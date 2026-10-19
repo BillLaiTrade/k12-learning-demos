@@ -179,16 +179,16 @@
     .model-panel h2 { margin: 0 0 5px; font-size: 1.18rem; }
     .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
     .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
-    .model-screen { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
-    .model-screen svg { display: block; width: 100%; height: auto; }
+    .model-screen { overflow: hidden; aspect-ratio: 760 / 170; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
+    .model-screen svg { display: block; width: 100%; height: 100%; }
     #shared-scale { fill: #26383a; font: 20px system-ui, sans-serif; }
     #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
     #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.5; }
     #shared-scale .ruler-line.major { stroke-width: 3; }
-    #shared-scale[data-zoom="true"] { font: 8px system-ui, sans-serif; }
-    #shared-scale[data-zoom="true"] .ruler-body { stroke-width: .3; }
-    #shared-scale[data-zoom="true"] .ruler-line { stroke-width: .23; }
-    #shared-scale[data-zoom="true"] .ruler-line.major { stroke-width: .46; }
+    #shared-scale[data-zoom="true"] { font: 16px system-ui, sans-serif; }
+    #shared-scale[data-zoom="true"] .ruler-body { stroke-width: 1.1; }
+    #shared-scale[data-zoom="true"] .ruler-line { stroke-width: .8; }
+    #shared-scale[data-zoom="true"] .ruler-line.major { stroke-width: 1.5; }
     #model-screen[data-zoom="true"] #pencil-end-guide { stroke-width: .7; stroke-dasharray: 2 2; }
     .model-readout { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #cbded0; }
     .model-readout small { color: var(--muted); }
@@ -563,6 +563,40 @@
       const ruler = document.querySelector("#shared-scale");
       const modelSvg = document.querySelector("#shared-measurement-model");
       const modelScreen = document.querySelector("#model-screen");
+      let modelViewBox = { x: 0, y: 295, width: 760, height: 170 };
+      let modelViewTarget = modelViewBox;
+      let modelViewAnimationFrame = 0;
+      const animateModelView = (zoom) => {
+        const targetHeight = zoom ? 139 : 170;
+        const targetWidth = targetHeight * (760 / 170);
+        const endpointX = 80 + estimateEndpoint() * (640 / 30);
+        const target = {
+          x: zoom ? endpointX - targetWidth / 2 : 0,
+          y: zoom ? 326 : 295,
+          width: targetWidth,
+          height: targetHeight
+        };
+        if (Object.keys(target).every((key) => Math.abs(target[key] - modelViewTarget[key]) < 0.01)) return;
+        modelViewTarget = target;
+        cancelAnimationFrame(modelViewAnimationFrame);
+        const start = { ...modelViewBox };
+        const startTime = performance.now();
+        const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700;
+        const frame = (now) => {
+          const progress = duration ? Math.min(1, (now - startTime) / duration) : 1;
+          const eased = progress < 0.5 ? 4 * progress ** 3 : 1 - ((-2 * progress + 2) ** 3) / 2;
+          modelViewBox = Object.fromEntries(Object.keys(target).map((key) => [key, start[key] + (target[key] - start[key]) * eased]));
+          modelSvg.setAttribute("viewBox", `${modelViewBox.x} ${modelViewBox.y} ${modelViewBox.width} ${modelViewBox.height}`);
+          if (progress < 1) {
+            modelViewAnimationFrame = requestAnimationFrame(frame);
+          } else {
+            modelViewBox = target;
+            modelViewAnimationFrame = 0;
+          }
+        };
+        cancelAnimationFrame(modelViewAnimationFrame);
+        modelViewAnimationFrame = requestAnimationFrame(frame);
+      };
       const parallaxCanvas = document.querySelector("#parallax-canvas");
       const parallaxContext = parallaxCanvas.getContext("2d");
       const camera = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
@@ -768,16 +802,6 @@
           : `三維直尺與鉛筆模型。鉛筆實際長度約 ${formatCentimeters(state.edge)} 公分；目前視角的視線落在尺面範圍外，無法讀值。可拖曳或使用方向鍵旋轉視角。`);
       };
       const updateModel = (note) => {
-        if (state.zoom) {
-          const interval = estimateGraduationInterval();
-          const startX = 80 + (interval.start * 640) / 30;
-          const endX = 80 + (interval.end * 640) / 30;
-          const width = Math.max(180, (endX - startX) * 1.7);
-          const centerX = 80 + (estimateEndpoint() * 640) / 30;
-          modelSvg.setAttribute("viewBox", `${centerX - width / 2} 315 ${width} 150`);
-        } else {
-          modelSvg.setAttribute("viewBox", "0 295 760 170");
-        }
         ruler.dataset.zoom = String(state.zoom);
         ruler.removeAttribute("transform");
         document.querySelector("#model-screen").dataset.zoom = String(state.zoom);
@@ -791,12 +815,14 @@
         const lines = [];
         const subdivisions = state.divisions;
         const totalTicks = subdivisions;
+        const zoomLabelStart = Math.max(0, Math.floor(estimateEndpoint()) - 3);
+        const zoomLabelEnd = Math.min(30, Math.floor(estimateEndpoint()) + 3);
         for (let tick = 0; tick <= 30; tick += 1) {
           const x = 80 + (tick * 640) / 30;
           const major = tick % 5 === 0;
           const top = major ? 380 : 390;
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${423 - top}"/>`);
-          if (major || state.zoom) {
+          if (state.zoom ? tick >= zoomLabelStart && tick <= zoomLabelEnd : major) {
             const anchor = tick === 0 ? "start" : tick === 30 ? "end" : "middle";
             lines.push(`<text x="${x}" y="448" text-anchor="${anchor}">${tick}${tick === 0 ? " cm" : ""}</text>`);
           }
@@ -948,6 +974,7 @@
         zoomButton.setAttribute("aria-pressed", String(zoom));
         zoomButton.textContent = zoom ? "縮回整把尺" : "拉近查看端點";
         updateModel();
+        animateModelView(zoom);
       };
       document.querySelector("#zoom-toggle").addEventListener("click", () => setZoom(!state.zoom));
       const estimateSlider = document.querySelector("#estimate-slider");
