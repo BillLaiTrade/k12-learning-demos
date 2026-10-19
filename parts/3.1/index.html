@@ -981,7 +981,7 @@
 
       divisionCountControl.addEventListener("input", () => {
         state.divisions = Number(divisionCountControl.value);
-        updateModel(`整把尺現在分成 ${state.divisions} 等分；尺長與鉛筆端點位置不變。`);
+        updateModel();
       });
 
       const setZoom = (zoom) => {
