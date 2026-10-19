@@ -1,9 +1,9 @@
 import * as THREE from "three";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
-const canvas = document.querySelector("#apple-3d-canvas");
+const canvas = document.querySelector("#pencil-3d-canvas");
 const sceneCanvas = document.querySelector("#parallax-canvas");
-const liveRegion = document.querySelector("#apple-model-status");
+const liveRegion = document.querySelector("#pencil-model-status");
 if (!canvas || !sceneCanvas) throw new Error("找不到鉛筆 3D 場景畫布");
 const immersiveView = document.body.classList.contains("immersive-page");
 
@@ -137,7 +137,7 @@ try {
   modelReady = true;
   announce(`鉛筆 3D 模型已載入；固定模型長度為 ${view.edge.toFixed(1)} 公分。可拖曳畫面旋轉觀察。`);
   render();
-  window.dispatchEvent(new Event("apple3d-ready"));
+  window.dispatchEvent(new Event("pencil3d-ready"));
 } catch (error) {
   modelFailed = true;
   canvas.hidden = true;
@@ -145,7 +145,7 @@ try {
   console.error("鉛筆 3D 模型建立失敗", error);
 }
 
-window.setApple3DView = (nextView = {}) => {
+window.setPencil3DView = (nextView = {}) => {
   Object.assign(view, nextView);
   if (pencil && Number.isFinite(nextView.edge)) pencil.scale.x = nextView.edge / 18.2;
   render();

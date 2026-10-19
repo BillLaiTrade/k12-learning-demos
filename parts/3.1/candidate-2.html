@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="在 3D 量測觀察室中，以鉛筆搭配直尺量長度、以蘋果搭配天平看質量。">
+<meta name="description" content="在 3D 量測觀察室中，以鉛筆搭配直尺量長度、以鉛筆搭配天平看質量。">
   <title>量測與公平比較｜3D 觀察室</title>
   <style>
     :root {
@@ -174,8 +174,8 @@
     #shared-scale[data-zoom="true"] .ruler-body { stroke-width: .3; }
     #shared-scale[data-zoom="true"] .ruler-line { stroke-width: .23; }
     #shared-scale[data-zoom="true"] .ruler-line.major { stroke-width: .46; }
-    #model-screen[data-zoom="true"] #apple-start-guide,
-    #model-screen[data-zoom="true"] #apple-end-guide { display: none; }
+    #model-screen[data-zoom="true"] #pencil-start-guide,
+    #model-screen[data-zoom="true"] #pencil-end-guide { display: none; }
     #model-screen[data-zoom="true"] #zoom-endpoint-marker path { stroke-width: .45; }
     #model-screen[data-zoom="true"] #zoom-endpoint-marker circle { r: 1.5; stroke-width: .35; }
     .model-readout { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #cbded0; }
@@ -210,7 +210,7 @@
     .scene-stage { position: sticky; top: 142px; min-width: 0; height: min(70vh, 700px); min-height: 480px; overflow: hidden; border: 1px solid rgb(132 159 146 / 44%); border-radius: 30px; background: radial-gradient(ellipse at 48% 38%, rgb(255 255 255 / 92%), transparent 38%), linear-gradient(155deg, #dce9e1, #c7d7ce 70%, #b7c8be); box-shadow: 0 24px 65px rgb(26 55 44 / 18%); isolation: isolate; }
     .scene-stage::before { position: absolute; inset: 56% -20% -36%; z-index: -1; content: ""; transform: perspective(420px) rotateX(58deg); transform-origin: top; background-image: linear-gradient(rgb(68 105 87 / 12%) 1px, transparent 1px), linear-gradient(90deg, rgb(68 105 87 / 12%) 1px, transparent 1px); background-size: 40px 40px; mask-image: linear-gradient(to bottom, black, transparent 80%); }
     .scene-stage::after { position: absolute; inset: 0; z-index: -1; content: ""; background: linear-gradient(180deg, rgb(255 255 255 / 20%), transparent 45%, rgb(75 103 88 / 8%)); pointer-events: none; }
-    .immersive-page #apple-3d-canvas { position: absolute; inset: 0; z-index: 3; display: block; width: 100%; height: 100%; pointer-events: none; transition: transform .5s ease; }
+    .immersive-page #pencil-3d-canvas { position: absolute; inset: 0; z-index: 3; display: block; width: 100%; height: 100%; pointer-events: none; transition: transform .5s ease; }
     .immersive-page #parallax-canvas { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; border-radius: inherit; background: transparent; transition: transform .5s ease; }
     .room-label { position: absolute; top: 18px; left: 20px; z-index: 3; padding: 6px 11px; border: 1px solid rgb(255 255 255 / 70%); border-radius: 999px; background: rgb(255 254 250 / 76%); color: #375a49; font-size: .8rem; font-weight: 800; letter-spacing: .06em; backdrop-filter: blur(8px); pointer-events: none; }
     .immersive-page .scene-caption { position: absolute; top: 16px; right: 16px; z-index: 4; margin: 0; }
@@ -258,7 +258,7 @@
     .immersive-page .scene-tool-slot .unit-source { font-size: .68rem; }
     .immersive-page .scene-stage[data-active-card="5"] #parallax-canvas { filter: saturate(1.08); }
     .immersive-page .scene-stage[data-active-card="5"] .scene-readout { display: none; }
-    .immersive-page .scene-stage[data-active-card="5"] #apple-3d-canvas,
+    .immersive-page .scene-stage[data-active-card="5"] #pencil-3d-canvas,
     .immersive-page .scene-stage[data-active-card="5"] #parallax-canvas { transform: scale(1.32); transform-origin: 62% 67%; }
     .immersive-page .scene-stage[data-active-card="4"] #parallax-canvas { filter: contrast(1.08); }
     .immersive-page .lesson-layout { position: sticky; top: 142px; min-width: 0; }
@@ -432,7 +432,7 @@
     .immersive-page .balance-station .balance-readout { font: 800 25px system-ui, sans-serif; fill: #174632; }
     .immersive-page .balance-station .balance-caption { font: 700 13px system-ui, sans-serif; fill: #476657; }
     .immersive-page .scene-stage.is-mass-mode #parallax-canvas,
-    .immersive-page .scene-stage.is-mass-mode #apple-3d-canvas { opacity: 0; }
+    .immersive-page .scene-stage.is-mass-mode #pencil-3d-canvas { opacity: 0; }
     .immersive-page .scene-stage.is-mass-mode .scene-readout, .immersive-page .scene-stage.is-mass-mode .scene-caption,
     .immersive-page .scene-stage.is-unit-mode .scene-readout, .immersive-page .scene-stage.is-unit-mode .scene-caption { visibility: hidden; }
     .immersive-page .balance-station.is-weighing { visibility: visible; opacity: 1; transform: translate(-50%, -50%) scale(1); }
@@ -495,12 +495,12 @@
     .unit-scale-controls > span strong { margin-left: 5px; font-size: 1.25rem; }
     .unit-scale-controls label { display: flex; align-items: center; gap: 8px; font-size: .86rem; font-weight: 700; }
     .unit-scale-controls select { min-height: 38px; padding: 6px 10px; }
-    .unit-apple-grid { display: block; width: 100%; height: 176px; min-height: 130px; max-height: 220px; overflow: hidden; padding: 0; border: 1px solid #d8e5da; border-radius: 14px; background: linear-gradient(150deg, #eef4eb, #e1ecdf); }
+    .unit-pencil-grid { display: block; width: 100%; height: 176px; min-height: 130px; max-height: 220px; overflow: hidden; padding: 0; border: 1px solid #d8e5da; border-radius: 14px; background: linear-gradient(150deg, #eef4eb, #e1ecdf); }
     .unit-scale-result { display: block; margin-top: 9px; color: var(--green); font-size: 1rem; font-weight: 800; }
     .unit-scale-note { margin: 4px 0 0; color: var(--muted); font-size: .8rem; }
     @media (max-width: 760px) {
       .unit-scale-demo { padding: 10px; }
-      .unit-apple-grid { height: 140px; min-height: 110px; max-height: 160px; }
+      .unit-pencil-grid { height: 140px; min-height: 110px; max-height: 160px; }
       .unit-scale-note { font-size: .72rem; }
     }
 
@@ -512,28 +512,28 @@
     .immersive-page .unit-scale-controls select { min-height: 32px; padding: 3px 6px; font-size: .7rem; }
     .immersive-page .unit-scale-result { margin-top: 3px; font-size: .78rem; }
     .immersive-page .unit-scale-note { margin-top: 1px; font-size: .64rem; line-height: 1.25; }
-    .immersive-page .unit-apple-field { position: absolute; inset: 78px 14px calc(23svh + 20px); z-index: 2; display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 8px; overflow: hidden; padding: clamp(8px, 1.8vw, 20px); border: 1px solid rgb(255 255 255 / 88%); border-radius: 24px; background: rgb(242 247 240 / 88%); box-shadow: 0 18px 46px rgb(30 52 42 / 18%); backdrop-filter: blur(12px); }
-    .immersive-page .unit-apple-field[hidden] { display: none !important; }
+    .immersive-page .unit-pencil-field { position: absolute; inset: 78px 14px calc(23svh + 20px); z-index: 2; display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 8px; overflow: hidden; padding: clamp(8px, 1.8vw, 20px); border: 1px solid rgb(255 255 255 / 88%); border-radius: 24px; background: rgb(242 247 240 / 88%); box-shadow: 0 18px 46px rgb(30 52 42 / 18%); backdrop-filter: blur(12px); }
+    .immersive-page .unit-pencil-field[hidden] { display: none !important; }
     .immersive-page .scene-stage.is-unit-mode #parallax-canvas,
-    .immersive-page .scene-stage.is-unit-mode #apple-3d-canvas { opacity: 0; }
+    .immersive-page .scene-stage.is-unit-mode #pencil-3d-canvas { opacity: 0; }
     .immersive-page .unit-scene-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--muted); }
     .immersive-page .unit-scene-heading strong { color: var(--green); font-size: clamp(1rem, 2.3vw, 1.8rem); white-space: nowrap; }
     .immersive-page .unit-scene-heading span { font-size: clamp(.75rem, 1.2vw, 1rem); }
     .immersive-page .unit-scene-caption { margin: 0; color: var(--muted); font-size: .82rem; text-align: center; }
-    .immersive-page .unit-apple-grid { width: 100%; height: 100%; min-height: 0; max-height: none; background: transparent; border: 0; padding: 0; }
+    .immersive-page .unit-pencil-grid { width: 100%; height: 100%; min-height: 0; max-height: none; background: transparent; border: 0; padding: 0; }
     .immersive-page .unit-scene-note { margin: 0; color: #5b6b62; font-size: .65rem; text-align: center; }
-    .apple-array-detail { display: grid; grid-template-columns: 92px minmax(0, 1fr); align-items: center; gap: 10px; margin-top: 7px; padding: 7px; border: 1px solid #d5e1d7; border-radius: 10px; background: #fffefa; }
-    .apple-array-detail canvas { display: block; width: 92px; height: 92px; border-radius: 7px; background: #f1f5ec; }
-    .apple-array-detail strong { display: block; color: #315b47; font-size: .73rem; }
-    .apple-array-detail p { margin: 3px 0 0; color: var(--muted); font-size: .67rem; line-height: 1.35; }
+    .pencil-array-detail { display: grid; grid-template-columns: 92px minmax(0, 1fr); align-items: center; gap: 10px; margin-top: 7px; padding: 7px; border: 1px solid #d5e1d7; border-radius: 10px; background: #fffefa; }
+    .pencil-array-detail canvas { display: block; width: 92px; height: 92px; border-radius: 7px; background: #f1f5ec; }
+    .pencil-array-detail strong { display: block; color: #315b47; font-size: .73rem; }
+    .pencil-array-detail p { margin: 3px 0 0; color: var(--muted); font-size: .67rem; line-height: 1.35; }
     @media (max-width: 760px) {
-      .immersive-page .unit-apple-field { inset: 122px 7px calc(23svh + 25px); gap: 4px; padding: 5px; border-radius: 14px; }
+      .immersive-page .unit-pencil-field { inset: 122px 7px calc(23svh + 25px); gap: 4px; padding: 5px; border-radius: 14px; }
       .immersive-page .unit-scene-heading strong { font-size: .9rem; }
       .immersive-page .unit-scene-heading span { font-size: .62rem; }
       .immersive-page .unit-scene-caption, .immersive-page .unit-scene-note { font-size: .58rem; }
-      .apple-array-detail { grid-template-columns: 72px minmax(0, 1fr); gap: 7px; padding: 5px; }
-      .apple-array-detail canvas { width: 72px; height: 72px; }
-      .apple-array-detail strong, .apple-array-detail p { font-size: .58rem; }
+      .pencil-array-detail { grid-template-columns: 72px minmax(0, 1fr); gap: 7px; padding: 5px; }
+      .pencil-array-detail canvas { width: 72px; height: 72px; }
+      .pencil-array-detail strong, .pencil-array-detail p { font-size: .58rem; }
                               .immersive-page #card-02 .unit-scale-note { display: none; }
     }
 
@@ -545,7 +545,7 @@
     .immersive-page .scene-stage[data-active-card="3"] .scene-tool-slot > .readout,
     .immersive-page .scene-stage[data-active-card="3"] .scene-tool-slot > .range-model { grid-column: 1; }
     .immersive-page .scene-stage[data-active-card="3"] .scene-tool-slot > .readout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .immersive-page .unit-apple-field { bottom: calc(23svh + 76px); }
+    .immersive-page .unit-pencil-field { bottom: calc(23svh + 76px); }
     @media (max-width: 760px) {
       .immersive-page .swipe-status { top: -54px; }
       .immersive-page .scene-tool-panel { max-height: calc(100svh - 23svh - 197px); }
@@ -562,11 +562,11 @@
       <div>
         <div class="eyebrow">密度與測量｜3D 量測觀察室</div>
         <h1>要公平比較，<br>先把「量」說清楚</h1>
-        <p>同一支鉛筆，為什麼可能量出不同讀值？長度測量固定使用同一支鉛筆與直尺；質量示範則使用同一顆蘋果與天平。沿著學習內容操作紀錄、刻度與讀值條件，看哪些變了、哪些保持不變。</p>
+        <p>測量能把「很長」這類感覺轉成能溝通、能比較的數值紀錄。接著用同一支鉛筆和直尺，逐步認識量測紀錄、刻度與讀值條件。</p>
       </div>
       <aside class="hero-note">
-        <strong>同一支鉛筆，讀值會怎麼變？</strong>
-        <p>調整尺的刻度或觀察角度，看看讀值如何改變，再找出讓量測更可靠的方法。</p>
+        <strong>測量後的數字，怎麼讓別人看懂？</strong>
+        <p>先觀察鉛筆和直尺，再帶著「18.2 代表什麼？」的問題，認識完整的量測紀錄。</p>
       </aside>
     </div>
   </header>
@@ -575,7 +575,7 @@
     <div class="shell">
       <p class="route-label">本段的閱讀路線｜依序閱讀、操作與觀察</p>
       <div class="route-inner">
-        <a href="#card-01"><b>01</b>不同讀值</a><a href="#card-02"><b>02</b>量與單位</a>
+        <a href="#card-01"><b>01</b>量測的意義</a><a href="#card-02"><b>02</b>量與單位</a>
         <a href="#card-03"><b>03</b>選工具</a><a href="#card-04"><b>04</b>看刻度</a>
         <a href="#card-05"><b>05</b>估讀</a><a href="#card-06"><b>06</b>找誤差</a>
         <a href="#card-07"><b>07</b>改善方法</a><a href="#card-08"><b>08</b>公平比較</a>
@@ -588,25 +588,25 @@
     <div class="immersive-room">
       <div class="scene-stage" aria-label="持續顯示的 3D 鉛筆與直尺觀察場景">
         <span class="room-label" id="room-label">3D 量測觀察室・同一支鉛筆</span>
-        <canvas id="apple-3d-canvas" aria-hidden="true"></canvas>
-        <span id="apple-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
+        <canvas id="pencil-3d-canvas" aria-hidden="true"></canvas>
+        <span id="pencil-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
         <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、鉛筆和視線延長線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明鉛筆長度不變，讀值可能隨觀察角度改變。</canvas>
-        <div class="unit-apple-field" id="unit-apple-field" hidden aria-hidden="true">
-          <div class="unit-scene-heading"><span>固定數字 182 所代表的蘋果總量</span><strong id="unit-scene-count">約 1 顆</strong></div>
-          <canvas class="unit-apple-grid" id="unit-scene-apples" role="img" aria-label="畫面會逐顆繪製與數量相符的蘋果模型">此瀏覽器不支援畫布，請參閱旁邊標示的精確蘋果數量。</canvas>
-          <p class="unit-scene-caption" id="unit-scene-caption">182 g = 1 顆模型蘋果</p>
-          <p class="unit-scene-note">每個蘋果圖形代表一顆模型蘋果，畫面會逐顆繪出計數器顯示的數量；每顆模型蘋果依資料中的中型蘋果為參照（直徑約 7.62 cm、質量約 182 g）。</p>
+        <div class="unit-pencil-field" id="unit-pencil-field" hidden aria-hidden="true">
+          <div class="unit-scene-heading"><span>固定數字 5 所代表的鉛筆總質量</span><strong id="unit-scene-count">約 1 支</strong></div>
+          <canvas class="unit-pencil-grid" id="unit-scene-pencils" role="img" aria-label="畫面會逐支繪製與數量相符的鉛筆模型">此瀏覽器不支援畫布，請參閱旁邊標示的精確鉛筆支數。</canvas>
+          <p class="unit-scene-caption" id="unit-scene-caption">5 g = 1 支模型鉛筆</p>
+          <p class="unit-scene-note">每個鉛筆圖形代表一支模型鉛筆，畫面會逐支繪出計數器顯示的數量；質量換算假設每支模型鉛筆約 5 g。</p>
         </div>
-        <div class="balance-station" id="balance-station" aria-label="蘋果放在電子秤平台上，秤面顯示質量讀值">
+        <div class="balance-station" id="balance-station" aria-label="鉛筆放在電子秤平台上，秤面顯示質量讀值">
           <svg viewBox="0 0 760 300" role="img" aria-labelledby="balance-title balance-description">
-            <title id="balance-title">同一顆蘋果的電子秤質量觀察台</title>
-            <desc id="balance-description">同一顆中型蘋果放在秤盤上，參照質量固定約 182 公克。</desc>
+            <title id="balance-title">同一支鉛筆的電子秤質量觀察台</title>
+            <desc id="balance-description">同一支模型鉛筆放在秤盤上，教學模型設定質量約 5 公克。</desc>
             <ellipse cx="380" cy="264" rx="270" ry="24" fill="#40594d" opacity=".16"></ellipse>
             <path d="M150 126L610 126L565 202L195 202Z" fill="#dce7df" stroke="#6c8b79" stroke-width="4"></path>
             <path d="M188 190L572 190L626 254L134 254Z" fill="#456b59" stroke="#2f5845" stroke-width="5"></path>
             <path class="scale-glow" d="M220 202L540 202L574 242L186 242Z" fill="#d5f5df" opacity=".45"></path>
             <path d="M230 202L530 202L554 226L206 226Z" fill="#f6faf5" stroke="#8ca998" stroke-width="3"></path>
-            <image href="assets/apple-hero.webp" x="270" y="4" width="220" height="200" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></image>
+            <image href="assets/pencil.svg" x="270" y="4" width="220" height="200" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></image>
             <rect x="293" y="224" width="174" height="40" rx="8" fill="#cfe5cf" stroke="#244a38" stroke-width="3"></rect>
             <text x="380" y="239" text-anchor="middle" class="balance-caption">質量讀值</text>
             <text id="balance-display-reading" x="380" y="260" text-anchor="middle" class="balance-readout">— g</text>
@@ -624,41 +624,49 @@
       <div class="lesson-layout">
       <div class="cards">
       <section class="lesson-card is-active" id="card-01">
-        <div class="card-side"><span class="card-number">01</span><h3>提出疑問</h3><span class="card-role">同一物體，不同紀錄</span></div>
+        <div class="card-side"><span class="card-number">01</span><h3>為什麼要量？</h3><span class="card-role">把感覺變成可比較的資料</span></div>
         <div class="card-main">
-          <h2>同一支鉛筆，為什麼會有不同讀值？</h2>
-          <p>先記下同一支鉛筆的紀錄 A，接著一次只改變一項量測條件，觀察紀錄 B 有什麼不同。兩次讀值改變了，是鉛筆變了，還是尺與讀法變了？</p>
-          <label class="field">切換量測情境
-            <select id="difference-condition"><option value="scale">工具刻度不同</option><option value="start">尺的起點沒有對準</option><option value="view">讀刻度的視角不同</option><option value="unit">使用的單位不同</option></select>
-          </label>
-          <div class="readout" aria-live="polite"><article><small>比較紀錄 A</small><strong id="reading-a">約 18.2 cm</strong><span id="reading-a-note">左端對齊零刻度</span></article><article><small>比較紀錄 B</small><strong id="reading-b">約 18.2–18.3 cm</strong><span id="reading-b-note">依物體端點的位置估一個讀值</span></article></div>
-          <div class="fact"><p id="difference-explanation">改變的是尺或讀值條件；鉛筆仍是同一支，讓我們可以比較同一量測對象的紀錄。</p></div>
-          <p class="next-hint">要讀懂這些差異，先看看一筆量測紀錄要交代哪些資訊。</p>
+          <h2>只說「這支鉛筆很長」，別人怎麼知道它到底有多長？</h2>
+          <p>「很長」是感覺，別人不一定和你想的一樣。測量能把觀察變成具體數字，讓結果可以說清楚、記下來，也能和別人比較。</p>
+          <div class="measurement-meaning-visual">
+            <svg viewBox="0 0 720 210" role="img" aria-label="一支鉛筆與一把尺對齊，尺上只標數字，尚未標示單位">
+              <rect x="18" y="108" width="684" height="72" rx="10" fill="#f4e7c5" stroke="#ac9563" stroke-width="2"></rect>
+              <path d="M42 108v37 M72 108v23 M102 108v23 M132 108v23 M162 108v37 M192 108v23 M222 108v23 M252 108v23 M282 108v37 M312 108v23 M342 108v23 M372 108v23 M402 108v37 M432 108v23 M462 108v23 M492 108v23 M522 108v37 M552 108v23 M582 108v23 M612 108v23 M642 108v37" fill="none" stroke="#34433c" stroke-width="2"></path>
+              <text x="42" y="163" text-anchor="middle" fill="#26383a" font-size="18">0</text><text x="342" y="163" text-anchor="middle" fill="#26383a" font-size="18">10</text><text x="642" y="163" text-anchor="middle" fill="#26383a" font-size="18">20</text>
+              <g transform="translate(42 48)"><rect x="28" y="0" width="539" height="30" rx="14" fill="#e5bd43" stroke="#987625" stroke-width="2"></rect><path d="M28 0L0 15l28 15z" fill="#d9a35b" stroke="#987625" stroke-width="2"></path><path d="M0 15h-9" stroke="#30343a" stroke-width="4"></path><rect x="567" y="0" width="16" height="30" fill="#b9c2c0" stroke="#987625" stroke-width="1"></rect><rect x="583" y="0" width="33" height="30" rx="8" fill="#d98280" stroke="#987625" stroke-width="2"></rect></g>
+            </svg>
+            <p>同一支鉛筆　｜　同一把尺</p>
+          </div>
+          <div class="measurement-meaning-result"><span>測量後，我們得到</span><strong>18.2</strong><p>這個數字讓描述更具體，但還需要更多資訊。</p></div>
+          <p class="next-hint">下一步：18.2 代表什麼？只看數字，別人知道你量的是什麼嗎？</p>
         </div>
       </section>
 
       <section class="lesson-card" id="card-02">
-        <div class="card-side"><span class="card-number">02</span><h3>看懂紀錄</h3><span class="card-role">物理量、數值與單位</span></div>
+        <div class="card-side"><span class="card-number">02</span><h3>讀懂紀錄</h3><span class="card-role">數值要有意義，還要說明單位</span></div>
         <div class="card-main">
-          <h2>只寫「18.2」，別人知道你量了什麼嗎？</h2>
-          <p>量測紀錄要寫清楚物理量、數值和單位。依序點選紀錄各部分；接著換成質量，作為另一種物理量的例子：前面的 18.2 cm 是鉛筆長度，這裡固定數字 182，只改變質量單位，看看它相當於多少顆約 182 g 的蘋果。</p>
-          <div class="record" aria-label="鉛筆的長度約為十八點二公分">
-            <span id="record-object">鉛筆的長度</span><span>=</span><span id="record-value">約 18.2</span><span id="record-unit">cm</span>
+          <h2>18.2 代表什麼？</h2>
+          <p>光看 18.2，還不知道量的是哪一種物理量，也不知道使用什麼單位。點選紀錄中的部分，再看完整描述。</p>
+          <div class="record" aria-label="鉛筆長度的量測紀錄">
+            <button type="button" data-record-part="object">鉛筆</button>
+            <span id="record-object">長度</span><span>=</span>
+            <span id="record-value">18.2</span>
+            <span id="record-unit">cm</span>
           </div>
           <div class="concept-parts" role="group" aria-label="量測紀錄的組成">
-            <button type="button" data-record-part="object" aria-pressed="true">物理量</button>
+            <button type="button" data-record-part="object" aria-pressed="true">量測對象與物理量</button>
             <button type="button" data-record-part="value" aria-pressed="false">數值</button>
             <button type="button" data-record-part="unit" aria-pressed="false">單位</button>
+            <button type="button" id="unit-toggle" aria-pressed="false">移除尺上的 cm 標示</button>
           </div>
-          <button type="button" class="secondary" id="unit-toggle" aria-pressed="false">移除尺上的 cm 標示</button>
-          <div class="unit-scale-demo" aria-label="以中型蘋果每顆約 182 公克為參照，固定數字 182 並切換質量單位，觀察對應的蘋果數量">
-            <div class="unit-scale-controls"><span>固定數字 <strong>182</strong></span><label for="apple-mass-unit">質量單位<select id="apple-mass-unit"><option value="g">克（g）</option><option value="kg">公斤（kg）</option><option value="t">公噸（t）</option></select></label></div>
-            <output class="unit-scale-result" id="unit-apple-count" aria-live="polite">182 g = 1 顆模型蘋果</output>
-            <div class="apple-array-detail"><canvas id="unit-apple-detail" width="184" height="184" role="img" aria-label="局部放大區中的蘋果圖樣">此瀏覽器不支援畫布。</canvas><div><strong>陣列局部放大</strong><p id="unit-apple-detail-note">顯示總數中的局部排列；放大圖不是額外增加的蘋果。</p></div></div>
-            <p class="unit-scale-note" id="unit-apple-note">依美國農業部資料，中型蘋果直徑約 7.62 cm、質量約 182 g。為了示範單位換算，這裡假設每顆模型蘋果的質量都固定為 182 g。</p><a class="unit-source" href="https://fdc.nal.usda.gov/food-details/171688/nutrients" target="_blank" rel="noreferrer">查看資料來源：美國農業部食品資料中心（中型蘋果）</a>
+          <p class="live-note" id="record-explanation" aria-live="polite">先說明你量的是什麼；這裡記錄的是鉛筆的長度。</p>
+          <div class="unit-scale-demo">
+            <div class="unit-scale-controls"><span>質量換算示範：固定 <strong>5</strong></span><label for="pencil-mass-unit">選擇單位<select id="pencil-mass-unit"><option value="g">g</option><option value="kg">kg</option><option value="t">公噸</option></select></label></div>
+            <canvas class="unit-pencil-grid" role="img" aria-label="依質量換算結果繪製的模型鉛筆數量">此瀏覽器不支援畫布，請參閱鉛筆數量。</canvas>
+            <strong class="unit-scale-result" id="unit-pencil-count">5 g = 1 支模型鉛筆</strong>
+            <p class="unit-scale-note" id="unit-pencil-note">換算示範假設每支模型鉛筆質量為 5 g。</p>
           </div>
-          <p class="live-note" id="record-explanation" aria-live="polite">先說明你量的是什麼；這裡量的是鉛筆的長度。</p>
-          <div class="fact"><p>「18.2 cm」和「18.2 mm」的數字相同，但單位不同，代表的長度也不同。記錄量測結果時，要把單位一起寫清楚。</p></div>
+          <p class="next-hint">知道要量什麼之後，下一步是選擇合適的工具。</p>
         </div>
       </section>
 
@@ -666,16 +674,16 @@
         <div class="card-side"><span class="card-number">03</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
         <div class="card-main">
           <h2>同一種工具，能量所有東西嗎？</h2>
-          <p>工具要配合要量的物理量和範圍。切換鉛筆的長度或蘋果的質量任務，再切換工具情境；觀察工具是否量對物理量、量程能不能涵蓋預期值。蘋果的質量參照值固定約 182 g。</p>
+          <p>工具要配合要量的物理量和範圍。切換鉛筆的長度或鉛筆的質量任務，再切換工具情境；觀察工具是否量對物理量、量程能不能涵蓋預期值。鉛筆的質量參照值固定約 5 g。</p>
           <div class="select-row">
             <label class="field">量測任務
-              <select id="tool-task"><option value="length">量這支鉛筆的長度（約 18.2 cm）</option><option value="mass">量這顆蘋果的質量（約 182 g）</option></select>
+              <select id="tool-task"><option value="length">量這支鉛筆的長度（約 18.2 cm）</option><option value="mass">量這支鉛筆的質量（約 5 g）</option></select>
             </label>
             <label class="field">工具情境
               <select id="tool-state"><option value="suitable">物理量和量程都合適</option><option value="wrong-quantity">工具測量的是另一種物理量</option><option value="short-range">工具量程不足</option></select>
             </label>
           </div>
-          <p class="mass-reference" id="mass-reference" hidden>沿用同一顆中型蘋果；質量參照值固定約 182 g。</p>
+          <p class="mass-reference" id="mass-reference" hidden>沿用同一支模型鉛筆；質量參照值固定約 5 g。</p>
           <div class="readout" aria-live="polite">
             <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
             <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，鉛筆長度落在尺的量程內。</span></article>
@@ -729,8 +737,8 @@
               <svg id="shared-measurement-model" viewBox="0 0 760 650" role="img" aria-label="用直尺測量鉛筆的長度，左端對齊零，右端落在十八點二公分與十八點三公分之間">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
                 <g id="pencil-object" aria-hidden="true"><rect x="27" y="265" width="402" height="28" rx="12" fill="#e5bd43" stroke="#987625" stroke-width="2"></rect><path d="M429 265L469 279L429 293Z" fill="#d9a35b" stroke="#987625" stroke-width="2"></path><path d="M469 279L481 279L469 283Z" fill="#34383d"></path><rect x="27" y="265" width="24" height="28" rx="8" fill="#d98280" stroke="#987625" stroke-width="2"></rect><rect x="50" y="265" width="8" height="28" fill="#b9c2c0" stroke="#987625" stroke-width="1"></rect><path d="M86 269H408" stroke="#f8dfa0" stroke-width="3" opacity=".8"></path></g>
-                <path id="apple-start-guide" d="M80 65V620" stroke="#176b53" stroke-width="2" stroke-dasharray="5 5"></path>
-                <path id="apple-end-guide" d="M588 65V620" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 5"></path>
+                <path id="pencil-start-guide" d="M80 65V620" stroke="#176b53" stroke-width="2" stroke-dasharray="5 5"></path>
+                <path id="pencil-end-guide" d="M588 65V620" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 5"></path>
                 <g id="shared-scale"></g>
                 <g id="zoom-endpoint-marker" display="none" aria-hidden="true"><path id="zoom-endpoint-line" d="M468 570V623" stroke="#bc612b" stroke-width="2"></path><circle id="zoom-endpoint-dot" cx="468" cy="570" r="6" fill="#bc612b" stroke="#fffefa" stroke-width="2"></circle></g>
                 <g id="eye-ray" opacity="0">
@@ -807,7 +815,7 @@
     </div>
   </main>
 
-  <footer><div class="shell">頁面以約 18.2 cm 的鉛筆模型示範長度量測及視差；質量例子使用中型蘋果約 182 g 的參照值。模型尺寸與實際產品可能不同，畫面讀值依教學模型估讀。</div></footer>
+  <footer><div class="shell">頁面以約 18.2 cm 的鉛筆模型示範長度量測及視差；質量例子假設每支模型鉛筆約 5 g。模型尺寸與實際產品可能不同，畫面讀值依教學模型估讀。</div></footer>
 
   <script>
     (() => {
@@ -923,7 +931,7 @@
         const pencilHalfLength = state.edge / 2;
         const pencilStartX = pencilCenter.x - pencilHalfLength;
         const pencilEndX = pencilCenter.x + pencilHalfLength;
-        window.setApple3DView?.({
+        window.setPencil3DView?.({
           edge: state.edge,
           start: state.start,
           yaw: camera.yaw,
@@ -991,8 +999,8 @@
         const pencilScale = (state.edge * (640 / 30)) / 454;
         const pencilOffset = startX - 27 * pencilScale;
         document.querySelector("#pencil-object").setAttribute("transform", `translate(${pencilOffset} 0) scale(${pencilScale})`);
-        document.querySelector("#apple-start-guide").setAttribute("d", `M${startX} 65V620`);
-        document.querySelector("#apple-end-guide").setAttribute("d", `M${endX} 65V620`);
+        document.querySelector("#pencil-start-guide").setAttribute("d", `M${startX} 65V620`);
+        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} 65V620`);
         document.querySelector("#zoom-endpoint-marker").setAttribute("display", state.zoom ? "" : "none");
         document.querySelector("#zoom-endpoint-line").setAttribute("d", `M${endX} 570V623`);
         document.querySelector("#zoom-endpoint-dot").setAttribute("cx", String(endX));
@@ -1056,23 +1064,6 @@
       updateModel();
       renderDivisionRuler();
 
-      const differenceStates = {
-        scale: { divisions: 2, start: 0, angle: false, unit: true, note: "同一支鉛筆與尺，改用較粗的刻度示意；端點所在區間較難細分。" },
-        start: { divisions: 10, start: 0.5, angle: false, unit: true, note: "尺的起點移到 0.5 cm；物體長度要用終點讀值減起點讀值。" },
-        view: { divisions: 10, start: 0, angle: true, unit: true, note: "改變視角可能讓鉛筆端點在尺面上的視線落點偏移；可以拖曳 3D 場景，觀察讀值如何改變。" },
-        unit: { divisions: 10, start: 0, angle: false, unit: false, note: "刻度旁的 cm 標示被移除；數字還在，但缺少單位就不能完整說明量值。" }
-      };
-      document.querySelector("#difference-condition").addEventListener("change", (event) => {
-        const chosen = differenceStates[event.target.value];
-        Object.assign(state, { divisions: chosen.divisions, start: chosen.start, angle: chosen.angle, unit: chosen.unit });
-        updateModel(chosen.note);
-        document.querySelector("#reading-a").textContent = "約 18.2 cm";
-        document.querySelector("#reading-b").textContent = chosen.start ? "終點讀值約 18.7 cm" : chosen.angle ? "讀值可能偏移" : chosen.divisions === 2 ? "約 18.0–18.5 cm" : chosen.unit ? "約 18.2–18.3 cm" : "約 18.2–18.3（無單位）";
-        document.querySelector("#reading-a-note").textContent = "原始測量的固定參照";
-        document.querySelector("#reading-b-note").textContent = chosen.start ? "起點在 0.5 cm，需扣除起點" : chosen.angle ? "轉動視角，比較尺上的讀值" : chosen.divisions === 2 ? "較粗刻度的尺，區間較大" : chosen.unit ? "依物體端點的位置估一個讀值" : "尺上的 cm 標示已移除";
-        document.querySelector("#difference-explanation").textContent = chosen.note;
-      });
-
       const recordDescriptions = {
         object: "先說明你量的是什麼；這裡量的是鉛筆的長度。",
         value: "數值表示量到的大小；模型顯示約 18.2，還要搭配單位才完整。",
@@ -1095,18 +1086,18 @@
         updateModel(state.unit ? "恢復 cm 標示後，紀錄能指出數值所用的長度單位。" : "公分標示已移除；數字還在，但讀者不知道它代表幾公分或其他尺度。 ");
       });
 
-      const appleMassUnits = {
+      const pencilMassUnits = {
         g: { label: "g", gramsPerUnit: 1 },
         kg: { label: "kg", gramsPerUnit: 1000 },
         t: { label: "公噸", gramsPerUnit: 1000000 }
       };
       const formatUnitCount = new Intl.NumberFormat("zh-TW");
-      const appleSprite = new Image();
-      appleSprite.src = "assets/apple-hero.webp";
-      appleSprite.addEventListener("load", () => updateUnitAppleDemo(), { once: true });
+      const pencilSprite = new Image();
+      pencilSprite.src = "assets/pencil.svg";
+      pencilSprite.addEventListener("load", () => updateUnitPencilDemo(), { once: true });
 
-      const renderApplePopulation = (canvas, count) => {
-        if (!canvas || !canvas.clientWidth || !canvas.clientHeight || !appleSprite.complete || !appleSprite.naturalWidth) return;
+      const renderPencilPopulation = (canvas, count) => {
+        if (!canvas || !canvas.clientWidth || !canvas.clientHeight || !pencilSprite.complete || !pencilSprite.naturalWidth) return;
         const context = canvas.getContext("2d");
         const width = canvas.clientWidth;
         const height = canvas.clientHeight;
@@ -1116,13 +1107,13 @@
         context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
         context.clearRect(0, 0, width, height);
         if (count === 1) {
-          const appleAspect = appleSprite.naturalWidth / appleSprite.naturalHeight;
-          const appleWidth = Math.min(width * .4, height * .72 * appleAspect);
-          const appleHeight = appleWidth / appleAspect;
-          context.drawImage(appleSprite, (width - appleWidth) / 2, (height - appleHeight) / 2, appleWidth, appleHeight);
+          const pencilAspect = pencilSprite.naturalWidth / pencilSprite.naturalHeight;
+          const pencilWidth = Math.min(width * .4, height * .72 * pencilAspect);
+          const pencilHeight = pencilWidth / pencilAspect;
+          context.drawImage(pencilSprite, (width - pencilWidth) / 2, (height - pencilHeight) / 2, pencilWidth, pencilHeight);
         } else {
-          const appleAspect = appleSprite.naturalWidth / appleSprite.naturalHeight;
-          const columns = Math.max(1, Math.ceil(Math.sqrt(count * width / (height * appleAspect))));
+          const pencilAspect = pencilSprite.naturalWidth / pencilSprite.naturalHeight;
+          const columns = Math.max(1, Math.ceil(Math.sqrt(count * width / (height * pencilAspect))));
           const rows = Math.ceil(count / columns);
           const cellWidth = width / columns;
           const cellHeight = height / rows;
@@ -1140,13 +1131,13 @@
             drawContext = highResolutionCanvas.getContext("2d");
             drawContext.setTransform(pixelRatio * sampleScale, 0, 0, pixelRatio * sampleScale, 0, 0);
           }
-          const pattern = drawContext.createPattern(appleSprite, "repeat");
-          pattern.setTransform(new DOMMatrix([cellWidth / appleSprite.width, 0, 0, cellHeight / appleSprite.height, 0, 0]));
+          const pattern = drawContext.createPattern(pencilSprite, "repeat");
+          pattern.setTransform(new DOMMatrix([cellWidth / pencilSprite.width, 0, 0, cellHeight / pencilSprite.height, 0, 0]));
           drawContext.fillStyle = pattern;
           const fullRows = Math.floor(count / columns);
-          const remainingApples = count - fullRows * columns;
+          const remainingPencils = count - fullRows * columns;
           if (fullRows > 0) drawContext.fillRect(0, 0, width, fullRows * cellHeight);
-          if (remainingApples > 0) drawContext.fillRect(0, fullRows * cellHeight, remainingApples * cellWidth, cellHeight);
+          if (remainingPencils > 0) drawContext.fillRect(0, fullRows * cellHeight, remainingPencils * cellWidth, cellHeight);
           if (highResolutionCanvas) {
             context.setTransform(1, 0, 0, 1, 0, 0);
             context.clearRect(0, 0, canvas.width, canvas.height);
@@ -1154,13 +1145,13 @@
             context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
           }
         }
-        canvas.dataset.appleCount = String(count);
-        canvas.dataset.drawnAppleCount = String(count);
-        canvas.setAttribute("aria-label", `${formatUnitCount.format(count)} 顆蘋果模型；每顆模型基準為中型蘋果參照值（直徑 7.62 cm、質量 182 g），畫面依此數量繪製`);
+        canvas.dataset.pencilCount = String(count);
+        canvas.dataset.drawnPencilCount = String(count);
+        canvas.setAttribute("aria-label", `${formatUnitCount.format(count)} 支鉛筆模型；每支模型基準為教學模型設定（每支 5 g），畫面依此數量繪製`);
       };
-      const renderAppleArrayDetail = (count) => {
-        const canvas = document.querySelector("#unit-apple-detail");
-        if (!canvas || !appleSprite.complete || !appleSprite.naturalWidth) return;
+      const renderPencilArrayDetail = (count) => {
+        const canvas = document.querySelector("#unit-pencil-detail");
+        if (!canvas || !pencilSprite.complete || !pencilSprite.naturalWidth) return;
         const context = canvas.getContext("2d");
         const width = canvas.width;
         const height = canvas.height;
@@ -1170,48 +1161,48 @@
         const rows = Math.ceil(visibleCount / columns);
         const cellWidth = width / columns;
         const cellHeight = height / rows;
-        const appleAspect = appleSprite.naturalWidth / appleSprite.naturalHeight;
+        const pencilAspect = pencilSprite.naturalWidth / pencilSprite.naturalHeight;
         for (let index = 0; index < visibleCount; index += 1) {
           const column = index % columns;
           const row = Math.floor(index / columns);
-          const appleWidth = Math.min(cellWidth * .88, cellHeight * .88 * appleAspect);
-          const appleHeight = appleWidth / appleAspect;
-          const x = column * cellWidth + (cellWidth - appleWidth) / 2;
-          const y = row * cellHeight + (cellHeight - appleHeight) / 2;
-          context.drawImage(appleSprite, x, y, appleWidth, appleHeight);
+          const pencilWidth = Math.min(cellWidth * .88, cellHeight * .88 * pencilAspect);
+          const pencilHeight = pencilWidth / pencilAspect;
+          const x = column * cellWidth + (cellWidth - pencilWidth) / 2;
+          const y = row * cellHeight + (cellHeight - pencilHeight) / 2;
+          context.drawImage(pencilSprite, x, y, pencilWidth, pencilHeight);
         }
-        canvas.dataset.totalAppleCount = String(count);
-        canvas.dataset.detailAppleCount = String(visibleCount);
-        canvas.setAttribute("aria-label", `局部放大顯示 ${formatUnitCount.format(visibleCount)} 顆蘋果，包含在總數 ${formatUnitCount.format(count)} 顆之內，不是額外增加`);
-        document.querySelector("#unit-apple-detail-note").textContent = count === 1
-          ? "總數只有 1 顆；放大顯示這顆本身，沒有額外增加蘋果。"
-          : `放大顯示總數中的前 ${formatUnitCount.format(visibleCount)} 顆；這些已包含在 ${formatUnitCount.format(count)} 顆內，不是額外增加。`;
+        canvas.dataset.totalPencilCount = String(count);
+        canvas.dataset.detailPencilCount = String(visibleCount);
+        canvas.setAttribute("aria-label", `局部放大顯示 ${formatUnitCount.format(visibleCount)} 支鉛筆，包含在總數 ${formatUnitCount.format(count)} 支之內，不是額外增加`);
+        document.querySelector("#unit-pencil-detail-note").textContent = count === 1
+          ? "總數只有 1 支；放大顯示這支本身，沒有額外增加鉛筆。"
+          : `放大顯示總數中的前 ${formatUnitCount.format(visibleCount)} 支；這些已包含在 ${formatUnitCount.format(count)} 支內，不是額外增加。`;
       };
-      const updateUnitAppleDemo = () => {
-        const unit = appleMassUnits[document.querySelector("#apple-mass-unit").value];
-        const totalGrams = 182 * unit.gramsPerUnit;
-        const appleCount = totalGrams / 182;
-        if (!Number.isInteger(appleCount)) throw new Error("蘋果模型數必須為整數");
-        const countText = formatUnitCount.format(appleCount);
-        const summary = `182 ${unit.label} = ${countText} 顆模型蘋果（每顆按 182 g 計）`;
-        document.querySelector("#unit-apple-count").textContent = summary;
-        document.querySelector("#unit-apple-note").textContent = appleCount === 1
-          ? "模型固定每顆蘋果為 182 g；這裡繪出 1 顆。"
-          : `模型每顆固定以 182 g 計；畫面逐顆繪出 ${countText} 顆，並依數量縮小圖樣。`;
-        renderAppleArrayDetail(appleCount);
-        document.querySelectorAll(".unit-apple-grid").forEach((canvas) => renderApplePopulation(canvas, appleCount));
+      const updateUnitPencilDemo = () => {
+        const unit = pencilMassUnits[document.querySelector("#pencil-mass-unit").value];
+        const totalGrams = 5 * unit.gramsPerUnit;
+        const pencilCount = totalGrams / 5;
+        if (!Number.isInteger(pencilCount)) throw new Error("鉛筆模型數必須為整數");
+        const countText = formatUnitCount.format(pencilCount);
+        const summary = `5 ${unit.label} = ${countText} 支模型鉛筆（每支按 5 g 計）`;
+        document.querySelector("#unit-pencil-count").textContent = summary;
+        document.querySelector("#unit-pencil-note").textContent = pencilCount === 1
+          ? "模型固定每支模型鉛筆為 5 g；這裡繪出 1 支。"
+          : `模型每支模型鉛筆固定以 5 g 計；畫面逐支繪出 ${countText} 支，並依數量縮小圖樣。`;
+        renderPencilArrayDetail(pencilCount);
+        document.querySelectorAll(".unit-pencil-grid").forEach((canvas) => renderPencilPopulation(canvas, pencilCount));
         const sceneCount = document.querySelector("#unit-scene-count");
-        if (sceneCount) sceneCount.textContent = `${countText} 顆`;
+        if (sceneCount) sceneCount.textContent = `${countText} 支`;
         const sceneCaption = document.querySelector("#unit-scene-caption");
         if (sceneCaption) sceneCaption.textContent = summary;
       };
-      document.querySelector("#apple-mass-unit").addEventListener("change", updateUnitAppleDemo);
-      window.addEventListener("resize", updateUnitAppleDemo);
-      updateUnitAppleDemo();
+      document.querySelector("#pencil-mass-unit").addEventListener("change", updateUnitPencilDemo);
+      window.addEventListener("resize", updateUnitPencilDemo);
+      updateUnitPencilDemo();
 
       const tasks = {
         length: { instrument: "直尺", range: "長度；量程 0–30 cm", quantity: "長度", value: "約 18.2 cm", tooShort: "短尺", tooShortRange: "長度；量程 0–5 cm" },
-        mass: { instrument: "天平", range: "質量；量程 0–500 g", quantity: "質量", value: "約 182 g", tooShort: "小量程天平", tooShortRange: "質量；量程 0–100 g" }
+        mass: { instrument: "天平", range: "質量；量程 0–100 g", quantity: "質量", value: "約 5 g", tooShort: "小量程天平", tooShortRange: "質量；量程 0–1 g" }
       };
       const toolTaskSelect = document.querySelector("#tool-task");
       const toolStateSelect = document.querySelector("#tool-state");
@@ -1225,7 +1216,7 @@
         let explanation = `${task.quantity}相符，預期值 ${task.value} 落在工具量程內。`;
         if (selection === "wrong-quantity") {
           name = task.quantity === "長度" ? "天平" : "直尺";
-          range = task.quantity === "長度" ? "質量；量程 0–500 g" : "長度；量程 0–30 cm";
+          range = task.quantity === "長度" ? "質量；量程 0–100 g" : "長度；量程 0–30 cm";
           result = "物理量不相符";
           explanation = `目前任務要量${task.quantity}，這個工具測量的是另一種物理量。`;
         }
@@ -1239,7 +1230,7 @@
         document.querySelector("#tool-range").textContent = range;
         document.querySelector("#tool-result").textContent = result;
         document.querySelector("#tool-result-note").textContent = explanation;
-        const quantityValues = { length: { value: 18.2, max: 30, unit: "cm" }, mass: { value: 182, max: 500, unit: "g" } };
+        const quantityValues = { length: { value: 18.2, max: 30, unit: "cm" }, mass: { value: 5, max: 100, unit: "g" } };
         const visual = quantityValues[toolTaskSelect.value];
         const visibleMaximum = selection === "short-range" ? (visual.unit === "cm" ? 5 : visual.unit === "g" ? 100 : 10) : visual.max;
         const ratio = Math.min(100, (visual.value / visibleMaximum) * 100);
@@ -1258,7 +1249,7 @@
         stage.classList.toggle("is-mass-mode", massTask);
         document.querySelector("#balance-station").classList.toggle("is-weighing", massTask);
         document.querySelector("#mass-reference").hidden = !massTask;
-        document.querySelector("#balance-display-reading").textContent = massTask ? "約 182 g" : "— g";
+        document.querySelector("#balance-display-reading").textContent = massTask ? "約 5 g" : "— g";
         if (activeCardIndex === 2) {
           document.querySelector("#room-label").textContent = massTask
             ? "電子天平觀察台・質量量測"
@@ -1334,10 +1325,10 @@
         renderParallaxScene();
       });
       window.addEventListener("resize", renderParallaxScene);
-      window.addEventListener("apple3d-ready", renderParallaxScene, { once: true });
+      window.addEventListener("pencil3d-ready", renderParallaxScene, { once: true });
       window.addEventListener("load", renderParallaxScene, { once: true });
       // The module can finish before this listener is attached; apply the current camera immediately when ready.
-      if (window.setApple3DView) renderParallaxScene();
+      if (window.setPencil3DView) renderParallaxScene();
 
       const zeroButtons = [...document.querySelectorAll("[data-zero]")];
       zeroButtons.forEach((button) => button.addEventListener("click", () => {
@@ -1428,7 +1419,7 @@
       ];
       const sceneToolContexts = [
         "切換一項條件，觀察同一支鉛筆的兩筆紀錄如何改變。",
-        "先分清長度與質量，再固定 182、切換質量單位，查看數量如何改變。",
+        "先分清長度與質量，再固定 5、切換質量單位，查看數量如何改變。",
         "在長度與質量任務間切換；觀察室會顯示相應工具、讀值與量程，鉛筆保持不變。",
         "改變每公分的分格數；尺的刻線會變，鉛筆端點保持在同一位置。",
         "放大只改變觀察範圍；移動鉛筆時，刻度和端點仍沿用同一模型。",
@@ -1466,7 +1457,7 @@
         mountedToolElements[index].forEach(({ element }) => sceneToolSlot.append(element));
         mountedToolIndex = index;
         if (index !== 1) {
-          const unitField = document.querySelector("#unit-apple-field");
+          const unitField = document.querySelector("#unit-pencil-field");
           unitField.hidden = true;
           unitField.setAttribute("aria-hidden", "true");
           scene.classList.remove("is-unit-mode");
@@ -1492,16 +1483,16 @@
         nextCardButton.textContent = activeCardIndex === lessonCards.length - 1 ? "已到這段學習的結尾" : "繼續閱讀 →";
         mountSceneTools(activeCardIndex);
         const unitFieldActive = activeCardIndex === 1;
-        const unitField = document.querySelector("#unit-apple-field");
+        const unitField = document.querySelector("#unit-pencil-field");
         scene.classList.toggle("is-unit-mode", unitFieldActive);
         unitField.hidden = !unitFieldActive;
         unitField.setAttribute("aria-hidden", String(!unitFieldActive));
         document.querySelector("#room-label").textContent = unitFieldActive
-          ? "單位觀察室・固定數字 182"
+          ? "單位觀察室・固定數字 5"
           : activeCardIndex === 2 && document.querySelector("#tool-task").value === "mass"
-          ? "量測觀察室・切換到蘋果質量"
+          ? "量測觀察室・切換到鉛筆質量"
           : `3D 量測觀察室・${sceneToolCards[activeCardIndex].title.split("・")[0]}`;
-        if (unitFieldActive) updateUnitAppleDemo();
+        if (unitFieldActive) updateUnitPencilDemo();
         updateToolView();
         if (updateHash) history.replaceState(null, "", `#${lessonCards[activeCardIndex].id}`);
         renderParallaxScene();
@@ -1566,6 +1557,6 @@
   <script type="importmap">
     {"imports":{"three":"./assets/vendor/three/build/three.module.js","three/addons/":"./assets/vendor/three/examples/jsm/"}}
   </script>
-  <script type="module" src="assets/apple-3d-viewer.js"></script>
+  <script type="module" src="assets/pencil-3d-viewer.js"></script>
 </body>
 </html>

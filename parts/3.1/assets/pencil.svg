@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 96" role="img" aria-label="黃色木製鉛筆">
+  <rect x="72" y="25" width="360" height="46" rx="18" fill="#e5bd43" stroke="#987625" stroke-width="3"/>
+  <path d="M72 25 14 48l58 23z" fill="#d9a35b" stroke="#987625" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M14 48 0 48" stroke="#30343a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M100 31h290" stroke="#f8dfa0" stroke-width="5" opacity=".8"/>
+  <rect x="432" y="25" width="23" height="46" fill="#b9c2c0" stroke="#987625" stroke-width="2"/>
+  <path d="M455 25h42a15 15 0 0 1 15 15v16a15 15 0 0 1-15 15h-42z" fill="#d98280" stroke="#987625" stroke-width="3"/>
+</svg>
