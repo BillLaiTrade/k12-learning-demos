@@ -577,11 +577,11 @@
         document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V423`);
       };
       const animateModelView = (zoom) => {
-        const targetHeight = zoom ? 120 : 170;
-        const targetWidth = targetHeight * (760 / 170);
+        const targetHeight = zoom ? 112 : 170;
+        const targetWidth = zoom ? 500 : 760;
         const endpointX = 80 + estimateEndpoint() * (640 / 30);
         const target = {
-          x: zoom ? endpointX - targetWidth * 0.8 : 0,
+          x: zoom ? endpointX - targetWidth * 0.85 : 0,
           y: zoom ? 320 : 295,
           width: targetWidth,
           height: targetHeight
@@ -591,7 +591,7 @@
         cancelAnimationFrame(modelViewAnimationFrame);
         const start = { ...modelViewBox };
         const startPencilOffset = pencilViewOffset;
-        const targetPencilOffset = zoom ? 4 : 0;
+        const targetPencilOffset = zoom ? 8 : 0;
         const startTime = performance.now();
         const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700;
         const frame = (now) => {
