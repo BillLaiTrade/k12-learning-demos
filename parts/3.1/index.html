@@ -139,6 +139,17 @@
     .readout article { padding: 15px; border: 1px solid var(--line); border-radius: 16px; background: #f9faf5; }
     .readout small { color: var(--muted); display: block; }
     .readout strong { display: block; font-size: 1.45rem; }
+    .range-model, .division-visual { margin: 14px 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
+    .range-model-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 14px; font-size: .9rem; }
+    .range-model-head span, .range-endpoints { color: var(--muted); }
+    .range-track { position: relative; height: 22px; margin: 13px 4px 3px; border: 1px solid #aab9ac; border-radius: 99px; background: linear-gradient(90deg, #e8eee3, #dbe9dc); }
+    .range-track::before { position: absolute; inset: 4px 0; content: ""; background: repeating-linear-gradient(90deg, transparent 0 calc(10% - 1px), #7c9485 calc(10% - 1px) 10%); }
+    .range-track span { position: absolute; inset: 0 auto 0 0; width: 21%; border-radius: inherit; background: rgb(36 117 84 / 32%); transition: width .3s ease, background .3s ease; }
+    .range-track span[data-state="invalid"] { background: rgb(188 97 43 / 32%); }
+    .range-track i { position: absolute; top: -5px; left: 21%; width: 3px; height: 30px; background: #bc612b; transform: translateX(-50%); transition: left .3s ease; }
+    .range-endpoints { display: flex; justify-content: space-between; font-size: .75rem; }
+    .division-visual svg { display: block; width: 100%; height: auto; }
+    .division-visual p { margin: 7px 0 0; color: var(--muted); font-size: .84rem; }
     .control-panel { padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
     .control-panel > :last-child { margin-bottom: 0; }
     .live-note { min-height: 3em; margin: 12px 0 0; color: var(--muted); }
@@ -233,11 +244,11 @@
         <div class="card-side"><span class="card-number">CARD 01</span><h3>提出疑問</h3><span class="card-role">同一物體，不同紀錄</span></div>
         <div class="card-main">
           <h2>同一顆蘋果，為什麼會有不同讀值？</h2>
-          <p>兩次紀錄出現差異，不一定表示蘋果的寬度改變。切換尺的刻度、起點、視角或單位，觀察同一個模型裡的量測紀錄如何改變。</p>
+          <p>先保留同一顆蘋果的紀錄 A，再只改變一個量測條件，觀察紀錄 B。比較時看清楚：是蘋果變了，還是尺與讀法變了？</p>
           <label class="field">切換量測情境
             <select id="difference-condition"><option value="scale">工具刻度不同</option><option value="start">尺的起點沒有對準</option><option value="view">讀刻度的視角不同</option><option value="unit">使用的單位不同</option></select>
           </label>
-          <div class="readout" aria-live="polite"><article><small>比較紀錄 A</small><strong id="reading-a">約 6.3 cm</strong><span id="reading-a-note">左端對齊零刻度</span></article><article><small>比較紀錄 B</small><strong id="reading-b">約 6.3–6.4 cm</strong><span id="reading-b-note">依端點位置估讀</span></article></div>
+          <div class="readout" aria-live="polite"><article><small>紀錄 A・固定參照</small><strong id="reading-a">約 6.3 cm</strong><span id="reading-a-note">同一顆蘋果的原始紀錄</span></article><article><small>紀錄 B・改變後</small><strong id="reading-b">約 6.3–6.4 cm</strong><span id="reading-b-note">依端點位置估讀</span></article></div>
           <div class="fact"><p id="difference-explanation">改變的是尺或讀值條件；蘋果仍是同一顆，讓我們可以比較同一量測對象的紀錄。</p></div>
           <p class="next-hint">要讀懂這些差異，先看看一筆量測紀錄要交代哪些資訊。</p>
         </div>
@@ -279,6 +290,11 @@
             <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
             <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，蘋果寬度落在尺的量程內。</span></article>
           </div>
+          <div class="range-model" aria-label="工具量程與預期量值的視覺比較">
+            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">蘋果約 6.3 cm，落在量程內</span></div>
+            <div class="range-track"><span id="range-fill"></span><i id="range-marker" aria-hidden="true"></i></div>
+            <div class="range-endpoints"><span>0</span><span id="range-maximum">30 cm</span></div>
+          </div>
           <p class="live-note">量程是工具能測量的範圍。量程太短時，即使物理量相符，也無法完整量取；量程很大也不代表刻度一定夠細。</p>
           <p class="next-hint">工具選定後，下一步是讀懂刻度的間距。</p>
         </div>
@@ -298,6 +314,14 @@
             </div>
             <p class="live-note" id="division-model-note">共用模型中的尺已同步更新；蘋果端點仍在相同位置。</p>
             <p class="live-note" id="division-note" aria-live="polite">1 cm 分成 10 個相等間隔，每個間隔是 0.1 cm（1 mm）。</p>
+          </div>
+          <div class="division-visual" aria-label="同一段直尺的分格變化；蘋果端點位置固定">
+            <svg id="division-ruler" viewBox="0 0 520 100" role="img" aria-label="一公分分成十格的直尺示意，右端點位置固定">
+              <rect x="20" y="22" width="480" height="50" rx="6" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
+              <g id="division-ticks"></g><path id="division-endpoint" d="M178.4 10v72" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
+              <text id="division-unit-label" x="20" y="94" fill="#26383a" font-size="13">6 cm</text><text id="division-unit-label-end" x="500" y="94" text-anchor="end" fill="#26383a" font-size="13">7 cm</text>
+            </svg>
+            <p id="division-visual-note" aria-live="polite">橘色標記是固定的蘋果端點；改變的是尺的刻線間距。</p>
           </div>
           <div class="fact"><p>工具的最小刻度會限制可直接讀取的精細程度；讀值時先確認刻度標示和每格的間距。</p></div>
         </div>
@@ -684,9 +708,28 @@
           ? `測量蘋果水平方向的寬度；蘋果左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於六點三與六點四公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`
           : "尺上的公分單位標示已隱藏；測量蘋果水平方向的寬度，端點仍在六點三與六點四刻線之間");
         if (note) document.querySelector("#shared-model-note").textContent = note;
+        renderDivisionRuler();
         renderParallaxScene();
       };
+      const renderDivisionRuler = () => {
+        const group = document.querySelector("#division-ticks");
+        if (!group) return;
+        const ticks = [];
+        for (let index = 0; index <= state.divisions; index += 1) {
+          const x = 20 + (480 * index) / state.divisions;
+          const major = index === 0 || index === state.divisions;
+          ticks.push(`<path d="M${x} 22v${major ? 36 : 26}" stroke="#26383a" stroke-width="${major ? 2.5 : 1.5}"/>`);
+        }
+        group.innerHTML = ticks.join("");
+        const endpointX = 20 + (clamp(state.edge - 6, 0, 1) * 480);
+        document.querySelector("#division-endpoint").setAttribute("d", `M${endpointX} 10v72`);
+        document.querySelector("#division-unit-label").textContent = state.unit ? "6 cm" : "6";
+        document.querySelector("#division-unit-label-end").textContent = state.unit ? "7 cm" : "7";
+        document.querySelector("#division-visual-note").textContent = `尺面顯示 6–7 cm；橘色標記是蘋果右端，固定在約 ${state.edge.toFixed(2)} cm。每公分分成 ${state.divisions} 格。`;
+        document.querySelector("#division-ruler").setAttribute("aria-label", `尺面從六到七公分，每公分分成${state.divisions}格；蘋果右端約在${state.edge.toFixed(2)}公分`);
+      };
       updateModel();
+      renderDivisionRuler();
 
       const differenceStates = {
         scale: { divisions: 2, start: 0, angle: false, unit: true, note: "同一蘋果與尺，改用較粗的刻度示意；端點所在區間較難細分。" },
@@ -698,9 +741,9 @@
         const chosen = differenceStates[event.target.value];
         Object.assign(state, { divisions: chosen.divisions, start: chosen.start, angle: chosen.angle, unit: chosen.unit });
         updateModel(chosen.note);
-        document.querySelector("#reading-a").textContent = chosen.unit ? "約 6.3 cm" : "約 6.3（無單位）";
+        document.querySelector("#reading-a").textContent = "約 6.3 cm";
         document.querySelector("#reading-b").textContent = chosen.start ? "終點讀值約 6.8 cm" : chosen.angle ? "讀值可能偏移" : chosen.divisions === 2 ? "約 6.0–6.5 cm" : chosen.unit ? "約 6.3–6.4 cm" : "約 6.3–6.4（無單位）";
-        document.querySelector("#reading-a-note").textContent = "同一顆蘋果的紀錄";
+        document.querySelector("#reading-a-note").textContent = "原始測量的固定參照";
         document.querySelector("#reading-b-note").textContent = chosen.start ? "起點在 0.5 cm，需扣除起點" : chosen.angle ? "轉動視角，檢視視差落點" : chosen.divisions === 2 ? "較粗刻度的尺，區間較大" : chosen.unit ? "依端點位置估讀" : "尺上的 cm 標示已移除";
         document.querySelector("#difference-explanation").textContent = chosen.note;
       });
@@ -755,6 +798,20 @@
         document.querySelector("#tool-range").textContent = range;
         document.querySelector("#tool-result").textContent = result;
         document.querySelector("#tool-result-note").textContent = explanation;
+        const quantityValues = { length: { value: 6.3, max: 30, unit: "cm" }, mass: { value: 150, max: 500, unit: "g" }, time: { value: 12, max: 60, unit: "s" } };
+        const visual = quantityValues[document.querySelector("#tool-task").value];
+        const visibleMaximum = selection === "short-range" ? (visual.unit === "cm" ? 5 : visual.unit === "g" ? 100 : 10) : visual.max;
+        const ratio = Math.min(100, (visual.value / visibleMaximum) * 100);
+        document.querySelector("#range-model-title").textContent = `${name}・${task.quantity}`;
+        document.querySelector("#range-model-caption").textContent = selection === "wrong-quantity"
+          ? `預期量值 ${visual.value} ${visual.unit}，但工具量的是另一種物理量`
+          : selection === "short-range"
+          ? `預期 ${visual.value} ${visual.unit} 超過 0–${visibleMaximum} ${visual.unit}`
+          : `預期 ${visual.value} ${visual.unit} 落在工具量程內`;
+        document.querySelector("#range-maximum").textContent = `${visibleMaximum} ${visual.unit}`;
+        document.querySelector("#range-fill").style.width = `${ratio}%`;
+        document.querySelector("#range-fill").dataset.state = selection === "wrong-quantity" || selection === "short-range" ? "invalid" : "valid";
+        document.querySelector("#range-marker").style.left = `${ratio}%`;
       };
       document.querySelector("#tool-task").addEventListener("change", updateToolView);
       document.querySelector("#tool-state").addEventListener("change", updateToolView);

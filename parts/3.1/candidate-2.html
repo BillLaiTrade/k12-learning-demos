@@ -138,6 +138,17 @@
     .readout article { padding: 15px; border: 1px solid var(--line); border-radius: 16px; background: #f9faf5; }
     .readout small { color: var(--muted); display: block; }
     .readout strong { display: block; font-size: 1.45rem; }
+    .range-model, .division-visual { margin: 14px 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
+    .range-model-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 14px; font-size: .9rem; }
+    .range-model-head span, .range-endpoints { color: var(--muted); }
+    .range-track { position: relative; height: 22px; margin: 13px 4px 3px; border: 1px solid #aab9ac; border-radius: 99px; background: linear-gradient(90deg, #e8eee3, #dbe9dc); }
+    .range-track::before { position: absolute; inset: 4px 0; content: ""; background: repeating-linear-gradient(90deg, transparent 0 calc(10% - 1px), #7c9485 calc(10% - 1px) 10%); }
+    .range-track span { position: absolute; inset: 0 auto 0 0; width: 21%; border-radius: inherit; background: rgb(36 117 84 / 32%); transition: width .3s ease, background .3s ease; }
+    .range-track span[data-state="invalid"] { background: rgb(188 97 43 / 32%); }
+    .range-track i { position: absolute; top: -5px; left: 21%; width: 3px; height: 30px; background: #bc612b; transform: translateX(-50%); transition: left .3s ease; }
+    .range-endpoints { display: flex; justify-content: space-between; font-size: .75rem; }
+    .division-visual svg { display: block; width: 100%; height: auto; }
+    .division-visual p { margin: 7px 0 0; color: var(--muted); font-size: .84rem; }
     .control-panel { padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
     .control-panel > :last-child { margin-bottom: 0; }
     .live-note { min-height: 3em; margin: 12px 0 0; color: var(--muted); }
@@ -242,6 +253,160 @@
       .lesson-card { animation: arrive .45s ease both; }
       @keyframes arrive { from { opacity: .78; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     }
+    /* 觀察室候選：視窗上方 80% 保留給同一個實驗場景，下方 20% 放教學卡。 */
+    html:has(.immersive-page), body.immersive-page { width: 100%; height: 100%; min-height: 100%; overflow: hidden; }
+    .immersive-page .masthead { position: fixed; inset: 0 0 auto; z-index: 12; width: 100%; padding: 10px 18px; pointer-events: none; }
+    .immersive-page .brand-row { pointer-events: auto; width: min(100%, 1200px); margin: auto; padding: 8px 12px; border: 1px solid rgb(255 255 255 / 65%); border-radius: 16px; background: rgb(255 254 250 / 72%); backdrop-filter: blur(12px); }
+    .immersive-page .hero, .immersive-page .route, .immersive-page .section-top, .immersive-page footer { display: none; }
+    .immersive-page .lesson { position: static; width: 100%; max-width: none; padding: 0; }
+    .immersive-room { display: block; min-height: 0; }
+    .immersive-page .scene-stage { position: fixed; inset: 0 0 20svh; z-index: 1; width: 100%; height: 80svh; min-height: 0; border: 0; border-radius: 0 0 28px 28px; }
+    .immersive-page #parallax-canvas { touch-action: none; }
+    .immersive-page .room-label { top: 72px; }
+    .immersive-page .scene-caption { top: 68px; right: 18px; }
+    .immersive-page .scene-readout { right: 20px; bottom: 18px; left: 20px; width: min(500px, calc(100% - 40px)); }
+    .immersive-page .lesson-layout { position: fixed; inset: auto 0 0; z-index: 10; width: 100%; height: 20svh; padding: 24px clamp(10px, 2vw, 28px) 7px; background: rgb(244 247 241 / 96%); border-top: 1px solid rgb(132 159 146 / 45%); box-shadow: 0 -14px 38px rgb(26 55 44 / 13%); backdrop-filter: blur(18px); }
+    .immersive-page .cards { display: block; width: 100%; height: 100%; overflow: hidden; touch-action: pan-y; }
+    .immersive-page .lesson-card { display: none; width: 100%; height: 100%; max-height: none; overflow: auto; grid-template-columns: 118px minmax(0, 1fr); gap: 12px; padding: 9px 12px 26px; border: 1px solid rgb(132 159 146 / 25%); border-radius: 18px; background: rgb(255 254 250 / 97%); box-shadow: 0 8px 24px rgb(30 52 42 / 10%); backdrop-filter: blur(16px); touch-action: pan-y; }
+    .immersive-page .lesson-card.is-active { display: grid; animation: card-arrive .22s ease both; }
+    .immersive-page .card-side { display: flex; align-items: flex-start; flex-direction: column; gap: 4px; padding: 8px 10px 8px 2px; border-right: 1px solid var(--line); }
+    .immersive-page .card-side h3 { margin: 0; font-size: .94rem; }
+    .immersive-page .card-role { display: block; font-size: .74rem; }
+    .immersive-page .card-main { position: relative; display: grid; grid-template-columns: minmax(180px, .75fr) minmax(0, 1.25fr); align-content: center; align-items: center; gap: 4px 14px; min-width: 0; }
+    .immersive-page .card-main h2 { grid-column: 1; grid-row: 1; margin: 0; font-size: clamp(.98rem, 1.45vw, 1.24rem); line-height: 1.25; }
+    .immersive-page .card-main > p:first-of-type { grid-column: 1; grid-row: 2; margin: 0; color: var(--muted); font-size: .78rem; line-height: 1.4; }
+    .immersive-page .card-main .fact, .immersive-page .card-main .next-hint, .immersive-page .card-main .live-note { display: none; }
+    .immersive-page .card-main .field, .immersive-page .card-main .select-row, .immersive-page .card-main .readout, .immersive-page .card-main .range-model, .immersive-page .card-main .mass-controls,
+    .immersive-page .card-main .record, .immersive-page .card-main .concept-parts, .immersive-page .card-main .control-panel,
+    .immersive-page .card-main .toggle-row, .immersive-page .card-main .slider-row, .immersive-page .card-main .choices,
+    .immersive-page .card-main .assessment-label, .immersive-page .card-main .feedback { grid-column: 2; margin: 0; }
+    .immersive-page .card-main .field, .immersive-page .card-main .select-row { align-self: center; }
+    .immersive-page .card-main .control-panel { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 5px; border: 0; background: transparent; }
+    .immersive-page .card-main .control-panel .ruler-caption { display: none; }
+    .immersive-page .card-main .control-panel .toggle-row { margin: 0; }
+    .immersive-page .card-main .control-panel .live-note { display: none; }
+    .immersive-page .card-main .readout { display: flex; gap: 6px; }
+    .immersive-page .card-main .readout article { flex: 1 1 0; min-width: 0; padding: 6px 8px; }
+    .immersive-page .card-main .readout small, .immersive-page .card-main .readout span { font-size: .7rem; }
+    .immersive-page .card-main .readout strong { font-size: .95rem; }
+    .immersive-page .card-main .choices { display: flex; flex-direction: row; overflow-x: auto; }
+    .immersive-page .card-main .choice { flex: 1 0 31%; min-height: 42px; padding: 5px 8px; font-size: .72rem; }
+    .immersive-page .card-main .assessment-label { position: absolute; top: -4px; right: 0; margin: 0; font-size: .66rem; }
+    .immersive-page .card-main .end-card h2 { padding-top: 16px; }
+    .immersive-page .model-panel, .immersive-page .parallax-scene, .immersive-page .division-visual { display: none; }
+    .immersive-page .card-main .range-model { display: none; }
+    .immersive-page .range-model { padding: 4px 8px; font-size: .72rem; }
+    .immersive-page .range-model-head { font-size: .68rem; }
+    .immersive-page .range-track { height: 14px; margin: 7px 4px 2px; }
+    .immersive-page .range-track i { top: -3px; height: 20px; }
+    .immersive-page .range-endpoints { font-size: .58rem; }
+    .immersive-page .card-main .slider-row { display: flex; gap: 8px; align-items: center; }
+    .immersive-page .card-main input[type="range"] { width: min(340px, 60%); }
+    .immersive-page .swipe-status { position: absolute; top: 4px; right: 18px; left: 148px; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 14px; color: var(--muted); font-size: .68rem; pointer-events: none; }
+    .immersive-page .swipe-status progress { width: min(180px, 25vw); height: 4px; margin: 0; }
+    .immersive-page .swipe-status strong { color: var(--green); white-space: nowrap; }
+    .immersive-page .lesson-card.is-dragging { transition: none; }
+    .immersive-page .lesson-card { transition: transform .18s ease, opacity .18s ease; }
+    .immersive-page .lesson-card.swipe-out-left { animation: swipe-out-left .22s ease both; }
+    .immersive-page .lesson-card.swipe-out-right { animation: swipe-out-right .22s ease both; }
+    @keyframes swipe-out-left { to { opacity: 0; transform: translateX(-24%) rotate(-5deg); } }
+    @keyframes swipe-out-right { to { opacity: 0; transform: translateX(24%) rotate(5deg); } }
+    @media (max-width: 760px) {
+      .immersive-page .masthead { padding: 6px 8px; }
+      .immersive-page .brand-row { gap: 6px; padding: 5px 8px; font-size: .73rem; }
+      .immersive-page .crumb { display: none; }
+      .immersive-page .brand { white-space: nowrap; }
+      .immersive-page .brand-row > a:last-child { padding: 5px 8px; font-size: .72rem; }
+      .immersive-page .room-label { top: 88px; left: 10px; font-size: .68rem; }
+      .immersive-page .scene-caption { top: 86px; right: 8px; }
+      .immersive-page .scene-caption .secondary { min-height: 34px; padding: 5px 8px; font-size: .72rem; }
+      .immersive-page .scene-readout { right: 8px; bottom: 9px; left: 8px; width: min(360px, calc(100% - 16px)); gap: 6px; }
+      .immersive-page .scene-readout article { padding: 6px; }
+      .immersive-page .scene-readout small { font-size: .62rem; }
+      .immersive-page .scene-readout strong { font-size: .82rem; }
+      .immersive-page .lesson-layout { padding: 22px 5px 5px; }
+      .immersive-page .lesson-card { grid-template-columns: 72px minmax(0, 1fr); gap: 6px; padding: 6px 7px 24px; border-radius: 14px; }
+      .immersive-page .card-side { gap: 3px; padding-right: 6px; }
+      .immersive-page .card-number { font-size: .64rem; }
+      .immersive-page .card-side h3 { font-size: .74rem; line-height: 1.2; }
+      .immersive-page .card-role { display: none; }
+      .immersive-page .card-main { grid-template-columns: minmax(0, 1fr); align-content: start; gap: 3px; padding-top: 2px; width: 100%; }
+      .immersive-page .card-main h2 { grid-column: 1; grid-row: auto; font-size: .8rem; }
+      .immersive-page .card-main > p:first-of-type { grid-column: 1; grid-row: auto; display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 1; font-size: .61rem; line-height: 1.2; }
+      .immersive-page .card-main .field, .immersive-page .card-main .select-row, .immersive-page .card-main .readout,
+      .immersive-page .card-main .range-model, .immersive-page .card-main .mass-controls, .immersive-page .card-main .record, .immersive-page .card-main .concept-parts,
+      .immersive-page .card-main .control-panel, .immersive-page .card-main .toggle-row, .immersive-page .card-main .slider-row,
+      .immersive-page .card-main .choices, .immersive-page .card-main .assessment-label, .immersive-page .card-main .feedback { grid-column: 1; }
+      .immersive-page #card-03 .readout { display: none; }
+      .immersive-page #card-03 .select-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px 6px; }
+      .immersive-page #card-03 .select-row .field { min-width: 0; font-size: .58rem; }
+      .immersive-page #card-03 .select-row select { width: 100%; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .immersive-page .card-main .field, .immersive-page .card-main select, .immersive-page .card-main .secondary,
+      .immersive-page .card-main .toggle-row button { min-height: 32px; padding: 4px 6px; font-size: .66rem; }
+      .immersive-page .card-main .readout article { padding: 4px; }
+      .immersive-page .card-main .readout strong { font-size: .72rem; }
+      .immersive-page .card-main .readout small, .immersive-page .card-main .readout span { font-size: .58rem; }
+      .immersive-page .card-main .record { padding: 5px; font-size: .76rem; }
+      .immersive-page .card-main .concept-parts { gap: 3px; }
+      .immersive-page .card-main .concept-parts button { padding: 4px 6px; font-size: .62rem; }
+      .immersive-page .card-main .choices { gap: 4px; }
+      .immersive-page .card-main .choice { flex-basis: 45%; font-size: .58rem; }
+      .immersive-page .swipe-status { top: 4px; right: 9px; left: 82px; font-size: .58rem; }
+      .immersive-page .swipe-status progress { width: 18vw; }
+    }
+    /* 觀察室是全畫面場景；卡片與前後卡片只作為浮在場景上的相簿式圖層。 */
+    .immersive-page .scene-stage { inset: 0; height: 100svh; border-radius: 0; }
+    .immersive-page .lesson-layout { inset: auto 0 2svh; height: 23svh; padding: 0; background: transparent; border: 0; box-shadow: none; backdrop-filter: none; pointer-events: none; }
+    .immersive-page .cards { position: relative; height: 100%; overflow: visible; perspective: 1000px; }
+    .immersive-page .lesson-card { position: absolute; bottom: 0; left: 50%; width: min(90vw, 1150px); height: 23svh; min-height: 0; margin: 0; transform: translateX(-50%); pointer-events: none; }
+    .immersive-page .lesson-card.is-active { z-index: 4; pointer-events: auto; transform: translateX(-50%); animation: room-card-arrive .22s ease both; }
+    .immersive-page .lesson-card.is-prev, .immersive-page .lesson-card.is-next { display: grid; z-index: 2; width: min(82vw, 980px); overflow: hidden; opacity: .62; filter: saturate(.75); pointer-events: none; }
+    .immersive-page .lesson-card.is-prev { left: 0; transform: scale(.94); transform-origin: left bottom; }
+    .immersive-page .lesson-card.is-next { right: 0; left: auto; transform: scale(.94); transform-origin: right bottom; }
+    .immersive-page .lesson-card.is-prev .card-main, .immersive-page .lesson-card.is-next .card-main { display: none; }
+    .immersive-page .lesson-card.is-prev .card-side, .immersive-page .lesson-card.is-next .card-side { align-self: center; border: 0; }
+    .immersive-page .lesson-card.is-next .card-side { position: absolute; right: 12px; left: auto; width: 124px; align-items: flex-end; text-align: right; }
+    .immersive-page .lesson-card.is-prev .card-number, .immersive-page .lesson-card.is-next .card-number { font-size: .75rem; }
+    .immersive-page .lesson-card.is-prev .card-role, .immersive-page .lesson-card.is-next .card-role { display: none; }
+    .immersive-page .swipe-status { top: -19px; right: auto; bottom: auto; left: 50%; width: min(94vw, 420px); padding: 3px 9px; border: 1px solid rgb(255 255 255 / 62%); border-radius: 999px; background: rgb(255 254 250 / 78%); box-shadow: 0 5px 18px rgb(26 55 44 / 12%); transform: translateX(-50%); font-size: .65rem; }
+    .immersive-page .swipe-status progress { width: min(120px, 20vw); }
+    .immersive-page .balance-station { position: absolute; top: 55%; left: 50%; z-index: 2; width: min(76vw, 760px); visibility: hidden; opacity: 0; transform: translate(-50%, -47%) scale(.97); transition: opacity .28s ease, transform .28s ease, visibility .28s; pointer-events: none; filter: drop-shadow(0 22px 30px rgb(26 55 44 / 18%)); }
+    .immersive-page .balance-station svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .immersive-page .balance-station .balance-readout { font: 800 25px system-ui, sans-serif; fill: #174632; }
+    .immersive-page .balance-station .balance-caption { font: 700 13px system-ui, sans-serif; fill: #476657; }
+    .immersive-page .scene-stage.is-mass-mode #parallax-canvas { opacity: 0; }
+    .immersive-page .scene-stage.is-mass-mode .scene-readout, .immersive-page .scene-stage.is-mass-mode .scene-caption { visibility: hidden; }
+    .immersive-page .balance-station.is-weighing { visibility: visible; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    .immersive-page .balance-station.is-weighing .scale-glow { opacity: 1; }
+    .immersive-page .balance-station .scale-glow { opacity: .25; transition: opacity .25s ease; }
+    .immersive-page .scene-readout { top: 118px; right: 18px; bottom: auto; left: auto; width: min(350px, calc(100% - 36px)); grid-template-columns: 1fr 1fr; }
+    .immersive-page .mass-controls { display: flex; align-items: center; gap: 10px; grid-column: 2; padding: 4px 8px; border: 1px solid var(--line); border-radius: 12px; background: #f8f9f4; }
+    .immersive-page .mass-controls[hidden] { display: none !important; }
+    .immersive-page .mass-controls label { display: flex; align-items: center; gap: 8px; font-size: .72rem; white-space: nowrap; }
+    .immersive-page .mass-controls input { width: min(180px, 32vw); }
+    .immersive-page .mass-controls output { min-width: 58px; color: var(--green); font-weight: 800; }
+    .immersive-page #card-03 .card-main > p:first-of-type { display: none; }
+    .immersive-page #card-03 .readout article { padding: 4px 7px; }
+    .immersive-page #card-03 .readout span { display: none; }
+    @keyframes room-card-arrive { from { opacity: .45; transform: translateX(calc(-50% + 12px)) scale(.99); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+    @media (max-width: 760px) {
+      .immersive-page .room-label { top: 88px; }
+      .immersive-page .scene-caption { top: 86px; }
+      .immersive-page .scene-readout { top: 132px; right: 8px; width: min(240px, calc(100% - 16px)); }
+      .immersive-page .lesson-layout { bottom: 2svh; height: 23svh; }
+      .immersive-page .lesson-card { width: calc(100% - 42px); height: 23svh; }
+      .immersive-page .lesson-card.is-prev, .immersive-page .lesson-card.is-next { width: calc(100% - 42px); height: 23svh; }
+      .immersive-page .lesson-card.is-prev { left: 0; }
+      .immersive-page .lesson-card.is-next { right: 0; }
+      .immersive-page .lesson-card.is-next .card-side { position: absolute; right: 9px; left: auto; width: 62px; align-items: flex-end; text-align: right; }
+      .immersive-page .swipe-status { top: -18px; width: min(94vw, 390px); gap: 5px; font-size: .56rem; }
+      .immersive-page .swipe-status progress { width: 16vw; }
+      .immersive-page .balance-station { top: 56%; width: min(92vw, 540px); }
+      .immersive-page .balance-station .balance-readout { font-size: 23px; }
+      .immersive-page .balance-station .balance-caption { font-size: 12px; }
+      .immersive-page .mass-controls { grid-column: 1; gap: 4px; padding: 2px 5px; }
+      .immersive-page .mass-controls input { width: 24vw; }
+    }
   </style>
 </head>
 <body class="immersive-page">
@@ -251,7 +416,7 @@
       <div>
         <div class="eyebrow">Part 3.1 · 候選 2｜3D 量測觀察室 · 8 張卡</div>
         <h1>要公平比較，<br>先把「量」說清楚</h1>
-        <p>同一顆蘋果，為什麼可能量出不同讀值？在觀察室裡逐張切換學習卡，操作同一個 3D 量測場景，從紀錄、刻度到讀值條件，一步步找出能比較的資料。</p>
+        <p>同一顆蘋果，為什麼可能量出不同讀值？觀察室會固定顯示同一顆蘋果與直尺；沿卡片操作紀錄、刻度與讀值條件，看哪些變了、哪些保持不變。</p>
       </div>
       <aside class="hero-note">
         <strong>同一顆蘋果，量測會怎麼變？</strong>
@@ -273,11 +438,29 @@
   </nav>
 
   <main class="shell lesson">
-    <div class="section-top"><h2>量測觀察室</h2><span class="progress-copy">拖曳場景旋轉視角；左右滑動卡片或使用前後按鈕繼續</span></div>
+    <div class="section-top"><h2>量測觀察室</h2><span class="progress-copy">拖曳場景旋轉視角；卡片向左滑繼續、向右滑回看</span></div>
     <div class="immersive-room">
       <div class="scene-stage" aria-label="持續顯示的 3D 蘋果與直尺觀察場景">
-        <span class="room-label">3D 量測觀察室・同一顆蘋果</span>
+        <span class="room-label" id="room-label">3D 量測觀察室・同一顆蘋果</span>
         <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、蘋果和視線延長線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明蘋果寬度不變，視角可能改變尺面上的表觀讀值。</canvas>
+        <div class="balance-station" id="balance-station" aria-label="蘋果放在電子秤平台上，秤面顯示質量讀值">
+          <svg viewBox="0 0 760 300" role="img" aria-labelledby="balance-title balance-description">
+            <title id="balance-title">同一顆蘋果的電子秤質量觀察台</title>
+            <desc id="balance-description">蘋果放在秤盤上；下方數位顯示器會隨調整的質量即時更新，單位為公克。</desc>
+            <ellipse cx="380" cy="264" rx="270" ry="24" fill="#40594d" opacity=".16"></ellipse>
+            <path d="M150 126L610 126L565 202L195 202Z" fill="#dce7df" stroke="#6c8b79" stroke-width="4"></path>
+            <path d="M188 190L572 190L626 254L134 254Z" fill="#456b59" stroke="#2f5845" stroke-width="5"></path>
+            <path class="scale-glow" d="M220 202L540 202L574 242L186 242Z" fill="#d5f5df" opacity=".45"></path>
+            <path d="M230 202L530 202L554 226L206 226Z" fill="#f6faf5" stroke="#8ca998" stroke-width="3"></path>
+            <path d="M380 96C358 65 309 67 279 99C246 134 262 183 302 199C333 211 359 198 380 190C401 198 427 211 458 199C498 183 514 134 481 99C451 67 402 65 380 96Z" fill="#d85f3f" stroke="#923d2a" stroke-width="4"></path>
+            <path d="M379 117C376 101 381 89 391 79" fill="none" stroke="#68452f" stroke-width="8" stroke-linecap="round"></path>
+            <path d="M389 95C405 80 423 82 433 91C421 105 403 109 389 95Z" fill="#6f9e63" stroke="#477544" stroke-width="2"></path>
+            <rect x="293" y="224" width="174" height="40" rx="8" fill="#cfe5cf" stroke="#244a38" stroke-width="3"></rect>
+            <text x="380" y="239" text-anchor="middle" class="balance-caption">質量讀值</text>
+            <text id="balance-display-reading" x="380" y="260" text-anchor="middle" class="balance-readout">— g</text>
+            <text x="550" y="250" text-anchor="middle" class="balance-caption">電子秤</text>
+          </svg>
+        </div>
         <div class="scene-caption"><p id="camera-caption" aria-live="polite">拖曳畫面旋轉視角；也可先選取畫面，再按方向鍵。</p><button type="button" class="secondary" id="reset-camera">回到正對刻度</button></div>
         <div class="scene-readout" aria-live="polite"><article><small>蘋果實際寬度（模型固定）</small><strong id="actual-width">約 6.3 cm</strong></article><article><small>沿視線投到尺面的表觀讀值</small><strong id="parallax-reading">約 6.3 cm</strong></article></div>
       </div>
@@ -320,7 +503,7 @@
         <div class="card-side"><span class="card-number">CARD 03</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
         <div class="card-main">
           <h2>同一種工具，能量所有東西嗎？</h2>
-          <p>工具要能測量指定的物理量，也要有適合的量程。切換量測任務和工具情境，觀察工具的用途及限制。</p>
+          <p>工具要配合要量的物理量和範圍。選「質量」時，調整同一顆蘋果的質量，觀察觀察室秤面讀值。</p>
           <div class="select-row">
             <label class="field">量測任務
               <select id="tool-task"><option value="length">量這顆蘋果的寬度（約 6.3 cm）</option><option value="mass">量這顆蘋果的質量（示意約 150 g）</option><option value="time">量一段約 12 s 的活動時間</option></select>
@@ -329,9 +512,17 @@
               <select id="tool-state"><option value="suitable">物理量和量程都合適</option><option value="wrong-quantity">工具測量的是另一種物理量</option><option value="short-range">工具量程不足</option></select>
             </label>
           </div>
+          <div class="mass-controls" id="mass-controls" hidden>
+            <label for="mass-slider">調整蘋果質量</label><input id="mass-slider" type="range" min="100" max="250" step="10" value="150" aria-label="調整蘋果的質量，觀察電子秤讀值改變"><output id="mass-output" for="mass-slider">150 g</output>
+          </div>
           <div class="readout" aria-live="polite">
             <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
             <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，蘋果寬度落在尺的量程內。</span></article>
+          </div>
+          <div class="range-model" aria-label="工具量程與預期量值的視覺比較">
+            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">蘋果約 6.3 cm，落在量程內</span></div>
+            <div class="range-track"><span id="range-fill"></span><i id="range-marker" aria-hidden="true"></i></div>
+            <div class="range-endpoints"><span>0</span><span id="range-maximum">30 cm</span></div>
           </div>
           <p class="live-note">量程是工具能測量的範圍。量程太短時，即使物理量相符，也無法完整量取；量程很大也不代表刻度一定夠細。</p>
           <p class="next-hint">工具選定後，下一步是讀懂刻度的間距。</p>
@@ -352,6 +543,14 @@
             </div>
             <p class="live-note" id="division-model-note">共用模型中的尺已同步更新；蘋果端點仍在相同位置。</p>
             <p class="live-note" id="division-note" aria-live="polite">1 cm 分成 10 個相等間隔，每個間隔是 0.1 cm（1 mm）。</p>
+          </div>
+          <div class="division-visual" aria-label="同一段直尺的分格變化；蘋果端點位置固定">
+            <svg id="division-ruler" viewBox="0 0 520 100" role="img" aria-label="一公分分成十格的直尺示意，右端點位置固定">
+              <rect x="20" y="22" width="480" height="50" rx="6" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
+              <g id="division-ticks"></g><path id="division-endpoint" d="M178.4 10v72" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
+              <text id="division-unit-label" x="20" y="94" fill="#26383a" font-size="13">6 cm</text><text id="division-unit-label-end" x="500" y="94" text-anchor="end" fill="#26383a" font-size="13">7 cm</text>
+            </svg>
+            <p id="division-visual-note" aria-live="polite">橘色標記是固定的蘋果端點；改變的是尺的刻線間距。</p>
           </div>
           <div class="fact"><p>工具的最小刻度會限制可直接讀取的精細程度；讀值時先確認刻度標示和每格的間距。</p></div>
         </div>
@@ -396,7 +595,7 @@
         <div class="card-side"><span class="card-number">CARD 06</span><h3>找出讀值差異</h3><span class="card-role">視角與起點是兩種條件</span></div>
         <div class="card-main">
           <h2>同一物體，為什麼讀值會差一點？</h2>
-          <p>拖曳左側的 3D 場景，從不同方向觀察同一顆蘋果和直尺。紅色虛線延伸到尺面的位置，是這個視角下可能讀到的刻度；蘋果本身的寬度不會因為轉動視角而改變。選取場景後也可用方向鍵調整視角。</p>
+          <p>拖曳上方觀察室的 3D 場景，從不同方向觀察同一顆蘋果和直尺。紅色視線落點會隨角度改變；蘋果本身的寬度不變。</p>
           <div class="parallax-scene">
             <p class="live-note" id="parallax-explanation">正對尺面時，視線延長線接近蘋果端點；斜向觀察時，端點的視線落到尺面別處，可能造成視差讀值。這是教學模型的幾何示意，讀值依刻度估讀。</p>
           </div>
@@ -445,11 +644,7 @@
         </div>
       </section>
     </div>
-      <nav class="card-pager" aria-label="學習卡片切換">
-        <button type="button" id="previous-card">← 上一張</button>
-        <div class="pager-status"><strong id="card-counter" aria-live="polite">第 1 / 8 張</strong><progress id="card-progress" value="1" max="8" aria-label="卡片閱讀位置"></progress><span>卡片位置，不是答題進度</span></div>
-        <button type="button" id="next-card">下一張 →</button>
-      </nav>
+      <div class="swipe-status" aria-live="polite"><span>卡片向左滑：繼續學習</span><progress id="card-progress" value="1" max="8" aria-label="卡片閱讀位置"></progress><strong id="card-counter">第 1 / 8 張</strong><span>向右滑：回看</span></div>
     </div>
     </div>
   </main>
@@ -501,7 +696,7 @@
         const forward = normalize(subtract(target, cameraPosition));
         const right = normalize(cross(forward, { x: 0, y: 1, z: 0 }));
         const up = normalize(cross(right, forward));
-        const focalLength = height * 1.45;
+      const focalLength = Math.min(height * 1.15, width * 1.25);
         const project = (point) => {
           const relative = subtract(point, cameraPosition);
           const depth = dot(relative, forward);
@@ -741,9 +936,28 @@
           ? `測量蘋果水平方向的寬度；蘋果左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於六點三與六點四公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`
           : "尺上的公分單位標示已隱藏；測量蘋果水平方向的寬度，端點仍在六點三與六點四刻線之間");
         if (note) document.querySelector("#shared-model-note").textContent = note;
+        renderDivisionRuler();
         renderParallaxScene();
       };
+      const renderDivisionRuler = () => {
+        const group = document.querySelector("#division-ticks");
+        if (!group) return;
+        const ticks = [];
+        for (let index = 0; index <= state.divisions; index += 1) {
+          const x = 20 + (480 * index) / state.divisions;
+          const major = index === 0 || index === state.divisions;
+          ticks.push(`<path d="M${x} 22v${major ? 36 : 26}" stroke="#26383a" stroke-width="${major ? 2.5 : 1.5}"/>`);
+        }
+        group.innerHTML = ticks.join("");
+        const endpointX = 20 + (clamp(state.edge - 6, 0, 1) * 480);
+        document.querySelector("#division-endpoint").setAttribute("d", `M${endpointX} 10v72`);
+        document.querySelector("#division-unit-label").textContent = state.unit ? "6 cm" : "6";
+        document.querySelector("#division-unit-label-end").textContent = state.unit ? "7 cm" : "7";
+        document.querySelector("#division-visual-note").textContent = `尺面顯示 6–7 cm；橘色標記是蘋果右端，固定在約 ${state.edge.toFixed(2)} cm。每公分分成 ${state.divisions} 格。`;
+        document.querySelector("#division-ruler").setAttribute("aria-label", `尺面從六到七公分，每公分分成${state.divisions}格；蘋果右端約在${state.edge.toFixed(2)}公分`);
+      };
       updateModel();
+      renderDivisionRuler();
 
       const differenceStates = {
         scale: { divisions: 2, start: 0, angle: false, unit: true, note: "同一蘋果與尺，改用較粗的刻度示意；端點所在區間較難細分。" },
@@ -755,9 +969,9 @@
         const chosen = differenceStates[event.target.value];
         Object.assign(state, { divisions: chosen.divisions, start: chosen.start, angle: chosen.angle, unit: chosen.unit });
         updateModel(chosen.note);
-        document.querySelector("#reading-a").textContent = chosen.unit ? "約 6.3 cm" : "約 6.3（無單位）";
+        document.querySelector("#reading-a").textContent = "約 6.3 cm";
         document.querySelector("#reading-b").textContent = chosen.start ? "終點讀值約 6.8 cm" : chosen.angle ? "讀值可能偏移" : chosen.divisions === 2 ? "約 6.0–6.5 cm" : chosen.unit ? "約 6.3–6.4 cm" : "約 6.3–6.4（無單位）";
-        document.querySelector("#reading-a-note").textContent = "同一顆蘋果的紀錄";
+        document.querySelector("#reading-a-note").textContent = "原始測量的固定參照";
         document.querySelector("#reading-b-note").textContent = chosen.start ? "起點在 0.5 cm，需扣除起點" : chosen.angle ? "轉動視角，檢視視差落點" : chosen.divisions === 2 ? "較粗刻度的尺，區間較大" : chosen.unit ? "依端點位置估讀" : "尺上的 cm 標示已移除";
         document.querySelector("#difference-explanation").textContent = chosen.note;
       });
@@ -812,9 +1026,34 @@
         document.querySelector("#tool-range").textContent = range;
         document.querySelector("#tool-result").textContent = result;
         document.querySelector("#tool-result-note").textContent = explanation;
+        const quantityValues = { length: { value: 6.3, max: 30, unit: "cm" }, mass: { value: 150, max: 500, unit: "g" }, time: { value: 12, max: 60, unit: "s" } };
+        const visual = quantityValues[document.querySelector("#tool-task").value];
+        const visibleMaximum = selection === "short-range" ? (visual.unit === "cm" ? 5 : visual.unit === "g" ? 100 : 10) : visual.max;
+        const ratio = Math.min(100, (visual.value / visibleMaximum) * 100);
+        document.querySelector("#range-model-title").textContent = `${name}・${task.quantity}`;
+        document.querySelector("#range-model-caption").textContent = selection === "wrong-quantity"
+          ? `預期量值 ${visual.value} ${visual.unit}，但工具量的是另一種物理量`
+          : selection === "short-range"
+          ? `預期 ${visual.value} ${visual.unit} 超過 0–${visibleMaximum} ${visual.unit}`
+          : `預期 ${visual.value} ${visual.unit} 落在工具量程內`;
+        document.querySelector("#range-maximum").textContent = `${visibleMaximum} ${visual.unit}`;
+        document.querySelector("#range-fill").style.width = `${ratio}%`;
+        document.querySelector("#range-fill").dataset.state = selection === "wrong-quantity" || selection === "short-range" ? "invalid" : "valid";
+        document.querySelector("#range-marker").style.left = `${ratio}%`;
+        const massTask = document.querySelector("#tool-task").value === "mass";
+        document.querySelector(".scene-stage").classList.toggle("is-mass-mode", massTask);
+        document.querySelector("#balance-station").classList.toggle("is-weighing", massTask);
+        document.querySelector("#mass-controls").hidden = !massTask;
+        document.querySelector("#balance-display-reading").textContent = massTask ? `${document.querySelector("#mass-slider").value} g` : "— g";
+        document.querySelector("#room-label").textContent = massTask ? "量測觀察室・切換到蘋果質量" : "3D 量測觀察室・同一顆蘋果";
       };
       document.querySelector("#tool-task").addEventListener("change", updateToolView);
       document.querySelector("#tool-state").addEventListener("change", updateToolView);
+      document.querySelector("#mass-slider").addEventListener("input", (event) => {
+        const reading = `${event.currentTarget.value} g`;
+        document.querySelector("#mass-output").textContent = reading;
+        document.querySelector("#balance-display-reading").textContent = reading;
+      });
 
       const divisionButtons = [...document.querySelectorAll("[data-divisions]")];
       divisionButtons.forEach((button) => button.addEventListener("click", () => {
@@ -824,6 +1063,7 @@
         const size = (1 / state.divisions).toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
         document.querySelector("#division-note").textContent = `1 cm 分成 ${state.divisions} 個相等間隔，每格是 ${size} cm。`;
         document.querySelector("#division-model-note").textContent = "上方共用模型的尺刻線已同步改變，蘋果和端點仍沿用同一模型。";
+        renderDivisionRuler();
       }));
 
       const setZoom = (zoom) => {
@@ -949,9 +1189,6 @@
           : "對照兩筆資料是否說清楚量測的物理量、數值與單位，再查看尺的刻度和讀值條件是否可比較。";
       }));
       const lessonCards = [...document.querySelectorAll(".lesson-card")];
-      const routeLinks = [...document.querySelectorAll(".route a")];
-      const previousCardButton = document.querySelector("#previous-card");
-      const nextCardButton = document.querySelector("#next-card");
       const cardCounter = document.querySelector("#card-counter");
       const cardProgress = document.querySelector("#card-progress");
       const cardIndexFromHash = lessonCards.findIndex((card) => `#${card.id}` === window.location.hash);
@@ -960,45 +1197,70 @@
         activeCardIndex = clamp(index, 0, lessonCards.length - 1);
         lessonCards.forEach((card, cardIndex) => {
           const isActive = cardIndex === activeCardIndex;
+          card.classList.toggle("is-prev", cardIndex === activeCardIndex - 1);
+          card.classList.toggle("is-next", cardIndex === activeCardIndex + 1);
           card.classList.toggle("is-active", isActive);
+          card.classList.remove("is-dragging", "swipe-out-left", "swipe-out-right");
+          card.style.transform = "";
+          card.style.opacity = "";
           card.setAttribute("aria-hidden", String(!isActive));
           card.inert = !isActive;
         });
-        routeLinks.forEach((link, linkIndex) => {
-          if (linkIndex === activeCardIndex) link.setAttribute("aria-current", "step");
-          else link.removeAttribute("aria-current");
-        });
-        previousCardButton.disabled = activeCardIndex === 0;
-        nextCardButton.disabled = activeCardIndex === lessonCards.length - 1;
         cardCounter.textContent = `第 ${activeCardIndex + 1} / ${lessonCards.length} 張`;
         cardProgress.value = activeCardIndex + 1;
         if (updateHash) history.replaceState(null, "", `#${lessonCards[activeCardIndex].id}`);
         renderParallaxScene();
       };
-      routeLinks.forEach((link, index) => link.addEventListener("click", (event) => {
-        event.preventDefault();
-        showCard(index);
-      }));
-      previousCardButton.addEventListener("click", () => showCard(activeCardIndex - 1));
-      nextCardButton.addEventListener("click", () => showCard(activeCardIndex + 1));
       let swipeStart = null;
-      document.querySelector(".cards").addEventListener("pointerdown", (event) => {
-        if (event.pointerType !== "touch" || event.target.closest("button, input, select, textarea, a")) return;
-        swipeStart = { x: event.clientX, y: event.clientY };
+      const cardsSurface = document.querySelector(".cards");
+      cardsSurface.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0 || !event.target.closest(".lesson-card.is-active") || event.target.closest("button, input, select, textarea, a, label")) return;
+        swipeStart = { x: event.clientX, y: event.clientY, card: lessonCards[activeCardIndex] };
+        swipeStart.card.classList.add("is-dragging");
+        cardsSurface.setPointerCapture(event.pointerId);
       });
-      document.querySelector(".cards").addEventListener("pointerup", (event) => {
+      cardsSurface.addEventListener("pointermove", (event) => {
         if (!swipeStart) return;
         const deltaX = event.clientX - swipeStart.x;
         const deltaY = event.clientY - swipeStart.y;
-        swipeStart = null;
-        if (Math.abs(deltaX) < 55 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
-        showCard(activeCardIndex + (deltaX < 0 ? 1 : -1));
+        if (Math.abs(deltaY) > Math.abs(deltaX) * 1.2) return;
+        swipeStart.card.style.transform = `translateX(${deltaX}px) rotate(${clamp(deltaX / 35, -8, 8)}deg)`;
+        swipeStart.card.style.opacity = String(Math.max(.55, 1 - Math.abs(deltaX) / 600));
       });
-      document.querySelector(".cards").addEventListener("pointercancel", () => { swipeStart = null; });
+      const finishSwipe = (event) => {
+        if (!swipeStart) return;
+        const { x, y, card } = swipeStart;
+        const deltaX = event.clientX - x;
+        const deltaY = event.clientY - y;
+        swipeStart = null;
+        card.classList.remove("is-dragging");
+        if (Math.abs(deltaX) < 72 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) {
+          card.style.transform = "";
+          card.style.opacity = "";
+          return;
+        }
+        const direction = deltaX < 0 ? 1 : -1;
+        const nextIndex = clamp(activeCardIndex + direction, 0, lessonCards.length - 1);
+        if (nextIndex === activeCardIndex) {
+          card.style.transform = "";
+          card.style.opacity = "";
+          return;
+        }
+        card.classList.add(direction > 0 ? "swipe-out-left" : "swipe-out-right");
+        window.setTimeout(() => showCard(nextIndex), 180);
+      };
+      cardsSurface.addEventListener("pointerup", finishSwipe);
+      cardsSurface.addEventListener("pointercancel", () => {
+        if (!swipeStart) return;
+        swipeStart.card.classList.remove("is-dragging");
+        swipeStart.card.style.transform = "";
+        swipeStart.card.style.opacity = "";
+        swipeStart = null;
+      });
       window.addEventListener("keydown", (event) => {
-        if (event.target.closest("button, input, select, textarea, a") || event.target === parallaxCanvas) return;
-        if (event.key === "ArrowLeft") showCard(activeCardIndex - 1);
-        else if (event.key === "ArrowRight") showCard(activeCardIndex + 1);
+        if (event.target.closest("button, input, select, textarea, a, label") || event.target === parallaxCanvas) return;
+        if (event.key === "PageDown") showCard(activeCardIndex + 1);
+        else if (event.key === "PageUp") showCard(activeCardIndex - 1);
       });
       showCard(activeCardIndex, false);
       updateToolView();
