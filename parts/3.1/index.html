@@ -655,7 +655,7 @@
         input.value = String(clamp(estimateGuess === null ? minimum : Math.round(estimateGuess * 1000), minimum, maximum));
         const button = document.querySelector("#check-estimate");
         button.disabled = estimateGuess === null && !estimateChecked;
-        button.textContent = estimateChecked ? "重新估讀" : "檢查估讀";
+        button.textContent = estimateChecked ? "③ 重新估讀" : "③ 檢查估讀";
         document.querySelector("#estimate-heading").textContent = "鉛筆端點落在相鄰刻線之間，該怎麼估讀？";
         document.querySelector("#estimate-instruction").textContent = state.zoom
           ? `端點已拉近；比較它和 18、19 cm 刻線的位置，再核對剛才的估讀。鉛筆左端對準 0 cm。`
@@ -1004,7 +1004,7 @@
         document.querySelector("#shared-model-note").textContent = "鉛筆和尺保持不動；先依右端相對於兩條刻線的位置估讀。";
         const button = document.querySelector("#check-estimate");
         button.disabled = false;
-        button.textContent = "檢查估讀";
+        button.textContent = "③ 檢查估讀";
       });
       document.querySelector("#check-estimate").addEventListener("click", () => {
         if (estimateChecked) {
