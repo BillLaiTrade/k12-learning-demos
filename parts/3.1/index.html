@@ -154,6 +154,17 @@
     .control-panel { padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
     .control-panel > :last-child { margin-bottom: 0; }
     .live-note { min-height: 3em; margin: 12px 0 0; color: var(--muted); }
+    .length-conversion-demo { margin: 18px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
+    .length-conversion-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; }
+    .length-conversion-head h3 { margin: 0; font-size: 1rem; }
+    .length-conversion-head p { margin: 3px 0 0; color: var(--muted); font-size: .88rem; }
+    .length-conversion-select { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .88rem; font-weight: 700; }
+    .length-conversion-pencil { display: grid; place-items: center; min-height: 86px; margin: 12px 0; padding: 12px; border: 1px solid #d8e5da; border-radius: 14px; background: #fffefa; }
+    .length-conversion-pencil img { display: block; width: min(460px, 82%); height: 54px; object-fit: contain; }
+    .length-conversion-result { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; }
+    .length-conversion-result strong { color: #183c31; font-family: Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.5rem); }
+    .length-conversion-result span { color: var(--muted); }
+    .length-conversion-equivalents { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
     .concept-parts { display: flex; flex-wrap: wrap; gap: 9px; margin: 14px 0; }
     .concept-parts button { border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; background: white; }
     .concept-parts button[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); }
@@ -317,6 +328,17 @@
             <button type="button" id="unit-toggle" aria-pressed="false">移除尺上的 cm 標示</button>
           </div>
           <p class="live-note" id="record-explanation" aria-live="polite">這筆紀錄量的是鉛筆的長度；18.2 是數值，cm 是長度單位。點選各部分，看看少了哪項資訊會讓紀錄難以理解。</p>
+          <div class="length-conversion-demo">
+            <div class="length-conversion-head">
+              <div><h3>同一段長度，可以用不同單位表示</h3><p>鉛筆的長度固定；切換單位時，長度不變，數值會跟著換算。</p></div>
+              <label class="length-conversion-select" for="length-display-unit">改用
+                <select id="length-display-unit" aria-label="選擇鉛筆長度的表示單位"><option value="cm" selected>公分（cm）</option><option value="mm">毫米（mm）</option><option value="m">公尺（m）</option></select>表示
+              </label>
+            </div>
+            <div class="length-conversion-pencil"><img src="assets/pencil-photo.webp" alt="同一支模型鉛筆，長度固定約 18.2 公分"></div>
+            <div class="length-conversion-result" aria-live="polite"><strong id="length-conversion-value">18.2 cm</strong><span id="length-conversion-explanation">目前以公分記錄。</span></div>
+            <p class="length-conversion-equivalents">換算關係：1 cm = 10 mm；100 cm = 1 m。　<span id="length-conversion-equation">18.2 cm × 10 = 182 mm</span></p>
+          </div>
           <p class="next-hint">知道要量什麼之後，下一步是選擇合適的工具。</p>
         </div>
       </section>
@@ -767,6 +789,18 @@
         unitToggle.textContent = state.unit ? "移除尺上的 cm 標示" : "恢復尺上的 cm 標示";
         document.querySelector("#record-unit").textContent = state.unit ? "cm" : "（單位未標）";
         updateModel(state.unit ? "恢復 cm 標示後，紀錄能指出數值所用的長度單位。" : "公分標示已移除；數字還在，但讀者不知道它代表幾公分或其他尺度。 ");
+      });
+
+      const lengthUnitConversions = {
+        cm: { value: "18.2 cm", explanation: "目前以公分記錄。", equation: "18.2 cm × 10 = 182 mm" },
+        mm: { value: "182 mm", explanation: "同一段長度改用毫米表示，數值變成原來的 10 倍。", equation: "182 mm ÷ 10 = 18.2 cm" },
+        m: { value: "0.182 m", explanation: "同一段長度改用公尺表示，數值是公分數除以 100。", equation: "18.2 cm ÷ 100 = 0.182 m" }
+      };
+      document.querySelector("#length-display-unit").addEventListener("change", (event) => {
+        const conversion = lengthUnitConversions[event.target.value];
+        document.querySelector("#length-conversion-value").textContent = conversion.value;
+        document.querySelector("#length-conversion-explanation").textContent = conversion.explanation;
+        document.querySelector("#length-conversion-equation").textContent = conversion.equation;
       });
 
       const tasks = {
