@@ -2,49 +2,35 @@ import * as THREE from '../../3.1/assets/vendor/three/build/three.module.js';
 
 const clamp=(value,min,max)=>Math.min(max,Math.max(min,value));
 
-function makeSurface(){
-  const width=1024,height=512,canvas=document.createElement('canvas');
-  canvas.width=width;canvas.height=height;
-  const ctx=canvas.getContext('2d'),image=ctx.createImageData(width,height),data=image.data;
-  let seed=7319;
-  const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
-  const grids=[[10,5],[28,14],[92,46],[330,165]].map(([cols,rows])=>({cols,rows,data:Array.from({length:cols*rows},random)}));
-  const noise=(grid,u,v)=>{const x=u*grid.cols,y=v*grid.rows,x0=Math.floor(x)%grid.cols,y0=Math.floor(y)%grid.rows,fx=x-Math.floor(x),fy=y-Math.floor(y),fade=t=>t*t*(3-2*t),at=(a,b)=>grid.data[(b%grid.rows)*grid.cols+(a%grid.cols)],a=at(x0,y0)*(1-fade(fx))+at(x0+1,y0)*fade(fx),b=at(x0,y0+1)*(1-fade(fx))+at(x0+1,y0+1)*fade(fx);return a*(1-fade(fy))+b*fade(fy)-.5};
-  for(let y=0;y<height;y++)for(let x=0;x<width;x++){
-    const u=x/width,v=y/height;
-    const cloud=noise(grids[0],u,v),mottle=noise(grids[1],u,v),speckle=noise(grids[2],u,v),grain=noise(grids[3],u,v)+(random()-.5)*.1;
-    const shade=clamp(.69+cloud*.38+mottle*.22+speckle*.1+grain*.15,.35,.96);
-    const i=(y*width+x)*4;
-    data[i]=Math.round(158*shade+cloud*5);
-    data[i+1]=Math.round(157*shade+mottle*4);
-    data[i+2]=Math.round(150*shade-cloud*4);
-    data[i+3]=255;
-  }
-  ctx.putImageData(image,0,0);
-  for(let i=0;i<2100;i++){
-    const x=random()*width,y=random()*height,r=.25+random()*1.4;
-    ctx.fillStyle=random()>.5?'rgba(230,224,205,.28)':'rgba(44,49,45,.22)';
-    ctx.beginPath();ctx.ellipse(x,y,r,r*(.4+random()),random()*Math.PI,0,Math.PI*2);ctx.fill();
-  }
-  const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.wrapS=THREE.RepeatWrapping;texture.anisotropy=4;
-  return texture;
+function noise3(x,y,z){
+  const fade=t=>t*t*(3-2*t),hash=(a,b,c)=>{const n=Math.sin(a*127.1+b*311.7+c*74.7)*43758.5453;return n-Math.floor(n)};
+  const ix=Math.floor(x),iy=Math.floor(y),iz=Math.floor(z),fx=fade(x-ix),fy=fade(y-iy),fz=fade(z-iz);
+  const mix=(a,b,t)=>a+(b-a)*t;
+  const z0=mix(mix(hash(ix,iy,iz),hash(ix+1,iy,iz),fx),mix(hash(ix,iy+1,iz),hash(ix+1,iy+1,iz),fx),fy);
+  const z1=mix(mix(hash(ix,iy,iz+1),hash(ix+1,iy,iz+1),fx),mix(hash(ix,iy+1,iz+1),hash(ix+1,iy+1,iz+1),fx),fy);
+  return mix(z0,z1,fz);
 }
 
 function makeStone(){
   const geometry=new THREE.SphereGeometry(1,128,96);
-  const position=geometry.attributes.position;
+  const position=geometry.attributes.position,colors=[];
   for(let i=0;i<position.count;i++){
     const v=new THREE.Vector3().fromBufferAttribute(position,i).normalize();
     const broad=Math.sin(v.x*4.3+v.y*2.6+v.z*3.1)*.05;
     const ripple=Math.sin(v.x*8.1-v.y*6.2+v.z*7.4)*.014;
+    const granule=(noise3(v.x*72,v.y*72,v.z*72)-.5)*.012;
     const pitA=Math.exp(-((v.x-.4)**2+(v.y+.2)**2+(v.z-.87)**2)*34)*.035;
     const pitB=Math.exp(-((v.x+.65)**2+(v.y-.1)**2+(v.z+.7)**2)*42)*.026;
-    const r=1+broad+ripple-pitA-pitB;
+    const r=1+broad+ripple+granule-pitA-pitB;
     position.setXYZ(i,v.x*r*1.28,v.y*r*.79,v.z*r*.82);
+    const cloud=noise3(v.x*5,v.y*5,v.z*5),mottle=noise3(v.x*17,v.y*17,v.z*17);
+    const flecks=noise3(v.x*43,v.y*43,v.z*43),grain=noise3(v.x*91,v.y*91,v.z*91);
+    const shade=clamp(.29+(cloud-.5)*.32+(mottle-.5)*.25+(flecks-.5)*.18+(grain-.5)*.1,.12,.55);
+    colors.push(shade*1.015,shade,shade*.96);
   }
+  geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
   geometry.computeVertexNormals();
-  const surface=makeSurface();
-  const material=new THREE.MeshStandardMaterial({map:surface,roughness:.96,metalness:0,bumpMap:surface,bumpScale:.055});
+  const material=new THREE.MeshStandardMaterial({color:0xffffff,vertexColors:true,roughness:.94,metalness:0});
   return new THREE.Mesh(geometry,material);
 }
 
@@ -96,19 +82,6 @@ function makeRulerFrame(parent,edge,floor){
   const grid=new THREE.LineSegments(geometry,material);grid.renderOrder=2;parent.add(grid);
 }
 
-function makeFramePickTargets(parent,edge,floor,height){
-  const material=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0,colorWrite:false,depthWrite:false,side:THREE.DoubleSide});
-  const targets=[];
-  const add=(geometry,position,rotation)=>{
-    const target=new THREE.Mesh(geometry,material);target.position.set(...position);if(rotation)target.rotation.set(...rotation);target.userData.dragTarget='frame';parent.add(target);targets.push(target);
-  };
-  const width=edge*2,centerY=floor+height/2;
-  add(new THREE.PlaneGeometry(width,width),[0,floor+.045,0],[-Math.PI/2,0,0]);
-  add(new THREE.PlaneGeometry(width,height),[0,centerY,-edge+.035]);
-  add(new THREE.PlaneGeometry(width,height),[edge-.035,centerY,0],[0,Math.PI/2,0]);
-  return targets;
-}
-
 export function mountStoneObserver(){
   const host=document.querySelector('#stone-observer'),canvas=document.querySelector('#stone-canvas');
   if(!host||!canvas)return;
@@ -125,16 +98,15 @@ export function mountStoneObserver(){
   const rim=new THREE.DirectionalLight(0xffffff,1.1);rim.position.set(1,4,-4);scene.add(rim);
   // 三把尺與三面格線組成同一個可旋轉的開口量測框。
   const rulerFloor=-1.05,rulerEdge=RULER_CM*WORLD_PER_CM/2,rulerHeight=RULER_CM*WORLD_PER_CM;
-  const frameCenterY=-.14; // 以石頭中心為旋轉軸心，尺框轉動時仍環繞石頭觀察。
+  const frameCenterY=-.14; // 將固定尺框與石頭的旋轉中心對齊。
   const framePivot=new THREE.Group();framePivot.position.y=frameCenterY;scene.add(framePivot);
   const frameAssembly=new THREE.Group();frameAssembly.position.y=-frameCenterY;framePivot.add(frameAssembly);
   const lengthRuler=makeRuler({position:[0,rulerFloor,-rulerEdge],accent:MEASURE_COLORS.length});frameAssembly.add(lengthRuler.group);
   const widthRuler=makeRuler({position:[rulerEdge,rulerFloor,0],rotationY:Math.PI/2,accent:MEASURE_COLORS.width});frameAssembly.add(widthRuler.group);
   const heightRuler=makeRuler({position:[rulerEdge,rulerFloor+rulerHeight/2,-rulerEdge],rotationZ:Math.PI/2,accent:MEASURE_COLORS.height});frameAssembly.add(heightRuler.group);
   makeRulerFrame(frameAssembly,rulerEdge,rulerFloor);
-  const framePickTargets=makeFramePickTargets(frameAssembly,rulerEdge,rulerFloor,rulerHeight);
   const pivot=new THREE.Group();pivot.position.y=frameCenterY;scene.add(pivot);
-  const stone=makeStone();stone.userData.dragTarget='stone';pivot.add(stone);
+  const stone=makeStone();pivot.add(stone);
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=128;shadowCanvas.height=128;
   const shadowCtx=shadowCanvas.getContext('2d'),gradient=shadowCtx.createRadialGradient(64,64,5,64,64,62);
   gradient.addColorStop(0,'rgba(32,38,33,.3)');gradient.addColorStop(1,'rgba(32,38,33,0)');shadowCtx.fillStyle=gradient;shadowCtx.fillRect(0,0,128,128);
@@ -148,16 +120,18 @@ export function mountStoneObserver(){
   function resize(){width=host.clientWidth;height=host.clientHeight;if(!width||!height)return;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix()}
   const observer=new ResizeObserver(resize);observer.observe(host);resize();
   const zoom=delta=>{distance=clamp(distance+delta,7.2,11.5);camera.position.z=distance;camera.updateProjectionMatrix()};
-  const activePivot=()=>dragTarget==='frame'?framePivot:pivot;
-  const tilt=(target,delta)=>{target.rotation.z=clamp(target.rotation.z+delta,-.72,.72);if((target.rotation.z===.72&&velocityPitch>0)||(target.rotation.z===-.72&&velocityPitch<0))velocityPitch=0;measureDirty=true};
-  function pickDragTarget(event){
+  function pickStone(event){
     const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return null;
     pointerNdc.set(((event.clientX-rect.left)/rect.width)*2-1,-((event.clientY-rect.top)/rect.height)*2+1);
     raycaster.setFromCamera(pointerNdc,camera);
-    const hit=raycaster.intersectObjects([stone,...framePickTargets],true)[0];
-    let object=hit?.object;
-    while(object&&!object.userData.dragTarget)object=object.parent;
-    return object?.userData.dragTarget??null;
+    return raycaster.intersectObject(stone,true).length>0;
+  }
+  function rotateStone(yaw,pitch){
+    if(!yaw&&!pitch)return;
+    const yawRotation=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),yaw);
+    const pitchRotation=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),pitch);
+    pivot.quaternion.premultiply(yawRotation).premultiply(pitchRotation).normalize();
+    measureDirty=true;
   }
   function refreshMeasurement(){
     pivot.updateMatrixWorld(true);framePivot.updateMatrixWorld(true);
@@ -193,7 +167,7 @@ export function mountStoneObserver(){
   host.addEventListener('pointerdown',event=>{
     if(event.button!==undefined&&event.button!==0)return;
     activePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});host.setPointerCapture(event.pointerId);
-    if(activePointers.size===1){dragId=event.pointerId;dragTarget=pickDragTarget(event);lastX=event.clientX;lastY=event.clientY;velocityYaw=0;velocityPitch=0}
+    if(activePointers.size===1){dragId=event.pointerId;dragTarget=pickStone(event)?'stone':null;lastX=event.clientX;lastY=event.clientY;velocityYaw=0;velocityPitch=0}
     else if(activePointers.size===2){dragId=null;dragTarget=null;const points=[...activePointers.values()];pinchDistance=Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y)}
   });
   host.addEventListener('pointermove',event=>{
@@ -202,13 +176,13 @@ export function mountStoneObserver(){
     if(activePointers.size>=2){const points=[...activePointers.values()],next=Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y);if(pinchDistance)zoom((pinchDistance-next)*.006);pinchDistance=next;return}
     if(dragId!==event.pointerId||!dragTarget)return;
     const dx=event.clientX-lastX,dy=event.clientY-lastY;lastX=event.clientX;lastY=event.clientY;
-    const target=activePivot();velocityYaw=dx*.0054;velocityPitch=dy*.0054;target.rotation.y+=velocityYaw;tilt(target,velocityPitch);
+    velocityYaw=dx*.0054;velocityPitch=dy*.0054;rotateStone(velocityYaw,velocityPitch);
   });
   const endPointer=event=>{activePointers.delete(event.pointerId);if(dragId===event.pointerId)dragId=null;if(activePointers.size===1){const [id,point]=activePointers.entries().next().value;dragId=id;dragTarget=null;lastX=point.x;lastY=point.y}if(activePointers.size<2)pinchDistance=0};
   host.addEventListener('pointerup',endPointer);host.addEventListener('pointercancel',endPointer);host.addEventListener('lostpointercapture',endPointer);
-  host.addEventListener('keydown',event=>{const step=event.shiftKey?.16:.07,target=event.shiftKey?framePivot:pivot;let used=true;switch(event.key){case'ArrowLeft':target.rotation.y-=step;measureDirty=true;break;case'ArrowRight':target.rotation.y+=step;measureDirty=true;break;case'ArrowUp':tilt(target,-step);break;case'ArrowDown':tilt(target,step);break;case'Home':pivot.rotation.set(0,0,0);framePivot.rotation.set(0,0,0);dragTarget=null;velocityYaw=0;velocityPitch=0;distance=8.8;camera.position.z=distance;camera.updateProjectionMatrix();measureDirty=true;break;default:used=false}if(used)event.preventDefault()});
+  host.addEventListener('keydown',event=>{const step=.07;let used=true;switch(event.key){case'ArrowLeft':rotateStone(-step,0);break;case'ArrowRight':rotateStone(step,0);break;case'ArrowUp':rotateStone(0,-step);break;case'ArrowDown':rotateStone(0,step);break;case'Home':pivot.quaternion.identity();dragTarget=null;velocityYaw=0;velocityPitch=0;distance=8.8;camera.position.z=distance;camera.updateProjectionMatrix();measureDirty=true;break;default:used=false}if(used)event.preventDefault()});
   if(loading)loading.hidden=true;
-  function render(){raf=requestAnimationFrame(render);if(!dragId&&(Math.abs(velocityYaw)>.00025||Math.abs(velocityPitch)>.00025)){const target=activePivot();target.rotation.y+=velocityYaw;tilt(target,velocityPitch);velocityYaw*=.91;velocityPitch*=.91}else if(Math.abs(velocityYaw)<=.00025&&Math.abs(velocityPitch)<=.00025){velocityYaw=0;velocityPitch=0}if(measureDirty)refreshMeasurement();renderer.render(scene,camera)}
+  function render(){raf=requestAnimationFrame(render);if(!dragId&&(Math.abs(velocityYaw)>.00025||Math.abs(velocityPitch)>.00025)){rotateStone(velocityYaw,velocityPitch);velocityYaw*=.91;velocityPitch*=.91}else if(Math.abs(velocityYaw)<=.00025&&Math.abs(velocityPitch)<=.00025){velocityYaw=0;velocityPitch=0}if(measureDirty)refreshMeasurement();renderer.render(scene,camera)}
   render();
   return()=>{cancelAnimationFrame(raf);observer.disconnect();renderer.dispose();scene.traverse(node=>{if(node.isMesh||node.isLine){node.geometry?.dispose();if(Array.isArray(node.material))node.material.forEach(material=>material.dispose());else node.material?.dispose()}})};
 }
