@@ -1,0 +1,1009 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="在 3D 量測觀察室中，沿著八張互動卡片探索蘋果、直尺與讀值條件。">
+  <title>Part 3.1 候選 2｜3D 量測觀察室</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #182326;
+      --muted: #59696b;
+      --line: #d7e1dd;
+      --paper: #f4f7f1;
+      --card: #fffefa;
+      --green: #176b53;
+      --green-pale: #e5f2e9;
+      --orange: #bc612b;
+      --orange-pale: #fff0e3;
+      --shadow: 0 14px 38px rgb(21 47 38 / 8%);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--green); }
+    .shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .masthead { padding: 26px 0 18px; }
+    .brand-row, .section-top, .card-head, .ruler-caption, .feedback, .controls {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .brand { font-size: .9rem; font-weight: 750; letter-spacing: .04em; }
+    .crumb { color: var(--muted); font-size: .9rem; }
+    .hero {
+      display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(260px, .9fr);
+      gap: 32px; align-items: center; padding: 44px 0 38px;
+    }
+    .eyebrow { color: var(--green); font-size: .82rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 8px 0 14px; font-size: clamp(2rem, 4.4vw, 3.7rem); line-height: 1.18; letter-spacing: -.04em; }
+    .hero p { max-width: 660px; color: var(--muted); font-size: 1.08rem; }
+    .hero-note {
+      background: #e3eee5; border: 1px solid #cbded0; border-radius: 24px;
+      padding: 24px; box-shadow: var(--shadow); transform: rotate(1deg);
+    }
+    .hero-note strong { display: block; font-size: 1.13rem; margin-bottom: 5px; }
+    .hero-note p { margin: 0; font-size: .96rem; }
+    .route {
+      position: sticky; top: 0; z-index: 5; background: rgb(244 247 241 / 94%);
+      backdrop-filter: blur(12px); border-block: 1px solid var(--line); padding: 12px 0;
+    }
+    .route-inner { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 3px; }
+    .route a {
+      flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px;
+      border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink);
+      font-size: .86rem; text-decoration: none; white-space: nowrap;
+    }
+    .route a:hover, .route a:focus-visible { border-color: var(--green); outline: 2px solid transparent; }
+    .route b { color: var(--green); font-size: .78rem; }
+    .route-label { font-size: .8rem; color: var(--muted); margin: 0 0 6px; }
+    .lesson { padding: 34px 0 80px; }
+    .section-top { align-items: end; margin: 0 0 18px; }
+    .section-top h2 { margin: 0; font-size: 1.35rem; }
+    .progress-copy { color: var(--muted); font-size: .9rem; }
+    progress { display: block; width: 100%; height: 8px; border: 0; border-radius: 99px; overflow: hidden; }
+    progress::-webkit-progress-bar { background: #dfe7df; }
+    progress::-webkit-progress-value { background: var(--green); border-radius: 99px; }
+    progress::-moz-progress-bar { background: var(--green); border-radius: 99px; }
+    .cards { display: grid; gap: 20px; }
+    .lesson-card {
+      position: relative; scroll-margin-top: 100px; display: grid; grid-template-columns: 190px minmax(0, 1fr);
+      gap: 28px; padding: 26px; border: 1px solid var(--line); border-radius: 24px;
+      background: var(--card); box-shadow: var(--shadow);
+    }
+    .card-side { border-right: 1px solid var(--line); padding-right: 20px; }
+    .card-number { color: var(--green); font-weight: 850; font-size: .84rem; letter-spacing: .08em; }
+    .card-side h3 { margin: 10px 0 8px; font-size: 1.08rem; line-height: 1.45; }
+    .card-role { color: var(--muted); font-size: .87rem; }
+    .card-main h2 { margin: 0 0 8px; font-size: clamp(1.32rem, 2.8vw, 1.85rem); line-height: 1.35; }
+    .card-main > p { color: var(--muted); margin: 0 0 18px; }
+    .prompt { color: var(--ink); font-weight: 750; margin: 14px 0 9px; }
+    .choices { display: flex; flex-wrap: wrap; gap: 9px; margin: 12px 0 16px; }
+    .choice {
+      min-height: 44px; border: 1px solid var(--line); border-radius: 13px; padding: 9px 13px;
+      background: #fff; color: var(--ink); text-align: left;
+    }
+    .choice:hover { border-color: var(--green); }
+    .choice[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); box-shadow: inset 0 0 0 1px var(--green); }
+    .choice.correct[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); }
+    .choice.incorrect[aria-pressed="true"] { border-color: var(--orange); background: var(--orange-pale); }
+    .action, .secondary {
+      min-height: 44px; border-radius: 13px; padding: 9px 16px; font-weight: 750;
+    }
+    .action { border: 0; background: var(--green); color: white; }
+    .action:hover { background: #105640; }
+    .secondary { border: 1px solid var(--line); background: #fff; color: var(--ink); }
+    .feedback { justify-content: flex-start; min-height: 30px; margin-top: 12px; color: var(--muted); }
+    .feedback[data-state="good"] { color: var(--green); }
+    .feedback[data-state="try"] { color: var(--orange); }
+    .feedback strong { color: inherit; }
+    .fact { margin-top: 16px; padding: 14px 16px; border-left: 4px solid #b8cda9; border-radius: 0 12px 12px 0; background: #f0f5eb; }
+    .fact p { margin: 0; }
+    .example-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
+    .example { border: 1px solid var(--line); border-radius: 16px; padding: 15px; background: #f9faf5; }
+    .example small { display: block; color: var(--muted); }
+    .example strong { font-size: 1.3rem; }
+    .select-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+    .field { display: grid; gap: 5px; font-size: .91rem; font-weight: 700; }
+    select, input[type="number"] { min-height: 44px; border: 1px solid var(--line); border-radius: 11px; background: white; padding: 8px 11px; color: var(--ink); }
+    .ruler-box { margin: 17px 0; padding: 16px; border-radius: 16px; background: #f4f6ef; border: 1px solid var(--line); }
+    .ruler-caption { color: var(--muted); font-size: .88rem; }
+    .ruler { width: 100%; height: auto; display: block; margin: 10px 0 0; }
+    .ruler .base { fill: #f9e9b9; stroke: #b09a62; stroke-width: 1.5; }
+    .ruler .tick { stroke: #26383a; stroke-width: 2; }
+    .ruler .tick-major { stroke-width: 3; }
+    .ruler text { fill: #26383a; font: 15px system-ui, sans-serif; }
+    .ruler .marker { stroke: #b84c2d; stroke-width: 4; }
+    .ruler .guide { stroke: #b84c2d; stroke-width: 2; stroke-dasharray: 5 5; }
+    input[type="range"] { width: min(460px, 100%); accent-color: var(--green); }
+    .slider-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    output.value { min-width: 88px; display: inline-block; padding: 5px 10px; border-radius: 10px; background: var(--green-pale); font-weight: 800; text-align: center; }
+    .toggle-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    .toggle-row button { border: 1px solid var(--line); border-radius: 999px; padding: 8px 13px; background: white; }
+    .toggle-row button[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: white; }
+    .diagram {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, .8fr); gap: 16px;
+      align-items: center; border: 1px solid var(--line); border-radius: 16px; padding: 15px; background: #f8f9f4;
+    }
+    .diagram svg { width: 100%; max-height: 220px; }
+    .diagram-note { color: var(--muted); font-size: .9rem; }
+    .diagram-note strong { color: var(--ink); }
+    .readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
+    .readout article { padding: 15px; border: 1px solid var(--line); border-radius: 16px; background: #f9faf5; }
+    .readout small { color: var(--muted); display: block; }
+    .readout strong { display: block; font-size: 1.45rem; }
+    .control-panel { padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
+    .control-panel > :last-child { margin-bottom: 0; }
+    .live-note { min-height: 3em; margin: 12px 0 0; color: var(--muted); }
+    .concept-parts { display: flex; flex-wrap: wrap; gap: 9px; margin: 14px 0; }
+    .concept-parts button { border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; background: white; }
+    .concept-parts button[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); }
+    .record { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0; padding: 18px; border-radius: 14px; background: #f2f4ef; font-size: 1.2rem; }
+    .record span { padding: 3px 7px; border-radius: 7px; }
+    .record .is-highlighted { background: #ffe2a8; box-shadow: 0 0 0 2px #d59a27; }
+    .assessment-label { display: inline-block; margin-bottom: 12px; padding: 4px 10px; border-radius: 999px; background: #e5f2e9; color: var(--green); font-weight: 750; font-size: .83rem; }
+    .lesson-layout { display: block; }
+    .model-panel { margin: 18px 0; padding: 18px; border: 1px solid #cbded0; border-radius: 20px; background: #e3eee5; box-shadow: var(--shadow); }
+    .model-panel h2 { margin: 0 0 5px; font-size: 1.18rem; }
+    .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
+    .model-screen { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
+    .model-screen svg { display: block; width: 100%; height: auto; transform-origin: 76% 74%; transition: transform .8s cubic-bezier(.2,.8,.2,1); }
+    .model-screen[data-zoom="true"] svg { transform: scale(3.2); }
+    #shared-scale { fill: #26383a; font: 20px system-ui, sans-serif; }
+    #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
+    #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.5; }
+    #shared-scale .ruler-line.major { stroke-width: 3; }
+    .model-readout { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #cbded0; }
+    .model-readout small { color: var(--muted); }
+    .model-readout strong { font-size: 1.12rem; }
+    .model-status { min-height: 3.1em; margin: 10px 0 0 !important; padding: 10px 12px; border-radius: 12px; background: rgb(255 255 255 / 70%); font-size: .86rem !important; }
+    .parallax-scene { margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
+    #parallax-canvas { display: block; width: 100%; height: 330px; border-radius: 12px; background: linear-gradient(#eef4f1, #fffefa 72%); cursor: grab; touch-action: none; }
+    #parallax-canvas:active { cursor: grabbing; }
+    #parallax-canvas:focus-visible { outline: 3px solid #176b53; outline-offset: 3px; }
+    .scene-caption { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+    .scene-caption p { margin: 0; color: var(--muted); font-size: .88rem; }
+    .scene-readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .scene-readout article { padding: 12px; border-radius: 12px; background: white; border: 1px solid var(--line); }
+    .scene-readout small { display: block; color: var(--muted); }
+    .scene-readout strong { font-size: 1.25rem; }
+    .end-card { background: #eef4e9; border-color: #bfd1be; }
+    .next-hint { font-size: .9rem; color: var(--muted); }
+    footer { padding: 28px 0 44px; color: var(--muted); font-size: .86rem; border-top: 1px solid var(--line); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .immersive-page { min-height: 100vh; background: linear-gradient(145deg, #edf3ee, #dce8e2 56%, #f4f1e8); }
+    .immersive-page .masthead { padding-bottom: 8px; }
+    .immersive-page .brand-row > a:last-child { padding: 8px 13px; border: 1px solid var(--line); border-radius: 999px; background: rgb(255 254 250 / 80%); text-decoration: none; }
+    .immersive-page .hero { grid-template-columns: 1fr; padding: 22px 0 18px; }
+    .immersive-page .hero-note { display: none; }
+    .immersive-page .hero p { max-width: 840px; }
+    .immersive-page .route { z-index: 8; }
+    .immersive-page .route a[aria-current="step"] { border-color: var(--green); background: var(--green-pale); box-shadow: inset 0 0 0 1px var(--green); }
+    .immersive-page .lesson { padding-top: 22px; }
+    .immersive-page .section-top { margin-bottom: 12px; }
+    .immersive-room { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(360px, .88fr); gap: 22px; align-items: start; min-height: 690px; }
+    .scene-stage { position: sticky; top: 142px; min-width: 0; height: min(70vh, 700px); min-height: 480px; overflow: hidden; border: 1px solid rgb(132 159 146 / 44%); border-radius: 30px; background: radial-gradient(ellipse at 48% 38%, rgb(255 255 255 / 92%), transparent 38%), linear-gradient(155deg, #dce9e1, #c7d7ce 70%, #b7c8be); box-shadow: 0 24px 65px rgb(26 55 44 / 18%); isolation: isolate; }
+    .scene-stage::before { position: absolute; inset: 56% -20% -36%; z-index: -1; content: ""; transform: perspective(420px) rotateX(58deg); transform-origin: top; background-image: linear-gradient(rgb(68 105 87 / 12%) 1px, transparent 1px), linear-gradient(90deg, rgb(68 105 87 / 12%) 1px, transparent 1px); background-size: 40px 40px; mask-image: linear-gradient(to bottom, black, transparent 80%); }
+    .scene-stage::after { position: absolute; inset: 0; z-index: -1; content: ""; background: linear-gradient(180deg, rgb(255 255 255 / 20%), transparent 45%, rgb(75 103 88 / 8%)); pointer-events: none; }
+    .immersive-page #parallax-canvas { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; border-radius: inherit; background: transparent; }
+    .room-label { position: absolute; top: 18px; left: 20px; z-index: 3; padding: 6px 11px; border: 1px solid rgb(255 255 255 / 70%); border-radius: 999px; background: rgb(255 254 250 / 76%); color: #375a49; font-size: .8rem; font-weight: 800; letter-spacing: .06em; backdrop-filter: blur(8px); pointer-events: none; }
+    .immersive-page .scene-caption { position: absolute; top: 16px; right: 16px; z-index: 4; margin: 0; }
+    .immersive-page .scene-caption p { display: none; }
+    .immersive-page .scene-caption .secondary { border-color: rgb(255 255 255 / 70%); background: rgb(255 254 250 / 84%); box-shadow: 0 4px 14px rgb(28 53 42 / 10%); }
+    .immersive-page .scene-readout { position: absolute; right: 16px; bottom: 16px; left: 16px; z-index: 4; margin: 0; }
+    .immersive-page .scene-readout article { border-color: rgb(255 255 255 / 70%); background: rgb(255 254 250 / 84%); backdrop-filter: blur(10px); }
+    .immersive-page .lesson-layout { position: sticky; top: 142px; min-width: 0; }
+    .immersive-page .cards { display: block; touch-action: pan-y; }
+    .immersive-page .lesson-card { display: none; max-height: min(70vh, 700px); overflow: auto; grid-template-columns: 1fr; gap: 13px; padding: 22px; border-color: rgb(255 255 255 / 78%); background: rgb(255 254 250 / 92%); box-shadow: 0 22px 55px rgb(30 52 42 / 20%); backdrop-filter: blur(16px); }
+    .immersive-page .lesson-card.is-active { display: grid; animation: card-arrive .28s ease both; }
+    .immersive-page .card-side { display: flex; align-items: baseline; gap: 10px; border: 0; padding: 0; }
+    .immersive-page .card-side h3 { margin: 0; }
+    .immersive-page .card-role { display: inline; }
+    .card-pager { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; margin-top: 14px; padding: 12px 14px; border: 1px solid rgb(255 255 255 / 78%); border-radius: 18px; background: rgb(255 254 250 / 82%); box-shadow: 0 12px 28px rgb(30 52 42 / 10%); backdrop-filter: blur(12px); }
+    .card-pager button { min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 12px; background: white; color: var(--ink); font-weight: 700; }
+    .card-pager button:disabled { cursor: default; opacity: .45; }
+    .pager-status { min-width: 0; text-align: center; }
+    .pager-status span { display: block; color: var(--muted); font-size: .82rem; }
+    .pager-status progress { height: 6px; margin-top: 3px; }
+    .immersive-page footer { position: relative; z-index: 1; margin-top: 38px; }
+    @keyframes card-arrive { from { opacity: .45; transform: translateX(12px) scale(.99); } to { opacity: 1; transform: translateX(0) scale(1); } }
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 24px, 620px); }
+      .hero { grid-template-columns: 1fr; gap: 16px; padding: 30px 0; }
+      .hero-note { transform: none; }
+      .lesson-card { grid-template-columns: 1fr; gap: 14px; padding: 18px; border-radius: 19px; }
+      .card-side { display: flex; align-items: baseline; gap: 10px; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 10px; }
+      .card-side h3 { margin: 0; }
+      .card-role { display: none; }
+      .diagram { grid-template-columns: 1fr; }
+      .section-top { align-items: start; flex-direction: column; gap: 3px; }
+      .example-grid, .readout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 760px) {
+      .immersive-page .hero { padding: 18px 0 14px; }
+      .immersive-room { grid-template-columns: 1fr; gap: 14px; min-height: 0; }
+      .scene-stage { position: relative; top: auto; height: 36svh; min-height: 250px; }
+      .immersive-page .lesson-layout { position: relative; top: auto; }
+      .immersive-page .lesson-card { max-height: none; padding: 18px; }
+      .immersive-page .card-side { flex-wrap: wrap; }
+      .card-pager { position: sticky; bottom: 8px; z-index: 6; }
+      .immersive-page .scene-readout { grid-template-columns: 1fr 1fr; }
+      .immersive-page .scene-readout article { padding: 9px; }
+      .immersive-page .scene-readout strong { font-size: 1rem; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+      .lesson-card { animation: arrive .45s ease both; }
+      @keyframes arrive { from { opacity: .78; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    }
+  </style>
+</head>
+<body class="immersive-page">
+  <header class="shell masthead">
+    <div class="brand-row"><a class="brand" href="../../index.html">← Part 3：密度與測量</a><span class="crumb">國二上・Part 3.1・候選 2</span><a href="index.html">切換候選 1｜直向卡片版</a></div>
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Part 3.1 · 候選 2｜3D 量測觀察室 · 8 張卡</div>
+        <h1>要公平比較，<br>先把「量」說清楚</h1>
+        <p>同一顆蘋果，為什麼可能量出不同讀值？在觀察室裡逐張切換學習卡，操作同一個 3D 量測場景，從紀錄、刻度到讀值條件，一步步找出能比較的資料。</p>
+      </div>
+      <aside class="hero-note">
+        <strong>同一顆蘋果，量測會怎麼變？</strong>
+        <p>調整尺的刻度或觀察角度，看看讀值如何改變，再找出讓量測更可靠的方法。</p>
+      </aside>
+    </div>
+  </header>
+
+  <nav class="route" aria-label="探索路線">
+    <div class="shell">
+      <p class="route-label">本 Part 的閱讀路線｜沿卡片順序讀、操作與觀察</p>
+      <div class="route-inner">
+        <a href="#card-01"><b>01</b>不同讀值</a><a href="#card-02"><b>02</b>量與單位</a>
+        <a href="#card-03"><b>03</b>選工具</a><a href="#card-04"><b>04</b>看刻度</a>
+        <a href="#card-05"><b>05</b>估讀</a><a href="#card-06"><b>06</b>找誤差</a>
+        <a href="#card-07"><b>07</b>改善方法</a><a href="#card-08"><b>08</b>公平比較</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="shell lesson">
+    <div class="section-top"><h2>量測觀察室</h2><span class="progress-copy">拖曳場景旋轉視角；左右滑動卡片或使用前後按鈕繼續</span></div>
+    <div class="immersive-room">
+      <div class="scene-stage" aria-label="持續顯示的 3D 蘋果與直尺觀察場景">
+        <span class="room-label">3D 量測觀察室・同一顆蘋果</span>
+        <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、蘋果和視線延長線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明蘋果寬度不變，視角可能改變尺面上的表觀讀值。</canvas>
+        <div class="scene-caption"><p id="camera-caption" aria-live="polite">拖曳畫面旋轉視角；也可先選取畫面，再按方向鍵。</p><button type="button" class="secondary" id="reset-camera">回到正對刻度</button></div>
+        <div class="scene-readout" aria-live="polite"><article><small>蘋果實際寬度（模型固定）</small><strong id="actual-width">約 6.3 cm</strong></article><article><small>沿視線投到尺面的表觀讀值</small><strong id="parallax-reading">約 6.3 cm</strong></article></div>
+      </div>
+      <div class="lesson-layout">
+      <div class="cards">
+      <section class="lesson-card is-active" id="card-01">
+        <div class="card-side"><span class="card-number">CARD 01</span><h3>提出疑問</h3><span class="card-role">同一物體，不同紀錄</span></div>
+        <div class="card-main">
+          <h2>同一顆蘋果，為什麼會有不同讀值？</h2>
+          <p>兩次紀錄出現差異，不一定表示蘋果的寬度改變。切換尺的刻度、起點、視角或單位，觀察同一個模型裡的量測紀錄如何改變。</p>
+          <label class="field">切換量測情境
+            <select id="difference-condition"><option value="scale">工具刻度不同</option><option value="start">尺的起點沒有對準</option><option value="view">讀刻度的視角不同</option><option value="unit">使用的單位不同</option></select>
+          </label>
+          <div class="readout" aria-live="polite"><article><small>比較紀錄 A</small><strong id="reading-a">約 6.3 cm</strong><span id="reading-a-note">左端對齊零刻度</span></article><article><small>比較紀錄 B</small><strong id="reading-b">約 6.3–6.4 cm</strong><span id="reading-b-note">依端點位置估讀</span></article></div>
+          <div class="fact"><p id="difference-explanation">改變的是尺或讀值條件；蘋果仍是同一顆，讓我們可以比較同一量測對象的紀錄。</p></div>
+          <p class="next-hint">要讀懂這些差異，先看看一筆量測紀錄要交代哪些資訊。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-02">
+        <div class="card-side"><span class="card-number">CARD 02</span><h3>看懂紀錄</h3><span class="card-role">物理量、數值與單位</span></div>
+        <div class="card-main">
+          <h2>只寫「5」，別人知道你量了什麼嗎？</h2>
+          <p>一筆完整的量測紀錄包含物理量、數值和單位。依序點選下方標示，觀察每一部分提供什麼資訊；也可移除同一把尺上的 cm 標示，看數字少了什麼依據。</p>
+          <div class="record" aria-label="蘋果水平方向的寬度約為六點三公分">
+            <span id="record-object">蘋果的寬度</span><span>=</span><span id="record-value">約 6.3</span><span id="record-unit">cm</span>
+          </div>
+          <div class="concept-parts" role="group" aria-label="量測紀錄的組成">
+            <button type="button" data-record-part="object" aria-pressed="true">物理量</button>
+            <button type="button" data-record-part="value" aria-pressed="false">數值</button>
+            <button type="button" data-record-part="unit" aria-pressed="false">單位</button>
+          </div>
+          <button type="button" class="secondary" id="unit-toggle" aria-pressed="false">移除尺上的 cm 標示</button>
+          <p class="live-note" id="record-explanation" aria-live="polite">物理量說明量的是什麼；這裡量的是蘋果水平方向的寬度。</p>
+          <div class="fact"><p>「6.3 cm」和「6.3 mm」的數字相同，表示的長度不同。單位不能從量測紀錄中省略。</p></div>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-03">
+        <div class="card-side"><span class="card-number">CARD 03</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
+        <div class="card-main">
+          <h2>同一種工具，能量所有東西嗎？</h2>
+          <p>工具要能測量指定的物理量，也要有適合的量程。切換量測任務和工具情境，觀察工具的用途及限制。</p>
+          <div class="select-row">
+            <label class="field">量測任務
+              <select id="tool-task"><option value="length">量這顆蘋果的寬度（約 6.3 cm）</option><option value="mass">量這顆蘋果的質量（示意約 150 g）</option><option value="time">量一段約 12 s 的活動時間</option></select>
+            </label>
+            <label class="field">工具情境
+              <select id="tool-state"><option value="suitable">物理量和量程都合適</option><option value="wrong-quantity">工具測量的是另一種物理量</option><option value="short-range">工具量程不足</option></select>
+            </label>
+          </div>
+          <div class="readout" aria-live="polite">
+            <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
+            <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，蘋果寬度落在尺的量程內。</span></article>
+          </div>
+          <p class="live-note">量程是工具能測量的範圍。量程太短時，即使物理量相符，也無法完整量取；量程很大也不代表刻度一定夠細。</p>
+          <p class="next-hint">工具選定後，下一步是讀懂刻度的間距。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-04">
+        <div class="card-side"><span class="card-number">CARD 04</span><h3>讀取刻度</h3><span class="card-role">觀察最小刻度</span></div>
+        <div class="card-main">
+          <h2>尺上的每一格，代表多少？</h2>
+          <p>共用模型中的尺顯示蘋果端點。切換刻度間隔，觀察每格的長度以及端點相對於刻線的位置。</p>
+          <div class="control-panel">
+            <div class="ruler-caption"><span>尺的一段：0 cm 至 1 cm</span><span>改變每公分的分格數</span></div>
+            <div class="toggle-row" role="group" aria-label="每公分分格數">
+              <button type="button" data-divisions="2" aria-pressed="false">2 格</button>
+              <button type="button" data-divisions="5" aria-pressed="false">5 格</button>
+              <button type="button" data-divisions="10" aria-pressed="true">10 格</button>
+            </div>
+            <p class="live-note" id="division-model-note">共用模型中的尺已同步更新；蘋果端點仍在相同位置。</p>
+            <p class="live-note" id="division-note" aria-live="polite">1 cm 分成 10 個相等間隔，每個間隔是 0.1 cm（1 mm）。</p>
+          </div>
+          <div class="fact"><p>工具的最小刻度會限制可直接讀取的精細程度；讀值時先確認刻度標示和每格的間距。</p></div>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-05">
+        <div class="card-side"><span class="card-number">CARD 05</span><h3>估讀刻線之間</h3><span class="card-role">位置改變，估值跟著改變</span></div>
+        <div class="card-main">
+          <h2>6.3 cm 再多一點，端點落在哪裡？</h2>
+          <p>6.3 cm 就是 6 cm 3 mm。這顆蘋果的右端再多出一點，沒有剛好停在刻線上。按下「拉近查看」，放大 6.3 cm 與 6.4 cm 兩條刻線附近；拖動同一顆蘋果沿尺移動，觀察右端在兩條刻線之間的位置。蘋果本身保持同樣大小。</p>
+          <aside class="model-panel" aria-labelledby="model-title">
+            <h2 id="model-title">量量看：蘋果有多寬？</h2>
+            <p>拉近刻度，觀察同一顆蘋果的端點在尺上的位置；這個模型會延續到後續卡片。</p>
+            <div class="model-screen" id="model-screen" data-zoom="false">
+              <svg id="shared-measurement-model" viewBox="0 0 760 300" role="img" aria-label="用直尺測量蘋果水平方向的寬度，左端對齊零，右端落在六點三公分與六點四公分之間">
+                <rect x="16" y="16" width="728" height="268" rx="12" fill="#fffefa"></rect>
+                <g id="apple-object">
+                  <path d="M254 89 C220 49 165 62 105 78 C28 100 27 169 78 208 C123 245 195 234 254 214 C313 234 385 245 430 208 C481 169 480 100 403 78 C343 62 288 49 254 89 Z" fill="#d85f3f" stroke="#923d2a" stroke-width="4"></path>
+                  <path d="M254 88 C250 68 256 52 269 39" fill="none" stroke="#6d4c32" stroke-width="9" stroke-linecap="round"></path>
+                  <path d="M265 54 C282 37 302 40 311 48 C298 63 280 67 265 54 Z" fill="#6f9e63" stroke="#477544" stroke-width="2"></path>
+                </g>
+                <path id="apple-start-guide" d="M80 65V235" stroke="#176b53" stroke-width="2" stroke-dasharray="5 5"></path>
+                <path id="apple-end-guide" d="M588 65V235" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 5"></path>
+                <g id="shared-scale"></g>
+                <g id="eye-ray" opacity="0">
+                  <circle cx="620" cy="30" r="12" fill="#dceaf0" stroke="#547884" stroke-width="3"></circle>
+                  <path d="M620 42L588 220" stroke="#bc612b" stroke-width="2" stroke-dasharray="5 4"></path>
+                </g>
+              </svg>
+            </div>
+            <div class="model-readout"><small>目前讀值</small><strong id="shared-reading">約 6.3 cm</strong></div>
+            <p class="model-status" id="shared-model-note" aria-live="polite">量的是蘋果水平方向的寬度。左端對齊 0 cm；右端略超過 6.3 cm。</p>
+            <button type="button" class="secondary" id="zoom-toggle" aria-pressed="false">拉近查看端點</button>
+          </aside>
+          <div class="slider-row"><input id="estimate-slider" type="range" min="630" max="640" value="633" aria-label="沿著直尺移動蘋果，觀察右端在六點三與六點四公分刻線間的位置"><output class="value" id="estimate-value" for="estimate-slider">6.3 cm 後一點</output></div>
+          <p class="live-note" id="estimate-note" aria-live="polite">拉近能看清端點相對於刻線的位置；放大不會增加尺的刻度精度，也不代表得到絕對精確值。</p>
+          <div class="fact"><p>估讀是依刻度和物體端點的位置作判斷。這裡把結果描述為「約在兩條刻線之間」，不把模型顯示的細節誤當成工具提供的額外精度。</p></div>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-06">
+        <div class="card-side"><span class="card-number">CARD 06</span><h3>找出讀值差異</h3><span class="card-role">視角與起點是兩種條件</span></div>
+        <div class="card-main">
+          <h2>同一物體，為什麼讀值會差一點？</h2>
+          <p>拖曳左側的 3D 場景，從不同方向觀察同一顆蘋果和直尺。紅色虛線延伸到尺面的位置，是這個視角下可能讀到的刻度；蘋果本身的寬度不會因為轉動視角而改變。選取場景後也可用方向鍵調整視角。</p>
+          <div class="parallax-scene">
+            <p class="live-note" id="parallax-explanation">正對尺面時，視線延長線接近蘋果端點；斜向觀察時，端點的視線落到尺面別處，可能造成視差讀值。這是教學模型的幾何示意，讀值依刻度估讀。</p>
+          </div>
+          <div class="toggle-row" role="group" aria-label="尺的起點">
+            <button type="button" data-zero="aligned" aria-pressed="true">起點在 0 cm</button>
+            <button type="button" data-zero="offset" aria-pressed="false">起點在 0.5 cm</button>
+          </div>
+          <div class="readout" aria-live="polite"><article><small>尺上蘋果端點</small><strong id="zero-end">約 6.3 cm</strong><span>沿用共用模型上的同一端點</span></article><article><small>蘋果寬度</small><strong id="zero-result">約 6.3 cm</strong><span id="zero-explanation">起點在 0 cm，終點位置就是寬度。</span></article></div>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-07">
+        <div class="card-side"><span class="card-number">CARD 07</span><h3>改善量測條件</h3><span class="card-role">修正前後對照</span></div>
+        <div class="card-main">
+          <h2>改變一個條件，量測會怎麼改善？</h2>
+          <p>選擇一種量測限制，再操作對應的改善方式。觀察哪個條件被改變，以及資料因此如何更容易判讀。</p>
+          <div class="select-row">
+            <label class="field">量測限制
+              <select id="correction-case"><option value="" selected>選擇一種量測限制</option><option value="view">從斜上方讀刻度</option><option value="start">起點在 0.5 cm</option><option value="scale">刻度不夠細</option></select>
+            </label>
+            <button class="secondary" id="apply-correction" type="button">套用改善方式</button>
+          </div>
+          <div class="readout" aria-live="polite">
+            <article><small>改善前</small><strong id="before-state">斜視刻度</strong><span id="before-note">視線和刻度不在同一高度</span></article>
+            <article><small>改善後</small><strong id="after-state">尚未套用</strong><span id="after-note">選擇改善方式後，這裡會顯示變化</span></article>
+          </div>
+          <p class="live-note" id="correction-explanation" aria-live="polite">正視刻度能減少視差；模型只呈現讀值條件的改變，不虛構精確誤差量。</p>
+          <div class="fact"><p>改善方式要對應誤差來源。選用合適工具、對齊起點並保持一致讀法，能讓量測更可靠，但不能保證每次讀值完全相同。</p></div>
+        </div>
+      </section>
+
+      <section class="lesson-card end-card" id="card-08">
+        <div class="card-side"><span class="card-number">CARD 08</span><h3>整合理解</h3><span class="card-role">本 Part 唯一的理解檢核</span></div>
+        <div class="card-main">
+          <span class="assessment-label">理解檢核・共 1 題</span>
+          <h2>怎麼判斷蘋果的兩筆寬度紀錄是否可比較？</h2>
+          <p>小安沿用共用模型，記下蘋果寬度約 6.3 cm；小晴也量同一顆蘋果，卻只記下「6.3」。哪一項說明最完整？</p>
+          <div class="choices" id="fair-options">
+            <button class="choice" data-fair="complete" aria-pressed="false">「6.3」缺少單位，資料還不完整；要確認兩筆都是長度、單位與讀值條件可對照。</button>
+            <button class="choice" data-fair="tool" aria-pressed="false">只要量到相同數字，就可以直接比較。</button>
+            <button class="choice" data-fair="number" aria-pressed="false">蘋果一樣，所以量測紀錄不需要寫單位。</button>
+          </div>
+          <div class="feedback" id="assessment-feedback" aria-live="polite"></div>
+          <div class="fact"><p><strong>回到開頭的問題：</strong>比較量測資料時，先確認物理量、單位、工具和讀值條件，並用可對照的證據說明差異。</p></div>
+          <p class="next-hint">下一個 Part 將追問：形狀不規則的物體，體積也量得出來嗎？</p>
+        </div>
+      </section>
+    </div>
+      <nav class="card-pager" aria-label="學習卡片切換">
+        <button type="button" id="previous-card">← 上一張</button>
+        <div class="pager-status"><strong id="card-counter" aria-live="polite">第 1 / 8 張</strong><progress id="card-progress" value="1" max="8" aria-label="卡片閱讀位置"></progress><span>卡片位置，不是答題進度</span></div>
+        <button type="button" id="next-card">下一張 →</button>
+      </nav>
+    </div>
+    </div>
+  </main>
+
+  <footer><div class="shell">本頁為密度與測量 Part 3.1 的觀察室版。3D 幾何模型呈現視差；表觀讀值依模型中的視線投影與尺刻度估算，不代表實際實驗數據。教材細節依採用版本複核。</div></footer>
+
+  <script>
+    (() => {
+      const pressOne = (buttons, selected) => buttons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button === selected));
+      });
+      const state = { divisions: 10, start: 0, angle: false, unit: true, zoom: false, edge: 6.33 };
+      const defaultCameraPitch = 0.95;
+      const orbitRadius = 14;
+      const defaultCameraYaw = Math.asin((state.edge / 2) / (orbitRadius * Math.cos(defaultCameraPitch)));
+      const ruler = document.querySelector("#shared-scale");
+      const modelSvg = document.querySelector("#shared-measurement-model");
+      const modelScreen = document.querySelector("#model-screen");
+      const parallaxCanvas = document.querySelector("#parallax-canvas");
+      const parallaxContext = parallaxCanvas.getContext("2d");
+      const camera = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
+      const edgePosition = () => state.start + state.edge;
+      const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
+      const add = (a, b) => ({ x: a.x + b.x, y: a.y + b.y, z: a.z + b.z });
+      const subtract = (a, b) => ({ x: a.x - b.x, y: a.y - b.y, z: a.z - b.z });
+      const scale = (a, amount) => ({ x: a.x * amount, y: a.y * amount, z: a.z * amount });
+      const dot = (a, b) => a.x * b.x + a.y * b.y + a.z * b.z;
+      const cross = (a, b) => ({ x: a.y * b.z - a.z * b.y, y: a.z * b.x - a.x * b.z, z: a.x * b.y - a.y * b.x });
+      const normalize = (a) => {
+        const magnitude = Math.hypot(a.x, a.y, a.z) || 1;
+        return scale(a, 1 / magnitude);
+      };
+      const renderParallaxScene = () => {
+        if (!parallaxContext || !parallaxCanvas.clientWidth) return;
+        const bounds = parallaxCanvas.getBoundingClientRect();
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        parallaxCanvas.width = Math.round(bounds.width * pixelRatio);
+        parallaxCanvas.height = Math.round(bounds.height * pixelRatio);
+        parallaxContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        const ctx = parallaxContext;
+        const width = bounds.width;
+        const height = bounds.height;
+        const target = { x: state.start + state.edge / 2, y: 1.8, z: 0 };
+        const cameraPosition = {
+          x: target.x + orbitRadius * Math.cos(camera.pitch) * Math.sin(camera.yaw),
+          y: target.y + orbitRadius * Math.sin(camera.pitch),
+          z: target.z + orbitRadius * Math.cos(camera.pitch) * Math.cos(camera.yaw)
+        };
+        const forward = normalize(subtract(target, cameraPosition));
+        const right = normalize(cross(forward, { x: 0, y: 1, z: 0 }));
+        const up = normalize(cross(right, forward));
+        const focalLength = height * 1.45;
+        const project = (point) => {
+          const relative = subtract(point, cameraPosition);
+          const depth = dot(relative, forward);
+          if (depth <= 0.1) return null;
+          const perspective = focalLength / depth;
+          return {
+            x: width / 2 + dot(relative, right) * perspective,
+            y: height / 2 - dot(relative, up) * perspective,
+            depth
+          };
+        };
+        const drawLine = (points, color, thickness = 1, dash = []) => {
+          const projected = points.map(project);
+          if (projected.some((point) => !point)) return;
+          ctx.beginPath();
+          ctx.setLineDash(dash);
+          ctx.moveTo(projected[0].x, projected[0].y);
+          projected.slice(1).forEach((point) => ctx.lineTo(point.x, point.y));
+          ctx.strokeStyle = color;
+          ctx.lineWidth = thickness;
+          ctx.stroke();
+          ctx.setLineDash([]);
+        };
+        const drawFace = (points, color, border = "#a99255") => {
+          const projected = points.map(project);
+          if (projected.some((point) => !point)) return;
+          ctx.beginPath();
+          ctx.moveTo(projected[0].x, projected[0].y);
+          projected.slice(1).forEach((point) => ctx.lineTo(point.x, point.y));
+          ctx.closePath();
+          ctx.fillStyle = color;
+          ctx.fill();
+          ctx.strokeStyle = border;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        };
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = "#f7f8f3";
+        ctx.fillRect(0, 0, width, height);
+
+        const rulerMin = -0.18;
+        const rulerMax = 8.1;
+        const top = 0.04;
+        drawFace([{ x: rulerMin, y: top, z: -2.3 }, { x: rulerMax, y: top, z: -2.3 }, { x: rulerMax, y: top, z: 2.3 }, { x: rulerMin, y: top, z: 2.3 }], "#f2dfa9");
+        drawFace([{ x: rulerMin, y: top, z: 2.3 }, { x: rulerMax, y: top, z: 2.3 }, { x: rulerMax, y: -0.12, z: 2.3 }, { x: rulerMin, y: -0.12, z: 2.3 }], "#ddc987", "#a99255");
+        const tickStep = 1 / state.divisions;
+        for (let tick = 0; tick <= 8 * state.divisions; tick += 1) {
+          const x = tick * tickStep;
+          const major = tick % state.divisions === 0;
+          const half = tick % Math.max(1, state.divisions / 2) === 0;
+          const startDepth = major ? -2.15 : half ? -1.65 : -1.05;
+          drawLine([{ x, y: top + 0.015, z: startDepth }, { x, y: top + 0.015, z: 2.15 }], major ? "#26383a" : "#637174", major ? 2.2 : 1.15);
+          if (major) {
+              const label = project({ x, y: top + 0.03, z: 2.55 });
+            if (label) {
+              ctx.fillStyle = "#26383a";
+              ctx.font = "12px system-ui, sans-serif";
+              ctx.textAlign = "center";
+              ctx.fillText(`${tick / state.divisions}${state.unit ? " cm" : ""}`, label.x, label.y);
+            }
+          }
+        }
+
+        const appleLobe = 0.045;
+        const appleRows = 32;
+        const appleColumns = 48;
+        const radialProfile = (theta) => {
+          const upperShoulder = 0.1 * Math.exp(-Math.pow((theta - 0.82) / 0.35, 2));
+          const lowerShoulder = 0.04 * Math.exp(-Math.pow((theta - (Math.PI - 0.9)) / 0.42, 2));
+          return Math.sin(theta) * (1 + upperShoulder + lowerShoulder);
+        };
+        const maximumProfile = Math.max(...Array.from({ length: appleRows + 1 }, (_, row) => {
+          const theta = (row / appleRows) * Math.PI;
+          const sine = Math.sin(theta);
+          return radialProfile(theta) * (1 + appleLobe * sine * sine);
+        }));
+        const appleCenter = { x: state.start + state.edge / 2, y: 2.95, z: 0 };
+        const appleRadii = { x: state.edge / (2 * maximumProfile), y: 2.9, z: 2 / maximumProfile };
+        const appleHalfWidth = appleRadii.x * maximumProfile;
+        const appleStartX = appleCenter.x - appleHalfWidth;
+        const appleEndX = appleCenter.x + appleHalfWidth;
+        const vertices = [];
+        for (let row = 0; row <= appleRows; row += 1) {
+          const theta = (row / appleRows) * Math.PI;
+          const cosine = Math.cos(theta);
+          const sine = Math.sin(theta);
+          const shoulder = radialProfile(theta);
+          const poleIndent = Math.exp(-Math.pow(sine / 0.2, 2));
+          for (let column = 0; column <= appleColumns; column += 1) {
+            const phi = (column / appleColumns) * Math.PI * 2;
+            const lobe = 1 + appleLobe * Math.cos(phi * 6) * sine * sine;
+            vertices.push({
+              x: appleCenter.x + appleRadii.x * shoulder * Math.cos(phi) * lobe,
+              y: appleCenter.y + appleRadii.y * cosine - (cosine >= 0 ? 0.58 : -0.16) * poleIndent,
+              z: appleCenter.z + appleRadii.z * shoulder * Math.sin(phi) * lobe
+            });
+          }
+        }
+        const faces = [];
+        for (let row = 0; row < appleRows; row += 1) {
+          for (let column = 0; column < appleColumns; column += 1) {
+            const a = row * (appleColumns + 1) + column;
+            const b = a + appleColumns + 1;
+            [[vertices[a], vertices[b], vertices[a + 1]], [vertices[a + 1], vertices[b], vertices[b + 1]]].forEach((points, index) => {
+              const projected = points.map(project);
+              if (!projected.some((point) => !point)) {
+                const faceCenter = points.reduce((sum, point) => add(sum, point), { x: 0, y: 0, z: 0 });
+                faceCenter.x = faceCenter.x / points.length - appleCenter.x;
+                faceCenter.y = faceCenter.y / points.length - appleCenter.y;
+                faceCenter.z = faceCenter.z / points.length - appleCenter.z;
+                const normal = normalize({
+                  x: faceCenter.x / (appleRadii.x * appleRadii.x),
+                  y: faceCenter.y / (appleRadii.y * appleRadii.y),
+                  z: faceCenter.z / (appleRadii.z * appleRadii.z)
+                });
+                const light = normalize({ x: -0.45, y: 0.72, z: 0.6 });
+                const brightness = 0.76 + 0.24 * Math.max(0, dot(normal, light));
+                const red = Math.round(205 * brightness);
+                const green = Math.round(78 * brightness);
+                const blue = Math.round(58 * brightness);
+                faces.push({
+                  points: projected,
+                  depth: projected.reduce((sum, point) => sum + point.depth, 0) / 3,
+                  color: `rgb(${red} ${green} ${blue})`
+                });
+              }
+            });
+          }
+        }
+        faces.sort((a, b) => b.depth - a.depth).forEach((face) => {
+          ctx.beginPath();
+          ctx.moveTo(face.points[0].x, face.points[0].y);
+          ctx.lineTo(face.points[1].x, face.points[1].y);
+          ctx.lineTo(face.points[2].x, face.points[2].y);
+          ctx.closePath();
+          ctx.fillStyle = face.color;
+          ctx.fill();
+        });
+        const stemBase = { x: appleCenter.x, y: appleCenter.y + appleRadii.y - 0.58, z: 0 };
+        const calyx = Array.from({ length: 12 }, (_, index) => {
+          const angle = (index / 12) * Math.PI * 2;
+          return { x: stemBase.x + Math.cos(angle) * 0.24, y: stemBase.y + 0.04, z: stemBase.z + Math.sin(angle) * 0.18 };
+        });
+        drawFace(calyx, "#a94432", "#8e352b");
+        drawLine([stemBase, { x: stemBase.x + 0.02, y: stemBase.y + 0.42, z: stemBase.z }, { x: stemBase.x + 0.09, y: stemBase.y + 0.82, z: stemBase.z }], "#68452f", 6);
+        drawFace([
+          { x: stemBase.x + 0.05, y: stemBase.y + 0.58, z: 0.02 },
+          { x: stemBase.x + 0.8, y: stemBase.y + 0.76, z: 0.08 },
+          { x: stemBase.x + 0.58, y: stemBase.y + 0.97, z: 0.06 },
+          { x: stemBase.x + 0.22, y: stemBase.y + 0.94, z: 0.02 },
+          { x: stemBase.x + 0.05, y: stemBase.y + 0.78, z: -0.02 }
+        ], "#6f9e63", "#477544");
+
+        const edgeX = appleEndX;
+        const edgeHeight = appleCenter.y;
+        const cameraHeight = cameraPosition.y;
+        const projectionFactor = (edgeHeight - top) / Math.max(0.1, cameraHeight - edgeHeight);
+        const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
+        const projectedEdgeZ = -projectionFactor * cameraPosition.z;
+        const clampedProjectionX = clamp(projectedEdgeX, rulerMin, rulerMax);
+        const clampedProjectionZ = clamp(projectedEdgeZ, -2.25, 2.25);
+        drawLine([{ x: appleStartX, y: 0.06, z: -1.26 }, { x: appleStartX, y: 1.25, z: -1.26 }], "#176b53", 1.7, [4, 4]);
+        drawLine([{ x: edgeX, y: top + 0.03, z: 0 }, { x: edgeX, y: edgeHeight, z: 0 }], "#bc612b", 2, [4, 4]);
+        drawLine([{ x: edgeX, y: edgeHeight, z: 0 }, { x: clampedProjectionX, y: top + 0.035, z: clampedProjectionZ }], "#bc612b", 2, [5, 4]);
+        const landing = project({ x: clampedProjectionX, y: top + 0.04, z: clampedProjectionZ });
+        if (landing) {
+          ctx.beginPath();
+          ctx.arc(landing.x, landing.y, 4, 0, Math.PI * 2);
+          ctx.fillStyle = "#bc612b";
+          ctx.fill();
+        }
+        const estimatedStep = 1 / state.divisions;
+        const apparentWidth = Math.max(0, projectedEdgeX - appleStartX);
+        const apparentWidthReading = Math.round(apparentWidth / estimatedStep) * estimatedStep;
+        const apparentEndReading = Math.round(projectedEdgeX / estimatedStep) * estimatedStep;
+        const formattedWidthReading = apparentWidthReading.toFixed(1);
+        const formattedEndReading = apparentEndReading.toFixed(1);
+        const landingOnScale = projectedEdgeX >= 0 && projectedEdgeX <= 8 && Math.abs(projectedEdgeZ) <= 2.2;
+        document.querySelector("#actual-width").textContent = `約 ${state.edge.toFixed(1)} cm`;
+        document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${formattedEndReading} cm` : "視線落在尺外";
+        document.querySelector("#zero-end").textContent = landingOnScale ? `約 ${formattedEndReading} cm` : "視線落在尺外";
+        document.querySelector("#zero-result").textContent = landingOnScale ? `約 ${formattedWidthReading} cm` : "目前無法估讀";
+        document.querySelector("#zero-explanation").textContent = !landingOnScale
+          ? "端點視線落在尺面範圍外；調整視角讓落點回到刻度，再讀取終點與寬度。"
+          : state.start === 0
+          ? `起點在 0 cm，終點讀值約 ${formattedEndReading} cm，寬度也約 ${formattedWidthReading} cm。`
+          : `終點讀值約 ${formattedEndReading} cm − 起點 ${state.start.toFixed(1)} cm，寬度約 ${formattedWidthReading} cm。`;
+        const side = Math.abs(camera.yaw) < 0.12 ? "接近正對尺長方向" : camera.yaw > 0 ? "從尺的右側觀察" : "從尺的左側觀察";
+        const elevation = camera.pitch > 1.05 ? "較高俯視" : camera.pitch < 0.8 ? "較低視線" : "斜上方視線";
+        document.querySelector("#camera-caption").textContent = `目前視角：${elevation}，${side}。拖曳旋轉；方向鍵也可調整。`;
+        document.querySelector("#parallax-explanation").textContent = !landingOnScale
+          ? "這個角度下，視線延長線落在尺面範圍外，無法從尺上讀值。轉動視角，讓落點回到刻度上；蘋果寬度始終不變。"
+          : Math.abs(apparentWidthReading - state.edge) < estimatedStep / 2
+          ? "目前視線接近正對尺長方向，落點讀值與固定的蘋果寬度接近。拖動視角，觀察視線延長線如何偏離端點。"
+          : `蘋果實際寬度仍約 ${state.edge.toFixed(1)} cm；端點視線落到尺面約 ${formattedEndReading} cm，扣除起點 ${state.start.toFixed(1)} cm 後，表觀寬度約 ${formattedWidthReading} cm。差異呈現視差，不代表蘋果或尺改變。`;
+        parallaxCanvas.setAttribute("aria-label", landingOnScale
+          ? `三維直尺與蘋果模型。蘋果實際寬度約 ${state.edge.toFixed(1)} 公分；目前視角沿視線投到尺面的端點讀值約 ${formattedEndReading} 公分。可拖曳或使用方向鍵旋轉視角。`
+          : `三維直尺與蘋果模型。蘋果實際寬度約 ${state.edge.toFixed(1)} 公分；目前視角的視線落在尺面範圍外，無法讀值。可拖曳或使用方向鍵旋轉視角。`);
+      };
+      const updateModel = (note) => {
+        const startX = 80 + state.start * 80;
+        const endX = 80 + edgePosition() * 80;
+        const appleScale = (state.edge * 80) / 454;
+        const appleOffset = startX - 27 * appleScale;
+        document.querySelector("#apple-object").setAttribute("transform", `translate(${appleOffset} 0) scale(${appleScale})`);
+        document.querySelector("#apple-start-guide").setAttribute("d", `M${startX} 65V235`);
+        document.querySelector("#apple-end-guide").setAttribute("d", `M${endX} 65V235`);
+        const lines = [];
+        const subdivisions = state.divisions;
+        const totalTicks = subdivisions * 8;
+        for (let tick = 0; tick <= totalTicks; tick += 1) {
+          const x = 80 + (tick * 640) / totalTicks;
+          const major = tick % subdivisions === 0;
+          const half = tick % Math.max(1, subdivisions / 2) === 0;
+          const top = major ? 213 : half ? 220 : 226;
+          lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${254 - top}"/>`);
+          if (major) lines.push(`<text x="${x - 4}" y="274">${tick / subdivisions}${state.unit ? " cm" : ""}</text>`);
+        }
+        ruler.innerHTML = `<rect class="ruler-body" x="66" y="213" width="668" height="43" rx="5"/>${lines.join("")}`;
+        document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
+        document.querySelector("#eye-ray path").setAttribute("d", `M620 42L${endX} 220`);
+        document.querySelector("#shared-reading").textContent = state.unit ? "約 6.3 cm" : "約 6.3（單位未標）";
+        const unitToggle = document.querySelector("#unit-toggle");
+        if (unitToggle) {
+          unitToggle.setAttribute("aria-pressed", String(!state.unit));
+          unitToggle.textContent = state.unit ? "移除尺上的 cm 標示" : "恢復尺上的 cm 標示";
+          document.querySelector("#record-unit").textContent = state.unit ? "cm" : "（單位未標）";
+        }
+        document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
+        document.querySelectorAll("[data-divisions]").forEach((button) => button.setAttribute("aria-pressed", String(Number(button.dataset.divisions) === state.divisions)));
+        const divisionNote = document.querySelector("#division-note");
+        if (divisionNote) {
+          const size = (1 / state.divisions).toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+          divisionNote.textContent = `1 cm 分成 ${state.divisions} 個相等間隔，每格是 ${size} cm。`;
+        }
+        modelSvg.setAttribute("aria-label", state.unit
+          ? `測量蘋果水平方向的寬度；蘋果左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於六點三與六點四公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`
+          : "尺上的公分單位標示已隱藏；測量蘋果水平方向的寬度，端點仍在六點三與六點四刻線之間");
+        if (note) document.querySelector("#shared-model-note").textContent = note;
+        renderParallaxScene();
+      };
+      updateModel();
+
+      const differenceStates = {
+        scale: { divisions: 2, start: 0, angle: false, unit: true, note: "同一蘋果與尺，改用較粗的刻度示意；端點所在區間較難細分。" },
+        start: { divisions: 10, start: 0.5, angle: false, unit: true, note: "尺的起點移到 0.5 cm；物體長度要用終點讀值減起點讀值。" },
+        view: { divisions: 10, start: 0, angle: true, unit: true, note: "改變視角可能讓蘋果端點在尺面上的視線落點偏移；第六卡可拖曳 3D 場景觀察表觀讀值如何改變。" },
+        unit: { divisions: 10, start: 0, angle: false, unit: false, note: "刻度旁的 cm 標示被移除；數字還在，但缺少單位就不能完整說明量值。" }
+      };
+      document.querySelector("#difference-condition").addEventListener("change", (event) => {
+        const chosen = differenceStates[event.target.value];
+        Object.assign(state, { divisions: chosen.divisions, start: chosen.start, angle: chosen.angle, unit: chosen.unit });
+        updateModel(chosen.note);
+        document.querySelector("#reading-a").textContent = chosen.unit ? "約 6.3 cm" : "約 6.3（無單位）";
+        document.querySelector("#reading-b").textContent = chosen.start ? "終點讀值約 6.8 cm" : chosen.angle ? "讀值可能偏移" : chosen.divisions === 2 ? "約 6.0–6.5 cm" : chosen.unit ? "約 6.3–6.4 cm" : "約 6.3–6.4（無單位）";
+        document.querySelector("#reading-a-note").textContent = "同一顆蘋果的紀錄";
+        document.querySelector("#reading-b-note").textContent = chosen.start ? "起點在 0.5 cm，需扣除起點" : chosen.angle ? "轉動視角，檢視視差落點" : chosen.divisions === 2 ? "較粗刻度的尺，區間較大" : chosen.unit ? "依端點位置估讀" : "尺上的 cm 標示已移除";
+        document.querySelector("#difference-explanation").textContent = chosen.note;
+      });
+
+      const recordDescriptions = {
+        object: "物理量說明量的是什麼；這裡量的是蘋果水平方向的寬度。",
+        value: "數值表示量到的大小；模型顯示約 6.3，還要搭配單位才完整。",
+        unit: "單位說明數值所採用的尺度；這把尺用 cm（公分）標示。"
+      };
+      const recordParts = [...document.querySelectorAll("[data-record-part]")];
+      recordParts.forEach((button) => button.addEventListener("click", () => {
+        pressOne(recordParts, button);
+        document.querySelectorAll("#record-object, #record-value, #record-unit").forEach((part) => part.classList.remove("is-highlighted"));
+        const target = { object: "#record-object", value: "#record-value", unit: "#record-unit" }[button.dataset.recordPart];
+        document.querySelector(target).classList.add("is-highlighted");
+        document.querySelector("#record-explanation").textContent = recordDescriptions[button.dataset.recordPart];
+      }));
+      const unitToggle = document.querySelector("#unit-toggle");
+      unitToggle.addEventListener("click", () => {
+        state.unit = !state.unit;
+        unitToggle.setAttribute("aria-pressed", String(!state.unit));
+        unitToggle.textContent = state.unit ? "移除尺上的 cm 標示" : "恢復尺上的 cm 標示";
+        document.querySelector("#record-unit").textContent = state.unit ? "cm" : "（單位未標）";
+        updateModel(state.unit ? "恢復 cm 標示後，紀錄能指出數值所用的長度單位。" : "公分標示已移除；數字還在，但讀者不知道它代表幾公分或其他尺度。 ");
+      });
+
+      const tasks = {
+        length: { instrument: "直尺", range: "長度；量程 0–30 cm", quantity: "長度", value: "約 6.3 cm", tooShort: "短尺", tooShortRange: "長度；量程 0–5 cm" },
+        mass: { instrument: "天平", range: "質量；量程 0–500 g", quantity: "質量", value: "約 150 g", tooShort: "小量程天平", tooShortRange: "質量；量程 0–100 g" },
+        time: { instrument: "計時器", range: "時間；量程 0–60 s", quantity: "時間", value: "約 12 s", tooShort: "短量程計時器", tooShortRange: "時間；量程 0–10 s" }
+      };
+      const updateToolView = () => {
+        const task = tasks[document.querySelector("#tool-task").value];
+        const selection = document.querySelector("#tool-state").value;
+        let name = task.instrument;
+        let range = task.range;
+        let result = "可涵蓋預期量值";
+        let explanation = `${task.quantity}相符，預期值 ${task.value} 落在工具量程內。`;
+        if (selection === "wrong-quantity") {
+          name = task.quantity === "長度" ? "天平" : "直尺";
+          range = task.quantity === "長度" ? "質量；量程 0–500 g" : "長度；量程 0–30 cm";
+          result = "物理量不相符";
+          explanation = `目前任務要量${task.quantity}，這個工具測量的是另一種物理量。`;
+        }
+        if (selection === "short-range") {
+          name = task.tooShort;
+          range = task.tooShortRange;
+          result = "量程無法涵蓋";
+          explanation = `預期值 ${task.value} 超出工具量程，無法完整量取。`;
+        }
+        document.querySelector("#tool-name").textContent = name;
+        document.querySelector("#tool-range").textContent = range;
+        document.querySelector("#tool-result").textContent = result;
+        document.querySelector("#tool-result-note").textContent = explanation;
+      };
+      document.querySelector("#tool-task").addEventListener("change", updateToolView);
+      document.querySelector("#tool-state").addEventListener("change", updateToolView);
+
+      const divisionButtons = [...document.querySelectorAll("[data-divisions]")];
+      divisionButtons.forEach((button) => button.addEventListener("click", () => {
+        pressOne(divisionButtons, button);
+        state.divisions = Number(button.dataset.divisions);
+        updateModel(`共用尺現在每公分分成 ${state.divisions} 格；蘋果端點位置不變，每格長度隨分格數改變。`);
+        const size = (1 / state.divisions).toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+        document.querySelector("#division-note").textContent = `1 cm 分成 ${state.divisions} 個相等間隔，每格是 ${size} cm。`;
+        document.querySelector("#division-model-note").textContent = "上方共用模型的尺刻線已同步改變，蘋果和端點仍沿用同一模型。";
+      }));
+
+      const setZoom = (zoom) => {
+        state.zoom = zoom;
+        modelScreen.dataset.zoom = String(zoom);
+        const zoomButton = document.querySelector("#zoom-toggle");
+        zoomButton.setAttribute("aria-pressed", String(zoom));
+        zoomButton.textContent = zoom ? "縮回整把尺" : "拉近查看端點";
+      };
+      document.querySelector("#zoom-toggle").addEventListener("click", () => setZoom(!state.zoom));
+      const estimateSlider = document.querySelector("#estimate-slider");
+      estimateSlider.addEventListener("input", () => {
+        const endpoint = Number(estimateSlider.value) / 100;
+        state.start = endpoint - state.edge;
+        const fraction = (endpoint - 6.3) / 0.1;
+        const description = fraction < 0.33 ? "6.3 cm 後一點" : fraction < 0.67 ? "約在兩條刻線中間" : "接近 6.4 cm 刻線";
+        document.querySelector("#estimate-value").textContent = description;
+        document.querySelector("#estimate-note").textContent = `蘋果保持同樣大小並沿尺移動，右端${description}；放大只讓位置更容易觀察，不會增加尺本身的刻度精度。`;
+        updateModel(`蘋果保持同樣大小並沿尺移動，右端${description}；讀取寬度仍須比較左右端位置。`);
+      });
+
+      const wrapAngle = (angle) => ((angle + Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) - Math.PI;
+      let dragPoint = null;
+      parallaxCanvas.addEventListener("pointerdown", (event) => {
+        dragPoint = { x: event.clientX, y: event.clientY };
+        parallaxCanvas.setPointerCapture(event.pointerId);
+        event.preventDefault();
+      });
+      parallaxCanvas.addEventListener("pointermove", (event) => {
+        if (!dragPoint) return;
+        const dx = event.clientX - dragPoint.x;
+        const dy = event.clientY - dragPoint.y;
+        dragPoint = { x: event.clientX, y: event.clientY };
+        camera.yaw = wrapAngle(camera.yaw + dx * 0.009);
+        camera.pitch = clamp(camera.pitch + dy * 0.007, 0.4, 1.35);
+        renderParallaxScene();
+      });
+      const releaseDrag = () => { dragPoint = null; };
+      parallaxCanvas.addEventListener("pointerup", releaseDrag);
+      parallaxCanvas.addEventListener("pointercancel", releaseDrag);
+      parallaxCanvas.addEventListener("lostpointercapture", releaseDrag);
+      parallaxCanvas.addEventListener("keydown", (event) => {
+        const angleStep = 0.08;
+        if (event.key === "ArrowLeft") camera.yaw -= angleStep;
+        else if (event.key === "ArrowRight") camera.yaw += angleStep;
+        else if (event.key === "ArrowUp") camera.pitch = clamp(camera.pitch - angleStep, 0.4, 1.35);
+        else if (event.key === "ArrowDown") camera.pitch = clamp(camera.pitch + angleStep, 0.4, 1.35);
+        else return;
+        event.preventDefault();
+        camera.yaw = wrapAngle(camera.yaw);
+        renderParallaxScene();
+      });
+      document.querySelector("#reset-camera").addEventListener("click", () => {
+        camera.yaw = defaultCameraYaw;
+        camera.pitch = defaultCameraPitch;
+        renderParallaxScene();
+      });
+      window.addEventListener("resize", renderParallaxScene);
+
+      const zeroButtons = [...document.querySelectorAll("[data-zero]")];
+      zeroButtons.forEach((button) => button.addEventListener("click", () => {
+        pressOne(zeroButtons, button);
+        state.start = button.dataset.zero === "offset" ? 0.5 : 0;
+        updateModel(state.start ? `尺的起點移到 0.5 cm；蘋果寬度要以終點位置減去起點位置。` : "尺的起點回到 0 cm；同一蘋果的寬度由終點位置讀取。");
+      }));
+
+      const correctionStates = {
+        view: { before: "斜向觀察尺面", beforeNote: "視線延長線落在端點旁邊", after: "正對端點讀刻度", afterNote: "視線落點更接近端點", explanation: "轉動視角讓視線接近正對尺長方向，可減少端點投影到尺面時的視差；蘋果寬度不變。", apply: () => { state.angle = false; camera.yaw = defaultCameraYaw; } },
+        start: { before: "起點在 0.5 cm", beforeNote: "不可直接把終點當長度", after: "起點對齊 0 cm", afterNote: "以同一蘋果重新讀取", explanation: "起點對齊零後，可直接讀終點位置；若未對齊，則須用終點減起點。", apply: () => { state.start = 0; } },
+        scale: { before: "刻度目前分格", beforeNote: "可在共用尺上比較", after: "每公分 10 格", afterNote: "每格為 0.1 cm（1 mm）", explanation: "較細的刻度可呈現更細的讀值；放大畫面本身不會改變工具刻度。", apply: () => { state.divisions = 10; } }
+      };
+      let corrected = false;
+      const showCorrectionCondition = () => {
+        const selectedCase = document.querySelector("#correction-case").value;
+        if (!selectedCase) return;
+        state.angle = selectedCase === "view";
+        camera.yaw = selectedCase === "view" ? defaultCameraYaw + 0.7 : defaultCameraYaw;
+        state.start = selectedCase === "start" ? 0.5 : 0;
+        if (selectedCase === "scale") state.divisions = 2;
+        updateModel("共用模型已切換到這種量測限制；套用改善後可比較同一模型的變化。");
+      };
+      const renderCorrection = () => {
+        const selectedCase = document.querySelector("#correction-case").value;
+        if (!selectedCase) {
+          document.querySelector("#before-state").textContent = "尚未選擇";
+          document.querySelector("#before-note").textContent = "選擇一種限制後，模型會切換到對應狀態";
+          document.querySelector("#after-state").textContent = "尚未套用";
+          document.querySelector("#after-note").textContent = "選擇改善方式後觀察變化";
+          document.querySelector("#correction-explanation").textContent = "量測限制會在上方共用模型中呈現；再套用相對應的改善方式。";
+          document.querySelector("#apply-correction").disabled = true;
+          return;
+        }
+        document.querySelector("#apply-correction").disabled = false;
+        const selected = correctionStates[selectedCase];
+        document.querySelector("#before-state").textContent = selectedCase === "scale" ? `每公分 ${state.divisions} 格` : selected.before;
+        document.querySelector("#before-note").textContent = selected.beforeNote;
+        document.querySelector("#after-state").textContent = corrected ? selected.after : "尚未套用";
+        document.querySelector("#after-note").textContent = corrected ? selected.afterNote : "按下「套用改善方式」觀察變化";
+        document.querySelector("#correction-explanation").textContent = corrected ? selected.explanation : "改善方式要對應量測限制；套用後會更新上方共用模型。";
+        document.querySelector("#apply-correction").textContent = corrected ? "還原改善前" : "套用改善方式";
+      };
+      document.querySelector("#correction-case").addEventListener("change", () => { corrected = false; showCorrectionCondition(); renderCorrection(); });
+      document.querySelector("#apply-correction").addEventListener("click", () => {
+        const selectedCase = document.querySelector("#correction-case").value;
+        if (!selectedCase) return;
+        const selected = correctionStates[selectedCase];
+        if (!corrected) selected.apply();
+        else if (selectedCase === "view") { state.angle = true; camera.yaw = defaultCameraYaw + 0.7; }
+        else if (selectedCase === "start") state.start = 0.5;
+        else state.divisions = 2;
+        corrected = !corrected;
+        updateModel(corrected ? selected.explanation : "已還原改善前的狀態；可再次套用修正觀察差異。");
+        renderCorrection();
+      });
+
+      const assessmentButtons = [...document.querySelectorAll("#fair-options button")];
+      assessmentButtons.forEach((button) => button.addEventListener("click", () => {
+        pressOne(assessmentButtons, button);
+        const feedback = document.querySelector("#assessment-feedback");
+        feedback.dataset.state = button.dataset.fair === "complete" ? "good" : "try";
+        feedback.textContent = button.dataset.fair === "complete"
+          ? "兩筆都是蘋果的長度，但「6.3」沒有單位，無法確定使用哪種尺度。補上單位，並確認量測方法後，才能判斷資料是否可比較。"
+          : "對照兩筆資料是否說清楚量測的物理量、數值與單位，再查看尺的刻度和讀值條件是否可比較。";
+      }));
+      const lessonCards = [...document.querySelectorAll(".lesson-card")];
+      const routeLinks = [...document.querySelectorAll(".route a")];
+      const previousCardButton = document.querySelector("#previous-card");
+      const nextCardButton = document.querySelector("#next-card");
+      const cardCounter = document.querySelector("#card-counter");
+      const cardProgress = document.querySelector("#card-progress");
+      const cardIndexFromHash = lessonCards.findIndex((card) => `#${card.id}` === window.location.hash);
+      let activeCardIndex = cardIndexFromHash >= 0 ? cardIndexFromHash : 0;
+      const showCard = (index, updateHash = true) => {
+        activeCardIndex = clamp(index, 0, lessonCards.length - 1);
+        lessonCards.forEach((card, cardIndex) => {
+          const isActive = cardIndex === activeCardIndex;
+          card.classList.toggle("is-active", isActive);
+          card.setAttribute("aria-hidden", String(!isActive));
+          card.inert = !isActive;
+        });
+        routeLinks.forEach((link, linkIndex) => {
+          if (linkIndex === activeCardIndex) link.setAttribute("aria-current", "step");
+          else link.removeAttribute("aria-current");
+        });
+        previousCardButton.disabled = activeCardIndex === 0;
+        nextCardButton.disabled = activeCardIndex === lessonCards.length - 1;
+        cardCounter.textContent = `第 ${activeCardIndex + 1} / ${lessonCards.length} 張`;
+        cardProgress.value = activeCardIndex + 1;
+        if (updateHash) history.replaceState(null, "", `#${lessonCards[activeCardIndex].id}`);
+        renderParallaxScene();
+      };
+      routeLinks.forEach((link, index) => link.addEventListener("click", (event) => {
+        event.preventDefault();
+        showCard(index);
+      }));
+      previousCardButton.addEventListener("click", () => showCard(activeCardIndex - 1));
+      nextCardButton.addEventListener("click", () => showCard(activeCardIndex + 1));
+      let swipeStart = null;
+      document.querySelector(".cards").addEventListener("pointerdown", (event) => {
+        if (event.pointerType !== "touch" || event.target.closest("button, input, select, textarea, a")) return;
+        swipeStart = { x: event.clientX, y: event.clientY };
+      });
+      document.querySelector(".cards").addEventListener("pointerup", (event) => {
+        if (!swipeStart) return;
+        const deltaX = event.clientX - swipeStart.x;
+        const deltaY = event.clientY - swipeStart.y;
+        swipeStart = null;
+        if (Math.abs(deltaX) < 55 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
+        showCard(activeCardIndex + (deltaX < 0 ? 1 : -1));
+      });
+      document.querySelector(".cards").addEventListener("pointercancel", () => { swipeStart = null; });
+      window.addEventListener("keydown", (event) => {
+        if (event.target.closest("button, input, select, textarea, a") || event.target === parallaxCanvas) return;
+        if (event.key === "ArrowLeft") showCard(activeCardIndex - 1);
+        else if (event.key === "ArrowRight") showCard(activeCardIndex + 1);
+      });
+      showCard(activeCardIndex, false);
+      updateToolView();
+      renderCorrection();
+    })();
+  </script>
+</body>
+</html>
