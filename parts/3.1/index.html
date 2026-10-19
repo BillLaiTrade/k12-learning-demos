@@ -175,7 +175,9 @@
     .record .is-highlighted { background: #ffe2a8; box-shadow: 0 0 0 2px #d59a27; }
     .assessment-label { display: inline-block; margin-bottom: 12px; padding: 4px 10px; border-radius: 999px; background: #e5f2e9; color: var(--green); font-weight: 750; font-size: .83rem; }
     .lesson-layout { display: grid; grid-template-columns: minmax(205px, 250px) minmax(0, 1fr); gap: 34px; align-items: start; }
-    .model-panel { margin: 18px 0; padding: 18px; border: 1px solid #cbded0; border-radius: 20px; background: #e3eee5; box-shadow: var(--shadow); }
+    .estimate-workspace { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(230px, .8fr); gap: 14px; align-items: start; margin: 18px 0; }
+    .model-panel { margin: 0; padding: 18px; border: 1px solid #cbded0; border-radius: 20px; background: #e3eee5; box-shadow: var(--shadow); }
+    .estimate-workspace .estimate-panel { margin: 0; }
     .model-panel h2 { margin: 0 0 5px; font-size: 1.18rem; }
     .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
     .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
@@ -238,6 +240,7 @@
       .card-side h3 { margin: 0; }
       .card-role { display: none; }
       .diagram { grid-template-columns: 1fr; }
+      .estimate-workspace { grid-template-columns: 1fr; }
       .section-top { align-items: start; flex-direction: column; gap: 3px; }
       .example-grid, .readout { grid-template-columns: 1fr; }
     }
@@ -406,10 +409,11 @@
         <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">先估讀，再核對</span></div>
         <div class="card-main">
           <h2 id="estimate-heading">鉛筆端點落在相鄰刻線之間，該怎麼估讀？</h2>
-          <p id="estimate-instruction">理想模型中的鉛筆長 18 cm。實際量測時，鉛筆端點常不會剛好對準刻線；先看整把尺，再按「拉近查看端點」，觀察筆尖是否越過 18 cm 刻線，再估讀位置。</p>
+          <p id="estimate-instruction">理想模型中的鉛筆長 18 cm。實際量測時，端點常不會剛好對準刻線；先根據整把尺估讀，再拉近觀察端點位置，最後核對估讀。</p>
+          <div class="estimate-workspace">
           <aside class="model-panel" aria-labelledby="model-title">
             <h2 id="model-title">觀察鉛筆端點</h2>
-            <p>鉛筆左端在 0.4 cm，右端落在兩條公分刻線之間。可以拉近查看，但放大不會增加尺上的刻線。</p>
+            <p>先看整把尺估讀；拉近後可看清右端與相鄰公分刻線的位置，刻線本身不會增加。</p>
             <div class="model-screen" id="model-screen" data-zoom="false">
               <svg id="shared-measurement-model" viewBox="0 295 760 170" role="img" aria-label="用公分直尺測量鉛筆；左端在 0.4 公分，右端在 18.4 公分附近">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
@@ -424,14 +428,15 @@
             </div>
             <div class="model-readout"><small>估讀核對</small><strong id="shared-reading">完成估讀後查看</strong></div>
             <p class="model-status" id="shared-model-note" aria-live="polite">鉛筆與尺保持不動。估讀右端在尺上的位置，再用右端讀值減去左端讀值。</p>
-            <button type="button" class="secondary" id="zoom-toggle" aria-pressed="false">拉近查看端點</button>
           </aside>
           <div class="control-panel estimate-panel">
-            <label class="field" for="estimate-slider">估讀鉛筆右端在尺上的位置（cm）
+            <label class="field" for="estimate-slider">① 先估讀鉛筆右端的位置（cm）
               <input id="estimate-slider" type="range" min="18000" max="20000" step="100" aria-label="選擇你估計的鉛筆右端位置，單位為公分">
             </label>
             <div class="slider-row"><span id="estimate-prompt">移動滑桿選一個估值，再檢查。</span><output class="value" id="estimate-value" for="estimate-slider">尚未估讀</output></div>
-            <button type="button" class="secondary" id="check-estimate" disabled>檢查估讀</button>
+            <button type="button" class="secondary" id="zoom-toggle" aria-pressed="false">② 拉近查看端點</button>
+            <button type="button" class="secondary" id="check-estimate" disabled>③ 檢查估讀</button>
+          </div>
           </div>
           <p class="live-note" id="estimate-note" aria-live="polite">先依端點在兩條刻線間的位置估讀。放大只讓你看得更清楚，不會增加刻線或改變最小刻度。</p>
           <div class="fact"><p>真實物體的端點很難每次都剛好對準刻線，因此常要依它在刻線間的位置估讀。這個理想模型的鉛筆長 18 cm；左端讀值約 0.4 cm、右端約 18.4 cm，兩者相減仍是 18 cm。估讀是近似值，放大畫面不會增加刻度。</p></div>
