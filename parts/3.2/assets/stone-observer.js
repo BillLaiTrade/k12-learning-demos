@@ -51,8 +51,9 @@ function makeStone(){
 const CM_PER_WORLD=1.6;
 const RULER_CM=6;
 const WORLD_PER_CM=1/CM_PER_WORLD;
+const MEASURE_COLORS={length:0x00796b,width:0x5269a6,height:0xbf6338};
 
-function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0}={}){
+function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLORS.length}={}){
   const width=RULER_CM*WORLD_PER_CM,depth=.56,top=0;
   const group=new THREE.Group();
   group.position.set(...position);group.rotation.set(0,rotationY,rotationZ);
@@ -70,9 +71,9 @@ function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0}={}){
   const texture=new THREE.CanvasTexture(face);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;
   const topFace=new THREE.Mesh(new THREE.PlaneGeometry(width+.2,depth),new THREE.MeshBasicMaterial({map:texture}));
   topFace.rotation.x=-Math.PI/2;topFace.position.y=top+.001;group.add(topFace);
-  const guideMaterial=new THREE.LineDashedMaterial({color:0xb85e3b,dashSize:.055,gapSize:.04,depthTest:false});
+  const guideMaterial=new THREE.LineDashedMaterial({color:accent,dashSize:.055,gapSize:.04,depthTest:false});
   const guides=[0,1].map(()=>{const line=new THREE.Line(new THREE.BufferGeometry(),guideMaterial);line.renderOrder=5;group.add(line);return line});
-  const markerMaterial=new THREE.MeshBasicMaterial({color:0xb85e3b,depthTest:false});
+  const markerMaterial=new THREE.MeshBasicMaterial({color:accent,depthTest:false});
   const markers=[0,1].map(()=>{const marker=new THREE.Mesh(new THREE.SphereGeometry(.035,12,8),markerMaterial);marker.renderOrder=6;group.add(marker);return marker});
   return {group,guides,markers,top,width};
 }
@@ -111,9 +112,9 @@ export function mountStoneObserver(){
   const rim=new THREE.DirectionalLight(0xffffff,1.1);rim.position.set(1,4,-4);scene.add(rim);
   // 三把尺固定在開口長方體角框的三個互相垂直方向。
   const rulerFloor=-1.05,rulerEdge=RULER_CM*WORLD_PER_CM/2,rulerHeight=RULER_CM*WORLD_PER_CM;
-  const lengthRuler=makeRuler({position:[0,rulerFloor,-rulerEdge]});scene.add(lengthRuler.group);
-  const widthRuler=makeRuler({position:[rulerEdge,rulerFloor,0],rotationY:Math.PI/2});scene.add(widthRuler.group);
-  const heightRuler=makeRuler({position:[rulerEdge,rulerFloor+rulerHeight/2,-rulerEdge],rotationZ:Math.PI/2});scene.add(heightRuler.group);
+  const lengthRuler=makeRuler({position:[0,rulerFloor,-rulerEdge],accent:MEASURE_COLORS.length});scene.add(lengthRuler.group);
+  const widthRuler=makeRuler({position:[rulerEdge,rulerFloor,0],rotationY:Math.PI/2,accent:MEASURE_COLORS.width});scene.add(widthRuler.group);
+  const heightRuler=makeRuler({position:[rulerEdge,rulerFloor+rulerHeight/2,-rulerEdge],rotationZ:Math.PI/2,accent:MEASURE_COLORS.height});scene.add(heightRuler.group);
   makeRulerFrame(scene,rulerEdge,rulerFloor);
   const pivot=new THREE.Group();pivot.position.y=-.14;scene.add(pivot);
   const stone=makeStone();pivot.add(stone);
