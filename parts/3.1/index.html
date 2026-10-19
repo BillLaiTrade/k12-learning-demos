@@ -566,13 +566,23 @@
       let modelViewBox = { x: 0, y: 295, width: 760, height: 170 };
       let modelViewTarget = modelViewBox;
       let modelViewAnimationFrame = 0;
+      let pencilViewOffset = 0;
+      const placePencil = () => {
+        const startX = 80 + estimateStart * (640 / 30);
+        const endX = 80 + estimateEndpoint() * (640 / 30);
+        const pencilScale = (state.edge * (640 / 30)) / 454;
+        const photoXOffset = startX - (pencilPhoto.x + pencilPhoto.width * pencilPhoto.visibleLeft) * pencilScale;
+        document.querySelector("#pencil-object").setAttribute("transform", `translate(${photoXOffset} ${pencilViewOffset}) scale(${pencilScale})`);
+        const pencilEndY = (pencilPhoto.y + pencilPhoto.height * pencilPhoto.rightEdgeCenterY) * pencilScale + pencilViewOffset;
+        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V423`);
+      };
       const animateModelView = (zoom) => {
-        const targetHeight = zoom ? 94 : 170;
+        const targetHeight = zoom ? 120 : 170;
         const targetWidth = targetHeight * (760 / 170);
         const endpointX = 80 + estimateEndpoint() * (640 / 30);
         const target = {
-          x: zoom ? endpointX - targetWidth / 2 : 0,
-          y: zoom ? 332 : 295,
+          x: zoom ? endpointX - targetWidth * 0.8 : 0,
+          y: zoom ? 320 : 295,
           width: targetWidth,
           height: targetHeight
         };
@@ -580,13 +590,17 @@
         modelViewTarget = target;
         cancelAnimationFrame(modelViewAnimationFrame);
         const start = { ...modelViewBox };
+        const startPencilOffset = pencilViewOffset;
+        const targetPencilOffset = zoom ? 4 : 0;
         const startTime = performance.now();
         const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700;
         const frame = (now) => {
           const progress = duration ? Math.min(1, (now - startTime) / duration) : 1;
           const eased = progress < 0.5 ? 4 * progress ** 3 : 1 - ((-2 * progress + 2) ** 3) / 2;
           modelViewBox = Object.fromEntries(Object.keys(target).map((key) => [key, start[key] + (target[key] - start[key]) * eased]));
+          pencilViewOffset = startPencilOffset + (targetPencilOffset - startPencilOffset) * eased;
           modelSvg.setAttribute("viewBox", `${modelViewBox.x} ${modelViewBox.y} ${modelViewBox.width} ${modelViewBox.height}`);
+          placePencil();
           if (progress < 1) {
             modelViewAnimationFrame = requestAnimationFrame(frame);
           } else {
@@ -805,13 +819,8 @@
         ruler.dataset.zoom = String(state.zoom);
         ruler.removeAttribute("transform");
         document.querySelector("#model-screen").dataset.zoom = String(state.zoom);
-        const startX = 80 + estimateStart * (640 / 30);
         const endX = 80 + estimateEndpoint() * (640 / 30);
-        const pencilScale = (state.edge * (640 / 30)) / 454;
-        const pencilOffset = startX - (pencilPhoto.x + pencilPhoto.width * pencilPhoto.visibleLeft) * pencilScale;
-        document.querySelector("#pencil-object").setAttribute("transform", `translate(${pencilOffset} 0) scale(${pencilScale})`);
-        const pencilEndY = (pencilPhoto.y + pencilPhoto.height * pencilPhoto.rightEdgeCenterY) * pencilScale;
-        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V423`);
+        placePencil();
         const lines = [];
         const subdivisions = state.divisions;
         const totalTicks = subdivisions;
