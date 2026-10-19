@@ -153,6 +153,8 @@
     .division-visual p { margin: 7px 0 0; color: var(--muted); font-size: .84rem; }
     .control-panel { padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
     .control-panel > :last-child { margin-bottom: 0; }
+    .control-panel .field { width: 100%; }
+    .control-panel input[type="range"] { width: 100%; min-height: 32px; accent-color: var(--green); }
     .live-note { min-height: 3em; margin: 12px 0 0; color: var(--muted); }
     .length-conversion-demo { margin: 18px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
     .length-conversion-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; }
@@ -381,15 +383,13 @@
         <div class="card-side"><span class="card-number">04</span><h3>讀取刻度</h3><span class="card-role">觀察最小刻度</span></div>
         <div class="card-main">
           <h2>尺上的每一格，代表多少？</h2>
-          <p>共用模型中的尺顯示鉛筆端點。切換刻度間隔，觀察每格的長度以及端點相對於刻線的位置。</p>
+          <p>調整每公分要分成幾格，觀察同一把尺上的刻線如何變密或變疏，以及每格代表多長；尺長與鉛筆端點保持不變。</p>
           <div class="control-panel">
-            <div class="ruler-caption"><span>尺的一段：0 cm 至 1 cm</span><span>改變每公分的分格數</span></div>
-            <div class="toggle-row" role="group" aria-label="每公分分格數">
-              <button type="button" data-divisions="2" aria-pressed="false">2 格</button>
-              <button type="button" data-divisions="5" aria-pressed="false">5 格</button>
-              <button type="button" data-divisions="10" aria-pressed="true">10 格</button>
-            </div>
-            <p class="live-note" id="division-model-note">共用模型中的尺已同步更新；鉛筆端點仍在相同位置。</p>
+            <div class="ruler-caption"><span>同一把 30 cm 直尺</span><span id="division-count-label">每公分分成 10 格</span></div>
+            <label class="field" for="division-count">調整每公分的格數
+              <input id="division-count" type="range" min="1" max="20" step="1" value="10" aria-label="調整每公分分成幾格">
+            </label>
+            <p class="live-note" id="division-model-note">尺的長度與鉛筆端點不變；調整格數只會改變刻線密度及每格長度。</p>
             <p class="live-note" id="division-note" aria-live="polite">1 cm 分成 10 個相等間隔，每個間隔是 0.1 cm（1 mm）。</p>
           </div>
           <div class="division-visual" aria-label="同一段直尺的分格變化；鉛筆端點位置固定">
@@ -400,7 +400,7 @@
             </svg>
             <p id="division-visual-note" aria-live="polite">橘色標記是固定的鉛筆端點；改變的是尺的刻線間距。</p>
           </div>
-          <div class="fact"><p>工具的最小刻度會限制可直接讀取的精細程度；讀值時先確認刻度標示和每格的間距。</p></div>
+          <div class="fact"><p>尺可以有不同的分格方式；每格的長度由 1 cm 除以格數決定。讀值時先確認刻度間距，再判斷端點落在哪裡。</p></div>
         </div>
       </section>
 
@@ -539,6 +539,17 @@
         document.querySelector("#measurement-next-hint").hidden = !measuring;
       }));
       const state = { divisions: 10, start: 0, angle: false, zoom: false, edge: 18.2 };
+      const divisionCountControl = document.querySelector("#division-count");
+      const formatDivisionSize = (divisions) => {
+        if (10 % divisions === 0) {
+          const millimeters = 10 / divisions;
+          const centimeters = 1 / divisions;
+          return `1 cm 分成 ${divisions} 格，每格是 ${millimeters} mm（${centimeters} cm）。`;
+        }
+        const centimeters = (1 / divisions).toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
+        const millimeters = (10 / divisions).toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
+        return `1 cm 分成 ${divisions} 格，每格是 1/${divisions} cm（約 ${centimeters} cm，約 ${millimeters} mm）。`;
+      };
       const defaultCameraPitch = 0.45;
       const orbitRadius = 24;
       const defaultCameraYaw = 0;
@@ -737,12 +748,11 @@
         document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${endX} 600`);
         document.querySelector("#shared-reading").textContent = "約 18.2 cm";
         document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
-        document.querySelectorAll("[data-divisions]").forEach((button) => button.setAttribute("aria-pressed", String(Number(button.dataset.divisions) === state.divisions)));
+        if (divisionCountControl) divisionCountControl.value = String(state.divisions);
+        const divisionCountLabel = document.querySelector("#division-count-label");
+        if (divisionCountLabel) divisionCountLabel.textContent = `每公分分成 ${state.divisions} 格`;
         const divisionNote = document.querySelector("#division-note");
-        if (divisionNote) {
-          const size = (1 / state.divisions).toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
-          divisionNote.textContent = `1 cm 分成 ${state.divisions} 個相等間隔，每格是 ${size} cm。`;
-        }
+        if (divisionNote) divisionNote.textContent = formatDivisionSize(state.divisions);
         modelSvg.setAttribute("aria-label", `測量鉛筆的長度；鉛筆左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於十八點二與十八點三公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`);
         if (note) document.querySelector("#shared-model-note").textContent = note;
         renderDivisionRuler();
@@ -868,15 +878,10 @@
       document.querySelector("#tool-task").addEventListener("change", updateToolView);
       document.querySelector("#tool-state").addEventListener("change", updateToolView);
 
-      const divisionButtons = [...document.querySelectorAll("[data-divisions]")];
-      divisionButtons.forEach((button) => button.addEventListener("click", () => {
-        pressOne(divisionButtons, button);
-        state.divisions = Number(button.dataset.divisions);
-        updateModel(`共用尺現在每公分分成 ${state.divisions} 格；鉛筆端點位置不變，每格長度隨分格數改變。`);
-        const size = (1 / state.divisions).toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
-        document.querySelector("#division-note").textContent = `1 cm 分成 ${state.divisions} 個相等間隔，每格是 ${size} cm。`;
-        document.querySelector("#division-model-note").textContent = "上方共用模型的尺刻線已同步改變，鉛筆和端點仍沿用同一模型。";
-      }));
+      divisionCountControl.addEventListener("input", () => {
+        state.divisions = Number(divisionCountControl.value);
+        updateModel(`每公分現在分成 ${state.divisions} 格；尺長與鉛筆端點位置不變。`);
+      });
 
       const setZoom = (zoom) => {
         state.zoom = zoom;
