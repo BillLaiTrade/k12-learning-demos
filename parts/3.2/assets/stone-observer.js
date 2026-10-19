@@ -78,7 +78,7 @@ function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLO
   return {group,guides,markers,top,width};
 }
 
-function makeRulerFrame(scene,edge,floor){
+function makeRulerFrame(parent,edge,floor){
   const points=[],steps=12,step=edge*2/steps,wallTop=floor+edge*2;
   for(let i=0;i<=steps;i++){
     const v=-edge+i*step;
@@ -93,7 +93,20 @@ function makeRulerFrame(scene,edge,floor){
   }
   const geometry=new THREE.BufferGeometry().setFromPoints(points);
   const material=new THREE.LineBasicMaterial({color:0x8da89a,transparent:true,opacity:.34,depthWrite:false});
-  const grid=new THREE.LineSegments(geometry,material);grid.renderOrder=2;scene.add(grid);
+  const grid=new THREE.LineSegments(geometry,material);grid.renderOrder=2;parent.add(grid);
+}
+
+function makeFramePickTargets(parent,edge,floor,height){
+  const material=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0,colorWrite:false,depthWrite:false,side:THREE.DoubleSide});
+  const targets=[];
+  const add=(geometry,position,rotation)=>{
+    const target=new THREE.Mesh(geometry,material);target.position.set(...position);if(rotation)target.rotation.set(...rotation);target.userData.dragTarget='frame';parent.add(target);targets.push(target);
+  };
+  const width=edge*2,centerY=floor+height/2;
+  add(new THREE.PlaneGeometry(width,width),[0,floor+.045,0],[-Math.PI/2,0,0]);
+  add(new THREE.PlaneGeometry(width,height),[0,centerY,-edge+.035]);
+  add(new THREE.PlaneGeometry(width,height),[edge-.035,centerY,0],[0,Math.PI/2,0]);
+  return targets;
 }
 
 export function mountStoneObserver(){
@@ -110,33 +123,49 @@ export function mountStoneObserver(){
   const key=new THREE.DirectionalLight(0xfff4df,3.1);key.position.set(-3,4,4);scene.add(key);
   const fill=new THREE.DirectionalLight(0xd9e6ef,1.45);fill.position.set(3,1,-3);scene.add(fill);
   const rim=new THREE.DirectionalLight(0xffffff,1.1);rim.position.set(1,4,-4);scene.add(rim);
-  // 三把尺固定在開口長方體角框的三個互相垂直方向。
+  // 三把尺與三面格線組成同一個可旋轉的開口量測框。
   const rulerFloor=-1.05,rulerEdge=RULER_CM*WORLD_PER_CM/2,rulerHeight=RULER_CM*WORLD_PER_CM;
-  const lengthRuler=makeRuler({position:[0,rulerFloor,-rulerEdge],accent:MEASURE_COLORS.length});scene.add(lengthRuler.group);
-  const widthRuler=makeRuler({position:[rulerEdge,rulerFloor,0],rotationY:Math.PI/2,accent:MEASURE_COLORS.width});scene.add(widthRuler.group);
-  const heightRuler=makeRuler({position:[rulerEdge,rulerFloor+rulerHeight/2,-rulerEdge],rotationZ:Math.PI/2,accent:MEASURE_COLORS.height});scene.add(heightRuler.group);
-  makeRulerFrame(scene,rulerEdge,rulerFloor);
-  const pivot=new THREE.Group();pivot.position.y=-.14;scene.add(pivot);
-  const stone=makeStone();pivot.add(stone);
+  const frameCenterY=-.14; // 以石頭中心為旋轉軸心，尺框轉動時仍環繞石頭觀察。
+  const framePivot=new THREE.Group();framePivot.position.y=frameCenterY;scene.add(framePivot);
+  const frameAssembly=new THREE.Group();frameAssembly.position.y=-frameCenterY;framePivot.add(frameAssembly);
+  const lengthRuler=makeRuler({position:[0,rulerFloor,-rulerEdge],accent:MEASURE_COLORS.length});frameAssembly.add(lengthRuler.group);
+  const widthRuler=makeRuler({position:[rulerEdge,rulerFloor,0],rotationY:Math.PI/2,accent:MEASURE_COLORS.width});frameAssembly.add(widthRuler.group);
+  const heightRuler=makeRuler({position:[rulerEdge,rulerFloor+rulerHeight/2,-rulerEdge],rotationZ:Math.PI/2,accent:MEASURE_COLORS.height});frameAssembly.add(heightRuler.group);
+  makeRulerFrame(frameAssembly,rulerEdge,rulerFloor);
+  const framePickTargets=makeFramePickTargets(frameAssembly,rulerEdge,rulerFloor,rulerHeight);
+  const pivot=new THREE.Group();pivot.position.y=frameCenterY;scene.add(pivot);
+  const stone=makeStone();stone.userData.dragTarget='stone';pivot.add(stone);
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=128;shadowCanvas.height=128;
   const shadowCtx=shadowCanvas.getContext('2d'),gradient=shadowCtx.createRadialGradient(64,64,5,64,64,62);
   gradient.addColorStop(0,'rgba(32,38,33,.3)');gradient.addColorStop(1,'rgba(32,38,33,0)');shadowCtx.fillStyle=gradient;shadowCtx.fillRect(0,0,128,128);
   const shadow=new THREE.Mesh(new THREE.PlaneGeometry(2.6,1.55),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));
   shadow.rotation.x=-Math.PI/2;shadow.position.set(0,rulerFloor+.003,0);scene.add(shadow);
 
-  let width=0,height=0,dragId=null,lastX=0,lastY=0,velocityYaw=0,velocityPitch=0,distance=8.8,raf=0,measureDirty=true,pinchDistance=0;
+  let width=0,height=0,dragId=null,lastX=0,lastY=0,dragTarget=null,velocityYaw=0,velocityPitch=0,distance=8.8,raf=0,measureDirty=true,pinchDistance=0;
   const activePointers=new Map(),lengthReadout=document.querySelector('#stone-length'),widthReadout=document.querySelector('#stone-width'),heightReadout=document.querySelector('#stone-height');
   const loading=document.querySelector('#observer-loading');
+  const raycaster=new THREE.Raycaster(),pointerNdc=new THREE.Vector2();raycaster.params.Line.threshold=.09;
   function resize(){width=host.clientWidth;height=host.clientHeight;if(!width||!height)return;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix()}
   const observer=new ResizeObserver(resize);observer.observe(host);resize();
   const zoom=delta=>{distance=clamp(distance+delta,7.2,11.5);camera.position.z=distance;camera.updateProjectionMatrix()};
-  const tilt=delta=>{pivot.rotation.z=clamp(pivot.rotation.z+delta,-.72,.72);if((pivot.rotation.z===.72&&velocityPitch>0)||(pivot.rotation.z===-.72&&velocityPitch<0))velocityPitch=0;measureDirty=true};
+  const activePivot=()=>dragTarget==='frame'?framePivot:pivot;
+  const tilt=(target,delta)=>{target.rotation.z=clamp(target.rotation.z+delta,-.72,.72);if((target.rotation.z===.72&&velocityPitch>0)||(target.rotation.z===-.72&&velocityPitch<0))velocityPitch=0;measureDirty=true};
+  function pickDragTarget(event){
+    const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return null;
+    pointerNdc.set(((event.clientX-rect.left)/rect.width)*2-1,-((event.clientY-rect.top)/rect.height)*2+1);
+    raycaster.setFromCamera(pointerNdc,camera);
+    const hit=raycaster.intersectObjects([stone,...framePickTargets],true)[0];
+    let object=hit?.object;
+    while(object&&!object.userData.dragTarget)object=object.parent;
+    return object?.userData.dragTarget??null;
+  }
   function refreshMeasurement(){
-    pivot.updateMatrixWorld(true);
+    pivot.updateMatrixWorld(true);framePivot.updateMatrixWorld(true);
+    const worldToFrame=framePivot.matrixWorld.clone().invert();
     const position=stone.geometry.attributes.position;
     let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity,minZ=Infinity,maxZ=-Infinity;
     for(let i=0;i<position.count;i++){
-      const point=new THREE.Vector3().fromBufferAttribute(position,i).applyMatrix4(pivot.matrixWorld);
+      const point=new THREE.Vector3().fromBufferAttribute(position,i).applyMatrix4(stone.matrixWorld).applyMatrix4(worldToFrame);
       minX=Math.min(minX,point.x);maxX=Math.max(maxX,point.x);
       minY=Math.min(minY,point.y);maxY=Math.max(maxY,point.y);
       minZ=Math.min(minZ,point.z);maxZ=Math.max(maxZ,point.z);
@@ -144,9 +173,9 @@ export function mountStoneObserver(){
     if(lengthReadout)lengthReadout.textContent=`約 ${((maxX-minX)*CM_PER_WORLD).toFixed(1)} cm`;
     if(widthReadout)widthReadout.textContent=`約 ${((maxZ-minZ)*CM_PER_WORLD).toFixed(1)} cm`;
     if(heightReadout)heightReadout.textContent=`約 ${((maxY-minY)*CM_PER_WORLD).toFixed(1)} cm`;
-    updateRulerGuides(lengthRuler,[minX,maxX].map(x=>new THREE.Vector3(x,rulerFloor+.012,-rulerEdge)));
-    updateRulerGuides(widthRuler,[minZ,maxZ].map(z=>new THREE.Vector3(rulerEdge,rulerFloor+.012,z)));
-    updateRulerGuides(heightRuler,[minY,maxY].map(y=>new THREE.Vector3(rulerEdge,y,-rulerEdge)));
+    updateRulerGuides(lengthRuler,[minX,maxX].map(x=>framePivot.localToWorld(new THREE.Vector3(x,rulerFloor+.012-frameCenterY,-rulerEdge))));
+    updateRulerGuides(widthRuler,[minZ,maxZ].map(z=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,rulerFloor+.012-frameCenterY,z))));
+    updateRulerGuides(heightRuler,[minY,maxY].map(y=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge))));
     measureDirty=false;
   }
   function updateRulerGuides(ruler,points){
@@ -164,22 +193,22 @@ export function mountStoneObserver(){
   host.addEventListener('pointerdown',event=>{
     if(event.button!==undefined&&event.button!==0)return;
     activePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});host.setPointerCapture(event.pointerId);
-    if(activePointers.size===1){dragId=event.pointerId;lastX=event.clientX;lastY=event.clientY;velocityYaw=0;velocityPitch=0}
-    else if(activePointers.size===2){dragId=null;const points=[...activePointers.values()];pinchDistance=Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y)}
+    if(activePointers.size===1){dragId=event.pointerId;dragTarget=pickDragTarget(event);lastX=event.clientX;lastY=event.clientY;velocityYaw=0;velocityPitch=0}
+    else if(activePointers.size===2){dragId=null;dragTarget=null;const points=[...activePointers.values()];pinchDistance=Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y)}
   });
   host.addEventListener('pointermove',event=>{
     if(!activePointers.has(event.pointerId))return;
     const previous=activePointers.get(event.pointerId);activePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
     if(activePointers.size>=2){const points=[...activePointers.values()],next=Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y);if(pinchDistance)zoom((pinchDistance-next)*.006);pinchDistance=next;return}
-    if(dragId!==event.pointerId)return;
+    if(dragId!==event.pointerId||!dragTarget)return;
     const dx=event.clientX-lastX,dy=event.clientY-lastY;lastX=event.clientX;lastY=event.clientY;
-    velocityYaw=dx*.0054;velocityPitch=dy*.0054;pivot.rotation.y+=velocityYaw;tilt(velocityPitch);
+    const target=activePivot();velocityYaw=dx*.0054;velocityPitch=dy*.0054;target.rotation.y+=velocityYaw;tilt(target,velocityPitch);
   });
-  const endPointer=event=>{activePointers.delete(event.pointerId);if(dragId===event.pointerId)dragId=null;if(activePointers.size===1){const [id,point]=activePointers.entries().next().value;dragId=id;lastX=point.x;lastY=point.y}if(activePointers.size<2)pinchDistance=0};
+  const endPointer=event=>{activePointers.delete(event.pointerId);if(dragId===event.pointerId)dragId=null;if(activePointers.size===1){const [id,point]=activePointers.entries().next().value;dragId=id;dragTarget=null;lastX=point.x;lastY=point.y}if(activePointers.size<2)pinchDistance=0};
   host.addEventListener('pointerup',endPointer);host.addEventListener('pointercancel',endPointer);host.addEventListener('lostpointercapture',endPointer);
-  host.addEventListener('keydown',event=>{const step=event.shiftKey?.16:.07;let used=true;switch(event.key){case'ArrowLeft':pivot.rotation.y-=step;measureDirty=true;break;case'ArrowRight':pivot.rotation.y+=step;measureDirty=true;break;case'ArrowUp':tilt(-step);break;case'ArrowDown':tilt(step);break;case'Home':pivot.rotation.set(0,0,0);velocityYaw=0;velocityPitch=0;distance=8.8;camera.position.z=distance;camera.updateProjectionMatrix();measureDirty=true;break;default:used=false}if(used)event.preventDefault()});
+  host.addEventListener('keydown',event=>{const step=event.shiftKey?.16:.07,target=event.shiftKey?framePivot:pivot;let used=true;switch(event.key){case'ArrowLeft':target.rotation.y-=step;measureDirty=true;break;case'ArrowRight':target.rotation.y+=step;measureDirty=true;break;case'ArrowUp':tilt(target,-step);break;case'ArrowDown':tilt(target,step);break;case'Home':pivot.rotation.set(0,0,0);framePivot.rotation.set(0,0,0);dragTarget=null;velocityYaw=0;velocityPitch=0;distance=8.8;camera.position.z=distance;camera.updateProjectionMatrix();measureDirty=true;break;default:used=false}if(used)event.preventDefault()});
   if(loading)loading.hidden=true;
-  function render(){raf=requestAnimationFrame(render);if(!dragId&&(Math.abs(velocityYaw)>.00025||Math.abs(velocityPitch)>.00025)){pivot.rotation.y+=velocityYaw;tilt(velocityPitch);velocityYaw*=.91;velocityPitch*=.91}else if(Math.abs(velocityYaw)<=.00025&&Math.abs(velocityPitch)<=.00025){velocityYaw=0;velocityPitch=0}if(measureDirty)refreshMeasurement();renderer.render(scene,camera)}
+  function render(){raf=requestAnimationFrame(render);if(!dragId&&(Math.abs(velocityYaw)>.00025||Math.abs(velocityPitch)>.00025)){const target=activePivot();target.rotation.y+=velocityYaw;tilt(target,velocityPitch);velocityYaw*=.91;velocityPitch*=.91}else if(Math.abs(velocityYaw)<=.00025&&Math.abs(velocityPitch)<=.00025){velocityYaw=0;velocityPitch=0}if(measureDirty)refreshMeasurement();renderer.render(scene,camera)}
   render();
   return()=>{cancelAnimationFrame(raf);observer.disconnect();renderer.dispose();scene.traverse(node=>{if(node.isMesh||node.isLine){node.geometry?.dispose();if(Array.isArray(node.material))node.material.forEach(material=>material.dispose());else node.material?.dispose()}})};
 }
