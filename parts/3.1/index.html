@@ -411,7 +411,7 @@
             <h2 id="model-title">觀察鉛筆端點</h2>
             <p>鉛筆左端在 0.4 cm，右端落在兩條公分刻線之間。可以拉近查看，但放大不會增加尺上的刻線。</p>
             <div class="model-screen" id="model-screen" data-zoom="false">
-              <svg id="shared-measurement-model" viewBox="0 0 760 510" role="img" aria-label="用公分直尺測量鉛筆；左端在 0.4 公分，右端在 18.4 公分附近">
+              <svg id="shared-measurement-model" viewBox="0 295 760 170" role="img" aria-label="用公分直尺測量鉛筆；左端在 0.4 公分，右端在 18.4 公分附近">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
                 <image id="pencil-object" href="assets/pencil-photo.webp" x="27" y="389" width="459.44" height="28.17" preserveAspectRatio="none" aria-hidden="true"></image>
                 <g id="shared-scale"></g>
@@ -776,7 +776,7 @@
           const centerX = 80 + (estimateEndpoint() * 640) / 30;
           modelSvg.setAttribute("viewBox", `${centerX - width / 2} 315 ${width} 150`);
         } else {
-          modelSvg.setAttribute("viewBox", "0 0 760 510");
+          modelSvg.setAttribute("viewBox", "0 295 760 170");
         }
         ruler.dataset.zoom = String(state.zoom);
         ruler.removeAttribute("transform");
