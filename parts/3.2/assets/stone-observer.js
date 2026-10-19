@@ -164,7 +164,7 @@ export function mountStoneObserver(){
     });
     updateRulerGuides(lengthRuler,lengthGuidePoints,new THREE.Vector3(0,1,0));
     updateRulerGuides(widthRuler,[minZ,maxZ].map(z=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,rulerFloor+.012-frameCenterY,z))),new THREE.Vector3(0,1,0));
-    updateRulerGuides(heightRuler,[minY,maxY].map(y=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge))),new THREE.Vector3(1,0,0));
+    updateRulerGuides(heightRuler,[minY,maxY].map(y=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge))),new THREE.Vector3(-1,0,0));
     measureDirty=false;
   }
   function updateRulerGuides(ruler,worldPoints,guideDirection){
