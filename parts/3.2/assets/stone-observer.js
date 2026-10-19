@@ -157,7 +157,7 @@ export function mountStoneObserver(){
     // marks inside the visible silhouette. Move the marks horizontally in screen
     // space to just outside the stone while preserving their screen height and depth.
     lengthGuidePoints.forEach((point,index)=>{
-      const edgeNdc=index===0?Math.max(-.9,projectedMinX-.035):Math.min(.9,projectedMaxX+.035);
+      const edgeNdc=index===0?Math.max(-.9,projectedMinX-.012):Math.min(.9,projectedMaxX+.012);
       const screenPoint=point.project(camera);
       screenPoint.x=edgeNdc;
       point.copy(screenPoint.unproject(camera));
