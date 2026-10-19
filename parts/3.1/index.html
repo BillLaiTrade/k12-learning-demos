@@ -383,37 +383,37 @@
         <div class="card-side"><span class="card-number">04</span><h3>讀取刻度</h3><span class="card-role">觀察最小刻度</span></div>
         <div class="card-main">
           <h2>尺上的每一格，代表多少？</h2>
-          <p>調整每公分要分成幾格，觀察同一把尺上的刻線如何變密或變疏，以及每格代表多長；尺長與鉛筆端點保持不變。</p>
+          <p>調整整把尺要分成幾等分，觀察刻線如何變密或變疏，以及每格代表多長；尺長與鉛筆端點保持不變。</p>
           <div class="control-panel">
-            <div class="ruler-caption"><span>同一把 30 cm 直尺</span><span id="division-count-label">每公分分成 10 格</span></div>
-            <label class="field" for="division-count">調整每公分的格數
-              <input id="division-count" type="range" min="1" max="20" step="1" value="10" aria-label="調整每公分分成幾格">
+            <div class="ruler-caption"><span>同一把 30 cm 直尺</span><span id="division-count-label">整把尺分成 15 等分</span></div>
+            <label class="field" for="division-count">調整整把尺的等分數
+              <input id="division-count" type="range" min="1" max="30" step="1" value="15" aria-label="調整三十公分直尺分成幾等分">
             </label>
-            <p class="live-note" id="division-model-note">尺的長度與鉛筆端點不變；調整格數只會改變刻線密度及每格長度。</p>
-            <p class="live-note" id="division-note" aria-live="polite">1 cm 分成 10 個相等間隔，每個間隔是 0.1 cm（1 mm）。</p>
+            <p class="live-note" id="division-model-note">尺長固定為 30 cm，橘色標記固定在鉛筆右端；調整等分數只會改變刻線密度與每格長度。</p>
+            <p class="live-note" id="division-note" aria-live="polite">30 cm ÷ 15 格 = 2 cm／格。</p>
           </div>
-          <div class="division-visual" aria-label="同一段直尺的分格變化；鉛筆端點位置固定">
-            <svg id="division-ruler" viewBox="0 0 520 100" role="img" aria-label="一公分分成十格的直尺示意，右端點位置固定">
-              <rect x="20" y="22" width="480" height="50" rx="6" fill="#dfe8e3" stroke="#a99255" stroke-width="2"></rect>
-              <g id="division-ticks"></g><path id="division-endpoint" d="M178.4 10v72" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
-              <text id="division-unit-label" x="20" y="94" fill="#26383a" font-size="13">7 cm</text><text id="division-unit-label-end" x="500" y="94" text-anchor="end" fill="#26383a" font-size="13">8 cm</text>
+          <div class="division-visual" aria-label="完整三十公分直尺的等分示意；鉛筆端點位置固定">
+            <svg id="division-ruler" viewBox="0 0 520 100" role="img" aria-label="零至三十公分直尺，分成十五等分，每格兩公分；鉛筆端點位置固定">
+              <rect x="20" y="22" width="480" height="50" rx="6" fill="#f4e7c5" stroke="#ac9563" stroke-width="2"></rect>
+              <g id="division-ticks"></g><path id="division-endpoint" d="M311.2 10v72" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
+              <text id="division-unit-label" x="20" y="94" fill="#26383a" font-size="13">0 cm</text><text id="division-unit-label-end" x="500" y="94" text-anchor="end" fill="#26383a" font-size="13">30 cm</text>
             </svg>
-            <p id="division-visual-note" aria-live="polite">橘色標記是固定的鉛筆端點；改變的是尺的刻線間距。</p>
+            <p id="division-visual-note" aria-live="polite">整把尺從 0 到 30 cm；橘色標記是固定在約 18.2 cm 的鉛筆右端。</p>
           </div>
-          <div class="fact"><p>尺可以有不同的分格方式；每格的長度由 1 cm 除以格數決定。讀值時先確認刻度間距，再判斷端點落在哪裡。</p></div>
+          <div class="fact"><p>同一把 30 cm 直尺可以有不同的分格方式；每格的長度由 30 cm 除以等分數決定。讀值時先確認刻度間距，再判斷端點落在哪裡。</p></div>
         </div>
       </section>
 
       <section class="lesson-card" id="card-05">
         <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">位置改變，估值跟著改變</span></div>
         <div class="card-main">
-          <h2>18.2 cm 再多一點，端點落在哪裡？</h2>
-          <p>18.2 cm 就是 18 cm 2 mm。這支鉛筆的右端再多出一點，沒有剛好停在刻線上。按下「拉近查看」，放大 18.2 cm 與 18.3 cm 兩條刻線附近；拖動同一支鉛筆沿尺移動，觀察右端在兩條刻線之間的位置。鉛筆長度保持不變。</p>
+          <h2 id="estimate-heading">鉛筆端點落在相鄰刻線之間，該怎麼估讀？</h2>
+          <p id="estimate-instruction">觀察鉛筆右端落在相鄰刻線間的位置。按下「拉近查看」放大這一段；拖動同一支鉛筆沿尺移動，鉛筆長度保持不變。</p>
           <aside class="model-panel" aria-labelledby="model-title">
             <h2 id="model-title">量量看：鉛筆有多長？</h2>
             <p>拉近刻度，觀察同一支鉛筆的端點在尺上的位置；這個模型會延續到後續內容。</p>
             <div class="model-screen" id="model-screen" data-zoom="false">
-              <svg id="shared-measurement-model" viewBox="0 0 760 650" role="img" aria-label="用直尺測量鉛筆的長度，左端對齊零，右端落在十八點二公分與十八點三公分之間">
+              <svg id="shared-measurement-model" viewBox="0 0 760 650" role="img" aria-label="用直尺測量鉛筆的長度，左端對齊零，右端位於相鄰刻線之間">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
                 <g id="pencil-object" aria-hidden="true"><rect x="27" y="265" width="402" height="28" rx="12" fill="#e5bd43" stroke="#987625" stroke-width="2"></rect><path d="M429 265L469 279L429 293Z" fill="#d9a35b" stroke="#987625" stroke-width="2"></path><path d="M469 279L481 279L469 283Z" fill="#34383d"></path><rect x="27" y="265" width="24" height="28" rx="8" fill="#d98280" stroke="#987625" stroke-width="2"></rect><rect x="50" y="265" width="8" height="28" fill="#b9c2c0" stroke="#987625" stroke-width="1"></rect><path d="M86 269H408" stroke="#f8dfa0" stroke-width="3" opacity=".8"></path></g>
                 <path id="pencil-start-guide" d="M80 65V620" stroke="#176b53" stroke-width="2" stroke-dasharray="5 5"></path>
@@ -427,10 +427,10 @@
               </svg>
             </div>
             <div class="model-readout"><small>目前讀值</small><strong id="shared-reading">約 18.2 cm</strong></div>
-            <p class="model-status" id="shared-model-note" aria-live="polite">量的是鉛筆的長度。左端對齊 0 cm；右端略超過 18.2 cm。</p>
+            <p class="model-status" id="shared-model-note" aria-live="polite">量的是鉛筆的長度。左端對齊 0 cm；右端落在相鄰刻線之間。</p>
             <button type="button" class="secondary" id="zoom-toggle" aria-pressed="false">拉近查看端點</button>
           </aside>
-          <div class="slider-row"><input id="estimate-slider" type="range" min="1820" max="1830" value="1823" aria-label="沿著直尺移動鉛筆，觀察右端在十八點二與十八點三公分刻線間的位置"><output class="value" id="estimate-value" for="estimate-slider">18.2 cm 後一點</output></div>
+          <div class="slider-row"><input id="estimate-slider" type="range" min="18000" max="20000" step="1" value="18200" aria-label="沿著直尺移動鉛筆，觀察端點在相鄰刻線間的位置"><output class="value" id="estimate-value" for="estimate-slider">約 18.2 cm</output></div>
           <p class="live-note" id="estimate-note" aria-live="polite">拉近能看清端點相對於刻線的位置；放大不會增加尺的刻度精度，也不代表得到絕對精確值。</p>
           <div class="fact"><p>物體端點不一定剛好對準刻線。讀值落在兩條刻線之間時，可以根據端點位置估一個值，這叫作「估讀」。畫面放大能幫助觀察位置，但不會讓尺的刻度變得更細。</p></div>
         </div>
@@ -538,17 +538,16 @@
         document.querySelector("#measurement-result-note").textContent = measuring ? "有了共同的表示方式，別人就能看懂並拿來比較。" : "每個人的感覺可能不一樣，還不能公平比較。";
         document.querySelector("#measurement-next-hint").hidden = !measuring;
       }));
-      const state = { divisions: 10, start: 0, angle: false, zoom: false, edge: 18.2 };
+      const state = { divisions: 15, start: 0, angle: false, zoom: false, edge: 18.2 };
       const divisionCountControl = document.querySelector("#division-count");
+      const greatestCommonDivisor = (a, b) => b ? greatestCommonDivisor(b, a % b) : a;
       const formatDivisionSize = (divisions) => {
-        if (10 % divisions === 0) {
-          const millimeters = 10 / divisions;
-          const centimeters = 1 / divisions;
-          return `1 cm 分成 ${divisions} 格，每格是 ${millimeters} mm（${centimeters} cm）。`;
-        }
-        const centimeters = (1 / divisions).toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
-        const millimeters = (10 / divisions).toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
-        return `1 cm 分成 ${divisions} 格，每格是 1/${divisions} cm（約 ${centimeters} cm，約 ${millimeters} mm）。`;
+        const divisor = greatestCommonDivisor(30, divisions);
+        const numerator = 30 / divisor;
+        const denominator = divisions / divisor;
+        if (denominator === 1) return `30 cm ÷ ${divisions} 等分 = ${numerator} cm／格。`;
+        const centimeters = (30 / divisions).toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
+        return `30 cm ÷ ${divisions} 等分 = ${numerator}/${denominator} cm／格（約 ${centimeters} cm）。`;
       };
       const defaultCameraPitch = 0.45;
       const orbitRadius = 24;
@@ -561,6 +560,30 @@
       const camera = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
       const edgePosition = () => state.start + state.edge;
       const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
+      const formatCentimeters = (value) => {
+        const rounded = Number(value.toFixed(3));
+        const text = String(rounded);
+        return Math.abs(value - rounded) < 1e-8 ? text : `約 ${text}`;
+      };
+      const graduationInterval = (position = edgePosition()) => {
+        const interval = 30 / state.divisions;
+        const index = clamp(Math.floor(position / interval + 1e-9), 0, state.divisions - 1);
+        return { start: index * interval, end: (index + 1) * interval };
+      };
+      const syncEstimateControls = () => {
+        const input = document.querySelector("#estimate-slider");
+        if (!input) return;
+        const interval = graduationInterval();
+        const minimum = Math.round(interval.start * 1000);
+        const maximum = Math.round(interval.end * 1000);
+        input.min = String(minimum);
+        input.max = String(maximum);
+        input.value = String(clamp(Math.round(edgePosition() * 1000), minimum, maximum));
+        document.querySelector("#estimate-heading").textContent = "端點落在兩條刻線之間，長度可以怎麼估讀？";
+        document.querySelector("#estimate-instruction").textContent = `目前每格是 ${formatCentimeters(30 / state.divisions)} cm。按下「拉近查看」，再拖動同一支鉛筆，觀察右端在相鄰刻線間的位置；鉛筆長度保持不變。`;
+        input.setAttribute("aria-label", "沿著直尺移動鉛筆，觀察端點在相鄰刻線間的位置");
+        document.querySelector("#estimate-value").textContent = `約 ${formatCentimeters(Number(input.value) / 1000)} cm`;
+      };
       const add = (a, b) => ({ x: a.x + b.x, y: a.y + b.y, z: a.z + b.z });
       const subtract = (a, b) => ({ x: a.x - b.x, y: a.y - b.y, z: a.z - b.z });
       const scale = (a, amount) => ({ x: a.x * amount, y: a.y * amount, z: a.z * amount });
@@ -636,20 +659,18 @@
         const pencilCenterZ = 1.9;
         drawFace([{ x: rulerMin, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerFar }, { x: rulerMin, y: top, z: rulerFar }], "#dfe8e3");
         drawFace([{ x: rulerMin, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerNear }, { x: rulerMax, y: -0.12, z: rulerNear }, { x: rulerMin, y: -0.12, z: rulerNear }], "#cad8d1", "#93a99e");
-        const tickStep = 1 / state.divisions;
-        for (let tick = 0; tick <= 30 * state.divisions; tick += 1) {
-          const x = tick * tickStep;
-          const major = tick % state.divisions === 0;
-          const half = tick % Math.max(1, state.divisions / 2) === 0;
-          const startDepth = major ? rulerNear + 0.04 : half ? rulerNear + 0.22 : rulerNear + 0.43;
+        for (let tick = 0; tick <= state.divisions; tick += 1) {
+          const x = (tick * 30) / state.divisions;
+          const major = tick === 0 || tick === state.divisions || (state.divisions % 3 === 0 && tick % (state.divisions / 3) === 0);
+          const startDepth = major ? rulerNear + 0.04 : rulerNear + 0.28;
           drawLine([{ x, y: top + 0.015, z: startDepth }, { x, y: top + 0.015, z: rulerFar - 0.04 }], major ? "#26383a" : "#637174", major ? 2.2 : 1.15);
-          if (major && tick % (5 * state.divisions) === 0) {
+          if (major) {
               const label = project({ x, y: top + 0.03, z: rulerNear - 0.3 });
             if (label) {
               ctx.fillStyle = "#26383a";
               ctx.font = "10px system-ui, sans-serif";
               ctx.textAlign = "center";
-              ctx.fillText(`${tick / state.divisions}`, label.x, label.y);
+              ctx.fillText(`${x}`, label.x, label.y);
             }
           }
         }
@@ -685,7 +706,7 @@
           ctx.fillStyle = "#bc612b";
           ctx.fill();
         }
-        const estimatedStep = 1 / state.divisions;
+        const estimatedStep = 30 / state.divisions;
         const apparentWidth = Math.max(0, projectedEdgeX - pencilStartX);
         const apparentWidthReading = Math.round(apparentWidth / estimatedStep) * estimatedStep;
         const apparentEndReading = Math.round(projectedEdgeX / estimatedStep) * estimatedStep;
@@ -714,7 +735,16 @@
           : `三維直尺與鉛筆模型。鉛筆實際長度約 ${state.edge.toFixed(1)} 公分；目前視角的視線落在尺面範圍外，無法讀值。可拖曳或使用方向鍵旋轉視角。`);
       };
       const updateModel = (note) => {
-        modelSvg.setAttribute("viewBox", state.zoom ? "410.87 550 116.923 100" : "0 0 760 650");
+        if (state.zoom) {
+          const interval = graduationInterval();
+          const startX = 80 + (interval.start * 640) / 30;
+          const endX = 80 + (interval.end * 640) / 30;
+          const width = Math.max(48, (endX - startX) * 1.7);
+          const centerX = 80 + (edgePosition() * 640) / 30;
+          modelSvg.setAttribute("viewBox", `${centerX - width / 2} 550 ${width} 100`);
+        } else {
+          modelSvg.setAttribute("viewBox", "0 0 760 650");
+        }
         ruler.dataset.zoom = String(state.zoom);
         document.querySelector("#model-screen").dataset.zoom = String(state.zoom);
         const startX = 80 + state.start * (640 / 30);
@@ -729,16 +759,14 @@
         document.querySelector("#zoom-endpoint-dot").setAttribute("cx", String(endX));
         const lines = [];
         const subdivisions = state.divisions;
-        const totalTicks = subdivisions * 30;
+        const totalTicks = subdivisions;
         for (let tick = 0; tick <= totalTicks; tick += 1) {
           const x = 80 + (tick * 640) / totalTicks;
-          const major = tick % subdivisions === 0;
-          const half = tick % Math.max(1, subdivisions / 2) === 0;
-          const top = major ? 580 : half ? 587 : 593;
+          const major = tick === 0 || tick === totalTicks || (subdivisions % 3 === 0 && tick % (subdivisions / 3) === 0);
+          const top = major ? 580 : 590;
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${623 - top}"/>`);
-          const labelEvery = subdivisions * (state.zoom ? 1 : 5);
-          if (major && tick % labelEvery === 0 && (!state.zoom || tick / subdivisions <= 20)) {
-            const value = tick / subdivisions;
+          if (major) {
+            const value = (tick * 30) / subdivisions;
             const anchor = value === 0 ? "start" : value === 30 ? "end" : "middle";
             lines.push(`<text x="${x}" y="644" text-anchor="${anchor}">${value} cm</text>`);
           }
@@ -750,12 +778,14 @@
         document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
         if (divisionCountControl) divisionCountControl.value = String(state.divisions);
         const divisionCountLabel = document.querySelector("#division-count-label");
-        if (divisionCountLabel) divisionCountLabel.textContent = `每公分分成 ${state.divisions} 格`;
+        if (divisionCountLabel) divisionCountLabel.textContent = `整把尺分成 ${state.divisions} 等分`;
         const divisionNote = document.querySelector("#division-note");
         if (divisionNote) divisionNote.textContent = formatDivisionSize(state.divisions);
-        modelSvg.setAttribute("aria-label", `測量鉛筆的長度；鉛筆左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於十八點二與十八點三公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`);
+        const interval = graduationInterval();
+        modelSvg.setAttribute("aria-label", `測量鉛筆的長度；鉛筆左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於${formatCentimeters(interval.start)}與${formatCentimeters(interval.end)}公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`);
         if (note) document.querySelector("#shared-model-note").textContent = note;
         renderDivisionRuler();
+        syncEstimateControls();
         renderParallaxScene();
       };
       const renderDivisionRuler = () => {
@@ -768,12 +798,12 @@
           ticks.push(`<path d="M${x} 22v${major ? 36 : 26}" stroke="#26383a" stroke-width="${major ? 2.5 : 1.5}"/>`);
         }
         group.innerHTML = ticks.join("");
-        const endpointX = 20 + (clamp(state.edge - 18, 0, 1) * 480);
+        const endpointX = 20 + (clamp(state.edge, 0, 30) / 30) * 480;
         document.querySelector("#division-endpoint").setAttribute("d", `M${endpointX} 10v72`);
-        document.querySelector("#division-unit-label").textContent = "18 cm";
-        document.querySelector("#division-unit-label-end").textContent = "19 cm";
-        document.querySelector("#division-visual-note").textContent = `尺面顯示 18–19 cm；橘色標記是鉛筆右端，固定在約 ${state.edge.toFixed(2)} cm。每公分分成 ${state.divisions} 格。`;
-        document.querySelector("#division-ruler").setAttribute("aria-label", `尺面從十八到十九公分，每公分分成${state.divisions}格；鉛筆右端約在${state.edge.toFixed(2)}公分`);
+        document.querySelector("#division-unit-label").textContent = "0 cm";
+        document.querySelector("#division-unit-label-end").textContent = "30 cm";
+        document.querySelector("#division-visual-note").textContent = `整把尺從 0 到 30 cm，分成 ${state.divisions} 等分；橘色標記是鉛筆右端，約在 ${edgePosition().toFixed(2)} cm。`;
+        document.querySelector("#division-ruler").setAttribute("aria-label", `完整三十公分直尺分成${state.divisions}等分，每格${formatCentimeters(30 / state.divisions)}公分；橘色標記是鉛筆右端，約${edgePosition().toFixed(2)}公分`);
       };
       updateModel();
       renderDivisionRuler();
@@ -880,7 +910,7 @@
 
       divisionCountControl.addEventListener("input", () => {
         state.divisions = Number(divisionCountControl.value);
-        updateModel(`每公分現在分成 ${state.divisions} 格；尺長與鉛筆端點位置不變。`);
+        updateModel(`整把尺現在分成 ${state.divisions} 等分；尺長與鉛筆端點位置不變。`);
       });
 
       const setZoom = (zoom) => {
@@ -893,11 +923,12 @@
       document.querySelector("#zoom-toggle").addEventListener("click", () => setZoom(!state.zoom));
       const estimateSlider = document.querySelector("#estimate-slider");
       estimateSlider.addEventListener("input", () => {
-        const endpoint = Number(estimateSlider.value) / 100;
+        const endpoint = Number(estimateSlider.value) / 1000;
         state.start = endpoint - state.edge;
-        const fraction = (endpoint - 18.2) / 0.1;
-        const description = fraction < 0.33 ? "18.2 cm 後一點" : fraction < 0.67 ? "約在兩條刻線中間" : "接近 18.3 cm 刻線";
-        document.querySelector("#estimate-value").textContent = description;
+        const interval = graduationInterval(endpoint);
+        const fraction = (endpoint - interval.start) / (interval.end - interval.start);
+        const description = fraction < 0.33 ? "靠近前一條刻線" : fraction < 0.67 ? "約在兩條刻線中間" : "接近後一條刻線";
+        document.querySelector("#estimate-value").textContent = `約 ${formatCentimeters(endpoint)} cm`;
         document.querySelector("#estimate-note").textContent = `鉛筆保持同樣長度並沿尺移動，右端${description}；放大只讓位置更容易觀察，不會增加尺本身的刻度精度。`;
         updateModel(`鉛筆保持同樣長度並沿尺移動，右端${description}；讀取長度仍須比較左右端位置。`);
       });
@@ -954,7 +985,7 @@
       const correctionStates = {
         view: { before: "斜向觀察尺面", beforeNote: "視線延長線落在端點旁邊", after: "將端點投影對準刻度", afterNote: "讀值回到約 18.2 cm", explanation: "調整觀察角度，使鉛筆右端的視線投影落到約 18.2 cm；讀值與鉛筆模型長度相符，鉛筆本身沒有改變。", apply: () => { state.angle = false; camera.yaw = defaultCameraYaw + 0.36; camera.pitch = defaultCameraPitch; } },
         start: { before: "起點在 0.5 cm", beforeNote: "不可直接把終點當長度", after: "起點對齊 0 cm", afterNote: "以同一支鉛筆重新讀取", explanation: "起點對齊零後，可直接讀終點位置；若未對齊，則須用終點減起點。", apply: () => { state.start = 0; } },
-        scale: { before: "刻度目前分格", beforeNote: "可在共用尺上比較", after: "每公分 10 格", afterNote: "每格為 0.1 cm（1 mm）", explanation: "較細的刻度可呈現更細的讀值；放大畫面本身不會改變工具刻度。", apply: () => { state.divisions = 10; } }
+        scale: { before: "刻度目前分格", beforeNote: "可在共用尺上比較", after: "整把尺分成 30 等分", afterNote: "每格為 1 cm", explanation: "較細的刻度可呈現更細的讀值；放大畫面本身不會改變工具刻度。", apply: () => { state.divisions = 30; } }
       };
       let corrected = false;
       const showCorrectionCondition = () => {
@@ -980,8 +1011,8 @@
         }
         document.querySelector("#apply-correction").disabled = false;
         const selected = correctionStates[selectedCase];
-        document.querySelector("#before-state").textContent = selectedCase === "scale" ? `每公分 ${state.divisions} 格` : selected.before;
-        document.querySelector("#before-note").textContent = selected.beforeNote;
+        document.querySelector("#before-state").textContent = selectedCase === "scale" ? `整把尺分成 ${state.divisions} 等分` : selected.before;
+        document.querySelector("#before-note").textContent = selectedCase === "scale" ? formatDivisionSize(state.divisions) : selected.beforeNote;
         document.querySelector("#after-state").textContent = corrected ? selected.after : "尚未套用";
         document.querySelector("#after-note").textContent = corrected ? selected.afterNote : "按下「套用改善方式」觀察變化";
         document.querySelector("#correction-explanation").textContent = corrected ? selected.explanation : "改善方式要對應量測限制；套用後會更新上方共用模型。";
