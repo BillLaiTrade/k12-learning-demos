@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="在 3D 量測觀察室中，沿著八張互動卡片探索蘋果、直尺與讀值條件。">
-  <title>Part 3.1 候選 2｜3D 量測觀察室</title>
+<meta name="description" content="在 3D 量測觀察室中，沿著連貫的學習內容探索蘋果、直尺與讀值條件。">
+  <title>量測與公平比較｜3D 觀察室</title>
   <style>
     :root {
       color-scheme: light;
@@ -163,6 +163,7 @@
     .model-panel { margin: 18px 0; padding: 18px; border: 1px solid #cbded0; border-radius: 20px; background: #e3eee5; box-shadow: var(--shadow); }
     .model-panel h2 { margin: 0 0 5px; font-size: 1.18rem; }
     .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
+    .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
     .model-screen { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
     .model-screen svg { display: block; width: 100%; height: auto; transform-origin: 76% 91%; transition: transform .8s cubic-bezier(.2,.8,.2,1); }
     .model-screen[data-zoom="true"] svg { transform: scale(3.2); }
@@ -202,7 +203,8 @@
     .scene-stage { position: sticky; top: 142px; min-width: 0; height: min(70vh, 700px); min-height: 480px; overflow: hidden; border: 1px solid rgb(132 159 146 / 44%); border-radius: 30px; background: radial-gradient(ellipse at 48% 38%, rgb(255 255 255 / 92%), transparent 38%), linear-gradient(155deg, #dce9e1, #c7d7ce 70%, #b7c8be); box-shadow: 0 24px 65px rgb(26 55 44 / 18%); isolation: isolate; }
     .scene-stage::before { position: absolute; inset: 56% -20% -36%; z-index: -1; content: ""; transform: perspective(420px) rotateX(58deg); transform-origin: top; background-image: linear-gradient(rgb(68 105 87 / 12%) 1px, transparent 1px), linear-gradient(90deg, rgb(68 105 87 / 12%) 1px, transparent 1px); background-size: 40px 40px; mask-image: linear-gradient(to bottom, black, transparent 80%); }
     .scene-stage::after { position: absolute; inset: 0; z-index: -1; content: ""; background: linear-gradient(180deg, rgb(255 255 255 / 20%), transparent 45%, rgb(75 103 88 / 8%)); pointer-events: none; }
-    .immersive-page #parallax-canvas { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; border-radius: inherit; background: transparent; }
+    .immersive-page #apple-3d-canvas { position: absolute; inset: 0; z-index: 1; display: block; width: 100%; height: 100%; pointer-events: none; }
+    .immersive-page #parallax-canvas { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; border-radius: inherit; background: transparent; }
     .room-label { position: absolute; top: 18px; left: 20px; z-index: 3; padding: 6px 11px; border: 1px solid rgb(255 255 255 / 70%); border-radius: 999px; background: rgb(255 254 250 / 76%); color: #375a49; font-size: .8rem; font-weight: 800; letter-spacing: .06em; backdrop-filter: blur(8px); pointer-events: none; }
     .immersive-page .scene-caption { position: absolute; top: 16px; right: 16px; z-index: 4; margin: 0; }
     .immersive-page .scene-caption p { display: none; }
@@ -368,13 +370,21 @@
     .immersive-page .lesson-card.is-next .card-side { position: absolute; right: 12px; left: auto; width: 124px; align-items: flex-end; text-align: right; }
     .immersive-page .lesson-card.is-prev .card-number, .immersive-page .lesson-card.is-next .card-number { font-size: .75rem; }
     .immersive-page .lesson-card.is-prev .card-role, .immersive-page .lesson-card.is-next .card-role { display: none; }
-    .immersive-page .swipe-status { top: -19px; right: auto; bottom: auto; left: 50%; width: min(94vw, 420px); padding: 3px 9px; border: 1px solid rgb(255 255 255 / 62%); border-radius: 999px; background: rgb(255 254 250 / 78%); box-shadow: 0 5px 18px rgb(26 55 44 / 12%); transform: translateX(-50%); font-size: .65rem; }
-    .immersive-page .swipe-status progress { width: min(120px, 20vw); }
+    .immersive-page .swipe-status { top: -28px; right: auto; bottom: auto; left: 50%; width: min(94vw, 560px); min-height: 48px; padding: 5px 8px; border: 1px solid rgb(255 255 255 / 82%); border-radius: 16px; background: rgb(255 254 250 / 97%); box-shadow: 0 8px 24px rgb(26 55 44 / 20%); transform: translateX(-50%); font-size: .78rem; pointer-events: auto; }
+    .immersive-page .swipe-status progress { width: min(110px, 12vw); height: 7px; margin: 0; accent-color: var(--green); }
+    .immersive-page .card-navigation-button { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; gap: 4px; padding: 7px 12px; border: 1px solid #b5cdbd; border-radius: 11px; background: #fff; color: #174632; font: inherit; font-weight: 750; white-space: nowrap; cursor: pointer; }
+    .immersive-page .card-navigation-button:hover:not(:disabled) { border-color: var(--green); background: #edf5ee; }
+    .immersive-page .card-navigation-button:focus-visible { outline: 3px solid #e9ad36; outline-offset: 2px; }
+    .immersive-page .card-navigation-button:disabled { opacity: .45; cursor: not-allowed; }
+    .immersive-page .card-navigation-button.is-next { border-color: #176b53; background: #176b53; color: #fff; box-shadow: 0 3px 9px rgb(23 107 83 / 24%); }
+    .immersive-page .card-navigation-button.is-next:hover:not(:disabled) { background: #10553f; }
+    .immersive-page #card-counter { color: var(--green); white-space: nowrap; }
     .immersive-page .balance-station { position: absolute; top: 55%; left: 50%; z-index: 2; width: min(76vw, 760px); visibility: hidden; opacity: 0; transform: translate(-50%, -47%) scale(.97); transition: opacity .28s ease, transform .28s ease, visibility .28s; pointer-events: none; filter: drop-shadow(0 22px 30px rgb(26 55 44 / 18%)); }
     .immersive-page .balance-station svg { display: block; width: 100%; height: auto; overflow: visible; }
     .immersive-page .balance-station .balance-readout { font: 800 25px system-ui, sans-serif; fill: #174632; }
     .immersive-page .balance-station .balance-caption { font: 700 13px system-ui, sans-serif; fill: #476657; }
-    .immersive-page .scene-stage.is-mass-mode #parallax-canvas { opacity: 0; }
+    .immersive-page .scene-stage.is-mass-mode #parallax-canvas,
+    .immersive-page .scene-stage.is-mass-mode #apple-3d-canvas { opacity: 0; }
     .immersive-page .scene-stage.is-mass-mode .scene-readout, .immersive-page .scene-stage.is-mass-mode .scene-caption,
     .immersive-page .scene-stage.is-unit-mode .scene-readout, .immersive-page .scene-stage.is-unit-mode .scene-caption { visibility: hidden; }
     .immersive-page .balance-station.is-weighing { visibility: visible; opacity: 1; transform: translate(-50%, -50%) scale(1); }
@@ -400,8 +410,9 @@
       .immersive-page .lesson-card.is-prev { left: 0; }
       .immersive-page .lesson-card.is-next { right: 0; }
       .immersive-page .lesson-card.is-next .card-side { position: absolute; right: 9px; left: auto; width: 62px; align-items: flex-end; text-align: right; }
-      .immersive-page .swipe-status { top: -18px; width: min(94vw, 390px); gap: 5px; font-size: .56rem; }
-      .immersive-page .swipe-status progress { width: 16vw; }
+      .immersive-page .swipe-status { top: -28px; width: min(96vw, 410px); min-height: 44px; gap: 5px; padding: 4px 5px; border-radius: 13px; font-size: .69rem; }
+      .immersive-page .swipe-status progress { width: min(58px, 15vw); height: 6px; }
+      .immersive-page .card-navigation-button { min-height: 36px; padding: 6px 8px; border-radius: 9px; font-size: .69rem; }
       .immersive-page .balance-station { top: 56%; width: min(92vw, 540px); }
       .immersive-page .balance-station .balance-readout { font-size: 23px; }
       .immersive-page .balance-station .balance-caption { font-size: 12px; }
@@ -434,7 +445,8 @@
     .immersive-page .unit-scale-note { margin-top: 1px; font-size: .64rem; line-height: 1.25; }
     .immersive-page .unit-apple-field { position: absolute; inset: 78px 14px calc(23svh + 20px); z-index: 2; display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 8px; overflow: hidden; padding: clamp(8px, 1.8vw, 20px); border: 1px solid rgb(255 255 255 / 88%); border-radius: 24px; background: rgb(242 247 240 / 88%); box-shadow: 0 18px 46px rgb(30 52 42 / 18%); backdrop-filter: blur(12px); }
     .immersive-page .unit-apple-field[hidden] { display: none !important; }
-    .immersive-page .scene-stage.is-unit-mode #parallax-canvas { opacity: 0; }
+    .immersive-page .scene-stage.is-unit-mode #parallax-canvas,
+    .immersive-page .scene-stage.is-unit-mode #apple-3d-canvas { opacity: 0; }
     .immersive-page .unit-scene-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--muted); }
     .immersive-page .unit-scene-heading strong { color: var(--green); font-size: clamp(1rem, 2.3vw, 1.8rem); white-space: nowrap; }
     .immersive-page .unit-scene-heading span { font-size: clamp(.75rem, 1.2vw, 1rem); }
@@ -453,12 +465,12 @@
 </head>
 <body class="immersive-page">
   <header class="shell masthead">
-    <div class="brand-row"><a class="brand" href="../../index.html">← Part 3：密度與測量</a><span class="crumb">國二上・Part 3.1・候選 2</span><a href="index.html">切換候選 1｜直向卡片版</a></div>
+    <div class="brand-row"><a class="brand" href="../../index.html">← 密度與測量</a><span class="crumb">國二上・量測與公平比較</span><a href="index.html">切換為直向閱讀</a></div>
     <div class="hero">
       <div>
-        <div class="eyebrow">Part 3.1 · 候選 2｜3D 量測觀察室 · 8 張卡</div>
+        <div class="eyebrow">密度與測量｜3D 量測觀察室</div>
         <h1>要公平比較，<br>先把「量」說清楚</h1>
-        <p>同一顆蘋果，為什麼可能量出不同讀值？觀察室會固定顯示同一顆蘋果與直尺；沿卡片操作紀錄、刻度與讀值條件，看哪些變了、哪些保持不變。</p>
+        <p>同一顆蘋果，為什麼可能量出不同讀值？觀察室會固定顯示同一顆蘋果與直尺；沿著學習內容操作紀錄、刻度與讀值條件，看哪些變了、哪些保持不變。</p>
       </div>
       <aside class="hero-note">
         <strong>同一顆蘋果，量測會怎麼變？</strong>
@@ -469,7 +481,7 @@
 
   <nav class="route" aria-label="探索路線">
     <div class="shell">
-      <p class="route-label">本 Part 的閱讀路線｜沿卡片順序讀、操作與觀察</p>
+      <p class="route-label">本段的閱讀路線｜依序閱讀、操作與觀察</p>
       <div class="route-inner">
         <a href="#card-01"><b>01</b>不同讀值</a><a href="#card-02"><b>02</b>量與單位</a>
         <a href="#card-03"><b>03</b>選工具</a><a href="#card-04"><b>04</b>看刻度</a>
@@ -480,16 +492,18 @@
   </nav>
 
   <main class="shell lesson">
-    <div class="section-top"><h2>量測觀察室</h2><span class="progress-copy">拖曳場景旋轉視角；卡片向左滑繼續、向右滑回看</span></div>
+    <div class="section-top"><h2>量測觀察室</h2><span class="progress-copy">拖曳場景旋轉視角；使用下方按鈕繼續閱讀</span></div>
     <div class="immersive-room">
       <div class="scene-stage" aria-label="持續顯示的 3D 蘋果與直尺觀察場景">
         <span class="room-label" id="room-label">3D 量測觀察室・同一顆蘋果</span>
-        <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、蘋果和視線延長線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明蘋果寬度不變，視角可能改變尺面上的表觀讀值。</canvas>
+        <canvas id="apple-3d-canvas" aria-hidden="true"></canvas>
+        <span id="apple-model-status" class="visually-hidden" aria-live="polite">正在載入蘋果 3D 模型。</span>
+        <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、蘋果和視線延長線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明蘋果寬度不變，讀值可能隨觀察角度改變。</canvas>
         <div class="unit-apple-field" id="unit-apple-field" hidden aria-hidden="true">
           <div class="unit-scene-heading"><span>固定數字 182 所代表的蘋果總量</span><strong id="unit-scene-count">約 1 顆</strong></div>
           <canvas class="unit-apple-grid" id="unit-scene-apples" role="img" aria-label="畫面會逐顆繪製與數量相符的蘋果模型">此瀏覽器不支援畫布，請參閱旁邊標示的精確蘋果數量。</canvas>
           <p class="unit-scene-caption" id="unit-scene-caption">182 g = 1 顆模型蘋果</p>
-          <p class="unit-scene-note">每個蘋果圖形代表一顆模型蘋果，畫面會逐顆繪出計數器顯示的數量；每顆模型蘋果以 USDA 中型蘋果為基準（直徑約 7.62 cm、重量 182 g）。</p>
+          <p class="unit-scene-note">每個蘋果圖形代表一顆模型蘋果，畫面會逐顆繪出計數器顯示的數量；每顆模型蘋果依資料中的中型蘋果為參照（直徑約 7.62 cm、質量約 182 g）。</p>
         </div>
         <div class="balance-station" id="balance-station" aria-label="蘋果放在電子秤平台上，秤面顯示質量讀值">
           <svg viewBox="0 0 760 300" role="img" aria-labelledby="balance-title balance-description">
@@ -500,9 +514,7 @@
             <path d="M188 190L572 190L626 254L134 254Z" fill="#456b59" stroke="#2f5845" stroke-width="5"></path>
             <path class="scale-glow" d="M220 202L540 202L574 242L186 242Z" fill="#d5f5df" opacity=".45"></path>
             <path d="M230 202L530 202L554 226L206 226Z" fill="#f6faf5" stroke="#8ca998" stroke-width="3"></path>
-            <path d="M380 96C358 65 309 67 279 99C246 134 262 183 302 199C333 211 359 198 380 190C401 198 427 211 458 199C498 183 514 134 481 99C451 67 402 65 380 96Z" fill="#d85f3f" stroke="#923d2a" stroke-width="4"></path>
-            <path d="M379 117C376 101 381 89 391 79" fill="none" stroke="#68452f" stroke-width="8" stroke-linecap="round"></path>
-            <path d="M389 95C405 80 423 82 433 91C421 105 403 109 389 95Z" fill="#6f9e63" stroke="#477544" stroke-width="2"></path>
+            <image href="assets/apple-hero.webp" x="270" y="4" width="220" height="200" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></image>
             <rect x="293" y="224" width="174" height="40" rx="8" fill="#cfe5cf" stroke="#244a38" stroke-width="3"></rect>
             <text x="380" y="239" text-anchor="middle" class="balance-caption">質量讀值</text>
             <text id="balance-display-reading" x="380" y="260" text-anchor="middle" class="balance-readout">— g</text>
@@ -510,26 +522,26 @@
           </svg>
         </div>
         <div class="scene-caption"><p id="camera-caption" aria-live="polite">拖曳畫面旋轉視角；也可先選取畫面，再按方向鍵。</p><button type="button" class="secondary" id="reset-camera">回到正對刻度</button></div>
-        <div class="scene-readout" aria-live="polite"><article><small>蘋果實際寬度（模型固定）</small><strong id="actual-width">約 7.6 cm</strong></article><article><small>沿視線投到尺面的表觀讀值</small><strong id="parallax-reading">約 7.6 cm</strong></article></div>
+        <div class="scene-readout" aria-live="polite"><article><small>蘋果模型設定的寬度</small><strong id="actual-width">約 7.6 cm</strong></article><article><small>從這個角度讀到的數值</small><strong id="parallax-reading">約 7.6 cm</strong></article></div>
       </div>
       <div class="lesson-layout">
       <div class="cards">
       <section class="lesson-card is-active" id="card-01">
-        <div class="card-side"><span class="card-number">CARD 01</span><h3>提出疑問</h3><span class="card-role">同一物體，不同紀錄</span></div>
+        <div class="card-side"><span class="card-number">01</span><h3>提出疑問</h3><span class="card-role">同一物體，不同紀錄</span></div>
         <div class="card-main">
           <h2>同一顆蘋果，為什麼會有不同讀值？</h2>
-          <p>兩次紀錄出現差異，不一定表示蘋果的寬度改變。切換尺的刻度、起點、視角或單位，觀察同一個模型裡的量測紀錄如何改變。</p>
+          <p>先記下同一顆蘋果的紀錄 A，接著一次只改變一項量測條件，觀察紀錄 B 有什麼不同。兩次讀值改變了，是蘋果變了，還是尺與讀法變了？</p>
           <label class="field">切換量測情境
             <select id="difference-condition"><option value="scale">工具刻度不同</option><option value="start">尺的起點沒有對準</option><option value="view">讀刻度的視角不同</option><option value="unit">使用的單位不同</option></select>
           </label>
-          <div class="readout" aria-live="polite"><article><small>比較紀錄 A</small><strong id="reading-a">約 7.6 cm</strong><span id="reading-a-note">左端對齊零刻度</span></article><article><small>比較紀錄 B</small><strong id="reading-b">約 7.6–7.7 cm</strong><span id="reading-b-note">依端點位置估讀</span></article></div>
+          <div class="readout" aria-live="polite"><article><small>比較紀錄 A</small><strong id="reading-a">約 7.6 cm</strong><span id="reading-a-note">左端對齊零刻度</span></article><article><small>比較紀錄 B</small><strong id="reading-b">約 7.6–7.7 cm</strong><span id="reading-b-note">依物體端點的位置估一個讀值</span></article></div>
           <div class="fact"><p id="difference-explanation">改變的是尺或讀值條件；蘋果仍是同一顆，讓我們可以比較同一量測對象的紀錄。</p></div>
           <p class="next-hint">要讀懂這些差異，先看看一筆量測紀錄要交代哪些資訊。</p>
         </div>
       </section>
 
       <section class="lesson-card" id="card-02">
-        <div class="card-side"><span class="card-number">CARD 02</span><h3>看懂紀錄</h3><span class="card-role">物理量、數值與單位</span></div>
+        <div class="card-side"><span class="card-number">02</span><h3>看懂紀錄</h3><span class="card-role">物理量、數值與單位</span></div>
         <div class="card-main">
           <h2>只寫「5」，別人知道你量了什麼嗎？</h2>
           <p>量測紀錄要寫清楚物理量、數值和單位。依序點選紀錄各部分；再固定數字 182、切換質量單位，看看它相當於多少顆約 182 g 的蘋果。</p>
@@ -542,21 +554,21 @@
             <button type="button" data-record-part="unit" aria-pressed="false">單位</button>
           </div>
           <button type="button" class="secondary" id="unit-toggle" aria-pressed="false">移除尺上的 cm 標示</button>
-          <div class="unit-scale-demo" aria-label="以 USDA 中型蘋果每顆 182 公克為模型基準，固定數字 182 並切換質量單位，觀察精確換算的蘋果數量">
+          <div class="unit-scale-demo" aria-label="以中型蘋果每顆約 182 公克為參照，固定數字 182 並切換質量單位，觀察對應的蘋果數量">
             <div class="unit-scale-controls"><span>固定數字 <strong>182</strong></span><label for="apple-mass-unit">質量單位<select id="apple-mass-unit"><option value="g">克（g）</option><option value="kg">公斤（kg）</option><option value="t">公噸（t）</option></select></label></div>
             <output class="unit-scale-result" id="unit-apple-count" aria-live="polite">182 g = 1 顆模型蘋果</output>
-            <p class="unit-scale-note" id="unit-apple-note">以 USDA FoodData Central 的中型蘋果為參照：直徑約 7.62 cm、標準重量 182 g。模型為精確換算，假設每顆都固定 182 g。</p><a class="unit-source" href="https://fdc.nal.usda.gov/food-details/171688/nutrients" target="_blank" rel="noreferrer">USDA FoodData Central：中型蘋果（3 吋直徑，182 g）</a>
+            <p class="unit-scale-note" id="unit-apple-note">依美國農業部資料，中型蘋果直徑約 7.62 cm、質量約 182 g。為了示範單位換算，這裡假設每顆模型蘋果的質量都固定為 182 g。</p><a class="unit-source" href="https://fdc.nal.usda.gov/food-details/171688/nutrients" target="_blank" rel="noreferrer">查看資料來源：美國農業部食品資料中心（中型蘋果）</a>
           </div>
-          <p class="live-note" id="record-explanation" aria-live="polite">物理量說明量的是什麼；這裡量的是蘋果水平方向的寬度。</p>
-          <div class="fact"><p>「7.6 cm」和「7.6 mm」的數字相同，表示的長度不同。單位不能從量測紀錄中省略。</p></div>
+          <p class="live-note" id="record-explanation" aria-live="polite">先說明你量的是什麼；這裡量的是蘋果水平方向的寬度。</p>
+          <div class="fact"><p>「7.6 cm」和「7.6 mm」的數字相同，但單位不同，代表的長度也不同。記錄量測結果時，要把單位一起寫清楚。</p></div>
         </div>
       </section>
 
       <section class="lesson-card" id="card-03">
-        <div class="card-side"><span class="card-number">CARD 03</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
+        <div class="card-side"><span class="card-number">03</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
         <div class="card-main">
           <h2>同一種工具，能量所有東西嗎？</h2>
-          <p>工具要配合要量的物理量和範圍。選「質量」時，調整同一顆蘋果的質量，觀察觀察室秤面讀值。</p>
+          <p>工具要配合要量的物理量和範圍。選「質量」時，調整同一顆蘋果的質量，觀察秤面讀值如何改變。</p>
           <div class="select-row">
             <label class="field">量測任務
               <select id="tool-task"><option value="length">量這顆蘋果的寬度（約 7.6 cm）</option><option value="mass">量這顆蘋果的質量（示意約 182 g）</option><option value="time">量一段約 12 s 的活動時間</option></select>
@@ -583,7 +595,7 @@
       </section>
 
       <section class="lesson-card" id="card-04">
-        <div class="card-side"><span class="card-number">CARD 04</span><h3>讀取刻度</h3><span class="card-role">觀察最小刻度</span></div>
+        <div class="card-side"><span class="card-number">04</span><h3>讀取刻度</h3><span class="card-role">觀察最小刻度</span></div>
         <div class="card-main">
           <h2>尺上的每一格，代表多少？</h2>
           <p>共用模型中的尺顯示蘋果端點。切換刻度間隔，觀察每格的長度以及端點相對於刻線的位置。</p>
@@ -610,21 +622,17 @@
       </section>
 
       <section class="lesson-card" id="card-05">
-        <div class="card-side"><span class="card-number">CARD 05</span><h3>估讀刻線之間</h3><span class="card-role">位置改變，估值跟著改變</span></div>
+        <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">位置改變，估值跟著改變</span></div>
         <div class="card-main">
           <h2>7.6 cm 再多一點，端點落在哪裡？</h2>
           <p>7.6 cm 就是 7 cm 6 mm。這顆蘋果的右端再多出一點，沒有剛好停在刻線上。按下「拉近查看」，放大 7.6 cm 與 7.7 cm 兩條刻線附近；拖動同一顆蘋果沿尺移動，觀察右端在兩條刻線之間的位置。蘋果本身保持同樣大小。</p>
           <aside class="model-panel" aria-labelledby="model-title">
             <h2 id="model-title">量量看：蘋果有多寬？</h2>
-            <p>拉近刻度，觀察同一顆蘋果的端點在尺上的位置；這個模型會延續到後續卡片。</p>
+            <p>拉近刻度，觀察同一顆蘋果的端點在尺上的位置；這個模型會延續到後續內容。</p>
             <div class="model-screen" id="model-screen" data-zoom="false">
               <svg id="shared-measurement-model" viewBox="0 0 760 650" role="img" aria-label="用直尺測量蘋果水平方向的寬度，左端對齊零，右端落在七點六公分與七點七公分之間">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
-                <g id="apple-object"><g transform="translate(0 64) scale(1 2.1)">
-                  <path d="M254 89 C220 49 165 62 105 78 C28 100 27 169 78 208 C123 245 195 234 254 214 C313 234 385 245 430 208 C481 169 480 100 403 78 C343 62 288 49 254 89 Z" fill="#d85f3f" stroke="#923d2a" stroke-width="4"></path>
-                  <path d="M254 88 C250 68 256 52 269 39" fill="none" stroke="#6d4c32" stroke-width="9" stroke-linecap="round"></path>
-                  <path d="M265 54 C282 37 302 40 311 48 C298 63 280 67 265 54 Z" fill="#6f9e63" stroke="#477544" stroke-width="2"></path>
-                  </g></g>
+                <image id="apple-object" href="assets/apple-hero.webp" x="27" y="45" width="454" height="414" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></image>
                 <path id="apple-start-guide" d="M80 65V620" stroke="#176b53" stroke-width="2" stroke-dasharray="5 5"></path>
                 <path id="apple-end-guide" d="M588 65V620" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 5"></path>
                 <g id="shared-scale"></g>
@@ -640,17 +648,17 @@
           </aside>
           <div class="slider-row"><input id="estimate-slider" type="range" min="760" max="770" value="763" aria-label="沿著直尺移動蘋果，觀察右端在七點六與七點七公分刻線間的位置"><output class="value" id="estimate-value" for="estimate-slider">7.6 cm 後一點</output></div>
           <p class="live-note" id="estimate-note" aria-live="polite">拉近能看清端點相對於刻線的位置；放大不會增加尺的刻度精度，也不代表得到絕對精確值。</p>
-          <div class="fact"><p>估讀是依刻度和物體端點的位置作判斷。這裡把結果描述為「約在兩條刻線之間」，不把模型顯示的細節誤當成工具提供的額外精度。</p></div>
+          <div class="fact"><p>物體端點不一定剛好對準刻線。讀值落在兩條刻線之間時，可以根據端點位置估一個值，這叫作「估讀」。畫面放大能幫助觀察位置，但不會讓尺的刻度變得更細。</p></div>
         </div>
       </section>
 
       <section class="lesson-card" id="card-06">
-        <div class="card-side"><span class="card-number">CARD 06</span><h3>找出讀值差異</h3><span class="card-role">視角與起點是兩種條件</span></div>
+        <div class="card-side"><span class="card-number">06</span><h3>找出讀值差異</h3><span class="card-role">視角與起點是兩種條件</span></div>
         <div class="card-main">
           <h2>同一物體，為什麼讀值會差一點？</h2>
           <p>拖曳上方觀察室的 3D 場景，從不同方向觀察同一顆蘋果和直尺。紅色視線落點會隨角度改變；蘋果本身的寬度不變。</p>
           <div class="parallax-scene">
-            <p class="live-note" id="parallax-explanation">正對尺面時，視線延長線接近蘋果端點；斜向觀察時，端點的視線落到尺面別處，可能造成視差讀值。這是教學模型的幾何示意，讀值依刻度估讀。</p>
+            <p class="live-note" id="parallax-explanation">正對尺面時，視線延長線接近蘋果端點；斜向觀察時，端點的視線落到尺面別處，這種因觀察角度不同而產生的讀值差異，叫作「視差」。這裡的讀值依照尺上刻度估讀。</p>
           </div>
           <div class="toggle-row" role="group" aria-label="尺的起點">
             <button type="button" data-zero="aligned" aria-pressed="true">起點在 0 cm</button>
@@ -661,7 +669,7 @@
       </section>
 
       <section class="lesson-card" id="card-07">
-        <div class="card-side"><span class="card-number">CARD 07</span><h3>改善量測條件</h3><span class="card-role">修正前後對照</span></div>
+        <div class="card-side"><span class="card-number">07</span><h3>改善量測條件</h3><span class="card-role">修正前後對照</span></div>
         <div class="card-main">
           <h2>改變一個條件，量測會怎麼改善？</h2>
           <p>選擇一種量測限制，再操作對應的改善方式。觀察哪個條件被改變，以及資料因此如何更容易判讀。</p>
@@ -681,7 +689,7 @@
       </section>
 
       <section class="lesson-card end-card" id="card-08">
-        <div class="card-side"><span class="card-number">CARD 08</span><h3>整合理解</h3><span class="card-role">本 Part 唯一的理解檢核</span></div>
+        <div class="card-side"><span class="card-number">08</span><h3>整合理解</h3><span class="card-role">檢查看看是否理解</span></div>
         <div class="card-main">
           <span class="assessment-label">理解檢核・共 1 題</span>
           <h2>怎麼判斷蘋果的兩筆寬度紀錄是否可比較？</h2>
@@ -693,16 +701,16 @@
           </div>
           <div class="feedback" id="assessment-feedback" aria-live="polite"></div>
           <div class="fact"><p><strong>回到開頭的問題：</strong>比較量測資料時，先確認物理量、單位、工具和讀值條件，並用可對照的證據說明差異。</p></div>
-          <p class="next-hint">下一個 Part 將追問：形狀不規則的物體，體積也量得出來嗎？</p>
+          <p class="next-hint">接下來，我們來看看不規則形狀的物體要怎麼量體積。</p>
         </div>
       </section>
     </div>
-      <div class="swipe-status" aria-live="polite"><span>卡片向左滑：繼續學習</span><progress id="card-progress" value="1" max="8" aria-label="卡片閱讀位置"></progress><strong id="card-counter">第 1 / 8 張</strong><span>向右滑：回看</span></div>
+      <nav class="swipe-status" aria-label="學習內容導覽與進度" aria-live="polite"><button type="button" class="card-navigation-button" id="previous-card">← 回看前文</button><progress id="card-progress" value="1" max="8" aria-label="學習進度"></progress><strong id="card-counter">學習進度 1 / 8</strong><button type="button" class="card-navigation-button is-next" id="next-card">繼續閱讀 →</button></nav>
     </div>
     </div>
   </main>
 
-  <footer><div class="shell">本頁為密度與測量 Part 3.1 的觀察室版。3D 幾何模型呈現視差；表觀讀值依模型中的視線投影與尺刻度估算，不代表實際實驗數據。教材細節依採用版本複核。</div></footer>
+  <footer><div class="shell">頁面以蘋果和直尺示範觀察角度如何影響讀值。蘋果模型依中型蘋果直徑參照縮放；畫面讀值由教學模型估讀，不代表每顆真實蘋果的測量結果。</div></footer>
 
   <script>
     (() => {
@@ -787,8 +795,6 @@
           ctx.stroke();
         };
         ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = "#f7f8f3";
-        ctx.fillRect(0, 0, width, height);
 
         const rulerMin = -0.18;
         const rulerMax = 12;
@@ -813,96 +819,19 @@
           }
         }
 
-        const appleLobe = 0.1;
-        const appleRows = 48;
-        const appleColumns = 72;
-        const radialProfile = (theta) => {
-          const upperShoulder = 0.16 * Math.exp(-Math.pow((theta - 0.82) / 0.35, 2));
-          const lowerShoulder = 0.08 * Math.exp(-Math.pow((theta - (Math.PI - 0.9)) / 0.42, 2));
-          return Math.sin(theta) * (1 + upperShoulder + lowerShoulder);
-        };
-        const maximumProfile = Math.max(...Array.from({ length: appleRows + 1 }, (_, row) => {
-          const theta = (row / appleRows) * Math.PI;
-          const sine = Math.sin(theta);
-          return radialProfile(theta) * (1 + appleLobe * sine * sine);
-        }));
         const appleCenter = { x: state.start + state.edge / 2, y: state.edge * 0.45 + 0.04, z: 2.5 };
-        const appleRadii = { x: state.edge / (2 * maximumProfile), y: state.edge * 0.45 / maximumProfile, z: state.edge * 0.45 / maximumProfile };
-        const appleHalfWidth = appleRadii.x * maximumProfile;
+        const appleHalfWidth = state.edge / 2;
         const appleStartX = appleCenter.x - appleHalfWidth;
         const appleEndX = appleCenter.x + appleHalfWidth;
-        const vertices = [];
-        for (let row = 0; row <= appleRows; row += 1) {
-          const theta = (row / appleRows) * Math.PI;
-          const cosine = Math.cos(theta);
-          const sine = Math.sin(theta);
-          const shoulder = radialProfile(theta);
-          const poleIndent = Math.exp(-Math.pow(sine / 0.2, 2));
-          for (let column = 0; column <= appleColumns; column += 1) {
-            const phi = (column / appleColumns) * Math.PI * 2;
-            const lobe = 1 + appleLobe * Math.cos(phi * 6) * sine * sine;
-            vertices.push({
-              x: appleCenter.x + appleRadii.x * shoulder * Math.cos(phi) * lobe,
-              y: appleCenter.y + appleRadii.y * cosine - (cosine >= 0 ? 0.9 : -0.24) * poleIndent,
-              z: appleCenter.z + appleRadii.z * shoulder * Math.sin(phi) * lobe
-            });
-          }
-        }
-        const faces = [];
-        for (let row = 0; row < appleRows; row += 1) {
-          for (let column = 0; column < appleColumns; column += 1) {
-            const a = row * (appleColumns + 1) + column;
-            const b = a + appleColumns + 1;
-            [[vertices[a], vertices[b], vertices[a + 1]], [vertices[a + 1], vertices[b], vertices[b + 1]]].forEach((points, index) => {
-              const projected = points.map(project);
-              if (!projected.some((point) => !point)) {
-                const faceCenter = points.reduce((sum, point) => add(sum, point), { x: 0, y: 0, z: 0 });
-                faceCenter.x = faceCenter.x / points.length - appleCenter.x;
-                faceCenter.y = faceCenter.y / points.length - appleCenter.y;
-                faceCenter.z = faceCenter.z / points.length - appleCenter.z;
-                const normal = normalize({
-                  x: faceCenter.x / (appleRadii.x * appleRadii.x),
-                  y: faceCenter.y / (appleRadii.y * appleRadii.y),
-                  z: faceCenter.z / (appleRadii.z * appleRadii.z)
-                });
-                const light = normalize({ x: -0.45, y: 0.72, z: 0.6 });
-                const brightness = 0.76 + 0.24 * Math.max(0, dot(normal, light));
-                const red = Math.round(205 * brightness);
-                const green = Math.round(78 * brightness);
-                const blue = Math.round(58 * brightness);
-                faces.push({
-                  points: projected,
-                  depth: projected.reduce((sum, point) => sum + point.depth, 0) / 3,
-                  color: `rgb(${red} ${green} ${blue})`
-                });
-              }
-            });
-          }
-        }
-        faces.sort((a, b) => b.depth - a.depth).forEach((face) => {
-          ctx.beginPath();
-          ctx.moveTo(face.points[0].x, face.points[0].y);
-          ctx.lineTo(face.points[1].x, face.points[1].y);
-          ctx.lineTo(face.points[2].x, face.points[2].y);
-          ctx.closePath();
-          ctx.fillStyle = face.color;
-          ctx.fill();
+        window.setApple3DView?.({
+          edge: state.edge,
+          start: state.start,
+          yaw: camera.yaw,
+          pitch: camera.pitch,
+          orbitRadius,
+          centerZ: appleCenter.z,
+          focalLengthRatio: focalLength / height
         });
-        const stemBase = { x: appleCenter.x, y: appleCenter.y + appleRadii.y - 0.9, z: appleCenter.z };
-        const calyx = Array.from({ length: 12 }, (_, index) => {
-          const angle = (index / 12) * Math.PI * 2;
-          return { x: stemBase.x + Math.cos(angle) * 0.24, y: stemBase.y + 0.04, z: stemBase.z + Math.sin(angle) * 0.18 };
-        });
-        drawFace(calyx, "#a94432", "#8e352b");
-        drawLine([stemBase, { x: stemBase.x + 0.02, y: stemBase.y + 0.42, z: stemBase.z }, { x: stemBase.x + 0.09, y: stemBase.y + 0.82, z: stemBase.z }], "#68452f", 6);
-        drawFace([
-          { x: stemBase.x + 0.05, y: stemBase.y + 0.58, z: stemBase.z + 0.02 },
-          { x: stemBase.x + 0.8, y: stemBase.y + 0.76, z: stemBase.z + 0.08 },
-          { x: stemBase.x + 0.58, y: stemBase.y + 0.97, z: 0.06 },
-          { x: stemBase.x + 0.22, y: stemBase.y + 0.94, z: stemBase.z + 0.02 },
-          { x: stemBase.x + 0.05, y: stemBase.y + 0.78, z: stemBase.z - 0.02 }
-        ], "#6f9e63", "#477544");
-
         const edgeX = appleEndX;
         const edgeHeight = appleCenter.y;
         const cameraHeight = cameraPosition.y;
@@ -944,9 +873,9 @@
           ? "這個角度下，視線延長線落在尺面範圍外，無法從尺上讀值。轉動視角，讓落點回到刻度上；蘋果寬度始終不變。"
           : Math.abs(apparentWidthReading - state.edge) < estimatedStep / 2
           ? "目前視線接近正對尺長方向，落點讀值與固定的蘋果寬度接近。拖動視角，觀察視線延長線如何偏離端點。"
-          : `蘋果實際寬度仍約 ${state.edge.toFixed(1)} cm；端點視線落到尺面約 ${formattedEndReading} cm，扣除起點 ${state.start.toFixed(1)} cm 後，表觀寬度約 ${formattedWidthReading} cm。差異呈現視差，不代表蘋果或尺改變。`;
+          : `蘋果實際寬度仍約 ${state.edge.toFixed(1)} cm；端點視線落到尺面約 ${formattedEndReading} cm，扣除起點 ${state.start.toFixed(1)} cm 後，讀到的寬度約 ${formattedWidthReading} cm。差異呈現視差，不代表蘋果或尺改變。`;
         parallaxCanvas.setAttribute("aria-label", landingOnScale
-          ? `三維直尺與蘋果模型。蘋果實際寬度約 ${state.edge.toFixed(1)} 公分；目前視角沿視線投到尺面的端點讀值約 ${formattedEndReading} 公分。可拖曳或使用方向鍵旋轉視角。`
+          ? `三維直尺與蘋果模型。蘋果寬度約 ${state.edge.toFixed(1)} 公分；從目前角度讀到的尺上端點約為 ${formattedEndReading} 公分。可拖曳或使用方向鍵旋轉視角。`
           : `三維直尺與蘋果模型。蘋果實際寬度約 ${state.edge.toFixed(1)} 公分；目前視角的視線落在尺面範圍外，無法讀值。可拖曳或使用方向鍵旋轉視角。`);
       };
       const updateModel = (note) => {
@@ -1015,7 +944,7 @@
       const differenceStates = {
         scale: { divisions: 2, start: 0, angle: false, unit: true, note: "同一蘋果與尺，改用較粗的刻度示意；端點所在區間較難細分。" },
         start: { divisions: 10, start: 0.5, angle: false, unit: true, note: "尺的起點移到 0.5 cm；物體長度要用終點讀值減起點讀值。" },
-        view: { divisions: 10, start: 0, angle: true, unit: true, note: "改變視角可能讓蘋果端點在尺面上的視線落點偏移；第六卡可拖曳 3D 場景觀察表觀讀值如何改變。" },
+        view: { divisions: 10, start: 0, angle: true, unit: true, note: "改變視角可能讓蘋果端點在尺面上的視線落點偏移；可以拖曳 3D 場景，觀察讀值如何改變。" },
         unit: { divisions: 10, start: 0, angle: false, unit: false, note: "刻度旁的 cm 標示被移除；數字還在，但缺少單位就不能完整說明量值。" }
       };
       document.querySelector("#difference-condition").addEventListener("change", (event) => {
@@ -1025,12 +954,12 @@
         document.querySelector("#reading-a").textContent = "約 7.6 cm";
         document.querySelector("#reading-b").textContent = chosen.start ? "終點讀值約 8.1 cm" : chosen.angle ? "讀值可能偏移" : chosen.divisions === 2 ? "約 7.5–8.0 cm" : chosen.unit ? "約 7.6–7.7 cm" : "約 7.6–7.7（無單位）";
         document.querySelector("#reading-a-note").textContent = "原始測量的固定參照";
-        document.querySelector("#reading-b-note").textContent = chosen.start ? "起點在 0.5 cm，需扣除起點" : chosen.angle ? "轉動視角，檢視視差落點" : chosen.divisions === 2 ? "較粗刻度的尺，區間較大" : chosen.unit ? "依端點位置估讀" : "尺上的 cm 標示已移除";
+        document.querySelector("#reading-b-note").textContent = chosen.start ? "起點在 0.5 cm，需扣除起點" : chosen.angle ? "轉動視角，比較尺上的讀值" : chosen.divisions === 2 ? "較粗刻度的尺，區間較大" : chosen.unit ? "依物體端點的位置估一個讀值" : "尺上的 cm 標示已移除";
         document.querySelector("#difference-explanation").textContent = chosen.note;
       });
 
       const recordDescriptions = {
-        object: "物理量說明量的是什麼；這裡量的是蘋果水平方向的寬度。",
+        object: "先說明你量的是什麼；這裡量的是蘋果水平方向的寬度。",
         value: "數值表示量到的大小；模型顯示約 7.6，還要搭配單位才完整。",
         unit: "單位說明數值所採用的尺度；這把尺用 cm（公分）標示。"
       };
@@ -1057,54 +986,12 @@
         t: { label: "公噸", gramsPerUnit: 1000000 }
       };
       const formatUnitCount = new Intl.NumberFormat("zh-TW");
-      const appleSprite = document.createElement("canvas");
-      appleSprite.width = 64;
-      appleSprite.height = 72;
-      const appleSpriteContext = appleSprite.getContext("2d");
-      const fruitGradient = appleSpriteContext.createLinearGradient(9, 9, 55, 60);
-      fruitGradient.addColorStop(0, "#ef8058");
-      fruitGradient.addColorStop(.52, "#dc6040");
-      fruitGradient.addColorStop(1, "#ae402d");
-      appleSpriteContext.beginPath();
-      appleSpriteContext.moveTo(32, 20);
-      appleSpriteContext.bezierCurveTo(26, 8, 12, 7, 6, 17);
-      appleSpriteContext.bezierCurveTo(-1, 29, 7, 50, 17, 60);
-      appleSpriteContext.bezierCurveTo(23, 66, 28, 61, 32, 58);
-      appleSpriteContext.bezierCurveTo(36, 61, 41, 66, 47, 60);
-      appleSpriteContext.bezierCurveTo(57, 50, 65, 29, 58, 17);
-      appleSpriteContext.bezierCurveTo(52, 7, 38, 8, 32, 20);
-      appleSpriteContext.closePath();
-      appleSpriteContext.fillStyle = fruitGradient;
-      appleSpriteContext.fill();
-      appleSpriteContext.strokeStyle = "#873825";
-      appleSpriteContext.lineWidth = 1.7;
-      appleSpriteContext.stroke();
-      appleSpriteContext.beginPath();
-      appleSpriteContext.moveTo(31, 20);
-      appleSpriteContext.bezierCurveTo(30, 12, 31, 7, 36, 3);
-      appleSpriteContext.strokeStyle = "#68452f";
-      appleSpriteContext.lineWidth = 4;
-      appleSpriteContext.lineCap = "round";
-      appleSpriteContext.stroke();
-      appleSpriteContext.beginPath();
-      appleSpriteContext.moveTo(35, 9);
-      appleSpriteContext.bezierCurveTo(42, 1, 53, 3, 57, 8);
-      appleSpriteContext.bezierCurveTo(51, 15, 42, 16, 35, 9);
-      appleSpriteContext.closePath();
-      appleSpriteContext.fillStyle = "#739e5e";
-      appleSpriteContext.fill();
-      appleSpriteContext.strokeStyle = "#477544";
-      appleSpriteContext.lineWidth = 1;
-      appleSpriteContext.stroke();
-      appleSpriteContext.beginPath();
-      appleSpriteContext.moveTo(10, 24);
-      appleSpriteContext.bezierCurveTo(12, 17, 17, 14, 22, 13);
-      appleSpriteContext.strokeStyle = "rgb(255 190 151 / 78%)";
-      appleSpriteContext.lineWidth = 2;
-      appleSpriteContext.stroke();
+      const appleSprite = new Image();
+      appleSprite.src = "assets/apple-hero.webp";
+      appleSprite.addEventListener("load", () => updateUnitAppleDemo(), { once: true });
 
       const renderApplePopulation = (canvas, count) => {
-        if (!canvas || !canvas.clientWidth || !canvas.clientHeight) return;
+        if (!canvas || !canvas.clientWidth || !canvas.clientHeight || !appleSprite.complete || !appleSprite.naturalWidth) return;
         const context = canvas.getContext("2d");
         const width = canvas.clientWidth;
         const height = canvas.clientHeight;
@@ -1114,11 +1001,12 @@
         context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
         context.clearRect(0, 0, width, height);
         if (count === 1) {
-          const appleWidth = Math.min(width * .4, height * .72 * (48 / 54));
-          const appleHeight = appleWidth * (54 / 48);
+          const appleAspect = appleSprite.naturalWidth / appleSprite.naturalHeight;
+          const appleWidth = Math.min(width * .4, height * .72 * appleAspect);
+          const appleHeight = appleWidth / appleAspect;
           context.drawImage(appleSprite, (width - appleWidth) / 2, (height - appleHeight) / 2, appleWidth, appleHeight);
         } else {
-          const appleAspect = 48 / 54;
+          const appleAspect = appleSprite.naturalWidth / appleSprite.naturalHeight;
           const columns = Math.max(1, Math.ceil(Math.sqrt(count * width / (height * appleAspect))));
           const rows = Math.ceil(count / columns);
           const cellWidth = width / columns;
@@ -1133,7 +1021,7 @@
         }
         canvas.dataset.appleCount = String(count);
         canvas.dataset.drawnAppleCount = String(count);
-        canvas.setAttribute("aria-label", `${formatUnitCount.format(count)} 顆蘋果模型；每顆模型基準為 USDA 中型蘋果（直徑 7.62 cm、182 g），畫面依此數量繪製`);
+        canvas.setAttribute("aria-label", `${formatUnitCount.format(count)} 顆蘋果模型；每顆模型基準為 中型蘋果參照值（直徑 7.62 cm、質量 182 g），畫面依此數量繪製`);
       };
       const updateUnitAppleDemo = () => {
         const unit = appleMassUnits[document.querySelector("#apple-mass-unit").value];
@@ -1282,6 +1170,7 @@
         renderParallaxScene();
       });
       window.addEventListener("resize", renderParallaxScene);
+      window.addEventListener("apple3d-ready", renderParallaxScene, { once: true });
 
       const zeroButtons = [...document.querySelectorAll("[data-zero]")];
       zeroButtons.forEach((button) => button.addEventListener("click", () => {
@@ -1351,6 +1240,8 @@
       const lessonCards = [...document.querySelectorAll(".lesson-card")];
       const cardCounter = document.querySelector("#card-counter");
       const cardProgress = document.querySelector("#card-progress");
+      const previousCardButton = document.querySelector("#previous-card");
+      const nextCardButton = document.querySelector("#next-card");
       const cardIndexFromHash = lessonCards.findIndex((card) => `#${card.id}` === window.location.hash);
       let activeCardIndex = cardIndexFromHash >= 0 ? cardIndexFromHash : 0;
       const showCard = (index, updateHash = true) => {
@@ -1366,8 +1257,11 @@
           card.setAttribute("aria-hidden", String(!isActive));
           card.inert = !isActive;
         });
-        cardCounter.textContent = `第 ${activeCardIndex + 1} / ${lessonCards.length} 張`;
+        cardCounter.textContent = `學習進度 ${activeCardIndex + 1} / ${lessonCards.length}`;
         cardProgress.value = activeCardIndex + 1;
+        previousCardButton.disabled = activeCardIndex === 0;
+        nextCardButton.disabled = activeCardIndex === lessonCards.length - 1;
+        nextCardButton.textContent = activeCardIndex === lessonCards.length - 1 ? "已到這段學習的結尾" : "繼續閱讀 →";
         const unitFieldActive = activeCardIndex === 1;
         const scene = document.querySelector(".scene-stage");
         const unitField = document.querySelector("#unit-apple-field");
@@ -1383,6 +1277,8 @@
         if (updateHash) history.replaceState(null, "", `#${lessonCards[activeCardIndex].id}`);
         renderParallaxScene();
       };
+      previousCardButton.addEventListener("click", () => showCard(activeCardIndex - 1));
+      nextCardButton.addEventListener("click", () => showCard(activeCardIndex + 1));
       let swipeStart = null;
       const cardsSurface = document.querySelector(".cards");
       cardsSurface.addEventListener("pointerdown", (event) => {
@@ -1439,5 +1335,9 @@
       renderCorrection();
     })();
   </script>
+  <script type="importmap">
+    {"imports":{"three":"./assets/vendor/three/build/three.module.js","three/addons/":"./assets/vendor/three/examples/jsm/"}}
+  </script>
+  <script type="module" src="assets/apple-3d-viewer.js"></script>
 </body>
 </html>
