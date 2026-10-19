@@ -333,10 +333,10 @@
           </div>
           <p class="live-note" id="record-explanation" aria-live="polite">先說明你量的是什麼；這裡記錄的是鉛筆的長度。</p>
           <div class="unit-scale-demo">
-            <div class="unit-scale-controls"><span>質量換算示範：固定 <strong>5</strong></span><label for="pencil-mass-unit">選擇單位<select id="pencil-mass-unit"><option value="g">g</option><option value="kg">kg</option><option value="t">公噸</option></select></label></div>
+            <div class="unit-scale-controls"><span>同一批模型鉛筆：總質量固定為 <strong>1 kg</strong></span><label for="pencil-mass-unit">顯示單位<select id="pencil-mass-unit"><option value="kg" selected>公斤（kg）</option><option value="g">公克（g）</option><option value="t">公噸（t）</option></select></label></div>
             <canvas class="unit-pencil-grid" role="img" aria-label="依質量換算結果繪製的模型鉛筆數量">此瀏覽器不支援畫布，請參閱鉛筆數量。</canvas>
-            <strong class="unit-scale-result" id="unit-pencil-count">5 g = 1 支模型鉛筆</strong>
-            <p class="unit-scale-note" id="unit-pencil-note">換算示範假設每支模型鉛筆質量為 5 g。</p>
+            <strong class="unit-scale-result" id="unit-pencil-count">1 kg = 200 支模型鉛筆</strong>
+            <p class="unit-scale-note" id="unit-pencil-note">每支模型鉛筆按 5 g 計；切換單位只改變寫法，總質量與鉛筆數量不變。</p>
           </div>
           <p class="next-hint">知道要量什麼之後，下一步是選擇合適的工具。</p>
         </div>
@@ -787,11 +787,12 @@
       });
 
       const pencilMassUnits = {
-        g: { label: "g", gramsPerUnit: 1 },
-        kg: { label: "kg", gramsPerUnit: 1000 },
-        t: { label: "公噸", gramsPerUnit: 1000000 }
+        g: { label: "g", gramsPerGram: 1 },
+        kg: { label: "kg", gramsPerGram: 1 / 1000 },
+        t: { label: "公噸", gramsPerGram: 1 / 1000000 }
       };
       const formatUnitCount = new Intl.NumberFormat("zh-TW");
+      const formatMass = new Intl.NumberFormat("zh-TW", { maximumFractionDigits: 3 });
       const pencilSprite = new Image();
       pencilSprite.src = "assets/pencil-photo.webp";
       pencilSprite.addEventListener("load", () => updateUnitPencilDemo(), { once: true });
@@ -831,15 +832,13 @@
       };
       const updateUnitPencilDemo = () => {
         const unit = pencilMassUnits[document.querySelector("#pencil-mass-unit").value];
-        const totalGrams = 5 * unit.gramsPerUnit;
+        const totalGrams = 1000;
         const pencilCount = totalGrams / 5;
-        if (!Number.isInteger(pencilCount)) throw new Error("鉛筆模型數必須為整數");
+        const amount = formatMass.format(totalGrams * unit.gramsPerGram);
         const countText = formatUnitCount.format(pencilCount);
-        const summary = `5 ${unit.label} = ${countText} 支模型鉛筆（每支按 5 g 計）`;
+        const summary = `${amount} ${unit.label} = ${countText} 支模型鉛筆`;
         document.querySelector("#unit-pencil-count").textContent = summary;
-        document.querySelector("#unit-pencil-note").textContent = pencilCount === 1
-          ? "模型固定每支模型鉛筆為 5 g；這裡繪出 1 支。"
-          : `模型每支模型鉛筆固定以 5 g 計；畫面逐支繪出 ${countText} 支，並依數量縮小圖樣。`;
+        document.querySelector("#unit-pencil-note").textContent = "每支模型鉛筆按 5 g 計；切換單位只改變寫法，總質量與鉛筆數量不變。";
         document.querySelectorAll(".unit-pencil-grid").forEach((canvas) => renderPencilPopulation(canvas, pencilCount));
         const sceneCount = document.querySelector("#unit-scene-count");
         if (sceneCount) sceneCount.textContent = `${countText} 支`;
