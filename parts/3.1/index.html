@@ -325,7 +325,6 @@
             <button type="button" data-record-part="object" aria-pressed="true">量測對象與物理量</button>
             <button type="button" data-record-part="value" aria-pressed="false">數值</button>
             <button type="button" data-record-part="unit" aria-pressed="false">單位</button>
-            <button type="button" id="unit-toggle" aria-pressed="false">移除尺上的 cm 標示</button>
           </div>
           <p class="live-note" id="record-explanation" aria-live="polite">這筆紀錄量的是鉛筆的長度；18.2 是數值，cm 是長度單位。點選各部分，看看少了哪項資訊會讓紀錄難以理解。</p>
           <div class="length-conversion-demo">
@@ -531,7 +530,7 @@
         document.querySelector("#measurement-result-note").textContent = measuring ? "有了共同的表示方式，別人就能看懂並拿來比較。" : "每個人的感覺可能不一樣，還不能公平比較。";
         document.querySelector("#measurement-next-hint").hidden = !measuring;
       }));
-      const state = { divisions: 10, start: 0, angle: false, unit: true, zoom: false, edge: 18.2 };
+      const state = { divisions: 10, start: 0, angle: false, zoom: false, edge: 18.2 };
       const defaultCameraPitch = 0.45;
       const orbitRadius = 24;
       const defaultCameraYaw = 0;
@@ -722,19 +721,13 @@
           if (major && tick % labelEvery === 0 && (!state.zoom || tick / subdivisions <= 20)) {
             const value = tick / subdivisions;
             const anchor = value === 0 ? "start" : value === 30 ? "end" : "middle";
-            lines.push(`<text x="${x}" y="644" text-anchor="${anchor}">${value}${state.unit ? " cm" : ""}</text>`);
+            lines.push(`<text x="${x}" y="644" text-anchor="${anchor}">${value} cm</text>`);
           }
         }
         ruler.innerHTML = `<rect class="ruler-body" x="66" y="580" width="668" height="43" rx="5"/>${lines.join("")}`;
         document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
         document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${endX} 600`);
-        document.querySelector("#shared-reading").textContent = state.unit ? "約 18.2 cm" : "約 18.2（單位未標）";
-        const unitToggle = document.querySelector("#unit-toggle");
-        if (unitToggle) {
-          unitToggle.setAttribute("aria-pressed", String(!state.unit));
-          unitToggle.textContent = state.unit ? "移除尺上的 cm 標示" : "恢復尺上的 cm 標示";
-          document.querySelector("#record-unit").textContent = state.unit ? "cm" : "（單位未標）";
-        }
+        document.querySelector("#shared-reading").textContent = "約 18.2 cm";
         document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
         document.querySelectorAll("[data-divisions]").forEach((button) => button.setAttribute("aria-pressed", String(Number(button.dataset.divisions) === state.divisions)));
         const divisionNote = document.querySelector("#division-note");
@@ -742,9 +735,7 @@
           const size = (1 / state.divisions).toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
           divisionNote.textContent = `1 cm 分成 ${state.divisions} 個相等間隔，每格是 ${size} cm。`;
         }
-        modelSvg.setAttribute("aria-label", state.unit
-          ? `測量鉛筆的長度；鉛筆左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於十八點二與十八點三公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`
-          : "尺上的公分單位標示已隱藏；測量鉛筆的長度，端點仍在十八點二與十八點三刻線之間");
+        modelSvg.setAttribute("aria-label", `測量鉛筆的長度；鉛筆左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於十八點二與十八點三公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`);
         if (note) document.querySelector("#shared-model-note").textContent = note;
         renderDivisionRuler();
         renderParallaxScene();
@@ -761,8 +752,8 @@
         group.innerHTML = ticks.join("");
         const endpointX = 20 + (clamp(state.edge - 18, 0, 1) * 480);
         document.querySelector("#division-endpoint").setAttribute("d", `M${endpointX} 10v72`);
-        document.querySelector("#division-unit-label").textContent = state.unit ? "18 cm" : "7";
-        document.querySelector("#division-unit-label-end").textContent = state.unit ? "19 cm" : "8";
+        document.querySelector("#division-unit-label").textContent = "18 cm";
+        document.querySelector("#division-unit-label-end").textContent = "19 cm";
         document.querySelector("#division-visual-note").textContent = `尺面顯示 18–19 cm；橘色標記是鉛筆右端，固定在約 ${state.edge.toFixed(2)} cm。每公分分成 ${state.divisions} 格。`;
         document.querySelector("#division-ruler").setAttribute("aria-label", `尺面從十八到十九公分，每公分分成${state.divisions}格；鉛筆右端約在${state.edge.toFixed(2)}公分`);
       };
@@ -782,15 +773,6 @@
         document.querySelector(target).classList.add("is-highlighted");
         document.querySelector("#record-explanation").textContent = recordDescriptions[button.dataset.recordPart];
       }));
-      const unitToggle = document.querySelector("#unit-toggle");
-      unitToggle.addEventListener("click", () => {
-        state.unit = !state.unit;
-        unitToggle.setAttribute("aria-pressed", String(!state.unit));
-        unitToggle.textContent = state.unit ? "移除尺上的 cm 標示" : "恢復尺上的 cm 標示";
-        document.querySelector("#record-unit").textContent = state.unit ? "cm" : "（單位未標）";
-        updateModel(state.unit ? "恢復 cm 標示後，紀錄能指出數值所用的長度單位。" : "公分標示已移除；數字還在，但讀者不知道它代表幾公分或其他尺度。 ");
-      });
-
       const lengthUnitConversions = {
         cm: { value: "18.2 cm", explanation: "目前以公分記錄。", equation: "18.2 cm × 10 = 182 mm" },
         mm: { value: "182 mm", explanation: "同一段長度改用毫米表示，數值變成原來的 10 倍。", equation: "182 mm ÷ 10 = 18.2 cm" },
