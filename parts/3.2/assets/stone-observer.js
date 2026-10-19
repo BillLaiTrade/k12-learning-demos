@@ -134,30 +134,44 @@ export function mountStoneObserver(){
     measureDirty=true;
   }
   function refreshMeasurement(){
-    pivot.updateMatrixWorld(true);framePivot.updateMatrixWorld(true);
+    pivot.updateMatrixWorld(true);framePivot.updateMatrixWorld(true);camera.updateMatrixWorld(true);
     const worldToFrame=framePivot.matrixWorld.clone().invert();
     const position=stone.geometry.attributes.position;
     let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity,minZ=Infinity,maxZ=-Infinity;
+    let projectedMinX=Infinity,projectedMaxX=-Infinity;
     for(let i=0;i<position.count;i++){
-      const point=new THREE.Vector3().fromBufferAttribute(position,i).applyMatrix4(stone.matrixWorld).applyMatrix4(worldToFrame);
+      const worldPoint=new THREE.Vector3().fromBufferAttribute(position,i).applyMatrix4(stone.matrixWorld);
+      const point=worldPoint.clone().applyMatrix4(worldToFrame);
       minX=Math.min(minX,point.x);maxX=Math.max(maxX,point.x);
       minY=Math.min(minY,point.y);maxY=Math.max(maxY,point.y);
       minZ=Math.min(minZ,point.z);maxZ=Math.max(maxZ,point.z);
+      const screenPoint=worldPoint.project(camera);
+      projectedMinX=Math.min(projectedMinX,screenPoint.x);
+      projectedMaxX=Math.max(projectedMaxX,screenPoint.x);
     }
     if(lengthReadout)lengthReadout.textContent=`約 ${((maxX-minX)*CM_PER_WORLD).toFixed(1)} cm`;
     if(widthReadout)widthReadout.textContent=`約 ${((maxZ-minZ)*CM_PER_WORLD).toFixed(1)} cm`;
     if(heightReadout)heightReadout.textContent=`約 ${((maxY-minY)*CM_PER_WORLD).toFixed(1)} cm`;
-    updateRulerGuides(lengthRuler,[minX,maxX].map(x=>framePivot.localToWorld(new THREE.Vector3(x,rulerFloor+.012-frameCenterY,-rulerEdge))));
-    updateRulerGuides(widthRuler,[minZ,maxZ].map(z=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,rulerFloor+.012-frameCenterY,z))));
-    updateRulerGuides(heightRuler,[minY,maxY].map(y=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge))));
+    const lengthGuidePoints=[minX,maxX].map(x=>framePivot.localToWorld(new THREE.Vector3(x,rulerFloor+.012-frameCenterY,-rulerEdge)));
+    // The length ruler sits behind the stone, so perspective projects its true end
+    // marks inside the visible silhouette. Move the marks horizontally in screen
+    // space to just outside the stone while preserving their screen height and depth.
+    lengthGuidePoints.forEach((point,index)=>{
+      const edgeNdc=index===0?Math.max(-.9,projectedMinX-.035):Math.min(.9,projectedMaxX+.035);
+      const screenPoint=point.project(camera);
+      screenPoint.x=edgeNdc;
+      point.copy(screenPoint.unproject(camera));
+    });
+    updateRulerGuides(lengthRuler,lengthGuidePoints,new THREE.Vector3(0,1,0));
+    updateRulerGuides(widthRuler,[minZ,maxZ].map(z=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,rulerFloor+.012-frameCenterY,z))),new THREE.Vector3(0,1,0));
+    updateRulerGuides(heightRuler,[minY,maxY].map(y=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge))),new THREE.Vector3(1,0,0));
     measureDirty=false;
   }
-  function updateRulerGuides(ruler,worldPoints){
+  function updateRulerGuides(ruler,worldPoints,guideDirection){
     ruler.group.updateMatrixWorld(true);
-    const worldUp=new THREE.Vector3(0,1,0);
     worldPoints.forEach((worldPoint,index)=>{
       const localPoint=ruler.group.worldToLocal(worldPoint.clone());
-      const directionLocal=ruler.group.worldToLocal(worldPoint.clone().add(worldUp)).sub(localPoint);
+      const directionLocal=ruler.group.worldToLocal(worldPoint.clone().add(guideDirection)).sub(localPoint);
       const lineStart=localPoint.clone().add(new THREE.Vector3(0,.012,0));
       const line=ruler.guides[index];line.geometry.dispose();line.geometry=new THREE.BufferGeometry().setFromPoints([
         lineStart,
