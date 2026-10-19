@@ -284,7 +284,7 @@
               <rect x="18" y="108" width="684" height="72" rx="10" fill="#f4e7c5" stroke="#ac9563" stroke-width="2"></rect>
               <path d="M42 108v37 M72 108v23 M102 108v23 M132 108v23 M162 108v37 M192 108v23 M222 108v23 M252 108v23 M282 108v37 M312 108v23 M342 108v23 M372 108v23 M402 108v37 M432 108v23 M462 108v23 M492 108v23 M522 108v37 M552 108v23 M582 108v23 M612 108v23 M642 108v37" fill="none" stroke="#34433c" stroke-width="2"></path>
               <text x="42" y="163" text-anchor="middle" fill="#26383a" font-size="18">0</text><text x="342" y="163" text-anchor="middle" fill="#26383a" font-size="18">10</text><text x="642" y="163" text-anchor="middle" fill="#26383a" font-size="18">20</text>
-              <g transform="translate(42 48)"><rect x="28" y="0" width="539" height="30" rx="14" fill="#e5bd43" stroke="#987625" stroke-width="2"></rect><path d="M28 0L0 15l28 15z" fill="#d9a35b" stroke="#987625" stroke-width="2"></path><path d="M0 15h-9" stroke="#30343a" stroke-width="4"></path><rect x="567" y="0" width="16" height="30" fill="#b9c2c0" stroke="#987625" stroke-width="1"></rect><rect x="583" y="0" width="33" height="30" rx="8" fill="#d98280" stroke="#987625" stroke-width="2"></rect></g>
+              <image href="assets/pencil-photo.webp" x="30" y="55" width="570" height="29" preserveAspectRatio="none"></image>
             </svg>
             <p>同一支鉛筆　｜　同一把尺</p>
           </div>
@@ -742,7 +742,7 @@
       };
       const formatUnitCount = new Intl.NumberFormat("zh-TW");
       const pencilSprite = new Image();
-      pencilSprite.src = "assets/pencil.svg";
+      pencilSprite.src = "assets/pencil-photo.webp";
       pencilSprite.addEventListener("load", () => updateUnitPencilDemo(), { once: true });
 
       const renderPencilPopulation = (canvas, count) => {
