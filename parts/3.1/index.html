@@ -504,14 +504,26 @@
       for (let millimeter = 0; millimeter <= 200; millimeter += 1) {
         const x = 42 + millimeter * 3;
         const tick = document.createElementNS(svgNamespace, "path");
-        const tickLength = millimeter % 10 === 0 ? 39 : millimeter % 5 === 0 ? 28 : 16;
+        const tickLength = millimeter === 100 ? 47 : millimeter % 50 === 0 ? 39 : millimeter % 10 === 0 ? 28 : millimeter % 5 === 0 ? 20 : 12;
         tick.setAttribute("d", `M${x} 108v${tickLength}`);
+        if (millimeter === 100) {
+          tick.setAttribute("stroke", "#176b53");
+          tick.setAttribute("stroke-width", "2.5");
+        } else if (millimeter % 10 === 0) {
+          tick.setAttribute("stroke-width", "1.9");
+        }
         rulerTickGroup.append(tick);
         if (millimeter % 10 === 0) {
           const centimeter = document.createElementNS(svgNamespace, "text");
           centimeter.setAttribute("x", String(x));
           centimeter.setAttribute("y", "165");
-          centimeter.textContent = String(millimeter / 10);
+          const centimeterValue = millimeter / 10;
+          centimeter.textContent = String(centimeterValue);
+          if (centimeterValue === 10) {
+            centimeter.setAttribute("fill", "#176b53");
+            centimeter.setAttribute("font-size", "16");
+            centimeter.setAttribute("font-weight", "800");
+          }
           rulerLabelGroup.append(centimeter);
         }
       }
