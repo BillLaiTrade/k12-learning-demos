@@ -185,7 +185,7 @@
     #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
     #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.5; }
     #shared-scale .ruler-line.major { stroke-width: 3; }
-    #shared-scale[data-zoom="true"] { font: 16px system-ui, sans-serif; }
+    #shared-scale[data-zoom="true"] { font: 12px system-ui, sans-serif; }
     #shared-scale[data-zoom="true"] .ruler-body { stroke-width: 1.1; }
     #shared-scale[data-zoom="true"] .ruler-line { stroke-width: .8; }
     #shared-scale[data-zoom="true"] .ruler-line.major { stroke-width: 1.5; }
@@ -567,12 +567,12 @@
       let modelViewTarget = modelViewBox;
       let modelViewAnimationFrame = 0;
       const animateModelView = (zoom) => {
-        const targetHeight = zoom ? 139 : 170;
+        const targetHeight = zoom ? 94 : 170;
         const targetWidth = targetHeight * (760 / 170);
         const endpointX = 80 + estimateEndpoint() * (640 / 30);
         const target = {
           x: zoom ? endpointX - targetWidth / 2 : 0,
-          y: zoom ? 326 : 295,
+          y: zoom ? 332 : 295,
           width: targetWidth,
           height: targetHeight
         };
@@ -815,16 +815,17 @@
         const lines = [];
         const subdivisions = state.divisions;
         const totalTicks = subdivisions;
-        const zoomLabelStart = Math.max(0, Math.floor(estimateEndpoint()) - 3);
-        const zoomLabelEnd = Math.min(30, Math.floor(estimateEndpoint()) + 3);
+        const zoomLabelStart = Math.max(0, Math.floor(estimateEndpoint()) - 1);
+        const zoomLabelEnd = Math.min(30, Math.ceil(estimateEndpoint()) + 1);
         for (let tick = 0; tick <= 30; tick += 1) {
           const x = 80 + (tick * 640) / 30;
           const major = tick % 5 === 0;
           const top = major ? 380 : 390;
-          lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${423 - top}"/>`);
+          const tickEnd = state.zoom ? 407 : 423;
+          lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${tickEnd - top}"/>`);
           if (state.zoom ? tick >= zoomLabelStart && tick <= zoomLabelEnd : major) {
             const anchor = tick === 0 ? "start" : tick === 30 ? "end" : "middle";
-            lines.push(`<text x="${x}" y="448" text-anchor="${anchor}">${tick}${tick === 0 ? " cm" : ""}</text>`);
+            lines.push(`<text x="${x}" y="${state.zoom ? 420 : 448}" text-anchor="${anchor}">${tick}${tick === 0 ? " cm" : ""}</text>`);
           }
         }
         ruler.innerHTML = `<rect class="ruler-body" x="66" y="380" width="668" height="43" rx="5"/>${lines.join("")}`;
