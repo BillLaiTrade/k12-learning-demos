@@ -782,9 +782,9 @@
         document.querySelector("#record-explanation").textContent = recordDescriptions[button.dataset.recordPart];
       }));
       const lengthUnitConversions = {
-        cm: { value: "18.2 cm", explanation: "鉛筆跨過 18 個 1 cm 間隔，再多 0.2 cm。", equation: "18.2 cm × 10 = 182 mm", divisions: 20, labelEvery: 1, label: (index) => String(index), tick: (index) => index % 5 === 0 ? 39 : 28 },
-        mm: { value: "182 mm", explanation: "每格是 1 mm；同一支鉛筆跨過 182 格。", equation: "182 mm ÷ 10 = 18.2 cm", divisions: 200, labelEvery: 10, label: (index) => String(index), tick: (index) => index % 50 === 0 ? 39 : index % 10 === 0 ? 28 : index % 5 === 0 ? 20 : 12 },
-        m: { value: "0.182 m", explanation: "每格是 0.001 m；這段長度是 0.182 m。", equation: "18.2 cm ÷ 100 = 0.182 m", divisions: 200, labelEvery: 10, label: (index) => (index / 1000).toFixed(2), tick: (index) => index % 50 === 0 ? 39 : index % 10 === 0 ? 28 : index % 5 === 0 ? 20 : 12 }
+        cm: { value: "18.2 cm", explanation: "鉛筆跨過 18 個 1 cm 間隔，再多 0.2 cm。", equation: "18.2 cm × 10 = 182 mm", divisions: 20, labelEvery: 5, label: (index) => String(index), tick: (index) => index % 5 === 0 ? 39 : 28, width: (index) => index % 5 === 0 ? 2 : 1.5 },
+        mm: { value: "182 mm", explanation: "每小格是 1 mm；同一支鉛筆跨過 182 格。", equation: "182 mm ÷ 10 = 18.2 cm", divisions: 200, labelEvery: 50, label: (index) => String(index), tick: (index) => index % 50 === 0 ? 39 : index % 10 === 0 ? 28 : index % 5 === 0 ? 20 : 12, width: (index) => index % 50 === 0 ? 2 : index % 10 === 0 ? 1.7 : 1.2 },
+        m: { value: "0.182 m", explanation: "每小格是 0.02 m；鉛筆長約 0.182 m，落在 0.18 m 之後。", equation: "18.2 cm ÷ 100 = 0.182 m", divisions: 10, labelEvery: 2, label: (index) => (index * 0.02).toFixed(2), tick: (index) => index % 2 === 0 ? 39 : 28, width: (index) => index % 2 === 0 ? 2 : 1.5 }
       };
       const renderLengthConversionRuler = (unit) => {
         const conversion = lengthUnitConversions[unit];
@@ -795,7 +795,7 @@
           const tickLength = conversion.tick(index);
           const path = document.createElementNS(svgNamespace, "path");
           path.setAttribute("d", `M${x} 82v${tickLength}`);
-          if (unit === "cm" || index % 10 === 0) path.setAttribute("stroke-width", "1.9");
+          path.setAttribute("stroke-width", String(conversion.width(index)));
           ticks.push(path);
           if (index % conversion.labelEvery === 0) {
             const text = document.createElementNS(svgNamespace, "text");
