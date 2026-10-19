@@ -164,7 +164,7 @@
     .model-panel h2 { margin: 0 0 5px; font-size: 1.18rem; }
     .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
     .model-screen { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
-    .model-screen svg { display: block; width: 100%; height: auto; transform-origin: 76% 74%; transition: transform .8s cubic-bezier(.2,.8,.2,1); }
+    .model-screen svg { display: block; width: 100%; height: auto; transform-origin: 76% 91%; transition: transform .8s cubic-bezier(.2,.8,.2,1); }
     .model-screen[data-zoom="true"] svg { transform: scale(3.2); }
     #shared-scale { fill: #26383a; font: 20px system-ui, sans-serif; }
     #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
@@ -375,7 +375,8 @@
     .immersive-page .balance-station .balance-readout { font: 800 25px system-ui, sans-serif; fill: #174632; }
     .immersive-page .balance-station .balance-caption { font: 700 13px system-ui, sans-serif; fill: #476657; }
     .immersive-page .scene-stage.is-mass-mode #parallax-canvas { opacity: 0; }
-    .immersive-page .scene-stage.is-mass-mode .scene-readout, .immersive-page .scene-stage.is-mass-mode .scene-caption { visibility: hidden; }
+    .immersive-page .scene-stage.is-mass-mode .scene-readout, .immersive-page .scene-stage.is-mass-mode .scene-caption,
+    .immersive-page .scene-stage.is-unit-mode .scene-readout, .immersive-page .scene-stage.is-unit-mode .scene-caption { visibility: hidden; }
     .immersive-page .balance-station.is-weighing { visibility: visible; opacity: 1; transform: translate(-50%, -50%) scale(1); }
     .immersive-page .balance-station.is-weighing .scale-glow { opacity: 1; }
     .immersive-page .balance-station .scale-glow { opacity: .25; transition: opacity .25s ease; }
@@ -407,6 +408,47 @@
       .immersive-page .mass-controls { grid-column: 1; gap: 4px; padding: 2px 5px; }
       .immersive-page .mass-controls input { width: 24vw; }
     }
+
+    .unit-scale-demo { margin: 16px 0; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
+    .unit-scale-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+    .unit-scale-controls > span { font-size: 1rem; }
+    .unit-scale-controls > span strong { margin-left: 5px; font-size: 1.25rem; }
+    .unit-scale-controls label { display: flex; align-items: center; gap: 8px; font-size: .86rem; font-weight: 700; }
+    .unit-scale-controls select { min-height: 38px; padding: 6px 10px; }
+    .unit-apple-grid { display: block; width: 100%; height: 176px; min-height: 130px; max-height: 220px; overflow: hidden; padding: 0; border: 1px solid #d8e5da; border-radius: 14px; background: linear-gradient(150deg, #eef4eb, #e1ecdf); }
+    .unit-scale-result { display: block; margin-top: 9px; color: var(--green); font-size: 1rem; font-weight: 800; }
+    .unit-scale-note { margin: 4px 0 0; color: var(--muted); font-size: .8rem; }
+    @media (max-width: 760px) {
+      .unit-scale-demo { padding: 10px; }
+      .unit-apple-grid { height: 140px; min-height: 110px; max-height: 160px; }
+      .unit-scale-note { font-size: .72rem; }
+    }
+
+    .immersive-page .unit-scale-demo { margin: 0; padding: 5px 8px; border-radius: 12px; }
+    .immersive-page .unit-scale-controls { gap: 5px 10px; }
+    .immersive-page .unit-scale-controls > span { font-size: .78rem; white-space: nowrap; }
+    .immersive-page .unit-scale-controls > span strong { font-size: .9rem; }
+    .immersive-page .unit-scale-controls label { gap: 5px; font-size: .68rem; white-space: nowrap; }
+    .immersive-page .unit-scale-controls select { min-height: 32px; padding: 3px 6px; font-size: .7rem; }
+    .immersive-page .unit-scale-result { margin-top: 3px; font-size: .78rem; }
+    .immersive-page .unit-scale-note { margin-top: 1px; font-size: .64rem; line-height: 1.25; }
+    .immersive-page .unit-apple-field { position: absolute; inset: 78px 14px calc(23svh + 20px); z-index: 2; display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 8px; overflow: hidden; padding: clamp(8px, 1.8vw, 20px); border: 1px solid rgb(255 255 255 / 88%); border-radius: 24px; background: rgb(242 247 240 / 88%); box-shadow: 0 18px 46px rgb(30 52 42 / 18%); backdrop-filter: blur(12px); }
+    .immersive-page .unit-apple-field[hidden] { display: none !important; }
+    .immersive-page .scene-stage.is-unit-mode #parallax-canvas { opacity: 0; }
+    .immersive-page .unit-scene-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--muted); }
+    .immersive-page .unit-scene-heading strong { color: var(--green); font-size: clamp(1rem, 2.3vw, 1.8rem); white-space: nowrap; }
+    .immersive-page .unit-scene-heading span { font-size: clamp(.75rem, 1.2vw, 1rem); }
+    .immersive-page .unit-scene-caption { margin: 0; color: var(--muted); font-size: .82rem; text-align: center; }
+    .immersive-page .unit-apple-grid { width: 100%; height: 100%; min-height: 0; max-height: none; background: transparent; border: 0; padding: 0; }
+    .immersive-page .unit-scene-note { margin: 0; color: #5b6b62; font-size: .65rem; text-align: center; }
+    @media (max-width: 760px) {
+      .immersive-page .unit-apple-field { inset: 122px 7px calc(23svh + 25px); gap: 4px; padding: 5px; border-radius: 14px; }
+      .immersive-page .unit-scene-heading strong { font-size: .9rem; }
+      .immersive-page .unit-scene-heading span { font-size: .62rem; }
+      .immersive-page .unit-scene-caption, .immersive-page .unit-scene-note { font-size: .58rem; }
+                              .immersive-page #card-02 .unit-scale-note { display: none; }
+    }
+
   </style>
 </head>
 <body class="immersive-page">
@@ -443,6 +485,12 @@
       <div class="scene-stage" aria-label="持續顯示的 3D 蘋果與直尺觀察場景">
         <span class="room-label" id="room-label">3D 量測觀察室・同一顆蘋果</span>
         <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、蘋果和視線延長線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明蘋果寬度不變，視角可能改變尺面上的表觀讀值。</canvas>
+        <div class="unit-apple-field" id="unit-apple-field" hidden aria-hidden="true">
+          <div class="unit-scene-heading"><span>固定數字 182 所代表的蘋果總量</span><strong id="unit-scene-count">約 1 顆</strong></div>
+          <canvas class="unit-apple-grid" id="unit-scene-apples" role="img" aria-label="畫面會逐顆繪製與數量相符的蘋果模型">此瀏覽器不支援畫布，請參閱旁邊標示的精確蘋果數量。</canvas>
+          <p class="unit-scene-caption" id="unit-scene-caption">182 g = 1 顆模型蘋果</p>
+          <p class="unit-scene-note">每個蘋果圖形代表一顆模型蘋果，畫面會逐顆繪出計數器顯示的數量；每顆模型蘋果以 USDA 中型蘋果為基準（直徑約 7.62 cm、重量 182 g）。</p>
+        </div>
         <div class="balance-station" id="balance-station" aria-label="蘋果放在電子秤平台上，秤面顯示質量讀值">
           <svg viewBox="0 0 760 300" role="img" aria-labelledby="balance-title balance-description">
             <title id="balance-title">同一顆蘋果的電子秤質量觀察台</title>
@@ -462,7 +510,7 @@
           </svg>
         </div>
         <div class="scene-caption"><p id="camera-caption" aria-live="polite">拖曳畫面旋轉視角；也可先選取畫面，再按方向鍵。</p><button type="button" class="secondary" id="reset-camera">回到正對刻度</button></div>
-        <div class="scene-readout" aria-live="polite"><article><small>蘋果實際寬度（模型固定）</small><strong id="actual-width">約 6.3 cm</strong></article><article><small>沿視線投到尺面的表觀讀值</small><strong id="parallax-reading">約 6.3 cm</strong></article></div>
+        <div class="scene-readout" aria-live="polite"><article><small>蘋果實際寬度（模型固定）</small><strong id="actual-width">約 7.6 cm</strong></article><article><small>沿視線投到尺面的表觀讀值</small><strong id="parallax-reading">約 7.6 cm</strong></article></div>
       </div>
       <div class="lesson-layout">
       <div class="cards">
@@ -474,7 +522,7 @@
           <label class="field">切換量測情境
             <select id="difference-condition"><option value="scale">工具刻度不同</option><option value="start">尺的起點沒有對準</option><option value="view">讀刻度的視角不同</option><option value="unit">使用的單位不同</option></select>
           </label>
-          <div class="readout" aria-live="polite"><article><small>比較紀錄 A</small><strong id="reading-a">約 6.3 cm</strong><span id="reading-a-note">左端對齊零刻度</span></article><article><small>比較紀錄 B</small><strong id="reading-b">約 6.3–6.4 cm</strong><span id="reading-b-note">依端點位置估讀</span></article></div>
+          <div class="readout" aria-live="polite"><article><small>比較紀錄 A</small><strong id="reading-a">約 7.6 cm</strong><span id="reading-a-note">左端對齊零刻度</span></article><article><small>比較紀錄 B</small><strong id="reading-b">約 7.6–7.7 cm</strong><span id="reading-b-note">依端點位置估讀</span></article></div>
           <div class="fact"><p id="difference-explanation">改變的是尺或讀值條件；蘋果仍是同一顆，讓我們可以比較同一量測對象的紀錄。</p></div>
           <p class="next-hint">要讀懂這些差異，先看看一筆量測紀錄要交代哪些資訊。</p>
         </div>
@@ -484,9 +532,9 @@
         <div class="card-side"><span class="card-number">CARD 02</span><h3>看懂紀錄</h3><span class="card-role">物理量、數值與單位</span></div>
         <div class="card-main">
           <h2>只寫「5」，別人知道你量了什麼嗎？</h2>
-          <p>一筆完整的量測紀錄包含物理量、數值和單位。依序點選下方標示，觀察每一部分提供什麼資訊；也可移除同一把尺上的 cm 標示，看數字少了什麼依據。</p>
-          <div class="record" aria-label="蘋果水平方向的寬度約為六點三公分">
-            <span id="record-object">蘋果的寬度</span><span>=</span><span id="record-value">約 6.3</span><span id="record-unit">cm</span>
+          <p>量測紀錄要寫清楚物理量、數值和單位。依序點選紀錄各部分；再固定數字 182、切換質量單位，看看它相當於多少顆約 182 g 的蘋果。</p>
+          <div class="record" aria-label="蘋果水平方向的寬度約為七點六公分">
+            <span id="record-object">蘋果的寬度</span><span>=</span><span id="record-value">約 7.6</span><span id="record-unit">cm</span>
           </div>
           <div class="concept-parts" role="group" aria-label="量測紀錄的組成">
             <button type="button" data-record-part="object" aria-pressed="true">物理量</button>
@@ -494,8 +542,13 @@
             <button type="button" data-record-part="unit" aria-pressed="false">單位</button>
           </div>
           <button type="button" class="secondary" id="unit-toggle" aria-pressed="false">移除尺上的 cm 標示</button>
+          <div class="unit-scale-demo" aria-label="以 USDA 中型蘋果每顆 182 公克為模型基準，固定數字 182 並切換質量單位，觀察精確換算的蘋果數量">
+            <div class="unit-scale-controls"><span>固定數字 <strong>182</strong></span><label for="apple-mass-unit">質量單位<select id="apple-mass-unit"><option value="g">克（g）</option><option value="kg">公斤（kg）</option><option value="t">公噸（t）</option></select></label></div>
+            <output class="unit-scale-result" id="unit-apple-count" aria-live="polite">182 g = 1 顆模型蘋果</output>
+            <p class="unit-scale-note" id="unit-apple-note">以 USDA FoodData Central 的中型蘋果為參照：直徑約 7.62 cm、標準重量 182 g。模型為精確換算，假設每顆都固定 182 g。</p><a class="unit-source" href="https://fdc.nal.usda.gov/food-details/171688/nutrients" target="_blank" rel="noreferrer">USDA FoodData Central：中型蘋果（3 吋直徑，182 g）</a>
+          </div>
           <p class="live-note" id="record-explanation" aria-live="polite">物理量說明量的是什麼；這裡量的是蘋果水平方向的寬度。</p>
-          <div class="fact"><p>「6.3 cm」和「6.3 mm」的數字相同，表示的長度不同。單位不能從量測紀錄中省略。</p></div>
+          <div class="fact"><p>「7.6 cm」和「7.6 mm」的數字相同，表示的長度不同。單位不能從量測紀錄中省略。</p></div>
         </div>
       </section>
 
@@ -506,21 +559,21 @@
           <p>工具要配合要量的物理量和範圍。選「質量」時，調整同一顆蘋果的質量，觀察觀察室秤面讀值。</p>
           <div class="select-row">
             <label class="field">量測任務
-              <select id="tool-task"><option value="length">量這顆蘋果的寬度（約 6.3 cm）</option><option value="mass">量這顆蘋果的質量（示意約 150 g）</option><option value="time">量一段約 12 s 的活動時間</option></select>
+              <select id="tool-task"><option value="length">量這顆蘋果的寬度（約 7.6 cm）</option><option value="mass">量這顆蘋果的質量（示意約 182 g）</option><option value="time">量一段約 12 s 的活動時間</option></select>
             </label>
             <label class="field">工具情境
               <select id="tool-state"><option value="suitable">物理量和量程都合適</option><option value="wrong-quantity">工具測量的是另一種物理量</option><option value="short-range">工具量程不足</option></select>
             </label>
           </div>
           <div class="mass-controls" id="mass-controls" hidden>
-            <label for="mass-slider">調整蘋果質量</label><input id="mass-slider" type="range" min="100" max="250" step="10" value="150" aria-label="調整蘋果的質量，觀察電子秤讀值改變"><output id="mass-output" for="mass-slider">150 g</output>
+            <label for="mass-slider">調整蘋果質量</label><input id="mass-slider" type="range" min="100" max="250" step="1" value="182" aria-label="調整蘋果的質量，觀察電子秤讀值改變"><output id="mass-output" for="mass-slider">182 g</output>
           </div>
           <div class="readout" aria-live="polite">
             <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
             <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，蘋果寬度落在尺的量程內。</span></article>
           </div>
           <div class="range-model" aria-label="工具量程與預期量值的視覺比較">
-            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">蘋果約 6.3 cm，落在量程內</span></div>
+            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">蘋果約 7.6 cm，落在量程內</span></div>
             <div class="range-track"><span id="range-fill"></span><i id="range-marker" aria-hidden="true"></i></div>
             <div class="range-endpoints"><span>0</span><span id="range-maximum">30 cm</span></div>
           </div>
@@ -548,7 +601,7 @@
             <svg id="division-ruler" viewBox="0 0 520 100" role="img" aria-label="一公分分成十格的直尺示意，右端點位置固定">
               <rect x="20" y="22" width="480" height="50" rx="6" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
               <g id="division-ticks"></g><path id="division-endpoint" d="M178.4 10v72" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
-              <text id="division-unit-label" x="20" y="94" fill="#26383a" font-size="13">6 cm</text><text id="division-unit-label-end" x="500" y="94" text-anchor="end" fill="#26383a" font-size="13">7 cm</text>
+              <text id="division-unit-label" x="20" y="94" fill="#26383a" font-size="13">7 cm</text><text id="division-unit-label-end" x="500" y="94" text-anchor="end" fill="#26383a" font-size="13">8 cm</text>
             </svg>
             <p id="division-visual-note" aria-live="polite">橘色標記是固定的蘋果端點；改變的是尺的刻線間距。</p>
           </div>
@@ -559,33 +612,33 @@
       <section class="lesson-card" id="card-05">
         <div class="card-side"><span class="card-number">CARD 05</span><h3>估讀刻線之間</h3><span class="card-role">位置改變，估值跟著改變</span></div>
         <div class="card-main">
-          <h2>6.3 cm 再多一點，端點落在哪裡？</h2>
-          <p>6.3 cm 就是 6 cm 3 mm。這顆蘋果的右端再多出一點，沒有剛好停在刻線上。按下「拉近查看」，放大 6.3 cm 與 6.4 cm 兩條刻線附近；拖動同一顆蘋果沿尺移動，觀察右端在兩條刻線之間的位置。蘋果本身保持同樣大小。</p>
+          <h2>7.6 cm 再多一點，端點落在哪裡？</h2>
+          <p>7.6 cm 就是 7 cm 6 mm。這顆蘋果的右端再多出一點，沒有剛好停在刻線上。按下「拉近查看」，放大 7.6 cm 與 7.7 cm 兩條刻線附近；拖動同一顆蘋果沿尺移動，觀察右端在兩條刻線之間的位置。蘋果本身保持同樣大小。</p>
           <aside class="model-panel" aria-labelledby="model-title">
             <h2 id="model-title">量量看：蘋果有多寬？</h2>
             <p>拉近刻度，觀察同一顆蘋果的端點在尺上的位置；這個模型會延續到後續卡片。</p>
             <div class="model-screen" id="model-screen" data-zoom="false">
-              <svg id="shared-measurement-model" viewBox="0 0 760 300" role="img" aria-label="用直尺測量蘋果水平方向的寬度，左端對齊零，右端落在六點三公分與六點四公分之間">
-                <rect x="16" y="16" width="728" height="268" rx="12" fill="#fffefa"></rect>
-                <g id="apple-object">
+              <svg id="shared-measurement-model" viewBox="0 0 760 650" role="img" aria-label="用直尺測量蘋果水平方向的寬度，左端對齊零，右端落在七點六公分與七點七公分之間">
+                <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
+                <g id="apple-object"><g transform="translate(0 64) scale(1 2.1)">
                   <path d="M254 89 C220 49 165 62 105 78 C28 100 27 169 78 208 C123 245 195 234 254 214 C313 234 385 245 430 208 C481 169 480 100 403 78 C343 62 288 49 254 89 Z" fill="#d85f3f" stroke="#923d2a" stroke-width="4"></path>
                   <path d="M254 88 C250 68 256 52 269 39" fill="none" stroke="#6d4c32" stroke-width="9" stroke-linecap="round"></path>
                   <path d="M265 54 C282 37 302 40 311 48 C298 63 280 67 265 54 Z" fill="#6f9e63" stroke="#477544" stroke-width="2"></path>
-                </g>
-                <path id="apple-start-guide" d="M80 65V235" stroke="#176b53" stroke-width="2" stroke-dasharray="5 5"></path>
-                <path id="apple-end-guide" d="M588 65V235" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 5"></path>
+                  </g></g>
+                <path id="apple-start-guide" d="M80 65V620" stroke="#176b53" stroke-width="2" stroke-dasharray="5 5"></path>
+                <path id="apple-end-guide" d="M588 65V620" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 5"></path>
                 <g id="shared-scale"></g>
                 <g id="eye-ray" opacity="0">
-                  <circle cx="620" cy="30" r="12" fill="#dceaf0" stroke="#547884" stroke-width="3"></circle>
-                  <path d="M620 42L588 220" stroke="#bc612b" stroke-width="2" stroke-dasharray="5 4"></path>
+                  <circle cx="620" cy="40" r="12" fill="#dceaf0" stroke="#547884" stroke-width="3"></circle>
+                  <path d="M620 52L588 600" stroke="#bc612b" stroke-width="2" stroke-dasharray="5 4"></path>
                 </g>
               </svg>
             </div>
-            <div class="model-readout"><small>目前讀值</small><strong id="shared-reading">約 6.3 cm</strong></div>
-            <p class="model-status" id="shared-model-note" aria-live="polite">量的是蘋果水平方向的寬度。左端對齊 0 cm；右端略超過 6.3 cm。</p>
+            <div class="model-readout"><small>目前讀值</small><strong id="shared-reading">約 7.6 cm</strong></div>
+            <p class="model-status" id="shared-model-note" aria-live="polite">量的是蘋果水平方向的寬度。左端對齊 0 cm；右端略超過 7.6 cm。</p>
             <button type="button" class="secondary" id="zoom-toggle" aria-pressed="false">拉近查看端點</button>
           </aside>
-          <div class="slider-row"><input id="estimate-slider" type="range" min="630" max="640" value="633" aria-label="沿著直尺移動蘋果，觀察右端在六點三與六點四公分刻線間的位置"><output class="value" id="estimate-value" for="estimate-slider">6.3 cm 後一點</output></div>
+          <div class="slider-row"><input id="estimate-slider" type="range" min="760" max="770" value="763" aria-label="沿著直尺移動蘋果，觀察右端在七點六與七點七公分刻線間的位置"><output class="value" id="estimate-value" for="estimate-slider">7.6 cm 後一點</output></div>
           <p class="live-note" id="estimate-note" aria-live="polite">拉近能看清端點相對於刻線的位置；放大不會增加尺的刻度精度，也不代表得到絕對精確值。</p>
           <div class="fact"><p>估讀是依刻度和物體端點的位置作判斷。這裡把結果描述為「約在兩條刻線之間」，不把模型顯示的細節誤當成工具提供的額外精度。</p></div>
         </div>
@@ -603,7 +656,7 @@
             <button type="button" data-zero="aligned" aria-pressed="true">起點在 0 cm</button>
             <button type="button" data-zero="offset" aria-pressed="false">起點在 0.5 cm</button>
           </div>
-          <div class="readout" aria-live="polite"><article><small>尺上蘋果端點</small><strong id="zero-end">約 6.3 cm</strong><span>沿用共用模型上的同一端點</span></article><article><small>蘋果寬度</small><strong id="zero-result">約 6.3 cm</strong><span id="zero-explanation">起點在 0 cm，終點位置就是寬度。</span></article></div>
+          <div class="readout" aria-live="polite"><article><small>尺上蘋果端點</small><strong id="zero-end">約 7.6 cm</strong><span>沿用共用模型上的同一端點</span></article><article><small>蘋果寬度</small><strong id="zero-result">約 7.6 cm</strong><span id="zero-explanation">起點在 0 cm，終點位置就是寬度。</span></article></div>
         </div>
       </section>
 
@@ -632,9 +685,9 @@
         <div class="card-main">
           <span class="assessment-label">理解檢核・共 1 題</span>
           <h2>怎麼判斷蘋果的兩筆寬度紀錄是否可比較？</h2>
-          <p>小安沿用共用模型，記下蘋果寬度約 6.3 cm；小晴也量同一顆蘋果，卻只記下「6.3」。哪一項說明最完整？</p>
+          <p>小安沿用共用模型，記下蘋果寬度約 7.6 cm；小晴也量同一顆蘋果，卻只記下「7.6」。哪一項說明最完整？</p>
           <div class="choices" id="fair-options">
-            <button class="choice" data-fair="complete" aria-pressed="false">「6.3」缺少單位，資料還不完整；要確認兩筆都是長度、單位與讀值條件可對照。</button>
+            <button class="choice" data-fair="complete" aria-pressed="false">「7.6」缺少單位，資料還不完整；要確認兩筆都是長度、單位與讀值條件可對照。</button>
             <button class="choice" data-fair="tool" aria-pressed="false">只要量到相同數字，就可以直接比較。</button>
             <button class="choice" data-fair="number" aria-pressed="false">蘋果一樣，所以量測紀錄不需要寫單位。</button>
           </div>
@@ -656,8 +709,8 @@
       const pressOne = (buttons, selected) => buttons.forEach((button) => {
         button.setAttribute("aria-pressed", String(button === selected));
       });
-      const state = { divisions: 10, start: 0, angle: false, unit: true, zoom: false, edge: 6.33 };
-      const defaultCameraPitch = 0.95;
+      const state = { divisions: 10, start: 0, angle: false, unit: true, zoom: false, edge: 7.62 };
+      const defaultCameraPitch = 0.35;
       const orbitRadius = 14;
       const defaultCameraYaw = Math.asin((state.edge / 2) / (orbitRadius * Math.cos(defaultCameraPitch)));
       const ruler = document.querySelector("#shared-scale");
@@ -687,7 +740,7 @@
         const ctx = parallaxContext;
         const width = bounds.width;
         const height = bounds.height;
-        const target = { x: state.start + state.edge / 2, y: 1.8, z: 0 };
+        const target = { x: state.start + state.edge / 2, y: state.edge * 0.45, z: 0 };
         const cameraPosition = {
           x: target.x + orbitRadius * Math.cos(camera.pitch) * Math.sin(camera.yaw),
           y: target.y + orbitRadius * Math.sin(camera.pitch),
@@ -738,19 +791,19 @@
         ctx.fillRect(0, 0, width, height);
 
         const rulerMin = -0.18;
-        const rulerMax = 8.1;
+        const rulerMax = 12;
         const top = 0.04;
-        drawFace([{ x: rulerMin, y: top, z: -2.3 }, { x: rulerMax, y: top, z: -2.3 }, { x: rulerMax, y: top, z: 2.3 }, { x: rulerMin, y: top, z: 2.3 }], "#f2dfa9");
-        drawFace([{ x: rulerMin, y: top, z: 2.3 }, { x: rulerMax, y: top, z: 2.3 }, { x: rulerMax, y: -0.12, z: 2.3 }, { x: rulerMin, y: -0.12, z: 2.3 }], "#ddc987", "#a99255");
+        drawFace([{ x: rulerMin, y: top, z: -6.2 }, { x: rulerMax, y: top, z: -6.2 }, { x: rulerMax, y: top, z: 6.2 }, { x: rulerMin, y: top, z: 6.2 }], "#f2dfa9");
+        drawFace([{ x: rulerMin, y: top, z: 6.2 }, { x: rulerMax, y: top, z: 6.2 }, { x: rulerMax, y: -0.12, z: 6.2 }, { x: rulerMin, y: -0.12, z: 6.2 }], "#ddc987", "#a99255");
         const tickStep = 1 / state.divisions;
-        for (let tick = 0; tick <= 8 * state.divisions; tick += 1) {
+        for (let tick = 0; tick <= 12 * state.divisions; tick += 1) {
           const x = tick * tickStep;
           const major = tick % state.divisions === 0;
           const half = tick % Math.max(1, state.divisions / 2) === 0;
-          const startDepth = major ? -2.15 : half ? -1.65 : -1.05;
-          drawLine([{ x, y: top + 0.015, z: startDepth }, { x, y: top + 0.015, z: 2.15 }], major ? "#26383a" : "#637174", major ? 2.2 : 1.15);
+          const startDepth = major ? -6.0 : half ? -4.6 : -2.8;
+          drawLine([{ x, y: top + 0.015, z: startDepth }, { x, y: top + 0.015, z: 6.2 }], major ? "#26383a" : "#637174", major ? 2.2 : 1.15);
           if (major) {
-              const label = project({ x, y: top + 0.03, z: 2.55 });
+              const label = project({ x, y: top + 0.03, z: 6.6 });
             if (label) {
               ctx.fillStyle = "#26383a";
               ctx.font = "12px system-ui, sans-serif";
@@ -760,12 +813,12 @@
           }
         }
 
-        const appleLobe = 0.045;
-        const appleRows = 32;
-        const appleColumns = 48;
+        const appleLobe = 0.1;
+        const appleRows = 48;
+        const appleColumns = 72;
         const radialProfile = (theta) => {
-          const upperShoulder = 0.1 * Math.exp(-Math.pow((theta - 0.82) / 0.35, 2));
-          const lowerShoulder = 0.04 * Math.exp(-Math.pow((theta - (Math.PI - 0.9)) / 0.42, 2));
+          const upperShoulder = 0.16 * Math.exp(-Math.pow((theta - 0.82) / 0.35, 2));
+          const lowerShoulder = 0.08 * Math.exp(-Math.pow((theta - (Math.PI - 0.9)) / 0.42, 2));
           return Math.sin(theta) * (1 + upperShoulder + lowerShoulder);
         };
         const maximumProfile = Math.max(...Array.from({ length: appleRows + 1 }, (_, row) => {
@@ -773,8 +826,8 @@
           const sine = Math.sin(theta);
           return radialProfile(theta) * (1 + appleLobe * sine * sine);
         }));
-        const appleCenter = { x: state.start + state.edge / 2, y: 2.95, z: 0 };
-        const appleRadii = { x: state.edge / (2 * maximumProfile), y: 2.9, z: 2 / maximumProfile };
+        const appleCenter = { x: state.start + state.edge / 2, y: state.edge * 0.45 + 0.04, z: 2.5 };
+        const appleRadii = { x: state.edge / (2 * maximumProfile), y: state.edge * 0.45 / maximumProfile, z: state.edge * 0.45 / maximumProfile };
         const appleHalfWidth = appleRadii.x * maximumProfile;
         const appleStartX = appleCenter.x - appleHalfWidth;
         const appleEndX = appleCenter.x + appleHalfWidth;
@@ -790,7 +843,7 @@
             const lobe = 1 + appleLobe * Math.cos(phi * 6) * sine * sine;
             vertices.push({
               x: appleCenter.x + appleRadii.x * shoulder * Math.cos(phi) * lobe,
-              y: appleCenter.y + appleRadii.y * cosine - (cosine >= 0 ? 0.58 : -0.16) * poleIndent,
+              y: appleCenter.y + appleRadii.y * cosine - (cosine >= 0 ? 0.9 : -0.24) * poleIndent,
               z: appleCenter.z + appleRadii.z * shoulder * Math.sin(phi) * lobe
             });
           }
@@ -835,7 +888,7 @@
           ctx.fillStyle = face.color;
           ctx.fill();
         });
-        const stemBase = { x: appleCenter.x, y: appleCenter.y + appleRadii.y - 0.58, z: 0 };
+        const stemBase = { x: appleCenter.x, y: appleCenter.y + appleRadii.y - 0.9, z: appleCenter.z };
         const calyx = Array.from({ length: 12 }, (_, index) => {
           const angle = (index / 12) * Math.PI * 2;
           return { x: stemBase.x + Math.cos(angle) * 0.24, y: stemBase.y + 0.04, z: stemBase.z + Math.sin(angle) * 0.18 };
@@ -843,11 +896,11 @@
         drawFace(calyx, "#a94432", "#8e352b");
         drawLine([stemBase, { x: stemBase.x + 0.02, y: stemBase.y + 0.42, z: stemBase.z }, { x: stemBase.x + 0.09, y: stemBase.y + 0.82, z: stemBase.z }], "#68452f", 6);
         drawFace([
-          { x: stemBase.x + 0.05, y: stemBase.y + 0.58, z: 0.02 },
-          { x: stemBase.x + 0.8, y: stemBase.y + 0.76, z: 0.08 },
+          { x: stemBase.x + 0.05, y: stemBase.y + 0.58, z: stemBase.z + 0.02 },
+          { x: stemBase.x + 0.8, y: stemBase.y + 0.76, z: stemBase.z + 0.08 },
           { x: stemBase.x + 0.58, y: stemBase.y + 0.97, z: 0.06 },
-          { x: stemBase.x + 0.22, y: stemBase.y + 0.94, z: 0.02 },
-          { x: stemBase.x + 0.05, y: stemBase.y + 0.78, z: -0.02 }
+          { x: stemBase.x + 0.22, y: stemBase.y + 0.94, z: stemBase.z + 0.02 },
+          { x: stemBase.x + 0.05, y: stemBase.y + 0.78, z: stemBase.z - 0.02 }
         ], "#6f9e63", "#477544");
 
         const edgeX = appleEndX;
@@ -855,9 +908,9 @@
         const cameraHeight = cameraPosition.y;
         const projectionFactor = (edgeHeight - top) / Math.max(0.1, cameraHeight - edgeHeight);
         const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
-        const projectedEdgeZ = -projectionFactor * cameraPosition.z;
+        const projectedEdgeZ = appleCenter.z + projectionFactor * (appleCenter.z - cameraPosition.z);
         const clampedProjectionX = clamp(projectedEdgeX, rulerMin, rulerMax);
-        const clampedProjectionZ = clamp(projectedEdgeZ, -2.25, 2.25);
+        const clampedProjectionZ = clamp(projectedEdgeZ, -6.1, 6.1);
         drawLine([{ x: appleStartX, y: 0.06, z: -1.26 }, { x: appleStartX, y: 1.25, z: -1.26 }], "#176b53", 1.7, [4, 4]);
         drawLine([{ x: edgeX, y: top + 0.03, z: 0 }, { x: edgeX, y: edgeHeight, z: 0 }], "#bc612b", 2, [4, 4]);
         drawLine([{ x: edgeX, y: edgeHeight, z: 0 }, { x: clampedProjectionX, y: top + 0.035, z: clampedProjectionZ }], "#bc612b", 2, [5, 4]);
@@ -874,7 +927,7 @@
         const apparentEndReading = Math.round(projectedEdgeX / estimatedStep) * estimatedStep;
         const formattedWidthReading = apparentWidthReading.toFixed(1);
         const formattedEndReading = apparentEndReading.toFixed(1);
-        const landingOnScale = projectedEdgeX >= 0 && projectedEdgeX <= 8 && Math.abs(projectedEdgeZ) <= 2.2;
+        const landingOnScale = projectedEdgeX >= 0 && projectedEdgeX <= 12 && Math.abs(projectedEdgeZ) <= 6.0;
         document.querySelector("#actual-width").textContent = `約 ${state.edge.toFixed(1)} cm`;
         document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${formattedEndReading} cm` : "視線落在尺外";
         document.querySelector("#zero-end").textContent = landingOnScale ? `約 ${formattedEndReading} cm` : "視線落在尺外";
@@ -902,8 +955,8 @@
         const appleScale = (state.edge * 80) / 454;
         const appleOffset = startX - 27 * appleScale;
         document.querySelector("#apple-object").setAttribute("transform", `translate(${appleOffset} 0) scale(${appleScale})`);
-        document.querySelector("#apple-start-guide").setAttribute("d", `M${startX} 65V235`);
-        document.querySelector("#apple-end-guide").setAttribute("d", `M${endX} 65V235`);
+        document.querySelector("#apple-start-guide").setAttribute("d", `M${startX} 65V620`);
+        document.querySelector("#apple-end-guide").setAttribute("d", `M${endX} 65V620`);
         const lines = [];
         const subdivisions = state.divisions;
         const totalTicks = subdivisions * 8;
@@ -911,14 +964,14 @@
           const x = 80 + (tick * 640) / totalTicks;
           const major = tick % subdivisions === 0;
           const half = tick % Math.max(1, subdivisions / 2) === 0;
-          const top = major ? 213 : half ? 220 : 226;
-          lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${254 - top}"/>`);
-          if (major) lines.push(`<text x="${x - 4}" y="274">${tick / subdivisions}${state.unit ? " cm" : ""}</text>`);
+          const top = major ? 580 : half ? 587 : 593;
+          lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${623 - top}"/>`);
+          if (major) lines.push(`<text x="${x - 4}" y="644">${tick / subdivisions}${state.unit ? " cm" : ""}</text>`);
         }
-        ruler.innerHTML = `<rect class="ruler-body" x="66" y="213" width="668" height="43" rx="5"/>${lines.join("")}`;
+        ruler.innerHTML = `<rect class="ruler-body" x="66" y="580" width="668" height="43" rx="5"/>${lines.join("")}`;
         document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
-        document.querySelector("#eye-ray path").setAttribute("d", `M620 42L${endX} 220`);
-        document.querySelector("#shared-reading").textContent = state.unit ? "約 6.3 cm" : "約 6.3（單位未標）";
+        document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${endX} 600`);
+        document.querySelector("#shared-reading").textContent = state.unit ? "約 7.6 cm" : "約 7.6（單位未標）";
         const unitToggle = document.querySelector("#unit-toggle");
         if (unitToggle) {
           unitToggle.setAttribute("aria-pressed", String(!state.unit));
@@ -933,8 +986,8 @@
           divisionNote.textContent = `1 cm 分成 ${state.divisions} 個相等間隔，每格是 ${size} cm。`;
         }
         modelSvg.setAttribute("aria-label", state.unit
-          ? `測量蘋果水平方向的寬度；蘋果左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於六點三與六點四公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`
-          : "尺上的公分單位標示已隱藏；測量蘋果水平方向的寬度，端點仍在六點三與六點四刻線之間");
+          ? `測量蘋果水平方向的寬度；蘋果左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於七點六與七點七公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`
+          : "尺上的公分單位標示已隱藏；測量蘋果水平方向的寬度，端點仍在七點六與七點七刻線之間");
         if (note) document.querySelector("#shared-model-note").textContent = note;
         renderDivisionRuler();
         renderParallaxScene();
@@ -949,12 +1002,12 @@
           ticks.push(`<path d="M${x} 22v${major ? 36 : 26}" stroke="#26383a" stroke-width="${major ? 2.5 : 1.5}"/>`);
         }
         group.innerHTML = ticks.join("");
-        const endpointX = 20 + (clamp(state.edge - 6, 0, 1) * 480);
+        const endpointX = 20 + (clamp(state.edge - 7, 0, 1) * 480);
         document.querySelector("#division-endpoint").setAttribute("d", `M${endpointX} 10v72`);
-        document.querySelector("#division-unit-label").textContent = state.unit ? "6 cm" : "6";
-        document.querySelector("#division-unit-label-end").textContent = state.unit ? "7 cm" : "7";
-        document.querySelector("#division-visual-note").textContent = `尺面顯示 6–7 cm；橘色標記是蘋果右端，固定在約 ${state.edge.toFixed(2)} cm。每公分分成 ${state.divisions} 格。`;
-        document.querySelector("#division-ruler").setAttribute("aria-label", `尺面從六到七公分，每公分分成${state.divisions}格；蘋果右端約在${state.edge.toFixed(2)}公分`);
+        document.querySelector("#division-unit-label").textContent = state.unit ? "7 cm" : "7";
+        document.querySelector("#division-unit-label-end").textContent = state.unit ? "8 cm" : "8";
+        document.querySelector("#division-visual-note").textContent = `尺面顯示 7–8 cm；橘色標記是蘋果右端，固定在約 ${state.edge.toFixed(2)} cm。每公分分成 ${state.divisions} 格。`;
+        document.querySelector("#division-ruler").setAttribute("aria-label", `尺面從七到八公分，每公分分成${state.divisions}格；蘋果右端約在${state.edge.toFixed(2)}公分`);
       };
       updateModel();
       renderDivisionRuler();
@@ -969,8 +1022,8 @@
         const chosen = differenceStates[event.target.value];
         Object.assign(state, { divisions: chosen.divisions, start: chosen.start, angle: chosen.angle, unit: chosen.unit });
         updateModel(chosen.note);
-        document.querySelector("#reading-a").textContent = "約 6.3 cm";
-        document.querySelector("#reading-b").textContent = chosen.start ? "終點讀值約 6.8 cm" : chosen.angle ? "讀值可能偏移" : chosen.divisions === 2 ? "約 6.0–6.5 cm" : chosen.unit ? "約 6.3–6.4 cm" : "約 6.3–6.4（無單位）";
+        document.querySelector("#reading-a").textContent = "約 7.6 cm";
+        document.querySelector("#reading-b").textContent = chosen.start ? "終點讀值約 8.1 cm" : chosen.angle ? "讀值可能偏移" : chosen.divisions === 2 ? "約 7.5–8.0 cm" : chosen.unit ? "約 7.6–7.7 cm" : "約 7.6–7.7（無單位）";
         document.querySelector("#reading-a-note").textContent = "原始測量的固定參照";
         document.querySelector("#reading-b-note").textContent = chosen.start ? "起點在 0.5 cm，需扣除起點" : chosen.angle ? "轉動視角，檢視視差落點" : chosen.divisions === 2 ? "較粗刻度的尺，區間較大" : chosen.unit ? "依端點位置估讀" : "尺上的 cm 標示已移除";
         document.querySelector("#difference-explanation").textContent = chosen.note;
@@ -978,7 +1031,7 @@
 
       const recordDescriptions = {
         object: "物理量說明量的是什麼；這裡量的是蘋果水平方向的寬度。",
-        value: "數值表示量到的大小；模型顯示約 6.3，還要搭配單位才完整。",
+        value: "數值表示量到的大小；模型顯示約 7.6，還要搭配單位才完整。",
         unit: "單位說明數值所採用的尺度；這把尺用 cm（公分）標示。"
       };
       const recordParts = [...document.querySelectorAll("[data-record-part]")];
@@ -998,9 +1051,114 @@
         updateModel(state.unit ? "恢復 cm 標示後，紀錄能指出數值所用的長度單位。" : "公分標示已移除；數字還在，但讀者不知道它代表幾公分或其他尺度。 ");
       });
 
+      const appleMassUnits = {
+        g: { label: "g", gramsPerUnit: 1 },
+        kg: { label: "kg", gramsPerUnit: 1000 },
+        t: { label: "公噸", gramsPerUnit: 1000000 }
+      };
+      const formatUnitCount = new Intl.NumberFormat("zh-TW");
+      const appleSprite = document.createElement("canvas");
+      appleSprite.width = 64;
+      appleSprite.height = 72;
+      const appleSpriteContext = appleSprite.getContext("2d");
+      const fruitGradient = appleSpriteContext.createLinearGradient(9, 9, 55, 60);
+      fruitGradient.addColorStop(0, "#ef8058");
+      fruitGradient.addColorStop(.52, "#dc6040");
+      fruitGradient.addColorStop(1, "#ae402d");
+      appleSpriteContext.beginPath();
+      appleSpriteContext.moveTo(32, 20);
+      appleSpriteContext.bezierCurveTo(26, 8, 12, 7, 6, 17);
+      appleSpriteContext.bezierCurveTo(-1, 29, 7, 50, 17, 60);
+      appleSpriteContext.bezierCurveTo(23, 66, 28, 61, 32, 58);
+      appleSpriteContext.bezierCurveTo(36, 61, 41, 66, 47, 60);
+      appleSpriteContext.bezierCurveTo(57, 50, 65, 29, 58, 17);
+      appleSpriteContext.bezierCurveTo(52, 7, 38, 8, 32, 20);
+      appleSpriteContext.closePath();
+      appleSpriteContext.fillStyle = fruitGradient;
+      appleSpriteContext.fill();
+      appleSpriteContext.strokeStyle = "#873825";
+      appleSpriteContext.lineWidth = 1.7;
+      appleSpriteContext.stroke();
+      appleSpriteContext.beginPath();
+      appleSpriteContext.moveTo(31, 20);
+      appleSpriteContext.bezierCurveTo(30, 12, 31, 7, 36, 3);
+      appleSpriteContext.strokeStyle = "#68452f";
+      appleSpriteContext.lineWidth = 4;
+      appleSpriteContext.lineCap = "round";
+      appleSpriteContext.stroke();
+      appleSpriteContext.beginPath();
+      appleSpriteContext.moveTo(35, 9);
+      appleSpriteContext.bezierCurveTo(42, 1, 53, 3, 57, 8);
+      appleSpriteContext.bezierCurveTo(51, 15, 42, 16, 35, 9);
+      appleSpriteContext.closePath();
+      appleSpriteContext.fillStyle = "#739e5e";
+      appleSpriteContext.fill();
+      appleSpriteContext.strokeStyle = "#477544";
+      appleSpriteContext.lineWidth = 1;
+      appleSpriteContext.stroke();
+      appleSpriteContext.beginPath();
+      appleSpriteContext.moveTo(10, 24);
+      appleSpriteContext.bezierCurveTo(12, 17, 17, 14, 22, 13);
+      appleSpriteContext.strokeStyle = "rgb(255 190 151 / 78%)";
+      appleSpriteContext.lineWidth = 2;
+      appleSpriteContext.stroke();
+
+      const renderApplePopulation = (canvas, count) => {
+        if (!canvas || !canvas.clientWidth || !canvas.clientHeight) return;
+        const context = canvas.getContext("2d");
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(width * pixelRatio);
+        canvas.height = Math.round(height * pixelRatio);
+        context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        context.clearRect(0, 0, width, height);
+        if (count === 1) {
+          const appleWidth = Math.min(width * .4, height * .72 * (48 / 54));
+          const appleHeight = appleWidth * (54 / 48);
+          context.drawImage(appleSprite, (width - appleWidth) / 2, (height - appleHeight) / 2, appleWidth, appleHeight);
+        } else {
+          const appleAspect = 48 / 54;
+          const columns = Math.max(1, Math.ceil(Math.sqrt(count * width / (height * appleAspect))));
+          const rows = Math.ceil(count / columns);
+          const cellWidth = width / columns;
+          const cellHeight = height / rows;
+          const pattern = context.createPattern(appleSprite, "repeat");
+          pattern.setTransform(new DOMMatrix([cellWidth / appleSprite.width, 0, 0, cellHeight / appleSprite.height, 0, 0]));
+          context.fillStyle = pattern;
+          const fullRows = Math.floor(count / columns);
+          const remainingApples = count - fullRows * columns;
+          if (fullRows > 0) context.fillRect(0, 0, width, fullRows * cellHeight);
+          if (remainingApples > 0) context.fillRect(0, fullRows * cellHeight, remainingApples * cellWidth, cellHeight);
+        }
+        canvas.dataset.appleCount = String(count);
+        canvas.dataset.drawnAppleCount = String(count);
+        canvas.setAttribute("aria-label", `${formatUnitCount.format(count)} 顆蘋果模型；每顆模型基準為 USDA 中型蘋果（直徑 7.62 cm、182 g），畫面依此數量繪製`);
+      };
+      const updateUnitAppleDemo = () => {
+        const unit = appleMassUnits[document.querySelector("#apple-mass-unit").value];
+        const totalGrams = 182 * unit.gramsPerUnit;
+        const appleCount = totalGrams / 182;
+        if (!Number.isInteger(appleCount)) throw new Error("蘋果模型數必須為整數");
+        const countText = formatUnitCount.format(appleCount);
+        const summary = `182 ${unit.label} = ${countText} 顆模型蘋果（每顆按 182 g 計）`;
+        document.querySelector("#unit-apple-count").textContent = summary;
+        document.querySelector("#unit-apple-note").textContent = appleCount === 1
+          ? "模型固定每顆蘋果為 182 g；這裡繪出 1 顆。"
+          : `模型每顆固定以 182 g 計；畫面逐顆繪出 ${countText} 顆，並依數量縮小圖樣。`;
+        document.querySelectorAll(".unit-apple-grid").forEach((canvas) => renderApplePopulation(canvas, appleCount));
+        const sceneCount = document.querySelector("#unit-scene-count");
+        if (sceneCount) sceneCount.textContent = `${countText} 顆`;
+        const sceneCaption = document.querySelector("#unit-scene-caption");
+        if (sceneCaption) sceneCaption.textContent = summary;
+      };
+      document.querySelector("#apple-mass-unit").addEventListener("change", updateUnitAppleDemo);
+      window.addEventListener("resize", updateUnitAppleDemo);
+      updateUnitAppleDemo();
+
       const tasks = {
-        length: { instrument: "直尺", range: "長度；量程 0–30 cm", quantity: "長度", value: "約 6.3 cm", tooShort: "短尺", tooShortRange: "長度；量程 0–5 cm" },
-        mass: { instrument: "天平", range: "質量；量程 0–500 g", quantity: "質量", value: "約 150 g", tooShort: "小量程天平", tooShortRange: "質量；量程 0–100 g" },
+        length: { instrument: "直尺", range: "長度；量程 0–30 cm", quantity: "長度", value: "約 7.6 cm", tooShort: "短尺", tooShortRange: "長度；量程 0–5 cm" },
+        mass: { instrument: "天平", range: "質量；量程 0–500 g", quantity: "質量", value: "約 182 g", tooShort: "小量程天平", tooShortRange: "質量；量程 0–100 g" },
         time: { instrument: "計時器", range: "時間；量程 0–60 s", quantity: "時間", value: "約 12 s", tooShort: "短量程計時器", tooShortRange: "時間；量程 0–10 s" }
       };
       const updateToolView = () => {
@@ -1026,7 +1184,7 @@
         document.querySelector("#tool-range").textContent = range;
         document.querySelector("#tool-result").textContent = result;
         document.querySelector("#tool-result-note").textContent = explanation;
-        const quantityValues = { length: { value: 6.3, max: 30, unit: "cm" }, mass: { value: 150, max: 500, unit: "g" }, time: { value: 12, max: 60, unit: "s" } };
+        const quantityValues = { length: { value: 7.6, max: 30, unit: "cm" }, mass: { value: 182, max: 500, unit: "g" }, time: { value: 12, max: 60, unit: "s" } };
         const visual = quantityValues[document.querySelector("#tool-task").value];
         const visibleMaximum = selection === "short-range" ? (visual.unit === "cm" ? 5 : visual.unit === "g" ? 100 : 10) : visual.max;
         const ratio = Math.min(100, (visual.value / visibleMaximum) * 100);
@@ -1045,7 +1203,9 @@
         document.querySelector("#balance-station").classList.toggle("is-weighing", massTask);
         document.querySelector("#mass-controls").hidden = !massTask;
         document.querySelector("#balance-display-reading").textContent = massTask ? `${document.querySelector("#mass-slider").value} g` : "— g";
-        document.querySelector("#room-label").textContent = massTask ? "量測觀察室・切換到蘋果質量" : "3D 量測觀察室・同一顆蘋果";
+        if (!document.querySelector(".scene-stage").classList.contains("is-unit-mode")) {
+          document.querySelector("#room-label").textContent = massTask ? "量測觀察室・切換到蘋果質量" : "3D 量測觀察室・同一顆蘋果";
+        }
       };
       document.querySelector("#tool-task").addEventListener("change", updateToolView);
       document.querySelector("#tool-state").addEventListener("change", updateToolView);
@@ -1078,8 +1238,8 @@
       estimateSlider.addEventListener("input", () => {
         const endpoint = Number(estimateSlider.value) / 100;
         state.start = endpoint - state.edge;
-        const fraction = (endpoint - 6.3) / 0.1;
-        const description = fraction < 0.33 ? "6.3 cm 後一點" : fraction < 0.67 ? "約在兩條刻線中間" : "接近 6.4 cm 刻線";
+        const fraction = (endpoint - 7.6) / 0.1;
+        const description = fraction < 0.33 ? "7.6 cm 後一點" : fraction < 0.67 ? "約在兩條刻線中間" : "接近 7.7 cm 刻線";
         document.querySelector("#estimate-value").textContent = description;
         document.querySelector("#estimate-note").textContent = `蘋果保持同樣大小並沿尺移動，右端${description}；放大只讓位置更容易觀察，不會增加尺本身的刻度精度。`;
         updateModel(`蘋果保持同樣大小並沿尺移動，右端${description}；讀取寬度仍須比較左右端位置。`);
@@ -1185,7 +1345,7 @@
         const feedback = document.querySelector("#assessment-feedback");
         feedback.dataset.state = button.dataset.fair === "complete" ? "good" : "try";
         feedback.textContent = button.dataset.fair === "complete"
-          ? "兩筆都是蘋果的長度，但「6.3」沒有單位，無法確定使用哪種尺度。補上單位，並確認量測方法後，才能判斷資料是否可比較。"
+          ? "兩筆都是蘋果的長度，但「7.6」沒有單位，無法確定使用哪種尺度。補上單位，並確認量測方法後，才能判斷資料是否可比較。"
           : "對照兩筆資料是否說清楚量測的物理量、數值與單位，再查看尺的刻度和讀值條件是否可比較。";
       }));
       const lessonCards = [...document.querySelectorAll(".lesson-card")];
@@ -1208,6 +1368,18 @@
         });
         cardCounter.textContent = `第 ${activeCardIndex + 1} / ${lessonCards.length} 張`;
         cardProgress.value = activeCardIndex + 1;
+        const unitFieldActive = activeCardIndex === 1;
+        const scene = document.querySelector(".scene-stage");
+        const unitField = document.querySelector("#unit-apple-field");
+        scene.classList.toggle("is-unit-mode", unitFieldActive);
+        unitField.hidden = !unitFieldActive;
+        unitField.setAttribute("aria-hidden", String(!unitFieldActive));
+        document.querySelector("#room-label").textContent = unitFieldActive
+          ? "單位觀察室・固定數字 182"
+          : document.querySelector("#tool-task").value === "mass"
+          ? "量測觀察室・切換到蘋果質量"
+          : "3D 量測觀察室・同一顆蘋果";
+        if (unitFieldActive) updateUnitAppleDemo();
         if (updateHash) history.replaceState(null, "", `#${lessonCards[activeCardIndex].id}`);
         renderParallaxScene();
       };
