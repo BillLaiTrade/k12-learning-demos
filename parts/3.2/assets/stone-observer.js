@@ -158,7 +158,7 @@ export function mountStoneObserver(){
       const localPoint=ruler.group.worldToLocal(worldPoint.clone());
       const line=ruler.guides[index];line.geometry.dispose();line.geometry=new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(localPoint.x,localPoint.y,localPoint.z),
-        new THREE.Vector3(localPoint.x,localPoint.y+.21,localPoint.z)
+        new THREE.Vector3(localPoint.x,localPoint.y+.42,localPoint.z)
       ]);line.computeLineDistances();
       ruler.markers[index].position.set(localPoint.x,localPoint.y+.012,localPoint.z);
     });
