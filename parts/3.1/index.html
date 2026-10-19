@@ -237,21 +237,6 @@
       @keyframes arrive { from { opacity: .78; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     }
 
-    .unit-scale-demo { margin: 16px 0; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
-    .unit-scale-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
-    .unit-scale-controls > span { font-size: 1rem; }
-    .unit-scale-controls > span strong { margin-left: 5px; font-size: 1.25rem; }
-    .unit-scale-controls label { display: flex; align-items: center; gap: 8px; font-size: .86rem; font-weight: 700; }
-    .unit-scale-controls select { min-height: 38px; padding: 6px 10px; }
-    .unit-pencil-grid { display: block; width: 100%; height: 176px; min-height: 130px; max-height: 220px; overflow: hidden; padding: 0; border: 1px solid #d8e5da; border-radius: 14px; background: linear-gradient(150deg, #eef4eb, #e1ecdf); }
-    .unit-scale-result { display: block; margin-top: 9px; color: var(--green); font-size: 1rem; font-weight: 800; }
-    .unit-scale-note { margin: 4px 0 0; color: var(--muted); font-size: .8rem; }
-    @media (max-width: 760px) {
-      .unit-scale-demo { padding: 10px; }
-      .unit-pencil-grid { height: 140px; min-height: 110px; max-height: 160px; }
-      .unit-scale-note { font-size: .72rem; }
-    }
-
   </style>
 </head>
 <body>
@@ -331,13 +316,7 @@
             <button type="button" data-record-part="unit" aria-pressed="false">單位</button>
             <button type="button" id="unit-toggle" aria-pressed="false">移除尺上的 cm 標示</button>
           </div>
-          <p class="live-note" id="record-explanation" aria-live="polite">先說明你量的是什麼；這裡記錄的是鉛筆的長度。</p>
-          <div class="unit-scale-demo">
-            <div class="unit-scale-controls"><span>同一批模型鉛筆：總質量固定為 <strong>1 kg</strong></span><label for="pencil-mass-unit">顯示單位<select id="pencil-mass-unit"><option value="kg" selected>公斤（kg）</option><option value="g">公克（g）</option><option value="t">公噸（t）</option></select></label></div>
-            <canvas class="unit-pencil-grid" role="img" aria-label="依質量換算結果繪製的模型鉛筆數量">此瀏覽器不支援畫布，請參閱鉛筆數量。</canvas>
-            <strong class="unit-scale-result" id="unit-pencil-count">1 kg = 200 支模型鉛筆</strong>
-            <p class="unit-scale-note" id="unit-pencil-note">每支模型鉛筆按 5 g 計；切換單位只改變寫法，總質量與鉛筆數量不變。</p>
-          </div>
+          <p class="live-note" id="record-explanation" aria-live="polite">這筆紀錄量的是鉛筆的長度；18.2 是數值，cm 是長度單位。點選各部分，看看少了哪項資訊會讓紀錄難以理解。</p>
           <p class="next-hint">知道要量什麼之後，下一步是選擇合適的工具。</p>
         </div>
       </section>
@@ -489,7 +468,7 @@
     </div>
   </main>
 
-  <footer><div class="shell">長度示範使用固定約 18.2 cm 的鉛筆模型；質量與單位換算假設每支模型鉛筆約 5 g。鉛筆長度為教學模型設定，不代表特定市售鉛筆規格。</div></footer>
+  <footer><div class="shell">長度示範使用固定約 18.2 cm 的鉛筆模型；工具選擇中的質量任務採每支模型鉛筆約 5 g 的教學設定。鉛筆長度與質量均不代表特定市售鉛筆規格。</div></footer>
 
   <script>
     (() => {
@@ -789,69 +768,6 @@
         document.querySelector("#record-unit").textContent = state.unit ? "cm" : "（單位未標）";
         updateModel(state.unit ? "恢復 cm 標示後，紀錄能指出數值所用的長度單位。" : "公分標示已移除；數字還在，但讀者不知道它代表幾公分或其他尺度。 ");
       });
-
-      const pencilMassUnits = {
-        g: { label: "g", gramsPerGram: 1 },
-        kg: { label: "kg", gramsPerGram: 1 / 1000 },
-        t: { label: "公噸", gramsPerGram: 1 / 1000000 }
-      };
-      const formatUnitCount = new Intl.NumberFormat("zh-TW");
-      const formatMass = new Intl.NumberFormat("zh-TW", { maximumFractionDigits: 3 });
-      const pencilSprite = new Image();
-      pencilSprite.src = "assets/pencil-photo.webp";
-      pencilSprite.addEventListener("load", () => updateUnitPencilDemo(), { once: true });
-
-      const renderPencilPopulation = (canvas, count) => {
-        if (!canvas || !canvas.clientWidth || !canvas.clientHeight || !pencilSprite.complete || !pencilSprite.naturalWidth) return;
-        const context = canvas.getContext("2d");
-        const width = canvas.clientWidth;
-        const height = canvas.clientHeight;
-        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = Math.round(width * pixelRatio);
-        canvas.height = Math.round(height * pixelRatio);
-        context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-        context.clearRect(0, 0, width, height);
-        if (count === 1) {
-          const pencilAspect = pencilSprite.naturalWidth / pencilSprite.naturalHeight;
-          const pencilWidth = Math.min(width * .4, height * .72 * pencilAspect);
-          const pencilHeight = pencilWidth / pencilAspect;
-          context.drawImage(pencilSprite, (width - pencilWidth) / 2, (height - pencilHeight) / 2, pencilWidth, pencilHeight);
-        } else {
-          const pencilAspect = pencilSprite.naturalWidth / pencilSprite.naturalHeight;
-          const columns = Math.max(1, Math.ceil(Math.sqrt(count * width / (height * pencilAspect))));
-          const rows = Math.ceil(count / columns);
-          const cellWidth = width / columns;
-          const cellHeight = height / rows;
-          const pattern = context.createPattern(pencilSprite, "repeat");
-          pattern.setTransform(new DOMMatrix([cellWidth / pencilSprite.width, 0, 0, cellHeight / pencilSprite.height, 0, 0]));
-          context.fillStyle = pattern;
-          const fullRows = Math.floor(count / columns);
-          const remainingPencils = count - fullRows * columns;
-          if (fullRows > 0) context.fillRect(0, 0, width, fullRows * cellHeight);
-          if (remainingPencils > 0) context.fillRect(0, fullRows * cellHeight, remainingPencils * cellWidth, cellHeight);
-        }
-        canvas.dataset.pencilCount = String(count);
-        canvas.dataset.drawnPencilCount = String(count);
-        canvas.setAttribute("aria-label", `${formatUnitCount.format(count)} 支鉛筆模型；每支模型基準為 教學模型設定（每支 5 g），畫面依此數量繪製`);
-      };
-      const updateUnitPencilDemo = () => {
-        const unit = pencilMassUnits[document.querySelector("#pencil-mass-unit").value];
-        const totalGrams = 1000;
-        const pencilCount = totalGrams / 5;
-        const amount = formatMass.format(totalGrams * unit.gramsPerGram);
-        const countText = formatUnitCount.format(pencilCount);
-        const summary = `${amount} ${unit.label} = ${countText} 支模型鉛筆`;
-        document.querySelector("#unit-pencil-count").textContent = summary;
-        document.querySelector("#unit-pencil-note").textContent = "每支模型鉛筆按 5 g 計；切換單位只改變寫法，總質量與鉛筆數量不變。";
-        document.querySelectorAll(".unit-pencil-grid").forEach((canvas) => renderPencilPopulation(canvas, pencilCount));
-        const sceneCount = document.querySelector("#unit-scene-count");
-        if (sceneCount) sceneCount.textContent = `${countText} 支`;
-        const sceneCaption = document.querySelector("#unit-scene-caption");
-        if (sceneCaption) sceneCaption.textContent = summary;
-      };
-      document.querySelector("#pencil-mass-unit").addEventListener("change", updateUnitPencilDemo);
-      window.addEventListener("resize", updateUnitPencilDemo);
-      updateUnitPencilDemo();
 
       const tasks = {
         length: { instrument: "直尺", range: "長度；量程 0–30 cm", quantity: "長度", value: "約 18.2 cm", tooShort: "短尺", tooShortRange: "長度；量程 0–5 cm" },
