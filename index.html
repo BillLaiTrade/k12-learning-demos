@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="透過八張互動卡片，練習量測紀錄、工具選擇、刻度判讀與公平比較。">
+  <title>要公平比較，先把「量」說清楚｜密度與測量</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #182326;
+      --muted: #59696b;
+      --line: #d7e1dd;
+      --paper: #f4f7f1;
+      --card: #fffefa;
+      --green: #176b53;
+      --green-pale: #e5f2e9;
+      --orange: #bc612b;
+      --orange-pale: #fff0e3;
+      --shadow: 0 14px 38px rgb(21 47 38 / 8%);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--green); }
+    .shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .masthead { padding: 26px 0 18px; }
+    .brand-row, .section-top, .card-head, .ruler-caption, .feedback, .controls {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .brand { font-size: .9rem; font-weight: 750; letter-spacing: .04em; }
+    .crumb { color: var(--muted); font-size: .9rem; }
+    .hero {
+      display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(260px, .9fr);
+      gap: 32px; align-items: center; padding: 44px 0 38px;
+    }
+    .eyebrow { color: var(--green); font-size: .82rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 8px 0 14px; font-size: clamp(2rem, 4.4vw, 3.7rem); line-height: 1.18; letter-spacing: -.04em; }
+    .hero p { max-width: 660px; color: var(--muted); font-size: 1.08rem; }
+    .hero-note {
+      background: #e3eee5; border: 1px solid #cbded0; border-radius: 24px;
+      padding: 24px; box-shadow: var(--shadow); transform: rotate(1deg);
+    }
+    .hero-note strong { display: block; font-size: 1.13rem; margin-bottom: 5px; }
+    .hero-note p { margin: 0; font-size: .96rem; }
+    .route {
+      position: sticky; top: 0; z-index: 5; background: rgb(244 247 241 / 94%);
+      backdrop-filter: blur(12px); border-block: 1px solid var(--line); padding: 12px 0;
+    }
+    .route-inner { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 3px; }
+    .route a {
+      flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px;
+      border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink);
+      font-size: .86rem; text-decoration: none; white-space: nowrap;
+    }
+    .route a:hover, .route a:focus-visible { border-color: var(--green); outline: 2px solid transparent; }
+    .route b { color: var(--green); font-size: .78rem; }
+    .route-label { font-size: .8rem; color: var(--muted); margin: 0 0 6px; }
+    .lesson { padding: 34px 0 80px; }
+    .section-top { align-items: end; margin: 0 0 18px; }
+    .section-top h2 { margin: 0; font-size: 1.35rem; }
+    .progress-copy { color: var(--muted); font-size: .9rem; }
+    progress { display: block; width: 100%; height: 8px; border: 0; border-radius: 99px; overflow: hidden; }
+    progress::-webkit-progress-bar { background: #dfe7df; }
+    progress::-webkit-progress-value { background: var(--green); border-radius: 99px; }
+    progress::-moz-progress-bar { background: var(--green); border-radius: 99px; }
+    .cards { display: grid; gap: 20px; }
+    .lesson-card {
+      position: relative; scroll-margin-top: 100px; display: grid; grid-template-columns: 190px minmax(0, 1fr);
+      gap: 28px; padding: 26px; border: 1px solid var(--line); border-radius: 24px;
+      background: var(--card); box-shadow: var(--shadow);
+    }
+    .card-side { border-right: 1px solid var(--line); padding-right: 20px; }
+    .card-number { color: var(--green); font-weight: 850; font-size: .84rem; letter-spacing: .08em; }
+    .card-side h3 { margin: 10px 0 8px; font-size: 1.08rem; line-height: 1.45; }
+    .card-role { color: var(--muted); font-size: .87rem; }
+    .card-main h2 { margin: 0 0 8px; font-size: clamp(1.32rem, 2.8vw, 1.85rem); line-height: 1.35; }
+    .card-main > p { color: var(--muted); margin: 0 0 18px; }
+    .prompt { color: var(--ink); font-weight: 750; margin: 14px 0 9px; }
+    .choices { display: flex; flex-wrap: wrap; gap: 9px; margin: 12px 0 16px; }
+    .choice {
+      min-height: 44px; border: 1px solid var(--line); border-radius: 13px; padding: 9px 13px;
+      background: #fff; color: var(--ink); text-align: left;
+    }
+    .choice:hover { border-color: var(--green); }
+    .choice[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); box-shadow: inset 0 0 0 1px var(--green); }
+    .choice.correct[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); }
+    .choice.incorrect[aria-pressed="true"] { border-color: var(--orange); background: var(--orange-pale); }
+    .action, .secondary {
+      min-height: 44px; border-radius: 13px; padding: 9px 16px; font-weight: 750;
+    }
+    .action { border: 0; background: var(--green); color: white; }
+    .action:hover { background: #105640; }
+    .secondary { border: 1px solid var(--line); background: #fff; color: var(--ink); }
+    .feedback { justify-content: flex-start; min-height: 30px; margin-top: 12px; color: var(--muted); }
+    .feedback[data-state="good"] { color: var(--green); }
+    .feedback[data-state="try"] { color: var(--orange); }
+    .feedback strong { color: inherit; }
+    .fact { margin-top: 16px; padding: 14px 16px; border-left: 4px solid #b8cda9; border-radius: 0 12px 12px 0; background: #f0f5eb; }
+    .fact p { margin: 0; }
+    .example-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
+    .example { border: 1px solid var(--line); border-radius: 16px; padding: 15px; background: #f9faf5; }
+    .example small { display: block; color: var(--muted); }
+    .example strong { font-size: 1.3rem; }
+    .select-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+    .field { display: grid; gap: 5px; font-size: .91rem; font-weight: 700; }
+    select, input[type="number"] { min-height: 44px; border: 1px solid var(--line); border-radius: 11px; background: white; padding: 8px 11px; color: var(--ink); }
+    .ruler-box { margin: 17px 0; padding: 16px; border-radius: 16px; background: #f4f6ef; border: 1px solid var(--line); }
+    .ruler-caption { color: var(--muted); font-size: .88rem; }
+    .ruler { width: 100%; height: auto; display: block; margin: 10px 0 0; }
+    .ruler .base { fill: #f9e9b9; stroke: #b09a62; stroke-width: 1.5; }
+    .ruler .tick { stroke: #26383a; stroke-width: 2; }
+    .ruler .tick-major { stroke-width: 3; }
+    .ruler text { fill: #26383a; font: 15px system-ui, sans-serif; }
+    .ruler .marker { stroke: #b84c2d; stroke-width: 4; }
+    .ruler .guide { stroke: #b84c2d; stroke-width: 2; stroke-dasharray: 5 5; }
+    input[type="range"] { width: min(460px, 100%); accent-color: var(--green); }
+    .slider-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    output.value { min-width: 88px; display: inline-block; padding: 5px 10px; border-radius: 10px; background: var(--green-pale); font-weight: 800; text-align: center; }
+    .toggle-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    .toggle-row button { border: 1px solid var(--line); border-radius: 999px; padding: 8px 13px; background: white; }
+    .toggle-row button[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: white; }
+    .diagram {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, .8fr); gap: 16px;
+      align-items: center; border: 1px solid var(--line); border-radius: 16px; padding: 15px; background: #f8f9f4;
+    }
+    .diagram svg { width: 100%; max-height: 220px; }
+    .diagram-note { color: var(--muted); font-size: .9rem; }
+    .diagram-note strong { color: var(--ink); }
+    .end-card { background: #eef4e9; border-color: #bfd1be; }
+    .next-hint { font-size: .9rem; color: var(--muted); }
+    footer { padding: 28px 0 44px; color: var(--muted); font-size: .86rem; border-top: 1px solid var(--line); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 24px, 620px); }
+      .hero { grid-template-columns: 1fr; gap: 16px; padding: 30px 0; }
+      .hero-note { transform: none; }
+      .lesson-card { grid-template-columns: 1fr; gap: 14px; padding: 18px; border-radius: 19px; }
+      .card-side { display: flex; align-items: baseline; gap: 10px; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 10px; }
+      .card-side h3 { margin: 0; }
+      .card-role { display: none; }
+      .diagram { grid-template-columns: 1fr; }
+      .section-top { align-items: start; flex-direction: column; gap: 3px; }
+      .example-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+      .lesson-card { animation: arrive .45s ease both; }
+      @keyframes arrive { from { opacity: .78; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell masthead">
+    <div class="brand-row"><span class="brand">理化互動學習｜密度與測量</span><span class="crumb">國二上・Part 3.1</span></div>
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Part 3.1 · 探索路線 8 張卡</div>
+        <h1>要公平比較，<br>先把「量」說清楚</h1>
+        <p>同一件物品，為什麼可能量出不同數字？沿著八張卡片，從量測紀錄、工具與刻度，一步步找出能比較的資料。</p>
+      </div>
+      <aside class="hero-note">
+        <strong>先猜，再動手找線索</strong>
+        <p>每次操作後看一看回饋，再想想：這個線索能支持什麼結論？</p>
+      </aside>
+    </div>
+  </header>
+
+  <nav class="route" aria-label="探索路線">
+    <div class="shell">
+      <p class="route-label">探索路線｜選一張卡開始，或由上往下走</p>
+      <div class="route-inner">
+        <a href="#card-01"><b>01</b>不同讀值</a><a href="#card-02"><b>02</b>量與單位</a>
+        <a href="#card-03"><b>03</b>選工具</a><a href="#card-04"><b>04</b>看刻度</a>
+        <a href="#card-05"><b>05</b>估讀</a><a href="#card-06"><b>06</b>找誤差</a>
+        <a href="#card-07"><b>07</b>改善方法</a><a href="#card-08"><b>08</b>公平比較</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="shell lesson">
+    <div class="section-top">
+      <h2>一起追查讀值差異</h2>
+      <span class="progress-copy" id="progress-copy">已完成 0／8 張卡的操作</span>
+    </div>
+    <progress id="lesson-progress" value="0" max="8" aria-label="卡片操作進度">0</progress>
+
+    <div class="cards">
+      <section class="lesson-card" id="card-01" data-card>
+        <div class="card-side"><span class="card-number">CARD 01</span><h3>提出問題</h3><span class="card-role">先留下你的猜想</span></div>
+        <div class="card-main">
+          <h2>同一件東西，為什麼量出不同數字？</h2>
+          <p>小安和小晴量同一支筆，紀錄卻不一樣。先別急著判定誰量錯了，想想可能有哪些原因。</p>
+          <div class="example-grid">
+            <div class="example"><small>小安的紀錄</small><strong>14.2 cm</strong></div>
+            <div class="example"><small>小晴的紀錄</small><strong>14.4 cm</strong></div>
+          </div>
+          <p class="prompt">勾選你認為可能造成差異的原因（可複選）：</p>
+          <div class="choices" id="reasons">
+            <label class="choice"><input type="checkbox" value="tool"> 使用的工具或刻度不同</label>
+            <label class="choice"><input type="checkbox" value="start"> 尺的起點沒有對準</label>
+            <label class="choice"><input type="checkbox" value="view"> 讀刻度時看的角度不同</label>
+            <label class="choice"><input type="checkbox" value="unit"> 記錄的單位不同</label>
+          </div>
+          <button class="action" id="check-reasons">看看這些猜想</button>
+          <div class="feedback" id="feedback-1" aria-live="polite"></div>
+          <p class="next-hint">接下來先釐清：一筆量測紀錄，至少要交代什麼？</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-02" data-card>
+        <div class="card-side"><span class="card-number">CARD 02</span><h3>看懂紀錄</h3><span class="card-role">把數字說完整</span></div>
+        <div class="card-main">
+          <h2>只寫「5」，別人知道你量了什麼嗎？</h2>
+          <p>看看兩筆紀錄。單獨一個數字，資訊夠完整嗎？</p>
+          <div class="example-grid">
+            <div class="example"><small>紀錄 A</small><strong>5 cm</strong></div>
+            <div class="example"><small>紀錄 B</small><strong>5 mm</strong></div>
+          </div>
+          <p class="prompt">把紀錄補完整：</p>
+          <div class="select-row">
+            <label class="field">量測項目
+              <select id="record-quantity"><option value="">選一項</option><option value="length">這支筆的長度</option><option value="mass">這支筆的質量</option></select>
+            </label>
+            <label class="field">數字「5」的單位
+              <select id="record-unit"><option value="">選一項</option><option value="cm">cm（公分）</option><option value="g">g（公克）</option></select>
+            </label>
+            <button class="action" id="check-record">檢查紀錄</button>
+          </div>
+          <div class="feedback" id="feedback-2" aria-live="polite"></div>
+          <div class="fact"><p><strong>量測紀錄要能讓別人看懂：</strong>說明量測項目，並記下數值與單位。單位不同時，不能只看數字就比較。</p></div>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-03" data-card>
+        <div class="card-side"><span class="card-number">CARD 03</span><h3>挑選工具</h3><span class="card-role">先看要量什麼</span></div>
+        <div class="card-main">
+          <h2>這個東西該用哪種工具量？</h2>
+          <p>工具要能量到你要測的物理量，尺度也要適合物體與預期的量值。</p>
+          <label class="field">選一個量測任務
+            <select id="tool-task"><option value="length">量一支筆的長度</option><option value="mass">量一顆蘋果的質量</option><option value="time">量一段跑步時間</option></select>
+          </label>
+          <div class="choices" id="tool-options">
+            <button class="choice" data-tool="ruler" aria-pressed="false">直尺</button>
+            <button class="choice" data-tool="balance" aria-pressed="false">天平</button>
+            <button class="choice" data-tool="timer" aria-pressed="false">計時器</button>
+          </div>
+          <div class="feedback" id="feedback-3" aria-live="polite"></div>
+          <p class="prompt">再看工具的量程：要量一支約 14 cm 的筆，哪把尺的範圍不夠長？</p>
+          <div class="choices" id="range-options">
+            <button class="choice" data-range="10" aria-pressed="false">0–10 cm</button>
+            <button class="choice" data-range="30" aria-pressed="false">0–30 cm</button>
+            <button class="choice" data-range="100" aria-pressed="false">0–100 cm</button>
+          </div>
+          <div class="feedback" id="feedback-3-range" aria-live="polite"></div>
+          <p class="next-hint">選好工具後，還要看懂工具的刻度，才能讀出量值。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-04" data-card>
+        <div class="card-side"><span class="card-number">CARD 04</span><h3>讀取刻度</h3><span class="card-role">找出最小一格</span></div>
+        <div class="card-main">
+          <h2>尺上的每一格，代表多少？</h2>
+          <p>放大看尺的一小段。相鄰兩個最短刻線之間，就是這把尺的最小刻度。</p>
+          <div class="ruler-box">
+            <div class="ruler-caption"><span>這段尺從 0 cm 到 1 cm</span><span>觀察相鄰刻線</span></div>
+            <svg class="ruler" viewBox="0 0 640 128" role="img" aria-label="從零公分到一公分的尺，兩端標示數字，中間分成十個相等間隔">
+              <rect class="base" x="32" y="24" width="576" height="80" rx="7"></rect>
+              <g class="tick tick-major"><path d="M48 24v54M608 24v54"></path></g>
+              <g class="tick">
+                <path d="M104 24v28M160 24v28M216 24v28M272 24v28M328 24v28M384 24v28M440 24v28M496 24v28M552 24v28"></path>
+              </g>
+              <text x="41" y="97">0</text><text x="594" y="97">1 cm</text>
+              <text x="235" y="119">每一公分之間有 10 個相等間隔</text>
+            </svg>
+          </div>
+          <p class="prompt">這把尺的最小刻度是多少？</p>
+          <div class="choices" id="division-options">
+            <button class="choice" data-division="1cm" aria-pressed="false">1 cm</button>
+            <button class="choice" data-division="0.1cm" aria-pressed="false">0.1 cm</button>
+            <button class="choice" data-division="0.01cm" aria-pressed="false">0.01 cm</button>
+          </div>
+          <div class="feedback" id="feedback-4" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-05" data-card>
+        <div class="card-side"><span class="card-number">CARD 05</span><h3>練習估讀</h3><span class="card-role">刻線之間也能判讀</span></div>
+        <div class="card-main">
+          <h2>刻度中間的值，可以估出來嗎？</h2>
+          <p>尺上相鄰刻線是 2.4 cm 和 2.5 cm。紅色位置落在兩條刻線之間，試著估一估。</p>
+          <div class="ruler-box">
+            <div class="ruler-caption"><span>刻度示意</span><span>紅線是物體端點的位置</span></div>
+            <svg class="ruler" viewBox="0 0 640 120" role="img" aria-label="尺上二點四公分與二點五公分刻線之間的紅色估讀位置">
+              <rect class="base" x="35" y="24" width="570" height="72" rx="7"></rect>
+              <g class="tick tick-major"><path d="M130 24v48M320 24v48M510 24v48"></path></g>
+              <g class="tick"><path d="M225 24v28"></path></g>
+              <text x="105" y="91">2.3</text><text x="295" y="91">2.4</text><text x="485" y="91">2.5</text>
+              <path class="marker" d="M415 18v75"></path>
+            </svg>
+          </div>
+          <p class="prompt">依圖估讀，最接近哪個值？</p>
+          <div class="choices" id="estimate-options">
+            <button class="choice" data-estimate="2.40" aria-pressed="false">2.40 cm</button>
+            <button class="choice" data-estimate="2.45" aria-pressed="false">2.45 cm</button>
+            <button class="choice" data-estimate="2.50" aria-pressed="false">2.50 cm</button>
+          </div>
+          <div class="feedback" id="feedback-5" aria-live="polite"></div>
+          <p class="next-hint">估讀是依這把工具的刻度與位置作判斷；接著看看，為什麼不同人可能讀出不同值。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-06" data-card>
+        <div class="card-side"><span class="card-number">CARD 06</span><h3>找出差異來源</h3><span class="card-role">讀值會受方法影響</span></div>
+        <div class="card-main">
+          <h2>同一物體，為什麼讀值會差一點？</h2>
+          <p>切換下方狀態，看看量測方式怎麼改變你讀到的資料。這是用來說明讀值方法的示意模型。</p>
+          <div class="toggle-row" aria-label="選擇讀值視角">
+            <button type="button" data-view="front" aria-pressed="true">眼睛正對刻度</button>
+            <button type="button" data-view="angle" aria-pressed="false">從斜上方看</button>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 480 210" role="img" aria-label="眼睛、刻度與物體端點的視線示意圖">
+              <rect x="40" y="139" width="400" height="37" rx="5" fill="#f2dfa9" stroke="#a99255"></rect>
+              <path d="M70 139v22M130 139v13M190 139v13M250 139v22M310 139v13M370 139v13M430 139v22" stroke="#26383a" stroke-width="3"></path>
+              <text x="230" y="198" font-size="14" fill="#26383a">刻度尺</text>
+              <path d="M250 75v64" stroke="#b84c2d" stroke-width="4"></path>
+              <circle cx="250" cy="74" r="7" fill="#b84c2d"></circle>
+              <g id="sight-lines"><path d="M250 80L250 137" stroke="#176b53" stroke-width="3" stroke-dasharray="5 4"></path><circle cx="250" cy="35" r="16" fill="#dceaf0" stroke="#547884" stroke-width="3"></circle></g>
+              <text x="278" y="89" font-size="14" fill="#26383a">物體端點</text>
+              <text x="30" y="24" font-size="13" fill="#59696b">視線方向</text>
+            </svg>
+            <div class="diagram-note" id="view-note"><strong>眼睛正對刻度</strong><br>從與刻度同一高度觀察，能減少視差造成的讀值偏差。</div>
+          </div>
+          <div class="toggle-row" aria-label="選擇尺的起點狀態">
+            <button type="button" data-zero="aligned" aria-pressed="true">物體起點對準 0</button>
+            <button type="button" data-zero="offset" aria-pressed="false">物體起點在 0.5 cm</button>
+          </div>
+          <div class="feedback" id="feedback-6" aria-live="polite">若起點不在 0，量長度時要用終點讀值減去起點讀值。</div>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-07" data-card>
+        <div class="card-side"><span class="card-number">CARD 07</span><h3>選擇修正方法</h3><span class="card-role">改善方法要對症</span></div>
+        <div class="card-main">
+          <h2>怎麼讓下一次量得更可靠？</h2>
+          <p>看到一種量測問題，就選一個相對應的改善方法。</p>
+          <label class="field">目前遇到的情況
+            <select id="error-case"><option value="angle">讀刻度時，眼睛從斜上方看</option><option value="zero">物體起點在 0.5 cm，終點在 5.3 cm</option><option value="scale">工具刻度太粗，看不出需要比較的細小差異</option></select>
+          </label>
+          <div class="choices" id="fix-options">
+            <button class="choice" data-fix="eye" aria-pressed="false">讓視線與刻度同高</button>
+            <button class="choice" data-fix="subtract" aria-pressed="false">用終點讀值減起點讀值</button>
+            <button class="choice" data-fix="scale" aria-pressed="false">改用範圍合適且刻度較細的工具</button>
+          </div>
+          <div class="feedback" id="feedback-7" aria-live="polite"></div>
+          <div class="fact"><p>改善方法要對應誤差來源。選用合適工具、對齊起點、正視刻度並保持一致讀法，可以讓量測更可靠，但不能保證每次讀值都完全相同。</p></div>
+        </div>
+      </section>
+
+      <section class="lesson-card end-card" id="card-08" data-card>
+        <div class="card-side"><span class="card-number">CARD 08</span><h3>帶著證據判斷</h3><span class="card-role">回到最初的問題</span></div>
+        <div class="card-main">
+          <h2>怎麼知道這次比較是公平的？</h2>
+          <p>小安用直尺量筆長，記下 14.2 cm；小晴用另一把合適的尺量同一支筆，記下 142 mm。這兩筆資料能不能比較？</p>
+          <div class="choices" id="fair-options">
+            <button class="choice" data-fair="yes" aria-pressed="false">可以：量的是同一種物理量，單位可換算</button>
+            <button class="choice" data-fair="no" aria-pressed="false">不可以：只要工具不同就完全不能比較</button>
+            <button class="choice" data-fair="noquantity" aria-pressed="false">不可以：兩個數字看起來不同</button>
+          </div>
+          <div class="feedback" id="feedback-8" aria-live="polite"></div>
+          <div class="fact"><p><strong>公平比較要看資料能否對照：</strong>確認量的是同一種物理量、單位可換算、工具適合，並注意讀值方法與條件。工具不必相同，但必須能取得可比較的量測資料。</p></div>
+          <p class="next-hint">下一個 Part 將追問：形狀不規則的物體，體積也量得出來嗎？</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer><div class="shell">本頁為密度與測量 Part 3.1 的互動試作。刻度圖與讀值情境為教學示意；實際工具與教材細節依採用教材複核。</div></footer>
+
+  <script>
+    (() => {
+      const done = new Set();
+      const progress = document.querySelector("#lesson-progress");
+      const progressCopy = document.querySelector("#progress-copy");
+      const complete = (id, message, state = "good") => {
+        const feedback = document.querySelector(`#feedback-${id}`);
+        feedback.dataset.state = state;
+        feedback.textContent = message;
+        done.add(id);
+        progress.value = done.size;
+        progressCopy.textContent = `已完成 ${done.size}／8 張卡的操作`;
+      };
+      const selectOne = (container, button, attr) => {
+        container.querySelectorAll("button").forEach((item) => {
+          item.setAttribute("aria-pressed", String(item === button));
+          item.classList.remove("correct", "incorrect");
+        });
+        button.setAttribute("aria-pressed", "true");
+        button.dataset.selected = attr;
+      };
+
+      document.querySelector("#check-reasons").addEventListener("click", () => {
+        const selected = [...document.querySelectorAll("#reasons input:checked")];
+        const feedback = document.querySelector("#feedback-1");
+        feedback.dataset.state = selected.length ? "good" : "try";
+        feedback.textContent = selected.length
+          ? "這些都可能造成讀值差異。先把它們當作待檢驗的猜想，接下來用量測紀錄和操作找線索。"
+          : "先選一個可能原因。等等會逐一檢查工具、單位、起點和讀值方式。";
+        if (selected.length) { done.add("1"); progress.value = done.size; progressCopy.textContent = `已完成 ${done.size}／8 張卡的操作`; }
+      });
+
+      document.querySelector("#check-record").addEventListener("click", () => {
+        const quantity = document.querySelector("#record-quantity").value;
+        const unit = document.querySelector("#record-unit").value;
+        if (quantity === "length" && unit === "cm") complete("2", "對了：這是一筆筆長 5 cm 的長度紀錄。只寫 5，缺少單位，別人無法確定量值。每個量測任務也要說清楚量的是什麼。", "good");
+        else if (!quantity || !unit) complete("2", "請選擇量測項目和單位，讓這筆紀錄完整。", "try");
+        else complete("2", "再想想：這裡量的是筆的長度，還是質量？單位也要和量測項目相配。", "try");
+      });
+
+      const toolAnswers = { length: "ruler", mass: "balance", time: "timer" };
+      const toolNames = { ruler: "直尺", balance: "天平", timer: "計時器" };
+      let toolChoice = "";
+      document.querySelectorAll("#tool-options button").forEach((button) => button.addEventListener("click", () => {
+        toolChoice = button.dataset.tool;
+        selectOne(document.querySelector("#tool-options"), button, "tool");
+        const task = document.querySelector("#tool-task").value;
+        const answer = toolAnswers[task];
+        if (toolChoice === answer) complete("3", `${toolNames[toolChoice]}適合這個量測任務。選工具時要先確認物理量相符，並檢查工具的範圍與刻度是否合用。`);
+        else complete("3", `這個工具主要用來量${toolChoice === "ruler" ? "長度" : toolChoice === "balance" ? "質量" : "時間"}；想想它和目前要量的物理量是否相符。`, "try");
+      }));
+      document.querySelector("#tool-task").addEventListener("change", () => {
+        toolChoice = "";
+        document.querySelectorAll("#tool-options button").forEach((button) => button.setAttribute("aria-pressed", "false"));
+        document.querySelector("#feedback-3").textContent = "";
+        document.querySelector("#feedback-3").removeAttribute("data-state");
+      });
+      document.querySelectorAll("#range-options button").forEach((button) => button.addEventListener("click", () => {
+        selectOne(document.querySelector("#range-options"), button, "range");
+        if (button.dataset.range === "10") complete("3", "對，0–10 cm 的量程比約 14 cm 的筆短，無法涵蓋全長。量程能涵蓋物體，才方便完成量測。", "good");
+        else complete("3", "這把尺的量程能涵蓋 14 cm。題目要找出量程不夠長的選項。", "try");
+        document.querySelector("#feedback-3-range").dataset.state = button.dataset.range === "10" ? "good" : "try";
+        document.querySelector("#feedback-3-range").textContent = button.dataset.range === "10"
+          ? "選擇量測工具時，除了物理量，也要確認量程足以涵蓋預期的量值。"
+          : "0–10 cm 的尺量程較短，不能涵蓋這支筆的全長。";
+      }));
+
+      document.querySelectorAll("#division-options button").forEach((button) => button.addEventListener("click", () => {
+        selectOne(document.querySelector("#division-options"), button, "division");
+        if (button.dataset.division === "0.1cm") complete("4", "正確。1 cm 分成 10 個相等間隔，每一格是 0.1 cm，也就是 1 mm。", "good");
+        else complete("4", "再數數看：從 0 到 1 cm 共有幾個相等間隔？最小刻度是一個間隔的量值。", "try");
+      }));
+
+      document.querySelectorAll("#estimate-options button").forEach((button) => button.addEventListener("click", () => {
+        selectOne(document.querySelector("#estimate-options"), button, "estimate");
+        if (button.dataset.estimate === "2.45") complete("5", "這個位置大約在 2.4 和 2.5 cm 的中間，因此可估為 2.45 cm。這是根據圖上位置作出的估計。", "good");
+        else complete("5", "紅線落在 2.4 和 2.5 cm 兩條刻線之間，而且接近中間；再選一個介於兩者的估計值。", "try");
+      }));
+
+      const viewNote = document.querySelector("#view-note");
+      const sightLines = document.querySelector("#sight-lines");
+      document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => {
+        document.querySelectorAll("[data-view]").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        if (button.dataset.view === "angle") {
+          sightLines.innerHTML = '<path d="M128 42L250 137" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path><circle cx="128" cy="42" r="16" fill="#f8e2d2" stroke="#bc612b" stroke-width="3"></circle>';
+          viewNote.innerHTML = "<strong>從斜上方看</strong><br>視線與刻度不在同一高度，可能產生視差，讓讀值偏離實際位置。";
+        } else {
+          sightLines.innerHTML = '<path d="M250 80L250 137" stroke="#176b53" stroke-width="3" stroke-dasharray="5 4"></path><circle cx="250" cy="35" r="16" fill="#dceaf0" stroke="#547884" stroke-width="3"></circle>';
+          viewNote.innerHTML = "<strong>眼睛正對刻度</strong><br>從與刻度同一高度觀察，能減少視差造成的讀值偏差。";
+        }
+        complete("6", `${viewNote.textContent} 若起點不在 0，量長度時還要用終點讀值減去起點讀值。`);
+      }));
+      document.querySelectorAll("[data-zero]").forEach((button) => button.addEventListener("click", () => {
+        document.querySelectorAll("[data-zero]").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        const message = button.dataset.zero === "offset"
+          ? "起點在 0.5 cm，終點在 5.3 cm，物體長度是 5.3 − 0.5 = 4.8 cm。不要把終點讀值直接當成物體長度。"
+          : "起點在 0 cm 時，終點讀值就是長度；仍要讓眼睛正對刻度，並確認物體沒有移動。";
+        complete("6", message);
+      }));
+
+      const fixAnswers = { angle: "eye", zero: "subtract", scale: "scale" };
+      let fixChoice = "";
+      document.querySelectorAll("#fix-options button").forEach((button) => button.addEventListener("click", () => {
+        fixChoice = button.dataset.fix;
+        selectOne(document.querySelector("#fix-options"), button, "fix");
+        const problem = document.querySelector("#error-case").value;
+        if (fixChoice === fixAnswers[problem]) complete("7", "方法和問題來源相符。修正這個來源能讓量測更可靠；仍要保留工具與讀值的限制。", "good");
+        else complete("7", "這個方法沒有直接處理目前的問題來源，再對照情況選一次。", "try");
+      }));
+      document.querySelector("#error-case").addEventListener("change", () => {
+        fixChoice = "";
+        document.querySelectorAll("#fix-options button").forEach((button) => button.setAttribute("aria-pressed", "false"));
+        document.querySelector("#feedback-7").textContent = "";
+        document.querySelector("#feedback-7").removeAttribute("data-state");
+      });
+
+      document.querySelectorAll("#fair-options button").forEach((button) => button.addEventListener("click", () => {
+        selectOne(document.querySelector("#fair-options"), button, "fair");
+        if (button.dataset.fair === "yes") complete("8", "對。兩筆都是長度，且 142 mm = 14.2 cm。工具不同不會自動讓資料失去可比性；仍要確認工具適合、讀法合理。", "good");
+        else if (button.dataset.fair === "no") complete("8", "工具不一定要相同。要看兩把工具是否都適合量這個物體，且資料能否用一致單位比較。", "try");
+        else complete("8", "單位不同時先換成相同單位再比較。14.2 cm 和 142 mm 表示相同長度。", "try");
+      }));
+    })();
+  </script>
+</body>
+</html>
