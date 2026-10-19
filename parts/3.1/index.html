@@ -159,8 +159,8 @@
     .length-conversion-head h3 { margin: 0; font-size: 1rem; }
     .length-conversion-head p { margin: 3px 0 0; color: var(--muted); font-size: .88rem; }
     .length-conversion-select { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .88rem; font-weight: 700; }
-    .length-conversion-pencil { display: grid; place-items: center; min-height: 86px; margin: 12px 0; padding: 12px; border: 1px solid #d8e5da; border-radius: 14px; background: #fffefa; }
-    .length-conversion-pencil img { display: block; width: min(460px, 82%); height: 54px; object-fit: contain; }
+    .length-conversion-pencil { margin: 12px 0; padding: 8px; border: 1px solid #d8e5da; border-radius: 14px; background: #fffefa; }
+    .length-conversion-pencil svg { display: block; width: 100%; height: auto; }
     .length-conversion-result { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; }
     .length-conversion-result strong { color: #183c31; font-family: Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.5rem); }
     .length-conversion-result span { color: var(--muted); }
@@ -329,13 +329,21 @@
           <p class="live-note" id="record-explanation" aria-live="polite">這筆紀錄量的是鉛筆的長度；18.2 是數值，cm 是長度單位。點選各部分，看看少了哪項資訊會讓紀錄難以理解。</p>
           <div class="length-conversion-demo">
             <div class="length-conversion-head">
-              <div><h3>同一段長度，可以用不同單位表示</h3><p>鉛筆的長度固定；切換單位時，長度不變，數值會跟著換算。</p></div>
+              <div><h3>同一段長度，可以用不同單位表示</h3><p>鉛筆固定長 18.2 cm；切換單位時，尺上每格代表的長度和格數會跟著改變。</p></div>
               <label class="length-conversion-select" for="length-display-unit">改用
                 <select id="length-display-unit" aria-label="選擇鉛筆長度的表示單位"><option value="cm" selected>公分（cm）</option><option value="mm">毫米（mm）</option><option value="m">公尺（m）</option></select>表示
               </label>
             </div>
-            <div class="length-conversion-pencil"><img src="assets/pencil-photo.webp" alt="同一支模型鉛筆，長度固定約 18.2 公分"></div>
-            <div class="length-conversion-result" aria-live="polite"><strong id="length-conversion-value">18.2 cm</strong><span id="length-conversion-explanation">目前以公分記錄。</span></div>
+            <div class="length-conversion-pencil">
+              <svg id="length-conversion-ruler" viewBox="0 0 720 170" role="img" aria-label="同一支鉛筆對齊刻度尺；目前以公分表示長度">
+                <image href="assets/pencil-photo.webp" x="42" y="14" width="546" height="29" preserveAspectRatio="none"></image>
+                <path d="M42 43v40 M588 43v40" fill="none" stroke="#718078" stroke-width="1.4" stroke-dasharray="4 4"></path>
+                <rect x="18" y="82" width="684" height="66" rx="9" fill="#f4e7c5" stroke="#ac9563" stroke-width="2"></rect>
+                <g id="length-conversion-ticks" fill="none" stroke="#34433c" stroke-width="1.4"></g>
+                <g id="length-conversion-labels" fill="#26383a" font-size="12" text-anchor="middle"></g>
+              </svg>
+            </div>
+            <div class="length-conversion-result" aria-live="polite"><strong id="length-conversion-value">18.2 cm</strong><span id="length-conversion-explanation">鉛筆跨過 18 個 1 cm 間隔，再多 0.2 cm。</span></div>
             <p class="length-conversion-equivalents">換算關係：1 cm = 10 mm；100 cm = 1 m。　<span id="length-conversion-equation">18.2 cm × 10 = 182 mm</span></p>
           </div>
           <p class="next-hint">知道要量什麼之後，下一步是選擇合適的工具。</p>
@@ -774,16 +782,45 @@
         document.querySelector("#record-explanation").textContent = recordDescriptions[button.dataset.recordPart];
       }));
       const lengthUnitConversions = {
-        cm: { value: "18.2 cm", explanation: "目前以公分記錄。", equation: "18.2 cm × 10 = 182 mm" },
-        mm: { value: "182 mm", explanation: "同一段長度改用毫米表示，數值變成原來的 10 倍。", equation: "182 mm ÷ 10 = 18.2 cm" },
-        m: { value: "0.182 m", explanation: "同一段長度改用公尺表示，數值是公分數除以 100。", equation: "18.2 cm ÷ 100 = 0.182 m" }
+        cm: { value: "18.2 cm", explanation: "鉛筆跨過 18 個 1 cm 間隔，再多 0.2 cm。", equation: "18.2 cm × 10 = 182 mm", divisions: 20, labelEvery: 1, label: (index) => String(index), tick: (index) => index % 5 === 0 ? 39 : 28 },
+        mm: { value: "182 mm", explanation: "每格是 1 mm；同一支鉛筆跨過 182 格。", equation: "182 mm ÷ 10 = 18.2 cm", divisions: 200, labelEvery: 10, label: (index) => String(index), tick: (index) => index % 50 === 0 ? 39 : index % 10 === 0 ? 28 : index % 5 === 0 ? 20 : 12 },
+        m: { value: "0.182 m", explanation: "每格是 0.001 m；這段長度是 0.182 m。", equation: "18.2 cm ÷ 100 = 0.182 m", divisions: 200, labelEvery: 10, label: (index) => (index / 1000).toFixed(2), tick: (index) => index % 50 === 0 ? 39 : index % 10 === 0 ? 28 : index % 5 === 0 ? 20 : 12 }
       };
-      document.querySelector("#length-display-unit").addEventListener("change", (event) => {
-        const conversion = lengthUnitConversions[event.target.value];
+      const renderLengthConversionRuler = (unit) => {
+        const conversion = lengthUnitConversions[unit];
+        const ticks = [];
+        const labels = [];
+        for (let index = 0; index <= conversion.divisions; index += 1) {
+          const x = 42 + (600 * index) / conversion.divisions;
+          const tickLength = conversion.tick(index);
+          const path = document.createElementNS(svgNamespace, "path");
+          path.setAttribute("d", `M${x} 82v${tickLength}`);
+          if (unit === "cm" || index % 10 === 0) path.setAttribute("stroke-width", "1.9");
+          ticks.push(path);
+          if (index % conversion.labelEvery === 0) {
+            const text = document.createElementNS(svgNamespace, "text");
+            text.setAttribute("x", String(x));
+            text.setAttribute("y", "132");
+            if (index === 0) text.setAttribute("text-anchor", "start");
+            if (index === conversion.divisions) text.setAttribute("text-anchor", "end");
+            text.textContent = conversion.label(index);
+            labels.push(text);
+          }
+        }
+        document.querySelector("#length-conversion-ticks").replaceChildren(...ticks);
+        document.querySelector("#length-conversion-labels").replaceChildren(...labels);
+        document.querySelector("#length-conversion-ruler").setAttribute("aria-label", `同一支鉛筆固定長 18.2 公分；目前尺面以${unit === "cm" ? "公分" : unit === "mm" ? "毫米" : "公尺"}刻度表示，端點位置不變。`);
+      };
+      const updateLengthConversion = (unit) => {
+        const conversion = lengthUnitConversions[unit];
         document.querySelector("#length-conversion-value").textContent = conversion.value;
         document.querySelector("#length-conversion-explanation").textContent = conversion.explanation;
         document.querySelector("#length-conversion-equation").textContent = conversion.equation;
-      });
+        renderLengthConversionRuler(unit);
+      };
+      const lengthUnitSelect = document.querySelector("#length-display-unit");
+      lengthUnitSelect.addEventListener("change", () => updateLengthConversion(lengthUnitSelect.value));
+      updateLengthConversion(lengthUnitSelect.value);
 
       const tasks = {
         length: { instrument: "直尺", range: "長度；量程 0–30 cm", quantity: "長度", value: "約 18.2 cm", tooShort: "短尺", tooShortRange: "長度；量程 0–5 cm" },
