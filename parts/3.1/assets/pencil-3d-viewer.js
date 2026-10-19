@@ -17,7 +17,7 @@ let modelReady = false;
 let modelFailed = false;
 let lastFrame = "";
 const view = {
-  edge: 18.2,
+  edge: 18,
   start: 0,
   yaw: 0,
   pitch: 0.45,
@@ -131,7 +131,7 @@ try {
 
 window.setPencil3DView = (nextView = {}) => {
   Object.assign(view, nextView);
-  if (pencil && Number.isFinite(nextView.edge)) pencil.scale.x = nextView.edge / 18.2;
+  if (pencil && Number.isFinite(nextView.edge)) pencil.scale.x = nextView.edge / 18;
   render();
 };
 
