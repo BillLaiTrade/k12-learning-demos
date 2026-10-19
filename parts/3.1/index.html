@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="透過蘋果與直尺的互動，觀察量測條件如何影響讀值，最後用一題確認理解。">
+<meta name="description" content="透過鉛筆與直尺的互動，觀察量測條件如何影響讀值，最後用一題確認理解。">
   <title>量測與公平比較｜直向閱讀</title>
   <style>
     :root {
@@ -168,18 +168,25 @@
     .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
     .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
     .model-screen { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
-    .model-screen svg { display: block; width: 100%; height: auto; transform-origin: 76% 91%; transition: transform .8s cubic-bezier(.2,.8,.2,1); }
-    .model-screen[data-zoom="true"] svg { transform: scale(3.2); }
+    .model-screen svg { display: block; width: 100%; height: auto; }
     #shared-scale { fill: #26383a; font: 20px system-ui, sans-serif; }
     #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
     #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.5; }
     #shared-scale .ruler-line.major { stroke-width: 3; }
+    #shared-scale[data-zoom="true"] { font: 3px system-ui, sans-serif; }
+    #shared-scale[data-zoom="true"] .ruler-body { stroke-width: .3; }
+    #shared-scale[data-zoom="true"] .ruler-line { stroke-width: .23; }
+    #shared-scale[data-zoom="true"] .ruler-line.major { stroke-width: .46; }
+    #model-screen[data-zoom="true"] #apple-start-guide,
+    #model-screen[data-zoom="true"] #apple-end-guide { display: none; }
+    #model-screen[data-zoom="true"] #zoom-endpoint-marker path { stroke-width: .45; }
+    #model-screen[data-zoom="true"] #zoom-endpoint-marker circle { r: 1.5; stroke-width: .35; }
     .model-readout { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #cbded0; }
     .model-readout small { color: var(--muted); }
     .model-readout strong { font-size: 1.12rem; }
     .model-status { min-height: 3.1em; margin: 10px 0 0 !important; padding: 10px 12px; border-radius: 12px; background: rgb(255 255 255 / 70%); font-size: .86rem !important; }
     .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
-    #apple-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 0; display: block; width: calc(100% - 24px); height: 330px; pointer-events: none; }
+    #apple-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 330px; pointer-events: none; }
     #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 330px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
     #parallax-canvas:active { cursor: grabbing; }
     #parallax-canvas:focus-visible { outline: 3px solid #176b53; outline-offset: 3px; }
@@ -241,10 +248,10 @@
       <div>
         <div class="eyebrow">密度與測量｜直向閱讀</div>
         <h1>要公平比較，<br>先把「量」說清楚</h1>
-        <p>同一顆蘋果，為什麼可能量出不同讀值？沿著連貫的學習內容操作同一把尺，從紀錄、刻度到讀值條件，一步步找出能比較的資料。</p>
+        <p>同一支鉛筆，為什麼可能量出不同讀值？沿著連貫的學習內容操作同一把尺，從紀錄、刻度到讀值條件，一步步找出能比較的資料。</p>
       </div>
       <aside class="hero-note">
-        <strong>同一顆蘋果，量測會怎麼變？</strong>
+        <strong>同一支鉛筆，讀值會怎麼變？</strong>
         <p>調整尺的刻度或觀察角度，看看讀值如何改變，再找出讓量測更可靠的方法。</p>
       </aside>
     </div>
@@ -255,14 +262,14 @@
       <nav class="route" aria-label="本段學習路徑">
         <p class="route-label">本單元的探索路線</p>
         <div class="route-inner">
-          <a href="#card-01" aria-current="step"><b>01</b><span>同一顆蘋果，為什麼會有不同讀值？</span></a>
-          <a href="#card-02"><b>02</b><span>只寫「5」，別人知道你量了什麼嗎？</span></a>
+          <a href="#card-01" aria-current="step"><b>01</b><span>同一支鉛筆，為什麼會有不同讀值？</span></a>
+          <a href="#card-02"><b>02</b><span>只寫「18.2」，別人知道你量了什麼嗎？</span></a>
           <a href="#card-03"><b>03</b><span>同一種工具，能量所有東西嗎？</span></a>
           <a href="#card-04"><b>04</b><span>尺上的每一格，代表多少？</span></a>
-          <a href="#card-05"><b>05</b><span>7.6 cm 再多一點，端點落在哪裡？</span></a>
+          <a href="#card-05"><b>05</b><span>18.2 cm 再多一點，端點落在哪裡？</span></a>
           <a href="#card-06"><b>06</b><span>同一物體，為什麼讀值會差一點？</span></a>
           <a href="#card-07"><b>07</b><span>改變一個條件，量測會怎麼改善？</span></a>
-          <a href="#card-08"><b>08</b><span>怎麼判斷兩筆寬度紀錄是否可比較？</span></a>
+          <a href="#card-08"><b>08</b><span>怎麼判斷兩筆長度紀錄是否可比較？</span></a>
         </div>
         <p class="next-hint">沿著學習順序閱讀、操作與觀察。</p>
       </nav>
@@ -271,13 +278,13 @@
       <section class="lesson-card" id="card-01">
         <div class="card-side"><span class="card-number">01</span><h3>提出疑問</h3><span class="card-role">同一物體，不同紀錄</span></div>
         <div class="card-main">
-          <h2>同一顆蘋果，為什麼會有不同讀值？</h2>
-          <p>先記下同一顆蘋果的紀錄 A，接著一次只改變一項量測條件，觀察紀錄 B 有什麼不同。兩次讀值改變了，是蘋果變了，還是尺與讀法變了？</p>
+          <h2>同一支鉛筆，為什麼會有不同讀值？</h2>
+          <p>先記下同一支鉛筆的紀錄 A，接著一次只改變一項量測條件，觀察紀錄 B 有什麼不同。兩次讀值改變了，是鉛筆變了，還是尺與讀法變了？</p>
           <label class="field">切換量測情境
             <select id="difference-condition"><option value="scale">工具刻度不同</option><option value="start">尺的起點沒有對準</option><option value="view">讀刻度的視角不同</option><option value="unit">使用的單位不同</option></select>
           </label>
-          <div class="readout" aria-live="polite"><article><small>紀錄 A・固定參照</small><strong id="reading-a">約 7.6 cm</strong><span id="reading-a-note">同一顆蘋果的原始紀錄</span></article><article><small>紀錄 B・改變後</small><strong id="reading-b">約 7.6–7.7 cm</strong><span id="reading-b-note">依物體端點的位置估一個讀值</span></article></div>
-          <div class="fact"><p id="difference-explanation">改變的是尺或讀值條件；蘋果仍是同一顆，讓我們可以比較同一量測對象的紀錄。</p></div>
+          <div class="readout" aria-live="polite"><article><small>紀錄 A・固定參照</small><strong id="reading-a">約 18.2 cm</strong><span id="reading-a-note">同一支鉛筆的原始紀錄</span></article><article><small>紀錄 B・改變後</small><strong id="reading-b">約 18.2–18.3 cm</strong><span id="reading-b-note">依物體端點的位置估一個讀值</span></article></div>
+          <div class="fact"><p id="difference-explanation">改變的是尺或讀值條件；鉛筆仍是同一支，讓我們可以比較同一量測對象的紀錄。</p></div>
           <p class="next-hint">要讀懂這些差異，先看看一筆量測紀錄要交代哪些資訊。</p>
         </div>
       </section>
@@ -285,10 +292,10 @@
       <section class="lesson-card" id="card-02">
         <div class="card-side"><span class="card-number">02</span><h3>看懂紀錄</h3><span class="card-role">物理量、數值與單位</span></div>
         <div class="card-main">
-          <h2>只寫「5」，別人知道你量了什麼嗎？</h2>
+          <h2>只寫「18.2」，別人知道你量了什麼嗎？</h2>
           <p>量測紀錄要寫清楚物理量、數值和單位。依序點選紀錄各部分；再固定數字 182、切換質量單位，看看它相當於多少顆約 182 g 的蘋果。</p>
-          <div class="record" aria-label="蘋果水平方向的寬度約為七點六公分">
-            <span id="record-object">蘋果的寬度</span><span>=</span><span id="record-value">約 7.6</span><span id="record-unit">cm</span>
+          <div class="record" aria-label="鉛筆的長度約為十八點二公分">
+            <span id="record-object">鉛筆的長度</span><span>=</span><span id="record-value">約 18.2</span><span id="record-unit">cm</span>
           </div>
           <div class="concept-parts" role="group" aria-label="量測紀錄的組成">
             <button type="button" data-record-part="object" aria-pressed="true">物理量</button>
@@ -302,8 +309,8 @@
             <output class="unit-scale-result" id="unit-apple-count" aria-live="polite">182 g = 1 顆模型蘋果</output>
             <p class="unit-scale-note" id="unit-apple-note">依美國農業部資料，中型蘋果直徑約 7.62 cm、質量約 182 g。為了示範單位換算，這裡假設每顆模型蘋果的質量都固定為 182 g。</p><a class="unit-source" href="https://fdc.nal.usda.gov/food-details/171688/nutrients" target="_blank" rel="noreferrer">查看資料來源：美國農業部食品資料中心（中型蘋果）</a>
           </div>
-          <p class="live-note" id="record-explanation" aria-live="polite">先說明你量的是什麼；這裡量的是蘋果水平方向的寬度。</p>
-          <div class="fact"><p>「7.6 cm」和「7.6 mm」的數字相同，但單位不同，代表的長度也不同。記錄量測結果時，要把單位一起寫清楚。</p></div>
+          <p class="live-note" id="record-explanation" aria-live="polite">先說明你量的是什麼；這裡量的是鉛筆的長度。</p>
+          <div class="fact"><p>「18.2 cm」和「18.2 mm」的數字相同，但單位不同，代表的長度也不同。記錄量測結果時，要把單位一起寫清楚。</p></div>
         </div>
       </section>
 
@@ -314,7 +321,7 @@
           <p>工具要能測量指定的物理量，也要有適合的量程。切換量測任務和工具情境，觀察工具的用途及限制。</p>
           <div class="select-row">
             <label class="field">量測任務
-              <select id="tool-task"><option value="length">量這顆蘋果的寬度（約 7.6 cm）</option><option value="mass">量這顆蘋果的質量（示意約 182 g）</option><option value="time">量一段約 12 s 的活動時間</option></select>
+              <select id="tool-task"><option value="length">量這支鉛筆的長度（約 18.2 cm）</option><option value="mass">量這顆蘋果的質量（約 182 g）</option></select>
             </label>
             <label class="field">工具情境
               <select id="tool-state"><option value="suitable">物理量和量程都合適</option><option value="wrong-quantity">工具測量的是另一種物理量</option><option value="short-range">工具量程不足</option></select>
@@ -322,10 +329,10 @@
           </div>
           <div class="readout" aria-live="polite">
             <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
-            <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，蘋果寬度落在尺的量程內。</span></article>
+            <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，鉛筆長度落在尺的量程內。</span></article>
           </div>
           <div class="range-model" aria-label="工具量程與預期量值的視覺比較">
-            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">蘋果約 7.6 cm，落在量程內</span></div>
+            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">鉛筆約 18.2 cm，落在量程內</span></div>
             <div class="range-track"><span id="range-fill"></span><i id="range-marker" aria-hidden="true"></i></div>
             <div class="range-endpoints"><span>0</span><span id="range-maximum">30 cm</span></div>
           </div>
@@ -338,7 +345,7 @@
         <div class="card-side"><span class="card-number">04</span><h3>讀取刻度</h3><span class="card-role">觀察最小刻度</span></div>
         <div class="card-main">
           <h2>尺上的每一格，代表多少？</h2>
-          <p>共用模型中的尺顯示蘋果端點。切換刻度間隔，觀察每格的長度以及端點相對於刻線的位置。</p>
+          <p>共用模型中的尺顯示鉛筆端點。切換刻度間隔，觀察每格的長度以及端點相對於刻線的位置。</p>
           <div class="control-panel">
             <div class="ruler-caption"><span>尺的一段：0 cm 至 1 cm</span><span>改變每公分的分格數</span></div>
             <div class="toggle-row" role="group" aria-label="每公分分格數">
@@ -346,16 +353,16 @@
               <button type="button" data-divisions="5" aria-pressed="false">5 格</button>
               <button type="button" data-divisions="10" aria-pressed="true">10 格</button>
             </div>
-            <p class="live-note" id="division-model-note">共用模型中的尺已同步更新；蘋果端點仍在相同位置。</p>
+            <p class="live-note" id="division-model-note">共用模型中的尺已同步更新；鉛筆端點仍在相同位置。</p>
             <p class="live-note" id="division-note" aria-live="polite">1 cm 分成 10 個相等間隔，每個間隔是 0.1 cm（1 mm）。</p>
           </div>
-          <div class="division-visual" aria-label="同一段直尺的分格變化；蘋果端點位置固定">
+          <div class="division-visual" aria-label="同一段直尺的分格變化；鉛筆端點位置固定">
             <svg id="division-ruler" viewBox="0 0 520 100" role="img" aria-label="一公分分成十格的直尺示意，右端點位置固定">
-              <rect x="20" y="22" width="480" height="50" rx="6" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
+              <rect x="20" y="22" width="480" height="50" rx="6" fill="#dfe8e3" stroke="#a99255" stroke-width="2"></rect>
               <g id="division-ticks"></g><path id="division-endpoint" d="M178.4 10v72" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
               <text id="division-unit-label" x="20" y="94" fill="#26383a" font-size="13">7 cm</text><text id="division-unit-label-end" x="500" y="94" text-anchor="end" fill="#26383a" font-size="13">8 cm</text>
             </svg>
-            <p id="division-visual-note" aria-live="polite">橘色標記是固定的蘋果端點；改變的是尺的刻線間距。</p>
+            <p id="division-visual-note" aria-live="polite">橘色標記是固定的鉛筆端點；改變的是尺的刻線間距。</p>
           </div>
           <div class="fact"><p>工具的最小刻度會限制可直接讀取的精細程度；讀值時先確認刻度標示和每格的間距。</p></div>
         </div>
@@ -364,29 +371,30 @@
       <section class="lesson-card" id="card-05">
         <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">位置改變，估值跟著改變</span></div>
         <div class="card-main">
-          <h2>7.6 cm 再多一點，端點落在哪裡？</h2>
-          <p>7.6 cm 就是 7 cm 6 mm。這顆蘋果的右端再多出一點，沒有剛好停在刻線上。按下「拉近查看」，放大 7.6 cm 與 7.7 cm 兩條刻線附近；拖動同一顆蘋果沿尺移動，觀察右端在兩條刻線之間的位置。蘋果本身保持同樣大小。</p>
+          <h2>18.2 cm 再多一點，端點落在哪裡？</h2>
+          <p>18.2 cm 就是 18 cm 2 mm。這支鉛筆的右端再多出一點，沒有剛好停在刻線上。按下「拉近查看」，放大 18.2 cm 與 18.3 cm 兩條刻線附近；拖動同一支鉛筆沿尺移動，觀察右端在兩條刻線之間的位置。鉛筆長度保持不變。</p>
           <aside class="model-panel" aria-labelledby="model-title">
-            <h2 id="model-title">量量看：蘋果有多寬？</h2>
-            <p>拉近刻度，觀察同一顆蘋果的端點在尺上的位置；這個模型會延續到後續內容。</p>
+            <h2 id="model-title">量量看：鉛筆有多長？</h2>
+            <p>拉近刻度，觀察同一支鉛筆的端點在尺上的位置；這個模型會延續到後續內容。</p>
             <div class="model-screen" id="model-screen" data-zoom="false">
-              <svg id="shared-measurement-model" viewBox="0 0 760 650" role="img" aria-label="用直尺測量蘋果水平方向的寬度，左端對齊零，右端落在七點六公分與七點七公分之間">
+              <svg id="shared-measurement-model" viewBox="0 0 760 650" role="img" aria-label="用直尺測量鉛筆的長度，左端對齊零，右端落在十八點二公分與十八點三公分之間">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
-                <image id="apple-object" href="assets/apple-hero.webp" x="27" y="45" width="454" height="414" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></image>
+                <g id="pencil-object" aria-hidden="true"><rect x="27" y="265" width="402" height="28" rx="12" fill="#e5bd43" stroke="#987625" stroke-width="2"></rect><path d="M429 265L469 279L429 293Z" fill="#d9a35b" stroke="#987625" stroke-width="2"></path><path d="M469 279L481 279L469 283Z" fill="#34383d"></path><rect x="27" y="265" width="24" height="28" rx="8" fill="#d98280" stroke="#987625" stroke-width="2"></rect><rect x="50" y="265" width="8" height="28" fill="#b9c2c0" stroke="#987625" stroke-width="1"></rect><path d="M86 269H408" stroke="#f8dfa0" stroke-width="3" opacity=".8"></path></g>
                 <path id="apple-start-guide" d="M80 65V620" stroke="#176b53" stroke-width="2" stroke-dasharray="5 5"></path>
                 <path id="apple-end-guide" d="M588 65V620" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 5"></path>
                 <g id="shared-scale"></g>
+                <g id="zoom-endpoint-marker" display="none" aria-hidden="true"><path id="zoom-endpoint-line" d="M468 570V623" stroke="#bc612b" stroke-width="2"></path><circle id="zoom-endpoint-dot" cx="468" cy="570" r="6" fill="#bc612b" stroke="#fffefa" stroke-width="2"></circle></g>
                 <g id="eye-ray" opacity="0">
                   <circle cx="620" cy="40" r="12" fill="#dceaf0" stroke="#547884" stroke-width="3"></circle>
                   <path d="M620 52L588 600" stroke="#bc612b" stroke-width="2" stroke-dasharray="5 4"></path>
                 </g>
               </svg>
             </div>
-            <div class="model-readout"><small>目前讀值</small><strong id="shared-reading">約 7.6 cm</strong></div>
-            <p class="model-status" id="shared-model-note" aria-live="polite">量的是蘋果水平方向的寬度。左端對齊 0 cm；右端略超過 7.6 cm。</p>
+            <div class="model-readout"><small>目前讀值</small><strong id="shared-reading">約 18.2 cm</strong></div>
+            <p class="model-status" id="shared-model-note" aria-live="polite">量的是鉛筆的長度。左端對齊 0 cm；右端略超過 18.2 cm。</p>
             <button type="button" class="secondary" id="zoom-toggle" aria-pressed="false">拉近查看端點</button>
           </aside>
-          <div class="slider-row"><input id="estimate-slider" type="range" min="760" max="770" value="763" aria-label="沿著直尺移動蘋果，觀察右端在七點六與七點七公分刻線間的位置"><output class="value" id="estimate-value" for="estimate-slider">7.6 cm 後一點</output></div>
+          <div class="slider-row"><input id="estimate-slider" type="range" min="1820" max="1830" value="1823" aria-label="沿著直尺移動鉛筆，觀察右端在十八點二與十八點三公分刻線間的位置"><output class="value" id="estimate-value" for="estimate-slider">18.2 cm 後一點</output></div>
           <p class="live-note" id="estimate-note" aria-live="polite">拉近能看清端點相對於刻線的位置；放大不會增加尺的刻度精度，也不代表得到絕對精確值。</p>
           <div class="fact"><p>物體端點不一定剛好對準刻線。讀值落在兩條刻線之間時，可以根據端點位置估一個值，這叫作「估讀」。畫面放大能幫助觀察位置，但不會讓尺的刻度變得更細。</p></div>
         </div>
@@ -396,20 +404,20 @@
         <div class="card-side"><span class="card-number">06</span><h3>找出讀值差異</h3><span class="card-role">視角與起點是兩種條件</span></div>
         <div class="card-main">
           <h2>同一物體，為什麼讀值會差一點？</h2>
-          <p>拖曳下方的 3D 場景，從不同方向觀察同一顆蘋果和直尺。紅色虛線延伸到尺面的位置，是這個視角下可能讀到的刻度；蘋果本身的寬度不會因為轉動視角而改變。選取畫面後也可用方向鍵調整視角。</p>
+          <p>同一支鉛筆平行放在直尺旁，左端對齊 0 cm。拖曳 3D 場景改變觀察角度，紅色虛線從鉛筆右端投到尺面的位置，顯示這個視角下讀到的刻度；鉛筆本身的長度不會因轉動視角而改變。也可選取畫面後用方向鍵調整視角。</p>
           <div class="parallax-scene">
             <canvas id="apple-3d-canvas" aria-hidden="true"></canvas>
-            <span id="apple-model-status" class="visually-hidden" aria-live="polite">正在載入蘋果 3D 模型。</span>
-            <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、蘋果和視線延長線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明蘋果寬度不變，讀值可能隨觀察角度改變。</canvas>
-            <div class="scene-caption"><p id="camera-caption" aria-live="polite">拖曳畫面旋轉視角；也可先選取畫面，再按方向鍵。</p><button type="button" class="secondary" id="reset-camera">回到正對刻度</button></div>
-            <div class="scene-readout" aria-live="polite"><article><small>蘋果模型設定的寬度</small><strong id="actual-width">約 7.6 cm</strong></article><article><small>從這個角度讀到的數值</small><strong id="parallax-reading">約 7.6 cm</strong></article></div>
-            <p class="live-note" id="parallax-explanation">正對尺面時，視線延長線接近蘋果端點；斜向觀察時，端點的視線落到尺面別處，這種因觀察角度不同而產生的讀值差異，叫作「視差」。這裡的讀值依照尺上刻度估讀。</p>
+            <span id="apple-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
+            <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、鉛筆和視線延長線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明鉛筆長度不變，讀值可能隨觀察角度改變。</canvas>
+            <div class="scene-caption"><p id="camera-caption" aria-live="polite">拖曳畫面旋轉視角；也可先選取畫面，再按方向鍵。</p><button type="button" class="secondary" id="reset-camera">回到預設視角</button></div>
+            <div class="scene-readout" aria-live="polite"><article><small>鉛筆模型設定的長度</small><strong id="actual-width">約 18.2 cm</strong></article><article><small>從這個角度讀到的數值</small><strong id="parallax-reading">約 18.2 cm</strong></article></div>
+            <p class="live-note" id="parallax-explanation">正對尺面時，視線延長線接近鉛筆端點；斜向觀察時，端點的視線落到尺面別處，這種因觀察角度不同而產生的讀值差異，叫作「視差」。這裡的讀值依照尺上刻度估讀。</p>
           </div>
           <div class="toggle-row" role="group" aria-label="尺的起點">
             <button type="button" data-zero="aligned" aria-pressed="true">起點在 0 cm</button>
             <button type="button" data-zero="offset" aria-pressed="false">起點在 0.5 cm</button>
           </div>
-          <div class="readout" aria-live="polite"><article><small>尺上蘋果端點</small><strong id="zero-end">約 7.6 cm</strong><span>沿用共用模型上的同一端點</span></article><article><small>蘋果寬度</small><strong id="zero-result">約 7.6 cm</strong><span id="zero-explanation">起點在 0 cm，終點位置就是寬度。</span></article></div>
+          <div class="readout" aria-live="polite"><article><small>尺上鉛筆端點</small><strong id="zero-end">約 18.2 cm</strong><span>沿用共用模型上的同一端點</span></article><article><small>鉛筆長度</small><strong id="zero-result">約 18.2 cm</strong><span id="zero-explanation">起點在 0 cm，終點位置就是長度。</span></article></div>
         </div>
       </section>
 
@@ -437,12 +445,12 @@
         <div class="card-side"><span class="card-number">08</span><h3>整合理解</h3><span class="card-role">檢查看看是否理解</span></div>
         <div class="card-main">
           <span class="assessment-label">理解檢核・共 1 題</span>
-          <h2>怎麼判斷蘋果的兩筆寬度紀錄是否可比較？</h2>
-          <p>小安沿用共用模型，記下蘋果寬度約 7.6 cm；小晴也量同一顆蘋果，卻只記下「7.6」。哪一項說明最完整？</p>
+          <h2>怎麼判斷鉛筆的兩筆長度紀錄是否可比較？</h2>
+          <p>小安沿用共用模型，記下鉛筆長度約 18.2 cm；小晴也量同一支鉛筆，卻只記下「18.2」。哪一項說明最完整？</p>
           <div class="choices" id="fair-options">
-            <button class="choice" data-fair="complete" aria-pressed="false">「7.6」缺少單位，資料還不完整；要確認兩筆都是長度、單位與讀值條件可對照。</button>
+            <button class="choice" data-fair="complete" aria-pressed="false">「18.2」缺少單位，資料還不完整；要確認兩筆都是長度、單位與讀值條件可對照。</button>
             <button class="choice" data-fair="tool" aria-pressed="false">只要量到相同數字，就可以直接比較。</button>
-            <button class="choice" data-fair="number" aria-pressed="false">蘋果一樣，所以量測紀錄不需要寫單位。</button>
+            <button class="choice" data-fair="number" aria-pressed="false">鉛筆一樣，所以量測紀錄不需要寫單位。</button>
           </div>
           <div class="feedback" id="assessment-feedback" aria-live="polite"></div>
           <div class="fact"><p><strong>回到開頭的問題：</strong>比較量測資料時，先確認物理量、單位、工具和讀值條件，並用可對照的證據說明差異。</p></div>
@@ -453,17 +461,17 @@
     </div>
   </main>
 
-  <footer><div class="shell">頁面以蘋果和直尺示範觀察角度如何影響讀值。蘋果模型依中型蘋果直徑參照縮放；畫面讀值由教學模型估讀，不代表每顆真實蘋果的測量結果。</div></footer>
+  <footer><div class="shell">長度示範使用固定約 18.2 cm 的鉛筆模型；質量與單位換算示範使用中型蘋果約 182 g 的參照值。鉛筆長度為教學模型設定，不代表特定市售鉛筆規格。</div></footer>
 
   <script>
     (() => {
       const pressOne = (buttons, selected) => buttons.forEach((button) => {
         button.setAttribute("aria-pressed", String(button === selected));
       });
-      const state = { divisions: 10, start: 0, angle: false, unit: true, zoom: false, edge: 7.62 };
-      const defaultCameraPitch = 0.35;
-      const orbitRadius = 14;
-      const defaultCameraYaw = Math.asin((state.edge / 2) / (orbitRadius * Math.cos(defaultCameraPitch)));
+      const state = { divisions: 10, start: 0, angle: false, unit: true, zoom: false, edge: 18.2 };
+      const defaultCameraPitch = 0.45;
+      const orbitRadius = 24;
+      const defaultCameraYaw = 0;
       const ruler = document.querySelector("#shared-scale");
       const modelSvg = document.querySelector("#shared-measurement-model");
       const modelScreen = document.querySelector("#model-screen");
@@ -491,7 +499,7 @@
         const ctx = parallaxContext;
         const width = bounds.width;
         const height = bounds.height;
-        const target = { x: state.start + state.edge / 2, y: state.edge * 0.45, z: 0 };
+        const target = { x: state.start + state.edge / 2, y: 0.3, z: 0 };
         const cameraPosition = {
           x: target.x + orbitRadius * Math.cos(camera.pitch) * Math.sin(camera.yaw),
           y: target.y + orbitRadius * Math.sin(camera.pitch),
@@ -500,7 +508,7 @@
         const forward = normalize(subtract(target, cameraPosition));
         const right = normalize(cross(forward, { x: 0, y: 1, z: 0 }));
         const up = normalize(cross(right, forward));
-        const focalLength = height * 1.45;
+        const focalLength = width <= 760 ? Math.min(height * 0.9, width * 0.52) : height * 0.9;
         const project = (point) => {
           const relative = subtract(point, cameraPosition);
           const depth = dot(relative, forward);
@@ -540,52 +548,55 @@
         ctx.clearRect(0, 0, width, height);
 
         const rulerMin = -0.18;
-        const rulerMax = 12;
+        const rulerMax = 30;
         const top = 0.04;
-        drawFace([{ x: rulerMin, y: top, z: -6.2 }, { x: rulerMax, y: top, z: -6.2 }, { x: rulerMax, y: top, z: 6.2 }, { x: rulerMin, y: top, z: 6.2 }], "#f2dfa9");
-        drawFace([{ x: rulerMin, y: top, z: 6.2 }, { x: rulerMax, y: top, z: 6.2 }, { x: rulerMax, y: -0.12, z: 6.2 }, { x: rulerMin, y: -0.12, z: 6.2 }], "#ddc987", "#a99255");
+        const rulerNear = -1.5;
+        const rulerFar = 1.5;
+        const pencilCenterZ = 1.9;
+        drawFace([{ x: rulerMin, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerFar }, { x: rulerMin, y: top, z: rulerFar }], "#dfe8e3");
+        drawFace([{ x: rulerMin, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerNear }, { x: rulerMax, y: -0.12, z: rulerNear }, { x: rulerMin, y: -0.12, z: rulerNear }], "#cad8d1", "#93a99e");
         const tickStep = 1 / state.divisions;
-        for (let tick = 0; tick <= 12 * state.divisions; tick += 1) {
+        for (let tick = 0; tick <= 30 * state.divisions; tick += 1) {
           const x = tick * tickStep;
           const major = tick % state.divisions === 0;
           const half = tick % Math.max(1, state.divisions / 2) === 0;
-          const startDepth = major ? -6.0 : half ? -4.6 : -2.8;
-          drawLine([{ x, y: top + 0.015, z: startDepth }, { x, y: top + 0.015, z: 6.2 }], major ? "#26383a" : "#637174", major ? 2.2 : 1.15);
-          if (major) {
-              const label = project({ x, y: top + 0.03, z: 6.6 });
+          const startDepth = major ? rulerNear + 0.04 : half ? rulerNear + 0.22 : rulerNear + 0.43;
+          drawLine([{ x, y: top + 0.015, z: startDepth }, { x, y: top + 0.015, z: rulerFar - 0.04 }], major ? "#26383a" : "#637174", major ? 2.2 : 1.15);
+          if (major && tick % (5 * state.divisions) === 0) {
+              const label = project({ x, y: top + 0.03, z: rulerNear - 0.3 });
             if (label) {
               ctx.fillStyle = "#26383a";
-              ctx.font = "12px system-ui, sans-serif";
+              ctx.font = "10px system-ui, sans-serif";
               ctx.textAlign = "center";
-              ctx.fillText(`${tick / state.divisions}${state.unit ? " cm" : ""}`, label.x, label.y);
+              ctx.fillText(`${tick / state.divisions}`, label.x, label.y);
             }
           }
         }
 
-        const appleCenter = { x: state.start + state.edge / 2, y: state.edge * 0.45 + 0.04, z: 2.5 };
-        const appleHalfWidth = state.edge / 2;
-        const appleStartX = appleCenter.x - appleHalfWidth;
-        const appleEndX = appleCenter.x + appleHalfWidth;
+        const pencilCenter = { x: state.start + state.edge / 2, y: 0.3, z: pencilCenterZ };
+        const pencilHalfLength = state.edge / 2;
+        const pencilStartX = pencilCenter.x - pencilHalfLength;
+        const pencilEndX = pencilCenter.x + pencilHalfLength;
         window.setApple3DView?.({
           edge: state.edge,
           start: state.start,
           yaw: camera.yaw,
           pitch: camera.pitch,
           orbitRadius,
-          centerZ: appleCenter.z,
+          centerZ: pencilCenter.z,
           focalLengthRatio: focalLength / height
         });
-        const edgeX = appleEndX;
-        const edgeHeight = appleCenter.y;
+        const edgeX = pencilEndX;
+        const edgeHeight = pencilCenter.y;
         const cameraHeight = cameraPosition.y;
         const projectionFactor = (edgeHeight - top) / Math.max(0.1, cameraHeight - edgeHeight);
         const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
-        const projectedEdgeZ = appleCenter.z + projectionFactor * (appleCenter.z - cameraPosition.z);
+        const projectedEdgeZ = pencilCenter.z + projectionFactor * (pencilCenter.z - cameraPosition.z);
         const clampedProjectionX = clamp(projectedEdgeX, rulerMin, rulerMax);
-        const clampedProjectionZ = clamp(projectedEdgeZ, -6.1, 6.1);
-        drawLine([{ x: appleStartX, y: 0.06, z: -1.26 }, { x: appleStartX, y: 1.25, z: -1.26 }], "#176b53", 1.7, [4, 4]);
-        drawLine([{ x: edgeX, y: top + 0.03, z: 0 }, { x: edgeX, y: edgeHeight, z: 0 }], "#bc612b", 2, [4, 4]);
-        drawLine([{ x: edgeX, y: edgeHeight, z: 0 }, { x: clampedProjectionX, y: top + 0.035, z: clampedProjectionZ }], "#bc612b", 2, [5, 4]);
+        const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
+        drawLine([{ x: pencilStartX, y: 0.06, z: pencilCenterZ }, { x: pencilStartX, y: 0.65, z: pencilCenterZ }], "#176b53", 1.7, [4, 4]);
+        drawLine([{ x: edgeX, y: top + 0.03, z: pencilCenterZ }, { x: edgeX, y: edgeHeight, z: pencilCenterZ }], "#bc612b", 2, [4, 4]);
+        drawLine([{ x: edgeX, y: edgeHeight, z: pencilCenterZ }, { x: clampedProjectionX, y: top + 0.035, z: clampedProjectionZ }], "#bc612b", 2, [5, 4]);
         const landing = project({ x: clampedProjectionX, y: top + 0.04, z: clampedProjectionZ });
         if (landing) {
           ctx.beginPath();
@@ -594,56 +605,67 @@
           ctx.fill();
         }
         const estimatedStep = 1 / state.divisions;
-        const apparentWidth = Math.max(0, projectedEdgeX - appleStartX);
+        const apparentWidth = Math.max(0, projectedEdgeX - pencilStartX);
         const apparentWidthReading = Math.round(apparentWidth / estimatedStep) * estimatedStep;
         const apparentEndReading = Math.round(projectedEdgeX / estimatedStep) * estimatedStep;
         const formattedWidthReading = apparentWidthReading.toFixed(1);
         const formattedEndReading = apparentEndReading.toFixed(1);
-        const landingOnScale = projectedEdgeX >= 0 && projectedEdgeX <= 12 && Math.abs(projectedEdgeZ) <= 6.0;
+        const landingOnScale = projectedEdgeX >= 0 && projectedEdgeX <= 30 && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
         document.querySelector("#actual-width").textContent = `約 ${state.edge.toFixed(1)} cm`;
         document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${formattedEndReading} cm` : "視線落在尺外";
         document.querySelector("#zero-end").textContent = landingOnScale ? `約 ${formattedEndReading} cm` : "視線落在尺外";
         document.querySelector("#zero-result").textContent = landingOnScale ? `約 ${formattedWidthReading} cm` : "目前無法估讀";
         document.querySelector("#zero-explanation").textContent = !landingOnScale
-          ? "端點視線落在尺面範圍外；調整視角讓落點回到刻度，再讀取終點與寬度。"
+          ? "端點視線落在尺面範圍外；調整視角讓落點回到刻度，再讀取終點與長度。"
           : state.start === 0
-          ? `起點在 0 cm，終點讀值約 ${formattedEndReading} cm，寬度也約 ${formattedWidthReading} cm。`
-          : `終點讀值約 ${formattedEndReading} cm − 起點 ${state.start.toFixed(1)} cm，寬度約 ${formattedWidthReading} cm。`;
-        const side = Math.abs(camera.yaw) < 0.12 ? "接近正對尺長方向" : camera.yaw > 0 ? "從尺的右側觀察" : "從尺的左側觀察";
-        const elevation = camera.pitch > 1.05 ? "較高俯視" : camera.pitch < 0.8 ? "較低視線" : "斜上方視線";
+          ? `起點在 0 cm，終點讀值約 ${formattedEndReading} cm，長度也約 ${formattedWidthReading} cm。`
+          : `終點讀值約 ${formattedEndReading} cm − 起點 ${state.start.toFixed(1)} cm，長度約 ${formattedWidthReading} cm。`;
+        const side = Math.abs(Math.sin(camera.yaw)) < 0.12 ? "從直尺正面觀察" : Math.sin(camera.yaw) > 0 ? "從尺的右側觀察" : "從尺的左側觀察";
+        const elevation = camera.pitch > 1.15 ? "較高俯視" : camera.pitch < 0.45 ? "較低視線" : "斜上方視線";
         document.querySelector("#camera-caption").textContent = `目前視角：${elevation}，${side}。拖曳旋轉；方向鍵也可調整。`;
         document.querySelector("#parallax-explanation").textContent = !landingOnScale
-          ? "這個角度下，視線延長線落在尺面範圍外，無法從尺上讀值。轉動視角，讓落點回到刻度上；蘋果寬度始終不變。"
+          ? "這個角度下，視線延長線落在尺面範圍外，無法從尺上讀值。轉動視角，讓落點回到刻度上；鉛筆長度始終不變。"
           : Math.abs(apparentWidthReading - state.edge) < estimatedStep / 2
-          ? "目前視線接近正對尺長方向，落點讀值與固定的蘋果寬度接近。拖動視角，觀察視線延長線如何偏離端點。"
-          : `蘋果實際寬度仍約 ${state.edge.toFixed(1)} cm；端點視線落到尺面約 ${formattedEndReading} cm，扣除起點 ${state.start.toFixed(1)} cm 後，讀到的寬度約 ${formattedWidthReading} cm。差異呈現視差，不代表蘋果或尺改變。`;
+          ? "目前視線接近正對尺長方向，落點讀值與固定的鉛筆長度接近。拖動視角，觀察視線延長線如何偏離端點。"
+          : `鉛筆實際長度仍約 ${state.edge.toFixed(1)} cm；端點視線落到尺面約 ${formattedEndReading} cm，扣除起點 ${state.start.toFixed(1)} cm 後，讀到的長度約 ${formattedWidthReading} cm。差異呈現視差，不代表鉛筆或尺改變。`;
         parallaxCanvas.setAttribute("aria-label", landingOnScale
-          ? `三維直尺與蘋果模型。蘋果寬度約 ${state.edge.toFixed(1)} 公分；從目前角度讀到的尺上端點約為 ${formattedEndReading} 公分。可拖曳或使用方向鍵旋轉視角。`
-          : `三維直尺與蘋果模型。蘋果實際寬度約 ${state.edge.toFixed(1)} 公分；目前視角的視線落在尺面範圍外，無法讀值。可拖曳或使用方向鍵旋轉視角。`);
+          ? `三維直尺與鉛筆模型。鉛筆長度約 ${state.edge.toFixed(1)} 公分；從目前角度讀到的尺上端點約為 ${formattedEndReading} 公分。可拖曳或使用方向鍵旋轉視角。`
+          : `三維直尺與鉛筆模型。鉛筆實際長度約 ${state.edge.toFixed(1)} 公分；目前視角的視線落在尺面範圍外，無法讀值。可拖曳或使用方向鍵旋轉視角。`);
       };
       const updateModel = (note) => {
-        const startX = 80 + state.start * 80;
-        const endX = 80 + edgePosition() * 80;
-        const appleScale = (state.edge * 80) / 454;
-        const appleOffset = startX - 27 * appleScale;
-        document.querySelector("#apple-object").setAttribute("transform", `translate(${appleOffset} 0) scale(${appleScale})`);
+        modelSvg.setAttribute("viewBox", state.zoom ? "410.87 550 116.923 100" : "0 0 760 650");
+        ruler.dataset.zoom = String(state.zoom);
+        document.querySelector("#model-screen").dataset.zoom = String(state.zoom);
+        const startX = 80 + state.start * (640 / 30);
+        const endX = 80 + edgePosition() * (640 / 30);
+        const pencilScale = (state.edge * (640 / 30)) / 454;
+        const pencilOffset = startX - 27 * pencilScale;
+        document.querySelector("#pencil-object").setAttribute("transform", `translate(${pencilOffset} 0) scale(${pencilScale})`);
         document.querySelector("#apple-start-guide").setAttribute("d", `M${startX} 65V620`);
         document.querySelector("#apple-end-guide").setAttribute("d", `M${endX} 65V620`);
+        document.querySelector("#zoom-endpoint-marker").setAttribute("display", state.zoom ? "" : "none");
+        document.querySelector("#zoom-endpoint-line").setAttribute("d", `M${endX} 570V623`);
+        document.querySelector("#zoom-endpoint-dot").setAttribute("cx", String(endX));
         const lines = [];
         const subdivisions = state.divisions;
-        const totalTicks = subdivisions * 8;
+        const totalTicks = subdivisions * 30;
         for (let tick = 0; tick <= totalTicks; tick += 1) {
           const x = 80 + (tick * 640) / totalTicks;
           const major = tick % subdivisions === 0;
           const half = tick % Math.max(1, subdivisions / 2) === 0;
           const top = major ? 580 : half ? 587 : 593;
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${623 - top}"/>`);
-          if (major) lines.push(`<text x="${x - 4}" y="644">${tick / subdivisions}${state.unit ? " cm" : ""}</text>`);
+          const labelEvery = subdivisions * (state.zoom ? 1 : 5);
+          if (major && tick % labelEvery === 0 && (!state.zoom || tick / subdivisions <= 20)) {
+            const value = tick / subdivisions;
+            const anchor = value === 0 ? "start" : value === 30 ? "end" : "middle";
+            lines.push(`<text x="${x}" y="644" text-anchor="${anchor}">${value}${state.unit ? " cm" : ""}</text>`);
+          }
         }
         ruler.innerHTML = `<rect class="ruler-body" x="66" y="580" width="668" height="43" rx="5"/>${lines.join("")}`;
         document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
         document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${endX} 600`);
-        document.querySelector("#shared-reading").textContent = state.unit ? "約 7.6 cm" : "約 7.6（單位未標）";
+        document.querySelector("#shared-reading").textContent = state.unit ? "約 18.2 cm" : "約 18.2（單位未標）";
         const unitToggle = document.querySelector("#unit-toggle");
         if (unitToggle) {
           unitToggle.setAttribute("aria-pressed", String(!state.unit));
@@ -658,8 +680,8 @@
           divisionNote.textContent = `1 cm 分成 ${state.divisions} 個相等間隔，每格是 ${size} cm。`;
         }
         modelSvg.setAttribute("aria-label", state.unit
-          ? `測量蘋果水平方向的寬度；蘋果左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於七點六與七點七公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`
-          : "尺上的公分單位標示已隱藏；測量蘋果水平方向的寬度，端點仍在七點六與七點七刻線之間");
+          ? `測量鉛筆的長度；鉛筆左端${state.start ? "未對齊零刻度" : "對齊零刻度"}，右端位於十八點二與十八點三公分刻線之間${state.angle ? "，視線從斜上方觀察" : ""}`
+          : "尺上的公分單位標示已隱藏；測量鉛筆的長度，端點仍在十八點二與十八點三刻線之間");
         if (note) document.querySelector("#shared-model-note").textContent = note;
         renderDivisionRuler();
         renderParallaxScene();
@@ -674,36 +696,36 @@
           ticks.push(`<path d="M${x} 22v${major ? 36 : 26}" stroke="#26383a" stroke-width="${major ? 2.5 : 1.5}"/>`);
         }
         group.innerHTML = ticks.join("");
-        const endpointX = 20 + (clamp(state.edge - 7, 0, 1) * 480);
+        const endpointX = 20 + (clamp(state.edge - 18, 0, 1) * 480);
         document.querySelector("#division-endpoint").setAttribute("d", `M${endpointX} 10v72`);
-        document.querySelector("#division-unit-label").textContent = state.unit ? "7 cm" : "7";
-        document.querySelector("#division-unit-label-end").textContent = state.unit ? "8 cm" : "8";
-        document.querySelector("#division-visual-note").textContent = `尺面顯示 7–8 cm；橘色標記是蘋果右端，固定在約 ${state.edge.toFixed(2)} cm。每公分分成 ${state.divisions} 格。`;
-        document.querySelector("#division-ruler").setAttribute("aria-label", `尺面從七到八公分，每公分分成${state.divisions}格；蘋果右端約在${state.edge.toFixed(2)}公分`);
+        document.querySelector("#division-unit-label").textContent = state.unit ? "18 cm" : "7";
+        document.querySelector("#division-unit-label-end").textContent = state.unit ? "19 cm" : "8";
+        document.querySelector("#division-visual-note").textContent = `尺面顯示 18–19 cm；橘色標記是鉛筆右端，固定在約 ${state.edge.toFixed(2)} cm。每公分分成 ${state.divisions} 格。`;
+        document.querySelector("#division-ruler").setAttribute("aria-label", `尺面從十八到十九公分，每公分分成${state.divisions}格；鉛筆右端約在${state.edge.toFixed(2)}公分`);
       };
       updateModel();
       renderDivisionRuler();
 
       const differenceStates = {
-        scale: { divisions: 2, start: 0, angle: false, unit: true, note: "同一蘋果與尺，改用較粗的刻度示意；端點所在區間較難細分。" },
+        scale: { divisions: 2, start: 0, angle: false, unit: true, note: "同一支鉛筆與尺，改用較粗的刻度示意；端點所在區間較難細分。" },
         start: { divisions: 10, start: 0.5, angle: false, unit: true, note: "尺的起點移到 0.5 cm；物體長度要用終點讀值減起點讀值。" },
-        view: { divisions: 10, start: 0, angle: true, unit: true, note: "改變視角可能讓蘋果端點在尺面上的視線落點偏移；可以拖曳 3D 場景，觀察讀值如何改變。" },
+        view: { divisions: 10, start: 0, angle: true, unit: true, note: "改變視角可能讓鉛筆端點在尺面上的視線落點偏移；可以拖曳 3D 場景，觀察讀值如何改變。" },
         unit: { divisions: 10, start: 0, angle: false, unit: false, note: "刻度旁的 cm 標示被移除；數字還在，但缺少單位就不能完整說明量值。" }
       };
       document.querySelector("#difference-condition").addEventListener("change", (event) => {
         const chosen = differenceStates[event.target.value];
         Object.assign(state, { divisions: chosen.divisions, start: chosen.start, angle: chosen.angle, unit: chosen.unit });
         updateModel(chosen.note);
-        document.querySelector("#reading-a").textContent = "約 7.6 cm";
-        document.querySelector("#reading-b").textContent = chosen.start ? "終點讀值約 8.1 cm" : chosen.angle ? "讀值可能偏移" : chosen.divisions === 2 ? "約 7.5–8.0 cm" : chosen.unit ? "約 7.6–7.7 cm" : "約 7.6–7.7（無單位）";
+        document.querySelector("#reading-a").textContent = "約 18.2 cm";
+        document.querySelector("#reading-b").textContent = chosen.start ? "終點讀值約 18.7 cm" : chosen.angle ? "讀值可能偏移" : chosen.divisions === 2 ? "約 18.0–18.5 cm" : chosen.unit ? "約 18.2–18.3 cm" : "約 18.2–18.3（無單位）";
         document.querySelector("#reading-a-note").textContent = "原始測量的固定參照";
         document.querySelector("#reading-b-note").textContent = chosen.start ? "起點在 0.5 cm，需扣除起點" : chosen.angle ? "轉動視角，比較尺上的讀值" : chosen.divisions === 2 ? "較粗刻度的尺，區間較大" : chosen.unit ? "依物體端點的位置估一個讀值" : "尺上的 cm 標示已移除";
         document.querySelector("#difference-explanation").textContent = chosen.note;
       });
 
       const recordDescriptions = {
-        object: "先說明你量的是什麼；這裡量的是蘋果水平方向的寬度。",
-        value: "數值表示量到的大小；模型顯示約 7.6，還要搭配單位才完整。",
+        object: "先說明你量的是什麼；這裡量的是鉛筆的長度。",
+        value: "數值表示量到的大小；模型顯示約 18.2，還要搭配單位才完整。",
         unit: "單位說明數值所採用的尺度；這把尺用 cm（公分）標示。"
       };
       const recordParts = [...document.querySelectorAll("[data-record-part]")];
@@ -788,9 +810,9 @@
       updateUnitAppleDemo();
 
       const tasks = {
-        length: { instrument: "直尺", range: "長度；量程 0–30 cm", quantity: "長度", value: "約 7.6 cm", tooShort: "短尺", tooShortRange: "長度；量程 0–5 cm" },
+        length: { instrument: "直尺", range: "長度；量程 0–30 cm", quantity: "長度", value: "約 18.2 cm", tooShort: "短尺", tooShortRange: "長度；量程 0–5 cm" },
         mass: { instrument: "天平", range: "質量；量程 0–500 g", quantity: "質量", value: "約 182 g", tooShort: "小量程天平", tooShortRange: "質量；量程 0–100 g" },
-        time: { instrument: "計時器", range: "時間；量程 0–60 s", quantity: "時間", value: "約 12 s", tooShort: "短量程計時器", tooShortRange: "時間；量程 0–10 s" }
+
       };
       const updateToolView = () => {
         const task = tasks[document.querySelector("#tool-task").value];
@@ -815,7 +837,7 @@
         document.querySelector("#tool-range").textContent = range;
         document.querySelector("#tool-result").textContent = result;
         document.querySelector("#tool-result-note").textContent = explanation;
-        const quantityValues = { length: { value: 7.6, max: 30, unit: "cm" }, mass: { value: 182, max: 500, unit: "g" }, time: { value: 12, max: 60, unit: "s" } };
+        const quantityValues = { length: { value: 18.2, max: 30, unit: "cm" }, mass: { value: 182, max: 500, unit: "g" } };
         const visual = quantityValues[document.querySelector("#tool-task").value];
         const visibleMaximum = selection === "short-range" ? (visual.unit === "cm" ? 5 : visual.unit === "g" ? 100 : 10) : visual.max;
         const ratio = Math.min(100, (visual.value / visibleMaximum) * 100);
@@ -837,29 +859,29 @@
       divisionButtons.forEach((button) => button.addEventListener("click", () => {
         pressOne(divisionButtons, button);
         state.divisions = Number(button.dataset.divisions);
-        updateModel(`共用尺現在每公分分成 ${state.divisions} 格；蘋果端點位置不變，每格長度隨分格數改變。`);
+        updateModel(`共用尺現在每公分分成 ${state.divisions} 格；鉛筆端點位置不變，每格長度隨分格數改變。`);
         const size = (1 / state.divisions).toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
         document.querySelector("#division-note").textContent = `1 cm 分成 ${state.divisions} 個相等間隔，每格是 ${size} cm。`;
-        document.querySelector("#division-model-note").textContent = "上方共用模型的尺刻線已同步改變，蘋果和端點仍沿用同一模型。";
+        document.querySelector("#division-model-note").textContent = "上方共用模型的尺刻線已同步改變，鉛筆和端點仍沿用同一模型。";
       }));
 
       const setZoom = (zoom) => {
         state.zoom = zoom;
-        modelScreen.dataset.zoom = String(zoom);
         const zoomButton = document.querySelector("#zoom-toggle");
         zoomButton.setAttribute("aria-pressed", String(zoom));
         zoomButton.textContent = zoom ? "縮回整把尺" : "拉近查看端點";
+        updateModel();
       };
       document.querySelector("#zoom-toggle").addEventListener("click", () => setZoom(!state.zoom));
       const estimateSlider = document.querySelector("#estimate-slider");
       estimateSlider.addEventListener("input", () => {
         const endpoint = Number(estimateSlider.value) / 100;
         state.start = endpoint - state.edge;
-        const fraction = (endpoint - 7.6) / 0.1;
-        const description = fraction < 0.33 ? "7.6 cm 後一點" : fraction < 0.67 ? "約在兩條刻線中間" : "接近 7.7 cm 刻線";
+        const fraction = (endpoint - 18.2) / 0.1;
+        const description = fraction < 0.33 ? "18.2 cm 後一點" : fraction < 0.67 ? "約在兩條刻線中間" : "接近 18.3 cm 刻線";
         document.querySelector("#estimate-value").textContent = description;
-        document.querySelector("#estimate-note").textContent = `蘋果保持同樣大小並沿尺移動，右端${description}；放大只讓位置更容易觀察，不會增加尺本身的刻度精度。`;
-        updateModel(`蘋果保持同樣大小並沿尺移動，右端${description}；讀取寬度仍須比較左右端位置。`);
+        document.querySelector("#estimate-note").textContent = `鉛筆保持同樣長度並沿尺移動，右端${description}；放大只讓位置更容易觀察，不會增加尺本身的刻度精度。`;
+        updateModel(`鉛筆保持同樣長度並沿尺移動，右端${description}；讀取長度仍須比較左右端位置。`);
       });
 
       const wrapAngle = (angle) => ((angle + Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) - Math.PI;
@@ -900,17 +922,20 @@
       });
       window.addEventListener("resize", renderParallaxScene);
       window.addEventListener("apple3d-ready", renderParallaxScene, { once: true });
+      window.addEventListener("load", renderParallaxScene, { once: true });
+      // The module can finish before this listener is attached; apply the current camera immediately when ready.
+      if (window.setApple3DView) renderParallaxScene();
 
       const zeroButtons = [...document.querySelectorAll("[data-zero]")];
       zeroButtons.forEach((button) => button.addEventListener("click", () => {
         pressOne(zeroButtons, button);
         state.start = button.dataset.zero === "offset" ? 0.5 : 0;
-        updateModel(state.start ? `尺的起點移到 0.5 cm；蘋果寬度要以終點位置減去起點位置。` : "尺的起點回到 0 cm；同一蘋果的寬度由終點位置讀取。");
+        updateModel(state.start ? `尺的起點移到 0.5 cm；鉛筆長度要以終點位置減去起點位置。` : "尺的起點回到 0 cm；同一鉛筆的長度由終點位置讀取。");
       }));
 
       const correctionStates = {
-        view: { before: "斜向觀察尺面", beforeNote: "視線延長線落在端點旁邊", after: "正對端點讀刻度", afterNote: "視線落點更接近端點", explanation: "轉動視角讓視線接近正對尺長方向，可減少端點投影到尺面時的視差；蘋果寬度不變。", apply: () => { state.angle = false; camera.yaw = defaultCameraYaw; } },
-        start: { before: "起點在 0.5 cm", beforeNote: "不可直接把終點當長度", after: "起點對齊 0 cm", afterNote: "以同一蘋果重新讀取", explanation: "起點對齊零後，可直接讀終點位置；若未對齊，則須用終點減起點。", apply: () => { state.start = 0; } },
+        view: { before: "斜向觀察尺面", beforeNote: "視線延長線落在端點旁邊", after: "將端點投影對準刻度", afterNote: "讀值回到約 18.2 cm", explanation: "調整觀察角度，使鉛筆右端的視線投影落到約 18.2 cm；讀值與鉛筆模型長度相符，鉛筆本身沒有改變。", apply: () => { state.angle = false; camera.yaw = defaultCameraYaw + 0.36; camera.pitch = defaultCameraPitch; } },
+        start: { before: "起點在 0.5 cm", beforeNote: "不可直接把終點當長度", after: "起點對齊 0 cm", afterNote: "以同一支鉛筆重新讀取", explanation: "起點對齊零後，可直接讀終點位置；若未對齊，則須用終點減起點。", apply: () => { state.start = 0; } },
         scale: { before: "刻度目前分格", beforeNote: "可在共用尺上比較", after: "每公分 10 格", afterNote: "每格為 0.1 cm（1 mm）", explanation: "較細的刻度可呈現更細的讀值；放大畫面本身不會改變工具刻度。", apply: () => { state.divisions = 10; } }
       };
       let corrected = false;
@@ -919,6 +944,7 @@
         if (!selectedCase) return;
         state.angle = selectedCase === "view";
         camera.yaw = selectedCase === "view" ? defaultCameraYaw + 0.7 : defaultCameraYaw;
+        camera.pitch = defaultCameraPitch;
         state.start = selectedCase === "start" ? 0.5 : 0;
         if (selectedCase === "scale") state.divisions = 2;
         updateModel("共用模型已切換到這種量測限制；套用改善後可比較同一模型的變化。");
@@ -949,7 +975,7 @@
         if (!selectedCase) return;
         const selected = correctionStates[selectedCase];
         if (!corrected) selected.apply();
-        else if (selectedCase === "view") { state.angle = true; camera.yaw = defaultCameraYaw + 0.7; }
+        else if (selectedCase === "view") { state.angle = true; camera.yaw = defaultCameraYaw + 0.7; camera.pitch = defaultCameraPitch; }
         else if (selectedCase === "start") state.start = 0.5;
         else state.divisions = 2;
         corrected = !corrected;
@@ -963,7 +989,7 @@
         const feedback = document.querySelector("#assessment-feedback");
         feedback.dataset.state = button.dataset.fair === "complete" ? "good" : "try";
         feedback.textContent = button.dataset.fair === "complete"
-          ? "兩筆都是蘋果的長度，但「7.6」沒有單位，無法確定使用哪種尺度。補上單位，並確認量測方法後，才能判斷資料是否可比較。"
+          ? "兩筆都是鉛筆的長度，但「18.2」沒有單位，無法確定使用哪種尺度。補上單位，並確認量測方法後，才能判斷資料是否可比較。"
           : "對照兩筆資料是否說清楚量測的物理量、數值與單位，再查看尺的刻度和讀值條件是否可比較。";
       }));
 
@@ -978,6 +1004,7 @@
             link.removeAttribute("aria-current");
           }
         });
+        if (cardId === "card-06") requestAnimationFrame(renderParallaxScene);
       };
       if ("IntersectionObserver" in window) {
         const cardObserver = new IntersectionObserver((entries) => {
