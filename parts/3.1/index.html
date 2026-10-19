@@ -393,12 +393,13 @@
             <p class="live-note" id="division-note" aria-live="polite">30 cm ÷ 15 格 = 2 cm／格。</p>
           </div>
           <div class="division-visual" aria-label="完整三十公分直尺的等分示意；鉛筆端點位置固定">
-            <svg id="division-ruler" viewBox="0 0 520 100" role="img" aria-label="零至三十公分直尺，分成十五等分，每格兩公分；鉛筆端點位置固定">
-              <rect x="20" y="22" width="480" height="50" rx="6" fill="#f4e7c5" stroke="#ac9563" stroke-width="2"></rect>
-              <g id="division-ticks"></g><path id="division-endpoint" d="M311.2 10v72" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
-              <text id="division-unit-label" x="20" y="94" fill="#26383a" font-size="13">0 cm</text><text id="division-unit-label-end" x="500" y="94" text-anchor="end" fill="#26383a" font-size="13">30 cm</text>
+            <svg id="division-ruler" viewBox="0 0 520 140" role="img" aria-label="零至三十公分直尺，分成十五等分，每格兩公分；鉛筆固定長十八點二公分，左端對齊零刻度">
+              <image href="assets/pencil-photo.webp" x="20" y="15" width="291.2" height="15.46" preserveAspectRatio="none"></image>
+              <rect x="20" y="52" width="480" height="50" rx="6" fill="#f4e7c5" stroke="#ac9563" stroke-width="2"></rect>
+              <g id="division-ticks"></g><path id="division-endpoint" d="M311.2 32v78" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
+              <text id="division-unit-label" x="20" y="126" fill="#26383a" font-size="13">0 cm</text><text id="division-unit-label-end" x="500" y="126" text-anchor="end" fill="#26383a" font-size="13">30 cm</text>
             </svg>
-            <p id="division-visual-note" aria-live="polite">整把尺從 0 到 30 cm；橘色標記是固定在約 18.2 cm 的鉛筆右端。</p>
+            <p id="division-visual-note" aria-live="polite">鉛筆長度固定約 18.2 cm，左端對齊 0；右端對齊橘色標記。調整等分數不會改變鉛筆。</p>
           </div>
           <div class="fact"><p>同一把 30 cm 直尺可以有不同的分格方式；每格的長度由 30 cm 除以等分數決定。讀值時先確認刻度間距，再判斷端點落在哪裡。</p></div>
         </div>
@@ -795,15 +796,15 @@
         for (let index = 0; index <= state.divisions; index += 1) {
           const x = 20 + (480 * index) / state.divisions;
           const major = index === 0 || index === state.divisions;
-          ticks.push(`<path d="M${x} 22v${major ? 36 : 26}" stroke="#26383a" stroke-width="${major ? 2.5 : 1.5}"/>`);
+          ticks.push(`<path d="M${x} 52v${major ? 36 : 26}" stroke="#26383a" stroke-width="${major ? 2.5 : 1.5}"/>`);
         }
         group.innerHTML = ticks.join("");
         const endpointX = 20 + (clamp(state.edge, 0, 30) / 30) * 480;
-        document.querySelector("#division-endpoint").setAttribute("d", `M${endpointX} 10v72`);
+        document.querySelector("#division-endpoint").setAttribute("d", `M${endpointX} 32v78`);
         document.querySelector("#division-unit-label").textContent = "0 cm";
         document.querySelector("#division-unit-label-end").textContent = "30 cm";
-        document.querySelector("#division-visual-note").textContent = `整把尺從 0 到 30 cm，分成 ${state.divisions} 等分；橘色標記是鉛筆右端，約在 ${edgePosition().toFixed(2)} cm。`;
-        document.querySelector("#division-ruler").setAttribute("aria-label", `完整三十公分直尺分成${state.divisions}等分，每格${formatCentimeters(30 / state.divisions)}公分；橘色標記是鉛筆右端，約${edgePosition().toFixed(2)}公分`);
+        document.querySelector("#division-visual-note").textContent = `鉛筆固定長約 ${state.edge.toFixed(1)} cm，左端對齊 0；右端約在 ${edgePosition().toFixed(2)} cm，對齊橘色標記。直尺分成 ${state.divisions} 等分。`;
+        document.querySelector("#division-ruler").setAttribute("aria-label", `完整三十公分直尺分成${state.divisions}等分，每格${formatCentimeters(30 / state.divisions)}公分；鉛筆固定長${state.edge.toFixed(1)}公分，左端對齊零刻度`);
       };
       updateModel();
       renderDivisionRuler();
