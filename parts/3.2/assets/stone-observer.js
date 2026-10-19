@@ -57,9 +57,9 @@ function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLO
   const texture=new THREE.CanvasTexture(face);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;
   const topFace=new THREE.Mesh(new THREE.PlaneGeometry(width+.2,depth),new THREE.MeshBasicMaterial({map:texture}));
   topFace.rotation.x=-Math.PI/2;topFace.position.y=top+.001;group.add(topFace);
-  const guideMaterial=new THREE.LineDashedMaterial({color:accent,dashSize:.055,gapSize:.04,depthTest:false});
+  const guideMaterial=new THREE.LineDashedMaterial({color:accent,dashSize:.055,gapSize:.04});
   const guides=[0,1].map(()=>{const line=new THREE.Line(new THREE.BufferGeometry(),guideMaterial);line.renderOrder=5;group.add(line);return line});
-  const markerMaterial=new THREE.MeshBasicMaterial({color:accent,depthTest:false});
+  const markerMaterial=new THREE.MeshBasicMaterial({color:accent});
   const markers=[0,1].map(()=>{const marker=new THREE.Mesh(new THREE.SphereGeometry(.035,12,8),markerMaterial);marker.renderOrder=6;group.add(marker);return marker});
   return {group,guides,markers,top,width};
 }
@@ -138,29 +138,45 @@ export function mountStoneObserver(){
     const worldToFrame=framePivot.matrixWorld.clone().invert();
     const position=stone.geometry.attributes.position;
     let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity,minZ=Infinity,maxZ=-Infinity;
+    const minXPoint=new THREE.Vector3(),maxXPoint=new THREE.Vector3();
+    const minYPoint=new THREE.Vector3(),maxYPoint=new THREE.Vector3();
+    const minZPoint=new THREE.Vector3(),maxZPoint=new THREE.Vector3();
     for(let i=0;i<position.count;i++){
       const point=new THREE.Vector3().fromBufferAttribute(position,i).applyMatrix4(stone.matrixWorld).applyMatrix4(worldToFrame);
-      minX=Math.min(minX,point.x);maxX=Math.max(maxX,point.x);
-      minY=Math.min(minY,point.y);maxY=Math.max(maxY,point.y);
-      minZ=Math.min(minZ,point.z);maxZ=Math.max(maxZ,point.z);
+      if(point.x<minX){minX=point.x;minXPoint.copy(point)}
+      if(point.x>maxX){maxX=point.x;maxXPoint.copy(point)}
+      if(point.y<minY){minY=point.y;minYPoint.copy(point)}
+      if(point.y>maxY){maxY=point.y;maxYPoint.copy(point)}
+      if(point.z<minZ){minZ=point.z;minZPoint.copy(point)}
+      if(point.z>maxZ){maxZ=point.z;maxZPoint.copy(point)}
     }
     if(lengthReadout)lengthReadout.textContent=`約 ${((maxX-minX)*CM_PER_WORLD).toFixed(1)} cm`;
     if(widthReadout)widthReadout.textContent=`約 ${((maxZ-minZ)*CM_PER_WORLD).toFixed(1)} cm`;
     if(heightReadout)heightReadout.textContent=`約 ${((maxY-minY)*CM_PER_WORLD).toFixed(1)} cm`;
-    updateRulerGuides(lengthRuler,[minX,maxX].map(x=>framePivot.localToWorld(new THREE.Vector3(x,rulerFloor+.012-frameCenterY,-rulerEdge))));
-    updateRulerGuides(widthRuler,[minZ,maxZ].map(z=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,rulerFloor+.012-frameCenterY,z))));
-    updateRulerGuides(heightRuler,[minY,maxY].map(y=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge))));
+    updateRulerGuides(lengthRuler,[
+      [minXPoint,new THREE.Vector3(minX,rulerFloor+.012-frameCenterY,-rulerEdge)],
+      [maxXPoint,new THREE.Vector3(maxX,rulerFloor+.012-frameCenterY,-rulerEdge)]
+    ]);
+    updateRulerGuides(widthRuler,[
+      [minZPoint,new THREE.Vector3(rulerEdge,rulerFloor+.012-frameCenterY,minZ)],
+      [maxZPoint,new THREE.Vector3(rulerEdge,rulerFloor+.012-frameCenterY,maxZ)]
+    ]);
+    updateRulerGuides(heightRuler,[
+      [minYPoint,new THREE.Vector3(rulerEdge,minY,-rulerEdge)],
+      [maxYPoint,new THREE.Vector3(rulerEdge,maxY,-rulerEdge)]
+    ]);
     measureDirty=false;
   }
-  function updateRulerGuides(ruler,points){
+  function updateRulerGuides(ruler,pointPairs){
     ruler.group.updateMatrixWorld(true);
-    points.forEach((worldPoint,index)=>{
-      const localPoint=ruler.group.worldToLocal(worldPoint.clone());
+    pointPairs.forEach(([surfacePoint,scalePoint],index)=>{
+      const surfaceLocal=ruler.group.worldToLocal(framePivot.localToWorld(surfacePoint.clone()));
+      const scaleLocal=ruler.group.worldToLocal(framePivot.localToWorld(scalePoint.clone()));
       const line=ruler.guides[index];line.geometry.dispose();line.geometry=new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(localPoint.x,localPoint.y,localPoint.z),
-        new THREE.Vector3(localPoint.x,localPoint.y+.42,localPoint.z)
+        surfaceLocal,
+        scaleLocal
       ]);line.computeLineDistances();
-      ruler.markers[index].position.set(localPoint.x,localPoint.y+.012,localPoint.z);
+      ruler.markers[index].position.copy(scaleLocal);
     });
   }
   host.addEventListener('wheel',event=>{event.preventDefault();zoom(event.deltaY>0?.22:-.22)},{passive:false});
