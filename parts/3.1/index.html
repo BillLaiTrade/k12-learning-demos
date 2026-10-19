@@ -197,6 +197,20 @@
     .scene-readout strong { font-size: 1.25rem; }
     .end-card { background: #eef4e9; border-color: #bfd1be; }
     .next-hint { font-size: .9rem; color: var(--muted); }
+    .measurement-meaning-visual { margin: 24px 0 12px; text-align: center; }
+    .measurement-meaning-visual svg { display: block; width: 100%; height: auto; }
+    .measurement-meaning-visual figcaption { margin-top: 5px; color: var(--muted); font-size: .9rem; }
+    .measurement-meaning-mode { display: flex; width: min(420px, 100%); margin: 18px auto; padding: 2px; border: 1px solid #78978a; border-radius: 999px; }
+    .measurement-meaning-mode button { flex: 1; min-height: 44px; padding: 8px 12px; border: 0; border-radius: 999px; background: transparent; color: var(--ink); }
+    .measurement-meaning-mode button[aria-pressed="true"] { background: var(--green); color: #fff; }
+    .measurement-meaning-result { display: flex; align-items: center; gap: 22px; margin: 0; padding: 18px 22px; border: 1px solid #cbded0; border-radius: 16px; background: #f5f8f1; }
+    .measurement-meaning-result > span { flex: 0 0 auto; padding: 7px 12px; border-radius: 10px; background: #e3eee5; color: #315a46; font-weight: 750; }
+    .measurement-meaning-result > div { border-left: 1px solid #cbded0; padding-left: 22px; }
+    .measurement-meaning-result strong { display: block; color: #133d30; font-family: Georgia, serif; font-size: clamp(2.3rem, 6vw, 3.7rem); line-height: 1.1; }
+    .measurement-meaning-result p { margin: 5px 0 0; color: var(--muted); }
+    #card-01[data-measurement-mode="eye"] .ruler-visual { display: none; }
+    #card-01[data-measurement-mode="eye"] .measurement-meaning-result > span { font-size: .92rem; }
+    @media (max-width: 520px) { .measurement-meaning-result { align-items: flex-start; gap: 12px; padding: 14px; } .measurement-meaning-result > div { padding-left: 12px; } }
     footer { padding: 28px 0 44px; color: var(--muted); font-size: .86rem; border-top: 1px solid var(--line); }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     @media (max-width: 760px) {
@@ -274,22 +288,28 @@
       </nav>
       <div class="cards">
       <div class="section-top"><h2>從日常描述走到共同尺度</h2><span class="progress-copy">透過觀察與操作理解概念</span></div>
-      <section class="lesson-card" id="card-01">
+      <section class="lesson-card" id="card-01" data-measurement-mode="eye">
         <div class="card-side"><span class="card-number">01</span><h3>為什麼要量？</h3><span class="card-role">把感覺變成可比較的資料</span></div>
         <div class="card-main">
           <h2>只說「這支鉛筆很長」，別人怎麼知道它到底有多長？</h2>
           <p>「很長」是感覺，別人不一定和你想的一樣。測量能把觀察變成具體數字，讓結果可以說清楚、記下來，也能和別人比較。</p>
-          <div class="measurement-meaning-visual">
-            <svg viewBox="0 0 720 210" role="img" aria-label="一支鉛筆與一把尺對齊，尺上只標數字，尚未標示單位">
-              <rect x="18" y="108" width="684" height="72" rx="10" fill="#f4e7c5" stroke="#ac9563" stroke-width="2"></rect>
-              <path d="M42 108v37 M72 108v23 M102 108v23 M132 108v23 M162 108v37 M192 108v23 M222 108v23 M252 108v23 M282 108v37 M312 108v23 M342 108v23 M372 108v23 M402 108v37 M432 108v23 M462 108v23 M492 108v23 M522 108v37 M552 108v23 M582 108v23 M612 108v23 M642 108v37" fill="none" stroke="#34433c" stroke-width="2"></path>
-              <text x="42" y="163" text-anchor="middle" fill="#26383a" font-size="18">0</text><text x="342" y="163" text-anchor="middle" fill="#26383a" font-size="18">10</text><text x="642" y="163" text-anchor="middle" fill="#26383a" font-size="18">20</text>
-              <image href="assets/pencil-photo.webp" x="30" y="55" width="570" height="29" preserveAspectRatio="none"></image>
+          <figure class="measurement-meaning-visual">
+            <svg viewBox="0 0 720 210" role="img" aria-label="一支鉛筆；切換至對照刻度後，可看見與鉛筆對齊的直尺">
+              <g class="ruler-visual">
+                <rect x="18" y="108" width="684" height="72" rx="10" fill="#f4e7c5" stroke="#ac9563" stroke-width="2"></rect>
+                <path d="M42 108v37 M72 108v23 M102 108v23 M132 108v23 M162 108v37 M192 108v23 M222 108v23 M252 108v23 M282 108v37 M312 108v23 M342 108v23 M372 108v23 M402 108v37 M432 108v23 M462 108v23 M492 108v23 M522 108v37 M552 108v23 M582 108v23 M612 108v23 M642 108v37" fill="none" stroke="#34433c" stroke-width="2"></path>
+                <text x="42" y="163" text-anchor="middle" fill="#26383a" font-size="18">0</text><text x="342" y="163" text-anchor="middle" fill="#26383a" font-size="18">10</text><text x="642" y="163" text-anchor="middle" fill="#26383a" font-size="18">20</text>
+              </g>
+              <image href="assets/pencil-photo.webp" x="42" y="55" width="546" height="29" preserveAspectRatio="none"></image>
             </svg>
-            <p>同一支鉛筆　｜　同一把尺</p>
+            <figcaption id="measurement-caption">同一支鉛筆</figcaption>
+          </figure>
+          <div class="measurement-meaning-mode" role="group" aria-label="選擇觀察鉛筆的方式">
+            <button type="button" data-measurement-mode-button="eye" aria-pressed="true">先用眼睛看</button>
+            <button type="button" data-measurement-mode-button="ruler" aria-pressed="false">對照尺上的刻度</button>
           </div>
-          <div class="measurement-meaning-result"><span>測量後，我們得到</span><strong>18.2</strong><p>這個數字讓描述更具體，但還需要更多資訊。</p></div>
-          <p class="next-hint">下一步：18.2 代表什麼？只看數字，別人知道你量的是什麼嗎？</p>
+          <div class="measurement-meaning-result" aria-live="polite"><span id="measurement-result-label">先觀察</span><div><strong id="measurement-result-value">看起來很長</strong><p id="measurement-result-note">每個人的感覺可能不一樣，還不能公平比較。</p></div></div>
+          <p class="next-hint" id="measurement-next-hint" hidden>下一步：18.2 代表什麼？還少了哪些資訊？</p>
         </div>
       </section>
 
@@ -475,6 +495,19 @@
       const pressOne = (buttons, selected) => buttons.forEach((button) => {
         button.setAttribute("aria-pressed", String(button === selected));
       });
+      const measurementCard = document.querySelector("#card-01");
+      const measurementModeButtons = [...document.querySelectorAll("[data-measurement-mode-button]")];
+      measurementModeButtons.forEach((button) => button.addEventListener("click", () => {
+        const mode = button.dataset.measurementModeButton;
+        measurementCard.dataset.measurementMode = mode;
+        measurementModeButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        const measuring = mode === "ruler";
+        document.querySelector("#measurement-caption").textContent = measuring ? "同一支鉛筆　｜　對照尺上的刻度" : "同一支鉛筆";
+        document.querySelector("#measurement-result-label").textContent = measuring ? "測量後" : "先觀察";
+        document.querySelector("#measurement-result-value").textContent = measuring ? "18.2" : "看起來很長";
+        document.querySelector("#measurement-result-note").textContent = measuring ? "有了共同的表示方式，別人就能看懂並拿來比較。" : "每個人的感覺可能不一樣，還不能公平比較。";
+        document.querySelector("#measurement-next-hint").hidden = !measuring;
+      }));
       const state = { divisions: 10, start: 0, angle: false, unit: true, zoom: false, edge: 18.2 };
       const defaultCameraPitch = 0.45;
       const orbitRadius = 24;
