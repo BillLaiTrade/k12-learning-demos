@@ -409,13 +409,13 @@
         <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">先估讀，再核對</span></div>
         <div class="card-main">
           <h2 id="estimate-heading">鉛筆端點落在相鄰刻線之間，該怎麼估讀？</h2>
-          <p id="estimate-instruction">理想模型中的鉛筆長 18 cm。實際量測時，端點常不會剛好對準刻線；先根據整把尺估讀，再拉近觀察端點位置，最後核對估讀。</p>
+          <p id="estimate-instruction">鉛筆左端對準 0 cm，右端約在 18.4 cm。先根據整把尺估讀右端位置，再拉近觀察端點，最後核對估讀。</p>
           <div class="estimate-workspace">
           <aside class="model-panel" aria-labelledby="model-title">
             <h2 id="model-title">觀察鉛筆端點</h2>
             <p>先看整把尺估讀；拉近後可看清右端與相鄰公分刻線的位置，刻線本身不會增加。</p>
             <div class="model-screen" id="model-screen" data-zoom="false">
-              <svg id="shared-measurement-model" viewBox="0 295 760 170" role="img" aria-label="用公分直尺測量鉛筆；左端在 0.4 公分，右端在 18.4 公分附近">
+              <svg id="shared-measurement-model" viewBox="0 295 760 170" role="img" aria-label="用公分直尺測量鉛筆；左端對準零刻度，右端在 18.4 公分附近">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
                 <image id="pencil-object" href="assets/pencil-photo.webp" x="27" y="389" width="459.44" height="28.17" preserveAspectRatio="none" aria-hidden="true"></image>
                 <g id="shared-scale"></g>
@@ -439,7 +439,7 @@
           </div>
           </div>
           <p class="live-note" id="estimate-note" aria-live="polite">先依端點在兩條刻線間的位置估讀。放大只讓你看得更清楚，不會增加刻線或改變最小刻度。</p>
-          <div class="fact"><p>真實物體的端點很難每次都剛好對準刻線，因此常要依它在刻線間的位置估讀。這個理想模型的鉛筆長 18 cm；左端讀值約 0.4 cm、右端約 18.4 cm，兩者相減仍是 18 cm。估讀是近似值，放大畫面不會增加刻度。</p></div>
+          <div class="fact"><p>真實物體的端點很難每次都剛好對準刻線，因此常要依它在刻線間的位置估讀。這支鉛筆左端對準 0 cm，右端約在 18.4 cm，長度約 18.4 cm。估讀是近似值，放大畫面不會增加刻度。</p></div>
         </div>
       </section>
 
@@ -546,8 +546,9 @@
         document.querySelector("#measurement-next-hint").hidden = !measuring;
       }));
       const state = { divisions: 15, start: 0, angle: false, zoom: false, edge: 18 };
-      const estimateStart = 0.4;
-      const estimateEndpoint = () => estimateStart + state.edge;
+      const estimateStart = 0;
+      const estimateLength = 18.4;
+      const estimateEndpoint = () => estimateStart + estimateLength;
       const pencilPhoto = { x: 27, y: 389, width: 454 * (2113 / 2088), height: 27.84 * (2113 / 2088), visibleLeft: 12 / 2113, rightEdgeCenterY: 66.5 / 130 };
       const divisionCountControl = document.querySelector("#division-count");
       let estimateGuess = null;
@@ -575,7 +576,7 @@
       const placePencil = () => {
         const startX = 80 + estimateStart * (640 / 30);
         const endX = 80 + estimateEndpoint() * (640 / 30);
-        const pencilScale = (state.edge * (640 / 30)) / 454;
+        const pencilScale = (estimateLength * (640 / 30)) / 454;
         const photoXOffset = startX - (pencilPhoto.x + pencilPhoto.width * pencilPhoto.visibleLeft) * pencilScale;
         document.querySelector("#pencil-object").setAttribute("transform", `translate(${photoXOffset} ${pencilViewOffset}) scale(${pencilScale})`);
         const pencilEndY = (pencilPhoto.y + pencilPhoto.height * pencilPhoto.rightEdgeCenterY) * pencilScale + pencilViewOffset;
@@ -657,8 +658,8 @@
         button.textContent = estimateChecked ? "重新估讀" : "檢查估讀";
         document.querySelector("#estimate-heading").textContent = "鉛筆端點落在相鄰刻線之間，該怎麼估讀？";
         document.querySelector("#estimate-instruction").textContent = state.zoom
-          ? `端點已拉近；比較它和 18、19 cm 刻線的位置，再核對剛才的估讀。鉛筆左端讀值為 ${formatCentimeters(estimateStart)} cm。`
-          : `理想模型中的鉛筆長 18 cm。真實物體的端點常不會剛好對準刻線；先根據整把尺估讀，再拉近觀察端點，最後核對估讀。`;
+          ? `端點已拉近；比較它和 18、19 cm 刻線的位置，再核對剛才的估讀。鉛筆左端對準 0 cm。`
+          : `鉛筆左端對準 0 cm，右端約在 18.4 cm。先根據整把尺估讀右端位置，再拉近觀察端點，最後核對估讀。`;
         input.setAttribute("aria-label", `選擇你估計的鉛筆右端位置；端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} 公分之間`);
         document.querySelector("#estimate-prompt").textContent = "尺上每 1 cm 一條刻線，數字每 5 cm 標示；依端點位置估讀。";
         if (estimateChecked) {
@@ -852,7 +853,7 @@
         const divisionNote = document.querySelector("#division-note");
         if (divisionNote) divisionNote.textContent = formatDivisionSize(state.divisions);
         const interval = graduationInterval();
-        modelSvg.setAttribute("aria-label", `公分直尺每公分一條刻線；鉛筆左端在 ${formatCentimeters(estimateStart)} 公分，右端在 ${formatCentimeters(estimateEndpoint())} 公分附近`);
+        modelSvg.setAttribute("aria-label", `公分直尺每公分一條刻線；鉛筆左端對準零刻度，右端在 ${formatCentimeters(estimateEndpoint())} 公分附近，鉛筆長約 ${formatCentimeters(estimateLength)} 公分`);
         if (note) document.querySelector("#shared-model-note").textContent = note;
         renderDivisionRuler();
         syncEstimateControls();
@@ -1024,9 +1025,9 @@
         const location = fraction < 0.33 ? "較靠近前一條刻線" : fraction < 0.67 ? "約在兩條刻線中間" : "較靠近後一條刻線";
         const guess = formatCentimeters(estimateGuess);
         document.querySelector("#shared-reading").textContent = `模型端點：約 ${formatCentimeters(reading)} cm`;
-        document.querySelector("#shared-model-note").textContent = `右端讀值約 ${formatCentimeters(reading)} cm，左端讀值約 ${formatCentimeters(estimateStart)} cm；相減得鉛筆長 18 cm。端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} cm 之間，${location}。`;
+        document.querySelector("#shared-model-note").textContent = `右端讀值約 ${formatCentimeters(reading)} cm，左端在 0 cm；相減得鉛筆長約 ${formatCentimeters(reading - estimateStart)} cm。端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} cm 之間，${location}。`;
         document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
-        document.querySelector("#estimate-note").textContent = `模型右端約在 ${formatCentimeters(reading)} cm，左端約在 ${formatCentimeters(estimateStart)} cm；右端減左端得到 18 cm。${location}。估讀是近似值，尺上每格 1 cm。`;
+        document.querySelector("#estimate-note").textContent = `模型右端約在 ${formatCentimeters(reading)} cm，左端在 0 cm；右端減左端得到鉛筆長約 ${formatCentimeters(reading - estimateStart)} cm。${location}。估讀是近似值，尺上每格 1 cm。`;
         syncEstimateControls();
       });
 
