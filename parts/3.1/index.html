@@ -655,10 +655,10 @@
         const button = document.querySelector("#check-estimate");
         button.disabled = estimateGuess === null && !estimateChecked;
         button.textContent = estimateChecked ? "重新估讀" : "檢查估讀";
-        document.querySelector("#estimate-heading").textContent = state.zoom ? "筆尖越過 18 cm 刻線多少？" : "先看整把尺，再拉近觀察端點";
+        document.querySelector("#estimate-heading").textContent = "鉛筆端點落在相鄰刻線之間，該怎麼估讀？";
         document.querySelector("#estimate-instruction").textContent = state.zoom
-          ? `尺面已拉近。筆尖越過 18 cm 刻線一小段，仍未到 19 cm；請估讀右端位置。鉛筆左端讀值為 ${formatCentimeters(estimateStart)} cm。`
-          : `理想模型中的鉛筆長 18 cm。真實物體的端點常不會剛好對準刻線；先看整把尺，再按「拉近查看端點」，觀察筆尖和 18 cm 刻線的相對位置。`;
+          ? `端點已拉近；比較它和 18、19 cm 刻線的位置，再核對剛才的估讀。鉛筆左端讀值為 ${formatCentimeters(estimateStart)} cm。`
+          : `理想模型中的鉛筆長 18 cm。真實物體的端點常不會剛好對準刻線；先根據整把尺估讀，再拉近觀察端點，最後核對估讀。`;
         input.setAttribute("aria-label", `選擇你估計的鉛筆右端位置；端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} 公分之間`);
         document.querySelector("#estimate-prompt").textContent = "尺上每 1 cm 一條刻線，數字每 5 cm 標示；依端點位置估讀。";
         if (estimateChecked) {
