@@ -57,9 +57,9 @@ function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLO
   const texture=new THREE.CanvasTexture(face);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;
   const topFace=new THREE.Mesh(new THREE.PlaneGeometry(width+.2,depth),new THREE.MeshBasicMaterial({map:texture}));
   topFace.rotation.x=-Math.PI/2;topFace.position.y=top+.001;group.add(topFace);
-  const guideMaterial=new THREE.LineDashedMaterial({color:accent,dashSize:.055,gapSize:.04});
+  const guideMaterial=new THREE.LineDashedMaterial({color:accent,dashSize:.055,gapSize:.04,depthTest:false});
   const guides=[0,1].map(()=>{const line=new THREE.Line(new THREE.BufferGeometry(),guideMaterial);line.renderOrder=5;group.add(line);return line});
-  const markerMaterial=new THREE.MeshBasicMaterial({color:accent});
+  const markerMaterial=new THREE.MeshBasicMaterial({color:accent,depthTest:false});
   const markers=[0,1].map(()=>{const marker=new THREE.Mesh(new THREE.SphereGeometry(.035,12,8),markerMaterial);marker.renderOrder=6;group.add(marker);return marker});
   return {group,guides,markers,top,width};
 }
@@ -138,45 +138,32 @@ export function mountStoneObserver(){
     const worldToFrame=framePivot.matrixWorld.clone().invert();
     const position=stone.geometry.attributes.position;
     let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity,minZ=Infinity,maxZ=-Infinity;
-    const minXPoint=new THREE.Vector3(),maxXPoint=new THREE.Vector3();
-    const minYPoint=new THREE.Vector3(),maxYPoint=new THREE.Vector3();
-    const minZPoint=new THREE.Vector3(),maxZPoint=new THREE.Vector3();
     for(let i=0;i<position.count;i++){
       const point=new THREE.Vector3().fromBufferAttribute(position,i).applyMatrix4(stone.matrixWorld).applyMatrix4(worldToFrame);
-      if(point.x<minX){minX=point.x;minXPoint.copy(point)}
-      if(point.x>maxX){maxX=point.x;maxXPoint.copy(point)}
-      if(point.y<minY){minY=point.y;minYPoint.copy(point)}
-      if(point.y>maxY){maxY=point.y;maxYPoint.copy(point)}
-      if(point.z<minZ){minZ=point.z;minZPoint.copy(point)}
-      if(point.z>maxZ){maxZ=point.z;maxZPoint.copy(point)}
+      minX=Math.min(minX,point.x);maxX=Math.max(maxX,point.x);
+      minY=Math.min(minY,point.y);maxY=Math.max(maxY,point.y);
+      minZ=Math.min(minZ,point.z);maxZ=Math.max(maxZ,point.z);
     }
     if(lengthReadout)lengthReadout.textContent=`約 ${((maxX-minX)*CM_PER_WORLD).toFixed(1)} cm`;
     if(widthReadout)widthReadout.textContent=`約 ${((maxZ-minZ)*CM_PER_WORLD).toFixed(1)} cm`;
     if(heightReadout)heightReadout.textContent=`約 ${((maxY-minY)*CM_PER_WORLD).toFixed(1)} cm`;
-    updateRulerGuides(lengthRuler,[
-      [minXPoint,new THREE.Vector3(minX,rulerFloor+.012-frameCenterY,-rulerEdge)],
-      [maxXPoint,new THREE.Vector3(maxX,rulerFloor+.012-frameCenterY,-rulerEdge)]
-    ]);
-    updateRulerGuides(widthRuler,[
-      [minZPoint,new THREE.Vector3(rulerEdge,rulerFloor+.012-frameCenterY,minZ)],
-      [maxZPoint,new THREE.Vector3(rulerEdge,rulerFloor+.012-frameCenterY,maxZ)]
-    ]);
-    updateRulerGuides(heightRuler,[
-      [minYPoint,new THREE.Vector3(rulerEdge,minY,-rulerEdge)],
-      [maxYPoint,new THREE.Vector3(rulerEdge,maxY,-rulerEdge)]
-    ]);
+    updateRulerGuides(lengthRuler,[minX,maxX].map(x=>framePivot.localToWorld(new THREE.Vector3(x,rulerFloor+.012-frameCenterY,-rulerEdge))));
+    updateRulerGuides(widthRuler,[minZ,maxZ].map(z=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,rulerFloor+.012-frameCenterY,z))));
+    updateRulerGuides(heightRuler,[minY,maxY].map(y=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge))));
     measureDirty=false;
   }
-  function updateRulerGuides(ruler,pointPairs){
+  function updateRulerGuides(ruler,worldPoints){
     ruler.group.updateMatrixWorld(true);
-    pointPairs.forEach(([surfacePoint,scalePoint],index)=>{
-      const surfaceLocal=ruler.group.worldToLocal(framePivot.localToWorld(surfacePoint.clone()));
-      const scaleLocal=ruler.group.worldToLocal(framePivot.localToWorld(scalePoint.clone()));
+    const worldUp=new THREE.Vector3(0,1,0);
+    worldPoints.forEach((worldPoint,index)=>{
+      const localPoint=ruler.group.worldToLocal(worldPoint.clone());
+      const directionLocal=ruler.group.worldToLocal(worldPoint.clone().add(worldUp)).sub(localPoint);
+      const lineStart=localPoint.clone().add(new THREE.Vector3(0,.012,0));
       const line=ruler.guides[index];line.geometry.dispose();line.geometry=new THREE.BufferGeometry().setFromPoints([
-        surfaceLocal,
-        scaleLocal
+        lineStart,
+        lineStart.clone().addScaledVector(directionLocal,.42)
       ]);line.computeLineDistances();
-      ruler.markers[index].position.copy(scaleLocal);
+      ruler.markers[index].position.copy(lineStart);
     });
   }
   host.addEventListener('wheel',event=>{event.preventDefault();zoom(event.deltaY>0?.22:-.22)},{passive:false});
