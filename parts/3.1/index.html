@@ -185,11 +185,10 @@
     #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
     #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.5; }
     #shared-scale .ruler-line.major { stroke-width: 3; }
-    #shared-scale[data-zoom="true"] { font: 3px system-ui, sans-serif; }
+    #shared-scale[data-zoom="true"] { font: 8px system-ui, sans-serif; }
     #shared-scale[data-zoom="true"] .ruler-body { stroke-width: .3; }
     #shared-scale[data-zoom="true"] .ruler-line { stroke-width: .23; }
     #shared-scale[data-zoom="true"] .ruler-line.major { stroke-width: .46; }
-    #model-screen[data-zoom="true"] #pencil-start-guide,
     #model-screen[data-zoom="true"] #pencil-end-guide { display: none; }
     #model-screen[data-zoom="true"] #zoom-endpoint-marker path { stroke-width: .45; }
     #model-screen[data-zoom="true"] #zoom-endpoint-marker circle { r: 1.5; stroke-width: .35; }
@@ -277,7 +276,7 @@
           <a href="#card-02"><b>02</b><span>18.2 代表什麼？</span></a>
           <a href="#card-03"><b>03</b><span>同一種工具，能量所有東西嗎？</span></a>
           <a href="#card-04"><b>04</b><span>尺上的每一格，代表多少？</span></a>
-          <a href="#card-05"><b>05</b><span>18.2 cm 再多一點，端點落在哪裡？</span></a>
+          <a href="#card-05"><b>05</b><span>刻線之間，怎麼估讀？</span></a>
           <a href="#card-06"><b>06</b><span>同一物體，為什麼讀值會差一點？</span></a>
           <a href="#card-07"><b>07</b><span>改變一個條件，量測會怎麼改善？</span></a>
           <a href="#card-08"><b>08</b><span>怎麼判斷兩筆長度紀錄是否可比較？</span></a>
@@ -406,34 +405,39 @@
       </section>
 
       <section class="lesson-card" id="card-05">
-        <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">位置改變，估值跟著改變</span></div>
+        <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">先估讀，再核對</span></div>
         <div class="card-main">
           <h2 id="estimate-heading">鉛筆端點落在相鄰刻線之間，該怎麼估讀？</h2>
-          <p id="estimate-instruction">觀察鉛筆右端落在相鄰刻線間的位置。按下「拉近查看」放大這一段；拖動同一支鉛筆沿尺移動，鉛筆長度保持不變。</p>
+          <p id="estimate-instruction">鉛筆左端對齊 0 cm，長度固定。先觀察右端落在相鄰刻線間的位置，再用下方滑桿估一個端點讀值。</p>
           <aside class="model-panel" aria-labelledby="model-title">
-            <h2 id="model-title">量量看：鉛筆有多長？</h2>
-            <p>拉近刻度，觀察同一支鉛筆的端點在尺上的位置；這個模型會延續到後續內容。</p>
+            <h2 id="model-title">觀察鉛筆端點</h2>
+            <p>鉛筆左端固定在 0 cm，右端落在兩條刻線之間。可以拉近查看，但放大不會增加尺上的刻線。</p>
             <div class="model-screen" id="model-screen" data-zoom="false">
               <svg id="shared-measurement-model" viewBox="0 0 760 650" role="img" aria-label="用直尺測量鉛筆的長度，左端對齊零，右端位於相鄰刻線之間">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
-                <g id="pencil-object" aria-hidden="true"><rect x="27" y="265" width="402" height="28" rx="12" fill="#e5bd43" stroke="#987625" stroke-width="2"></rect><path d="M429 265L469 279L429 293Z" fill="#d9a35b" stroke="#987625" stroke-width="2"></path><path d="M469 279L481 279L469 283Z" fill="#34383d"></path><rect x="27" y="265" width="24" height="28" rx="8" fill="#d98280" stroke="#987625" stroke-width="2"></rect><rect x="50" y="265" width="8" height="28" fill="#b9c2c0" stroke="#987625" stroke-width="1"></rect><path d="M86 269H408" stroke="#f8dfa0" stroke-width="3" opacity=".8"></path></g>
-                <path id="pencil-start-guide" d="M80 65V620" stroke="#176b53" stroke-width="2" stroke-dasharray="5 5"></path>
-                <path id="pencil-end-guide" d="M588 65V620" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 5"></path>
+                <image id="pencil-object" href="assets/pencil-photo.webp" x="27" y="265" width="454" height="27.84" preserveAspectRatio="none" aria-hidden="true"></image>
+                <path id="pencil-end-guide" d="M588 252V620" stroke="#bc612b" stroke-width="2" stroke-dasharray="4 5"></path>
                 <g id="shared-scale"></g>
-                <g id="zoom-endpoint-marker" display="none" aria-hidden="true"><path id="zoom-endpoint-line" d="M468 570V623" stroke="#bc612b" stroke-width="2"></path><circle id="zoom-endpoint-dot" cx="468" cy="570" r="6" fill="#bc612b" stroke="#fffefa" stroke-width="2"></circle></g>
+                <g id="zoom-endpoint-marker" display="none" aria-hidden="true"><path id="zoom-endpoint-line" d="M468 570V597" stroke="#bc612b" stroke-width="2"></path><circle id="zoom-endpoint-dot" cx="468" cy="570" r="6" fill="#bc612b" stroke="#fffefa" stroke-width="2"></circle></g>
                 <g id="eye-ray" opacity="0">
                   <circle cx="620" cy="40" r="12" fill="#dceaf0" stroke="#547884" stroke-width="3"></circle>
                   <path d="M620 52L588 600" stroke="#bc612b" stroke-width="2" stroke-dasharray="5 4"></path>
                 </g>
               </svg>
             </div>
-            <div class="model-readout"><small>目前讀值</small><strong id="shared-reading">約 18.2 cm</strong></div>
-            <p class="model-status" id="shared-model-note" aria-live="polite">量的是鉛筆的長度。左端對齊 0 cm；右端落在相鄰刻線之間。</p>
+            <div class="model-readout"><small>估讀核對</small><strong id="shared-reading">完成估讀後查看</strong></div>
+            <p class="model-status" id="shared-model-note" aria-live="polite">同一支鉛筆保持固定長度，左端對齊 0 cm；現在請先估讀右端位置。</p>
             <button type="button" class="secondary" id="zoom-toggle" aria-pressed="false">拉近查看端點</button>
           </aside>
-          <div class="slider-row"><input id="estimate-slider" type="range" min="18000" max="20000" step="1" value="18200" aria-label="沿著直尺移動鉛筆，觀察端點在相鄰刻線間的位置"><output class="value" id="estimate-value" for="estimate-slider">約 18.2 cm</output></div>
-          <p class="live-note" id="estimate-note" aria-live="polite">拉近能看清端點相對於刻線的位置；放大不會增加尺的刻度精度，也不代表得到絕對精確值。</p>
-          <div class="fact"><p>物體端點不一定剛好對準刻線。讀值落在兩條刻線之間時，可以根據端點位置估一個值，這叫作「估讀」。畫面放大能幫助觀察位置，但不會讓尺的刻度變得更細。</p></div>
+          <div class="control-panel estimate-panel">
+            <label class="field" for="estimate-slider">估讀鉛筆右端在尺上的位置（cm）
+              <input id="estimate-slider" type="range" min="18000" max="20000" step="100" aria-label="選擇你估計的鉛筆右端位置，單位為公分">
+            </label>
+            <div class="slider-row"><span id="estimate-prompt">移動滑桿選一個估值，再檢查。</span><output class="value" id="estimate-value" for="estimate-slider">尚未估讀</output></div>
+            <button type="button" class="secondary" id="check-estimate" disabled>檢查估讀</button>
+          </div>
+          <p class="live-note" id="estimate-note" aria-live="polite">先依端點在兩條刻線間的位置估讀。放大只讓你看得更清楚，不會增加刻線或改變最小刻度。</p>
+          <div class="fact"><p>端點沒有剛好對準刻線時，可以根據它在相鄰刻線間的位置估讀。估讀是近似值；刻度疏密會限制可讀取的細度，單純放大畫面不會改變刻度。</p></div>
         </div>
       </section>
 
@@ -541,6 +545,9 @@
       }));
       const state = { divisions: 15, start: 0, angle: false, zoom: false, edge: 18.2 };
       const divisionCountControl = document.querySelector("#division-count");
+      let estimateGuess = null;
+      let estimateChecked = false;
+      let estimateIntervalKey = "";
       const greatestCommonDivisor = (a, b) => b ? greatestCommonDivisor(b, a % b) : a;
       const formatDivisionSize = (divisions) => {
         const divisor = greatestCommonDivisor(30, divisions);
@@ -577,13 +584,32 @@
         const interval = graduationInterval();
         const minimum = Math.round(interval.start * 1000);
         const maximum = Math.round(interval.end * 1000);
+        const intervalKey = `${minimum}:${maximum}`;
+        if (intervalKey !== estimateIntervalKey) {
+          estimateIntervalKey = intervalKey;
+          estimateGuess = null;
+          estimateChecked = false;
+        }
         input.min = String(minimum);
         input.max = String(maximum);
-        input.value = String(clamp(Math.round(edgePosition() * 1000), minimum, maximum));
-        document.querySelector("#estimate-heading").textContent = "端點落在兩條刻線之間，長度可以怎麼估讀？";
-        document.querySelector("#estimate-instruction").textContent = `目前每格是 ${formatCentimeters(30 / state.divisions)} cm。按下「拉近查看」，再拖動同一支鉛筆，觀察右端在相鄰刻線間的位置；鉛筆長度保持不變。`;
-        input.setAttribute("aria-label", "沿著直尺移動鉛筆，觀察端點在相鄰刻線間的位置");
-        document.querySelector("#estimate-value").textContent = `約 ${formatCentimeters(Number(input.value) / 1000)} cm`;
+        const step = Math.max(1, Math.round((maximum - minimum) / 10));
+        input.step = String(step);
+        input.value = String(clamp(estimateGuess === null ? minimum : Math.round(estimateGuess * 1000), minimum, maximum));
+        const button = document.querySelector("#check-estimate");
+        button.disabled = estimateGuess === null && !estimateChecked;
+        button.textContent = estimateChecked ? "重新估讀" : "檢查估讀";
+        document.querySelector("#estimate-heading").textContent = "端點落在兩條刻線之間，位置可以怎麼估讀？";
+        document.querySelector("#estimate-instruction").textContent = `鉛筆保持固定，左端目前在 ${formatCentimeters(state.start)} cm；右端位於 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} cm 之間。先估讀右端位置。`;
+        input.setAttribute("aria-label", `選擇你估計的鉛筆右端位置；端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} 公分之間`);
+        document.querySelector("#estimate-prompt").textContent = `本格 ${formatCentimeters(30 / state.divisions)} cm；滑桿以約十分之一格調整，放大不會改變刻線間距。`;
+        if (estimateChecked) {
+          const reading = edgePosition();
+          document.querySelector("#shared-reading").textContent = `模型端點：約 ${formatCentimeters(reading)} cm`;
+          document.querySelector("#estimate-value").textContent = `你的估讀：約 ${formatCentimeters(estimateGuess)} cm`;
+        } else {
+          document.querySelector("#shared-reading").textContent = "完成估讀後查看";
+          document.querySelector("#estimate-value").textContent = estimateGuess === null ? "尚未估讀" : `你的估讀：約 ${formatCentimeters(Number(input.value) / 1000)} cm`;
+        }
       };
       const add = (a, b) => ({ x: a.x + b.x, y: a.y + b.y, z: a.z + b.z });
       const subtract = (a, b) => ({ x: a.x - b.x, y: a.y - b.y, z: a.z - b.z });
@@ -740,23 +766,24 @@
           const interval = graduationInterval();
           const startX = 80 + (interval.start * 640) / 30;
           const endX = 80 + (interval.end * 640) / 30;
-          const width = Math.max(48, (endX - startX) * 1.7);
+          const width = Math.max(180, (endX - startX) * 1.7);
           const centerX = 80 + (edgePosition() * 640) / 30;
           modelSvg.setAttribute("viewBox", `${centerX - width / 2} 550 ${width} 100`);
         } else {
           modelSvg.setAttribute("viewBox", "0 0 760 650");
         }
         ruler.dataset.zoom = String(state.zoom);
+        ruler.setAttribute("transform", state.zoom ? "translate(0 348) scale(1 0.4)" : "");
         document.querySelector("#model-screen").dataset.zoom = String(state.zoom);
         const startX = 80 + state.start * (640 / 30);
         const endX = 80 + edgePosition() * (640 / 30);
         const pencilScale = (state.edge * (640 / 30)) / 454;
         const pencilOffset = startX - 27 * pencilScale;
-        document.querySelector("#pencil-object").setAttribute("transform", `translate(${pencilOffset} 0) scale(${pencilScale})`);
-        document.querySelector("#pencil-start-guide").setAttribute("d", `M${startX} 65V620`);
-        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} 65V620`);
+        const pencilZoomOffset = state.zoom ? 328 : 0;
+        document.querySelector("#pencil-object").setAttribute("transform", `translate(${pencilOffset} ${pencilZoomOffset}) scale(${pencilScale})`);
+        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} 252V620`);
         document.querySelector("#zoom-endpoint-marker").setAttribute("display", state.zoom ? "" : "none");
-        document.querySelector("#zoom-endpoint-line").setAttribute("d", `M${endX} 570V623`);
+        document.querySelector("#zoom-endpoint-line").setAttribute("d", `M${endX} 570V597`);
         document.querySelector("#zoom-endpoint-dot").setAttribute("cx", String(endX));
         const lines = [];
         const subdivisions = state.divisions;
@@ -775,7 +802,6 @@
         ruler.innerHTML = `<rect class="ruler-body" x="66" y="580" width="668" height="43" rx="5"/>${lines.join("")}`;
         document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
         document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${endX} 600`);
-        document.querySelector("#shared-reading").textContent = "約 18.2 cm";
         document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
         if (divisionCountControl) divisionCountControl.value = String(state.divisions);
         const divisionCountLabel = document.querySelector("#division-count-label");
@@ -924,14 +950,40 @@
       document.querySelector("#zoom-toggle").addEventListener("click", () => setZoom(!state.zoom));
       const estimateSlider = document.querySelector("#estimate-slider");
       estimateSlider.addEventListener("input", () => {
-        const endpoint = Number(estimateSlider.value) / 1000;
-        state.start = endpoint - state.edge;
-        const interval = graduationInterval(endpoint);
-        const fraction = (endpoint - interval.start) / (interval.end - interval.start);
-        const description = fraction < 0.33 ? "靠近前一條刻線" : fraction < 0.67 ? "約在兩條刻線中間" : "接近後一條刻線";
-        document.querySelector("#estimate-value").textContent = `約 ${formatCentimeters(endpoint)} cm`;
-        document.querySelector("#estimate-note").textContent = `鉛筆保持同樣長度並沿尺移動，右端${description}；放大只讓位置更容易觀察，不會增加尺本身的刻度精度。`;
-        updateModel(`鉛筆保持同樣長度並沿尺移動，右端${description}；讀取長度仍須比較左右端位置。`);
+        estimateGuess = Number(estimateSlider.value) / 1000;
+        estimateChecked = false;
+        const guess = formatCentimeters(estimateGuess);
+        document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
+        document.querySelector("#estimate-note").textContent = `你選擇估讀約 ${guess} cm。依鉛筆右端和相鄰刻線的位置判斷；這個滑桿只記錄你的估值，不會移動鉛筆或尺。`;
+        document.querySelector("#shared-reading").textContent = "完成估讀後查看";
+        document.querySelector("#shared-model-note").textContent = "鉛筆和尺保持不動；先依右端相對於兩條刻線的位置估讀。";
+        const button = document.querySelector("#check-estimate");
+        button.disabled = false;
+        button.textContent = "檢查估讀";
+      });
+      document.querySelector("#check-estimate").addEventListener("click", () => {
+        if (estimateChecked) {
+          estimateGuess = null;
+          estimateChecked = false;
+          document.querySelector("#estimate-value").textContent = "尚未估讀";
+          document.querySelector("#estimate-note").textContent = "先依端點在兩條刻線間的位置估讀。放大只讓你看得更清楚，不會增加刻線或改變最小刻度。";
+          document.querySelector("#shared-reading").textContent = "完成估讀後查看";
+          document.querySelector("#shared-model-note").textContent = "同一支鉛筆保持固定長度，左端對齊 0 cm；現在請先估讀右端位置。";
+          syncEstimateControls();
+          return;
+        }
+        if (estimateGuess === null) return;
+        estimateChecked = true;
+        const reading = edgePosition();
+        const interval = graduationInterval(reading);
+        const fraction = (reading - interval.start) / (interval.end - interval.start);
+        const location = fraction < 0.33 ? "較靠近前一條刻線" : fraction < 0.67 ? "約在兩條刻線中間" : "較靠近後一條刻線";
+        const guess = formatCentimeters(estimateGuess);
+        document.querySelector("#shared-reading").textContent = `模型端點：約 ${formatCentimeters(reading)} cm`;
+        document.querySelector("#shared-model-note").textContent = `端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} cm 之間，${location}。鉛筆長度和位置均未因放大而改變。`;
+        document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
+        document.querySelector("#estimate-note").textContent = `模型端點約在 ${formatCentimeters(reading)} cm；${location}。比較你的估讀與端點在刻線間的位置。估讀是近似值，刻線仍是每格 ${formatCentimeters(30 / state.divisions)} cm。`;
+        syncEstimateControls();
       });
 
       const wrapAngle = (angle) => ((angle + Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) - Math.PI;
