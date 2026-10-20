@@ -183,7 +183,7 @@
     .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
     .model-screen { position: relative; overflow: hidden; aspect-ratio: 760 / 170; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
     .model-screen svg { display: block; width: 100%; height: 100%; }
-    .image-zoom-toggle { position: absolute; top: 8px; right: 8px; z-index: 2; margin: 0; padding: 6px 10px; background: rgb(255 255 255 / 94%); font-size: .84rem; }
+    .image-zoom-toggle { display: block; margin: 8px 0 0 auto; padding: 6px 10px; font-size: .84rem; }
     #shared-scale { fill: #26383a; font: 20px system-ui, sans-serif; }
     #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
     #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.5; }
@@ -409,16 +409,18 @@
             <div class="model-screen" id="model-screen" data-zoom="false">
               <svg id="shared-measurement-model" viewBox="0 295 760 170" role="img" aria-label="鉛筆左端對準零刻度，右端落在直尺兩條相鄰公分刻線之間">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
-                <image id="pencil-object" href="assets/pencil-photo.webp" x="27" y="389" width="459.44" height="28.17" preserveAspectRatio="none" aria-hidden="true"></image>
-                <g id="shared-scale"></g>
-                <path id="pencil-end-guide" d="M588 348V423" stroke="#bc612b" stroke-width="2" stroke-dasharray="4 5"></path>
+                <g id="model-stage">
+                  <image id="pencil-object" href="assets/pencil-photo.webp" x="27" y="389" width="459.44" height="28.17" preserveAspectRatio="none" aria-hidden="true"></image>
+                  <g id="shared-scale"></g>
+                  <path id="pencil-end-guide" d="M588 348V423" stroke="#bc612b" stroke-width="2" stroke-dasharray="4 5"></path>
+                </g>
                 <g id="eye-ray" opacity="0">
                   <circle cx="620" cy="40" r="12" fill="#dceaf0" stroke="#547884" stroke-width="3"></circle>
                   <path d="M620 52L588 600" stroke="#bc612b" stroke-width="2" stroke-dasharray="5 4"></path>
                 </g>
               </svg>
-              <button type="button" class="secondary image-zoom-toggle" id="zoom-toggle" aria-pressed="false">拉近查看端點</button>
             </div>
+            <button type="button" class="secondary image-zoom-toggle" id="zoom-toggle" aria-pressed="false">拉近查看端點</button>
             <div class="control-panel estimate-panel">
               <label class="field" for="estimate-slider">估讀鉛筆右端的位置（cm）
                 <input id="estimate-slider" type="range" min="18000" max="20000" step="100" aria-label="選擇你估計的鉛筆右端位置，單位為公分">
@@ -559,6 +561,14 @@
       const ruler = document.querySelector("#shared-scale");
       const modelSvg = document.querySelector("#shared-measurement-model");
       const modelScreen = document.querySelector("#model-screen");
+      const modelStage = document.querySelector("#model-stage");
+      const modelStageScale = 1.4;
+      const modelStageCenter = { x: 380, y: 360 };
+      modelStage.setAttribute("transform", `translate(${modelStageCenter.x * (1 - modelStageScale)} ${modelStageCenter.y * (1 - modelStageScale)}) scale(${modelStageScale})`);
+      const modelStagePoint = (x, y) => ({
+        x: modelStageCenter.x + (x - modelStageCenter.x) * modelStageScale,
+        y: modelStageCenter.y + (y - modelStageCenter.y) * modelStageScale
+      });
       let modelViewBox = { x: 0, y: 295, width: 760, height: 170 };
       let modelViewTarget = modelViewBox;
       let modelViewAnimationFrame = 0;
@@ -577,7 +587,7 @@
       const animateModelView = (zoom) => {
         const targetHeight = zoom ? 70 : 170;
         const targetWidth = zoom ? targetHeight * (760 / 170) : 760;
-        const endpointX = 80 + (5 + estimateEndpoint()) * (640 / 30);
+        const endpointX = modelStagePoint(80 + (5 + estimateEndpoint()) * (640 / 30), 0).x;
         const target = {
           x: zoom ? endpointX - targetWidth * 0.55 : 0,
           y: zoom ? 320 : 295,
@@ -836,7 +846,8 @@
         }
         ruler.innerHTML = `<rect class="ruler-body" x="${rulerZeroX - 14}" y="355" width="${20 * centimeter + 28}" height="10.75" rx="5"/>${lines.join("")}`;
         document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
-        document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${endX} 365.75`);
+        const projectedEndpoint = modelStagePoint(endX, 365.75);
+        document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${projectedEndpoint.x} ${projectedEndpoint.y}`);
         document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
         if (divisionCountControl) divisionCountControl.value = String(state.divisions);
         const divisionCountLabel = document.querySelector("#division-count-label");
