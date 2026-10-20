@@ -438,7 +438,7 @@
               <label class="field" for="estimate-slider">估讀鉛筆右端的位置（cm）
                 <div class="estimate-range">
                   <span aria-hidden="true">18 cm</span>
-                  <input id="estimate-slider" type="range" min="18000" max="20000" step="any" aria-label="在 18 公分到 19 公分之間連續選擇估計位置">
+                  <input id="estimate-slider" type="range" min="18000" max="20000" step="any" aria-label="選擇鉛筆端點在 18 公分到 19 公分之間的位置">
                   <span aria-hidden="true">19 cm</span>
                 </div>
               </label>
@@ -661,7 +661,7 @@
           ? `畫面已放大到 ${document.querySelector("#zoom-level").textContent}；可查看端點與相鄰刻線的位置。`
           : `先依整把尺估讀鉛筆右端，再用圖片上的放大按鈕或滑鼠滾輪查看 18 cm 和 19 cm 之間的位置。`;
         input.setAttribute("aria-label", `選擇你估計的鉛筆右端位置；端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} 公分之間`);
-        document.querySelector("#estimate-prompt").textContent = "在 18 cm 和 19 cm 之間連續移動；估讀是近似判斷，可能無法完全準確。";
+        document.querySelector("#estimate-prompt").textContent = "依端點在 18 cm 和 19 cm 之間的位置估讀；估讀是近似判斷。";
         if (estimateChecked) {
           const reading = estimateEndpoint();
           document.querySelector("#estimate-value").textContent = `你的估讀：約 ${formatEstimate(estimateGuess)} cm`;
@@ -1066,7 +1066,7 @@
           ? "估讀接近參考值。"
           : "估讀與參考值有差距。";
         document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
-        document.querySelector("#estimate-note").textContent = `你的估讀：約 ${guess} cm；誤差百分比：${percentageError.toFixed(2)}%。${closeness} 百分比依滑桿位置連續計算，估讀顯示到小數一位。`;
+        document.querySelector("#estimate-note").textContent = `你的估讀：約 ${guess} cm；誤差百分比：${percentageError.toFixed(2)}%。${closeness} 估讀顯示到小數一位。`;
         syncEstimateControls();
       });
 
