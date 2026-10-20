@@ -177,7 +177,7 @@
     .lesson-layout { display: grid; grid-template-columns: minmax(205px, 250px) minmax(0, 1fr); gap: 34px; align-items: start; }
     .estimate-workspace { display: grid; grid-template-columns: 1fr; gap: 14px; align-items: start; margin: 18px 0; }
     .model-panel { margin: 0; padding: 18px; border: 1px solid #cbded0; border-radius: 20px; background: #e3eee5; box-shadow: var(--shadow); }
-    .estimate-workspace .estimate-panel { margin: 0; }
+    .estimate-workspace .estimate-panel { margin: 14px 0 0; }
     .model-panel h2 { margin: 0 0 5px; font-size: 1.18rem; }
     .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
     .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
@@ -422,15 +422,15 @@
                 </g>
               </svg>
             </div>
+            <div class="control-panel estimate-panel">
+              <label class="field" for="estimate-slider">① 先估讀鉛筆右端的位置（cm）
+                <input id="estimate-slider" type="range" min="18000" max="20000" step="100" aria-label="選擇你估計的鉛筆右端位置，單位為公分">
+              </label>
+              <div class="slider-row"><span id="estimate-prompt">移動滑桿選一個估值，再檢查。</span><output class="value" id="estimate-value" for="estimate-slider">尚未估讀</output></div>
+              <button type="button" class="secondary" id="zoom-toggle" aria-pressed="false">② 拉近查看端點</button>
+              <button type="button" class="secondary" id="check-estimate" disabled>③ 檢查估讀</button>
+            </div>
           </aside>
-          <div class="control-panel estimate-panel">
-            <label class="field" for="estimate-slider">① 先估讀鉛筆右端的位置（cm）
-              <input id="estimate-slider" type="range" min="18000" max="20000" step="100" aria-label="選擇你估計的鉛筆右端位置，單位為公分">
-            </label>
-            <div class="slider-row"><span id="estimate-prompt">移動滑桿選一個估值，再檢查。</span><output class="value" id="estimate-value" for="estimate-slider">尚未估讀</output></div>
-            <button type="button" class="secondary" id="zoom-toggle" aria-pressed="false">② 拉近查看端點</button>
-            <button type="button" class="secondary" id="check-estimate" disabled>③ 檢查估讀</button>
-          </div>
           </div>
           <p class="live-note" id="estimate-note" aria-live="polite">先依端點在兩條刻線間的位置估讀。放大只讓你看得更清楚，不會增加刻線或改變最小刻度。</p>
           <div class="fact"><p>真實物體的端點不一定剛好對準刻線，因此要依它落在刻線間的位置估讀。估讀是近似值；拉近只能看得更清楚，不會增加刻度。</p></div>
