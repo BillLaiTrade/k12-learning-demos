@@ -587,7 +587,7 @@
         document.querySelector("#pencil-object").setAttribute("transform", `translate(${photoXOffset} ${pencilViewOffset}) scale(${pencilScale})`);
         const pencilEndY = (pencilPhoto.y + pencilPhoto.height * pencilPhoto.rightEdgeCenterY) * pencilScale + pencilViewOffset;
         const guide = document.querySelector("#pencil-end-guide");
-        guide.setAttribute("d", `M${endX} ${pencilEndY}V${state.zoom ? 357 : 355}`);
+        guide.setAttribute("d", `M${endX} ${pencilEndY}V${state.zoom ? 360 : 355}`);
         guide.setAttribute("stroke-width", state.zoom ? ".16" : "2");
         guide.setAttribute("stroke-dasharray", state.zoom ? ".28 .28" : "2 2");
       };
@@ -841,13 +841,13 @@
         for (let tick = 0; tick <= 20; tick += 1) {
           const x = rulerZeroX + tick * centimeter;
           const major = tick % 5 === 0;
-          const top = 355;
-          const tickEnd = 355 + (major ? (state.zoom ? 3.5 : 39) : (state.zoom ? 2.5 : 28)) / modelStageScale;
+          const top = 355 + (state.zoom ? 1 / modelStageScale : 0);
+          const tickEnd = top + (major ? (state.zoom ? 3.5 : 39) : (state.zoom ? 2.5 : 28)) / modelStageScale;
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${tickEnd - top}"/>`);
           if (state.zoom ? tick === 18 || tick === 19 : major) {
             const anchor = tick === 0 ? "start" : tick === 20 ? "end" : "middle";
             const labelY = state.zoom
-              ? 355 + 4.4 / modelStageScale
+              ? top + 4.4 / modelStageScale
               : 355 + (66 + 17) / modelStageScale;
             const zoomFontSize = state.zoom ? ' font-size="1.1"' : "";
             lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}"${zoomFontSize}>${tick}</text>`);
@@ -855,9 +855,11 @@
         }
         const rulerLeftMargin = 24 / modelStageScale;
         const rulerRightMargin = 50 / modelStageScale;
-        ruler.innerHTML = `<rect class="ruler-body" x="${rulerZeroX - rulerLeftMargin}" y="355" width="${20 * centimeter + rulerLeftMargin + rulerRightMargin}" height="${66 / modelStageScale}" rx="${9 / modelStageScale}"/>${lines.join("")}`;
+        const rulerHeight = state.zoom ? 5.8 / modelStageScale : 66 / modelStageScale;
+        const rulerTop = 355 + (state.zoom ? 1 / modelStageScale : 0);
+        ruler.innerHTML = `<rect class="ruler-body" x="${rulerZeroX - rulerLeftMargin}" y="${rulerTop}" width="${20 * centimeter + rulerLeftMargin + rulerRightMargin}" height="${rulerHeight}" rx="${9 / modelStageScale}"/>${lines.join("")}`;
         document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
-        const projectedEndpoint = modelStagePoint(endX, 355);
+        const projectedEndpoint = modelStagePoint(endX, 355 + (state.zoom ? 1 / modelStageScale : 0));
         document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${projectedEndpoint.x} ${projectedEndpoint.y}`);
         document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
         if (divisionCountControl) divisionCountControl.value = String(state.divisions);
