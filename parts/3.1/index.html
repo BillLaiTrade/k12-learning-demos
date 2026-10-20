@@ -1066,7 +1066,7 @@
           ? "估讀接近參考值。"
           : "估讀與參考值有差距。";
         document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
-        document.querySelector("#estimate-note").textContent = `你的估讀：約 ${guess} cm；誤差百分比：${percentageError.toFixed(2)}%。${closeness} 估讀顯示到小數一位。`;
+        document.querySelector("#estimate-note").textContent = `你的估讀：約 ${guess} cm；誤差百分比：${percentageError.toFixed(2)}%。${closeness}`;
         syncEstimateControls();
       });
 
