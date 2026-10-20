@@ -39,7 +39,7 @@ const RULER_CM=6;
 const WORLD_PER_CM=1/CM_PER_WORLD;
 const MEASURE_COLORS={length:0x00796b,width:0x5269a6,height:0xbf6338};
 
-function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLORS.length}={}){
+function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLORS.length,showGuides=true}={}){
   const width=RULER_CM*WORLD_PER_CM,depth=.56,top=0;
   const group=new THREE.Group();
   group.position.set(...position);group.rotation.set(0,rotationY,rotationZ);
@@ -57,10 +57,10 @@ function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLO
   const texture=new THREE.CanvasTexture(face);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;
   const topFace=new THREE.Mesh(new THREE.PlaneGeometry(width+.2,depth),new THREE.MeshBasicMaterial({map:texture}));
   topFace.rotation.x=-Math.PI/2;topFace.position.y=top+.001;group.add(topFace);
-  const guideMaterial=new THREE.LineDashedMaterial({color:accent,dashSize:.055,gapSize:.04,depthTest:false});
-  const guides=[0,1].map(()=>{const line=new THREE.Line(new THREE.BufferGeometry(),guideMaterial);line.renderOrder=5;group.add(line);return line});
-  const markerMaterial=new THREE.MeshBasicMaterial({color:accent,depthTest:false});
-  const markers=[0,1].map(()=>{const marker=new THREE.Mesh(new THREE.SphereGeometry(.035,12,8),markerMaterial);marker.renderOrder=6;group.add(marker);return marker});
+  const guideMaterial=showGuides?new THREE.LineDashedMaterial({color:accent,dashSize:.055,gapSize:.04,depthTest:false}):null;
+  const guides=showGuides?[0,1].map(()=>{const line=new THREE.Line(new THREE.BufferGeometry(),guideMaterial);line.renderOrder=5;group.add(line);return line}):[];
+  const markerMaterial=showGuides?new THREE.MeshBasicMaterial({color:accent,depthTest:false}):null;
+  const markers=showGuides?[0,1].map(()=>{const marker=new THREE.Mesh(new THREE.SphereGeometry(.035,12,8),markerMaterial);marker.renderOrder=6;group.add(marker);return marker}):[];
   return {group,guides,markers,top,width};
 }
 
@@ -103,7 +103,7 @@ export function mountStoneObserver(){
   const frameAssembly=new THREE.Group();frameAssembly.position.y=-frameCenterY;framePivot.add(frameAssembly);
   const lengthRuler=makeRuler({position:[0,rulerFloor,-rulerEdge],accent:MEASURE_COLORS.length});frameAssembly.add(lengthRuler.group);
   const widthRuler=makeRuler({position:[rulerEdge,rulerFloor,0],rotationY:Math.PI/2,accent:MEASURE_COLORS.width});frameAssembly.add(widthRuler.group);
-  const heightRuler=makeRuler({position:[rulerEdge,rulerFloor+rulerHeight/2,-rulerEdge],rotationZ:Math.PI/2,accent:MEASURE_COLORS.height});frameAssembly.add(heightRuler.group);
+  const heightRuler=makeRuler({position:[rulerEdge,rulerFloor+rulerHeight/2,-rulerEdge],rotationZ:Math.PI/2,accent:MEASURE_COLORS.height,showGuides:false});frameAssembly.add(heightRuler.group);
   makeRulerFrame(frameAssembly,rulerEdge,rulerFloor);
   const pivot=new THREE.Group();pivot.position.y=frameCenterY;scene.add(pivot);
   const stone=makeStone();pivot.add(stone);
@@ -115,11 +115,19 @@ export function mountStoneObserver(){
 
   let width=0,height=0,dragId=null,lastX=0,lastY=0,dragTarget=null,velocityYaw=0,velocityPitch=0,distance=8.8,raf=0,measureDirty=true,pinchDistance=0;
   const activePointers=new Map(),lengthReadout=document.querySelector('#stone-length'),widthReadout=document.querySelector('#stone-width'),heightReadout=document.querySelector('#stone-height');
+  const svgNS='http://www.w3.org/2000/svg',heightOverlay=document.createElementNS(svgNS,'svg'),heightGuides=[0,1].map(()=>{
+    const line=document.createElementNS(svgNS,'line');
+    line.setAttribute('stroke','#bf6338');line.setAttribute('stroke-width','2.5');line.setAttribute('stroke-dasharray','5 4');line.setAttribute('stroke-linecap','round');
+    heightOverlay.append(line);return line;
+  });
+  heightOverlay.setAttribute('aria-hidden','true');heightOverlay.setAttribute('focusable','false');
+  Object.assign(heightOverlay.style,{position:'absolute',inset:'0',width:'100%',height:'100%',overflow:'hidden',pointerEvents:'none',zIndex:'2'});
+  host.append(heightOverlay);
   const loading=document.querySelector('#observer-loading');
   const raycaster=new THREE.Raycaster(),pointerNdc=new THREE.Vector2();raycaster.params.Line.threshold=.09;
-  function resize(){width=host.clientWidth;height=host.clientHeight;if(!width||!height)return;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix()}
+  function resize(){width=host.clientWidth;height=host.clientHeight;if(!width||!height)return;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();measureDirty=true}
   const observer=new ResizeObserver(resize);observer.observe(host);resize();
-  const zoom=delta=>{distance=clamp(distance+delta,7.2,11.5);camera.position.z=distance;camera.updateProjectionMatrix()};
+  const zoom=delta=>{distance=clamp(distance+delta,7.2,11.5);camera.position.z=distance;camera.updateProjectionMatrix();measureDirty=true};
   function pickStone(event){
     const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return null;
     pointerNdc.set(((event.clientX-rect.left)/rect.width)*2-1,-((event.clientY-rect.top)/rect.height)*2+1);
@@ -164,8 +172,21 @@ export function mountStoneObserver(){
     });
     updateRulerGuides(lengthRuler,lengthGuidePoints,new THREE.Vector3(0,1,0));
     updateRulerGuides(widthRuler,[minZ,maxZ].map(z=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,rulerFloor+.012-frameCenterY,z))),new THREE.Vector3(0,1,0));
-    updateRulerGuides(heightRuler,[minY,maxY].map(y=>framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge))),new THREE.Vector3(-1,0,0));
+    updateHeightOverlay([minY,maxY]);
     measureDirty=false;
+  }
+  function updateHeightOverlay(yValues){
+    heightOverlay.setAttribute('viewBox',`0 0 ${width} ${height}`);
+    // 固定以尺框角落作為畫面錨點；量測高度只改變標記的垂直位置。
+    const anchorPoint=framePivot.localToWorld(new THREE.Vector3(rulerEdge,0,-rulerEdge)).project(camera);
+    const anchorX=(anchorPoint.x*.5+.5)*width;
+    yValues.forEach((y,index)=>{
+      const projected=framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge)).project(camera);
+      const screenY=(-projected.y*.5+.5)*height;
+      const line=heightGuides[index];
+      line.setAttribute('x1',String(anchorX-36));line.setAttribute('x2',String(anchorX-3));
+      line.setAttribute('y1',String(screenY));line.setAttribute('y2',String(screenY));
+    });
   }
   function updateRulerGuides(ruler,worldPoints,guideDirection){
     ruler.group.updateMatrixWorld(true);
