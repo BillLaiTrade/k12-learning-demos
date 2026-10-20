@@ -825,7 +825,7 @@
           const top = major ? 380 : 390;
           const tickEnd = 423;
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${tickEnd - top}"/>`);
-          if (state.zoom ? tick === 18 || tick === 19 : major || tick === 18 || tick === 19) {
+          if (state.zoom ? tick === 18 || tick === 19 : major) {
             const anchor = tick === 0 ? "start" : tick === 30 ? "end" : "middle";
             const zoomFontSize = state.zoom ? ' font-size="14"' : "";
             lines.push(`<text x="${x}" y="448" text-anchor="${anchor}"${zoomFontSize}>${tick}${tick === 0 ? " cm" : ""}</text>`);
