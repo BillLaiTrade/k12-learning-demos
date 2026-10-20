@@ -195,10 +195,16 @@
     .model-screen[data-zoom="true"] #shared-scale .ruler-body { stroke: none; }
     #shared-scale .ruler-outline { fill: none; stroke: #a99255; stroke-width: .9; }
     .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
-    #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 330px; pointer-events: none; }
-    #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 330px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
+    #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 160px; pointer-events: none; }
+    #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 160px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
+    @media (max-width: 760px) {
+      #pencil-3d-canvas, #parallax-canvas { height: 140px; }
+    }
     #parallax-canvas:active { cursor: grabbing; }
     #parallax-canvas:focus-visible { outline: 3px solid #176b53; outline-offset: 3px; }
+    .view-presets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+    .view-presets [aria-pressed="true"] { background: var(--green); color: #fff; border-color: var(--green); }
+    .view-presets .view-help { margin: 0 0 0 auto; color: var(--muted); font-size: .84rem; }
     .scene-caption { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
     .scene-caption p { margin: 0; color: var(--muted); font-size: .88rem; }
     .scene-readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
@@ -453,23 +459,23 @@
       </section>
 
       <section class="lesson-card" id="card-06">
-        <div class="card-side"><span class="card-number">06</span><h3>找出讀值差異</h3><span class="card-role">視角與起點是兩種條件</span></div>
+        <div class="card-side"><span class="card-number">06</span><h3>找出讀值差異</h3><span class="card-role">觀察角度會影響讀值</span></div>
         <div class="card-main">
           <h2>同一物體，為什麼讀值會差一點？</h2>
-          <p>同一支鉛筆平行放在直尺旁，左端對齊 0 cm。拖曳 3D 場景改變觀察角度，紅色虛線從鉛筆右端投到尺面的位置，顯示這個視角下讀到的刻度；鉛筆本身的長度不會因轉動視角而改變。也可選取畫面後用方向鍵調整視角。</p>
+          <p>同一支鉛筆平行放在直尺旁。切換兩個預設視角，或拖曳 3D 場景自由旋轉；觀察鉛筆端點的投影落在哪個刻度，以及讀值如何改變。</p>
           <div class="parallax-scene">
             <canvas id="pencil-3d-canvas" aria-hidden="true"></canvas>
             <span id="pencil-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
-            <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、鉛筆和視線延長線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明鉛筆長度不變，讀值可能隨觀察角度改變。</canvas>
-            <div class="scene-caption"><p id="camera-caption" aria-live="polite">拖曳畫面旋轉視角；也可先選取畫面，再按方向鍵。</p><button type="button" class="secondary" id="reset-camera">回到預設視角</button></div>
-            <div class="scene-readout" aria-live="polite"><article><small>鉛筆模型設定的長度</small><strong id="actual-width">18 cm</strong></article><article><small>從這個角度讀到的數值</small><strong id="parallax-reading">約 18 cm</strong></article></div>
+            <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、鉛筆和端點投影線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明觀察角度改變時，尺上的讀值可能改變。</canvas>
+            <div class="view-presets" role="group" aria-label="預設觀察視角">
+              <button type="button" class="secondary" id="view-front" aria-pressed="true">正對尺面</button>
+              <button type="button" class="secondary" id="view-oblique" aria-pressed="false">斜向觀察</button>
+              <p class="view-help">拖曳畫面也可自由旋轉視角</p>
+            </div>
+            <div class="scene-caption"><p id="camera-caption" aria-live="polite">正對尺面：端點投影對準尺上刻度。</p><button type="button" class="secondary" id="reset-camera">回到正對尺面</button></div>
+            <div class="scene-readout" aria-live="polite"><article><small>正對尺面估讀</small><strong id="front-reading">約 18 cm</strong></article><article><small>目前角度估讀</small><strong id="parallax-reading">約 18 cm</strong></article></div>
             <p class="live-note" id="parallax-explanation">正對尺面時，視線延長線接近鉛筆端點；斜向觀察時，端點的視線落到尺面別處，這種因觀察角度不同而產生的讀值差異，叫作「視差」。這裡的讀值依照尺上刻度估讀。</p>
           </div>
-          <div class="toggle-row" role="group" aria-label="尺的起點">
-            <button type="button" data-zero="aligned" aria-pressed="true">起點在 0 cm</button>
-            <button type="button" data-zero="offset" aria-pressed="false">起點在 0.5 cm</button>
-          </div>
-          <div class="readout" aria-live="polite"><article><small>尺上鉛筆端點</small><strong id="zero-end">約 18 cm</strong><span>沿用共用模型上的同一端點</span></article><article><small>鉛筆長度</small><strong id="zero-result">約 18 cm</strong><span id="zero-explanation">起點在 0 cm，終點位置就是長度。</span></article></div>
         </div>
       </section>
 
@@ -572,9 +578,14 @@
         const centimeters = (30 / divisions).toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
         return `30 cm ÷ ${divisions} 等分 = ${numerator}/${denominator} cm／格（約 ${centimeters} cm）。`;
       };
-      const defaultCameraPitch = 0.45;
+      const defaultCameraPitch = 0.8;
       const orbitRadius = 24;
-      const defaultCameraYaw = 0;
+      const parallaxLength = 18.4;
+      const pencilHeight = 0.8;
+      const parallaxTickSpacing = 1;
+      const parallaxCenterX = state.start + parallaxLength / 2;
+      const defaultCameraYaw = Math.asin((state.start + parallaxLength - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
+      const obliqueCameraYaw = Math.asin((state.start + parallaxLength - 18 - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
       const ruler = document.querySelector("#shared-scale");
       const modelSvg = document.querySelector("#shared-measurement-model");
       const modelScreen = document.querySelector("#model-screen");
@@ -620,6 +631,7 @@
       const parallaxCanvas = document.querySelector("#parallax-canvas");
       const parallaxContext = parallaxCanvas.getContext("2d");
       const camera = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
+      let cameraPreset = "front";
       const edgePosition = () => state.start + state.edge;
       const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
       const formatCentimeters = (value) => {
@@ -688,16 +700,28 @@
         const ctx = parallaxContext;
         const width = bounds.width;
         const height = bounds.height;
-        const target = { x: state.start + state.edge / 2, y: 0.3, z: 0 };
+        const target = { x: state.start + parallaxLength / 2, y: pencilHeight, z: 0 };
         const cameraPosition = {
           x: target.x + orbitRadius * Math.cos(camera.pitch) * Math.sin(camera.yaw),
           y: target.y + orbitRadius * Math.sin(camera.pitch),
           z: target.z + orbitRadius * Math.cos(camera.pitch) * Math.cos(camera.yaw)
         };
-        const forward = normalize(subtract(target, cameraPosition));
+        const viewBlend = cameraPreset === "front"
+          ? 0
+          : cameraPreset === "oblique"
+          ? 1
+          : clamp(Math.abs(camera.yaw - defaultCameraYaw) / 0.4, 0, 1);
+        const cameraTarget = {
+          x: cameraPosition.x + (target.x - cameraPosition.x) * viewBlend,
+          y: 0.04,
+          z: 0
+        };
+        const forward = normalize(subtract(cameraTarget, cameraPosition));
         const right = normalize(cross(forward, { x: 0, y: 1, z: 0 }));
         const up = normalize(cross(right, forward));
-        const focalLength = width <= 760 ? Math.min(height * 0.9, width * 0.52) : height * 0.9;
+        const focalLength = cameraPreset === "front"
+          ? width * 0.76
+          : width <= 760 ? Math.min(height * 1.95, width * 0.85) : height * 2.48;
         const project = (point) => {
           const relative = subtract(point, cameraPosition);
           const depth = dot(relative, forward);
@@ -740,13 +764,13 @@
         const rulerMax = 30;
         const top = 0.04;
         const rulerNear = -1.5;
-        const rulerFar = 1.5;
-        const pencilCenterZ = 1.9;
+        const rulerFar = 2.5;
+        const pencilCenterZ = 0.5;
         drawFace([{ x: rulerMin, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerFar }, { x: rulerMin, y: top, z: rulerFar }], "#dfe8e3");
         drawFace([{ x: rulerMin, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerNear }, { x: rulerMax, y: -0.12, z: rulerNear }, { x: rulerMin, y: -0.12, z: rulerNear }], "#cad8d1", "#93a99e");
-        for (let tick = 0; tick <= state.divisions; tick += 1) {
-          const x = (tick * 30) / state.divisions;
-          const major = tick === 0 || tick === state.divisions || (state.divisions % 3 === 0 && tick % (state.divisions / 3) === 0);
+        for (let tick = 0; tick <= 30 / parallaxTickSpacing; tick += 1) {
+          const x = tick * parallaxTickSpacing;
+          const major = tick === 0 || tick === 30 / parallaxTickSpacing || tick % 5 === 0;
           const startDepth = major ? rulerNear + 0.04 : rulerNear + 0.28;
           drawLine([{ x, y: top + 0.015, z: startDepth }, { x, y: top + 0.015, z: rulerFar - 0.04 }], major ? "#26383a" : "#637174", major ? 2.2 : 1.15);
           if (major) {
@@ -760,17 +784,21 @@
           }
         }
 
-        const pencilCenter = { x: state.start + state.edge / 2, y: 0.3, z: pencilCenterZ };
-        const pencilHalfLength = state.edge / 2;
+        const pencilCenter = { x: state.start + parallaxLength / 2, y: pencilHeight, z: pencilCenterZ };
+        const pencilHalfLength = parallaxLength / 2;
         const pencilStartX = pencilCenter.x - pencilHalfLength;
         const pencilEndX = pencilCenter.x + pencilHalfLength;
         window.setPencil3DView?.({
-          edge: state.edge,
+          edge: parallaxLength,
           start: state.start,
           yaw: camera.yaw,
           pitch: camera.pitch,
           orbitRadius,
           centerZ: pencilCenter.z,
+          centerY: pencilCenter.y,
+          lookAtX: cameraTarget.x,
+          lookAtY: cameraTarget.y,
+          lookAtZ: cameraTarget.z,
           focalLengthRatio: focalLength / height
         });
         const edgeX = pencilEndX;
@@ -791,33 +819,30 @@
           ctx.fillStyle = "#bc612b";
           ctx.fill();
         }
-        const estimatedStep = 30 / state.divisions;
+        const estimatedStep = parallaxTickSpacing;
         const apparentWidth = Math.max(0, projectedEdgeX - pencilStartX);
-        const apparentWidthReading = Math.round(apparentWidth / estimatedStep) * estimatedStep;
-        const apparentEndReading = Math.round(projectedEdgeX / estimatedStep) * estimatedStep;
-        const formattedWidthReading = apparentWidthReading.toFixed(1);
-        const formattedEndReading = apparentEndReading.toFixed(1);
+        const apparentWidthReading = Math.round(apparentWidth / estimatedStep * 10) / 10 * estimatedStep;
+        const displayedEndEstimate = (Math.round(projectedEdgeX / estimatedStep) * estimatedStep).toFixed(0);
         const landingOnScale = projectedEdgeX >= 0 && projectedEdgeX <= 30 && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
-        document.querySelector("#actual-width").textContent = `約 ${formatCentimeters(state.edge)} cm`;
-        document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${formattedEndReading} cm` : "視線落在尺外";
-        document.querySelector("#zero-end").textContent = landingOnScale ? `約 ${formattedEndReading} cm` : "視線落在尺外";
-        document.querySelector("#zero-result").textContent = landingOnScale ? `約 ${formattedWidthReading} cm` : "目前無法估讀";
-        document.querySelector("#zero-explanation").textContent = !landingOnScale
-          ? "端點視線落在尺面範圍外；調整視角讓落點回到刻度，再讀取終點與長度。"
-          : state.start === 0
-          ? `起點在 0 cm，終點讀值約 ${formattedEndReading} cm，長度也約 ${formattedWidthReading} cm。`
-          : `終點讀值約 ${formattedEndReading} cm − 起點 ${state.start.toFixed(1)} cm，長度約 ${formattedWidthReading} cm。`;
-        const side = Math.abs(Math.sin(camera.yaw)) < 0.12 ? "從直尺正面觀察" : Math.sin(camera.yaw) > 0 ? "從尺的右側觀察" : "從尺的左側觀察";
-        const elevation = camera.pitch > 1.15 ? "較高俯視" : camera.pitch < 0.45 ? "較低視線" : "斜上方視線";
-        document.querySelector("#camera-caption").textContent = `目前視角：${elevation}，${side}。拖曳旋轉；方向鍵也可調整。`;
+        const frontPosition = state.start + parallaxLength;
+        document.querySelector("#front-reading").textContent = `約 ${(Math.round(frontPosition / estimatedStep) * estimatedStep).toFixed(0)} cm`;
+        document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${displayedEndEstimate} cm` : "視線落在尺外";
+        const cameraCaption = cameraPreset === "front"
+          ? "正對尺面：端點投影對準尺上刻度。"
+          : cameraPreset === "oblique"
+          ? "斜向觀察：端點視線投影偏離正對時的刻度。"
+          : "自由視角：拖曳或用方向鍵轉動，觀察投影落點和讀值。";
+        document.querySelector("#camera-caption").textContent = cameraCaption;
+        document.querySelector("#view-front").setAttribute("aria-pressed", String(cameraPreset === "front"));
+        document.querySelector("#view-oblique").setAttribute("aria-pressed", String(cameraPreset === "oblique"));
         document.querySelector("#parallax-explanation").textContent = !landingOnScale
           ? "這個角度下，視線延長線落在尺面範圍外，無法從尺上讀值。轉動視角，讓落點回到刻度上；鉛筆長度始終不變。"
-          : Math.abs(apparentWidthReading - state.edge) < estimatedStep / 2
-          ? "目前視線接近正對尺長方向，落點讀值與固定的鉛筆長度接近。拖動視角，觀察視線延長線如何偏離端點。"
-          : `鉛筆實際長度仍約 ${formatCentimeters(state.edge)} cm；端點視線落到尺面約 ${formattedEndReading} cm，扣除起點 ${state.start.toFixed(1)} cm 後，讀到的長度約 ${formattedWidthReading} cm。差異呈現視差，不代表鉛筆或尺改變。`;
+          : Math.abs(apparentWidthReading - parallaxLength) < estimatedStep / 2
+          ? "目前端點投影接近正對刻度的位置。拖動視角，觀察投影線和尺上讀值如何改變。"
+          : "目前端點投影已偏離正對時的位置；比較上方兩種角度的估讀。鉛筆和尺都沒有移動。";
         parallaxCanvas.setAttribute("aria-label", landingOnScale
-          ? `三維直尺與鉛筆模型。鉛筆長度約 ${formatCentimeters(state.edge)} 公分；從目前角度讀到的尺上端點約為 ${formattedEndReading} 公分。可拖曳或使用方向鍵旋轉視角。`
-          : `三維直尺與鉛筆模型。鉛筆實際長度約 ${formatCentimeters(state.edge)} 公分；目前視角的視線落在尺面範圍外，無法讀值。可拖曳或使用方向鍵旋轉視角。`);
+          ? `三維直尺與鉛筆模型。從目前角度讀到的尺上端點約為 ${displayedEndEstimate} 公分。可拖曳或使用方向鍵旋轉視角。`
+          : "三維直尺與鉛筆模型。目前視角的投影落在尺面範圍外，無法讀值；可拖曳或使用方向鍵旋轉視角。");
       };
       const updateModel = () => {
         const closeup = state.zoom > 0.8;
@@ -1070,7 +1095,9 @@
         syncEstimateControls();
       });
 
-      const wrapAngle = (angle) => ((angle + Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) - Math.PI;
+      const minimumViewYaw = obliqueCameraYaw - 0.3;
+      const maximumViewYaw = defaultCameraYaw + 0.3;
+      const clampViewYaw = (angle) => clamp(angle, minimumViewYaw, maximumViewYaw);
       let dragPoint = null;
       parallaxCanvas.addEventListener("pointerdown", (event) => {
         dragPoint = { x: event.clientX, y: event.clientY };
@@ -1082,8 +1109,9 @@
         const dx = event.clientX - dragPoint.x;
         const dy = event.clientY - dragPoint.y;
         dragPoint = { x: event.clientX, y: event.clientY };
-        camera.yaw = wrapAngle(camera.yaw + dx * 0.009);
-        camera.pitch = clamp(camera.pitch + dy * 0.007, 0.4, 1.35);
+        cameraPreset = "free";
+        camera.yaw = clampViewYaw(camera.yaw + dx * 0.009);
+        camera.pitch = clamp(camera.pitch + dy * 0.007, 0.55, 1.15);
         renderParallaxScene();
       });
       const releaseDrag = () => { dragPoint = null; };
@@ -1092,17 +1120,30 @@
       parallaxCanvas.addEventListener("lostpointercapture", releaseDrag);
       parallaxCanvas.addEventListener("keydown", (event) => {
         const angleStep = 0.08;
-        if (event.key === "ArrowLeft") camera.yaw -= angleStep;
-        else if (event.key === "ArrowRight") camera.yaw += angleStep;
-        else if (event.key === "ArrowUp") camera.pitch = clamp(camera.pitch - angleStep, 0.4, 1.35);
-        else if (event.key === "ArrowDown") camera.pitch = clamp(camera.pitch + angleStep, 0.4, 1.35);
+        if (event.key === "ArrowLeft") camera.yaw = clampViewYaw(camera.yaw - angleStep);
+        else if (event.key === "ArrowRight") camera.yaw = clampViewYaw(camera.yaw + angleStep);
+        else if (event.key === "ArrowUp") camera.pitch = clamp(camera.pitch - angleStep, 0.55, 1.15);
+        else if (event.key === "ArrowDown") camera.pitch = clamp(camera.pitch + angleStep, 0.55, 1.15);
         else return;
         event.preventDefault();
-        camera.yaw = wrapAngle(camera.yaw);
+        cameraPreset = "free";
         renderParallaxScene();
       });
       document.querySelector("#reset-camera").addEventListener("click", () => {
+        cameraPreset = "front";
         camera.yaw = defaultCameraYaw;
+        camera.pitch = defaultCameraPitch;
+        renderParallaxScene();
+      });
+      document.querySelector("#view-front").addEventListener("click", () => {
+        cameraPreset = "front";
+        camera.yaw = defaultCameraYaw;
+        camera.pitch = defaultCameraPitch;
+        renderParallaxScene();
+      });
+      document.querySelector("#view-oblique").addEventListener("click", () => {
+        cameraPreset = "oblique";
+        camera.yaw = obliqueCameraYaw;
         camera.pitch = defaultCameraPitch;
         renderParallaxScene();
       });
@@ -1112,15 +1153,8 @@
       // The module can finish before this listener is attached; apply the current camera immediately when ready.
       if (window.setPencil3DView) renderParallaxScene();
 
-      const zeroButtons = [...document.querySelectorAll("[data-zero]")];
-      zeroButtons.forEach((button) => button.addEventListener("click", () => {
-        pressOne(zeroButtons, button);
-        state.start = button.dataset.zero === "offset" ? 0.5 : 0;
-        updateModel();
-      }));
-
       const correctionStates = {
-        view: { before: "斜向觀察尺面", beforeNote: "視線延長線落在端點旁邊", after: "將端點投影對準刻度", afterNote: "讀值回到約 18 cm", explanation: "調整觀察角度，使鉛筆右端的視線投影落到約 18 cm；讀值與鉛筆模型長度相符，鉛筆本身沒有改變。", apply: () => { state.angle = false; camera.yaw = defaultCameraYaw + 0.36; camera.pitch = defaultCameraPitch; } },
+        view: { before: "斜向觀察尺面", beforeNote: "視線延長線落在端點旁邊", after: "端點投影對準刻度", afterNote: "讀值接近正對時的位置", explanation: "調整觀察角度，讓端點的視線投影對準尺上的刻度；鉛筆和尺本身都沒有改變。", apply: () => { state.angle = false; cameraPreset = "front"; camera.yaw = defaultCameraYaw; camera.pitch = defaultCameraPitch; } },
         start: { before: "起點在 0.5 cm", beforeNote: "不可直接把終點當長度", after: "起點對齊 0 cm", afterNote: "以同一支鉛筆重新讀取", explanation: "起點對齊零後，可直接讀終點位置；若未對齊，則須用終點減起點。", apply: () => { state.start = 0; } },
         scale: { before: "刻度目前分格", beforeNote: "可在共用尺上比較", after: "整把尺分成 30 等分", afterNote: "每格為 1 cm", explanation: "較細的刻度可呈現更細的讀值；放大畫面本身不會改變工具刻度。", apply: () => { state.divisions = 30; } }
       };
@@ -1129,7 +1163,8 @@
         const selectedCase = document.querySelector("#correction-case").value;
         if (!selectedCase) return;
         state.angle = selectedCase === "view";
-        camera.yaw = selectedCase === "view" ? defaultCameraYaw + 0.7 : defaultCameraYaw;
+        cameraPreset = selectedCase === "view" ? "oblique" : "front";
+        camera.yaw = selectedCase === "view" ? obliqueCameraYaw : defaultCameraYaw;
         camera.pitch = defaultCameraPitch;
         state.start = selectedCase === "start" ? 0.5 : 0;
         if (selectedCase === "scale") state.divisions = 2;
@@ -1161,7 +1196,7 @@
         if (!selectedCase) return;
         const selected = correctionStates[selectedCase];
         if (!corrected) selected.apply();
-        else if (selectedCase === "view") { state.angle = true; camera.yaw = defaultCameraYaw + 0.7; camera.pitch = defaultCameraPitch; }
+        else if (selectedCase === "view") { state.angle = true; cameraPreset = "oblique"; camera.yaw = obliqueCameraYaw; camera.pitch = defaultCameraPitch; }
         else if (selectedCase === "start") state.start = 0.5;
         else state.divisions = 2;
         corrected = !corrected;

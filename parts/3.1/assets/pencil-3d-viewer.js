@@ -22,7 +22,8 @@ const view = {
   yaw: 0,
   pitch: 0.45,
   orbitRadius: 24,
-  centerZ: 1.9,
+  centerY: 0.8,
+  centerZ: 2.5,
   focalLengthRatio: immersiveView ? 0.5 : 0.9
 };
 
@@ -81,16 +82,21 @@ function render() {
   if (!renderer || !modelReady || modelFailed) return;
   camera.fov = 2 * Math.atan(1 / (2 * view.focalLengthRatio)) * 180 / Math.PI;
   camera.updateProjectionMatrix();
-  const target = new THREE.Vector3(view.start + view.edge / 2, 0.3, 0);
+  const orbitCenter = new THREE.Vector3(view.start + view.edge / 2, view.centerY, 0);
+  const target = new THREE.Vector3(
+    Number.isFinite(view.lookAtX) ? view.lookAtX : view.start + view.edge / 2,
+    Number.isFinite(view.lookAtY) ? view.lookAtY : view.centerY,
+    Number.isFinite(view.lookAtZ) ? view.lookAtZ : 0
+  );
   const horizontal = view.orbitRadius * Math.cos(view.pitch);
   camera.position.set(
-    target.x + horizontal * Math.sin(view.yaw),
-    target.y + view.orbitRadius * Math.sin(view.pitch),
-    target.z + horizontal * Math.cos(view.yaw)
+    orbitCenter.x + horizontal * Math.sin(view.yaw),
+    orbitCenter.y + view.orbitRadius * Math.sin(view.pitch),
+    orbitCenter.z + horizontal * Math.cos(view.yaw)
   );
   camera.lookAt(target);
 
-  pencil.position.set(view.start + view.edge / 2, 0.3, view.centerZ);
+  pencil.position.set(view.start + view.edge / 2, view.centerY, view.centerZ);
   renderer.render(scene, camera);
 }
 
@@ -110,7 +116,7 @@ function createPencil(length) {
     material
   );
   photographicCutout.name = "realistic-pencil-cutout";
-  photographicCutout.position.set(0, 0.3, 0.36);
+  photographicCutout.position.set(0, 0, 0);
   photographicCutout.renderOrder = 2;
   return photographicCutout;
 }
@@ -119,7 +125,7 @@ try {
   pencil = createPencil(view.edge);
   scene.add(pencil);
   modelReady = true;
-  announce(`鉛筆量測圖像已載入；固定模型長度為 ${view.edge.toFixed(1)} 公分。可拖曳畫面旋轉觀察。`);
+  announce("鉛筆 3D 場景已載入。可拖曳畫面旋轉觀察。");
   render();
   window.dispatchEvent(new Event("pencil3d-ready"));
 } catch (error) {
