@@ -415,8 +415,10 @@
               <svg id="shared-measurement-model" viewBox="0 295 760 170" role="img" aria-label="鉛筆左端對準零刻度，右端落在直尺兩條相鄰公分刻線之間">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
                 <g id="model-stage">
+                  <path id="estimate-guide-upper" d="M588 320V355" stroke="#2878a5" stroke-width="1.5" stroke-dasharray="4 3" visibility="hidden"></path>
                   <image id="pencil-object" href="assets/pencil-photo.webp" x="27" y="389" width="459.44" height="28.17" preserveAspectRatio="none" aria-hidden="true"></image>
                   <g id="shared-scale"></g>
+                  <path id="estimate-guide-lower" d="M588 355V360" stroke="#2878a5" stroke-width="1.5" stroke-dasharray="4 3" visibility="hidden"></path>
                   <path id="pencil-end-guide" d="M588 348V423" stroke="#bc612b" stroke-width="2" stroke-dasharray="2 2"></path>
                 </g>
                 <g id="eye-ray" opacity="0">
@@ -591,6 +593,22 @@
         guide.setAttribute("d", `M${endX} ${pencilEndY}V${state.zoom ? 360 : 355}`);
         guide.setAttribute("stroke-width", state.zoom ? ".16" : "2");
         guide.setAttribute("stroke-dasharray", state.zoom ? ".28 .28" : "2 2");
+      };
+      const updateEstimateGuide = () => {
+        const centimeter = 640 / 30;
+        const rulerZeroX = 80 + 5 * centimeter;
+        const rulerTop = 355 + (state.zoom ? 1 / modelStageScale : 0);
+        const estimateX = rulerZeroX + (estimateGuess ?? 18) * centimeter;
+        const upperGuide = document.querySelector("#estimate-guide-upper");
+        const lowerGuide = document.querySelector("#estimate-guide-lower");
+        const visibility = estimateGuess === null ? "hidden" : "visible";
+        upperGuide.setAttribute("d", `M${estimateX} 320V${rulerTop}`);
+        lowerGuide.setAttribute("d", `M${estimateX} ${rulerTop}V${state.zoom ? 360 : rulerTop}`);
+        for (const guide of [upperGuide, lowerGuide]) {
+          guide.setAttribute("visibility", visibility);
+          guide.setAttribute("stroke-width", state.zoom ? ".16" : "1.5");
+          guide.setAttribute("stroke-dasharray", state.zoom ? ".28 .28" : "4 3");
+        }
       };
       const animateModelView = (zoom) => {
         const targetWidth = zoom ? 55 : 760;
@@ -838,6 +856,7 @@
         const rulerZeroX = 80 + 5 * centimeter;
         const endX = rulerZeroX + estimateEndpoint() * centimeter;
         placePencil();
+        updateEstimateGuide();
         const lines = [];
         for (let tick = 0; tick <= 20; tick += 1) {
           const x = rulerZeroX + tick * centimeter;
@@ -1018,10 +1037,11 @@
       const estimateSlider = document.querySelector("#estimate-slider");
       estimateSlider.addEventListener("input", () => {
         estimateGuess = Number(estimateSlider.value) / 1000;
+        updateEstimateGuide();
         estimateChecked = false;
         const guess = formatCentimeters(estimateGuess);
         document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
-        document.querySelector("#estimate-note").textContent = `你選擇估讀約 ${guess} cm。依鉛筆右端和相鄰刻線的位置判斷；這個滑桿只記錄你的估值，不會移動鉛筆或尺。`;
+        document.querySelector("#estimate-note").textContent = `你選擇估讀約 ${guess} cm。藍色虛線表示你的估讀位置，橘紅虛線標示鉛筆端點；移動滑桿不會移動鉛筆或尺。`;
         const button = document.querySelector("#check-estimate");
         button.disabled = false;
         button.textContent = "檢查估讀";
@@ -1030,6 +1050,7 @@
         if (estimateChecked) {
           estimateGuess = null;
           estimateChecked = false;
+          updateEstimateGuide();
           document.querySelector("#estimate-value").textContent = "尚未估讀";
           document.querySelector("#estimate-note").textContent = "依端點在相鄰刻線間的位置估讀。拉近只讓位置更清楚，不會增加刻線或改變最小刻度。";
           syncEstimateControls();
