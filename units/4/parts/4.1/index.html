@@ -75,6 +75,7 @@
     .bucket-image-hotspots[data-view="handle"] { transform:translateX(-50%) scale(2); transform-origin:50% 0%; }
     .bucket-image-hotspots[data-view="grip"] { transform:translateX(-50%) scale(3); transform-origin:50% -18%; }
     .bucket-hotspot { position:absolute; z-index:1; padding:0; border:1px solid transparent; border-radius:12px; background:transparent; cursor:zoom-in; }
+    .bucket-hotspot:focus { outline:none; }
     .bucket-hotspot-body { left:14%; top:35%; width:72%; height:62%; }
     .bucket-hotspot-handle-left { left:10%; top:10%; width:34%; height:33%; }
     .bucket-hotspot-handle-right { right:10%; top:10%; width:34%; height:33%; }
@@ -87,7 +88,7 @@
     .bucket-choices { margin:0 0 12px; }
     .bucket-choices button { min-height:42px; padding:8px 14px; border:1px solid #c8d1c8; border-radius:999px; background:#fff; cursor:pointer; font-weight:700; }
     .bucket-choices button:hover { border-color:var(--green); }
-    .bucket-choices button[aria-pressed="true"] { border-color:var(--green); background:var(--green); color:#fff; box-shadow:0 3px 10px #176b5330; }
+    .bucket-choices button[aria-pressed="true"] { border-color:#9aaa9f; background:#eef1eb; color:var(--ink); box-shadow:none; }
     .concept-note { margin:16px 0; padding:14px 16px; border-left:4px solid #b8cda9; border-radius:0 12px 12px 0; background:#f0f5eb; }
     .concept-note p { margin:0; }
     .record-task { display:grid; grid-template-columns:145px 1fr; gap:10px 16px; align-items:center; margin:14px 0; padding:16px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
