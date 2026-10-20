@@ -10,7 +10,7 @@ export function mountDisplacementExperiment() {
   const explanation = document.querySelector('#displacement-explanation');
   const placeButton = document.querySelector('#immerse');
   const resetButton = document.querySelector('#water-reset');
-  const marks = [...document.querySelectorAll('#measuring-cylinder .mark')];
+  const marks = [...document.querySelectorAll('#measuring-cylinder [data-volume]')];
 
   if (![scene, cylinder, rock, water, status, finalWater, displaced, equation, explanation, placeButton, resetButton].every(Boolean)) return;
 
@@ -23,7 +23,7 @@ export function mountDisplacementExperiment() {
     rock.classList.toggle('is-immersed', immersed);
     rock.classList.remove('is-dragging');
     cylinder.classList.remove('drop-ready');
-    water.style.height = immersed ? '65%' : '40%';
+    water.style.height = immersed ? '91.6667%' : '66.6667%';
     marks.forEach(mark => mark.classList.toggle('active', Number(mark.dataset.volume) === (immersed ? 55 : 40)));
     finalWater.textContent = immersed ? '55 mL' : '尚未放入';
     displaced.textContent = immersed ? '15 cm³' : '尚未量出';
