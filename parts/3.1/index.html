@@ -586,12 +586,12 @@
         document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V${state.zoom ? 361 : 355}`);
       };
       const animateModelView = (zoom) => {
-        const targetHeight = zoom ? 78 : 170;
+        const targetHeight = zoom ? 68 : 170;
         const targetWidth = zoom ? targetHeight * 1.6 : 760;
         const endpointX = modelStagePoint(80 + (5 + estimateEndpoint()) * (640 / 30), 0).x;
         const target = {
           x: zoom ? endpointX - targetWidth * 0.55 : 0,
-          y: zoom ? 316 : 295,
+          y: zoom ? 320 : 295,
           width: targetWidth,
           height: targetHeight
         };
@@ -600,7 +600,7 @@
         cancelAnimationFrame(modelViewAnimationFrame);
         const start = { ...modelViewBox };
         const startPencilOffset = pencilViewOffset;
-        const targetPencilOffset = zoom ? -15 : -18;
+        const targetPencilOffset = zoom ? -9 : -18;
         const startTime = performance.now();
         const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700;
         const frame = (now) => {
@@ -836,12 +836,12 @@
           const x = rulerZeroX + tick * centimeter;
           const major = tick % 5 === 0;
           const top = 355;
-          const tickEnd = 355 + (major ? 39 : 28) / modelStageScale;
+          const tickEnd = 355 + (major ? (state.zoom ? 28 : 39) : (state.zoom ? 20 : 28)) / modelStageScale;
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${tickEnd - top}"/>`);
           if (state.zoom ? tick === 18 || tick === 19 : major) {
             const anchor = tick === 0 ? "start" : tick === 20 ? "end" : "middle";
             const labelY = state.zoom
-              ? 355 + 39 / modelStageScale
+              ? 355 + 31 / modelStageScale
               : 355 + (66 + 17) / modelStageScale;
             const zoomFontSize = state.zoom ? ' font-size="8.5714"' : "";
             lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}"${zoomFontSize}>${tick}</text>`);
