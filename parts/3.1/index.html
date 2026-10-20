@@ -588,11 +588,11 @@
         document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V${state.zoom ? 357 : 355}`);
       };
       const animateModelView = (zoom) => {
-        const targetHeight = zoom ? 19 : 170;
+        const targetHeight = zoom ? 19.5 : 170;
         const targetWidth = zoom ? targetHeight * (760 / 170) : 760;
         const endpointX = modelStagePoint(80 + (5 + estimateEndpoint()) * (640 / 30), 0).x;
         const target = {
-          x: zoom ? endpointX - targetWidth * 0.46 : 0,
+          x: zoom ? endpointX + modelStageScale * (640 / 30) * 0.1 - targetWidth / 2 : 0,
           y: zoom ? 343 : 295,
           width: targetWidth,
           height: targetHeight
@@ -843,9 +843,9 @@
           if (state.zoom ? tick === 18 || tick === 19 : major) {
             const anchor = tick === 0 ? "start" : tick === 20 ? "end" : "middle";
             const labelY = state.zoom
-              ? 355 + 4 / modelStageScale
+              ? 355 + 6.5 / modelStageScale
               : 355 + (66 + 17) / modelStageScale;
-            const zoomFontSize = state.zoom ? ' font-size="2.4"' : "";
+            const zoomFontSize = state.zoom ? ' font-size="2.1"' : "";
             lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}"${zoomFontSize}>${tick}</text>`);
           }
         }
