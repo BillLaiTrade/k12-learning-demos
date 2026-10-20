@@ -409,13 +409,13 @@
         <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">先估讀，再核對</span></div>
         <div class="card-main">
           <h2 id="estimate-heading">鉛筆端點落在相鄰刻線之間，該怎麼估讀？</h2>
-          <p id="estimate-instruction">鉛筆左端對準 0 cm，右端約在 18.4 cm。先根據整把尺估讀右端位置，再拉近觀察端點，最後核對估讀。</p>
+          <p id="estimate-instruction">先看整把尺，估計鉛筆右端的位置；再拉近觀察端點，最後核對估讀。</p>
           <div class="estimate-workspace">
           <aside class="model-panel" aria-labelledby="model-title">
             <h2 id="model-title">觀察鉛筆端點</h2>
             <p>先看整把尺估讀；拉近後可看清右端與相鄰公分刻線的位置，刻線本身不會增加。</p>
             <div class="model-screen" id="model-screen" data-zoom="false">
-              <svg id="shared-measurement-model" viewBox="0 295 760 170" role="img" aria-label="用公分直尺測量鉛筆；左端對準零刻度，右端在 18.4 公分附近">
+              <svg id="shared-measurement-model" viewBox="0 295 760 170" role="img" aria-label="鉛筆左端對準零刻度，右端落在直尺兩條相鄰公分刻線之間">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
                 <image id="pencil-object" href="assets/pencil-photo.webp" x="27" y="389" width="459.44" height="28.17" preserveAspectRatio="none" aria-hidden="true"></image>
                 <g id="shared-scale"></g>
@@ -439,7 +439,7 @@
           </div>
           </div>
           <p class="live-note" id="estimate-note" aria-live="polite">先依端點在兩條刻線間的位置估讀。放大只讓你看得更清楚，不會增加刻線或改變最小刻度。</p>
-          <div class="fact"><p>真實物體的端點很難每次都剛好對準刻線，因此常要依它在刻線間的位置估讀。這支鉛筆左端對準 0 cm，右端約在 18.4 cm，長度約 18.4 cm。估讀是近似值，放大畫面不會增加刻度。</p></div>
+          <div class="fact"><p>真實物體的端點不一定剛好對準刻線，因此要依它落在刻線間的位置估讀。估讀是近似值；拉近只能看得更清楚，不會增加刻度。</p></div>
         </div>
       </section>
 
@@ -658,8 +658,8 @@
         button.textContent = estimateChecked ? "③ 重新估讀" : "③ 檢查估讀";
         document.querySelector("#estimate-heading").textContent = "鉛筆端點落在相鄰刻線之間，該怎麼估讀？";
         document.querySelector("#estimate-instruction").textContent = state.zoom
-          ? `端點已拉近；比較它和 18、19 cm 刻線的位置，再核對剛才的估讀。鉛筆左端對準 0 cm。`
-          : `鉛筆左端對準 0 cm，右端約在 18.4 cm。先根據整把尺估讀右端位置，再拉近觀察端點，最後核對估讀。`;
+          ? `端點已拉近；比較它和相鄰刻線的位置，再核對剛才的估讀。`
+          : `先看整把尺，估計鉛筆右端的位置；再拉近觀察端點，最後核對估讀。`;
         input.setAttribute("aria-label", `選擇你估計的鉛筆右端位置；端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} 公分之間`);
         document.querySelector("#estimate-prompt").textContent = "尺上每 1 cm 一條刻線，數字每 5 cm 標示；依端點位置估讀。";
         if (estimateChecked) {
