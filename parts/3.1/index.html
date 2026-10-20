@@ -184,10 +184,10 @@
     .model-screen { position: relative; overflow: hidden; aspect-ratio: 760 / 170; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
     .model-screen svg { display: block; width: 100%; height: 100%; }
     .image-zoom-toggle { display: block; margin: 8px 0 0 auto; padding: 6px 10px; font-size: .84rem; }
-    #shared-scale { fill: #26383a; font: 20px system-ui, sans-serif; }
-    #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
-    #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.5; }
-    #shared-scale .ruler-line.major { stroke-width: 3; }
+    #shared-scale { fill: #26383a; font: 8.5714px system-ui, sans-serif; }
+    #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 1.4286; }
+    #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.0714; }
+    #shared-scale .ruler-line.major { stroke-width: 1.4286; }
     .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
     #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 330px; pointer-events: none; }
     #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 330px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
@@ -582,15 +582,15 @@
         const photoXOffset = startX - (pencilPhoto.x + pencilPhoto.width * pencilPhoto.visibleLeft) * pencilScale;
         document.querySelector("#pencil-object").setAttribute("transform", `translate(${photoXOffset} ${pencilViewOffset}) scale(${pencilScale})`);
         const pencilEndY = (pencilPhoto.y + pencilPhoto.height * pencilPhoto.rightEdgeCenterY) * pencilScale + pencilViewOffset;
-        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V365.75`);
+        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V355`);
       };
       const animateModelView = (zoom) => {
-        const targetHeight = zoom ? 70 : 170;
+        const targetHeight = zoom ? 130 : 170;
         const targetWidth = zoom ? targetHeight * (760 / 170) : 760;
         const endpointX = modelStagePoint(80 + (5 + estimateEndpoint()) * (640 / 30), 0).x;
         const target = {
           x: zoom ? endpointX - targetWidth * 0.55 : 0,
-          y: zoom ? 320 : 295,
+          y: zoom ? 314 : 295,
           width: targetWidth,
           height: targetHeight
         };
@@ -834,19 +834,21 @@
         for (let tick = 0; tick <= 20; tick += 1) {
           const x = rulerZeroX + tick * centimeter;
           const major = tick % 5 === 0;
-          const top = major ? 355 : 357.6875;
-          const tickEnd = 365.75;
+          const top = 355;
+          const tickEnd = 355 + (major ? 39 : 28) / modelStageScale;
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${tickEnd - top}"/>`);
           if (state.zoom ? tick === 18 || tick === 19 : major) {
             const anchor = tick === 0 ? "start" : tick === 20 ? "end" : "middle";
-            const labelY = state.zoom ? 374 : 385.5;
-            const zoomFontSize = state.zoom ? ' font-size="9"' : "";
-            lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}"${zoomFontSize}>${tick}${tick === 0 ? " cm" : ""}</text>`);
+            const labelY = 355 + (66 + 17) / modelStageScale;
+            const zoomFontSize = state.zoom ? ' font-size="8.5714"' : "";
+            lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}"${zoomFontSize}>${tick}</text>`);
           }
         }
-        ruler.innerHTML = `<rect class="ruler-body" x="${rulerZeroX - 14}" y="355" width="${20 * centimeter + 28}" height="10.75" rx="5"/>${lines.join("")}`;
+        const rulerLeftMargin = 24 / modelStageScale;
+        const rulerRightMargin = 50 / modelStageScale;
+        ruler.innerHTML = `<rect class="ruler-body" x="${rulerZeroX - rulerLeftMargin}" y="355" width="${20 * centimeter + rulerLeftMargin + rulerRightMargin}" height="${66 / modelStageScale}" rx="${9 / modelStageScale}"/>${lines.join("")}`;
         document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
-        const projectedEndpoint = modelStagePoint(endX, 365.75);
+        const projectedEndpoint = modelStagePoint(endX, 355);
         document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${projectedEndpoint.x} ${projectedEndpoint.y}`);
         document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
         if (divisionCountControl) divisionCountControl.value = String(state.divisions);
