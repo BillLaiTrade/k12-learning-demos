@@ -182,9 +182,11 @@
     .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
     .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
     .model-screen { position: relative; overflow: hidden; aspect-ratio: 760 / 170; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; transition: aspect-ratio 700ms ease; }
-    .model-screen[data-zoom="true"] { aspect-ratio: 760 / 170; }
     .model-screen svg { display: block; width: 100%; height: 100%; }
-    .image-zoom-toggle { display: block; margin: 8px 0 0 auto; padding: 6px 10px; font-size: .84rem; }
+    .zoom-control { display: grid; grid-template-columns: auto minmax(100px, 1fr) auto; align-items: center; gap: 10px; margin: 10px 0 0; padding: 9px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fffefa; }
+    .zoom-control label { font-size: .86rem; font-weight: 700; }
+    .zoom-control input { width: 100%; }
+    .zoom-control output { min-width: 3.2em; color: var(--green); font-weight: 750; text-align: right; font-variant-numeric: tabular-nums; }
     #shared-scale { fill: #26383a; font: 8.5714px system-ui, sans-serif; }
     #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 1.4286; }
     #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.0714; }
@@ -192,7 +194,7 @@
     .model-screen[data-zoom="true"] #shared-scale .ruler-line { stroke-width: .55; }
     .model-screen[data-zoom="true"] #shared-scale .ruler-line.major { stroke-width: .75; }
     .model-screen[data-zoom="true"] #shared-scale .ruler-body { stroke: none; }
-    .model-screen[data-zoom="true"] #shared-scale .ruler-outline { fill: none; stroke: #a99255; stroke-width: .9; }
+    #shared-scale .ruler-outline { fill: none; stroke: #a99255; stroke-width: .9; }
     .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
     #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 330px; pointer-events: none; }
     #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 330px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
@@ -406,11 +408,11 @@
         <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">先估讀，再核對</span></div>
         <div class="card-main">
           <h2 id="estimate-heading">鉛筆端點落在相鄰刻線之間，該怎麼估讀？</h2>
-          <p id="estimate-instruction">拖動滑桿估讀鉛筆右端的位置；可按圖片上的按鈕拉近端點，檢查估讀後會顯示讀值。</p>
+          <p id="estimate-instruction">先依整把尺估讀鉛筆右端，再拖動放大滑桿，逐步查看 18 cm 和 19 cm 之間的位置。</p>
           <div class="estimate-workspace">
           <aside class="model-panel" aria-labelledby="model-title">
             <h2 id="model-title">觀察鉛筆端點</h2>
-            <p>鉛筆和尺保持不動；按圖片上的按鈕查看端點與相鄰刻線的位置。</p>
+            <p>鉛筆和尺保持不動；拖動下方滑桿，逐步放大 18 cm 和 19 cm 附近。</p>
             <div class="model-screen" id="model-screen" data-zoom="false">
               <svg id="shared-measurement-model" viewBox="0 295 760 170" role="img" aria-label="鉛筆左端對準零刻度，右端落在直尺兩條相鄰公分刻線之間">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
@@ -427,7 +429,11 @@
                 </g>
               </svg>
             </div>
-            <button type="button" class="secondary image-zoom-toggle" id="zoom-toggle" aria-pressed="false">拉近查看端點</button>
+            <div class="zoom-control">
+              <label for="zoom-slider">放大 18–19 cm</label>
+              <input id="zoom-slider" type="range" min="0" max="100" step="1" value="0" aria-label="逐步放大 18 到 19 公分附近">
+              <output id="zoom-level" for="zoom-slider" aria-live="polite">1×</output>
+            </div>
             <div class="control-panel estimate-panel">
               <label class="field" for="estimate-slider">估讀鉛筆右端的位置（cm）
                 <input id="estimate-slider" type="range" min="18000" max="20000" step="100" aria-label="選擇你估計的鉛筆右端位置，單位為公分">
@@ -437,8 +443,8 @@
             </div>
           </aside>
           </div>
-          <p class="live-note" id="estimate-note" aria-live="polite">依端點在相鄰刻線間的位置估讀。拉近只讓位置更清楚，不會增加刻線或改變最小刻度。</p>
-          <div class="fact"><p>真實物體的端點不一定剛好對準刻線，因此要依它落在刻線間的位置估讀。估讀是近似值；拉近只能看得更清楚，不會增加刻度。</p></div>
+          <p class="live-note" id="estimate-note" aria-live="polite">依端點在相鄰刻線間的位置估讀。放大只改變觀看比例，不會增加刻線或改變最小刻度。</p>
+          <div class="fact"><p>真實物體的端點不一定剛好對準刻線，因此要依它落在刻線間的位置估讀。估讀是近似值；放大只能看得更清楚，不會增加刻度。</p></div>
         </div>
       </section>
 
@@ -544,7 +550,7 @@
         document.querySelector("#measurement-result-note").textContent = measuring ? "有了共同的表示方式，別人就能看懂並拿來比較。" : "每個人的感覺可能不一樣，還不能公平比較。";
         document.querySelector("#measurement-next-hint").hidden = !measuring;
       }));
-      const state = { divisions: 15, start: 0, angle: false, zoom: false, edge: 18 };
+      const state = { divisions: 15, start: 0, angle: false, zoom: 0, edge: 18 };
       const estimateStart = 0;
       let estimateLength = 18.4;
       const estimateEndpoint = () => estimateStart + estimateLength;
@@ -576,9 +582,6 @@
         x: modelStageCenter.x + (x - modelStageCenter.x) * modelStageScale,
         y: modelStageCenter.y + (y - modelStageCenter.y) * modelStageScale
       });
-      let modelViewBox = { x: 0, y: 295, width: 760, height: 170 };
-      let modelViewTarget = modelViewBox;
-      let modelViewAnimationFrame = 0;
       let pencilViewOffset = -18;
       const placePencil = () => {
         const centimeter = 640 / 30;
@@ -590,60 +593,25 @@
         document.querySelector("#pencil-object").setAttribute("transform", `translate(${photoXOffset} ${pencilViewOffset}) scale(${pencilScale})`);
         const pencilEndY = (pencilPhoto.y + pencilPhoto.height * pencilPhoto.rightEdgeCenterY) * pencilScale + pencilViewOffset;
         const guide = document.querySelector("#pencil-end-guide");
-        guide.setAttribute("d", `M${endX} ${pencilEndY}V${state.zoom ? 360 : 355}`);
-        guide.setAttribute("stroke-width", state.zoom ? ".16" : "2");
-        guide.setAttribute("stroke-dasharray", state.zoom ? ".28 .28" : "2 2");
+        guide.setAttribute("d", `M${endX} ${pencilEndY}V${355 + state.zoom}`);
+        guide.setAttribute("stroke-width", String(2 - 1.84 * state.zoom));
+        guide.setAttribute("stroke-dasharray", `${2 - 1.72 * state.zoom} ${2 - 1.72 * state.zoom}`);
       };
       const updateEstimateGuide = () => {
         const centimeter = 640 / 30;
         const rulerZeroX = 80 + 5 * centimeter;
-        const rulerTop = 355 + (state.zoom ? 1 / modelStageScale : 0);
+        const rulerTop = 355 + state.zoom / modelStageScale;
         const estimateX = rulerZeroX + (estimateGuess ?? 18) * centimeter;
         const upperGuide = document.querySelector("#estimate-guide-upper");
         const lowerGuide = document.querySelector("#estimate-guide-lower");
         const visibility = estimateGuess === null ? "hidden" : "visible";
         upperGuide.setAttribute("d", `M${estimateX} 320V${rulerTop}`);
-        lowerGuide.setAttribute("d", `M${estimateX} ${rulerTop}V${state.zoom ? 360 : rulerTop}`);
+        lowerGuide.setAttribute("d", `M${estimateX} ${rulerTop}V${355 + state.zoom}`);
         for (const guide of [upperGuide, lowerGuide]) {
           guide.setAttribute("visibility", visibility);
-          guide.setAttribute("stroke-width", state.zoom ? ".16" : "1.5");
-          guide.setAttribute("stroke-dasharray", state.zoom ? ".28 .28" : "4 3");
+          guide.setAttribute("stroke-width", String(1.5 - 1.34 * state.zoom));
+          guide.setAttribute("stroke-dasharray", `${4 - 3.72 * state.zoom} ${3 - 2.72 * state.zoom}`);
         }
-      };
-      const animateModelView = (zoom) => {
-        const targetWidth = zoom ? 55 : 760;
-        const targetHeight = zoom ? targetWidth * (170 / 760) : 170;
-        const endpointX = modelStagePoint(80 + (5 + estimateEndpoint()) * (640 / 30), 0).x;
-        const target = {
-          x: zoom ? endpointX + modelStageScale * (640 / 30) * 0.1 - targetWidth / 2 : 0,
-          y: zoom ? 349 : 295,
-          width: targetWidth,
-          height: targetHeight
-        };
-        if (Object.keys(target).every((key) => Math.abs(target[key] - modelViewTarget[key]) < 0.01)) return;
-        modelViewTarget = target;
-        cancelAnimationFrame(modelViewAnimationFrame);
-        const start = { ...modelViewBox };
-        const startPencilOffset = pencilViewOffset;
-        const targetPencilOffset = zoom ? -3.5 : -18;
-        const startTime = performance.now();
-        const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700;
-        const frame = (now) => {
-          const progress = duration ? Math.min(1, (now - startTime) / duration) : 1;
-          const eased = progress < 0.5 ? 4 * progress ** 3 : 1 - ((-2 * progress + 2) ** 3) / 2;
-          modelViewBox = Object.fromEntries(Object.keys(target).map((key) => [key, start[key] + (target[key] - start[key]) * eased]));
-          pencilViewOffset = startPencilOffset + (targetPencilOffset - startPencilOffset) * eased;
-          modelSvg.setAttribute("viewBox", `${modelViewBox.x} ${modelViewBox.y} ${modelViewBox.width} ${modelViewBox.height}`);
-          placePencil();
-          if (progress < 1) {
-            modelViewAnimationFrame = requestAnimationFrame(frame);
-          } else {
-            modelViewBox = target;
-            modelViewAnimationFrame = 0;
-          }
-        };
-        cancelAnimationFrame(modelViewAnimationFrame);
-        modelViewAnimationFrame = requestAnimationFrame(frame);
       };
       const parallaxCanvas = document.querySelector("#parallax-canvas");
       const parallaxContext = parallaxCanvas.getContext("2d");
@@ -685,9 +653,9 @@
         button.disabled = estimateGuess === null && !estimateChecked;
         button.textContent = estimateChecked ? "重新估讀" : "檢查估讀";
         document.querySelector("#estimate-heading").textContent = "鉛筆端點落在相鄰刻線之間，該怎麼估讀？";
-        document.querySelector("#estimate-instruction").textContent = state.zoom
-          ? `端點已拉近；可查看它與相鄰刻線的位置。`
-          : `拖動滑桿估讀鉛筆右端的位置；可按圖片上的按鈕拉近端點，檢查估讀後會顯示讀值。`;
+        document.querySelector("#estimate-instruction").textContent = state.zoom > 0.8
+          ? `畫面已放大到 ${document.querySelector("#zoom-level").textContent}；可查看端點與相鄰刻線的位置。`
+          : `先依整把尺估讀鉛筆右端，再拖動放大滑桿，逐步查看 18 cm 和 19 cm 之間的位置。`;
         input.setAttribute("aria-label", `選擇你估計的鉛筆右端位置；端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} 公分之間`);
         document.querySelector("#estimate-prompt").textContent = "尺上每 1 cm 一條刻線，數字每 5 cm 標示；依端點位置估讀。";
         if (estimateChecked) {
@@ -848,10 +816,11 @@
           : `三維直尺與鉛筆模型。鉛筆實際長度約 ${formatCentimeters(state.edge)} 公分；目前視角的視線落在尺面範圍外，無法讀值。可拖曳或使用方向鍵旋轉視角。`);
       };
       const updateModel = () => {
-        ruler.dataset.zoom = String(state.zoom);
+        const closeup = state.zoom > 0.8;
+        ruler.dataset.zoom = String(closeup);
         modelSvg.setAttribute("preserveAspectRatio", "xMidYMid meet");
         ruler.removeAttribute("transform");
-        document.querySelector("#model-screen").dataset.zoom = String(state.zoom);
+        document.querySelector("#model-screen").dataset.zoom = String(closeup);
         const centimeter = 640 / 30;
         const rulerZeroX = 80 + 5 * centimeter;
         const endX = rulerZeroX + estimateEndpoint() * centimeter;
@@ -861,31 +830,35 @@
         for (let tick = 0; tick <= 20; tick += 1) {
           const x = rulerZeroX + tick * centimeter;
           const major = tick % 5 === 0;
-          const top = 355 + (state.zoom ? 1 / modelStageScale : 0);
-          const tickEnd = top + (major ? (state.zoom ? 3.5 : 39) : (state.zoom ? 2.5 : 28)) / modelStageScale;
+          const top = 355 + state.zoom / modelStageScale;
+          const regularTick = major ? 39 : 28;
+          const closeTick = major ? 3.5 : 2.5;
+          const tickEnd = top + (regularTick + (closeTick - regularTick) * state.zoom) / modelStageScale;
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${tickEnd - top}"/>`);
-          if (state.zoom ? tick === 18 || tick === 19 : major) {
+          if (major) {
             const anchor = tick === 0 ? "start" : tick === 20 ? "end" : "middle";
-            const labelY = state.zoom
-              ? top + 4.4 / modelStageScale
-              : 355 + (66 + 17) / modelStageScale;
-            const zoomFontSize = state.zoom ? ' font-size="1.1"' : "";
-            lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}"${zoomFontSize}>${tick}</text>`);
+            const regularLabelY = 355 + (66 + 17) / modelStageScale;
+            const closeupLabelY = top + 4.4 / modelStageScale;
+            const labelY = regularLabelY + (closeupLabelY - regularLabelY) * state.zoom;
+            const opacity = 1 - state.zoom;
+            lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}" font-size="${8.5714 + (1.1 - 8.5714) * state.zoom}" opacity="${opacity}">${tick}</text>`);
+          }
+          if (tick === 18 || tick === 19) {
+            const labelY = top + 4.4 / modelStageScale;
+            lines.push(`<text x="${x}" y="${labelY}" text-anchor="middle" font-size="${8.5714 + (1.1 - 8.5714) * state.zoom}" opacity="${state.zoom}">${tick}</text>`);
           }
         }
         const rulerLeftMargin = 24 / modelStageScale;
         const rulerRightMargin = 50 / modelStageScale;
         const rulerHeight = 66 / modelStageScale;
-        const rulerTop = 355 + (state.zoom ? 1 / modelStageScale : 0);
+        const rulerTop = 355 + state.zoom / modelStageScale;
         const rulerX = rulerZeroX - rulerLeftMargin;
         const rulerWidth = 20 * centimeter + rulerLeftMargin + rulerRightMargin;
         const rulerRadius = 9 / modelStageScale;
-        const zoomOutline = state.zoom
-          ? `<path class="ruler-outline" d="M${rulerX + rulerRadius} ${rulerTop}H${rulerX + rulerWidth - rulerRadius}Q${rulerX + rulerWidth} ${rulerTop} ${rulerX + rulerWidth} ${rulerTop + rulerRadius}V${rulerTop + rulerHeight} M${rulerX} ${rulerTop + rulerHeight}V${rulerTop + rulerRadius}Q${rulerX} ${rulerTop} ${rulerX + rulerRadius} ${rulerTop}"/>`
-          : "";
-        ruler.innerHTML = `<rect class="ruler-body" x="${rulerX}" y="${rulerTop}" width="${rulerWidth}" height="${rulerHeight}" rx="${rulerRadius}"/>${zoomOutline}${lines.join("")}`;
+        const zoomOutline = `<path class="ruler-outline" opacity="${state.zoom}" d="M${rulerX + rulerRadius} ${rulerTop}H${rulerX + rulerWidth - rulerRadius}Q${rulerX + rulerWidth} ${rulerTop} ${rulerX + rulerWidth} ${rulerTop + rulerRadius}V${rulerTop + rulerHeight} M${rulerX} ${rulerTop + rulerHeight}V${rulerTop + rulerRadius}Q${rulerX} ${rulerTop} ${rulerX + rulerRadius} ${rulerTop}"/>`;
+        ruler.innerHTML = `<rect class="ruler-body" x="${rulerX}" y="${rulerTop}" width="${rulerWidth}" height="${rulerHeight}" rx="${rulerRadius}" style="stroke-width:${1.4286 * (1 - state.zoom)}"/>${zoomOutline}${lines.join("")}`;
         document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
-        const projectedEndpoint = modelStagePoint(endX, 355 + (state.zoom ? 1 / modelStageScale : 0));
+        const projectedEndpoint = modelStagePoint(endX, 355 + state.zoom / modelStageScale);
         document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${projectedEndpoint.x} ${projectedEndpoint.y}`);
         document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
         if (divisionCountControl) divisionCountControl.value = String(state.divisions);
@@ -1025,15 +998,25 @@
       });
 
       const setZoom = (zoom) => {
-        state.zoom = zoom;
-        estimateLength = 18.4;
-        const zoomButton = document.querySelector("#zoom-toggle");
-        zoomButton.setAttribute("aria-pressed", String(zoom));
-        zoomButton.textContent = zoom ? "縮回整把尺" : "拉近查看端點";
+        state.zoom = clamp(zoom, 0, 1);
+        const width = 760 * Math.pow(55 / 760, state.zoom);
+        const height = width * (170 / 760);
+        const fullCenterX = 380;
+        const focusCenterX = modelStagePoint(80 + (5 + 18.5) * (640 / 30), 0).x;
+        const centerX = fullCenterX + (focusCenterX - fullCenterX) * state.zoom;
+        const x = state.zoom === 0 ? 0 : centerX - width / 2;
+        const y = 295 + 54 * state.zoom;
+        pencilViewOffset = -18 + 14.5 * state.zoom;
+        modelSvg.setAttribute("viewBox", `${x} ${y} ${width} ${height}`);
+        const magnification = 760 / width;
+        const magnificationText = `${magnification.toFixed(1).replace(/\.0$/, "")}×`;
+        document.querySelector("#zoom-level").textContent = magnificationText;
+        zoomSlider.setAttribute("aria-valuetext", `${magnificationText} 放大`);
         updateModel();
-        animateModelView(zoom);
       };
-      document.querySelector("#zoom-toggle").addEventListener("click", () => setZoom(!state.zoom));
+      const zoomSlider = document.querySelector("#zoom-slider");
+      zoomSlider.addEventListener("input", () => setZoom(Number(zoomSlider.value) / 100));
+      setZoom(0);
       const estimateSlider = document.querySelector("#estimate-slider");
       estimateSlider.addEventListener("input", () => {
         estimateGuess = Number(estimateSlider.value) / 1000;
@@ -1052,7 +1035,7 @@
           estimateChecked = false;
           updateEstimateGuide();
           document.querySelector("#estimate-value").textContent = "尚未估讀";
-          document.querySelector("#estimate-note").textContent = "依端點在相鄰刻線間的位置估讀。拉近只讓位置更清楚，不會增加刻線或改變最小刻度。";
+          document.querySelector("#estimate-note").textContent = "依端點在相鄰刻線間的位置估讀。放大只改變觀看比例，不會增加刻線或改變最小刻度。";
           syncEstimateControls();
           return;
         }
