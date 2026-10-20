@@ -245,7 +245,7 @@
                       <button class="bucket-hotspot bucket-hotspot-grip" type="button" data-bucket-part="grip" aria-label="點選握把，查看使用的材料"></button>
                     </div>
                   </div>
-                  <p class="bucket-image-hint">點選圖中的桶身、提把支架或握把，可放大查看；用上方按鈕隨時切換或返回整桶。</p>
+                  <p class="bucket-image-hint">點選桶身、提把支架或握把可放大；再次點擊放大圖可恢復整桶。</p>
                 </figure>
                 <div class="bucket-detail" aria-live="polite" aria-atomic="true">
                   <p class="bucket-detail-label" id="bucket-detail-material">物體</p>
@@ -454,6 +454,10 @@
       document.getElementById("bucket-detail-copy").textContent=view.copy;
     }
     document.querySelectorAll("[data-bucket-part]").forEach(button=>button.addEventListener("click",()=>selectBucketPart(button.dataset.bucketPart)));
+    document.querySelector(".bucket-image-window").addEventListener("click",event=>{
+      const currentPart=document.getElementById("bucket-image-art").dataset.view;
+      if(currentPart!=="overview"&&!event.target.closest("[data-bucket-part]"))selectBucketPart(currentPart);
+    });
 
     const recordValues = {
       state: ["桶身／土壤：固體；水：液體", "空氣只作氣體對照，不列為雨水樣本。"],
