@@ -578,14 +578,14 @@
         const centimeters = (30 / divisions).toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
         return `30 cm ÷ ${divisions} 等分 = ${numerator}/${denominator} cm／格（約 ${centimeters} cm）。`;
       };
-      const defaultCameraPitch = 0.8;
+      const defaultCameraPitch = 0.48;
       const orbitRadius = 24;
       const parallaxLength = 18.4;
-      const pencilHeight = 0.8;
+      const pencilHeight = 0.78;
       const parallaxTickSpacing = 1;
-      const parallaxCenterX = state.start + parallaxLength / 2;
+      const parallaxCenterX = state.start + 15;
       const defaultCameraYaw = Math.asin((state.start + parallaxLength - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
-      const obliqueCameraYaw = Math.asin((state.start + parallaxLength - 18 - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
+      const obliqueCameraYaw = Math.asin((state.start + 8 - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
       const ruler = document.querySelector("#shared-scale");
       const modelSvg = document.querySelector("#shared-measurement-model");
       const modelScreen = document.querySelector("#model-screen");
@@ -629,7 +629,6 @@
         }
       };
       const parallaxCanvas = document.querySelector("#parallax-canvas");
-      const parallaxContext = parallaxCanvas.getContext("2d");
       const camera = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
       let cameraPreset = "front";
       const edgePosition = () => state.start + state.edge;
@@ -681,149 +680,63 @@
           document.querySelector("#estimate-value").textContent = estimateGuess === null ? "尚未估讀" : `你的估讀：約 ${formatEstimate(Number(input.value) / 1000)} cm`;
         }
       };
-      const add = (a, b) => ({ x: a.x + b.x, y: a.y + b.y, z: a.z + b.z });
-      const subtract = (a, b) => ({ x: a.x - b.x, y: a.y - b.y, z: a.z - b.z });
-      const scale = (a, amount) => ({ x: a.x * amount, y: a.y * amount, z: a.z * amount });
-      const dot = (a, b) => a.x * b.x + a.y * b.y + a.z * b.z;
-      const cross = (a, b) => ({ x: a.y * b.z - a.z * b.y, y: a.z * b.x - a.x * b.z, z: a.x * b.y - a.y * b.x });
-      const normalize = (a) => {
-        const magnitude = Math.hypot(a.x, a.y, a.z) || 1;
-        return scale(a, 1 / magnitude);
-      };
       const renderParallaxScene = () => {
-        if (!parallaxContext || !parallaxCanvas.clientWidth) return;
+        if (!parallaxCanvas.clientWidth) return;
         const bounds = parallaxCanvas.getBoundingClientRect();
         const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
         parallaxCanvas.width = Math.round(bounds.width * pixelRatio);
         parallaxCanvas.height = Math.round(bounds.height * pixelRatio);
-        parallaxContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-        const ctx = parallaxContext;
-        const width = bounds.width;
-        const height = bounds.height;
-        const target = { x: state.start + parallaxLength / 2, y: pencilHeight, z: 0 };
+        const target = { x: state.start + 15, y: pencilHeight, z: 0 };
         const cameraPosition = {
           x: target.x + orbitRadius * Math.cos(camera.pitch) * Math.sin(camera.yaw),
           y: target.y + orbitRadius * Math.sin(camera.pitch),
           z: target.z + orbitRadius * Math.cos(camera.pitch) * Math.cos(camera.yaw)
         };
-        const viewBlend = cameraPreset === "front"
-          ? 0
-          : cameraPreset === "oblique"
-          ? 1
-          : clamp(Math.abs(camera.yaw - defaultCameraYaw) / 0.4, 0, 1);
-        const cameraTarget = {
-          x: cameraPosition.x + (target.x - cameraPosition.x) * viewBlend,
-          y: 0.04,
-          z: 0
-        };
-        const forward = normalize(subtract(cameraTarget, cameraPosition));
-        const right = normalize(cross(forward, { x: 0, y: 1, z: 0 }));
-        const up = normalize(cross(right, forward));
-        const focalLength = cameraPreset === "front"
-          ? width * 0.76
-          : width <= 760 ? Math.min(height * 1.95, width * 0.85) : height * 2.48;
-        const project = (point) => {
-          const relative = subtract(point, cameraPosition);
-          const depth = dot(relative, forward);
-          if (depth <= 0.1) return null;
-          const perspective = focalLength / depth;
-          return {
-            x: width / 2 + dot(relative, right) * perspective,
-            y: height / 2 - dot(relative, up) * perspective,
-            depth
-          };
-        };
-        const drawLine = (points, color, thickness = 1, dash = []) => {
-          const projected = points.map(project);
-          if (projected.some((point) => !point)) return;
-          ctx.beginPath();
-          ctx.setLineDash(dash);
-          ctx.moveTo(projected[0].x, projected[0].y);
-          projected.slice(1).forEach((point) => ctx.lineTo(point.x, point.y));
-          ctx.strokeStyle = color;
-          ctx.lineWidth = thickness;
-          ctx.stroke();
-          ctx.setLineDash([]);
-        };
-        const drawFace = (points, color, border = "#a99255") => {
-          const projected = points.map(project);
-          if (projected.some((point) => !point)) return;
-          ctx.beginPath();
-          ctx.moveTo(projected[0].x, projected[0].y);
-          projected.slice(1).forEach((point) => ctx.lineTo(point.x, point.y));
-          ctx.closePath();
-          ctx.fillStyle = color;
-          ctx.fill();
-          ctx.strokeStyle = border;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        };
-        ctx.clearRect(0, 0, width, height);
-
         const rulerMin = -0.18;
         const rulerMax = 30;
-        const top = 0.04;
-        const rulerNear = -1.5;
-        const rulerFar = 2.5;
-        const pencilCenterZ = 0.5;
-        drawFace([{ x: rulerMin, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerFar }, { x: rulerMin, y: top, z: rulerFar }], "#dfe8e3");
-        drawFace([{ x: rulerMin, y: top, z: rulerNear }, { x: rulerMax, y: top, z: rulerNear }, { x: rulerMax, y: -0.12, z: rulerNear }, { x: rulerMin, y: -0.12, z: rulerNear }], "#cad8d1", "#93a99e");
-        for (let tick = 0; tick <= 30 / parallaxTickSpacing; tick += 1) {
-          const x = tick * parallaxTickSpacing;
-          const major = tick === 0 || tick === 30 / parallaxTickSpacing || tick % 5 === 0;
-          const startDepth = major ? rulerNear + 0.04 : rulerNear + 0.28;
-          drawLine([{ x, y: top + 0.015, z: startDepth }, { x, y: top + 0.015, z: rulerFar - 0.04 }], major ? "#26383a" : "#637174", major ? 2.2 : 1.15);
-          if (major) {
-              const label = project({ x, y: top + 0.03, z: rulerNear - 0.3 });
-            if (label) {
-              ctx.fillStyle = "#26383a";
-              ctx.font = "10px system-ui, sans-serif";
-              ctx.textAlign = "center";
-              ctx.fillText(`${x}`, label.x, label.y);
-            }
-          }
-        }
+        const rulerTop = 0.2;
+        const rulerNear = -2.9;
+        const rulerFar = 2.9;
+        const pencilCenterZ = -1.3;
+        const edgeX = state.start + parallaxLength;
+        const cameraTarget = {
+          x: target.x,
+          y: rulerTop,
+          z: 0
+        };
+        const focalLength = cameraPreset === "front"
+          ? bounds.width * 0.76
+          : bounds.width <= 760 ? Math.min(bounds.height * 1.95, bounds.width * 0.85) : bounds.height * 2.48;
+        const cameraHeight = cameraPosition.y;
+        const projectionFactor = (pencilHeight - rulerTop) / Math.max(0.1, cameraHeight - pencilHeight);
+        const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
+        const projectedEdgeZ = pencilCenterZ + projectionFactor * (pencilCenterZ - cameraPosition.z);
+        const clampedProjectionX = clamp(projectedEdgeX, rulerMin, rulerMax);
+        const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
+        const pencilCenterX = state.start + parallaxLength / 2;
+        const pencilStartX = pencilCenterX - parallaxLength / 2;
+        const estimatedStep = parallaxTickSpacing;
+        const apparentWidth = Math.max(0, projectedEdgeX - pencilStartX);
+        const apparentWidthReading = Math.round(apparentWidth / estimatedStep * 10) / 10 * estimatedStep;
+        const displayedEndEstimate = (Math.round(projectedEdgeX / estimatedStep) * estimatedStep).toFixed(0);
+        const landingOnScale = projectedEdgeX >= 0 && projectedEdgeX <= 30 && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
 
-        const pencilCenter = { x: state.start + parallaxLength / 2, y: pencilHeight, z: pencilCenterZ };
-        const pencilHalfLength = parallaxLength / 2;
-        const pencilStartX = pencilCenter.x - pencilHalfLength;
-        const pencilEndX = pencilCenter.x + pencilHalfLength;
         window.setPencil3DView?.({
           edge: parallaxLength,
           start: state.start,
           yaw: camera.yaw,
           pitch: camera.pitch,
           orbitRadius,
-          centerZ: pencilCenter.z,
-          centerY: pencilCenter.y,
+          centerZ: pencilCenterZ,
+          centerY: pencilHeight,
           lookAtX: cameraTarget.x,
           lookAtY: cameraTarget.y,
           lookAtZ: cameraTarget.z,
-          focalLengthRatio: focalLength / height
+          focalLengthRatio: focalLength / bounds.height,
+          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
+          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.02, z: clampedProjectionZ }
         });
-        const edgeX = pencilEndX;
-        const edgeHeight = pencilCenter.y;
-        const cameraHeight = cameraPosition.y;
-        const projectionFactor = (edgeHeight - top) / Math.max(0.1, cameraHeight - edgeHeight);
-        const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
-        const projectedEdgeZ = pencilCenter.z + projectionFactor * (pencilCenter.z - cameraPosition.z);
-        const clampedProjectionX = clamp(projectedEdgeX, rulerMin, rulerMax);
-        const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
-        drawLine([{ x: pencilStartX, y: 0.06, z: pencilCenterZ }, { x: pencilStartX, y: 0.65, z: pencilCenterZ }], "#176b53", 1.7, [4, 4]);
-        drawLine([{ x: edgeX, y: top + 0.03, z: pencilCenterZ }, { x: edgeX, y: edgeHeight, z: pencilCenterZ }], "#bc612b", 2, [4, 4]);
-        drawLine([{ x: edgeX, y: edgeHeight, z: pencilCenterZ }, { x: clampedProjectionX, y: top + 0.035, z: clampedProjectionZ }], "#bc612b", 2, [5, 4]);
-        const landing = project({ x: clampedProjectionX, y: top + 0.04, z: clampedProjectionZ });
-        if (landing) {
-          ctx.beginPath();
-          ctx.arc(landing.x, landing.y, 4, 0, Math.PI * 2);
-          ctx.fillStyle = "#bc612b";
-          ctx.fill();
-        }
-        const estimatedStep = parallaxTickSpacing;
-        const apparentWidth = Math.max(0, projectedEdgeX - pencilStartX);
-        const apparentWidthReading = Math.round(apparentWidth / estimatedStep * 10) / 10 * estimatedStep;
-        const displayedEndEstimate = (Math.round(projectedEdgeX / estimatedStep) * estimatedStep).toFixed(0);
-        const landingOnScale = projectedEdgeX >= 0 && projectedEdgeX <= 30 && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
+
         const frontPosition = state.start + parallaxLength;
         document.querySelector("#front-reading").textContent = `約 ${(Math.round(frontPosition / estimatedStep) * estimatedStep).toFixed(0)} cm`;
         document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${displayedEndEstimate} cm` : "視線落在尺外";

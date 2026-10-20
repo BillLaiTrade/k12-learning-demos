@@ -5,30 +5,288 @@ const canvas = document.querySelector("#pencil-3d-canvas");
 const sceneCanvas = document.querySelector("#parallax-canvas");
 const liveRegion = document.querySelector("#pencil-model-status");
 if (!canvas || !sceneCanvas) throw new Error("找不到鉛筆 3D 場景畫布");
-const immersiveView = document.body.classList.contains("immersive-page");
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 1000);
+scene.background = null;
+scene.fog = new THREE.Fog(0xf7f8f3, 43, 82);
+const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 180);
 camera.up.set(0, 1, 0);
 
 let renderer;
 let pencil;
+let projectionRay;
+let landingMarker;
 let modelReady = false;
 let modelFailed = false;
 let lastFrame = "";
 const view = {
-  edge: 18,
+  edge: 18.4,
   start: 0,
   yaw: 0,
-  pitch: 0.45,
+  pitch: 0.48,
   orbitRadius: 24,
-  centerY: 0.8,
-  centerZ: 2.5,
-  focalLengthRatio: immersiveView ? 0.5 : 0.9
+  centerY: 0.78,
+  centerZ: -1.3,
+  lookAtX: 9.2,
+  lookAtY: 0.04,
+  lookAtZ: 0,
+  focalLengthRatio: 2.5,
+  rayStart: null,
+  rayEnd: null
 };
 
 function announce(message) {
   if (liveRegion) liveRegion.textContent = message;
+}
+
+function standardMaterial(color, options = {}) {
+  return new THREE.MeshStandardMaterial({ color, roughness: 0.42, metalness: 0.02, ...options });
+}
+
+function cylinderAlongX(radiusTop, radiusBottom, length, material, radialSegments = 24) {
+  const mesh = new THREE.Mesh(
+    new THREE.CylinderGeometry(radiusTop, radiusBottom, length, radialSegments, 1, false),
+    material
+  );
+  mesh.rotation.z = -Math.PI / 2;
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  return mesh;
+}
+
+function makeTextTexture(text) {
+  const label = document.createElement("canvas");
+  label.width = 256;
+  label.height = 128;
+  const context = label.getContext("2d");
+  context.clearRect(0, 0, label.width, label.height);
+  context.fillStyle = "#26383a";
+  context.font = "700 78px system-ui, sans-serif";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillText(text, label.width / 2, label.height / 2);
+  const texture = new THREE.CanvasTexture(label);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  return texture;
+}
+
+function roundedRulerGeometry(width, depth, thickness, radius) {
+  const halfWidth = width / 2;
+  const halfDepth = depth / 2;
+  const shape = new THREE.Shape();
+  shape.moveTo(-halfWidth + radius, -halfDepth);
+  shape.lineTo(halfWidth - radius, -halfDepth);
+  shape.quadraticCurveTo(halfWidth, -halfDepth, halfWidth, -halfDepth + radius);
+  shape.lineTo(halfWidth, halfDepth - radius);
+  shape.quadraticCurveTo(halfWidth, halfDepth, halfWidth - radius, halfDepth);
+  shape.lineTo(-halfWidth + radius, halfDepth);
+  shape.quadraticCurveTo(-halfWidth, halfDepth, -halfWidth, halfDepth - radius);
+  shape.lineTo(-halfWidth, -halfDepth + radius);
+  shape.quadraticCurveTo(-halfWidth, -halfDepth, -halfWidth + radius, -halfDepth);
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: thickness - 0.04,
+    bevelEnabled: true,
+    bevelSegments: 3,
+    bevelThickness: 0.02,
+    bevelSize: 0.035,
+    curveSegments: 5
+  });
+  geometry.rotateX(-Math.PI / 2);
+  return geometry;
+}
+
+function createRuler() {
+  const group = new THREE.Group();
+  group.name = "solid-rounded-30-centimeter-ruler";
+
+  const bodyMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xe1c477,
+    roughness: 0.3,
+    metalness: 0.04,
+    clearcoat: 0.55,
+    clearcoatRoughness: 0.24,
+    transparent: false,
+    opacity: 1
+  });
+  const rulerSideMaterial = standardMaterial(0x98733a, { roughness: 0.42, metalness: 0.08 });
+  const body = new THREE.Mesh(roundedRulerGeometry(30.6, 5.8, 0.4, 0.16), [bodyMaterial, rulerSideMaterial]);
+  body.position.set(15, -0.18, 0);
+  body.castShadow = true;
+  body.receiveShadow = true;
+  group.add(body);
+
+  const edge = new THREE.LineSegments(
+    new THREE.EdgesGeometry(body.geometry, 22),
+    new THREE.LineBasicMaterial({ color: 0x9a804d, transparent: true, opacity: 0.75 })
+  );
+  edge.position.copy(body.position);
+  group.add(edge);
+
+  const scaleInk = standardMaterial(0x24383a, { roughness: 0.7 });
+  for (let centimeter = 0; centimeter <= 30; centimeter += 1) {
+    const major = centimeter % 5 === 0;
+    const tickLength = major ? 1.45 : 0.9;
+    const tick = new THREE.Mesh(
+      new THREE.BoxGeometry(0.045, 0.014, tickLength),
+      scaleInk
+    );
+    tick.position.set(centimeter, 0.211, 2.55 - tickLength / 2);
+    tick.castShadow = false;
+    tick.receiveShadow = true;
+    group.add(tick);
+  }
+
+  for (let centimeter = 0; centimeter <= 30; centimeter += 5) {
+    const number = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.3, 0.7),
+      new THREE.MeshBasicMaterial({
+        map: makeTextTexture(String(centimeter)),
+        transparent: true,
+        depthWrite: false,
+        side: THREE.DoubleSide
+      })
+    );
+    number.rotation.x = -Math.PI / 2;
+    const labelX = centimeter === 0 ? 0.32 : centimeter === 30 ? 29.68 : centimeter;
+    number.position.set(labelX, 0.21, 0.42);
+    number.renderOrder = 2;
+    group.add(number);
+  }
+
+  const sideStripe = standardMaterial(0xb18b48, { metalness: 0.35, roughness: 0.3 });
+  for (const z of [-2.81, 2.81]) {
+    const stripe = new THREE.Mesh(new THREE.BoxGeometry(30.2, 0.018, 0.045), sideStripe);
+    stripe.position.set(15, 0.207, z);
+    group.add(stripe);
+  }
+  return group;
+}
+
+function createPencil() {
+  const group = new THREE.Group();
+  group.name = "three-dimensional-hexagonal-pencil";
+
+  const yellowLacquer = new THREE.MeshPhysicalMaterial({
+    color: 0xf5a900,
+    roughness: 0.27,
+    metalness: 0.08,
+    clearcoat: 0.78,
+    clearcoatRoughness: 0.2
+  });
+  const lacquerHighlight = standardMaterial(0xffcf36, { roughness: 0.25, metalness: 0.08 });
+  const wood = standardMaterial(0xb97934, { roughness: 0.78 });
+  const graphite = standardMaterial(0x24282a, { roughness: 0.48, metalness: 0.18 });
+  const ferruleMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xb8c0c2,
+    roughness: 0.24,
+    metalness: 0.88,
+    clearcoat: 0.5
+  });
+  const ferruleGroove = standardMaterial(0x6d7479, { metalness: 0.82, roughness: 0.31 });
+  const eraserMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xe88487,
+    roughness: 0.48,
+    metalness: 0,
+    clearcoat: 0.12
+  });
+
+  const barrelStart = 1.22;
+  const barrelEnd = 16.93;
+  const barrelFacets = [0xf4a900, 0xffca32, 0xe99b00, 0xffc327, 0xe69a00, 0xffbd1c].map((color) => new THREE.MeshPhysicalMaterial({
+    color,
+    roughness: 0.28,
+    metalness: 0.06,
+    clearcoat: 0.82,
+    clearcoatRoughness: 0.2
+  }));
+  barrelFacets.push(yellowLacquer, yellowLacquer);
+  const barrelRadius = 0.4;
+  const barrel = new THREE.Mesh(
+    new THREE.CylinderGeometry(barrelRadius, barrelRadius, barrelEnd - barrelStart, 6, 1, false),
+    barrelFacets
+  );
+  barrel.rotation.z = -Math.PI / 2;
+  barrel.position.set((barrelStart + barrelEnd) / 2, 0, 0);
+  barrel.castShadow = true;
+  barrel.receiveShadow = true;
+  group.add(barrel);
+
+  const facetEdges = [];
+  const edgeRadius = 0.405;
+  for (let side = 0; side < 6; side += 1) {
+    const angle = (side / 6) * Math.PI * 2;
+    const y = -Math.cos(angle) * edgeRadius;
+    const z = Math.sin(angle) * edgeRadius;
+    facetEdges.push(new THREE.Vector3(barrelStart, y, z), new THREE.Vector3(barrelEnd, y, z));
+  }
+  const facetOutline = new THREE.LineSegments(
+    new THREE.BufferGeometry().setFromPoints(facetEdges),
+    new THREE.LineBasicMaterial({ color: 0x9d6800, transparent: true, opacity: 0.48 })
+  );
+  group.add(facetOutline);
+
+  const paintedFlute = new THREE.Mesh(
+    new THREE.BoxGeometry(13.7, 0.012, 0.026),
+    lacquerHighlight
+  );
+  paintedFlute.position.set(8.25, 0.257, 0.15);
+  group.add(paintedFlute);
+
+  const woodPoint = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.012, 0.38, 1.22, 6, 1, false),
+    wood
+  );
+  woodPoint.rotation.z = Math.PI / 2;
+  woodPoint.position.x = 0.61;
+  woodPoint.castShadow = true;
+  group.add(woodPoint);
+
+  const lead = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.006, 0.055, 0.34, 8, 1, false),
+    graphite
+  );
+  lead.rotation.z = Math.PI / 2;
+  lead.position.x = 0.17;
+  lead.castShadow = true;
+  group.add(lead);
+
+  const ferrule = cylinderAlongX(0.38, 0.38, 0.88, ferruleMaterial);
+  ferrule.position.x = 17.37;
+  group.add(ferrule);
+  for (const x of [17.06, 17.25, 17.47, 17.68]) {
+    const groove = cylinderAlongX(0.39, 0.39, 0.045, ferruleGroove);
+    groove.position.x = x;
+    group.add(groove);
+  }
+
+  const eraser = new THREE.Mesh(new THREE.CapsuleGeometry(0.36, 0.02, 5, 24), eraserMaterial);
+  eraser.rotation.z = -Math.PI / 2;
+  eraser.scale.y = 0.81;
+  eraser.position.x = 18.1;
+  eraser.castShadow = true;
+  eraser.receiveShadow = true;
+  group.add(eraser);
+
+  const imprintCanvas = document.createElement("canvas");
+  imprintCanvas.width = 256;
+  imprintCanvas.height = 64;
+  const imprintContext = imprintCanvas.getContext("2d");
+  imprintContext.fillStyle = "#775316";
+  imprintContext.font = "700 34px Georgia, serif";
+  imprintContext.textAlign = "center";
+  imprintContext.textBaseline = "middle";
+  imprintContext.fillText("HB", 128, 32);
+  const imprintTexture = new THREE.CanvasTexture(imprintCanvas);
+  imprintTexture.colorSpace = THREE.SRGBColorSpace;
+  const imprint = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.56, 0.14),
+    new THREE.MeshBasicMaterial({ map: imprintTexture, transparent: true, side: THREE.DoubleSide })
+  );
+  imprint.position.set(14.3, 0, 0.355);
+  group.add(imprint);
+
+  return group;
 }
 
 try {
@@ -41,26 +299,70 @@ try {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 0.94;
   renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const pmrem = new THREE.PMREMGenerator(renderer);
   const room = new RoomEnvironment();
   scene.environment = pmrem.fromScene(room, 0.04).texture;
   pmrem.dispose();
 
-  scene.add(new THREE.HemisphereLight(0xfff6ec, 0x44352d, 1.25));
-  const keyLight = new THREE.DirectionalLight(0xffefd9, 2.15);
-  keyLight.position.set(-5, 9, 8);
+  const keyLight = new THREE.DirectionalLight(0xfff2d7, 3.1);
+  keyLight.position.set(-7, 13, 9);
+  keyLight.target.position.set(15, 0, 0);
+  scene.add(keyLight.target);
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.set(1024, 1024);
+  keyLight.shadow.camera.left = -18;
+  keyLight.shadow.camera.right = 18;
+  keyLight.shadow.camera.top = 10;
+  keyLight.shadow.camera.bottom = -10;
+  keyLight.shadow.bias = -0.0005;
   scene.add(keyLight);
-  const fillLight = new THREE.DirectionalLight(0xdceaff, 0.7);
-  fillLight.position.set(7, 4, 3);
+
+  const fillLight = new THREE.DirectionalLight(0xd7e8ff, 1.5);
+  fillLight.position.set(12, 7, -6);
   scene.add(fillLight);
+  scene.add(new THREE.HemisphereLight(0xfff8e9, 0x5b503e, 1.55));
+
+  const shadowSurface = new THREE.Mesh(
+    new THREE.PlaneGeometry(34, 8),
+    new THREE.ShadowMaterial({ color: 0x473619, opacity: 0.18 })
+  );
+  shadowSurface.rotation.x = -Math.PI / 2;
+  shadowSurface.position.set(15, -0.207, 0);
+  shadowSurface.receiveShadow = true;
+  scene.add(shadowSurface);
+
+  const ruler = createRuler();
+  scene.add(ruler);
+  pencil = createPencil();
+  scene.add(pencil);
+
+  projectionRay = new THREE.Line(
+    new THREE.BufferGeometry(),
+    new THREE.LineDashedMaterial({ color: 0xc45a2b, dashSize: 0.16, gapSize: 0.1, linewidth: 1.5 })
+  );
+  projectionRay.renderOrder = 3;
+  scene.add(projectionRay);
+  landingMarker = new THREE.Mesh(
+    new THREE.SphereGeometry(0.085, 16, 12),
+    new THREE.MeshStandardMaterial({ color: 0xc45a2b, roughness: 0.38, emissive: 0x491708, emissiveIntensity: 0.25 })
+  );
+  landingMarker.position.y = 0.17;
+  landingMarker.renderOrder = 4;
+  scene.add(landingMarker);
+
+  modelReady = true;
+  announce("三維鉛筆與直尺已載入。可拖曳畫面旋轉觀察。");
+  window.dispatchEvent(new Event("pencil3d-ready"));
 } catch (error) {
   modelFailed = true;
   canvas.hidden = true;
   announce("此瀏覽器無法啟動 3D 鉛筆模型。請使用支援 WebGL 的瀏覽器。");
-  console.error("鉛筆 3D 場景初始化失敗", error);
+  console.error("三維鉛筆與直尺場景初始化失敗", error);
 }
 
 function resizeRenderer() {
@@ -82,62 +384,36 @@ function render() {
   if (!renderer || !modelReady || modelFailed) return;
   camera.fov = 2 * Math.atan(1 / (2 * view.focalLengthRatio)) * 180 / Math.PI;
   camera.updateProjectionMatrix();
-  const orbitCenter = new THREE.Vector3(view.start + view.edge / 2, view.centerY, 0);
-  const target = new THREE.Vector3(
-    Number.isFinite(view.lookAtX) ? view.lookAtX : view.start + view.edge / 2,
-    Number.isFinite(view.lookAtY) ? view.lookAtY : view.centerY,
-    Number.isFinite(view.lookAtZ) ? view.lookAtZ : 0
-  );
+  const center = new THREE.Vector3(view.start + 15, view.centerY, 0);
+  const target = new THREE.Vector3(view.lookAtX, view.lookAtY, view.lookAtZ);
   const horizontal = view.orbitRadius * Math.cos(view.pitch);
   camera.position.set(
-    orbitCenter.x + horizontal * Math.sin(view.yaw),
-    orbitCenter.y + view.orbitRadius * Math.sin(view.pitch),
-    orbitCenter.z + horizontal * Math.cos(view.yaw)
+    center.x + horizontal * Math.sin(view.yaw),
+    center.y + view.orbitRadius * Math.sin(view.pitch),
+    center.z + horizontal * Math.cos(view.yaw)
   );
   camera.lookAt(target);
 
-  pencil.position.set(view.start + view.edge / 2, view.centerY, view.centerZ);
+  pencil.position.set(view.start, view.centerY, view.centerZ);
+  if (view.rayStart && view.rayEnd) {
+    projectionRay.geometry.setFromPoints([
+      new THREE.Vector3(view.rayStart.x, view.rayStart.y, view.rayStart.z),
+      new THREE.Vector3(view.rayStart.x, 0.22, view.rayStart.z),
+      new THREE.Vector3(view.rayEnd.x, view.rayEnd.y, view.rayEnd.z)
+    ]);
+    projectionRay.computeLineDistances();
+    landingMarker.position.set(view.rayEnd.x, 0.17, view.rayEnd.z);
+    projectionRay.visible = true;
+    landingMarker.visible = true;
+  } else {
+    projectionRay.visible = false;
+    landingMarker.visible = false;
+  }
   renderer.render(scene, camera);
-}
-
-function createPencil(length) {
-  const texture = new THREE.TextureLoader().load("assets/pencil-photo.webp", render);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-  const material = new THREE.MeshBasicMaterial({
-    map: texture,
-    transparent: true,
-    alphaTest: 0.04,
-    side: THREE.DoubleSide,
-    toneMapped: false
-  });
-  const photographicCutout = new THREE.Mesh(
-    new THREE.PlaneGeometry(length, length / 19.7),
-    material
-  );
-  photographicCutout.name = "realistic-pencil-cutout";
-  photographicCutout.position.set(0, 0, 0);
-  photographicCutout.renderOrder = 2;
-  return photographicCutout;
-}
-
-try {
-  pencil = createPencil(view.edge);
-  scene.add(pencil);
-  modelReady = true;
-  announce("鉛筆 3D 場景已載入。可拖曳畫面旋轉觀察。");
-  render();
-  window.dispatchEvent(new Event("pencil3d-ready"));
-} catch (error) {
-  modelFailed = true;
-  canvas.hidden = true;
-  announce("鉛筆 3D 模型建立失敗；請重新載入頁面。");
-  console.error("鉛筆 3D 模型建立失敗", error);
 }
 
 window.setPencil3DView = (nextView = {}) => {
   Object.assign(view, nextView);
-  if (pencil && Number.isFinite(nextView.edge)) pencil.scale.x = nextView.edge / 18;
   render();
 };
 
