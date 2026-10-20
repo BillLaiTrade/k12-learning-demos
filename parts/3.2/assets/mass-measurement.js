@@ -329,7 +329,7 @@ export function mountMassMeasurement() {
     unitSelect.disabled = !measured;
     document.querySelector('#mass-readout-note').textContent = measured
       ? `同一塊石頭的質量是 ${text}；換單位時數值表示改變，石頭本身沒有改變。`
-      : '完成秤量後，再切換單位查看同一質量的不同表示。';
+      : '秤量後可切換單位，觀察數值表示如何改變；物體的質量保持不變。';
     if (mode === 'digital' && weighed) status.textContent = `石頭已放上秤盤；電子秤顯示 ${value} ${label}。`;
   }
 
