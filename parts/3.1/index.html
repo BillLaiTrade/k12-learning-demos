@@ -191,6 +191,7 @@
     #shared-scale .ruler-line.major { stroke-width: 1.4286; }
     .model-screen[data-zoom="true"] #shared-scale .ruler-line { stroke-width: .55; }
     .model-screen[data-zoom="true"] #shared-scale .ruler-line.major { stroke-width: .75; }
+    .model-screen[data-zoom="true"] #shared-scale .ruler-body { stroke-width: .9; }
     .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
     #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 330px; pointer-events: none; }
     #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 330px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
@@ -585,15 +586,18 @@
         const photoXOffset = startX - (pencilPhoto.x + pencilPhoto.width * pencilPhoto.visibleLeft) * pencilScale;
         document.querySelector("#pencil-object").setAttribute("transform", `translate(${photoXOffset} ${pencilViewOffset}) scale(${pencilScale})`);
         const pencilEndY = (pencilPhoto.y + pencilPhoto.height * pencilPhoto.rightEdgeCenterY) * pencilScale + pencilViewOffset;
-        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V${state.zoom ? 357 : 355}`);
+        const guide = document.querySelector("#pencil-end-guide");
+        guide.setAttribute("d", `M${endX} ${pencilEndY}V${state.zoom ? 357 : 355}`);
+        guide.setAttribute("stroke-width", state.zoom ? ".16" : "2");
+        guide.setAttribute("stroke-dasharray", state.zoom ? ".28 .28" : "2 2");
       };
       const animateModelView = (zoom) => {
-        const targetHeight = zoom ? 19.5 : 170;
-        const targetWidth = zoom ? targetHeight * (760 / 170) : 760;
+        const targetWidth = zoom ? 55 : 760;
+        const targetHeight = zoom ? targetWidth * (170 / 760) : 170;
         const endpointX = modelStagePoint(80 + (5 + estimateEndpoint()) * (640 / 30), 0).x;
         const target = {
           x: zoom ? endpointX + modelStageScale * (640 / 30) * 0.1 - targetWidth / 2 : 0,
-          y: zoom ? 343 : 295,
+          y: zoom ? 349 : 295,
           width: targetWidth,
           height: targetHeight
         };
@@ -838,14 +842,14 @@
           const x = rulerZeroX + tick * centimeter;
           const major = tick % 5 === 0;
           const top = 355;
-          const tickEnd = 355 + (major ? (state.zoom ? 5 : 39) : (state.zoom ? 3 : 28)) / modelStageScale;
+          const tickEnd = 355 + (major ? (state.zoom ? 3.5 : 39) : (state.zoom ? 2.5 : 28)) / modelStageScale;
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${tickEnd - top}"/>`);
           if (state.zoom ? tick === 18 || tick === 19 : major) {
             const anchor = tick === 0 ? "start" : tick === 20 ? "end" : "middle";
             const labelY = state.zoom
               ? 355 + 6.5 / modelStageScale
               : 355 + (66 + 17) / modelStageScale;
-            const zoomFontSize = state.zoom ? ' font-size="2.1"' : "";
+            const zoomFontSize = state.zoom ? ' font-size="1.1"' : "";
             lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}"${zoomFontSize}>${tick}</text>`);
           }
         }
