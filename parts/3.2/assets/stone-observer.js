@@ -61,7 +61,7 @@ function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLO
   const guides=showGuides?[0,1].map(()=>{const line=new THREE.Line(new THREE.BufferGeometry(),guideMaterial);line.renderOrder=5;group.add(line);return line}):[];
   const markerMaterial=showGuides?new THREE.MeshBasicMaterial({color:accent,depthTest:false}):null;
   const markers=showGuides?[0,1].map(()=>{const marker=new THREE.Mesh(new THREE.SphereGeometry(.035,12,8),markerMaterial);marker.renderOrder=6;group.add(marker);return marker}):[];
-  return {group,guides,markers,top,width};
+  return {group,guides,markers,top,width,depth,faceWidth:width+.2,faceWidthPixels:face.width,faceHeightPixels:face.height};
 }
 
 function makeRulerFrame(parent,edge,floor){
@@ -182,14 +182,21 @@ export function mountStoneObserver(){
   }
   function updateHeightOverlay(yValues){
     heightOverlay.setAttribute('viewBox',`0 0 ${width} ${height}`);
-    // 每個標記都投影到後方垂直尺的實際位置，避免高低點因透視而離開尺柱。
+    // 標記落在垂直尺面上對應的實際刻線端點；數值取到 0.1 cm，與讀值一致。
     yValues.forEach((y,index)=>{
-      const rulerLocalY=y+frameCenterY-(rulerFloor+rulerHeight/2);
-      const projected=heightRuler.group.localToWorld(new THREE.Vector3(rulerLocalY,.001,0)).project(camera);
+      const worldY=y+frameCenterY;
+      const centimeters=clamp(Math.round((worldY-rulerFloor)/WORLD_PER_CM*10)/10,0,RULER_CM);
+      const tickIndex=Math.round(centimeters*10);
+      const tickLength=tickIndex%10===0?105:tickIndex%5===0?78:54;
+      const tickX=8+(heightRuler.faceWidthPixels-16)*centimeters/RULER_CM;
+      const rulerLocalX=(tickX/heightRuler.faceWidthPixels-.5)*heightRuler.faceWidth;
+      // CanvasTexture 的上緣對應尺面的 -Z 側；把端點放在這個刻線的內側末端。
+      const rulerLocalZ=-heightRuler.depth/2+tickLength/heightRuler.faceHeightPixels*heightRuler.depth;
+      const projected=heightRuler.group.localToWorld(new THREE.Vector3(rulerLocalX,.004,rulerLocalZ)).project(camera);
       const anchorX=(projected.x*.5+.5)*width;
       const screenY=(-projected.y*.5+.5)*height;
       const line=heightGuides[index];
-      line.setAttribute('x1',String(anchorX-22));line.setAttribute('x2',String(anchorX-2));
+      line.setAttribute('x1',String(anchorX-22));line.setAttribute('x2',String(anchorX));
       line.setAttribute('y1',String(screenY));line.setAttribute('y2',String(screenY));
       heightMarkers[index].setAttribute('cx',String(anchorX));heightMarkers[index].setAttribute('cy',String(screenY));
     });
