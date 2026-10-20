@@ -537,7 +537,7 @@
       }));
       const state = { divisions: 15, start: 0, angle: false, zoom: false, edge: 18 };
       const estimateStart = 0;
-      const estimateLength = 18.4;
+      let estimateLength = 18;
       const estimateEndpoint = () => estimateStart + estimateLength;
       const pencilPhoto = { x: 27, y: 389, width: 454 * (2113 / 2088), height: 27.84 * (2113 / 2088), visibleLeft: 12 / 2113, rightEdgeCenterY: 66.5 / 130 };
       const divisionCountControl = document.querySelector("#division-count");
@@ -564,21 +564,23 @@
       let modelViewAnimationFrame = 0;
       let pencilViewOffset = 0;
       const placePencil = () => {
-        const startX = 80 + estimateStart * (640 / 30);
-        const endX = 80 + estimateEndpoint() * (640 / 30);
-        const pencilScale = (estimateLength * (640 / 30)) / 454;
+        const centimeter = 640 / 30;
+        const rulerZeroX = 80 + 5 * centimeter;
+        const startX = rulerZeroX + estimateStart * centimeter;
+        const endX = rulerZeroX + estimateEndpoint() * centimeter;
+        const pencilScale = (estimateLength * centimeter) / 454;
         const photoXOffset = startX - (pencilPhoto.x + pencilPhoto.width * pencilPhoto.visibleLeft) * pencilScale;
         document.querySelector("#pencil-object").setAttribute("transform", `translate(${photoXOffset} ${pencilViewOffset}) scale(${pencilScale})`);
         const pencilEndY = (pencilPhoto.y + pencilPhoto.height * pencilPhoto.rightEdgeCenterY) * pencilScale + pencilViewOffset;
-        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V423`);
+        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V365.75`);
       };
       const animateModelView = (zoom) => {
-        const targetHeight = zoom ? 104 : 170;
+        const targetHeight = zoom ? 70 : 170;
         const targetWidth = zoom ? targetHeight * (760 / 170) : 760;
-        const endpointX = 80 + estimateEndpoint() * (640 / 30);
+        const endpointX = 80 + (5 + estimateEndpoint()) * (640 / 30);
         const target = {
           x: zoom ? endpointX - targetWidth * 0.55 : 0,
-          y: zoom ? 350 : 295,
+          y: zoom ? 320 : 295,
           width: targetWidth,
           height: targetHeight
         };
@@ -587,7 +589,7 @@
         cancelAnimationFrame(modelViewAnimationFrame);
         const start = { ...modelViewBox };
         const startPencilOffset = pencilViewOffset;
-        const targetPencilOffset = zoom ? 20 : 0;
+        const targetPencilOffset = 0;
         const startTime = performance.now();
         const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700;
         const frame = (now) => {
@@ -814,26 +816,27 @@
         modelSvg.setAttribute("preserveAspectRatio", "xMidYMid meet");
         ruler.removeAttribute("transform");
         document.querySelector("#model-screen").dataset.zoom = String(state.zoom);
-        const endX = 80 + estimateEndpoint() * (640 / 30);
+        const centimeter = 640 / 30;
+        const rulerZeroX = 80 + 5 * centimeter;
+        const endX = rulerZeroX + estimateEndpoint() * centimeter;
         placePencil();
         const lines = [];
-        const subdivisions = state.divisions;
-        const totalTicks = subdivisions;
-        for (let tick = 0; tick <= 30; tick += 1) {
-          const x = 80 + (tick * 640) / 30;
+        for (let tick = 0; tick <= 20; tick += 1) {
+          const x = rulerZeroX + tick * centimeter;
           const major = tick % 5 === 0;
-          const top = major ? 380 : 390;
-          const tickEnd = 423;
+          const top = major ? 355 : 357.6875;
+          const tickEnd = 365.75;
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${tickEnd - top}"/>`);
           if (state.zoom ? tick === 18 || tick === 19 : major) {
-            const anchor = tick === 0 ? "start" : tick === 30 ? "end" : "middle";
-            const zoomFontSize = state.zoom ? ' font-size="14"' : "";
-            lines.push(`<text x="${x}" y="448" text-anchor="${anchor}"${zoomFontSize}>${tick}${tick === 0 ? " cm" : ""}</text>`);
+            const anchor = tick === 0 ? "start" : tick === 20 ? "end" : "middle";
+            const labelY = state.zoom ? 374 : 385.5;
+            const zoomFontSize = state.zoom ? ' font-size="9"' : "";
+            lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}"${zoomFontSize}>${tick}${tick === 0 ? " cm" : ""}</text>`);
           }
         }
-        ruler.innerHTML = `<rect class="ruler-body" x="66" y="380" width="668" height="43" rx="5"/>${lines.join("")}`;
+        ruler.innerHTML = `<rect class="ruler-body" x="${rulerZeroX - 14}" y="355" width="${20 * centimeter + 28}" height="10.75" rx="5"/>${lines.join("")}`;
         document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
-        document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${endX} 420`);
+        document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${endX} 365.75`);
         document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
         if (divisionCountControl) divisionCountControl.value = String(state.divisions);
         const divisionCountLabel = document.querySelector("#division-count-label");
@@ -973,6 +976,7 @@
 
       const setZoom = (zoom) => {
         state.zoom = zoom;
+        estimateLength = zoom ? 18.4 : 18;
         const zoomButton = document.querySelector("#zoom-toggle");
         zoomButton.setAttribute("aria-pressed", String(zoom));
         zoomButton.textContent = zoom ? "縮回整把尺" : "拉近查看端點";
