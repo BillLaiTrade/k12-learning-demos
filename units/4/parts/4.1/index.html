@@ -36,6 +36,7 @@
     .route a:hover,.route a[aria-current="step"] { color:#174c3e; background:#e5efe8; }
     .route a[aria-current="step"] b { color:var(--green); }
     .route-hint { margin:12px 2px 0; color:#77837b; font-size:.75rem; }
+    .route-progress { margin:0 0 10px; color:#425b50; font-size:.8rem; font-weight:800; }
     .record-panel { margin-top:15px; padding:13px 12px; border-radius:12px; background:#f1ead6; }
     .record-panel h2 { margin:0 0 8px; font-size:.9rem; }
     .record-panel p { margin:0; color:#5d5a4d; font-size:.77rem; }
@@ -110,9 +111,12 @@
       .hero { grid-template-columns:1fr; gap:16px; padding-top:28px; }
       .hero-note { order:2; }
       .lesson-layout { display:block; }
-      .route { position:relative; top:auto; max-height:none; margin:0 0 16px; padding:11px; }
-      .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); }
-      .route a { font-size:.74rem; }
+      .route { position:sticky; top:0; z-index:5; max-height:none; margin:0 -12px 16px; padding:10px 12px; border:0; border-block:1px solid var(--line); border-radius:0; background:rgb(244 241 232 / 96%); backdrop-filter:blur(12px); }
+      .route-inner { display:flex; gap:6px; overflow-x:auto; padding-bottom:3px; scrollbar-width:thin; }
+      .route a { flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border:1px solid var(--line); border-radius:999px; background:var(--card); font-size:.74rem; white-space:nowrap; }
+      .route a[aria-current="step"] { border-color:var(--green); }
+      .route-progress { margin-bottom:6px; }
+      .lesson-card { scroll-margin-top:116px; }
       .record-panel { display:none; }
       .lesson-card { grid-template-columns:1fr; gap:10px; padding:15px; }
       .card-side { display:grid; grid-template-columns:38px 1fr; align-items:center; column-gap:10px; border:0; border-bottom:1px solid #e5dfd1; padding:0 0 9px; }
@@ -162,6 +166,7 @@
     <div class="lesson-layout">
       <nav class="route" aria-label="學習路徑">
         <p class="route-label">沿著問題一步步探索</p>
+        <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／10 卡</p>
         <div class="route-inner">
           <a href="#s1" aria-current="step"><b>01</b><span>這個雨水桶是什麼做的？桶子和材料有什麼不同？</span></a>
           <a href="#s2"><b>02</b><span>水會流、土能堆，空氣又裝在哪裡？</span></a>
@@ -472,9 +477,32 @@
       else {feedback.dataset.kind="wrong";feedback.textContent="再看一次成分紀錄：樣本含水和泥沙，不是只有一種物質。依據組成，應分類為混合物。";}
     });
 
-    const routeLinks=[...document.querySelectorAll(".route a")];
-    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){routeLinks.forEach(link=>link.toggleAttribute("aria-current",link.hash===`#${entry.target.id}`));}}),{rootMargin:"-18% 0px -70% 0px"});
-    document.querySelectorAll(".lesson-card").forEach(card=>observer.observe(card));
+    const routeLinks=[...document.querySelectorAll(".route a[href^='#s']")];
+    const lessonCards=routeLinks.map(link=>document.querySelector(link.getAttribute("href"))).filter(Boolean);
+    const markActiveCard=card=>{
+      const index=lessonCards.indexOf(card);
+      routeLinks.forEach(link=>{
+        if(link.hash===`#${card.id}`){link.setAttribute("aria-current","step");link.scrollIntoView({block:"nearest",inline:"nearest"});}
+        else link.removeAttribute("aria-current");
+      });
+      document.getElementById("route-progress").textContent=`目前位置：第 ${String(index+1).padStart(2,"0")}／${lessonCards.length} 卡`;
+    };
+    if("IntersectionObserver" in window){
+      const syncActiveCard=()=>{
+        const currentCard=[...lessonCards].reverse().find(card=>card.getBoundingClientRect().top<=window.innerHeight*.32);
+        markActiveCard(currentCard||lessonCards[0]);
+      };
+      const cardObserver=new IntersectionObserver(entries=>{
+        if(entries.some(entry=>entry.isIntersecting))syncActiveCard();
+      },{rootMargin:"-18% 0px -68% 0px",threshold:0});
+      lessonCards.forEach(card=>cardObserver.observe(card));
+    }else{
+      const syncActiveCard=()=>{
+        const currentCard=[...lessonCards].reverse().find(card=>card.getBoundingClientRect().top<=window.innerHeight*.35);
+        markActiveCard(currentCard||lessonCards[0]);
+      };
+      window.addEventListener("scroll",syncActiveCard,{passive:true});syncActiveCard();
+    }
   </script>
 </body>
 </html>
