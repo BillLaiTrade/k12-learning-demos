@@ -308,6 +308,7 @@ export function mountMassMeasurement() {
   let balancePlaced = false;
   let placingBalance = false;
   let weights = [];
+  const weightModels = [];
   let weighed = false;
   let placingDigital = false;
   let stoneTargetY = digital.restingY + 0.78;
@@ -332,13 +333,31 @@ export function mountMassMeasurement() {
     if (mode === 'digital' && weighed) status.textContent = `石頭已放上秤盤；電子秤顯示 ${value} ${label}。`;
   }
 
+  function clearWeightModels() {
+    weightModels.forEach(weight => {
+      balance.rightPan.remove(weight);
+      weight.traverse(part => {
+        if (!part.isMesh) return;
+        part.geometry.dispose();
+        const materials = Array.isArray(part.material) ? part.material : [part.material];
+        materials.forEach(material => {
+          material.map?.dispose();
+          material.dispose();
+        });
+      });
+    });
+    weightModels.length = 0;
+  }
+
   function drawWeights() {
+    clearWeightModels();
     weightTray.replaceChildren();
     weights.forEach((value, index) => {
       const weight = makeWeight(value);
       const col = index % 3, row = Math.floor(index / 3);
       weight.position.set((col - 1) * 0.35, -0.64 + row * 0.02, (row - 0.5) * 0.32);
       balance.rightPan.add(weight);
+      weightModels.push(weight);
       const tag = document.createElement('span');
       tag.className = 'weight-chip';
       tag.textContent = `${value} g`;
