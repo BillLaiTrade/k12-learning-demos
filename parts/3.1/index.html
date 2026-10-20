@@ -443,7 +443,7 @@
                 </div>
               </label>
               <div class="slider-row"><span id="estimate-prompt">移動滑桿記下估值，再查看提示。</span><output class="value" id="estimate-value" for="estimate-slider">尚未估讀</output></div>
-              <button type="button" class="secondary" id="check-estimate" disabled>查看估讀提示</button>
+              <button type="button" class="secondary" id="check-estimate" disabled>查看誤差</button>
             </div>
           </aside>
           </div>
@@ -655,7 +655,7 @@
         input.value = String(clamp(estimateGuess === null ? minimum : estimateGuess * 1000, minimum, maximum));
         const button = document.querySelector("#check-estimate");
         button.disabled = estimateGuess === null && !estimateChecked;
-        button.textContent = estimateChecked ? "再估一次" : "查看估讀提示";
+        button.textContent = estimateChecked ? "再估一次" : "查看誤差";
         document.querySelector("#estimate-heading").textContent = "鉛筆端點落在相鄰刻線之間，該怎麼估讀？";
         document.querySelector("#estimate-instruction").textContent = state.zoom > 0.8
           ? `畫面已放大到 ${document.querySelector("#zoom-level").textContent}；可查看端點與相鄰刻線的位置。`
@@ -1046,7 +1046,7 @@
         document.querySelector("#estimate-note").textContent = `你選擇的估讀：${guess} cm。藍色虛線表示你的估讀位置，橘紅虛線表示鉛筆端點；刻線間的位置要根據端點位置估讀。`;
         const button = document.querySelector("#check-estimate");
         button.disabled = false;
-        button.textContent = "查看估讀提示";
+        button.textContent = "查看誤差";
       });
       document.querySelector("#check-estimate").addEventListener("click", () => {
         if (estimateChecked) {
@@ -1061,8 +1061,12 @@
         if (estimateGuess === null) return;
         estimateChecked = true;
         const guess = formatEstimate(estimateGuess);
+        const percentageError = Math.abs(estimateGuess - estimateLength) / estimateLength * 100;
+        const closeness = percentageError < 1
+          ? "誤差小於 1%，表示估讀非常接近模型設定值；但估讀仍是近似判斷，不能視為完全精確。"
+          : "這是估讀值與模型設定值的差距；估讀仍是近似判斷。";
         document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
-        document.querySelector("#estimate-note").textContent = `你記下的估讀是 ${guess} cm。端點落在 18 cm 和 19 cm 的刻線之間；這把尺每 1 cm 才有一條刻線，沒有直接標出刻線間的數值。估讀是根據端點位置作出的近似判斷。`;
+        document.querySelector("#estimate-note").textContent = `模型設定值為 18.4 cm；你的估讀顯示為 ${guess} cm。以模型設定值為基準，誤差百分比是 ${percentageError.toFixed(2)}%。${closeness} 百分比依滑桿位置連續計算，估讀數字顯示到小數一位。`;
         syncEstimateControls();
       });
 
