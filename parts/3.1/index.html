@@ -191,7 +191,8 @@
     #shared-scale .ruler-line.major { stroke-width: 1.4286; }
     .model-screen[data-zoom="true"] #shared-scale .ruler-line { stroke-width: .55; }
     .model-screen[data-zoom="true"] #shared-scale .ruler-line.major { stroke-width: .75; }
-    .model-screen[data-zoom="true"] #shared-scale .ruler-body { stroke-width: .9; }
+    .model-screen[data-zoom="true"] #shared-scale .ruler-body { stroke: none; }
+    .model-screen[data-zoom="true"] #shared-scale .ruler-outline { fill: none; stroke: #a99255; stroke-width: .9; }
     .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
     #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 330px; pointer-events: none; }
     #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 330px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
@@ -857,7 +858,13 @@
         const rulerRightMargin = 50 / modelStageScale;
         const rulerHeight = state.zoom ? 5.8 / modelStageScale : 66 / modelStageScale;
         const rulerTop = 355 + (state.zoom ? 1 / modelStageScale : 0);
-        ruler.innerHTML = `<rect class="ruler-body" x="${rulerZeroX - rulerLeftMargin}" y="${rulerTop}" width="${20 * centimeter + rulerLeftMargin + rulerRightMargin}" height="${rulerHeight}" rx="${9 / modelStageScale}"/>${lines.join("")}`;
+        const rulerX = rulerZeroX - rulerLeftMargin;
+        const rulerWidth = 20 * centimeter + rulerLeftMargin + rulerRightMargin;
+        const rulerRadius = 9 / modelStageScale;
+        const zoomOutline = state.zoom
+          ? `<path class="ruler-outline" d="M${rulerX + rulerRadius} ${rulerTop}H${rulerX + rulerWidth - rulerRadius}Q${rulerX + rulerWidth} ${rulerTop} ${rulerX + rulerWidth} ${rulerTop + rulerRadius}V${rulerTop + rulerHeight} M${rulerX} ${rulerTop + rulerHeight}V${rulerTop + rulerRadius}Q${rulerX} ${rulerTop} ${rulerX + rulerRadius} ${rulerTop}"/>`
+          : "";
+        ruler.innerHTML = `<rect class="ruler-body" x="${rulerX}" y="${rulerTop}" width="${rulerWidth}" height="${rulerHeight}" rx="${rulerRadius}"/>${zoomOutline}${lines.join("")}`;
         document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
         const projectedEndpoint = modelStagePoint(endX, 355 + (state.zoom ? 1 / modelStageScale : 0));
         document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${projectedEndpoint.x} ${projectedEndpoint.y}`);
