@@ -181,8 +181,9 @@
     .model-panel h2 { margin: 0 0 5px; font-size: 1.18rem; }
     .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
     .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
-    .model-screen { overflow: hidden; aspect-ratio: 760 / 170; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
+    .model-screen { position: relative; overflow: hidden; aspect-ratio: 760 / 170; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
     .model-screen svg { display: block; width: 100%; height: 100%; }
+    .image-zoom-toggle { position: absolute; top: 8px; right: 8px; z-index: 2; margin: 0; padding: 6px 10px; background: rgb(255 255 255 / 94%); font-size: .84rem; }
     #shared-scale { fill: #26383a; font: 20px system-ui, sans-serif; }
     #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
     #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.5; }
@@ -405,11 +406,11 @@
         <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">先估讀，再核對</span></div>
         <div class="card-main">
           <h2 id="estimate-heading">鉛筆端點落在相鄰刻線之間，該怎麼估讀？</h2>
-          <p id="estimate-instruction">先看整把尺，估計鉛筆右端的位置；再拉近觀察端點，最後核對估讀。</p>
+          <p id="estimate-instruction">拖動滑桿估讀鉛筆右端的位置；可按圖片上的按鈕拉近端點，檢查估讀後會顯示讀值。</p>
           <div class="estimate-workspace">
           <aside class="model-panel" aria-labelledby="model-title">
             <h2 id="model-title">觀察鉛筆端點</h2>
-            <p>先看整把尺估讀；拉近後可看清右端與相鄰公分刻線的位置，刻線本身不會增加。</p>
+            <p>鉛筆和尺保持不動；按圖片上的按鈕查看端點與相鄰刻線的位置。</p>
             <div class="model-screen" id="model-screen" data-zoom="false">
               <svg id="shared-measurement-model" viewBox="0 295 760 170" role="img" aria-label="鉛筆左端對準零刻度，右端落在直尺兩條相鄰公分刻線之間">
                 <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
@@ -421,18 +422,18 @@
                   <path d="M620 52L588 600" stroke="#bc612b" stroke-width="2" stroke-dasharray="5 4"></path>
                 </g>
               </svg>
+              <button type="button" class="secondary image-zoom-toggle" id="zoom-toggle" aria-pressed="false">拉近查看端點</button>
             </div>
             <div class="control-panel estimate-panel">
-              <label class="field" for="estimate-slider">① 先估讀鉛筆右端的位置（cm）
+              <label class="field" for="estimate-slider">估讀鉛筆右端的位置（cm）
                 <input id="estimate-slider" type="range" min="18000" max="20000" step="100" aria-label="選擇你估計的鉛筆右端位置，單位為公分">
               </label>
               <div class="slider-row"><span id="estimate-prompt">移動滑桿選一個估值，再檢查。</span><output class="value" id="estimate-value" for="estimate-slider">尚未估讀</output></div>
-              <button type="button" class="secondary" id="zoom-toggle" aria-pressed="false">② 拉近查看端點</button>
-              <button type="button" class="secondary" id="check-estimate" disabled>③ 檢查估讀</button>
+              <button type="button" class="secondary" id="check-estimate" disabled>檢查估讀</button>
             </div>
           </aside>
           </div>
-          <p class="live-note" id="estimate-note" aria-live="polite">先依端點在兩條刻線間的位置估讀。放大只讓你看得更清楚，不會增加刻線或改變最小刻度。</p>
+          <p class="live-note" id="estimate-note" aria-live="polite">依端點在相鄰刻線間的位置估讀。拉近只讓位置更清楚，不會增加刻線或改變最小刻度。</p>
           <div class="fact"><p>真實物體的端點不一定剛好對準刻線，因此要依它落在刻線間的位置估讀。估讀是近似值；拉近只能看得更清楚，不會增加刻度。</p></div>
         </div>
       </section>
@@ -649,11 +650,11 @@
         input.value = String(clamp(estimateGuess === null ? minimum : Math.round(estimateGuess * 1000), minimum, maximum));
         const button = document.querySelector("#check-estimate");
         button.disabled = estimateGuess === null && !estimateChecked;
-        button.textContent = estimateChecked ? "③ 重新估讀" : "③ 檢查估讀";
+        button.textContent = estimateChecked ? "重新估讀" : "檢查估讀";
         document.querySelector("#estimate-heading").textContent = "鉛筆端點落在相鄰刻線之間，該怎麼估讀？";
         document.querySelector("#estimate-instruction").textContent = state.zoom
-          ? `端點已拉近；比較它和相鄰刻線的位置，再核對剛才的估讀。`
-          : `先看整把尺，估計鉛筆右端的位置；再拉近觀察端點，最後核對估讀。`;
+          ? `端點已拉近；可查看它與相鄰刻線的位置。`
+          : `拖動滑桿估讀鉛筆右端的位置；可按圖片上的按鈕拉近端點，檢查估讀後會顯示讀值。`;
         input.setAttribute("aria-label", `選擇你估計的鉛筆右端位置；端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} 公分之間`);
         document.querySelector("#estimate-prompt").textContent = "尺上每 1 cm 一條刻線，數字每 5 cm 標示；依端點位置估讀。";
         if (estimateChecked) {
@@ -993,14 +994,14 @@
         document.querySelector("#estimate-note").textContent = `你選擇估讀約 ${guess} cm。依鉛筆右端和相鄰刻線的位置判斷；這個滑桿只記錄你的估值，不會移動鉛筆或尺。`;
         const button = document.querySelector("#check-estimate");
         button.disabled = false;
-        button.textContent = "③ 檢查估讀";
+        button.textContent = "檢查估讀";
       });
       document.querySelector("#check-estimate").addEventListener("click", () => {
         if (estimateChecked) {
           estimateGuess = null;
           estimateChecked = false;
           document.querySelector("#estimate-value").textContent = "尚未估讀";
-          document.querySelector("#estimate-note").textContent = "先依端點在兩條刻線間的位置估讀。放大只讓你看得更清楚，不會增加刻線或改變最小刻度。";
+          document.querySelector("#estimate-note").textContent = "依端點在相鄰刻線間的位置估讀。拉近只讓位置更清楚，不會增加刻線或改變最小刻度。";
           syncEstimateControls();
           return;
         }
