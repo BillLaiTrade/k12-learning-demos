@@ -195,10 +195,10 @@
     .model-screen[data-zoom="true"] #shared-scale .ruler-body { stroke: none; }
     #shared-scale .ruler-outline { fill: none; stroke: #a99255; stroke-width: .9; }
     .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
-    #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 160px; pointer-events: none; }
-    #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 160px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
+    #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 220px; pointer-events: none; }
+    #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 220px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
     @media (max-width: 760px) {
-      #pencil-3d-canvas, #parallax-canvas { height: 140px; }
+      #pencil-3d-canvas, #parallax-canvas { height: 200px; }
     }
     #parallax-canvas:active { cursor: grabbing; }
     #parallax-canvas:focus-visible { outline: 3px solid #176b53; outline-offset: 3px; }
@@ -462,7 +462,7 @@
         <div class="card-side"><span class="card-number">06</span><h3>找出讀值差異</h3><span class="card-role">觀察角度會影響讀值</span></div>
         <div class="card-main">
           <h2>同一物體，為什麼讀值會差一點？</h2>
-          <p>同一支鉛筆平行放在直尺旁。切換兩個預設視角，或拖曳 3D 場景自由旋轉；觀察鉛筆端點的投影落在哪個刻度，以及讀值如何改變。</p>
+          <p>同一支鉛筆平行放在 20 cm 直尺上，筆尖對齊 0 cm。切換兩個預設視角，或拖曳 3D 場景自由旋轉；觀察筆尾投影落在哪個刻度，以及讀值如何改變。</p>
           <div class="parallax-scene">
             <canvas id="pencil-3d-canvas" aria-hidden="true"></canvas>
             <span id="pencil-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
@@ -578,14 +578,14 @@
         const centimeters = (30 / divisions).toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
         return `30 cm ÷ ${divisions} 等分 = ${numerator}/${denominator} cm／格（約 ${centimeters} cm）。`;
       };
-      const defaultCameraPitch = 0.48;
+      const defaultCameraPitch = 0.68;
       const orbitRadius = 24;
       const parallaxLength = 18.4;
-      const pencilHeight = 0.78;
+      const pencilHeight = 0.61;
       const parallaxTickSpacing = 1;
-      const parallaxCenterX = state.start + 15;
+      const parallaxCenterX = state.start + 10;
       const defaultCameraYaw = Math.asin((state.start + parallaxLength - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
-      const obliqueCameraYaw = Math.asin((state.start + 8 - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
+      const obliqueCameraYaw = Math.asin((state.start - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
       const ruler = document.querySelector("#shared-scale");
       const modelSvg = document.querySelector("#shared-measurement-model");
       const modelScreen = document.querySelector("#model-screen");
@@ -686,27 +686,25 @@
         const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
         parallaxCanvas.width = Math.round(bounds.width * pixelRatio);
         parallaxCanvas.height = Math.round(bounds.height * pixelRatio);
-        const target = { x: state.start + 15, y: pencilHeight, z: 0 };
+        const target = { x: state.start + 10, y: pencilHeight, z: 0 };
         const cameraPosition = {
           x: target.x + orbitRadius * Math.cos(camera.pitch) * Math.sin(camera.yaw),
           y: target.y + orbitRadius * Math.sin(camera.pitch),
           z: target.z + orbitRadius * Math.cos(camera.pitch) * Math.cos(camera.yaw)
         };
         const rulerMin = -0.18;
-        const rulerMax = 30;
+        const rulerMax = 20;
         const rulerTop = 0.2;
-        const rulerNear = -2.9;
-        const rulerFar = 2.9;
-        const pencilCenterZ = -1.3;
+        const rulerNear = -1.6;
+        const rulerFar = 1.6;
+        const pencilCenterZ = -0.82;
         const edgeX = state.start + parallaxLength;
         const cameraTarget = {
           x: target.x,
           y: rulerTop,
           z: 0
         };
-        const focalLength = cameraPreset === "front"
-          ? bounds.width * 0.76
-          : bounds.width <= 760 ? Math.min(bounds.height * 1.95, bounds.width * 0.85) : bounds.height * 2.48;
+        const focalLength = bounds.width * 0.85;
         const cameraHeight = cameraPosition.y;
         const projectionFactor = (pencilHeight - rulerTop) / Math.max(0.1, cameraHeight - pencilHeight);
         const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
@@ -750,9 +748,7 @@
         document.querySelector("#view-oblique").setAttribute("aria-pressed", String(cameraPreset === "oblique"));
         document.querySelector("#parallax-explanation").textContent = !landingOnScale
           ? "這個角度下，視線延長線落在尺面範圍外，無法從尺上讀值。轉動視角，讓落點回到刻度上；鉛筆長度始終不變。"
-          : Math.abs(apparentWidthReading - parallaxLength) < estimatedStep / 2
-          ? "目前端點投影接近正對刻度的位置。拖動視角，觀察投影線和尺上讀值如何改變。"
-          : "目前端點投影已偏離正對時的位置；比較上方兩種角度的估讀。鉛筆和尺都沒有移動。";
+          : "橘色標記顯示端點投影在尺上的位置。比較正對和斜向的估讀；鉛筆和尺都沒有移動。";
         parallaxCanvas.setAttribute("aria-label", landingOnScale
           ? `三維直尺與鉛筆模型。從目前角度讀到的尺上端點約為 ${displayedEndEstimate} 公分。可拖曳或使用方向鍵旋轉視角。`
           : "三維直尺與鉛筆模型。目前視角的投影落在尺面範圍外，無法讀值；可拖曳或使用方向鍵旋轉視角。");

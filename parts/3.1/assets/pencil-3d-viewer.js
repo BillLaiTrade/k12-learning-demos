@@ -11,11 +11,13 @@ scene.background = null;
 scene.fog = new THREE.Fog(0xf7f8f3, 43, 82);
 const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 180);
 camera.up.set(0, 1, 0);
+const rulerLength = 20;
 
 let renderer;
 let pencil;
 let projectionRay;
 let landingMarker;
+let landingRing;
 let modelReady = false;
 let modelFailed = false;
 let lastFrame = "";
@@ -61,7 +63,7 @@ function makeTextTexture(text) {
   const context = label.getContext("2d");
   context.clearRect(0, 0, label.width, label.height);
   context.fillStyle = "#26383a";
-  context.font = "700 78px system-ui, sans-serif";
+  context.font = "700 112px system-ui, sans-serif";
   context.textAlign = "center";
   context.textBaseline = "middle";
   context.fillText(text, label.width / 2, label.height / 2);
@@ -98,7 +100,7 @@ function roundedRulerGeometry(width, depth, thickness, radius) {
 
 function createRuler() {
   const group = new THREE.Group();
-  group.name = "solid-rounded-30-centimeter-ruler";
+  group.name = "solid-rounded-20-centimeter-ruler";
 
   const bodyMaterial = new THREE.MeshPhysicalMaterial({
     color: 0xe1c477,
@@ -110,8 +112,8 @@ function createRuler() {
     opacity: 1
   });
   const rulerSideMaterial = standardMaterial(0x98733a, { roughness: 0.42, metalness: 0.08 });
-  const body = new THREE.Mesh(roundedRulerGeometry(30.6, 5.8, 0.4, 0.16), [bodyMaterial, rulerSideMaterial]);
-  body.position.set(15, -0.18, 0);
+  const body = new THREE.Mesh(roundedRulerGeometry(rulerLength + 0.6, 3.2, 0.4, 0.16), [bodyMaterial, rulerSideMaterial]);
+  body.position.set(rulerLength / 2, -0.18, 0);
   body.castShadow = true;
   body.receiveShadow = true;
   group.add(body);
@@ -124,22 +126,33 @@ function createRuler() {
   group.add(edge);
 
   const scaleInk = standardMaterial(0x24383a, { roughness: 0.7 });
-  for (let centimeter = 0; centimeter <= 30; centimeter += 1) {
+  for (let centimeter = 0; centimeter <= rulerLength; centimeter += 1) {
     const major = centimeter % 5 === 0;
-    const tickLength = major ? 1.45 : 0.9;
+    const tickLength = major ? 0.84 : 0.56;
     const tick = new THREE.Mesh(
       new THREE.BoxGeometry(0.045, 0.014, tickLength),
       scaleInk
     );
-    tick.position.set(centimeter, 0.211, 2.55 - tickLength / 2);
+    tick.position.set(centimeter, 0.211, 1.5 - tickLength / 2);
     tick.castShadow = false;
     tick.receiveShadow = true;
     group.add(tick);
+
+    // The opposite edge has a second graduation row, like a marked ruler edge.
+    const farTickLength = major ? 0.44 : 0.28;
+    const farTick = new THREE.Mesh(
+      new THREE.BoxGeometry(0.045, 0.014, farTickLength),
+      scaleInk
+    );
+    farTick.position.set(centimeter, 0.211, -1.5 + farTickLength / 2);
+    farTick.castShadow = false;
+    farTick.receiveShadow = true;
+    group.add(farTick);
   }
 
-  for (let centimeter = 0; centimeter <= 30; centimeter += 5) {
+  for (let centimeter = 0; centimeter <= rulerLength; centimeter += 5) {
     const number = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.3, 0.7),
+      new THREE.PlaneGeometry(1.8, 1.2),
       new THREE.MeshBasicMaterial({
         map: makeTextTexture(String(centimeter)),
         transparent: true,
@@ -148,16 +161,16 @@ function createRuler() {
       })
     );
     number.rotation.x = -Math.PI / 2;
-    const labelX = centimeter === 0 ? 0.32 : centimeter === 30 ? 29.68 : centimeter;
-    number.position.set(labelX, 0.21, 0.42);
+    const labelX = centimeter === 0 ? 0.32 : centimeter === rulerLength ? rulerLength - 0.32 : centimeter;
+    number.position.set(labelX, 0.21, 0.02);
     number.renderOrder = 2;
     group.add(number);
   }
 
   const sideStripe = standardMaterial(0xb18b48, { metalness: 0.35, roughness: 0.3 });
-  for (const z of [-2.81, 2.81]) {
-    const stripe = new THREE.Mesh(new THREE.BoxGeometry(30.2, 0.018, 0.045), sideStripe);
-    stripe.position.set(15, 0.207, z);
+  for (const z of [-1.51, 1.51]) {
+    const stripe = new THREE.Mesh(new THREE.BoxGeometry(rulerLength + 0.2, 0.018, 0.045), sideStripe);
+    stripe.position.set(rulerLength / 2, 0.207, z);
     group.add(stripe);
   }
   return group;
@@ -311,7 +324,7 @@ try {
 
   const keyLight = new THREE.DirectionalLight(0xfff2d7, 3.1);
   keyLight.position.set(-7, 13, 9);
-  keyLight.target.position.set(15, 0, 0);
+  keyLight.target.position.set(rulerLength / 2, 0, 0);
   scene.add(keyLight.target);
   keyLight.castShadow = true;
   keyLight.shadow.mapSize.set(1024, 1024);
@@ -328,11 +341,11 @@ try {
   scene.add(new THREE.HemisphereLight(0xfff8e9, 0x5b503e, 1.55));
 
   const shadowSurface = new THREE.Mesh(
-    new THREE.PlaneGeometry(34, 8),
+    new THREE.PlaneGeometry(rulerLength + 4, 6),
     new THREE.ShadowMaterial({ color: 0x473619, opacity: 0.18 })
   );
   shadowSurface.rotation.x = -Math.PI / 2;
-  shadowSurface.position.set(15, -0.207, 0);
+  shadowSurface.position.set(rulerLength / 2, -0.207, 0);
   shadowSurface.receiveShadow = true;
   scene.add(shadowSurface);
 
@@ -348,12 +361,20 @@ try {
   projectionRay.renderOrder = 3;
   scene.add(projectionRay);
   landingMarker = new THREE.Mesh(
-    new THREE.SphereGeometry(0.085, 16, 12),
+    new THREE.SphereGeometry(0.15, 20, 14),
     new THREE.MeshStandardMaterial({ color: 0xc45a2b, roughness: 0.38, emissive: 0x491708, emissiveIntensity: 0.25 })
   );
-  landingMarker.position.y = 0.17;
+  landingMarker.position.y = 0.28;
   landingMarker.renderOrder = 4;
   scene.add(landingMarker);
+  landingRing = new THREE.Mesh(
+    new THREE.RingGeometry(0.18, 0.3, 28),
+    new THREE.MeshBasicMaterial({ color: 0xc45a2b, side: THREE.DoubleSide, depthWrite: false })
+  );
+  landingRing.rotation.x = -Math.PI / 2;
+  landingRing.position.y = 0.255;
+  landingRing.renderOrder = 5;
+  scene.add(landingRing);
 
   modelReady = true;
   announce("三維鉛筆與直尺已載入。可拖曳畫面旋轉觀察。");
@@ -384,7 +405,7 @@ function render() {
   if (!renderer || !modelReady || modelFailed) return;
   camera.fov = 2 * Math.atan(1 / (2 * view.focalLengthRatio)) * 180 / Math.PI;
   camera.updateProjectionMatrix();
-  const center = new THREE.Vector3(view.start + 15, view.centerY, 0);
+  const center = new THREE.Vector3(view.start + rulerLength / 2, view.centerY, 0);
   const target = new THREE.Vector3(view.lookAtX, view.lookAtY, view.lookAtZ);
   const horizontal = view.orbitRadius * Math.cos(view.pitch);
   camera.position.set(
@@ -397,17 +418,19 @@ function render() {
   pencil.position.set(view.start, view.centerY, view.centerZ);
   if (view.rayStart && view.rayEnd) {
     projectionRay.geometry.setFromPoints([
-      new THREE.Vector3(view.rayStart.x, view.rayStart.y, view.rayStart.z),
-      new THREE.Vector3(view.rayStart.x, 0.22, view.rayStart.z),
+      new THREE.Vector3(view.rayEnd.x, view.centerY, view.rayEnd.z),
       new THREE.Vector3(view.rayEnd.x, view.rayEnd.y, view.rayEnd.z)
     ]);
     projectionRay.computeLineDistances();
-    landingMarker.position.set(view.rayEnd.x, 0.17, view.rayEnd.z);
+    landingMarker.position.set(view.rayEnd.x, 0.28, view.rayEnd.z);
+    landingRing.position.set(view.rayEnd.x, 0.255, view.rayEnd.z);
     projectionRay.visible = true;
     landingMarker.visible = true;
+    landingRing.visible = true;
   } else {
     projectionRay.visible = false;
     landingMarker.visible = false;
+    landingRing.visible = false;
   }
   renderer.render(scene, camera);
 }

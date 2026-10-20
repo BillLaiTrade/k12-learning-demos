@@ -11,8 +11,8 @@
 
 ## 視差場景
 
-- `pencil-3d-viewer.js` 以 Three.js 幾何建立完整場景，不使用平面鉛筆貼圖：鉛筆包含六角漆面筆桿、木質筆尖、石墨筆芯、金屬筆箍和橡皮擦；直尺以圓角擠出幾何製作，具有可見厚度、尺面、實體刻線與數字。
-- 鉛筆與尺使用實際 3D 材質、透視相機和光源；端點投影線及落點也在同一個 3D 場景中繪製。讀值依相機視線和尺面的交點估讀。
+- `pencil-3d-viewer.js` 以 Three.js 幾何建立完整場景，不使用平面鉛筆貼圖：鉛筆包含六角漆面筆桿、木質筆尖、石墨筆芯、金屬筆箍和橡皮擦；20 cm 直尺以圓角擠出幾何製作，具有可見厚度、尺面、雙側刻線與數字。鉛筆平放在尺面上，筆尖對齊 0 cm。
+- 鉛筆與尺使用實際 3D 材質、透視相機和光源；視角改變時，尺面交點和橘色讀值標記隨之改變，鉛筆與尺保持固定。標記放在尺的另一側刻線列，讓端點投影和對應刻度能在同一視角下辨讀。
 - 共用量測模型以 18 cm 呈現刻度與估讀；第六區塊使用獨立的視差端點模型，尺上讀值依相機視線與尺面的交點估算，畫面不揭露模型設定長度。
 - 建模方式參考 Three.js 官方幾何與材質文件：[ExtrudeGeometry](https://threejs.org/docs/#api/en/geometries/ExtrudeGeometry)、[CylinderGeometry](https://threejs.org/docs/#api/en/geometries/CylinderGeometry)、[CapsuleGeometry](https://threejs.org/docs/#api/en/geometries/CapsuleGeometry)、[MeshPhysicalMaterial](https://threejs.org/docs/#api/en/materials/MeshPhysicalMaterial)。外觀比例參考公開的 [Fusion 360 鉛筆模型](https://github.com/Vichack18/Pencil-Github-3D-Model)，未使用其模型檔案或標誌。
 - Three.js 版本：0.186.1。套件授權見 `vendor/three/LICENSE`（MIT）。
