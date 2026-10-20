@@ -448,7 +448,7 @@
           </aside>
           </div>
           <p class="live-note" id="estimate-note" aria-live="polite">依端點在相鄰刻線間的位置估讀。放大只改變觀看比例，不會增加刻線或改變最小刻度。</p>
-          <div class="fact"><p>真實物體的端點不一定剛好對準刻線，因此要依它落在刻線間的位置估讀。刻度即使細到奈米，有限精度的儀器仍無法標出所有更細的位置差異；測量結果因此是近似值，仍需要估讀。</p></div>
+          <div class="fact"><p>這把尺每 1 cm 才有一條刻線，沒有標出 18 cm 和 19 cm 之間的細分位置。估讀是根據端點在兩條刻線間的位置作近似判斷；顯示到小數一位，不代表尺能直接讀出那個精度。</p></div>
         </div>
       </section>
 
@@ -1043,7 +1043,7 @@
         estimateChecked = false;
         const guess = formatEstimate(estimateGuess);
         document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
-        document.querySelector("#estimate-note").textContent = `你選擇的估讀：${guess} cm。藍色虛線表示你的估讀位置，橘紅虛線標示鉛筆端點；刻線之間沒有直接標出的讀值，估讀是近似判斷。`;
+        document.querySelector("#estimate-note").textContent = `你選擇的估讀：${guess} cm。藍色虛線表示你的估讀位置，橘紅虛線表示鉛筆端點；刻線間的位置要根據端點位置估讀。`;
         const button = document.querySelector("#check-estimate");
         button.disabled = false;
         button.textContent = "查看估讀提示";
@@ -1054,7 +1054,7 @@
           estimateChecked = false;
           updateEstimateGuide();
           document.querySelector("#estimate-value").textContent = "尚未估讀";
-          document.querySelector("#estimate-note").textContent = "依端點在相鄰刻線間的位置估讀。這把尺沒有標出刻線之間的唯一精確讀值；放大只能看得更清楚，不會增加測量精度。";
+          document.querySelector("#estimate-note").textContent = "這把尺每 1 cm 一條刻線，兩條刻線間的位置需要估讀；放大可以看清端點，但不會增加刻線。";
           syncEstimateControls();
           return;
         }
@@ -1062,7 +1062,7 @@
         estimateChecked = true;
         const guess = formatEstimate(estimateGuess);
         document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
-        document.querySelector("#estimate-note").textContent = `你記下的估讀是 ${guess} cm。鉛筆端點落在 18 cm 和 19 cm 之間；這把尺沒有標出刻線間的唯一精確讀值，所以無法從圖上核對出唯一答案。估讀是依刻度做出的近似判斷，測量精度也會受到工具限制。`;
+        document.querySelector("#estimate-note").textContent = `你記下的估讀是 ${guess} cm。端點落在 18 cm 和 19 cm 的刻線之間；這把尺每 1 cm 才有一條刻線，沒有直接標出刻線間的數值。估讀是根據端點位置作出的近似判斷。`;
         syncEstimateControls();
       });
 
