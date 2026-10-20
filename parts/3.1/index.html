@@ -181,7 +181,8 @@
     .model-panel h2 { margin: 0 0 5px; font-size: 1.18rem; }
     .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
     .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
-    .model-screen { position: relative; overflow: hidden; aspect-ratio: 760 / 170; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
+    .model-screen { position: relative; overflow: hidden; aspect-ratio: 760 / 170; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; transition: aspect-ratio 700ms ease; }
+    .model-screen[data-zoom="true"] { aspect-ratio: 2.2 / 1; }
     .model-screen svg { display: block; width: 100%; height: 100%; }
     .image-zoom-toggle { display: block; margin: 8px 0 0 auto; padding: 6px 10px; font-size: .84rem; }
     #shared-scale { fill: #26383a; font: 8.5714px system-ui, sans-serif; }
@@ -539,7 +540,7 @@
       }));
       const state = { divisions: 15, start: 0, angle: false, zoom: false, edge: 18 };
       const estimateStart = 0;
-      let estimateLength = 18;
+      let estimateLength = 18.4;
       const estimateEndpoint = () => estimateStart + estimateLength;
       const pencilPhoto = { x: 27, y: 389, width: 454 * (2113 / 2088), height: 27.84 * (2113 / 2088), visibleLeft: 12 / 2113, rightEdgeCenterY: 66.5 / 130 };
       const divisionCountControl = document.querySelector("#division-count");
@@ -585,12 +586,12 @@
         document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V355`);
       };
       const animateModelView = (zoom) => {
-        const targetHeight = zoom ? 130 : 170;
-        const targetWidth = zoom ? targetHeight * (760 / 170) : 760;
+        const targetHeight = zoom ? 54 : 170;
+        const targetWidth = zoom ? targetHeight * 2.2 : 760;
         const endpointX = modelStagePoint(80 + (5 + estimateEndpoint()) * (640 / 30), 0).x;
         const target = {
           x: zoom ? endpointX - targetWidth * 0.55 : 0,
-          y: zoom ? 314 : 295,
+          y: zoom ? 341 : 295,
           width: targetWidth,
           height: targetHeight
         };
@@ -839,7 +840,9 @@
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${tickEnd - top}"/>`);
           if (state.zoom ? tick === 18 || tick === 19 : major) {
             const anchor = tick === 0 ? "start" : tick === 20 ? "end" : "middle";
-            const labelY = 355 + (66 + 17) / modelStageScale;
+            const labelY = state.zoom
+              ? 355 + 39 / modelStageScale
+              : 355 + (66 + 17) / modelStageScale;
             const zoomFontSize = state.zoom ? ' font-size="8.5714"' : "";
             lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}"${zoomFontSize}>${tick}</text>`);
           }
@@ -989,7 +992,7 @@
 
       const setZoom = (zoom) => {
         state.zoom = zoom;
-        estimateLength = zoom ? 18.4 : 18;
+        estimateLength = 18.4;
         const zoomButton = document.querySelector("#zoom-toggle");
         zoomButton.setAttribute("aria-pressed", String(zoom));
         zoomButton.textContent = zoom ? "縮回整把尺" : "拉近查看端點";
