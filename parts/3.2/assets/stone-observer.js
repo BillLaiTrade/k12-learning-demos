@@ -120,6 +120,11 @@ export function mountStoneObserver(){
     line.setAttribute('stroke','#bf6338');line.setAttribute('stroke-width','2.5');line.setAttribute('stroke-dasharray','5 4');line.setAttribute('stroke-linecap','round');
     heightOverlay.append(line);return line;
   });
+  const heightMarkers=[0,1].map(()=>{
+    const marker=document.createElementNS(svgNS,'circle');
+    marker.setAttribute('r','3.5');marker.setAttribute('fill','#bf6338');marker.setAttribute('stroke','#fffefa');marker.setAttribute('stroke-width','1.25');
+    heightOverlay.append(marker);return marker;
+  });
   heightOverlay.setAttribute('aria-hidden','true');heightOverlay.setAttribute('focusable','false');
   Object.assign(heightOverlay.style,{position:'absolute',inset:'0',width:'100%',height:'100%',overflow:'hidden',pointerEvents:'none',zIndex:'2'});
   host.append(heightOverlay);
@@ -177,15 +182,15 @@ export function mountStoneObserver(){
   }
   function updateHeightOverlay(yValues){
     heightOverlay.setAttribute('viewBox',`0 0 ${width} ${height}`);
-    // 固定以尺框角落作為畫面錨點；量測高度只改變標記的垂直位置。
-    const anchorPoint=framePivot.localToWorld(new THREE.Vector3(rulerEdge,0,-rulerEdge)).project(camera);
-    const anchorX=(anchorPoint.x*.5+.5)*width;
+    // 每個標記都投影到後方垂直尺的實際位置，避免高低點因透視而離開尺柱。
     yValues.forEach((y,index)=>{
       const projected=framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge)).project(camera);
+      const anchorX=(projected.x*.5+.5)*width;
       const screenY=(-projected.y*.5+.5)*height;
       const line=heightGuides[index];
       line.setAttribute('x1',String(anchorX-36));line.setAttribute('x2',String(anchorX-3));
       line.setAttribute('y1',String(screenY));line.setAttribute('y2',String(screenY));
+      heightMarkers[index].setAttribute('cx',String(anchorX));heightMarkers[index].setAttribute('cy',String(screenY));
     });
   }
   function updateRulerGuides(ruler,worldPoints,guideDirection){
