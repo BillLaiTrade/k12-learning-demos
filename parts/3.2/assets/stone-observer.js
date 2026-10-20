@@ -117,12 +117,12 @@ export function mountStoneObserver(){
   const activePointers=new Map(),lengthReadout=document.querySelector('#stone-length'),widthReadout=document.querySelector('#stone-width'),heightReadout=document.querySelector('#stone-height');
   const svgNS='http://www.w3.org/2000/svg',heightOverlay=document.createElementNS(svgNS,'svg'),heightGuides=[0,1].map(()=>{
     const line=document.createElementNS(svgNS,'line');
-    line.setAttribute('stroke','#bf6338');line.setAttribute('stroke-width','2.5');line.setAttribute('stroke-dasharray','5 4');line.setAttribute('stroke-linecap','round');
+    line.setAttribute('stroke','#bf6338');line.setAttribute('stroke-width','1');line.setAttribute('stroke-dasharray','4 3');
     heightOverlay.append(line);return line;
   });
   const heightMarkers=[0,1].map(()=>{
     const marker=document.createElementNS(svgNS,'circle');
-    marker.setAttribute('r','3.5');marker.setAttribute('fill','#bf6338');marker.setAttribute('stroke','#fffefa');marker.setAttribute('stroke-width','1.25');
+    marker.setAttribute('r','2');marker.setAttribute('fill','#bf6338');
     heightOverlay.append(marker);return marker;
   });
   heightOverlay.setAttribute('aria-hidden','true');heightOverlay.setAttribute('focusable','false');
@@ -185,11 +185,15 @@ export function mountStoneObserver(){
     // 每個標記都投影到後方垂直尺的實際位置，避免高低點因透視而離開尺柱。
     yValues.forEach((y,index)=>{
       const projected=framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge)).project(camera);
+      const railAbove=framePivot.localToWorld(new THREE.Vector3(rulerEdge,y+.35,-rulerEdge)).project(camera);
       const anchorX=(projected.x*.5+.5)*width;
       const screenY=(-projected.y*.5+.5)*height;
+      const aboveX=(railAbove.x*.5+.5)*width,aboveY=(-railAbove.y*.5+.5)*height;
+      const directionLength=Math.hypot(aboveX-anchorX,aboveY-screenY)||1;
+      const dx=(aboveX-anchorX)/directionLength,dy=(aboveY-screenY)/directionLength;
       const line=heightGuides[index];
-      line.setAttribute('x1',String(anchorX-36));line.setAttribute('x2',String(anchorX-3));
-      line.setAttribute('y1',String(screenY));line.setAttribute('y2',String(screenY));
+      line.setAttribute('x1',String(anchorX+dx*2));line.setAttribute('x2',String(anchorX+dx*22));
+      line.setAttribute('y1',String(screenY+dy*2));line.setAttribute('y2',String(screenY+dy*22));
       heightMarkers[index].setAttribute('cx',String(anchorX));heightMarkers[index].setAttribute('cy',String(screenY));
     });
   }
