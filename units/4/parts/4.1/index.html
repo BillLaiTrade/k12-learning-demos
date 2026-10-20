@@ -83,7 +83,7 @@
     .bucket-detail-label { margin:0 0 5px; color:var(--green); font-size:.78rem; font-weight:800; letter-spacing:.05em; }
     .bucket-detail h3 { margin:0 0 8px; font-size:1.15rem; }
     .bucket-detail p:last-child { margin:0; color:var(--muted); font-size:.92rem; }
-    .bucket-choices { margin-top:14px; }
+    .bucket-choices { margin:0 0 12px; }
     .bucket-choices button { min-height:42px; padding:8px 14px; border:1px solid #c8d1c8; border-radius:999px; background:#fff; cursor:pointer; font-weight:700; }
     .bucket-choices button:hover { border-color:var(--green); }
     .bucket-choices button[aria-pressed="true"] { border-color:var(--green); background:var(--green); color:#fff; box-shadow:0 3px 10px #176b5330; }
@@ -224,6 +224,12 @@
             <h2>水桶是一個物體，桶身、提把支架和握把由什麼製成？</h2>
             <p>依序查看水桶的不同部位，找出製作各部位所用的材料。</p>
             <div class="visual">
+              <div class="choice-row bucket-choices" role="group" aria-label="切換水桶部位的圖像與材質說明">
+                <button type="button" data-bucket-part="overview" aria-pressed="true">整只水桶</button>
+                <button type="button" data-bucket-part="body" aria-pressed="false">桶身</button>
+                <button type="button" data-bucket-part="handle" aria-pressed="false">提把支架</button>
+                <button type="button" data-bucket-part="grip" aria-pressed="false">握把</button>
+              </div>
               <div class="bucket-scene">
                 <figure class="bucket-figure">
                   <div class="bucket-image-window">
@@ -237,19 +243,13 @@
                       <button class="bucket-hotspot bucket-hotspot-grip" type="button" data-bucket-part="grip" aria-label="點選握把，查看使用的材料"></button>
                     </div>
                   </div>
-                  <p class="bucket-image-hint">點選圖中的桶身、提把支架或握把，可放大查看。</p>
+                  <p class="bucket-image-hint">點選圖中的桶身、提把支架或握把，可放大查看；用上方按鈕隨時切換或返回整桶。</p>
                 </figure>
                 <div class="bucket-detail" aria-live="polite" aria-atomic="true">
                   <p class="bucket-detail-label" id="bucket-detail-material">物體</p>
                   <h3 id="bucket-detail-heading">整只水桶</h3>
                   <p id="bucket-detail-copy">水桶是看得見、摸得到的整體，由桶身、提把支架和握把組成。</p>
                 </div>
-              </div>
-              <div class="choice-row bucket-choices" role="group" aria-label="切換水桶部位的圖像與材質說明">
-                <button type="button" data-bucket-part="overview" aria-pressed="true">整只水桶</button>
-                <button type="button" data-bucket-part="body" aria-pressed="false">桶身</button>
-                <button type="button" data-bucket-part="handle" aria-pressed="false">提把支架</button>
-                <button type="button" data-bucket-part="grip" aria-pressed="false">握把</button>
               </div>
             </div>
             <div class="concept-note"><p><strong>概念重點：</strong>水桶是物體；物質是構成物體的成分。物質用來製作物體時，稱為材料。</p></div>
