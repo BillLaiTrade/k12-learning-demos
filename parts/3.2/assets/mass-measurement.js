@@ -4,13 +4,39 @@ import { makeStone } from './stone-observer.js';
 const MASS_G = 39;
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
-function stoneBottomY(stone) {
-  const probe = new THREE.Group();
-  const copy = stone.clone();
-  copy.position.set(0, 0, 0);
-  probe.add(copy);
-  probe.updateMatrixWorld(true);
-  return new THREE.Box3().setFromObject(copy).min.y;
+function stoneSupportPoint(stone) {
+  stone.updateMatrix();
+  const vertices = stone.geometry.attributes.position;
+  const point = new THREE.Vector3();
+  let minY = Infinity;
+  for (let index = 0; index < vertices.count; index += 1) {
+    point.fromBufferAttribute(vertices, index).applyMatrix4(stone.matrix);
+    minY = Math.min(minY, point.y);
+  }
+  const support = new THREE.Vector3();
+  let count = 0;
+  for (let index = 0; index < vertices.count; index += 1) {
+    point.fromBufferAttribute(vertices, index).applyMatrix4(stone.matrix);
+    if (Math.abs(point.y - minY) < 1e-5) {
+      support.x += point.x;
+      support.z += point.z;
+      count += 1;
+    }
+  }
+  support.set(support.x / count, minY, support.z / count);
+  return support;
+}
+
+function makeRestingStone() {
+  const stone = makeStone();
+  const vertices = stone.geometry.attributes.position;
+  for (let index = 0; index < vertices.count; index += 1) {
+    vertices.setY(index, Math.max(vertices.getY(index), -0.52));
+  }
+  vertices.needsUpdate = true;
+  stone.geometry.computeVertexNormals();
+  stone.geometry.computeBoundingSphere();
+  return stone;
 }
 
 function labelTexture(text, options = {}) {
@@ -38,8 +64,8 @@ function contactShadow(width, depth) {
   canvas.width = 128; canvas.height = 128;
   const ctx = canvas.getContext('2d');
   const gradient = ctx.createRadialGradient(64, 64, 5, 64, 64, 62);
-  gradient.addColorStop(0, 'rgba(32, 38, 33, .34)');
-  gradient.addColorStop(0.55, 'rgba(32, 38, 33, .16)');
+  gradient.addColorStop(0, 'rgba(32, 38, 33, .42)');
+  gradient.addColorStop(0.55, 'rgba(32, 38, 33, .2)');
   gradient.addColorStop(1, 'rgba(32, 38, 33, 0)');
   ctx.fillStyle = gradient; ctx.fillRect(0, 0, 128, 128);
   const texture = new THREE.CanvasTexture(canvas);
@@ -135,17 +161,21 @@ function makeBalance(scene, materials) {
   const leftPan = makePan(-1.82, materials);
   const rightPan = makePan(1.82, materials);
   beamPivot.add(leftPan, rightPan);
-  const stone = makeStone();
+  const stone = makeRestingStone();
   stone.scale.setScalar(0.43);
-  stone.rotation.set(0.24, -0.44, -0.04);
-  stone.position.set(0, -0.645 - stoneBottomY(stone), 0);
+  stone.rotation.set(0, -0.44, 0);
+  const support = stoneSupportPoint(stone);
+  // Rest the stone's flat natural contact patch directly on the pan.
+  const stoneRestY = -0.643 - support.y;
+  stone.position.set(0, stoneRestY + 0.78, 0);
   leftPan.add(stone);
   const panShadow = contactShadow(1.35, 0.9);
-  panShadow.position.set(0, -0.638, 0);
+  panShadow.position.set(support.x, -0.638, support.z);
+  panShadow.visible = false;
   leftPan.add(panShadow);
   base.position.y = 0;
   scene.add(base);
-  return { base, pivot: beamPivot, arc: scaleArc, leftPan, rightPan, stone };
+  return { base, pivot: beamPivot, arc: scaleArc, leftPan, rightPan, stone, panShadow, stoneRestY };
 }
 
 function makeDigitalScale(scene, materials) {
@@ -192,14 +222,16 @@ function makeDigitalScale(scene, materials) {
   tareLabel.position.set(0.88, 0.52, 0.89);
   base.add(tareLabel);
 
-  const stone = makeStone();
+  const stone = makeRestingStone();
   stone.scale.setScalar(0.43);
-  stone.rotation.set(0.24, -0.44, -0.04);
-  const restingY = 0.776 - stoneBottomY(stone);
+  stone.rotation.set(0, -0.44, 0);
+  const support = stoneSupportPoint(stone);
+  // The stone settles into the top plate instead of appearing to hover on a single vertex.
+  const restingY = 0.778 - support.y;
   stone.position.set(0, restingY, 0);
   stone.visible = false;
   const shadow = contactShadow(1.72, 1.1);
-  shadow.position.set(0, 0.781, 0);
+  shadow.position.set(support.x, 0.779, support.z);
   shadow.visible = false;
   scene.add(base);
   scene.add(stone);
@@ -264,17 +296,23 @@ export function mountMassMeasurement() {
   const balancePanel = document.querySelector('#balance-controls');
   const digitalPanel = document.querySelector('#digital-controls');
   const status = document.querySelector('#mass-status');
+  const balancePlaceButton = document.querySelector('#place-on-balance');
   const weightTray = document.querySelector('#weight-tray');
   const reading = document.querySelector('#mass-reading');
   const weightTotal = document.querySelector('#weight-total');
   const unitSelect = document.querySelector('#mass-unit');
   const balanceReadout = document.querySelector('#mass-value');
   const placeButton = document.querySelector('#place-on-scale');
+  const removeButton = document.querySelector('#remove-from-scale');
   let mode = 'balance';
+  let balancePlaced = false;
+  let placingBalance = false;
   let weights = [];
   let weighed = false;
-  let stoneTargetY = digital.restingY + 0.38;
+  let placingDigital = false;
+  let stoneTargetY = digital.restingY + 0.78;
   let hideStoneAfterMotion = false;
+  let balanceStoneTargetY = balance.stoneRestY + 0.78;
   let targetTilt = 0;
   let currentTilt = 0;
   let measured = false;
@@ -308,16 +346,18 @@ export function mountMassMeasurement() {
     });
     const total = weights.reduce((sum, value) => sum + value, 0);
     document.querySelectorAll('[data-weight]').forEach(button => {
-      button.disabled = total + Number(button.dataset.weight) > 60;
+      button.disabled = !balancePlaced || total + Number(button.dataset.weight) > 60;
     });
     weightTotal.textContent = `${total} g`;
     const difference = MASS_G - total;
-    targetTilt = clamp(difference * 0.006, -0.18, 0.18);
-    const balanced = total === MASS_G;
+    targetTilt = balancePlaced ? clamp(difference * 0.006, -0.18, 0.18) : 0;
+    const balanced = balancePlaced && total === MASS_G;
     measured = balanced;
     status.textContent = balanced
       ? '已達平衡！兩側質量相等。'
-      : '加入或移除砝碼，觀察天平兩側的變化。';
+      : balancePlaced
+        ? '石頭已放在左側秤盤；加入砝碼，觀察天平兩側的變化。'
+        : placingBalance ? '石頭正放到左側秤盤上…' : '先將石頭放上左側秤盤。';
     status.dataset.balanced = String(balanced);
     showReading();
   }
@@ -327,6 +367,7 @@ export function mountMassMeasurement() {
     drawWeights();
   }
   document.querySelectorAll('[data-weight]').forEach(button => button.addEventListener('click', () => {
+    if (!balancePlaced) return;
     const next = Number(button.dataset.weight);
     if (weights.reduce((sum, value) => sum + value, 0) + next > 60) return;
     weights.push(next);
@@ -334,6 +375,14 @@ export function mountMassMeasurement() {
   }));
   document.querySelector('#balance-undo').addEventListener('click', () => { weights.pop(); drawWeights(); });
   document.querySelector('#balance-reset').addEventListener('click', resetBalance);
+  balancePlaceButton.addEventListener('click', () => {
+    if (balancePlaced || placingBalance) return;
+    placingBalance = true;
+    balanceStoneTargetY = balance.stoneRestY;
+    balancePlaceButton.disabled = true;
+    balancePlaceButton.textContent = '正在放上左盤…';
+    status.textContent = '石頭正放到左側秤盤上…';
+  });
   unitSelect.addEventListener('change', showReading);
 
   function setMode(nextMode) {
@@ -353,20 +402,28 @@ export function mountMassMeasurement() {
     digital.stone.visible = mode === 'digital';
       digital.shadow.visible = mode === 'digital' && weighed;
     if (mode === 'digital') {
+      balance.panShadow.visible = false;
       balance.stone.visible = false;
       balance.stone.removeFromParent();
-      digital.stone.position.set(0, weighed ? digital.restingY : digital.restingY + 0.38, 0);
+      digital.stone.position.set(0, weighed || placingDigital ? digital.restingY : digital.restingY + 0.78, 0);
       digital.stone.scale.setScalar(0.43);
-      digital.stone.visible = weighed;
-      placeButton.disabled = weighed;
-      placeButton.textContent = weighed ? '石頭已放上秤盤' : '將石頭放上秤盤';
+      digital.stone.visible = weighed || placingDigital;
+      placeButton.disabled = weighed || placingDigital;
+      placeButton.textContent = weighed ? '石頭已放上秤盤' : placingDigital ? '正在放上秤盤…' : '將石頭放上秤盤';
+      removeButton.disabled = !weighed || placingDigital;
       digital.updateDisplay(weighed ? '39' : '0.0', 'g');
-      stoneTargetY = weighed ? digital.restingY : digital.restingY + 0.38;
-      status.textContent = weighed ? '石頭已放上秤盤；電子秤已讀取質量。' : '秤盤已歸零；按下按鈕，將同一塊石頭放上秤盤。';
+      stoneTargetY = weighed || placingDigital ? digital.restingY : digital.restingY + 0.78;
+      status.textContent = weighed
+        ? '石頭已放上秤盤；電子秤已讀取質量。'
+        : placingDigital ? '石頭正放到電子秤秤盤上…' : '秤盤已歸零；按下按鈕，將同一塊石頭放上秤盤。';
     } else {
       digital.stone.visible = false;
       balance.leftPan.add(balance.stone);
       balance.stone.visible = true;
+      balance.panShadow.visible = balancePlaced;
+      balanceStoneTargetY = balancePlaced ? balance.stoneRestY : balance.stoneRestY + 0.78;
+      balancePlaceButton.disabled = balancePlaced || placingBalance;
+      balancePlaceButton.textContent = balancePlaced ? '石頭已放上左盤' : placingBalance ? '正在放上左盤…' : '將石頭放上左盤';
       resetBalance();
     }
     measured = mode === 'digital' ? weighed : weights.reduce((sum, v) => sum + v, 0) === MASS_G;
@@ -378,24 +435,28 @@ export function mountMassMeasurement() {
   modeButtons.forEach(button => button.addEventListener('click', () => setMode(button.dataset.massMode)));
 
   document.querySelector('#place-on-scale').addEventListener('click', () => {
-    weighed = true;
-    measured = true;
+    if (weighed || placingDigital) return;
+    placingDigital = true;
+    measured = false;
     digital.stone.visible = true;
-    digital.shadow.visible = true;
     placeButton.disabled = true;
-    placeButton.textContent = '石頭已放上秤盤';
+    placeButton.textContent = '正在放上秤盤…';
+    removeButton.disabled = true;
     hideStoneAfterMotion = false;
     stoneTargetY = digital.restingY;
-    status.textContent = '石頭已放上秤盤；電子秤已讀取質量。';
-    status.dataset.balanced = 'true';
+    status.textContent = '石頭正放到電子秤秤盤上…';
+    status.dataset.balanced = 'false';
     showReading();
   });
   document.querySelector('#remove-from-scale').addEventListener('click', () => {
+    if (!weighed) return;
     weighed = false;
     measured = false;
+    removeButton.disabled = true;
+    placeButton.disabled = true;
     hideStoneAfterMotion = true;
-    stoneTargetY = digital.restingY + 0.38;
-    status.textContent = '秤盤已清空並歸零。放上同一塊石頭即可讀取質量。';
+    stoneTargetY = digital.restingY + 0.78;
+    status.textContent = '石頭正從秤盤取下…';
     status.dataset.balanced = 'false';
     showReading();
   });
@@ -415,11 +476,32 @@ export function mountMassMeasurement() {
     raf = requestAnimationFrame(render);
     currentTilt += (targetTilt - currentTilt) * 0.12;
     digital.stone.position.y += (stoneTargetY - digital.stone.position.y) * 0.12;
+    balance.stone.position.y += (balanceStoneTargetY - balance.stone.position.y) * 0.12;
+    if (mode === 'balance' && placingBalance && Math.abs(balanceStoneTargetY - balance.stone.position.y) < 0.015) {
+      placingBalance = false;
+      balancePlaced = true;
+      balance.panShadow.visible = true;
+      balancePlaceButton.textContent = '石頭已放上左盤';
+      drawWeights();
+    }
+    if (mode === 'digital' && placingDigital && Math.abs(stoneTargetY - digital.stone.position.y) < 0.015) {
+      placingDigital = false;
+      weighed = true;
+      measured = true;
+      digital.shadow.visible = true;
+      placeButton.disabled = true;
+      placeButton.textContent = '石頭已放上秤盤';
+      removeButton.disabled = false;
+      status.textContent = '石頭已放上秤盤；電子秤顯示 39 g。';
+      status.dataset.balanced = 'true';
+      showReading();
+    }
     if (hideStoneAfterMotion && Math.abs(stoneTargetY - digital.stone.position.y) < 0.015) {
       digital.stone.visible = false;
       digital.shadow.visible = false;
-    placeButton.disabled = false;
-    placeButton.textContent = '將石頭放上秤盤';
+      placeButton.disabled = false;
+      placeButton.textContent = '將石頭放上秤盤';
+      status.textContent = '秤盤已清空並歸零。放上同一塊石頭即可讀取質量。';
       hideStoneAfterMotion = false;
     }
     balance.pivot.rotation.z = currentTilt;
