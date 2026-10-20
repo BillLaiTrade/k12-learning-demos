@@ -315,9 +315,9 @@ export function mountMassMeasurement() {
     targetTilt = clamp(difference * 0.006, -0.18, 0.18);
     const balanced = total === MASS_G;
     measured = balanced;
-    status.textContent = balanced ? '平衡了：兩側質量相等，砝碼總質量是 39 g。' : difference > 0
-      ? `石頭一側較低；砝碼還少 ${difference} g。`
-      : `砝碼一側較低；比石頭多 ${Math.abs(difference)} g。`;
+    status.textContent = balanced
+      ? '已達平衡！兩側質量相等。'
+      : '加入或移除砝碼，觀察天平兩側的變化。';
     status.dataset.balanced = String(balanced);
     showReading();
   }
