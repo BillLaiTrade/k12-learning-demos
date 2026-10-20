@@ -356,7 +356,9 @@ export function mountMassMeasurement() {
     status.textContent = balanced
       ? '已達平衡！兩側質量相等。'
       : balancePlaced
-        ? '石頭已放在左側秤盤；加入砝碼，觀察天平兩側的變化。'
+        ? difference > 0
+          ? '石頭這一側較低，砝碼還不夠；可以再加一些。'
+          : '砝碼這一側較低，砝碼已過多；可以移除一些。'
         : placingBalance ? '石頭正放到左側秤盤上…' : '先將石頭放上左側秤盤。';
     status.dataset.balanced = String(balanced);
     showReading();
