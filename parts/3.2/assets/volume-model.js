@@ -28,6 +28,25 @@ function renderSolid(svg, length, width, height) {
   polygon([[length, 0, 0], [length, 0, depth], [length, height, depth], [length, height, 0]], '#91b7a2');
   polygon([[0, height, 0], [length, height, 0], [length, height, depth], [0, height, depth]], '#e0eee3');
 
+  // Alternate the visible unit-cube faces so each added cubic centimetre reads as a block.
+  const cubeShade = (index, colors) => colors[index % 2];
+  for (let x = 0; x < length; x++) {
+    for (let z = 0; z < depth; z++) {
+      const shade = x + z + height;
+      polygon([[x, height, z], [x + 1, height, z], [x + 1, height, z + 1], [x, height, z + 1]], cubeShade(shade, ['#d2e6d7', '#edf5e9']), '#789482', 0.8);
+    }
+    for (let y = 0; y < height; y++) {
+      const shade = x + y + depth;
+      polygon([[x, y, depth], [x + 1, y, depth], [x + 1, y + 1, depth], [x, y + 1, depth]], cubeShade(shade, ['#9fc6ac', '#c7dfcf']), '#718e7c', 0.8);
+    }
+  }
+  for (let z = 0; z < depth; z++) {
+    for (let y = 0; y < height; y++) {
+      const shade = length + y + z;
+      polygon([[length, y, z], [length, y, z + 1], [length, y + 1, z + 1], [length, y + 1, z]], cubeShade(shade, ['#79a68d', '#a9ceb5']), '#698875', 0.8);
+    }
+  }
+
   const grid = '#6f9380';
   for (let z = 0; z <= depth; z++) line(point(0, height, z), point(length, height, z), grid);
   for (let x = 0; x <= length; x++) line(point(x, height, 0), point(x, height, depth), grid);
@@ -47,7 +66,7 @@ function renderSolid(svg, length, width, height) {
     text((from[0] + to[0]) / 2 + dx, (from[1] + to[1]) / 2 + dy, label, color);
   });
 
-  svg.setAttribute('aria-label', '由每一公分刻線組成的長方體，長 ' + length + ' 公分、寬 ' + width + ' 公分、高 ' + height + ' 公分，體積 ' + length * width * height + ' 立方公分');
+  svg.setAttribute('aria-label', '由深淺交錯的 1 立方公分單位小方塊組成的長方體，長 ' + length + ' 公分、寬 ' + width + ' 公分、高 ' + height + ' 公分，體積 ' + length * width * height + ' 立方公分');
 }
 
 function renderLayers(svg, length, width, height) {
@@ -63,7 +82,7 @@ function renderLayers(svg, length, width, height) {
         width: cell - 1,
         height: cell - 1,
         rx: 2,
-        fill: x === 0 && z === 0 ? '#d99459' : (x + z) % 2 ? '#dcebe0' : '#c8dfd0',
+        fill: (x + z) % 2 ? '#c0dbc9' : '#e4efe5',
         stroke: '#75917e',
         'stroke-width': 0.8
       });
@@ -75,14 +94,14 @@ function renderLayers(svg, length, width, height) {
     const y = stackY + (height - layer - 1) * layerH;
     svgNode(svg, 'rect', {
       x: stackX, y, width: stackW, height: layerH - 1,
-      rx: 2, fill: layer % 2 ? '#a8cbb5' : '#c5dece',
+      rx: 2, fill: layer % 2 ? '#cfe2d4' : '#83ad92',
       stroke: '#668573', 'stroke-width': 0.9
     });
     if (layerH >= 15) svgNode(svg, 'text', { x: stackX + stackW + 8, y: y + layerH * 0.72, class: 'volume-layer-label' }, '1 cm');
   }
   svgNode(svg, 'text', { x: gridX + length * cell / 2, y: gridY + width * cell + 22, class: 'volume-layer-label' }, length * width + ' 個 1 cm³ 小方塊');
   svgNode(svg, 'text', { x: stackX + stackW / 2, y: stackY + height * layerH + 21, class: 'volume-layer-label' }, '共 ' + height + ' 層');
-  svg.setAttribute('aria-label', '每層底面有 ' + length + ' 乘 ' + width + ' 個單位方格，共 ' + length * width + ' 個；疊 ' + height + ' 層，共 ' + length * width * height + ' 個一立方公分小方塊');
+  svg.setAttribute('aria-label', '深淺交錯顯示每個單位小方塊；每層底面有 ' + length + ' 乘 ' + width + ' 個單位方格，共 ' + length * width + ' 個；疊 ' + height + ' 層，共 ' + length * width * height + ' 個一立方公分小方塊');
 }
 
 export function mountVolumeModel() {
