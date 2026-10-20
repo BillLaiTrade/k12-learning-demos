@@ -842,13 +842,13 @@
             const regularLabelY = 355 + (66 + 17) / modelStageScale;
             const closeupLabelY = top + 4.4 / modelStageScale;
             const labelY = regularLabelY + (closeupLabelY - regularLabelY) * state.zoom;
-            const opacity = 1 - Math.min(1, state.zoom * 8);
+            const opacity = 1 - Math.min(1, state.zoom * 12);
             lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}" font-size="${8.5714 + (1.1 - 8.5714) * state.zoom}" opacity="${opacity}">${tick}</text>`);
           }
           if (tick === 18 || tick === 19) {
             const labelGap = 8 * modelSvg.viewBox.baseVal.width / (modelScreen.getBoundingClientRect().width * modelStageScale);
             const labelY = tickEnd + labelGap;
-            const labelOpacity = Math.min(1, state.zoom * 10);
+            const labelOpacity = state.zoom < .015 ? 0 : 1;
             const labelFontSize = 11 * modelSvg.viewBox.baseVal.width / (modelScreen.getBoundingClientRect().width * modelStageScale);
             lines.push(`<text x="${x}" y="${labelY}" text-anchor="middle" font-size="${labelFontSize}" opacity="${labelOpacity}">${tick}</text>`);
           }
