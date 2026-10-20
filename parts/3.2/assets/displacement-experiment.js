@@ -4,15 +4,11 @@ export function mountDisplacementExperiment() {
   const rock = document.querySelector('#submerged-rock');
   const water = document.querySelector('#water');
   const status = document.querySelector('#displacement-status');
-  const finalWater = document.querySelector('#final-water');
-  const displaced = document.querySelector('#displaced');
-  const equation = document.querySelector('#displacement-equation');
-  const explanation = document.querySelector('#displacement-explanation');
   const placeButton = document.querySelector('#immerse');
   const resetButton = document.querySelector('#water-reset');
   const marks = [...document.querySelectorAll('#measuring-cylinder [data-volume]')];
 
-  if (![scene, cylinder, rock, water, status, finalWater, displaced, equation, explanation, placeButton, resetButton].every(Boolean)) return;
+  if (![scene, cylinder, rock, water, status, placeButton, resetButton].every(Boolean)) return;
 
   let immersed = false;
   let drag = null;
@@ -25,21 +21,15 @@ export function mountDisplacementExperiment() {
     cylinder.classList.remove('drop-ready');
     water.style.height = immersed ? '91.6667%' : '66.6667%';
     marks.forEach(mark => mark.classList.toggle('active', Number(mark.dataset.volume) === (immersed ? 55 : 40)));
-    finalWater.textContent = immersed ? '55 mL' : '尚未放入';
-    displaced.textContent = immersed ? '15 cm³' : '尚未量出';
     cylinder.setAttribute('aria-label', '量筒，目前水量 ' + (immersed ? '55' : '40') + ' 毫升');
     rock.setAttribute('aria-label', immersed ? '同一塊石頭已完全浸入量筒；可拖曳取出' : '同一塊石頭；可拖曳到量筒內，或按 Enter 放入');
     placeButton.disabled = immersed;
     resetButton.disabled = !immersed;
     status.dataset.state = immersed ? 'complete' : 'ready';
     if (immersed) {
-      status.textContent = '石頭已完全浸入。水位從 40 mL 升到 55 mL，上升 15 mL；可將石頭拖出量筒重新測量。';
-      equation.textContent = '55 mL − 40 mL = 15 mL';
-      explanation.textContent = '1 mL = 1 cm³，因此石頭體積是 15 cm³。';
+      status.textContent = '石頭已完全浸入。比較放入前後的水位；水位差就是石頭排開水的體積。可將石頭拖出重新測量。';
     } else {
       status.textContent = '拖曳石頭進入量筒，讓它完全浸入水中；也可使用下方按鈕。';
-      equation.textContent = '水位差＝石頭排開水的體積';
-      explanation.textContent = '石頭完全浸入後，讀取前後水位差；1 mL = 1 cm³。';
     }
   }
 

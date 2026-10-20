@@ -298,10 +298,7 @@ export function mountMassMeasurement() {
   const status = document.querySelector('#mass-status');
   const balancePlaceButton = document.querySelector('#place-on-balance');
   const weightTray = document.querySelector('#weight-tray');
-  const reading = document.querySelector('#mass-reading');
   const weightTotal = document.querySelector('#weight-total');
-  const unitSelect = document.querySelector('#mass-unit');
-  const balanceReadout = document.querySelector('#mass-value');
   const placeButton = document.querySelector('#place-on-scale');
   const removeButton = document.querySelector('#remove-from-scale');
   let mode = 'balance';
@@ -316,21 +313,10 @@ export function mountMassMeasurement() {
   let balanceStoneTargetY = balance.stoneRestY + 0.78;
   let targetTilt = 0;
   let currentTilt = 0;
-  let measured = false;
   let width = 0, height = 0;
 
   function showReading() {
-    const unit = unitSelect.value;
-    const values = { g: ['39', 'g', '39 g'], kg: ['0.039', 'kg', '0.039 kg'], mg: ['39,000', 'mg', '39,000 mg'] };
-    const [value, label, text] = values[unit];
-    reading.textContent = measured && mode === 'digital' && weighed ? `${value} ${label}` : '0.0 g';
-    digital.updateDisplay(measured && mode === 'digital' && weighed ? value : '0.0', label);
-    balanceReadout.textContent = measured ? text : '尚待秤量';
-    unitSelect.disabled = !measured;
-    document.querySelector('#mass-readout-note').textContent = measured
-      ? `同一塊石頭的質量是 ${text}；換單位時數值表示改變，石頭本身沒有改變。`
-      : '秤量後可切換單位，觀察數值表示如何改變；物體的質量保持不變。';
-    if (mode === 'digital' && weighed) status.textContent = `石頭已放上秤盤；電子秤顯示 ${value} ${label}。`;
+    digital.updateDisplay(mode === 'digital' && weighed ? '39' : '0.0', 'g');
   }
 
   function clearWeightModels() {
@@ -371,7 +357,6 @@ export function mountMassMeasurement() {
     const difference = MASS_G - total;
     targetTilt = balancePlaced ? clamp(difference * 0.006, -0.18, 0.18) : 0;
     const balanced = balancePlaced && total === MASS_G;
-    measured = balanced;
     status.textContent = balanced
       ? '已達平衡！兩側質量相等。'
       : balancePlaced
@@ -404,7 +389,6 @@ export function mountMassMeasurement() {
     balancePlaceButton.textContent = '正在放上左盤…';
     status.textContent = '石頭正放到左側秤盤上…';
   });
-  unitSelect.addEventListener('change', showReading);
 
   function setMode(nextMode) {
     mode = nextMode;
@@ -447,7 +431,6 @@ export function mountMassMeasurement() {
       balancePlaceButton.textContent = balancePlaced ? '石頭已放上左盤' : placingBalance ? '正在放上左盤…' : '將石頭放上左盤';
       resetBalance();
     }
-    measured = mode === 'digital' ? weighed : weights.reduce((sum, v) => sum + v, 0) === MASS_G;
     showReading();
     camera.position.set(mode === 'balance' ? 0.8 : 3.1, mode === 'balance' ? 3.25 : 3.1, mode === 'balance' ? 9.4 : 8.2);
     camera.lookAt(0, mode === 'balance' ? 1.05 : 0.78, 0);
@@ -458,7 +441,6 @@ export function mountMassMeasurement() {
   document.querySelector('#place-on-scale').addEventListener('click', () => {
     if (weighed || placingDigital) return;
     placingDigital = true;
-    measured = false;
     digital.stone.visible = true;
     placeButton.disabled = true;
     placeButton.textContent = '正在放上秤盤…';
@@ -472,7 +454,6 @@ export function mountMassMeasurement() {
   document.querySelector('#remove-from-scale').addEventListener('click', () => {
     if (!weighed) return;
     weighed = false;
-    measured = false;
     removeButton.disabled = true;
     placeButton.disabled = true;
     hideStoneAfterMotion = true;
@@ -508,12 +489,11 @@ export function mountMassMeasurement() {
     if (mode === 'digital' && placingDigital && Math.abs(stoneTargetY - digital.stone.position.y) < 0.015) {
       placingDigital = false;
       weighed = true;
-      measured = true;
       digital.shadow.visible = true;
       placeButton.disabled = true;
       placeButton.textContent = '石頭已放上秤盤';
       removeButton.disabled = false;
-      status.textContent = '石頭已放上秤盤；電子秤顯示 39 g。';
+      status.textContent = '石頭已放穩；請讀取秤面上的數值。';
       status.dataset.balanced = 'true';
       showReading();
     }
