@@ -117,8 +117,8 @@
     .ruler-box { margin: 17px 0; padding: 16px; border-radius: 16px; background: #f4f6ef; border: 1px solid var(--line); }
     .ruler-caption { color: var(--muted); font-size: .88rem; }
     .ruler { width: 100%; height: auto; display: block; margin: 10px 0 0; }
-    .ruler .base { fill: #f9e9b9; stroke: #b09a62; stroke-width: 1.5; }
-    .ruler .tick { stroke: #26383a; stroke-width: 2; }
+    .ruler .base { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
+    .ruler .tick { stroke: #26383a; stroke-width: 1.5; }
     .ruler .tick-major { stroke-width: 3; }
     .ruler text { fill: #26383a; font: 15px system-ui, sans-serif; }
     .ruler .marker { stroke: #b84c2d; stroke-width: 4; }
@@ -284,10 +284,10 @@
           <h2>只說「這支鉛筆很長」，別人怎麼知道它到底有多長？</h2>
           <p>「很長」是感覺，別人不一定和你想的一樣。測量能把觀察變成具體數字，讓結果可以說清楚、記下來，也能和別人比較。</p>
           <figure class="measurement-meaning-visual">
-            <svg viewBox="0 0 720 210" role="img" aria-label="一支鉛筆對齊直尺的零刻度；尺面每公分分成十個毫米刻度">
+            <svg viewBox="0 0 720 230" role="img" aria-label="一支鉛筆對齊直尺的零刻度；尺面每公分分成十個毫米刻度">
               <g class="ruler-visual">
-                <rect x="18" y="108" width="684" height="72" rx="10" fill="#f4e7c5" stroke="#ac9563" stroke-width="2"></rect>
-                <g id="measurement-ruler-ticks" fill="none" stroke="#34433c" stroke-width="1.4"></g>
+                <rect x="18" y="108" width="684" height="72" rx="10" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
+                <g id="measurement-ruler-ticks" fill="none" stroke="#26383a" stroke-width="1.5"></g>
                 <g id="measurement-ruler-labels" fill="#26383a" font-size="14" text-anchor="middle"></g>
                 <path d="M42 84v24 M588 84v24" fill="none" stroke="#718078" stroke-width="1.5" stroke-dasharray="4 4"></path>
               </g>
@@ -329,11 +329,11 @@
               </label>
             </div>
             <div class="length-conversion-pencil">
-              <svg id="length-conversion-ruler" viewBox="0 0 720 170" role="img" aria-label="同一支鉛筆對齊刻度尺；目前以公分表示長度">
+            <svg id="length-conversion-ruler" viewBox="0 0 720 190" role="img" aria-label="同一支鉛筆對齊刻度尺；目前以公分表示長度">
                 <image href="assets/pencil-photo.webp" x="42" y="14" width="546" height="29" preserveAspectRatio="none"></image>
                 <path d="M42 43v40 M588 43v40" fill="none" stroke="#718078" stroke-width="1.4" stroke-dasharray="4 4"></path>
-                <rect x="18" y="82" width="684" height="66" rx="9" fill="#f4e7c5" stroke="#ac9563" stroke-width="2"></rect>
-                <g id="length-conversion-ticks" fill="none" stroke="#34433c" stroke-width="1.4"></g>
+                <rect x="18" y="82" width="684" height="66" rx="9" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
+                <g id="length-conversion-ticks" fill="none" stroke="#26383a" stroke-width="1.5"></g>
                 <g id="length-conversion-labels" fill="#26383a" font-size="12" text-anchor="middle"></g>
               </svg>
             </div>
@@ -387,7 +387,7 @@
           <div class="division-visual" aria-label="完整三十公分直尺的等分示意；鉛筆端點位置固定">
             <svg id="division-ruler" viewBox="0 0 520 140" role="img" aria-label="零至三十公分直尺，分成十五等分，每格兩公分；鉛筆固定長十八點二公分，左端對齊零刻度">
               <image href="assets/pencil-photo.webp" x="20" y="15" width="291.2" height="15.46" preserveAspectRatio="none"></image>
-              <rect x="20" y="52" width="480" height="50" rx="6" fill="#f4e7c5" stroke="#ac9563" stroke-width="2"></rect>
+              <rect x="20" y="52" width="480" height="50" rx="6" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
               <g id="division-ticks"></g><path id="division-endpoint" d="M311.2 32v78" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
               <text id="division-unit-label" x="20" y="126" fill="#26383a" font-size="13">0 cm</text><text id="division-unit-label-end" x="500" y="126" text-anchor="end" fill="#26383a" font-size="13">30 cm</text>
             </svg>
@@ -518,7 +518,7 @@
         if (millimeter % 10 === 0) {
           const centimeter = document.createElementNS(svgNamespace, "text");
           centimeter.setAttribute("x", String(x));
-          centimeter.setAttribute("y", "165");
+          centimeter.setAttribute("y", "201");
           const centimeterValue = millimeter / 10;
           centimeter.textContent = String(centimeterValue);
           rulerLabelGroup.append(centimeter);
@@ -898,7 +898,7 @@
           if (index % conversion.labelEvery === 0) {
             const text = document.createElementNS(svgNamespace, "text");
             text.setAttribute("x", String(x));
-            text.setAttribute("y", "132");
+            text.setAttribute("y", "165");
             if (index === 0) text.setAttribute("text-anchor", "start");
             if (index === conversion.divisions) text.setAttribute("text-anchor", "end");
             text.textContent = conversion.label(index);
