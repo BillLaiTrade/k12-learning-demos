@@ -583,7 +583,7 @@
         const photoXOffset = startX - (pencilPhoto.x + pencilPhoto.width * pencilPhoto.visibleLeft) * pencilScale;
         document.querySelector("#pencil-object").setAttribute("transform", `translate(${photoXOffset} ${pencilViewOffset}) scale(${pencilScale})`);
         const pencilEndY = (pencilPhoto.y + pencilPhoto.height * pencilPhoto.rightEdgeCenterY) * pencilScale + pencilViewOffset;
-        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V355`);
+        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V${state.zoom ? 361 : 355}`);
       };
       const animateModelView = (zoom) => {
         const targetHeight = zoom ? 78 : 170;
@@ -600,7 +600,7 @@
         cancelAnimationFrame(modelViewAnimationFrame);
         const start = { ...modelViewBox };
         const startPencilOffset = pencilViewOffset;
-        const targetPencilOffset = -18;
+        const targetPencilOffset = zoom ? -15 : -18;
         const startTime = performance.now();
         const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700;
         const frame = (now) => {
