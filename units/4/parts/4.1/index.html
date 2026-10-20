@@ -211,8 +211,8 @@
         <section class="lesson-card" id="s1">
           <div class="card-side"><span class="card-number">01</span><h3>物體和物質</h3><span class="card-role">先分清楚正在研究什麼</span></div>
           <div class="card-main">
-            <h2>這個水桶是什麼做的？桶子和材料有什麼不同？</h2>
-            <p>看看這只水桶由哪些部分組成，各部分用了什麼材料。</p>
+            <h2>水桶是一個物體，桶身、提把支架和握把由什麼製成？</h2>
+            <p>依序查看水桶的不同部位，找出製作各部位所用的材料。</p>
             <div class="visual">
               <div class="bucket-scene">
                 <figure class="bucket-figure">
@@ -221,7 +221,7 @@
                 <div class="bucket-detail" aria-live="polite" aria-atomic="true">
                   <p class="bucket-detail-label" id="bucket-detail-material">物體</p>
                   <h3 id="bucket-detail-heading">整只水桶</h3>
-                  <p id="bucket-detail-copy">水桶是一個看得見、摸得到的物體，由不同部位組成。</p>
+                  <p id="bucket-detail-copy">水桶是看得見、摸得到的整體，由桶身、提把支架和握把組成。</p>
                 </div>
               </div>
               <div class="choice-row bucket-choices" role="group" aria-label="切換水桶部位的圖像與材質說明">
@@ -231,10 +231,11 @@
                 <button type="button" data-bucket-part="grip" aria-pressed="false">握把</button>
               </div>
             </div>
-            <div class="concept-note"><p><strong>先抓住這個差別：</strong>水桶是物體；鐵和塑膠是構成水桶不同部位的物質。「材料」是物質在製作物體時的用途。</p></div>
+            <div class="concept-note"><p><strong>概念重點：</strong>水桶是物體；物質是構成物體的成分。物質用來製作物體時，稱為材料。</p></div>
             <p class="prompt">水桶觀察紀錄</p>
             <dl class="record-task" aria-label="水桶觀察紀錄">
               <dt>桶身材料</dt><dd>鐵製材料</dd>
+              <dt>提把支架材料</dt><dd>鐵絲</dd>
               <dt>握把材料</dt><dd>塑膠材料</dd>
               <dt>觀察發現</dt><dd>同一物體的不同部位可使用不同材料</dd>
             </dl>
@@ -411,10 +412,10 @@
 
   <script>
     const bucketPartViews = {
-      overview: { label:"物體", heading:"整只水桶", copy:"水桶是一個看得見、摸得到的物體，由不同部位組成。", alt:"完整的空水桶，包含鐵製桶身、鐵絲提把和紅色塑膠握把" },
-      body: { label:"鐵製材料", heading:"桶身", copy:"桶身是水桶的一部分，由鐵製材料製成；水桶這個物體不等於鐵這種物質。", alt:"水桶的鐵製桶身" },
-      handle: { label:"鐵製材料", heading:"提把支架", copy:"提把支架是連接水桶兩側的鐵絲，也屬於水桶的一部分。", alt:"水桶兩側連接桶身的鐵絲提把支架" },
-      grip: { label:"塑膠材料", heading:"握把", copy:"握把套在提把支架上，方便手握；它使用塑膠材料，和鐵製支架不同。", alt:"水桶提把中央的紅色塑膠握把" }
+      overview: { label:"物體", heading:"整只水桶", copy:"水桶是看得見、摸得到的整體，由桶身、提把支架和握把組成。", alt:"完整的空水桶，包含鐵製桶身、鐵絲提把和紅色塑膠握把" },
+      body: { label:"物體的一部分", heading:"桶身", copy:"桶身是水桶的一部分，使用鐵製材料製成。", alt:"水桶的鐵製桶身" },
+      handle: { label:"物體的一部分", heading:"提把支架", copy:"提把支架連接水桶兩側，由鐵絲製成。", alt:"水桶兩側連接桶身的鐵絲提把支架" },
+      grip: { label:"物體的一部分", heading:"握把", copy:"握把套在提把支架上，方便手握，使用塑膠製成。", alt:"水桶提把中央的紅色塑膠握把" }
     };
     function selectBucketPart(part) {
       const view=bucketPartViews[part];
