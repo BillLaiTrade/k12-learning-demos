@@ -6,12 +6,13 @@ export function mountDisplacementExperiment() {
   const status = document.querySelector('#displacement-status');
   const finalWater = document.querySelector('#final-water');
   const displaced = document.querySelector('#displaced');
+  const equation = document.querySelector('#displacement-equation');
   const explanation = document.querySelector('#displacement-explanation');
   const placeButton = document.querySelector('#immerse');
   const resetButton = document.querySelector('#water-reset');
   const marks = [...document.querySelectorAll('#measuring-cylinder .mark')];
 
-  if (![scene, cylinder, rock, water, status, finalWater, displaced, explanation, placeButton, resetButton].every(Boolean)) return;
+  if (![scene, cylinder, rock, water, status, finalWater, displaced, equation, explanation, placeButton, resetButton].every(Boolean)) return;
 
   let immersed = false;
   let drag = null;
@@ -33,10 +34,12 @@ export function mountDisplacementExperiment() {
     status.dataset.state = immersed ? 'complete' : 'ready';
     if (immersed) {
       status.textContent = '石頭已完全浸入。水位從 40 mL 升到 55 mL，上升 15 mL；可將石頭拖出量筒重新測量。';
-      explanation.textContent = '55 mL − 40 mL = 15 mL。因為 1 mL = 1 cm³，所以這塊石頭的體積是 15 cm³。';
+      equation.textContent = '55 mL − 40 mL = 15 mL';
+      explanation.textContent = '1 mL = 1 cm³，因此石頭體積是 15 cm³。';
     } else {
       status.textContent = '拖曳石頭進入量筒，讓它完全浸入水中；也可使用下方按鈕。';
-      explanation.textContent = '石頭完全浸入後，讀取量筒的水位變化；水位差代表石頭排開的水量。';
+      equation.textContent = '水位差＝石頭排開水的體積';
+      explanation.textContent = '石頭完全浸入後，讀取前後水位差；1 mL = 1 cm³。';
     }
   }
 
