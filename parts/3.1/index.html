@@ -188,10 +188,10 @@
     #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
     #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.5; }
     #shared-scale .ruler-line.major { stroke-width: 3; }
-    #shared-scale[data-zoom="true"] { font: 12px system-ui, sans-serif; }
-    #shared-scale[data-zoom="true"] .ruler-body { stroke-width: 1.1; }
-    #shared-scale[data-zoom="true"] .ruler-line { stroke-width: .8; }
-    #shared-scale[data-zoom="true"] .ruler-line.major { stroke-width: 1.5; }
+    #shared-scale[data-zoom="true"] { font: 6px system-ui, sans-serif; }
+    #shared-scale[data-zoom="true"] .ruler-body { stroke-width: .5; }
+    #shared-scale[data-zoom="true"] .ruler-line { stroke-width: .35; }
+    #shared-scale[data-zoom="true"] .ruler-line.major { stroke-width: .65; }
     #model-screen[data-zoom="true"] #pencil-end-guide { stroke-width: .7; stroke-dasharray: 2 2; }
     .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
     #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 330px; pointer-events: none; }
@@ -575,15 +575,15 @@
         const photoXOffset = startX - (pencilPhoto.x + pencilPhoto.width * pencilPhoto.visibleLeft) * pencilScale;
         document.querySelector("#pencil-object").setAttribute("transform", `translate(${photoXOffset} ${pencilViewOffset}) scale(${pencilScale})`);
         const pencilEndY = (pencilPhoto.y + pencilPhoto.height * pencilPhoto.rightEdgeCenterY) * pencilScale + pencilViewOffset;
-        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V423`);
+        document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V${state.zoom ? 400 : 423}`);
       };
       const animateModelView = (zoom) => {
-        const targetHeight = zoom ? 78 : 170;
+        const targetHeight = zoom ? 51 : 170;
         const targetWidth = zoom ? targetHeight * (760 / 170) : 760;
         const endpointX = 80 + estimateEndpoint() * (640 / 30);
         const target = {
           x: zoom ? endpointX - targetWidth * 0.55 : 0,
-          y: zoom ? 345 : 295,
+          y: zoom ? 354 : 295,
           width: targetWidth,
           height: targetHeight
         };
@@ -829,14 +829,14 @@
           const x = 80 + (tick * 640) / 30;
           const major = tick % 5 === 0;
           const top = major ? 380 : 390;
-          const tickEnd = state.zoom ? 407 : 423;
+          const tickEnd = state.zoom ? 396 : 423;
           lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${tickEnd - top}"/>`);
           if (state.zoom ? tick >= zoomLabelStart && tick <= zoomLabelEnd : major || tick === 18 || tick === 19) {
             const anchor = tick === 0 ? "start" : tick === 30 ? "end" : "middle";
-            lines.push(`<text x="${x}" y="${state.zoom ? 420 : 448}" text-anchor="${anchor}">${tick}${tick === 0 ? " cm" : ""}</text>`);
+            lines.push(`<text x="${x}" y="${state.zoom ? 399 : 448}" text-anchor="${anchor}">${tick}${tick === 0 ? " cm" : ""}</text>`);
           }
         }
-        ruler.innerHTML = `<rect class="ruler-body" x="66" y="380" width="668" height="43" rx="5"/>${lines.join("")}`;
+        ruler.innerHTML = `<rect class="ruler-body" x="66" y="380" width="668" height="${state.zoom ? 20 : 43}" rx="5"/>${lines.join("")}`;
         document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
         document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${endX} 420`);
         document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
