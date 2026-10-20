@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f1e8">
-  <title>雨水桶裡的水變混濁了，裡面到底有什麼？</title>
+  <title>水桶裡的水變混濁了，裡面到底有什麼？</title>
   <style>
     :root { color-scheme:light; --ink:#263a36; --muted:#5c6c65; --paper:#f4f1e8; --card:#fffdf8; --line:#d9d3c4; --green:#176b53; --green2:#e2efe8; --gold:#d7a94a; --rust:#a84d31; --blue:#477ba4; --shadow:0 10px 26px #243a3509; }
     * { box-sizing:border-box; }
@@ -62,6 +62,27 @@
     .choice-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
     .choice-row button,.action-button { min-height:40px; padding:8px 13px; border:1px solid #c8d1c8; border-radius:10px; background:#fff; cursor:pointer; font-weight:700; }
     .choice-row button[aria-pressed="true"],.choice-row button[aria-checked="true"] { border-color:var(--green); background:var(--green2); color:#174c3e; box-shadow:inset 0 0 0 1px var(--green); }
+    .bucket-scene { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(190px,.85fr); gap:18px; align-items:center; }
+    .bucket-figure { display:grid; justify-items:center; gap:8px; margin:0; padding:12px; border:1px solid var(--line); border-radius:14px; background:linear-gradient(145deg,#fffefa,#f0f3ed); }
+    .bucket-image-window { position:relative; width:100%; aspect-ratio:1.28; overflow:hidden; border-radius:10px; background:radial-gradient(ellipse at 50% 68%,#e6ece6 0,transparent 66%); }
+    .bucket-image { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:contain; transform:scale(1); transform-origin:50% 50%; transition:transform .35s ease; }
+    .bucket-image[data-view="body"] { transform:scale(1.7); transform-origin:50% 68%; }
+    .bucket-image[data-view="handle"] { transform:scale(2); transform-origin:50% 0%; }
+    .bucket-image[data-view="grip"] { transform:scale(4.2); transform-origin:50% 6%; }
+    .bucket-figure figcaption { min-height:1.4em; color:var(--muted); font-size:.8rem; text-align:center; }
+    .bucket-detail { min-height:150px; padding:18px; border:1px solid var(--line); border-radius:14px; background:#fff; }
+    .bucket-detail-label { margin:0 0 5px; color:var(--green); font-size:.78rem; font-weight:800; letter-spacing:.05em; }
+    .bucket-detail h3 { margin:0 0 8px; font-size:1.15rem; }
+    .bucket-detail p:last-child { margin:0; color:var(--muted); font-size:.92rem; }
+    .bucket-choices { margin-top:14px; }
+    .bucket-choices button { min-height:42px; padding:8px 14px; border:1px solid #c8d1c8; border-radius:999px; background:#fff; cursor:pointer; font-weight:700; }
+    .bucket-choices button:hover { border-color:var(--green); }
+    .bucket-choices button[aria-pressed="true"] { border-color:var(--green); background:var(--green); color:#fff; box-shadow:0 3px 10px #176b5330; }
+    .concept-note { margin:16px 0; padding:14px 16px; border-left:4px solid #b8cda9; border-radius:0 12px 12px 0; background:#f0f5eb; }
+    .concept-note p { margin:0; }
+    .record-task { display:grid; grid-template-columns:145px 1fr; gap:10px 16px; align-items:center; margin:14px 0; padding:16px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
+    .record-task dt { color:var(--muted); font-size:.9rem; }
+    .record-task dd { min-height:32px; margin:0; padding:4px 9px; border-bottom:1px solid #9aaa9f; }
     button:focus-visible,a:focus-visible { outline:3px solid #d6a83d; outline-offset:2px; }
     .live-note { min-height:48px; margin:9px 0 0; padding:10px 12px; border-radius:10px; background:#edf3ee; color:#36554a; font-size:.9rem; }
     .sample-scene { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-items:end; gap:12px; text-align:center; }
@@ -124,6 +145,9 @@
       .card-side h3 { margin:0; }
       .sample-scene { gap:5px; }
       .sample-item svg { height:98px; }
+      .bucket-scene { grid-template-columns:1fr; }
+      .bucket-detail { min-height:auto; }
+      .record-task { grid-template-columns:100px 1fr; }
       .state-board,.property-grid,.class-grid { grid-template-columns:1fr; }
       .state-tile { min-height:unset; display:grid; grid-template-columns:70px 1fr; align-items:center; text-align:left; }
       .state-tile strong { margin:0; }
@@ -141,23 +165,13 @@
     <div class="brand-row"><a class="brand" href="../../index.html">← 物質、分離與水溶液</a><span class="crumb">國二上・自然科學</span></div>
     <div class="hero">
       <div>
-        <div class="eyebrow">從雨水樣本認識物質</div>
-        <h1>雨水桶裡的水變混濁了，裡面到底有什麼？</h1>
-        <p class="hero-copy">學校打算用收集的雨水澆灌花圃，雨水桶中的水卻變混濁了。要弄清水樣由什麼組成，先分辨桶和材料，記錄物質的性質與變化，再根據證據替樣本分類。</p>
+        <div class="eyebrow">從一只水桶開始認識物質</div>
+        <h1>水桶裡的水變混濁了，裡面到底有什麼？</h1>
+        <p class="hero-copy">花圃旁的水桶中有一份變混濁的水樣。要了解水樣的組成，先分清楚水桶這個物體與構成它的材料，再沿著觀察紀錄逐步整理證據。</p>
       </div>
       <aside class="hero-note">
         <strong>先別急著猜水裡有什麼</strong>
         <p>混濁是觀察線索，不能單靠外觀證明組成。沿著樣本紀錄逐步補上證據。</p>
-        <svg class="hero-scene" viewBox="0 0 300 184" role="img" aria-label="花圃旁的雨水桶，桶中水樣混濁">
-          <path d="M15 154h270" stroke="#9cad91" stroke-width="4" stroke-linecap="round"/>
-          <path d="M26 153c8-25 17-27 26 0m0 0c7-34 17-35 25 0m153 0c7-27 17-29 25 0m0 0c7-36 19-36 26 0" fill="#92a57a" stroke="#69815e" stroke-width="3"/>
-          <path d="M88 55h124l-10 91c-1 9-7 14-16 14h-71c-9 0-15-5-16-14z" fill="#aeb8b1" stroke="#60736b" stroke-width="4"/>
-          <path d="M94 104h112l-5 42c-1 8-7 13-15 13h-72c-8 0-14-5-15-13z" fill="#a9824e" opacity=".88"/>
-          <path d="M88 55c0-8 28-15 62-15s62 7 62 15-28 15-62 15-62-7-62-15z" fill="#c7d0c9" stroke="#60736b" stroke-width="4"/>
-          <ellipse cx="150" cy="56" rx="43" ry="8" fill="#a9824e"/>
-          <path d="M105 76h90M102 87h96" stroke="#d9dfd8" stroke-width="3" opacity=".75"/>
-          <circle cx="120" cy="118" r="3" fill="#745b3e"/><circle cx="157" cy="132" r="4" fill="#745b3e"/><circle cx="180" cy="112" r="3" fill="#745b3e"/>
-        </svg>
       </aside>
     </div>
   </header>
@@ -168,7 +182,7 @@
         <p class="route-label">沿著問題一步步探索</p>
         <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／10 卡</p>
         <div class="route-inner">
-          <a href="#s1" aria-current="step"><b>01</b><span>這個雨水桶是什麼做的？桶子和材料有什麼不同？</span></a>
+          <a href="#s1" aria-current="step"><b>01</b><span>這個水桶是什麼做的？桶子和材料有什麼不同？</span></a>
           <a href="#s2"><b>02</b><span>水會流、土能堆，空氣又裝在哪裡？</span></a>
           <a href="#s3"><b>03</b><span>固體、液體和氣體裡的粒子，各自在做什麼？</span></a>
           <a href="#s4"><b>04</b><span>水結冰或蒸發後，還是原來的水嗎？</span></a>
@@ -183,7 +197,7 @@
         <section class="record-panel" aria-labelledby="record-title">
           <h2 id="record-title">雨水樣本紀錄</h2>
           <dl class="record-list">
-            <div><dt>研究物件</dt><dd id="record-object">雨水桶、桶中水</dd></div>
+            <div><dt>研究物體</dt><dd id="record-object">水桶</dd></div>
             <div><dt>狀態</dt><dd id="record-state">待觀察</dd></div>
             <div><dt>性質</dt><dd id="record-property">待整理</dd></div>
             <div><dt>變化</dt><dd id="record-change">待整理</dd></div>
@@ -193,33 +207,43 @@
       </nav>
 
       <div class="cards">
-        <div class="section-top"><h2>從物件到樣本證據</h2><span class="progress-copy">觀察、操作，再把結果連回概念</span></div>
+        <div class="section-top"><h2>從一只水桶，開始認識物質</h2><span class="progress-copy">先看情境，再找線索、留下紀錄</span></div>
 
         <section class="lesson-card" id="s1">
-          <div class="card-side"><span class="card-number">01</span><h3>物件和材料</h3><span class="card-role">先分清楚正在研究什麼</span></div>
+          <div class="card-side"><span class="card-number">01</span><h3>物體和物質</h3><span class="card-role">先分清楚正在研究什麼</span></div>
           <div class="card-main">
-            <h2>這個雨水桶是什麼做的？桶子和材料有什麼不同？</h2>
-            <p>「雨水桶」是一個物件；桶身則是製作這個物件的材料。桶裡的水和花圃土壤，也都是我們可以取來研究的樣本。物件不一定只由一種材料做成。</p>
-            <figure class="visual">
-              <div class="sample-scene">
-                <div class="sample-item">
-                  <svg viewBox="0 0 120 112" role="img" aria-label="沒有鏽斑的雨水桶物件"><path d="M28 23h64l-5 70c-1 7-5 11-12 11H45c-7 0-11-4-12-11z" fill="#b8c3bc" stroke="#64766e" stroke-width="4"/><ellipse cx="60" cy="23" rx="32" ry="9" fill="#d8ded9" stroke="#64766e" stroke-width="4"/><ellipse cx="60" cy="24" rx="20" ry="5" fill="#f8f7f0"/><path d="M36 48h47M34 59h51" stroke="#e5e9e5" stroke-width="3"/></svg>
-                  雨水桶（物件）
-                </div>
-                <div class="sample-item">
-                  <svg viewBox="0 0 120 112" role="img" aria-label="桶身材料示意"><path d="M22 37h76v52H22z" fill="#aebbb3" stroke="#64766e" stroke-width="4"/><path d="M30 48h60M30 60h60M30 72h60" stroke="#e5e9e5" stroke-width="3"/><path d="M42 28h36v9H42z" fill="#7c9186"/></svg>
-                  桶身（材料）
-                </div>
-                <div class="sample-item">
-                  <svg viewBox="0 0 120 112" role="img" aria-label="雨水和土壤兩種待研究樣本"><path d="M15 34h38l-4 54H19z" fill="#fff" stroke="#74847b" stroke-width="3"/><path d="M19 62h31l-2 23H21z" fill="#9bbfd0"/><path d="M69 69q24-24 43 0v18H67z" fill="#877151"/><circle cx="79" cy="74" r="3" fill="#57452f"/><circle cx="98" cy="80" r="4" fill="#57452f"/></svg>
-                  水樣、花圃土壤
+            <h2>這個水桶是什麼做的？桶子和材料有什麼不同？</h2>
+            <p>先看看整只水桶，再觀察它的不同部位。水桶是物體；桶身和提把握把則使用不同的物質作為材料。</p>
+            <div class="visual">
+              <div class="bucket-scene">
+                <figure class="bucket-figure">
+                  <div class="bucket-image-window"><img class="bucket-image" id="bucket-image" src="assets/metal-bucket.png" data-view="overview" alt="完整的空水桶，包含鐵製桶身、鐵絲提把和紅色塑膠握把"></div>
+                  <figcaption id="bucket-image-caption">整只水桶：鐵製桶身、鐵絲提把、塑膠握把</figcaption>
+                </figure>
+                <div class="bucket-detail" aria-live="polite" aria-atomic="true">
+                  <p class="bucket-detail-label" id="bucket-detail-material">物體</p>
+                  <h3 id="bucket-detail-heading">整只水桶</h3>
+                  <p id="bucket-detail-copy">水桶是一個看得見、摸得到的物體；不同部位可以由不同物質製成。</p>
                 </div>
               </div>
-              <figcaption>桶身先當作物件材料觀察；此處不展示鏽斑，也不據外觀判斷完整組成。</figcaption>
-            </figure>
-            <button class="action-button" type="button" data-record="object">把研究物件記入紀錄</button>
-            <p class="live-note" id="note-s1" aria-live="polite">先把「物件」和「材料」分開記錄。</p>
-            <p class="next-hint">接下來，記錄桶身、土壤和水樣各自呈現的狀態。</p>
+              <div class="choice-row bucket-choices" role="group" aria-label="切換水桶部位的圖像與材質說明">
+                <button type="button" data-bucket-part="overview" aria-pressed="true">整只水桶</button>
+                <button type="button" data-bucket-part="body" aria-pressed="false">桶身</button>
+                <button type="button" data-bucket-part="handle" aria-pressed="false">提把支架</button>
+                <button type="button" data-bucket-part="grip" aria-pressed="false">握把</button>
+              </div>
+            </div>
+            <div class="concept-note"><p><strong>先抓住這個差別：</strong>水桶是物體；鐵和塑膠是構成水桶不同部位的物質。「材料」是物質在製作物體時的用途。</p></div>
+            <p class="live-note" id="note-s1" aria-live="polite">整只水桶是一個物體；桶身、提把支架和握把使用不同材料。</p>
+            <p class="prompt">把水桶各部分的觀察整理成紀錄。</p>
+            <dl class="record-task" aria-label="水桶觀察紀錄">
+              <dt>研究物體</dt><dd>水桶</dd>
+              <dt>桶身材料</dt><dd>鐵製材料</dd>
+              <dt>握把材料</dt><dd>塑膠材料</dd>
+              <dt>觀察發現</dt><dd>同一物體的不同部位可使用不同材料</dd>
+            </dl>
+            <button class="action-button" type="button" data-record="object">把水桶的組成記入紀錄</button>
+            <p class="next-hint">下一步再觀察桶身和桶中水的狀態，並比較固體與液體的特徵。</p>
           </div>
         </section>
 
@@ -391,8 +415,29 @@
   <footer class="shell">國二上・自然科學</footer>
 
   <script>
+    const bucketPartViews = {
+      overview: { label:"物體", heading:"整只水桶", copy:"水桶是一個看得見、摸得到的物體；不同部位可以由不同物質製成。", caption:"整只水桶：鐵製桶身、鐵絲提把、塑膠握把", alt:"完整的空水桶，包含鐵製桶身、鐵絲提把和紅色塑膠握把", note:"整只水桶是一個物體；桶身、提把支架和握把使用不同材料。" },
+      body: { label:"鐵製材料", heading:"桶身", copy:"桶身是水桶的一部分，由鐵製材料製成；水桶這個物體不等於鐵這種物質。", caption:"桶身特寫：鐵製材料", alt:"水桶鐵製桶身的放大特寫", note:"桶身是水桶的一部分，使用鐵製材料；整只水桶仍是一個物體。" },
+      handle: { label:"鐵製材料", heading:"提把支架", copy:"提把支架是連接水桶兩側的鐵絲，也屬於水桶的一部分。", caption:"提把支架特寫：鐵絲製成", alt:"水桶兩側連接桶身的鐵絲提把支架放大特寫", note:"提把支架是水桶的一部分，由鐵製材料製成。" },
+      grip: { label:"塑膠材料", heading:"握把", copy:"握把套在提把支架上，方便手握；它使用塑膠材料，和鐵製支架不同。", caption:"握把特寫：紅色塑膠材料", alt:"水桶提把中央紅色塑膠握把的放大特寫", note:"握把使用塑膠材料；同一個物體的不同部位可以由不同物質製成。" }
+    };
+    function selectBucketPart(part) {
+      const view=bucketPartViews[part];
+      if(!view)return;
+      document.querySelectorAll("[data-bucket-part]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.bucketPart===part)));
+      const image=document.getElementById("bucket-image");
+      image.dataset.view=part;
+      image.alt=view.alt;
+      document.getElementById("bucket-image-caption").textContent=view.caption;
+      document.getElementById("bucket-detail-material").textContent=view.label;
+      document.getElementById("bucket-detail-heading").textContent=view.heading;
+      document.getElementById("bucket-detail-copy").textContent=view.copy;
+      document.getElementById("note-s1").textContent=view.note;
+    }
+    document.querySelectorAll("[data-bucket-part]").forEach(button=>button.addEventListener("click",()=>selectBucketPart(button.dataset.bucketPart)));
+
     const recordValues = {
-      object: ["雨水桶、桶中水、土壤", "研究物件已和材料、樣本分開。"],
+      object: ["水桶", "已記錄水桶這個物體，以及不同部位使用的材料。"],
       state: ["桶身／土壤：固體；水：液體", "空氣只作氣體對照，不列為雨水樣本。"],
       property: ["混濁、顆粒、磁性等觀察線索", "外觀和單一性質都不足以單獨證明組成。"],
       change: ["鏽層是不同於原金屬的新物質", "已分開記錄形成新物質的可能性與已發生的變化。"],
