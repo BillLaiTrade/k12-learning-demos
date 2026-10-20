@@ -184,16 +184,13 @@ export function mountStoneObserver(){
     heightOverlay.setAttribute('viewBox',`0 0 ${width} ${height}`);
     // 每個標記都投影到後方垂直尺的實際位置，避免高低點因透視而離開尺柱。
     yValues.forEach((y,index)=>{
-      const projected=framePivot.localToWorld(new THREE.Vector3(rulerEdge,y,-rulerEdge)).project(camera);
-      const railAbove=framePivot.localToWorld(new THREE.Vector3(rulerEdge,y+.35,-rulerEdge)).project(camera);
+      const rulerLocalY=y+frameCenterY-(rulerFloor+rulerHeight/2);
+      const projected=heightRuler.group.localToWorld(new THREE.Vector3(rulerLocalY,.001,0)).project(camera);
       const anchorX=(projected.x*.5+.5)*width;
       const screenY=(-projected.y*.5+.5)*height;
-      const aboveX=(railAbove.x*.5+.5)*width,aboveY=(-railAbove.y*.5+.5)*height;
-      const directionLength=Math.hypot(aboveX-anchorX,aboveY-screenY)||1;
-      const dx=(aboveX-anchorX)/directionLength,dy=(aboveY-screenY)/directionLength;
       const line=heightGuides[index];
-      line.setAttribute('x1',String(anchorX+dx*2));line.setAttribute('x2',String(anchorX+dx*22));
-      line.setAttribute('y1',String(screenY+dy*2));line.setAttribute('y2',String(screenY+dy*22));
+      line.setAttribute('x1',String(anchorX-22));line.setAttribute('x2',String(anchorX-2));
+      line.setAttribute('y1',String(screenY));line.setAttribute('y2',String(screenY));
       heightMarkers[index].setAttribute('cx',String(anchorX));heightMarkers[index].setAttribute('cy',String(screenY));
     });
   }
