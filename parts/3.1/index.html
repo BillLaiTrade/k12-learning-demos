@@ -155,6 +155,8 @@
     .control-panel > :last-child { margin-bottom: 0; }
     .control-panel .field { width: 100%; }
     .control-panel input[type="range"] { width: 100%; min-height: 32px; accent-color: var(--green); }
+    .estimate-range { display: grid; grid-template-columns: auto minmax(80px, 1fr) auto; align-items: center; gap: 10px; width: 100%; }
+    .estimate-range span { color: var(--muted); font-size: .86rem; font-variant-numeric: tabular-nums; }
     .live-note { min-height: 3em; margin: 12px 0 0; color: var(--muted); }
     .length-conversion-demo { margin: 18px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
     .length-conversion-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; }
@@ -434,7 +436,11 @@
             </div>
             <div class="control-panel estimate-panel">
               <label class="field" for="estimate-slider">估讀鉛筆右端的位置（cm）
-                <input id="estimate-slider" type="range" min="18000" max="20000" step="100" aria-label="選擇你估計的鉛筆右端位置，單位為公分">
+                <div class="estimate-range">
+                  <span aria-hidden="true">18 cm</span>
+                  <input id="estimate-slider" type="range" min="18000" max="20000" step="any" aria-label="在 18 公分到 19 公分之間連續選擇估計位置">
+                  <span aria-hidden="true">19 cm</span>
+                </div>
               </label>
               <div class="slider-row"><span id="estimate-prompt">移動滑桿選一個估值，再檢查。</span><output class="value" id="estimate-value" for="estimate-slider">尚未估讀</output></div>
               <button type="button" class="secondary" id="check-estimate" disabled>檢查估讀</button>
@@ -644,9 +650,8 @@
         }
         input.min = String(minimum);
         input.max = String(maximum);
-        const step = Math.max(1, Math.round((maximum - minimum) / 10));
-        input.step = String(step);
-        input.value = String(clamp(estimateGuess === null ? minimum : Math.round(estimateGuess * 1000), minimum, maximum));
+        input.step = "any";
+        input.value = String(clamp(estimateGuess === null ? minimum : estimateGuess * 1000, minimum, maximum));
         const button = document.querySelector("#check-estimate");
         button.disabled = estimateGuess === null && !estimateChecked;
         button.textContent = estimateChecked ? "重新估讀" : "檢查估讀";
@@ -655,12 +660,12 @@
           ? `畫面已放大到 ${document.querySelector("#zoom-level").textContent}；可查看端點與相鄰刻線的位置。`
           : `先依整把尺估讀鉛筆右端，再用圖片上的放大按鈕或滑鼠滾輪查看 18 cm 和 19 cm 之間的位置。`;
         input.setAttribute("aria-label", `選擇你估計的鉛筆右端位置；端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} 公分之間`);
-        document.querySelector("#estimate-prompt").textContent = "尺上每 1 cm 一條刻線，數字每 5 cm 標示；依端點位置估讀。";
+        document.querySelector("#estimate-prompt").textContent = "在 18 cm 和 19 cm 之間連續移動；估讀是近似判斷，可能無法完全準確。";
         if (estimateChecked) {
           const reading = estimateEndpoint();
-          document.querySelector("#estimate-value").textContent = `你的估讀：約 ${formatCentimeters(estimateGuess)} cm`;
+          document.querySelector("#estimate-value").textContent = `你的估讀：${formatCentimeters(estimateGuess)} cm`;
         } else {
-          document.querySelector("#estimate-value").textContent = estimateGuess === null ? "尚未估讀" : `你的估讀：約 ${formatCentimeters(Number(input.value) / 1000)} cm`;
+          document.querySelector("#estimate-value").textContent = estimateGuess === null ? "尚未估讀" : `你的估讀：${formatCentimeters(Number(input.value) / 1000)} cm`;
         }
       };
       const add = (a, b) => ({ x: a.x + b.x, y: a.y + b.y, z: a.z + b.z });
@@ -1036,8 +1041,8 @@
         updateEstimateGuide();
         estimateChecked = false;
         const guess = formatCentimeters(estimateGuess);
-        document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
-        document.querySelector("#estimate-note").textContent = `你選擇估讀約 ${guess} cm。藍色虛線表示你的估讀位置，橘紅虛線標示鉛筆端點；移動滑桿不會移動鉛筆或尺。`;
+        document.querySelector("#estimate-value").textContent = `你的估讀：${guess} cm`;
+        document.querySelector("#estimate-note").textContent = `你選擇的估讀：${guess} cm。藍色虛線表示你的估讀位置，橘紅虛線標示鉛筆端點；估讀只是近似判斷，可能與實際位置有差距。`;
         const button = document.querySelector("#check-estimate");
         button.disabled = false;
         button.textContent = "檢查估讀";
@@ -1059,8 +1064,8 @@
         const fraction = (reading - interval.start) / (interval.end - interval.start);
         const location = fraction < 0.33 ? "較靠近前一條刻線" : fraction < 0.67 ? "約在兩條刻線中間" : "較靠近後一條刻線";
         const guess = formatCentimeters(estimateGuess);
-        document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
-        document.querySelector("#estimate-note").textContent = `模型右端約在 ${formatCentimeters(reading)} cm，左端在 0 cm；右端減左端得到鉛筆長約 ${formatCentimeters(reading - estimateStart)} cm。${location}。估讀是近似值，尺上每格 1 cm。`;
+        document.querySelector("#estimate-value").textContent = `你的估讀：${guess} cm`;
+        document.querySelector("#estimate-note").textContent = `模型端點位置約為 ${formatCentimeters(reading)} cm；你的估讀：${guess} cm，${location}。估讀是近似判斷，刻線間沒有直接標出的精確讀值，因此可能與實際位置有差距。`;
         syncEstimateControls();
       });
 
