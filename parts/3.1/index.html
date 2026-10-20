@@ -182,7 +182,7 @@
     .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
     .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
     .model-screen { position: relative; overflow: hidden; aspect-ratio: 760 / 170; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; transition: aspect-ratio 700ms ease; }
-    .model-screen[data-zoom="true"] { aspect-ratio: 2.2 / 1; }
+    .model-screen[data-zoom="true"] { aspect-ratio: 1.6 / 1; }
     .model-screen svg { display: block; width: 100%; height: 100%; }
     .image-zoom-toggle { display: block; margin: 8px 0 0 auto; padding: 6px 10px; font-size: .84rem; }
     #shared-scale { fill: #26383a; font: 8.5714px system-ui, sans-serif; }
@@ -413,7 +413,7 @@
                 <g id="model-stage">
                   <image id="pencil-object" href="assets/pencil-photo.webp" x="27" y="389" width="459.44" height="28.17" preserveAspectRatio="none" aria-hidden="true"></image>
                   <g id="shared-scale"></g>
-                  <path id="pencil-end-guide" d="M588 348V423" stroke="#bc612b" stroke-width="2" stroke-dasharray="4 5"></path>
+                  <path id="pencil-end-guide" d="M588 348V423" stroke="#bc612b" stroke-width="2" stroke-dasharray="2 2"></path>
                 </g>
                 <g id="eye-ray" opacity="0">
                   <circle cx="620" cy="40" r="12" fill="#dceaf0" stroke="#547884" stroke-width="3"></circle>
@@ -573,7 +573,7 @@
       let modelViewBox = { x: 0, y: 295, width: 760, height: 170 };
       let modelViewTarget = modelViewBox;
       let modelViewAnimationFrame = 0;
-      let pencilViewOffset = 0;
+      let pencilViewOffset = -18;
       const placePencil = () => {
         const centimeter = 640 / 30;
         const rulerZeroX = 80 + 5 * centimeter;
@@ -586,12 +586,12 @@
         document.querySelector("#pencil-end-guide").setAttribute("d", `M${endX} ${pencilEndY}V355`);
       };
       const animateModelView = (zoom) => {
-        const targetHeight = zoom ? 54 : 170;
-        const targetWidth = zoom ? targetHeight * 2.2 : 760;
+        const targetHeight = zoom ? 78 : 170;
+        const targetWidth = zoom ? targetHeight * 1.6 : 760;
         const endpointX = modelStagePoint(80 + (5 + estimateEndpoint()) * (640 / 30), 0).x;
         const target = {
           x: zoom ? endpointX - targetWidth * 0.55 : 0,
-          y: zoom ? 341 : 295,
+          y: zoom ? 316 : 295,
           width: targetWidth,
           height: targetHeight
         };
@@ -600,7 +600,7 @@
         cancelAnimationFrame(modelViewAnimationFrame);
         const start = { ...modelViewBox };
         const startPencilOffset = pencilViewOffset;
-        const targetPencilOffset = 0;
+        const targetPencilOffset = -18;
         const startTime = performance.now();
         const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700;
         const frame = (now) => {
