@@ -190,8 +190,6 @@
     #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 1.4286; }
     #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.0714; }
     #shared-scale .ruler-line.major { stroke-width: 1.4286; }
-    .model-screen[data-zoom="true"] #shared-scale .ruler-line { stroke-width: .55; }
-    .model-screen[data-zoom="true"] #shared-scale .ruler-line.major { stroke-width: .75; }
     .model-screen[data-zoom="true"] #shared-scale .ruler-body { stroke: none; }
     #shared-scale .ruler-outline { fill: none; stroke: #a99255; stroke-width: .9; }
     .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
@@ -833,19 +831,25 @@
           const top = 355 + state.zoom / modelStageScale;
           const regularTick = major ? 39 : 28;
           const closeTick = major ? 3.5 : 2.5;
-          const tickEnd = top + (regularTick + (closeTick - regularTick) * state.zoom) / modelStageScale;
-          lines.push(`<path class="ruler-line${major ? " major" : ""}" d="M${x} ${top}v${tickEnd - top}"/>`);
+          const tickLength = regularTick + (closeTick - regularTick) * state.zoom;
+          const tickEnd = top + tickLength / modelStageScale;
+          const regularStroke = major ? 1.4286 : 1.0714;
+          const closeStroke = major ? .75 : .55;
+          const strokeWidth = regularStroke + (closeStroke - regularStroke) * state.zoom;
+          lines.push(`<path class="ruler-line${major ? " major" : ""}" stroke-width="${strokeWidth}" d="M${x} ${top}v${tickEnd - top}"/>`);
           if (major) {
             const anchor = tick === 0 ? "start" : tick === 20 ? "end" : "middle";
             const regularLabelY = 355 + (66 + 17) / modelStageScale;
             const closeupLabelY = top + 4.4 / modelStageScale;
             const labelY = regularLabelY + (closeupLabelY - regularLabelY) * state.zoom;
-            const opacity = 1 - state.zoom;
+            const opacity = 1 - Math.min(1, state.zoom * 8);
             lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}" font-size="${8.5714 + (1.1 - 8.5714) * state.zoom}" opacity="${opacity}">${tick}</text>`);
           }
           if (tick === 18 || tick === 19) {
-            const labelY = top + 4.4 / modelStageScale;
-            lines.push(`<text x="${x}" y="${labelY}" text-anchor="middle" font-size="${8.5714 + (1.1 - 8.5714) * state.zoom}" opacity="${state.zoom}">${tick}</text>`);
+            const labelY = tickEnd + 1.35;
+            const labelOpacity = Math.min(1, state.zoom * 10);
+            const labelFontSize = 11 * modelSvg.viewBox.baseVal.width / (modelScreen.getBoundingClientRect().width * modelStageScale);
+            lines.push(`<text x="${x}" y="${labelY}" text-anchor="middle" font-size="${labelFontSize}" opacity="${labelOpacity}">${tick}</text>`);
           }
         }
         const rulerLeftMargin = 24 / modelStageScale;
@@ -1006,7 +1010,7 @@
         const panProgress = 1 - Math.pow(1 - state.zoom, 26);
         const centerX = fullCenterX + (focusCenterX - fullCenterX) * panProgress;
         const x = state.zoom === 0 ? 0 : centerX - width / 2;
-        const y = 295 + 54 * state.zoom;
+        const y = 295 + 54 * state.zoom + 20 * state.zoom * (1 - state.zoom);
         pencilViewOffset = -18 + 14.5 * state.zoom;
         modelSvg.setAttribute("viewBox", `${x} ${y} ${width} ${height}`);
         const magnification = 760 / width;
