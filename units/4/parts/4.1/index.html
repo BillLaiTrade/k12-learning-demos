@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e8">
+  <title>雨水桶裡的水變混濁了，裡面到底有什麼？</title>
+  <style>
+    :root { color-scheme:light; --ink:#263a36; --muted:#5c6c65; --paper:#f4f1e8; --card:#fffdf8; --line:#d9d3c4; --green:#176b53; --green2:#e2efe8; --gold:#d7a94a; --rust:#a84d31; --blue:#477ba4; --shadow:0 10px 26px #243a3509; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:24px; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:ui-sans-serif,system-ui,-apple-system,"Noto Sans TC",sans-serif; line-height:1.72; }
+    button,a { font:inherit; }
+    button { color:inherit; }
+    .shell { width:min(1200px,calc(100% - 36px)); margin-inline:auto; }
+    .masthead { padding:24px 0 30px; }
+    .brand-row { display:flex; gap:18px; align-items:center; color:var(--muted); font-size:.9rem; }
+    .brand { color:var(--green); text-decoration:none; font-weight:750; }
+    .crumb { border-left:1px solid var(--line); padding-left:18px; }
+    .hero { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(260px,.8fr); align-items:center; gap:28px; padding:42px 0 14px; }
+    .eyebrow { color:var(--green); font-size:.77rem; font-weight:850; letter-spacing:.12em; }
+    h1,h2,h3,p { margin-top:0; }
+    .hero h1 { max-width:780px; margin:10px 0 14px; font-size:clamp(2rem,4.6vw,3.45rem); line-height:1.2; letter-spacing:-.045em; }
+    .hero-copy { max-width:710px; margin:0; color:#53645d; font-size:1.05rem; }
+    .hero-note { padding:19px 20px; border:1px solid #d8cda9; border-radius:17px; background:#f8f1dc; }
+    .hero-note strong { display:block; margin-bottom:5px; color:#594a28; font-size:1rem; }
+    .hero-note p { margin:0; color:#665c43; font-size:.91rem; }
+    .hero-scene { display:block; width:min(100%,360px); margin:16px auto 0; }
+    .lesson { padding-bottom:72px; }
+    .lesson-layout { display:grid; grid-template-columns:250px minmax(0,1fr); align-items:start; gap:26px; }
+    .route { position:sticky; top:18px; max-height:calc(100vh - 36px); overflow:auto; padding:16px 14px; border:1px solid var(--line); border-radius:16px; background:#fbfaf5; }
+    .route-label { margin:0 0 10px; color:#69776f; font-size:.72rem; font-weight:850; letter-spacing:.08em; }
+    .route-inner { display:grid; gap:4px; }
+    .route a { display:grid; grid-template-columns:28px 1fr; align-items:start; gap:7px; padding:7px 6px; border-radius:9px; color:#516159; text-decoration:none; font-size:.8rem; line-height:1.45; }
+    .route a b { color:#8c8061; font-size:.72rem; }
+    .route a:hover,.route a[aria-current="step"] { color:#174c3e; background:#e5efe8; }
+    .route a[aria-current="step"] b { color:var(--green); }
+    .route-hint { margin:12px 2px 0; color:#77837b; font-size:.75rem; }
+    .record-panel { margin-top:15px; padding:13px 12px; border-radius:12px; background:#f1ead6; }
+    .record-panel h2 { margin:0 0 8px; font-size:.9rem; }
+    .record-panel p { margin:0; color:#5d5a4d; font-size:.77rem; }
+    .record-list { display:grid; gap:5px; margin:0; }
+    .record-list div { display:grid; grid-template-columns:60px 1fr; gap:6px; font-size:.75rem; }
+    .record-list dt { color:#726a52; }
+    .record-list dd { margin:0; color:#394b43; }
+    .cards { min-width:0; }
+    .section-top { display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:2px 4px 12px; }
+    .section-top h2 { margin:0; font-size:1.28rem; }
+    .progress-copy { color:#6b7971; font-size:.79rem; }
+    .lesson-card { display:grid; grid-template-columns:144px minmax(0,1fr); gap:18px; margin:0 0 19px; padding:22px; border:1px solid var(--line); border-radius:18px; background:var(--card); box-shadow:var(--shadow); scroll-margin-top:16px; }
+    .card-side { border-right:1px solid #e5dfd1; padding-right:16px; }
+    .card-number { display:inline-grid; place-items:center; width:38px; height:38px; margin-bottom:13px; border:1px solid #d2c39b; border-radius:50%; background:#f8f1dc; color:#66552c; font-size:.82rem; font-weight:850; }
+    .card-side h3 { margin:0 0 5px; font-size:1rem; line-height:1.45; }
+    .card-role { color:#78837d; font-size:.77rem; line-height:1.45; }
+    .card-main { min-width:0; }
+    .card-main h2 { margin:0 0 9px; font-size:clamp(1.22rem,2.3vw,1.65rem); line-height:1.43; }
+    .card-main>p { margin-bottom:14px; color:#4f6159; }
+    .next-hint { margin:14px 0 0!important; padding:9px 12px; border-left:3px solid var(--gold); background:#faf4e5; color:#615638!important; font-size:.87rem; }
+    .visual { margin:14px 0; padding:14px; border:1px solid #e6e0d4; border-radius:14px; background:#faf9f4; }
+    .visual figcaption,.caption { margin:8px 0 0; color:#758178; font-size:.77rem; }
+    .choice-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+    .choice-row button,.action-button { min-height:40px; padding:8px 13px; border:1px solid #c8d1c8; border-radius:10px; background:#fff; cursor:pointer; font-weight:700; }
+    .choice-row button[aria-pressed="true"],.choice-row button[aria-checked="true"] { border-color:var(--green); background:var(--green2); color:#174c3e; box-shadow:inset 0 0 0 1px var(--green); }
+    button:focus-visible,a:focus-visible { outline:3px solid #d6a83d; outline-offset:2px; }
+    .live-note { min-height:48px; margin:9px 0 0; padding:10px 12px; border-radius:10px; background:#edf3ee; color:#36554a; font-size:.9rem; }
+    .sample-scene { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-items:end; gap:12px; text-align:center; }
+    .sample-item { display:grid; justify-items:center; gap:5px; color:#516159; font-size:.78rem; }
+    .sample-item svg { width:min(100%,150px); height:118px; }
+    .state-board { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+    .state-tile { min-height:124px; padding:12px; border:1px solid #ded8ca; border-radius:12px; background:#fff; text-align:center; }
+    .state-tile strong { display:block; margin-bottom:8px; }
+    .state-symbol { display:grid; place-items:center; width:68px; height:52px; margin:auto; border:2px solid #8aa397; border-radius:8px; color:var(--green); }
+    .state-symbol.solid { background:#d5b978; border-radius:5px; width:45px; height:42px; }
+    .state-symbol.liquid { background:linear-gradient(0deg,#9fc9db 55%,transparent 55%); }
+    .state-symbol.gas { border-style:dashed; background:#eef5f7; font-size:.78rem; }
+    .particle-stage { min-height:170px; display:grid; place-items:center; border-radius:12px; background:#edf2eb; }
+    .particle-box { position:relative; width:190px; height:130px; border:2px solid #80968a; border-radius:10px; background:#fffdf8; }
+    .particle { position:absolute; width:14px; height:14px; border-radius:50%; background:#d7a94a; box-shadow:inset -2px -2px 0 #b28835; transition:all .3s ease; }
+    .phase-visual { min-height:144px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(#e6f1f3,#f9f6ea); }
+    .phase-water { display:grid; place-items:center; width:112px; height:90px; border:3px solid #6c8790; border-radius:12px 12px 20px 20px; background:linear-gradient(0deg,#79b6cc 55%,#f8fbfc 55%); color:#244a55; font-weight:850; }
+    .property-grid,.class-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+    .property-card,.class-card { padding:13px; border:1px solid #ded8ca; border-radius:12px; background:#fff; }
+    .property-card strong,.class-card strong { display:block; margin-bottom:5px; }
+    .property-card p,.class-card p { margin:0; color:#607067; font-size:.83rem; }
+    .rust-pair { display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:stretch; }
+    .barrel-card { padding:12px; border-radius:13px; background:#f1f3ed; text-align:center; }
+    .barrel-card svg { width:min(100%,180px); height:142px; }
+    .barrel-card strong { display:block; font-size:.84rem; }
+    .barrel-card p { margin:4px 0 0; color:#65736c; font-size:.78rem; }
+    .comparison { width:100%; border-collapse:collapse; margin:12px 0; font-size:.88rem; }
+    .comparison th,.comparison td { padding:9px 10px; border-bottom:1px solid #e1dccf; text-align:left; vertical-align:top; }
+    .comparison th { color:#53645d; background:#f5f2e9; }
+    .classification-tree { display:grid; justify-items:center; gap:9px; padding:15px; border-radius:12px; background:#f5f2e9; }
+    .tree-root,.tree-branch { padding:9px 14px; border-radius:999px; background:#e5efe8; color:#174c3e; font-weight:750; }
+    .tree-branches { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
+    .tree-branch { background:#fff; border:1px solid #d6d0c1; color:#374c43; }
+    .evidence-box { padding:13px 15px; border-left:4px solid var(--blue); border-radius:8px; background:#edf3f7; color:#34536a; }
+    .check-options { display:grid; gap:8px; margin:12px 0; }
+    .check-option { display:flex; gap:9px; align-items:flex-start; padding:11px 12px; border:1px solid #d9d4c8; border-radius:10px; background:#fff; cursor:pointer; }
+    .check-option:has(input:checked) { border-color:var(--green); background:#edf4ef; }
+    .check-option input { margin-top:5px; accent-color:var(--green); }
+    .feedback { min-height:50px; margin-top:11px; padding:10px 12px; border-radius:10px; background:#f1eee5; color:#56645d; }
+    .feedback[data-kind="correct"] { background:#e4f1e8; color:#23533e; }
+    .feedback[data-kind="wrong"] { background:#fbefdf; color:#795125; }
+    .note { padding:10px 13px; border-radius:10px; background:#f8f1dc; color:#655b42; font-size:.86rem; }
+    footer { padding:22px 0 34px; color:#738078; font-size:.82rem; }
+    @media(max-width:900px) { .lesson-layout { grid-template-columns:210px minmax(0,1fr); gap:16px; } .lesson-card { grid-template-columns:112px minmax(0,1fr); padding:17px; gap:13px; } }
+    @media(max-width:680px) {
+      .shell { width:min(100% - 24px,600px); }
+      .hero { grid-template-columns:1fr; gap:16px; padding-top:28px; }
+      .hero-note { order:2; }
+      .lesson-layout { display:block; }
+      .route { position:relative; top:auto; max-height:none; margin:0 0 16px; padding:11px; }
+      .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .route a { font-size:.74rem; }
+      .record-panel { display:none; }
+      .lesson-card { grid-template-columns:1fr; gap:10px; padding:15px; }
+      .card-side { display:grid; grid-template-columns:38px 1fr; align-items:center; column-gap:10px; border:0; border-bottom:1px solid #e5dfd1; padding:0 0 9px; }
+      .card-number { grid-row:span 2; margin:0; }
+      .card-side h3 { margin:0; }
+      .sample-scene { gap:5px; }
+      .sample-item svg { height:98px; }
+      .state-board,.property-grid,.class-grid { grid-template-columns:1fr; }
+      .state-tile { min-height:unset; display:grid; grid-template-columns:70px 1fr; align-items:center; text-align:left; }
+      .state-tile strong { margin:0; }
+      .state-symbol { grid-column:2; grid-row:1; }
+      .rust-pair { grid-template-columns:1fr 1fr; gap:7px; }
+      .comparison { font-size:.78rem; }
+      .comparison th,.comparison td { padding:7px 6px; }
+      .section-top { align-items:start; flex-direction:column; gap:3px; }
+    }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <header class="shell masthead">
+    <div class="brand-row"><a class="brand" href="../../index.html">← 物質、分離與水溶液</a><span class="crumb">國二上・自然科學</span></div>
+    <div class="hero">
+      <div>
+        <div class="eyebrow">從雨水樣本認識物質</div>
+        <h1>雨水桶裡的水變混濁了，裡面到底有什麼？</h1>
+        <p class="hero-copy">學校打算用收集的雨水澆灌花圃，雨水桶中的水卻變混濁了。要弄清水樣由什麼組成，先分辨桶和材料，記錄物質的性質與變化，再根據證據替樣本分類。</p>
+      </div>
+      <aside class="hero-note">
+        <strong>先別急著猜水裡有什麼</strong>
+        <p>混濁是觀察線索，不能單靠外觀證明組成。沿著樣本紀錄逐步補上證據。</p>
+        <svg class="hero-scene" viewBox="0 0 300 184" role="img" aria-label="花圃旁的雨水桶，桶中水樣混濁">
+          <path d="M15 154h270" stroke="#9cad91" stroke-width="4" stroke-linecap="round"/>
+          <path d="M26 153c8-25 17-27 26 0m0 0c7-34 17-35 25 0m153 0c7-27 17-29 25 0m0 0c7-36 19-36 26 0" fill="#92a57a" stroke="#69815e" stroke-width="3"/>
+          <path d="M88 55h124l-10 91c-1 9-7 14-16 14h-71c-9 0-15-5-16-14z" fill="#aeb8b1" stroke="#60736b" stroke-width="4"/>
+          <path d="M94 104h112l-5 42c-1 8-7 13-15 13h-72c-8 0-14-5-15-13z" fill="#a9824e" opacity=".88"/>
+          <path d="M88 55c0-8 28-15 62-15s62 7 62 15-28 15-62 15-62-7-62-15z" fill="#c7d0c9" stroke="#60736b" stroke-width="4"/>
+          <ellipse cx="150" cy="56" rx="43" ry="8" fill="#a9824e"/>
+          <path d="M105 76h90M102 87h96" stroke="#d9dfd8" stroke-width="3" opacity=".75"/>
+          <circle cx="120" cy="118" r="3" fill="#745b3e"/><circle cx="157" cy="132" r="4" fill="#745b3e"/><circle cx="180" cy="112" r="3" fill="#745b3e"/>
+        </svg>
+      </aside>
+    </div>
+  </header>
+
+  <main class="shell lesson">
+    <div class="lesson-layout">
+      <nav class="route" aria-label="學習路徑">
+        <p class="route-label">沿著問題一步步探索</p>
+        <div class="route-inner">
+          <a href="#s1" aria-current="step"><b>01</b><span>這個雨水桶是什麼做的？桶子和材料有什麼不同？</span></a>
+          <a href="#s2"><b>02</b><span>水會流、土能堆，空氣又裝在哪裡？</span></a>
+          <a href="#s3"><b>03</b><span>固體、液體和氣體裡的粒子，各自在做什麼？</span></a>
+          <a href="#s4"><b>04</b><span>水結冰或蒸發後，還是原來的水嗎？</span></a>
+          <a href="#s5"><b>05</b><span>只看外表，認得出這是什麼材料嗎？</span></a>
+          <a href="#s6"><b>06</b><span>鐵桶生鏽了，這告訴我們什麼？</span></a>
+          <a href="#s7"><b>07</b><span>東西變了樣，就代表變成另一種物質嗎？</span></a>
+          <a href="#s8"><b>08</b><span>雨水看起來像一種東西，裡面可能混了什麼？</span></a>
+          <a href="#s9"><b>09</b><span>純鐵和蒸餾水，為什麼分到不同類？</span></a>
+          <a href="#s10"><b>10</b><span>這桶混濁的雨水，怎麼證明它是混合物？</span></a>
+        </div>
+        <p class="route-hint">每段補上一項資料，最後用證據完成分類。</p>
+        <section class="record-panel" aria-labelledby="record-title">
+          <h2 id="record-title">雨水樣本紀錄</h2>
+          <dl class="record-list">
+            <div><dt>研究物件</dt><dd id="record-object">雨水桶、桶中水</dd></div>
+            <div><dt>狀態</dt><dd id="record-state">待觀察</dd></div>
+            <div><dt>性質</dt><dd id="record-property">待整理</dd></div>
+            <div><dt>變化</dt><dd id="record-change">待整理</dd></div>
+            <div><dt>組成</dt><dd id="record-composition">待判斷</dd></div>
+          </dl>
+        </section>
+      </nav>
+
+      <div class="cards">
+        <div class="section-top"><h2>從物件到樣本證據</h2><span class="progress-copy">觀察、操作，再把結果連回概念</span></div>
+
+        <section class="lesson-card" id="s1">
+          <div class="card-side"><span class="card-number">01</span><h3>物件和材料</h3><span class="card-role">先分清楚正在研究什麼</span></div>
+          <div class="card-main">
+            <h2>這個雨水桶是什麼做的？桶子和材料有什麼不同？</h2>
+            <p>「雨水桶」是一個物件；桶身則是製作這個物件的材料。桶裡的水和花圃土壤，也都是我們可以取來研究的樣本。物件不一定只由一種材料做成。</p>
+            <figure class="visual">
+              <div class="sample-scene">
+                <div class="sample-item">
+                  <svg viewBox="0 0 120 112" role="img" aria-label="沒有鏽斑的雨水桶物件"><path d="M28 23h64l-5 70c-1 7-5 11-12 11H45c-7 0-11-4-12-11z" fill="#b8c3bc" stroke="#64766e" stroke-width="4"/><ellipse cx="60" cy="23" rx="32" ry="9" fill="#d8ded9" stroke="#64766e" stroke-width="4"/><ellipse cx="60" cy="24" rx="20" ry="5" fill="#f8f7f0"/><path d="M36 48h47M34 59h51" stroke="#e5e9e5" stroke-width="3"/></svg>
+                  雨水桶（物件）
+                </div>
+                <div class="sample-item">
+                  <svg viewBox="0 0 120 112" role="img" aria-label="桶身材料示意"><path d="M22 37h76v52H22z" fill="#aebbb3" stroke="#64766e" stroke-width="4"/><path d="M30 48h60M30 60h60M30 72h60" stroke="#e5e9e5" stroke-width="3"/><path d="M42 28h36v9H42z" fill="#7c9186"/></svg>
+                  桶身（材料）
+                </div>
+                <div class="sample-item">
+                  <svg viewBox="0 0 120 112" role="img" aria-label="雨水和土壤兩種待研究樣本"><path d="M15 34h38l-4 54H19z" fill="#fff" stroke="#74847b" stroke-width="3"/><path d="M19 62h31l-2 23H21z" fill="#9bbfd0"/><path d="M69 69q24-24 43 0v18H67z" fill="#877151"/><circle cx="79" cy="74" r="3" fill="#57452f"/><circle cx="98" cy="80" r="4" fill="#57452f"/></svg>
+                  水樣、花圃土壤
+                </div>
+              </div>
+              <figcaption>桶身先當作物件材料觀察；此處不展示鏽斑，也不據外觀判斷完整組成。</figcaption>
+            </figure>
+            <button class="action-button" type="button" data-record="object">把研究物件記入紀錄</button>
+            <p class="live-note" id="note-s1" aria-live="polite">先把「物件」和「材料」分開記錄。</p>
+            <p class="next-hint">接下來，記錄桶身、土壤和水樣各自呈現的狀態。</p>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="s2">
+          <div class="card-side"><span class="card-number">02</span><h3>物質三態</h3><span class="card-role">比較形狀、體積與可壓縮性</span></div>
+          <div class="card-main">
+            <h2>水會流、土能堆，空氣又裝在哪裡？</h2>
+            <p>桶身和土壤是固體，水樣是液體。固體通常有固定形狀和體積；液體體積大致固定，形狀會隨容器改變。另用注射筒中的空氣作氣體對照：氣體會充滿容器，也比較容易被壓縮。</p>
+            <div class="state-board" aria-label="三態特徵對照">
+              <div class="state-tile"><strong>固體・桶身、土壤</strong><span class="state-symbol solid" aria-hidden="true"></span></div>
+              <div class="state-tile"><strong>液體・雨水</strong><span class="state-symbol liquid" aria-hidden="true"></span></div>
+              <div class="state-tile"><strong>氣體・注射筒中的空氣</strong><span class="state-symbol gas" aria-hidden="true">可壓縮</span></div>
+            </div>
+            <div class="choice-row" role="group" aria-label="觀察注射筒裡的空氣">
+              <button type="button" data-air="wide" aria-pressed="true">拉開活塞</button>
+              <button type="button" data-air="press" aria-pressed="false">推入活塞</button>
+            </div>
+            <div class="visual" style="display:flex;align-items:center;gap:16px">
+              <svg viewBox="0 0 280 90" width="min(100%,280px)" role="img" aria-label="活塞改變注射筒內空氣空間的示意"><rect x="34" y="24" width="190" height="42" rx="8" fill="#fff" stroke="#62766d" stroke-width="4"/><rect id="air-space" x="48" y="30" width="150" height="30" rx="4" fill="#dcecf2"/><line id="syringe-plunger" x1="198" y1="18" x2="198" y2="72" stroke="#687d73" stroke-width="7"/><line id="syringe-rod" x1="198" y1="45" x2="250" y2="45" stroke="#687d73" stroke-width="5"/><g id="syringe-particles" fill="#477ba4"><circle cx="82" cy="39" r="3"/><circle cx="118" cy="51" r="3"/><circle cx="156" cy="39" r="3"/><circle cx="177" cy="52" r="3"/></g></svg>
+              <p class="live-note" id="air-note" aria-live="polite">空氣佔據注射筒內的空間。</p>
+            </div>
+            <button class="action-button" type="button" data-record="state">記錄樣本狀態</button>
+            <p class="live-note" id="note-s2" aria-live="polite">空氣只作氣體對照，不列入雨水樣本。</p>
+            <p class="next-hint">看得見的差異可以描述；下一步用粒子模型解釋這些差異。</p>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="s3">
+          <div class="card-side"><span class="card-number">03</span><h3>粒子模型</h3><span class="card-role">用模型解釋三態</span></div>
+          <div class="card-main">
+            <h2>固體、液體和氣體裡的粒子，各自在做什麼？</h2>
+            <p>粒子小到不能直接看見，圖中的小球是幫助思考的模型。固體粒子彼此接近、位置較固定並持續振動；液體粒子彼此接近但能相對移動；氣體粒子間距較大，能在容器中移動。</p>
+            <div class="choice-row" role="group" aria-label="切換粒子模型">
+              <button type="button" data-particles="solid" aria-pressed="true">固體</button><button type="button" data-particles="liquid" aria-pressed="false">液體</button><button type="button" data-particles="gas" aria-pressed="false">氣體</button>
+            </div>
+            <div class="particle-stage"><div class="particle-box" id="particle-box" aria-label="粒子排列示意"></div></div>
+            <p class="live-note" id="particle-note" aria-live="polite">固體：粒子彼此接近，位置大致固定，只在原位置附近振動。</p>
+            <p class="note">模型只用來解釋狀態，不表示空氣只有一種粒子；空氣是多種氣體組成的混合物。</p>
+            <p class="next-hint">模型解釋了狀態差異；接著用蒸餾水追蹤升溫或冷卻時的變化。</p>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="s4">
+          <div class="card-side"><span class="card-number">04</span><h3>溫度與狀態</h3><span class="card-role">狀態改變，物質仍相同</span></div>
+          <div class="card-main">
+            <h2>水結冰或蒸發後，還是原來的水嗎？</h2>
+            <p>為了只追蹤水這種物質，這裡改用蒸餾水作參照，不把整桶雨水當作純水。選擇狀態，觀察水在融化、凝固或汽化前後仍是水。</p>
+            <div class="choice-row" role="group" aria-label="選擇水的狀態變化">
+              <button type="button" data-phase="solid" aria-pressed="false">冰融化</button><button type="button" data-phase="liquid" aria-pressed="true">液態水</button><button type="button" data-phase="gas" aria-pressed="false">水汽化</button>
+            </div>
+            <div class="phase-visual"><div class="phase-water" id="phase-water">液態水</div></div>
+            <p class="live-note" id="phase-note" aria-live="polite">蒸餾水是液體；改變的是狀態，物質仍是水。</p>
+            <p class="note">水蒸氣是氣體；冷卻後看到的小水滴是液體，不要把兩者混稱。</p>
+            <p class="next-hint">狀態改變沒有生成另一種物質；還有哪些性質能描述材料而不改變物質種類？</p>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="s5">
+          <div class="card-side"><span class="card-number">05</span><h3>物理性質</h3><span class="card-role">觀察不等於確定組成</span></div>
+          <div class="card-main">
+            <h2>只看外表，認得出這是什麼材料嗎？</h2>
+            <p>顏色、狀態、磁性和密度都能描述材料。觀察或測量這些物理性質時，不會因此把原物質變成另一種物質。不過，一個外觀線索通常不足以確認未知材料的組成。</p>
+            <div class="property-grid">
+              <article class="property-card"><strong>水樣・外觀</strong><p>看見混濁，只能先記下觀察結果，不能只靠它斷定有哪些成分。</p></article>
+              <article class="property-card"><strong>土壤・狀態與顆粒</strong><p>記錄可觀察特徵；外觀不代表土壤只含一種物質。</p></article>
+              <article class="property-card"><strong>桶身・磁性、密度</strong><p>可作為辨認材料的物理性質；密度是舊知回顧，不重教計算。</p></article>
+            </div>
+            <button class="action-button" type="button" data-record="property">把觀察線索記入紀錄</button>
+            <p class="live-note" id="note-s5" aria-live="polite">請把觀察到的線索和「已證明的組成」分開。</p>
+            <p class="next-hint">物理性質資料整理完成後，再看桶身出現的新變化線索。</p>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="s6">
+          <div class="card-side"><span class="card-number">06</span><h3>化學性質</h3><span class="card-role">材料可能形成新物質</span></div>
+          <div class="card-main">
+            <h2>鐵桶生鏽了，這告訴我們什麼？</h2>
+            <p>到這裡才揭示桶身的鏽斑。含鐵材料能和環境中的物質作用而生鏽，這是化學性質的例子。照片之外，材料說明也指出鏽層是不同於原金屬的新物質；不是只憑顏色變了就作判斷。</p>
+            <figure class="visual">
+              <div class="rust-pair">
+                <div class="barrel-card">
+                  <svg viewBox="0 0 150 135" role="img" aria-label="尚未生鏽的鐵製雨水桶"><path d="M32 28h86l-7 85c-1 8-6 12-14 12H53c-8 0-13-4-14-12z" fill="#b8c3bc" stroke="#64766e" stroke-width="4"/><ellipse cx="75" cy="28" rx="43" ry="10" fill="#d8ded9" stroke="#64766e" stroke-width="4"/><path d="M39 57h78M37 70h81" stroke="#e6eae6" stroke-width="3"/></svg>
+                  <strong>桶身尚未出現鏽層</strong><p>作為對照影像</p>
+                </div>
+                <div class="barrel-card">
+                  <svg viewBox="0 0 150 135" role="img" aria-label="桶身有鏽層的鐵製雨水桶"><path d="M32 28h86l-7 85c-1 8-6 12-14 12H53c-8 0-13-4-14-12z" fill="#b8c3bc" stroke="#64766e" stroke-width="4"/><ellipse cx="75" cy="28" rx="43" ry="10" fill="#d8ded9" stroke="#64766e" stroke-width="4"/><path d="M39 57h78M37 70h81" stroke="#e6eae6" stroke-width="3"/><path d="M45 45q12-8 18 2t-6 13q-16-2-12-15m43 20q15-8 20 5t-9 12q-15-3-11-17m-39 25q10-6 15 2t-5 11q-12-1-10-13m44 16q9-8 16 0t-6 12q-11 0-10-12" fill="#a84d31"/></svg>
+                  <strong>桶身形成鏽層</strong><p>鏽層是不同於原金屬的新物質</p>
+                </div>
+              </div>
+              <figcaption>對照圖協助辨認變化；判斷新物質依據材料說明，不以顏色改變作唯一證據。</figcaption>
+            </figure>
+            <button class="action-button" type="button" data-record="change">把變化線索記入紀錄</button>
+            <p class="live-note" id="note-s6" aria-live="polite">「可能形成新物質」描述化學性質；「已形成鏽層」描述化學變化。</p>
+            <p class="next-hint">接著用蒸發和生鏽比較：變化前後是否生成另一種物質？</p>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="s7">
+          <div class="card-side"><span class="card-number">07</span><h3>物理與化學變化</h3><span class="card-role">看有沒有生成新物質</span></div>
+          <div class="card-main">
+            <h2>東西變了樣，就代表變成另一種物質嗎？</h2>
+            <p>沿用卡 4 的蒸發例子作簡短回顧，這裡不重教狀態變化；重點是比較它和生鏽是否生成新物質。</p>
+            <div class="choice-row" role="group" aria-label="比較兩種變化">
+              <button type="button" data-change="evaporation" aria-pressed="true">水分蒸發</button><button type="button" data-change="rust" aria-pressed="false">桶身生鏽</button>
+            </div>
+            <table class="comparison"><thead><tr><th>觀察的變化</th><th>變化前後</th><th>分類</th></tr></thead><tbody><tr><td id="change-name">水分蒸發</td><td id="change-result">沒有生成另一種物質</td><td id="change-type">物理變化</td></tr></tbody></table>
+            <p class="live-note" id="change-note" aria-live="polite">水分從液態變成水蒸氣，物質仍是水。</p>
+            <p class="next-hint">從「物質怎麼變」轉向「水樣由哪些物質組成」。</p>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="s8">
+          <div class="card-side"><span class="card-number">08</span><h3>純物質與混合物</h3><span class="card-role">比較由一種或多種物質組成</span></div>
+          <div class="card-main">
+            <h2>雨水看起來像一種東西，裡面可能混了什麼？</h2>
+            <p>純物質只由一種物質構成；混合物由多種物質組成，成分可用物理方法分離。外觀看起來均勻，不代表一定是純物質。</p>
+            <div class="class-grid">
+              <article class="class-card"><strong>蒸餾水・純物質</strong><p>用作單一物質的參照樣本。</p></article>
+              <article class="class-card"><strong>花圃土壤・混合物</strong><p>由多種成分構成，不能只看顏色判斷成分。</p></article>
+              <article class="class-card"><strong>空氣・混合物</strong><p>外觀均勻，也可能由多種物質組成；只作對照例子。</p></article>
+            </div>
+            <div class="evidence-box" style="margin-top:12px"><strong>判斷雨水還需要資料</strong><br>水樣混濁只是觀察線索；成分要依明確資料判斷。</div>
+            <button class="action-button" type="button" data-record="composition">整理樣本組成欄位</button>
+            <p class="live-note" id="note-s8" aria-live="polite">先建立分類標準，下一段再看純物質的子分類。</p>
+            <p class="next-hint">純物質還能分成元素和化合物，看看參照樣本如何分類。</p>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="s9">
+          <div class="card-side"><span class="card-number">09</span><h3>元素與化合物</h3><span class="card-role">純物質的兩種類型</span></div>
+          <div class="card-main">
+            <h2>純鐵和蒸餾水，為什麼分到不同類？</h2>
+            <p>兩者都是純物質，但分類依據不同：元素不能再用化學方法分解成更簡單的純物質；化合物則能用化學方法分解成不同元素。</p>
+            <div class="choice-row" role="group" aria-label="查看純物質範例">
+              <button type="button" data-pure="iron" aria-pressed="true">純鐵</button><button type="button" data-pure="water" aria-pressed="false">蒸餾水</button>
+            </div>
+            <div class="classification-tree" aria-live="polite">
+              <div class="tree-root">純物質</div><div aria-hidden="true">↓</div>
+              <div class="tree-branches"><div class="tree-branch" id="pure-type">元素</div><div class="tree-branch" id="pure-example">純鐵：不能用化學方法分解成更簡單的純物質</div></div>
+            </div>
+            <p class="note">這裡只建立分類關係，不進入原子結構、元素符號或化學式。純鐵和蒸餾水是參照樣本，不是花圃現場採集物。</p>
+            <p class="next-hint">分類參照完成後，回到雨水樣本，用已提供的成分資料做最後判斷。</p>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="s10">
+          <div class="card-side"><span class="card-number">10</span><h3>用證據完成分類</h3><span class="card-role">整合本段學到的判斷方法</span></div>
+          <div class="card-main">
+            <h2>這桶混濁的雨水，怎麼證明它是混合物？</h2>
+            <p>這次不只看水樣外觀。資料卡明確提供成分紀錄：樣本含有水和泥沙。根據「由多種物質組成」的分類依據，判斷這個水樣。</p>
+            <div class="evidence-box"><strong>樣本成分紀錄</strong><br>水樣含有水與泥沙兩種成分。這是題目提供的資料，不是由混濁外觀推測。</div>
+            <fieldset style="border:0;padding:0;margin:14px 0">
+              <legend><strong>依資料判斷，這份水樣屬於哪一類？</strong></legend>
+              <div class="check-options">
+                <label class="check-option"><input type="radio" name="final-check" value="pure"><span>純物質，因為它是一份水樣。</span></label>
+                <label class="check-option"><input type="radio" name="final-check" value="mixture"><span>混合物，因為資料指出它含水和泥沙。</span></label>
+              </div>
+            </fieldset>
+            <button class="action-button" type="button" id="check-answer">查看判斷</button>
+            <p class="feedback" id="final-feedback" aria-live="polite">先選擇一個判斷，再查看資料如何支持答案。</p>
+            <p class="next-hint">已確認這是混合物；下一步，如何利用成分差異分出泥沙？</p>
+          </div>
+        </section>
+
+        <p class="note">這段課程只判斷樣本組成，不評估雨水是否適合澆灌，也不在此操作過濾。後續再學如何分離混合物，以及水溶液中溶質含量的表示。</p>
+      </div>
+    </div>
+  </main>
+  <footer class="shell">國二上・自然科學</footer>
+
+  <script>
+    const recordValues = {
+      object: ["雨水桶、桶中水、土壤", "研究物件已和材料、樣本分開。"],
+      state: ["桶身／土壤：固體；水：液體", "空氣只作氣體對照，不列為雨水樣本。"],
+      property: ["混濁、顆粒、磁性等觀察線索", "外觀和單一性質都不足以單獨證明組成。"],
+      change: ["鏽層是不同於原金屬的新物質", "已分開記錄形成新物質的可能性與已發生的變化。"],
+      composition: ["待依成分資料判斷", "已建立純物質／混合物的分類依據。"]
+    };
+    const recordRows = { object:"record-object", state:"record-state", property:"record-property", change:"record-change", composition:"record-composition" };
+    document.querySelectorAll("[data-record]").forEach(button => button.addEventListener("click", () => {
+      const key = button.dataset.record;
+      document.getElementById(recordRows[key]).textContent = recordValues[key][0];
+      const card = button.closest(".lesson-card");
+      const note = card.querySelector(".live-note");
+      note.textContent = recordValues[key][1];
+    }));
+
+    document.querySelectorAll("[data-air]").forEach(button => button.addEventListener("click", () => {
+      document.querySelectorAll("[data-air]").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+      const pressed = button.dataset.air === "press";
+      document.getElementById("air-space").setAttribute("width", pressed ? "64" : "150");
+      document.getElementById("syringe-plunger").setAttribute("x1", pressed ? "112" : "198");
+      document.getElementById("syringe-plunger").setAttribute("x2", pressed ? "112" : "198");
+      document.getElementById("syringe-rod").setAttribute("x1", pressed ? "112" : "198");
+      document.getElementById("syringe-rod").setAttribute("x2", pressed ? "164" : "250");
+      document.querySelectorAll("#syringe-particles circle").forEach((particle,index)=>particle.setAttribute("cx", pressed ? [60,76,92,103][index] : [82,118,156,177][index]));
+      document.getElementById("air-note").textContent = pressed ? "活塞推入後，空氣仍在筒內，但佔據的體積變小。" : "活塞拉開後，空氣佔據較大的空間。";
+    }));
+
+    const particlePositions = {
+      solid:[[24,20],[54,20],[84,20],[114,20],[24,50],[54,50],[84,50],[114,50],[24,80],[54,80],[84,80],[114,80],[24,110],[54,110],[84,110],[114,110]],
+      liquid:[[18,24],[52,32],[91,18],[126,38],[28,65],[66,58],[111,73],[147,61],[18,101],[55,88],[96,108],[138,96],[42,119],[117,119]],
+      gas:[[8,8],[151,13],[67,13],[119,43],[29,47],[89,67],[159,82],[12,101],[58,108],[129,112],[103,24],[39,79]]
+    };
+    const particleDescriptions = {
+      solid:"固體：粒子彼此接近，位置大致固定，只在原位置附近振動。",
+      liquid:"液體：粒子仍彼此接近，但可以相對移動。",
+      gas:"氣體：粒子間距較大，能在容器空間中移動。"
+    };
+    function drawParticles(state) {
+      const box=document.getElementById("particle-box"); box.replaceChildren();
+      particlePositions[state].forEach(([x,y],index)=>{const dot=document.createElement("span");dot.className="particle";dot.style.left=`${x}px`;dot.style.top=`${y}px`;dot.style.animation=state==="gas"?`drift ${2.1+(index%4)*.35}s ease-in-out ${-(index%5)*.4}s infinite alternate`:state==="liquid"?`drift ${3+(index%3)*.45}s ease-in-out ${-(index%4)*.5}s infinite alternate`:state==="solid"?`vibrate .55s ease-in-out ${-(index%5)*.1}s infinite alternate`:"none";box.append(dot);});
+      document.getElementById("particle-note").textContent=particleDescriptions[state];
+      document.querySelectorAll("[data-particles]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.particles===state)));
+    }
+    const style=document.createElement("style");style.textContent="@keyframes drift{to{translate:3px -3px}}@keyframes vibrate{to{translate:1px -1px}}";document.head.append(style);
+    document.querySelectorAll("[data-particles]").forEach(button=>button.addEventListener("click",()=>drawParticles(button.dataset.particles)));
+    drawParticles("solid");
+
+    const phaseData={
+      solid:["冰","蒸餾水凝固成冰；狀態改變，物質仍是水。", "linear-gradient(0deg,#f7fdff,#cce4ef)"],
+      liquid:["液態水","蒸餾水是液體；改變的是狀態，物質仍是水。", "linear-gradient(0deg,#79b6cc 55%,#f8fbfc 55%)"],
+      gas:["水蒸氣","水汽化成水蒸氣；狀態改變，物質仍是水。", "linear-gradient(0deg,#eff5f4,#d9e9e5)"]
+    };
+    document.querySelectorAll("[data-phase]").forEach(button=>button.addEventListener("click",()=>{
+      const [label,note,background]=phaseData[button.dataset.phase];
+      document.getElementById("phase-water").textContent=label;
+      document.getElementById("phase-water").style.background=background;
+      document.getElementById("phase-note").textContent=note;
+      document.querySelectorAll("[data-phase]").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+    }));
+
+    const changes={evaporation:["水分蒸發","沒有生成另一種物質","物理變化","水分從液態變成水蒸氣，物質仍是水。"],rust:["桶身生鏽","形成不同於原金屬的鏽層","化學變化","生鏽形成新物質；外觀改變是線索，分類依據是是否生成新物質。"]};
+    document.querySelectorAll("[data-change]").forEach(button=>button.addEventListener("click",()=>{
+      const [name,result,type,note]=changes[button.dataset.change];
+      document.getElementById("change-name").textContent=name;
+      document.getElementById("change-result").textContent=result;
+      document.getElementById("change-type").textContent=type;
+      document.getElementById("change-note").textContent=note;
+      document.querySelectorAll("[data-change]").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+    }));
+
+    document.querySelectorAll("[data-pure]").forEach(button=>button.addEventListener("click",()=>{
+      const iron=button.dataset.pure==="iron";
+      document.getElementById("pure-type").textContent=iron?"元素":"化合物";
+      document.getElementById("pure-example").textContent=iron?"純鐵：不能用化學方法分解成更簡單的純物質":"蒸餾水：可用化學方法分解成氫、氧等元素";
+      document.querySelectorAll("[data-pure]").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+    }));
+
+    document.getElementById("check-answer").addEventListener("click",()=>{
+      const selected=document.querySelector('input[name="final-check"]:checked');
+      const feedback=document.getElementById("final-feedback");
+      if(!selected){feedback.dataset.kind="";feedback.textContent="先選一個判斷，再用成分紀錄說明理由。";return;}
+      if(selected.value==="mixture") {feedback.dataset.kind="correct";feedback.textContent="判斷正確。資料列出水和泥沙兩種物質，因此樣本是混合物；下一步才是選擇合適的分離方法。";}
+      else {feedback.dataset.kind="wrong";feedback.textContent="再看一次成分紀錄：樣本含水和泥沙，不是只有一種物質。依據組成，應分類為混合物。";}
+    });
+
+    const routeLinks=[...document.querySelectorAll(".route a")];
+    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){routeLinks.forEach(link=>link.toggleAttribute("aria-current",link.hash===`#${entry.target.id}`));}}),{rootMargin:"-18% 0px -70% 0px"});
+    document.querySelectorAll(".lesson-card").forEach(card=>observer.observe(card));
+  </script>
+</body>
+</html>
