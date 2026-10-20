@@ -192,10 +192,6 @@
     #shared-scale[data-zoom="true"] .ruler-line { stroke-width: .8; }
     #shared-scale[data-zoom="true"] .ruler-line.major { stroke-width: 1.5; }
     #model-screen[data-zoom="true"] #pencil-end-guide { stroke-width: .7; stroke-dasharray: 2 2; }
-    .model-readout { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #cbded0; }
-    .model-readout small { color: var(--muted); }
-    .model-readout strong { font-size: 1.12rem; }
-    .model-status { min-height: 3.1em; margin: 10px 0 0 !important; padding: 10px 12px; border-radius: 12px; background: rgb(255 255 255 / 70%); font-size: .86rem !important; }
     .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
     #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 330px; pointer-events: none; }
     #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 330px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
@@ -426,8 +422,6 @@
                 </g>
               </svg>
             </div>
-            <div class="model-readout"><small>估讀核對</small><strong id="shared-reading">完成估讀後查看</strong></div>
-            <p class="model-status" id="shared-model-note" aria-live="polite">鉛筆與尺保持不動。估讀右端在尺上的位置，再用右端讀值減去左端讀值。</p>
           </aside>
           <div class="control-panel estimate-panel">
             <label class="field" for="estimate-slider">① 先估讀鉛筆右端的位置（cm）
@@ -664,10 +658,8 @@
         document.querySelector("#estimate-prompt").textContent = "尺上每 1 cm 一條刻線，數字每 5 cm 標示；依端點位置估讀。";
         if (estimateChecked) {
           const reading = estimateEndpoint();
-          document.querySelector("#shared-reading").textContent = `模型端點：約 ${formatCentimeters(reading)} cm`;
           document.querySelector("#estimate-value").textContent = `你的估讀：約 ${formatCentimeters(estimateGuess)} cm`;
         } else {
-          document.querySelector("#shared-reading").textContent = "完成估讀後查看";
           document.querySelector("#estimate-value").textContent = estimateGuess === null ? "尚未估讀" : `你的估讀：約 ${formatCentimeters(Number(input.value) / 1000)} cm`;
         }
       };
@@ -821,7 +813,7 @@
           ? `三維直尺與鉛筆模型。鉛筆長度約 ${formatCentimeters(state.edge)} 公分；從目前角度讀到的尺上端點約為 ${formattedEndReading} 公分。可拖曳或使用方向鍵旋轉視角。`
           : `三維直尺與鉛筆模型。鉛筆實際長度約 ${formatCentimeters(state.edge)} 公分；目前視角的視線落在尺面範圍外，無法讀值。可拖曳或使用方向鍵旋轉視角。`);
       };
-      const updateModel = (note) => {
+      const updateModel = () => {
         ruler.dataset.zoom = String(state.zoom);
         ruler.removeAttribute("transform");
         document.querySelector("#model-screen").dataset.zoom = String(state.zoom);
@@ -854,7 +846,6 @@
         if (divisionNote) divisionNote.textContent = formatDivisionSize(state.divisions);
         const interval = graduationInterval();
         modelSvg.setAttribute("aria-label", `公分直尺每公分一條刻線；鉛筆左端對準零刻度，右端在 ${formatCentimeters(estimateEndpoint())} 公分附近，鉛筆長約 ${formatCentimeters(estimateLength)} 公分`);
-        if (note) document.querySelector("#shared-model-note").textContent = note;
         renderDivisionRuler();
         syncEstimateControls();
         renderParallaxScene();
@@ -1000,8 +991,6 @@
         const guess = formatCentimeters(estimateGuess);
         document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
         document.querySelector("#estimate-note").textContent = `你選擇估讀約 ${guess} cm。依鉛筆右端和相鄰刻線的位置判斷；這個滑桿只記錄你的估值，不會移動鉛筆或尺。`;
-        document.querySelector("#shared-reading").textContent = "完成估讀後查看";
-        document.querySelector("#shared-model-note").textContent = "鉛筆和尺保持不動；先依右端相對於兩條刻線的位置估讀。";
         const button = document.querySelector("#check-estimate");
         button.disabled = false;
         button.textContent = "③ 檢查估讀";
@@ -1012,8 +1001,6 @@
           estimateChecked = false;
           document.querySelector("#estimate-value").textContent = "尚未估讀";
           document.querySelector("#estimate-note").textContent = "先依端點在兩條刻線間的位置估讀。放大只讓你看得更清楚，不會增加刻線或改變最小刻度。";
-          document.querySelector("#shared-reading").textContent = "完成估讀後查看";
-          document.querySelector("#shared-model-note").textContent = "同一支鉛筆保持固定長度，左端對齊 0 cm；現在請先估讀右端位置。";
           syncEstimateControls();
           return;
         }
@@ -1024,8 +1011,6 @@
         const fraction = (reading - interval.start) / (interval.end - interval.start);
         const location = fraction < 0.33 ? "較靠近前一條刻線" : fraction < 0.67 ? "約在兩條刻線中間" : "較靠近後一條刻線";
         const guess = formatCentimeters(estimateGuess);
-        document.querySelector("#shared-reading").textContent = `模型端點：約 ${formatCentimeters(reading)} cm`;
-        document.querySelector("#shared-model-note").textContent = `右端讀值約 ${formatCentimeters(reading)} cm，左端在 0 cm；相減得鉛筆長約 ${formatCentimeters(reading - estimateStart)} cm。端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} cm 之間，${location}。`;
         document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
         document.querySelector("#estimate-note").textContent = `模型右端約在 ${formatCentimeters(reading)} cm，左端在 0 cm；右端減左端得到鉛筆長約 ${formatCentimeters(reading - estimateStart)} cm。${location}。估讀是近似值，尺上每格 1 cm。`;
         syncEstimateControls();
@@ -1077,7 +1062,7 @@
       zeroButtons.forEach((button) => button.addEventListener("click", () => {
         pressOne(zeroButtons, button);
         state.start = button.dataset.zero === "offset" ? 0.5 : 0;
-        updateModel(state.start ? `尺的起點移到 0.5 cm；鉛筆長度要以終點位置減去起點位置。` : "尺的起點回到 0 cm；同一鉛筆的長度由終點位置讀取。");
+        updateModel();
       }));
 
       const correctionStates = {
@@ -1094,7 +1079,7 @@
         camera.pitch = defaultCameraPitch;
         state.start = selectedCase === "start" ? 0.5 : 0;
         if (selectedCase === "scale") state.divisions = 2;
-        updateModel("共用模型已切換到這種量測限制；套用改善後可比較同一模型的變化。");
+        updateModel();
       };
       const renderCorrection = () => {
         const selectedCase = document.querySelector("#correction-case").value;
@@ -1126,7 +1111,7 @@
         else if (selectedCase === "start") state.start = 0.5;
         else state.divisions = 2;
         corrected = !corrected;
-        updateModel(corrected ? selected.explanation : "已還原改善前的狀態；可再次套用修正觀察差異。");
+        updateModel();
         renderCorrection();
       });
 
