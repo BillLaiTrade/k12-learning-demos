@@ -448,7 +448,7 @@
           </aside>
           </div>
           <p class="live-note" id="estimate-note" aria-live="polite">依端點在相鄰刻線間的位置估讀。放大只改變觀看比例，不會增加刻線或改變最小刻度。</p>
-          <div class="fact"><p>真實物體的端點不一定剛好對準刻線，因此要依它落在刻線間的位置估讀。估讀是近似值；放大只能看得更清楚，不會增加刻度。</p></div>
+          <div class="fact"><p>真實物體的端點不一定剛好對準刻線，因此要依它落在刻線間的位置估讀。刻度即使細到奈米，有限精度的儀器仍無法標出所有更細的位置差異；測量結果因此是近似值，仍需要估讀。</p></div>
         </div>
       </section>
 
@@ -627,6 +627,7 @@
         const text = String(rounded);
         return Math.abs(value - rounded) < 1e-8 ? text : `約 ${text}`;
       };
+      const formatEstimate = (value) => Number(value).toFixed(1);
       const graduationInterval = (position = edgePosition()) => {
         const interval = 30 / state.divisions;
         const index = clamp(Math.floor(position / interval + 1e-9), 0, state.divisions - 1);
@@ -663,9 +664,9 @@
         document.querySelector("#estimate-prompt").textContent = "在 18 cm 和 19 cm 之間連續移動；估讀是近似判斷，可能無法完全準確。";
         if (estimateChecked) {
           const reading = estimateEndpoint();
-          document.querySelector("#estimate-value").textContent = `你的估讀：${formatCentimeters(estimateGuess)} cm`;
+          document.querySelector("#estimate-value").textContent = `你的估讀：約 ${formatEstimate(estimateGuess)} cm`;
         } else {
-          document.querySelector("#estimate-value").textContent = estimateGuess === null ? "尚未估讀" : `你的估讀：${formatCentimeters(Number(input.value) / 1000)} cm`;
+          document.querySelector("#estimate-value").textContent = estimateGuess === null ? "尚未估讀" : `你的估讀：約 ${formatEstimate(Number(input.value) / 1000)} cm`;
         }
       };
       const add = (a, b) => ({ x: a.x + b.x, y: a.y + b.y, z: a.z + b.z });
@@ -1040,8 +1041,8 @@
         estimateGuess = Number(estimateSlider.value) / 1000;
         updateEstimateGuide();
         estimateChecked = false;
-        const guess = formatCentimeters(estimateGuess);
-        document.querySelector("#estimate-value").textContent = `你的估讀：${guess} cm`;
+        const guess = formatEstimate(estimateGuess);
+        document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
         document.querySelector("#estimate-note").textContent = `你選擇的估讀：${guess} cm。藍色虛線表示你的估讀位置，橘紅虛線標示鉛筆端點；估讀只是近似判斷，可能與實際位置有差距。`;
         const button = document.querySelector("#check-estimate");
         button.disabled = false;
@@ -1063,9 +1064,9 @@
         const interval = estimateGraduationInterval();
         const fraction = (reading - interval.start) / (interval.end - interval.start);
         const location = fraction < 0.33 ? "較靠近前一條刻線" : fraction < 0.67 ? "約在兩條刻線中間" : "較靠近後一條刻線";
-        const guess = formatCentimeters(estimateGuess);
-        document.querySelector("#estimate-value").textContent = `你的估讀：${guess} cm`;
-        document.querySelector("#estimate-note").textContent = `模型端點位置約為 ${formatCentimeters(reading)} cm；你的估讀：${guess} cm，${location}。估讀是近似判斷，刻線間沒有直接標出的精確讀值，因此可能與實際位置有差距。`;
+        const guess = formatEstimate(estimateGuess);
+        document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
+        document.querySelector("#estimate-note").textContent = `模型端點位置約為 ${formatCentimeters(reading)} cm；你的估讀約為 ${guess} cm，${location}。估讀是近似判斷，刻線間沒有直接標出的精確讀值，因此可能與實際位置有差距。`;
         syncEstimateControls();
       });
 
