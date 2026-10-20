@@ -11,7 +11,7 @@ function noise3(x,y,z){
   return mix(z0,z1,fz);
 }
 
-function makeStone(){
+export function makeStone(){
   const geometry=new THREE.SphereGeometry(1,128,96);
   const position=geometry.attributes.position,colors=[];
   for(let i=0;i<position.count;i++){
