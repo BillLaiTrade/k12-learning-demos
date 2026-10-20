@@ -448,7 +448,7 @@
           </aside>
           </div>
           <p class="live-note" id="estimate-note" aria-live="polite">依端點在相鄰刻線間的位置估讀。放大只改變觀看比例，不會增加刻線或改變最小刻度。</p>
-          <div class="fact"><p>這把尺每 1 cm 才有一條刻線，沒有標出 18 cm 和 19 cm 之間的細分位置。估讀是根據端點在兩條刻線間的位置作近似判斷；顯示到小數一位，不代表尺能直接讀出那個精度。</p></div>
+          <div class="fact"><p>尺每 1 cm 一條刻線，兩條刻線間的位置需要估讀。顯示到小數一位是估值，不是尺上直接讀出的刻度。</p></div>
         </div>
       </section>
 
@@ -1063,10 +1063,10 @@
         const guess = formatEstimate(estimateGuess);
         const percentageError = Math.abs(estimateGuess - estimateLength) / estimateLength * 100;
         const closeness = percentageError < 1
-          ? "誤差小於 1%，表示估讀非常接近模型設定值；但估讀仍是近似判斷，不能視為完全精確。"
-          : "這是估讀值與模型設定值的差距；估讀仍是近似判斷。";
+          ? "估讀接近參考值。"
+          : "估讀與參考值有差距。";
         document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
-        document.querySelector("#estimate-note").textContent = `模型設定值為 18.4 cm；你的估讀顯示為 ${guess} cm。以模型設定值為基準，誤差百分比是 ${percentageError.toFixed(2)}%。${closeness} 百分比依滑桿位置連續計算，估讀數字顯示到小數一位。`;
+        document.querySelector("#estimate-note").textContent = `你的估讀：約 ${guess} cm；誤差百分比：${percentageError.toFixed(2)}%。${closeness} 百分比依滑桿位置連續計算，估讀顯示到小數一位。`;
         syncEstimateControls();
       });
 
