@@ -69,7 +69,6 @@
     .bucket-image[data-view="body"] { transform:scale(1.7); transform-origin:50% 68%; }
     .bucket-image[data-view="handle"] { transform:scale(2); transform-origin:50% 0%; }
     .bucket-image[data-view="grip"] { transform:scale(3); transform-origin:50% -18%; }
-    .bucket-figure figcaption { min-height:1.4em; color:var(--muted); font-size:.8rem; text-align:center; }
     .bucket-detail { min-height:150px; padding:18px; border:1px solid var(--line); border-radius:14px; background:#fff; }
     .bucket-detail-label { margin:0 0 5px; color:var(--green); font-size:.78rem; font-weight:800; letter-spacing:.05em; }
     .bucket-detail h3 { margin:0 0 8px; font-size:1.15rem; }
@@ -213,17 +212,16 @@
           <div class="card-side"><span class="card-number">01</span><h3>物體和物質</h3><span class="card-role">先分清楚正在研究什麼</span></div>
           <div class="card-main">
             <h2>這個水桶是什麼做的？桶子和材料有什麼不同？</h2>
-            <p>先看看整只水桶，再觀察它的不同部位。水桶是物體；桶身和提把握把則使用不同的物質作為材料。</p>
+            <p>看看這只水桶由哪些部分組成，各部分用了什麼材料。</p>
             <div class="visual">
               <div class="bucket-scene">
                 <figure class="bucket-figure">
                   <div class="bucket-image-window"><img class="bucket-image" id="bucket-image" src="assets/metal-bucket.png" data-view="overview" alt="完整的空水桶，包含鐵製桶身、鐵絲提把和紅色塑膠握把"></div>
-                  <figcaption id="bucket-image-caption">整只水桶：鐵製桶身、鐵絲提把、塑膠握把</figcaption>
                 </figure>
                 <div class="bucket-detail" aria-live="polite" aria-atomic="true">
                   <p class="bucket-detail-label" id="bucket-detail-material">物體</p>
                   <h3 id="bucket-detail-heading">整只水桶</h3>
-                  <p id="bucket-detail-copy">水桶是一個看得見、摸得到的物體；不同部位可以由不同物質製成。</p>
+                  <p id="bucket-detail-copy">水桶是一個看得見、摸得到的物體，由不同部位組成。</p>
                 </div>
               </div>
               <div class="choice-row bucket-choices" role="group" aria-label="切換水桶部位的圖像與材質說明">
@@ -234,15 +232,12 @@
               </div>
             </div>
             <div class="concept-note"><p><strong>先抓住這個差別：</strong>水桶是物體；鐵和塑膠是構成水桶不同部位的物質。「材料」是物質在製作物體時的用途。</p></div>
-            <p class="live-note" id="note-s1" aria-live="polite">整只水桶是一個物體；桶身、提把支架和握把使用不同材料。</p>
-            <p class="prompt">把水桶各部分的觀察整理成紀錄。</p>
+            <p class="prompt">水桶觀察紀錄</p>
             <dl class="record-task" aria-label="水桶觀察紀錄">
-              <dt>研究物體</dt><dd>水桶</dd>
               <dt>桶身材料</dt><dd>鐵製材料</dd>
               <dt>握把材料</dt><dd>塑膠材料</dd>
               <dt>觀察發現</dt><dd>同一物體的不同部位可使用不同材料</dd>
             </dl>
-            <button class="action-button" type="button" data-record="object">把水桶的組成記入紀錄</button>
             <p class="next-hint">下一步再觀察桶身和桶中水的狀態，並比較固體與液體的特徵。</p>
           </div>
         </section>
@@ -416,10 +411,10 @@
 
   <script>
     const bucketPartViews = {
-      overview: { label:"物體", heading:"整只水桶", copy:"水桶是一個看得見、摸得到的物體；不同部位可以由不同物質製成。", caption:"整只水桶：鐵製桶身、鐵絲提把、塑膠握把", alt:"完整的空水桶，包含鐵製桶身、鐵絲提把和紅色塑膠握把", note:"整只水桶是一個物體；桶身、提把支架和握把使用不同材料。" },
-      body: { label:"鐵製材料", heading:"桶身", copy:"桶身是水桶的一部分，由鐵製材料製成；水桶這個物體不等於鐵這種物質。", caption:"桶身由鐵製材料製成", alt:"水桶的鐵製桶身", note:"桶身是水桶的一部分，使用鐵製材料；整只水桶仍是一個物體。" },
-      handle: { label:"鐵製材料", heading:"提把支架", copy:"提把支架是連接水桶兩側的鐵絲，也屬於水桶的一部分。", caption:"提把支架由鐵絲製成", alt:"水桶兩側連接桶身的鐵絲提把支架", note:"提把支架是水桶的一部分，由鐵製材料製成。" },
-      grip: { label:"塑膠材料", heading:"握把", copy:"握把套在提把支架上，方便手握；它使用塑膠材料，和鐵製支架不同。", caption:"握把由紅色塑膠製成", alt:"水桶提把中央的紅色塑膠握把", note:"握把使用塑膠材料；同一個物體的不同部位可以由不同物質製成。" }
+      overview: { label:"物體", heading:"整只水桶", copy:"水桶是一個看得見、摸得到的物體，由不同部位組成。", alt:"完整的空水桶，包含鐵製桶身、鐵絲提把和紅色塑膠握把" },
+      body: { label:"鐵製材料", heading:"桶身", copy:"桶身是水桶的一部分，由鐵製材料製成；水桶這個物體不等於鐵這種物質。", alt:"水桶的鐵製桶身" },
+      handle: { label:"鐵製材料", heading:"提把支架", copy:"提把支架是連接水桶兩側的鐵絲，也屬於水桶的一部分。", alt:"水桶兩側連接桶身的鐵絲提把支架" },
+      grip: { label:"塑膠材料", heading:"握把", copy:"握把套在提把支架上，方便手握；它使用塑膠材料，和鐵製支架不同。", alt:"水桶提把中央的紅色塑膠握把" }
     };
     function selectBucketPart(part) {
       const view=bucketPartViews[part];
@@ -428,22 +423,19 @@
       const image=document.getElementById("bucket-image");
       image.dataset.view=part;
       image.alt=view.alt;
-      document.getElementById("bucket-image-caption").textContent=view.caption;
       document.getElementById("bucket-detail-material").textContent=view.label;
       document.getElementById("bucket-detail-heading").textContent=view.heading;
       document.getElementById("bucket-detail-copy").textContent=view.copy;
-      document.getElementById("note-s1").textContent=view.note;
     }
     document.querySelectorAll("[data-bucket-part]").forEach(button=>button.addEventListener("click",()=>selectBucketPart(button.dataset.bucketPart)));
 
     const recordValues = {
-      object: ["水桶", "已記錄水桶這個物體，以及不同部位使用的材料。"],
       state: ["桶身／土壤：固體；水：液體", "空氣只作氣體對照，不列為雨水樣本。"],
       property: ["混濁、顆粒、磁性等觀察線索", "外觀和單一性質都不足以單獨證明組成。"],
       change: ["鏽層是不同於原金屬的新物質", "已分開記錄形成新物質的可能性與已發生的變化。"],
       composition: ["待依成分資料判斷", "已建立純物質／混合物的分類依據。"]
     };
-    const recordRows = { object:"record-object", state:"record-state", property:"record-property", change:"record-change", composition:"record-composition" };
+    const recordRows = { state:"record-state", property:"record-property", change:"record-change", composition:"record-composition" };
     document.querySelectorAll("[data-record]").forEach(button => button.addEventListener("click", () => {
       const key = button.dataset.record;
       document.getElementById(recordRows[key]).textContent = recordValues[key][0];
