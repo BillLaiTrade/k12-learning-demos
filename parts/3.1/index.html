@@ -219,7 +219,7 @@
     .view-presets .view-help { margin: 0 0 0 auto; color: var(--muted); font-size: .84rem; }
     .scene-caption { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
     .scene-caption p { margin: 0; color: var(--muted); font-size: .88rem; }
-    .scene-readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .scene-readout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin-top: 12px; }
     .scene-readout article { padding: 12px; border-radius: 12px; background: white; border: 1px solid var(--line); }
     .scene-readout small { display: block; color: var(--muted); }
     .scene-readout strong { font-size: 1.25rem; }
@@ -491,9 +491,9 @@
               <button type="button" class="secondary" id="view-oblique" aria-pressed="false">斜向觀察</button>
               <p class="view-help">拖曳畫面也可自由旋轉視角</p>
             </div>
-            <div class="scene-caption"><p id="camera-caption" aria-live="polite">正對尺面：端點投影對準尺上刻度。</p><button type="button" class="secondary" id="reset-camera">回到正對尺面</button></div>
-            <div class="scene-readout" aria-live="polite"><article><small>正對尺面估讀</small><strong id="front-reading">約 18 cm</strong></article><article><small>目前角度估讀</small><strong id="parallax-reading">約 18 cm</strong></article></div>
-            <p class="live-note" id="parallax-explanation">正對尺面時，視線延長線接近鉛筆端點；斜向觀察時，端點的視線落到尺面別處，這種因觀察角度不同而產生的讀值差異，叫作「視差」。這裡的讀值依照尺上刻度估讀。</p>
+            <div class="scene-caption"><p id="camera-caption" aria-live="polite">正對尺面：端點投影對準尺上刻度。</p></div>
+            <div class="scene-readout" aria-live="polite"><article><small>目前角度估讀</small><strong id="parallax-reading">約 18.4 cm</strong></article></div>
+            <p class="live-note" id="parallax-explanation">橘色輔助線的落點顯示目前角度的估讀。視角不同，視線落點可能改變，因此讀值也會產生差異，這稱為視差。</p>
           </div>
         </div>
       </section>
@@ -601,7 +601,6 @@
       const orbitRadius = 24;
       const parallaxLength = 18.4;
       const pencilHeight = 0.61;
-      const parallaxTickSpacing = 1;
       const parallaxCenterX = state.start + 10;
       const defaultCameraYaw = Math.asin((state.start + parallaxLength - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
       const obliqueCameraYaw = Math.asin((state.start - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
@@ -757,11 +756,7 @@
         const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
         const pencilCenterX = state.start + parallaxLength / 2;
         const pencilStartX = pencilCenterX - parallaxLength / 2;
-        const estimatedStep = parallaxTickSpacing;
-        const apparentWidth = Math.max(0, projectedEdgeX - pencilStartX);
-        const apparentWidthReading = Math.round(apparentWidth / estimatedStep * 10) / 10 * estimatedStep;
-        const displayedEndEstimate = (Math.round(projectedEdgeX / estimatedStep) * estimatedStep).toFixed(0);
-        const landingOnScale = projectedEdgeX >= 0 && projectedEdgeX <= 30 && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
+        const landingOnScale = clampedProjectionX >= 0 && clampedProjectionX <= 20 && projectedEdgeX <= rulerMax && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
 
         window.setPencil3DView?.({
           edge: parallaxLength,
@@ -779,9 +774,7 @@
           rayEnd: { x: clampedProjectionX, y: rulerTop + 0.02, z: clampedProjectionZ }
         });
 
-        const frontPosition = state.start + parallaxLength;
-        document.querySelector("#front-reading").textContent = `約 ${(Math.round(frontPosition / estimatedStep) * estimatedStep).toFixed(0)} cm`;
-        document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${displayedEndEstimate} cm` : "視線落在尺外";
+        document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${clampedProjectionX.toFixed(1)} cm` : "視線落在尺外";
         const cameraCaption = cameraPreset === "front"
           ? "正對尺面：端點投影對準尺上刻度。"
           : cameraPreset === "oblique"
@@ -793,9 +786,9 @@
         document.querySelector("#view-oblique").setAttribute("aria-pressed", String(cameraPreset === "oblique"));
         document.querySelector("#parallax-explanation").textContent = !landingOnScale
           ? "這個角度下，視線延長線落在尺面範圍外，無法從尺上讀值。轉動視角，讓落點回到刻度上；鉛筆長度始終不變。"
-          : "橘色標記顯示端點投影在尺上的位置。比較正對和斜向的估讀；鉛筆和尺都沒有移動。";
+          : "觀察角度改變時，橘色輔助線落點也會改變，因此讀值可能不同；這種差異稱為視差。";
         parallaxCanvas.setAttribute("aria-label", landingOnScale
-          ? `三維直尺與鉛筆模型。從目前角度讀到的尺上端點約為 ${displayedEndEstimate} 公分。可拖曳或使用方向鍵旋轉視角。`
+          ? `三維直尺與鉛筆模型。橘色輔助線落在約 ${clampedProjectionX.toFixed(1)} 公分處。可拖曳或使用方向鍵旋轉視角。`
           : "三維直尺與鉛筆模型。目前視角的投影落在尺面範圍外，無法讀值；可拖曳或使用方向鍵旋轉視角。");
       };
       const updateModel = () => {
@@ -1083,12 +1076,6 @@
         else return;
         event.preventDefault();
         cameraPreset = "free";
-        renderParallaxScene();
-      });
-      document.querySelector("#reset-camera").addEventListener("click", () => {
-        cameraPreset = "front";
-        camera.yaw = defaultCameraYaw;
-        camera.pitch = defaultCameraPitch;
         renderParallaxScene();
       });
       document.querySelector("#view-front").addEventListener("click", () => {
