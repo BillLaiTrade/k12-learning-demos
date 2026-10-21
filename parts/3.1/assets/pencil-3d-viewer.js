@@ -389,7 +389,7 @@ try {
 
   projectionRay = new THREE.Line(
     new THREE.BufferGeometry(),
-    new THREE.LineDashedMaterial({ color: 0xc45a2b, dashSize: 0.16, gapSize: 0.1, linewidth: 1.5 })
+    new THREE.LineDashedMaterial({ color: 0xb65125, dashSize: 0.2, gapSize: 0.09, linewidth: 1.5 })
   );
   projectionRay.renderOrder = 3;
   scene.add(projectionRay);
