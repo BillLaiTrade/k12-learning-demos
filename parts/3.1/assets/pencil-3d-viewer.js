@@ -21,9 +21,9 @@ let renderer;
 let magnifierRenderer;
 let correctionRenderer;
 let correctionMagnifierRenderer;
-const magnifierCamera = new THREE.PerspectiveCamera(18.5, 1, 0.1, 80);
+const magnifierCamera = new THREE.PerspectiveCamera(23, 1, 0.1, 80);
 const correctionCamera = new THREE.PerspectiveCamera(38, 1, 0.1, 180);
-const correctionMagnifierCamera = new THREE.PerspectiveCamera(18.5, 1, 0.1, 80);
+const correctionMagnifierCamera = new THREE.PerspectiveCamera(23, 1, 0.1, 80);
 const correctionInteractionRaycaster = new THREE.Raycaster();
 const correctionInteractionPointer = new THREE.Vector2();
 let correctionScene;
@@ -630,7 +630,7 @@ function render() {
       }
       magnifierCamera.aspect = rect.width / rect.height;
       magnifierCamera.updateProjectionMatrix();
-      const magnifierTarget = new THREE.Vector3(view.start + 17.5, 0.55, 0.1);
+      const magnifierTarget = new THREE.Vector3(view.start + 18.5, 0.3, 0.8);
       const viewDirection = camera.position.clone().sub(target).normalize();
       magnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
       magnifierCamera.lookAt(magnifierTarget);
@@ -736,7 +736,7 @@ function renderCorrection() {
       correctionMagnifierCamera.aspect = inset.width / inset.height;
       correctionMagnifierCamera.updateProjectionMatrix();
       const magnifierTargetX = correctionView.magnifierTargetX ?? (correctionView.start + correctionView.rulerOffset + 18.5);
-      const magnifierTarget = new THREE.Vector3(magnifierTargetX, 0.32, 0.1);
+      const magnifierTarget = new THREE.Vector3(magnifierTargetX, 0.3, 0.8);
       const viewDirection = correctionCamera.position.clone().sub(target).normalize();
       correctionMagnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
       correctionMagnifierCamera.lookAt(magnifierTarget);
