@@ -24,6 +24,8 @@ let correctionMagnifierRenderer;
 const magnifierCamera = new THREE.PerspectiveCamera(18.5, 1, 0.1, 80);
 const correctionCamera = new THREE.PerspectiveCamera(38, 1, 0.1, 180);
 const correctionMagnifierCamera = new THREE.PerspectiveCamera(18.5, 1, 0.1, 80);
+const correctionInteractionRaycaster = new THREE.Raycaster();
+const correctionInteractionPointer = new THREE.Vector2();
 let correctionScene;
 const magnifierLabels = new THREE.Group();
 let correctionMagnifierLabels;
@@ -674,6 +676,23 @@ window.setPencil3DView = (nextView = {}) => {
 window.setPencil3DCorrectionView = (nextView = {}) => {
   Object.assign(correctionView, nextView);
   renderCorrection();
+};
+
+window.getPencil3DCorrectionDragTarget = (clientX, clientY) => {
+  if (!correctionRenderer || !modelReady || modelFailed || !correctionPencil || !correctionRulerModel) return null;
+  const rect = correctionCanvas.getBoundingClientRect();
+  if (!rect.width || !rect.height || clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) return null;
+  correctionInteractionPointer.set(
+    ((clientX - rect.left) / rect.width) * 2 - 1,
+    -((clientY - rect.top) / rect.height) * 2 + 1
+  );
+  correctionScene.updateMatrixWorld(true);
+  correctionCamera.updateMatrixWorld(true);
+  correctionInteractionRaycaster.setFromCamera(correctionInteractionPointer, correctionCamera);
+  const pencilHit = correctionInteractionRaycaster.intersectObject(correctionPencil, true)[0];
+  const rulerHit = correctionInteractionRaycaster.intersectObject(correctionRulerModel, true)[0];
+  if (!pencilHit && !rulerHit) return null;
+  return pencilHit && (!rulerHit || pencilHit.distance < rulerHit.distance) ? "pencil" : "ruler";
 };
 
 new ResizeObserver(resizeRenderer).observe(sceneCanvas);
