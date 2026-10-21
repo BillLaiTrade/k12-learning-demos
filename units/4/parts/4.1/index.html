@@ -187,7 +187,7 @@
     .gas-shape-walls { position:absolute; inset:12px 0 0; border:3px solid #718b7e; border-top:0; border-radius:0 0 15px 15px; background:linear-gradient(90deg,rgba(122,160,140,.23),rgba(240,249,243,.16) 18%,rgba(255,255,255,.12) 52%,rgba(218,238,226,.18) 84%,rgba(112,148,128,.24)); box-shadow:inset 0 -5px 0 rgba(85,122,100,.12); pointer-events:none; }
     .gas-shape-rim { position:absolute; z-index:2; top:0; left:-3px; right:-3px; height:27px; border:3px solid #718b7e; border-radius:50%; background:linear-gradient(180deg,#fff 0%,#e5efe8 54%,#bfd2c5 100%); box-shadow:inset 0 -3px 0 rgba(85,122,100,.18),0 2px 3px rgba(40,60,49,.12); pointer-events:none; }
     .gas-particle-field { position:absolute; z-index:1; inset:18px 8px 8px; overflow:hidden; border-radius:0 0 10px 10px; }
-    .gas-particle { position:absolute; left:var(--x); top:var(--y); width:8px; height:8px; border-radius:50%; background:#d27b27; box-shadow:0 1px 2px rgba(96,54,15,.24),inset -1px -1px 0 rgba(133,70,12,.25); transform:translate(-50%,-50%); transition:left .5s ease-in-out,top .5s ease-in-out; will-change:left,top; }
+    .gas-particle { position:absolute; left:var(--x); top:var(--y); width:8px; height:8px; border-radius:50%; background:#d27b27; box-shadow:0 1px 2px rgba(96,54,15,.24),inset -1px -1px 0 rgba(133,70,12,.25); transform:translate(calc(-50% + var(--drift-x,0px)),calc(-50% + var(--drift-y,0px))); will-change:transform; }
     .interactive-model[data-model="gas-shape"] { width:min(100%,360px); }
     .interactive-model[data-model="gas-shape"] .model-readout { width:100%; }
     @media(prefers-reduced-motion:reduce) { .gas-shape-box { transition-duration:.01ms; } }
@@ -623,21 +623,28 @@
       root.querySelector("[data-model-readout]").textContent=placed?"水位差 8 mL｜鐵塊體積 8 cm³":"量筒原有水：20 mL｜鐵塊尚未浸入";
       document.querySelector("#state-demo .demo-result").textContent=placed?"鐵塊完全浸入後，水位由 20 mL 升至 28 mL；差 8 mL，等於鐵塊 8 cm³。":"量筒恢復原水位 20 mL；再將鐵塊放入水中重做測量。";
     }
-    let gasMotionTimers=new Set();
+    let gasMotionFrame=0;
     function startGasParticleMotion(){
-      gasMotionTimers.forEach(timer=>clearTimeout(timer));gasMotionTimers.clear();
+      cancelAnimationFrame(gasMotionFrame);
       const model=document.querySelector('[data-model="gas-shape"]');if(!model)return;
-      const dots=[...model.querySelectorAll("[data-gas-particle]")];
-      dots.forEach((dot,index)=>{
-        const drift=()=>{
-          if(!dot.isConnected)return;
-          const col=index%6,row=Math.floor(index/6),cellX=100/6,cellY=100/5;
-          const x=(col+.5+(Math.random()-.5)*.7)*cellX,y=(row+.5+(Math.random()-.5)*.5)*cellY;
-          dot.style.setProperty("--x",`${x}%`);dot.style.setProperty("--y",`${y}%`);
-          const timer=setTimeout(()=>{gasMotionTimers.delete(timer);drift();},500+Math.random()*350);gasMotionTimers.add(timer);
-        };
-        const timer=setTimeout(()=>{gasMotionTimers.delete(timer);drift();},index*10+Math.random()*180);gasMotionTimers.add(timer);
-      });
+      const field=model.querySelector(".gas-particle-field"),dots=[...model.querySelectorAll("[data-gas-particle]")],particles=dots.map(dot=>({dot,x:0,y:0,vx:(Math.random()-.5)*8,vy:(Math.random()-.5)*8}));
+      let previous=performance.now();
+      const animate=now=>{
+        if(!model.isConnected)return;
+        const dt=Math.min((now-previous)/1000,.04);previous=now;
+        const limitX=Math.max(3,Math.min(13,field.clientWidth/12-4)),limitY=Math.max(3,Math.min(8,field.clientHeight/10-4)),damping=Math.exp(-2.6*dt),noise=38*Math.sqrt(dt);
+        particles.forEach(p=>{
+          const dot=p.dot;
+          p.vx=(p.vx+(Math.random()*2-1)*noise)*damping;p.vy=(p.vy+(Math.random()*2-1)*noise)*damping;
+          p.vx=Math.max(-24,Math.min(24,p.vx));p.vy=Math.max(-18,Math.min(18,p.vy));
+          p.x+=p.vx*dt;p.y+=p.vy*dt;
+          if(p.x>limitX){p.x=limitX;p.vx=-Math.abs(p.vx)*.55;}else if(p.x< -limitX){p.x=-limitX;p.vx=Math.abs(p.vx)*.55;}
+          if(p.y>limitY){p.y=limitY;p.vy=-Math.abs(p.vy)*.55;}else if(p.y< -limitY){p.y=-limitY;p.vy=Math.abs(p.vy)*.55;}
+          dot.style.setProperty("--drift-x",`${p.x.toFixed(2)}px`);dot.style.setProperty("--drift-y",`${p.y.toFixed(2)}px`);
+        });
+        gasMotionFrame=requestAnimationFrame(animate);
+      };
+      gasMotionFrame=requestAnimationFrame(animate);
     }
     function setGasShape(form,button){
       const model=document.querySelector('[data-model="gas-shape"]');if(!model)return;
@@ -697,7 +704,7 @@
         :visual==="liquid-shape"?`<div class="interactive-model" data-model="liquid-shape"><div class="liquid-shape-vessel" data-liquid-vessel data-form="wide"><div class="liquid-shape-water"></div></div><div class="model-readout" data-model-readout>容器：寬而淺｜同一份水</div></div>`
         :visual==="liquid-volume"?`<div class="interactive-model" data-model="liquid-volume"><div class="liquid-transfer"><div><div class="transfer-vessel"><span class="transfer-water" data-source-water style="--fill:100%"></span></div><span class="model-caption">量筒・200 mL</span><span class="model-caption" data-source-reading>目前 200 mL</span></div><span class="transfer-arrow" aria-hidden="true">→</span><div><div class="transfer-vessel"><span class="transfer-water" data-target-water style="--fill:0%"></span></div><span class="model-caption">接收量筒</span><span class="model-caption" data-target-reading>目前 0 mL</span></div></div><div class="model-readout" data-model-readout>轉移 0%｜同一份水合計 200 mL</div></div>`
         :visual==="liquid-compress"?`<div class="interactive-model" data-model="liquid-compress"><div class="water-syringe-model" data-water-syringe><div class="water-syringe-fill"></div><span class="water-syringe-plunger"></span></div><div class="model-readout" data-model-readout>推力：0｜水樣體積：約 50 mL</div><span class="model-caption">示意模型；活塞位移放大顯示水樣極微小壓縮，勿用力硬推實物</span></div>`
-        :visual==="gas-shape"?`<div class="interactive-model" data-model="gas-shape"><div class="gas-shape-box" data-gas-shape-box data-form="wide" role="img" aria-label="寬淺容器剖面模型"><div class="gas-shape-walls" aria-hidden="true"></div><div class="gas-particle-field" aria-hidden="true">${Array.from({length:30},(_,i)=>`<span class="gas-particle" data-gas-particle style="--x:${((i%6)+.5)*100/6}%;--y:${(Math.floor(i/6)+.5)*100/5}%"></span>`).join("")}</div><div class="gas-shape-rim" aria-hidden="true"></div></div><div class="model-readout" data-model-readout>容器：寬淺容器｜空氣分子持續緩慢隨機運動</div><span class="model-caption">橘色圓點表示空氣分子模型；靜置時也會緩慢隨機移動，實際空氣看不見。</span></div>`
+        :visual==="gas-shape"?`<div class="interactive-model" data-model="gas-shape"><div class="gas-shape-box" data-gas-shape-box data-form="wide" role="img" aria-label="寬淺容器剖面模型"><div class="gas-shape-walls" aria-hidden="true"></div><div class="gas-particle-field" aria-hidden="true">${Array.from({length:30},(_,i)=>`<span class="gas-particle" data-gas-particle style="--x:${((i%6)+.5)*100/6}%;--y:${(Math.floor(i/6)+.5)*100/5}%"></span>`).join("")}</div><div class="gas-shape-rim" aria-hidden="true"></div></div><div class="model-readout" data-model-readout>容器：寬淺容器｜空氣分子持續緩慢隨機運動</div><span class="model-caption">橘色圓點沿不規則、連續的路徑移動，表示空氣分子的隨機運動；實際空氣看不見。</span></div>`
         :visual==="gas-volume"?`<div class="interactive-model" data-model="gas-volume"><div class="gas-space-box" data-gas-space-box><span class="gas-space-fill"></span></div><div class="model-readout" data-model-readout>容器空間：1 單位｜空氣體積：1 單位</div></div>`
         :visual==="gas-compress"?`<div class="interactive-model" data-model="gas-compress"><div class="gas-syringe-model" data-gas-syringe><div class="gas-syringe-cavity"><span class="gas-syringe-particles"></span></div><span class="gas-piston"></span></div><div class="model-readout" data-model-readout>活塞位置：未推入｜空氣體積：約 50 mL</div><span class="model-caption">橘色點表示同一份空氣的粒子模型</span></div>`
         :`<div class="compare-three" data-compare-property="${key}"><span class="compare-item" data-kind="solid" data-active="true">固體<br>鐵製物體</span><span class="compare-item" data-kind="liquid">液體<br>水</span><span class="compare-item" data-kind="gas">氣體<br>空氣</span></div>`;
