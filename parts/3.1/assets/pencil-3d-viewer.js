@@ -17,7 +17,6 @@ const rulerLength = 20;
 let renderer;
 let magnifierRenderer;
 const magnifierCamera = new THREE.PerspectiveCamera(11, 1, 0.1, 80);
-const magnifierLabels = new THREE.Group();
 let rulerModel;
 let pencil;
 let projectionRay;
@@ -374,20 +373,7 @@ try {
 
   rulerModel = createRuler();
   scene.add(rulerModel);
-  if (magnifierRenderer) {
-    magnifierLabels.visible = false;
-    for (const centimeter of [18, 19]) {
-      const label = new THREE.Mesh(
-        new THREE.PlaneGeometry(0.62, 0.42),
-        new THREE.MeshBasicMaterial({ map: makeTextTexture(String(centimeter)), transparent: true, depthWrite: false, side: THREE.DoubleSide })
-      );
-      label.rotation.x = -Math.PI / 2;
-      label.position.set(centimeter, 0.235, 0.46);
-      label.renderOrder = 6;
-      magnifierLabels.add(label);
-    }
-    scene.add(magnifierLabels);
-  }
+  // Keep the magnified edge unnumbered, like the opposite physical edge of the ruler.
   pencil = createPencil();
   scene.add(pencil);
 
@@ -480,15 +466,22 @@ function render() {
       }
       magnifierCamera.aspect = rect.width / rect.height;
       magnifierCamera.updateProjectionMatrix();
-      const magnifierTarget = new THREE.Vector3(view.start + 18.5, 0.22, 0.46);
+      const magnifierTarget = new THREE.Vector3(view.start + 18.5, 0.22, -1.48);
       const viewDirection = camera.position.clone().sub(target).normalize();
+      viewDirection.z = -Math.abs(viewDirection.z);
+      viewDirection.y = Math.max(viewDirection.y, 2.5);
+      viewDirection.normalize();
       magnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 7.2);
       magnifierCamera.lookAt(magnifierTarget);
       const majorLabels = rulerModel.children.filter((child) => child.userData.rulerMajorNumber);
       for (const label of majorLabels) label.visible = false;
-      magnifierLabels.visible = true;
+      const markerScale = landingMarker.scale.clone();
+      const ringScale = landingRing.scale.clone();
+      landingMarker.scale.setScalar(0.3);
+      landingRing.scale.setScalar(0.45);
       magnifierRenderer.render(scene, magnifierCamera);
-      magnifierLabels.visible = false;
+      landingMarker.scale.copy(markerScale);
+      landingRing.scale.copy(ringScale);
       for (const label of majorLabels) label.visible = true;
     }
   }
@@ -504,8 +497,8 @@ function render() {
   };
   window.dispatchEvent(new CustomEvent("pencil3d-projection", {
     detail: {
-      ruler18: projectToPanel(18, 0.23, 1.05),
-      ruler19: projectToPanel(19, 0.23, 1.05),
+      ruler18: projectToPanel(18, 0.23, -1.3),
+      ruler19: projectToPanel(19, 0.23, -1.3),
       pencilTip: projectToPanel(view.start + view.edge, view.centerY, view.centerZ),
       projectedReading: view.rayEnd?.x ?? view.edge
     }
