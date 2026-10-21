@@ -128,6 +128,27 @@ function updateProjectionGuide(guide, start, end) {
   guide.visible = true;
 }
 
+function setMagnifierCrop(magnifierCamera, sourceCamera, worldTarget, viewport) {
+  const magnification = 6;
+  const fullHeight = 1000;
+  const fullWidth = fullHeight * sourceCamera.aspect;
+  const cropHeight = fullHeight / magnification;
+  const cropWidth = Math.min(fullWidth, cropHeight * viewport.width / viewport.height);
+  const projectedTarget = worldTarget.clone().project(sourceCamera);
+  const centerX = (projectedTarget.x + 1) * fullWidth / 2;
+  const centerY = (1 - projectedTarget.y) * fullHeight / 2;
+  const cropX = THREE.MathUtils.clamp(centerX - cropWidth / 2, 0, fullWidth - cropWidth);
+  const cropY = THREE.MathUtils.clamp(centerY - cropHeight / 2, 0, fullHeight - cropHeight);
+
+  magnifierCamera.fov = sourceCamera.fov;
+  magnifierCamera.aspect = sourceCamera.aspect;
+  magnifierCamera.position.copy(sourceCamera.position);
+  magnifierCamera.quaternion.copy(sourceCamera.quaternion);
+  magnifierCamera.updateProjectionMatrix();
+  magnifierCamera.setViewOffset(fullWidth, fullHeight, cropX, cropY, cropWidth, cropHeight);
+  magnifierCamera.updateMatrixWorld(true);
+}
+
 function makeTextTexture(text) {
   const label = document.createElement("canvas");
   label.width = 256;
@@ -582,28 +603,21 @@ function render() {
         magnifierCanvas.dataset.size = size;
         magnifierRenderer.setSize(Math.round(rect.width), Math.round(rect.height), false);
       }
-      magnifierCamera.aspect = rect.width / rect.height;
-      magnifierCamera.updateProjectionMatrix();
       const magnifierTarget = new THREE.Vector3(
         view.rayStart && view.rayEnd ? (view.rayStart.x + view.rayEnd.x) / 2 : view.start + 18.5,
         view.rayStart ? (view.rayStart.y + 0.22) / 2 : 0.3,
         view.rayStart ? (view.rayStart.z + 1.5) / 2 : 0.34
       );
-      const viewDirection = camera.position.clone().sub(target).normalize();
-      magnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
-      magnifierCamera.lookAt(magnifierTarget);
+      setMagnifierCrop(magnifierCamera, camera, magnifierTarget, rect);
       const majorLabels = rulerModel.children.filter((child) => child.userData.rulerMajorNumber);
       for (const label of majorLabels) label.visible = false;
       magnifierLabels.visible = true;
-      const markerScale = landingMarker.scale.clone();
       const ringScale = landingRing.scale.clone();
       const ringWasVisible = landingRing.visible;
-      landingMarker.scale.setScalar(0.15);
       landingRing.scale.setScalar(0.18);
       landingRing.visible = false;
       magnifierRenderer.render(scene, magnifierCamera);
       magnifierLabels.visible = false;
-      landingMarker.scale.copy(markerScale);
       landingRing.scale.copy(ringScale);
       landingRing.visible = ringWasVisible;
       for (const label of majorLabels) label.visible = true;
@@ -682,8 +696,6 @@ function renderCorrection() {
         correctionMagnifierCanvas.dataset.size = size;
         correctionMagnifierRenderer.setSize(Math.round(inset.width), Math.round(inset.height), false);
       }
-      correctionMagnifierCamera.aspect = inset.width / inset.height;
-      correctionMagnifierCamera.updateProjectionMatrix();
       const magnifierTarget = new THREE.Vector3(
         correctionView.magnifierTargetX ?? (correctionView.rayStart && correctionView.rayEnd
           ? (correctionView.rayStart.x + correctionView.rayEnd.x) / 2
@@ -691,20 +703,15 @@ function renderCorrection() {
         correctionView.rayStart ? (correctionView.rayStart.y + 0.22) / 2 : 0.3,
         correctionView.rayStart ? (correctionView.rayStart.z + 1.5) / 2 : 0.34
       );
-      const viewDirection = correctionCamera.position.clone().sub(target).normalize();
-      correctionMagnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
-      correctionMagnifierCamera.lookAt(magnifierTarget);
+      setMagnifierCrop(correctionMagnifierCamera, correctionCamera, magnifierTarget, inset);
       const majorLabels = correctionRulerModel.children.filter((child) => child.userData.rulerMajorNumber);
       const showEndpointLabels = correctionView.magnifierMode !== "origin";
       for (const label of majorLabels) label.visible = !showEndpointLabels;
       correctionMagnifierLabels.visible = showEndpointLabels;
-      const markerScale = correctionLandingMarker.scale.clone();
       const ringWasVisible = correctionLandingRing.visible;
-      correctionLandingMarker.scale.setScalar(0.15);
       correctionLandingRing.visible = false;
       correctionMagnifierRenderer.render(correctionScene, correctionMagnifierCamera);
       correctionMagnifierLabels.visible = false;
-      correctionLandingMarker.scale.copy(markerScale);
       correctionLandingRing.visible = ringWasVisible;
       for (const label of majorLabels) label.visible = true;
     }
