@@ -429,8 +429,7 @@ export function mountMassMeasurement() {
     button.addEventListener('click', () => {
       if (suppressWeightClick) { suppressWeightClick = false; return; }
       const value = Number(button.dataset.weight);
-      const source = weightSource.weights.findIndex(item => item.value === value && item.model.visible);
-      addWeight(value, source < 0 ? null : source);
+      addWeight(value);
     });
     let start = null;
     let ghost = null;
@@ -633,6 +632,12 @@ export function mountMassMeasurement() {
             object = parent;
           }
           sourceIndex = sourceWeightModels.indexOf(object);
+          const sourceModel = object;
+          object = sourceModel.clone(true);
+          scene.add(object);
+          object.position.copy(sourceModel.getWorldPosition(new THREE.Vector3()));
+          object.quaternion.copy(sourceModel.getWorldQuaternion(new THREE.Quaternion()));
+          object.scale.copy(sourceModel.getWorldScale(new THREE.Vector3()));
           dragKind = 'source-weight';
         } else if (raycaster.intersectObject(balance.stone, true).length) {
           object = balance.stone;
@@ -660,7 +665,7 @@ export function mountMassMeasurement() {
       }
     }
     if (!object) return;
-    if (dragKind === 'weight' || dragKind === 'source-weight') detachPreservingWorldTransform(object);
+    if (dragKind === 'weight') detachPreservingWorldTransform(object);
     const center = object.getWorldPosition(new THREE.Vector3());
     camera.getWorldDirection(planeNormal);
     dragPlane.setFromNormalAndCoplanarPoint(planeNormal, center);
@@ -688,18 +693,11 @@ export function mountMassMeasurement() {
     if (dragged.kind === 'source-weight') {
       const source = weightSource.weights[dragged.sourceIndex];
       if (rightPanDropTarget(event) && weights.reduce((sum, value) => sum + value, 0) + source.value <= 60) {
-        weightSource.tray.add(dragged.object);
-        dragged.object.position.copy(source.position);
-        dragged.object.quaternion.copy(source.quaternion);
-        dragged.object.scale.copy(source.scale);
-        addWeight(source.value, dragged.sourceIndex);
+        addWeight(source.value);
       } else {
-        weightSource.tray.add(dragged.object);
-        dragged.object.position.copy(source.position);
-        dragged.object.quaternion.copy(source.quaternion);
-        dragged.object.scale.copy(source.scale);
-        status.textContent = '砝碼已放回畫面中的架上；可以先放砝碼或石頭。';
+        status.textContent = '可將砝碼拖到右側秤盤，架上的砝碼會留在原位。';
       }
+      dragged.object.removeFromParent();
     } else if (dragged.kind === 'weight') {
       if (rightPanDropTarget(event)) {
         drawWeights();
