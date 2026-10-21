@@ -231,35 +231,32 @@
     .correction-options button[aria-pressed="true"] { color: #fff; border-color: var(--green); background: var(--green); }
     .correction-options small { color: var(--muted); font-size: .76rem; font-weight: 500; }
     .correction-options button[aria-pressed="true"] small { color: #e2f0e8; }
-    .correction-visual { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
-    .correction-visual { position: relative; }
-    .correction-visual > svg { display: block; width: 100%; height: auto; touch-action: none; transition: margin-top 180ms ease; }
-    .correction-workspace[data-control="angle"] .correction-visual > svg { margin-top: 125px; }
-    .correction-magnifier { position: absolute; top: 10px; right: 10px; width: clamp(175px, 54%, 230px); aspect-ratio: 300 / 180; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 8px 22px rgb(42 43 29 / 18%); }
-    .correction-magnifier svg { display: block; width: 100%; height: 100%; }
-    #correction-ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
-    #correction-ruler-ticks { fill: #26383a; font: 14px system-ui, sans-serif; }
-    #correction-ruler-ticks path { stroke: #26383a; stroke-width: 1.5; }
-    #correction-ruler-ticks path.major { stroke-width: 2.2; }
-    #correction-magnifier-ticks path { fill: none; stroke: #26383a; stroke-width: 2; }
-    #correction-magnifier-ticks path.major { stroke-width: 2.8; }
-    #correction-pencil-guide { stroke: #bc612b; stroke-width: 3; stroke-dasharray: 5 4; }
-    #correction-sight-guide { stroke: #b65125; stroke-width: 3; stroke-dasharray: 5 4; }
-    .correction-focus-label { fill: #26383a; font: 14px system-ui, sans-serif; text-anchor: middle; }
-    #correction-ruler-group { touch-action: none; }
-    .correction-workspace[data-control="origin"] #correction-ruler-group { cursor: grab; }
-    .correction-workspace[data-control="origin"] #correction-ruler-group:active { cursor: grabbing; }
-    .correction-magnifier-frame { fill: #fffefa; stroke: #d17b26; stroke-width: 2; }
-    .correction-controls { margin-top: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
-    .correction-controls label { display: block; font-weight: 700; }
-    .correction-controls input[type="range"] { width: 100%; min-height: 34px; accent-color: var(--green); }
-    .correction-control-ends { display: flex; justify-content: space-between; color: var(--muted); font-size: .84rem; }
-    .correction-live-readout { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
-    .correction-live-readout small { color: var(--muted); }
-    .correction-live-readout strong { color: #183c31; font-size: 1.1rem; font-variant-numeric: tabular-nums; }
-    .correction-result { margin-top: 12px; padding: 12px 14px; border-left: 4px solid #b9cfb7; border-radius: 0 12px 12px 0; background: #f1f6ef; }
-    .correction-result p { margin: 0; }
-    .correction-result p + p { margin-top: 4px; color: var(--muted); font-size: .9rem; }
+    .correction-parallax-scene { position: relative; margin: 12px 0; padding: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
+    #correction-pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 220px; pointer-events: none; }
+    #correction-parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 220px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
+    .correction-parallax-scene[data-magnifier="true"] #correction-parallax-canvas { margin-top: 150px; }
+    .correction-parallax-scene[data-magnifier="true"] #correction-pencil-3d-canvas { inset: 162px 12px auto; }
+    #correction-parallax-focus-overlay { position: absolute; z-index: 4; inset: 0; pointer-events: none; opacity: 0; visibility: hidden; }
+    .correction-parallax-scene[data-magnifier="true"] #correction-parallax-focus-overlay { opacity: 1; visibility: visible; }
+    #correction-parallax-focus-connectors { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    #correction-parallax-focus-connectors path { fill: none; stroke: #d17b26; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+    #correction-parallax-focus-box { position: absolute; border: 2px solid #d17b26; border-radius: 5px; background: rgb(255 190 95 / 10%); box-shadow: 0 0 0 2px rgb(255 255 255 / 78%); }
+    .correction-parallax-magnifier { position: absolute; top: 10px; right: 10px; z-index: 2; width: clamp(175px, 54%, 230px); aspect-ratio: 300 / 180; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 8px 22px rgb(42 43 29 / 18%); }
+    .correction-parallax-magnifier canvas { display: block; width: 100%; height: 100%; }
+    .correction-adjustment { margin: 12px 0 0; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
+    .correction-adjustment h4 { margin: 0 0 6px; font-size: 1rem; }
+    .correction-adjustment p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .correction-choice-row, .correction-view-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .correction-choice-row [aria-pressed="true"], .correction-view-controls [aria-pressed="true"] { background: var(--green); color: #fff; border-color: var(--green); }
+    .correction-mode-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .correction-mode-tabs [aria-pressed="true"] { background: var(--green); color: #fff; border-color: var(--green); }
+    #correction-mode-instructions { min-height: 2.8em; margin: 8px 0 0; color: var(--muted); font-size: .9rem; }
+    #correction-combined-title { font-weight: 750; }
+    @media (max-width: 760px) {
+      #correction-pencil-3d-canvas, #correction-parallax-canvas { height: 200px; }
+      .correction-parallax-scene[data-magnifier="true"] #correction-parallax-canvas { margin-top: 125px; }
+      .correction-parallax-scene[data-magnifier="true"] #correction-pencil-3d-canvas { inset: 137px 12px auto; }
+    }
     @media (max-width: 520px) { .correction-options { gap: 5px; } .correction-options button { padding: 8px 7px; font-size: .88rem; } .correction-options small { font-size: .7rem; } }
     .end-card { background: #eef4e9; border-color: #bfd1be; }
     .next-hint { font-size: .9rem; color: var(--muted); }
@@ -513,13 +510,13 @@
         <div class="card-main">
           <h2>同一物體，為什麼讀值會差一點？</h2>
           <p>同一支鉛筆平行放在 20 cm 直尺上，筆尖對齊 0 cm。切換兩個預設視角，或拖曳 3D 場景自由旋轉；觀察筆尾投影落在哪個刻度，以及讀值如何改變。</p>
-          <div class="parallax-scene">
+          <div class="parallax-scene" id="parallax-scene">
             <canvas id="pencil-3d-canvas" aria-hidden="true"></canvas>
             <span id="pencil-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
             <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、鉛筆和端點投影線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明觀察角度改變時，尺上的讀值可能改變。</canvas>
             <div class="parallax-focus-overlay" aria-hidden="true">
-              <svg id="parallax-focus-connectors" preserveAspectRatio="none"><path id="parallax-focus-path"></path></svg>
-              <div id="parallax-focus-box"></div>
+              <svg id="parallax-focus-connectors" class="parallax-focus-connectors" preserveAspectRatio="none"><path id="parallax-focus-path" class="parallax-focus-path"></path></svg>
+              <div id="parallax-focus-box" class="parallax-focus-box"></div>
               <div class="parallax-magnifier">
                 <canvas id="parallax-magnifier-canvas" aria-hidden="true"></canvas>
               </div>
@@ -550,37 +547,35 @@
             </div>
             <h3 id="correction-stage-title">調整刻度密度</h3>
             <p id="correction-stage-prompt">端點落在相距很遠的刻線之間，讀值範圍較大。把刻度調密，觀察範圍如何縮小。</p>
-            <div class="correction-visual">
-              <svg id="correction-measurement-svg" viewBox="0 0 760 190" role="img" aria-label="同一支鉛筆與二十公分直尺；橘色虛線標示讀值位置">
-                <image id="correction-pencil" href="assets/pencil-photo.webp" x="50" y="27" width="552" height="34" preserveAspectRatio="none" aria-hidden="true"></image>
-                <line id="correction-pencil-guide" x1="602" y1="60" x2="602" y2="102"></line>
-                <line id="correction-zero-guide" x1="20" y1="64" x2="20" y2="102" stroke="#bc612b" stroke-width="2" stroke-dasharray="4 4" visibility="hidden"></line>
-                <line id="correction-sight-guide" x1="602" y1="60" x2="617" y2="102" visibility="hidden"></line>
-                <g id="correction-focus-labels" visibility="hidden"><text class="correction-focus-label" x="590" y="180">18</text><text class="correction-focus-label" x="620" y="180">19</text></g>
-                <g id="correction-ruler-group" aria-hidden="true">
-                  <rect id="correction-ruler-body" x="50" y="100" width="600" height="58" rx="8"></rect>
-                  <g id="correction-ruler-ticks"></g>
-                </g>
-              </svg>
-              <div class="correction-magnifier" id="correction-magnifier" hidden aria-hidden="true">
-                <svg viewBox="526 48 184 110" preserveAspectRatio="xMidYMid meet">
-                  <image href="assets/pencil-photo.webp" x="50" y="27" width="552" height="34" preserveAspectRatio="none"></image>
-                  <g id="correction-magnifier-ruler">
-                    <rect x="50" y="100" width="600" height="58" rx="8" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
-                    <g id="correction-magnifier-ticks" fill="#26383a" font-family="system-ui, sans-serif" font-size="14" text-anchor="middle"></g>
-                    <g id="correction-magnifier-focus-labels" fill="#26383a" font-family="system-ui, sans-serif" font-size="14" text-anchor="middle"><text x="590" y="151">18</text><text x="620" y="151">19</text></g>
-                  </g>
-                  <line id="correction-magnifier-guide" x1="602" y1="59" x2="617" y2="102" stroke="#b65125" stroke-width="3" stroke-dasharray="5 4"></line>
-                </svg>
+            <div class="correction-parallax-scene" id="correction-parallax-scene" data-magnifier="true">
+              <canvas id="correction-pencil-3d-canvas" aria-hidden="true"></canvas>
+              <canvas id="correction-parallax-canvas" tabindex="0" role="img" aria-label="可拖曳調整鉛筆和直尺視角的三維場景，包含端點投影線與放大視窗；使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明。</canvas>
+              <p id="correction-parallax-fallback" hidden>目前瀏覽器無法顯示 3D 場景，請使用支援 WebGL 的瀏覽器。</p>
+              <div id="correction-parallax-focus-overlay" aria-hidden="true">
+                <svg id="correction-parallax-focus-connectors" class="parallax-focus-connectors" preserveAspectRatio="none"><path class="parallax-focus-path"></path></svg>
+                <div id="correction-parallax-focus-box" class="parallax-focus-box"></div>
+                <div class="correction-parallax-magnifier"><canvas id="correction-parallax-magnifier-canvas"></canvas></div>
               </div>
             </div>
-            <div class="correction-controls">
-              <label for="correction-control-range" id="correction-control-label">調整直尺的刻度密度</label>
-              <input id="correction-control-range" type="range" min="2" max="20" step="1" value="2" aria-label="調整二十公分直尺的等分數">
-              <div class="correction-control-ends" id="correction-control-ends"><span>較疏</span><span>較密</span></div>
+            <div class="correction-adjustment">
+              <div id="correction-density-controls" class="correction-choice-row" role="group" aria-label="選擇直尺刻度密度">
+                <button type="button" class="secondary" data-correction-density="5" aria-pressed="true">較疏・每格 5 cm</button>
+                <button type="button" class="secondary" data-correction-density="1" aria-pressed="false">較密・每格 1 cm</button>
+              </div>
+              <div id="correction-origin-controls" hidden>
+                <p>在上方直尺上左右拖曳，讓 0 刻度對準筆尖；若未對準 0，需用終點讀值減去起點讀值。</p>
+              </div>
+              <div id="correction-angle-controls" hidden>
+                <div class="correction-view-controls" role="group" aria-label="預設觀察視角">
+                  <button type="button" class="secondary" id="correction-view-front" aria-pressed="false">正對尺面</button>
+                  <button type="button" class="secondary" id="correction-view-oblique" aria-pressed="true">斜向觀察</button>
+                </div>
+                <p>也可拖曳場景自由旋轉，並在放大視窗觀察端點投影。</p>
+              </div>
+              <p id="correction-mode-instructions" aria-live="polite">選擇較密的刻度，看看估讀範圍如何縮小。</p>
               <div class="correction-live-readout" aria-live="polite">
-                <small id="correction-readout-label">目前每格 10 cm・估讀範圍</small>
-                <strong id="correction-readout-value">10–20 cm</strong>
+                <small id="correction-readout-label">每格 5 cm・估讀範圍</small>
+                <strong id="correction-readout-value">15–20 cm</strong>
               </div>
             </div>
             <div class="correction-result" id="correction-result" aria-live="polite">
@@ -722,27 +717,29 @@
       const parallaxCanvas = document.querySelector("#parallax-canvas");
       const parallaxScene = parallaxCanvas.parentElement;
       window.addEventListener("pencil3d-projection", (event) => {
+        const projectionScene = document.getElementById(event.detail.sceneId);
+        if (!projectionScene) return;
         const { ruler18, ruler19, pencilTip } = event.detail;
-        const panelBounds = parallaxScene.getBoundingClientRect();
+        const panelBounds = projectionScene.getBoundingClientRect();
         const points = [ruler18, ruler19, pencilTip];
         const left = clamp(Math.min(...points.map((point) => point.x)) - 8, 4, panelBounds.width - 4);
         const right = clamp(Math.max(...points.map((point) => point.x)) + 8, left + 18, panelBounds.width - 4);
         const top = clamp(Math.min(...points.map((point) => point.y)) - 10, 4, panelBounds.height - 4);
         const bottom = clamp(Math.max(...points.map((point) => point.y)) + 10, top + 18, panelBounds.height - 4);
-        const focusBox = document.querySelector("#parallax-focus-box");
+        const focusBox = projectionScene.querySelector(".parallax-focus-box");
         focusBox.style.left = `${left}px`;
         focusBox.style.top = `${top}px`;
         focusBox.style.width = `${right - left}px`;
         focusBox.style.height = `${bottom - top}px`;
 
-        const magnifier = document.querySelector(".parallax-magnifier");
+        const magnifier = projectionScene.querySelector(".parallax-magnifier, .correction-parallax-magnifier");
         const inset = magnifier.getBoundingClientRect();
         const insetLeft = inset.left - panelBounds.left;
         const insetRight = inset.right - panelBounds.left;
         const insetBottom = inset.bottom - panelBounds.top;
-        document.querySelector("#parallax-focus-connectors").setAttribute("viewBox", `0 0 ${panelBounds.width} ${panelBounds.height}`);
+        projectionScene.querySelector(".parallax-focus-connectors").setAttribute("viewBox", `0 0 ${panelBounds.width} ${panelBounds.height}`);
         const path = `M${right} ${top} L${insetLeft} ${insetBottom} M${right} ${bottom} L${insetRight} ${insetBottom}`;
-        document.querySelector("#parallax-focus-path").setAttribute("d", path);
+        projectionScene.querySelector(".parallax-focus-path").setAttribute("d", path);
       });
       const camera = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
       let cameraPreset = "front";
@@ -1170,147 +1167,167 @@
       if (window.setPencil3DView) renderParallaxScene();
 
       const correctionWorkspace = document.querySelector("#correction-workspace");
-      const correctionSvg = document.querySelector("#correction-measurement-svg");
-      const correctionRuler = document.querySelector("#correction-ruler-group");
-      const correctionControl = document.querySelector("#correction-control-range");
-      let correctionControlKind = "density";
-      let correctionDivisions = 2;
-      let correctionOriginShift = 0;
-      let correctionViewProgress = 0;
-      const correctionLength = parallaxLength;
-      const correctionScaleOrigin = 50;
-      const correctionPencilEnd = correctionScaleOrigin + correctionLength * 30;
-      const correctionControlButtons = [...document.querySelectorAll("[data-correction-control]")];
-      const formatCorrectionValue = (value) => String(Number((Math.round((value + 1e-8) * 10) / 10).toFixed(1)));
-      const drawCorrectionTicks = (group, divisions, showMajorLabels = true) => {
-        const ticks = [];
-        for (let index = 0; index <= divisions; index += 1) {
-          const cm = (20 * index) / divisions;
-          const x = correctionScaleOrigin + 30 * cm;
-          const major = Math.abs(cm % 5) < 1e-8 || index === divisions;
-          const length = major ? 30 : 19;
-          ticks.push(`<path class="${major ? "major" : ""}" d="M${x} 100v${length}"/>`);
-          if (major && showMajorLabels) ticks.push(`<text x="${x}" y="151" text-anchor="${index === 0 ? "start" : index === divisions ? "end" : "middle"}">${formatCorrectionValue(cm)}</text>`);
-        }
-        group.innerHTML = ticks.join("");
-      };
-      const updateCorrectionScene = () => {
-        const step = 20 / correctionDivisions;
-        drawCorrectionTicks(document.querySelector("#correction-ruler-ticks"), correctionDivisions);
-        drawCorrectionTicks(document.querySelector("#correction-magnifier-ticks"), 20, false);
-        const rulerShift = correctionOriginShift - 30;
-        correctionRuler.setAttribute("transform", `translate(${rulerShift} 0)`);
-        document.querySelector("#correction-magnifier-ruler").setAttribute("transform", `translate(${rulerShift} 0)`);
-        const rulerOriginX = correctionScaleOrigin + rulerShift;
-        const startReading = (correctionScaleOrigin - rulerOriginX) / 30;
-        const apparentEndpoint = 18.9 - 0.5 * correctionViewProgress / 100;
-        const endReading = apparentEndpoint + startReading;
-        const landingX = correctionScaleOrigin + apparentEndpoint * 30;
-        const focusStart = Math.floor(endReading);
-        const focusEnd = focusStart + 1;
-        const mainFocusLabels = [...document.querySelectorAll("#correction-focus-labels text")];
-        mainFocusLabels.forEach((label, index) => {
-          const cm = index === 0 ? focusStart : focusEnd;
-          label.textContent = String(cm);
-          label.setAttribute("x", String(rulerOriginX + cm * 30));
-        });
-        const magnifierFocusLabels = [...document.querySelectorAll("#correction-magnifier-focus-labels text")];
-        magnifierFocusLabels.forEach((label, index) => {
-          const cm = index === 0 ? focusStart : focusEnd;
-          label.textContent = String(cm);
-          label.setAttribute("x", String(correctionScaleOrigin + cm * 30));
-        });
-        const originGuide = document.querySelector("#correction-zero-guide");
-        originGuide.setAttribute("x1", String(rulerOriginX));
-        originGuide.setAttribute("x2", String(rulerOriginX));
-        originGuide.setAttribute("visibility", correctionControlKind === "origin" ? "visible" : "hidden");
-        const pencilGuide = document.querySelector("#correction-pencil-guide");
-        pencilGuide.setAttribute("visibility", correctionControlKind === "angle" ? "hidden" : "visible");
-        const sightGuide = document.querySelector("#correction-sight-guide");
-        const magnifier = document.querySelector("#correction-magnifier");
-        const magnifierGuide = document.querySelector("#correction-magnifier-guide");
-        document.querySelector("#correction-focus-labels").setAttribute("visibility", correctionControlKind === "angle" ? "visible" : "hidden");
-        document.querySelector("#correction-magnifier-focus-labels").setAttribute("transform", `translate(${rulerShift} 0)`);
-        if (correctionControlKind === "density") {
-          const low = Math.floor(endReading / step) * step;
-          const high = low + step;
-          document.querySelector("#correction-readout-label").textContent = `每格 ${formatCorrectionValue(step)} cm・端點估讀範圍`;
-          document.querySelector("#correction-readout-value").textContent = `${formatCorrectionValue(low)}–${formatCorrectionValue(high)} cm`;
+      const correctionCanvas = document.querySelector("#correction-parallax-canvas");
+      const correctionScene = document.querySelector("#correction-parallax-scene");
+      const correctionModeButtons = [...document.querySelectorAll("[data-correction-control]")];
+      const correctionDensityButtons = [...document.querySelectorAll("[data-correction-density]")];
+      let correctionMode = "density";
+      let correctionTickInterval = 5;
+      let correctionRulerOffset = -1;
+      const correctionCameraState = { yaw: obliqueCameraYaw, pitch: defaultCameraPitch };
+      let correctionCameraPreset = "oblique";
+      let correctionDrag = null;
+      const correctionFormat = (value) => Number(value.toFixed(1)).toFixed(1);
+      const correctionDisplay = (value) => Math.abs(value - Math.round(value)) < 0.001 ? String(Math.round(value)) : correctionFormat(value);
+      const renderCorrectionScene = () => {
+        const bounds = correctionCanvas.getBoundingClientRect();
+        if (!bounds.width || !bounds.height) return;
+        const target = { x: state.start + 10, y: pencilHeight, z: 0 };
+        const cameraPosition = {
+          x: target.x + orbitRadius * Math.cos(correctionCameraState.pitch) * Math.sin(correctionCameraState.yaw),
+          y: target.y + orbitRadius * Math.sin(correctionCameraState.pitch),
+          z: target.z + orbitRadius * Math.cos(correctionCameraState.pitch) * Math.cos(correctionCameraState.yaw)
+        };
+        const rulerTop = 0.2;
+        const rulerNear = -1.6;
+        const rulerFar = 1.6;
+        const pencilCenterZ = -0.82;
+        const edgeX = state.start + parallaxLength;
+        const projectionFactor = (pencilHeight - rulerTop) / Math.max(0.1, cameraPosition.y - pencilHeight);
+        const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
+        const projectedEdgeZ = pencilCenterZ + projectionFactor * (pencilCenterZ - cameraPosition.z);
+        const rulerMin = correctionRulerOffset;
+        const rulerMax = correctionRulerOffset + 20;
+        const clampedProjectionX = clamp(projectedEdgeX, rulerMin, rulerMax);
+        const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
+        const landingOnScale = clampedProjectionX >= rulerMin && clampedProjectionX <= rulerMax && projectedEdgeX >= rulerMin && projectedEdgeX <= rulerMax && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
+        const startReading = state.start - correctionRulerOffset;
+        const endReading = clampedProjectionX - correctionRulerOffset;
+        const measuredLength = endReading - startReading;
+        const correctionView = {
+          edge: parallaxLength,
+          start: state.start,
+          rulerOffset: correctionRulerOffset,
+          tickInterval: correctionTickInterval,
+          yaw: correctionCameraState.yaw,
+          pitch: correctionCameraState.pitch,
+          orbitRadius,
+          centerZ: pencilCenterZ,
+          centerY: pencilHeight,
+          lookAtX: target.x,
+          lookAtY: rulerTop,
+          lookAtZ: target.z,
+          focalLengthRatio: bounds.width * 0.85 / bounds.height,
+          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
+          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.02, z: clampedProjectionZ }
+        };
+        window.setPencil3DCorrectionView?.(correctionView);
+        const reading = document.querySelector("#correction-readout-value");
+        if (correctionMode === "density") {
+          const low = Math.floor(measuredLength / correctionTickInterval) * correctionTickInterval;
+          const high = low + correctionTickInterval;
+          document.querySelector("#correction-readout-label").textContent = `每格 ${correctionTickInterval} cm・估讀範圍`;
+          reading.textContent = `${correctionDisplay(low)}–${correctionDisplay(high)} cm`;
           document.querySelector("#correction-stage-title").textContent = "調整刻度密度";
-          document.querySelector("#correction-stage-prompt").textContent = "端點落在相距很遠的刻線之間，讀值範圍較大。把刻度調密，觀察範圍如何縮小。";
-          document.querySelector("#correction-control-label").textContent = "調整直尺的刻度密度";
-          document.querySelector("#correction-control-ends").innerHTML = "<span>較疏</span><span>較密</span>";
-          correctionControl.min = "2"; correctionControl.max = "20"; correctionControl.step = "1"; correctionControl.value = String(correctionDivisions);
-          correctionControl.setAttribute("aria-label", "調整二十公分直尺的等分數");
-          sightGuide.setAttribute("visibility", "hidden"); magnifier.hidden = true;
-        } else if (correctionControlKind === "origin") {
-          const measuredLength = endReading - startReading;
-          document.querySelector("#correction-readout-label").textContent = `起點 ${formatCorrectionValue(startReading)} cm・終點 ${formatCorrectionValue(endReading)} cm`;
-          document.querySelector("#correction-readout-value").textContent = `${formatCorrectionValue(endReading)} − ${formatCorrectionValue(startReading)} ≈ ${formatCorrectionValue(measuredLength)} cm`;
+          document.querySelector("#correction-stage-prompt").textContent = "刻度間距大，估讀範圍也大。選擇刻度較疏或較密的直尺。";
+          document.querySelector("#correction-mode-instructions").textContent = correctionTickInterval === 1 ? "每格 1 cm，估讀範圍縮小了。起點和視角仍可分別調整。" : "每格 5 cm，端點落在哪一小段還不清楚；試試較密的刻度。";
+        } else if (correctionMode === "origin") {
+          document.querySelector("#correction-readout-label").textContent = `起點 ${correctionFormat(startReading)} cm・終點 ${correctionFormat(endReading)} cm`;
+          reading.textContent = `${correctionFormat(endReading)} − ${correctionFormat(startReading)} ≈ ${correctionFormat(measuredLength)} cm`;
           document.querySelector("#correction-stage-title").textContent = "調整起點位置";
-          document.querySelector("#correction-stage-prompt").textContent = "試著把 0 刻度移到筆尖；若起點沒有對準 0，就用終點讀值減去起點讀值。";
-          document.querySelector("#correction-control-label").textContent = "拖動直尺，讓 0 刻度對準筆尖";
-          document.querySelector("#correction-control-ends").innerHTML = "<span>起點偏移</span><span>對準 0</span>";
-          correctionControl.min = "0"; correctionControl.max = "30"; correctionControl.step = "0.1"; correctionControl.value = String(correctionOriginShift);
-          correctionControl.setAttribute("aria-label", "拖動直尺，使零刻度對準鉛筆左端");
-          sightGuide.setAttribute("visibility", "hidden"); magnifier.hidden = true;
+          document.querySelector("#correction-stage-prompt").textContent = "在尺面上左右拖曳，讓 0 刻度對準筆尖；也可用終點讀值減起點讀值。";
+          document.querySelector("#correction-mode-instructions").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "零刻度已對準筆尖。拖動尺面仍可任意調整；觀察角度也可另外修正。" : `零刻度偏移 ${formatCentimeters(-correctionRulerOffset)} cm。直接拖動尺面，讓零刻度移到筆尖。`;
         } else {
-          sightGuide.setAttribute("x1", String(correctionPencilEnd)); sightGuide.setAttribute("x2", String(landingX));
-          sightGuide.setAttribute("visibility", "visible");
-          magnifier.hidden = false;
-          magnifierGuide.setAttribute("x1", String(correctionPencilEnd)); magnifierGuide.setAttribute("x2", String(landingX));
-          document.querySelector("#correction-readout-label").textContent = "橘色輔助線落點・目前角度估讀";
-          document.querySelector("#correction-readout-value").textContent = `約 ${formatCorrectionValue(endReading)} cm`;
+          document.querySelector("#correction-readout-label").textContent = landingOnScale ? "目前角度估讀" : "目前角度估讀";
+          reading.textContent = landingOnScale ? `約 ${correctionFormat(endReading)} cm` : "視線落在尺外";
           document.querySelector("#correction-stage-title").textContent = "調整觀察角度";
-          document.querySelector("#correction-stage-prompt").textContent = "筆和尺保持不動。調整視線，並在放大圖中比較端點在 18 和 19 之間的位置。";
-          document.querySelector("#correction-control-label").textContent = "調整觀察方向";
-          document.querySelector("#correction-control-ends").innerHTML = "<span>斜向觀察</span><span>正對刻度</span>";
-          correctionControl.min = "0"; correctionControl.max = "100"; correctionControl.step = "1"; correctionControl.value = String(correctionViewProgress);
-          correctionControl.setAttribute("aria-label", "調整視線方向，觀察橘色輔助線落點與讀值變化");
+          document.querySelector("#correction-stage-prompt").textContent = "沿用第六區塊的視角控制：按預設視角，或拖曳 3D 場景自由旋轉。";
+          document.querySelector("#correction-mode-instructions").textContent = landingOnScale
+            ? `目前讀值約 ${correctionFormat(endReading)} cm。改變視角，觀察橘色投影線落點與讀值如何變化。`
+            : "目前視線落在尺面外；拖曳場景轉動視角，讓投影回到刻度上。";
         }
-        correctionWorkspace.dataset.control = correctionControlKind;
-        correctionControlButtons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.correctionControl === correctionControlKind)));
-        const scaleReady = correctionDivisions === 20;
-        const originReady = correctionOriginShift >= 29.9;
-        const angleReady = correctionViewProgress === 100;
-        document.querySelector("#correction-density-status").textContent = `${scaleReady ? "較密" : "較疏"}・每格 ${formatCorrectionValue(step)} cm`;
-        document.querySelector("#correction-origin-status").textContent = originReady ? "已對準 0" : `起點偏移 ${formatCorrectionValue(startReading)} cm`;
-        document.querySelector("#correction-angle-status").textContent = angleReady ? "視線正對" : "斜向觀察";
-        document.querySelector("#correction-combined-title").textContent = scaleReady && originReady && angleReady
-          ? "三項條件都已調整，讀值範圍最小、落差也最小。"
-          : "三項條件都可分別調整；合併改善時，讀值會更可靠。";
-        document.querySelector("#correction-combined-note").textContent = scaleReady && originReady && angleReady
-          ? "刻度較密、零刻度對準筆尖、視線正對刻度。任一項都可再調整，觀察它對量測的影響。"
-          : "刻度密度影響估讀範圍；起點位置與觀察角度會影響讀值。任意切換項目，設定都會保留。";
+        correctionScene.dataset.control = correctionMode;
+        correctionModeButtons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.correctionControl === correctionMode)));
+        correctionDensityButtons.forEach((button) => button.setAttribute("aria-pressed", String(Number(button.dataset.correctionDensity) === correctionTickInterval)));
+        document.querySelector("#correction-density-controls").hidden = correctionMode !== "density";
+        document.querySelector("#correction-origin-controls").hidden = correctionMode !== "origin";
+        document.querySelector("#correction-angle-controls").hidden = correctionMode !== "angle";
+        document.querySelector("#correction-view-front").setAttribute("aria-pressed", String(correctionCameraPreset === "front"));
+        document.querySelector("#correction-view-oblique").setAttribute("aria-pressed", String(correctionCameraPreset === "oblique"));
+        document.querySelector("#correction-density-status").textContent = `${correctionTickInterval === 1 ? "較密" : "較疏"}・每格 ${correctionTickInterval} cm`;
+        document.querySelector("#correction-origin-status").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "已對準 0" : `偏移 ${formatCentimeters(-correctionRulerOffset)} cm`;
+        document.querySelector("#correction-angle-status").textContent = correctionCameraPreset === "front" ? "正對尺面" : correctionCameraPreset === "oblique" ? "斜向觀察" : "自由旋轉";
+        const allImproved = correctionTickInterval === 1 && Math.abs(correctionRulerOffset) < 0.02 && correctionCameraPreset === "front";
+        document.querySelector("#correction-combined-title").textContent = allImproved
+          ? "三項條件都調整後，估讀範圍最小、視差也較小。"
+          : "三項條件可各自調整；同時改善時，讀值會更可靠。";
+        document.querySelector("#correction-combined-note").textContent = allImproved
+          ? "每格 1 cm、零刻度對準筆尖、視線正對尺面。任一項都可再調整，比較它對讀值的影響。"
+          : "刻度疏密、起點位置和觀察角度都會影響讀值。切換項目時，各項設定都會保留。";
       };
-      correctionControl.addEventListener("input", () => {
-        if (correctionControlKind === "density") correctionDivisions = Number(correctionControl.value);
-        else if (correctionControlKind === "origin") correctionOriginShift = Number(correctionControl.value);
-        else correctionViewProgress = Number(correctionControl.value);
-        updateCorrectionScene();
-      });
-      correctionControlButtons.forEach((button) => button.addEventListener("click", () => {
-        correctionControlKind = button.dataset.correctionControl;
-        updateCorrectionScene();
+      correctionModeButtons.forEach((button) => button.addEventListener("click", () => {
+        correctionMode = button.dataset.correctionControl;
+        renderCorrectionScene();
       }));
-      let rulerDrag = null;
-      correctionRuler.addEventListener("pointerdown", (event) => {
-        if (correctionControlKind !== "origin") return;
-        rulerDrag = { x: event.clientX, value: correctionOriginShift, pointerId: event.pointerId };
-        correctionRuler.setPointerCapture(event.pointerId);
+      correctionDensityButtons.forEach((button) => button.addEventListener("click", () => {
+        correctionTickInterval = Number(button.dataset.correctionDensity);
+        renderCorrectionScene();
+      }));
+      document.querySelector("#correction-view-front").addEventListener("click", () => {
+        correctionCameraPreset = "front";
+        correctionCameraState.yaw = defaultCameraYaw;
+        correctionCameraState.pitch = defaultCameraPitch;
+        renderCorrectionScene();
+      });
+      document.querySelector("#correction-view-oblique").addEventListener("click", () => {
+        correctionCameraPreset = "oblique";
+        correctionCameraState.yaw = obliqueCameraYaw;
+        correctionCameraState.pitch = defaultCameraPitch;
+        renderCorrectionScene();
+      });
+      correctionCanvas.addEventListener("pointerdown", (event) => {
+        if (correctionMode === "density") return;
+        correctionDrag = { x: event.clientX, y: event.clientY, value: correctionRulerOffset, pointerId: event.pointerId };
+        correctionCanvas.setPointerCapture(event.pointerId);
         event.preventDefault();
       });
-      correctionRuler.addEventListener("pointermove", (event) => {
-        if (!rulerDrag || event.pointerId !== rulerDrag.pointerId) return;
-        const scale = correctionSvg.getBoundingClientRect().width / 760;
-        correctionOriginShift = clamp(rulerDrag.value + (event.clientX - rulerDrag.x) / scale, 0, 30);
-        correctionControl.value = String(correctionOriginShift);
-        updateCorrectionScene();
+      correctionCanvas.addEventListener("pointermove", (event) => {
+        if (!correctionDrag || event.pointerId !== correctionDrag.pointerId) return;
+        const dx = event.clientX - correctionDrag.x;
+        const dy = event.clientY - correctionDrag.y;
+        correctionDrag.x = event.clientX;
+        correctionDrag.y = event.clientY;
+        if (correctionMode === "origin") {
+          const bounds = correctionCanvas.getBoundingClientRect();
+          correctionRulerOffset = clamp(correctionRulerOffset + dx * 20 / (bounds.width * 0.78), -1, 0);
+        } else {
+          correctionCameraPreset = "free";
+          const bounds = correctionCanvas.getBoundingClientRect();
+          const sideOfRuler = clamp((bounds.left + bounds.width / 2 - event.clientX) / (bounds.width / 2), -1, 1);
+          const dragSideStrength = Math.sign(sideOfRuler) * Math.max(0.4, Math.min(Math.abs(sideOfRuler), 0.6));
+          correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw + dx * 0.009 - dy * dragSideStrength * 0.013);
+        }
+        renderCorrectionScene();
       });
-      const releaseCorrectionRuler = () => { rulerDrag = null; };
-      correctionRuler.addEventListener("pointerup", releaseCorrectionRuler);
-      correctionRuler.addEventListener("pointercancel", releaseCorrectionRuler);
-      updateCorrectionScene();
+      const releaseCorrectionDrag = () => { correctionDrag = null; };
+      correctionCanvas.addEventListener("pointerup", releaseCorrectionDrag);
+      correctionCanvas.addEventListener("pointercancel", releaseCorrectionDrag);
+      correctionCanvas.addEventListener("lostpointercapture", releaseCorrectionDrag);
+      correctionCanvas.addEventListener("keydown", (event) => {
+        if (correctionMode !== "angle") return;
+        const angleStep = 0.08;
+        if (event.key === "ArrowLeft") correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw - angleStep);
+        else if (event.key === "ArrowRight") correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw + angleStep);
+        else if (event.key === "ArrowUp") correctionCameraState.pitch = clamp(correctionCameraState.pitch + angleStep, 0.55, 1.15);
+        else if (event.key === "ArrowDown") correctionCameraState.pitch = clamp(correctionCameraState.pitch - angleStep, 0.55, 1.15);
+        else return;
+        event.preventDefault();
+        correctionCameraPreset = "free";
+        renderCorrectionScene();
+      });
+      window.addEventListener("resize", renderCorrectionScene);
+      window.addEventListener("pencil3d-ready", renderCorrectionScene, { once: true });
+      renderCorrectionScene();
 
       const assessmentButtons = [...document.querySelectorAll("#fair-options button")];
       assessmentButtons.forEach((button) => button.addEventListener("click", () => {

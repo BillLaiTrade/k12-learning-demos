@@ -4,6 +4,9 @@ import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 const canvas = document.querySelector("#pencil-3d-canvas");
 const sceneCanvas = document.querySelector("#parallax-canvas");
 const magnifierCanvas = document.querySelector("#parallax-magnifier-canvas");
+const correctionCanvas = document.querySelector("#correction-parallax-canvas");
+const correctionMagnifierCanvas = document.querySelector("#correction-parallax-magnifier-canvas");
+const correctionSceneCanvas = document.querySelector("#correction-parallax-scene");
 const liveRegion = document.querySelector("#pencil-model-status");
 if (!canvas || !sceneCanvas) throw new Error("找不到鉛筆 3D 場景畫布");
 
@@ -16,19 +19,32 @@ const rulerLength = 20;
 
 let renderer;
 let magnifierRenderer;
+let correctionRenderer;
+let correctionMagnifierRenderer;
 const magnifierCamera = new THREE.PerspectiveCamera(18.5, 1, 0.1, 80);
+const correctionCamera = new THREE.PerspectiveCamera(38, 1, 0.1, 180);
+const correctionMagnifierCamera = new THREE.PerspectiveCamera(18.5, 1, 0.1, 80);
+let correctionScene;
 const magnifierLabels = new THREE.Group();
+let correctionMagnifierLabels;
 let rulerModel;
+let correctionRulerModel;
 let pencil;
+let correctionPencil;
 let projectionRay;
+let correctionProjectionRay;
 let landingMarker;
+let correctionLandingMarker;
 let landingRing;
+let correctionLandingRing;
 let modelReady = false;
 let modelFailed = false;
 let lastFrame = "";
 const view = {
   edge: 18.4,
   start: 0,
+  rulerOffset: 0,
+  tickInterval: 1,
   yaw: 0,
   pitch: 0.48,
   orbitRadius: 24,
@@ -40,6 +56,13 @@ const view = {
   focalLengthRatio: 2.5,
   rayStart: null,
   rayEnd: null
+};
+const correctionView = {
+  ...view,
+  yaw: 0,
+  pitch: 0.68,
+  rulerOffset: -1,
+  tickInterval: 5
 };
 
 function announce(message) {
@@ -139,6 +162,7 @@ function createRuler() {
       scaleInk
     );
     tick.position.set(centimeter, 0.211, 1.5 - tickLength / 2);
+    tick.userData.rulerTick = centimeter;
     tick.castShadow = false;
     tick.receiveShadow = true;
     group.add(tick);
@@ -150,6 +174,7 @@ function createRuler() {
       scaleInk
     );
     farTick.position.set(centimeter, 0.211, -1.5 + farTickLength / 2);
+    farTick.userData.rulerFarTick = centimeter;
     farTick.castShadow = false;
     farTick.receiveShadow = true;
     group.add(farTick);
@@ -170,6 +195,7 @@ function createRuler() {
     number.position.set(labelX, 0.235, 0.68);
     number.renderOrder = 2;
     number.userData.rulerMajorNumber = true;
+    number.userData.rulerCentimeter = centimeter;
     group.add(number);
   }
 
@@ -340,6 +366,37 @@ try {
     console.warn("無法啟動刻度放大窗", error);
   }
 
+  try {
+    correctionRenderer = new THREE.WebGLRenderer({
+      canvas: correctionCanvas,
+      alpha: true,
+      antialias: true,
+      powerPreference: "low-power"
+    });
+    correctionRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    correctionRenderer.outputColorSpace = THREE.SRGBColorSpace;
+    correctionRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+    correctionRenderer.toneMappingExposure = 0.94;
+    correctionRenderer.setClearColor(0x000000, 0);
+    correctionRenderer.shadowMap.enabled = true;
+    correctionRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    correctionMagnifierRenderer = new THREE.WebGLRenderer({
+      canvas: correctionMagnifierCanvas,
+      alpha: false,
+      antialias: true,
+      powerPreference: "low-power"
+    });
+    correctionMagnifierRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    correctionMagnifierRenderer.outputColorSpace = THREE.SRGBColorSpace;
+    correctionMagnifierRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+    correctionMagnifierRenderer.toneMappingExposure = 0.94;
+    correctionMagnifierRenderer.setClearColor(0xfffefa, 1);
+  } catch (error) {
+    correctionCanvas.hidden = true;
+    document.querySelector("#correction-parallax-fallback").hidden = false;
+    console.warn("無法啟動第七區塊的 3D 場景", error);
+  }
+
   const pmrem = new THREE.PMREMGenerator(renderer);
   const room = new RoomEnvironment();
   scene.environment = pmrem.fromScene(room, 0.04).texture;
@@ -375,6 +432,7 @@ try {
   rulerModel = createRuler();
   scene.add(rulerModel);
   if (magnifierRenderer) {
+    magnifierLabels.name = "ruler-magnifier-labels";
     for (const centimeter of [18, 19]) {
       const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeTextTexture(String(centimeter)), transparent: true, depthTest: false, depthWrite: false }));
       label.scale.set(0.56, 0.3, 1);
@@ -391,12 +449,14 @@ try {
     new THREE.BufferGeometry(),
     new THREE.LineDashedMaterial({ color: 0xb65125, dashSize: 0.2, gapSize: 0.09, linewidth: 1.5 })
   );
+  projectionRay.name = "measurement-projection-ray";
   projectionRay.renderOrder = 3;
   scene.add(projectionRay);
   landingMarker = new THREE.Mesh(
     new THREE.SphereGeometry(0.15, 20, 14),
     new THREE.MeshStandardMaterial({ color: 0xc45a2b, roughness: 0.38, emissive: 0x491708, emissiveIntensity: 0.25 })
   );
+  landingMarker.name = "measurement-landing-marker";
   landingMarker.position.y = 0.28;
   landingMarker.renderOrder = 4;
   scene.add(landingMarker);
@@ -404,10 +464,20 @@ try {
     new THREE.RingGeometry(0.18, 0.3, 28),
     new THREE.MeshBasicMaterial({ color: 0xc45a2b, side: THREE.DoubleSide, depthWrite: false })
   );
+  landingRing.name = "measurement-landing-ring";
   landingRing.rotation.x = -Math.PI / 2;
   landingRing.position.y = 0.255;
   landingRing.renderOrder = 5;
   scene.add(landingRing);
+
+  correctionScene = scene.clone(true);
+  correctionRulerModel = correctionScene.getObjectByName(rulerModel.name);
+  correctionPencil = correctionScene.getObjectByName(pencil.name);
+  correctionProjectionRay = correctionScene.getObjectByName(projectionRay.name);
+  correctionLandingMarker = correctionScene.getObjectByName(landingMarker.name);
+  correctionLandingRing = correctionScene.getObjectByName(landingRing.name);
+  correctionMagnifierLabels = correctionScene.getObjectByName(magnifierLabels.name);
+  correctionProjectionRay.geometry = correctionProjectionRay.geometry.clone();
 
   modelReady = true;
   announce("三維鉛筆與直尺已載入。可拖曳畫面旋轉觀察。");
@@ -509,10 +579,103 @@ function render() {
   };
   window.dispatchEvent(new CustomEvent("pencil3d-projection", {
     detail: {
+      sceneId: "parallax-scene",
       ruler18: projectToPanel(18, 0.23, 1.05),
       ruler19: projectToPanel(19, 0.23, 1.05),
       pencilTip: projectToPanel(view.start + view.edge, view.centerY, view.centerZ),
       projectedReading: view.rayEnd?.x ?? view.edge
+    }
+  }));
+}
+
+function renderCorrection() {
+  if (!correctionRenderer || !modelReady || modelFailed) return;
+  const rect = correctionCanvas.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  const frame = `${Math.round(rect.width)}:${Math.round(rect.height)}:${window.devicePixelRatio || 1}`;
+  if (correctionCanvas.dataset.size !== frame) {
+    correctionCanvas.dataset.size = frame;
+    correctionRenderer.setSize(Math.round(rect.width), Math.round(rect.height), false);
+  }
+  correctionCamera.fov = 2 * Math.atan(1 / (2 * correctionView.focalLengthRatio)) * 180 / Math.PI;
+  correctionCamera.aspect = rect.width / rect.height;
+  correctionCamera.updateProjectionMatrix();
+  const center = new THREE.Vector3(correctionView.start + rulerLength / 2, correctionView.centerY, 0);
+  const target = new THREE.Vector3(correctionView.lookAtX, correctionView.lookAtY, correctionView.lookAtZ);
+  const horizontal = correctionView.orbitRadius * Math.cos(correctionView.pitch);
+  correctionCamera.position.set(
+    center.x + horizontal * Math.sin(correctionView.yaw),
+    center.y + correctionView.orbitRadius * Math.sin(correctionView.pitch),
+    center.z + horizontal * Math.cos(correctionView.yaw)
+  );
+  correctionCamera.lookAt(target);
+  correctionRulerModel.position.x = correctionView.rulerOffset;
+  correctionMagnifierLabels.position.x = correctionView.rulerOffset;
+  correctionRulerModel.traverse((object) => {
+    if (object.userData.rulerTick !== undefined) object.visible = object.userData.rulerTick % correctionView.tickInterval === 0;
+    if (object.userData.rulerFarTick !== undefined) object.visible = object.userData.rulerFarTick % correctionView.tickInterval === 0;
+  });
+  correctionPencil.position.set(correctionView.start, correctionView.centerY, correctionView.centerZ);
+  if (correctionView.rayStart && correctionView.rayEnd) {
+    correctionProjectionRay.geometry.setFromPoints([
+      new THREE.Vector3(correctionView.rayEnd.x, correctionView.centerY, correctionView.rayEnd.z),
+      new THREE.Vector3(correctionView.rayEnd.x, correctionView.rayEnd.y, correctionView.rayEnd.z)
+    ]);
+    correctionProjectionRay.computeLineDistances();
+    correctionLandingMarker.position.set(correctionView.rayEnd.x, 0.28, correctionView.rayEnd.z);
+    correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, correctionView.rayEnd.z);
+    correctionProjectionRay.visible = true;
+    correctionLandingMarker.visible = true;
+    correctionLandingRing.visible = true;
+  } else {
+    correctionProjectionRay.visible = false;
+    correctionLandingMarker.visible = false;
+    correctionLandingRing.visible = false;
+  }
+  correctionRenderer.render(correctionScene, correctionCamera);
+  if (correctionMagnifierRenderer && correctionSceneCanvas.dataset.magnifier === "true") {
+    const inset = correctionMagnifierCanvas.getBoundingClientRect();
+    if (inset.width && inset.height) {
+      const size = `${Math.round(inset.width)}:${Math.round(inset.height)}:${window.devicePixelRatio || 1}`;
+      if (correctionMagnifierCanvas.dataset.size !== size) {
+        correctionMagnifierCanvas.dataset.size = size;
+        correctionMagnifierRenderer.setSize(Math.round(inset.width), Math.round(inset.height), false);
+      }
+      correctionMagnifierCamera.aspect = inset.width / inset.height;
+      correctionMagnifierCamera.updateProjectionMatrix();
+      const magnifierTarget = new THREE.Vector3(correctionView.start + correctionView.rulerOffset + 17.5, 0.55, 0.1);
+      const viewDirection = correctionCamera.position.clone().sub(target).normalize();
+      correctionMagnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
+      correctionMagnifierCamera.lookAt(magnifierTarget);
+      const majorLabels = correctionRulerModel.children.filter((child) => child.userData.rulerMajorNumber);
+      for (const label of majorLabels) label.visible = false;
+      correctionMagnifierLabels.visible = true;
+      const markerScale = correctionLandingMarker.scale.clone();
+      const ringWasVisible = correctionLandingRing.visible;
+      correctionLandingMarker.scale.setScalar(0.15);
+      correctionLandingRing.visible = false;
+      correctionMagnifierRenderer.render(correctionScene, correctionMagnifierCamera);
+      correctionMagnifierLabels.visible = false;
+      correctionLandingMarker.scale.copy(markerScale);
+      correctionLandingRing.visible = ringWasVisible;
+      for (const label of majorLabels) label.visible = true;
+    }
+  }
+  const panelRect = correctionSceneCanvas.parentElement.getBoundingClientRect();
+  const projectToPanel = (x, y, z) => {
+    const point = new THREE.Vector3(x, y, z).project(correctionCamera);
+    return {
+      x: rect.left - panelRect.left + (point.x + 1) * rect.width / 2,
+      y: rect.top - panelRect.top + (1 - point.y) * rect.height / 2
+    };
+  };
+  window.dispatchEvent(new CustomEvent("pencil3d-projection", {
+    detail: {
+      sceneId: "correction-parallax-scene",
+      ruler18: projectToPanel(correctionView.start + correctionView.rulerOffset + 18, 0.23, 1.05),
+      ruler19: projectToPanel(correctionView.start + correctionView.rulerOffset + 19, 0.23, 1.05),
+      pencilTip: projectToPanel(correctionView.start + correctionView.edge, correctionView.centerY, correctionView.centerZ),
+      projectedReading: correctionView.rayEnd?.x ?? correctionView.edge
     }
   }));
 }
@@ -522,6 +685,14 @@ window.setPencil3DView = (nextView = {}) => {
   render();
 };
 
+window.setPencil3DCorrectionView = (nextView = {}) => {
+  Object.assign(correctionView, nextView);
+  renderCorrection();
+};
+
 new ResizeObserver(resizeRenderer).observe(sceneCanvas);
 window.addEventListener("resize", resizeRenderer, { passive: true });
 resizeRenderer();
+new ResizeObserver(renderCorrection).observe(correctionCanvas);
+window.addEventListener("resize", renderCorrection, { passive: true });
+renderCorrection();
