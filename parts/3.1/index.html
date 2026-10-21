@@ -243,6 +243,8 @@
     .correction-angle-detail[hidden] { display: none; }
     .correction-angle-detail p { display: grid; gap: 2px; margin: 0; }
     .correction-angle-detail p span { color: var(--muted); font-size: .85rem; }
+    .correction-origin-drag-toggle[hidden] { display: none; }
+    .correction-origin-drag-toggle[aria-pressed="true"] { color: #fff; border-color: var(--green); background: var(--green); }
     .correction-average-panel { margin-top: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #fffefa; }
     .correction-average-panel strong { display: block; }
     .correction-average-panel p { margin: 4px 0 0; color: var(--muted); font-size: .88rem; }
@@ -570,7 +572,7 @@
               <canvas id="correction-parallax-canvas" tabindex="0" role="img" aria-label="可拖曳調整鉛筆和直尺視角的三維場景；切換到觀察角度時會顯示端點附近的放大視窗。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明。</canvas>
               <p id="correction-parallax-fallback" hidden>目前瀏覽器無法顯示 3D 場景，請使用支援 WebGL 的瀏覽器。</p>
               <div class="correction-angle-detail" id="correction-parallax-detail" hidden>
-                <p><strong id="correction-magnifier-title">鉛筆右端放大</strong><span id="correction-magnifier-range">尺面 18–19 cm 附近</span></p>
+                <p><strong id="correction-magnifier-title">鉛筆右端放大</strong><span id="correction-magnifier-range">尺面 18–19 cm 附近</span><button type="button" class="secondary correction-origin-drag-toggle" id="correction-origin-drag-toggle" aria-pressed="false" hidden>✋ 旋轉場景</button></p>
                 <div class="correction-parallax-magnifier" id="correction-magnifier" aria-label="鉛筆右端與直尺 18 至 19 公分附近的放大圖"><strong id="correction-magnifier-caption">端點與刻度</strong><canvas id="correction-parallax-magnifier-canvas" aria-hidden="true"></canvas></div>
               </div>
             </div>
@@ -580,7 +582,7 @@
                 <button type="button" class="secondary" data-correction-density="1" aria-pressed="false">較密・每格 1 cm</button>
               </div>
               <div id="correction-origin-controls" hidden>
-                <p>拖曳尺面下緣左右移動 0 刻度；拖曳鉛筆或場景空白處旋轉視角。若起點未對準 0，需用終點讀值減去起點讀值。</p>
+                <p id="correction-origin-control-instructions">目前拖曳會旋轉場景；點擊放大窗旁的按鈕可切換為移動尺面。若起點未對準 0，需用終點讀值減去起點讀值。</p>
               </div>
               <div id="correction-angle-controls" hidden>
                 <div class="correction-view-controls" role="group" aria-label="預設觀察視角">
@@ -1202,6 +1204,7 @@
       let correctionMode = "density";
       let correctionTickInterval = 5;
       let correctionRulerOffset = -1;
+      let correctionOriginDragMode = "rotate";
       const correctionCameraState = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
       let correctionCameraPreset = "front";
       let correctionDrag = null;
@@ -1211,6 +1214,14 @@
         correctionScene.hidden = false;
         correctionScene.dataset.control = correctionMode;
         document.querySelector("#correction-parallax-detail").hidden = correctionMode !== "angle" && correctionMode !== "origin";
+        const originDragToggle = document.querySelector("#correction-origin-drag-toggle");
+        originDragToggle.hidden = correctionMode !== "origin";
+        originDragToggle.textContent = correctionOriginDragMode === "rotate" ? "✋ 旋轉場景" : "↔ 調整尺面";
+        originDragToggle.setAttribute("aria-pressed", String(correctionOriginDragMode === "origin"));
+        originDragToggle.setAttribute("aria-label", correctionOriginDragMode === "rotate" ? "目前為旋轉場景模式；點擊切換為調整尺面模式" : "目前為調整尺面模式；點擊切換為旋轉場景模式");
+        correctionCanvas.style.cursor = correctionDrag
+          ? correctionDrag.action === "origin" ? "ew-resize" : "grabbing"
+          : correctionMode === "origin" && correctionOriginDragMode === "origin" ? "ew-resize" : "grab";
         document.querySelector("#correction-average-controls").hidden = correctionMode !== "average";
         document.querySelector("#correction-live-readout").hidden = correctionMode === "average";
         document.querySelector("#correction-mode-instructions").hidden = correctionMode === "average";
@@ -1280,8 +1291,10 @@
           document.querySelector("#correction-readout-label").textContent = `起點 ${correctionFormat(startReading)} cm・終點 ${correctionFormat(endReading)} cm`;
           reading.textContent = `${correctionFormat(endReading)} − ${correctionFormat(startReading)} ≈ ${correctionFormat(measuredLength)} cm`;
           document.querySelector("#correction-stage-title").textContent = "調整起點位置";
-          document.querySelector("#correction-stage-prompt").textContent = "讓 0 刻度對準鉛筆起點，可直接讀出長度；拖曳鉛筆或場景空白處可旋轉視角，拖曳尺面下緣可移動零刻度。";
-          document.querySelector("#correction-mode-instructions").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "零刻度已對準筆尖。拖曳尺面下緣可移動直尺；拖曳鉛筆或場景空白處可旋轉視角。" : `零刻度偏移 ${formatCentimeters(-correctionRulerOffset)} cm。拖曳尺面下緣讓 0 移到筆尖；拖曳鉛筆或場景空白處可旋轉視角。`;
+          document.querySelector("#correction-stage-prompt").textContent = "讓 0 刻度對準鉛筆起點，可直接讀出長度；點擊放大窗旁的按鈕切換拖曳旋轉或移動尺面。";
+          document.querySelector("#correction-origin-control-instructions").textContent = correctionOriginDragMode === "rotate" ? "目前拖曳會旋轉場景；點擊放大窗旁的「✋ 旋轉場景」按鈕可切換為移動尺面。若起點未對準 0，需用終點讀值減去起點讀值。" : "目前拖曳會移動尺面；點擊放大窗旁的「↔ 調整尺面」按鈕可切回旋轉場景。若起點未對準 0，需用終點讀值減去起點讀值。";
+          const dragModeHint = correctionOriginDragMode === "rotate" ? "拖曳會旋轉場景；點擊「↔ 調整尺面」切換操作。" : "拖曳會移動尺面；點擊「✋ 旋轉場景」切回旋轉操作。";
+          document.querySelector("#correction-mode-instructions").textContent = `${Math.abs(correctionRulerOffset) < 0.02 ? "零刻度已對準筆尖。" : `零刻度偏移 ${formatCentimeters(-correctionRulerOffset)} cm。`} ${dragModeHint}`;
         } else if (correctionMode === "angle") {
           document.querySelector("#correction-magnifier-title").textContent = "鉛筆右端放大";
           document.querySelector("#correction-magnifier-range").textContent = "尺面 18–19 cm 附近";
@@ -1320,6 +1333,10 @@
         renderCorrectionScene();
         if (correctionMode === "origin") document.querySelector("#correction-parallax-detail").scrollIntoView({ behavior: "smooth", block: "center" });
       }));
+      document.querySelector("#correction-origin-drag-toggle").addEventListener("click", () => {
+        correctionOriginDragMode = correctionOriginDragMode === "rotate" ? "origin" : "rotate";
+        renderCorrectionScene();
+      });
       correctionDensityButtons.forEach((button) => button.addEventListener("click", () => {
         correctionTickInterval = Number(button.dataset.correctionDensity);
         renderCorrectionScene();
@@ -1337,21 +1354,14 @@
         renderCorrectionScene();
       });
       correctionCanvas.addEventListener("pointerdown", (event) => {
-        const bounds = correctionCanvas.getBoundingClientRect();
-        const localY = (event.clientY - bounds.top) / bounds.height;
-        const dragAction = correctionMode === "origin" && localY > 0.68 ? "origin" : "rotate";
+        const dragAction = correctionMode === "origin" ? correctionOriginDragMode : "rotate";
         correctionDrag = { x: event.clientX, y: event.clientY, value: correctionRulerOffset, pointerId: event.pointerId, action: dragAction };
         correctionCanvas.setPointerCapture(event.pointerId);
+        correctionCanvas.style.cursor = dragAction === "origin" ? "ew-resize" : "grabbing";
         event.preventDefault();
       });
       correctionCanvas.addEventListener("pointermove", (event) => {
-        if (!correctionDrag) {
-          if (correctionMode === "origin") {
-            const bounds = correctionCanvas.getBoundingClientRect();
-            correctionCanvas.style.cursor = (event.clientY - bounds.top) / bounds.height > 0.68 ? "ew-resize" : "grab";
-          }
-          return;
-        }
+        if (!correctionDrag) return;
         if (event.pointerId !== correctionDrag.pointerId) return;
         const dx = event.clientX - correctionDrag.x;
         const dy = event.clientY - correctionDrag.y;
@@ -1369,7 +1379,10 @@
         }
         renderCorrectionScene();
       });
-      const releaseCorrectionDrag = () => { correctionDrag = null; };
+      const releaseCorrectionDrag = () => {
+        correctionDrag = null;
+        correctionCanvas.style.cursor = correctionMode === "origin" && correctionOriginDragMode === "origin" ? "ew-resize" : "grab";
+      };
       correctionCanvas.addEventListener("pointerup", releaseCorrectionDrag);
       correctionCanvas.addEventListener("pointercancel", releaseCorrectionDrag);
       correctionCanvas.addEventListener("lostpointercapture", releaseCorrectionDrag);
