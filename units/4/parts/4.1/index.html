@@ -209,8 +209,6 @@
     .demo-controls p { margin:0 0 7px; color:#465950; font-size:.87rem; }
     .demo-controls button { min-height:38px; padding:6px 11px; border:1px solid #b9c8bf; border-radius:9px; background:white; cursor:pointer; font-weight:700; }
     .demo-controls button:hover { background:#f7f1e4; }
-    .demo-controls button.gas-motion-restart { margin:0 0 9px; border-color:#267257; background:#267257; color:#fff; }
-    .demo-controls button.gas-motion-restart:hover { background:#1f624b; }
     .demo-controls button.shape-container-choice[aria-pressed="true"],.demo-controls button.shape-container-choice[aria-pressed="true"]:hover { border-color:#267257; background:#267257; color:#fff; }
     .compare-three { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; width:100%; }
     .compare-item { min-height:68px; display:grid; place-items:center; padding:7px 4px; border:1px solid #ddd7c9; border-radius:9px; background:#fff; color:#394b43; font-size:.76rem; text-align:center; }
@@ -280,7 +278,7 @@
       .section-top { align-items:start; flex-direction:column; gap:3px; }
     }
     @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
-    @media(prefers-reduced-motion:reduce) { .gas-motion-active .gas-particle { animation-duration:var(--gas-drift-duration,7s)!important; animation-delay:var(--gas-drift-delay,0s)!important; } }
+    @media(prefers-reduced-motion:reduce) { .gas-particle { animation-duration:var(--gas-drift-duration,7s)!important; animation-delay:var(--gas-drift-delay,0s)!important; } }
   </style>
 </head>
 <body>
@@ -636,7 +634,6 @@
       vars["--gas-drift-duration"]=`${duration.toFixed(2)}s`;vars["--gas-drift-delay"]=`-${(Math.random()*duration).toFixed(2)}s`;
       return vars;
     }
-    function applyGasParticleMotionVars(dot){Object.entries(gasParticleMotionVars()).forEach(([name,value])=>dot.style.setProperty(name,value));}
     function gasParticleMotionStyle(){return Object.entries(gasParticleMotionVars()).map(([name,value])=>`${name}:${value}`).join(";");}
     function startGasParticleMotion(type){
       cancelAnimationFrame(gasMotionFrame);
@@ -753,16 +750,6 @@
       const isInteractive=visual!=="compare"&&!staticOnly;
       const controls=visual==="solid-volume"?`<button class="volume-action" type="button" data-volume-action aria-pressed="false">放入量筒</button>`:visual==="solid-shape"?`<div class="shape-container-options" role="group" aria-label="選擇容器照片"><button class="shape-container-choice" type="button" data-container-shape="wide" aria-pressed="true">淺口塑膠碗</button><button class="shape-container-choice" type="button" data-container-shape="beaker" aria-pressed="false">100 mL 燒杯</button><button class="shape-container-choice" type="button" data-container-shape="tall" aria-pressed="false">2000 mL 燒杯</button></div>`:visual==="gas-shape"?`<div class="shape-container-options" role="group" aria-label="切換容器形狀"><button class="shape-container-choice" type="button" data-gas-form="wide" aria-pressed="true">寬淺</button><button class="shape-container-choice" type="button" data-gas-form="tall" aria-pressed="false">細高</button><button class="shape-container-choice" type="button" data-gas-form="square" aria-pressed="false">方形</button></div>`:staticOnly?"":isInteractive?`<input class="state-range" type="range" min="0" max="100" value="0" data-demo-range="${visual}" aria-label="${action}">`:`<button type="button" data-state-demo>依序查看固體、液體和氣體</button>`;
       document.getElementById("state-demo").innerHTML=staticOnly?`<div class="state-demo-visual">${graphic}</div><div class="demo-controls"><p>${control}</p><p class="demo-result" aria-live="polite">${result}</p></div>`:`<div class="state-demo-visual">${graphic}</div><div class="demo-controls"><p>${control}</p>${controls}<p class="demo-result" aria-live="polite">${result}</p></div>`;
-      if(visual==="gas-shape"||visual==="gas-volume"||visual==="gas-compress"){
-        const restart=document.createElement("button");restart.type="button";restart.className="gas-motion-restart";restart.textContent="開始／重新啟動粒子運動";restart.setAttribute("aria-label","重新啟動空氣分子的隨機運動");
-        restart.addEventListener("click",()=>{
-          stateDemo.classList.add("gas-motion-active");
-          stateDemo.querySelectorAll("[data-gas-particle]").forEach(dot=>{applyGasParticleMotionVars(dot);dot.style.animationName="none";void dot.offsetWidth;dot.style.animationName="";});
-          if(visual==="gas-volume"||visual==="gas-compress")startGasParticleMotion(visual);
-          document.querySelector("#state-demo .demo-result").textContent="粒子運動已重新啟動。";
-        });
-        stateDemo.querySelector(".demo-controls").insertBefore(restart,stateDemo.querySelector(".demo-result"));
-      }
       if(visual==="gas-compress"){
         const slider=stateDemo.querySelector('[data-demo-range="gas-compress"]');slider.value="60";slider.dispatchEvent(new Event("input",{bubbles:true}));
       }
