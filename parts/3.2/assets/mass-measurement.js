@@ -93,11 +93,34 @@ function makeWeight(value) {
   const knob = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.18, radius * 0.26, 0.12, 20), brass);
   knob.position.y = height + 0.11;
   group.add(knob);
+  const markHeight = Math.min(0.15, height * 0.9);
+  const markCenterY = height * 0.54;
+  const markRadius = radius * (1 - 0.09 * (markCenterY / height) + 0.006);
+  const markSegments = 40;
+  const markAngle = 1.12;
+  const markGeometry = new THREE.BufferGeometry();
+  const markPositions = [];
+  const markUvs = [];
+  const markIndices = [];
+  for (let row = 0; row <= 1; row += 1) {
+    for (let column = 0; column <= markSegments; column += 1) {
+      const angle = -markAngle + (column / markSegments) * markAngle * 2;
+      markPositions.push(Math.sin(angle) * markRadius, markCenterY + (row - 0.5) * markHeight, Math.cos(angle) * markRadius);
+      markUvs.push(column / markSegments, row);
+    }
+  }
+  for (let column = 0; column < markSegments; column += 1) {
+    const lowerLeft = column, lowerRight = column + 1;
+    const upperLeft = markSegments + 1 + column, upperRight = upperLeft + 1;
+    markIndices.push(lowerLeft, lowerRight, upperLeft, lowerRight, upperRight, upperLeft);
+  }
+  markGeometry.setAttribute('position', new THREE.Float32BufferAttribute(markPositions, 3));
+  markGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(markUvs, 2));
+  markGeometry.setIndex(markIndices);
   const inscription = new THREE.Mesh(
-    new THREE.PlaneGeometry(radius * 1.6, 0.13),
-    new THREE.MeshBasicMaterial({ map: labelTexture(`${value} g`, { width: 320, height: 112, fontSize: 92, color: '#493817' }), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 })
+    markGeometry,
+    new THREE.MeshBasicMaterial({ map: labelTexture(`${value} g`, { width: 512, height: 160, fontSize: 190, color: '#211708' }), transparent: true, depthWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2 })
   );
-  inscription.position.set(0, height * 0.54, radius * 0.94);
   group.add(inscription);
   return group;
 }
