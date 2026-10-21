@@ -648,9 +648,11 @@ export function mountMassMeasurement() {
       bounds.left = Math.min(bounds.left, px); bounds.right = Math.max(bounds.right, px);
       bounds.top = Math.min(bounds.top, py); bounds.bottom = Math.max(bounds.bottom, py);
     }
-    const padding = Math.max(24, Math.min(rect.width, rect.height) * 0.12);
-    return event.clientX >= bounds.left - padding && event.clientX <= bounds.right + padding
-      && event.clientY >= bounds.top - padding && event.clientY <= bounds.bottom + padding;
+    const horizontalPadding = Math.max(32, rect.width * 0.12);
+    const upperPadding = Math.max(96, rect.height * 0.38);
+    const lowerPadding = Math.max(32, rect.height * 0.12);
+    return event.clientX >= bounds.left - horizontalPadding && event.clientX <= bounds.right + horizontalPadding
+      && event.clientY >= bounds.top - upperPadding && event.clientY <= bounds.bottom + lowerPadding;
   }
   function detachPreservingWorldTransform(object) {
     const position = object.getWorldPosition(new THREE.Vector3());
