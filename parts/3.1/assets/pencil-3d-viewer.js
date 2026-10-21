@@ -128,51 +128,6 @@ function updateProjectionGuide(guide, start, end) {
   guide.visible = true;
 }
 
-function findPerpendicularScaleX(camera, canvasElement, guideStart, fallbackX, scaleMin, scaleMax) {
-  const rect = canvasElement.getBoundingClientRect();
-  const project = (point) => {
-    const projected = new THREE.Vector3(point.x, point.y, point.z).project(camera);
-    return new THREE.Vector2((projected.x + 1) * rect.width / 2, (1 - projected.y) * rect.height / 2);
-  };
-  const endOnAxis = project(guideStart);
-  const behindOnAxis = project({ ...guideStart, x: guideStart.x - 1 });
-  const axis = endOnAxis.sub(behindOnAxis).normalize();
-  const guideOrigin = project(guideStart);
-  const dotAt = (x) => project({ x, y: 0.22, z: 1.5 }).sub(guideOrigin).dot(axis);
-  const samples = 80;
-  let previousX = scaleMin;
-  let previousDot = dotAt(previousX);
-  let bestX = previousX;
-  let bestMagnitude = Math.abs(previousDot);
-  for (let index = 1; index <= samples; index += 1) {
-    const x = scaleMin + (scaleMax - scaleMin) * index / samples;
-    const dot = dotAt(x);
-    if (Math.abs(dot) < bestMagnitude) {
-      bestX = x;
-      bestMagnitude = Math.abs(dot);
-    }
-    if (previousDot === 0 || dot === 0 || Math.sign(previousDot) !== Math.sign(dot)) {
-      let low = previousX;
-      let high = x;
-      let lowDot = previousDot;
-      for (let iteration = 0; iteration < 24; iteration += 1) {
-        const middle = (low + high) / 2;
-        const middleDot = dotAt(middle);
-        if (Math.sign(middleDot) === Math.sign(lowDot)) {
-          low = middle;
-          lowDot = middleDot;
-        } else {
-          high = middle;
-        }
-      }
-      return (low + high) / 2;
-    }
-    previousX = x;
-    previousDot = dot;
-  }
-  return Number.isFinite(bestX) ? bestX : fallbackX;
-}
-
 function makeTextTexture(text) {
   const label = document.createElement("canvas");
   label.width = 256;
@@ -605,10 +560,9 @@ function render() {
   pencil.position.set(view.start, view.centerY, view.centerZ);
   if (view.rayStart && view.rayEnd) {
     const guideStart = { x: view.rayStart.x - 0.08, y: view.rayStart.y, z: view.rayStart.z + 0.34 };
-    const guideX = findPerpendicularScaleX(camera, sceneCanvas, guideStart, view.rayEnd.x, 0, rulerLength);
     updateProjectionGuide(projectionRay,
       guideStart,
-      { x: guideX, y: 0.22, z: 1.5 });
+      { x: view.rayEnd.x, y: 0.22, z: 1.5 });
     landingMarker.position.set(view.rayEnd.x, 0.28, view.rayEnd.z);
     landingRing.position.set(view.rayEnd.x, 0.255, view.rayEnd.z);
     projectionRay.visible = true;
@@ -702,18 +656,9 @@ function renderCorrection() {
   correctionPencil.position.set(correctionView.start, correctionView.centerY, correctionView.centerZ);
   if (correctionView.rayStart && correctionView.rayEnd) {
     const guideStart = { x: correctionView.rayStart.x - 0.08, y: correctionView.rayStart.y, z: correctionView.rayStart.z + 0.34 };
-    const rulerMin = correctionView.rulerOffset;
-    const guideX = findPerpendicularScaleX(
-      correctionCamera,
-      correctionCanvas,
-      guideStart,
-      correctionView.rayEnd.x,
-      rulerMin,
-      rulerMin + rulerLength
-    );
     updateProjectionGuide(correctionProjectionRay,
       guideStart,
-      { x: guideX, y: 0.22, z: 1.5 });
+      { x: correctionView.rayEnd.x, y: 0.22, z: 1.5 });
     correctionLandingMarker.position.set(correctionView.rayEnd.x, 0.28, correctionView.rayEnd.z);
     correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, correctionView.rayEnd.z);
     correctionProjectionRay.visible = true;
