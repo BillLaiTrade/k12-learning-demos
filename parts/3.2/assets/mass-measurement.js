@@ -636,9 +636,21 @@ export function mountMassMeasurement() {
     return panDropTarget(event, balance.rightPan);
   }
   function digitalDropTarget(event) {
-    updatePointer(event);
-    const point = raycaster.ray.intersectPlane(new THREE.Plane(up, -0.78), new THREE.Vector3());
-    return point && Math.abs(point.x) < 1.32 && Math.abs(point.z) < 0.95;
+    camera.updateMatrixWorld();
+    digital.base.updateWorldMatrix(true, false);
+    const rect = canvas.getBoundingClientRect();
+    const bounds = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
+    for (const x of [-1.3, 1.3]) for (const z of [-0.79, 0.79]) {
+      const point = digital.base.localToWorld(new THREE.Vector3(x, 0.79, z));
+      point.project(camera);
+      const px = rect.left + (point.x + 1) * rect.width / 2;
+      const py = rect.top + (1 - point.y) * rect.height / 2;
+      bounds.left = Math.min(bounds.left, px); bounds.right = Math.max(bounds.right, px);
+      bounds.top = Math.min(bounds.top, py); bounds.bottom = Math.max(bounds.bottom, py);
+    }
+    const padding = Math.max(24, Math.min(rect.width, rect.height) * 0.12);
+    return event.clientX >= bounds.left - padding && event.clientX <= bounds.right + padding
+      && event.clientY >= bounds.top - padding && event.clientY <= bounds.bottom + padding;
   }
   function detachPreservingWorldTransform(object) {
     const position = object.getWorldPosition(new THREE.Vector3());
