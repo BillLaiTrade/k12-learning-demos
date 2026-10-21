@@ -181,17 +181,19 @@
     .transfer-water { position:absolute; inset:auto 0 0; height:var(--fill,100%); background:#1687cb; transition:height .2s ease; }
     .transfer-vessel::after { content:""; position:absolute; inset:5px auto 5px 5px; width:14px; pointer-events:none; background:repeating-linear-gradient(to top,transparent 0 12px,rgba(40,65,56,.62) 12px 13px); }
     .transfer-arrow { color:#8b612d; font-weight:800; }
-    .gas-shape-box { position:relative; width:min(260px,100%); height:112px; margin-top:14px; transition:width .38s cubic-bezier(.2,.7,.25,1),height .38s cubic-bezier(.2,.7,.25,1); }
+    .gas-shape-stage { position:relative; width:min(260px,100%); height:224px; }
+    .gas-shape-box { position:absolute; left:50%; bottom:0; width:min(260px,100%); height:112px; transform:translateX(-50%); transition:width .9s ease-in-out,height .9s ease-in-out; }
     .gas-shape-box[data-form="tall"] { width:min(132px,100%); height:210px; }
     .gas-shape-box[data-form="square"] { width:min(174px,100%); height:174px; }
     .gas-shape-walls { position:absolute; inset:12px 0 0; border:3px solid #718b7e; border-top:0; border-radius:0 0 15px 15px; background:linear-gradient(90deg,rgba(122,160,140,.23),rgba(240,249,243,.16) 18%,rgba(255,255,255,.12) 52%,rgba(218,238,226,.18) 84%,rgba(112,148,128,.24)); box-shadow:inset 0 -5px 0 rgba(85,122,100,.12); pointer-events:none; }
     .gas-shape-rim { position:absolute; z-index:2; top:0; left:-3px; right:-3px; height:27px; border:3px solid #718b7e; border-radius:50%; background:linear-gradient(180deg,#fff 0%,#e5efe8 54%,#bfd2c5 100%); box-shadow:inset 0 -3px 0 rgba(85,122,100,.18),0 2px 3px rgba(40,60,49,.12); pointer-events:none; }
     .gas-particle-field { position:absolute; z-index:1; inset:18px 8px 8px; overflow:hidden; border-radius:0 0 10px 10px; }
     .gas-particle { position:absolute; left:var(--x); top:var(--y); box-sizing:border-box; width:10px; height:10px; border:1.7px solid #5f8e9f; border-radius:50%; background:transparent; transform:translate(-50%,-50%); transition:left .38s ease,top .38s ease; animation:gas-brownian var(--gas-drift-duration,7s) linear infinite; animation-delay:var(--gas-drift-delay,0s); will-change:transform; }
+    .gas-shape-box .gas-particle { transition:left .9s ease-in-out,top .9s ease-in-out; }
     @keyframes gas-brownian { 0%,100% { transform:translate(-50%,-50%); } 14% { transform:translate(calc(-50% + var(--dx1,0px)),calc(-50% + var(--dy1,0px))); } 28% { transform:translate(calc(-50% + var(--dx2,0px)),calc(-50% + var(--dy2,0px))); } 42% { transform:translate(calc(-50% + var(--dx3,0px)),calc(-50% + var(--dy3,0px))); } 56% { transform:translate(calc(-50% + var(--dx4,0px)),calc(-50% + var(--dy4,0px))); } 70% { transform:translate(calc(-50% + var(--dx5,0px)),calc(-50% + var(--dy5,0px))); } 84% { transform:translate(calc(-50% + var(--dx6,0px)),calc(-50% + var(--dy6,0px))); } }
     .interactive-model[data-model="gas-shape"] { width:min(100%,360px); }
     .interactive-model[data-model="gas-shape"] .model-readout { width:100%; }
-    @media(prefers-reduced-motion:reduce) { .gas-shape-box { transition-duration:.01ms; } }
+    @media(prefers-reduced-motion:reduce) { .gas-shape-box,.gas-shape-box .gas-particle { transition-duration:.01ms; } }
     .gas-space-box { position:relative; width:160px; height:110px; overflow:hidden; border:3px solid #718b7e; border-radius:10px; background:linear-gradient(135deg,rgba(229,240,232,.6),rgba(255,255,255,.2)); transition:width .35s ease,height .35s ease; }
     .gas-space-box .gas-particle-field { inset:8px; }
     .gas-syringe-stage { position:relative; width:min(100%,340px); height:116px; overflow:visible; }
@@ -725,16 +727,31 @@
       const model=document.querySelector('[data-model="gas-shape"]');if(!model)return;
       const shapes={wide:{label:"寬淺容器"},tall:{label:"細高容器"},square:{label:"方形容器"}},shape=shapes[form];if(!shape)return;
       const box=model.querySelector("[data-gas-shape-box]");
+      const layouts={wide:{columns:12,rows:4},tall:{columns:6,rows:8},square:{columns:7,rows:7}},layout=layouts[form],dots=[...model.querySelectorAll("[data-gas-particle]")],field=model.querySelector(".gas-particle-field");
+      const current=dots.map(dot=>({x:parseFloat(getComputedStyle(dot).left)/field.clientWidth*100,y:parseFloat(getComputedStyle(dot).top)/field.clientHeight*100}));
+      const targets=dots.map((_,index)=>({x:((index%layout.columns)+.5)*100/layout.columns,y:(Math.floor(index/layout.columns)+.5)*100/layout.rows}));
+      // Match each molecule to the nearest unused destination. This preserves
+      // particle identity and avoids the row-major position swaps on each change.
+      const count=dots.length,u=Array(count+1).fill(0),v=Array(count+1).fill(0),p=Array(count+1).fill(0),way=Array(count+1).fill(0),scaleX=field.clientWidth,scaleY=field.clientHeight;
+      for(let i=1;i<=count;i++){
+        p[0]=i;let j0=0;const minv=Array(count+1).fill(Infinity),used=Array(count+1).fill(false);
+        do{
+          used[j0]=true;const i0=p[j0];let delta=Infinity,j1=0;
+          for(let j=1;j<=count;j++)if(!used[j]){
+            const dx=(current[i0-1].x-targets[j-1].x)*scaleX/100,dy=(current[i0-1].y-targets[j-1].y)*scaleY/100,cost=dx*dx+dy*dy;
+            const value=cost-u[i0]-v[j];if(value<minv[j]){minv[j]=value;way[j]=j0;}if(minv[j]<delta){delta=minv[j];j1=j;}
+          }
+          for(let j=0;j<=count;j++)if(used[j]){u[p[j]]+=delta;v[j]-=delta;}else minv[j]-=delta;
+          j0=j1;
+        }while(p[j0]!==0);
+        do{const j1=way[j0];p[j0]=p[j1];j0=j1;}while(j0!==0);
+      }
+      const destination=Array(count);for(let j=1;j<=count;j++)destination[p[j]-1]=targets[j-1];
       box.dataset.form=form;box.setAttribute("aria-label",shape.label+"剖面模型");
-      const layouts={wide:{columns:12,rows:4,amplitudeX:4.2,amplitudeY:5.4},tall:{columns:6,rows:8,amplitudeX:4.3,amplitudeY:5.3},square:{columns:7,rows:7,amplitudeX:5.5,amplitudeY:4.8}},layout=layouts[form],dots=[...model.querySelectorAll("[data-gas-particle]")],field=model.querySelector(".gas-particle-field");
-      dots.forEach((dot,index)=>{
-        dot.style.left=`${((index%layout.columns)+.5)*100/layout.columns}%`;dot.style.top=`${(Math.floor(index/layout.columns)+.5)*100/layout.rows}%`;
-        Object.entries(gasParticleMotionVars(layout.amplitudeX,layout.amplitudeY)).forEach(([name,value])=>dot.style.setProperty(name,value));dot.style.animationName="none";
-      });
-      void field.offsetWidth;dots.forEach(dot=>dot.style.animationName="");
-      model.querySelector("[data-model-readout]").textContent=`容器：${shape.label}｜空氣分子持續緩慢隨機運動`;
+      dots.forEach((dot,index)=>{dot.style.left=`${destination[index].x}%`;dot.style.top=`${destination[index].y}%`;});
+      model.querySelector("[data-model-readout]").textContent=`容器：${shape.label}｜同一批空氣分子隨容器變形重新分布`;
       document.querySelectorAll("#state-demo [data-gas-form]").forEach(control=>control.setAttribute("aria-pressed",String(control===button)));
-      document.querySelector("#state-demo .demo-result").textContent="容器改變形狀時，空氣原本就已分布其中，不需要從一端集體跑到遠處；靜置時分子仍持續緩慢隨機運動。";
+      document.querySelector("#state-demo .demo-result").textContent="容器壁逐漸移動，空氣分子也連續地往新空間分散；沒有分子突然換位。靜置時，分子仍持續緩慢隨機運動。";
     }
     function renderStateDetail(mode,key){
       document.querySelectorAll("[data-state-pick],[data-property-pick],[data-state-cell]").forEach(button=>button.setAttribute("aria-pressed","false"));
@@ -787,7 +804,7 @@
         :visual==="liquid-shape"?`<div class="interactive-model" data-model="liquid-shape"><div class="liquid-shape-vessel" data-liquid-vessel data-form="wide"><div class="liquid-shape-water"></div></div><div class="model-readout" data-model-readout>容器：寬而淺｜同一份水</div></div>`
         :visual==="liquid-volume"?`<div class="interactive-model" data-model="liquid-volume"><div class="liquid-transfer"><div><div class="transfer-vessel"><span class="transfer-water" data-source-water style="--fill:100%"></span></div><span class="model-caption">量筒・200 mL</span><span class="model-caption" data-source-reading>目前 200 mL</span></div><span class="transfer-arrow" aria-hidden="true">→</span><div><div class="transfer-vessel"><span class="transfer-water" data-target-water style="--fill:0%"></span></div><span class="model-caption">接收量筒</span><span class="model-caption" data-target-reading>目前 0 mL</span></div></div><div class="model-readout" data-model-readout>轉移 0%｜同一份水合計 200 mL</div></div>`
         :visual==="liquid-compress"?`<div class="interactive-model" data-model="liquid-compress"><div class="water-syringe-model" data-water-syringe><div class="water-syringe-fill"></div><span class="water-syringe-plunger"></span></div><div class="model-readout" data-model-readout>推力：0｜水樣體積：約 50 mL</div><span class="model-caption">示意模型；活塞位移放大顯示水樣極微小壓縮，勿用力硬推實物</span></div>`
-        :visual==="gas-shape"?`<div class="interactive-model" data-model="gas-shape"><div class="gas-shape-box" data-gas-shape-box data-form="wide" role="img" aria-label="寬淺容器剖面模型"><div class="gas-shape-walls" aria-hidden="true"></div><div class="gas-particle-field" aria-hidden="true">${gasParticles}</div><div class="gas-shape-rim" aria-hidden="true"></div></div><div class="model-readout" data-model-readout>容器：寬淺容器｜同一批空氣分子持續隨機運動</div><span class="model-caption">淡藍空心圓環沿連續、不規則的路徑移動，代表空氣分子的隨機運動；真實空氣分子無色且看不見。</span></div>`
+        :visual==="gas-shape"?`<div class="interactive-model" data-model="gas-shape"><div class="gas-shape-stage"><div class="gas-shape-box" data-gas-shape-box data-form="wide" role="img" aria-label="寬淺容器剖面模型"><div class="gas-shape-walls" aria-hidden="true"></div><div class="gas-particle-field" aria-hidden="true">${gasParticles}</div><div class="gas-shape-rim" aria-hidden="true"></div></div></div><div class="model-readout" data-model-readout>容器：寬淺容器｜同一批空氣分子持續隨機運動</div><span class="model-caption">淡藍空心圓環沿連續、不規則的路徑移動，代表空氣分子的隨機運動；真實空氣分子無色且看不見。</span></div>`
         :visual==="gas-volume"?`<div class="interactive-model" data-model="gas-volume"><div class="gas-space-box" data-gas-space-box><div class="gas-particle-field" aria-hidden="true">${gasParticles}</div></div><div class="model-readout" data-model-readout>空氣分子數量：${gasParticleCount}｜容器體積：1.0 單位</div><span class="model-caption">淡藍空心圓環代表同一批空氣分子；容器擴大時，分子持續移動到新增空間。真實空氣分子無色且看不見。</span></div>`
         :visual==="gas-compress"?`<div class="interactive-model" data-model="gas-compress"><div class="gas-syringe-stage" data-gas-syringe><div class="gas-syringe-model"><div class="gas-syringe-cavity"><div class="gas-particle-field" data-gas-compress-field aria-hidden="true" style="width:100%">${gasParticles}</div></div></div><div class="gas-plunger" data-gas-piston role="slider" tabindex="0" aria-label="注射筒活塞把手" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-orientation="horizontal" title="抓住把手左右推拉"><span class="gas-piston-face" aria-hidden="true"></span><span class="gas-plunger-rod" aria-hidden="true"></span><span class="gas-plunger-grip" aria-hidden="true"></span></div></div><div class="model-readout" data-model-readout>活塞位置：未推入｜空氣分子數量：${gasParticleCount}｜可用空間：100%</div><span class="model-caption">抓住連桿末端的把手，向左推入或向右拉出。淡藍空心圓環代表持續運動的空氣分子；真實空氣分子無色且看不見。</span></div>`
         :`<div class="compare-three" data-compare-property="${key}"><span class="compare-item" data-kind="solid" data-active="true">固體<br>鐵製物體</span><span class="compare-item" data-kind="liquid">液體<br>水</span><span class="compare-item" data-kind="gas">氣體<br>空氣</span></div>`;
