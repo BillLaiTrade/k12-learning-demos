@@ -641,11 +641,11 @@
           const target=Number(field.dataset.targetWidth||field.clientWidth),current=field.clientWidth,delta=target-current,step=140*dt;
           if(Math.abs(delta)>.5)field.style.width=`${(current+Math.sign(delta)*Math.min(Math.abs(delta),step)).toFixed(2)}px`;
         }
-        const limitX=anchored?Math.max(2,Math.min(13,field.clientWidth/20-4)):Math.max(4,field.clientWidth/2-4),limitY=anchored?Math.max(2,Math.min(8,field.clientHeight/12-4)):Math.max(4,field.clientHeight/2-4),damping=Math.exp(-(anchored?2.5:2.2)*dt),noise=(anchored?42:65)*Math.sqrt(dt);
+        const limitX=anchored?Math.max(2,Math.min(12,field.clientWidth/14-4)):Math.max(4,field.clientWidth/2-4),limitY=anchored?Math.max(2,Math.min(9,field.clientHeight/10-4)):Math.max(4,field.clientHeight/2-4),damping=Math.exp(-(anchored?2.5:2.2)*dt),noise=(anchored?50:65)*Math.sqrt(dt);
         particles.forEach(p=>{
           const dot=p.dot;
           p.vx=(p.vx+(Math.random()*2-1)*noise)*damping;p.vy=(p.vy+(Math.random()*2-1)*noise)*damping;
-          p.vx=Math.max(anchored?-18:-40,Math.min(anchored?18:40,p.vx));p.vy=Math.max(anchored?-13:-32,Math.min(anchored?13:32,p.vy));
+          p.vx=Math.max(anchored?-22:-40,Math.min(anchored?22:40,p.vx));p.vy=Math.max(anchored?-16:-32,Math.min(anchored?16:32,p.vy));
           p.x+=p.vx*dt;p.y+=p.vy*dt;
           if(anchored){
             if(p.x>limitX){p.x=limitX;p.vx=-Math.abs(p.vx)*.55;}else if(p.x< -limitX){p.x=-limitX;p.vx=Math.abs(p.vx)*.55;}
