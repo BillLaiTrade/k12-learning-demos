@@ -235,6 +235,9 @@
     .correction-parallax-scene { position: relative; margin: 12px 0; padding: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
     #correction-pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 220px; pointer-events: none; }
     #correction-parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 220px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
+    .correction-parallax-scene[data-control="origin"] #correction-parallax-detail { position: absolute; top: 10px; right: 10px; z-index: 3; width: min(250px, calc(100% - 20px)); margin: 0; }
+    .correction-parallax-scene[data-control="origin"] #correction-parallax-canvas { margin-top: 160px; }
+    .correction-parallax-scene[data-control="origin"] #correction-pencil-3d-canvas { top: 172px; }
     #correction-parallax-focus-overlay { display: none; }
     .correction-angle-detail { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 10px 12px; border: 1px solid #e3c38e; border-radius: 14px; background: #fffefa; }
     .correction-angle-detail[hidden] { display: none; }
@@ -266,6 +269,8 @@
       .lesson-card { scroll-margin-top: 160px; }
       .correction-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       #correction-pencil-3d-canvas, #correction-parallax-canvas { height: 200px; }
+      .correction-parallax-scene[data-control="origin"] #correction-parallax-canvas { margin-top: 160px; }
+      .correction-parallax-scene[data-control="origin"] #correction-pencil-3d-canvas { top: 172px; }
       .correction-angle-detail { align-items: flex-start; }
       .correction-parallax-magnifier { width: min(100%, 250px); margin-left: auto; }
     }
@@ -564,10 +569,10 @@
               <canvas id="correction-pencil-3d-canvas" aria-hidden="true"></canvas>
               <canvas id="correction-parallax-canvas" tabindex="0" role="img" aria-label="可拖曳調整鉛筆和直尺視角的三維場景；切換到觀察角度時會顯示端點附近的放大視窗。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明。</canvas>
               <p id="correction-parallax-fallback" hidden>目前瀏覽器無法顯示 3D 場景，請使用支援 WebGL 的瀏覽器。</p>
-            </div>
-            <div class="correction-angle-detail" id="correction-parallax-detail" hidden>
-              <p><strong id="correction-magnifier-title">鉛筆右端放大</strong><span id="correction-magnifier-range">尺面 18–19 cm 附近</span></p>
-              <div class="correction-parallax-magnifier" id="correction-magnifier" aria-label="鉛筆右端與直尺 18 至 19 公分附近的放大圖"><strong id="correction-magnifier-caption">端點與刻度</strong><canvas id="correction-parallax-magnifier-canvas" aria-hidden="true"></canvas></div>
+              <div class="correction-angle-detail" id="correction-parallax-detail" hidden>
+                <p><strong id="correction-magnifier-title">鉛筆右端放大</strong><span id="correction-magnifier-range">尺面 18–19 cm 附近</span></p>
+                <div class="correction-parallax-magnifier" id="correction-magnifier" aria-label="鉛筆右端與直尺 18 至 19 公分附近的放大圖"><strong id="correction-magnifier-caption">端點與刻度</strong><canvas id="correction-parallax-magnifier-canvas" aria-hidden="true"></canvas></div>
+              </div>
             </div>
             <div class="correction-adjustment">
               <div id="correction-density-controls" class="correction-choice-row" role="group" aria-label="選擇直尺刻度密度">
@@ -1203,13 +1208,14 @@
       const correctionFormat = (value) => Number(value.toFixed(1)).toFixed(1);
       const correctionDisplay = (value) => Math.abs(value - Math.round(value)) < 0.001 ? String(Math.round(value)) : correctionFormat(value);
       const renderCorrectionScene = () => {
-        correctionScene.hidden = correctionMode === "average";
+        correctionScene.hidden = false;
+        correctionScene.dataset.control = correctionMode;
         document.querySelector("#correction-parallax-detail").hidden = correctionMode !== "angle" && correctionMode !== "origin";
         document.querySelector("#correction-average-controls").hidden = correctionMode !== "average";
         document.querySelector("#correction-live-readout").hidden = correctionMode === "average";
         document.querySelector("#correction-mode-instructions").hidden = correctionMode === "average";
         correctionScene.dataset.magnifier = String(correctionMode === "angle" || correctionMode === "origin");
-        const sceneActive = correctionMode !== "average";
+        const sceneActive = true;
         const bounds = correctionCanvas.getBoundingClientRect();
         if (sceneActive && (!bounds.width || !bounds.height)) return;
         const target = { x: state.start + 10, y: pencilHeight, z: 0 };
@@ -1238,7 +1244,7 @@
           edge: parallaxLength,
           start: state.start,
           rulerOffset: correctionRulerOffset,
-          tickInterval: correctionTickInterval,
+          tickInterval: correctionMode === "density" ? correctionTickInterval : 1,
           yaw: correctionCameraState.yaw,
           pitch: correctionCameraState.pitch,
           orbitRadius,
@@ -1290,8 +1296,9 @@
             ? `目前讀值約 ${correctionFormat(endReading)} cm。改變視角，觀察橘色投影線落點與讀值如何變化。`
             : "目前視線落在尺面外；拖曳場景轉動視角，讓投影回到刻度上。";
         } else {
+          correctionCanvas.setAttribute("aria-label", "重複量測示意場景；可拖曳旋轉鉛筆與密刻度直尺。");
           document.querySelector("#correction-stage-title").textContent = "重複量測並取平均";
-          document.querySelector("#correction-stage-prompt").textContent = "重複量測可降低每次讀值的偶然波動；起點偏移或視差等固定偏差仍須另外修正。";
+          document.querySelector("#correction-stage-prompt").textContent = "可拖曳上方場景旋轉觀看。重複量測可降低每次讀值的偶然波動；起點偏移或視差等固定偏差仍須另外修正。";
           document.querySelector("#correction-mode-instructions").textContent = "十次讀值可能略有差異；平均值通常比單次讀值穩定。";
         }
         correctionScene.dataset.control = correctionMode;
@@ -1311,6 +1318,7 @@
       correctionModeButtons.forEach((button) => button.addEventListener("click", () => {
         correctionMode = button.dataset.correctionControl;
         renderCorrectionScene();
+        if (correctionMode === "origin") document.querySelector("#correction-parallax-detail").scrollIntoView({ behavior: "smooth", block: "center" });
       }));
       correctionDensityButtons.forEach((button) => button.addEventListener("click", () => {
         correctionTickInterval = Number(button.dataset.correctionDensity);
@@ -1356,7 +1364,7 @@
       correctionCanvas.addEventListener("pointercancel", releaseCorrectionDrag);
       correctionCanvas.addEventListener("lostpointercapture", releaseCorrectionDrag);
       correctionCanvas.addEventListener("keydown", (event) => {
-        if (correctionMode !== "angle") return;
+        if (correctionMode === "origin") return;
         const angleStep = 0.08;
         if (event.key === "ArrowLeft") correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw - angleStep);
         else if (event.key === "ArrowRight") correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw + angleStep);
