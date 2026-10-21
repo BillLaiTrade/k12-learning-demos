@@ -561,10 +561,9 @@ function render() {
   if (view.rayStart && view.rayEnd) {
     // Keep the guide perpendicular to the pencil's X axis and aim it across
     // the pencil-to-ruler gap, ending on the marked edge of the ruler.
-    const guideX = view.rayEnd.x;
     updateProjectionGuide(projectionRay,
-      { x: guideX, y: view.centerY + 0.05, z: view.centerZ },
-      { x: guideX, y: 0.22, z: 1.5 });
+      { x: view.rayStart.x - 0.08, y: view.rayStart.y, z: view.rayStart.z + 0.34 },
+      { x: view.rayEnd.x, y: 0.22, z: 1.5 });
     landingMarker.position.set(view.rayEnd.x, 0.28, view.rayEnd.z);
     landingRing.position.set(view.rayEnd.x, 0.255, view.rayEnd.z);
     projectionRay.visible = true;
@@ -657,10 +656,9 @@ function renderCorrection() {
   });
   correctionPencil.position.set(correctionView.start, correctionView.centerY, correctionView.centerZ);
   if (correctionView.rayStart && correctionView.rayEnd) {
-    const guideX = correctionView.rayEnd.x;
     updateProjectionGuide(correctionProjectionRay,
-      { x: guideX, y: correctionView.centerY + 0.05, z: correctionView.centerZ },
-      { x: guideX, y: 0.22, z: 1.5 });
+      { x: correctionView.rayStart.x - 0.08, y: correctionView.rayStart.y, z: correctionView.rayStart.z + 0.34 },
+      { x: correctionView.rayEnd.x, y: 0.22, z: 1.5 });
     correctionLandingMarker.position.set(correctionView.rayEnd.x, 0.28, correctionView.rayEnd.z);
     correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, correctionView.rayEnd.z);
     correctionProjectionRay.visible = true;
