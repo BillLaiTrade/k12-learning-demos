@@ -195,10 +195,13 @@ function createRuler() {
 
   const bodyMaterial = new THREE.MeshPhysicalMaterial({
     color: 0xe1c477,
-    roughness: 0.3,
-    metalness: 0.04,
-    clearcoat: 0.55,
-    clearcoatRoughness: 0.24,
+    // A ruler is matte; strong clearcoat and the room environment produced
+    // near-white specular patches when the magnifier viewed the face obliquely.
+    roughness: 0.78,
+    metalness: 0,
+    clearcoat: 0.04,
+    clearcoatRoughness: 0.8,
+    envMapIntensity: 0.45,
     transparent: false,
     opacity: 1
   });
