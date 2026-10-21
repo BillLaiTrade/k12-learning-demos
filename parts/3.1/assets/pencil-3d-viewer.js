@@ -49,7 +49,7 @@ const view = {
   pitch: 0.48,
   orbitRadius: 24,
   centerY: 0.78,
-  centerZ: -1.3,
+  centerZ: -0.3,
   lookAtX: 9.2,
   lookAtY: 0.04,
   lookAtZ: 0,
@@ -231,7 +231,7 @@ function createRuler() {
     group.add(tick);
 
     // The opposite edge has a second graduation row, like a marked ruler edge.
-    const farTickLength = major ? 0.04 : 0.025;
+    const farTickLength = major ? 0.44 : 0.28;
     const farTick = new THREE.Mesh(
       new THREE.BoxGeometry(0.045, 0.014, farTickLength),
       scaleInk
