@@ -584,7 +584,11 @@ function render() {
       }
       magnifierCamera.aspect = rect.width / rect.height;
       magnifierCamera.updateProjectionMatrix();
-      const magnifierTarget = new THREE.Vector3(view.start + 18.5, 0.3, 0.68);
+      const magnifierTarget = new THREE.Vector3(
+        view.rayStart && view.rayEnd ? (view.rayStart.x + view.rayEnd.x) / 2 : view.start + 18.5,
+        view.rayStart ? (view.rayStart.y + 0.22) / 2 : 0.3,
+        view.rayStart ? (view.rayStart.z + 1.5) / 2 : 0.34
+      );
       const viewDirection = camera.position.clone().sub(target).normalize();
       magnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
       magnifierCamera.lookAt(magnifierTarget);
@@ -680,8 +684,13 @@ function renderCorrection() {
       }
       correctionMagnifierCamera.aspect = inset.width / inset.height;
       correctionMagnifierCamera.updateProjectionMatrix();
-      const magnifierTargetX = correctionView.magnifierTargetX ?? (correctionView.start + correctionView.rulerOffset + 18.5);
-      const magnifierTarget = new THREE.Vector3(magnifierTargetX, 0.3, 0.68);
+      const magnifierTarget = new THREE.Vector3(
+        correctionView.magnifierTargetX ?? (correctionView.rayStart && correctionView.rayEnd
+          ? (correctionView.rayStart.x + correctionView.rayEnd.x) / 2
+          : correctionView.start + correctionView.rulerOffset + 18.5),
+        correctionView.rayStart ? (correctionView.rayStart.y + 0.22) / 2 : 0.3,
+        correctionView.rayStart ? (correctionView.rayStart.z + 1.5) / 2 : 0.34
+      );
       const viewDirection = correctionCamera.position.clone().sub(target).normalize();
       correctionMagnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
       correctionMagnifierCamera.lookAt(magnifierTarget);
