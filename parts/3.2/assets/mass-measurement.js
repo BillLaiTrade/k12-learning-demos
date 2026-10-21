@@ -76,7 +76,7 @@ function contactShadow(width, depth) {
 }
 
 function makeWeight(value) {
-  const sizes = { 20: [0.205, 0.19], 10: [0.176, 0.175], 5: [0.15, 0.16], 2: [0.128, 0.145], 1: [0.108, 0.135] };
+  const sizes = { 20: [0.205, 0.19], 10: [0.19, 0.18], 5: [0.175, 0.17], 1: [0.16, 0.155] };
   const [radius, height] = sizes[value];
   const group = new THREE.Group();
   const brass = new THREE.MeshStandardMaterial({ color: 0xc99a45, metalness: 0.72, roughness: 0.3 });
@@ -93,16 +93,18 @@ function makeWeight(value) {
   const knob = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.18, radius * 0.26, 0.12, 20), brass);
   knob.position.y = height + 0.11;
   group.add(knob);
-  const top = new THREE.Mesh(new THREE.CircleGeometry(radius * 0.55, 40), new THREE.MeshBasicMaterial({ map: labelTexture(`${value} g`, { width: 256, height: 96, fontSize: 42, color: '#493817' }) }));
-  top.rotation.x = -Math.PI / 2;
-  top.position.y = height + 0.057;
-  group.add(top);
+  const inscription = new THREE.Mesh(
+    new THREE.PlaneGeometry(radius * 1.6, 0.13),
+    new THREE.MeshBasicMaterial({ map: labelTexture(`${value} g`, { width: 320, height: 112, fontSize: 92, color: '#493817' }), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 })
+  );
+  inscription.position.set(0, height * 0.54, radius * 0.94);
+  group.add(inscription);
   return group;
 }
 
 function makeWeightTray(scene, materials) {
   const tray = new THREE.Group();
-  tray.position.set(1.45, 0, 1.08);
+  tray.position.set(1.4, 0, 1.08);
   const base = new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.14, 0.72), materials.base);
   base.position.y = 0.07;
   tray.add(base);
@@ -112,8 +114,8 @@ function makeWeightTray(scene, materials) {
   const inset = new THREE.Mesh(new THREE.BoxGeometry(2.72, 0.035, 0.54), materials.pan);
   inset.position.y = 0.177;
   tray.add(inset);
-  const values = [20, 10, 5, 2, 1];
-  const spacing = 0.5;
+  const values = [20, 10, 5, 1, 1, 1, 1];
+  const spacing = 0.34;
   const weights = values.map((value, index) => {
     const weight = makeWeight(value);
     const x = (index - 2) * spacing;
@@ -321,15 +323,6 @@ export function mountMassMeasurement() {
   const digital = makeDigitalScale(scene, mat);
   const weightSource = makeWeightTray(scene, mat);
   const sourceWeightModels = weightSource.weights.map(item => item.model);
-  const sourceLabelsContainer = document.querySelector('#weight-source-labels');
-  const sourceLabels = weightSource.weights.map(({ value }) => {
-    const label = document.createElement('span');
-    label.className = 'weight-source-label';
-    label.textContent = `${value} g`;
-    label.setAttribute('aria-hidden', 'true');
-    sourceLabelsContainer.append(label);
-    return label;
-  });
   const modeButtons = [...document.querySelectorAll('[data-mass-mode]')];
   const balancePanel = document.querySelector('#balance-controls');
   const digitalPanel = document.querySelector('#digital-controls');
@@ -505,7 +498,6 @@ export function mountMassMeasurement() {
     balance.leftPan.visible = mode === 'balance';
     balance.rightPan.visible = mode === 'balance';
     weightSource.tray.visible = mode === 'balance';
-    sourceLabelsContainer.hidden = mode !== 'balance';
     digital.base.visible = mode === 'digital';
     digital.stone.visible = mode === 'digital';
       digital.shadow.visible = mode === 'digital' && weighed;
@@ -797,15 +789,6 @@ export function mountMassMeasurement() {
           status.textContent = '石頭已取下並回到電子秤旁；可拖曳或按鈕再次秤量。';
         }
       }
-    }
-    if (mode === 'balance') {
-      const rect = host.getBoundingClientRect();
-      weightSource.weights.forEach((item, index) => {
-        const point = item.model.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.42, 0.02)).project(camera);
-        sourceLabels[index].style.left = `${(point.x + 1) * rect.width / 2}px`;
-        sourceLabels[index].style.top = `${(1 - point.y) * rect.height / 2}px`;
-        sourceLabels[index].hidden = point.z < -1 || point.z > 1;
-      });
     }
     renderer.render(scene, camera);
   }
