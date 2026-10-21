@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="data:,">
+  <title>混合物裡的成分，怎麼分開？</title>
+  <style>
+    :root { color-scheme:light; --ink:#243a35; --muted:#64736d; --paper:#f4f1e8; --card:#fffdf8; --line:#d9d3c4; --green:#176b53; --gold:#d7a94a; --blue:#dce9e5; --rust:#a85c3d; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:18px; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:ui-sans-serif,system-ui,-apple-system,"Noto Sans TC",sans-serif; line-height:1.7; }
+    button,select { font:inherit; }
+    button { color:inherit; }
+    .shell { width:min(1160px,calc(100% - 36px)); margin-inline:auto; }
+    .masthead { padding:28px 0 22px; }
+    .brand-row { margin-bottom:20px; display:flex; justify-content:space-between; gap:12px; align-items:center; }
+    .brand { color:var(--green); font-size:.9rem; font-weight:750; text-decoration:none; }
+    .crumb { color:var(--muted); font-size:.83rem; }
+    .hero { display:grid; grid-template-columns:minmax(0,1fr) minmax(230px,.42fr); gap:24px; align-items:end; }
+    .eyebrow { color:var(--green); font-size:.78rem; font-weight:800; letter-spacing:.1em; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { max-width:800px; margin:6px 0 12px; font-size:clamp(2rem,5vw,3.25rem); line-height:1.2; letter-spacing:-.035em; }
+    .hero-copy { max-width:740px; color:#52635d; font-size:1.06rem; }
+    .hero-note { padding:15px 17px; border:1px solid var(--line); border-radius:14px; background:#fffdf8b5; }
+    .hero-note strong { color:var(--green); }
+    .hero-note p { margin:5px 0 0; color:var(--muted); font-size:.9rem; }
+    .lesson-layout { display:grid; grid-template-columns:260px minmax(0,1fr); gap:28px; align-items:start; }
+    .route { position:sticky; top:12px; max-height:calc(100vh - 24px); overflow:auto; padding:14px; border:1px solid var(--line); border-radius:16px; background:#fffdf8eF; }
+    .route-label { margin:0; color:var(--green); font-weight:800; font-size:.9rem; }
+    .route-progress { margin:3px 0 10px; color:var(--muted); font-size:.78rem; }
+    .route-inner { display:grid; gap:4px; }
+    .route-inner a { display:grid; grid-template-columns:27px 1fr; gap:8px; align-items:start; padding:8px; border-radius:9px; color:var(--ink); text-decoration:none; font-size:.81rem; line-height:1.4; }
+    .route-inner a b { color:#818d84; font-size:.72rem; }
+    .route-inner a[aria-current="step"] { background:#e8efe9; color:#164e3f; font-weight:700; }
+    .route-hint { margin:10px 0 0; padding-top:10px; border-top:1px solid var(--line); color:var(--muted); font-size:.78rem; }
+    .record-panel { margin-top:12px; padding:12px; border-radius:11px; background:#f1eee4; }
+    .record-panel h2 { margin:0 0 6px; font-size:.9rem; }
+    .record-panel p { margin:0; color:var(--muted); font-size:.8rem; }
+    .cards { min-width:0; }
+    .section-top { display:flex; justify-content:space-between; gap:12px; align-items:baseline; padding:4px 0 12px; }
+    .section-top h2 { margin:0; font-size:1.05rem; }
+    .progress-copy { color:var(--muted); font-size:.78rem; }
+    .lesson-card { display:grid; grid-template-columns:150px minmax(0,1fr); gap:22px; margin:0 0 18px; padding:22px; border:1px solid var(--line); border-radius:18px; background:var(--card); box-shadow:0 7px 20px #243a3508; }
+    .card-side { padding-right:14px; border-right:1px solid var(--line); }
+    .card-number { display:inline-grid; place-items:center; width:34px; height:34px; border-radius:50%; background:#efe6cd; color:#594a28; font-size:.78rem; font-weight:850; }
+    .card-side h3 { margin:10px 0 4px; font-size:.98rem; line-height:1.4; }
+    .card-role { color:var(--muted); font-size:.78rem; }
+    .card-main h2 { margin:0 0 8px; font-size:clamp(1.17rem,2.4vw,1.55rem); line-height:1.4; }
+    .card-main>p { color:#53645d; }
+    .evidence-box,.note-box { margin:12px 0; padding:12px 14px; border-left:4px solid var(--gold); border-radius:7px; background:#f5f0df; }
+    .evidence-box strong { display:block; margin-bottom:3px; }
+    .note-box { border-left-color:var(--green); background:#edf3ee; font-size:.88rem; }
+    .control-row,.choice-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+    .control-button,.choice-button,.method-tab { border:1px solid #bdc8bf; border-radius:9px; padding:8px 12px; background:#fff; cursor:pointer; font-weight:700; }
+    .control-button:hover,.choice-button:hover,.method-tab:hover { border-color:var(--green); }
+    .choice-button[aria-pressed="true"],.method-tab[aria-pressed="true"] { color:#fff; border-color:var(--green); background:var(--green); }
+    button:focus-visible,a:focus-visible,select:focus-visible { outline:3px solid #d7a94a; outline-offset:2px; }
+    .live-note { min-height:1.6em; color:#315e4e; font-size:.9rem; font-weight:650; }
+    .scene { position:relative; min-height:190px; margin:12px 0; overflow:hidden; border:1px solid #cdd8d2; border-radius:13px; background:linear-gradient(#f6faf7,#eef3ef); }
+    .scene-label { position:absolute; top:10px; left:12px; color:var(--muted); font-size:.78rem; font-weight:700; }
+    .filter-scene { display:grid; grid-template-columns:minmax(0,1fr) 24px minmax(70px,.8fr) 24px minmax(0,1fr); gap:5px; align-items:center; padding:42px 16px 18px; text-align:center; }
+    .vessel { min-height:92px; display:grid; place-items:center; position:relative; border:2px solid #8ba69a; border-top:0; border-radius:0 0 18px 18px; background:linear-gradient(to top,#b8d2ca 0 52%,transparent 52%); color:#345d50; font-weight:750; font-size:.83rem; }
+    .vessel.muddy { background:linear-gradient(to top,#9bb9ad 0 50%,transparent 50%); }
+    .vessel.clean { background:linear-gradient(to top,#c7e2dc 0 50%,transparent 50%); }
+    .funnel { width:74px; height:70px; margin:auto; position:relative; opacity:.35; }
+    .funnel:before { content:""; position:absolute; left:4px; top:0; width:66px; height:42px; background:#e8eee9; border:2px solid #71887d; clip-path:polygon(0 0,100% 0,58% 100%,42% 100%); }
+    .funnel:after { content:""; position:absolute; left:31px; top:38px; width:12px; height:32px; border:2px solid #71887d; border-top:0; }
+    .funnel.ready { opacity:1; }
+    .filter-stage-0 .funnel,.filter-stage-1 .funnel { opacity:.35; }
+    .filter-stage-2 .funnel,.filter-stage-3 .funnel,.filter-stage-4 .funnel { opacity:1; }
+    .filter-stage-0 .output,.filter-stage-1 .output { opacity:.15; }
+    .output { opacity:.45; transition:opacity .25s; }
+    .filter-stage-4 .output { opacity:1; }
+    .flow-arrow { color:#82998d; font-size:1.5rem; }
+    .steps { display:flex; gap:6px; margin:12px 0; }
+    .step-dot { width:10px; height:10px; border-radius:99px; background:#d4dcd6; }
+    .step-dot.active { background:var(--green); }
+    .evap-stage { min-height:200px; display:grid; place-items:center; padding:38px 16px 14px; }
+    .dish-wrap { width:min(420px,100%); text-align:center; }
+    .evap-cup { height:118px; position:relative; overflow:hidden; border:3px solid #647e72; border-top:0; border-radius:0 0 52% 52%; background:linear-gradient(to top,#b9d5cc var(--water,65%),transparent var(--water,65%)); transition:background .8s; }
+    .salt-crystals { position:absolute; bottom:4px; left:15%; right:15%; height:0; opacity:0; transition:all .5s; background:radial-gradient(circle at 15% 70%,#fff 0 4px,transparent 5px),radial-gradient(circle at 35% 90%,#fff 0 5px,transparent 6px),radial-gradient(circle at 58% 72%,#fff 0 4px,transparent 5px),radial-gradient(circle at 80% 88%,#fff 0 5px,transparent 6px); }
+    .evap-stage[data-step="3"] .salt-crystals,.evap-stage[data-step="4"] .salt-crystals { height:28px; opacity:1; }
+    .evap-stage[data-step="1"] .evap-cup { --water:65%; }
+    .evap-stage[data-step="2"] .evap-cup { --water:50%; }
+    .evap-stage[data-step="3"] .evap-cup { --water:24%; }
+    .evap-stage[data-step="4"] .evap-cup { --water:10%; }
+    .heat-lines { height:24px; color:#b07d39; letter-spacing:10px; opacity:0; }
+    .evap-stage[data-step="2"] .heat-lines,.evap-stage[data-step="3"] .heat-lines { opacity:1; }
+    .strip-scene { min-height:205px; padding:40px 18px 14px; display:grid; place-items:center; }
+    .paper-strip { height:145px; width:94px; position:relative; border:1px solid #b5b6a5; background:repeating-linear-gradient(0deg,#fffef5,#fffef5 17px,#f6f3e7 18px); box-shadow:0 3px 10px #243a3514; }
+    .solvent { position:absolute; bottom:0; left:0; right:0; height:20%; background:#c6ddd8; transition:height 1s; }
+    .ink-dot { position:absolute; z-index:2; top:79%; left:50%; width:12px; height:7px; border-radius:50%; transform:translateX(-50%); background:#285943; }
+    .baseline { position:absolute; z-index:1; top:82%; left:8px; right:8px; border-top:1px dashed #878b75; }
+    .band { position:absolute; z-index:3; left:50%; width:16px; height:8px; border-radius:50%; transform:translate(-50%,0); opacity:0; transition:all .9s; }
+    .band.one { background:#3a8c65; top:49%; }
+    .band.two { background:#c7a52c; top:32%; }
+    .band.three { background:#b95645; top:17%; }
+    .strip-scene[data-ink="dark"] .band.one { background:#4776ad; }
+    .strip-scene[data-ink="dark"] .band.two { background:#7960a9; }
+    .strip-scene[data-ink="dark"] .band.three { background:#41464e; }
+    .strip-scene[data-step="1"] .solvent { height:17%; }
+    .strip-scene[data-step="2"] .solvent { height:72%; }
+    .strip-scene[data-step="2"] .band.one { top:57%; opacity:1; }
+    .strip-scene[data-step="2"] .band.two { top:39%; opacity:1; }
+    .strip-scene[data-step="2"] .band.three { top:22%; opacity:1; }
+    .compare-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:12px 0; }
+    .compare-card { padding:12px; border:1px solid var(--line); border-radius:11px; background:#fff; transition:all .2s; }
+    .compare-card.active { border-color:var(--green); background:#edf4ef; box-shadow:0 0 0 2px #176b5316; }
+    .compare-card h3 { margin:0 0 4px; font-size:.95rem; }
+    .compare-card p { margin:0; color:var(--muted); font-size:.82rem; }
+    .quiz-grid { display:grid; gap:10px; margin:14px 0; }
+    .quiz-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(155px,.55fr); gap:12px; align-items:center; padding:12px; border:1px solid var(--line); border-radius:11px; background:#fff; }
+    .quiz-row label { font-weight:700; }
+    .quiz-row p { margin:3px 0 0; color:var(--muted); font-size:.82rem; }
+    select { width:100%; padding:8px; border:1px solid #bdc8bf; border-radius:8px; background:#fff; }
+    .feedback { min-height:2em; font-weight:700; }
+    .next-hint { margin:14px 0 0; padding-top:12px; border-top:1px solid var(--line); color:#587365; font-size:.86rem; }
+    footer { padding:16px 0 28px; color:#718078; font-size:.82rem; }
+    @media(max-width:850px) { .lesson-layout { grid-template-columns:1fr; gap:12px; } .route { position:relative; top:auto; max-height:none; } .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); } .record-panel { display:none; } }
+    @media(max-width:620px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:8px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-scene { padding-inline:9px; gap:5px; } .vessel { font-size:.72rem; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <header class="shell masthead">
+    <div class="brand-row"><a class="brand" href="../../index.html">← 物質、分離與水溶液</a><span class="crumb">國二上・自然科學</span></div>
+    <div class="hero">
+      <div>
+        <div class="eyebrow">從認出混合物，到分開其中成分</div>
+        <h1>混合物裡的成分，怎麼分開？</h1>
+        <p class="hero-copy">這份雨水樣本的成分紀錄指出，其中含有水與泥沙。能利用什麼差異，把想分開的成分取出來？</p>
+      </div>
+      <aside class="hero-note"><strong>先說清楚要分開什麼</strong><p>分離方法要配合成分的性質和分離目標；操作後，再看實際留下或流出的結果。</p></aside>
+    </div>
+  </header>
+  <main class="shell lesson-layout">
+    <nav class="route" aria-label="學習路徑">
+      <p class="route-label">沿著問題一步步探索</p>
+      <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／06 段</p>
+      <div class="route-inner">
+        <a href="#s1" aria-current="step"><b>01</b><span>已知是混合物，怎麼分出泥沙？</span></a>
+        <a href="#s2"><b>02</b><span>過濾：讓泥沙留在濾紙上</span></a>
+        <a href="#s3"><b>03</b><span>結晶：從鹽水中取回鹽</span></a>
+        <a href="#s4"><b>04</b><span>簡易濾紙層析：看見色素分開</span></a>
+        <a href="#s5"><b>05</b><span>依分離目標比較三種方法</span></a>
+        <a href="#s6"><b>06</b><span>依目標選方法並判讀結果</span></a>
+      </div>
+      <p class="route-hint">先確認分離目標，再用操作結果檢查方法選擇。</p>
+      <section class="record-panel"><h2>目前的分離目標</h2><p id="goal-record">先選擇想分開的成分。</p></section>
+    </nav>
+    <div class="cards">
+      <div class="section-top"><h2>混合物的分離</h2><span class="progress-copy">已知樣本組成 → 選擇並操作方法 → 判讀結果</span></div>
+
+      <section class="lesson-card" id="s1">
+        <div class="card-side"><span class="card-number">01</span><h3>從樣本資料開始</h3><span class="card-role">由樣本分類轉向分離任務</span></div>
+        <div class="card-main">
+          <h2>已知雨水裡有水和泥沙，怎麼把它們分開？</h2>
+          <p>這份水樣已有成分紀錄，含有水與泥沙。現在要決定分離目標，再尋找適合的方法。</p>
+          <div class="evidence-box"><strong>樣本成分紀錄</strong>這份雨水樣本含有水與泥沙。混濁是觀察線索；成分判斷依據是已提供的紀錄。</div>
+          <p><strong>這次的目標是：</strong></p>
+          <div class="choice-row" role="group" aria-label="選擇分離目標">
+            <button class="choice-button" type="button" data-goal="分出泥沙" aria-pressed="true">分出泥沙</button>
+            <button class="choice-button" type="button" data-goal="收集流出的水" aria-pressed="false">收集流出的水</button>
+          </div>
+          <label for="first-prediction"><strong>先留下你的方法預測：</strong></label>
+          <div class="control-row"><select id="first-prediction"><option value="">選擇一種想法</option><option>用濾紙和漏斗</option><option>讓水分蒸發</option><option>還不確定</option></select><button class="control-button" type="button" id="save-prediction">記下預測</button></div>
+          <p class="live-note" id="prediction-note" aria-live="polite">這是操作前的想法，先保留，完成過濾後再回來比較。</p>
+          <p class="next-hint">下一步用濾紙和漏斗處理簡易泥沙水樣，看看哪些成分留下、哪些通過。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="s2">
+        <div class="card-side"><span class="card-number">02</span><h3>過濾</h3><span class="card-role">讓不溶固體留在濾紙上</span></div>
+        <div class="card-main">
+          <h2>泥沙留在濾紙上，液體流進容器</h2>
+          <p>摺好的濾紙放入漏斗後，把簡易泥沙水樣沿著濾紙慢慢倒入。濾紙上的固體是殘留物；通過濾紙、流到下方容器的液體是濾液。</p>
+          <div class="scene filter-scene filter-stage-0" id="filter-scene" data-stage="0" aria-label="過濾操作示意">
+            <span class="scene-label">操作示意：按步驟觀察泥沙水樣</span>
+            <div class="vessel muddy">泥沙水樣</div><span class="flow-arrow" aria-hidden="true">→</span>
+            <div><div class="funnel" aria-hidden="true"></div><small>漏斗與濾紙</small></div><span class="flow-arrow" aria-hidden="true">→</span>
+            <div class="vessel clean output">濾液</div>
+            <span class="scene-label" id="retained-label" style="top:auto;bottom:8px;left:50%">濾紙上的泥沙：尚未操作</span>
+          </div>
+          <div class="steps" id="filter-dots" aria-label="操作步驟進度"><span class="step-dot active"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span></div>
+          <div class="control-row"><button class="control-button" type="button" id="filter-prev">上一步</button><button class="control-button" type="button" id="filter-next">下一步</button><button class="control-button" type="button" id="filter-reset">重設</button></div>
+          <p class="live-note" id="filter-note" aria-live="polite">準備好摺濾紙，放入漏斗。</p>
+          <div class="note-box">此處用簡易泥沙樣本呈現過濾。實際樣本能否被濾紙分開，會受顆粒大小等條件影響；不要只用「看起來混濁」推斷組成。</div>
+          <p class="next-hint">過濾能截留不溶固體；如果固體已溶在液體裡，就要換一種分離方法。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="s3">
+        <div class="card-side"><span class="card-number">03</span><h3>結晶</h3><span class="card-role">從液體中取回溶解的固體</span></div>
+        <div class="card-main">
+          <h2>鹽已經溶在水裡，怎麼把鹽取回來？</h2>
+          <p>鹽水是另一個分離樣本。把鹽水放入適合的蒸發容器，透過加熱讓水分逐漸離開，可以觀察到容器中留下鹽的固體。</p>
+          <div class="scene evap-stage" id="evap-stage" data-step="1" aria-label="鹽水蒸發與鹽晶體留下的示意">
+            <span class="scene-label">過程示意，動畫時間不代表真實加熱時間</span>
+            <div class="dish-wrap"><div class="heat-lines" aria-hidden="true">⌁　⌁　⌁</div><div class="evap-cup"><div class="salt-crystals"></div></div><p id="evap-caption" class="live-note">加熱前：鹽在水中，肉眼看不見分開的鹽粒。</p></div>
+          </div>
+          <div class="control-row"><button class="control-button" type="button" id="evap-play">開始</button><button class="control-button" type="button" id="evap-step">下一步</button><button class="control-button" type="button" id="evap-reset">重設</button></div>
+          <div class="note-box">這裡以安全示意呈現加熱與蒸發，不要求學生自行操作火源。課程重點是用結晶取回固體，不計算濃度，也不探討溶解度。</div>
+          <p class="next-hint">不溶固體可由濾紙截留；溶解的固體要用不同方法取回。再看另一種能把混合色素分開的操作。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="s4">
+        <div class="card-side"><span class="card-number">04</span><h3>簡易濾紙層析</h3><span class="card-role">觀察色素分開</span></div>
+        <div class="card-main">
+          <h2>一筆顏色，可能分成幾條色帶</h2>
+          <p>在濾紙基線點上水溶性彩色筆墨水，讓濾紙下端接觸合適的溶劑。觀察顏色在濾紙上形成的色帶；本卡只看操作和結果，不解釋色素為何移動。</p>
+          <div class="choice-row" role="group" aria-label="選擇彩色筆墨水">
+            <button class="choice-button ink-choice" type="button" data-ink="green" aria-pressed="true">綠色筆</button>
+            <button class="choice-button ink-choice" type="button" data-ink="dark" aria-pressed="false">深色筆</button>
+          </div>
+          <div class="scene strip-scene" id="strip-scene" data-step="0" aria-label="濾紙層析操作示意">
+            <span class="scene-label">基線上的墨點要高於溶劑液面</span>
+            <div class="paper-strip"><div class="solvent"></div><div class="ink-dot" id="ink-dot"></div><div class="baseline"></div><span class="band one"></span><span class="band two"></span><span class="band three"></span></div>
+          </div>
+          <div class="control-row"><button class="control-button" type="button" id="strip-start">開始觀察</button><button class="control-button" type="button" id="strip-pause">暫停／繼續</button><button class="control-button" type="button" id="strip-reset">重設</button></div>
+          <p class="live-note" id="strip-note" aria-live="polite">先看好基線、墨點與溶劑液面的相對位置。</p>
+          <div class="note-box">操作前確認墨點位於溶劑液面上方。示意圖呈現簡易濾紙層析的可見結果，不代表真實色帶寬度或移動速度。</div>
+          <p class="next-hint">三種方法處理的目標不同。下一步把樣本、分離目標和觀察結果放在一起比較。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="s5">
+        <div class="card-side"><span class="card-number">05</span><h3>方法比較</h3><span class="card-role">目標不同，方法也不同</span></div>
+        <div class="card-main">
+          <h2>要分開什麼，決定要看哪一種操作結果</h2>
+          <p>比較樣本中成分的差異和分離目標，再選擇合適的方法。點選方法或樣本，對照器材與結果。</p>
+          <div class="choice-row" role="group" aria-label="選擇分離方法">
+            <button class="method-tab" type="button" data-method="filter" aria-pressed="true">過濾</button>
+            <button class="method-tab" type="button" data-method="crystal" aria-pressed="false">結晶</button>
+            <button class="method-tab" type="button" data-method="paper" aria-pressed="false">簡易濾紙層析</button>
+          </div>
+          <div class="compare-grid" id="compare-grid">
+            <article class="compare-card active" data-kind="filter"><h3>泥沙水</h3><p>用漏斗、濾紙；觀察固體留在濾紙、液體通過。</p></article>
+            <article class="compare-card" data-kind="crystal"><h3>鹽水</h3><p>用蒸發容器；觀察水分離開後留下鹽的固體。</p></article>
+            <article class="compare-card" data-kind="paper"><h3>混合色素</h3><p>用濾紙和合適溶劑；觀察顏色形成不同色帶。</p></article>
+          </div>
+          <p class="live-note" id="compare-note" aria-live="polite">過濾適合用來分開液體與其中不溶的固體。</p>
+          <p class="next-hint">現在用三種分離目標檢視方法選擇和結果判讀。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="s6">
+        <div class="card-side"><span class="card-number">06</span><h3>整合檢核</h3><span class="card-role">用方法和結果說明選擇</span></div>
+        <div class="card-main">
+          <h2>為每個分離目標選方法，再預測會看到什麼</h2>
+          <p>依據樣本與要分離的成分選擇方法，並把操作和可觀察的結果連起來。</p>
+          <div class="quiz-grid">
+            <div class="quiz-row"><div><label for="q-filter">泥沙水：想把泥沙和水分開</label><p>操作後，固體會留在哪裡？</p></div><select id="q-filter"><option value="">選方法及結果</option><option value="filter">過濾：固體留在濾紙，液體通過</option><option value="crystal">結晶：水分離開後留下固體</option><option value="paper">濾紙層析：顏色形成不同色帶</option></select></div>
+            <div class="quiz-row"><div><label for="q-crystal">鹽水：想取回溶解在水中的鹽</label><p>哪種操作能留下鹽的固體？</p></div><select id="q-crystal"><option value="">選方法及結果</option><option value="filter">過濾：固體留在濾紙，液體通過</option><option value="crystal">結晶：水分離開後留下鹽的固體</option><option value="paper">濾紙層析：顏色形成不同色帶</option></select></div>
+            <div class="quiz-row"><div><label for="q-paper">混合色素：想觀察顏色是否由不同色素組成</label><p>操作後要觀察什麼？</p></div><select id="q-paper"><option value="">選方法及結果</option><option value="filter">過濾：固體留在濾紙，液體通過</option><option value="crystal">結晶：水分離開後留下固體</option><option value="paper">濾紙層析：顏色形成不同色帶</option></select></div>
+          </div>
+          <div class="control-row"><button class="control-button" type="button" id="check-answers">查看整合結果</button><button class="control-button" type="button" id="reset-answers">重新選擇</button></div>
+          <p class="feedback" id="quiz-feedback" aria-live="polite">完成三個情境後，一次查看整合回饋。</p>
+          <div class="note-box">分離方法要配合分離目標和成分差異。本段不測純物質／混合物分類，也不涉及濃度表示或計算。</div>
+        </div>
+      </section>
+      <p class="next-hint">已學會依分離目標比較過濾、結晶和簡易濾紙層析。水溶液中溶質含量的表示，會在後續內容處理。</p>
+    </div>
+  </main>
+  <footer class="shell">國二上・自然科學</footer>
+  <script>
+    const routeLinks=[...document.querySelectorAll('.route-inner a')];
+    const cards=routeLinks.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean);
+    const routeProgress=document.getElementById('route-progress');
+    function setCurrentCard(card){const index=cards.indexOf(card);if(index<0)return;routeLinks.forEach((link,i)=>{if(i===index)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');});routeProgress.textContent=`目前位置：第 ${String(index+1).padStart(2,'0')}／${String(cards.length).padStart(2,'0')} 段`;}
+    if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible[0])setCurrentCard(visible[0].target);},{rootMargin:'-15% 0px -65% 0px'});cards.forEach(card=>observer.observe(card));}
+
+    let chosenGoal='分出泥沙';
+    document.querySelectorAll('[data-goal]').forEach(button=>button.addEventListener('click',()=>{chosenGoal=button.dataset.goal;document.querySelectorAll('[data-goal]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.getElementById('goal-record').textContent=`目前目標：${chosenGoal}`;}));
+    document.getElementById('save-prediction').addEventListener('click',()=>{const value=document.getElementById('first-prediction').value;document.getElementById('prediction-note').textContent=value?`已記下「${value}」。完成過濾後，再回來比較預測和觀察。`:'先選一個想法，或選擇「還不確定」。';});
+
+    const filterMessages=['準備好摺濾紙，放入漏斗。','把摺好的濾紙放進漏斗，確認濾紙貼合。','沿著濾紙慢慢倒入泥沙水樣。','觀察固體留在濾紙上，液體通過濾紙。','結果：濾紙留下泥沙；流到下方容器的液體是濾液。'];
+    let filterStage=0;
+    function updateFilter(){const scene=document.getElementById('filter-scene');scene.dataset.stage=filterStage;scene.className=`scene filter-scene filter-stage-${filterStage}`;document.getElementById('filter-note').textContent=filterMessages[filterStage];document.getElementById('retained-label').textContent=filterStage<3?'濾紙上的泥沙：尚未完成過濾':'濾紙上的泥沙：殘留物';document.querySelectorAll('#filter-dots .step-dot').forEach((dot,i)=>dot.classList.toggle('active',i===filterStage));document.getElementById('filter-prev').disabled=filterStage===0;document.getElementById('filter-next').disabled=filterStage===4;}
+    document.getElementById('filter-prev').addEventListener('click',()=>{filterStage=Math.max(0,filterStage-1);updateFilter();});
+    document.getElementById('filter-next').addEventListener('click',()=>{filterStage=Math.min(4,filterStage+1);updateFilter();});
+    document.getElementById('filter-reset').addEventListener('click',()=>{filterStage=0;updateFilter();});updateFilter();
+
+    const evapCaptions=['尚未開始：準備觀察鹽水的分離。','加熱前：鹽在水中，肉眼看不見分開的鹽粒。','加熱示意：水逐漸離開，容器中的液體變少。','繼續蒸發：開始看到固體鹽留下。','結果：容器中留下鹽的固體。'];
+    let evapStep=1,evapTimer=null;
+    function updateEvap(){const stage=document.getElementById('evap-stage');stage.dataset.step=evapStep;document.getElementById('evap-caption').textContent=evapCaptions[evapStep];document.getElementById('evap-play').textContent=evapTimer?'暫停':'開始';document.getElementById('evap-step').disabled=evapStep>=4;}
+    function stopEvap(){if(evapTimer){clearInterval(evapTimer);evapTimer=null;}updateEvap();}
+    document.getElementById('evap-play').addEventListener('click',()=>{if(evapTimer){stopEvap();return;}if(evapStep>=4)evapStep=1;evapTimer=setInterval(()=>{if(evapStep>=4){stopEvap();return;}evapStep++;updateEvap();},1000);updateEvap();});
+    document.getElementById('evap-step').addEventListener('click',()=>{stopEvap();evapStep=Math.min(4,evapStep+1);updateEvap();});
+    document.getElementById('evap-reset').addEventListener('click',()=>{stopEvap();evapStep=1;updateEvap();});updateEvap();
+
+    const stripNotes=['先看好基線、墨點與溶劑液面的相對位置。','溶劑接觸濾紙下端，墨點仍在液面上方。','觀察濾紙上的顏色逐漸分開，形成不同色帶。'];
+    let stripStep=0,stripTimer=null;
+    function updateStrip(){document.getElementById('strip-scene').dataset.step=stripStep;document.getElementById('strip-note').textContent=stripNotes[stripStep];}
+    function stopStrip(){if(stripTimer){clearInterval(stripTimer);stripTimer=null;}document.getElementById('strip-pause').textContent='暫停／繼續';}
+    document.getElementById('strip-start').addEventListener('click',()=>{stopStrip();stripStep=1;updateStrip();stripTimer=setTimeout(()=>{stripStep=2;updateStrip();stripTimer=null;},1200);});
+    document.getElementById('strip-pause').addEventListener('click',()=>{if(stripTimer){clearTimeout(stripTimer);stripTimer=null;document.getElementById('strip-pause').textContent='繼續觀察';}else if(stripStep===1){document.getElementById('strip-pause').textContent='暫停／繼續';stripTimer=setTimeout(()=>{stripStep=2;updateStrip();stripTimer=null;},1200);}});
+    document.getElementById('strip-reset').addEventListener('click',()=>{stopStrip();stripStep=0;updateStrip();});
+    document.querySelectorAll('.ink-choice').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.ink-choice').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.getElementById('strip-scene').dataset.ink=button.dataset.ink;document.getElementById('ink-dot').style.background=button.dataset.ink==='green'?'#285943':'#343a45';if(stripStep===2){stripStep=0;updateStrip();}}));
+
+    const compareNotes={filter:'過濾適合用來分開液體與其中不溶的固體。',crystal:'結晶適合從液體中取回溶解的固體。',paper:'簡易濾紙層析可用來觀察混合色素分開後的色帶。'};
+    document.querySelectorAll('.method-tab').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.method-tab').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.querySelectorAll('.compare-card').forEach(card=>card.classList.toggle('active',card.dataset.kind===button.dataset.method));document.getElementById('compare-note').textContent=compareNotes[button.dataset.method];}));
+
+    document.getElementById('check-answers').addEventListener('click',()=>{const ids=['q-filter','q-crystal','q-paper'];const values=ids.map(id=>document.getElementById(id).value);const feedback=document.getElementById('quiz-feedback');if(values.some(value=>!value)){feedback.textContent='請先完成三個分離目標的配對，再查看整合回饋。';feedback.style.color='#805d20';return;}const correct=values[0]==='filter'&&values[1]==='crystal'&&values[2]==='paper';feedback.textContent=correct?'三種方法都配對正確：你依分離目標選擇方法，也能說出操作後要觀察的結果。':'再對照各樣本要分開的成分：泥沙水看固體與液體如何分開，鹽水看留下的鹽，混合色素看分開的色帶。';feedback.style.color=correct?'#176b53':'#805d20';});
+    document.getElementById('reset-answers').addEventListener('click',()=>{['q-filter','q-crystal','q-paper'].forEach(id=>document.getElementById(id).value='');const feedback=document.getElementById('quiz-feedback');feedback.textContent='完成三個情境後，一次查看整合回饋。';feedback.style.color='';});
+  </script>
+</body>
+</html>
