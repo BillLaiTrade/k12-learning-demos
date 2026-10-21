@@ -203,11 +203,14 @@
     #parallax-focus-connectors path { fill: none; stroke: #d17b26; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
     #parallax-focus-box { position: absolute; border: 2px solid #d17b26; border-radius: 5px; background: rgb(255 190 95 / 10%); box-shadow: 0 0 0 2px rgb(255 255 255 / 78%); }
     .parallax-magnifier { position: absolute; top: 14px; right: 14px; z-index: 2; width: clamp(185px, 38%, 220px); aspect-ratio: 300 / 180; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 8px 22px rgb(42 43 29 / 18%); }
-    .parallax-magnifier.is-left { right: auto; left: 14px; }
     .parallax-magnifier canvas { display: block; width: 100%; height: 100%; }
+    .parallax-scene[data-magnifier="true"] #parallax-canvas { margin-top: 150px; }
+    .parallax-scene[data-magnifier="true"] #pencil-3d-canvas { inset: 162px 12px auto; }
     @media (max-width: 760px) {
       #pencil-3d-canvas, #parallax-canvas { height: 200px; }
-      .parallax-magnifier { top: 10px; right: auto; left: 10px; width: clamp(175px, 54%, 230px); }
+      .parallax-magnifier { top: 10px; right: 10px; width: clamp(175px, 54%, 230px); }
+      .parallax-scene[data-magnifier="true"] #parallax-canvas { margin-top: 125px; }
+      .parallax-scene[data-magnifier="true"] #pencil-3d-canvas { inset: 137px 12px auto; }
     }
     #parallax-canvas:active { cursor: grabbing; }
     #parallax-canvas:focus-visible { outline: 3px solid #176b53; outline-offset: 3px; }
@@ -661,22 +664,12 @@
         focusBox.style.height = `${bottom - top}px`;
 
         const magnifier = document.querySelector(".parallax-magnifier");
-        const initialInset = magnifier.getBoundingClientRect();
-        const insetWidth = initialInset.width;
-        const rightCandidate = panelBounds.width - 14 - insetWidth;
-        const leftCandidate = 14;
-        const overlapsFocus = (candidateLeft) => !(candidateLeft + insetWidth < left || candidateLeft > right || 14 + initialInset.height < top || 14 > bottom);
-        const leftSideIsClear = !overlapsFocus(leftCandidate);
-        const preferLeft = window.matchMedia("(max-width: 760px)").matches || (overlapsFocus(rightCandidate) && leftSideIsClear);
-        magnifier.classList.toggle("is-left", preferLeft);
         const inset = magnifier.getBoundingClientRect();
         const insetLeft = inset.left - panelBounds.left;
         const insetRight = inset.right - panelBounds.left;
         const insetBottom = inset.bottom - panelBounds.top;
         document.querySelector("#parallax-focus-connectors").setAttribute("viewBox", `0 0 ${panelBounds.width} ${panelBounds.height}`);
-        const path = insetRight < left
-          ? `M${left} ${top} L${insetRight} ${insetBottom} M${left} ${bottom} L${insetLeft} ${insetBottom}`
-          : `M${right} ${top} L${insetLeft} ${insetBottom} M${right} ${bottom} L${insetRight} ${insetBottom}`;
+        const path = `M${right} ${top} L${insetLeft} ${insetBottom} M${right} ${bottom} L${insetRight} ${insetBottom}`;
         document.querySelector("#parallax-focus-path").setAttribute("d", path);
       });
       const camera = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
