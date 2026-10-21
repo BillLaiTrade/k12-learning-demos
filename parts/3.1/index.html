@@ -227,7 +227,7 @@
     .correction-workspace { margin: 16px 0; padding: 16px; border: 1px solid #cbded0; border-radius: 20px; background: #e3eee5; box-shadow: var(--shadow); }
     .correction-workspace h3 { margin: 0 0 4px; font-size: 1rem; }
     .correction-workspace > p { margin: 0 0 12px; color: var(--muted); font-size: .9rem; }
-    .correction-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+    .correction-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
     .correction-options button { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 3px; padding: 10px; text-align: left; }
     .correction-options button[aria-pressed="true"] { color: #fff; border-color: var(--green); background: var(--green); }
     .correction-options small { color: var(--muted); font-size: .76rem; font-weight: 500; }
@@ -240,6 +240,15 @@
     .correction-angle-detail[hidden] { display: none; }
     .correction-angle-detail p { display: grid; gap: 2px; margin: 0; }
     .correction-angle-detail p span { color: var(--muted); font-size: .85rem; }
+    .correction-average-panel { margin-top: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #fffefa; }
+    .correction-average-panel strong { display: block; }
+    .correction-average-panel p { margin: 4px 0 0; color: var(--muted); font-size: .88rem; }
+    .correction-average-plot { position: relative; height: 64px; margin: 8px 4px 0; }
+    .correction-average-axis { position: absolute; top: 34px; right: 4px; left: 4px; height: 2px; background: #b9c9c1; }
+    .correction-average-point { position: absolute; z-index: 1; top: calc(30px + var(--offset)); left: var(--position); width: 10px; height: 10px; border: 2px solid #fffefa; border-radius: 50%; background: #528a74; box-shadow: 0 0 0 1px #528a74; transform: translateX(-50%); }
+    .correction-average-mean { position: absolute; z-index: 2; top: 9px; bottom: 10px; left: 53%; border-left: 2px solid var(--green); }
+    .correction-average-mean::before { position: absolute; top: -3px; left: -4px; width: 6px; height: 6px; border-radius: 50%; background: var(--green); content: ""; }
+    .correction-average-legend { display: flex; justify-content: space-between; color: var(--muted); font-size: .78rem; }
     .correction-parallax-magnifier { display: flex; width: clamp(175px, 54%, 230px); aspect-ratio: 300 / 180; flex: 0 0 auto; flex-direction: column; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 4px 12px rgb(42 43 29 / 12%); }
     .correction-parallax-magnifier strong { flex: 0 0 25px; padding: 3px 8px; color: #26383a; background: #fffefa; font-size: .78rem; text-align: center; }
     .correction-parallax-magnifier canvas { display: block; width: 100%; min-height: 0; flex: 1; }
@@ -255,6 +264,7 @@
     #correction-combined-title { font-weight: 750; }
     @media (max-width: 760px) {
       .lesson-card { scroll-margin-top: 160px; }
+      .correction-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       #correction-pencil-3d-canvas, #correction-parallax-canvas { height: 200px; }
       .correction-angle-detail { align-items: flex-start; }
       .correction-parallax-magnifier { width: min(100%, 250px); margin-left: auto; }
@@ -539,13 +549,14 @@
         <div class="card-side"><span class="card-number">07</span><h3>改善量測條件</h3><span class="card-role">自由調整，觀察讀值變化</span></div>
         <div class="card-main">
           <h2>怎麼讓量測結果更可靠？</h2>
-          <p>沿用前面量過的鉛筆和直尺，觀察三項量測條件如何影響讀值。</p>
+          <p>以下四種方法都能改善量測結果。點選一種，看看它能減少哪一類誤差，以及為什麼有效。</p>
           <div class="correction-workspace" id="correction-workspace" data-control="density">
-            <p>三項條件都可以操作，順序不限；切換時會保留調整結果。</p>
-            <div class="correction-options" role="group" aria-label="選擇要調整的量測條件">
-              <button type="button" class="secondary" data-correction-control="density" aria-pressed="true"><strong>刻度密度</strong><small id="correction-density-status">較疏・每格 10 cm</small></button>
-              <button type="button" class="secondary" data-correction-control="origin" aria-pressed="false"><strong>起點位置</strong><small id="correction-origin-status">未對齊 0</small></button>
-              <button type="button" class="secondary" data-correction-control="angle" aria-pressed="false"><strong>觀察角度</strong><small id="correction-angle-status">正對尺面</small></button>
+            <p>四種方法各自改善不同的誤差來源；點選任一項查看操作和說明。</p>
+            <div class="correction-options" role="group" aria-label="選擇改善量測可靠性的方法">
+              <button type="button" class="secondary" data-correction-control="density" aria-pressed="true"><strong>刻度加密</strong><small id="correction-density-status">較疏・每格 5 cm</small></button>
+              <button type="button" class="secondary" data-correction-control="origin" aria-pressed="false"><strong>對準零點</strong><small id="correction-origin-status">偏移 1 cm</small></button>
+              <button type="button" class="secondary" data-correction-control="angle" aria-pressed="false"><strong>正對尺面</strong><small id="correction-angle-status">正對尺面</small></button>
+              <button type="button" class="secondary" data-correction-control="average" aria-pressed="false"><strong>重複量測</strong><small>取平均降波動</small></button>
             </div>
             <h3 id="correction-stage-title">調整刻度密度</h3>
             <p id="correction-stage-prompt">端點落在相距很遠的刻線之間，讀值範圍較大。把刻度調密，觀察範圍如何縮小。</p>
@@ -573,15 +584,26 @@
                 </div>
                 <p>也可拖曳場景自由旋轉，並在放大視窗觀察端點投影。</p>
               </div>
+              <div id="correction-average-controls" class="correction-average-panel" hidden>
+                <strong>同一物體量測 10 次</strong>
+                <p>每次讀值可能略有不同；把多次結果取平均，能降低偶然波動對結果的影響。</p>
+                <div class="correction-average-plot" role="img" aria-label="十次量測的讀值略有差異，平均值位於讀值集中區域">
+                  <div class="correction-average-axis"></div>
+                  <span class="correction-average-point" style="--position:28%;--offset:0px"></span><span class="correction-average-point" style="--position:36%;--offset:-8px"></span><span class="correction-average-point" style="--position:42%;--offset:5px"></span><span class="correction-average-point" style="--position:47%;--offset:-4px"></span><span class="correction-average-point" style="--position:51%;--offset:7px"></span><span class="correction-average-point" style="--position:56%;--offset:-9px"></span><span class="correction-average-point" style="--position:61%;--offset:3px"></span><span class="correction-average-point" style="--position:66%;--offset:-5px"></span><span class="correction-average-point" style="--position:71%;--offset:8px"></span><span class="correction-average-point" style="--position:76%;--offset:-2px"></span>
+                  <span class="correction-average-mean" aria-hidden="true"></span>
+                </div>
+                <div class="correction-average-legend"><span>較小讀值</span><strong>平均值</strong><span>較大讀值</span></div>
+                <p>平均能減少隨機誤差；若每次都起點未對準或視線歪斜，仍要先修正這些固定偏差。</p>
+              </div>
               <p id="correction-mode-instructions" aria-live="polite">選擇較密的刻度，看看估讀範圍如何縮小。</p>
-              <div class="correction-live-readout" aria-live="polite">
+              <div class="correction-live-readout" id="correction-live-readout" aria-live="polite">
                 <small id="correction-readout-label">每格 5 cm・估讀範圍</small>
                 <strong id="correction-readout-value">15–20 cm</strong>
               </div>
             </div>
             <div class="correction-result" id="correction-result" aria-live="polite">
-              <p><strong id="correction-combined-title">目前的讀值範圍較大。</strong></p>
-              <p id="correction-combined-note">調密刻度能縮小估讀範圍；對齊起點、正對刻度，也能減少讀值落差。</p>
+              <p><strong id="correction-combined-title">四種方法分別改善不同的誤差來源。</strong></p>
+              <p id="correction-combined-note">刻度加密、對準起點、正對尺面與重複量測取平均，可以搭配使用；平均不能消除固定的起點或視角偏差。</p>
             </div>
           </div>
         </div>
@@ -1181,10 +1203,15 @@
       const correctionFormat = (value) => Number(value.toFixed(1)).toFixed(1);
       const correctionDisplay = (value) => Math.abs(value - Math.round(value)) < 0.001 ? String(Math.round(value)) : correctionFormat(value);
       const renderCorrectionScene = () => {
-        const bounds = correctionCanvas.getBoundingClientRect();
-        if (!bounds.width || !bounds.height) return;
-        correctionScene.dataset.magnifier = String(correctionMode === "angle");
+        correctionScene.hidden = correctionMode === "average";
         document.querySelector("#correction-parallax-detail").hidden = correctionMode !== "angle";
+        document.querySelector("#correction-average-controls").hidden = correctionMode !== "average";
+        document.querySelector("#correction-live-readout").hidden = correctionMode === "average";
+        document.querySelector("#correction-mode-instructions").hidden = correctionMode === "average";
+        correctionScene.dataset.magnifier = String(correctionMode === "angle");
+        const sceneActive = correctionMode !== "average";
+        const bounds = correctionCanvas.getBoundingClientRect();
+        if (sceneActive && (!bounds.width || !bounds.height)) return;
         const target = { x: state.start + 10, y: pencilHeight, z: 0 };
         const cameraPosition = {
           x: target.x + orbitRadius * Math.cos(correctionCameraState.pitch) * Math.sin(correctionCameraState.yaw),
@@ -1220,11 +1247,11 @@
           lookAtX: target.x,
           lookAtY: rulerTop,
           lookAtZ: target.z,
-          focalLengthRatio: bounds.width * 0.85 / bounds.height,
+          focalLengthRatio: sceneActive ? bounds.width * 0.85 / bounds.height : 1,
           rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
           rayEnd: { x: clampedProjectionX, y: rulerTop + 0.02, z: clampedProjectionZ }
         };
-        window.setPencil3DCorrectionView?.(correctionView);
+        if (sceneActive) window.setPencil3DCorrectionView?.(correctionView);
         const reading = document.querySelector("#correction-readout-value");
         if (correctionMode === "density") {
           const low = Math.floor(measuredLength / correctionTickInterval) * correctionTickInterval;
@@ -1232,22 +1259,26 @@
           document.querySelector("#correction-readout-label").textContent = `每格 ${correctionTickInterval} cm・估讀範圍`;
           reading.textContent = `${correctionDisplay(low)}–${correctionDisplay(high)} cm`;
           document.querySelector("#correction-stage-title").textContent = "調整刻度密度";
-          document.querySelector("#correction-stage-prompt").textContent = "刻度間距大，估讀範圍也大。選擇刻度較疏或較密的直尺。";
+          document.querySelector("#correction-stage-prompt").textContent = "刻度每格越小，端點落在刻線之間的範圍越小，估讀的不確定性也會降低。選擇較疏或較密的直尺。";
           document.querySelector("#correction-mode-instructions").textContent = correctionTickInterval === 1 ? "每格 1 cm，估讀範圍縮小了。起點和視角仍可分別調整。" : "每格 5 cm，端點落在哪一小段還不清楚；試試較密的刻度。";
         } else if (correctionMode === "origin") {
           document.querySelector("#correction-readout-label").textContent = `起點 ${correctionFormat(startReading)} cm・終點 ${correctionFormat(endReading)} cm`;
           reading.textContent = `${correctionFormat(endReading)} − ${correctionFormat(startReading)} ≈ ${correctionFormat(measuredLength)} cm`;
           document.querySelector("#correction-stage-title").textContent = "調整起點位置";
-          document.querySelector("#correction-stage-prompt").textContent = "在尺面上左右拖曳，讓 0 刻度對準筆尖；也可用終點讀值減起點讀值。";
+          document.querySelector("#correction-stage-prompt").textContent = "讓 0 刻度對準鉛筆起點，可直接讀出長度；若未對準，就要減去起點讀值，避免零點偏移算進長度。";
           document.querySelector("#correction-mode-instructions").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "零刻度已對準筆尖。拖動尺面仍可任意調整；觀察角度也可另外修正。" : `零刻度偏移 ${formatCentimeters(-correctionRulerOffset)} cm。直接拖動尺面，讓零刻度移到筆尖。`;
-        } else {
+        } else if (correctionMode === "angle") {
           document.querySelector("#correction-readout-label").textContent = landingOnScale ? "目前角度估讀" : "目前角度估讀";
           reading.textContent = landingOnScale ? `約 ${correctionFormat(endReading)} cm` : "視線落在尺外";
           document.querySelector("#correction-stage-title").textContent = "調整觀察角度";
-          document.querySelector("#correction-stage-prompt").textContent = "沿用第六區塊的視角控制：按預設視角，或拖曳 3D 場景自由旋轉。";
+          document.querySelector("#correction-stage-prompt").textContent = "視線正對尺面、垂直刻度，可減少視差造成的讀值偏移。比較兩種視角的端點讀值。";
           document.querySelector("#correction-mode-instructions").textContent = landingOnScale
             ? `目前讀值約 ${correctionFormat(endReading)} cm。改變視角，觀察橘色投影線落點與讀值如何變化。`
             : "目前視線落在尺面外；拖曳場景轉動視角，讓投影回到刻度上。";
+        } else {
+          document.querySelector("#correction-stage-title").textContent = "重複量測並取平均";
+          document.querySelector("#correction-stage-prompt").textContent = "重複量測可降低每次讀值的偶然波動；起點偏移或視差等固定偏差仍須另外修正。";
+          document.querySelector("#correction-mode-instructions").textContent = "十次讀值可能略有差異；平均值通常比單次讀值穩定。";
         }
         correctionScene.dataset.control = correctionMode;
         correctionModeButtons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.correctionControl === correctionMode)));
@@ -1260,13 +1291,8 @@
         document.querySelector("#correction-density-status").textContent = `${correctionTickInterval === 1 ? "較密" : "較疏"}・每格 ${correctionTickInterval} cm`;
         document.querySelector("#correction-origin-status").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "已對準 0" : `偏移 ${formatCentimeters(-correctionRulerOffset)} cm`;
         document.querySelector("#correction-angle-status").textContent = correctionCameraPreset === "front" ? "正對尺面" : correctionCameraPreset === "oblique" ? "斜向觀察" : "自由旋轉";
-        const allImproved = correctionTickInterval === 1 && Math.abs(correctionRulerOffset) < 0.02 && correctionCameraPreset === "front";
-        document.querySelector("#correction-combined-title").textContent = allImproved
-          ? "三項條件都調整後，估讀範圍最小、視差也較小。"
-          : "三項條件可各自調整；同時改善時，讀值會更可靠。";
-        document.querySelector("#correction-combined-note").textContent = allImproved
-          ? "每格 1 cm、零刻度對準筆尖、視線正對尺面。任一項都可再調整，比較它對讀值的影響。"
-          : "刻度疏密、起點位置和觀察角度都會影響讀值。切換項目時，各項設定都會保留。";
+        document.querySelector("#correction-combined-title").textContent = "四種方法分別改善不同的誤差來源。";
+        document.querySelector("#correction-combined-note").textContent = "刻度加密、對準起點、正對尺面與重複量測取平均，可以搭配使用；平均不能消除固定的起點或視角偏差。";
       };
       correctionModeButtons.forEach((button) => button.addEventListener("click", () => {
         correctionMode = button.dataset.correctionControl;
