@@ -49,7 +49,7 @@ const view = {
   pitch: 0.48,
   orbitRadius: 24,
   centerY: 0.78,
-  centerZ: -0.3,
+  centerZ: 0,
   lookAtX: 9.2,
   lookAtY: 0.04,
   lookAtZ: 0,
@@ -219,7 +219,7 @@ function createRuler() {
   const scaleInk = standardMaterial(0x24383a, { roughness: 0.7 });
   for (let centimeter = 0; centimeter <= rulerLength; centimeter += 1) {
     const major = centimeter % 5 === 0;
-    const tickLength = major ? 0.84 : 0.56;
+    const tickLength = major ? 0.58 : 0.46;
     const tick = new THREE.Mesh(
       new THREE.BoxGeometry(0.045, 0.014, tickLength),
       scaleInk
@@ -231,7 +231,7 @@ function createRuler() {
     group.add(tick);
 
     // The opposite edge has a second graduation row, like a marked ruler edge.
-    const farTickLength = major ? 0.44 : 0.28;
+    const farTickLength = major ? 0.36 : 0.24;
     const farTick = new THREE.Mesh(
       new THREE.BoxGeometry(0.045, 0.014, farTickLength),
       scaleInk
