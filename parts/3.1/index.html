@@ -197,8 +197,17 @@
     .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
     #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 220px; pointer-events: none; }
     #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 220px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
+    .parallax-focus-overlay { position: absolute; z-index: 4; inset: 0; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 180ms ease; }
+    .parallax-scene[data-magnifier="true"] .parallax-focus-overlay { opacity: 1; visibility: visible; }
+    #parallax-focus-connectors { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    #parallax-focus-connectors path { fill: none; stroke: #d17b26; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+    #parallax-focus-box { position: absolute; border: 2px solid #d17b26; border-radius: 5px; background: rgb(255 190 95 / 10%); box-shadow: 0 0 0 2px rgb(255 255 255 / 78%); }
+    .parallax-magnifier { position: absolute; top: 14px; right: 14px; z-index: 2; width: clamp(185px, 38%, 220px); aspect-ratio: 300 / 180; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 8px 22px rgb(42 43 29 / 18%); }
+    .parallax-magnifier.is-left { right: auto; left: 14px; }
+    .parallax-magnifier canvas { display: block; width: 100%; height: 100%; }
     @media (max-width: 760px) {
       #pencil-3d-canvas, #parallax-canvas { height: 200px; }
+      .parallax-magnifier { top: 10px; right: auto; left: 10px; width: clamp(175px, 54%, 230px); }
     }
     #parallax-canvas:active { cursor: grabbing; }
     #parallax-canvas:focus-visible { outline: 3px solid #176b53; outline-offset: 3px; }
@@ -467,6 +476,13 @@
             <canvas id="pencil-3d-canvas" aria-hidden="true"></canvas>
             <span id="pencil-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
             <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、鉛筆和端點投影線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明觀察角度改變時，尺上的讀值可能改變。</canvas>
+            <div class="parallax-focus-overlay" aria-hidden="true">
+              <svg id="parallax-focus-connectors" preserveAspectRatio="none"><path id="parallax-focus-path"></path></svg>
+              <div id="parallax-focus-box"></div>
+              <div class="parallax-magnifier">
+                <canvas id="parallax-magnifier-canvas" aria-hidden="true"></canvas>
+              </div>
+            </div>
             <div class="view-presets" role="group" aria-label="預設觀察視角">
               <button type="button" class="secondary" id="view-front" aria-pressed="true">正對尺面</button>
               <button type="button" class="secondary" id="view-oblique" aria-pressed="false">斜向觀察</button>
@@ -629,6 +645,40 @@
         }
       };
       const parallaxCanvas = document.querySelector("#parallax-canvas");
+      const parallaxScene = parallaxCanvas.parentElement;
+      window.addEventListener("pencil3d-projection", (event) => {
+        const { ruler18, ruler19, pencilTip } = event.detail;
+        const panelBounds = parallaxScene.getBoundingClientRect();
+        const points = [ruler18, ruler19, pencilTip];
+        const left = clamp(Math.min(...points.map((point) => point.x)) - 8, 4, panelBounds.width - 4);
+        const right = clamp(Math.max(...points.map((point) => point.x)) + 8, left + 18, panelBounds.width - 4);
+        const top = clamp(Math.min(...points.map((point) => point.y)) - 10, 4, panelBounds.height - 4);
+        const bottom = clamp(Math.max(...points.map((point) => point.y)) + 10, top + 18, panelBounds.height - 4);
+        const focusBox = document.querySelector("#parallax-focus-box");
+        focusBox.style.left = `${left}px`;
+        focusBox.style.top = `${top}px`;
+        focusBox.style.width = `${right - left}px`;
+        focusBox.style.height = `${bottom - top}px`;
+
+        const magnifier = document.querySelector(".parallax-magnifier");
+        const initialInset = magnifier.getBoundingClientRect();
+        const insetWidth = initialInset.width;
+        const rightCandidate = panelBounds.width - 14 - insetWidth;
+        const leftCandidate = 14;
+        const overlapsFocus = (candidateLeft) => !(candidateLeft + insetWidth < left || candidateLeft > right || 14 + initialInset.height < top || 14 > bottom);
+        const leftSideIsClear = !overlapsFocus(leftCandidate);
+        const preferLeft = window.matchMedia("(max-width: 760px)").matches || (overlapsFocus(rightCandidate) && leftSideIsClear);
+        magnifier.classList.toggle("is-left", preferLeft);
+        const inset = magnifier.getBoundingClientRect();
+        const insetLeft = inset.left - panelBounds.left;
+        const insetRight = inset.right - panelBounds.left;
+        const insetBottom = inset.bottom - panelBounds.top;
+        document.querySelector("#parallax-focus-connectors").setAttribute("viewBox", `0 0 ${panelBounds.width} ${panelBounds.height}`);
+        const path = insetRight < left
+          ? `M${left} ${top} L${insetRight} ${insetBottom} M${left} ${bottom} L${insetLeft} ${insetBottom}`
+          : `M${right} ${top} L${insetLeft} ${insetBottom} M${right} ${bottom} L${insetRight} ${insetBottom}`;
+        document.querySelector("#parallax-focus-path").setAttribute("d", path);
+      });
       const camera = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
       let cameraPreset = "front";
       const edgePosition = () => state.start + state.edge;
@@ -682,6 +732,7 @@
       };
       const renderParallaxScene = () => {
         if (!parallaxCanvas.clientWidth) return;
+        parallaxScene.dataset.magnifier = String(cameraPreset !== "front");
         const bounds = parallaxCanvas.getBoundingClientRect();
         const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
         parallaxCanvas.width = Math.round(bounds.width * pixelRatio);
@@ -743,6 +794,7 @@
           : cameraPreset === "oblique"
           ? "斜向觀察：端點視線投影偏離正對時的刻度。"
           : "自由視角：拖曳或用方向鍵轉動，觀察投影落點和讀值。";
+        parallaxScene.dataset.magnifier = String(cameraPreset !== "front");
         document.querySelector("#camera-caption").textContent = cameraCaption;
         document.querySelector("#view-front").setAttribute("aria-pressed", String(cameraPreset === "front"));
         document.querySelector("#view-oblique").setAttribute("aria-pressed", String(cameraPreset === "oblique"));

@@ -3,6 +3,7 @@ import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const canvas = document.querySelector("#pencil-3d-canvas");
 const sceneCanvas = document.querySelector("#parallax-canvas");
+const magnifierCanvas = document.querySelector("#parallax-magnifier-canvas");
 const liveRegion = document.querySelector("#pencil-model-status");
 if (!canvas || !sceneCanvas) throw new Error("找不到鉛筆 3D 場景畫布");
 
@@ -14,6 +15,10 @@ camera.up.set(0, 1, 0);
 const rulerLength = 20;
 
 let renderer;
+let magnifierRenderer;
+const magnifierCamera = new THREE.PerspectiveCamera(11, 1, 0.1, 80);
+const magnifierLabels = new THREE.Group();
+let rulerModel;
 let pencil;
 let projectionRay;
 let landingMarker;
@@ -164,6 +169,7 @@ function createRuler() {
     const labelX = centimeter === 0 ? 0.32 : centimeter === rulerLength ? rulerLength - 0.32 : centimeter;
     number.position.set(labelX, 0.21, 0.02);
     number.renderOrder = 2;
+    number.userData.rulerMajorNumber = true;
     group.add(number);
   }
 
@@ -317,6 +323,23 @@ try {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+  try {
+    magnifierRenderer = new THREE.WebGLRenderer({
+      canvas: magnifierCanvas,
+      alpha: false,
+      antialias: true,
+      powerPreference: "low-power"
+    });
+    magnifierRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    magnifierRenderer.outputColorSpace = THREE.SRGBColorSpace;
+    magnifierRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+    magnifierRenderer.toneMappingExposure = 0.94;
+    magnifierRenderer.setClearColor(0xfffefa, 1);
+  } catch (error) {
+    document.querySelector(".parallax-magnifier").hidden = true;
+    console.warn("無法啟動刻度放大窗", error);
+  }
+
   const pmrem = new THREE.PMREMGenerator(renderer);
   const room = new RoomEnvironment();
   scene.environment = pmrem.fromScene(room, 0.04).texture;
@@ -349,8 +372,22 @@ try {
   shadowSurface.receiveShadow = true;
   scene.add(shadowSurface);
 
-  const ruler = createRuler();
-  scene.add(ruler);
+  rulerModel = createRuler();
+  scene.add(rulerModel);
+  if (magnifierRenderer) {
+    magnifierLabels.visible = false;
+    for (const centimeter of [18, 19]) {
+      const label = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.62, 0.42),
+        new THREE.MeshBasicMaterial({ map: makeTextTexture(String(centimeter)), transparent: true, depthWrite: false, side: THREE.DoubleSide })
+      );
+      label.rotation.x = -Math.PI / 2;
+      label.position.set(centimeter, 0.235, 0.46);
+      label.renderOrder = 6;
+      magnifierLabels.add(label);
+    }
+    scene.add(magnifierLabels);
+  }
   pencil = createPencil();
   scene.add(pencil);
 
@@ -433,6 +470,46 @@ function render() {
     landingRing.visible = false;
   }
   renderer.render(scene, camera);
+  if (magnifierRenderer && sceneCanvas.parentElement.dataset.magnifier === "true") {
+    const rect = magnifierCanvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const size = `${Math.round(rect.width)}:${Math.round(rect.height)}:${window.devicePixelRatio || 1}`;
+      if (magnifierCanvas.dataset.size !== size) {
+        magnifierCanvas.dataset.size = size;
+        magnifierRenderer.setSize(Math.round(rect.width), Math.round(rect.height), false);
+      }
+      magnifierCamera.aspect = rect.width / rect.height;
+      magnifierCamera.updateProjectionMatrix();
+      const magnifierTarget = new THREE.Vector3(view.start + 18.5, 0.22, 0.46);
+      const viewDirection = camera.position.clone().sub(target).normalize();
+      magnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 7.2);
+      magnifierCamera.lookAt(magnifierTarget);
+      const majorLabels = rulerModel.children.filter((child) => child.userData.rulerMajorNumber);
+      for (const label of majorLabels) label.visible = false;
+      magnifierLabels.visible = true;
+      magnifierRenderer.render(scene, magnifierCamera);
+      magnifierLabels.visible = false;
+      for (const label of majorLabels) label.visible = true;
+    }
+  }
+
+  const panelRect = sceneCanvas.parentElement.getBoundingClientRect();
+  const canvasRect = sceneCanvas.getBoundingClientRect();
+  const projectToPanel = (x, y, z) => {
+    const point = new THREE.Vector3(x, y, z).project(camera);
+    return {
+      x: canvasRect.left - panelRect.left + (point.x + 1) * canvasRect.width / 2,
+      y: canvasRect.top - panelRect.top + (1 - point.y) * canvasRect.height / 2
+    };
+  };
+  window.dispatchEvent(new CustomEvent("pencil3d-projection", {
+    detail: {
+      ruler18: projectToPanel(18, 0.23, 1.05),
+      ruler19: projectToPanel(19, 0.23, 1.05),
+      pencilTip: projectToPanel(view.start + view.edge, view.centerY, view.centerZ),
+      projectedReading: view.rayEnd?.x ?? view.edge
+    }
+  }));
 }
 
 window.setPencil3DView = (nextView = {}) => {
