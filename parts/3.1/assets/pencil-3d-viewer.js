@@ -16,7 +16,7 @@ const rulerLength = 20;
 
 let renderer;
 let magnifierRenderer;
-const magnifierCamera = new THREE.PerspectiveCamera(11, 1, 0.1, 80);
+const magnifierCamera = new THREE.PerspectiveCamera(18.5, 1, 0.1, 80);
 const magnifierLabels = new THREE.Group();
 let rulerModel;
 let pencil;
@@ -157,7 +157,7 @@ function createRuler() {
 
   for (let centimeter = 0; centimeter <= rulerLength; centimeter += 5) {
     const number = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.8, 1.2),
+      new THREE.PlaneGeometry(1.0, 0.5),
       new THREE.MeshBasicMaterial({
         map: makeTextTexture(String(centimeter)),
         transparent: true,
@@ -167,7 +167,7 @@ function createRuler() {
     );
     number.rotation.x = -Math.PI / 2;
     const labelX = centimeter === 0 ? 0.32 : centimeter === rulerLength ? rulerLength - 0.32 : centimeter;
-    number.position.set(labelX, 0.21, 0.02);
+    number.position.set(labelX, 0.235, 0.68);
     number.renderOrder = 2;
     number.userData.rulerMajorNumber = true;
     group.add(number);
@@ -377,8 +377,8 @@ try {
   if (magnifierRenderer) {
     for (const centimeter of [18, 19]) {
       const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeTextTexture(String(centimeter)), transparent: true, depthTest: false, depthWrite: false }));
-      label.scale.set(0.42, 0.22, 1);
-      label.position.set(centimeter, 0.27, -1.3);
+      label.scale.set(0.56, 0.3, 1);
+      label.position.set(centimeter, 0.27, 0.68);
       label.renderOrder = 6;
       magnifierLabels.add(label);
     }
@@ -476,30 +476,23 @@ function render() {
       }
       magnifierCamera.aspect = rect.width / rect.height;
       magnifierCamera.updateProjectionMatrix();
-      const magnifierTarget = new THREE.Vector3(view.start + 18.5, 0.22, -1.2);
+      const magnifierTarget = new THREE.Vector3(view.start + 17.5, 0.55, 0.1);
       const viewDirection = camera.position.clone().sub(target).normalize();
-      viewDirection.x = 0;
-      viewDirection.z = -0.2;
-      viewDirection.y = 1;
-      viewDirection.normalize();
-      magnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 7.2);
+      magnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
       magnifierCamera.lookAt(magnifierTarget);
       const majorLabels = rulerModel.children.filter((child) => child.userData.rulerMajorNumber);
       for (const label of majorLabels) label.visible = false;
       magnifierLabels.visible = true;
       const markerScale = landingMarker.scale.clone();
       const ringScale = landingRing.scale.clone();
-      const markerWasVisible = landingMarker.visible;
       const ringWasVisible = landingRing.visible;
       landingMarker.scale.setScalar(0.15);
       landingRing.scale.setScalar(0.18);
-      landingMarker.visible = false;
       landingRing.visible = false;
       magnifierRenderer.render(scene, magnifierCamera);
       magnifierLabels.visible = false;
       landingMarker.scale.copy(markerScale);
       landingRing.scale.copy(ringScale);
-      landingMarker.visible = markerWasVisible;
       landingRing.visible = ringWasVisible;
       for (const label of majorLabels) label.visible = true;
     }
@@ -516,8 +509,8 @@ function render() {
   };
   window.dispatchEvent(new CustomEvent("pencil3d-projection", {
     detail: {
-      ruler18: projectToPanel(18, 0.23, -1.3),
-      ruler19: projectToPanel(19, 0.23, -1.3),
+      ruler18: projectToPanel(18, 0.23, 1.05),
+      ruler19: projectToPanel(19, 0.23, 1.05),
       pencilTip: projectToPanel(view.start + view.edge, view.centerY, view.centerZ),
       projectedReading: view.rayEnd?.x ?? view.edge
     }
