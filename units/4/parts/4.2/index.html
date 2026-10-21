@@ -54,6 +54,13 @@
     .filter-animation { position:relative; margin:16px 0 10px; overflow:hidden; border:1px solid #d8e2da; border-radius:18px; background:#f1f6f1; box-shadow:0 12px 30px #243a350d; }
     .filter-animation .filter-illustration { display:block; width:100%; height:auto; }
     .filter-animation .filter-motion { position:absolute; inset:0; display:block; width:100%; height:100%; overflow:visible; pointer-events:none; }
+    .filter-animation .filter-hotspot { position:absolute; z-index:2; display:grid; place-items:center; width:clamp(38px,5vw,52px); aspect-ratio:1; padding:0; border:2px solid #fff; border-radius:50%; background:#176b53; color:#fff; box-shadow:0 2px 12px #243a3550; font-size:.82rem; font-weight:850; cursor:pointer; transform:translate(-50%,-50%); transition:transform .2s,background .2s,box-shadow .2s; }
+    .filter-animation .filter-hotspot:hover,.filter-animation .filter-hotspot[aria-pressed="true"] { background:#0f4e3b; box-shadow:0 0 0 5px #176b5330,0 3px 14px #243a3550; transform:translate(-50%,-50%) scale(1.08); }
+    .filter-animation .filter-hotspot:focus-visible { outline:3px solid #82a98c; outline-offset:4px; }
+    .filter-hotspot.sample { left:25%; top:29%; }
+    .filter-hotspot.filter { left:50%; top:38%; }
+    .filter-hotspot.pour { left:44%; top:23%; }
+    .filter-hotspot.result { left:50%; top:76%; }
     .filter-animation .flow-body,.filter-animation .flow-glint,.filter-animation .drip-body,.filter-animation .drip-glint { fill:none; stroke-linecap:round; stroke-linejoin:round; opacity:0; }
     .filter-animation .flow-body { stroke:#9bd2c4; stroke-width:19; filter:drop-shadow(0 2px 4px #477a6850); }
     .filter-animation .flow-glint { stroke:#f4fffb; stroke-width:5; stroke-dasharray:6 17; }
@@ -77,10 +84,16 @@
     @keyframes flow-pulse { 50% { stroke-width:23; opacity:.75; } }
     @keyframes filter-focus { 50% { stroke-dashoffset:-21; stroke-opacity:.45; } }
     @keyframes result-ripple { 0% { transform:scale(.35); opacity:.8; } 100% { transform:scale(1.7); opacity:0; } }
-    .filter-stage-labels { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin:0 0 8px; color:#53645d; font-size:.8rem; font-weight:700; text-align:center; }
-    .filter-stage-labels button { min-width:0; padding:8px 3px; border:0; border-radius:9px; background:transparent; color:inherit; font-size:inherit; font-weight:inherit; cursor:pointer; }
-    .filter-stage-labels button[aria-pressed="true"] { color:var(--green); background:#e7eee6; }
-    .filter-stage-labels button:focus-visible { outline:3px solid #79ad8d; outline-offset:2px; }
+    .filter-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; margin:0 0 12px; padding:0; list-style:none; }
+    .filter-steps li { min-width:0; padding:12px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+    .filter-steps b { display:block; margin-bottom:4px; color:var(--green); font-size:.84rem; }
+    .filter-steps span { display:block; color:#53645d; font-size:.82rem; line-height:1.5; }
+    .filter-principle { margin:12px 0; padding:14px 16px; border:1px solid #d8e2da; border-radius:12px; background:#edf4ee; color:#40564b; }
+    .filter-principle strong { display:block; margin-bottom:3px; color:var(--green); }
+    .filter-details { min-height:116px; margin:12px 0; padding:16px 18px; border:1px solid #cddfd2; border-radius:14px; background:#fff; box-shadow:0 5px 16px #243a3508; }
+    .filter-details h3 { margin:0 0 8px; color:var(--green); font-size:1rem; }
+    .filter-details p { margin:5px 0 0; color:#53645d; }
+    .filter-details p strong { color:var(--ink); }
     .choice-prompt { margin:16px 0 6px; font-weight:750; }
     .note-box { border-left-color:var(--green); background:#edf3ee; font-size:.88rem; }
     .control-row,.choice-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
@@ -133,7 +146,8 @@
     .next-hint { margin:14px 0 0; padding-top:12px; border-top:1px solid var(--line); color:#587365; font-size:.86rem; }
     footer { padding:16px 0 28px; color:#718078; font-size:.82rem; }
     @media(max-width:850px) { .lesson-layout { grid-template-columns:1fr; gap:12px; } .route { position:relative; top:auto; max-height:none; } .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); } .record-panel { display:none; } }
-    @media(max-width:620px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:8px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-stage-labels { font-size:.68rem; line-height:1.35; } .goal-choice { min-width:100%; } }
+    @media(max-width:850px) { .filter-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:620px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:8px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .filter-details { padding:13px; } .goal-choice { min-width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
 </head>
@@ -170,7 +184,7 @@
         <div class="card-main">
           <h2>把泥沙水倒進漏斗，會發生什麼？</h2>
           <p>這份水樣裡看得到泥沙。若想讓泥沙和水分開，可以用濾紙過濾；跟著步驟操作，看看固體和液體各自去了哪裡。</p>
-          <div class="filter-animation" id="filter-animation" data-stage="0" role="group" aria-label="泥沙水經過濾紙的連續動畫；可選擇四個步驟查看">
+          <div class="filter-animation" id="filter-animation" data-stage="0" role="group" aria-label="泥沙水經過濾紙的連續動畫；可點選畫面標記查看深入解說">
             <img class="filter-illustration" src="assets/filtration-scene.png" width="1672" height="941" alt="同一個連續過濾場景：一只傾斜的玻璃杯將含少量泥沙的淺青綠色水倒入濾紙漏斗，泥沙留在濾紙上，濾液滴入下方接液杯。">
             <svg class="filter-motion" viewBox="0 0 1672 941" aria-hidden="true">
               <defs><clipPath id="receiver-water-clip"><path d="M713 592Q836 606 960 592L950 817Q948 840 924 846H750Q726 840 724 817Z"/></clipPath></defs>
@@ -190,11 +204,22 @@
               <path class="filtered-water" clip-path="url(#receiver-water-clip)" d="M710 704Q836 692 964 704V860H710Z"/>
               <ellipse class="result-ripple" cx="836" cy="710" rx="47" ry="11"/>
             </svg>
+            <button class="filter-hotspot sample" type="button" data-filter-detail="sample" aria-label="泥沙水樣：查看樣本與分離目標的詳細說明" aria-pressed="false">1</button>
+            <button class="filter-hotspot filter" type="button" data-filter-detail="filter" aria-label="濾紙與漏斗：查看攔住泥沙的原理" aria-pressed="false">2</button>
+            <button class="filter-hotspot pour" type="button" data-filter-detail="pour" aria-label="倒入樣本：查看倒入與過濾如何進行" aria-pressed="false">3</button>
+            <button class="filter-hotspot result" type="button" data-filter-detail="result" aria-label="接液杯與分離結果：查看濾渣和濾液的說明" aria-pressed="false">4</button>
           </div>
-          <div class="filter-stage-labels" role="group" aria-label="選擇動畫步驟"><button type="button" data-filter-stage="0" aria-pressed="true">① 泥沙水樣</button><button type="button" data-filter-stage="1" aria-pressed="false">② 準備濾紙</button><button type="button" data-filter-stage="2" aria-pressed="false">③ 倒入樣本</button><button type="button" data-filter-stage="3" aria-pressed="false">④ 觀察結果</button></div>
-          <div class="control-row"><button class="control-button" type="button" id="filter-play">播放流程</button><button class="control-button" type="button" id="filter-prev">上一步</button><button class="control-button" type="button" id="filter-next">下一步</button><button class="control-button" type="button" id="filter-reset">重設</button></div>
-          <p class="live-note" id="filter-note" aria-live="polite">樣本裡有泥沙；先看清楚要分離的是什麼。</p>
-          <div class="note-box">此處以簡易泥沙樣本示範過濾。實際樣本能否被濾紙分開，會受顆粒大小等條件影響。</div>
+          <ol class="filter-steps" aria-label="過濾的四個步驟">
+            <li><b>① 架好器材</b><span>將濾紙放入漏斗，並在漏斗下方放好接液杯。</span></li>
+            <li><b>② 倒入泥沙水</b><span>將樣本慢慢倒進濾紙中，避免液體溢出。</span></li>
+            <li><b>③ 讓混合物分開</b><span>水穿過濾紙，泥沙顆粒留在濾紙上。</span></li>
+            <li><b>④ 觀察結果</b><span>濾紙上留下固體；下方接液杯收集流下的液體。</span></li>
+          </ol>
+          <div class="filter-principle"><strong>過濾原理</strong>泥沙不溶於水。這個樣本中的泥沙顆粒被濾紙攔住，水則穿過濾紙流入接液杯；留在濾紙上的固體叫「濾渣」，收集到的液體叫「濾液」。</div>
+          <section class="filter-details" id="filter-details" aria-live="polite" aria-atomic="true">
+            <h3 id="filter-detail-title">想深入了解？</h3>
+            <p><strong>點選畫面上的 1–4 標記</strong>，看看該物件在過濾時做什麼，以及它如何幫助分開泥沙和水。完整流程與過濾原理已列在上方，不必點選也能讀懂。</p>
+          </section>
         </div>
       </section>
 
@@ -262,17 +287,28 @@
     function setCurrentCard(card){const index=cards.indexOf(card);if(index<0)return;routeLinks.forEach((link,i)=>{if(i===index)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');});routeProgress.textContent=`目前位置：第 ${String(index+1).padStart(2,'0')}／${String(cards.length).padStart(2,'0')} 個問題`;}
     if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible[0])setCurrentCard(visible[0].target);},{rootMargin:'-15% 0px -65% 0px'});cards.forEach(card=>observer.observe(card));}
 
-    const filterMessages=['樣本裡看得到少量砂粒與細小顆粒。先確認要分開的是固體和液體。','把摺好的濾紙放入漏斗，並在下方放好接液容器。','慢慢倒入淺青綠色的泥沙水；水流穿過濾紙，顆粒逐漸留在紙上。','觀察結果：砂粒留在濾紙上，較清澈的液體滴入下方容器。'];
-    let filterStage=0,filterTimer=null;
-    const filterPlay=document.getElementById('filter-play');
-    function pauseFilter(){if(filterTimer){clearInterval(filterTimer);filterTimer=null;}updateFilter();}
-    function updateFilter(){document.getElementById('filter-animation').dataset.stage=filterStage;document.getElementById('filter-note').textContent=filterMessages[filterStage];document.querySelectorAll('[data-filter-stage]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.filterStage)===filterStage)));document.getElementById('filter-prev').disabled=filterStage===0;document.getElementById('filter-next').disabled=filterStage===3;filterPlay.textContent=filterTimer?'暫停動畫':filterStage===3?'重新播放':'播放流程';filterPlay.setAttribute('aria-pressed',String(Boolean(filterTimer)));}
-    function selectFilterStage(stage){pauseFilter();filterStage=stage;updateFilter();}
-    document.querySelectorAll('[data-filter-stage]').forEach(button=>button.addEventListener('click',()=>selectFilterStage(Number(button.dataset.filterStage))));
-    filterPlay.addEventListener('click',()=>{if(filterTimer){pauseFilter();return;}if(filterStage===3)filterStage=0;filterTimer=setInterval(()=>{if(filterStage>=3){pauseFilter();return;}filterStage++;updateFilter();if(filterStage===3)pauseFilter();},2400);updateFilter();});
-    document.getElementById('filter-prev').addEventListener('click',()=>selectFilterStage(Math.max(0,filterStage-1)));
-    document.getElementById('filter-next').addEventListener('click',()=>selectFilterStage(Math.min(3,filterStage+1)));
-    document.getElementById('filter-reset').addEventListener('click',()=>selectFilterStage(0));updateFilter();
+    const filterAnimation=document.getElementById('filter-animation');
+    const filterDetails={
+      sample:{title:'① 泥沙水樣｜要分開的是什麼？',purpose:'這杯樣本裡，泥沙顆粒分散在水中。這次要把固體泥沙和液態水分開。',principle:'泥沙沒有溶解在水裡，仍以顆粒存在，因此可以利用固體和液體通過濾紙的差異來分離。'},
+      filter:{title:'② 濾紙與漏斗｜它們怎麼幫上忙？',purpose:'濾紙放進漏斗中，接液杯放在漏斗下方。漏斗托住濾紙，也把流下的液體導入接液杯。',principle:'濾紙有細小孔隙。水可以穿過孔隙；這份樣本中的泥沙顆粒被攔在濾紙上，於是固體和液體分開。'},
+      pour:{title:'③ 倒入樣本｜過濾如何開始？',purpose:'將泥沙水慢慢倒入濾紙，讓樣本接觸濾紙並流經漏斗。',principle:'倒得慢一些可避免液體溢出。水穿過濾紙後沿漏斗流下，泥沙顆粒則留在濾紙上；這就是過濾正在發生的過程。'},
+      result:{title:'④ 接液杯與結果｜分離後得到什麼？',purpose:'泥沙留在濾紙上，穿過濾紙的液體被下方接液杯收集。',principle:'留在濾紙上的固體叫「濾渣」，收集到的液體叫「濾液」。過濾能分開這份樣本中的泥沙和水；濾液看起來較清澈，不代表一定能飲用。'}
+    };
+    document.querySelectorAll('[data-filter-detail]').forEach(hotspot=>hotspot.addEventListener('click',()=>{
+      const detail=filterDetails[hotspot.dataset.filterDetail];
+      if(!detail)return;
+      document.querySelectorAll('[data-filter-detail]').forEach(item=>item.setAttribute('aria-pressed',String(item===hotspot)));
+      document.getElementById('filter-detail-title').textContent=detail.title;
+      const panel=document.getElementById('filter-details');
+      panel.querySelectorAll('p').forEach(paragraph=>paragraph.remove());
+      const purpose=document.createElement('p');const purposeLabel=document.createElement('strong');purposeLabel.textContent='這裡在做什麼：';purpose.append(purposeLabel,document.createTextNode(detail.purpose));
+      const principle=document.createElement('p');const principleLabel=document.createElement('strong');principleLabel.textContent='原理與作用：';principle.append(principleLabel,document.createTextNode(detail.principle));
+      panel.append(purpose,principle);
+    }));
+    const reduceFilterMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let filterStage=reduceFilterMotion?3:0;
+    filterAnimation.dataset.stage=String(filterStage);
+    if(!reduceFilterMotion){setInterval(()=>{filterStage=(filterStage+1)%4;filterAnimation.dataset.stage=String(filterStage);},2200);}
 
     const evapCaptions=['尚未開始：準備觀察鹽水的分離。','加熱前：鹽在水中，肉眼看不見分開的鹽粒。','加熱示意：水逐漸離開，容器中的液體變少。','繼續蒸發：容器中開始出現鹽的固體。','結果：容器中形成鹽的固體。'];
     let evapStep=1,evapTimer=null;
