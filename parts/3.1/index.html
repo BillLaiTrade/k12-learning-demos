@@ -1021,7 +1021,8 @@
         cameraPreset = "free";
         const bounds = parallaxCanvas.getBoundingClientRect();
         const sideOfRuler = clamp((bounds.left + bounds.width / 2 - event.clientX) / (bounds.width / 2), -1, 1);
-        camera.yaw = clampViewYaw(camera.yaw + dx * 0.009 - dy * sideOfRuler * 0.009);
+        const dragSideStrength = Math.sign(sideOfRuler) * Math.max(0.4, Math.min(Math.abs(sideOfRuler), 0.6));
+        camera.yaw = clampViewYaw(camera.yaw + dx * 0.009 - dy * dragSideStrength * 0.013);
         renderParallaxScene();
       });
       const releaseDrag = () => { dragPoint = null; };
