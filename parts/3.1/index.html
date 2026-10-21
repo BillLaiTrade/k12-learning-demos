@@ -234,15 +234,14 @@
     .correction-parallax-scene { position: relative; margin: 12px 0; padding: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
     #correction-pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 220px; pointer-events: none; }
     #correction-parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 220px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
-    .correction-parallax-scene[data-magnifier="true"] #correction-parallax-canvas { margin-top: 150px; }
-    .correction-parallax-scene[data-magnifier="true"] #correction-pencil-3d-canvas { inset: 162px 12px auto; }
-    #correction-parallax-focus-overlay { position: absolute; z-index: 4; inset: 0; pointer-events: none; opacity: 0; visibility: hidden; }
-    .correction-parallax-scene[data-magnifier="true"] #correction-parallax-focus-overlay { opacity: 1; visibility: visible; }
-    #correction-parallax-focus-connectors { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-    #correction-parallax-focus-connectors path { fill: none; stroke: #d17b26; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
-    #correction-parallax-focus-box { position: absolute; border: 2px solid #d17b26; border-radius: 5px; background: rgb(255 190 95 / 10%); box-shadow: 0 0 0 2px rgb(255 255 255 / 78%); }
-    .correction-parallax-magnifier { position: absolute; top: 10px; right: 10px; z-index: 2; width: clamp(175px, 54%, 230px); aspect-ratio: 300 / 180; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 8px 22px rgb(42 43 29 / 18%); }
-    .correction-parallax-magnifier canvas { display: block; width: 100%; height: 100%; }
+    #correction-parallax-focus-overlay { display: none; }
+    .correction-angle-detail { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 10px 12px; border: 1px solid #e3c38e; border-radius: 14px; background: #fffefa; }
+    .correction-angle-detail[hidden] { display: none; }
+    .correction-angle-detail p { display: grid; gap: 2px; margin: 0; }
+    .correction-angle-detail p span { color: var(--muted); font-size: .85rem; }
+    .correction-parallax-magnifier { display: flex; width: clamp(175px, 54%, 230px); aspect-ratio: 300 / 180; flex: 0 0 auto; flex-direction: column; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 4px 12px rgb(42 43 29 / 12%); }
+    .correction-parallax-magnifier strong { flex: 0 0 25px; padding: 3px 8px; color: #26383a; background: #fffefa; font-size: .78rem; text-align: center; }
+    .correction-parallax-magnifier canvas { display: block; width: 100%; min-height: 0; flex: 1; }
     .correction-adjustment { margin: 12px 0 0; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
     .correction-adjustment h4 { margin: 0 0 6px; font-size: 1rem; }
     .correction-adjustment p { margin: 0; color: var(--muted); font-size: .9rem; }
@@ -254,8 +253,8 @@
     #correction-combined-title { font-weight: 750; }
     @media (max-width: 760px) {
       #correction-pencil-3d-canvas, #correction-parallax-canvas { height: 200px; }
-      .correction-parallax-scene[data-magnifier="true"] #correction-parallax-canvas { margin-top: 125px; }
-      .correction-parallax-scene[data-magnifier="true"] #correction-pencil-3d-canvas { inset: 137px 12px auto; }
+      .correction-angle-detail { align-items: flex-start; }
+      .correction-parallax-magnifier { width: min(100%, 250px); margin-left: auto; }
     }
     @media (max-width: 520px) { .correction-options { gap: 5px; } .correction-options button { padding: 8px 7px; font-size: .88rem; } .correction-options small { font-size: .7rem; } }
     .end-card { background: #eef4e9; border-color: #bfd1be; }
@@ -543,19 +542,18 @@
             <div class="correction-options" role="group" aria-label="選擇要調整的量測條件">
               <button type="button" class="secondary" data-correction-control="density" aria-pressed="true"><strong>刻度密度</strong><small id="correction-density-status">較疏・每格 10 cm</small></button>
               <button type="button" class="secondary" data-correction-control="origin" aria-pressed="false"><strong>起點位置</strong><small id="correction-origin-status">未對齊 0</small></button>
-              <button type="button" class="secondary" data-correction-control="angle" aria-pressed="false"><strong>觀察角度</strong><small id="correction-angle-status">斜向觀察</small></button>
+              <button type="button" class="secondary" data-correction-control="angle" aria-pressed="false"><strong>觀察角度</strong><small id="correction-angle-status">正對尺面</small></button>
             </div>
             <h3 id="correction-stage-title">調整刻度密度</h3>
             <p id="correction-stage-prompt">端點落在相距很遠的刻線之間，讀值範圍較大。把刻度調密，觀察範圍如何縮小。</p>
-            <div class="correction-parallax-scene" id="correction-parallax-scene" data-magnifier="true">
+            <div class="correction-parallax-scene" id="correction-parallax-scene" data-magnifier="false">
               <canvas id="correction-pencil-3d-canvas" aria-hidden="true"></canvas>
-              <canvas id="correction-parallax-canvas" tabindex="0" role="img" aria-label="可拖曳調整鉛筆和直尺視角的三維場景，包含端點投影線與放大視窗；使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明。</canvas>
+              <canvas id="correction-parallax-canvas" tabindex="0" role="img" aria-label="可拖曳調整鉛筆和直尺視角的三維場景；切換到觀察角度時會顯示端點附近的放大視窗。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明。</canvas>
               <p id="correction-parallax-fallback" hidden>目前瀏覽器無法顯示 3D 場景，請使用支援 WebGL 的瀏覽器。</p>
-              <div id="correction-parallax-focus-overlay" aria-hidden="true">
-                <svg id="correction-parallax-focus-connectors" class="parallax-focus-connectors" preserveAspectRatio="none"><path class="parallax-focus-path"></path></svg>
-                <div id="correction-parallax-focus-box" class="parallax-focus-box"></div>
-                <div class="correction-parallax-magnifier"><canvas id="correction-parallax-magnifier-canvas"></canvas></div>
-              </div>
+            </div>
+            <div class="correction-angle-detail" id="correction-parallax-detail" hidden>
+              <p><strong>鉛筆右端放大</strong><span>尺面 18–19 cm 附近</span></p>
+              <div class="correction-parallax-magnifier" aria-label="鉛筆右端與直尺 18 至 19 公分附近的放大圖"><strong>端點與刻度</strong><canvas id="correction-parallax-magnifier-canvas" aria-hidden="true"></canvas></div>
             </div>
             <div class="correction-adjustment">
               <div id="correction-density-controls" class="correction-choice-row" role="group" aria-label="選擇直尺刻度密度">
@@ -567,8 +565,8 @@
               </div>
               <div id="correction-angle-controls" hidden>
                 <div class="correction-view-controls" role="group" aria-label="預設觀察視角">
-                  <button type="button" class="secondary" id="correction-view-front" aria-pressed="false">正對尺面</button>
-                  <button type="button" class="secondary" id="correction-view-oblique" aria-pressed="true">斜向觀察</button>
+                  <button type="button" class="secondary" id="correction-view-front" aria-pressed="true">正對尺面</button>
+                  <button type="button" class="secondary" id="correction-view-oblique" aria-pressed="false">斜向觀察</button>
                 </div>
                 <p>也可拖曳場景自由旋轉，並在放大視窗觀察端點投影。</p>
               </div>
@@ -1174,14 +1172,16 @@
       let correctionMode = "density";
       let correctionTickInterval = 5;
       let correctionRulerOffset = -1;
-      const correctionCameraState = { yaw: obliqueCameraYaw, pitch: defaultCameraPitch };
-      let correctionCameraPreset = "oblique";
+      const correctionCameraState = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
+      let correctionCameraPreset = "front";
       let correctionDrag = null;
       const correctionFormat = (value) => Number(value.toFixed(1)).toFixed(1);
       const correctionDisplay = (value) => Math.abs(value - Math.round(value)) < 0.001 ? String(Math.round(value)) : correctionFormat(value);
       const renderCorrectionScene = () => {
         const bounds = correctionCanvas.getBoundingClientRect();
         if (!bounds.width || !bounds.height) return;
+        correctionScene.dataset.magnifier = String(correctionMode === "angle");
+        document.querySelector("#correction-parallax-detail").hidden = correctionMode !== "angle";
         const target = { x: state.start + 10, y: pencilHeight, z: 0 };
         const cameraPosition = {
           x: target.x + orbitRadius * Math.cos(correctionCameraState.pitch) * Math.sin(correctionCameraState.yaw),

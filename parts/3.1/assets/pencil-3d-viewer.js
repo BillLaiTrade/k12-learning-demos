@@ -478,6 +478,7 @@ try {
   correctionLandingRing = correctionScene.getObjectByName(landingRing.name);
   correctionMagnifierLabels = correctionScene.getObjectByName(magnifierLabels.name);
   correctionProjectionRay.geometry = correctionProjectionRay.geometry.clone();
+  correctionMagnifierLabels.visible = false;
 
   modelReady = true;
   announce("三維鉛筆與直尺已載入。可拖曳畫面旋轉觀察。");
@@ -643,7 +644,7 @@ function renderCorrection() {
       }
       correctionMagnifierCamera.aspect = inset.width / inset.height;
       correctionMagnifierCamera.updateProjectionMatrix();
-      const magnifierTarget = new THREE.Vector3(correctionView.start + correctionView.rulerOffset + 17.5, 0.55, 0.1);
+      const magnifierTarget = new THREE.Vector3(correctionView.start + correctionView.rulerOffset + 18.5, 0.32, 0.1);
       const viewDirection = correctionCamera.position.clone().sub(target).normalize();
       correctionMagnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
       correctionMagnifierCamera.lookAt(magnifierTarget);
@@ -661,23 +662,6 @@ function renderCorrection() {
       for (const label of majorLabels) label.visible = true;
     }
   }
-  const panelRect = correctionSceneCanvas.parentElement.getBoundingClientRect();
-  const projectToPanel = (x, y, z) => {
-    const point = new THREE.Vector3(x, y, z).project(correctionCamera);
-    return {
-      x: rect.left - panelRect.left + (point.x + 1) * rect.width / 2,
-      y: rect.top - panelRect.top + (1 - point.y) * rect.height / 2
-    };
-  };
-  window.dispatchEvent(new CustomEvent("pencil3d-projection", {
-    detail: {
-      sceneId: "correction-parallax-scene",
-      ruler18: projectToPanel(correctionView.start + correctionView.rulerOffset + 18, 0.23, 1.05),
-      ruler19: projectToPanel(correctionView.start + correctionView.rulerOffset + 19, 0.23, 1.05),
-      pencilTip: projectToPanel(correctionView.start + correctionView.edge, correctionView.centerY, correctionView.centerZ),
-      projectedReading: correctionView.rayEnd?.x ?? correctionView.edge
-    }
-  }));
 }
 
 window.setPencil3DView = (nextView = {}) => {
