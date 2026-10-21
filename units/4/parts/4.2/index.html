@@ -51,14 +51,11 @@
     .card-main>p { color:#53645d; }
     .evidence-box,.note-box { margin:12px 0; padding:12px 14px; border-left:4px solid var(--gold); border-radius:7px; background:#f5f0df; }
     .evidence-box strong { display:block; margin-bottom:3px; }
-    .opening-scene { display:grid; grid-template-columns:minmax(150px,.8fr) minmax(0,1.2fr); gap:18px; align-items:center; margin:16px 0; padding:18px; border:1px solid #d8dfd7; border-radius:14px; background:linear-gradient(120deg,#f1f5ef,#faf8ef); }
-    .sample-illustration { min-height:164px; display:grid; place-items:center; position:relative; overflow:hidden; border-radius:11px; background:linear-gradient(#e8f0ed 0 57%,#d6e4dd 57%); }
-    .rain-mark { position:absolute; top:15px; left:18px; color:#718b81; font-size:1.15rem; letter-spacing:12px; }
-    .sample-jar { width:88px; height:108px; position:relative; border:3px solid #789589; border-top:0; border-radius:5px 5px 18px 18px; background:linear-gradient(to top,#b4cec2 0 53%,#f5fbf8 53%); box-shadow:0 8px 15px #243a3518; }
-    .sample-jar:before { content:""; position:absolute; top:-5px; left:-4px; right:-4px; height:9px; border:3px solid #789589; border-radius:5px; background:#edf4f0; }
-    .jar-sediment { position:absolute; bottom:6px; left:13px; right:13px; height:16px; border-radius:50%; background:radial-gradient(circle at 15% 40%,#8c7753 0 3px,transparent 4px),radial-gradient(circle at 39% 62%,#9a8259 0 4px,transparent 5px),radial-gradient(circle at 65% 38%,#88734d 0 3px,transparent 4px),radial-gradient(circle at 84% 63%,#a38a5c 0 3px,transparent 4px); }
-    .jar-caption { position:absolute; bottom:8px; left:0; right:0; text-align:center; color:#36564a; font-size:.78rem; font-weight:750; }
-    .sample-record { padding:4px 2px; }
+    .opening-scene { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:0; align-items:stretch; margin:16px 0; overflow:hidden; border:1px solid #d8dfd7; border-radius:14px; background:#f8f6ed; }
+    .sample-illustration { min-height:210px; position:relative; overflow:hidden; margin:0; background:#e7e7db; }
+    .sample-photo { display:block; width:100%; height:100%; min-height:210px; object-fit:cover; object-position:43% center; }
+    .jar-caption { position:absolute; left:12px; bottom:12px; margin:0; padding:5px 10px; border:1px solid #ffffffa6; border-radius:6px; background:#253d35d9; color:#fffdf8; font-size:.77rem; font-weight:750; box-shadow:0 2px 8px #243a3526; }
+    .sample-record { display:flex; flex-direction:column; justify-content:center; padding:22px; }
     .sample-record-label { display:inline-block; margin-bottom:8px; padding:3px 9px; border-radius:99px; background:#e2eadf; color:#486a56; font-size:.75rem; font-weight:800; letter-spacing:.04em; }
     .sample-record h3 { margin:0 0 6px; font-size:1.02rem; }
     .sample-record p { margin:0; color:#53645d; font-size:.9rem; }
@@ -141,7 +138,7 @@
     .next-hint { margin:14px 0 0; padding-top:12px; border-top:1px solid var(--line); color:#587365; font-size:.86rem; }
     footer { padding:16px 0 28px; color:#718078; font-size:.82rem; }
     @media(max-width:850px) { .lesson-layout { grid-template-columns:1fr; gap:12px; } .route { position:relative; top:auto; max-height:none; } .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); } .record-panel { display:none; } }
-    @media(max-width:620px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:8px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-scene { padding-inline:9px; gap:5px; } .vessel { font-size:.72rem; } .opening-scene { grid-template-columns:1fr; gap:10px; padding:12px; } .sample-illustration { min-height:145px; } .prediction-options { grid-template-columns:1fr; } .goal-choice { min-width:100%; } }
+    @media(max-width:620px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:8px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-scene { padding-inline:9px; gap:5px; } .vessel { font-size:.72rem; } .opening-scene { grid-template-columns:1fr; } .sample-illustration,.sample-photo { min-height:190px; } .sample-record { padding:16px; } .prediction-options { grid-template-columns:1fr; } .goal-choice { min-width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
 </head>
@@ -181,7 +178,7 @@
           <h2>這份雨水混著泥沙，怎麼把想要的部分分出來？</h2>
           <p>先看看樣本紀錄，再決定這次要取出什麼。樣本已經提供成分資訊，不需要只靠外觀猜測裡面有什麼。</p>
           <div class="opening-scene" aria-label="雨水與泥沙樣本及其成分紀錄">
-            <div class="sample-illustration" aria-hidden="true"><span class="rain-mark">⌁　⌁　⌁</span><div class="sample-jar"><span class="jar-sediment"></span></div><span class="jar-caption">收集到的雨水</span></div>
+            <figure class="sample-illustration"><img class="sample-photo" src="assets/rainwater-sample.png" alt="玻璃罐中的雨水，水裡有懸浮泥沙，底部沉積著泥沙"><figcaption class="jar-caption">雨水樣本</figcaption></figure>
             <div class="sample-record"><span class="sample-record-label">樣本紀錄</span><h3>這份樣本含有兩種成分</h3><p>收集到的雨水中有水，也有混在水裡的泥沙。</p><div class="sample-components"><span>水</span><span>泥沙</span></div></div>
           </div>
           <p class="choice-prompt">你想先完成哪一個分離目標？</p>
