@@ -332,7 +332,7 @@ export function mountMassMeasurement() {
 
   function clearWeightModels() {
     weightModels.forEach(weight => {
-      balance.rightPan.remove(weight);
+      weight.removeFromParent();
       weight.traverse(part => {
         if (!part.isMesh) return;
         part.geometry.dispose();
@@ -365,8 +365,8 @@ export function mountMassMeasurement() {
       button.disabled = !balancePlaced || total + Number(button.dataset.weight) > 60;
     });
     weightTotal.textContent = `${total} g`;
-    const difference = MASS_G - total;
-    targetTilt = balancePlaced ? clamp(difference * 0.006, -0.18, 0.18) : 0;
+    const difference = (balancePlaced ? MASS_G : 0) - total;
+    targetTilt = clamp(difference * 0.006, -0.18, 0.18);
     const balanced = balancePlaced && total === MASS_G;
     status.textContent = balanced
       ? '已達平衡！兩側質量相等。'
@@ -374,7 +374,9 @@ export function mountMassMeasurement() {
         ? difference > 0
           ? '石頭這一側較低，砝碼還不夠；可以再加一些。'
           : '砝碼這一側較低，砝碼已過多；可以移除一些。'
-        : placingBalance ? '石頭正移至左側秤盤…' : '拖曳石頭到左側秤盤，或按下按鈕。';
+        : !balancePlaced && total > 0
+          ? '石頭已取下，右側仍有砝碼；可拖出砝碼移除，或重新放上石頭。'
+          : placingBalance ? '石頭正移至左側秤盤…' : '拖曳石頭到左側秤盤，或按下按鈕。';
     status.dataset.balanced = String(balanced);
     showReading();
   }
@@ -383,13 +385,52 @@ export function mountMassMeasurement() {
     weights = [];
     drawWeights();
   }
-  document.querySelectorAll('[data-weight]').forEach(button => button.addEventListener('click', () => {
+  let suppressWeightClick = false;
+  function addWeight(next) {
     if (!balancePlaced) return;
-    const next = Number(button.dataset.weight);
     if (weights.reduce((sum, value) => sum + value, 0) + next > 60) return;
     weights.push(next);
     drawWeights();
-  }));
+  }
+  document.querySelectorAll('[data-weight]').forEach(button => {
+    button.addEventListener('click', () => {
+      if (suppressWeightClick) { suppressWeightClick = false; return; }
+      addWeight(Number(button.dataset.weight));
+    });
+    let start = null;
+    let ghost = null;
+    button.addEventListener('pointerdown', event => {
+      if (event.button !== undefined && event.button !== 0 || button.disabled) return;
+      start = { id: event.pointerId, x: event.clientX, y: event.clientY, value: Number(button.dataset.weight), moved: false };
+      button.setPointerCapture(event.pointerId);
+    });
+    button.addEventListener('pointermove', event => {
+      if (!start || start.id !== event.pointerId) return;
+      if (!start.moved && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 7) {
+        start.moved = true;
+        ghost = document.createElement('div');
+        ghost.className = 'weight-drag-preview';
+        ghost.textContent = `${start.value} g`;
+        document.body.append(ghost);
+        suppressWeightClick = true;
+      }
+      if (ghost) {
+        ghost.style.left = `${event.clientX}px`;
+        ghost.style.top = `${event.clientY}px`;
+      }
+    });
+    const finishWeightDrag = event => {
+      if (!start || start.id !== event.pointerId) return;
+      const drag = start;
+      start = null;
+      if (button.hasPointerCapture(event.pointerId)) button.releasePointerCapture(event.pointerId);
+      ghost?.remove(); ghost = null;
+      if (drag.moved && mode === 'balance' && rightPanDropTarget(event)) addWeight(drag.value);
+      if (drag.moved) window.setTimeout(() => { suppressWeightClick = false; }, 0);
+    };
+    button.addEventListener('pointerup', finishWeightDrag);
+    button.addEventListener('pointercancel', finishWeightDrag);
+  });
   document.querySelector('#balance-undo').addEventListener('click', () => { weights.pop(); drawWeights(); });
   document.querySelector('#balance-reset').addEventListener('click', resetBalance);
   function placeStoneOnBalance() {
@@ -489,43 +530,94 @@ export function mountMassMeasurement() {
     pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     raycaster.setFromCamera(pointer, camera);
   }
-  function balanceDropTarget(event) {
+  function panDropTarget(event, pan) {
     updatePointer(event);
-    const panSurface = balance.leftPan.localToWorld(new THREE.Vector3(0, -0.64, 0));
-    const plane = new THREE.Plane(up, -panSurface.y);
+    const panSurface = pan.localToWorld(new THREE.Vector3(0, -0.64, 0));
+    const panNormal = pan.localToWorld(new THREE.Vector3(0, 1, 0)).sub(pan.localToWorld(new THREE.Vector3(0, 0, 0))).normalize();
+    const plane = new THREE.Plane().setFromNormalAndCoplanarPoint(panNormal, panSurface);
     const point = raycaster.ray.intersectPlane(plane, new THREE.Vector3());
     if (!point) return false;
-    const local = balance.leftPan.worldToLocal(point);
-    return Math.abs(local.x) < 0.58 && Math.abs(local.z) < 0.4 && Math.abs(local.y + 0.64) < 0.12;
+    const local = pan.worldToLocal(point);
+    return Math.abs(local.x) < 0.74 && Math.abs(local.z) < 0.52 && Math.abs(local.y + 0.64) < 0.22;
+  }
+  function balanceDropTarget(event) { return panDropTarget(event, balance.leftPan); }
+  function rightPanDropTarget(event) {
+    return panDropTarget(event, balance.rightPan);
   }
   function digitalDropTarget(event) {
     updatePointer(event);
-    const point = raycaster.ray.intersectPlane(new THREE.Plane(up, -0.79), new THREE.Vector3());
-    return point && Math.abs(point.x) < 1.08 && Math.abs(point.z) < 0.57;
+    const point = raycaster.ray.intersectPlane(new THREE.Plane(up, -0.78), new THREE.Vector3());
+    return point && Math.abs(point.x) < 1.32 && Math.abs(point.z) < 0.95;
+  }
+  function detachPreservingWorldTransform(object) {
+    const position = object.getWorldPosition(new THREE.Vector3());
+    const quaternion = object.getWorldQuaternion(new THREE.Quaternion());
+    const scale = object.getWorldScale(new THREE.Vector3());
+    object.removeFromParent();
+    scene.add(object);
+    object.position.copy(position);
+    object.quaternion.copy(quaternion);
+    object.scale.copy(scale);
   }
   canvas.addEventListener('pointerdown', event => {
     if (event.button !== undefined && event.button !== 0) return;
-    const stone = mode === 'balance' ? balance.stone : digital.stone;
-    if ((mode === 'balance' && (balancePlaced || placingBalance)) || (mode === 'digital' && (weighed || placingDigital))) return;
+    if (placingBalance || placingDigital || returningBalance || returningDigital) return;
     updatePointer(event);
-    if (!raycaster.intersectObject(stone, true).length) return;
-    const center = stone.getWorldPosition(new THREE.Vector3());
+    let object, dragKind, weightIndex = -1;
+    if (mode === 'balance') {
+      const weightHit = raycaster.intersectObjects(weightModels, true)[0];
+      if (weightHit) {
+        object = weightModels.find(weight => weight === weightHit.object || weightHit.object.parent === weight);
+        if (!object) {
+          let parent = weightHit.object;
+          while (parent && !weightModels.includes(parent)) parent = parent.parent;
+          object = parent;
+        }
+        weightIndex = weightModels.indexOf(object);
+        dragKind = 'weight';
+      } else if (raycaster.intersectObject(balance.stone, true).length) {
+        object = balance.stone;
+        dragKind = 'balance-stone';
+        if (balancePlaced) {
+          balancePlaced = false;
+          balance.panShadow.visible = false;
+          detachPreservingWorldTransform(object);
+          balancePlaceButton.disabled = false;
+          balancePlaceButton.textContent = '將石頭放上左盤';
+          drawWeights();
+        }
+      }
+    } else if (raycaster.intersectObject(digital.stone, true).length) {
+      object = digital.stone;
+      dragKind = 'digital-stone';
+      if (weighed) {
+        weighed = false;
+        digital.shadow.visible = false;
+        placeButton.disabled = false;
+        placeButton.textContent = '將石頭放上秤盤';
+        removeButton.disabled = true;
+        showReading();
+      }
+    }
+    if (!object) return;
+    if (dragKind === 'weight') detachPreservingWorldTransform(object);
+    const center = object.getWorldPosition(new THREE.Vector3());
     camera.getWorldDirection(planeNormal);
     dragPlane.setFromNormalAndCoplanarPoint(planeNormal, center);
     const point = raycaster.ray.intersectPlane(dragPlane, planeHit);
     if (!point) return;
     dragOffset.copy(center).sub(point);
-    activeStoneDrag = { pointerId: event.pointerId, mode, stone };
+    activeStoneDrag = { pointerId: event.pointerId, mode, object, kind: dragKind, weightIndex };
     canvas.setPointerCapture(event.pointerId);
     canvas.style.cursor = 'grabbing';
-    status.textContent = mode === 'balance' ? '將石頭拖到左側秤盤內再放開。' : '將石頭拖到電子秤秤盤內再放開。';
+    status.textContent = dragKind === 'weight' ? '將砝碼拖到右側秤盤；拖出秤盤即可移除。' : mode === 'balance' ? '將石頭拖到左側秤盤，或拖離秤盤取下。' : '將石頭拖到電子秤秤盤，或拖離秤盤取下。';
     event.preventDefault();
   });
   canvas.addEventListener('pointermove', event => {
     if (!activeStoneDrag || activeStoneDrag.pointerId !== event.pointerId) return;
     updatePointer(event);
     const point = raycaster.ray.intersectPlane(dragPlane, planeHit);
-    if (point) activeStoneDrag.stone.position.copy(point.add(dragOffset));
+    if (point) activeStoneDrag.object.position.copy(point.add(dragOffset));
   });
   function finishStoneDrag(event) {
     if (!activeStoneDrag || activeStoneDrag.pointerId !== event.pointerId) return;
@@ -533,16 +625,26 @@ export function mountMassMeasurement() {
     activeStoneDrag = null;
     canvas.releasePointerCapture(event.pointerId);
     canvas.style.cursor = 'grab';
-    if (dragged.mode === 'balance') {
+    if (dragged.kind === 'weight') {
+      if (rightPanDropTarget(event)) {
+        drawWeights();
+        status.textContent = '砝碼已放上右側秤盤；也可以拖出秤盤移除。';
+      } else {
+        weights.splice(dragged.weightIndex, 1);
+        drawWeights();
+      }
+    } else if (dragged.mode === 'balance') {
       if (balanceDropTarget(event)) placeStoneOnBalance();
       else {
         returningBalance = true;
-        status.textContent = '請把石頭放在左側秤盤內；石頭已回到原位。';
+        status.textContent = '石頭已取下，移回秤盤旁。';
+        drawWeights();
       }
     } else if (digitalDropTarget(event)) placeStoneOnDigitalScale();
     else {
       returningDigital = true;
-      status.textContent = '請把石頭放在電子秤秤盤上；石頭已回到原位。';
+      digitalTargetPosition.copy(digital.sourcePosition);
+      status.textContent = '石頭已取下，移回電子秤旁。';
     }
   }
   canvas.addEventListener('pointerup', finishStoneDrag);
@@ -607,7 +709,7 @@ export function mountMassMeasurement() {
           digital.shadow.visible = false;
           placeButton.disabled = false;
           placeButton.textContent = '將石頭放上秤盤';
-          status.textContent = '石頭已移回秤盤旁；可拖曳或按鈕再次秤量。';
+          status.textContent = '石頭已取下並回到電子秤旁；可拖曳或按鈕再次秤量。';
         }
       }
     }
