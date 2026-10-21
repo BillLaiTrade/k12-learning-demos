@@ -1019,7 +1019,7 @@
         const dy = event.clientY - dragPoint.y;
         dragPoint = { x: event.clientX, y: event.clientY };
         cameraPreset = "free";
-        camera.yaw = clampViewYaw(camera.yaw + dx * 0.009);
+        camera.yaw = clampViewYaw(camera.yaw - dx * 0.009);
         camera.pitch = clamp(camera.pitch + dy * 0.007, 0.55, 1.15);
         renderParallaxScene();
       });
@@ -1029,8 +1029,8 @@
       parallaxCanvas.addEventListener("lostpointercapture", releaseDrag);
       parallaxCanvas.addEventListener("keydown", (event) => {
         const angleStep = 0.08;
-        if (event.key === "ArrowLeft") camera.yaw = clampViewYaw(camera.yaw - angleStep);
-        else if (event.key === "ArrowRight") camera.yaw = clampViewYaw(camera.yaw + angleStep);
+        if (event.key === "ArrowLeft") camera.yaw = clampViewYaw(camera.yaw + angleStep);
+        else if (event.key === "ArrowRight") camera.yaw = clampViewYaw(camera.yaw - angleStep);
         else if (event.key === "ArrowUp") camera.pitch = clamp(camera.pitch - angleStep, 0.55, 1.15);
         else if (event.key === "ArrowDown") camera.pitch = clamp(camera.pitch + angleStep, 0.55, 1.15);
         else return;
