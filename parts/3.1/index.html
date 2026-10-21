@@ -836,9 +836,9 @@
         const rulerMin = -0.18;
         const rulerMax = 20;
         const rulerTop = 0.2;
-        const rulerNear = -1.6;
-        const rulerFar = 1.6;
-        const pencilCenterZ = -0.82;
+        const rulerNear = -1.0;
+        const rulerFar = 1.0;
+        const pencilCenterZ = -0.1;
         const edgeX = state.start + parallaxLength;
         const cameraTarget = {
           x: target.x,
@@ -1229,9 +1229,9 @@
           z: target.z + orbitRadius * Math.cos(correctionCameraState.pitch) * Math.cos(correctionCameraState.yaw)
         };
         const rulerTop = 0.2;
-        const rulerNear = -1.6;
-        const rulerFar = 1.6;
-        const pencilCenterZ = -0.82;
+        const rulerNear = -1.0;
+        const rulerFar = 1.0;
+        const pencilCenterZ = -0.1;
         const edgeX = state.start + parallaxLength;
         const projectionFactor = (pencilHeight - rulerTop) / Math.max(0.1, cameraPosition.y - pencilHeight);
         const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);

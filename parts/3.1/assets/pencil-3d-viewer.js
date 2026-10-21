@@ -49,7 +49,7 @@ const view = {
   pitch: 0.48,
   orbitRadius: 24,
   centerY: 0.78,
-  centerZ: 0,
+  centerZ: -0.1,
   lookAtX: 9.2,
   lookAtY: 0.04,
   lookAtZ: 0,
