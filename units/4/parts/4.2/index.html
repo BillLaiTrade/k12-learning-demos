@@ -51,6 +51,28 @@
     .card-main>p { color:#53645d; }
     .evidence-box,.note-box { margin:12px 0; padding:12px 14px; border-left:4px solid var(--gold); border-radius:7px; background:#f5f0df; }
     .evidence-box strong { display:block; margin-bottom:3px; }
+    .opening-scene { display:grid; grid-template-columns:minmax(150px,.8fr) minmax(0,1.2fr); gap:18px; align-items:center; margin:16px 0; padding:18px; border:1px solid #d8dfd7; border-radius:14px; background:linear-gradient(120deg,#f1f5ef,#faf8ef); }
+    .sample-illustration { min-height:164px; display:grid; place-items:center; position:relative; overflow:hidden; border-radius:11px; background:linear-gradient(#e8f0ed 0 57%,#d6e4dd 57%); }
+    .rain-mark { position:absolute; top:15px; left:18px; color:#718b81; font-size:1.15rem; letter-spacing:12px; }
+    .sample-jar { width:88px; height:108px; position:relative; border:3px solid #789589; border-top:0; border-radius:5px 5px 18px 18px; background:linear-gradient(to top,#b4cec2 0 53%,#f5fbf8 53%); box-shadow:0 8px 15px #243a3518; }
+    .sample-jar:before { content:""; position:absolute; top:-5px; left:-4px; right:-4px; height:9px; border:3px solid #789589; border-radius:5px; background:#edf4f0; }
+    .jar-sediment { position:absolute; bottom:6px; left:13px; right:13px; height:16px; border-radius:50%; background:radial-gradient(circle at 15% 40%,#8c7753 0 3px,transparent 4px),radial-gradient(circle at 39% 62%,#9a8259 0 4px,transparent 5px),radial-gradient(circle at 65% 38%,#88734d 0 3px,transparent 4px),radial-gradient(circle at 84% 63%,#a38a5c 0 3px,transparent 4px); }
+    .jar-caption { position:absolute; bottom:8px; left:0; right:0; text-align:center; color:#36564a; font-size:.78rem; font-weight:750; }
+    .sample-record { padding:4px 2px; }
+    .sample-record-label { display:inline-block; margin-bottom:8px; padding:3px 9px; border-radius:99px; background:#e2eadf; color:#486a56; font-size:.75rem; font-weight:800; letter-spacing:.04em; }
+    .sample-record h3 { margin:0 0 6px; font-size:1.02rem; }
+    .sample-record p { margin:0; color:#53645d; font-size:.9rem; }
+    .sample-components { display:flex; gap:7px; margin-top:11px; flex-wrap:wrap; }
+    .sample-components span { padding:4px 10px; border:1px solid #d3ddd4; border-radius:99px; background:#fffdf8; color:#355c4c; font-size:.8rem; font-weight:700; }
+    .choice-prompt { margin:16px 0 6px; font-weight:750; }
+    .goal-choice { min-width:190px; flex:1; display:flex; align-items:center; gap:10px; text-align:left; }
+    .goal-choice .choice-icon { width:30px; height:30px; display:grid; place-items:center; flex:none; border-radius:50%; background:#edf2eb; color:var(--green); font-size:1rem; }
+    .goal-choice small,.prediction-choice small { display:block; font-weight:500; opacity:.82; }
+    .prediction-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:8px 0 10px; }
+    .prediction-choice { min-height:62px; padding:9px 11px; text-align:left; border:1px solid #bdc8bf; border-radius:10px; background:#fff; cursor:pointer; }
+    .prediction-choice[aria-pressed="true"] { border-color:var(--green); background:#edf4ef; box-shadow:0 0 0 2px #176b5316; }
+    .prediction-choice strong { display:block; color:#29483c; font-size:.88rem; }
+    .prediction-choice small { color:var(--muted); font-size:.75rem; }
     .note-box { border-left-color:var(--green); background:#edf3ee; font-size:.88rem; }
     .control-row,.choice-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
     .control-button,.choice-button,.method-tab { border:1px solid #bdc8bf; border-radius:9px; padding:8px 12px; background:#fff; cursor:pointer; font-weight:700; }
@@ -119,7 +141,7 @@
     .next-hint { margin:14px 0 0; padding-top:12px; border-top:1px solid var(--line); color:#587365; font-size:.86rem; }
     footer { padding:16px 0 28px; color:#718078; font-size:.82rem; }
     @media(max-width:850px) { .lesson-layout { grid-template-columns:1fr; gap:12px; } .route { position:relative; top:auto; max-height:none; } .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); } .record-panel { display:none; } }
-    @media(max-width:620px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:8px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-scene { padding-inline:9px; gap:5px; } .vessel { font-size:.72rem; } }
+    @media(max-width:620px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:8px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-scene { padding-inline:9px; gap:5px; } .vessel { font-size:.72rem; } .opening-scene { grid-template-columns:1fr; gap:10px; padding:12px; } .sample-illustration { min-height:145px; } .prediction-options { grid-template-columns:1fr; } .goal-choice { min-width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
 </head>
@@ -154,20 +176,27 @@
       <div class="section-top"><h2>混合物的分離</h2><span class="progress-copy">已知樣本組成 → 選擇並操作方法 → 判讀結果</span></div>
 
       <section class="lesson-card" id="s1">
-        <div class="card-side"><span class="card-number">01</span><h3>從樣本資料開始</h3><span class="card-role">由樣本分類轉向分離任務</span></div>
+        <div class="card-side"><span class="card-number">01</span><h3>提出分離問題</h3><span class="card-role">從一份混合樣本開始</span></div>
         <div class="card-main">
-          <h2>已知雨水裡有水和泥沙，怎麼把它們分開？</h2>
-          <p>這份水樣已有成分紀錄，含有水與泥沙。現在要決定分離目標，再尋找適合的方法。</p>
-          <div class="evidence-box"><strong>樣本成分紀錄</strong>這份雨水樣本含有水與泥沙。混濁是觀察線索；成分判斷依據是已提供的紀錄。</div>
-          <p><strong>這次的目標是：</strong></p>
-          <div class="choice-row" role="group" aria-label="選擇分離目標">
-            <button class="choice-button" type="button" data-goal="分出泥沙" aria-pressed="true">分出泥沙</button>
-            <button class="choice-button" type="button" data-goal="收集流出的水" aria-pressed="false">收集流出的水</button>
+          <h2>這份雨水混著泥沙，怎麼把想要的部分分出來？</h2>
+          <p>先看看樣本紀錄，再決定這次要取出什麼。樣本已經提供成分資訊，不需要只靠外觀猜測裡面有什麼。</p>
+          <div class="opening-scene" aria-label="雨水與泥沙樣本及其成分紀錄">
+            <div class="sample-illustration" aria-hidden="true"><span class="rain-mark">⌁　⌁　⌁</span><div class="sample-jar"><span class="jar-sediment"></span></div><span class="jar-caption">收集到的雨水</span></div>
+            <div class="sample-record"><span class="sample-record-label">樣本紀錄</span><h3>這份樣本含有兩種成分</h3><p>收集到的雨水中有水，也有混在水裡的泥沙。</p><div class="sample-components"><span>水</span><span>泥沙</span></div></div>
           </div>
-          <label for="first-prediction"><strong>先留下你的方法預測：</strong></label>
-          <div class="control-row"><select id="first-prediction"><option value="">選擇一種想法</option><option>用濾紙和漏斗</option><option>讓水分蒸發</option><option>還不確定</option></select><button class="control-button" type="button" id="save-prediction">記下預測</button></div>
-          <p class="live-note" id="prediction-note" aria-live="polite">這是操作前的想法，先保留，完成過濾後再回來比較。</p>
-          <p class="next-hint">下一步用濾紙和漏斗處理簡易泥沙水樣，看看哪些成分留下、哪些通過。</p>
+          <p class="choice-prompt">你想先完成哪一個分離目標？</p>
+          <div class="choice-row" role="group" aria-label="選擇分離目標">
+            <button class="choice-button goal-choice" type="button" data-goal="分出泥沙" aria-pressed="true"><span class="choice-icon" aria-hidden="true">●</span><span>把泥沙分出來<small>目標：取得固體</small></span></button>
+            <button class="choice-button goal-choice" type="button" data-goal="收集流出的水" aria-pressed="false"><span class="choice-icon" aria-hidden="true">◒</span><span>收集流出的水<small>目標：取得液體</small></span></button>
+          </div>
+          <p class="choice-prompt">你預測哪種方法可能有用？先選一個想法，之後可以觀察結果再回來比較。</p>
+          <div class="prediction-options" role="group" aria-label="選擇方法預測">
+            <button class="prediction-choice" type="button" data-prediction="用濾紙和漏斗" aria-pressed="false"><strong>濾紙和漏斗</strong><small>讓液體通過，看看固體會不會留下</small></button>
+            <button class="prediction-choice" type="button" data-prediction="讓水分蒸發" aria-pressed="false"><strong>讓水分蒸發</strong><small>觀察水離開後還剩下什麼</small></button>
+            <button class="prediction-choice" type="button" data-prediction="還不確定" aria-pressed="false"><strong>我還不確定</strong><small>先看操作，再形成自己的想法</small></button>
+          </div>
+          <p class="live-note" id="prediction-note" aria-live="polite">選好目標和預測後，帶著這個問題觀察下一區的操作。</p>
+          <p class="next-hint">接下來會用濾紙和漏斗處理泥沙水樣，看看固體和液體各自到了哪裡。</p>
         </div>
       </section>
 
@@ -274,7 +303,9 @@
 
     let chosenGoal='分出泥沙';
     document.querySelectorAll('[data-goal]').forEach(button=>button.addEventListener('click',()=>{chosenGoal=button.dataset.goal;document.querySelectorAll('[data-goal]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.getElementById('goal-record').textContent=`目前目標：${chosenGoal}`;}));
-    document.getElementById('save-prediction').addEventListener('click',()=>{const value=document.getElementById('first-prediction').value;document.getElementById('prediction-note').textContent=value?`已記下「${value}」。完成過濾後，再回來比較預測和觀察。`:'先選一個想法，或選擇「還不確定」。';});
+    document.getElementById('goal-record').textContent=`目前目標：${chosenGoal}`;
+    let chosenPrediction='';
+    document.querySelectorAll('[data-prediction]').forEach(button=>button.addEventListener('click',()=>{chosenPrediction=button.dataset.prediction;document.querySelectorAll('[data-prediction]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.getElementById('prediction-note').textContent=`已記下你的預測：「${chosenPrediction}」。帶著這個想法觀察下一區的操作，再比較預測和結果。`;}));
 
     const filterMessages=['準備好摺濾紙，放入漏斗。','把摺好的濾紙放進漏斗，確認濾紙貼合。','沿著濾紙慢慢倒入泥沙水樣。','觀察固體留在濾紙上，液體通過濾紙。','結果：濾紙留下泥沙；流到下方容器的液體是濾液。'];
     let filterStage=0;
