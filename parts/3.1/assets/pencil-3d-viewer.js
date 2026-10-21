@@ -566,10 +566,14 @@ function render() {
 
   pencil.position.set(view.start, view.centerY, view.centerZ);
   if (view.rayStart && view.rayEnd) {
-    const guideStart = { x: view.rayStart.x, y: view.rayStart.y, z: view.rayStart.z + 0.34 };
+    const guideStart = {
+      x: view.rayStart.x + (view.rayEnd.x - view.rayStart.x) * 0.04,
+      y: view.rayStart.y + (view.rayEnd.y - view.rayStart.y) * 0.04,
+      z: view.rayStart.z + (view.rayEnd.z - view.rayStart.z) * 0.04
+    };
     updateProjectionGuide(projectionRay,
       guideStart,
-      { x: view.rayEnd.x, y: 0.22, z: 0.95 });
+      { x: view.rayEnd.x, y: view.rayEnd.y + 0.01, z: view.rayEnd.z });
     landingRing.position.set(view.rayEnd.x, 0.255, view.rayEnd.z);
     projectionRay.visible = true;
     landingRing.visible = true;
@@ -656,10 +660,14 @@ function renderCorrection() {
   });
   correctionPencil.position.set(correctionView.start, correctionView.centerY, correctionView.centerZ);
   if (correctionView.rayStart && correctionView.rayEnd) {
-    const guideStart = { x: correctionView.rayStart.x, y: correctionView.rayStart.y, z: correctionView.rayStart.z + 0.34 };
+    const guideStart = {
+      x: correctionView.rayStart.x + (correctionView.rayEnd.x - correctionView.rayStart.x) * 0.04,
+      y: correctionView.rayStart.y + (correctionView.rayEnd.y - correctionView.rayStart.y) * 0.04,
+      z: correctionView.rayStart.z + (correctionView.rayEnd.z - correctionView.rayStart.z) * 0.04
+    };
     updateProjectionGuide(correctionProjectionRay,
       guideStart,
-      { x: correctionView.rayEnd.x, y: 0.22, z: 0.95 });
+      { x: correctionView.rayEnd.x, y: correctionView.rayEnd.y + 0.01, z: correctionView.rayEnd.z });
     correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, correctionView.rayEnd.z);
     correctionProjectionRay.visible = true;
     correctionLandingRing.visible = true;
