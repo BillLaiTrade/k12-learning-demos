@@ -104,13 +104,13 @@ function updateProjectionGuide(guide, start, end) {
     return;
   }
   const direction = delta.normalize();
-  const dashLength = 0.28;
-  const dashGap = 0.11;
+  const dashLength = 0.18;
+  const dashGap = 0.13;
   const dashCount = Math.ceil(length / (dashLength + dashGap));
   while (guide.children.length < dashCount) {
     const dash = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.035, 0.035, 1, 8, 1, false),
-      new THREE.MeshBasicMaterial({ color: 0xc45a2b, depthTest: false, depthWrite: false, toneMapped: false })
+      new THREE.CylinderGeometry(0.018, 0.018, 1, 8, 1, false),
+      new THREE.MeshBasicMaterial({ color: 0xc45a2b, transparent: true, opacity: 0.72, depthTest: false, depthWrite: false, toneMapped: false })
     );
     dash.renderOrder = 7;
     guide.add(dash);
