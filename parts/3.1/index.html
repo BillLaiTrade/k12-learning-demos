@@ -566,8 +566,8 @@
               <p id="correction-parallax-fallback" hidden>目前瀏覽器無法顯示 3D 場景，請使用支援 WebGL 的瀏覽器。</p>
             </div>
             <div class="correction-angle-detail" id="correction-parallax-detail" hidden>
-              <p><strong>鉛筆右端放大</strong><span>尺面 18–19 cm 附近</span></p>
-              <div class="correction-parallax-magnifier" aria-label="鉛筆右端與直尺 18 至 19 公分附近的放大圖"><strong>端點與刻度</strong><canvas id="correction-parallax-magnifier-canvas" aria-hidden="true"></canvas></div>
+              <p><strong id="correction-magnifier-title">鉛筆右端放大</strong><span id="correction-magnifier-range">尺面 18–19 cm 附近</span></p>
+              <div class="correction-parallax-magnifier" id="correction-magnifier" aria-label="鉛筆右端與直尺 18 至 19 公分附近的放大圖"><strong id="correction-magnifier-caption">端點與刻度</strong><canvas id="correction-parallax-magnifier-canvas" aria-hidden="true"></canvas></div>
             </div>
             <div class="correction-adjustment">
               <div id="correction-density-controls" class="correction-choice-row" role="group" aria-label="選擇直尺刻度密度">
@@ -1204,11 +1204,11 @@
       const correctionDisplay = (value) => Math.abs(value - Math.round(value)) < 0.001 ? String(Math.round(value)) : correctionFormat(value);
       const renderCorrectionScene = () => {
         correctionScene.hidden = correctionMode === "average";
-        document.querySelector("#correction-parallax-detail").hidden = correctionMode !== "angle";
+        document.querySelector("#correction-parallax-detail").hidden = correctionMode !== "angle" && correctionMode !== "origin";
         document.querySelector("#correction-average-controls").hidden = correctionMode !== "average";
         document.querySelector("#correction-live-readout").hidden = correctionMode === "average";
         document.querySelector("#correction-mode-instructions").hidden = correctionMode === "average";
-        correctionScene.dataset.magnifier = String(correctionMode === "angle");
+        correctionScene.dataset.magnifier = String(correctionMode === "angle" || correctionMode === "origin");
         const sceneActive = correctionMode !== "average";
         const bounds = correctionCanvas.getBoundingClientRect();
         if (sceneActive && (!bounds.width || !bounds.height)) return;
@@ -1249,11 +1249,14 @@
           lookAtZ: target.z,
           focalLengthRatio: sceneActive ? bounds.width * 0.85 / bounds.height : 1,
           rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
-          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.02, z: clampedProjectionZ }
+          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.02, z: clampedProjectionZ },
+          magnifierTargetX: correctionMode === "origin" ? (state.start + correctionRulerOffset) / 2 : undefined,
+          magnifierMode: correctionMode
         };
         if (sceneActive) window.setPencil3DCorrectionView?.(correctionView);
         const reading = document.querySelector("#correction-readout-value");
         if (correctionMode === "density") {
+          correctionCanvas.setAttribute("aria-label", "可拖曳場景旋轉鉛筆與直尺；使用下方按鈕切換刻度密度。");
           const low = Math.floor(measuredLength / correctionTickInterval) * correctionTickInterval;
           const high = low + correctionTickInterval;
           document.querySelector("#correction-readout-label").textContent = `每格 ${correctionTickInterval} cm・估讀範圍`;
@@ -1262,12 +1265,23 @@
           document.querySelector("#correction-stage-prompt").textContent = "刻度每格越小，端點落在刻線之間的範圍越小，估讀的不確定性也會降低。選擇較疏或較密的直尺。";
           document.querySelector("#correction-mode-instructions").textContent = correctionTickInterval === 1 ? "每格 1 cm，估讀範圍縮小了。可拖曳場景旋轉觀看；起點和視角也能分別調整。" : "每格 5 cm，端點落在哪一小段還不清楚；可拖曳場景旋轉觀看，再試試較密的刻度。";
         } else if (correctionMode === "origin") {
+          const gap = Math.abs(startReading);
+          document.querySelector("#correction-magnifier-title").textContent = "筆尖與零刻度放大";
+          document.querySelector("#correction-magnifier-range").textContent = gap < 0.05 ? "筆尖已對準 0 刻度" : `目前相距 ${correctionFormat(gap)} cm；拖曳尺面逐步對準`;
+          document.querySelector("#correction-magnifier-caption").textContent = "筆尖與 0 刻度";
+          document.querySelector("#correction-magnifier").setAttribute("aria-label", "鉛筆筆尖與直尺零刻度的即時放大圖");
+          correctionCanvas.setAttribute("aria-label", "可拖曳上方直尺移動零刻度；下方放大視窗會顯示筆尖與零刻度的距離。");
           document.querySelector("#correction-readout-label").textContent = `起點 ${correctionFormat(startReading)} cm・終點 ${correctionFormat(endReading)} cm`;
           reading.textContent = `${correctionFormat(endReading)} − ${correctionFormat(startReading)} ≈ ${correctionFormat(measuredLength)} cm`;
           document.querySelector("#correction-stage-title").textContent = "調整起點位置";
           document.querySelector("#correction-stage-prompt").textContent = "讓 0 刻度對準鉛筆起點，可直接讀出長度；若未對準，就要減去起點讀值，避免零點偏移算進長度。";
           document.querySelector("#correction-mode-instructions").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "零刻度已對準筆尖。拖動尺面仍可任意調整；觀察角度也可另外修正。" : `零刻度偏移 ${formatCentimeters(-correctionRulerOffset)} cm。直接拖動尺面，讓零刻度移到筆尖。`;
         } else if (correctionMode === "angle") {
+          document.querySelector("#correction-magnifier-title").textContent = "鉛筆右端放大";
+          document.querySelector("#correction-magnifier-range").textContent = "尺面 18–19 cm 附近";
+          document.querySelector("#correction-magnifier-caption").textContent = "端點與刻度";
+          document.querySelector("#correction-magnifier").setAttribute("aria-label", "鉛筆右端與直尺 18 至 19 公分附近的放大圖");
+          correctionCanvas.setAttribute("aria-label", "可拖曳場景調整鉛筆和直尺的觀察角度；下方放大視窗顯示端點附近的刻度。");
           document.querySelector("#correction-readout-label").textContent = landingOnScale ? "目前角度估讀" : "目前角度估讀";
           reading.textContent = landingOnScale ? `約 ${correctionFormat(endReading)} cm` : "視線落在尺外";
           document.querySelector("#correction-stage-title").textContent = "調整觀察角度";

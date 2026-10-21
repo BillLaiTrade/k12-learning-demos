@@ -644,13 +644,15 @@ function renderCorrection() {
       }
       correctionMagnifierCamera.aspect = inset.width / inset.height;
       correctionMagnifierCamera.updateProjectionMatrix();
-      const magnifierTarget = new THREE.Vector3(correctionView.start + correctionView.rulerOffset + 18.5, 0.32, 0.1);
+      const magnifierTargetX = correctionView.magnifierTargetX ?? (correctionView.start + correctionView.rulerOffset + 18.5);
+      const magnifierTarget = new THREE.Vector3(magnifierTargetX, 0.32, 0.1);
       const viewDirection = correctionCamera.position.clone().sub(target).normalize();
       correctionMagnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
       correctionMagnifierCamera.lookAt(magnifierTarget);
       const majorLabels = correctionRulerModel.children.filter((child) => child.userData.rulerMajorNumber);
-      for (const label of majorLabels) label.visible = false;
-      correctionMagnifierLabels.visible = true;
+      const showEndpointLabels = correctionView.magnifierMode !== "origin";
+      for (const label of majorLabels) label.visible = !showEndpointLabels;
+      correctionMagnifierLabels.visible = showEndpointLabels;
       const markerScale = correctionLandingMarker.scale.clone();
       const ringWasVisible = correctionLandingRing.visible;
       correctionLandingMarker.scale.setScalar(0.15);
