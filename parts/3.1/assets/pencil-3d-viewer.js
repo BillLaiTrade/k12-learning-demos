@@ -559,7 +559,7 @@ function render() {
 
   pencil.position.set(view.start, view.centerY, view.centerZ);
   if (view.rayStart && view.rayEnd) {
-    const guideStart = { x: view.rayStart.x - 0.08, y: view.rayStart.y, z: view.rayStart.z + 0.34 };
+    const guideStart = { x: view.rayStart.x, y: view.rayStart.y, z: view.rayStart.z + 0.34 };
     updateProjectionGuide(projectionRay,
       guideStart,
       { x: view.rayEnd.x, y: 0.22, z: 1.5 });
@@ -655,7 +655,7 @@ function renderCorrection() {
   });
   correctionPencil.position.set(correctionView.start, correctionView.centerY, correctionView.centerZ);
   if (correctionView.rayStart && correctionView.rayEnd) {
-    const guideStart = { x: correctionView.rayStart.x - 0.08, y: correctionView.rayStart.y, z: correctionView.rayStart.z + 0.34 };
+    const guideStart = { x: correctionView.rayStart.x, y: correctionView.rayStart.y, z: correctionView.rayStart.z + 0.34 };
     updateProjectionGuide(correctionProjectionRay,
       guideStart,
       { x: correctionView.rayEnd.x, y: 0.22, z: 1.5 });
