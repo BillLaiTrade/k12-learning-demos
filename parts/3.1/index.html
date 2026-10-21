@@ -580,7 +580,7 @@
                 <button type="button" class="secondary" data-correction-density="1" aria-pressed="false">較密・每格 1 cm</button>
               </div>
               <div id="correction-origin-controls" hidden>
-                <p>在上方直尺上左右拖曳，讓 0 刻度對準筆尖；若未對準 0，需用終點讀值減去起點讀值。</p>
+                <p>拖曳尺面下緣左右移動 0 刻度；拖曳鉛筆或場景空白處旋轉視角。若起點未對準 0，需用終點讀值減去起點讀值。</p>
               </div>
               <div id="correction-angle-controls" hidden>
                 <div class="correction-view-controls" role="group" aria-label="預設觀察視角">
@@ -1276,12 +1276,12 @@
           document.querySelector("#correction-magnifier-range").textContent = gap < 0.05 ? "筆尖已對準 0 刻度" : `目前相距 ${correctionFormat(gap)} cm；拖曳尺面逐步對準`;
           document.querySelector("#correction-magnifier-caption").textContent = "筆尖與 0 刻度";
           document.querySelector("#correction-magnifier").setAttribute("aria-label", "鉛筆筆尖與直尺零刻度的即時放大圖");
-          correctionCanvas.setAttribute("aria-label", "可拖曳上方直尺移動零刻度；下方放大視窗會顯示筆尖與零刻度的距離。");
+          correctionCanvas.setAttribute("aria-label", "可拖曳尺面下緣移動零刻度，也可拖曳鉛筆或場景空白處旋轉視角；放大視窗顯示筆尖與零刻度的距離。");
           document.querySelector("#correction-readout-label").textContent = `起點 ${correctionFormat(startReading)} cm・終點 ${correctionFormat(endReading)} cm`;
           reading.textContent = `${correctionFormat(endReading)} − ${correctionFormat(startReading)} ≈ ${correctionFormat(measuredLength)} cm`;
           document.querySelector("#correction-stage-title").textContent = "調整起點位置";
-          document.querySelector("#correction-stage-prompt").textContent = "讓 0 刻度對準鉛筆起點，可直接讀出長度；若未對準，就要減去起點讀值，避免零點偏移算進長度。";
-          document.querySelector("#correction-mode-instructions").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "零刻度已對準筆尖。拖動尺面仍可任意調整；觀察角度也可另外修正。" : `零刻度偏移 ${formatCentimeters(-correctionRulerOffset)} cm。直接拖動尺面，讓零刻度移到筆尖。`;
+          document.querySelector("#correction-stage-prompt").textContent = "讓 0 刻度對準鉛筆起點，可直接讀出長度；拖曳鉛筆或場景空白處可旋轉視角，拖曳尺面下緣可移動零刻度。";
+          document.querySelector("#correction-mode-instructions").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "零刻度已對準筆尖。拖曳尺面下緣可移動直尺；拖曳鉛筆或場景空白處可旋轉視角。" : `零刻度偏移 ${formatCentimeters(-correctionRulerOffset)} cm。拖曳尺面下緣讓 0 移到筆尖；拖曳鉛筆或場景空白處可旋轉視角。`;
         } else if (correctionMode === "angle") {
           document.querySelector("#correction-magnifier-title").textContent = "鉛筆右端放大";
           document.querySelector("#correction-magnifier-range").textContent = "尺面 18–19 cm 附近";
@@ -1337,17 +1337,27 @@
         renderCorrectionScene();
       });
       correctionCanvas.addEventListener("pointerdown", (event) => {
-        correctionDrag = { x: event.clientX, y: event.clientY, value: correctionRulerOffset, pointerId: event.pointerId };
+        const bounds = correctionCanvas.getBoundingClientRect();
+        const localY = (event.clientY - bounds.top) / bounds.height;
+        const dragAction = correctionMode === "origin" && localY > 0.68 ? "origin" : "rotate";
+        correctionDrag = { x: event.clientX, y: event.clientY, value: correctionRulerOffset, pointerId: event.pointerId, action: dragAction };
         correctionCanvas.setPointerCapture(event.pointerId);
         event.preventDefault();
       });
       correctionCanvas.addEventListener("pointermove", (event) => {
-        if (!correctionDrag || event.pointerId !== correctionDrag.pointerId) return;
+        if (!correctionDrag) {
+          if (correctionMode === "origin") {
+            const bounds = correctionCanvas.getBoundingClientRect();
+            correctionCanvas.style.cursor = (event.clientY - bounds.top) / bounds.height > 0.68 ? "ew-resize" : "grab";
+          }
+          return;
+        }
+        if (event.pointerId !== correctionDrag.pointerId) return;
         const dx = event.clientX - correctionDrag.x;
         const dy = event.clientY - correctionDrag.y;
         correctionDrag.x = event.clientX;
         correctionDrag.y = event.clientY;
-        if (correctionMode === "origin") {
+        if (correctionDrag.action === "origin") {
           const bounds = correctionCanvas.getBoundingClientRect();
           correctionRulerOffset = clamp(correctionRulerOffset + dx * 20 / (bounds.width * 0.78), -1, 0);
         } else {
@@ -1364,7 +1374,6 @@
       correctionCanvas.addEventListener("pointercancel", releaseCorrectionDrag);
       correctionCanvas.addEventListener("lostpointercapture", releaseCorrectionDrag);
       correctionCanvas.addEventListener("keydown", (event) => {
-        if (correctionMode === "origin") return;
         const angleStep = 0.08;
         if (event.key === "ArrowLeft") correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw - angleStep);
         else if (event.key === "ArrowRight") correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw + angleStep);
