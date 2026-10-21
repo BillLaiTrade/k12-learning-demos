@@ -140,8 +140,18 @@
     .vessel-front { position:absolute; inset:23px 8% 0; z-index:2; clip-path:polygon(0 0,100% 0,88% 100%,12% 100%); border-bottom:3px solid #80968a; background:linear-gradient(90deg,rgba(121,148,133,.2),rgba(250,253,251,.18) 48%,rgba(121,148,133,.25)); pointer-events:none; }
     .vessel-rim { position:absolute; z-index:3; top:0; left:0; width:100%; height:23px; border:3px solid #81968a; border-radius:50%; background:linear-gradient(180deg,#f9fcfa,#d9e5dd); box-shadow:inset 0 -4px 0 rgba(112,137,122,.16); }
     .shape-iron-block { position:absolute; z-index:1; left:50%; bottom:24px; width:78px; height:60px; transform:translateX(-50%); }
-    .solid-volume-space { width:154px; height:106px; display:grid; place-items:center; border:2px solid #94a69c; border-radius:8px; background:#f5f8f5; transition:width .2s ease,height .2s ease; }
-    .solid-volume-space .iron-block-svg { width:94px; height:74px; }
+    .solid-volume-measure { position:relative; width:210px; height:158px; }
+    .volume-cylinder { position:absolute; top:20px; left:59px; width:92px; height:122px; overflow:hidden; border:3px solid #71877b; border-top:0; border-radius:0 0 13px 13px; background:linear-gradient(90deg,#eef3ef,#fff 35%,#f3f7f4 80%,#dce6df); }
+    .volume-graduations { position:absolute; inset:9px 5px 8px auto; width:18px; background:repeating-linear-gradient(to top,transparent 0 11px,rgba(50,76,62,.72) 11px 12px); pointer-events:none; }
+    .volume-water { position:absolute; inset:auto 0 0; height:60%; background:linear-gradient(180deg,#68b8db,#1988c8); transition:height .25s ease; }
+    .volume-water::before { content:""; position:absolute; top:0; left:0; right:0; border-top:2px solid #0870a8; }
+    .volume-before-mark { position:absolute; z-index:1; right:0; bottom:60%; width:100%; border-top:2px dashed #c47a33; pointer-events:none; }
+    .volume-iron-block { position:absolute; z-index:2; left:50%; top:-12px; width:60px; height:47px; transform:translateX(-50%); transition:top .25s ease; }
+    .volume-annotations { position:absolute; inset:0; pointer-events:none; }
+    .volume-mark-label { position:absolute; left:151px; color:#506359; font-size:.67rem; font-weight:700; white-space:nowrap; }
+    .volume-mark-label[data-label="before"] { top:61px; color:#a1652f; }
+    .volume-mark-label[data-label="after"] { top:31px; color:#176e9c; }
+    .volume-mark-label[hidden] { display:none; }
     .solid-compress-block { position:relative; width:120px; height:82px; display:grid; place-items:center; border:2px solid #7a8a81; border-radius:7px; background:linear-gradient(145deg,#f0f3f0,#dce2dd); transition:transform .2s ease; transform-origin:center; }
     .solid-compress-particles { display:grid; grid-template-columns:repeat(4,12px); gap:var(--particle-gap,6px); transition:gap .2s ease; }
     .solid-compress-particles i { width:12px; height:12px; border-radius:50%; background:#718078; }
@@ -567,7 +577,7 @@
     };
     const cellExamples={
       "solid.shape":["容器形狀改變，鐵塊外形不跟著改變","同一個堅硬鐵塊放進不同形狀的容器，鐵塊不會像液體一樣流動並貼合容器。","拖曳下方滑桿改變容器外形，觀察鐵塊輪廓是否改變。","solid-shape","容器外形改變，鐵塊仍維持原來形狀；固體通常有固定形狀。"],
-      "solid.volume":["周遭空間改變，鐵塊體積仍相同","同一鐵塊放在不同大小的空間裡，物體本身的三維尺寸與體積標記不變。","拖曳滑桿改變周遭空間大小，比較鐵塊尺寸和體積讀值。","solid-volume","空間大小改變，鐵塊的尺寸與體積讀值維持不變。"],
+      "solid.volume":["量筒水位差，量出鐵塊的體積","將邊長 2 公分的鐵塊完全浸入量筒，水位由 20 mL 上升到 28 mL；排開的 8 mL 水，對應鐵塊 8 cm³ 的體積。","拖曳滑桿將鐵塊浸入量筒，觀察水位讀值與浸入前的差。","solid-volume","鐵塊完全浸入後，水位差為 8 mL；1 mL 等於 1 cm³，因此鐵塊體積是 8 cm³。"],
       "solid.compressibility":["增加壓力，固體體積幾乎不變","一般情況下，固體粒子彼此緊密排列，受到外力時不容易再靠近。","拖曳滑桿逐步增加壓力，觀察固體模型的尺寸與粒子間距。","solid-compress","模型中的粒子間距幾乎不變；固體通常不易壓縮。"],
       "liquid.shape":["同一份水會貼合不同容器的形狀","水倒入淺容器或細高容器時，水面以下的形狀會隨容器改變。","拖曳滑桿切換容器形狀，觀察同一份水如何改變外形。","liquid-shape","水的形狀隨容器改變；水量在這項觀察中保持相同。"],
       "liquid.volume":["轉移前後量出同一份水的體積","用量筒量取 200 mL 的水，轉移到另一個容器後再量一次，讀值仍約為 200 mL。","拖曳滑桿完成轉移，對照量筒與接收容器的刻度讀值。","liquid-volume","轉移前後讀值皆為 200 mL；液體體積在一般情況下大致固定。"],
@@ -584,7 +594,7 @@
       if(mode==="cell"){
         const [title,desc,interaction,type,outcome]=cellExamples[key];
         kicker=`單一比較・${stateNames[key.split(".")[0]]}・${propertyNames[key.split(".")[1]]}`;
-        heading=title;copy=desc;visual=type;control=interaction;action=interaction;result=outcome;
+        heading=title;copy=desc;visual=type;control=interaction;action=interaction;result=type==="solid-volume"?"先記下量筒原水位 20 mL，再拖曳滑桿把鐵塊浸入，觀察水位差。":outcome;
       }else if(mode==="state"){
         const state=key;
         summaryState=state;
@@ -618,7 +628,7 @@
       stateDemo.hidden=false;
       const ironBlockGraphic=(label)=>`<svg class="iron-block-svg" viewBox="0 0 160 120" role="img" aria-label="${label}"><defs><linearGradient id="iron-front" x2=".9" y2="1"><stop stop-color="#dce2de"/><stop offset=".5" stop-color="#aeb9b2"/><stop offset="1" stop-color="#849189"/></linearGradient><linearGradient id="iron-top" x2="1" y2="1"><stop stop-color="#f1f4f2"/><stop offset="1" stop-color="#b6c0ba"/></linearGradient><linearGradient id="iron-side" x2="1" y2=".6"><stop stop-color="#89968e"/><stop offset="1" stop-color="#65736b"/></linearGradient></defs><path d="M26 34 76 10 139 28 89 52Z" fill="url(#iron-top)"/><path d="M89 52 139 28 139 91 89 112Z" fill="url(#iron-side)"/><path d="M26 34 89 52 89 112 26 94Z" fill="url(#iron-front)"/><path d="M27 35 88 53 88 110" fill="none" stroke="#f7f9f7" stroke-opacity=".55" stroke-width="2"/></svg>`;
       const graphic=visual==="solid-shape"?`<div class="interactive-model" data-model="solid-shape"><div class="shape-holder"><div class="shape-vessel" data-shape-holder data-form="wide"><div class="vessel-back" aria-hidden="true"></div>${ironBlockGraphic("放在透明容器中的完整立體鐵塊").replace('class="iron-block-svg"','class="iron-block-svg shape-iron-block"')}<div class="vessel-front" aria-hidden="true"></div><div class="vessel-rim" aria-hidden="true"></div></div></div><div class="model-readout" data-model-readout>容器：寬而淺｜完整鐵塊外形不變</div></div>`
-        :visual==="solid-volume"?`<div class="interactive-model" data-model="solid-volume"><div class="solid-volume-space" data-solid-space>${ironBlockGraphic("邊長 2 公分的完整立體鐵塊")}</div><div class="model-readout" data-model-readout>周遭空間：較小｜鐵塊邊長 2 公分，體積 8 立方公分</div></div>`
+        :visual==="solid-volume"?`<div class="interactive-model" data-model="solid-volume"><div class="solid-volume-measure"><div class="volume-cylinder"><div class="volume-water" data-volume-water></div><div class="volume-before-mark" aria-hidden="true"></div><div class="volume-graduations" aria-hidden="true"></div></div>${ironBlockGraphic("準備放入量筒的完整鐵塊").replace('class="iron-block-svg"','class="iron-block-svg volume-iron-block"')}<div class="volume-annotations"><span class="volume-mark-label" data-label="before">原水位 20 mL</span><span class="volume-mark-label" data-label="after" data-volume-after hidden>水位 28 mL</span></div></div><div class="model-readout" data-model-readout>量筒原有水：20 mL｜鐵塊尚未完全浸入</div></div>`
         :visual==="solid-compress"?`<div class="interactive-model" data-model="solid-compress"><div class="solid-compress-block" data-solid-block><div class="solid-compress-particles">${"<i></i>".repeat(12)}</div></div><div class="model-readout" data-model-readout>施力：0｜固體內部粒子排列緊密</div><span class="model-caption">粒子間距的變化經放大示意；固體本身只會略微壓縮</span></div>`
         :visual==="liquid-shape"?`<div class="interactive-model" data-model="liquid-shape"><div class="liquid-shape-vessel" data-liquid-vessel data-form="wide"><div class="liquid-shape-water"></div></div><div class="model-readout" data-model-readout>容器：寬而淺｜同一份水</div></div>`
         :visual==="liquid-volume"?`<div class="interactive-model" data-model="liquid-volume"><div class="liquid-transfer"><div><div class="transfer-vessel"><span class="transfer-water" data-source-water style="--fill:100%"></span></div><span class="model-caption">量筒・200 mL</span><span class="model-caption" data-source-reading>目前 200 mL</span></div><span class="transfer-arrow" aria-hidden="true">→</span><div><div class="transfer-vessel"><span class="transfer-water" data-target-water style="--fill:0%"></span></div><span class="model-caption">接收量筒</span><span class="model-caption" data-target-reading>目前 0 mL</span></div></div><div class="model-readout" data-model-readout>轉移 0%｜同一份水合計 200 mL</div></div>`
@@ -640,7 +650,7 @@
       if(model==="solid-shape"){
         const tall=value>=50;root.querySelector("[data-shape-holder]").dataset.form=tall?"tall":"wide";readout.textContent=`容器：${tall?"細高":"寬而淺"}｜鐵塊外形不變`;result.textContent=`容器改成${tall?"細高":"寬而淺"}外形，鐵塊輪廓與尺寸沒有跟著改變。`;
       }else if(model==="solid-volume"){
-        const space=root.querySelector("[data-solid-space]"),width=140+value*.8,height=92+value*.35;space.style.width=`${width}px`;space.style.height=`${height}px`;readout.textContent=`周遭空間：${value<50?"較小":"較大"}｜鐵塊：2×2×2 公分＝8 立方公分`;result.textContent=`周遭空間改變；同一鐵塊的尺寸和體積讀值仍不變。`;
+        const ratio=value/100,reading=20+8*ratio;root.querySelector("[data-volume-water]").style.height=`${60+24*ratio}%`;root.querySelector(".volume-iron-block").style.top=`${-12+value*.56}px`;const final=value>=100;root.querySelector("[data-volume-after]").hidden=!final;readout.textContent=final?"水位差 8 mL｜鐵塊體積 8 cm³":value===0?"鐵塊尚未浸入｜量筒讀值 20 mL":`鐵塊浸入中｜量筒讀值約 ${reading.toFixed(1)} mL`;result.textContent=final?"鐵塊完全浸入後，水位差為 8 mL；1 mL 等於 1 cm³，因此鐵塊體積是 8 cm³。":"水位隨鐵塊浸入而上升；要量出整塊體積，須讓鐵塊完全浸沒後再比較水位差。";
       }else if(model==="solid-compress"){
         const block=root.querySelector("[data-solid-block]"),gap=6-value*.04;block.style.transform=`scale(${1-value*.0002})`;root.querySelector(".solid-compress-particles").style.setProperty("--particle-gap",`${gap.toFixed(1)}px`);readout.textContent=`施力：${value}%｜粒子間距示意：${gap.toFixed(1)} px`;result.textContent="施力增加時，粒子間距的放大示意稍微縮小；固體整體體積只會略微改變，因此不易壓縮。";
       }else if(model==="liquid-shape"){
