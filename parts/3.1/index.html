@@ -725,7 +725,7 @@
       };
       const renderParallaxScene = () => {
         if (!parallaxCanvas.clientWidth) return;
-        parallaxScene.dataset.magnifier = String(cameraPreset !== "front");
+        parallaxScene.dataset.magnifier = "true";
         const bounds = parallaxCanvas.getBoundingClientRect();
         const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
         parallaxCanvas.width = Math.round(bounds.width * pixelRatio);
@@ -787,7 +787,7 @@
           : cameraPreset === "oblique"
           ? "斜向觀察：端點視線投影偏離正對時的刻度。"
           : "自由視角：拖曳或用方向鍵轉動，觀察投影落點和讀值。";
-        parallaxScene.dataset.magnifier = String(cameraPreset !== "front");
+        parallaxScene.dataset.magnifier = "true";
         document.querySelector("#camera-caption").textContent = cameraCaption;
         document.querySelector("#view-front").setAttribute("aria-pressed", String(cameraPreset === "front"));
         document.querySelector("#view-oblique").setAttribute("aria-pressed", String(cameraPreset === "oblique"));
