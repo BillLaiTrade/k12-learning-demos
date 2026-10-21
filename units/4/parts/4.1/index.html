@@ -119,6 +119,13 @@
     .state-detail-kicker { margin:0 0 4px; color:#8b612d; font-size:.76rem; font-weight:850; letter-spacing:.06em; }
     .state-detail h3 { margin:0 0 7px; font-size:1.15rem; }
     .state-detail-copy { margin:0 0 12px; color:var(--muted); }
+    .state-property-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+    .state-property-list[hidden],.state-demo[hidden] { display:none; }
+    .state-property-card { min-width:0; padding:13px; border:1px solid #ded8ca; border-radius:12px; background:#f8f8f3; }
+    .state-property-card h4 { margin:0 0 8px; color:#31483d; font-size:.98rem; }
+    .state-property-card p { margin:0 0 8px; color:#52615a; font-size:.86rem; line-height:1.6; }
+    .state-property-card p:last-child { margin-bottom:0; }
+    .state-property-card strong { color:#8b612d; }
     .state-demo { min-height:118px; display:grid; grid-template-columns:minmax(130px,.7fr) minmax(0,1.3fr); align-items:center; gap:15px; padding:13px; border-radius:12px; background:#f7f7f2; }
     .state-demo-visual { display:grid; place-items:center; min-height:88px; }
     .demo-vessel { position:relative; width:102px; height:78px; border:3px solid #788982; border-top:0; border-radius:3px 3px 14px 14px; background:#fff; overflow:hidden; }
@@ -206,6 +213,7 @@
       .bucket-scene { grid-template-columns:1fr; }
       .bucket-detail { min-height:auto; }
       .record-task { grid-template-columns:100px 1fr; }
+      .state-property-list { grid-template-columns:1fr; }
       .rust-pair { grid-template-columns:1fr 1fr; gap:7px; }
       .comparison { font-size:.78rem; }
       .comparison th,.comparison td { padding:7px 6px; }
@@ -313,7 +321,7 @@
           <div class="card-side"><span class="card-number">02</span><h3>物質三態</h3><span class="card-role">比較形狀、體積與可壓縮性</span></div>
           <div class="card-main">
             <h2>桶身、水和空氣，各有哪些不同？</h2>
-            <p>用第一張卡的鐵製桶身代表固體、桶中的水代表液體，再以注射筒中的空氣觀察氣體。先看完整比較表，再點選欄名、列名或表格內容，查看相應的例子與操作。</p>
+            <p>用第一張卡的鐵製桶身代表固體、桶中的水代表液體，再以注射筒中的空氣觀察氣體。先看完整比較表；點選欄名可直接閱讀該狀態三項性質的重點與例子，點選格子則可進一步操作觀察。</p>
             <div class="state-matrix-wrap" role="region" aria-label="物質三態性質比較表，可左右滑動查看完整表格" tabindex="0">
               <table class="state-matrix">
                 <thead><tr>
@@ -338,11 +346,12 @@
                 </tbody>
               </table>
             </div>
-            <p class="state-matrix-hint">手機上可左右滑動表格。點選上方欄名看同一種狀態的三項特徵；點選左側列名比較三種狀態的同一項性質；點選格子查看該格例子。</p>
+            <p class="state-matrix-hint">手機上可左右滑動表格。點選欄名直接閱讀該狀態三項性質的重點與例子；點選左側列名比較三種狀態；點選格子查看對應例子與操作。</p>
             <section class="state-detail" id="state-detail" aria-live="polite" aria-atomic="true" aria-label="所選性質的例子與操作">
               <p class="state-detail-kicker" id="state-detail-kicker">先從一格開始觀察</p>
               <h3 id="state-detail-heading">選擇表格中的一個欄名、列名或內容</h3>
               <p class="state-detail-copy" id="state-detail-copy">下方會只顯示你所選項目的例子和操作。</p>
+              <div class="state-property-list" id="state-property-list" hidden></div>
               <div class="state-demo" id="state-demo"><div class="state-demo-visual"><figure class="demo-bucket"><img src="assets/metal-bucket.png" alt="鐵製桶身的水桶"><figcaption>鐵製桶身</figcaption></figure></div><div class="demo-controls"><p>改變水桶的方向，觀察桶身仍維持原來的外形。</p><button type="button" data-state-demo>轉動水桶</button><p class="demo-result" aria-live="polite">固體通常有固定形狀。</p><p class="gas-key">圖示會以顏色和紋理區分水與空氣；圖示色不代表物質實際顏色。</p></div></div>
             </section>
             <p class="next-hint">比較完可觀察的形狀、體積和可壓縮性後，下一步用粒子模型解釋三態差異。</p>
@@ -543,25 +552,26 @@
       "solid.volume":["石頭在量筒中排開水，顯示它占有體積","不規則石頭完全浸入水中，量筒讀值上升；水位上升的體積就是石頭占有的空間。","點選「放入石頭」；讀取量筒從 30 mL 上升到 38 mL，差值 8 mL 表示石頭體積約為 8 cm³。","solid-volume","量筒水位上升 8 mL，表示石頭占有約 8 cm³ 的體積。"],
       "solid.compressibility":["鐵製桶身不易被壓縮","堅硬的鐵製桶身在一般情況下不容易被壓小。","觀察水桶桶身；這裡比較一般情況下的性質，不用工具大力擠壓。","solid","固體通常不易壓縮，不代表任何力量下都不會變形。"],
       "liquid.shape":["水的形狀會隨容器改變","同一份水倒入不同形狀的容器，水面以下的形狀會改變。","把等量的藍色水示意從寬容器換到窄容器，觀察液面形狀。","liquid","水的形狀隨容器改變；藍色是圖示色。"],
-      "liquid.volume":["一定量的水體積大致固定","同一份水換到不同容器，體積大致不變。","沿用等量的水，在兩個不同形狀的容器間轉移；比較水量刻度。","liquid","容器形狀不同，等量水的體積仍大致相同。"],
+      "liquid.volume":["一定量的水體積大致固定","同一杯水倒入高而窄、矮而寬的容器，水位高度不同，但水量不變。","沿用等量的水，在兩個不同形狀的容器間轉移；比較水量刻度。","liquid","容器形狀不同，等量水的體積仍大致相同。"],
       "liquid.compressibility":["水在一般情況下不易被壓縮","注滿水並封住出口的注射筒，活塞不容易推入。","選擇「輕推活塞」示意；比較密閉水樣前後的空間，勿用力硬推。","water-syringe","水在一般情況下不易壓縮；不是絕對不可壓縮。"],
-      "gas.shape":["空氣會充滿容器可用空間","空氣沒有固定形狀，會充滿容器可用空間。","將空氣想像在不同形狀的透明容器中；橘色斜紋只標示空氣所在空間。","gas","容器形狀改變，空氣所在空間也改變；空氣本身沒有橘色。"],
-      "gas.volume":["空氣體積隨可用空間改變","空氣體積會隨容器可用空間改變。","比較注射筒活塞拉開和推入時，筒內空氣佔據的空間。","gas-syringe","空氣可被壓縮，體積會隨可用空間改變。"],
+      "gas.shape":["空氣會充滿容器可用空間","吹氣進入不同形狀的氣球，空氣會隨氣球形狀分布，並充滿其中可用空間。","將空氣想像在不同形狀的透明容器中；橘色斜紋只標示空氣所在空間。","gas","容器形狀改變，空氣所在空間也改變；空氣本身沒有橘色。"],
+      "gas.volume":["空氣體積隨可用空間改變","注射筒拉動活塞時，筒內空氣佔據的空間會隨可用空間變大或變小。","比較注射筒活塞拉開和推入時，筒內空氣佔據的空間。","gas-syringe","空氣可被壓縮，體積會隨可用空間改變。"],
       "gas.compressibility":["空氣比固體和液體容易壓縮","注射筒內封住的空氣可透過活塞壓縮。","點選按鈕推入活塞，再觀察橘色斜紋區縮小；鬆手前不要拔出活塞。","gas-syringe","推入活塞後，同一份空氣佔據的體積變小。"]
     };
     function renderStateDetail(mode,key){
       document.querySelectorAll("[data-state-pick],[data-property-pick],[data-state-cell]").forEach(button=>button.setAttribute("aria-pressed","false"));
       const selected=mode==="state"?`[data-state-pick="${key}"]`:mode==="property"?`[data-property-pick="${key}"]`:`[data-state-cell="${key}"]`;
       const active=document.querySelector(selected); if(active) active.setAttribute("aria-pressed","true");
-      let kicker,heading,copy,visual,control,result;
+      let kicker,heading,copy,visual,control,result,summaryState=null;
       if(mode==="cell"){
         const [title,desc,action,type,outcome]=cellExamples[key];
         kicker=`單一比較・${stateNames[key.split(".")[0]]}・${propertyNames[key.split(".")[1]]}`;
         heading=title;copy=desc;visual=type;control=action;result=outcome;
       }else if(mode==="state"){
         const state=key;
-        kicker=`整欄比較・${stateNames[state]}`; heading=`${stateNames[state]}的三項特徵`;
-        copy="只看這一種狀態，依序比較形狀、體積和可壓縮性。";
+        summaryState=state;
+        kicker=`整欄比較・${stateNames[state]}`; heading=`${stateNames[state]}：形狀、體積與可壓縮性`;
+        copy="三項性質的重點與例子已列在下方，可直接閱讀。";
         visual=state==="solid"?"solid-shape":state==="liquid"?"liquid":"gas";
         control=`形狀：${stateFacts[state].shape}。體積：${stateFacts[state].volume}。可壓縮性：${stateFacts[state].compressibility}。`;
         result=state==="gas"?"橘色斜紋只標示空氣所在空間，不代表空氣的實際顏色。":"依固定量的物質比較；水的藍色只是圖示色。";
@@ -575,6 +585,19 @@
       document.getElementById("state-detail-kicker").textContent=kicker;
       document.getElementById("state-detail-heading").textContent=heading;
       document.getElementById("state-detail-copy").textContent=copy;
+      const propertyList=document.getElementById("state-property-list");
+      const stateDemo=document.getElementById("state-demo");
+      if(summaryState){
+        propertyList.innerHTML=["shape","volume","compressibility"].map(prop=>{
+          const [,example]=cellExamples[`${summaryState}.${prop}`];
+          return `<article class="state-property-card"><h4>${propertyNames[prop]}</h4><p><strong>性質重點：</strong>${stateFacts[summaryState][prop]}。</p><p><strong>例子：</strong>${example}</p></article>`;
+        }).join("");
+        propertyList.hidden=false;
+        stateDemo.hidden=true;
+        return;
+      }
+      propertyList.hidden=true;
+      stateDemo.hidden=false;
       const graphic=visual==="solid-shape"?'<figure class="demo-bucket" data-demo-bucket><img src="assets/metal-bucket.png" alt="鐵製桶身的水桶"><figcaption>鐵製桶身</figcaption></figure>':visual==="solid-volume"?'<div class="solid-volume-demo" data-solid-volume-demo data-submerged="false"><svg viewBox="0 0 190 160" role="img" aria-label="石頭浸入量筒中的水，水面由 30 毫升刻度升至 38 毫升"><path d="M46 17h98M55 17v119q0 8 8 8h64q8 0 8-8V17" fill="#fbfdfe" stroke="#64766e" stroke-width="3"/><rect x="59" y="91" width="72" height="49" class="volume-water" fill="#1687cb"/><path d="M82 103q-8-10 1-19l12-12 15 4 8 16-7 15-19 4z" class="volume-stone" fill="#737e79" stroke="#4c5752" stroke-width="2"/><g stroke="#60736b" stroke-width="2"><path d="M134 48h10M138 64h6M134 81h10M138 97h6M134 114h10"/></g><text x="19" y="96" fill="#176b91" font-size="10" font-weight="700" data-level-label>30 mL</text></svg><div class="solid-volume-readout"><span>量筒讀值</span><strong data-solid-reading aria-live="polite">30 mL</strong></div></div>':visual==="liquid"?'<div class="demo-vessel"><div class="demo-water"></div></div>':visual==="gas"?'<div class="demo-vessel"><div class="demo-air"></div></div>':visual==="water-syringe"?'<div class="demo-syringe" data-demo-syringe="water"><div class="demo-syringe-fill" style="background:#1687cb"></div><span class="demo-syringe-plunger"></span></div>':visual==="gas-syringe"?'<div class="demo-syringe" data-demo-syringe="gas"><div class="demo-syringe-fill"></div><span class="demo-syringe-plunger"></span></div>':`<div class="compare-three" data-compare-property="${key}"><span class="compare-item" data-kind="solid" data-active="true">固體<br>鐵製桶身</span><span class="compare-item" data-kind="liquid">液體<br>水</span><span class="compare-item" data-kind="gas">氣體<br>空氣</span></div>`;
       const isOperable=visual==="water-syringe"||visual==="gas-syringe";
       const buttonText=visual==="solid-volume"?"放入石頭":visual==="solid-shape"?"轉動水桶":visual==="water-syringe"?"輕推活塞":visual==="gas-syringe"?"推入活塞":visual==="liquid"?"換成窄容器":visual==="gas"?"改看窄容器":mode==="state"?"查看這三項特徵":mode==="property"?"依序比較三種狀態":key==="solid.compressibility"?"查看一般情況下的比較": "確認桶身特徵";
