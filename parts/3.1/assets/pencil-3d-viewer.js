@@ -102,13 +102,13 @@ function updateProjectionGuide(guide, start, end) {
     return;
   }
   const direction = delta.normalize();
-  const dashLength = 0.18;
-  const dashGap = 0.13;
+  const dashLength = 0.2;
+  const dashGap = 0.1;
   const dashCount = Math.ceil(length / (dashLength + dashGap));
   while (guide.children.length < dashCount) {
     const dash = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.018, 0.018, 1, 8, 1, false),
-      new THREE.MeshBasicMaterial({ color: 0xc45a2b, transparent: true, opacity: 0.72, depthTest: false, depthWrite: false, toneMapped: false })
+      new THREE.CylinderGeometry(0.028, 0.028, 1, 10, 1, false),
+      new THREE.MeshBasicMaterial({ color: 0xc45a2b, transparent: true, opacity: 1, depthTest: false, depthWrite: false, toneMapped: false })
     );
     dash.renderOrder = 7;
     guide.add(dash);
@@ -568,13 +568,13 @@ function render() {
   if (view.rayStart && view.rayEnd) {
     const guideStart = {
       x: view.rayStart.x + (view.rayEnd.x - view.rayStart.x) * 0.04,
-      y: view.rayStart.y + (view.rayEnd.y - view.rayStart.y) * 0.04,
+      y: view.rayStart.y + (view.rayEnd.y - view.rayStart.y) * 0.04 + 0.035,
       z: view.rayStart.z + (view.rayEnd.z - view.rayStart.z) * 0.04
     };
     updateProjectionGuide(projectionRay,
       guideStart,
-      { x: view.rayEnd.x, y: view.rayEnd.y + 0.01, z: view.rayEnd.z });
-    landingRing.position.set(view.rayEnd.x, 0.255, view.rayEnd.z);
+      { x: view.rayEnd.x, y: 0.22, z: 0.95 });
+    landingRing.position.set(view.rayEnd.x, 0.255, 0.95);
     projectionRay.visible = true;
     landingRing.visible = true;
   } else {
@@ -662,13 +662,13 @@ function renderCorrection() {
   if (correctionView.rayStart && correctionView.rayEnd) {
     const guideStart = {
       x: correctionView.rayStart.x + (correctionView.rayEnd.x - correctionView.rayStart.x) * 0.04,
-      y: correctionView.rayStart.y + (correctionView.rayEnd.y - correctionView.rayStart.y) * 0.04,
+      y: correctionView.rayStart.y + (correctionView.rayEnd.y - correctionView.rayStart.y) * 0.04 + 0.035,
       z: correctionView.rayStart.z + (correctionView.rayEnd.z - correctionView.rayStart.z) * 0.04
     };
     updateProjectionGuide(correctionProjectionRay,
       guideStart,
-      { x: correctionView.rayEnd.x, y: correctionView.rayEnd.y + 0.01, z: correctionView.rayEnd.z });
-    correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, correctionView.rayEnd.z);
+      { x: correctionView.rayEnd.x, y: 0.22, z: 0.95 });
+    correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, 0.95);
     correctionProjectionRay.visible = true;
     correctionLandingRing.visible = true;
   } else {
