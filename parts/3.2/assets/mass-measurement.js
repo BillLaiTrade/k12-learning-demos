@@ -338,7 +338,7 @@ export function mountMassMeasurement() {
     trim: new THREE.MeshStandardMaterial({ color: 0xd4b86d, metalness: 0.74, roughness: 0.27 }),
     inlay: new THREE.MeshStandardMaterial({ color: 0xc9d6ca, metalness: 0.48, roughness: 0.3 }),
     indicator: new THREE.MeshStandardMaterial({ color: 0xbf6338, metalness: 0.2, roughness: 0.5 }),
-    platform: new THREE.MeshStandardMaterial({ color: 0xf7f8f4, metalness: 0.26, roughness: 0.5 }),
+    platform: new THREE.MeshStandardMaterial({ color: 0xb9c9bd, metalness: 0.16, roughness: 0.68 }),
     rubber: new THREE.MeshStandardMaterial({ color: 0x37443e, roughness: 0.93 }),
     button: new THREE.MeshStandardMaterial({ color: 0xc8d8cc, metalness: 0.25, roughness: 0.38 })
   };
