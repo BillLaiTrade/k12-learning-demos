@@ -181,13 +181,13 @@
     .transfer-water { position:absolute; inset:auto 0 0; height:var(--fill,100%); background:#1687cb; transition:height .2s ease; }
     .transfer-vessel::after { content:""; position:absolute; inset:5px auto 5px 5px; width:14px; pointer-events:none; background:repeating-linear-gradient(to top,transparent 0 12px,rgba(40,65,56,.62) 12px 13px); }
     .transfer-arrow { color:#8b612d; font-weight:800; }
-    .gas-shape-box { position:relative; width:220px; height:138px; margin-top:14px; transition:width .38s cubic-bezier(.2,.7,.25,1),height .38s cubic-bezier(.2,.7,.25,1); }
-    .gas-shape-box[data-form="tall"] { width:175px; height:184px; }
-    .gas-shape-box[data-form="square"] { width:190px; height:162px; }
+    .gas-shape-box { position:relative; width:min(260px,100%); height:112px; margin-top:14px; transition:width .38s cubic-bezier(.2,.7,.25,1),height .38s cubic-bezier(.2,.7,.25,1); }
+    .gas-shape-box[data-form="tall"] { width:min(132px,100%); height:210px; }
+    .gas-shape-box[data-form="square"] { width:min(174px,100%); height:174px; }
     .gas-shape-walls { position:absolute; inset:12px 0 0; border:3px solid #718b7e; border-top:0; border-radius:0 0 15px 15px; background:linear-gradient(90deg,rgba(122,160,140,.23),rgba(240,249,243,.16) 18%,rgba(255,255,255,.12) 52%,rgba(218,238,226,.18) 84%,rgba(112,148,128,.24)); box-shadow:inset 0 -5px 0 rgba(85,122,100,.12); pointer-events:none; }
     .gas-shape-rim { position:absolute; z-index:2; top:0; left:-3px; right:-3px; height:27px; border:3px solid #718b7e; border-radius:50%; background:linear-gradient(180deg,#fff 0%,#e5efe8 54%,#bfd2c5 100%); box-shadow:inset 0 -3px 0 rgba(85,122,100,.18),0 2px 3px rgba(40,60,49,.12); pointer-events:none; }
     .gas-particle-field { position:absolute; z-index:1; inset:18px 8px 8px; overflow:hidden; border-radius:0 0 10px 10px; }
-    .gas-particle { position:absolute; left:var(--x); top:var(--y); box-sizing:border-box; width:10px; height:10px; border:1.7px solid #5f8e9f; border-radius:50%; background:transparent; transform:translate(-50%,-50%); animation:gas-brownian var(--gas-drift-duration,7s) linear infinite; animation-delay:var(--gas-drift-delay,0s); will-change:transform; }
+    .gas-particle { position:absolute; left:var(--x); top:var(--y); box-sizing:border-box; width:10px; height:10px; border:1.7px solid #5f8e9f; border-radius:50%; background:transparent; transform:translate(-50%,-50%); transition:left .38s ease,top .38s ease; animation:gas-brownian var(--gas-drift-duration,7s) linear infinite; animation-delay:var(--gas-drift-delay,0s); will-change:transform; }
     @keyframes gas-brownian { 0%,100% { transform:translate(-50%,-50%); } 14% { transform:translate(calc(-50% + var(--dx1,0px)),calc(-50% + var(--dy1,0px))); } 28% { transform:translate(calc(-50% + var(--dx2,0px)),calc(-50% + var(--dy2,0px))); } 42% { transform:translate(calc(-50% + var(--dx3,0px)),calc(-50% + var(--dy3,0px))); } 56% { transform:translate(calc(-50% + var(--dx4,0px)),calc(-50% + var(--dy4,0px))); } 70% { transform:translate(calc(-50% + var(--dx5,0px)),calc(-50% + var(--dy5,0px))); } 84% { transform:translate(calc(-50% + var(--dx6,0px)),calc(-50% + var(--dy6,0px))); } }
     .interactive-model[data-model="gas-shape"] { width:min(100%,360px); }
     .interactive-model[data-model="gas-shape"] .model-readout { width:100%; }
@@ -628,13 +628,13 @@
     }
     const gasParticleCount=48;
     let gasMotionFrame=0;
-    function gasParticleMotionVars(){
+    function gasParticleMotionVars(amplitudeX=9,amplitudeY=6){
       const vars={},duration=6+Math.random()*2;
-      for(let step=1;step<=6;step++){vars[`--dx${step}`]=`${((Math.random()*2-1)*9).toFixed(1)}px`;vars[`--dy${step}`]=`${((Math.random()*2-1)*6).toFixed(1)}px`;}
+      for(let step=1;step<=6;step++){vars[`--dx${step}`]=`${((Math.random()*2-1)*amplitudeX).toFixed(1)}px`;vars[`--dy${step}`]=`${((Math.random()*2-1)*amplitudeY).toFixed(1)}px`;}
       vars["--gas-drift-duration"]=`${duration.toFixed(2)}s`;vars["--gas-drift-delay"]=`-${(Math.random()*duration).toFixed(2)}s`;
       return vars;
     }
-    function gasParticleMotionStyle(){return Object.entries(gasParticleMotionVars()).map(([name,value])=>`${name}:${value}`).join(";");}
+    function gasParticleMotionStyle(amplitudeX,amplitudeY){return Object.entries(gasParticleMotionVars(amplitudeX,amplitudeY)).map(([name,value])=>`${name}:${value}`).join(";");}
     function startGasParticleMotion(type){
       cancelAnimationFrame(gasMotionFrame);
       const model=document.querySelector(`[data-model="${type}"]`);if(!model)return;
@@ -689,6 +689,12 @@
       const shapes={wide:{label:"寬淺容器"},tall:{label:"細高容器"},square:{label:"方形容器"}},shape=shapes[form];if(!shape)return;
       const box=model.querySelector("[data-gas-shape-box]");
       box.dataset.form=form;box.setAttribute("aria-label",shape.label+"剖面模型");
+      const layouts={wide:{columns:12,rows:4,amplitudeX:4.2,amplitudeY:5.4},tall:{columns:6,rows:8,amplitudeX:4.3,amplitudeY:5.3},square:{columns:7,rows:7,amplitudeX:5.5,amplitudeY:4.8}},layout=layouts[form],dots=[...model.querySelectorAll("[data-gas-particle]")],field=model.querySelector(".gas-particle-field");
+      dots.forEach((dot,index)=>{
+        dot.style.left=`${((index%layout.columns)+.5)*100/layout.columns}%`;dot.style.top=`${(Math.floor(index/layout.columns)+.5)*100/layout.rows}%`;
+        Object.entries(gasParticleMotionVars(layout.amplitudeX,layout.amplitudeY)).forEach(([name,value])=>dot.style.setProperty(name,value));dot.style.animationName="none";
+      });
+      void field.offsetWidth;dots.forEach(dot=>dot.style.animationName="");
       model.querySelector("[data-model-readout]").textContent=`容器：${shape.label}｜空氣分子持續緩慢隨機運動`;
       document.querySelectorAll("#state-demo [data-gas-form]").forEach(control=>control.setAttribute("aria-pressed",String(control===button)));
       document.querySelector("#state-demo .demo-result").textContent="容器改變形狀時，空氣原本就已分布其中，不需要從一端集體跑到遠處；靜置時分子仍持續緩慢隨機運動。";
@@ -737,7 +743,8 @@
       stateDemo.classList.toggle("static-only",staticOnly);
       const ironBlockGraphic=(label)=>`<svg class="iron-block-svg" viewBox="0 0 160 120" role="img" aria-label="${label}"><defs><linearGradient id="iron-front" x2=".9" y2="1"><stop stop-color="#dce2de"/><stop offset=".5" stop-color="#aeb9b2"/><stop offset="1" stop-color="#849189"/></linearGradient><linearGradient id="iron-top" x2="1" y2="1"><stop stop-color="#f1f4f2"/><stop offset="1" stop-color="#b6c0ba"/></linearGradient><linearGradient id="iron-side" x2="1" y2=".6"><stop stop-color="#89968e"/><stop offset="1" stop-color="#65736b"/></linearGradient></defs><path d="M26 34 76 10 139 28 89 52Z" fill="url(#iron-top)"/><path d="M89 52 139 28 139 91 89 112Z" fill="url(#iron-side)"/><path d="M26 34 89 52 89 112 26 94Z" fill="url(#iron-front)"/><path d="M27 35 88 53 88 110" fill="none" stroke="#f7f9f7" stroke-opacity=".55" stroke-width="2"/></svg>`;
       const pushingHandGraphic=(side)=>`<svg class="solid-pressure-hand${side==="right"?" right":""}" viewBox="0 0 64 80" aria-hidden="true"><path d="M0 34h27v18H0z" fill="#d9a477"/><path d="M19 34q2-7 9-8l8 1v28l-8 2q-6-1-9-6z" fill="#efc39a" stroke="#bd855a" stroke-width="1.5"/><rect x="33" y="26" width="31" height="7" rx="3.5" fill="#efc39a" stroke="#bd855a" stroke-width="1.2"/><rect x="34" y="34" width="30" height="7" rx="3.5" fill="#efc39a" stroke="#bd855a" stroke-width="1.2"/><rect x="34" y="42" width="30" height="7" rx="3.5" fill="#e8b88d" stroke="#bd855a" stroke-width="1.2"/><rect x="31" y="50" width="29" height="7" rx="3.5" fill="#dca87c" stroke="#bd855a" stroke-width="1.2"/><path d="M23 48q8-5 13 0l7 7q3 4-1 7-3 2-7-1l-11-7" fill="#efc39a" stroke="#bd855a" stroke-width="1.5"/></svg>`;
-      const gasParticles=Array.from({length:gasParticleCount},(_,i)=>`<span class="gas-particle" data-gas-particle style="--x:${((i%8)+.5)*100/8}%;--y:${(Math.floor(i/8)+.5)*100/6}%;${gasParticleMotionStyle()}"></span>`).join("");
+      const gasGrid=visual==="gas-shape"?{columns:12,rows:4,amplitudeX:4.2,amplitudeY:5.4}:{columns:8,rows:6,amplitudeX:9,amplitudeY:6};
+      const gasParticles=Array.from({length:gasParticleCount},(_,i)=>`<span class="gas-particle" data-gas-particle style="--x:${((i%gasGrid.columns)+.5)*100/gasGrid.columns}%;--y:${(Math.floor(i/gasGrid.columns)+.5)*100/gasGrid.rows}%;${gasParticleMotionStyle(gasGrid.amplitudeX,gasGrid.amplitudeY)}"></span>`).join("");
       const graphic=visual==="solid-compress-note"?`<div class="solid-pressure-scene" role="img" aria-label="雙手直接抵住鐵塊兩側向內推擠；鐵塊外形與大小維持不變"><div class="solid-pressure-press"><span class="solid-pressure-arrow" aria-hidden="true">→</span>${pushingHandGraphic("left")}${ironBlockGraphic("受到雙手直接推擠的完整鐵塊").replace('class="iron-block-svg"','class="iron-block-svg solid-pressure-iron"').replace('viewBox="0 0 160 120"','viewBox="26 10 113 102"')} ${pushingHandGraphic("right")}<span class="solid-pressure-arrow" aria-hidden="true">←</span></div><p class="solid-pressure-caption">雙手直接向內推擠鐵塊</p></div>`:visual==="solid-shape"?`<div class="interactive-model" data-model="solid-shape"><div class="solid-shape-photo-row"><div class="solid-object-card"><span>同一個鐵塊</span>${ironBlockGraphic("外形固定的鐵塊模型").replace('class="iron-block-svg"','class="iron-block-svg shape-iron-block"')}</div><figure class="shape-photo-card"><img data-shape-photo src="assets/solid-container-bowl.jpg" alt="淺口塑膠碗的實物照片"><figcaption data-shape-caption>淺口塑膠碗</figcaption><div class="shape-source"><a data-shape-source href="https://commons.wikimedia.org/wiki/File:Dog_Water_Bowl.jpg" target="_blank" rel="noopener">Ohiopetwatch</a><a data-shape-license href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a></div></figure></div><div class="model-readout" data-model-readout>目前選擇：淺口塑膠碗</div></div>`
         :visual==="solid-volume"?`<div class="interactive-model" data-model="solid-volume"><div class="solid-volume-measure"><div class="volume-cylinder"><div class="volume-water" data-volume-water></div><div class="volume-before-mark" aria-hidden="true"></div><div class="volume-graduations" aria-hidden="true"></div></div>${ironBlockGraphic("準備放入量筒的完整鐵塊").replace('class="iron-block-svg"','class="iron-block-svg volume-iron-block" tabindex="0"').replace('role="img"','role="button"')}<div class="volume-annotations"><span class="volume-mark-label" data-label="before">原水位 20 mL</span><span class="volume-mark-label" data-label="after" data-volume-after hidden>水位 28 mL</span></div></div><div class="model-readout" data-model-readout>量筒原有水：20 mL｜鐵塊尚未浸入</div></div>`
         :visual==="liquid-shape"?`<div class="interactive-model" data-model="liquid-shape"><div class="liquid-shape-vessel" data-liquid-vessel data-form="wide"><div class="liquid-shape-water"></div></div><div class="model-readout" data-model-readout>容器：寬而淺｜同一份水</div></div>`
