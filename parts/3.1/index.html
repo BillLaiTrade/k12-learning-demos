@@ -868,8 +868,8 @@
           lookAtY: cameraTarget.y,
           lookAtZ: cameraTarget.z,
           focalLengthRatio: focalLength / bounds.height,
-          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ + 0.36 },
-          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.02, z: clampedProjectionZ }
+          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
+          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.01, z: clampedProjectionZ }
         });
 
         document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${clampedProjectionX.toFixed(1)} cm` : "視線落在尺外";
@@ -1257,8 +1257,8 @@
           lookAtY: rulerTop,
           lookAtZ: target.z,
           focalLengthRatio: sceneActive ? bounds.width * 0.85 / bounds.height : 1,
-          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ + 0.36 },
-          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.01, z: 1.1 },
+          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
+          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.01, z: clampedProjectionZ },
           magnifierTargetX: correctionMode === "origin" ? (state.start + correctionRulerOffset) / 2 : undefined,
           magnifierMode: correctionMode
         };

@@ -559,7 +559,7 @@ function render() {
 
   pencil.position.set(view.start, view.centerY, view.centerZ);
   if (view.rayStart && view.rayEnd) {
-    updateProjectionGuide(projectionRay, view.rayStart, view.rayEnd);
+    updateProjectionGuide(projectionRay, { x: view.rayEnd.x, y: view.centerY + 0.1, z: view.rayEnd.z }, view.rayEnd);
     landingMarker.position.set(view.rayEnd.x, 0.28, view.rayEnd.z);
     landingRing.position.set(view.rayEnd.x, 0.255, view.rayEnd.z);
     projectionRay.visible = true;
@@ -652,7 +652,7 @@ function renderCorrection() {
   });
   correctionPencil.position.set(correctionView.start, correctionView.centerY, correctionView.centerZ);
   if (correctionView.rayStart && correctionView.rayEnd) {
-    updateProjectionGuide(correctionProjectionRay, correctionView.rayStart, correctionView.rayEnd);
+    updateProjectionGuide(correctionProjectionRay, { x: correctionView.rayEnd.x, y: correctionView.centerY + 0.1, z: correctionView.rayEnd.z }, correctionView.rayEnd);
     correctionLandingMarker.position.set(correctionView.rayEnd.x, 0.28, correctionView.rayEnd.z);
     correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, correctionView.rayEnd.z);
     correctionProjectionRay.visible = true;
