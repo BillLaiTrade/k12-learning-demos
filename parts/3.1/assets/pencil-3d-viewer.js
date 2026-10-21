@@ -255,7 +255,7 @@ function createRuler() {
     );
     number.rotation.x = -Math.PI / 2;
     const labelX = centimeter === 0 ? 0.32 : centimeter === rulerLength ? rulerLength - 0.32 : centimeter;
-    number.position.set(labelX, 0.235, -0.16);
+    number.position.set(labelX, 0.235, 0.34);
     number.renderOrder = 2;
     number.userData.rulerMajorNumber = true;
     number.userData.rulerCentimeter = centimeter;
@@ -573,8 +573,8 @@ function render() {
     };
     updateProjectionGuide(projectionRay,
       guideStart,
-      { x: view.rayEnd.x, y: 0.22, z: 0.95 });
-    landingRing.position.set(view.rayEnd.x, 0.255, 0.95);
+      { x: view.rayEnd.x, y: 0.22, z: 0.72 });
+    landingRing.position.set(view.rayEnd.x, 0.255, 0.72);
     projectionRay.visible = true;
     landingRing.visible = true;
   } else {
@@ -593,7 +593,7 @@ function render() {
       const magnifierTarget = new THREE.Vector3(
         view.rayStart && view.rayEnd ? (view.rayStart.x + view.rayEnd.x) / 2 : view.start + 18.5,
         view.rayStart ? (view.rayStart.y + 0.22) / 2 : 0.3,
-        view.rayStart ? (view.rayStart.z + 0.95) / 2 : -0.16
+        view.rayStart ? (view.rayStart.z + 0.72) / 2 : -0.16
       );
       setMagnifierCrop(magnifierCamera, camera, magnifierTarget, rect);
       const majorLabels = rulerModel.children.filter((child) => child.userData.rulerMajorNumber);
@@ -667,8 +667,8 @@ function renderCorrection() {
     };
     updateProjectionGuide(correctionProjectionRay,
       guideStart,
-      { x: correctionView.rayEnd.x, y: 0.22, z: 0.95 });
-    correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, 0.95);
+      { x: correctionView.rayEnd.x, y: 0.22, z: 0.72 });
+    correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, 0.72);
     correctionProjectionRay.visible = true;
     correctionLandingRing.visible = true;
   } else {
@@ -689,7 +689,7 @@ function renderCorrection() {
           ? (correctionView.rayStart.x + correctionView.rayEnd.x) / 2
           : correctionView.start + correctionView.rulerOffset + 18.5),
         correctionView.rayStart ? (correctionView.rayStart.y + 0.22) / 2 : 0.3,
-        correctionView.rayStart ? (correctionView.rayStart.z + 0.95) / 2 : -0.16
+        correctionView.rayStart ? (correctionView.rayStart.z + 0.72) / 2 : -0.16
       );
       setMagnifierCrop(correctionMagnifierCamera, correctionCamera, magnifierTarget, inset);
       const majorLabels = correctionRulerModel.children.filter((child) => child.userData.rulerMajorNumber);
