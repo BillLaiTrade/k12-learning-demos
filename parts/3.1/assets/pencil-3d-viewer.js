@@ -35,8 +35,6 @@ let pencil;
 let correctionPencil;
 let projectionRay;
 let correctionProjectionRay;
-let landingMarker;
-let correctionLandingMarker;
 let landingRing;
 let correctionLandingRing;
 let modelReady = false;
@@ -205,7 +203,7 @@ function createRuler() {
     opacity: 1
   });
   const rulerSideMaterial = standardMaterial(0x98733a, { roughness: 0.42, metalness: 0.08 });
-  const body = new THREE.Mesh(roundedRulerGeometry(rulerLength + 0.6, 3.2, 0.4, 0.16), [bodyMaterial, rulerSideMaterial]);
+  const body = new THREE.Mesh(roundedRulerGeometry(rulerLength + 0.6, 2.4, 0.4, 0.16), [bodyMaterial, rulerSideMaterial]);
   body.position.set(rulerLength / 2, -0.18, 0);
   body.castShadow = true;
   body.receiveShadow = true;
@@ -226,19 +224,19 @@ function createRuler() {
       new THREE.BoxGeometry(0.045, 0.014, tickLength),
       scaleInk
     );
-    tick.position.set(centimeter, 0.211, 1.5 - tickLength / 2);
+    tick.position.set(centimeter, 0.211, 1.1 - tickLength / 2);
     tick.userData.rulerTick = centimeter;
     tick.castShadow = false;
     tick.receiveShadow = true;
     group.add(tick);
 
     // The opposite edge has a second graduation row, like a marked ruler edge.
-    const farTickLength = major ? 0.44 : 0.28;
+    const farTickLength = major ? 0.12 : 0.08;
     const farTick = new THREE.Mesh(
       new THREE.BoxGeometry(0.045, 0.014, farTickLength),
       scaleInk
     );
-    farTick.position.set(centimeter, 0.211, -1.5 + farTickLength / 2);
+    farTick.position.set(centimeter, 0.211, -1.1 + farTickLength / 2);
     farTick.userData.rulerFarTick = centimeter;
     farTick.castShadow = false;
     farTick.receiveShadow = true;
@@ -257,7 +255,7 @@ function createRuler() {
     );
     number.rotation.x = -Math.PI / 2;
     const labelX = centimeter === 0 ? 0.32 : centimeter === rulerLength ? rulerLength - 0.32 : centimeter;
-    number.position.set(labelX, 0.235, 0.68);
+    number.position.set(labelX, 0.235, -0.3);
     number.renderOrder = 2;
     number.userData.rulerMajorNumber = true;
     number.userData.rulerCentimeter = centimeter;
@@ -265,7 +263,7 @@ function createRuler() {
   }
 
   const sideStripe = standardMaterial(0xb18b48, { metalness: 0.35, roughness: 0.3 });
-  for (const z of [-1.51, 1.51]) {
+  for (const z of [-1.21, 1.21]) {
     const stripe = new THREE.Mesh(new THREE.BoxGeometry(rulerLength + 0.2, 0.018, 0.045), sideStripe);
     stripe.position.set(rulerLength / 2, 0.207, z);
     group.add(stripe);
@@ -501,7 +499,7 @@ try {
     for (const centimeter of [18, 19]) {
       const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeTextTexture(String(centimeter)), transparent: true, depthTest: false, depthWrite: false }));
       label.scale.set(0.56, 0.3, 1);
-      label.position.set(centimeter, 0.27, 0.68);
+      label.position.set(centimeter, 0.27, -0.3);
       label.renderOrder = 6;
       magnifierLabels.add(label);
     }
@@ -512,14 +510,6 @@ try {
 
   projectionRay = createProjectionGuide();
   scene.add(projectionRay);
-  landingMarker = new THREE.Mesh(
-    new THREE.SphereGeometry(0.15, 20, 14),
-    new THREE.MeshStandardMaterial({ color: 0xc45a2b, roughness: 0.38, emissive: 0x491708, emissiveIntensity: 0.25 })
-  );
-  landingMarker.name = "measurement-landing-marker";
-  landingMarker.position.y = 0.28;
-  landingMarker.renderOrder = 4;
-  scene.add(landingMarker);
   landingRing = new THREE.Mesh(
     new THREE.RingGeometry(0.18, 0.3, 28),
     new THREE.MeshBasicMaterial({ color: 0xc45a2b, side: THREE.DoubleSide, depthWrite: false })
@@ -534,7 +524,6 @@ try {
   correctionRulerModel = correctionScene.getObjectByName(rulerModel.name);
   correctionPencil = correctionScene.getObjectByName(pencil.name);
   correctionProjectionRay = correctionScene.getObjectByName(projectionRay.name);
-  correctionLandingMarker = correctionScene.getObjectByName(landingMarker.name);
   correctionLandingRing = correctionScene.getObjectByName(landingRing.name);
   correctionMagnifierLabels = correctionScene.getObjectByName(magnifierLabels.name);
   correctionMagnifierLabels.visible = false;
@@ -583,15 +572,12 @@ function render() {
     const guideStart = { x: view.rayStart.x, y: view.rayStart.y, z: view.rayStart.z + 0.34 };
     updateProjectionGuide(projectionRay,
       guideStart,
-      { x: view.rayEnd.x, y: 0.22, z: 1.5 });
-    landingMarker.position.set(view.rayEnd.x, 0.28, view.rayEnd.z);
+      { x: view.rayEnd.x, y: 0.22, z: 1.1 });
     landingRing.position.set(view.rayEnd.x, 0.255, view.rayEnd.z);
     projectionRay.visible = true;
-    landingMarker.visible = true;
     landingRing.visible = true;
   } else {
     projectionRay.visible = false;
-    landingMarker.visible = false;
     landingRing.visible = false;
   }
   renderer.render(scene, camera);
@@ -606,7 +592,7 @@ function render() {
       const magnifierTarget = new THREE.Vector3(
         view.rayStart && view.rayEnd ? (view.rayStart.x + view.rayEnd.x) / 2 : view.start + 18.5,
         view.rayStart ? (view.rayStart.y + 0.22) / 2 : 0.3,
-        view.rayStart ? (view.rayStart.z + 1.5) / 2 : 0.34
+        view.rayStart ? (view.rayStart.z + 1.1) / 2 : -0.3
       );
       setMagnifierCrop(magnifierCamera, camera, magnifierTarget, rect);
       const majorLabels = rulerModel.children.filter((child) => child.userData.rulerMajorNumber);
@@ -636,8 +622,8 @@ function render() {
   window.dispatchEvent(new CustomEvent("pencil3d-projection", {
     detail: {
       sceneId: "parallax-scene",
-      ruler18: projectToPanel(18, 0.23, 1.05),
-      ruler19: projectToPanel(19, 0.23, 1.05),
+      ruler18: projectToPanel(18, 0.23, -0.3),
+      ruler19: projectToPanel(19, 0.23, -0.3),
       pencilTip: projectToPanel(view.start + view.edge, view.centerY, view.centerZ),
       projectedReading: view.rayEnd?.x ?? view.edge
     }
@@ -676,15 +662,12 @@ function renderCorrection() {
     const guideStart = { x: correctionView.rayStart.x, y: correctionView.rayStart.y, z: correctionView.rayStart.z + 0.34 };
     updateProjectionGuide(correctionProjectionRay,
       guideStart,
-      { x: correctionView.rayEnd.x, y: 0.22, z: 1.5 });
-    correctionLandingMarker.position.set(correctionView.rayEnd.x, 0.28, correctionView.rayEnd.z);
+      { x: correctionView.rayEnd.x, y: 0.22, z: 1.1 });
     correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, correctionView.rayEnd.z);
     correctionProjectionRay.visible = true;
-    correctionLandingMarker.visible = true;
     correctionLandingRing.visible = true;
   } else {
     correctionProjectionRay.visible = false;
-    correctionLandingMarker.visible = false;
     correctionLandingRing.visible = false;
   }
   correctionRenderer.render(correctionScene, correctionCamera);
@@ -701,7 +684,7 @@ function renderCorrection() {
           ? (correctionView.rayStart.x + correctionView.rayEnd.x) / 2
           : correctionView.start + correctionView.rulerOffset + 18.5),
         correctionView.rayStart ? (correctionView.rayStart.y + 0.22) / 2 : 0.3,
-        correctionView.rayStart ? (correctionView.rayStart.z + 1.5) / 2 : 0.34
+        correctionView.rayStart ? (correctionView.rayStart.z + 1.1) / 2 : -0.3
       );
       setMagnifierCrop(correctionMagnifierCamera, correctionCamera, magnifierTarget, inset);
       const majorLabels = correctionRulerModel.children.filter((child) => child.userData.rulerMajorNumber);
