@@ -51,48 +51,27 @@
     .card-main>p { color:#53645d; }
     .evidence-box,.note-box { margin:12px 0; padding:12px 14px; border-left:4px solid var(--gold); border-radius:7px; background:#f5f0df; }
     .evidence-box strong { display:block; margin-bottom:3px; }
-    .filter-animation { position:relative; margin:16px 0 10px; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:linear-gradient(145deg,#fbfaf4,#f1f5ef); }
-    .filter-animation svg { display:block; width:100%; height:auto; }
-    .filter-animation .glass { fill:#fffefa99; stroke:#718c80; stroke-width:4; }
-    .filter-animation .glass-rim { fill:none; stroke:#9bb0a5; stroke-width:4; }
-    .filter-animation .water-fill { fill:#a9d2c588; transition:all 1.1s ease; }
-    .filter-animation .water-surface { stroke:#77b8a2; stroke-width:3; opacity:.8; }
-    .filter-animation .sediment-dot { fill:#a17b4e; opacity:.78; }
-    .filter-animation .small-particle { fill:#c5a575; opacity:.72; }
-    .filter-animation .apparatus-label { fill:#61766b; font:600 17px system-ui,sans-serif; }
-    .filter-animation .bench { stroke:#d7ddd4; stroke-width:4; }
-    .filter-animation .stand { fill:#71877c; }
-    .filter-animation .filter-paper { fill:#fffefa; stroke:#b8c4ba; stroke-width:3; transform-box:fill-box; transform-origin:50% 0; transform:scaleY(.18); opacity:.35; transition:transform .8s ease,opacity .8s ease; }
-    .filter-animation .stream, .filter-animation .stream-highlight, .filter-animation .drip { fill:none; stroke:#a9d2c5; stroke-linecap:round; stroke-linejoin:round; opacity:0; transition:opacity .35s ease; }
-    .filter-animation .stream { stroke-width:17; }
-    .filter-animation .stream-highlight { stroke:#e7f4ee; stroke-width:3; stroke-dasharray:4 34; }
-    .filter-animation .drip { stroke-width:5; }
-    .filter-animation .moving-drop { fill:#8ec5b2; opacity:0; }
-    .filter-animation .retained-sediment { fill:#b69a73; opacity:0; transition:opacity .6s ease; }
-    .filter-animation .receiving-water { fill:#a9d2c577; transform:scaleY(0); transform-box:fill-box; transform-origin:bottom; transition:transform 1.1s ease; }
-    .filter-animation .source-motion-echo { fill:#a9d2c512; stroke:#718c8033; stroke-width:4; opacity:0; }
-    .filter-animation .source-glass { transform-box:view-box; transform-origin:260px 250px; transition:transform .9s ease; }
-    .filter-animation[data-stage="2"] .source-glass,.filter-animation[data-stage="3"] .source-glass { transform:rotate(9deg); }
+    .filter-animation { position:relative; margin:16px 0 10px; overflow:hidden; border:1px solid #d8dfd6; border-radius:18px; background:#f7f6ef; box-shadow:0 12px 30px #243a3512; }
+    .filter-animation .filter-illustration { display:block; width:100%; height:auto; }
+    .filter-animation .filter-motion { position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
+    .filter-animation .flow-glint,.filter-animation .drip-glint { fill:none; stroke:#f4fff9; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:3 28; opacity:0; }
+    .filter-animation .flow-glint { stroke-width:9; stroke-dasharray:14 34; }
+    .filter-animation .drip-glint { stroke-width:4; stroke-dasharray:2 16; }
+    .filter-animation .flow-bead { fill:#f4fff9; stroke:#9fcaba; stroke-width:2; filter:drop-shadow(0 1px 3px #50796855); opacity:0; }
+    .filter-animation[data-stage="2"] .flow-glint,.filter-animation[data-stage="3"] .flow-glint { opacity:.95; animation:filter-flow 1s linear infinite; }
+    .filter-animation[data-stage="2"] .flow-bead,.filter-animation[data-stage="3"] .flow-bead { opacity:.95; }
+    .filter-animation[data-stage="3"] .drip-glint { opacity:.95; animation:filter-drip .75s linear infinite; }
+    .filter-animation[data-stage="0"] [data-filter-stage="0"],.filter-animation[data-stage="1"] [data-filter-stage="1"],.filter-animation[data-stage="2"] [data-filter-stage="2"],.filter-animation[data-stage="3"] [data-filter-stage="3"] { animation:hotspot-pulse 1.8s ease-in-out infinite; }
+    @keyframes filter-flow { to { stroke-dashoffset:-62; } }
+    @keyframes filter-drip { to { stroke-dashoffset:-38; } }
+    @keyframes hotspot-pulse { 50% { box-shadow:0 0 0 7px #6cac8a44,0 2px 8px #203d3038; } }
     .filter-animation .filter-hotspot { position:absolute; display:grid; place-items:center; width:42px; height:42px; padding:0; border:2px solid #fffefa; border-radius:50%; background:var(--green); color:#fff; box-shadow:0 2px 8px #203d3038; font-size:.78rem; font-weight:850; cursor:pointer; transition:transform .2s,box-shadow .2s,background .2s; }
     .filter-animation .filter-hotspot:hover { transform:scale(1.08); }
     .filter-animation .filter-hotspot[aria-pressed="true"] { background:#174d3c; box-shadow:0 0 0 4px #6cac8a77,0 2px 8px #203d3038; }
-    .filter-animation .filter-hotspot:nth-of-type(1) { left:16%; top:45%; }
-    .filter-animation .filter-hotspot:nth-of-type(2) { left:50%; top:47%; }
-    .filter-animation .filter-hotspot:nth-of-type(3) { left:38%; top:49%; }
-    .filter-animation .filter-hotspot:nth-of-type(4) { left:52%; top:78%; }
-    .filter-animation[data-stage="1"] .filter-paper,.filter-animation[data-stage="2"] .filter-paper,.filter-animation[data-stage="3"] .filter-paper { transform:scaleY(1); opacity:1; }
-    .filter-animation[data-stage="2"] .stream,.filter-animation[data-stage="3"] .stream,.filter-animation[data-stage="2"] .stream-highlight,.filter-animation[data-stage="3"] .stream-highlight,.filter-animation[data-stage="2"] .drip,.filter-animation[data-stage="3"] .drip { opacity:1; }
-    .filter-animation[data-stage="2"] .moving-drop,.filter-animation[data-stage="3"] .moving-drop { opacity:1; }
-    .filter-animation[data-stage="2"] .source-motion-echo,.filter-animation[data-stage="3"] .source-motion-echo { opacity:1; }
-    .filter-animation[data-stage="2"] .retained-sediment,.filter-animation[data-stage="3"] .retained-sediment { opacity:1; }
-    .filter-animation[data-stage="3"] .receiving-water { transform:scaleY(1); }
-    .filter-animation[data-stage="2"] .source-water,.filter-animation[data-stage="3"] .source-water { transform:scaleY(.68); transform-origin:bottom; }
-    .filter-animation[data-stage="2"] .stream-highlight,.filter-animation[data-stage="3"] .stream-highlight { animation:filter-flow 1.2s linear infinite; }
-    .filter-animation[data-stage="2"] .drip,.filter-animation[data-stage="3"] .drip { animation:filter-drip 1s ease-in-out infinite alternate; }
-    .filter-animation .receiver-surface { opacity:0; transition:opacity .5s; }
-    .filter-animation[data-stage="3"] .receiver-surface { opacity:.8; }
-    @keyframes filter-flow { to { stroke-dashoffset:-76; } }
-    @keyframes filter-drip { to { opacity:.5; } }
+    .filter-animation .filter-hotspot:nth-of-type(1) { left:22%; top:24%; }
+    .filter-animation .filter-hotspot:nth-of-type(2) { left:50%; top:38%; }
+    .filter-animation .filter-hotspot:nth-of-type(3) { left:40%; top:16%; }
+    .filter-animation .filter-hotspot:nth-of-type(4) { left:49%; top:77%; }
     .filter-stage-labels { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin:0 0 8px; color:#53645d; font-size:.8rem; font-weight:700; text-align:center; }
     .filter-stage-labels button { min-width:0; padding:8px 3px; border:0; border-radius:9px; background:transparent; color:inherit; font-size:inherit; font-weight:inherit; cursor:pointer; }
     .filter-stage-labels button[aria-pressed="true"] { color:var(--green); background:#e7eee6; }
@@ -150,7 +129,8 @@
     footer { padding:16px 0 28px; color:#718078; font-size:.82rem; }
     @media(max-width:850px) { .lesson-layout { grid-template-columns:1fr; gap:12px; } .route { position:relative; top:auto; max-height:none; } .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); } .record-panel { display:none; } }
     @media(max-width:620px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:8px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-stage-labels { font-size:.68rem; line-height:1.35; } .filter-animation .filter-hotspot { width:34px; height:34px; font-size:.68rem; } .filter-animation .filter-hotspot:nth-of-type(1) { left:12%; top:47%; } .filter-animation .filter-hotspot:nth-of-type(2) { left:50%; top:47%; } .filter-animation .filter-hotspot:nth-of-type(3) { left:37%; top:49%; } .filter-animation .filter-hotspot:nth-of-type(4) { left:51%; top:78%; } .goal-choice { min-width:100%; } }
-    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } .filter-animation .moving-drop { display:none; } }
+    @media(max-width:620px) { .filter-animation .filter-hotspot:nth-of-type(1) { left:22%; top:24%; } .filter-animation .filter-hotspot:nth-of-type(2) { left:50%; top:38%; } .filter-animation .filter-hotspot:nth-of-type(3) { left:40%; top:16%; } .filter-animation .filter-hotspot:nth-of-type(4) { left:49%; top:77%; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } .filter-motion .flow-bead { display:none; } }
   </style>
 </head>
 <body>
@@ -187,44 +167,14 @@
           <h2>把泥沙水倒進漏斗，會發生什麼？</h2>
           <p>這份水樣裡看得到泥沙。若想讓泥沙和水分開，可以用濾紙過濾；跟著步驟操作，看看固體和液體各自去了哪裡。</p>
           <div class="filter-animation" id="filter-animation" data-stage="0" role="group" aria-label="泥沙水經過濾紙的連續動畫；可選擇四個步驟查看">
-            <svg viewBox="0 0 1000 520" role="img" aria-labelledby="filter-svg-title filter-svg-desc">
-              <title id="filter-svg-title">泥沙水的過濾過程</title>
-              <desc id="filter-svg-desc">一杯清透、帶有少量可見砂粒的淺青綠水樣，倒入裝有濾紙的漏斗。砂粒留在濾紙上，較清澈的液體滴入下方容器。</desc>
-              <defs>
-                <clipPath id="source-water-mask"><path d="M91 171 Q190 190 289 171 L272 390 Q190 409 108 390Z"/></clipPath>
-                <clipPath id="receiver-water-mask"><path d="M424 402 Q520 418 616 402 L602 484 Q520 499 438 484Z"/></clipPath>
-              </defs>
-              <path class="bench" d="M32 464H966"/>
-              <g class="source-motion-echo" aria-hidden="true"><path d="M91 171Q190 190 289 171L272 390Q190 409 108 390Z"/><ellipse cx="190" cy="171" rx="99" ry="17"/></g>
-              <g class="source-glass">
-                <path class="glass" d="M91 171Q190 190 289 171L272 390Q190 409 108 390Z"/>
-                <g clip-path="url(#source-water-mask)">
-                  <rect class="water-fill source-water" x="85" y="246" width="210" height="160"/>
-                  <path class="water-surface" d="M92 246Q190 258 288 246"/>
-                  <g aria-hidden="true">
-                    <circle class="sediment-dot" cx="133" cy="359" r="4"/><circle class="sediment-dot" cx="170" cy="378" r="5"/><circle class="sediment-dot" cx="206" cy="352" r="3.5"/><circle class="sediment-dot" cx="239" cy="381" r="4"/><circle class="sediment-dot" cx="112" cy="374" r="3"/><circle class="sediment-dot" cx="263" cy="362" r="3.5"/>
-                    <circle class="small-particle" cx="146" cy="315" r="2.5"/><circle class="small-particle" cx="225" cy="329" r="2"/><circle class="small-particle" cx="183" cy="294" r="2.3"/><circle class="small-particle" cx="251" cy="303" r="2"/><circle class="small-particle" cx="121" cy="334" r="2"/>
-                  </g>
-                </g>
-                <path class="glass-rim" d="M91 171Q190 190 289 171M100 184Q190 201 280 184"/>
-              </g>
-              <text class="apparatus-label" x="147" y="435">泥沙水樣</text>
-
-              <g class="stand" aria-hidden="true"><rect x="690" y="144" width="12" height="300" rx="6"/><rect x="655" y="438" width="84" height="12" rx="6"/><rect x="607" y="247" width="88" height="10" rx="5"/><circle cx="679" cy="252" r="14"/></g>
-              <path class="glass" d="M397 224H625L535 373Q520 391 505 373Z"/>
-              <path class="filter-paper" d="M415 230L607 230L532 355Q520 368 508 355Z"/>
-              <path class="retained-sediment" d="M482 322Q520 336 558 322L533 356Q520 365 507 356Z"/>
-              <circle class="retained-sediment" cx="496" cy="329" r="4"/><circle class="retained-sediment" cx="544" cy="334" r="3.5"/><circle class="retained-sediment" cx="516" cy="346" r="3"/>
-              <path class="stream" d="M277 246C335 249 369 273 414 277S464 279 493 284"/>
-              <path class="stream-highlight" d="M277 246C335 249 369 273 414 277S464 279 493 284"/>
-              <circle class="moving-drop" r="5"><animateMotion dur="1.5s" repeatCount="indefinite" path="M277 246C335 249 369 273 414 277S464 279 493 284"/></circle>
-              <circle class="moving-drop" r="3.5"><animateMotion dur="1.5s" begin="-.75s" repeatCount="indefinite" path="M277 246C335 249 369 273 414 277S464 279 493 284"/></circle>
-              <path class="drip" d="M520 369C518 388 523 403 520 424"/>
-              <circle class="moving-drop" r="4"><animateMotion dur="1.05s" repeatCount="indefinite" path="M520 369C518 388 523 403 520 424"/></circle>
-              <path class="glass" d="M424 402Q520 418 616 402L602 484Q520 499 438 484Z"/>
-              <g clip-path="url(#receiver-water-mask)"><rect class="receiving-water" x="425" y="442" width="190" height="47"/><path class="water-surface receiver-surface" d="M431 442Q520 454 610 442"/></g>
-              <path class="glass-rim" d="M424 402Q520 418 616 402M432 413Q520 429 608 413"/>
-              <text class="apparatus-label" x="469" y="510">接液容器</text>
+            <img class="filter-illustration" src="assets/filtration-scene.png" width="1672" height="941" alt="完整過濾場景：左側清透淺青綠水樣含少量砂粒，流入中央漏斗的濾紙；砂粒留在濾紙，液體滴入下方接液杯。">
+            <svg class="filter-motion" viewBox="0 0 1672 941" aria-hidden="true">
+              <path class="flow-glint" d="M565 160C650 148 710 178 745 225S799 296 820 344"/>
+              <circle class="flow-bead" r="10"><animateMotion dur="1.4s" repeatCount="indefinite" path="M565 160C650 148 710 178 745 225S799 296 820 344"/></circle>
+              <circle class="flow-bead" r="6"><animateMotion dur="1.4s" begin="-.46s" repeatCount="indefinite" path="M565 160C650 148 710 178 745 225S799 296 820 344"/></circle>
+              <circle class="flow-bead" r="7"><animateMotion dur="1.4s" begin="-.92s" repeatCount="indefinite" path="M565 160C650 148 710 178 745 225S799 296 820 344"/></circle>
+              <path class="drip-glint" d="M831 520C826 552 832 587 834 629"/>
+              <circle class="flow-bead" r="4"><animateMotion dur=".9s" repeatCount="indefinite" path="M831 520C826 552 832 587 834 629"/></circle>
             </svg>
             <button class="filter-hotspot" type="button" data-filter-stage="0" aria-label="步驟一：觀察泥沙水樣" aria-pressed="true">01</button>
             <button class="filter-hotspot" type="button" data-filter-stage="1" aria-label="步驟二：把濾紙放入漏斗" aria-pressed="false">02</button>
