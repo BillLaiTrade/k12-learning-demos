@@ -187,7 +187,7 @@
     .gas-shape-walls { position:absolute; inset:12px 0 0; border:3px solid #718b7e; border-top:0; border-radius:0 0 15px 15px; background:linear-gradient(90deg,rgba(122,160,140,.23),rgba(240,249,243,.16) 18%,rgba(255,255,255,.12) 52%,rgba(218,238,226,.18) 84%,rgba(112,148,128,.24)); box-shadow:inset 0 -5px 0 rgba(85,122,100,.12); pointer-events:none; }
     .gas-shape-rim { position:absolute; z-index:2; top:0; left:-3px; right:-3px; height:27px; border:3px solid #718b7e; border-radius:50%; background:linear-gradient(180deg,#fff 0%,#e5efe8 54%,#bfd2c5 100%); box-shadow:inset 0 -3px 0 rgba(85,122,100,.18),0 2px 3px rgba(40,60,49,.12); pointer-events:none; }
     .gas-particle-field { position:absolute; z-index:1; inset:18px 8px 8px; overflow:hidden; border-radius:0 0 10px 10px; }
-    .gas-particle { position:absolute; left:var(--x); top:var(--y); width:8px; height:8px; border-radius:50%; background:#d27b27; box-shadow:0 1px 2px rgba(96,54,15,.24),inset -1px -1px 0 rgba(133,70,12,.25); transform:translate(calc(-50% + var(--drift-x,0px)),calc(-50% + var(--drift-y,0px))); will-change:transform; }
+    .gas-particle { position:absolute; left:var(--x); top:var(--y); box-sizing:border-box; width:10px; height:10px; border:1.5px solid #ce7929; border-radius:50%; background:transparent; transform:translate(calc(-50% + var(--drift-x,0px)),calc(-50% + var(--drift-y,0px))); will-change:transform; }
     .interactive-model[data-model="gas-shape"] { width:min(100%,360px); }
     .interactive-model[data-model="gas-shape"] .model-readout { width:100%; }
     @media(prefers-reduced-motion:reduce) { .gas-shape-box { transition-duration:.01ms; } }
@@ -611,7 +611,7 @@
       "liquid.shape":["同一份水會貼合不同容器的形狀","水倒入淺容器或細高容器時，水面以下的形狀會隨容器改變。","拖曳滑桿切換容器形狀，觀察同一份水如何改變外形。","liquid-shape","水的形狀隨容器改變；水量在這項觀察中保持相同。"],
       "liquid.volume":["轉移前後量出同一份水的體積","用量筒量取 200 mL 的水，轉移到另一個容器後再量一次，讀值仍約為 200 mL。","拖曳滑桿完成轉移，對照量筒與接收容器的刻度讀值。","liquid-volume","轉移前後讀值皆為 200 mL；液體體積在一般情況下大致固定。"],
       "liquid.compressibility":["推壓密閉水樣，體積幾乎不變","密閉注射筒裝滿水並封住出口，推壓活塞時水的體積只略微改變。","拖曳滑桿增加推力，觀察水樣體積讀值；這是示意模型，不需用力硬推實物。","liquid-compress","水樣體積只略微變化；液體在一般情況下不易壓縮。"],
-      "gas.shape":["空氣會填滿不同形狀的容器","容器外形改變時，裡面的空氣仍會分布在整個可用空間；即使靜置，空氣分子也會持續緩慢、隨機地運動。","切換容器形狀，觀察容器變化時空氣粒子如何在原有分布附近持續移動。","gas-shape","空氣分布在整個容器空間；即使靜置，分子仍會緩慢隨機運動。橘色圓點是模型，實際空氣看不見。"],
+      "gas.shape":["空氣會填滿不同形狀的容器","容器外形改變時，裡面的空氣仍會分布在整個可用空間；即使靜置，空氣分子也會持續緩慢、隨機地運動。","切換容器形狀，觀察容器變化時空氣粒子如何在原有分布附近持續移動。","gas-shape","空氣分布在整個容器空間；即使靜置，分子仍會緩慢隨機運動。橘色空心圓環是分子模型，實際空氣看不見。"],
       "gas.volume":["空間擴大，空氣佔據的體積也增加","封閉空氣所在的可變容器擴大時，同一批空氣分子持續運動，逐漸分布到新增的可用空間。","拖曳滑桿擴大容器，觀察同一批空氣分子進入新增空間並持續隨機運動。","gas-volume","容器空間擴大，分子數量不變，並逐漸分布到新增空間；空氣佔據的體積隨之增加。"],
       "gas.compressibility":["推入活塞，密閉空氣的體積縮小","封住注射筒出口後推入活塞，同一批空氣分子仍持續運動，在縮小的空間中變得較密集。","拖曳滑桿推入活塞，觀察同一批分子在縮小空間中持續運動、間距變密。","gas-compress","活塞推入後，同一批分子仍在運動，空氣所佔空間縮小、分子間距變密；氣體容易壓縮。"]
     };
@@ -624,14 +624,14 @@
       root.querySelector("[data-model-readout]").textContent=placed?"水位差 8 mL｜鐵塊體積 8 cm³":"量筒原有水：20 mL｜鐵塊尚未浸入";
       document.querySelector("#state-demo .demo-result").textContent=placed?"鐵塊完全浸入後，水位由 20 mL 升至 28 mL；差 8 mL，等於鐵塊 8 cm³。":"量筒恢復原水位 20 mL；再將鐵塊放入水中重做測量。";
     }
-    const gasParticleCount=80;
+    const gasParticleCount=48;
     let gasMotionFrame=0;
     function startGasParticleMotion(type){
       cancelAnimationFrame(gasMotionFrame);
       const model=document.querySelector(`[data-model="${type}"]`);if(!model)return;
       const field=model.querySelector(".gas-particle-field"),dots=[...model.querySelectorAll("[data-gas-particle]")],anchored=type==="gas-shape",particles=dots.map((dot,index)=>{
-        const col=index%10,row=Math.floor(index/10);
-        return {dot,x:anchored?0:(col+.5)*field.clientWidth/10,y:anchored?0:(row+.5)*field.clientHeight/8,vx:(Math.random()-.5)*8,vy:(Math.random()-.5)*8};
+        const col=index%8,row=Math.floor(index/8);
+        return {dot,x:anchored?0:(col+.5)*field.clientWidth/8,y:anchored?0:(row+.5)*field.clientHeight/6,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4};
       });
       let previous=performance.now();
       const animate=now=>{
@@ -641,11 +641,11 @@
           const target=Number(field.dataset.targetWidth||field.clientWidth),current=field.clientWidth,delta=target-current,step=140*dt;
           if(Math.abs(delta)>.5)field.style.width=`${(current+Math.sign(delta)*Math.min(Math.abs(delta),step)).toFixed(2)}px`;
         }
-        const limitX=anchored?Math.max(2,Math.min(13,field.clientWidth/20-4)):Math.max(4,field.clientWidth/2-4),limitY=anchored?Math.max(2,Math.min(8,field.clientHeight/12-4)):Math.max(4,field.clientHeight/2-4),damping=Math.exp(-(anchored?2.6:1.8)*dt),noise=(anchored?38:80)*Math.sqrt(dt);
+        const limitX=anchored?Math.max(2,Math.min(13,field.clientWidth/20-4)):Math.max(4,field.clientWidth/2-4),limitY=anchored?Math.max(2,Math.min(8,field.clientHeight/12-4)):Math.max(4,field.clientHeight/2-4),damping=Math.exp(-(anchored?2.8:2.4)*dt),noise=(anchored?22:42)*Math.sqrt(dt);
         particles.forEach(p=>{
           const dot=p.dot;
           p.vx=(p.vx+(Math.random()*2-1)*noise)*damping;p.vy=(p.vy+(Math.random()*2-1)*noise)*damping;
-          p.vx=Math.max(anchored?-24:-62,Math.min(anchored?24:62,p.vx));p.vy=Math.max(anchored?-18:-50,Math.min(anchored?18:50,p.vy));
+          p.vx=Math.max(anchored?-14:-30,Math.min(anchored?14:30,p.vx));p.vy=Math.max(anchored?-10:-24,Math.min(anchored?10:24,p.vy));
           p.x+=p.vx*dt;p.y+=p.vy*dt;
           if(anchored){
             if(p.x>limitX){p.x=limitX;p.vx=-Math.abs(p.vx)*.55;}else if(p.x< -limitX){p.x=-limitX;p.vx=Math.abs(p.vx)*.55;}
@@ -657,17 +657,17 @@
         if(!anchored){
           for(let pass=0;pass<2;pass++)for(let i=0;i<particles.length;i++)for(let j=i+1;j<particles.length;j++){
             const a=particles[i],b=particles[j];let dx=b.x-a.x,dy=b.y-a.y,distance=Math.hypot(dx,dy);
-            if(distance>=8)continue;
+            if(distance>=10)continue;
             if(distance<.01){const angle=Math.random()*Math.PI*2;dx=Math.cos(angle);dy=Math.sin(angle);distance=1;}
-            const nx=dx/distance,ny=dy/distance,overlap=(8-distance)/2;
+            const nx=dx/distance,ny=dy/distance,overlap=(10-distance)/2;
             a.x-=nx*overlap;a.y-=ny*overlap;b.x+=nx*overlap;b.y+=ny*overlap;
             const relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
             if(relative<0){a.vx+=relative*nx;a.vy+=relative*ny;b.vx-=relative*nx;b.vy-=relative*ny;}
           }
-          const maxX=Math.max(4,field.clientWidth-4),maxY=Math.max(4,field.clientHeight-4);
+          const maxX=Math.max(5,field.clientWidth-5),maxY=Math.max(5,field.clientHeight-5);
           particles.forEach(p=>{
-            if(p.x>maxX){p.x=maxX;p.vx=-Math.abs(p.vx)*.55;}else if(p.x<4){p.x=4;p.vx=Math.abs(p.vx)*.55;}
-            if(p.y>maxY){p.y=maxY;p.vy=-Math.abs(p.vy)*.55;}else if(p.y<4){p.y=4;p.vy=Math.abs(p.vy)*.55;}
+            if(p.x>maxX){p.x=maxX;p.vx=-Math.abs(p.vx)*.55;}else if(p.x<5){p.x=5;p.vx=Math.abs(p.vx)*.55;}
+            if(p.y>maxY){p.y=maxY;p.vy=-Math.abs(p.vy)*.55;}else if(p.y<5){p.y=5;p.vy=Math.abs(p.vy)*.55;}
             p.dot.style.left=`${p.x.toFixed(2)}px`;p.dot.style.top=`${p.y.toFixed(2)}px`;
           });
         }
@@ -728,15 +728,15 @@
       stateDemo.classList.toggle("static-only",staticOnly);
       const ironBlockGraphic=(label)=>`<svg class="iron-block-svg" viewBox="0 0 160 120" role="img" aria-label="${label}"><defs><linearGradient id="iron-front" x2=".9" y2="1"><stop stop-color="#dce2de"/><stop offset=".5" stop-color="#aeb9b2"/><stop offset="1" stop-color="#849189"/></linearGradient><linearGradient id="iron-top" x2="1" y2="1"><stop stop-color="#f1f4f2"/><stop offset="1" stop-color="#b6c0ba"/></linearGradient><linearGradient id="iron-side" x2="1" y2=".6"><stop stop-color="#89968e"/><stop offset="1" stop-color="#65736b"/></linearGradient></defs><path d="M26 34 76 10 139 28 89 52Z" fill="url(#iron-top)"/><path d="M89 52 139 28 139 91 89 112Z" fill="url(#iron-side)"/><path d="M26 34 89 52 89 112 26 94Z" fill="url(#iron-front)"/><path d="M27 35 88 53 88 110" fill="none" stroke="#f7f9f7" stroke-opacity=".55" stroke-width="2"/></svg>`;
       const pushingHandGraphic=(side)=>`<svg class="solid-pressure-hand${side==="right"?" right":""}" viewBox="0 0 64 80" aria-hidden="true"><path d="M0 34h27v18H0z" fill="#d9a477"/><path d="M19 34q2-7 9-8l8 1v28l-8 2q-6-1-9-6z" fill="#efc39a" stroke="#bd855a" stroke-width="1.5"/><rect x="33" y="26" width="31" height="7" rx="3.5" fill="#efc39a" stroke="#bd855a" stroke-width="1.2"/><rect x="34" y="34" width="30" height="7" rx="3.5" fill="#efc39a" stroke="#bd855a" stroke-width="1.2"/><rect x="34" y="42" width="30" height="7" rx="3.5" fill="#e8b88d" stroke="#bd855a" stroke-width="1.2"/><rect x="31" y="50" width="29" height="7" rx="3.5" fill="#dca87c" stroke="#bd855a" stroke-width="1.2"/><path d="M23 48q8-5 13 0l7 7q3 4-1 7-3 2-7-1l-11-7" fill="#efc39a" stroke="#bd855a" stroke-width="1.5"/></svg>`;
-      const gasParticles=Array.from({length:gasParticleCount},(_,i)=>`<span class="gas-particle" data-gas-particle style="--x:${((i%10)+.5)*10}%;--y:${(Math.floor(i/10)+.5)*100/8}%"></span>`).join("");
+      const gasParticles=Array.from({length:gasParticleCount},(_,i)=>`<span class="gas-particle" data-gas-particle style="--x:${((i%8)+.5)*100/8}%;--y:${(Math.floor(i/8)+.5)*100/6}%"></span>`).join("");
       const graphic=visual==="solid-compress-note"?`<div class="solid-pressure-scene" role="img" aria-label="雙手直接抵住鐵塊兩側向內推擠；鐵塊外形與大小維持不變"><div class="solid-pressure-press"><span class="solid-pressure-arrow" aria-hidden="true">→</span>${pushingHandGraphic("left")}${ironBlockGraphic("受到雙手直接推擠的完整鐵塊").replace('class="iron-block-svg"','class="iron-block-svg solid-pressure-iron"').replace('viewBox="0 0 160 120"','viewBox="26 10 113 102"')} ${pushingHandGraphic("right")}<span class="solid-pressure-arrow" aria-hidden="true">←</span></div><p class="solid-pressure-caption">雙手直接向內推擠鐵塊</p></div>`:visual==="solid-shape"?`<div class="interactive-model" data-model="solid-shape"><div class="solid-shape-photo-row"><div class="solid-object-card"><span>同一個鐵塊</span>${ironBlockGraphic("外形固定的鐵塊模型").replace('class="iron-block-svg"','class="iron-block-svg shape-iron-block"')}</div><figure class="shape-photo-card"><img data-shape-photo src="assets/solid-container-bowl.jpg" alt="淺口塑膠碗的實物照片"><figcaption data-shape-caption>淺口塑膠碗</figcaption><div class="shape-source"><a data-shape-source href="https://commons.wikimedia.org/wiki/File:Dog_Water_Bowl.jpg" target="_blank" rel="noopener">Ohiopetwatch</a><a data-shape-license href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a></div></figure></div><div class="model-readout" data-model-readout>目前選擇：淺口塑膠碗</div></div>`
         :visual==="solid-volume"?`<div class="interactive-model" data-model="solid-volume"><div class="solid-volume-measure"><div class="volume-cylinder"><div class="volume-water" data-volume-water></div><div class="volume-before-mark" aria-hidden="true"></div><div class="volume-graduations" aria-hidden="true"></div></div>${ironBlockGraphic("準備放入量筒的完整鐵塊").replace('class="iron-block-svg"','class="iron-block-svg volume-iron-block" tabindex="0"').replace('role="img"','role="button"')}<div class="volume-annotations"><span class="volume-mark-label" data-label="before">原水位 20 mL</span><span class="volume-mark-label" data-label="after" data-volume-after hidden>水位 28 mL</span></div></div><div class="model-readout" data-model-readout>量筒原有水：20 mL｜鐵塊尚未浸入</div></div>`
         :visual==="liquid-shape"?`<div class="interactive-model" data-model="liquid-shape"><div class="liquid-shape-vessel" data-liquid-vessel data-form="wide"><div class="liquid-shape-water"></div></div><div class="model-readout" data-model-readout>容器：寬而淺｜同一份水</div></div>`
         :visual==="liquid-volume"?`<div class="interactive-model" data-model="liquid-volume"><div class="liquid-transfer"><div><div class="transfer-vessel"><span class="transfer-water" data-source-water style="--fill:100%"></span></div><span class="model-caption">量筒・200 mL</span><span class="model-caption" data-source-reading>目前 200 mL</span></div><span class="transfer-arrow" aria-hidden="true">→</span><div><div class="transfer-vessel"><span class="transfer-water" data-target-water style="--fill:0%"></span></div><span class="model-caption">接收量筒</span><span class="model-caption" data-target-reading>目前 0 mL</span></div></div><div class="model-readout" data-model-readout>轉移 0%｜同一份水合計 200 mL</div></div>`
         :visual==="liquid-compress"?`<div class="interactive-model" data-model="liquid-compress"><div class="water-syringe-model" data-water-syringe><div class="water-syringe-fill"></div><span class="water-syringe-plunger"></span></div><div class="model-readout" data-model-readout>推力：0｜水樣體積：約 50 mL</div><span class="model-caption">示意模型；活塞位移放大顯示水樣極微小壓縮，勿用力硬推實物</span></div>`
-        :visual==="gas-shape"?`<div class="interactive-model" data-model="gas-shape"><div class="gas-shape-box" data-gas-shape-box data-form="wide" role="img" aria-label="寬淺容器剖面模型"><div class="gas-shape-walls" aria-hidden="true"></div><div class="gas-particle-field" aria-hidden="true">${gasParticles}</div><div class="gas-shape-rim" aria-hidden="true"></div></div><div class="model-readout" data-model-readout>容器：寬淺容器｜同一批空氣分子持續隨機運動</div><span class="model-caption">橘色圓點沿不規則、連續的路徑移動，表示空氣分子的隨機運動；實際空氣看不見。</span></div>`
-        :visual==="gas-volume"?`<div class="interactive-model" data-model="gas-volume"><div class="gas-space-box" data-gas-space-box><div class="gas-particle-field" aria-hidden="true">${gasParticles}</div></div><div class="model-readout" data-model-readout>空氣分子數量：${gasParticleCount}｜容器體積：1.0 單位</div><span class="model-caption">橘色圓點是同一批空氣分子；容器擴大時，分子持續移動到新增空間。</span></div>`
-        :visual==="gas-compress"?`<div class="interactive-model" data-model="gas-compress"><div class="gas-syringe-model" data-gas-syringe><div class="gas-syringe-cavity"><div class="gas-particle-field" data-gas-compress-field aria-hidden="true" style="width:100%">${gasParticles}</div></div><span class="gas-piston" data-gas-piston></span></div><div class="model-readout" data-model-readout>活塞位置：未推入｜空氣分子數量：${gasParticleCount}</div><span class="model-caption">同一批橘色分子持續隨機運動；推入活塞時，分布空間縮小。</span></div>`
+        :visual==="gas-shape"?`<div class="interactive-model" data-model="gas-shape"><div class="gas-shape-box" data-gas-shape-box data-form="wide" role="img" aria-label="寬淺容器剖面模型"><div class="gas-shape-walls" aria-hidden="true"></div><div class="gas-particle-field" aria-hidden="true">${gasParticles}</div><div class="gas-shape-rim" aria-hidden="true"></div></div><div class="model-readout" data-model-readout>容器：寬淺容器｜同一批空氣分子持續隨機運動</div><span class="model-caption">橘色空心圓環沿不規則、連續的路徑緩慢移動，表示空氣分子的隨機運動；實際空氣看不見。</span></div>`
+        :visual==="gas-volume"?`<div class="interactive-model" data-model="gas-volume"><div class="gas-space-box" data-gas-space-box><div class="gas-particle-field" aria-hidden="true">${gasParticles}</div></div><div class="model-readout" data-model-readout>空氣分子數量：${gasParticleCount}｜容器體積：1.0 單位</div><span class="model-caption">橘色空心圓環代表同一批空氣分子；容器擴大時，分子持續緩慢移動到新增空間。</span></div>`
+        :visual==="gas-compress"?`<div class="interactive-model" data-model="gas-compress"><div class="gas-syringe-model" data-gas-syringe><div class="gas-syringe-cavity"><div class="gas-particle-field" data-gas-compress-field aria-hidden="true" style="width:100%">${gasParticles}</div></div><span class="gas-piston" data-gas-piston></span></div><div class="model-readout" data-model-readout>活塞位置：未推入｜空氣分子數量：${gasParticleCount}</div><span class="model-caption">同一批橘色空心圓環持續緩慢隨機運動；推入活塞時，分布空間縮小。</span></div>`
         :`<div class="compare-three" data-compare-property="${key}"><span class="compare-item" data-kind="solid" data-active="true">固體<br>鐵製物體</span><span class="compare-item" data-kind="liquid">液體<br>水</span><span class="compare-item" data-kind="gas">氣體<br>空氣</span></div>`;
       const isInteractive=visual!=="compare"&&!staticOnly;
       const controls=visual==="solid-volume"?`<button class="volume-action" type="button" data-volume-action aria-pressed="false">放入量筒</button>`:visual==="solid-shape"?`<div class="shape-container-options" role="group" aria-label="選擇容器照片"><button class="shape-container-choice" type="button" data-container-shape="wide" aria-pressed="true">淺口塑膠碗</button><button class="shape-container-choice" type="button" data-container-shape="beaker" aria-pressed="false">100 mL 燒杯</button><button class="shape-container-choice" type="button" data-container-shape="tall" aria-pressed="false">2000 mL 燒杯</button></div>`:visual==="gas-shape"?`<div class="shape-container-options" role="group" aria-label="切換容器形狀"><button class="shape-container-choice" type="button" data-gas-form="wide" aria-pressed="true">寬淺</button><button class="shape-container-choice" type="button" data-gas-form="tall" aria-pressed="false">細高</button><button class="shape-container-choice" type="button" data-gas-form="square" aria-pressed="false">方形</button></div>`:staticOnly?"":isInteractive?`<input class="state-range" type="range" min="0" max="100" value="0" data-demo-range="${visual}" aria-label="${action}">`:`<button type="button" data-state-demo>依序查看固體、液體和氣體</button>`;
