@@ -851,13 +851,13 @@
         const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
         const projectedEdgeZ = pencilCenterZ + projectionFactor * (pencilCenterZ - cameraPosition.z);
         const clampedProjectionX = clamp(projectedEdgeX, rulerMin, rulerMax);
-        const displayedProjectionX = cameraPreset === "front" ? clamp(edgeX, rulerMin, rulerMax) : clampedProjectionX;
+        let displayedProjectionX = clampedProjectionX;
         const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
         const pencilCenterX = state.start + parallaxLength / 2;
         const pencilStartX = pencilCenterX - parallaxLength / 2;
         const landingOnScale = clampedProjectionX >= 0 && clampedProjectionX <= 20 && projectedEdgeX <= rulerMax && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
 
-        window.setPencil3DView?.({
+        const occludedTickX = window.setPencil3DView?.({
           edge: parallaxLength,
           start: state.start,
           yaw: camera.yaw,
@@ -872,6 +872,7 @@
           rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
           rayEnd: { x: displayedProjectionX, y: rulerTop + 0.01, z: clampedProjectionZ }
         });
+        if (Number.isFinite(occludedTickX)) displayedProjectionX = occludedTickX;
 
         document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${displayedProjectionX.toFixed(1)} cm` : "視線落在尺外";
         const cameraCaption = cameraPreset === "front"
@@ -1242,9 +1243,9 @@
         const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
         const landingOnScale = clampedProjectionX >= rulerMin && clampedProjectionX <= rulerMax && projectedEdgeX >= rulerMin && projectedEdgeX <= rulerMax && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
         const startReading = state.start - correctionRulerOffset;
-        const displayedProjectionX = correctionCameraPreset === "front" ? clamp(edgeX, rulerMin, rulerMax) : clampedProjectionX;
-        const endReading = displayedProjectionX - correctionRulerOffset;
-        const measuredLength = endReading - startReading;
+        let displayedProjectionX = clampedProjectionX;
+        let endReading = displayedProjectionX - correctionRulerOffset;
+        let measuredLength = endReading - startReading;
         const correctionView = {
           edge: parallaxLength,
           start: state.start,
@@ -1264,7 +1265,12 @@
           magnifierTargetX: correctionMode === "origin" ? (state.start + correctionRulerOffset) / 2 : undefined,
           magnifierMode: correctionMode
         };
-        if (sceneActive) window.setPencil3DCorrectionView?.(correctionView);
+        const occludedTickX = sceneActive ? window.setPencil3DCorrectionView?.(correctionView) : null;
+        if (Number.isFinite(occludedTickX)) {
+          displayedProjectionX = occludedTickX;
+          endReading = displayedProjectionX - correctionRulerOffset;
+          measuredLength = endReading - startReading;
+        }
         const reading = document.querySelector("#correction-readout-value");
         if (correctionMode === "density") {
           correctionCanvas.setAttribute("aria-label", "可拖曳場景旋轉鉛筆與直尺；使用下方按鈕切換刻度密度。");
