@@ -147,10 +147,18 @@
     .shape-holder { position:relative; width:220px; height:154px; display:grid; place-items:center; background:transparent; transition:all .25s ease; }
     .shape-vessel { position:absolute; bottom:12px; left:50%; width:168px; height:100px; transform:translateX(-50%); transition:width .25s ease,height .25s ease; }
     .shape-vessel[data-form="tall"] { width:132px; height:126px; }
+    .shape-vessel[data-form="square"] { width:145px; height:116px; }
     .vessel-back { position:absolute; inset:5px 0 0; z-index:0; clip-path:polygon(5% 0,95% 0,84% 100%,16% 100%); background:linear-gradient(90deg,#93a89d 0,#e5eee8 12%,#f4f8f5 45%,#d8e4dc 88%,#81968a 100%); filter:drop-shadow(0 3px 2px rgba(39,51,45,.16)); }
     .vessel-front { position:absolute; inset:23px 8% 0; z-index:2; clip-path:polygon(0 0,100% 0,88% 100%,12% 100%); border-bottom:3px solid #80968a; background:linear-gradient(90deg,rgba(121,148,133,.2),rgba(250,253,251,.18) 48%,rgba(121,148,133,.25)); pointer-events:none; }
     .vessel-rim { position:absolute; z-index:3; top:0; left:0; width:100%; height:23px; border:3px solid #81968a; border-radius:50%; background:linear-gradient(180deg,#f9fcfa,#d9e5dd); box-shadow:inset 0 -4px 0 rgba(112,137,122,.16); }
+    .shape-vessel[data-form="square"] .vessel-back { inset:5px 5% 0; clip-path:polygon(0 0,100% 0,100% 100%,0 100%); }
+    .shape-vessel[data-form="square"] .vessel-front { inset:23px 8% 0; clip-path:polygon(0 0,100% 0,100% 100%,0 100%); }
+    .shape-vessel[data-form="square"] .vessel-rim { border-radius:6px; background:linear-gradient(180deg,#f9fcfa,#d9e5dd); }
     .shape-iron-block { position:absolute; z-index:1; left:50%; bottom:24px; width:78px; height:60px; transform:translateX(-50%); }
+    .shape-container-options { display:flex; flex-wrap:wrap; gap:7px; margin:5px 0; }
+    .shape-container-choice { min-height:38px; padding:7px 11px; border:1px solid #82978c; border-radius:999px; background:#fff; color:#354c40; font:inherit; font-size:.84rem; font-weight:750; cursor:pointer; }
+    .shape-container-choice:hover { background:#f3f7f3; }
+    .shape-container-choice[aria-pressed="true"] { border-color:#267257; background:#267257; color:#fff; }
     .solid-volume-measure { position:relative; width:210px; height:158px; }
     .volume-cylinder { position:absolute; top:20px; left:59px; width:92px; height:122px; overflow:hidden; border:3px solid #71877b; border-top:0; border-radius:0 0 13px 13px; background:linear-gradient(90deg,#eef3ef,#fff 35%,#f3f7f4 80%,#dce6df); }
     .volume-graduations { position:absolute; inset:9px 5px 8px auto; width:18px; background:repeating-linear-gradient(to top,transparent 0 11px,rgba(50,76,62,.72) 11px 12px); pointer-events:none; }
@@ -190,6 +198,7 @@
     .demo-controls p { margin:0 0 7px; color:#465950; font-size:.87rem; }
     .demo-controls button { min-height:38px; padding:6px 11px; border:1px solid #b9c8bf; border-radius:9px; background:white; cursor:pointer; font-weight:700; }
     .demo-controls button:hover { background:#f7f1e4; }
+    .demo-controls button.shape-container-choice[aria-pressed="true"],.demo-controls button.shape-container-choice[aria-pressed="true"]:hover { border-color:#267257; background:#267257; color:#fff; }
     .compare-three { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; width:100%; }
     .compare-item { min-height:68px; display:grid; place-items:center; padding:7px 4px; border:1px solid #ddd7c9; border-radius:9px; background:#fff; color:#394b43; font-size:.76rem; text-align:center; }
     .compare-item[data-kind="solid"] { position:relative; background:#edf0ee; }
@@ -586,7 +595,7 @@
       gas:{shape:"沒有固定形狀，會充滿容器可用空間",volume:"體積會隨容器可用空間改變",compressibility:"比固體和液體容易壓縮"}
     };
     const cellExamples={
-      "solid.shape":["容器形狀改變，鐵塊外形不跟著改變","同一個堅硬鐵塊放進不同形狀的容器，鐵塊不會像液體一樣流動並貼合容器。","拖曳下方滑桿改變容器外形，觀察鐵塊輪廓是否改變。","solid-shape","容器外形改變，鐵塊仍維持原來形狀；固體通常有固定形狀。"],
+      "solid.shape":["容器形狀改變，鐵塊外形不跟著改變","同一個堅硬鐵塊放進不同形狀的容器，鐵塊不會像液體一樣流動並貼合容器。","選擇不同形狀的容器，觀察鐵塊。","solid-shape","容器外形改變，鐵塊仍維持原來形狀；固體通常有固定形狀。"],
       "solid.volume":["量筒水位差，量出鐵塊的體積","將邊長 2 公分的鐵塊完全浸入量筒，水位由 20 mL 上升到 28 mL；排開的 8 mL 水，對應鐵塊 8 cm³ 的體積。","將鐵塊拖入或拖出水中；也可按按鈕操作，觀察水位變化。","solid-volume","鐵塊完全浸入後，水位差為 8 mL；1 mL 等於 1 cm³，因此鐵塊體積是 8 cm³。"],
       "solid.compressibility":["固體在一般情況下不易壓縮","以鐵塊為例。","一般外力下，鐵塊體積不容易明顯縮小。","solid-compress-note","「不易壓縮」不代表完全不能壓縮。"],
       "liquid.shape":["同一份水會貼合不同容器的形狀","水倒入淺容器或細高容器時，水面以下的形狀會隨容器改變。","拖曳滑桿切換容器形狀，觀察同一份水如何改變外形。","liquid-shape","水的形狀隨容器改變；水量在這項觀察中保持相同。"],
@@ -659,7 +668,7 @@
         :visual==="gas-compress"?`<div class="interactive-model" data-model="gas-compress"><div class="gas-syringe-model" data-gas-syringe><div class="gas-syringe-cavity"><span class="gas-syringe-particles"></span></div><span class="gas-piston"></span></div><div class="model-readout" data-model-readout>活塞位置：未推入｜空氣體積：約 50 mL</div><span class="model-caption">橘色點表示同一份空氣的粒子模型</span></div>`
         :`<div class="compare-three" data-compare-property="${key}"><span class="compare-item" data-kind="solid" data-active="true">固體<br>鐵製物體</span><span class="compare-item" data-kind="liquid">液體<br>水</span><span class="compare-item" data-kind="gas">氣體<br>空氣</span></div>`;
       const isInteractive=visual!=="compare"&&!staticOnly;
-      const controls=visual==="solid-volume"?`<button class="volume-action" type="button" data-volume-action aria-pressed="false">放入量筒</button>`:staticOnly?"":isInteractive?`<input class="state-range" type="range" min="0" max="100" value="0" data-demo-range="${visual}" aria-label="${action}">`:`<button type="button" data-state-demo>依序查看固體、液體和氣體</button>`;
+      const controls=visual==="solid-volume"?`<button class="volume-action" type="button" data-volume-action aria-pressed="false">放入量筒</button>`:visual==="solid-shape"?`<div class="shape-container-options" role="group" aria-label="選擇容器形狀"><button class="shape-container-choice" type="button" data-container-shape="wide" aria-pressed="true">寬淺容器</button><button class="shape-container-choice" type="button" data-container-shape="tall" aria-pressed="false">細長容器</button><button class="shape-container-choice" type="button" data-container-shape="square" aria-pressed="false">方形容器</button></div>`:staticOnly?"":isInteractive?`<input class="state-range" type="range" min="0" max="100" value="0" data-demo-range="${visual}" aria-label="${action}">`:`<button type="button" data-state-demo>依序查看固體、液體和氣體</button>`;
       document.getElementById("state-demo").innerHTML=staticOnly?`<div class="state-demo-visual">${graphic}</div><div class="demo-controls"><p>${control}</p><p class="demo-result" aria-live="polite">${result}</p></div>`:`<div class="state-demo-visual">${graphic}</div><div class="demo-controls"><p>${control}</p>${controls}<p class="demo-result" aria-live="polite">${result}</p></div>`;
       if(visual==="solid-volume"){
         const block=document.querySelector("#state-demo .volume-iron-block"),stage=block.closest(".solid-volume-measure");let dragging=false,startY=0,startTop=0,wasPlaced=false;
@@ -676,9 +685,7 @@
     document.getElementById("state-demo").addEventListener("input",event=>{
       const input=event.target.closest("[data-demo-range]"); if(!input)return;
       const value=Number(input.value),model=input.dataset.demoRange,root=document.querySelector(`[data-model="${model}"]`),readout=root.querySelector("[data-model-readout]"),result=document.querySelector("#state-demo .demo-result");
-      if(model==="solid-shape"){
-        const tall=value>=50;root.querySelector("[data-shape-holder]").dataset.form=tall?"tall":"wide";readout.textContent=`容器：${tall?"細高":"寬而淺"}｜鐵塊外形不變`;result.textContent=`容器改成${tall?"細高":"寬而淺"}外形，鐵塊輪廓與尺寸沒有跟著改變。`;
-      }else if(model==="liquid-shape"){
+      if(model==="liquid-shape"){
         const tall=value>=50;root.querySelector("[data-liquid-vessel]").dataset.form=tall?"tall":"wide";root.querySelector(".liquid-shape-water").style.height=tall?"70%":"52%";readout.textContent=`容器：${tall?"細高":"寬而淺"}｜同一份水`;result.textContent=`容器改成${tall?"細高":"寬而淺"}外形，水的輪廓隨容器改變；水量保持相同。`;
       }else if(model==="liquid-volume"){
         const ratio=value/100,source=Math.round(200*(1-ratio)),target=200-source;root.querySelector("[data-source-water]").style.setProperty("--fill",`${100*(1-ratio)}%`);root.querySelector("[data-target-water]").style.setProperty("--fill",`${100*ratio}%`);root.querySelector("[data-source-reading]").textContent=`目前 ${source} mL`;root.querySelector("[data-target-reading]").textContent=`目前 ${target} mL`;readout.textContent=`轉移 ${value}%｜同一份水合計 ${source+target} mL`;result.textContent=value===100?"同一份水轉移完成；接收端再用量筒量取，讀值約為 200 mL。":"拖曳滑桿模擬轉移，兩端讀值合計維持 200 mL。";
@@ -693,6 +700,15 @@
       }
     });
     document.getElementById("state-demo").addEventListener("click",event=>{
+      const containerButton=event.target.closest("[data-container-shape]");
+      if(containerButton){
+        const shape=containerButton.dataset.containerShape,labels={wide:"寬淺",tall:"細長",square:"方形"},model=document.querySelector('[data-model="solid-shape"]');
+        model.querySelector("[data-shape-holder]").dataset.form=shape;
+        model.querySelector("[data-model-readout]").textContent=`容器：${labels[shape]}`;
+        document.querySelectorAll("#state-demo [data-container-shape]").forEach(button=>button.setAttribute("aria-pressed",String(button===containerButton)));
+        document.querySelector("#state-demo .demo-result").textContent=`容器改為${labels[shape]}形狀；鐵塊的形狀與大小維持不變。`;
+        return;
+      }
       const volumeButton=event.target.closest("[data-volume-action]");
       if(volumeButton){
         setSolidVolumePlaced(volumeButton.dataset.placed!=="true");
