@@ -187,7 +187,8 @@
     .gas-shape-walls { position:absolute; inset:12px 0 0; border:3px solid #718b7e; border-top:0; border-radius:0 0 15px 15px; background:linear-gradient(90deg,rgba(122,160,140,.23),rgba(240,249,243,.16) 18%,rgba(255,255,255,.12) 52%,rgba(218,238,226,.18) 84%,rgba(112,148,128,.24)); box-shadow:inset 0 -5px 0 rgba(85,122,100,.12); pointer-events:none; }
     .gas-shape-rim { position:absolute; z-index:2; top:0; left:-3px; right:-3px; height:27px; border:3px solid #718b7e; border-radius:50%; background:linear-gradient(180deg,#fff 0%,#e5efe8 54%,#bfd2c5 100%); box-shadow:inset 0 -3px 0 rgba(85,122,100,.18),0 2px 3px rgba(40,60,49,.12); pointer-events:none; }
     .gas-particle-field { position:absolute; z-index:1; inset:18px 8px 8px; overflow:hidden; border-radius:0 0 10px 10px; }
-    .gas-particle { position:absolute; left:var(--x); top:var(--y); box-sizing:border-box; width:10px; height:10px; border:1.5px solid #6f9eae; border-radius:50%; background:transparent; transform:translate(calc(-50% + var(--drift-x,0px)),calc(-50% + var(--drift-y,0px))); will-change:transform; }
+    .gas-particle { position:absolute; left:var(--x); top:var(--y); box-sizing:border-box; width:10px; height:10px; border:1.7px solid #5f8e9f; border-radius:50%; background:transparent; transform:translate(-50%,-50%); animation:gas-brownian var(--gas-drift-duration,7s) linear infinite; animation-delay:var(--gas-drift-delay,0s); will-change:transform; }
+    @keyframes gas-brownian { 0%,100% { transform:translate(-50%,-50%); } 14% { transform:translate(calc(-50% + var(--dx1,0px)),calc(-50% + var(--dy1,0px))); } 28% { transform:translate(calc(-50% + var(--dx2,0px)),calc(-50% + var(--dy2,0px))); } 42% { transform:translate(calc(-50% + var(--dx3,0px)),calc(-50% + var(--dy3,0px))); } 56% { transform:translate(calc(-50% + var(--dx4,0px)),calc(-50% + var(--dy4,0px))); } 70% { transform:translate(calc(-50% + var(--dx5,0px)),calc(-50% + var(--dy5,0px))); } 84% { transform:translate(calc(-50% + var(--dx6,0px)),calc(-50% + var(--dy6,0px))); } }
     .interactive-model[data-model="gas-shape"] { width:min(100%,360px); }
     .interactive-model[data-model="gas-shape"] .model-readout { width:100%; }
     @media(prefers-reduced-motion:reduce) { .gas-shape-box { transition-duration:.01ms; } }
@@ -279,6 +280,7 @@
       .section-top { align-items:start; flex-direction:column; gap:3px; }
     }
     @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+    @media(prefers-reduced-motion:reduce) { .gas-motion-active .gas-particle { animation-duration:var(--gas-drift-duration,7s)!important; animation-delay:var(--gas-drift-delay,0s)!important; } }
   </style>
 </head>
 <body>
@@ -628,6 +630,14 @@
     }
     const gasParticleCount=48;
     let gasMotionFrame=0;
+    function gasParticleMotionVars(){
+      const vars={},duration=6+Math.random()*2;
+      for(let step=1;step<=6;step++){vars[`--dx${step}`]=`${((Math.random()*2-1)*9).toFixed(1)}px`;vars[`--dy${step}`]=`${((Math.random()*2-1)*6).toFixed(1)}px`;}
+      vars["--gas-drift-duration"]=`${duration.toFixed(2)}s`;vars["--gas-drift-delay"]=`-${(Math.random()*duration).toFixed(2)}s`;
+      return vars;
+    }
+    function applyGasParticleMotionVars(dot){Object.entries(gasParticleMotionVars()).forEach(([name,value])=>dot.style.setProperty(name,value));}
+    function gasParticleMotionStyle(){return Object.entries(gasParticleMotionVars()).map(([name,value])=>`${name}:${value}`).join(";");}
     function startGasParticleMotion(type){
       cancelAnimationFrame(gasMotionFrame);
       const model=document.querySelector(`[data-model="${type}"]`);if(!model)return;
@@ -730,7 +740,7 @@
       stateDemo.classList.toggle("static-only",staticOnly);
       const ironBlockGraphic=(label)=>`<svg class="iron-block-svg" viewBox="0 0 160 120" role="img" aria-label="${label}"><defs><linearGradient id="iron-front" x2=".9" y2="1"><stop stop-color="#dce2de"/><stop offset=".5" stop-color="#aeb9b2"/><stop offset="1" stop-color="#849189"/></linearGradient><linearGradient id="iron-top" x2="1" y2="1"><stop stop-color="#f1f4f2"/><stop offset="1" stop-color="#b6c0ba"/></linearGradient><linearGradient id="iron-side" x2="1" y2=".6"><stop stop-color="#89968e"/><stop offset="1" stop-color="#65736b"/></linearGradient></defs><path d="M26 34 76 10 139 28 89 52Z" fill="url(#iron-top)"/><path d="M89 52 139 28 139 91 89 112Z" fill="url(#iron-side)"/><path d="M26 34 89 52 89 112 26 94Z" fill="url(#iron-front)"/><path d="M27 35 88 53 88 110" fill="none" stroke="#f7f9f7" stroke-opacity=".55" stroke-width="2"/></svg>`;
       const pushingHandGraphic=(side)=>`<svg class="solid-pressure-hand${side==="right"?" right":""}" viewBox="0 0 64 80" aria-hidden="true"><path d="M0 34h27v18H0z" fill="#d9a477"/><path d="M19 34q2-7 9-8l8 1v28l-8 2q-6-1-9-6z" fill="#efc39a" stroke="#bd855a" stroke-width="1.5"/><rect x="33" y="26" width="31" height="7" rx="3.5" fill="#efc39a" stroke="#bd855a" stroke-width="1.2"/><rect x="34" y="34" width="30" height="7" rx="3.5" fill="#efc39a" stroke="#bd855a" stroke-width="1.2"/><rect x="34" y="42" width="30" height="7" rx="3.5" fill="#e8b88d" stroke="#bd855a" stroke-width="1.2"/><rect x="31" y="50" width="29" height="7" rx="3.5" fill="#dca87c" stroke="#bd855a" stroke-width="1.2"/><path d="M23 48q8-5 13 0l7 7q3 4-1 7-3 2-7-1l-11-7" fill="#efc39a" stroke="#bd855a" stroke-width="1.5"/></svg>`;
-      const gasParticles=Array.from({length:gasParticleCount},(_,i)=>`<span class="gas-particle" data-gas-particle style="--x:${((i%8)+.5)*100/8}%;--y:${(Math.floor(i/8)+.5)*100/6}%"></span>`).join("");
+      const gasParticles=Array.from({length:gasParticleCount},(_,i)=>`<span class="gas-particle" data-gas-particle style="--x:${((i%8)+.5)*100/8}%;--y:${(Math.floor(i/8)+.5)*100/6}%;${gasParticleMotionStyle()}"></span>`).join("");
       const graphic=visual==="solid-compress-note"?`<div class="solid-pressure-scene" role="img" aria-label="雙手直接抵住鐵塊兩側向內推擠；鐵塊外形與大小維持不變"><div class="solid-pressure-press"><span class="solid-pressure-arrow" aria-hidden="true">→</span>${pushingHandGraphic("left")}${ironBlockGraphic("受到雙手直接推擠的完整鐵塊").replace('class="iron-block-svg"','class="iron-block-svg solid-pressure-iron"').replace('viewBox="0 0 160 120"','viewBox="26 10 113 102"')} ${pushingHandGraphic("right")}<span class="solid-pressure-arrow" aria-hidden="true">←</span></div><p class="solid-pressure-caption">雙手直接向內推擠鐵塊</p></div>`:visual==="solid-shape"?`<div class="interactive-model" data-model="solid-shape"><div class="solid-shape-photo-row"><div class="solid-object-card"><span>同一個鐵塊</span>${ironBlockGraphic("外形固定的鐵塊模型").replace('class="iron-block-svg"','class="iron-block-svg shape-iron-block"')}</div><figure class="shape-photo-card"><img data-shape-photo src="assets/solid-container-bowl.jpg" alt="淺口塑膠碗的實物照片"><figcaption data-shape-caption>淺口塑膠碗</figcaption><div class="shape-source"><a data-shape-source href="https://commons.wikimedia.org/wiki/File:Dog_Water_Bowl.jpg" target="_blank" rel="noopener">Ohiopetwatch</a><a data-shape-license href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a></div></figure></div><div class="model-readout" data-model-readout>目前選擇：淺口塑膠碗</div></div>`
         :visual==="solid-volume"?`<div class="interactive-model" data-model="solid-volume"><div class="solid-volume-measure"><div class="volume-cylinder"><div class="volume-water" data-volume-water></div><div class="volume-before-mark" aria-hidden="true"></div><div class="volume-graduations" aria-hidden="true"></div></div>${ironBlockGraphic("準備放入量筒的完整鐵塊").replace('class="iron-block-svg"','class="iron-block-svg volume-iron-block" tabindex="0"').replace('role="img"','role="button"')}<div class="volume-annotations"><span class="volume-mark-label" data-label="before">原水位 20 mL</span><span class="volume-mark-label" data-label="after" data-volume-after hidden>水位 28 mL</span></div></div><div class="model-readout" data-model-readout>量筒原有水：20 mL｜鐵塊尚未浸入</div></div>`
         :visual==="liquid-shape"?`<div class="interactive-model" data-model="liquid-shape"><div class="liquid-shape-vessel" data-liquid-vessel data-form="wide"><div class="liquid-shape-water"></div></div><div class="model-readout" data-model-readout>容器：寬而淺｜同一份水</div></div>`
@@ -744,15 +754,20 @@
       const controls=visual==="solid-volume"?`<button class="volume-action" type="button" data-volume-action aria-pressed="false">放入量筒</button>`:visual==="solid-shape"?`<div class="shape-container-options" role="group" aria-label="選擇容器照片"><button class="shape-container-choice" type="button" data-container-shape="wide" aria-pressed="true">淺口塑膠碗</button><button class="shape-container-choice" type="button" data-container-shape="beaker" aria-pressed="false">100 mL 燒杯</button><button class="shape-container-choice" type="button" data-container-shape="tall" aria-pressed="false">2000 mL 燒杯</button></div>`:visual==="gas-shape"?`<div class="shape-container-options" role="group" aria-label="切換容器形狀"><button class="shape-container-choice" type="button" data-gas-form="wide" aria-pressed="true">寬淺</button><button class="shape-container-choice" type="button" data-gas-form="tall" aria-pressed="false">細高</button><button class="shape-container-choice" type="button" data-gas-form="square" aria-pressed="false">方形</button></div>`:staticOnly?"":isInteractive?`<input class="state-range" type="range" min="0" max="100" value="0" data-demo-range="${visual}" aria-label="${action}">`:`<button type="button" data-state-demo>依序查看固體、液體和氣體</button>`;
       document.getElementById("state-demo").innerHTML=staticOnly?`<div class="state-demo-visual">${graphic}</div><div class="demo-controls"><p>${control}</p><p class="demo-result" aria-live="polite">${result}</p></div>`:`<div class="state-demo-visual">${graphic}</div><div class="demo-controls"><p>${control}</p>${controls}<p class="demo-result" aria-live="polite">${result}</p></div>`;
       if(visual==="gas-shape"||visual==="gas-volume"||visual==="gas-compress"){
-        const restart=document.createElement("button");restart.type="button";restart.className="gas-motion-restart";restart.textContent="重新啟動粒子運動";restart.setAttribute("aria-label","重新啟動空氣分子的隨機運動");
-        restart.addEventListener("click",()=>{startGasParticleMotion(visual);document.querySelector("#state-demo .demo-result").textContent="粒子運動已重新啟動。";});
+        const restart=document.createElement("button");restart.type="button";restart.className="gas-motion-restart";restart.textContent="開始／重新啟動粒子運動";restart.setAttribute("aria-label","重新啟動空氣分子的隨機運動");
+        restart.addEventListener("click",()=>{
+          stateDemo.classList.add("gas-motion-active");
+          stateDemo.querySelectorAll("[data-gas-particle]").forEach(dot=>{applyGasParticleMotionVars(dot);dot.style.animationName="none";void dot.offsetWidth;dot.style.animationName="";});
+          if(visual==="gas-volume"||visual==="gas-compress")startGasParticleMotion(visual);
+          document.querySelector("#state-demo .demo-result").textContent="粒子運動已重新啟動。";
+        });
         stateDemo.querySelector(".demo-controls").insertBefore(restart,stateDemo.querySelector(".demo-result"));
       }
       if(visual==="gas-compress"){
         const slider=stateDemo.querySelector('[data-demo-range="gas-compress"]');slider.value="60";slider.dispatchEvent(new Event("input",{bubbles:true}));
       }
       stateDemo.scrollIntoView({block:"start",behavior:"smooth"});
-      if(visual==="gas-shape"||visual==="gas-volume"||visual==="gas-compress")startGasParticleMotion(visual);
+      if(visual==="gas-volume"||visual==="gas-compress")startGasParticleMotion(visual);
       if(visual==="solid-volume"){
         const block=document.querySelector("#state-demo .volume-iron-block"),stage=block.closest(".solid-volume-measure");let dragging=false,startY=0,startTop=0,wasPlaced=false;
         block.addEventListener("pointerdown",event=>{dragging=true;startY=event.clientY;startTop=parseFloat(getComputedStyle(block).top);wasPlaced=document.querySelector("#state-demo [data-volume-action]").dataset.placed==="true";block.style.transition="none";block.setAttribute("aria-grabbed","true");block.setPointerCapture(event.pointerId);event.preventDefault();});
