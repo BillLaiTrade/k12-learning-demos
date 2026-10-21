@@ -108,7 +108,7 @@ function updateProjectionGuide(guide, start, end) {
   while (guide.children.length < dashCount) {
     const dash = new THREE.Mesh(
       new THREE.CylinderGeometry(0.028, 0.028, 1, 10, 1, false),
-      new THREE.MeshBasicMaterial({ color: 0xc45a2b, transparent: true, opacity: 1, depthTest: false, depthWrite: false, toneMapped: false })
+      new THREE.MeshBasicMaterial({ color: 0xc45a2b, transparent: true, opacity: 1, depthTest: true, depthWrite: false, toneMapped: false })
     );
     dash.renderOrder = 7;
     guide.add(dash);
@@ -567,9 +567,9 @@ function render() {
   pencil.position.set(view.start, view.centerY, view.centerZ);
   if (view.rayStart && view.rayEnd) {
     const guideStart = {
-      x: view.rayStart.x + (view.rayEnd.x - view.rayStart.x) * 0.04,
-      y: view.rayStart.y + (view.rayEnd.y - view.rayStart.y) * 0.04 + 0.035,
-      z: view.rayStart.z + (view.rayEnd.z - view.rayStart.z) * 0.04
+      x: view.rayStart.x,
+      y: view.rayStart.y,
+      z: view.rayStart.z
     };
     updateProjectionGuide(projectionRay,
       guideStart,
@@ -661,9 +661,9 @@ function renderCorrection() {
   correctionPencil.position.set(correctionView.start, correctionView.centerY, correctionView.centerZ);
   if (correctionView.rayStart && correctionView.rayEnd) {
     const guideStart = {
-      x: correctionView.rayStart.x + (correctionView.rayEnd.x - correctionView.rayStart.x) * 0.04,
-      y: correctionView.rayStart.y + (correctionView.rayEnd.y - correctionView.rayStart.y) * 0.04 + 0.035,
-      z: correctionView.rayStart.z + (correctionView.rayEnd.z - correctionView.rayStart.z) * 0.04
+      x: correctionView.rayStart.x,
+      y: correctionView.rayStart.y,
+      z: correctionView.rayStart.z
     };
     updateProjectionGuide(correctionProjectionRay,
       guideStart,
