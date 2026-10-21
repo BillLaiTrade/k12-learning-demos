@@ -851,7 +851,7 @@
         const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
         const projectedEdgeZ = pencilCenterZ + projectionFactor * (pencilCenterZ - cameraPosition.z);
         const clampedProjectionX = clamp(projectedEdgeX, rulerMin, rulerMax);
-        const displayedProjectionX = cameraPreset === "front" ? clamp(edgeX, rulerMin, rulerMax) : clampedProjectionX;
+        const displayedProjectionX = clampedProjectionX;
         const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
         const pencilCenterX = state.start + parallaxLength / 2;
         const pencilStartX = pencilCenterX - parallaxLength / 2;
@@ -1242,7 +1242,7 @@
         const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
         const landingOnScale = clampedProjectionX >= rulerMin && clampedProjectionX <= rulerMax && projectedEdgeX >= rulerMin && projectedEdgeX <= rulerMax && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
         const startReading = state.start - correctionRulerOffset;
-        const displayedProjectionX = correctionCameraPreset === "front" ? clamp(edgeX, rulerMin, rulerMax) : clampedProjectionX;
+        const displayedProjectionX = clampedProjectionX;
         const endReading = displayedProjectionX - correctionRulerOffset;
         const measuredLength = endReading - startReading;
         const correctionView = {
