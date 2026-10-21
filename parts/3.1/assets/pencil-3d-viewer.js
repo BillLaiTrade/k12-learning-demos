@@ -17,6 +17,7 @@ const rulerLength = 20;
 let renderer;
 let magnifierRenderer;
 const magnifierCamera = new THREE.PerspectiveCamera(11, 1, 0.1, 80);
+const magnifierLabels = new THREE.Group();
 let rulerModel;
 let pencil;
 let projectionRay;
@@ -373,7 +374,16 @@ try {
 
   rulerModel = createRuler();
   scene.add(rulerModel);
-  // Keep the magnified edge unnumbered, like the opposite physical edge of the ruler.
+  if (magnifierRenderer) {
+    for (const centimeter of [18, 19]) {
+      const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeTextTexture(String(centimeter)), transparent: true, depthTest: false, depthWrite: false }));
+      label.scale.set(0.42, 0.22, 1);
+      label.position.set(centimeter, 0.27, -1.3);
+      label.renderOrder = 6;
+      magnifierLabels.add(label);
+    }
+    scene.add(magnifierLabels);
+  }
   pencil = createPencil();
   scene.add(pencil);
 
@@ -466,22 +476,31 @@ function render() {
       }
       magnifierCamera.aspect = rect.width / rect.height;
       magnifierCamera.updateProjectionMatrix();
-      const magnifierTarget = new THREE.Vector3(view.start + 18.5, 0.22, -1.48);
+      const magnifierTarget = new THREE.Vector3(view.start + 18.5, 0.22, -1.2);
       const viewDirection = camera.position.clone().sub(target).normalize();
-      viewDirection.z = -Math.abs(viewDirection.z);
-      viewDirection.y = Math.max(viewDirection.y, 2.5);
+      viewDirection.x = 0;
+      viewDirection.z = -0.2;
+      viewDirection.y = 1;
       viewDirection.normalize();
       magnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 7.2);
       magnifierCamera.lookAt(magnifierTarget);
       const majorLabels = rulerModel.children.filter((child) => child.userData.rulerMajorNumber);
       for (const label of majorLabels) label.visible = false;
+      magnifierLabels.visible = true;
       const markerScale = landingMarker.scale.clone();
       const ringScale = landingRing.scale.clone();
-      landingMarker.scale.setScalar(0.3);
-      landingRing.scale.setScalar(0.45);
+      const markerWasVisible = landingMarker.visible;
+      const ringWasVisible = landingRing.visible;
+      landingMarker.scale.setScalar(0.15);
+      landingRing.scale.setScalar(0.18);
+      landingMarker.visible = false;
+      landingRing.visible = false;
       magnifierRenderer.render(scene, magnifierCamera);
+      magnifierLabels.visible = false;
       landingMarker.scale.copy(markerScale);
       landingRing.scale.copy(ringScale);
+      landingMarker.visible = markerWasVisible;
+      landingRing.visible = ringWasVisible;
       for (const label of majorLabels) label.visible = true;
     }
   }
