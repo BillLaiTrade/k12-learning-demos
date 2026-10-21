@@ -698,7 +698,7 @@
       const parallaxLength = 18.4;
       const pencilHeight = 0.61;
       const parallaxCenterX = state.start + 10;
-      const defaultCameraYaw = Math.asin((state.start + parallaxLength - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
+      const defaultCameraYaw = 0;
       const obliqueCameraYaw = Math.asin((state.start - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
       const ruler = document.querySelector("#shared-scale");
       const modelSvg = document.querySelector("#shared-measurement-model");
@@ -851,6 +851,7 @@
         const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
         const projectedEdgeZ = pencilCenterZ + projectionFactor * (pencilCenterZ - cameraPosition.z);
         const clampedProjectionX = clamp(projectedEdgeX, rulerMin, rulerMax);
+        const displayedProjectionX = cameraPreset === "front" ? clamp(edgeX, rulerMin, rulerMax) : clampedProjectionX;
         const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
         const pencilCenterX = state.start + parallaxLength / 2;
         const pencilStartX = pencilCenterX - parallaxLength / 2;
@@ -869,10 +870,10 @@
           lookAtZ: cameraTarget.z,
           focalLengthRatio: focalLength / bounds.height,
           rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
-          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.01, z: clampedProjectionZ }
+          rayEnd: { x: displayedProjectionX, y: rulerTop + 0.01, z: clampedProjectionZ }
         });
 
-        document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${clampedProjectionX.toFixed(1)} cm` : "視線落在尺外";
+        document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${displayedProjectionX.toFixed(1)} cm` : "視線落在尺外";
         const cameraCaption = cameraPreset === "front"
           ? "正對尺面：端點投影對準尺上刻度。"
           : cameraPreset === "oblique"
@@ -886,7 +887,7 @@
           ? "這個角度下，視線延長線落在尺面範圍外，無法從尺上讀值。轉動視角，讓落點回到刻度上；鉛筆長度始終不變。"
           : "觀察角度改變時，橘色輔助線落點也會改變，因此讀值可能不同；這種差異稱為視差。";
         parallaxCanvas.setAttribute("aria-label", landingOnScale
-          ? `三維直尺與鉛筆模型。橘色輔助線落在約 ${clampedProjectionX.toFixed(1)} 公分處。可拖曳或使用方向鍵旋轉視角。`
+          ? `三維直尺與鉛筆模型。橘色輔助線落在約 ${displayedProjectionX.toFixed(1)} 公分處。可拖曳或使用方向鍵旋轉視角。`
           : "三維直尺與鉛筆模型。目前視角的投影落在尺面範圍外，無法讀值；可拖曳或使用方向鍵旋轉視角。");
       };
       const updateModel = () => {
@@ -1241,7 +1242,8 @@
         const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
         const landingOnScale = clampedProjectionX >= rulerMin && clampedProjectionX <= rulerMax && projectedEdgeX >= rulerMin && projectedEdgeX <= rulerMax && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
         const startReading = state.start - correctionRulerOffset;
-        const endReading = clampedProjectionX - correctionRulerOffset;
+        const displayedProjectionX = correctionCameraPreset === "front" ? clamp(edgeX, rulerMin, rulerMax) : clampedProjectionX;
+        const endReading = displayedProjectionX - correctionRulerOffset;
         const measuredLength = endReading - startReading;
         const correctionView = {
           edge: parallaxLength,
@@ -1258,7 +1260,7 @@
           lookAtZ: target.z,
           focalLengthRatio: sceneActive ? bounds.width * 0.85 / bounds.height : 1,
           rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
-          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.01, z: clampedProjectionZ },
+          rayEnd: { x: displayedProjectionX, y: rulerTop + 0.01, z: clampedProjectionZ },
           magnifierTargetX: correctionMode === "origin" ? (state.start + correctionRulerOffset) / 2 : undefined,
           magnifierMode: correctionMode
         };

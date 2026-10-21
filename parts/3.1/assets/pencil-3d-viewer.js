@@ -21,9 +21,9 @@ let renderer;
 let magnifierRenderer;
 let correctionRenderer;
 let correctionMagnifierRenderer;
-const magnifierCamera = new THREE.PerspectiveCamera(18.5, 1, 0.1, 80);
+const magnifierCamera = new THREE.PerspectiveCamera(24, 1, 0.1, 80);
 const correctionCamera = new THREE.PerspectiveCamera(38, 1, 0.1, 180);
-const correctionMagnifierCamera = new THREE.PerspectiveCamera(18.5, 1, 0.1, 80);
+const correctionMagnifierCamera = new THREE.PerspectiveCamera(24, 1, 0.1, 80);
 const correctionInteractionRaycaster = new THREE.Raycaster();
 const correctionInteractionPointer = new THREE.Vector2();
 let correctionScene;
@@ -126,51 +126,6 @@ function updateProjectionGuide(guide, start, end) {
     dash.scale.set(1, segmentLength, 1);
   }
   guide.visible = true;
-}
-
-function findPerpendicularScaleX(camera, canvasElement, guideStart, fallbackX, scaleMin, scaleMax) {
-  const rect = canvasElement.getBoundingClientRect();
-  const project = (point) => {
-    const projected = new THREE.Vector3(point.x, point.y, point.z).project(camera);
-    return new THREE.Vector2((projected.x + 1) * rect.width / 2, (1 - projected.y) * rect.height / 2);
-  };
-  const endOnAxis = project(guideStart);
-  const behindOnAxis = project({ ...guideStart, x: guideStart.x - 1 });
-  const axis = endOnAxis.sub(behindOnAxis).normalize();
-  const guideOrigin = project(guideStart);
-  const dotAt = (x) => project({ x, y: 0.22, z: 1.5 }).sub(guideOrigin).dot(axis);
-  const samples = 80;
-  let previousX = scaleMin;
-  let previousDot = dotAt(previousX);
-  let bestX = previousX;
-  let bestMagnitude = Math.abs(previousDot);
-  for (let index = 1; index <= samples; index += 1) {
-    const x = scaleMin + (scaleMax - scaleMin) * index / samples;
-    const dot = dotAt(x);
-    if (Math.abs(dot) < bestMagnitude) {
-      bestX = x;
-      bestMagnitude = Math.abs(dot);
-    }
-    if (previousDot === 0 || dot === 0 || Math.sign(previousDot) !== Math.sign(dot)) {
-      let low = previousX;
-      let high = x;
-      let lowDot = previousDot;
-      for (let iteration = 0; iteration < 24; iteration += 1) {
-        const middle = (low + high) / 2;
-        const middleDot = dotAt(middle);
-        if (Math.sign(middleDot) === Math.sign(lowDot)) {
-          low = middle;
-          lowDot = middleDot;
-        } else {
-          high = middle;
-        }
-      }
-      return (low + high) / 2;
-    }
-    previousX = x;
-    previousDot = dot;
-  }
-  return Number.isFinite(bestX) ? bestX : fallbackX;
 }
 
 function makeTextTexture(text) {
@@ -604,11 +559,10 @@ function render() {
 
   pencil.position.set(view.start, view.centerY, view.centerZ);
   if (view.rayStart && view.rayEnd) {
-    const guideStart = { x: view.rayStart.x - 0.08, y: view.rayStart.y, z: view.rayStart.z + 0.34 };
-    const guideX = findPerpendicularScaleX(camera, sceneCanvas, guideStart, view.rayEnd.x, 0, rulerLength);
+    const guideStart = { x: view.rayStart.x, y: view.rayStart.y, z: view.rayStart.z + 0.34 };
     updateProjectionGuide(projectionRay,
       guideStart,
-      { x: guideX, y: 0.22, z: 1.5 });
+      { x: view.rayEnd.x, y: 0.22, z: 1.5 });
     landingMarker.position.set(view.rayEnd.x, 0.28, view.rayEnd.z);
     landingRing.position.set(view.rayEnd.x, 0.255, view.rayEnd.z);
     projectionRay.visible = true;
@@ -630,7 +584,7 @@ function render() {
       }
       magnifierCamera.aspect = rect.width / rect.height;
       magnifierCamera.updateProjectionMatrix();
-      const magnifierTarget = new THREE.Vector3(view.start + 17.5, 0.55, 0.1);
+      const magnifierTarget = new THREE.Vector3(view.start + 18.5, 0.3, 0.68);
       const viewDirection = camera.position.clone().sub(target).normalize();
       magnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
       magnifierCamera.lookAt(magnifierTarget);
@@ -701,19 +655,10 @@ function renderCorrection() {
   });
   correctionPencil.position.set(correctionView.start, correctionView.centerY, correctionView.centerZ);
   if (correctionView.rayStart && correctionView.rayEnd) {
-    const guideStart = { x: correctionView.rayStart.x - 0.08, y: correctionView.rayStart.y, z: correctionView.rayStart.z + 0.34 };
-    const rulerMin = correctionView.rulerOffset;
-    const guideX = findPerpendicularScaleX(
-      correctionCamera,
-      correctionCanvas,
-      guideStart,
-      correctionView.rayEnd.x,
-      rulerMin,
-      rulerMin + rulerLength
-    );
+    const guideStart = { x: correctionView.rayStart.x, y: correctionView.rayStart.y, z: correctionView.rayStart.z + 0.34 };
     updateProjectionGuide(correctionProjectionRay,
       guideStart,
-      { x: guideX, y: 0.22, z: 1.5 });
+      { x: correctionView.rayEnd.x, y: 0.22, z: 1.5 });
     correctionLandingMarker.position.set(correctionView.rayEnd.x, 0.28, correctionView.rayEnd.z);
     correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, correctionView.rayEnd.z);
     correctionProjectionRay.visible = true;
@@ -736,7 +681,7 @@ function renderCorrection() {
       correctionMagnifierCamera.aspect = inset.width / inset.height;
       correctionMagnifierCamera.updateProjectionMatrix();
       const magnifierTargetX = correctionView.magnifierTargetX ?? (correctionView.start + correctionView.rulerOffset + 18.5);
-      const magnifierTarget = new THREE.Vector3(magnifierTargetX, 0.32, 0.1);
+      const magnifierTarget = new THREE.Vector3(magnifierTargetX, 0.3, 0.68);
       const viewDirection = correctionCamera.position.clone().sub(target).normalize();
       correctionMagnifierCamera.position.copy(magnifierTarget).addScaledVector(viewDirection, 8);
       correctionMagnifierCamera.lookAt(magnifierTarget);
