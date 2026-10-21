@@ -61,10 +61,11 @@
     .sample-record p { margin:0; color:#53645d; font-size:.9rem; }
     .sample-components { display:flex; gap:7px; margin-top:11px; flex-wrap:wrap; }
     .sample-components span { padding:4px 10px; border:1px solid #d3ddd4; border-radius:99px; background:#fffdf8; color:#355c4c; font-size:.8rem; font-weight:700; }
+    .learning-goal { margin:16px 0; padding:13px 16px; border-left:4px solid var(--green); border-radius:8px; background:#edf3ee; }
+    .learning-goal span { display:block; margin-bottom:3px; color:#587365; font-size:.75rem; font-weight:800; letter-spacing:.04em; }
+    .learning-goal strong { color:#24483a; font-size:1.02rem; }
     .choice-prompt { margin:16px 0 6px; font-weight:750; }
-    .goal-choice { min-width:190px; flex:1; display:flex; align-items:center; gap:10px; text-align:left; }
-    .goal-choice .choice-icon { width:30px; height:30px; display:grid; place-items:center; flex:none; border-radius:50%; background:#edf2eb; color:var(--green); font-size:1rem; }
-    .goal-choice small,.prediction-choice small { display:block; font-weight:500; opacity:.82; }
+    .prediction-choice small { display:block; font-weight:500; opacity:.82; }
     .prediction-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:8px 0 10px; }
     .prediction-choice { min-height:62px; padding:9px 11px; text-align:left; border:1px solid #bdc8bf; border-radius:10px; background:#fff; cursor:pointer; }
     .prediction-choice[aria-pressed="true"] { border-color:var(--green); background:#edf4ef; box-shadow:0 0 0 2px #176b5316; }
@@ -147,9 +148,9 @@
     <div class="brand-row"><a class="brand" href="../../index.html">← 物質、分離與水溶液</a><span class="crumb">國二上・自然科學</span></div>
     <div class="hero">
       <div>
-        <div class="eyebrow">從認出混合物，到分開其中成分</div>
+        <div class="eyebrow">想得到比較清的水，怎麼分開泥沙？</div>
         <h1>混合物裡的成分，怎麼分開？</h1>
-        <p class="hero-copy">這份雨水樣本的成分紀錄指出，其中含有水與泥沙。能利用什麼差異，把想分開的成分取出來？</p>
+        <p class="hero-copy">這份雨水樣本的紀錄指出其中有水和泥沙。能利用什麼差異，讓水樣變得比較清？</p>
       </div>
       <aside class="hero-note"><strong>先說清楚要分開什麼</strong><p>分離方法要配合成分的性質和分離目標；操作後，再看實際留下或流出的結果。</p></aside>
     </div>
@@ -159,15 +160,15 @@
       <p class="route-label">沿著問題一步步探索</p>
       <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／06 段</p>
       <div class="route-inner">
-        <a href="#s1" aria-current="step"><b>01</b><span>已知是混合物，怎麼分出泥沙？</span></a>
+        <a href="#s1" aria-current="step"><b>01</b><span>想得到比較清的水，怎麼處理雨水？</span></a>
         <a href="#s2"><b>02</b><span>過濾：讓泥沙留在濾紙上</span></a>
         <a href="#s3"><b>03</b><span>結晶：從鹽水中取回鹽</span></a>
         <a href="#s4"><b>04</b><span>簡易濾紙層析：看見色素分開</span></a>
         <a href="#s5"><b>05</b><span>依分離目標比較三種方法</span></a>
         <a href="#s6"><b>06</b><span>依目標選方法並判讀結果</span></a>
       </div>
-      <p class="route-hint">先確認分離目標，再用操作結果檢查方法選擇。</p>
-      <section class="record-panel"><h2>目前的分離目標</h2><p id="goal-record">先選擇想分開的成分。</p></section>
+      <p class="route-hint">先想想怎麼讓水樣變清，再觀察過濾操作。</p>
+      <section class="record-panel"><h2>本段目標</h2><p>分開水和泥沙，取得較清的水樣。</p></section>
     </nav>
     <div class="cards">
       <div class="section-top"><h2>混合物的分離</h2><span class="progress-copy">已知樣本組成 → 選擇並操作方法 → 判讀結果</span></div>
@@ -175,24 +176,20 @@
       <section class="lesson-card" id="s1">
         <div class="card-side"><span class="card-number">01</span><h3>提出分離問題</h3><span class="card-role">從一份混合樣本開始</span></div>
         <div class="card-main">
-          <h2>這份雨水混著泥沙，怎麼把想要的部分分出來？</h2>
-          <p>先看看樣本紀錄，再決定這次要取出什麼。樣本已經提供成分資訊，不需要只靠外觀猜測裡面有什麼。</p>
+          <h2>想得到比較清的水，能怎麼處理這份雨水？</h2>
+          <p>樣本紀錄指出，這份雨水裡有水和泥沙。這次要想辦法把兩種成分分開，看看水樣會有什麼變化。</p>
           <div class="opening-scene" aria-label="雨水與泥沙樣本及其成分紀錄">
             <figure class="sample-illustration"><img class="sample-photo" src="assets/rainwater-sample.png" alt="玻璃罐中的雨水，水裡有懸浮泥沙，底部沉積著泥沙"><figcaption class="jar-caption">雨水樣本</figcaption></figure>
             <div class="sample-record"><span class="sample-record-label">樣本紀錄</span><h3>這份樣本含有兩種成分</h3><p>收集到的雨水中有水，也有混在水裡的泥沙。</p><div class="sample-components"><span>水</span><span>泥沙</span></div></div>
           </div>
-          <p class="choice-prompt">你想先完成哪一個分離目標？</p>
-          <div class="choice-row" role="group" aria-label="選擇分離目標">
-            <button class="choice-button goal-choice" type="button" data-goal="分出泥沙" aria-pressed="true"><span class="choice-icon" aria-hidden="true">●</span><span>把泥沙分出來<small>目標：取得固體</small></span></button>
-            <button class="choice-button goal-choice" type="button" data-goal="收集流出的水" aria-pressed="false"><span class="choice-icon" aria-hidden="true">◒</span><span>收集流出的水<small>目標：取得液體</small></span></button>
-          </div>
-          <p class="choice-prompt">你預測哪種方法可能有用？先選一個想法，之後可以觀察結果再回來比較。</p>
+          <div class="learning-goal"><span>本段任務</span><strong>把水和泥沙分開，取得較清的水樣</strong></div>
+          <p class="choice-prompt">接下來會試用濾紙和漏斗。你預測泥沙會在哪裡？</p>
           <div class="prediction-options" role="group" aria-label="選擇方法預測">
-            <button class="prediction-choice" type="button" data-prediction="用濾紙和漏斗" aria-pressed="false"><strong>濾紙和漏斗</strong><small>讓液體通過，看看固體會不會留下</small></button>
-            <button class="prediction-choice" type="button" data-prediction="讓水分蒸發" aria-pressed="false"><strong>讓水分蒸發</strong><small>觀察水離開後還剩下什麼</small></button>
-            <button class="prediction-choice" type="button" data-prediction="還不確定" aria-pressed="false"><strong>我還不確定</strong><small>先看操作，再形成自己的想法</small></button>
+            <button class="prediction-choice" type="button" data-prediction="泥沙會留在濾紙上" aria-pressed="false"><strong>留在濾紙上</strong><small>水通過濾紙，泥沙被留下</small></button>
+            <button class="prediction-choice" type="button" data-prediction="泥沙會跟著水流下去" aria-pressed="false"><strong>跟著水流下去</strong><small>泥沙和水一起通過濾紙</small></button>
+            <button class="prediction-choice" type="button" data-prediction="還不確定" aria-pressed="false"><strong>我還不確定</strong><small>先觀察操作，再形成想法</small></button>
           </div>
-          <p class="live-note" id="prediction-note" aria-live="polite">選好目標和預測後，帶著這個問題觀察下一區的操作。</p>
+          <p class="live-note" id="prediction-note" aria-live="polite">先想一想，再看濾紙如何處理這份泥沙水樣。</p>
           <p class="next-hint">接下來會用濾紙和漏斗處理泥沙水樣，看看固體和液體各自到了哪裡。</p>
         </div>
       </section>
@@ -298,9 +295,6 @@
     function setCurrentCard(card){const index=cards.indexOf(card);if(index<0)return;routeLinks.forEach((link,i)=>{if(i===index)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');});routeProgress.textContent=`目前位置：第 ${String(index+1).padStart(2,'0')}／${String(cards.length).padStart(2,'0')} 段`;}
     if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible[0])setCurrentCard(visible[0].target);},{rootMargin:'-15% 0px -65% 0px'});cards.forEach(card=>observer.observe(card));}
 
-    let chosenGoal='分出泥沙';
-    document.querySelectorAll('[data-goal]').forEach(button=>button.addEventListener('click',()=>{chosenGoal=button.dataset.goal;document.querySelectorAll('[data-goal]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.getElementById('goal-record').textContent=`目前目標：${chosenGoal}`;}));
-    document.getElementById('goal-record').textContent=`目前目標：${chosenGoal}`;
     let chosenPrediction='';
     document.querySelectorAll('[data-prediction]').forEach(button=>button.addEventListener('click',()=>{chosenPrediction=button.dataset.prediction;document.querySelectorAll('[data-prediction]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.getElementById('prediction-note').textContent=`已記下你的預測：「${chosenPrediction}」。帶著這個想法觀察下一區的操作，再比較預測和結果。`;}));
 
