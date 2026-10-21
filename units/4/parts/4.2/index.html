@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f1e8">
+  <meta name="theme-color" content="#f3f7f2">
   <link rel="icon" href="data:,">
   <title>混在一起的東西，怎麼分開？</title>
   <style>
-    :root { color-scheme:light; --ink:#243a35; --muted:#64736d; --paper:#f4f1e8; --card:#fffdf8; --line:#d9d3c4; --green:#176b53; --gold:#d7a94a; --blue:#dce9e5; --rust:#a85c3d; }
+    :root { color-scheme:light; --ink:#243a35; --muted:#64736d; --paper:#f3f7f2; --card:#fff; --line:#d8e2da; --green:#176b53; --gold:#82a98c; --blue:#dce9e5; --rust:#a85c3d; }
     * { box-sizing:border-box; }
     html { scroll-behavior:smooth; scroll-padding-top:18px; }
     body { margin:0; color:var(--ink); background:var(--paper); font-family:ui-sans-serif,system-ui,-apple-system,"Noto Sans TC",sans-serif; line-height:1.7; }
@@ -23,11 +23,11 @@
     h1,h2,h3,p { margin-top:0; }
     h1 { max-width:800px; margin:6px 0 12px; font-size:clamp(2rem,5vw,3.25rem); line-height:1.2; letter-spacing:-.035em; }
     .hero-copy { max-width:740px; color:#52635d; font-size:1.06rem; }
-    .hero-note { padding:15px 17px; border:1px solid var(--line); border-radius:14px; background:#fffdf8b5; }
+    .hero-note { padding:15px 17px; border:1px solid var(--line); border-radius:14px; background:#fff; }
     .hero-note strong { color:var(--green); }
     .hero-note p { margin:5px 0 0; color:var(--muted); font-size:.9rem; }
     .lesson-layout { display:grid; grid-template-columns:260px minmax(0,1fr); gap:28px; align-items:start; }
-    .route { position:sticky; top:12px; max-height:calc(100vh - 24px); overflow:auto; padding:14px; border:1px solid var(--line); border-radius:16px; background:#fffdf8eF; }
+    .route { position:sticky; top:12px; max-height:calc(100vh - 24px); overflow:auto; padding:14px; border:1px solid var(--line); border-radius:16px; background:#fff; }
     .route-label { margin:0; color:var(--green); font-weight:800; font-size:.9rem; }
     .route-progress { margin:3px 0 10px; color:var(--muted); font-size:.78rem; }
     .route-inner { display:grid; gap:4px; }
@@ -35,7 +35,7 @@
     .route-inner a b { color:var(--green); font-size:.72rem; font-weight:750; }
     .route-inner a[aria-current="step"] { background:#e8efe9; color:#164e3f; font-weight:700; }
     .route-hint { margin:10px 0 0; padding-top:10px; border-top:1px solid var(--line); color:var(--muted); font-size:.78rem; }
-    .record-panel { margin-top:12px; padding:12px; border-radius:11px; background:#f1eee4; }
+    .record-panel { margin-top:12px; padding:12px; border-radius:11px; background:#edf4ee; }
     .record-panel h2 { margin:0 0 6px; font-size:.9rem; }
     .record-panel p { margin:0; color:var(--muted); font-size:.8rem; }
     .cards { min-width:0; }
@@ -49,9 +49,9 @@
     .card-role { color:var(--muted); font-size:.78rem; }
     .card-main h2 { margin:0 0 8px; font-size:clamp(1.17rem,2.4vw,1.55rem); line-height:1.4; }
     .card-main>p { color:#53645d; }
-    .evidence-box,.note-box { margin:12px 0; padding:12px 14px; border-left:4px solid var(--gold); border-radius:7px; background:#f5f0df; }
+    .evidence-box,.note-box { margin:12px 0; padding:12px 14px; border-left:4px solid #82a98c; border-radius:7px; background:#f0f6f0; }
     .evidence-box strong { display:block; margin-bottom:3px; }
-    .filter-animation { position:relative; margin:16px 0 10px; overflow:hidden; border:1px solid #d8dfd6; border-radius:18px; background:#f7f6ef; box-shadow:0 12px 30px #243a3512; }
+    .filter-animation { position:relative; margin:16px 0 10px; overflow:hidden; border:1px solid #d8e2da; border-radius:18px; background:#f1f6f1; box-shadow:0 12px 30px #243a350d; }
     .filter-scene { display:block; width:100%; height:auto; }
     .filter-scene .glass { fill:url(#glass-fill); stroke:#71887e; stroke-width:4; stroke-linejoin:round; }
     .filter-scene .glass-edge { fill:none; stroke:#fff; stroke-width:5; stroke-linecap:round; opacity:.86; }
@@ -92,14 +92,14 @@
     .filter-stage-labels { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin:0 0 8px; color:#53645d; font-size:.8rem; font-weight:700; text-align:center; }
     .filter-stage-labels button { min-width:0; padding:8px 3px; border:0; border-radius:9px; background:transparent; color:inherit; font-size:inherit; font-weight:inherit; cursor:pointer; }
     .filter-stage-labels button[aria-pressed="true"] { color:var(--green); background:#e7eee6; }
-    .filter-stage-labels button:focus-visible { outline:3px solid #d7a94a; outline-offset:2px; }
+    .filter-stage-labels button:focus-visible { outline:3px solid #79ad8d; outline-offset:2px; }
     .choice-prompt { margin:16px 0 6px; font-weight:750; }
     .note-box { border-left-color:var(--green); background:#edf3ee; font-size:.88rem; }
     .control-row,.choice-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
     .control-button,.choice-button { border:1px solid #bdc8bf; border-radius:9px; padding:8px 12px; background:#fff; cursor:pointer; font-weight:700; }
     .control-button:hover,.choice-button:hover { border-color:var(--green); }
     .choice-button[aria-pressed="true"] { color:#fff; border-color:var(--green); background:var(--green); }
-    button:focus-visible,a:focus-visible,select:focus-visible { outline:3px solid #d7a94a; outline-offset:2px; }
+    button:focus-visible,a:focus-visible,select:focus-visible { outline:3px solid #79ad8d; outline-offset:2px; }
     .live-note { min-height:1.6em; color:#315e4e; font-size:.9rem; font-weight:650; }
     .scene { position:relative; min-height:190px; margin:12px 0; overflow:hidden; border:1px solid #cdd8d2; border-radius:13px; background:linear-gradient(#f6faf7,#eef3ef); }
     .scene-label { position:absolute; top:10px; left:12px; color:var(--muted); font-size:.78rem; font-weight:700; }
@@ -112,13 +112,13 @@
     .evap-stage[data-step="2"] .evap-cup { --water:50%; }
     .evap-stage[data-step="3"] .evap-cup { --water:24%; }
     .evap-stage[data-step="4"] .evap-cup { --water:10%; }
-    .heat-lines { height:24px; color:#b07d39; letter-spacing:10px; opacity:0; }
+    .heat-lines { height:24px; color:#5c997b; letter-spacing:10px; opacity:0; }
     .evap-stage[data-step="2"] .heat-lines,.evap-stage[data-step="3"] .heat-lines { opacity:1; }
     .strip-scene { min-height:205px; padding:40px 18px 14px; display:grid; place-items:center; }
-    .paper-strip { height:145px; width:94px; position:relative; border:1px solid #b5b6a5; background:repeating-linear-gradient(0deg,#fffef5,#fffef5 17px,#f6f3e7 18px); box-shadow:0 3px 10px #243a3514; }
+    .paper-strip { height:145px; width:94px; position:relative; border:1px solid #cbd9ce; background:repeating-linear-gradient(0deg,#fff,#fff 17px,#eff5ef 18px); box-shadow:0 3px 10px #243a3514; }
     .solvent { position:absolute; bottom:0; left:0; right:0; height:20%; background:#c6ddd8; transition:height 1s; }
     .ink-dot { position:absolute; z-index:2; top:79%; left:50%; width:12px; height:7px; border-radius:50%; transform:translateX(-50%); background:#285943; }
-    .baseline { position:absolute; z-index:1; top:82%; left:8px; right:8px; border-top:1px dashed #878b75; }
+    .baseline { position:absolute; z-index:1; top:82%; left:8px; right:8px; border-top:1px dashed #84988a; }
     .band { position:absolute; z-index:3; left:50%; width:16px; height:8px; border-radius:50%; transform:translate(-50%,0); opacity:0; transition:all .9s; }
     .band.one { background:#3a8c65; top:49%; }
     .band.two { background:#c7a52c; top:32%; }
@@ -185,10 +185,10 @@
           <div class="filter-animation" id="filter-animation" data-stage="0" role="group" aria-label="泥沙水經過濾紙的連續動畫；可選擇四個步驟查看">
             <svg class="filter-scene" viewBox="0 0 1000 562" role="img" aria-label="動態示範泥沙水倒入濾紙漏斗：水流通過，泥沙留在濾紙上，較清澈的水滴入接液杯。">
               <defs>
-                <linearGradient id="scene-bg" x2="0" y2="1"><stop stop-color="#fbfaf4"/><stop offset="1" stop-color="#e8eee8"/></linearGradient>
+                <linearGradient id="scene-bg" x2="0" y2="1"><stop stop-color="#f8fbf7"/><stop offset="1" stop-color="#e8f0e9"/></linearGradient>
                 <linearGradient id="glass-fill" x1="0" x2="1"><stop stop-color="#dfece5" stop-opacity=".52"/><stop offset=".42" stop-color="#fff" stop-opacity=".74"/><stop offset="1" stop-color="#cbded5" stop-opacity=".44"/></linearGradient>
                 <linearGradient id="water-fill" x2="0" y2="1"><stop stop-color="#b9ddd2" stop-opacity=".84"/><stop offset="1" stop-color="#80b9a9" stop-opacity=".9"/></linearGradient>
-                <linearGradient id="paper-fill" x2="0" y2="1"><stop stop-color="#fffefa"/><stop offset="1" stop-color="#eee8d8"/></linearGradient>
+                <linearGradient id="paper-fill" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#edf4ed"/></linearGradient>
                 <filter id="soft-shadow" x="-.3" y="-.3" width="1.6" height="1.8"><feGaussianBlur stdDeviation="3"/></filter>
                 <clipPath id="beaker-clip"><path d="M178 141h147l-14 172q-2 23-23 23h-72q-21 0-23-23z"/></clipPath>
                 <clipPath id="receiver-clip"><path d="M590 433h103l-7 80q-2 16-17 16h-55q-15 0-17-16z"/></clipPath>
@@ -210,8 +210,8 @@
               </g>
               <ellipse cx="636" cy="448" rx="116" ry="13" fill="#52675c" opacity=".12"/>
               <path d="M515 183q121 17 242 0l-13 35-89 102v74h-34v-74l-89-102z" fill="url(#glass-fill)" stroke="#82948b" stroke-width="5" stroke-linejoin="round"/>
-              <g class="filter-paper"><path d="M531 205q104 15 210 0l-87 105v76h-34v-76z" fill="url(#paper-fill)" stroke="#d1cbb9" stroke-width="3"/><path d="M550 218q82 11 166 0l-76 86v63h-17v-63z" fill="#f5f1e5" stroke="#e2dccb" stroke-width="2"/></g>
-              <path d="M548 216q83 12 164 0l-73 84v68h-18v-68z" fill="#d5b178" opacity=".42"/>
+              <g class="filter-paper"><path d="M531 205q104 15 210 0l-87 105v76h-34v-76z" fill="url(#paper-fill)" stroke="#cbd9ce" stroke-width="3"/><path d="M550 218q82 11 166 0l-76 86v63h-17v-63z" fill="#f2f7f2" stroke="#d8e4d9" stroke-width="2"/></g>
+              <path d="M548 216q83 12 164 0l-73 84v68h-18v-68z" fill="#a9d4c5" opacity=".5"/>
               <g class="filtered-sand"><g fill="#a87942" stroke="#fff0d5" stroke-width="2"><circle cx="602" cy="310" r="7"/><circle cx="620" cy="318" r="6"/><circle cx="639" cy="313" r="8"/><circle cx="655" cy="319" r="5"/><circle cx="631" cy="330" r="5"/><circle cx="611" cy="329" r="4"/></g><g fill="#cc9d62"><circle cx="616" cy="307" r="2.5"/><circle cx="644" cy="308" r="2.5"/><circle cx="661" cy="311" r="2"/></g></g>
               <path d="M514 182q122 20 245 0" fill="none" stroke="#758a80" stroke-width="8" stroke-linecap="round"/><path d="M524 177q111 19 225 0" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9"/>
               <path d="M629 367v66" fill="none" stroke="#8c9c93" stroke-width="17"/><path d="M629 371v60" stroke="#fff" stroke-width="4" opacity=".75"/>
@@ -324,7 +324,7 @@
     document.getElementById('strip-reset').addEventListener('click',()=>{stopStrip();stripStep=0;updateStrip();});
     document.querySelectorAll('.ink-choice').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.ink-choice').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.getElementById('strip-scene').dataset.ink=button.dataset.ink;document.getElementById('ink-dot').style.background=button.dataset.ink==='green'?'#285943':'#343a45';if(stripStep===2){stripStep=0;updateStrip();}}));
 
-    document.getElementById('check-answers').addEventListener('click',()=>{const ids=['q-filter','q-crystal','q-paper'];const values=ids.map(id=>document.getElementById(id).value);const feedback=document.getElementById('quiz-feedback');if(values.some(value=>!value)){feedback.textContent='請先完成三個分離目標的配對，再查看結果。';feedback.style.color='#805d20';return;}const correct=values[0]==='filter'&&values[1]==='crystal'&&values[2]==='paper';feedback.textContent=correct?'三個方法都選對了！過濾分開泥沙和水、結晶讓鹽從鹽水中分離、濾紙層析讓混合色素分出不同色帶。':'還有方法和目標沒有對上。回頭想想：要分開泥沙和水、把鹽從鹽水中分離，還是觀察墨水裡有幾種色素？';feedback.style.color=correct?'#176b53':'#805d20';});
+    document.getElementById('check-answers').addEventListener('click',()=>{const ids=['q-filter','q-crystal','q-paper'];const values=ids.map(id=>document.getElementById(id).value);const feedback=document.getElementById('quiz-feedback');if(values.some(value=>!value)){feedback.textContent='請先完成三個分離目標的配對，再查看結果。';feedback.style.color='#48634f';return;}const correct=values[0]==='filter'&&values[1]==='crystal'&&values[2]==='paper';feedback.textContent=correct?'三個方法都選對了！過濾分開泥沙和水、結晶讓鹽從鹽水中分離、濾紙層析讓混合色素分出不同色帶。':'還有方法和目標沒有對上。回頭想想：要分開泥沙和水、把鹽從鹽水中分離，還是觀察墨水裡有幾種色素？';feedback.style.color=correct?'#176b53':'#48634f';});
     document.getElementById('reset-answers').addEventListener('click',()=>{['q-filter','q-crystal','q-paper'].forEach(id=>document.getElementById(id).value='');const feedback=document.getElementById('quiz-feedback');feedback.textContent='完成三個配對後，查看回饋。';feedback.style.color='';});
   </script>
 </body>
