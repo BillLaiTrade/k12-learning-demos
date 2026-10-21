@@ -173,9 +173,17 @@
     .volume-mark-label[data-label="before"] { top:61px; color:#a1652f; }
     .volume-mark-label[data-label="after"] { top:31px; color:#176e9c; }
     .volume-mark-label[hidden] { display:none; }
-    .liquid-shape-vessel { width:130px; height:96px; display:grid; align-items:end; border:3px solid #82948b; border-top:0; background:#fff; overflow:hidden; transition:width .25s ease,height .25s ease; }
-    .liquid-shape-vessel[data-form="tall"] { width:74px; height:126px; }
-    .liquid-shape-water { height:52%; border-top:3px solid #08679f; background:linear-gradient(180deg,#42a7d8,#1687cb); transition:height .2s ease; }
+    .liquid-shape-stage { position:relative; width:min(260px,100%); height:224px; }
+    .liquid-shape-vessel { position:absolute; left:50%; bottom:0; width:min(260px,100%); height:112px; transform:translateX(-50%); transition:width .9s ease-in-out,height .9s ease-in-out; }
+    .liquid-shape-vessel[data-form="tall"] { width:min(132px,100%); height:210px; }
+    .liquid-shape-vessel[data-form="square"] { width:min(174px,100%); height:174px; }
+    .liquid-shape-walls { position:absolute; inset:12px 0 0; border:3px solid #718b7e; border-top:0; border-radius:0 0 15px 15px; background:linear-gradient(90deg,rgba(122,160,140,.23),rgba(240,249,243,.16) 18%,rgba(255,255,255,.12) 52%,rgba(218,238,226,.18) 84%,rgba(112,148,128,.24)); box-shadow:inset 0 -5px 0 rgba(85,122,100,.12); pointer-events:none; }
+    .liquid-shape-interior { position:absolute; z-index:1; inset:18px 8px 8px; overflow:hidden; border-radius:0 0 10px 10px; }
+    .liquid-shape-water { position:absolute; left:0; right:0; bottom:0; height:45%; box-sizing:border-box; border-top:3px solid #08679f; background:linear-gradient(180deg,rgba(66,167,216,.88),#1687cb); }
+    .liquid-shape-rim { position:absolute; z-index:2; top:0; left:-3px; right:-3px; height:27px; border:3px solid #718b7e; border-radius:50%; background:linear-gradient(180deg,#fff 0%,#e5efe8 54%,#bfd2c5 100%); box-shadow:inset 0 -3px 0 rgba(85,122,100,.18),0 2px 3px rgba(40,60,49,.12); pointer-events:none; }
+    .interactive-model[data-model="liquid-shape"] { width:min(100%,360px); }
+    .interactive-model[data-model="liquid-shape"] .model-readout { width:100%; }
+    @media(prefers-reduced-motion:reduce) { .liquid-shape-vessel { transition-duration:.01ms; } }
     .liquid-transfer { width:100%; display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:end; }
     .transfer-vessel { position:relative; width:70px; height:76px; margin:auto; border:2px solid #82948b; border-top:0; border-radius:0 0 10px 10px; background:#fff; overflow:hidden; }
     .transfer-water { position:absolute; inset:auto 0 0; height:var(--fill,100%); background:#1687cb; transition:height .2s ease; }
@@ -620,7 +628,7 @@
       "solid.shape":["換了容器，鐵塊的形狀會改變嗎？","把同一個鐵塊和不同形狀的容器放在一起比較。","切換容器照片，觀察實際容器的外形。","solid-shape","容器外形不同，鐵塊的形狀仍相同；固體通常有固定形狀。"],
       "solid.volume":["量筒水位差，量出鐵塊的體積","將邊長 2 公分的鐵塊完全浸入量筒，水位由 20 mL 上升到 28 mL；排開的 8 mL 水，對應鐵塊 8 cm³ 的體積。","將鐵塊拖入或拖出水中；也可按按鈕操作，觀察水位變化。","solid-volume","鐵塊完全浸入後，水位差為 8 mL；1 mL 等於 1 cm³，因此鐵塊體積是 8 cm³。"],
       "solid.compressibility":["固體在一般情況下不易壓縮","以鐵塊為例。","一般外力下，鐵塊體積不容易明顯縮小。","solid-compress-note","「不易壓縮」不代表完全不能壓縮。"],
-      "liquid.shape":["同一份水會貼合不同容器的形狀","水倒入淺容器或細高容器時，水面以下的形狀會隨容器改變。","拖曳滑桿切換容器形狀，觀察同一份水如何改變外形。","liquid-shape","水的形狀隨容器改變；水量在這項觀察中保持相同。"],
+      "liquid.shape":["同一份水會貼合不同容器的形狀","容器形狀改變時，同一份水仍貼合容器底部與側壁；液面保持水平，水量不變。","切換容器形狀，觀察同一份水的外形與液面高度如何改變。","liquid-shape","同一份 200 mL 的水量不變；容器變窄時液面升高，水仍貼合容器底部，液面保持水平。"],
       "liquid.volume":["轉移前後量出同一份水的體積","用量筒量取 200 mL 的水，轉移到另一個容器後再量一次，讀值仍約為 200 mL。","拖曳滑桿完成轉移，對照量筒與接收容器的刻度讀值。","liquid-volume","轉移前後讀值皆為 200 mL；液體體積在一般情況下大致固定。"],
       "liquid.compressibility":["推壓密閉水樣，體積幾乎不變","密閉注射筒裝滿水並封住出口，推壓活塞時水的體積只略微改變。","拖曳滑桿增加推力，觀察水樣體積讀值；這是示意模型，不需用力硬推實物。","liquid-compress","水樣體積只略微變化；液體在一般情況下不易壓縮。"],
       "gas.shape":["空氣會填滿不同形狀的容器","容器外形改變時，裡面的空氣仍會分布在整個可用空間；即使靜置，空氣分子也會持續緩慢、隨機地運動。","切換容器形狀，觀察容器變化時空氣粒子如何在原有分布附近持續移動。","gas-shape","空氣分布在整個容器空間；即使靜置，分子仍會緩慢隨機運動。淡藍空心圓環是分子模型；真實空氣分子無色且看不見。"],
@@ -752,6 +760,30 @@
       document.querySelectorAll("#state-demo [data-gas-form]").forEach(control=>control.setAttribute("aria-pressed",String(control===button)));
       document.querySelector("#state-demo .demo-result").textContent="容器壁逐漸移動，空氣分子也連續地往新空間分散；沒有分子突然換位。靜置時，分子仍持續緩慢隨機運動。";
     }
+    let liquidShapeFrame=0;
+    function setupLiquidShape(root){
+      const model=root.querySelector('[data-model="liquid-shape"]'),interior=model?.querySelector(".liquid-shape-interior"),water=model?.querySelector("[data-liquid-water]");
+      if(!model||!interior||!water)return;
+      cancelAnimationFrame(liquidShapeFrame);liquidShapeFrame=0;
+      model.dataset.volumeArea=String(interior.clientWidth*water.offsetHeight);
+    }
+    function setLiquidShape(form,button){
+      const model=document.querySelector('[data-model="liquid-shape"]');if(!model)return;
+      const names={wide:"寬淺容器",tall:"細高容器",square:"方形容器"},name=names[form];if(!name)return;
+      const vessel=model.querySelector("[data-liquid-vessel]"),interior=model.querySelector(".liquid-shape-interior"),water=model.querySelector("[data-liquid-water]"),volumeArea=Number(model.dataset.volumeArea)||interior.clientWidth*water.offsetHeight;
+      vessel.dataset.form=form;vessel.setAttribute("aria-label",name+"剖面模型");
+      cancelAnimationFrame(liquidShapeFrame);const started=performance.now();
+      const adjustSurface=now=>{
+        if(!model.isConnected)return;
+        const width=Math.max(1,interior.clientWidth),height=interior.clientHeight;
+        water.style.height=`${Math.min(height,volumeArea/width)}px`;
+        if(now-started<950)liquidShapeFrame=requestAnimationFrame(adjustSurface);
+      };
+      adjustSurface(started);
+      model.querySelector("[data-model-readout]").textContent=`容器：${name}｜同一份水：200 mL`;
+      document.querySelectorAll("#state-demo [data-liquid-form]").forEach(control=>control.setAttribute("aria-pressed",String(control===button)));
+      document.querySelector("#state-demo .demo-result").textContent="同一份 200 mL 的水量不變；容器變窄時液面升高，水仍貼合容器底部，液面保持水平。";
+    }
     function renderStateDetail(mode,key){
       document.querySelectorAll("[data-state-pick],[data-property-pick],[data-state-cell]").forEach(button=>button.setAttribute("aria-pressed","false"));
       const selected=mode==="state"?`[data-state-pick="${key}"]`:mode==="property"?`[data-property-pick="${key}"]`:`[data-state-cell="${key}"]`;
@@ -800,7 +832,7 @@
       const gasParticles=Array.from({length:gasParticleCount},(_,i)=>`<span class="gas-particle" data-gas-particle style="--x:${((i%gasGrid.columns)+.5)*100/gasGrid.columns}%;--y:${(Math.floor(i/gasGrid.columns)+.5)*100/gasGrid.rows}%;${gasParticleMotionStyle(gasGrid.amplitudeX,gasGrid.amplitudeY)}"></span>`).join("");
       const graphic=visual==="solid-compress-note"?`<div class="solid-pressure-scene" role="img" aria-label="雙手直接抵住鐵塊兩側向內推擠；鐵塊外形與大小維持不變"><div class="solid-pressure-press"><span class="solid-pressure-arrow" aria-hidden="true">→</span>${pushingHandGraphic("left")}${ironBlockGraphic("受到雙手直接推擠的完整鐵塊").replace('class="iron-block-svg"','class="iron-block-svg solid-pressure-iron"').replace('viewBox="0 0 160 120"','viewBox="26 10 113 102"')} ${pushingHandGraphic("right")}<span class="solid-pressure-arrow" aria-hidden="true">←</span></div><p class="solid-pressure-caption">雙手直接向內推擠鐵塊</p></div>`:visual==="solid-shape"?`<div class="interactive-model" data-model="solid-shape"><div class="solid-shape-photo-row"><div class="solid-object-card"><span>同一個鐵塊</span>${ironBlockGraphic("外形固定的鐵塊模型").replace('class="iron-block-svg"','class="iron-block-svg shape-iron-block"')}</div><figure class="shape-photo-card"><img data-shape-photo src="assets/solid-container-bowl.jpg" alt="淺口塑膠碗的實物照片"><figcaption data-shape-caption>淺口塑膠碗</figcaption><div class="shape-source"><a data-shape-source href="https://commons.wikimedia.org/wiki/File:Dog_Water_Bowl.jpg" target="_blank" rel="noopener">Ohiopetwatch</a><a data-shape-license href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a></div></figure></div><div class="model-readout" data-model-readout>目前選擇：淺口塑膠碗</div></div>`
         :visual==="solid-volume"?`<div class="interactive-model" data-model="solid-volume"><div class="solid-volume-measure"><div class="volume-cylinder"><div class="volume-water" data-volume-water></div><div class="volume-before-mark" aria-hidden="true"></div><div class="volume-graduations" aria-hidden="true"></div></div>${ironBlockGraphic("準備放入量筒的完整鐵塊").replace('class="iron-block-svg"','class="iron-block-svg volume-iron-block" tabindex="0"').replace('role="img"','role="button"')}<div class="volume-annotations"><span class="volume-mark-label" data-label="before">原水位 20 mL</span><span class="volume-mark-label" data-label="after" data-volume-after hidden>水位 28 mL</span></div></div><div class="model-readout" data-model-readout>量筒原有水：20 mL｜鐵塊尚未浸入</div></div>`
-        :visual==="liquid-shape"?`<div class="interactive-model" data-model="liquid-shape"><div class="liquid-shape-vessel" data-liquid-vessel data-form="wide"><div class="liquid-shape-water"></div></div><div class="model-readout" data-model-readout>容器：寬而淺｜同一份水</div></div>`
+        :visual==="liquid-shape"?`<div class="interactive-model" data-model="liquid-shape"><div class="liquid-shape-stage"><div class="liquid-shape-vessel" data-liquid-vessel data-form="wide" role="img" aria-label="寬淺容器剖面模型"><div class="liquid-shape-walls" aria-hidden="true"></div><div class="liquid-shape-interior"><div class="liquid-shape-water" data-liquid-water></div></div><div class="liquid-shape-rim" aria-hidden="true"></div></div></div><div class="model-readout" data-model-readout>容器：寬淺容器｜同一份水：200 mL</div><span class="model-caption">藍色區域代表水；容器變形時水仍是連續的一整片，液面保持水平。</span></div>`
         :visual==="liquid-volume"?`<div class="interactive-model" data-model="liquid-volume"><div class="liquid-transfer"><div><div class="transfer-vessel"><span class="transfer-water" data-source-water style="--fill:100%"></span></div><span class="model-caption">量筒・200 mL</span><span class="model-caption" data-source-reading>目前 200 mL</span></div><span class="transfer-arrow" aria-hidden="true">→</span><div><div class="transfer-vessel"><span class="transfer-water" data-target-water style="--fill:0%"></span></div><span class="model-caption">接收量筒</span><span class="model-caption" data-target-reading>目前 0 mL</span></div></div><div class="model-readout" data-model-readout>轉移 0%｜同一份水合計 200 mL</div></div>`
         :visual==="liquid-compress"?`<div class="interactive-model" data-model="liquid-compress"><div class="water-syringe-model" data-water-syringe><div class="water-syringe-fill"></div><span class="water-syringe-plunger"></span></div><div class="model-readout" data-model-readout>推力：0｜水樣體積：約 50 mL</div><span class="model-caption">示意模型；活塞位移放大顯示水樣極微小壓縮，勿用力硬推實物</span></div>`
         :visual==="gas-shape"?`<div class="interactive-model" data-model="gas-shape"><div class="gas-shape-stage"><div class="gas-shape-box" data-gas-shape-box data-form="wide" role="img" aria-label="寬淺容器剖面模型"><div class="gas-shape-walls" aria-hidden="true"></div><div class="gas-particle-field" aria-hidden="true">${gasParticles}</div><div class="gas-shape-rim" aria-hidden="true"></div></div></div><div class="model-readout" data-model-readout>容器：寬淺容器｜同一批空氣分子持續隨機運動</div><span class="model-caption">淡藍空心圓環沿連續、不規則的路徑移動，代表空氣分子的隨機運動；真實空氣分子無色且看不見。</span></div>`
@@ -808,11 +840,12 @@
         :visual==="gas-compress"?`<div class="interactive-model" data-model="gas-compress"><div class="gas-syringe-stage" data-gas-syringe><div class="gas-syringe-model"><div class="gas-syringe-cavity"><div class="gas-particle-field" data-gas-compress-field aria-hidden="true" style="width:100%">${gasParticles}</div></div></div><div class="gas-plunger" data-gas-piston role="slider" tabindex="0" aria-label="注射筒活塞把手" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-orientation="horizontal" title="抓住把手左右推拉"><span class="gas-piston-face" aria-hidden="true"></span><span class="gas-plunger-rod" aria-hidden="true"></span><span class="gas-plunger-grip" aria-hidden="true"></span></div></div><div class="model-readout" data-model-readout>活塞位置：未推入｜空氣分子數量：${gasParticleCount}｜可用空間：100%</div><span class="model-caption">淡藍空心圓環代表持續運動的空氣分子；真實空氣分子無色且看不見。</span></div>`
         :`<div class="compare-three" data-compare-property="${key}"><span class="compare-item" data-kind="solid" data-active="true">固體<br>鐵製物體</span><span class="compare-item" data-kind="liquid">液體<br>水</span><span class="compare-item" data-kind="gas">氣體<br>空氣</span></div>`;
       const isInteractive=visual!=="compare"&&!staticOnly;
-      const controls=visual==="solid-volume"?`<button class="volume-action" type="button" data-volume-action aria-pressed="false">放入量筒</button>`:visual==="solid-shape"?`<div class="shape-container-options" role="group" aria-label="選擇容器照片"><button class="shape-container-choice" type="button" data-container-shape="wide" aria-pressed="true">淺口塑膠碗</button><button class="shape-container-choice" type="button" data-container-shape="beaker" aria-pressed="false">100 mL 燒杯</button><button class="shape-container-choice" type="button" data-container-shape="tall" aria-pressed="false">2000 mL 燒杯</button></div>`:visual==="gas-shape"?`<div class="shape-container-options" role="group" aria-label="切換容器形狀"><button class="shape-container-choice" type="button" data-gas-form="wide" aria-pressed="true">寬淺</button><button class="shape-container-choice" type="button" data-gas-form="tall" aria-pressed="false">細高</button><button class="shape-container-choice" type="button" data-gas-form="square" aria-pressed="false">方形</button></div>`:visual==="gas-compress"?"":staticOnly?"":isInteractive?`<input class="state-range" type="range" min="0" max="100" value="0" data-demo-range="${visual}" aria-label="${action}">`:`<button type="button" data-state-demo>依序查看固體、液體和氣體</button>`;
+      const controls=visual==="solid-volume"?`<button class="volume-action" type="button" data-volume-action aria-pressed="false">放入量筒</button>`:visual==="solid-shape"?`<div class="shape-container-options" role="group" aria-label="選擇容器照片"><button class="shape-container-choice" type="button" data-container-shape="wide" aria-pressed="true">淺口塑膠碗</button><button class="shape-container-choice" type="button" data-container-shape="beaker" aria-pressed="false">100 mL 燒杯</button><button class="shape-container-choice" type="button" data-container-shape="tall" aria-pressed="false">2000 mL 燒杯</button></div>`:visual==="liquid-shape"?`<div class="shape-container-options" role="group" aria-label="切換液體容器形狀"><button class="shape-container-choice" type="button" data-liquid-form="wide" aria-pressed="true">寬淺</button><button class="shape-container-choice" type="button" data-liquid-form="tall" aria-pressed="false">細高</button><button class="shape-container-choice" type="button" data-liquid-form="square" aria-pressed="false">方形</button></div>`:visual==="gas-shape"?`<div class="shape-container-options" role="group" aria-label="切換容器形狀"><button class="shape-container-choice" type="button" data-gas-form="wide" aria-pressed="true">寬淺</button><button class="shape-container-choice" type="button" data-gas-form="tall" aria-pressed="false">細高</button><button class="shape-container-choice" type="button" data-gas-form="square" aria-pressed="false">方形</button></div>`:visual==="gas-compress"?"":staticOnly?"":isInteractive?`<input class="state-range" type="range" min="0" max="100" value="0" data-demo-range="${visual}" aria-label="${action}">`:`<button type="button" data-state-demo>依序查看固體、液體和氣體</button>`;
       document.getElementById("state-demo").innerHTML=staticOnly?`<div class="state-demo-visual">${graphic}</div><div class="demo-controls"><p>${control}</p><p class="demo-result" aria-live="polite">${result}</p></div>`:`<div class="state-demo-visual">${graphic}</div><div class="demo-controls"><p>${control}</p>${controls}<p class="demo-result" aria-live="polite">${result}</p></div>`;
       stateDemo.scrollIntoView({block:"start",behavior:"smooth"});
       if(visual==="gas-volume"||visual==="gas-compress")startGasParticleMotion(visual);
       if(visual==="gas-compress")setupGasPlunger(stateDemo);
+      if(visual==="liquid-shape")setupLiquidShape(stateDemo);
       if(visual==="solid-volume"){
         const block=document.querySelector("#state-demo .volume-iron-block"),stage=block.closest(".solid-volume-measure");let dragging=false,startY=0,startTop=0,wasPlaced=false;
         block.addEventListener("pointerdown",event=>{dragging=true;startY=event.clientY;startTop=parseFloat(getComputedStyle(block).top);wasPlaced=document.querySelector("#state-demo [data-volume-action]").dataset.placed==="true";block.style.transition="none";block.setAttribute("aria-grabbed","true");block.setPointerCapture(event.pointerId);event.preventDefault();});
@@ -828,9 +861,7 @@
     document.getElementById("state-demo").addEventListener("input",event=>{
       const input=event.target.closest("[data-demo-range]"); if(!input)return;
       const value=Number(input.value),model=input.dataset.demoRange,root=document.querySelector(`[data-model="${model}"]`),readout=root.querySelector("[data-model-readout]"),result=document.querySelector("#state-demo .demo-result");
-      if(model==="liquid-shape"){
-        const tall=value>=50;root.querySelector("[data-liquid-vessel]").dataset.form=tall?"tall":"wide";root.querySelector(".liquid-shape-water").style.height=tall?"70%":"52%";readout.textContent=`容器：${tall?"細高":"寬而淺"}｜同一份水`;result.textContent=`容器改成${tall?"細高":"寬而淺"}外形，水的輪廓隨容器改變；水量保持相同。`;
-      }else if(model==="liquid-volume"){
+      if(model==="liquid-volume"){
         const ratio=value/100,source=Math.round(200*(1-ratio)),target=200-source;root.querySelector("[data-source-water]").style.setProperty("--fill",`${100*(1-ratio)}%`);root.querySelector("[data-target-water]").style.setProperty("--fill",`${100*ratio}%`);root.querySelector("[data-source-reading]").textContent=`目前 ${source} mL`;root.querySelector("[data-target-reading]").textContent=`目前 ${target} mL`;readout.textContent=`轉移 ${value}%｜同一份水合計 ${source+target} mL`;result.textContent=value===100?"同一份水轉移完成；接收端再用量筒量取，讀值約為 200 mL。":"拖曳滑桿模擬轉移，兩端讀值合計維持 200 mL。";
       }else if(model==="liquid-compress"){
         const syringe=root.querySelector("[data-water-syringe]"),plungerPosition=value*.08;syringe.dataset.pressed=String(value>0);syringe.querySelector(".water-syringe-plunger").style.right=`${plungerPosition}px`;syringe.querySelector(".water-syringe-fill").style.right=`${17+plungerPosition}px`;const volume=(50-value*.001).toFixed(1);readout.textContent=`模型推力：${value}%｜水樣體積：約 ${volume} mL`;result.textContent="模型中推力增加，活塞略微移動，水樣體積只略微改變；真實水樣仍會有極微小壓縮。";
@@ -841,6 +872,8 @@
     document.getElementById("state-demo").addEventListener("click",event=>{
       const gasShapeButton=event.target.closest("[data-gas-form]");
       if(gasShapeButton){setGasShape(gasShapeButton.dataset.gasForm,gasShapeButton);return;}
+      const liquidShapeButton=event.target.closest("[data-liquid-form]");
+      if(liquidShapeButton){setLiquidShape(liquidShapeButton.dataset.liquidForm,liquidShapeButton);return;}
       const containerButton=event.target.closest("[data-container-shape]");
       if(containerButton){
         const shape=containerButton.dataset.containerShape,examples={wide:{name:"淺口塑膠碗",image:"solid-container-bowl.jpg",alt:"淺口塑膠碗的實物照片",source:"https://commons.wikimedia.org/wiki/File:Dog_Water_Bowl.jpg",creator:"Ohiopetwatch"},beaker:{name:"100 mL 燒杯",image:"solid-container-beaker.jpg",alt:"100 mL 玻璃燒杯的實物照片",source:"https://commons.wikimedia.org/wiki/File:Glass_100ml_beaker.jpg",creator:"Lilly_M"},tall:{name:"2000 mL 燒杯",image:"solid-container-tall-beaker.jpg",alt:"2000 mL 玻璃燒杯的實物照片",source:"https://commons.wikimedia.org/wiki/File:Glass_2000ml_beaker.jpg",creator:"Lilly_M"}},item=examples[shape],model=document.querySelector('[data-model="solid-shape"]');
