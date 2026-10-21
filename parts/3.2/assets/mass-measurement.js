@@ -434,11 +434,31 @@ export function mountMassMeasurement() {
     showReading();
   }
 
-  function resetBalance() {
+  function clearBalanceWeights() {
     weightOrigins.forEach(origin => { if (origin !== null) sourceWeightModels[origin].visible = true; });
     weights = [];
     weightOrigins = [];
     drawWeights();
+  }
+  function resetBalance() {
+    const stoneWasOnPan = balancePlaced || balance.stone.parent === balance.leftPan;
+    placingBalance = false;
+    balancePlaced = false;
+    balance.panShadow.visible = false;
+    balance.stone.visible = mode === 'balance';
+    if (stoneWasOnPan) {
+      if (balance.stone.parent !== scene) detachPreservingWorldTransform(balance.stone);
+      returningBalance = true;
+    } else {
+      returningBalance = false;
+      balance.stone.removeFromParent();
+      scene.add(balance.stone);
+      balance.stone.position.copy(balance.sourcePosition);
+    }
+    balanceTargetPosition.copy(balance.sourcePosition);
+    balancePlaceButton.disabled = false;
+    balancePlaceButton.textContent = '將石頭放上左盤';
+    clearBalanceWeights();
   }
   let suppressWeightClick = false;
   function addWeight(next, origin = null) {
@@ -467,7 +487,8 @@ export function mountMassMeasurement() {
         start.moved = true;
         ghost = document.createElement('div');
         ghost.className = 'weight-drag-preview';
-        ghost.textContent = `${start.value} g`;
+        ghost.setAttribute('aria-hidden', 'true');
+        ghost.innerHTML = `<svg viewBox="0 0 96 112" role="presentation"><defs><linearGradient id="dragWeightGold" x1="0" x2="1"><stop offset="0" stop-color="#9b6d22"/><stop offset=".38" stop-color="#f3d98e"/><stop offset=".68" stop-color="#c99a45"/><stop offset="1" stop-color="#8a6020"/></linearGradient><linearGradient id="dragWeightTop" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f6dfa1"/><stop offset="1" stop-color="#a8792e"/></linearGradient></defs><ellipse cx="48" cy="101" rx="29" ry="5" fill="#26342c" opacity=".18"/><path d="M43 9 Q48 6 53 9 L55 28 L41 28 Z" fill="url(#dragWeightGold)" stroke="#8c6328" stroke-width="1.5"/><ellipse cx="48" cy="28" rx="15" ry="5" fill="url(#dragWeightTop)" stroke="#8c6328" stroke-width="1.5"/><path d="M23 36 Q24 30 48 30 Q72 30 73 36 L70 82 Q69 91 48 93 Q27 91 26 82 Z" fill="url(#dragWeightGold)" stroke="#8c6328" stroke-width="1.8"/><ellipse cx="48" cy="36" rx="25" ry="7" fill="url(#dragWeightTop)" stroke="#8c6328" stroke-width="1.6"/><path d="M25 43 Q48 49 71 43" fill="none" stroke="#f5dc9a" stroke-width="2" opacity=".8"/><text x="48" y="68" text-anchor="middle" dominant-baseline="middle" fill="#38250c" font-family="sans-serif" font-size="14" font-weight="800">${start.value} g</text></svg>`;
         document.body.append(ghost);
         suppressWeightClick = true;
       }
@@ -553,7 +574,7 @@ export function mountMassMeasurement() {
       }
       balancePlaceButton.disabled = balancePlaced || placingBalance;
       balancePlaceButton.textContent = balancePlaced ? '石頭已放上左盤' : placingBalance ? '正在放上左盤…' : '將石頭放上左盤';
-      resetBalance();
+      clearBalanceWeights();
     }
     showReading();
     camera.position.set(mode === 'balance' ? 0.8 : 3.1, mode === 'balance' ? 3.25 : 3.1, mode === 'balance' ? 9.4 : 8.2);
