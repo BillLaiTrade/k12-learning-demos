@@ -126,6 +126,46 @@ function updateProjectionGuide(guide, start, end) {
   guide.visible = true;
 }
 
+function getFarthestOccludedTick(sourceCamera, ruler, pencilGroup) {
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  sourceCamera.updateMatrixWorld();
+  ruler.updateMatrixWorld(true);
+  pencilGroup.updateMatrixWorld(true);
+  let farthest = null;
+  for (const tick of ruler.children) {
+    if (tick.userData.rulerFarTick === undefined || !tick.visible) continue;
+    const point = tick.getWorldPosition(new THREE.Vector3());
+    const projected = point.clone().project(sourceCamera);
+    if (projected.x < -1 || projected.x > 1 || projected.y < -1 || projected.y > 1 || projected.z < -1 || projected.z > 1) continue;
+    pointer.set(projected.x, projected.y);
+    raycaster.setFromCamera(pointer, sourceCamera);
+    const tickDistance = raycaster.ray.origin.distanceTo(point);
+    const pencilHit = raycaster.intersectObject(pencilGroup, true).find((hit) => hit.object.visible);
+    if (pencilHit && pencilHit.distance < tickDistance - 0.025) {
+      const centimeter = tick.userData.rulerFarTick;
+      if (!farthest || centimeter > farthest.centimeter) farthest = { centimeter, point };
+    }
+  }
+  if (!farthest) return null;
+  const visibleCounterpart = ruler.children.find((tick) => tick.userData.rulerTick === farthest.centimeter);
+  return visibleCounterpart
+    ? { centimeter: farthest.centimeter, point: visibleCounterpart.getWorldPosition(new THREE.Vector3()) }
+    : farthest;
+}
+
+function getEraserSurfaceStart(pencilStart, pencilHeight, pencilZ, target) {
+  const eraserRadius = 0.34;
+  const vertical = target.y - pencilHeight;
+  const depth = target.z - pencilZ;
+  const length = Math.hypot(vertical, depth) || 1;
+  return {
+    x: pencilStart + 18.41,
+    y: pencilHeight + eraserRadius * vertical / length,
+    z: pencilZ + eraserRadius * depth / length
+  };
+}
+
 function setMagnifierCrop(magnifierCamera, sourceCamera, worldTarget, viewport) {
   const magnification = 6;
   const fullHeight = 1000;
@@ -255,7 +295,7 @@ function createRuler() {
     );
     number.rotation.x = -Math.PI / 2;
     const labelX = centimeter === 0 ? 0.32 : centimeter === rulerLength ? rulerLength - 0.32 : centimeter;
-    number.position.set(labelX, 0.235, -0.16);
+    number.position.set(labelX, 0.235, -0.34);
     number.renderOrder = 2;
     number.userData.rulerMajorNumber = true;
     number.userData.rulerCentimeter = centimeter;
@@ -496,7 +536,7 @@ try {
     for (const centimeter of [18, 19]) {
       const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeTextTexture(String(centimeter)), transparent: true, depthTest: false, depthWrite: false }));
       label.scale.set(0.56, 0.3, 1);
-      label.position.set(centimeter, 0.27, 0.34);
+      label.position.set(centimeter, 0.27, -0.34);
       label.renderOrder = 6;
       magnifierLabels.add(label);
     }
@@ -565,16 +605,19 @@ function render() {
   camera.lookAt(target);
 
   pencil.position.set(view.start, view.centerY, view.centerZ);
+  const occludedTick = getFarthestOccludedTick(camera, rulerModel, pencil);
+  view.occludedTick = occludedTick?.point.x ?? null;
+  if (occludedTick) view.rayEnd = { x: occludedTick.point.x, y: 0.22, z: occludedTick.point.z };
   if (view.rayStart && view.rayEnd) {
-    const guideStart = {
-      x: view.rayStart.x,
-      y: view.rayStart.y,
-      z: view.rayStart.z
-    };
+    const guideStart = getEraserSurfaceStart(view.start, view.centerY, view.centerZ, {
+      x: view.rayEnd.x,
+      y: 0.22,
+      z: view.rayEnd.z
+    });
     updateProjectionGuide(projectionRay,
       guideStart,
-      { x: view.rayEnd.x, y: 0.22, z: 0.95 });
-    landingRing.position.set(view.rayEnd.x, 0.255, 0.95);
+      { x: view.rayEnd.x, y: 0.22, z: view.rayEnd.z });
+    landingRing.position.set(view.rayEnd.x, 0.255, view.rayEnd.z);
     projectionRay.visible = true;
     landingRing.visible = true;
   } else {
@@ -593,7 +636,7 @@ function render() {
       const magnifierTarget = new THREE.Vector3(
         view.rayStart && view.rayEnd ? (view.rayStart.x + view.rayEnd.x) / 2 : view.start + 18.5,
         view.rayStart ? (view.rayStart.y + 0.22) / 2 : 0.3,
-        view.rayStart ? (view.rayStart.z + 0.95) / 2 : -0.16
+        view.rayStart && view.rayEnd ? (view.rayStart.z + view.rayEnd.z) / 2 : -0.34
       );
       setMagnifierCrop(magnifierCamera, camera, magnifierTarget, rect);
       const majorLabels = rulerModel.children.filter((child) => child.userData.rulerMajorNumber);
@@ -623,8 +666,8 @@ function render() {
   window.dispatchEvent(new CustomEvent("pencil3d-projection", {
     detail: {
       sceneId: "parallax-scene",
-      ruler18: projectToPanel(18, 0.23, 0.34),
-      ruler19: projectToPanel(19, 0.23, 0.34),
+      ruler18: projectToPanel(18, 0.23, -0.34),
+      ruler19: projectToPanel(19, 0.23, -0.34),
       pencilTip: projectToPanel(view.start + view.edge, view.centerY, view.centerZ),
       projectedReading: view.rayEnd?.x ?? view.edge
     }
@@ -659,16 +702,19 @@ function renderCorrection() {
     if (object.userData.rulerFarTick !== undefined) object.visible = object.userData.rulerFarTick % correctionView.tickInterval === 0;
   });
   correctionPencil.position.set(correctionView.start, correctionView.centerY, correctionView.centerZ);
+  const correctionOccludedTick = getFarthestOccludedTick(correctionCamera, correctionRulerModel, correctionPencil);
+  correctionView.occludedTick = correctionOccludedTick?.point.x ?? null;
+  if (correctionOccludedTick) correctionView.rayEnd = { x: correctionOccludedTick.point.x, y: 0.22, z: correctionOccludedTick.point.z };
   if (correctionView.rayStart && correctionView.rayEnd) {
-    const guideStart = {
-      x: correctionView.rayStart.x,
-      y: correctionView.rayStart.y,
-      z: correctionView.rayStart.z
-    };
+    const guideStart = getEraserSurfaceStart(correctionView.start, correctionView.centerY, correctionView.centerZ, {
+      x: correctionView.rayEnd.x,
+      y: 0.22,
+      z: correctionView.rayEnd.z
+    });
     updateProjectionGuide(correctionProjectionRay,
       guideStart,
-      { x: correctionView.rayEnd.x, y: 0.22, z: 0.95 });
-    correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, 0.95);
+      { x: correctionView.rayEnd.x, y: 0.22, z: correctionView.rayEnd.z });
+    correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, correctionView.rayEnd.z);
     correctionProjectionRay.visible = true;
     correctionLandingRing.visible = true;
   } else {
@@ -689,7 +735,7 @@ function renderCorrection() {
           ? (correctionView.rayStart.x + correctionView.rayEnd.x) / 2
           : correctionView.start + correctionView.rulerOffset + 18.5),
         correctionView.rayStart ? (correctionView.rayStart.y + 0.22) / 2 : 0.3,
-        correctionView.rayStart ? (correctionView.rayStart.z + 0.95) / 2 : -0.16
+        correctionView.rayStart && correctionView.rayEnd ? (correctionView.rayStart.z + correctionView.rayEnd.z) / 2 : -0.34
       );
       setMagnifierCrop(correctionMagnifierCamera, correctionCamera, magnifierTarget, inset);
       const majorLabels = correctionRulerModel.children.filter((child) => child.userData.rulerMajorNumber);
@@ -709,11 +755,13 @@ function renderCorrection() {
 window.setPencil3DView = (nextView = {}) => {
   Object.assign(view, nextView);
   render();
+  return view.occludedTick;
 };
 
 window.setPencil3DCorrectionView = (nextView = {}) => {
   Object.assign(correctionView, nextView);
   renderCorrection();
+  return correctionView.occludedTick;
 };
 
 window.getPencil3DCorrectionDragTarget = (clientX, clientY) => {
