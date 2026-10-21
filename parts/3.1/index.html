@@ -559,7 +559,7 @@
             <p>四種方法各自改善不同的誤差來源；點選任一項查看操作和說明。</p>
             <div class="correction-options" role="group" aria-label="選擇改善量測可靠性的方法">
               <button type="button" class="secondary" data-correction-control="density" aria-pressed="true"><strong>刻度加密</strong><small id="correction-density-status">較疏・每格 5 cm</small></button>
-              <button type="button" class="secondary" data-correction-control="origin" aria-pressed="false"><strong>對準零點</strong><small id="correction-origin-status">偏移 1 cm</small></button>
+              <button type="button" class="secondary" data-correction-control="origin" aria-pressed="false"><strong>對準零點</strong><small id="correction-origin-status">已對準 0</small></button>
               <button type="button" class="secondary" data-correction-control="angle" aria-pressed="false"><strong>正對尺面</strong><small id="correction-angle-status">正對尺面</small></button>
               <button type="button" class="secondary" data-correction-control="average" aria-pressed="false"><strong>重複量測</strong><small>取平均降波動</small></button>
             </div>
@@ -868,7 +868,7 @@
           lookAtY: cameraTarget.y,
           lookAtZ: cameraTarget.z,
           focalLengthRatio: focalLength / bounds.height,
-          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
+          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ + 0.36 },
           rayEnd: { x: clampedProjectionX, y: rulerTop + 0.02, z: clampedProjectionZ }
         });
 
@@ -1201,7 +1201,7 @@
       const correctionDensityButtons = [...document.querySelectorAll("[data-correction-density]")];
       let correctionMode = "density";
       let correctionTickInterval = 5;
-      let correctionRulerOffset = -1;
+      let correctionRulerOffset = 0;
       const correctionCameraState = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
       let correctionCameraPreset = "front";
       let correctionDrag = null;
@@ -1257,8 +1257,8 @@
           lookAtY: rulerTop,
           lookAtZ: target.z,
           focalLengthRatio: sceneActive ? bounds.width * 0.85 / bounds.height : 1,
-          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
-          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.02, z: clampedProjectionZ },
+          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ + 0.36 },
+          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.01, z: 1.1 },
           magnifierTargetX: correctionMode === "origin" ? (state.start + correctionRulerOffset) / 2 : undefined,
           magnifierMode: correctionMode
         };
@@ -1362,7 +1362,7 @@
         correctionDrag.y = event.clientY;
         if (correctionDrag.action === "origin") {
           const bounds = correctionCanvas.getBoundingClientRect();
-          correctionRulerOffset = clamp(correctionRulerOffset + dx * 20 / (bounds.width * 0.78), -1, 0);
+          correctionRulerOffset = clamp(correctionRulerOffset + dx * 20 / (bounds.width * 0.78), -1, 1);
         } else {
           correctionCameraPreset = "free";
           const bounds = correctionCanvas.getBoundingClientRect();

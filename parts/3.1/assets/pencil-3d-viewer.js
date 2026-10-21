@@ -86,6 +86,48 @@ function cylinderAlongX(radiusTop, radiusBottom, length, material, radialSegment
   return mesh;
 }
 
+function createProjectionGuide() {
+  const guide = new THREE.Group();
+  guide.name = "measurement-projection-ray";
+  guide.visible = false;
+  return guide;
+}
+
+function updateProjectionGuide(guide, start, end) {
+  if (!guide || !start || !end) return;
+  const from = new THREE.Vector3(start.x, start.y, start.z);
+  const to = new THREE.Vector3(end.x, end.y, end.z);
+  const delta = to.clone().sub(from);
+  const length = delta.length();
+  if (length < 0.01) {
+    guide.visible = false;
+    return;
+  }
+  const direction = delta.normalize();
+  const dashLength = 0.28;
+  const dashGap = 0.11;
+  const dashCount = Math.ceil(length / (dashLength + dashGap));
+  while (guide.children.length < dashCount) {
+    const dash = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.035, 0.035, 1, 8, 1, false),
+      new THREE.MeshBasicMaterial({ color: 0xc45a2b, depthTest: false, depthWrite: false, toneMapped: false })
+    );
+    dash.renderOrder = 7;
+    guide.add(dash);
+  }
+  for (let index = 0; index < guide.children.length; index += 1) {
+    const dash = guide.children[index];
+    const offset = index * (dashLength + dashGap);
+    const segmentLength = Math.max(0, Math.min(dashLength, length - offset));
+    dash.visible = segmentLength > 0;
+    if (!dash.visible) continue;
+    dash.position.copy(from).addScaledVector(direction, offset + segmentLength / 2);
+    dash.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
+    dash.scale.set(1, segmentLength, 1);
+  }
+  guide.visible = true;
+}
+
 function makeTextTexture(text) {
   const label = document.createElement("canvas");
   label.width = 256;
@@ -447,12 +489,7 @@ try {
   pencil = createPencil();
   scene.add(pencil);
 
-  projectionRay = new THREE.Line(
-    new THREE.BufferGeometry(),
-    new THREE.LineDashedMaterial({ color: 0xb65125, dashSize: 0.2, gapSize: 0.09, linewidth: 1.5 })
-  );
-  projectionRay.name = "measurement-projection-ray";
-  projectionRay.renderOrder = 3;
+  projectionRay = createProjectionGuide();
   scene.add(projectionRay);
   landingMarker = new THREE.Mesh(
     new THREE.SphereGeometry(0.15, 20, 14),
@@ -479,7 +516,6 @@ try {
   correctionLandingMarker = correctionScene.getObjectByName(landingMarker.name);
   correctionLandingRing = correctionScene.getObjectByName(landingRing.name);
   correctionMagnifierLabels = correctionScene.getObjectByName(magnifierLabels.name);
-  correctionProjectionRay.geometry = correctionProjectionRay.geometry.clone();
   correctionMagnifierLabels.visible = false;
 
   modelReady = true;
@@ -523,11 +559,7 @@ function render() {
 
   pencil.position.set(view.start, view.centerY, view.centerZ);
   if (view.rayStart && view.rayEnd) {
-    projectionRay.geometry.setFromPoints([
-      new THREE.Vector3(view.rayEnd.x, view.centerY, view.rayEnd.z),
-      new THREE.Vector3(view.rayEnd.x, view.rayEnd.y, view.rayEnd.z)
-    ]);
-    projectionRay.computeLineDistances();
+    updateProjectionGuide(projectionRay, view.rayStart, view.rayEnd);
     landingMarker.position.set(view.rayEnd.x, 0.28, view.rayEnd.z);
     landingRing.position.set(view.rayEnd.x, 0.255, view.rayEnd.z);
     projectionRay.visible = true;
@@ -620,11 +652,7 @@ function renderCorrection() {
   });
   correctionPencil.position.set(correctionView.start, correctionView.centerY, correctionView.centerZ);
   if (correctionView.rayStart && correctionView.rayEnd) {
-    correctionProjectionRay.geometry.setFromPoints([
-      new THREE.Vector3(correctionView.rayEnd.x, correctionView.centerY, correctionView.rayEnd.z),
-      new THREE.Vector3(correctionView.rayEnd.x, correctionView.rayEnd.y, correctionView.rayEnd.z)
-    ]);
-    correctionProjectionRay.computeLineDistances();
+    updateProjectionGuide(correctionProjectionRay, correctionView.rayStart, correctionView.rayEnd);
     correctionLandingMarker.position.set(correctionView.rayEnd.x, 0.28, correctionView.rayEnd.z);
     correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, correctionView.rayEnd.z);
     correctionProjectionRay.visible = true;
