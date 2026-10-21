@@ -127,6 +127,7 @@
     .state-property-card p:last-child { margin-bottom:0; }
     .state-property-card strong { color:#8b612d; }
     .state-demo { min-height:118px; display:grid; grid-template-columns:minmax(260px,1fr) minmax(0,1.15fr); align-items:center; gap:15px; padding:13px; border-radius:12px; background:#f7f7f2; }
+    #state-demo { scroll-margin-top:160px; }
     .state-demo.static-only { min-height:0; }
     .state-demo-visual { display:grid; place-items:center; min-height:88px; }
     .solid-pressure-scene { width:min(100%,370px); padding:14px 10px 10px; border:1px solid #d9ddd7; border-radius:12px; background:#fff; text-align:center; }
@@ -669,6 +670,7 @@
       const isInteractive=visual!=="compare"&&!staticOnly;
       const controls=visual==="solid-volume"?`<button class="volume-action" type="button" data-volume-action aria-pressed="false">放入量筒</button>`:visual==="solid-shape"?`<div class="shape-container-options" role="group" aria-label="選擇容器照片"><button class="shape-container-choice" type="button" data-container-shape="wide" aria-pressed="true">淺口塑膠碗</button><button class="shape-container-choice" type="button" data-container-shape="beaker" aria-pressed="false">100 mL 燒杯</button><button class="shape-container-choice" type="button" data-container-shape="tall" aria-pressed="false">2000 mL 燒杯</button></div>`:staticOnly?"":isInteractive?`<input class="state-range" type="range" min="0" max="100" value="0" data-demo-range="${visual}" aria-label="${action}">`:`<button type="button" data-state-demo>依序查看固體、液體和氣體</button>`;
       document.getElementById("state-demo").innerHTML=staticOnly?`<div class="state-demo-visual">${graphic}</div><div class="demo-controls"><p>${control}</p><p class="demo-result" aria-live="polite">${result}</p></div>`:`<div class="state-demo-visual">${graphic}</div><div class="demo-controls"><p>${control}</p>${controls}<p class="demo-result" aria-live="polite">${result}</p></div>`;
+      stateDemo.scrollIntoView({block:"start",behavior:"smooth"});
       if(visual==="solid-volume"){
         const block=document.querySelector("#state-demo .volume-iron-block"),stage=block.closest(".solid-volume-measure");let dragging=false,startY=0,startTop=0,wasPlaced=false;
         block.addEventListener("pointerdown",event=>{dragging=true;startY=event.clientY;startTop=parseFloat(getComputedStyle(block).top);wasPlaced=document.querySelector("#state-demo [data-volume-action]").dataset.placed==="true";block.style.transition="none";block.setAttribute("aria-grabbed","true");block.setPointerCapture(event.pointerId);event.preventDefault();});
