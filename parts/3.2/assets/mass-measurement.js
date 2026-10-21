@@ -114,11 +114,11 @@ function makeWeightTray(scene, materials) {
   const inset = new THREE.Mesh(new THREE.BoxGeometry(2.72, 0.035, 0.54), materials.pan);
   inset.position.y = 0.177;
   tray.add(inset);
-  const values = [20, 10, 5, 1, 1, 1, 1];
-  const spacing = 0.34;
+  const values = [20, 10, 5, 1];
+  const spacing = 0.52;
   const weights = values.map((value, index) => {
     const weight = makeWeight(value);
-    const x = (index - 2) * spacing;
+    const x = (index - (values.length - 1) / 2) * spacing;
     weight.position.set(x, 0.2, 0);
     tray.add(weight);
     return { value, model: weight, position: weight.position.clone(), quaternion: weight.quaternion.clone(), scale: weight.scale.clone() };
