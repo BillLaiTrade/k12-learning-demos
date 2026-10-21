@@ -1260,7 +1260,7 @@
           reading.textContent = `${correctionDisplay(low)}–${correctionDisplay(high)} cm`;
           document.querySelector("#correction-stage-title").textContent = "調整刻度密度";
           document.querySelector("#correction-stage-prompt").textContent = "刻度每格越小，端點落在刻線之間的範圍越小，估讀的不確定性也會降低。選擇較疏或較密的直尺。";
-          document.querySelector("#correction-mode-instructions").textContent = correctionTickInterval === 1 ? "每格 1 cm，估讀範圍縮小了。起點和視角仍可分別調整。" : "每格 5 cm，端點落在哪一小段還不清楚；試試較密的刻度。";
+          document.querySelector("#correction-mode-instructions").textContent = correctionTickInterval === 1 ? "每格 1 cm，估讀範圍縮小了。可拖曳場景旋轉觀看；起點和視角也能分別調整。" : "每格 5 cm，端點落在哪一小段還不清楚；可拖曳場景旋轉觀看，再試試較密的刻度。";
         } else if (correctionMode === "origin") {
           document.querySelector("#correction-readout-label").textContent = `起點 ${correctionFormat(startReading)} cm・終點 ${correctionFormat(endReading)} cm`;
           reading.textContent = `${correctionFormat(endReading)} − ${correctionFormat(startReading)} ≈ ${correctionFormat(measuredLength)} cm`;
@@ -1315,7 +1315,6 @@
         renderCorrectionScene();
       });
       correctionCanvas.addEventListener("pointerdown", (event) => {
-        if (correctionMode === "density") return;
         correctionDrag = { x: event.clientX, y: event.clientY, value: correctionRulerOffset, pointerId: event.pointerId };
         correctionCanvas.setPointerCapture(event.pointerId);
         event.preventDefault();
