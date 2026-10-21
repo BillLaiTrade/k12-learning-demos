@@ -496,7 +496,7 @@ try {
     for (const centimeter of [18, 19]) {
       const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeTextTexture(String(centimeter)), transparent: true, depthTest: false, depthWrite: false }));
       label.scale.set(0.56, 0.3, 1);
-      label.position.set(centimeter, 0.27, -0.16);
+      label.position.set(centimeter, 0.27, 0.34);
       label.renderOrder = 6;
       magnifierLabels.add(label);
     }
@@ -619,8 +619,8 @@ function render() {
   window.dispatchEvent(new CustomEvent("pencil3d-projection", {
     detail: {
       sceneId: "parallax-scene",
-      ruler18: projectToPanel(18, 0.23, -0.16),
-      ruler19: projectToPanel(19, 0.23, -0.16),
+      ruler18: projectToPanel(18, 0.23, 0.34),
+      ruler19: projectToPanel(19, 0.23, 0.34),
       pencilTip: projectToPanel(view.start + view.edge, view.centerY, view.centerZ),
       projectedReading: view.rayEnd?.x ?? view.edge
     }
