@@ -103,25 +103,22 @@ function makeWeight(value) {
 function makeWeightTray(scene, materials) {
   const tray = new THREE.Group();
   tray.position.set(1.45, 0, 1.08);
-  const base = new THREE.Mesh(new THREE.BoxGeometry(2.42, 0.14, 0.72), materials.base);
+  const base = new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.14, 0.72), materials.base);
   base.position.y = 0.07;
   tray.add(base);
-  const rim = new THREE.Mesh(new THREE.BoxGeometry(2.36, 0.035, 0.68), materials.trim);
+  const rim = new THREE.Mesh(new THREE.BoxGeometry(2.84, 0.035, 0.68), materials.trim);
   rim.position.y = 0.155;
   tray.add(rim);
-  const inset = new THREE.Mesh(new THREE.BoxGeometry(2.22, 0.035, 0.54), materials.pan);
+  const inset = new THREE.Mesh(new THREE.BoxGeometry(2.72, 0.035, 0.54), materials.pan);
   inset.position.y = 0.177;
   tray.add(inset);
   const values = [20, 10, 5, 2, 1];
-  const spacing = 0.43;
+  const spacing = 0.5;
   const weights = values.map((value, index) => {
     const weight = makeWeight(value);
     const x = (index - 2) * spacing;
     weight.position.set(x, 0.2, 0);
     tray.add(weight);
-    const label = new THREE.Mesh(new THREE.PlaneGeometry(0.36, 0.16), new THREE.MeshBasicMaterial({ map: labelTexture(`${value} g`, { width: 256, height: 112, fontSize: 48, background: '#f5e8c4', color: '#493817' }) }));
-    label.position.set(x, 0.66, 0.22);
-    tray.add(label);
     return { value, model: weight, position: weight.position.clone(), quaternion: weight.quaternion.clone(), scale: weight.scale.clone() };
   });
   scene.add(tray);
@@ -324,6 +321,15 @@ export function mountMassMeasurement() {
   const digital = makeDigitalScale(scene, mat);
   const weightSource = makeWeightTray(scene, mat);
   const sourceWeightModels = weightSource.weights.map(item => item.model);
+  const sourceLabelsContainer = document.querySelector('#weight-source-labels');
+  const sourceLabels = weightSource.weights.map(({ value }) => {
+    const label = document.createElement('span');
+    label.className = 'weight-source-label';
+    label.textContent = `${value} g`;
+    label.setAttribute('aria-hidden', 'true');
+    sourceLabelsContainer.append(label);
+    return label;
+  });
   const modeButtons = [...document.querySelectorAll('[data-mass-mode]')];
   const balancePanel = document.querySelector('#balance-controls');
   const digitalPanel = document.querySelector('#digital-controls');
@@ -499,6 +505,7 @@ export function mountMassMeasurement() {
     balance.leftPan.visible = mode === 'balance';
     balance.rightPan.visible = mode === 'balance';
     weightSource.tray.visible = mode === 'balance';
+    sourceLabelsContainer.hidden = mode !== 'balance';
     digital.base.visible = mode === 'digital';
     digital.stone.visible = mode === 'digital';
       digital.shadow.visible = mode === 'digital' && weighed;
@@ -790,6 +797,15 @@ export function mountMassMeasurement() {
           status.textContent = '石頭已取下並回到電子秤旁；可拖曳或按鈕再次秤量。';
         }
       }
+    }
+    if (mode === 'balance') {
+      const rect = host.getBoundingClientRect();
+      weightSource.weights.forEach((item, index) => {
+        const point = item.model.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.42, 0.02)).project(camera);
+        sourceLabels[index].style.left = `${(point.x + 1) * rect.width / 2}px`;
+        sourceLabels[index].style.top = `${(1 - point.y) * rect.height / 2}px`;
+        sourceLabels[index].hidden = point.z < -1 || point.z > 1;
+      });
     }
     renderer.render(scene, camera);
   }
