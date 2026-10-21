@@ -99,13 +99,60 @@
     .sample-scene { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-items:end; gap:12px; text-align:center; }
     .sample-item { display:grid; justify-items:center; gap:5px; color:#516159; font-size:.78rem; }
     .sample-item svg { width:min(100%,150px); height:118px; }
-    .state-board { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
-    .state-tile { min-height:124px; padding:12px; border:1px solid #ded8ca; border-radius:12px; background:#fff; text-align:center; }
-    .state-tile strong { display:block; margin-bottom:8px; }
-    .state-symbol { display:grid; place-items:center; width:68px; height:52px; margin:auto; border:2px solid #8aa397; border-radius:8px; color:var(--green); }
-    .state-symbol.solid { background:#d5b978; border-radius:5px; width:45px; height:42px; }
-    .state-symbol.liquid { background:linear-gradient(0deg,#9fc9db 55%,transparent 55%); }
-    .state-symbol.gas { border-style:dashed; background:#eef5f7; font-size:.78rem; }
+    .state-matrix-wrap { overflow-x:auto; margin:15px 0 10px; border:1px solid #ddd7c9; border-radius:14px; background:#fffefa; }
+    .state-matrix { width:100%; min-width:560px; border-collapse:separate; border-spacing:0; text-align:center; font-size:.91rem; }
+    .state-matrix th,.state-matrix td { padding:0; border-right:1px solid #e6e0d4; border-bottom:1px solid #e6e0d4; }
+    .state-matrix tr:last-child th,.state-matrix tr:last-child td { border-bottom:0; }
+    .state-matrix tr th:last-child,.state-matrix tr td:last-child { border-right:0; }
+    .state-matrix th { background:#f5f2e9; }
+    .state-matrix tbody th { position:sticky; left:0; z-index:1; }
+    .state-matrix thead .corner { position:sticky; left:0; z-index:2; }
+    .state-matrix .corner { width:118px; color:#6b7971; font-size:.8rem; }
+    .state-pick { display:block; width:100%; min-height:54px; padding:10px 8px; border:0; background:transparent; cursor:pointer; font-weight:800; }
+    .state-pick:hover { background:#f7f1e4; }
+    .state-pick[aria-pressed="true"] { background:#f8e9cf; box-shadow:inset 0 -3px #b97835; color:#65451f; }
+    .state-cell { display:block; width:100%; min-height:57px; padding:9px 8px; border:0; background:#fffefa; cursor:pointer; color:#40534b; }
+    .state-cell:hover { background:#f8f4eb; }
+    .state-cell[aria-pressed="true"] { background:#faeedb; box-shadow:inset 0 0 0 2px #c28b4b; color:#563b1d; font-weight:750; }
+    .state-matrix-hint { margin:0 0 12px; color:var(--muted); font-size:.82rem; }
+    .state-detail { min-height:260px; padding:17px; border:1px solid #ded8ca; border-radius:15px; background:#fff; }
+    .state-detail-kicker { margin:0 0 4px; color:#8b612d; font-size:.76rem; font-weight:850; letter-spacing:.06em; }
+    .state-detail h3 { margin:0 0 7px; font-size:1.15rem; }
+    .state-detail-copy { margin:0 0 12px; color:var(--muted); }
+    .state-demo { min-height:118px; display:grid; grid-template-columns:minmax(130px,.7fr) minmax(0,1.3fr); align-items:center; gap:15px; padding:13px; border-radius:12px; background:#f7f7f2; }
+    .state-demo-visual { display:grid; place-items:center; min-height:88px; }
+    .demo-vessel { position:relative; width:102px; height:78px; border:3px solid #788982; border-top:0; border-radius:3px 3px 14px 14px; background:#fff; overflow:hidden; }
+    .demo-water { position:absolute; inset:35% 0 0; background:#1687cb; border-top:3px solid #08679f; transition:all .25s ease; }
+    .demo-air { position:absolute; inset:8px; border:2px dashed #b96b19; background:repeating-linear-gradient(135deg,#fff0d6 0 8px,#f5c477 8px 10px); transition:all .25s ease; }
+    .demo-bucket { display:grid; justify-items:center; gap:2px; margin:0; padding:4px 8px; border:1px solid #d9ddd7; border-radius:11px; background:#fff; }
+    .demo-bucket img { display:block; width:112px; height:92px; object-fit:contain; transition:transform .3s ease; }
+    .demo-bucket[data-turned="true"] img { transform:rotate(12deg) translateY(-2px); }
+    .demo-bucket figcaption { color:#5f6b65; font-size:.73rem; }
+    .solid-volume-demo { display:grid; justify-items:center; width:min(100%,210px); padding:8px; border:1px solid #d9ddd7; border-radius:11px; background:#fff; }
+    .solid-volume-demo svg { display:block; width:100%; height:auto; }
+    .volume-water { transition:y .35s ease,height .35s ease; }
+    .volume-stone { opacity:0; transform:translateY(16px); transition:opacity .25s ease,transform .35s ease; }
+    .solid-volume-demo[data-submerged="true"] .volume-stone { opacity:1; transform:translateY(0); }
+    .solid-volume-readout { display:flex; align-items:baseline; gap:8px; color:#52615a; font-size:.78rem; }
+    .solid-volume-readout strong { color:#126da2; font-size:1.05rem; }
+    .demo-syringe { position:relative; width:150px; height:49px; border:3px solid #788982; border-radius:8px; background:#fff; overflow:visible; }
+    .demo-syringe-fill { position:absolute; inset:4px 32px 4px 4px; border-radius:3px; background:repeating-linear-gradient(135deg,#fff0d6 0 7px,#f5c477 7px 9px); transition:all .25s ease; }
+    .demo-syringe-plunger { position:absolute; right:24px; top:-7px; height:57px; border-left:6px solid #59675e; transition:right .25s ease; }
+    .demo-syringe[data-compressed="true"] .demo-syringe-fill { right:68px; }
+    .demo-syringe[data-compressed="true"] .demo-syringe-plunger { right:68px; }
+    .demo-controls { min-width:0; }
+    .demo-controls p { margin:0 0 7px; color:#465950; font-size:.87rem; }
+    .demo-controls button { min-height:38px; padding:6px 11px; border:1px solid #b9c8bf; border-radius:9px; background:white; cursor:pointer; font-weight:700; }
+    .demo-controls button:hover { background:#f7f1e4; }
+    .compare-three { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; width:100%; }
+    .compare-item { min-height:68px; display:grid; place-items:center; padding:7px 4px; border:1px solid #ddd7c9; border-radius:9px; background:#fff; color:#394b43; font-size:.76rem; text-align:center; }
+    .compare-item[data-kind="solid"] { position:relative; background:#edf0ee; }
+    .compare-item[data-kind="solid"]::before { content:""; width:30px; height:28px; margin-bottom:4px; border:1px solid #58655f; border-radius:5px 5px 9px 9px; background:linear-gradient(90deg,#aeb9b2,#e1e5e2 48%,#99a69f); clip-path:polygon(14% 18%,86% 18%,76% 100%,24% 100%); }
+    .compare-item[data-kind="liquid"] { background:linear-gradient(0deg,#ccecff 0 45%,#fff 45%); border-color:#68a6cd; }
+    .compare-item[data-kind="gas"] { background:repeating-linear-gradient(135deg,#fff0d6 0 7px,#edb961 7px 9px); border-style:dashed; border-color:#b96b19; }
+    .compare-item[data-active="true"] { outline:2px solid #8a602e; outline-offset:1px; }
+    .demo-result { margin:7px 0 0!important; color:#66502f!important; font-size:.82rem!important; }
+    .gas-key { margin:8px 0 0; color:#76501f; font-size:.77rem; }
     .particle-stage { min-height:170px; display:grid; place-items:center; border-radius:12px; background:#edf2eb; }
     .particle-box { position:relative; width:190px; height:130px; border:2px solid #80968a; border-radius:10px; background:#fffdf8; }
     .particle { position:absolute; width:14px; height:14px; border-radius:50%; background:#d7a94a; box-shadow:inset -2px -2px 0 #b28835; transition:all .3s ease; }
@@ -159,10 +206,6 @@
       .bucket-scene { grid-template-columns:1fr; }
       .bucket-detail { min-height:auto; }
       .record-task { grid-template-columns:100px 1fr; }
-      .state-board,.property-grid,.class-grid { grid-template-columns:1fr; }
-      .state-tile { min-height:unset; display:grid; grid-template-columns:70px 1fr; align-items:center; text-align:left; }
-      .state-tile strong { margin:0; }
-      .state-symbol { grid-column:2; grid-row:1; }
       .rust-pair { grid-template-columns:1fr 1fr; gap:7px; }
       .comparison { font-size:.78rem; }
       .comparison th,.comparison td { padding:7px 6px; }
@@ -194,7 +237,7 @@
         <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／10 卡</p>
         <div class="route-inner">
           <a href="#s1" aria-current="step"><b>01</b><span>這個水桶是什麼做的？桶子和材料有什麼不同？</span></a>
-          <a href="#s2"><b>02</b><span>水會流、土能堆，空氣又裝在哪裡？</span></a>
+          <a href="#s2"><b>02</b><span>桶身、水和空氣，各有哪些不同？</span></a>
           <a href="#s3"><b>03</b><span>固體、液體和氣體裡的粒子，各自在做什麼？</span></a>
           <a href="#s4"><b>04</b><span>水結冰或蒸發後，還是原來的水嗎？</span></a>
           <a href="#s5"><b>05</b><span>只看外表，認得出這是什麼材料嗎？</span></a>
@@ -269,27 +312,42 @@
         <section class="lesson-card" id="s2">
           <div class="card-side"><span class="card-number">02</span><h3>物質三態</h3><span class="card-role">比較形狀、體積與可壓縮性</span></div>
           <div class="card-main">
-            <h2>水會流、土能堆，空氣又裝在哪裡？</h2>
-            <p>桶身和土壤是固體，水樣是液體。固體通常有固定形狀和體積；液體體積大致固定，形狀會隨容器改變。另用注射筒中的空氣作氣體對照：氣體會充滿容器，也比較容易被壓縮。</p>
-            <div class="state-board" aria-label="三態特徵對照">
-              <div class="state-tile"><strong>固體・桶身、土壤</strong><span class="state-symbol solid" aria-hidden="true"></span></div>
-              <div class="state-tile"><strong>液體・雨水</strong><span class="state-symbol liquid" aria-hidden="true"></span></div>
-              <div class="state-tile"><strong>氣體・注射筒中的空氣</strong><span class="state-symbol gas" aria-hidden="true">可壓縮</span></div>
+            <h2>桶身、水和空氣，各有哪些不同？</h2>
+            <p>用第一張卡的鐵製桶身代表固體、桶中的水代表液體，再以注射筒中的空氣觀察氣體。先看完整比較表，再點選欄名、列名或表格內容，查看相應的例子與操作。</p>
+            <div class="state-matrix-wrap" role="region" aria-label="物質三態性質比較表，可左右滑動查看完整表格" tabindex="0">
+              <table class="state-matrix">
+                <thead><tr>
+                  <th class="corner" scope="col">性質</th>
+                  <th scope="col"><button class="state-pick" type="button" data-state-pick="solid" aria-pressed="false">固體<br><small>鐵製桶身</small></button></th>
+                  <th scope="col"><button class="state-pick" type="button" data-state-pick="liquid" aria-pressed="false">液體<br><small>水</small></button></th>
+                  <th scope="col"><button class="state-pick" type="button" data-state-pick="gas" aria-pressed="false">氣體<br><small>空氣</small></button></th>
+                </tr></thead>
+                <tbody>
+                  <tr><th scope="row"><button class="state-pick" type="button" data-property-pick="shape" aria-pressed="false">形狀</button></th>
+                    <td><button class="state-cell" type="button" data-state-cell="solid.shape" aria-pressed="false">通常固定</button></td>
+                    <td><button class="state-cell" type="button" data-state-cell="liquid.shape" aria-pressed="false">隨容器改變</button></td>
+                    <td><button class="state-cell" type="button" data-state-cell="gas.shape" aria-pressed="false">充滿容器空間</button></td></tr>
+                  <tr><th scope="row"><button class="state-pick" type="button" data-property-pick="volume" aria-pressed="false">體積</button></th>
+                    <td><button class="state-cell" type="button" data-state-cell="solid.volume" aria-pressed="false">通常固定</button></td>
+                    <td><button class="state-cell" type="button" data-state-cell="liquid.volume" aria-pressed="false">大致固定</button></td>
+                    <td><button class="state-cell" type="button" data-state-cell="gas.volume" aria-pressed="false">隨可用空間改變</button></td></tr>
+                  <tr><th scope="row"><button class="state-pick" type="button" data-property-pick="compressibility" aria-pressed="false">可壓縮性</button></th>
+                    <td><button class="state-cell" type="button" data-state-cell="solid.compressibility" aria-pressed="false">不易壓縮</button></td>
+                    <td><button class="state-cell" type="button" data-state-cell="liquid.compressibility" aria-pressed="false">不易壓縮</button></td>
+                    <td><button class="state-cell" type="button" data-state-cell="gas.compressibility" aria-pressed="false">較容易壓縮</button></td></tr>
+                </tbody>
+              </table>
             </div>
-            <div class="choice-row" role="group" aria-label="觀察注射筒裡的空氣">
-              <button type="button" data-air="wide" aria-pressed="true">拉開活塞</button>
-              <button type="button" data-air="press" aria-pressed="false">推入活塞</button>
-            </div>
-            <div class="visual" style="display:flex;align-items:center;gap:16px">
-              <svg viewBox="0 0 280 90" width="min(100%,280px)" role="img" aria-label="活塞改變注射筒內空氣空間的示意"><rect x="34" y="24" width="190" height="42" rx="8" fill="#fff" stroke="#62766d" stroke-width="4"/><rect id="air-space" x="48" y="30" width="150" height="30" rx="4" fill="#dcecf2"/><line id="syringe-plunger" x1="198" y1="18" x2="198" y2="72" stroke="#687d73" stroke-width="7"/><line id="syringe-rod" x1="198" y1="45" x2="250" y2="45" stroke="#687d73" stroke-width="5"/><g id="syringe-particles" fill="#477ba4"><circle cx="82" cy="39" r="3"/><circle cx="118" cy="51" r="3"/><circle cx="156" cy="39" r="3"/><circle cx="177" cy="52" r="3"/></g></svg>
-              <p class="live-note" id="air-note" aria-live="polite">空氣佔據注射筒內的空間。</p>
-            </div>
-            <button class="action-button" type="button" data-record="state">記錄樣本狀態</button>
-            <p class="live-note" id="note-s2" aria-live="polite">空氣只作氣體對照，不列入雨水樣本。</p>
-            <p class="next-hint">看得見的差異可以描述；下一步用粒子模型解釋這些差異。</p>
+            <p class="state-matrix-hint">手機上可左右滑動表格。點選上方欄名看同一種狀態的三項特徵；點選左側列名比較三種狀態的同一項性質；點選格子查看該格例子。</p>
+            <section class="state-detail" id="state-detail" aria-live="polite" aria-atomic="true" aria-label="所選性質的例子與操作">
+              <p class="state-detail-kicker" id="state-detail-kicker">先從一格開始觀察</p>
+              <h3 id="state-detail-heading">選擇表格中的一個欄名、列名或內容</h3>
+              <p class="state-detail-copy" id="state-detail-copy">下方會只顯示你所選項目的例子和操作。</p>
+              <div class="state-demo" id="state-demo"><div class="state-demo-visual"><figure class="demo-bucket"><img src="assets/metal-bucket.png" alt="鐵製桶身的水桶"><figcaption>鐵製桶身</figcaption></figure></div><div class="demo-controls"><p>改變水桶的方向，觀察桶身仍維持原來的外形。</p><button type="button" data-state-demo>轉動水桶</button><p class="demo-result" aria-live="polite">固體通常有固定形狀。</p><p class="gas-key">圖示會以顏色和紋理區分水與空氣；圖示色不代表物質實際顏色。</p></div></div>
+            </section>
+            <p class="next-hint">比較完可觀察的形狀、體積和可壓縮性後，下一步用粒子模型解釋三態差異。</p>
           </div>
         </section>
-
         <section class="lesson-card" id="s3">
           <div class="card-side"><span class="card-number">03</span><h3>粒子模型</h3><span class="card-role">用模型解釋三態</span></div>
           <div class="card-main">
@@ -460,12 +518,11 @@
     });
 
     const recordValues = {
-      state: ["桶身／土壤：固體；水：液體", "空氣只作氣體對照，不列為雨水樣本。"],
       property: ["混濁、顆粒、磁性等觀察線索", "外觀和單一性質都不足以單獨證明組成。"],
       change: ["鏽層是不同於原金屬的新物質", "已分開記錄形成新物質的可能性與已發生的變化。"],
       composition: ["待依成分資料判斷", "已建立純物質／混合物的分類依據。"]
     };
-    const recordRows = { state:"record-state", property:"record-property", change:"record-change", composition:"record-composition" };
+    const recordRows = { property:"record-property", change:"record-change", composition:"record-composition" };
     document.querySelectorAll("[data-record]").forEach(button => button.addEventListener("click", () => {
       const key = button.dataset.record;
       document.getElementById(recordRows[key]).textContent = recordValues[key][0];
@@ -474,17 +531,73 @@
       note.textContent = recordValues[key][1];
     }));
 
-    document.querySelectorAll("[data-air]").forEach(button => button.addEventListener("click", () => {
-      document.querySelectorAll("[data-air]").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
-      const pressed = button.dataset.air === "press";
-      document.getElementById("air-space").setAttribute("width", pressed ? "64" : "150");
-      document.getElementById("syringe-plunger").setAttribute("x1", pressed ? "112" : "198");
-      document.getElementById("syringe-plunger").setAttribute("x2", pressed ? "112" : "198");
-      document.getElementById("syringe-rod").setAttribute("x1", pressed ? "112" : "198");
-      document.getElementById("syringe-rod").setAttribute("x2", pressed ? "164" : "250");
-      document.querySelectorAll("#syringe-particles circle").forEach((particle,index)=>particle.setAttribute("cx", pressed ? [60,76,92,103][index] : [82,118,156,177][index]));
-      document.getElementById("air-note").textContent = pressed ? "活塞推入後，空氣仍在筒內，但佔據的體積變小。" : "活塞拉開後，空氣佔據較大的空間。";
-    }));
+    const stateNames={solid:"固體・鐵製桶身",liquid:"液體・水",gas:"氣體・空氣"};
+    const propertyNames={shape:"形狀",volume:"體積",compressibility:"可壓縮性"};
+    const stateFacts={
+      solid:{shape:"通常有固定形狀",volume:"通常有固定體積",compressibility:"在一般情況下不易壓縮"},
+      liquid:{shape:"沒有固定形狀，會隨容器改變",volume:"一定量的液體體積大致固定",compressibility:"在一般情況下不易壓縮"},
+      gas:{shape:"沒有固定形狀，會充滿容器可用空間",volume:"體積會隨容器可用空間改變",compressibility:"比固體和液體容易壓縮"}
+    };
+    const cellExamples={
+      "solid.shape":["鐵製桶身通常維持固定形狀","改變水桶的方向，桶身仍保有原來的外形，顯示固體通常有固定形狀。","點選「轉動水桶」，觀察桶身方向改變後，外形是否跟著改變。","solid-shape","水桶方向改變，桶身外形仍維持原樣。"],
+      "solid.volume":["石頭在量筒中排開水，顯示它占有體積","不規則石頭完全浸入水中，量筒讀值上升；水位上升的體積就是石頭占有的空間。","點選「放入石頭」；讀取量筒從 30 mL 上升到 38 mL，差值 8 mL 表示石頭體積約為 8 cm³。","solid-volume","量筒水位上升 8 mL，表示石頭占有約 8 cm³ 的體積。"],
+      "solid.compressibility":["鐵製桶身不易被壓縮","堅硬的鐵製桶身在一般情況下不容易被壓小。","觀察水桶桶身；這裡比較一般情況下的性質，不用工具大力擠壓。","solid","固體通常不易壓縮，不代表任何力量下都不會變形。"],
+      "liquid.shape":["水的形狀會隨容器改變","同一份水倒入不同形狀的容器，水面以下的形狀會改變。","把等量的藍色水示意從寬容器換到窄容器，觀察液面形狀。","liquid","水的形狀隨容器改變；藍色是圖示色。"],
+      "liquid.volume":["一定量的水體積大致固定","同一份水換到不同容器，體積大致不變。","沿用等量的水，在兩個不同形狀的容器間轉移；比較水量刻度。","liquid","容器形狀不同，等量水的體積仍大致相同。"],
+      "liquid.compressibility":["水在一般情況下不易被壓縮","注滿水並封住出口的注射筒，活塞不容易推入。","選擇「輕推活塞」示意；比較密閉水樣前後的空間，勿用力硬推。","water-syringe","水在一般情況下不易壓縮；不是絕對不可壓縮。"],
+      "gas.shape":["空氣會充滿容器可用空間","空氣沒有固定形狀，會充滿容器可用空間。","將空氣想像在不同形狀的透明容器中；橘色斜紋只標示空氣所在空間。","gas","容器形狀改變，空氣所在空間也改變；空氣本身沒有橘色。"],
+      "gas.volume":["空氣體積隨可用空間改變","空氣體積會隨容器可用空間改變。","比較注射筒活塞拉開和推入時，筒內空氣佔據的空間。","gas-syringe","空氣可被壓縮，體積會隨可用空間改變。"],
+      "gas.compressibility":["空氣比固體和液體容易壓縮","注射筒內封住的空氣可透過活塞壓縮。","點選按鈕推入活塞，再觀察橘色斜紋區縮小；鬆手前不要拔出活塞。","gas-syringe","推入活塞後，同一份空氣佔據的體積變小。"]
+    };
+    function renderStateDetail(mode,key){
+      document.querySelectorAll("[data-state-pick],[data-property-pick],[data-state-cell]").forEach(button=>button.setAttribute("aria-pressed","false"));
+      const selected=mode==="state"?`[data-state-pick="${key}"]`:mode==="property"?`[data-property-pick="${key}"]`:`[data-state-cell="${key}"]`;
+      const active=document.querySelector(selected); if(active) active.setAttribute("aria-pressed","true");
+      let kicker,heading,copy,visual,control,result;
+      if(mode==="cell"){
+        const [title,desc,action,type,outcome]=cellExamples[key];
+        kicker=`單一比較・${stateNames[key.split(".")[0]]}・${propertyNames[key.split(".")[1]]}`;
+        heading=title;copy=desc;visual=type;control=action;result=outcome;
+      }else if(mode==="state"){
+        const state=key;
+        kicker=`整欄比較・${stateNames[state]}`; heading=`${stateNames[state]}的三項特徵`;
+        copy="只看這一種狀態，依序比較形狀、體積和可壓縮性。";
+        visual=state==="solid"?"solid-shape":state==="liquid"?"liquid":"gas";
+        control=`形狀：${stateFacts[state].shape}。體積：${stateFacts[state].volume}。可壓縮性：${stateFacts[state].compressibility}。`;
+        result=state==="gas"?"橘色斜紋只標示空氣所在空間，不代表空氣的實際顏色。":"依固定量的物質比較；水的藍色只是圖示色。";
+      }else{
+        const prop=key;kicker=`整列比較・${propertyNames[prop]}`;heading=`三種狀態的${propertyNames[prop]}`;
+        copy="只比較這一項性質，並列固體、液體和氣體。";
+        visual="compare";
+        control=`固體：${stateFacts.solid[prop]}。液體：${stateFacts.liquid[prop]}。氣體：${stateFacts.gas[prop]}。`;
+        result=prop==="compressibility"?"一般情況下，固體和液體都不易壓縮；氣體相對容易壓縮。":"不同狀態的物質在這項性質上表現不同。";
+      }
+      document.getElementById("state-detail-kicker").textContent=kicker;
+      document.getElementById("state-detail-heading").textContent=heading;
+      document.getElementById("state-detail-copy").textContent=copy;
+      const graphic=visual==="solid-shape"?'<figure class="demo-bucket" data-demo-bucket><img src="assets/metal-bucket.png" alt="鐵製桶身的水桶"><figcaption>鐵製桶身</figcaption></figure>':visual==="solid-volume"?'<div class="solid-volume-demo" data-solid-volume-demo data-submerged="false"><svg viewBox="0 0 190 160" role="img" aria-label="石頭浸入量筒中的水，水面由 30 毫升刻度升至 38 毫升"><path d="M46 17h98M55 17v119q0 8 8 8h64q8 0 8-8V17" fill="#fbfdfe" stroke="#64766e" stroke-width="3"/><rect x="59" y="91" width="72" height="49" class="volume-water" fill="#1687cb"/><path d="M82 103q-8-10 1-19l12-12 15 4 8 16-7 15-19 4z" class="volume-stone" fill="#737e79" stroke="#4c5752" stroke-width="2"/><g stroke="#60736b" stroke-width="2"><path d="M134 48h10M138 64h6M134 81h10M138 97h6M134 114h10"/></g><text x="19" y="96" fill="#176b91" font-size="10" font-weight="700" data-level-label>30 mL</text></svg><div class="solid-volume-readout"><span>量筒讀值</span><strong data-solid-reading aria-live="polite">30 mL</strong></div></div>':visual==="liquid"?'<div class="demo-vessel"><div class="demo-water"></div></div>':visual==="gas"?'<div class="demo-vessel"><div class="demo-air"></div></div>':visual==="water-syringe"?'<div class="demo-syringe" data-demo-syringe="water"><div class="demo-syringe-fill" style="background:#1687cb"></div><span class="demo-syringe-plunger"></span></div>':visual==="gas-syringe"?'<div class="demo-syringe" data-demo-syringe="gas"><div class="demo-syringe-fill"></div><span class="demo-syringe-plunger"></span></div>':`<div class="compare-three" data-compare-property="${key}"><span class="compare-item" data-kind="solid" data-active="true">固體<br>鐵製桶身</span><span class="compare-item" data-kind="liquid">液體<br>水</span><span class="compare-item" data-kind="gas">氣體<br>空氣</span></div>`;
+      const isOperable=visual==="water-syringe"||visual==="gas-syringe";
+      const buttonText=visual==="solid-volume"?"放入石頭":visual==="solid-shape"?"轉動水桶":visual==="water-syringe"?"輕推活塞":visual==="gas-syringe"?"推入活塞":visual==="liquid"?"換成窄容器":visual==="gas"?"改看窄容器":mode==="state"?"查看這三項特徵":mode==="property"?"依序比較三種狀態":key==="solid.compressibility"?"查看一般情況下的比較": "確認桶身特徵";
+      document.getElementById("state-demo").innerHTML=`<div class="state-demo-visual"${visual==="solid-shape"||visual==="solid-volume"?"":" aria-hidden=\"true\""}>${graphic}</div><div class="demo-controls"><p>${control}</p><button type="button" data-state-demo>${buttonText}</button><p class="demo-result" aria-live="polite">${result}</p><p class="gas-key">空氣以橘色斜紋表示、水以藍色表示；這些顏色只用來區分示意，不是物質本身的顏色。</p></div>`;
+    }
+    document.querySelectorAll("[data-state-pick]").forEach(button=>button.addEventListener("click",()=>renderStateDetail("state",button.dataset.statePick)));
+    document.querySelectorAll("[data-property-pick]").forEach(button=>button.addEventListener("click",()=>renderStateDetail("property",button.dataset.propertyPick)));
+    document.querySelectorAll("[data-state-cell]").forEach(button=>button.addEventListener("click",()=>renderStateDetail("cell",button.dataset.stateCell)));
+    document.getElementById("state-demo").addEventListener("click",event=>{
+      const button=event.target.closest("[data-state-demo]"); if(!button)return;
+      const syringe=document.querySelector("[data-demo-syringe]");
+      const result=button.parentElement.querySelector(".demo-result");
+      const bucket=document.querySelector("[data-demo-bucket]");
+      if(bucket){const turned=bucket.dataset.turned!=="true";bucket.dataset.turned=String(turned);button.textContent=turned?"轉回原方向":"轉動水桶";result.textContent=turned?"水桶方向改變，桶身外形仍維持原樣。":"水桶回到原方向，桶身外形沒有改變。";return;}
+      const volumeDemo=document.querySelector("[data-solid-volume-demo]");
+      if(volumeDemo){const submerged=volumeDemo.dataset.submerged!=="true";volumeDemo.dataset.submerged=String(submerged);const water=volumeDemo.querySelector(".volume-water");water.setAttribute("y",submerged?"65":"91");water.setAttribute("height",submerged?"75":"49");const levelLabel=volumeDemo.querySelector("[data-level-label]");levelLabel.textContent=submerged?"38 mL":"30 mL";levelLabel.setAttribute("y",submerged?"70":"96");volumeDemo.querySelector("[data-solid-reading]").textContent=submerged?"38 mL":"30 mL";button.textContent=submerged?"取出石頭":"放入石頭";result.textContent=submerged?"讀值由 30 mL 上升到 38 mL，石頭排開 8 mL 的水，體積約 8 cm³。":"石頭取出後，量筒回到 30 mL。";return;}
+      if(syringe){const compressed=syringe.dataset.compressed!=="true";syringe.dataset.compressed=String(compressed);button.textContent=compressed?"回到原來位置":"推入活塞";result.textContent=compressed?(syringe.dataset.demoSyringe==="gas"?"空氣佔據的體積變小，顯示氣體較容易壓縮。":"活塞不易推入，顯示水在一般情況下不易壓縮。"):(syringe.dataset.demoSyringe==="gas"?"活塞回到原位，空氣恢復佔據較大的空間。":"回到起始狀態；水的體積大致維持不變。");return;}
+      const vessel=document.querySelector("#state-demo .demo-vessel");
+      if(vessel){const narrow=vessel.dataset.narrow!=="true";vessel.dataset.narrow=String(narrow);vessel.style.width=narrow?"68px":"102px";const water=vessel.querySelector(".demo-water");if(water)water.style.inset=narrow?"18% 0 0":"35% 0 0";result.textContent=narrow?(water?"容器變窄；液體形狀隨容器改變。":"容器變窄；空氣仍充滿容器可用空間。"):(water?"換回寬容器；同一份水的體積大致不變。":"換回寬容器；空氣仍充滿容器可用空間。");return;}
+      const compare=document.querySelector("[data-compare-property]");
+      if(compare){const items=[...compare.querySelectorAll(".compare-item")];const active=(Number(compare.dataset.activeIndex||0)+1)%items.length;compare.dataset.activeIndex=String(active);items.forEach((item,index)=>item.dataset.active=String(index===active));const kind=["固體","液體","氣體"][active];result.textContent=`目前查看${kind}；上方並列三種狀態在「${propertyNames[compare.dataset.compareProperty]}」上的差異。`;return;}
+      result.textContent="鐵製桶身改變方向時，桶身外形仍維持不變。";
+    });
 
     const particlePositions = {
       solid:[[24,20],[54,20],[84,20],[114,20],[24,50],[54,50],[84,50],[114,50],[24,80],[54,80],[84,80],[114,80],[24,110],[54,110],[84,110],[114,110]],
