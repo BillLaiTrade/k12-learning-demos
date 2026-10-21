@@ -368,12 +368,9 @@ function createPencil() {
     group.add(groove);
   }
 
-  const eraser = new THREE.Mesh(new THREE.CapsuleGeometry(0.36, 0.02, 5, 24), eraserMaterial);
-  eraser.rotation.z = -Math.PI / 2;
-  eraser.scale.y = 0.81;
+  // Keep the eraser as a short barrel along the pencil, rather than a sphere-like capsule.
+  const eraser = cylinderAlongX(0.34, 0.34, 0.62, eraserMaterial, 24);
   eraser.position.x = 18.1;
-  eraser.castShadow = true;
-  eraser.receiveShadow = true;
   group.add(eraser);
 
   const imprintCanvas = document.createElement("canvas");
