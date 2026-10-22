@@ -250,7 +250,7 @@
     .particle-molecule { position:absolute; left:var(--x); top:var(--y); width:22px; height:22px; transform:translate(-50%,-50%); transition:left 1.2s ease-in-out,top 1.2s ease-in-out; will-change:left,top; }
     .particle-molecule svg { display:block; width:100%; height:100%; overflow:visible; }
     .particle-molecule[data-vibrating="true"] { animation:solid-particle-vibration .42s ease-in-out infinite alternate; }
-    @keyframes solid-particle-vibration { from { transform:translate(-50%,-50%); } to { transform:translate(calc(-50% + var(--vibrate-x)),calc(-50% + var(--vibrate-y))); } }
+    @keyframes solid-particle-vibration { from { transform:translate(calc(-50% + var(--vibrate-from-x)),calc(-50% + var(--vibrate-from-y))); } to { transform:translate(calc(-50% + var(--vibrate-to-x)),calc(-50% + var(--vibrate-to-y))); } }
     .particle-legend { display:flex; flex-wrap:wrap; justify-content:center; gap:8px 16px; margin:9px 0 0; color:#5c6d63; font-size:.76rem; }
     .particle-legend span { display:inline-flex; align-items:center; gap:5px; }
     .particle-legend svg { width:22px; height:19px; flex:none; }
@@ -318,7 +318,7 @@
       .section-top { align-items:start; flex-direction:column; gap:3px; }
     }
     @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
-    @media(prefers-reduced-motion:reduce) { .gas-particle { animation-duration:var(--gas-drift-duration,7s)!important; animation-delay:var(--gas-drift-delay,0s)!important; } .particle-molecule[data-vibrating="true"] { animation:none!important; transform:translate(-50%,-50%); } }
+    @media(prefers-reduced-motion:reduce) { .gas-particle { animation-duration:var(--gas-drift-duration,7s)!important; animation-delay:var(--gas-drift-delay,0s)!important; } .particle-molecule { transition:left .9s ease-in-out,top .9s ease-in-out!important; } .particle-molecule[data-vibrating="true"] { animation-duration:1.2s!important; } }
     @media(prefers-reduced-motion:reduce) { .hand-press-scene.is-approaching .hand-approach { animation-duration:3.5s!important; } .hydraulic-scene.is-pressing .hydraulic-ram,.hydraulic-scene.is-pressing .hydraulic-iron { animation-duration:10s!important; } }
     /* 第二學習區塊沿用第三單元的綠色與中性色系。 */
     #s2.lesson-card { border-color:#d8e2da; background:#fffefa; }
@@ -998,14 +998,15 @@
     };
     const particleBox=document.getElementById("particle-box");
     const moleculeSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="#5f8e9f" stroke-width="2"/></svg>';
-    const molecules=particlePositions.solid.map((_,index)=>{const molecule=document.createElement("span");molecule.className="particle-molecule";molecule.innerHTML=moleculeSvg;molecule.setAttribute("aria-hidden","true");molecule.dataset.index=String(index);molecule.style.setProperty("--vibrate-x",`${index%2?"-":""}${3.2+(index%3)*.45}px`);molecule.style.setProperty("--vibrate-y",`${index%3?"-":""}${2.6+(index%2)*.4}px`);molecule.style.animationDelay=`-${(index%6)*.07}s`;particleBox.append(molecule);return molecule;});
+    const molecules=particlePositions.solid.map((_,index)=>{const molecule=document.createElement("span");molecule.className="particle-molecule";molecule.innerHTML=moleculeSvg;molecule.setAttribute("aria-hidden","true");molecule.dataset.index=String(index);const vibrationX=3.8+(index%3)*.45,vibrationY=3+(index%2)*.4;molecule.style.setProperty("--vibrate-from-x",`${index%2?vibrationX:-vibrationX}px`);molecule.style.setProperty("--vibrate-to-x",`${index%2?-vibrationX:vibrationX}px`);molecule.style.setProperty("--vibrate-from-y",`${index%3?vibrationY:-vibrationY}px`);molecule.style.setProperty("--vibrate-to-y",`${index%3?-vibrationY:vibrationY}px`);molecule.style.animationDelay=`-${(index%6)*.07}s`;particleBox.append(molecule);return molecule;});
     let particleState="solid",particleMotionTimer;
     const reducedParticleMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
     function setParticlePositions(state,settle=false){
       const positions=particlePositions[state];
       molecules.forEach((molecule,index)=>{
         const [baseX,baseY]=positions[index];
-        const amplitude=state==="solid"?0:state==="liquid"?3:6;
+        const reducedFactor=reducedParticleMotion.matches ? 0.55 : 1;
+        const amplitude=(state==="solid"?0:state==="liquid"?3:6)*reducedFactor;
         const jitterX=settle?0:(Math.random()*2-1)*amplitude;
         const jitterY=settle?0:(Math.random()*2-1)*amplitude;
         molecule.style.setProperty("--x",`${baseX+jitterX}%`);
@@ -1019,7 +1020,7 @@
       particleBox.setAttribute("aria-label",`同一批 12 個水分子在${state==="solid"?"固態":state==="liquid"?"液態":"氣態"}中的排列與運動`);
       document.querySelectorAll("[data-particles]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.particles===state)));
       clearInterval(particleMotionTimer);
-      if(!reducedParticleMotion.matches)particleMotionTimer=setInterval(()=>setParticlePositions(particleState),1500);
+      particleMotionTimer=setInterval(()=>setParticlePositions(particleState),reducedParticleMotion.matches?2600:1500);
     }
     document.querySelectorAll("[data-particles]").forEach(button=>button.addEventListener("click",()=>drawParticles(button.dataset.particles)));
     reducedParticleMotion.addEventListener?.("change",()=>drawParticles(particleState));
