@@ -249,8 +249,8 @@
     .correction-average-header strong { font-size: 1rem; }
     .correction-average-count { flex: 0 0 auto; color: var(--muted); font-size: .88rem; }
     .correction-average-readings-label { display: block; margin-top: 10px; color: var(--muted); font-size: .78rem; }
-    .correction-average-readings { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-    .correction-average-reading { padding: 5px 8px; border: 1px solid var(--line); border-radius: 9px; background: #f7f8f3; color: var(--muted); font-size: .78rem; }
+    .correction-average-readings { display: grid; grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); gap: 6px; max-height: 170px; margin-top: 8px; padding: 1px 3px 1px 1px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+    .correction-average-reading { min-width: 0; padding: 5px 6px; border: 1px solid var(--line); border-radius: 9px; background: #f7f8f3; color: var(--muted); font-size: .72rem; white-space: nowrap; }
     .correction-average-reading b { color: var(--ink); font-size: .85rem; }
     .correction-average-plot { position: relative; height: 75px; margin: 8px 4px 0; }
     .correction-average-axis { position: absolute; top: 43px; right: 0; left: 0; height: 2px; background: #b9c9c1; }
@@ -605,8 +605,8 @@
                   <strong>同一物體，重複測量</strong>
                   <span class="correction-average-count" id="correction-average-count" aria-live="polite">已測 5 次</span>
                 </div>
-                <span class="correction-average-readings-label">每次讀值</span>
-                <div class="correction-average-readings" id="correction-average-readings" aria-label="所有測量讀值"></div>
+                <span class="correction-average-readings-label">所有讀值（清單可上下捲動）</span>
+                <div class="correction-average-readings" id="correction-average-readings" role="region" tabindex="0" aria-label="所有測量讀值；清單可上下捲動"></div>
                 <div class="correction-average-plot" id="correction-average-plot" role="img" aria-label="五次讀值集中在數線上的相近位置，深綠線表示目前平均">
                   <div class="correction-average-axis"></div>
                   <div id="correction-average-points" aria-hidden="true"></div>
@@ -1222,41 +1222,46 @@
       let correctionTickInterval = 5;
       let correctionRulerOffset = 0;
       const correctionAverageMeasurements = [18.6, 18.2, 18.5, 18.7, 18.4];
+      let correctionAverageTotal = correctionAverageMeasurements.reduce((total, value) => total + value, 0);
       const correctionCameraState = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
       let correctionCameraPreset = "front";
       let correctionDrag = null;
       const correctionFormat = (value) => Number(value.toFixed(1)).toFixed(1);
       const correctionDisplay = (value) => Math.abs(value - Math.round(value)) < 0.001 ? String(Math.round(value)) : correctionFormat(value);
-      const renderCorrectionAverage = () => {
+      const renderCorrectionAverageSummary = () => {
         const count = correctionAverageMeasurements.length;
-        const mean = correctionAverageMeasurements.reduce((total, value) => total + value, 0) / count;
+        const mean = correctionAverageTotal / count;
         const min = 17.5;
         const max = 19.5;
         const positionFor = (value) => clamp((value - min) / (max - min) * 100, 0, 100);
-        const readings = document.querySelector("#correction-average-readings");
-        readings.replaceChildren(...correctionAverageMeasurements.map((value, measurementIndex) => {
-          const item = document.createElement("span");
-          item.className = "correction-average-reading";
-          item.append(`第 ${measurementIndex + 1} 次 `);
-          const reading = document.createElement("b");
-          reading.textContent = `${correctionFormat(value)} cm`;
-          item.append(reading);
-          return item;
-        }));
         document.querySelector("#correction-average-count").textContent = `已測 ${count} 次`;
         document.querySelector("#correction-average-value").textContent = `${correctionFormat(mean)} cm`;
         document.querySelector("#correction-average-mean").style.setProperty("--mean-position", `${positionFor(mean)}%`);
-        const points = document.querySelector("#correction-average-points");
-        const offsets = [0, -9, 8, -5, 5, -8, 10, -2, 3];
-        points.replaceChildren(...correctionAverageMeasurements.map((value, index) => {
-          const point = document.createElement("span");
-          point.className = "correction-average-point";
-          point.style.setProperty("--position", `${positionFor(value)}%`);
-          point.style.setProperty("--offset", `${offsets[index % offsets.length]}px`);
-          point.title = `第 ${index + 1} 次：${correctionFormat(value)} cm`;
-          return point;
-        }));
         document.querySelector("#correction-average-plot").setAttribute("aria-label", `${count} 次讀值分布於數線上；目前平均約 ${correctionFormat(mean)} 公分`);
+      };
+      const appendCorrectionAverageMeasurement = (value, index) => {
+        const min = 17.5;
+        const max = 19.5;
+        const position = clamp((value - min) / (max - min) * 100, 0, 100);
+        const item = document.createElement("span");
+        item.className = "correction-average-reading";
+        item.append(`第 ${index + 1} 次 `);
+        const reading = document.createElement("b");
+        reading.textContent = `${correctionFormat(value)} cm`;
+        item.append(reading);
+        document.querySelector("#correction-average-readings").append(item);
+
+        const offsets = [0, -9, 8, -5, 5, -8, 10, -2, 3];
+        const point = document.createElement("span");
+        point.className = "correction-average-point";
+        point.style.setProperty("--position", `${position}%`);
+        point.style.setProperty("--offset", `${offsets[index % offsets.length]}px`);
+        point.title = `第 ${index + 1} 次：${correctionFormat(value)} cm`;
+        document.querySelector("#correction-average-points").append(point);
+      };
+      const renderCorrectionAverage = () => {
+        correctionAverageMeasurements.forEach(appendCorrectionAverageMeasurement);
+        renderCorrectionAverageSummary();
       };
       const renderCorrectionScene = () => {
         const sceneActive = correctionMode !== "average";
@@ -1379,8 +1384,13 @@
       document.querySelector("#correction-average-add").addEventListener("click", () => {
         const noise = (Math.random() + Math.random() + Math.random() + Math.random() - 2) * 0.5;
         const reading = clamp(Math.round((parallaxLength + noise) * 10) / 10, 17.5, 19.5);
+        const measurementIndex = correctionAverageMeasurements.length;
         correctionAverageMeasurements.push(reading);
-        renderCorrectionAverage();
+        correctionAverageTotal += reading;
+        appendCorrectionAverageMeasurement(reading, measurementIndex);
+        renderCorrectionAverageSummary();
+        const readings = document.querySelector("#correction-average-readings");
+        readings.scrollTop = readings.scrollHeight;
       });
       renderCorrectionAverage();
       correctionDensityButtons.forEach((button) => button.addEventListener("click", () => {
