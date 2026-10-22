@@ -116,11 +116,77 @@ export function mountDisplacementExperiment() {
     requestAnimationFrame(() => rock.classList.remove('is-throwing'));
   }
 
+  async function removeRockFromCylinder() {
+    if (!immersed || animating) return;
+    drag = null;
+    animating = true;
+    placeButton.disabled = true;
+    resetButton.disabled = true;
+    rock.classList.remove('is-dragging');
+    cylinder.classList.remove('drop-ready');
+
+    const sceneRect = scene.getBoundingClientRect();
+    const startRect = rock.getBoundingClientRect();
+    const startLeft = startRect.left - sceneRect.left;
+    const startTop = startRect.top - sceneRect.top;
+    const savedPosition = {
+      left: rock.style.left,
+      top: rock.style.top,
+      bottom: rock.style.bottom,
+      transform: rock.style.transform
+    };
+
+    clearPosition();
+    rock.classList.add('is-throwing');
+    rock.classList.remove('is-immersed');
+    const returnRect = rock.getBoundingClientRect();
+    rock.classList.add('is-immersed');
+    rock.style.left = startLeft + 'px';
+    rock.style.top = startTop + 'px';
+    rock.style.bottom = 'auto';
+    rock.style.transform = 'none';
+
+    const cylinderRect = cylinder.getBoundingClientRect();
+    const cylinderLeft = cylinderRect.left - sceneRect.left;
+    const cylinderTop = cylinderRect.top - sceneRect.top;
+    const returnLeft = returnRect.left - sceneRect.left;
+    const returnTop = returnRect.top - sceneRect.top;
+    const exitLeft = cylinderLeft - startRect.width - 12;
+    const clearTop = Math.max(0, cylinderTop - startRect.height - 12);
+    const insideTop = cylinderTop + 12;
+
+    status.textContent = '石頭先從量筒口提起，再移到量筒外；水位隨後重設。';
+    const animation = rock.animate([
+      { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
+      { offset: 0.28, left: startLeft + 'px', top: insideTop + 'px', transform: 'rotate(-4deg)', easing: 'cubic-bezier(.3,.7,.5,1)' },
+      { offset: 0.45, left: startLeft + 'px', top: clearTop + 'px', transform: 'rotate(-7deg)', easing: 'cubic-bezier(.4,0,.8,.5)' },
+      { offset: 0.61, left: exitLeft + 'px', top: clearTop + 'px', transform: 'rotate(-9deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
+      { offset: 0.78, left: returnLeft + 'px', top: Math.max(0, returnTop - 8) + 'px', transform: 'rotate(-5deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
+      { offset: 1, left: returnLeft + 'px', top: returnTop + 'px', transform: 'rotate(0deg)' }
+    ], { duration: 1050, fill: 'forwards' });
+
+    try {
+      await animation.finished;
+    } catch {
+      // A canceled animation should still leave the sample in a valid state.
+    }
+    animation.cancel();
+    rock.style.left = savedPosition.left;
+    rock.style.top = savedPosition.top;
+    rock.style.bottom = savedPosition.bottom;
+    rock.style.transform = savedPosition.transform;
+    animating = false;
+    resetRock();
+  }
+
   function resetRock() {
     drag = null;
+    rock.classList.add('is-throwing');
     clearPosition();
     animating = false;
     setReading(false);
+    rock.getBoundingClientRect();
+    requestAnimationFrame(() => rock.classList.remove('is-throwing'));
   }
 
   function centerIsInCylinder() {
@@ -142,6 +208,7 @@ export function mountDisplacementExperiment() {
     let rockRect = rock.getBoundingClientRect();
     const wasImmersed = immersed;
     if (wasImmersed) {
+      rock.classList.add('is-throwing');
       rock.style.left = rockRect.left - sceneRect.left + 'px';
       rock.style.top = rockRect.top - sceneRect.top + 'px';
       rock.style.bottom = 'auto';
@@ -155,7 +222,8 @@ export function mountDisplacementExperiment() {
       startY: event.clientY,
       left: rockRect.left - sceneRect.left,
       top: rockRect.top - sceneRect.top,
-      wasImmersed
+      wasImmersed,
+      clearedRim: !wasImmersed
     };
     rock.classList.add('is-dragging');
     rock.setPointerCapture(event.pointerId);
@@ -163,9 +231,26 @@ export function mountDisplacementExperiment() {
 
   rock.addEventListener('pointermove', event => {
     if (!drag || event.pointerId !== drag.pointerId) return;
-    rock.style.left = drag.left + event.clientX - drag.startX + 'px';
-    rock.style.top = drag.top + event.clientY - drag.startY + 'px';
+    let nextLeft = drag.left + event.clientX - drag.startX;
+    const nextTop = drag.top + event.clientY - drag.startY;
     rock.style.bottom = 'auto';
+    if (drag.wasImmersed) {
+      const sceneRect = scene.getBoundingClientRect();
+      const cylinderRect = cylinder.getBoundingClientRect();
+      const rockWidth = rock.getBoundingClientRect().width;
+      const rockHeight = rock.getBoundingClientRect().height;
+      const cylinderLeft = cylinderRect.left - sceneRect.left;
+      const cylinderRight = cylinderRect.right - sceneRect.left;
+      const cylinderTop = cylinderRect.top - sceneRect.top;
+      const clearTop = cylinderTop - rockHeight - 12;
+      if (nextTop > clearTop) {
+        nextLeft = Math.max(cylinderLeft + 3, Math.min(cylinderRight - rockWidth - 3, nextLeft));
+      } else {
+        drag.clearedRim = true;
+      }
+    }
+    rock.style.left = nextLeft + 'px';
+    rock.style.top = nextTop + 'px';
     const overTarget = centerIsInCylinder();
     cylinder.classList.toggle('drop-ready', overTarget);
   });
@@ -174,13 +259,15 @@ export function mountDisplacementExperiment() {
     if (!drag || event.pointerId !== drag.pointerId) return;
     const validDrop = centerIsInCylinder();
     const wasImmersed = drag.wasImmersed;
+    const clearedRim = drag.clearedRim;
     drag = null;
-    if (validDrop) {
-      throwRockIntoCylinder();
+    if (wasImmersed) {
+      if (clearedRim && !validDrop) resetRock();
+      else placeRock();
       return;
     }
-    if (wasImmersed) {
-      resetRock();
+    if (validDrop) {
+      throwRockIntoCylinder();
       return;
     }
     rock.classList.remove('is-dragging');
@@ -193,12 +280,12 @@ export function mountDisplacementExperiment() {
   rock.addEventListener('pointerup', finishDrag);
   rock.addEventListener('pointercancel', finishDrag);
   rock.addEventListener('keydown', event => {
-    if (!immersed && !animating && (event.key === 'Enter' || event.key === ' ')) {
-      event.preventDefault();
-      throwRockIntoCylinder();
-    }
+    if (animating || (event.key !== 'Enter' && event.key !== ' ')) return;
+    event.preventDefault();
+    if (immersed) removeRockFromCylinder();
+    else throwRockIntoCylinder();
   });
   placeButton.addEventListener('click', throwRockIntoCylinder);
-  resetButton.addEventListener('click', resetRock);
+  resetButton.addEventListener('click', removeRockFromCylinder);
   setReading(false);
 }
