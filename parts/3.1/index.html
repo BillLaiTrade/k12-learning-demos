@@ -156,7 +156,7 @@
     .decision-root { position: relative; z-index: 1; align-self: center; grid-column: 1; grid-row: 1; width: 100%; margin: 0; padding: 8px 5px; border: 1px solid #cbdccc; border-radius: 10px; background: #e7f0e7; color: var(--green); font-size: .78rem; font-weight: 800; text-align: center; }
     .decision-root::after { position: absolute; top: 50%; left: 100%; width: 12px; height: 2px; background: #9bb8a5; content: ""; }
     .decision-branches { position: relative; display: grid; grid-column: 2; grid-row: 1; grid-template-columns: minmax(0, 1fr); align-content: center; gap: 10px; padding-left: 10px; }
-    .decision-branches::before { position: absolute; top: 8px; bottom: 8px; left: 0; width: 2px; background: #9bb8a5; content: ""; }
+    .decision-trunk { position: absolute; top: 0; left: 0; z-index: 0; width: 2px; background: #9bb8a5; pointer-events: none; }
     .decision-branch { position: relative; z-index: 1; display: grid; min-width: 0; grid-template-columns: minmax(62px, .26fr) minmax(120px, .42fr) minmax(0, 1fr); align-items: center; gap: 8px; padding: 0; border: 0; background: transparent; }
     .decision-branch::before { position: absolute; top: 50%; left: -10px; width: 10px; height: 2px; background: #9bb8a5; content: ""; }
     .decision-category { display: flex; min-height: 34px; align-items: center; justify-content: center; padding: 5px 4px; border: 1px solid #d5e1d6; border-radius: 9px; background: #eaf2e9; color: #244b3c; font-size: .82rem; font-weight: 750; text-align: center; }
@@ -1301,6 +1301,38 @@
         });
         branch.append(children);
       });
+      const decisionBranches = document.querySelector(".decision-branches");
+      const decisionRoot = document.querySelector(".decision-root");
+      const decisionTrunk = document.createElement("span");
+      decisionTrunk.className = "decision-trunk";
+      decisionTrunk.setAttribute("aria-hidden", "true");
+      decisionBranches.prepend(decisionTrunk);
+      const alignDecisionTree = () => {
+        const categories = decisionBranches.querySelectorAll(".decision-category");
+        if (!categories.length) return;
+        const branchesRect = decisionBranches.getBoundingClientRect();
+        const firstRect = categories[0].getBoundingClientRect();
+        const lastRect = categories[categories.length - 1].getBoundingClientRect();
+        const firstCenter = firstRect.top + firstRect.height / 2 - branchesRect.top;
+        const lastCenter = lastRect.top + lastRect.height / 2 - branchesRect.top;
+        decisionTrunk.style.top = `${firstCenter}px`;
+        decisionTrunk.style.height = `${Math.max(0, lastCenter - firstCenter)}px`;
+        const targetCenter = (firstRect.top + firstRect.height / 2 + lastRect.top + lastRect.height / 2) / 2;
+        decisionRoot.style.transform = "none";
+        const rootRect = decisionRoot.getBoundingClientRect();
+        decisionRoot.style.transform = `translateY(${targetCenter - (rootRect.top + rootRect.height / 2)}px)`;
+      };
+      let decisionTreeFrame = 0;
+      const scheduleDecisionTreeAlignment = () => {
+        cancelAnimationFrame(decisionTreeFrame);
+        decisionTreeFrame = requestAnimationFrame(alignDecisionTree);
+      };
+      alignDecisionTree();
+      window.addEventListener("resize", scheduleDecisionTreeAlignment);
+      if ("ResizeObserver" in window) {
+        const decisionTreeObserver = new ResizeObserver(scheduleDecisionTreeAlignment);
+        decisionTreeObserver.observe(decisionBranches);
+      }
       document.querySelectorAll(".decision-leaf").forEach(button => button.addEventListener("click", () => chooseTool(button.dataset.tool)));
 
       divisionCountControl.addEventListener("input", () => {
