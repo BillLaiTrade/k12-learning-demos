@@ -595,7 +595,7 @@
                 <button type="button" class="secondary" data-correction-density="1" aria-pressed="false">較密・每格 1 cm</button>
               </div>
               <div id="correction-origin-controls" hidden>
-                <p id="correction-origin-control-instructions">點擊並拖曳鉛筆可旋轉場景；點擊並拖曳尺面可移動零刻度。若起點未對準 0，需用終點讀值減去起點讀值。</p>
+                <p id="correction-origin-control-instructions">點擊並拖曳鉛筆可旋轉場景；拖曳尺面可移動零刻度，但 0 刻度不能越過筆尖，否則起點沒有刻度可讀。若未對準，需用終點讀值減去起點讀值。</p>
               </div>
               <div id="correction-angle-controls" hidden>
                 <div class="correction-view-controls" role="group" aria-label="預設觀察視角">
@@ -1436,7 +1436,7 @@
         correctionDrag.y = event.clientY;
         if (correctionDrag.action === "origin") {
           const bounds = correctionCanvas.getBoundingClientRect();
-          correctionRulerOffset = clamp(correctionRulerOffset + dx * 20 / (bounds.width * 0.78), -1, 1);
+          correctionRulerOffset = clamp(correctionRulerOffset + dx * 20 / (bounds.width * 0.78), -1, state.start);
         } else {
           correctionCameraPreset = "free";
           const bounds = correctionCanvas.getBoundingClientRect();
