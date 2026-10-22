@@ -3,16 +3,16 @@ export function mountDensityExperimentQuiz() {
   if (!quiz) return;
 
   const samples = {
-    A: { mass: 39, before: 20, after: 35, image: 'assets/stone-model.webp' },
-    B: { mass: 65, before: 20, after: 50, image: 'assets/stone-model-b.webp' }
+    A: { mass: 54, before: 20, after: 38, image: 'assets/stone-model-a.webp' },
+    B: { mass: 65, before: 20, after: 40, image: 'assets/stone-model-b.webp' }
   };
   const sampleCards = [...quiz.querySelectorAll('[data-experiment-sample]')];
   const tools = [...quiz.querySelectorAll('[data-instrument]')];
   const marks = [...quiz.querySelectorAll('[data-volume]')];
   const feedback = quiz.querySelector('[data-experiment-feedback]');
   let selectedSample = null;
-  let scaleSample = null;
-  let cylinderSample = null;
+  const scaleSamples = new Set();
+  const cylinderSamples = new Set();
   let drag = null;
 
   function record(sample) {
@@ -21,6 +21,18 @@ export function mountDensityExperimentQuiz() {
 
   function field(sample, name) {
     return record(sample).querySelector(`[data-entry="${name}"]`);
+  }
+
+  function sampleMass(sample) {
+    const entered = Number(field(sample, 'mass').value);
+    return Number.isFinite(entered) && entered > 0 ? entered : samples[sample].mass;
+  }
+
+  function sampleVolume(sample) {
+    const before = Number(field(sample, 'before').value);
+    const after = Number(field(sample, 'after').value);
+    if (field(sample, 'before').value !== '' && field(sample, 'after').value !== '' && after > before) return after - before;
+    return samples[sample].after - samples[sample].before;
   }
 
   function setActiveMark(value) {
@@ -35,56 +47,52 @@ export function mountDensityExperimentQuiz() {
     setActiveMark(value);
   }
 
+  function refreshScale() {
+    const group = quiz.querySelector('[data-scale-rocks]');
+    const totalMass = [...scaleSamples].reduce((sum, sample) => sum + sampleMass(sample), 0);
+    group.innerHTML = [...scaleSamples].map(sample => `<img class="experiment-scale-rock is-visible" data-drag-sample="${sample}" data-sample="${sample}" src="${samples[sample].image}" alt="石頭 ${sample}，可拖曳移動">`).join('');
+    quiz.querySelector('[data-scale-reading]').textContent = totalMass.toFixed(1);
+    quiz.querySelector('[data-instrument="scale"]').setAttribute('aria-label', `電子秤，${scaleSamples.size} 顆石頭，總質量 ${totalMass.toFixed(1)} 公克`);
+  }
+
+  function refreshCylinder() {
+    const group = quiz.querySelector('[data-cylinder-rocks]');
+    const totalVolume = [...cylinderSamples].reduce((sum, sample) => sum + sampleVolume(sample), 0);
+    const finalReading = samples.A.before + totalVolume;
+    group.innerHTML = [...cylinderSamples].map(sample => `<img class="experiment-cylinder-rock is-visible" data-drag-sample="${sample}" data-sample="${sample}" src="${samples[sample].image}" alt="石頭 ${sample}，可拖曳移動">`).join('');
+    setWaterReading(finalReading);
+    quiz.querySelector('[data-instrument="cylinder"]').setAttribute('aria-label', `量筒，${cylinderSamples.size} 顆石頭完全浸入後水位 ${finalReading} 毫升，排水量 ${totalVolume} 毫升`);
+  }
+
   function chooseSample(sample) {
     selectedSample = sample;
     sampleCards.forEach(card => card.setAttribute('aria-pressed', String(card.dataset.experimentSample === sample)));
-    if (!cylinderSample) {
+    if (!cylinderSamples.size) {
       const enteredBefore = field(sample, 'before').value;
       setWaterReading(enteredBefore === '' ? samples[sample].before : Number(enteredBefore));
     }
   }
 
   function placeSample(sample, instrument) {
-    if (instrument === 'scale') {
-      if (cylinderSample === sample) removeSample(sample, 'cylinder');
-      if (scaleSample && scaleSample !== sample) removeSample(scaleSample, 'scale');
-    }
-    if (instrument === 'cylinder') {
-      if (scaleSample === sample) removeSample(sample, 'scale');
-      if (cylinderSample && cylinderSample !== sample) removeSample(cylinderSample, 'cylinder');
-    }
+    if (instrument === 'scale' && cylinderSamples.delete(sample)) refreshCylinder();
+    if (instrument === 'cylinder' && scaleSamples.delete(sample)) refreshScale();
     chooseSample(sample);
     if (instrument === 'scale') {
-      scaleSample = sample;
-      const rock = quiz.querySelector('[data-scale-rock]');
-      rock.src = samples[sample].image;
-      rock.dataset.dragSample = sample;
-      rock.classList.add('is-visible');
-      quiz.querySelector('[data-scale-reading]').textContent = samples[sample].mass.toFixed(1);
+      scaleSamples.add(sample);
+      refreshScale();
     }
     if (instrument === 'cylinder') {
-      cylinderSample = sample;
-      const rock = quiz.querySelector('[data-cylinder-rock]');
-      rock.src = samples[sample].image;
-      rock.dataset.dragSample = sample;
-      rock.classList.add('is-visible');
-      setWaterReading(samples[sample].after);
+      cylinderSamples.add(sample);
+      refreshCylinder();
     }
   }
 
   function removeSample(sample, instrument) {
-    if (instrument === 'scale' && scaleSample === sample) {
-      scaleSample = null;
-      const rock = quiz.querySelector('[data-scale-rock]');
-      rock.classList.remove('is-visible');
-      quiz.querySelector('[data-scale-reading]').textContent = '0.0';
+    if (instrument === 'scale' && scaleSamples.delete(sample)) {
+      refreshScale();
     }
-    if (instrument === 'cylinder' && cylinderSample === sample) {
-      cylinderSample = null;
-      const rock = quiz.querySelector('[data-cylinder-rock]');
-      rock.classList.remove('is-visible');
-      const before = selectedSample ? field(selectedSample, 'before').value : '';
-      setWaterReading(before === '' ? 20 : Number(before));
+    if (instrument === 'cylinder' && cylinderSamples.delete(sample)) {
+      refreshCylinder();
     }
   }
 
@@ -113,10 +121,11 @@ export function mountDensityExperimentQuiz() {
     }
     afterInput.setAttribute('aria-invalid', String(hasReadings && !validVolume));
 
-    if (selectedSample === sample && !cylinderSample) {
+    if (selectedSample === sample && !cylinderSamples.size) {
       setWaterReading(beforeInput.value === '' ? samples[sample].before : before);
     }
-    if (cylinderSample === sample && afterInput.value !== '') setWaterReading(after);
+    if (scaleSamples.has(sample)) refreshScale();
+    if (cylinderSamples.has(sample) && afterInput.value !== '') refreshCylinder();
 
     feedback.textContent = '';
     feedback.removeAttribute('data-result');
@@ -154,28 +163,18 @@ export function mountDensityExperimentQuiz() {
     tools.forEach(tool => tool.classList.toggle('is-drop-target', tool === target));
   }
 
-  sampleCards.forEach(card => {
-    card.addEventListener('click', () => chooseSample(card.dataset.experimentSample));
-    card.addEventListener('pointerdown', event => startDrag(event, card));
-    card.addEventListener('pointermove', event => {
-      if (!drag || drag.pointerId !== event.pointerId) return;
-      if (Math.abs(event.clientX - drag.startX) + Math.abs(event.clientY - drag.startY) > 5) drag.moved = true;
-      moveGhost(event.clientX, event.clientY);
-    });
-    card.addEventListener('pointerup', event => finishDrag(event));
-    card.addEventListener('pointercancel', event => finishDrag(event));
+  sampleCards.forEach(card => card.addEventListener('click', () => chooseSample(card.dataset.experimentSample)));
+  quiz.addEventListener('pointerdown', event => {
+    const source = event.target.closest('[data-experiment-sample], [data-drag-sample]');
+    if (source && quiz.contains(source)) startDrag(event, source);
   });
-
-  quiz.querySelectorAll('[data-drag-sample]').forEach(rock => {
-    rock.addEventListener('pointerdown', event => startDrag(event, rock));
-    rock.addEventListener('pointermove', event => {
-      if (!drag || drag.pointerId !== event.pointerId) return;
-      if (Math.abs(event.clientX - drag.startX) + Math.abs(event.clientY - drag.startY) > 5) drag.moved = true;
-      moveGhost(event.clientX, event.clientY);
-    });
-    rock.addEventListener('pointerup', event => finishDrag(event));
-    rock.addEventListener('pointercancel', event => finishDrag(event));
+  quiz.addEventListener('pointermove', event => {
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    if (Math.abs(event.clientX - drag.startX) + Math.abs(event.clientY - drag.startY) > 5) drag.moved = true;
+    moveGhost(event.clientX, event.clientY);
   });
+  quiz.addEventListener('pointerup', finishDrag);
+  quiz.addEventListener('pointercancel', finishDrag);
 
   function finishDrag(event) {
     if (!drag || drag.pointerId !== event.pointerId) return;
@@ -200,7 +199,10 @@ export function mountDensityExperimentQuiz() {
     tool.addEventListener('pointerup', finishDrag);
     tool.addEventListener('pointercancel', finishDrag);
     tool.addEventListener('click', event => {
-      if (selectedSample && !event.target.closest('[data-drag-sample]')) placeSample(selectedSample, tool.dataset.instrument);
+      if (!selectedSample || event.target.closest('[data-drag-sample]')) return;
+      const samplesInTool = tool.dataset.instrument === 'scale' ? scaleSamples : cylinderSamples;
+      if (samplesInTool.has(selectedSample)) removeSample(selectedSample, tool.dataset.instrument);
+      else placeSample(selectedSample, tool.dataset.instrument);
     });
     tool.addEventListener('keydown', event => {
       if (selectedSample && (event.key === 'Enter' || event.key === ' ')) {
@@ -208,6 +210,12 @@ export function mountDensityExperimentQuiz() {
         placeSample(selectedSample, tool.dataset.instrument);
       }
     });
+  });
+
+  sampleCards.forEach(card => card.querySelector('img').src = samples[card.dataset.experimentSample].image);
+  ['A', 'B'].forEach(sample => {
+    const card = record(sample).querySelector('h4 img');
+    card.src = samples[sample].image;
   });
 
   ['A', 'B'].forEach(sample => {
