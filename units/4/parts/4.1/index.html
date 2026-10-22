@@ -148,11 +148,11 @@
     .solid-pressure-art.hand-press-scene>.hand-approach { position:absolute; z-index:2; top:0; left:8%; width:84%; height:auto; transform:translateY(-60%); transform-origin:center bottom; }
     .hand-press-scene.is-approaching .hand-approach { animation:hand-approach 3.5s cubic-bezier(.4,.05,.25,1) both; }
     @keyframes hand-approach { 0% { transform:translateY(-60%); } 70% { transform:translateY(2%); } 100% { transform:translateY(2%); } }
-    @keyframes hydraulic-ram-cycle { 0%,8% { transform:translateY(-6px); } 22% { transform:translateY(0); } 78%,85% { transform:translateY(50px); } 100% { transform:translateY(-6px); } }
-    @keyframes hydraulic-iron-cycle { 0%,22% { transform:scale(1,1); } 78%,100% { transform:scale(2,.5); } }
+    @keyframes hydraulic-ram-cycle { 0%,12% { transform:translateY(-26px); } 68%,80% { transform:translateY(58px); } 100% { transform:translateY(-26px); } }
+    @keyframes hydraulic-iron-cycle { 0%,12% { transform:scale(1,1); } 42% { transform:scale(1.5,.75); } 68%,100% { transform:scale(2,.5); } }
     .hydraulic-iron { transform-box:fill-box; transform-origin:center bottom; }
-    .hydraulic-scene.is-pressing .hydraulic-ram { animation:hydraulic-ram-cycle 13s linear both; }
-    .hydraulic-scene.is-pressing .hydraulic-iron { animation:hydraulic-iron-cycle 13s linear both; }
+    .hydraulic-scene.is-pressing .hydraulic-ram { animation:hydraulic-ram-cycle 10s linear both; }
+    .hydraulic-scene.is-pressing .hydraulic-iron { animation:hydraulic-iron-cycle 10s linear both; }
     .hydraulic-outline { opacity:0; transition:opacity .25s ease; }
     .hydraulic-scene.is-pressing .hydraulic-outline { opacity:.6; }
     .solid-pressure-options { display:flex; flex-wrap:wrap; gap:7px; width:100%; justify-content:center; }
@@ -304,7 +304,7 @@
     }
     @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
     @media(prefers-reduced-motion:reduce) { .gas-particle { animation-duration:var(--gas-drift-duration,7s)!important; animation-delay:var(--gas-drift-delay,0s)!important; } }
-    @media(prefers-reduced-motion:reduce) { .hand-press-scene.is-approaching .hand-approach { animation-duration:3.5s!important; } .hydraulic-scene.is-pressing .hydraulic-ram,.hydraulic-scene.is-pressing .hydraulic-iron { animation-duration:13s!important; } }
+    @media(prefers-reduced-motion:reduce) { .hand-press-scene.is-approaching .hand-approach { animation-duration:3.5s!important; } .hydraulic-scene.is-pressing .hydraulic-ram,.hydraulic-scene.is-pressing .hydraulic-iron { animation-duration:10s!important; } }
     /* 第二學習區塊沿用第三單元的綠色與中性色系。 */
     #s2.lesson-card { border-color:#d8e2da; background:#fffefa; }
     #s2 .card-side { border-color:#d8e2da; }
