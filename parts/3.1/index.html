@@ -199,6 +199,7 @@
     .sequence-handle:focus-visible { border-radius: 6px; outline: 2px solid var(--green); outline-offset: 1px; }
     .sequence-number { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; background: #e9f1e9; color: var(--green); font-size: .78rem; font-weight: 800; }
     .sequence-step.is-dragging { z-index: 1; border-color: var(--green); background: #f1f7f0; box-shadow: 0 5px 14px rgb(24 52 40 / 12%); }
+    .sequence-placeholder { min-height: 54px; border: 1px dashed #9eb4a4; border-radius: 11px; background: rgb(231 241 232 / 55%); }
     .sequence-step[data-position-correct="true"] { border-color: #79a58d; background: #f1f7f0; }
     .sequence-step[data-position-correct="false"] { border-color: #d6b271; background: #fffaf0; }
     .quiz-actions { display: flex; align-items: center; gap: 16px; margin-top: 17px; }
@@ -1569,9 +1570,29 @@
       const sequenceLive = document.querySelector("#sequence-live");
       let draggedSequenceStep = null;
       let sequenceDragHandle = null;
+      let sequencePlaceholder = null;
+      let sequencePointerId = null;
+      let sequencePointerOffsetY = 0;
       const sequenceSteps = () => [...measurementSequence.querySelectorAll(".sequence-step")];
-      const updateSequenceNumbers = () => sequenceSteps().forEach((step, index) => {
-        step.querySelector(".sequence-number").textContent = String(index + 1);
+      const updateSequenceNumbers = () => [...measurementSequence.children].forEach((child, index) => {
+        const step = child === sequencePlaceholder ? draggedSequenceStep : child;
+        if (step) {
+          const number = step.querySelector(".sequence-number");
+          if (number) number.textContent = String(index + 1);
+        }
+      });
+      const captureSequencePositions = () => new Map([...measurementSequence.children].map((child) => [child, child.getBoundingClientRect()]));
+      const animateSequenceReflow = (previousPositions) => [...measurementSequence.children].forEach((child) => {
+        if (child === sequencePlaceholder) return;
+        const previous = previousPositions.get(child);
+        if (!previous) return;
+        const current = child.getBoundingClientRect();
+        const offsetY = previous.top - current.top;
+        if (Math.abs(offsetY) < 1) return;
+        child.animate([{ transform: `translateY(${offsetY}px)` }, { transform: "translateY(0)" }], {
+          duration: 190,
+          easing: "cubic-bezier(.2,.75,.25,1)"
+        });
       });
       const clearSequenceFeedback = () => {
         sequenceSteps().forEach((step) => step.removeAttribute("data-position-correct"));
@@ -1588,31 +1609,78 @@
         const handle = event.target.closest(".sequence-handle");
         if (!handle || event.button !== 0) return;
         event.preventDefault();
+        const bounds = handle.closest(".sequence-step").getBoundingClientRect();
         sequenceDragHandle = handle;
         draggedSequenceStep = handle.closest(".sequence-step");
+        sequencePointerId = event.pointerId;
+        sequencePointerOffsetY = event.clientY - bounds.top;
+        sequencePlaceholder = document.createElement("li");
+        sequencePlaceholder.className = "sequence-placeholder";
+        sequencePlaceholder.setAttribute("aria-hidden", "true");
+        sequencePlaceholder.style.height = `${bounds.height}px`;
+        measurementSequence.insertBefore(sequencePlaceholder, draggedSequenceStep.nextElementSibling);
+        document.body.append(draggedSequenceStep);
+        Object.assign(draggedSequenceStep.style, {
+          position: "fixed",
+          top: `${bounds.top}px`,
+          left: `${bounds.left}px`,
+          width: `${bounds.width}px`,
+          margin: "0",
+          zIndex: "20",
+          pointerEvents: "none"
+        });
         draggedSequenceStep.classList.add("is-dragging");
         handle.setPointerCapture(event.pointerId);
         clearSequenceFeedback();
       });
-      measurementSequence.addEventListener("pointermove", (event) => {
-        if (!draggedSequenceStep) return;
+      document.addEventListener("pointermove", (event) => {
+        if (!draggedSequenceStep || event.pointerId !== sequencePointerId) return;
+        draggedSequenceStep.style.top = `${event.clientY - sequencePointerOffsetY}px`;
         const otherSteps = sequenceSteps().filter((step) => step !== draggedSequenceStep);
         const beforeStep = otherSteps.find((step) => event.clientY < step.getBoundingClientRect().top + step.getBoundingClientRect().height / 2);
-        if (beforeStep) measurementSequence.insertBefore(draggedSequenceStep, beforeStep);
-        else measurementSequence.append(draggedSequenceStep);
-        updateSequenceNumbers();
+        const currentNextStep = sequencePlaceholder.nextElementSibling;
+        if (beforeStep !== currentNextStep) {
+          const previousPositions = captureSequencePositions();
+          measurementSequence.insertBefore(sequencePlaceholder, beforeStep);
+          animateSequenceReflow(previousPositions);
+          updateSequenceNumbers();
+          clearSequenceFeedback();
+        }
       });
       const finishSequenceDrag = (event) => {
-        if (!draggedSequenceStep) return;
+        if (!draggedSequenceStep || event.pointerId !== sequencePointerId) return;
         const movedStep = draggedSequenceStep;
+        const floatingBounds = movedStep.getBoundingClientRect();
+        const previousPositions = captureSequencePositions();
+        measurementSequence.insertBefore(movedStep, sequencePlaceholder);
+        sequencePlaceholder.remove();
+        Object.assign(movedStep.style, {
+          position: "",
+          top: "",
+          left: "",
+          width: "",
+          margin: "",
+          zIndex: "",
+          pointerEvents: ""
+        });
         movedStep.classList.remove("is-dragging");
+        const placedBounds = movedStep.getBoundingClientRect();
+        animateSequenceReflow(previousPositions);
+        const dropOffsetY = floatingBounds.top - placedBounds.top;
+        if (Math.abs(dropOffsetY) > 1) movedStep.animate([
+          { transform: `translateY(${dropOffsetY}px) scale(1.02)` },
+          { transform: "translateY(0) scale(1)" }
+        ], { duration: 190, easing: "cubic-bezier(.2,.75,.25,1)" });
         if (sequenceDragHandle?.hasPointerCapture(event.pointerId)) sequenceDragHandle.releasePointerCapture(event.pointerId);
         draggedSequenceStep = null;
         sequenceDragHandle = null;
+        sequencePlaceholder = null;
+        sequencePointerId = null;
+        updateSequenceNumbers();
         announceSequencePosition(movedStep);
       };
-      measurementSequence.addEventListener("pointerup", finishSequenceDrag);
-      measurementSequence.addEventListener("pointercancel", finishSequenceDrag);
+      document.addEventListener("pointerup", finishSequenceDrag);
+      document.addEventListener("pointercancel", finishSequenceDrag);
       measurementSequence.addEventListener("keydown", (event) => {
         const handle = event.target.closest(".sequence-handle");
         if (!handle || (event.key !== "ArrowUp" && event.key !== "ArrowDown")) return;
