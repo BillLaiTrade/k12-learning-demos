@@ -184,6 +184,9 @@
     .quiz-head p { margin: 8px 0 0; color: var(--muted); font-size: .94rem; }
     .quiz-body { padding: 23px 28px 28px; }
     .quiz-lead { margin: 0 0 18px; color: #46574e; }
+    .quiz-measurement-figure { margin: 0 0 22px; padding: 12px 16px 8px; border: 1px solid var(--line); border-radius: 14px; background: #f7f8f3; }
+    .quiz-measurement-figure svg { display: block; width: 100%; height: auto; }
+    .quiz-measurement-figure figcaption { margin-top: 3px; color: var(--muted); font-size: .84rem; text-align: center; }
     .quiz-question { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e7e9e2; }
     .quiz-prompt { margin: 0 0 12px; color: var(--green); font-size: .9rem; font-weight: 750; }
     .quiz-question h3 { margin: 0 0 12px; font-size: 1.2rem; line-height: 1.45; }
@@ -706,13 +709,33 @@
           </div>
         </header>
         <div class="quiz-body">
-          <p class="quiz-lead">有一個長度未知的小物件，要量出它的長度並讓結果可靠。請把下方步驟排成合適的順序。</p>
+          <p class="quiz-lead">老師給你一塊紅色長方積木，請用直尺量出它的長度，並讓結果可靠。先看圖，再把下方步驟排成合適的順序。</p>
+          <figure class="quiz-measurement-figure" aria-labelledby="quiz-measurement-caption">
+            <svg viewBox="0 0 520 190" role="img" aria-labelledby="quiz-object-title quiz-object-desc">
+              <title id="quiz-object-title">紅色長方積木和一把直尺</title>
+              <desc id="quiz-object-desc">一塊紅色長方積木放在直尺上方，直尺標有零到十公分刻度，示意要測量的物體和工具。</desc>
+              <ellipse cx="276" cy="101" rx="98" ry="12" fill="#26382d" opacity=".10" />
+              <path d="M188 60 211 47h166l-23 13z" fill="#e99b7d" stroke="#a95546" stroke-width="1.5" />
+              <path d="M354 60 377 47v34l-23 14z" fill="#a94e43" stroke="#8d413a" stroke-width="1.5" />
+              <rect x="188" y="60" width="166" height="34" rx="4" fill="#d66f60" stroke="#a95546" stroke-width="1.5" />
+              <path d="M198 67h145" stroke="#efaa91" stroke-width="3" stroke-linecap="round" opacity=".7" />
+              <text x="271" y="39" text-anchor="middle" fill="#46574e" font-size="13" font-family="system-ui, sans-serif">紅色長方積木</text>
+              <rect x="38" y="120" width="444" height="43" rx="7" fill="#f2dfa9" stroke="#a99255" stroke-width="2" />
+              <path d="M38 120h444" stroke="#fff0c9" stroke-width="3" />
+              <g stroke="#26383a" stroke-width="1.5" fill="#26383a" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle">
+                <path d="M48 120v18 M91 120v18 M134 120v18 M177 120v18 M220 120v18 M263 120v18 M306 120v18 M349 120v18 M392 120v18 M435 120v18 M478 120v18" />
+                <text x="48" y="153" stroke="none">0</text><text x="91" y="153" stroke="none">1</text><text x="134" y="153" stroke="none">2</text><text x="177" y="153" stroke="none">3</text><text x="220" y="153" stroke="none">4</text><text x="263" y="153" stroke="none">5</text><text x="306" y="153" stroke="none">6</text><text x="349" y="153" stroke="none">7</text><text x="392" y="153" stroke="none">8</text><text x="435" y="153" stroke="none">9</text><text x="478" y="153" stroke="none">10</text>
+              </g>
+              <text x="492" y="153" fill="#46574e" font-size="10" font-family="system-ui, sans-serif">cm</text>
+            </svg>
+            <figcaption id="quiz-measurement-caption">待測物：紅色長方積木　・　工具：直尺</figcaption>
+          </figure>
           <div class="quiz-question">
             <p class="quiz-prompt">拖曳步驟卡片排序</p>
             <h3 id="unit-quiz-question-title">從挑選直尺到整理讀值</h3>
             <ol class="sequence-list" id="measurement-sequence" aria-labelledby="unit-quiz-question-title">
               <li class="sequence-step" data-sequence-step="repeat"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">1</span><span>保持相同的量法，重複測量幾次並記下每次讀值。</span></li>
-              <li class="sequence-step" data-sequence-step="estimate"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">2</span><span>依每格長度估讀物體末端，記下數值和單位。</span></li>
+              <li class="sequence-step" data-sequence-step="estimate"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">2</span><span>依每格長度估讀積木末端，記下數值和單位。</span></li>
               <li class="sequence-step" data-sequence-step="ruler"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">3</span><span>選擇量程合適、刻度較密的直尺。</span></li>
               <li class="sequence-step" data-sequence-step="average"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">4</span><span>計算多次讀值的平均，作為較具代表性的結果。</span></li>
               <li class="sequence-step" data-sequence-step="align"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">5</span><span>將直尺的 0 刻度對準物體起點。</span></li>
