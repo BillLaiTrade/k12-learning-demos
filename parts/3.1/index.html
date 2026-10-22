@@ -157,13 +157,17 @@
     .decision-root::after { position: absolute; top: 50%; left: 100%; width: 12px; height: 2px; background: #9bb8a5; content: ""; }
     .decision-branches { position: relative; display: grid; grid-column: 2; grid-row: 1; grid-template-columns: minmax(0, 1fr); align-content: center; gap: 10px; padding-left: 10px; }
     .decision-branches::before { position: absolute; top: 8px; bottom: 8px; left: 0; width: 2px; background: #9bb8a5; content: ""; }
-    .decision-branch { position: relative; z-index: 1; display: grid; min-width: 0; grid-template-columns: minmax(60px, .28fr) minmax(0, 1fr); align-items: center; gap: 9px; padding: 0; border: 0; background: transparent; }
+    .decision-branch { position: relative; z-index: 1; display: grid; min-width: 0; grid-template-columns: minmax(62px, .26fr) minmax(120px, .42fr) minmax(0, 1fr); align-items: center; gap: 8px; padding: 0; border: 0; background: transparent; }
     .decision-branch::before { position: absolute; top: 50%; left: -10px; width: 10px; height: 2px; background: #9bb8a5; content: ""; }
-    .decision-category { display: flex; min-height: 34px; align-items: center; justify-content: center; padding: 5px 4px; border: 1px solid #d5e1d6; border-radius: 9px; background: #fffefa; color: #244b3c; font-size: .82rem; font-weight: 750; text-align: center; }
-    .decision-branch-children { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: 5px; padding-left: 12px; }
+    .decision-category { display: flex; min-height: 34px; align-items: center; justify-content: center; padding: 5px 4px; border: 1px solid #d5e1d6; border-radius: 9px; background: #eaf2e9; color: #244b3c; font-size: .82rem; font-weight: 750; text-align: center; }
+    .decision-question { position: relative; display: flex; min-height: 40px; grid-column: 2; grid-row: 1; align-items: center; justify-content: center; padding: 6px 8px; border: 1px solid #bfd5c1; border-radius: 9px; background: #eff5ed; color: #36594b; font-size: .82rem; line-height: 1.3; text-align: center; }
+    .decision-question::before { position: absolute; top: 50%; right: 100%; width: 8px; height: 2px; background: #bfd0c2; content: ""; }
+    .decision-branch-children { position: relative; display: grid; grid-column: 3; grid-row: 1; grid-template-columns: minmax(0, 1fr); align-items: center; gap: 5px; padding-left: 12px; }
     .decision-branch-children::before { position: absolute; top: 9px; bottom: 9px; left: 0; width: 2px; background: #bfd0c2; content: ""; }
-    .decision-next-choice { position: relative; min-width: 0; min-height: 32px; padding: 4px 7px; border: 1px solid #d5e1d6; border-radius: 8px; background: #fffefa; color: #244b3c; font-size: .76rem; line-height: 1.2; text-align: left; white-space: pre-line; overflow-wrap: anywhere; cursor: pointer; }
+    .decision-next-choice { position: relative; display: flex; min-width: 0; min-height: 34px; flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px; padding: 4px 7px; border: 1px solid #d5e1d6; border-radius: 8px; background: #fffefa; color: #244b3c; text-align: left; cursor: pointer; }
     .decision-next-choice::before { position: absolute; top: 50%; right: 100%; width: 12px; height: 2px; background: #bfd0c2; content: ""; }
+    .decision-answer { color: #687a70; font-size: .7rem; line-height: 1.15; }
+    .decision-tool-name { color: #244b3c; font-size: .82rem; line-height: 1.15; font-weight: 750; }
     .decision-next-choice:hover, .decision-next-choice[aria-pressed="true"] { border-color: var(--green); background: #eaf2e9; }
     .decision-branch p, .decision-leaves { display: none; }
     .decision-tool-options, .decision-scroll-hint, .decision-next-level { display: none; }
@@ -188,7 +192,7 @@
     .tool-demo-value { color: var(--green); font-size: 1.2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
     .tool-demo-controls button { padding: 8px 14px; border: 1px solid var(--green); border-radius: 9px; background: var(--green); color: white; font-weight: 700; cursor: pointer; }
     .tool-demo-controls button.secondary { background: white; color: var(--green); }
-    @media (max-width: 600px) { .decision-tree { padding: 7px; } .decision-canvas { grid-template-columns: 52px minmax(0, 1fr); column-gap: 8px; padding: 3px; } .decision-root { padding: 7px 3px; font-size: .68rem; } .decision-root::after { width: 8px; } .decision-branches { gap: 9px; padding-left: 7px; } .decision-branch { grid-template-columns: 54px minmax(0, 1fr); gap: 6px; } .decision-branch::before { left: -7px; width: 7px; } .decision-category { min-height: 31px; padding: 4px 2px; font-size: .7rem; } .decision-branch-children { gap: 4px; padding-left: 8px; } .decision-branch-children::before { top: 8px; bottom: 8px; } .decision-next-choice { min-height: 30px; padding: 4px 5px; font-size: .8rem; } .decision-next-choice::before { width: 8px; } }
+    @media (max-width: 600px) { .decision-tree { padding: 7px; } .decision-canvas { grid-template-columns: 46px minmax(0, 1fr); column-gap: 7px; padding: 3px; } .decision-root { padding: 7px 3px; font-size: .65rem; } .decision-root::after { width: 7px; } .decision-branches { gap: 9px; padding-left: 6px; } .decision-branch { grid-template-columns: 43px minmax(68px, .8fr) minmax(0, 1.1fr); gap: 5px; } .decision-branch::before { left: -6px; width: 6px; } .decision-category { min-height: 30px; padding: 3px 1px; font-size: .68rem; overflow-wrap: anywhere; } .decision-question { min-height: 38px; padding: 4px 3px; font-size: .68rem; line-height: 1.2; overflow-wrap: anywhere; } .decision-question::before { width: 5px; } .decision-branch-children { gap: 4px; padding-left: 7px; } .decision-branch-children::before { top: 8px; bottom: 8px; } .decision-next-choice { min-height: 31px; padding: 3px 4px; } .decision-next-choice::before { width: 7px; } .decision-answer { font-size: .65rem; } .decision-tool-name { font-size: .74rem; } }
     .division-visual svg { display: block; width: 100%; height: auto; }
     .division-visual p { margin: 7px 0 0; color: var(--muted); font-size: .84rem; }
     .control-panel { padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
@@ -725,7 +729,7 @@
         <div class="card-side"><span class="card-number">07</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
         <div class="card-main">
           <h2>要量什麼？依物品特性選工具</h2>
-          <p>先選擇要測量的物理量，再查看適合的工具。</p>
+          <p>先選擇物理量，再回答判斷問題，依答案選工具。</p>
           <div class="decision-tree" aria-label="由左至右的測量工具決策樹"><div class="decision-canvas">
                         <div class="decision-root">我要測量什麼？</div><div class="decision-branches"><section class="decision-branch"><div class="decision-category">長度</div><p>看長短、形狀與所需精細程度</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">短而筆直</span><button class="decision-leaf" data-tool="ruler" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="3" y="12" width="54" height="20" rx="3" fill="#f0dca3" stroke="#997d3c"/><path d="M12 12v9m8-9v5m8-5v9m8-9v5m8-5v9" stroke="#354a42" stroke-width="1.5"/></svg><span>短、直物件：直尺</span></button></div><div class="decision-outcome"><span class="decision-edge-label">較長</span><button class="decision-leaf" data-tool="tape" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="5" y="9" width="24" height="23" rx="8" fill="#e5b94f" stroke="#997d3c"/><path d="M27 13h28v13H27" fill="#f0dca3" stroke="#997d3c"/><path d="M35 13v7m7-7v4m7-4v7" stroke="#354a42"/></svg><span>較長物件：捲尺</span></button></div></div><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">曲面或繞量</span><button class="decision-leaf" data-tool="softTape" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M5 28c8-23 18 15 27-7s15 10 23-10" fill="none" stroke="#3b9a91" stroke-width="7" stroke-linecap="round"/><path d="M11 24l3 2m5 1 3 2m7-7 3 1m7-8 3 1m8-2 3 1" stroke="#fff"/></svg><span>曲面或繞量：軟尺</span></button></div><div class="decision-outcome"><span class="decision-edge-label">微小尺寸</span><button class="decision-leaf" data-tool="caliper" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M12 8v25h39M12 13h12v8H12m27 12V23h8v10" fill="none" stroke="#667c79" stroke-width="4"/><path d="M18 28h3m4 0h3m4 0h3" stroke="#354a42"/></svg><span>微小尺寸：游標卡尺 <small class="decision-extension">延伸工具</small></span></button></div></div></div></section><section class="decision-branch"><div class="decision-category">質量</div><p>看物品大小與預期質量，選合適秤型和量程</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">較小、較輕</span><button class="decision-leaf" data-tool="electronicBalance" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="13" y="8" width="34" height="23" rx="4" fill="#e8eee8" stroke="#557368" stroke-width="2"/><rect x="21" y="12" width="18" height="8" rx="2" fill="#fff" stroke="#7b9485"/><path d="M20 25h20" stroke="#d6a94a" stroke-width="3"/></svg><span>小物件、較精細：電子秤</span></button></div><div class="decision-outcome"><span class="decision-edge-label">較大、較重</span><button class="decision-leaf" data-tool="platformScale" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M12 30h36M17 27l5-13h16l5 13M30 14V7m-5 0h10" fill="none" stroke="#557368" stroke-width="3"/><rect x="22" y="28" width="16" height="5" rx="2" fill="#d6a94a"/></svg><span>較大、較重物件：平台秤</span></button></div></div></div></section><section class="decision-branch"><div class="decision-category">時間</div><p>看要量已經過多久，還是設定一段時間</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">量經過時間</span><button class="decision-leaf" data-tool="stopwatch" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><circle cx="30" cy="22" r="14" fill="#fff" stroke="#557368" stroke-width="3"/><path d="M30 22V12m0 10 8 4M25 4h10m-5 0v4" stroke="#247554" stroke-width="2.5"/></svg><span>量經過時間：碼錶</span></button></div><div class="decision-outcome"><span class="decision-edge-label">設定倒數</span><button class="decision-leaf" data-tool="timer" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="13" y="8" width="34" height="25" rx="5" fill="#fff" stroke="#557368" stroke-width="2.5"/><path d="M22 4h16m-8 0v4" stroke="#557368" stroke-width="3"/><text x="30" y="26" text-anchor="middle" font-size="11" fill="#247554">1:00</text></svg><span>設定倒數時間：計時器</span></button></div></div></div></section><section class="decision-branch"><div class="decision-category">液體體積</div><p>小量精確量取或一般廚房估量</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">需要精細讀值</span><button class="decision-leaf" data-tool="cylinder" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M18 5h25l-3 30H21z" fill="#e8f4ee" stroke="#557368" stroke-width="2"/><path d="M22 26h17M23 20h7m-7-6h7m-7-6h7" stroke="#3b9a91" stroke-width="2"/></svg><span>需較精細：量筒</span></button></div><div class="decision-outcome"><span class="decision-edge-label">一般容量</span><button class="decision-leaf" data-tool="measuringCup" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M13 10h29l-3 24H17z" fill="#e8f4ee" stroke="#557368" stroke-width="2"/><path d="M42 15h7v13h-9M19 25h19m-18-6h8m-8-6h8" fill="none" stroke="#3b9a91" stroke-width="2"/></svg><span>一般容量：量杯</span></button></div></div></div></section><section class="decision-branch"><div class="decision-category">溫度</div><p>依測量對象選用合適型式與量程</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">人體</span><button class="decision-leaf" data-tool="clinicalThermometer" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="27" y="5" width="7" height="24" rx="4" fill="#fff" stroke="#778980" stroke-width="2"/><circle cx="30.5" cy="31" r="6" fill="#db7657"/><path d="M30.5 25v6" stroke="#db7657" stroke-width="3"/></svg><span>量體溫：體溫計</span></button></div><div class="decision-outcome"><span class="decision-edge-label">液體或環境</span><button class="decision-leaf" data-tool="labThermometer" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M25 6h10v24a8 8 0 1 1-10 0z" fill="#fff" stroke="#778980" stroke-width="2"/><path d="M30 13v20" stroke="#db7657" stroke-width="4"/><path d="M37 12h7m-7 6h5m-5 6h7" stroke="#557368"/></svg><span>量液體或環境：實驗用溫度計</span></button></div></div></div></section><section class="decision-branch"><div class="decision-category">力</div><p>先估力的大小，再挑選不超量程的測力計</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">較小的力</span><button class="decision-leaf" data-tool="smallSpring" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M30 4v5l-5 3 10 4-10 4 10 4-5 3v5" fill="none" stroke="#557368" stroke-width="2"/><path d="M21 7h18m-9 25v4m-6 0h12" stroke="#d6a94a" stroke-width="2"/></svg><span>較小的力：小量程彈簧秤</span></button></div><div class="decision-outcome"><span class="decision-edge-label">較大的力</span><button class="decision-leaf" data-tool="largeSpring" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M30 3v5l-7 4 14 4-14 4 14 4-7 4v6" fill="none" stroke="#557368" stroke-width="3"/><path d="M19 6h22m-11 28v3m-7 0h14" stroke="#d6a94a" stroke-width="2.5"/></svg><span>較大的力：大量程彈簧秤</span></button></div></div></div></section></div></div></div>
           <div class="tool-demo" id="tool-demo" aria-live="polite" hidden><h3>選一個樹梢工具開始觀察</h3><p>完整決策樹會留在上方；選取工具後，這裡會出現操作示範。</p></div>
@@ -1250,18 +1254,48 @@
           range.addEventListener("input", update); update();
         }
       };
-      const compactToolLabels = { ruler: "短直：直尺", tape: "較長：捲尺", softTape: "曲面：軟尺", caliper: "微小：游標卡尺", electronicBalance: "小物：電子秤", platformScale: "較重：平台秤", stopwatch: "經過時間：碼錶", timer: "倒數：計時器", cylinder: "需精細：量筒", measuringCup: "一般容量：量杯", clinicalThermometer: "人體：體溫計", labThermometer: "液體／環境：溫度計", smallSpring: "小力：小量程測力計", largeSpring: "大力：大量程測力計" };
+      const decisionQuestions = {
+        長度: "物件的形狀與長度如何？",
+        質量: "物件大約有多重？",
+        時間: "要量經過時間，還是設定倒數？",
+        液體體積: "需要精細量取嗎？",
+        溫度: "要測量哪一種對象？",
+        力: "預期的力有多大？"
+      };
+      const decisionChoices = {
+        ruler: "短而筆直：直尺", tape: "較長：捲尺", softTape: "曲面或繞量：軟尺", caliper: "微小尺寸：游標卡尺",
+        electronicBalance: "較輕、需精細讀值：電子秤", platformScale: "較重：平台秤",
+        stopwatch: "經過時間：碼錶", timer: "設定倒數：計時器",
+        cylinder: "需要精細讀值：量筒", measuringCup: "一般容量：量杯",
+        clinicalThermometer: "人體：體溫計", labThermometer: "液體或環境：實驗溫度計",
+        smallSpring: "較小：小量程測力計", largeSpring: "較大：大量程測力計"
+      };
       document.querySelectorAll(".decision-branch").forEach(branch => {
+        const category = branch.querySelector(".decision-category").textContent.trim();
+        const question = document.createElement("div");
+        question.className = "decision-question";
+        question.textContent = decisionQuestions[category];
+        question.setAttribute("aria-label", `判斷問題：${decisionQuestions[category]}`);
+        branch.insertBefore(question, branch.querySelector(".decision-leaves"));
         const children = document.createElement("div");
         children.className = "decision-branch-children";
-        children.setAttribute("aria-label", `${branch.querySelector(".decision-category").textContent}適用工具`);
+        children.setAttribute("aria-label", `${category}的答案與適用工具`);
         branch.querySelectorAll(".decision-leaf").forEach(leaf => {
           const choice = document.createElement("button");
+          const [answer, ...toolParts] = decisionChoices[leaf.dataset.tool].split(":");
+          const tool = toolParts.join(":").trim();
           choice.type = "button";
           choice.className = "decision-next-choice";
           choice.dataset.tool = leaf.dataset.tool;
-          choice.textContent = compactToolLabels[leaf.dataset.tool] || leaf.querySelector("span").textContent.trim();
           choice.setAttribute("aria-pressed", "false");
+          choice.setAttribute("aria-label", `${answer.trim()}，建議工具：${tool}`);
+          const answerLabel = document.createElement("span");
+          answerLabel.className = "decision-answer";
+          answerLabel.textContent = answer.trim();
+          const toolName = document.createElement("strong");
+          toolName.className = "decision-tool-name";
+          toolName.textContent = tool;
+          choice.append(answerLabel, toolName);
           choice.addEventListener("click", () => chooseTool(choice.dataset.tool));
           children.append(choice);
         });
