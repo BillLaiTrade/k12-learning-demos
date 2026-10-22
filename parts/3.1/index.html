@@ -1209,7 +1209,7 @@
       updateLengthConversion(lengthUnitSelect.value);
 
       const toolDemos = {
-        stopwatch: { title: "碼錶・量時間間隔", desc: "開始、暫停與歸零，觀察時間讀值。" },
+        stopwatch: { title: "電子碼錶・正計時與倒數", desc: "用正計時量經過時間，也可以切換倒數；練習開始、暫停與歸零。" },
         ruler: { title: "直尺・量短而筆直的物件", desc: "先把物件左端對準 0，再看右端對到幾公分。拖曳下方滑桿，觀察讀值如何改變。", controlLabel: "改變物件長度", min: 5, max: 20, value: 12, unit: "cm", draw: v => {
           const end = 55 + v * 15;
           return `<text x="55" y="25" font-size="14" font-weight="700" fill="#247554">起點對準 0</text><text x="${end}" y="25" text-anchor="middle" font-size="14" font-weight="700" fill="#a65327">另一端讀值：${v} cm</text><path d="M55 31v12" stroke="#247554" stroke-width="2"/><rect x="45" y="88" width="470" height="50" rx="7" fill="#f1dfa9" stroke="#9d8244" stroke-width="3"/><path d="${Array.from({length:31},(_,i)=>`M${55+i*15} 88v${i%5===0?22:11}`).join(' ')}" stroke="#354a42" stroke-width="2"/><text x="62" y="126" font-size="17" fill="#30463d">0</text><text x="280" y="126" text-anchor="middle" font-size="17" fill="#30463d">15</text><text x="495" y="126" text-anchor="end" font-size="17" fill="#30463d">30 cm</text><rect x="55" y="52" width="${v*15}" height="14" rx="7" fill="#d59a27"/><path d="M55 43v45" stroke="#247554" stroke-width="2"/><path d="M${end} 40v48" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"/>`;
@@ -1240,19 +1240,41 @@
       toolDemos.smallSpring = { ...toolDemos.spring, title: "小量程彈簧秤・量較小的力", desc: "小量程刻度通常較適合讀取較小的力，注意不要超出上限。", min: 0, max: 2, value: 1 };
       toolDemos.largeSpring = { ...toolDemos.spring, title: "大量程彈簧秤・量較大的力", desc: "較大拉力要使用上限較高的測力計，避免超量程。", min: 0, max: 50, value: 20 };
       const demo = document.querySelector("#tool-demo");
-      let stopwatchTimer = null, stopwatchStarted = 0, stopwatchElapsed = 0, timerRemaining = 60;
+      let stopwatchTimer = null, stopwatchStarted = 0, stopwatchElapsed = 0, timerRemaining = 60, stopwatchDeadline = 0, stopwatchMode = "elapsed";
       const formatStopwatch = ms => `${(ms / 60000 | 0).toString().padStart(2,"0")}:${((ms / 1000 | 0) % 60).toString().padStart(2,"0")}.${((ms % 1000) / 10 | 0).toString().padStart(2,"0")}`;
       const chooseTool = key => {
         document.querySelectorAll(".decision-leaf").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tool === key)));
         document.querySelectorAll(".decision-next-choice").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tool === key)));
         demo.hidden = false;
-        clearInterval(stopwatchTimer); stopwatchTimer = null; stopwatchElapsed = 0; timerRemaining = 60;
+        clearInterval(stopwatchTimer); stopwatchTimer = null; stopwatchElapsed = 0; timerRemaining = 60; stopwatchDeadline = 0; stopwatchMode = "elapsed";
         const item = toolDemos[key];
         if (key === "stopwatch") {
-          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual"><svg viewBox="0 0 560 190" role="img" aria-label="碼錶示意圖"><circle cx="280" cy="96" r="66" fill="#fff" stroke="#557368" stroke-width="8"/><path d="M260 18h40m-20 0v12" stroke="#557368" stroke-width="8" stroke-linecap="round"/><text id="stopwatch-display" x="280" y="108" text-anchor="middle" font-size="30" font-family="monospace" fill="#247554">00:00.00</text></svg></div><div class="tool-demo-controls"><button id="watch-start">開始</button><button id="watch-reset" class="secondary">歸零</button><span class="tool-demo-value" id="watch-state">準備開始</span></div>`;
-          const display = document.querySelector("#stopwatch-display"), stateLabel = document.querySelector("#watch-state"), start = document.querySelector("#watch-start");
-          start.onclick = () => { if (stopwatchTimer) { stopwatchElapsed += Date.now() - stopwatchStarted; clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "繼續"; stateLabel.textContent = "已暫停"; } else { stopwatchStarted = Date.now(); stopwatchTimer = setInterval(() => { display.textContent = formatStopwatch(stopwatchElapsed + Date.now() - stopwatchStarted); }, 30); start.textContent = "暫停"; stateLabel.textContent = "計時中"; } };
-          document.querySelector("#watch-reset").onclick = () => { clearInterval(stopwatchTimer); stopwatchTimer = null; stopwatchElapsed = 0; display.textContent = "00:00.00"; start.textContent = "開始"; stateLabel.textContent = "準備開始"; };
+          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual"><svg viewBox="100 0 360 190" role="img" aria-label="有數位螢幕和操作按鈕的手持電子碼錶"><path d="M246 57V38q0-15 15-15h38q15 0 15 15v19" fill="none" stroke="#557368" stroke-width="8"/><rect x="175" y="47" width="210" height="132" rx="26" fill="#dce7df" stroke="#557368" stroke-width="6"/><rect x="200" y="36" width="43" height="23" rx="7" fill="#d6a94a" stroke="#557368" stroke-width="3"/><rect x="317" y="36" width="43" height="23" rx="7" fill="#d6a94a" stroke="#557368" stroke-width="3"/><rect x="163" y="83" width="14" height="27" rx="5" fill="#557368"/><rect x="383" y="83" width="14" height="27" rx="5" fill="#557368"/><rect x="195" y="77" width="170" height="54" rx="8" fill="#fbfff9" stroke="#81988b" stroke-width="3"/><text id="stopwatch-display" x="280" y="113" text-anchor="middle" font-size="27" font-family="monospace" fill="#247554">00:00.00</text><text x="280" y="151" text-anchor="middle" font-size="11" font-weight="700" letter-spacing="2" fill="#557368">STOPWATCH</text><circle cx="222" cy="157" r="7" fill="#d6a94a"/><circle cx="338" cy="157" r="7" fill="#557368"/></svg></div><div class="tool-demo-controls" role="group" aria-label="碼錶計時模式"><button id="watch-mode-elapsed" aria-pressed="true">正計時</button><button id="watch-mode-countdown" class="secondary" aria-pressed="false">倒數</button></div><div class="tool-demo-controls" id="watch-countdown-settings" hidden><label for="watch-seconds">設定倒數秒數</label><input id="watch-seconds" type="range" min="5" max="120" step="5" value="60"><output class="tool-demo-value" id="watch-seconds-output">60 秒</output></div><div class="tool-demo-controls"><button id="watch-start">開始</button><button id="watch-reset" class="secondary">歸零</button><span class="tool-demo-value" id="watch-state">準備開始</span></div>`;
+          const display = document.querySelector("#stopwatch-display"), stateLabel = document.querySelector("#watch-state"), start = document.querySelector("#watch-start"), reset = document.querySelector("#watch-reset"), settings = document.querySelector("#watch-countdown-settings"), seconds = document.querySelector("#watch-seconds"), secondsOutput = document.querySelector("#watch-seconds-output"), elapsedMode = document.querySelector("#watch-mode-elapsed"), countdownMode = document.querySelector("#watch-mode-countdown");
+          const formatCountdown = value => `${String(Math.floor(value / 60)).padStart(2,"0")}:${String(value % 60).padStart(2,"0")}`;
+          const paintWatch = () => { display.textContent = stopwatchMode === "elapsed" ? formatStopwatch(stopwatchElapsed + (stopwatchTimer ? Date.now() - stopwatchStarted : 0)) : formatCountdown(timerRemaining); };
+          const setWatchMode = mode => { clearInterval(stopwatchTimer); stopwatchTimer = null; stopwatchMode = mode; stopwatchElapsed = 0; timerRemaining = Number(seconds.value); stopwatchDeadline = 0; settings.hidden = mode !== "countdown"; elapsedMode.setAttribute("aria-pressed", String(mode === "elapsed")); countdownMode.setAttribute("aria-pressed", String(mode === "countdown")); elapsedMode.classList.toggle("secondary", mode !== "elapsed"); countdownMode.classList.toggle("secondary", mode !== "countdown"); start.textContent = "開始"; stateLabel.textContent = mode === "elapsed" ? "正計時" : "設定倒數時間"; paintWatch(); };
+          elapsedMode.onclick = () => setWatchMode("elapsed");
+          countdownMode.onclick = () => setWatchMode("countdown");
+          seconds.oninput = () => { if (!stopwatchTimer) { timerRemaining = Number(seconds.value); secondsOutput.textContent = `${timerRemaining} 秒`; paintWatch(); } };
+          start.onclick = () => {
+            if (stopwatchTimer) {
+              if (stopwatchMode === "elapsed") stopwatchElapsed += Date.now() - stopwatchStarted;
+              else timerRemaining = Math.max(0, Math.ceil((stopwatchDeadline - Date.now()) / 1000));
+              clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "繼續"; stateLabel.textContent = "已暫停"; paintWatch(); return;
+            }
+            if (stopwatchMode === "elapsed") {
+              stopwatchStarted = Date.now();
+              stopwatchTimer = setInterval(paintWatch, 30);
+              start.textContent = "暫停"; stateLabel.textContent = "正計時中";
+            } else {
+              if (!timerRemaining) timerRemaining = Number(seconds.value);
+              stopwatchDeadline = Date.now() + timerRemaining * 1000;
+              stopwatchTimer = setInterval(() => { timerRemaining = Math.max(0, Math.ceil((stopwatchDeadline - Date.now()) / 1000)); paintWatch(); if (!timerRemaining) { clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "再倒數一次"; stateLabel.textContent = "時間到"; } }, 100);
+              start.textContent = "暫停"; stateLabel.textContent = "倒數中";
+            }
+          };
+          reset.onclick = () => { clearInterval(stopwatchTimer); stopwatchTimer = null; stopwatchElapsed = 0; timerRemaining = Number(seconds.value); stopwatchDeadline = 0; start.textContent = "開始"; stateLabel.textContent = stopwatchMode === "elapsed" ? "正計時" : "設定倒數時間"; paintWatch(); };
         } else if (key === "timer") {
           demo.innerHTML = `<h3>計時器・設定一段倒數時間</h3><p>設定時間後開始倒數；適合控制一段預定的活動時間。</p><div class="tool-demo-visual"><svg viewBox="0 0 560 190" role="img" aria-label="倒數計時器"><rect x="175" y="28" width="210" height="132" rx="22" fill="#fff" stroke="#557368" stroke-width="6"/><text id="timer-display" x="280" y="111" text-anchor="middle" font-size="46" font-family="monospace" fill="#247554">01:00</text></svg></div><div class="tool-demo-controls"><label for="timer-setting">設定秒數</label><input id="timer-setting" type="range" min="5" max="120" step="5" value="60"><output class="tool-demo-value" id="timer-output">60 秒</output><button id="timer-start">開始</button><button id="timer-reset" class="secondary">歸零</button></div>`;
           const display = document.querySelector("#timer-display"), setting = document.querySelector("#timer-setting"), output = document.querySelector("#timer-output"), start = document.querySelector("#timer-start");
@@ -1278,7 +1300,7 @@
       const decisionChoices = {
         ruler: "短而筆直：直尺", tape: "較長：捲尺", softTape: "曲面或繞量：軟尺", caliper: "微小尺寸：游標卡尺",
         electronicBalance: "較輕、需精細讀值：電子秤", platformScale: "較重：平台秤",
-        stopwatch: "經過時間：碼錶", timer: "設定倒數：計時器",
+        stopwatch: "量經過時間／倒數：碼錶", timer: "單純設定倒數：計時器",
         cylinder: "需要精細讀值：量筒", measuringCup: "一般容量：量杯",
         clinicalThermometer: "人體：體溫計", labThermometer: "液體或環境：實驗溫度計",
         smallSpring: "較小：小量程測力計", largeSpring: "較大：大量程測力計"
