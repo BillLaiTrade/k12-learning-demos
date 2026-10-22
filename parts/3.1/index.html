@@ -1233,7 +1233,6 @@
       let correctionMode = "density";
       let correctionTickInterval = 5;
       let correctionRulerOffset = 0;
-      let correctionOriginInitialized = false;
       const correctionAverageMeasurements = [18.4, 18.5, 18.3, 18.6, 18.4];
       let correctionAverageTotal = correctionAverageMeasurements.reduce((total, value) => total + value, 0);
       const correctionCameraState = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
@@ -1389,11 +1388,11 @@
         document.querySelector("#correction-angle-status").textContent = correctionCameraPreset === "front" ? "正對尺面" : correctionCameraPreset === "oblique" ? "斜向觀察" : "自由旋轉";
       };
       correctionModeButtons.forEach((button) => button.addEventListener("click", () => {
-        correctionMode = button.dataset.correctionControl;
-        if (correctionMode === "origin" && !correctionOriginInitialized) {
+        const nextMode = button.dataset.correctionControl;
+        if (nextMode === "origin" && correctionMode !== "origin") {
           correctionRulerOffset = -1;
-          correctionOriginInitialized = true;
-        }
+        } else if (nextMode !== "origin") correctionRulerOffset = 0;
+        correctionMode = nextMode;
         renderCorrectionScene();
         if (correctionMode === "origin") document.querySelector("#correction-parallax-detail").scrollIntoView({ behavior: "smooth", block: "center" });
       }));
