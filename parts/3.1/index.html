@@ -605,8 +605,8 @@
                   <strong>同一物體，重複測量</strong>
                   <span class="correction-average-count" id="correction-average-count" aria-live="polite">已測 5 次</span>
                 </div>
-                <span class="correction-average-readings-label">最近 5 次讀值</span>
-                <div class="correction-average-readings" id="correction-average-readings" aria-label="最近五次讀值"></div>
+                <span class="correction-average-readings-label">每次讀值</span>
+                <div class="correction-average-readings" id="correction-average-readings" aria-label="所有測量讀值"></div>
                 <div class="correction-average-plot" id="correction-average-plot" role="img" aria-label="五次讀值集中在數線上的相近位置，深綠線表示目前平均">
                   <div class="correction-average-axis"></div>
                   <div id="correction-average-points" aria-hidden="true"></div>
@@ -1233,10 +1233,8 @@
         const min = 17.5;
         const max = 19.5;
         const positionFor = (value) => clamp((value - min) / (max - min) * 100, 0, 100);
-        const recentReadings = document.querySelector("#correction-average-readings");
-        const firstRecentIndex = Math.max(0, count - 5);
-        recentReadings.replaceChildren(...correctionAverageMeasurements.slice(firstRecentIndex).map((value, index) => {
-          const measurementIndex = firstRecentIndex + index;
+        const readings = document.querySelector("#correction-average-readings");
+        readings.replaceChildren(...correctionAverageMeasurements.map((value, measurementIndex) => {
           const item = document.createElement("span");
           item.className = "correction-average-reading";
           item.append(`第 ${measurementIndex + 1} 次 `);
