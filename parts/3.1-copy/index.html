@@ -1,0 +1,1450 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="透過鉛筆與直尺的互動，觀察量測條件如何影響讀值，最後用一題確認理解。">
+  <title>量測與公平比較｜量測的意義</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #182326;
+      --muted: #59696b;
+      --line: #d7e1dd;
+      --paper: #f4f7f1;
+      --card: #fffefa;
+      --green: #176b53;
+      --green-pale: #e5f2e9;
+      --orange: #bc612b;
+      --orange-pale: #fff0e3;
+      --shadow: 0 14px 38px rgb(21 47 38 / 8%);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+    }
+    [hidden] { display: none !important; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--green); }
+    .shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .masthead { padding: 26px 0 18px; }
+    .brand-row, .section-top, .card-head, .ruler-caption, .feedback, .controls {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .brand { font-size: .9rem; font-weight: 750; letter-spacing: .04em; }
+    .crumb { color: var(--muted); font-size: .9rem; }
+    .hero {
+      display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(260px, .9fr);
+      gap: 32px; align-items: center; padding: 44px 0 38px;
+    }
+    .eyebrow { color: var(--green); font-size: .82rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 8px 0 14px; font-size: clamp(2rem, 4.4vw, 3.7rem); line-height: 1.18; letter-spacing: -.04em; }
+    .hero p { max-width: 660px; color: var(--muted); font-size: 1.08rem; }
+    .hero-note {
+      background: #e3eee5; border: 1px solid #cbded0; border-radius: 24px;
+      padding: 24px; box-shadow: var(--shadow); transform: rotate(1deg);
+    }
+    .hero-note strong { display: block; font-size: 1.13rem; margin-bottom: 5px; }
+    .hero-note p { margin: 0; font-size: .96rem; }
+    .route {
+      position: sticky; top: 24px; align-self: start; max-height: calc(100svh - 48px);
+      overflow-y: auto; padding: 8px 12px 12px 0; scrollbar-width: thin;
+    }
+    .route-inner { display: grid; gap: 4px; }
+    .route a {
+      display: grid; grid-template-columns: 28px minmax(0, 1fr); align-items: start; gap: 8px;
+      padding: 10px 11px; border: 1px solid transparent; border-left: 3px solid transparent;
+      border-radius: 0 10px 10px 0; color: var(--muted); font-size: .86rem; line-height: 1.45;
+      text-decoration: none;
+    }
+    .route a:hover, .route a:focus-visible { border-color: var(--line); outline: 2px solid transparent; }
+    .route a[aria-current="step"] { border-left-color: var(--green); background: #e7eee0; color: #315a46; font-weight: 750; }
+    .route b { color: var(--green); font-size: .76rem; font-weight: 650; }
+    .route-label { font-size: .74rem; letter-spacing: .08em; color: var(--muted); margin: 0 0 10px; }
+    .lesson { padding: 34px 0 80px; }
+    .section-top { align-items: end; margin: 0 0 18px; }
+    .section-top h2 { margin: 0; font-size: 1.35rem; }
+    .progress-copy { color: var(--muted); font-size: .9rem; }
+    progress { display: block; width: 100%; height: 8px; border: 0; border-radius: 99px; overflow: hidden; }
+    progress::-webkit-progress-bar { background: #dfe7df; }
+    progress::-webkit-progress-value { background: var(--green); border-radius: 99px; }
+    progress::-moz-progress-bar { background: var(--green); border-radius: 99px; }
+    .cards { display: grid; gap: 20px; }
+    .lesson-card {
+      position: relative; scroll-margin-top: 100px; display: grid; grid-template-columns: 190px minmax(0, 1fr);
+      gap: 28px; padding: 26px; border: 1px solid var(--line); border-radius: 24px;
+      background: var(--card); box-shadow: var(--shadow);
+    }
+    .card-side { border-right: 1px solid var(--line); padding-right: 20px; }
+    .card-number { color: var(--green); font-weight: 850; font-size: .84rem; letter-spacing: .08em; }
+    .card-side h3 { margin: 10px 0 8px; font-size: 1.08rem; line-height: 1.45; }
+    .card-role { color: var(--muted); font-size: .87rem; }
+    .card-main h2 { margin: 0 0 8px; font-size: clamp(1.32rem, 2.8vw, 1.85rem); line-height: 1.35; }
+    .card-main > p { color: var(--muted); margin: 0 0 18px; }
+    .prompt { color: var(--ink); font-weight: 750; margin: 14px 0 9px; }
+    .choices { display: flex; flex-wrap: wrap; gap: 9px; margin: 12px 0 16px; }
+    .choice {
+      min-height: 44px; border: 1px solid var(--line); border-radius: 13px; padding: 9px 13px;
+      background: #fff; color: var(--ink); text-align: left;
+    }
+    .choice:hover { border-color: var(--green); }
+    .choice[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); box-shadow: inset 0 0 0 1px var(--green); }
+    .choice.correct[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); }
+    .choice.incorrect[aria-pressed="true"] { border-color: var(--orange); background: var(--orange-pale); }
+    .action, .secondary {
+      min-height: 44px; border-radius: 13px; padding: 9px 16px; font-weight: 750;
+    }
+    .action { border: 0; background: var(--green); color: white; }
+    .action:hover { background: #105640; }
+    .secondary { border: 1px solid var(--line); background: #fff; color: var(--ink); }
+    .feedback { justify-content: flex-start; min-height: 30px; margin-top: 12px; color: var(--muted); }
+    .feedback[data-state="good"] { color: var(--green); }
+    .feedback[data-state="try"] { color: var(--orange); }
+    .feedback strong { color: inherit; }
+    .fact { margin-top: 16px; padding: 14px 16px; border-left: 4px solid #b8cda9; border-radius: 0 12px 12px 0; background: #f0f5eb; }
+    .fact p { margin: 0; }
+    .example-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
+    .example { border: 1px solid var(--line); border-radius: 16px; padding: 15px; background: #f9faf5; }
+    .example small { display: block; color: var(--muted); }
+    .example strong { font-size: 1.3rem; }
+    .select-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+    .field { display: grid; gap: 5px; font-size: .91rem; font-weight: 700; }
+    select, input[type="number"] { min-height: 44px; border: 1px solid var(--line); border-radius: 11px; background: white; padding: 8px 11px; color: var(--ink); }
+    .ruler-box { margin: 17px 0; padding: 16px; border-radius: 16px; background: #f4f6ef; border: 1px solid var(--line); }
+    .ruler-caption { color: var(--muted); font-size: .88rem; }
+    .ruler { width: 100%; height: auto; display: block; margin: 10px 0 0; }
+    .ruler .base { fill: #f2dfa9; stroke: #a99255; stroke-width: 2; }
+    .ruler .tick { stroke: #26383a; stroke-width: 1.5; }
+    .ruler .tick-major { stroke-width: 3; }
+    .ruler text { fill: #26383a; font: 15px system-ui, sans-serif; }
+    .ruler .marker { stroke: #b84c2d; stroke-width: 4; }
+    .ruler .guide { stroke: #b84c2d; stroke-width: 2; stroke-dasharray: 5 5; }
+    input[type="range"] { width: min(460px, 100%); accent-color: var(--green); }
+    .slider-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    output.value { min-width: 88px; display: inline-block; padding: 5px 10px; border-radius: 10px; background: var(--green-pale); font-weight: 800; text-align: center; }
+    .toggle-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    .toggle-row button { border: 1px solid var(--line); border-radius: 999px; padding: 8px 13px; background: white; }
+    .toggle-row button[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: white; }
+    .diagram {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, .8fr); gap: 16px;
+      align-items: center; border: 1px solid var(--line); border-radius: 16px; padding: 15px; background: #f8f9f4;
+    }
+    .diagram svg { width: 100%; max-height: 220px; }
+    .diagram-note { color: var(--muted); font-size: .9rem; }
+    .diagram-note strong { color: var(--ink); }
+    .readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
+    .readout article { padding: 15px; border: 1px solid var(--line); border-radius: 16px; background: #f9faf5; }
+    .readout small { color: var(--muted); display: block; }
+    .readout strong { display: block; font-size: 1.45rem; }
+    .range-model, .division-visual { margin: 14px 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
+    .range-model-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 14px; font-size: .9rem; }
+    .range-model-head span, .range-endpoints { color: var(--muted); }
+    .range-track { position: relative; height: 22px; margin: 13px 4px 3px; border: 1px solid #aab9ac; border-radius: 99px; background: linear-gradient(90deg, #e8eee3, #dbe9dc); }
+    .range-track::before { position: absolute; inset: 4px 0; content: ""; background: repeating-linear-gradient(90deg, transparent 0 calc(10% - 1px), #7c9485 calc(10% - 1px) 10%); }
+    .range-track span { position: absolute; inset: 0 auto 0 0; width: 21%; border-radius: inherit; background: rgb(36 117 84 / 32%); transition: width .3s ease, background .3s ease; }
+    .range-track span[data-state="invalid"] { background: rgb(188 97 43 / 32%); }
+    .range-track i { position: absolute; top: -5px; left: 21%; width: 3px; height: 30px; background: #bc612b; transform: translateX(-50%); transition: left .3s ease; }
+    .range-endpoints { display: flex; justify-content: space-between; font-size: .75rem; }
+    .division-visual svg { display: block; width: 100%; height: auto; }
+    .division-visual p { margin: 7px 0 0; color: var(--muted); font-size: .84rem; }
+    .control-panel { padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
+    .control-panel > :last-child { margin-bottom: 0; }
+    .control-panel .field { width: 100%; }
+    .control-panel input[type="range"] { width: 100%; min-height: 32px; accent-color: var(--green); }
+    .estimate-range { display: grid; grid-template-columns: auto minmax(80px, 1fr) auto; align-items: center; gap: 10px; width: 100%; }
+    .estimate-range span { color: var(--muted); font-size: .86rem; font-variant-numeric: tabular-nums; }
+    .live-note { min-height: 3em; margin: 12px 0 0; color: var(--muted); }
+    .length-conversion-demo { margin: 18px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
+    .length-conversion-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; }
+    .length-conversion-head h3 { margin: 0; font-size: 1rem; }
+    .length-conversion-head p { margin: 3px 0 0; color: var(--muted); font-size: .88rem; }
+    .length-conversion-select { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .88rem; font-weight: 700; }
+    .length-conversion-pencil { margin: 12px 0; padding: 8px; border: 1px solid #d8e5da; border-radius: 14px; background: #fffefa; }
+    .length-conversion-pencil svg { display: block; width: 100%; height: auto; }
+    .length-conversion-result { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; }
+    .length-conversion-result strong { color: #183c31; font-family: Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.5rem); }
+    .length-conversion-result span { color: var(--muted); }
+    .length-conversion-equivalents { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
+    .concept-parts { display: flex; flex-wrap: wrap; gap: 9px; margin: 14px 0; }
+    .concept-parts button { border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; background: white; }
+    .concept-parts button[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); }
+    .record { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0; padding: 18px; border-radius: 14px; background: #f2f4ef; font-size: 1.2rem; }
+    .record span { padding: 3px 7px; border-radius: 7px; }
+    .record .is-highlighted { background: #ffe2a8; box-shadow: 0 0 0 2px #d59a27; }
+    .assessment-label { display: inline-block; margin-bottom: 12px; padding: 4px 10px; border-radius: 999px; background: #e5f2e9; color: var(--green); font-weight: 750; font-size: .83rem; }
+    .lesson-layout { display: grid; grid-template-columns: minmax(205px, 250px) minmax(0, 1fr); gap: 34px; align-items: start; }
+    .estimate-workspace { display: grid; grid-template-columns: 1fr; gap: 14px; align-items: start; margin: 18px 0; }
+    .model-panel { margin: 0; padding: 18px; border: 1px solid #cbded0; border-radius: 20px; background: #e3eee5; box-shadow: var(--shadow); }
+    .estimate-workspace .estimate-panel { margin: 14px 0 0; }
+    .model-panel h2 { margin: 0 0 5px; font-size: 1.18rem; }
+    .model-panel > p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
+    .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
+    .model-screen { position: relative; overflow: hidden; aspect-ratio: 760 / 170; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; transition: aspect-ratio 700ms ease; }
+    .model-screen svg { display: block; width: 100%; height: 100%; }
+    .zoom-control { display: flex; align-items: center; justify-content: flex-end; gap: 4px; width: max-content; margin: 8px 0 0 auto; padding: 4px; border: 1px solid var(--line); border-radius: 12px; background: #fffefa; }
+    .zoom-control button { min-width: 32px; min-height: 32px; height: 32px; padding: 2px 6px; border-radius: 9px; font-size: 1.05rem; line-height: 1.2; }
+    .zoom-control output { min-width: 3.4em; color: var(--green); font-weight: 750; text-align: center; font-variant-numeric: tabular-nums; }
+    #shared-scale { fill: #26383a; font: 8.5714px system-ui, sans-serif; }
+    #shared-scale .ruler-body { fill: #f2dfa9; stroke: #a99255; stroke-width: 1.4286; }
+    #shared-scale .ruler-line { stroke: #26383a; stroke-width: 1.0714; }
+    #shared-scale .ruler-line.major { stroke-width: 1.4286; }
+    .model-screen[data-zoom="true"] #shared-scale .ruler-body { stroke: none; }
+    #shared-scale .ruler-outline { fill: none; stroke: #a99255; stroke-width: .9; }
+    .parallax-scene { position: relative; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
+    #pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 220px; pointer-events: none; }
+    #parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 220px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
+    .parallax-focus-overlay { position: absolute; z-index: 4; inset: 0; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 180ms ease; }
+    .parallax-scene[data-magnifier="true"] .parallax-focus-overlay { opacity: 1; visibility: visible; }
+    #parallax-focus-connectors { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    #parallax-focus-connectors path { fill: none; stroke: #d17b26; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+    #parallax-focus-box { position: absolute; border: 2px solid #d17b26; border-radius: 5px; background: rgb(255 190 95 / 10%); box-shadow: 0 0 0 2px rgb(255 255 255 / 78%); }
+    .parallax-magnifier { position: absolute; top: 14px; right: 14px; z-index: 2; width: clamp(185px, 38%, 220px); aspect-ratio: 300 / 180; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 8px 22px rgb(42 43 29 / 18%); }
+    .parallax-magnifier canvas { display: block; width: 100%; height: 100%; }
+    .parallax-scene[data-magnifier="true"] #parallax-canvas { margin-top: 150px; }
+    .parallax-scene[data-magnifier="true"] #pencil-3d-canvas { inset: 162px 12px auto; }
+    @media (max-width: 760px) {
+      #pencil-3d-canvas, #parallax-canvas { height: 200px; }
+      .parallax-magnifier { top: 10px; right: 10px; width: clamp(175px, 54%, 230px); }
+      .parallax-scene[data-magnifier="true"] #parallax-canvas { margin-top: 125px; }
+      .parallax-scene[data-magnifier="true"] #pencil-3d-canvas { inset: 137px 12px auto; }
+    }
+    #parallax-canvas:active { cursor: grabbing; }
+    #parallax-canvas:focus-visible { outline: 3px solid #176b53; outline-offset: 3px; }
+    .view-presets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+    .view-presets [aria-pressed="true"] { background: var(--green); color: #fff; border-color: var(--green); }
+    .view-presets .view-help { margin: 0 0 0 auto; color: var(--muted); font-size: .84rem; }
+    .scene-caption { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+    .scene-caption p { margin: 0; color: var(--muted); font-size: .88rem; }
+    .scene-readout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin-top: 12px; }
+    .scene-readout article { padding: 12px; border-radius: 12px; background: white; border: 1px solid var(--line); }
+    .scene-readout small { display: block; color: var(--muted); }
+    .scene-readout strong { font-size: 1.25rem; }
+    .correction-workspace { margin: 16px 0; padding: 16px; border: 1px solid #cbded0; border-radius: 20px; background: #e3eee5; box-shadow: var(--shadow); }
+    .correction-workspace h3 { margin: 0 0 4px; font-size: 1rem; }
+    .correction-workspace > p { margin: 0 0 12px; color: var(--muted); font-size: .9rem; }
+    .correction-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+    .correction-options button { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 3px; padding: 10px; text-align: left; }
+    .correction-options button[aria-pressed="true"] { color: #fff; border-color: var(--green); background: var(--green); }
+    .correction-options small { color: var(--muted); font-size: .76rem; font-weight: 500; }
+    .correction-options button[aria-pressed="true"] small { color: #e2f0e8; }
+    .correction-parallax-scene { position: relative; margin: 12px 0; padding: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
+    #correction-pencil-3d-canvas { position: absolute; inset: 12px 12px auto; z-index: 2; display: block; width: calc(100% - 24px); height: 220px; pointer-events: none; }
+    #correction-parallax-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 220px; border-radius: 12px; background: transparent; cursor: grab; touch-action: none; }
+    .correction-parallax-scene[data-control="origin"] #correction-parallax-detail { position: absolute; top: 10px; right: 10px; z-index: 3; width: min(250px, calc(100% - 20px)); margin: 0; }
+    .correction-parallax-scene[data-control="origin"] #correction-parallax-canvas { margin-top: 160px; }
+    .correction-parallax-scene[data-control="origin"] #correction-pencil-3d-canvas { top: 172px; }
+    #correction-parallax-focus-overlay { display: none; }
+    .correction-angle-detail { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 10px 12px; border: 1px solid #e3c38e; border-radius: 14px; background: #fffefa; }
+    .correction-angle-detail[hidden] { display: none; }
+    .correction-angle-detail p { display: grid; gap: 2px; margin: 0; }
+    .correction-angle-detail p span { color: var(--muted); font-size: .85rem; }
+    .correction-origin-drag-toggle[hidden] { display: none; }
+    .correction-origin-drag-toggle[aria-pressed="true"] { color: #fff; border-color: var(--green); background: var(--green); }
+    .correction-average-panel { margin-top: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #fffefa; }
+    .correction-average-panel strong { display: block; }
+    .correction-average-panel p { margin: 4px 0 0; color: var(--muted); font-size: .88rem; }
+    .correction-average-plot { position: relative; height: 64px; margin: 8px 4px 0; }
+    .correction-average-axis { position: absolute; top: 34px; right: 4px; left: 4px; height: 2px; background: #b9c9c1; }
+    .correction-average-point { position: absolute; z-index: 1; top: calc(30px + var(--offset)); left: var(--position); width: 10px; height: 10px; border: 2px solid #fffefa; border-radius: 50%; background: #528a74; box-shadow: 0 0 0 1px #528a74; transform: translateX(-50%); }
+    .correction-average-mean { position: absolute; z-index: 2; top: 9px; bottom: 10px; left: 53%; border-left: 2px solid var(--green); }
+    .correction-average-mean::before { position: absolute; top: -3px; left: -4px; width: 6px; height: 6px; border-radius: 50%; background: var(--green); content: ""; }
+    .correction-average-legend { display: flex; justify-content: space-between; color: var(--muted); font-size: .78rem; }
+    .correction-parallax-magnifier { display: flex; width: clamp(175px, 54%, 230px); aspect-ratio: 300 / 180; flex: 0 0 auto; flex-direction: column; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 4px 12px rgb(42 43 29 / 12%); }
+    .correction-parallax-magnifier strong { flex: 0 0 25px; padding: 3px 8px; color: #26383a; background: #fffefa; font-size: .78rem; text-align: center; }
+    .correction-parallax-magnifier canvas { display: block; width: 100%; min-height: 0; flex: 1; }
+    .correction-adjustment { margin: 12px 0 0; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
+    .correction-adjustment h4 { margin: 0 0 6px; font-size: 1rem; }
+    .correction-adjustment p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .correction-choice-row, .correction-view-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    #correction-density-controls[hidden] { display: none; }
+    .correction-choice-row [aria-pressed="true"], .correction-view-controls [aria-pressed="true"] { background: var(--green); color: #fff; border-color: var(--green); }
+    .correction-mode-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .correction-mode-tabs [aria-pressed="true"] { background: var(--green); color: #fff; border-color: var(--green); }
+    #correction-mode-instructions { min-height: 2.8em; margin: 8px 0 0; color: var(--muted); font-size: .9rem; }
+    #correction-combined-title { font-weight: 750; }
+    @media (max-width: 760px) {
+      .lesson-card { scroll-margin-top: 160px; }
+      .correction-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #correction-pencil-3d-canvas, #correction-parallax-canvas { height: 200px; }
+      .correction-parallax-scene[data-control="origin"] #correction-parallax-canvas { margin-top: 160px; }
+      .correction-parallax-scene[data-control="origin"] #correction-pencil-3d-canvas { top: 172px; }
+      .correction-angle-detail { align-items: flex-start; }
+      .correction-parallax-magnifier { width: min(100%, 250px); margin-left: auto; }
+    }
+    @media (max-width: 520px) { .correction-options { gap: 5px; } .correction-options button { padding: 8px 7px; font-size: .88rem; } .correction-options small { font-size: .7rem; } }
+    .end-card { background: #eef4e9; border-color: #bfd1be; }
+    .next-hint { font-size: .9rem; color: var(--muted); }
+    .measurement-meaning-visual { margin: 24px 0 12px; text-align: center; }
+    .measurement-meaning-visual svg { display: block; width: 100%; height: auto; }
+    .measurement-meaning-visual figcaption { margin-top: 5px; color: var(--muted); font-size: .9rem; }
+    .measurement-meaning-mode { display: flex; width: min(420px, 100%); margin: 18px auto; padding: 2px; border: 1px solid #78978a; border-radius: 999px; }
+    .measurement-meaning-mode button { flex: 1; min-height: 44px; padding: 8px 12px; border: 0; border-radius: 999px; background: transparent; color: var(--ink); }
+    .measurement-meaning-mode button[aria-pressed="true"] { background: var(--green); color: #fff; }
+    .measurement-meaning-result { display: flex; align-items: center; gap: 22px; margin: 0; padding: 18px 22px; border: 1px solid #cbded0; border-radius: 16px; background: #f5f8f1; }
+    .measurement-meaning-result > span { flex: 0 0 auto; padding: 7px 12px; border-radius: 10px; background: #e3eee5; color: #315a46; font-weight: 750; }
+    .measurement-meaning-result > div { border-left: 1px solid #cbded0; padding-left: 22px; }
+    .measurement-meaning-result strong { display: block; color: #133d30; font-family: Georgia, serif; font-size: clamp(2.3rem, 6vw, 3.7rem); line-height: 1.1; }
+    .measurement-meaning-result p { margin: 5px 0 0; color: var(--muted); }
+    #card-01[data-measurement-mode="eye"] .ruler-visual { display: none; }
+    #card-01[data-measurement-mode="eye"] .measurement-meaning-result > span { font-size: .92rem; }
+    @media (max-width: 520px) { .measurement-meaning-result { align-items: flex-start; gap: 12px; padding: 14px; } .measurement-meaning-result > div { padding-left: 12px; } }
+    footer { padding: 28px 0 44px; color: var(--muted); font-size: .86rem; border-top: 1px solid var(--line); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 24px, 620px); }
+      .hero { grid-template-columns: 1fr; gap: 16px; padding: 30px 0; }
+      .hero-note { transform: none; }
+      .lesson-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+      .route { top: 0; z-index: 5; max-height: none; margin: 0 -12px; padding: 10px 12px; background: rgb(244 247 241 / 96%); backdrop-filter: blur(12px); border-block: 1px solid var(--line); }
+      .route-label { margin-bottom: 6px; }
+      .route-inner { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 3px; scrollbar-width: thin; }
+      .route a { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); white-space: nowrap; }
+      .route a[aria-current="step"] { border-color: var(--green); }
+      .lesson-card { grid-template-columns: 1fr; gap: 14px; padding: 18px; border-radius: 19px; }
+      .card-side { display: flex; align-items: baseline; gap: 10px; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 10px; }
+      .card-side h3 { margin: 0; }
+      .card-role { display: none; }
+      .diagram { grid-template-columns: 1fr; }
+      .estimate-workspace { grid-template-columns: 1fr; }
+      .section-top { align-items: start; flex-direction: column; gap: 3px; }
+      .example-grid, .readout { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+      .lesson-card { animation: arrive .45s ease both; }
+      @keyframes arrive { from { opacity: .78; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    }
+
+  </style>
+</head>
+<body>
+  <header class="shell masthead">
+    <div class="brand-row"><a class="brand" href="../../units/3/">← 密度與測量</a><span class="crumb">國二上・量測與公平比較</span></div>
+    <div class="hero">
+      <div>
+        <div class="eyebrow">密度與測量｜量測的意義</div>
+        <h1>為什麼要測量？<br>把「很長」說清楚</h1>
+        <p>只說「很長」，別人不一定和你有相同的感覺。用鉛筆和直尺一起觀察，看看測量怎麼把描述轉成能溝通、能比較的資料。</p>
+      </div>
+      <aside class="hero-note">
+        <strong>測量後的數字，怎麼讓別人看懂？</strong>
+        <p>先觀察鉛筆和直尺，再帶著「18 代表什麼？」的問題，認識完整的量測紀錄。</p>
+      </aside>
+    </div>
+  </header>
+
+  <main class="shell lesson">
+    <div class="lesson-layout">
+      <nav class="route" aria-label="本段學習路徑">
+        <p class="route-label">本單元的探索路線</p>
+        <div class="route-inner">
+          <a href="#card-01" aria-current="step"><b>01</b><span>測量，讓「很長」變成能比較的資料？</span></a>
+          <a href="#card-02"><b>02</b><span>18 代表什麼？</span></a>
+          <a href="#card-03"><b>03</b><span>同一種工具，能量所有東西嗎？</span></a>
+          <a href="#card-04"><b>04</b><span>尺上的每一格，代表多少？</span></a>
+          <a href="#card-05"><b>05</b><span>刻線之間，怎麼估讀？</span></a>
+          <a href="#card-06"><b>06</b><span>同一物體，為什麼讀值會差一點？</span></a>
+          <a href="#card-07"><b>07</b><span>改善量測條件</span></a>
+          <a href="#card-08"><b>08</b><span>怎麼判斷兩筆長度紀錄是否可比較？</span></a>
+        </div>
+        <p class="next-hint">沿著學習順序閱讀、操作與觀察。</p>
+      </nav>
+      <div class="cards">
+      <div class="section-top"><h2>從日常描述走到共同尺度</h2><span class="progress-copy">透過觀察與操作理解概念</span></div>
+      <section class="lesson-card" id="card-01" data-measurement-mode="eye">
+        <div class="card-side"><span class="card-number">01</span><h3>為什麼要量？</h3><span class="card-role">把感覺變成可比較的資料</span></div>
+        <div class="card-main">
+          <h2>只說「這支鉛筆很長」，別人怎麼知道它到底有多長？</h2>
+          <p>「很長」是感覺，別人不一定和你想的一樣。測量能把觀察變成具體數字，讓結果可以說清楚、記下來，也能和別人比較。</p>
+          <figure class="measurement-meaning-visual">
+            <svg viewBox="0 0 720 230" role="img" aria-label="一支鉛筆對齊直尺的零刻度；尺面每公分分成十個毫米刻度">
+              <g class="ruler-visual">
+                <rect x="18" y="108" width="684" height="72" rx="10" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
+                <g id="measurement-ruler-ticks" fill="none" stroke="#26383a" stroke-width="1.5"></g>
+                <g id="measurement-ruler-labels" fill="#26383a" font-size="14" text-anchor="middle"></g>
+                <path d="M42 84v24 M582 84v24" fill="none" stroke="#718078" stroke-width="1.5" stroke-dasharray="4 4"></path>
+              </g>
+              <image href="assets/pencil-photo.webp" x="38.898037" y="55" width="546.203925" height="29" preserveAspectRatio="none"></image>
+            </svg>
+            <figcaption id="measurement-caption">同一支鉛筆</figcaption>
+          </figure>
+          <div class="measurement-meaning-mode" role="group" aria-label="選擇觀察鉛筆的方式">
+            <button type="button" data-measurement-mode-button="eye" aria-pressed="true">先用眼睛看</button>
+            <button type="button" data-measurement-mode-button="ruler" aria-pressed="false">對照尺上的刻度</button>
+          </div>
+          <div class="measurement-meaning-result" aria-live="polite"><span id="measurement-result-label">先觀察</span><div><strong id="measurement-result-value">看起來很長</strong><p id="measurement-result-note">每個人的感覺可能不一樣，還不能公平比較。</p></div></div>
+          <p class="next-hint" id="measurement-next-hint" hidden>下一步：18 代表什麼？還少了哪些資訊？</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-02">
+        <div class="card-side"><span class="card-number">02</span><h3>讀懂紀錄</h3><span class="card-role">數值要有意義，還要說明單位</span></div>
+        <div class="card-main">
+          <h2>18 代表什麼？</h2>
+          <p>光看 18，還不知道量的是哪一種物理量，也不知道使用什麼單位。點選紀錄中的部分，再看完整描述。</p>
+          <div class="record" aria-label="鉛筆長度的量測紀錄">
+            <button type="button" data-record-part="object">鉛筆</button>
+            <span id="record-object">長度</span><span>=</span>
+            <span id="record-value">18</span>
+            <span id="record-unit">cm</span>
+          </div>
+          <div class="concept-parts" role="group" aria-label="量測紀錄的組成">
+            <button type="button" data-record-part="object" aria-pressed="true">量測對象與物理量</button>
+            <button type="button" data-record-part="value" aria-pressed="false">數值</button>
+            <button type="button" data-record-part="unit" aria-pressed="false">單位</button>
+          </div>
+          <p class="live-note" id="record-explanation" aria-live="polite">這筆紀錄量的是鉛筆的長度；18 是數值，cm 是長度單位。點選各部分，看看少了哪項資訊會讓紀錄難以理解。</p>
+          <div class="length-conversion-demo">
+            <div class="length-conversion-head">
+              <div><h3>同一段長度，可以用不同單位表示</h3><p>鉛筆固定長 18 cm；切換單位時，尺上每格代表的長度和格數會跟著改變。</p></div>
+              <label class="length-conversion-select" for="length-display-unit">改用
+                <select id="length-display-unit" aria-label="選擇鉛筆長度的表示單位"><option value="cm" selected>公分（cm）</option><option value="mm">毫米（mm）</option><option value="m">公尺（m）</option></select>表示
+              </label>
+            </div>
+            <div class="length-conversion-pencil">
+            <svg id="length-conversion-ruler" viewBox="0 0 720 190" role="img" aria-label="同一支鉛筆對齊刻度尺；目前以公分表示長度">
+                <image href="assets/pencil-photo.webp" x="38.898037" y="14" width="546.203925" height="29" preserveAspectRatio="none"></image>
+                <path d="M42 43v40 M582 43v40" fill="none" stroke="#718078" stroke-width="1.4" stroke-dasharray="4 4"></path>
+                <rect x="18" y="82" width="684" height="66" rx="9" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
+                <g id="length-conversion-ticks" fill="none" stroke="#26383a" stroke-width="1.5"></g>
+                <g id="length-conversion-labels" fill="#26383a" font-size="12" text-anchor="middle"></g>
+              </svg>
+            </div>
+            <div class="length-conversion-result" aria-live="polite"><strong id="length-conversion-value">18 cm</strong><span id="length-conversion-explanation">鉛筆跨過 18 個 1 cm 間隔。</span></div>
+            <p class="length-conversion-equivalents">換算關係：1 cm = 10 mm；100 cm = 1 m。　<span id="length-conversion-equation">18 cm × 10 = 180 mm</span></p>
+          </div>
+          <p class="next-hint">知道要量什麼之後，下一步是選擇合適的工具。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-03">
+        <div class="card-side"><span class="card-number">03</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
+        <div class="card-main">
+          <h2>同一種工具，能量所有東西嗎？</h2>
+          <p>工具要能測量指定的物理量，也要有適合的量程。切換量測任務和工具情境，觀察工具的用途及限制。</p>
+          <div class="select-row">
+            <label class="field">量測任務
+              <select id="tool-task"><option value="length">量這支鉛筆的長度（18 cm）</option><option value="mass">量這支鉛筆的質量（約 5 g）</option></select>
+            </label>
+            <label class="field">工具情境
+              <select id="tool-state"><option value="suitable">物理量和量程都合適</option><option value="wrong-quantity">工具測量的是另一種物理量</option><option value="short-range">工具量程不足</option></select>
+            </label>
+          </div>
+          <div class="readout" aria-live="polite">
+            <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
+            <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，鉛筆長度落在尺的量程內。</span></article>
+          </div>
+          <div class="range-model" aria-label="工具量程與預期量值的視覺比較">
+            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">鉛筆長 18 cm，落在量程內</span></div>
+            <div class="range-track"><span id="range-fill"></span><i id="range-marker" aria-hidden="true"></i></div>
+            <div class="range-endpoints"><span>0</span><span id="range-maximum">30 cm</span></div>
+          </div>
+          <p class="live-note">量程是工具能測量的範圍。量程太短時，即使物理量相符，也無法完整量取；量程很大也不代表刻度一定夠細。</p>
+          <p class="next-hint">工具選定後，下一步是讀懂刻度的間距。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-04">
+        <div class="card-side"><span class="card-number">04</span><h3>讀取刻度</h3><span class="card-role">觀察最小刻度</span></div>
+        <div class="card-main">
+          <h2>尺上的每一格，代表多少？</h2>
+          <p>調整整把尺要分成幾等分，觀察刻線如何變密或變疏，以及每格代表多長；尺長與鉛筆端點保持不變。</p>
+          <div class="control-panel">
+            <div class="ruler-caption"><span>同一把 30 cm 直尺</span><span id="division-count-label">整把尺分成 15 等分</span></div>
+            <label class="field" for="division-count">調整整把尺的等分數
+              <input id="division-count" type="range" min="1" max="30" step="1" value="15" aria-label="調整三十公分直尺分成幾等分">
+            </label>
+            <p class="live-note" id="division-model-note">尺長固定為 30 cm，橘色標記固定在鉛筆右端；調整等分數只會改變刻線密度與每格長度。</p>
+            <p class="live-note" id="division-note" aria-live="polite">30 cm ÷ 15 格 = 2 cm／格。</p>
+          </div>
+          <div class="division-visual" aria-label="完整三十公分直尺的等分示意；鉛筆端點位置固定">
+            <svg id="division-ruler" viewBox="0 0 520 140" role="img" aria-label="零至三十公分直尺，分成十五等分，每格兩公分；鉛筆固定長十八點二公分，左端對齊零刻度">
+              <image href="assets/pencil-photo.webp" x="20" y="15" width="291.2" height="15.46" preserveAspectRatio="none"></image>
+              <rect x="20" y="52" width="480" height="50" rx="6" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
+              <g id="division-ticks"></g><path id="division-endpoint" d="M311.2 32v78" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
+              <text id="division-unit-label" x="20" y="126" fill="#26383a" font-size="13">0 cm</text><text id="division-unit-label-end" x="500" y="126" text-anchor="end" fill="#26383a" font-size="13">30 cm</text>
+            </svg>
+            <p id="division-visual-note" aria-live="polite">鉛筆長度固定為 18 cm，左端對齊 0；右端對齊橘色標記。調整等分數不會改變鉛筆。</p>
+          </div>
+          <div class="fact"><p>同一把 30 cm 直尺可以有不同的分格方式；每格的長度由 30 cm 除以等分數決定。讀值時先確認刻度間距，再判斷端點落在哪裡。</p></div>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-05">
+        <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">練習觀察與估讀</span></div>
+        <div class="card-main">
+          <h2 id="estimate-heading">鉛筆端點落在相鄰刻線之間，該怎麼估讀？</h2>
+          <p id="estimate-instruction">先依整把尺估讀鉛筆右端，再用圖片上的放大按鈕或滑鼠滾輪查看 18 cm 和 19 cm 之間的位置。</p>
+          <div class="estimate-workspace">
+          <aside class="model-panel" aria-labelledby="model-title">
+            <h2 id="model-title">觀察鉛筆端點</h2>
+            <p>鉛筆和尺保持不動；按圖上的 ＋／－，或在圖片上滾動滑鼠滾輪，放大 18 cm 和 19 cm 附近。</p>
+            <div class="model-screen" id="model-screen" data-zoom="false" tabindex="0" aria-label="鉛筆與直尺圖片；使用滑鼠滾輪可逐步放大或縮小">
+              <svg id="shared-measurement-model" viewBox="0 295 760 170" role="img" aria-label="鉛筆左端對準零刻度，右端落在直尺兩條相鄰公分刻線之間">
+                <rect x="16" y="16" width="728" height="618" rx="12" fill="#fffefa"></rect>
+                <g id="model-stage">
+                  <path id="estimate-guide-upper" d="M588 320V355" stroke="#2878a5" stroke-width="1.5" stroke-dasharray="4 3" visibility="hidden"></path>
+                  <image id="pencil-object" href="assets/pencil-photo.webp" x="27" y="389" width="459.44" height="28.17" preserveAspectRatio="none" aria-hidden="true"></image>
+                  <g id="shared-scale"></g>
+                  <path id="estimate-guide-lower" d="M588 355V360" stroke="#2878a5" stroke-width="1.5" stroke-dasharray="4 3" visibility="hidden"></path>
+                  <path id="pencil-end-guide" d="M588 348V423" stroke="#bc612b" stroke-width="2" stroke-dasharray="2 2"></path>
+                </g>
+                <g id="eye-ray" opacity="0">
+                  <circle cx="620" cy="40" r="12" fill="#dceaf0" stroke="#547884" stroke-width="3"></circle>
+                  <path d="M620 52L588 600" stroke="#bc612b" stroke-width="2" stroke-dasharray="5 4"></path>
+                </g>
+              </svg>
+            </div>
+            <div class="zoom-control" aria-label="圖片放大控制">
+              <button type="button" class="secondary" id="zoom-in" aria-label="放大 18 到 19 公分附近" title="放大">＋</button>
+              <output id="zoom-level" aria-live="polite">1×</output>
+              <button type="button" class="secondary" id="zoom-out" aria-label="縮小圖片" title="縮小">－</button>
+              <button type="button" class="secondary" id="zoom-reset" aria-label="還原整把尺" title="還原">↺</button>
+            </div>
+            <div class="control-panel estimate-panel">
+              <label class="field" for="estimate-slider">估讀鉛筆右端的位置（cm）
+                <div class="estimate-range">
+                  <span aria-hidden="true">18 cm</span>
+                  <input id="estimate-slider" type="range" min="18000" max="20000" step="any" aria-label="選擇鉛筆端點在 18 公分到 19 公分之間的位置">
+                  <span aria-hidden="true">19 cm</span>
+                </div>
+              </label>
+              <div class="slider-row"><span id="estimate-prompt">移動滑桿記下估值，再查看提示。</span><output class="value" id="estimate-value" for="estimate-slider">尚未估讀</output></div>
+              <button type="button" class="secondary" id="check-estimate" disabled>查看誤差</button>
+              <p class="live-note" id="estimate-note" aria-live="polite">依端點在相鄰刻線間的位置估讀。放大只改變觀看比例，不會增加刻線或改變最小刻度。</p>
+            </div>
+          </aside>
+          </div>
+          <div class="fact"><p>這把尺最小刻度是 1 cm，估讀時通常再多估一位，到 0.1 cm；再往下寫到 0.01 cm，就超出這把尺能支持的精度。無論使用什麼單位或多細的刻度，測量仍受工具與讀取條件限制，因此結果都有不確定度。</p></div>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-06">
+        <div class="card-side"><span class="card-number">06</span><h3>找出讀值差異</h3><span class="card-role">觀察角度會影響讀值</span></div>
+        <div class="card-main">
+          <h2>同一物體，為什麼讀值會差一點？</h2>
+          <p>同一支鉛筆平行放在 20 cm 直尺上，筆尖對齊 0 cm。切換兩個預設視角，或拖曳 3D 場景自由旋轉；觀察筆尾投影落在哪個刻度，以及讀值如何改變。</p>
+          <div class="parallax-scene" id="parallax-scene">
+            <canvas id="pencil-3d-canvas" aria-hidden="true"></canvas>
+            <span id="pencil-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
+            <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、鉛筆和端點投影線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明觀察角度改變時，尺上的讀值可能改變。</canvas>
+            <div class="parallax-focus-overlay" aria-hidden="true">
+              <svg id="parallax-focus-connectors" class="parallax-focus-connectors" preserveAspectRatio="none"><path id="parallax-focus-path" class="parallax-focus-path"></path></svg>
+              <div id="parallax-focus-box" class="parallax-focus-box"></div>
+              <div class="parallax-magnifier">
+                <canvas id="parallax-magnifier-canvas" aria-hidden="true"></canvas>
+              </div>
+            </div>
+            <div class="view-presets" role="group" aria-label="預設觀察視角">
+              <button type="button" class="secondary" id="view-front" aria-pressed="true">正對尺面</button>
+              <button type="button" class="secondary" id="view-oblique" aria-pressed="false">斜向觀察</button>
+              <p class="view-help">拖曳畫面也可自由旋轉視角</p>
+            </div>
+            <div class="scene-caption"><p id="camera-caption" aria-live="polite">正對尺面：端點投影對準尺上刻度。</p></div>
+            <div class="scene-readout" aria-live="polite"><article><small>目前角度估讀</small><strong id="parallax-reading">約 18.4 cm</strong></article></div>
+            <p class="live-note" id="parallax-explanation">橘色輔助線的落點顯示目前角度的估讀。視角不同，視線落點可能改變，因此讀值也會產生差異，這稱為視差。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-07">
+        <div class="card-side"><span class="card-number">07</span><h3>改善量測條件</h3><span class="card-role">自由調整，觀察讀值變化</span></div>
+        <div class="card-main">
+          <h2>怎麼讓量測結果更可靠？</h2>
+          <p>以下四種方法都能改善量測結果。點選一種，看看它能減少哪一類誤差，以及為什麼有效。</p>
+          <div class="correction-workspace" id="correction-workspace" data-control="density">
+            <p>四種方法各自改善不同的誤差來源；點選任一項查看操作和說明。</p>
+            <div class="correction-options" role="group" aria-label="選擇改善量測可靠性的方法">
+              <button type="button" class="secondary" data-correction-control="density" aria-pressed="true"><strong>刻度加密</strong><small id="correction-density-status">較疏・每格 5 cm</small></button>
+              <button type="button" class="secondary" data-correction-control="origin" aria-pressed="false"><strong>對準零點</strong><small id="correction-origin-status">偏移 1 cm</small></button>
+              <button type="button" class="secondary" data-correction-control="angle" aria-pressed="false"><strong>正對尺面</strong><small id="correction-angle-status">正對尺面</small></button>
+              <button type="button" class="secondary" data-correction-control="average" aria-pressed="false"><strong>重複量測</strong><small>取平均降波動</small></button>
+            </div>
+            <h3 id="correction-stage-title">調整刻度密度</h3>
+            <p id="correction-stage-prompt">端點落在相距很遠的刻線之間，讀值範圍較大。把刻度調密，觀察範圍如何縮小。</p>
+            <div class="correction-parallax-scene" id="correction-parallax-scene" data-magnifier="false">
+              <canvas id="correction-pencil-3d-canvas" aria-hidden="true"></canvas>
+              <canvas id="correction-parallax-canvas" tabindex="0" role="img" aria-label="可拖曳調整鉛筆和直尺視角的三維場景；切換到觀察角度時會顯示端點附近的放大視窗。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明。</canvas>
+              <p id="correction-parallax-fallback" hidden>目前瀏覽器無法顯示 3D 場景，請使用支援 WebGL 的瀏覽器。</p>
+              <div class="correction-angle-detail" id="correction-parallax-detail" hidden>
+                <p><strong id="correction-magnifier-title">鉛筆右端放大</strong><span id="correction-magnifier-range">尺面 18–19 cm 附近</span><button type="button" class="secondary correction-origin-drag-toggle" id="correction-origin-drag-toggle" aria-pressed="false" hidden>✋ 旋轉場景</button></p>
+                <div class="correction-parallax-magnifier" id="correction-magnifier" aria-label="鉛筆右端與直尺 18 至 19 公分附近的放大圖"><strong id="correction-magnifier-caption">端點與刻度</strong><canvas id="correction-parallax-magnifier-canvas" aria-hidden="true"></canvas></div>
+              </div>
+            </div>
+            <div class="correction-adjustment">
+              <div id="correction-density-controls" class="correction-choice-row" role="group" aria-label="選擇直尺刻度密度">
+                <button type="button" class="secondary" data-correction-density="5" aria-pressed="true">較疏・每格 5 cm</button>
+                <button type="button" class="secondary" data-correction-density="1" aria-pressed="false">較密・每格 1 cm</button>
+              </div>
+              <div id="correction-origin-controls" hidden>
+                <p id="correction-origin-control-instructions">目前拖曳會旋轉場景；點擊放大窗旁的按鈕可切換為移動尺面。若起點未對準 0，需用終點讀值減去起點讀值。</p>
+              </div>
+              <div id="correction-angle-controls" hidden>
+                <div class="correction-view-controls" role="group" aria-label="預設觀察視角">
+                  <button type="button" class="secondary" id="correction-view-front" aria-pressed="true">正對尺面</button>
+                  <button type="button" class="secondary" id="correction-view-oblique" aria-pressed="false">斜向觀察</button>
+                </div>
+                <p>也可拖曳場景自由旋轉，並在放大視窗觀察端點投影。</p>
+              </div>
+              <div id="correction-average-controls" class="correction-average-panel" hidden>
+                <strong>同一物體量測 10 次</strong>
+                <p>每次讀值可能略有不同；把多次結果取平均，能降低偶然波動對結果的影響。</p>
+                <div class="correction-average-plot" role="img" aria-label="十次量測的讀值略有差異，平均值位於讀值集中區域">
+                  <div class="correction-average-axis"></div>
+                  <span class="correction-average-point" style="--position:28%;--offset:0px"></span><span class="correction-average-point" style="--position:36%;--offset:-8px"></span><span class="correction-average-point" style="--position:42%;--offset:5px"></span><span class="correction-average-point" style="--position:47%;--offset:-4px"></span><span class="correction-average-point" style="--position:51%;--offset:7px"></span><span class="correction-average-point" style="--position:56%;--offset:-9px"></span><span class="correction-average-point" style="--position:61%;--offset:3px"></span><span class="correction-average-point" style="--position:66%;--offset:-5px"></span><span class="correction-average-point" style="--position:71%;--offset:8px"></span><span class="correction-average-point" style="--position:76%;--offset:-2px"></span>
+                  <span class="correction-average-mean" aria-hidden="true"></span>
+                </div>
+                <div class="correction-average-legend"><span>較小讀值</span><strong>平均值</strong><span>較大讀值</span></div>
+                <p>平均能減少隨機誤差；若每次都起點未對準或視線歪斜，仍要先修正這些固定偏差。</p>
+              </div>
+              <p id="correction-mode-instructions" aria-live="polite">選擇較密的刻度，看看估讀範圍如何縮小。</p>
+              <div class="correction-live-readout" id="correction-live-readout" aria-live="polite">
+                <small id="correction-readout-label">每格 5 cm・估讀範圍</small>
+                <strong id="correction-readout-value">15–20 cm</strong>
+              </div>
+            </div>
+            <div class="correction-result" id="correction-result" aria-live="polite">
+              <p><strong id="correction-combined-title">四種方法分別改善不同的誤差來源。</strong></p>
+              <p id="correction-combined-note">刻度加密、對準起點、正對尺面與重複量測取平均，可以搭配使用；平均不能消除固定的起點或視角偏差。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lesson-card end-card" id="card-08">
+        <div class="card-side"><span class="card-number">08</span><h3>整合理解</h3><span class="card-role">檢查看看是否理解</span></div>
+        <div class="card-main">
+          <span class="assessment-label">理解檢核・共 1 題</span>
+          <h2>怎麼判斷鉛筆的兩筆長度紀錄是否可比較？</h2>
+          <p>小安沿用共用模型，記下鉛筆長度約 18 cm；小晴也量同一支鉛筆，卻只記下「18」。哪一項說明最完整？</p>
+          <div class="choices" id="fair-options">
+            <button class="choice" data-fair="complete" aria-pressed="false">「18」缺少單位，資料還不完整；要確認兩筆都是長度、單位與讀值條件可對照。</button>
+            <button class="choice" data-fair="tool" aria-pressed="false">只要量到相同數字，就可以直接比較。</button>
+            <button class="choice" data-fair="number" aria-pressed="false">鉛筆一樣，所以量測紀錄不需要寫單位。</button>
+          </div>
+          <div class="feedback" id="assessment-feedback" aria-live="polite"></div>
+          <div class="fact"><p><strong>回到開頭的問題：</strong>比較量測資料時，先確認物理量、單位、工具和讀值條件，並用可對照的證據說明差異。</p></div>
+          <p class="next-hint">接下來，我們來看看不規則形狀的物體要怎麼量體積。</p>
+        </div>
+      </section>
+    </div>
+    </div>
+  </main>
+
+  <footer><div class="shell">長度示範使用固定 18 cm 的理想鉛筆模型；工具選擇中的質量任務採每支模型鉛筆約 5 g 的教學設定。鉛筆長度與質量均不代表特定市售鉛筆規格。</div></footer>
+
+  <script>
+    (() => {
+      const pressOne = (buttons, selected) => buttons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button === selected));
+      });
+      const measurementCard = document.querySelector("#card-01");
+      const measurementModeButtons = [...document.querySelectorAll("[data-measurement-mode-button]")];
+      const rulerTickGroup = document.querySelector("#measurement-ruler-ticks");
+      const rulerLabelGroup = document.querySelector("#measurement-ruler-labels");
+      const svgNamespace = "http://www.w3.org/2000/svg";
+      for (let millimeter = 0; millimeter <= 200; millimeter += 1) {
+        const x = 42 + millimeter * 3;
+        const tick = document.createElementNS(svgNamespace, "path");
+        const tickLength = millimeter % 50 === 0 ? 39 : millimeter % 10 === 0 ? 28 : millimeter % 5 === 0 ? 20 : 12;
+        tick.setAttribute("d", `M${x} 108v${tickLength}`);
+        if (millimeter % 10 === 0) {
+          tick.setAttribute("stroke-width", "1.9");
+        }
+        rulerTickGroup.append(tick);
+        if (millimeter % 10 === 0) {
+          const centimeter = document.createElementNS(svgNamespace, "text");
+          centimeter.setAttribute("x", String(x));
+          centimeter.setAttribute("y", "201");
+          const centimeterValue = millimeter / 10;
+          centimeter.textContent = String(centimeterValue);
+          rulerLabelGroup.append(centimeter);
+        }
+      }
+      measurementModeButtons.forEach((button) => button.addEventListener("click", () => {
+        const mode = button.dataset.measurementModeButton;
+        measurementCard.dataset.measurementMode = mode;
+        measurementModeButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        const measuring = mode === "ruler";
+        document.querySelector("#measurement-caption").textContent = measuring ? "同一支鉛筆　｜　對照尺上的刻度" : "同一支鉛筆";
+        document.querySelector("#measurement-result-label").textContent = measuring ? "測量後" : "先觀察";
+        document.querySelector("#measurement-result-value").textContent = measuring ? "18" : "看起來很長";
+        document.querySelector("#measurement-result-note").textContent = measuring ? "有了共同的表示方式，別人就能看懂並拿來比較。" : "每個人的感覺可能不一樣，還不能公平比較。";
+        document.querySelector("#measurement-next-hint").hidden = !measuring;
+      }));
+      const state = { divisions: 15, start: 0, angle: false, zoom: 0, edge: 18 };
+      const estimateStart = 0;
+      let estimateLength = 18.4;
+      const estimateEndpoint = () => estimateStart + estimateLength;
+      const pencilPhoto = { x: 27, y: 389, width: 454 * (2113 / 2088), height: 27.84 * (2113 / 2088), visibleLeft: 12 / 2113, rightEdgeCenterY: 66.5 / 130 };
+      const divisionCountControl = document.querySelector("#division-count");
+      let estimateGuess = null;
+      let estimateChecked = false;
+      let estimateIntervalKey = "";
+      const greatestCommonDivisor = (a, b) => b ? greatestCommonDivisor(b, a % b) : a;
+      const formatDivisionSize = (divisions) => {
+        const divisor = greatestCommonDivisor(30, divisions);
+        const numerator = 30 / divisor;
+        const denominator = divisions / divisor;
+        if (denominator === 1) return `30 cm ÷ ${divisions} 等分 = ${numerator} cm／格。`;
+        const centimeters = (30 / divisions).toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
+        return `30 cm ÷ ${divisions} 等分 = ${numerator}/${denominator} cm／格（約 ${centimeters} cm）。`;
+      };
+      const defaultCameraPitch = 0.68;
+      const orbitRadius = 24;
+      const parallaxLength = 18.4;
+      const pencilHeight = 0.61;
+      const parallaxCenterX = state.start + 10;
+      const defaultCameraYaw = Math.asin((state.start + parallaxLength - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
+      const obliqueCameraYaw = Math.asin((state.start - parallaxCenterX) / (orbitRadius * Math.cos(defaultCameraPitch)));
+      const ruler = document.querySelector("#shared-scale");
+      const modelSvg = document.querySelector("#shared-measurement-model");
+      const modelScreen = document.querySelector("#model-screen");
+      const modelStage = document.querySelector("#model-stage");
+      const modelStageScale = 1.4;
+      const modelStageCenter = { x: 380, y: 360 };
+      modelStage.setAttribute("transform", `translate(${modelStageCenter.x * (1 - modelStageScale)} ${modelStageCenter.y * (1 - modelStageScale)}) scale(${modelStageScale})`);
+      const modelStagePoint = (x, y) => ({
+        x: modelStageCenter.x + (x - modelStageCenter.x) * modelStageScale,
+        y: modelStageCenter.y + (y - modelStageCenter.y) * modelStageScale
+      });
+      let pencilViewOffset = -18;
+      const placePencil = () => {
+        const centimeter = 640 / 30;
+        const rulerZeroX = 80 + 5 * centimeter;
+        const startX = rulerZeroX + estimateStart * centimeter;
+        const endX = rulerZeroX + estimateEndpoint() * centimeter;
+        const pencilScale = (estimateLength * centimeter) / 454;
+        const photoXOffset = startX - (pencilPhoto.x + pencilPhoto.width * pencilPhoto.visibleLeft) * pencilScale;
+        document.querySelector("#pencil-object").setAttribute("transform", `translate(${photoXOffset} ${pencilViewOffset}) scale(${pencilScale})`);
+        const pencilEndY = (pencilPhoto.y + pencilPhoto.height * pencilPhoto.rightEdgeCenterY) * pencilScale + pencilViewOffset;
+        const guide = document.querySelector("#pencil-end-guide");
+        guide.setAttribute("d", `M${endX} ${pencilEndY}V${355 + state.zoom}`);
+        guide.setAttribute("stroke-width", String(2 - 1.84 * state.zoom));
+        guide.setAttribute("stroke-dasharray", `${2 - 1.72 * state.zoom} ${2 - 1.72 * state.zoom}`);
+      };
+      const updateEstimateGuide = () => {
+        const centimeter = 640 / 30;
+        const rulerZeroX = 80 + 5 * centimeter;
+        const rulerTop = 355 + state.zoom / modelStageScale;
+        const estimateX = rulerZeroX + (estimateGuess ?? 18) * centimeter;
+        const upperGuide = document.querySelector("#estimate-guide-upper");
+        const lowerGuide = document.querySelector("#estimate-guide-lower");
+        const visibility = estimateGuess === null ? "hidden" : "visible";
+        upperGuide.setAttribute("d", `M${estimateX} 320V${rulerTop}`);
+        lowerGuide.setAttribute("d", `M${estimateX} ${rulerTop}V${355 + state.zoom}`);
+        for (const guide of [upperGuide, lowerGuide]) {
+          guide.setAttribute("visibility", visibility);
+          guide.setAttribute("stroke-width", String(1.5 - 1.34 * state.zoom));
+          guide.setAttribute("stroke-dasharray", `${4 - 3.72 * state.zoom} ${3 - 2.72 * state.zoom}`);
+        }
+      };
+      const parallaxCanvas = document.querySelector("#parallax-canvas");
+      const parallaxScene = parallaxCanvas.parentElement;
+      window.addEventListener("pencil3d-projection", (event) => {
+        const projectionScene = document.getElementById(event.detail.sceneId);
+        if (!projectionScene) return;
+        const { ruler18, ruler19, pencilTip } = event.detail;
+        const panelBounds = projectionScene.getBoundingClientRect();
+        const points = [ruler18, ruler19, pencilTip];
+        const left = clamp(Math.min(...points.map((point) => point.x)) - 8, 4, panelBounds.width - 4);
+        const right = clamp(Math.max(...points.map((point) => point.x)) + 8, left + 18, panelBounds.width - 4);
+        const top = clamp(Math.min(...points.map((point) => point.y)) - 10, 4, panelBounds.height - 4);
+        const bottom = clamp(Math.max(...points.map((point) => point.y)) + 10, top + 18, panelBounds.height - 4);
+        const focusBox = projectionScene.querySelector(".parallax-focus-box");
+        focusBox.style.left = `${left}px`;
+        focusBox.style.top = `${top}px`;
+        focusBox.style.width = `${right - left}px`;
+        focusBox.style.height = `${bottom - top}px`;
+
+        const magnifier = projectionScene.querySelector(".parallax-magnifier, .correction-parallax-magnifier");
+        const inset = magnifier.getBoundingClientRect();
+        const insetLeft = inset.left - panelBounds.left;
+        const insetRight = inset.right - panelBounds.left;
+        const insetBottom = inset.bottom - panelBounds.top;
+        projectionScene.querySelector(".parallax-focus-connectors").setAttribute("viewBox", `0 0 ${panelBounds.width} ${panelBounds.height}`);
+        const path = `M${right} ${top} L${insetLeft} ${insetBottom} M${right} ${bottom} L${insetRight} ${insetBottom}`;
+        projectionScene.querySelector(".parallax-focus-path").setAttribute("d", path);
+      });
+      const camera = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
+      let cameraPreset = "front";
+      const edgePosition = () => state.start + state.edge;
+      const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
+      const formatCentimeters = (value) => {
+        const rounded = Number(value.toFixed(3));
+        const text = String(rounded);
+        return Math.abs(value - rounded) < 1e-8 ? text : `約 ${text}`;
+      };
+      const formatEstimate = (value) => Number(value).toFixed(1);
+      const graduationInterval = (position = edgePosition()) => {
+        const interval = 30 / state.divisions;
+        const index = clamp(Math.floor(position / interval + 1e-9), 0, state.divisions - 1);
+        return { start: index * interval, end: (index + 1) * interval };
+      };
+      const estimateGraduationInterval = () => {
+        const position = estimateEndpoint();
+        return { start: Math.floor(position), end: Math.floor(position) + 1 };
+      };
+      const syncEstimateControls = () => {
+        const input = document.querySelector("#estimate-slider");
+        if (!input) return;
+        const interval = estimateGraduationInterval();
+        const minimum = Math.round(interval.start * 1000);
+        const maximum = Math.round(interval.end * 1000);
+        const intervalKey = `${minimum}:${maximum}`;
+        if (intervalKey !== estimateIntervalKey) {
+          estimateIntervalKey = intervalKey;
+          estimateGuess = null;
+          estimateChecked = false;
+        }
+        input.min = String(minimum);
+        input.max = String(maximum);
+        input.step = "any";
+        input.value = String(clamp(estimateGuess === null ? minimum : estimateGuess * 1000, minimum, maximum));
+        const button = document.querySelector("#check-estimate");
+        button.disabled = estimateGuess === null && !estimateChecked;
+        button.textContent = estimateChecked ? "再估一次" : "查看誤差";
+        document.querySelector("#estimate-heading").textContent = "鉛筆端點落在相鄰刻線之間，該怎麼估讀？";
+        document.querySelector("#estimate-instruction").textContent = state.zoom > 0.8
+          ? `畫面已放大到 ${document.querySelector("#zoom-level").textContent}；可查看端點與相鄰刻線的位置。`
+          : `先依整把尺估讀鉛筆右端，再用圖片上的放大按鈕或滑鼠滾輪查看 18 cm 和 19 cm 之間的位置。`;
+        input.setAttribute("aria-label", `選擇你估計的鉛筆右端位置；端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} 公分之間`);
+        document.querySelector("#estimate-prompt").textContent = "依端點在 18 cm 和 19 cm 之間的位置估讀；估讀是近似判斷。";
+        if (estimateChecked) {
+          const reading = estimateEndpoint();
+          document.querySelector("#estimate-value").textContent = `你的估讀：約 ${formatEstimate(estimateGuess)} cm`;
+        } else {
+          document.querySelector("#estimate-value").textContent = estimateGuess === null ? "尚未估讀" : `你的估讀：約 ${formatEstimate(Number(input.value) / 1000)} cm`;
+        }
+      };
+      const renderParallaxScene = () => {
+        if (!parallaxCanvas.clientWidth) return;
+        parallaxScene.dataset.magnifier = "true";
+        const bounds = parallaxCanvas.getBoundingClientRect();
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        parallaxCanvas.width = Math.round(bounds.width * pixelRatio);
+        parallaxCanvas.height = Math.round(bounds.height * pixelRatio);
+        const target = { x: state.start + 10, y: pencilHeight, z: 0 };
+        const cameraPosition = {
+          x: target.x + orbitRadius * Math.cos(camera.pitch) * Math.sin(camera.yaw),
+          y: target.y + orbitRadius * Math.sin(camera.pitch),
+          z: target.z + orbitRadius * Math.cos(camera.pitch) * Math.cos(camera.yaw)
+        };
+        const rulerMin = -0.18;
+        const rulerMax = 20;
+        const rulerTop = 0.2;
+        const rulerNear = -1.6;
+        const rulerFar = 1.6;
+        const pencilCenterZ = -0.82;
+        const edgeX = state.start + parallaxLength;
+        const cameraTarget = {
+          x: target.x,
+          y: rulerTop,
+          z: 0
+        };
+        const focalLength = bounds.width * 0.85;
+        const cameraHeight = cameraPosition.y;
+        const projectionFactor = (pencilHeight - rulerTop) / Math.max(0.1, cameraHeight - pencilHeight);
+        const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
+        const projectedEdgeZ = pencilCenterZ + projectionFactor * (pencilCenterZ - cameraPosition.z);
+        const clampedProjectionX = clamp(projectedEdgeX, rulerMin, rulerMax);
+        const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
+        const pencilCenterX = state.start + parallaxLength / 2;
+        const pencilStartX = pencilCenterX - parallaxLength / 2;
+        const landingOnScale = clampedProjectionX >= 0 && clampedProjectionX <= 20 && projectedEdgeX <= rulerMax && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
+
+        window.setPencil3DView?.({
+          edge: parallaxLength,
+          start: state.start,
+          yaw: camera.yaw,
+          pitch: camera.pitch,
+          orbitRadius,
+          centerZ: pencilCenterZ,
+          centerY: pencilHeight,
+          lookAtX: cameraTarget.x,
+          lookAtY: cameraTarget.y,
+          lookAtZ: cameraTarget.z,
+          focalLengthRatio: focalLength / bounds.height,
+          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
+          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.02, z: clampedProjectionZ }
+        });
+
+        document.querySelector("#parallax-reading").textContent = landingOnScale ? `約 ${clampedProjectionX.toFixed(1)} cm` : "視線落在尺外";
+        const cameraCaption = cameraPreset === "front"
+          ? "正對尺面：端點投影對準尺上刻度。"
+          : cameraPreset === "oblique"
+          ? "斜向觀察：端點視線投影偏離正對時的刻度。"
+          : "自由視角：拖曳或用方向鍵轉動，觀察投影落點和讀值。";
+        parallaxScene.dataset.magnifier = "true";
+        document.querySelector("#camera-caption").textContent = cameraCaption;
+        document.querySelector("#view-front").setAttribute("aria-pressed", String(cameraPreset === "front"));
+        document.querySelector("#view-oblique").setAttribute("aria-pressed", String(cameraPreset === "oblique"));
+        document.querySelector("#parallax-explanation").textContent = !landingOnScale
+          ? "這個角度下，視線延長線落在尺面範圍外，無法從尺上讀值。轉動視角，讓落點回到刻度上；鉛筆長度始終不變。"
+          : "觀察角度改變時，橘色輔助線落點也會改變，因此讀值可能不同；這種差異稱為視差。";
+        parallaxCanvas.setAttribute("aria-label", landingOnScale
+          ? `三維直尺與鉛筆模型。橘色輔助線落在約 ${clampedProjectionX.toFixed(1)} 公分處。可拖曳或使用方向鍵旋轉視角。`
+          : "三維直尺與鉛筆模型。目前視角的投影落在尺面範圍外，無法讀值；可拖曳或使用方向鍵旋轉視角。");
+      };
+      const updateModel = () => {
+        const closeup = state.zoom > 0.8;
+        ruler.dataset.zoom = String(closeup);
+        modelSvg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+        ruler.removeAttribute("transform");
+        document.querySelector("#model-screen").dataset.zoom = String(closeup);
+        const centimeter = 640 / 30;
+        const rulerZeroX = 80 + 5 * centimeter;
+        const endX = rulerZeroX + estimateEndpoint() * centimeter;
+        placePencil();
+        updateEstimateGuide();
+        const lines = [];
+        for (let tick = 0; tick <= 20; tick += 1) {
+          const x = rulerZeroX + tick * centimeter;
+          const major = tick % 5 === 0;
+          const top = 355 + state.zoom / modelStageScale;
+          const regularTick = major ? 39 : 28;
+          const closeTick = major ? 3.5 : 2.5;
+          const tickLength = regularTick + (closeTick - regularTick) * state.zoom;
+          const tickEnd = top + tickLength / modelStageScale;
+          const regularStroke = major ? 1.4286 : 1.0714;
+          const closeStroke = major ? .75 : .55;
+          const strokeWidth = regularStroke + (closeStroke - regularStroke) * state.zoom;
+          lines.push(`<path class="ruler-line${major ? " major" : ""}" stroke-width="${strokeWidth}" d="M${x} ${top}v${tickEnd - top}"/>`);
+          if (major) {
+            const anchor = tick === 0 ? "start" : tick === 20 ? "end" : "middle";
+            const regularLabelY = 355 + (66 + 17) / modelStageScale;
+            const closeupLabelY = top + 4.4 / modelStageScale;
+            const labelY = regularLabelY + (closeupLabelY - regularLabelY) * state.zoom;
+            const opacity = 1 - Math.min(1, state.zoom * 12);
+            lines.push(`<text x="${x}" y="${labelY}" text-anchor="${anchor}" font-size="${8.5714 + (1.1 - 8.5714) * state.zoom}" opacity="${opacity}">${tick}</text>`);
+          }
+          if (tick === 18 || tick === 19) {
+            const labelGap = 8 * modelSvg.viewBox.baseVal.width / (modelScreen.getBoundingClientRect().width * modelStageScale);
+            const labelY = tickEnd + labelGap;
+            const labelOpacity = state.zoom < .015 ? 0 : 1;
+            const labelFontSize = 11 * modelSvg.viewBox.baseVal.width / (modelScreen.getBoundingClientRect().width * modelStageScale);
+            lines.push(`<text x="${x}" y="${labelY}" text-anchor="middle" font-size="${labelFontSize}" opacity="${labelOpacity}">${tick}</text>`);
+          }
+        }
+        const rulerLeftMargin = 24 / modelStageScale;
+        const rulerRightMargin = 50 / modelStageScale;
+        const rulerHeight = 66 / modelStageScale;
+        const rulerTop = 355 + state.zoom / modelStageScale;
+        const rulerX = rulerZeroX - rulerLeftMargin;
+        const rulerWidth = 20 * centimeter + rulerLeftMargin + rulerRightMargin;
+        const rulerRadius = 9 / modelStageScale;
+        const zoomOutline = `<path class="ruler-outline" opacity="${state.zoom}" d="M${rulerX + rulerRadius} ${rulerTop}H${rulerX + rulerWidth - rulerRadius}Q${rulerX + rulerWidth} ${rulerTop} ${rulerX + rulerWidth} ${rulerTop + rulerRadius}V${rulerTop + rulerHeight} M${rulerX} ${rulerTop + rulerHeight}V${rulerTop + rulerRadius}Q${rulerX} ${rulerTop} ${rulerX + rulerRadius} ${rulerTop}"/>`;
+        ruler.innerHTML = `<rect class="ruler-body" x="${rulerX}" y="${rulerTop}" width="${rulerWidth}" height="${rulerHeight}" rx="${rulerRadius}" style="stroke-width:${1.4286 * (1 - state.zoom)}"/>${zoomOutline}${lines.join("")}`;
+        document.querySelector("#eye-ray").setAttribute("opacity", state.angle ? "1" : "0");
+        const projectedEndpoint = modelStagePoint(endX, 355 + state.zoom / modelStageScale);
+        document.querySelector("#eye-ray path").setAttribute("d", `M620 52L${projectedEndpoint.x} ${projectedEndpoint.y}`);
+        document.querySelectorAll("[data-zero]").forEach((button) => button.setAttribute("aria-pressed", String((button.dataset.zero === "offset") === Boolean(state.start))));
+        if (divisionCountControl) divisionCountControl.value = String(state.divisions);
+        const divisionCountLabel = document.querySelector("#division-count-label");
+        if (divisionCountLabel) divisionCountLabel.textContent = `整把尺分成 ${state.divisions} 等分`;
+        const divisionNote = document.querySelector("#division-note");
+        if (divisionNote) divisionNote.textContent = formatDivisionSize(state.divisions);
+        const interval = graduationInterval();
+        modelSvg.setAttribute("aria-label", "公分直尺每公分一條刻線；鉛筆左端對準零刻度，右端落在 18 cm 與 19 cm 兩條刻線之間");
+        renderDivisionRuler();
+        syncEstimateControls();
+        renderParallaxScene();
+      };
+      const renderDivisionRuler = () => {
+        const group = document.querySelector("#division-ticks");
+        if (!group) return;
+        const ticks = [];
+        for (let index = 0; index <= state.divisions; index += 1) {
+          const x = 20 + (480 * index) / state.divisions;
+          const major = index === 0 || index === state.divisions;
+          ticks.push(`<path d="M${x} 52v${major ? 36 : 26}" stroke="#26383a" stroke-width="${major ? 2.5 : 1.5}"/>`);
+        }
+        group.innerHTML = ticks.join("");
+        const endpointX = 20 + (clamp(state.edge, 0, 30) / 30) * 480;
+        document.querySelector("#division-endpoint").setAttribute("d", `M${endpointX} 32v78`);
+        document.querySelector("#division-unit-label").textContent = "0 cm";
+        document.querySelector("#division-unit-label-end").textContent = "30 cm";
+        document.querySelector("#division-visual-note").textContent = `鉛筆固定長 ${formatCentimeters(state.edge)} cm，左端對齊 0；右端在 ${formatCentimeters(edgePosition())} cm，對齊橘色標記。直尺分成 ${state.divisions} 等分。`;
+        document.querySelector("#division-ruler").setAttribute("aria-label", `完整三十公分直尺分成${state.divisions}等分，每格${formatCentimeters(30 / state.divisions)}公分；鉛筆固定長${formatCentimeters(state.edge)}公分，左端對齊零刻度`);
+      };
+      updateModel();
+      renderDivisionRuler();
+
+      const recordDescriptions = {
+        object: "先說明你量的是什麼；這裡量的是鉛筆的長度。",
+        value: "數值表示量到的大小；模型顯示約 18，還要搭配單位才完整。",
+        unit: "單位說明數值所採用的尺度；這把尺用 cm（公分）標示。"
+      };
+      const recordParts = [...document.querySelectorAll("[data-record-part]")];
+      recordParts.forEach((button) => button.addEventListener("click", () => {
+        pressOne(recordParts, button);
+        document.querySelectorAll("#record-object, #record-value, #record-unit").forEach((part) => part.classList.remove("is-highlighted"));
+        const target = { object: "#record-object", value: "#record-value", unit: "#record-unit" }[button.dataset.recordPart];
+        document.querySelector(target).classList.add("is-highlighted");
+        document.querySelector("#record-explanation").textContent = recordDescriptions[button.dataset.recordPart];
+      }));
+      const lengthUnitConversions = {
+        cm: { value: "18 cm", explanation: "鉛筆跨過 18 個 1 cm 間隔。", equation: "18 cm × 10 = 180 mm", divisions: 20, labelEvery: 5, label: (index) => String(index), tick: (index) => index % 5 === 0 ? 39 : 28, width: (index) => index % 5 === 0 ? 2 : 1.5 },
+        mm: { value: "180 mm", explanation: "每小格是 1 mm；同一支鉛筆跨過 180 格。", equation: "180 mm ÷ 10 = 18 cm", divisions: 200, labelEvery: 50, label: (index) => String(index), tick: (index) => index % 50 === 0 ? 39 : index % 10 === 0 ? 28 : index % 5 === 0 ? 20 : 12, width: (index) => index % 50 === 0 ? 2 : index % 10 === 0 ? 1.7 : 1.2 },
+        m: { value: "0.18 m", explanation: "每小格是 0.02 m；18 cm 等於 0.18 m。", equation: "18 cm ÷ 100 = 0.18 m", divisions: 10, labelEvery: 2, label: (index) => (index * 0.02).toFixed(2), tick: (index) => index % 2 === 0 ? 39 : 28, width: (index) => index % 2 === 0 ? 2 : 1.5 }
+      };
+      const renderLengthConversionRuler = (unit) => {
+        const conversion = lengthUnitConversions[unit];
+        const ticks = [];
+        const labels = [];
+        for (let index = 0; index <= conversion.divisions; index += 1) {
+          const x = 42 + (600 * index) / conversion.divisions;
+          const tickLength = conversion.tick(index);
+          const path = document.createElementNS(svgNamespace, "path");
+          path.setAttribute("d", `M${x} 82v${tickLength}`);
+          path.setAttribute("stroke-width", String(conversion.width(index)));
+          ticks.push(path);
+          if (index % conversion.labelEvery === 0) {
+            const text = document.createElementNS(svgNamespace, "text");
+            text.setAttribute("x", String(x));
+            text.setAttribute("y", "165");
+            if (index === 0) text.setAttribute("text-anchor", "start");
+            if (index === conversion.divisions) text.setAttribute("text-anchor", "end");
+            text.textContent = conversion.label(index);
+            labels.push(text);
+          }
+        }
+        document.querySelector("#length-conversion-ticks").replaceChildren(...ticks);
+        document.querySelector("#length-conversion-labels").replaceChildren(...labels);
+        document.querySelector("#length-conversion-ruler").setAttribute("aria-label", `同一支鉛筆固定長 18 公分；目前尺面以${unit === "cm" ? "公分" : unit === "mm" ? "毫米" : "公尺"}刻度表示，端點位置不變。`);
+      };
+      const updateLengthConversion = (unit) => {
+        const conversion = lengthUnitConversions[unit];
+        document.querySelector("#length-conversion-value").textContent = conversion.value;
+        document.querySelector("#length-conversion-explanation").textContent = conversion.explanation;
+        document.querySelector("#length-conversion-equation").textContent = conversion.equation;
+        renderLengthConversionRuler(unit);
+      };
+      const lengthUnitSelect = document.querySelector("#length-display-unit");
+      lengthUnitSelect.addEventListener("change", () => updateLengthConversion(lengthUnitSelect.value));
+      updateLengthConversion(lengthUnitSelect.value);
+
+      const tasks = {
+        length: { instrument: "直尺", range: "長度；量程 0–30 cm", quantity: "長度", value: "18 cm", tooShort: "短尺", tooShortRange: "長度；量程 0–5 cm" },
+        mass: { instrument: "天平", range: "質量；量程 0–100 g", quantity: "質量", value: "約 5 g", tooShort: "小量程天平", tooShortRange: "質量；量程 0–1 g" },
+
+      };
+      const updateToolView = () => {
+        const task = tasks[document.querySelector("#tool-task").value];
+        const selection = document.querySelector("#tool-state").value;
+        let name = task.instrument;
+        let range = task.range;
+        let result = "可涵蓋預期量值";
+        let explanation = `${task.quantity}相符，預期值 ${task.value} 落在工具量程內。`;
+        if (selection === "wrong-quantity") {
+          name = task.quantity === "長度" ? "天平" : "直尺";
+          range = task.quantity === "長度" ? "質量；量程 0–100 g" : "長度；量程 0–30 cm";
+          result = "物理量不相符";
+          explanation = `目前任務要量${task.quantity}，這個工具測量的是另一種物理量。`;
+        }
+        if (selection === "short-range") {
+          name = task.tooShort;
+          range = task.tooShortRange;
+          result = "量程無法涵蓋";
+          explanation = `預期值 ${task.value} 超出工具量程，無法完整量取。`;
+        }
+        document.querySelector("#tool-name").textContent = name;
+        document.querySelector("#tool-range").textContent = range;
+        document.querySelector("#tool-result").textContent = result;
+        document.querySelector("#tool-result-note").textContent = explanation;
+        const quantityValues = { length: { value: 18, max: 30, unit: "cm" }, mass: { value: 5, max: 100, unit: "g" } };
+        const visual = quantityValues[document.querySelector("#tool-task").value];
+        const visibleMaximum = selection === "short-range" ? (visual.unit === "cm" ? 5 : visual.unit === "g" ? 100 : 10) : visual.max;
+        const ratio = Math.min(100, (visual.value / visibleMaximum) * 100);
+        document.querySelector("#range-model-title").textContent = `${name}・${task.quantity}`;
+        document.querySelector("#range-model-caption").textContent = selection === "wrong-quantity"
+          ? `預期量值 ${visual.value} ${visual.unit}，但工具量的是另一種物理量`
+          : selection === "short-range"
+          ? `預期 ${visual.value} ${visual.unit} 超過 0–${visibleMaximum} ${visual.unit}`
+          : `預期 ${visual.value} ${visual.unit} 落在工具量程內`;
+        document.querySelector("#range-maximum").textContent = `${visibleMaximum} ${visual.unit}`;
+        document.querySelector("#range-fill").style.width = `${ratio}%`;
+        document.querySelector("#range-fill").dataset.state = selection === "wrong-quantity" || selection === "short-range" ? "invalid" : "valid";
+        document.querySelector("#range-marker").style.left = `${ratio}%`;
+      };
+      document.querySelector("#tool-task").addEventListener("change", updateToolView);
+      document.querySelector("#tool-state").addEventListener("change", updateToolView);
+
+      divisionCountControl.addEventListener("input", () => {
+        state.divisions = Number(divisionCountControl.value);
+        updateModel();
+      });
+
+      const setZoom = (zoom) => {
+        state.zoom = clamp(zoom, 0, 1);
+        const width = 760 * Math.pow(55 / 760, state.zoom);
+        const height = width * (170 / 760);
+        const fullCenterX = 380;
+        const focusCenterX = modelStagePoint(80 + (5 + 18.5) * (640 / 30), 0).x;
+        const panProgress = 1 - Math.pow(1 - state.zoom, 26);
+        const centerX = fullCenterX + (focusCenterX - fullCenterX) * panProgress;
+        const x = state.zoom === 0 ? 0 : centerX - width / 2;
+        const y = 295 + 54 * state.zoom + 20 * state.zoom * (1 - state.zoom);
+        pencilViewOffset = -18 + 14.5 * state.zoom;
+        modelSvg.setAttribute("viewBox", `${x} ${y} ${width} ${height}`);
+        const magnification = 760 / width;
+        const magnificationText = `${magnification.toFixed(1).replace(/\.0$/, "")}×`;
+        document.querySelector("#zoom-level").textContent = magnificationText;
+        document.querySelector("#zoom-in").disabled = state.zoom >= 1;
+        document.querySelector("#zoom-out").disabled = state.zoom <= 0;
+        updateModel();
+      };
+      document.querySelector("#zoom-in").addEventListener("click", () => setZoom(state.zoom + 0.08));
+      document.querySelector("#zoom-out").addEventListener("click", () => setZoom(state.zoom - 0.08));
+      document.querySelector("#zoom-reset").addEventListener("click", () => setZoom(0));
+      modelScreen.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        const wheelStep = clamp(Math.abs(event.deltaY) / 100 * 0.035, 0.02, 0.1);
+        setZoom(state.zoom + Math.sign(-event.deltaY) * wheelStep);
+      }, { passive: false });
+      setZoom(0);
+      const estimateSlider = document.querySelector("#estimate-slider");
+      estimateSlider.addEventListener("input", () => {
+        estimateGuess = Number(estimateSlider.value) / 1000;
+        updateEstimateGuide();
+        estimateChecked = false;
+        const guess = formatEstimate(estimateGuess);
+        document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
+        document.querySelector("#estimate-note").textContent = `你選擇的估讀：${guess} cm。藍色虛線表示你的估讀位置，橘紅虛線表示鉛筆端點；刻線間的位置要根據端點位置估讀。`;
+        const button = document.querySelector("#check-estimate");
+        button.disabled = false;
+        button.textContent = "查看誤差";
+      });
+      document.querySelector("#check-estimate").addEventListener("click", () => {
+        if (estimateChecked) {
+          estimateGuess = null;
+          estimateChecked = false;
+          updateEstimateGuide();
+          document.querySelector("#estimate-value").textContent = "尚未估讀";
+          document.querySelector("#estimate-note").textContent = "這把尺每 1 cm 一條刻線，兩條刻線間的位置需要估讀；放大可以看清端點，但不會增加刻線。";
+          syncEstimateControls();
+          return;
+        }
+        if (estimateGuess === null) return;
+        estimateChecked = true;
+        const guess = formatEstimate(estimateGuess);
+        const percentageError = Math.abs(estimateGuess - estimateLength) / estimateLength * 100;
+        const closeness = percentageError < 1
+          ? "估讀接近參考值。"
+          : "估讀與參考值有差距。";
+        document.querySelector("#estimate-value").textContent = `你的估讀：約 ${guess} cm`;
+        document.querySelector("#estimate-note").textContent = `你的估讀：約 ${guess} cm；誤差百分比：${percentageError.toFixed(2)}%。${closeness}`;
+        syncEstimateControls();
+      });
+
+      const minimumViewYaw = obliqueCameraYaw - 0.3;
+      const maximumViewYaw = defaultCameraYaw + 0.3;
+      const clampViewYaw = (angle) => clamp(angle, minimumViewYaw, maximumViewYaw);
+      let dragPoint = null;
+      parallaxCanvas.addEventListener("pointerdown", (event) => {
+        dragPoint = { x: event.clientX, y: event.clientY };
+        parallaxCanvas.setPointerCapture(event.pointerId);
+        event.preventDefault();
+      });
+      parallaxCanvas.addEventListener("pointermove", (event) => {
+        if (!dragPoint) return;
+        const dx = event.clientX - dragPoint.x;
+        const dy = event.clientY - dragPoint.y;
+        dragPoint = { x: event.clientX, y: event.clientY };
+        cameraPreset = "free";
+        const bounds = parallaxCanvas.getBoundingClientRect();
+        const sideOfRuler = clamp((bounds.left + bounds.width / 2 - event.clientX) / (bounds.width / 2), -1, 1);
+        const dragSideStrength = Math.sign(sideOfRuler) * Math.max(0.4, Math.min(Math.abs(sideOfRuler), 0.6));
+        camera.yaw = clampViewYaw(camera.yaw + dx * 0.009 - dy * dragSideStrength * 0.013);
+        renderParallaxScene();
+      });
+      const releaseDrag = () => { dragPoint = null; };
+      parallaxCanvas.addEventListener("pointerup", releaseDrag);
+      parallaxCanvas.addEventListener("pointercancel", releaseDrag);
+      parallaxCanvas.addEventListener("lostpointercapture", releaseDrag);
+      parallaxCanvas.addEventListener("keydown", (event) => {
+        const angleStep = 0.08;
+        if (event.key === "ArrowLeft") camera.yaw = clampViewYaw(camera.yaw - angleStep);
+        else if (event.key === "ArrowRight") camera.yaw = clampViewYaw(camera.yaw + angleStep);
+        else if (event.key === "ArrowUp") camera.pitch = clamp(camera.pitch + angleStep, 0.55, 1.15);
+        else if (event.key === "ArrowDown") camera.pitch = clamp(camera.pitch - angleStep, 0.55, 1.15);
+        else return;
+        event.preventDefault();
+        cameraPreset = "free";
+        renderParallaxScene();
+      });
+      document.querySelector("#view-front").addEventListener("click", () => {
+        cameraPreset = "front";
+        camera.yaw = defaultCameraYaw;
+        camera.pitch = defaultCameraPitch;
+        renderParallaxScene();
+      });
+      document.querySelector("#view-oblique").addEventListener("click", () => {
+        cameraPreset = "oblique";
+        camera.yaw = obliqueCameraYaw;
+        camera.pitch = defaultCameraPitch;
+        renderParallaxScene();
+      });
+      window.addEventListener("resize", renderParallaxScene);
+      window.addEventListener("pencil3d-ready", renderParallaxScene, { once: true });
+      window.addEventListener("load", renderParallaxScene, { once: true });
+      // The module can finish before this listener is attached; apply the current camera immediately when ready.
+      if (window.setPencil3DView) renderParallaxScene();
+
+      const correctionWorkspace = document.querySelector("#correction-workspace");
+      const correctionCanvas = document.querySelector("#correction-parallax-canvas");
+      const correctionScene = document.querySelector("#correction-parallax-scene");
+      const correctionModeButtons = [...document.querySelectorAll("[data-correction-control]")];
+      const correctionDensityButtons = [...document.querySelectorAll("[data-correction-density]")];
+      let correctionMode = "density";
+      let correctionTickInterval = 5;
+      let correctionRulerOffset = -1;
+      let correctionOriginDragMode = "rotate";
+      const correctionCameraState = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
+      let correctionCameraPreset = "front";
+      let correctionDrag = null;
+      const correctionFormat = (value) => Number(value.toFixed(1)).toFixed(1);
+      const correctionDisplay = (value) => Math.abs(value - Math.round(value)) < 0.001 ? String(Math.round(value)) : correctionFormat(value);
+      const renderCorrectionScene = () => {
+        correctionScene.hidden = false;
+        correctionScene.dataset.control = correctionMode;
+        document.querySelector("#correction-parallax-detail").hidden = correctionMode !== "angle" && correctionMode !== "origin";
+        const originDragToggle = document.querySelector("#correction-origin-drag-toggle");
+        originDragToggle.hidden = correctionMode !== "origin";
+        originDragToggle.textContent = correctionOriginDragMode === "rotate" ? "✋ 旋轉場景" : "↔ 調整尺面";
+        originDragToggle.setAttribute("aria-pressed", String(correctionOriginDragMode === "origin"));
+        originDragToggle.setAttribute("aria-label", correctionOriginDragMode === "rotate" ? "目前為旋轉場景模式；點擊切換為調整尺面模式" : "目前為調整尺面模式；點擊切換為旋轉場景模式");
+        correctionCanvas.style.cursor = correctionDrag
+          ? correctionDrag.action === "origin" ? "ew-resize" : "grabbing"
+          : correctionMode === "origin" && correctionOriginDragMode === "origin" ? "ew-resize" : "grab";
+        document.querySelector("#correction-average-controls").hidden = correctionMode !== "average";
+        document.querySelector("#correction-live-readout").hidden = correctionMode === "average";
+        document.querySelector("#correction-mode-instructions").hidden = correctionMode === "average";
+        correctionScene.dataset.magnifier = String(correctionMode === "angle" || correctionMode === "origin");
+        const sceneActive = true;
+        const bounds = correctionCanvas.getBoundingClientRect();
+        if (sceneActive && (!bounds.width || !bounds.height)) return;
+        const target = { x: state.start + 10, y: pencilHeight, z: 0 };
+        const cameraPosition = {
+          x: target.x + orbitRadius * Math.cos(correctionCameraState.pitch) * Math.sin(correctionCameraState.yaw),
+          y: target.y + orbitRadius * Math.sin(correctionCameraState.pitch),
+          z: target.z + orbitRadius * Math.cos(correctionCameraState.pitch) * Math.cos(correctionCameraState.yaw)
+        };
+        const rulerTop = 0.2;
+        const rulerNear = -1.6;
+        const rulerFar = 1.6;
+        const pencilCenterZ = -0.82;
+        const edgeX = state.start + parallaxLength;
+        const projectionFactor = (pencilHeight - rulerTop) / Math.max(0.1, cameraPosition.y - pencilHeight);
+        const projectedEdgeX = edgeX + projectionFactor * (edgeX - cameraPosition.x);
+        const projectedEdgeZ = pencilCenterZ + projectionFactor * (pencilCenterZ - cameraPosition.z);
+        const rulerMin = correctionRulerOffset;
+        const rulerMax = correctionRulerOffset + 20;
+        const clampedProjectionX = clamp(projectedEdgeX, rulerMin, rulerMax);
+        const clampedProjectionZ = clamp(projectedEdgeZ, rulerNear, rulerFar);
+        const landingOnScale = clampedProjectionX >= rulerMin && clampedProjectionX <= rulerMax && projectedEdgeX >= rulerMin && projectedEdgeX <= rulerMax && projectedEdgeZ >= rulerNear && projectedEdgeZ <= rulerFar;
+        const startReading = state.start - correctionRulerOffset;
+        const endReading = clampedProjectionX - correctionRulerOffset;
+        const measuredLength = endReading - startReading;
+        const correctionView = {
+          edge: parallaxLength,
+          start: state.start,
+          rulerOffset: correctionRulerOffset,
+          tickInterval: correctionMode === "density" ? correctionTickInterval : 1,
+          yaw: correctionCameraState.yaw,
+          pitch: correctionCameraState.pitch,
+          orbitRadius,
+          centerZ: pencilCenterZ,
+          centerY: pencilHeight,
+          lookAtX: target.x,
+          lookAtY: rulerTop,
+          lookAtZ: target.z,
+          focalLengthRatio: sceneActive ? bounds.width * 0.85 / bounds.height : 1,
+          rayStart: { x: edgeX, y: pencilHeight, z: pencilCenterZ },
+          rayEnd: { x: clampedProjectionX, y: rulerTop + 0.02, z: clampedProjectionZ },
+          magnifierTargetX: correctionMode === "origin" ? (state.start + correctionRulerOffset) / 2 : undefined,
+          magnifierMode: correctionMode
+        };
+        if (sceneActive) window.setPencil3DCorrectionView?.(correctionView);
+        const reading = document.querySelector("#correction-readout-value");
+        if (correctionMode === "density") {
+          correctionCanvas.setAttribute("aria-label", "可拖曳場景旋轉鉛筆與直尺；使用下方按鈕切換刻度密度。");
+          const low = Math.floor(measuredLength / correctionTickInterval) * correctionTickInterval;
+          const high = low + correctionTickInterval;
+          document.querySelector("#correction-readout-label").textContent = `每格 ${correctionTickInterval} cm・估讀範圍`;
+          reading.textContent = `${correctionDisplay(low)}–${correctionDisplay(high)} cm`;
+          document.querySelector("#correction-stage-title").textContent = "調整刻度密度";
+          document.querySelector("#correction-stage-prompt").textContent = "刻度每格越小，端點落在刻線之間的範圍越小，估讀的不確定性也會降低。選擇較疏或較密的直尺。";
+          document.querySelector("#correction-mode-instructions").textContent = correctionTickInterval === 1 ? "每格 1 cm，估讀範圍縮小了。可拖曳場景旋轉觀看；起點和視角也能分別調整。" : "每格 5 cm，端點落在哪一小段還不清楚；可拖曳場景旋轉觀看，再試試較密的刻度。";
+        } else if (correctionMode === "origin") {
+          const gap = Math.abs(startReading);
+          document.querySelector("#correction-magnifier-title").textContent = "筆尖與零刻度放大";
+          document.querySelector("#correction-magnifier-range").textContent = gap < 0.05 ? "筆尖已對準 0 刻度" : `目前相距 ${correctionFormat(gap)} cm；拖曳尺面逐步對準`;
+          document.querySelector("#correction-magnifier-caption").textContent = "筆尖與 0 刻度";
+          document.querySelector("#correction-magnifier").setAttribute("aria-label", "鉛筆筆尖與直尺零刻度的即時放大圖");
+          correctionCanvas.setAttribute("aria-label", "可拖曳尺面下緣移動零刻度，也可拖曳鉛筆或場景空白處旋轉視角；放大視窗顯示筆尖與零刻度的距離。");
+          document.querySelector("#correction-readout-label").textContent = `起點 ${correctionFormat(startReading)} cm・終點 ${correctionFormat(endReading)} cm`;
+          reading.textContent = `${correctionFormat(endReading)} − ${correctionFormat(startReading)} ≈ ${correctionFormat(measuredLength)} cm`;
+          document.querySelector("#correction-stage-title").textContent = "調整起點位置";
+          document.querySelector("#correction-stage-prompt").textContent = "讓 0 刻度對準鉛筆起點，可直接讀出長度；點擊放大窗旁的按鈕切換拖曳旋轉或移動尺面。";
+          document.querySelector("#correction-origin-control-instructions").textContent = correctionOriginDragMode === "rotate" ? "目前拖曳會旋轉場景；點擊放大窗旁的「✋ 旋轉場景」按鈕可切換為移動尺面。若起點未對準 0，需用終點讀值減去起點讀值。" : "目前拖曳會移動尺面；點擊放大窗旁的「↔ 調整尺面」按鈕可切回旋轉場景。若起點未對準 0，需用終點讀值減去起點讀值。";
+          const dragModeHint = correctionOriginDragMode === "rotate" ? "拖曳會旋轉場景；點擊「↔ 調整尺面」切換操作。" : "拖曳會移動尺面；點擊「✋ 旋轉場景」切回旋轉操作。";
+          document.querySelector("#correction-mode-instructions").textContent = `${Math.abs(correctionRulerOffset) < 0.02 ? "零刻度已對準筆尖。" : `零刻度偏移 ${formatCentimeters(-correctionRulerOffset)} cm。`} ${dragModeHint}`;
+        } else if (correctionMode === "angle") {
+          document.querySelector("#correction-magnifier-title").textContent = "鉛筆右端放大";
+          document.querySelector("#correction-magnifier-range").textContent = "尺面 18–19 cm 附近";
+          document.querySelector("#correction-magnifier-caption").textContent = "端點與刻度";
+          document.querySelector("#correction-magnifier").setAttribute("aria-label", "鉛筆右端與直尺 18 至 19 公分附近的放大圖");
+          correctionCanvas.setAttribute("aria-label", "可拖曳場景調整鉛筆和直尺的觀察角度；下方放大視窗顯示端點附近的刻度。");
+          document.querySelector("#correction-readout-label").textContent = landingOnScale ? "目前角度估讀" : "目前角度估讀";
+          reading.textContent = landingOnScale ? `約 ${correctionFormat(endReading)} cm` : "視線落在尺外";
+          document.querySelector("#correction-stage-title").textContent = "調整觀察角度";
+          document.querySelector("#correction-stage-prompt").textContent = "視線正對尺面、垂直刻度，可減少視差造成的讀值偏移。比較兩種視角的端點讀值。";
+          document.querySelector("#correction-mode-instructions").textContent = landingOnScale
+            ? `目前讀值約 ${correctionFormat(endReading)} cm。改變視角，觀察橘色投影線落點與讀值如何變化。`
+            : "目前視線落在尺面外；拖曳場景轉動視角，讓投影回到刻度上。";
+        } else {
+          correctionCanvas.setAttribute("aria-label", "重複量測示意場景；可拖曳旋轉鉛筆與密刻度直尺。");
+          document.querySelector("#correction-stage-title").textContent = "重複量測並取平均";
+          document.querySelector("#correction-stage-prompt").textContent = "可拖曳上方場景旋轉觀看。重複量測可降低每次讀值的偶然波動；起點偏移或視差等固定偏差仍須另外修正。";
+          document.querySelector("#correction-mode-instructions").textContent = "十次讀值可能略有差異；平均值通常比單次讀值穩定。";
+        }
+        correctionScene.dataset.control = correctionMode;
+        correctionModeButtons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.correctionControl === correctionMode)));
+        correctionDensityButtons.forEach((button) => button.setAttribute("aria-pressed", String(Number(button.dataset.correctionDensity) === correctionTickInterval)));
+        document.querySelector("#correction-density-controls").hidden = correctionMode !== "density";
+        document.querySelector("#correction-origin-controls").hidden = correctionMode !== "origin";
+        document.querySelector("#correction-angle-controls").hidden = correctionMode !== "angle";
+        document.querySelector("#correction-view-front").setAttribute("aria-pressed", String(correctionCameraPreset === "front"));
+        document.querySelector("#correction-view-oblique").setAttribute("aria-pressed", String(correctionCameraPreset === "oblique"));
+        document.querySelector("#correction-density-status").textContent = `${correctionTickInterval === 1 ? "較密" : "較疏"}・每格 ${correctionTickInterval} cm`;
+        document.querySelector("#correction-origin-status").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "已對準 0" : `偏移 ${formatCentimeters(-correctionRulerOffset)} cm`;
+        document.querySelector("#correction-angle-status").textContent = correctionCameraPreset === "front" ? "正對尺面" : correctionCameraPreset === "oblique" ? "斜向觀察" : "自由旋轉";
+        document.querySelector("#correction-combined-title").textContent = "四種方法分別改善不同的誤差來源。";
+        document.querySelector("#correction-combined-note").textContent = "刻度加密、對準起點、正對尺面與重複量測取平均，可以搭配使用；平均不能消除固定的起點或視角偏差。";
+      };
+      correctionModeButtons.forEach((button) => button.addEventListener("click", () => {
+        correctionMode = button.dataset.correctionControl;
+        renderCorrectionScene();
+        if (correctionMode === "origin") document.querySelector("#correction-parallax-detail").scrollIntoView({ behavior: "smooth", block: "center" });
+      }));
+      document.querySelector("#correction-origin-drag-toggle").addEventListener("click", () => {
+        correctionOriginDragMode = correctionOriginDragMode === "rotate" ? "origin" : "rotate";
+        renderCorrectionScene();
+      });
+      correctionDensityButtons.forEach((button) => button.addEventListener("click", () => {
+        correctionTickInterval = Number(button.dataset.correctionDensity);
+        renderCorrectionScene();
+      }));
+      document.querySelector("#correction-view-front").addEventListener("click", () => {
+        correctionCameraPreset = "front";
+        correctionCameraState.yaw = defaultCameraYaw;
+        correctionCameraState.pitch = defaultCameraPitch;
+        renderCorrectionScene();
+      });
+      document.querySelector("#correction-view-oblique").addEventListener("click", () => {
+        correctionCameraPreset = "oblique";
+        correctionCameraState.yaw = obliqueCameraYaw;
+        correctionCameraState.pitch = defaultCameraPitch;
+        renderCorrectionScene();
+      });
+      correctionCanvas.addEventListener("pointerdown", (event) => {
+        const dragAction = correctionMode === "origin" ? correctionOriginDragMode : "rotate";
+        correctionDrag = { x: event.clientX, y: event.clientY, value: correctionRulerOffset, pointerId: event.pointerId, action: dragAction };
+        correctionCanvas.setPointerCapture(event.pointerId);
+        correctionCanvas.style.cursor = dragAction === "origin" ? "ew-resize" : "grabbing";
+        event.preventDefault();
+      });
+      correctionCanvas.addEventListener("pointermove", (event) => {
+        if (!correctionDrag) return;
+        if (event.pointerId !== correctionDrag.pointerId) return;
+        const dx = event.clientX - correctionDrag.x;
+        const dy = event.clientY - correctionDrag.y;
+        correctionDrag.x = event.clientX;
+        correctionDrag.y = event.clientY;
+        if (correctionDrag.action === "origin") {
+          const bounds = correctionCanvas.getBoundingClientRect();
+          correctionRulerOffset = clamp(correctionRulerOffset + dx * 20 / (bounds.width * 0.78), -1, 0);
+        } else {
+          correctionCameraPreset = "free";
+          const bounds = correctionCanvas.getBoundingClientRect();
+          const sideOfRuler = clamp((bounds.left + bounds.width / 2 - event.clientX) / (bounds.width / 2), -1, 1);
+          const dragSideStrength = Math.sign(sideOfRuler) * Math.max(0.4, Math.min(Math.abs(sideOfRuler), 0.6));
+          correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw + dx * 0.009 - dy * dragSideStrength * 0.013);
+        }
+        renderCorrectionScene();
+      });
+      const releaseCorrectionDrag = () => {
+        correctionDrag = null;
+        correctionCanvas.style.cursor = correctionMode === "origin" && correctionOriginDragMode === "origin" ? "ew-resize" : "grab";
+      };
+      correctionCanvas.addEventListener("pointerup", releaseCorrectionDrag);
+      correctionCanvas.addEventListener("pointercancel", releaseCorrectionDrag);
+      correctionCanvas.addEventListener("lostpointercapture", releaseCorrectionDrag);
+      correctionCanvas.addEventListener("keydown", (event) => {
+        const angleStep = 0.08;
+        if (event.key === "ArrowLeft") correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw - angleStep);
+        else if (event.key === "ArrowRight") correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw + angleStep);
+        else if (event.key === "ArrowUp") correctionCameraState.pitch = clamp(correctionCameraState.pitch + angleStep, 0.55, 1.15);
+        else if (event.key === "ArrowDown") correctionCameraState.pitch = clamp(correctionCameraState.pitch - angleStep, 0.55, 1.15);
+        else return;
+        event.preventDefault();
+        correctionCameraPreset = "free";
+        renderCorrectionScene();
+      });
+      window.addEventListener("resize", renderCorrectionScene);
+      window.addEventListener("pencil3d-ready", renderCorrectionScene, { once: true });
+      renderCorrectionScene();
+
+      const assessmentButtons = [...document.querySelectorAll("#fair-options button")];
+      assessmentButtons.forEach((button) => button.addEventListener("click", () => {
+        pressOne(assessmentButtons, button);
+        const feedback = document.querySelector("#assessment-feedback");
+        feedback.dataset.state = button.dataset.fair === "complete" ? "good" : "try";
+        feedback.textContent = button.dataset.fair === "complete"
+          ? "兩筆都是鉛筆的長度，但「18」沒有單位，無法確定使用哪種尺度。補上單位，並確認量測方法後，才能判斷資料是否可比較。"
+          : "對照兩筆資料是否說清楚量測的物理量、數值與單位，再查看尺的刻度和讀值條件是否可比較。";
+      }));
+
+      const routeLinks = [...document.querySelectorAll(".route a[href^='#card-']")];
+      const lessonCards = routeLinks.map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+      const markActiveCard = (cardId) => {
+        routeLinks.forEach((link) => {
+          if (link.hash === `#${cardId}`) {
+            link.setAttribute("aria-current", "step");
+            link.scrollIntoView({ block: "nearest", inline: "nearest" });
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+        if (cardId === "card-06") requestAnimationFrame(renderParallaxScene);
+      };
+      if ("IntersectionObserver" in window) {
+        const cardObserver = new IntersectionObserver((entries) => {
+          const visibleCards = entries.filter((entry) => entry.isIntersecting)
+            .sort((first, second) => first.boundingClientRect.top - second.boundingClientRect.top);
+          if (visibleCards.length) markActiveCard(visibleCards[0].target.id);
+        }, { rootMargin: "-18% 0px -68% 0px", threshold: 0 });
+        lessonCards.forEach((card) => cardObserver.observe(card));
+      } else {
+        const syncActiveCard = () => {
+          const currentCard = [...lessonCards].reverse().find((card) => card.getBoundingClientRect().top <= window.innerHeight * 0.35);
+          markActiveCard((currentCard || lessonCards[0]).id);
+        };
+        window.addEventListener("scroll", syncActiveCard, { passive: true });
+        syncActiveCard();
+      }
+      updateToolView();
+    })();
+  </script>
+  <script type="importmap">
+    {"imports":{"three":"./assets/vendor/three/build/three.module.js","three/addons/":"./assets/vendor/three/examples/jsm/"}}
+  </script>
+  <script type="module" src="assets/pencil-3d-viewer.js"></script>
+</body>
+</html>
