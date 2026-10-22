@@ -148,8 +148,8 @@
     .solid-pressure-art.hand-press-scene>.hand-approach { position:absolute; z-index:2; top:0; left:8%; width:84%; height:auto; transform:translateY(-60%); transform-origin:center bottom; }
     .hand-press-scene.is-approaching .hand-approach { animation:hand-approach 3.5s cubic-bezier(.4,.05,.25,1) both; }
     @keyframes hand-approach { 0% { transform:translateY(-60%); } 70% { transform:translateY(2%); } 100% { transform:translateY(2%); } }
-    @keyframes hydraulic-ram-cycle { 0%,12% { transform:translateY(-26px); } 68%,80% { transform:translateY(58px); } 100% { transform:translateY(-26px); } }
-    @keyframes hydraulic-iron-cycle { 0%,12% { transform:scale(1,1); } 42% { transform:scale(1.5,.75); } 68%,100% { transform:scale(2,.5); } }
+    @keyframes hydraulic-ram-cycle { 0%,12% { transform:translateY(-26px); } 29% { transform:translateY(0); } 68%,80% { transform:translateY(58px); } 100% { transform:translateY(-26px); } }
+    @keyframes hydraulic-iron-cycle { 0%,29% { transform:scale(1,1); } 50% { transform:scale(1.5,.75); } 68%,100% { transform:scale(2,.5); } }
     .hydraulic-iron { transform-box:fill-box; transform-origin:center bottom; }
     .hydraulic-scene.is-pressing .hydraulic-ram { animation:hydraulic-ram-cycle 10s linear both; }
     .hydraulic-scene.is-pressing .hydraulic-iron { animation:hydraulic-iron-cycle 10s linear both; }
@@ -158,6 +158,7 @@
     .solid-pressure-options { display:flex; flex-wrap:wrap; gap:7px; width:100%; justify-content:center; }
     .solid-pressure-choice { min-height:40px; padding:8px 13px; border:1px solid #aebdb3; border-radius:999px; background:#fff; color:#354c40; font:inherit; font-size:.83rem; font-weight:750; cursor:pointer; }
     .solid-pressure-choice[aria-pressed="true"] { border-color:#267257; background:#267257; color:#fff; }
+    .solid-pressure-choice:disabled { opacity:.65; cursor:wait; }
     .solid-pressure-summary { display:grid; gap:6px; width:100%; padding:11px 13px; border-radius:10px; background:#eef4eb; color:#485a50; font-size:.8rem; text-align:left; }
     .solid-pressure-summary strong { color:#176b53; font-size:.86rem; }
     .solid-pressure-math { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:7px; width:100%; }
@@ -916,8 +917,18 @@
         const mode=pressureModeButton.dataset.solidPressureMode,model=document.querySelector('[data-model="solid-compress"]'),hydraulic=mode==="hydraulic";
         const art=model.querySelector("[data-pressure-art]");
         art.setAttribute("aria-label",hydraulic?"液壓機活塞下壓並使金屬塊逐漸變矮、向兩側展開":"插畫示意：手掌按壓金屬塊，金屬塊保持原來外形");
-        if(hydraulic){art.classList.remove("hand-press-scene");art.innerHTML=hydraulicPressIllustration;requestAnimationFrame(()=>requestAnimationFrame(()=>model.querySelector("[data-hydraulic-scene]").classList.add("is-pressing")));}
-        else{art.classList.add("hand-press-scene");art.innerHTML=handPressIllustration;requestAnimationFrame(()=>requestAnimationFrame(()=>art.classList.add("is-approaching")));}
+        if(model.dataset.pressRunning==="true")return;
+        if(hydraulic){
+          model.dataset.pressRunning="true";
+          const pressureButtons=[...document.querySelectorAll("#state-demo [data-solid-pressure-mode]")];
+          pressureButtons.forEach(button=>button.disabled=true);
+          const unlockPressure=()=>{if(model.dataset.pressRunning!=="true")return;model.dataset.pressRunning="false";pressureButtons.forEach(button=>button.disabled=false);};
+          art.classList.remove("hand-press-scene");art.innerHTML=hydraulicPressIllustration;
+          const scene=model.querySelector("[data-hydraulic-scene]"),iron=scene.querySelector(".hydraulic-iron");
+          iron.addEventListener("animationend",event=>{if(event.animationName==="hydraulic-iron-cycle")unlockPressure();},{once:true});
+          window.setTimeout(unlockPressure,10500);
+          requestAnimationFrame(()=>requestAnimationFrame(()=>scene.classList.add("is-pressing")));
+        }else{art.classList.add("hand-press-scene");art.innerHTML=handPressIllustration;requestAnimationFrame(()=>requestAnimationFrame(()=>art.classList.add("is-approaching")));}
         model.querySelector("[data-pressure-heading]").textContent=hydraulic?"液壓機下壓：觀察鐵塊形變":"一般手力：鐵塊沒有明顯變形";
         model.querySelector("[data-pressure-copy]").textContent=hydraulic?"液壓機先接近鐵塊，再以較慢速度下壓；鐵塊變矮並向兩側展開，活塞回升後鐵塊維持形變。":"手掌從上方逐漸靠近並按住鐵塊；一般手力下，鐵塊外形尺寸沒有明顯改變。";
         const math=model.querySelector("[data-pressure-math]");math.hidden=!hydraulic;math.innerHTML=hydraulic?'<span>施壓前<br>2 × 2 × 2 = 8 cm³</span><b>＝</b><span>形變後<br>4 × 2 × 1 = 8 cm³</span>':"";
