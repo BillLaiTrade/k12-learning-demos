@@ -251,7 +251,7 @@
     .particle-box[data-motion-state="liquid"] .particle-molecule,
     .particle-box[data-motion-state="gas"] .particle-molecule { animation:gas-brownian var(--gas-drift-duration,7s) linear infinite; animation-delay:var(--gas-drift-delay,0s); will-change:transform,left,top; }
     .particle-molecule svg { display:block; width:100%; height:100%; overflow:visible; }
-    .particle-molecule[data-vibrating="true"] { animation:solid-particle-vibration 1.65s ease-in-out infinite alternate; }
+    .particle-molecule[data-vibrating="true"] { animation:solid-particle-vibration 1.35s ease-in-out infinite alternate; }
     @keyframes solid-particle-vibration { from { transform:translate(calc(-50% + var(--vibrate-from-x)),calc(-50% + var(--vibrate-from-y))); } to { transform:translate(calc(-50% + var(--vibrate-to-x)),calc(-50% + var(--vibrate-to-y))); } }
     .particle-legend { display:flex; flex-wrap:wrap; justify-content:center; gap:8px 16px; margin:9px 0 0; color:#5c6d63; font-size:.76rem; }
     .particle-legend span { display:inline-flex; align-items:center; gap:5px; }
@@ -262,7 +262,7 @@
     .particle-comparison p { margin:0; color:#4f6159; font-size:.79rem; }
     .particle-model-note { margin:10px 0 0; padding:9px 12px; border-radius:9px; background:#eef3ea; color:#52635a; font-size:.78rem; }
     @media(max-width:680px) { .particle-stage { min-height:190px; padding:10px; } .particle-box { height:170px; } .particle-comparison { grid-template-columns:1fr; gap:6px; } .particle-comparison article { display:grid; grid-template-columns:58px 1fr; gap:8px; align-items:baseline; padding:8px 10px; } .particle-comparison h3 { margin:0; } }
-    @media(prefers-reduced-motion:reduce) { .particle-molecule { transition:left 1.25s ease-in-out,top 1.25s ease-in-out; } .particle-box[data-motion-state="liquid"] .particle-molecule { animation-duration:24s; } .particle-box[data-motion-state="gas"] .particle-molecule { animation-duration:24s; } .particle-molecule[data-vibrating="true"] { animation-duration:3.3s; } }
+    @media(prefers-reduced-motion:reduce) { .particle-molecule { transition:left 1.25s ease-in-out,top 1.25s ease-in-out; } .particle-box[data-motion-state="liquid"] .particle-molecule { animation-duration:20s; } .particle-box[data-motion-state="gas"] .particle-molecule { animation-duration:20s; } .particle-molecule[data-vibrating="true"] { animation-duration:2.7s; } }
     .phase-visual { min-height:144px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(#e6f1f3,#f9f6ea); }
     .phase-water { display:grid; place-items:center; width:112px; height:90px; border:3px solid #6c8790; border-radius:12px 12px 20px 20px; background:linear-gradient(0deg,#79b6cc 55%,#f8fbfc 55%); color:#244a55; font-weight:850; }
     .property-grid,.class-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
@@ -320,7 +320,7 @@
       .section-top { align-items:start; flex-direction:column; gap:3px; }
     }
     @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
-    @media(prefers-reduced-motion:reduce) { .gas-particle { animation-duration:var(--gas-drift-duration,7s)!important; animation-delay:var(--gas-drift-delay,0s)!important; } .particle-molecule { transition:left 1.25s ease-in-out,top 1.25s ease-in-out!important; } .particle-box[data-motion-state="liquid"] .particle-molecule { transition:left 1.4s ease-in-out,top 1.4s ease-in-out!important; animation-duration:24s!important; } .particle-box[data-motion-state="gas"] .particle-molecule { transition:left 1.15s linear,top 1.15s linear!important; animation-duration:24s!important; } .particle-molecule[data-vibrating="true"] { animation-duration:3.3s!important; } }
+    @media(prefers-reduced-motion:reduce) { .gas-particle { animation-duration:var(--gas-drift-duration,7s)!important; animation-delay:var(--gas-drift-delay,0s)!important; } .particle-molecule { transition:left 1.25s ease-in-out,top 1.25s ease-in-out!important; } .particle-box[data-motion-state="liquid"] .particle-molecule { transition:left 1.4s ease-in-out,top 1.4s ease-in-out!important; animation-duration:20s!important; } .particle-box[data-motion-state="gas"] .particle-molecule { transition:left 1.15s linear,top 1.15s linear!important; animation-duration:20s!important; } .particle-molecule[data-vibrating="true"] { animation-duration:2.7s!important; } }
     @media(prefers-reduced-motion:reduce) { .hand-press-scene.is-approaching .hand-approach { animation-duration:3.5s!important; } .hydraulic-scene.is-pressing .hydraulic-ram,.hydraulic-scene.is-pressing .hydraulic-iron { animation-duration:10s!important; } }
     /* 第二學習區塊沿用第三單元的綠色與中性色系。 */
     #s2.lesson-card { border-color:#d8e2da; background:#fffefa; }
@@ -989,7 +989,7 @@
     });
 
     const particlePositions = {
-      solid:[[29,34],[43,34],[57,34],[71,34],[29,50],[43,50],[57,50],[71,50],[29,66],[43,66],[57,66],[71,66]],
+      solid:[[40,43],[46.5,43],[53.5,43],[60,43],[40,51],[46.5,51],[53.5,51],[60,51],[40,59],[46.5,59],[53.5,59],[60,59]],
       liquid:[[28,55],[43,60],[57,52],[72,58],[35,71],[50,67],[65,74],[80,68],[28,85],[44,82],[60,88],[76,83]],
       gas:[[16,18],[37,16],[62,22],[84,16],[22,46],[52,40],[76,55],[86,47],[15,79],[42,73],[65,80],[84,77]]
     };
@@ -1017,8 +1017,8 @@
       particleBox.dataset.motionState=state;
       molecules.forEach((molecule,index)=>{
         molecule.dataset.vibrating=String(state==="solid");
-        if(state==="gas")Object.entries(gasParticleMotionVars(28,16,3)).forEach(([name,value])=>molecule.style.setProperty(name,value));
-        if(state==="liquid")Object.entries(gasParticleMotionVars(6,4,3)).forEach(([name,value])=>molecule.style.setProperty(name,value));
+        if(state==="gas")Object.entries(gasParticleMotionVars(28,16,2.5)).forEach(([name,value])=>molecule.style.setProperty(name,value));
+        if(state==="liquid")Object.entries(gasParticleMotionVars(6,4,2.5)).forEach(([name,value])=>molecule.style.setProperty(name,value));
         if(state!=="solid")molecule.style.animationDelay=`calc(var(--gas-drift-delay, 0s) - ${(index%4)*.37}s)`;
       });
       particleLocations=particlePositions[state].map(([x,y])=>[x,y]);
