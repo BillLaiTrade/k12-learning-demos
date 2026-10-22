@@ -62,6 +62,7 @@ export function mountDisplacementExperiment() {
     };
 
     clearPosition();
+    rock.classList.add('is-throwing');
     rock.classList.add('is-immersed');
     const targetRect = rock.getBoundingClientRect();
     rock.classList.remove('is-immersed');
@@ -74,19 +75,18 @@ export function mountDisplacementExperiment() {
     const targetTop = targetRect.top - sceneRect.top;
     const waterTop = water.getBoundingClientRect().top - sceneRect.top;
     const entryLeft = targetLeft + Math.max(0, (targetRect.width - startRect.width) / 2);
-    const entryTop = Math.max(0, waterTop - startRect.height * 0.58);
+    const entryTop = Math.max(0, waterTop - startRect.height * 0.3);
     const apexLeft = startLeft + (entryLeft - startLeft) * 0.46;
-    const apexTop = Math.max(0, Math.min(startTop, entryTop) - Math.max(48, sceneRect.height * 0.27));
+    const apexTop = Math.max(0, startTop + (entryTop - startTop) * 0.42 - Math.min(42, sceneRect.height * 0.14));
 
     status.textContent = '石頭沿著弧線落入量筒，再沉到水底；觀察水位上升。';
-    rock.classList.add('is-throwing');
     const animation = rock.animate([
       { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
-      { offset: 0.38, left: apexLeft + 'px', top: apexTop + 'px', transform: 'rotate(100deg)', easing: 'cubic-bezier(.48,0,.8,.45)' },
-      { offset: 0.67, left: entryLeft + 'px', top: entryTop + 'px', transform: 'rotate(205deg)', easing: 'cubic-bezier(.1,.65,.5,1)' },
-      { offset: 0.77, left: entryLeft + 3 + 'px', top: Math.max(0, entryTop - 15) + 'px', transform: 'rotate(228deg)', easing: 'cubic-bezier(.3,0,.8,.4)' },
-      { offset: 1, left: targetLeft + 'px', top: targetTop + 'px', transform: 'rotate(285deg)' }
-    ], { duration: 1120, fill: 'forwards' });
+      { offset: 0.42, left: apexLeft + 'px', top: apexTop + 'px', transform: 'rotate(6deg)', easing: 'cubic-bezier(.48,0,.8,.45)' },
+      { offset: 0.7, left: entryLeft + 'px', top: entryTop + 'px', transform: 'rotate(14deg)', easing: 'cubic-bezier(.1,.65,.5,1)' },
+      { offset: 0.79, left: entryLeft + 2 + 'px', top: Math.max(0, entryTop - 8) + 'px', transform: 'rotate(8deg)', easing: 'cubic-bezier(.3,0,.8,.4)' },
+      { offset: 1, left: targetLeft + 'px', top: targetTop + 'px', transform: 'rotate(0deg)' }
+    ], { duration: 980, fill: 'forwards' });
 
     try {
       await animation.finished;
@@ -94,7 +94,6 @@ export function mountDisplacementExperiment() {
       // A canceled animation should still leave the sample in a valid state.
     }
     animation.cancel();
-    rock.classList.remove('is-throwing');
     rock.style.left = savedPosition.left;
     rock.style.top = savedPosition.top;
     rock.style.bottom = savedPosition.bottom;
@@ -105,9 +104,12 @@ export function mountDisplacementExperiment() {
 
   function placeRock() {
     drag = null;
+    rock.classList.add('is-throwing');
     clearPosition();
     animating = false;
     setReading(true);
+    rock.getBoundingClientRect();
+    requestAnimationFrame(() => rock.classList.remove('is-throwing'));
   }
 
   function resetRock() {
