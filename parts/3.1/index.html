@@ -696,19 +696,19 @@
           </div>
         </header>
         <div class="quiz-body">
-          <p class="quiz-lead">小安記下鉛筆長度約 18 cm；小晴量同一支鉛筆，卻只記下「18」。先看兩筆紀錄，再回答問題。</p>
+            <p class="quiz-lead">小安要量一支鉛筆，並把結果交給同學比較。直尺每格 1 cm，筆尾落在 18 和 19 cm 之間。</p>
           <div class="quiz-question">
-            <p class="quiz-prompt">請選出最完整的判斷</p>
-            <h3 id="unit-quiz-question-title">怎麼判斷這兩筆長度紀錄是否可比較？</h3>
+            <p class="quiz-prompt">整合工具、刻度與誤差概念</p>
+            <h3 id="unit-quiz-question-title">哪一項測量流程最完整、可靠？</h3>
             <fieldset class="quiz-options" aria-labelledby="unit-quiz-question-title" style="border:0;padding:0;margin:0">
-              <legend class="sr-only">怎麼判斷這兩筆長度紀錄是否可比較？</legend>
-              <label class="quiz-choice"><input type="radio" name="length-record-check" value="complete"><span>「18」缺少單位，資料還不完整；還要確認量測條件是否一致。</span></label>
-              <label class="quiz-choice"><input type="radio" name="length-record-check" value="number"><span>只要量到相同數字，就可以直接比較。</span></label>
-              <label class="quiz-choice"><input type="radio" name="length-record-check" value="object"><span>量的是同一支鉛筆，所以紀錄不需要寫單位。</span></label>
+              <legend class="sr-only">哪一項測量流程最完整、可靠？</legend>
+              <label class="quiz-choice"><input type="radio" name="length-record-check" value="complete"><span>用直尺量長度，將 0 對準筆尖、視線正對刻度，在 18–19 cm 間估讀並記下數值與單位；重複量幾次取平均，起點或視角偏差另行修正。</span></label>
+              <label class="quiz-choice"><input type="radio" name="length-record-check" value="number"><span>用直尺從 0 量到筆尾，取最接近的整數 19 cm；工具和物體相同，單位與視角不影響比較。</span></label>
+              <label class="quiz-choice"><input type="radio" name="length-record-check" value="average"><span>用直尺估讀端點並重複取平均；起點偏移和斜視造成的差異，也會被平均消除。</span></label>
             </fieldset>
             <div class="quiz-actions">
               <button id="assessment-check-answer" class="action" type="button">查看解析</button>
-              <span class="quiz-helper">選好答案後，再查看哪些量測資訊必須能對照。</span>
+              <span class="quiz-helper">選好答案後，再查看完整量測流程如何降低誤差。</span>
             </div>
             <div class="quiz-feedback" id="assessment-feedback" role="status" aria-live="polite" hidden></div>
           </div>
@@ -1564,8 +1564,8 @@
         const isCorrect = selectedAnswer.value === "complete";
         feedback.dataset.result = isCorrect ? "correct" : "incorrect";
         feedback.textContent = isCorrect
-          ? "「18」沒有單位，無法確認它代表多少長度。比較前要記下物理量與單位，也要確認量測條件能對照。"
-          : "先確認兩筆紀錄代表相同的物理量，並有單位和可對照的量測條件；數字相同也不一定能直接比較。";
+          ? "直尺適合量長度；每格 1 cm 時，可在 18 和 19 之間估讀並記下數值與單位。起點對準 0、視線正對刻度能減少固定偏差；重複量測取平均能降低讀值波動，但不能消除起點或視角偏差。"
+          : "檢查量測工具和物理量、每格代表的長度、估讀與單位；起點和視線也要對準。重複取平均能降低讀值波動，卻不能修正固定偏差。";
       });
 
       const routeLinks = [...document.querySelectorAll(".route a[href^='#card-']")];
