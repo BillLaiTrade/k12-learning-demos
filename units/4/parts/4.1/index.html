@@ -144,13 +144,13 @@
     .solid-shape-scene figcaption { color:#52635a; font-size:.75rem; font-weight:750; }
     .solid-pressure-art { width:min(100%,390px); overflow:hidden; border:1px solid #dfe4dc; border-radius:12px; background:#f8f8f4; }
     .solid-pressure-art>img,.solid-pressure-art>svg { display:block; width:100%; height:auto; }
-    .hydraulic-ram { transition:transform 1.15s cubic-bezier(.25,.72,.32,1); }
-    .hydraulic-iron { transform-box:fill-box; transform-origin:center bottom; transition:transform 1.15s cubic-bezier(.25,.72,.32,1); }
-    .hydraulic-scene.is-pressed .hydraulic-ram { transform:translateY(50px); }
-    .hydraulic-scene.is-pressed .hydraulic-iron { transform:scale(2,.5); }
+    @keyframes hydraulic-ram-cycle { 0%,12% { transform:translateY(0); } 48%,64% { transform:translateY(50px); } 100% { transform:translateY(0); } }
+    @keyframes hydraulic-iron-cycle { 0%,12% { transform:scale(1,1); } 48%,100% { transform:scale(2,.5); } }
+    .hydraulic-iron { transform-box:fill-box; transform-origin:center bottom; }
+    .hydraulic-scene.is-pressing .hydraulic-ram { animation:hydraulic-ram-cycle 2.4s cubic-bezier(.35,.05,.25,1) both; }
+    .hydraulic-scene.is-pressing .hydraulic-iron { animation:hydraulic-iron-cycle 2.4s cubic-bezier(.35,.05,.25,1) both; }
     .hydraulic-outline { opacity:0; transition:opacity .25s ease; }
-    .hydraulic-scene.is-pressed .hydraulic-outline { opacity:.6; }
-    @media(prefers-reduced-motion:reduce) { .hydraulic-ram,.hydraulic-iron,.hydraulic-outline { transition:none; } }
+    .hydraulic-scene.is-pressing .hydraulic-outline { opacity:.6; }
     .solid-pressure-options { display:flex; flex-wrap:wrap; gap:7px; width:100%; justify-content:center; }
     .solid-pressure-choice { min-height:40px; padding:8px 13px; border:1px solid #aebdb3; border-radius:999px; background:#fff; color:#354c40; font:inherit; font-size:.83rem; font-weight:750; cursor:pointer; }
     .solid-pressure-choice[aria-pressed="true"] { border-color:#267257; background:#267257; color:#fff; }
@@ -651,7 +651,7 @@
     const cellExamples={
       "solid.shape":["換了容器，金屬塊的形狀會改變嗎？","同一個金屬塊分別放進不同形狀的容器，逐一觀察容器改變時，金屬塊的外形是否跟著改變。","切換三種情境示意圖，觀察同一金屬塊實際放進不同容器後的外形。","solid-shape","改變的是容器，金屬塊本身的形狀沒有跟著容器改變。固體通常有固定形狀。"],
       "solid.volume":["放進不同容器，金屬塊的體積會改變嗎？","觀察同一個金屬塊放進寬淺、較高和高窄的容器。容器形狀與可用空間不同，但金屬塊的長、寬、高仍各是 2 公分，所佔體積仍是 8 立方公分。","切換三種容器，直接比較金屬塊的尺寸與體積讀值是否改變。","solid-volume","容器大小和形狀改變，金屬塊的長、寬、高仍各是 2 公分，體積維持 8 立方公分。"],
-      "solid.compressibility":["直接按壓金屬塊，它會明顯變小嗎？","以金屬塊為例，比較未施力與手直接向下按壓時的情境。一般情況下，金屬塊的外形尺寸與所佔空間不會明顯縮小。","觀察左右兩個情境，說一說按壓前後金屬塊的外形與體積有沒有明顯改變。","solid-compress-note","按壓時金屬塊的外形尺寸和體積幾乎不變，表示固體在一般情況下不易壓縮；「不易」不代表任何情況下都完全不能壓縮。"],
+      "solid.compressibility":["直接按壓金屬塊，它會明顯變小嗎？","以金屬塊為例，比較未施力與手直接向下按壓時的情境。一般情況下，金屬塊的外形尺寸與所佔空間不會明顯縮小。","點選「用液壓機強力按壓」，觀察活塞下行、鐵塊變矮並向兩側展開；活塞回升後，鐵塊維持形變。","solid-compress-note","按壓時金屬塊的外形尺寸和體積幾乎不變，表示固體在一般情況下不易壓縮；「不易」不代表任何情況下都完全不能壓縮。"],
       "liquid.shape":["同一份水會貼合不同容器的形狀","容器形狀改變時，同一份水仍貼合容器底部與側壁；液面保持水平，水量不變。","切換容器形狀，觀察同一份水的外形與液面高度如何改變。","liquid-shape","同一份 200 mL 的水量不變；容器變窄時液面升高，水仍貼合容器底部，液面保持水平。"],
       "liquid.volume":["容器空間變大，水的體積也會變大嗎？","容器空間逐漸增加時，裡面的同一份水仍留在底部，體積大致維持 200 mL；新增空間不會被水填滿。","拖動滑桿逐漸擴大同一個容器，觀察水仍留在底部，水量讀值維持 200 mL。","liquid-volume","容器空間增加，水仍佔有約 200 mL；水的體積大致固定，不會像氣體一樣填滿新增空間。"],
       "liquid.compressibility":["推壓密閉水樣，體積幾乎不變","把注射筒裝滿水並封住出口，向內推活塞；活塞只能移動一小段，水樣體積仍約 50 mL。","抓住活塞末端把手向內推，觀察活塞的小幅移動與水樣讀值。","liquid-compress","活塞只能略微推入，水樣體積變化很小；液體在一般情況下不易壓縮。"],
@@ -909,10 +909,10 @@
         const mode=pressureModeButton.dataset.solidPressureMode,model=document.querySelector('[data-model="solid-compress"]'),hydraulic=mode==="hydraulic";
         const art=model.querySelector("[data-pressure-art]");
         art.setAttribute("aria-label",hydraulic?"液壓機活塞下壓並使金屬塊逐漸變矮、向兩側展開":"插畫示意：手掌按壓金屬塊，金屬塊保持原來外形");
-        if(hydraulic){art.innerHTML=hydraulicPressIllustration;requestAnimationFrame(()=>model.querySelector("[data-hydraulic-scene]").classList.add("is-pressed"));}
+        if(hydraulic){art.innerHTML=hydraulicPressIllustration;requestAnimationFrame(()=>requestAnimationFrame(()=>model.querySelector("[data-hydraulic-scene]").classList.add("is-pressing")));}
         else art.innerHTML='<img src="assets/solid-pressure-hand-illustration.webp?v=hand2" alt="手掌連同四根手指向下按住金屬立方體，鐵塊沒有明顯變形">';
         model.querySelector("[data-pressure-heading]").textContent=hydraulic?"液壓機下壓：觀察鐵塊形變":"一般手力：金屬塊沒有明顯變形";
-        model.querySelector("[data-pressure-copy]").textContent=hydraulic?"液壓機活塞下移，金屬塊隨之變矮並向兩側展開；外形在動畫中改變。":"手掌直接向下按壓時，金屬塊的外形尺寸沒有明顯改變。";
+        model.querySelector("[data-pressure-copy]").textContent=hydraulic?"按下後會播放完整循環：活塞下壓、鐵塊變矮並向兩側展開，接著活塞回升；鐵塊維持形變。":"手掌直接向下按壓時，金屬塊的外形尺寸沒有明顯改變。";
         const math=model.querySelector("[data-pressure-math]");math.hidden=!hydraulic;math.innerHTML=hydraulic?'<span>施壓前<br>2 × 2 × 2 = 8 cm³</span><b>＝</b><span>形變後<br>4 × 2 × 1 = 8 cm³</span>':"";
         model.querySelector("[data-model-readout]").textContent=hydraulic?"理想化示意：外形改變，幾何體積相同。":"一般情況下，固體不易壓縮。";
         document.querySelectorAll("#state-demo [data-solid-pressure-mode]").forEach(button=>button.setAttribute("aria-pressed",String(button===pressureModeButton)));
