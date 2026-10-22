@@ -258,6 +258,8 @@
     .correction-average-mean { position: absolute; z-index: 2; top: 13px; bottom: 24px; left: var(--mean-position); border-left: 2px solid var(--green); }
     .correction-average-mean::before { position: absolute; top: -3px; left: -4px; width: 6px; height: 6px; border-radius: 50%; background: var(--green); content: ""; }
     .correction-average-ticks { display: flex; justify-content: space-between; margin: -2px 4px 0; color: var(--muted); font-size: .72rem; }
+    .correction-average-legend { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 5px; color: var(--muted); font-size: .8rem; }
+    .correction-average-legend-line { width: 2px; height: 15px; background: var(--green); }
     .correction-average-value { margin-top: 8px; text-align: center; }
     .correction-average-value strong { color: var(--green); font-size: 1.1rem; }
     .correction-average-add { width: 100%; margin-top: 12px; }
@@ -613,6 +615,7 @@
                   <span class="correction-average-mean" id="correction-average-mean" aria-hidden="true"></span>
                 </div>
                 <div class="correction-average-ticks" aria-hidden="true"><span>17.5</span><span>18.0</span><span>18.5</span><span>19.0</span><span>19.5 cm</span></div>
+                <div class="correction-average-legend"><span class="correction-average-legend-line" aria-hidden="true"></span><span>深綠直線代表目前平均值</span></div>
                 <div class="correction-average-value" aria-live="polite">目前平均約 <strong id="correction-average-value">18.5 cm</strong></div>
                 <button type="button" class="action correction-average-add" id="correction-average-add">再量一次</button>
                 <p class="correction-average-explanation">每按一次，就加入一筆新讀值並更新平均。重複測量並取平均，是讓結果更穩定、更具代表性的方法之一。</p>
