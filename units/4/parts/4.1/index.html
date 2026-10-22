@@ -247,9 +247,11 @@
     .demo-result { margin:7px 0 0!important; color:#66502f!important; font-size:.82rem!important; }
     .particle-stage { min-height:216px; display:grid; place-items:center; padding:14px; border-radius:12px; background:#edf2eb; }
     .particle-box { position:relative; width:min(100%,380px); height:188px; overflow:hidden; border:2px solid #80968a; border-radius:13px; background:linear-gradient(180deg,#fffefa,#f7faf6); }
-    .particle-molecule { position:absolute; left:var(--x); top:var(--y); width:22px; height:22px; transform:translate(-50%,-50%); transition:left 1.2s ease-in-out,top 1.2s ease-in-out; will-change:left,top; }
+    .particle-molecule { position:absolute; left:var(--x); top:var(--y); width:22px; height:22px; transform:translate(-50%,-50%); transition:left .9s ease-in-out,top .9s ease-in-out; will-change:left,top; }
+    .particle-box[data-motion-state="liquid"] .particle-molecule { transition:left .88s ease-in-out,top .88s ease-in-out; }
+    .particle-box[data-motion-state="gas"] .particle-molecule { transition:left .5s linear,top .5s linear; }
     .particle-molecule svg { display:block; width:100%; height:100%; overflow:visible; }
-    .particle-molecule[data-vibrating="true"] { animation:solid-particle-vibration .42s ease-in-out infinite alternate; }
+    .particle-molecule[data-vibrating="true"] { animation:solid-particle-vibration .55s ease-in-out infinite alternate; }
     @keyframes solid-particle-vibration { from { transform:translate(calc(-50% + var(--vibrate-from-x)),calc(-50% + var(--vibrate-from-y))); } to { transform:translate(calc(-50% + var(--vibrate-to-x)),calc(-50% + var(--vibrate-to-y))); } }
     .particle-legend { display:flex; flex-wrap:wrap; justify-content:center; gap:8px 16px; margin:9px 0 0; color:#5c6d63; font-size:.76rem; }
     .particle-legend span { display:inline-flex; align-items:center; gap:5px; }
@@ -260,7 +262,7 @@
     .particle-comparison p { margin:0; color:#4f6159; font-size:.79rem; }
     .particle-model-note { margin:10px 0 0; padding:9px 12px; border-radius:9px; background:#eef3ea; color:#52635a; font-size:.78rem; }
     @media(max-width:680px) { .particle-stage { min-height:190px; padding:10px; } .particle-box { height:170px; } .particle-comparison { grid-template-columns:1fr; gap:6px; } .particle-comparison article { display:grid; grid-template-columns:58px 1fr; gap:8px; align-items:baseline; padding:8px 10px; } .particle-comparison h3 { margin:0; } }
-    @media(prefers-reduced-motion:reduce) { .particle-molecule { transition:none; } }
+    @media(prefers-reduced-motion:reduce) { .particle-molecule { transition:left 1.25s ease-in-out,top 1.25s ease-in-out; } .particle-box[data-motion-state="liquid"] .particle-molecule { transition:left 1.4s ease-in-out,top 1.4s ease-in-out; } .particle-box[data-motion-state="gas"] .particle-molecule { transition:left 1.15s linear,top 1.15s linear; } }
     .phase-visual { min-height:144px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(#e6f1f3,#f9f6ea); }
     .phase-water { display:grid; place-items:center; width:112px; height:90px; border:3px solid #6c8790; border-radius:12px 12px 20px 20px; background:linear-gradient(0deg,#79b6cc 55%,#f8fbfc 55%); color:#244a55; font-weight:850; }
     .property-grid,.class-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
@@ -318,7 +320,7 @@
       .section-top { align-items:start; flex-direction:column; gap:3px; }
     }
     @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
-    @media(prefers-reduced-motion:reduce) { .gas-particle { animation-duration:var(--gas-drift-duration,7s)!important; animation-delay:var(--gas-drift-delay,0s)!important; } .particle-molecule { transition:left .9s ease-in-out,top .9s ease-in-out!important; } .particle-molecule[data-vibrating="true"] { animation-duration:1.2s!important; } }
+    @media(prefers-reduced-motion:reduce) { .gas-particle { animation-duration:var(--gas-drift-duration,7s)!important; animation-delay:var(--gas-drift-delay,0s)!important; } .particle-molecule { transition:left 1.25s ease-in-out,top 1.25s ease-in-out!important; } .particle-box[data-motion-state="liquid"] .particle-molecule { transition:left 1.4s ease-in-out,top 1.4s ease-in-out!important; } .particle-box[data-motion-state="gas"] .particle-molecule { transition:left 1.15s linear,top 1.15s linear!important; } .particle-molecule[data-vibrating="true"] { animation-duration:1.1s!important; } }
     @media(prefers-reduced-motion:reduce) { .hand-press-scene.is-approaching .hand-approach { animation-duration:3.5s!important; } .hydraulic-scene.is-pressing .hydraulic-ram,.hydraulic-scene.is-pressing .hydraulic-iron { animation-duration:10s!important; } }
     /* 第二學習區塊沿用第三單元的綠色與中性色系。 */
     #s2.lesson-card { border-color:#d8e2da; background:#fffefa; }
@@ -492,7 +494,7 @@
               <article><h3>液態</h3><p>分子仍靠近，排列不固定，能緩慢換位流動。</p></article>
               <article><h3>氣態</h3><p>分子相距較遠，在容器空間中持續隨機移動。</p></article>
             </div>
-            <p class="particle-model-note">點選上方狀態，觀察同一批水分子逐漸改變排列。圓環只代表一個水分子，不表示它的真實形狀、顏色或大小。</p>
+            <p class="particle-model-note">點選上方狀態，觀察同一批水分子逐漸改變排列。圓環只是分子的簡化符號；動畫比較三態的排列與相對運動，位移和速度不按實際比例呈現。</p>
             <p class="next-hint">模型解釋了狀態差異；接著用蒸餾水追蹤升溫或冷卻時的變化。</p>
           </div>
         </section>
@@ -993,34 +995,46 @@
     };
     const particleDescriptions = {
       solid:"固態的水分子靠近並排列較整齊，只在原位附近振動。",
-      liquid:"液態的水分子仍靠近，但排列不固定，可以緩慢換位。",
-      gas:"氣態的水分子彼此較遠，在整個容器空間中持續隨機移動。"
+      liquid:"液態的水分子仍靠近、排列不固定，會在彼此間緩慢移動。",
+      gas:"氣態的水分子相距較遠，快速往各方向移動，遍布整個容器。"
     };
     const particleBox=document.getElementById("particle-box");
     const moleculeSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="#5f8e9f" stroke-width="2"/></svg>';
-    const molecules=particlePositions.solid.map((_,index)=>{const molecule=document.createElement("span");molecule.className="particle-molecule";molecule.innerHTML=moleculeSvg;molecule.setAttribute("aria-hidden","true");molecule.dataset.index=String(index);const vibrationX=3.8+(index%3)*.45,vibrationY=3+(index%2)*.4;molecule.style.setProperty("--vibrate-from-x",`${index%2?vibrationX:-vibrationX}px`);molecule.style.setProperty("--vibrate-to-x",`${index%2?-vibrationX:vibrationX}px`);molecule.style.setProperty("--vibrate-from-y",`${index%3?vibrationY:-vibrationY}px`);molecule.style.setProperty("--vibrate-to-y",`${index%3?-vibrationY:vibrationY}px`);molecule.style.animationDelay=`-${(index%6)*.07}s`;particleBox.append(molecule);return molecule;});
+    const molecules=particlePositions.solid.map((_,index)=>{const molecule=document.createElement("span");molecule.className="particle-molecule";molecule.innerHTML=moleculeSvg;molecule.setAttribute("aria-hidden","true");molecule.dataset.index=String(index);const vibrationX=1.05+(index%3)*.12,vibrationY=.72+(index%2)*.1;molecule.style.setProperty("--vibrate-from-x",`${index%2?vibrationX:-vibrationX}px`);molecule.style.setProperty("--vibrate-to-x",`${index%2?-vibrationX:vibrationX}px`);molecule.style.setProperty("--vibrate-from-y",`${index%3?vibrationY:-vibrationY}px`);molecule.style.setProperty("--vibrate-to-y",`${index%3?-vibrationY:vibrationY}px`);molecule.style.animationDelay=`-${(index%6)*.07}s`;particleBox.append(molecule);return molecule;});
     let particleState="solid",particleMotionTimer;
+    let particleLocations=particlePositions.solid.map(([x,y])=>[x,y]);
     const reducedParticleMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
-    function setParticlePositions(state,settle=false){
-      const positions=particlePositions[state];
+    const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+    function paintParticleLocations(){
       molecules.forEach((molecule,index)=>{
-        const [baseX,baseY]=positions[index];
-        const reducedFactor=reducedParticleMotion.matches ? 0.55 : 1;
-        const amplitude=(state==="solid"?0:state==="liquid"?3:6)*reducedFactor;
-        const jitterX=settle?0:(Math.random()*2-1)*amplitude;
-        const jitterY=settle?0:(Math.random()*2-1)*amplitude;
-        molecule.style.setProperty("--x",`${baseX+jitterX}%`);
-        molecule.style.setProperty("--y",`${baseY+jitterY}%`);
+        const [x,y]=particleLocations[index];
+        molecule.style.setProperty("--x",`${x}%`);
+        molecule.style.setProperty("--y",`${y}%`);
       });
+    }
+    function moveParticles(state){
+      if(state==="solid")return;
+      const factor=reducedParticleMotion.matches?0.55:1;
+      if(state==="liquid"){
+        particleLocations=particleLocations.map(([x,y])=>[
+          clamp(x+(Math.random()*2-1)*3.2*factor,18,84),
+          clamp(y+(Math.random()*2-1)*2.5*factor,57,94)
+        ]);
+      }else{
+        particleLocations=particleLocations.map(()=>[8+Math.random()*84,9+Math.random()*82]);
+      }
+      paintParticleLocations();
     }
     function drawParticles(state){
       particleState=state;
+      particleBox.dataset.motionState=state;
       molecules.forEach(molecule=>molecule.dataset.vibrating=String(state==="solid"));
-      setParticlePositions(state,true);
+      particleLocations=particlePositions[state].map(([x,y])=>[x,y]);
+      paintParticleLocations();
       particleBox.setAttribute("aria-label",`同一批 12 個水分子在${state==="solid"?"固態":state==="liquid"?"液態":"氣態"}中的排列與運動`);
       document.querySelectorAll("[data-particles]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.particles===state)));
       clearInterval(particleMotionTimer);
-      particleMotionTimer=setInterval(()=>setParticlePositions(particleState),reducedParticleMotion.matches?2600:1500);
+      if(state!=="solid")particleMotionTimer=setInterval(()=>moveParticles(particleState),state==="gas"?(reducedParticleMotion.matches?1300:520):(reducedParticleMotion.matches?1900:900));
     }
     document.querySelectorAll("[data-particles]").forEach(button=>button.addEventListener("click",()=>drawParticles(button.dataset.particles)));
     reducedParticleMotion.addEventListener?.("change",()=>drawParticles(particleState));
