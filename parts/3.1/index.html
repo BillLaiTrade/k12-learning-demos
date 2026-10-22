@@ -421,10 +421,10 @@
         <div class="route-inner">
           <a href="#card-01" aria-current="step"><b>01</b><span>測量，讓「很長」變成能比較的資料？</span></a>
           <a href="#card-02"><b>02</b><span>18 代表什麼？</span></a>
-          <a href="#card-03"><b>03</b><span>同一種工具，能量所有東西嗎？</span></a>
+          <a href="#card-03"><b>03</b><span>同一物體，為什麼讀值會差一點？</span></a>
           <a href="#card-04"><b>04</b><span>尺上的每一格，代表多少？</span></a>
           <a href="#card-05"><b>05</b><span>刻線之間，怎麼估讀？</span></a>
-          <a href="#card-06"><b>06</b><span>同一物體，為什麼讀值會差一點？</span></a>
+          <a href="#card-06"><b>06</b><span>同一種工具，能量所有東西嗎？</span></a>
           <a href="#card-07"><b>07</b><span>改善量測條件</span></a>
           <a href="#card-08" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
         </div>
@@ -494,34 +494,36 @@
             <div class="length-conversion-result" aria-live="polite"><strong id="length-conversion-value">18 cm</strong><span id="length-conversion-explanation">鉛筆跨過 18 個 1 cm 間隔。</span></div>
             <p class="length-conversion-equivalents">換算關係：1 cm = 10 mm；100 cm = 1 m。　<span id="length-conversion-equation">18 cm × 10 = 180 mm</span></p>
           </div>
-          <p class="next-hint">知道要量什麼之後，下一步是選擇合適的工具。</p>
+          <p class="next-hint">讀懂數值和單位後，接著觀察視角如何影響同一物體的讀值。</p>
         </div>
       </section>
 
       <section class="lesson-card" id="card-03">
-        <div class="card-side"><span class="card-number">03</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
+        <div class="card-side"><span class="card-number">03</span><h3>找出讀值差異</h3><span class="card-role">觀察角度會影響讀值</span></div>
         <div class="card-main">
-          <h2>同一種工具，能量所有東西嗎？</h2>
-          <p>工具要能測量指定的物理量，也要有適合的量程。切換量測任務和工具情境，觀察工具的用途及限制。</p>
-          <div class="select-row">
-            <label class="field">量測任務
-              <select id="tool-task"><option value="length">量這支鉛筆的長度（18 cm）</option><option value="mass">量這支鉛筆的質量（約 5 g）</option></select>
-            </label>
-            <label class="field">工具情境
-              <select id="tool-state"><option value="suitable">物理量和量程都合適</option><option value="wrong-quantity">工具測量的是另一種物理量</option><option value="short-range">工具量程不足</option></select>
-            </label>
+          <h2>同一物體，為什麼讀值會差一點？</h2>
+          <p>同一支鉛筆平行放在 20 cm 直尺上，筆尖對齊 0 cm。切換兩個預設視角，或拖曳 3D 場景自由旋轉；觀察筆尾投影落在哪個刻度，以及讀值如何改變。</p>
+          <div class="parallax-scene" id="parallax-scene">
+            <canvas id="pencil-3d-canvas" aria-hidden="true"></canvas>
+            <span id="pencil-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
+            <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、鉛筆和端點投影線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明觀察角度改變時，尺上的讀值可能改變。</canvas>
+            <div class="parallax-focus-overlay" aria-hidden="true">
+              <svg id="parallax-focus-connectors" class="parallax-focus-connectors" preserveAspectRatio="none"><path id="parallax-focus-path" class="parallax-focus-path"></path></svg>
+              <div id="parallax-focus-box" class="parallax-focus-box"></div>
+              <div class="parallax-magnifier">
+                <canvas id="parallax-magnifier-canvas" aria-hidden="true"></canvas>
+              </div>
+            </div>
+            <div class="view-presets" role="group" aria-label="預設觀察視角">
+              <button type="button" class="secondary" id="view-front" aria-pressed="true">正對尺面</button>
+              <button type="button" class="secondary" id="view-oblique" aria-pressed="false">斜向觀察</button>
+              <p class="view-help">拖曳畫面也可自由旋轉視角</p>
+            </div>
+            <div class="scene-caption"><p id="camera-caption" aria-live="polite">正對尺面：端點投影對準尺上刻度。</p></div>
+            <div class="scene-readout" aria-live="polite"><article><small>目前角度估讀</small><strong id="parallax-reading">約 18.4 cm</strong></article></div>
+            <p class="live-note" id="parallax-explanation">橘色輔助線的落點顯示目前角度的估讀。視角不同，視線落點可能改變，因此讀值也會產生差異，這稱為視差。</p>
           </div>
-          <div class="readout" aria-live="polite">
-            <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
-            <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，鉛筆長度落在尺的量程內。</span></article>
-          </div>
-          <div class="range-model" aria-label="工具量程與預期量值的視覺比較">
-            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">鉛筆長 18 cm，落在量程內</span></div>
-            <div class="range-track"><span id="range-fill"></span><i id="range-marker" aria-hidden="true"></i></div>
-            <div class="range-endpoints"><span>0</span><span id="range-maximum">30 cm</span></div>
-          </div>
-          <p class="live-note">量程是工具能測量的範圍。量程太短時，即使物理量相符，也無法完整量取；量程很大也不代表刻度一定夠細。</p>
-          <p class="next-hint">工具選定後，下一步是讀懂刻度的間距。</p>
+          <p class="next-hint">觀察視角如何影響讀值後，接著看看尺上的每一格代表多少。</p>
         </div>
       </section>
 
@@ -601,30 +603,29 @@
       </section>
 
       <section class="lesson-card" id="card-06">
-        <div class="card-side"><span class="card-number">06</span><h3>找出讀值差異</h3><span class="card-role">觀察角度會影響讀值</span></div>
+        <div class="card-side"><span class="card-number">06</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
         <div class="card-main">
-          <h2>同一物體，為什麼讀值會差一點？</h2>
-          <p>同一支鉛筆平行放在 20 cm 直尺上，筆尖對齊 0 cm。切換兩個預設視角，或拖曳 3D 場景自由旋轉；觀察筆尾投影落在哪個刻度，以及讀值如何改變。</p>
-          <div class="parallax-scene" id="parallax-scene">
-            <canvas id="pencil-3d-canvas" aria-hidden="true"></canvas>
-            <span id="pencil-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
-            <canvas id="parallax-canvas" tabindex="0" role="img" aria-label="可拖曳旋轉的三維場景，包含直尺、鉛筆和端點投影線。使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明觀察角度改變時，尺上的讀值可能改變。</canvas>
-            <div class="parallax-focus-overlay" aria-hidden="true">
-              <svg id="parallax-focus-connectors" class="parallax-focus-connectors" preserveAspectRatio="none"><path id="parallax-focus-path" class="parallax-focus-path"></path></svg>
-              <div id="parallax-focus-box" class="parallax-focus-box"></div>
-              <div class="parallax-magnifier">
-                <canvas id="parallax-magnifier-canvas" aria-hidden="true"></canvas>
-              </div>
-            </div>
-            <div class="view-presets" role="group" aria-label="預設觀察視角">
-              <button type="button" class="secondary" id="view-front" aria-pressed="true">正對尺面</button>
-              <button type="button" class="secondary" id="view-oblique" aria-pressed="false">斜向觀察</button>
-              <p class="view-help">拖曳畫面也可自由旋轉視角</p>
-            </div>
-            <div class="scene-caption"><p id="camera-caption" aria-live="polite">正對尺面：端點投影對準尺上刻度。</p></div>
-            <div class="scene-readout" aria-live="polite"><article><small>目前角度估讀</small><strong id="parallax-reading">約 18.4 cm</strong></article></div>
-            <p class="live-note" id="parallax-explanation">橘色輔助線的落點顯示目前角度的估讀。視角不同，視線落點可能改變，因此讀值也會產生差異，這稱為視差。</p>
+          <h2>同一種工具，能量所有東西嗎？</h2>
+          <p>工具要能測量指定的物理量，也要有適合的量程。切換量測任務和工具情境，觀察工具的用途及限制。</p>
+          <div class="select-row">
+            <label class="field">量測任務
+              <select id="tool-task"><option value="length">量這支鉛筆的長度（18 cm）</option><option value="mass">量這支鉛筆的質量（約 5 g）</option></select>
+            </label>
+            <label class="field">工具情境
+              <select id="tool-state"><option value="suitable">物理量和量程都合適</option><option value="wrong-quantity">工具測量的是另一種物理量</option><option value="short-range">工具量程不足</option></select>
+            </label>
           </div>
+          <div class="readout" aria-live="polite">
+            <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
+            <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，鉛筆長度落在尺的量程內。</span></article>
+          </div>
+          <div class="range-model" aria-label="工具量程與預期量值的視覺比較">
+            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">鉛筆長 18 cm，落在量程內</span></div>
+            <div class="range-track"><span id="range-fill"></span><i id="range-marker" aria-hidden="true"></i></div>
+            <div class="range-endpoints"><span>0</span><span id="range-maximum">30 cm</span></div>
+          </div>
+          <p class="live-note">量程是工具能測量的範圍。量程太短時，即使物理量相符，也無法完整量取；量程很大也不代表刻度一定夠細。</p>
+          <p class="next-hint">了解工具的用途與量程後，接著觀察如何改善讀值。</p>
         </div>
       </section>
 
