@@ -424,8 +424,8 @@
           <a href="#card-03"><b>03</b><span>尺上的每一格，代表多少？</span></a>
           <a href="#card-04"><b>04</b><span>同一物體，為什麼讀值會差一點？</span></a>
           <a href="#card-05"><b>05</b><span>刻線之間，怎麼估讀？</span></a>
-          <a href="#card-06"><b>06</b><span>同一種工具，能量所有東西嗎？</span></a>
-          <a href="#card-07"><b>07</b><span>改善量測條件</span></a>
+          <a href="#card-06"><b>06</b><span>改善量測條件</span></a>
+          <a href="#card-07"><b>07</b><span>同一種工具，能量所有東西嗎？</span></a>
           <a href="#card-08" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
         </div>
         <p class="next-hint">沿著學習順序閱讀、操作與觀察。</p>
@@ -603,34 +603,7 @@
       </section>
 
       <section class="lesson-card" id="card-06">
-        <div class="card-side"><span class="card-number">06</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
-        <div class="card-main">
-          <h2>同一種工具，能量所有東西嗎？</h2>
-          <p>工具要能測量指定的物理量，也要有適合的量程。切換量測任務和工具情境，觀察工具的用途及限制。</p>
-          <div class="select-row">
-            <label class="field">量測任務
-              <select id="tool-task"><option value="length">量這支鉛筆的長度（18 cm）</option><option value="mass">量這支鉛筆的質量（約 5 g）</option></select>
-            </label>
-            <label class="field">工具情境
-              <select id="tool-state"><option value="suitable">物理量和量程都合適</option><option value="wrong-quantity">工具測量的是另一種物理量</option><option value="short-range">工具量程不足</option></select>
-            </label>
-          </div>
-          <div class="readout" aria-live="polite">
-            <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
-            <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，鉛筆長度落在尺的量程內。</span></article>
-          </div>
-          <div class="range-model" aria-label="工具量程與預期量值的視覺比較">
-            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">鉛筆長 18 cm，落在量程內</span></div>
-            <div class="range-track"><span id="range-fill"></span><i id="range-marker" aria-hidden="true"></i></div>
-            <div class="range-endpoints"><span>0</span><span id="range-maximum">30 cm</span></div>
-          </div>
-          <p class="live-note">量程是工具能測量的範圍。量程太短時，即使物理量相符，也無法完整量取；量程很大也不代表刻度一定夠細。</p>
-          <p class="next-hint">了解工具的用途與量程後，接著觀察如何改善讀值。</p>
-        </div>
-      </section>
-
-      <section class="lesson-card" id="card-07">
-        <div class="card-side"><span class="card-number">07</span><h3>改善量測條件</h3><span class="card-role">自由調整，觀察讀值變化</span></div>
+        <div class="card-side"><span class="card-number">06</span><h3>改善量測條件</h3><span class="card-role">自由調整，觀察讀值變化</span></div>
         <div class="card-main">
           <h2>怎麼讓量測結果更可靠？</h2>
           <p>以下四種方法都能改善量測結果。點選一種，看看它能減少哪一類誤差，以及為什麼有效。</p>
@@ -705,6 +678,34 @@
             <h3 id="correction-result-title">四種方法可以搭配使用</h3>
             <p>刻度加密、對準起點、正對尺面與重複量測取平均，分別改善不同的誤差來源。平均能減少讀值波動，但不能消除固定的起點或視角偏差。</p>
           </aside>
+          <p class="next-hint">了解改善讀值的方法後，接著選擇合適的測量工具。</p>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="card-07">
+        <div class="card-side"><span class="card-number">07</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
+        <div class="card-main">
+          <h2>同一種工具，能量所有東西嗎？</h2>
+          <p>工具要能測量指定的物理量，也要有適合的量程。切換量測任務和工具情境，觀察工具的用途及限制。</p>
+          <div class="select-row">
+            <label class="field">量測任務
+              <select id="tool-task"><option value="length">量這支鉛筆的長度（18 cm）</option><option value="mass">量這支鉛筆的質量（約 5 g）</option></select>
+            </label>
+            <label class="field">工具情境
+              <select id="tool-state"><option value="suitable">物理量和量程都合適</option><option value="wrong-quantity">工具測量的是另一種物理量</option><option value="short-range">工具量程不足</option></select>
+            </label>
+          </div>
+          <div class="readout" aria-live="polite">
+            <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
+            <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，鉛筆長度落在尺的量程內。</span></article>
+          </div>
+          <div class="range-model" aria-label="工具量程與預期量值的視覺比較">
+            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">鉛筆長 18 cm，落在量程內</span></div>
+            <div class="range-track"><span id="range-fill"></span><i id="range-marker" aria-hidden="true"></i></div>
+            <div class="range-endpoints"><span>0</span><span id="range-maximum">30 cm</span></div>
+          </div>
+          <p class="live-note">量程是工具能測量的範圍。量程太短時，即使物理量相符，也無法完整量取；量程很大也不代表刻度一定夠細。</p>
+          <p class="next-hint">了解工具的用途與量程後，接著用單元小測安排測量步驟。</p>
         </div>
       </section>
 
