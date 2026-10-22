@@ -3,7 +3,7 @@ export function mountDensityExperimentQuiz() {
   if (!quiz) return;
 
   const samples = {
-    A: { mass: 54, before: 20, after: 38, image: 'assets/stone-model-a.webp' },
+    A: { mass: 54, before: 20, after: 35, image: 'assets/stone-model-a.webp' },
     B: { mass: 65, before: 20, after: 40, image: 'assets/stone-model-b.webp' }
   };
   const sampleCards = [...quiz.querySelectorAll('[data-experiment-sample]')];
