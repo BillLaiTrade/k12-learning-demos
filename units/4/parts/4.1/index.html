@@ -247,7 +247,7 @@
     .demo-result { margin:7px 0 0!important; color:#66502f!important; font-size:.82rem!important; }
     .particle-stage { min-height:216px; display:grid; place-items:center; padding:14px; border-radius:12px; background:#edf2eb; }
     .particle-box { position:relative; width:min(100%,380px); height:188px; overflow:hidden; border:2px solid #80968a; border-radius:13px; background:linear-gradient(180deg,#fffefa,#f7faf6); }
-    .particle-molecule { position:absolute; left:var(--x); top:var(--y); width:25px; height:22px; transform:translate(-50%,-50%); transition:left 1.2s ease-in-out,top 1.2s ease-in-out; will-change:left,top; }
+    .particle-molecule { position:absolute; left:var(--x); top:var(--y); width:22px; height:22px; transform:translate(-50%,-50%); transition:left 1.2s ease-in-out,top 1.2s ease-in-out; will-change:left,top; }
     .particle-molecule svg { display:block; width:100%; height:100%; overflow:visible; }
     .particle-legend { display:flex; flex-wrap:wrap; justify-content:center; gap:8px 16px; margin:9px 0 0; color:#5c6d63; font-size:.76rem; }
     .particle-legend span { display:inline-flex; align-items:center; gap:5px; }
@@ -478,19 +478,19 @@
         <section class="lesson-card" id="s3">
           <div class="card-side"><span class="card-number">03</span><h3>粒子模型</h3><span class="card-role">用模型解釋三態</span></div>
           <div class="card-main">
-            <h2>以水分子為例：水的三種狀態，粒子各自在做什麼？</h2>
-            <p>下面用同一批水分子（H₂O）比較固態、液態和氣態。三種狀態的水分子沒有換掉；改變的是它們的排列、間距和運動方式。</p>
+            <h2>以水為例：三種狀態的粒子有什麼不同？</h2>
+            <p>圖中每個圓環代表一個水分子。比較同一批水分子在固態、液態和氣態中的排列、間距和運動；狀態改變時，水分子仍是同一批。</p>
             <div class="choice-row" role="group" aria-label="選擇要觀察的水分子排列">
               <button type="button" data-particles="solid" aria-pressed="true">固態：冰</button><button type="button" data-particles="liquid" aria-pressed="false">液態水</button><button type="button" data-particles="gas" aria-pressed="false">氣態：水蒸氣</button>
             </div>
             <div class="particle-stage"><div class="particle-box" id="particle-box" role="img" aria-label="同一批水分子在固態中的排列與振動"></div></div>
-            <div class="particle-legend" aria-label="水分子模型圖例"><span><svg viewBox="0 0 30 24" aria-hidden="true"><path d="M14 12 7 5M14 12 7 19" stroke="#80968a" stroke-width="2"/><circle cx="16" cy="12" r="5.5" fill="#8eb5c1" stroke="#4c7d8c"/><circle cx="6" cy="4.5" r="3" fill="#f7fbfc" stroke="#718b94"/><circle cx="6" cy="19.5" r="3" fill="#f7fbfc" stroke="#718b94"/></svg>一個水分子（H₂O）</span><span>模型顯示同一批 12 個水分子</span></div>
+            <div class="particle-legend" aria-label="水分子模型圖例"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="#5f8e9f" stroke-width="2"/></svg>一個水分子（簡化符號）</span><span>模型顯示同一批 12 個水分子</span></div>
             <div class="particle-comparison" aria-label="三種狀態的粒子特徵">
               <article><h3>固態</h3><p>分子靠近、排列較整齊，在原位附近振動。</p></article>
               <article><h3>液態</h3><p>分子仍靠近，排列不固定，能緩慢換位流動。</p></article>
               <article><h3>氣態</h3><p>分子相距較遠，在容器空間中持續隨機移動。</p></article>
             </div>
-            <p class="particle-model-note">點選上方狀態，觀察同一批水分子逐漸改變排列。圖中的分子形狀與大小是簡化模型，不按實際比例繪製。</p>
+            <p class="particle-model-note">點選上方狀態，觀察同一批水分子逐漸改變排列。圓環只代表一個水分子，不表示它的真實形狀、顏色或大小。</p>
             <p class="next-hint">模型解釋了狀態差異；接著用蒸餾水追蹤升溫或冷卻時的變化。</p>
           </div>
         </section>
@@ -995,7 +995,7 @@
       gas:"氣態的水分子彼此較遠，在整個容器空間中持續隨機移動。"
     };
     const particleBox=document.getElementById("particle-box");
-    const moleculeSvg='<svg viewBox="0 0 30 24" aria-hidden="true"><path d="M14 12 7 5M14 12 7 19" stroke="#80968a" stroke-width="2"/><circle cx="16" cy="12" r="5.5" fill="#8eb5c1" stroke="#4c7d8c" stroke-width="1.2"/><circle cx="6" cy="4.5" r="3" fill="#f7fbfc" stroke="#718b94" stroke-width="1.2"/><circle cx="6" cy="19.5" r="3" fill="#f7fbfc" stroke="#718b94" stroke-width="1.2"/></svg>';
+    const moleculeSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="#5f8e9f" stroke-width="2"/></svg>';
     const molecules=particlePositions.solid.map((_,index)=>{const molecule=document.createElement("span");molecule.className="particle-molecule";molecule.innerHTML=moleculeSvg;molecule.setAttribute("aria-hidden","true");molecule.dataset.index=String(index);particleBox.append(molecule);return molecule;});
     let particleState="solid",particleMotionTimer;
     const reducedParticleMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
