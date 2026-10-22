@@ -421,8 +421,8 @@
         <div class="route-inner">
           <a href="#card-01" aria-current="step"><b>01</b><span>測量，讓「很長」變成能比較的資料？</span></a>
           <a href="#card-02"><b>02</b><span>18 代表什麼？</span></a>
-          <a href="#card-03"><b>03</b><span>同一物體，為什麼讀值會差一點？</span></a>
-          <a href="#card-04"><b>04</b><span>尺上的每一格，代表多少？</span></a>
+          <a href="#card-03"><b>03</b><span>尺上的每一格，代表多少？</span></a>
+          <a href="#card-04"><b>04</b><span>同一物體，為什麼讀值會差一點？</span></a>
           <a href="#card-05"><b>05</b><span>刻線之間，怎麼估讀？</span></a>
           <a href="#card-06"><b>06</b><span>同一種工具，能量所有東西嗎？</span></a>
           <a href="#card-07"><b>07</b><span>改善量測條件</span></a>
@@ -494,12 +494,38 @@
             <div class="length-conversion-result" aria-live="polite"><strong id="length-conversion-value">18 cm</strong><span id="length-conversion-explanation">鉛筆跨過 18 個 1 cm 間隔。</span></div>
             <p class="length-conversion-equivalents">換算關係：1 cm = 10 mm；100 cm = 1 m。　<span id="length-conversion-equation">18 cm × 10 = 180 mm</span></p>
           </div>
-          <p class="next-hint">讀懂數值和單位後，接著觀察視角如何影響同一物體的讀值。</p>
+          <p class="next-hint">讀懂數值和單位後，接著看看尺上的每一格代表多少。</p>
         </div>
       </section>
 
       <section class="lesson-card" id="card-03">
-        <div class="card-side"><span class="card-number">03</span><h3>找出讀值差異</h3><span class="card-role">觀察角度會影響讀值</span></div>
+        <div class="card-side"><span class="card-number">03</span><h3>讀取刻度</h3><span class="card-role">觀察最小刻度</span></div>
+        <div class="card-main">
+          <h2>尺上的每一格，代表多少？</h2>
+          <p>調整整把尺要分成幾等分，觀察刻線如何變密或變疏，以及每格代表多長；尺長與鉛筆端點保持不變。</p>
+          <div class="control-panel">
+            <div class="ruler-caption"><span>同一把 30 cm 直尺</span><span id="division-count-label">整把尺分成 15 等分</span></div>
+            <label class="field" for="division-count">調整整把尺的等分數
+              <input id="division-count" type="range" min="1" max="30" step="1" value="15" aria-label="調整三十公分直尺分成幾等分">
+            </label>
+            <p class="live-note" id="division-model-note">尺長固定為 30 cm，橘色標記固定在鉛筆右端；調整等分數只會改變刻線密度與每格長度。</p>
+            <p class="live-note" id="division-note" aria-live="polite">30 cm ÷ 15 格 = 2 cm／格。</p>
+          </div>
+          <div class="division-visual" aria-label="完整三十公分直尺的等分示意；鉛筆端點位置固定">
+            <svg id="division-ruler" viewBox="0 0 520 140" role="img" aria-label="零至三十公分直尺，分成十五等分，每格兩公分；鉛筆固定長十八點二公分，左端對齊零刻度">
+              <image href="assets/pencil-photo.webp" x="20" y="15" width="291.2" height="15.46" preserveAspectRatio="none"></image>
+              <rect x="20" y="52" width="480" height="50" rx="6" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
+              <g id="division-ticks"></g><path id="division-endpoint" d="M311.2 32v78" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
+              <text id="division-unit-label" x="20" y="126" fill="#26383a" font-size="13">0 cm</text><text id="division-unit-label-end" x="500" y="126" text-anchor="end" fill="#26383a" font-size="13">30 cm</text>
+            </svg>
+            <p id="division-visual-note" aria-live="polite">鉛筆長度固定為 18 cm，左端對齊 0；右端對齊橘色標記。調整等分數不會改變鉛筆。</p>
+          </div>
+          <div class="fact"><p>同一把 30 cm 直尺可以有不同的分格方式；每格的長度由 30 cm 除以等分數決定。讀值時先確認刻度間距，再判斷端點落在哪裡。</p></div>
+          <p class="next-hint">知道每格代表多少後，接著觀察視角如何影響讀值。</p>
+      </section>
+
+      <section class="lesson-card" id="card-04">
+        <div class="card-side"><span class="card-number">04</span><h3>找出讀值差異</h3><span class="card-role">觀察角度會影響讀值</span></div>
         <div class="card-main">
           <h2>同一物體，為什麼讀值會差一點？</h2>
           <p>同一支鉛筆平行放在 20 cm 直尺上，筆尖對齊 0 cm。切換兩個預設視角，或拖曳 3D 場景自由旋轉；觀察筆尾投影落在哪個刻度，以及讀值如何改變。</p>
@@ -523,33 +549,7 @@
             <div class="scene-readout" aria-live="polite"><article><small>目前角度估讀</small><strong id="parallax-reading">約 18.4 cm</strong></article></div>
             <p class="live-note" id="parallax-explanation">橘色輔助線的落點顯示目前角度的估讀。視角不同，視線落點可能改變，因此讀值也會產生差異，這稱為視差。</p>
           </div>
-          <p class="next-hint">觀察視角如何影響讀值後，接著看看尺上的每一格代表多少。</p>
-        </div>
-      </section>
-
-      <section class="lesson-card" id="card-04">
-        <div class="card-side"><span class="card-number">04</span><h3>讀取刻度</h3><span class="card-role">觀察最小刻度</span></div>
-        <div class="card-main">
-          <h2>尺上的每一格，代表多少？</h2>
-          <p>調整整把尺要分成幾等分，觀察刻線如何變密或變疏，以及每格代表多長；尺長與鉛筆端點保持不變。</p>
-          <div class="control-panel">
-            <div class="ruler-caption"><span>同一把 30 cm 直尺</span><span id="division-count-label">整把尺分成 15 等分</span></div>
-            <label class="field" for="division-count">調整整把尺的等分數
-              <input id="division-count" type="range" min="1" max="30" step="1" value="15" aria-label="調整三十公分直尺分成幾等分">
-            </label>
-            <p class="live-note" id="division-model-note">尺長固定為 30 cm，橘色標記固定在鉛筆右端；調整等分數只會改變刻線密度與每格長度。</p>
-            <p class="live-note" id="division-note" aria-live="polite">30 cm ÷ 15 格 = 2 cm／格。</p>
-          </div>
-          <div class="division-visual" aria-label="完整三十公分直尺的等分示意；鉛筆端點位置固定">
-            <svg id="division-ruler" viewBox="0 0 520 140" role="img" aria-label="零至三十公分直尺，分成十五等分，每格兩公分；鉛筆固定長十八點二公分，左端對齊零刻度">
-              <image href="assets/pencil-photo.webp" x="20" y="15" width="291.2" height="15.46" preserveAspectRatio="none"></image>
-              <rect x="20" y="52" width="480" height="50" rx="6" fill="#f2dfa9" stroke="#a99255" stroke-width="2"></rect>
-              <g id="division-ticks"></g><path id="division-endpoint" d="M311.2 32v78" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"></path>
-              <text id="division-unit-label" x="20" y="126" fill="#26383a" font-size="13">0 cm</text><text id="division-unit-label-end" x="500" y="126" text-anchor="end" fill="#26383a" font-size="13">30 cm</text>
-            </svg>
-            <p id="division-visual-note" aria-live="polite">鉛筆長度固定為 18 cm，左端對齊 0；右端對齊橘色標記。調整等分數不會改變鉛筆。</p>
-          </div>
-          <div class="fact"><p>同一把 30 cm 直尺可以有不同的分格方式；每格的長度由 30 cm 除以等分數決定。讀值時先確認刻度間距，再判斷端點落在哪裡。</p></div>
+          <p class="next-hint">了解視角如何影響讀值後，接著練習估讀相鄰刻線之間的位置。</p>
         </div>
       </section>
 
