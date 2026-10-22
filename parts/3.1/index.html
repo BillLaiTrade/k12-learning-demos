@@ -246,6 +246,8 @@
     .correction-angle-detail[hidden] { display: none; }
     .correction-angle-detail p { display: grid; gap: 2px; margin: 0; }
     .correction-angle-detail p span { color: var(--muted); font-size: .85rem; }
+    .correction-origin-principle { margin: 10px 0 0; padding: 9px 11px; border-left: 3px solid var(--green); border-radius: 0 9px 9px 0; background: #eef5ef; color: var(--ink); font-size: .88rem; }
+    .correction-origin-principle strong { color: var(--green); }
     .correction-workspace[data-control="average"] .correction-adjustment { margin: 12px 0 0; padding: 0; border: 0; background: transparent; }
     .correction-average-panel { margin-top: 10px; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #fffefa; }
     .correction-average-header { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
@@ -595,7 +597,8 @@
                 <button type="button" class="secondary" data-correction-density="1" aria-pressed="false">較密・每格 1 cm</button>
               </div>
               <div id="correction-origin-controls" hidden>
-                <p id="correction-origin-control-instructions">點擊並拖曳鉛筆可旋轉場景；拖曳尺面可移動零刻度，但 0 刻度不能越過筆尖，否則起點沒有刻度可讀。若未對準，需用終點讀值減去起點讀值。</p>
+                <p id="correction-origin-control-instructions">點擊並拖曳鉛筆可旋轉場景；拖曳尺面可移動零刻度，但 0 刻度不能越過筆尖，否則起點沒有刻度可讀。</p>
+                <p class="correction-origin-principle"><strong>較方便的做法：</strong>起點未對準時，仍可用「終點讀值－起點讀值」算出長度；每次先將 0 對準筆尖，就能直接讀取，也讓各次量測基準一致，更方便比較。</p>
               </div>
               <div id="correction-angle-controls" hidden>
                 <div class="correction-view-controls" role="group" aria-label="預設觀察視角">
