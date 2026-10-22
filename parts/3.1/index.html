@@ -583,7 +583,7 @@
               <button type="button" class="secondary" data-correction-control="average" aria-pressed="false"><strong>重複量測</strong><small>取平均降波動</small></button>
             </div>
             <h3 id="correction-stage-title">調整刻度密度</h3>
-            <p id="correction-stage-prompt">端點落在相距很遠的刻線之間，讀值範圍較大。把刻度調密，觀察範圍如何縮小。</p>
+            <p id="correction-stage-prompt">端點落在相距很遠的刻線之間，讀值範圍較大。拖動滑桿逐步加密刻度，觀察範圍如何縮小。</p>
             <div class="correction-parallax-scene" id="correction-parallax-scene" data-magnifier="false">
               <canvas id="correction-pencil-3d-canvas" aria-hidden="true"></canvas>
               <canvas id="correction-parallax-canvas" tabindex="0" role="img" aria-label="可在鉛筆或尺面上拖曳操作的三維場景；使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明。</canvas>
@@ -595,9 +595,12 @@
               </div>
             </div>
             <div class="correction-adjustment">
-              <div id="correction-density-controls" class="correction-choice-row" role="group" aria-label="選擇直尺刻度密度">
-                <button type="button" class="secondary" data-correction-density="5" aria-pressed="true">較疏・每格 5 cm</button>
-                <button type="button" class="secondary" data-correction-density="1" aria-pressed="false">較密・每格 1 cm</button>
+              <div id="correction-density-controls" class="control-panel" aria-label="調整直尺刻度密度">
+                <div class="range-model-head"><strong>直尺每格長度</strong><span id="correction-density-value">每格 5 cm</span></div>
+                <label class="field" for="correction-density-slider">拖動滑桿調整刻度疏密
+                  <input id="correction-density-slider" type="range" min="1" max="5" step="1" value="5" aria-label="調整直尺每格刻度長度">
+                </label>
+                <div class="range-endpoints"><span>較密・1 cm／格</span><span>較疏・5 cm／格</span></div>
               </div>
               <div id="correction-origin-controls" hidden>
                 <p id="correction-origin-control-instructions">將游標移到尺面，出現 ↔ 後左右拖曳來移動零刻度；觸控螢幕可直接在尺面左右拖曳。點擊並拖曳鉛筆可旋轉場景；0 刻度不能越過筆尖，否則起點沒有刻度可讀。</p>
@@ -1227,7 +1230,7 @@
       const correctionCanvas = document.querySelector("#correction-parallax-canvas");
       const correctionScene = document.querySelector("#correction-parallax-scene");
       const correctionModeButtons = [...document.querySelectorAll("[data-correction-control]")];
-      const correctionDensityButtons = [...document.querySelectorAll("[data-correction-density]")];
+      const correctionDensitySlider = document.querySelector("#correction-density-slider");
       let correctionMode = "density";
       let correctionTickInterval = 5;
       let correctionRulerOffset = 0;
@@ -1334,14 +1337,15 @@
         if (sceneActive) window.setPencil3DCorrectionView?.(correctionView);
         const reading = document.querySelector("#correction-readout-value");
         if (correctionMode === "density") {
-          correctionCanvas.setAttribute("aria-label", "可拖曳場景旋轉鉛筆與直尺；使用下方按鈕切換刻度密度。");
+          correctionCanvas.setAttribute("aria-label", "可拖曳場景旋轉鉛筆與直尺；使用下方滑桿調整刻度密度。");
           const low = Math.floor(measuredLength / correctionTickInterval) * correctionTickInterval;
           const high = low + correctionTickInterval;
           document.querySelector("#correction-readout-label").textContent = `每格 ${correctionTickInterval} cm・估讀範圍`;
           reading.textContent = `${correctionDisplay(low)}–${correctionDisplay(high)} cm`;
           document.querySelector("#correction-stage-title").textContent = "調整刻度密度";
-          document.querySelector("#correction-stage-prompt").textContent = "刻度每格越小，端點落在刻線之間的範圍越小，估讀的不確定性也會降低。選擇較疏或較密的直尺。";
-          document.querySelector("#correction-mode-instructions").textContent = correctionTickInterval === 1 ? "每格 1 cm，估讀範圍縮小了。可拖曳場景旋轉觀看；起點和視角也能分別調整。" : "每格 5 cm，端點落在哪一小段還不清楚；可拖曳場景旋轉觀看，再試試較密的刻度。";
+          document.querySelector("#correction-stage-prompt").textContent = "刻度每格越小，端點落在刻線之間的範圍越小，估讀的不確定性也會降低。拖動滑桿逐步加密刻度。";
+          document.querySelector("#correction-mode-instructions").textContent = "刻度越密，估讀範圍越小。";
+          document.querySelector("#correction-density-value").textContent = `每格 ${correctionTickInterval} cm`;
         } else if (correctionMode === "origin") {
           const gap = Math.abs(startReading);
           document.querySelector("#correction-magnifier-title").textContent = "筆尖與零刻度放大";
@@ -1375,13 +1379,13 @@
         }
         correctionScene.dataset.control = correctionMode;
         correctionModeButtons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.correctionControl === correctionMode)));
-        correctionDensityButtons.forEach((button) => button.setAttribute("aria-pressed", String(Number(button.dataset.correctionDensity) === correctionTickInterval)));
+        correctionDensitySlider.value = String(correctionTickInterval);
         document.querySelector("#correction-density-controls").hidden = correctionMode !== "density";
         document.querySelector("#correction-origin-controls").hidden = correctionMode !== "origin";
         document.querySelector("#correction-angle-controls").hidden = correctionMode !== "angle";
         document.querySelector("#correction-view-front").setAttribute("aria-pressed", String(correctionCameraPreset === "front"));
         document.querySelector("#correction-view-oblique").setAttribute("aria-pressed", String(correctionCameraPreset === "oblique"));
-        document.querySelector("#correction-density-status").textContent = `${correctionTickInterval === 1 ? "較密" : "較疏"}・每格 ${correctionTickInterval} cm`;
+        document.querySelector("#correction-density-status").textContent = `每格 ${correctionTickInterval} cm`;
         document.querySelector("#correction-origin-status").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "已對準 0" : `偏移 ${formatCentimeters(-correctionRulerOffset)} cm`;
         document.querySelector("#correction-angle-status").textContent = correctionCameraPreset === "front" ? "正對尺面" : correctionCameraPreset === "oblique" ? "斜向觀察" : "自由旋轉";
       };
@@ -1408,10 +1412,10 @@
         readings.scrollTop = readings.scrollHeight;
       });
       renderCorrectionAverage();
-      correctionDensityButtons.forEach((button) => button.addEventListener("click", () => {
-        correctionTickInterval = Number(button.dataset.correctionDensity);
+      correctionDensitySlider.addEventListener("input", () => {
+        correctionTickInterval = Number(correctionDensitySlider.value);
         renderCorrectionScene();
-      }));
+      });
       document.querySelector("#correction-view-front").addEventListener("click", () => {
         correctionCameraPreset = "front";
         correctionCameraState.yaw = defaultCameraYaw;
