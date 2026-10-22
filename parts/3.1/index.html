@@ -241,6 +241,10 @@
     .correction-parallax-scene[data-control="origin"] #correction-parallax-detail { position: absolute; top: 10px; right: 10px; z-index: 3; width: min(250px, calc(100% - 20px)); margin: 0; }
     .correction-parallax-scene[data-control="origin"] #correction-parallax-canvas { margin-top: 210px; }
     .correction-parallax-scene[data-control="origin"] #correction-pencil-3d-canvas { top: 222px; }
+    .correction-origin-drag-hint { position: absolute; top: 268px; left: 50%; z-index: 4; display: flex; align-items: center; gap: 6px; padding: 5px 9px; transform: translateX(-50%); border: 1px solid #b8d0c2; border-radius: 999px; background: #fffefa; color: var(--green); font-size: .78rem; font-weight: 750; white-space: nowrap; box-shadow: 0 2px 8px rgb(42 43 29 / 10%); pointer-events: none; }
+    .correction-origin-drag-hint span { font-size: 1rem; line-height: 1; }
+    .correction-origin-drag-hint::after { position: absolute; top: 100%; left: 50%; width: 2px; height: 14px; background: #176b53; content: ""; }
+    .correction-origin-drag-hint::before { position: absolute; top: calc(100% + 11px); left: calc(50% - 4px); border: 4px solid transparent; border-top-color: #176b53; content: ""; }
     #correction-parallax-focus-overlay { display: none; }
     .correction-angle-detail { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 10px 12px; border: 1px solid #e3c38e; border-radius: 14px; background: #fffefa; }
     .correction-angle-detail[hidden] { display: none; }
@@ -585,6 +589,7 @@
             <div class="correction-parallax-scene" id="correction-parallax-scene" data-magnifier="false">
               <canvas id="correction-pencil-3d-canvas" aria-hidden="true"></canvas>
               <canvas id="correction-parallax-canvas" tabindex="0" role="img" aria-label="可在鉛筆或尺面上拖曳操作的三維場景；使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明。</canvas>
+              <div class="correction-origin-drag-hint" id="correction-origin-drag-hint" hidden><span aria-hidden="true">↔</span>游標移到尺面左右拖曳</div>
               <p id="correction-parallax-fallback" hidden>目前瀏覽器無法顯示 3D 場景，請使用支援 WebGL 的瀏覽器。</p>
               <div class="correction-angle-detail" id="correction-parallax-detail" hidden>
                 <p><strong id="correction-magnifier-title">鉛筆右端放大</strong><span id="correction-magnifier-range">尺面 18–19 cm 附近</span></p>
@@ -597,7 +602,7 @@
                 <button type="button" class="secondary" data-correction-density="1" aria-pressed="false">較密・每格 1 cm</button>
               </div>
               <div id="correction-origin-controls" hidden>
-                <p id="correction-origin-control-instructions">點擊並拖曳鉛筆可旋轉場景；拖曳尺面可移動零刻度，但 0 刻度不能越過筆尖，否則起點沒有刻度可讀。</p>
+                <p id="correction-origin-control-instructions">將游標移到尺面，出現 ↔ 後左右拖曳來移動零刻度；觸控螢幕可直接在尺面左右拖曳。點擊並拖曳鉛筆可旋轉場景；0 刻度不能越過筆尖，否則起點沒有刻度可讀。</p>
                 <p class="correction-origin-principle"><strong>較方便的做法：</strong>起點未對準時，仍可用「終點讀值－起點讀值」算出長度；每次先將 0 對準筆尖，就能直接讀取，也讓各次量測基準一致，更方便比較。</p>
               </div>
               <div id="correction-angle-controls" hidden>
@@ -1228,6 +1233,7 @@
       let correctionMode = "density";
       let correctionTickInterval = 5;
       let correctionRulerOffset = 0;
+      let correctionOriginInitialized = false;
       const correctionAverageMeasurements = [18.4, 18.5, 18.3, 18.6, 18.4];
       let correctionAverageTotal = correctionAverageMeasurements.reduce((total, value) => total + value, 0);
       const correctionCameraState = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
@@ -1282,6 +1288,7 @@
         document.querySelector("#correction-average-controls").hidden = correctionMode !== "average";
         document.querySelector("#correction-live-readout").hidden = correctionMode === "average";
         document.querySelector("#correction-mode-instructions").hidden = correctionMode === "average";
+        document.querySelector("#correction-origin-drag-hint").hidden = correctionMode !== "origin";
         correctionScene.dataset.magnifier = String(correctionMode === "angle" || correctionMode === "origin");
         const bounds = correctionCanvas.getBoundingClientRect();
         if (sceneActive && (!bounds.width || !bounds.height)) return;
@@ -1383,6 +1390,10 @@
       };
       correctionModeButtons.forEach((button) => button.addEventListener("click", () => {
         correctionMode = button.dataset.correctionControl;
+        if (correctionMode === "origin" && !correctionOriginInitialized) {
+          correctionRulerOffset = -1;
+          correctionOriginInitialized = true;
+        }
         renderCorrectionScene();
         if (correctionMode === "origin") document.querySelector("#correction-parallax-detail").scrollIntoView({ behavior: "smooth", block: "center" });
       }));
