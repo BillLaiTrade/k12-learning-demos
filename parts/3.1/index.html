@@ -227,6 +227,9 @@
     .correction-workspace { margin: 16px 0; padding: 16px; border: 1px solid #cbded0; border-radius: 20px; background: #e3eee5; box-shadow: var(--shadow); }
     .correction-workspace h3 { margin: 0 0 4px; font-size: 1rem; }
     .correction-workspace > p { margin: 0 0 12px; color: var(--muted); font-size: .9rem; }
+    .correction-result { margin: 14px 0 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #fffefa; }
+    .correction-result h3 { margin: 0 0 6px; font-size: 1rem; }
+    .correction-result p { margin: 0; color: var(--muted); }
     .correction-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
     .correction-options button { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 3px; padding: 10px; text-align: left; }
     .correction-options button[aria-pressed="true"] { color: #fff; border-color: var(--green); background: var(--green); }
@@ -625,11 +628,11 @@
                 <strong id="correction-readout-value">15–20 cm</strong>
               </div>
             </div>
-            <div class="correction-result" id="correction-result" aria-live="polite">
-              <p><strong id="correction-combined-title">四種方法分別改善不同的誤差來源。</strong></p>
-              <p id="correction-combined-note">刻度加密、對準起點、正對尺面與重複量測取平均，可以搭配使用；平均不能消除固定的起點或視角偏差。</p>
-            </div>
           </div>
+          <aside class="correction-result" aria-labelledby="correction-result-title">
+            <h3 id="correction-result-title">四種方法可以搭配使用</h3>
+            <p>刻度加密、對準起點、正對尺面與重複量測取平均，分別改善不同的誤差來源。平均能減少讀值波動，但不能消除固定的起點或視角偏差。</p>
+          </aside>
         </div>
       </section>
 
@@ -1374,8 +1377,6 @@
         document.querySelector("#correction-density-status").textContent = `${correctionTickInterval === 1 ? "較密" : "較疏"}・每格 ${correctionTickInterval} cm`;
         document.querySelector("#correction-origin-status").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "已對準 0" : `偏移 ${formatCentimeters(-correctionRulerOffset)} cm`;
         document.querySelector("#correction-angle-status").textContent = correctionCameraPreset === "front" ? "正對尺面" : correctionCameraPreset === "oblique" ? "斜向觀察" : "自由旋轉";
-        document.querySelector("#correction-combined-title").textContent = "四種方法分別改善不同的誤差來源。";
-        document.querySelector("#correction-combined-note").textContent = "刻度加密、對準起點、正對尺面與重複量測取平均，可以搭配使用；平均不能消除固定的起點或視角偏差。";
       };
       correctionModeButtons.forEach((button) => button.addEventListener("click", () => {
         correctionMode = button.dataset.correctionControl;
