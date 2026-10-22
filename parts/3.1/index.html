@@ -241,10 +241,8 @@
     .correction-parallax-scene[data-control="origin"] #correction-parallax-detail { position: absolute; top: 10px; right: 10px; z-index: 3; width: min(250px, calc(100% - 20px)); margin: 0; }
     .correction-parallax-scene[data-control="origin"] #correction-parallax-canvas { margin-top: 210px; }
     .correction-parallax-scene[data-control="origin"] #correction-pencil-3d-canvas { top: 222px; }
-    .correction-origin-drag-hint { position: absolute; top: 268px; left: 50%; z-index: 4; display: flex; align-items: center; gap: 6px; padding: 5px 9px; transform: translateX(-50%); border: 1px solid #b8d0c2; border-radius: 999px; background: #fffefa; color: var(--green); font-size: .78rem; font-weight: 750; white-space: nowrap; box-shadow: 0 2px 8px rgb(42 43 29 / 10%); pointer-events: none; }
-    .correction-origin-drag-hint span { font-size: 1rem; line-height: 1; }
-    .correction-origin-drag-hint::after { position: absolute; top: 100%; left: 50%; width: 2px; height: 14px; background: #176b53; content: ""; }
-    .correction-origin-drag-hint::before { position: absolute; top: calc(100% + 11px); left: calc(50% - 4px); border: 4px solid transparent; border-top-color: #176b53; content: ""; }
+    .correction-origin-drag-hint { position: absolute; top: 296px; left: 50%; z-index: 4; display: flex; align-items: center; gap: 4px; padding: 2px 6px; transform: translateX(-50%); border: 1px solid #b8d0c2; border-radius: 999px; background: rgb(255 254 250 / 88%); color: var(--green); font-size: .68rem; font-weight: 750; white-space: nowrap; box-shadow: 0 1px 4px rgb(42 43 29 / 10%); pointer-events: none; }
+    .correction-origin-drag-hint span { font-size: .82rem; line-height: 1; }
     #correction-parallax-focus-overlay { display: none; }
     .correction-angle-detail { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 10px 12px; border: 1px solid #e3c38e; border-radius: 14px; background: #fffefa; }
     .correction-angle-detail[hidden] { display: none; }
@@ -589,7 +587,7 @@
             <div class="correction-parallax-scene" id="correction-parallax-scene" data-magnifier="false">
               <canvas id="correction-pencil-3d-canvas" aria-hidden="true"></canvas>
               <canvas id="correction-parallax-canvas" tabindex="0" role="img" aria-label="可在鉛筆或尺面上拖曳操作的三維場景；使用方向鍵也能改變視角。">此瀏覽器不支援畫布；場景以文字說明。</canvas>
-              <div class="correction-origin-drag-hint" id="correction-origin-drag-hint" hidden><span aria-hidden="true">↔</span>游標移到尺面左右拖曳</div>
+              <div class="correction-origin-drag-hint" id="correction-origin-drag-hint" hidden><span aria-hidden="true">↔</span>移到尺上</div>
               <p id="correction-parallax-fallback" hidden>目前瀏覽器無法顯示 3D 場景，請使用支援 WebGL 的瀏覽器。</p>
               <div class="correction-angle-detail" id="correction-parallax-detail" hidden>
                 <p><strong id="correction-magnifier-title">鉛筆右端放大</strong><span id="correction-magnifier-range">尺面 18–19 cm 附近</span></p>
