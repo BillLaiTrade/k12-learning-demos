@@ -150,6 +150,31 @@
     .range-track span[data-state="invalid"] { background: rgb(188 97 43 / 32%); }
     .range-track i { position: absolute; top: -5px; left: 21%; width: 3px; height: 30px; background: #bc612b; transform: translateX(-50%); transition: left .3s ease; }
     .range-endpoints { display: flex; justify-content: space-between; font-size: .75rem; }
+    .decision-tree { margin: 18px 0; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: #f7f8f3; }
+    .decision-root { width: fit-content; max-width: 100%; margin: 0 auto 20px; padding: 10px 18px; border-radius: 999px; background: #e7f0e7; color: var(--green); font-weight: 800; text-align: center; }
+    .decision-root::after { display: block; width: 2px; height: 20px; margin: 8px auto -29px; background: #9bb8a5; content: ""; }
+    .decision-branches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .decision-branch { min-width: 0; padding: 13px; border: 1px solid #d7e2d9; border-radius: 14px; background: #fffefa; }
+    .decision-branch h3 { margin: 0 0 4px; color: #244b3c; font-size: 1rem; }
+    .decision-branch p { margin: 0 0 10px; color: var(--muted); font-size: .83rem; }
+    .decision-leaves { display: grid; gap: 7px; }
+    .decision-leaf { display: flex; width: 100%; align-items: center; gap: 9px; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); text-align: left; cursor: pointer; }
+    .decision-leaf:hover, .decision-leaf[aria-pressed="true"] { border-color: var(--green); background: #eef5ed; }
+    .decision-leaf svg { width: 44px; height: 34px; flex: none; }
+    .decision-leaf span { font-size: .86rem; font-weight: 700; }
+    .decision-extension { color: #78612e; font-size: .75rem; font-weight: 600; }
+    .tool-demo { margin-top: 16px; padding: 16px; border: 1px solid #cddfd1; border-radius: 16px; background: #fffefa; }
+    .tool-demo h3 { margin: 0; font-size: 1.1rem; }
+    .tool-demo p { margin: 5px 0 12px; color: var(--muted); }
+    .tool-demo-visual { display: grid; min-height: 155px; place-items: center; overflow: hidden; border: 1px solid #e0e7dd; border-radius: 12px; background: #f8f9f4; }
+    .tool-demo-visual svg { display: block; width: min(100%, 560px); max-height: 210px; }
+    .tool-demo-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 12px; }
+    .tool-demo-controls input[type="range"] { width: min(100%, 320px); accent-color: var(--green); }
+    .tool-demo-value { color: var(--green); font-size: 1.2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .tool-demo-controls button { padding: 8px 14px; border: 1px solid var(--green); border-radius: 9px; background: var(--green); color: white; font-weight: 700; cursor: pointer; }
+    .tool-demo-controls button.secondary { background: white; color: var(--green); }
+    @media (max-width: 760px) { .decision-branches { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 500px) { .decision-tree { padding: 11px; } .decision-branches { grid-template-columns: 1fr; } .decision-branch { padding: 11px; } }
     .division-visual svg { display: block; width: 100%; height: auto; }
     .division-visual p { margin: 7px 0 0; color: var(--muted); font-size: .84rem; }
     .control-panel { padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
@@ -685,26 +710,41 @@
       <section class="lesson-card" id="card-07">
         <div class="card-side"><span class="card-number">07</span><h3>挑選工具</h3><span class="card-role">物理量與量程都要合適</span></div>
         <div class="card-main">
-          <h2>同一種工具，能量所有東西嗎？</h2>
-          <p>工具要能測量指定的物理量，也要有適合的量程。切換量測任務和工具情境，觀察工具的用途及限制。</p>
-          <div class="select-row">
-            <label class="field">量測任務
-              <select id="tool-task"><option value="length">量這支鉛筆的長度（18 cm）</option><option value="mass">量這支鉛筆的質量（約 5 g）</option></select>
-            </label>
-            <label class="field">工具情境
-              <select id="tool-state"><option value="suitable">物理量和量程都合適</option><option value="wrong-quantity">工具測量的是另一種物理量</option><option value="short-range">工具量程不足</option></select>
-            </label>
+          <h2>要量什麼？依物品特性選工具</h2>
+          <p>先辨認要測量的物理量，再看物品的大小、形狀和預期範圍。下面完整列出常見選擇；點選樹梢可以操作對應工具。</p>
+          <div class="decision-tree" aria-label="測量工具決策樹">
+            <div class="decision-root">我要測量什麼？</div>
+            <div class="decision-branches">
+              <section class="decision-branch"><h3>長度</h3><p>看長短、形狀與所需精細程度</p><div class="decision-leaves">
+                <button class="decision-leaf" data-tool="ruler" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="3" y="12" width="54" height="20" rx="3" fill="#f0dca3" stroke="#997d3c"/><path d="M12 12v9m8-9v5m8-5v9m8-9v5m8-5v9" stroke="#354a42" stroke-width="1.5"/></svg><span>短、直物件：直尺</span></button>
+                <button class="decision-leaf" data-tool="tape" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="5" y="9" width="24" height="23" rx="8" fill="#e5b94f" stroke="#997d3c"/><path d="M27 13h28v13H27" fill="#f0dca3" stroke="#997d3c"/><path d="M35 13v7m7-7v4m7-4v7" stroke="#354a42"/></svg><span>較長物件：捲尺</span></button>
+                <button class="decision-leaf" data-tool="softTape" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M5 28c8-23 18 15 27-7s15 10 23-10" fill="none" stroke="#3b9a91" stroke-width="7" stroke-linecap="round"/><path d="M11 24l3 2m5 1 3 2m7-7 3 1m7-8 3 1m8-2 3 1" stroke="#fff"/></svg><span>曲面或繞量：軟尺</span></button>
+                <button class="decision-leaf" data-tool="caliper" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M12 8v25h39M12 13h12v8H12m27 12V23h8v10" fill="none" stroke="#667c79" stroke-width="4"/><path d="M18 28h3m4 0h3m4 0h3" stroke="#354a42"/></svg><span>微小尺寸：游標卡尺 <small class="decision-extension">延伸工具</small></span></button>
+              </div></section>
+              <section class="decision-branch"><h3>質量</h3><p>看物品大小與預期質量，選合適秤型和量程</p><div class="decision-leaves">
+                <button class="decision-leaf" data-tool="electronicBalance" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="13" y="8" width="34" height="23" rx="4" fill="#e8eee8" stroke="#557368" stroke-width="2"/><rect x="21" y="12" width="18" height="8" rx="2" fill="#fff" stroke="#7b9485"/><path d="M20 25h20" stroke="#d6a94a" stroke-width="3"/></svg><span>小物件、較精細：電子秤</span></button>
+                <button class="decision-leaf" data-tool="platformScale" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M12 30h36M17 27l5-13h16l5 13M30 14V7m-5 0h10" fill="none" stroke="#557368" stroke-width="3"/><rect x="22" y="28" width="16" height="5" rx="2" fill="#d6a94a"/></svg><span>較大、較重物件：平台秤</span></button>
+              </div></section>
+              <section class="decision-branch"><h3>時間</h3><p>看要量已經過多久，還是設定一段時間</p><div class="decision-leaves">
+                <button class="decision-leaf" data-tool="stopwatch" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><circle cx="30" cy="22" r="14" fill="#fff" stroke="#557368" stroke-width="3"/><path d="M30 22V12m0 10 8 4M25 4h10m-5 0v4" stroke="#247554" stroke-width="2.5"/></svg><span>量經過時間：碼錶</span></button>
+                <button class="decision-leaf" data-tool="timer" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="13" y="8" width="34" height="25" rx="5" fill="#fff" stroke="#557368" stroke-width="2.5"/><path d="M22 4h16m-8 0v4" stroke="#557368" stroke-width="3"/><text x="30" y="26" text-anchor="middle" font-size="11" fill="#247554">1:00</text></svg><span>設定倒數時間：計時器</span></button>
+              </div></section>
+              <section class="decision-branch"><h3>液體體積</h3><p>小量精確量取或一般廚房估量</p><div class="decision-leaves">
+                <button class="decision-leaf" data-tool="cylinder" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M18 5h25l-3 30H21z" fill="#e8f4ee" stroke="#557368" stroke-width="2"/><path d="M22 26h17M23 20h7m-7-6h7m-7-6h7" stroke="#3b9a91" stroke-width="2"/></svg><span>需較精細：量筒</span></button>
+                <button class="decision-leaf" data-tool="measuringCup" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M13 10h29l-3 24H17z" fill="#e8f4ee" stroke="#557368" stroke-width="2"/><path d="M42 15h7v13h-9M19 25h19m-18-6h8m-8-6h8" fill="none" stroke="#3b9a91" stroke-width="2"/></svg><span>一般容量：量杯</span></button>
+              </div></section>
+              <section class="decision-branch"><h3>溫度</h3><p>依測量對象選用合適型式與量程</p><div class="decision-leaves">
+                <button class="decision-leaf" data-tool="clinicalThermometer" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="27" y="5" width="7" height="24" rx="4" fill="#fff" stroke="#778980" stroke-width="2"/><circle cx="30.5" cy="31" r="6" fill="#db7657"/><path d="M30.5 25v6" stroke="#db7657" stroke-width="3"/></svg><span>量體溫：體溫計</span></button>
+                <button class="decision-leaf" data-tool="labThermometer" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M25 6h10v24a8 8 0 1 1-10 0z" fill="#fff" stroke="#778980" stroke-width="2"/><path d="M30 13v20" stroke="#db7657" stroke-width="4"/><path d="M37 12h7m-7 6h5m-5 6h7" stroke="#557368"/></svg><span>量液體或環境：實驗用溫度計</span></button>
+              </div></section>
+              <section class="decision-branch"><h3>力</h3><p>先估力的大小，再挑選不超量程的測力計</p><div class="decision-leaves">
+                <button class="decision-leaf" data-tool="smallSpring" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M30 4v5l-5 3 10 4-10 4 10 4-5 3v5" fill="none" stroke="#557368" stroke-width="2"/><path d="M21 7h18m-9 25v4m-6 0h12" stroke="#d6a94a" stroke-width="2"/></svg><span>較小的力：小量程彈簧秤</span></button>
+                <button class="decision-leaf" data-tool="largeSpring" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M30 3v5l-7 4 14 4-14 4 14 4-7 4v6" fill="none" stroke="#557368" stroke-width="3"/><path d="M19 6h22m-11 28v3m-7 0h14" stroke="#d6a94a" stroke-width="2.5"/></svg><span>較大的力：大量程彈簧秤</span></button>
+              </div></section>
+            </div>
           </div>
-          <div class="readout" aria-live="polite">
-            <article><small>目前工具</small><strong id="tool-name">30 cm 直尺</strong><span id="tool-range">長度；量程 0–30 cm</span></article>
-            <article><small>這種情境會看到</small><strong id="tool-result">可完整量取</strong><span id="tool-result-note">物理量相符，鉛筆長度落在尺的量程內。</span></article>
-          </div>
-          <div class="range-model" aria-label="工具量程與預期量值的視覺比較">
-            <div class="range-model-head"><strong id="range-model-title">30 cm 直尺・長度</strong><span id="range-model-caption">鉛筆長 18 cm，落在量程內</span></div>
-            <div class="range-track"><span id="range-fill"></span><i id="range-marker" aria-hidden="true"></i></div>
-            <div class="range-endpoints"><span>0</span><span id="range-maximum">30 cm</span></div>
-          </div>
-          <p class="live-note">量程是工具能測量的範圍。量程太短時，即使物理量相符，也無法完整量取；量程很大也不代表刻度一定夠細。</p>
+          <div class="tool-demo" id="tool-demo" aria-live="polite"><h3>選一個樹梢工具開始觀察</h3><p>完整決策樹會留在上方；選取工具後，這裡會出現操作示範。</p></div>
+          <p class="live-note">同一種物理量也可能需要不同工具：長度測量就要依物品長短、是否彎曲及需要的精細程度選擇。選工具時也要確認量程合適。</p>
           <p class="next-hint">了解工具的用途與量程後，接著用單元小測安排測量步驟。</p>
         </div>
       </section>
@@ -1179,51 +1219,51 @@
       lengthUnitSelect.addEventListener("change", () => updateLengthConversion(lengthUnitSelect.value));
       updateLengthConversion(lengthUnitSelect.value);
 
-      const tasks = {
-        length: { instrument: "直尺", range: "長度；量程 0–30 cm", quantity: "長度", value: "18 cm", tooShort: "短尺", tooShortRange: "長度；量程 0–5 cm" },
-        mass: { instrument: "天平", range: "質量；量程 0–100 g", quantity: "質量", value: "約 5 g", tooShort: "小量程天平", tooShortRange: "質量；量程 0–1 g" },
-
+      const toolDemos = {
+        stopwatch: { title: "碼錶・量時間間隔", desc: "開始、暫停與歸零，觀察時間讀值。" },
+        ruler: { title: "直尺・量短而筆直的物件", desc: "把物件一端對準 0 刻度，另一端讀取長度。", min: 5, max: 20, value: 12, unit: "cm", draw: v => `<rect x="45" y="87" width="470" height="50" rx="7" fill="#f1dfa9" stroke="#9d8244" stroke-width="3"/><path d="${Array.from({length:31},(_,i)=>`M${55+i*15} 87v${i%5===0?22:11}`).join(' ')}" stroke="#354a42" stroke-width="2"/><text x="280" y="124" text-anchor="middle" font-size="20" fill="#30463d">0　　　　　　　　　15　　　　　　　　　30 cm</text><path d="M65 48h${v*14}v22" fill="none" stroke="#d59a27" stroke-width="12" stroke-linecap="round"/><path d="M${65+v*14} 43v48" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"/>` },
+        tape: { title: "捲尺・量較長的物件", desc: "拉出足夠長度的尺帶，保持拉直並讀取端點。", min: 20, max: 300, value: 125, unit: "cm", draw: v => `<rect x="28" y="70" width="88" height="74" rx="28" fill="#e6b94d" stroke="#9d8244" stroke-width="4"/><path d="M100 88h420v38H100z" fill="#f1dfa9" stroke="#9d8244" stroke-width="3"/><path d="${Array.from({length:21},(_,i)=>`M${112+i*19} 88v${i%5===0?22:12}`).join(' ')}" stroke="#354a42" stroke-width="2"/><path d="M115 52h${Math.min(380,v*1.25)}" stroke="#477e59" stroke-width="12" stroke-linecap="round"/><path d="M${115+Math.min(380,v*1.25)} 48v42" stroke="#bc612b" stroke-width="3"/>` },
+        softTape: { title: "軟尺・量曲面或繞量", desc: "軟尺貼合曲面，不要拉伸；周長量測時保持貼緊。", min: 10, max: 80, value: 32, unit: "cm", draw: v => `<circle cx="280" cy="100" r="58" fill="#e7c889" stroke="#9d8244" stroke-width="4"/><circle cx="280" cy="100" r="40" fill="#f8f9f4" stroke="#d9c28d" stroke-width="2"/><circle cx="280" cy="100" r="68" fill="none" stroke="#3b9a91" stroke-width="14" stroke-dasharray="${Math.max(45,v*5)} 500" transform="rotate(-90 280 100)"/><path d="M280 32h55" stroke="#3b9a91" stroke-width="14"/><path d="M300 25v14m18-14v9m18-9v14" stroke="white" stroke-width="2"/>` },
+        caliper: { title: "游標卡尺・延伸工具", desc: "用量爪夾住微小尺寸，依主尺與游標讀值。", min: 2, max: 25, value: 12, unit: "mm", draw: v => `<path d="M70 65h400v24H70zM105 65V40h30v49m285-24v75h-30V65" fill="#9baead" stroke="#566b68" stroke-width="3"/><path d="M135 99h${Math.max(25,v*12)}v27h-22v-27" fill="#c5d1ce" stroke="#566b68" stroke-width="3"/><path d="${Array.from({length:21},(_,i)=>`M${150+i*14} 65v${i%5===0?13:7}`).join(' ')}" stroke="#354a42" stroke-width="2"/><circle cx="${150+v*12}" cy="112" r="10" fill="#d59a27"/>` },
+        balance: { title: "天平／電子秤・量質量", desc: "將物品放在秤盤上，選擇量程合適的秤並讀取質量。", min: 1, max: 500, value: 85, unit: "g", draw: v => `<path d="M280 45v90M190 75h180M200 75l-38 48h76zm160 0-38 48h76z" fill="#e8eee8" stroke="#557368" stroke-width="4"/><path d="M165 123h74m82 0h74M230 142h100" stroke="#d6a94a" stroke-width="5"/><rect x="253" y="102" width="54" height="27" rx="5" fill="#fff" stroke="#7b9485" stroke-width="2"/><text x="280" y="122" text-anchor="middle" font-size="17" fill="#247554">${v} g</text>` },
+        cylinder: { title: "量筒／量杯・量液體體積", desc: "將液體倒入刻度容器，視線與液面最低處同高讀值。", min: 10, max: 100, value: 50, unit: "mL", draw: v => `<path d="M205 35h150l-15 115H220z" fill="#e7f4ee" stroke="#557368" stroke-width="4"/><path d="M222 ${145-v*0.9}h117v${v*0.9}H222z" fill="#83c8be" opacity=".8"/><path d="${Array.from({length:10},(_,i)=>`M220 ${45+i*10}h${i%2===0?35:20}`).join(' ')}" stroke="#557368" stroke-width="2"/><text x="280" y="172" text-anchor="middle" font-size="18" fill="#247554">${v} mL</text>` },
+        thermometer: { title: "溫度計・量溫度", desc: "依對象選用適合量程的溫度計，等待示值穩定後讀取。", min: 0, max: 100, value: 24, unit: "°C", draw: v => `<rect x="263" y="28" width="34" height="112" rx="17" fill="#fff" stroke="#778980" stroke-width="4"/><circle cx="280" cy="143" r="26" fill="#db7657"/><path d="M280 125V${132-(v*.85)}" stroke="#db7657" stroke-width="12" stroke-linecap="round"/><path d="${Array.from({length:6},(_,i)=>`M300 ${45+i*15}h${i%2?9:15}`).join(' ')}" stroke="#557368" stroke-width="2"/><text x="333" y="86" font-size="17" fill="#247554">${v} °C</text>` },
+        spring: { title: "彈簧秤／測力計・量力", desc: "沿受力方向掛上物體，勿超過量程，再讀取刻度。", min: 0, max: 10, value: 4, unit: "N", draw: v => `<path d="M280 30v18" stroke="#557368" stroke-width="5"/><path d="${Array.from({length:8},(_,i)=>`M280 ${48+i*10}q${i%2?22:-22} 5 0 10`).join(' ')}" fill="none" stroke="#718980" stroke-width="3"/><path d="M280 128v20q0 12 12 12" fill="none" stroke="#557368" stroke-width="4"/><rect x="308" y="42" width="64" height="100" rx="12" fill="#fff" stroke="#9aaea1" stroke-width="3"/><path d="M316 58h${Math.min(45,v*4)}" stroke="#db7657" stroke-width="5"/><text x="340" y="125" text-anchor="middle" font-size="17" fill="#247554">${v} N</text>` }
       };
-      const updateToolView = () => {
-        const task = tasks[document.querySelector("#tool-task").value];
-        const selection = document.querySelector("#tool-state").value;
-        let name = task.instrument;
-        let range = task.range;
-        let result = "可涵蓋預期量值";
-        let explanation = `${task.quantity}相符，預期值 ${task.value} 落在工具量程內。`;
-        if (selection === "wrong-quantity") {
-          name = task.quantity === "長度" ? "天平" : "直尺";
-          range = task.quantity === "長度" ? "質量；量程 0–100 g" : "長度；量程 0–30 cm";
-          result = "物理量不相符";
-          explanation = `目前任務要量${task.quantity}，這個工具測量的是另一種物理量。`;
+      toolDemos.electronicBalance = { ...toolDemos.balance, title: "電子秤・量較輕的小物件", desc: "電子秤適合讀取較小質量；量測前先確認歸零與量程。" };
+      toolDemos.platformScale = { ...toolDemos.balance, title: "平台秤・量較大或較重的物件", desc: "平台較大、量程較高，適合較大物件；仍要確認不要超量程。", max: 2000, value: 650 };
+      toolDemos.measuringCup = { ...toolDemos.cylinder, title: "量杯・量取一般液體容量", desc: "量杯適合一般容量估量；讀值時讓視線與液面同高。" };
+      toolDemos.clinicalThermometer = { ...toolDemos.thermometer, title: "體溫計・量人體體溫", desc: "體溫計的量程適合人體溫度，依使用方式等待讀值穩定。", min: 34, max: 42, value: 37 };
+      toolDemos.labThermometer = { ...toolDemos.thermometer, title: "實驗用溫度計・量液體或環境", desc: "依待測物選擇適合量程；量液體時不要讓溫度計碰到容器底部。", min: -10, max: 110, value: 24 };
+      toolDemos.smallSpring = { ...toolDemos.spring, title: "小量程彈簧秤・量較小的力", desc: "小量程刻度通常較適合讀取較小的力，注意不要超出上限。", min: 0, max: 2, value: 1 };
+      toolDemos.largeSpring = { ...toolDemos.spring, title: "大量程彈簧秤・量較大的力", desc: "較大拉力要使用上限較高的測力計，避免超量程。", min: 0, max: 50, value: 20 };
+      const demo = document.querySelector("#tool-demo");
+      let stopwatchTimer = null, stopwatchStarted = 0, stopwatchElapsed = 0, timerRemaining = 60;
+      const formatStopwatch = ms => `${(ms / 60000 | 0).toString().padStart(2,"0")}:${((ms / 1000 | 0) % 60).toString().padStart(2,"0")}.${((ms % 1000) / 10 | 0).toString().padStart(2,"0")}`;
+      const chooseTool = key => {
+        document.querySelectorAll(".decision-leaf").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tool === key)));
+        clearInterval(stopwatchTimer); stopwatchTimer = null; stopwatchElapsed = 0; timerRemaining = 60;
+        const item = toolDemos[key];
+        if (key === "stopwatch") {
+          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual"><svg viewBox="0 0 560 190" role="img" aria-label="碼錶示意圖"><circle cx="280" cy="96" r="66" fill="#fff" stroke="#557368" stroke-width="8"/><path d="M260 18h40m-20 0v12" stroke="#557368" stroke-width="8" stroke-linecap="round"/><text id="stopwatch-display" x="280" y="108" text-anchor="middle" font-size="30" font-family="monospace" fill="#247554">00:00.00</text></svg></div><div class="tool-demo-controls"><button id="watch-start">開始</button><button id="watch-reset" class="secondary">歸零</button><span class="tool-demo-value" id="watch-state">準備開始</span></div>`;
+          const display = document.querySelector("#stopwatch-display"), stateLabel = document.querySelector("#watch-state"), start = document.querySelector("#watch-start");
+          start.onclick = () => { if (stopwatchTimer) { stopwatchElapsed += Date.now() - stopwatchStarted; clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "繼續"; stateLabel.textContent = "已暫停"; } else { stopwatchStarted = Date.now(); stopwatchTimer = setInterval(() => { display.textContent = formatStopwatch(stopwatchElapsed + Date.now() - stopwatchStarted); }, 30); start.textContent = "暫停"; stateLabel.textContent = "計時中"; } };
+          document.querySelector("#watch-reset").onclick = () => { clearInterval(stopwatchTimer); stopwatchTimer = null; stopwatchElapsed = 0; display.textContent = "00:00.00"; start.textContent = "開始"; stateLabel.textContent = "準備開始"; };
+        } else if (key === "timer") {
+          demo.innerHTML = `<h3>計時器・設定一段倒數時間</h3><p>設定時間後開始倒數；適合控制一段預定的活動時間。</p><div class="tool-demo-visual"><svg viewBox="0 0 560 190" role="img" aria-label="倒數計時器"><rect x="175" y="28" width="210" height="132" rx="22" fill="#fff" stroke="#557368" stroke-width="6"/><text id="timer-display" x="280" y="111" text-anchor="middle" font-size="46" font-family="monospace" fill="#247554">01:00</text></svg></div><div class="tool-demo-controls"><label for="timer-setting">設定秒數</label><input id="timer-setting" type="range" min="5" max="120" step="5" value="60"><output class="tool-demo-value" id="timer-output">60 秒</output><button id="timer-start">開始</button><button id="timer-reset" class="secondary">歸零</button></div>`;
+          const display = document.querySelector("#timer-display"), setting = document.querySelector("#timer-setting"), output = document.querySelector("#timer-output"), start = document.querySelector("#timer-start");
+          const paintTimer = () => { display.textContent = `${String(Math.floor(timerRemaining / 60)).padStart(2,"0")}:${String(timerRemaining % 60).padStart(2,"0")}`; };
+          setting.oninput = () => { if (!stopwatchTimer) { timerRemaining = Number(setting.value); output.textContent = `${timerRemaining} 秒`; paintTimer(); } };
+          start.onclick = () => { if (stopwatchTimer) { clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "繼續"; } else { start.textContent = "暫停"; stopwatchTimer = setInterval(() => { timerRemaining = Math.max(0, timerRemaining - 1); paintTimer(); if (!timerRemaining) { clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "重新開始"; } }, 1000); } };
+          document.querySelector("#timer-reset").onclick = () => { clearInterval(stopwatchTimer); stopwatchTimer = null; timerRemaining = Number(setting.value); paintTimer(); start.textContent = "開始"; };
+        } else {
+          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual"><svg id="tool-visual" viewBox="0 0 560 190" role="img" aria-label="${item.title}操作示意"></svg></div><div class="tool-demo-controls"><label for="tool-value">調整示值</label><input id="tool-value" type="range" min="${item.min}" max="${item.max}" value="${item.value}"><output id="tool-output" class="tool-demo-value"></output></div>`;
+          const range = document.querySelector("#tool-value"), output = document.querySelector("#tool-output"), visual = document.querySelector("#tool-visual");
+          const update = () => { const value = Number(range.value); output.value = `${value} ${item.unit}`; output.textContent = output.value; visual.innerHTML = item.draw(value); };
+          range.addEventListener("input", update); update();
         }
-        if (selection === "short-range") {
-          name = task.tooShort;
-          range = task.tooShortRange;
-          result = "量程無法涵蓋";
-          explanation = `預期值 ${task.value} 超出工具量程，無法完整量取。`;
-        }
-        document.querySelector("#tool-name").textContent = name;
-        document.querySelector("#tool-range").textContent = range;
-        document.querySelector("#tool-result").textContent = result;
-        document.querySelector("#tool-result-note").textContent = explanation;
-        const quantityValues = { length: { value: 18, max: 30, unit: "cm" }, mass: { value: 5, max: 100, unit: "g" } };
-        const visual = quantityValues[document.querySelector("#tool-task").value];
-        const visibleMaximum = selection === "short-range" ? (visual.unit === "cm" ? 5 : visual.unit === "g" ? 100 : 10) : visual.max;
-        const ratio = Math.min(100, (visual.value / visibleMaximum) * 100);
-        document.querySelector("#range-model-title").textContent = `${name}・${task.quantity}`;
-        document.querySelector("#range-model-caption").textContent = selection === "wrong-quantity"
-          ? `預期量值 ${visual.value} ${visual.unit}，但工具量的是另一種物理量`
-          : selection === "short-range"
-          ? `預期 ${visual.value} ${visual.unit} 超過 0–${visibleMaximum} ${visual.unit}`
-          : `預期 ${visual.value} ${visual.unit} 落在工具量程內`;
-        document.querySelector("#range-maximum").textContent = `${visibleMaximum} ${visual.unit}`;
-        document.querySelector("#range-fill").style.width = `${ratio}%`;
-        document.querySelector("#range-fill").dataset.state = selection === "wrong-quantity" || selection === "short-range" ? "invalid" : "valid";
-        document.querySelector("#range-marker").style.left = `${ratio}%`;
       };
-      document.querySelector("#tool-task").addEventListener("change", updateToolView);
-      document.querySelector("#tool-state").addEventListener("change", updateToolView);
+      document.querySelectorAll(".decision-leaf").forEach(button => button.addEventListener("click", () => chooseTool(button.dataset.tool)));
 
       divisionCountControl.addEventListener("input", () => {
         state.divisions = Number(divisionCountControl.value);
@@ -1793,7 +1833,6 @@
         window.addEventListener("scroll", syncActiveCard, { passive: true });
         syncActiveCard();
       }
-      updateToolView();
     })();
   </script>
   <script type="importmap">
