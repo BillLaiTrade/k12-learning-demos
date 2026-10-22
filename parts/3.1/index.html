@@ -193,12 +193,12 @@
     .quiz-choice input { width: 19px; height: 19px; flex: none; margin: 2px 0 0; accent-color: var(--green); }
     .quiz-choice span { color: #33443a; line-height: 1.55; }
     .sequence-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-    .sequence-step { display: grid; grid-template-columns: 30px 25px minmax(0, 1fr); align-items: center; gap: 9px; min-height: 54px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 11px; background: #fff; color: #33443a; line-height: 1.5; }
+    .sequence-step { display: grid; grid-template-columns: 30px 25px minmax(0, 1fr); align-items: center; gap: 9px; min-height: 54px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 11px; background: #fff; color: #33443a; line-height: 1.5; cursor: grab; touch-action: pan-y; }
     .sequence-handle { min-height: 32px; padding: 0; border: 0; background: transparent; color: #6d8175; font-size: 1.25rem; line-height: 1; cursor: grab; touch-action: none; user-select: none; }
     .sequence-handle:active { cursor: grabbing; }
     .sequence-handle:focus-visible { border-radius: 6px; outline: 2px solid var(--green); outline-offset: 1px; }
     .sequence-number { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; background: #e9f1e9; color: var(--green); font-size: .78rem; font-weight: 800; }
-    .sequence-step.is-dragging { z-index: 1; border-color: var(--green); background: #f1f7f0; box-shadow: 0 5px 14px rgb(24 52 40 / 12%); }
+    .sequence-step.is-dragging { z-index: 1; transform: scale(1.015); border-color: var(--green); background: #f1f7f0; box-shadow: 0 7px 18px rgb(24 52 40 / 20%); transition: top 70ms linear, transform 110ms ease-out, box-shadow 110ms ease-out; cursor: grabbing; }
     .sequence-placeholder { min-height: 54px; border: 1px dashed #9eb4a4; border-radius: 11px; background: rgb(231 241 232 / 55%); }
     .sequence-step[data-position-correct="true"] { border-color: #79a58d; background: #f1f7f0; }
     .sequence-step[data-position-correct="false"] { border-color: #d6b271; background: #fffaf0; }
@@ -721,7 +721,7 @@
             <span id="sequence-live" class="sr-only" aria-live="polite"></span>
             <div class="quiz-actions">
               <button id="assessment-check-answer" class="action" type="button">檢查順序</button>
-              <span class="quiz-helper">拖曳卡片排序；也可聚焦卡片後用上下方向鍵移動。</span>
+              <span class="quiz-helper">抓住卡片拖曳；觸控用左側把手，鍵盤用上下鍵。</span>
             </div>
             <div class="quiz-feedback" id="assessment-feedback" role="status" aria-live="polite" hidden></div>
           </div>
@@ -1606,12 +1606,13 @@
         sequenceLive.textContent = `已移到第 ${position} 步`;
       };
       measurementSequence.addEventListener("pointerdown", (event) => {
+        const step = event.target.closest(".sequence-step");
         const handle = event.target.closest(".sequence-handle");
-        if (!handle || event.button !== 0) return;
+        if (!step || event.button !== 0 || (event.pointerType === "touch" && !handle)) return;
         event.preventDefault();
-        const bounds = handle.closest(".sequence-step").getBoundingClientRect();
-        sequenceDragHandle = handle;
-        draggedSequenceStep = handle.closest(".sequence-step");
+        const bounds = step.getBoundingClientRect();
+        sequenceDragHandle = handle || event.target;
+        draggedSequenceStep = step;
         sequencePointerId = event.pointerId;
         sequencePointerOffsetY = event.clientY - bounds.top;
         sequencePlaceholder = document.createElement("li");
@@ -1630,7 +1631,7 @@
           pointerEvents: "none"
         });
         draggedSequenceStep.classList.add("is-dragging");
-        handle.setPointerCapture(event.pointerId);
+        sequenceDragHandle.setPointerCapture(event.pointerId);
         clearSequenceFeedback();
       });
       document.addEventListener("pointermove", (event) => {
