@@ -1225,7 +1225,7 @@
       let correctionMode = "density";
       let correctionTickInterval = 5;
       let correctionRulerOffset = 0;
-      const correctionAverageMeasurements = [18.6, 18.2, 18.5, 18.7, 18.4];
+      const correctionAverageMeasurements = [18.4, 18.5, 18.3, 18.6, 18.4];
       let correctionAverageTotal = correctionAverageMeasurements.reduce((total, value) => total + value, 0);
       const correctionCameraState = { yaw: defaultCameraYaw, pitch: defaultCameraPitch };
       let correctionCameraPreset = "front";
@@ -1384,7 +1384,9 @@
         if (correctionMode === "origin") document.querySelector("#correction-parallax-detail").scrollIntoView({ behavior: "smooth", block: "center" });
       }));
       document.querySelector("#correction-average-add").addEventListener("click", () => {
-        const noise = (Math.random() + Math.random() + Math.random() + Math.random() - 2) * 0.5;
+        const noise = Math.random() < 0.015
+          ? (Math.random() < 0.5 ? -1 : 1) * (0.6 + Math.random() * 0.2)
+          : (Math.random() + Math.random() + Math.random() + Math.random() - 2) * 0.25;
         const reading = clamp(Math.round((parallaxLength + noise) * 10) / 10, 17.5, 19.5);
         const measurementIndex = correctionAverageMeasurements.length;
         correctionAverageMeasurements.push(reading);
