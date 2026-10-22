@@ -176,7 +176,32 @@
     .record { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0; padding: 18px; border-radius: 14px; background: #f2f4ef; font-size: 1.2rem; }
     .record span { padding: 3px 7px; border-radius: 7px; }
     .record .is-highlighted { background: #ffe2a8; box-shadow: 0 0 0 2px #d59a27; }
-    .assessment-label { display: inline-block; margin-bottom: 12px; padding: 4px 10px; border-radius: 999px; background: #e5f2e9; color: var(--green); font-weight: 750; font-size: .83rem; }
+    .unit-quiz { margin: 20px 0 28px; overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--card); box-shadow: var(--shadow); scroll-margin-top: 18px; }
+    .quiz-head { display: flex; align-items: flex-start; gap: 18px; padding: 25px 28px 21px; border-bottom: 1px solid #e7ece5; background: linear-gradient(105deg, #fffdf6, #fdfbf3); }
+    .quiz-mark { display: grid; width: 50px; height: 50px; flex: none; place-items: center; border-radius: 15px; background: #f5ead0; color: #8b6725; font-size: 1.45rem; font-weight: 800; }
+    .quiz-kicker { margin: 0 0 4px; color: #946f2d; font-size: .82rem; font-weight: 800; letter-spacing: .06em; }
+    .quiz-head h2 { margin: 0; font-size: clamp(1.22rem, 2vw, 1.65rem); line-height: 1.35; }
+    .quiz-head p { margin: 8px 0 0; color: var(--muted); font-size: .94rem; }
+    .quiz-body { padding: 23px 28px 28px; }
+    .quiz-lead { margin: 0 0 18px; color: #46574e; }
+    .quiz-question { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e7e9e2; }
+    .quiz-prompt { margin: 0 0 12px; color: var(--green); font-size: .9rem; font-weight: 750; }
+    .quiz-question h3 { margin: 0 0 12px; font-size: 1.2rem; line-height: 1.45; }
+    .quiz-options { display: grid; gap: 9px; }
+    .quiz-choice { display: flex; min-height: 52px; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 11px; background: #fff; cursor: pointer; }
+    .quiz-choice:has(input:checked) { border-color: var(--green); background: #f1f7f0; }
+    .quiz-choice input { width: 19px; height: 19px; flex: none; margin: 2px 0 0; accent-color: var(--green); }
+    .quiz-choice span { color: #33443a; line-height: 1.55; }
+    .quiz-actions { display: flex; align-items: center; gap: 16px; margin-top: 17px; }
+    .quiz-actions .action { min-width: 120px; }
+    .quiz-helper { color: var(--muted); font-size: .87rem; }
+    .quiz-feedback[hidden] { display: none; }
+    .quiz-feedback { margin-top: 12px; padding: 11px 13px; border-radius: 10px; background: #f1f5ee; color: #40574b; font-size: .92rem; }
+    .quiz-feedback[data-result="correct"] { background: #e8f3e8; color: var(--green); }
+    .quiz-feedback[data-result="incorrect"] { background: #faf3e4; color: #755a2d; }
+    .route a.quiz-nav { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 17px; color: #8a6726; font-weight: 750; }
+    .route a.quiz-nav b { color: #946f2d; }
+    .route a.quiz-nav[aria-current="step"] { border-left-color: #d9a74f; background: #faf3e4; color: #795b25; box-shadow: inset 3px 0 #d9a74f; }
     .lesson-layout { display: grid; grid-template-columns: minmax(205px, 250px) minmax(0, 1fr); gap: 34px; align-items: start; }
     .estimate-workspace { display: grid; grid-template-columns: 1fr; gap: 14px; align-items: start; margin: 18px 0; }
     .model-panel { margin: 0; padding: 18px; border: 1px solid #cbded0; border-radius: 20px; background: #e3eee5; box-shadow: var(--shadow); }
@@ -324,6 +349,17 @@
       .route-inner { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 3px; scrollbar-width: thin; }
       .route a { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); white-space: nowrap; }
       .route a[aria-current="step"] { border-color: var(--green); }
+      .route a.quiz-nav[aria-current="step"] { border-color: #d9a74f; }
+      .quiz-head { gap: 12px; padding: 20px 18px; }
+      .quiz-mark { width: 43px; height: 43px; border-radius: 12px; }
+      .quiz-body { padding: 20px 17px 23px; }
+      .quiz-lead { margin-bottom: 14px; }
+      .quiz-question { margin-top: 19px; padding-top: 17px; }
+      .quiz-question h3 { font-size: 1.1rem; }
+      .quiz-choice { padding: 11px; }
+      .quiz-actions { align-items: stretch; flex-direction: column; gap: 8px; }
+      .quiz-actions .action { width: 100%; }
+      .quiz-helper { font-size: .82rem; }
       .lesson-card { grid-template-columns: 1fr; gap: 14px; padding: 18px; border-radius: 19px; }
       .card-side { display: flex; align-items: baseline; gap: 10px; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 10px; }
       .card-side h3 { margin: 0; }
@@ -369,7 +405,7 @@
           <a href="#card-05"><b>05</b><span>刻線之間，怎麼估讀？</span></a>
           <a href="#card-06"><b>06</b><span>同一物體，為什麼讀值會差一點？</span></a>
           <a href="#card-07"><b>07</b><span>改善量測條件</span></a>
-          <a href="#card-08"><b>08</b><span>怎麼判斷兩筆長度紀錄是否可比較？</span></a>
+          <a href="#card-08" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
         </div>
         <p class="next-hint">沿著學習順序閱讀、操作與觀察。</p>
       </nav>
@@ -650,20 +686,32 @@
         </div>
       </section>
 
-      <section class="lesson-card end-card" id="card-08">
-        <div class="card-side"><span class="card-number">08</span><h3>整合理解</h3><span class="card-role">檢查看看是否理解</span></div>
-        <div class="card-main">
-          <span class="assessment-label">理解檢核・共 1 題</span>
-          <h2>怎麼判斷鉛筆的兩筆長度紀錄是否可比較？</h2>
-          <p>小安沿用共用模型，記下鉛筆長度約 18 cm；小晴也量同一支鉛筆，卻只記下「18」。哪一項說明最完整？</p>
-          <div class="choices" id="fair-options">
-            <button class="choice" data-fair="complete" aria-pressed="false">「18」缺少單位，資料還不完整；要確認兩筆都是長度、單位與讀值條件可對照。</button>
-            <button class="choice" data-fair="tool" aria-pressed="false">只要量到相同數字，就可以直接比較。</button>
-            <button class="choice" data-fair="number" aria-pressed="false">鉛筆一樣，所以量測紀錄不需要寫單位。</button>
+      <section class="unit-quiz" id="card-08" aria-labelledby="unit-quiz-title">
+        <header class="quiz-head">
+          <div class="quiz-mark" aria-hidden="true">?</div>
+          <div>
+            <p class="quiz-kicker">單元小測</p>
+            <h2 id="unit-quiz-title">比較兩筆長度紀錄</h2>
+            <p>運用本單元學到的量測方法與紀錄方式，判斷兩筆資料是否能公平比較。</p>
           </div>
-          <div class="feedback" id="assessment-feedback" aria-live="polite"></div>
-          <div class="fact"><p><strong>回到開頭的問題：</strong>比較量測資料時，先確認物理量、單位、工具和讀值條件，並用可對照的證據說明差異。</p></div>
-          <p class="next-hint">接下來，我們來看看不規則形狀的物體要怎麼量體積。</p>
+        </header>
+        <div class="quiz-body">
+          <p class="quiz-lead">小安記下鉛筆長度約 18 cm；小晴量同一支鉛筆，卻只記下「18」。先看兩筆紀錄，再回答問題。</p>
+          <div class="quiz-question">
+            <p class="quiz-prompt">請選出最完整的判斷</p>
+            <h3 id="unit-quiz-question-title">怎麼判斷這兩筆長度紀錄是否可比較？</h3>
+            <fieldset class="quiz-options" aria-labelledby="unit-quiz-question-title" style="border:0;padding:0;margin:0">
+              <legend class="sr-only">怎麼判斷這兩筆長度紀錄是否可比較？</legend>
+              <label class="quiz-choice"><input type="radio" name="length-record-check" value="complete"><span>「18」缺少單位，資料還不完整；還要確認量測條件是否一致。</span></label>
+              <label class="quiz-choice"><input type="radio" name="length-record-check" value="number"><span>只要量到相同數字，就可以直接比較。</span></label>
+              <label class="quiz-choice"><input type="radio" name="length-record-check" value="object"><span>量的是同一支鉛筆，所以紀錄不需要寫單位。</span></label>
+            </fieldset>
+            <div class="quiz-actions">
+              <button id="assessment-check-answer" class="action" type="button">查看解析</button>
+              <span class="quiz-helper">選好答案後，再查看哪些量測資訊必須能對照。</span>
+            </div>
+            <div class="quiz-feedback" id="assessment-feedback" role="status" aria-live="polite" hidden></div>
+          </div>
         </div>
       </section>
     </div>
@@ -1504,15 +1552,21 @@
       window.addEventListener("pencil3d-ready", renderCorrectionScene, { once: true });
       renderCorrectionScene();
 
-      const assessmentButtons = [...document.querySelectorAll("#fair-options button")];
-      assessmentButtons.forEach((button) => button.addEventListener("click", () => {
-        pressOne(assessmentButtons, button);
+      document.querySelector("#assessment-check-answer").addEventListener("click", () => {
         const feedback = document.querySelector("#assessment-feedback");
-        feedback.dataset.state = button.dataset.fair === "complete" ? "good" : "try";
-        feedback.textContent = button.dataset.fair === "complete"
-          ? "兩筆都是鉛筆的長度，但「18」沒有單位，無法確定使用哪種尺度。補上單位，並確認量測方法後，才能判斷資料是否可比較。"
-          : "對照兩筆資料是否說清楚量測的物理量、數值與單位，再查看尺的刻度和讀值條件是否可比較。";
-      }));
+        const selectedAnswer = document.querySelector('input[name="length-record-check"]:checked');
+        feedback.hidden = false;
+        if (!selectedAnswer) {
+          feedback.dataset.result = "incorrect";
+          feedback.textContent = "請先選擇一個答案，再查看解析。";
+          return;
+        }
+        const isCorrect = selectedAnswer.value === "complete";
+        feedback.dataset.result = isCorrect ? "correct" : "incorrect";
+        feedback.textContent = isCorrect
+          ? "「18」沒有單位，無法確認它代表多少長度。比較前要記下物理量與單位，也要確認量測條件能對照。"
+          : "先確認兩筆紀錄代表相同的物理量，並有單位和可對照的量測條件；數字相同也不一定能直接比較。";
+      });
 
       const routeLinks = [...document.querySelectorAll(".route a[href^='#card-']")];
       const lessonCards = routeLinks.map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean);
