@@ -192,6 +192,15 @@
     .quiz-choice:has(input:checked) { border-color: var(--green); background: #f1f7f0; }
     .quiz-choice input { width: 19px; height: 19px; flex: none; margin: 2px 0 0; accent-color: var(--green); }
     .quiz-choice span { color: #33443a; line-height: 1.55; }
+    .sequence-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .sequence-step { display: grid; grid-template-columns: 30px 25px minmax(0, 1fr); align-items: center; gap: 9px; min-height: 54px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 11px; background: #fff; color: #33443a; line-height: 1.5; }
+    .sequence-handle { min-height: 32px; padding: 0; border: 0; background: transparent; color: #6d8175; font-size: 1.25rem; line-height: 1; cursor: grab; touch-action: none; user-select: none; }
+    .sequence-handle:active { cursor: grabbing; }
+    .sequence-handle:focus-visible { border-radius: 6px; outline: 2px solid var(--green); outline-offset: 1px; }
+    .sequence-number { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; background: #e9f1e9; color: var(--green); font-size: .78rem; font-weight: 800; }
+    .sequence-step.is-dragging { z-index: 1; border-color: var(--green); background: #f1f7f0; box-shadow: 0 5px 14px rgb(24 52 40 / 12%); }
+    .sequence-step[data-position-correct="true"] { border-color: #79a58d; background: #f1f7f0; }
+    .sequence-step[data-position-correct="false"] { border-color: #d6b271; background: #fffaf0; }
     .quiz-actions { display: flex; align-items: center; gap: 16px; margin-top: 17px; }
     .quiz-actions .action { min-width: 120px; }
     .quiz-helper { color: var(--muted); font-size: .87rem; }
@@ -691,24 +700,27 @@
           <div class="quiz-mark" aria-hidden="true">?</div>
           <div>
             <p class="quiz-kicker">單元小測</p>
-            <h2 id="unit-quiz-title">比較兩筆長度紀錄</h2>
-            <p>運用本單元學到的量測方法與紀錄方式，判斷兩筆資料是否能公平比較。</p>
+            <h2 id="unit-quiz-title">量一個物體，步驟怎麼安排？</h2>
+            <p>把量測步驟排好，整合本單元的工具、刻度與減少誤差的方法。</p>
           </div>
         </header>
         <div class="quiz-body">
-            <p class="quiz-lead">小安要量一支鉛筆，並把結果交給同學比較。直尺每格 1 cm，筆尾落在 18 和 19 cm 之間。</p>
+          <p class="quiz-lead">有一個長度未知的小物件，要量出它的長度並讓結果可靠。請把下方步驟排成合適的順序。</p>
           <div class="quiz-question">
-            <p class="quiz-prompt">整合工具、刻度與誤差概念</p>
-            <h3 id="unit-quiz-question-title">哪一項測量流程最完整、可靠？</h3>
-            <fieldset class="quiz-options" aria-labelledby="unit-quiz-question-title" style="border:0;padding:0;margin:0">
-              <legend class="sr-only">哪一項測量流程最完整、可靠？</legend>
-              <label class="quiz-choice"><input type="radio" name="length-record-check" value="complete"><span>用直尺量長度，將 0 對準筆尖、視線正對刻度，在 18–19 cm 間估讀並記下數值與單位；重複量幾次取平均，起點或視角偏差另行修正。</span></label>
-              <label class="quiz-choice"><input type="radio" name="length-record-check" value="number"><span>用直尺從 0 量到筆尾，取最接近的整數 19 cm；工具和物體相同，單位與視角不影響比較。</span></label>
-              <label class="quiz-choice"><input type="radio" name="length-record-check" value="average"><span>用直尺估讀端點並重複取平均；起點偏移和斜視造成的差異，也會被平均消除。</span></label>
-            </fieldset>
+            <p class="quiz-prompt">拖曳步驟卡片排序</p>
+            <h3 id="unit-quiz-question-title">從挑選直尺到整理讀值</h3>
+            <ol class="sequence-list" id="measurement-sequence" aria-labelledby="unit-quiz-question-title">
+              <li class="sequence-step" data-sequence-step="repeat"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">1</span><span>保持相同的量法，重複測量幾次並記下每次讀值。</span></li>
+              <li class="sequence-step" data-sequence-step="estimate"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">2</span><span>依每格長度估讀物體末端，記下數值和單位。</span></li>
+              <li class="sequence-step" data-sequence-step="ruler"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">3</span><span>選擇量程合適、刻度較密的直尺。</span></li>
+              <li class="sequence-step" data-sequence-step="average"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">4</span><span>計算多次讀值的平均，作為較具代表性的結果。</span></li>
+              <li class="sequence-step" data-sequence-step="align"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">5</span><span>將直尺的 0 刻度對準物體起點。</span></li>
+              <li class="sequence-step" data-sequence-step="view"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">6</span><span>視線正對刻度，確認末端落在哪兩條刻線之間。</span></li>
+            </ol>
+            <span id="sequence-live" class="sr-only" aria-live="polite"></span>
             <div class="quiz-actions">
-              <button id="assessment-check-answer" class="action" type="button">查看解析</button>
-              <span class="quiz-helper">選好答案後，再查看完整量測流程如何降低誤差。</span>
+              <button id="assessment-check-answer" class="action" type="button">檢查順序</button>
+              <span class="quiz-helper">拖曳卡片排序；也可聚焦卡片後用上下方向鍵移動。</span>
             </div>
             <div class="quiz-feedback" id="assessment-feedback" role="status" aria-live="polite" hidden></div>
           </div>
@@ -1552,21 +1564,83 @@
       window.addEventListener("pencil3d-ready", renderCorrectionScene, { once: true });
       renderCorrectionScene();
 
+      const measurementSequence = document.querySelector("#measurement-sequence");
+      const sequenceExpectedOrder = ["ruler", "align", "view", "estimate", "repeat", "average"];
+      const sequenceLive = document.querySelector("#sequence-live");
+      let draggedSequenceStep = null;
+      let sequenceDragHandle = null;
+      const sequenceSteps = () => [...measurementSequence.querySelectorAll(".sequence-step")];
+      const updateSequenceNumbers = () => sequenceSteps().forEach((step, index) => {
+        step.querySelector(".sequence-number").textContent = String(index + 1);
+      });
+      const clearSequenceFeedback = () => {
+        sequenceSteps().forEach((step) => step.removeAttribute("data-position-correct"));
+        const feedback = document.querySelector("#assessment-feedback");
+        feedback.hidden = true;
+        feedback.removeAttribute("data-result");
+        feedback.textContent = "";
+      };
+      const announceSequencePosition = (step) => {
+        const position = sequenceSteps().indexOf(step) + 1;
+        sequenceLive.textContent = `已移到第 ${position} 步`;
+      };
+      measurementSequence.addEventListener("pointerdown", (event) => {
+        const handle = event.target.closest(".sequence-handle");
+        if (!handle || event.button !== 0) return;
+        event.preventDefault();
+        sequenceDragHandle = handle;
+        draggedSequenceStep = handle.closest(".sequence-step");
+        draggedSequenceStep.classList.add("is-dragging");
+        handle.setPointerCapture(event.pointerId);
+        clearSequenceFeedback();
+      });
+      measurementSequence.addEventListener("pointermove", (event) => {
+        if (!draggedSequenceStep) return;
+        const otherSteps = sequenceSteps().filter((step) => step !== draggedSequenceStep);
+        const beforeStep = otherSteps.find((step) => event.clientY < step.getBoundingClientRect().top + step.getBoundingClientRect().height / 2);
+        if (beforeStep) measurementSequence.insertBefore(draggedSequenceStep, beforeStep);
+        else measurementSequence.append(draggedSequenceStep);
+        updateSequenceNumbers();
+      });
+      const finishSequenceDrag = (event) => {
+        if (!draggedSequenceStep) return;
+        const movedStep = draggedSequenceStep;
+        movedStep.classList.remove("is-dragging");
+        if (sequenceDragHandle?.hasPointerCapture(event.pointerId)) sequenceDragHandle.releasePointerCapture(event.pointerId);
+        draggedSequenceStep = null;
+        sequenceDragHandle = null;
+        announceSequencePosition(movedStep);
+      };
+      measurementSequence.addEventListener("pointerup", finishSequenceDrag);
+      measurementSequence.addEventListener("pointercancel", finishSequenceDrag);
+      measurementSequence.addEventListener("keydown", (event) => {
+        const handle = event.target.closest(".sequence-handle");
+        if (!handle || (event.key !== "ArrowUp" && event.key !== "ArrowDown")) return;
+        const step = handle.closest(".sequence-step");
+        const sibling = event.key === "ArrowUp" ? step.previousElementSibling : step.nextElementSibling;
+        if (!sibling) return;
+        event.preventDefault();
+        if (event.key === "ArrowUp") measurementSequence.insertBefore(step, sibling);
+        else measurementSequence.insertBefore(sibling, step);
+        updateSequenceNumbers();
+        clearSequenceFeedback();
+        announceSequencePosition(step);
+        handle.focus();
+      });
       document.querySelector("#assessment-check-answer").addEventListener("click", () => {
         const feedback = document.querySelector("#assessment-feedback");
-        const selectedAnswer = document.querySelector('input[name="length-record-check"]:checked');
+        const steps = sequenceSteps();
+        const isCorrect = steps.every((step, index) => step.dataset.sequenceStep === sequenceExpectedOrder[index]);
+        steps.forEach((step, index) => {
+          step.dataset.positionCorrect = String(step.dataset.sequenceStep === sequenceExpectedOrder[index]);
+        });
         feedback.hidden = false;
-        if (!selectedAnswer) {
-          feedback.dataset.result = "incorrect";
-          feedback.textContent = "請先選擇一個答案，再查看解析。";
-          return;
-        }
-        const isCorrect = selectedAnswer.value === "complete";
         feedback.dataset.result = isCorrect ? "correct" : "incorrect";
         feedback.textContent = isCorrect
-          ? "直尺適合量長度；每格 1 cm 時，可在 18 和 19 之間估讀並記下數值與單位。起點對準 0、視線正對刻度能減少固定偏差；重複量測取平均能降低讀值波動，但不能消除起點或視角偏差。"
-          : "檢查量測工具和物理量、每格代表的長度、估讀與單位；起點和視線也要對準。重複取平均能降低讀值波動，卻不能修正固定偏差。";
+          ? "順序正確：選合適的尺、對準 0 並正視刻度，可減少起點與視角偏差；估讀記錄後再重複測量取平均，可降低讀值波動。"
+          : "還有步驟未排正確。先選合適的尺並對準 0，再正對刻度觀察、估讀記錄；重複測量後才取平均。";
       });
+      updateSequenceNumbers();
 
       const routeLinks = [...document.querySelectorAll(".route a[href^='#card-']")];
       const lessonCards = routeLinks.map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean);
