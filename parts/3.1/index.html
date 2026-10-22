@@ -711,11 +711,11 @@
         <div class="quiz-body">
           <p class="quiz-lead">老師給你一段繩子，請比較兩把直尺的刻度，選一把來量繩子的長度，並讓結果可靠。先看圖，再把下方步驟排成合適的順序。</p>
           <figure class="quiz-measurement-figure" aria-labelledby="quiz-measurement-caption">
-            <svg viewBox="0 0 520 270" role="img" aria-labelledby="quiz-object-title quiz-object-desc">
+            <svg viewBox="0 0 520 205" role="img" aria-labelledby="quiz-object-title quiz-object-desc">
               <title id="quiz-object-title">一段尾端打結的扭股繩和兩把直尺</title>
-              <desc id="quiz-object-desc">一段淺米色粗扭股繩彎成曲線，右端打結；下方是量程相同、刻度疏密不同的兩把直尺。</desc>
-              <image href="rope-knot.png" x="12" y="0" width="496" height="137" preserveAspectRatio="xMidYMid meet" />
-              <g transform="translate(0 74)">
+              <desc id="quiz-object-desc">一段淺米色粗扭股繩平直擺放，右端打結；下方是量程相同、刻度疏密不同的兩把直尺。</desc>
+              <image href="rope-knot.png" x="85" y="5" width="350" height="50" preserveAspectRatio="xMidYMid meet" />
+              <g>
               <text x="17" y="105" fill="#46574e" font-size="12" font-family="system-ui, sans-serif">每格 5 cm</text>
               <rect x="70" y="91" width="392" height="37" rx="6" fill="#f2dfa9" stroke="#a99255" stroke-width="1.5" />
               <path d="M70 91h392" stroke="#fff0c9" stroke-width="2" />
@@ -758,7 +758,6 @@
               <li class="sequence-step" data-sequence-step="estimate"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">2</span><span>依每格長度估讀繩子末端，記下數值和單位。</span></li>
               <li class="sequence-step" data-sequence-step="ruler"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">3</span><span>選擇量程合適、刻度較密的直尺。</span></li>
               <li class="sequence-step" data-sequence-step="average"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">4</span><span>計算多次讀值的平均，作為較具代表性的結果。</span></li>
-              <li class="sequence-step" data-sequence-step="straighten"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">5</span><span>把彎曲的繩子拉直，再沿直尺放好。</span></li>
               <li class="sequence-step" data-sequence-step="align"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">5</span><span>將直尺的 0 刻度對準繩子起點。</span></li>
               <li class="sequence-step" data-sequence-step="view"><button class="sequence-handle" type="button" aria-label="拖曳此步驟；也可用上下方向鍵調整順序">⠿</button><span class="sequence-number">6</span><span>視線正對刻度，確認繩子末端落在哪兩條刻線之間。</span></li>
             </ol>
@@ -1610,7 +1609,7 @@
       renderCorrectionScene();
 
       const measurementSequence = document.querySelector("#measurement-sequence");
-      const sequenceExpectedOrder = ["ruler", "straighten", "align", "view", "estimate", "repeat", "average"];
+      const sequenceExpectedOrder = ["ruler", "align", "view", "estimate", "repeat", "average"];
       const sequenceLive = document.querySelector("#sequence-live");
       let draggedSequenceStep = null;
       let sequenceDragHandle = null;
@@ -1750,8 +1749,8 @@
         feedback.hidden = false;
         feedback.dataset.result = isCorrect ? "correct" : "incorrect";
         feedback.textContent = isCorrect
-          ? "順序正確：先選合適的尺並把繩子拉直，再對準 0、正視刻度並估讀；重複測量後取平均，讓結果更可靠。"
-          : "還有步驟未排正確。先選合適的尺並把繩子拉直，再對準 0、正視刻度並估讀；重複測量後才取平均。";
+          ? "順序正確：選合適的尺並對準 0，再正視刻度、估讀記錄；重複測量後取平均，讓結果更可靠。"
+          : "還有步驟未排正確。先選合適的尺並對準 0，再正視刻度觀察、估讀記錄；重複測量後才取平均。";
       });
       updateSequenceNumbers();
 
