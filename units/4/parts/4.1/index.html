@@ -245,9 +245,20 @@
     .compare-item[data-kind="gas"] { background:repeating-linear-gradient(135deg,#fff0d6 0 7px,#edb961 7px 9px); border-style:dashed; border-color:#b96b19; }
     .compare-item[data-active="true"] { outline:2px solid #8a602e; outline-offset:1px; }
     .demo-result { margin:7px 0 0!important; color:#66502f!important; font-size:.82rem!important; }
-    .particle-stage { min-height:170px; display:grid; place-items:center; border-radius:12px; background:#edf2eb; }
-    .particle-box { position:relative; width:190px; height:130px; border:2px solid #80968a; border-radius:10px; background:#fffdf8; }
-    .particle { position:absolute; width:14px; height:14px; border-radius:50%; background:#d7a94a; box-shadow:inset -2px -2px 0 #b28835; transition:all .3s ease; }
+    .particle-stage { min-height:216px; display:grid; place-items:center; padding:14px; border-radius:12px; background:#edf2eb; }
+    .particle-box { position:relative; width:min(100%,380px); height:188px; overflow:hidden; border:2px solid #80968a; border-radius:13px; background:linear-gradient(180deg,#fffefa,#f7faf6); }
+    .particle-molecule { position:absolute; left:var(--x); top:var(--y); width:25px; height:22px; transform:translate(-50%,-50%); transition:left 1.2s ease-in-out,top 1.2s ease-in-out; will-change:left,top; }
+    .particle-molecule svg { display:block; width:100%; height:100%; overflow:visible; }
+    .particle-legend { display:flex; flex-wrap:wrap; justify-content:center; gap:8px 16px; margin:9px 0 0; color:#5c6d63; font-size:.76rem; }
+    .particle-legend span { display:inline-flex; align-items:center; gap:5px; }
+    .particle-legend svg { width:22px; height:19px; flex:none; }
+    .particle-comparison { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:12px; }
+    .particle-comparison article { padding:10px 12px; border:1px solid #dbe4dc; border-radius:10px; background:#f8faf7; }
+    .particle-comparison h3 { margin:0 0 4px; color:#23624e; font-size:.88rem; }
+    .particle-comparison p { margin:0; color:#4f6159; font-size:.79rem; }
+    .particle-model-note { margin:10px 0 0; padding:9px 12px; border-radius:9px; background:#eef3ea; color:#52635a; font-size:.78rem; }
+    @media(max-width:680px) { .particle-stage { min-height:190px; padding:10px; } .particle-box { height:170px; } .particle-comparison { grid-template-columns:1fr; gap:6px; } .particle-comparison article { display:grid; grid-template-columns:58px 1fr; gap:8px; align-items:baseline; padding:8px 10px; } .particle-comparison h3 { margin:0; } }
+    @media(prefers-reduced-motion:reduce) { .particle-molecule { transition:none; } }
     .phase-visual { min-height:144px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(#e6f1f3,#f9f6ea); }
     .phase-water { display:grid; place-items:center; width:112px; height:90px; border:3px solid #6c8790; border-radius:12px 12px 20px 20px; background:linear-gradient(0deg,#79b6cc 55%,#f8fbfc 55%); color:#244a55; font-weight:850; }
     .property-grid,.class-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
@@ -467,14 +478,19 @@
         <section class="lesson-card" id="s3">
           <div class="card-side"><span class="card-number">03</span><h3>粒子模型</h3><span class="card-role">用模型解釋三態</span></div>
           <div class="card-main">
-            <h2>固體、液體和氣體裡的粒子，各自在做什麼？</h2>
-            <p>粒子小到不能直接看見，圖中的小球是幫助思考的模型。固體粒子彼此接近、位置較固定並持續振動；液體粒子彼此接近但能相對移動；氣體粒子間距較大，能在容器中移動。</p>
-            <div class="choice-row" role="group" aria-label="切換粒子模型">
-              <button type="button" data-particles="solid" aria-pressed="true">固體</button><button type="button" data-particles="liquid" aria-pressed="false">液體</button><button type="button" data-particles="gas" aria-pressed="false">氣體</button>
+            <h2>以水分子為例：水的三種狀態，粒子各自在做什麼？</h2>
+            <p>下面用同一批水分子（H₂O）比較固態、液態和氣態。三種狀態的水分子沒有換掉；改變的是它們的排列、間距和運動方式。</p>
+            <div class="choice-row" role="group" aria-label="選擇要觀察的水分子排列">
+              <button type="button" data-particles="solid" aria-pressed="true">固態：冰</button><button type="button" data-particles="liquid" aria-pressed="false">液態水</button><button type="button" data-particles="gas" aria-pressed="false">氣態：水蒸氣</button>
             </div>
-            <div class="particle-stage"><div class="particle-box" id="particle-box" aria-label="粒子排列示意"></div></div>
-            <p class="live-note" id="particle-note" aria-live="polite">固體：粒子彼此接近，位置大致固定，只在原位置附近振動。</p>
-            <p class="note">模型只用來解釋狀態，不表示空氣只有一種粒子；空氣是多種氣體組成的混合物。</p>
+            <div class="particle-stage"><div class="particle-box" id="particle-box" role="img" aria-label="同一批水分子在固態中的排列與振動"></div></div>
+            <div class="particle-legend" aria-label="水分子模型圖例"><span><svg viewBox="0 0 30 24" aria-hidden="true"><path d="M14 12 7 5M14 12 7 19" stroke="#80968a" stroke-width="2"/><circle cx="16" cy="12" r="5.5" fill="#8eb5c1" stroke="#4c7d8c"/><circle cx="6" cy="4.5" r="3" fill="#f7fbfc" stroke="#718b94"/><circle cx="6" cy="19.5" r="3" fill="#f7fbfc" stroke="#718b94"/></svg>一個水分子（H₂O）</span><span>模型顯示同一批 12 個水分子</span></div>
+            <div class="particle-comparison" aria-label="三種狀態的粒子特徵">
+              <article><h3>固態</h3><p>分子靠近、排列較整齊，在原位附近振動。</p></article>
+              <article><h3>液態</h3><p>分子仍靠近，排列不固定，能緩慢換位流動。</p></article>
+              <article><h3>氣態</h3><p>分子相距較遠，在容器空間中持續隨機移動。</p></article>
+            </div>
+            <p class="particle-model-note">點選上方狀態，觀察同一批水分子逐漸改變排列。圖中的分子形狀與大小是簡化模型，不按實際比例繪製。</p>
             <p class="next-hint">模型解釋了狀態差異；接著用蒸餾水追蹤升溫或冷卻時的變化。</p>
           </div>
         </section>
@@ -969,23 +985,41 @@
     });
 
     const particlePositions = {
-      solid:[[24,20],[54,20],[84,20],[114,20],[24,50],[54,50],[84,50],[114,50],[24,80],[54,80],[84,80],[114,80],[24,110],[54,110],[84,110],[114,110]],
-      liquid:[[18,24],[52,32],[91,18],[126,38],[28,65],[66,58],[111,73],[147,61],[18,101],[55,88],[96,108],[138,96],[42,119],[117,119]],
-      gas:[[8,8],[151,13],[67,13],[119,43],[29,47],[89,67],[159,82],[12,101],[58,108],[129,112],[103,24],[39,79]]
+      solid:[[29,34],[43,34],[57,34],[71,34],[29,50],[43,50],[57,50],[71,50],[29,66],[43,66],[57,66],[71,66]],
+      liquid:[[28,61],[43,66],[57,58],[72,64],[35,77],[50,73],[65,80],[80,74],[28,91],[44,88],[60,94],[76,89]],
+      gas:[[12,20],[35,13],[61,24],[84,12],[22,48],[52,39],[73,55],[92,45],[11,78],[42,72],[65,88],[87,80]]
     };
     const particleDescriptions = {
-      solid:"固體：粒子彼此接近，位置大致固定，只在原位置附近振動。",
-      liquid:"液體：粒子仍彼此接近，但可以相對移動。",
-      gas:"氣體：粒子間距較大，能在容器空間中移動。"
+      solid:"固態的水分子靠近並排列較整齊，只在原位附近振動。",
+      liquid:"液態的水分子仍靠近，但排列不固定，可以緩慢換位。",
+      gas:"氣態的水分子彼此較遠，在整個容器空間中持續隨機移動。"
     };
-    function drawParticles(state) {
-      const box=document.getElementById("particle-box"); box.replaceChildren();
-      particlePositions[state].forEach(([x,y],index)=>{const dot=document.createElement("span");dot.className="particle";dot.style.left=`${x}px`;dot.style.top=`${y}px`;dot.style.animation=state==="gas"?`drift ${2.1+(index%4)*.35}s ease-in-out ${-(index%5)*.4}s infinite alternate`:state==="liquid"?`drift ${3+(index%3)*.45}s ease-in-out ${-(index%4)*.5}s infinite alternate`:state==="solid"?`vibrate .55s ease-in-out ${-(index%5)*.1}s infinite alternate`:"none";box.append(dot);});
-      document.getElementById("particle-note").textContent=particleDescriptions[state];
-      document.querySelectorAll("[data-particles]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.particles===state)));
+    const particleBox=document.getElementById("particle-box");
+    const moleculeSvg='<svg viewBox="0 0 30 24" aria-hidden="true"><path d="M14 12 7 5M14 12 7 19" stroke="#80968a" stroke-width="2"/><circle cx="16" cy="12" r="5.5" fill="#8eb5c1" stroke="#4c7d8c" stroke-width="1.2"/><circle cx="6" cy="4.5" r="3" fill="#f7fbfc" stroke="#718b94" stroke-width="1.2"/><circle cx="6" cy="19.5" r="3" fill="#f7fbfc" stroke="#718b94" stroke-width="1.2"/></svg>';
+    const molecules=particlePositions.solid.map((_,index)=>{const molecule=document.createElement("span");molecule.className="particle-molecule";molecule.innerHTML=moleculeSvg;molecule.setAttribute("aria-hidden","true");molecule.dataset.index=String(index);particleBox.append(molecule);return molecule;});
+    let particleState="solid",particleMotionTimer;
+    const reducedParticleMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
+    function setParticlePositions(state,settle=false){
+      const positions=particlePositions[state];
+      molecules.forEach((molecule,index)=>{
+        const [baseX,baseY]=positions[index];
+        const amplitude=state==="solid"?1.5:state==="liquid"?3:6;
+        const jitterX=settle?0:(Math.random()*2-1)*amplitude;
+        const jitterY=settle?0:(Math.random()*2-1)*amplitude;
+        molecule.style.setProperty("--x",`${baseX+jitterX}%`);
+        molecule.style.setProperty("--y",`${baseY+jitterY}%`);
+      });
     }
-    const style=document.createElement("style");style.textContent="@keyframes drift{to{translate:3px -3px}}@keyframes vibrate{to{translate:1px -1px}}";document.head.append(style);
+    function drawParticles(state){
+      particleState=state;
+      setParticlePositions(state,true);
+      particleBox.setAttribute("aria-label",`同一批 12 個水分子在${state==="solid"?"固態":state==="liquid"?"液態":"氣態"}中的排列與運動`);
+      document.querySelectorAll("[data-particles]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.particles===state)));
+      clearInterval(particleMotionTimer);
+      if(!reducedParticleMotion.matches)particleMotionTimer=setInterval(()=>setParticlePositions(particleState),1500);
+    }
     document.querySelectorAll("[data-particles]").forEach(button=>button.addEventListener("click",()=>drawParticles(button.dataset.particles)));
+    reducedParticleMotion.addEventListener?.("change",()=>drawParticles(particleState));
     drawParticles("solid");
 
     const phaseData={
