@@ -207,6 +207,11 @@
       const quizFeedback=$('#check-feedback'),quizChoices=$$('input[name="density-check"]');quizChoices.forEach(choice=>choice.addEventListener('change',()=>{quizFeedback.dataset.result='';quizFeedback.hidden=true;quizFeedback.textContent=''}));$('#check-answer').addEventListener('click',()=>{const selected=$('input[name="density-check"]:checked');if(!selected){quizFeedback.dataset.result='';quizFeedback.hidden=false;quizFeedback.textContent='請先選一個答案，再查看解析。';return}quizFeedback.hidden=false;if(selected.value==='gold'){quizFeedback.dataset.result='correct';quizFeedback.textContent='判斷正確。兩個樣本體積相同，純金樣本的質量較大，所以密度較大：約 289.5 g ÷ 15 cm³ ≈ 19.3 g/cm³；石頭樣本為 39 g ÷ 15 cm³ = 2.6 g/cm³。'}else{quizFeedback.dataset.result='incorrect';quizFeedback.textContent='再看一次資料：兩個樣本的體積都是 15 cm³。純金樣本的質量較大，因此每 1 cm³ 所含的質量較多，密度也較大。'}});
     })();
   </script>
-  <script type="module" src="assets/density-experiment-quiz.js"></script>
+  <script type="module">
+    const experimentModule = new URL("assets/density-experiment-quiz.js", document.baseURI);
+    const pageVersion = new URL(location.href).searchParams.get("v");
+    if (pageVersion) experimentModule.searchParams.set("v", pageVersion);
+    import(experimentModule.href);
+  </script>
 </body>
 </html>
