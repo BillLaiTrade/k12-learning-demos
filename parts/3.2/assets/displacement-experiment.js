@@ -22,14 +22,14 @@ export function mountDisplacementExperiment() {
     water.style.height = immersed ? '91.6667%' : '66.6667%';
     marks.forEach(mark => mark.classList.toggle('active', Number(mark.dataset.volume) === (immersed ? 55 : 40)));
     cylinder.setAttribute('aria-label', '量筒，目前水量 ' + (immersed ? '55' : '40') + ' 毫升');
-    rock.setAttribute('aria-label', immersed ? '同一塊隕石已完全浸入量筒；可拖曳取出' : '同一塊隕石；可拖曳到量筒內，或按 Enter 放入');
+    rock.setAttribute('aria-label', immersed ? '同一塊石頭已完全浸入量筒；可拖曳取出' : '同一塊石頭；可拖曳到量筒內，或按 Enter 放入');
     placeButton.disabled = immersed;
     resetButton.disabled = !immersed;
     status.dataset.state = immersed ? 'complete' : 'ready';
     if (immersed) {
-      status.textContent = '隕石已完全浸入。比較放入前後的水位；水位差就是隕石排開水的體積。可將隕石拖出重新測量。';
+      status.textContent = '石頭已完全浸入。比較放入前後的水位；水位差就是石頭排開水的體積。可將石頭拖出重新測量。';
     } else {
-      status.textContent = '拖曳隕石進入量筒，讓它完全浸入水中；也可使用下方按鈕。';
+      status.textContent = '拖曳石頭進入量筒，讓它完全浸入水中；也可使用下方按鈕。';
     }
   }
 
@@ -116,7 +116,7 @@ export function mountDisplacementExperiment() {
     rock.style.top = '';
     rock.style.bottom = '';
     status.dataset.state = 'ready';
-    status.textContent = '隕石要放在量筒內並完全浸入水中；再觀察水位變化。';
+    status.textContent = '石頭要放在量筒內並完全浸入水中；再觀察水位變化。';
   }
 
   rock.addEventListener('pointerup', finishDrag);

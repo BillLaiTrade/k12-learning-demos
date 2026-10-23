@@ -224,13 +224,9 @@ function makeBalance(scene, materials) {
   panShadow.position.set(support.x, -0.638, support.z);
   panShadow.visible = false;
   leftPan.add(panShadow);
-  const rightPanShadow = contactShadow(1.35, 0.9);
-  rightPanShadow.position.copy(panShadow.position);
-  rightPanShadow.visible = false;
-  rightPan.add(rightPanShadow);
   base.position.y = 0;
   scene.add(base);
-  return { base, pivot: beamPivot, arc: scaleArc, leftPan, rightPan, stone, panShadow, rightPanShadow, stoneRestY, sourcePosition };
+  return { base, pivot: beamPivot, arc: scaleArc, leftPan, rightPan, stone, panShadow, stoneRestY, sourcePosition };
 }
 
 function makeDigitalScale(scene, materials) {
@@ -361,11 +357,9 @@ export function mountMassMeasurement() {
   const removeButton = document.querySelector('#remove-from-scale');
   let mode = 'balance';
   let balancePlaced = false;
-  let balanceSide = 'left';
   let placingBalance = false;
   let weights = [];
   let weightOrigins = [];
-  let weightSides = [];
   const weightModels = [];
   let weighed = false;
   let placingDigital = false;
@@ -408,14 +402,11 @@ export function mountMassMeasurement() {
   function drawWeights() {
     clearWeightModels();
     weightTray.replaceChildren();
-    const sideCounts = { left: 0, right: 0 };
     weights.forEach((value, index) => {
       const weight = makeWeight(value);
-      const side = weightSides[index] === 'left' ? 'left' : 'right';
-      const localIndex = sideCounts[side]++;
-      const col = localIndex % 3, row = Math.floor(localIndex / 3);
+      const col = index % 3, row = Math.floor(index / 3);
       weight.position.set((col - 1) * 0.35, -0.64 + row * 0.02, (row - 0.5) * 0.32);
-      (side === 'left' ? balance.leftPan : balance.rightPan).add(weight);
+      balance.rightPan.add(weight);
       weightModels.push(weight);
       const tag = document.createElement('span');
       tag.className = 'weight-chip';
@@ -427,20 +418,18 @@ export function mountMassMeasurement() {
       button.disabled = total + Number(button.dataset.weight) > 60;
     });
     weightTotal.textContent = `${total} g`;
-    const leftWeight = weights.reduce((sum, value, index) => sum + (weightSides[index] === 'left' ? value : 0), 0);
-    const rightWeight = weights.reduce((sum, value, index) => sum + (weightSides[index] === 'right' ? value : 0), 0);
-    const leftMass = leftWeight + (balancePlaced && balanceSide === 'left' ? MASS_G : 0);
-    const rightMass = rightWeight + (balancePlaced && balanceSide === 'right' ? MASS_G : 0);
-    const difference = leftMass - rightMass;
+    const difference = (balancePlaced ? MASS_G : 0) - total;
     targetTilt = clamp(difference * 0.006, -0.18, 0.18);
-    const balanced = leftMass === rightMass && leftMass > 0;
+    const balanced = balancePlaced && total === MASS_G;
     status.textContent = balanced
       ? '已達平衡！兩側質量相等。'
-      : balancePlaced || total > 0
+      : balancePlaced
         ? difference > 0
-          ? '左側秤盤較重；可以調整兩側的物件，直到平衡。'
-          : '右側秤盤較重；可以調整兩側的物件，直到平衡。'
-        : placingBalance ? '隕石正移至秤盤…' : '把隕石或砝碼拖到任一秤盤上。';
+          ? '石頭這一側較低，砝碼還不夠；可以再加一些。'
+          : '砝碼這一側較低，砝碼已過多；可以移除一些。'
+        : !balancePlaced && total > 0
+          ? '右側秤盤已有砝碼；可拖回畫面中的架上移除，或放上石頭比較。'
+          : placingBalance ? '石頭正移至左側秤盤…' : '拖曳石頭到左側秤盤，或按下按鈕。';
     status.dataset.balanced = String(balanced);
     showReading();
   }
@@ -449,15 +438,13 @@ export function mountMassMeasurement() {
     weightOrigins.forEach(origin => { if (origin !== null) sourceWeightModels[origin].visible = true; });
     weights = [];
     weightOrigins = [];
-    weightSides = [];
     drawWeights();
   }
   function resetBalance() {
-    const stoneWasOnPan = balancePlaced || balance.stone.parent === balance.leftPan || balance.stone.parent === balance.rightPan;
+    const stoneWasOnPan = balancePlaced || balance.stone.parent === balance.leftPan;
     placingBalance = false;
     balancePlaced = false;
     balance.panShadow.visible = false;
-    balance.rightPanShadow.visible = false;
     balance.stone.visible = mode === 'balance';
     if (stoneWasOnPan) {
       if (balance.stone.parent !== scene) detachPreservingWorldTransform(balance.stone);
@@ -470,15 +457,14 @@ export function mountMassMeasurement() {
     }
     balanceTargetPosition.copy(balance.sourcePosition);
     balancePlaceButton.disabled = false;
-    balancePlaceButton.textContent = '將隕石放上左盤';
+    balancePlaceButton.textContent = '將石頭放上左盤';
     clearBalanceWeights();
   }
   let suppressWeightClick = false;
-  function addWeight(next, origin = null, side = 'right') {
+  function addWeight(next, origin = null) {
     if (weights.reduce((sum, value) => sum + value, 0) + next > 60) return;
     weights.push(next);
     weightOrigins.push(origin);
-    weightSides.push(side);
     if (origin !== null) sourceWeightModels[origin].visible = false;
     drawWeights();
   }
@@ -517,8 +503,7 @@ export function mountMassMeasurement() {
       start = null;
       if (button.hasPointerCapture(event.pointerId)) button.releasePointerCapture(event.pointerId);
       ghost?.remove(); ghost = null;
-      const side = balanceDropSide(event);
-      if (drag.moved && mode === 'balance' && side) addWeight(drag.value, null, side);
+      if (drag.moved && mode === 'balance' && rightPanDropTarget(event)) addWeight(drag.value);
       if (drag.moved) window.setTimeout(() => { suppressWeightClick = false; }, 0);
     };
     button.addEventListener('pointerup', finishWeightDrag);
@@ -527,23 +512,20 @@ export function mountMassMeasurement() {
   document.querySelector('#balance-undo').addEventListener('click', () => {
     weights.pop();
     const origin = weightOrigins.pop();
-    weightSides.pop();
     if (origin !== null && origin !== undefined) sourceWeightModels[origin].visible = true;
     drawWeights();
   });
   document.querySelector('#balance-reset').addEventListener('click', resetBalance);
-  function placeStoneOnBalance(side = 'left') {
+  function placeStoneOnBalance() {
     if (balancePlaced || placingBalance) return;
     returningBalance = false;
-    balanceSide = side;
     placingBalance = true;
-    const pan = side === 'left' ? balance.leftPan : balance.rightPan;
-    balanceTargetPosition.copy(pan.localToWorld(new THREE.Vector3(0, balance.stoneRestY, 0)));
+    balanceTargetPosition.copy(balance.leftPan.localToWorld(new THREE.Vector3(0, balance.stoneRestY, 0)));
     balancePlaceButton.disabled = true;
-    balancePlaceButton.textContent = '正在放上秤盤…';
-    status.textContent = '隕石正移至秤盤…';
+    balancePlaceButton.textContent = '正在放上左盤…';
+    status.textContent = '石頭正移至左側秤盤…';
   }
-  balancePlaceButton.addEventListener('click', () => placeStoneOnBalance('left'));
+  balancePlaceButton.addEventListener('click', placeStoneOnBalance);
 
   function setMode(nextMode) {
     mode = nextMode;
@@ -564,7 +546,6 @@ export function mountMassMeasurement() {
       digital.shadow.visible = mode === 'digital' && weighed;
     if (mode === 'digital') {
       balance.panShadow.visible = false;
-      balance.rightPanShadow.visible = false;
       balance.stone.visible = false;
       digital.stone.scale.setScalar(0.43);
       digital.stone.visible = true;
@@ -573,20 +554,18 @@ export function mountMassMeasurement() {
         digitalTargetPosition.copy(digital.stone.position);
       }
       placeButton.disabled = weighed || placingDigital;
-      placeButton.textContent = weighed ? '隕石已放上秤盤' : placingDigital ? '正在放上秤盤…' : '將隕石放上秤盤';
+      placeButton.textContent = weighed ? '石頭已放上秤盤' : placingDigital ? '正在放上秤盤…' : '將石頭放上秤盤';
       removeButton.disabled = !weighed || placingDigital;
       digital.updateDisplay(weighed ? '39' : '0.0', 'g');
       status.textContent = weighed
-        ? '隕石已放穩；請讀取秤面上的數值。'
-        : placingDigital ? '隕石正移至電子秤秤盤…' : '拖曳隕石到電子秤秤盤，或按下按鈕。';
+        ? '石頭已放穩；請讀取秤面上的數值。'
+        : placingDigital ? '石頭正移至電子秤秤盤…' : '拖曳石頭到電子秤秤盤，或按下按鈕。';
     } else {
       digital.stone.visible = false;
       balance.stone.visible = true;
-      balance.panShadow.visible = balancePlaced && balanceSide === 'left';
-      balance.rightPanShadow.visible = balancePlaced && balanceSide === 'right';
+      balance.panShadow.visible = balancePlaced;
       if (balancePlaced) {
-        const pan = balanceSide === 'left' ? balance.leftPan : balance.rightPan;
-        if (balance.stone.parent !== pan) pan.add(balance.stone);
+        if (balance.stone.parent !== balance.leftPan) balance.leftPan.add(balance.stone);
         balance.stone.position.set(0, balance.stoneRestY, 0);
       } else if (!placingBalance && !returningBalance) {
         if (balance.stone.parent !== scene) scene.add(balance.stone);
@@ -594,7 +573,7 @@ export function mountMassMeasurement() {
         balanceTargetPosition.copy(balance.sourcePosition);
       }
       balancePlaceButton.disabled = balancePlaced || placingBalance;
-      balancePlaceButton.textContent = balancePlaced ? `隕石已放上${balanceSide === 'left' ? '左' : '右'}盤` : placingBalance ? '正在放上秤盤…' : '將隕石放上左盤';
+      balancePlaceButton.textContent = balancePlaced ? '石頭已放上左盤' : placingBalance ? '正在放上左盤…' : '將石頭放上左盤';
       clearBalanceWeights();
     }
     showReading();
@@ -613,7 +592,7 @@ export function mountMassMeasurement() {
     placeButton.disabled = true;
     placeButton.textContent = '正在放上秤盤…';
     removeButton.disabled = true;
-    status.textContent = '隕石正移至電子秤秤盤…';
+    status.textContent = '石頭正移至電子秤秤盤…';
     status.dataset.balanced = 'false';
     showReading();
   }
@@ -625,7 +604,7 @@ export function mountMassMeasurement() {
     removeButton.disabled = true;
     placeButton.disabled = true;
     digitalTargetPosition.copy(digital.sourcePosition);
-    status.textContent = '隕石正移回秤盤旁…';
+    status.textContent = '石頭正移回秤盤旁…';
     status.dataset.balanced = 'false';
     showReading();
   });
@@ -652,31 +631,9 @@ export function mountMassMeasurement() {
     }
     return x >= bounds.left - 12 && x <= bounds.right + 12 && y >= bounds.top - 10 && y <= bounds.bottom + 10;
   }
-  function balanceDropSide(event) {
-    if (panDropTarget(event, balance.leftPan)) return 'left';
-    if (panDropTarget(event, balance.rightPan)) return 'right';
-    return null;
-  }
-  function balanceDropSideOrAbove(event) {
-    camera.updateMatrixWorld();
-    const rect = canvas.getBoundingClientRect();
-    for (const [side, pan] of [['left', balance.leftPan], ['right', balance.rightPan]]) {
-      pan.updateWorldMatrix(true, false);
-      const bounds = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
-      for (const level of [-0.64, 0.05, 0.42]) for (let i = 0; i < 24; i++) {
-        const angle = Math.PI * 2 * i / 24;
-        const point = pan.localToWorld(new THREE.Vector3(Math.cos(angle) * 0.9, level, Math.sin(angle) * 0.9));
-        point.project(camera);
-        const px = rect.left + (point.x + 1) * rect.width / 2;
-        const py = rect.top + (1 - point.y) * rect.height / 2;
-        bounds.left = Math.min(bounds.left, px); bounds.right = Math.max(bounds.right, px);
-        bounds.top = Math.min(bounds.top, py); bounds.bottom = Math.max(bounds.bottom, py);
-      }
-      if (event.clientX >= bounds.left - 12 && event.clientX <= bounds.right + 12
-        && event.clientY >= bounds.top - Math.max(110, rect.height * 0.34)
-        && event.clientY <= bounds.bottom + 10) return side;
-    }
-    return null;
+  function balanceDropTarget(event) { return panDropTarget(event, balance.leftPan); }
+  function rightPanDropTarget(event) {
+    return panDropTarget(event, balance.rightPan);
   }
   function digitalDropTarget(event) {
     camera.updateMatrixWorld();
@@ -746,10 +703,9 @@ export function mountMassMeasurement() {
           if (balancePlaced) {
             balancePlaced = false;
             balance.panShadow.visible = false;
-            balance.rightPanShadow.visible = false;
             detachPreservingWorldTransform(object);
             balancePlaceButton.disabled = false;
-            balancePlaceButton.textContent = '將隕石放上左盤';
+            balancePlaceButton.textContent = '將石頭放上左盤';
             drawWeights();
           }
         }
@@ -761,7 +717,7 @@ export function mountMassMeasurement() {
         weighed = false;
         digital.shadow.visible = false;
         placeButton.disabled = false;
-        placeButton.textContent = '將隕石放上秤盤';
+        placeButton.textContent = '將石頭放上秤盤';
         removeButton.disabled = true;
         showReading();
       }
@@ -777,7 +733,7 @@ export function mountMassMeasurement() {
     activeStoneDrag = { pointerId: event.pointerId, mode, object, kind: dragKind, weightIndex, sourceIndex };
     canvas.setPointerCapture(event.pointerId);
     canvas.style.cursor = 'grabbing';
-    status.textContent = dragKind === 'weight' || dragKind === 'source-weight' ? '將砝碼拖到任一秤盤，或拖離秤盤取下。' : mode === 'balance' ? '將隕石拖到任一秤盤，或拖離秤盤取下。' : '將隕石拖到電子秤秤盤，或拖離秤盤取下。';
+    status.textContent = dragKind === 'weight' || dragKind === 'source-weight' ? '拖曳砝碼到右側秤盤；拖離秤盤即可取下。' : mode === 'balance' ? '將石頭拖到左側秤盤，或拖離秤盤取下。' : '將石頭拖到電子秤秤盤，或拖離秤盤取下。';
     event.preventDefault();
   });
   canvas.addEventListener('pointermove', event => {
@@ -794,39 +750,34 @@ export function mountMassMeasurement() {
     canvas.style.cursor = 'grab';
     if (dragged.kind === 'source-weight') {
       const source = weightSource.weights[dragged.sourceIndex];
-      const side = balanceDropSideOrAbove(event);
-      if (side && weights.reduce((sum, value) => sum + value, 0) + source.value <= 60) {
-        addWeight(source.value, null, side);
+      if (rightPanDropTarget(event) && weights.reduce((sum, value) => sum + value, 0) + source.value <= 60) {
+        addWeight(source.value);
       } else {
-        status.textContent = '可將砝碼拖到任一秤盤，架上的砝碼會留在原位。';
+        status.textContent = '可將砝碼拖到右側秤盤，架上的砝碼會留在原位。';
       }
       dragged.object.removeFromParent();
     } else if (dragged.kind === 'weight') {
-      const side = balanceDropSideOrAbove(event);
-      if (side) {
-        weightSides[dragged.weightIndex] = side;
+      if (rightPanDropTarget(event)) {
         drawWeights();
-        status.textContent = `砝碼已放上${side === 'left' ? '左' : '右'}側秤盤；也可以拖到另一側或移除。`;
+        status.textContent = '砝碼已放上右側秤盤；也可以拖出秤盤移除。';
       } else {
         weights.splice(dragged.weightIndex, 1);
         const origin = weightOrigins.splice(dragged.weightIndex, 1)[0];
-        weightSides.splice(dragged.weightIndex, 1);
         if (origin !== null && origin !== undefined) sourceWeightModels[origin].visible = true;
         drawWeights();
       }
     } else if (dragged.mode === 'balance') {
-      const side = balanceDropSideOrAbove(event);
-      if (side) placeStoneOnBalance(side);
+      if (balanceDropTarget(event)) placeStoneOnBalance();
       else {
         returningBalance = true;
-        status.textContent = '隕石已取下，移回秤盤旁。';
+        status.textContent = '石頭已取下，移回秤盤旁。';
         drawWeights();
       }
     } else if (digitalDropTarget(event)) placeStoneOnDigitalScale();
     else {
       returningDigital = true;
       digitalTargetPosition.copy(digital.sourcePosition);
-      status.textContent = '隕石已取下，移回電子秤旁。';
+      status.textContent = '石頭已取下，移回電子秤旁。';
     }
   }
   canvas.addEventListener('pointerup', finishStoneDrag);
@@ -851,19 +802,16 @@ export function mountMassMeasurement() {
     balance.leftPan.rotation.z = -currentTilt;
     balance.rightPan.rotation.z = -currentTilt;
     if (placingBalance) {
-      const targetPan = balanceSide === 'left' ? balance.leftPan : balance.rightPan;
-      balanceTargetPosition.copy(targetPan.localToWorld(new THREE.Vector3(0, balance.stoneRestY, 0)));
+      balanceTargetPosition.copy(balance.leftPan.localToWorld(new THREE.Vector3(0, balance.stoneRestY, 0)));
       balance.stone.position.lerp(balanceTargetPosition, 0.12);
       if (balance.stone.position.distanceTo(balanceTargetPosition) < 0.015) {
         placingBalance = false;
         balancePlaced = true;
         balance.stone.removeFromParent();
-        const pan = balanceSide === 'left' ? balance.leftPan : balance.rightPan;
-        pan.add(balance.stone);
+        balance.leftPan.add(balance.stone);
         balance.stone.position.set(0, balance.stoneRestY, 0);
-        balance.panShadow.visible = balanceSide === 'left';
-        balance.rightPanShadow.visible = balanceSide === 'right';
-        balancePlaceButton.textContent = `隕石已放上${balanceSide === 'left' ? '左' : '右'}盤`;
+        balance.panShadow.visible = true;
+        balancePlaceButton.textContent = '石頭已放上左盤';
         drawWeights();
       }
     } else if (returningBalance) {
@@ -883,9 +831,9 @@ export function mountMassMeasurement() {
           weighed = true;
           digital.shadow.visible = true;
           placeButton.disabled = true;
-          placeButton.textContent = '隕石已放上秤盤';
+          placeButton.textContent = '石頭已放上秤盤';
           removeButton.disabled = false;
-          status.textContent = '隕石已放穩；請讀取秤面上的數值。';
+          status.textContent = '石頭已放穩；請讀取秤面上的數值。';
           status.dataset.balanced = 'true';
           showReading();
         }
@@ -893,8 +841,8 @@ export function mountMassMeasurement() {
           returningDigital = false;
           digital.shadow.visible = false;
           placeButton.disabled = false;
-          placeButton.textContent = '將隕石放上秤盤';
-          status.textContent = '隕石已取下並回到電子秤旁；可拖曳或按鈕再次秤量。';
+          placeButton.textContent = '將石頭放上秤盤';
+          status.textContent = '石頭已取下並回到電子秤旁；可拖曳或按鈕再次秤量。';
         }
       }
     }
