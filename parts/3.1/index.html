@@ -622,6 +622,7 @@
           <h2>同一物體，為什麼讀值會差一點？</h2>
           <p>同一支鉛筆平行放在 20 cm 直尺上，筆尖對齊 0 cm。切換兩個預設視角，或拖曳 3D 場景自由旋轉；觀察筆尾投影落在哪個刻度，以及讀值如何改變。</p>
           <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>阿公，同一支鉛筆明明沒有變長，為什麼換個角度看，讀到的數字好像不一樣？</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>我們來拖曳畫面轉換觀察角度。看看鉛筆端點投影到尺上的位置，以及讀到的數字有什麼變化。</p></div>
           <div class="parallax-scene" id="parallax-scene">
             <canvas id="pencil-3d-canvas" aria-hidden="true"></canvas>
             <span id="pencil-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
@@ -652,6 +653,8 @@
         <div class="card-main">
           <h2 id="estimate-heading">鉛筆端點落在相鄰刻線之間，該怎麼估讀？</h2>
           <p id="estimate-instruction">先依整把尺估讀鉛筆右端，再用圖片上的放大按鈕或滑鼠滾輪查看 18 cm 和 19 cm 之間的位置。</p>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>鉛筆末端落在兩條刻線中間，只看整數刻線好像不夠準，那我要怎麼估讀？</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>先觀察末端落在兩條刻線間的位置，再移動滑桿選擇估值。也可以放大查看，但放大不會增加刻線。</p></div>
           <div class="estimate-workspace">
           <aside class="model-panel" aria-labelledby="model-title">
             <h2 id="model-title">觀察鉛筆端點</h2>
