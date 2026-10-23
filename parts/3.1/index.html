@@ -713,6 +713,7 @@
               <button type="button" class="secondary" data-correction-control="angle" aria-pressed="false"><strong>正對尺面</strong><small id="correction-angle-status">正對尺面</small></button>
               <button type="button" class="secondary" data-correction-control="average" aria-pressed="false"><strong>重複量測</strong><small>取平均降波動</small></button>
             </div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p id="correction-grandpa-tip" aria-live="polite">刻度加密能縮小估讀範圍，但不會修正起點偏移或視線角度造成的誤差。</p></div>
             <h3 id="correction-stage-title">調整刻度密度</h3>
             <p id="correction-stage-prompt">端點落在相距很遠的刻線之間，讀值範圍較大。拖動滑桿逐步加密刻度，觀察範圍如何縮小。</p>
             <div class="correction-parallax-scene" id="correction-parallax-scene" data-magnifier="false">
@@ -1784,6 +1785,13 @@
         renderCorrectionAverageSummary();
       };
       const renderCorrectionScene = () => {
+        const grandpaTips = {
+          density: "刻度加密能縮小估讀範圍，但不會修正起點偏移或視線角度造成的誤差。",
+          origin: "把零刻度對準起點，讀到的終點刻度就能直接表示長度。",
+          angle: "眼睛正對刻度讀值，能避免視線角度造成讀值偏移。",
+          average: "多次讀值取平均能降低偶然波動；固定的起點或視角偏差仍要另外修正。"
+        };
+        document.querySelector("#correction-grandpa-tip").textContent = grandpaTips[correctionMode];
         const sceneActive = correctionMode !== "average";
         correctionWorkspace.dataset.control = correctionMode;
         correctionScene.hidden = !sceneActive;
