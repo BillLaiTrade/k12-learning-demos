@@ -1109,13 +1109,38 @@
         const vibrationX=.42+(index%3)*.04,vibrationY=.3+(index%2)*.04;molecule.style.setProperty("--vibrate-from-x",`${index%2?vibrationX:-vibrationX}px`);molecule.style.setProperty("--vibrate-to-x",`${index%2?-vibrationX:vibrationX}px`);molecule.style.setProperty("--vibrate-from-y",`${index%3?vibrationY:-vibrationY}px`);molecule.style.setProperty("--vibrate-to-y",`${index%3?-vibrationY:vibrationY}px`);
         if(state==="solid"){molecule.dataset.vibrating="true";molecule.style.animationDelay=`-${(index%6)*.07}s`;}
         if(state==="gas"||state==="liquid"){
-          const variables=gasParticleMotionVars(state==="gas"?Math.min(9,box.clientWidth*.05):3,state==="gas"?Math.min(7,box.clientHeight*.035):2,1.25);
+          const variables=gasParticleMotionVars(state==="gas"?Math.min(9,box.clientWidth*.05):3,state==="gas"?Math.min(7,box.clientHeight*.035):2,state==="gas"?2/3:5/6);
           Object.entries(variables).forEach(([name,value])=>molecule.style.setProperty(name,value));
           molecule.style.animationDelay=`calc(${variables["--gas-drift-delay"]} - ${(index%4)*.37}s)`;
         }
         box.append(molecule);
       });
+      if(state==="liquid") arrangeLiquidParticles(box);
     });
+
+    function arrangeLiquidParticles(box){
+      const particles=[...box.querySelectorAll(".particle-molecule")];
+      if(!particles.length)return;
+      const width=box.clientWidth,height=box.clientHeight,size=particles[0].getBoundingClientRect().width,radius=size/2,gap=5;
+      const columns=Math.max(1,Math.floor((width-2*radius-6)/(size+gap))+1);
+      const spacingX=columns>1?(width-2*(radius+3))/(columns-1):0;
+      particles.forEach((particle,index)=>{
+        const row=Math.floor(index/columns),column=index%columns,rowCount=Math.min(columns,particles.length-row*columns);
+        const rowWidth=(rowCount-1)*spacingX,startX=(width-rowWidth)/2;
+        const centerX=startX+column*spacingX,centerY=height-radius-3-row*(size+gap);
+        particle.style.setProperty("--x",`${centerX/width*100}%`);
+        particle.style.setProperty("--y",`${centerY/height*100}%`);
+      });
+    }
+    let particleLayoutFrame=0;
+    window.addEventListener("resize",()=>{
+      if(particleLayoutFrame)cancelAnimationFrame(particleLayoutFrame);
+      particleLayoutFrame=requestAnimationFrame(()=>{
+        const liquidBox=document.getElementById("particle-box-liquid");
+        if(liquidBox)arrangeLiquidParticles(liquidBox);
+        particleLayoutFrame=0;
+      });
+    },{passive:true});
 
     const phaseProcesses={
       melt:{title:"融化｜冰變成水",energy:"吸熱｜固態變液態",copy:"固態物質吸收熱量後變成液態。冰受熱會逐漸融化成水。",steps:["冰（固態）","吸收熱量","水（液態）"]},
