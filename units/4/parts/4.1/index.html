@@ -1246,7 +1246,7 @@
         const path=document.getElementById(`phase-path-${key}`),travelers=2;
         const matrix=path.getScreenCTM();let screenLength=0,previous=null;
         for(let i=0;i<=32;i++){const point=path.getPointAtLength(path.getTotalLength()*i/32),screen=phaseSvg.createSVGPoint();screen.x=point.x;screen.y=point.y;const transformed=screen.matrixTransform(matrix);if(previous)screenLength+=Math.hypot(transformed.x-previous.x,transformed.y-previous.y);previous=transformed;}
-        const duration=Math.max(2.1,Math.min(4.4,screenLength/92));
+        const duration=Math.max(2.1,Math.min(4.4,screenLength/92))*2;
         for(let i=0;i<travelers;i++){
           const group=document.createElementNS(svgNS,"g");group.classList.add("phase-traveler");group.setAttribute("aria-hidden","true");group.setAttribute("pointer-events","none");
           const motion=document.createElementNS(svgNS,"animateMotion");motion.setAttribute("dur",`${duration}s`);motion.setAttribute("begin",`${i*duration/travelers}s`);motion.setAttribute("repeatCount","indefinite");
