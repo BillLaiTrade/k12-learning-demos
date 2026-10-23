@@ -1299,20 +1299,13 @@
       let softTapeFrameId = 0;
       const drawSoftTape = value => {
         const progress=Math.max(0,Math.min(100,Number(value)))/100, looseness=1-progress;
-        const left=128,seam=370,end=448-30*progress;
-        const topAt=t=>(1-t)*(1-t)*103+2*(1-t)*t*(116+12*looseness)+t*t*127;
-        const thickAt=t=>46+14*looseness*Math.sin(Math.PI*t);
-        const bottomAt=t=>topAt(t)+thickAt(t);
-        const tailTop=topAt(1)+6*looseness,tailBottom=tailTop+39;
-        const d=`M${left} 103 Q249 ${116+12*looseness} ${seam} 127 L${end.toFixed(1)} ${tailTop.toFixed(1)} L${end.toFixed(1)} ${tailBottom.toFixed(1)} L${seam} ${bottomAt(1).toFixed(1)} Q249 ${(bottomAt(.5)+8*looseness).toFixed(1)} ${left} 149 Z`;
-        const marks=[];
-        for(let cm=0;cm<=Math.floor((end-left)/12.08);cm++){
-          const x=left+cm*12.08,t=Math.min(1,(x-left)/(seam-left)),y=x>seam?tailTop:topAt(t),length=cm%5===0?14:cm%2===0?10:6;
-          marks.push(`<path d="M${x.toFixed(1)} ${(y+2).toFixed(1)}v${length}" stroke="#26372e" stroke-width="${cm%5===0?1.4:1}"/>`);
-          if(cm%5===0||(cm===24&&progress===1))marks.push(`<text x="${x.toFixed(1)}" y="${(y+31).toFixed(1)}" text-anchor="middle" font-size="9" font-weight="700" fill="#26372e" stroke="#f1c647" stroke-width="1.2" paint-order="stroke">${cm}</text>`);
-        }
         const uid=`soft-tape-${++softTapeFrameId}`;
-        return `<image href="assets/soft-tape-mug-clean.webp" x="0" y="0" width="560" height="280" preserveAspectRatio="none"/><defs><linearGradient id="${uid}-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cc4d"/><stop offset=".48" stop-color="#e8ac16"/><stop offset="1" stop-color="#c9840d"/></linearGradient><filter id="${uid}-shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="1.6" flood-color="#70511e" flood-opacity=".32"/></filter></defs><path d="${d}" fill="url(#${uid}-fill)" stroke="#9a6d14" stroke-width="1.2" filter="url(#${uid}-shadow)"/><path d="M${left+2} 106 Q249 ${119+12*looseness} ${seam-2} 130" fill="none" stroke="#ffe58a" stroke-width="2" opacity=".72"/>${marks.join("")}`;
+        // Keep the photographed tape as one clipped object; the slider changes its scale continuously.
+        const scaleX=1+.14*looseness, scaleY=1+.08*looseness;
+        const labels=[
+          [130,126,"0"],[162,139,"5"],[210,148,"10"],[258,151,"15"],[306,148,"20"],[350,140,"25"]
+        ].map(([x,y,label])=>`<text x="${x}" y="${y}" text-anchor="middle" font-size="6.5" font-family="sans-serif" font-weight="700" fill="#18251d" stroke="#e9ae17" stroke-width="1.6" paint-order="stroke">${label}</text>`).join("");
+        return `<image href="assets/soft-tape-mug-clean.webp" x="0" y="0" width="560" height="280" preserveAspectRatio="none"/><defs><clipPath id="${uid}-belt" clipPathUnits="userSpaceOnUse"><path d="M129 97 C139 117 178 131 222 137 C278 144 331 141 357 130 L376 124 L376 177 C341 186 308 189 264 184 C209 180 163 171 129 163 Z M357 127 L423 132 L421 174 L359 164 Z"/></clipPath></defs><g transform="translate(280 140) scale(${scaleX.toFixed(3)} ${scaleY.toFixed(3)}) translate(-280 -140)"><image href="assets/soft-tape-mug.webp" x="0" y="0" width="560" height="280" preserveAspectRatio="none" clip-path="url(#${uid}-belt)"/>${labels}</g>`;
       };
 
       const toolDemos = {
