@@ -1198,8 +1198,10 @@
     function updatePhaseArrowGeometry(){
       if(!phaseSvg||!phaseSvg.getScreenCTM())return;
       const inverse=phaseSvg.getScreenCTM().inverse(),svgPoint=(x,y)=>{const p=phaseSvg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(inverse);return{x:q.x,y:q.y};};
-      const triangle=document.querySelector(".phase-triangle"),triangleRect=triangle.getBoundingClientRect(),width=triangle.clientWidth,side=width*.5,altitude=side*Math.sqrt(3)/2,nodeSize=matchMedia("(max-width:680px)").matches?68:side*.36,topY=nodeSize/2+8;
-      const vertices={solid:{x:triangleRect.left+width/2,y:triangleRect.top+topY},liquid:{x:triangleRect.left+width/4,y:triangleRect.top+topY+altitude},gas:{x:triangleRect.left+width*3/4,y:triangleRect.top+topY+altitude}};
+      const triangle=document.querySelector(".phase-triangle"),width=triangle.clientWidth,side=width*.62,altitude=side*Math.sqrt(3)/2,nodeSize=side*.34,topY=nodeSize/2+10;
+      triangle.style.height=`${topY+altitude+nodeSize/2+24}px`;
+      const triangleRect=triangle.getBoundingClientRect();
+      const vertices={solid:{x:triangleRect.left+width/2,y:triangleRect.top+topY},liquid:{x:triangleRect.left+(width-side)/2,y:triangleRect.top+topY+altitude},gas:{x:triangleRect.left+(width+side)/2,y:triangleRect.top+topY+altitude}};
       for(const [key,point] of Object.entries(vertices)){
         const node=document.querySelector(`[data-phase-state="${key}"]`);
         node.style.left=`${point.x-triangleRect.left}px`;node.style.top=`${point.y-triangleRect.top}px`;node.style.width=`${nodeSize}px`;node.style.height=`${nodeSize}px`;
