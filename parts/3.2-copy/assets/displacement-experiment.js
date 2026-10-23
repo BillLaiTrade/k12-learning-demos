@@ -190,10 +190,11 @@ export function mountDisplacementExperiment() {
 
     const sceneRect = scene.getBoundingClientRect();
     const startRect = rock.getBoundingClientRect();
+    const cylinderRect = cylinder.getBoundingClientRect();
     const startLeft = startRect.left - sceneRect.left;
     const startTop = startRect.top - sceneRect.top;
     const left = Math.max(4, Math.min(sceneRect.width - startRect.width - 4, startLeft));
-    const floorTop = Math.max(0, sceneRect.height - startRect.height - 10);
+    const floorTop = Math.max(0, cylinderRect.bottom - sceneRect.top - startRect.height);
     rock.style.left = startLeft + 'px';
     rock.style.top = startTop + 'px';
     rock.style.bottom = 'auto';
