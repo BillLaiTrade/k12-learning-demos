@@ -13,7 +13,7 @@ export function mountDisplacementExperiment() {
   let immersed = false;
   let animating = false;
   let drag = null;
-  const INITIAL_WATER_ML = 300;
+  const INITIAL_WATER_ML = 400;
   const STONE_VOLUME_ML = 350;
   const CYLINDER_CAPACITY_ML = 1000;
   const FINAL_WATER_ML = INITIAL_WATER_ML + STONE_VOLUME_ML;
