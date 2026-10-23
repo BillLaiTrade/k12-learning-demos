@@ -531,7 +531,9 @@
                 <g id="measurement-ruler-labels" fill="#26383a" font-size="14" text-anchor="middle"></g>
                 <path d="M42 84v24 M582 84v24" fill="none" stroke="#718078" stroke-width="1.5" stroke-dasharray="4 4"></path>
               </g>
-              <image href="assets/pencil-photo.webp" x="38.898037" y="55" width="546.203925" height="29" preserveAspectRatio="none"></image>
+              <g id="measurement-pencil-visual" transform="translate(48 0)">
+                <image href="assets/pencil-photo.webp" x="38.898037" y="55" width="546.203925" height="29" preserveAspectRatio="none"></image>
+              </g>
             </svg>
             <figcaption id="measurement-caption">同一支鉛筆</figcaption>
           </figure>
@@ -883,6 +885,7 @@
       });
       const measurementCard = document.querySelector("#card-01");
       const measurementModeButtons = [...document.querySelectorAll("[data-measurement-mode-button]")];
+      const measurementPencilVisual = document.querySelector("#measurement-pencil-visual");
       const rulerTickGroup = document.querySelector("#measurement-ruler-ticks");
       const rulerLabelGroup = document.querySelector("#measurement-ruler-labels");
       const svgNamespace = "http://www.w3.org/2000/svg";
@@ -907,6 +910,7 @@
       measurementModeButtons.forEach((button) => button.addEventListener("click", () => {
         const mode = button.dataset.measurementModeButton;
         measurementCard.dataset.measurementMode = mode;
+        measurementPencilVisual.setAttribute("transform", mode === "eye" ? "translate(48 0)" : "");
         measurementModeButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
         const measuring = mode === "ruler";
         document.querySelector("#measurement-caption").textContent = measuring ? "同一支鉛筆　｜　對照尺上的刻度" : "同一支鉛筆";
