@@ -1883,6 +1883,9 @@
         document.querySelector("#correction-view-front").setAttribute("aria-pressed", String(correctionCameraPreset === "front"));
         document.querySelector("#correction-view-oblique").setAttribute("aria-pressed", String(correctionCameraPreset === "oblique"));
         document.querySelector("#correction-density-status").textContent = `每格 ${correctionTickInterval} cm`;
+        document.querySelector("#correction-origin-status").textContent = correctionMode === "origin"
+          ? (Math.abs(correctionRulerOffset) < 0.02 ? "已對準 0" : `偏移 ${formatCentimeters(-correctionRulerOffset)} cm`)
+          : "偏移 1 cm";
         document.querySelector("#correction-angle-status").textContent = correctionCameraPreset === "front" ? "正對尺面" : correctionCameraPreset === "oblique" ? "斜向觀察" : "自由旋轉";
       };
       correctionModeButtons.forEach((button) => button.addEventListener("click", () => {
