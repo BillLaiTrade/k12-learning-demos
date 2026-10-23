@@ -734,8 +734,7 @@
                 <div class="range-endpoints"><span>較密・1 cm／格</span><span>較疏・5 cm／格</span></div>
               </div>
               <div id="correction-origin-controls" hidden>
-                <p id="correction-origin-control-instructions">將游標移到尺面，出現 ↔ 後左右拖曳來移動零刻度；觸控螢幕可直接在尺面左右拖曳。點擊並拖曳鉛筆可旋轉場景；0 刻度不能越過筆尖，否則起點沒有刻度可讀。</p>
-                <p class="correction-origin-principle"><strong>較方便的做法：</strong>起點未對準時，仍可用「終點讀值－起點讀值」算出長度；每次先將 0 對準筆尖，就能直接讀取，也讓各次量測基準一致，更方便比較。</p>
+                <p id="correction-origin-control-instructions">左右拖曳尺面可移動零刻度；拖曳鉛筆可旋轉場景。</p>
               </div>
               <div id="correction-angle-controls" hidden>
                 <div class="correction-view-controls" role="group" aria-label="預設觀察視角">
@@ -771,6 +770,7 @@
                 <strong id="correction-readout-value">15–20 cm</strong>
               </div>
             </div>
+            <p class="correction-origin-principle" id="correction-origin-principle" hidden><strong>較方便的做法：</strong>起點未對準時，仍可用「終點讀值－起點讀值」算出長度；每次先將 0 對準筆尖，就能直接讀取，也讓各次量測基準一致，更方便比較。</p>
           </div>
           <aside class="correction-result" aria-labelledby="correction-result-title">
             <h3 id="correction-result-title">四種方法可以搭配使用</h3>
@@ -1879,6 +1879,7 @@
         correctionDensitySlider.value = String(correctionTickInterval);
         document.querySelector("#correction-density-controls").hidden = correctionMode !== "density";
         document.querySelector("#correction-origin-controls").hidden = correctionMode !== "origin";
+        document.querySelector("#correction-origin-principle").hidden = correctionMode !== "origin";
         document.querySelector("#correction-angle-controls").hidden = correctionMode !== "angle";
         document.querySelector("#correction-view-front").setAttribute("aria-pressed", String(correctionCameraPreset === "front"));
         document.querySelector("#correction-view-oblique").setAttribute("aria-pressed", String(correctionCameraPreset === "oblique"));
