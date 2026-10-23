@@ -34,7 +34,7 @@ export function makeStone(){
   return new THREE.Mesh(geometry,material);
 }
 
-const LINEAR_SCALE=Math.cbrt(860/39);
+const LINEAR_SCALE=Math.cbrt(910/39);
 const CM_PER_WORLD=1.6*LINEAR_SCALE;
 const RULER_CM=6*LINEAR_SCALE;
 const WORLD_PER_CM=1/CM_PER_WORLD;

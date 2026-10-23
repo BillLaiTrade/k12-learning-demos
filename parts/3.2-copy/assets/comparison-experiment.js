@@ -38,7 +38,7 @@ export function mountComparisonExperiment() {
     immersed = nextImmersed;
     scene.classList.toggle('is-immersed', immersed);
     sample.classList.toggle('in-water', immersed);
-    mass.textContent = immersed ? '0.0 g' : chosenSpecimen === 'stone' ? '860 g' : '約 6,383 g';
+    mass.textContent = immersed ? '0.0 g' : chosenSpecimen === 'stone' ? '910 g' : '約 6,755 g';
     status.textContent = message || (immersed
       ? '樣本已浸入；把它往上提過量筒口再移出，或按下取出按鈕。'
       : '把樣本拖到量筒口正上方並放開；量測後可再拖出。也可用下方按鈕操作。');

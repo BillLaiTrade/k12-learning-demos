@@ -14,7 +14,7 @@ export function mountDisplacementExperiment() {
   let animating = false;
   let drag = null;
   const INITIAL_WATER_ML = 300;
-  const STONE_VOLUME_ML = 330;
+  const STONE_VOLUME_ML = 350;
   const CYLINDER_CAPACITY_ML = 1000;
   const FINAL_WATER_ML = INITIAL_WATER_ML + STONE_VOLUME_ML;
 
@@ -25,7 +25,7 @@ export function mountDisplacementExperiment() {
     rock.classList.remove('is-dragging');
     cylinder.classList.remove('drop-ready');
     water.style.height = `${(immersed ? FINAL_WATER_ML : INITIAL_WATER_ML) / CYLINDER_CAPACITY_ML * 100}%`;
-    marks.forEach(mark => mark.classList.toggle('active', Number(mark.dataset.volume) === (immersed ? 600 : INITIAL_WATER_ML)));
+    marks.forEach(mark => mark.classList.toggle('active', Number(mark.dataset.volume) === (immersed ? FINAL_WATER_ML : INITIAL_WATER_ML)));
     const finalReading = Math.round(FINAL_WATER_ML * 100) / 100;
     cylinder.setAttribute('aria-label', '量筒，目前水量 ' + (immersed ? `約 ${Math.round(finalReading)}（精算 ${finalReading}）` : String(INITIAL_WATER_ML)) + ' 毫升');
     rock.setAttribute('aria-label', immersed ? '同一塊石頭已完全浸入量筒；可拖曳取出' : '同一塊石頭；可拖曳到量筒口正上方放入，或按 Enter 放入');

@@ -1,7 +1,7 @@
 import * as THREE from '../../3.1/assets/vendor/three/build/three.module.js';
 import { makeStone } from './stone-observer.js';
 
-const MASS_G = 860;
+const MASS_G = 910;
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
 function stoneSupportPoint(stone) {
@@ -381,7 +381,7 @@ export function mountMassMeasurement() {
   let width = 0, height = 0;
 
   function showReading() {
-    digital.updateDisplay(mode === 'digital' && weighed ? '860' : '0.0', 'g');
+    digital.updateDisplay(mode === 'digital' && weighed ? '910' : '0.0', 'g');
   }
 
   function clearWeightModels() {
@@ -567,7 +567,7 @@ export function mountMassMeasurement() {
       placeButton.disabled = weighed || placingDigital;
       placeButton.textContent = weighed ? '石頭已放上秤盤' : placingDigital ? '正在放上秤盤…' : '將石頭放上秤盤';
       removeButton.disabled = !weighed || placingDigital;
-      digital.updateDisplay(weighed ? '860' : '0.0', 'g');
+      digital.updateDisplay(weighed ? '910' : '0.0', 'g');
       status.textContent = weighed
         ? '石頭已放穩；請讀取秤面上的數值。'
         : placingDigital ? '石頭正移至電子秤秤盤…' : '拖曳石頭到電子秤秤盤，或按下按鈕。';
