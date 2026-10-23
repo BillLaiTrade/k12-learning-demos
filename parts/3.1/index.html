@@ -249,6 +249,9 @@
     .tool-demo-value { color: var(--green); font-size: 1.2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
     .tool-demo-controls button { padding: 8px 14px; border: 1px solid var(--green); border-radius: 9px; background: var(--green); color: white; font-weight: 700; cursor: pointer; }
     .tool-demo-controls button.secondary { background: white; color: var(--green); }
+    .ruler-guide { cursor: ew-resize; touch-action: none; }
+    .ruler-guide:focus-visible circle { stroke: #1b2731; stroke-width: 3; }
+    .ruler-guide-status { margin: 7px 0 0; color: var(--muted); font-size: .84rem; }
     @media (max-width: 600px) { .decision-tree { padding: 7px; } .decision-canvas { grid-template-columns: 46px minmax(0, 1fr); column-gap: 7px; padding: 3px; } .decision-root { padding: 7px 3px; font-size: .65rem; } .decision-root::after { width: 7px; } .decision-branches { gap: 9px; padding-left: 6px; } .decision-branch { grid-template-columns: 43px minmax(68px, .8fr) minmax(0, 1.1fr); gap: 5px; } .decision-branch::before { left: -6px; width: 6px; } .decision-category { min-height: 30px; padding: 3px 1px; font-size: .68rem; overflow-wrap: anywhere; } .decision-question { min-height: 38px; padding: 4px 3px; font-size: .68rem; line-height: 1.2; overflow-wrap: anywhere; } .decision-question::before { width: 5px; } .decision-branch-children { gap: 4px; padding-left: 7px; } .decision-next-choice { min-height: 31px; padding: 3px 4px; } .decision-next-choice::before { width: 7px; } .decision-answer { font-size: .65rem; } .decision-tool-name { font-size: .74rem; } }
     .division-visual svg { display: block; width: 100%; height: auto; }
     .division-visual p { margin: 7px 0 0; color: var(--muted); font-size: .84rem; }
@@ -1285,7 +1288,7 @@
 
       const toolDemos = {
         stopwatch: { title: "電子碼錶・正計時與倒數", desc: "用正計時量經過時間，也可以切換倒數；練習開始、暫停與歸零。" },
-        ruler: { title: "直尺・量短而筆直的物件", desc: "先把物件左端對準 0，再看右端對到幾公分。拖曳下方滑桿，觀察讀值如何改變。", controlLabel: "改變物件長度", min: 5, max: 20, value: 12, unit: "cm", draw: v => {
+        ruler: { title: "直尺・量短而筆直的物件", desc: "尺與鉛筆固定不動。拖曳兩條輔助線，分別對準筆尖與橡皮擦端，再讀取刻度。", controlLabel: "改變物件長度", min: 5, max: 20, value: 12, unit: "cm", draw: v => {
           const end = 55 + v * 15;
           return `<text x="55" y="25" font-size="14" font-weight="700" fill="#247554">起點對準 0</text><text x="${end}" y="25" text-anchor="middle" font-size="14" font-weight="700" fill="#a65327">另一端讀值：${v} cm</text><path d="M55 31v12" stroke="#247554" stroke-width="2"/><rect x="45" y="88" width="470" height="50" rx="7" fill="#f1dfa9" stroke="#9d8244" stroke-width="3"/><path d="${Array.from({length:31},(_,i)=>`M${55+i*15} 88v${i%5===0?22:11}`).join(' ')}" stroke="#354a42" stroke-width="2"/><text x="62" y="126" font-size="17" fill="#30463d">0</text><text x="280" y="126" text-anchor="middle" font-size="17" fill="#30463d">15</text><text x="495" y="126" text-anchor="end" font-size="17" fill="#30463d">30 cm</text><rect x="55" y="52" width="${v*15}" height="14" rx="7" fill="#d59a27"/><path d="M55 43v45" stroke="#247554" stroke-width="2"/><path d="M${end} 40v48" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"/>`;
         } },
@@ -1395,6 +1398,32 @@
           setting.oninput = () => { if (!stopwatchTimer) { timerRemaining = Number(setting.value); output.textContent = `${timerRemaining} 秒`; paintTimer(); } };
           start.onclick = () => { if (stopwatchTimer) { clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "繼續"; } else { start.textContent = "暫停"; stopwatchTimer = setInterval(() => { timerRemaining = Math.max(0, timerRemaining - 1); paintTimer(); if (!timerRemaining) { clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "重新開始"; } }, 1000); } };
           document.querySelector("#timer-reset").onclick = () => { clearInterval(stopwatchTimer); stopwatchTimer = null; timerRemaining = Number(setting.value); paintTimer(); start.textContent = "開始"; };
+        } else if (key === "ruler") {
+          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual"><svg id="ruler-guide-visual" viewBox="0 0 560 180" role="img" aria-label="固定的鉛筆與直尺；拖曳輔助線對準兩端"><rect x="60" y="99" width="440" height="48" rx="7" fill="#f1dfa9" stroke="#9d8244" stroke-width="2"/><path d="${Array.from({length:21},(_,i)=>`M${60+i*22} 99v${i%5===0?29:i%2===0?20:13}`).join(" ")}" stroke="#354a42" stroke-width="1.5"/>${Array.from({length:5},(_,i)=>`<text x="${60+i*110}" y="169" text-anchor="middle" font-size="12" fill="#30463d">${i*5}</text>`).join("")}<text x="501" y="169" text-anchor="end" font-size="12" fill="#30463d">cm</text><path d="M148 68v29M368 68v29" stroke="#93a79b" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M148 56l14-8h180l12 8v9H162z" fill="#e4aa21" stroke="#a87a16" stroke-width="2"/><path d="M148 56l14-8v17z" fill="#d6b47a" stroke="#a87a16" stroke-width="1.5"/><path d="M148 56h4" stroke="#394740" stroke-width="2"/><path d="M342 48v17m4-17v17m4-17v17" stroke="#7a8580" stroke-width="2"/><rect x="354" y="48" width="14" height="17" rx="5" fill="#df8175" stroke="#a6534a" stroke-width="1.5"/><path d="M165 52h175" stroke="#ffe178" stroke-width="2"/><text x="148" y="40" text-anchor="middle" font-size="11" fill="#65786d">筆尖</text><text x="368" y="40" text-anchor="middle" font-size="11" fill="#65786d">橡皮擦端</text><g id="ruler-guides"></g></svg></div><div class="tool-demo-controls"><output class="tool-demo-value" id="ruler-reading" aria-live="polite"></output></div><p class="ruler-guide-status" id="ruler-guide-status" aria-live="polite"></p>`;
+          const svg = document.querySelector("#ruler-guide-visual"), guides = document.querySelector("#ruler-guides"), reading = document.querySelector("#ruler-reading"), status = document.querySelector("#ruler-guide-status");
+          const trueStart = 4, trueEnd = 14, xFor = cm => 60 + cm * 22;
+          const positions = { start: 3, end: 15 };
+          let activeGuide = null;
+          const drawGuides = () => {
+            guides.innerHTML = ["start", "end"].map((which,index) => {
+              const x=xFor(positions[which]),color=index===0?"#247554":"#bc612b",label=index===0?"起點":"終點";
+              return `<g class="ruler-guide" data-guide="${which}" tabindex="0" role="slider" aria-label="拖曳${label}輔助線，對準物件端點" aria-valuemin="0" aria-valuemax="20" aria-valuenow="${positions[which]}"><line x1="${x}" y1="67" x2="${x}" y2="99" stroke="${color}" stroke-width="2.5" stroke-dasharray="4 3"/><circle cx="${x}" cy="94" r="8" fill="${color}" stroke="#fff" stroke-width="2"/><text x="${x}" y="87" text-anchor="middle" font-size="10" font-weight="700" fill="${color}">${label}</text></g>`;
+            }).join("");
+            const length=positions.end-positions.start,aligned=positions.start===trueStart&&positions.end===trueEnd;
+            reading.textContent=`起點 ${positions.start} cm　終點 ${positions.end} cm　讀值差 ${length} cm`;
+            status.textContent=aligned?`對準完成：${positions.end} − ${positions.start} = ${length} cm`:`拖曳輔助線，對準筆尖與橡皮擦端。`;
+          };
+          const positionFromEvent = event => {
+            const point=svg.createSVGPoint();point.x=event.clientX;point.y=event.clientY;
+            const x=point.matrixTransform(svg.getScreenCTM().inverse()).x;
+            return Math.max(0,Math.min(20,Math.round((x-60)/22)));
+          };
+          svg.addEventListener("pointerdown",event=>{const handle=event.target.closest(".ruler-guide");if(!handle)return;activeGuide=handle.dataset.guide;svg.setPointerCapture(event.pointerId);event.preventDefault();});
+          svg.addEventListener("pointermove",event=>{if(!activeGuide)return;const cm=positionFromEvent(event);if(activeGuide==="start")positions.start=Math.min(cm,positions.end-1);else positions.end=Math.max(cm,positions.start+1);drawGuides();});
+          svg.addEventListener("pointerup",()=>{activeGuide=null;});
+          svg.addEventListener("pointercancel",()=>{activeGuide=null;});
+          svg.addEventListener("keydown",event=>{const handle=event.target.closest(".ruler-guide");if(!handle||!["ArrowLeft","ArrowRight"].includes(event.key))return;event.preventDefault();const direction=event.key==="ArrowRight"?1:-1,which=handle.dataset.guide;if(which==="start")positions.start=Math.max(0,Math.min(positions.end-1,positions.start+direction));else positions.end=Math.min(20,Math.max(positions.start+1,positions.end+direction));drawGuides();svg.querySelector(`[data-guide="${which}"]`).focus();});
+          drawGuides();
         } else if (["electronicBalance", "platformScale", "weighbridge"].includes(key)) {
           const examples = {
             electronicBalance: { value: "145 g", start: "0 g", status: "蘋果放上秤盤…", wait: 1100, svg: `<path d="M156 145h248l-17 75H173z" fill="#e8eee8" stroke="#557368" stroke-width="4"/><path d="M175 135h210l10 17H165z" fill="#cbd5d0" stroke="#557368" stroke-width="3"/><path d="M190 140h180" stroke="#fff" stroke-width="3"/><rect x="222" y="168" width="116" height="37" rx="5" fill="#fbfff9" stroke="#7b9485" stroke-width="2"/><text id="mass-reading" x="280" y="194" text-anchor="middle" font-size="23" font-family="monospace" font-weight="700" fill="#247554">0 g</text><g class="mass-object"><path d="M262 135c-18-8-27-25-17-42 5-9 17-14 30-12 12-12 30-8 35 6 13 29-13 51-48 48z" fill="#d9784f" stroke="#a94d30" stroke-width="3"/><path d="M278 84q3-13 15-16m-17 20q10-2 16 3" fill="none" stroke="#557b48" stroke-width="5" stroke-linecap="round"/><path d="M266 105q8 7 16 0" fill="none" stroke="#edaa81" stroke-width="3"/></g>` },
