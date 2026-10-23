@@ -16,21 +16,25 @@ export function makeStone(){
   const position=geometry.attributes.position,colors=[];
   for(let i=0;i<position.count;i++){
     const v=new THREE.Vector3().fromBufferAttribute(position,i).normalize();
-    const broad=Math.sin(v.x*4.3+v.y*2.6+v.z*3.1)*.05;
-    const ripple=Math.sin(v.x*8.1-v.y*6.2+v.z*7.4)*.014;
-    const granule=(noise3(v.x*72,v.y*72,v.z*72)-.5)*.012;
-    const pitA=Math.exp(-((v.x-.4)**2+(v.y+.2)**2+(v.z-.87)**2)*34)*.035;
-    const pitB=Math.exp(-((v.x+.65)**2+(v.y-.1)**2+(v.z+.7)**2)*42)*.026;
-    const r=1+broad+ripple+granule-pitA-pitB;
+    const broad=(noise3(v.x*3.4,v.y*3.4,v.z*3.4)-.5)*.2;
+    const ridge=(noise3(v.x*7.5+2,v.y*7.5-1,v.z*7.5)-.5)*.09;
+    const granule=(noise3(v.x*48,v.y*48,v.z*48)-.5)*.035;
+    const pits=[
+      [ .43,-.18,.87,.075],[-.66,.16,.71,.06],[.1,.72,.7,.05],[-.84,-.21,-.49,.055],
+      [.72,.48,-.46,.05],[-.22,-.71,.66,.045],[.88,-.19,.3,.04]
+    ].reduce((sum,[x,y,z,depth])=>sum+Math.exp(-((v.x-x)**2+(v.y-y)**2+(v.z-z)**2)*42)*depth,0);
+    const r=1+broad+ridge+granule-pits;
     position.setXYZ(i,v.x*r*1.28,v.y*r*.79,v.z*r*.82);
-    const cloud=noise3(v.x*5,v.y*5,v.z*5),mottle=noise3(v.x*17,v.y*17,v.z*17);
-    const flecks=noise3(v.x*43,v.y*43,v.z*43),grain=noise3(v.x*91,v.y*91,v.z*91);
-    const shade=clamp(.29+(cloud-.5)*.32+(mottle-.5)*.25+(flecks-.5)*.18+(grain-.5)*.1,.12,.55);
-    colors.push(shade*1.015,shade,shade*.96);
+    const cloud=noise3(v.x*5,v.y*5,v.z*5),mottle=noise3(v.x*19,v.y*19,v.z*19);
+    const flecks=noise3(v.x*53,v.y*53,v.z*53),orePatch=noise3(v.x*12+4,v.y*12-2,v.z*12+1);
+    const charcoal=clamp(.105+(cloud-.5)*.11+(mottle-.5)*.09+(flecks-.5)*.045,.045,.24);
+    const ironOxide=Math.pow(clamp((orePatch-.72)*3.4,0,1),1.25)*clamp(.58+(flecks-.5)*.8,.22,.95);
+    const warm=ironOxide;
+    colors.push(charcoal*(1-warm)+.66*warm,charcoal*(1-warm)+.25*warm,charcoal*(1-warm)+.07*warm);
   }
   geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
   geometry.computeVertexNormals();
-  const material=new THREE.MeshStandardMaterial({color:0xffffff,vertexColors:true,roughness:.94,metalness:0});
+  const material=new THREE.MeshStandardMaterial({color:0xffffff,vertexColors:true,roughness:.88,metalness:.08});
   return new THREE.Mesh(geometry,material);
 }
 
