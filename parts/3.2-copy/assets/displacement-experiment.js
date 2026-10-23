@@ -46,6 +46,20 @@ export function mountDisplacementExperiment() {
     rock.style.transform = '';
   }
 
+  function animateWaterRise(duration) {
+    const startingHeight = getComputedStyle(water).height;
+    const savedTransition = water.style.transition;
+    water.style.transition = 'none';
+    water.style.height = `${FINAL_WATER_ML / CYLINDER_CAPACITY_ML * 100}%`;
+    water.getBoundingClientRect();
+    const targetHeight = getComputedStyle(water).height;
+    water.style.transition = savedTransition;
+    return water.animate([
+      { height: startingHeight },
+      { height: targetHeight }
+    ], { duration, easing: 'ease-in-out' });
+  }
+
   async function throwRockIntoCylinder({ dropFromAbove = false } = {}) {
     if (immersed || animating) return;
     drag = null;
@@ -105,12 +119,23 @@ export function mountDisplacementExperiment() {
           { offset: 0.82, left: entryLeft + 2 + 'px', top: Math.max(0, entryTop - 8) + 'px', transform: 'rotate(8deg)', easing: 'cubic-bezier(.3,0,.8,.4)' },
           { offset: 1, left: targetLeft + 'px', top: targetTop + 'px', transform: 'rotate(0deg)' }
         ];
-    const animation = rock.animate(frames, { duration: dropFromAbove ? 760 : 980, fill: 'forwards' });
+    const duration = dropFromAbove ? 760 : 980;
+    const waterStartOffset = dropFromAbove ? 0.64 : 0.62;
+    const animation = rock.animate(frames, { duration, fill: 'forwards' });
+    let waterAnimation = null;
+    const waterRiseTimer = window.setTimeout(() => {
+      waterAnimation = animateWaterRise(duration * (1 - waterStartOffset));
+    }, duration * waterStartOffset);
 
     try {
       await animation.finished;
     } catch {
       // A canceled animation should still leave the sample in a valid state.
+    }
+    window.clearTimeout(waterRiseTimer);
+    if (waterAnimation) {
+      try { await waterAnimation.finished; } catch { /* The water is already at its final reading. */ }
+      waterAnimation.cancel();
     }
     animation.cancel();
     rock.style.left = savedPosition.left;
@@ -163,14 +188,25 @@ export function mountDisplacementExperiment() {
     const targetTop = targetRect.top - sceneRect.top;
     const cylinderTop = cylinder.getBoundingClientRect().top - sceneRect.top;
     const waterTop = water.getBoundingClientRect().top - sceneRect.top;
+    const duration = 850;
+    const waterStartOffset = 0.58;
     const animation = rock.animate([
       { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)' },
       { offset: 0.38, left: targetLeft + 'px', top: Math.max(0, cylinderTop - startRect.height - 8) + 'px', transform: 'rotate(4deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
       { offset: 0.68, left: targetLeft + 'px', top: Math.max(0, waterTop - startRect.height * 0.35) + 'px', transform: 'rotate(-3deg)', easing: 'cubic-bezier(.45,0,.8,.5)' },
       { offset: 1, left: targetLeft + 'px', top: targetTop + 'px', transform: 'rotate(0deg)' }
-    ], { duration: 850, fill: 'forwards' });
+    ], { duration, fill: 'forwards' });
+    let waterAnimation = null;
+    const waterRiseTimer = window.setTimeout(() => {
+      waterAnimation = animateWaterRise(duration * (1 - waterStartOffset));
+    }, duration * waterStartOffset);
 
     try { await animation.finished; } catch { /* Keep the sample in a valid state if canceled. */ }
+    window.clearTimeout(waterRiseTimer);
+    if (waterAnimation) {
+      try { await waterAnimation.finished; } catch { /* The water is already at its final reading. */ }
+      waterAnimation.cancel();
+    }
     animation.cancel();
     rock.style.left = savedPosition.left;
     rock.style.top = savedPosition.top;
