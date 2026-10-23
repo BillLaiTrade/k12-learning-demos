@@ -1431,7 +1431,7 @@
       phaseDemoMotionState=state;
       freezeParticles.forEach(p=>{
         if(state==="solid"){p.vx=0;p.vy=0;}
-        else if(!continueVelocity){p.vx=(Math.random()-.5)*(state==="gas"?90:44);p.vy=(Math.random()-.5)*(state==="gas"?90:38);}
+        else if(!continueVelocity){if(state==="gas"){const angle=Math.random()*Math.PI*2,speed=44+Math.random()*34;p.vx=Math.cos(angle)*speed;p.vy=Math.sin(angle)*speed;}else{p.vx=(Math.random()-.5)*44;p.vy=(Math.random()-.5)*38;}}
         p.element.setAttribute("class",`freeze-demo-particle${state==="solid"?" is-vibrating":""}`);
       });
       phaseDemoLastFrame=0;phaseDemoFrame=requestAnimationFrame(now=>animatePhaseDemoMotion(now,runId));
@@ -1538,7 +1538,7 @@
         const liquid=phaseDemoMotionState==="liquid",moving=freezeParticles;
         for(const p of moving){
           p.x+=p.vx*dt;p.y+=p.vy*dt;
-          const minY=liquid?69:38;
+          const minY=liquid?69:phaseDemoMotionState==="gas"?16:38;
           if(p.x<17){p.x=17;p.vx=Math.abs(p.vx);}if(p.x>343){p.x=343;p.vx=-Math.abs(p.vx);}
           if(p.y<minY){p.y=minY;p.vy=Math.abs(p.vy);}if(p.y>117){p.y=117;p.vy=-Math.abs(p.vy);}
         }
@@ -1583,6 +1583,11 @@
         p.element.setAttribute("class",`freeze-demo-particle${key==="sublimation"?" is-vibrating":""}`);p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
       });
       phaseDemoMotionState="";phaseDemoLastFrame=0;
+      if(key==="condensation"){
+        phaseDemoCaption.textContent="目前只呈現凝結前的水蒸氣狀態；粒子持續在容器內移動，不顯示變成液態水。";
+        document.getElementById("freeze-demo-status").textContent="水蒸氣（氣態）：粒子持續在容器內移動";
+        startPhaseDemoMotion("gas",runId,true);return;
+      }
       if(reduceMotion&&key!=="melt"&&key!=="deposition"&&key!=="sublimation"&&key!=="vaporization"){
         freezeParticles.forEach(p=>{p.x=p.targetX;p.y=p.targetY;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
         startPhaseDemoMotion(process.to,runId);return;
