@@ -229,6 +229,12 @@
     #race-visual svg { width: 100%; height: 100%; max-height: none; }
     .sprint-runner { position: absolute; left: 9%; bottom: 10%; width: 13%; height: 50%; background-image: url("sprint-run-cycle.png"); background-repeat: no-repeat; background-position: 0 0; background-size: 500% 100%; }
     .sprint-runner::after { content: ""; position: absolute; left: 28%; bottom: 4%; width: 48%; height: 4px; border-radius: 50%; background: rgb(47 48 38 / 24%); filter: blur(2px); }
+    .mass-demo-svg { display: block; width: min(100%, 560px); max-height: 250px; }
+    .mass-object { transform-box: fill-box; transform-origin: center; }
+    .mass-demo-visual.mass-animating .mass-object { animation: mass-place .95s cubic-bezier(.2,.7,.25,1) both; }
+    .mass-demo-visual.mass-animating .mass-truck { animation: mass-drive 1.8s cubic-bezier(.2,.65,.2,1) both; }
+    @keyframes mass-place { 0% { transform: translateY(-92px); } 72% { transform: translateY(3px); } 86% { transform: translateY(-2px); } 100% { transform: translateY(0); } }
+    @keyframes mass-drive { 0% { transform: translateX(-220px); } 72% { transform: translateX(0); } 88% { transform: translateX(-4px); } 100% { transform: translateX(0); } }
     @keyframes sprint-cycle {
       0% { background-position: 0% 0%; }
       20% { background-position: 25% 0%; }
@@ -1333,7 +1339,7 @@
         <g transform="translate(45 37)"><path d="M0 0h27l10 6-10 6H0z" fill="#d6ad51" stroke="#806b40" stroke-width="2"/><path d="M8 12 1 24h13l4-12" fill="#b38b40" stroke="#806b40" stroke-width="2"/><path d="M40-3q13 9 0 18m7-24q21 15 0 30" fill="none" stroke="#d66f54" stroke-width="2.5" stroke-linecap="round"/><text x="13" y="42" text-anchor="middle" font-size="11" fill="#526f68">發令訊號</text></g>
         <text x="380" y="242" text-anchor="middle" font-size="11" fill="#fff8e8">計時從發令訊號開始，在軀幹通過終點線時停止</text>` };
       const demo = document.querySelector("#tool-demo");
-      let stopwatchTimer = null, stopwatchStarted = 0, stopwatchElapsed = 0, timerRemaining = 60, stopwatchDeadline = 0, stopwatchMode = "elapsed";
+      let stopwatchTimer = null, stopwatchStarted = 0, stopwatchElapsed = 0, timerRemaining = 60, stopwatchDeadline = 0, stopwatchMode = "elapsed", massReadTimer = null;
       const formatStopwatch = ms => `${(ms / 60000 | 0).toString().padStart(2,"0")}:${((ms / 1000 | 0) % 60).toString().padStart(2,"0")}.${((ms % 1000) / 10 | 0).toString().padStart(2,"0")}`;
       const chooseTool = key => {
         selectedDecisionQuestion = null;
@@ -1347,11 +1353,13 @@
         paintDecisionRoute(true);
         if (!selectedDecisionTool) {
           clearInterval(stopwatchTimer); stopwatchTimer = null;
+          clearTimeout(massReadTimer); massReadTimer = null;
           demo.hidden = true;
           return;
         }
         demo.hidden = false;
         clearInterval(stopwatchTimer); stopwatchTimer = null; stopwatchElapsed = 0; timerRemaining = 60; stopwatchDeadline = 0; stopwatchMode = "elapsed";
+        clearTimeout(massReadTimer); massReadTimer = null;
         const item = toolDemos[key];
         if (key === "stopwatch") {
           demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual"><svg viewBox="100 0 360 190" role="img" aria-label="有數位螢幕和操作按鈕的手持電子碼錶"><path d="M246 57V38q0-15 15-15h38q15 0 15 15v19" fill="none" stroke="#557368" stroke-width="8"/><rect x="175" y="47" width="210" height="132" rx="26" fill="#dce7df" stroke="#557368" stroke-width="6"/><rect x="200" y="36" width="43" height="23" rx="7" fill="#d6a94a" stroke="#557368" stroke-width="3"/><rect x="317" y="36" width="43" height="23" rx="7" fill="#d6a94a" stroke="#557368" stroke-width="3"/><rect x="163" y="83" width="14" height="27" rx="5" fill="#557368"/><rect x="383" y="83" width="14" height="27" rx="5" fill="#557368"/><rect x="195" y="77" width="170" height="54" rx="8" fill="#fbfff9" stroke="#81988b" stroke-width="3"/><text id="stopwatch-display" x="280" y="113" text-anchor="middle" font-size="27" font-family="monospace" fill="#247554">00:00.00</text><text x="280" y="151" text-anchor="middle" font-size="11" font-weight="700" letter-spacing="2" fill="#557368">STOPWATCH</text><circle cx="222" cy="157" r="7" fill="#d6a94a"/><circle cx="338" cy="157" r="7" fill="#557368"/></svg></div><div class="tool-demo-controls" role="group" aria-label="碼錶計時模式"><button id="watch-mode-elapsed" aria-pressed="true">正計時</button><button id="watch-mode-countdown" class="secondary" aria-pressed="false">倒數</button></div><div class="tool-demo-controls" id="watch-countdown-settings" hidden><label for="watch-seconds">設定倒數秒數</label><input id="watch-seconds" type="range" min="5" max="120" step="5" value="60"><output class="tool-demo-value" id="watch-seconds-output">60 秒</output></div><div class="tool-demo-controls"><button id="watch-start">開始</button><button id="watch-reset" class="secondary">歸零</button><span class="tool-demo-value" id="watch-state">準備開始</span></div>`;
@@ -1387,6 +1395,26 @@
           setting.oninput = () => { if (!stopwatchTimer) { timerRemaining = Number(setting.value); output.textContent = `${timerRemaining} 秒`; paintTimer(); } };
           start.onclick = () => { if (stopwatchTimer) { clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "繼續"; } else { start.textContent = "暫停"; stopwatchTimer = setInterval(() => { timerRemaining = Math.max(0, timerRemaining - 1); paintTimer(); if (!timerRemaining) { clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "重新開始"; } }, 1000); } };
           document.querySelector("#timer-reset").onclick = () => { clearInterval(stopwatchTimer); stopwatchTimer = null; timerRemaining = Number(setting.value); paintTimer(); start.textContent = "開始"; };
+        } else if (["electronicBalance", "platformScale", "weighbridge"].includes(key)) {
+          const examples = {
+            electronicBalance: { value: "145 g", start: "0 g", status: "蘋果放上秤盤…", wait: 1100, svg: `<path d="M156 145h248l-17 75H173z" fill="#e8eee8" stroke="#557368" stroke-width="4"/><path d="M175 135h210l10 17H165z" fill="#cbd5d0" stroke="#557368" stroke-width="3"/><path d="M190 140h180" stroke="#fff" stroke-width="3"/><rect x="222" y="168" width="116" height="37" rx="5" fill="#fbfff9" stroke="#7b9485" stroke-width="2"/><text id="mass-reading" x="280" y="194" text-anchor="middle" font-size="23" font-family="monospace" font-weight="700" fill="#247554">0 g</text><g class="mass-object"><path d="M262 135c-18-8-27-25-17-42 5-9 17-14 30-12 12-12 30-8 35 6 13 29-13 51-48 48z" fill="#d9784f" stroke="#a94d30" stroke-width="3"/><path d="M278 84q3-13 15-16m-17 20q10-2 16 3" fill="none" stroke="#557b48" stroke-width="5" stroke-linecap="round"/><path d="M266 105q8 7 16 0" fill="none" stroke="#edaa81" stroke-width="3"/></g>` },
+            platformScale: { value: "2.6 kg", start: "0.0 kg", status: "箱子放上平台…", wait: 1100, svg: `<path d="M99 140h331l-30 26H73z" fill="#c7d2ce" stroke="#557368" stroke-width="4"/><path d="M90 133h322v13H90z" fill="#dce5e0" stroke="#557368" stroke-width="4"/><path d="M124 166v45m256-45v45M105 211h291" fill="none" stroke="#557368" stroke-width="7" stroke-linecap="round"/><rect x="183" y="180" width="194" height="39" rx="5" fill="#fbfff9" stroke="#7b9485" stroke-width="2"/><text id="mass-reading" x="280" y="207" text-anchor="middle" font-size="23" font-family="monospace" font-weight="700" fill="#247554">0.0 kg</text><g class="mass-object"><path d="M194 62h143l22 17v54H194z" fill="#e6c77d" stroke="#997d3c" stroke-width="3"/><path d="M337 62v71M194 82h143m-93-20v71" fill="none" stroke="#b4944d" stroke-width="2"/><path d="M209 96h58v22h-58z" fill="#f4e5bf" stroke="#b4944d" stroke-width="2"/><path d="M219 107h38" stroke="#c0a76a" stroke-width="2"/></g>` },
+            weighbridge: { value: "18.4 t", start: "0.0 t", status: "貨車駛上地磅…", wait: 2100, svg: `<path d="M50 170h455v20H50z" fill="#9caeaa" stroke="#557368" stroke-width="3"/><path d="M62 161h430v10H62z" fill="#d6a94a" stroke="#997d3c" stroke-width="2"/><path d="M91 191h373" stroke="#557368" stroke-width="4"/><path d="M470 157v-68q0-6 6-6h10V73" fill="none" stroke="#557368" stroke-width="5"/><rect x="385" y="35" width="132" height="42" rx="7" fill="#dce5e0" stroke="#557368" stroke-width="3"/><rect x="397" y="43" width="108" height="23" rx="3" fill="#fbfff9" stroke="#9aaea1" stroke-width="2"/><text id="mass-reading" x="451" y="60" text-anchor="middle" font-size="17" font-family="monospace" font-weight="700" fill="#247554">0.0 t</text><g class="mass-truck"><path d="M83 87h223v52H83z" fill="#4b8a79" stroke="#365f55" stroke-width="3"/><path d="M306 106h75l45 33H306z" fill="#d69b2d" stroke="#997d3c" stroke-width="3"/><path d="M322 111h51l30 26h-81z" fill="#d8ebe4" stroke="#557368" stroke-width="2"/><path d="M94 99h197m-197 12h197m-197 12h197" stroke="#77a493" stroke-width="2"/><circle cx="148" cy="144" r="17" fill="#344540"/><circle cx="148" cy="144" r="7" fill="#d7dfda"/><circle cx="354" cy="144" r="17" fill="#344540"/><circle cx="354" cy="144" r="7" fill="#d7dfda"/><path d="M420 145h12" stroke="#fff3c9" stroke-width="3"/></g>` }
+          }[key];
+          const action = key === "weighbridge" ? "車輛到位後顯示重量" : "物件放上秤後顯示質量";
+          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual mass-demo-visual" id="mass-demo"><svg class="mass-demo-svg" viewBox="0 0 560 250" role="img" aria-label="${action}">${examples.svg}</svg></div><div class="tool-demo-controls"><button type="button" id="mass-replay">重新播放</button><span class="tool-demo-value" id="mass-state" aria-live="polite">${examples.status}</span></div>`;
+          const visual = document.querySelector("#mass-demo"), reading = document.querySelector("#mass-reading"), status = document.querySelector("#mass-state");
+          const play = () => {
+            clearTimeout(massReadTimer);
+            reading.textContent = examples.start;
+            status.textContent = examples.status;
+            visual.classList.remove("mass-animating");
+            void visual.offsetWidth;
+            visual.classList.add("mass-animating");
+            massReadTimer = setTimeout(() => { reading.textContent = examples.value; status.textContent = `讀值穩定：${examples.value}`; }, examples.wait);
+          };
+          document.querySelector("#mass-replay").onclick = play;
+          play();
         } else if (key === "olympicSprint") {
           demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual" id="race-visual"><div class="race-scene"><svg viewBox="${item.viewBox}" role="img" aria-label="跑道、起跑訊號、終點攝影機和自動計時器">${item.draw()}</svg><div class="sprint-runner" role="img" aria-label="短跑選手跑步循環動畫"></div></div></div><div class="tool-demo-controls"><button type="button" id="race-start">開始模擬短跑</button><span class="tool-demo-value" id="race-state" aria-live="polite">準備起跑</span></div>`;
           const visual = document.querySelector("#race-visual"), runner = document.querySelector(".sprint-runner"), display = document.querySelector("#race-clock-display"), start = document.querySelector("#race-start"), state = document.querySelector("#race-state");
