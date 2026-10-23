@@ -436,10 +436,8 @@ export async function mountMassMeasurement() {
       tag.textContent = `${value} g`;
       weightTray.append(tag);
     });
+    document.querySelectorAll('[data-weight]').forEach(button => { button.disabled = false; });
     const total = weights.reduce((sum, value) => sum + value, 0);
-    document.querySelectorAll('[data-weight]').forEach(button => {
-      button.disabled = total + Number(button.dataset.weight) > MASS_G;
-    });
     weightTotal.textContent = `${total} g`;
     const leftWeight = weights.reduce((sum, value, index) => sum + (weightSides[index] === 'left' ? value : 0), 0);
     const rightWeight = weights.reduce((sum, value, index) => sum + (weightSides[index] === 'right' ? value : 0), 0);
@@ -489,7 +487,6 @@ export async function mountMassMeasurement() {
   }
   let suppressWeightClick = false;
   function addWeight(next, origin = null, side = 'right') {
-    if (weights.reduce((sum, value) => sum + value, 0) + next > MASS_G) return;
     weights.push(next);
     weightOrigins.push(origin);
     weightSides.push(side);
@@ -859,7 +856,7 @@ export async function mountMassMeasurement() {
     if (dragged.kind === 'source-weight') {
       const source = weightSource.weights[dragged.sourceIndex];
       const side = balanceDropSideOrAbove(event);
-      if (side && weights.reduce((sum, value) => sum + value, 0) + source.value <= MASS_G) {
+      if (side) {
         if (balanceDropSide(event) === side) {
           addWeight(source.value, null, side);
           dragged.object.removeFromParent();
