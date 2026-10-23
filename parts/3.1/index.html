@@ -504,7 +504,7 @@
           <a href="#card-02"><b>02</b><span>18 代表什麼？</span></a>
           <a href="#card-03"><b>03</b><span>尺上的每一格，代表多少？</span></a>
           <a href="#card-04"><b>04</b><span>同一物體，為什麼讀值會差一點？</span></a>
-          <a href="#card-05"><b>05</b><span>鉛筆端點落在相鄰刻線之間，該怎麼估讀？</span></a>
+          <a href="#card-05"><b>05</b><span>端點落在相鄰刻線之間，該怎麼估讀？</span></a>
           <a href="#card-06"><b>06</b><span>怎麼讓量測結果更可靠？</span></a>
           <a href="#card-07"><b>07</b><span>要量什麼？依物品特性選工具</span></a>
           <a href="#card-08" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
@@ -650,7 +650,7 @@
       <section class="lesson-card" id="card-05">
         <div class="card-side"><span class="card-number">05</span><h3>刻線之間，怎麼估讀？</h3><span class="card-role">練習觀察與估讀</span></div>
         <div class="card-main">
-          <h2 id="estimate-heading">鉛筆端點落在相鄰刻線之間，該怎麼估讀？</h2>
+          <h2 id="estimate-heading">端點落在相鄰刻線之間，該怎麼估讀？</h2>
           <p id="estimate-instruction">先依整把尺估讀鉛筆右端，再用圖片上的放大按鈕或滑鼠滾輪查看 18 cm 和 19 cm 之間的位置。</p>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>鉛筆末端沒有對準刻線，長度要怎麼讀？</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>先看鉛筆末端落在兩條刻線之間的位置，再估出它大約在哪裡。</p></div>
@@ -1046,7 +1046,7 @@
         const button = document.querySelector("#check-estimate");
         button.disabled = estimateGuess === null && !estimateChecked;
         button.textContent = estimateChecked ? "再估一次" : "查看誤差";
-        document.querySelector("#estimate-heading").textContent = "鉛筆端點落在相鄰刻線之間，該怎麼估讀？";
+        document.querySelector("#estimate-heading").textContent = "端點落在相鄰刻線之間，該怎麼估讀？";
         document.querySelector("#estimate-instruction").textContent = state.zoom > 0.8
           ? `畫面已放大到 ${document.querySelector("#zoom-level").textContent}；可查看端點與相鄰刻線的位置。`
           : `先依整把尺估讀鉛筆右端，再用圖片上的放大按鈕或滑鼠滾輪查看 18 cm 和 19 cm 之間的位置。`;
