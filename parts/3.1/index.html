@@ -1164,7 +1164,7 @@
           if (tick === 18 || tick === 19) {
             const labelGap = 8 * modelSvg.viewBox.baseVal.width / (modelScreen.getBoundingClientRect().width * modelStageScale);
             const labelY = tickEnd + labelGap;
-            const labelOpacity = state.zoom < .015 ? 0 : 1;
+            const labelOpacity = 1;
             const labelFontSize = 11 * modelSvg.viewBox.baseVal.width / (modelScreen.getBoundingClientRect().width * modelStageScale);
             lines.push(`<text x="${x}" y="${labelY}" text-anchor="middle" font-size="${labelFontSize}" opacity="${labelOpacity}">${tick}</text>`);
           }
