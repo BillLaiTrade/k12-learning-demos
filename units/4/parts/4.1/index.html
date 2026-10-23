@@ -1212,24 +1212,25 @@
       const center=r=>({x:r.left+r.width/2,y:r.top+r.height/2});
       // Connect card edges directly. Both directions on each triangle side use
       // parallel, slightly offset curves so the arrows do not cross or touch art.
-      const edge=(from,to,gap=12)=>{
+      const edge=(from,to,gap=14,lane=0)=>{
         const a=center(from),b=center(to),dx=b.x-a.x,dy=b.y-a.y,length=Math.hypot(dx,dy)||1,ux=dx/length,uy=dy/length;
         const reach=(r,x,y)=>Math.min((r.width/2)/Math.max(Math.abs(x),.0001),(r.height/2)/Math.max(Math.abs(y),.0001))+gap;
         const ra=reach(from,ux,uy),rb=reach(to,ux,uy);
-        return[{x:a.x+ux*ra,y:a.y+uy*ra},{x:b.x-ux*rb,y:b.y-uy*rb}];
+        const nx=-uy,ny=ux;
+        return[{x:a.x+ux*ra+nx*lane,y:a.y+uy*ra+ny*lane},{x:b.x-ux*rb+nx*lane,y:b.y-uy*rb+ny*lane}];
       };
-      const curve=(from,to,bow)=>{
-        const [a,b]=edge(nodes[from],nodes[to]),dx=b.x-a.x,dy=b.y-a.y,n=Math.hypot(dx,dy)||1,nx=-dy/n,ny=dx/n;
+      const curve=(from,to,lane)=>{
+        const [a,b]=edge(nodes[from],nodes[to],14,lane),dx=b.x-a.x,dy=b.y-a.y,n=Math.hypot(dx,dy)||1,nx=-dy/n,ny=dx/n,bow=5;
         const p=[a,{x:a.x+dx/3+nx*bow,y:a.y+dy/3+ny*bow},{x:a.x+dx*2/3+nx*bow,y:a.y+dy*2/3+ny*bow},b];
         return p.map(q=>svgPoint(q.x,q.y));
       };
       const curves={
-        melt:curve("solid","liquid",-11),
-        freeze:curve("liquid","solid",-11),
-        sublimation:curve("solid","gas",11),
-        deposition:curve("gas","solid",11),
-        vaporization:curve("liquid","gas",-18),
-        condensation:curve("gas","liquid",-18)
+        melt:curve("solid","liquid",-12),
+        freeze:curve("liquid","solid",-12),
+        sublimation:curve("solid","gas",12),
+        deposition:curve("gas","solid",12),
+        vaporization:curve("liquid","gas",-13),
+        condensation:curve("gas","liquid",-13)
       };
       const triangleRect=document.querySelector(".phase-triangle").getBoundingClientRect();
       Object.entries(curves).forEach(([key,points])=>{
