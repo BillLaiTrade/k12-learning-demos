@@ -1204,6 +1204,42 @@
       liquid:{title:"水｜液態",kicker:"液態・粒子排列與運動",copy:"液態水中的水分子仍彼此靠近，但排列不固定，可以互相移動，所以水會流動。水放熱會凝固成冰；吸熱則會汽化成水蒸氣。",paths:[["freeze","凝固：水 → 冰｜放熱"],["vaporization","汽化：水 → 水蒸氣｜吸熱"]]},
       gas:{title:"水蒸氣｜氣態",kicker:"氣態・粒子排列與運動",copy:"水蒸氣中的水分子彼此距離較遠，會在空間中移動。放熱、運動減慢時可凝結成水；若直接形成固態冰，則稱為凝華。",paths:[["condensation","凝結：水蒸氣 → 水｜放熱"],["deposition","凝華：水蒸氣 → 冰｜放熱"]]}
     };
+    const phaseSvg=document.querySelector(".phase-triangle-svg");
+    function updatePhaseArrowGeometry(){
+      if(!phaseSvg||!phaseSvg.getScreenCTM())return;
+      const inverse=phaseSvg.getScreenCTM().inverse(),svgPoint=(x,y)=>{const p=phaseSvg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(inverse);return{x:q.x,y:q.y};};
+      const rect=selector=>document.querySelector(`[data-phase-state="${selector}"]`).getBoundingClientRect();
+      const solid=rect("solid"),water=rect("liquid"),vapor=rect("gas"),gap=15;
+      // Put arrow tips in the open lane just outside each state card. The pictures
+      // have transparent padding, so using their image boxes made arrowheads look
+      // as if they were stabbing the water and vapor illustrations.
+      const iceA={x:solid.left+solid.width*.22,y:solid.bottom+gap},iceB={x:solid.left+solid.width*.78,y:solid.bottom+gap};
+      const waterLeft={x:water.left+water.width*.25,y:water.top-gap},waterRight={x:water.left+water.width*.75,y:water.top-gap},vaporLeft={x:vapor.left+vapor.width*.25,y:vapor.top-gap},vaporRight={x:vapor.left+vapor.width*.75,y:vapor.top-gap};
+      const iceDeposition={x:solid.left+solid.width*.66,y:solid.bottom+gap},vaporDeposition={x:vapor.left+vapor.width*.65,y:vapor.top-gap};
+      const waterFlowA={x:water.right+gap,y:water.top+water.height*.5-8},vaporFlowA={x:vapor.left-gap,y:vapor.top+vapor.height*.5-8},vaporFlowB={x:vapor.left-gap,y:vapor.top+vapor.height*.5+16},waterFlowB={x:water.right+gap,y:water.top+water.height*.5+16};
+      const cubic=(start,c1,c2,end)=>[start,c1,c2,end].map(p=>svgPoint(p.x,p.y));
+      const curves={
+        melt:cubic(iceA,{x:iceA.x-42,y:iceA.y+78},{x:waterLeft.x-34,y:waterLeft.y-70},waterLeft),
+        freeze:cubic(waterRight,{x:waterRight.x+34,y:waterRight.y-70},{x:iceB.x+42,y:iceB.y+78},iceB),
+        sublimation:cubic(iceB,{x:iceB.x+42,y:iceB.y+78},{x:vaporRight.x+34,y:vaporRight.y-70},vaporRight),
+        deposition:cubic(vaporDeposition,{x:vaporDeposition.x+22,y:vaporDeposition.y-72},{x:iceDeposition.x+22,y:iceDeposition.y+82},iceDeposition),
+        vaporization:cubic(waterFlowA,{x:waterFlowA.x+(vaporFlowA.x-waterFlowA.x)*.34,y:waterFlowA.y-30},{x:waterFlowA.x+(vaporFlowA.x-waterFlowA.x)*.66,y:vaporFlowA.y-30},vaporFlowA),
+        condensation:cubic(vaporFlowB,{x:vaporFlowB.x+(waterFlowB.x-vaporFlowB.x)*.34,y:vaporFlowB.y+30},{x:vaporFlowB.x+(waterFlowB.x-vaporFlowB.x)*.66,y:waterFlowB.y+30},waterFlowB)
+      };
+      const triangleRect=document.querySelector(".phase-triangle").getBoundingClientRect();
+      Object.entries(curves).forEach(([key,points])=>{
+        const d=`M${points[0].x} ${points[0].y} C${points[1].x} ${points[1].y} ${points[2].x} ${points[2].y} ${points[3].x} ${points[3].y}`;
+        const path=document.querySelector(`.phase-arrow[data-phase-path="${key}"]`);
+        path.setAttribute("d",d);
+        document.getElementById(`phase-path-${key}`).setAttribute("d",d);
+        document.querySelector(`.phase-arrow-hit[data-phase-process="${key}"]`).setAttribute("d",d);
+        const label=document.getElementById(`phase-${key}`),labelSlots={melt:[.29,.49],freeze:[.39,.58],sublimation:[.71,.49],deposition:[.61,.58],vaporization:[.5,.72],condensation:[.5,.84]};
+        label.style.left=`${triangleRect.width*labelSlots[key][0]}px`;label.style.top=`${triangleRect.height*labelSlots[key][1]}px`;
+      });
+    }
+    updatePhaseArrowGeometry();
+    window.addEventListener("resize",updatePhaseArrowGeometry,{passive:true});
+    new ResizeObserver(updatePhaseArrowGeometry).observe(document.querySelector(".phase-triangle"));
     let phaseAnimationTimer;
     const phaseSteps=document.getElementById("phase-detail-steps");
     function resetPhaseSteps(){phaseSteps.replaceChildren();phaseSteps.hidden=true;}
