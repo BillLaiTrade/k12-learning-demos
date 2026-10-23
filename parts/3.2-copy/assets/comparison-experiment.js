@@ -39,7 +39,9 @@ export function mountComparisonExperiment() {
     scene.classList.toggle('is-immersed', immersed);
     sample.classList.toggle('in-water', immersed);
     mass.textContent = immersed ? '0.0 g' : chosenSpecimen === 'stone' ? '860 g' : '約 6,383 g';
-    status.textContent = message;
+    status.textContent = message || (immersed
+      ? '樣本已浸入；把它往上提過量筒口再移出，或按下取出按鈕。'
+      : '把樣本拖到量筒口正上方並放開；量測後可再拖出。也可用下方按鈕操作。');
     setButtons();
   }
 
@@ -66,6 +68,7 @@ export function mountComparisonExperiment() {
 
   function setFinalPosition(left, top, isImmersed) {
     cylinder.classList.remove('drop-ready');
+    sample.classList.remove('is-dragging');
     sample.classList.add('is-animating');
     if (isImmersed) {
       sample.style.left = left + 'px';
@@ -76,7 +79,7 @@ export function mountComparisonExperiment() {
     }
     animating = false;
     setState(isImmersed, isImmersed
-      ? '樣本已完全浸入；觀察量筒中的水位變化，再與右側的量測結果比較。'
+      ? '樣本已完全浸入；觀察量筒中的水位變化，再與右側的量測結果比較。往上提過筒口可取出。'
       : `${chosenSpecimen === 'stone' ? '石頭' : '純金塊'}已取出；可再次放入觀察水位變化。`);
     sample.getBoundingClientRect();
     requestAnimationFrame(() => sample.classList.remove('is-animating'));
@@ -285,7 +288,8 @@ export function mountComparisonExperiment() {
     const nextTop = drag.top + dy;
 
     if (drag.wasImmersed) {
-      if (nextTop > geometry.clearTop) {
+      const rimClearedTop = geometry.top - sampleRect.height + 8;
+      if (nextTop > rimClearedTop) {
         nextLeft = Math.max(geometry.left + 3, Math.min(geometry.right - sampleRect.width - 3, nextLeft));
       } else {
         drag.clearedRim = true;
