@@ -1141,7 +1141,7 @@
 
     const particlePositions = {
       solid:[[27,64],[36,64],[45,64],[54,64],[63,64],[72,64],[27,71.5],[36,71.5],[45,71.5],[54,71.5],[63,71.5],[72,71.5],[27,79],[36,79],[45,79],[54,79],[63,79],[72,79],[27,86.5],[36,86.5],[45,86.5],[54,86.5],[63,86.5],[72,86.5],[27,94],[36,94],[45,94],[54,94],[63,94],[72,94]],
-      liquid:[[14,61],[28,61],[42,61],[56,61],[70,61],[84,61],[14,69],[28,69],[42,69],[56,69],[70,69],[84,69],[14,77],[28,77],[42,77],[56,77],[70,77],[84,77],[14,85],[28,85],[42,85],[56,85],[70,85],[84,85],[14,93],[28,93],[42,93],[56,93],[70,93],[84,93]],
+      liquid:[[14,61],[28,61],[42,61],[56,61],[70,61],[84,61],[14,69],[28,69],[42,69],[56,69],[70,69],[84,69],[14,77],[28,77],[42,77],[56,77],[70,77],[84,77],[14,85],[28,85],[42,85],[56,85],[70,85],[84,85],[14,93],[28,93],[42,93],[56,93],[70,93],[84,93],[18,65],[32,65],[46,65],[60,65],[74,65],[18,73],[32,73],[46,73],[60,73],[74,73],[18,81],[32,81]],
       gas:[[13,10],[29,13],[45,8],[61,16],[77,11],[87,18],[20,28],[36,32],[52,25],[68,34],[84,27],[91,31],[11,46],[27,41],[43,51],[59,44],[75,54],[89,48],[17,66],[33,71],[49,63],[65,74],[81,68],[93,61],[12,85],[28,91],[44,82],[60,88],[76,79],[88,94]]
     };
     const moleculeSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#2346bd" stroke="#152e86" stroke-width="1"/></svg>';
@@ -1158,20 +1158,20 @@
     });
 
     function createMovingParticleModel(box,state,initialPositions){
-      const width=box.clientWidth,height=box.clientHeight,isLiquid=state==="liquid",elements=[...box.querySelectorAll(".particle-molecule")],radius=elements[0].getBoundingClientRect().width/2,poolTop=height*.66,particles=[];
-      const margin=radius+3,availableWidth=Math.max(1,width-margin*2),availableHeight=Math.max(1,height-poolTop-radius*2-3),columns=Math.max(1,Math.floor(availableWidth/(radius*2+1.5))),rows=Math.ceil(elements.length/columns);
+      const width=box.clientWidth,height=box.clientHeight,isLiquid=state==="liquid",elements=[...box.querySelectorAll(".particle-molecule")],radius=elements[0].getBoundingClientRect().width/2;
+      const margin=radius+3,availableWidth=Math.max(1,width-margin*2),columns=Math.max(1,Math.floor(availableWidth/(radius*2+1.5))),rows=Math.ceil(elements.length/columns),layerGap=radius*2+1.5,poolTop=isLiquid?Math.max(height*.54,height-radius*2-3-rows*layerGap):height*.66,particles=[];
       elements.forEach((element,index)=>{
         let x,y;
         if(isLiquid){
           const row=Math.floor(index/columns),rowStart=row*columns,countInRow=Math.min(columns,elements.length-rowStart),columnOffset=(columns-countInRow)/2,column=index-rowStart;
           x=margin+(column+columnOffset+.5)*availableWidth/columns+(Math.random()-.5)*availableWidth/columns*.05;
-          y=poolTop+radius+1+(row+.5)*availableHeight/rows+(Math.random()-.5)*availableHeight/rows*.05;
+          y=poolTop+radius+(row+.5)*layerGap+(Math.random()-.5)*1.2;
         }else{
           x=Math.max(radius,Math.min(width-radius,initialPositions[index][0]*width/100));
           y=Math.max(radius,Math.min(height-radius,initialPositions[index][1]*height/100));
         }
-        const angle=Math.random()*Math.PI*2,speed=isLiquid?30+Math.random()*24:44+Math.random()*34;
-        const vx=Math.cos(angle)*speed,vy=Math.sin(angle)*speed,particle={element,x,y,radius,vx,vy,targetVx:vx,targetVy:vy,turnIn:.4+Math.random()*.9};
+        const angle=Math.random()*Math.PI*2,speed=isLiquid?16+Math.random()*12:44+Math.random()*34;
+        const vx=isLiquid?(Math.random()<.5?-1:1)*speed:Math.cos(angle)*speed,vy=isLiquid?(Math.random()-.5)*1.2:Math.sin(angle)*speed,particle={element,x,y,radius,vx,vy,targetVx:vx,targetVy:vy,homeY:isLiquid?y:undefined,turnIn:.4+Math.random()*.9};
         element.style.setProperty("--particle-x",`${x}px`);element.style.setProperty("--particle-y",`${y}px`);
         particles.push(particle);
       });
@@ -1179,15 +1179,15 @@
     }
 
     function advanceParticleModel(model,dt){
-      const {box,state,particles}=model,isLiquid=state==="liquid",width=box.clientWidth,height=box.clientHeight,poolTop=height*.66;
+      const {box,state,particles}=model,isLiquid=state==="liquid",width=box.clientWidth,height=box.clientHeight,poolTop=model.poolTop;
       model.width=width;model.height=height;model.poolTop=poolTop;
       const stepCount=Math.max(1,Math.ceil(dt/(1/120))),step=dt/stepCount,restitution=isLiquid?.58:.94,minGap=1;
       for(let stepIndex=0;stepIndex<stepCount;stepIndex++){
         for(const p of particles){
           if(isLiquid){
             p.turnIn-=step;
-            if(p.turnIn<=0){const angle=Math.random()*Math.PI*2,speed=18+Math.random()*24;p.targetVx=Math.cos(angle)*speed;p.targetVy=Math.sin(angle)*speed;p.turnIn=.55+Math.random()*1.1;}
-            const response=Math.min(1,1.5*step);p.vx+=(p.targetVx-p.vx)*response;p.vy+=(p.targetVy-p.vy)*response+16*step;
+            if(p.turnIn<=0){p.targetVx=(Math.random()<.5?-1:1)*(15+Math.random()*15);p.targetVy=(Math.random()-.5)*1.2;p.turnIn=.55+Math.random()*1.1;}
+            const response=Math.min(1,1.5*step);p.vx+=(p.targetVx-p.vx)*response;p.vy+=(p.targetVy-p.vy)*response+(.6-(p.y-p.homeY)*24-p.vy*9)*step;
           }
           p.x+=p.vx*step;p.y+=p.vy*step;
           if(p.x<p.radius){p.x=p.radius;p.vx=Math.abs(p.vx)*(isLiquid?.9:1);}
@@ -1213,7 +1213,7 @@
         }
       }
       for(const p of particles){
-        const maxSpeed=isLiquid?48:78,speed=Math.hypot(p.vx,p.vy);
+        const maxSpeed=isLiquid?34:78,speed=Math.hypot(p.vx,p.vy);
         if(speed>maxSpeed){p.vx*=maxSpeed/speed;p.vy*=maxSpeed/speed;}
         p.element.style.setProperty("--particle-x",`${p.x}px`);p.element.style.setProperty("--particle-y",`${p.y}px`);
       }
@@ -1225,11 +1225,18 @@
       requestAnimationFrame(animateParticleModels);
     }
     requestAnimationFrame(animateParticleModels);
-    window.addEventListener("resize",()=>movingParticleModels.forEach(model=>model.particles.forEach(p=>{
-      p.radius=p.element.getBoundingClientRect().width/2;
-      p.x=Math.max(p.radius,Math.min(model.box.clientWidth-p.radius,p.x));
-      p.y=Math.max(model.state==="liquid"?model.box.clientHeight*.66+p.radius:p.radius,Math.min(model.box.clientHeight-p.radius,p.y));
-    })),{passive:true});
+    window.addEventListener("resize",()=>movingParticleModels.forEach(model=>{
+      const {box,state,particles}=model,width=box.clientWidth,height=box.clientHeight;
+      particles.forEach(p=>{p.radius=p.element.getBoundingClientRect().width/2;});
+      const margin=particles[0].radius+3,columns=Math.max(1,Math.floor(Math.max(1,width-margin*2)/(particles[0].radius*2+1.5))),rows=Math.ceil(particles.length/columns),layerGap=particles[0].radius*2+1.5;
+      model.poolTop=state==="liquid"?Math.max(height*.54,height-particles[0].radius*2-3-rows*layerGap):height*.66;
+      particles.forEach((p,index)=>{
+        p.x=Math.max(p.radius,Math.min(width-p.radius,p.x));
+        const row=Math.floor(index/columns);
+        if(state==="liquid")p.homeY=model.poolTop+p.radius+(row+.5)*layerGap;
+        p.y=Math.max(state==="liquid"?model.poolTop+p.radius:p.radius,Math.min(height-p.radius,p.y));
+      });
+    }),{passive:true});
 
     const phaseProcesses={
       melt:{title:"融化｜冰變成水",energy:"吸熱｜固態變液態",copy:"冰吸收熱量時，水分子的振動會增強；原本在固定位置附近振動的分子逐漸能互相移動。融化後，分子仍彼此靠近，但可以滑動，因此水能流動。",steps:["冰（固態）","吸收熱量","水（液態）"]},
