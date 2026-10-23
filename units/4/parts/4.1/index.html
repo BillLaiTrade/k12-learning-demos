@@ -256,9 +256,6 @@
     .particle-molecule svg { display:block; width:100%; height:100%; overflow:visible; }
     .particle-molecule[data-vibrating="true"] { animation:solid-particle-vibration .12s linear infinite alternate; }
     @keyframes solid-particle-vibration { from { transform:translate(calc(-50% + var(--vibrate-from-x)),calc(-50% + var(--vibrate-from-y))); } to { transform:translate(calc(-50% + var(--vibrate-to-x)),calc(-50% + var(--vibrate-to-y))); } }
-    .particle-legend { display:flex; flex-wrap:wrap; justify-content:center; gap:8px 16px; margin:9px 0 0; color:#5c6d63; font-size:.76rem; }
-    .particle-legend span { display:inline-flex; align-items:center; gap:5px; }
-    .particle-legend svg { width:22px; height:19px; flex:none; }
     .particle-comparison { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:12px; }
     .particle-comparison article { padding:10px 12px; border:1px solid #dbe4dc; border-radius:10px; background:#f8faf7; }
     .particle-comparison h3 { margin:0 0 4px; color:#23624e; font-size:.88rem; }
@@ -565,13 +562,12 @@
               <article class="particle-state-card"><h3>液態水分子</h3><div class="particle-box" id="particle-box-liquid" data-motion-state="liquid" role="img" aria-label="水分子集中在容器底部，持續流動、碰撞和換位"></div></article>
               <article class="particle-state-card"><h3>氣態：水蒸氣</h3><div class="particle-box" id="particle-box-gas" data-motion-state="gas" role="img" aria-label="水分子在容器中移動，碰到其他分子或杯壁後反彈"></div></article>
             </div>
-            <div class="particle-legend" aria-label="水分子模型圖例"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="#2346bd" stroke="#152e86" stroke-width="1"/></svg>一個水分子（簡化符號）</span></div>
             <div class="particle-comparison" aria-label="三種狀態的粒子特徵">
               <article><h3>固態</h3><p>分子靠近、排列較整齊，在原位附近振動。</p></article>
               <article><h3>液態</h3><p>分子集中在容器底部的有限範圍，持續碰撞、流動和換位，不會散布到整個容器。</p></article>
               <article><h3>氣態</h3><p>分子在整個空間中沿直線移動，碰撞其他分子或杯壁後改變方向。</p></article>
             </div>
-            <p class="particle-model-note">藍色圓點代表水分子；動畫呈現三態中分子的排列與相對運動，粒子大小和間距並非實際比例。</p>
+            <p class="particle-model-note">動畫呈現三態中粒子的排列與相對運動；粒子大小和間距並非實際比例。</p>
             <p class="next-hint">模型解釋了狀態差異；接著用蒸餾水追蹤升溫或冷卻時的變化。</p>
           </div>
         </section>
