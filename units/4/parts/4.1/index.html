@@ -589,6 +589,9 @@
                     <path id="phase-path-deposition" d="M610 392 Q600 300 490 228"/>
                     <path id="phase-path-vaporization" d="M235 445 Q420 405 580 445"/>
                     <path id="phase-path-condensation" d="M605 475 Q420 515 260 475"/>
+                    <symbol id="phase-icon-droplet" viewBox="-10 -10 20 20"><path d="M0 -8C-1 -5-7 1-7 4a7 7 0 0 0 14 0C7 1 1-5 0-8Z" fill="#6bd4ee" stroke="#2787a4" stroke-width="1.3"/><path d="M-3 3c.2-1.5 1.2-2.7 2.5-3.8" fill="none" stroke="#eaffff" stroke-linecap="round" stroke-width="1.2"/></symbol>
+                    <symbol id="phase-icon-snowflake" viewBox="-10 -10 20 20"><g fill="none" stroke="#43839a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M0-8V8M-6.93-4 6.93 4M-6.93 4 6.93-4M0-8l-2 2m2-2 2 2M0 8l-2-2m2 2 2-2m-8.93-2 2.7-.2m-2.7.2.7 2.6m12.23-.6-2.7-.2m2.7.2-.7 2.6m-12.23-7.2 2.7.2m-2.7-.2.7-2.6m12.23 2.6-2.7.2m2.7-.2-.7-2.6"/></g></symbol>
+                    <symbol id="phase-icon-vapor" viewBox="-10 -10 20 20"><g fill="none" stroke="#58afd0" stroke-linecap="round" stroke-width="2"><path d="M-5 8c-5-4 3-6-1-9s3-5 1-8M1 9c-4-4 4-6 0-9s3-5 1-8M6 8c-4-4 3-6 0-9s2-5 1-8"/></g></symbol>
                   </defs>
                   <path class="phase-arrow phase-heat" data-phase-path="melt" d="M380 228 Q280 300 240 392"/>
                   <path class="phase-arrow phase-cool" data-phase-path="freeze" d="M260 392 Q380 300 430 228"/>
@@ -602,7 +605,6 @@
                   <path class="phase-arrow-hit" data-phase-process="deposition" tabindex="0" role="button" aria-pressed="false" aria-label="凝華：水蒸氣變成冰，放熱" d="M610 392 Q600 300 490 228"/>
                   <path class="phase-arrow-hit" data-phase-process="vaporization" tabindex="0" role="button" aria-pressed="false" aria-label="汽化：水變成水蒸氣，吸熱" d="M235 445 Q420 405 580 445"/>
                   <path class="phase-arrow-hit" data-phase-process="condensation" tabindex="0" role="button" aria-pressed="false" aria-label="凝結：水蒸氣變成水，放熱" d="M605 475 Q420 515 260 475"/>
-                  <circle class="phase-flow-dot" id="phase-flow-dot" r="7"><animateMotion id="phase-flow-animation" dur="1.8s" fill="freeze"><mpath href="#phase-path-melt"/></animateMotion></circle>
                 </svg>
                 <button type="button" class="phase-node phase-node-solid" data-phase-state="solid" aria-pressed="false" aria-label="查看固態冰的特性與相關轉變"><h3>固態・冰</h3><img src="assets/phase-ice.webp" alt="動畫插畫：一塊淺藍色冰塊"><p>形狀與體積大致固定</p></button>
                 <button type="button" class="phase-node phase-node-liquid" data-phase-state="liquid" aria-pressed="false" aria-label="查看液態水的特性與相關轉變"><h3>液態・水</h3><img src="assets/phase-water.webp" alt="動畫插畫：帶有漣漪的液態水"><p>會流動，形狀隨容器改變</p></button>
@@ -1199,7 +1201,7 @@
       if(!phaseSvg||!phaseSvg.getScreenCTM())return;
       const inverse=phaseSvg.getScreenCTM().inverse(),svgPoint=(x,y)=>{const p=phaseSvg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(inverse);return{x:q.x,y:q.y};};
       const triangle=document.querySelector(".phase-triangle"),width=triangle.clientWidth,side=width*.62,altitude=side*Math.sqrt(3)/2,nodeSize=side*.34,topY=nodeSize/2+10;
-      triangle.style.height=`${topY+altitude+nodeSize/2+24}px`;
+      triangle.style.height=`${topY+altitude+nodeSize/2+(width<680?60:32)}px`;
       const triangleRect=triangle.getBoundingClientRect();
       const vertices={solid:{x:triangleRect.left+width/2,y:triangleRect.top+topY},liquid:{x:triangleRect.left+(width-side)/2,y:triangleRect.top+topY+altitude},gas:{x:triangleRect.left+(width+side)/2,y:triangleRect.top+topY+altitude}};
       for(const [key,point] of Object.entries(vertices)){
@@ -1230,14 +1232,32 @@
         path.setAttribute("d",d);
         document.getElementById(`phase-path-${key}`).setAttribute("d",d);
         document.querySelector(`.phase-arrow-hit[data-phase-process="${key}"]`).setAttribute("d",d);
-        const labelEdges={melt:["solid","liquid",.38],freeze:["solid","liquid",.6],sublimation:["solid","gas",.62],deposition:["solid","gas",.4],vaporization:["liquid","gas",.4],condensation:["liquid","gas",.6]},[from,to,fraction]=labelEdges[key],a=vertices[from],b=vertices[to],centroid={x:(vertices.solid.x+vertices.liquid.x+vertices.gas.x)/3,y:(vertices.solid.y+vertices.liquid.y+vertices.gas.y)/3},edgePoint={x:a.x+(b.x-a.x)*fraction,y:a.y+(b.y-a.y)*fraction},dx=centroid.x-(a.x+b.x)/2,dy=centroid.y-(a.y+b.y)/2,distance=Math.hypot(dx,dy)||1,sideDirection=phaseProcesses[key].energy.startsWith("吸熱")?1:-1,labelOffset=sideDirection===1?32:40,label=document.getElementById(`phase-${key}`);
+        const labelEdges={melt:["solid","liquid",.5],freeze:["solid","liquid",.5],sublimation:["solid","gas",.5],deposition:["solid","gas",.5],vaporization:["liquid","gas",.5],condensation:["liquid","gas",.5]},[from,to,fraction]=labelEdges[key],a=vertices[from],b=vertices[to],centroid={x:(vertices.solid.x+vertices.liquid.x+vertices.gas.x)/3,y:(vertices.solid.y+vertices.liquid.y+vertices.gas.y)/3},edgePoint={x:a.x+(b.x-a.x)*fraction,y:a.y+(b.y-a.y)*fraction},dx=centroid.x-(a.x+b.x)/2,dy=centroid.y-(a.y+b.y)/2,distance=Math.hypot(dx,dy)||1,sideDirection=phaseProcesses[key].energy.startsWith("吸熱")?1:-1,labelOffset=from==="liquid"?42:Math.max(32,side*.075),label=document.getElementById(`phase-${key}`);
         label.style.left=`${edgePoint.x-triangleRect.left+dx/distance*labelOffset*sideDirection}px`;label.style.top=`${edgePoint.y-triangleRect.top+dy/distance*labelOffset*sideDirection}px`;
       });
     }
     updatePhaseArrowGeometry();
     window.addEventListener("resize",updatePhaseArrowGeometry,{passive:true});
     new ResizeObserver(updatePhaseArrowGeometry).observe(document.querySelector(".phase-triangle"));
-    let phaseAnimationTimer;
+    const phaseTravelerIcons={melt:"droplet",freeze:"snowflake",sublimation:"vapor",deposition:"snowflake",vaporization:"vapor",condensation:"droplet"};
+    function addContinuousPhaseTravelers(){
+      const svgNS="http://www.w3.org/2000/svg";
+      Object.entries(phaseTravelerIcons).forEach(([key,icon])=>{
+        const path=document.getElementById(`phase-path-${key}`),travelers=2;
+        const matrix=path.getScreenCTM();let screenLength=0,previous=null;
+        for(let i=0;i<=32;i++){const point=path.getPointAtLength(path.getTotalLength()*i/32),screen=phaseSvg.createSVGPoint();screen.x=point.x;screen.y=point.y;const transformed=screen.matrixTransform(matrix);if(previous)screenLength+=Math.hypot(transformed.x-previous.x,transformed.y-previous.y);previous=transformed;}
+        const duration=Math.max(2.1,Math.min(4.4,screenLength/92));
+        for(let i=0;i<travelers;i++){
+          const group=document.createElementNS(svgNS,"g");group.classList.add("phase-traveler");group.setAttribute("aria-hidden","true");group.setAttribute("pointer-events","none");
+          const motion=document.createElementNS(svgNS,"animateMotion");motion.setAttribute("dur",`${duration}s`);motion.setAttribute("begin",`${i*duration/travelers}s`);motion.setAttribute("repeatCount","indefinite");
+          if(icon==="droplet")motion.setAttribute("rotate","auto");
+          const route=document.createElementNS(svgNS,"mpath");route.setAttribute("href",`#phase-path-${key}`);motion.append(route);
+          const symbol=document.createElementNS(svgNS,"use");symbol.setAttribute("href",`#phase-icon-${icon}`);symbol.setAttribute("x","-7");symbol.setAttribute("y","-7");symbol.setAttribute("width","14");symbol.setAttribute("height","14");
+          group.append(motion,symbol);phaseSvg.append(group);
+        }
+      });
+    }
+    addContinuousPhaseTravelers();
     const phaseSteps=document.getElementById("phase-detail-steps");
     function resetPhaseSteps(){phaseSteps.replaceChildren();phaseSteps.hidden=true;}
     function selectPhaseState(key){
@@ -1266,10 +1286,6 @@
       resetPhaseSteps();
       process.steps.forEach((step,index)=>{const item=document.createElement("span");item.textContent=step;phaseSteps.append(item);if(index===1){const arrow=document.createElement("b");arrow.setAttribute("aria-hidden","true");arrow.textContent="→";phaseSteps.append(arrow);}});
       phaseSteps.hidden=false;
-      const animation=document.getElementById("phase-flow-animation"),motionPath=animation.querySelector("mpath");
-      motionPath.setAttribute("href",`#phase-path-${key}`);
-      const dot=document.getElementById("phase-flow-dot");dot.style.opacity="1";animation.beginElement();
-      clearTimeout(phaseAnimationTimer);phaseAnimationTimer=setTimeout(()=>{dot.style.opacity="0";},1900);
     }
     document.querySelectorAll("[data-phase-state]").forEach(button=>button.addEventListener("click",()=>selectPhaseState(button.dataset.phaseState)));
     document.addEventListener("click",event=>{const trigger=event.target.closest("[data-phase-process]");if(trigger)selectPhaseProcess(trigger.dataset.phaseProcess);});
