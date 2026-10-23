@@ -251,10 +251,6 @@
     .particle-box { position:relative; width:100%; height:188px; overflow:hidden; border:2px solid #80968a; border-radius:13px; background:linear-gradient(180deg,#fffefa,#f7faf6); }
     .particle-box { container-type:inline-size; }
     .particle-molecule { position:absolute; z-index:1; left:var(--x); top:var(--y); width:clamp(6px,5.8cqi,12px); height:clamp(6px,5.8cqi,12px); transform:translate(-50%,-50%); transition:left .9s ease-in-out,top .9s ease-in-out; will-change:left,top; }
-    .particle-box[data-motion-state="liquid"] { background:linear-gradient(180deg,#fffefa 0 58%,#f2fbfc 58% 100%); }
-    .particle-liquid-fill { position:absolute; z-index:0; right:0; bottom:0; left:0; height:42%; background:linear-gradient(180deg,#c4e8eddd,#a8dce5e8); pointer-events:none; }
-    .particle-liquid-surface { position:absolute; z-index:1; right:-6%; bottom:36%; left:-6%; height:12px; border-top:2px solid #68b8c8; border-radius:48%; background:radial-gradient(ellipse at 50% 100%,#a9dce444 0 52%,transparent 55%); animation:liquid-surface-flow 2.8s ease-in-out infinite alternate; pointer-events:none; }
-    @keyframes liquid-surface-flow { from { transform:translateX(-2%) scaleY(.75); } to { transform:translateX(2%) scaleY(1.15); } }
     .particle-box[data-motion-state="liquid"] .particle-molecule,
     .particle-box[data-motion-state="gas"] .particle-molecule { z-index:2; animation:none; transition:none; }
     .particle-molecule svg { display:block; width:100%; height:100%; overflow:visible; }
@@ -551,16 +547,16 @@
           <div class="card-side"><span class="card-number">03</span><h3>粒子模型</h3><span class="card-role">用模型解釋三態</span></div>
           <div class="card-main">
             <h2>以水為例：三種狀態的粒子有什麼不同？</h2>
-            <p>圖中每個圓環代表一個水分子。比較同一批水分子在固態、液態和氣態中的排列、間距和運動；狀態改變時，水分子仍是同一批。</p>
+            <p>圖中每個圓點代表一個水分子。比較同一批水分子在固態、液態和氣態中的排列、間距和運動；狀態改變時，水分子仍是同一批。</p>
             <div class="particle-stage" aria-label="三種狀態的水分子排列比較">
               <article class="particle-state-card"><h3>固態：冰</h3><div class="particle-box" id="particle-box-solid" data-motion-state="solid" role="img" aria-label="24 個水分子在容器底部排列整齊、彼此留有間距並微微振動"></div></article>
-              <article class="particle-state-card"><h3>液態水</h3><div class="particle-box" id="particle-box-liquid" data-motion-state="liquid" role="img" aria-label="24 個水分子在液面下不規則移動、彼此碰撞並在容器底部流動"></div></article>
+              <article class="particle-state-card"><h3>液態水分子</h3><div class="particle-box" id="particle-box-liquid" data-motion-state="liquid" role="img" aria-label="24 個水分子集中在容器底部，持續流動、碰撞和換位"></div></article>
               <article class="particle-state-card"><h3>氣態：水蒸氣</h3><div class="particle-box" id="particle-box-gas" data-motion-state="gas" role="img" aria-label="同一批 24 個水分子在容器中沿直線移動並在碰到杯壁時反彈"></div></article>
             </div>
             <div class="particle-legend" aria-label="水分子模型圖例"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="#2346bd" stroke="#152e86" stroke-width="1"/></svg>一個水分子（簡化符號）</span><span>三種狀態使用相同數量的分子作比較</span></div>
             <div class="particle-comparison" aria-label="三種狀態的粒子特徵">
               <article><h3>固態</h3><p>分子靠近、排列較整齊，在原位附近振動。</p></article>
-              <article><h3>液態</h3><p>分子聚集在液面下，彼此碰撞、隨機換位，整體留在容器底部。</p></article>
+              <article><h3>液態</h3><p>分子集中在容器底部的有限範圍，持續碰撞、流動和換位，不會散布到整個容器。</p></article>
               <article><h3>氣態</h3><p>分子在整個空間中沿直線移動，碰撞其他分子或杯壁後改變方向。</p></article>
             </div>
             <p class="particle-model-note">三個容器同時顯示相同數量的水分子，方便直接比較排列和活動範圍。藍色圓點是水分子的簡化符號；動畫呈現三態粒子的排列與相對運動，不按實際比例呈現。</p>
@@ -1100,12 +1096,6 @@
     const movingParticleModels=[];
     Object.entries(particlePositions).forEach(([state,positions])=>{
       const box=document.getElementById(`particle-box-${state}`);
-      if(state==="liquid"){
-        const fill=document.createElement("div"),surface=document.createElement("div");
-        fill.className="particle-liquid-fill";surface.className="particle-liquid-surface";
-        fill.setAttribute("aria-hidden","true");surface.setAttribute("aria-hidden","true");
-        box.append(fill,surface);
-      }
       positions.forEach(([x,y],index)=>{
         const molecule=document.createElement("span");molecule.className="particle-molecule";molecule.innerHTML=moleculeSvg;molecule.setAttribute("aria-hidden","true");molecule.style.setProperty("--x",`${x}%`);molecule.style.setProperty("--y",`${y}%`);
         const vibrationX=.42+(index%3)*.04,vibrationY=.3+(index%2)*.04;molecule.style.setProperty("--vibrate-from-x",`${index%2?vibrationX:-vibrationX}px`);molecule.style.setProperty("--vibrate-to-x",`${index%2?-vibrationX:vibrationX}px`);molecule.style.setProperty("--vibrate-from-y",`${index%3?vibrationY:-vibrationY}px`);molecule.style.setProperty("--vibrate-to-y",`${index%3?-vibrationY:vibrationY}px`);
@@ -1116,7 +1106,7 @@
     });
 
     function createMovingParticleModel(box,state,initialPositions){
-      const width=box.clientWidth,height=box.clientHeight,isLiquid=state==="liquid",elements=[...box.querySelectorAll(".particle-molecule")],radius=elements[0].getBoundingClientRect().width/2,poolTop=height*.58,particles=[];
+      const width=box.clientWidth,height=box.clientHeight,isLiquid=state==="liquid",elements=[...box.querySelectorAll(".particle-molecule")],radius=elements[0].getBoundingClientRect().width/2,poolTop=height*.66,particles=[];
       elements.forEach((element,index)=>{
         element.style.transition="none";
         let x,y;
@@ -1139,7 +1129,7 @@
     }
 
     function advanceParticleModel(model,dt,time){
-      const {box,state,particles}=model,isLiquid=state==="liquid",width=box.clientWidth,height=box.clientHeight,poolTop=height*.58;
+      const {box,state,particles}=model,isLiquid=state==="liquid",width=box.clientWidth,height=box.clientHeight,poolTop=height*.66;
       model.width=width;model.height=height;model.poolTop=poolTop;
       for(const p of particles){
         if(isLiquid){const depth=(p.y-poolTop)/Math.max(1,height-poolTop),flowX=24*Math.sin(depth*Math.PI*2+time*.85),flowY=10*Math.cos(p.x/width*Math.PI*2-time*.6);p.vx+=(flowX-p.vx)*.6*dt+(Math.random()-.5)*10*dt;p.vy+=(flowY-p.vy)*.6*dt+(Math.random()-.5)*8*dt+9*dt;p.vx*=.9995;}
@@ -1175,7 +1165,7 @@
     window.addEventListener("resize",()=>movingParticleModels.forEach(model=>model.particles.forEach(p=>{
       p.radius=p.element.getBoundingClientRect().width/2;
       p.x=Math.max(p.radius,Math.min(model.box.clientWidth-p.radius,p.x));
-      p.y=Math.max(model.state==="liquid"?model.box.clientHeight*.58+p.radius:p.radius,Math.min(model.box.clientHeight-p.radius,p.y));
+      p.y=Math.max(model.state==="liquid"?model.box.clientHeight*.66+p.radius:p.radius,Math.min(model.box.clientHeight-p.radius,p.y));
     })),{passive:true});
 
     const phaseProcesses={
