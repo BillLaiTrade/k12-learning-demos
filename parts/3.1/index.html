@@ -1296,6 +1296,25 @@
       lengthUnitSelect.addEventListener("change", () => updateLengthConversion(lengthUnitSelect.value));
       updateLengthConversion(lengthUnitSelect.value);
 
+      let softTapeFrameId = 0;
+      const drawSoftTape = value => {
+        const progress=Math.max(0,Math.min(100,Number(value)))/100, looseness=1-progress;
+        const left=128,seam=370,end=448-30*progress;
+        const topAt=t=>(1-t)*(1-t)*103+2*(1-t)*t*(116+12*looseness)+t*t*127;
+        const thickAt=t=>46+14*looseness*Math.sin(Math.PI*t);
+        const bottomAt=t=>topAt(t)+thickAt(t);
+        const tailTop=topAt(1)+6*looseness,tailBottom=tailTop+39;
+        const d=`M${left} 103 Q249 ${116+12*looseness} ${seam} 127 L${end.toFixed(1)} ${tailTop.toFixed(1)} L${end.toFixed(1)} ${tailBottom.toFixed(1)} L${seam} ${bottomAt(1).toFixed(1)} Q249 ${(bottomAt(.5)+8*looseness).toFixed(1)} ${left} 149 Z`;
+        const marks=[];
+        for(let cm=0;cm<=Math.floor((end-left)/12.08);cm++){
+          const x=left+cm*12.08,t=Math.min(1,(x-left)/(seam-left)),y=x>seam?tailTop:topAt(t),length=cm%5===0?14:cm%2===0?10:6;
+          marks.push(`<path d="M${x.toFixed(1)} ${(y+2).toFixed(1)}v${length}" stroke="#26372e" stroke-width="${cm%5===0?1.4:1}"/>`);
+          if(cm%5===0||(cm===24&&progress===1))marks.push(`<text x="${x.toFixed(1)}" y="${(y+31).toFixed(1)}" text-anchor="middle" font-size="9" font-weight="700" fill="#26372e" stroke="#f1c647" stroke-width="1.2" paint-order="stroke">${cm}</text>`);
+        }
+        const uid=`soft-tape-${++softTapeFrameId}`;
+        return `<image href="assets/soft-tape-mug-clean.webp" x="0" y="0" width="560" height="280" preserveAspectRatio="none"/><defs><linearGradient id="${uid}-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cc4d"/><stop offset=".48" stop-color="#e8ac16"/><stop offset="1" stop-color="#c9840d"/></linearGradient><filter id="${uid}-shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="1.6" flood-color="#70511e" flood-opacity=".32"/></filter></defs><path d="${d}" fill="url(#${uid}-fill)" stroke="#9a6d14" stroke-width="1.2" filter="url(#${uid}-shadow)"/><path d="M${left+2} 106 Q249 ${119+12*looseness} ${seam-2} 130" fill="none" stroke="#ffe58a" stroke-width="2" opacity=".72"/>${marks.join("")}`;
+      };
+
       const toolDemos = {
         stopwatch: { title: "電子碼錶・正計時與倒數", desc: "用正計時量經過時間，也可以切換倒數；練習開始、暫停與歸零。" },
         ruler: { title: "直尺・量短而筆直的物件", desc: "尺與鉛筆固定不動。拖曳兩條輔助線，分別對準筆尖與橡皮擦端，再讀取刻度。", controlLabel: "改變物件長度", min: 5, max: 20, value: 12, unit: "cm", draw: v => {
@@ -1306,10 +1325,7 @@
           const end = 132 + v * 1.27;
           return `<text x="${end}" y="27" text-anchor="middle" font-size="14" font-weight="700" fill="#a65327">另一端：${v} cm</text><rect x="25" y="73" width="112" height="72" rx="27" fill="#e6b94d" stroke="#9d8244" stroke-width="4"/><path d="M43 81q27-13 55 0M43 137q27 13 55 0" fill="none" stroke="#f6d776" stroke-width="3"/><circle cx="79" cy="108" r="14" fill="#f4d16a" stroke="#9d8244" stroke-width="3"/><circle cx="79" cy="108" r="4" fill="#9d8244"/><rect x="119" y="96" width="17" height="31" rx="3" fill="#354a42"/><rect x="130" y="100" width="400" height="39" fill="#f1dfa9" stroke="#9d8244" stroke-width="3"/><path d="${Array.from({length:61},(_,i)=>{const x=132+i*(390/60);return `M${x} 101v${i%10===0?19:i%2===0?13:8}`}).join(' ')}" stroke="#354a42" stroke-width="1.5"/>${Array.from({length:6},(_,i)=>`<text x="${132+i*65}" y="132" text-anchor="middle" font-size="11" fill="#30463d">${i*50}</text>`).join('')}<text x="520" y="132" text-anchor="end" font-size="11" fill="#30463d">300 cm</text><rect x="132" y="59" width="${v*1.27}" height="13" rx="6" fill="#477e59"/><path d="M132 48v51" stroke="#247554" stroke-width="2"/><path d="M${end} 39v61" stroke="#bc612b" stroke-width="3" stroke-dasharray="5 4"/>`;
         } },
-        softTape: { title: "軟尺・量杯身周長", desc: "杯身固定。讓軟尺繞過杯身並逐步拉緊，直到尺帶貼合但不勒緊，再讀取接合處的刻度。", viewBox: "0 0 560 280", value: 0, unit: "cm", draw: () => {
-          const labels = Array.from({length:7},(_,i)=>{const tx=133+i*38,ty=143+i*3.5;return `<text x="${tx}" y="${ty}" text-anchor="middle" font-size="10" font-weight="700" fill="#253a32" paint-order="stroke" stroke="#f0d078" stroke-width="1.6">${i*5}</text>`}).join("");
-          return `<image id="soft-tape-state" href="assets/soft-tape-mug-loose.webp" x="0" y="0" width="560" height="280" preserveAspectRatio="none"/>${labels}`;
-        } },
+        softTape: { title: "軟尺・量杯身周長", desc: "杯身固定。拖動滑桿，讓同一條軟尺逐漸收緊至貼合杯身；再讀取接合處的刻度。", viewBox: "0 0 560 280", value: 0, unit: "cm", draw: drawSoftTape },
         caliper: { title: "游標卡尺・延伸工具", desc: "用量爪夾住微小尺寸，依主尺與游標讀值。", min: 2, max: 25, value: 12, unit: "mm", draw: v => `<path d="M70 65h400v24H70zM105 65V40h30v49m285-24v75h-30V65" fill="#9baead" stroke="#566b68" stroke-width="3"/><path d="M135 99h${Math.max(25,v*12)}v27h-22v-27" fill="#c5d1ce" stroke="#566b68" stroke-width="3"/><path d="${Array.from({length:21},(_,i)=>`M${150+i*14} 65v${i%5===0?13:7}`).join(' ')}" stroke="#354a42" stroke-width="2"/><circle cx="${150+v*12}" cy="112" r="10" fill="#d59a27"/>` },
         balance: { title: "天平／電子秤・量質量", desc: "將物品放在秤盤上，選擇量程合適的秤並讀取質量。", min: 1, max: 500, value: 85, unit: "g", draw: v => `<path d="M280 45v90M190 75h180M200 75l-38 48h76zm160 0-38 48h76z" fill="#e8eee8" stroke="#557368" stroke-width="4"/><path d="M165 123h74m82 0h74M230 142h100" stroke="#d6a94a" stroke-width="5"/><rect x="253" y="102" width="54" height="27" rx="5" fill="#fff" stroke="#7b9485" stroke-width="2"/><text x="280" y="122" text-anchor="middle" font-size="17" fill="#247554">${v} g</text>` },
         cylinder: { title: "量筒・精細量取少量液體", desc: "將液體倒入量筒，待液面穩定後平視凹液面最低處讀值。", viewBox: "150 0 260 190", min: 5, max: 50, value: 25, unit: "mL", draw: v => {
@@ -1400,9 +1416,11 @@
           const value=Number(item.value);
           demo.innerHTML=`<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual"><svg viewBox="${item.viewBox || "0 0 560 190"}" role="img" aria-label="${item.title}，固定讀值 ${value} °C">${item.draw(value)}</svg></div>`;
         } else if (key === "softTape") {
-          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual"><svg id="soft-tape-visual" viewBox="${item.viewBox}" role="img" aria-label="軟尺從鬆開、半緊到貼合杯身的三個狀態，尺帶上標有公分刻度">${item.draw(item.value)}</svg></div><div class="tool-demo-controls"><label for="soft-tape-progress">逐步拉緊軟尺</label><input id="soft-tape-progress" type="range" min="0" max="100" step="1" value="${item.value}"><output id="soft-tape-reading" class="tool-demo-value" aria-live="polite">尺帶尚鬆</output></div>`;
-          const range = document.querySelector("#soft-tape-progress"), stateImage = document.querySelector("#soft-tape-state"), output = document.querySelector("#soft-tape-reading");
-          range.addEventListener("input", () => { const value = Number(range.value), stage = value < 34 ? 0 : value < 67 ? 1 : 2; stateImage.setAttribute("href", ["assets/soft-tape-mug-loose.webp", "assets/soft-tape-mug-mid.webp", "assets/soft-tape-mug.webp"][stage]); output.textContent = ["尺帶尚鬆，繼續拉緊", "再拉緊一些，讓尺帶貼合杯身", "尺帶已貼合，讀值：24 cm"][stage]; });
+          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual"><svg id="soft-tape-visual" viewBox="${item.viewBox}" role="img" aria-label="同一條有公分刻度的軟尺，隨滑桿連續收緊並貼合固定杯身">${item.draw(item.value)}</svg></div><div class="tool-demo-controls"><label for="soft-tape-progress">拉緊軟尺</label><input id="soft-tape-progress" type="range" min="0" max="100" step="1" value="${item.value}"><output id="soft-tape-reading" class="tool-demo-value" aria-live="polite">拖動滑桿，讓軟尺貼合杯身</output></div>`;
+          const range = document.querySelector("#soft-tape-progress"), visual = document.querySelector("#soft-tape-visual"), output = document.querySelector("#soft-tape-reading");
+          const paintSoftTape = () => { const progress=Number(range.value)/100; visual.innerHTML=item.draw(range.value); output.textContent=progress===1?"尺帶貼合，讀值：24 cm":progress===0?"尺帶尚鬆，向右拖動滑桿以收緊":"持續拉緊軟尺"; };
+          paintSoftTape();
+          range.addEventListener("input", paintSoftTape);
         } else if (key === "cylinder") {
           const ticks=Array.from({length:51},(_,i)=>{const y=200-i*2.6;return `<path d="M268 ${y.toFixed(1)}h${i%10===0?27:i%5===0?18:9}" stroke="#557368" stroke-width="${i%5===0?1.5:1}"/>`;}).join("");
           const labels=Array.from({length:6},(_,i)=>`<text x="300" y="${204-i*26}" font-size="10" fill="#557368">${i*10}</text>`).join("");
