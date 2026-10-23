@@ -201,11 +201,13 @@
     .decision-help h3 { margin: 0; color: #244b3c; font-size: 1rem; }
     .decision-help p { margin: 7px 0 0; color: var(--muted); }
     .decision-help-visuals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin-top: 12px; }
+    .decision-help-visuals[data-count="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
     .decision-help-visual-card { min-width: 0; margin: 0; padding: 8px; border: 1px solid #e3e6dc; border-radius: 11px; background: #fffefa; }
-    .decision-help-visual-card svg { display: block; width: 100%; height: 82px; }
+    .decision-help-visual-card svg { display: block; width: 100%; height: 96px; }
     .decision-help-visual-card figcaption { display: grid; gap: 2px; margin-top: 5px; color: #687a70; font-size: .75rem; line-height: 1.25; }
     .decision-help-visual-card figcaption strong { color: #244b3c; font-size: .82rem; }
     .decision-help .decision-help-example { padding: 9px 11px; border-left: 3px solid #d69b2d; border-radius: 0 8px 8px 0; background: #f7f2e5; color: #46574e; }
+    @media (max-width: 600px) { .decision-help-visuals[data-count="3"] { grid-template-columns: repeat(2, minmax(0, 1fr)); } .decision-help-visuals[data-count="3"] .decision-help-visual-card:last-child { grid-column: 1 / -1; width: calc(50% - 4px); justify-self: center; } }
     .tool-demo h3 { margin: 0; font-size: 1.1rem; }
     .tool-demo p { margin: 5px 0 12px; color: var(--muted); }
     .tool-demo-visual { display: grid; min-height: 155px; place-items: center; overflow: hidden; border: 1px solid #e0e7dd; border-radius: 12px; background: #f8f9f4; }
@@ -1400,6 +1402,7 @@
           visualIntro.textContent = "看看不同情況會用到哪些工具：";
           const visuals = document.createElement("div");
           visuals.className = "decision-help-visuals";
+          visuals.dataset.count = details.tools.length;
           details.tools.forEach(toolKey => {
             const item = toolDemos[toolKey] || { title: "計時器・設定倒數時間", viewBox: "0 0 560 190" };
             const figure = document.createElement("figure");
