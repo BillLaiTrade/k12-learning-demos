@@ -153,6 +153,14 @@
     .range-endpoints { display: flex; justify-content: space-between; font-size: .75rem; }
     .decision-tree { position: relative; min-width: 0; max-width: 100%; margin: 14px 0; padding: 10px; border: 1px solid var(--line); border-radius: 16px; background: #f7f8f3; }
     .decision-canvas { position: relative; display: grid; width: 100%; grid-template-columns: 72px minmax(0, 1fr); align-items: stretch; column-gap: 12px; padding: 4px; }
+    .decision-route-overlay { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+    .decision-route-path { fill: none; stroke: #d69b2d; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 1px 1px #fffefa); stroke-dasharray: 1; stroke-dashoffset: 1; animation: decision-route-draw .85s ease-out forwards; }
+    @keyframes decision-route-draw { to { stroke-dashoffset: 0; } }
+    .decision-root, .decision-branch { z-index: 3; }
+    .decision-root, .decision-category, .decision-question, .decision-next-choice, .decision-leaf { transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease; }
+    .decision-route-active .decision-root, .decision-branch.route-active .decision-category, .decision-branch.route-active .decision-question, .decision-next-choice.route-active, .decision-leaf.route-active { border-color: #d69b2d; background-color: #fff6df; box-shadow: 0 0 0 2px #d69b2d24; }
+    .decision-branch.route-active::before, .decision-root.route-active::after, .decision-question.route-active::before, .decision-next-choice.route-active::before { background: #d69b2d; }
+    @media (prefers-reduced-motion: reduce) { .decision-route-path { animation-duration: .01ms; } }
     .decision-root { position: relative; z-index: 1; align-self: center; grid-column: 1; grid-row: 1; width: 100%; margin: 0; padding: 8px 5px; border: 1px solid #cbdccc; border-radius: 10px; background: #e7f0e7; color: var(--green); font-size: .78rem; font-weight: 800; text-align: center; }
     .decision-root::after { position: absolute; top: 50%; left: 100%; width: 12px; height: 2px; background: #9bb8a5; content: ""; }
     .decision-branches { position: relative; display: grid; grid-column: 2; grid-row: 1; grid-template-columns: minmax(0, 1fr); align-content: center; gap: 10px; padding-left: 10px; }
@@ -1261,6 +1269,8 @@
       const chooseTool = key => {
         document.querySelectorAll(".decision-leaf").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tool === key)));
         document.querySelectorAll(".decision-next-choice").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tool === key)));
+        selectedDecisionTool = key;
+        paintDecisionRoute(true);
         demo.hidden = false;
         clearInterval(stopwatchTimer); stopwatchTimer = null; stopwatchElapsed = 0; timerRemaining = 60; stopwatchDeadline = 0; stopwatchMode = "elapsed";
         const item = toolDemos[key];
@@ -1358,6 +1368,53 @@
       });
       const decisionBranches = document.querySelector(".decision-branches");
       const decisionRoot = document.querySelector(".decision-root");
+      const decisionCanvas = document.querySelector(".decision-canvas");
+      const decisionRouteOverlay = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      decisionRouteOverlay.classList.add("decision-route-overlay");
+      decisionRouteOverlay.setAttribute("aria-hidden", "true");
+      const decisionRoutePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      decisionRoutePath.classList.add("decision-route-path");
+      decisionRoutePath.setAttribute("pathLength", "1");
+      decisionRouteOverlay.append(decisionRoutePath);
+      decisionCanvas.append(decisionRouteOverlay);
+      let selectedDecisionTool = null;
+      const paintDecisionRoute = (animate = false) => {
+        document.querySelectorAll(".decision-branch.route-active, .decision-question.route-active, .decision-next-choice.route-active, .decision-leaf.route-active").forEach(node => node.classList.remove("route-active"));
+        decisionRoot.classList.toggle("route-active", Boolean(selectedDecisionTool));
+        decisionCanvas.classList.toggle("decision-route-active", Boolean(selectedDecisionTool));
+        const canvasRect = decisionCanvas.getBoundingClientRect();
+        decisionRouteOverlay.setAttribute("viewBox", `0 0 ${canvasRect.width} ${canvasRect.height}`);
+        if (!selectedDecisionTool || !canvasRect.width || !canvasRect.height) {
+          decisionRoutePath.setAttribute("d", "");
+          return;
+        }
+        const choice = decisionBranches.querySelector(`.decision-next-choice[data-tool="${selectedDecisionTool}"]`);
+        const leaf = decisionBranches.querySelector(`.decision-leaf[data-tool="${selectedDecisionTool}"]`);
+        if (!choice || !leaf) return;
+        const branch = choice.closest(".decision-branch");
+        branch.classList.add("route-active");
+        choice.classList.add("route-active");
+        leaf.classList.add("route-active");
+        const category = branch.querySelector(".decision-category");
+        const question = branch.querySelector(".decision-question");
+        question.classList.add("route-active");
+        const childTrunk = branch.querySelector(".decision-child-trunk");
+        const box = node => {
+          const rect = node.getBoundingClientRect();
+          return { left: rect.left - canvasRect.left, right: rect.right - canvasRect.left, midX: rect.left + rect.width / 2 - canvasRect.left, midY: rect.top + rect.height / 2 - canvasRect.top };
+        };
+        const c = box(choice), cat = box(category), q = box(question), root = box(decisionRoot);
+        const trunkRect = childTrunk.getBoundingClientRect();
+        const childX = trunkRect.left + trunkRect.width / 2 - canvasRect.left;
+        const mainX = decisionTrunk.getBoundingClientRect().left + decisionTrunk.getBoundingClientRect().width / 2 - canvasRect.left;
+        const route = `M ${c.left} ${c.midY} L ${childX} ${c.midY} L ${childX} ${cat.midY} L ${q.right} ${q.midY} M ${q.left} ${q.midY} L ${cat.right} ${cat.midY} M ${cat.left} ${cat.midY} L ${mainX} ${cat.midY} L ${mainX} ${root.midY} L ${root.right} ${root.midY}`;
+        decisionRoutePath.setAttribute("d", route);
+        if (animate) {
+          decisionRoutePath.style.animation = "none";
+          void decisionRoutePath.getBoundingClientRect();
+          decisionRoutePath.style.animation = "";
+        }
+      };
       const decisionTrunk = document.createElement("span");
       decisionTrunk.className = "decision-trunk";
       decisionTrunk.setAttribute("aria-hidden", "true");
@@ -1392,7 +1449,7 @@
       let decisionTreeFrame = 0;
       const scheduleDecisionTreeAlignment = () => {
         cancelAnimationFrame(decisionTreeFrame);
-        decisionTreeFrame = requestAnimationFrame(alignDecisionTree);
+        decisionTreeFrame = requestAnimationFrame(() => { alignDecisionTree(); paintDecisionRoute(false); });
       };
       alignDecisionTree();
       window.addEventListener("resize", scheduleDecisionTreeAlignment);
