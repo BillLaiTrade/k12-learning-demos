@@ -708,7 +708,7 @@
             <p>四種方法各自改善不同的誤差來源；點選任一項查看操作和說明。</p>
             <div class="correction-options" role="group" aria-label="選擇改善量測可靠性的方法">
               <button type="button" class="secondary" data-correction-control="density" aria-pressed="true"><strong>刻度加密</strong><small id="correction-density-status">較疏・每格 5 cm</small></button>
-              <button type="button" class="secondary" data-correction-control="origin" aria-pressed="false"><strong>對準零點</strong><small id="correction-origin-status">已對準 0</small></button>
+              <button type="button" class="secondary" data-correction-control="origin" aria-pressed="false"><strong>對準零點</strong><small id="correction-origin-status">偏移 1 cm</small></button>
               <button type="button" class="secondary" data-correction-control="angle" aria-pressed="false"><strong>正對尺面</strong><small id="correction-angle-status">正對尺面</small></button>
               <button type="button" class="secondary" data-correction-control="average" aria-pressed="false"><strong>重複量測</strong><small>取平均降波動</small></button>
             </div>
@@ -1883,7 +1883,6 @@
         document.querySelector("#correction-view-front").setAttribute("aria-pressed", String(correctionCameraPreset === "front"));
         document.querySelector("#correction-view-oblique").setAttribute("aria-pressed", String(correctionCameraPreset === "oblique"));
         document.querySelector("#correction-density-status").textContent = `每格 ${correctionTickInterval} cm`;
-        document.querySelector("#correction-origin-status").textContent = Math.abs(correctionRulerOffset) < 0.02 ? "已對準 0" : `偏移 ${formatCentimeters(-correctionRulerOffset)} cm`;
         document.querySelector("#correction-angle-status").textContent = correctionCameraPreset === "front" ? "正對尺面" : correctionCameraPreset === "oblique" ? "斜向觀察" : "自由旋轉";
       };
       correctionModeButtons.forEach((button) => button.addEventListener("click", () => {
