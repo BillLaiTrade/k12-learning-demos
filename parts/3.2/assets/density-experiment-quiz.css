@@ -290,5 +290,8 @@
 @media(max-width:700px){.overflow-tank{height:136px}}
 @media(max-width:420px){.overflow-tank{width:min(178px,68%);height:128px}.overflow-tank .experiment-cylinder-rock{height:61px}.overflow-tank .experiment-cylinder-rock[data-sample=B]{bottom:65px}.overflow-tank .experiment-cylinder-rock[data-sample=B]:only-child{bottom:5px}.overflow-tank .experiment-cylinder-rock:only-child{height:61px}}
 
+/* Hide the retired side display if an older script is still present in browser cache. */
+#density-experiment-quiz .overflow-removed-crown{display:none!important;visibility:hidden!important}
+
 /* The vessel's own water surface moves with its true displaced volume. */
 .overflow-tank-water:before{content:"";z-index:2;left:-1px;right:-1px;top:0;height:0;border:0;border-top:3px solid #087f95;border-radius:0;background:none}
