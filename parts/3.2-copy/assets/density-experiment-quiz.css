@@ -49,6 +49,7 @@
 .experiment-rock-thumb{width:72px;height:58px;flex:0 0 72px;object-fit:contain;filter:drop-shadow(0 3px 3px #263a3045)}
 .experiment-rock-thumb.is-dark{width:72px;flex-basis:72px;height:58px}
 .experiment-records{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.experiment-record[data-experiment-record="C"]{grid-column:1/-1}
 .experiment-record{min-width:0;padding:15px;border:1px solid var(--line);border-radius:12px;background:#fbfcf8}
 .experiment-record h4{display:flex;align-items:center;gap:10px;margin:0 0 11px;font-size:1rem}
 .experiment-record h4 img{width:54px;height:42px;object-fit:contain}

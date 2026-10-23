@@ -14,8 +14,9 @@ export function mountDensityExperimentQuiz() {
   quiz.querySelector('.overflow-catch-tray').append(catchLevelLens);
 
   const samples = {
-    A: { mass: 714, volume: 37, image: 'assets/golden-wreath.webp' },
-    B: { mass: 680, volume: 44, image: 'assets/crown-sample-b.svg' }
+    A: { mass: 714, volume: 37, image: 'assets/golden-wreath.webp', label: '皇冠樣本 A' },
+    B: { mass: 680, volume: 44, image: 'assets/crown-sample-b.svg', label: '皇冠樣本 B' },
+    C: { mass: 193, volume: 10, image: 'assets/pure-gold-block.svg', label: '純金對照塊' }
   };
   const sampleCards = [...quiz.querySelectorAll('[data-experiment-sample]')];
   const tools = [...quiz.querySelectorAll('[data-instrument]')];
@@ -40,8 +41,12 @@ export function mountDensityExperimentQuiz() {
     return record(sample).querySelector(`[data-entry="${name}"]`);
   }
 
+  function sampleLabel(sample) {
+    return samples[sample]?.label || `樣本 ${sample}`;
+  }
+
   function refreshRemovedCrown() {
-    removedCrownDisplay.innerHTML = [...removedTankSamples].map(sample => `<figure><img src="${samples[sample].image}" alt=""><figcaption>皇冠 ${sample} 已取出</figcaption></figure>`).join('');
+    removedCrownDisplay.innerHTML = [...removedTankSamples].map(sample => `<figure><img src="${samples[sample].image}" alt=""><figcaption>${sampleLabel(sample)} 已取出</figcaption></figure>`).join('');
     removedCrownDisplay.classList.toggle('is-visible', removedTankSamples.size > 0);
   }
 
@@ -121,7 +126,7 @@ export function mountDensityExperimentQuiz() {
     const dropMm = waterLevelDropMm(returned);
     const instrument = quiz.querySelector('[data-instrument="cylinder"]');
     instrument.classList.add('is-water-lowered');
-    quiz.querySelector('[data-water-status]').textContent = `皇冠已取出，水位先下降約 ${dropMm.toFixed(2)} mm；接水盤的水暫時留在盤中。`;
+    quiz.querySelector('[data-water-status]').textContent = `物件已取出，水位先下降約 ${dropMm.toFixed(2)} mm；接水盤的水暫時留在盤中。`;
     // Keep the crown-out, lower-water state visible before the basin moves.
     returnTimer = window.setTimeout(beginWaterReturn, 1400);
   }
@@ -143,14 +148,22 @@ export function mountDensityExperimentQuiz() {
   function refreshScale() {
     const group = quiz.querySelector('[data-scale-rocks]');
     const totalMass = [...scaleSamples].reduce((sum, sample) => sum + sampleMass(sample), 0);
-    group.innerHTML = [...scaleSamples].map(sample => `<img class="experiment-scale-rock crown-thumb" data-drag-sample="${sample}" data-sample="${sample}" src="${samples[sample].image}" alt="皇冠樣本 ${sample}，可拖曳移動">`).join('');
+    const placed = [...scaleSamples];
+    const positions = placed.length === 1 ? [50] : placed.length === 2 ? [32, 68] : [20, 50, 80];
+    const width = placed.length === 3 ? 58 : placed.length === 2 ? 78 : 94;
+    const height = placed.length === 3 ? 50 : placed.length === 2 ? 58 : 62;
+    group.innerHTML = placed.map((sample, index) => `<img class="experiment-scale-rock crown-thumb" data-drag-sample="${sample}" data-sample="${sample}" src="${samples[sample].image}" alt="${sampleLabel(sample)}，可拖曳移動" style="left:${positions[index]}%;top:-${height}px;width:${width}px;height:${height}px;transform:translateX(-50%)">`).join('');
     quiz.querySelector('[data-scale-reading]').textContent = totalMass.toFixed(1);
-    quiz.querySelector('[data-instrument="scale"]').setAttribute('aria-label', `電子秤，放有 ${scaleSamples.size} 頂皇冠，總質量 ${totalMass.toFixed(1)} 公克`);
+    quiz.querySelector('[data-instrument="scale"]').setAttribute('aria-label', `電子秤，放有 ${scaleSamples.size} 件樣本，總質量 ${totalMass.toFixed(1)} 公克`);
   }
 
   function refreshTank(spill = false) {
     const group = quiz.querySelector('[data-cylinder-rocks]');
-    group.innerHTML = [...tankSamples].map(sample => `<img class="experiment-cylinder-rock crown-thumb" data-drag-sample="${sample}" data-sample="${sample}" src="${samples[sample].image}" alt="皇冠樣本 ${sample}，可拖曳移動">`).join('');
+    const placed = [...tankSamples];
+    const positions = placed.length === 1 ? [50] : placed.length === 2 ? [28, 72] : [18, 50, 82];
+    const width = placed.length === 1 ? '60%' : placed.length === 2 ? '42%' : '32%';
+    const height = placed.length === 1 ? '67px' : placed.length === 2 ? '62px' : '54px';
+    group.innerHTML = placed.map((sample, index) => `<img class="experiment-cylinder-rock crown-thumb" data-drag-sample="${sample}" data-sample="${sample}" src="${samples[sample].image}" alt="${sampleLabel(sample)}，可拖曳移動" style="left:${positions[index]}%;bottom:5px;width:${width};height:${height};transform:translateX(-50%)">`).join('');
     setWaterReading(collectedVolume);
     setTankWaterLevel(pendingReturnVolume);
     const instrument = quiz.querySelector('[data-instrument="cylinder"]');
@@ -163,7 +176,7 @@ export function mountDensityExperimentQuiz() {
       instrument.classList.add('is-spilling');
       spillTimer = window.setTimeout(() => instrument.classList.remove('is-spilling'), 1350);
     }
-    instrument.setAttribute('aria-label', `溢流水槽與有刻度的接水盤，槽內有 ${tankSamples.size} 頂皇冠，接水盤有 ${collectedVolume.toFixed(1)} 毫升水`);
+    instrument.setAttribute('aria-label', `溢流水槽與有刻度的接水盤，槽內有 ${tankSamples.size} 件樣本，接水盤有 ${collectedVolume.toFixed(1)} 毫升水`);
   }
 
   function chooseSample(sample) {
@@ -192,8 +205,8 @@ export function mountDensityExperimentQuiz() {
         collectedVolume += overflowed;
         refreshTank(volume > refilled);
         quiz.querySelector('[data-water-status]').textContent = overflowed > 0
-          ? `皇冠放入後，約 ${overflowed.toFixed(1)} mL 的水溢出並流入接水盤。`
-          : '皇冠放入後，水位回升；接水盤中的水量不變。';
+          ? `樣本放入後，約 ${overflowed.toFixed(1)} mL 的水溢出並流入接水盤。`
+          : '樣本放入後，水位回升；接水盤中的水量不變。';
       }
     }
   }
@@ -347,7 +360,7 @@ export function mountDensityExperimentQuiz() {
     });
   });
 
-  ['A', 'B'].forEach(sample => {
+  Object.keys(samples).forEach(sample => {
     record(sample).querySelectorAll('[data-entry="mass"], [data-entry="displacement"]').forEach(input => {
       input.addEventListener('input', () => updateRecord(sample));
     });
@@ -363,29 +376,31 @@ export function mountDensityExperimentQuiz() {
   }));
 
   quiz.querySelector('[data-experiment-submit]').addEventListener('click', () => {
-    const densities = ['A', 'B'].map(sample => {
+    const densities = ['A', 'B', 'C'].map(sample => {
       const value = record(sample).querySelector('[data-entry="density"]').dataset.value;
       return value === undefined ? null : Number(value);
     });
     if (densities.some(value => value === null)) {
-      feedback.textContent = '請先填妥兩頂皇冠的質量與排出水量，再比較密度。';
+      feedback.textContent = '請先填妥兩頂皇冠與純金對照塊的質量及排出水量。';
       feedback.dataset.result = 'incomplete';
       return;
     }
     if (!answer) {
-      feedback.textContent = '請選出你認為密度較大的皇冠。';
+      feedback.textContent = '請選出密度最接近純金對照塊的皇冠。';
       feedback.dataset.result = 'incomplete';
       return;
     }
-    const correct = densities[0] === densities[1] ? null : densities[0] > densities[1] ? 'A' : 'B';
+    const differenceA = Math.abs(densities[0] - densities[2]);
+    const differenceB = Math.abs(densities[1] - densities[2]);
+    const correct = differenceA === differenceB ? null : differenceA < differenceB ? 'A' : 'B';
     if (answer === correct) {
-      feedback.textContent = `比較正確。純金皇冠 A 為 ${densities[0].toFixed(2)} g/cm³，合金皇冠 B 為 ${densities[1].toFixed(2)} g/cm³；密度較大的是皇冠 ${correct}。`;
+      feedback.textContent = `判斷正確。純金對照塊的密度約為 ${densities[2].toFixed(2)} g/cm³；皇冠 A 為 ${densities[0].toFixed(2)} g/cm³，皇冠 B 為 ${densities[1].toFixed(2)} g/cm³。皇冠 ${correct} 的密度最接近純金對照塊。`;
       feedback.dataset.result = 'correct';
     } else if (correct === null) {
-      feedback.textContent = `兩頂皇冠計算出的密度相同，都是 ${densities[0].toFixed(2)} g/cm³。`;
+      feedback.textContent = `兩頂皇冠與純金對照塊的密度差距相同；請再檢查量測資料。`;
       feedback.dataset.result = 'incorrect';
     } else {
-      feedback.textContent = `再比較一次數值：純金皇冠 A 為 ${densities[0].toFixed(2)} g/cm³，合金皇冠 B 為 ${densities[1].toFixed(2)} g/cm³。密度較大的是皇冠 ${correct}。`;
+      feedback.textContent = `再比較一次：純金對照塊的密度約為 ${densities[2].toFixed(2)} g/cm³，皇冠 A 為 ${densities[0].toFixed(2)} g/cm³，皇冠 B 為 ${densities[1].toFixed(2)} g/cm³。較接近純金對照塊的是皇冠 ${correct}。`;
       feedback.dataset.result = 'incorrect';
     }
   });
