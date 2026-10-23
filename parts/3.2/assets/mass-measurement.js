@@ -372,7 +372,6 @@ export async function mountMassMeasurement() {
   const placeButton = document.querySelector('#place-on-scale');
   const removeButton = document.querySelector('#remove-from-scale');
   let mode = 'balance';
-  let shortcutWeightSide = 'right';
   let balancePlaced = false;
   let balanceSide = 'left';
   let placingBalance = false;
@@ -493,20 +492,11 @@ export async function mountMassMeasurement() {
     if (origin !== null) sourceWeightModels[origin].visible = false;
     drawWeights();
   }
-  document.querySelectorAll('[data-weight-side]').forEach(button => {
-    button.addEventListener('click', () => {
-      shortcutWeightSide = button.dataset.weightSide;
-      document.querySelectorAll('[data-weight-side]').forEach(option => {
-        option.setAttribute('aria-pressed', String(option === button));
-      });
-      status.textContent = `點選下方砝碼會加入${shortcutWeightSide === 'left' ? '左' : '右'}盤；也可直接拖到任一秤盤。`;
-    });
-  });
   document.querySelectorAll('[data-weight]').forEach(button => {
     button.addEventListener('click', () => {
       if (suppressWeightClick) { suppressWeightClick = false; return; }
       const value = Number(button.dataset.weight);
-      addWeight(value, null, shortcutWeightSide);
+      addWeight(value, null, 'right');
     });
     let start = null;
     let ghost = null;
