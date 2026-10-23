@@ -1508,6 +1508,18 @@
         }
         liquid.forEach(p=>{p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
       }
+      if(transition.key==="condensation"){
+        const gas=freezeParticles.filter((p,index)=>elapsed<transition.delays[index]);
+        for(let i=0;i<gas.length;i++)for(let j=i+1;j<gas.length;j++){
+          const a=gas[i],b=gas[j],dx=b.x-a.x,dy=b.y-a.y,distance=Math.hypot(dx,dy),minimum=9;
+          if(distance>=minimum)continue;
+          const nx=distance?dx/distance:1,ny=distance?dy/distance:0,overlap=minimum-(distance||0);
+          a.x-=nx*overlap/2;a.y-=ny*overlap/2;b.x+=nx*overlap/2;b.y+=ny*overlap/2;
+          const relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+          if(relative<0){a.vx+=relative*nx;a.vy+=relative*ny;b.vx-=relative*nx;b.vy-=relative*ny;}
+        }
+        gas.forEach(p=>{p.startX=p.x;p.startY=p.y;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
+      }
       if(elapsed<0)document.getElementById("freeze-demo-status").textContent=transition.key==="deposition"?"起始狀態：水蒸氣；粒子分散並在容器內移動":`起始狀態：${transition.fromLabel}；粒子排列與位置`;
       else document.getElementById("freeze-demo-status").textContent=transition.status;
       if(now-transition.startedAt>=total){
