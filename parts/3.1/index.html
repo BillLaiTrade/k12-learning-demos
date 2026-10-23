@@ -224,6 +224,21 @@
     .tool-demo p { margin: 5px 0 12px; color: var(--muted); }
     .tool-demo-visual { display: grid; min-height: 155px; place-items: center; overflow: hidden; border: 1px solid #e0e7dd; border-radius: 12px; background: #f8f9f4; }
     .tool-demo-visual svg { display: block; width: min(100%, 560px); max-height: 210px; }
+    #race-visual { display: block; min-height: 0; padding: 0; }
+    #race-visual .race-scene { position: relative; width: min(100%, 560px); aspect-ratio: 760 / 260; overflow: hidden; }
+    #race-visual svg { width: 100%; height: 100%; max-height: none; }
+    .sprint-runner { position: absolute; left: 9%; bottom: 10%; width: 13%; height: 50%; background-image: url("sprint-run-cycle.png"); background-repeat: no-repeat; background-position: 0 0; background-size: 600% 100%; }
+    .sprint-runner::after { content: ""; position: absolute; left: 28%; bottom: 4%; width: 48%; height: 4px; border-radius: 50%; background: rgb(47 48 38 / 24%); filter: blur(2px); }
+    @keyframes sprint-cycle {
+      0% { background-position: 0% 0%; }
+      16.66% { background-position: 20% 0%; }
+      33.33% { background-position: 40% 0%; }
+      50% { background-position: 60% 0%; }
+      66.66% { background-position: 80% 0%; }
+      83.33%, 100% { background-position: 100% 0%; }
+    }
+    @keyframes sprint-travel { from { left: 9%; } to { left: 72.5%; } }
+    .race-running .sprint-runner { animation: sprint-travel 9.63s linear forwards, sprint-cycle .48s steps(1, end) infinite; }
     .tool-demo-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 12px; }
     .tool-demo-controls input[type="range"] { width: min(100%, 320px); accent-color: var(--green); }
     .tool-demo-value { color: var(--green); font-size: 1.2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
@@ -1309,36 +1324,13 @@
         return `<rect x="8" y="8" width="544" height="194" rx="16" fill="#f1f5ef" stroke="#cfded3" stroke-width="2"/><path d="M20 169h520" stroke="#d1dcd3" stroke-width="2"/><ellipse cx="261" cy="162" rx="189" ry="13" fill="#dce4dc"/><path d="M93 133h325l23 15H109z" fill="#526f68" stroke="#3c5a52" stroke-width="3"/><path d="M109 120h319l-10 17H99z" fill="#d6ad51" stroke="#9c7c33" stroke-width="2"/><path d="M122 148v15m265-15v15M108 163h30m239 0h30" stroke="#526f68" stroke-width="6" stroke-linecap="round"/><path d="M169 73l27-18h113l30 18v47H169z" fill="#d5af62" stroke="#886c35" stroke-width="3"/><path d="M169 73h140l30-18H196z" fill="#ebce83" stroke="#a18343" stroke-width="2"/><path d="M309 73l30-18v65h-30z" fill="#bd984d" stroke="#886c35" stroke-width="2"/><path d="M196 55v65m56-65v65m-83-30h140" stroke="#b28c42" stroke-width="2" opacity=".8"/><path d="M211 31v15m70-15v15m70-15v15" stroke="#d66f54" stroke-width="4" stroke-linecap="round"/><path d="M205 40l6 7 6-7m58 0 6 7 6-7m58 0 6 7 6-7" fill="none" stroke="#d66f54" stroke-width="3" stroke-linejoin="round"/><path d="M428 130h28V92h12" fill="none" stroke="#526f68" stroke-width="5" stroke-linejoin="round"/><rect x="465" y="62" width="70" height="59" rx="9" fill="#d8e4dd" stroke="#526f68" stroke-width="3"/><rect x="473" y="72" width="54" height="31" rx="4" fill="#fafff8" stroke="#91a89b" stroke-width="2"/><text x="500" y="93" text-anchor="middle" font-size="15" font-family="monospace" font-weight="700" fill="#176c54">${v} N</text><circle cx="480" cy="111" r="3" fill="#d6ad51"/><circle cx="491" cy="111" r="3" fill="#6f887b"/><text x="261" y="185" text-anchor="middle" font-size="10" font-weight="700" fill="#526f68">箱子直接壓在平台上，感測器讀取垂直受力</text>`;
       } };
       toolDemos.olympicSprint = { title: "奧運短跑・全自動計時", desc: "按下開始模擬發令訊號。計時同步啟動；選手軀幹通過終點線時，計時自動停止。", viewBox: "0 0 760 260", draw: () => `
-        <style>
-          @keyframes sprint-run { from { translate: 0 0; } to { translate: 490px 0; } }
-          @keyframes sprint-arm { 0%,100% { rotate: -28deg; } 50% { rotate: 32deg; } }
-          @keyframes sprint-leg-a { 0%,100% { rotate: 30deg; } 50% { rotate: -34deg; } }
-          @keyframes sprint-leg-b { 0%,100% { rotate: -34deg; } 50% { rotate: 30deg; } }
-          #sprint-arm-a,#sprint-arm-b,#sprint-leg-a,#sprint-leg-b { transform-box: fill-box; transform-origin: 50% 0%; }
-          .race-running #sprint-runner { animation: sprint-run 9.63s cubic-bezier(.2,.1,.75,.9) forwards; }
-          .race-running #sprint-arm-a { animation: sprint-arm .42s ease-in-out infinite; }
-          .race-running #sprint-arm-b { animation: sprint-arm .42s ease-in-out infinite reverse; }
-          .race-running #sprint-leg-a { animation: sprint-leg-a .42s ease-in-out infinite; }
-          .race-running #sprint-leg-b { animation: sprint-leg-b .42s ease-in-out infinite; }
-        </style>
         <rect x="8" y="8" width="744" height="244" rx="18" fill="#f1f5ef" stroke="#cfded3" stroke-width="2"/>
         <rect x="22" y="92" width="716" height="132" rx="8" fill="#bf7654"/><path d="M22 136h716M22 180h716" stroke="#f5e5bd" stroke-width="3" opacity=".9"/>
         <path d="M35 101h690M35 145h690M35 189h690M35 216h690" stroke="#e6bd8d" stroke-width="1" opacity=".6"/>
         <path d="M116 92v132" stroke="#fff5d9" stroke-width="3" stroke-dasharray="8 7"/><text x="116" y="241" text-anchor="middle" font-size="12" fill="#fff8e8">起跑線</text>
-        <path d="M592 88v140" stroke="#fff" stroke-width="5"/><path d="M600 88v140" stroke="#e9bd62" stroke-width="3"/><text x="596" y="241" text-anchor="middle" font-size="12" font-weight="700" fill="#fff8e8">終點線</text>
+        <path d="M592 88v140" stroke="#fff" stroke-width="5"/><path d="M600 88v140" stroke="#e9bd62" stroke-width="3"/><text x="596" y="241" text-anchor="middle" font-size="12" font-weight="700" fill="#a65327">終點線</text>
         <g id="race-clock"><rect x="285" y="22" width="190" height="49" rx="12" fill="#fffefa" stroke="#8fa99a" stroke-width="2"/><text x="380" y="41" text-anchor="middle" font-size="11" fill="#687a70">全自動計時</text><text id="race-clock-display" x="380" y="62" text-anchor="middle" font-family="monospace" font-size="20" font-weight="700" fill="#176b53">00.00 s</text></g>
         <g aria-label="終點攝影機"><path d="M625 73v25" stroke="#526f68" stroke-width="5"/><rect x="606" y="46" width="54" height="31" rx="6" fill="#dce7df" stroke="#557368" stroke-width="3"/><path d="M613 46l7-9h24l8 9" fill="#dce7df" stroke="#557368" stroke-width="3"/><circle cx="649" cy="61" r="8" fill="#fffefa" stroke="#557368" stroke-width="3"/><path d="M649 69v30" stroke="#d66f54" stroke-width="2" stroke-dasharray="3 4"/><text x="633" y="28" text-anchor="middle" font-size="11" font-weight="700" fill="#355c4b">終點攝影</text></g>
-        <g id="sprint-runner" transform="translate(114 0)">
-          <ellipse cx="13" cy="205" rx="31" ry="5" fill="#784e3f" opacity=".35"/>
-          <g id="sprint-leg-a" transform="translate(0 31)"><path d="M0 0 13 35 31 53" fill="none" stroke="#176b53" stroke-width="12" stroke-linecap="round"/><path d="M28 52l17 2" stroke="#f4f1e8" stroke-width="7" stroke-linecap="round"/></g>
-          <g id="sprint-leg-b" transform="translate(0 31)"><path d="M0 0-15 34-36 42" fill="none" stroke="#125541" stroke-width="12" stroke-linecap="round"/><path d="M-38 42l-15 9" stroke="#f4f1e8" stroke-width="7" stroke-linecap="round"/></g>
-          <path d="M-10 -3q16-7 31 5l-4 35q-18 8-36-2z" fill="#176b53" stroke="#104a3a" stroke-width="2"/>
-          <path d="M-11 2q10 5 23 2M-14 29q14 6 28 0" fill="none" stroke="#e1b856" stroke-width="3"/>
-          <g id="sprint-arm-a" transform="translate(-23 17)"><path d="M0 0-10 17-1 25" fill="none" stroke="#d99a75" stroke-width="8" stroke-linecap="round"/><path d="M-1 25l6 1" stroke="#47332e" stroke-width="6" stroke-linecap="round"/></g>
-          <g id="sprint-arm-b" transform="translate(32 17)"><path d="M0 0 9 18 1 27" fill="none" stroke="#d99a75" stroke-width="8" stroke-linecap="round"/><path d="M1 27l-5 1" stroke="#47332e" stroke-width="6" stroke-linecap="round"/></g>
-          <path d="M-16 -17q-2-24 19-25 21 2 17 25l-7 12-25-1z" fill="#c87b55" stroke="#744838" stroke-width="2"/><path d="M-16-26q12-21 35-8l4 9q-19-6-39 3z" fill="#3d302c"/><path d="M12-19q8 4 6 12" fill="none" stroke="#744838" stroke-width="2"/><circle cx="7" cy="-23" r="2" fill="#302724"/>
-          <path d="M-27 -24h-10m8-7h-11" stroke="#c87b55" stroke-width="3" stroke-linecap="round"/>
-        </g>
         <g transform="translate(45 37)"><path d="M0 0h27l10 6-10 6H0z" fill="#d6ad51" stroke="#806b40" stroke-width="2"/><path d="M8 12 1 24h13l4-12" fill="#b38b40" stroke="#806b40" stroke-width="2"/><path d="M40-3q13 9 0 18m7-24q21 15 0 30" fill="none" stroke="#d66f54" stroke-width="2.5" stroke-linecap="round"/><text x="13" y="42" text-anchor="middle" font-size="11" fill="#526f68">發令訊號</text></g>
         <text x="380" y="242" text-anchor="middle" font-size="11" fill="#fff8e8">計時從發令訊號開始，在軀幹通過終點線時停止</text>` };
       const demo = document.querySelector("#tool-demo");
@@ -1397,10 +1389,11 @@
           start.onclick = () => { if (stopwatchTimer) { clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "繼續"; } else { start.textContent = "暫停"; stopwatchTimer = setInterval(() => { timerRemaining = Math.max(0, timerRemaining - 1); paintTimer(); if (!timerRemaining) { clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "重新開始"; } }, 1000); } };
           document.querySelector("#timer-reset").onclick = () => { clearInterval(stopwatchTimer); stopwatchTimer = null; timerRemaining = Number(setting.value); paintTimer(); start.textContent = "開始"; };
         } else if (key === "olympicSprint") {
-          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual" id="race-visual"><svg viewBox="${item.viewBox}" role="img" aria-label="短跑選手在跑道上起跑，計時器在發令訊號時啟動，選手軀幹通過終點線時停止">${item.draw()}</svg></div><div class="tool-demo-controls"><button type="button" id="race-start">開始模擬短跑</button><span class="tool-demo-value" id="race-state" aria-live="polite">準備起跑</span></div>`;
-          const visual = document.querySelector("#race-visual"), display = document.querySelector("#race-clock-display"), start = document.querySelector("#race-start"), state = document.querySelector("#race-state");
+          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual" id="race-visual"><div class="race-scene"><svg viewBox="${item.viewBox}" role="img" aria-label="跑道、起跑訊號、終點攝影機和自動計時器">${item.draw()}</svg><div class="sprint-runner" role="img" aria-label="短跑選手跑步循環動畫"></div></div></div><div class="tool-demo-controls"><button type="button" id="race-start">開始模擬短跑</button><span class="tool-demo-value" id="race-state" aria-live="polite">準備起跑</span></div>`;
+          const visual = document.querySelector("#race-visual"), runner = document.querySelector(".sprint-runner"), display = document.querySelector("#race-clock-display"), start = document.querySelector("#race-start"), state = document.querySelector("#race-state");
           const duration = 9630;
           start.onclick = () => {
+            runner.style.left = "";
             visual.classList.remove("race-running");
             void visual.offsetWidth;
             visual.classList.add("race-running");
@@ -1410,7 +1403,7 @@
               const elapsed = Math.min(now - started, duration);
               display.textContent = `${(elapsed / 1000).toFixed(2)} s`;
               if (elapsed < duration) requestAnimationFrame(tick);
-              else { visual.classList.remove("race-running"); state.textContent = "抵達終點，計時停止"; start.disabled = false; start.textContent = "再跑一次"; }
+              else { visual.classList.remove("race-running"); runner.style.left = "72.5%"; state.textContent = "抵達終點，計時停止"; start.disabled = false; start.textContent = "再跑一次"; }
             };
             requestAnimationFrame(tick);
           };
