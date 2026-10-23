@@ -282,15 +282,23 @@
     .phase-arrow.phase-cool { stroke:#43839a; marker-end:url(#phase-arrow-cool); }
     .phase-arrow.is-active { stroke:#176b53; stroke-width:4.5; stroke-dasharray:9 8; animation:phase-arrow-flow 1.05s linear infinite; }
     .phase-arrow-hit { fill:none; stroke:transparent; stroke-width:24; pointer-events:stroke; cursor:pointer; }
+    .phase-arrow-hit:focus { outline:none; }
     .phase-arrow-hit:focus-visible { stroke:#176b5340; stroke-width:19; outline:none; }
     @keyframes phase-arrow-flow { to { stroke-dashoffset:-34; } }
     .phase-flow-dot { fill:#78b7cb; stroke:#fff; stroke-width:2; opacity:0; filter:drop-shadow(0 2px 2px #1d34322c); }
-    .phase-node { position:absolute; z-index:2; width:210px; height:196px; padding:10px; border:1px solid #d8e2da; border-radius:16px; background:#fffefa; box-shadow:0 8px 22px #263b300d; text-align:center; font:inherit; color:inherit; cursor:pointer; transition:border-color .16s,box-shadow .16s,background .16s; }
-    .phase-node:hover,.phase-node:focus-visible { border-color:#176b53; box-shadow:0 8px 22px #176b5322; outline:3px solid #176b5330; }
-    .phase-node[aria-pressed="true"] { border:2px solid #176b53; background:#f5faf3; }
+    .phase-node { position:absolute; z-index:2; width:210px; height:196px; padding:10px; border:1px solid transparent; border-radius:16px; background:transparent; box-shadow:none; text-align:center; font:inherit; color:inherit; cursor:pointer; pointer-events:none; transition:outline-color .16s,filter .16s; }
+    .phase-node > * { pointer-events:auto; text-shadow:0 0 4px #f0f5ed,0 0 4px #f0f5ed; }
+    .phase-node:hover,.phase-node:focus-visible { outline:3px solid #176b5340; outline-offset:3px; }
+    .phase-node[aria-pressed="true"] { outline:2px solid #176b5380; outline-offset:3px; }
     .phase-node h3 { margin:0 0 4px; color:#176b53; font-size:1rem; }
     .phase-node img { display:block; width:100%; height:126px; object-fit:contain; background:transparent; }
     .phase-node p { margin:3px 0 0; color:#68776f; font-size:.71rem; line-height:1.35; }
+    .phase-node-solid img { animation:phase-ice-glint 3.8s ease-in-out infinite; }
+    .phase-node-liquid img { animation:phase-water-sway 3.2s ease-in-out infinite; transform-origin:center 70%; }
+    .phase-node-gas img { animation:phase-vapor-drift 2.8s ease-in-out infinite; }
+    @keyframes phase-ice-glint { 0%,100% { filter:drop-shadow(0 0 0 #8ce4ff00); } 50% { filter:drop-shadow(0 2px 5px #8ce4ff75); } }
+    @keyframes phase-water-sway { 0%,100% { transform:scale(1,.97) translateY(1px); } 50% { transform:scale(1.035,1.03) translateY(-1px); } }
+    @keyframes phase-vapor-drift { 0%,100% { transform:translateY(3px); } 50% { transform:translateY(-3px); } }
     .phase-node-solid { top:10px; left:calc(50% - 105px); }
     .phase-node-liquid { top:365px; left:3%; }
     .phase-node-gas { top:365px; right:3%; }
@@ -336,6 +344,7 @@
     }
     @media(max-width:680px) { .phase-detail { grid-template-columns:1fr; gap:7px; padding:12px; } .phase-diagram-hint { font-size:.72rem; } }
     @media(prefers-reduced-motion:reduce) { .phase-arrow.is-active { animation:none; stroke-dasharray:none; } }
+    @media(prefers-reduced-motion:reduce) { .phase-node-solid img,.phase-node-liquid img,.phase-node-gas img { animation:none; } }
 
     .property-grid,.class-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
     .property-card,.class-card { padding:13px; border:1px solid #ded8ca; border-radius:12px; background:#fff; }
