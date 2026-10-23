@@ -38,7 +38,7 @@ export function mountComparisonExperiment() {
     immersed = nextImmersed;
     scene.classList.toggle('is-immersed', immersed);
     sample.classList.toggle('in-water', immersed);
-    mass.textContent = immersed ? '0.0 g' : chosenSpecimen === 'stone' ? '860 g' : '約 6,369 g';
+    mass.textContent = immersed ? '0.0 g' : chosenSpecimen === 'stone' ? '860 g' : '約 6,383 g';
     status.textContent = message;
     setButtons();
   }
