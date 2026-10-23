@@ -13,6 +13,10 @@ export function mountDisplacementExperiment() {
   let immersed = false;
   let animating = false;
   let drag = null;
+  const INITIAL_WATER_ML = 300;
+  const STONE_VOLUME_ML = 15 * 860 / 39;
+  const CYLINDER_CAPACITY_ML = 1000;
+  const FINAL_WATER_ML = INITIAL_WATER_ML + STONE_VOLUME_ML;
 
   function setReading(isImmersed) {
     immersed = isImmersed;
@@ -20,10 +24,10 @@ export function mountDisplacementExperiment() {
     rock.classList.toggle('is-immersed', immersed);
     rock.classList.remove('is-dragging');
     cylinder.classList.remove('drop-ready');
-    water.style.height = immersed ? '92.6923%' : '10%';
-    marks.forEach(mark => mark.classList.toggle('active', Number(mark.dataset.volume) === (immersed ? 350 : 50)));
-    const finalReading = Math.round((40 + 15 * 860 / 39) * 100) / 100;
-    cylinder.setAttribute('aria-label', '量筒，目前水量 ' + (immersed ? `約 ${Math.round(finalReading)}（精算 ${finalReading}）` : '40') + ' 毫升');
+    water.style.height = `${(immersed ? FINAL_WATER_ML : INITIAL_WATER_ML) / CYLINDER_CAPACITY_ML * 100}%`;
+    marks.forEach(mark => mark.classList.toggle('active', Number(mark.dataset.volume) === (immersed ? 600 : INITIAL_WATER_ML)));
+    const finalReading = Math.round(FINAL_WATER_ML * 100) / 100;
+    cylinder.setAttribute('aria-label', '量筒，目前水量 ' + (immersed ? `約 ${Math.round(finalReading)}（精算 ${finalReading}）` : String(INITIAL_WATER_ML)) + ' 毫升');
     rock.setAttribute('aria-label', immersed ? '同一塊石頭已完全浸入量筒；可拖曳取出' : '同一塊石頭；可拖曳到量筒內，或按 Enter 放入');
     placeButton.disabled = immersed || animating;
     resetButton.disabled = !immersed || animating;
@@ -155,11 +159,12 @@ export function mountDisplacementExperiment() {
     const exitLeft = cylinderLeft - startRect.width - 12;
     const clearTop = Math.max(0, cylinderTop - startRect.height - 12);
     const insideTop = cylinderTop + 12;
+    const liftedTop = Math.min(startTop, insideTop);
 
     status.textContent = '石頭先從量筒口提起，再移到量筒外；水位隨後重設。';
     const animation = rock.animate([
       { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
-      { offset: 0.28, left: startLeft + 'px', top: insideTop + 'px', transform: 'rotate(-4deg)', easing: 'cubic-bezier(.3,.7,.5,1)' },
+      { offset: 0.28, left: startLeft + 'px', top: liftedTop + 'px', transform: 'rotate(-4deg)', easing: 'cubic-bezier(.3,.7,.5,1)' },
       { offset: 0.45, left: startLeft + 'px', top: clearTop + 'px', transform: 'rotate(-7deg)', easing: 'cubic-bezier(.4,0,.8,.5)' },
       { offset: 0.61, left: exitLeft + 'px', top: clearTop + 'px', transform: 'rotate(-9deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
       { offset: 0.78, left: returnLeft + 'px', top: Math.max(0, returnTop - 8) + 'px', transform: 'rotate(-5deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
@@ -243,7 +248,9 @@ export function mountDisplacementExperiment() {
       const cylinderLeft = cylinderRect.left - sceneRect.left;
       const cylinderRight = cylinderRect.right - sceneRect.left;
       const cylinderTop = cylinderRect.top - sceneRect.top;
-      const clearTop = cylinderTop - rockHeight - 12;
+      // Let the user start moving the stone sideways once its center clears
+      // the rim; requiring the whole image to clear made removal impractical.
+      const clearTop = cylinderTop - rockHeight / 2 - 8;
       if (nextTop > clearTop) {
         nextLeft = Math.max(cylinderLeft + 3, Math.min(cylinderRight - rockWidth - 3, nextLeft));
       } else {
@@ -263,7 +270,7 @@ export function mountDisplacementExperiment() {
     const clearedRim = drag.clearedRim;
     drag = null;
     if (wasImmersed) {
-      if (clearedRim && !validDrop) resetRock();
+      if (clearedRim && !validDrop) removeRockFromCylinder();
       else placeRock();
       return;
     }
