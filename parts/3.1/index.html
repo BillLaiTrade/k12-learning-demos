@@ -637,7 +637,6 @@
             <div class="view-presets" role="group" aria-label="預設觀察視角">
               <button type="button" class="secondary" id="view-front" aria-pressed="true">正對尺面</button>
               <button type="button" class="secondary" id="view-oblique" aria-pressed="false">斜向觀察</button>
-              <p class="view-help">拖曳畫面也可自由旋轉視角</p>
             </div>
             <div class="scene-caption"><p id="camera-caption" aria-live="polite">正對尺面：端點投影對準尺上刻度。</p></div>
             <div class="scene-readout" aria-live="polite"><article><small>目前角度估讀</small><strong id="parallax-reading">約 18.4 cm</strong></article></div>
@@ -1117,9 +1116,10 @@
           ? "正對尺面：端點投影對準尺上刻度。"
           : cameraPreset === "oblique"
           ? "斜向觀察：端點視線投影偏離正對時的刻度。"
-          : "自由視角：拖曳或用方向鍵轉動，觀察投影落點和讀值。";
+          : "";
         parallaxScene.dataset.magnifier = "true";
         document.querySelector("#camera-caption").textContent = cameraCaption;
+        document.querySelector(".scene-caption").hidden = !cameraCaption;
         document.querySelector("#view-front").setAttribute("aria-pressed", String(cameraPreset === "front"));
         document.querySelector("#view-oblique").setAttribute("aria-pressed", String(cameraPreset === "oblique"));
         document.querySelector("#parallax-explanation").textContent = !landingOnScale
