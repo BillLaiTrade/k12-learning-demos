@@ -1212,7 +1212,7 @@
         for(const p of particles){
           if(isLiquid){
             p.turnIn-=step;
-            if(p.turnIn<=0){p.vx+=(Math.random()-.5)*52;p.vy+=(Math.random()-.5)*38;p.turnIn=.12+Math.random()*.2;}
+            if(p.turnIn<=0){p.vx+=(Math.random()-.5)*52;p.vy+=(Math.random()-.5)*38;if(Math.random()<.08)p.vy-=90+Math.random()*70;p.turnIn=.12+Math.random()*.2;}
             p.vy+=420*step;
           }
           p.x+=p.vx*step;p.y+=p.vy*step;
