@@ -275,7 +275,7 @@
     .phase-transition-key .phase-heat-dot { background:#b45c44; }
     .phase-transition-key .phase-cool-dot { background:#3c8097; }
     .phase-diagram-scroll { overflow-x:auto; padding:5px 2px 9px; border-radius:15px; scrollbar-color:#b8c9bd transparent; }
-    .phase-triangle { position:relative; width:100%; min-width:700px; height:590px; overflow:hidden; border:1px solid #e0e8df; border-radius:16px; background:linear-gradient(145deg,#f0f5ed,#f8f8f2 62%,#edf3ec); }
+    .phase-triangle { position:relative; width:100%; min-width:700px; height:460px; overflow:hidden; border:1px solid #e0e8df; border-radius:16px; background:linear-gradient(145deg,#f0f5ed,#f8f8f2 62%,#edf3ec); }
     .phase-triangle-svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; z-index:0; }
     .phase-arrow { fill:none; stroke:#a8b9ae; stroke-width:3.5; stroke-linecap:round; marker-end:url(#phase-arrow-default); }
     .phase-arrow.phase-heat { stroke:#bd634b; marker-end:url(#phase-arrow-heat); }
@@ -286,27 +286,25 @@
     .phase-arrow-hit:focus-visible { stroke:#176b5340; stroke-width:19; outline:none; }
     @keyframes phase-arrow-flow { to { stroke-dashoffset:-34; } }
     .phase-flow-dot { fill:#78b7cb; stroke:#fff; stroke-width:2; opacity:0; filter:drop-shadow(0 2px 2px #1d34322c); }
-    .phase-node { position:absolute; z-index:2; width:210px; height:196px; padding:10px; border:1px solid transparent; border-radius:16px; background:transparent; box-shadow:none; text-align:center; font:inherit; color:inherit; cursor:pointer; pointer-events:none; transition:outline-color .16s,filter .16s; }
+    .phase-node { position:absolute; z-index:2; display:grid; place-items:center; width:112px; height:112px; padding:0; border:1px solid transparent; border-radius:50%; background:transparent; box-shadow:none; text-align:center; font:inherit; color:inherit; cursor:pointer; pointer-events:none; transform:translate(-50%,-50%); transition:outline-color .16s,filter .16s; }
     .phase-node > * { pointer-events:auto; text-shadow:0 0 4px #f0f5ed,0 0 4px #f0f5ed; }
     .phase-node:hover,.phase-node:focus-visible { outline:3px solid #176b5340; outline-offset:3px; }
     .phase-node[aria-pressed="true"] { outline:2px solid #176b5380; outline-offset:3px; }
-    .phase-node h3 { margin:0 0 4px; color:#176b53; font-size:1rem; }
-    .phase-node img { display:block; width:100%; height:126px; object-fit:contain; background:transparent; }
-    .phase-node p { margin:3px 0 0; color:#68776f; font-size:.71rem; line-height:1.35; }
+    .phase-node h3,.phase-node p { display:none; }
+    .phase-node img { display:block; width:100%; height:100%; object-fit:contain; background:transparent; }
     .phase-node-solid img { animation:phase-ice-glint 4.4s ease-in-out infinite; }
     .phase-node-liquid img { animation:phase-water-sway 3.2s ease-in-out infinite; transform-origin:center 70%; }
     .phase-node-gas img { animation:phase-vapor-drift 2.8s ease-in-out infinite; }
     @keyframes phase-ice-glint { 0%,54%,100% { filter:brightness(1) drop-shadow(0 0 0 #8ce4ff00); } 59% { filter:brightness(1.08) drop-shadow(0 0 4px #8ce4ff99); } 63% { filter:brightness(1) drop-shadow(0 0 1px #8ce4ff35); } 68% { filter:brightness(1.12) drop-shadow(0 0 7px #9beeffaa); } 74% { filter:brightness(1) drop-shadow(0 0 0 #8ce4ff00); } }
     @keyframes phase-water-sway { 0%,100% { transform:scale(1,.97) translateY(1px); } 50% { transform:scale(1.035,1.03) translateY(-1px); } }
     @keyframes phase-vapor-drift { 0%,100% { transform:translateY(3px); } 50% { transform:translateY(-3px); } }
-    .phase-node-solid { top:10px; left:calc(50% - 105px); }
-    .phase-node-liquid { top:365px; left:3%; }
-    .phase-node-gas { top:365px; right:3%; }
+    .phase-node-solid,.phase-node-liquid,.phase-node-gas { top:50%; left:50%; }
     .phase-transition { position:absolute; z-index:3; min-width:0; padding:3px 7px; transform:translate(-50%,-50%); border:1px solid var(--phase-route-color); border-radius:8px; background:#fffefa; box-shadow:0 2px 7px #263b3014; color:var(--phase-route-color); text-align:center; cursor:pointer; font-size:.78rem; font-weight:850; line-height:1.1; white-space:nowrap; transition:transform .16s,border-color .16s,box-shadow .16s; }
     .phase-transition:hover,.phase-transition:focus-visible { transform:translate(-50%,calc(-50% - 2px)); box-shadow:0 5px 12px #263b3020; outline:3px solid #176b5330; }
     .phase-transition[aria-pressed="true"] { border:2px solid #176b53; background:#f2f8f3; }
     .phase-transition[data-energy="heat"] { --phase-route-color:#bd634b; }
     .phase-transition[data-energy="cool"] { --phase-route-color:#43839a; }
+    .phase-transition,.phase-transition-key,.phase-diagram-hint { display:none; }
     #phase-melt { left:33%; top:44%; }
     #phase-freeze { left:45.6%; top:51.4%; }
     #phase-sublimation { left:55.5%; top:48%; }
@@ -330,16 +328,8 @@
     @media(max-width:680px) {
       .lesson-card#s4 { scroll-margin-top:164px; }
       .phase-diagram-scroll { overflow:visible; padding:4px 0; }
-      .phase-triangle { min-width:0; height:420px; }
-      .phase-triangle-svg { height:430px; }
-      .phase-node { width:138px; height:156px; padding:7px; }
-      .phase-node h3 { font-size:.82rem; }
-      .phase-node img { height:96px; }
-      .phase-node p { font-size:.63rem; }
-      .phase-node-solid { top:8px; left:calc(50% - 69px); }
-      .phase-node-liquid { top:250px; left:2%; }
-      .phase-node-gas { top:250px; right:2%; }
-      .phase-transition { padding:2px 4px; font-size:.66rem; }
+      .phase-triangle { min-width:0; height:250px; }
+      .phase-node { width:68px; height:68px; }
       .phase-transition-key { font-size:.76rem; }
     }
     @media(max-width:680px) { .phase-detail { grid-template-columns:1fr; gap:7px; padding:12px; } .phase-diagram-hint { font-size:.72rem; } }
@@ -1208,39 +1198,36 @@
     function updatePhaseArrowGeometry(){
       if(!phaseSvg||!phaseSvg.getScreenCTM())return;
       const inverse=phaseSvg.getScreenCTM().inverse(),svgPoint=(x,y)=>{const p=phaseSvg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(inverse);return{x:q.x,y:q.y};};
-      const rect=selector=>document.querySelector(`[data-phase-state="${selector}"]`).getBoundingClientRect(),nodes={solid:rect("solid"),liquid:rect("liquid"),gas:rect("gas")};
-      const center=r=>({x:r.left+r.width/2,y:r.top+r.height/2});
-      // Connect card edges directly. Both directions on each triangle side use
-      // parallel, slightly offset curves so the arrows do not cross or touch art.
-      const edge=(from,to,gap=14,lane=0)=>{
-        const a=center(from),b=center(to),dx=b.x-a.x,dy=b.y-a.y,length=Math.hypot(dx,dy)||1,ux=dx/length,uy=dy/length;
-        const reach=(r,x,y)=>Math.min((r.width/2)/Math.max(Math.abs(x),.0001),(r.height/2)/Math.max(Math.abs(y),.0001))+gap;
-        const ra=reach(from,ux,uy),rb=reach(to,ux,uy);
-        const nx=-uy,ny=ux;
-        return[{x:a.x+ux*ra+nx*lane,y:a.y+uy*ra+ny*lane},{x:b.x-ux*rb+nx*lane,y:b.y-uy*rb+ny*lane}];
-      };
+      const triangle=document.querySelector(".phase-triangle"),triangleRect=triangle.getBoundingClientRect(),width=triangle.clientWidth,side=width*.5,altitude=side*Math.sqrt(3)/2,nodeSize=matchMedia("(max-width:680px)").matches?68:side*.36,topY=nodeSize/2+8;
+      const vertices={solid:{x:triangleRect.left+width/2,y:triangleRect.top+topY},liquid:{x:triangleRect.left+width/4,y:triangleRect.top+topY+altitude},gas:{x:triangleRect.left+width*3/4,y:triangleRect.top+topY+altitude}};
+      for(const [key,point] of Object.entries(vertices)){
+        const node=document.querySelector(`[data-phase-state="${key}"]`);
+        node.style.left=`${point.x-triangleRect.left}px`;node.style.top=`${point.y-triangleRect.top}px`;node.style.width=`${nodeSize}px`;node.style.height=`${nodeSize}px`;
+      }
+      // The three image centers are vertices of an equilateral triangle. Use
+      // the same radial clearance and curve offset on every side, so all six
+      // directional arrows have equal geometric length and clear the artwork.
       const curve=(from,to,lane)=>{
-        const [a,b]=edge(nodes[from],nodes[to],14,lane),dx=b.x-a.x,dy=b.y-a.y,n=Math.hypot(dx,dy)||1,nx=-dy/n,ny=dx/n,bow=5;
-        const p=[a,{x:a.x+dx/3+nx*bow,y:a.y+dy/3+ny*bow},{x:a.x+dx*2/3+nx*bow,y:a.y+dy*2/3+ny*bow},b];
+        const a=vertices[from],b=vertices[to],dx=b.x-a.x,dy=b.y-a.y,length=Math.hypot(dx,dy)||1,ux=dx/length,uy=dy/length,nx=-uy,ny=ux,clearance=side*.24,bow=side*.014;
+        const start={x:a.x+ux*clearance+nx*lane,y:a.y+uy*clearance+ny*lane},end={x:b.x-ux*clearance+nx*lane,y:b.y-uy*clearance+ny*lane};
+        const sx=end.x-start.x,sy=end.y-start.y;
+        const p=[start,{x:start.x+sx/3+nx*bow,y:start.y+sy/3+ny*bow},{x:start.x+sx*2/3+nx*bow,y:start.y+sy*2/3+ny*bow},end];
         return p.map(q=>svgPoint(q.x,q.y));
       };
       const curves={
-        melt:curve("solid","liquid",-12),
-        freeze:curve("liquid","solid",-12),
-        sublimation:curve("solid","gas",12),
-        deposition:curve("gas","solid",12),
-        vaporization:curve("liquid","gas",-13),
-        condensation:curve("gas","liquid",-13)
+        melt:curve("solid","liquid",-side*.035),
+        freeze:curve("liquid","solid",-side*.035),
+        sublimation:curve("solid","gas",side*.035),
+        deposition:curve("gas","solid",side*.035),
+        vaporization:curve("liquid","gas",-side*.035),
+        condensation:curve("gas","liquid",-side*.035)
       };
-      const triangleRect=document.querySelector(".phase-triangle").getBoundingClientRect();
       Object.entries(curves).forEach(([key,points])=>{
         const d=`M${points[0].x} ${points[0].y} C${points[1].x} ${points[1].y} ${points[2].x} ${points[2].y} ${points[3].x} ${points[3].y}`;
         const path=document.querySelector(`.phase-arrow[data-phase-path="${key}"]`);
         path.setAttribute("d",d);
         document.getElementById(`phase-path-${key}`).setAttribute("d",d);
         document.querySelector(`.phase-arrow-hit[data-phase-process="${key}"]`).setAttribute("d",d);
-        const label=document.getElementById(`phase-${key}`),labelSlots={melt:[.29,.49],freeze:[.39,.58],sublimation:[.71,.49],deposition:[.61,.58],vaporization:[.5,.72],condensation:[.5,.84]};
-        label.style.left=`${triangleRect.width*labelSlots[key][0]}px`;label.style.top=`${triangleRect.height*labelSlots[key][1]}px`;
       });
     }
     updatePhaseArrowGeometry();
