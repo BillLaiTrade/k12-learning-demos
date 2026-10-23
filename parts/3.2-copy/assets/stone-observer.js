@@ -136,8 +136,7 @@ export function mountStoneObserver(){
   const loading=document.querySelector('#observer-loading');
   const modelUrl=new URL('./meteorite-model.glb',import.meta.url);
   const pageVersion=new URL(import.meta.url).searchParams.get('v');if(pageVersion)modelUrl.searchParams.set('v',pageVersion);
-  // The GLB uses a render-predicted 3D body; the source photo is projected on
-  // its visible face while the unseen sides retain the inferred rock material.
+  // Apply the same predicted surface texture across the full rendered 3D body.
   new GLTFLoader().load(modelUrl.href,gltf=>{
     gltf.scene.updateMatrixWorld(true);
     const modeledMesh=gltf.scene.getObjectByProperty('isMesh',true);
