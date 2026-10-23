@@ -1311,10 +1311,10 @@
       toolDemos.olympicSprint = { title: "奧運短跑・全自動計時", desc: "按下開始模擬發令訊號。計時同步啟動；選手軀幹通過終點線時，計時自動停止。", viewBox: "0 0 760 260", draw: () => `
         <style>
           @keyframes sprint-run { from { translate: 0 0; } to { translate: 490px 0; } }
-          @keyframes sprint-arm { 0%,100% { rotate: -32deg; } 50% { rotate: 38deg; } }
-          @keyframes sprint-leg-a { 0%,100% { rotate: 35deg; } 50% { rotate: -42deg; } }
-          @keyframes sprint-leg-b { 0%,100% { rotate: -42deg; } 50% { rotate: 35deg; } }
-          #sprint-arm-a,#sprint-arm-b,#sprint-leg-a,#sprint-leg-b { transform-box: fill-box; transform-origin: 0 0; }
+          @keyframes sprint-arm { 0%,100% { rotate: -28deg; } 50% { rotate: 32deg; } }
+          @keyframes sprint-leg-a { 0%,100% { rotate: 30deg; } 50% { rotate: -34deg; } }
+          @keyframes sprint-leg-b { 0%,100% { rotate: -34deg; } 50% { rotate: 30deg; } }
+          #sprint-arm-a,#sprint-arm-b,#sprint-leg-a,#sprint-leg-b { transform-box: fill-box; transform-origin: 50% 0%; }
           .race-running #sprint-runner { animation: sprint-run 9.63s cubic-bezier(.2,.1,.75,.9) forwards; }
           .race-running #sprint-arm-a { animation: sprint-arm .42s ease-in-out infinite; }
           .race-running #sprint-arm-b { animation: sprint-arm .42s ease-in-out infinite reverse; }
@@ -1334,7 +1334,6 @@
           <g id="sprint-leg-b" transform="translate(0 31)"><path d="M0 0-15 34-36 42" fill="none" stroke="#125541" stroke-width="12" stroke-linecap="round"/><path d="M-38 42l-15 9" stroke="#f4f1e8" stroke-width="7" stroke-linecap="round"/></g>
           <path d="M-10 -3q16-7 31 5l-4 35q-18 8-36-2z" fill="#176b53" stroke="#104a3a" stroke-width="2"/>
           <path d="M-11 2q10 5 23 2M-14 29q14 6 28 0" fill="none" stroke="#e1b856" stroke-width="3"/>
-          <path d="M-10 2-24 17" stroke="#d99a75" stroke-width="10" stroke-linecap="round"/><path d="M17 4 32 17" stroke="#d99a75" stroke-width="10" stroke-linecap="round"/>
           <g id="sprint-arm-a" transform="translate(-23 17)"><path d="M0 0-10 17-1 25" fill="none" stroke="#d99a75" stroke-width="8" stroke-linecap="round"/><path d="M-1 25l6 1" stroke="#47332e" stroke-width="6" stroke-linecap="round"/></g>
           <g id="sprint-arm-b" transform="translate(32 17)"><path d="M0 0 9 18 1 27" fill="none" stroke="#d99a75" stroke-width="8" stroke-linecap="round"/><path d="M1 27l-5 1" stroke="#47332e" stroke-width="6" stroke-linecap="round"/></g>
           <path d="M-16 -17q-2-24 19-25 21 2 17 25l-7 12-25-1z" fill="#c87b55" stroke="#744838" stroke-width="2"/><path d="M-16-26q12-21 35-8l4 9q-19-6-39 3z" fill="#3d302c"/><path d="M12-19q8 4 6 12" fill="none" stroke="#744838" stroke-width="2"/><circle cx="7" cy="-23" r="2" fill="#302724"/>
