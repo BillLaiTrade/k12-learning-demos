@@ -3,10 +3,6 @@ export function mountDensityExperimentQuiz() {
   if (!quiz) return;
 
   quiz.querySelector('.overflow-level-detail')?.remove();
-  const removedCrownDisplay = document.createElement('div');
-  removedCrownDisplay.className = 'overflow-removed-crown';
-  removedCrownDisplay.setAttribute('aria-hidden', 'true');
-  quiz.querySelector('.experiment-overflow-layout').append(removedCrownDisplay);
   const catchLevelLens = document.createElement('div');
   catchLevelLens.className = 'catch-level-lens';
   catchLevelLens.setAttribute('aria-hidden', 'true');
@@ -24,7 +20,6 @@ export function mountDensityExperimentQuiz() {
   let selectedSample = null;
   const scaleSamples = new Set();
   const tankSamples = new Set();
-  const removedTankSamples = new Set();
   const tankSampleVolumes = new Map();
   let collectedVolume = 0;
   let pendingReturnVolume = 0;
@@ -43,11 +38,6 @@ export function mountDensityExperimentQuiz() {
 
   function sampleLabel(sample) {
     return samples[sample]?.label || `樣本 ${sample}`;
-  }
-
-  function refreshRemovedCrown() {
-    removedCrownDisplay.innerHTML = [...removedTankSamples].map(sample => `<figure><img src="${samples[sample].image}" alt=""><figcaption>${sampleLabel(sample)} 已取出</figcaption></figure>`).join('');
-    removedCrownDisplay.classList.toggle('is-visible', removedTankSamples.size > 0);
   }
 
   function sampleMass(sample) {
@@ -206,7 +196,6 @@ export function mountDensityExperimentQuiz() {
     if (instrument === 'cylinder' && returnInProgress) finishWaterReturn();
     if (instrument === 'scale' && tankSamples.has(sample)) removeSample(sample, 'cylinder');
     if (instrument === 'cylinder' && scaleSamples.delete(sample)) refreshScale();
-    if (removedTankSamples.delete(sample)) refreshRemovedCrown();
     chooseSample(sample);
     if (instrument === 'scale') {
       scaleSamples.add(sample);
@@ -236,8 +225,6 @@ export function mountDensityExperimentQuiz() {
       const volume = tankSampleVolumes.get(sample) ?? sampleVolume(sample);
       tankSamples.delete(sample);
       tankSampleVolumes.delete(sample);
-      removedTankSamples.add(sample);
-      refreshRemovedCrown();
       pendingReturnVolume += volume;
       const instrumentElement = quiz.querySelector('[data-instrument="cylinder"]');
       instrumentElement.classList.remove('is-spilling');
