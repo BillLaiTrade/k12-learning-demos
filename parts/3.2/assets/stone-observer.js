@@ -98,7 +98,7 @@ export function mountStoneObserver(){
   const rim=new THREE.DirectionalLight(0xffffff,1.1);rim.position.set(1,4,-4);scene.add(rim);
   // 三把尺與三面格線組成同一個可旋轉的開口量測框。
   const rulerFloor=-1.05,rulerEdge=RULER_CM*WORLD_PER_CM/2,rulerHeight=RULER_CM*WORLD_PER_CM;
-  const frameCenterY=-.14; // 將固定尺框與石頭的旋轉中心對齊。
+  const frameCenterY=-.14; // 將固定尺框與隕石的旋轉中心對齊。
   const framePivot=new THREE.Group();framePivot.position.y=frameCenterY;scene.add(framePivot);
   const frameAssembly=new THREE.Group();frameAssembly.position.y=-frameCenterY;framePivot.add(frameAssembly);
   const lengthRuler=makeRuler({position:[0,rulerFloor,-rulerEdge],accent:MEASURE_COLORS.length});frameAssembly.add(lengthRuler.group);
