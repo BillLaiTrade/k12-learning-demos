@@ -74,8 +74,9 @@ export function mountDensityExperimentQuiz() {
     const zeroY = zeroMark.top + zeroMark.height / 2;
     const hundredY = hundredMark.top + hundredMark.height / 2;
     const trayStyle = getComputedStyle(tray);
-    const waterBottom = trayBounds.bottom - parseFloat(trayStyle.borderBottomWidth) - zeroY;
-    const waterHeight = (zeroY - hundredY) * level / 100;
+    const waterBottom = 3;
+    const waterBaseY = trayBounds.bottom - parseFloat(trayStyle.borderBottomWidth) - waterBottom;
+    const waterHeight = waterBaseY - (zeroY - (zeroY - hundredY) * level / 100);
     // Match the real water surface to the 0–100 mL marks on the tray.
     water.style.bottom = `${waterBottom}px`;
     water.style.height = `${waterHeight}px`;
@@ -91,7 +92,7 @@ export function mountDensityExperimentQuiz() {
       const lensBounds = catchLevelLens.getBoundingClientRect();
       const lensLineBounds = lensLine.getBoundingClientRect();
       const lineOffset = lensLineBounds.top - lensBounds.top;
-      const waterlineY = zeroY - waterHeight;
+      const waterlineY = waterBaseY - waterHeight;
       catchLevelLens.style.bottom = 'auto';
       catchLevelLens.style.top = `${waterlineY - trayBounds.top - parseFloat(trayStyle.borderTopWidth) - lineOffset}px`;
       catchLevelLens.style.setProperty('--lens-line-y', `${lineOffset - parseFloat(getComputedStyle(catchLevelLens).borderTopWidth)}px`);

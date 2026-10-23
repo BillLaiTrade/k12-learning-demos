@@ -191,7 +191,7 @@
 /* Arrange volume marks up the collector wall, as on an ordinary graduated vessel. */
 .overflow-catch-tray{height:68px;overflow:visible}
 .overflow-catch-tray:before{content:"接水盤（mL）";z-index:5;padding:0 3px;border-radius:3px;background:#f2f6f1}
-.overflow-catch-scale{position:absolute;left:auto;right:8px;top:7px;bottom:7px;width:43px;display:block;color:#526358;font-size:.6rem;font-variant-numeric:tabular-nums;pointer-events:none}
+.overflow-catch-scale{position:absolute;left:auto;right:8px;top:7px;bottom:0;width:43px;display:block;color:#526358;font-size:.6rem;font-variant-numeric:tabular-nums;pointer-events:none}
 .overflow-catch-scale .catch-tick{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:4px;line-height:1}
 .overflow-catch-scale .catch-tick-100{top:0}
 .overflow-catch-scale .catch-tick-50{top:50%;transform:translateY(-50%)}
