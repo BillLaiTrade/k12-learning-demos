@@ -1267,10 +1267,15 @@
       let stopwatchTimer = null, stopwatchStarted = 0, stopwatchElapsed = 0, timerRemaining = 60, stopwatchDeadline = 0, stopwatchMode = "elapsed";
       const formatStopwatch = ms => `${(ms / 60000 | 0).toString().padStart(2,"0")}:${((ms / 1000 | 0) % 60).toString().padStart(2,"0")}.${((ms % 1000) / 10 | 0).toString().padStart(2,"0")}`;
       const chooseTool = key => {
-        document.querySelectorAll(".decision-leaf").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tool === key)));
-        document.querySelectorAll(".decision-next-choice").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tool === key)));
-        selectedDecisionTool = key;
+        selectedDecisionTool = selectedDecisionTool === key ? null : key;
+        document.querySelectorAll(".decision-leaf").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tool === selectedDecisionTool)));
+        document.querySelectorAll(".decision-next-choice").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tool === selectedDecisionTool)));
         paintDecisionRoute(true);
+        if (!selectedDecisionTool) {
+          clearInterval(stopwatchTimer); stopwatchTimer = null;
+          demo.hidden = true;
+          return;
+        }
         demo.hidden = false;
         clearInterval(stopwatchTimer); stopwatchTimer = null; stopwatchElapsed = 0; timerRemaining = 60; stopwatchDeadline = 0; stopwatchMode = "elapsed";
         const item = toolDemos[key];
