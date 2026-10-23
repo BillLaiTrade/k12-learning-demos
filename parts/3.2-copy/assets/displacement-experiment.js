@@ -33,7 +33,7 @@ export function mountDisplacementExperiment() {
     resetButton.disabled = !immersed || animating;
     status.dataset.state = immersed ? 'complete' : 'ready';
     if (immersed) {
-      status.textContent = '石頭已完全浸入。比較水位差；點一下石頭或拖曳它即可取出，石頭會先升過量筒口再移出。';
+      status.textContent = '石頭已完全浸入。拖曳石頭移動，放開時它會依正下方的位置落回量筒或落在筒外。';
     } else {
       status.textContent = '把石頭拖到量筒口正上方並放開，讓它落入水中；也可使用下方按鈕。';
     }
@@ -129,6 +129,94 @@ export function mountDisplacementExperiment() {
     setReading(true);
     rock.getBoundingClientRect();
     requestAnimationFrame(() => rock.classList.remove('is-throwing'));
+  }
+
+  async function dropDraggedRockIntoCylinder() {
+    if (animating) return;
+    animating = true;
+    placeButton.disabled = true;
+    resetButton.disabled = true;
+    rock.classList.remove('is-dragging');
+    cylinder.classList.remove('drop-ready');
+
+    const sceneRect = scene.getBoundingClientRect();
+    const startRect = rock.getBoundingClientRect();
+    const startLeft = startRect.left - sceneRect.left;
+    const startTop = startRect.top - sceneRect.top;
+    const savedPosition = {
+      left: rock.style.left,
+      top: rock.style.top,
+      bottom: rock.style.bottom,
+      transform: rock.style.transform
+    };
+
+    clearPosition();
+    rock.classList.add('is-throwing', 'is-immersed');
+    const targetRect = rock.getBoundingClientRect();
+    rock.classList.remove('is-immersed');
+    rock.style.left = startLeft + 'px';
+    rock.style.top = startTop + 'px';
+    rock.style.bottom = 'auto';
+    rock.style.transform = 'none';
+
+    const targetLeft = targetRect.left - sceneRect.left;
+    const targetTop = targetRect.top - sceneRect.top;
+    const cylinderTop = cylinder.getBoundingClientRect().top - sceneRect.top;
+    const waterTop = water.getBoundingClientRect().top - sceneRect.top;
+    const animation = rock.animate([
+      { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)' },
+      { offset: 0.38, left: targetLeft + 'px', top: Math.max(0, cylinderTop - startRect.height - 8) + 'px', transform: 'rotate(4deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
+      { offset: 0.68, left: targetLeft + 'px', top: Math.max(0, waterTop - startRect.height * 0.35) + 'px', transform: 'rotate(-3deg)', easing: 'cubic-bezier(.45,0,.8,.5)' },
+      { offset: 1, left: targetLeft + 'px', top: targetTop + 'px', transform: 'rotate(0deg)' }
+    ], { duration: 850, fill: 'forwards' });
+
+    try { await animation.finished; } catch { /* Keep the sample in a valid state if canceled. */ }
+    animation.cancel();
+    rock.style.left = savedPosition.left;
+    rock.style.top = savedPosition.top;
+    rock.style.bottom = savedPosition.bottom;
+    rock.style.transform = savedPosition.transform;
+    animating = false;
+    placeRock();
+  }
+
+  async function dropDraggedRockOutsideCylinder() {
+    if (animating) return;
+    animating = true;
+    placeButton.disabled = true;
+    resetButton.disabled = true;
+    rock.classList.remove('is-dragging', 'is-immersed');
+    cylinder.classList.remove('drop-ready');
+
+    const sceneRect = scene.getBoundingClientRect();
+    const startRect = rock.getBoundingClientRect();
+    const startLeft = startRect.left - sceneRect.left;
+    const startTop = startRect.top - sceneRect.top;
+    const left = Math.max(4, Math.min(sceneRect.width - startRect.width - 4, startLeft));
+    const floorTop = Math.max(0, sceneRect.height - startRect.height - 10);
+    rock.style.left = startLeft + 'px';
+    rock.style.top = startTop + 'px';
+    rock.style.bottom = 'auto';
+    rock.style.transform = 'none';
+    rock.classList.add('is-throwing');
+    status.textContent = '石頭落在量筒外；水位已重設。';
+
+    const animation = rock.animate([
+      { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)' },
+      { offset: 0.76, left: left + 'px', top: floorTop + 'px', transform: 'rotate(8deg)', easing: 'cubic-bezier(.25,.65,.4,1)' },
+      { offset: 0.9, left: left + 'px', top: Math.max(0, floorTop - 8) + 'px', transform: 'rotate(-4deg)' },
+      { offset: 1, left: left + 'px', top: floorTop + 'px', transform: 'rotate(0deg)' }
+    ], { duration: 550, fill: 'forwards' });
+
+    try { await animation.finished; } catch { /* Keep the sample in a valid state if canceled. */ }
+    animation.cancel();
+    rock.style.left = left + 'px';
+    rock.style.top = floorTop + 'px';
+    rock.style.bottom = 'auto';
+    rock.style.transform = 'none';
+    animating = false;
+    setReading(false);
+    status.textContent = '石頭落在量筒外；水位已重設。可再拖回量筒上方放入。';
   }
 
   async function removeRockFromCylinder() {
@@ -258,20 +346,7 @@ export function mountDisplacementExperiment() {
     let nextLeft = drag.left + event.clientX - drag.startX;
     const nextTop = drag.top + event.clientY - drag.startY;
     rock.style.bottom = 'auto';
-    if (drag.wasImmersed) {
-      const sceneRect = scene.getBoundingClientRect();
-      const cylinderRect = cylinder.getBoundingClientRect();
-      const rockWidth = rock.getBoundingClientRect().width;
-      const rockHeight = rock.getBoundingClientRect().height;
-      const cylinderLeft = cylinderRect.left - sceneRect.left;
-      const cylinderRight = cylinderRect.right - sceneRect.left;
-      const cylinderTop = cylinderRect.top - sceneRect.top;
-      // Keep the stone inside the cylinder until its bottom clears the rim.
-      // This is a shorter, more visible lift than requiring its center to clear.
-      if (nextTop + rockHeight > cylinderTop + 10) {
-        nextLeft = Math.max(cylinderLeft + 3, Math.min(cylinderRight - rockWidth - 3, nextLeft));
-      }
-    }
+    // The user chooses the landing spot; gravity is resolved when released.
     rock.style.left = nextLeft + 'px';
     rock.style.top = nextTop + 'px';
     const overTarget = centerIsInCylinder() || rockIsAboveCylinderMouth();
@@ -284,19 +359,12 @@ export function mountDisplacementExperiment() {
     const validDrop = centerIsInCylinder() || aboveMouth;
     const wasImmersed = drag.wasImmersed;
     drag = null;
-    if (wasImmersed) {
-      removeRockFromCylinder();
-      return;
-    }
     if (validDrop) {
-      throwRockIntoCylinder({ dropFromAbove: aboveMouth });
+      if (wasImmersed) dropDraggedRockIntoCylinder();
+      else throwRockIntoCylinder({ dropFromAbove: aboveMouth });
       return;
     }
-    rock.classList.remove('is-dragging');
-    cylinder.classList.remove('drop-ready');
-    clearPosition();
-    status.dataset.state = 'ready';
-    status.textContent = '把石頭拖到量筒口正上方再放開，讓它落入水中；再觀察水位變化。';
+    dropDraggedRockOutsideCylinder();
   }
 
   rock.addEventListener('pointerup', finishDrag);
