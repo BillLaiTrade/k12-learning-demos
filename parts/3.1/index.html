@@ -519,7 +519,7 @@
           <p>「很長」是感覺，別人不一定和你想的一樣。測量能把觀察變成具體數字，讓結果可以說清楚、記下來，也能和別人比較。</p>
           <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>這支鉛筆好像比其他鉛筆長耶！</p></div>
           <div class="dialogue"><span class="speaker">阿公</span><p>妳怎麼知道呢？</p></div>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>嗯……大概是靠感覺吧。</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>好像是靠感覺。</p></div>
           <div class="dialogue"><span class="speaker">阿公</span><p>除了靠感覺，也可以用尺量量看啊。</p></div>
           <figure class="measurement-meaning-visual">
             <svg viewBox="0 0 720 230" role="img" aria-label="一支鉛筆對齊直尺的零刻度；尺面每公分分成十個毫米刻度">
@@ -549,8 +549,8 @@
           <p>光看 18，還不知道量的是哪一種物理量，也不知道使用什麼單位。點選紀錄中的部分，再看完整描述。</p>
           <div class="dialogue dialogue--xiaokui" id="measurement-dialogue" hidden><span class="speaker">小葵</span><p>我量到了，18！</p></div>
           <div class="dialogue" id="measurement-question-dialogue" hidden><span class="speaker">阿公</span><p>18 代表什麼呢？</p></div>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>我量的是這支鉛筆的長度，數值是 18。這樣記下來就完整了嗎？</p></div>
-          <div class="dialogue"><span class="speaker">阿公</span><p>還要想想看：18 是用什麼單位量出來的？我們一起看看這筆紀錄還包含哪些部分。</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>這樣記錄完整了嗎？</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>還差單位，我們看看紀錄。</p></div>
           <div class="record" aria-label="鉛筆長度的量測紀錄">
             <button type="button" data-record-part="object">鉛筆</button>
             <span id="record-object">長度</span><span>=</span>
@@ -591,8 +591,8 @@
         <div class="card-main">
           <h2>尺上的每一格，代表多少？</h2>
           <p>調整整把尺要分成幾等分，觀察刻線如何變密或變疏，以及每格代表多長；尺長與鉛筆端點保持不變。</p>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>阿公，這把 30 公分的尺分成不同格數時，每一格代表的長度會一樣嗎？</p></div>
-          <div class="dialogue"><span class="speaker">阿公</span><p>我們來調整分格數，再用尺的總長除以格數，看看每一格代表多長。</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>分格變多，每格會變短嗎？</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>拖動滑桿，用尺長除以格數看看。</p></div>
           <div class="control-panel">
             <div class="ruler-caption"><span>同一把 30 cm 直尺</span><span id="division-count-label">整把尺分成 15 等分</span></div>
             <label class="field" for="division-count">調整整把尺的等分數
@@ -611,8 +611,7 @@
             <p id="division-visual-note" aria-live="polite">鉛筆長度固定為 18 cm，左端對齊 0；右端對齊橘色標記。調整等分數不會改變鉛筆。</p>
           </div>
           <div class="fact"><p>同一把 30 cm 直尺可以有不同的分格方式；每格的長度由 30 cm 除以等分數決定。讀值時先確認刻度間距，再判斷端點落在哪裡。</p></div>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>原來 30 公分分成 15 格，每格就是 2 公分；分成更多格，每格就會更短。</p></div>
-          <div class="dialogue"><span class="speaker">阿公</span><p>沒錯。讀取刻度前，要先確認每一格代表多少長度。</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>分格越多，每格就越短了。</p></div>
           <p class="next-hint">知道每格代表多少後，接著觀察視角如何影響讀值。</p>
       </section>
 
@@ -621,8 +620,7 @@
         <div class="card-main">
           <h2>同一物體，為什麼讀值會差一點？</h2>
           <p>同一支鉛筆平行放在 20 cm 直尺上，筆尖對齊 0 cm。切換兩個預設視角，或拖曳 3D 場景自由旋轉；觀察筆尾投影落在哪個刻度，以及讀值如何改變。</p>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>阿公，同一支鉛筆明明沒有變長，為什麼換個角度看，讀到的數字好像不一樣？</p></div>
-          <div class="dialogue"><span class="speaker">阿公</span><p>我們來拖曳畫面轉換觀察角度。看看鉛筆端點投影到尺上的位置，以及讀到的數字有什麼變化。</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>阿公，同一支鉛筆沒變長，為什麼換個角度看，讀值卻不同？</p></div>
           <div class="parallax-scene" id="parallax-scene">
             <canvas id="pencil-3d-canvas" aria-hidden="true"></canvas>
             <span id="pencil-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
@@ -643,8 +641,7 @@
             <div class="scene-readout" aria-live="polite"><article><small>目前角度估讀</small><strong id="parallax-reading">約 18.4 cm</strong></article></div>
             <p class="live-note" id="parallax-explanation">橘色輔助線的落點顯示目前角度的估讀。視角不同，視線落點可能改變，因此讀值也會產生差異，這稱為視差。</p>
           </div>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>原來斜著看尺時，鉛筆端點對到的位置看起來會改變，讀到的長度也可能變長或變短。</p></div>
-          <div class="dialogue"><span class="speaker">阿公</span><p>沒錯。鉛筆本身沒有變，改變的是視線落在刻度上的位置；讀尺時要正對尺面，減少視差。</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>尺沒變，是視線落點改變了讀值；讀尺時要正對尺面。</p></div>
           <p class="next-hint">了解視角如何影響讀值後，接著練習估讀相鄰刻線之間的位置。</p>
         </div>
       </section>
@@ -654,8 +651,8 @@
         <div class="card-main">
           <h2 id="estimate-heading">鉛筆端點落在相鄰刻線之間，該怎麼估讀？</h2>
           <p id="estimate-instruction">先依整把尺估讀鉛筆右端，再用圖片上的放大按鈕或滑鼠滾輪查看 18 cm 和 19 cm 之間的位置。</p>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>鉛筆末端落在兩條刻線中間，只看整數刻線好像不夠準，那我要怎麼估讀？</p></div>
-          <div class="dialogue"><span class="speaker">阿公</span><p>先觀察末端落在兩條刻線間的位置，再移動滑桿選擇估值。也可以放大查看，但放大不會增加刻線。</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>端點在兩條刻線中間，該怎麼估？</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>觀察端點的位置再估讀；放大不會增加刻線。</p></div>
           <div class="estimate-workspace">
           <aside class="model-panel" aria-labelledby="model-title">
             <h2 id="model-title">觀察鉛筆端點</h2>
@@ -705,8 +702,7 @@
         <div class="card-main">
           <h2>怎麼讓量測結果更可靠？</h2>
           <p>以下四種方法都能改善量測結果。點選一種，看看它能減少哪一類誤差，以及為什麼有效。</p>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>阿公，量測結果會受哪些條件影響？我們可以怎麼讓它更可靠？</p></div>
-          <div class="dialogue"><span class="speaker">阿公</span><p>試試調整刻度密度、對準零點、正對尺面和重複量測取平均，觀察每種方法能改善什麼。</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>怎麼讓量測更可靠？</p></div>
           <div class="correction-workspace" id="correction-workspace" data-control="density">
             <p>四種方法各自改善不同的誤差來源；點選任一項查看操作和說明。</p>
             <div class="correction-options" role="group" aria-label="選擇改善量測可靠性的方法">
@@ -788,7 +784,7 @@
           <h2>要量什麼？依物品特性選工具</h2>
           <p>先選擇物理量，再回答判斷問題，依答案選工具。點問題查看判斷提示。</p>
           <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>阿公，我已經學會用尺量長度，也知道怎麼讓讀值更可靠了！</p></div>
-          <div class="dialogue"><span class="speaker">阿公</span><p>很好。不過量長度只是其中一種測量。物理量和物品特性不同，適合的工具、量程和操作條件也不同；還有很多測量方法等著你認識。</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>不同物理量和物品特性，要選不同工具與量程，考慮的條件也不同。</p></div>
           <div class="decision-tree" aria-label="由左至右的測量工具決策樹"><div class="decision-canvas">
                         <div class="decision-root">我要測量什麼？</div><div class="decision-branches"><section class="decision-branch"><div class="decision-category">長度</div><p>看長短、形狀與所需精細程度</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">短而筆直</span><button class="decision-leaf" data-tool="ruler" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="3" y="12" width="54" height="20" rx="3" fill="#f0dca3" stroke="#997d3c"/><path d="M12 12v9m8-9v5m8-5v9m8-9v5m8-5v9" stroke="#354a42" stroke-width="1.5"/></svg><span>短、直物件：直尺</span></button></div><div class="decision-outcome"><span class="decision-edge-label">較長</span><button class="decision-leaf" data-tool="tape" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="5" y="9" width="24" height="23" rx="8" fill="#e5b94f" stroke="#997d3c"/><path d="M27 13h28v13H27" fill="#f0dca3" stroke="#997d3c"/><path d="M35 13v7m7-7v4m7-4v7" stroke="#354a42"/></svg><span>較長物件：捲尺</span></button></div></div><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">曲面或繞量</span><button class="decision-leaf" data-tool="softTape" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M5 28c8-23 18 15 27-7s15 10 23-10" fill="none" stroke="#3b9a91" stroke-width="7" stroke-linecap="round"/><path d="M11 24l3 2m5 1 3 2m7-7 3 1m7-8 3 1m8-2 3 1" stroke="#fff"/></svg><span>曲面或繞量：軟尺</span></button></div><div class="decision-outcome"><span class="decision-edge-label">微小尺寸</span><button class="decision-leaf" data-tool="caliper" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M12 8v25h39M12 13h12v8H12m27 12V23h8v10" fill="none" stroke="#667c79" stroke-width="4"/><path d="M18 28h3m4 0h3m4 0h3" stroke="#354a42"/></svg><span>微小尺寸：游標卡尺 <small class="decision-extension">延伸工具</small></span></button></div></div></div></section><section class="decision-branch"><div class="decision-category">質量</div><p>看物品大小與預期質量，選合適秤型和量程</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">較小、較輕</span><button class="decision-leaf" data-tool="electronicBalance" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="13" y="8" width="34" height="23" rx="4" fill="#e8eee8" stroke="#557368" stroke-width="2"/><rect x="21" y="12" width="18" height="8" rx="2" fill="#fff" stroke="#7b9485"/><path d="M20 25h20" stroke="#d6a94a" stroke-width="3"/></svg><span>小物件、較精細：電子秤</span></button></div><div class="decision-outcome"><span class="decision-edge-label">較大、較重</span><button class="decision-leaf" data-tool="platformScale" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M12 30h36M17 27l5-13h16l5 13M30 14V7m-5 0h10" fill="none" stroke="#557368" stroke-width="3"/><rect x="22" y="28" width="16" height="5" rx="2" fill="#d6a94a"/></svg><span>較大、較重物件：平台秤</span></button></div><div class="decision-outcome"><span class="decision-edge-label">車輛或大型貨物</span><button class="decision-leaf" data-tool="weighbridge" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M3 32h54" stroke="#557368" stroke-width="3"/><path d="M7 27h46v5H7z" fill="#d6a94a" stroke="#997d3c"/><path d="M12 13h24v13H12z" fill="#d9b66d" stroke="#806b40" stroke-width="2"/><path d="M36 17h9l7 7v2H36z" fill="#4b8a79" stroke="#365f55" stroke-width="2"/><circle cx="19" cy="28" r="4" fill="#344540"/><circle cx="44" cy="28" r="4" fill="#344540"/><path d="M49 12v-5h8v8h-8" fill="#dce5e0" stroke="#557368" stroke-width="1.5"/></svg><span>車輛或大型貨物：地磅</span></button></div></div></div></section><section class="decision-branch"><div class="decision-category">時間</div><p>日常事件量經過多久，或需要多精確、穩定的時間標準</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">日常事件的經過時間</span><button class="decision-leaf" data-tool="stopwatch" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><circle cx="30" cy="22" r="14" fill="#fff" stroke="#557368" stroke-width="3"/><path d="M30 22V12m0 10 8 4M25 4h10m-5 0v4" stroke="#247554" stroke-width="2.5"/></svg><span>量經過時間：碼錶</span></button></div><div class="decision-outcome"><span class="decision-edge-label">極精確、穩定的時間標準</span><button class="decision-leaf" data-tool="atomicClock" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="8" y="7" width="44" height="27" rx="4" fill="#e8eee8" stroke="#557368" stroke-width="2"/><circle cx="20" cy="20" r="5" fill="#d6a94a" stroke="#997d3c"/><path d="M29 16h15m-15 5h15m-15 5h10" stroke="#247554" stroke-width="1.5"/><path d="M14 4q-6 4 0 8m3-8q6 4 0 8" fill="none" stroke="#3b9a91" stroke-width="1.5"/></svg><span>校準時間標準：原子鐘</span></button></div></div></div></section><section class="decision-branch"><div class="decision-category">液體體積</div><p>選用有刻度的量筒，直接讀取液體體積</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">量取液體體積</span><button class="decision-leaf" data-tool="cylinder" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M18 5h25l-3 30H21z" fill="#e8f4ee" stroke="#557368" stroke-width="2"/><path d="M22 26h17M23 20h7m-7-6h7m-7-6h7" stroke="#3b9a91" stroke-width="2"/></svg><span>量筒</span></button></div></div></div></section><section class="decision-branch"><div class="decision-category">溫度</div><p>依測量對象選用合適型式與量程</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">人體</span><button class="decision-leaf" data-tool="clinicalThermometer" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="27" y="5" width="7" height="24" rx="4" fill="#fff" stroke="#778980" stroke-width="2"/><circle cx="30.5" cy="31" r="6" fill="#db7657"/><path d="M30.5 25v6" stroke="#db7657" stroke-width="3"/></svg><span>量體溫：體溫計</span></button></div><div class="decision-outcome"><span class="decision-edge-label">液體或環境</span><button class="decision-leaf" data-tool="labThermometer" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M25 6h10v24a8 8 0 1 1-10 0z" fill="#fff" stroke="#778980" stroke-width="2"/><path d="M30 13v20" stroke="#db7657" stroke-width="4"/><path d="M37 12h7m-7 6h5m-5 6h7" stroke="#557368"/></svg><span>量液體或環境：實驗用溫度計</span></button></div></div></div></section><section class="decision-branch"><div class="decision-category">力</div><p>是測太空繫索的拉力，還是物體壓在平台上的力</p><div class="decision-leaves"><div class="decision-leaf-row"><div class="decision-outcome"><span class="decision-edge-label">掛鉤受拉</span><button class="decision-leaf" data-tool="springTension" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M30 4v5l-5 3 10 4-10 4 10 4-5 3v5" fill="none" stroke="#557368" stroke-width="2"/><path d="M21 7h18m-9 25v4m-6 0h12" stroke="#d6a94a" stroke-width="2"/></svg><span>懸掛物拉力：彈簧秤</span></button></div><div class="decision-outcome"><span class="decision-edge-label">平面受壓</span><button class="decision-leaf" data-tool="compressionSensor" aria-pressed="false"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="11" y="9" width="38" height="18" rx="3" fill="#dce5e0" stroke="#557368" stroke-width="2"/><rect x="18" y="13" width="24" height="8" rx="2" fill="#fff" stroke="#7b9485"/><path d="M7 29h46M15 29v5m30-5v5" stroke="#d6a94a" stroke-width="3"/><path d="M18 3v5m12-5v5m12-5v5M15 6l3 3 3-3m9 0 3 3 3-3m9 0 3 3 3-3" fill="none" stroke="#db7657" stroke-width="1.5"/></svg><span>物體推壓：力感測平台</span></button></div></div></div></section></div></div></div>
           <aside class="decision-help" id="decision-help" aria-live="polite" hidden></aside>
