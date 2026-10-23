@@ -227,15 +227,14 @@
     #race-visual { display: block; min-height: 0; padding: 0; }
     #race-visual .race-scene { position: relative; width: min(100%, 560px); aspect-ratio: 760 / 260; overflow: hidden; }
     #race-visual svg { width: 100%; height: 100%; max-height: none; }
-    .sprint-runner { position: absolute; left: 9%; bottom: 10%; width: 13%; height: 50%; background-image: url("sprint-run-cycle.png"); background-repeat: no-repeat; background-position: 0 0; background-size: 600% 100%; }
+    .sprint-runner { position: absolute; left: 9%; bottom: 10%; width: 13%; height: 50%; background-image: url("sprint-run-cycle.png"); background-repeat: no-repeat; background-position: 0 0; background-size: 500% 100%; }
     .sprint-runner::after { content: ""; position: absolute; left: 28%; bottom: 4%; width: 48%; height: 4px; border-radius: 50%; background: rgb(47 48 38 / 24%); filter: blur(2px); }
     @keyframes sprint-cycle {
       0% { background-position: 0% 0%; }
-      16.66% { background-position: 20% 0%; }
-      33.33% { background-position: 40% 0%; }
-      50% { background-position: 60% 0%; }
-      66.66% { background-position: 80% 0%; }
-      83.33%, 100% { background-position: 100% 0%; }
+      20% { background-position: 25% 0%; }
+      40% { background-position: 50% 0%; }
+      60% { background-position: 75% 0%; }
+      80%, 100% { background-position: 100% 0%; }
     }
     @keyframes sprint-travel { from { left: 9%; } to { left: 72.5%; } }
     .race-running .sprint-runner { animation: sprint-travel 9.63s linear forwards, sprint-cycle .48s steps(1, end) infinite; }
