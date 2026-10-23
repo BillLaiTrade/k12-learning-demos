@@ -500,13 +500,13 @@
       <nav class="route" aria-label="本段學習路徑">
         <p class="route-label">本單元的探索路線</p>
         <div class="route-inner">
-          <a href="#card-01" aria-current="step"><b>01</b><span>測量，讓「很長」變成能比較的資料？</span></a>
+          <a href="#card-01" aria-current="step"><b>01</b><span>只說「這支鉛筆很長」，別人怎麼知道它到底有多長？</span></a>
           <a href="#card-02"><b>02</b><span>18 代表什麼？</span></a>
           <a href="#card-03"><b>03</b><span>尺上的每一格，代表多少？</span></a>
           <a href="#card-04"><b>04</b><span>同一物體，為什麼讀值會差一點？</span></a>
-          <a href="#card-05"><b>05</b><span>刻線之間，怎麼估讀？</span></a>
-          <a href="#card-06"><b>06</b><span>改善量測條件</span></a>
-          <a href="#card-07"><b>07</b><span>同一種工具，能量所有東西嗎？</span></a>
+          <a href="#card-05"><b>05</b><span>鉛筆端點落在相鄰刻線之間，該怎麼估讀？</span></a>
+          <a href="#card-06"><b>06</b><span>怎麼讓量測結果更可靠？</span></a>
+          <a href="#card-07"><b>07</b><span>要量什麼？依物品特性選工具</span></a>
           <a href="#card-08" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
         </div>
         <p class="next-hint">沿著學習順序閱讀、操作與觀察。</p>
@@ -2143,32 +2143,33 @@
 
       const routeLinks = [...document.querySelectorAll(".route a[href^='#card-']")];
       const lessonCards = routeLinks.map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+      let activeCardId = null;
       const markActiveCard = (cardId) => {
+        if (activeCardId === cardId) return;
+        activeCardId = cardId;
         routeLinks.forEach((link) => {
           if (link.hash === `#${cardId}`) {
             link.setAttribute("aria-current", "step");
-            link.scrollIntoView({ block: "nearest", inline: "nearest" });
           } else {
             link.removeAttribute("aria-current");
           }
         });
         if (cardId === "card-06") requestAnimationFrame(renderParallaxScene);
       };
-      if ("IntersectionObserver" in window) {
-        const cardObserver = new IntersectionObserver((entries) => {
-          const visibleCards = entries.filter((entry) => entry.isIntersecting)
-            .sort((first, second) => first.boundingClientRect.top - second.boundingClientRect.top);
-          if (visibleCards.length) markActiveCard(visibleCards[0].target.id);
-        }, { rootMargin: "-18% 0px -68% 0px", threshold: 0 });
-        lessonCards.forEach((card) => cardObserver.observe(card));
-      } else {
-        const syncActiveCard = () => {
+      let activeCardFrame = 0;
+      const syncActiveCard = () => {
+        if (activeCardFrame) return;
+        activeCardFrame = requestAnimationFrame(() => {
+          activeCardFrame = 0;
           const currentCard = [...lessonCards].reverse().find((card) => card.getBoundingClientRect().top <= window.innerHeight * 0.35);
-          markActiveCard((currentCard || lessonCards[0]).id);
-        };
-        window.addEventListener("scroll", syncActiveCard, { passive: true });
-        syncActiveCard();
-      }
+          const pageEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+          const targetCard = pageEnd ? lessonCards[lessonCards.length - 1] : currentCard || lessonCards[0];
+          markActiveCard(targetCard.id);
+        });
+      };
+      window.addEventListener("scroll", syncActiveCard, { passive: true });
+      window.addEventListener("resize", syncActiveCard);
+      syncActiveCard();
     })();
   </script>
   <script type="importmap">
