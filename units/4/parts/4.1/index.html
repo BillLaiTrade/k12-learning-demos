@@ -668,7 +668,7 @@
             <p class="phase-diagram-hint">箭頭表示物態變化方向；點選狀態卡或箭頭／名稱查看詳細說明。</p>
             <section class="phase-detail" id="phase-detail" aria-live="polite" aria-atomic="true" aria-label="物態轉變說明">
               <div><p class="phase-detail-kicker" id="phase-detail-kicker">三種狀態・粒子與轉變</p><h3 id="phase-detail-title">點選冰、水、水蒸氣或任一箭頭</h3></div>
-              <div><p class="phase-detail-copy" id="phase-detail-copy">選擇物態可查看它的粒子狀態和四種相關轉變；選擇箭頭則會說明轉變時粒子如何改變排列與運動。</p><div class="phase-detail-steps" id="phase-detail-steps" hidden></div><div class="freeze-demo" id="freeze-demo" hidden><div class="freeze-demo-head"><span>水 → 冰：晶核形成並逐步長大</span><button type="button" class="freeze-demo-replay" id="freeze-demo-replay">重播</button></div><svg class="freeze-demo-scene" viewBox="0 0 360 132" role="img" aria-label="容器中只有代表水的粒子；粒子由液態移動狀態，逐步形成晶核並排列成固態"><defs><clipPath id="freeze-demo-clip"><rect x="12" y="34" width="336" height="88" rx="2"/></clipPath></defs><rect x="10" y="8" width="340" height="114" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><text x="20" y="25" fill="#43839a" font-size="10" font-weight="700">冷端</text><path d="M57 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4" fill="none" stroke="#43839a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><g id="freeze-demo-particles" clip-path="url(#freeze-demo-clip)"></g></svg><p class="freeze-demo-status" id="freeze-demo-status" aria-live="polite">液態水：粒子持續移動</p><p class="freeze-demo-caption">圓點代表水中的粒子；冷端先形成小晶核，有序排列逐步擴展。此圖不另畫一層水，也不按實際大小比例呈現。</p></div></div>
+              <div><p class="phase-detail-copy" id="phase-detail-copy">選擇物態可查看它的粒子狀態和四種相關轉變；選擇箭頭則會說明轉變時粒子如何改變排列與運動。</p><div class="phase-detail-steps" id="phase-detail-steps" hidden></div><div class="freeze-demo" id="freeze-demo" hidden><div class="freeze-demo-head"><span id="phase-demo-heading">水 → 冰：晶核形成並逐步長大</span><button type="button" class="freeze-demo-replay" id="freeze-demo-replay">重播</button></div><svg class="freeze-demo-scene" viewBox="0 0 360 132" role="img" aria-label="以粒子示意水的物態轉變"><defs><clipPath id="freeze-demo-clip"><rect x="12" y="34" width="336" height="88" rx="2"/></clipPath></defs><rect x="10" y="8" width="340" height="114" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><text id="phase-demo-source" x="20" y="25" fill="#43839a" font-size="10" font-weight="700">冷端</text><path id="phase-demo-arrows" d="M57 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4" fill="none" stroke="#43839a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><g id="freeze-demo-particles" clip-path="url(#freeze-demo-clip)"></g></svg><p class="freeze-demo-status" id="freeze-demo-status" aria-live="polite">液態水：粒子持續移動</p><p class="freeze-demo-caption" id="phase-demo-caption">圓點代表水中的粒子；冷端先形成小晶核，有序排列逐步擴展。此圖不另畫一層水，也不按實際大小比例呈現。</p></div></div>
             </section>
             <p class="phase-science-note">水蒸氣本身無色、看不見；淡藍流線是教材插畫符號，不是水蒸氣真實的顏色或形狀。</p>
             <p class="next-hint">沿六個方向比較後，繼續觀察狀態改變時物質本身是否改變。</p>
@@ -1368,6 +1368,7 @@
     }
     function playFreezeDemo(){
       stopFreezeDemo();const runId=freezeRunId;freezeDone=0;
+      activePhaseProcess="freeze";phaseDemoHeading.textContent="水 → 冰：晶核形成並逐步長大";phaseDemoSource.textContent="放熱／冷端";phaseDemoArrows.setAttribute("transform","translate(0 50) scale(1 -1)");phaseDemoArrows.setAttribute("stroke","#43839a");phaseDemoCaption.textContent="圓點代表水中的粒子；冷端先形成小晶核，有序排列逐步擴展。此圖不另畫一層水，也不按實際大小比例呈現。";
       const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches,scale=freezeDemo.querySelector("svg").getBoundingClientRect().width/360;
       freezeParticles.forEach(p=>{
         p.frozen=false;p.isFreezing=false;p.element.setAttribute("class","freeze-demo-particle");p.element.style.transform="none";
@@ -1389,11 +1390,93 @@
       };
       freezeTargets.forEach((_,index)=>freezeTimers.push(setTimeout(()=>freezeNext(index),500+index*125)));
     }
-    document.getElementById("freeze-demo-replay").addEventListener("click",playFreezeDemo);
+    const phaseDemoHeading=document.getElementById("phase-demo-heading"),phaseDemoSource=document.getElementById("phase-demo-source"),phaseDemoCaption=document.getElementById("phase-demo-caption"),phaseDemoArrows=document.getElementById("phase-demo-arrows");
+    let phaseDemoRun=0,phaseDemoFrame=0,phaseDemoLastFrame=0,phaseDemoAnimations=[],activePhaseProcess="freeze",phaseDemoMotionState="";
+    const phaseDemoMotion={
+      melt:{from:"solid",to:"liquid",heading:"冰 → 水：吸熱融化",source:"吸熱",status:"冰晶排列逐漸鬆動，粒子開始互相移動"},
+      vaporization:{from:"liquid",to:"gas",heading:"水 → 水蒸氣：液面蒸發",source:"吸熱",status:"液面粒子逐步離開液體，分散到容器空間"},
+      condensation:{from:"gas",to:"liquid",heading:"水蒸氣 → 水：放熱凝結",source:"放熱／冷表面",status:"氣態粒子減速、靠近，凝結成液態水"},
+      sublimation:{from:"solid",to:"gas",heading:"冰 → 水蒸氣：吸熱昇華",source:"吸熱",status:"粒子直接脫離固態排列，沒有經過液態"},
+      deposition:{from:"gas",to:"solid",heading:"水蒸氣 → 冰：放熱凝華",source:"放熱／冷表面",status:"粒子在冷端直接排列成固態，沒有經過液態"}
+    };
+    function phaseDemoTargets(state){
+      if(state==="solid")return freezeParticles.map((_,i)=>{const row=Math.floor(i/8),column=i%8;return{x:123+column*15+(row%2)*7,y:45+row*12};});
+      if(state==="liquid")return freezeParticles.map((_,i)=>{const row=Math.floor(i/16),column=i%16;return{x:27+column*20.2+(row%2)*2,y:81+row*13};});
+      return freezeParticles.map(()=>({x:20+Math.random()*320,y:39+Math.random()*77}));
+    }
+    function stopPhaseDemoMotion(){
+      phaseDemoRun++;cancelAnimationFrame(phaseDemoFrame);phaseDemoFrame=0;phaseDemoLastFrame=0;
+      phaseDemoAnimations.forEach(animation=>animation.cancel());phaseDemoAnimations=[];phaseDemoMotionState="";
+    }
+    function startPhaseDemoMotion(state,runId){
+      if(runId!==phaseDemoRun)return;
+      phaseDemoMotionState=state;
+      freezeParticles.forEach(p=>{
+        p.vx=state==="solid"?0:(Math.random()-.5)*(state==="gas"?90:44);
+        p.vy=state==="solid"?0:(Math.random()-.5)*(state==="gas"?90:38);
+        p.element.setAttribute("class",`freeze-demo-particle${state==="solid"?" is-vibrating":""}`);
+      });
+      phaseDemoLastFrame=0;phaseDemoFrame=requestAnimationFrame(now=>animatePhaseDemoMotion(now,runId));
+    }
+    function animatePhaseDemoMotion(now,runId){
+      if(runId!==phaseDemoRun||freezeDemo.hidden)return;
+      const dt=phaseDemoLastFrame?Math.min((now-phaseDemoLastFrame)/1000,.04):0;phaseDemoLastFrame=now;
+      if(phaseDemoMotionState!=="solid"){
+        const liquid=phaseDemoMotionState==="liquid",moving=freezeParticles;
+        for(const p of moving){
+          p.x+=p.vx*dt;p.y+=p.vy*dt;
+          const minY=liquid?69:38;
+          if(p.x<17){p.x=17;p.vx=Math.abs(p.vx);}if(p.x>343){p.x=343;p.vx=-Math.abs(p.vx);}
+          if(p.y<minY){p.y=minY;p.vy=Math.abs(p.vy);}if(p.y>117){p.y=117;p.vy=-Math.abs(p.vy);}
+        }
+        for(let i=0;i<moving.length;i++)for(let j=i+1;j<moving.length;j++){
+          const a=moving[i],b=moving[j],dx=b.x-a.x,dy=b.y-a.y,distance=Math.hypot(dx,dy),minimum=9;
+          if(distance>=minimum)continue;
+          const nx=distance?dx/distance:1,ny=distance?dy/distance:0,overlap=minimum-(distance||0);
+          a.x-=nx*overlap/2;a.y-=ny*overlap/2;b.x+=nx*overlap/2;b.y+=ny*overlap/2;
+          const relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+          if(relative<0){a.vx+=relative*nx;a.vy+=relative*ny;b.vx-=relative*nx;b.vy-=relative*ny;}
+        }
+        moving.forEach(p=>{p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
+      }
+      phaseDemoFrame=requestAnimationFrame(next=>animatePhaseDemoMotion(next,runId));
+    }
+    function playPhaseTransition(key){
+      stopPhaseDemoMotion();const runId=phaseDemoRun,process=phaseDemoMotion[key],starts=phaseDemoTargets(process.from),ends=phaseDemoTargets(process.to);
+      activePhaseProcess=key;phaseDemoHeading.textContent=process.heading;phaseDemoSource.textContent=process.source;
+      const releasesEnergy=phaseProcesses[key].energy.startsWith("放熱");phaseDemoArrows.setAttribute("transform",releasesEnergy?"translate(0 50) scale(1 -1)":"");phaseDemoArrows.setAttribute("stroke",releasesEnergy?"#43839a":"#bd634b");
+      document.getElementById("freeze-demo-status").textContent=process.status;
+      phaseDemoCaption.textContent="圓點代表水的粒子；動畫呈現排列與運動改變，並非實際大小比例。";
+      const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches,scale=freezeDemo.querySelector("svg").getBoundingClientRect().width/360;
+      freezeParticles.forEach((p,i)=>{
+        p.element.setAttribute("class","freeze-demo-particle");p.element.style.transform="none";
+        p.x=starts[i].x+(Math.random()-.5)*(process.from==="gas"?12:3);p.y=starts[i].y+(Math.random()-.5)*(process.from==="gas"?12:3);
+        p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
+      });
+      let pending=freezeParticles.length;
+      const finishOne=(p,i)=>{
+        if(runId!==phaseDemoRun)return;
+        p.x=ends[i].x;p.y=ends[i].y;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
+        if(--pending===0){
+          const doneText={melt:"融化完成：粒子仍靠近，持續流動",vaporization:"汽化完成：水蒸氣粒子在容器中快速移動",condensation:"凝結完成：液態粒子聚集在容器底部並流動",sublimation:"昇華完成：粒子分散移動，未經過液態",deposition:"凝華完成：粒子排列成固態並微微振動"};
+          document.getElementById("freeze-demo-status").textContent=doneText[key];startPhaseDemoMotion(process.to,runId);
+        }
+      };
+      const ordered=[...freezeParticles.keys()];
+      if(key==="vaporization"||key==="sublimation")ordered.sort((a,b)=>starts[a].y-starts[b].y);
+      if(key==="deposition")ordered.sort((a,b)=>Math.floor(a/8)*7+Math.abs(a%8-3.5)-(Math.floor(b/8)*7+Math.abs(b%8-3.5)));
+      ordered.forEach((particleIndex,orderIndex)=>{
+        const p=freezeParticles[particleIndex],end=ends[particleIndex],delay=reduceMotion?0:orderIndex*34;
+        if(reduceMotion){finishOne(p,particleIndex);return;}
+        const animation=p.element.animate([{transform:"translate(0px,0px)"},{transform:`translate(${(end.x-p.x)*scale}px,${(end.y-p.y)*scale}px)`}],{duration:1050,delay,easing:"ease-in-out",fill:"forwards"});
+        phaseDemoAnimations.push(animation);animation.onfinish=()=>{animation.cancel();finishOne(p,particleIndex);};
+      });
+    }
+    document.getElementById("freeze-demo-replay").addEventListener("click",()=>activePhaseProcess==="freeze"?playFreezeDemo():playPhaseTransition(activePhaseProcess));
     function resetPhaseSteps(){phaseSteps.replaceChildren();phaseSteps.hidden=true;}
     function selectPhaseState(key){
       const state=phaseStates[key];
-      stopFreezeDemo();
+      stopPhaseDemoMotion();stopFreezeDemo();
       freezeDemo.hidden=true;
       document.querySelectorAll("[data-phase-state]").forEach(item=>item.setAttribute("aria-pressed",String(item.dataset.phaseState===key)));
       document.querySelectorAll("[data-phase-process]").forEach(item=>item.setAttribute("aria-pressed","false"));
@@ -1414,8 +1497,8 @@
     }
     function selectPhaseProcess(key){
       const process=phaseProcesses[key];
-      if(key!=="freeze")stopFreezeDemo();
-      freezeDemo.hidden=key!=="freeze";
+      stopPhaseDemoMotion();stopFreezeDemo();
+      freezeDemo.hidden=false;
       document.querySelectorAll("[data-phase-state]").forEach(item=>item.setAttribute("aria-pressed","false"));
       document.querySelectorAll("[data-phase-process]").forEach(item=>item.setAttribute("aria-pressed",String(item.dataset.phaseProcess===key)));
       document.querySelectorAll("[data-phase-path]").forEach(path=>{path.classList.remove("is-related");path.classList.toggle("is-active",path.dataset.phasePath===key);});
@@ -1425,7 +1508,7 @@
       resetPhaseSteps();
       process.steps.forEach((step,index)=>{const item=document.createElement("span");item.textContent=step;phaseSteps.append(item);if(index===1){const arrow=document.createElement("b");arrow.setAttribute("aria-hidden","true");arrow.textContent="→";phaseSteps.append(arrow);}});
       phaseSteps.hidden=false;
-      if(key==="freeze")playFreezeDemo();
+      if(key==="freeze")playFreezeDemo();else playPhaseTransition(key);
     }
     document.querySelectorAll("[data-phase-state]").forEach(button=>button.addEventListener("click",()=>selectPhaseState(button.dataset.phaseState)));
     document.addEventListener("click",event=>{const trigger=event.target.closest("[data-phase-process]");if(trigger)selectPhaseProcess(trigger.dataset.phaseProcess);});
