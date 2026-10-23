@@ -340,7 +340,6 @@
     .freeze-demo-scene { display:block; width:100%; height:auto; border-radius:9px; background:#f4f8f5; }
     .freeze-demo-particle { fill:#287ba0; stroke:#fff; stroke-width:1; }
     .freeze-demo-particle.is-melted { fill:#39a9c4; }
-    .freeze-demo-particle.is-nucleus { fill:#1e6d8b; stroke:#fff7ca; stroke-width:2; }
     .freeze-demo-particle.is-vibrating { animation:freeze-particle-vibration .14s ease-in-out infinite alternate; transform-box:fill-box; transform-origin:center; }
     @keyframes freeze-particle-vibration { from { transform:translate(-.35px,.25px); } to { transform:translate(.35px,-.25px); } }
     .freeze-demo-caption { margin:6px 0 0; color:#61736a; font-size:.73rem; }
@@ -1397,8 +1396,8 @@
         if(runId!==freezeRunId||index>=freezeTargets.length)return;
         const target=freezeTargets[index],available=freezeParticles.filter(p=>!p.frozen&&!p.isFreezing);
         const particle=available.reduce((best,p)=>Math.hypot(p.x-target.endX,p.y-target.endY)<Math.hypot(best.x-target.endX,best.y-target.endY)?p:best,available[0]);
-        if(!particle)return;particle.isFreezing=true;if(index<3)particle.element.setAttribute("class","freeze-demo-particle is-nucleus");
-        const finish=()=>{if(runId!==freezeRunId)return;particle.x=target.endX;particle.y=target.endY;particle.vx=0;particle.vy=0;particle.frozen=true;particle.isFreezing=false;particle.element.setAttribute("cx",String(target.endX));particle.element.setAttribute("cy",String(target.endY));particle.element.setAttribute("class",`freeze-demo-particle${index<3?" is-nucleus":""} is-vibrating`);freezeDone++;updateFreezeProgress();};
+        if(!particle)return;particle.isFreezing=true;particle.element.setAttribute("class","freeze-demo-particle");
+        const finish=()=>{if(runId!==freezeRunId)return;particle.x=target.endX;particle.y=target.endY;particle.vx=0;particle.vy=0;particle.frozen=true;particle.isFreezing=false;particle.element.setAttribute("cx",String(target.endX));particle.element.setAttribute("cy",String(target.endY));particle.element.setAttribute("class","freeze-demo-particle is-vibrating");freezeDone++;updateFreezeProgress();};
         if(reduceMotion){finish();}
         else{
           const animation=particle.element.animate([{transform:"translate(0px,0px)"},{transform:`translate(${(target.endX-particle.x)*scale}px,${(target.endY-particle.y)*scale}px)`}],{duration:900,easing:"ease-in-out",fill:"forwards"});
