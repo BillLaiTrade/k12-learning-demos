@@ -28,14 +28,14 @@ export function mountDisplacementExperiment() {
     marks.forEach(mark => mark.classList.toggle('active', Number(mark.dataset.volume) === (immersed ? FINAL_WATER_ML : INITIAL_WATER_ML)));
     const finalReading = Math.round(FINAL_WATER_ML * 100) / 100;
     cylinder.setAttribute('aria-label', '量筒，目前水量 ' + (immersed ? `約 ${Math.round(finalReading)}（精算 ${finalReading}）` : String(INITIAL_WATER_ML)) + ' 毫升');
-    rock.setAttribute('aria-label', immersed ? '同一塊石頭已完全浸入量筒；可拖曳取出' : '同一塊石頭；可拖曳到量筒口正上方放入，或按 Enter 放入');
+    rock.setAttribute('aria-label', immersed ? '同一塊隕石已完全浸入量筒；可拖曳取出' : '同一塊隕石；可拖曳到量筒口正上方放入，或按 Enter 放入');
     placeButton.disabled = immersed || animating;
     resetButton.disabled = !immersed || animating;
     status.dataset.state = immersed ? 'complete' : 'ready';
     if (immersed) {
-      status.textContent = '石頭已完全浸入。拖曳石頭移動，放開時它會依正下方的位置落回量筒或落在筒外。';
+      status.textContent = '隕石已完全浸入。拖曳隕石移動，放開時它會依正下方的位置落回量筒或落在筒外。';
     } else {
-      status.textContent = '把石頭拖到量筒口正上方並放開，讓它落入水中；也可使用下方按鈕。';
+      status.textContent = '把隕石拖到量筒口正上方並放開，讓它落入水中；也可使用下方按鈕。';
     }
   }
 
@@ -102,8 +102,8 @@ export function mountDisplacementExperiment() {
     const apexTop = Math.max(0, cylinderTop - startRect.height - 12);
 
     status.textContent = dropFromAbove
-      ? '石頭從量筒口落下，沉到筒底；觀察水位上升。'
-      : '石頭沿著弧線落入量筒，再沉到水底；觀察水位上升。';
+      ? '隕石從量筒口落下，沉到筒底；觀察水位上升。'
+      : '隕石沿著弧線落入量筒，再沉到水底；觀察水位上升。';
     const frames = dropFromAbove
       ? [
           { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)', easing: 'cubic-bezier(.45,0,.95,.5)' },
@@ -236,7 +236,7 @@ export function mountDisplacementExperiment() {
     rock.style.bottom = 'auto';
     rock.style.transform = 'none';
     rock.classList.add('is-throwing');
-    status.textContent = '石頭落在量筒外；水位已重設。';
+    status.textContent = '隕石落在量筒外；水位已重設。';
 
     const animation = rock.animate([
       { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)' },
@@ -253,7 +253,7 @@ export function mountDisplacementExperiment() {
     rock.style.transform = 'none';
     animating = false;
     setReading(false);
-    status.textContent = '石頭落在量筒外；水位已重設。可再拖回量筒上方放入。';
+    status.textContent = '隕石落在量筒外；水位已重設。可再拖回量筒上方放入。';
   }
 
   async function removeRockFromCylinder() {
@@ -296,7 +296,7 @@ export function mountDisplacementExperiment() {
     const insideTop = cylinderTop + 12;
     const liftedTop = Math.min(startTop, insideTop);
 
-    status.textContent = '石頭先從量筒口提起，再移到量筒外；水位隨後重設。';
+    status.textContent = '隕石先從量筒口提起，再移到量筒外；水位隨後重設。';
     const animation = rock.animate([
       { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
       { offset: 0.28, left: startLeft + 'px', top: liftedTop + 'px', transform: 'rotate(-4deg)', easing: 'cubic-bezier(.3,.7,.5,1)' },

@@ -81,7 +81,7 @@ export function mountComparisonExperiment() {
     animating = false;
     setState(isImmersed, isImmersed
       ? '樣本已完全浸入；觀察量筒中的水位變化，再與右側的量測結果比較。往上提過筒口可取出。'
-      : `${chosenSpecimen === 'stone' ? '石頭' : '純金塊'}已取出；可再次放入觀察水位變化。`);
+      : `${chosenSpecimen === 'stone' ? '隕石' : '純金塊'}已取出；可再次放入觀察水位變化。`);
     sample.getBoundingClientRect();
     requestAnimationFrame(() => sample.classList.remove('is-animating'));
   }
@@ -226,9 +226,9 @@ export function mountComparisonExperiment() {
     scene.dataset.specimen = kind;
     rock.hidden = kind !== 'stone';
     gold.style.display = kind === 'gold' ? 'block' : 'none';
-    sample.setAttribute('aria-label', kind === 'stone' ? '石頭；可拖曳放入或移出量筒' : '純金塊；可拖曳放入或移出量筒');
-    massLabel.textContent = kind === 'stone' ? '石頭樣本質量' : '純金樣本質量';
-    placeButton.textContent = kind === 'stone' ? '把石頭放入水中' : '把純金塊放入水中';
+    sample.setAttribute('aria-label', kind === 'stone' ? '隕石；可拖曳放入或移出量筒' : '純金塊；可拖曳放入或移出量筒');
+    massLabel.textContent = kind === 'stone' ? '隕石樣本質量' : '純金樣本質量';
+    placeButton.textContent = kind === 'stone' ? '把隕石放入水中' : '把純金塊放入水中';
     clearPosition();
     sample.classList.remove('in-water');
     cylinder.classList.remove('drop-ready');
