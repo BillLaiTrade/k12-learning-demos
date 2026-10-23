@@ -910,7 +910,6 @@
         rulerGuideGroup.setAttribute("transform", rulerOffset);
         measurementModeButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
         const measuring = mode === "ruler";
-        document.querySelector("#measurement-caption").textContent = measuring ? "同一支鉛筆　｜　對照尺上的刻度" : "同一支鉛筆";
         document.querySelector("#measurement-result-label").textContent = measuring ? "測量後" : "先觀察";
         document.querySelector("#measurement-result-value").textContent = measuring ? "18" : "看起來很長";
         document.querySelector("#measurement-result-note").textContent = measuring ? "有了共同的表示方式，別人就能看懂並拿來比較。" : "每個人的感覺可能不一樣，還不能公平比較。";
