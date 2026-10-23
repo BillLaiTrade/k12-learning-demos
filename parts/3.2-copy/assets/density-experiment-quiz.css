@@ -193,7 +193,7 @@
 .overflow-catch-tray:before{content:"接水盤（mL）";z-index:5;padding:0 3px;border-radius:3px;background:#f2f6f1}
 .overflow-catch-scale{position:absolute;left:auto;right:8px;top:7px;bottom:7px;width:43px;display:block;color:#526358;font-size:.6rem;font-variant-numeric:tabular-nums;pointer-events:none}
 .overflow-catch-scale .catch-tick{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:4px;line-height:1}
-.overflow-catch-scale .catch-tick-100{top:0;transform:translateY(-6px)}
+.overflow-catch-scale .catch-tick-100{top:0}
 .overflow-catch-scale .catch-tick-50{top:50%;transform:translateY(-50%)}
 .overflow-catch-scale .catch-tick-0{bottom:0}
 .overflow-catch-scale i{display:block;width:8px;height:0;flex:0 0 8px;border:0;border-top:1px solid #789087}
@@ -254,9 +254,9 @@
 @media(max-width:420px){.overflow-level-detail{top:7px;right:5px;gap:4px;padding:4px 5px}.overflow-level-gauge{flex-basis:22px;width:22px;height:25px}.overflow-level-gauge .level-after{top:18px}}
 
 /* The zoom inset stays attached to the catch-tray scale while it is poured. */
-.catch-level-lens{position:absolute;z-index:8;right:-94px;bottom:-7px;width:88px;height:48px;box-sizing:border-box;display:flex;align-items:center;gap:5px;padding:4px 7px;border:1.5px solid #77958a;border-radius:25px;background:#f8faf6f2;box-shadow:0 2px 6px #263a3026;pointer-events:none}
+.catch-level-lens{position:absolute;z-index:8;right:-94px;bottom:-7px;width:88px;height:48px;box-sizing:border-box;display:flex;align-items:center;gap:5px;padding:4px 7px;border:1.5px solid #77958a;border-radius:25px;background:#f8faf6f2;box-shadow:0 2px 6px #263a3026;pointer-events:none;transition:top 1s ease}
 .overflow-tool.is-returning-water .catch-level-lens{transform:rotate(-14deg)}
-.catch-level-lens:before{content:"";position:absolute;right:100%;top:50%;width:17px;border-top:2px solid #398fa0}
+.catch-level-lens:before{content:"";position:absolute;right:100%;top:var(--lens-line-y,50%);width:17px;border-top:2px solid #398fa0}
 .catch-level-lens-ruler{position:relative;flex:0 0 27px;width:27px;height:34px;border-left:2px solid #78958a;color:#53685d;font-size:7px;font-variant-numeric:tabular-nums;line-height:1}
 .catch-level-lens-ruler span{position:absolute;left:2px}
 .catch-level-lens-ruler span:first-child{top:1px}

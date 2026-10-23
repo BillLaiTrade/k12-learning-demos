@@ -68,18 +68,34 @@ export function mountDensityExperimentQuiz() {
     const tray = water.parentElement;
     tray.classList.toggle('has-collected-water', level > 0);
     const scale = tray.querySelector('.overflow-catch-scale');
-    const scaleBounds = scale.getBoundingClientRect();
-    // Keep the collected water anchored to the inside floor of the tray.
-    water.style.bottom = '3px';
-    const waterHeight = scaleBounds.height * level / 100;
+    const trayBounds = tray.getBoundingClientRect();
+    const zeroMark = scale.querySelector('.catch-tick-0 i').getBoundingClientRect();
+    const hundredMark = scale.querySelector('.catch-tick-100 i').getBoundingClientRect();
+    const zeroY = zeroMark.top + zeroMark.height / 2;
+    const hundredY = hundredMark.top + hundredMark.height / 2;
+    const trayStyle = getComputedStyle(tray);
+    const waterBottom = trayBounds.bottom - parseFloat(trayStyle.borderBottomWidth) - zeroY;
+    const waterHeight = (zeroY - hundredY) * level / 100;
+    // Match the real water surface to the 0–100 mL marks on the tray.
+    water.style.bottom = `${waterBottom}px`;
     water.style.height = `${waterHeight}px`;
     quiz.querySelector('[data-water-reading]').style.bottom = `${Math.max(3, waterHeight - 8)}px`;
     const lowerMark = Math.min(90, Math.floor(level / 10) * 10);
     const fraction = (level - lowerMark) / 10;
     catchLevelLens.querySelector('[data-lens-upper]').textContent = String(lowerMark + 10);
     catchLevelLens.querySelector('[data-lens-lower]').textContent = String(lowerMark);
-    catchLevelLens.querySelector('[data-lens-line]').style.top = `${6 + (1 - fraction) * 22}px`;
+    const lensLine = catchLevelLens.querySelector('[data-lens-line]');
+    lensLine.style.top = `${6 + (1 - fraction) * 22}px`;
     catchLevelLens.querySelector('[data-lens-value]').textContent = level % 1 === 0 ? String(level) : level.toFixed(1);
+    if (level > 0) {
+      const lensBounds = catchLevelLens.getBoundingClientRect();
+      const lensLineBounds = lensLine.getBoundingClientRect();
+      const lineOffset = lensLineBounds.top - lensBounds.top;
+      const waterlineY = zeroY - waterHeight;
+      catchLevelLens.style.bottom = 'auto';
+      catchLevelLens.style.top = `${waterlineY - trayBounds.top - parseFloat(trayStyle.borderTopWidth) - lineOffset}px`;
+      catchLevelLens.style.setProperty('--lens-line-y', `${lineOffset - parseFloat(getComputedStyle(catchLevelLens).borderTopWidth)}px`);
+    }
   }
 
   function setWaterReading(value) {
