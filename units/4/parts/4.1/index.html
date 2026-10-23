@@ -1444,7 +1444,8 @@
       const elapsed=now-transition.startedAt-transition.hold,total=transition.hold+transition.spread+transition.duration,dt=transition.lastFrame?Math.min((now-transition.lastFrame)/1000,.04):0;transition.lastFrame=now;
       const meltLayerProgress=transition.key==="melt"?Array.from({length:6},(_,row)=>{const local=Math.max(0,Math.min(1,(elapsed-transition.delays[row*8])/transition.duration));return local*local*(3-2*local);}):null;
       freezeParticles.forEach((p,index)=>{
-        if(transition.key==="deposition"&&elapsed<0){
+        const local=Math.max(0,Math.min(1,(elapsed-transition.delays[index])/transition.duration));
+        if(transition.key==="deposition"&&(elapsed<0||local<=0)){
           p.x+=p.vx*dt;p.y+=p.vy*dt;
           if(p.x<17){p.x=17;p.vx=Math.abs(p.vx);}if(p.x>343){p.x=343;p.vx=-Math.abs(p.vx);}
           if(p.y<38){p.y=38;p.vy=Math.abs(p.vy);}if(p.y>116){p.y=116;p.vy=-Math.abs(p.vy);}
@@ -1456,7 +1457,6 @@
           if(p.y<87){p.y=87;p.vy=Math.abs(p.vy)*.65;}if(p.y>116){p.y=116;p.vy=-Math.abs(p.vy)*.38;}
           p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));return;
         }
-        const local=Math.max(0,Math.min(1,(elapsed-transition.delays[index])/transition.duration));
         let shiftedStartY=p.startY;
         if(transition.key==="melt"){
           const row=Math.floor(index/8),droppedRows=meltLayerProgress.slice(row+1).reduce((sum,value)=>sum+value,0);shiftedStartY+=droppedRows*12;
