@@ -65,6 +65,7 @@ export function mountComparisonExperiment() {
   }
 
   function setFinalPosition(left, top, isImmersed) {
+    cylinder.classList.remove('drop-ready');
     sample.classList.add('is-animating');
     if (isImmersed) {
       sample.style.left = left + 'px';
@@ -81,7 +82,7 @@ export function mountComparisonExperiment() {
     requestAnimationFrame(() => sample.classList.remove('is-animating'));
   }
 
-  async function animateSample(enter, alreadyClearedRim = false) {
+  async function animateSample(enter, alreadyClearedRim = false, dropFromAbove = false) {
     if (animating || enter === immersed) return;
     animating = true;
     setButtons();
@@ -110,8 +111,21 @@ export function mountComparisonExperiment() {
     let segments;
 
     if (enter) {
-      status.textContent = '樣本先越過量筒口，再落入水中；觀察水位上升。';
-      if (alreadyClearedRim) {
+      status.textContent = dropFromAbove
+        ? '樣本從量筒口正上方落入水中；觀察水位上升。'
+        : '樣本先越過量筒口，再落入水中；觀察水位上升。';
+      if (dropFromAbove) {
+        segments = [
+          { duration: 720, frames: [
+            { left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)', easing: 'cubic-bezier(.4,0,.95,.5)' },
+            { left: startLeft + 'px', top: entryTop + 'px', transform: 'rotate(4deg)' }
+          ] },
+          { duration: 520, frames: [
+            { left: startLeft + 'px', top: entryTop + 'px', transform: 'rotate(4deg)' },
+            { left: geometry.targetLeft + 'px', top: geometry.targetTop + 'px', transform: 'rotate(0deg)' }
+          ] }
+        ];
+      } else if (alreadyClearedRim) {
         segments = [
           { duration: 620, frames: [
             { left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)' },
@@ -206,7 +220,8 @@ export function mountComparisonExperiment() {
     placeButton.textContent = kind === 'stone' ? '把石頭放入水中' : '把純金塊放入水中';
     clearPosition();
     sample.classList.remove('in-water');
-    setState(false, '拖曳樣本進入量筒；量測後可再拖出。也可用下方按鈕操作。');
+    cylinder.classList.remove('drop-ready');
+    setState(false, '把樣本拖到量筒口正上方並放開；量測後可再拖出。也可用下方按鈕操作。');
   }
 
   function sampleCenterIsInCylinder() {
@@ -218,6 +233,15 @@ export function mountComparisonExperiment() {
       && centerX <= cylinderRect.right - 8
       && centerY >= cylinderRect.top + 12
       && centerY <= cylinderRect.bottom - 8;
+  }
+
+  function sampleIsAboveCylinderMouth() {
+    const sampleRect = sample.getBoundingClientRect();
+    const cylinderRect = cylinder.getBoundingClientRect();
+    const centerX = sampleRect.left + sampleRect.width / 2;
+    return centerX >= cylinderRect.left + 8
+      && centerX <= cylinderRect.right - 8
+      && sampleRect.bottom <= cylinderRect.top + 8;
   }
 
   specimenButtons.forEach(button => button.addEventListener('click', () => selectSpecimen(button.dataset.specimen)));
@@ -266,7 +290,7 @@ export function mountComparisonExperiment() {
       } else {
         drag.clearedRim = true;
       }
-    } else if (nextTop > geometry.clearTop) {
+    } else if (nextTop + sampleRect.height > geometry.top + 8) {
       nextLeft = Math.min(nextLeft, geometry.exitLeft);
     } else {
       drag.clearedRim = true;
@@ -275,6 +299,7 @@ export function mountComparisonExperiment() {
     sample.style.left = nextLeft + 'px';
     sample.style.top = nextTop + 'px';
     sample.style.transform = 'none';
+    cylinder.classList.toggle('drop-ready', !drag.wasImmersed && (sampleCenterIsInCylinder() || sampleIsAboveCylinderMouth()));
   });
 
   function finishDrag(event) {
@@ -290,7 +315,9 @@ export function mountComparisonExperiment() {
       return;
     }
 
+    const aboveMouth = sampleIsAboveCylinderMouth();
     const inside = sampleCenterIsInCylinder();
+    cylinder.classList.remove('drop-ready');
     if (result.wasImmersed) {
       if (result.clearedRim && !inside) {
         setFinalPosition(0, 0, false);
@@ -305,7 +332,8 @@ export function mountComparisonExperiment() {
       return;
     }
 
-    if (inside && result.clearedRim) animateSample(true, true);
+    if (aboveMouth) animateSample(true, true, true);
+    else if (inside && result.clearedRim) animateSample(true, true);
     else {
       sample.classList.remove('is-dragging', 'is-animating');
       clearPosition();
@@ -321,5 +349,5 @@ export function mountComparisonExperiment() {
     animateSample(!immersed);
   });
 
-  setState(false, '拖曳樣本進入量筒；量測後可再拖出。也可用下方按鈕操作。');
+  setState(false, '把樣本拖到量筒口正上方並放開；量測後可再拖出。也可用下方按鈕操作。');
 }

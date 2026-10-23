@@ -28,14 +28,14 @@ export function mountDisplacementExperiment() {
     marks.forEach(mark => mark.classList.toggle('active', Number(mark.dataset.volume) === (immersed ? 600 : INITIAL_WATER_ML)));
     const finalReading = Math.round(FINAL_WATER_ML * 100) / 100;
     cylinder.setAttribute('aria-label', '量筒，目前水量 ' + (immersed ? `約 ${Math.round(finalReading)}（精算 ${finalReading}）` : String(INITIAL_WATER_ML)) + ' 毫升');
-    rock.setAttribute('aria-label', immersed ? '同一塊石頭已完全浸入量筒；可拖曳取出' : '同一塊石頭；可拖曳到量筒內，或按 Enter 放入');
+    rock.setAttribute('aria-label', immersed ? '同一塊石頭已完全浸入量筒；可拖曳取出' : '同一塊石頭；可拖曳到量筒口正上方放入，或按 Enter 放入');
     placeButton.disabled = immersed || animating;
     resetButton.disabled = !immersed || animating;
     status.dataset.state = immersed ? 'complete' : 'ready';
     if (immersed) {
       status.textContent = '石頭已完全浸入。比較放入前後的水位；水位差就是石頭排開水的體積。可將石頭拖出重新測量。';
     } else {
-      status.textContent = '拖曳石頭進入量筒，讓它完全浸入水中；也可使用下方按鈕。';
+      status.textContent = '把石頭拖到量筒口正上方並放開，讓它落入水中；也可使用下方按鈕。';
     }
   }
 
@@ -46,7 +46,7 @@ export function mountDisplacementExperiment() {
     rock.style.transform = '';
   }
 
-  async function throwRockIntoCylinder() {
+  async function throwRockIntoCylinder({ dropFromAbove = false } = {}) {
     if (immersed || animating) return;
     drag = null;
     animating = true;
@@ -87,15 +87,25 @@ export function mountDisplacementExperiment() {
     const apexLeft = Math.max(startLeft, cylinderLeft - startRect.width - 12);
     const apexTop = Math.max(0, cylinderTop - startRect.height - 12);
 
-    status.textContent = '石頭沿著弧線落入量筒，再沉到水底；觀察水位上升。';
-    const animation = rock.animate([
-      { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
-      { offset: 0.42, left: apexLeft + 'px', top: apexTop + 'px', transform: 'rotate(6deg)', easing: 'cubic-bezier(.48,0,.8,.45)' },
-      { offset: 0.58, left: entryLeft + 'px', top: Math.min(entryTop, apexTop + 8) + 'px', transform: 'rotate(10deg)', easing: 'cubic-bezier(.1,.65,.5,1)' },
-      { offset: 0.74, left: entryLeft + 'px', top: entryTop + 'px', transform: 'rotate(14deg)', easing: 'cubic-bezier(.1,.65,.5,1)' },
-      { offset: 0.82, left: entryLeft + 2 + 'px', top: Math.max(0, entryTop - 8) + 'px', transform: 'rotate(8deg)', easing: 'cubic-bezier(.3,0,.8,.4)' },
-      { offset: 1, left: targetLeft + 'px', top: targetTop + 'px', transform: 'rotate(0deg)' }
-    ], { duration: 980, fill: 'forwards' });
+    status.textContent = dropFromAbove
+      ? '石頭從量筒口落下，沉到筒底；觀察水位上升。'
+      : '石頭沿著弧線落入量筒，再沉到水底；觀察水位上升。';
+    const frames = dropFromAbove
+      ? [
+          { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)', easing: 'cubic-bezier(.45,0,.95,.5)' },
+          { offset: 0.7, left: startLeft + 'px', top: Math.max(startTop, entryTop) + 'px', transform: 'rotate(3deg)', easing: 'cubic-bezier(.2,.7,.35,1)' },
+          { offset: 0.82, left: startLeft + 'px', top: Math.max(startTop, entryTop) - 7 + 'px', transform: 'rotate(-2deg)', easing: 'cubic-bezier(.3,0,.8,.4)' },
+          { offset: 1, left: targetLeft + 'px', top: targetTop + 'px', transform: 'rotate(0deg)' }
+        ]
+      : [
+          { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
+          { offset: 0.42, left: apexLeft + 'px', top: apexTop + 'px', transform: 'rotate(6deg)', easing: 'cubic-bezier(.48,0,.8,.45)' },
+          { offset: 0.58, left: entryLeft + 'px', top: Math.min(entryTop, apexTop + 8) + 'px', transform: 'rotate(10deg)', easing: 'cubic-bezier(.1,.65,.5,1)' },
+          { offset: 0.74, left: entryLeft + 'px', top: entryTop + 'px', transform: 'rotate(14deg)', easing: 'cubic-bezier(.1,.65,.5,1)' },
+          { offset: 0.82, left: entryLeft + 2 + 'px', top: Math.max(0, entryTop - 8) + 'px', transform: 'rotate(8deg)', easing: 'cubic-bezier(.3,0,.8,.4)' },
+          { offset: 1, left: targetLeft + 'px', top: targetTop + 'px', transform: 'rotate(0deg)' }
+        ];
+    const animation = rock.animate(frames, { duration: dropFromAbove ? 760 : 980, fill: 'forwards' });
 
     try {
       await animation.finished;
@@ -206,6 +216,15 @@ export function mountDisplacementExperiment() {
       && centerY <= cylinderRect.bottom - 12;
   }
 
+  function rockIsAboveCylinderMouth() {
+    const rockRect = rock.getBoundingClientRect();
+    const cylinderRect = cylinder.getBoundingClientRect();
+    const centerX = rockRect.left + rockRect.width / 2;
+    return centerX >= cylinderRect.left + 12
+      && centerX <= cylinderRect.right - 12
+      && rockRect.bottom <= cylinderRect.top + 8;
+  }
+
   rock.addEventListener('pointerdown', event => {
     if (event.pointerType === 'mouse' && event.button !== 0) return;
     if (animating) return;
@@ -259,13 +278,14 @@ export function mountDisplacementExperiment() {
     }
     rock.style.left = nextLeft + 'px';
     rock.style.top = nextTop + 'px';
-    const overTarget = centerIsInCylinder();
+    const overTarget = centerIsInCylinder() || rockIsAboveCylinderMouth();
     cylinder.classList.toggle('drop-ready', overTarget);
   });
 
   function finishDrag(event) {
     if (!drag || event.pointerId !== drag.pointerId) return;
-    const validDrop = centerIsInCylinder();
+    const aboveMouth = rockIsAboveCylinderMouth();
+    const validDrop = centerIsInCylinder() || aboveMouth;
     const wasImmersed = drag.wasImmersed;
     const clearedRim = drag.clearedRim;
     drag = null;
@@ -275,14 +295,14 @@ export function mountDisplacementExperiment() {
       return;
     }
     if (validDrop) {
-      throwRockIntoCylinder();
+      throwRockIntoCylinder({ dropFromAbove: aboveMouth });
       return;
     }
     rock.classList.remove('is-dragging');
     cylinder.classList.remove('drop-ready');
     clearPosition();
     status.dataset.state = 'ready';
-    status.textContent = '石頭要放在量筒內並完全浸入水中；再觀察水位變化。';
+    status.textContent = '把石頭拖到量筒口正上方再放開，讓它落入水中；再觀察水位變化。';
   }
 
   rock.addEventListener('pointerup', finishDrag);

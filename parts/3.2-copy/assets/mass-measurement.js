@@ -366,6 +366,7 @@ export function mountMassMeasurement() {
   let returningDigital = false;
   let returningBalance = false;
   let activeStoneDrag = null;
+  const fallingItems = [];
   const digitalTargetPosition = digital.sourcePosition.clone();
   const balanceTargetPosition = balance.sourcePosition.clone();
   const raycaster = new THREE.Raycaster();
@@ -429,7 +430,7 @@ export function mountMassMeasurement() {
           : '砝碼這一側較低，砝碼已過多；可以移除一些。'
         : !balancePlaced && total > 0
           ? '右側秤盤已有砝碼；可拖回畫面中的架上移除，或放上石頭比較。'
-          : placingBalance ? '石頭正移至左側秤盤…' : '拖曳石頭到左側秤盤，或按下按鈕。';
+          : placingBalance ? '石頭正移至左側秤盤…' : '把石頭拖到左側秤盤正上方放開，或按下按鈕。';
     status.dataset.balanced = String(balanced);
     showReading();
   }
@@ -524,6 +525,16 @@ export function mountMassMeasurement() {
     balancePlaceButton.disabled = true;
     balancePlaceButton.textContent = '正在放上左盤…';
     status.textContent = '石頭正移至左側秤盤…';
+  }
+  function settleBalanceStone() {
+    placingBalance = false;
+    balancePlaced = true;
+    balance.stone.removeFromParent();
+    balance.leftPan.add(balance.stone);
+    balance.stone.position.set(0, balance.stoneRestY, 0);
+    balance.panShadow.visible = true;
+    balancePlaceButton.textContent = '石頭已放上左盤';
+    drawWeights();
   }
   balancePlaceButton.addEventListener('click', placeStoneOnBalance);
 
@@ -635,6 +646,51 @@ export function mountMassMeasurement() {
   function rightPanDropTarget(event) {
     return panDropTarget(event, balance.rightPan);
   }
+  function panDropTargetOrAbove(event, pan) {
+    camera.updateMatrixWorld();
+    pan.updateWorldMatrix(true, false);
+    const rect = canvas.getBoundingClientRect();
+    const bounds = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
+    for (const level of [-0.64, 0.05, 0.42]) for (let i = 0; i < 24; i++) {
+      const angle = Math.PI * 2 * i / 24;
+      const point = pan.localToWorld(new THREE.Vector3(Math.cos(angle) * 0.9, level, Math.sin(angle) * 0.9));
+      point.project(camera);
+      const px = rect.left + (point.x + 1) * rect.width / 2;
+      const py = rect.top + (1 - point.y) * rect.height / 2;
+      bounds.left = Math.min(bounds.left, px); bounds.right = Math.max(bounds.right, px);
+      bounds.top = Math.min(bounds.top, py); bounds.bottom = Math.max(bounds.bottom, py);
+    }
+    return event.clientX >= bounds.left - 12 && event.clientX <= bounds.right + 12
+      && event.clientY >= bounds.top - Math.max(110, rect.height * 0.34)
+      && event.clientY <= bounds.bottom + 10;
+  }
+  function fallToPosition(object, targetPosition, onLand) {
+    fallingItems.push({
+      object,
+      startPosition: object.position.clone(),
+      targetPosition: targetPosition.clone(),
+      startedAt: performance.now(),
+      duration: 620,
+      onLand
+    });
+  }
+  function updateFallingItems(now) {
+    for (let index = fallingItems.length - 1; index >= 0; index -= 1) {
+      const item = fallingItems[index];
+      const progress = clamp((now - item.startedAt) / item.duration, 0, 1);
+      const fall = progress * progress;
+      item.object.position.set(
+        THREE.MathUtils.lerp(item.startPosition.x, item.targetPosition.x, progress),
+        THREE.MathUtils.lerp(item.startPosition.y, item.targetPosition.y, fall),
+        THREE.MathUtils.lerp(item.startPosition.z, item.targetPosition.z, progress)
+      );
+      if (progress >= 1) {
+        fallingItems.splice(index, 1);
+        item.object.position.copy(item.targetPosition);
+        item.onLand();
+      }
+    }
+  }
   function digitalDropTarget(event) {
     camera.updateMatrixWorld();
     digital.base.updateWorldMatrix(true, false);
@@ -666,7 +722,7 @@ export function mountMassMeasurement() {
   }
   canvas.addEventListener('pointerdown', event => {
     if (event.button !== undefined && event.button !== 0) return;
-    if (placingBalance || placingDigital || returningBalance || returningDigital) return;
+    if (placingBalance || placingDigital || returningBalance || returningDigital || fallingItems.length) return;
     updatePointer(event);
     let object, dragKind, weightIndex = -1, sourceIndex = -1;
     if (mode === 'balance') {
@@ -733,7 +789,7 @@ export function mountMassMeasurement() {
     activeStoneDrag = { pointerId: event.pointerId, mode, object, kind: dragKind, weightIndex, sourceIndex };
     canvas.setPointerCapture(event.pointerId);
     canvas.style.cursor = 'grabbing';
-    status.textContent = dragKind === 'weight' || dragKind === 'source-weight' ? '拖曳砝碼到右側秤盤；拖離秤盤即可取下。' : mode === 'balance' ? '將石頭拖到左側秤盤，或拖離秤盤取下。' : '將石頭拖到電子秤秤盤，或拖離秤盤取下。';
+    status.textContent = dragKind === 'weight' || dragKind === 'source-weight' ? '把砝碼拖到右側秤盤正上方並放開，或拖離秤盤取下。' : mode === 'balance' ? '把石頭拖到左側秤盤正上方並放開，或拖離秤盤取下。' : '將石頭拖到電子秤秤盤，或拖離秤盤取下。';
     event.preventDefault();
   });
   canvas.addEventListener('pointermove', event => {
@@ -750,14 +806,30 @@ export function mountMassMeasurement() {
     canvas.style.cursor = 'grab';
     if (dragged.kind === 'source-weight') {
       const source = weightSource.weights[dragged.sourceIndex];
-      if (rightPanDropTarget(event) && weights.reduce((sum, value) => sum + value, 0) + source.value <= MASS_G) {
-        addWeight(source.value);
+      if (panDropTargetOrAbove(event, balance.rightPan) && weights.reduce((sum, value) => sum + value, 0) + source.value <= MASS_G) {
+        if (rightPanDropTarget(event)) {
+          addWeight(source.value);
+          dragged.object.removeFromParent();
+        } else {
+          status.textContent = '砝碼落到右側秤盤…';
+          fallToPosition(dragged.object, balance.rightPan.localToWorld(new THREE.Vector3(0, -0.64, 0)), () => {
+            addWeight(source.value);
+            dragged.object.removeFromParent();
+          });
+        }
       } else {
         status.textContent = '可將砝碼拖到右側秤盤，架上的砝碼會留在原位。';
+        dragged.object.removeFromParent();
       }
-      dragged.object.removeFromParent();
     } else if (dragged.kind === 'weight') {
-      if (rightPanDropTarget(event)) {
+      if (panDropTargetOrAbove(event, balance.rightPan)) {
+        if (!rightPanDropTarget(event)) {
+          status.textContent = '砝碼落回右側秤盤…';
+          const col = dragged.weightIndex % 3, row = Math.floor(dragged.weightIndex / 3);
+          const target = balance.rightPan.localToWorld(new THREE.Vector3((col - 1) * 0.35, -0.64 + row * 0.02, (row - 0.5) * 0.32));
+          fallToPosition(dragged.object, target, drawWeights);
+          return;
+        }
         drawWeights();
         status.textContent = '砝碼已放上右側秤盤；也可以拖出秤盤移除。';
       } else {
@@ -767,7 +839,14 @@ export function mountMassMeasurement() {
         drawWeights();
       }
     } else if (dragged.mode === 'balance') {
-      if (balanceDropTarget(event)) placeStoneOnBalance();
+      if (panDropTargetOrAbove(event, balance.leftPan)) {
+        if (balanceDropTarget(event)) placeStoneOnBalance();
+        else {
+          status.textContent = '石頭從上方落到左側秤盤…';
+          const target = balance.leftPan.localToWorld(new THREE.Vector3(0, balance.stoneRestY, 0));
+          fallToPosition(balance.stone, target, settleBalanceStone);
+        }
+      }
       else {
         returningBalance = true;
         status.textContent = '石頭已取下，移回秤盤旁。';
@@ -797,6 +876,7 @@ export function mountMassMeasurement() {
   let raf = 0;
   function render() {
     raf = requestAnimationFrame(render);
+    updateFallingItems(performance.now());
     currentTilt += (targetTilt - currentTilt) * 0.12;
     balance.pivot.rotation.z = currentTilt;
     balance.leftPan.rotation.z = -currentTilt;
