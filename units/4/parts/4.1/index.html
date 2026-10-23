@@ -1230,8 +1230,8 @@
         path.setAttribute("d",d);
         document.getElementById(`phase-path-${key}`).setAttribute("d",d);
         document.querySelector(`.phase-arrow-hit[data-phase-process="${key}"]`).setAttribute("d",d);
-        const midpoint=path.getPointAtLength(path.getTotalLength()/2),screenMidpoint=new DOMPoint(midpoint.x,midpoint.y).matrixTransform(phaseSvg.getScreenCTM()),centroid={x:(vertices.solid.x+vertices.liquid.x+vertices.gas.x)/3,y:(vertices.solid.y+vertices.liquid.y+vertices.gas.y)/3},dx=centroid.x-screenMidpoint.x,dy=centroid.y-screenMidpoint.y,distance=Math.hypot(dx,dy)||1,sideDirection=phaseProcesses[key].energy.startsWith("吸熱")?1:-1,label=document.getElementById(`phase-${key}`);
-        label.style.left=`${screenMidpoint.x-triangleRect.left+dx/distance*22*sideDirection}px`;label.style.top=`${screenMidpoint.y-triangleRect.top+dy/distance*22*sideDirection}px`;
+        const labelEdges={melt:["solid","liquid",.3],freeze:["solid","liquid",.68],sublimation:["solid","gas",.68],deposition:["solid","gas",.3],vaporization:["liquid","gas",.42],condensation:["liquid","gas",.58]},[from,to,fraction]=labelEdges[key],a=vertices[from],b=vertices[to],centroid={x:(vertices.solid.x+vertices.liquid.x+vertices.gas.x)/3,y:(vertices.solid.y+vertices.liquid.y+vertices.gas.y)/3},edgePoint={x:a.x+(b.x-a.x)*fraction,y:a.y+(b.y-a.y)*fraction},dx=centroid.x-(a.x+b.x)/2,dy=centroid.y-(a.y+b.y)/2,distance=Math.hypot(dx,dy)||1,sideDirection=phaseProcesses[key].energy.startsWith("吸熱")?1:-1,labelOffset=40,label=document.getElementById(`phase-${key}`);
+        label.style.left=`${edgePoint.x-triangleRect.left+dx/distance*labelOffset*sideDirection}px`;label.style.top=`${edgePoint.y-triangleRect.top+dy/distance*labelOffset*sideDirection}px`;
       });
     }
     updatePhaseArrowGeometry();
