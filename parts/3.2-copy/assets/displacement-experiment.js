@@ -33,7 +33,7 @@ export function mountDisplacementExperiment() {
     resetButton.disabled = !immersed || animating;
     status.dataset.state = immersed ? 'complete' : 'ready';
     if (immersed) {
-      status.textContent = '石頭已完全浸入。比較放入前後的水位；水位差就是石頭排開水的體積。可將石頭拖出重新測量。';
+      status.textContent = '石頭已完全浸入。比較水位差；要取出時，先向上提過量筒口，再拖到筒外放開，或按「取出石頭，重設量筒」。';
     } else {
       status.textContent = '把石頭拖到量筒口正上方並放開，讓它落入水中；也可使用下方按鈕。';
     }
@@ -274,10 +274,9 @@ export function mountDisplacementExperiment() {
       const cylinderLeft = cylinderRect.left - sceneRect.left;
       const cylinderRight = cylinderRect.right - sceneRect.left;
       const cylinderTop = cylinderRect.top - sceneRect.top;
-      // Let the user start moving the stone sideways once its center clears
-      // the rim; requiring the whole image to clear made removal impractical.
-      const clearTop = cylinderTop - rockHeight / 2 - 8;
-      if (nextTop > clearTop) {
+      // Keep the stone inside the cylinder until its bottom clears the rim.
+      // This is a shorter, more visible lift than requiring its center to clear.
+      if (nextTop + rockHeight > cylinderTop + 10) {
         nextLeft = Math.max(cylinderLeft + 3, Math.min(cylinderRight - rockWidth - 3, nextLeft));
       } else {
         drag.clearedRim = true;
