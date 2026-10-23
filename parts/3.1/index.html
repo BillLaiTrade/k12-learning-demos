@@ -591,7 +591,8 @@
         <div class="card-main">
           <h2>尺上的每一格，代表多少？</h2>
           <p>調整整把尺要分成幾等分，觀察刻線如何變密或變疏，以及每格代表多長；尺長與鉛筆端點保持不變。</p>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>阿公，同一支鉛筆明明沒有變長，為什麼換個角度看，讀到的數字好像不一樣？</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>阿公，這把 30 公分的尺分成不同格數時，每一格代表的長度會一樣嗎？</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>我們來調整分格數，再用尺的總長除以格數，看看每一格代表多長。</p></div>
           <div class="control-panel">
             <div class="ruler-caption"><span>同一把 30 cm 直尺</span><span id="division-count-label">整把尺分成 15 等分</span></div>
             <label class="field" for="division-count">調整整把尺的等分數
@@ -610,6 +611,8 @@
             <p id="division-visual-note" aria-live="polite">鉛筆長度固定為 18 cm，左端對齊 0；右端對齊橘色標記。調整等分數不會改變鉛筆。</p>
           </div>
           <div class="fact"><p>同一把 30 cm 直尺可以有不同的分格方式；每格的長度由 30 cm 除以等分數決定。讀值時先確認刻度間距，再判斷端點落在哪裡。</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>原來 30 公分分成 15 格，每格就是 2 公分；分成更多格，每格就會更短。</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>沒錯。讀取刻度前，要先確認每一格代表多少長度。</p></div>
           <p class="next-hint">知道每格代表多少後，接著觀察視角如何影響讀值。</p>
       </section>
 
@@ -618,7 +621,7 @@
         <div class="card-main">
           <h2>同一物體，為什麼讀值會差一點？</h2>
           <p>同一支鉛筆平行放在 20 cm 直尺上，筆尖對齊 0 cm。切換兩個預設視角，或拖曳 3D 場景自由旋轉；觀察筆尾投影落在哪個刻度，以及讀值如何改變。</p>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>原來角度會影響讀值。如果鉛筆端點落在兩條刻線之間，該怎麼估讀？</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>阿公，同一支鉛筆明明沒有變長，為什麼換個角度看，讀到的數字好像不一樣？</p></div>
           <div class="parallax-scene" id="parallax-scene">
             <canvas id="pencil-3d-canvas" aria-hidden="true"></canvas>
             <span id="pencil-model-status" class="visually-hidden" aria-live="polite">正在建立鉛筆 3D 模型。</span>
@@ -639,6 +642,7 @@
             <div class="scene-readout" aria-live="polite"><article><small>目前角度估讀</small><strong id="parallax-reading">約 18.4 cm</strong></article></div>
             <p class="live-note" id="parallax-explanation">橘色輔助線的落點顯示目前角度的估讀。視角不同，視線落點可能改變，因此讀值也會產生差異，這稱為視差。</p>
           </div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>原來角度會影響讀值。如果鉛筆端點落在兩條刻線之間，該怎麼估讀？</p></div>
           <p class="next-hint">了解視角如何影響讀值後，接著練習估讀相鄰刻線之間的位置。</p>
         </div>
       </section>
