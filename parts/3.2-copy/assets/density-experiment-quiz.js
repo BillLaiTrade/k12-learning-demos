@@ -15,7 +15,7 @@ export function mountDensityExperimentQuiz() {
 
   const samples = {
     A: { mass: 714, volume: 37, image: 'assets/golden-wreath.webp' },
-    B: { mass: 714, volume: 46.3, image: 'assets/golden-wreath.webp' }
+    B: { mass: 680, volume: 44, image: 'assets/crown-sample-b.svg' }
   };
   const sampleCards = [...quiz.querySelectorAll('[data-experiment-sample]')];
   const tools = [...quiz.querySelectorAll('[data-instrument]')];
@@ -264,7 +264,7 @@ export function mountDensityExperimentQuiz() {
     const ghost = document.createElement('img');
     ghost.src = samples[sample].image;
     ghost.alt = '';
-    ghost.className = `experiment-ghost crown-thumb${sample === 'B' ? ' alloy' : ''}`;
+    ghost.className = 'experiment-ghost crown-thumb';
     ghost.style.width = source.dataset.experimentSample ? '116px' : '116px';
     document.body.append(ghost);
     drag = {

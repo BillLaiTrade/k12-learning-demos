@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" fill="none">
+  <defs>
+    <linearGradient id="gold" x1="38" y1="48" x2="202" y2="126" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9b5c18"/>
+      <stop offset=".2" stop-color="#f9d979"/>
+      <stop offset=".48" stop-color="#c17a20"/>
+      <stop offset=".7" stop-color="#ffe89a"/>
+      <stop offset="1" stop-color="#9c5b16"/>
+    </linearGradient>
+    <linearGradient id="band" x1="54" y1="101" x2="185" y2="130" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b06d1b"/>
+      <stop offset=".5" stop-color="#ffdf7c"/>
+      <stop offset="1" stop-color="#a45c13"/>
+    </linearGradient>
+    <filter id="shadow" x="13" y="14" width="214" height="135" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dy="4"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".28"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)" stroke="#805018" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">
+    <path d="M43 55 72 81 91 35l29 42 29-42 19 46 29-26-17 55H61L43 55Z" fill="url(#gold)"/>
+    <path d="m72 81 19-46 29 42 29-42 19 46" stroke="#fff0b5" stroke-width="4"/>
+    <path d="M61 110h120l-7 20H69l-8-20Z" fill="url(#band)"/>
+    <path d="M66 117h110" stroke="#fff0b5" stroke-width="2"/>
+    <circle cx="43" cy="55" r="6" fill="#f5d46c"/>
+    <circle cx="91" cy="35" r="6" fill="#f5d46c"/>
+    <circle cx="120" cy="77" r="6" fill="#f5d46c"/>
+    <circle cx="149" cy="35" r="6" fill="#f5d46c"/>
+    <circle cx="198" cy="55" r="6" fill="#f5d46c"/>
+    <path d="M109 94h22l-11 13-11-13Z" fill="#b73932" stroke="#7d211d"/>
+  </g>
+</svg>
