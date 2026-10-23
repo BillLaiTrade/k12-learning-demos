@@ -682,7 +682,7 @@
             <p class="phase-diagram-hint">箭頭表示物態變化方向；點選狀態卡或箭頭／名稱查看詳細說明。</p>
             <section class="phase-detail" id="phase-detail" aria-live="polite" aria-atomic="true" aria-label="物態轉變說明">
               <div><p class="phase-detail-kicker" id="phase-detail-kicker">三種狀態・粒子與轉變</p><h3 id="phase-detail-title">點選冰、水、水蒸氣或任一箭頭</h3></div>
-              <div><p class="phase-detail-copy" id="phase-detail-copy">選擇物態可查看它的粒子狀態和四種相關轉變；選擇箭頭則會說明轉變時粒子如何改變排列與運動。</p><div class="phase-detail-steps" id="phase-detail-steps" hidden></div><div class="freeze-demo" id="freeze-demo" hidden><div class="freeze-demo-head"><span id="phase-demo-heading">水 → 冰：晶核形成並逐步長大</span><button type="button" class="freeze-demo-replay" id="freeze-demo-replay">重播</button></div><svg class="freeze-demo-scene" viewBox="0 0 360 132" role="img" aria-label="以粒子示意水的物態轉變"><defs><clipPath id="freeze-demo-clip"><rect x="12" y="34" width="336" height="88" rx="2"/></clipPath></defs><rect x="10" y="8" width="340" height="114" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><text id="phase-demo-source" x="20" y="25" fill="#43839a" font-size="10" font-weight="700">冷端</text><path id="phase-demo-arrows" d="M110 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4" fill="none" stroke="#43839a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><g id="freeze-demo-particles" clip-path="url(#freeze-demo-clip)"></g></svg><p class="freeze-demo-status" id="freeze-demo-status" aria-live="polite">液態水：粒子持續移動</p><p class="freeze-demo-caption" id="phase-demo-caption">圓點代表水中的粒子；冷端先形成小晶核，有序排列逐步擴展。此圖不另畫一層水，也不按實際大小比例呈現。</p></div></div>
+              <div><p class="phase-detail-copy" id="phase-detail-copy">選擇物態可查看它的粒子狀態和四種相關轉變；選擇箭頭則會說明轉變時粒子如何改變排列與運動。</p><div class="phase-detail-steps" id="phase-detail-steps" hidden></div><div class="freeze-demo" id="freeze-demo" hidden><div class="freeze-demo-head"><span id="phase-demo-heading">水 → 冰：晶核形成並逐步長大</span><button type="button" class="freeze-demo-replay" id="freeze-demo-replay">重播</button></div><svg class="freeze-demo-scene" viewBox="0 0 360 132" role="img" aria-label="以粒子示意水的物態轉變"><defs><clipPath id="freeze-demo-clip"><rect x="12" y="12" width="336" height="110" rx="2"/></clipPath></defs><rect x="10" y="8" width="340" height="114" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><g id="freeze-demo-particles" clip-path="url(#freeze-demo-clip)"></g><text id="phase-demo-source" x="20" y="25" fill="#43839a" font-size="10" font-weight="700">冷端</text><path id="phase-demo-arrows" d="M110 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4" fill="none" stroke="#43839a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><p class="freeze-demo-status" id="freeze-demo-status" aria-live="polite">液態水：粒子持續移動</p><p class="freeze-demo-caption" id="phase-demo-caption">圓點代表水中的粒子；冷端先形成小晶核，有序排列逐步擴展。此圖不另畫一層水，也不按實際大小比例呈現。</p></div></div>
             </section>
             <p class="phase-science-note">水蒸氣本身無色、看不見；淡藍流線是教材插畫符號，不是水蒸氣真實的顏色或形狀。</p>
             <p class="next-hint">沿六個方向比較後，繼續觀察狀態改變時物質本身是否改變。</p>
@@ -1470,7 +1470,7 @@
         if(transition.key==="condensation"&&local<=0){
           p.x+=p.vx*dt;p.y+=p.vy*dt;
           if(p.x<17){p.x=17;p.vx=Math.abs(p.vx);}if(p.x>343){p.x=343;p.vx=-Math.abs(p.vx);}
-          if(p.y<38){p.y=38;p.vy=Math.abs(p.vy);}if(p.y>116){p.y=116;p.vy=-Math.abs(p.vy);}
+          if(p.y<16){p.y=16;p.vy=Math.abs(p.vy);}if(p.y>116){p.y=116;p.vy=-Math.abs(p.vy);}
           p.startX=p.x;p.startY=p.y;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));return;
         }
         if(transition.key==="deposition"&&(elapsed<0||local<=0)){
@@ -1556,6 +1556,7 @@
     }
     function playPhaseTransition(key){
       stopPhaseDemoMotion();const runId=phaseDemoRun,process=phaseDemoMotion[key],starts=phaseDemoTargets(process.from),ends=phaseDemoTargets(process.to);
+      if(key==="condensation")starts.forEach(point=>{point.y=15+Math.random()*101;});
       activePhaseProcess=key;phaseDemoHeading.textContent=process.heading;phaseDemoSource.textContent=process.source;
       const releasesEnergy=phaseProcesses[key].energy.startsWith("放熱"),meltArrowPath="M180 147v-25m0 0-4 5m4-5 4 5",demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox",key==="melt"?"0 0 360 150":"0 0 360 132");phaseDemoArrows.setAttribute("d",key==="melt"?meltArrowPath:phaseDemoDefaultArrowPath);phaseDemoArrows.setAttribute("transform",key==="melt"?"":releasesEnergy?"translate(0 50) scale(1 -1)":"");phaseDemoArrows.setAttribute("stroke",releasesEnergy?"#43839a":"#bd634b");phaseDemoSource.setAttribute("x",key==="melt"?"192":"20");phaseDemoSource.setAttribute("y",key==="melt"?"145":"25");
       document.getElementById("freeze-demo-status").textContent=`起始狀態：${process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態"}；粒子排列與位置`;
