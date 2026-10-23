@@ -1301,11 +1301,11 @@
         const progress=Math.max(0,Math.min(100,Number(value)))/100, looseness=1-progress;
         const uid=`soft-tape-${++softTapeFrameId}`;
         // Keep the photographed tape as one clipped object; the slider changes its scale continuously.
-        const scaleX=1+.14*looseness, scaleY=1+.08*looseness;
+        const loopScale=1+.08*looseness, tailScale=1+.22*looseness;
         const labels=[
           [130,126,"0"],[162,139,"5"],[210,148,"10"],[258,151,"15"],[306,148,"20"],[350,140,"25"]
         ].map(([x,y,label])=>`<text x="${x}" y="${y}" text-anchor="middle" font-size="6.5" font-family="sans-serif" font-weight="700" fill="#18251d" stroke="#e9ae17" stroke-width="1.6" paint-order="stroke">${label}</text>`).join("");
-        return `<image href="assets/soft-tape-mug-clean.webp" x="0" y="0" width="560" height="280" preserveAspectRatio="none"/><defs><clipPath id="${uid}-belt" clipPathUnits="userSpaceOnUse"><path d="M129 97 C139 117 178 131 222 137 C278 144 331 141 357 130 L376 124 L376 177 C341 186 308 189 264 184 C209 180 163 171 129 163 Z M357 127 L423 132 L421 174 L359 164 Z"/></clipPath></defs><g transform="translate(280 140) scale(${scaleX.toFixed(3)} ${scaleY.toFixed(3)}) translate(-280 -140)"><image href="assets/soft-tape-mug.webp" x="0" y="0" width="560" height="280" preserveAspectRatio="none" clip-path="url(#${uid}-belt)"/>${labels}</g>`;
+        return `<image href="assets/soft-tape-mug-clean.webp" x="0" y="0" width="560" height="280" preserveAspectRatio="none"/><defs><clipPath id="${uid}-loop" clipPathUnits="userSpaceOnUse"><path d="M129 97 C139 117 178 131 222 137 C278 144 331 141 357 130 L376 124 L376 177 C341 186 308 189 264 184 C209 180 163 171 129 163 Z"/></clipPath><clipPath id="${uid}-tail" clipPathUnits="userSpaceOnUse"><path d="M357 127 L423 132 L421 174 L359 164 Z"/></clipPath></defs><g transform="translate(129 0) scale(${loopScale.toFixed(3)} 1) translate(-129 0)"><image href="assets/soft-tape-mug.webp" x="0" y="0" width="560" height="280" preserveAspectRatio="none" clip-path="url(#${uid}-loop)"/>${labels}</g><g transform="translate(129 0) scale(${loopScale.toFixed(3)} 1) translate(-129 0) translate(357 0) scale(${tailScale.toFixed(3)} 1) translate(-357 0)"><image href="assets/soft-tape-mug.webp" x="0" y="0" width="560" height="280" preserveAspectRatio="none" clip-path="url(#${uid}-tail)"/></g>`;
       };
 
       const toolDemos = {
