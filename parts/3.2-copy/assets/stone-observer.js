@@ -1,4 +1,5 @@
 import * as THREE from '../../3.1/assets/vendor/three/build/three.module.js';
+import {GLTFLoader} from '../../3.1/assets/vendor/three/examples/jsm/loaders/GLTFLoader.js';
 
 const clamp=(value,min,max)=>Math.min(max,Math.max(min,value));
 
@@ -12,8 +13,8 @@ function noise3(x,y,z){
 }
 
 export function makeStone(){
-  const geometry=new THREE.IcosahedronGeometry(1,3);
-  const position=geometry.attributes.position;
+  const geometry=new THREE.IcosahedronGeometry(1,4);
+  const position=geometry.attributes.position,colors=[];
   for(let i=0;i<position.count;i++){
     const v=new THREE.Vector3().fromBufferAttribute(position,i).normalize();
     const broad=(noise3(v.x*3.4,v.y*3.4,v.z*3.4)-.5)*.3;
@@ -25,43 +26,16 @@ export function makeStone(){
     ].reduce((sum,[x,y,z,depth])=>sum+Math.exp(-((v.x-x)**2+(v.y-y)**2+(v.z-z)**2)*42)*depth,0);
     const r=1+broad+ridge+granule-pits;
     position.setXYZ(i,v.x*r*1.28,v.y*r*.79,v.z*r*.82);
+    const cloud=noise3(v.x*5,v.y*5,v.z*5),mottle=noise3(v.x*19+4,v.y*19-2,v.z*19+1);
+    const flecks=noise3(v.x*53,v.y*53,v.z*53),orePatch=noise3(v.x*10+12,v.y*10-7,v.z*10+3);
+    const charcoal=clamp(.085+(cloud-.5)*.12+(mottle-.5)*.095+(flecks-.5)*.05,.035,.23);
+    const inclusion=Math.pow(clamp((orePatch-.70)*4.4,0,1)*clamp(.65+(flecks-.5)*1.1,0,1),1.25);
+    colors.push(charcoal*1.12*(1-inclusion)+.52*inclusion,charcoal*1.1*(1-inclusion)+.205*inclusion,charcoal*1.06*(1-inclusion)+.048*inclusion);
   }
+  geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
   geometry.computeVertexNormals();
-  const material=new THREE.MeshStandardMaterial({color:0x292521,roughness:.92,metalness:.08,flatShading:true});
-  const meteorite=new THREE.Mesh(geometry,material);
-
-  // The 3D specimen and the measurement cards share the same meteorite image.
-  // Extend its cutout edge pixels before mapping so transparent margins do not
-  // become holes or a pale halo on the rotating model.
-  const image=new Image();
-  image.onload=()=>{
-    const textureCanvas=document.createElement('canvas');
-    textureCanvas.width=768;textureCanvas.height=Math.round(768*image.height/image.width);
-    const context=textureCanvas.getContext('2d');
-    context.drawImage(image,0,0,textureCanvas.width,textureCanvas.height);
-    const pixels=context.getImageData(0,0,textureCanvas.width,textureCanvas.height);
-    const {data,width,height}=pixels,total=width*height,nearest=new Int32Array(total),queue=new Int32Array(total);
-    nearest.fill(-1);
-    let tail=0;
-    for(let index=0;index<total;index++)if(data[index*4+3]>240){nearest[index]=index;queue[tail++]=index;}
-    for(let head=0;head<tail;head++){
-      const index=queue[head],x=index%width,y=(index/width)|0,source=nearest[index];
-      if(x>0&&nearest[index-1]===-1){nearest[index-1]=source;queue[tail++]=index-1;}
-      if(x+1<width&&nearest[index+1]===-1){nearest[index+1]=source;queue[tail++]=index+1;}
-      if(y>0&&nearest[index-width]===-1){nearest[index-width]=source;queue[tail++]=index-width;}
-      if(y+1<height&&nearest[index+width]===-1){nearest[index+width]=source;queue[tail++]=index+width;}
-    }
-    for(let index=0;index<total;index++){
-      const offset=index*4,source=nearest[index]*4;
-      data[offset]=data[source];data[offset+1]=data[source+1];data[offset+2]=data[source+2];data[offset+3]=255;
-    }
-    context.putImageData(pixels,0,0);
-    const texture=new THREE.CanvasTexture(textureCanvas);
-    texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;
-    material.map=texture;material.color.set(0xffffff);material.needsUpdate=true;
-  };
-  image.src=new URL('./meteorite-model.webp',import.meta.url).href;
-  return meteorite;
+  const material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.8,metalness:.18});
+  return new THREE.Mesh(geometry,material);
 }
 
 const LINEAR_SCALE=Math.cbrt(910/39);
@@ -160,6 +134,39 @@ export function mountStoneObserver(){
   Object.assign(heightOverlay.style,{position:'absolute',inset:'0',width:'100%',height:'100%',overflow:'hidden',pointerEvents:'none',zIndex:'2'});
   host.append(heightOverlay);
   const loading=document.querySelector('#observer-loading');
+  const modelUrl=new URL('./meteorite-model.glb',import.meta.url);
+  const pageVersion=new URL(import.meta.url).searchParams.get('v');if(pageVersion)modelUrl.searchParams.set('v',pageVersion);
+  // The GLB uses a render-predicted 3D body; the source photo is projected on
+  // its visible face while the unseen sides retain the inferred rock material.
+  new GLTFLoader().load(modelUrl.href,gltf=>{
+    gltf.scene.updateMatrixWorld(true);
+    const modeledMesh=gltf.scene.getObjectByProperty('isMesh',true);
+    if(!modeledMesh)return;
+    const modeledGeometry=modeledMesh.geometry.clone();modeledGeometry.applyMatrix4(modeledMesh.matrixWorld);modeledGeometry.computeVertexNormals();
+    stone.geometry.dispose();stone.geometry=modeledGeometry;
+    stone.material.dispose();stone.material=modeledMesh.material.clone();
+    stone.material.flatShading=false;stone.material.color.setScalar(.62);stone.material.needsUpdate=true;
+    const photo=new Image();photo.onload=()=>{
+      const source=document.createElement('canvas');source.width=photo.naturalWidth;source.height=photo.naturalHeight;
+      const sourceContext=source.getContext('2d');sourceContext.drawImage(photo,0,0);
+      const sourcePixels=sourceContext.getImageData(0,0,source.width,source.height),alpha=sourcePixels.data;
+      let minX=source.width,minY=source.height,maxX=0,maxY=0;
+      for(let y=0;y<source.height;y++)for(let x=0;x<source.width;x++)if(alpha[(y*source.width+x)*4+3]>240){minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}
+      const canvasTexture=document.createElement('canvas');canvasTexture.width=768;canvasTexture.height=Math.round(768*(maxY-minY+1)/(maxX-minX+1));
+      const context=canvasTexture.getContext('2d');context.drawImage(source,minX,minY,maxX-minX+1,maxY-minY+1,0,0,canvasTexture.width,canvasTexture.height);
+      const texture=new THREE.CanvasTexture(canvasTexture);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;
+      const photoGeometry=stone.geometry.clone(),position=photoGeometry.attributes.position;
+      for(let i=0;i<position.count;i++)position.setXYZ(i,position.getX(i)*1.004,position.getY(i)*1.004,position.getZ(i)*1.004);
+      position.needsUpdate=true;photoGeometry.computeVertexNormals();photoGeometry.computeBoundingBox();
+      const bounds=photoGeometry.boundingBox,uvs=new Float32Array(position.count*2);
+      for(let i=0;i<position.count;i++){uvs[i*2]=(position.getX(i)-bounds.min.x)/(bounds.max.x-bounds.min.x);uvs[i*2+1]=(position.getY(i)-bounds.min.y)/(bounds.max.y-bounds.min.y);}
+      photoGeometry.setAttribute('uv',new THREE.BufferAttribute(uvs,2));
+      const photoMaterial=new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.02,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1,toneMapped:false});
+      stone.add(new THREE.Mesh(photoGeometry,photoMaterial));
+    };
+    photo.src=new URL('./meteorite-model.webp',import.meta.url).href;
+    measureDirty=true;if(loading)loading.hidden=true;
+  },undefined,()=>{if(loading)loading.hidden=true});
   const raycaster=new THREE.Raycaster(),pointerNdc=new THREE.Vector2();raycaster.params.Line.threshold=.09;
   function resize(){width=host.clientWidth;height=host.clientHeight;if(!width||!height)return;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();measureDirty=true}
   const observer=new ResizeObserver(resize);observer.observe(host);resize();
@@ -263,7 +270,6 @@ export function mountStoneObserver(){
   const endPointer=event=>{activePointers.delete(event.pointerId);if(dragId===event.pointerId)dragId=null;if(activePointers.size===1){const [id,point]=activePointers.entries().next().value;dragId=id;dragTarget=null;lastX=point.x;lastY=point.y}if(activePointers.size<2)pinchDistance=0};
   host.addEventListener('pointerup',endPointer);host.addEventListener('pointercancel',endPointer);host.addEventListener('lostpointercapture',endPointer);
   host.addEventListener('keydown',event=>{const step=.07;let used=true;switch(event.key){case'ArrowLeft':rotateStone(-step,0);break;case'ArrowRight':rotateStone(step,0);break;case'ArrowUp':rotateStone(0,-step);break;case'ArrowDown':rotateStone(0,step);break;case'Home':pivot.quaternion.identity();dragTarget=null;velocityYaw=0;velocityPitch=0;distance=8.8;camera.position.z=distance;camera.updateProjectionMatrix();measureDirty=true;break;default:used=false}if(used)event.preventDefault()});
-  if(loading)loading.hidden=true;
   function render(){raf=requestAnimationFrame(render);if(!dragId&&(Math.abs(velocityYaw)>.00025||Math.abs(velocityPitch)>.00025)){rotateStone(velocityYaw,velocityPitch);velocityYaw*=.91;velocityPitch*=.91}else if(Math.abs(velocityYaw)<=.00025&&Math.abs(velocityPitch)<=.00025){velocityYaw=0;velocityPitch=0}if(measureDirty)refreshMeasurement();renderer.render(scene,camera)}
   render();
   return()=>{cancelAnimationFrame(raf);observer.disconnect();renderer.dispose();scene.traverse(node=>{if(node.isMesh||node.isLine){node.geometry?.dispose();if(Array.isArray(node.material))node.material.forEach(material=>material.dispose());else node.material?.dispose()}})};

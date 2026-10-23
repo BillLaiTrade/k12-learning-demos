@@ -100,6 +100,9 @@
       #gold-scene[data-specimen="gold"] .sample-display:not(.in-water){top:calc(100% - 134px)}
     }
   </style>
+  <script type="importmap">
+    {"imports":{"three":"../3.1/assets/vendor/three/build/three.module.js","three/addons/":"../3.1/assets/vendor/three/examples/jsm/"}}
+  </script>
 </head>
 <body>
   <header class="wrap top"><a href="../../units/3/index.html">← 回到單元總覽</a><span>國二上・理化　／　密度與測量</span><span>學習路徑 3.2</span></header>
@@ -134,7 +137,7 @@
       const navLinks=$$('#lesson-nav a'), pathSections=$$('.lesson, .unit-quiz');
       const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.hash===`#${entry.target.id}`));}})},{rootMargin:'-15% 0px -70% 0px'});pathSections.forEach(s=>observer.observe(s));
       // 3D 石頭使用專案既有的本機 Three.js；其餘段落仍共用原石頭圖像。
-      const pageVersion=new URL(location.href).searchParams.get('v')||'meteorite-20261023-2';
+      const pageVersion=new URL(location.href).searchParams.get('v')||'meteorite-20261023-3';
       const observerModule=new URL('./assets/stone-observer.js',document.baseURI);if(pageVersion)observerModule.searchParams.set('v',pageVersion);
       import(observerModule.href).then(({mountStoneObserver})=>mountStoneObserver()).catch(()=>{const status=$('#observer-loading');if(status)status.textContent='立體模型無法載入，請重新整理頁面。'});
       const massModule=new URL('./assets/mass-measurement.js',document.baseURI);if(pageVersion)massModule.searchParams.set('v',pageVersion);
