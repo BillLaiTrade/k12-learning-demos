@@ -543,7 +543,6 @@
           </div>
           <div class="measurement-meaning-result" aria-live="polite"><span id="measurement-result-label">先觀察</span><div><strong id="measurement-result-value">看起來很長</strong><p id="measurement-result-note">每個人的感覺可能不一樣，還不能公平比較。</p></div></div>
           </div>
-          <p class="next-hint" id="measurement-next-hint" hidden>下一步：18 代表什麼？還少了哪些資訊？</p>
         </div>
       </section>
 
@@ -587,7 +586,6 @@
             <div class="length-conversion-result" aria-live="polite"><strong id="length-conversion-value">18 cm</strong><span id="length-conversion-explanation">鉛筆跨過 18 個 1 cm 間隔。</span></div>
             <p class="length-conversion-equivalents">換算關係：1 cm = 10 mm；100 cm = 1 m。　<span id="length-conversion-equation">18 cm × 10 = 180 mm</span></p>
           </div>
-          <p class="next-hint">讀懂數值和單位後，接著看看尺上的每一格代表多少。</p>
         </div>
       </section>
 
@@ -617,7 +615,6 @@
           </div>
           <div class="fact"><p>同一把 30 cm 直尺可以有不同的分格方式；每格的長度由 30 cm 除以等分數決定。讀值時先確認刻度間距，再判斷端點落在哪裡。</p></div>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>分格越多，每格就越短了。</p></div>
-          <p class="next-hint">知道每格代表多少後，接著觀察視角如何影響讀值。</p>
       </section>
 
       <section class="lesson-card" id="card-04">
@@ -647,7 +644,6 @@
             <p class="live-note" id="parallax-explanation">橘色輔助線的落點顯示目前角度的估讀。視角不同，視線落點可能改變，因此讀值也會產生差異，這稱為視差。</p>
           </div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>尺沒變，是視線落點改變了讀值；讀尺時要正對尺面。</p></div>
-          <p class="next-hint">了解視角如何影響讀值後，接著練習估讀相鄰刻線之間的位置。</p>
         </div>
       </section>
 
@@ -779,7 +775,6 @@
             <h3 id="correction-result-title">四種方法可以搭配使用</h3>
             <p>刻度加密、對準起點、正對尺面與重複量測取平均，分別改善不同的誤差來源。平均能減少讀值波動，但不能消除固定的起點或視角偏差。</p>
           </aside>
-          <p class="next-hint">了解改善讀值的方法後，接著選擇合適的測量工具。</p>
         </div>
       </section>
 
@@ -795,7 +790,6 @@
           <aside class="decision-help" id="decision-help" aria-live="polite" hidden></aside>
           <div class="tool-demo" id="tool-demo" aria-live="polite" hidden><h3>選一個樹梢工具開始觀察</h3><p>完整決策樹會留在上方；選取工具後，這裡會出現操作示範。</p></div>
           <p class="live-note">先確認要測量的物理量，再依物件特性和量程挑選工具。同一種物理量，也可能有不只一種適用工具。</p>
-          <p class="next-hint">了解工具的用途與量程後，接著用單元小測安排測量步驟。</p>
         </div>
       </section>
 
@@ -869,7 +863,6 @@
             </div>
             <div class="quiz-feedback" id="assessment-feedback" role="status" aria-live="polite" hidden></div>
           </div>
-          <p class="next-hint">帶著隕石實驗紀錄，接著探索質量與體積的量測方法。</p>
         </div>
       </section>
     </div>
@@ -917,7 +910,6 @@
         document.querySelector("#measurement-result-label").textContent = measuring ? "測量後" : "先觀察";
         document.querySelector("#measurement-result-value").textContent = measuring ? "18" : "看起來很長";
         document.querySelector("#measurement-result-note").textContent = measuring ? "有了共同的表示方式，別人就能看懂並拿來比較。" : "每個人的感覺可能不一樣，還不能公平比較。";
-        document.querySelector("#measurement-next-hint").hidden = !measuring;
         document.querySelector("#measurement-dialogue").hidden = !measuring;
         document.querySelector("#measurement-question-dialogue").hidden = !measuring;
       }));
