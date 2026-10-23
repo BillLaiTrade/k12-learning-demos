@@ -1454,10 +1454,6 @@
       if(now-transition.startedAt>=total){
         freezeParticles.forEach(p=>{p.x=p.targetX;p.y=p.targetY;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
         phaseDemoTransition=null;
-        if(transition.key==="melt-reset"){
-          document.getElementById("freeze-demo-status").textContent="凝固完成：冰晶排列清楚，接著停留再融化";
-          playPhaseTransition("melt");return;
-        }
         const doneText={melt:"融化完成：粒子仍靠近，持續流動",vaporization:"汽化完成：水蒸氣粒子在容器中快速移動",condensation:"凝結完成：液態粒子聚集在容器底部並流動",sublimation:"昇華完成：粒子分散移動，未經過液態",deposition:"凝華完成：粒子排列成固態並微微振動"};
         document.getElementById("freeze-demo-status").textContent=doneText[transition.key];
         startPhaseDemoMotion(transition.to,runId);return;
@@ -1501,7 +1497,8 @@
       }
       freezeParticles.forEach((p,i)=>{
         p.element.setAttribute("class","freeze-demo-particle");p.element.style.transform="none";
-        p.x=starts[i].x+(Math.random()-.5)*(process.from==="gas"?12:3);p.y=starts[i].y+(Math.random()-.5)*(process.from==="gas"?12:3);
+        const offset=key==="melt"?0:process.from==="gas"?12:3;
+        p.x=starts[i].x+(Math.random()-.5)*offset;p.y=starts[i].y+(Math.random()-.5)*offset;
         p.startX=p.x;p.startY=p.y;p.targetX=ends[i].x;p.targetY=ends[i].y;
         const bend=process.to==="gas"?15:process.to==="liquid"?7:3,angle=Math.random()*Math.PI*2;
         p.curveX=Math.cos(angle)*bend;p.curveY=Math.sin(angle)*bend;
@@ -1510,25 +1507,16 @@
         p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
       });
       phaseDemoMotionState="";phaseDemoLastFrame=0;
-      if(reduceMotion){
+      if(reduceMotion&&key!=="melt"){
         freezeParticles.forEach(p=>{p.x=p.targetX;p.y=p.targetY;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
         startPhaseDemoMotion(process.to,runId);return;
       }
       const scores=freezeParticles.map((p,i)=>process.to==="solid"?ends[i].y:key==="melt"?-p.y:p.y),minScore=Math.min(...scores),maxScore=Math.max(...scores),spread=key==="melt"?5000:3600,duration=key==="melt"?2000:1600;
       const delays=scores.map(score=>maxScore===minScore?0:(score-minScore)/(maxScore-minScore)*spread);
-      phaseDemoTransition={key,to:process.to,fromLabel:key==="melt"?"固態冰":process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態",status:process.status,startedAt:null,pausedAt:null,hold:key==="melt"?2000:900,spread,duration,delays};
+      phaseDemoTransition={key,to:process.to,fromLabel:key==="melt"?"固態冰":process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態",status:process.status,startedAt:null,pausedAt:null,hold:key==="melt"?5000:900,spread,duration,delays};
       phaseDemoFrame=requestAnimationFrame(now=>animatePhaseTransition(now,runId));
     }
-    function replayMelting(){
-      stopPhaseDemoMotion();stopFreezeDemo();const runId=phaseDemoRun,ends=phaseDemoTargets("solid"),starts=freezeParticles.map(p=>({x:p.x,y:p.y}));
-      activePhaseProcess="melt";phaseDemoHeading.textContent="水 → 冰：重新凝固";phaseDemoSource.textContent="放熱／冷端";phaseDemoSource.setAttribute("x","20");phaseDemoSource.setAttribute("y","25");freezeDemo.querySelector("svg").setAttribute("viewBox","0 0 360 132");phaseDemoArrows.setAttribute("d","M57 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4");phaseDemoArrows.setAttribute("transform","translate(0 50) scale(1 -1)");phaseDemoArrows.setAttribute("stroke","#43839a");phaseDemoCaption.textContent="重播會先讓液態粒子重新排列成冰，再停留兩秒，接著從底部逐步融化。";
-      freezeParticles.forEach((p,i)=>{p.element.setAttribute("class","freeze-demo-particle");p.element.style.transform="none";p.x=starts[i].x;p.y=starts[i].y;p.startX=p.x;p.startY=p.y;p.targetX=ends[i].x;p.targetY=ends[i].y;p.curveX=0;p.curveY=0;p.finalVx=0;p.finalVy=0;});
-      const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if(reduceMotion){freezeParticles.forEach(p=>{p.x=p.targetX;p.y=p.targetY;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});playPhaseTransition("melt");return;}
-      const scores=ends.map(point=>point.y),minScore=Math.min(...scores),maxScore=Math.max(...scores),spread=3600,duration=1600,delays=scores.map(score=>(score-minScore)/(maxScore-minScore)*spread);
-      document.getElementById("freeze-demo-status").textContent="液態水：準備重新凝固";phaseDemoTransition={key:"melt-reset",to:"solid",fromLabel:"液態水",status:"冷端先形成晶核，冰晶排列逐層擴展",startedAt:null,pausedAt:null,hold:900,spread,duration,delays};phaseDemoFrame=requestAnimationFrame(now=>animatePhaseTransition(now,runId));
-    }
-    document.getElementById("freeze-demo-replay").addEventListener("click",()=>activePhaseProcess==="freeze"?playFreezeDemo():activePhaseProcess==="melt"?replayMelting():playPhaseTransition(activePhaseProcess));
+    document.getElementById("freeze-demo-replay").addEventListener("click",()=>activePhaseProcess==="freeze"?playFreezeDemo():playPhaseTransition(activePhaseProcess));
     function resetPhaseSteps(){phaseSteps.replaceChildren();phaseSteps.hidden=true;}
     function selectPhaseState(key){
       const state=phaseStates[key];
