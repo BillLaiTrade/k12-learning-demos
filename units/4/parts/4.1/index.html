@@ -277,10 +277,10 @@
     .phase-diagram-scroll { overflow-x:auto; padding:5px 2px 9px; border-radius:15px; scrollbar-color:#b8c9bd transparent; }
     .phase-triangle { position:relative; width:100%; min-width:700px; height:550px; overflow:hidden; border:1px solid #e0e8df; border-radius:16px; background:linear-gradient(145deg,#f0f5ed,#f8f8f2 62%,#edf3ec); }
     .phase-triangle-svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; z-index:0; }
-    .phase-arrow { fill:none; stroke:#a8b9ae; stroke-width:2.6; stroke-linecap:round; marker-end:url(#phase-arrow-default); }
-    .phase-arrow.phase-heat { marker-end:url(#phase-arrow-heat); }
-    .phase-arrow.phase-cool { marker-end:url(#phase-arrow-cool); }
-    .phase-arrow.is-active { stroke:#527c68; stroke-width:4; stroke-dasharray:9 8; animation:phase-arrow-flow 1.05s linear infinite; }
+    .phase-arrow { fill:none; stroke:#a8b9ae; stroke-width:3.5; stroke-linecap:round; marker-end:url(#phase-arrow-default); }
+    .phase-arrow.phase-heat { stroke:#bd634b; marker-end:url(#phase-arrow-heat); }
+    .phase-arrow.phase-cool { stroke:#43839a; marker-end:url(#phase-arrow-cool); }
+    .phase-arrow.is-active { stroke:#176b53; stroke-width:4.5; stroke-dasharray:9 8; animation:phase-arrow-flow 1.05s linear infinite; }
     @keyframes phase-arrow-flow { to { stroke-dashoffset:-34; } }
     .phase-flow-dot { fill:#78b7cb; stroke:#fff; stroke-width:2; opacity:0; filter:drop-shadow(0 2px 2px #1d34322c); }
     .phase-node { position:absolute; z-index:2; width:210px; height:196px; padding:10px; border:1px solid #d8e2da; border-radius:16px; background:#fffefa; box-shadow:0 8px 22px #263b300d; text-align:center; }
@@ -290,14 +290,19 @@
     .phase-node-solid { top:10px; left:calc(50% - 105px); }
     .phase-node-liquid { top:345px; left:3%; }
     .phase-node-gas { top:345px; right:3%; }
-    .phase-transition { position:absolute; z-index:3; min-width:120px; padding:5px 8px; border:1px solid #c6d4ca; border-radius:11px; background:#fffefa; box-shadow:0 3px 10px #263b3014; text-align:left; cursor:pointer; font-size:.78rem; line-height:1.32; transition:transform .16s,border-color .16s,box-shadow .16s; }
+    .phase-transition { position:absolute; z-index:3; min-width:120px; padding:5px 8px; border:1px solid #c6d4ca; border-left:4px solid var(--phase-route-color); border-radius:11px; background:#fffefa; box-shadow:0 3px 10px #263b3014; text-align:left; cursor:pointer; font-size:.78rem; line-height:1.32; transition:transform .16s,border-color .16s,box-shadow .16s; }
     .phase-transition:hover,.phase-transition:focus-visible { transform:translateY(-2px); box-shadow:0 6px 15px #263b3020; outline:3px solid #176b5330; }
     .phase-transition[aria-pressed="true"] { border:2px solid #176b53; background:#f2f8f3; }
-    .phase-transition .phase-direction { display:block; color:#263a36; font-weight:750; white-space:nowrap; }
+    .phase-transition .phase-direction { display:block; color:#263a36; font-size:.84rem; font-weight:800; white-space:nowrap; }
+    .phase-transition .phase-direction b { padding-inline:2px; color:var(--phase-route-color); font-size:1.05em; }
     .phase-transition .phase-name { display:block; margin-top:2px; font-weight:750; }
     .phase-transition .phase-energy { display:block; color:#66766d; font-size:.69rem; }
+    .phase-transition[data-energy="heat"] { --phase-route-color:#bd634b; }
+    .phase-transition[data-energy="cool"] { --phase-route-color:#43839a; }
     .phase-transition[data-energy="heat"] .phase-name { color:#b45c44; }
     .phase-transition[data-energy="cool"] .phase-name { color:#3c8097; }
+    .phase-transition[data-energy="heat"] .phase-energy { color:#9d513e; }
+    .phase-transition[data-energy="cool"] .phase-energy { color:#376e83; }
     #phase-melt { top:212px; left:25%; }
     #phase-freeze { top:275px; left:31%; }
     #phase-sublimation { top:212px; right:25%; }
@@ -603,12 +608,12 @@
                 <article class="phase-node phase-node-liquid"><h3>液態・水</h3><img src="assets/phase-water.webp" alt="動畫插畫：帶有漣漪的液態水"><p>會流動，形狀隨容器改變</p></article>
                 <article class="phase-node phase-node-gas"><h3>氣態・水蒸氣</h3><img src="assets/phase-vapor.webp" alt="動畫插畫：以淡藍流線象徵看不見的水蒸氣"><p>水蒸氣無色、看不見；流線僅作示意</p></article>
                 <div class="phase-transition-grid">
-                <button class="phase-transition" id="phase-melt" data-phase-process="melt" data-energy="heat" aria-pressed="false" aria-label="冰融化成水，吸熱"><span class="phase-direction">冰 → 水</span><span class="phase-name">融化</span><span class="phase-energy">吸熱</span></button>
-                <button class="phase-transition" id="phase-freeze" data-phase-process="freeze" data-energy="cool" aria-pressed="false" aria-label="水凝固成冰，放熱"><span class="phase-direction">水 → 冰</span><span class="phase-name">凝固</span><span class="phase-energy">放熱</span></button>
-                <button class="phase-transition" id="phase-sublimation" data-phase-process="sublimation" data-energy="heat" aria-pressed="false" aria-label="冰昇華成水蒸氣，吸熱"><span class="phase-direction">冰 → 水蒸氣</span><span class="phase-name">昇華</span><span class="phase-energy">吸熱</span></button>
-                <button class="phase-transition" id="phase-deposition" data-phase-process="deposition" data-energy="cool" aria-pressed="false" aria-label="水蒸氣凝華成冰，放熱"><span class="phase-direction">水蒸氣 → 冰</span><span class="phase-name">凝華</span><span class="phase-energy">放熱</span></button>
-                <button class="phase-transition" id="phase-vaporization" data-phase-process="vaporization" data-energy="heat" aria-pressed="false" aria-label="水汽化成水蒸氣，吸熱"><span class="phase-direction">水 → 水蒸氣</span><span class="phase-name">汽化</span><span class="phase-energy">吸熱</span></button>
-                <button class="phase-transition" id="phase-condensation" data-phase-process="condensation" data-energy="cool" aria-pressed="false" aria-label="水蒸氣凝結成水，放熱"><span class="phase-direction">水蒸氣 → 水</span><span class="phase-name">凝結</span><span class="phase-energy">放熱</span></button>
+                <button class="phase-transition" id="phase-melt" data-phase-process="melt" data-energy="heat" aria-pressed="false" aria-label="冰融化成水，吸熱"><span class="phase-direction">冰 <b aria-hidden="true">→</b> 水</span><span class="phase-name">融化</span><span class="phase-energy">吸熱</span></button>
+                <button class="phase-transition" id="phase-freeze" data-phase-process="freeze" data-energy="cool" aria-pressed="false" aria-label="水凝固成冰，放熱"><span class="phase-direction">水 <b aria-hidden="true">→</b> 冰</span><span class="phase-name">凝固</span><span class="phase-energy">放熱</span></button>
+                <button class="phase-transition" id="phase-sublimation" data-phase-process="sublimation" data-energy="heat" aria-pressed="false" aria-label="冰昇華成水蒸氣，吸熱"><span class="phase-direction">冰 <b aria-hidden="true">→</b> 水蒸氣</span><span class="phase-name">昇華</span><span class="phase-energy">吸熱</span></button>
+                <button class="phase-transition" id="phase-deposition" data-phase-process="deposition" data-energy="cool" aria-pressed="false" aria-label="水蒸氣凝華成冰，放熱"><span class="phase-direction">水蒸氣 <b aria-hidden="true">→</b> 冰</span><span class="phase-name">凝華</span><span class="phase-energy">放熱</span></button>
+                <button class="phase-transition" id="phase-vaporization" data-phase-process="vaporization" data-energy="heat" aria-pressed="false" aria-label="水汽化成水蒸氣，吸熱"><span class="phase-direction">水 <b aria-hidden="true">→</b> 水蒸氣</span><span class="phase-name">汽化</span><span class="phase-energy">吸熱</span></button>
+                <button class="phase-transition" id="phase-condensation" data-phase-process="condensation" data-energy="cool" aria-pressed="false" aria-label="水蒸氣凝結成水，放熱"><span class="phase-direction">水蒸氣 <b aria-hidden="true">→</b> 水</span><span class="phase-name">凝結</span><span class="phase-energy">放熱</span></button>
                 </div>
               </div>
             </div>
