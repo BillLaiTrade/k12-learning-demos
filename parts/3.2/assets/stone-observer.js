@@ -145,13 +145,14 @@ export function mountStoneObserver(){
   const widthRuler=makeRuler({position:[rulerEdge,rulerFloor,0],rotationY:Math.PI/2,accent:MEASURE_COLORS.width});frameAssembly.add(widthRuler.group);
   const heightRuler=makeRuler({position:[rulerEdge,rulerFloor+rulerHeight/2,-rulerEdge],rotationZ:Math.PI/2,accent:MEASURE_COLORS.height,showGuides:false});frameAssembly.add(heightRuler.group);
   makeRulerFrame(frameAssembly,rulerEdge,rulerFloor);
-  const pivot=new THREE.Group();pivot.position.y=frameCenterY;scene.add(pivot);
+  const stoneHorizontalOffset=-.22;
+  const pivot=new THREE.Group();pivot.position.set(stoneHorizontalOffset,frameCenterY,0);scene.add(pivot);
   const stone=makeStone();pivot.add(stone);
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=128;shadowCanvas.height=128;
   const shadowCtx=shadowCanvas.getContext('2d'),gradient=shadowCtx.createRadialGradient(64,64,5,64,64,62);
   gradient.addColorStop(0,'rgba(32,38,33,.3)');gradient.addColorStop(1,'rgba(32,38,33,0)');shadowCtx.fillStyle=gradient;shadowCtx.fillRect(0,0,128,128);
   const shadow=new THREE.Mesh(new THREE.PlaneGeometry(2.6,1.55),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));
-  shadow.rotation.x=-Math.PI/2;shadow.position.set(0,rulerFloor+.003,0);scene.add(shadow);
+  shadow.rotation.x=-Math.PI/2;shadow.position.set(stoneHorizontalOffset,rulerFloor+.003,0);scene.add(shadow);
 
   let width=0,height=0,dragId=null,lastX=0,lastY=0,dragTarget=null,velocityYaw=0,velocityPitch=0,distance=8.8,raf=0,measureDirty=true,pinchDistance=0;
   const activePointers=new Map(),lengthReadout=document.querySelector('#stone-length'),widthReadout=document.querySelector('#stone-width'),heightReadout=document.querySelector('#stone-height');
