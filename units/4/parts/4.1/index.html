@@ -299,9 +299,9 @@
     @keyframes phase-water-sway { 0%,100% { transform:scale(1,.97) translateY(1px); } 50% { transform:scale(1.035,1.03) translateY(-1px); } }
     @keyframes phase-vapor-drift { 0%,100% { transform:translateY(3px); } 50% { transform:translateY(-3px); } }
     .phase-node-solid,.phase-node-liquid,.phase-node-gas { top:50%; left:50%; }
-    .phase-transition { position:absolute; z-index:3; min-width:0; padding:3px 6px; transform:translate(-50%,-50%); border:0; border-radius:6px; background:#f5f6efed; box-shadow:none; color:var(--phase-route-color); text-align:center; cursor:pointer; font-size:.8rem; font-weight:850; line-height:1.1; white-space:nowrap; transition:transform .16s,outline-color .16s; }
-    .phase-transition:hover,.phase-transition:focus-visible { transform:translate(-50%,calc(-50% - 2px)); box-shadow:0 5px 12px #263b3020; outline:3px solid #176b5330; }
-    .phase-transition[aria-pressed="true"] { border:2px solid #176b53; background:#f2f8f3; }
+    .phase-transition { position:absolute; z-index:3; min-width:0; padding:5px 10px; transform:translate(-50%,-50%); border:1px solid var(--phase-route-color); border-radius:9px; background:#fffefa; box-shadow:0 2px 6px #263b3020; color:var(--phase-route-color); text-align:center; cursor:pointer; font-size:.98rem; font-weight:850; line-height:1.1; white-space:nowrap; transition:transform .16s,box-shadow .16s,background-color .16s; }
+    .phase-transition:hover,.phase-transition:focus-visible { transform:translate(-50%,calc(-50% - 2px)); box-shadow:0 5px 12px #263b3030; outline:3px solid #176b5330; }
+    .phase-transition[aria-pressed="true"] { border:2px solid #176b53; background:#f2f8f3; box-shadow:0 0 0 2px #176b5320; }
     .phase-transition[data-energy="heat"] { --phase-route-color:#bd634b; }
     .phase-transition[data-energy="cool"] { --phase-route-color:#43839a; }
     .phase-transition-key,.phase-diagram-hint { display:none; }
@@ -330,7 +330,7 @@
       .phase-diagram-scroll { overflow:visible; padding:4px 0; }
       .phase-triangle { min-width:0; height:250px; }
       .phase-node { width:68px; height:68px; }
-      .phase-transition-key { font-size:.76rem; }
+      .phase-transition { padding:4px 8px; border-radius:8px; font-size:.88rem; }
     }
     @media(max-width:680px) { .phase-detail { grid-template-columns:1fr; gap:7px; padding:12px; } .phase-diagram-hint { font-size:.72rem; } }
     @media(prefers-reduced-motion:reduce) { .phase-arrow.is-active { animation:none; stroke-dasharray:none; } }
@@ -1230,7 +1230,7 @@
         path.setAttribute("d",d);
         document.getElementById(`phase-path-${key}`).setAttribute("d",d);
         document.querySelector(`.phase-arrow-hit[data-phase-process="${key}"]`).setAttribute("d",d);
-        const labelEdges={melt:["solid","liquid",.45],freeze:["solid","liquid",.55],sublimation:["solid","gas",.55],deposition:["solid","gas",.45],vaporization:["liquid","gas",.5],condensation:["liquid","gas",.5]},[from,to,fraction]=labelEdges[key],a=vertices[from],b=vertices[to],centroid={x:(vertices.solid.x+vertices.liquid.x+vertices.gas.x)/3,y:(vertices.solid.y+vertices.liquid.y+vertices.gas.y)/3},edgePoint={x:a.x+(b.x-a.x)*fraction,y:a.y+(b.y-a.y)*fraction},dx=centroid.x-(a.x+b.x)/2,dy=centroid.y-(a.y+b.y)/2,distance=Math.hypot(dx,dy)||1,sideDirection=phaseProcesses[key].energy.startsWith("吸熱")?1:-1,labelOffset=40,label=document.getElementById(`phase-${key}`);
+        const labelEdges={melt:["solid","liquid",.38],freeze:["solid","liquid",.6],sublimation:["solid","gas",.62],deposition:["solid","gas",.4],vaporization:["liquid","gas",.4],condensation:["liquid","gas",.6]},[from,to,fraction]=labelEdges[key],a=vertices[from],b=vertices[to],centroid={x:(vertices.solid.x+vertices.liquid.x+vertices.gas.x)/3,y:(vertices.solid.y+vertices.liquid.y+vertices.gas.y)/3},edgePoint={x:a.x+(b.x-a.x)*fraction,y:a.y+(b.y-a.y)*fraction},dx=centroid.x-(a.x+b.x)/2,dy=centroid.y-(a.y+b.y)/2,distance=Math.hypot(dx,dy)||1,sideDirection=phaseProcesses[key].energy.startsWith("吸熱")?1:-1,labelOffset=sideDirection===1?32:40,label=document.getElementById(`phase-${key}`);
         label.style.left=`${edgePoint.x-triangleRect.left+dx/distance*labelOffset*sideDirection}px`;label.style.top=`${edgePoint.y-triangleRect.top+dy/distance*labelOffset*sideDirection}px`;
       });
     }
