@@ -1437,7 +1437,7 @@
     }
     function animatePhaseTransition(now,runId){
       if(runId!==phaseDemoRun||freezeDemo.hidden||!phaseDemoTransition)return;
-      const transition=phaseDemoTransition,rect=freezeDemo.getBoundingClientRect(),inView=rect.bottom>0&&rect.top<window.innerHeight;
+      const transition=phaseDemoTransition,rect=freezeDemo.getBoundingClientRect(),inView=rect.top>=0&&rect.bottom<=window.innerHeight;
       if(!inView){if(transition.startedAt!==null&&transition.pausedAt===null)transition.pausedAt=now;phaseDemoFrame=requestAnimationFrame(next=>animatePhaseTransition(next,runId));return;}
       if(transition.startedAt===null)transition.startedAt=now;
       if(transition.pausedAt!==null){transition.startedAt+=now-transition.pausedAt;transition.pausedAt=null;}
@@ -1524,9 +1524,9 @@
         freezeParticles.forEach(p=>{p.x=p.targetX;p.y=p.targetY;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
         startPhaseDemoMotion(process.to,runId);return;
       }
-      const scores=freezeParticles.map((p,i)=>process.to==="solid"?ends[i].y:key==="melt"?-p.y:p.y),minScore=Math.min(...scores),maxScore=Math.max(...scores),spread=key==="melt"?5000:3600,duration=key==="melt"?2000:1600;
+      const scores=freezeParticles.map((p,i)=>process.to==="solid"?ends[i].y:key==="melt"?-p.y:p.y),minScore=Math.min(...scores),maxScore=Math.max(...scores),spread=key==="melt"?5000:key==="deposition"?4800:3600,duration=key==="melt"?2000:key==="deposition"?2200:1600;
       const delays=scores.map(score=>maxScore===minScore?0:(score-minScore)/(maxScore-minScore)*spread);
-      phaseDemoTransition={key,to:process.to,fromLabel:key==="melt"?"固態冰":process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態",status:process.status,startedAt:null,pausedAt:null,hold:key==="melt"?2000:900,spread,duration,delays};
+      phaseDemoTransition={key,to:process.to,fromLabel:key==="melt"?"固態冰":process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態",status:process.status,startedAt:null,pausedAt:null,hold:key==="melt"?2000:key==="deposition"?1800:900,spread,duration,delays};
       phaseDemoFrame=requestAnimationFrame(now=>animatePhaseTransition(now,runId));
     }
     document.getElementById("freeze-demo-replay").addEventListener("click",()=>activePhaseProcess==="freeze"?playFreezeDemo():playPhaseTransition(activePhaseProcess));
