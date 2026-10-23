@@ -51,6 +51,17 @@
     }
     .hero-note strong { display: block; font-size: 1.13rem; margin-bottom: 5px; }
     .hero-note p { margin: 0; font-size: .96rem; }
+    .story-opening-figure { margin: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: #fffefa; box-shadow: var(--shadow); }
+    .story-opening-figure img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+    .story-opening-figure figcaption { padding: 9px 13px; color: var(--muted); font-size: .84rem; }
+    .dialogue { display: flex; gap: 10px; align-items: center; margin: 12px 0; padding: 11px 15px; border-left: 4px solid #8cae91; border-radius: 0 13px 13px 0; background: #f0f5eb; }
+    .dialogue p { margin: 0; }
+    .dialogue .speaker { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; color: #315a46; font-weight: 800; }
+    .dialogue .speaker::before { content: ""; display: block; width: 44px; height: 44px; border: 2px solid #8cae91; border-radius: 50%; background-image: url("assets/dialogue-character-avatars.png"); background-repeat: no-repeat; background-position: 100% 50%; background-size: 200% 100%; box-shadow: 0 2px 6px rgb(21 47 38 / 12%); }
+    .dialogue--xiaokui { border-left-color: #d39765; background: #fff4e8; }
+    .dialogue--xiaokui .speaker { color: #945523; }
+    .dialogue--xiaokui .speaker::before { border-color: #d39765; background-position: 0 50%; }
+    .dialogue[hidden] { display: none; }
     .route {
       position: sticky; top: 24px; align-self: start; max-height: calc(100svh - 48px);
       overflow-y: auto; padding: 8px 12px 12px 0; scrollbar-width: thin;
@@ -474,12 +485,12 @@
       <div>
         <div class="eyebrow">密度與測量｜量測的意義</div>
         <h1>為什麼要測量？<br>把「很長」說清楚</h1>
-        <p>只說「很長」，別人不一定和你有相同的感覺。用鉛筆和直尺一起觀察，看看測量怎麼把描述轉成能溝通、能比較的資料。</p>
+        <p>小葵和阿公撿到一顆隕石，正準備記錄實驗資料。小葵拿起鉛筆時，發現它好像比其他鉛筆長；這個判斷是靠感覺，還是能用共同的方法確認？</p>
       </div>
-      <aside class="hero-note">
-        <strong>測量後的數字，怎麼讓別人看懂？</strong>
-        <p>先觀察鉛筆和直尺，再帶著「18 代表什麼？」的問題，認識完整的量測紀錄。</p>
-      </aside>
+      <figure class="story-opening-figure">
+        <img src="assets/meteorite-recording-opening.png" alt="小葵拿著鉛筆觀察長短，阿公在旁引導；桌上有實驗紀錄本、直尺與隕石。">
+        <figcaption>小葵和阿公準備記錄隕石實驗資料</figcaption>
+      </figure>
     </div>
   </header>
 
@@ -506,6 +517,10 @@
         <div class="card-main">
           <h2>只說「這支鉛筆很長」，別人怎麼知道它到底有多長？</h2>
           <p>「很長」是感覺，別人不一定和你想的一樣。測量能把觀察變成具體數字，讓結果可以說清楚、記下來，也能和別人比較。</p>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>這支鉛筆好像比其他鉛筆長耶！</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>妳怎麼知道呢？</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>嗯……大概是靠感覺吧。</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>除了靠感覺，也可以用尺量量看啊。</p></div>
           <figure class="measurement-meaning-visual">
             <svg viewBox="0 0 720 230" role="img" aria-label="一支鉛筆對齊直尺的零刻度；尺面每公分分成十個毫米刻度">
               <g class="ruler-visual">
@@ -523,6 +538,8 @@
             <button type="button" data-measurement-mode-button="ruler" aria-pressed="false">對照尺上的刻度</button>
           </div>
           <div class="measurement-meaning-result" aria-live="polite"><span id="measurement-result-label">先觀察</span><div><strong id="measurement-result-value">看起來很長</strong><p id="measurement-result-note">每個人的感覺可能不一樣，還不能公平比較。</p></div></div>
+          <div class="dialogue dialogue--xiaokui" id="measurement-dialogue" hidden><span class="speaker">小葵</span><p>我量到了，18！</p></div>
+          <div class="dialogue" id="measurement-question-dialogue" hidden><span class="speaker">阿公</span><p>18 代表什麼呢？</p></div>
           <p class="next-hint" id="measurement-next-hint" hidden>下一步：18 代表什麼？還少了哪些資訊？</p>
         </div>
       </section>
@@ -532,6 +549,8 @@
         <div class="card-main">
           <h2>18 代表什麼？</h2>
           <p>光看 18，還不知道量的是哪一種物理量，也不知道使用什麼單位。點選紀錄中的部分，再看完整描述。</p>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>我量的是這支鉛筆的長度，數值是 18。這樣記下來就完整了嗎？</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>還要想想看：18 是用什麼單位量出來的？我們一起看看這筆紀錄還包含哪些部分。</p></div>
           <div class="record" aria-label="鉛筆長度的量測紀錄">
             <button type="button" data-record-part="object">鉛筆</button>
             <span id="record-object">長度</span><span>=</span>
@@ -590,6 +609,7 @@
             <p id="division-visual-note" aria-live="polite">鉛筆長度固定為 18 cm，左端對齊 0；右端對齊橘色標記。調整等分數不會改變鉛筆。</p>
           </div>
           <div class="fact"><p>同一把 30 cm 直尺可以有不同的分格方式；每格的長度由 30 cm 除以等分數決定。讀值時先確認刻度間距，再判斷端點落在哪裡。</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>阿公，同一支鉛筆明明沒有變長，為什麼換個角度看，讀到的數字好像不一樣？</p></div>
           <p class="next-hint">知道每格代表多少後，接著觀察視角如何影響讀值。</p>
       </section>
 
@@ -618,6 +638,7 @@
             <div class="scene-readout" aria-live="polite"><article><small>目前角度估讀</small><strong id="parallax-reading">約 18.4 cm</strong></article></div>
             <p class="live-note" id="parallax-explanation">橘色輔助線的落點顯示目前角度的估讀。視角不同，視線落點可能改變，因此讀值也會產生差異，這稱為視差。</p>
           </div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>原來角度會影響讀值。如果鉛筆端點落在兩條刻線之間，該怎麼估讀？</p></div>
           <p class="next-hint">了解視角如何影響讀值後，接著練習估讀相鄰刻線之間的位置。</p>
         </div>
       </section>
@@ -668,6 +689,7 @@
           </aside>
           </div>
           <div class="fact"><p>這把尺最小刻度是 1 cm，估讀時通常再多估一位，到 0.1 cm；再往下寫到 0.01 cm，就超出這把尺能支持的精度。無論使用什麼單位或多細的刻度，測量仍受工具與讀取條件限制，因此結果都有不確定度。</p></div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>我估讀出鉛筆的長度了！不過視角或起點不同，讀值還是可能改變；我們能怎麼改善量測？</p></div>
         </div>
       </section>
 
@@ -747,6 +769,8 @@
             <h3 id="correction-result-title">四種方法可以搭配使用</h3>
             <p>刻度加密、對準起點、正對尺面與重複量測取平均，分別改善不同的誤差來源。平均能減少讀值波動，但不能消除固定的起點或視角偏差。</p>
           </aside>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>量測條件改善了，還要先確認要量什麼、工具合不合適，才能記錄隕石資料吧？</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>沒錯。接著看看同一種工具，能不能量所有東西。</p></div>
           <p class="next-hint">了解改善讀值的方法後，接著選擇合適的測量工具。</p>
         </div>
       </section>
@@ -761,6 +785,8 @@
           <aside class="decision-help" id="decision-help" aria-live="polite" hidden></aside>
           <div class="tool-demo" id="tool-demo" aria-live="polite" hidden><h3>選一個樹梢工具開始觀察</h3><p>完整決策樹會留在上方；選取工具後，這裡會出現操作示範。</p></div>
           <p class="live-note">先確認要測量的物理量，再依物件特性和量程挑選工具。同一種物理量，也可能有不只一種適用工具。</p>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>阿公，隕石除了長度，還要記錄哪些資料？</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>還要量質量和體積。先把今天學到的工具選擇和讀值方法整理起來吧。</p></div>
           <p class="next-hint">了解工具的用途與量程後，接著用單元小測安排測量步驟。</p>
         </div>
       </section>
@@ -835,6 +861,9 @@
             </div>
             <div class="quiz-feedback" id="assessment-feedback" role="status" aria-live="polite" hidden></div>
           </div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker">小葵</span><p>鉛筆的長度記好了。那這顆隕石呢？光知道長度好像還不夠。</p></div>
+          <div class="dialogue"><span class="speaker">阿公</span><p>沒錯。接下來，我們要想想怎麼量出它的質量和體積。</p></div>
+          <p class="next-hint">帶著隕石實驗紀錄，接著探索質量與體積的量測方法。</p>
         </div>
       </section>
     </div>
@@ -881,6 +910,8 @@
         document.querySelector("#measurement-result-value").textContent = measuring ? "18" : "看起來很長";
         document.querySelector("#measurement-result-note").textContent = measuring ? "有了共同的表示方式，別人就能看懂並拿來比較。" : "每個人的感覺可能不一樣，還不能公平比較。";
         document.querySelector("#measurement-next-hint").hidden = !measuring;
+        document.querySelector("#measurement-dialogue").hidden = !measuring;
+        document.querySelector("#measurement-question-dialogue").hidden = !measuring;
       }));
       const state = { divisions: 15, start: 0, angle: false, zoom: 0, edge: 18 };
       const estimateStart = 0;
