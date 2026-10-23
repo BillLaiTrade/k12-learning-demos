@@ -1566,6 +1566,7 @@
       process.steps.forEach((step,index)=>{const item=document.createElement("span");item.textContent=step;phaseSteps.append(item);if(index===1){const arrow=document.createElement("b");arrow.setAttribute("aria-hidden","true");arrow.textContent="→";phaseSteps.append(arrow);}});
       phaseSteps.hidden=false;
       if(key==="freeze")playFreezeDemo();else playPhaseTransition(key);
+      requestAnimationFrame(()=>freezeDemo.scrollIntoView({behavior:"smooth",block:"center"}));
     }
     document.querySelectorAll("[data-phase-state]").forEach(button=>button.addEventListener("click",()=>selectPhaseState(button.dataset.phaseState)));
     document.addEventListener("click",event=>{const trigger=event.target.closest("[data-phase-process]");if(trigger)selectPhaseProcess(trigger.dataset.phaseProcess);});
