@@ -579,7 +579,7 @@ function render() {
       { x: view.rayEnd.x, y: 0.22, z: 0.72 });
     landingRing.position.set(view.rayEnd.x, 0.255, 0.72);
     projectionRay.visible = true;
-    landingRing.visible = true;
+    landingRing.visible = false;
   } else {
     projectionRay.visible = false;
     landingRing.visible = false;
