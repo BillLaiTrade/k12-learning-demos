@@ -1391,7 +1391,7 @@
       freezeTargets.forEach((_,index)=>freezeTimers.push(setTimeout(()=>freezeNext(index),500+index*125)));
     }
     const phaseDemoHeading=document.getElementById("phase-demo-heading"),phaseDemoSource=document.getElementById("phase-demo-source"),phaseDemoCaption=document.getElementById("phase-demo-caption"),phaseDemoArrows=document.getElementById("phase-demo-arrows");
-    let phaseDemoRun=0,phaseDemoFrame=0,phaseDemoLastFrame=0,phaseDemoAnimations=[],activePhaseProcess="freeze",phaseDemoMotionState="";
+    let phaseDemoRun=0,phaseDemoFrame=0,phaseDemoLastFrame=0,phaseDemoTransition=null,activePhaseProcess="freeze",phaseDemoMotionState="";
     const phaseDemoMotion={
       melt:{from:"solid",to:"liquid",heading:"冰 → 水：吸熱融化",source:"吸熱",status:"冰晶排列逐漸鬆動，粒子開始互相移動"},
       vaporization:{from:"liquid",to:"gas",heading:"水 → 水蒸氣：液面蒸發",source:"吸熱",status:"液面粒子逐步離開液體，分散到容器空間"},
@@ -1406,17 +1406,35 @@
     }
     function stopPhaseDemoMotion(){
       phaseDemoRun++;cancelAnimationFrame(phaseDemoFrame);phaseDemoFrame=0;phaseDemoLastFrame=0;
-      phaseDemoAnimations.forEach(animation=>animation.cancel());phaseDemoAnimations=[];phaseDemoMotionState="";
+      phaseDemoTransition=null;phaseDemoMotionState="";
     }
-    function startPhaseDemoMotion(state,runId){
+    function startPhaseDemoMotion(state,runId,continueVelocity=false){
       if(runId!==phaseDemoRun)return;
       phaseDemoMotionState=state;
       freezeParticles.forEach(p=>{
-        p.vx=state==="solid"?0:(Math.random()-.5)*(state==="gas"?90:44);
-        p.vy=state==="solid"?0:(Math.random()-.5)*(state==="gas"?90:38);
+        if(state==="solid"){p.vx=0;p.vy=0;}
+        else if(!continueVelocity){p.vx=(Math.random()-.5)*(state==="gas"?90:44);p.vy=(Math.random()-.5)*(state==="gas"?90:38);}
         p.element.setAttribute("class",`freeze-demo-particle${state==="solid"?" is-vibrating":""}`);
       });
       phaseDemoLastFrame=0;phaseDemoFrame=requestAnimationFrame(now=>animatePhaseDemoMotion(now,runId));
+    }
+    function animatePhaseTransition(now,runId){
+      if(runId!==phaseDemoRun||freezeDemo.hidden||!phaseDemoTransition)return;
+      const transition=phaseDemoTransition,progress=Math.min(1,(now-transition.startedAt)/transition.duration),curve=Math.sin(Math.PI*progress),seconds=transition.duration/1000,drift=progress*progress*progress-progress*progress;
+      freezeParticles.forEach(p=>{
+        p.x=p.startX+(p.targetX-p.startX)*progress+p.curveX*curve+p.finalVx*seconds*drift;
+        p.y=p.startY+(p.targetY-p.startY)*progress+p.curveY*curve+p.finalVy*seconds*drift;
+        p.vx=(p.targetX-p.startX)/seconds+p.curveX*Math.PI/seconds*Math.cos(Math.PI*progress)+p.finalVx*(3*progress*progress-2*progress);
+        p.vy=(p.targetY-p.startY)/seconds+p.curveY*Math.PI/seconds*Math.cos(Math.PI*progress)+p.finalVy*(3*progress*progress-2*progress);
+        p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
+      });
+      if(progress>=1){
+        phaseDemoTransition=null;
+        const doneText={melt:"融化完成：粒子仍靠近，持續流動",vaporization:"汽化完成：水蒸氣粒子在容器中快速移動",condensation:"凝結完成：液態粒子聚集在容器底部並流動",sublimation:"昇華完成：粒子分散移動，未經過液態",deposition:"凝華完成：粒子排列成固態並微微振動"};
+        document.getElementById("freeze-demo-status").textContent=doneText[transition.key];
+        startPhaseDemoMotion(transition.to,runId,true);return;
+      }
+      phaseDemoFrame=requestAnimationFrame(next=>animatePhaseTransition(next,runId));
     }
     function animatePhaseDemoMotion(now,runId){
       if(runId!==phaseDemoRun||freezeDemo.hidden)return;
@@ -1447,30 +1465,24 @@
       const releasesEnergy=phaseProcesses[key].energy.startsWith("放熱");phaseDemoArrows.setAttribute("transform",releasesEnergy?"translate(0 50) scale(1 -1)":"");phaseDemoArrows.setAttribute("stroke",releasesEnergy?"#43839a":"#bd634b");
       document.getElementById("freeze-demo-status").textContent=process.status;
       phaseDemoCaption.textContent="圓點代表水的粒子；動畫呈現排列與運動改變，並非實際大小比例。";
-      const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches,scale=freezeDemo.querySelector("svg").getBoundingClientRect().width/360;
+      const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       freezeParticles.forEach((p,i)=>{
         p.element.setAttribute("class","freeze-demo-particle");p.element.style.transform="none";
         p.x=starts[i].x+(Math.random()-.5)*(process.from==="gas"?12:3);p.y=starts[i].y+(Math.random()-.5)*(process.from==="gas"?12:3);
+        p.startX=p.x;p.startY=p.y;p.targetX=ends[i].x;p.targetY=ends[i].y;
+        const bend=process.to==="gas"?15:process.to==="liquid"?7:3,angle=Math.random()*Math.PI*2;
+        p.curveX=Math.cos(angle)*bend;p.curveY=Math.sin(angle)*bend;
+        p.finalVx=process.to==="solid"?0:(Math.random()-.5)*(process.to==="gas"?88:34);
+        p.finalVy=process.to==="solid"?0:(Math.random()-.5)*(process.to==="gas"?88:26);
         p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
       });
-      let pending=freezeParticles.length;
-      const finishOne=(p,i)=>{
-        if(runId!==phaseDemoRun)return;
-        p.x=ends[i].x;p.y=ends[i].y;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
-        if(--pending===0){
-          const doneText={melt:"融化完成：粒子仍靠近，持續流動",vaporization:"汽化完成：水蒸氣粒子在容器中快速移動",condensation:"凝結完成：液態粒子聚集在容器底部並流動",sublimation:"昇華完成：粒子分散移動，未經過液態",deposition:"凝華完成：粒子排列成固態並微微振動"};
-          document.getElementById("freeze-demo-status").textContent=doneText[key];startPhaseDemoMotion(process.to,runId);
-        }
-      };
-      const ordered=[...freezeParticles.keys()];
-      if(key==="vaporization"||key==="sublimation")ordered.sort((a,b)=>starts[a].y-starts[b].y);
-      if(key==="deposition")ordered.sort((a,b)=>Math.floor(a/8)*7+Math.abs(a%8-3.5)-(Math.floor(b/8)*7+Math.abs(b%8-3.5)));
-      ordered.forEach((particleIndex,orderIndex)=>{
-        const p=freezeParticles[particleIndex],end=ends[particleIndex],delay=reduceMotion?0:orderIndex*34;
-        if(reduceMotion){finishOne(p,particleIndex);return;}
-        const animation=p.element.animate([{transform:"translate(0px,0px)"},{transform:`translate(${(end.x-p.x)*scale}px,${(end.y-p.y)*scale}px)`}],{duration:1050,delay,easing:"ease-in-out",fill:"forwards"});
-        phaseDemoAnimations.push(animation);animation.onfinish=()=>{animation.cancel();finishOne(p,particleIndex);};
-      });
+      phaseDemoMotionState="";phaseDemoLastFrame=0;
+      if(reduceMotion){
+        freezeParticles.forEach(p=>{p.x=p.targetX;p.y=p.targetY;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
+        startPhaseDemoMotion(process.to,runId);return;
+      }
+      phaseDemoTransition={key,to:process.to,startedAt:performance.now(),duration:2700};
+      phaseDemoFrame=requestAnimationFrame(now=>animatePhaseTransition(now,runId));
     }
     document.getElementById("freeze-demo-replay").addEventListener("click",()=>activePhaseProcess==="freeze"?playFreezeDemo():playPhaseTransition(activePhaseProcess));
     function resetPhaseSteps(){phaseSteps.replaceChildren();phaseSteps.hidden=true;}
