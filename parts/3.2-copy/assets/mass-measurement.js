@@ -1,5 +1,5 @@
 import * as THREE from '../../3.1/assets/vendor/three/build/three.module.js';
-import { makeStone } from './stone-observer.js';
+import { makeStone } from './stone-observer.js?v=meteorite-20261023-2';
 
 const MASS_G = 910;
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));

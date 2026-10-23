@@ -12,13 +12,13 @@ function noise3(x,y,z){
 }
 
 export function makeStone(){
-  const geometry=new THREE.SphereGeometry(1,128,96);
+  const geometry=new THREE.IcosahedronGeometry(1,3);
   const position=geometry.attributes.position,colors=[];
   for(let i=0;i<position.count;i++){
     const v=new THREE.Vector3().fromBufferAttribute(position,i).normalize();
-    const broad=(noise3(v.x*3.4,v.y*3.4,v.z*3.4)-.5)*.2;
-    const ridge=(noise3(v.x*7.5+2,v.y*7.5-1,v.z*7.5)-.5)*.09;
-    const granule=(noise3(v.x*48,v.y*48,v.z*48)-.5)*.035;
+    const broad=(noise3(v.x*3.4,v.y*3.4,v.z*3.4)-.5)*.3;
+    const ridge=(noise3(v.x*8+2,v.y*8-1,v.z*8)-.5)*.17;
+    const granule=(noise3(v.x*48,v.y*48,v.z*48)-.5)*.055;
     const pits=[
       [ .43,-.18,.87,.075],[-.66,.16,.71,.06],[.1,.72,.7,.05],[-.84,-.21,-.49,.055],
       [.72,.48,-.46,.05],[-.22,-.71,.66,.045],[.88,-.19,.3,.04]
@@ -34,7 +34,7 @@ export function makeStone(){
   }
   geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
   geometry.computeVertexNormals();
-  const material=new THREE.MeshStandardMaterial({color:0xffffff,vertexColors:true,roughness:.88,metalness:.08});
+  const material=new THREE.MeshStandardMaterial({color:0xffffff,vertexColors:true,roughness:.9,metalness:.12,flatShading:true});
   return new THREE.Mesh(geometry,material);
 }
 
