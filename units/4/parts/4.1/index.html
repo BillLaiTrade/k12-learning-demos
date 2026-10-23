@@ -340,6 +340,7 @@
     .freeze-demo-scene { display:block; width:100%; height:auto; border-radius:9px; background:#f4f8f5; }
     .freeze-demo-particle { fill:#287ba0; stroke:#fff; stroke-width:1; }
     .freeze-demo-particle.is-melted { fill:#39a9c4; }
+    .freeze-demo-particle.is-condensed { fill:#39a9c4; }
     .freeze-demo-particle.is-vibrating { animation:freeze-particle-vibration .14s ease-in-out infinite alternate; transform-box:fill-box; transform-origin:center; }
     @keyframes freeze-particle-vibration { from { transform:translate(-.35px,.25px); } to { transform:translate(.35px,-.25px); } }
     .freeze-demo-caption { margin:6px 0 0; color:#61736a; font-size:.73rem; }
@@ -1446,6 +1447,12 @@
       const meltLayerProgress=transition.key==="melt"?Array.from({length:6},(_,row)=>{const local=Math.max(0,Math.min(1,(elapsed-transition.delays[row*8])/transition.duration));return local*local*(3-2*local);}):null;
       freezeParticles.forEach((p,index)=>{
         const local=Math.max(0,Math.min(1,(elapsed-transition.delays[index])/transition.duration));
+        if(transition.key==="condensation"&&p.isCondensed){
+          p.x+=p.vx*dt;p.y+=p.vy*dt;
+          if(p.x<17){p.x=17;p.vx=Math.abs(p.vx);}if(p.x>343){p.x=343;p.vx=-Math.abs(p.vx);}
+          if(p.y<85){p.y=85;p.vy=Math.abs(p.vy)*.55;}if(p.y>116){p.y=116;p.vy=-Math.abs(p.vy)*.55;}
+          p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));return;
+        }
         if(transition.key==="sublimation"){
           if(local<=0)return;
           if(!p.isGasReleased){p.isGasReleased=true;p.element.setAttribute("class","freeze-demo-particle");}
@@ -1494,6 +1501,7 @@
         p.x=p.startX+(p.targetX-p.startX)*eased+p.curveX*curve+p.finalVx*seconds*drift;
         p.y=shiftedStartY+(p.targetY-shiftedStartY)*eased+p.curveY*curve+p.finalVy*seconds*drift;
         if(transition.key==="melt"&&local>=1){p.melted=true;p.vx=(Math.random()-.5)*38;p.vy=(Math.random()-.5)*14;p.element.setAttribute("class","freeze-demo-particle is-melted");}
+        if(transition.key==="condensation"&&local>=1&&!p.isCondensed){p.isCondensed=true;p.vx=(Math.random()-.5)*44;p.vy=(Math.random()-.5)*14;p.element.setAttribute("class","freeze-demo-particle is-condensed");}
         p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
       });
       if(transition.key==="vaporization"){
@@ -1519,11 +1527,21 @@
           if(relative<0){const impulse=-.97*relative;a.vx-=impulse*nx;a.vy-=impulse*ny;b.vx+=impulse*nx;b.vy+=impulse*ny;}
         }
         gas.forEach(p=>{p.startX=p.x;p.startY=p.y;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
+        const liquid=freezeParticles.filter(p=>p.isCondensed);
+        for(let pass=0;pass<3;pass++)for(let i=0;i<liquid.length;i++)for(let j=i+1;j<liquid.length;j++){
+          const a=liquid[i],b=liquid[j],dx=b.x-a.x,dy=b.y-a.y,distance=Math.hypot(dx,dy),minimum=9;
+          if(distance>=minimum)continue;
+          const nx=distance?dx/distance:1,ny=distance?dy/distance:0,overlap=minimum-(distance||0);
+          a.x-=nx*overlap/2;a.y-=ny*overlap/2;b.x+=nx*overlap/2;b.y+=ny*overlap/2;
+          const relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+          if(relative<0){const impulse=-.5*relative;a.vx-=impulse*nx;a.vy-=impulse*ny;b.vx+=impulse*nx;b.vy+=impulse*ny;}
+        }
+        liquid.forEach(p=>{p.x=Math.max(17,Math.min(343,p.x));p.y=Math.max(85,Math.min(116,p.y));p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
       }
       if(elapsed<0)document.getElementById("freeze-demo-status").textContent=transition.key==="deposition"?"起始狀態：水蒸氣；粒子分散並在容器內移動":`起始狀態：${transition.fromLabel}；粒子排列與位置`;
       else document.getElementById("freeze-demo-status").textContent=transition.status;
       if(now-transition.startedAt>=total){
-        if(transition.key!=="melt"&&transition.key!=="sublimation"&&transition.key!=="vaporization")freezeParticles.forEach(p=>{p.x=p.targetX;p.y=p.targetY;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
+        if(transition.key!=="melt"&&transition.key!=="sublimation"&&transition.key!=="vaporization"&&transition.key!=="condensation")freezeParticles.forEach(p=>{p.x=p.targetX;p.y=p.targetY;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
         phaseDemoTransition=null;
         const doneText={melt:"融化完成：粒子仍靠近，持續流動",vaporization:"汽化完成：水蒸氣粒子在容器中快速移動",condensation:"凝結完成：液態粒子聚集在容器底部並流動",sublimation:"昇華完成：粒子分散移動，未經過液態",deposition:"凝華完成：粒子排列成固態並微微振動"};
         document.getElementById("freeze-demo-status").textContent=doneText[transition.key];
@@ -1572,6 +1590,7 @@
         const offset=key==="melt"||key==="sublimation"?0:process.from==="gas"?12:3;
         p.x=starts[i].x+(Math.random()-.5)*offset;p.y=starts[i].y+(Math.random()-.5)*offset;
         p.startX=p.x;p.startY=p.y;p.targetX=ends[i].x;p.targetY=ends[i].y;
+        p.isCondensed=false;
         if(key==="deposition"){p.vx=(Math.random()-.5)*90;p.vy=(Math.random()-.5)*90;}
         if(key==="sublimation"){p.isGasReleased=false;p.vx=(Math.random()-.5)*90;p.vy=(Math.random()-.5)*90;}
         if(key==="vaporization"){p.isVaporized=false;p.vx=(Math.random()-.5)*42;p.vy=(Math.random()-.5)*32;}
@@ -1587,8 +1606,8 @@
         freezeParticles.forEach(p=>{p.x=p.targetX;p.y=p.targetY;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
         startPhaseDemoMotion(process.to,runId);return;
       }
-      const scores=freezeParticles.map((p,i)=>process.to==="solid"?ends[i].y:key==="melt"?-p.y:p.y),minScore=Math.min(...scores),maxScore=Math.max(...scores),spread=key==="melt"?5000:key==="deposition"?4800:3600,duration=key==="melt"?2000:key==="deposition"?2200:1600;
-      const delays=scores.map(score=>{const delay=maxScore===minScore?0:(score-minScore)/(maxScore-minScore)*spread;return key==="sublimation"?Math.max(0,Math.min(spread,delay+(Math.random()-.5)*260)):delay;});
+      const scores=freezeParticles.map((p,i)=>process.to==="solid"?ends[i].y:key==="melt"?-p.y:p.y),minScore=Math.min(...scores),maxScore=Math.max(...scores),spread=key==="melt"?5000:key==="deposition"?4800:3600,duration=key==="melt"?2000:key==="deposition"?2200:key==="condensation"?650:1600;
+      const delays=scores.map(score=>{const delay=maxScore===minScore?0:(score-minScore)/(maxScore-minScore)*spread;return key==="sublimation"||key==="condensation"?Math.max(0,Math.min(spread,delay+(Math.random()-.5)*260)):delay;});
       phaseDemoTransition={key,to:process.to,fromLabel:key==="melt"?"固態冰":process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態",status:process.status,startedAt:null,pausedAt:null,hold:key==="melt"?2000:key==="deposition"?2000:key==="vaporization"?2000:key==="condensation"?2000:900,spread,duration,delays};
       phaseDemoFrame=requestAnimationFrame(now=>animatePhaseTransition(now,runId));
     }
