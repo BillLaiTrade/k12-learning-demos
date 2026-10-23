@@ -1866,7 +1866,7 @@
           document.querySelector("#correction-stage-title").textContent = "調整觀察角度";
           document.querySelector("#correction-stage-prompt").textContent = "視線正對尺面、垂直刻度，可減少視差造成的讀值偏移。比較兩種視角的端點讀值。";
           document.querySelector("#correction-mode-instructions").textContent = landingOnScale
-            ? `目前讀值約 ${correctionFormat(endReading)} cm。改變視角，觀察橘色投影線落點與讀值如何變化。`
+            ? "改變視角，觀察橘色投影線落點與讀值如何變化。"
             : "目前視線落在尺面外；拖曳場景轉動視角，讓投影回到刻度上。";
         } else {
           correctionCanvas.setAttribute("aria-label", "重複量測模式不使用三維尺筆場景。");
