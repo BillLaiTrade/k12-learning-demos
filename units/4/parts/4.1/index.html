@@ -252,7 +252,7 @@
     .particle-box { container-type:inline-size; }
     .particle-molecule { position:absolute; z-index:1; left:var(--x); top:var(--y); width:clamp(6px,5.8cqi,12px); height:clamp(6px,5.8cqi,12px); transform:translate(-50%,-50%); transition:left .9s ease-in-out,top .9s ease-in-out; will-change:left,top; }
     .particle-box[data-motion-state="liquid"] .particle-molecule,
-    .particle-box[data-motion-state="gas"] .particle-molecule { z-index:2; animation:none; transition:none; }
+    .particle-box[data-motion-state="gas"] .particle-molecule { z-index:2; left:0; top:0; transform:translate3d(var(--particle-x,0px),var(--particle-y,0px),0) translate(-50%,-50%); animation:none; transition:none; will-change:transform; }
     .particle-molecule svg { display:block; width:100%; height:100%; overflow:visible; }
     .particle-molecule[data-vibrating="true"] { animation:solid-particle-vibration .12s linear infinite alternate; }
     @keyframes solid-particle-vibration { from { transform:translate(calc(-50% + var(--vibrate-from-x)),calc(-50% + var(--vibrate-from-y))); } to { transform:translate(calc(-50% + var(--vibrate-to-x)),calc(-50% + var(--vibrate-to-y))); } }
@@ -1160,58 +1160,69 @@
 
     function createMovingParticleModel(box,state,initialPositions){
       const width=box.clientWidth,height=box.clientHeight,isLiquid=state==="liquid",elements=[...box.querySelectorAll(".particle-molecule")],radius=elements[0].getBoundingClientRect().width/2,poolTop=height*.66,particles=[];
+      const margin=radius+3,availableWidth=Math.max(1,width-margin*2),availableHeight=Math.max(1,height-poolTop-radius*2-3),columns=Math.max(1,Math.floor(availableWidth/(radius*2+1.5))),rows=Math.ceil(elements.length/columns);
       elements.forEach((element,index)=>{
-        element.style.transition="none";
         let x,y;
         if(isLiquid){
-          let found=false;
-          for(let attempt=0;attempt<900&&!found;attempt++){
-            const candidateX=radius+3+Math.random()*(width-2*radius-6),candidateY=poolTop+radius+Math.random()*(height-poolTop-2*radius-3);
-          if(particles.every(other=>Math.hypot(candidateX-other.x,candidateY-other.y)>radius*2+3)){x=candidateX;y=candidateY;found=true;}
-          }
-          if(!found){const columns=Math.max(1,Math.floor((width-2*radius)/(radius*2+4))),column=index%columns,row=Math.floor(index/columns);x=radius+3+column*(width-2*radius-6)/Math.max(1,columns-1);y=height-radius-3-row*(radius*2+4);}
+          const row=Math.floor(index/columns),rowStart=row*columns,countInRow=Math.min(columns,elements.length-rowStart),columnOffset=(columns-countInRow)/2,column=index-rowStart;
+          x=margin+(column+columnOffset+.5)*availableWidth/columns+(Math.random()-.5)*availableWidth/columns*.05;
+          y=poolTop+radius+1+(row+.5)*availableHeight/rows+(Math.random()-.5)*availableHeight/rows*.05;
         }else{
           x=Math.max(radius,Math.min(width-radius,initialPositions[index][0]*width/100));
           y=Math.max(radius,Math.min(height-radius,initialPositions[index][1]*height/100));
         }
         const angle=Math.random()*Math.PI*2,speed=isLiquid?30+Math.random()*24:44+Math.random()*34;
-        const particle={element,x,y,radius,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed};
-        particles.push(particle);element.style.left=`${x}px`;element.style.top=`${y}px`;
+        const vx=Math.cos(angle)*speed,vy=Math.sin(angle)*speed,particle={element,x,y,radius,vx,vy,targetVx:vx,targetVy:vy,turnIn:.4+Math.random()*.9};
+        element.style.setProperty("--particle-x",`${x}px`);element.style.setProperty("--particle-y",`${y}px`);
+        particles.push(particle);
       });
       return {box,state,width,height,poolTop,particles};
     }
 
-    function advanceParticleModel(model,dt,time){
+    function advanceParticleModel(model,dt){
       const {box,state,particles}=model,isLiquid=state==="liquid",width=box.clientWidth,height=box.clientHeight,poolTop=height*.66;
       model.width=width;model.height=height;model.poolTop=poolTop;
-      for(const p of particles){
-        if(isLiquid){const depth=(p.y-poolTop)/Math.max(1,height-poolTop),flowX=24*Math.sin(depth*Math.PI*2+time*.85),flowY=10*Math.cos(p.x/width*Math.PI*2-time*.6);p.vx+=(flowX-p.vx)*.6*dt+(Math.random()-.5)*10*dt;p.vy+=(flowY-p.vy)*.6*dt+(Math.random()-.5)*8*dt+9*dt;p.vx*=.9995;}
-        p.x+=p.vx*dt;p.y+=p.vy*dt;
-        if(p.x<p.radius){p.x=p.radius;p.vx=Math.abs(p.vx);if(isLiquid)p.vx*=.92;}
-        if(p.x>width-p.radius){p.x=width-p.radius;p.vx=-Math.abs(p.vx);if(isLiquid)p.vx*=.92;}
-        const top=isLiquid?poolTop+p.radius:p.radius,bottom=height-p.radius;
-        if(p.y<top){p.y=top;p.vy=Math.abs(p.vy)*(isLiquid?.38:1);}
-        if(p.y>bottom){p.y=bottom;p.vy=-Math.abs(p.vy)*(isLiquid?.48:1);if(isLiquid)p.vx*=.96;}
+      const stepCount=Math.max(1,Math.ceil(dt/(1/120))),step=dt/stepCount,restitution=isLiquid?.58:.94,minGap=1;
+      for(let stepIndex=0;stepIndex<stepCount;stepIndex++){
+        for(const p of particles){
+          if(isLiquid){
+            p.turnIn-=step;
+            if(p.turnIn<=0){const angle=Math.random()*Math.PI*2,speed=18+Math.random()*24;p.targetVx=Math.cos(angle)*speed;p.targetVy=Math.sin(angle)*speed;p.turnIn=.55+Math.random()*1.1;}
+            const response=Math.min(1,1.5*step);p.vx+=(p.targetVx-p.vx)*response;p.vy+=(p.targetVy-p.vy)*response+16*step;
+          }
+          p.x+=p.vx*step;p.y+=p.vy*step;
+          if(p.x<p.radius){p.x=p.radius;p.vx=Math.abs(p.vx)*(isLiquid?.9:1);}
+          if(p.x>width-p.radius){p.x=width-p.radius;p.vx=-Math.abs(p.vx)*(isLiquid?.9:1);}
+          const top=isLiquid?poolTop+p.radius:p.radius,bottom=height-p.radius;
+          if(p.y<top){p.y=top;p.vy=Math.abs(p.vy)*(isLiquid?.28:1);}
+          if(p.y>bottom){p.y=bottom;p.vy=-Math.abs(p.vy)*(isLiquid?.28:1);}
+        }
+        for(let pass=0;pass<3;pass++)for(let i=0;i<particles.length;i++)for(let j=i+1;j<particles.length;j++){
+          const a=particles[i],b=particles[j],dx=b.x-a.x,dy=b.y-a.y,distance=Math.hypot(dx,dy),minimum=a.radius+b.radius+minGap;
+          if(distance>=minimum)continue;
+          const nx=distance?dx/distance:Math.cos((i+j)*2.399),ny=distance?dy/distance:Math.sin((i+j)*2.399),overlap=minimum-(distance||0);
+          a.x-=nx*overlap/2;a.y-=ny*overlap/2;b.x+=nx*overlap/2;b.y+=ny*overlap/2;
+          const relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+          if(relative<0){const impulse=-(1+restitution)*relative/2;a.vx-=impulse*nx;a.vy-=impulse*ny;b.vx+=impulse*nx;b.vy+=impulse*ny;}
+        }
+        for(const p of particles){
+          const top=isLiquid?poolTop+p.radius:p.radius,bottom=height-p.radius;
+          if(p.x<p.radius){p.x=p.radius;p.vx=Math.abs(p.vx);}
+          if(p.x>width-p.radius){p.x=width-p.radius;p.vx=-Math.abs(p.vx);}
+          if(p.y<top){p.y=top;p.vy=Math.abs(p.vy)*(isLiquid?.28:1);}
+          if(p.y>bottom){p.y=bottom;p.vy=-Math.abs(p.vy)*(isLiquid?.28:1);}
+        }
       }
-      const restitution=isLiquid?.62:.94;
-      for(let i=0;i<particles.length;i++)for(let j=i+1;j<particles.length;j++){
-        const a=particles[i],b=particles[j],dx=b.x-a.x,dy=b.y-a.y,minDistance=a.radius+b.radius+(isLiquid?3:1),distance=Math.hypot(dx,dy);
-        if(distance>=minDistance)continue;
-        const nx=distance?dx/distance:1,ny=distance?dy/distance:0,overlap=minDistance-(distance||0);
-        a.x-=nx*overlap/2;a.y-=ny*overlap/2;b.x+=nx*overlap/2;b.y+=ny*overlap/2;
-        const relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
-        if(relative<0){const impulse=-(1+restitution)*relative/2;a.vx-=impulse*nx;a.vy-=impulse*ny;b.vx+=impulse*nx;b.vy+=impulse*ny;}
-      }
       for(const p of particles){
-        const maxSpeed=isLiquid?54:78,speed=Math.hypot(p.vx,p.vy);
+        const maxSpeed=isLiquid?48:78,speed=Math.hypot(p.vx,p.vy);
         if(speed>maxSpeed){p.vx*=maxSpeed/speed;p.vy*=maxSpeed/speed;}
-        p.element.style.left=`${p.x}px`;p.element.style.top=`${p.y}px`;
+        p.element.style.setProperty("--particle-x",`${p.x}px`);p.element.style.setProperty("--particle-y",`${p.y}px`);
       }
     }
     let particleMotionTime=0;
     function animateParticleModels(now){
       const dt=particleMotionTime?Math.min((now-particleMotionTime)/1000,.04):0;particleMotionTime=now;
-      if(dt)for(const model of movingParticleModels)advanceParticleModel(model,dt,now/1000);
+      if(dt)for(const model of movingParticleModels)advanceParticleModel(model,dt);
       requestAnimationFrame(animateParticleModels);
     }
     requestAnimationFrame(animateParticleModels);
