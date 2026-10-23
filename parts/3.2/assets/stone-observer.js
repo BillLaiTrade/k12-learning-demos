@@ -1,4 +1,5 @@
 import * as THREE from '../../3.1/assets/vendor/three/build/three.module.js';
+import {GLTFLoader} from '../../3.1/assets/vendor/three/examples/jsm/loaders/GLTFLoader.js';
 
 const clamp=(value,min,max)=>Math.min(max,Math.max(min,value));
 
@@ -12,32 +13,71 @@ function noise3(x,y,z){
 }
 
 export function makeStone(){
-  const geometry=new THREE.SphereGeometry(1,128,96);
+  const geometry=new THREE.IcosahedronGeometry(1,4);
   const position=geometry.attributes.position,colors=[];
   for(let i=0;i<position.count;i++){
     const v=new THREE.Vector3().fromBufferAttribute(position,i).normalize();
-    const broad=Math.sin(v.x*4.3+v.y*2.6+v.z*3.1)*.05;
-    const ripple=Math.sin(v.x*8.1-v.y*6.2+v.z*7.4)*.014;
-    const granule=(noise3(v.x*72,v.y*72,v.z*72)-.5)*.012;
-    const pitA=Math.exp(-((v.x-.4)**2+(v.y+.2)**2+(v.z-.87)**2)*34)*.035;
-    const pitB=Math.exp(-((v.x+.65)**2+(v.y-.1)**2+(v.z+.7)**2)*42)*.026;
-    const r=1+broad+ripple+granule-pitA-pitB;
+    const broad=(noise3(v.x*3.4,v.y*3.4,v.z*3.4)-.5)*.3;
+    const ridge=(noise3(v.x*8+2,v.y*8-1,v.z*8)-.5)*.17;
+    const granule=(noise3(v.x*48,v.y*48,v.z*48)-.5)*.055;
+    const pits=[
+      [ .43,-.18,.87,.075],[-.66,.16,.71,.06],[.1,.72,.7,.05],[-.84,-.21,-.49,.055],
+      [.72,.48,-.46,.05],[-.22,-.71,.66,.045],[.88,-.19,.3,.04]
+    ].reduce((sum,[x,y,z,depth])=>sum+Math.exp(-((v.x-x)**2+(v.y-y)**2+(v.z-z)**2)*42)*depth,0);
+    const r=1+broad+ridge+granule-pits;
     position.setXYZ(i,v.x*r*1.28,v.y*r*.79,v.z*r*.82);
-    const cloud=noise3(v.x*5,v.y*5,v.z*5),mottle=noise3(v.x*17,v.y*17,v.z*17);
-    const flecks=noise3(v.x*43,v.y*43,v.z*43),grain=noise3(v.x*91,v.y*91,v.z*91);
-    const shade=clamp(.29+(cloud-.5)*.32+(mottle-.5)*.25+(flecks-.5)*.18+(grain-.5)*.1,.12,.55);
-    colors.push(shade*1.015,shade,shade*.96);
+    const cloud=noise3(v.x*5,v.y*5,v.z*5),mottle=noise3(v.x*19+4,v.y*19-2,v.z*19+1);
+    const flecks=noise3(v.x*53,v.y*53,v.z*53),orePatch=noise3(v.x*10+12,v.y*10-7,v.z*10+3);
+    const charcoal=clamp(.085+(cloud-.5)*.12+(mottle-.5)*.095+(flecks-.5)*.05,.035,.23);
+    const inclusion=Math.pow(clamp((orePatch-.70)*4.4,0,1)*clamp(.65+(flecks-.5)*1.1,0,1),1.25);
+    colors.push(charcoal*1.12*(1-inclusion)+.52*inclusion,charcoal*1.1*(1-inclusion)+.205*inclusion,charcoal*1.06*(1-inclusion)+.048*inclusion);
   }
   geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
   geometry.computeVertexNormals();
-  const material=new THREE.MeshStandardMaterial({color:0xffffff,vertexColors:true,roughness:.94,metalness:0});
+  const material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.8,metalness:.18});
   return new THREE.Mesh(geometry,material);
 }
 
-const CM_PER_WORLD=1.6;
-const RULER_CM=6;
+let meteoriteTemplatePromise;
+function loadMeteoriteTemplate(){
+  if(meteoriteTemplatePromise)return meteoriteTemplatePromise;
+  const pageVersion=new URL(import.meta.url).searchParams.get('v'),modelUrl=new URL('./meteorite-model.glb',import.meta.url);
+  if(pageVersion)modelUrl.searchParams.set('v',pageVersion);
+  meteoriteTemplatePromise=new Promise((resolve,reject)=>new GLTFLoader().load(modelUrl.href,gltf=>{
+    gltf.scene.updateMatrixWorld(true);
+    const modeledMesh=gltf.scene.getObjectByProperty('isMesh',true);
+    if(!modeledMesh){reject(new Error('Meteorite mesh missing'));return;}
+    const modeledGeometry=modeledMesh.geometry.clone();modeledGeometry.applyMatrix4(modeledMesh.matrixWorld);modeledGeometry.computeVertexNormals();
+    const geometry=modeledGeometry.toNonIndexed(),position=geometry.attributes.position,uvs=new Float32Array(position.count*2);
+    const sphericalUV=index=>{
+      const direction=new THREE.Vector3().fromBufferAttribute(position,index).normalize();
+      return [.5+Math.atan2(direction.z,direction.x)/(2*Math.PI),.5+Math.asin(THREE.MathUtils.clamp(direction.y,-1,1))/Math.PI];
+    };
+    for(let face=0;face<position.count;face+=3){
+      const coords=[sphericalUV(face),sphericalUV(face+1),sphericalUV(face+2)],uValues=coords.map(value=>value[0]);
+      if(Math.max(...uValues)-Math.min(...uValues)>.5)for(const value of coords)if(value[0]<.5)value[0]+=1;
+      for(let vertex=0;vertex<3;vertex++){uvs[(face+vertex)*2]=coords[vertex][0];uvs[(face+vertex)*2+1]=coords[vertex][1];}
+    }
+    geometry.setAttribute('uv',new THREE.BufferAttribute(uvs,2));geometry.deleteAttribute('color');geometry.computeVertexNormals();
+    const material=modeledMesh.material.clone();material.flatShading=false;material.vertexColors=false;material.color.set(0xffffff);material.roughness=.92;material.metalness=.08;
+    const textureUrl=new URL('./meteorite-surface.webp',import.meta.url);if(pageVersion)textureUrl.searchParams.set('v',pageVersion);
+    new THREE.TextureLoader().load(textureUrl.href,texture=>{
+      texture.colorSpace=THREE.SRGBColorSpace;texture.wrapS=THREE.RepeatWrapping;texture.wrapT=THREE.ClampToEdgeWrapping;
+      material.map=texture;material.needsUpdate=true;resolve({geometry,material});
+    },undefined,reject);
+  },undefined,reject));
+  return meteoriteTemplatePromise;
+}
+
+export function makeMeteoriteMesh(){
+  return loadMeteoriteTemplate().then(({geometry,material})=>new THREE.Mesh(geometry.clone(),material.clone()));
+}
+
+const LINEAR_SCALE=Math.cbrt(910/39);
+const CM_PER_WORLD=1.6*LINEAR_SCALE;
+const RULER_CM=6*LINEAR_SCALE;
 const WORLD_PER_CM=1/CM_PER_WORLD;
-const MEASURE_COLORS={length:0x00796b,width:0x5269a6,height:0xbf6338};
+const MEASURE_COLORS={length:0x00b89c,width:0x6d88ff,height:0xff895c};
 
 function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLORS.length,showGuides=true}={}){
   const width=RULER_CM*WORLD_PER_CM,depth=.56,top=0;
@@ -48,19 +88,19 @@ function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLO
   const face=document.createElement('canvas');face.width=1280;face.height=180;
   const ctx=face.getContext('2d');ctx.fillStyle='#e5ce91';ctx.fillRect(0,0,face.width,face.height);
   ctx.strokeStyle='#354b42';ctx.lineWidth=2;ctx.strokeRect(1,1,face.width-2,face.height-2);
-  for(let tenth=0;tenth<=RULER_CM*10;tenth++){
-    const x=8+(face.width-16)*tenth/(RULER_CM*10),major=tenth%10===0,half=tenth%5===0;
-    ctx.lineWidth=major?4:2.5;ctx.beginPath();ctx.moveTo(x,6);ctx.lineTo(x,major?105:half?78:54);ctx.stroke();
-    if(major){ctx.fillStyle='#263b34';ctx.font='bold 34px sans-serif';ctx.textAlign='center';ctx.fillText(String(tenth/10),x,145)}
+  for(let cm=0;cm<=Math.floor(RULER_CM);cm++){
+    const x=8+(face.width-16)*cm/RULER_CM,major=cm%5===0;
+    ctx.lineWidth=major?4:2.5;ctx.beginPath();ctx.moveTo(x,6);ctx.lineTo(x,major?105:72);ctx.stroke();
+    if(major){ctx.fillStyle='#263b34';ctx.font='bold 34px sans-serif';ctx.textAlign='center';ctx.fillText(String(cm),x,145)}
   }
   ctx.fillStyle='#263b34';ctx.font='20px sans-serif';ctx.textAlign='right';ctx.fillText('cm',face.width-12,169);
   const texture=new THREE.CanvasTexture(face);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;
   const topFace=new THREE.Mesh(new THREE.PlaneGeometry(width+.2,depth),new THREE.MeshBasicMaterial({map:texture}));
   topFace.rotation.x=-Math.PI/2;topFace.position.y=top+.001;group.add(topFace);
-  const guideMaterial=showGuides?new THREE.LineDashedMaterial({color:accent,dashSize:.055,gapSize:.04,depthTest:false}):null;
+  const guideMaterial=showGuides?new THREE.LineDashedMaterial({color:accent,dashSize:.07,gapSize:.035,depthTest:false,toneMapped:false}):null;
   const guides=showGuides?[0,1].map(()=>{const line=new THREE.Line(new THREE.BufferGeometry(),guideMaterial);line.renderOrder=5;group.add(line);return line}):[];
-  const markerMaterial=showGuides?new THREE.MeshBasicMaterial({color:accent,depthTest:false}):null;
-  const markers=showGuides?[0,1].map(()=>{const marker=new THREE.Mesh(new THREE.SphereGeometry(.035,12,8),markerMaterial);marker.renderOrder=6;group.add(marker);return marker}):[];
+  const markerMaterial=showGuides?new THREE.MeshBasicMaterial({color:accent,depthTest:false,toneMapped:false}):null;
+  const markers=showGuides?[0,1].map(()=>{const marker=new THREE.Mesh(new THREE.SphereGeometry(.045,12,8),markerMaterial);marker.renderOrder=6;group.add(marker);return marker}):[];
   return {group,guides,markers,top,width,depth,faceWidth:width+.2,faceWidthPixels:face.width,faceHeightPixels:face.height};
 }
 
@@ -98,7 +138,7 @@ export function mountStoneObserver(){
   const rim=new THREE.DirectionalLight(0xffffff,1.1);rim.position.set(1,4,-4);scene.add(rim);
   // 三把尺與三面格線組成同一個可旋轉的開口量測框。
   const rulerFloor=-1.05,rulerEdge=RULER_CM*WORLD_PER_CM/2,rulerHeight=RULER_CM*WORLD_PER_CM;
-  const frameCenterY=-.14; // 將固定尺框與石頭的旋轉中心對齊。
+  const frameCenterY=-.14; // 將固定尺框與隕石的旋轉中心對齊。
   const framePivot=new THREE.Group();framePivot.position.y=frameCenterY;scene.add(framePivot);
   const frameAssembly=new THREE.Group();frameAssembly.position.y=-frameCenterY;framePivot.add(frameAssembly);
   const lengthRuler=makeRuler({position:[0,rulerFloor,-rulerEdge],accent:MEASURE_COLORS.length});frameAssembly.add(lengthRuler.group);
@@ -117,18 +157,25 @@ export function mountStoneObserver(){
   const activePointers=new Map(),lengthReadout=document.querySelector('#stone-length'),widthReadout=document.querySelector('#stone-width'),heightReadout=document.querySelector('#stone-height');
   const svgNS='http://www.w3.org/2000/svg',heightOverlay=document.createElementNS(svgNS,'svg'),heightGuides=[0,1].map(()=>{
     const line=document.createElementNS(svgNS,'line');
-    line.setAttribute('stroke','#bf6338');line.setAttribute('stroke-width','1');line.setAttribute('stroke-dasharray','4 3');
+    line.setAttribute('stroke','#ff895c');line.setAttribute('stroke-width','1.7');line.setAttribute('stroke-dasharray','6 3');
     heightOverlay.append(line);return line;
   });
   const heightMarkers=[0,1].map(()=>{
     const marker=document.createElementNS(svgNS,'circle');
-    marker.setAttribute('r','2');marker.setAttribute('fill','#bf6338');
+    marker.setAttribute('r','3');marker.setAttribute('fill','#ff895c');
     heightOverlay.append(marker);return marker;
   });
   heightOverlay.setAttribute('aria-hidden','true');heightOverlay.setAttribute('focusable','false');
   Object.assign(heightOverlay.style,{position:'absolute',inset:'0',width:'100%',height:'100%',overflow:'hidden',pointerEvents:'none',zIndex:'2'});
   host.append(heightOverlay);
   const loading=document.querySelector('#observer-loading');
+  // Apply the same predicted surface texture across the full rendered 3D body.
+  loadMeteoriteTemplate().then(({geometry,material})=>{
+    stone.geometry.dispose();stone.geometry=geometry.clone();
+    stone.material.dispose();stone.material=material.clone();
+    stone.material.map.anisotropy=renderer.capabilities.getMaxAnisotropy();
+    measureDirty=true;if(loading)loading.hidden=true;
+  }).catch(()=>{if(loading)loading.hidden=true});
   const raycaster=new THREE.Raycaster(),pointerNdc=new THREE.Vector2();raycaster.params.Line.threshold=.09;
   function resize(){width=host.clientWidth;height=host.clientHeight;if(!width||!height)return;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();measureDirty=true}
   const observer=new ResizeObserver(resize);observer.observe(host);resize();
@@ -196,7 +243,7 @@ export function mountStoneObserver(){
       const anchorX=(projected.x*.5+.5)*width;
       const screenY=(-projected.y*.5+.5)*height;
       const line=heightGuides[index];
-      line.setAttribute('x1',String(anchorX-22));line.setAttribute('x2',String(anchorX));
+      line.setAttribute('x1',String(anchorX-34));line.setAttribute('x2',String(anchorX));
       line.setAttribute('y1',String(screenY));line.setAttribute('y2',String(screenY));
       heightMarkers[index].setAttribute('cx',String(anchorX));heightMarkers[index].setAttribute('cy',String(screenY));
     });
@@ -209,7 +256,7 @@ export function mountStoneObserver(){
       const lineStart=localPoint.clone().add(new THREE.Vector3(0,.012,0));
       const line=ruler.guides[index];line.geometry.dispose();line.geometry=new THREE.BufferGeometry().setFromPoints([
         lineStart,
-        lineStart.clone().addScaledVector(directionLocal,.42)
+        lineStart.clone().addScaledVector(directionLocal,.58)
       ]);line.computeLineDistances();
       ruler.markers[index].position.copy(lineStart);
     });
@@ -232,7 +279,6 @@ export function mountStoneObserver(){
   const endPointer=event=>{activePointers.delete(event.pointerId);if(dragId===event.pointerId)dragId=null;if(activePointers.size===1){const [id,point]=activePointers.entries().next().value;dragId=id;dragTarget=null;lastX=point.x;lastY=point.y}if(activePointers.size<2)pinchDistance=0};
   host.addEventListener('pointerup',endPointer);host.addEventListener('pointercancel',endPointer);host.addEventListener('lostpointercapture',endPointer);
   host.addEventListener('keydown',event=>{const step=.07;let used=true;switch(event.key){case'ArrowLeft':rotateStone(-step,0);break;case'ArrowRight':rotateStone(step,0);break;case'ArrowUp':rotateStone(0,-step);break;case'ArrowDown':rotateStone(0,step);break;case'Home':pivot.quaternion.identity();dragTarget=null;velocityYaw=0;velocityPitch=0;distance=8.8;camera.position.z=distance;camera.updateProjectionMatrix();measureDirty=true;break;default:used=false}if(used)event.preventDefault()});
-  if(loading)loading.hidden=true;
   function render(){raf=requestAnimationFrame(render);if(!dragId&&(Math.abs(velocityYaw)>.00025||Math.abs(velocityPitch)>.00025)){rotateStone(velocityYaw,velocityPitch);velocityYaw*=.91;velocityPitch*=.91}else if(Math.abs(velocityYaw)<=.00025&&Math.abs(velocityPitch)<=.00025){velocityYaw=0;velocityPitch=0}if(measureDirty)refreshMeasurement();renderer.render(scene,camera)}
   render();
   return()=>{cancelAnimationFrame(raf);observer.disconnect();renderer.dispose();scene.traverse(node=>{if(node.isMesh||node.isLine){node.geometry?.dispose();if(Array.isArray(node.material))node.material.forEach(material=>material.dispose());else node.material?.dispose()}})};

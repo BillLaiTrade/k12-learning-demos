@@ -1,0 +1,301 @@
+.density-experiment{margin-top:24px;padding-top:20px;border-top:1px solid #e7e9e2}
+.density-experiment h3{margin:0 0 6px;font-size:1.2rem;line-height:1.45}
+.density-experiment-intro{margin:0 0 15px;color:var(--muted);font-size:.92rem}
+.experiment-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.experiment-tool{height:340px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--line);border-radius:12px;background:linear-gradient(#f5f8f3 0 58%,#edf3ec 58%);transition:box-shadow .15s,border-color .15s;cursor:pointer}
+.experiment-tool:hover{border-color:#9ab9a3}
+.experiment-tool:focus-visible{outline:3px solid #79b89a;outline-offset:2px}
+.experiment-tool.is-drop-target{box-shadow:inset 0 0 0 4px #7bb59288;border-color:var(--green)}
+.experiment-tool-name{position:absolute;top:12px;left:15px;color:#526358;font-weight:750;font-size:.9rem}
+.experiment-scale{position:relative;width:min(330px,90%);height:176px;margin-top:45px;filter:drop-shadow(0 5px 4px #243b3028)}
+.experiment-scale-platform{position:absolute;left:6%;top:0;width:88%;height:22px;border:2px solid #b99545;border-radius:4px;background:linear-gradient(180deg,#eeeae0,#c8cbc1);box-shadow:0 4px 0 #997837}
+.experiment-scale-platform:after{content:"";position:absolute;inset:3px 10px;border-radius:2px;background:linear-gradient(90deg,#aeb6ab,#e6e6dc,#aab3a7)}
+.experiment-scale-body{position:absolute;left:10%;right:10%;top:24px;height:137px;clip-path:polygon(0 0,100% 0,96% 100%,4% 100%);border:1px solid #143d32;background:linear-gradient(180deg,#23604d,#164838 68%,#10392f)}
+.experiment-scale-body:after{content:"";position:absolute;left:22px;right:22px;bottom:12px;height:4px;border-radius:3px;background:#73917d;opacity:.7}
+.experiment-scale-body:before{content:"";position:absolute;right:23px;top:75px;width:16px;height:16px;border:1px solid #7e8e82;border-radius:50%;background:linear-gradient(145deg,#f5f5ec,#9da99e)}
+.experiment-scale-screen{position:absolute;left:14%;right:14%;top:42px;height:57px;display:flex;align-items:center;justify-content:center;gap:5px;padding:0 8px;border:2px solid #809386;border-radius:3px;background:linear-gradient(180deg,#14251f,#0d1c17);box-shadow:inset 0 0 6px #08130f;color:#dff1bd;font-variant-numeric:tabular-nums;text-shadow:0 0 5px #bce58a;white-space:nowrap}
+.experiment-scale-screen strong{font-size:1.8rem;line-height:1.1;letter-spacing:0}
+.experiment-scale-screen small{align-self:flex-end;margin:0 0 9px 2px;font-size:1rem;font-weight:800}
+.experiment-scale-rocks{position:absolute;inset:0;z-index:3;pointer-events:none}
+.experiment-scale-rock{position:absolute;top:-58px;width:72px;height:58px;object-fit:contain;filter:drop-shadow(0 3px 2px #354a3c55);pointer-events:auto;cursor:grab;touch-action:none}
+.experiment-scale-rock:active,.experiment-cylinder-rock:active{cursor:grabbing}
+.experiment-scale-rock[data-sample=A]{left:34%;top:-58px;width:76px;height:58px;transform:translateX(-50%)}
+.experiment-scale-rock[data-sample=B]{left:66%;top:-58px;width:76px;height:58px;transform:translateX(-50%)}
+.experiment-scale-rock:only-child{left:50%;transform:translateX(-50%)}
+.experiment-cylinder{position:relative;width:176px;height:258px;margin-top:17px;box-sizing:border-box;border:3px solid #809b91;border-top:0;border-radius:0 0 20px 20px;overflow:hidden;background:linear-gradient(90deg,#fff9,#deeee366 28%,#fff8 58%,#d9e9e366)}
+.experiment-water{position:absolute;left:0;bottom:0;width:100%;height:33.3333%;border-top:2px solid #2b8da4;background:linear-gradient(90deg,#70b7c688,#8bc8d288 35%,#70b7c688);transition:height .45s}
+.experiment-water-label{position:absolute;left:8px;top:5px;color:var(--green);font-size:.75rem;font-weight:800;text-shadow:0 1px white}
+.experiment-cylinder-scale{position:absolute;inset:0;z-index:3;pointer-events:none;color:#263f37;font-size:.73rem;font-variant-numeric:tabular-nums}
+.experiment-cylinder-scale i{position:absolute;left:0;right:0;height:0;font-style:normal}
+.experiment-cylinder-scale i:before{content:"";position:absolute;right:0;top:0;width:10px;border-top:1px solid #617b70}
+.experiment-cylinder-scale i.major:before{width:18px;border-top:1.5px solid #405e52}
+.experiment-cylinder-scale i:after{content:attr(data-label);position:absolute;right:22px;top:0;min-width:18px;text-align:right;line-height:1;font-weight:750;transform:translateY(-50%)}
+.experiment-cylinder-scale i:last-child:after{transform:translateY(-100%)}
+.experiment-cylinder-scale i:first-child:after{transform:translateY(0)}
+.experiment-cylinder-scale i.is-active:before{border-color:var(--green)}
+.experiment-cylinder-scale i.is-active:after{color:#145c46;font-weight:850}
+.experiment-cylinder-rocks{position:absolute;inset:0;z-index:2;pointer-events:none}
+.experiment-cylinder-rock{position:absolute;bottom:6px;width:66px;height:50px;object-fit:contain;filter:drop-shadow(0 2px 3px #354a3c66);pointer-events:auto;cursor:grab;touch-action:none}
+.experiment-cylinder-rock[data-sample=A]{left:34%;width:70px;height:54px;transform:translateX(-50%)}
+.experiment-cylinder-rock[data-sample=B]{left:66%;width:70px;height:54px;transform:translateX(-50%)}
+.experiment-cylinder-rock:only-child{left:50%;transform:translateX(-50%)}
+.experiment-samples{display:flex;align-items:center;gap:12px;margin:14px 0;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:#fbfcf8}
+.experiment-samples-title{margin-right:4px;color:#526358;font-size:.9rem;font-weight:750}
+.experiment-sample{width:232px;min-height:92px;display:flex;align-items:center;gap:12px;padding:10px 13px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink);text-align:left;cursor:grab;touch-action:none;user-select:none}
+.experiment-sample:active{cursor:grabbing}
+.experiment-sample[aria-pressed=true]{border-color:#72a083;background:#edf4ec;box-shadow:inset 0 0 0 1px #72a083}
+.experiment-sample strong{display:block;font-size:.95rem}
+.experiment-sample small{display:block;color:var(--muted);font-size:.76rem;line-height:1.45}
+.experiment-rock-thumb{width:72px;height:58px;flex:0 0 72px;object-fit:contain;filter:drop-shadow(0 3px 3px #263a3045)}
+.experiment-rock-thumb.is-dark{width:72px;flex-basis:72px;height:58px}
+.experiment-records{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.experiment-record[data-experiment-record="C"]{grid-column:1/-1}
+.experiment-record{min-width:0;padding:15px;border:1px solid var(--line);border-radius:12px;background:#fbfcf8}
+.experiment-record h4{display:flex;align-items:center;gap:10px;margin:0 0 11px;font-size:1rem}
+.experiment-record h4 img{width:54px;height:42px;object-fit:contain}
+.experiment-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.experiment-field label{display:block;margin-bottom:4px;color:#5e6f66;font-size:.76rem}
+.experiment-input{height:39px;display:flex;align-items:center;gap:5px;padding:0 9px;border:1px solid var(--line);border-radius:8px;background:white}
+.experiment-input:focus-within{border-color:#79a88c;box-shadow:0 0 0 2px #79b89a55}
+.experiment-input input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font:inherit;font-weight:700;font-variant-numeric:tabular-nums}
+.experiment-input input:focus-visible{outline:0}
+.experiment-input input[readonly]{color:#50675b}
+.experiment-input em{color:#718078;font-size:.75rem;font-style:normal;white-space:nowrap}
+.experiment-calculations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:9px}
+.experiment-calculations div{padding:9px 10px;border-radius:8px;background:#edf4ea;color:#596b61;font-size:.76rem}
+.experiment-calculations strong{float:right;color:var(--green);font-size:.95rem;font-variant-numeric:tabular-nums}
+.experiment-answer{display:flex;align-items:center;gap:14px;margin-top:15px;padding:14px 15px;border:1px solid var(--line);border-radius:12px;background:white}
+.experiment-answer>strong{font-size:.95rem}
+.experiment-answer-choices{display:flex;gap:8px;margin-left:auto}
+.experiment-answer-choices button[aria-pressed=true]{border-color:#72a083;background:#e5efe4;box-shadow:inset 0 0 0 1px #72a083}
+.experiment-submit{padding:9px 17px!important;background:var(--green)!important;color:white!important;border-color:var(--green)!important}
+.experiment-feedback{min-height:24px;margin:9px 0 0;color:#62716a;font-size:.86rem}
+.experiment-feedback[data-result=correct]{color:var(--green);font-weight:700}
+.experiment-feedback[data-result=incorrect]{color:#755a2d}
+.experiment-ghost{position:fixed;z-index:1000;pointer-events:none;opacity:.92;transform:translate(-50%,-50%) scale(1.06);filter:drop-shadow(0 7px 7px #243b3055)}
+.crown-context{display:flex;align-items:center;gap:16px;margin:0 0 16px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:#f7f9f4}.crown-context img{width:116px;height:94px;flex:none;object-fit:contain;filter:drop-shadow(0 3px 3px #263a3040)}.crown-context figcaption{display:grid;gap:4px;color:#526358;font-size:.84rem;line-height:1.5}.crown-context figcaption strong{color:var(--ink);font-size:.92rem}.crown-context figcaption small{color:#718078}.experiment-tool-hint{margin:10px 0 0;color:var(--muted);font-size:.84rem;line-height:1.5}.experiment-cylinder-scale i:not(.major):after{content:none}
+@media(max-width:900px){.experiment-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.crown-context{gap:10px;padding:10px}.crown-context img{width:90px;height:78px}.experiment-tools,.experiment-records{grid-template-columns:1fr}.experiment-tool{height:340px}.experiment-scale{transform:scale(.92);transform-origin:center}.experiment-samples{flex-wrap:wrap}.experiment-samples-title{width:100%}.experiment-sample{flex:1;min-width:132px}.experiment-answer{align-items:flex-start;flex-wrap:wrap}.experiment-answer-choices{margin-left:0}.experiment-submit{margin-left:auto}}
+@media(max-width:420px){.crown-context img{width:72px;height:68px}.crown-context figcaption{font-size:.78rem}.experiment-tool{height:320px}.experiment-cylinder{height:258px;width:176px}.experiment-sample{padding:8px;gap:7px}.experiment-rock-thumb{width:62px;height:50px;flex-basis:62px}.experiment-rock-thumb.is-dark{width:62px;height:50px;flex-basis:62px}.experiment-record{padding:12px}.experiment-fields{gap:7px}.experiment-answer{gap:9px;padding:12px}}
+/* Archimedes crown overflow setup */
+.crown-thumb{object-fit:contain;filter:drop-shadow(0 3px 3px #263a3040)}
+.crown-thumb.alloy{filter:saturate(.58) hue-rotate(8deg) brightness(1.08) drop-shadow(0 3px 3px #263a3040)}
+.experiment-scale-rock.crown-thumb{width:78px;height:62px;top:-58px}
+.experiment-scale-rock.crown-thumb[data-sample=A]{left:34%;width:78px;height:62px}
+.experiment-scale-rock.crown-thumb[data-sample=B]{left:66%;width:78px;height:62px}
+.overflow-tool{height:340px}
+.experiment-overflow-layout{display:grid;grid-template-columns:minmax(0,1fr) 82px;align-items:center;gap:17px;width:min(390px,90%);margin-top:23px}
+.overflow-tank{height:214px;position:relative;border:4px solid #809b91;border-top:0;border-radius:0 0 22px 22px;background:linear-gradient(90deg,#ffffffa6,#dcebe066 38%,#ffffff88 72%,#d8e8df66);box-shadow:inset 0 -7px #d7e3dc}
+.overflow-tank:before{content:"";position:absolute;left:-7px;right:-7px;top:0;height:6px;border-radius:4px;background:#809b91}
+.overflow-tank-water{position:absolute;left:0;right:0;bottom:4px;height:73%;border-top:3px solid #429eb1;background:linear-gradient(90deg,#7dc1ca9c,#9bd5d888 50%,#78b9c69c)}
+.overflow-tank-water:before{content:"溢水槽";position:absolute;top:7px;left:8px;color:#287d8d;font-size:.72rem;font-weight:750}
+.overflow-tank-spout{position:absolute;z-index:4;right:-28px;top:53px;width:30px;height:22px;border:3px solid #809b91;border-left:0;border-radius:0 7px 7px 0;background:#e7f0eb}
+.overflow-stream{position:absolute;z-index:1;right:-51px;top:76px;width:29px;height:63px;border-right:5px solid #66b8c3;border-radius:0 0 60% 0;transform:rotate(-15deg)}
+.overflow-tank .experiment-cylinder-rocks{position:absolute;inset:0;z-index:3;pointer-events:none}
+.overflow-tank .experiment-cylinder-rock{position:absolute;bottom:8px;width:93px;height:72px;object-fit:contain;pointer-events:auto;cursor:grab;touch-action:none}
+.overflow-tank .experiment-cylinder-rock[data-sample=A]{left:34%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]{left:66%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock:only-child{left:50%;transform:translateX(-50%)}
+.overflow-collector{height:194px;position:relative;overflow:hidden;border:3px solid #809b91;border-top:0;border-radius:0 0 13px 13px;background:linear-gradient(90deg,#fff9,#deeee366 38%,#fff8 70%,#d9e9e366)}
+.overflow-collector:before{content:"量筒";position:absolute;top:-25px;left:0;right:0;color:#526358;text-align:center;font-size:.75rem;font-weight:750}
+.overflow-collector-water{position:absolute;bottom:0;left:0;right:0;height:0;border-top:2px solid #2b8da4;background:linear-gradient(90deg,#70b7c688,#8bc8d288 45%,#70b7c688);transition:height .45s}
+.overflow-water-label{position:absolute;left:4px;right:4px;top:6px;color:#145c46;text-align:center;font-size:.66rem;font-weight:850;text-shadow:0 1px white;white-space:nowrap}
+.overflow-collector-scale{position:absolute;inset:0;z-index:2;pointer-events:none;color:#263f37;font-size:.62rem;font-variant-numeric:tabular-nums}
+.overflow-collector-scale i{position:absolute;left:0;right:0;height:0;font-style:normal}
+.overflow-collector-scale i:before{content:"";position:absolute;right:0;top:0;width:7px;border-top:1px solid #617b70}
+.overflow-collector-scale i.major:before{width:12px;border-top:1.5px solid #405e52}
+.overflow-collector-scale i:after{content:attr(data-label);position:absolute;right:15px;top:0;min-width:13px;text-align:right;line-height:1;font-weight:750;transform:translateY(-50%)}
+.overflow-collector-scale i:first-child:after{transform:translateY(0)}
+.overflow-collector-scale i:last-child:after{transform:translateY(-100%)}
+.experiment-displacement-hint{display:flex;gap:10px;align-items:flex-start;margin:10px 0;padding:11px 14px;border:1px solid #d8e2da;border-left:3px solid #88ae86;border-radius:10px;background:#f4f7f1;color:#4c6255;font-size:.86rem;line-height:1.5}
+.experiment-displacement-hint strong{flex:none;color:#176b53}
+.experiment-tool-hint{margin:8px 0 0;color:var(--muted);font-size:.84rem;line-height:1.5}
+.experiment-fields{grid-template-columns:repeat(3,minmax(0,1fr))}
+.experiment-sample .crown-thumb{width:78px;height:68px;flex-basis:78px}
+.experiment-record h4 .crown-thumb{width:60px;height:50px}
+@media(max-width:900px){.experiment-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.overflow-tool{height:360px}.experiment-overflow-layout{width:min(330px,88%);grid-template-columns:minmax(0,1fr) 78px;gap:16px}.overflow-tank{height:215px}.overflow-collector{height:192px}.experiment-displacement-hint{display:block}.experiment-displacement-hint strong{display:block;margin-bottom:3px}}
+@media(max-width:420px){.overflow-tool{height:350px}.experiment-overflow-layout{grid-template-columns:minmax(0,1fr) 72px;gap:12px;width:88%}.overflow-tank{height:198px}.overflow-collector{height:178px}.overflow-tank .experiment-cylinder-rock{width:80px;height:62px}.experiment-sample .crown-thumb{width:65px;height:58px;flex-basis:65px}}
+.overflow-stream{opacity:0;transition:opacity .2s}.overflow-tool.has-overflow .overflow-stream{opacity:1}
+.overflow-collector{height:210px}
+.overflow-collector-scale i.minor:before{width:2px;border-color:#99aaa1}.overflow-collector-scale i.medium:before{width:6px}.overflow-collector-scale i.major:before{width:12px}
+@media(max-width:700px){.overflow-collector{height:202px}}
+@media(max-width:420px){.overflow-collector{height:184px}}
+/* Refine the overflow can into a round laboratory vessel with a believable drain. */
+.overflow-tank{width:min(236px,100%);justify-self:center;border:3px solid #809b91;border-top:0;border-radius:0 0 24px 24px;background:linear-gradient(90deg,#eef5efaa,#ffffff66 42%,#dce9e366);box-shadow:inset 0 -7px #d7e3dc}
+.overflow-tank:before{left:-7px;right:-7px;top:-11px;height:23px;border:3px solid #809b91;border-radius:50%;background:linear-gradient(#f6f8f4,#e8efea);box-shadow:0 2px 3px #354a3c22}
+.overflow-tank-water{left:2px;right:2px;bottom:4px;height:74%;border-top:2px solid #429eb1;background:linear-gradient(90deg,#7dc1ca88,#9bd5d86e 48%,#78b9c688)}
+.overflow-tank-spout{right:-32px;top:46px;width:35px;height:18px;border:3px solid #809b91;border-left:0;border-radius:0 9px 9px 0;background:linear-gradient(180deg,#eff5f1,#dfe9e3)}
+.overflow-stream{right:-59px;top:57px;width:41px;height:62px;border-right:3px solid #809b91;border-bottom:3px solid #809b91;border-radius:0 0 16px 0;transform:none;opacity:1}
+.overflow-stream:after{content:"";position:absolute;right:-3px;top:14px;height:45px;border-right:4px solid #65b8c5;border-radius:0 0 10px 0;opacity:0;transition:opacity .2s}
+.overflow-tool.has-overflow .overflow-stream:after{opacity:1}
+.overflow-collector{width:82px;justify-self:center;align-self:center;margin-top:56px;height:172px;border:3px solid #809b91;border-top:0;border-radius:0 0 16px 16px;background:linear-gradient(90deg,#ffffffa8,#deeee366 48%,#ffffff88)}
+.overflow-collector:before{content:"";position:absolute;top:-8px;left:-4px;right:-4px;height:16px;border:3px solid #809b91;border-radius:50%;background:linear-gradient(#f7faf6,#e4ede7)}
+.overflow-collector-water{z-index:1}
+.overflow-collector-scale{z-index:3}
+.overflow-water-label{z-index:4}
+.overflow-collector-scale i.minor:before{width:2px;border-color:#a0b0a7}
+@media(max-width:700px){.overflow-tool{height:360px}.overflow-tank{width:min(205px,100%)}.overflow-collector{width:78px;height:170px;margin-top:52px}.overflow-stream{right:-54px;width:38px}}
+@media(max-width:420px){.overflow-tool{height:350px}.overflow-tank{width:min(178px,100%);height:198px}.overflow-collector{width:72px;height:156px;margin-top:48px}.overflow-stream{right:-51px;width:35px}.overflow-tank .experiment-cylinder-rock{width:76px;height:60px}}
+.overflow-stream{right:-62px;top:52px;width:48px;height:30px;border:0;border-radius:0;transform:none;background:transparent;opacity:1}
+.overflow-stream:before{content:"";position:absolute;left:0;right:5px;top:2px;height:4px;border:0;border-radius:4px;background:#63b7c5;opacity:0;transition:opacity .2s}
+.overflow-stream:after{content:"";position:absolute;right:5px;top:2px;width:4px;height:22px;border:0;border-radius:0 0 4px 4px;background:#63b7c5;opacity:0;transition:opacity .2s}
+.overflow-tool.has-overflow .overflow-stream:before,.overflow-tool.has-overflow .overflow-stream:after{opacity:1}
+@media(max-width:700px){.overflow-stream{right:-57px;width:43px}}
+@media(max-width:420px){.overflow-stream{right:-54px;width:39px}}
+
+/* Full vessel with direct overflow into a shallow catch tray. */
+.experiment-overflow-layout{position:relative;display:block;width:min(430px,92%);height:290px;margin:18px auto 0}
+.overflow-catch-tray{position:absolute;z-index:1;left:0;right:0;bottom:0;height:66px;overflow:hidden;border:3px solid #809b91;border-radius:9px 9px 17px 17px;background:linear-gradient(180deg,#f2f6f1,#e1ebe4);box-shadow:inset 0 5px 0 #d7e2da}
+.overflow-catch-tray:before{content:"接水盤";position:absolute;z-index:3;left:12px;top:8px;color:#526358;font-size:.72rem;font-weight:750}
+.overflow-catch-water{position:absolute;left:0;right:0;bottom:0;height:0;z-index:1;border-top:2px solid #429eb1;background:linear-gradient(180deg,#8bc8d288,#70b7c688);transition:height .45s}
+.overflow-water-label{left:0;right:0;top:4px;color:#145c46;font-size:.68rem;text-shadow:0 1px 2px #fff}
+.overflow-catch-scale{position:absolute;z-index:3;left:92px;right:12px;bottom:7px;display:flex;align-items:center;justify-content:space-between;color:#526358;font-size:.61rem;font-variant-numeric:tabular-nums;pointer-events:none}
+.overflow-catch-scale i{height:7px;border-left:1px solid #789087}
+.overflow-tank{position:absolute;z-index:3;left:50%;bottom:70px;width:min(240px,68%);height:197px;transform:translateX(-50%);border:3px solid #809b91;border-top:0;border-radius:0 0 22px 22px;background:linear-gradient(90deg,#eef5ef88,#ffffff44 45%,#dce9e344);box-shadow:inset 0 -6px #d7e3dc}
+.overflow-tank:before{content:"";position:absolute;z-index:4;left:-6px;right:-6px;top:-9px;height:18px;border:3px solid #809b91;border-radius:50%;background:#f5f8f3}
+.overflow-tank-water{position:absolute;z-index:1;left:2px;right:2px;top:0;bottom:3px;height:auto;overflow:hidden;border-top:0;border-radius:0 0 18px 18px;background:linear-gradient(90deg,#7dc1ca88,#9bd5d888 48%,#78b9c688)}
+.overflow-tank-water:before{content:"";position:absolute;z-index:4;left:0;right:0;top:0;height:8px;border-bottom:2px solid #398fa0;border-radius:50%;background:#a5d7d8aa}
+.overflow-tank .experiment-cylinder-rocks{z-index:5}
+.overflow-tank .experiment-cylinder-rock{bottom:8px}
+.overflow-spill{position:absolute;z-index:2;top:2px;bottom:-72px;width:7px;opacity:0;border-radius:0 0 6px 6px;background:linear-gradient(90deg,#58aebb66,#69bfcbdd,#58aebb66);transition:opacity .2s}
+.overflow-spill-left{left:-8px;transform:rotate(1deg)}
+.overflow-spill-right{right:-8px;transform:rotate(-1deg)}
+.overflow-tool.has-overflow .overflow-spill{opacity:1;animation:overflow-pour .65s ease-in-out infinite alternate}
+@keyframes overflow-pour{from{filter:brightness(.94);transform:translateY(-1px)}to{filter:brightness(1.08);transform:translateY(2px)}}
+@media(max-width:700px){.experiment-overflow-layout{width:min(380px,90%);height:270px}.overflow-tool{height:360px}}
+@media(max-width:420px){.experiment-overflow-layout{width:90%;height:270px;margin-top:18px}.overflow-tank{width:66%;height:184px;bottom:70px}.overflow-catch-tray{height:62px}.overflow-catch-scale{left:78px;right:8px;bottom:6px;font-size:.56rem}.overflow-catch-tray:before{left:8px;top:7px;font-size:.66rem}.overflow-tank .experiment-cylinder-rock{width:76px;height:60px}}
+
+.overflow-water-label{position:absolute;z-index:4;left:auto;right:12px;top:8px;color:#145c46;font-size:.7rem;text-shadow:0 1px 2px #fff}
+.overflow-spill{bottom:-14px}
+
+.overflow-catch-tray{left:50%;right:auto;width:min(280px,78%);height:42px;transform:translateX(-50%)}
+.overflow-catch-tray:before{top:5px}
+.overflow-water-label{top:5px}
+.overflow-catch-scale{left:70px;right:9px;bottom:3px;font-size:.56rem}
+.overflow-spill{bottom:-14px}
+@media(max-width:420px){.overflow-tank{width:66%;height:156px;bottom:54px}.overflow-tank .experiment-cylinder-rock{width:91px;height:61px;bottom:7px}.overflow-tank .experiment-cylinder-rock:only-child{width:91px;height:61px}.overflow-catch-tray{width:76%;height:38px}.overflow-catch-scale{left:61px;right:7px;bottom:2px;font-size:.52rem}.overflow-catch-tray:before{left:7px;top:5px;font-size:.61rem}.overflow-spill{bottom:-14px}}
+
+/* Keep the on-screen drawing proportional as the layout scales down. */
+.overflow-tank{height:auto;aspect-ratio:1.5;bottom:46px}
+.overflow-tank .experiment-cylinder-rock{width:44%;height:auto;max-height:68px;bottom:7px}
+.overflow-tank .experiment-cylinder-rock[data-sample=A]{left:26%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]{left:74%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock:only-child{left:50%;width:44%;height:auto;max-height:68px;transform:translateX(-50%)}
+.overflow-catch-tray{left:50%;right:auto;width:min(280px,78%);height:44px;transform:translateX(-50%)}
+.overflow-catch-scale{left:70px;right:9px;bottom:3px;font-size:.56rem}
+.overflow-spill{bottom:-6px}
+@media(max-width:420px){.overflow-tank{width:66%;height:auto;aspect-ratio:1.5;bottom:46px}.overflow-tank .experiment-cylinder-rock{width:44%;height:auto;max-height:60px;bottom:6px}.overflow-tank .experiment-cylinder-rock:only-child{width:44%;height:auto;max-height:60px}.overflow-catch-tray{width:76%;height:36px}.overflow-catch-scale{left:61px;right:7px;bottom:2px;font-size:.52rem}.overflow-catch-tray:before{left:7px;top:4px;font-size:.61rem}.overflow-spill{bottom:-6px}}
+
+
+/* Arrange volume marks up the collector wall, as on an ordinary graduated vessel. */
+.overflow-catch-tray{height:68px;overflow:visible}
+.overflow-catch-tray:before{content:"接水盤（mL）";z-index:5;padding:0 3px;border-radius:3px;background:#f2f6f1}
+.overflow-catch-scale{position:absolute;left:auto;right:8px;top:7px;bottom:0;width:43px;display:block;color:#526358;font-size:.6rem;font-variant-numeric:tabular-nums;pointer-events:none}
+.overflow-catch-scale .catch-tick{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:4px;line-height:1}
+.overflow-catch-scale .catch-tick-100{top:0}
+.overflow-catch-scale .catch-tick-50{top:50%;transform:translateY(-50%)}
+.overflow-catch-scale .catch-tick-0{bottom:0}
+.overflow-catch-scale i{display:block;width:8px;height:0;flex:0 0 8px;border:0;border-top:1px solid #789087}
+.overflow-tank{bottom:72px}
+.overflow-water-label{left:8px;right:54px;top:auto;bottom:8px;text-align:center}
+@media(max-width:700px){.overflow-catch-tray{height:68px}.overflow-tank{bottom:72px}}
+@media(max-width:420px){.overflow-catch-tray{height:68px}.overflow-catch-scale{right:6px;width:40px;font-size:.54rem}.overflow-water-label{left:6px;right:49px;bottom:7px}.overflow-tank{bottom:72px}}
+
+/* Show overflow only while a crown is displacing water, then pour the
+   collected water visibly back into the tank when a crown is lifted out. */
+.overflow-tool.has-overflow .overflow-spill{opacity:0;animation:none}
+.overflow-spill{top:0;bottom:-6px;width:12px;overflow:visible;border-radius:0 0 8px 8px;clip-path:polygon(12% 0,100% 0,82% 15%,100% 28%,72% 43%,95% 61%,70% 78%,85% 100%,20% 100%,30% 80%,5% 62%,27% 44%,0 27%,20% 13%);background:linear-gradient(90deg,#61b3bf88,#63bdc9e8 48%,#55a9b8a8);background-size:100% 48px;opacity:0;transition:opacity .15s}
+.overflow-tool.is-spilling .overflow-spill{opacity:.95;animation:spill-flow .42s linear infinite}
+.overflow-spill-left{left:-8px}
+.overflow-spill-right{right:-8px;animation-delay:-.21s!important}
+.overflow-spill::after{content:"";position:absolute;bottom:-5px;left:50%;width:7px;height:9px;border-radius:50% 50% 55% 45%;background:#62b7c4;transform:translateX(-50%);opacity:.85;animation:spill-drop .55s ease-in infinite}
+.overflow-spill-right::after{animation-delay:-.28s}
+@keyframes spill-flow{to{background-position:0 48px}}
+@keyframes spill-drop{0%{transform:translate(-50%,-3px) scale(.72);opacity:0}45%{opacity:.95}100%{transform:translate(-50%,5px) scale(1);opacity:0}}
+.overflow-tank-water{transition:top 1s ease,height .45s ease}
+.overflow-catch-tray{z-index:1;transform:translateX(-50%);transform-origin:68% 20%;transition:filter .25s}
+.overflow-tool.is-returning-water .overflow-catch-tray{z-index:6;animation:lift-tray-to-rim 1.25s cubic-bezier(.35,.04,.2,1) forwards;filter:drop-shadow(0 8px 8px #263a3033)}
+@keyframes lift-tray-to-rim{0%{transform:translateX(-50%) translateY(0) rotate(0)}18%{transform:translateX(-50%) translateY(-15px) rotate(0)}74%,100%{transform:translateX(-50%) translateY(-242px) rotate(-13deg)}}
+.overflow-catch-water{transition:height 1s ease}
+.overflow-return-status{min-height:22px;margin:7px 2px 0;color:#526358;font-size:.82rem;line-height:1.45}
+@media(max-width:700px){@keyframes lift-tray-to-rim{0%{transform:translateX(-50%) translateY(0) rotate(0)}18%{transform:translateX(-50%) translateY(-14px) rotate(0)}74%,100%{transform:translateX(-50%) translateY(-242px) rotate(-13deg)}}}
+@media(prefers-reduced-motion:reduce){.overflow-tool.is-spilling .overflow-spill,.overflow-tool.is-spilling .overflow-spill::after,.overflow-tool.is-returning-water .overflow-catch-tray{animation-duration:.01ms;animation-iteration-count:1}}
+.overflow-tool.is-returning-water .overflow-catch-tray{overflow:visible;animation-duration:1.3s}
+.overflow-tool.is-returning-water .overflow-catch-tray::after{content:"";position:absolute;z-index:8;top:calc(100% - 3px);right:16%;width:12px;height:42px;border-radius:35% 35% 55% 55%;background:linear-gradient(90deg,#61b5c255,#5db8c9ed 48%,#53a9b888);opacity:0;transform:scaleY(.35);transform-origin:top;pointer-events:none;animation:return-from-tray .58s ease .74s forwards}
+.overflow-tool.is-returning-water .overflow-catch-water,.overflow-tool.is-returning-water .overflow-tank-water{transition-delay:.7s}
+@keyframes return-from-tray{0%{opacity:0;transform:scaleY(.35)}20%{opacity:.95;transform:scaleY(1)}75%{opacity:.95;transform:scaleY(1)}100%{opacity:0;transform:scaleY(.65)}}
+@media(max-width:700px){.overflow-tool.is-returning-water .experiment-tool-name{z-index:9;padding:4px 6px;border-radius:6px;background:#f5f8f3ed;box-shadow:0 1px 4px #263a3022}}
+@media(prefers-reduced-motion:reduce){.overflow-tool.is-returning-water .overflow-catch-tray::after{animation-duration:.01ms;animation-delay:0ms}}
+
+/* Make the tiny physical level drop legible without scaling the vessel itself. */
+.overflow-level-detail{display:none;position:absolute;z-index:8;top:8px;right:7px;align-items:center;gap:6px;padding:5px 7px;border:1px solid #c9d9d0;border-radius:7px;background:#f7faf4ed;color:#40594d;box-shadow:0 1px 4px #263a3020}
+.overflow-tool.is-water-lowered .overflow-level-detail{display:flex}
+.overflow-level-detail>span:last-child{display:grid;gap:2px}
+.overflow-level-detail small{font-size:.52rem;line-height:1.15;white-space:nowrap}
+.overflow-level-detail strong{color:#176b53;font-size:.66rem;line-height:1.1}
+.overflow-level-gauge{position:relative;display:block;flex:0 0 27px;width:27px;height:28px;border-left:1px solid #718d80}
+.overflow-level-gauge:after{content:"";position:absolute;left:-4px;top:4px;width:6px;height:17px;border-right:1px solid #719184;border-top:1px solid #719184;border-bottom:1px solid #719184}
+.overflow-level-gauge i{position:absolute;left:0;right:0;border-top:2px solid #3596a2}
+.overflow-level-gauge .level-before{top:4px}
+.overflow-level-gauge .level-after{top:20px;border-color:#176b53}
+.overflow-catch-tray{width:min(250px,86%);height:68px}
+.overflow-catch-water{left:3px;right:3px;bottom:3px;border-radius:0 0 11px 11px}
+.overflow-catch-tray:not(.has-collected-water) .overflow-catch-water{visibility:hidden}
+.overflow-catch-tray:not(.has-collected-water) .catch-level-lens{display:none}
+.overflow-catch-tray:before{content:none}
+.overflow-water-label{display:none}
+.overflow-tool.is-returning-water .experiment-tool-name{z-index:9;top:auto;bottom:8px;left:12px;padding:4px 6px;border-radius:6px;background:#f5f8f3ed;box-shadow:0 1px 4px #263a3022}
+.overflow-tool.is-returning-water .overflow-catch-tray{animation:lift-tray-to-rim 1.3s cubic-bezier(.35,.04,.2,1) forwards;transform-origin:88% 20%}
+@keyframes lift-tray-to-rim{0%{transform:translateX(-50%) translateY(0) rotate(0)}18%{transform:translateX(-50%) translateY(-15px) rotate(0)}74%,100%{transform:translateX(calc(-50% - 118px)) translateY(-215px) rotate(14deg)}}
+.overflow-tool.is-returning-water .overflow-catch-tray::after{content:"";position:absolute;z-index:8;top:calc(100% - 3px);right:7%;width:9px;height:54px;border-radius:0 0 55% 55%;background:linear-gradient(90deg,#61b5c255,#5db8c9ed 48%,#53a9b888);opacity:0;transform:rotate(-14deg) scaleY(.35);transform-origin:top;pointer-events:none;animation:return-from-tray .95s ease .45s forwards}
+.overflow-tool.is-returning-water .overflow-catch-water,.overflow-tool.is-returning-water .overflow-tank-water{transition-delay:.45s}
+@media(max-width:700px){.overflow-catch-tray{width:min(240px,92%)}@keyframes lift-tray-to-rim{0%{transform:translateX(-50%) translateY(0) rotate(0)}18%{transform:translateX(-50%) translateY(-14px) rotate(0)}74%,100%{transform:translateX(calc(-50% - 95px)) translateY(-208px) rotate(14deg)}}}
+@media(max-width:420px){.overflow-level-detail{top:7px;right:5px;gap:4px;padding:4px 5px}.overflow-level-gauge{flex-basis:22px;width:22px;height:25px}.overflow-level-gauge .level-after{top:18px}}
+
+/* The zoom inset stays attached to the catch-tray scale while it is poured. */
+.catch-level-lens{position:absolute;z-index:8;right:-94px;bottom:-7px;width:88px;height:48px;box-sizing:border-box;display:flex;align-items:center;gap:5px;padding:4px 7px;border:1.5px solid #77958a;border-radius:25px;background:#f8faf6f2;box-shadow:0 2px 6px #263a3026;pointer-events:none;transition:top 1s ease}
+.overflow-tool.is-returning-water .catch-level-lens{transform:rotate(-14deg)}
+.catch-level-lens:before{content:"";position:absolute;right:100%;top:var(--lens-line-y,50%);width:17px;border-top:2px solid #398fa0}
+.catch-level-lens-ruler{position:relative;flex:0 0 27px;width:27px;height:34px;border-left:2px solid #78958a;color:#53685d;font-size:7px;font-variant-numeric:tabular-nums;line-height:1}
+.catch-level-lens-ruler span{position:absolute;left:2px}
+.catch-level-lens-ruler span:first-child{top:1px}
+.catch-level-lens-ruler span:last-child{bottom:1px}
+.catch-level-lens-ruler:before,.catch-level-lens-ruler:after{content:"";position:absolute;left:-3px;width:7px;border-top:1px solid #78958a}
+.catch-level-lens-ruler:before{top:0}
+.catch-level-lens-ruler:after{bottom:0}
+.catch-level-lens-ruler i{position:absolute;left:-4px;right:0;border-top:2px solid #12869a}
+.catch-level-lens-reading{display:flex;align-items:baseline;gap:2px;color:#176b53;font-variant-numeric:tabular-nums;white-space:nowrap}
+.catch-level-lens-reading strong{font-size:.78rem;line-height:1}
+.catch-level-lens-reading small{font-size:.55rem;font-weight:750}
+
+/* Keep the crown samples stacked in the same narrow overflow vessel. */
+.overflow-tank{width:min(128px,40%);height:auto;aspect-ratio:22/30;bottom:72px}
+.overflow-tank .experiment-cylinder-rock{width:84%;height:auto;max-height:66px;bottom:8px;left:50%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=A]{bottom:8px;left:50%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]{bottom:70px;left:50%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]:only-child{bottom:8px}
+.overflow-tank .experiment-cylinder-rock:only-child{width:84%;left:50%;transform:translateX(-50%)}
+
+/* Narrow overflow trough: 19 × 0.7 cm base, 12 cm deep; the crown sits edge-on. */
+.overflow-tank{width:min(205px,68%);height:136px;aspect-ratio:auto;bottom:72px;border-radius:2px 2px 12px 12px;box-shadow:inset 0 -5px #d7e3dc}
+.overflow-tank:before{height:24px;border-radius:50%}
+.overflow-tank-water{border-radius:0 0 9px 9px}
+.overflow-tank-water:before{height:6px}
+.overflow-tank .experiment-cylinder-rock{width:calc(100% - 10px);height:67px;max-height:none;bottom:5px}
+.overflow-tank .experiment-cylinder-rock[data-sample=A]{left:50%;bottom:5px;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]{left:50%;bottom:67px;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]:only-child{bottom:5px}
+.overflow-tank .experiment-cylinder-rock:only-child{width:calc(100% - 10px);height:67px;left:50%;transform:translateX(-50%)}
+@media(max-width:700px){.overflow-tank{height:136px}}
+@media(max-width:420px){.overflow-tank{width:min(178px,68%);height:128px}.overflow-tank .experiment-cylinder-rock{height:61px}.overflow-tank .experiment-cylinder-rock[data-sample=B]{bottom:65px}.overflow-tank .experiment-cylinder-rock[data-sample=B]:only-child{bottom:5px}.overflow-tank .experiment-cylinder-rock:only-child{height:61px}}
+
+/* The vessel's own water surface moves with its true displaced volume. */
+.overflow-tank-water:before{content:"";z-index:2;left:-1px;right:-1px;top:0;height:0;border:0;border-top:3px solid #087f95;border-radius:0;background:none}
+.overflow-removed-crown{display:none;position:absolute;z-index:8;top:39%;right:0;width:78px;transform:translateY(-50%);padding:5px 3px 4px;border:1px solid #d4dfd4;border-radius:9px;background:#f8faf6eF;box-shadow:0 2px 6px #263a3020;text-align:center;pointer-events:none}
+.overflow-removed-crown.is-visible{display:block}
+.overflow-removed-crown figure{display:grid;justify-items:center;gap:2px;margin:0}
+.overflow-removed-crown figure+figure{margin-top:4px;padding-top:4px;border-top:1px solid #dce5dc}
+.overflow-removed-crown img{width:68px;height:48px;object-fit:contain;filter:drop-shadow(0 2px 2px #263a3040)}
+.overflow-removed-crown figcaption{color:#526358;font-size:.56rem;font-weight:750;line-height:1.2;white-space:nowrap}
+@media(max-width:420px){.overflow-removed-crown{width:63px;padding:3px 1px}.overflow-removed-crown img{width:56px;height:38px}.overflow-removed-crown figcaption{font-size:.48rem}}

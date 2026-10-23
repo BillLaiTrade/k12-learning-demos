@@ -77,7 +77,7 @@ const LINEAR_SCALE=Math.cbrt(910/39);
 const CM_PER_WORLD=1.6*LINEAR_SCALE;
 const RULER_CM=6*LINEAR_SCALE;
 const WORLD_PER_CM=1/CM_PER_WORLD;
-const MEASURE_COLORS={length:0x00796b,width:0x5269a6,height:0xbf6338};
+const MEASURE_COLORS={length:0x00b89c,width:0x6d88ff,height:0xff895c};
 
 function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLORS.length,showGuides=true}={}){
   const width=RULER_CM*WORLD_PER_CM,depth=.56,top=0;
@@ -97,10 +97,10 @@ function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLO
   const texture=new THREE.CanvasTexture(face);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;
   const topFace=new THREE.Mesh(new THREE.PlaneGeometry(width+.2,depth),new THREE.MeshBasicMaterial({map:texture}));
   topFace.rotation.x=-Math.PI/2;topFace.position.y=top+.001;group.add(topFace);
-  const guideMaterial=showGuides?new THREE.LineDashedMaterial({color:accent,dashSize:.055,gapSize:.04,depthTest:false}):null;
+  const guideMaterial=showGuides?new THREE.LineDashedMaterial({color:accent,dashSize:.07,gapSize:.035,depthTest:false,toneMapped:false}):null;
   const guides=showGuides?[0,1].map(()=>{const line=new THREE.Line(new THREE.BufferGeometry(),guideMaterial);line.renderOrder=5;group.add(line);return line}):[];
-  const markerMaterial=showGuides?new THREE.MeshBasicMaterial({color:accent,depthTest:false}):null;
-  const markers=showGuides?[0,1].map(()=>{const marker=new THREE.Mesh(new THREE.SphereGeometry(.035,12,8),markerMaterial);marker.renderOrder=6;group.add(marker);return marker}):[];
+  const markerMaterial=showGuides?new THREE.MeshBasicMaterial({color:accent,depthTest:false,toneMapped:false}):null;
+  const markers=showGuides?[0,1].map(()=>{const marker=new THREE.Mesh(new THREE.SphereGeometry(.045,12,8),markerMaterial);marker.renderOrder=6;group.add(marker);return marker}):[];
   return {group,guides,markers,top,width,depth,faceWidth:width+.2,faceWidthPixels:face.width,faceHeightPixels:face.height};
 }
 
@@ -157,12 +157,12 @@ export function mountStoneObserver(){
   const activePointers=new Map(),lengthReadout=document.querySelector('#stone-length'),widthReadout=document.querySelector('#stone-width'),heightReadout=document.querySelector('#stone-height');
   const svgNS='http://www.w3.org/2000/svg',heightOverlay=document.createElementNS(svgNS,'svg'),heightGuides=[0,1].map(()=>{
     const line=document.createElementNS(svgNS,'line');
-    line.setAttribute('stroke','#bf6338');line.setAttribute('stroke-width','1');line.setAttribute('stroke-dasharray','4 3');
+    line.setAttribute('stroke','#ff895c');line.setAttribute('stroke-width','1.7');line.setAttribute('stroke-dasharray','6 3');
     heightOverlay.append(line);return line;
   });
   const heightMarkers=[0,1].map(()=>{
     const marker=document.createElementNS(svgNS,'circle');
-    marker.setAttribute('r','2');marker.setAttribute('fill','#bf6338');
+    marker.setAttribute('r','3');marker.setAttribute('fill','#ff895c');
     heightOverlay.append(marker);return marker;
   });
   heightOverlay.setAttribute('aria-hidden','true');heightOverlay.setAttribute('focusable','false');
@@ -243,7 +243,7 @@ export function mountStoneObserver(){
       const anchorX=(projected.x*.5+.5)*width;
       const screenY=(-projected.y*.5+.5)*height;
       const line=heightGuides[index];
-      line.setAttribute('x1',String(anchorX-22));line.setAttribute('x2',String(anchorX));
+      line.setAttribute('x1',String(anchorX-34));line.setAttribute('x2',String(anchorX));
       line.setAttribute('y1',String(screenY));line.setAttribute('y2',String(screenY));
       heightMarkers[index].setAttribute('cx',String(anchorX));heightMarkers[index].setAttribute('cy',String(screenY));
     });
@@ -256,7 +256,7 @@ export function mountStoneObserver(){
       const lineStart=localPoint.clone().add(new THREE.Vector3(0,.012,0));
       const line=ruler.guides[index];line.geometry.dispose();line.geometry=new THREE.BufferGeometry().setFromPoints([
         lineStart,
-        lineStart.clone().addScaledVector(directionLocal,.42)
+        lineStart.clone().addScaledVector(directionLocal,.58)
       ]);line.computeLineDistances();
       ruler.markers[index].position.copy(lineStart);
     });
