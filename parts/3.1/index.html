@@ -1046,7 +1046,7 @@
         button.disabled = estimateGuess === null && !estimateChecked;
         button.textContent = estimateChecked ? "再估一次" : "查看誤差";
         document.querySelector("#estimate-heading").textContent = "端點落在相鄰刻線之間，該怎麼估讀？";
-        document.querySelector("#estimate-instruction").textContent = state.zoom > 0.8
+        document.querySelector("#estimate-instruction").textContent = state.zoom > 0.2
           ? `畫面已放大到 ${document.querySelector("#zoom-level").textContent}；可查看端點與相鄰刻線的位置。`
           : `先依整把尺估讀鉛筆右端，再用圖片上的放大按鈕或滑鼠滾輪查看 18 cm 和 19 cm 之間的位置。`;
         input.setAttribute("aria-label", `選擇你估計的鉛筆右端位置；端點在 ${formatCentimeters(interval.start)} 至 ${formatCentimeters(interval.end)} 公分之間`);
@@ -1130,7 +1130,7 @@
           : "三維直尺與鉛筆模型。目前視角的投影落在尺面範圍外，無法讀值；可拖曳或使用方向鍵旋轉視角。");
       };
       const updateModel = () => {
-        const closeup = state.zoom > 0.8;
+        const closeup = state.zoom > 0.2;
         ruler.dataset.zoom = String(closeup);
         modelSvg.setAttribute("preserveAspectRatio", "xMidYMid meet");
         ruler.removeAttribute("transform");
@@ -1599,8 +1599,9 @@
         updateModel();
       });
 
+      const maximumEstimateZoom = 0.32;
       const setZoom = (zoom) => {
-        state.zoom = clamp(zoom, 0, 1);
+        state.zoom = clamp(zoom, 0, maximumEstimateZoom);
         const width = 760 * Math.pow(55 / 760, state.zoom);
         const height = width * (170 / 760);
         const fullCenterX = 380;
@@ -1614,7 +1615,7 @@
         const magnification = 760 / width;
         const magnificationText = `${magnification.toFixed(1).replace(/\.0$/, "")}×`;
         document.querySelector("#zoom-level").textContent = magnificationText;
-        document.querySelector("#zoom-in").disabled = state.zoom >= 1;
+        document.querySelector("#zoom-in").disabled = state.zoom >= maximumEstimateZoom;
         document.querySelector("#zoom-out").disabled = state.zoom <= 0;
         updateModel();
       };
