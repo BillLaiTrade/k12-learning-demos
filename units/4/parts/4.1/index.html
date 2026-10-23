@@ -293,10 +293,10 @@
     .phase-node h3 { margin:0 0 4px; color:#176b53; font-size:1rem; }
     .phase-node img { display:block; width:100%; height:126px; object-fit:contain; background:transparent; }
     .phase-node p { margin:3px 0 0; color:#68776f; font-size:.71rem; line-height:1.35; }
-    .phase-node-solid img { animation:phase-ice-glint 3.8s ease-in-out infinite; }
+    .phase-node-solid img { animation:phase-ice-glint 4.4s ease-in-out infinite; }
     .phase-node-liquid img { animation:phase-water-sway 3.2s ease-in-out infinite; transform-origin:center 70%; }
     .phase-node-gas img { animation:phase-vapor-drift 2.8s ease-in-out infinite; }
-    @keyframes phase-ice-glint { 0%,100% { filter:drop-shadow(0 0 0 #8ce4ff00); } 50% { filter:drop-shadow(0 2px 5px #8ce4ff75); } }
+    @keyframes phase-ice-glint { 0%,54%,100% { filter:brightness(1) drop-shadow(0 0 0 #8ce4ff00); } 59% { filter:brightness(1.08) drop-shadow(0 0 4px #8ce4ff99); } 63% { filter:brightness(1) drop-shadow(0 0 1px #8ce4ff35); } 68% { filter:brightness(1.12) drop-shadow(0 0 7px #9beeffaa); } 74% { filter:brightness(1) drop-shadow(0 0 0 #8ce4ff00); } }
     @keyframes phase-water-sway { 0%,100% { transform:scale(1,.97) translateY(1px); } 50% { transform:scale(1.035,1.03) translateY(-1px); } }
     @keyframes phase-vapor-drift { 0%,100% { transform:translateY(3px); } 50% { transform:translateY(-3px); } }
     .phase-node-solid { top:10px; left:calc(50% - 105px); }
