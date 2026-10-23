@@ -281,9 +281,13 @@
     .phase-arrow.phase-heat { stroke:#bd634b; marker-end:url(#phase-arrow-heat); }
     .phase-arrow.phase-cool { stroke:#43839a; marker-end:url(#phase-arrow-cool); }
     .phase-arrow.is-active { stroke:#176b53; stroke-width:4.5; stroke-dasharray:9 8; animation:phase-arrow-flow 1.05s linear infinite; }
+    .phase-arrow-hit { fill:none; stroke:transparent; stroke-width:24; pointer-events:stroke; cursor:pointer; }
+    .phase-arrow-hit:focus-visible { stroke:#176b5340; stroke-width:19; outline:none; }
     @keyframes phase-arrow-flow { to { stroke-dashoffset:-34; } }
     .phase-flow-dot { fill:#78b7cb; stroke:#fff; stroke-width:2; opacity:0; filter:drop-shadow(0 2px 2px #1d34322c); }
-    .phase-node { position:absolute; z-index:2; width:210px; height:196px; padding:10px; border:1px solid #d8e2da; border-radius:16px; background:#fffefa; box-shadow:0 8px 22px #263b300d; text-align:center; }
+    .phase-node { position:absolute; z-index:2; width:210px; height:196px; padding:10px; border:1px solid #d8e2da; border-radius:16px; background:#fffefa; box-shadow:0 8px 22px #263b300d; text-align:center; font:inherit; color:inherit; cursor:pointer; transition:border-color .16s,box-shadow .16s,background .16s; }
+    .phase-node:hover,.phase-node:focus-visible { border-color:#176b53; box-shadow:0 8px 22px #176b5322; outline:3px solid #176b5330; }
+    .phase-node[aria-pressed="true"] { border:2px solid #176b53; background:#f5faf3; }
     .phase-node h3 { margin:0 0 4px; color:#176b53; font-size:1rem; }
     .phase-node img { display:block; width:100%; height:126px; object-fit:contain; background:transparent; }
     .phase-node p { margin:3px 0 0; color:#68776f; font-size:.71rem; line-height:1.35; }
@@ -308,6 +312,10 @@
     .phase-detail-copy { margin:0; color:#52635a; font-size:.87rem; }
     .phase-detail-steps { display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-top:8px; }
     .phase-detail-steps span { padding:5px 8px; border:1px solid #d5e0d7; border-radius:8px; background:#fff; color:#41574c; font-size:.76rem; }
+    .phase-detail-steps button { padding:6px 9px; border:1px solid var(--phase-route-color); border-radius:8px; background:#fffefa; color:var(--phase-route-color); cursor:pointer; font:inherit; font-size:.76rem; text-align:left; }
+    .phase-detail-steps button:hover,.phase-detail-steps button:focus-visible { outline:3px solid #176b5330; }
+    .phase-detail-steps button[data-energy="heat"] { --phase-route-color:#bd634b; }
+    .phase-detail-steps button[data-energy="cool"] { --phase-route-color:#43839a; }
     .phase-detail-steps b { color:#176b53; font-size:1rem; }
     #s4 .next-hint { border-left-color:#88ae86; background:#f4f7f1; color:#4c6255!important; }
     .phase-science-note { margin:10px 0 0; padding:10px 12px; border-radius:10px; background:#eef3ea; color:#52635a; font-size:.82rem; }
@@ -568,10 +576,10 @@
           <div class="card-side"><span class="card-number">04</span><h3>物態變化</h3><span class="card-role">沿三角箭頭觀察六種轉變</span></div>
           <div class="card-main">
             <h2>冰、水和水蒸氣，如何互相轉變？</h2>
-            <p>固態、液態和氣態可以彼此轉變。先用箭頭旁的編號確認轉變方向，再點選下方同編號的精簡說明。</p>
+            <p>點選冰、水或水蒸氣，查看它能轉變成哪些狀態；也可以直接點選六條箭頭，了解轉變過程與粒子變化。</p>
             <div class="phase-diagram-scroll" role="region" aria-label="物質三態與六種轉變互動圖，可左右滑動查看" tabindex="0">
               <div class="phase-triangle" id="phase-triangle">
-                <svg class="phase-triangle-svg" viewBox="0 0 840 590" preserveAspectRatio="none" aria-hidden="true">
+                <svg class="phase-triangle-svg" viewBox="0 0 840 590" preserveAspectRatio="none" role="group" aria-label="六條可點選的物態變化箭頭">
                   <defs>
                     <marker id="phase-arrow-default" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#527c68"/></marker>
                     <marker id="phase-arrow-heat" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#b45c44"/></marker>
@@ -589,11 +597,17 @@
                   <path class="phase-arrow phase-cool" data-phase-path="deposition" d="M610 365 Q600 280 490 205"/>
                   <path class="phase-arrow phase-heat" data-phase-path="vaporization" d="M235 445 Q420 405 580 445"/>
                   <path class="phase-arrow phase-cool" data-phase-path="condensation" d="M605 475 Q420 515 260 475"/>
+                  <path class="phase-arrow-hit" data-phase-process="melt" tabindex="0" role="button" aria-pressed="false" aria-label="融化：冰變成水，吸熱" d="M380 205 Q280 280 240 365"/>
+                  <path class="phase-arrow-hit" data-phase-process="freeze" tabindex="0" role="button" aria-pressed="false" aria-label="凝固：水變成冰，放熱" d="M260 365 Q380 280 430 205"/>
+                  <path class="phase-arrow-hit" data-phase-process="sublimation" tabindex="0" role="button" aria-pressed="false" aria-label="昇華：冰變成水蒸氣，吸熱" d="M460 205 Q490 280 585 365"/>
+                  <path class="phase-arrow-hit" data-phase-process="deposition" tabindex="0" role="button" aria-pressed="false" aria-label="凝華：水蒸氣變成冰，放熱" d="M610 365 Q600 280 490 205"/>
+                  <path class="phase-arrow-hit" data-phase-process="vaporization" tabindex="0" role="button" aria-pressed="false" aria-label="汽化：水變成水蒸氣，吸熱" d="M235 445 Q420 405 580 445"/>
+                  <path class="phase-arrow-hit" data-phase-process="condensation" tabindex="0" role="button" aria-pressed="false" aria-label="凝結：水蒸氣變成水，放熱" d="M605 475 Q420 515 260 475"/>
                   <circle class="phase-flow-dot" id="phase-flow-dot" r="7"><animateMotion id="phase-flow-animation" dur="1.8s" fill="freeze"><mpath href="#phase-path-melt"/></animateMotion></circle>
                 </svg>
-                <article class="phase-node phase-node-solid"><h3>固態・冰</h3><img src="assets/phase-ice.webp" alt="動畫插畫：一塊淺藍色冰塊"><p>形狀與體積大致固定</p></article>
-                <article class="phase-node phase-node-liquid"><h3>液態・水</h3><img src="assets/phase-water.webp" alt="動畫插畫：帶有漣漪的液態水"><p>會流動，形狀隨容器改變</p></article>
-                <article class="phase-node phase-node-gas"><h3>氣態・水蒸氣</h3><img src="assets/phase-vapor.webp" alt="動畫插畫：以淡藍流線象徵看不見的水蒸氣"><p>水蒸氣無色、看不見；流線僅作示意</p></article>
+                <button type="button" class="phase-node phase-node-solid" data-phase-state="solid" aria-pressed="false" aria-label="查看固態冰的特性與相關轉變"><h3>固態・冰</h3><img src="assets/phase-ice.webp" alt="動畫插畫：一塊淺藍色冰塊"><p>形狀與體積大致固定</p></button>
+                <button type="button" class="phase-node phase-node-liquid" data-phase-state="liquid" aria-pressed="false" aria-label="查看液態水的特性與相關轉變"><h3>液態・水</h3><img src="assets/phase-water.webp" alt="動畫插畫：帶有漣漪的液態水"><p>會流動，形狀隨容器改變</p></button>
+                <button type="button" class="phase-node phase-node-gas" data-phase-state="gas" aria-pressed="false" aria-label="查看氣態水蒸氣的特性與相關轉變"><h3>氣態・水蒸氣</h3><img src="assets/phase-vapor.webp" alt="動畫插畫：以淡藍流線象徵看不見的水蒸氣"><p>水蒸氣無色、看不見；流線僅作示意</p></button>
                 <button class="phase-transition" id="phase-melt" data-phase-process="melt" data-energy="heat" aria-pressed="false" aria-label="融化：冰變成水，吸熱">融化</button>
                 <button class="phase-transition" id="phase-freeze" data-phase-process="freeze" data-energy="cool" aria-pressed="false" aria-label="凝固：水變成冰，放熱">凝固</button>
                 <button class="phase-transition" id="phase-sublimation" data-phase-process="sublimation" data-energy="heat" aria-pressed="false" aria-label="昇華：冰變成水蒸氣，吸熱">昇華</button>
@@ -603,10 +617,10 @@
               </div>
             </div>
             <div class="phase-transition-key" aria-label="箭頭顏色圖例"><span><i class="phase-heat-dot" aria-hidden="true"></i>紅色：吸熱</span><span><i class="phase-cool-dot" aria-hidden="true"></i>藍色：放熱</span></div>
-            <p class="phase-diagram-hint">箭頭表示物態變化的方向；點選箭頭旁的名稱，查看詳細說明。</p>
+            <p class="phase-diagram-hint">箭頭表示物態變化方向；點選狀態卡或箭頭／名稱查看詳細說明。</p>
             <section class="phase-detail" id="phase-detail" aria-live="polite" aria-atomic="true" aria-label="物態轉變說明">
-              <div><p class="phase-detail-kicker" id="phase-detail-kicker">六種轉變・吸熱或放熱</p><h3 id="phase-detail-title">沿箭頭查看物態變化</h3></div>
-              <div><p class="phase-detail-copy" id="phase-detail-copy">吸熱表示熱量進入物質；放熱表示熱量離開物質。點選任一箭頭，查看這種轉變的定義和例子。</p><div class="phase-detail-steps" id="phase-detail-steps" hidden></div></div>
+              <div><p class="phase-detail-kicker" id="phase-detail-kicker">三種狀態・粒子與轉變</p><h3 id="phase-detail-title">點選冰、水、水蒸氣或任一箭頭</h3></div>
+              <div><p class="phase-detail-copy" id="phase-detail-copy">選擇物態可查看它的粒子狀態和兩條相關轉變；選擇箭頭則會說明轉變時粒子如何改變排列與運動。</p><div class="phase-detail-steps" id="phase-detail-steps" hidden></div></div>
             </section>
             <p class="phase-science-note">水蒸氣本身無色、看不見；淡藍流線是教材插畫符號，不是水蒸氣真實的顏色或形狀。</p>
             <p class="next-hint">沿六個方向比較後，繼續觀察狀態改變時物質本身是否改變。</p>
@@ -1169,29 +1183,55 @@
     })),{passive:true});
 
     const phaseProcesses={
-      melt:{title:"融化｜冰變成水",energy:"吸熱｜固態變液態",copy:"固態物質吸收熱量後變成液態。冰受熱會逐漸融化成水。",steps:["冰（固態）","吸收熱量","水（液態）"]},
-      freeze:{title:"凝固｜水變成冰",energy:"放熱｜液態變固態",copy:"液態物質放出熱量後變成固態。水冷卻到凝固點時會結成冰。",steps:["水（液態）","放出熱量","冰（固態）"]},
-      vaporization:{title:"汽化｜水變成水蒸氣",energy:"吸熱｜液態變氣態",copy:"液態物質吸收熱量後變成氣態。汽化包含蒸發與沸騰；濕衣服晾乾是蒸發。",steps:["水（液態）","吸收熱量","水蒸氣（氣態）"]},
-      condensation:{title:"凝結｜水蒸氣變成水",energy:"放熱｜氣態變液態",copy:"氣態物質放出熱量後變成液態。水蒸氣遇到較冷的表面，會凝結成小水滴。",steps:["水蒸氣（氣態）","放出熱量","水滴（液態）"]},
-      sublimation:{title:"昇華｜冰直接變成水蒸氣",energy:"吸熱｜固態直接變氣態",copy:"固態物質不經過液態，直接變成氣態。冰在寒冷乾燥的空氣中也可能慢慢昇華。",steps:["冰（固態）","吸收熱量","水蒸氣（氣態）"]},
-      deposition:{title:"凝華｜水蒸氣直接變成冰",energy:"放熱｜氣態直接變固態",copy:"氣態物質不經過液態，直接變成固態。寒冷表面形成霜，是常見例子。",steps:["水蒸氣（氣態）","放出熱量","霜（固態）"]}
+      melt:{title:"融化｜冰變成水",energy:"吸熱｜固態變液態",copy:"冰吸收熱量時，水分子的振動會增強；原本在固定位置附近振動的分子逐漸能互相移動。融化後，分子仍彼此靠近，但可以滑動，因此水能流動。",steps:["冰（固態）","吸收熱量","水（液態）"]},
+      freeze:{title:"凝固｜水變成冰",energy:"放熱｜液態變固態",copy:"水放出熱量後，分子運動減慢，逐漸排列成較有規律的結構，並在固定位置附近振動，形成冰。分子仍在振動，不是完全靜止。",steps:["水（液態）","放出熱量","冰（固態）"]},
+      vaporization:{title:"汽化｜水變成水蒸氣",energy:"吸熱｜液態變氣態",copy:"水吸收熱量後，分子運動加快；部分分子離開液面，或液體內形成氣泡，成為水蒸氣。氣態分子彼此距離較遠，能在空間中移動。汽化包含蒸發與沸騰。",steps:["水（液態）","吸收熱量","水蒸氣（氣態）"]},
+      condensation:{title:"凝結｜水蒸氣變成水",energy:"放熱｜氣態變液態",copy:"水蒸氣放出熱量後，分子運動減慢並靠近，形成液態水。水蒸氣遇到較冷表面形成小水滴，就是凝結。",steps:["水蒸氣（氣態）","放出熱量","水滴（液態）"]},
+      sublimation:{title:"昇華｜冰直接變成水蒸氣",energy:"吸熱｜固態直接變氣態",copy:"冰吸收熱量後，部分水分子直接脫離固態排列，成為彼此距離較遠、可自由移動的水蒸氣分子，中間不經過液態。",steps:["冰（固態）","吸收熱量","水蒸氣（氣態）"]},
+      deposition:{title:"凝華｜水蒸氣直接變成冰",energy:"放熱｜氣態直接變固態",copy:"水蒸氣放出熱量後，分子運動減慢並直接排列成固態結構，中間不經過液態。寒冷表面形成霜，是常見例子。",steps:["水蒸氣（氣態）","放出熱量","霜（固態）"]}
+    };
+    const phaseStates={
+      solid:{title:"冰｜固態",kicker:"固態・粒子排列與運動",copy:"冰中的水分子彼此靠近，排列較有規律；每個分子在固定位置附近持續小幅振動。冰吸熱可以融化成水，也可以直接昇華成水蒸氣。",paths:[["melt","融化：冰 → 水｜吸熱"],["sublimation","昇華：冰 → 水蒸氣｜吸熱"]]},
+      liquid:{title:"水｜液態",kicker:"液態・粒子排列與運動",copy:"液態水中的水分子仍彼此靠近，但排列不固定，可以互相移動，所以水會流動。水放熱會凝固成冰；吸熱則會汽化成水蒸氣。",paths:[["freeze","凝固：水 → 冰｜放熱"],["vaporization","汽化：水 → 水蒸氣｜吸熱"]]},
+      gas:{title:"水蒸氣｜氣態",kicker:"氣態・粒子排列與運動",copy:"水蒸氣中的水分子彼此距離較遠，會在空間中移動。放熱、運動減慢時可凝結成水；若直接形成固態冰，則稱為凝華。",paths:[["condensation","凝結：水蒸氣 → 水｜放熱"],["deposition","凝華：水蒸氣 → 冰｜放熱"]]}
     };
     let phaseAnimationTimer;
-    document.querySelectorAll("[data-phase-process]").forEach(button=>button.addEventListener("click",()=>{
-      const key=button.dataset.phaseProcess,process=phaseProcesses[key];
-      document.querySelectorAll("[data-phase-process]").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+    const phaseSteps=document.getElementById("phase-detail-steps");
+    function resetPhaseSteps(){phaseSteps.replaceChildren();phaseSteps.hidden=true;}
+    function selectPhaseState(key){
+      const state=phaseStates[key];
+      document.querySelectorAll("[data-phase-state]").forEach(item=>item.setAttribute("aria-pressed",String(item.dataset.phaseState===key)));
+      document.querySelectorAll("[data-phase-process]").forEach(item=>item.setAttribute("aria-pressed","false"));
+      document.querySelectorAll("[data-phase-path]").forEach(path=>path.classList.remove("is-active"));
+      document.getElementById("phase-detail-kicker").textContent=state.kicker;
+      document.getElementById("phase-detail-title").textContent=state.title;
+      document.getElementById("phase-detail-copy").textContent=state.copy;
+      resetPhaseSteps();
+      state.paths.forEach(([processKey,label])=>{
+        const button=document.createElement("button");
+        button.type="button";button.dataset.phaseProcess=processKey;button.dataset.energy=phaseProcesses[processKey].energy.startsWith("吸熱")?"heat":"cool";button.setAttribute("aria-pressed","false");button.textContent=label;phaseSteps.append(button);
+      });
+      phaseSteps.hidden=false;
+    }
+    function selectPhaseProcess(key){
+      const process=phaseProcesses[key];
+      document.querySelectorAll("[data-phase-state]").forEach(item=>item.setAttribute("aria-pressed","false"));
+      document.querySelectorAll("[data-phase-process]").forEach(item=>item.setAttribute("aria-pressed",String(item.dataset.phaseProcess===key)));
       document.querySelectorAll("[data-phase-path]").forEach(path=>path.classList.toggle("is-active",path.dataset.phasePath===key));
       document.getElementById("phase-detail-kicker").textContent=process.energy;
       document.getElementById("phase-detail-title").textContent=process.title;
       document.getElementById("phase-detail-copy").textContent=process.copy;
-      const steps=document.getElementById("phase-detail-steps");steps.replaceChildren();
-      process.steps.forEach((step,index)=>{const item=document.createElement("span");item.textContent=step;steps.append(item);if(index===1){const arrow=document.createElement("b");arrow.setAttribute("aria-hidden","true");arrow.textContent="→";steps.append(arrow);}});
-      steps.hidden=false;
+      resetPhaseSteps();
+      process.steps.forEach((step,index)=>{const item=document.createElement("span");item.textContent=step;phaseSteps.append(item);if(index===1){const arrow=document.createElement("b");arrow.setAttribute("aria-hidden","true");arrow.textContent="→";phaseSteps.append(arrow);}});
+      phaseSteps.hidden=false;
       const animation=document.getElementById("phase-flow-animation"),motionPath=animation.querySelector("mpath");
       motionPath.setAttribute("href",`#phase-path-${key}`);
       const dot=document.getElementById("phase-flow-dot");dot.style.opacity="1";animation.beginElement();
       clearTimeout(phaseAnimationTimer);phaseAnimationTimer=setTimeout(()=>{dot.style.opacity="0";},1900);
-    }));
+    }
+    document.querySelectorAll("[data-phase-state]").forEach(button=>button.addEventListener("click",()=>selectPhaseState(button.dataset.phaseState)));
+    document.addEventListener("click",event=>{const trigger=event.target.closest("[data-phase-process]");if(trigger)selectPhaseProcess(trigger.dataset.phaseProcess);});
+    document.addEventListener("keydown",event=>{const trigger=event.target.closest(".phase-arrow-hit");if(trigger&&(event.key==="Enter"||event.key===" ")){event.preventDefault();selectPhaseProcess(trigger.dataset.phaseProcess);}});
 
     const changes={evaporation:["水分蒸發","沒有生成另一種物質","物理變化","水分從液態變成水蒸氣，物質仍是水。"],rust:["桶身生鏽","形成不同於原金屬的鏽層","化學變化","生鏽形成新物質；外觀改變是線索，分類依據是是否生成新物質。"]};
     document.querySelectorAll("[data-change]").forEach(button=>button.addEventListener("click",()=>{
