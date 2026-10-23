@@ -1402,7 +1402,7 @@
             weighbridge: { value: "18.4 t", start: "0.0 t", status: "貨車駛上地磅…", wait: 2100, svg: `<path d="M50 170h455v20H50z" fill="#9caeaa" stroke="#557368" stroke-width="3"/><path d="M62 161h430v10H62z" fill="#d6a94a" stroke="#997d3c" stroke-width="2"/><path d="M91 191h373" stroke="#557368" stroke-width="4"/><path d="M470 157v-68q0-6 6-6h10V73" fill="none" stroke="#557368" stroke-width="5"/><rect x="385" y="35" width="132" height="42" rx="7" fill="#dce5e0" stroke="#557368" stroke-width="3"/><rect x="397" y="43" width="108" height="23" rx="3" fill="#fbfff9" stroke="#9aaea1" stroke-width="2"/><text id="mass-reading" x="451" y="60" text-anchor="middle" font-size="17" font-family="monospace" font-weight="700" fill="#247554">0.0 t</text><g class="mass-truck"><path d="M83 87h223v52H83z" fill="#4b8a79" stroke="#365f55" stroke-width="3"/><path d="M306 106h75l45 33H306z" fill="#d69b2d" stroke="#997d3c" stroke-width="3"/><path d="M322 111h51l30 26h-81z" fill="#d8ebe4" stroke="#557368" stroke-width="2"/><path d="M94 99h197m-197 12h197m-197 12h197" stroke="#77a493" stroke-width="2"/><circle cx="148" cy="144" r="17" fill="#344540"/><circle cx="148" cy="144" r="7" fill="#d7dfda"/><circle cx="354" cy="144" r="17" fill="#344540"/><circle cx="354" cy="144" r="7" fill="#d7dfda"/><path d="M420 145h12" stroke="#fff3c9" stroke-width="3"/></g>` }
           }[key];
           const action = key === "weighbridge" ? "車輛到位後顯示重量" : "物件放上秤後顯示質量";
-          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual mass-demo-visual" id="mass-demo"><svg class="mass-demo-svg" viewBox="0 0 560 250" role="img" aria-label="${action}">${examples.svg}</svg></div><div class="tool-demo-controls"><button type="button" id="mass-replay">重新播放</button><span class="tool-demo-value" id="mass-state" aria-live="polite">${examples.status}</span></div>`;
+          demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual mass-demo-visual" id="mass-demo"><svg class="mass-demo-svg" viewBox="0 0 560 250" role="img" aria-label="${action}">${examples.svg}</svg></div><div class="tool-demo-controls"><span class="tool-demo-value" id="mass-state" aria-live="polite">${examples.status}</span></div>`;
           const visual = document.querySelector("#mass-demo"), reading = document.querySelector("#mass-reading"), status = document.querySelector("#mass-state");
           const play = () => {
             clearTimeout(massReadTimer);
@@ -1413,7 +1413,6 @@
             visual.classList.add("mass-animating");
             massReadTimer = setTimeout(() => { reading.textContent = examples.value; status.textContent = `讀值穩定：${examples.value}`; }, examples.wait);
           };
-          document.querySelector("#mass-replay").onclick = play;
           play();
         } else if (key === "olympicSprint") {
           demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual" id="race-visual"><div class="race-scene"><svg viewBox="${item.viewBox}" role="img" aria-label="跑道、起跑訊號、終點攝影機和自動計時器">${item.draw()}</svg><div class="sprint-runner" role="img" aria-label="短跑選手跑步循環動畫"></div></div></div><div class="tool-demo-controls"><button type="button" id="race-start">開始模擬短跑</button><span class="tool-demo-value" id="race-state" aria-live="polite">準備起跑</span></div>`;
