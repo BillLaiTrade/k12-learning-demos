@@ -33,7 +33,7 @@ export function mountDisplacementExperiment() {
     resetButton.disabled = !immersed || animating;
     status.dataset.state = immersed ? 'complete' : 'ready';
     if (immersed) {
-      status.textContent = '石頭已完全浸入。比較水位差；要取出時，先向上提過量筒口，再拖到筒外放開，或按「取出石頭，重設量筒」。';
+      status.textContent = '石頭已完全浸入。比較水位差；點一下石頭或拖曳它即可取出，石頭會先升過量筒口再移出。';
     } else {
       status.textContent = '把石頭拖到量筒口正上方並放開，讓它落入水中；也可使用下方按鈕。';
     }
@@ -225,13 +225,6 @@ export function mountDisplacementExperiment() {
       && rockRect.bottom <= cylinderRect.top + 8;
   }
 
-  function rockIsOutsideCylinder() {
-    const rockRect = rock.getBoundingClientRect();
-    const cylinderRect = cylinder.getBoundingClientRect();
-    const centerX = rockRect.left + rockRect.width / 2;
-    return centerX < cylinderRect.left + 12 || centerX > cylinderRect.right - 12;
-  }
-
   rock.addEventListener('pointerdown', event => {
     if (event.pointerType === 'mouse' && event.button !== 0) return;
     if (animating) return;
@@ -254,8 +247,7 @@ export function mountDisplacementExperiment() {
       startY: event.clientY,
       left: rockRect.left - sceneRect.left,
       top: rockRect.top - sceneRect.top,
-      wasImmersed,
-      clearedRim: !wasImmersed
+      wasImmersed
     };
     rock.classList.add('is-dragging');
     rock.setPointerCapture(event.pointerId);
@@ -278,8 +270,6 @@ export function mountDisplacementExperiment() {
       // This is a shorter, more visible lift than requiring its center to clear.
       if (nextTop + rockHeight > cylinderTop + 10) {
         nextLeft = Math.max(cylinderLeft + 3, Math.min(cylinderRight - rockWidth - 3, nextLeft));
-      } else {
-        drag.clearedRim = true;
       }
     }
     rock.style.left = nextLeft + 'px';
@@ -293,11 +283,9 @@ export function mountDisplacementExperiment() {
     const aboveMouth = rockIsAboveCylinderMouth();
     const validDrop = centerIsInCylinder() || aboveMouth;
     const wasImmersed = drag.wasImmersed;
-    const clearedRim = drag.clearedRim;
     drag = null;
     if (wasImmersed) {
-      if (clearedRim && rockIsOutsideCylinder()) removeRockFromCylinder();
-      else placeRock();
+      removeRockFromCylinder();
       return;
     }
     if (validDrop) {
