@@ -163,7 +163,8 @@
     .decision-question { position: relative; display: flex; min-height: 40px; grid-column: 2; grid-row: 1; align-items: center; justify-content: center; padding: 6px 8px; border: 1px solid #bfd5c1; border-radius: 9px; background: #eff5ed; color: #36594b; font-size: .82rem; line-height: 1.3; text-align: center; }
     .decision-question::before { position: absolute; top: 50%; right: 100%; width: 8px; height: 2px; background: #bfd0c2; content: ""; }
     .decision-branch-children { position: relative; display: grid; grid-column: 3; grid-row: 1; grid-template-columns: minmax(0, 1fr); align-items: center; gap: 5px; padding-left: 12px; }
-    .decision-branch-children::before { position: absolute; top: 9px; bottom: 9px; left: 0; width: 2px; background: #bfd0c2; content: ""; }
+    .decision-branch-children::before { display: none; }
+    .decision-child-trunk { position: absolute; top: 0; left: 0; z-index: 0; width: 2px; background: #bfd0c2; pointer-events: none; }
     .decision-next-choice { position: relative; display: flex; min-width: 0; min-height: 34px; flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px; padding: 4px 7px; border: 1px solid #d5e1d6; border-radius: 8px; background: #fffefa; color: #244b3c; text-align: left; cursor: pointer; }
     .decision-next-choice::before { position: absolute; top: 50%; right: 100%; width: 12px; height: 2px; background: #bfd0c2; content: ""; }
     .decision-answer { color: #687a70; font-size: .7rem; line-height: 1.15; }
@@ -192,7 +193,7 @@
     .tool-demo-value { color: var(--green); font-size: 1.2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
     .tool-demo-controls button { padding: 8px 14px; border: 1px solid var(--green); border-radius: 9px; background: var(--green); color: white; font-weight: 700; cursor: pointer; }
     .tool-demo-controls button.secondary { background: white; color: var(--green); }
-    @media (max-width: 600px) { .decision-tree { padding: 7px; } .decision-canvas { grid-template-columns: 46px minmax(0, 1fr); column-gap: 7px; padding: 3px; } .decision-root { padding: 7px 3px; font-size: .65rem; } .decision-root::after { width: 7px; } .decision-branches { gap: 9px; padding-left: 6px; } .decision-branch { grid-template-columns: 43px minmax(68px, .8fr) minmax(0, 1.1fr); gap: 5px; } .decision-branch::before { left: -6px; width: 6px; } .decision-category { min-height: 30px; padding: 3px 1px; font-size: .68rem; overflow-wrap: anywhere; } .decision-question { min-height: 38px; padding: 4px 3px; font-size: .68rem; line-height: 1.2; overflow-wrap: anywhere; } .decision-question::before { width: 5px; } .decision-branch-children { gap: 4px; padding-left: 7px; } .decision-branch-children::before { top: 8px; bottom: 8px; } .decision-next-choice { min-height: 31px; padding: 3px 4px; } .decision-next-choice::before { width: 7px; } .decision-answer { font-size: .65rem; } .decision-tool-name { font-size: .74rem; } }
+    @media (max-width: 600px) { .decision-tree { padding: 7px; } .decision-canvas { grid-template-columns: 46px minmax(0, 1fr); column-gap: 7px; padding: 3px; } .decision-root { padding: 7px 3px; font-size: .65rem; } .decision-root::after { width: 7px; } .decision-branches { gap: 9px; padding-left: 6px; } .decision-branch { grid-template-columns: 43px minmax(68px, .8fr) minmax(0, 1.1fr); gap: 5px; } .decision-branch::before { left: -6px; width: 6px; } .decision-category { min-height: 30px; padding: 3px 1px; font-size: .68rem; overflow-wrap: anywhere; } .decision-question { min-height: 38px; padding: 4px 3px; font-size: .68rem; line-height: 1.2; overflow-wrap: anywhere; } .decision-question::before { width: 5px; } .decision-branch-children { gap: 4px; padding-left: 7px; } .decision-next-choice { min-height: 31px; padding: 3px 4px; } .decision-next-choice::before { width: 7px; } .decision-answer { font-size: .65rem; } .decision-tool-name { font-size: .74rem; } }
     .division-visual svg { display: block; width: 100%; height: auto; }
     .division-visual p { margin: 7px 0 0; color: var(--muted); font-size: .84rem; }
     .control-panel { padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
@@ -1349,6 +1350,10 @@
           choice.addEventListener("click", () => chooseTool(choice.dataset.tool));
           children.append(choice);
         });
+        const childTrunk = document.createElement("span");
+        childTrunk.className = "decision-child-trunk";
+        childTrunk.setAttribute("aria-hidden", "true");
+        children.prepend(childTrunk);
         branch.append(children);
       });
       const decisionBranches = document.querySelector(".decision-branches");
@@ -1367,6 +1372,18 @@
         const lastCenter = lastRect.top + lastRect.height / 2 - branchesRect.top;
         decisionTrunk.style.top = `${firstCenter}px`;
         decisionTrunk.style.height = `${Math.max(0, lastCenter - firstCenter)}px`;
+        decisionBranches.querySelectorAll(".decision-branch-children").forEach(group => {
+          const choices = group.querySelectorAll(".decision-next-choice");
+          if (!choices.length) return;
+          const groupRect = group.getBoundingClientRect();
+          const firstChoice = choices[0].getBoundingClientRect();
+          const lastChoice = choices[choices.length - 1].getBoundingClientRect();
+          const childStart = firstChoice.top + firstChoice.height / 2 - groupRect.top;
+          const childEnd = lastChoice.top + lastChoice.height / 2 - groupRect.top;
+          const childTrunk = group.querySelector(".decision-child-trunk");
+          childTrunk.style.top = `${childStart}px`;
+          childTrunk.style.height = `${Math.max(0, childEnd - childStart)}px`;
+        });
         const targetCenter = (firstRect.top + firstRect.height / 2 + lastRect.top + lastRect.height / 2) / 2;
         decisionRoot.style.transform = "none";
         const rootRect = decisionRoot.getBoundingClientRect();
