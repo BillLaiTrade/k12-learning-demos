@@ -13,7 +13,7 @@ function noise3(x,y,z){
 
 export function makeStone(){
   const geometry=new THREE.IcosahedronGeometry(1,3);
-  const position=geometry.attributes.position,colors=[];
+  const position=geometry.attributes.position;
   for(let i=0;i<position.count;i++){
     const v=new THREE.Vector3().fromBufferAttribute(position,i).normalize();
     const broad=(noise3(v.x*3.4,v.y*3.4,v.z*3.4)-.5)*.3;
@@ -25,17 +25,43 @@ export function makeStone(){
     ].reduce((sum,[x,y,z,depth])=>sum+Math.exp(-((v.x-x)**2+(v.y-y)**2+(v.z-z)**2)*42)*depth,0);
     const r=1+broad+ridge+granule-pits;
     position.setXYZ(i,v.x*r*1.28,v.y*r*.79,v.z*r*.82);
-    const cloud=noise3(v.x*5,v.y*5,v.z*5),mottle=noise3(v.x*19,v.y*19,v.z*19);
-    const flecks=noise3(v.x*53,v.y*53,v.z*53),orePatch=noise3(v.x*12+4,v.y*12-2,v.z*12+1);
-    const charcoal=clamp(.105+(cloud-.5)*.11+(mottle-.5)*.09+(flecks-.5)*.045,.045,.24);
-    const ironOxide=Math.pow(clamp((orePatch-.72)*3.4,0,1),1.25)*clamp(.58+(flecks-.5)*.8,.22,.95);
-    const warm=ironOxide;
-    colors.push(charcoal*(1-warm)+.66*warm,charcoal*(1-warm)+.25*warm,charcoal*(1-warm)+.07*warm);
   }
-  geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
   geometry.computeVertexNormals();
-  const material=new THREE.MeshStandardMaterial({color:0xffffff,vertexColors:true,roughness:.9,metalness:.12,flatShading:true});
-  return new THREE.Mesh(geometry,material);
+  const material=new THREE.MeshStandardMaterial({color:0x292521,roughness:.92,metalness:.08,flatShading:true});
+  const meteorite=new THREE.Mesh(geometry,material);
+
+  // The 3D specimen and the measurement cards share the same meteorite image.
+  // Extend its cutout edge pixels before mapping so transparent margins do not
+  // become holes or a pale halo on the rotating model.
+  const image=new Image();
+  image.onload=()=>{
+    const textureCanvas=document.createElement('canvas');
+    textureCanvas.width=768;textureCanvas.height=Math.round(768*image.height/image.width);
+    const context=textureCanvas.getContext('2d');
+    context.drawImage(image,0,0,textureCanvas.width,textureCanvas.height);
+    const pixels=context.getImageData(0,0,textureCanvas.width,textureCanvas.height);
+    const {data,width,height}=pixels,total=width*height,nearest=new Int32Array(total),queue=new Int32Array(total);
+    nearest.fill(-1);
+    let tail=0;
+    for(let index=0;index<total;index++)if(data[index*4+3]>240){nearest[index]=index;queue[tail++]=index;}
+    for(let head=0;head<tail;head++){
+      const index=queue[head],x=index%width,y=(index/width)|0,source=nearest[index];
+      if(x>0&&nearest[index-1]===-1){nearest[index-1]=source;queue[tail++]=index-1;}
+      if(x+1<width&&nearest[index+1]===-1){nearest[index+1]=source;queue[tail++]=index+1;}
+      if(y>0&&nearest[index-width]===-1){nearest[index-width]=source;queue[tail++]=index-width;}
+      if(y+1<height&&nearest[index+width]===-1){nearest[index+width]=source;queue[tail++]=index+width;}
+    }
+    for(let index=0;index<total;index++){
+      const offset=index*4,source=nearest[index]*4;
+      data[offset]=data[source];data[offset+1]=data[source+1];data[offset+2]=data[source+2];data[offset+3]=255;
+    }
+    context.putImageData(pixels,0,0);
+    const texture=new THREE.CanvasTexture(textureCanvas);
+    texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;
+    material.map=texture;material.color.set(0xffffff);material.needsUpdate=true;
+  };
+  image.src=new URL('./meteorite-model.webp',import.meta.url).href;
+  return meteorite;
 }
 
 const LINEAR_SCALE=Math.cbrt(910/39);
