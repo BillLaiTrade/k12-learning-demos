@@ -1186,7 +1186,7 @@
 
     function createMovingParticleModel(box,state,initialPositions){
       const width=box.clientWidth,height=box.clientHeight,isLiquid=state==="liquid",elements=[...box.querySelectorAll(".particle-molecule")],radius=elements[0].getBoundingClientRect().width/2;
-      const margin=radius+3,availableWidth=Math.max(1,width-margin*2),columns=Math.max(1,Math.floor(availableWidth/(radius*2+1.5))),rows=Math.ceil(elements.length/columns),layerGap=radius*2+1.5,poolTop=isLiquid?Math.max(height*.54,height-radius*2-3-rows*layerGap):height*.66,particles=[];
+      const margin=radius+3,availableWidth=Math.max(1,width-margin*2),columns=Math.max(1,Math.floor(availableWidth/(radius*2+1.5))),rows=Math.ceil(elements.length/columns),layerGap=radius*2+1.5,poolTop=isLiquid?Math.max(height*.54,height-radius*2-3-(rows-.5)*layerGap):height*.66,particles=[];
       elements.forEach((element,index)=>{
         let x,y;
         if(isLiquid){
@@ -1256,7 +1256,7 @@
       const {box,state,particles}=model,width=box.clientWidth,height=box.clientHeight;
       particles.forEach(p=>{p.radius=p.element.getBoundingClientRect().width/2;});
       const margin=particles[0].radius+3,columns=Math.max(1,Math.floor(Math.max(1,width-margin*2)/(particles[0].radius*2+1.5))),rows=Math.ceil(particles.length/columns),layerGap=particles[0].radius*2+1.5;
-      model.poolTop=state==="liquid"?Math.max(height*.54,height-particles[0].radius*2-3-rows*layerGap):height*.66;
+      model.poolTop=state==="liquid"?Math.max(height*.54,height-particles[0].radius*2-3-(rows-.5)*layerGap):height*.66;
       particles.forEach((p,index)=>{
         p.x=Math.max(p.radius,Math.min(width-p.radius,p.x));
         const row=Math.floor(index/columns);
