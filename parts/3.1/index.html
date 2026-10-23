@@ -424,7 +424,8 @@
     @media (max-width: 520px) { .correction-options { gap: 5px; } .correction-options button { padding: 8px 7px; font-size: .88rem; } .correction-options small { font-size: .7rem; } }
     .end-card { background: #eef4e9; border-color: #bfd1be; }
     .next-hint { font-size: .9rem; color: var(--muted); }
-    .measurement-meaning-visual { margin: 24px 0 12px; text-align: center; }
+    .measurement-meaning-demo { margin: 24px 0 12px; padding: 16px 20px; border: 1px solid #cbded0; border-radius: 20px; background: #fffefa; }
+    .measurement-meaning-visual { margin: 0 0 12px; text-align: center; }
     .measurement-meaning-visual svg { display: block; width: 100%; height: auto; }
     .measurement-meaning-visual figcaption { margin-top: 5px; color: var(--muted); font-size: .9rem; }
     .measurement-meaning-mode { display: flex; width: min(420px, 100%); margin: 18px auto; padding: 2px; border: 1px solid #78978a; border-radius: 999px; }
@@ -521,6 +522,7 @@
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>妳怎麼知道呢？</p></div>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>好像是靠感覺。</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>除了靠感覺，也可以用尺量量看啊。</p></div>
+          <div class="measurement-meaning-demo">
           <figure class="measurement-meaning-visual">
             <svg viewBox="0 0 720 230" role="img" aria-label="一支鉛筆對齊直尺的零刻度；尺面每公分分成十個毫米刻度">
               <g class="ruler-visual">
@@ -538,6 +540,7 @@
             <button type="button" data-measurement-mode-button="ruler" aria-pressed="false">對照尺上的刻度</button>
           </div>
           <div class="measurement-meaning-result" aria-live="polite"><span id="measurement-result-label">先觀察</span><div><strong id="measurement-result-value">看起來很長</strong><p id="measurement-result-note">每個人的感覺可能不一樣，還不能公平比較。</p></div></div>
+          </div>
           <p class="next-hint" id="measurement-next-hint" hidden>下一步：18 代表什麼？還少了哪些資訊？</p>
         </div>
       </section>
