@@ -1255,7 +1255,7 @@
           const group=document.createElementNS(svgNS,"g");group.classList.add("phase-traveler");group.setAttribute("aria-hidden","true");group.setAttribute("pointer-events","none");
           const motion=document.createElementNS(svgNS,"animateMotion");motion.setAttribute("dur",`${duration}s`);motion.setAttribute("begin",`${i*duration/travelers}s`);motion.setAttribute("repeatCount","indefinite");
           const route=document.createElementNS(svgNS,"mpath");route.setAttribute("href",`#phase-path-${key}`);motion.append(route);
-          const symbolSize=icon==="snowflake"?38:32,symbol=document.createElementNS(svgNS,"use");symbol.setAttribute("href",`#phase-icon-${icon}`);symbol.setAttribute("x",String(-symbolSize/2));symbol.setAttribute("y",String(-symbolSize/2));symbol.setAttribute("width",String(symbolSize));symbol.setAttribute("height",String(symbolSize));
+          const svgRect=phaseSvg.getBoundingClientRect(),pixelSize=icon==="snowflake"?16:12,symbolWidth=pixelSize/(svgRect.width/840),symbolHeight=pixelSize/(svgRect.height/590),symbol=document.createElementNS(svgNS,"use");symbol.setAttribute("href",`#phase-icon-${icon}`);symbol.setAttribute("x",String(-symbolWidth/2));symbol.setAttribute("y",String(-symbolHeight/2));symbol.setAttribute("width",String(symbolWidth));symbol.setAttribute("height",String(symbolHeight));
           group.append(motion,symbol);phaseSvg.append(group);
         }
       });
