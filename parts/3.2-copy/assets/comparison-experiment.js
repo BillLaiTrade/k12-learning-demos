@@ -68,6 +68,7 @@ export function mountComparisonExperiment() {
 
   function setFinalPosition(left, top, isImmersed) {
     cylinder.classList.remove('drop-ready');
+    water.style.transitionDuration = '';
     sample.classList.remove('is-dragging');
     sample.classList.add('is-animating');
     if (isImmersed) {
@@ -194,7 +195,14 @@ export function mountComparisonExperiment() {
       ];
     }
 
-    for (const segment of segments) {
+    for (let index = 0; index < segments.length; index += 1) {
+      const segment = segments[index];
+      if (enter && index === segments.length - 1) {
+        // Begin the water rise as the sample reaches the water, and finish it
+        // with the same drop segment so the two motions read as one action.
+        water.style.transitionDuration = `${segment.duration}ms`;
+        scene.classList.add('is-immersed');
+      }
       const animation = sample.animate(segment.frames, { duration: segment.duration, fill: 'forwards', easing: 'cubic-bezier(.2,.65,.45,1)' });
       try {
         await animation.finished;
