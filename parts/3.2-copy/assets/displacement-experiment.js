@@ -225,6 +225,13 @@ export function mountDisplacementExperiment() {
       && rockRect.bottom <= cylinderRect.top + 8;
   }
 
+  function rockIsOutsideCylinder() {
+    const rockRect = rock.getBoundingClientRect();
+    const cylinderRect = cylinder.getBoundingClientRect();
+    const centerX = rockRect.left + rockRect.width / 2;
+    return centerX < cylinderRect.left + 12 || centerX > cylinderRect.right - 12;
+  }
+
   rock.addEventListener('pointerdown', event => {
     if (event.pointerType === 'mouse' && event.button !== 0) return;
     if (animating) return;
@@ -290,7 +297,7 @@ export function mountDisplacementExperiment() {
     const clearedRim = drag.clearedRim;
     drag = null;
     if (wasImmersed) {
-      if (clearedRim && !validDrop) removeRockFromCylinder();
+      if (clearedRim && rockIsOutsideCylinder()) removeRockFromCylinder();
       else placeRock();
       return;
     }
