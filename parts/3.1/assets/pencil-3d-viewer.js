@@ -673,7 +673,7 @@ function renderCorrection() {
       { x: correctionView.rayEnd.x, y: 0.22, z: 0.72 });
     correctionLandingRing.position.set(correctionView.rayEnd.x, 0.255, 0.72);
     correctionProjectionRay.visible = true;
-    correctionLandingRing.visible = correctionView.magnifierMode === "angle";
+    correctionLandingRing.visible = false;
   } else {
     correctionProjectionRay.visible = false;
     correctionLandingRing.visible = false;
