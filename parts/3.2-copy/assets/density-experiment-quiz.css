@@ -241,6 +241,8 @@
 .overflow-level-gauge .level-after{top:20px;border-color:#176b53}
 .overflow-catch-tray{width:min(250px,86%);height:68px}
 .overflow-catch-water{left:3px;right:3px;bottom:3px;border-radius:0 0 11px 11px}
+.overflow-catch-tray:not(.has-collected-water) .overflow-catch-water{visibility:hidden}
+.overflow-catch-tray:not(.has-collected-water) .catch-level-lens{display:none}
 .overflow-catch-tray:before{content:none}
 .overflow-water-label{display:none}
 .overflow-tool.is-returning-water .experiment-tool-name{z-index:9;top:auto;bottom:8px;left:12px;padding:4px 6px;border-radius:6px;background:#f5f8f3ed;box-shadow:0 1px 4px #263a3022}

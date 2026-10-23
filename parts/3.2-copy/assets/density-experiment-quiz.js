@@ -66,6 +66,7 @@ export function mountDensityExperimentQuiz() {
     const level = Math.min(100, Math.max(0, Number(value) || 0));
     const water = quiz.querySelector('[data-overflow-water]');
     const tray = water.parentElement;
+    tray.classList.toggle('has-collected-water', level > 0);
     const scale = tray.querySelector('.overflow-catch-scale');
     const scaleBounds = scale.getBoundingClientRect();
     // Keep the collected water anchored to the inside floor of the tray.
