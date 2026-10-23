@@ -38,6 +38,41 @@ export function makeStone(){
   return new THREE.Mesh(geometry,material);
 }
 
+let meteoriteTemplatePromise;
+function loadMeteoriteTemplate(){
+  if(meteoriteTemplatePromise)return meteoriteTemplatePromise;
+  const pageVersion=new URL(import.meta.url).searchParams.get('v'),modelUrl=new URL('./meteorite-model.glb',import.meta.url);
+  if(pageVersion)modelUrl.searchParams.set('v',pageVersion);
+  meteoriteTemplatePromise=new Promise((resolve,reject)=>new GLTFLoader().load(modelUrl.href,gltf=>{
+    gltf.scene.updateMatrixWorld(true);
+    const modeledMesh=gltf.scene.getObjectByProperty('isMesh',true);
+    if(!modeledMesh){reject(new Error('Meteorite mesh missing'));return;}
+    const modeledGeometry=modeledMesh.geometry.clone();modeledGeometry.applyMatrix4(modeledMesh.matrixWorld);modeledGeometry.computeVertexNormals();
+    const geometry=modeledGeometry.toNonIndexed(),position=geometry.attributes.position,uvs=new Float32Array(position.count*2);
+    const sphericalUV=index=>{
+      const direction=new THREE.Vector3().fromBufferAttribute(position,index).normalize();
+      return [.5+Math.atan2(direction.z,direction.x)/(2*Math.PI),.5+Math.asin(THREE.MathUtils.clamp(direction.y,-1,1))/Math.PI];
+    };
+    for(let face=0;face<position.count;face+=3){
+      const coords=[sphericalUV(face),sphericalUV(face+1),sphericalUV(face+2)],uValues=coords.map(value=>value[0]);
+      if(Math.max(...uValues)-Math.min(...uValues)>.5)for(const value of coords)if(value[0]<.5)value[0]+=1;
+      for(let vertex=0;vertex<3;vertex++){uvs[(face+vertex)*2]=coords[vertex][0];uvs[(face+vertex)*2+1]=coords[vertex][1];}
+    }
+    geometry.setAttribute('uv',new THREE.BufferAttribute(uvs,2));geometry.deleteAttribute('color');geometry.computeVertexNormals();
+    const material=modeledMesh.material.clone();material.flatShading=false;material.vertexColors=false;material.color.set(0xffffff);material.roughness=.92;material.metalness=.08;
+    const textureUrl=new URL('./meteorite-surface.webp',import.meta.url);if(pageVersion)textureUrl.searchParams.set('v',pageVersion);
+    new THREE.TextureLoader().load(textureUrl.href,texture=>{
+      texture.colorSpace=THREE.SRGBColorSpace;texture.wrapS=THREE.RepeatWrapping;texture.wrapT=THREE.ClampToEdgeWrapping;
+      material.map=texture;material.needsUpdate=true;resolve({geometry,material});
+    },undefined,reject);
+  },undefined,reject));
+  return meteoriteTemplatePromise;
+}
+
+export function makeMeteoriteMesh(){
+  return loadMeteoriteTemplate().then(({geometry,material})=>new THREE.Mesh(geometry.clone(),material.clone()));
+}
+
 const LINEAR_SCALE=Math.cbrt(910/39);
 const CM_PER_WORLD=1.6*LINEAR_SCALE;
 const RULER_CM=6*LINEAR_SCALE;
@@ -134,37 +169,13 @@ export function mountStoneObserver(){
   Object.assign(heightOverlay.style,{position:'absolute',inset:'0',width:'100%',height:'100%',overflow:'hidden',pointerEvents:'none',zIndex:'2'});
   host.append(heightOverlay);
   const loading=document.querySelector('#observer-loading');
-  const modelUrl=new URL('./meteorite-model.glb',import.meta.url);
-  const pageVersion=new URL(import.meta.url).searchParams.get('v');if(pageVersion)modelUrl.searchParams.set('v',pageVersion);
   // Apply the same predicted surface texture across the full rendered 3D body.
-  new GLTFLoader().load(modelUrl.href,gltf=>{
-    gltf.scene.updateMatrixWorld(true);
-    const modeledMesh=gltf.scene.getObjectByProperty('isMesh',true);
-    if(!modeledMesh)return;
-    const modeledGeometry=modeledMesh.geometry.clone();modeledGeometry.applyMatrix4(modeledMesh.matrixWorld);modeledGeometry.computeVertexNormals();
-    const surfaceGeometry=modeledGeometry.toNonIndexed(),position=surfaceGeometry.attributes.position,uvs=new Float32Array(position.count*2);
-    const sphericalUV=index=>{
-      const direction=new THREE.Vector3().fromBufferAttribute(position,index).normalize();
-      return [.5+Math.atan2(direction.z,direction.x)/(2*Math.PI),.5+Math.asin(THREE.MathUtils.clamp(direction.y,-1,1))/Math.PI];
-    };
-    for(let face=0;face<position.count;face+=3){
-      const coords=[sphericalUV(face),sphericalUV(face+1),sphericalUV(face+2)],uValues=coords.map(value=>value[0]);
-      if(Math.max(...uValues)-Math.min(...uValues)>.5)for(const value of coords)if(value[0]<.5)value[0]+=1;
-      for(let vertex=0;vertex<3;vertex++){uvs[(face+vertex)*2]=coords[vertex][0];uvs[(face+vertex)*2+1]=coords[vertex][1];}
-    }
-    surfaceGeometry.setAttribute('uv',new THREE.BufferAttribute(uvs,2));surfaceGeometry.deleteAttribute('color');surfaceGeometry.computeVertexNormals();
-    stone.geometry.dispose();stone.geometry=surfaceGeometry;
-    stone.material.dispose();stone.material=modeledMesh.material.clone();
-    stone.material.flatShading=false;stone.material.vertexColors=false;stone.material.color.set(0xffffff);
-    stone.material.roughness=.92;stone.material.metalness=.08;
-    const textureUrl=new URL('./meteorite-surface.webp',import.meta.url);
-    if(pageVersion)textureUrl.searchParams.set('v',pageVersion);
-    new THREE.TextureLoader().load(textureUrl.href,texture=>{
-      texture.colorSpace=THREE.SRGBColorSpace;texture.wrapS=THREE.RepeatWrapping;texture.wrapT=THREE.ClampToEdgeWrapping;
-      texture.anisotropy=renderer.capabilities.getMaxAnisotropy();stone.material.map=texture;stone.material.needsUpdate=true;
-    });
+  loadMeteoriteTemplate().then(({geometry,material})=>{
+    stone.geometry.dispose();stone.geometry=geometry.clone();
+    stone.material.dispose();stone.material=material.clone();
+    stone.material.map.anisotropy=renderer.capabilities.getMaxAnisotropy();
     measureDirty=true;if(loading)loading.hidden=true;
-  },undefined,()=>{if(loading)loading.hidden=true});
+  }).catch(()=>{if(loading)loading.hidden=true});
   const raycaster=new THREE.Raycaster(),pointerNdc=new THREE.Vector2();raycaster.params.Line.threshold=.09;
   function resize(){width=host.clientWidth;height=host.clientHeight;if(!width||!height)return;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();measureDirty=true}
   const observer=new ResizeObserver(resize);observer.observe(host);resize();

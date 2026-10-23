@@ -1,5 +1,5 @@
 import * as THREE from '../../3.1/assets/vendor/three/build/three.module.js';
-import { makeStone } from './stone-observer.js?v=meteorite-20261023-2';
+import { makeMeteoriteMesh, makeStone } from './stone-observer.js?v=meteorite-20261023-6';
 
 const MASS_G = 910;
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
@@ -27,11 +27,16 @@ function stoneSupportPoint(stone) {
   return support;
 }
 
-function makeRestingStone() {
-  const stone = makeStone();
+function makeRestingStone(stone = makeStone()) {
   const vertices = stone.geometry.attributes.position;
+  let minY = Infinity, maxY = -Infinity;
   for (let index = 0; index < vertices.count; index += 1) {
-    vertices.setY(index, Math.max(vertices.getY(index), -0.52));
+    minY = Math.min(minY, vertices.getY(index));
+    maxY = Math.max(maxY, vertices.getY(index));
+  }
+  const contactY = minY + (maxY - minY) * 0.015;
+  for (let index = 0; index < vertices.count; index += 1) {
+    vertices.setY(index, Math.max(vertices.getY(index), contactY));
   }
   vertices.needsUpdate = true;
   stone.geometry.computeVertexNormals();
@@ -169,7 +174,7 @@ function makePan(x, materials) {
   return group;
 }
 
-function makeBalance(scene, materials) {
+function makeBalance(scene, materials, stoneModel) {
   const base = new THREE.Group();
   const foot = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.16, 1.18), materials.base);
   foot.position.y = 0.08;
@@ -211,7 +216,7 @@ function makeBalance(scene, materials) {
   const leftPan = makePan(-1.82, materials);
   const rightPan = makePan(1.82, materials);
   beamPivot.add(leftPan, rightPan);
-  const stone = makeRestingStone();
+  const stone = makeRestingStone(stoneModel);
   stone.scale.setScalar(0.43);
   stone.rotation.set(0, -0.44, 0);
   const support = stoneSupportPoint(stone);
@@ -229,7 +234,7 @@ function makeBalance(scene, materials) {
   return { base, pivot: beamPivot, arc: scaleArc, leftPan, rightPan, stone, panShadow, stoneRestY, sourcePosition };
 }
 
-function makeDigitalScale(scene, materials) {
+function makeDigitalScale(scene, materials, stoneModel) {
   const base = new THREE.Group();
   const housing = new THREE.Mesh(new THREE.BoxGeometry(2.72, 0.47, 1.72), materials.base);
   housing.position.y = 0.34;
@@ -273,7 +278,7 @@ function makeDigitalScale(scene, materials) {
   tareLabel.position.set(0.88, 0.52, 0.89);
   base.add(tareLabel);
 
-  const stone = makeRestingStone();
+  const stone = makeRestingStone(stoneModel);
   stone.scale.setScalar(0.43);
   stone.rotation.set(0, -0.44, 0);
   const support = stoneSupportPoint(stone);
@@ -310,10 +315,17 @@ function makeDigitalScale(scene, materials) {
   return { base, stone, shadow, restingY, sourcePosition, updateDisplay };
 }
 
-export function mountMassMeasurement() {
+export async function mountMassMeasurement() {
   const host = document.querySelector('#mass-instrument');
   const canvas = document.querySelector('#mass-instrument-canvas');
   if (!host || !canvas) return;
+  let balanceStone, digitalStone;
+  try {
+    [balanceStone, digitalStone] = await Promise.all([makeMeteoriteMesh(), makeMeteoriteMesh()]);
+  } catch {
+    balanceStone = makeStone();
+    digitalStone = makeStone();
+  }
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -342,8 +354,8 @@ export function mountMassMeasurement() {
     rubber: new THREE.MeshStandardMaterial({ color: 0x37443e, roughness: 0.93 }),
     button: new THREE.MeshStandardMaterial({ color: 0xc8d8cc, metalness: 0.25, roughness: 0.38 })
   };
-  const balance = makeBalance(scene, mat);
-  const digital = makeDigitalScale(scene, mat);
+  const balance = makeBalance(scene, mat, balanceStone);
+  const digital = makeDigitalScale(scene, mat, digitalStone);
   const weightSource = makeWeightTray(scene, mat);
   const sourceWeightModels = weightSource.weights.map(item => item.model);
   const modeButtons = [...document.querySelectorAll('[data-mass-mode]')];

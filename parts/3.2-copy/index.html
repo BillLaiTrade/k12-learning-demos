@@ -136,8 +136,8 @@
       const $=(s,root=document)=>root.querySelector(s), $$=(s,root=document)=>[...root.querySelectorAll(s)];
       const navLinks=$$('#lesson-nav a'), pathSections=$$('.lesson, .unit-quiz');
       const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.hash===`#${entry.target.id}`));}})},{rootMargin:'-15% 0px -70% 0px'});pathSections.forEach(s=>observer.observe(s));
-      // 3D 石頭使用專案既有的本機 Three.js；其餘段落仍共用原石頭圖像。
-      const pageVersion=new URL(location.href).searchParams.get('v')||'meteorite-20261023-5';
+      // 全單元共用同一顆隕石模型與表面材質；靜態示意圖使用該模型的固定角度渲染圖。
+      const pageVersion=new URL(location.href).searchParams.get('v')||'meteorite-20261023-6';
       const observerModule=new URL('./assets/stone-observer.js',document.baseURI);if(pageVersion)observerModule.searchParams.set('v',pageVersion);
       import(observerModule.href).then(({mountStoneObserver})=>mountStoneObserver()).catch(()=>{const status=$('#observer-loading');if(status)status.textContent='立體模型無法載入，請重新整理頁面。'});
       const massModule=new URL('./assets/mass-measurement.js',document.baseURI);if(pageVersion)massModule.searchParams.set('v',pageVersion);
