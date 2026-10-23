@@ -168,18 +168,11 @@
 .overflow-water-label{position:absolute;z-index:4;left:auto;right:12px;top:8px;color:#145c46;font-size:.7rem;text-shadow:0 1px 2px #fff}
 .overflow-spill{bottom:-14px}
 
-/* Proportional model: two 18.5 cm crowns in a 45 cm inner-diameter, 30 cm-deep tank. */
-.overflow-tank{height:156px}
-.overflow-tank .experiment-cylinder-rock{width:103px;height:68px;bottom:7px}
-.overflow-tank .experiment-cylinder-rock[data-sample=A]{left:26%;transform:translateX(-50%)}
-.overflow-tank .experiment-cylinder-rock[data-sample=B]{left:74%;transform:translateX(-50%)}
-.overflow-tank .experiment-cylinder-rock:only-child{left:50%;width:103px;height:68px;transform:translateX(-50%)}
 .overflow-catch-tray{left:50%;right:auto;width:min(280px,78%);height:42px;transform:translateX(-50%)}
 .overflow-catch-tray:before{top:5px}
 .overflow-water-label{top:5px}
 .overflow-catch-scale{left:70px;right:9px;bottom:3px;font-size:.56rem}
 .overflow-spill{bottom:-14px}
-@media(max-width:700px){.overflow-tank{height:156px}}
 @media(max-width:420px){.overflow-tank{width:66%;height:156px;bottom:54px}.overflow-tank .experiment-cylinder-rock{width:91px;height:61px;bottom:7px}.overflow-tank .experiment-cylinder-rock:only-child{width:91px;height:61px}.overflow-catch-tray{width:76%;height:38px}.overflow-catch-scale{left:61px;right:7px;bottom:2px;font-size:.52rem}.overflow-catch-tray:before{left:7px;top:5px;font-size:.61rem}.overflow-spill{bottom:-14px}}
 
 /* Keep the on-screen drawing proportional as the layout scales down. */
@@ -207,3 +200,83 @@
 .overflow-water-label{left:8px;right:54px;top:auto;bottom:8px;text-align:center}
 @media(max-width:700px){.overflow-catch-tray{height:68px}.overflow-tank{bottom:72px}}
 @media(max-width:420px){.overflow-catch-tray{height:68px}.overflow-catch-scale{right:6px;width:40px;font-size:.54rem}.overflow-water-label{left:6px;right:49px;bottom:7px}.overflow-tank{bottom:72px}}
+
+/* Show overflow only while a crown is displacing water, then pour the
+   collected water visibly back into the tank when a crown is lifted out. */
+.overflow-tool.has-overflow .overflow-spill{opacity:0;animation:none}
+.overflow-spill{top:0;bottom:-6px;width:12px;overflow:visible;border-radius:0 0 8px 8px;clip-path:polygon(12% 0,100% 0,82% 15%,100% 28%,72% 43%,95% 61%,70% 78%,85% 100%,20% 100%,30% 80%,5% 62%,27% 44%,0 27%,20% 13%);background:linear-gradient(90deg,#61b3bf88,#63bdc9e8 48%,#55a9b8a8);background-size:100% 48px;opacity:0;transition:opacity .15s}
+.overflow-tool.is-spilling .overflow-spill{opacity:.95;animation:spill-flow .42s linear infinite}
+.overflow-spill-left{left:-8px}
+.overflow-spill-right{right:-8px;animation-delay:-.21s!important}
+.overflow-spill::after{content:"";position:absolute;bottom:-5px;left:50%;width:7px;height:9px;border-radius:50% 50% 55% 45%;background:#62b7c4;transform:translateX(-50%);opacity:.85;animation:spill-drop .55s ease-in infinite}
+.overflow-spill-right::after{animation-delay:-.28s}
+@keyframes spill-flow{to{background-position:0 48px}}
+@keyframes spill-drop{0%{transform:translate(-50%,-3px) scale(.72);opacity:0}45%{opacity:.95}100%{transform:translate(-50%,5px) scale(1);opacity:0}}
+.overflow-tank-water{transition:top 1s ease,height .45s ease}
+.overflow-catch-tray{z-index:1;transform:translateX(-50%);transform-origin:68% 20%;transition:filter .25s}
+.overflow-tool.is-returning-water .overflow-catch-tray{z-index:6;animation:lift-tray-to-rim 1.25s cubic-bezier(.35,.04,.2,1) forwards;filter:drop-shadow(0 8px 8px #263a3033)}
+@keyframes lift-tray-to-rim{0%{transform:translateX(-50%) translateY(0) rotate(0)}18%{transform:translateX(-50%) translateY(-15px) rotate(0)}74%,100%{transform:translateX(-50%) translateY(-242px) rotate(-13deg)}}
+.overflow-catch-water{transition:height 1s ease}
+.overflow-return-status{min-height:22px;margin:7px 2px 0;color:#526358;font-size:.82rem;line-height:1.45}
+@media(max-width:700px){@keyframes lift-tray-to-rim{0%{transform:translateX(-50%) translateY(0) rotate(0)}18%{transform:translateX(-50%) translateY(-14px) rotate(0)}74%,100%{transform:translateX(-50%) translateY(-242px) rotate(-13deg)}}}
+@media(prefers-reduced-motion:reduce){.overflow-tool.is-spilling .overflow-spill,.overflow-tool.is-spilling .overflow-spill::after,.overflow-tool.is-returning-water .overflow-catch-tray{animation-duration:.01ms;animation-iteration-count:1}}
+.overflow-tool.is-returning-water .overflow-catch-tray{overflow:visible;animation-duration:1.3s}
+.overflow-tool.is-returning-water .overflow-catch-tray::after{content:"";position:absolute;z-index:8;top:calc(100% - 3px);right:16%;width:12px;height:42px;border-radius:35% 35% 55% 55%;background:linear-gradient(90deg,#61b5c255,#5db8c9ed 48%,#53a9b888);opacity:0;transform:scaleY(.35);transform-origin:top;pointer-events:none;animation:return-from-tray .58s ease .74s forwards}
+.overflow-tool.is-returning-water .overflow-catch-water,.overflow-tool.is-returning-water .overflow-tank-water{transition-delay:.7s}
+@keyframes return-from-tray{0%{opacity:0;transform:scaleY(.35)}20%{opacity:.95;transform:scaleY(1)}75%{opacity:.95;transform:scaleY(1)}100%{opacity:0;transform:scaleY(.65)}}
+@media(max-width:700px){.overflow-tool.is-returning-water .experiment-tool-name{z-index:9;padding:4px 6px;border-radius:6px;background:#f5f8f3ed;box-shadow:0 1px 4px #263a3022}}
+@media(prefers-reduced-motion:reduce){.overflow-tool.is-returning-water .overflow-catch-tray::after{animation-duration:.01ms;animation-delay:0ms}}
+
+/* Make the tiny physical level drop legible without scaling the vessel itself. */
+.overflow-level-detail{display:none;position:absolute;z-index:8;top:8px;right:7px;align-items:center;gap:6px;padding:5px 7px;border:1px solid #c9d9d0;border-radius:7px;background:#f7faf4ed;color:#40594d;box-shadow:0 1px 4px #263a3020}
+.overflow-tool.is-water-lowered .overflow-level-detail{display:flex}
+.overflow-level-detail>span:last-child{display:grid;gap:2px}
+.overflow-level-detail small{font-size:.52rem;line-height:1.15;white-space:nowrap}
+.overflow-level-detail strong{color:#176b53;font-size:.66rem;line-height:1.1}
+.overflow-level-gauge{position:relative;display:block;flex:0 0 27px;width:27px;height:28px;border-left:1px solid #718d80}
+.overflow-level-gauge:after{content:"";position:absolute;left:-4px;top:4px;width:6px;height:17px;border-right:1px solid #719184;border-top:1px solid #719184;border-bottom:1px solid #719184}
+.overflow-level-gauge i{position:absolute;left:0;right:0;border-top:2px solid #3596a2}
+.overflow-level-gauge .level-before{top:4px}
+.overflow-level-gauge .level-after{top:20px;border-color:#176b53}
+.overflow-catch-tray{width:min(170px,78%);height:68px}
+.overflow-catch-water{left:3px;right:3px;bottom:3px;border-radius:0 0 11px 11px}
+.overflow-catch-tray:before{content:none}
+.overflow-water-label{z-index:6;padding:0 2px;border-radius:3px;background:#edf5eff0}
+.overflow-tool.is-returning-water .experiment-tool-name{z-index:9;top:auto;bottom:8px;left:12px;padding:4px 6px;border-radius:6px;background:#f5f8f3ed;box-shadow:0 1px 4px #263a3022}
+.overflow-tool.is-returning-water .overflow-catch-tray{animation:lift-tray-to-rim 1.3s cubic-bezier(.35,.04,.2,1) forwards;transform-origin:88% 20%}
+@keyframes lift-tray-to-rim{0%{transform:translateX(-50%) translateY(0) rotate(0)}18%{transform:translateX(-50%) translateY(-15px) rotate(0)}74%,100%{transform:translateX(calc(-50% - 118px)) translateY(-215px) rotate(14deg)}}
+.overflow-tool.is-returning-water .overflow-catch-tray::after{content:"";position:absolute;z-index:8;top:calc(100% - 3px);right:7%;width:9px;height:54px;border-radius:0 0 55% 55%;background:linear-gradient(90deg,#61b5c255,#5db8c9ed 48%,#53a9b888);opacity:0;transform:rotate(-14deg) scaleY(.35);transform-origin:top;pointer-events:none;animation:return-from-tray .95s ease .45s forwards}
+.overflow-tool.is-returning-water .overflow-catch-water,.overflow-tool.is-returning-water .overflow-tank-water{transition-delay:.45s}
+@media(max-width:700px){.overflow-catch-tray{width:min(120px,76%)}@keyframes lift-tray-to-rim{0%{transform:translateX(-50%) translateY(0) rotate(0)}18%{transform:translateX(-50%) translateY(-14px) rotate(0)}74%,100%{transform:translateX(calc(-50% - 95px)) translateY(-208px) rotate(14deg)}}}
+@media(max-width:420px){.overflow-level-detail{top:7px;right:5px;gap:4px;padding:4px 5px}.overflow-level-gauge{flex-basis:22px;width:22px;height:25px}.overflow-level-gauge .level-after{top:18px}}
+
+/* Keep the crown samples stacked in the same narrow overflow vessel. */
+.overflow-tank{width:min(128px,40%);height:auto;aspect-ratio:22/30;bottom:72px}
+.overflow-tank .experiment-cylinder-rock{width:84%;height:auto;max-height:66px;bottom:8px;left:50%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=A]{bottom:8px;left:50%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]{bottom:70px;left:50%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]:only-child{bottom:8px}
+.overflow-tank .experiment-cylinder-rock:only-child{width:84%;left:50%;transform:translateX(-50%)}
+
+/* Narrow overflow trough: 19 × 0.7 cm base, 12 cm deep; the crown sits edge-on. */
+.overflow-tank{width:min(205px,68%);height:136px;aspect-ratio:auto;bottom:72px;border-radius:2px 2px 12px 12px;box-shadow:inset 0 -5px #d7e3dc}
+.overflow-tank:before{height:24px;border-radius:50%}
+.overflow-tank-water{border-radius:0 0 9px 9px}
+.overflow-tank-water:before{height:6px}
+.overflow-tank .experiment-cylinder-rock{width:calc(100% - 10px);height:67px;max-height:none;bottom:5px}
+.overflow-tank .experiment-cylinder-rock[data-sample=A]{left:50%;bottom:5px;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]{left:50%;bottom:67px;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]:only-child{bottom:5px}
+.overflow-tank .experiment-cylinder-rock:only-child{width:calc(100% - 10px);height:67px;left:50%;transform:translateX(-50%)}
+@media(max-width:700px){.overflow-tank{height:136px}}
+@media(max-width:420px){.overflow-tank{width:min(178px,68%);height:128px}.overflow-tank .experiment-cylinder-rock{height:61px}.overflow-tank .experiment-cylinder-rock[data-sample=B]{bottom:65px}.overflow-tank .experiment-cylinder-rock[data-sample=B]:only-child{bottom:5px}.overflow-tank .experiment-cylinder-rock:only-child{height:61px}}
+
+/* The vessel's own water surface moves with its true displaced volume. */
+.overflow-tank-water:before{content:"";z-index:2;left:-1px;right:-1px;top:0;height:0;border:0;border-top:3px solid #087f95;border-radius:0;background:none}
+.overflow-removed-crown{display:none;position:absolute;z-index:8;top:39%;right:0;width:78px;transform:translateY(-50%);padding:5px 3px 4px;border:1px solid #d4dfd4;border-radius:9px;background:#f8faf6eF;box-shadow:0 2px 6px #263a3020;text-align:center;pointer-events:none}
+.overflow-removed-crown.is-visible{display:block}
+.overflow-removed-crown figure{display:grid;justify-items:center;gap:2px;margin:0}
+.overflow-removed-crown figure+figure{margin-top:4px;padding-top:4px;border-top:1px solid #dce5dc}
+.overflow-removed-crown img{width:68px;height:48px;object-fit:contain;filter:drop-shadow(0 2px 2px #263a3040)}
+.overflow-removed-crown figcaption{color:#526358;font-size:.56rem;font-weight:750;line-height:1.2;white-space:nowrap}
+@media(max-width:420px){.overflow-removed-crown{width:63px;padding:3px 1px}.overflow-removed-crown img{width:56px;height:38px}.overflow-removed-crown figcaption{font-size:.48rem}}

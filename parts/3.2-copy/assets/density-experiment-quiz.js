@@ -2,6 +2,12 @@ export function mountDensityExperimentQuiz() {
   const quiz = document.querySelector('#density-experiment-quiz');
   if (!quiz) return;
 
+  quiz.querySelector('.overflow-level-detail')?.remove();
+  const removedCrownDisplay = document.createElement('div');
+  removedCrownDisplay.className = 'overflow-removed-crown';
+  removedCrownDisplay.setAttribute('aria-hidden', 'true');
+  quiz.querySelector('.experiment-overflow-layout').append(removedCrownDisplay);
+
   const samples = {
     A: { mass: 714, volume: 37, image: 'assets/golden-wreath.webp' },
     B: { mass: 714, volume: 46.3, image: 'assets/golden-wreath.webp' }
@@ -12,6 +18,13 @@ export function mountDensityExperimentQuiz() {
   let selectedSample = null;
   const scaleSamples = new Set();
   const tankSamples = new Set();
+  const removedTankSamples = new Set();
+  const tankSampleVolumes = new Map();
+  let collectedVolume = 0;
+  let pendingReturnVolume = 0;
+  let returnTimer = null;
+  let returnInProgress = null;
+  let spillTimer = null;
   let drag = null;
 
   function record(sample) {
@@ -20,6 +33,11 @@ export function mountDensityExperimentQuiz() {
 
   function field(sample, name) {
     return record(sample).querySelector(`[data-entry="${name}"]`);
+  }
+
+  function refreshRemovedCrown() {
+    removedCrownDisplay.innerHTML = [...removedTankSamples].map(sample => `<figure><img src="${samples[sample].image}" alt=""><figcaption>皇冠 ${sample} 已取出</figcaption></figure>`).join('');
+    removedCrownDisplay.classList.toggle('is-visible', removedTankSamples.size > 0);
   }
 
   function sampleMass(sample) {
@@ -34,16 +52,81 @@ export function mountDensityExperimentQuiz() {
     return input.value !== '' && Number.isFinite(entered) && entered > 0 ? entered : samples[sample].volume;
   }
 
-  function setWaterReading(value) {
+  function setWaterVisual(value) {
     const level = Math.min(100, Math.max(0, Number(value) || 0));
     const water = quiz.querySelector('[data-overflow-water]');
     const tray = water.parentElement;
     const scale = tray.querySelector('.overflow-catch-scale');
-    const trayBounds = tray.getBoundingClientRect();
     const scaleBounds = scale.getBoundingClientRect();
-    water.style.bottom = `${trayBounds.bottom - scaleBounds.bottom}px`;
-    water.style.height = `${scaleBounds.height * level / 100}px`;
-    quiz.querySelector('[data-water-reading]').textContent = `${value} mL`;
+    // Keep the collected water anchored to the inside floor of the tray.
+    water.style.bottom = '3px';
+    const waterHeight = scaleBounds.height * level / 100;
+    water.style.height = `${waterHeight}px`;
+    quiz.querySelector('[data-water-reading]').style.bottom = `${Math.max(3, waterHeight - 8)}px`;
+  }
+
+  function setWaterReading(value) {
+    setWaterVisual(value);
+    const rounded = Number(value) % 1 === 0 ? Number(value).toFixed(0) : Number(value).toFixed(1);
+    quiz.querySelector('[data-water-reading]').textContent = `${rounded} mL`;
+  }
+
+  function setTankWaterLevel(deficit) {
+    const water = quiz.querySelector('.overflow-tank-water');
+    const tank = quiz.querySelector('.overflow-tank');
+    const tankDepthCm = 12;
+    const surfaceAreaCm2 = 19 * 0.7;
+    const volumeMl = Math.max(0, Number(deficit) || 0);
+    const heightPx = volumeMl / surfaceAreaCm2 * (tank.getBoundingClientRect().height / tankDepthCm);
+    water.style.top = `${heightPx}px`;
+  }
+
+  function waterLevelDropMm(volumeMl) {
+    const surfaceAreaCm2 = 19 * 0.7;
+    return volumeMl / surfaceAreaCm2 * 10;
+  }
+
+  function finishWaterReturn() {
+    if (!returnInProgress) return;
+    window.clearTimeout(returnTimer);
+    const returned = returnInProgress.volume;
+    collectedVolume = Math.max(0, collectedVolume - returned);
+    pendingReturnVolume = Math.max(0, pendingReturnVolume - returned);
+    returnInProgress = null;
+    returnTimer = null;
+    const instrument = quiz.querySelector('[data-instrument="cylinder"]');
+    instrument.classList.remove('is-returning-water');
+    instrument.classList.remove('is-water-lowered');
+    refreshTank();
+    quiz.querySelector('[data-water-status]').textContent = pendingReturnVolume > 0
+      ? `水已倒回溢水槽；槽內仍有約 ${pendingReturnVolume.toFixed(1)} mL 的水位差。`
+      : '接水盤的水已倒回溢水槽，水位恢復到槽口。';
+  }
+
+  function startWaterReturn() {
+    const returned = Math.min(pendingReturnVolume, collectedVolume);
+    if (returned <= 0) return;
+    returnInProgress = { volume: returned, phase: 'settling' };
+    const dropMm = waterLevelDropMm(returned);
+    const instrument = quiz.querySelector('[data-instrument="cylinder"]');
+    instrument.classList.add('is-water-lowered');
+    quiz.querySelector('[data-water-status]').textContent = `皇冠已取出，水位先下降約 ${dropMm.toFixed(2)} mm；接水盤的水暫時留在盤中。`;
+    // Keep the crown-out, lower-water state visible before the basin moves.
+    returnTimer = window.setTimeout(beginWaterReturn, 1400);
+  }
+
+  function beginWaterReturn() {
+    if (!returnInProgress) return;
+    const returned = returnInProgress.volume;
+    const instrument = quiz.querySelector('[data-instrument="cylinder"]');
+    returnInProgress.phase = 'pouring';
+    instrument.classList.remove('is-water-lowered');
+    instrument.classList.remove('is-spilling');
+    instrument.classList.add('is-returning-water');
+    setWaterVisual(collectedVolume - returned);
+    setTankWaterLevel(pendingReturnVolume - returned);
+    quiz.querySelector('[data-water-status]').textContent = `接水盤中的水正倒回溢水槽（約 ${returned.toFixed(1)} mL）。`;
+    returnTimer = window.setTimeout(finishWaterReturn, 1500);
   }
 
   function refreshScale() {
@@ -54,13 +137,22 @@ export function mountDensityExperimentQuiz() {
     quiz.querySelector('[data-instrument="scale"]').setAttribute('aria-label', `電子秤，放有 ${scaleSamples.size} 頂皇冠，總質量 ${totalMass.toFixed(1)} 公克`);
   }
 
-  function refreshTank() {
+  function refreshTank(spill = false) {
     const group = quiz.querySelector('[data-cylinder-rocks]');
-    const totalVolume = [...tankSamples].reduce((sum, sample) => sum + sampleVolume(sample), 0);
     group.innerHTML = [...tankSamples].map(sample => `<img class="experiment-cylinder-rock crown-thumb" data-drag-sample="${sample}" data-sample="${sample}" src="${samples[sample].image}" alt="皇冠樣本 ${sample}，可拖曳移動">`).join('');
-    setWaterReading(totalVolume);
-    quiz.querySelector('[data-instrument="cylinder"]').classList.toggle('has-overflow', tankSamples.size > 0);
-    quiz.querySelector('[data-instrument="cylinder"]').setAttribute('aria-label', `滿水溢流水槽與有刻度的接水盤，${tankSamples.size} 頂皇冠完全浸入，收集到溢出水 ${totalVolume} 毫升`);
+    setWaterReading(collectedVolume);
+    setTankWaterLevel(pendingReturnVolume);
+    const instrument = quiz.querySelector('[data-instrument="cylinder"]');
+    instrument.classList.toggle('has-overflow', tankSamples.size > 0);
+    if (spill) {
+      instrument.classList.remove('is-spilling');
+      window.clearTimeout(spillTimer);
+      // Restart CSS flow when a sample displaces water over the rim.
+      void instrument.offsetWidth;
+      instrument.classList.add('is-spilling');
+      spillTimer = window.setTimeout(() => instrument.classList.remove('is-spilling'), 1350);
+    }
+    instrument.setAttribute('aria-label', `溢流水槽與有刻度的接水盤，槽內有 ${tankSamples.size} 頂皇冠，接水盤有 ${collectedVolume.toFixed(1)} 毫升水`);
   }
 
   function chooseSample(sample) {
@@ -69,22 +161,49 @@ export function mountDensityExperimentQuiz() {
   }
 
   function placeSample(sample, instrument) {
-    if (instrument === 'scale' && tankSamples.delete(sample)) refreshTank();
+    if (instrument === 'cylinder' && returnInProgress) finishWaterReturn();
+    if (instrument === 'scale' && tankSamples.has(sample)) removeSample(sample, 'cylinder');
     if (instrument === 'cylinder' && scaleSamples.delete(sample)) refreshScale();
+    if (removedTankSamples.delete(sample)) refreshRemovedCrown();
     chooseSample(sample);
     if (instrument === 'scale') {
       scaleSamples.add(sample);
       refreshScale();
     }
     if (instrument === 'cylinder') {
-      tankSamples.add(sample);
-      refreshTank();
+      if (!tankSamples.has(sample)) {
+        const volume = sampleVolume(sample);
+        tankSamples.add(sample);
+        tankSampleVolumes.set(sample, volume);
+        const refilled = Math.min(pendingReturnVolume, volume);
+        pendingReturnVolume -= refilled;
+        const overflowed = volume - refilled;
+        collectedVolume += overflowed;
+        refreshTank(volume > refilled);
+        quiz.querySelector('[data-water-status]').textContent = overflowed > 0
+          ? `皇冠放入後，約 ${overflowed.toFixed(1)} mL 的水溢出並流入接水盤。`
+          : '皇冠放入後，水位回升；接水盤中的水量不變。';
+      }
     }
   }
 
   function removeSample(sample, instrument) {
     if (instrument === 'scale' && scaleSamples.delete(sample)) refreshScale();
-    if (instrument === 'cylinder' && tankSamples.delete(sample)) refreshTank();
+    if (instrument === 'cylinder' && tankSamples.has(sample)) {
+      if (returnInProgress) finishWaterReturn();
+      const volume = tankSampleVolumes.get(sample) ?? sampleVolume(sample);
+      tankSamples.delete(sample);
+      tankSampleVolumes.delete(sample);
+      removedTankSamples.add(sample);
+      refreshRemovedCrown();
+      pendingReturnVolume += volume;
+      const instrumentElement = quiz.querySelector('[data-instrument="cylinder"]');
+      instrumentElement.classList.remove('is-spilling');
+      window.clearTimeout(spillTimer);
+      refreshTank();
+      quiz.querySelector('[data-water-status]').textContent = `皇冠取出後，水位下降；接水盤中的水正倒回槽中。`;
+      startWaterReturn();
+    }
   }
 
   function updateRecord(sample) {
@@ -107,7 +226,21 @@ export function mountDensityExperimentQuiz() {
     }
     displacementInput.setAttribute('aria-invalid', String(displacementInput.value !== '' && !validVolume));
     if (scaleSamples.has(sample)) refreshScale();
-    if (tankSamples.has(sample)) refreshTank();
+    if (tankSamples.has(sample)) {
+      if (returnInProgress) finishWaterReturn();
+      const currentSampleVolume = sampleVolume(sample);
+      const previous = tankSampleVolumes.get(sample) ?? currentSampleVolume;
+      const difference = currentSampleVolume - previous;
+      tankSampleVolumes.set(sample, currentSampleVolume);
+      if (difference > 0) {
+        const refilled = Math.min(pendingReturnVolume, difference);
+        pendingReturnVolume -= refilled;
+        collectedVolume += difference - refilled;
+      } else if (difference < 0) {
+        pendingReturnVolume += Math.abs(difference);
+      }
+      refreshTank(difference > 0);
+    }
     feedback.textContent = '';
     feedback.removeAttribute('data-result');
   }
@@ -153,6 +286,7 @@ export function mountDensityExperimentQuiz() {
     const moved = current.moved || Math.abs(event.clientX - current.startX) + Math.abs(event.clientY - current.startY) > 5;
     if (!moved) return;
     const target = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-instrument]');
+    if (current.sourceInstrument && target?.dataset.instrument === current.sourceInstrument) return;
     if (current.sourceInstrument) removeSample(current.sample, current.sourceInstrument);
     if (target) placeSample(current.sample, target.dataset.instrument);
   }
@@ -178,15 +312,26 @@ export function mountDensityExperimentQuiz() {
     tool.addEventListener('pointerup', finishDrag);
     tool.addEventListener('pointercancel', finishDrag);
     tool.addEventListener('click', event => {
-      if (!selectedSample || event.target.closest('[data-drag-sample]')) return;
       const inTool = tool.dataset.instrument === 'scale' ? scaleSamples : tankSamples;
+      const clickedSample = event.target.closest('[data-drag-sample]')?.dataset.dragSample;
+      if (clickedSample) {
+        if (selectedSample && !inTool.has(selectedSample)) {
+          placeSample(selectedSample, tool.dataset.instrument);
+          return;
+        }
+        if (inTool.has(clickedSample)) removeSample(clickedSample, tool.dataset.instrument);
+        return;
+      }
+      if (!selectedSample) return;
       if (inTool.has(selectedSample)) removeSample(selectedSample, tool.dataset.instrument);
       else placeSample(selectedSample, tool.dataset.instrument);
     });
     tool.addEventListener('keydown', event => {
       if (selectedSample && (event.key === 'Enter' || event.key === ' ')) {
         event.preventDefault();
-        placeSample(selectedSample, tool.dataset.instrument);
+        const inTool = tool.dataset.instrument === 'scale' ? scaleSamples : tankSamples;
+        if (inTool.has(selectedSample)) removeSample(selectedSample, tool.dataset.instrument);
+        else placeSample(selectedSample, tool.dataset.instrument);
       }
     });
   });
