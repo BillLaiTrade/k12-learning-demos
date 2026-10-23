@@ -7,6 +7,11 @@ export function mountDensityExperimentQuiz() {
   removedCrownDisplay.className = 'overflow-removed-crown';
   removedCrownDisplay.setAttribute('aria-hidden', 'true');
   quiz.querySelector('.experiment-overflow-layout').append(removedCrownDisplay);
+  const catchLevelLens = document.createElement('div');
+  catchLevelLens.className = 'catch-level-lens';
+  catchLevelLens.setAttribute('aria-hidden', 'true');
+  catchLevelLens.innerHTML = '<div class="catch-level-lens-ruler"><span data-lens-upper>10</span><i data-lens-line></i><span data-lens-lower>0</span></div><div class="catch-level-lens-reading"><strong data-lens-value>0</strong><small>mL</small></div>';
+  quiz.querySelector('.overflow-catch-tray').append(catchLevelLens);
 
   const samples = {
     A: { mass: 714, volume: 37, image: 'assets/golden-wreath.webp' },
@@ -63,6 +68,12 @@ export function mountDensityExperimentQuiz() {
     const waterHeight = scaleBounds.height * level / 100;
     water.style.height = `${waterHeight}px`;
     quiz.querySelector('[data-water-reading]').style.bottom = `${Math.max(3, waterHeight - 8)}px`;
+    const lowerMark = Math.min(90, Math.floor(level / 10) * 10);
+    const fraction = (level - lowerMark) / 10;
+    catchLevelLens.querySelector('[data-lens-upper]').textContent = String(lowerMark + 10);
+    catchLevelLens.querySelector('[data-lens-lower]').textContent = String(lowerMark);
+    catchLevelLens.querySelector('[data-lens-line]').style.top = `${6 + (1 - fraction) * 22}px`;
+    catchLevelLens.querySelector('[data-lens-value]').textContent = level % 1 === 0 ? String(level) : level.toFixed(1);
   }
 
   function setWaterReading(value) {

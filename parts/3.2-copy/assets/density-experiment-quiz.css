@@ -188,7 +188,7 @@
 
 
 /* Arrange volume marks up the collector wall, as on an ordinary graduated vessel. */
-.overflow-catch-tray{height:68px}
+.overflow-catch-tray{height:68px;overflow:visible}
 .overflow-catch-tray:before{content:"接水盤（mL）";z-index:5;padding:0 3px;border-radius:3px;background:#f2f6f1}
 .overflow-catch-scale{position:absolute;left:auto;right:8px;top:7px;bottom:7px;width:43px;display:block;color:#526358;font-size:.6rem;font-variant-numeric:tabular-nums;pointer-events:none}
 .overflow-catch-scale .catch-tick{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:4px;line-height:1}
@@ -249,6 +249,22 @@
 .overflow-tool.is-returning-water .overflow-catch-water,.overflow-tool.is-returning-water .overflow-tank-water{transition-delay:.45s}
 @media(max-width:700px){.overflow-catch-tray{width:min(240px,92%)}@keyframes lift-tray-to-rim{0%{transform:translateX(-50%) translateY(0) rotate(0)}18%{transform:translateX(-50%) translateY(-14px) rotate(0)}74%,100%{transform:translateX(calc(-50% - 95px)) translateY(-208px) rotate(14deg)}}}
 @media(max-width:420px){.overflow-level-detail{top:7px;right:5px;gap:4px;padding:4px 5px}.overflow-level-gauge{flex-basis:22px;width:22px;height:25px}.overflow-level-gauge .level-after{top:18px}}
+
+/* The zoom inset stays attached to the catch-tray scale while it is poured. */
+.catch-level-lens{position:absolute;z-index:8;right:-94px;bottom:8px;width:88px;height:48px;box-sizing:border-box;display:flex;align-items:center;gap:5px;padding:4px 7px;border:1.5px solid #77958a;border-radius:25px;background:#f8faf6f2;box-shadow:0 2px 6px #263a3026;pointer-events:none}
+.overflow-tool.is-returning-water .catch-level-lens{transform:rotate(-14deg)}
+.catch-level-lens:before{content:"";position:absolute;right:100%;top:50%;width:17px;border-top:2px solid #398fa0}
+.catch-level-lens-ruler{position:relative;flex:0 0 27px;width:27px;height:34px;border-left:2px solid #78958a;color:#53685d;font-size:7px;font-variant-numeric:tabular-nums;line-height:1}
+.catch-level-lens-ruler span{position:absolute;left:2px}
+.catch-level-lens-ruler span:first-child{top:1px}
+.catch-level-lens-ruler span:last-child{bottom:1px}
+.catch-level-lens-ruler:before,.catch-level-lens-ruler:after{content:"";position:absolute;left:-3px;width:7px;border-top:1px solid #78958a}
+.catch-level-lens-ruler:before{top:0}
+.catch-level-lens-ruler:after{bottom:0}
+.catch-level-lens-ruler i{position:absolute;left:-4px;right:0;border-top:2px solid #12869a}
+.catch-level-lens-reading{display:flex;align-items:baseline;gap:2px;color:#176b53;font-variant-numeric:tabular-nums;white-space:nowrap}
+.catch-level-lens-reading strong{font-size:.78rem;line-height:1}
+.catch-level-lens-reading small{font-size:.55rem;font-weight:750}
 
 /* Keep the crown samples stacked in the same narrow overflow vessel. */
 .overflow-tank{width:min(128px,40%);height:auto;aspect-ratio:22/30;bottom:72px}
