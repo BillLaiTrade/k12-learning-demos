@@ -299,12 +299,12 @@
     @keyframes phase-water-sway { 0%,100% { transform:scale(1,.97) translateY(1px); } 50% { transform:scale(1.035,1.03) translateY(-1px); } }
     @keyframes phase-vapor-drift { 0%,100% { transform:translateY(3px); } 50% { transform:translateY(-3px); } }
     .phase-node-solid,.phase-node-liquid,.phase-node-gas { top:50%; left:50%; }
-    .phase-transition { position:absolute; z-index:3; min-width:0; padding:3px 7px; transform:translate(-50%,-50%); border:1px solid var(--phase-route-color); border-radius:8px; background:#fffefa; box-shadow:0 2px 7px #263b3014; color:var(--phase-route-color); text-align:center; cursor:pointer; font-size:.78rem; font-weight:850; line-height:1.1; white-space:nowrap; transition:transform .16s,border-color .16s,box-shadow .16s; }
+    .phase-transition { position:absolute; z-index:3; min-width:0; padding:3px 6px; transform:translate(-50%,-50%); border:0; border-radius:6px; background:#f5f6efed; box-shadow:none; color:var(--phase-route-color); text-align:center; cursor:pointer; font-size:.8rem; font-weight:850; line-height:1.1; white-space:nowrap; transition:transform .16s,outline-color .16s; }
     .phase-transition:hover,.phase-transition:focus-visible { transform:translate(-50%,calc(-50% - 2px)); box-shadow:0 5px 12px #263b3020; outline:3px solid #176b5330; }
     .phase-transition[aria-pressed="true"] { border:2px solid #176b53; background:#f2f8f3; }
     .phase-transition[data-energy="heat"] { --phase-route-color:#bd634b; }
     .phase-transition[data-energy="cool"] { --phase-route-color:#43839a; }
-    .phase-transition,.phase-transition-key,.phase-diagram-hint { display:none; }
+    .phase-transition-key,.phase-diagram-hint { display:none; }
     #phase-melt { left:33%; top:44%; }
     #phase-freeze { left:45.6%; top:51.4%; }
     #phase-sublimation { left:55.5%; top:48%; }
@@ -1230,6 +1230,8 @@
         path.setAttribute("d",d);
         document.getElementById(`phase-path-${key}`).setAttribute("d",d);
         document.querySelector(`.phase-arrow-hit[data-phase-process="${key}"]`).setAttribute("d",d);
+        const midpoint=path.getPointAtLength(path.getTotalLength()/2),screenMidpoint=new DOMPoint(midpoint.x,midpoint.y).matrixTransform(phaseSvg.getScreenCTM()),centroid={x:(vertices.solid.x+vertices.liquid.x+vertices.gas.x)/3,y:(vertices.solid.y+vertices.liquid.y+vertices.gas.y)/3},dx=centroid.x-screenMidpoint.x,dy=centroid.y-screenMidpoint.y,distance=Math.hypot(dx,dy)||1,sideDirection=phaseProcesses[key].energy.startsWith("吸熱")?1:-1,label=document.getElementById(`phase-${key}`);
+        label.style.left=`${screenMidpoint.x-triangleRect.left+dx/distance*22*sideDirection}px`;label.style.top=`${screenMidpoint.y-triangleRect.top+dy/distance*22*sideDirection}px`;
       });
     }
     updatePhaseArrowGeometry();
