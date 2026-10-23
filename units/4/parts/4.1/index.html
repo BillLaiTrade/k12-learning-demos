@@ -275,7 +275,7 @@
     .phase-transition-key .phase-heat-dot { background:#b45c44; }
     .phase-transition-key .phase-cool-dot { background:#3c8097; }
     .phase-diagram-scroll { overflow-x:auto; padding:5px 2px 9px; border-radius:15px; scrollbar-color:#b8c9bd transparent; }
-    .phase-triangle { position:relative; width:100%; min-width:700px; height:550px; overflow:hidden; border:1px solid #e0e8df; border-radius:16px; background:linear-gradient(145deg,#f0f5ed,#f8f8f2 62%,#edf3ec); }
+    .phase-triangle { position:relative; width:100%; min-width:700px; height:590px; overflow:hidden; border:1px solid #e0e8df; border-radius:16px; background:linear-gradient(145deg,#f0f5ed,#f8f8f2 62%,#edf3ec); }
     .phase-triangle-svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; z-index:0; }
     .phase-arrow { fill:none; stroke:#a8b9ae; stroke-width:3.5; stroke-linecap:round; marker-end:url(#phase-arrow-default); }
     .phase-arrow.phase-heat { stroke:#bd634b; marker-end:url(#phase-arrow-heat); }
@@ -288,8 +288,8 @@
     .phase-node img { display:block; width:100%; height:126px; object-fit:contain; background:transparent; }
     .phase-node p { margin:3px 0 0; color:#68776f; font-size:.71rem; line-height:1.35; }
     .phase-node-solid { top:10px; left:calc(50% - 105px); }
-    .phase-node-liquid { top:345px; left:3%; }
-    .phase-node-gas { top:345px; right:3%; }
+    .phase-node-liquid { top:365px; left:3%; }
+    .phase-node-gas { top:365px; right:3%; }
     .phase-transition { position:absolute; z-index:3; min-width:120px; padding:5px 8px; border:1px solid #c6d4ca; border-left:4px solid var(--phase-route-color); border-radius:11px; background:#fffefa; box-shadow:0 3px 10px #263b3014; text-align:left; cursor:pointer; font-size:.78rem; line-height:1.32; transition:transform .16s,border-color .16s,box-shadow .16s; }
     .phase-transition:hover,.phase-transition:focus-visible { transform:translateY(-2px); box-shadow:0 6px 15px #263b3020; outline:3px solid #176b5330; }
     .phase-transition[aria-pressed="true"] { border:2px solid #176b53; background:#f2f8f3; }
@@ -303,12 +303,13 @@
     .phase-transition[data-energy="cool"] .phase-name { color:#3c8097; }
     .phase-transition[data-energy="heat"] .phase-energy { color:#9d513e; }
     .phase-transition[data-energy="cool"] .phase-energy { color:#376e83; }
-    #phase-melt { top:212px; left:25%; }
-    #phase-freeze { top:275px; left:31%; }
-    #phase-sublimation { top:212px; right:25%; }
-    #phase-deposition { top:275px; right:33.5%; }
-    #phase-vaporization { top:370px; left:33%; }
-    #phase-condensation { top:435px; left:48%; }
+    #phase-melt { top:212px; left:26%; }
+    #phase-freeze { top:292px; left:25%; }
+    #phase-sublimation { top:212px; right:26%; }
+    #phase-deposition { top:292px; right:25%; }
+    #phase-vaporization,#phase-condensation { top:510px; width:112px; min-width:0; padding:5px 6px; }
+    #phase-vaporization { left:calc(50% - 117px); }
+    #phase-condensation { left:calc(50% + 3px); }
     .phase-diagram-hint { margin:5px 1px 0; color:#758178; font-size:.75rem; }
     .phase-detail { display:grid; grid-template-columns:minmax(170px,.7fr) 1.3fr; gap:14px; align-items:center; margin-top:12px; padding:15px 16px; border:1px solid #d8e2da; border-radius:13px; background:#f5f8f2; }
     .phase-detail-kicker { margin:0 0 3px; color:#176b53; font-size:.73rem; font-weight:800; letter-spacing:.04em; }
@@ -334,6 +335,7 @@
       .phase-node-gas { top:250px; right:2%; }
       .phase-transition-grid { position:absolute; z-index:4; top:450px; right:9px; bottom:9px; left:9px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; align-content:stretch; }
       .phase-transition { position:static!important; width:100%; min-width:0; padding:6px 7px; font-size:.72rem; }
+      #phase-vaporization,#phase-condensation { width:100%; }
       .phase-transition .phase-direction { white-space:normal; }
       .phase-transition .phase-energy { font-size:.65rem; }
       .phase-transition-key { font-size:.76rem; }
@@ -584,24 +586,24 @@
             <div class="phase-transition-key" aria-label="熱量方向圖例"><span><i class="phase-heat-dot" aria-hidden="true"></i>吸熱：熱量進入物質</span><span><i class="phase-cool-dot" aria-hidden="true"></i>放熱：熱量離開物質</span></div>
             <div class="phase-diagram-scroll" role="region" aria-label="物質三態與六種轉變互動圖，可左右滑動查看" tabindex="0">
               <div class="phase-triangle" id="phase-triangle">
-                <svg class="phase-triangle-svg" viewBox="0 0 840 540" preserveAspectRatio="none" aria-hidden="true">
+                <svg class="phase-triangle-svg" viewBox="0 0 840 590" preserveAspectRatio="none" aria-hidden="true">
                   <defs>
                     <marker id="phase-arrow-default" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#527c68"/></marker>
                     <marker id="phase-arrow-heat" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#b45c44"/></marker>
                     <marker id="phase-arrow-cool" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#3c8097"/></marker>
-                    <path id="phase-path-melt" d="M380 205 Q330 265 270 345"/>
-                    <path id="phase-path-freeze" d="M270 345 Q330 270 405 205"/>
-                    <path id="phase-path-sublimation" d="M460 205 Q510 265 570 345"/>
-                    <path id="phase-path-deposition" d="M570 345 Q510 270 435 205"/>
-                    <path id="phase-path-vaporization" d="M270 445 Q420 465 570 445"/>
-                    <path id="phase-path-condensation" d="M570 475 Q420 495 270 475"/>
+                    <path id="phase-path-melt" d="M380 205 Q330 280 270 365"/>
+                    <path id="phase-path-freeze" d="M250 365 Q330 280 405 205"/>
+                    <path id="phase-path-sublimation" d="M460 205 Q510 280 570 365"/>
+                    <path id="phase-path-deposition" d="M590 365 Q510 280 435 205"/>
+                    <path id="phase-path-vaporization" d="M235 445 Q420 405 605 445"/>
+                    <path id="phase-path-condensation" d="M605 475 Q420 515 235 475"/>
                   </defs>
-                  <path class="phase-arrow phase-heat" data-phase-path="melt" d="M380 205 Q330 265 270 345"/>
-                  <path class="phase-arrow phase-cool" data-phase-path="freeze" d="M270 345 Q330 270 405 205"/>
-                  <path class="phase-arrow phase-heat" data-phase-path="sublimation" d="M460 205 Q510 265 570 345"/>
-                  <path class="phase-arrow phase-cool" data-phase-path="deposition" d="M570 345 Q510 270 435 205"/>
-                  <path class="phase-arrow phase-heat" data-phase-path="vaporization" d="M270 445 Q420 465 570 445"/>
-                  <path class="phase-arrow phase-cool" data-phase-path="condensation" d="M570 475 Q420 495 270 475"/>
+                  <path class="phase-arrow phase-heat" data-phase-path="melt" d="M380 205 Q330 280 270 365"/>
+                  <path class="phase-arrow phase-cool" data-phase-path="freeze" d="M250 365 Q330 280 405 205"/>
+                  <path class="phase-arrow phase-heat" data-phase-path="sublimation" d="M460 205 Q510 280 570 365"/>
+                  <path class="phase-arrow phase-cool" data-phase-path="deposition" d="M590 365 Q510 280 435 205"/>
+                  <path class="phase-arrow phase-heat" data-phase-path="vaporization" d="M235 445 Q420 405 605 445"/>
+                  <path class="phase-arrow phase-cool" data-phase-path="condensation" d="M605 475 Q420 515 235 475"/>
                   <circle class="phase-flow-dot" id="phase-flow-dot" r="7"><animateMotion id="phase-flow-animation" dur="1.8s" fill="freeze"><mpath href="#phase-path-melt"/></animateMotion></circle>
                 </svg>
                 <article class="phase-node phase-node-solid"><h3>固態・冰</h3><img src="assets/phase-ice.webp" alt="動畫插畫：一塊淺藍色冰塊"><p>形狀與體積大致固定</p></article>
