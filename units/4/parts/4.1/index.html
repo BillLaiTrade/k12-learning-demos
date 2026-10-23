@@ -1168,7 +1168,7 @@
 
     const particlePositions = {
       solid:[[27,64],[36,64],[45,64],[54,64],[63,64],[72,64],[27,71.5],[36,71.5],[45,71.5],[54,71.5],[63,71.5],[72,71.5],[27,79],[36,79],[45,79],[54,79],[63,79],[72,79],[27,86.5],[36,86.5],[45,86.5],[54,86.5],[63,86.5],[72,86.5],[27,94],[36,94],[45,94],[54,94],[63,94],[72,94]],
-      liquid:[[16,50],[30,50],[44,50],[58,50],[72,50],[86,50],[16,58],[30,58],[44,58],[58,58],[72,58],[86,58],[16,66],[30,66],[44,66],[58,66],[72,66],[86,66],[16,74],[30,74],[44,74],[58,74],[72,74],[86,74],[16,82],[30,82],[44,82],[58,82],[72,82],[86,82]],
+      liquid:Array.from({length:60},(_,index)=>[16+(index%10)*7.5,50+Math.floor(index/10)*8]),
       gas:[[13,10],[29,13],[45,8],[61,16],[77,11],[87,18],[20,28],[36,32],[52,25],[68,34],[84,27],[91,31],[11,46],[27,41],[43,51],[59,44],[75,54],[89,48],[17,66],[33,71],[49,63],[65,74],[81,68],[93,61],[12,85],[28,91],[44,82],[60,88],[76,79],[88,94]]
     };
     const moleculeSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#2346bd" stroke="#152e86" stroke-width="1"/></svg>';
@@ -1186,12 +1186,13 @@
 
     function createMovingParticleModel(box,state,initialPositions){
       const width=box.clientWidth,height=box.clientHeight,isLiquid=state==="liquid",elements=[...box.querySelectorAll(".particle-molecule")],radius=elements[0].getBoundingClientRect().width/2;
-      const particles=[];
+      const margin=radius+3,availableWidth=Math.max(1,width-margin*2),columns=Math.max(1,Math.floor(availableWidth/(radius*2+1.5))),rows=Math.ceil(elements.length/columns),layerGap=radius*2+1.5,particles=[];
       elements.forEach((element,index)=>{
         let x,y;
         if(isLiquid){
-          x=Math.max(radius,Math.min(width-radius,initialPositions[index][0]*width/100+(Math.random()-.5)*radius*2));
-          y=radius+Math.random()*height*.62;
+          const row=Math.floor(index/columns),rowStart=row*columns,countInRow=Math.min(columns,elements.length-rowStart),columnOffset=(columns-countInRow)/2,column=index-rowStart,stagger=row%2?.5:0;
+          x=Math.max(radius,Math.min(width-radius,margin+(column+columnOffset+.5+stagger)*availableWidth/(columns+.5)+(Math.random()-.5)*Math.min(2,availableWidth/columns*.18)));
+          y=height-radius-(row+.5)*layerGap+(Math.random()-.5)*.8;
         }else{
           x=Math.max(radius,Math.min(width-radius,initialPositions[index][0]*width/100));
           y=Math.max(radius,Math.min(height-radius,initialPositions[index][1]*height/100));
