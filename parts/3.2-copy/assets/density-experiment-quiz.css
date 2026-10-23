@@ -17,12 +17,12 @@
 .experiment-scale-screen strong{font-size:1.8rem;line-height:1.1;letter-spacing:0}
 .experiment-scale-screen small{align-self:flex-end;margin:0 0 9px 2px;font-size:1rem;font-weight:800}
 .experiment-scale-rocks{position:absolute;inset:0;z-index:3;pointer-events:none}
-.experiment-scale-rock{position:absolute;top:-68px;width:104px;height:70px;object-fit:contain;filter:drop-shadow(0 3px 2px #354a3c55);pointer-events:auto;cursor:grab;touch-action:none}
+.experiment-scale-rock{position:absolute;top:-58px;width:72px;height:58px;object-fit:contain;filter:drop-shadow(0 3px 2px #354a3c55);pointer-events:auto;cursor:grab;touch-action:none}
 .experiment-scale-rock:active,.experiment-cylinder-rock:active{cursor:grabbing}
-.experiment-scale-rock[data-sample=A]{left:22%;transform:translateX(-50%) rotate(-8deg)}
-.experiment-scale-rock[data-sample=B]{left:76%;transform:translateX(-50%) rotate(7deg)}
+.experiment-scale-rock[data-sample=A]{left:34%;top:-58px;width:76px;height:58px;transform:translateX(-50%)}
+.experiment-scale-rock[data-sample=B]{left:66%;top:-58px;width:76px;height:58px;transform:translateX(-50%)}
 .experiment-scale-rock:only-child{left:50%;transform:translateX(-50%)}
-.experiment-cylinder{position:relative;width:176px;height:258px;margin-top:17px;box-sizing:border-box;border:3px solid #809b91;border-top:0;border-radius:0 0 18px 18px;overflow:hidden;background:linear-gradient(90deg,#fff9,#deeee366 28%,#fff8 58%,#d9e9e366)}
+.experiment-cylinder{position:relative;width:176px;height:258px;margin-top:17px;box-sizing:border-box;border:3px solid #809b91;border-top:0;border-radius:0 0 20px 20px;overflow:hidden;background:linear-gradient(90deg,#fff9,#deeee366 28%,#fff8 58%,#d9e9e366)}
 .experiment-water{position:absolute;left:0;bottom:0;width:100%;height:33.3333%;border-top:2px solid #2b8da4;background:linear-gradient(90deg,#70b7c688,#8bc8d288 35%,#70b7c688);transition:height .45s}
 .experiment-water-label{position:absolute;left:8px;top:5px;color:var(--green);font-size:.75rem;font-weight:800;text-shadow:0 1px white}
 .experiment-cylinder-scale{position:absolute;inset:0;z-index:3;pointer-events:none;color:#263f37;font-size:.73rem;font-variant-numeric:tabular-nums}
@@ -35,23 +35,23 @@
 .experiment-cylinder-scale i.is-active:before{border-color:var(--green)}
 .experiment-cylinder-scale i.is-active:after{color:#145c46;font-weight:850}
 .experiment-cylinder-rocks{position:absolute;inset:0;z-index:2;pointer-events:none}
-.experiment-cylinder-rock{position:absolute;bottom:6px;width:70px;height:54px;object-fit:contain;filter:drop-shadow(0 2px 3px #354a3c66) saturate(.9);pointer-events:auto;cursor:grab;touch-action:none}
-.experiment-cylinder-rock[data-sample=A]{left:24%;transform:translateX(-50%) rotate(-7deg)}
-.experiment-cylinder-rock[data-sample=B]{left:55%;transform:translateX(-50%) rotate(6deg)}
+.experiment-cylinder-rock{position:absolute;bottom:6px;width:66px;height:50px;object-fit:contain;filter:drop-shadow(0 2px 3px #354a3c66);pointer-events:auto;cursor:grab;touch-action:none}
+.experiment-cylinder-rock[data-sample=A]{left:34%;width:70px;height:54px;transform:translateX(-50%)}
+.experiment-cylinder-rock[data-sample=B]{left:66%;width:70px;height:54px;transform:translateX(-50%)}
 .experiment-cylinder-rock:only-child{left:50%;transform:translateX(-50%)}
 .experiment-samples{display:flex;align-items:center;gap:12px;margin:14px 0;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:#fbfcf8}
 .experiment-samples-title{margin-right:4px;color:#526358;font-size:.9rem;font-weight:750}
-.experiment-sample{width:196px;min-height:88px;display:flex;align-items:center;gap:12px;padding:10px 13px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink);text-align:left;cursor:grab;touch-action:none;user-select:none}
+.experiment-sample{width:232px;min-height:92px;display:flex;align-items:center;gap:12px;padding:10px 13px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink);text-align:left;cursor:grab;touch-action:none;user-select:none}
 .experiment-sample:active{cursor:grabbing}
 .experiment-sample[aria-pressed=true]{border-color:#72a083;background:#edf4ec;box-shadow:inset 0 0 0 1px #72a083}
 .experiment-sample strong{display:block;font-size:.95rem}
 .experiment-sample small{display:block;color:var(--muted);font-size:.76rem;line-height:1.45}
-.experiment-rock-thumb{width:75px;height:56px;flex:0 0 75px;object-fit:contain;filter:drop-shadow(0 3px 3px #263a3045)}
-.experiment-rock-thumb.is-dark{width:70px;flex-basis:70px}
+.experiment-rock-thumb{width:72px;height:58px;flex:0 0 72px;object-fit:contain;filter:drop-shadow(0 3px 3px #263a3045)}
+.experiment-rock-thumb.is-dark{width:72px;flex-basis:72px;height:58px}
 .experiment-records{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .experiment-record{min-width:0;padding:15px;border:1px solid var(--line);border-radius:12px;background:#fbfcf8}
 .experiment-record h4{display:flex;align-items:center;gap:10px;margin:0 0 11px;font-size:1rem}
-.experiment-record h4 img{width:48px;height:36px;object-fit:contain}
+.experiment-record h4 img{width:54px;height:42px;object-fit:contain}
 .experiment-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .experiment-field label{display:block;margin-bottom:4px;color:#5e6f66;font-size:.76rem}
 .experiment-input{height:39px;display:flex;align-items:center;gap:5px;padding:0 9px;border:1px solid var(--line);border-radius:8px;background:white}
@@ -72,6 +72,123 @@
 .experiment-feedback[data-result=correct]{color:var(--green);font-weight:700}
 .experiment-feedback[data-result=incorrect]{color:#755a2d}
 .experiment-ghost{position:fixed;z-index:1000;pointer-events:none;opacity:.92;transform:translate(-50%,-50%) scale(1.06);filter:drop-shadow(0 7px 7px #243b3055)}
+.crown-context{display:flex;align-items:center;gap:16px;margin:0 0 16px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:#f7f9f4}.crown-context img{width:116px;height:94px;flex:none;object-fit:contain;filter:drop-shadow(0 3px 3px #263a3040)}.crown-context figcaption{display:grid;gap:4px;color:#526358;font-size:.84rem;line-height:1.5}.crown-context figcaption strong{color:var(--ink);font-size:.92rem}.crown-context figcaption small{color:#718078}.experiment-tool-hint{margin:10px 0 0;color:var(--muted);font-size:.84rem;line-height:1.5}.experiment-cylinder-scale i:not(.major):after{content:none}
 @media(max-width:900px){.experiment-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:700px){.experiment-tools,.experiment-records{grid-template-columns:1fr}.experiment-tool{height:300px}.experiment-scale{transform:scale(.92);transform-origin:center}.experiment-samples{flex-wrap:wrap}.experiment-samples-title{width:100%}.experiment-sample{flex:1;min-width:132px}.experiment-answer{align-items:flex-start;flex-wrap:wrap}.experiment-answer-choices{margin-left:0}.experiment-submit{margin-left:auto}}
-@media(max-width:420px){.experiment-tool{height:280px}.experiment-cylinder{height:235px;width:164px}.experiment-sample{padding:9px;gap:8px}.experiment-rock-thumb{width:63px;height:48px;flex-basis:63px}.experiment-rock-thumb.is-dark{width:60px;flex-basis:60px}.experiment-record{padding:12px}.experiment-fields{gap:7px}.experiment-answer{gap:9px;padding:12px}}
+@media(max-width:700px){.crown-context{gap:10px;padding:10px}.crown-context img{width:90px;height:78px}.experiment-tools,.experiment-records{grid-template-columns:1fr}.experiment-tool{height:340px}.experiment-scale{transform:scale(.92);transform-origin:center}.experiment-samples{flex-wrap:wrap}.experiment-samples-title{width:100%}.experiment-sample{flex:1;min-width:132px}.experiment-answer{align-items:flex-start;flex-wrap:wrap}.experiment-answer-choices{margin-left:0}.experiment-submit{margin-left:auto}}
+@media(max-width:420px){.crown-context img{width:72px;height:68px}.crown-context figcaption{font-size:.78rem}.experiment-tool{height:320px}.experiment-cylinder{height:258px;width:176px}.experiment-sample{padding:8px;gap:7px}.experiment-rock-thumb{width:62px;height:50px;flex-basis:62px}.experiment-rock-thumb.is-dark{width:62px;height:50px;flex-basis:62px}.experiment-record{padding:12px}.experiment-fields{gap:7px}.experiment-answer{gap:9px;padding:12px}}
+/* Archimedes crown overflow setup */
+.crown-thumb{object-fit:contain;filter:drop-shadow(0 3px 3px #263a3040)}
+.crown-thumb.alloy{filter:saturate(.58) hue-rotate(8deg) brightness(1.08) drop-shadow(0 3px 3px #263a3040)}
+.experiment-scale-rock.crown-thumb{width:78px;height:62px;top:-58px}
+.experiment-scale-rock.crown-thumb[data-sample=A]{left:34%;width:78px;height:62px}
+.experiment-scale-rock.crown-thumb[data-sample=B]{left:66%;width:78px;height:62px}
+.overflow-tool{height:340px}
+.experiment-overflow-layout{display:grid;grid-template-columns:minmax(0,1fr) 82px;align-items:center;gap:17px;width:min(390px,90%);margin-top:23px}
+.overflow-tank{height:214px;position:relative;border:4px solid #809b91;border-top:0;border-radius:0 0 22px 22px;background:linear-gradient(90deg,#ffffffa6,#dcebe066 38%,#ffffff88 72%,#d8e8df66);box-shadow:inset 0 -7px #d7e3dc}
+.overflow-tank:before{content:"";position:absolute;left:-7px;right:-7px;top:0;height:6px;border-radius:4px;background:#809b91}
+.overflow-tank-water{position:absolute;left:0;right:0;bottom:4px;height:73%;border-top:3px solid #429eb1;background:linear-gradient(90deg,#7dc1ca9c,#9bd5d888 50%,#78b9c69c)}
+.overflow-tank-water:before{content:"溢水槽";position:absolute;top:7px;left:8px;color:#287d8d;font-size:.72rem;font-weight:750}
+.overflow-tank-spout{position:absolute;z-index:4;right:-28px;top:53px;width:30px;height:22px;border:3px solid #809b91;border-left:0;border-radius:0 7px 7px 0;background:#e7f0eb}
+.overflow-stream{position:absolute;z-index:1;right:-51px;top:76px;width:29px;height:63px;border-right:5px solid #66b8c3;border-radius:0 0 60% 0;transform:rotate(-15deg)}
+.overflow-tank .experiment-cylinder-rocks{position:absolute;inset:0;z-index:3;pointer-events:none}
+.overflow-tank .experiment-cylinder-rock{position:absolute;bottom:8px;width:93px;height:72px;object-fit:contain;pointer-events:auto;cursor:grab;touch-action:none}
+.overflow-tank .experiment-cylinder-rock[data-sample=A]{left:34%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]{left:66%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock:only-child{left:50%;transform:translateX(-50%)}
+.overflow-collector{height:194px;position:relative;overflow:hidden;border:3px solid #809b91;border-top:0;border-radius:0 0 13px 13px;background:linear-gradient(90deg,#fff9,#deeee366 38%,#fff8 70%,#d9e9e366)}
+.overflow-collector:before{content:"量筒";position:absolute;top:-25px;left:0;right:0;color:#526358;text-align:center;font-size:.75rem;font-weight:750}
+.overflow-collector-water{position:absolute;bottom:0;left:0;right:0;height:0;border-top:2px solid #2b8da4;background:linear-gradient(90deg,#70b7c688,#8bc8d288 45%,#70b7c688);transition:height .45s}
+.overflow-water-label{position:absolute;left:4px;right:4px;top:6px;color:#145c46;text-align:center;font-size:.66rem;font-weight:850;text-shadow:0 1px white;white-space:nowrap}
+.overflow-collector-scale{position:absolute;inset:0;z-index:2;pointer-events:none;color:#263f37;font-size:.62rem;font-variant-numeric:tabular-nums}
+.overflow-collector-scale i{position:absolute;left:0;right:0;height:0;font-style:normal}
+.overflow-collector-scale i:before{content:"";position:absolute;right:0;top:0;width:7px;border-top:1px solid #617b70}
+.overflow-collector-scale i.major:before{width:12px;border-top:1.5px solid #405e52}
+.overflow-collector-scale i:after{content:attr(data-label);position:absolute;right:15px;top:0;min-width:13px;text-align:right;line-height:1;font-weight:750;transform:translateY(-50%)}
+.overflow-collector-scale i:first-child:after{transform:translateY(0)}
+.overflow-collector-scale i:last-child:after{transform:translateY(-100%)}
+.experiment-displacement-hint{display:flex;gap:10px;align-items:flex-start;margin:10px 0;padding:11px 14px;border:1px solid #d8e2da;border-left:3px solid #88ae86;border-radius:10px;background:#f4f7f1;color:#4c6255;font-size:.86rem;line-height:1.5}
+.experiment-displacement-hint strong{flex:none;color:#176b53}
+.experiment-tool-hint{margin:8px 0 0;color:var(--muted);font-size:.84rem;line-height:1.5}
+.experiment-fields{grid-template-columns:repeat(3,minmax(0,1fr))}
+.experiment-sample .crown-thumb{width:78px;height:68px;flex-basis:78px}
+.experiment-record h4 .crown-thumb{width:60px;height:50px}
+@media(max-width:900px){.experiment-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.overflow-tool{height:360px}.experiment-overflow-layout{width:min(330px,88%);grid-template-columns:minmax(0,1fr) 78px;gap:16px}.overflow-tank{height:215px}.overflow-collector{height:192px}.experiment-displacement-hint{display:block}.experiment-displacement-hint strong{display:block;margin-bottom:3px}}
+@media(max-width:420px){.overflow-tool{height:350px}.experiment-overflow-layout{grid-template-columns:minmax(0,1fr) 72px;gap:12px;width:88%}.overflow-tank{height:198px}.overflow-collector{height:178px}.overflow-tank .experiment-cylinder-rock{width:80px;height:62px}.experiment-sample .crown-thumb{width:65px;height:58px;flex-basis:65px}}
+.overflow-stream{opacity:0;transition:opacity .2s}.overflow-tool.has-overflow .overflow-stream{opacity:1}
+.overflow-collector{height:210px}
+.overflow-collector-scale i.minor:before{width:2px;border-color:#99aaa1}.overflow-collector-scale i.medium:before{width:6px}.overflow-collector-scale i.major:before{width:12px}
+@media(max-width:700px){.overflow-collector{height:202px}}
+@media(max-width:420px){.overflow-collector{height:184px}}
+/* Refine the overflow can into a round laboratory vessel with a believable drain. */
+.overflow-tank{width:min(236px,100%);justify-self:center;border:3px solid #809b91;border-top:0;border-radius:0 0 24px 24px;background:linear-gradient(90deg,#eef5efaa,#ffffff66 42%,#dce9e366);box-shadow:inset 0 -7px #d7e3dc}
+.overflow-tank:before{left:-7px;right:-7px;top:-11px;height:23px;border:3px solid #809b91;border-radius:50%;background:linear-gradient(#f6f8f4,#e8efea);box-shadow:0 2px 3px #354a3c22}
+.overflow-tank-water{left:2px;right:2px;bottom:4px;height:74%;border-top:2px solid #429eb1;background:linear-gradient(90deg,#7dc1ca88,#9bd5d86e 48%,#78b9c688)}
+.overflow-tank-spout{right:-32px;top:46px;width:35px;height:18px;border:3px solid #809b91;border-left:0;border-radius:0 9px 9px 0;background:linear-gradient(180deg,#eff5f1,#dfe9e3)}
+.overflow-stream{right:-59px;top:57px;width:41px;height:62px;border-right:3px solid #809b91;border-bottom:3px solid #809b91;border-radius:0 0 16px 0;transform:none;opacity:1}
+.overflow-stream:after{content:"";position:absolute;right:-3px;top:14px;height:45px;border-right:4px solid #65b8c5;border-radius:0 0 10px 0;opacity:0;transition:opacity .2s}
+.overflow-tool.has-overflow .overflow-stream:after{opacity:1}
+.overflow-collector{width:82px;justify-self:center;align-self:center;margin-top:56px;height:172px;border:3px solid #809b91;border-top:0;border-radius:0 0 16px 16px;background:linear-gradient(90deg,#ffffffa8,#deeee366 48%,#ffffff88)}
+.overflow-collector:before{content:"";position:absolute;top:-8px;left:-4px;right:-4px;height:16px;border:3px solid #809b91;border-radius:50%;background:linear-gradient(#f7faf6,#e4ede7)}
+.overflow-collector-water{z-index:1}
+.overflow-collector-scale{z-index:3}
+.overflow-water-label{z-index:4}
+.overflow-collector-scale i.minor:before{width:2px;border-color:#a0b0a7}
+@media(max-width:700px){.overflow-tool{height:360px}.overflow-tank{width:min(205px,100%)}.overflow-collector{width:78px;height:170px;margin-top:52px}.overflow-stream{right:-54px;width:38px}}
+@media(max-width:420px){.overflow-tool{height:350px}.overflow-tank{width:min(178px,100%);height:198px}.overflow-collector{width:72px;height:156px;margin-top:48px}.overflow-stream{right:-51px;width:35px}.overflow-tank .experiment-cylinder-rock{width:76px;height:60px}}
+.overflow-stream{right:-62px;top:52px;width:48px;height:30px;border:0;border-radius:0;transform:none;background:transparent;opacity:1}
+.overflow-stream:before{content:"";position:absolute;left:0;right:5px;top:2px;height:4px;border:0;border-radius:4px;background:#63b7c5;opacity:0;transition:opacity .2s}
+.overflow-stream:after{content:"";position:absolute;right:5px;top:2px;width:4px;height:22px;border:0;border-radius:0 0 4px 4px;background:#63b7c5;opacity:0;transition:opacity .2s}
+.overflow-tool.has-overflow .overflow-stream:before,.overflow-tool.has-overflow .overflow-stream:after{opacity:1}
+@media(max-width:700px){.overflow-stream{right:-57px;width:43px}}
+@media(max-width:420px){.overflow-stream{right:-54px;width:39px}}
+
+/* Full vessel with direct overflow into a shallow catch tray. */
+.experiment-overflow-layout{position:relative;display:block;width:min(430px,92%);height:290px;margin:18px auto 0}
+.overflow-catch-tray{position:absolute;z-index:1;left:0;right:0;bottom:0;height:66px;overflow:hidden;border:3px solid #809b91;border-radius:9px 9px 17px 17px;background:linear-gradient(180deg,#f2f6f1,#e1ebe4);box-shadow:inset 0 5px 0 #d7e2da}
+.overflow-catch-tray:before{content:"接水盤";position:absolute;z-index:3;left:12px;top:8px;color:#526358;font-size:.72rem;font-weight:750}
+.overflow-catch-water{position:absolute;left:0;right:0;bottom:0;height:0;z-index:1;border-top:2px solid #429eb1;background:linear-gradient(180deg,#8bc8d288,#70b7c688);transition:height .45s}
+.overflow-water-label{left:0;right:0;top:4px;color:#145c46;font-size:.68rem;text-shadow:0 1px 2px #fff}
+.overflow-catch-scale{position:absolute;z-index:3;left:92px;right:12px;bottom:7px;display:flex;align-items:center;justify-content:space-between;color:#526358;font-size:.61rem;font-variant-numeric:tabular-nums;pointer-events:none}
+.overflow-catch-scale i{height:7px;border-left:1px solid #789087}
+.overflow-tank{position:absolute;z-index:3;left:50%;bottom:70px;width:min(240px,68%);height:197px;transform:translateX(-50%);border:3px solid #809b91;border-top:0;border-radius:0 0 22px 22px;background:linear-gradient(90deg,#eef5ef88,#ffffff44 45%,#dce9e344);box-shadow:inset 0 -6px #d7e3dc}
+.overflow-tank:before{content:"";position:absolute;z-index:4;left:-6px;right:-6px;top:-9px;height:18px;border:3px solid #809b91;border-radius:50%;background:#f5f8f3}
+.overflow-tank-water{position:absolute;z-index:1;left:2px;right:2px;top:0;bottom:3px;height:auto;overflow:hidden;border-top:0;border-radius:0 0 18px 18px;background:linear-gradient(90deg,#7dc1ca88,#9bd5d888 48%,#78b9c688)}
+.overflow-tank-water:before{content:"";position:absolute;z-index:4;left:0;right:0;top:0;height:8px;border-bottom:2px solid #398fa0;border-radius:50%;background:#a5d7d8aa}
+.overflow-tank .experiment-cylinder-rocks{z-index:5}
+.overflow-tank .experiment-cylinder-rock{bottom:8px}
+.overflow-spill{position:absolute;z-index:2;top:2px;bottom:-72px;width:7px;opacity:0;border-radius:0 0 6px 6px;background:linear-gradient(90deg,#58aebb66,#69bfcbdd,#58aebb66);transition:opacity .2s}
+.overflow-spill-left{left:-8px;transform:rotate(1deg)}
+.overflow-spill-right{right:-8px;transform:rotate(-1deg)}
+.overflow-tool.has-overflow .overflow-spill{opacity:1;animation:overflow-pour .65s ease-in-out infinite alternate}
+@keyframes overflow-pour{from{filter:brightness(.94);transform:translateY(-1px)}to{filter:brightness(1.08);transform:translateY(2px)}}
+@media(max-width:700px){.experiment-overflow-layout{width:min(380px,90%);height:270px}.overflow-tool{height:360px}}
+@media(max-width:420px){.experiment-overflow-layout{width:90%;height:270px;margin-top:18px}.overflow-tank{width:66%;height:184px;bottom:70px}.overflow-catch-tray{height:62px}.overflow-catch-scale{left:78px;right:8px;bottom:6px;font-size:.56rem}.overflow-catch-tray:before{left:8px;top:7px;font-size:.66rem}.overflow-tank .experiment-cylinder-rock{width:76px;height:60px}}
+
+.overflow-water-label{position:absolute;z-index:4;left:auto;right:12px;top:8px;color:#145c46;font-size:.7rem;text-shadow:0 1px 2px #fff}
+.overflow-spill{bottom:-14px}
+
+/* Proportional model: two 18.5 cm crowns in a 45 cm inner-diameter, 30 cm-deep tank. */
+.overflow-tank{height:156px}
+.overflow-tank .experiment-cylinder-rock{width:103px;height:68px;bottom:7px}
+.overflow-tank .experiment-cylinder-rock[data-sample=A]{left:26%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]{left:74%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock:only-child{left:50%;width:103px;height:68px;transform:translateX(-50%)}
+.overflow-catch-tray{left:50%;right:auto;width:min(280px,78%);height:42px;transform:translateX(-50%)}
+.overflow-catch-tray:before{top:5px}
+.overflow-water-label{top:5px}
+.overflow-catch-scale{left:70px;right:9px;bottom:3px;font-size:.56rem}
+.overflow-spill{bottom:-14px}
+@media(max-width:700px){.overflow-tank{height:156px}}
+@media(max-width:420px){.overflow-tank{width:66%;height:156px;bottom:54px}.overflow-tank .experiment-cylinder-rock{width:91px;height:61px;bottom:7px}.overflow-tank .experiment-cylinder-rock:only-child{width:91px;height:61px}.overflow-catch-tray{width:76%;height:38px}.overflow-catch-scale{left:61px;right:7px;bottom:2px;font-size:.52rem}.overflow-catch-tray:before{left:7px;top:5px;font-size:.61rem}.overflow-spill{bottom:-14px}}
+
+/* Keep the on-screen drawing proportional as the layout scales down. */
+.overflow-tank{height:auto;aspect-ratio:1.5;bottom:46px}
+.overflow-tank .experiment-cylinder-rock{width:44%;height:auto;max-height:68px;bottom:7px}
+.overflow-tank .experiment-cylinder-rock[data-sample=A]{left:26%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock[data-sample=B]{left:74%;transform:translateX(-50%)}
+.overflow-tank .experiment-cylinder-rock:only-child{left:50%;width:44%;height:auto;max-height:68px;transform:translateX(-50%)}
+.overflow-catch-tray{left:50%;right:auto;width:min(280px,78%);height:44px;transform:translateX(-50%)}
+.overflow-catch-scale{left:70px;right:9px;bottom:3px;font-size:.56rem}
+.overflow-spill{bottom:-6px}
+@media(max-width:420px){.overflow-tank{width:66%;height:auto;aspect-ratio:1.5;bottom:46px}.overflow-tank .experiment-cylinder-rock{width:44%;height:auto;max-height:60px;bottom:6px}.overflow-tank .experiment-cylinder-rock:only-child{width:44%;height:auto;max-height:60px}.overflow-catch-tray{width:76%;height:36px}.overflow-catch-scale{left:61px;right:7px;bottom:2px;font-size:.52rem}.overflow-catch-tray:before{left:7px;top:4px;font-size:.61rem}.overflow-spill{bottom:-6px}}
