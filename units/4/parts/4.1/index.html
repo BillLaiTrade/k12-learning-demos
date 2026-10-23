@@ -1197,7 +1197,7 @@
           y=Math.max(radius,Math.min(height-radius,initialPositions[index][1]*height/100));
         }
         const angle=Math.random()*Math.PI*2,speed=isLiquid?24+Math.random()*18:44+Math.random()*34;
-        const vx=isLiquid?(Math.random()<.5?-1:1)*speed:Math.cos(angle)*speed,vy=isLiquid?0:Math.sin(angle)*speed,particle={element,x,y,radius,vx,vy,targetVx:vx,targetVy:(Math.random()-.5)*24,turnIn:.15+Math.random()*.25};
+        const vx=isLiquid?(Math.random()<.5?-1:1)*speed:Math.cos(angle)*speed,vy=isLiquid?(Math.random()-.5)*24:Math.sin(angle)*speed,particle={element,x,y,radius,vx,vy,turnIn:.12+Math.random()*.2};
         element.style.setProperty("--particle-x",`${x}px`);element.style.setProperty("--particle-y",`${y}px`);
         particles.push(particle);
       });
@@ -1207,20 +1207,20 @@
     function advanceParticleModel(model,dt){
       const {box,state,particles}=model,isLiquid=state==="liquid",width=box.clientWidth,height=box.clientHeight;
       model.width=width;model.height=height;
-      const stepCount=Math.max(1,Math.ceil(dt/(1/120))),step=dt/stepCount,restitution=isLiquid?.48:.94,minGap=1;
+      const stepCount=Math.max(1,Math.ceil(dt/(1/120))),step=dt/stepCount,restitution=isLiquid?.68:.94,minGap=1;
       for(let stepIndex=0;stepIndex<stepCount;stepIndex++){
         for(const p of particles){
           if(isLiquid){
             p.turnIn-=step;
-            if(p.turnIn<=0){p.targetVx=(Math.random()<.5?-1:1)*(26+Math.random()*24);p.targetVy=(Math.random()-.5)*36;p.turnIn=.18+Math.random()*.3;}
-            const response=Math.min(1,4*step);p.vx+=(p.targetVx-p.vx)*response;p.vy+=(p.targetVy-p.vy)*response+420*step;
+            if(p.turnIn<=0){p.vx+=(Math.random()-.5)*52;p.vy+=(Math.random()-.5)*38;p.turnIn=.12+Math.random()*.2;}
+            p.vy+=420*step;
           }
           p.x+=p.vx*step;p.y+=p.vy*step;
           if(p.x<p.radius){p.x=p.radius;p.vx=Math.abs(p.vx)*(isLiquid?.9:1);}
           if(p.x>width-p.radius){p.x=width-p.radius;p.vx=-Math.abs(p.vx)*(isLiquid?.9:1);}
           const top=p.radius,bottom=height-p.radius+(isLiquid?1.5:0);
-          if(p.y<top){p.y=top;p.vy=Math.abs(p.vy)*(isLiquid?.28:1);}
-          if(p.y>bottom){p.y=bottom;p.vy=-Math.abs(p.vy)*(isLiquid?.28:1);}
+          if(p.y<top){p.y=top;p.vy=Math.abs(p.vy)*(isLiquid?.42:1);}
+          if(p.y>bottom){p.y=bottom;p.vy=-Math.abs(p.vy)*(isLiquid?.42:1);}
         }
         for(let pass=0;pass<3;pass++)for(let i=0;i<particles.length;i++)for(let j=i+1;j<particles.length;j++){
           const a=particles[i],b=particles[j],dx=b.x-a.x,dy=b.y-a.y,distance=Math.hypot(dx,dy),minimum=a.radius+b.radius+minGap;
@@ -1234,12 +1234,12 @@
           const top=p.radius,bottom=height-p.radius+(isLiquid?1.5:0);
           if(p.x<p.radius){p.x=p.radius;p.vx=Math.abs(p.vx);}
           if(p.x>width-p.radius){p.x=width-p.radius;p.vx=-Math.abs(p.vx);}
-          if(p.y<top){p.y=top;p.vy=Math.abs(p.vy)*(isLiquid?.28:1);}
-          if(p.y>bottom){p.y=bottom;p.vy=-Math.abs(p.vy)*(isLiquid?.28:1);}
+          if(p.y<top){p.y=top;p.vy=Math.abs(p.vy)*(isLiquid?.42:1);}
+          if(p.y>bottom){p.y=bottom;p.vy=-Math.abs(p.vy)*(isLiquid?.42:1);}
         }
       }
       for(const p of particles){
-        const maxSpeed=isLiquid?52:78,speed=Math.hypot(p.vx,p.vy);
+        const maxSpeed=isLiquid?60:78,speed=Math.hypot(p.vx,p.vy);
         if(speed>maxSpeed){p.vx*=maxSpeed/speed;p.vy*=maxSpeed/speed;}
         p.element.style.setProperty("--particle-x",`${p.x}px`);p.element.style.setProperty("--particle-y",`${p.y}px`);
       }
