@@ -440,7 +440,7 @@
     <div class="lesson-layout">
       <nav class="route" aria-label="學習路徑">
         <p class="route-label">沿著問題一步步探索</p>
-        <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／10 卡</p>
+        <p class="route-progress" id="route-progress" aria-live="polite">學習進度：01／10</p>
         <div class="route-inner">
           <a href="#s1" aria-current="step"><b>01</b><span>這個水桶是什麼做的？桶子和材料有什麼不同？</span></a>
           <a href="#s2"><b>02</b><span>桶身、水和空氣，各有哪些不同？</span></a>
@@ -519,7 +519,7 @@
           <div class="card-side"><span class="card-number">02</span><h3>物質三態</h3><span class="card-role">比較形狀、體積與可壓縮性</span></div>
           <div class="card-main">
             <h2>桶身、水和空氣，各有哪些不同？</h2>
-            <p>先以鐵製桶身和桶中的水帶出固體與液體，再用鐵塊、水樣和空氣模型，分別觀察形狀、體積與受壓後的變化。先看完整比較表；點選欄名可讀取該狀態三項性質，點選格子則能親自調整模型並查看變化。</p>
+            <p>固體、液體和氣體在形狀、體積及可壓縮性上各有差異。先比較表格，再選擇欄名、列名或格子查看性質與例子；部分格子還能操作模型觀察變化。</p>
             <div class="state-matrix-wrap" role="region" aria-label="物質三態性質比較表，可左右滑動查看完整表格" tabindex="0">
               <table class="state-matrix">
                 <thead><tr>
@@ -544,13 +544,13 @@
                 </tbody>
               </table>
             </div>
-            <p class="state-matrix-hint">手機上可左右滑動表格。點選欄名直接閱讀該狀態三項性質的重點與例子；點選左側列名比較三種狀態；點選格子查看對應例子與操作。</p>
+            <p class="state-matrix-hint">手機上可左右滑動表格。點選欄名、列名或格子，查看相關性質與例子。</p>
             <section class="state-detail" id="state-detail" aria-live="polite" aria-atomic="true" aria-label="所選性質的例子與操作">
-              <p class="state-detail-kicker" id="state-detail-kicker">先從一格開始觀察</p>
-              <h3 id="state-detail-heading">選擇表格中的一個欄名、列名或內容</h3>
-              <p class="state-detail-copy" id="state-detail-copy">下方會只顯示你所選項目的例子和操作。</p>
+              <p class="state-detail-kicker" id="state-detail-kicker">三態比較</p>
+              <h3 id="state-detail-heading">選擇一項性質查看例子</h3>
+              <p class="state-detail-copy" id="state-detail-copy">下方會顯示相關例子與示意模型。</p>
               <div class="state-property-list" id="state-property-list" hidden></div>
-              <div class="state-demo" id="state-demo"><div class="state-demo-visual"><div class="interactive-model"><span class="model-caption">點選比較表中的一格，下方會顯示對應例子和可操作的模型。</span></div></div><div class="demo-controls"><p>你可以先比較整表，也可以選擇一格觀察它要表達的性質。</p><p class="demo-result" aria-live="polite">選取格子後，拖曳滑桿並查看變化。</p></div></div>
+              <div class="state-demo" id="state-demo"><div class="state-demo-visual"><div class="interactive-model"><span class="model-caption">點選格子，查看這項性質的示意模型。</span></div></div><div class="demo-controls"><p class="demo-result" aria-live="polite">依畫面提示操作模型，觀察變化。</p></div></div>
             </section>
             <p class="next-hint">比較完可觀察的形狀、體積和可壓縮性後，下一步用粒子模型解釋三態差異。</p>
           </div>
@@ -561,17 +561,17 @@
             <h2>以水為例：三種狀態的粒子有什麼不同？</h2>
             <p>圖中每個圓點代表一個水分子。比較同一批水分子在固態、液態和氣態中的排列、間距和運動；狀態改變時，水分子仍是同一批。</p>
             <div class="particle-stage" aria-label="三種狀態的水分子排列比較">
-              <article class="particle-state-card"><h3>固態：冰</h3><div class="particle-box" id="particle-box-solid" data-motion-state="solid" role="img" aria-label="30 個水分子在容器底部排列整齊、彼此留有間距並微微振動"></div></article>
-              <article class="particle-state-card"><h3>液態水分子</h3><div class="particle-box" id="particle-box-liquid" data-motion-state="liquid" role="img" aria-label="30 個水分子集中在容器底部，持續流動、碰撞和換位"></div></article>
-              <article class="particle-state-card"><h3>氣態：水蒸氣</h3><div class="particle-box" id="particle-box-gas" data-motion-state="gas" role="img" aria-label="同一批 30 個水分子在容器中沿直線移動並在碰到杯壁時反彈"></div></article>
+              <article class="particle-state-card"><h3>固態：冰</h3><div class="particle-box" id="particle-box-solid" data-motion-state="solid" role="img" aria-label="水分子在容器底部排列整齊、彼此留有間距並微微振動"></div></article>
+              <article class="particle-state-card"><h3>液態水分子</h3><div class="particle-box" id="particle-box-liquid" data-motion-state="liquid" role="img" aria-label="水分子集中在容器底部，持續流動、碰撞和換位"></div></article>
+              <article class="particle-state-card"><h3>氣態：水蒸氣</h3><div class="particle-box" id="particle-box-gas" data-motion-state="gas" role="img" aria-label="水分子在容器中移動，碰到其他分子或杯壁後反彈"></div></article>
             </div>
-            <div class="particle-legend" aria-label="水分子模型圖例"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="#2346bd" stroke="#152e86" stroke-width="1"/></svg>一個水分子（簡化符號）</span><span>每種狀態各有 30 個分子，方便比較</span></div>
+            <div class="particle-legend" aria-label="水分子模型圖例"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="#2346bd" stroke="#152e86" stroke-width="1"/></svg>一個水分子（簡化符號）</span></div>
             <div class="particle-comparison" aria-label="三種狀態的粒子特徵">
               <article><h3>固態</h3><p>分子靠近、排列較整齊，在原位附近振動。</p></article>
               <article><h3>液態</h3><p>分子集中在容器底部的有限範圍，持續碰撞、流動和換位，不會散布到整個容器。</p></article>
               <article><h3>氣態</h3><p>分子在整個空間中沿直線移動，碰撞其他分子或杯壁後改變方向。</p></article>
             </div>
-            <p class="particle-model-note">三個容器同時顯示相同數量的水分子，方便直接比較排列和活動範圍。藍色圓點是水分子的簡化符號；動畫呈現三態粒子的排列與相對運動，不按實際比例呈現。</p>
+            <p class="particle-model-note">藍色圓點代表水分子；動畫呈現三態中分子的排列與相對運動，粒子大小和間距並非實際比例。</p>
             <p class="next-hint">模型解釋了狀態差異；接著用蒸餾水追蹤升溫或冷卻時的變化。</p>
           </div>
         </section>
@@ -674,11 +674,11 @@
             <div class="property-grid">
               <article class="property-card"><strong>水樣・外觀</strong><p>看見混濁，只能先記下觀察結果，不能只靠它斷定有哪些成分。</p></article>
               <article class="property-card"><strong>土壤・狀態與顆粒</strong><p>記錄可觀察特徵；外觀不代表土壤只含一種物質。</p></article>
-              <article class="property-card"><strong>桶身・磁性、密度</strong><p>可作為辨認材料的物理性質；密度是舊知回顧，不重教計算。</p></article>
+              <article class="property-card"><strong>桶身・磁性、密度</strong><p>磁性和密度都是描述、辨認材料的物理性質。</p></article>
             </div>
             <button class="action-button" type="button" data-record="property">把觀察線索記入紀錄</button>
             <p class="live-note" id="note-s5" aria-live="polite">請把觀察到的線索和「已證明的組成」分開。</p>
-            <p class="next-hint">物理性質資料整理完成後，再看桶身出現的新變化線索。</p>
+            <p class="next-hint">接著觀察桶身的鏽斑，看看材料是否產生新的物質。</p>
           </div>
         </section>
 
@@ -686,7 +686,7 @@
           <div class="card-side"><span class="card-number">06</span><h3>化學性質</h3><span class="card-role">材料可能形成新物質</span></div>
           <div class="card-main">
             <h2>鐵桶生鏽了，這告訴我們什麼？</h2>
-            <p>到這裡才揭示桶身的鏽斑。含鐵材料能和環境中的物質作用而生鏽，這是化學性質的例子。照片之外，材料說明也指出鏽層是不同於原金屬的新物質；不是只憑顏色變了就作判斷。</p>
+            <p>含鐵材料能和環境中的物質作用而生鏽，這是化學性質的例子。生鏽後會形成不同於原金屬的新物質；不能只憑顏色改變就作判斷。</p>
             <figure class="visual">
               <div class="rust-pair">
                 <div class="barrel-card">
@@ -698,7 +698,7 @@
                   <strong>桶身形成鏽層</strong><p>鏽層是不同於原金屬的新物質</p>
                 </div>
               </div>
-              <figcaption>對照圖協助辨認變化；判斷新物質依據材料說明，不以顏色改變作唯一證據。</figcaption>
+              <figcaption>材料資料指出，鏽層是不同於原金屬的新物質。</figcaption>
             </figure>
             <button class="action-button" type="button" data-record="change">把變化線索記入紀錄</button>
             <p class="live-note" id="note-s6" aria-live="polite">「可能形成新物質」描述化學性質；「已形成鏽層」描述化學變化。</p>
@@ -710,7 +710,7 @@
           <div class="card-side"><span class="card-number">07</span><h3>物理與化學變化</h3><span class="card-role">看有沒有生成新物質</span></div>
           <div class="card-main">
             <h2>東西變了樣，就代表變成另一種物質嗎？</h2>
-            <p>沿用卡 4 的蒸發例子作簡短回顧，這裡不重教狀態變化；重點是比較它和生鏽是否生成新物質。</p>
+            <p>蒸發和生鏽都會讓外觀改變；比較變化前後有沒有生成新物質，就能分辨物理變化和化學變化。</p>
             <div class="choice-row" role="group" aria-label="比較兩種變化">
               <button type="button" data-change="evaporation" aria-pressed="true">水分蒸發</button><button type="button" data-change="rust" aria-pressed="false">桶身生鏽</button>
             </div>
@@ -728,11 +728,11 @@
             <div class="class-grid">
               <article class="class-card"><strong>蒸餾水・純物質</strong><p>用作單一物質的參照樣本。</p></article>
               <article class="class-card"><strong>花圃土壤・混合物</strong><p>由多種成分構成，不能只看顏色判斷成分。</p></article>
-              <article class="class-card"><strong>空氣・混合物</strong><p>外觀均勻，也可能由多種物質組成；只作對照例子。</p></article>
+              <article class="class-card"><strong>空氣・混合物</strong><p>空氣由多種氣體組成；外觀看起來均勻，仍是混合物。</p></article>
             </div>
             <div class="evidence-box" style="margin-top:12px"><strong>判斷雨水還需要資料</strong><br>水樣混濁只是觀察線索；成分要依明確資料判斷。</div>
             <button class="action-button" type="button" data-record="composition">整理樣本組成欄位</button>
-            <p class="live-note" id="note-s8" aria-live="polite">先建立分類標準，下一段再看純物質的子分類。</p>
+            <p class="live-note" id="note-s8" aria-live="polite">先判斷樣本由幾種物質構成，再區分純物質與混合物。</p>
             <p class="next-hint">純物質還能分成元素和化合物，看看參照樣本如何分類。</p>
           </div>
         </section>
@@ -749,8 +749,8 @@
               <div class="tree-root">純物質</div><div aria-hidden="true">↓</div>
               <div class="tree-branches"><div class="tree-branch" id="pure-type">元素</div><div class="tree-branch" id="pure-example">純鐵：不能用化學方法分解成更簡單的純物質</div></div>
             </div>
-            <p class="note">這裡只建立分類關係，不進入原子結構、元素符號或化學式。純鐵和蒸餾水是參照樣本，不是花圃現場採集物。</p>
-            <p class="next-hint">分類參照完成後，回到雨水樣本，用已提供的成分資料做最後判斷。</p>
+            <p class="note">純鐵是元素，蒸餾水是化合物；兩者都只由一種純物質構成。</p>
+            <p class="next-hint">純鐵和蒸餾水是分類例子；回到雨水樣本，根據成分資料判斷它屬於哪一類。</p>
           </div>
         </section>
 
@@ -773,7 +773,6 @@
           </div>
         </section>
 
-        <p class="note">這段課程只判斷樣本組成，不評估雨水是否適合澆灌，也不在此操作過濾。後續再學如何分離混合物，以及水溶液中溶質含量的表示。</p>
       </div>
     </div>
   </main>
@@ -1376,7 +1375,7 @@
         if(link.hash===`#${card.id}`){link.setAttribute("aria-current","step");link.scrollIntoView({block:"nearest",inline:"nearest"});}
         else link.removeAttribute("aria-current");
       });
-      document.getElementById("route-progress").textContent=`目前位置：第 ${String(index+1).padStart(2,"0")}／${lessonCards.length} 卡`;
+      document.getElementById("route-progress").textContent=`學習進度：${String(index+1).padStart(2,"0")}／${lessonCards.length}`;
     };
     if("IntersectionObserver" in window){
       const syncActiveCard=()=>{
