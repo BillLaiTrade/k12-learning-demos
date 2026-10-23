@@ -192,3 +192,18 @@
 .overflow-catch-scale{left:70px;right:9px;bottom:3px;font-size:.56rem}
 .overflow-spill{bottom:-6px}
 @media(max-width:420px){.overflow-tank{width:66%;height:auto;aspect-ratio:1.5;bottom:46px}.overflow-tank .experiment-cylinder-rock{width:44%;height:auto;max-height:60px;bottom:6px}.overflow-tank .experiment-cylinder-rock:only-child{width:44%;height:auto;max-height:60px}.overflow-catch-tray{width:76%;height:36px}.overflow-catch-scale{left:61px;right:7px;bottom:2px;font-size:.52rem}.overflow-catch-tray:before{left:7px;top:4px;font-size:.61rem}.overflow-spill{bottom:-6px}}
+
+
+/* Arrange volume marks up the collector wall, as on an ordinary graduated vessel. */
+.overflow-catch-tray{height:68px}
+.overflow-catch-tray:before{content:"接水盤（mL）";z-index:5;padding:0 3px;border-radius:3px;background:#f2f6f1}
+.overflow-catch-scale{position:absolute;left:auto;right:8px;top:7px;bottom:7px;width:43px;display:block;color:#526358;font-size:.6rem;font-variant-numeric:tabular-nums;pointer-events:none}
+.overflow-catch-scale .catch-tick{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:4px;line-height:1}
+.overflow-catch-scale .catch-tick-100{top:0;transform:translateY(-6px)}
+.overflow-catch-scale .catch-tick-50{top:50%;transform:translateY(-50%)}
+.overflow-catch-scale .catch-tick-0{bottom:0}
+.overflow-catch-scale i{display:block;width:8px;height:0;flex:0 0 8px;border:0;border-top:1px solid #789087}
+.overflow-tank{bottom:72px}
+.overflow-water-label{left:8px;right:54px;top:auto;bottom:8px;text-align:center}
+@media(max-width:700px){.overflow-catch-tray{height:68px}.overflow-tank{bottom:72px}}
+@media(max-width:420px){.overflow-catch-tray{height:68px}.overflow-catch-scale{right:6px;width:40px;font-size:.54rem}.overflow-water-label{left:6px;right:49px;bottom:7px}.overflow-tank{bottom:72px}}

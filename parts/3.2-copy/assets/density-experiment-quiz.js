@@ -37,7 +37,12 @@ export function mountDensityExperimentQuiz() {
   function setWaterReading(value) {
     const level = Math.min(100, Math.max(0, Number(value) || 0));
     const water = quiz.querySelector('[data-overflow-water]');
-    water.style.height = `${level}%`;
+    const tray = water.parentElement;
+    const scale = tray.querySelector('.overflow-catch-scale');
+    const trayBounds = tray.getBoundingClientRect();
+    const scaleBounds = scale.getBoundingClientRect();
+    water.style.bottom = `${trayBounds.bottom - scaleBounds.bottom}px`;
+    water.style.height = `${scaleBounds.height * level / 100}px`;
     quiz.querySelector('[data-water-reading]').textContent = `${value} mL`;
   }
 
@@ -55,7 +60,7 @@ export function mountDensityExperimentQuiz() {
     group.innerHTML = [...tankSamples].map(sample => `<img class="experiment-cylinder-rock crown-thumb" data-drag-sample="${sample}" data-sample="${sample}" src="${samples[sample].image}" alt="皇冠樣本 ${sample}，可拖曳移動">`).join('');
     setWaterReading(totalVolume);
     quiz.querySelector('[data-instrument="cylinder"]').classList.toggle('has-overflow', tankSamples.size > 0);
-    quiz.querySelector('[data-instrument="cylinder"]').setAttribute('aria-label', `滿水溢流水槽與接水盤，${tankSamples.size} 頂皇冠完全浸入，收集到溢出水 ${totalVolume} 毫升`);
+    quiz.querySelector('[data-instrument="cylinder"]').setAttribute('aria-label', `滿水溢流水槽與有刻度的接水盤，${tankSamples.size} 頂皇冠完全浸入，收集到溢出水 ${totalVolume} 毫升`);
   }
 
   function chooseSample(sample) {
