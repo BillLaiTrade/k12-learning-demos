@@ -34,8 +34,9 @@ export function makeStone(){
   return new THREE.Mesh(geometry,material);
 }
 
-const CM_PER_WORLD=1.6;
-const RULER_CM=6;
+const LINEAR_SCALE=Math.cbrt(860/39);
+const CM_PER_WORLD=1.6*LINEAR_SCALE;
+const RULER_CM=6*LINEAR_SCALE;
 const WORLD_PER_CM=1/CM_PER_WORLD;
 const MEASURE_COLORS={length:0x00796b,width:0x5269a6,height:0xbf6338};
 
@@ -48,10 +49,10 @@ function makeRuler({position=[0,0,0],rotationY=0,rotationZ=0,accent=MEASURE_COLO
   const face=document.createElement('canvas');face.width=1280;face.height=180;
   const ctx=face.getContext('2d');ctx.fillStyle='#e5ce91';ctx.fillRect(0,0,face.width,face.height);
   ctx.strokeStyle='#354b42';ctx.lineWidth=2;ctx.strokeRect(1,1,face.width-2,face.height-2);
-  for(let tenth=0;tenth<=RULER_CM*10;tenth++){
-    const x=8+(face.width-16)*tenth/(RULER_CM*10),major=tenth%10===0,half=tenth%5===0;
-    ctx.lineWidth=major?4:2.5;ctx.beginPath();ctx.moveTo(x,6);ctx.lineTo(x,major?105:half?78:54);ctx.stroke();
-    if(major){ctx.fillStyle='#263b34';ctx.font='bold 34px sans-serif';ctx.textAlign='center';ctx.fillText(String(tenth/10),x,145)}
+  for(let cm=0;cm<=Math.floor(RULER_CM);cm++){
+    const x=8+(face.width-16)*cm/RULER_CM,major=cm%5===0;
+    ctx.lineWidth=major?4:2.5;ctx.beginPath();ctx.moveTo(x,6);ctx.lineTo(x,major?105:72);ctx.stroke();
+    if(major){ctx.fillStyle='#263b34';ctx.font='bold 34px sans-serif';ctx.textAlign='center';ctx.fillText(String(cm),x,145)}
   }
   ctx.fillStyle='#263b34';ctx.font='20px sans-serif';ctx.textAlign='right';ctx.fillText('cm',face.width-12,169);
   const texture=new THREE.CanvasTexture(face);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;

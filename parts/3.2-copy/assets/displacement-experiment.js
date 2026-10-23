@@ -20,9 +20,10 @@ export function mountDisplacementExperiment() {
     rock.classList.toggle('is-immersed', immersed);
     rock.classList.remove('is-dragging');
     cylinder.classList.remove('drop-ready');
-    water.style.height = immersed ? '91.6667%' : '66.6667%';
-    marks.forEach(mark => mark.classList.toggle('active', Number(mark.dataset.volume) === (immersed ? 55 : 40)));
-    cylinder.setAttribute('aria-label', '量筒，目前水量 ' + (immersed ? '55' : '40') + ' 毫升');
+    water.style.height = immersed ? '92.6923%' : '10%';
+    marks.forEach(mark => mark.classList.toggle('active', Number(mark.dataset.volume) === (immersed ? 350 : 50)));
+    const finalReading = Math.round((40 + 15 * 860 / 39) * 100) / 100;
+    cylinder.setAttribute('aria-label', '量筒，目前水量 ' + (immersed ? `約 ${Math.round(finalReading)}（精算 ${finalReading}）` : '40') + ' 毫升');
     rock.setAttribute('aria-label', immersed ? '同一塊石頭已完全浸入量筒；可拖曳取出' : '同一塊石頭；可拖曳到量筒內，或按 Enter 放入');
     placeButton.disabled = immersed || animating;
     resetButton.disabled = !immersed || animating;

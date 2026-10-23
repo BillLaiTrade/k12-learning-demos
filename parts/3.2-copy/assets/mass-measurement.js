@@ -1,7 +1,7 @@
 import * as THREE from '../../3.1/assets/vendor/three/build/three.module.js';
 import { makeStone } from './stone-observer.js';
 
-const MASS_G = 39;
+const MASS_G = 860;
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
 function stoneSupportPoint(stone) {
@@ -76,7 +76,7 @@ function contactShadow(width, depth) {
 }
 
 function makeWeight(value) {
-  const sizes = { 20: [0.205, 0.19], 10: [0.19, 0.18], 5: [0.175, 0.17], 1: [0.16, 0.155] };
+  const sizes = { 500: [0.205, 0.19], 200: [0.19, 0.18], 100: [0.175, 0.17], 50: [0.16, 0.155], 10: [0.16, 0.155] };
   const [radius, height] = sizes[value];
   const group = new THREE.Group();
   const brass = new THREE.MeshStandardMaterial({ color: 0xc99a45, metalness: 0.72, roughness: 0.3 });
@@ -137,7 +137,7 @@ function makeWeightTray(scene, materials) {
   const inset = new THREE.Mesh(new THREE.BoxGeometry(2.72, 0.035, 0.54), materials.pan);
   inset.position.y = 0.177;
   tray.add(inset);
-  const values = [20, 10, 5, 1];
+  const values = [500, 200, 100, 50, 10];
   const spacing = 0.52;
   const weights = values.map((value, index) => {
     const weight = makeWeight(value);
@@ -380,7 +380,7 @@ export function mountMassMeasurement() {
   let width = 0, height = 0;
 
   function showReading() {
-    digital.updateDisplay(mode === 'digital' && weighed ? '39' : '0.0', 'g');
+    digital.updateDisplay(mode === 'digital' && weighed ? '860' : '0.0', 'g');
   }
 
   function clearWeightModels() {
@@ -415,7 +415,7 @@ export function mountMassMeasurement() {
     });
     const total = weights.reduce((sum, value) => sum + value, 0);
     document.querySelectorAll('[data-weight]').forEach(button => {
-      button.disabled = total + Number(button.dataset.weight) > 60;
+      button.disabled = total + Number(button.dataset.weight) > MASS_G;
     });
     weightTotal.textContent = `${total} g`;
     const difference = (balancePlaced ? MASS_G : 0) - total;
@@ -462,7 +462,7 @@ export function mountMassMeasurement() {
   }
   let suppressWeightClick = false;
   function addWeight(next, origin = null) {
-    if (weights.reduce((sum, value) => sum + value, 0) + next > 60) return;
+    if (weights.reduce((sum, value) => sum + value, 0) + next > MASS_G) return;
     weights.push(next);
     weightOrigins.push(origin);
     if (origin !== null) sourceWeightModels[origin].visible = false;
@@ -556,7 +556,7 @@ export function mountMassMeasurement() {
       placeButton.disabled = weighed || placingDigital;
       placeButton.textContent = weighed ? '石頭已放上秤盤' : placingDigital ? '正在放上秤盤…' : '將石頭放上秤盤';
       removeButton.disabled = !weighed || placingDigital;
-      digital.updateDisplay(weighed ? '39' : '0.0', 'g');
+      digital.updateDisplay(weighed ? '860' : '0.0', 'g');
       status.textContent = weighed
         ? '石頭已放穩；請讀取秤面上的數值。'
         : placingDigital ? '石頭正移至電子秤秤盤…' : '拖曳石頭到電子秤秤盤，或按下按鈕。';
@@ -750,7 +750,7 @@ export function mountMassMeasurement() {
     canvas.style.cursor = 'grab';
     if (dragged.kind === 'source-weight') {
       const source = weightSource.weights[dragged.sourceIndex];
-      if (rightPanDropTarget(event) && weights.reduce((sum, value) => sum + value, 0) + source.value <= 60) {
+      if (rightPanDropTarget(event) && weights.reduce((sum, value) => sum + value, 0) + source.value <= MASS_G) {
         addWeight(source.value);
       } else {
         status.textContent = '可將砝碼拖到右側秤盤，架上的砝碼會留在原位。';
