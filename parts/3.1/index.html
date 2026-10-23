@@ -330,7 +330,8 @@
     #parallax-focus-connectors path { fill: none; stroke: #d17b26; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
     #parallax-focus-box { position: absolute; border: 2px solid #d17b26; border-radius: 5px; background: rgb(255 190 95 / 10%); box-shadow: 0 0 0 2px rgb(255 255 255 / 78%); }
     .parallax-magnifier { position: absolute; top: 14px; right: 14px; z-index: 2; width: clamp(185px, 38%, 220px); aspect-ratio: 300 / 180; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 8px 22px rgb(42 43 29 / 18%); }
-    .parallax-magnifier canvas { display: block; width: 100%; height: 100%; }
+    .parallax-magnifier { cursor: grab; touch-action: none; }
+    .parallax-magnifier canvas { display: block; width: 100%; height: 100%; pointer-events: none; }
     .parallax-scene[data-magnifier="true"] #parallax-canvas { margin-top: 150px; }
     .parallax-scene[data-magnifier="true"] #pencil-3d-canvas { inset: 162px 12px auto; }
     @media (max-width: 760px) {
@@ -399,9 +400,9 @@
     .correction-average-actions .correction-average-add { width: 100%; min-width: 0; margin-top: 0; }
     .correction-average-explanation { margin: 8px 0 0; color: var(--muted); font-size: .86rem; }
     .correction-average-caveat { margin-top: 12px !important; padding-top: 10px; border-top: 1px solid var(--line); }
-    .correction-parallax-magnifier { display: flex; width: clamp(175px, 54%, 230px); aspect-ratio: 300 / 180; flex: 0 0 auto; flex-direction: column; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 4px 12px rgb(42 43 29 / 12%); }
+    .correction-parallax-magnifier { display: flex; cursor: grab; touch-action: none; width: clamp(175px, 54%, 230px); aspect-ratio: 300 / 180; flex: 0 0 auto; flex-direction: column; overflow: hidden; border: 2px solid #d17b26; border-radius: 12px; background: #fffefa; box-shadow: 0 4px 12px rgb(42 43 29 / 12%); }
     .correction-parallax-magnifier strong { flex: 0 0 25px; padding: 3px 8px; color: #26383a; background: #fffefa; font-size: .78rem; text-align: center; }
-    .correction-parallax-magnifier canvas { display: block; width: 100%; min-height: 0; flex: 1; }
+    .correction-parallax-magnifier canvas { display: block; pointer-events: none; width: 100%; min-height: 0; flex: 1; }
     .correction-adjustment { margin: 12px 0 0; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #f8f9f4; }
     .correction-adjustment h4 { margin: 0 0 6px; font-size: 1rem; }
     .correction-adjustment p { margin: 0; color: var(--muted); font-size: .9rem; }
@@ -1665,27 +1666,29 @@
       const maximumViewYaw = defaultCameraYaw + 0.3;
       const clampViewYaw = (angle) => clamp(angle, minimumViewYaw, maximumViewYaw);
       let dragPoint = null;
-      parallaxCanvas.addEventListener("pointerdown", (event) => {
-        dragPoint = { x: event.clientX, y: event.clientY };
-        parallaxCanvas.setPointerCapture(event.pointerId);
-        event.preventDefault();
+      const parallaxDragSurfaces = [parallaxCanvas, parallaxScene.querySelector(".parallax-magnifier")];
+      parallaxDragSurfaces.forEach((surface) => {
+        surface.addEventListener("pointerdown", (event) => {
+          dragPoint = { x: event.clientX, y: event.clientY };
+          surface.setPointerCapture(event.pointerId);
+          event.preventDefault();
+        });
+        surface.addEventListener("pointermove", (event) => {
+          if (!dragPoint) return;
+          const dx = event.clientX - dragPoint.x;
+          const dy = event.clientY - dragPoint.y;
+          dragPoint = { x: event.clientX, y: event.clientY };
+          cameraPreset = "free";
+          const bounds = parallaxCanvas.getBoundingClientRect();
+          const sideOfRuler = clamp((bounds.left + bounds.width / 2 - event.clientX) / (bounds.width / 2), -1, 1);
+          const dragSideStrength = Math.sign(sideOfRuler) * Math.max(0.4, Math.min(Math.abs(sideOfRuler), 0.6));
+          camera.yaw = clampViewYaw(camera.yaw + dx * 0.009 - dy * dragSideStrength * 0.013);
+          renderParallaxScene();
+        });
+        surface.addEventListener("pointerup", () => { dragPoint = null; });
+        surface.addEventListener("pointercancel", () => { dragPoint = null; });
+        surface.addEventListener("lostpointercapture", () => { dragPoint = null; });
       });
-      parallaxCanvas.addEventListener("pointermove", (event) => {
-        if (!dragPoint) return;
-        const dx = event.clientX - dragPoint.x;
-        const dy = event.clientY - dragPoint.y;
-        dragPoint = { x: event.clientX, y: event.clientY };
-        cameraPreset = "free";
-        const bounds = parallaxCanvas.getBoundingClientRect();
-        const sideOfRuler = clamp((bounds.left + bounds.width / 2 - event.clientX) / (bounds.width / 2), -1, 1);
-        const dragSideStrength = Math.sign(sideOfRuler) * Math.max(0.4, Math.min(Math.abs(sideOfRuler), 0.6));
-        camera.yaw = clampViewYaw(camera.yaw + dx * 0.009 - dy * dragSideStrength * 0.013);
-        renderParallaxScene();
-      });
-      const releaseDrag = () => { dragPoint = null; };
-      parallaxCanvas.addEventListener("pointerup", releaseDrag);
-      parallaxCanvas.addEventListener("pointercancel", releaseDrag);
-      parallaxCanvas.addEventListener("lostpointercapture", releaseDrag);
       parallaxCanvas.addEventListener("keydown", (event) => {
         const angleStep = 0.08;
         if (event.key === "ArrowLeft") camera.yaw = clampViewYaw(camera.yaw - angleStep);
@@ -1935,47 +1938,53 @@
         correctionCameraState.pitch = defaultCameraPitch;
         renderCorrectionScene();
       });
-      correctionCanvas.addEventListener("pointerdown", (event) => {
-        const hitTarget = correctionMode === "origin" ? window.getPencil3DCorrectionDragTarget?.(event.clientX, event.clientY) : null;
-        const dragAction = correctionMode === "origin" && hitTarget === "ruler" ? "origin" : "rotate";
-        correctionDrag = { x: event.clientX, y: event.clientY, value: correctionRulerOffset, pointerId: event.pointerId, action: dragAction };
-        correctionCanvas.setPointerCapture(event.pointerId);
-        correctionCanvas.style.cursor = dragAction === "origin" ? "ew-resize" : "grabbing";
-        event.preventDefault();
-      });
-      correctionCanvas.addEventListener("pointermove", (event) => {
-        if (!correctionDrag) {
-          if (correctionMode === "origin") {
-            const hitTarget = window.getPencil3DCorrectionDragTarget?.(event.clientX, event.clientY);
-            correctionCanvas.style.cursor = hitTarget === "ruler" ? "ew-resize" : "grab";
+      const correctionMagnifier = document.querySelector("#correction-magnifier");
+      const correctionDragSurfaces = [correctionCanvas, correctionMagnifier];
+      correctionDragSurfaces.forEach((surface) => {
+        const isMagnifier = surface === correctionMagnifier;
+        surface.addEventListener("pointerdown", (event) => {
+          const hitTarget = !isMagnifier && correctionMode === "origin" ? window.getPencil3DCorrectionDragTarget?.(event.clientX, event.clientY) : null;
+          const dragAction = correctionMode === "origin" && (isMagnifier || hitTarget === "ruler") ? "origin" : "rotate";
+          correctionDrag = { x: event.clientX, y: event.clientY, value: correctionRulerOffset, pointerId: event.pointerId, action: dragAction };
+          surface.setPointerCapture(event.pointerId);
+          surface.style.cursor = dragAction === "origin" ? "ew-resize" : "grabbing";
+          event.preventDefault();
+        });
+        surface.addEventListener("pointermove", (event) => {
+          if (!correctionDrag) {
+            if (isMagnifier) surface.style.cursor = correctionMode === "origin" ? "ew-resize" : "grab";
+            else if (correctionMode === "origin") {
+              const hitTarget = window.getPencil3DCorrectionDragTarget?.(event.clientX, event.clientY);
+              correctionCanvas.style.cursor = hitTarget === "ruler" ? "ew-resize" : "grab";
+            }
+            return;
           }
-          return;
-        }
-        if (event.pointerId !== correctionDrag.pointerId) return;
-        const dx = event.clientX - correctionDrag.x;
-        const dy = event.clientY - correctionDrag.y;
-        correctionDrag.x = event.clientX;
-        correctionDrag.y = event.clientY;
-        if (correctionDrag.action === "origin") {
-          const bounds = correctionCanvas.getBoundingClientRect();
-          correctionRulerOffset = clamp(correctionRulerOffset + dx * 20 / (bounds.width * 0.78), -1, state.start);
-        } else {
-          correctionCameraPreset = "free";
-          const bounds = correctionCanvas.getBoundingClientRect();
-          const sideOfRuler = clamp((bounds.left + bounds.width / 2 - event.clientX) / (bounds.width / 2), -1, 1);
-          const dragSideStrength = Math.sign(sideOfRuler) * Math.max(0.4, Math.min(Math.abs(sideOfRuler), 0.6));
-          correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw + dx * 0.009 - dy * dragSideStrength * 0.013);
-        }
-        renderCorrectionScene();
+          if (event.pointerId !== correctionDrag.pointerId) return;
+          const dx = event.clientX - correctionDrag.x;
+          const dy = event.clientY - correctionDrag.y;
+          correctionDrag.x = event.clientX;
+          correctionDrag.y = event.clientY;
+          if (correctionDrag.action === "origin") {
+            const bounds = correctionCanvas.getBoundingClientRect();
+            correctionRulerOffset = clamp(correctionRulerOffset + dx * 20 / (bounds.width * 0.78), -1, state.start);
+          } else {
+            correctionCameraPreset = "free";
+            const bounds = correctionCanvas.getBoundingClientRect();
+            const sideOfRuler = clamp((bounds.left + bounds.width / 2 - event.clientX) / (bounds.width / 2), -1, 1);
+            const dragSideStrength = Math.sign(sideOfRuler) * Math.max(0.4, Math.min(Math.abs(sideOfRuler), 0.6));
+            correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw + dx * 0.009 - dy * dragSideStrength * 0.013);
+          }
+          renderCorrectionScene();
+        });
+        const releaseCorrectionDrag = (event) => {
+          correctionDrag = null;
+          const hitTarget = !isMagnifier && correctionMode === "origin" && event ? window.getPencil3DCorrectionDragTarget?.(event.clientX, event.clientY) : null;
+          surface.style.cursor = hitTarget === "ruler" || (isMagnifier && correctionMode === "origin") ? "ew-resize" : "grab";
+        };
+        surface.addEventListener("pointerup", releaseCorrectionDrag);
+        surface.addEventListener("pointercancel", releaseCorrectionDrag);
+        surface.addEventListener("lostpointercapture", releaseCorrectionDrag);
       });
-      const releaseCorrectionDrag = (event) => {
-        correctionDrag = null;
-        const hitTarget = correctionMode === "origin" && event ? window.getPencil3DCorrectionDragTarget?.(event.clientX, event.clientY) : null;
-        correctionCanvas.style.cursor = hitTarget === "ruler" ? "ew-resize" : "grab";
-      };
-      correctionCanvas.addEventListener("pointerup", releaseCorrectionDrag);
-      correctionCanvas.addEventListener("pointercancel", releaseCorrectionDrag);
-      correctionCanvas.addEventListener("lostpointercapture", releaseCorrectionDrag);
       correctionCanvas.addEventListener("keydown", (event) => {
         const angleStep = 0.08;
         if (event.key === "ArrowLeft") correctionCameraState.yaw = clampViewYaw(correctionCameraState.yaw - angleStep);
