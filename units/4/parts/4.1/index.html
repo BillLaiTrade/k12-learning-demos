@@ -324,6 +324,20 @@
     .phase-detail-steps button[data-energy="heat"] { --phase-route-color:#bd634b; }
     .phase-detail-steps button[data-energy="cool"] { --phase-route-color:#43839a; }
     .phase-detail-steps b { color:#176b53; font-size:1rem; }
+    .freeze-demo { margin-top:10px; padding:10px 12px; border:1px solid #cbded9; border-radius:11px; background:#fffefa; }
+    .freeze-demo[hidden] { display:none; }
+    .freeze-demo-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:7px; color:#31594b; font-size:.8rem; font-weight:800; }
+    .freeze-demo-replay { padding:4px 9px; border:1px solid #43839a; border-radius:7px; background:#fff; color:#35748a; cursor:pointer; font:inherit; font-size:.75rem; }
+    .freeze-demo-replay:focus-visible { outline:3px solid #43839a40; }
+    .freeze-demo-scene { display:block; width:100%; height:auto; border-radius:9px; background:#f4f8f5; }
+    .freeze-demo-water { fill:#92d5e5; transition:fill 2.3s ease; }
+    .freeze-demo.is-freezing .freeze-demo-water { fill:#c5e8ee; }
+    .freeze-demo-particle { fill:#287ba0; stroke:#fff; stroke-width:1; }
+    .freeze-demo.is-freezing .freeze-demo-particle { fill:#287ba0; }
+    .freeze-demo-particle.is-vibrating { animation:freeze-particle-vibration .16s ease-in-out infinite alternate; transform-box:fill-box; transform-origin:center; }
+    @keyframes freeze-particle-vibration { from { transform:translate(-.5px,.35px); } to { transform:translate(.5px,-.35px); } }
+    .freeze-demo-caption { margin:6px 0 0; color:#61736a; font-size:.73rem; }
+    @media(prefers-reduced-motion:reduce) { .freeze-demo-particle.is-vibrating { animation:none; } .freeze-demo-water { transition:none; } }
     #s4 .next-hint { border-left-color:#88ae86; background:#f4f7f1; color:#4c6255!important; }
     .phase-science-note { margin:10px 0 0; padding:10px 12px; border-radius:10px; background:#eef3ea; color:#52635a; font-size:.82rem; }
     @media(max-width:680px) {
@@ -655,7 +669,7 @@
             <p class="phase-diagram-hint">箭頭表示物態變化方向；點選狀態卡或箭頭／名稱查看詳細說明。</p>
             <section class="phase-detail" id="phase-detail" aria-live="polite" aria-atomic="true" aria-label="物態轉變說明">
               <div><p class="phase-detail-kicker" id="phase-detail-kicker">三種狀態・粒子與轉變</p><h3 id="phase-detail-title">點選冰、水、水蒸氣或任一箭頭</h3></div>
-              <div><p class="phase-detail-copy" id="phase-detail-copy">選擇物態可查看它的粒子狀態和四種相關轉變；選擇箭頭則會說明轉變時粒子如何改變排列與運動。</p><div class="phase-detail-steps" id="phase-detail-steps" hidden></div></div>
+              <div><p class="phase-detail-copy" id="phase-detail-copy">選擇物態可查看它的粒子狀態和四種相關轉變；選擇箭頭則會說明轉變時粒子如何改變排列與運動。</p><div class="phase-detail-steps" id="phase-detail-steps" hidden></div><div class="freeze-demo" id="freeze-demo" hidden><div class="freeze-demo-head"><span>水 → 冰：粒子逐漸排列固定</span><button type="button" class="freeze-demo-replay" id="freeze-demo-replay">重播</button></div><svg class="freeze-demo-scene" viewBox="0 0 360 116" role="img" aria-label="示意液態粒子逐漸減慢並排列成固態，凝固後仍微微振動"><rect x="10" y="8" width="340" height="100" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><path class="freeze-demo-water" d="M12 54 Q48 50 82 54 T152 54 T222 54 T292 54 T348 54 V106 H12Z"/><g id="freeze-demo-particles"></g></svg><p class="freeze-demo-caption">一般粒子示意：水放熱後，粒子移動減慢、排列較有規律；沒有變成另一種物質。</p></div></div>
             </section>
             <p class="phase-science-note">水蒸氣本身無色、看不見；淡藍流線是教材插畫符號，不是水蒸氣真實的顏色或形狀。</p>
             <p class="next-hint">沿六個方向比較後，繼續觀察狀態改變時物質本身是否改變。</p>
@@ -1236,7 +1250,7 @@
 
     const phaseProcesses={
       melt:{title:"融化｜冰變成水",energy:"吸熱｜固態變液態",copy:"冰吸收熱量時，水分子的振動會增強；原本在固定位置附近振動的分子逐漸能互相移動。融化後，分子仍彼此靠近，但可以滑動，因此水能流動。",steps:["冰（固態）","吸收熱量","水（液態）"]},
-      freeze:{title:"凝固｜水變成冰",energy:"放熱｜液態變固態",copy:"水放出熱量後，分子運動減慢，逐漸排列成較有規律的結構，並在固定位置附近振動，形成冰。分子仍在振動，不是完全靜止。",steps:["水（液態）","放出熱量","冰（固態）"]},
+      freeze:{title:"凝固｜水變成冰",energy:"放熱｜液態變固態",copy:"水放出熱量後，粒子的移動逐漸減慢，排列也逐漸變得有規律。凝固後，粒子仍會在位置附近微微振動；水仍是水，這是物態變化。",steps:["水（液態）","放出熱量","冰（固態）"]},
       vaporization:{title:"汽化｜水變成水蒸氣",energy:"吸熱｜液態變氣態",copy:"水吸收熱量後，分子運動加快；部分分子離開液面，或液體內形成氣泡，成為水蒸氣。氣態分子彼此距離較遠，能在空間中移動。汽化包含蒸發與沸騰。",steps:["水（液態）","吸收熱量","水蒸氣（氣態）"]},
       condensation:{title:"凝結｜水蒸氣變成水",energy:"放熱｜氣態變液態",copy:"水蒸氣放出熱量後，分子運動減慢並靠近，形成液態水。水蒸氣遇到較冷表面形成小水滴，就是凝結。",steps:["水蒸氣（氣態）","放出熱量","水滴（液態）"]},
       sublimation:{title:"昇華｜冰直接變成水蒸氣",energy:"吸熱｜固態直接變氣態",copy:"冰吸收熱量後，部分水分子直接脫離固態排列，成為彼此距離較遠、可自由移動的水蒸氣分子，中間不經過液態。",steps:["冰（固態）","吸收熱量","水蒸氣（氣態）"]},
@@ -1309,9 +1323,37 @@
     }
     addContinuousPhaseTravelers();
     const phaseSteps=document.getElementById("phase-detail-steps");
+    const freezeDemo=document.getElementById("freeze-demo"),freezeDemoParticles=document.getElementById("freeze-demo-particles"),freezeParticleAnimations=[];
+    const freezeParticleLayout=Array.from({length:24},(_,index)=>{
+      const row=Math.floor(index/8),column=index%8;
+      return {startX:30+((index*83)%300),startY:57+((index*37)%44),endX:56+column*35+(row%2)*2,endY:64+row*13};
+    });
+    freezeParticleLayout.forEach(({startX,startY,endX,endY})=>{
+      const particle=document.createElementNS("http://www.w3.org/2000/svg","circle");
+      particle.setAttribute("class","freeze-demo-particle");particle.setAttribute("r","4.5");particle.setAttribute("cx",String(startX));particle.setAttribute("cy",String(startY));
+      particle.dataset.startX=String(startX);particle.dataset.startY=String(startY);particle.dataset.endX=String(endX);particle.dataset.endY=String(endY);freezeDemoParticles.append(particle);
+    });
+    function playFreezeDemo(){
+      freezeParticleAnimations.forEach(animation=>animation.cancel());freezeParticleAnimations.length=0;
+      freezeDemo.classList.remove("is-freezing");
+      const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches,scale=freezeDemo.querySelector("svg").getBoundingClientRect().width/360;
+      freezeDemoParticles.querySelectorAll("circle").forEach(particle=>{
+        particle.classList.remove("is-vibrating");
+        const startX=Number(particle.dataset.startX),startY=Number(particle.dataset.startY),endX=Number(particle.dataset.endX),endY=Number(particle.dataset.endY);
+        particle.setAttribute("cx",String(startX));particle.setAttribute("cy",String(startY));particle.style.transform="none";
+        if(reduceMotion){particle.setAttribute("cx",String(endX));particle.setAttribute("cy",String(endY));particle.classList.add("is-vibrating");return;}
+        const animation=particle.animate([{transform:"translate(0px,0px)"},{transform:`translate(${(endX-startX)*scale}px,${(endY-startY)*scale}px)`}],{duration:3100,delay:(startY-57)*28,easing:"ease-in-out",fill:"forwards"});
+        animation.onfinish=()=>{particle.setAttribute("cx",String(endX));particle.setAttribute("cy",String(endY));particle.style.transform="none";particle.classList.add("is-vibrating");};
+        freezeParticleAnimations.push(animation);
+      });
+      requestAnimationFrame(()=>freezeDemo.classList.add("is-freezing"));
+    }
+    document.getElementById("freeze-demo-replay").addEventListener("click",playFreezeDemo);
     function resetPhaseSteps(){phaseSteps.replaceChildren();phaseSteps.hidden=true;}
     function selectPhaseState(key){
       const state=phaseStates[key];
+      freezeParticleAnimations.forEach(animation=>animation.cancel());freezeParticleAnimations.length=0;
+      freezeDemo.hidden=true;
       document.querySelectorAll("[data-phase-state]").forEach(item=>item.setAttribute("aria-pressed",String(item.dataset.phaseState===key)));
       document.querySelectorAll("[data-phase-process]").forEach(item=>item.setAttribute("aria-pressed","false"));
       const relatedProcesses=new Set(state.paths.map(([processKey])=>processKey));
@@ -1331,6 +1373,8 @@
     }
     function selectPhaseProcess(key){
       const process=phaseProcesses[key];
+      if(key!=="freeze"){freezeParticleAnimations.forEach(animation=>animation.cancel());freezeParticleAnimations.length=0;}
+      freezeDemo.hidden=key!=="freeze";
       document.querySelectorAll("[data-phase-state]").forEach(item=>item.setAttribute("aria-pressed","false"));
       document.querySelectorAll("[data-phase-process]").forEach(item=>item.setAttribute("aria-pressed",String(item.dataset.phaseProcess===key)));
       document.querySelectorAll("[data-phase-path]").forEach(path=>{path.classList.remove("is-related");path.classList.toggle("is-active",path.dataset.phasePath===key);});
@@ -1340,6 +1384,7 @@
       resetPhaseSteps();
       process.steps.forEach((step,index)=>{const item=document.createElement("span");item.textContent=step;phaseSteps.append(item);if(index===1){const arrow=document.createElement("b");arrow.setAttribute("aria-hidden","true");arrow.textContent="→";phaseSteps.append(arrow);}});
       phaseSteps.hidden=false;
+      if(key==="freeze")playFreezeDemo();
     }
     document.querySelectorAll("[data-phase-state]").forEach(button=>button.addEventListener("click",()=>selectPhaseState(button.dataset.phaseState)));
     document.addEventListener("click",event=>{const trigger=event.target.closest("[data-phase-process]");if(trigger)selectPhaseProcess(trigger.dataset.phaseProcess);});
