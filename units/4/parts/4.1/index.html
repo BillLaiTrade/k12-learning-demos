@@ -1436,7 +1436,11 @@
     }
     function animatePhaseTransition(now,runId){
       if(runId!==phaseDemoRun||freezeDemo.hidden||!phaseDemoTransition)return;
-      const transition=phaseDemoTransition,elapsed=now-transition.startedAt-transition.hold,total=transition.hold+transition.spread+transition.duration;
+      const transition=phaseDemoTransition,rect=freezeDemo.getBoundingClientRect(),inView=rect.bottom>0&&rect.top<window.innerHeight;
+      if(!inView){if(transition.startedAt!==null&&transition.pausedAt===null)transition.pausedAt=now;phaseDemoFrame=requestAnimationFrame(next=>animatePhaseTransition(next,runId));return;}
+      if(transition.startedAt===null)transition.startedAt=now;
+      if(transition.pausedAt!==null){transition.startedAt+=now-transition.pausedAt;transition.pausedAt=null;}
+      const elapsed=now-transition.startedAt-transition.hold,total=transition.hold+transition.spread+transition.duration;
       freezeParticles.forEach((p,index)=>{
         const local=Math.max(0,Math.min(1,(elapsed-transition.delays[index])/transition.duration));
         if(local<=0)return;
@@ -1508,7 +1512,7 @@
       }
       const scores=freezeParticles.map((p,i)=>process.to==="solid"?ends[i].y:key==="melt"?-p.y:p.y),minScore=Math.min(...scores),maxScore=Math.max(...scores),spread=key==="melt"?5000:3600,duration=key==="melt"?2000:1600;
       const delays=scores.map(score=>maxScore===minScore?0:(score-minScore)/(maxScore-minScore)*spread);
-      phaseDemoTransition={key,to:process.to,fromLabel:key==="melt"?"固態冰":process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態",status:process.status,startedAt:performance.now(),hold:key==="melt"?2000:900,spread,duration,delays};
+      phaseDemoTransition={key,to:process.to,fromLabel:key==="melt"?"固態冰":process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態",status:process.status,startedAt:null,pausedAt:null,hold:key==="melt"?2000:900,spread,duration,delays};
       phaseDemoFrame=requestAnimationFrame(now=>animatePhaseTransition(now,runId));
     }
     document.getElementById("freeze-demo-replay").addEventListener("click",()=>activePhaseProcess==="freeze"?playFreezeDemo():playPhaseTransition(activePhaseProcess));
