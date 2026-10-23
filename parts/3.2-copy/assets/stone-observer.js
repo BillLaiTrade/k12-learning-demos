@@ -143,28 +143,27 @@ export function mountStoneObserver(){
     const modeledMesh=gltf.scene.getObjectByProperty('isMesh',true);
     if(!modeledMesh)return;
     const modeledGeometry=modeledMesh.geometry.clone();modeledGeometry.applyMatrix4(modeledMesh.matrixWorld);modeledGeometry.computeVertexNormals();
-    stone.geometry.dispose();stone.geometry=modeledGeometry;
-    stone.material.dispose();stone.material=modeledMesh.material.clone();
-    stone.material.flatShading=false;stone.material.color.setScalar(.62);stone.material.needsUpdate=true;
-    const photo=new Image();photo.onload=()=>{
-      const source=document.createElement('canvas');source.width=photo.naturalWidth;source.height=photo.naturalHeight;
-      const sourceContext=source.getContext('2d');sourceContext.drawImage(photo,0,0);
-      const sourcePixels=sourceContext.getImageData(0,0,source.width,source.height),alpha=sourcePixels.data;
-      let minX=source.width,minY=source.height,maxX=0,maxY=0;
-      for(let y=0;y<source.height;y++)for(let x=0;x<source.width;x++)if(alpha[(y*source.width+x)*4+3]>240){minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}
-      const canvasTexture=document.createElement('canvas');canvasTexture.width=768;canvasTexture.height=Math.round(768*(maxY-minY+1)/(maxX-minX+1));
-      const context=canvasTexture.getContext('2d');context.drawImage(source,minX,minY,maxX-minX+1,maxY-minY+1,0,0,canvasTexture.width,canvasTexture.height);
-      const texture=new THREE.CanvasTexture(canvasTexture);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;
-      const photoGeometry=stone.geometry.clone(),position=photoGeometry.attributes.position;
-      for(let i=0;i<position.count;i++)position.setXYZ(i,position.getX(i)*1.004,position.getY(i)*1.004,position.getZ(i)*1.004);
-      position.needsUpdate=true;photoGeometry.computeVertexNormals();photoGeometry.computeBoundingBox();
-      const bounds=photoGeometry.boundingBox,uvs=new Float32Array(position.count*2);
-      for(let i=0;i<position.count;i++){uvs[i*2]=(position.getX(i)-bounds.min.x)/(bounds.max.x-bounds.min.x);uvs[i*2+1]=(position.getY(i)-bounds.min.y)/(bounds.max.y-bounds.min.y);}
-      photoGeometry.setAttribute('uv',new THREE.BufferAttribute(uvs,2));
-      const photoMaterial=new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.02,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1,toneMapped:false});
-      stone.add(new THREE.Mesh(photoGeometry,photoMaterial));
+    const surfaceGeometry=modeledGeometry.toNonIndexed(),position=surfaceGeometry.attributes.position,uvs=new Float32Array(position.count*2);
+    const sphericalUV=index=>{
+      const direction=new THREE.Vector3().fromBufferAttribute(position,index).normalize();
+      return [.5+Math.atan2(direction.z,direction.x)/(2*Math.PI),.5+Math.asin(THREE.MathUtils.clamp(direction.y,-1,1))/Math.PI];
     };
-    photo.src=new URL('./meteorite-model.webp',import.meta.url).href;
+    for(let face=0;face<position.count;face+=3){
+      const coords=[sphericalUV(face),sphericalUV(face+1),sphericalUV(face+2)],uValues=coords.map(value=>value[0]);
+      if(Math.max(...uValues)-Math.min(...uValues)>.5)for(const value of coords)if(value[0]<.5)value[0]+=1;
+      for(let vertex=0;vertex<3;vertex++){uvs[(face+vertex)*2]=coords[vertex][0];uvs[(face+vertex)*2+1]=coords[vertex][1];}
+    }
+    surfaceGeometry.setAttribute('uv',new THREE.BufferAttribute(uvs,2));surfaceGeometry.deleteAttribute('color');surfaceGeometry.computeVertexNormals();
+    stone.geometry.dispose();stone.geometry=surfaceGeometry;
+    stone.material.dispose();stone.material=modeledMesh.material.clone();
+    stone.material.flatShading=false;stone.material.vertexColors=false;stone.material.color.set(0xffffff);
+    stone.material.roughness=.92;stone.material.metalness=.08;
+    const textureUrl=new URL('./meteorite-surface.webp',import.meta.url);
+    if(pageVersion)textureUrl.searchParams.set('v',pageVersion);
+    new THREE.TextureLoader().load(textureUrl.href,texture=>{
+      texture.colorSpace=THREE.SRGBColorSpace;texture.wrapS=THREE.RepeatWrapping;texture.wrapT=THREE.ClampToEdgeWrapping;
+      texture.anisotropy=renderer.capabilities.getMaxAnisotropy();stone.material.map=texture;stone.material.needsUpdate=true;
+    });
     measureDirty=true;if(loading)loading.hidden=true;
   },undefined,()=>{if(loading)loading.hidden=true});
   const raycaster=new THREE.Raycaster(),pointerNdc=new THREE.Vector2();raycaster.params.Line.threshold=.09;
