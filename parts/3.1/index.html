@@ -1315,7 +1315,7 @@
           @keyframes sprint-leg-a { 0%,100% { rotate: 35deg; } 50% { rotate: -42deg; } }
           @keyframes sprint-leg-b { 0%,100% { rotate: -42deg; } 50% { rotate: 35deg; } }
           #sprint-arm-a,#sprint-arm-b,#sprint-leg-a,#sprint-leg-b { transform-box: fill-box; transform-origin: 0 0; }
-          .race-running #sprint-runner { animation: sprint-run 8s cubic-bezier(.2,.1,.75,.9) forwards; }
+          .race-running #sprint-runner { animation: sprint-run 9.63s cubic-bezier(.2,.1,.75,.9) forwards; }
           .race-running #sprint-arm-a { animation: sprint-arm .42s ease-in-out infinite; }
           .race-running #sprint-arm-b { animation: sprint-arm .42s ease-in-out infinite reverse; }
           .race-running #sprint-leg-a { animation: sprint-leg-a .42s ease-in-out infinite; }
@@ -1400,7 +1400,7 @@
         } else if (key === "olympicSprint") {
           demo.innerHTML = `<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual" id="race-visual"><svg viewBox="${item.viewBox}" role="img" aria-label="短跑選手在跑道上起跑，計時器在發令訊號時啟動，選手軀幹通過終點線時停止">${item.draw()}</svg></div><div class="tool-demo-controls"><button type="button" id="race-start">開始模擬短跑</button><span class="tool-demo-value" id="race-state" aria-live="polite">準備起跑</span></div>`;
           const visual = document.querySelector("#race-visual"), display = document.querySelector("#race-clock-display"), start = document.querySelector("#race-start"), state = document.querySelector("#race-state");
-          const duration = 8000;
+          const duration = 9630;
           start.onclick = () => {
             visual.classList.remove("race-running");
             void visual.offsetWidth;
