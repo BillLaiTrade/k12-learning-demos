@@ -1408,6 +1408,9 @@
           setting.oninput = () => { if (!stopwatchTimer) { timerRemaining = Number(setting.value); output.textContent = `${timerRemaining} 秒`; paintTimer(); } };
           start.onclick = () => { if (stopwatchTimer) { clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "繼續"; } else { start.textContent = "暫停"; stopwatchTimer = setInterval(() => { timerRemaining = Math.max(0, timerRemaining - 1); paintTimer(); if (!timerRemaining) { clearInterval(stopwatchTimer); stopwatchTimer = null; start.textContent = "重新開始"; } }, 1000); } };
           document.querySelector("#timer-reset").onclick = () => { clearInterval(stopwatchTimer); stopwatchTimer = null; timerRemaining = Number(setting.value); paintTimer(); start.textContent = "開始"; };
+        } else if (["clinicalThermometer", "labThermometer"].includes(key)) {
+          const value=Number(item.value);
+          demo.innerHTML=`<h3>${item.title}</h3><p>${item.desc}</p><div class="tool-demo-visual"><svg viewBox="${item.viewBox || "0 0 560 190"}" role="img" aria-label="${item.title}，固定讀值 ${value} °C">${item.draw(value)}</svg></div>`;
         } else if (key === "cylinder") {
           const ticks=Array.from({length:51},(_,i)=>{const y=200-i*2.6;return `<path d="M268 ${y.toFixed(1)}h${i%10===0?27:i%5===0?18:9}" stroke="#557368" stroke-width="${i%5===0?1.5:1}"/>`;}).join("");
           const labels=Array.from({length:6},(_,i)=>`<text x="300" y="${204-i*26}" font-size="10" fill="#557368">${i*10}</text>`).join("");
