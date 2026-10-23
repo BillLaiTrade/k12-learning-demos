@@ -1409,7 +1409,7 @@
     const phaseDemoHeading=document.getElementById("phase-demo-heading"),phaseDemoSource=document.getElementById("phase-demo-source"),phaseDemoCaption=document.getElementById("phase-demo-caption"),phaseDemoArrows=document.getElementById("phase-demo-arrows");
     let phaseDemoRun=0,phaseDemoFrame=0,phaseDemoLastFrame=0,phaseDemoTransition=null,activePhaseProcess="freeze",phaseDemoMotionState="";
     const phaseDemoMotion={
-      melt:{from:"solid",to:"liquid",heading:"冰 → 水：吸熱融化",source:"吸熱",status:"冰晶排列逐漸鬆動，粒子開始互相移動"},
+      melt:{from:"solid",to:"liquid",heading:"冰 → 水：吸熱融化",source:"吸熱",status:"底層粒子逐漸鬆動，融水聚集在底部，固態排列逐層縮小"},
       vaporization:{from:"liquid",to:"gas",heading:"水 → 水蒸氣：液面蒸發",source:"吸熱",status:"液面粒子逐步離開液體，分散到容器空間"},
       condensation:{from:"gas",to:"liquid",heading:"水蒸氣 → 水：放熱凝結",source:"放熱／冷表面",status:"氣態粒子減速、靠近，凝結成液態水"},
       sublimation:{from:"solid",to:"gas",heading:"冰 → 水蒸氣：吸熱昇華",source:"吸熱",status:"粒子直接脫離固態排列，沒有經過液態"},
@@ -1482,10 +1482,15 @@
     function playPhaseTransition(key){
       stopPhaseDemoMotion();const runId=phaseDemoRun,process=phaseDemoMotion[key],starts=phaseDemoTargets(process.from),ends=phaseDemoTargets(process.to);
       activePhaseProcess=key;phaseDemoHeading.textContent=process.heading;phaseDemoSource.textContent=process.source;
-      const releasesEnergy=phaseProcesses[key].energy.startsWith("放熱");phaseDemoArrows.setAttribute("transform",releasesEnergy?"translate(0 50) scale(1 -1)":"");phaseDemoArrows.setAttribute("stroke",releasesEnergy?"#43839a":"#bd634b");
+      const releasesEnergy=phaseProcesses[key].energy.startsWith("放熱"),arrowPath="M57 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4",meltArrowPath="M57 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4";phaseDemoArrows.setAttribute("d",key==="melt"?meltArrowPath:arrowPath);phaseDemoArrows.setAttribute("transform",key==="melt"?"translate(0 120) scale(1 -1)":releasesEnergy?"translate(0 50) scale(1 -1)":"");phaseDemoArrows.setAttribute("stroke",releasesEnergy?"#43839a":"#bd634b");phaseDemoSource.setAttribute("y","25");
       document.getElementById("freeze-demo-status").textContent=`起始狀態：${process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態"}；粒子排列與位置`;
       phaseDemoCaption.textContent="圓點代表水的粒子；動畫呈現排列與運動改變，並非實際大小比例。";
       const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if(key==="melt"){
+        const fromBottom=starts.map((point,index)=>({index,y:point.y})).sort((a,b)=>b.y-a.y);
+        const poolTargets=ends.map(point=>({...point})).sort((a,b)=>b.y-a.y||a.x-b.x);
+        fromBottom.forEach(({index},rank)=>{ends[index]=poolTargets[rank];});
+      }
       freezeParticles.forEach((p,i)=>{
         p.element.setAttribute("class","freeze-demo-particle");p.element.style.transform="none";
         p.x=starts[i].x+(Math.random()-.5)*(process.from==="gas"?12:3);p.y=starts[i].y+(Math.random()-.5)*(process.from==="gas"?12:3);
@@ -1501,9 +1506,9 @@
         freezeParticles.forEach(p=>{p.x=p.targetX;p.y=p.targetY;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
         startPhaseDemoMotion(process.to,runId);return;
       }
-      const scores=freezeParticles.map((p,i)=>process.to==="solid"?ends[i].y:p.y),minScore=Math.min(...scores),maxScore=Math.max(...scores),spread=3600,duration=1600;
+      const scores=freezeParticles.map((p,i)=>process.to==="solid"?ends[i].y:key==="melt"?-p.y:p.y),minScore=Math.min(...scores),maxScore=Math.max(...scores),spread=3600,duration=1600;
       const delays=scores.map(score=>maxScore===minScore?0:(score-minScore)/(maxScore-minScore)*spread);
-      phaseDemoTransition={key,to:process.to,fromLabel:process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態",status:process.status,startedAt:performance.now(),hold:900,spread,duration,delays};
+      phaseDemoTransition={key,to:process.to,fromLabel:key==="melt"?"固態冰":process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態",status:process.status,startedAt:performance.now(),hold:key==="melt"?1250:900,spread,duration,delays};
       phaseDemoFrame=requestAnimationFrame(now=>animatePhaseTransition(now,runId));
     }
     document.getElementById("freeze-demo-replay").addEventListener("click",()=>activePhaseProcess==="freeze"?playFreezeDemo():playPhaseTransition(activePhaseProcess));
