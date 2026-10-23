@@ -49,6 +49,14 @@
     .card-role { color:var(--muted); font-size:.78rem; }
     .card-main h2 { margin:0 0 8px; font-size:clamp(1.17rem,2.4vw,1.55rem); line-height:1.4; }
     .card-main>p { color:#53645d; }
+    .dialogue { display:flex; gap:10px; align-items:center; margin:12px 0; padding:11px 15px; border-left:4px solid #8cae91; border-radius:0 13px 13px 0; background:#f0f5eb; }
+    .dialogue p { margin:0; }
+    .dialogue .speaker { display:inline-flex; flex:0 0 auto; align-items:center; color:#315a46; font-weight:800; }
+    .dialogue .speaker::before { content:""; display:block; width:44px; height:44px; border:2px solid #8cae91; border-radius:50%; background-image:url("../../../../parts/3.1/assets/dialogue-character-avatars.png"); background-repeat:no-repeat; background-position:100% 50%; background-size:200% 100%; box-shadow:0 2px 6px rgb(21 47 38 / 12%); }
+    .dialogue--xiaokui { border-left-color:#d39765; background:#fff4e8; }
+    .dialogue--xiaokui .speaker { color:#945523; }
+    .dialogue--xiaokui .speaker::before { border-color:#d39765; background-position:0 50%; }
+    .dialogue .visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
     .evidence-box,.note-box { margin:12px 0; padding:12px 14px; border-left:4px solid #82a98c; border-radius:7px; background:#f0f6f0; }
     .evidence-box strong { display:block; margin-bottom:3px; }
     .filter-animation { position:relative; margin:16px 0 10px; overflow:hidden; border:1px solid #d8e2da; border-radius:18px; background:#f1f6f1; box-shadow:0 12px 30px #243a350d; }
@@ -184,6 +192,8 @@
         <div class="card-main">
           <h2>把泥沙水倒進漏斗，會發生什麼？</h2>
           <p>這份水樣裡看得到泥沙。若想讓泥沙和水分開，可以用濾紙過濾；跟著步驟操作，看看固體和液體各自去了哪裡。</p>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>泥沙混在水裡，要怎麼把它們分開？</p></div>
+          <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>觀察過濾後，哪些留在濾紙上，哪些穿過去了。</p></div>
           <div class="filter-animation" id="filter-animation" data-stage="0" role="group" aria-label="泥沙水經過濾紙的連續動畫；可點選畫面標記查看深入解說">
             <img class="filter-illustration" src="assets/filtration-scene.png" width="1672" height="941" alt="同一個連續過濾場景：一只傾斜的玻璃杯將含少量泥沙的淺青綠色水倒入濾紙漏斗，泥沙留在濾紙上，濾液滴入下方接液杯。">
             <svg class="filter-motion" viewBox="0 0 1672 941" aria-hidden="true">
@@ -228,6 +238,8 @@
         <div class="card-main">
           <h2>水分蒸發後，鹽還會留在容器裡嗎？</h2>
           <p>鹽溶在水中，不能用濾紙把它攔下來。讓水逐漸蒸發，再觀察容器中是否形成鹽的固體。</p>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>鹽溶在水裡看不見了，水蒸發後鹽也會一起不見嗎？</p></div>
+          <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>觀察蒸發後留下的東西，看看鹽和水各有什麼變化。</p></div>
           <div class="scene evap-stage" id="evap-stage" data-step="1" aria-label="鹽水蒸發與鹽晶體留下的示意">
             <span class="scene-label">過程示意，動畫時間不代表真實加熱時間</span>
             <div class="dish-wrap"><div class="heat-lines" aria-hidden="true">⌁　⌁　⌁</div><div class="evap-cup"><div class="salt-crystals"></div></div><p id="evap-caption" class="live-note">加熱前：鹽在水中，肉眼看不見分開的鹽粒。</p></div>
@@ -242,6 +254,8 @@
         <div class="card-main">
           <h2>一滴綠色墨水，最後會留下幾條色帶？</h2>
           <p>在濾紙上點一滴水溶性彩色筆墨水，讓濾紙下端接觸溶劑。看著顏色逐漸分開；若出現不同色帶，表示這支筆的墨水可能混有不同色素。</p>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>綠色墨水裡，會不會混著其他顏色？</p></div>
+          <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>讓溶劑帶動色素，再觀察濾紙上有沒有不同色帶。</p></div>
           <div class="choice-row" role="group" aria-label="選擇彩色筆墨水">
             <button class="choice-button ink-choice" type="button" data-ink="green" aria-pressed="true">綠色筆</button>
             <button class="choice-button ink-choice" type="button" data-ink="dark" aria-pressed="false">深色筆</button>
@@ -261,6 +275,8 @@
         <div class="card-main">
           <h2>泥沙、鹽、墨水：面對不同目標，要怎麼選？</h2>
           <p>先想清楚要留下或分開的是什麼，再對照操作後看見的結果。方法合適，才會得到想要的分離結果。</p>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>泥沙、鹽和墨水，能用同一種方法分開嗎？</p></div>
+          <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>先確認分離目標，再比較方法和操作後的結果。</p></div>
           <div class="compare-grid" id="compare-grid">
             <article class="compare-card" data-kind="filter"><h3>固體留在濾紙，水通過</h3><p>用漏斗和濾紙過濾泥沙水。</p></article>
             <article class="compare-card" data-kind="crystal"><h3>水分蒸發後，鹽形成固體</h3><p>讓鹽水蒸發，觀察容器中形成的鹽晶體。</p></article>

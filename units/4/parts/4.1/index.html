@@ -56,6 +56,14 @@
     .card-main { min-width:0; }
     .card-main h2 { margin:0 0 9px; font-size:clamp(1.22rem,2.3vw,1.65rem); line-height:1.43; }
     .card-main>p { margin-bottom:14px; color:#4f6159; }
+    .dialogue { display:flex; gap:10px; align-items:center; margin:12px 0; padding:11px 15px; border-left:4px solid #8cae91; border-radius:0 13px 13px 0; background:#f0f5eb; }
+    .dialogue p { margin:0; }
+    .dialogue .speaker { display:inline-flex; flex:0 0 auto; align-items:center; color:#315a46; font-weight:800; }
+    .dialogue .speaker::before { content:""; display:block; width:44px; height:44px; border:2px solid #8cae91; border-radius:50%; background-image:url("../../../../parts/3.1/assets/dialogue-character-avatars.png"); background-repeat:no-repeat; background-position:100% 50%; background-size:200% 100%; box-shadow:0 2px 6px rgb(21 47 38 / 12%); }
+    .dialogue--xiaokui { border-left-color:#d39765; background:#fff4e8; }
+    .dialogue--xiaokui .speaker { color:#945523; }
+    .dialogue--xiaokui .speaker::before { border-color:#d39765; background-position:0 50%; }
+    .dialogue .visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
     .next-hint { margin:14px 0 0!important; padding:9px 12px; border-left:3px solid var(--gold); background:#faf4e5; color:#615638!important; font-size:.87rem; }
     .visual { margin:14px 0; padding:14px; border:1px solid #e6e0d4; border-radius:14px; background:#faf9f4; }
     .visual figcaption,.caption { margin:8px 0 0; color:#758178; font-size:.77rem; }
@@ -484,6 +492,8 @@
           <div class="card-main">
             <h2>水桶是一個物體，桶身、提把支架和握把由什麼製成？</h2>
             <p>依序查看水桶的不同部位，找出製作各部位所用的材料。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水桶是一個物體，那桶身和握把是用什麼做的呢？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>仔細看看不同部位，再找出各自使用的材料。</p></div>
             <div class="visual">
               <div class="choice-row bucket-choices" role="group" aria-label="切換水桶部位的圖像與材質說明">
                 <button type="button" data-bucket-part="overview" aria-pressed="true">整只水桶</button>
@@ -570,6 +580,8 @@
           <div class="card-main">
             <h2>以水為例：三種狀態的粒子有什麼不同？</h2>
             <p>圖中每個圓點代表一個水分子。比較同一批水分子在固態、液態和氣態中的排列、間距和運動；狀態改變時，水分子仍是同一批。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水結成冰之後，水分子會變成別的物質嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>觀察排列和運動怎麼改變；狀態改變時，水分子仍是水分子。</p></div>
             <div class="particle-stage" aria-label="三種狀態的水分子排列比較">
               <article class="particle-state-card"><h3>固態：冰</h3><div class="particle-box" id="particle-box-solid" data-motion-state="solid" role="img" aria-label="水分子在容器底部排列整齊、彼此留有間距並微微振動"></div></article>
               <article class="particle-state-card"><h3>液態水分子</h3><div class="particle-box" id="particle-box-liquid" data-motion-state="liquid" role="img" aria-label="水分子集中在容器底部，持續流動、碰撞和換位"></div></article>
@@ -590,6 +602,8 @@
           <div class="card-main">
             <h2>冰、水和水蒸氣，如何互相轉變？</h2>
             <p>點選冰、水或水蒸氣，查看它能轉變成哪些狀態；也可以直接點選六條箭頭，了解轉變過程與粒子變化。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水蒸氣除了變回水，也能直接變成冰嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>沿著六條箭頭找找看，再觀察粒子的排列和運動。</p></div>
             <div class="phase-diagram-scroll" role="region" aria-label="物質三態與六種轉變互動圖，可左右滑動查看" tabindex="0">
               <div class="phase-triangle" id="phase-triangle">
                 <svg class="phase-triangle-svg" viewBox="0 0 840 590" preserveAspectRatio="none" role="group" aria-label="六條可點選的物態變化箭頭">
@@ -720,6 +734,8 @@
           <div class="card-main">
             <h2>東西變了樣，就代表變成另一種物質嗎？</h2>
             <p>蒸發和生鏽都會讓外觀改變；比較變化前後有沒有生成新物質，就能分辨物理變化和化學變化。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水蒸發後看不見了，是不是就變成另一種物質？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>比對變化前後的物質，看看有沒有生成新的物質。</p></div>
             <div class="choice-row" role="group" aria-label="比較兩種變化">
               <button type="button" data-change="evaporation" aria-pressed="true">水分蒸發</button><button type="button" data-change="rust" aria-pressed="false">桶身生鏽</button>
             </div>
@@ -768,6 +784,8 @@
           <div class="card-main">
             <h2>這桶混濁的雨水，怎麼證明它是混合物？</h2>
             <p>這次不只看水樣外觀。資料卡明確提供成分紀錄：樣本含有水和泥沙。根據「由多種物質組成」的分類依據，判斷這個水樣。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>只看水樣混濁，就能確定裡面有泥沙嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>要根據成分紀錄判斷，不能只靠外觀猜測。</p></div>
             <div class="evidence-box"><strong>樣本成分紀錄</strong><br>水樣含有水與泥沙兩種成分。這是題目提供的資料，不是由混濁外觀推測。</div>
             <fieldset style="border:0;padding:0;margin:14px 0">
               <legend><strong>依資料判斷，這份水樣屬於哪一類？</strong></legend>
