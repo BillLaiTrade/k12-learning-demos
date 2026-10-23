@@ -1208,23 +1208,28 @@
     function updatePhaseArrowGeometry(){
       if(!phaseSvg||!phaseSvg.getScreenCTM())return;
       const inverse=phaseSvg.getScreenCTM().inverse(),svgPoint=(x,y)=>{const p=phaseSvg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(inverse);return{x:q.x,y:q.y};};
-      const rect=selector=>document.querySelector(`[data-phase-state="${selector}"]`).getBoundingClientRect();
-      const solid=rect("solid"),water=rect("liquid"),vapor=rect("gas"),gap=15;
-      // Put arrow tips in the open lane just outside each state card. The pictures
-      // have transparent padding, so using their image boxes made arrowheads look
-      // as if they were stabbing the water and vapor illustrations.
-      const iceA={x:solid.left+solid.width*.22,y:solid.bottom+gap},iceB={x:solid.left+solid.width*.78,y:solid.bottom+gap};
-      const waterLeft={x:water.left+water.width*.25,y:water.top-gap},waterRight={x:water.left+water.width*.75,y:water.top-gap},vaporLeft={x:vapor.left+vapor.width*.25,y:vapor.top-gap},vaporRight={x:vapor.left+vapor.width*.75,y:vapor.top-gap};
-      const iceDeposition={x:solid.left+solid.width*.66,y:solid.bottom+gap},vaporDeposition={x:vapor.left+vapor.width*.65,y:vapor.top-gap};
-      const waterFlowA={x:water.right+gap,y:water.top+water.height*.5-8},vaporFlowA={x:vapor.left-gap,y:vapor.top+vapor.height*.5-8},vaporFlowB={x:vapor.left-gap,y:vapor.top+vapor.height*.5+16},waterFlowB={x:water.right+gap,y:water.top+water.height*.5+16};
-      const cubic=(start,c1,c2,end)=>[start,c1,c2,end].map(p=>svgPoint(p.x,p.y));
+      const rect=selector=>document.querySelector(`[data-phase-state="${selector}"]`).getBoundingClientRect(),nodes={solid:rect("solid"),liquid:rect("liquid"),gas:rect("gas")};
+      const center=r=>({x:r.left+r.width/2,y:r.top+r.height/2});
+      // Connect card edges directly. Both directions on each triangle side use
+      // parallel, slightly offset curves so the arrows do not cross or touch art.
+      const edge=(from,to,gap=12)=>{
+        const a=center(from),b=center(to),dx=b.x-a.x,dy=b.y-a.y,length=Math.hypot(dx,dy)||1,ux=dx/length,uy=dy/length;
+        const reach=(r,x,y)=>Math.min((r.width/2)/Math.max(Math.abs(x),.0001),(r.height/2)/Math.max(Math.abs(y),.0001))+gap;
+        const ra=reach(from,ux,uy),rb=reach(to,ux,uy);
+        return[{x:a.x+ux*ra,y:a.y+uy*ra},{x:b.x-ux*rb,y:b.y-uy*rb}];
+      };
+      const curve=(from,to,bow)=>{
+        const [a,b]=edge(nodes[from],nodes[to]),dx=b.x-a.x,dy=b.y-a.y,n=Math.hypot(dx,dy)||1,nx=-dy/n,ny=dx/n;
+        const p=[a,{x:a.x+dx/3+nx*bow,y:a.y+dy/3+ny*bow},{x:a.x+dx*2/3+nx*bow,y:a.y+dy*2/3+ny*bow},b];
+        return p.map(q=>svgPoint(q.x,q.y));
+      };
       const curves={
-        melt:cubic(iceA,{x:iceA.x-42,y:iceA.y+78},{x:waterLeft.x-34,y:waterLeft.y-70},waterLeft),
-        freeze:cubic(waterRight,{x:waterRight.x+34,y:waterRight.y-70},{x:iceB.x+42,y:iceB.y+78},iceB),
-        sublimation:cubic(iceB,{x:iceB.x+42,y:iceB.y+78},{x:vaporRight.x+34,y:vaporRight.y-70},vaporRight),
-        deposition:cubic(vaporDeposition,{x:vaporDeposition.x+22,y:vaporDeposition.y-72},{x:iceDeposition.x+22,y:iceDeposition.y+82},iceDeposition),
-        vaporization:cubic(waterFlowA,{x:waterFlowA.x+(vaporFlowA.x-waterFlowA.x)*.34,y:waterFlowA.y-30},{x:waterFlowA.x+(vaporFlowA.x-waterFlowA.x)*.66,y:vaporFlowA.y-30},vaporFlowA),
-        condensation:cubic(vaporFlowB,{x:vaporFlowB.x+(waterFlowB.x-vaporFlowB.x)*.34,y:vaporFlowB.y+30},{x:vaporFlowB.x+(waterFlowB.x-vaporFlowB.x)*.66,y:waterFlowB.y+30},waterFlowB)
+        melt:curve("solid","liquid",-11),
+        freeze:curve("liquid","solid",-11),
+        sublimation:curve("solid","gas",11),
+        deposition:curve("gas","solid",11),
+        vaporization:curve("liquid","gas",-18),
+        condensation:curve("gas","liquid",-18)
       };
       const triangleRect=document.querySelector(".phase-triangle").getBoundingClientRect();
       Object.entries(curves).forEach(([key,points])=>{
