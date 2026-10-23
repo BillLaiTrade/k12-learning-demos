@@ -262,6 +262,9 @@
     .particle-box[data-motion-state="liquid"] .particle-molecule,
     .particle-box[data-motion-state="gas"] .particle-molecule { z-index:2; left:0; top:0; transform:translate3d(var(--particle-x,0px),var(--particle-y,0px),0) translate(-50%,-50%); animation:none; transition:none; will-change:transform; }
     .particle-molecule svg { display:block; width:100%; height:100%; overflow:visible; }
+    #particle-box-solid .particle-molecule { --particle-phase-color:#2346bd; --particle-phase-stroke:#152e86; }
+    #particle-box-liquid .particle-molecule { --particle-phase-color:#438bb8; --particle-phase-stroke:#2b6e96; }
+    #particle-box-gas .particle-molecule { --particle-phase-color:#94c8da; --particle-phase-stroke:#5b9bb4; }
     .particle-molecule[data-vibrating="true"] { animation:solid-particle-vibration .12s linear infinite alternate; }
     @keyframes solid-particle-vibration { from { transform:translate(calc(-50% + var(--vibrate-from-x)),calc(-50% + var(--vibrate-from-y))); } to { transform:translate(calc(-50% + var(--vibrate-to-x)),calc(-50% + var(--vibrate-to-y))); } }
     .particle-comparison { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:12px; }
@@ -338,9 +341,10 @@
     .freeze-demo-replay { padding:4px 9px; border:1px solid #43839a; border-radius:7px; background:#fff; color:#35748a; cursor:pointer; font:inherit; font-size:.75rem; }
     .freeze-demo-replay:focus-visible { outline:3px solid #43839a40; }
     .freeze-demo-scene { display:block; width:100%; height:auto; border-radius:9px; background:#f4f8f5; }
-    .freeze-demo-particle { fill:#287ba0; stroke:#fff; stroke-width:1; }
-    .freeze-demo-particle.is-melted { fill:#39a9c4; }
-    .freeze-demo-particle.is-condensed { fill:#39a9c4; }
+    .freeze-demo-particle { fill:#438bb8; stroke:#fff; stroke-width:1; transition:fill .55s ease; }
+    .freeze-demo-particle.is-solid { fill:#2346bd; }
+    .freeze-demo-particle.is-liquid { fill:#438bb8; }
+    .freeze-demo-particle.is-gas { fill:#94c8da; }
     .freeze-demo-particle.is-vibrating { animation:freeze-particle-vibration .14s ease-in-out infinite alternate; transform-box:fill-box; transform-origin:center; }
     @keyframes freeze-particle-vibration { from { transform:translate(-.35px,.25px); } to { transform:translate(.35px,-.25px); } }
     .freeze-demo-caption { margin:6px 0 0; color:#61736a; font-size:.73rem; }
@@ -1172,7 +1176,7 @@
       liquid:Array.from({length:60},(_,index)=>[16+(index%10)*7.5,50+Math.floor(index/10)*8]),
       gas:[[13,10],[29,13],[45,8],[61,16],[77,11],[87,18],[20,28],[36,32],[52,25],[68,34],[84,27],[91,31],[11,46],[27,41],[43,51],[59,44],[75,54],[89,48],[17,66],[33,71],[49,63],[65,74],[81,68],[93,61],[12,85],[28,91],[44,82],[60,88],[76,79],[88,94]]
     };
-    const moleculeSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#2346bd" stroke="#152e86" stroke-width="1"/></svg>';
+    const moleculeSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="var(--particle-phase-color,#438bb8)" stroke="var(--particle-phase-stroke,#2b6e96)" stroke-width="1"/></svg>';
     const movingParticleModels=[];
     Object.entries(particlePositions).forEach(([state,positions])=>{
       const box=document.getElementById(`particle-box-${state}`);
@@ -1389,7 +1393,7 @@
       const demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox","0 0 360 132");phaseDemoSource.setAttribute("x","20");phaseDemoSource.setAttribute("y","25");
       const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches,scale=demoSvg.getBoundingClientRect().width/360;
       freezeParticles.forEach(p=>{
-        p.frozen=false;p.isFreezing=false;p.element.setAttribute("class","freeze-demo-particle");p.element.style.transform="none";
+        p.frozen=false;p.isFreezing=false;p.element.setAttribute("class","freeze-demo-particle is-liquid");p.element.style.transform="none";
         p.x=20+Math.random()*320;p.y=66+Math.random()*47;p.vx=(Math.random()-.5)*34;p.vy=(Math.random()-.5)*28;
         p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
       });
@@ -1398,8 +1402,8 @@
         if(runId!==freezeRunId||index>=freezeTargets.length)return;
         const target=freezeTargets[index],available=freezeParticles.filter(p=>!p.frozen&&!p.isFreezing);
         const particle=available.reduce((best,p)=>Math.hypot(p.x-target.endX,p.y-target.endY)<Math.hypot(best.x-target.endX,best.y-target.endY)?p:best,available[0]);
-        if(!particle)return;particle.isFreezing=true;particle.element.setAttribute("class","freeze-demo-particle");
-        const finish=()=>{if(runId!==freezeRunId)return;particle.x=target.endX;particle.y=target.endY;particle.vx=0;particle.vy=0;particle.frozen=true;particle.isFreezing=false;particle.element.setAttribute("cx",String(target.endX));particle.element.setAttribute("cy",String(target.endY));particle.element.setAttribute("class","freeze-demo-particle is-vibrating");freezeDone++;updateFreezeProgress();};
+        if(!particle)return;particle.isFreezing=true;particle.element.setAttribute("class","freeze-demo-particle is-liquid");
+        const finish=()=>{if(runId!==freezeRunId)return;particle.x=target.endX;particle.y=target.endY;particle.vx=0;particle.vy=0;particle.frozen=true;particle.isFreezing=false;particle.element.setAttribute("cx",String(target.endX));particle.element.setAttribute("cy",String(target.endY));particle.element.setAttribute("class","freeze-demo-particle is-solid is-vibrating");freezeDone++;updateFreezeProgress();};
         if(reduceMotion){finish();}
         else{
           const animation=particle.element.animate([{transform:"translate(0px,0px)"},{transform:`translate(${(target.endX-particle.x)*scale}px,${(target.endY-particle.y)*scale}px)`}],{duration:900,easing:"ease-in-out",fill:"forwards"});
@@ -1433,7 +1437,7 @@
       freezeParticles.forEach(p=>{
         if(state==="solid"){p.vx=0;p.vy=0;}
         else if(!continueVelocity){if(state==="gas"){const angle=Math.random()*Math.PI*2,speed=44+Math.random()*34;p.vx=Math.cos(angle)*speed;p.vy=Math.sin(angle)*speed;}else{p.vx=(Math.random()-.5)*44;p.vy=(Math.random()-.5)*38;}}
-        p.element.setAttribute("class",`freeze-demo-particle${state==="solid"?" is-vibrating":""}`);
+        p.element.setAttribute("class",`freeze-demo-particle is-${state}${state==="solid"?" is-vibrating":""}`);
       });
       phaseDemoLastFrame=0;phaseDemoFrame=requestAnimationFrame(now=>animatePhaseDemoMotion(now,runId));
     }
@@ -1455,7 +1459,7 @@
         }
         if(transition.key==="sublimation"){
           if(local<=0)return;
-          if(!p.isGasReleased){p.isGasReleased=true;p.element.setAttribute("class","freeze-demo-particle");}
+          if(!p.isGasReleased){p.isGasReleased=true;p.element.setAttribute("class","freeze-demo-particle is-gas");}
           p.x+=p.vx*dt;p.y+=p.vy*dt;
           if(p.x<17){p.x=17;p.vx=Math.abs(p.vx);}if(p.x>343){p.x=343;p.vx=-Math.abs(p.vx);}
           if(p.y<38){p.y=38;p.vy=Math.abs(p.vy);}if(p.y>116){p.y=116;p.vy=-Math.abs(p.vy);}
@@ -1468,7 +1472,7 @@
             if(p.y<81){p.y=81;p.vy=Math.abs(p.vy);}if(p.y>116){p.y=116;p.vy=-Math.abs(p.vy);}
             p.startX=p.x;p.startY=p.y;p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));return;
           }
-          if(!p.isVaporized){p.isVaporized=true;p.vx=(Math.random()-.5)*90;p.vy=-(15+Math.random()*75);}
+          if(!p.isVaporized){p.isVaporized=true;p.vx=(Math.random()-.5)*90;p.vy=-(15+Math.random()*75);p.element.setAttribute("class","freeze-demo-particle is-gas");}
           p.x+=p.vx*dt;p.y+=p.vy*dt;
           if(p.x<17){p.x=17;p.vx=Math.abs(p.vx);}if(p.x>343){p.x=343;p.vx=-Math.abs(p.vx);}
           if(p.y<38){p.y=38;p.vy=Math.abs(p.vy);}if(p.y>116){p.y=116;p.vy=-Math.abs(p.vy);}
@@ -1500,8 +1504,9 @@
         const eased=local*local*(3-2*local),curve=Math.sin(Math.PI*local),seconds=transition.duration/1000,drift=local*local*local-local*local;
         p.x=p.startX+(p.targetX-p.startX)*eased+p.curveX*curve+p.finalVx*seconds*drift;
         p.y=shiftedStartY+(p.targetY-shiftedStartY)*eased+p.curveY*curve+p.finalVy*seconds*drift;
-        if(transition.key==="melt"&&local>=1){p.melted=true;p.vx=(Math.random()-.5)*38;p.vy=(Math.random()-.5)*14;p.element.setAttribute("class","freeze-demo-particle is-melted");}
-        if(transition.key==="condensation"&&local>=1&&!p.isCondensed){p.isCondensed=true;p.vx=(Math.random()-.5)*44;p.vy=(Math.random()-.5)*14;p.element.setAttribute("class","freeze-demo-particle is-condensed");}
+        if(transition.key==="melt"&&local>=1){p.melted=true;p.vx=(Math.random()-.5)*38;p.vy=(Math.random()-.5)*14;p.element.setAttribute("class","freeze-demo-particle is-liquid");}
+        if(transition.key==="condensation"&&local>=1&&!p.isCondensed){p.isCondensed=true;p.vx=(Math.random()-.5)*44;p.vy=(Math.random()-.5)*14;p.element.setAttribute("class","freeze-demo-particle is-liquid");}
+        if(transition.to==="solid"&&local>=1)p.element.setAttribute("class","freeze-demo-particle is-solid is-vibrating");
         p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
       });
       if(transition.key==="vaporization"){
@@ -1599,7 +1604,7 @@
         p.curveX=Math.cos(angle)*bend;p.curveY=Math.sin(angle)*bend;
         p.finalVx=process.to==="solid"?0:(Math.random()-.5)*(process.to==="gas"?88:34);
         p.finalVy=process.to==="solid"?0:(Math.random()-.5)*(process.to==="gas"?88:26);
-        p.element.setAttribute("class",`freeze-demo-particle${key==="sublimation"?" is-vibrating":""}`);p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
+        p.element.setAttribute("class",`freeze-demo-particle is-${process.from}${key==="sublimation"?" is-vibrating":""}`);p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
       });
       phaseDemoMotionState="";phaseDemoLastFrame=0;
       if(reduceMotion&&key!=="melt"&&key!=="deposition"&&key!=="sublimation"&&key!=="vaporization"&&key!=="condensation"){
