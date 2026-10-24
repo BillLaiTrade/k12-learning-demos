@@ -174,7 +174,7 @@ if (canvas) {
     heightOutput.classList.toggle('is-standard', isStandardHeight);
     const plateNames = ['小孔板 1', '中間板', '小孔板 3'];
     plateButtons.forEach((button, index) => {
-      const letsLightThrough = Math.abs(plateStates[index].height) <= 0.05;
+      const letsLightThrough = Math.abs(plateStates[index].height) <= 0.02;
       button.classList.toggle('is-transmitting', letsLightThrough);
       button.setAttribute('aria-label', `${plateNames[index]}，${letsLightThrough ? '小孔對準，光可通過' : '小孔偏移，光受阻'}`);
       button.title = letsLightThrough ? '小孔對準光路' : '小孔偏離光路';
