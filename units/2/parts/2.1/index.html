@@ -454,8 +454,9 @@
       const pulseStatuses = [...document.querySelectorAll("[data-pulse-status]")];
       const waveModeButtons = [...document.querySelectorAll("[data-wave-mode]")];
       const waveCaption = document.querySelector("[data-wave-caption]");
-      let pulsePlaying = !reducedMotion;
-      let pulseMode = "continuous";
+      let pulsePlaying = false;
+      let pulseMode = "single";
+      let singleWaveStarted = false;
       let pulseTime = 0;
       let previousTime = 0;
       let pulseFrame = null;
@@ -466,7 +467,7 @@
         const baseline = 142;
         const single = pulseMode === "single" && svg.closest("#card-01");
         const pulseCenter = 64 + time * 150;
-        const shapeAt = x => single ? (singleWaveFinished ? 0 : 72*Math.exp(-0.5*((x-pulseCenter)/32)**2)) : waveAt(x,(time*132)%232);
+        const shapeAt = x => single ? ((!singleWaveStarted||singleWaveFinished) ? 0 : 72*Math.exp(-0.5*((x-pulseCenter)/32)**2)) : waveAt(x,(time*132)%232);
         let path = `M 38 ${baseline-shapeAt(38)}`;
         for (let x=44;x<=722;x+=6) path += ` L ${x} ${baseline-shapeAt(x)}`;
         const wave = svg.querySelector(".pulse-path");
@@ -476,12 +477,12 @@
         pulseToggles.forEach(button => { button.textContent = pulsePlaying ? "暫停動畫" : "播放動畫"; button.setAttribute("aria-pressed",String(pulsePlaying)); });
         waveModeButtons.forEach(button => button.setAttribute("aria-pressed",String(button.dataset.waveMode===pulseMode)));
         if(waveCaption) waveCaption.textContent=pulseMode==="single"?"單次波：波源只擾動一次，形成一個波形向右傳播。":"連續波：波源持續振動，繩上的波形持續向右傳播。";
-        pulseStatuses.forEach(note => { note.textContent=pulseMode==="single"?(pulsePlaying?"單次波向右傳播；傳過繩子後會停止。":"單次波已暫停；可重新播放觀察一次擾動的傳播。"):(pulsePlaying?"連續波播放中；可切換成單次波觀察只擾動一次的傳播。":"連續波已暫停；按播放即可繼續觀察。"); });
+        pulseStatuses.forEach(note => { note.textContent=pulseMode==="single"?(pulsePlaying?"單次波向右傳播；傳過繩子後會停止。":singleWaveStarted?"單次波已暫停；可重新播放觀察一次擾動的傳播。":"初始狀態：繩子維持平衡；播放後可觀察一次擾動如何傳播。"):(pulsePlaying?"連續波播放中；可切換成單次波觀察只擾動一次的傳播。":"連續波已暫停；按播放即可繼續觀察。"); });
       };
       const schedulePulse = () => { if(pulsePlaying&&pulseFrame===null) pulseFrame=window.requestAnimationFrame(animatePulse); };
-      waveModeButtons.forEach(button=>button.addEventListener("click",()=>{pulseMode=button.dataset.waveMode;pulseTime=0;singleWaveFinished=false;pulsePlaying=true;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();schedulePulse();}));
-      pulseToggles.forEach(button => button.addEventListener("click",() => { pulsePlaying = !pulsePlaying; updatePulseControls(); schedulePulse(); }));
-      pulseResets.forEach(button => button.addEventListener("click",() => { pulseTime=0;singleWaveFinished=false;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));pulsePlaying=!reducedMotion;updatePulseControls();schedulePulse(); }));
+      waveModeButtons.forEach(button=>button.addEventListener("click",()=>{pulseMode=button.dataset.waveMode;pulseTime=0;singleWaveStarted=false;singleWaveFinished=false;pulsePlaying=false;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();}));
+      pulseToggles.forEach(button => button.addEventListener("click",() => { if(!pulsePlaying&&pulseMode==="single"&&(!singleWaveStarted||singleWaveFinished)){pulseTime=0;singleWaveFinished=false;singleWaveStarted=true;previousTime=0;} pulsePlaying = !pulsePlaying; updatePulseControls(); schedulePulse(); }));
+      pulseResets.forEach(button => button.addEventListener("click",() => { pulseTime=0;singleWaveStarted=true;singleWaveFinished=false;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));pulsePlaying=true;updatePulseControls();schedulePulse(); }));
       const animatePulse = time => {
         if (previousTime) { const delta=Math.min((time-previousTime)/1000,.05); if(pulsePlaying) pulseTime+=delta; }
         previousTime=time;
