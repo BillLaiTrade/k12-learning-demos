@@ -467,13 +467,11 @@
       const singlePulseSpeed=150;
       const singlePulseAmplitude=48;
       const singlePulseSource=38;
-      const smoothstep=value=>{const t=Math.max(0,Math.min(1,value));return t*t*(3-2*t);};
       const singlePulseAt=(x,eventStart,time)=>{
         if(x<singlePulseSource)return 0;
         const phase=(time-eventStart-(x-singlePulseSource)/singlePulseSpeed)/singlePulseDuration;
         if(phase<=0||phase>=1)return 0;
-        const envelope=smoothstep(phase/0.1)*smoothstep((1-phase)/0.1);
-        return singlePulseAmplitude*Math.sin(2*Math.PI*phase)*envelope;
+        return singlePulseAmplitude*Math.sin(2*Math.PI*phase);
       };
       const renderRopeTexture = ropePath => {
         const fallback=ropePath.nextElementSibling;
