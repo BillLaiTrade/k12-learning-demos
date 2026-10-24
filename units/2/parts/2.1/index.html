@@ -183,7 +183,7 @@
               </svg>
               <figcaption data-wave-caption>單次波：波源只擾動一次，形成一個波形向右傳播。</figcaption>
             </figure>
-            <div class="control-panel"><div class="controls" role="group" aria-label="繩波播放控制"><button class="secondary" type="button" data-wave-single>單次播</button><button class="secondary" type="button" data-wave-continuous aria-pressed="false">連續播</button><span class="live-note" data-pulse-status aria-live="polite">初始狀態：繩子維持平衡。可播放一次波形，或持續振動。</span></div></div>
+            <div class="control-panel"><div class="controls" role="group" aria-label="繩波播放控制"><button class="secondary" type="button" data-wave-single>單次波</button><button class="secondary" type="button" data-wave-continuous aria-pressed="false">連續波</button><span class="live-note" data-pulse-status aria-live="polite">初始狀態：繩子維持平衡。可播放一次波形，或持續振動。</span></div></div>
           </div>
         </section>
 
@@ -479,10 +479,10 @@
         svg.querySelectorAll(".pulse-path").forEach(wave=>wave.setAttribute("d",path));
       };
       const updatePulseControls = () => {
-        continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續播";
+        continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續波";
         continuousButton.setAttribute("aria-pressed",String(pulseMode==="continuous"&&pulsePlaying));
         if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的波形持續向右傳播。":"單次波：波源只擾動一次，形成一個波形向右傳播。";
-        pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?"單次波正在向右傳播。":"單次波已傳過；按「單次播」可再看一次。"):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續播」可繼續。");});
+        pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?"單次波正在向右傳播。":"單次波已傳過；按「單次播」可再看一次。"):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續波」可繼續。");});
       };
       const schedulePulse = () => { if(pulsePlaying&&pulseFrame===null) pulseFrame=window.requestAnimationFrame(animatePulse); };
       singleButton.addEventListener("click",()=>{pulseMode="single";pulseTime=0;singleWaveStarted=true;singleWaveFinished=false;pulsePlaying=true;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();schedulePulse();});
