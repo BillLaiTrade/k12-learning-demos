@@ -108,7 +108,6 @@ export function mountDisplacementExperiment() {
       ? [
           { offset: 0, left: startLeft + 'px', top: startTop + 'px', transform: 'rotate(0deg)', easing: 'cubic-bezier(.45,0,.95,.5)' },
           { offset: 0.7, left: startLeft + 'px', top: Math.max(startTop, entryTop) + 'px', transform: 'rotate(3deg)', easing: 'cubic-bezier(.2,.7,.35,1)' },
-          { offset: 0.82, left: startLeft + 'px', top: Math.max(startTop, entryTop) - 7 + 'px', transform: 'rotate(-2deg)', easing: 'cubic-bezier(.3,0,.8,.4)' },
           { offset: 1, left: targetLeft + 'px', top: targetTop + 'px', transform: 'rotate(0deg)' }
         ]
       : [
@@ -116,7 +115,6 @@ export function mountDisplacementExperiment() {
           { offset: 0.42, left: apexLeft + 'px', top: apexTop + 'px', transform: 'rotate(6deg)', easing: 'cubic-bezier(.48,0,.8,.45)' },
           { offset: 0.58, left: entryLeft + 'px', top: Math.min(entryTop, apexTop + 8) + 'px', transform: 'rotate(10deg)', easing: 'cubic-bezier(.1,.65,.5,1)' },
           { offset: 0.74, left: entryLeft + 'px', top: entryTop + 'px', transform: 'rotate(14deg)', easing: 'cubic-bezier(.1,.65,.5,1)' },
-          { offset: 0.82, left: entryLeft + 2 + 'px', top: Math.max(0, entryTop - 8) + 'px', transform: 'rotate(8deg)', easing: 'cubic-bezier(.3,0,.8,.4)' },
           { offset: 1, left: targetLeft + 'px', top: targetTop + 'px', transform: 'rotate(0deg)' }
         ];
     const duration = dropFromAbove ? 760 : 980;
