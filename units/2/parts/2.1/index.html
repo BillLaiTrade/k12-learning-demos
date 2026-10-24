@@ -183,7 +183,7 @@
               </svg>
               <figcaption data-wave-caption>單次波：波源只擾動一次，形成一個波形向右傳播。</figcaption>
             </figure>
-            <div class="control-panel"><div class="controls" role="group" aria-label="選擇繩波播放方式"><button class="secondary" type="button" data-wave-mode="continuous" aria-pressed="false">連續波</button><button class="secondary" type="button" data-wave-mode="single" aria-pressed="true">單次波</button><button class="secondary" type="button" data-pulse-toggle aria-pressed="false">播放動畫</button><button class="secondary" type="button" data-pulse-reset>重新播放</button><span class="live-note" data-pulse-status aria-live="polite">初始狀態：繩子維持平衡；播放後可觀察一次擾動如何傳播。</span></div></div>
+            <div class="control-panel"><div class="controls" role="group" aria-label="繩波播放控制"><button class="secondary" type="button" data-wave-single>單次播</button><button class="secondary" type="button" data-wave-continuous aria-pressed="false">連續播</button><span class="live-note" data-pulse-status aria-live="polite">初始狀態：繩子維持平衡。可播放一次波形，或持續振動。</span></div></div>
           </div>
         </section>
 
@@ -454,13 +454,12 @@
     (() => {
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const pulseSvgs = [...document.querySelectorAll(".rope-wave")];
-      const pulseToggles = [...document.querySelectorAll("[data-pulse-toggle]")];
-      const pulseResets = [...document.querySelectorAll("[data-pulse-reset]")];
       const pulseStatuses = [...document.querySelectorAll("[data-pulse-status]")];
-      const waveModeButtons = [...document.querySelectorAll("[data-wave-mode]")];
+      const singleButton = document.querySelector("[data-wave-single]");
+      const continuousButton = document.querySelector("[data-wave-continuous]");
       const waveCaption = document.querySelector("[data-wave-caption]");
       let pulsePlaying = false;
-      let pulseMode = "single";
+      let pulseMode = "idle";
       let singleWaveStarted = false;
       let pulseTime = 0;
       let previousTime = 0;
@@ -470,23 +469,24 @@
       let singleWaveFinished = false;
       const renderPulse = (svg,time) => {
         const baseline = 142;
-        const single = pulseMode === "single" && svg.closest("#card-01");
+        const firstCard = Boolean(svg.closest("#card-01"));
+        const single = pulseMode === "single" && firstCard;
+        const initial = pulseMode === "idle" && firstCard;
         const pulseCenter = 64 + time * 150;
-        const shapeAt = x => single ? ((!singleWaveStarted||singleWaveFinished) ? 0 : 72*Math.exp(-0.5*((x-pulseCenter)/32)**2)) : waveAt(x,(time*132)%232);
+        const shapeAt = x => initial ? 0 : single ? ((!singleWaveStarted||singleWaveFinished) ? 0 : 72*Math.exp(-0.5*((x-pulseCenter)/32)**2)) : waveAt(x,(time*132)%232);
         let path = `M 38 ${baseline-shapeAt(38)}`;
         for (let x=44;x<=722;x+=6) path += ` L ${x} ${baseline-shapeAt(x)}`;
         svg.querySelectorAll(".pulse-path").forEach(wave=>wave.setAttribute("d",path));
       };
       const updatePulseControls = () => {
-        pulseToggles.forEach(button => { button.textContent = pulsePlaying ? "暫停動畫" : "播放動畫"; button.setAttribute("aria-pressed",String(pulsePlaying)); });
-        waveModeButtons.forEach(button => button.setAttribute("aria-pressed",String(button.dataset.waveMode===pulseMode)));
-        if(waveCaption) waveCaption.textContent=pulseMode==="single"?"單次波：波源只擾動一次，形成一個波形向右傳播。":"連續波：波源持續振動，繩上的波形持續向右傳播。";
-        pulseStatuses.forEach(note => { note.textContent=pulseMode==="single"?(pulsePlaying?"單次波向右傳播；傳過繩子後會停止。":singleWaveStarted?"單次波已暫停；可重新播放觀察一次擾動的傳播。":"初始狀態：繩子維持平衡；播放後可觀察一次擾動如何傳播。"):(pulsePlaying?"連續波播放中；可切換成單次波觀察只擾動一次的傳播。":"連續波已暫停；按播放即可繼續觀察。"); });
+        continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續播";
+        continuousButton.setAttribute("aria-pressed",String(pulseMode==="continuous"&&pulsePlaying));
+        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的波形持續向右傳播。":"單次波：波源只擾動一次，形成一個波形向右傳播。";
+        pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?"單次波正在向右傳播。":"單次波已傳過；按「單次播」可再看一次。"):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續播」可繼續。");});
       };
       const schedulePulse = () => { if(pulsePlaying&&pulseFrame===null) pulseFrame=window.requestAnimationFrame(animatePulse); };
-      waveModeButtons.forEach(button=>button.addEventListener("click",()=>{pulseMode=button.dataset.waveMode;pulseTime=0;singleWaveStarted=false;singleWaveFinished=false;pulsePlaying=false;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();}));
-      pulseToggles.forEach(button => button.addEventListener("click",() => { if(!pulsePlaying&&pulseMode==="single"&&(!singleWaveStarted||singleWaveFinished)){pulseTime=0;singleWaveFinished=false;singleWaveStarted=true;previousTime=0;} pulsePlaying = !pulsePlaying; updatePulseControls(); schedulePulse(); }));
-      pulseResets.forEach(button => button.addEventListener("click",() => { pulseTime=0;singleWaveStarted=true;singleWaveFinished=false;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));pulsePlaying=true;updatePulseControls();schedulePulse(); }));
+      singleButton.addEventListener("click",()=>{pulseMode="single";pulseTime=0;singleWaveStarted=true;singleWaveFinished=false;pulsePlaying=true;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();schedulePulse();});
+      continuousButton.addEventListener("click",()=>{if(pulseMode==="continuous"&&pulsePlaying){pulsePlaying=false;}else{if(pulseMode!=="continuous"){pulseMode="continuous";pulseTime=0;}pulsePlaying=true;}singleWaveFinished=false;previousTime=0;updatePulseControls();schedulePulse();});
       const animatePulse = time => {
         if (previousTime) { const delta=Math.min((time-previousTime)/1000,.05); if(pulsePlaying) pulseTime+=delta; }
         previousTime=time;
