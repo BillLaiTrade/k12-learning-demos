@@ -55,9 +55,8 @@
     .visual text { fill:#314640; font-family:inherit; font-size:15px; }
     .visual .small-label { fill:#59696b; font-size:12px; }
     .visual .wave-line { fill:none; stroke:#176b53; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
-    .visual .rope-underlay, .visual .rope-texture { fill:none; stroke-width:22; stroke-linecap:round; stroke-linejoin:round; }
-    .visual .rope-underlay { stroke:#d4ad7b; }
-    .visual .rope-texture { pointer-events:none; }
+    .visual .rope-underlay { fill:none; stroke:#d4ad7b; stroke-width:22; stroke-linecap:round; stroke-linejoin:round; }
+    .visual .rope-texture-layer { pointer-events:none; }
     .visual .equilibrium { stroke:#9aaca1; stroke-width:1.5; stroke-dasharray:7 7; }
     .visual .motion-arrow { fill:none; stroke:#176b53; stroke-width:2.5; stroke-linecap:round; }
     .visual .measure { fill:none; stroke:#bc612b; stroke-width:2; stroke-linecap:round; }
@@ -171,9 +170,9 @@
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>持續振動，波就接連傳出去；只擾動一次，也會傳出一個單次波。</p></div>
             <p>波是振動或擾動的傳播，能把能量由一處傳到另一處。繩子一端振動後，變化沿著繩子傳開。</p><figure class="visual">
               <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="繩波由左側波源向右傳播；可切換連續波與波源只擾動一次形成的單次波">
-                <defs><pattern id="rope-texture-card-1" patternUnits="userSpaceOnUse" width="272" height="22"><image href="assets/wave-rope-strip.png" width="272" height="22" preserveAspectRatio="none"/></pattern><marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
+                <defs><marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
-                <path class="pulse-path rope-underlay" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><path class="pulse-path rope-texture" stroke="url(#rope-texture-card-1)" aria-hidden="true" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/>
+                <path class="pulse-path rope-underlay" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <path d="M64 116V87M58 94L64 86L70 94M64 139V168M58 161L64 169L70 161" fill="none" stroke="#748b7e" stroke-width="2"/>
                 <text x="84" y="45">波源上下振動</text>
                 <path d="M130 228H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
@@ -193,9 +192,9 @@
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先找繩子原本的位置，再認出最高處、最低處和波形傳播方向。</p></div>
             <p>沿用剛才的繩波，將某一時刻的形狀畫成波形圖。繩子是這個例子中的介質；沒有波通過時，繩子所在的位置稱為平衡位置。圖上的最高處叫波峰，最低處叫波谷；箭頭表示波形傳播方向。這些名稱幫助我們描述波形上的位置，不是波由哪些實體零件組成。</p><figure class="visual">
               <svg class="rope-wave" data-static-rope viewBox="0 0 720 280" role="img" aria-label="同一條編織繩的波形示意圖，標示平衡位置、波峰、波谷與波形傳播方向">
-                <defs><pattern id="rope-texture-vocab" patternUnits="userSpaceOnUse" width="272" height="22"><image href="assets/wave-rope-strip.png" width="272" height="22" preserveAspectRatio="none"/></pattern><marker id="wave-vocab-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
+                <defs><marker id="wave-vocab-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M48 140H672" class="equilibrium"/>
-                <path class="rope-underlay" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><path class="rope-texture" stroke="url(#rope-texture-vocab)" aria-hidden="true" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/>
+                <path class="rope-underlay" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <circle cx="150" cy="66" r="6" fill="#176b53"/><circle cx="266" cy="214" r="6" fill="#176b53"/>
                 <text x="150" y="40" text-anchor="middle">波峰</text><text x="266" y="248" text-anchor="middle">波谷</text>
                 <path d="M520 117V136" stroke="#748b7e" stroke-width="1.5"/><rect x="472" y="91" width="98" height="25" rx="8" fill="#fffefa" stroke="#d7e1dd"/><text x="521" y="108" text-anchor="middle">平衡位置</text>
@@ -216,9 +215,9 @@
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>把波峰的位置和橘色繩點分開看：繩點在原處附近上下振動，波形和能量往右傳。</p></div>
             <p>波峰經過記號時，記號附近的繩段上下振動；波峰移開後，繩段回到原位置附近，沒有跟著波峰一路向右跑。繩上的振動把能量傳到較遠的位置，因此波向前傳，介質卻沒有整段隨波形前進。</p><figure class="visual">
               <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="三個連續時刻的繩波位置；波峰往右移，固定繩點只上下振動">
-                <defs><pattern id="rope-texture-card-3" patternUnits="userSpaceOnUse" width="272" height="22"><image href="assets/wave-rope-strip.png" width="272" height="22" preserveAspectRatio="none"/></pattern><marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
+                <defs><marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
-                <path class="pulse-path rope-underlay" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><path class="pulse-path rope-texture" stroke="url(#rope-texture-card-3)" aria-hidden="true" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/>
+                <path class="pulse-path rope-underlay" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <path d="M118 228H565" class="motion-arrow" marker-end="url(#arrow-rope-2)"/>
                 <text x="341" y="253" text-anchor="middle">波形與能量向右傳</text>
                 <path d="M350 64V178" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
@@ -474,9 +473,27 @@
         const pulseCenter = 64 + time * 150;
         const shapeAt = x => initial ? 0 : single ? ((!singleWaveStarted||singleWaveFinished) ? 0 : 72*Math.exp(-0.5*((x-pulseCenter)/32)**2)) : waveAt(x,(time*132)%232);
         const end = svg.viewBox.baseVal.width - 38;
-        let path = `M 38 ${baseline-shapeAt(38)}`;
-        for (let x=41;x<=end;x+=3) path += ` L ${x} ${baseline-shapeAt(x)}`;
-        svg.querySelectorAll(".rope-underlay, .rope-texture").forEach(rope=>rope.setAttribute("d",path));
+        const points=[];
+        for(let x=38;x<=end;x+=3) points.push({x,y:baseline-shapeAt(x)});
+        if(points[points.length-1].x<end) points.push({x:end,y:baseline-shapeAt(end)});
+        const path=points.map((point,index)=>`${index===0?"M":"L"} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(" ");
+        svg.querySelectorAll(".rope-underlay").forEach(rope=>rope.setAttribute("d",path));
+        const layer=svg.querySelector(".rope-texture-layer");
+        if(layer){
+          layer.replaceChildren();
+          const segments=[];let total=0;
+          for(let i=0;i<points.length-1;i++){const a=points[i],b=points[i+1],length=Math.hypot(b.x-a.x,b.y-a.y);segments.push({a,b,length,distance:total});total+=length;}
+          const materialWidth=22*2172/176,materialSourceWidth=2172;
+          for(const segment of segments){
+            const {a,b,length,distance}=segment,sourceX=(distance%materialWidth)/materialWidth*materialSourceWidth,sourceWidth=length/materialWidth*materialSourceWidth,width=length+0.35;
+            const tile=document.createElementNS(ns,"svg");
+            tile.setAttribute("x",String(-width/2));tile.setAttribute("y","-11");tile.setAttribute("width",String(width));tile.setAttribute("height","22");
+            tile.setAttribute("viewBox",`${sourceX} 0 ${sourceWidth} 176`);tile.setAttribute("preserveAspectRatio","none");
+            tile.setAttribute("transform",`translate(${(a.x+b.x)/2} ${(a.y+b.y)/2}) rotate(${Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI})`);
+            for(const offset of [0,2172]){const image=document.createElementNS(ns,"image");image.setAttribute("href","assets/wave-rope-strip.png");image.setAttribute("x",String(offset));image.setAttribute("width","2172");image.setAttribute("height","176");tile.append(image);}
+            layer.append(tile);
+          }
+        }
       };
       const updatePulseControls = () => {
         continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續波";
