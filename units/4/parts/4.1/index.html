@@ -330,43 +330,55 @@
     .phase-solid-overview[hidden] { display:none; }
     .phase-solid-overview.is-process-view .phase-solid-overview-intro,.phase-solid-overview.is-process-view .phase-solid-process { display:none; }
     .phase-solid-overview.is-process-view { grid-column:1/-1; }
+    .phase-solid-overview.is-process-view .phase-solid-stage { min-height:0; }
+    .phase-solid-overview.is-process-view .phase-solid-flow { display:none; }
     .phase-solid-overview-intro { margin-bottom:12px; }
     .phase-solid-overview-intro h3 { margin:0 0 4px; color:#244b3d; font-size:1.03rem; }
     .phase-solid-overview-intro p { margin:0; color:#52635a; font-size:.84rem; }
-    .phase-solid-stage { display:grid; grid-template-columns:minmax(160px,1fr) minmax(230px,1.3fr) minmax(160px,1fr); grid-template-rows:1fr 1fr; gap:9px 12px; align-items:center; padding:12px; border:1px solid #d7e2d7; border-radius:16px; background:linear-gradient(145deg,#f7f8f1,#edf3eb); }
-    .phase-solid-process { min-height:86px; width:100%; padding:10px 12px; border:1px solid #b9d0c2; border-radius:14px; background:#fffefa; color:#253e38; text-align:left; cursor:pointer; box-shadow:0 3px 9px #263b3014; transition:transform .16s,box-shadow .16s; }
+    .phase-solid-stage { position:relative; display:grid; grid-template-columns:minmax(145px,1fr) minmax(300px,1.2fr) minmax(145px,1fr); grid-template-rows:1fr 1fr; gap:12px; align-items:center; min-height:430px; padding:16px; border:1px solid #d7e2d7; border-radius:16px; background:linear-gradient(145deg,#f7f8f1,#edf3eb); }
+    .phase-solid-flow { position:absolute; z-index:0; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
+    .phase-solid-flow path { fill:none; stroke-width:2.4; stroke-dasharray:1 11; stroke-linecap:round; animation:phase-solid-flow 2.6s linear infinite; }
+    .phase-solid-flow .incoming { stroke:#438bb8; marker-end:url(#phase-flow-blue-arrow); }
+    .phase-solid-flow .outgoing { stroke:#cf684f; marker-end:url(#phase-flow-red-arrow); animation-direction:reverse; }
+    @keyframes phase-solid-flow { to { stroke-dashoffset:-48; } }
+    .phase-solid-process { position:relative; z-index:1; min-height:120px; width:100%; padding:14px 16px; border:1px solid #b9d0c2; border-radius:14px; background:#fffefa; color:#253e38; text-align:left; cursor:pointer; box-shadow:0 3px 9px #263b3014; transition:transform .16s,box-shadow .16s; }
     .phase-solid-process:hover,.phase-solid-process:focus-visible { transform:translateY(-2px); box-shadow:0 6px 14px #263b3022; outline:3px solid #176b5330; }
     .phase-solid-process[aria-pressed="true"] { box-shadow:0 0 0 2px #176b5340; }
-    .phase-solid-process[data-energy="heat"] { border-color:#d9aa9c; }
-    .phase-solid-process[data-energy="cool"] { border-color:#a8c5cf; }
-    .phase-solid-process strong { display:block; margin-bottom:3px; font-size:.97rem; }
-    .phase-solid-process .phase-solid-direction { display:block; color:#536b62; font-size:.75rem; }
-    .phase-solid-process .phase-solid-energy { display:inline-block; margin-top:5px; padding:2px 8px; border-radius:999px; background:#eaf2f4; color:#39788f; font-size:.68rem; }
+    .phase-solid-process[data-energy="heat"] { border-color:#d46b50; border-left:6px solid #cf684f; }
+    .phase-solid-process[data-energy="cool"] { border-color:#438bb8; border-left:6px solid #438bb8; }
+    .phase-solid-process strong { display:block; margin-bottom:4px; font-size:1.08rem; }
+    .phase-solid-process .phase-solid-direction { display:block; color:#536b62; font-size:.86rem; }
+    .phase-solid-process .phase-solid-energy { display:inline-block; margin-top:8px; padding:3px 10px; border-radius:999px; background:#eaf2f4; color:#39788f; font-size:.76rem; }
+    .phase-solid-process .phase-solid-open { position:absolute; top:13px; right:13px; color:#6b7b71; font-size:.74rem; }
     .phase-solid-process[data-energy="heat"] .phase-solid-energy { background:#faeee9; color:#b4543c; }
     #solid-freeze-button { grid-column:1; grid-row:1; }
     #solid-deposition-button { grid-column:3; grid-row:1; }
     #solid-melt-button { grid-column:1; grid-row:2; }
     #solid-sublimation-button { grid-column:3; grid-row:2; }
-    .phase-solid-stage .freeze-demo { grid-column:2; grid-row:1/span 2; width:100%; min-width:0; margin:0; padding:6px; border:0; background:transparent; }
+    .phase-solid-stage .freeze-demo { position:relative; z-index:1; grid-column:2; grid-row:1/span 2; width:100%; min-width:0; margin:0; padding:6px; border:0; background:transparent; }
     .phase-detail.is-solid-overview .freeze-demo-head { display:none; }
     .phase-detail.is-solid-overview .freeze-demo-scene { background:transparent; }
     .phase-detail.is-solid-overview .freeze-demo-scene #freeze-demo-vessel { display:none; }
     .phase-detail.is-solid-overview .freeze-demo-scene #phase-demo-source,.phase-detail.is-solid-overview .freeze-demo-scene #phase-demo-arrows { display:none; }
     .phase-detail.is-solid-overview .freeze-demo-status { text-align:center; }
-    .phase-detail.is-solid-overview .freeze-demo-caption { text-align:center; }
+    .phase-detail.is-solid-overview .freeze-demo-caption { display:none; }
+    .phase-detail.is-solid-overview .freeze-demo-status { margin:2px 0 0; color:#52635a; font-size:.78rem; font-weight:700; }
+    .phase-solid-overview-hint { margin:10px 2px 0; color:#68776f; font-size:.82rem; text-align:center; }
     .phase-solid-overview.is-process-view .phase-solid-stage { display:block; padding:10px; }
     .phase-solid-overview.is-process-view .phase-solid-stage .phase-solid-process { display:none; }
     .phase-solid-overview.is-process-view .phase-solid-stage .freeze-demo { max-width:560px; margin:0 auto; padding:10px; border:1px solid #cbded9; background:#fffefa; }
     @media(max-width:680px) {
-      .phase-solid-stage { grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-rows:auto auto auto; gap:8px; padding:9px; }
+      .phase-solid-stage { grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-rows:auto auto auto; gap:8px; min-height:0; padding:9px; }
+      .phase-solid-flow { display:none; }
       #solid-freeze-button { grid-column:1; grid-row:1; }
       #solid-deposition-button { grid-column:2; grid-row:1; }
       #solid-melt-button { grid-column:1; grid-row:3; }
       #solid-sublimation-button { grid-column:2; grid-row:3; }
       .phase-solid-stage .freeze-demo { grid-column:1/span 2; grid-row:2; max-width:460px; justify-self:center; }
-      .phase-solid-process { min-height:76px; padding:8px; }
+      .phase-solid-process { min-height:92px; padding:9px; }
       .phase-solid-process strong { font-size:.88rem; }
-      .phase-solid-process .phase-solid-direction { font-size:.66rem; }
+      .phase-solid-process .phase-solid-open { top:9px; right:8px; font-size:.61rem; }
+      .phase-solid-process .phase-solid-direction { font-size:.7rem; }
       .phase-solid-overview-intro p { font-size:.78rem; }
     }
     .phase-detail-kicker { margin:0 0 3px; color:#176b53; font-size:.73rem; font-weight:800; letter-spacing:.04em; }
@@ -736,16 +748,18 @@
               <div class="phase-solid-overview" id="phase-solid-overview" hidden>
                 <div class="phase-solid-overview-intro"><p class="phase-detail-kicker">固態・冰｜粒子狀態</p><h3>冰裡的粒子如何排列與運動？</h3><p>水分子緊密、有規律地排列，在固定位置附近微微振動，因此冰有固定形狀。</p></div>
                 <div class="phase-solid-stage">
-                  <button type="button" class="phase-solid-process" id="solid-freeze-button" data-phase-process="freeze" data-energy="cool" aria-label="觀察凝固：液態水變成冰，粒子逐漸加入冰晶"><strong>凝固</strong><span class="phase-solid-direction">液態水 → 冰</span><span class="phase-solid-energy">放熱</span></button>
-                  <button type="button" class="phase-solid-process" id="solid-deposition-button" data-phase-process="deposition" data-energy="cool" aria-label="觀察凝華：水蒸氣變成冰，粒子逐漸加入冰晶"><strong>凝華</strong><span class="phase-solid-direction">水蒸氣 → 冰</span><span class="phase-solid-energy">放熱</span></button>
-                  <button type="button" class="phase-solid-process" id="solid-melt-button" data-phase-process="melt" data-energy="heat" aria-label="觀察融化：冰變成液態水，粒子逐漸離開冰塊"><strong>融化</strong><span class="phase-solid-direction">冰 → 液態水</span><span class="phase-solid-energy">吸熱</span></button>
-                  <button type="button" class="phase-solid-process" id="solid-sublimation-button" data-phase-process="sublimation" data-energy="heat" aria-label="觀察昇華：冰變成水蒸氣，粒子逐漸離開冰塊"><strong>昇華</strong><span class="phase-solid-direction">冰 → 水蒸氣</span><span class="phase-solid-energy">吸熱</span></button>
+                  <svg class="phase-solid-flow" viewBox="0 0 1000 470" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="phase-flow-blue-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#438bb8"/></marker><marker id="phase-flow-red-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#cf684f"/></marker></defs><path class="incoming" d="M280 105 Q345 135 410 214"/><path class="incoming" d="M720 105 Q655 135 590 214"/><path class="outgoing" d="M410 260 Q345 338 280 368"/><path class="outgoing" d="M590 260 Q655 338 720 368"/></svg>
+                  <button type="button" class="phase-solid-process" id="solid-freeze-button" data-phase-process="freeze" data-energy="cool" aria-label="觀察凝固：液態水變成冰，粒子逐漸加入冰晶"><strong>凝固</strong><span class="phase-solid-open">點擊觀察 ›</span><span class="phase-solid-direction">液態水 → 冰</span><span class="phase-solid-energy">放熱</span></button>
+                  <button type="button" class="phase-solid-process" id="solid-deposition-button" data-phase-process="deposition" data-energy="cool" aria-label="觀察凝華：水蒸氣變成冰，粒子逐漸加入冰晶"><strong>凝華</strong><span class="phase-solid-open">點擊觀察 ›</span><span class="phase-solid-direction">水蒸氣 → 冰</span><span class="phase-solid-energy">放熱</span></button>
+                  <button type="button" class="phase-solid-process" id="solid-melt-button" data-phase-process="melt" data-energy="heat" aria-label="觀察融化：冰變成液態水，粒子逐漸離開冰塊"><strong>融化</strong><span class="phase-solid-open">點擊觀察 ›</span><span class="phase-solid-direction">冰 → 液態水</span><span class="phase-solid-energy">吸熱</span></button>
+                  <button type="button" class="phase-solid-process" id="solid-sublimation-button" data-phase-process="sublimation" data-energy="heat" aria-label="觀察昇華：冰變成水蒸氣，粒子逐漸離開冰塊"><strong>昇華</strong><span class="phase-solid-open">點擊觀察 ›</span><span class="phase-solid-direction">冰 → 水蒸氣</span><span class="phase-solid-energy">吸熱</span></button>
                   <div class="freeze-demo" id="freeze-demo" hidden>
                     <div class="freeze-demo-head"><span id="phase-demo-heading">冰中的粒子</span><button type="button" class="freeze-demo-replay" id="freeze-demo-replay">重播</button></div>
-                    <svg class="freeze-demo-scene" viewBox="0 0 360 132" role="img" aria-label="冰塊中的粒子排列與物態變化"><defs><linearGradient id="phase-demo-ice-top" x2="1" y2="1"><stop stop-color="#e0fbff"/><stop offset="1" stop-color="#89d8ee"/></linearGradient><linearGradient id="phase-demo-ice-front" x2="1" y2="1"><stop stop-color="#a6e5f4"/><stop offset="1" stop-color="#67c5e5"/></linearGradient><linearGradient id="phase-demo-ice-side" x2="1" y2="1"><stop stop-color="#77cce8"/><stop offset="1" stop-color="#48a9d4"/></linearGradient><clipPath id="freeze-demo-clip"><rect x="12" y="12" width="336" height="110" rx="2"/></clipPath><clipPath id="phase-demo-ice-clip"><path d="M178 12 248 34V91L182 118 112 91V34Z"/></clipPath></defs><rect id="freeze-demo-vessel" x="10" y="8" width="340" height="114" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><g id="phase-demo-ice"><path d="M112 34 178 12 248 34 182 58Z" fill="url(#phase-demo-ice-top)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M112 34 182 58V118L112 91Z" fill="url(#phase-demo-ice-front)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M182 58 248 34V91L182 118Z" fill="url(#phase-demo-ice-side)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="m124 39 46 16m-45 2 48 16m-48 3 48 17m20-32 41-16m-41 38 42-17" fill="none" stroke="#e6fbff" stroke-width="3.5" opacity=".75"/></g><g id="freeze-demo-particles" clip-path="url(#freeze-demo-clip)"></g><text id="phase-demo-source" x="20" y="25" fill="#43839a" font-size="10" font-weight="700">冷端</text><path id="phase-demo-arrows" d="M110 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4" fill="none" stroke="#43839a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg class="freeze-demo-scene" viewBox="0 0 360 150" role="img" aria-label="冰塊中的粒子排列與物態變化"><defs><linearGradient id="phase-demo-ice-top" x2="1" y2="1"><stop stop-color="#e0fbff"/><stop offset="1" stop-color="#89d8ee"/></linearGradient><linearGradient id="phase-demo-ice-front" x2="1" y2="1"><stop stop-color="#a6e5f4"/><stop offset="1" stop-color="#67c5e5"/></linearGradient><linearGradient id="phase-demo-ice-side" x2="1" y2="1"><stop stop-color="#77cce8"/><stop offset="1" stop-color="#48a9d4"/></linearGradient><clipPath id="freeze-demo-clip"><rect x="12" y="12" width="336" height="136" rx="2"/></clipPath><clipPath id="phase-demo-ice-clip"><path d="M178 12 248 34V91L182 118 112 91V34Z"/></clipPath></defs><rect id="freeze-demo-vessel" x="10" y="8" width="340" height="114" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><g id="phase-demo-ice"><path d="M112 34 178 12 248 34 182 58Z" fill="url(#phase-demo-ice-top)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M112 34 182 58V118L112 91Z" fill="url(#phase-demo-ice-front)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M182 58 248 34V91L182 118Z" fill="url(#phase-demo-ice-side)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="m124 39 46 16m-45 2 48 16m-48 3 48 17m20-32 41-16m-41 38 42-17" fill="none" stroke="#e6fbff" stroke-width="3.5" opacity=".75"/></g><g id="freeze-demo-particles" clip-path="url(#freeze-demo-clip)"></g><text id="phase-demo-source" x="20" y="25" fill="#43839a" font-size="10" font-weight="700">冷端</text><path id="phase-demo-arrows" d="M110 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4" fill="none" stroke="#43839a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     <p class="freeze-demo-status" id="freeze-demo-status" aria-live="polite">固態粒子在固定位置附近微微振動</p><p class="freeze-demo-caption" id="phase-demo-caption">圓點代表水分子；粒子大小與間距並非實際比例。</p>
                   </div>
                 </div>
+                <p class="phase-solid-overview-hint">點選四角變化：粒子逐漸加入冰晶或離開冰塊；尚未轉變的粒子仍持續運動。</p>
               </div>
             </section>
             <p class="phase-science-note">水蒸氣本身無色、看不見；淡藍流線是教材插畫符號，不是水蒸氣真實的顏色或形狀。</p>
@@ -1401,7 +1415,7 @@
       });
     }
     addContinuousPhaseTravelers();
-    const phaseSteps=document.getElementById("phase-detail-steps"),phaseDetail=document.getElementById("phase-detail"),phaseSolidOverview=document.getElementById("phase-solid-overview"),phaseDemoIce=document.getElementById("phase-demo-ice");
+    const phaseSteps=document.getElementById("phase-detail-steps"),phaseDetail=document.getElementById("phase-detail"),phaseSolidOverview=document.getElementById("phase-solid-overview"),phaseDemoIce=document.getElementById("phase-demo-ice"),phaseDemoIceClip=document.querySelector("#phase-demo-ice-clip path");
     const freezeDemo=document.getElementById("freeze-demo"),freezeDemoParticles=document.getElementById("freeze-demo-particles"),freezeParticleAnimations=[];
     const freezeParticleLayout=Array.from({length:48},(_,index)=>{
       const row=Math.floor(index/12),column=index%12;
@@ -1420,7 +1434,7 @@
       if(freezeDone===0)freezeDemoStatus.textContent="液態水：粒子持續移動";
       else if(freezeDone<3)freezeDemoStatus.textContent="冷端開始形成微小晶核";
       else if(freezeDone<freezeParticles.length)freezeDemoStatus.textContent=freezeDone<12?"小晶核逐漸穩定並向周圍擴展":"冰晶向液體內部逐步生長；未凝固區仍在移動";
-      else freezeDemoStatus.textContent="凝固完成：粒子排列有序，仍在位置附近微微振動";
+      else freezeDemoStatus.textContent="凝固完成：粒子有序排列並微微振動";
     }
     function freezeLiquidFrame(now,runId){
       if(runId!==freezeRunId||freezeDemo.hidden)return;
@@ -1447,12 +1461,13 @@
     function stopFreezeDemo(){
       freezeRunId++;cancelAnimationFrame(freezeMotionFrame);freezeMotionFrame=0;freezeTimers.forEach(clearTimeout);freezeTimers.length=0;freezeParticleAnimations.forEach(animation=>animation.cancel());freezeParticleAnimations.length=0;freezeLastFrame=0;
     }
-    function playFreezeDemo(){
+    function playFreezeDemo(fromSolidOverview=false){
       stopFreezeDemo();const runId=freezeRunId;freezeDone=0;
+      setPhaseDemoIceScale(fromSolidOverview);
       phaseDemoIce.style.opacity="0";
       activePhaseProcess="freeze";phaseDemoHeading.textContent="水 → 冰：晶核形成並逐步長大";phaseDemoSource.textContent="放熱／冷端";phaseDemoArrows.setAttribute("d",phaseDemoDefaultArrowPath);phaseDemoArrows.setAttribute("transform","translate(0 50) scale(1 -1)");phaseDemoArrows.setAttribute("stroke","#43839a");phaseDemoCaption.textContent="圓點代表水中的粒子；冷端先形成小晶核，有序排列逐步擴展。此圖不另畫一層水，也不按實際大小比例呈現。";
-      const demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox","0 0 360 132");phaseDemoSource.setAttribute("x","20");phaseDemoSource.setAttribute("y","25");
-      const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches,scale=demoSvg.getBoundingClientRect().width/360;
+      const demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox",fromSolidOverview?"0 0 360 150":"0 0 360 132");phaseDemoSource.setAttribute("x","20");phaseDemoSource.setAttribute("y","25");
+      const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches,scale=demoSvg.getBoundingClientRect().width/360,solidTargets=fromSolidOverview?phaseDemoTargets("solid",true):null;
       freezeParticles.forEach(p=>{
         p.frozen=false;p.isFreezing=false;p.element.setAttribute("class","freeze-demo-particle is-liquid");p.element.style.transform="none";
         p.x=20+Math.random()*320;p.y=66+Math.random()*47;p.vx=(Math.random()-.5)*34;p.vy=(Math.random()-.5)*28;
@@ -1461,13 +1476,13 @@
       updateFreezeProgress();freezeMotionFrame=requestAnimationFrame(now=>freezeLiquidFrame(now,runId));
       const freezeNext=(index)=>{
         if(runId!==freezeRunId||index>=freezeTargets.length)return;
-        const target=freezeTargets[index],available=freezeParticles.filter(p=>!p.frozen&&!p.isFreezing);
-        const particle=available.reduce((best,p)=>Math.hypot(p.x-target.endX,p.y-target.endY)<Math.hypot(best.x-target.endX,best.y-target.endY)?p:best,available[0]);
+        const target=freezeTargets[index],end=solidTargets?solidTargets[index]:{x:target.endX,y:target.endY},available=freezeParticles.filter(p=>!p.frozen&&!p.isFreezing);
+        const particle=available.reduce((best,p)=>Math.hypot(p.x-end.x,p.y-end.y)<Math.hypot(best.x-end.x,best.y-end.y)?p:best,available[0]);
         if(!particle)return;particle.isFreezing=true;particle.element.setAttribute("class","freeze-demo-particle is-liquid");
-        const finish=()=>{if(runId!==freezeRunId)return;particle.x=target.endX;particle.y=target.endY;particle.vx=0;particle.vy=0;particle.frozen=true;particle.isFreezing=false;particle.element.setAttribute("cx",String(target.endX));particle.element.setAttribute("cy",String(target.endY));particle.element.setAttribute("class","freeze-demo-particle is-solid is-vibrating");freezeDone++;updateFreezeProgress();};
+        const finish=()=>{if(runId!==freezeRunId)return;particle.x=end.x;particle.y=end.y;particle.vx=0;particle.vy=0;particle.frozen=true;particle.isFreezing=false;particle.element.setAttribute("cx",String(end.x));particle.element.setAttribute("cy",String(end.y));particle.element.setAttribute("class","freeze-demo-particle is-solid is-vibrating");freezeDone++;updateFreezeProgress();};
         if(reduceMotion){finish();}
         else{
-          const animation=particle.element.animate([{transform:"translate(0px,0px)"},{transform:`translate(${(target.endX-particle.x)*scale}px,${(target.endY-particle.y)*scale}px)`}],{duration:900,easing:"ease-in-out",fill:"forwards"});
+          const animation=particle.element.animate([{transform:"translate(0px,0px)"},{transform:`translate(${(end.x-particle.x)*scale}px,${(end.y-particle.y)*scale}px)`}],{duration:900,easing:"ease-in-out",fill:"forwards"});
           freezeParticleAnimations.push(animation);animation.onfinish=()=>{animation.cancel();finish();};
         }
       };
@@ -1476,6 +1491,10 @@
     const phaseDemoHeading=document.getElementById("phase-demo-heading"),phaseDemoSource=document.getElementById("phase-demo-source"),phaseDemoCaption=document.getElementById("phase-demo-caption"),phaseDemoArrows=document.getElementById("phase-demo-arrows");
     const phaseDemoDefaultArrowPath="M110 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4";
     let phaseDemoRun=0,phaseDemoFrame=0,phaseDemoLastFrame=0,phaseDemoTransition=null,activePhaseProcess="freeze",phaseDemoMotionState="";
+    function setPhaseDemoIceScale(enabled){
+      const transform=enabled?"translate(-45 0) scale(1.25)":"";
+      phaseDemoIce.setAttribute("transform",transform);phaseDemoIceClip.setAttribute("transform",transform);
+    }
     const phaseDemoMotion={
       melt:{from:"solid",to:"liquid",heading:"冰 → 水：吸熱融化",source:"吸熱",status:"底層粒子先融化並開始流動；上層冰晶隨支撐減少逐步下沉"},
       vaporization:{from:"liquid",to:"gas",heading:"水 → 水蒸氣：液面蒸發",source:"吸熱",status:"液面粒子先離開液體並進入氣體運動；其餘液體粒子繼續流動"},
@@ -1483,8 +1502,8 @@
       sublimation:{from:"solid",to:"gas",heading:"冰 → 水蒸氣：吸熱昇華",source:"吸熱",status:"表面粒子先脫離固態排列並在空間移動；尚未昇華的粒子繼續振動"},
       deposition:{from:"gas",to:"solid",heading:"水蒸氣 → 冰：放熱凝華",source:"放熱／冷表面",status:"粒子在冷端直接排列成固態，沒有經過液態"}
     };
-    function phaseDemoTargets(state){
-      if(state==="solid")return freezeParticles.map((_,i)=>{const row=Math.floor(i/8),column=i%8;return{x:123+column*15+(row%2)*7,y:45+row*12};});
+    function phaseDemoTargets(state,forSolidOverview=false){
+      if(state==="solid")return freezeParticles.map((_,i)=>{const row=Math.floor(i/8),column=i%8,x=123+column*15+(row%2)*7,y=45+row*12;return forSolidOverview?{x:x*1.25-45,y:y*1.25}:{x,y};});
       if(state==="liquid")return freezeParticles.map((_,i)=>{const row=Math.floor(i/16),column=i%16;return{x:27+column*20.2+(row%2)*2,y:81+row*13};});
       return freezeParticles.map(()=>({x:20+Math.random()*320,y:39+Math.random()*77}));
     }
@@ -1504,10 +1523,10 @@
       phaseDemoLastFrame=0;phaseDemoFrame=requestAnimationFrame(now=>animatePhaseDemoMotion(now,runId));
     }
     function playSolidStateOverview(){
-      stopPhaseDemoMotion();stopFreezeDemo();const runId=phaseDemoRun,targets=phaseDemoTargets("solid");
-      activePhaseProcess="solid";freezeDemo.hidden=false;phaseDemoHeading.textContent="冰中的粒子";phaseDemoSource.textContent="";phaseDemoArrows.setAttribute("d","");
+      stopPhaseDemoMotion();stopFreezeDemo();const runId=phaseDemoRun,targets=phaseDemoTargets("solid",true);
+      setPhaseDemoIceScale(true);activePhaseProcess="solid";freezeDemo.hidden=false;freezeDemo.querySelector("svg").setAttribute("viewBox","0 0 360 150");phaseDemoHeading.textContent="冰中的粒子";phaseDemoSource.textContent="";phaseDemoArrows.setAttribute("d","");
       freezeParticles.forEach((p,index)=>{p.x=targets[index].x;p.y=targets[index].y;p.element.setAttribute("class","freeze-demo-particle is-solid is-vibrating");p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
-      phaseDemoIce.style.opacity="1";freezeDemoStatus.textContent="固態粒子在固定位置附近微微振動";phaseDemoCaption.textContent="圓點代表水分子；粒子大小與間距並非實際比例。";
+      phaseDemoIce.style.opacity="1";freezeDemoStatus.textContent="冰｜固態";phaseDemoCaption.textContent="冰｜固態";
       startPhaseDemoMotion("solid",runId);
     }
     function updatePhaseDemoIce(){
@@ -1661,12 +1680,13 @@
       }
       phaseDemoFrame=requestAnimationFrame(next=>animatePhaseDemoMotion(next,runId));
     }
-    function playPhaseTransition(key){
-      stopPhaseDemoMotion();const runId=phaseDemoRun,process=phaseDemoMotion[key],starts=phaseDemoTargets(process.from),ends=phaseDemoTargets(process.to);
+    function playPhaseTransition(key,fromSolidOverview=false){
+      stopPhaseDemoMotion();const runId=phaseDemoRun,process=phaseDemoMotion[key],starts=phaseDemoTargets(process.from,fromSolidOverview),ends=phaseDemoTargets(process.to,fromSolidOverview);
+      setPhaseDemoIceScale(fromSolidOverview);
       phaseDemoIce.style.opacity=process.from==="solid"?"1":"0";
       if(key==="condensation")starts.forEach((point,index)=>{point.y=16+(index%8)*14+(Math.random()-.5)*3;});
       activePhaseProcess=key;phaseDemoHeading.textContent=process.heading;phaseDemoSource.textContent=process.source;
-      const releasesEnergy=phaseProcesses[key].energy.startsWith("放熱"),meltArrowPath="M180 147v-25m0 0-4 5m4-5 4 5",demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox",key==="melt"?"0 0 360 150":"0 0 360 132");phaseDemoArrows.setAttribute("d",key==="melt"?meltArrowPath:phaseDemoDefaultArrowPath);phaseDemoArrows.setAttribute("transform",key==="melt"?"":releasesEnergy?"translate(0 50) scale(1 -1)":"");phaseDemoArrows.setAttribute("stroke",releasesEnergy?"#43839a":"#bd634b");phaseDemoSource.setAttribute("x",key==="melt"?"192":"20");phaseDemoSource.setAttribute("y",key==="melt"?"145":"25");
+      const releasesEnergy=phaseProcesses[key].energy.startsWith("放熱"),meltArrowPath="M180 147v-25m0 0-4 5m4-5 4 5",demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox",fromSolidOverview||key==="melt"?"0 0 360 150":"0 0 360 132");phaseDemoArrows.setAttribute("d",key==="melt"?meltArrowPath:phaseDemoDefaultArrowPath);phaseDemoArrows.setAttribute("transform",key==="melt"?"":releasesEnergy?"translate(0 50) scale(1 -1)":"");phaseDemoArrows.setAttribute("stroke",releasesEnergy?"#43839a":"#bd634b");phaseDemoSource.setAttribute("x",key==="melt"?"192":"20");phaseDemoSource.setAttribute("y",key==="melt"?"145":"25");
       document.getElementById("freeze-demo-status").textContent=`起始狀態：${process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態"}；粒子排列與位置`;
       phaseDemoCaption.textContent="圓點代表水的粒子；動畫呈現排列與運動改變，並非實際大小比例。";
       const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1747,7 +1767,7 @@
       resetPhaseSteps();
       process.steps.forEach((step,index)=>{const item=document.createElement("span");item.textContent=step;phaseSteps.append(item);if(index===1){const arrow=document.createElement("b");arrow.setAttribute("aria-hidden","true");arrow.textContent="→";phaseSteps.append(arrow);}});
       phaseSteps.hidden=false;
-      if(key==="freeze")playFreezeDemo();else playPhaseTransition(key);
+      if(key==="freeze")playFreezeDemo(fromSolidOverview);else playPhaseTransition(key,fromSolidOverview);
       requestAnimationFrame(()=>freezeDemo.scrollIntoView({behavior:"smooth",block:"center"}));
     }
     document.querySelectorAll("[data-phase-state]").forEach(button=>button.addEventListener("click",()=>selectPhaseState(button.dataset.phaseState)));
