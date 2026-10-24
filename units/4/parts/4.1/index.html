@@ -437,6 +437,21 @@
     .property-card,.class-card { padding:13px; border:1px solid #ded8ca; border-radius:12px; background:#fff; }
     .property-card strong,.class-card strong { display:block; margin-bottom:5px; }
     .property-card p,.class-card p { margin:0; color:#607067; font-size:.83rem; }
+    .physical-property-test { display:grid; grid-template-columns:minmax(240px,.9fr) minmax(0,1.1fr); gap:14px; align-items:center; margin:12px 0; padding:13px; border:1px solid #d9e2d9; border-radius:12px; background:#f7f9f4; }
+    .physical-property-scene { width:100%; min-height:190px; border-radius:10px; background:linear-gradient(145deg,#eef3ec,#fbfcf8); }
+    .physical-property-scene svg { display:block; width:100%; height:auto; max-height:220px; }
+    #property-magnet { transition:transform .35s ease; }
+    .physical-property-controls { display:flex; flex-wrap:wrap; gap:7px; margin:8px 0; }
+    .physical-property-controls button,.property-judgment button { padding:8px 12px; border:1px solid #c9d8cc; border-radius:10px; background:#fffefa; color:#31594b; font:inherit; font-size:.84rem; font-weight:700; cursor:pointer; }
+    .physical-property-controls button[aria-pressed="true"],.property-judgment button[aria-pressed="true"] { border-color:#176b53; background:#e6f1e8; color:#176b53; }
+    .property-observation,.property-feedback { min-height:42px; margin:8px 0; padding:9px 11px; border-radius:9px; background:#edf3eb; color:#40594b; font-size:.85rem; }
+    .property-judgment { margin-top:10px; }
+    .property-judgment[hidden] { display:none; }
+    .property-judgment p { margin:6px 0; font-weight:750; }
+    .property-judgment button { display:block; width:100%; margin-top:6px; text-align:left; }
+    .property-feedback[data-result="incorrect"] { background:#faf2e5; color:#785f2b; }
+    .property-feedback[data-result="correct"] { background:#e8f3e8; color:#176b53; }
+    #record-property-button:disabled { opacity:.55; cursor:not-allowed; }
     .rust-pair { display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:stretch; }
     .barrel-card { padding:12px; border-radius:13px; background:#f1f3ed; text-align:center; }
     .barrel-card svg { width:min(100%,180px); height:142px; }
@@ -481,6 +496,7 @@
       .bucket-scene { grid-template-columns:1fr; }
       .bucket-detail { min-height:auto; }
       .record-task { grid-template-columns:100px 1fr; }
+      .physical-property-test { grid-template-columns:1fr; }
       .state-property-list { grid-template-columns:1fr; }
       .rust-pair { grid-template-columns:1fr 1fr; gap:7px; }
       .comparison { font-size:.78rem; }
@@ -538,7 +554,7 @@
           <a href="#s2"><b>02</b><span>桶身、水和空氣，各有哪些不同？</span></a>
           <a href="#s3"><b>03</b><span>固體、液體和氣體裡的粒子，各自在做什麼？</span></a>
           <a href="#s4"><b>04</b><span>冰、水和水蒸氣，如何互相轉變？</span></a>
-          <a href="#s5"><b>05</b><span>只看外表，認得出這是什麼材料嗎？</span></a>
+          <a href="#s5"><b>05</b><span>水桶不同部位的材料，可以用磁鐵辨認嗎？</span></a>
           <a href="#s6"><b>06</b><span>鐵桶生鏽了，這告訴我們什麼？</span></a>
           <a href="#s7"><b>07</b><span>東西變了樣，就代表變成另一種物質嗎？</span></a>
           <a href="#s8"><b>08</b><span>雨水看起來像一種東西，裡面可能混了什麼？</span></a>
@@ -782,17 +798,44 @@
         </section>
 
         <section class="lesson-card" id="s5">
-          <div class="card-side"><span class="card-number">05</span><h3>物理性質</h3><span class="card-role">觀察不等於確定組成</span></div>
+          <div class="card-side"><span class="card-number">05</span><h3>物理性質</h3><span class="card-role">用性質辨認材料</span></div>
           <div class="card-main">
-            <h2>只看外表，認得出這是什麼材料嗎？</h2>
-            <p>顏色、狀態、磁性和密度都能描述材料。觀察或測量這些物理性質時，不會因此把原物質變成另一種物質。不過，一個外觀線索通常不足以確認未知材料的組成。</p>
-            <div class="property-grid">
-              <article class="property-card"><strong>水樣・外觀</strong><p>看見混濁，只能先記下觀察結果，不能只靠它斷定有哪些成分。</p></article>
-              <article class="property-card"><strong>土壤・狀態與顆粒</strong><p>記錄可觀察特徵；外觀不代表土壤只含一種物質。</p></article>
-              <article class="property-card"><strong>桶身・磁性、密度</strong><p>磁性和密度都是描述、辨認材料的物理性質。</p></article>
+            <h2>水桶不同部位的材料，可以用磁鐵辨認嗎？</h2>
+            <p>第一區塊發現桶身和握把使用不同材料。現在分別用磁鐵測試：磁性是物理性質；測試不會產生新物質，但結果只能作為辨認材料的線索。</p>
+            <div class="physical-property-test" id="physical-property-test">
+              <div class="physical-property-scene">
+                <svg viewBox="0 0 360 210" role="img" aria-label="水桶、桶身與握把，以及可移動到測試位置的馬蹄形磁鐵">
+                  <defs><linearGradient id="property-bucket-metal" x2="1" y2="0"><stop stop-color="#aebbb4"/><stop offset=".48" stop-color="#e1e8e2"/><stop offset="1" stop-color="#aab8b0"/></linearGradient></defs>
+                  <path d="M86 49Q180-5 274 49" fill="none" stroke="#74887d" stroke-width="9" stroke-linecap="round"/>
+                  <path d="M82 50H278L260 169Q180 191 100 169Z" fill="url(#property-bucket-metal)" stroke="#687e72" stroke-width="4" stroke-linejoin="round"/>
+                  <ellipse cx="180" cy="50" rx="98" ry="18" fill="#f8fbf7" stroke="#687e72" stroke-width="4"/>
+                  <path d="M116 84H244M112 104H248" stroke="#fff" stroke-width="4" opacity=".8"/>
+                  <text x="180" y="139" fill="#40584b" font-size="13" font-weight="700" text-anchor="middle">桶身</text>
+                  <text x="180" y="27" fill="#40584b" font-size="12" font-weight="700" text-anchor="middle">握把</text>
+                  <g id="property-magnet" transform="translate(290 95)">
+                    <path d="M0 0V23A22 22 0 0 0 44 23V0" fill="none" stroke="#ba5144" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M0 0V8M44 0V8" stroke="#477ba4" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M0 0h9M35 0h9" stroke="#f4f1e8" stroke-width="3"/>
+                  </g>
+                </svg>
+              </div>
+              <div>
+                <strong>操作：選一個部位，用磁鐵靠近測試。</strong>
+                <div class="physical-property-controls" role="group" aria-label="選擇要測試的水桶部位">
+                  <button type="button" data-property-test="body" aria-pressed="false">測試桶身</button>
+                  <button type="button" data-property-test="handle" aria-pressed="false">測試握把</button>
+                </div>
+                <p class="property-observation" id="property-observation" aria-live="polite">尚未測試。先選擇桶身或握把。</p>
+                <div class="property-judgment" id="property-judgment" hidden>
+                  <p>這項觀察能支持哪個判斷？</p>
+                  <button type="button" data-property-judgment="supported" aria-pressed="false">有磁性是辨認材料的線索；還需要其他資料確認完整組成。</button>
+                  <button type="button" data-property-judgment="overclaim" aria-pressed="false">被吸引就能證明是純鐵；沒被吸引就能證明是塑膠。</button>
+                  <p class="property-feedback" id="property-feedback" aria-live="polite">選擇一項判斷，再記錄觀察。</p>
+                </div>
+                <button class="action-button" type="button" id="record-property-button" disabled>記入觀察紀錄</button>
+              </div>
             </div>
-            <button class="action-button" type="button" data-record="property">把觀察線索記入紀錄</button>
-            <p class="live-note" id="note-s5" aria-live="polite">請把觀察到的線索和「已證明的組成」分開。</p>
+            <p class="live-note" id="note-s5" aria-live="polite">觀察到的性質能幫助辨認材料，但不能單獨證明完整組成。</p>
             <p class="next-hint">接著觀察桶身的鏽斑，看看材料是否產生新的物質。</p>
           </div>
         </section>
@@ -924,11 +967,10 @@
     });
 
     const recordValues = {
-      property: ["混濁、顆粒、磁性等觀察線索", "外觀和單一性質都不足以單獨證明組成。"],
       change: ["鏽層是不同於原金屬的新物質", "已分開記錄形成新物質的可能性與已發生的變化。"],
       composition: ["待依成分資料判斷", "已建立純物質／混合物的分類依據。"]
     };
-    const recordRows = { property:"record-property", change:"record-change", composition:"record-composition" };
+    const recordRows = { change:"record-change", composition:"record-composition" };
     document.querySelectorAll("[data-record]").forEach(button => button.addEventListener("click", () => {
       const key = button.dataset.record;
       document.getElementById(recordRows[key]).textContent = recordValues[key][0];
@@ -936,6 +978,31 @@
       const note = card.querySelector(".live-note");
       note.textContent = recordValues[key][1];
     }));
+
+    const propertyObservation=document.getElementById("property-observation"),propertyJudgment=document.getElementById("property-judgment"),propertyFeedback=document.getElementById("property-feedback"),propertyRecordButton=document.getElementById("record-property-button"),propertyMagnet=document.getElementById("property-magnet");
+    let testedBucketPart="",propertyJudgmentResult="";
+    document.querySelectorAll("[data-property-test]").forEach(button=>button.addEventListener("click",()=>{
+      testedBucketPart=button.dataset.propertyTest;propertyJudgmentResult="";propertyRecordButton.disabled=true;propertyRecordButton.textContent="記入觀察紀錄";
+      document.querySelectorAll("[data-property-test]").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+      document.querySelectorAll("[data-property-judgment]").forEach(item=>item.setAttribute("aria-pressed","false"));
+      const isBody=testedBucketPart==="body",partName=isBody?"桶身":"握把";
+      propertyMagnet.setAttribute("transform",isBody?"translate(224 96)":"translate(158 2)");
+      propertyObservation.textContent=isBody?"觀察到：磁鐵靠近桶身時，桶身被吸引；這項性質是「有磁性」。":"觀察到：磁鐵靠近握把時，握把沒有被吸引；這次測試未觀察到磁性。";
+      propertyJudgment.hidden=false;propertyFeedback.textContent=`${partName}測試完成。這項結果能說明什麼？`;propertyFeedback.dataset.result="";
+    }));
+    document.querySelectorAll("[data-property-judgment]").forEach(button=>button.addEventListener("click",()=>{
+      propertyJudgmentResult=button.dataset.propertyJudgment;document.querySelectorAll("[data-property-judgment]").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+      const correct=propertyJudgmentResult==="supported";propertyFeedback.dataset.result=correct?"correct":"incorrect";
+      propertyFeedback.textContent=correct?"判斷合理：磁性是辨認材料的線索；單一測試不能證明完整組成。":"再想想：有磁性或沒有磁性，是否都只提供一項材料線索？";
+      propertyRecordButton.disabled=!correct;
+    }));
+    propertyRecordButton.addEventListener("click",()=>{
+      if(!testedBucketPart||propertyJudgmentResult!=="supported")return;
+      const partName=testedBucketPart==="body"?"桶身被吸引，有磁性":"握把未被磁鐵吸引，未呈現磁性";
+      document.getElementById("record-property").textContent=`${partName}；磁性是材料線索，尚不能單獨證明完整組成。`;
+      document.getElementById("note-s5").textContent="已記錄觀察與判斷。下一步比較桶身生鏽前後，看看有沒有形成新物質。";
+      propertyRecordButton.textContent="已記入紀錄 ✓";
+    });
 
     const stateNames={solid:"固體・金屬物體",liquid:"液體・水",gas:"氣體・空氣"};
     const propertyNames={shape:"形狀",volume:"體積",compressibility:"可壓縮性"};
