@@ -50,6 +50,7 @@ if (canvas) {
     source: material('#33413f'),
     sourceFace: material('#f0bd4b', { emissive: '#d88b20', emissiveIntensity: 0.65 }),
     plate: material('#273238', { roughness: 0.48, metalness: 0.15 }),
+    selectedPlate: material('#315c4c', { roughness: 0.48, metalness: 0.12 }),
     plateEdge: material('#8b9b92', { metalness: 0.36, roughness: 0.42 }),
     carriage: material('#76847d', { metalness: 0.5, roughness: 0.42 }),
     screen: material('#faf8ed', { roughness: 0.92 }),
@@ -129,13 +130,17 @@ if (canvas) {
     bar([0.12, 0.92, 1.62], [0, -0.64, 0]);
     bar([0.12, 0.36, 0.56], [0, 0, -0.49]);
     bar([0.12, 0.36, 0.56], [0, 0, 0.49]);
+    const pickSurface = new THREE.Mesh(new THREE.BoxGeometry(0.012, 2.2, 1.62), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, colorWrite: false, depthWrite: false, side: THREE.DoubleSide }));
+    pickSurface.position.x = -0.067;
+    plate.add(pickSurface);
     // A narrow metal edge makes the cut-out and plate thickness legible as the camera turns.
     const edgeMat = mats.plateEdge;
     bar([0.035, 2.2, 0.045], [0.075, 0, -0.81]).material = edgeMat;
     bar([0.035, 2.2, 0.045], [0.075, 0, 0.81]).material = edgeMat;
     plate.position.y = 1.28;
     carriage.position.set(plateStates[index].x, 0, 0);
-    plates.push({ carriage, plate, post, collar, plateBars });
+    plates.push({ carriage, plate, post, collar, plateBars, pickSurface });
+    pickSurface.userData.plateIndex = index;
   };
   homeX.forEach((_, index) => makePlate(index));
 
@@ -149,12 +154,14 @@ if (canvas) {
   const result = document.querySelector('#aperture-result');
   const resultText = result.querySelector('span:last-child');
   let selectedIndex = 1;
+  const selectableSurfaces = plates.map(({ pickSurface }) => pickSurface);
 
   const updateExperiment = () => {
-    plates.forEach(({ carriage, plate, post, collar }, index) => {
+    plates.forEach(({ carriage, plate, post, collar, plateBars }, index) => {
       const state = plateStates[index];
       carriage.position.x = state.x;
       plate.position.y = 1.28 + state.height;
+      plateBars.slice(0, 4).forEach((bar) => { bar.material = index === selectedIndex ? mats.selectedPlate : mats.plate; });
       post.scale.y = Math.max(0.22, 1.2 + state.height);
       post.position.y = 0.19 + post.scale.y / 2;
       collar.position.y = 0.19 + post.scale.y - 0.03;
@@ -180,10 +187,13 @@ if (canvas) {
     else resultText.textContent = '光被偏移的小孔板擋住，屏幕亮點消失。';
   };
 
-  plateButtons.forEach((button) => button.addEventListener('click', () => {
-    selectedIndex = Number(button.dataset.plate);
-    plateButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+  const selectPlate = (index) => {
+    selectedIndex = index;
+    plateButtons.forEach((item, itemIndex) => item.setAttribute('aria-pressed', String(itemIndex === index)));
     updateExperiment();
+  };
+  plateButtons.forEach((button) => button.addEventListener('click', () => {
+    selectPlate(Number(button.dataset.plate));
   }));
   depthInput.addEventListener('input', () => {
     plateStates[selectedIndex].x = homeX[selectedIndex] + Number(depthInput.value) / 100 * 0.82;
@@ -210,6 +220,8 @@ if (canvas) {
   const activePointers = new Map();
   let lastPointer = null;
   let pinchDistance = 0;
+  let pointerStart = null;
+  let pointerDragged = false;
   const distanceBetweenPointers = () => {
     const points = [...activePointers.values()];
     if (points.length < 2) return 0;
@@ -219,12 +231,19 @@ if (canvas) {
     if (event.button !== 0) return;
     activePointers.set(event.pointerId, [event.clientX, event.clientY]);
     lastPointer = [event.clientX, event.clientY];
-    if (activePointers.size === 2) pinchDistance = distanceBetweenPointers();
+    if (activePointers.size === 1) {
+      pointerStart = [event.clientX, event.clientY];
+      pointerDragged = false;
+    } else {
+      pointerDragged = true;
+      pinchDistance = distanceBetweenPointers();
+    }
     canvas.setPointerCapture(event.pointerId);
   });
   canvas.addEventListener('pointermove', (event) => {
     if (!activePointers.has(event.pointerId)) return;
     activePointers.set(event.pointerId, [event.clientX, event.clientY]);
+    if (pointerStart && Math.hypot(event.clientX - pointerStart[0], event.clientY - pointerStart[1]) > 6) pointerDragged = true;
     if (activePointers.size > 1) {
       const nextDistance = distanceBetweenPointers();
       if (pinchDistance > 0 && nextDistance > 0) radius = THREE.MathUtils.clamp(radius - (nextDistance - pinchDistance) * 0.035, 8, 24);
@@ -241,9 +260,22 @@ if (canvas) {
     updateCamera();
   });
   const stopDrag = (event) => {
+    const wasClick = activePointers.size === 1 && !pointerDragged;
+    if (wasClick) {
+      const bounds = canvas.getBoundingClientRect();
+      const pointer = new THREE.Vector2(
+        ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
+        -((event.clientY - bounds.top) / bounds.height) * 2 + 1
+      );
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(pointer, camera);
+      const hit = raycaster.intersectObjects(selectableSurfaces, false)[0];
+      if (hit) selectPlate(hit.object.userData.plateIndex);
+    }
     activePointers.delete(event.pointerId);
     pinchDistance = 0;
     lastPointer = activePointers.size === 1 ? [...activePointers.values()][0] : null;
+    if (activePointers.size === 0) pointerStart = null;
   };
   canvas.addEventListener('pointerup', stopDrag);
   canvas.addEventListener('pointercancel', stopDrag);
