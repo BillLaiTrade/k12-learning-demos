@@ -118,7 +118,7 @@ if (canvas) {
     const makeBackdropTexture = () => {
       const textureCanvas = document.createElement('canvas');
       textureCanvas.width = 1024;
-      textureCanvas.height = 768;
+      textureCanvas.height = 512;
       const context = textureCanvas.getContext('2d');
       const wash = context.createLinearGradient(0, 0, 0, textureCanvas.height);
       wash.addColorStop(0, '#d6e0d6');
@@ -126,7 +126,7 @@ if (canvas) {
       wash.addColorStop(1, '#f5e8d2');
       context.fillStyle = wash;
       context.fillRect(0, 0, textureCanvas.width, textureCanvas.height);
-      const glow = context.createRadialGradient(650, 355, 25, 650, 355, 470);
+      const glow = context.createRadialGradient(650, 240, 25, 650, 240, 470);
       glow.addColorStop(0, 'rgba(255, 250, 231, 0.55)');
       glow.addColorStop(1, 'rgba(255, 250, 231, 0)');
       context.fillStyle = glow;
@@ -139,6 +139,7 @@ if (canvas) {
         context.fillRect(random() * textureCanvas.width, random() * textureCanvas.height, 1.2, 1.2);
       }
       const texture = new THREE.CanvasTexture(textureCanvas);
+      texture.mapping = THREE.EquirectangularReflectionMapping;
       texture.colorSpace = THREE.SRGBColorSpace;
       return texture;
     };
@@ -189,13 +190,13 @@ if (canvas) {
     const mat = (color, options = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.68, metalness: 0.08, ...options });
     const woodTexture = makeWoodTexture();
     const backdropTexture = makeBackdropTexture();
+    scene.background = backdropTexture;
     const screenTexture = makeScreenTexture();
     const ballTexture = makeBallTexture();
     const materials = {
       floor: mat('#f2e8d6'),
       table: new THREE.MeshPhysicalMaterial({ color: '#fff5e5', map: woodTexture, roughness: 0.43, metalness: 0.02, clearcoat: 0.24, clearcoatRoughness: 0.56 }),
       tableEdge: mat('#805c3c', { roughness: 0.56 }),
-      backdrop: new THREE.MeshBasicMaterial({ map: backdropTexture }),
       metal: mat('#9aa79d', { metalness: 0.42, roughness: 0.34 }),
       metalDark: mat('#526158', { metalness: 0.34, roughness: 0.37 }),
       lamp: mat('#35443e', { metalness: 0.38, roughness: 0.34 }),
@@ -219,12 +220,6 @@ if (canvas) {
     floor.position.y = -0.25;
     floor.receiveShadow = true;
     scene.add(floor);
-
-    // A soft, textured studio wall gives the apparatus a warm illustrated-lab setting.
-    const backdrop = new THREE.Mesh(new THREE.PlaneGeometry(80, 40), materials.backdrop);
-    backdrop.position.set(0, 5, 6.1);
-    backdrop.receiveShadow = false;
-    scene.add(backdrop);
 
     // Table and the short cross-rail keep the sphere's distance from the lamp and screen fixed.
     box(scene, [8.2, 0.2, 5.6], [0, -0.08, 0], materials.table);
@@ -426,7 +421,8 @@ if (canvas) {
         previousPinch = nextPinch;
       } else if (previousPoint) {
         azimuth -= (point.x - previousPoint.x) * 0.006;
-        polar = THREE.MathUtils.clamp(polar + (point.y - previousPoint.y) * 0.005, 0.45, 1.72);
+        // Keep the camera above the floor so the ground plane cannot hide the apparatus.
+        polar = THREE.MathUtils.clamp(polar + (point.y - previousPoint.y) * 0.005, 0.45, 1.62);
       }
       previousPoint = point;
       updateCamera();
