@@ -60,7 +60,7 @@
     .visual .rope-fallback { fill:none; stroke-width:14; stroke-linecap:round; stroke-linejoin:round; }
     .visual .rope-texture-layer { pointer-events:none; }
     #fixed-rope-marker { cursor:ew-resize; touch-action:none; }
-    #fixed-rope-marker:focus { stroke:#176b53; stroke-width:5; }
+    #fixed-rope-marker:focus-visible:not(.is-dragging) { stroke:#176b53; stroke-width:5; }
     .visual .equilibrium { stroke:#9aaca1; stroke-width:1.5; stroke-dasharray:7 7; }
     .visual .motion-arrow { fill:none; stroke:#176b53; stroke-width:2.5; stroke-linecap:round; }
     .visual .measure { fill:none; stroke:#bc612b; stroke-width:2; stroke-linecap:round; }
@@ -559,12 +559,13 @@
           return point.matrixTransform(fixedPointSvg.getScreenCTM().inverse()).x;
         };
         fixedPointMarker.addEventListener("pointerdown",event=>{
-          event.preventDefault();fixedPointMarker.focus({preventScroll:true});
+          event.preventDefault();fixedPointMarker.classList.add("is-dragging");
           fixedPointMarker.setPointerCapture(event.pointerId);setFixedPointX(pointerSvgX(event));
         });
         fixedPointMarker.addEventListener("pointermove",event=>{
           if(fixedPointMarker.hasPointerCapture(event.pointerId))setFixedPointX(pointerSvgX(event));
         });
+        ["pointerup","pointercancel","lostpointercapture"].forEach(type=>fixedPointMarker.addEventListener(type,()=>fixedPointMarker.classList.remove("is-dragging")));
         fixedPointMarker.addEventListener("keydown",event=>{
           const step=event.shiftKey?1:8;
           if(event.key==="ArrowLeft"){event.preventDefault();setFixedPointX(fixedPointX-step);}
