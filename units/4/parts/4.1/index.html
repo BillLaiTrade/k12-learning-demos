@@ -336,7 +336,7 @@
     .phase-solid-overview-intro { margin-bottom:12px; }
     .phase-solid-overview-intro h3 { margin:0 0 4px; color:#244b3d; font-size:1.03rem; }
     .phase-solid-overview-intro p { margin:0; color:#52635a; font-size:.84rem; }
-    .phase-solid-stage { position:relative; display:grid; grid-template-columns:minmax(145px,1fr) minmax(300px,1.2fr) minmax(145px,1fr); grid-template-rows:1fr 1fr; gap:12px; align-items:center; min-height:430px; padding:16px; border:1px solid #d7e2d7; border-radius:16px; background:linear-gradient(145deg,#f7f8f1,#edf3eb); }
+    .phase-solid-stage { position:relative; display:grid; grid-template-columns:minmax(120px,1fr) minmax(220px,1.2fr) minmax(120px,1fr); grid-template-rows:1fr 1fr; gap:12px; align-items:center; min-height:430px; padding:16px; border:1px solid #d7e2d7; border-radius:16px; background:linear-gradient(145deg,#f7f8f1,#edf3eb); }
     .phase-solid-flow { position:absolute; z-index:0; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
     .phase-solid-flow-mobile { display:none; }
     .phase-solid-flow path { fill:none; stroke-width:2.4; stroke-dasharray:1 11; stroke-linecap:round; opacity:.72; }
@@ -366,9 +366,9 @@
     .phase-solid-stage .freeze-demo { position:relative; z-index:1; grid-column:2; grid-row:1/span 2; width:100%; min-width:0; margin:0; padding:6px; border:0; background:transparent; }
     .phase-detail.is-solid-overview .freeze-demo-head { display:none; }
     .phase-detail.is-solid-overview .freeze-demo-scene { background:transparent; }
-    .phase-detail.is-solid-overview[data-overview-state="solid"] .freeze-demo-scene #freeze-demo-vessel { display:none; }
-    .phase-detail.is-solid-overview:not([data-overview-state="solid"]) .freeze-demo-scene #freeze-demo-vessel { fill:transparent; }
-    .phase-detail.is-solid-overview:not([data-overview-state="solid"]) .freeze-demo-scene #phase-demo-ice { display:none; }
+    .phase-detail.is-solid-overview .freeze-demo-scene #freeze-demo-vessel { fill:transparent; }
+    .phase-detail.is-solid-overview .freeze-demo-scene #phase-demo-ice { display:none; }
+    .phase-detail.is-solid-overview .freeze-demo-particle.is-solid { clip-path:none; }
     .phase-detail.is-solid-overview .freeze-demo-scene #phase-demo-source,.phase-detail.is-solid-overview .freeze-demo-scene #phase-demo-arrows { display:none; }
     .phase-detail.is-solid-overview .freeze-demo-status { text-align:center; }
     .phase-detail.is-solid-overview .freeze-demo-caption { display:none; }
@@ -1520,7 +1520,7 @@
     };
     const phaseParticleColors={solid:"#2346bd",liquid:"#438bb8",gas:"#94c8da"};
     const phaseOverviewLayouts={
-      solid:{copy:"水分子緊密、有規律地排列，在固定位置附近微微振動，因此冰有固定形狀。",hint:"點選四角變化：粒子進出冰晶；尚未轉變的粒子仍在原位附近振動。",slots:{"top-left":"freeze","top-right":"deposition","bottom-left":"melt","bottom-right":"sublimation"}},
+      solid:{copy:"水分子緊密、有規律地排列，只在固定位置附近微微振動，因此冰有固定形狀。",hint:"點選四角變化：粒子加入或離開固態排列；尚未轉變的粒子仍在原位附近振動。",slots:{"top-left":"freeze","top-right":"deposition","bottom-left":"melt","bottom-right":"sublimation"}},
       liquid:{copy:"水分子彼此靠近但排列不固定，可以互相滑動，所以液態水會流動並隨容器改變形狀。",hint:"點選四角變化：粒子進出液態水；其餘水分子仍在容器底部附近流動。",slots:{"top-left":"melt","top-right":"condensation","bottom-left":"freeze","bottom-right":"vaporization"}},
       gas:{copy:"水蒸氣分子彼此距離較遠，快速移動並散布在可用空間中；水蒸氣本身無色、看不見。",hint:"點選四角變化：粒子進出水蒸氣；尚未轉變的分子持續在容器中移動。",slots:{"top-left":"vaporization","top-right":"sublimation","bottom-left":"condensation","bottom-right":"deposition"}}
     };
@@ -1563,14 +1563,14 @@
     }
     function playPhaseStateOverview(stateKey){
       stopPhaseDemoMotion();stopFreezeDemo();const runId=phaseDemoRun,solid=stateKey==="solid",targets=freezeParticles.map((_,index)=>{
-        if(solid)return phaseDemoTargets("solid",true)[index];
+        if(solid){const row=Math.floor(index/12),column=index%12;return{x:42+column*25,y:31+row*21};}
         if(stateKey==="liquid"){const base=phaseDemoTargets("liquid")[index],row=Math.floor(index/16);return{x:base.x+(Math.random()-.5)*4,y:91+row*11+(Math.random()-.5)*4};}
         return{x:20+Math.random()*320,y:20+Math.random()*98};
       });
       setPhaseDemoIceScale(solid);activePhaseProcess=stateKey;phaseDetail.dataset.overviewState=stateKey;configurePhaseOverview(stateKey);
-      freezeDemo.hidden=false;const demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox",solid?"0 0 360 150":"0 0 360 132");demoSvg.setAttribute("aria-label",stateKey==="solid"?"固態冰中的粒子排列與運動":stateKey==="liquid"?"液態水分子在容器底部附近流動":"水蒸氣分子在容器中分散移動");phaseDemoHeading.textContent=phaseStates[stateKey].title;phaseDemoSource.textContent="";phaseDemoArrows.setAttribute("d","");phaseSolidFlowParticles.replaceChildren();document.querySelectorAll(".phase-solid-flow path,.phase-solid-flow-mobile path").forEach(path=>path.classList.remove("is-active"));
+      freezeDemo.hidden=false;const demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox","0 0 360 132");demoSvg.setAttribute("aria-label",stateKey==="solid"?"容器中的固態水分子規則排列並在固定位置微微振動":stateKey==="liquid"?"液態水分子在容器底部附近流動":"水蒸氣分子在容器中分散移動");phaseDemoHeading.textContent=phaseStates[stateKey].title;phaseDemoSource.textContent="";phaseDemoArrows.setAttribute("d","");phaseSolidFlowParticles.replaceChildren();document.querySelectorAll(".phase-solid-flow path,.phase-solid-flow-mobile path").forEach(path=>path.classList.remove("is-active"));
       freezeParticles.forEach((p,index)=>{p.x=targets[index].x;p.y=targets[index].y;p.element.style.transform="none";p.element.setAttribute("class",`freeze-demo-particle is-${stateKey}${solid?" is-vibrating":""}`);p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
-      phaseDemoIce.style.opacity=solid?"1":"0";freezeDemoStatus.textContent=phaseStates[stateKey].title;phaseDemoCaption.textContent=phaseStates[stateKey].title;
+      phaseDemoIce.style.opacity="0";freezeDemoStatus.textContent=phaseStates[stateKey].title;phaseDemoCaption.textContent=phaseStates[stateKey].title;
       startPhaseDemoMotion(stateKey,runId);
     }
     function playStateEdgeFlow(key,stateKey){
