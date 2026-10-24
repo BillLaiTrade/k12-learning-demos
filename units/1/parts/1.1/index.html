@@ -269,18 +269,16 @@
                 <img id="night-scene-image" src="assets/night-scene-both-on.webp" alt="夜晚的小葵在檯燈下看書，窗外月亮明亮可見。">
                 <svg class="light-rays" viewBox="0 0 1672 941" preserveAspectRatio="none" aria-hidden="true">
                   <defs>
-                    <marker id="moon-ray-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#c6edff"/></marker>
-                    <marker id="lamp-ray-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#ffd16f"/></marker>
                     <filter id="ray-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
                   </defs>
                   <g id="moon-ray-path" class="ray-path">
-                    <path d="M18 174 286 174" class="ray sun-ray" marker-end="url(#moon-ray-arrow)"/>
-                    <path d="M298 178 1118 365" class="ray moon-ray" marker-end="url(#moon-ray-arrow)"/>
+                    <path d="M18 174 286 174" class="ray sun-ray"/>
+                    <path d="M298 178 1118 365" class="ray moon-ray"/>
                     <circle cx="292" cy="176" r="7" class="ray-point moon-point"/>
                   </g>
                   <g id="lamp-ray-path" class="ray-path">
-                    <path d="M802 370 811 716" class="ray lamp-ray" marker-end="url(#lamp-ray-arrow)"/>
-                    <path d="M814 716 1118 369" class="ray book-ray" marker-end="url(#lamp-ray-arrow)"/>
+                    <path d="M802 370 811 716" class="ray lamp-ray"/>
+                    <path d="M814 716 1118 369" class="ray book-ray"/>
                     <circle cx="811" cy="716" r="7" class="ray-point lamp-point"/>
                   </g>
                 </svg>
