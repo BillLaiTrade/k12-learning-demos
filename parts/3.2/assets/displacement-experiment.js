@@ -281,12 +281,6 @@ export function mountDisplacementExperiment() {
     const startRect = rock.getBoundingClientRect();
     const startLeft = startRect.left - sceneRect.left;
     const startTop = startRect.top - sceneRect.top;
-    const savedPosition = {
-      left: rock.style.left,
-      top: rock.style.top,
-      bottom: rock.style.bottom,
-      transform: rock.style.transform
-    };
 
     clearPosition();
     rock.classList.add('is-throwing');
@@ -302,9 +296,9 @@ export function mountDisplacementExperiment() {
     const cylinderLeft = cylinderRect.left - sceneRect.left;
     const cylinderTop = cylinderRect.top - sceneRect.top;
     const returnLeft = returnRect.left - sceneRect.left;
-    const returnTop = returnRect.top - sceneRect.top;
     const exitLeft = cylinderLeft - startRect.width - 12;
     const clearTop = Math.max(0, cylinderTop - startRect.height - 12);
+    const floorTop = Math.max(0, cylinderRect.bottom - sceneRect.top - startRect.height);
     const insideTop = cylinderTop + 12;
     const liftedTop = Math.min(startTop, insideTop);
 
@@ -314,8 +308,9 @@ export function mountDisplacementExperiment() {
       { offset: 0.28, left: startLeft + 'px', top: liftedTop + 'px', transform: 'rotate(-4deg)', easing: 'cubic-bezier(.3,.7,.5,1)' },
       { offset: 0.45, left: startLeft + 'px', top: clearTop + 'px', transform: 'rotate(-7deg)', easing: 'cubic-bezier(.4,0,.8,.5)' },
       { offset: 0.61, left: exitLeft + 'px', top: clearTop + 'px', transform: 'rotate(-9deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
-      { offset: 0.78, left: returnLeft + 'px', top: Math.max(0, returnTop - 8) + 'px', transform: 'rotate(-5deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
-      { offset: 1, left: returnLeft + 'px', top: returnTop + 'px', transform: 'rotate(0deg)' }
+      { offset: 0.78, left: returnLeft + 'px', top: clearTop + 'px', transform: 'rotate(-5deg)', easing: 'cubic-bezier(.2,.65,.45,1)' },
+      { offset: 0.91, left: returnLeft + 'px', top: Math.max(0, floorTop - 8) + 'px', transform: 'rotate(4deg)' },
+      { offset: 1, left: returnLeft + 'px', top: floorTop + 'px', transform: 'rotate(0deg)' }
     ], { duration: 1050, fill: 'forwards' });
 
     try {
@@ -324,20 +319,13 @@ export function mountDisplacementExperiment() {
       // A canceled animation should still leave the sample in a valid state.
     }
     animation.cancel();
-    rock.style.left = savedPosition.left;
-    rock.style.top = savedPosition.top;
-    rock.style.bottom = savedPosition.bottom;
-    rock.style.transform = savedPosition.transform;
-    animating = false;
-    resetRock();
-  }
-
-  function resetRock() {
-    drag = null;
-    rock.classList.add('is-throwing');
-    clearPosition();
+    rock.style.left = returnLeft + 'px';
+    rock.style.top = floorTop + 'px';
+    rock.style.bottom = 'auto';
+    rock.style.transform = 'none';
     animating = false;
     setReading(false);
+    status.textContent = '隕石已從量筒口取出，落在量筒外；水位已重設。';
     rock.getBoundingClientRect();
     requestAnimationFrame(() => rock.classList.remove('is-throwing'));
   }
