@@ -181,15 +181,14 @@ if (canvas) {
     });
     selectedLabel.textContent = `調整${plateNames[selectedIndex]}`;
     const maxDeviation = Math.max(...plateStates.map((state) => Math.abs(state.height)));
-    const transmission = THREE.MathUtils.clamp(1 - maxDeviation / 0.36, 0, 1);
+    const transmission = maxDeviation <= 0.02 ? 1 : 0;
     mats.spot.opacity = transmission;
     mats.spotGlow.opacity = transmission * 0.34;
     spot.scale.setScalar(0.72 + transmission * 0.28);
     spotGlow.scale.setScalar(0.6 + transmission * 0.4);
-    alignmentOutput.textContent = transmission > 0.78 ? '小孔對齊' : transmission > 0.08 ? '小孔略有偏移' : '小孔沒有對齊';
+    alignmentOutput.textContent = transmission > 0 ? '小孔對齊' : '小孔沒有對齊';
     result.classList.toggle('is-blocked', transmission < 0.2);
-    if (transmission > 0.78) resultText.textContent = '三個小孔排成一直線，屏幕上出現清楚亮點。';
-    else if (transmission > 0.08) resultText.textContent = '小孔略有偏移，屏幕上的亮點變暗。';
+    if (transmission > 0) resultText.textContent = '三個小孔排成一直線，屏幕上出現清楚亮點。';
     else resultText.textContent = '光被偏移的小孔板擋住，屏幕亮點消失。';
   };
 
