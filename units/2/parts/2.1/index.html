@@ -164,10 +164,10 @@
           <div class="card-side"><span class="card-number">01</span><h3>認識波</h3><span class="card-role">變化如何傳開</span></div>
           <div class="card-main">
             <h2>繩子一端被抖動，變化怎麼傳到另一端？</h2>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，我只抖動繩子一端，這個起伏怎麼一路傳到另一端？是整條繩子一起移過去嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先看變化從哪裡開始、往哪裡傳；我們也在繩上做個記號，接著追蹤同一點。</p></div>
-            <p>繩子一端上下振動時，繩上的變化會沿著繩子傳開。這種振動或擾動向外傳播的現象稱為波。波把能量傳到較遠的位置；繩子本身只在原位置附近振動，沒有整條移到另一端。</p><figure class="visual">
-              <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="連續繩波向右傳，一個固定的橘色繩點只在原位置附近上下振動">
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，繩子一端上下抖動，為什麼會讓起伏沿著繩子傳開？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>繩子上的波是怎麼產生的？我們先觀察波源持續振動和只擾動一次時，繩上會形成什麼變化。</p></div>
+            <p>繩子一端上下振動時，附近的繩段跟著振動，並把變化傳給相鄰繩段，於是形成沿繩子傳播的波。這種振動或擾動向外傳播的現象稱為波。波源持續振動會形成連續波；波源只擾動一次，則形成一個向前傳播的單次波。</p><figure class="visual">
+              <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="繩波由左側波源向右傳播；可切換連續波與波源只擾動一次形成的單次波">
                 <defs><marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
                 <path class="pulse-path wave-line" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/>
@@ -175,13 +175,10 @@
                 <text x="84" y="93">波源上下振動</text>
                 <path d="M130 228H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
                 <text x="345" y="253" text-anchor="middle">波形傳播方向</text>
-                <path d="M350 64V178" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
-                <circle class="rope-marker" cx="350" cy="142" r="10" fill="#df8b41" stroke="#fff" stroke-width="3"/>
-                <text x="350" y="45" text-anchor="middle">繩上的同一個記號</text>
               </svg>
-              <figcaption>繩上的波形向右傳，橘點代表繩上的一小段介質，只在原位置附近上下振動。</figcaption>
+              <figcaption data-wave-caption>連續波：波源持續振動，繩上的波形持續向右傳播。</figcaption>
             </figure>
-            <div class="control-panel"><div class="controls"><button class="secondary" type="button" data-pulse-toggle aria-pressed="true">暫停波形</button><button class="secondary" type="button" data-pulse-reset>重新播放</button><span class="live-note" data-pulse-status aria-live="polite">動畫播放中；橘點代表繩上的固定記號。</span></div></div>
+            <div class="control-panel"><div class="controls" role="group" aria-label="選擇繩波播放方式"><button class="secondary" type="button" data-wave-mode="continuous" aria-pressed="true">連續波</button><button class="secondary" type="button" data-wave-mode="single" aria-pressed="false">單次波</button><button class="secondary" type="button" data-pulse-toggle aria-pressed="true">暫停動畫</button><button class="secondary" type="button" data-pulse-reset>重新播放</button><span class="live-note" data-pulse-status aria-live="polite">連續波播放中；可切換成單次波觀察只擾動一次的傳播。</span></div></div>
           </div>
         </section>
 
@@ -455,32 +452,40 @@
       const pulseToggles = [...document.querySelectorAll("[data-pulse-toggle]")];
       const pulseResets = [...document.querySelectorAll("[data-pulse-reset]")];
       const pulseStatuses = [...document.querySelectorAll("[data-pulse-status]")];
+      const waveModeButtons = [...document.querySelectorAll("[data-wave-mode]")];
+      const waveCaption = document.querySelector("[data-wave-caption]");
       let pulsePlaying = !reducedMotion;
+      let pulseMode = "continuous";
       let pulseTime = 0;
       let previousTime = 0;
       let pulseFrame = null;
       const ns="http://www.w3.org/2000/svg";
       const waveAt = (x,offset,amplitude=74) => amplitude * Math.sin((x-offset-92)*2*Math.PI/232);
+      let singleWaveFinished = false;
       const renderPulse = (svg,time) => {
         const baseline = 142;
-        const offset = (time * 132) % 232;
-        let path = `M 38 ${baseline-waveAt(38,offset)}`;
-        for (let x=44;x<=722;x+=6) path += ` L ${x} ${baseline-waveAt(x,offset)}`;
+        const single = pulseMode === "single" && svg.closest("#card-01");
+        const pulseCenter = 64 + time * 150;
+        const shapeAt = x => single ? (singleWaveFinished ? 0 : 72*Math.exp(-0.5*((x-pulseCenter)/32)**2)) : waveAt(x,(time*132)%232);
+        let path = `M 38 ${baseline-shapeAt(38)}`;
+        for (let x=44;x<=722;x+=6) path += ` L ${x} ${baseline-shapeAt(x)}`;
         const wave = svg.querySelector(".pulse-path");
-        const marker = svg.querySelector(".rope-marker");
         if (wave) wave.setAttribute("d",path);
-        if (marker) marker.setAttribute("cy",String(baseline-waveAt(350,offset)));
       };
       const updatePulseControls = () => {
-        pulseToggles.forEach(button => { button.textContent = pulsePlaying ? "暫停波形" : "播放波形"; button.setAttribute("aria-pressed",String(pulsePlaying)); });
-        pulseStatuses.forEach(note => { note.textContent = reducedMotion ? pulsePlaying ? "系統偏好減少動態效果；目前依你的操作手動播放。" : "系統偏好減少動態效果；動畫不自動播放，按下播放即可觀看。" : pulsePlaying ? "動畫播放中；橘點代表繩上的固定記號。" : "波形已暫停；可觀察橘點位置與凸起位置。"; });
+        pulseToggles.forEach(button => { button.textContent = pulsePlaying ? "暫停動畫" : "播放動畫"; button.setAttribute("aria-pressed",String(pulsePlaying)); });
+        waveModeButtons.forEach(button => button.setAttribute("aria-pressed",String(button.dataset.waveMode===pulseMode)));
+        if(waveCaption) waveCaption.textContent=pulseMode==="single"?"單次波：波源只擾動一次，形成一個波形向右傳播。":"連續波：波源持續振動，繩上的波形持續向右傳播。";
+        pulseStatuses.forEach(note => { note.textContent=pulseMode==="single"?(pulsePlaying?"單次波向右傳播；傳過繩子後會停止。":"單次波已暫停；可重新播放觀察一次擾動的傳播。"):(pulsePlaying?"連續波播放中；可切換成單次波觀察只擾動一次的傳播。":"連續波已暫停；按播放即可繼續觀察。"); });
       };
       const schedulePulse = () => { if(pulsePlaying&&pulseFrame===null) pulseFrame=window.requestAnimationFrame(animatePulse); };
+      waveModeButtons.forEach(button=>button.addEventListener("click",()=>{pulseMode=button.dataset.waveMode;pulseTime=0;singleWaveFinished=false;pulsePlaying=true;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();schedulePulse();}));
       pulseToggles.forEach(button => button.addEventListener("click",() => { pulsePlaying = !pulsePlaying; updatePulseControls(); schedulePulse(); }));
-      pulseResets.forEach(button => button.addEventListener("click",() => { pulseTime=0; pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime)); pulsePlaying=!reducedMotion; updatePulseControls(); schedulePulse(); }));
+      pulseResets.forEach(button => button.addEventListener("click",() => { pulseTime=0;singleWaveFinished=false;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));pulsePlaying=!reducedMotion;updatePulseControls();schedulePulse(); }));
       const animatePulse = time => {
         if (previousTime) { const delta=Math.min((time-previousTime)/1000,.05); if(pulsePlaying) pulseTime+=delta; }
         previousTime=time;
+        if(pulseMode==="single"&&pulseTime>4.55){singleWaveFinished=true;pulsePlaying=false;updatePulseControls();}
         pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));
         pulseFrame=pulsePlaying?window.requestAnimationFrame(animatePulse):null;
       };
