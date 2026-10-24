@@ -245,7 +245,7 @@
 .overflow-catch-tray:not(.has-collected-water) .catch-level-lens{display:none}
 .overflow-catch-tray:before{content:none}
 .overflow-water-label{display:none}
-.overflow-tool.is-returning-water .experiment-tool-name{z-index:9;top:auto;bottom:8px;left:12px;padding:4px 6px;border-radius:6px;background:#f5f8f3ed;box-shadow:0 1px 4px #263a3022}
+.overflow-tool.is-returning-water .experiment-tool-name{z-index:9;top:12px;bottom:auto;left:12px;padding:4px 6px;border-radius:6px;background:#f5f8f3ed;box-shadow:0 1px 4px #263a3022}
 .overflow-tool.is-returning-water .overflow-catch-tray{animation:lift-tray-to-rim 1.3s cubic-bezier(.35,.04,.2,1) forwards;transform-origin:88% 20%}
 @keyframes lift-tray-to-rim{0%{transform:translateX(-50%) translateY(0) rotate(0)}18%{transform:translateX(-50%) translateY(-15px) rotate(0)}74%,100%{transform:translateX(calc(-50% - 118px)) translateY(-215px) rotate(14deg)}}
 .overflow-tool.is-returning-water .overflow-catch-tray::after{content:"";position:absolute;z-index:8;top:calc(100% - 3px);right:7%;width:9px;height:54px;border-radius:0 0 55% 55%;background:linear-gradient(90deg,#61b5c255,#5db8c9ed 48%,#53a9b888);opacity:0;transform:rotate(-14deg) scaleY(.35);transform-origin:top;pointer-events:none;animation:return-from-tray .95s ease .45s forwards}
