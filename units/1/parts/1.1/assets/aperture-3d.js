@@ -156,6 +156,11 @@ if (canvas) {
   let selectedIndex = 1;
   const standardHeightTolerance = 0.02;
   const fullBlockOffset = 0.36;
+  const visibleLightThreshold = 0.2;
+  const lightRemainingAtOffset = (deviation) => {
+    const remaining = THREE.MathUtils.clamp(1 - deviation / fullBlockOffset, 0, 1);
+    return remaining <= visibleLightThreshold ? 0 : remaining;
+  };
   const selectableSurfaces = plates.map(({ pickSurface }) => pickSurface);
 
   const updateExperiment = () => {
@@ -173,19 +178,19 @@ if (canvas) {
     const heightPercent = Number(heightInput.value);
     const selectedDeviation = Math.abs(selected.height);
     const isStandardHeight = selectedDeviation <= standardHeightTolerance;
-    const isFullyBlocked = selectedDeviation >= fullBlockOffset;
+    const isFullyBlocked = lightRemainingAtOffset(selectedDeviation) === 0;
     heightOutput.textContent = isStandardHeight ? '標準高度' : isFullyBlocked ? (heightPercent > 0 ? '偏高' : '偏低') : (heightPercent > 0 ? '略微偏高' : '略微偏低');
     heightOutput.classList.toggle('is-standard', isStandardHeight);
     const plateNames = ['小孔板 1', '中間板', '小孔板 3'];
     plateButtons.forEach((button, index) => {
-      const letsLightThrough = Math.abs(plateStates[index].height) < fullBlockOffset;
+      const letsLightThrough = lightRemainingAtOffset(Math.abs(plateStates[index].height)) > 0;
       button.classList.toggle('is-transmitting', letsLightThrough);
       button.setAttribute('aria-label', `${plateNames[index]}，${letsLightThrough ? '仍有光通過' : '偏移過大，光被擋住'}`);
       button.title = letsLightThrough ? '仍有光通過這片小孔板' : '偏移過大，光被這片小孔板擋住';
     });
     selectedLabel.textContent = `調整${plateNames[selectedIndex]}`;
     const maxDeviation = Math.max(...plateStates.map((state) => Math.abs(state.height)));
-    const transmission = THREE.MathUtils.clamp(1 - maxDeviation / fullBlockOffset, 0, 1);
+    const transmission = lightRemainingAtOffset(maxDeviation);
     mats.spot.opacity = transmission;
     mats.spotGlow.opacity = transmission * 0.34;
     spot.scale.setScalar(0.72 + transmission * 0.28);
