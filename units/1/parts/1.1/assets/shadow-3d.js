@@ -362,39 +362,6 @@ if (canvas) {
     const parkedX = 2.38;
     blocker.position.x = parkedX;
 
-    // Thin conceptual rays stop at the opaque sphere. They are teaching overlays, not visible air beams.
-    const rayMaterial = new THREE.LineBasicMaterial({ color: '#e6aa46', transparent: true, opacity: 0.68, depthWrite: false });
-    const sourcePoint = new THREE.Vector3(0, 1.55, -3.45);
-    const rayTargets = [];
-    const rays = [];
-    for (let i = -3; i <= 3; i += 1) {
-      const endpoint = new THREE.Vector3(i * 0.49, 1.55, screenZ - 0.018);
-      const geometry = new THREE.BufferGeometry().setFromPoints([sourcePoint, endpoint]);
-      const line = new THREE.Line(geometry, rayMaterial);
-      line.renderOrder = 2;
-      scene.add(line);
-      rayTargets.push(endpoint);
-      rays.push(line);
-    }
-
-    const updateRays = () => {
-      const center = new THREE.Vector3(blocker.position.x, 1.61, railZ);
-      rayTargets.forEach((endpoint, index) => {
-        const direction = endpoint.clone().sub(sourcePoint);
-        const length = direction.length();
-        direction.normalize();
-        const projection = center.clone().sub(sourcePoint).dot(direction);
-        const closest = sourcePoint.clone().addScaledVector(direction, projection);
-        const distanceToRay = closest.distanceTo(center);
-        let end = endpoint;
-        if (projection > 0 && projection < length && distanceToRay < sphereRadius) {
-          const stopDistance = Math.max(0.06, projection - Math.sqrt(sphereRadius ** 2 - distanceToRay ** 2));
-          end = sourcePoint.clone().addScaledVector(direction, stopDistance);
-        }
-        rays[index].geometry.setFromPoints([sourcePoint, end]);
-      });
-    };
-
     const resize = () => {
       const width = Math.max(canvas.clientWidth, 1);
       const height = Math.max(canvas.clientHeight, 1);
@@ -482,7 +449,6 @@ if (canvas) {
       if (animation) {
         const progress = THREE.MathUtils.clamp((performance.now() - animation.started) / animation.duration, 0, 1);
         blocker.position.x = THREE.MathUtils.lerp(animation.from, animation.to, ease(progress));
-        updateRays();
         if (progress >= 1) {
           animation = null;
           status.textContent = blocked ? '球體擋住部分光，屏幕相應位置形成影子。' : '球體停在光路旁，屏幕均勻受光。';
@@ -490,7 +456,6 @@ if (canvas) {
       }
       renderer.render(scene, camera);
     };
-    updateRays();
     animate();
   } catch (error) {
     console.error('Shadow 3D scene failed to initialize:', error);
