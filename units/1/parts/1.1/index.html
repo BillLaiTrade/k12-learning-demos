@@ -83,6 +83,8 @@
     #shadow-3d-scene { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
     #shadow-3d-scene:active { cursor: grabbing; }
     #shadow-3d-scene.dragging-blocker { cursor: grabbing; }
+    #shadow-size-3d-scene { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+    #shadow-size-3d-scene:active, #shadow-size-3d-scene.dragging-size-object { cursor: grabbing; }
     .shadow-scene-actions { position: absolute; z-index: 2; top: 10px; left: 10px; }
     .shadow-scene-action { min-height: 44px; padding: 7px 13px; border: 1px solid #aebfae; border-radius: 11px; background: rgb(255 253 248 / 97%); color: #213a32; font-size: .9rem; font-weight: 800; box-shadow: 0 3px 9px #243a351a; backdrop-filter: blur(4px); }
     .shadow-scene-action:hover, .shadow-scene-action:focus-visible { border-color: var(--green); outline: 2px solid rgb(23 107 83 / 12%); }
@@ -418,21 +420,14 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>物體沒有變，為什麼把它移動後，影子也會變大或變小？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>把遮擋物移近光源，再移近屏幕，比較兩次影子的輪廓。</p></div>
             <div class="visual">
-              <svg viewBox="0 0 720 260" role="img" aria-labelledby="shadow-size-title shadow-size-desc">
-                <title id="shadow-size-title">移動遮擋物觀察影子的大小</title><desc id="shadow-size-desc">滑桿可以移動物體在點光源與屏幕之間的位置。物體靠近光源時，屏幕上的影子較大。</desc>
-                <defs><linearGradient id="shadow-size-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8f3e5"/><stop offset="1" stop-color="#edf4ef"/></linearGradient><marker id="size-ray-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d99a36"/></marker></defs>
-                <rect width="720" height="260" rx="14" fill="url(#shadow-size-bg)"/><path d="M78 215H639" stroke="#9aab9f" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="80" cy="122" r="21" fill="#ffd46b" stroke="#bd8a27" stroke-width="4"/><path d="M80 97v-9M55 122h-9M105 122h9M62 104l-7-7M98 104l7-7" stroke="#e2ad44" stroke-width="3" stroke-linecap="round"/>
-                <path id="size-ray-top" d="M101 122 202 104 620 53" fill="none" stroke="#d99a36" stroke-width="3" marker-end="url(#size-ray-arrow)"/>
-                <path id="size-ray-bottom" d="M101 122 202 140 620 191" fill="none" stroke="#d99a36" stroke-width="3" marker-end="url(#size-ray-arrow)"/>
-                <path id="size-object" d="M202 111q18-18 36 0v22q-18 18-36 0Z" fill="#71827b" stroke="#445951" stroke-width="3"/>
-                <path d="M620 46v148" stroke="#526f65" stroke-width="8" stroke-linecap="round"/><rect id="cast-shadow" x="613" y="53" width="14" height="138" rx="5" fill="#42534d"/>
-                <text x="80" y="249" text-anchor="middle" fill="#52665d" font-size="14" font-weight="700">光源</text><text id="size-object-label" x="220" y="192" text-anchor="middle" fill="#52665d" font-size="14" font-weight="700">遮擋物</text><text x="664" y="126" fill="#52665d" font-size="14" font-weight="700">屏幕</text>
-                <text x="365" y="46" text-anchor="middle" fill="#52665d" font-size="14">影子輪廓沿著光線延伸</text>
-              </svg>
+              <div class="shadow-scene-frame shadow-size-scene-frame">
+                <canvas id="shadow-size-3d-scene" role="img" aria-label="可旋轉觀察的立體影子大小實驗：直接拖曳球體沿光源到屏幕的方向前後移動，觀察屏幕上的影子大小變化。" aria-describedby="shadow-size-scene-status shadow-size-feedback"></canvas>
+                <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-size-view-reset" type="button">重設視角</button></div>
+                <p class="shadow-scene-status" id="shadow-size-scene-status" aria-live="polite">球體靠近光源，屏幕上的影子較大。</p>
+              </div>
               <div class="range-row"><input id="shadow-position" type="range" min="0" max="100" value="0" aria-label="移動光源和屏幕之間的遮擋物"><output id="shadow-size-output" for="shadow-position">靠近光源，影子較大</output></div>
               <div class="scale-legend"><span>靠近光源</span><span>靠近屏幕</span></div>
-              <p class="visual-caption" id="shadow-size-feedback" aria-live="polite">物體靠近光源時，影子會放大；靠近屏幕時，影子會縮小。</p>
+              <p class="visual-caption" id="shadow-size-feedback" aria-live="polite">直接拖曳球體前後移動，或用滑桿調整位置；球體越靠近光源，影子越大。</p>
             </div>
             <div class="fact"><p><strong>觀察重點：</strong>影子的大小會隨光源、遮擋物和屏幕的相對位置改變。示意圖用點光源簡化說明，實際影子邊緣可能較模糊。</p></div>
           </div>
@@ -545,32 +540,6 @@
           : `約 ${Math.round(distance).toLocaleString('zh-TW')} 公里；光正往月球前進。`;
       });
 
-      const shadowPosition = document.querySelector('#shadow-position');
-      const shadowSizeOutput = document.querySelector('#shadow-size-output');
-      const shadowSizeFeedback = document.querySelector('#shadow-size-feedback');
-      const sizeObject = document.querySelector('#size-object');
-      const sizeObjectLabel = document.querySelector('#size-object-label');
-      const castShadow = document.querySelector('#cast-shadow');
-      const sizeRayTop = document.querySelector('#size-ray-top');
-      const sizeRayBottom = document.querySelector('#size-ray-bottom');
-      shadowPosition.addEventListener('input', () => {
-        const value = Number(shadowPosition.value);
-        const objectX = 220 + value * 1.45;
-        const shadowHalfHeight = 18 * 540 / (objectX - 80);
-        sizeObject.setAttribute('d', `M${objectX - 18} 111q18-18 36 0v22q-18 18-36 0Z`);
-        sizeObjectLabel.setAttribute('x', String(objectX));
-        castShadow.setAttribute('y', String(122 - shadowHalfHeight));
-        castShadow.setAttribute('height', String(shadowHalfHeight * 2));
-        sizeRayTop.setAttribute('d', `M101 122 ${objectX - 18} 104 620 ${122 - shadowHalfHeight}`);
-        sizeRayBottom.setAttribute('d', `M101 122 ${objectX - 18} 140 620 ${122 + shadowHalfHeight}`);
-        const closerToSource = value < 50;
-        shadowSizeOutput.value = closerToSource ? '靠近光源，影子較大' : '靠近屏幕，影子較小';
-        shadowSizeOutput.textContent = shadowSizeOutput.value;
-        shadowSizeFeedback.textContent = closerToSource
-          ? '物體靠近光源時，影子會放大。'
-          : '物體靠近屏幕時，影子會縮小。';
-      });
-
       const choices = [...document.querySelectorAll('[data-answer]')];
       const checkFeedback = document.querySelector('#check-feedback');
       choices.forEach((button) => button.addEventListener('click', () => {
@@ -623,5 +592,6 @@
   </script>
   <script type="module" src="assets/aperture-3d.js?v=dialogue-story-20261024"></script>
   <script type="module" src="assets/shadow-3d.js?v=shadow-short-rail-20261024"></script>
+  <script type="module" src="assets/shadow-size-3d.js?v=shadow-size-3d-20261024"></script>
 </body>
 </html>
