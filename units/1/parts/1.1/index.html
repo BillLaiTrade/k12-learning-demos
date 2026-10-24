@@ -82,6 +82,7 @@
     .shadow-scene-frame { position: relative; height: clamp(320px, 46vw, 480px); overflow: hidden; border: 1px solid #dbe2d8; border-radius: 17px; background: linear-gradient(#e9eee8, #f6f1e6); box-shadow: 0 5px 18px #243a3514; }
     #shadow-3d-scene { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
     #shadow-3d-scene:active { cursor: grabbing; }
+    #shadow-3d-scene.dragging-blocker { cursor: grabbing; }
     .shadow-scene-actions { position: absolute; z-index: 2; top: 10px; left: 10px; }
     .shadow-scene-action { min-height: 44px; padding: 7px 13px; border: 1px solid #aebfae; border-radius: 11px; background: rgb(255 253 248 / 97%); color: #213a32; font-size: .9rem; font-weight: 800; box-shadow: 0 3px 9px #243a351a; backdrop-filter: blur(4px); }
     .shadow-scene-action:hover, .shadow-scene-action:focus-visible { border-color: var(--green); outline: 2px solid rgb(23 107 83 / 12%); }
@@ -391,7 +392,7 @@
             <p>光源發出的光沿直線前進。當不透明物體擋在光源和屏幕之間，沒有光到達的區域就形成影子。</p>
             <div class="shadow-lab">
               <div class="shadow-scene-frame">
-                <canvas id="shadow-3d-scene" role="img" aria-label="可旋轉觀察的立體影子實驗：光源與屏幕固定，球體沿導軌移入或退出光路。" aria-describedby="shadow-scene-status shadow-view-hint"></canvas>
+                <canvas id="shadow-3d-scene" role="img" aria-label="可旋轉觀察的立體影子實驗：可直接拖曳球體沿導軌移動，觀察屏幕影子變化。" aria-describedby="shadow-scene-status shadow-view-hint"></canvas>
                 <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-view-reset" type="button">重設視角</button></div>
                 <p class="shadow-scene-status" id="shadow-scene-status" aria-live="polite">球體停在光路旁，屏幕均勻受光。</p>
               </div>
@@ -403,7 +404,7 @@
                 </button>
                 <div class="shadow-fixed-label"><span aria-hidden="true">▯</span>屏幕固定</div>
               </div>
-              <p class="visual-caption" id="shadow-view-hint">球體沿導軌滑入燈光前方時，屏幕上的影子逐漸形成。拖曳場景可旋轉觀察，滾輪或雙指可縮放。</p>
+              <p class="visual-caption" id="shadow-view-hint">直接拖曳球體沿導軌移動，屏幕影子會隨位置改變；拖曳空白處可旋轉場景，滾輪或雙指可縮放。</p>
             </div>
             <div class="fact"><p><strong>形成原因：</strong>影子不是物體發出的，而是光被不透明物體遮住後留下的暗區。</p></div>
           </div>
@@ -621,6 +622,6 @@
     })();
   </script>
   <script type="module" src="assets/aperture-3d.js?v=dialogue-story-20261024"></script>
-  <script type="module" src="assets/shadow-3d.js?v=shadow-free-orbit-20261024"></script>
+  <script type="module" src="assets/shadow-3d.js?v=shadow-ball-drag-20261024"></script>
 </body>
 </html>

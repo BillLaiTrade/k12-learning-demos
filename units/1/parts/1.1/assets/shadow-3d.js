@@ -399,6 +399,35 @@ if (canvas) {
     const pointers = new Map();
     let previousPoint = null;
     let previousPinch = 0;
+    let blockerPointerId = null;
+    const raycaster = new THREE.Raycaster();
+    const pointerNdc = new THREE.Vector2();
+    const blockerDragPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), -railZ);
+    const dragIntersection = new THREE.Vector3();
+    const castPointerRay = (event) => {
+      const bounds = canvas.getBoundingClientRect();
+      pointerNdc.set(
+        ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
+        -((event.clientY - bounds.top) / bounds.height) * 2 + 1
+      );
+      raycaster.setFromCamera(pointerNdc, camera);
+    };
+    const isPointerOnBlocker = (event) => {
+      castPointerRay(event);
+      blocker.updateMatrixWorld(true);
+      return raycaster.intersectObject(sphere, false).length > 0;
+    };
+    const updateBlockerFromPointer = (event) => {
+      castPointerRay(event);
+      if (!raycaster.ray.intersectPlane(blockerDragPlane, dragIntersection)) return;
+      blocker.position.x = THREE.MathUtils.clamp(dragIntersection.x, targetX, parkedX);
+      setToggleState(blocker.position.x < (targetX + parkedX) / 2);
+      status.textContent = blocker.position.x < 0.55
+        ? '球體已移至光路中央，屏幕形成影子。'
+        : blocker.position.x > parkedX - 0.35
+          ? '球體位於光路旁，屏幕均勻受光。'
+          : '球體正在移動，屏幕影子隨位置改變。';
+    };
     const pinchDistance = () => {
       const points = [...pointers.values()];
       if (points.length < 2) return 0;
@@ -406,16 +435,30 @@ if (canvas) {
     };
     canvas.addEventListener('pointerdown', (event) => {
       if (event.pointerType === 'mouse' && event.button !== 0) return;
+      if (pointers.size === 0 && isPointerOnBlocker(event)) {
+        animation = null;
+        blockerPointerId = event.pointerId;
+        canvas.classList.add('dragging-blocker');
+        status.textContent = '拖曳球體，讓它沿導軌移動。';
+      } else if (pointers.size > 0) {
+        blockerPointerId = null;
+        canvas.classList.remove('dragging-blocker');
+      }
       canvas.setPointerCapture(event.pointerId);
       pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-      previousPoint = { x: event.clientX, y: event.clientY };
+      previousPoint = blockerPointerId === event.pointerId ? null : { x: event.clientX, y: event.clientY };
       previousPinch = pinchDistance();
     });
     canvas.addEventListener('pointermove', (event) => {
-      if (!pointers.has(event.pointerId)) return;
+      if (!pointers.has(event.pointerId)) {
+        if (event.pointerType === 'mouse') canvas.style.cursor = isPointerOnBlocker(event) ? 'pointer' : 'grab';
+        return;
+      }
       const point = { x: event.clientX, y: event.clientY };
       pointers.set(event.pointerId, point);
-      if (pointers.size >= 2) {
+      if (blockerPointerId === event.pointerId && pointers.size === 1) {
+        updateBlockerFromPointer(event);
+      } else if (pointers.size >= 2) {
         const nextPinch = pinchDistance();
         if (previousPinch > 0 && nextPinch > 0) radius = THREE.MathUtils.clamp(radius * (previousPinch / nextPinch), 6.5, 18);
         previousPinch = nextPinch;
@@ -428,6 +471,10 @@ if (canvas) {
       updateCamera();
     });
     const endPointer = (event) => {
+      if (blockerPointerId === event.pointerId) {
+        blockerPointerId = null;
+        canvas.classList.remove('dragging-blocker');
+      }
       pointers.delete(event.pointerId);
       previousPoint = pointers.size === 1 ? [...pointers.values()][0] : null;
       previousPinch = pinchDistance();
