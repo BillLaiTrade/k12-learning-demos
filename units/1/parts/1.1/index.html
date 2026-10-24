@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f1e8">
-  <meta name="description" content="從光源、看見物體和光速，開始認識光。">
+  <meta name="description" content="從光源與看見物體開始，探索光的直進、影子，再以光速收尾。">
   <link rel="icon" href="data:,">
-  <title>認識光：我們怎麼看見？｜光學單元</title>
+  <title>光與看見：光如何傳播？｜光學單元</title>
   <style>
     :root {
       color-scheme: light;
@@ -150,15 +150,15 @@
       <span class="crumb">國二上・理化</span>
     </div>
     <div class="hero">
-      <div class="eyebrow">第一段學習・認識光</div>
-      <h1>光是什麼？我們怎麼看見？</h1>
-      <p>從熟悉的生活經驗開始：哪些東西會發光？光怎麼進入眼睛？它傳得有多快？</p>
+      <div class="eyebrow">第一段學習・光與看見</div>
+      <h1>光如何傳播，讓我們看見？</h1>
+      <p>從光源與看見物體開始，觀察光沿直線前進、影子如何形成，最後感受光速的尺度。</p>
     </div>
   </header>
   <main class="shell">
     <div class="section-top">
-      <div><h2>沿著探索路線，一步步認識光</h2><progress id="lesson-progress" max="5" value="1" aria-label="學習路線閱讀進度"></progress></div>
-      <span class="progress-copy" id="progress-copy">目前在第 1 段，共 5 段</span>
+      <div><h2>沿著探索路線，一步步認識光</h2><progress id="lesson-progress" max="7" value="1" aria-label="學習路線閱讀進度"></progress></div>
+      <span class="progress-copy" id="progress-copy">目前在第 1 段，共 7 段</span>
     </div>
     <div class="lesson-layout">
       <nav class="route" aria-label="探索路線">
@@ -166,9 +166,11 @@
         <div class="route-inner">
           <a href="#card-01" aria-current="step"><b>01</b><span>為什麼我們看得見東西？</span></a>
           <a href="#card-02"><b>02</b><span>哪些物體會自己發光？</span></a>
-          <a href="#card-03"><b>03</b><span>光傳得有多快？</span></a>
-          <a href="#card-04"><b>04</b><span>光走到哪裡都一樣快嗎？</span></a>
-          <a href="#card-05"><b>05</b><span>整理：光如何讓我們看見？</span></a>
+          <a href="#card-03"><b>03</b><span>光路會彎嗎？</span></a>
+          <a href="#card-04"><b>04</b><span>影子怎麼形成？</span></a>
+          <a href="#card-05"><b>05</b><span>影子的大小如何改變？</span></a>
+          <a href="#card-06"><b>06</b><span>光傳得有多快？</span></a>
+          <a href="#card-07"><b>07</b><span>整理：用光路解釋觀察</span></a>
         </div>
       </nav>
       <div class="cards">
@@ -268,75 +270,134 @@
         </section>
 
         <section class="lesson-card" id="card-03">
-          <div class="card-side"><span class="card-number">03</span><h3>感受光速的尺度</h3><span class="card-role">光不是瞬間到達</span></div>
+          <div class="card-side"><span class="card-number">03</span><h3>觀察光的路徑</h3><span class="card-role">光沿直線前進</span></div>
+          <div class="card-main">
+            <h2>光路會彎嗎？</h2>
+            <p>把有小孔的板子排成一列。小孔對齊時，光能穿過；移開中間一片，光就被擋住。</p>
+            <div class="visual">
+              <div class="scene-pair">
+                <figure class="scene-example">
+                  <div class="scene-example-head"><span class="scene-index">觀察 A</span><h3>小孔排成一直線</h3></div>
+                  <svg viewBox="0 0 520 220" role="img" aria-labelledby="aligned-title aligned-desc">
+                    <title id="aligned-title">三片板子的小孔對齊，光可以直線通過</title><desc id="aligned-desc">雷射光沿水平直線穿過三個對齊的小孔。</desc>
+                    <defs><linearGradient id="aligned-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7f1e2"/><stop offset="1" stop-color="#edf4ef"/></linearGradient><marker id="aligned-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d99a36"/></marker></defs>
+                    <rect width="520" height="220" rx="12" fill="url(#aligned-bg)"/>
+                    <rect x="23" y="91" width="60" height="38" rx="8" fill="#dce9df" stroke="#59766b" stroke-width="3"/><circle cx="75" cy="110" r="7" fill="#fffdf8" stroke="#59766b" stroke-width="2"/><path d="M37 99h22M37 121h22" stroke="#90aa98" stroke-width="2"/>
+                    <path d="M83 110H482" fill="none" stroke="#e0a13b" stroke-width="4" stroke-linecap="round" marker-end="url(#aligned-arrow)"/>
+                    <g fill="#d4ddd5" stroke="#71877c" stroke-width="3"><path d="M145 45h18v130h-18z"/><path d="M272 45h18v130h-18z"/><path d="M399 45h18v130h-18z"/></g>
+                    <g fill="#fffdf8" stroke="#71877c" stroke-width="2"><ellipse cx="154" cy="110" rx="5" ry="10"/><ellipse cx="281" cy="110" rx="5" ry="10"/><ellipse cx="408" cy="110" rx="5" ry="10"/></g>
+                    <text x="72" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">光源</text><text x="281" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">對齊的小孔</text><text x="460" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">光穿出</text>
+                  </svg>
+                  <figcaption class="scene-path"><span class="scene-path-label">結果</span><span>小孔對齊</span><span class="path-arrow">→</span><span>光能通過</span></figcaption>
+                </figure>
+                <figure class="scene-example">
+                  <div class="scene-example-head"><span class="scene-index">觀察 B</span><h3>移開中間那片</h3></div>
+                  <svg viewBox="0 0 520 220" role="img" aria-labelledby="offset-title offset-desc">
+                    <title id="offset-title">中間小孔移開直線，光被板子擋住</title><desc id="offset-desc">前後兩片小孔仍在同一高度，中間小孔偏低，原本的直線光路被遮擋。</desc>
+                    <defs><linearGradient id="offset-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7f1e2"/><stop offset="1" stop-color="#edf4ef"/></linearGradient></defs>
+                    <rect width="520" height="220" rx="12" fill="url(#offset-bg)"/>
+                    <rect x="23" y="91" width="60" height="38" rx="8" fill="#dce9df" stroke="#59766b" stroke-width="3"/><circle cx="75" cy="110" r="7" fill="#fffdf8" stroke="#59766b" stroke-width="2"/><path d="M37 99h22M37 121h22" stroke="#90aa98" stroke-width="2"/>
+                    <path d="M83 110H154" fill="none" stroke="#e0a13b" stroke-width="4" stroke-linecap="round"/><path d="M164 98v24" stroke="#c86a42" stroke-width="5" stroke-linecap="round"/><path d="M180 110h288" fill="none" stroke="#b4bdb6" stroke-width="3" stroke-dasharray="8 8"/>
+                    <g fill="#d4ddd5" stroke="#71877c" stroke-width="3"><path d="M145 45h18v130h-18z"/><path d="M272 45h18v130h-18z"/><path d="M399 45h18v130h-18z"/></g>
+                    <g fill="#fffdf8" stroke="#71877c" stroke-width="2"><ellipse cx="154" cy="110" rx="5" ry="10"/><ellipse cx="281" cy="150" rx="5" ry="10"/><ellipse cx="408" cy="110" rx="5" ry="10"/></g>
+                    <text x="72" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">光源</text><text x="281" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">小孔錯開</text><text x="460" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">光被擋住</text>
+                  </svg>
+                  <figcaption class="scene-path"><span class="scene-path-label">觀察</span><span>光不會轉彎繞過板子</span></figcaption>
+                </figure>
+              </div>
+              <p class="visual-caption">把小孔重新排直，光又能通過。這表示光在均勻環境中沿直線前進。</p>
+            </div>
+            <div class="fact"><p><strong>觀察結論：</strong>光在真空或均勻介質中沿直線傳播。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-04">
+          <div class="card-side"><span class="card-number">04</span><h3>把直線光路連到影子</h3><span class="card-role">不透明物體擋住光</span></div>
+          <div class="card-main">
+            <h2>影子怎麼形成？</h2>
+            <p>光源發出的光沿直線前進。當不透明物體擋在光源和屏幕之間，沒有光到達的區域就形成影子。</p>
+            <div class="visual">
+              <svg viewBox="0 0 720 260" role="img" aria-labelledby="shadow-title shadow-desc">
+                <title id="shadow-title">不透明物體擋住光，在屏幕上形成影子</title><desc id="shadow-desc">點光源發出的光沿直線前進，被球形不透明物體擋住，屏幕上出現暗色影子。</desc>
+                <defs><linearGradient id="shadow-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8f3e5"/><stop offset="1" stop-color="#edf4ef"/></linearGradient><radialGradient id="shadow-glow"><stop stop-color="#ffe9ad" stop-opacity=".8"/><stop offset="1" stop-color="#ffe9ad" stop-opacity="0"/></radialGradient><marker id="shadow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d99a36"/></marker></defs>
+                <rect width="720" height="260" rx="14" fill="url(#shadow-bg)"/><circle cx="90" cy="130" r="74" fill="url(#shadow-glow)"/>
+                <circle cx="90" cy="130" r="23" fill="#ffd46b" stroke="#bd8a27" stroke-width="4"/><path d="M90 103v54M63 130h54M71 111l38 38M109 111l-38 38" stroke="#fff4c8" stroke-width="3" stroke-linecap="round"/>
+                <path d="M113 130 332 94 624 55M113 130 332 166 624 205" fill="none" stroke="#d99a36" stroke-width="4" stroke-linecap="round" marker-end="url(#shadow-arrow)"/>
+                <path d="M348 75a36 36 0 1 1-1 0Z" fill="#71827b" stroke="#445951" stroke-width="4"/><path d="M327 61q17-18 36-5" fill="none" stroke="#aebbb4" stroke-width="4" stroke-linecap="round"/>
+                <path d="M625 35v190" stroke="#526f65" stroke-width="9" stroke-linecap="round"/><rect x="615" y="109" width="19" height="42" rx="5" fill="#42534d"/>
+                <text x="90" y="204" text-anchor="middle" fill="#52665d" font-size="15" font-weight="700">光源</text><text x="348" y="232" text-anchor="middle" fill="#52665d" font-size="15" font-weight="700">不透明物體</text><text x="664" y="132" fill="#52665d" font-size="15" font-weight="700">屏幕</text>
+                <rect x="206" y="25" width="133" height="27" rx="13" fill="#fffdf8" stroke="#ead8b6"/><text x="272" y="43" text-anchor="middle" fill="#8a672d" font-size="13" font-weight="700">直線光路</text>
+              </svg>
+              <p class="visual-caption">球擋住部分光，屏幕上相應的位置收不到光，於是出現影子。</p>
+            </div>
+            <div class="fact"><p><strong>形成原因：</strong>影子不是物體發出的，而是光被不透明物體遮住後留下的暗區。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-05">
+          <div class="card-side"><span class="card-number">05</span><h3>觀察物體位置的影響</h3><span class="card-role">物體靠近光源，影子變大</span></div>
+          <div class="card-main">
+            <h2>影子的大小如何改變？</h2>
+            <p>試著移動光源和屏幕之間的遮擋物。觀察它靠近光源或靠近屏幕時，屏幕上的影子有什麼變化。</p>
+            <div class="visual">
+              <svg viewBox="0 0 720 260" role="img" aria-labelledby="shadow-size-title shadow-size-desc">
+                <title id="shadow-size-title">移動遮擋物觀察影子的大小</title><desc id="shadow-size-desc">滑桿可以移動物體在點光源與屏幕之間的位置。物體靠近光源時，屏幕上的影子較大。</desc>
+                <defs><linearGradient id="shadow-size-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8f3e5"/><stop offset="1" stop-color="#edf4ef"/></linearGradient><marker id="size-ray-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d99a36"/></marker></defs>
+                <rect width="720" height="260" rx="14" fill="url(#shadow-size-bg)"/><path d="M78 215H639" stroke="#9aab9f" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="80" cy="122" r="21" fill="#ffd46b" stroke="#bd8a27" stroke-width="4"/><path d="M80 97v-9M55 122h-9M105 122h9M62 104l-7-7M98 104l7-7" stroke="#e2ad44" stroke-width="3" stroke-linecap="round"/>
+                <path id="size-ray-top" d="M101 122 202 104 620 53" fill="none" stroke="#d99a36" stroke-width="3" marker-end="url(#size-ray-arrow)"/>
+                <path id="size-ray-bottom" d="M101 122 202 140 620 191" fill="none" stroke="#d99a36" stroke-width="3" marker-end="url(#size-ray-arrow)"/>
+                <path id="size-object" d="M202 111q18-18 36 0v22q-18 18-36 0Z" fill="#71827b" stroke="#445951" stroke-width="3"/>
+                <path d="M620 46v148" stroke="#526f65" stroke-width="8" stroke-linecap="round"/><rect id="cast-shadow" x="613" y="53" width="14" height="138" rx="5" fill="#42534d"/>
+                <text x="80" y="249" text-anchor="middle" fill="#52665d" font-size="14" font-weight="700">光源</text><text id="size-object-label" x="220" y="192" text-anchor="middle" fill="#52665d" font-size="14" font-weight="700">遮擋物</text><text x="664" y="126" fill="#52665d" font-size="14" font-weight="700">屏幕</text>
+                <text x="365" y="46" text-anchor="middle" fill="#52665d" font-size="14">影子輪廓沿著光線延伸</text>
+              </svg>
+              <div class="range-row"><input id="shadow-position" type="range" min="0" max="100" value="0" aria-label="移動光源和屏幕之間的遮擋物"><output id="shadow-size-output" for="shadow-position">靠近光源，影子較大</output></div>
+              <div class="scale-legend"><span>靠近光源</span><span>靠近屏幕</span></div>
+              <p class="visual-caption" id="shadow-size-feedback" aria-live="polite">物體靠近光源時，影子會放大；靠近屏幕時，影子會縮小。</p>
+            </div>
+            <div class="fact"><p><strong>觀察重點：</strong>影子的大小會隨光源、遮擋物和屏幕的相對位置改變。示意圖用點光源簡化說明，實際影子邊緣可能較模糊。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-06">
+          <div class="card-side"><span class="card-number">06</span><h3>感受光速的尺度</h3><span class="card-role">光不是瞬間到達</span></div>
           <div class="card-main">
             <h2>光傳得有多快？</h2>
-            <p>光速非常快，但跨越很遠的距離仍需要時間。以地球和月球的平均距離作例子，看看光傳過去需要多久。</p>
+            <p>光沿直線傳播，但也需要時間走過距離。以地球和月球的平均距離作例子，感受光速的尺度。</p>
             <div class="visual">
               <svg viewBox="0 0 720 210" role="img" aria-labelledby="moon-title moon-desc">
-                <title id="moon-title">光從地球傳到月球的時間示意</title>
-                <desc id="moon-desc">圖中顯示地球、月球及兩者之間的光路，路徑長度不按比例。</desc>
+                <title id="moon-title">光從地球傳到月球的時間示意</title><desc id="moon-desc">圖中顯示地球、月球及兩者之間的光路，路徑長度不按比例。</desc>
                 <defs><marker id="arrow-path" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#91ae9a"/></marker></defs>
                 <path d="M95 96H618" stroke="#91ae9a" stroke-width="5" stroke-dasharray="9 9" marker-end="url(#arrow-path)"/>
-                <circle cx="95" cy="96" r="43" fill="#73a9bd" stroke="#4d7d90" stroke-width="4"/>
-                <path d="M75 84q14-14 29-4l8 11-14 5-6 18-12-8zM103 116l10 4-5 12-10-7z" fill="#9ac390"/>
-                <circle cx="618" cy="96" r="27" fill="#e9e7d5" stroke="#b5b39f" stroke-width="4"/>
-                <circle id="photon" cx="95" cy="96" r="12" fill="#efaa32" stroke="#fffefa" stroke-width="4"/>
-                <text x="95" y="171" text-anchor="middle" fill="#53665d" font-size="17">地球</text>
-                <text x="618" y="151" text-anchor="middle" fill="#53665d" font-size="17">月球</text>
-                <text x="357" y="57" text-anchor="middle" fill="#53665d" font-size="16">平均距離約 38 萬公里</text>
+                <circle cx="95" cy="96" r="43" fill="#73a9bd" stroke="#4d7d90" stroke-width="4"/><path d="M75 84q14-14 29-4l8 11-14 5-6 18-12-8zM103 116l10 4-5 12-10-7z" fill="#9ac390"/><circle cx="618" cy="96" r="27" fill="#e9e7d5" stroke="#b5b39f" stroke-width="4"/><circle id="photon" cx="95" cy="96" r="12" fill="#efaa32" stroke="#fffefa" stroke-width="4"/>
+                <text x="95" y="171" text-anchor="middle" fill="#53665d" font-size="17">地球</text><text x="618" y="151" text-anchor="middle" fill="#53665d" font-size="17">月球</text><text x="357" y="57" text-anchor="middle" fill="#53665d" font-size="16">平均距離約 38 萬公里</text>
               </svg>
-              <div class="range-row">
-                <input id="light-time" type="range" min="0" max="1.28" step="0.01" value="0" aria-label="調整光從地球前往月球所經過的時間">
-                <output id="light-time-output" for="light-time">0.00 秒</output>
-              </div>
+              <div class="range-row"><input id="light-time" type="range" min="0" max="1.28" step="0.01" value="0" aria-label="調整光從地球前往月球所經過的時間"><output id="light-time-output" for="light-time">0.00 秒</output></div>
               <div class="scale-legend"><span>光從地球出發</span><span>約 1.28 秒後抵達月球</span></div>
-              <p class="visual-caption" id="light-distance">光速約每秒 30 萬公里。拖動時間，觀察光走過的距離。</p>
-              <p class="visual-caption">示意圖的地球、月球與路徑長度不按比例。</p>
+              <p class="visual-caption" id="light-distance">拖動時間，觀察光走過的距離。</p><p class="visual-caption">示意圖的地球、月球與路徑長度不按比例。</p>
             </div>
             <div class="fact"><p><strong>光速：</strong>真空中的光每秒約走 30 萬公里。這裡用距離感受光速，不需要代公式計算。</p></div>
           </div>
         </section>
 
-        <section class="lesson-card" id="card-04">
-          <div class="card-side"><span class="card-number">04</span><h3>比較光在不同地方</h3><span class="card-role">介質會影響光速</span></div>
+        <section class="lesson-card end-card" id="card-07">
+          <div class="card-side"><span class="card-number">07</span><h3>把觀察連起來</h3><span class="card-role">整合理解</span></div>
           <div class="card-main">
-            <h2>光走到哪裡都一樣快嗎？</h2>
-            <p>光通過的物質，例如空氣、水或玻璃，稱為<strong>介質</strong>。選擇一種環境，比較光速。</p>
-            <div class="medium-grid" role="group" aria-label="選擇光傳播的環境">
-              <button class="control-button" type="button" data-medium="vacuum" aria-pressed="true">真空<span class="hint">沒有物質</span></button>
-              <button class="control-button" type="button" data-medium="air" aria-pressed="false">空氣<span class="hint">氣體</span></button>
-              <button class="control-button" type="button" data-medium="water" aria-pressed="false">水<span class="hint">液體</span></button>
-              <button class="control-button" type="button" data-medium="glass" aria-pressed="false">玻璃<span class="hint">固體</span></button>
-            </div>
-            <div class="visual" aria-label="不同環境中的光速比較">
-              <div class="speed-row"><span>真空</span><div class="speed-track"><div class="speed-bar selected" data-bar="vacuum" style="--speed:100%"></div></div><span class="speed-value">約 30 萬 km/s</span></div>
-              <div class="speed-row"><span>空氣</span><div class="speed-track"><div class="speed-bar" data-bar="air" style="--speed:99.9%"></div></div><span class="speed-value">約 30 萬 km/s</span></div>
-              <div class="speed-row"><span>水</span><div class="speed-track"><div class="speed-bar" data-bar="water" style="--speed:75%"></div></div><span class="speed-value">約 22.5 萬 km/s</span></div>
-              <div class="speed-row"><span>一般玻璃</span><div class="speed-track"><div class="speed-bar" data-bar="glass" style="--speed:67%"></div></div><span class="speed-value">約 20 萬 km/s</span></div>
-              <div class="visual-caption" id="medium-feedback" aria-live="polite">真空中的光速作為比較基準。</div>
-            </div>
-            <div class="fact"><p><strong>觀察重點：</strong>光在不同介質中的速度不完全相同；空氣中的速度非常接近真空。不同種類的玻璃，光速也會略有不同。</p></div>
-          </div>
-        </section>
-
-        <section class="lesson-card end-card" id="card-05">
-          <div class="card-side"><span class="card-number">05</span><h3>把觀察連起來</h3><span class="card-role">整合理解</span></div>
-          <div class="card-main">
-            <h2>整理：光如何讓我們看見？</h2>
-            <p>夜晚看到月亮時，哪一條光路能說明我們為什麼看得見它？</p>
-            <div class="choices" role="group" aria-label="選擇月亮光線進入眼睛的路徑">
-              <button class="choice" type="button" data-answer="wrong" aria-pressed="false">月亮自己發光，光進入眼睛</button>
-              <button class="choice" type="button" data-answer="right" aria-pressed="false">陽光照到月亮，再反射進入眼睛</button>
+            <h2>整理：用光路解釋看見與影子</h2>
+            <p>一本書本身不發光，卻能被看見；手電筒前方放一個不透明物體，屏幕上會出現影子。哪個說法能解釋這兩個現象？</p>
+            <div class="choices" role="group" aria-label="選擇能解釋看見書本和形成影子的光路">
+              <button class="choice" type="button" data-answer="wrong" aria-pressed="false">書本自己發光；光遇到物體會繞過去</button>
+              <button class="choice" type="button" data-answer="right" aria-pressed="false">燈光照到書本後反射進眼睛；不透明物體會擋住直線光路</button>
             </div>
             <div class="check-actions"><button class="action" id="check-answer" type="button">看看解釋</button><button class="secondary" id="reset-answer" type="button">重新選擇</button></div>
-            <div class="feedback" id="check-feedback" aria-live="polite">選擇一條光路，再看看光源、物體和眼睛如何連在一起。</div>
+            <div class="feedback" id="check-feedback" aria-live="polite">先選一個說法，再用光路檢查它能否同時解釋兩個現象。</div>
           </div>
         </section>
       </div>
     </div>
   </main>
-  <footer><div class="shell">第一段學習・認識光｜下一段：光如何傳播？</div></footer>
+  <footer><div class="shell">第一段學習・光與看見｜下一段：光遇到表面會怎樣？</div></footer>
   <script>
     (() => {
       const objectInfo = {
@@ -371,18 +432,31 @@
           : `約 ${Math.round(distance).toLocaleString('zh-TW')} 公里；光正往月球前進。`;
       });
 
-      const mediumCopy = {
-        vacuum: '真空中的光速作為比較基準。',
-        air: '空氣中的光速和真空非常接近，差異在這張簡化圖中不容易看出。',
-        water: '光在水中的速度約是真空中的四分之三。',
-        glass: '一般玻璃中的光速約是真空中的三分之二；玻璃成分不同，數值也會變。'
-      };
-      const mediumFeedback = document.querySelector('#medium-feedback');
-      document.querySelectorAll('[data-medium]').forEach((button) => button.addEventListener('click', () => {
-        document.querySelectorAll('[data-medium]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-        document.querySelectorAll('[data-bar]').forEach((bar) => bar.classList.toggle('selected', bar.dataset.bar === button.dataset.medium));
-        mediumFeedback.textContent = mediumCopy[button.dataset.medium];
-      }));
+      const shadowPosition = document.querySelector('#shadow-position');
+      const shadowSizeOutput = document.querySelector('#shadow-size-output');
+      const shadowSizeFeedback = document.querySelector('#shadow-size-feedback');
+      const sizeObject = document.querySelector('#size-object');
+      const sizeObjectLabel = document.querySelector('#size-object-label');
+      const castShadow = document.querySelector('#cast-shadow');
+      const sizeRayTop = document.querySelector('#size-ray-top');
+      const sizeRayBottom = document.querySelector('#size-ray-bottom');
+      shadowPosition.addEventListener('input', () => {
+        const value = Number(shadowPosition.value);
+        const objectX = 220 + value * 1.45;
+        const shadowHalfHeight = 18 * 540 / (objectX - 80);
+        sizeObject.setAttribute('d', `M${objectX - 18} 111q18-18 36 0v22q-18 18-36 0Z`);
+        sizeObjectLabel.setAttribute('x', String(objectX));
+        castShadow.setAttribute('y', String(122 - shadowHalfHeight));
+        castShadow.setAttribute('height', String(shadowHalfHeight * 2));
+        sizeRayTop.setAttribute('d', `M101 122 ${objectX - 18} 104 620 ${122 - shadowHalfHeight}`);
+        sizeRayBottom.setAttribute('d', `M101 122 ${objectX - 18} 140 620 ${122 + shadowHalfHeight}`);
+        const closerToSource = value < 50;
+        shadowSizeOutput.value = closerToSource ? '靠近光源，影子較大' : '靠近屏幕，影子較小';
+        shadowSizeOutput.textContent = shadowSizeOutput.value;
+        shadowSizeFeedback.textContent = closerToSource
+          ? '物體靠近光源時，影子會放大。'
+          : '物體靠近屏幕時，影子會縮小。';
+      });
 
       const choices = [...document.querySelectorAll('[data-answer]')];
       const checkFeedback = document.querySelector('#check-feedback');
@@ -392,22 +466,22 @@
           item.classList.remove('correct', 'incorrect');
         });
         button.classList.add(button.dataset.answer === 'right' ? 'correct' : 'incorrect');
-        checkFeedback.textContent = '已選好，按「看看解釋」整理光源、物體與眼睛的關係。';
+        checkFeedback.textContent = '已選好，按「看看解釋」檢查光路是否能說明看見和影子。';
         checkFeedback.dataset.state = '';
       }));
       document.querySelector('#check-answer').addEventListener('click', () => {
         const selected = choices.find((button) => button.getAttribute('aria-pressed') === 'true');
         if (!selected) {
-          checkFeedback.textContent = '先選一條光路，再看看說明。';
+          checkFeedback.textContent = '先選一個說法，再看看解釋。';
           checkFeedback.dataset.state = 'try';
           return;
         }
-        checkFeedback.textContent = '月亮不是光源。太陽光照到月亮後反射，部分光進入眼睛，所以我們看得見月亮。';
+        checkFeedback.textContent = '書本本身不發光；燈光照到書本後反射進入眼睛。光沿直線前進，不透明物體擋住光路時，屏幕上會出現影子。';
         checkFeedback.dataset.state = selected.dataset.answer === 'right' ? 'good' : 'try';
       });
       document.querySelector('#reset-answer').addEventListener('click', () => {
         choices.forEach((item) => { item.setAttribute('aria-pressed', 'false'); item.classList.remove('correct', 'incorrect'); });
-        checkFeedback.textContent = '選擇一條光路，再看看光源、物體和眼睛如何連在一起。';
+        checkFeedback.textContent = '先選一個說法，再用光路檢查它能否同時解釋兩個現象。';
         checkFeedback.dataset.state = '';
       });
 
