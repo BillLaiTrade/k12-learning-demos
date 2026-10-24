@@ -349,8 +349,6 @@
     .phase-solid-flow-mobile path.is-active { stroke-width:4.5; opacity:1; }
     .phase-solid-flow-particles { position:absolute; z-index:2; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
     .phase-solid-flow-particle { stroke:#fff; stroke-width:1.6; }
-    .phase-solid-flow-particle.is-incoming { fill:#2346bd; }
-    .phase-solid-flow-particle.is-outgoing { fill:#75b7d0; }
     .phase-solid-process { position:relative; z-index:1; min-height:120px; width:100%; padding:14px 16px; border:1px solid #b9d0c2; border-radius:14px; background:#fffefa; color:#253e38; text-align:left; cursor:pointer; box-shadow:0 3px 9px #263b3014; transition:transform .16s,box-shadow .16s; }
     .phase-solid-process:hover,.phase-solid-process:focus-visible { transform:translateY(-2px); box-shadow:0 6px 14px #263b3022; outline:3px solid #176b5330; }
     .phase-solid-process[aria-pressed="true"] { box-shadow:0 0 0 2px #176b5340; }
@@ -1517,6 +1515,8 @@
       sublimation:{from:"solid",to:"gas",heading:"冰 → 水蒸氣：吸熱昇華",source:"吸熱",status:"表面粒子先脫離固態排列並在空間移動；尚未昇華的粒子繼續振動"},
       deposition:{from:"gas",to:"solid",heading:"水蒸氣 → 冰：放熱凝華",source:"放熱／冷表面",status:"粒子在冷端直接排列成固態，沒有經過液態"}
     };
+    const phaseParticleColors={solid:"#2346bd",liquid:"#438bb8",gas:"#94c8da"};
+    const solidEdgeTransitions={freeze:{from:"liquid",to:"solid"},deposition:{from:"gas",to:"solid"},melt:{from:"solid",to:"liquid"},sublimation:{from:"solid",to:"gas"}};
     function phaseDemoTargets(state,forSolidOverview=false){
       if(state==="solid")return freezeParticles.map((_,i)=>{const row=Math.floor(i/8),column=i%8,x=123+column*15+(row%2)*7,y=45+row*12;return forSolidOverview?{x:x*1.25-45,y:y*1.25}:{x,y};});
       if(state==="liquid")return freezeParticles.map((_,i)=>{const row=Math.floor(i/16),column=i%16;return{x:27+column*20.2+(row%2)*2,y:81+row*13};});
@@ -1545,14 +1545,16 @@
       startPhaseDemoMotion("solid",runId);
     }
     function playSolidEdgeFlow(key){
-      const incoming=key==="freeze"||key==="deposition",mobile=window.matchMedia("(max-width: 680px)").matches,routeId=`phase-flow-${mobile?"mobile-":""}route-${key}`,route=document.getElementById(routeId);
+      const transition=solidEdgeTransitions[key],mobile=window.matchMedia("(max-width: 680px)").matches,routeId=`phase-flow-${mobile?"mobile-":""}route-${key}`,route=document.getElementById(routeId),colors=phaseParticleColors;
       activePhaseProcess=key;
       document.querySelectorAll(".phase-solid-flow path,.phase-solid-flow-mobile path").forEach(path=>path.classList.toggle("is-active",path===route));
       phaseSolidFlowParticles.replaceChildren();
       for(let index=0;index<6;index++){
-        const particle=document.createElementNS("http://www.w3.org/2000/svg","circle"),motion=document.createElementNS("http://www.w3.org/2000/svg","animateMotion"),pathRef=document.createElementNS("http://www.w3.org/2000/svg","mpath");
-        particle.setAttribute("class",`phase-solid-flow-particle is-${incoming?"incoming":"outgoing"}`);particle.setAttribute("r","7");
-        motion.setAttribute("dur","3.2s");motion.setAttribute("begin",`${index*.52}s`);motion.setAttribute("repeatCount","indefinite");pathRef.setAttribute("href",`#${routeId}`);motion.append(pathRef);particle.append(motion);phaseSolidFlowParticles.append(particle);
+        const delay=`${index*.52}s`,particle=document.createElementNS("http://www.w3.org/2000/svg","circle"),motion=document.createElementNS("http://www.w3.org/2000/svg","animateMotion"),pathRef=document.createElementNS("http://www.w3.org/2000/svg","mpath"),color=document.createElementNS("http://www.w3.org/2000/svg","animate");
+        particle.setAttribute("class",`phase-solid-flow-particle is-${transition.from}-to-${transition.to}`);particle.setAttribute("r","7");particle.setAttribute("fill",colors[transition.from]);
+        motion.setAttribute("dur","3.2s");motion.setAttribute("begin",delay);motion.setAttribute("repeatCount","indefinite");pathRef.setAttribute("href",`#${routeId}`);motion.append(pathRef);
+        color.setAttribute("attributeName","fill");color.setAttribute("values",`${colors[transition.from]};${colors[transition.to]}`);color.setAttribute("dur","3.2s");color.setAttribute("begin",delay);color.setAttribute("repeatCount","indefinite");
+        particle.append(motion,color);phaseSolidFlowParticles.append(particle);
       }
     }
     function updatePhaseDemoIce(){
