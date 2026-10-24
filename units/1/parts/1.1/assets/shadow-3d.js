@@ -325,14 +325,19 @@ if (canvas) {
 
     // The sphere rides sideways into and out of the beam; its depth never changes.
     const railZ = 0.12;
-    const rail = new THREE.Mesh(new THREE.BoxGeometry(5.05, 0.075, 0.12), materials.metal);
-    rail.position.set(0, 0.18, railZ);
+    const targetX = 0;
+    const parkedX = 2.38;
+    const railLength = parkedX - targetX;
+    const railCenter = (parkedX + targetX) / 2;
+    const rail = new THREE.Mesh(new THREE.BoxGeometry(railLength + 0.08, 0.075, 0.12), materials.metal);
+    rail.position.set(railCenter, 0.18, railZ);
     scene.add(rail);
-    for (let mark = -11; mark <= 11; mark += 1) {
-      const major = mark % 5 === 0;
-      box(scene, [0.014, major ? 0.012 : 0.007, major ? 0.09 : 0.055], [mark * 0.205, 0.225, railZ + 0.05], materials.metalDark, { cast: false, receive: false });
+    for (let mark = 0; mark <= 12; mark += 1) {
+      const major = mark % 3 === 0;
+      const x = targetX + railLength * (mark / 12);
+      box(scene, [0.014, major ? 0.012 : 0.007, major ? 0.09 : 0.055], [x, 0.225, railZ + 0.05], materials.metalDark, { cast: false, receive: false });
     }
-    for (const x of [-2.48, 2.48]) box(scene, [0.18, 0.16, 0.24], [x, 0.08, railZ], materials.metalDark);
+    for (const x of [targetX - 0.13, parkedX + 0.13]) box(scene, [0.18, 0.16, 0.24], [x, 0.08, railZ], materials.metalDark);
     const blocker = new THREE.Group();
     scene.add(blocker);
     const carrier = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.16, 0.34), materials.metalDark);
@@ -353,8 +358,6 @@ if (canvas) {
     sphere.castShadow = true;
     sphere.receiveShadow = true;
     blocker.add(sphere);
-    const targetX = 0;
-    const parkedX = 2.38;
     blocker.position.x = parkedX;
 
     const resize = () => {
