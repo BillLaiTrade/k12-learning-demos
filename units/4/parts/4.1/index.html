@@ -468,8 +468,11 @@
     .rust-stage-card { display:grid; justify-items:center; min-width:0; padding:8px 7px 6px; border:1px solid transparent; border-radius:13px; background:transparent; cursor:pointer; transition:background .2s,border-color .2s,transform .2s; }
     .rust-stage-card:hover { transform:translateY(-2px); }
     .rust-stage-card[aria-pressed="true"] { border-color:#b9cbb8; background:#f0f4eb; }
-    .rust-stage-card svg { display:block; width:min(100%,260px); height:auto; overflow:visible; }
-    .rust-stage-card span { margin-top:2px; padding:3px 15px; border-radius:999px; background:#e8ece4; color:#40594b; font-size:.8rem; font-weight:750; white-space:nowrap; }
+    .rust-bucket-photo { display:block; width:min(100%,260px); aspect-ratio:1; border-radius:8px; background-image:url("assets/rust-reference-sheet.webp"); background-size:200% 216%; background-repeat:no-repeat; }
+    .rust-bucket-photo[data-rust-photo="0"] { background-position:0 0; }
+    .rust-bucket-photo[data-rust-photo="1"] { background-position:100% 0; }
+    .rust-bucket-photo[data-rust-photo="2"] { background-position:0 85%; }
+    .rust-stage-card span:not(.rust-bucket-photo) { margin-top:2px; padding:3px 15px; border-radius:999px; background:#e8ece4; color:#40594b; font-size:.8rem; font-weight:750; white-space:nowrap; }
     .rust-stage-controls { display:grid; gap:4px; margin:7px 7px 0; }
     .rust-stage-controls input { width:100%; margin:0; accent-color:#588366; cursor:pointer; }
     .rust-stage-status { margin:3px 0 0!important; color:#53665b; font-size:.84rem; }
@@ -482,7 +485,9 @@
     .rust-evidence-head strong { display:block; color:#294b3c; font-size:1.05rem; }
     .rust-evidence-head small { display:block; color:#68776e; font-size:.79rem; line-height:1.4; }
     .rust-evidence-art { display:block; width:100%; height:150px; overflow:hidden; border-radius:10px; background:#b7b8ae; }
-    .rust-evidence-art svg { display:block; width:100%; height:100%; }
+    .rust-evidence-photo { display:block; width:100%; height:100%; background-image:url("assets/rust-reference-sheet.webp"); background-size:200% auto; background-repeat:no-repeat; }
+    .rust-evidence-photo[data-rust-photo="appearance"] { background-position:100% 25%; }
+    .rust-evidence-photo[data-rust-photo="material"] { background-position:100% 100%; }
     .rust-evidence-note { display:flex; align-items:center; gap:8px; margin-top:9px; padding:9px 11px; border-radius:9px; background:#f0f4e9; color:#3d5747; font-size:.83rem; font-weight:750; }
     .rust-evidence-note::before { content:"✦"; color:#82966a; }
     .rust-decision { padding:16px; border:1px solid #e2ded2; border-radius:15px; background:#fffefa; }
@@ -517,7 +522,7 @@
       .rust-play { grid-column:1/-1; justify-self:end; min-height:38px; padding:6px 13px; }
       .rust-stage-gallery { gap:3px; }
       .rust-stage-card { padding:5px 1px; }
-      .rust-stage-card span { padding:3px 6px; font-size:.69rem; }
+      .rust-stage-card span:not(.rust-bucket-photo) { padding:3px 6px; font-size:.69rem; }
       .rust-stage-card svg { width:100%; }
       .rust-evidence-grid,.rust-answer-options { grid-template-columns:1fr; }
       .rust-evidence-art { height:100px; }
@@ -878,9 +883,9 @@
               <div class="rust-timeline" id="rust-timeline" data-stage="1">
                 <div class="rust-timeline-head"><span class="rust-timeline-icon" aria-hidden="true">⚗</span><div><h3>觀察鐵桶生鏽的過程</h3><p>拖動時間軸，觀察同一個鐵桶在不同時間的變化。</p></div><button class="rust-play" type="button" id="rust-play"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3.5v13l11-6.5z" fill="currentColor"/></svg>播放變化</button></div>
                 <div class="rust-stage-gallery" aria-label="鐵桶生鏽的三個時間點">
-                  <button class="rust-stage-card" type="button" data-rust-stage="0" aria-pressed="false" aria-label="查看剛開始"><svg viewBox="0 0 220 220" role="img" aria-label="剛開始，乾淨的金屬桶"><defs><clipPath id="bucket-rust-clip-0"><path d="M38 64h144l-9 140q-63 18-126 0z"/></clipPath></defs><image href="assets/metal-bucket.png" width="220" height="220" preserveAspectRatio="xMidYMid meet"/><path d="M101 6q0-3 4-3h30q4 0 4 3v5q0 4-4 4h-30q-4 0-4-4z" fill="#aeb9b3" stroke="#59665f" stroke-width="1.3"/><path d="M104 6h28" stroke="#eff1ec" stroke-width="1.2"/><g clip-path="url(#bucket-rust-clip-0)"></g></svg><span>剛開始</span></button>
-                  <button class="rust-stage-card" type="button" data-rust-stage="1" aria-pressed="true" aria-label="查看一段時間後"><svg viewBox="0 0 220 220" role="img" aria-label="一段時間後，桶身出現鏽斑"><defs><clipPath id="bucket-rust-clip-1"><path d="M38 64h144l-9 140q-63 18-126 0z"/></clipPath></defs><image href="assets/metal-bucket.png" width="220" height="220" preserveAspectRatio="xMidYMid meet"/><path d="M101 6q0-3 4-3h30q4 0 4 3v5q0 4-4 4h-30q-4 0-4-4z" fill="#aeb9b3" stroke="#59665f" stroke-width="1.3"/><path d="M104 6h28" stroke="#eff1ec" stroke-width="1.2"/><g clip-path="url(#bucket-rust-clip-1)"><g fill="#a64d2c" opacity=".94"><path d="M53 94q9-9 17 1t-8 11q-10-2-9-12m57 17q12-8 19 3t-10 12q-10-2-9-15m37-28q10-7 17 3t-9 10q-9-2-8-13m-75 54q10-7 17 2t-8 11q-9-2-9-13m57 11q10-8 18 2t-9 12q-10-2-9-14"/><circle cx="83" cy="128" r="4"/><circle cx="154" cy="116" r="3"/></g></g></svg><span>一段時間後</span></button>
-                  <button class="rust-stage-card" type="button" data-rust-stage="2" aria-pressed="false" aria-label="查看形成鏽層"><svg viewBox="0 0 220 220" role="img" aria-label="形成鏽層"><defs><clipPath id="bucket-rust-clip-2"><path d="M38 64h144l-9 140q-63 18-126 0z"/></clipPath></defs><image href="assets/metal-bucket.png" width="220" height="220" preserveAspectRatio="xMidYMid meet"/><path d="M101 6q0-3 4-3h30q4 0 4 3v5q0 4-4 4h-30q-4 0-4-4z" fill="#aeb9b3" stroke="#59665f" stroke-width="1.3"/><path d="M104 6h28" stroke="#eff1ec" stroke-width="1.2"/><g clip-path="url(#bucket-rust-clip-2)"><g fill="#9a482b" opacity=".96"><path d="M44 91q11-10 19 2t-10 12q-10-2-9-14m29 16q10-8 18 3t-10 12q-10-2-8-15m34-25q12-9 20 3t-11 13q-10-2-9-16m34 17q11-9 19 2t-10 13q-10-2-9-15M53 129q10-9 19 2t-10 12q-10-2-9-14m31 9q12-8 19 3t-10 12q-10-2-9-15m36 2q11-9 20 3t-11 13q-10-2-9-16m29 7q11-9 19 3t-10 12q-10-2-9-15M65 157q10-8 18 2t-9 11q-9-2-9-13m39 2q11-8 18 2t-9 11q-10-2-9-13m37 0q10-8 17 2t-9 10q-9-2-8-12"/></g></g></svg><span>形成鏽層</span></button>
+                  <button class="rust-stage-card" type="button" data-rust-stage="0" aria-pressed="false" aria-label="查看剛開始"><span class="rust-bucket-photo" data-rust-photo="0" role="img" aria-label="剛開始，乾淨的金屬桶"></span><span>剛開始</span></button>
+                  <button class="rust-stage-card" type="button" data-rust-stage="1" aria-pressed="true" aria-label="查看一段時間後"><span class="rust-bucket-photo" data-rust-photo="1" role="img" aria-label="一段時間後，桶身出現鏽斑"></span><span>一段時間後</span></button>
+                  <button class="rust-stage-card" type="button" data-rust-stage="2" aria-pressed="false" aria-label="查看形成鏽層"><span class="rust-bucket-photo" data-rust-photo="2" role="img" aria-label="形成鏽層的鐵桶"></span><span>形成鏽層</span></button>
                 </div>
                 <div class="rust-stage-controls"><input type="range" id="rust-progress" min="0" max="2" step="1" value="1" aria-label="拖曳查看鐵桶生鏽的變化過程" aria-valuetext="一段時間後：桶身開始出現橘褐色鏽斑"></div>
                 <p class="rust-stage-status" id="rust-stage-status" aria-live="polite">桶身開始出現橘褐色鏽斑。</p>
@@ -892,12 +897,12 @@
                 <div class="rust-evidence-grid" role="group" aria-label="選擇觀察到的線索和材料資料">
                   <button class="rust-evidence-card" type="button" data-rust-evidence="appearance" aria-pressed="false">
                     <span class="rust-evidence-head"><span class="rust-evidence-icon" aria-hidden="true">⌕</span><span><strong>外觀觀察</strong><small>觀察鐵桶生鏽後的顏色與表面狀態。</small></span></span>
-                    <span class="rust-evidence-art"><svg viewBox="0 0 500 150" preserveAspectRatio="xMidYMid slice" role="img" aria-label="灰色金屬表面出現橘褐色鏽斑"><defs><linearGradient id="rust-macro-bg" x2="0.8" y2="1"><stop stop-color="#9b9e98"/><stop offset=".5" stop-color="#bbb4a8"/><stop offset="1" stop-color="#757c76"/></linearGradient><filter id="rust-grain"><feTurbulence type="fractalNoise" baseFrequency=".12" numOctaves="2"/><feColorMatrix values=".8 0 0 0 .2 .7 0 0 0 .15 .5 0 0 0 .1 0 0 0 .18 0"/></filter></defs><rect width="500" height="150" fill="url(#rust-macro-bg)"/><path d="M0 103q57-32 103 0t89-9q44-31 95 3t101-5q49-25 112 2v56H0Z" fill="#874426"/><path d="M12 82q29-31 67-4t62-9q25-25 56 2t53-2q34-29 64 4t54-8q38-26 61 5t71-4" fill="none" stroke="#cc7540" stroke-width="17" stroke-linecap="round"/><path d="M0 0h500v150H0z" filter="url(#rust-grain)" opacity=".6"/></svg></span>
+                    <span class="rust-evidence-art"><span class="rust-evidence-photo" data-rust-photo="appearance" role="img" aria-label="鏽斑和金屬表面的近拍"></span></span>
                     <span class="rust-evidence-note">顏色改變是線索</span>
                   </button>
                   <button class="rust-evidence-card" type="button" data-rust-evidence="material" aria-pressed="false">
                     <span class="rust-evidence-head"><span class="rust-evidence-icon" aria-hidden="true">▤</span><span><strong>材料資料</strong><small>放大觀察鏽層的樣子，並與原本的鐵比較。</small></span></span>
-                    <span class="rust-evidence-art"><svg viewBox="0 0 500 150" preserveAspectRatio="xMidYMid slice" role="img" aria-label="鏽層與金屬鐵的放大比較"><defs><linearGradient id="rust-layer-bg" x2="0.8" y2="1"><stop stop-color="#68402c"/><stop offset=".48" stop-color="#bf7544"/><stop offset="1" stop-color="#b7b7ae"/></linearGradient></defs><rect width="500" height="150" fill="url(#rust-layer-bg)"/><path d="M0 115 90 70l82 34 68-68 85 55 85-46 90 42v63H0Z" fill="#8d4b2c"/><path d="m5 110 88-48 81 33 68-68 85 48 83-47 90 38" fill="none" stroke="#d68d55" stroke-width="12"/><circle cx="388" cy="75" r="55" fill="#a45a32" stroke="#fffefa" stroke-width="7"/><path d="M357 76q20-38 45-12t-7 42q-34 8-38-30m30-18q17 19 34 2" fill="#d99155"/><path d="M0 0h500v150H0z" fill="#7d6857" opacity=".18"/></svg></span>
+                    <span class="rust-evidence-art"><span class="rust-evidence-photo" data-rust-photo="material" role="img" aria-label="鏽斑和金屬表面的近拍"></span></span>
                     <span class="rust-evidence-note">鏽層不同於原本的鐵</span>
                   </button>
                 </div>
