@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="沿著繩波追蹤介質如何振動與波形如何傳播，認識橫波、縱波、波的特徵與速度關係。">
+  <title>波的傳播｜波動與聲音</title>
+  <style>
+    :root { color-scheme:light; --ink:#182326; --muted:#59696b; --line:#d7e1dd; --paper:#f4f7f1; --card:#fffefa; --green:#176b53; --green-pale:#e5f2e9; --orange:#bc612b; --orange-pale:#fff0e3; --shadow:0 14px 38px rgb(21 47 38 / 8%); font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); line-height:1.7; }
+    button,input,select { font:inherit; }
+    button { cursor:pointer; }
+    a { color:var(--green); }
+    .shell { width:min(1120px,calc(100% - 40px)); margin:0 auto; }
+    .masthead { padding:26px 0 18px; }
+    .brand-row,.section-top,.caption-row,.readout,.assessment-row { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .brand { color:var(--ink); font-size:.9rem; font-weight:800; letter-spacing:.04em; text-decoration:none; }
+    .crumb { color:var(--muted); font-size:.9rem; }
+    .hero { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr); gap:32px; align-items:center; padding:44px 0 38px; }
+    .eyebrow { color:var(--green); font-size:.82rem; font-weight:800; letter-spacing:.12em; }
+    h1 { margin:8px 0 14px; font-size:clamp(2rem,4.4vw,3.7rem); line-height:1.18; letter-spacing:-.04em; }
+    .hero p { max-width:670px; color:var(--muted); font-size:1.08rem; }
+    .hero-note { padding:24px; border:1px solid #cbded0; border-radius:24px; background:#e3eee5; box-shadow:var(--shadow); }
+    .hero-note strong { display:block; margin-bottom:5px; font-size:1.13rem; }
+    .hero-note p { margin:0; font-size:.96rem; }
+    .lesson { padding:34px 0 80px; }
+    .lesson-layout { display:grid; grid-template-columns:minmax(205px,250px) minmax(0,1fr); gap:34px; align-items:start; }
+    .route { position:sticky; top:24px; align-self:start; max-height:calc(100svh - 48px); overflow-y:auto; padding:8px 12px 12px 0; scrollbar-width:thin; }
+    .route-label { margin:0 0 10px; color:var(--muted); font-size:.74rem; letter-spacing:.08em; }
+    .route-inner { display:grid; gap:4px; }
+    .route a { display:grid; grid-template-columns:28px minmax(0,1fr); align-items:start; gap:8px; padding:10px 11px; border:1px solid transparent; border-left:3px solid transparent; border-radius:0 10px 10px 0; color:var(--muted); font-size:.86rem; line-height:1.45; text-decoration:none; }
+    .route a:hover,.route a:focus-visible { border-color:var(--line); outline:2px solid transparent; }
+    .route a[aria-current="step"] { border-left-color:var(--green); background:#e7eee0; color:#315a46; font-weight:750; }
+    .route b { color:var(--green); font-size:.76rem; font-weight:650; }
+    .route-note,.next-hint { color:var(--muted); font-size:.88rem; }
+    .cards { display:grid; gap:20px; }
+    .section-top { align-items:end; margin:0 0 18px; }
+    .section-top h2 { margin:0; font-size:1.35rem; }
+    .progress-copy { color:var(--muted); font-size:.9rem; }
+    .lesson-card { position:relative; scroll-margin-top:100px; display:grid; grid-template-columns:190px minmax(0,1fr); gap:28px; padding:26px; border:1px solid var(--line); border-radius:24px; background:var(--card); box-shadow:var(--shadow); }
+    .card-side { border-right:1px solid var(--line); padding-right:20px; }
+    .card-number { color:var(--green); font-size:.84rem; font-weight:850; letter-spacing:.08em; }
+    .card-side h3 { margin:10px 0 8px; font-size:1.08rem; line-height:1.45; }
+    .card-role { color:var(--muted); font-size:.87rem; }
+    .card-main h2 { margin:0 0 8px; font-size:clamp(1.32rem,2.8vw,1.85rem); line-height:1.35; }
+    .card-main>p { color:var(--muted); margin:0 0 18px; }
+    figure { margin:16px 0; }
+    figcaption,.caption-row { color:var(--muted); font-size:.88rem; }
+    .visual { overflow:hidden; padding:14px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(135deg,#f2f8f1,#fffefa 68%); }
+    .visual svg { display:block; width:100%; height:auto; }
+    .visual text { fill:#314640; font-family:inherit; font-size:15px; }
+    .visual .small-label { fill:#59696b; font-size:12px; }
+    .visual .wave-line { fill:none; stroke:#176b53; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
+    .visual .equilibrium { stroke:#9aaca1; stroke-width:1.5; stroke-dasharray:7 7; }
+    .visual .motion-arrow { fill:none; stroke:#176b53; stroke-width:2.5; stroke-linecap:round; }
+    .visual .measure { fill:none; stroke:#bc612b; stroke-width:2; stroke-linecap:round; }
+    .visual .marker { fill:#df8b41; stroke:#fff; stroke-width:3; }
+    .visual .particle { fill:#74a98e; stroke:#fff; stroke-width:2; }
+    .legend { display:flex; flex-wrap:wrap; gap:8px 18px; margin:10px 0 0; color:var(--muted); font-size:.84rem; }
+    .legend span { display:inline-flex; align-items:center; gap:7px; }
+    .legend i { display:inline-block; width:11px; height:11px; border-radius:50%; background:#176b53; }
+    .legend i.marker-key { background:#df8b41; }
+    .fact { margin-top:16px; padding:14px 16px; border-left:4px solid #b8cda9; border-radius:0 12px 12px 0; background:#f0f5eb; }
+    .fact p { margin:0; }
+    .control-panel { margin-top:14px; padding:14px 16px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
+    .controls { display:flex; flex-wrap:wrap; align-items:center; gap:9px; }
+    .secondary,.action { min-height:44px; padding:9px 15px; border-radius:13px; font-weight:750; }
+    .secondary { border:1px solid var(--line); background:#fff; color:var(--ink); }
+    .secondary:hover { border-color:var(--green); }
+    .action { border:0; background:var(--green); color:white; }
+    .action:hover { background:#105640; }
+    .live-note { min-height:1.6em; margin:9px 0 0; color:var(--muted); font-size:.9rem; }
+    .diagram-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .diagram-panel { padding:14px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
+    .diagram-panel h3 { margin:0 0 5px; font-size:1rem; }
+    .diagram-panel p { margin:6px 0 0; color:var(--muted); font-size:.88rem; }
+    .data-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
+    .data-cell { padding:13px 15px; border:1px solid var(--line); border-radius:14px; background:#f8f9f4; }
+    .data-cell small { display:block; color:var(--muted); }
+    .data-cell strong { display:block; font-size:1.26rem; }
+    .formula { margin:14px 0; padding:16px; border-radius:16px; background:#eaf3e9; text-align:center; color:#183c31; font-size:clamp(1.25rem,3vw,1.8rem); font-weight:800; letter-spacing:.02em; }
+    .example-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
+    .example { padding:14px 16px; border:1px solid var(--line); border-radius:15px; background:#f9faf5; }
+    .example small { display:block; color:var(--muted); }
+    .example strong { font-size:1.16rem; }
+    input[type="range"] { width:min(430px,100%); accent-color:var(--green); }
+    .field { display:grid; gap:4px; font-size:.9rem; font-weight:750; }
+    output.value { display:inline-block; min-width:76px; padding:5px 9px; border-radius:9px; background:var(--green-pale); text-align:center; font-weight:800; }
+    .assessment-label { display:inline-block; margin-bottom:12px; padding:4px 10px; border-radius:999px; background:var(--green-pale); color:var(--green); font-size:.83rem; font-weight:750; }
+    .assessment-box { margin:14px 0; padding:16px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
+    .assessment-box p { margin:0 0 12px; }
+    .assessment-row { justify-content:flex-start; flex-wrap:wrap; }
+    .assessment-row label { display:grid; gap:4px; font-size:.88rem; font-weight:750; }
+    select,input[type="number"] { min-height:44px; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:#fff; color:var(--ink); }
+    .feedback { min-height:1.6em; margin:10px 0 0; color:var(--muted); }
+    .feedback[data-state="good"] { color:var(--green); }
+    .feedback[data-state="try"] { color:var(--orange); }
+    .answer { margin-top:14px; padding:13px 15px; border:1px solid #cbded0; border-radius:14px; background:#eef5ec; }
+    .answer summary { color:#315a46; font-weight:800; cursor:pointer; }
+    .answer p { margin:8px 0 0; }
+    .end-card { border-color:#bfd1be; background:#eef4e9; }
+    footer { padding:28px 0 44px; border-top:1px solid var(--line); color:var(--muted); font-size:.86rem; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    @media (max-width:760px) {
+      .shell { width:min(100% - 24px,620px); }
+      .hero { grid-template-columns:1fr; gap:16px; padding:30px 0; }
+      .lesson-layout { grid-template-columns:minmax(0,1fr); gap:12px; }
+      .route { top:0; z-index:5; max-height:none; margin:0 -12px; padding:10px 12px; border-block:1px solid var(--line); background:rgb(244 247 241 / 96%); backdrop-filter:blur(12px); }
+      .route-label { margin-bottom:6px; }
+      .route-inner { display:flex; gap:6px; overflow-x:auto; padding-bottom:3px; scrollbar-width:thin; }
+      .route a { display:inline-flex; flex:0 0 auto; align-items:center; gap:6px; padding:7px 10px; border:1px solid var(--line); border-radius:999px; background:var(--card); white-space:nowrap; }
+      .route a[aria-current="step"] { border-color:var(--green); }
+      .lesson-card { grid-template-columns:1fr; gap:14px; padding:18px; border-radius:19px; }
+      .card-side { display:flex; align-items:baseline; gap:10px; border-right:0; border-bottom:1px solid var(--line); padding:0 0 10px; }
+      .card-side h3 { margin:0; }
+      .card-role { display:none; }
+      .section-top { align-items:start; flex-direction:column; gap:3px; }
+    }
+    @media (max-width:520px) { .diagram-grid,.data-grid,.example-grid { grid-template-columns:1fr; } .lesson-card { padding:16px; } .visual { padding:8px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <header class="shell masthead">
+    <div class="brand-row"><a class="brand" href="../../index.html">← 波動與聲音</a><span class="crumb">國二上・波的傳播</span></div>
+    <div class="hero">
+      <div><div class="eyebrow">波動與聲音｜波的傳播</div><h1>繩子上的波往前傳，<br>繩點也跟著跑遠了嗎？</h1><p>追蹤一段繩子上的波，分清楚介質如何振動、波形如何前進；再讀懂波形中的距離、振動快慢與波速。</p></div>
+      <aside class="hero-note"><strong>整段路線要回答的問題</strong><p>波形看起來一路向前移動，繩子上的點也跟著跑到另一端了嗎？沿著同一個繩點觀察，再用波形和數值解釋波如何傳播。</p></aside>
+    </div>
+  </header>
+  <main class="shell lesson">
+    <div class="lesson-layout">
+      <nav class="route" aria-label="本段學習路徑">
+        <p class="route-label">本單元的探索路線</p>
+        <div class="route-inner">
+          <a href="#card-01" aria-current="step"><b>01</b><span>繩子上的波，究竟是什麼在前進？</span></a>
+          <a href="#card-02"><b>02</b><span>波往前走，標記怎麼沒有跟著跑？</span></a>
+          <a href="#card-03"><b>03</b><span>橫波和縱波，差別在振動方向？</span></a>
+          <a href="#card-04"><b>04</b><span>波峰、波谷和振幅，要從哪裡量？</span></a>
+          <a href="#card-05"><b>05</b><span>相鄰兩個波峰，相隔多遠？</span></a>
+          <a href="#card-06"><b>06</b><span>振得快慢，如何用頻率和週期表示？</span></a>
+          <a href="#card-07"><b>07</b><span>波速、頻率和波長，怎麼連在一起？</span></a>
+          <a href="#card-08"><b>08</b><span>讀懂這段波，可以解釋什麼？</span></a>
+        </div>
+        <p class="route-note">依序閱讀八段說明；動畫和操作可用來加深觀察。</p>
+      </nav>
+      <div class="cards">
+        <div class="section-top"><h2>從繩點的運動，走到波速關係</h2><span class="progress-copy">完整說明直接呈現在每張卡片</span></div>
+
+        <section class="lesson-card" id="card-01">
+          <div class="card-side"><span class="card-number">01</span><h3>先提出問題</h3><span class="card-role">看見波形與繩點</span></div>
+          <div class="card-main">
+            <h2>繩子上的波，究竟是什麼在前進？</h2>
+            <p>把繩子的一端上下抖動，一個突起會沿著繩子向前移動。看起來像有東西跑向繩子的另一端；但繩上的一小段繩子，真的也跟著一路跑過去嗎？觀察波形和繩上的記號各自怎麼移動。</p>
+            <figure class="visual">
+              <svg class="rope-wave" viewBox="0 0 760 220" role="img" aria-label="繩波波形往右傳，一個固定的橘色繩點在原位置附近上下振動">
+                <defs><marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
+                <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
+                <path class="pulse-path wave-line" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/>
+                <path d="M130 190H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
+                <text x="345" y="214" text-anchor="middle">波形傳播方向</text>
+                <path d="M350 64V178" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
+                <circle class="rope-marker" cx="350" cy="142" r="10" fill="#df8b41" stroke="#fff" stroke-width="3"/>
+                <text x="350" y="45" text-anchor="middle">繩上的同一個記號</text>
+              </svg>
+              <figcaption>同一條繩子、同一個記號；比較波峰的位置和繩點的位置。</figcaption>
+            </figure>
+            <div class="control-panel"><div class="controls"><button class="secondary" type="button" data-pulse-toggle aria-pressed="true">暫停波形</button><button class="secondary" type="button" data-pulse-reset>重新播放</button><span class="live-note" data-pulse-status aria-live="polite">動畫播放中；橘點代表繩上的固定記號。</span></div></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-02">
+          <div class="card-side"><span class="card-number">02</span><h3>追蹤固定繩點</h3><span class="card-role">介質振動，波形前進</span></div>
+          <div class="card-main">
+            <h2>波往前走，標記怎麼沒有跟著跑？</h2>
+            <p>波形通過時，記號附近的繩段上下振動；波形離開後，繩段回到原位置附近，沒有跟著波峰一路向右跑。繩上的振動把能量傳到較遠的位置，因此波向前傳，介質卻沒有整段隨波形前進。</p>
+            <figure class="visual">
+              <svg class="rope-wave" viewBox="0 0 760 220" role="img" aria-label="三個連續時刻的繩波位置；波峰往右移，固定繩點只上下振動">
+                <defs><marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
+                <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
+                <path class="pulse-path wave-line" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/>
+                <path d="M118 190H565" class="motion-arrow" marker-end="url(#arrow-rope-2)"/>
+                <text x="341" y="214" text-anchor="middle">波形與能量向右傳</text>
+                <path d="M350 64V178" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
+                <circle class="rope-marker" cx="350" cy="142" r="10" fill="#df8b41" stroke="#fff" stroke-width="3"/>
+                <path d="M610 85V161" stroke="#748b7e" stroke-width="2"/>
+                <path d="M602 94L610 84L618 94M602 152L610 162L618 152" fill="none" stroke="#748b7e" stroke-width="2"/>
+                <text x="630" y="126">繩點上下</text><text x="630" y="147">振動</text>
+              </svg>
+              <figcaption>橘點在原位置附近上下移動，波峰則沿繩子向右傳播。</figcaption>
+            </figure>
+            <div class="fact"><p><strong>分清楚兩種運動：</strong>繩點在原處附近振動；波形把擾動和能量傳到遠處。波峰不是一團繩子一路移動。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-03">
+          <div class="card-side"><span class="card-number">03</span><h3>比較兩個方向</h3><span class="card-role">認識橫波與縱波</span></div>
+          <div class="card-main">
+            <h2>橫波和縱波，差別在振動方向？</h2>
+            <p>判斷波型時，比較介質振動方向和波前進方向。兩個方向互相垂直是橫波，互相平行是縱波。繩子上下振動、波向右傳是橫波；彈簧各圈前後振動、疏密狀態向前傳是縱波。</p>
+            <div class="diagram-grid">
+              <figure class="visual diagram-panel">
+                <h3>橫波｜振動方向與傳播方向垂直</h3>
+                <svg viewBox="0 0 500 230" role="img" aria-label="繩點上下振動，波向右傳播的橫波示意圖">
+                  <defs><marker id="arrow-transverse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker><marker id="arrow-particle-v" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#bc612b"/></marker></defs>
+                  <path d="M38 112H455" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
+                  <path class="small-transverse-wave wave-line" d="M38 112 C72 112 78 58 112 58 S152 166 186 166 S226 58 260 58 S300 166 334 166 S374 58 408 58 S442 112 455 112"/>
+                  <g class="transverse-particles"></g>
+                  <path d="M85 204H408" class="motion-arrow" marker-end="url(#arrow-transverse)"/><text x="246" y="226" text-anchor="middle">波前進方向</text>
+                  <path d="M112 111V67" class="measure" marker-end="url(#arrow-particle-v)"/><path d="M112 111V154" class="measure" marker-end="url(#arrow-particle-v)"/>
+                  <text x="128" y="125">介質振動方向</text>
+                </svg>
+                <p>繩點在原位置附近上下振動，波形沿繩子向右傳。</p>
+              </figure>
+              <figure class="visual diagram-panel">
+                <h3>縱波｜振動方向與傳播方向平行</h3>
+                <svg class="spring-wave" viewBox="0 0 500 230" role="img" aria-label="彈簧圈前後振動，壓縮區向右傳播的縱波示意圖">
+                  <defs><marker id="arrow-longitudinal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker><marker id="arrow-particle-h" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#bc612b"/></marker></defs>
+                  <path d="M38 112H455" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
+                  <g class="spring-particles"></g>
+                  <path d="M85 204H408" class="motion-arrow" marker-end="url(#arrow-longitudinal)"/><text x="246" y="226" text-anchor="middle">疏密波形前進方向</text>
+                  <path d="M122 72H156" class="measure" marker-end="url(#arrow-particle-h)"/><path d="M156 72H122" class="measure" marker-end="url(#arrow-particle-h)"/>
+                  <text x="170" y="77">彈簧圈前後振動</text>
+                </svg>
+                <p>彈簧圈在原位置附近前後振動，壓縮與疏鬆的狀態向右傳。</p>
+              </figure>
+            </div>
+            <div class="fact"><p>接下來先用繩波這種容易看出上下位移的橫波圖，示範如何量振幅與波長。縱波也有波長，例如一個壓縮區到下一個壓縮區。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-04">
+          <div class="card-side"><span class="card-number">04</span><h3>量垂直距離</h3><span class="card-role">認識振幅</span></div>
+          <div class="card-main">
+            <h2>波峰、波谷和振幅，要從哪裡量？</h2>
+            <p>沒有波通過時介質所在的位置稱為平衡位置。在這張橫波圖中，最高處是波峰、最低處是波谷；從平衡位置到波峰（或波谷）的最大距離是振幅 <em>A</em>。對稱波形的波峰到波谷高度是 <em>2A</em>，不是振幅本身。</p>
+            <figure class="visual">
+              <svg viewBox="0 0 720 280" role="img" aria-label="橫波圖標示平衡位置、波峰、波谷、振幅 A 與波峰至波谷高度 2A">
+                <defs><marker id="arrow-a" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
+                <path d="M40 140H680" class="equilibrium"/>
+                <path d="M40 140 C90 140 105 62 160 62 S230 218 285 218 S355 62 410 62 S480 218 535 218 S605 62 660 62" class="wave-line"/>
+                <circle cx="160" cy="62" r="6" fill="#176b53"/><circle cx="285" cy="218" r="6" fill="#176b53"/>
+                <text x="600" y="131">平衡位置</text><text x="160" y="37" text-anchor="middle">波峰</text><text x="285" y="251" text-anchor="middle">波谷</text>
+                <path d="M185 140V66" class="measure" marker-start="url(#arrow-a)" marker-end="url(#arrow-a)"/><text x="202" y="105">A</text>
+                <path d="M322 66V214" stroke="#82978a" stroke-width="2" stroke-dasharray="5 5" marker-start="url(#arrow-a)" marker-end="url(#arrow-a)"/><text x="337" y="144">2A</text>
+                <text class="small-label" x="54" y="274">示意圖使用橫波的上下位移呈現介質偏離平衡位置的距離</text>
+              </svg>
+              <figcaption>振幅從平衡位置量到波峰或波谷；波峰到波谷是兩倍振幅。</figcaption>
+            </figure>
+            <div class="fact"><p><strong>量測方向：</strong>振幅是介質偏離平衡位置的最大位移。此圖以橫波示範，所以位移畫成上下方向。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-05">
+          <div class="card-side"><span class="card-number">05</span><h3>量水平距離</h3><span class="card-role">認識波長</span></div>
+          <div class="card-main">
+            <h2>相鄰兩個波峰，相隔多遠？</h2>
+            <p>波長 <em>λ</em> 是波形中相鄰重複位置之間的距離，例如一個波峰到下一個波峰，或一個波谷到下一個波谷。波長沿著波前進方向量，和振幅的上下位移不同。</p>
+            <figure class="visual">
+              <svg viewBox="0 0 720 280" role="img" aria-label="相鄰波峰間的水平距離標為波長 lambda，平衡位置到波峰的垂直距離標為振幅 A">
+                <defs><marker id="arrow-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
+                <path d="M40 125H680" class="equilibrium"/>
+                <path d="M40 125 C70 125 91 53 130 53 S190 197 250 197 S310 53 370 53 S430 197 490 197 S550 53 610 53 S650 125 680 125" class="wave-line"/>
+                <text x="130" y="31" text-anchor="middle">波峰</text><text x="370" y="31" text-anchor="middle">相鄰波峰</text>
+                <path d="M130 90V250M370 90V250" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
+                <path d="M134 235H366" class="measure" marker-start="url(#arrow-lambda)" marker-end="url(#arrow-lambda)"/><text x="250" y="263" text-anchor="middle">波長 λ</text>
+                <path d="M394 125V58" stroke="#bc612b" stroke-width="2" marker-start="url(#arrow-lambda)" marker-end="url(#arrow-lambda)"/><text x="410" y="97">振幅 A</text>
+                <text class="small-label" x="45" y="15">橫波圖示</text>
+              </svg>
+              <figcaption>水平標尺量波長；垂直標尺量振幅，兩者代表不同方向的距離。</figcaption>
+            </figure>
+            <div class="diagram-panel">
+              <h3>縱波也有波長</h3>
+              <svg viewBox="0 0 620 120" role="img" aria-label="彈簧縱波中相鄰兩個壓縮區之間的距離為波長">
+                <defs><marker id="arrow-long-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
+                <path d="M30 55H590" stroke="#176b53" stroke-width="3" stroke-dasharray="2 8"/>
+                <g fill="#74a98e" stroke="#fff" stroke-width="2"><circle cx="70" cy="55" r="7"/><circle cx="96" cy="55" r="7"/><circle cx="116" cy="55" r="7"/><circle cx="132" cy="55" r="7"/><circle cx="145" cy="55" r="7"/><circle cx="238" cy="55" r="7"/><circle cx="284" cy="55" r="7"/><circle cx="330" cy="55" r="7"/><circle cx="376" cy="55" r="7"/><circle cx="422" cy="55" r="7"/><circle cx="462" cy="55" r="7"/><circle cx="482" cy="55" r="7"/><circle cx="498" cy="55" r="7"/><circle cx="512" cy="55" r="7"/></g>
+                <path d="M130 80V102M482 80V102" stroke="#84988a" stroke-width="1.5" stroke-dasharray="4 4"/><path d="M134 94H478" class="measure" marker-start="url(#arrow-long-lambda)" marker-end="url(#arrow-long-lambda)"/><text x="306" y="118" text-anchor="middle">相鄰壓縮區的距離也是波長 λ</text>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-06">
+          <div class="card-side"><span class="card-number">06</span><h3>讀時間尺度</h3><span class="card-role">頻率與週期互為倒數</span></div>
+          <div class="card-main">
+            <h2>振得快慢，如何用頻率和週期表示？</h2>
+            <p>頻率 <em>f</em> 表示每秒完成幾次振動，單位是赫茲（Hz）；週期 <em>T</em> 表示完成一次完整振動所需的時間，單位是秒（s）。完整振動是回到相同位置、並朝相同方向運動的一次循環。</p>
+            <div class="formula"><em>f = 1/T</em>　　<em>T = 1/f</em></div>
+            <div class="example-grid">
+              <div class="example"><small>每秒完成 1 次振動</small><strong>f = 1 Hz　→　T = 1 s</strong></div>
+              <div class="example"><small>每秒完成 2 次振動</small><strong>f = 2 Hz　→　T = 0.5 s</strong></div>
+            </div>
+            <figure class="visual">
+              <svg viewBox="0 0 720 220" role="img" aria-label="兩條相同時間長度的一秒時間軸；一赫茲完成一次振動，二赫茲完成兩次振動">
+                <defs><marker id="arrow-time" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#748b7e"/></marker><marker id="arrow-time-measure" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
+                <text x="42" y="56">f = 1 Hz</text><path d="M170 52H670" stroke="#aab9ac" stroke-width="2" marker-end="url(#arrow-time)"/><path d="M170 52 C230 52 230 22 290 22 S350 82 410 82 S470 52 530 52" fill="none" stroke="#176b53" stroke-width="4"/>
+                <path d="M170 100V116M530 100V116M174 109H526" class="measure" marker-start="url(#arrow-time-measure)" marker-end="url(#arrow-time-measure)"/><text x="350" y="137" text-anchor="middle">一次完整振動：T = 1 s</text>
+                <text x="42" y="178">f = 2 Hz</text><path d="M170 173H670" stroke="#aab9ac" stroke-width="2" marker-end="url(#arrow-time)"/><path d="M170 173 C215 173 215 143 260 143 S305 203 350 203 S395 143 440 143 S485 203 530 203 S575 143 620 143" fill="none" stroke="#176b53" stroke-width="4"/>
+                <text x="350" y="218" text-anchor="middle" class="small-label">同樣一秒內振動兩次；每次週期是 0.5 秒</text>
+              </svg>
+              <figcaption>頻率數一秒內完成幾次；週期量一次完整振動花多少時間。</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-07">
+          <div class="card-side"><span class="card-number">07</span><h3>連結時間和距離</h3><span class="card-role">得到波速關係</span></div>
+          <div class="card-main">
+            <h2>波速、頻率和波長，怎麼連在一起？</h2>
+            <p>波速 <em>v</em> 表示波形每單位時間前進的距離。週期波在一個週期 <em>T</em> 內前進一個波長 <em>λ</em>，所以 <em>v = λ/T</em>；因為 <em>f = 1/T</em>，也可以寫成 <em>v = f × λ</em>。</p>
+            <div class="formula"><em>v = λ/T = f × λ</em></div>
+            <div class="example"><small>基本代入：f = 2 Hz，λ = 1.5 m</small><strong>v = 2 Hz × 1.5 m = 3 m/s</strong></div>
+            <p>同一介質中波速固定時，若頻率提高，波長就會縮短。這個比較的條件是波仍在同一介質中傳播。</p>
+            <figure class="visual">
+              <svg id="speed-wave" viewBox="0 0 720 180" role="img" aria-label="頻率為二赫茲、波長為一點五公尺的繩波，波速為每秒三公尺">
+                <defs><marker id="speed-measure" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
+                <path d="M30 90H690" class="equilibrium"/>
+                <path id="speed-wave-path" d="M30 90 C71.25 90 71.25 50 112.5 50 S153.75 130 195 130 S236.25 50 277.5 50 S318.75 130 360 130 S401.25 50 442.5 50 S483.75 130 525 130 S566.25 50 607.5 50 S648.75 130 690 130" class="wave-line"/>
+                <path d="M112.5 35V145M277.5 35V145" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
+                <path d="M116 153H274" class="measure" marker-start="url(#speed-measure)" marker-end="url(#speed-measure)"/><text id="speed-lambda-label" x="195" y="175" text-anchor="middle">λ = 1.5 m</text>
+              </svg>
+              <figcaption>固定介質與波速；提高波源頻率時，波峰間距縮短。</figcaption>
+            </figure>
+            <div class="control-panel">
+              <label class="field" for="frequency-slider">只改變波源頻率；模型固定波速為 3 m/s
+                <input id="frequency-slider" type="range" min="2" max="3" step="1" value="2" aria-describedby="frequency-model-note">
+              </label>
+              <div class="readout" aria-live="polite"><div class="data-cell"><small>頻率 f</small><strong id="frequency-output">2 Hz</strong></div><div class="data-cell"><small>波長 λ</small><strong id="wavelength-output">1.5 m</strong></div></div>
+              <p class="live-note" id="frequency-model-note">v = f × λ，因此 3 m/s = 2 Hz × 1.5 m。波速固定，頻率增大時波長縮短。</p>
+            </div>
+            <p class="fact"><strong>條件要一起看：</strong>頻率變高不代表波速必然改變；這裡固定同一介質與波速，才會看到頻率增加、波長減少。</p>
+          </div>
+        </section>
+
+        <section class="lesson-card end-card" id="card-08">
+          <div class="card-side"><span class="card-number">08</span><h3>整合理解</h3><span class="card-role">回到最初的問題</span></div>
+          <div class="card-main">
+            <span class="assessment-label">理解檢核・共 1 題</span>
+            <h2>讀懂這段波，可以解釋什麼？</h2>
+            <p>繩波向右傳，頻率是 2 Hz；圖上相鄰波峰距離是 1.5 m，振幅是 0.5 m。請用這張圖說明繩點如何運動、指出波的振幅和波長，並算出波速。</p>
+            <figure class="visual">
+              <svg viewBox="0 0 720 250" role="img" aria-label="繩波向右傳；橘色標記代表同一繩點；振幅為零點五公尺，波長為一點五公尺">
+                <defs><marker id="arrow-check" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#176b53"/></marker><marker id="arrow-check-measure" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
+                <path d="M35 120H685" class="equilibrium"/><path class="summary-wave-path wave-line" d="M35 120 C75 120 90 60 135 60 S195 180 255 180 S315 60 375 60 S435 180 495 180 S555 60 615 60 S660 120 685 120"/>
+                <circle class="summary-rope-marker marker" cx="255" cy="180" r="9"/><path d="M255 192V221" stroke="#df8b41" stroke-width="2" stroke-dasharray="4 4"/><text x="255" y="242" text-anchor="middle">固定繩點</text>
+                <path d="M135 80V118" stroke="#bc612b" stroke-width="2" marker-start="url(#arrow-check-measure)" marker-end="url(#arrow-check-measure)"/><text x="149" y="105">A = 0.5 m</text>
+                <path d="M135 38V22M375 38V22" stroke="#84988a" stroke-width="1.5"/><path d="M139 28H371" class="measure" marker-start="url(#arrow-check-measure)" marker-end="url(#arrow-check-measure)"/><text x="255" y="17" text-anchor="middle">λ = 1.5 m</text>
+                <path d="M420 220H640" class="motion-arrow" marker-end="url(#arrow-check)"/><text x="530" y="244" text-anchor="middle">波形向右傳</text>
+              </svg>
+            </figure>
+            <div class="assessment-box">
+              <p><strong>請選出完整說明：</strong>繩上的橘點如何移動？波速是多少？</p>
+              <div class="assessment-row">
+                <label for="marker-motion">橘色繩點的運動
+                  <select id="marker-motion"><option value="">選一項</option><option value="local">在原位置附近上下振動</option><option value="travel">跟著波峰向右移到另一端</option></select>
+                </label>
+                <label for="answer-speed">波速 v（m/s）
+                  <input id="answer-speed" type="number" min="0" step="0.1" inputmode="decimal" placeholder="輸入數值">
+                </label>
+                <button class="action" id="check-answer" type="button">對照說明</button>
+              </div>
+              <p class="feedback" id="answer-feedback" aria-live="polite">波速可以用 v = f × λ 計算；圖上 A 與 λ 已直接標示。</p>
+            </div>
+            <details class="answer" open><summary>完整解釋</summary><p>橘點是繩上的同一小段介質，只在原位置附近上下振動；波峰和能量向右傳。圖中振幅 <em>A = 0.5 m</em>、波長 <em>λ = 1.5 m</em>；波速 <em>v = f × λ = 2 Hz × 1.5 m = 3 m/s</em>。</p></details>
+            <p class="next-hint">下一個問題：空氣中的聲音如何傳到耳朵？</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer><div class="shell">本頁繩波與彈簧波為概念示意模型；動畫時間與振幅用來呈現運動方向及量值關係，不代表特定實際繩長或真實介質尺度。</div></footer>
+  <script>
+    (() => {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const pulseSvgs = [...document.querySelectorAll(".rope-wave")];
+      const pulseToggles = [...document.querySelectorAll("[data-pulse-toggle]")];
+      const pulseResets = [...document.querySelectorAll("[data-pulse-reset]")];
+      const pulseStatuses = [...document.querySelectorAll("[data-pulse-status]")];
+      let pulsePlaying = !reducedMotion;
+      let pulseTime = 0;
+      let previousTime = 0;
+      const ns="http://www.w3.org/2000/svg";
+      const pulseAt = (x,center,amplitude=74) => amplitude * Math.exp(-Math.pow((x-center)/44,2));
+      const renderPulse = (svg,time) => {
+        const baseline = 142;
+        const center = 42 + ((time * 132 + 125) % 700);
+        let path = "M 38 142";
+        for (let x=38;x<=722;x+=6) path += ` L ${x} ${baseline-pulseAt(x,center)}`;
+        const wave = svg.querySelector(".pulse-path");
+        const marker = svg.querySelector(".rope-marker");
+        if (wave) wave.setAttribute("d",path);
+        if (marker) marker.setAttribute("cy",String(baseline-pulseAt(350,center)));
+      };
+      const updatePulseControls = () => {
+        pulseToggles.forEach(button => { button.textContent = reducedMotion ? "動畫已依設定停用" : pulsePlaying ? "暫停波形" : "播放波形"; button.setAttribute("aria-pressed",String(pulsePlaying)); button.disabled=reducedMotion; });
+        pulseResets.forEach(button => { button.disabled=reducedMotion; });
+        pulseStatuses.forEach(note => { note.textContent = reducedMotion ? "系統已啟用減少動態效果；圖示停在清楚可讀的靜態狀態。" : pulsePlaying ? "動畫播放中；橘點代表繩上的固定記號。" : "波形已暫停；可觀察橘點位置與波峰位置。"; });
+      };
+      pulseToggles.forEach(button => button.addEventListener("click",() => { pulsePlaying = !pulsePlaying; updatePulseControls(); }));
+      pulseResets.forEach(button => button.addEventListener("click",() => { pulseTime=0; pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime)); pulsePlaying=true; updatePulseControls(); }));
+      const animatePulse = time => {
+        if (previousTime) { const delta=Math.min((time-previousTime)/1000,.05); if(pulsePlaying) pulseTime+=delta; }
+        previousTime=time;
+        pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));
+        if(!reducedMotion) window.requestAnimationFrame(animatePulse);
+      };
+      pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime)); updatePulseControls(); if(!reducedMotion) window.requestAnimationFrame(animatePulse);
+
+      const transverseGroup=document.querySelector(".transverse-particles");
+      const transverseParticles=[];
+      if(transverseGroup){for(let i=0;i<27;i++){const circle=document.createElementNS(ns,"circle");circle.setAttribute("r","5.5");circle.setAttribute("class","particle");transverseGroup.append(circle);transverseParticles.push(circle);}}
+      const springGroup=document.querySelector(".spring-particles");
+      const springDots=[];
+      if(springGroup){for(let i=0;i<27;i++){const circle=document.createElementNS(ns,"circle");circle.setAttribute("r","6");circle.setAttribute("cy","112");circle.setAttribute("class","particle");springGroup.append(circle);springDots.push(circle);}}
+      let waveStart=0;
+      const animateWaveTypes=time=>{
+        const t=reducedMotion?0:(time-waveStart)/1000;
+        transverseParticles.forEach((dot,i)=>{const x=42+i*16;dot.setAttribute("cx",String(x));dot.setAttribute("cy",String(112-54*Math.sin((2*Math.PI*(x-75)/148)-t*2)));});
+        springDots.forEach((dot,i)=>{const x=42+i*16;const shift=12*Math.sin((x/65)-t*2);dot.setAttribute("cx",String(x+shift));});
+        if(!reducedMotion) window.requestAnimationFrame(animateWaveTypes);
+      };
+      if(reducedMotion) animateWaveTypes(0); else window.requestAnimationFrame(time=>{waveStart=time;animateWaveTypes(time);});
+
+      const frequencySlider=document.querySelector("#frequency-slider");
+      const frequencyOutput=document.querySelector("#frequency-output");
+      const wavelengthOutput=document.querySelector("#wavelength-output");
+      const frequencyNote=document.querySelector("#frequency-model-note");
+      const speedWavePath=document.querySelector("#speed-wave-path");
+      const speedLambdaLabel=document.querySelector("#speed-lambda-label");
+      const updateFrequencyModel=()=>{
+        const f=Number(frequencySlider.value);const v=3;const lambda=v/f;
+        frequencyOutput.textContent=`${f} Hz`;wavelengthOutput.textContent=`${lambda.toFixed(1)} m`;
+        frequencyNote.textContent=`v = f × λ，因此 ${v} m/s = ${f} Hz × ${lambda.toFixed(1)} m。波速固定，頻率增加時波長縮短。`;
+        speedLambdaLabel.textContent=`λ = ${lambda.toFixed(1)} m`;
+        let d="M 30 90";for(let x=30;x<=690;x+=4){const y=90-40*Math.cos((2*Math.PI*(x-112.5))/(110*lambda));d+=` L ${x} ${y.toFixed(2)}`;}speedWavePath.setAttribute("d",d);
+      };
+      frequencySlider.addEventListener("input",updateFrequencyModel);updateFrequencyModel();
+
+      const summaryWavePath=document.querySelector(".summary-wave-path");
+      const summaryMarker=document.querySelector(".summary-rope-marker");
+      const animateSummaryWave=(time)=>{
+        const t=reducedMotion?0:time/1000;
+        const x0=135;const periodPx=240;const amplitude=60;let d="M 35 120";
+        for(let x=35;x<=685;x+=4){const y=120-amplitude*Math.cos((2*Math.PI*(x-x0)/periodPx)-t*1.8);d+=` L ${x} ${y.toFixed(2)}`;}
+        summaryWavePath.setAttribute("d",d);
+        const markerY=120-amplitude*Math.cos((2*Math.PI*(255-x0)/periodPx)-t*1.8);
+        summaryMarker.setAttribute("cy",String(markerY));
+        if(!reducedMotion) window.requestAnimationFrame(animateSummaryWave);
+      };
+      if(reducedMotion) animateSummaryWave(0); else window.requestAnimationFrame(animateSummaryWave);
+
+      const checkAnswer=document.querySelector("#check-answer");
+      checkAnswer.addEventListener("click",()=>{
+        const motion=document.querySelector("#marker-motion").value;
+        const speed=Number(document.querySelector("#answer-speed").value);
+        const feedback=document.querySelector("#answer-feedback");
+        if(!motion||!Number.isFinite(speed)){feedback.dataset.state="try";feedback.textContent="請選擇橘點的運動方式並輸入波速，再對照下方完整解釋。";return;}
+        if(motion==="local"&&Math.abs(speed-3)<0.01){feedback.dataset.state="good";feedback.textContent="說明完整：繩點在原位置附近上下振動，波形向右傳；v = 2 Hz × 1.5 m = 3 m/s。";}
+        else {feedback.dataset.state="try";feedback.textContent="再對照圖示：橘點留在繩上的同一位置附近振動；用 v = f × λ 計算波速。完整解釋已列在下方。";}
+      });
+
+      const routeLinks=[...document.querySelectorAll(".route a[href^='#card-']")];
+      const cards=routeLinks.map(link=>document.querySelector(link.getAttribute("href"))).filter(Boolean);
+      const markActive=id=>routeLinks.forEach(link=>{if(link.hash===`#${id}`){link.setAttribute("aria-current","step");link.scrollIntoView({block:"nearest",inline:"nearest"});}else link.removeAttribute("aria-current");});
+      if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)markActive(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});cards.forEach(card=>observer.observe(card));}
+      else {const sync=()=>{const current=[...cards].reverse().find(card=>card.getBoundingClientRect().top<=window.innerHeight*.35);if(current)markActive(current.id);};window.addEventListener("scroll",sync,{passive:true});sync();}
+    })();
+  </script>
+</body>
+</html>
