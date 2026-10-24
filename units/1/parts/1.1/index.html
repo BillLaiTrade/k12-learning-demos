@@ -77,16 +77,46 @@
     .scene-path { display: flex; align-items: center; gap: 10px; margin-top: 16px; color: var(--green); font-size: .94rem; font-weight: 800; }
     .scene-path-label { color: var(--muted); font-weight: 650; }
     .path-arrow { color: #c4872b; }
-    .toggle-row, .object-grid, .medium-grid, .choices { display: flex; flex-wrap: wrap; gap: 9px; margin: 12px 0; }
+    .toggle-row, .medium-grid, .choices { display: flex; flex-wrap: wrap; gap: 9px; margin: 12px 0; }
     .control-button, .choice { min-height: 44px; border: 1px solid var(--line); border-radius: 13px; padding: 9px 13px; background: #fff; color: var(--ink); text-align: left; }
     .control-button:hover, .choice:hover, .control-button:focus-visible, .choice:focus-visible { border-color: var(--green); outline: 2px solid rgb(23 107 83 / 12%); }
     .control-button[aria-pressed="true"], .choice[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); box-shadow: inset 0 0 0 1px var(--green); }
     .control-button .hint { display: block; color: var(--muted); font-size: .78rem; }
     .scene-panel[hidden] { display: none; }
-    .object-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .object-button { min-height: 92px; border: 1px solid var(--line); border-radius: 15px; background: #fff; color: var(--ink); font-weight: 750; }
-    .object-button:hover, .object-button:focus-visible, .object-button[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); outline: 2px solid rgb(23 107 83 / 10%); }
-    .object-emoji { display: block; margin-bottom: 3px; font-size: 1.6rem; }
+    .night-experiment { margin-top: 16px; }
+    .night-switches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+    .light-switch { display: grid; grid-template-columns: 38px minmax(0, 1fr) 46px auto; align-items: center; gap: 10px; min-width: 0; min-height: 76px; padding: 11px 13px; border: 1px solid var(--line); border-radius: 15px; background: #fbfcf8; color: var(--ink); text-align: left; }
+    .light-switch:hover, .light-switch:focus-visible { border-color: var(--green); outline: 3px solid rgb(23 107 83 / 12%); }
+    .source-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #e9f2f5; color: #477c92; font-size: 1.25rem; }
+    .lamp-switch .source-icon { background: #fff2dc; color: #a86c22; }
+    .switch-copy { min-width: 0; }
+    .switch-copy strong, .switch-copy small { display: block; }
+    .switch-copy strong { font-size: .94rem; line-height: 1.35; }
+    .switch-copy small { margin-top: 3px; color: var(--muted); font-size: .76rem; line-height: 1.35; }
+    .switch-control { position: relative; display: block; width: 44px; height: 26px; border-radius: 99px; background: #b7c1b8; transition: background .2s ease; }
+    .switch-control span { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px #18362935; transition: transform .2s ease; }
+    .light-switch[aria-pressed="true"] .switch-control { background: #287353; }
+    .lamp-switch[aria-pressed="true"] .switch-control { background: #bd8128; }
+    .light-switch[aria-pressed="true"] .switch-control span { transform: translateX(18px); }
+    .switch-status { min-width: 2.5em; color: var(--muted); font-size: .77rem; font-weight: 750; text-align: right; }
+    .light-switch[aria-pressed="true"] .switch-status { color: var(--green); }
+    .lamp-switch[aria-pressed="true"] .switch-status { color: #9b681d; }
+    .night-scene { position: relative; margin: 0; overflow: hidden; border: 1px solid #263d48; border-radius: 17px; background: #07172a; box-shadow: 0 5px 18px #243a3514; }
+    .night-scene img { display: block; width: 100%; height: auto; aspect-ratio: 1672 / 941; object-fit: cover; }
+    .light-rays { position: absolute; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
+    .ray-path { opacity: 1; transition: opacity .25s ease; }
+    .ray-path[hidden] { display: none; }
+    .ray { fill: none; stroke: #c6edff; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; filter: url(#ray-glow); }
+    .sun-ray { stroke-dasharray: 10 13; stroke-width: 4; opacity: .88; }
+    .lamp-ray, .book-ray { stroke: #ffd16f; }
+    .ray-point { fill: #f8fdff; stroke: #83d7ff; stroke-width: 5; }
+    .lamp-point { fill: #fff9e8; stroke: #f2b949; }
+    .path-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .path-chip { padding: 6px 10px; border: 1px solid #dce7e8; border-radius: 10px; background: #eef6f8; color: #426e84; font-size: .79rem; font-weight: 750; }
+    .path-chip.lamp { border-color: #f0dfbd; background: #fff6e7; color: #916222; }
+    .path-chip.inactive { border-color: var(--line); background: #f1f3ef; color: #78827a; font-weight: 600; }
+    .night-feedback { min-height: 54px; margin-top: 10px; padding: 11px 14px; border-left: 4px solid #7da6b4; border-radius: 0 12px 12px 0; background: #eef5f7; color: #385968; font-size: .9rem; }
+    .night-takeaway { margin-top: 11px; }
     .feedback { min-height: 54px; margin-top: 12px; padding: 12px 14px; border-left: 4px solid #b8cda9; border-radius: 0 12px 12px 0; background: #f0f5eb; color: #365348; }
     .feedback[data-state="good"] { border-left-color: var(--green); }
     .feedback[data-state="try"] { border-left-color: var(--orange); background: var(--orange-pale); color: #6b4028; }
@@ -125,7 +155,9 @@
       .card-side { display: flex; align-items: baseline; gap: 10px; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 10px; }
       .card-side h3 { margin: 0; }
       .card-role { display: none; }
-      .object-grid, .medium-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .medium-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .night-switches { grid-template-columns: 1fr; gap: 8px; }
+      .light-switch { min-height: 70px; }
       .scene-pair { gap: 16px; }
       .scene-example { padding: 17px; border-radius: 17px; }
       .scene-example-head h3 { font-size: 1.02rem; }
@@ -141,6 +173,15 @@
       .progress-copy { font-size: .82rem; }
       .visual { padding: 9px; }
       .speed-row { grid-template-columns: 54px minmax(0, 1fr) 88px; gap: 7px; font-size: .82rem; }
+      .light-switch { grid-template-columns: 34px minmax(0, 1fr) 40px auto; gap: 8px; padding: 10px; }
+      .source-icon { width: 34px; height: 34px; }
+      .switch-copy strong { font-size: .88rem; }
+      .switch-copy small { font-size: .72rem; }
+      .switch-control { width: 40px; }
+      .light-switch[aria-pressed="true"] .switch-control span { transform: translateX(14px); }
+      .path-legend { gap: 6px; }
+      .path-chip { font-size: .73rem; }
+      .night-feedback { font-size: .84rem; }
       .range-row { grid-template-columns: 1fr; gap: 4px; }
       .range-row output { text-align: right; }
     }
@@ -169,7 +210,7 @@
         <p class="route-label">這段學習的路線</p>
         <div class="route-inner">
           <a href="#card-01" aria-current="step"><b>01</b><span>為什麼我們看得見東西？</span></a>
-          <a href="#card-02"><b>02</b><span>哪些物體會自己發光？</span></a>
+          <a href="#card-02"><b>02</b><span>月亮和書本為什麼看得見？</span></a>
           <a href="#card-03"><b>03</b><span>光路會彎嗎？</span></a>
           <a href="#card-04"><b>04</b><span>影子怎麼形成？</span></a>
           <a href="#card-05"><b>05</b><span>影子的大小如何改變？</span></a>
@@ -207,16 +248,47 @@
         <section class="lesson-card" id="card-02">
           <div class="card-side"><span class="card-number">02</span><h3>分清楚光從哪裡來</h3><span class="card-role">自己發光或反射光</span></div>
           <div class="card-main">
-            <h2>哪些物體會自己發光？</h2>
-            <p>有些物體會自行發光；有些看起來亮，是因為接收到其他光源的光。選一個例子看看。</p>
-            <div class="object-grid" role="group" aria-label="選擇一個物體查看它如何發光或反射光">
-              <button class="object-button" type="button" data-object="sun" aria-pressed="false"><span class="object-emoji" aria-hidden="true">☀️</span>太陽</button>
-              <button class="object-button" type="button" data-object="lamp" aria-pressed="false"><span class="object-emoji" aria-hidden="true">💡</span>燈泡</button>
-              <button class="object-button" type="button" data-object="moon" aria-pressed="false"><span class="object-emoji" aria-hidden="true">🌙</span>月亮</button>
-              <button class="object-button" type="button" data-object="book" aria-pressed="false"><span class="object-emoji" aria-hidden="true">📖</span>書本</button>
+            <h2>今晚，哪些光讓小葵看得見？</h2>
+            <p>切換照向月球的陽光和書桌檯燈，觀察月亮、書頁與光路如何改變。</p>
+            <div class="night-experiment">
+              <div class="night-switches" role="group" aria-label="切換夜間場景中的光源">
+                <button class="light-switch moon-switch" id="moonlight-toggle" type="button" aria-pressed="true" aria-describedby="moonlight-hint">
+                  <span class="source-icon" aria-hidden="true">☼</span>
+                  <span class="switch-copy"><strong>照向月球的陽光</strong><small id="moonlight-hint">讓月球反射陽光</small></span>
+                  <span class="switch-control" aria-hidden="true"><span></span></span>
+                  <span class="switch-status">開啟</span>
+                </button>
+                <button class="light-switch lamp-switch" id="lamp-toggle" type="button" aria-pressed="true" aria-describedby="lamp-hint">
+                  <span class="source-icon" aria-hidden="true">✦</span>
+                  <span class="switch-copy"><strong>書桌檯燈</strong><small id="lamp-hint">照亮書頁</small></span>
+                  <span class="switch-control" aria-hidden="true"><span></span></span>
+                  <span class="switch-status">開啟</span>
+                </button>
+              </div>
+              <figure class="night-scene">
+                <img id="night-scene-image" src="assets/night-scene-both-on.webp" alt="夜晚的小葵在檯燈下看書，窗外月亮明亮可見。">
+                <svg class="light-rays" viewBox="0 0 1672 941" preserveAspectRatio="none" aria-hidden="true">
+                  <defs>
+                    <marker id="moon-ray-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#c6edff"/></marker>
+                    <marker id="lamp-ray-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#ffd16f"/></marker>
+                    <filter id="ray-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                  </defs>
+                  <g id="moon-ray-path" class="ray-path">
+                    <path d="M18 174 286 174" class="ray sun-ray" marker-end="url(#moon-ray-arrow)"/>
+                    <path d="M298 178 1118 365" class="ray moon-ray" marker-end="url(#moon-ray-arrow)"/>
+                    <circle cx="292" cy="176" r="7" class="ray-point moon-point"/>
+                  </g>
+                  <g id="lamp-ray-path" class="ray-path">
+                    <path d="M802 370 811 716" class="ray lamp-ray" marker-end="url(#lamp-ray-arrow)"/>
+                    <path d="M814 716 1118 369" class="ray book-ray" marker-end="url(#lamp-ray-arrow)"/>
+                    <circle cx="811" cy="716" r="7" class="ray-point lamp-point"/>
+                  </g>
+                </svg>
+              </figure>
+              <div class="path-legend" id="path-legend" aria-live="polite"></div>
+              <div class="night-feedback" id="night-feedback" aria-live="polite"></div>
+              <div class="fact night-takeaway"><p><strong>觀察重點：</strong>月亮和書本本身都不發光；月亮反射陽光、書頁反射檯燈的光，這些光進入眼睛後，我們才能看見它們。</p></div>
             </div>
-            <div class="feedback" id="object-feedback" aria-live="polite">點選一個物體，看看它是光源，還是反射其他光源的光。</div>
-            <div class="fact"><p><strong>光源：</strong>能自行發光的物體。月亮和書本本身不發光；我們看見它們，是因為它們反射了照到表面的光。</p></div>
           </div>
         </section>
 
@@ -351,19 +423,54 @@
   <footer><div class="shell">第一段學習・光與看見｜下一段：光遇到表面會怎樣？</div></footer>
   <script>
     (() => {
-      const objectInfo = {
-        sun: ['光源', '太陽能自行發光，是光源。'],
-        lamp: ['光源', '燈泡通電後會發光，是光源。'],
-        moon: ['反射光', '月亮本身不發光；它反射太陽光進入我們的眼睛。'],
-        book: ['反射光', '書本本身不發光；燈光照到書本後反射進入眼睛。']
+      const moonToggle = document.querySelector('#moonlight-toggle');
+      const lampToggle = document.querySelector('#lamp-toggle');
+      const nightImage = document.querySelector('#night-scene-image');
+      const moonPath = document.querySelector('#moon-ray-path');
+      const lampPath = document.querySelector('#lamp-ray-path');
+      const nightFeedback = document.querySelector('#night-feedback');
+      const pathLegend = document.querySelector('#path-legend');
+      const nightScenes = {
+        'true-true': {
+          image: 'assets/night-scene-both-on.webp',
+          alt: '月亮明亮可見，檯燈照亮書頁，小葵在夜裡看書。',
+          text: '月面反射陽光，月光進入小葵的眼睛；檯燈照亮書頁，書頁反射的光也進入她的眼睛。'
+        },
+        'false-true': {
+          image: 'assets/night-scene-sun-off-lamp-on.webp',
+          alt: '月亮因沒有陽光照射而變暗；檯燈仍照亮書頁，小葵在夜裡看書。',
+          text: '月球沒有反射陽光，暗下來而難以看見；檯燈仍照亮書頁，小葵可以看書。'
+        },
+        'true-false': {
+          image: 'assets/night-scene-sun-on-lamp-off.webp',
+          alt: '月亮仍反射陽光而可見；檯燈關閉，室內只剩微弱月光。',
+          text: '月亮仍反射陽光、清楚可見；室內只剩微弱月光，書頁變暗，小葵難以閱讀。'
+        },
+        'false-false': {
+          image: 'assets/night-scene-both-off.webp',
+          alt: '陽光和檯燈都關閉，月亮與書頁都暗下來，只剩微弱輪廓。',
+          text: '兩段光路都中斷，月亮和書頁都暗下來。物體沒有消失，只是沒有足夠的光進入眼睛。'
+        }
       };
-      const objectFeedback = document.querySelector('#object-feedback');
-      document.querySelectorAll('[data-object]').forEach((button) => button.addEventListener('click', () => {
-        document.querySelectorAll('[data-object]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-        const [label, explanation] = objectInfo[button.dataset.object];
-        objectFeedback.innerHTML = `<strong>${label}：</strong>${explanation}`;
-        objectFeedback.dataset.state = 'good';
+      Object.values(nightScenes).forEach(({ image }) => { const preload = new Image(); preload.src = image; });
+      const updateNightScene = () => {
+        const moonOn = moonToggle.getAttribute('aria-pressed') === 'true';
+        const lampOn = lampToggle.getAttribute('aria-pressed') === 'true';
+        const state = nightScenes[`${moonOn}-${lampOn}`];
+        nightImage.src = state.image;
+        nightImage.alt = state.alt;
+        moonToggle.querySelector('.switch-status').textContent = moonOn ? '開啟' : '關閉';
+        lampToggle.querySelector('.switch-status').textContent = lampOn ? '開啟' : '關閉';
+        moonPath.hidden = !moonOn;
+        lampPath.hidden = !lampOn;
+        pathLegend.innerHTML = `${moonOn ? '<span class="path-chip">陽光 → 月球 → 眼睛</span>' : '<span class="path-chip inactive">月亮的反射光路中斷</span>'}${lampOn ? '<span class="path-chip lamp">檯燈 → 書頁 → 眼睛</span>' : '<span class="path-chip inactive">檯燈照明光路中斷</span>'}`;
+        nightFeedback.textContent = state.text;
+      };
+      [moonToggle, lampToggle].forEach((button) => button.addEventListener('click', () => {
+        button.setAttribute('aria-pressed', String(button.getAttribute('aria-pressed') !== 'true'));
+        updateNightScene();
       }));
+      updateNightScene();
 
       const timeInput = document.querySelector('#light-time');
       const timeOutput = document.querySelector('#light-time-output');
