@@ -169,9 +169,9 @@
           <div class="card-main">
             <h2>繩子一端被抖動，變化怎麼傳到另一端？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，繩子一端上下振動，起伏怎麼會往另一端傳？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>持續振動，波就接連傳出去；只擾動一次，也會傳出一個單次波。</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>波源完成一次上下振動，會送出一個有波峰和波谷的單次波；持續振動則形成連續波。</p></div>
             <p>波是振動或擾動的傳播，能把能量由一處傳到另一處。繩子一端振動後，變化沿著繩子傳開。</p><figure class="visual">
-              <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="繩波由左側波源向右傳播；可切換連續波與波源只擾動一次形成的單次波">
+              <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="繩波由左側波源向右傳播；可播放含有波峰和波谷的單次波，或切換連續波">
                 <defs><pattern id="rope-fallback-1" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern><marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path class="pulse-path rope-underlay" d="M38 142H722"/><path class="rope-fallback" stroke="url(#rope-fallback-1)" aria-hidden="true" d="M38 142H722"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <path d="M64 116V87M58 94L64 86L70 94M64 139V168M58 161L64 169L70 161" fill="none" stroke="#748b7e" stroke-width="2"/>
@@ -179,7 +179,7 @@
                 <path d="M130 228H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
                 <text x="345" y="253" text-anchor="middle">波形傳播方向</text>
               </svg>
-              <figcaption data-wave-caption>單次波：波源只擾動一次，形成一個波形向右傳播。</figcaption>
+              <figcaption data-wave-caption>單次波：波源完成一次上下振動，形成一個有波峰和波谷的波形向右傳播。</figcaption>
             </figure>
             <div class="control-panel"><div class="controls" role="group" aria-label="繩波播放控制"><button class="secondary" type="button" data-wave-single>單次波</button><button class="secondary" type="button" data-wave-continuous aria-pressed="false">連續波</button><span class="live-note" data-pulse-status aria-live="polite">初始狀態：繩子維持平衡。可播放一次波形，或持續振動。</span></div></div>
           </div>
@@ -462,6 +462,14 @@
       const ns="http://www.w3.org/2000/svg";
       const waveAt = (x,offset,amplitude=74) => amplitude * Math.sin((x-offset-92)*2*Math.PI/232);
       const singlePulses = [];
+      const singlePulseWidth=150;
+      const smoothstep=value=>{const t=Math.max(0,Math.min(1,value));return t*t*(3-2*t);};
+      const singlePulseAt=(x,start)=>{
+        const phase=(x-start)/singlePulseWidth;
+        if(phase<=0||phase>=1)return 0;
+        const envelope=smoothstep(phase/0.1)*smoothstep((1-phase)/0.1);
+        return 72*Math.sin(2*Math.PI*phase)*envelope;
+      };
       const renderRopeTexture = ropePath => {
         const fallback=ropePath.nextElementSibling;
         if(fallback&&fallback.classList.contains("rope-fallback"))fallback.setAttribute("d",ropePath.getAttribute("d"));
@@ -485,7 +493,7 @@
         const firstCard = Boolean(svg.closest("#card-01"));
         const single = pulseMode === "single" && firstCard;
         const initial = pulseMode === "idle" && firstCard;
-        const shapeAt = x => initial ? 0 : single ? singlePulses.reduce((sum,center)=>sum+72*Math.exp(-0.5*((x-center)/32)**2),0) : waveAt(x,(time*132)%232);
+        const shapeAt = x => initial ? 0 : single ? singlePulses.reduce((sum,start)=>sum+singlePulseAt(x,start),0) : waveAt(x,(time*132)%232);
         const end = svg.viewBox.baseVal.width - 38;
         let path = `M 38 ${baseline-shapeAt(38)}`;
         for (let x=41;x<=end;x+=3) path += ` L ${x} ${baseline-shapeAt(x)}`;
@@ -495,8 +503,8 @@
       const updatePulseControls = () => {
         continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續波";
         continuousButton.setAttribute("aria-pressed",String(pulseMode==="continuous"&&pulsePlaying));
-        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的波形持續向右傳播。":"單次波：繩上各處依序上下振動，形成的波形向右傳；再按一次，就會送出下一個波形。";
-        pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?"單次波正在向右傳播；再按「單次波」可送出下一個波形。":"單次波已傳過；按「單次波」可再看一次。"):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續波」可繼續。");});
+        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的波形持續向右傳播。":"單次波：波源完成一次上下振動，送出一個含有波峰與波谷的波形；再按一次，就會送出下一個。";
+        pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?"單次波正在向右傳播；再按「單次波」可送出下一個。":"單次波已傳過；按「單次波」可再看一次。"):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續波」可繼續。");});
       };
       const schedulePulse = () => { if(pulsePlaying&&pulseFrame===null) pulseFrame=window.requestAnimationFrame(animatePulse); };
       singleButton.addEventListener("click",()=>{pulseMode="single";pulseTime=0;singlePulses.push(64);pulsePlaying=true;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();schedulePulse();});
@@ -507,7 +515,7 @@
           if(pulsePlaying&&pulseMode==="continuous")pulseTime+=delta;
           if(pulsePlaying&&pulseMode==="single"){
             for(let i=0;i<singlePulses.length;i++)singlePulses[i]+=delta*150;
-            for(let i=singlePulses.length-1;i>=0;i--)if(singlePulses[i]>746)singlePulses.splice(i,1);
+            for(let i=singlePulses.length-1;i>=0;i--)if(singlePulses[i]>722)singlePulses.splice(i,1);
             if(!singlePulses.length){pulsePlaying=false;updatePulseControls();}
           }
         }
