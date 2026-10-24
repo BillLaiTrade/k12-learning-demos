@@ -218,10 +218,27 @@ if (canvas) {
   };
   document.querySelector('#aperture-view-reset').addEventListener('click', viewReset);
   const activePointers = new Map();
+  const pointerRaycaster = new THREE.Raycaster();
   let lastPointer = null;
   let pinchDistance = 0;
   let pointerStart = null;
   let pointerDragged = false;
+  let movingPlateIndex = null;
+  let plateDragStart = null;
+  const findPlateAt = (clientX, clientY) => {
+    const bounds = canvas.getBoundingClientRect();
+    const pointer = new THREE.Vector2(
+      ((clientX - bounds.left) / bounds.width) * 2 - 1,
+      -((clientY - bounds.top) / bounds.height) * 2 + 1
+    );
+    pointerRaycaster.setFromCamera(pointer, camera);
+    return pointerRaycaster.intersectObjects(selectableSurfaces, false)[0] || null;
+  };
+  const projectWorldPoint = (x, y) => {
+    const projected = new THREE.Vector3(x, y, 0).project(camera);
+    const bounds = canvas.getBoundingClientRect();
+    return [bounds.left + (projected.x + 1) * bounds.width / 2, bounds.top + (1 - projected.y) * bounds.height / 2];
+  };
   const distanceBetweenPointers = () => {
     const points = [...activePointers.values()];
     if (points.length < 2) return 0;
@@ -229,19 +246,31 @@ if (canvas) {
   };
   canvas.addEventListener('pointerdown', (event) => {
     if (event.button !== 0) return;
+    const hit = findPlateAt(event.clientX, event.clientY);
     activePointers.set(event.pointerId, [event.clientX, event.clientY]);
     lastPointer = [event.clientX, event.clientY];
     if (activePointers.size === 1) {
       pointerStart = [event.clientX, event.clientY];
       pointerDragged = false;
+      movingPlateIndex = hit ? hit.object.userData.plateIndex : null;
+      if (movingPlateIndex !== null) {
+        selectPlate(movingPlateIndex);
+        const state = plateStates[movingPlateIndex];
+        plateDragStart = { x: state.x, y: 1.28 + state.height, screen: projectWorldPoint(state.x, 1.28 + state.height) };
+        canvas.style.cursor = 'grabbing';
+      }
     } else {
       pointerDragged = true;
+      movingPlateIndex = null;
       pinchDistance = distanceBetweenPointers();
     }
     canvas.setPointerCapture(event.pointerId);
   });
   canvas.addEventListener('pointermove', (event) => {
-    if (!activePointers.has(event.pointerId)) return;
+    if (!activePointers.has(event.pointerId)) {
+      canvas.style.cursor = findPlateAt(event.clientX, event.clientY) ? 'move' : 'grab';
+      return;
+    }
     activePointers.set(event.pointerId, [event.clientX, event.clientY]);
     if (pointerStart && Math.hypot(event.clientX - pointerStart[0], event.clientY - pointerStart[1]) > 6) pointerDragged = true;
     if (activePointers.size > 1) {
@@ -249,6 +278,29 @@ if (canvas) {
       if (pinchDistance > 0 && nextDistance > 0) radius = THREE.MathUtils.clamp(radius - (nextDistance - pinchDistance) * 0.035, 8, 24);
       pinchDistance = nextDistance;
       updateCamera();
+      return;
+    }
+    if (movingPlateIndex !== null && plateDragStart) {
+      if (pointerDragged) {
+        const startScreen = plateDragStart.screen;
+        const xScreen = projectWorldPoint(plateDragStart.x + 1, plateDragStart.y);
+        const yScreen = projectWorldPoint(plateDragStart.x, plateDragStart.y + 1);
+        const a = xScreen[0] - startScreen[0];
+        const c = xScreen[1] - startScreen[1];
+        const b = yScreen[0] - startScreen[0];
+        const d = yScreen[1] - startScreen[1];
+        const determinant = a * d - b * c;
+        if (Math.abs(determinant) > 0.001) {
+          const dx = event.clientX - pointerStart[0];
+          const dy = event.clientY - pointerStart[1];
+          const moveX = (dx * d - b * dy) / determinant;
+          const moveY = (a * dy - dx * c) / determinant;
+          const state = plateStates[movingPlateIndex];
+          state.x = THREE.MathUtils.clamp(plateDragStart.x + moveX, homeX[movingPlateIndex] - 0.82, homeX[movingPlateIndex] + 0.82);
+          state.height = THREE.MathUtils.clamp(plateDragStart.y + moveY - 1.28, -0.62, 0.62);
+          updateExperiment();
+        }
+      }
       return;
     }
     if (!lastPointer) return;
@@ -260,22 +312,16 @@ if (canvas) {
     updateCamera();
   });
   const stopDrag = (event) => {
-    const wasClick = activePointers.size === 1 && !pointerDragged;
-    if (wasClick) {
-      const bounds = canvas.getBoundingClientRect();
-      const pointer = new THREE.Vector2(
-        ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
-        -((event.clientY - bounds.top) / bounds.height) * 2 + 1
-      );
-      const raycaster = new THREE.Raycaster();
-      raycaster.setFromCamera(pointer, camera);
-      const hit = raycaster.intersectObjects(selectableSurfaces, false)[0];
-      if (hit) selectPlate(hit.object.userData.plateIndex);
-    }
     activePointers.delete(event.pointerId);
     pinchDistance = 0;
     lastPointer = activePointers.size === 1 ? [...activePointers.values()][0] : null;
-    if (activePointers.size === 0) pointerStart = null;
+    if (activePointers.size === 0) {
+      pointerStart = null;
+      plateDragStart = null;
+      movingPlateIndex = null;
+      pointerDragged = false;
+      canvas.style.cursor = 'grab';
+    }
   };
   canvas.addEventListener('pointerup', stopDrag);
   canvas.addEventListener('pointercancel', stopDrag);

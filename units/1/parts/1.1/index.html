@@ -128,9 +128,6 @@
     .aperture-scene-frame { overflow: hidden; border: 1px solid #dbe2d8; border-radius: 17px; background: linear-gradient(#eaf0ea, #f6f1e6); box-shadow: 0 5px 18px #243a3514; }
     #aperture-3d-scene { display: block; width: 100%; height: clamp(300px, 44vw, 440px); cursor: grab; touch-action: none; }
     #aperture-3d-scene:active { cursor: grabbing; }
-    .aperture-view-hint { display: flex; justify-content: space-between; gap: 10px; margin: 7px 2px 12px; color: var(--muted); font-size: .78rem; }
-    .aperture-mobility-note { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 0 0 12px; color: var(--muted); font-size: .82rem; }
-    .aperture-mobility-note strong { color: var(--ink); }
     .equipment-labels { display: grid; grid-template-columns: 1.2fr repeat(3, 1fr) 1.1fr; gap: 4px; margin: 7px 4px 13px; color: var(--muted); font-size: .72rem; text-align: center; }
     .aperture-controls { padding: 13px 15px 11px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
     .aperture-control-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
@@ -157,7 +154,6 @@
       .aperture-range-row { grid-template-columns: auto minmax(0, 1fr) auto; gap: 7px; }
       .aperture-reset-row { margin-top: 7px; }
       .aperture-controls { padding: 11px; }
-      .aperture-view-hint { display: block; }
     }
     .end-card { border-color: #bfd1be; background: #f4f8ef; }
     .end-card .card-side { border-color: #d0ddcb; }
@@ -307,14 +303,12 @@
           <div class="card-side"><span class="card-number">03</span><h3>觀察光的路徑</h3><span class="card-role">光沿直線前進</span></div>
           <div class="card-main">
             <h2>光路會彎嗎？</h2>
-            <p>拖曳旋轉 3D 實驗台。光源、屏幕和導軌固定；三片小孔板各自能沿導軌前後移動，也能上下調整高度。</p>
+            <p>觀察三個小孔是否排成一直線，以及屏幕亮點如何變化。</p>
             <div class="aperture-lab">
               <div class="aperture-scene-frame">
-                <canvas id="aperture-3d-scene" tabindex="0" aria-label="可旋轉的 3D 小孔實驗台。點選任一小孔板即可切換下方控制器；拖曳畫面旋轉視角。"></canvas>
+                <canvas id="aperture-3d-scene" tabindex="0" aria-label="3D 小孔實驗台"></canvas>
               </div>
-              <div class="aperture-view-hint"><span>點選小孔板：切換下方控制器；拖曳畫面：旋轉視角</span><span>滾輪或雙指：縮放；按「重設視角」回到初始角度</span></div>
               <div class="equipment-labels"><span>光源</span><span>小孔板 1</span><span>中間板</span><span>小孔板 3</span><span>屏幕</span></div>
-              <div class="aperture-mobility-note"><span><strong>固定：</strong>光源、導軌、屏幕</span><span><strong>可移動：</strong>三片小孔板可分別前後滑動、上下調整</span></div>
               <div class="aperture-controls">
                 <div class="aperture-control-head"><strong id="aperture-selected-label">調整小孔板 2</strong><output id="aperture-alignment-output">小孔對齊</output></div>
                 <div class="aperture-plate-selectors" role="group" aria-label="選擇要移動的小孔板">
@@ -335,7 +329,7 @@
                 <div class="aperture-reset-row"><button class="secondary aperture-reset" id="aperture-reset" type="button">重設實驗位置</button><button class="secondary" id="aperture-view-reset" type="button">重設視角</button></div>
               </div>
               <div class="aperture-result" id="aperture-result" aria-live="polite"><span class="aperture-result-dot" aria-hidden="true"></span><span>三個小孔排成一直線，屏幕上出現亮點。</span></div>
-              <p class="aperture-observation">操作提示：先選一片小孔板，再調整它的前後位置或高度。前後移動不會改變光路；上下移動若讓小孔不再排成直線，屏幕亮點就會變暗或消失。空氣中的光路看不見，我們以屏幕亮點判斷光是否通過。</p>
+              <p class="aperture-observation">小孔前後距離改變時，只要仍排成直線，光就能通過；小孔偏離直線，光會被板片擋住，屏幕亮點便會變暗或消失。</p>
               <div class="fact aperture-conclusion"><p><strong>從現象推想：</strong>小孔要排成一直線，光才能通過。光在均勻介質中沿直線傳播。</p></div>
             </div>
           </div>
