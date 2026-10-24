@@ -414,8 +414,8 @@
     .freeze-demo-particle.is-solid { clip-path:url(#phase-demo-ice-clip); }
     .freeze-demo-particle.is-liquid { fill:#438bb8; }
     .freeze-demo-particle.is-gas { fill:#94c8da; }
-    .freeze-demo-particle.is-vibrating { animation:freeze-particle-vibration .14s ease-in-out infinite alternate; transform-box:fill-box; transform-origin:center; }
-    @keyframes freeze-particle-vibration { from { transform:translate(-.35px,.25px); } to { transform:translate(.35px,-.25px); } }
+    .freeze-demo-particle.is-vibrating { animation:freeze-particle-vibration .42s ease-in-out infinite alternate; animation-delay:var(--vibration-delay,0ms); transform-box:fill-box; transform-origin:center; }
+    @keyframes freeze-particle-vibration { from { transform:translate(-1px,.7px); } to { transform:translate(1px,-.7px); } }
     .freeze-demo-caption { margin:6px 0 0; color:#61736a; font-size:.73rem; }
     .freeze-demo-status { margin:4px 0 0; min-height:1.3em; color:#35748a; font-size:.74rem; font-weight:750; }
     @media(prefers-reduced-motion:reduce) { .freeze-demo-particle.is-vibrating { animation:none; } }
@@ -1436,9 +1436,9 @@
       const row=Math.floor(index/12),column=index%12;
       return {row,column,endX:34+column*24+(row%2)*12,endY:67+row*13};
     });
-    const freezeParticles=freezeParticleLayout.map(({row,column,endX,endY})=>{
+    const freezeParticles=freezeParticleLayout.map(({row,column,endX,endY},index)=>{
       const particle=document.createElementNS("http://www.w3.org/2000/svg","circle");
-      particle.setAttribute("class","freeze-demo-particle");particle.setAttribute("r","4.2");freezeDemoParticles.append(particle);
+      particle.setAttribute("class","freeze-demo-particle");particle.setAttribute("r","4.2");particle.style.setProperty("--vibration-delay",`${-(index%20)*19}ms`);freezeDemoParticles.append(particle);
       return {element:particle,row,column,x:0,y:0,vx:0,vy:0,endX,endY,frozen:false,isFreezing:false};
     });
     const freezeTargets=[...freezeParticles].sort((a,b)=>(a.row*7+Math.abs(a.column-5.5)*.5)-(b.row*7+Math.abs(b.column-5.5)*.5));
