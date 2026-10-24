@@ -244,7 +244,7 @@
                 <svg viewBox="0 0 500 230" role="img" aria-label="繩點上下振動，波向右傳播的橫波示意圖">
                   <defs><marker id="arrow-transverse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker><marker id="arrow-particle-v" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#bc612b"/></marker></defs>
                   <path d="M38 112H455" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
-                  <path class="small-transverse-wave wave-line" d="M38 112 C72 112 78 58 112 58 S152 166 186 166 S226 58 260 58 S300 166 334 166 S374 58 408 58 S442 112 455 112"/>
+                  <path class="small-transverse-wave rope-underlay" d="M38 112 C72 112 78 58 112 58 S152 166 186 166 S226 58 260 58 S300 166 334 166 S374 58 408 58 S442 112 455 112"/><g class="rope-texture-layer" aria-hidden="true"></g>
                   <g class="transverse-particles"></g>
                   <path d="M85 204H408" class="motion-arrow" marker-end="url(#arrow-transverse)"/><text x="246" y="226" text-anchor="middle">波前進方向</text>
                   <path d="M112 111V67" class="measure" marker-end="url(#arrow-particle-v)"/><path d="M112 111V154" class="measure" marker-end="url(#arrow-particle-v)"/>
@@ -287,7 +287,7 @@
               <svg viewBox="0 0 720 280" role="img" aria-label="橫波圖標示平衡位置、波峰、波谷、振幅 A 與波峰至波谷高度 2A">
                 <defs><marker id="arrow-a" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
                 <path d="M40 140H680" class="equilibrium"/>
-                <path id="amplitude-wave" d="M40 140 C90 140 105 62 160 62 S230 218 285 218 S355 62 410 62 S480 218 535 218 S605 62 660 62" class="wave-line"/>
+                <path id="amplitude-wave" d="M40 140 C90 140 105 62 160 62 S230 218 285 218 S355 62 410 62 S480 218 535 218 S605 62 660 62" class="rope-underlay"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <circle id="amplitude-peak" cx="160" cy="62" r="6" fill="#176b53"/><circle id="amplitude-trough" cx="285" cy="218" r="6" fill="#176b53"/>
                 <text x="600" y="131">平衡位置</text><text x="160" y="22" text-anchor="middle">波峰</text><text x="285" y="260" text-anchor="middle">波谷</text>
                 <path id="amplitude-measure" d="M185 140V80" class="measure" marker-start="url(#arrow-a)" marker-end="url(#arrow-a)"/><text id="amplitude-label" x="202" y="110">A = 0.5 m</text>
@@ -317,7 +317,7 @@
               <svg viewBox="0 0 720 280" role="img" aria-label="相鄰波峰間的水平距離標為波長 lambda，平衡位置到波峰的垂直距離標為振幅 A">
                 <defs><marker id="arrow-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
                 <path d="M40 125H680" class="equilibrium"/>
-                <path d="M40 125 C70 125 91 53 130 53 S190 197 250 197 S310 53 370 53 S430 197 490 197 S550 53 610 53 S650 125 680 125" class="wave-line"/>
+                <path d="M40 125 C70 125 91 53 130 53 S190 197 250 197 S310 53 370 53 S430 197 490 197 S550 53 610 53 S650 125 680 125" class="rope-underlay"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <text x="130" y="31" text-anchor="middle">波峰</text><text x="370" y="31" text-anchor="middle">相鄰波峰</text>
                 <path id="lambda-left-guide" d="M130 90V250" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
                 <path id="lambda-right-guide" d="M370 90V250" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
@@ -369,9 +369,9 @@
             <figure class="visual">
               <svg viewBox="0 0 720 220" role="img" aria-label="兩條相同時間長度的一秒時間軸；一赫茲完成一次振動，二赫茲完成兩次振動">
                 <defs><marker id="arrow-time" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#748b7e"/></marker><marker id="arrow-time-measure" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
-                <text x="42" y="56">f = 1 Hz</text><path d="M170 52H670" stroke="#aab9ac" stroke-width="2" marker-end="url(#arrow-time)"/><path id="frequency-wave-1" d="M170 52 C230 52 230 22 290 22 S350 82 410 82 S470 52 530 52" fill="none" stroke="#176b53" stroke-width="5"/>
+                <text x="42" y="56">f = 1 Hz</text><path d="M170 52H670" stroke="#aab9ac" stroke-width="2" marker-end="url(#arrow-time)"/><path id="frequency-wave-1" class="rope-underlay" d="M170 52 C230 52 230 22 290 22 S350 82 410 82 S470 52 530 52"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <path d="M170 100V116M530 100V116M174 109H526" class="measure" marker-start="url(#arrow-time-measure)" marker-end="url(#arrow-time-measure)"/><text x="350" y="137" text-anchor="middle">一次完整振動：T = 1 s</text>
-                <text x="42" y="178">f = 2 Hz</text><path d="M170 173H670" stroke="#aab9ac" stroke-width="2" marker-end="url(#arrow-time)"/><path id="frequency-wave-2" d="M170 173 C215 173 215 143 260 143 S305 203 350 203 S395 143 440 143 S485 203 530 203 S575 143 620 143" fill="none" stroke="#176b53" stroke-width="3" opacity=".55"/>
+                <text x="42" y="178">f = 2 Hz</text><path d="M170 173H670" stroke="#aab9ac" stroke-width="2" marker-end="url(#arrow-time)"/><path id="frequency-wave-2" class="rope-underlay" d="M170 173 C215 173 215 143 260 143 S305 203 350 203 S395 143 440 143 S485 203 530 203 S575 143 620 143" opacity=".55"/><g class="rope-texture-layer" aria-hidden="true" opacity=".55"></g>
                 <text x="350" y="218" text-anchor="middle" class="small-label">同樣一秒內振動兩次；每次週期是 0.5 秒</text>
               </svg>
               <figcaption>頻率數一秒內完成幾次；週期量一次完整振動花多少時間。</figcaption>
@@ -392,7 +392,7 @@
               <svg id="speed-wave" viewBox="0 0 720 180" role="img" aria-label="頻率為二赫茲、波長為一點五公尺的繩波，波速為每秒三公尺">
                 <defs><marker id="speed-measure" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
                 <path d="M30 90H690" class="equilibrium"/>
-                <path id="speed-wave-path" d="M30 90 C71.25 90 71.25 50 112.5 50 S153.75 130 195 130 S236.25 50 277.5 50 S318.75 130 360 130 S401.25 50 442.5 50 S483.75 130 525 130 S566.25 50 607.5 50 S648.75 130 690 130" class="wave-line"/>
+                <path id="speed-wave-path" d="M30 90 C71.25 90 71.25 50 112.5 50 S153.75 130 195 130 S236.25 50 277.5 50 S318.75 130 360 130 S401.25 50 442.5 50 S483.75 130 525 130 S566.25 50 607.5 50 S648.75 130 690 130" class="rope-underlay"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <path d="M112.5 35V145M277.5 35V145" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
                 <path d="M116 153H274" class="measure" marker-start="url(#speed-measure)" marker-end="url(#speed-measure)"/><text id="speed-lambda-label" x="195" y="175" text-anchor="middle">λ = 1.5 m</text>
               </svg>
@@ -419,7 +419,7 @@
             <p>繩波向右傳，頻率是 2 Hz；圖上相鄰波峰距離是 1.5 m，振幅是 0.5 m。請用這張圖說明繩點如何運動、指出波的振幅和波長，並算出波速。</p><figure class="visual">
               <svg viewBox="0 0 720 250" role="img" aria-label="繩波向右傳；橘色標記代表同一繩點；振幅為零點五公尺，波長為一點五公尺">
                 <defs><marker id="arrow-check" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#176b53"/></marker><marker id="arrow-check-measure" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
-                <path d="M35 120H685" class="equilibrium"/><path class="summary-wave-path wave-line" d="M35 120 C75 120 90 60 135 60 S195 180 255 180 S315 60 375 60 S435 180 495 180 S555 60 615 60 S660 120 685 120"/>
+                <path d="M35 120H685" class="equilibrium"/><path class="summary-wave-path rope-underlay" d="M35 120 C75 120 90 60 135 60 S195 180 255 180 S315 60 375 60 S435 180 495 180 S555 60 615 60 S660 120 685 120"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <circle class="summary-rope-marker marker" cx="255" cy="180" r="9"/><path d="M255 192V221" stroke="#df8b41" stroke-width="2" stroke-dasharray="4 4"/><text x="255" y="242" text-anchor="middle">固定繩點</text>
                 <path d="M135 80V118" stroke="#bc612b" stroke-width="2" marker-start="url(#arrow-check-measure)" marker-end="url(#arrow-check-measure)"/><text x="149" y="105">A = 0.5 m</text>
                 <path d="M135 38V22M375 38V22" stroke="#84988a" stroke-width="1.5"/><path d="M139 28H371" class="measure" marker-start="url(#arrow-check-measure)" marker-end="url(#arrow-check-measure)"/><text x="255" y="17" text-anchor="middle">λ = 1.5 m</text>
@@ -465,6 +465,22 @@
       const ns="http://www.w3.org/2000/svg";
       const waveAt = (x,offset,amplitude=74) => amplitude * Math.sin((x-offset-92)*2*Math.PI/232);
       let singleWaveFinished = false;
+      const renderRopeTexture = ropePath => {
+        const layer=ropePath.nextElementSibling;
+        if(!layer||!layer.classList.contains("rope-texture-layer"))return;
+        layer.replaceChildren();
+        const totalLength=ropePath.getTotalLength(),materialWidth=14*2172/176,step=Math.max(3.5,totalLength/180);
+        for(let distance=0;distance<totalLength;distance+=step){
+          const next=Math.min(totalLength,distance+step),a=ropePath.getPointAtLength(distance),b=ropePath.getPointAtLength(next),length=next-distance;
+          const sourceX=(distance%materialWidth)/materialWidth*2172,sourceWidth=length/materialWidth*2172,width=length+0.35;
+          const tile=document.createElementNS(ns,"svg");
+          tile.setAttribute("x",String(-width/2));tile.setAttribute("y","-7");tile.setAttribute("width",String(width));tile.setAttribute("height","14");
+          tile.setAttribute("viewBox",`${sourceX} 0 ${sourceWidth} 176`);tile.setAttribute("preserveAspectRatio","none");
+          tile.setAttribute("transform",`translate(${(a.x+b.x)/2} ${(a.y+b.y)/2}) rotate(${Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI})`);
+          for(const offset of [0,2172]){const image=document.createElementNS(ns,"image");image.setAttribute("href","assets/wave-rope-strip.png");image.setAttribute("x",String(offset));image.setAttribute("width","2172");image.setAttribute("height","176");tile.append(image);}
+          layer.append(tile);
+        }
+      };
       const renderPulse = (svg,time) => {
         const baseline = 142;
         const firstCard = Boolean(svg.closest("#card-01"));
@@ -473,27 +489,9 @@
         const pulseCenter = 64 + time * 150;
         const shapeAt = x => initial ? 0 : single ? ((!singleWaveStarted||singleWaveFinished) ? 0 : 72*Math.exp(-0.5*((x-pulseCenter)/32)**2)) : waveAt(x,(time*132)%232);
         const end = svg.viewBox.baseVal.width - 38;
-        const points=[];
-        for(let x=38;x<=end;x+=3) points.push({x,y:baseline-shapeAt(x)});
-        if(points[points.length-1].x<end) points.push({x:end,y:baseline-shapeAt(end)});
-        const path=points.map((point,index)=>`${index===0?"M":"L"} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(" ");
-        svg.querySelectorAll(".rope-underlay").forEach(rope=>rope.setAttribute("d",path));
-        const layer=svg.querySelector(".rope-texture-layer");
-        if(layer){
-          layer.replaceChildren();
-          const segments=[];let total=0;
-          for(let i=0;i<points.length-1;i++){const a=points[i],b=points[i+1],length=Math.hypot(b.x-a.x,b.y-a.y);segments.push({a,b,length,distance:total});total+=length;}
-          const materialWidth=14*2172/176,materialSourceWidth=2172;
-          for(const segment of segments){
-            const {a,b,length,distance}=segment,sourceX=(distance%materialWidth)/materialWidth*materialSourceWidth,sourceWidth=length/materialWidth*materialSourceWidth,width=length+0.35;
-            const tile=document.createElementNS(ns,"svg");
-            tile.setAttribute("x",String(-width/2));tile.setAttribute("y","-7");tile.setAttribute("width",String(width));tile.setAttribute("height","14");
-            tile.setAttribute("viewBox",`${sourceX} 0 ${sourceWidth} 176`);tile.setAttribute("preserveAspectRatio","none");
-            tile.setAttribute("transform",`translate(${(a.x+b.x)/2} ${(a.y+b.y)/2}) rotate(${Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI})`);
-            for(const offset of [0,2172]){const image=document.createElementNS(ns,"image");image.setAttribute("href","assets/wave-rope-strip.png");image.setAttribute("x",String(offset));image.setAttribute("width","2172");image.setAttribute("height","176");tile.append(image);}
-            layer.append(tile);
-          }
-        }
+        let path = `M 38 ${baseline-shapeAt(38)}`;
+        for (let x=41;x<=end;x+=3) path += ` L ${x} ${baseline-shapeAt(x)}`;
+        svg.querySelectorAll(".rope-underlay").forEach(rope=>{rope.setAttribute("d",path);renderRopeTexture(rope);});
       };
       const updatePulseControls = () => {
         continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續波";
@@ -512,7 +510,9 @@
         pulseFrame=pulsePlaying?window.requestAnimationFrame(animatePulse):null;
       };
       staticRopeSvgs.forEach(svg=>renderPulse(svg,0));
-      pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime)); updatePulseControls(); schedulePulse();
+      pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));
+      document.querySelectorAll("svg .rope-underlay").forEach(rope=>{if(!rope.closest(".rope-wave"))renderRopeTexture(rope);});
+      updatePulseControls(); schedulePulse();
 
       const transverseGroup=document.querySelector(".transverse-particles");
       const transverseParticles=[];
@@ -547,7 +547,7 @@
       const updateAmplitudeModel=()=>{
         const amplitude=Number(amplitudeSlider.value);const pixels=amplitude*120;const top=140-pixels;const bottom=140+pixels;const startY=140-pixels*Math.cos((2*Math.PI*(40-160))/250);let d=`M 40 ${startY.toFixed(2)}`;
         for(let x=44;x<=660;x+=4){const y=140-pixels*Math.cos((2*Math.PI*(x-160))/250);d+=` L ${x} ${y.toFixed(2)}`;}
-        amplitudeWave.setAttribute("d",d);amplitudePeak.setAttribute("cy",String(top));amplitudeTrough.setAttribute("cy",String(bottom));
+        amplitudeWave.setAttribute("d",d);renderRopeTexture(amplitudeWave);amplitudePeak.setAttribute("cy",String(top));amplitudeTrough.setAttribute("cy",String(bottom));
         amplitudeMeasure.setAttribute("d",`M185 140V${top}`);peakTroughMeasure.setAttribute("d",`M322 ${top}V${bottom}`);
         amplitudeLabel.textContent=`A = ${amplitude.toFixed(1)} m`;amplitudeLabel.setAttribute("y",String(140-pixels/2+5));
         twiceAmplitudeLabel.textContent=`2A = ${(amplitude*2).toFixed(1)} m`;twiceAmplitudeLabel.setAttribute("y","130");
@@ -577,8 +577,8 @@
       const setFrequencyExample=value=>{
         const one=value==="1";frequencyExampleButtons.forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.frequencyExample===value)));
         frequencyExampleNote.textContent=one?"1 Hz：一秒完成一次振動，所以一個週期 T 是 1 秒。":"2 Hz：一秒完成兩次振動，所以每個週期 T 是 0.5 秒。";
-        frequencyWaveOne.setAttribute("stroke-width",one?"5":"3");frequencyWaveOne.setAttribute("opacity",one?"1":".55");
-        frequencyWaveTwo.setAttribute("stroke-width",one?"3":"5");frequencyWaveTwo.setAttribute("opacity",one?".55":"1");
+        frequencyWaveOne.setAttribute("opacity",one?"1":".55");frequencyWaveOne.nextElementSibling.setAttribute("opacity",one?"1":".55");
+        frequencyWaveTwo.setAttribute("opacity",one?".55":"1");frequencyWaveTwo.nextElementSibling.setAttribute("opacity",one?".55":"1");
       };
       frequencyExampleButtons.forEach(button=>button.addEventListener("click",()=>setFrequencyExample(button.dataset.frequencyExample)));
 
@@ -593,7 +593,7 @@
         frequencyOutput.textContent=`${f} Hz`;wavelengthOutput.textContent=`${lambda.toFixed(1)} m`;
         frequencyNote.textContent=`v = f × λ，因此 ${v} m/s = ${f} Hz × ${lambda.toFixed(1)} m。波速固定，頻率增加時波長縮短。`;
         speedLambdaLabel.textContent=`λ = ${lambda.toFixed(1)} m`;
-        let d="M 30 90";for(let x=30;x<=690;x+=4){const y=90-40*Math.cos((2*Math.PI*(x-112.5))/(110*lambda));d+=` L ${x} ${y.toFixed(2)}`;}speedWavePath.setAttribute("d",d);
+        let d="M 30 90";for(let x=30;x<=690;x+=4){const y=90-40*Math.cos((2*Math.PI*(x-112.5))/(110*lambda));d+=` L ${x} ${y.toFixed(2)}`;}speedWavePath.setAttribute("d",d);renderRopeTexture(speedWavePath);
       };
       frequencySlider.addEventListener("input",updateFrequencyModel);updateFrequencyModel();
 
@@ -603,7 +603,7 @@
         const t=reducedMotion?0:time/1000;
         const x0=135;const periodPx=240;const amplitude=60;let d="M 35 120";
         for(let x=35;x<=685;x+=4){const y=120-amplitude*Math.cos((2*Math.PI*(x-x0)/periodPx)-t*1.8);d+=` L ${x} ${y.toFixed(2)}`;}
-        summaryWavePath.setAttribute("d",d);
+        summaryWavePath.setAttribute("d",d);renderRopeTexture(summaryWavePath);
         const markerY=120-amplitude*Math.cos((2*Math.PI*(255-x0)/periodPx)-t*1.8);
         summaryMarker.setAttribute("cy",String(markerY));
         if(!reducedMotion) window.requestAnimationFrame(animateSummaryWave);
