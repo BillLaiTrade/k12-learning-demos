@@ -111,7 +111,8 @@ if (canvas) {
   scene.add(spotGlow);
 
   const homeX = [-2.35, 0, 2.35];
-  const plateStates = homeX.map((x) => ({ x, height: 0 }));
+  const homeHeight = [0, 0.31, 0];
+  const plateStates = homeX.map((x, index) => ({ x, height: homeHeight[index] }));
   const plateGap = 0.16;
   const railLimits = { min: -3.65, max: 3.85 };
   const plates = [];
@@ -215,7 +216,7 @@ if (canvas) {
     updateExperiment();
   });
   document.querySelector('#aperture-reset').addEventListener('click', () => {
-    plateStates.forEach((state, index) => { state.x = homeX[index]; state.height = 0; });
+    plateStates.forEach((state, index) => { state.x = homeX[index]; state.height = homeHeight[index]; });
     selectedIndex = 1;
     plateButtons.forEach((button, index) => button.setAttribute('aria-pressed', String(index === selectedIndex)));
     updateExperiment();
