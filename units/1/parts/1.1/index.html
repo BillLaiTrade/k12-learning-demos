@@ -425,9 +425,7 @@
                 <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-size-view-reset" type="button">重設視角</button></div>
                 <p class="shadow-scene-status" id="shadow-size-scene-status" aria-live="polite">球體靠近光源，屏幕上的影子較大。</p>
               </div>
-              <div class="range-row"><input id="shadow-position" type="range" min="0" max="100" value="0" aria-label="移動光源和屏幕之間的遮擋物"><output id="shadow-size-output" for="shadow-position">靠近光源，影子較大</output></div>
-              <div class="scale-legend"><span>靠近光源</span><span>靠近屏幕</span></div>
-              <p class="visual-caption" id="shadow-size-feedback" aria-live="polite">直接拖曳球體前後移動，或用滑桿調整位置；球體越靠近光源，影子越大。</p>
+              <p class="visual-caption" id="shadow-size-feedback" aria-live="polite">拖曳球體沿導軌前後移動，觀察影子大小改變；拖曳空白處可旋轉場景，滾輪或雙指可縮放。</p>
             </div>
             <div class="fact"><p><strong>觀察重點：</strong>影子的大小會隨光源、遮擋物和屏幕的相對位置改變。示意圖用點光源簡化說明，實際影子邊緣可能較模糊。</p></div>
           </div>
@@ -592,6 +590,6 @@
   </script>
   <script type="module" src="assets/aperture-3d.js?v=dialogue-story-20261024"></script>
   <script type="module" src="assets/shadow-3d.js?v=shadow-short-rail-20261024"></script>
-  <script type="module" src="assets/shadow-size-3d.js?v=shadow-size-3d-20261024"></script>
+  <script type="module" src="assets/shadow-size-3d.js?v=shadow-size-drag-only-20261024"></script>
 </body>
 </html>

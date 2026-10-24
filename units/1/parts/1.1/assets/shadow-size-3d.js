@@ -2,8 +2,6 @@ import * as THREE from './vendor/three/build/three.module.js';
 
 const canvas = document.querySelector('#shadow-size-3d-scene');
 if (canvas) {
-  const slider = document.querySelector('#shadow-position');
-  const sizeOutput = document.querySelector('#shadow-size-output');
   const feedback = document.querySelector('#shadow-size-feedback');
   const status = document.querySelector('#shadow-size-scene-status');
   const resetButton = document.querySelector('#shadow-size-view-reset');
@@ -296,24 +294,20 @@ if (canvas) {
     const positionFromZ = (z) => THREE.MathUtils.mapLinear(z, nearLightZ, nearScreenZ, minPosition, maxPosition);
     const updateReadout = (position, dragging = false) => {
       const value = THREE.MathUtils.clamp(position, minPosition, maxPosition);
-      slider.value = String(Math.round(value));
       const nearLight = value <= 28;
       const nearScreen = value >= 72;
-      sizeOutput.textContent = nearLight ? '靠近光源・影子較大' : nearScreen ? '靠近屏幕・影子較小' : '移動中・影子同步變化';
-      feedback.textContent = '球體越靠近光源，屏幕上的影子越大；越靠近屏幕，影子越小。';
+      feedback.textContent = nearLight
+        ? '球體靠近光源，屏幕上的影子較大；往屏幕方向拖動，影子會逐漸縮小。'
+        : nearScreen
+          ? '球體靠近屏幕，影子較小；往光源方向拖動，影子會逐漸放大。'
+          : '球體越靠近光源，屏幕上的影子越大；越靠近屏幕，影子越小。';
       if (dragging) status.textContent = '拖曳球體前後移動，屏幕影子會即時改變。';
       else if (nearLight) status.textContent = '球體靠近光源，屏幕上的影子較大。';
       else if (nearScreen) status.textContent = '球體靠近屏幕，影子縮小。';
       else status.textContent = '球體在光源與屏幕之間，影子大小隨位置改變。';
     };
-    const setBlockerPosition = (position, dragging = false) => {
-      const value = THREE.MathUtils.clamp(position, minPosition, maxPosition);
-      blocker.position.z = zFromPosition(value);
-      updateReadout(value, dragging);
-    };
-    slider.value = '0';
-    setBlockerPosition(0);
-    slider.addEventListener('input', () => setBlockerPosition(Number(slider.value)));
+    blocker.position.z = zFromPosition(minPosition);
+    updateReadout(minPosition);
 
     const resize = () => {
       const width = Math.max(canvas.clientWidth, 1);
@@ -357,7 +351,8 @@ if (canvas) {
       castPointerRay(event);
       if (!raycaster.ray.intersectPlane(depthPlane, depthIntersection)) return;
       const position = positionFromZ(depthIntersection.z);
-      setBlockerPosition(position, true);
+      blocker.position.z = zFromPosition(THREE.MathUtils.clamp(position, minPosition, maxPosition));
+      updateReadout(position, true);
     };
     const pinchDistance = () => {
       const points = [...pointers.values()];
@@ -403,7 +398,7 @@ if (canvas) {
       if (draggingSpherePointer === event.pointerId) {
         draggingSpherePointer = null;
         canvas.classList.remove('dragging-size-object');
-        updateReadout(Number(slider.value));
+        updateReadout(positionFromZ(blocker.position.z));
       }
       pointers.delete(event.pointerId);
       previousPoint = pointers.size === 1 ? [...pointers.values()][0] : null;
