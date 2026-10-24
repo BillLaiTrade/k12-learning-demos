@@ -124,6 +124,30 @@
     .speed-bar { width: var(--speed); height: 100%; border-radius: inherit; background: linear-gradient(90deg, #7eaf88, #176b53); transition: width .45s ease; }
     .speed-bar.selected { background: linear-gradient(90deg, #f3c56a, #d58a2b); }
     .speed-value { color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+    .aperture-lab { margin-top: 16px; }
+    .aperture-scene-frame { overflow: hidden; border: 1px solid #dbe2d8; border-radius: 17px; background: linear-gradient(#eaf0ea, #f6f1e6); box-shadow: 0 5px 18px #243a3514; }
+    #aperture-3d-scene { display: block; width: 100%; height: clamp(260px, 40vw, 390px); }
+    .equipment-labels { display: grid; grid-template-columns: 1.2fr repeat(3, 1fr) 1.1fr; gap: 4px; margin: 7px 4px 13px; color: var(--muted); font-size: .72rem; text-align: center; }
+    .aperture-controls { padding: 13px 15px 11px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .aperture-control-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+    .aperture-control-head label { color: var(--ink); font-size: .91rem; font-weight: 800; }
+    #aperture-offset-output { color: var(--green); font-size: .84rem; font-weight: 800; }
+    .aperture-range-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 10px; color: var(--muted); font-size: .76rem; }
+    .aperture-range-row input { min-width: 0; accent-color: var(--green); }
+    .aperture-reset { min-height: 38px; padding: 6px 11px; font-size: .8rem; }
+    .aperture-result { display: flex; align-items: flex-start; gap: 10px; min-height: 48px; margin-top: 10px; padding: 11px 13px; border-left: 4px solid #d6aa4e; border-radius: 0 11px 11px 0; background: #f5f7ef; color: #3f5c4d; font-size: .89rem; }
+    .aperture-result-dot { flex: none; width: 10px; height: 10px; margin-top: 5px; border-radius: 50%; background: #e9b34c; box-shadow: 0 0 0 4px #f8edd5; }
+    .aperture-result.is-blocked { border-left-color: #b68a4a; background: #f5f2e9; }
+    .aperture-result.is-blocked .aperture-result-dot { background: #89938b; box-shadow: 0 0 0 4px #e4e8e1; }
+    .aperture-observation { margin: 9px 2px 0; color: var(--muted); font-size: .8rem; line-height: 1.55; }
+    .aperture-conclusion { margin-top: 11px; }
+    @media (max-width: 520px) {
+      #aperture-3d-scene { height: 270px; }
+      .equipment-labels { font-size: .64rem; gap: 1px; }
+      .aperture-range-row { grid-template-columns: auto minmax(0, 1fr) auto; gap: 7px; }
+      .aperture-reset { grid-column: 1 / -1; justify-self: end; }
+      .aperture-controls { padding: 11px; }
+    }
     .end-card { border-color: #bfd1be; background: #f4f8ef; }
     .end-card .card-side { border-color: #d0ddcb; }
     .choice.correct[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); }
@@ -272,41 +296,20 @@
           <div class="card-side"><span class="card-number">03</span><h3>觀察光的路徑</h3><span class="card-role">光沿直線前進</span></div>
           <div class="card-main">
             <h2>光路會彎嗎？</h2>
-            <p>把有小孔的板子排成一列。小孔對齊時，光能穿過；移開中間一片，光就被擋住。</p>
-            <div class="visual">
-              <div class="scene-pair">
-                <figure class="scene-example">
-                  <div class="scene-example-head"><span class="scene-index">觀察 A</span><h3>小孔排成一直線</h3></div>
-                  <svg viewBox="0 0 520 220" role="img" aria-labelledby="aligned-title aligned-desc">
-                    <title id="aligned-title">三片板子的小孔對齊，光可以直線通過</title><desc id="aligned-desc">雷射光沿水平直線穿過三個對齊的小孔。</desc>
-                    <defs><linearGradient id="aligned-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7f1e2"/><stop offset="1" stop-color="#edf4ef"/></linearGradient><marker id="aligned-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d99a36"/></marker></defs>
-                    <rect width="520" height="220" rx="12" fill="url(#aligned-bg)"/>
-                    <rect x="23" y="91" width="60" height="38" rx="8" fill="#dce9df" stroke="#59766b" stroke-width="3"/><circle cx="75" cy="110" r="7" fill="#fffdf8" stroke="#59766b" stroke-width="2"/><path d="M37 99h22M37 121h22" stroke="#90aa98" stroke-width="2"/>
-                    <path d="M83 110H482" fill="none" stroke="#e0a13b" stroke-width="4" stroke-linecap="round" marker-end="url(#aligned-arrow)"/>
-                    <g fill="#d4ddd5" stroke="#71877c" stroke-width="3"><path d="M145 45h18v130h-18z"/><path d="M272 45h18v130h-18z"/><path d="M399 45h18v130h-18z"/></g>
-                    <g fill="#fffdf8" stroke="#71877c" stroke-width="2"><ellipse cx="154" cy="110" rx="5" ry="10"/><ellipse cx="281" cy="110" rx="5" ry="10"/><ellipse cx="408" cy="110" rx="5" ry="10"/></g>
-                    <text x="72" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">光源</text><text x="281" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">對齊的小孔</text><text x="460" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">光穿出</text>
-                  </svg>
-                  <figcaption class="scene-path"><span class="scene-path-label">結果</span><span>小孔對齊</span><span class="path-arrow">→</span><span>光能通過</span></figcaption>
-                </figure>
-                <figure class="scene-example">
-                  <div class="scene-example-head"><span class="scene-index">觀察 B</span><h3>移開中間那片</h3></div>
-                  <svg viewBox="0 0 520 220" role="img" aria-labelledby="offset-title offset-desc">
-                    <title id="offset-title">中間小孔移開直線，光被板子擋住</title><desc id="offset-desc">前後兩片小孔仍在同一高度，中間小孔偏低，原本的直線光路被遮擋。</desc>
-                    <defs><linearGradient id="offset-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7f1e2"/><stop offset="1" stop-color="#edf4ef"/></linearGradient></defs>
-                    <rect width="520" height="220" rx="12" fill="url(#offset-bg)"/>
-                    <rect x="23" y="91" width="60" height="38" rx="8" fill="#dce9df" stroke="#59766b" stroke-width="3"/><circle cx="75" cy="110" r="7" fill="#fffdf8" stroke="#59766b" stroke-width="2"/><path d="M37 99h22M37 121h22" stroke="#90aa98" stroke-width="2"/>
-                    <path d="M83 110H154" fill="none" stroke="#e0a13b" stroke-width="4" stroke-linecap="round"/><path d="M164 98v24" stroke="#c86a42" stroke-width="5" stroke-linecap="round"/><path d="M180 110h288" fill="none" stroke="#b4bdb6" stroke-width="3" stroke-dasharray="8 8"/>
-                    <g fill="#d4ddd5" stroke="#71877c" stroke-width="3"><path d="M145 45h18v130h-18z"/><path d="M272 45h18v130h-18z"/><path d="M399 45h18v130h-18z"/></g>
-                    <g fill="#fffdf8" stroke="#71877c" stroke-width="2"><ellipse cx="154" cy="110" rx="5" ry="10"/><ellipse cx="281" cy="150" rx="5" ry="10"/><ellipse cx="408" cy="110" rx="5" ry="10"/></g>
-                    <text x="72" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">光源</text><text x="281" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">小孔錯開</text><text x="460" y="198" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">光被擋住</text>
-                  </svg>
-                  <figcaption class="scene-path"><span class="scene-path-label">觀察</span><span>光不會轉彎繞過板子</span></figcaption>
-                </figure>
+            <p>操作 3D 小孔實驗台，移動中間板，觀察屏幕上的亮點如何改變。</p>
+            <div class="aperture-lab">
+              <div class="aperture-scene-frame">
+                <canvas id="aperture-3d-scene" role="img" aria-label="3D 小孔實驗台：光源、三片小孔板和屏幕沿實驗台排列，初始時小孔對齊，屏幕上有亮點。"></canvas>
               </div>
-              <p class="visual-caption">把小孔重新排直，光又能通過。這表示光在均勻環境中沿直線前進。</p>
+              <div class="equipment-labels"><span>光源</span><span>小孔板 1</span><span>中間板</span><span>小孔板 3</span><span>屏幕</span></div>
+              <div class="aperture-controls">
+                <div class="aperture-control-head"><label for="aperture-offset">上下移動中間板</label><output id="aperture-offset-output" for="aperture-offset">小孔對齊</output></div>
+                <div class="aperture-range-row"><span>下移</span><input id="aperture-offset" type="range" min="-100" max="100" step="1" value="0" aria-label="上下移動 3D 實驗台的中間小孔板"><span>上移</span><button class="secondary aperture-reset" id="aperture-reset" type="button">重新對齊</button></div>
+              </div>
+              <div class="aperture-result" id="aperture-result" aria-live="polite"><span class="aperture-result-dot" aria-hidden="true"></span><span>三個小孔排成一直線，屏幕上出現亮點。</span></div>
+              <p class="aperture-observation">操作提示：小孔錯開時，屏幕亮點會變暗或消失；移回對齊位置，亮點重新出現。空氣中的光路看不見，我們以屏幕上的亮點判斷光是否通過。</p>
+              <div class="fact aperture-conclusion"><p><strong>從現象推想：</strong>小孔要排成一直線，光才能通過。光在均勻介質中沿直線傳播。</p></div>
             </div>
-            <div class="fact"><p><strong>觀察結論：</strong>光在真空或均勻介質中沿直線傳播。</p></div>
           </div>
         </section>
 
@@ -443,6 +446,148 @@
         updateNightScene();
       }));
       updateNightScene();
+
+      const apertureCanvas = document.querySelector('#aperture-3d-scene');
+      const apertureContext = apertureCanvas.getContext('2d');
+      const apertureSlider = document.querySelector('#aperture-offset');
+      const apertureOutput = document.querySelector('#aperture-offset-output');
+      const apertureResult = document.querySelector('#aperture-result');
+      const apertureResultText = apertureResult.querySelector('span:last-child');
+      const apertureReset = document.querySelector('#aperture-reset');
+      let apertureOffset = 0;
+      const vecSub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+      const vecDot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+      const vecCross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+      const vecNorm = (a) => { const length = Math.hypot(...a) || 1; return a.map((part) => part / length); };
+      const labCamera = [-4.8, -12, 7.2];
+      const labTarget = [5, .8, 1.3];
+      const labForward = vecNorm(vecSub(labTarget, labCamera));
+      const labRight = vecNorm(vecCross(labForward, [0, 0, 1]));
+      const labUp = vecCross(labRight, labForward);
+      const projectLabPoint = (point, width, height) => {
+        const relative = vecSub(point, labCamera);
+        const depth = vecDot(relative, labForward);
+        const focal = Math.min(width * 1.45, height * 2.3);
+        return [width / 2 + vecDot(relative, labRight) * focal / depth, height * .59 - vecDot(relative, labUp) * focal / depth];
+      };
+      const labPolygon = (points, fill, stroke = null, lineWidth = 1) => {
+        apertureContext.beginPath();
+        points.forEach((point, index) => {
+          const projected = projectLabPoint(point, apertureCanvas.clientWidth, apertureCanvas.clientHeight);
+          if (index === 0) apertureContext.moveTo(projected[0], projected[1]);
+          else apertureContext.lineTo(projected[0], projected[1]);
+        });
+        apertureContext.closePath();
+        apertureContext.fillStyle = fill;
+        apertureContext.fill();
+        if (stroke) { apertureContext.strokeStyle = stroke; apertureContext.lineWidth = lineWidth; apertureContext.stroke(); }
+      };
+      const labBox = (x0, x1, y0, y1, z0, z1, colors) => {
+        labPolygon([[x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]], colors.top, colors.edge, 1);
+        labPolygon([[x0, y0, z0], [x1, y0, z0], [x1, y0, z1], [x0, y0, z1]], colors.front, colors.edge, 1);
+        labPolygon([[x0, y0, z0], [x0, y1, z0], [x0, y1, z1], [x0, y0, z1]], colors.side, colors.edge, 1);
+      };
+      const labCircle = (x, y, z, radiusY, radiusZ, fill, stroke = null, alpha = 1) => {
+        apertureContext.save();
+        apertureContext.globalAlpha = alpha;
+        apertureContext.beginPath();
+        for (let index = 0; index <= 32; index += 1) {
+          const angle = index * Math.PI * 2 / 32;
+          const projected = projectLabPoint([x, y + Math.cos(angle) * radiusY, z + Math.sin(angle) * radiusZ], apertureCanvas.clientWidth, apertureCanvas.clientHeight);
+          if (index === 0) apertureContext.moveTo(projected[0], projected[1]);
+          else apertureContext.lineTo(projected[0], projected[1]);
+        }
+        apertureContext.closePath();
+        apertureContext.fillStyle = fill;
+        apertureContext.fill();
+        if (stroke) { apertureContext.strokeStyle = stroke; apertureContext.lineWidth = 1.5; apertureContext.stroke(); }
+        apertureContext.restore();
+      };
+      const drawAperturePlate = (x, offset = 0, movable = false) => {
+        const frontX = x - .08;
+        const backX = x + .08;
+        const y0 = -.15;
+        const y1 = 1.65;
+        const z0 = .35;
+        const z1 = 2.9;
+        labPolygon([[frontX, y0, z0], [frontX, y1, z0], [frontX, y1, z1], [frontX, y0, z1]], '#28343a', '#61706f', 1.2);
+        labPolygon([[backX, y0, z0], [backX, y1, z0], [backX, y1, z1], [backX, y0, z1]], '#1c272c', '#52605f', 1);
+        labPolygon([[frontX, y0, z1], [backX, y0, z1], [backX, y1, z1], [frontX, y1, z1]], '#4c5b5d', '#74817d', 1);
+        labPolygon([[frontX, y0, z0], [backX, y0, z0], [backX, y0, z1], [frontX, y0, z1]], '#202b30', '#52605f', 1);
+        labBox(x - .27, x + .27, .48, 1.05, .3, .48, { top: '#899591', front: '#4e5b58', side: '#37423f', edge: '#a9b1aa' });
+        labCircle(frontX - .012, .75, 1.6 + offset, .15, .15, '#0d1519', '#c9d0c8');
+        labCircle(frontX - .016, .75, 1.6 + offset, .075, .075, '#d8dfd6');
+        if (movable) {
+          labBox(x + .10, x + .18, 1.73, 1.84, .55, 2.82, { top: '#9aa6a1', front: '#56635f', side: '#35423e', edge: '#b3bcb5' });
+          labBox(x + .17, x + .34, 1.73, 1.98, 1.6 + offset - .08, 1.6 + offset + .08, { top: '#d9c08e', front: '#9d7945', side: '#73552f', edge: '#ead4a5' });
+        }
+        return { faceX: frontX, holeZ: 1.6 + offset };
+      };
+      const drawApertureLab = () => {
+        const width = apertureCanvas.clientWidth;
+        const height = apertureCanvas.clientHeight;
+        if (!width || !height) return;
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        const requiredWidth = Math.round(width * pixelRatio);
+        const requiredHeight = Math.round(height * pixelRatio);
+        if (apertureCanvas.width !== requiredWidth || apertureCanvas.height !== requiredHeight) {
+          apertureCanvas.width = requiredWidth;
+          apertureCanvas.height = requiredHeight;
+        }
+        apertureContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        const backdrop = apertureContext.createLinearGradient(0, 0, 0, height);
+        backdrop.addColorStop(0, '#e8eee8');
+        backdrop.addColorStop(1, '#f8f4eb');
+        apertureContext.fillStyle = backdrop;
+        apertureContext.fillRect(0, 0, width, height);
+        labPolygon([[-1, 3, 1], [11, 3, 1], [11, 3, 6], [-1, 3, 6]], '#849a8d', '#748a7e', 2);
+        labBox(-.8, 10.4, -1, 2.4, 0, .26, { top: '#b98e61', front: '#76593d', side: '#5d4835', edge: '#8f704d' });
+        for (const y of [-.15, 1.72]) labBox(-.45, 10.15, y - .055, y + .055, .31, .42, { top: '#aab4af', front: '#6f7d7a', side: '#5a6764', edge: '#c2cbc5' });
+        for (const x of [-.3, 9.8]) for (const y of [-.5, 1.9]) labBox(x - .08, x + .08, y - .08, y + .08, .03, .33, { top: '#75817e', front: '#485450', side: '#36413e', edge: '#8f9a95' });
+        labBox(-.05, .82, .12, 1.42, .62, 2.2, { top: '#465255', front: '#202a2d', side: '#131c20', edge: '#657273' });
+        labCircle(-.07, .77, 1.55, .18, .18, '#ffc85b', '#fff0b3');
+        labCircle(-.075, .77, 1.55, .085, .085, '#fff5ce');
+        drawAperturePlate(2.7);
+        const middle = drawAperturePlate(4.9, apertureOffset, true);
+        drawAperturePlate(7.1);
+        labBox(9.35, 9.52, -.05, 1.68, .42, 3.45, { top: '#e5e9e4', front: '#f5f4ec', side: '#c7d0cb', edge: '#82918a' });
+        const transmission = Math.max(0, 1 - Math.abs(apertureOffset) / .2);
+        if (transmission > .02) {
+          apertureContext.save();
+          apertureContext.shadowColor = '#ffd66f';
+          apertureContext.shadowBlur = 18 * transmission;
+          labCircle(9.33, .76, 1.6, .11, .11, '#fff6cf', '#f7cf66', Math.max(.12, transmission));
+          apertureContext.restore();
+        }
+        if (transmission < .98) {
+          apertureContext.save();
+          apertureContext.shadowColor = '#ffb73f';
+          apertureContext.shadowBlur = 13 * (1 - transmission);
+          labCircle(middle.faceX - .018, .75, 1.6, .075, .075, '#ffcf63', '#fff1bc', Math.min(1, (1 - transmission) * 1.2));
+          apertureContext.restore();
+        }
+        const sliderPercent = Number(apertureSlider.value);
+        if (Math.abs(sliderPercent) < 3) apertureOutput.textContent = '小孔對齊';
+        else apertureOutput.textContent = `中間板向${sliderPercent > 0 ? '上' : '下'}移 ${Math.round(Math.abs(sliderPercent))}%`;
+        apertureResult.classList.toggle('is-blocked', transmission < .2);
+        if (transmission > .78) apertureResultText.textContent = '三個小孔排成一直線，屏幕上出現清楚亮點。';
+        else if (transmission > .04) apertureResultText.textContent = '中間小孔逐漸偏離直線，屏幕上的亮點變暗。';
+        else apertureResultText.textContent = '中間小孔偏離直線，光被板面擋住；屏幕亮點消失，亮斑出現在中間板上。';
+        apertureCanvas.setAttribute('aria-label', `3D 小孔實驗台：${apertureResultText.textContent}`);
+      };
+      apertureSlider.addEventListener('input', () => {
+        apertureOffset = Number(apertureSlider.value) / 100 * .75;
+        drawApertureLab();
+      });
+      apertureReset.addEventListener('click', () => {
+        apertureSlider.value = '0';
+        apertureOffset = 0;
+        drawApertureLab();
+        apertureSlider.focus();
+      });
+      if ('ResizeObserver' in window) new ResizeObserver(drawApertureLab).observe(apertureCanvas);
+      else window.addEventListener('resize', drawApertureLab);
+      drawApertureLab();
 
       const timeInput = document.querySelector('#light-time');
       const timeOutput = document.querySelector('#light-time-output');
