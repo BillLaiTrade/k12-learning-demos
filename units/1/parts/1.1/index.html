@@ -126,16 +126,24 @@
     .speed-value { color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
     .aperture-lab { margin-top: 16px; }
     .aperture-scene-frame { overflow: hidden; border: 1px solid #dbe2d8; border-radius: 17px; background: linear-gradient(#eaf0ea, #f6f1e6); box-shadow: 0 5px 18px #243a3514; }
-    #aperture-3d-scene { display: block; width: 100%; height: clamp(260px, 40vw, 390px); }
+    #aperture-3d-scene { display: block; width: 100%; height: clamp(300px, 44vw, 440px); cursor: grab; touch-action: none; }
+    #aperture-3d-scene:active { cursor: grabbing; }
+    .aperture-view-hint { display: flex; justify-content: space-between; gap: 10px; margin: 7px 2px 12px; color: var(--muted); font-size: .78rem; }
+    .aperture-mobility-note { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 0 0 12px; color: var(--muted); font-size: .82rem; }
+    .aperture-mobility-note strong { color: var(--ink); }
     .equipment-labels { display: grid; grid-template-columns: 1.2fr repeat(3, 1fr) 1.1fr; gap: 4px; margin: 7px 4px 13px; color: var(--muted); font-size: .72rem; text-align: center; }
     .aperture-controls { padding: 13px 15px 11px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
     .aperture-control-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
     .aperture-control-head label { color: var(--ink); font-size: .91rem; font-weight: 800; }
-    #aperture-offset-output { color: var(--green); font-size: .84rem; font-weight: 800; }
+    .aperture-controls output { color: var(--green); font-size: .84rem; font-weight: 800; }
     .aperture-range-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; color: var(--muted); font-size: .76rem; }
     .aperture-range-row input { min-width: 0; accent-color: var(--green); }
     .aperture-control-stack { display: grid; gap: 8px; }
-    .aperture-reset-row { display: flex; justify-content: flex-end; margin-top: 8px; }
+    .aperture-reset-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 11px; }
+    .aperture-plate-selectors { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+    .aperture-plate-selectors button { min-height: 38px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink); font-size: .84rem; }
+    .aperture-plate-selectors button[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); color: var(--green); font-weight: 800; }
+    .aperture-plate-selectors button:focus-visible, #aperture-3d-scene:focus-visible { outline: 3px solid rgb(23 107 83 / 28%); outline-offset: 2px; }
     .aperture-reset { min-height: 38px; padding: 6px 11px; font-size: .8rem; }
     .aperture-result { display: flex; align-items: flex-start; gap: 10px; min-height: 48px; margin-top: 10px; padding: 11px 13px; border-left: 4px solid #d6aa4e; border-radius: 0 11px 11px 0; background: #f5f7ef; color: #3f5c4d; font-size: .89rem; }
     .aperture-result-dot { flex: none; width: 10px; height: 10px; margin-top: 5px; border-radius: 50%; background: #e9b34c; box-shadow: 0 0 0 4px #f8edd5; }
@@ -144,11 +152,12 @@
     .aperture-observation { margin: 9px 2px 0; color: var(--muted); font-size: .8rem; line-height: 1.55; }
     .aperture-conclusion { margin-top: 11px; }
     @media (max-width: 520px) {
-      #aperture-3d-scene { height: 270px; }
+      #aperture-3d-scene { height: 300px; }
       .equipment-labels { font-size: .64rem; gap: 1px; }
       .aperture-range-row { grid-template-columns: auto minmax(0, 1fr) auto; gap: 7px; }
       .aperture-reset-row { margin-top: 7px; }
       .aperture-controls { padding: 11px; }
+      .aperture-view-hint { display: block; }
     }
     .end-card { border-color: #bfd1be; background: #f4f8ef; }
     .end-card .card-side { border-color: #d0ddcb; }
@@ -298,27 +307,35 @@
           <div class="card-side"><span class="card-number">03</span><h3>觀察光的路徑</h3><span class="card-role">光沿直線前進</span></div>
           <div class="card-main">
             <h2>光路會彎嗎？</h2>
-            <p>操作 3D 小孔實驗台，讓中間板上下偏移或沿光路前後移動，觀察屏幕亮點的變化。</p>
+            <p>拖曳旋轉 3D 實驗台。光源、屏幕和導軌固定；三片小孔板各自能沿導軌前後移動，也能上下調整高度。</p>
             <div class="aperture-lab">
               <div class="aperture-scene-frame">
-                <canvas id="aperture-3d-scene" role="img" aria-label="3D 小孔實驗台：光源、三片小孔板和屏幕沿實驗台排列，初始時小孔對齊，屏幕上有亮點。"></canvas>
+                <canvas id="aperture-3d-scene" tabindex="0" aria-label="可旋轉的 3D 小孔實驗台。拖曳畫面旋轉視角，使用下方控制器移動小孔板。"></canvas>
               </div>
+              <div class="aperture-view-hint"><span>拖曳畫面：左右／上下旋轉視角</span><span>滾輪或雙指：縮放；按「重設視角」回到初始角度</span></div>
               <div class="equipment-labels"><span>光源</span><span>小孔板 1</span><span>中間板</span><span>小孔板 3</span><span>屏幕</span></div>
+              <div class="aperture-mobility-note"><span><strong>固定：</strong>光源、導軌、屏幕</span><span><strong>可移動：</strong>三片小孔板可分別前後滑動、上下調整</span></div>
               <div class="aperture-controls">
+                <div class="aperture-control-head"><strong id="aperture-selected-label">調整小孔板 2</strong><output id="aperture-alignment-output">小孔對齊</output></div>
+                <div class="aperture-plate-selectors" role="group" aria-label="選擇要移動的小孔板">
+                  <button type="button" data-plate="0" aria-pressed="false">小孔板 1</button>
+                  <button type="button" data-plate="1" aria-pressed="true">小孔板 2</button>
+                  <button type="button" data-plate="2" aria-pressed="false">小孔板 3</button>
+                </div>
                 <div class="aperture-control-stack">
                   <div>
-                    <div class="aperture-control-head"><label for="aperture-offset">上下移動中間板</label><output id="aperture-offset-output" for="aperture-offset">小孔對齊</output></div>
-                    <div class="aperture-range-row"><span>下移</span><input id="aperture-offset" type="range" min="-100" max="100" step="1" value="0" aria-label="上下移動 3D 實驗台的中間小孔板"><span>上移</span></div>
+                    <div class="aperture-control-head"><label for="aperture-depth">沿導軌前後移動</label><output id="aperture-depth-output">基準位置</output></div>
+                    <div class="aperture-range-row"><span>靠近光源</span><input id="aperture-depth" type="range" min="-100" max="100" step="1" value="0" aria-label="沿導軌前後移動選取的小孔板"><span>靠近屏幕</span></div>
                   </div>
                   <div>
-                    <div class="aperture-control-head"><label for="aperture-depth">沿光路前後移動</label><output id="aperture-depth-output" for="aperture-depth">基準位置</output></div>
-                    <div class="aperture-range-row"><span>靠近板 1</span><input id="aperture-depth" type="range" min="-100" max="100" step="1" value="0" aria-label="沿光路前後移動 3D 實驗台的中間小孔板"><span>靠近板 3</span></div>
+                    <div class="aperture-control-head"><label for="aperture-offset">上下調整板高</label><output id="aperture-offset-output">光孔等高</output></div>
+                    <div class="aperture-range-row"><span>下移</span><input id="aperture-offset" type="range" min="-100" max="100" step="1" value="0" aria-label="上下調整選取小孔板的高度"><span>上移</span></div>
                   </div>
                 </div>
-                <div class="aperture-reset-row"><button class="secondary aperture-reset" id="aperture-reset" type="button">回到中央位置</button></div>
+                <div class="aperture-reset-row"><button class="secondary aperture-reset" id="aperture-reset" type="button">重設實驗位置</button><button class="secondary" id="aperture-view-reset" type="button">重設視角</button></div>
               </div>
               <div class="aperture-result" id="aperture-result" aria-live="polite"><span class="aperture-result-dot" aria-hidden="true"></span><span>三個小孔排成一直線，屏幕上出現亮點。</span></div>
-              <p class="aperture-observation">操作提示：上下移動會讓小孔錯開，屏幕亮點隨之變暗或消失；沿光路前後移動時，只要小孔仍排成直線，亮點就會保留。空氣中的光路看不見，我們以屏幕上的亮點判斷光是否通過。</p>
+              <p class="aperture-observation">操作提示：先選一片小孔板，再調整它的前後位置或高度。前後移動不會改變光路；上下移動若讓小孔不再排成直線，屏幕亮點就會變暗或消失。空氣中的光路看不見，我們以屏幕亮點判斷光是否通過。</p>
               <div class="fact aperture-conclusion"><p><strong>從現象推想：</strong>小孔要排成一直線，光才能通過。光在均勻介質中沿直線傳播。</p></div>
             </div>
           </div>
@@ -458,160 +475,6 @@
       }));
       updateNightScene();
 
-      const apertureCanvas = document.querySelector('#aperture-3d-scene');
-      const apertureContext = apertureCanvas.getContext('2d');
-      const apertureSlider = document.querySelector('#aperture-offset');
-      const apertureDepthSlider = document.querySelector('#aperture-depth');
-      const apertureOutput = document.querySelector('#aperture-offset-output');
-      const apertureDepthOutput = document.querySelector('#aperture-depth-output');
-      const apertureResult = document.querySelector('#aperture-result');
-      const apertureResultText = apertureResult.querySelector('span:last-child');
-      const apertureReset = document.querySelector('#aperture-reset');
-      let apertureOffset = 0;
-      let apertureDepth = 0;
-      const vecSub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-      const vecDot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-      const vecCross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
-      const vecNorm = (a) => { const length = Math.hypot(...a) || 1; return a.map((part) => part / length); };
-      const labCamera = [-4.8, -12, 7.2];
-      const labTarget = [5, .8, 1.3];
-      const labForward = vecNorm(vecSub(labTarget, labCamera));
-      const labRight = vecNorm(vecCross(labForward, [0, 0, 1]));
-      const labUp = vecCross(labRight, labForward);
-      const projectLabPoint = (point, width, height) => {
-        const relative = vecSub(point, labCamera);
-        const depth = vecDot(relative, labForward);
-        const focal = Math.min(width * 1.45, height * 2.3);
-        return [width / 2 + vecDot(relative, labRight) * focal / depth, height * .59 - vecDot(relative, labUp) * focal / depth];
-      };
-      const labPolygon = (points, fill, stroke = null, lineWidth = 1) => {
-        apertureContext.beginPath();
-        points.forEach((point, index) => {
-          const projected = projectLabPoint(point, apertureCanvas.clientWidth, apertureCanvas.clientHeight);
-          if (index === 0) apertureContext.moveTo(projected[0], projected[1]);
-          else apertureContext.lineTo(projected[0], projected[1]);
-        });
-        apertureContext.closePath();
-        apertureContext.fillStyle = fill;
-        apertureContext.fill();
-        if (stroke) { apertureContext.strokeStyle = stroke; apertureContext.lineWidth = lineWidth; apertureContext.stroke(); }
-      };
-      const labBox = (x0, x1, y0, y1, z0, z1, colors) => {
-        labPolygon([[x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]], colors.top, colors.edge, 1);
-        labPolygon([[x0, y0, z0], [x1, y0, z0], [x1, y0, z1], [x0, y0, z1]], colors.front, colors.edge, 1);
-        labPolygon([[x0, y0, z0], [x0, y1, z0], [x0, y1, z1], [x0, y0, z1]], colors.side, colors.edge, 1);
-      };
-      const labCircle = (x, y, z, radiusY, radiusZ, fill, stroke = null, alpha = 1) => {
-        apertureContext.save();
-        apertureContext.globalAlpha = alpha;
-        apertureContext.beginPath();
-        for (let index = 0; index <= 32; index += 1) {
-          const angle = index * Math.PI * 2 / 32;
-          const projected = projectLabPoint([x, y + Math.cos(angle) * radiusY, z + Math.sin(angle) * radiusZ], apertureCanvas.clientWidth, apertureCanvas.clientHeight);
-          if (index === 0) apertureContext.moveTo(projected[0], projected[1]);
-          else apertureContext.lineTo(projected[0], projected[1]);
-        }
-        apertureContext.closePath();
-        apertureContext.fillStyle = fill;
-        apertureContext.fill();
-        if (stroke) { apertureContext.strokeStyle = stroke; apertureContext.lineWidth = 1.5; apertureContext.stroke(); }
-        apertureContext.restore();
-      };
-      const drawAperturePlate = (x, offset = 0, movable = false) => {
-        const frontX = x - .08;
-        const backX = x + .08;
-        const y0 = -.15;
-        const y1 = 1.65;
-        const z0 = .35;
-        const z1 = 2.9;
-        labPolygon([[frontX, y0, z0], [frontX, y1, z0], [frontX, y1, z1], [frontX, y0, z1]], '#28343a', '#61706f', 1.2);
-        labPolygon([[backX, y0, z0], [backX, y1, z0], [backX, y1, z1], [backX, y0, z1]], '#1c272c', '#52605f', 1);
-        labPolygon([[frontX, y0, z1], [backX, y0, z1], [backX, y1, z1], [frontX, y1, z1]], '#4c5b5d', '#74817d', 1);
-        labPolygon([[frontX, y0, z0], [backX, y0, z0], [backX, y0, z1], [frontX, y0, z1]], '#202b30', '#52605f', 1);
-        labBox(x - .27, x + .27, .48, 1.05, .3, .48, { top: '#899591', front: '#4e5b58', side: '#37423f', edge: '#a9b1aa' });
-        labCircle(frontX - .012, .75, 1.6 + offset, .15, .15, '#0d1519', '#c9d0c8');
-        labCircle(frontX - .016, .75, 1.6 + offset, .075, .075, '#d8dfd6');
-        if (movable) {
-          labBox(x + .10, x + .18, 1.73, 1.84, .55, 2.82, { top: '#9aa6a1', front: '#56635f', side: '#35423e', edge: '#b3bcb5' });
-          labBox(x + .17, x + .34, 1.73, 1.98, 1.6 + offset - .08, 1.6 + offset + .08, { top: '#d9c08e', front: '#9d7945', side: '#73552f', edge: '#ead4a5' });
-        }
-        return { faceX: frontX, holeZ: 1.6 + offset };
-      };
-      const drawApertureLab = () => {
-        const width = apertureCanvas.clientWidth;
-        const height = apertureCanvas.clientHeight;
-        if (!width || !height) return;
-        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-        const requiredWidth = Math.round(width * pixelRatio);
-        const requiredHeight = Math.round(height * pixelRatio);
-        if (apertureCanvas.width !== requiredWidth || apertureCanvas.height !== requiredHeight) {
-          apertureCanvas.width = requiredWidth;
-          apertureCanvas.height = requiredHeight;
-        }
-        apertureContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-        const backdrop = apertureContext.createLinearGradient(0, 0, 0, height);
-        backdrop.addColorStop(0, '#e8eee8');
-        backdrop.addColorStop(1, '#f8f4eb');
-        apertureContext.fillStyle = backdrop;
-        apertureContext.fillRect(0, 0, width, height);
-        labPolygon([[-1, 3, 1], [11, 3, 1], [11, 3, 6], [-1, 3, 6]], '#849a8d', '#748a7e', 2);
-        labBox(-.8, 10.4, -1, 2.4, 0, .26, { top: '#b98e61', front: '#76593d', side: '#5d4835', edge: '#8f704d' });
-        for (const y of [-.15, 1.72]) labBox(-.45, 10.15, y - .055, y + .055, .31, .42, { top: '#aab4af', front: '#6f7d7a', side: '#5a6764', edge: '#c2cbc5' });
-        for (const x of [-.3, 9.8]) for (const y of [-.5, 1.9]) labBox(x - .08, x + .08, y - .08, y + .08, .03, .33, { top: '#75817e', front: '#485450', side: '#36413e', edge: '#8f9a95' });
-        labBox(-.05, .82, .12, 1.42, .62, 2.2, { top: '#465255', front: '#202a2d', side: '#131c20', edge: '#657273' });
-        labCircle(-.07, .77, 1.55, .18, .18, '#ffc85b', '#fff0b3');
-        labCircle(-.075, .77, 1.55, .085, .085, '#fff5ce');
-        drawAperturePlate(2.7);
-        const middle = drawAperturePlate(4.9 + apertureDepth, apertureOffset, true);
-        drawAperturePlate(7.1);
-        labBox(9.35, 9.52, -.05, 1.68, .42, 3.45, { top: '#e5e9e4', front: '#f5f4ec', side: '#c7d0cb', edge: '#82918a' });
-        const transmission = Math.max(0, 1 - Math.abs(apertureOffset) / .2);
-        if (transmission > .02) {
-          apertureContext.save();
-          apertureContext.shadowColor = '#ffd66f';
-          apertureContext.shadowBlur = 18 * transmission;
-          labCircle(9.33, .76, 1.6, .11, .11, '#fff6cf', '#f7cf66', Math.max(.12, transmission));
-          apertureContext.restore();
-        }
-        if (transmission < .98) {
-          apertureContext.save();
-          apertureContext.shadowColor = '#ffb73f';
-          apertureContext.shadowBlur = 13 * (1 - transmission);
-          labCircle(middle.faceX - .018, .75, 1.6, .075, .075, '#ffcf63', '#fff1bc', Math.min(1, (1 - transmission) * 1.2));
-          apertureContext.restore();
-        }
-        const sliderPercent = Number(apertureSlider.value);
-        if (Math.abs(sliderPercent) < 3) apertureOutput.textContent = '小孔對齊';
-        else apertureOutput.textContent = `中間板向${sliderPercent > 0 ? '上' : '下'}移 ${Math.round(Math.abs(sliderPercent))}%`;
-        const depthPercent = Number(apertureDepthSlider.value);
-        if (Math.abs(depthPercent) < 3) apertureDepthOutput.textContent = '基準位置';
-        else apertureDepthOutput.textContent = `偏向小孔板 ${depthPercent > 0 ? '3' : '1'}`;
-        apertureResult.classList.toggle('is-blocked', transmission < .2);
-        if (transmission > .78) apertureResultText.textContent = '三個小孔排成一直線，屏幕上出現清楚亮點。';
-        else if (transmission > .04) apertureResultText.textContent = '中間小孔逐漸偏離直線，屏幕上的亮點變暗。';
-        else apertureResultText.textContent = '中間小孔偏離直線，光被板面擋住；屏幕亮點消失，亮斑出現在中間板上。';
-        apertureCanvas.setAttribute('aria-label', `3D 小孔實驗台：${apertureDepthOutput.textContent}；${apertureResultText.textContent}`);
-      };
-      apertureSlider.addEventListener('input', () => {
-        apertureOffset = Number(apertureSlider.value) / 100 * .75;
-        drawApertureLab();
-      });
-      apertureDepthSlider.addEventListener('input', () => {
-        apertureDepth = Number(apertureDepthSlider.value) / 100 * 1.2;
-        drawApertureLab();
-      });
-      apertureReset.addEventListener('click', () => {
-        apertureSlider.value = '0';
-        apertureDepthSlider.value = '0';
-        apertureOffset = 0;
-        apertureDepth = 0;
-        drawApertureLab();
-        apertureSlider.focus();
-      });
-      if ('ResizeObserver' in window) new ResizeObserver(drawApertureLab).observe(apertureCanvas);
-      else window.addEventListener('resize', drawApertureLab);
-      drawApertureLab();
-
       const timeInput = document.querySelector('#light-time');
       const timeOutput = document.querySelector('#light-time-output');
       const photon = document.querySelector('#photon');
@@ -706,5 +569,6 @@
       }
     })();
   </script>
+  <script type="module" src="assets/aperture-3d.js"></script>
 </body>
 </html>
