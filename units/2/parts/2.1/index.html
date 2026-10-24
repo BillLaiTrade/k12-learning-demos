@@ -174,7 +174,7 @@
               <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="繩波由左側波源向右傳播；可播放含有波峰和波谷的單次波，或切換連續波">
                 <defs><pattern id="rope-fallback-1" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern><marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path class="pulse-path rope-underlay" d="M38 142H722"/><path class="rope-fallback" stroke="url(#rope-fallback-1)" aria-hidden="true" d="M38 142H722"/><g class="rope-texture-layer" aria-hidden="true"></g>
-                <path d="M64 116V87M58 94L64 86L70 94M64 139V168M58 161L64 169L70 161" fill="none" stroke="#748b7e" stroke-width="2"/>
+                <path d="M38 116V87M32 94L38 86L44 94M38 139V168M32 161L38 169L44 161" fill="none" stroke="#748b7e" stroke-width="2"/>
                 <text x="84" y="45">波源上下振動</text>
                 <path d="M130 228H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
                 <text x="345" y="253" text-anchor="middle">波形傳播方向</text>
@@ -466,7 +466,7 @@
       const singlePulseDuration=4/3;
       const singlePulseSpeed=150;
       const singlePulseAmplitude=48;
-      const singlePulseSource=64;
+      const singlePulseSource=38;
       const smoothstep=value=>{const t=Math.max(0,Math.min(1,value));return t*t*(3-2*t);};
       const singlePulseAt=(x,eventStart,time)=>{
         if(x<singlePulseSource)return 0;
