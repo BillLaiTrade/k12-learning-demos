@@ -415,6 +415,8 @@
     .freeze-demo-particle.is-liquid { fill:#438bb8; }
     .freeze-demo-particle.is-gas { fill:#94c8da; }
     .freeze-demo-particle.is-vibrating { animation:freeze-particle-vibration .42s ease-in-out infinite alternate; animation-delay:var(--vibration-delay,0ms); transform-box:fill-box; transform-origin:center; }
+    .phase-demo-heat-wave { fill:none; stroke:#d6a52f; stroke-width:1.35; opacity:0; pointer-events:none; }
+    .phase-demo-heat-wave.is-active { opacity:.9; }
     @keyframes freeze-particle-vibration { from { transform:translate(-1px,.7px); } to { transform:translate(1px,-.7px); } }
     .freeze-demo-caption { margin:6px 0 0; color:#61736a; font-size:.73rem; }
     .freeze-demo-status { margin:4px 0 0; min-height:1.3em; color:#35748a; font-size:.74rem; font-weight:750; }
@@ -769,7 +771,7 @@
                   <button type="button" class="phase-solid-process" id="phase-overview-bottom-right" data-overview-slot="bottom-right" data-phase-process="sublimation" data-energy="heat"><strong>昇華</strong><span class="phase-solid-open">點擊觀察 ›</span><span class="phase-solid-direction">冰 → 水蒸氣</span><span class="phase-solid-energy">吸熱</span></button>
                   <div class="freeze-demo" id="freeze-demo" hidden>
                     <div class="freeze-demo-head"><span id="phase-demo-heading">冰中的粒子</span><button type="button" class="freeze-demo-replay" id="freeze-demo-replay">重播</button></div>
-                    <svg class="freeze-demo-scene" viewBox="0 0 360 150" role="img" aria-label="冰塊中的粒子排列與物態變化"><defs><linearGradient id="phase-demo-ice-top" x2="1" y2="1"><stop stop-color="#e0fbff"/><stop offset="1" stop-color="#89d8ee"/></linearGradient><linearGradient id="phase-demo-ice-front" x2="1" y2="1"><stop stop-color="#a6e5f4"/><stop offset="1" stop-color="#67c5e5"/></linearGradient><linearGradient id="phase-demo-ice-side" x2="1" y2="1"><stop stop-color="#77cce8"/><stop offset="1" stop-color="#48a9d4"/></linearGradient><clipPath id="freeze-demo-clip"><rect x="12" y="12" width="336" height="136" rx="2"/></clipPath><clipPath id="phase-demo-ice-clip"><path d="M178 12 248 34V91L182 118 112 91V34Z"/></clipPath></defs><rect id="freeze-demo-vessel" x="10" y="8" width="340" height="114" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><g id="phase-demo-ice"><path d="M112 34 178 12 248 34 182 58Z" fill="url(#phase-demo-ice-top)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M112 34 182 58V118L112 91Z" fill="url(#phase-demo-ice-front)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M182 58 248 34V91L182 118Z" fill="url(#phase-demo-ice-side)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="m124 39 46 16m-45 2 48 16m-48 3 48 17m20-32 41-16m-41 38 42-17" fill="none" stroke="#e6fbff" stroke-width="3.5" opacity=".75"/></g><g id="freeze-demo-particles" clip-path="url(#freeze-demo-clip)"></g><text id="phase-demo-source" x="20" y="25" fill="#43839a" font-size="10" font-weight="700">冷端</text><path id="phase-demo-arrows" d="M110 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4" fill="none" stroke="#43839a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg class="freeze-demo-scene" viewBox="0 0 360 150" role="img" aria-label="冰塊中的粒子排列與物態變化"><defs><linearGradient id="phase-demo-ice-top" x2="1" y2="1"><stop stop-color="#e0fbff"/><stop offset="1" stop-color="#89d8ee"/></linearGradient><linearGradient id="phase-demo-ice-front" x2="1" y2="1"><stop stop-color="#a6e5f4"/><stop offset="1" stop-color="#67c5e5"/></linearGradient><linearGradient id="phase-demo-ice-side" x2="1" y2="1"><stop stop-color="#77cce8"/><stop offset="1" stop-color="#48a9d4"/></linearGradient><clipPath id="freeze-demo-clip"><rect x="12" y="12" width="336" height="136" rx="2"/></clipPath><clipPath id="phase-demo-ice-clip"><path d="M178 12 248 34V91L182 118 112 91V34Z"/></clipPath></defs><rect id="freeze-demo-vessel" x="10" y="8" width="340" height="114" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><g id="phase-demo-ice"><path d="M112 34 178 12 248 34 182 58Z" fill="url(#phase-demo-ice-top)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M112 34 182 58V118L112 91Z" fill="url(#phase-demo-ice-front)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M182 58 248 34V91L182 118Z" fill="url(#phase-demo-ice-side)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="m124 39 46 16m-45 2 48 16m-48 3 48 17m20-32 41-16m-41 38 42-17" fill="none" stroke="#e6fbff" stroke-width="3.5" opacity=".75"/></g><g id="freeze-demo-particles" clip-path="url(#freeze-demo-clip)"></g><g id="phase-demo-heat-waves" clip-path="url(#freeze-demo-clip)" aria-hidden="true"></g><text id="phase-demo-source" x="20" y="25" fill="#43839a" font-size="10" font-weight="700">冷端</text><path id="phase-demo-arrows" d="M110 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4" fill="none" stroke="#43839a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     <p class="freeze-demo-status" id="freeze-demo-status" aria-live="polite">固態粒子在固定位置附近微微振動</p><p class="freeze-demo-caption" id="phase-demo-caption">圓點代表水分子；粒子大小與間距並非實際比例。</p>
                   </div>
                 </div>
@@ -1431,7 +1433,7 @@
     addContinuousPhaseTravelers();
     const phaseSteps=document.getElementById("phase-detail-steps"),phaseDetail=document.getElementById("phase-detail"),phaseSolidOverview=document.getElementById("phase-solid-overview"),phaseDemoIce=document.getElementById("phase-demo-ice"),phaseDemoIceClip=document.querySelector("#phase-demo-ice-clip path");
     const phaseSolidFlowParticles=document.getElementById("phase-solid-flow-particles");
-    const freezeDemo=document.getElementById("freeze-demo"),freezeDemoParticles=document.getElementById("freeze-demo-particles"),freezeParticleAnimations=[];
+    const freezeDemo=document.getElementById("freeze-demo"),freezeDemoParticles=document.getElementById("freeze-demo-particles"),phaseDemoHeatWaves=document.getElementById("phase-demo-heat-waves"),freezeParticleAnimations=[];
     const freezeParticleLayout=Array.from({length:48},(_,index)=>{
       const row=Math.floor(index/12),column=index%12;
       return {row,column,endX:34+column*24+(row%2)*12,endY:67+row*13};
@@ -1441,6 +1443,19 @@
       particle.setAttribute("class","freeze-demo-particle");particle.setAttribute("r","4.2");particle.style.setProperty("--vibration-delay",`${-(index%20)*19}ms`);freezeDemoParticles.append(particle);
       return {element:particle,row,column,x:0,y:0,vx:0,vy:0,endX,endY,frozen:false,isFreezing:false};
     });
+    const phaseHeatWaveRings=freezeParticles.map(()=>[0,1].map(()=>{const ring=document.createElementNS("http://www.w3.org/2000/svg","circle");ring.setAttribute("class","phase-demo-heat-wave");ring.setAttribute("r","4");phaseDemoHeatWaves.append(ring);return ring;}));
+    function clearPhaseHeatWaves(){phaseHeatWaveRings.flat().forEach(ring=>ring.classList.remove("is-active"));}
+    function updatePhaseHeatWaves(p,index,local,transition,elapsed){
+      const changing=local>0&&local<1,absorbing=phaseProcesses[transition.key].energy.startsWith("吸熱");
+      phaseHeatWaveRings[index].forEach((ring,ringIndex)=>{
+        if(!changing){ring.classList.remove("is-active");return;}
+        const phase=((elapsed/1150+index*.29+ringIndex*.5)%1+1)%1;
+        const radius=absorbing?23-phase*19:4+phase*19;
+        const strength=Math.sin(Math.PI*phase);
+        ring.setAttribute("cx",p.x.toFixed(2));ring.setAttribute("cy",p.y.toFixed(2));ring.setAttribute("r",radius.toFixed(2));
+        ring.style.opacity=(.78*strength).toFixed(3);ring.classList.add("is-active");
+      });
+    }
     const freezeTargets=[...freezeParticles].sort((a,b)=>(a.row*7+Math.abs(a.column-5.5)*.5)-(b.row*7+Math.abs(b.column-5.5)*.5));
     const freezeTimers=[],freezeDemoStatus=document.getElementById("freeze-demo-status");
     let freezeRunId=0,freezeLastFrame=0,freezeMotionFrame=0,freezeDone=0;
@@ -1533,6 +1548,7 @@
     function stopPhaseDemoMotion(){
       phaseDemoRun++;cancelAnimationFrame(phaseDemoFrame);phaseDemoFrame=0;phaseDemoLastFrame=0;
       phaseDemoTransition=null;phaseDemoMotionState="";
+      clearPhaseHeatWaves();
     }
     function startPhaseDemoMotion(state,runId,continueVelocity=false){
       if(runId!==phaseDemoRun)return;
@@ -1579,11 +1595,19 @@
       document.querySelectorAll(".phase-solid-flow path,.phase-solid-flow-mobile path").forEach(path=>path.classList.toggle("is-active",path===route));
       phaseSolidFlowParticles.replaceChildren();
       for(let index=0;index<6;index++){
-        const delay=`${index*.52}s`,particle=document.createElementNS("http://www.w3.org/2000/svg","circle"),motion=document.createElementNS("http://www.w3.org/2000/svg","animateMotion"),pathRef=document.createElementNS("http://www.w3.org/2000/svg","mpath"),color=document.createElementNS("http://www.w3.org/2000/svg","animate");
+        const delay=index*.52,traveler=document.createElementNS("http://www.w3.org/2000/svg","g"),motion=document.createElementNS("http://www.w3.org/2000/svg","animateMotion"),pathRef=document.createElementNS("http://www.w3.org/2000/svg","mpath"),absorbing=phaseProcesses[key].energy.startsWith("吸熱");
+        for(let waveIndex=0;waveIndex<2;waveIndex++){
+          const wave=document.createElementNS("http://www.w3.org/2000/svg","circle"),radius=document.createElementNS("http://www.w3.org/2000/svg","animate"),opacity=document.createElementNS("http://www.w3.org/2000/svg","animate");
+          wave.setAttribute("class","phase-demo-heat-wave is-active");wave.setAttribute("r",absorbing?"20":"4");wave.setAttribute("stroke-width","1.8");
+          radius.setAttribute("attributeName","r");radius.setAttribute("values",absorbing?"20;4":"4;20");radius.setAttribute("dur","1.35s");radius.setAttribute("begin",`${delay+waveIndex*.34}s`);radius.setAttribute("repeatCount","indefinite");
+          opacity.setAttribute("attributeName","opacity");opacity.setAttribute("values","0.08;0.78;0.08");opacity.setAttribute("dur","1.35s");opacity.setAttribute("begin",`${delay+waveIndex*.34}s`);opacity.setAttribute("repeatCount","indefinite");
+          wave.append(radius,opacity);traveler.append(wave);
+        }
+        const particle=document.createElementNS("http://www.w3.org/2000/svg","circle"),color=document.createElementNS("http://www.w3.org/2000/svg","animate");
         particle.setAttribute("class",`phase-solid-flow-particle is-${transition.from}-to-${transition.to}`);particle.setAttribute("r","7");particle.setAttribute("fill",colors[transition.from]);
-        motion.setAttribute("dur","3.2s");motion.setAttribute("begin",delay);motion.setAttribute("repeatCount","indefinite");pathRef.setAttribute("href",`#${routeId}`);motion.append(pathRef);
-        color.setAttribute("attributeName","fill");color.setAttribute("values",`${colors[transition.from]};${colors[transition.to]}`);color.setAttribute("dur","3.2s");color.setAttribute("begin",delay);color.setAttribute("repeatCount","indefinite");
-        particle.append(motion,color);phaseSolidFlowParticles.append(particle);
+        motion.setAttribute("dur","3.2s");motion.setAttribute("begin",`${delay}s`);motion.setAttribute("repeatCount","indefinite");pathRef.setAttribute("href",`#${routeId}`);motion.append(pathRef);
+        color.setAttribute("attributeName","fill");color.setAttribute("values",`${colors[transition.from]};${colors[transition.to]}`);color.setAttribute("dur","3.2s");color.setAttribute("begin",`${delay}s`);color.setAttribute("repeatCount","indefinite");
+        particle.append(color);traveler.append(particle,motion);phaseSolidFlowParticles.append(traveler);
       }
     }
     function updatePhaseDemoIce(){
@@ -1600,6 +1624,7 @@
       const meltLayerProgress=transition.key==="melt"?Array.from({length:6},(_,row)=>{const local=Math.max(0,Math.min(1,(elapsed-transition.delays[row*8])/transition.duration));return local*local*(3-2*local);}):null;
       freezeParticles.forEach((p,index)=>{
         const local=Math.max(0,Math.min(1,(elapsed-transition.delays[index])/transition.duration));
+        updatePhaseHeatWaves(p,index,local,transition,elapsed);
         if(transition.key==="condensation"){
           if(!p.isCondensed&&elapsed>=transition.delays[index]){
             p.isCondensed=true;p.vx=(Math.random()-.5)*40;p.vy=0;
@@ -1739,6 +1764,7 @@
     }
     function playPhaseTransition(key,fromSolidOverview=false){
       stopPhaseDemoMotion();const runId=phaseDemoRun,process=phaseDemoMotion[key],starts=phaseDemoTargets(process.from,fromSolidOverview),ends=phaseDemoTargets(process.to,fromSolidOverview);
+      clearPhaseHeatWaves();
       setPhaseDemoIceScale(fromSolidOverview);
       phaseDemoIce.style.opacity=process.from==="solid"?"1":"0";
       if(key==="condensation")starts.forEach((point,index)=>{point.y=16+(index%8)*14+(Math.random()-.5)*3;});
