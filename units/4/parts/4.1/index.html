@@ -551,10 +551,10 @@
         <p class="route-progress" id="route-progress" aria-live="polite">學習進度：01／10</p>
         <div class="route-inner">
           <a href="#s1" aria-current="step"><b>01</b><span>這個水桶是什麼做的？桶子和材料有什麼不同？</span></a>
-          <a href="#s2"><b>02</b><span>桶身、水和空氣，各有哪些不同？</span></a>
-          <a href="#s3"><b>03</b><span>固體、液體和氣體裡的粒子，各自在做什麼？</span></a>
-          <a href="#s4"><b>04</b><span>冰、水和水蒸氣，如何互相轉變？</span></a>
-          <a href="#s5"><b>05</b><span>水桶不同部位的材料，可以用磁鐵辨認嗎？</span></a>
+          <a href="#s5"><b>02</b><span>磁鐵能幫我們辨認水桶不同部位的材料嗎？</span></a>
+          <a href="#s2"><b>03</b><span>桶身、水和空氣，各有哪些不同？</span></a>
+          <a href="#s3"><b>04</b><span>固體、液體和氣體裡的粒子，各自在做什麼？</span></a>
+          <a href="#s4"><b>05</b><span>冰、水和水蒸氣，如何互相轉變？</span></a>
           <a href="#s6"><b>06</b><span>鐵桶生鏽了，這告訴我們什麼？</span></a>
           <a href="#s7"><b>07</b><span>東西變了樣，就代表變成另一種物質嗎？</span></a>
           <a href="#s8"><b>08</b><span>雨水看起來像一種東西，裡面可能混了什麼？</span></a>
@@ -581,9 +581,9 @@
           <div class="card-side"><span class="card-number">01</span><h3>物體和物質</h3><span class="card-role">先分清楚正在研究什麼</span></div>
           <div class="card-main">
             <h2>水桶是一個物體，桶身、提把支架和握把由什麼製成？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這只水桶是整個物體；桶身、提把和握把都是同一種材料做的嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>點選不同部位仔細看看，找出水桶是由哪些材料組成的。</p></div>
             <p>依序查看水桶的不同部位，找出製作各部位所用的材料。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水桶是一個物體，那桶身和握把是用什麼做的呢？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>仔細看看不同部位，再找出各自使用的材料。</p></div>
             <div class="visual">
               <div class="choice-row bucket-choices" role="group" aria-label="切換水桶部位的圖像與材質說明">
                 <button type="button" data-bucket-part="overview" aria-pressed="true">整只水桶</button>
@@ -621,17 +621,62 @@
               <dt>握把材料</dt><dd>塑膠材料</dd>
               <dt>觀察發現</dt><dd>同一物體的不同部位可使用不同材料</dd>
             </dl>
-            <p class="next-hint">下一步再觀察桶身和桶中水的狀態，並比較固體與液體的特徵。</p>
+            <p class="next-hint">接著用磁鐵測試不同部位，看看材料性質能提供什麼線索。</p>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="s5">
+          <div class="card-side"><span class="card-number">02</span><h3>物理性質</h3><span class="card-role">用性質辨認材料</span></div>
+          <div class="card-main">
+            <h2>水桶不同部位的材料，可以用磁鐵辨認嗎？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>桶身和握把的材料不同，磁鐵能幫我們辨認它們嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>分別測試兩個部位，記下吸引與否，再判斷磁性能提供什麼線索。</p></div>
+            <p>桶身和握把使用不同材料。現在分別用磁鐵測試：磁性是物理性質；測試不會產生新物質，但結果只能作為辨認材料的線索。</p>
+            <div class="physical-property-test" id="physical-property-test">
+              <div class="physical-property-scene">
+                <svg viewBox="0 0 360 210" role="img" aria-label="水桶、桶身與握把，以及可移動到測試位置的馬蹄形磁鐵">
+                  <defs><linearGradient id="property-bucket-metal" x2="1" y2="0"><stop stop-color="#aebbb4"/><stop offset=".48" stop-color="#e1e8e2"/><stop offset="1" stop-color="#aab8b0"/></linearGradient></defs>
+                  <path d="M86 49Q180-5 274 49" fill="none" stroke="#74887d" stroke-width="9" stroke-linecap="round"/>
+                  <path d="M82 50H278L260 169Q180 191 100 169Z" fill="url(#property-bucket-metal)" stroke="#687e72" stroke-width="4" stroke-linejoin="round"/>
+                  <ellipse cx="180" cy="50" rx="98" ry="18" fill="#f8fbf7" stroke="#687e72" stroke-width="4"/>
+                  <path d="M116 84H244M112 104H248" stroke="#fff" stroke-width="4" opacity=".8"/>
+                  <text x="180" y="139" fill="#40584b" font-size="13" font-weight="700" text-anchor="middle">桶身</text>
+                  <text x="180" y="27" fill="#40584b" font-size="12" font-weight="700" text-anchor="middle">握把</text>
+                  <g id="property-magnet" transform="translate(290 95)">
+                    <path d="M0 0V23A22 22 0 0 0 44 23V0" fill="none" stroke="#ba5144" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M0 0V8M44 0V8" stroke="#477ba4" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M0 0h9M35 0h9" stroke="#f4f1e8" stroke-width="3"/>
+                  </g>
+                </svg>
+              </div>
+              <div>
+                <strong>操作：選一個部位，用磁鐵靠近測試。</strong>
+                <div class="physical-property-controls" role="group" aria-label="選擇要測試的水桶部位">
+                  <button type="button" data-property-test="body" aria-pressed="false">測試桶身</button>
+                  <button type="button" data-property-test="handle" aria-pressed="false">測試握把</button>
+                </div>
+                <p class="property-observation" id="property-observation" aria-live="polite">尚未測試。先選擇桶身或握把。</p>
+                <div class="property-judgment" id="property-judgment" hidden>
+                  <p>這項觀察能支持哪個判斷？</p>
+                  <button type="button" data-property-judgment="supported" aria-pressed="false">有磁性是辨認材料的線索；還需要其他資料確認完整組成。</button>
+                  <button type="button" data-property-judgment="overclaim" aria-pressed="false">被吸引就能證明是純鐵；沒被吸引就能證明是塑膠。</button>
+                  <p class="property-feedback" id="property-feedback" aria-live="polite">選擇一項判斷，再記錄觀察。</p>
+                </div>
+                <button class="action-button" type="button" id="record-property-button" disabled>記入觀察紀錄</button>
+              </div>
+            </div>
+            <p class="live-note" id="note-s5" aria-live="polite">觀察到的性質能幫助辨認材料，但不能單獨證明完整組成。</p>
+            <p class="next-hint">我們已用磁鐵觀察材料性質，接著比較桶身、水和空氣的狀態。</p>
           </div>
         </section>
 
         <section class="lesson-card" id="s2">
-          <div class="card-side"><span class="card-number">02</span><h3>物質三態</h3><span class="card-role">比較形狀、體積與可壓縮性</span></div>
+          <div class="card-side"><span class="card-number">03</span><h3>物質三態</h3><span class="card-role">比較形狀、體積與可壓縮性</span></div>
           <div class="card-main">
             <h2>桶身、水和空氣，各有哪些不同？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>桶身、水和空氣放在一起看，哪些地方不一樣？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>先比較它們的形狀、體積和可壓縮性，再用粒子模型想想原因。</p></div>
             <p>固體、液體和氣體在形狀、體積及可壓縮性上各有差異。先比較表格，再選擇欄名、列名或格子查看性質與例子；部分格子還能操作模型觀察變化。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>桶身是固體，桶裡的水是液體，空氣是氣體；它們最明顯的差異是什麼？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>先比較形狀、體積和可壓縮性，再用粒子模型找原因。</p></div>
             <div class="state-matrix-wrap" role="region" aria-label="物質三態性質比較表，可左右滑動查看完整表格" tabindex="0">
               <table class="state-matrix">
                 <thead><tr>
@@ -668,12 +713,12 @@
           </div>
         </section>
         <section class="lesson-card" id="s3">
-          <div class="card-side"><span class="card-number">03</span><h3>粒子模型</h3><span class="card-role">用模型解釋三態</span></div>
+          <div class="card-side"><span class="card-number">04</span><h3>粒子模型</h3><span class="card-role">用模型解釋三態</span></div>
           <div class="card-main">
             <h2>以水為例：三種狀態的粒子有什麼不同？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>剛才比較了三態的外在特徵，粒子又是怎麼造成這些差異的？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>看看粒子的排列、間距和運動，再把模型和剛才的觀察對照。</p></div>
             <p>圖中每個圓點代表一個水分子。比較同一批水分子在固態、液態和氣態中的排列、間距和運動；狀態改變時，水分子仍是同一批。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水結成冰之後，水分子會變成別的物質嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>觀察排列和運動怎麼改變；狀態改變時，水分子仍是水分子。</p></div>
             <div class="particle-stage" aria-label="三種狀態的水分子排列比較">
               <article class="particle-state-card"><h3>固態：冰</h3><div class="particle-box" id="particle-box-solid" data-motion-state="solid" role="img" aria-label="水分子在容器底部排列整齊、彼此留有間距並微微振動"></div></article>
               <article class="particle-state-card"><h3>液態水分子</h3><div class="particle-box" id="particle-box-liquid" data-motion-state="liquid" role="img" aria-label="水分子集中在容器底部，持續流動、碰撞和換位"></div></article>
@@ -690,12 +735,12 @@
         </section>
 
         <section class="lesson-card" id="s4">
-          <div class="card-side"><span class="card-number">04</span><h3>物態變化</h3><span class="card-role">沿三角箭頭觀察六種轉變</span></div>
+          <div class="card-side"><span class="card-number">05</span><h3>物態變化</h3><span class="card-role">沿三角箭頭觀察六種轉變</span></div>
           <div class="card-main">
             <h2>冰、水和水蒸氣，如何互相轉變？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>粒子的排列和運動會改變，那水可以從一種狀態變成另一種嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>沿著圖上的箭頭找找看，每種轉變中粒子的排列和運動如何改變。</p></div>
             <p>點選冰、水或水蒸氣，查看它能轉變成哪些狀態；也可以直接點選六條箭頭，了解轉變過程與粒子變化。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水蒸氣除了變回水，也能直接變成冰嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>沿著六條箭頭找找看，再觀察粒子的排列和運動。</p></div>
             <div class="phase-diagram-scroll" role="region" aria-label="物質三態與六種轉變互動圖，可左右滑動查看" tabindex="0">
               <div class="phase-triangle" id="phase-triangle">
                 <svg class="phase-triangle-svg" viewBox="0 0 840 590" preserveAspectRatio="none" role="group" aria-label="六條可點選的物態變化箭頭">
@@ -795,62 +840,17 @@
               </div>
             </section>
             <p class="phase-science-note">水蒸氣本身無色、看不見；淡藍流線是教材插畫符號，不是水蒸氣真實的顏色或形狀。</p>
-            <p class="next-hint">沿六個方向比較後，繼續觀察狀態改變時物質本身是否改變。</p>
-          </div>
-        </section>
-
-        <section class="lesson-card" id="s5">
-          <div class="card-side"><span class="card-number">05</span><h3>物理性質</h3><span class="card-role">用性質辨認材料</span></div>
-          <div class="card-main">
-            <h2>水桶不同部位的材料，可以用磁鐵辨認嗎？</h2>
-            <p>第一區塊發現桶身和握把使用不同材料。現在分別用磁鐵測試：磁性是物理性質；測試不會產生新物質，但結果只能作為辨認材料的線索。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>桶身被磁鐵吸引，就能確定它一定是純鐵嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>先記錄測試結果，再想它能支持什麼判斷；一種性質只是材料線索。</p></div>
-            <div class="physical-property-test" id="physical-property-test">
-              <div class="physical-property-scene">
-                <svg viewBox="0 0 360 210" role="img" aria-label="水桶、桶身與握把，以及可移動到測試位置的馬蹄形磁鐵">
-                  <defs><linearGradient id="property-bucket-metal" x2="1" y2="0"><stop stop-color="#aebbb4"/><stop offset=".48" stop-color="#e1e8e2"/><stop offset="1" stop-color="#aab8b0"/></linearGradient></defs>
-                  <path d="M86 49Q180-5 274 49" fill="none" stroke="#74887d" stroke-width="9" stroke-linecap="round"/>
-                  <path d="M82 50H278L260 169Q180 191 100 169Z" fill="url(#property-bucket-metal)" stroke="#687e72" stroke-width="4" stroke-linejoin="round"/>
-                  <ellipse cx="180" cy="50" rx="98" ry="18" fill="#f8fbf7" stroke="#687e72" stroke-width="4"/>
-                  <path d="M116 84H244M112 104H248" stroke="#fff" stroke-width="4" opacity=".8"/>
-                  <text x="180" y="139" fill="#40584b" font-size="13" font-weight="700" text-anchor="middle">桶身</text>
-                  <text x="180" y="27" fill="#40584b" font-size="12" font-weight="700" text-anchor="middle">握把</text>
-                  <g id="property-magnet" transform="translate(290 95)">
-                    <path d="M0 0V23A22 22 0 0 0 44 23V0" fill="none" stroke="#ba5144" stroke-width="12" stroke-linecap="round"/>
-                    <path d="M0 0V8M44 0V8" stroke="#477ba4" stroke-width="12" stroke-linecap="round"/>
-                    <path d="M0 0h9M35 0h9" stroke="#f4f1e8" stroke-width="3"/>
-                  </g>
-                </svg>
-              </div>
-              <div>
-                <strong>操作：選一個部位，用磁鐵靠近測試。</strong>
-                <div class="physical-property-controls" role="group" aria-label="選擇要測試的水桶部位">
-                  <button type="button" data-property-test="body" aria-pressed="false">測試桶身</button>
-                  <button type="button" data-property-test="handle" aria-pressed="false">測試握把</button>
-                </div>
-                <p class="property-observation" id="property-observation" aria-live="polite">尚未測試。先選擇桶身或握把。</p>
-                <div class="property-judgment" id="property-judgment" hidden>
-                  <p>這項觀察能支持哪個判斷？</p>
-                  <button type="button" data-property-judgment="supported" aria-pressed="false">有磁性是辨認材料的線索；還需要其他資料確認完整組成。</button>
-                  <button type="button" data-property-judgment="overclaim" aria-pressed="false">被吸引就能證明是純鐵；沒被吸引就能證明是塑膠。</button>
-                  <p class="property-feedback" id="property-feedback" aria-live="polite">選擇一項判斷，再記錄觀察。</p>
-                </div>
-                <button class="action-button" type="button" id="record-property-button" disabled>記入觀察紀錄</button>
-              </div>
-            </div>
-            <p class="live-note" id="note-s5" aria-live="polite">觀察到的性質能幫助辨認材料，但不能單獨證明完整組成。</p>
-            <p class="next-hint">接著觀察桶身的鏽斑，看看材料是否產生新的物質。</p>
+            <p class="next-hint">水會在三態之間轉變。接著看看鐵桶生鏽，和水的物態變化有什麼不同。</p>
           </div>
         </section>
 
         <section class="lesson-card" id="s6">
-          <div class="card-side"><span class="card-number">06</span><h3>化學性質</h3><span class="card-role">材料可能形成新物質</span></div>
+          <div class="card-side"><span class="card-number">06</span><h3>化學變化</h3><span class="card-role">觀察是否生成新物質</span></div>
           <div class="card-main">
-            <h2>鐵桶生鏽了，這告訴我們什麼？</h2>
-            <p>含鐵材料能和環境中的物質作用而生鏽，這是化學性質的例子。生鏽後會形成不同於原金屬的新物質；不能只憑顏色改變就作判斷。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>桶身顏色變了，就一定已經產生新物質嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>比較生鏽前後的材料；鏽層是新物質，不能只靠顏色判斷。</p></div>
+            <h2>水的狀態會改變，鐵桶生鏽又有什麼不同？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水變成冰還是水；那鐵桶生鏽後，鐵也還是原來的鐵嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>看看生鏽前後的材料是否相同，再找找鏽層提供了什麼線索。</p></div>
+            <p>水結冰或蒸發後仍是水，沒有生成新物質，屬於物理變化。鐵桶生鏽時會形成不同於鐵的新物質，是化學變化；鐵能生鏽則是它的一種化學性質。</p>
             <figure class="visual">
               <div class="rust-pair">
                 <div class="barrel-card">
@@ -866,7 +866,7 @@
             </figure>
             <button class="action-button" type="button" data-record="change">把變化線索記入紀錄</button>
             <p class="live-note" id="note-s6" aria-live="polite">「可能形成新物質」描述化學性質；「已形成鏽層」描述化學變化。</p>
-            <p class="next-hint">接著用蒸發和生鏽比較：變化前後是否生成另一種物質？</p>
+            <p class="next-hint">水的物態變化沒有生成新物質，生鏽則形成鏽層。接著把兩種變化並列比較。</p>
           </div>
         </section>
 
@@ -874,9 +874,9 @@
           <div class="card-side"><span class="card-number">07</span><h3>物理與化學變化</h3><span class="card-role">看有沒有生成新物質</span></div>
           <div class="card-main">
             <h2>東西變了樣，就代表變成另一種物質嗎？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水變成冰和鐵桶生鏽，看起來都變了；要怎麼分辨這兩種變化？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>比較變化前後有沒有生成新物質：水的狀態改變仍是水，生鏽則形成鏽層。</p></div>
             <p>蒸發和生鏽都會讓外觀改變；比較變化前後有沒有生成新物質，就能分辨物理變化和化學變化。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水蒸發後看不見了，是不是就變成另一種物質？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>比對變化前後的物質，看看有沒有生成新的物質。</p></div>
             <div class="choice-row" role="group" aria-label="比較兩種變化">
               <button type="button" data-change="evaporation" aria-pressed="true">水分蒸發</button><button type="button" data-change="rust" aria-pressed="false">桶身生鏽</button>
             </div>
@@ -890,9 +890,9 @@
           <div class="card-side"><span class="card-number">08</span><h3>純物質與混合物</h3><span class="card-role">比較由一種或多種物質組成</span></div>
           <div class="card-main">
             <h2>雨水看起來像一種東西，裡面可能混了什麼？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我們知道怎麼判斷物質的變化了；那雨水樣本裡又有哪些物質呢？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>先找成分資料，再根據組成判斷它是純物質還是混合物。</p></div>
             <p>純物質只由一種物質構成；混合物由多種物質組成，成分可用物理方法分離。外觀看起來均勻，不代表一定是純物質。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>雨水看起來混濁，就能確定裡面有哪些成分嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>混濁是觀察結果；要看成分紀錄，才能判斷是純物質還是混合物。</p></div>
             <div class="class-grid">
               <article class="class-card"><strong>蒸餾水・純物質</strong><p>用作單一物質的參照樣本。</p></article>
               <article class="class-card"><strong>花圃土壤・混合物</strong><p>由多種成分構成，不能只看顏色判斷成分。</p></article>
@@ -909,9 +909,9 @@
           <div class="card-side"><span class="card-number">09</span><h3>元素與化合物</h3><span class="card-role">純物質的兩種類型</span></div>
           <div class="card-main">
             <h2>純鐵和蒸餾水，為什麼分到不同類？</h2>
-            <p>兩者都是純物質，但分類依據不同：元素不能再用化學方法分解成更簡單的純物質；化合物則能用化學方法分解成不同元素。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>純鐵和蒸餾水都只有一種物質，為什麼分類不同？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>再看它們能否用化學方法分解，這是區分元素和化合物的依據。</p></div>
+            <p>兩者都是純物質，但分類依據不同：元素不能再用化學方法分解成更簡單的純物質；化合物則能用化學方法分解成不同元素。</p>
             <div class="choice-row" role="group" aria-label="查看純物質範例">
               <button type="button" data-pure="iron" aria-pressed="true">純鐵</button><button type="button" data-pure="water" aria-pressed="false">蒸餾水</button>
             </div>
@@ -928,9 +928,9 @@
           <div class="card-side"><span class="card-number">10</span><h3>用證據完成分類</h3><span class="card-role">整合本段學到的判斷方法</span></div>
           <div class="card-main">
             <h2>這桶混濁的雨水，怎麼證明它是混合物？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>資料卡列出水和泥沙兩種成分；根據我們學過的標準，這份水樣該怎麼分類？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>先看成分有幾種，再依分類標準說出判斷和證據。</p></div>
             <p>這次不只看水樣外觀。資料卡明確提供成分紀錄：樣本含有水和泥沙。根據「由多種物質組成」的分類依據，判斷這個水樣。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>只看水樣混濁，就能確定裡面有泥沙嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>要根據成分紀錄判斷，不能只靠外觀猜測。</p></div>
             <div class="evidence-box"><strong>樣本成分紀錄</strong><br>水樣含有水與泥沙兩種成分。這是題目提供的資料，不是由混濁外觀推測。</div>
             <fieldset style="border:0;padding:0;margin:14px 0">
               <legend><strong>依資料判斷，這份水樣屬於哪一類？</strong></legend>
@@ -1010,7 +1010,7 @@
       if(!testedBucketPart||propertyJudgmentResult!=="supported")return;
       const partName=testedBucketPart==="body"?"桶身被吸引，有磁性":"握把未被磁鐵吸引，未呈現磁性";
       document.getElementById("record-property").textContent=`${partName}；磁性是材料線索，尚不能單獨證明完整組成。`;
-      document.getElementById("note-s5").textContent="已記錄觀察與判斷。下一步比較桶身生鏽前後，看看有沒有形成新物質。";
+      document.getElementById("note-s5").textContent="已記錄觀察與判斷。接著比較桶身、水和空氣的狀態。";
       propertyRecordButton.textContent="已記入紀錄 ✓";
     });
 
