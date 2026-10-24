@@ -24,6 +24,7 @@
       font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
     }
     * { box-sizing: border-box; }
+    .visual svg [hidden] { display: none !important; }
     html { scroll-behavior: smooth; }
     body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.7; }
     button, input { font: inherit; }
@@ -119,6 +120,7 @@
     }
     @media (max-width: 460px) {
       .shell { width: calc(100% - 20px); }
+      .route { margin-inline: -10px; }
       .brand-row { align-items: flex-start; }
       .section-top { align-items: start; }
       .section-top h2 { font-size: 1.15rem; }
@@ -299,8 +301,8 @@
       sceneButtons.forEach((button) => button.addEventListener('click', () => {
         const reflected = button.dataset.scene === 'reflected';
         sceneButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-        directScene.hidden = reflected;
-        reflectedScene.hidden = !reflected;
+        directScene.toggleAttribute('hidden', reflected);
+        reflectedScene.toggleAttribute('hidden', !reflected);
         sceneCaption.textContent = reflected
           ? '燈光照到書本後反射，接著進入眼睛；書本本身不會發光。'
           : '太陽、燈泡等光源發出的光，可以直接進入眼睛。';
