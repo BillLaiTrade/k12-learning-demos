@@ -297,7 +297,7 @@ export function mountComparisonExperiment() {
 
     if (drag.wasImmersed) {
       const rimClearedTop = geometry.top - sampleRect.height + 8;
-      if (nextTop > rimClearedTop) {
+      if (!drag.clearedRim && nextTop > rimClearedTop) {
         nextLeft = Math.max(geometry.left + 3, Math.min(geometry.right - sampleRect.width - 3, nextLeft));
       } else {
         drag.clearedRim = true;

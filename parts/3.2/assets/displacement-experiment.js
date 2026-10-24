@@ -413,7 +413,7 @@ export function mountDisplacementExperiment() {
     const insideMouth = nextCenterX >= cylinderLeft + 12 && nextCenterX <= cylinderRight - 12;
     if (drag.wasImmersed) {
       const rimClearedTop = cylinderTop - rockHeight + 8;
-      if (nextTop > rimClearedTop) {
+      if (!drag.clearedRim && nextTop > rimClearedTop) {
         nextLeft = Math.max(cylinderLeft + 3, Math.min(cylinderRight - rockWidth - 3, nextLeft));
       } else {
         drag.clearedRim = true;
