@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e8">
+  <meta name="description" content="從光源、看見物體和光速，開始認識光。">
+  <link rel="icon" href="data:,">
+  <title>認識光：我們怎麼看見？｜光學單元</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #243a35;
+      --muted: #64736d;
+      --line: #d9d3c4;
+      --paper: #f4f1e8;
+      --card: #fffdf8;
+      --green: #176b53;
+      --green-pale: #e5f2e9;
+      --orange: #bc612b;
+      --orange-pale: #fff0e3;
+      --sun: #e9b64c;
+      --shadow: 0 7px 20px #243a3508;
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.7; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--green); }
+    .shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+    .masthead { padding: 22px 0 12px; }
+    .brand-row, .section-top, .controls, .card-head, .readout-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand-row { font-size: .9rem; font-weight: 750; }
+    .crumb { color: var(--muted); font-weight: 500; }
+    .back-link { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; }
+    .hero { max-width: 780px; padding: 36px 0 28px; }
+    .eyebrow { color: var(--green); font-size: .82rem; font-weight: 800; letter-spacing: .12em; }
+    h1 { margin: 8px 0 12px; font-size: clamp(2rem, 4.4vw, 3.55rem); line-height: 1.18; letter-spacing: -.04em; }
+    .hero p { margin: 0; color: var(--muted); font-size: 1.08rem; }
+    main { padding: 0 0 76px; }
+    .section-top { align-items: end; margin: 0 0 18px; }
+    .section-top h2 { margin: 0; font-size: 1.32rem; }
+    .progress-copy { color: var(--muted); font-size: .9rem; white-space: nowrap; }
+    progress { display: block; width: 100%; height: 8px; margin: 12px 0 0; border: 0; border-radius: 99px; overflow: hidden; }
+    progress::-webkit-progress-bar { background: #dfe7df; }
+    progress::-webkit-progress-value { background: var(--green); border-radius: 99px; }
+    progress::-moz-progress-bar { background: var(--green); border-radius: 99px; }
+    .lesson-layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 28px; align-items: start; }
+    .route { position: sticky; top: 18px; max-height: calc(100svh - 36px); overflow-y: auto; padding: 8px 10px 12px 0; scrollbar-width: thin; }
+    .route-label { margin: 0 0 8px; color: var(--muted); font-size: .76rem; letter-spacing: .08em; }
+    .route-inner { display: grid; gap: 4px; }
+    .route a { display: grid; grid-template-columns: 28px minmax(0, 1fr); align-items: start; gap: 8px; padding: 10px 11px; border: 1px solid transparent; border-left: 3px solid transparent; border-radius: 0 10px 10px 0; color: var(--muted); font-size: .88rem; line-height: 1.45; text-decoration: none; }
+    .route a:hover, .route a:focus-visible { border-color: var(--line); outline: 2px solid transparent; }
+    .route a[aria-current="step"] { border-left-color: var(--green); background: #e7eee0; color: #315a46; font-weight: 750; }
+    .route b { color: var(--green); font-size: .76rem; font-weight: 700; }
+    .cards { display: grid; gap: 20px; }
+    .lesson-card { position: relative; scroll-margin-top: 22px; display: grid; grid-template-columns: 175px minmax(0, 1fr); gap: 26px; padding: 26px; border: 1px solid var(--line); border-radius: 24px; background: var(--card); box-shadow: var(--shadow); }
+    .card-side { border-right: 1px solid var(--line); padding-right: 18px; }
+    .card-number { color: var(--green); font-weight: 850; font-size: .84rem; letter-spacing: .08em; }
+    .card-side h3 { margin: 10px 0 8px; font-size: 1.05rem; line-height: 1.45; }
+    .card-role { color: var(--muted); font-size: .87rem; }
+    .card-main h2 { margin: 0 0 8px; font-size: clamp(1.3rem, 2.6vw, 1.75rem); line-height: 1.38; }
+    .card-main > p { margin: 0 0 16px; color: var(--muted); }
+    .prompt { margin: 14px 0 8px; font-weight: 750; }
+    .visual { margin: 16px 0; padding: 14px; border: 1px solid var(--line); border-radius: 17px; background: #f6f8f3; }
+    .visual svg { display: block; width: 100%; height: auto; }
+    .visual-caption { margin: 8px 2px 0; color: var(--muted); font-size: .84rem; }
+    .toggle-row, .object-grid, .medium-grid, .choices { display: flex; flex-wrap: wrap; gap: 9px; margin: 12px 0; }
+    .control-button, .choice { min-height: 44px; border: 1px solid var(--line); border-radius: 13px; padding: 9px 13px; background: #fff; color: var(--ink); text-align: left; }
+    .control-button:hover, .choice:hover, .control-button:focus-visible, .choice:focus-visible { border-color: var(--green); outline: 2px solid rgb(23 107 83 / 12%); }
+    .control-button[aria-pressed="true"], .choice[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); box-shadow: inset 0 0 0 1px var(--green); }
+    .control-button .hint { display: block; color: var(--muted); font-size: .78rem; }
+    .scene-panel[hidden] { display: none; }
+    .object-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .object-button { min-height: 92px; border: 1px solid var(--line); border-radius: 15px; background: #fff; color: var(--ink); font-weight: 750; }
+    .object-button:hover, .object-button:focus-visible, .object-button[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); outline: 2px solid rgb(23 107 83 / 10%); }
+    .object-emoji { display: block; margin-bottom: 3px; font-size: 1.6rem; }
+    .feedback { min-height: 54px; margin-top: 12px; padding: 12px 14px; border-left: 4px solid #b8cda9; border-radius: 0 12px 12px 0; background: #f0f5eb; color: #365348; }
+    .feedback[data-state="good"] { border-left-color: var(--green); }
+    .feedback[data-state="try"] { border-left-color: var(--orange); background: var(--orange-pale); color: #6b4028; }
+    .fact { margin-top: 15px; padding: 13px 15px; border-radius: 13px; background: #f0f5eb; color: #405851; }
+    .fact p { margin: 0; }
+    .range-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 14px; margin-top: 15px; }
+    input[type="range"] { width: 100%; accent-color: var(--green); }
+    output, .strong-readout { color: var(--green); font-weight: 850; white-space: nowrap; }
+    .scale-legend { display: flex; justify-content: space-between; color: var(--muted); font-size: .82rem; }
+    .medium-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .speed-row { display: grid; grid-template-columns: 70px minmax(0, 1fr) 105px; align-items: center; gap: 10px; margin: 12px 0; font-size: .9rem; }
+    .speed-track { height: 13px; overflow: hidden; border-radius: 99px; background: #e4e9e2; }
+    .speed-bar { width: var(--speed); height: 100%; border-radius: inherit; background: linear-gradient(90deg, #7eaf88, #176b53); transition: width .45s ease; }
+    .speed-bar.selected { background: linear-gradient(90deg, #f3c56a, #d58a2b); }
+    .speed-value { color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+    .end-card { border-color: #bfd1be; background: #f4f8ef; }
+    .end-card .card-side { border-color: #d0ddcb; }
+    .choice.correct[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); }
+    .choice.incorrect[aria-pressed="true"] { border-color: var(--orange); background: var(--orange-pale); }
+    .check-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; }
+    .action, .secondary { min-height: 44px; border-radius: 13px; padding: 9px 16px; font-weight: 750; }
+    .action { border: 0; background: var(--green); color: #fff; }
+    .action:hover { background: #105640; }
+    .secondary { border: 1px solid var(--line); background: #fff; color: var(--ink); }
+    footer { padding: 22px 0 36px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
+    @media (max-width: 780px) {
+      .shell { width: min(100% - 24px, 680px); }
+      .hero { padding: 26px 0 20px; }
+      .lesson-layout { grid-template-columns: 1fr; gap: 8px; }
+      .route { z-index: 5; top: 0; max-height: none; margin: 0 -12px; padding: 6px 12px 10px; overflow-x: auto; overflow-y: hidden; background: var(--paper); }
+      .route-label { margin: 0 0 6px; }
+      .route-inner { display: flex; width: max-content; gap: 6px; }
+      .route a { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); white-space: nowrap; }
+      .route a[aria-current="step"] { border-color: var(--green); }
+      .lesson-card { grid-template-columns: 1fr; gap: 13px; padding: 19px; border-radius: 19px; }
+      .card-side { display: flex; align-items: baseline; gap: 10px; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 10px; }
+      .card-side h3 { margin: 0; }
+      .card-role { display: none; }
+      .object-grid, .medium-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 460px) {
+      .shell { width: calc(100% - 20px); }
+      .brand-row { align-items: flex-start; }
+      .section-top { align-items: start; }
+      .section-top h2 { font-size: 1.15rem; }
+      .progress-copy { font-size: .82rem; }
+      .visual { padding: 9px; }
+      .speed-row { grid-template-columns: 54px minmax(0, 1fr) 88px; gap: 7px; font-size: .82rem; }
+      .range-row { grid-template-columns: 1fr; gap: 4px; }
+      .range-row output { text-align: right; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header class="shell masthead">
+    <div class="brand-row">
+      <a class="back-link" href="../../index.html" aria-label="返回光學單元學習路線">← 返回學習路線</a>
+      <span class="crumb">國二上・理化</span>
+    </div>
+    <div class="hero">
+      <div class="eyebrow">第一段學習・認識光</div>
+      <h1>光是什麼？我們怎麼看見？</h1>
+      <p>從熟悉的生活經驗開始：哪些東西會發光？光怎麼進入眼睛？它傳得有多快？</p>
+    </div>
+  </header>
+  <main class="shell">
+    <div class="section-top">
+      <div><h2>沿著探索路線，一步步認識光</h2><progress id="lesson-progress" max="5" value="1" aria-label="學習路線閱讀進度"></progress></div>
+      <span class="progress-copy" id="progress-copy">目前在第 1 段，共 5 段</span>
+    </div>
+    <div class="lesson-layout">
+      <nav class="route" aria-label="探索路線">
+        <p class="route-label">這段學習的路線</p>
+        <div class="route-inner">
+          <a href="#card-01" aria-current="step"><b>01</b><span>為什麼我們看得見東西？</span></a>
+          <a href="#card-02"><b>02</b><span>哪些物體會自己發光？</span></a>
+          <a href="#card-03"><b>03</b><span>光傳得有多快？</span></a>
+          <a href="#card-04"><b>04</b><span>光走到哪裡都一樣快嗎？</span></a>
+          <a href="#card-05"><b>05</b><span>整理：光如何讓我們看見？</span></a>
+        </div>
+      </nav>
+      <div class="cards">
+        <section class="lesson-card" id="card-01">
+          <div class="card-side"><span class="card-number">01</span><h3>從眼睛看到的現象開始</h3><span class="card-role">光要進入眼睛</span></div>
+          <div class="card-main">
+            <h2>為什麼我們看得見東西？</h2>
+            <p>白天看見月亮，或在房間裡看見一本書，都和光進入眼睛有關。看看光可能走哪一條路。</p>
+            <div class="toggle-row" role="group" aria-label="選擇光進入眼睛的情境">
+              <button class="control-button" type="button" data-scene="direct" aria-pressed="true">光源直接進入眼睛</button>
+              <button class="control-button" type="button" data-scene="reflected" aria-pressed="false">光先照到物體</button>
+            </div>
+            <div class="visual">
+              <svg viewBox="0 0 720 240" role="img" aria-labelledby="scene-title scene-desc">
+                <title id="scene-title">光進入眼睛的路徑示意</title>
+                <desc id="scene-desc">可以切換光源直接進入眼睛，或光先照到物體再反射進入眼睛。</desc>
+                <defs>
+                  <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#176b53"/></marker>
+                  <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d58a2b"/></marker>
+                </defs>
+                <g id="scene-direct">
+                  <circle cx="105" cy="105" r="39" fill="#f5c75e" stroke="#bd8a27" stroke-width="4"/>
+                  <g stroke="#e6b44b" stroke-width="5" stroke-linecap="round"><path d="M105 42V26"/><path d="M105 184v16"/><path d="M42 105H26"/><path d="M168 105h16"/><path d="m60 60-12-12"/><path d="m150 150 12 12"/><path d="m150 60 12-12"/><path d="m60 150-12 12"/></g>
+                  <text x="105" y="169" text-anchor="middle" fill="#53665d" font-size="17">光源</text>
+                  <path d="M165 105H530" fill="none" stroke="#176b53" stroke-width="5" stroke-dasharray="12 10" marker-end="url(#arrow-green)"/>
+                  <g transform="translate(564 76)" fill="none" stroke="#526f65" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M0 30Q48-13 96 30Q48 73 0 30Z"/><circle cx="48" cy="30" r="13" fill="#b7d9c6"/><circle cx="48" cy="30" r="5" fill="#176b53"/></g>
+                  <text x="612" y="169" text-anchor="middle" fill="#53665d" font-size="17">眼睛</text>
+                </g>
+                <g id="scene-reflected" hidden>
+                  <path d="M72 156V79a32 32 0 0 1 64 0v77" fill="#e9b64c" stroke="#bd8a27" stroke-width="4"/>
+                  <path d="M94 156h20l-5 18H99z" fill="#a9833e"/>
+                  <text x="104" y="207" text-anchor="middle" fill="#53665d" font-size="17">光源</text>
+                  <path d="M138 91 324 137" fill="none" stroke="#d58a2b" stroke-width="5" stroke-dasharray="12 10" marker-end="url(#arrow-amber)"/>
+                  <path d="M299 151 350 108l51 43v43H299z" fill="#f0dfa8" stroke="#a99255" stroke-width="4" stroke-linejoin="round"/>
+                  <path d="m349 111 1 80" stroke="#a99255" stroke-width="3"/>
+                  <text x="350" y="222" text-anchor="middle" fill="#53665d" font-size="17">書本</text>
+                  <path d="M407 137 548 93" fill="none" stroke="#176b53" stroke-width="5" stroke-dasharray="12 10" marker-end="url(#arrow-green)"/>
+                  <g transform="translate(572 64)" fill="none" stroke="#526f65" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M0 30Q48-13 96 30Q48 73 0 30Z"/><circle cx="48" cy="30" r="13" fill="#b7d9c6"/><circle cx="48" cy="30" r="5" fill="#176b53"/></g>
+                  <text x="620" y="157" text-anchor="middle" fill="#53665d" font-size="17">眼睛</text>
+                </g>
+              </svg>
+              <p class="visual-caption" id="scene-caption">太陽、燈泡等光源發出的光，可以直接進入眼睛。</p>
+            </div>
+            <div class="fact"><p><strong>先記住：</strong>看見物體，需要有光進入眼睛；光可能直接來自光源，也可能先照到物體再反射進眼睛。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-02">
+          <div class="card-side"><span class="card-number">02</span><h3>分清楚光從哪裡來</h3><span class="card-role">自己發光或反射光</span></div>
+          <div class="card-main">
+            <h2>哪些物體會自己發光？</h2>
+            <p>有些物體會自行發光；有些看起來亮，是因為接收到其他光源的光。選一個例子看看。</p>
+            <div class="object-grid" role="group" aria-label="選擇一個物體查看它如何發光或反射光">
+              <button class="object-button" type="button" data-object="sun" aria-pressed="false"><span class="object-emoji" aria-hidden="true">☀️</span>太陽</button>
+              <button class="object-button" type="button" data-object="lamp" aria-pressed="false"><span class="object-emoji" aria-hidden="true">💡</span>燈泡</button>
+              <button class="object-button" type="button" data-object="moon" aria-pressed="false"><span class="object-emoji" aria-hidden="true">🌙</span>月亮</button>
+              <button class="object-button" type="button" data-object="book" aria-pressed="false"><span class="object-emoji" aria-hidden="true">📖</span>書本</button>
+            </div>
+            <div class="feedback" id="object-feedback" aria-live="polite">點選一個物體，看看它是光源，還是反射其他光源的光。</div>
+            <div class="fact"><p><strong>光源：</strong>能自行發光的物體。月亮和書本本身不發光；我們看見它們，是因為它們反射了照到表面的光。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-03">
+          <div class="card-side"><span class="card-number">03</span><h3>感受光速的尺度</h3><span class="card-role">光不是瞬間到達</span></div>
+          <div class="card-main">
+            <h2>光傳得有多快？</h2>
+            <p>光速非常快，但跨越很遠的距離仍需要時間。以地球和月球的平均距離作例子，看看光傳過去需要多久。</p>
+            <div class="visual">
+              <svg viewBox="0 0 720 210" role="img" aria-labelledby="moon-title moon-desc">
+                <title id="moon-title">光從地球傳到月球的時間示意</title>
+                <desc id="moon-desc">圖中顯示地球、月球及兩者之間的光路，路徑長度不按比例。</desc>
+                <defs><marker id="arrow-path" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#91ae9a"/></marker></defs>
+                <path d="M95 96H618" stroke="#91ae9a" stroke-width="5" stroke-dasharray="9 9" marker-end="url(#arrow-path)"/>
+                <circle cx="95" cy="96" r="43" fill="#73a9bd" stroke="#4d7d90" stroke-width="4"/>
+                <path d="M75 84q14-14 29-4l8 11-14 5-6 18-12-8zM103 116l10 4-5 12-10-7z" fill="#9ac390"/>
+                <circle cx="618" cy="96" r="27" fill="#e9e7d5" stroke="#b5b39f" stroke-width="4"/>
+                <circle id="photon" cx="95" cy="96" r="12" fill="#efaa32" stroke="#fffefa" stroke-width="4"/>
+                <text x="95" y="171" text-anchor="middle" fill="#53665d" font-size="17">地球</text>
+                <text x="618" y="151" text-anchor="middle" fill="#53665d" font-size="17">月球</text>
+                <text x="357" y="57" text-anchor="middle" fill="#53665d" font-size="16">平均距離約 38 萬公里</text>
+              </svg>
+              <div class="range-row">
+                <input id="light-time" type="range" min="0" max="1.28" step="0.01" value="0" aria-label="調整光從地球前往月球所經過的時間">
+                <output id="light-time-output" for="light-time">0.00 秒</output>
+              </div>
+              <div class="scale-legend"><span>光從地球出發</span><span>約 1.28 秒後抵達月球</span></div>
+              <p class="visual-caption" id="light-distance">光速約每秒 30 萬公里。拖動時間，觀察光走過的距離。</p>
+              <p class="visual-caption">示意圖的地球、月球與路徑長度不按比例。</p>
+            </div>
+            <div class="fact"><p><strong>光速：</strong>真空中的光每秒約走 30 萬公里。這裡用距離感受光速，不需要代公式計算。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-04">
+          <div class="card-side"><span class="card-number">04</span><h3>比較光在不同地方</h3><span class="card-role">介質會影響光速</span></div>
+          <div class="card-main">
+            <h2>光走到哪裡都一樣快嗎？</h2>
+            <p>光通過的物質，例如空氣、水或玻璃，稱為<strong>介質</strong>。選擇一種環境，比較光速。</p>
+            <div class="medium-grid" role="group" aria-label="選擇光傳播的環境">
+              <button class="control-button" type="button" data-medium="vacuum" aria-pressed="true">真空<span class="hint">沒有物質</span></button>
+              <button class="control-button" type="button" data-medium="air" aria-pressed="false">空氣<span class="hint">氣體</span></button>
+              <button class="control-button" type="button" data-medium="water" aria-pressed="false">水<span class="hint">液體</span></button>
+              <button class="control-button" type="button" data-medium="glass" aria-pressed="false">玻璃<span class="hint">固體</span></button>
+            </div>
+            <div class="visual" aria-label="不同環境中的光速比較">
+              <div class="speed-row"><span>真空</span><div class="speed-track"><div class="speed-bar selected" data-bar="vacuum" style="--speed:100%"></div></div><span class="speed-value">約 30 萬 km/s</span></div>
+              <div class="speed-row"><span>空氣</span><div class="speed-track"><div class="speed-bar" data-bar="air" style="--speed:99.9%"></div></div><span class="speed-value">約 30 萬 km/s</span></div>
+              <div class="speed-row"><span>水</span><div class="speed-track"><div class="speed-bar" data-bar="water" style="--speed:75%"></div></div><span class="speed-value">約 22.5 萬 km/s</span></div>
+              <div class="speed-row"><span>一般玻璃</span><div class="speed-track"><div class="speed-bar" data-bar="glass" style="--speed:67%"></div></div><span class="speed-value">約 20 萬 km/s</span></div>
+              <div class="visual-caption" id="medium-feedback" aria-live="polite">真空中的光速作為比較基準。</div>
+            </div>
+            <div class="fact"><p><strong>觀察重點：</strong>光在不同介質中的速度不完全相同；空氣中的速度非常接近真空。不同種類的玻璃，光速也會略有不同。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card end-card" id="card-05">
+          <div class="card-side"><span class="card-number">05</span><h3>把觀察連起來</h3><span class="card-role">整合理解</span></div>
+          <div class="card-main">
+            <h2>整理：光如何讓我們看見？</h2>
+            <p>夜晚看到月亮時，哪一條光路能說明我們為什麼看得見它？</p>
+            <div class="choices" role="group" aria-label="選擇月亮光線進入眼睛的路徑">
+              <button class="choice" type="button" data-answer="wrong" aria-pressed="false">月亮自己發光，光進入眼睛</button>
+              <button class="choice" type="button" data-answer="right" aria-pressed="false">陽光照到月亮，再反射進入眼睛</button>
+            </div>
+            <div class="check-actions"><button class="action" id="check-answer" type="button">看看解釋</button><button class="secondary" id="reset-answer" type="button">重新選擇</button></div>
+            <div class="feedback" id="check-feedback" aria-live="polite">選擇一條光路，再看看光源、物體和眼睛如何連在一起。</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer><div class="shell">第一段學習・認識光｜下一段：光如何傳播？</div></footer>
+  <script>
+    (() => {
+      const sceneButtons = [...document.querySelectorAll('[data-scene]')];
+      const directScene = document.querySelector('#scene-direct');
+      const reflectedScene = document.querySelector('#scene-reflected');
+      const sceneCaption = document.querySelector('#scene-caption');
+      sceneButtons.forEach((button) => button.addEventListener('click', () => {
+        const reflected = button.dataset.scene === 'reflected';
+        sceneButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        directScene.hidden = reflected;
+        reflectedScene.hidden = !reflected;
+        sceneCaption.textContent = reflected
+          ? '燈光照到書本後反射，接著進入眼睛；書本本身不會發光。'
+          : '太陽、燈泡等光源發出的光，可以直接進入眼睛。';
+      }));
+
+      const objectInfo = {
+        sun: ['光源', '太陽能自行發光，是光源。'],
+        lamp: ['光源', '燈泡通電後會發光，是光源。'],
+        moon: ['反射光', '月亮本身不發光；它反射太陽光進入我們的眼睛。'],
+        book: ['反射光', '書本本身不發光；燈光照到書本後反射進入眼睛。']
+      };
+      const objectFeedback = document.querySelector('#object-feedback');
+      document.querySelectorAll('[data-object]').forEach((button) => button.addEventListener('click', () => {
+        document.querySelectorAll('[data-object]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        const [label, explanation] = objectInfo[button.dataset.object];
+        objectFeedback.innerHTML = `<strong>${label}：</strong>${explanation}`;
+        objectFeedback.dataset.state = 'good';
+      }));
+
+      const timeInput = document.querySelector('#light-time');
+      const timeOutput = document.querySelector('#light-time-output');
+      const photon = document.querySelector('#photon');
+      const distanceCopy = document.querySelector('#light-distance');
+      const moonDistanceKm = 384400;
+      const speedKmPerSecond = 300000;
+      timeInput.addEventListener('input', () => {
+        const seconds = Number(timeInput.value);
+        const distance = Math.min(moonDistanceKm, speedKmPerSecond * seconds);
+        const progress = distance / moonDistanceKm;
+        timeOutput.value = `${seconds.toFixed(2)} 秒`;
+        timeOutput.textContent = `${seconds.toFixed(2)} 秒`;
+        photon.setAttribute('cx', String(95 + progress * (618 - 95)));
+        distanceCopy.textContent = seconds >= 1.28
+          ? '約 1.28 秒，光走過約 38 萬公里，抵達月球。'
+          : `約 ${Math.round(distance).toLocaleString('zh-TW')} 公里；光正往月球前進。`;
+      });
+
+      const mediumCopy = {
+        vacuum: '真空中的光速作為比較基準。',
+        air: '空氣中的光速和真空非常接近，差異在這張簡化圖中不容易看出。',
+        water: '光在水中的速度約是真空中的四分之三。',
+        glass: '一般玻璃中的光速約是真空中的三分之二；玻璃成分不同，數值也會變。'
+      };
+      const mediumFeedback = document.querySelector('#medium-feedback');
+      document.querySelectorAll('[data-medium]').forEach((button) => button.addEventListener('click', () => {
+        document.querySelectorAll('[data-medium]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        document.querySelectorAll('[data-bar]').forEach((bar) => bar.classList.toggle('selected', bar.dataset.bar === button.dataset.medium));
+        mediumFeedback.textContent = mediumCopy[button.dataset.medium];
+      }));
+
+      const choices = [...document.querySelectorAll('[data-answer]')];
+      const checkFeedback = document.querySelector('#check-feedback');
+      choices.forEach((button) => button.addEventListener('click', () => {
+        choices.forEach((item) => {
+          item.setAttribute('aria-pressed', String(item === button));
+          item.classList.remove('correct', 'incorrect');
+        });
+        button.classList.add(button.dataset.answer === 'right' ? 'correct' : 'incorrect');
+        checkFeedback.textContent = '已選好，按「看看解釋」整理光源、物體與眼睛的關係。';
+        checkFeedback.dataset.state = '';
+      }));
+      document.querySelector('#check-answer').addEventListener('click', () => {
+        const selected = choices.find((button) => button.getAttribute('aria-pressed') === 'true');
+        if (!selected) {
+          checkFeedback.textContent = '先選一條光路，再看看說明。';
+          checkFeedback.dataset.state = 'try';
+          return;
+        }
+        checkFeedback.textContent = '月亮不是光源。太陽光照到月亮後反射，部分光進入眼睛，所以我們看得見月亮。';
+        checkFeedback.dataset.state = selected.dataset.answer === 'right' ? 'good' : 'try';
+      });
+      document.querySelector('#reset-answer').addEventListener('click', () => {
+        choices.forEach((item) => { item.setAttribute('aria-pressed', 'false'); item.classList.remove('correct', 'incorrect'); });
+        checkFeedback.textContent = '選擇一條光路，再看看光源、物體和眼睛如何連在一起。';
+        checkFeedback.dataset.state = '';
+      });
+
+      const cards = [...document.querySelectorAll('.lesson-card')];
+      const routeLinks = [...document.querySelectorAll('.route a')];
+      const progress = document.querySelector('#lesson-progress');
+      const progressCopy = document.querySelector('#progress-copy');
+      const setCurrent = (id) => {
+        const index = cards.findIndex((card) => card.id === id);
+        if (index < 0) return;
+        routeLinks.forEach((link) => {
+          if (link.hash === `#${id}`) link.setAttribute('aria-current', 'step');
+          else link.removeAttribute('aria-current');
+        });
+        progress.value = index + 1;
+        progressCopy.textContent = `目前在第 ${index + 1} 段，共 ${cards.length} 段`;
+      };
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (visible) setCurrent(visible.target.id);
+        }, { rootMargin: '-18% 0px -58% 0px', threshold: [0, .15, .35, .6] });
+        cards.forEach((card) => observer.observe(card));
+      }
+    })();
+  </script>
+</body>
+</html>
