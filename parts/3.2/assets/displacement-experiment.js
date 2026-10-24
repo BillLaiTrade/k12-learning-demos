@@ -389,6 +389,7 @@ export function mountDisplacementExperiment() {
       currentLeft: initialLeft,
       currentTop: initialTop,
       enteredThroughMouth: wasImmersed,
+      clearedRim: false,
       wasImmersed
     };
     rock.classList.add('is-dragging');
@@ -410,26 +411,34 @@ export function mountDisplacementExperiment() {
     const cylinderBottom = cylinderRect.bottom - sceneRect.top;
     const nextCenterX = nextLeft + rockWidth / 2;
     const insideMouth = nextCenterX >= cylinderLeft + 12 && nextCenterX <= cylinderRight - 12;
-    const crossedMouthFromAbove = !drag.wasImmersed
-      && !drag.enteredThroughMouth
-      && insideMouth
-      && drag.currentTop + rockHeight <= cylinderTop + 8
-      && nextTop > drag.currentTop
-      && nextTop + rockHeight > cylinderTop + 8
-      && nextTop < cylinderBottom;
-    if (crossedMouthFromAbove) drag.enteredThroughMouth = true;
+    if (drag.wasImmersed) {
+      const rimClearedTop = cylinderTop - rockHeight + 8;
+      if (nextTop > rimClearedTop) {
+        nextLeft = Math.max(cylinderLeft + 3, Math.min(cylinderRight - rockWidth - 3, nextLeft));
+      } else {
+        drag.clearedRim = true;
+      }
+    } else {
+      const crossedMouthFromAbove = !drag.enteredThroughMouth
+        && insideMouth
+        && drag.currentTop + rockHeight <= cylinderTop + 8
+        && nextTop > drag.currentTop
+        && nextTop + rockHeight > cylinderTop + 8
+        && nextTop < cylinderBottom;
+      if (crossedMouthFromAbove) drag.enteredThroughMouth = true;
 
-    const overlapsCylinderBody = nextTop + rockHeight > cylinderTop + 8
-      && nextTop < cylinderBottom - 8
-      && nextLeft < cylinderRight
-      && nextLeft + rockWidth > cylinderLeft;
-    if (!drag.wasImmersed && !drag.enteredThroughMouth && overlapsCylinderBody) {
-      if (drag.currentLeft + rockWidth <= cylinderLeft) nextLeft = cylinderLeft - rockWidth;
-      else if (drag.currentLeft >= cylinderRight) nextLeft = cylinderRight;
-      else {
-        const leftEdge = cylinderLeft - rockWidth;
-        const rightEdge = cylinderRight;
-        nextLeft = Math.abs(nextLeft - leftEdge) <= Math.abs(nextLeft - rightEdge) ? leftEdge : rightEdge;
+      const overlapsCylinderBody = nextTop + rockHeight > cylinderTop + 8
+        && nextTop < cylinderBottom - 8
+        && nextLeft < cylinderRight
+        && nextLeft + rockWidth > cylinderLeft;
+      if (!drag.enteredThroughMouth && overlapsCylinderBody) {
+        if (drag.currentLeft + rockWidth <= cylinderLeft) nextLeft = cylinderLeft - rockWidth;
+        else if (drag.currentLeft >= cylinderRight) nextLeft = cylinderRight;
+        else {
+          const leftEdge = cylinderLeft - rockWidth;
+          const rightEdge = cylinderRight;
+          nextLeft = Math.abs(nextLeft - leftEdge) <= Math.abs(nextLeft - rightEdge) ? leftEdge : rightEdge;
+        }
       }
     }
     drag.currentLeft = nextLeft;
@@ -448,11 +457,17 @@ export function mountDisplacementExperiment() {
     const aboveMouth = rockIsAboveCylinderMouth();
     const inside = centerIsInCylinder();
     const wasImmersed = drag.wasImmersed;
+    const clearedRim = drag.clearedRim;
+    if (wasImmersed) {
+      drag = null;
+      if (clearedRim && !inside && !aboveMouth) dropDraggedRockOutsideCylinder();
+      else dropDraggedRockIntoCylinder();
+      return;
+    }
     const validDrop = aboveMouth || (inside && (wasImmersed || drag.enteredThroughMouth));
     drag = null;
     if (validDrop) {
-      if (wasImmersed) dropDraggedRockIntoCylinder();
-      else throwRockIntoCylinder({ dropFromAbove: aboveMouth });
+      throwRockIntoCylinder({ dropFromAbove: aboveMouth });
       return;
     }
     dropDraggedRockOutsideCylinder();
