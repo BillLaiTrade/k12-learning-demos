@@ -63,6 +63,14 @@
     .card-role { color: var(--muted); font-size: .87rem; }
     .card-main h2 { margin: 0 0 8px; font-size: clamp(1.3rem, 2.6vw, 1.75rem); line-height: 1.38; }
     .card-main > p { margin: 0 0 16px; color: var(--muted); }
+    .dialogue { display: flex; gap: 10px; align-items: center; margin: 12px 0; padding: 11px 15px; border-left: 4px solid #8cae91; border-radius: 0 13px 13px 0; background: #f0f5eb; }
+    .dialogue p { margin: 0; }
+    .dialogue .speaker { display: inline-flex; flex: 0 0 auto; align-items: center; color: #315a46; font-weight: 800; }
+    .dialogue .speaker::before { content: ""; display: block; width: 44px; height: 44px; border: 2px solid #8cae91; border-radius: 50%; background-image: url("assets/dialogue-character-avatars.png"); background-repeat: no-repeat; background-position: 100% 50%; background-size: 200% 100%; box-shadow: 0 2px 6px rgb(21 47 38 / 12%); }
+    .dialogue--xiaokui { border-left-color: #d39765; background: #fff4e8; }
+    .dialogue--xiaokui .speaker { color: #945523; }
+    .dialogue--xiaokui .speaker::before { border-color: #d39765; background-position: 0 50%; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     .prompt { margin: 14px 0 8px; font-weight: 750; }
     .visual { margin: 20px 0; padding: 20px; border: 1px solid var(--line); border-radius: 20px; background: #f6f8f3; }
     .visual svg { display: block; width: 100%; height: auto; }
@@ -107,7 +115,6 @@
     .path-chip { padding: 6px 10px; border: 1px solid #dce7e8; border-radius: 10px; background: #eef6f8; color: #426e84; font-size: .79rem; font-weight: 750; }
     .path-chip.lamp { border-color: #f0dfbd; background: #fff6e7; color: #916222; }
     .path-chip.inactive { border-color: var(--line); background: #f1f3ef; color: #78827a; font-weight: 600; }
-    .night-feedback { min-height: 54px; margin-top: 10px; padding: 11px 14px; border-left: 4px solid #7da6b4; border-radius: 0 12px 12px 0; background: #eef5f7; color: #385968; font-size: .9rem; }
     .night-takeaway { margin-top: 11px; }
     .feedback { min-height: 54px; margin-top: 12px; padding: 12px 14px; border-left: 4px solid #b8cda9; border-radius: 0 12px 12px 0; background: #f0f5eb; color: #365348; }
     .feedback[data-state="good"] { border-left-color: var(--green); }
@@ -252,6 +259,8 @@
           <div class="card-main">
             <h2>為什麼我們看得見東西？</h2>
             <p>我們看見光源，也看見被照亮的物體；兩種情況都需要光進入眼睛，但光走的路徑不同。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我看電影時，銀幕的光直接進入眼睛；可是書頁自己不發光，阿公怎麼也看得見？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先沿著這兩個例子找一找：光從哪裡出發，又怎麼進入眼睛？</p></div>
             <div class="visual">
               <div class="scene-pair">
                 <figure class="scene-example">
@@ -278,6 +287,8 @@
           <div class="card-main">
             <h2>今晚，哪些光讓小葵看得見？</h2>
             <p>切換照向月球的陽光和書桌檯燈，觀察月亮、書頁與光路如何改變。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>那月亮和書頁是不是也都自己發光？把燈關掉後，又會剩下什麼？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先猜一猜，再分別關掉照向月球的陽光和書桌檯燈，觀察畫面。</p></div>
             <div class="night-experiment">
               <div class="night-switches" role="group" aria-label="切換夜間場景中的光源">
                 <button class="light-switch moon-switch" id="moonlight-toggle" type="button" aria-pressed="true" aria-describedby="moonlight-hint">
@@ -298,7 +309,7 @@
 
               </figure>
               <div class="path-legend" id="path-legend" aria-live="polite"></div>
-              <div class="night-feedback" id="night-feedback" aria-live="polite"></div>
+              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p id="night-feedback" aria-live="polite"></p></div>
               <div class="fact night-takeaway"><p><strong>觀察重點：</strong>月亮和書本本身都不發光；月亮反射陽光、書頁反射檯燈的光，這些光進入眼睛後，我們才能看見它們。</p></div>
             </div>
           </div>
@@ -309,6 +320,8 @@
           <div class="card-main">
             <h2>光路會彎嗎？</h2>
             <p>觀察三個小孔是否排成一直線，以及屏幕亮點如何變化。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>現在中間板偏高，屏幕沒有亮點；光會不會自己轉彎，繞過中間板呢？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>試著移動中間板，再讓它稍微偏離，看看三個小孔的燈泡和屏幕亮點有什麼變化。</p></div>
             <div class="aperture-lab">
               <div class="aperture-scene-with-height">
                 <div class="aperture-scene-frame">
@@ -337,6 +350,8 @@
           <div class="card-side"><span class="card-number">04</span><h3>把直線光路連到影子</h3><span class="card-role">不透明物體擋住光</span></div>
           <div class="card-main">
             <h2>影子怎麼形成？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>剛才孔板擋住了光；如果換成一顆不透明球，屏幕上是不是也會留下暗的地方？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>沿著光源到屏幕的路徑看一看，球擋住光之後，屏幕哪裡收不到光？</p></div>
             <p>光源發出的光沿直線前進。當不透明物體擋在光源和屏幕之間，沒有光到達的區域就形成影子。</p>
             <div class="visual">
               <svg viewBox="0 0 720 260" role="img" aria-labelledby="shadow-title shadow-desc">
@@ -361,6 +376,8 @@
           <div class="card-main">
             <h2>影子的大小如何改變？</h2>
             <p>試著移動光源和屏幕之間的遮擋物。觀察它靠近光源或靠近屏幕時，屏幕上的影子有什麼變化。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>物體沒有變，為什麼把它移動後，影子也會變大或變小？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>把遮擋物移近光源，再移近屏幕，比較兩次影子的輪廓。</p></div>
             <div class="visual">
               <svg viewBox="0 0 720 260" role="img" aria-labelledby="shadow-size-title shadow-size-desc">
                 <title id="shadow-size-title">移動遮擋物觀察影子的大小</title><desc id="shadow-size-desc">滑桿可以移動物體在點光源與屏幕之間的位置。物體靠近光源時，屏幕上的影子較大。</desc>
@@ -387,6 +404,8 @@
           <div class="card-main">
             <h2>光傳得有多快？</h2>
             <p>光沿直線傳播，但也需要時間走過距離。以地球和月球的平均距離作例子，感受光速的尺度。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>從地球到月球這麼遠，光要走多久？我平常怎麼感覺不到它在路上呢？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>拖動時間，跟著光點從地球走向月球；看看它是否一開始就到了。</p></div>
             <div class="visual">
               <svg viewBox="0 0 720 210" role="img" aria-labelledby="moon-title moon-desc">
                 <title id="moon-title">光從地球傳到月球的時間示意</title><desc id="moon-desc">圖中顯示地球、月球及兩者之間的光路，路徑長度不按比例。</desc>
@@ -408,6 +427,8 @@
           <div class="card-main">
             <h2>整理：用光路解釋看見與影子</h2>
             <p>一本書本身不發光，卻能被看見；手電筒前方放一個不透明物體，屏幕上會出現影子。哪個說法能解釋這兩個現象？</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我們看過書頁反射光，也看過物體擋住光；我想把這兩種現象用光路一起說清楚。</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>選一個說法，看看它能不能同時解釋看見書本和形成影子。</p></div>
             <div class="choices" role="group" aria-label="選擇能解釋看見書本和形成影子的光路">
               <button class="choice" type="button" data-answer="wrong" aria-pressed="false">書本自己發光；光遇到物體會繞過去</button>
               <button class="choice" type="button" data-answer="right" aria-pressed="false">燈光照到書本後反射進眼睛；不透明物體會擋住直線光路</button>
@@ -431,22 +452,22 @@
         'true-true': {
           image: 'assets/night-scene-both-on.webp',
           alt: '月亮明亮可見，檯燈照亮書頁，小葵在夜裡看書。',
-          text: '月面反射陽光，月光進入小葵的眼睛；檯燈照亮書頁，書頁反射的光也進入她的眼睛。'
+          text: '月亮反射陽光，書頁反射檯燈光；這些反射光都進入我的眼睛。'
         },
         'false-true': {
           image: 'assets/night-scene-sun-off-lamp-on.webp',
           alt: '月亮因沒有陽光照射而變暗；檯燈仍照亮書頁，小葵在夜裡看書。',
-          text: '月球沒有反射陽光，暗下來而難以看見；檯燈仍照亮書頁，小葵可以看書。'
+          text: '照向月球的陽光關掉後，月亮就暗下來；檯燈還亮著，書頁反射的光仍進到我的眼睛。'
         },
         'true-false': {
           image: 'assets/night-scene-sun-on-lamp-off.webp',
           alt: '月亮仍反射陽光而可見；檯燈關閉，室內只剩微弱月光。',
-          text: '月亮仍反射陽光、清楚可見；室內只剩微弱月光，書頁變暗，小葵難以閱讀。'
+          text: '檯燈關掉後，書頁變暗，我難以閱讀；月亮仍反射陽光，所以還看得見。'
         },
         'false-false': {
           image: 'assets/night-scene-both-off.webp',
           alt: '陽光和檯燈都關閉，月亮與書頁都暗下來，只剩微弱輪廓。',
-          text: '兩段光路都中斷，月亮和書頁都暗下來。物體沒有消失，只是沒有足夠的光進入眼睛。'
+          text: '陽光和檯燈都關掉了，月亮和書頁都暗下來。它們沒有消失，只是沒有足夠的光進入我的眼睛。'
         }
       };
       Object.values(nightScenes).forEach(({ image }) => { const preload = new Image(); preload.src = image; });
@@ -561,6 +582,6 @@
       }
     })();
   </script>
-  <script type="module" src="assets/aperture-3d.js?v=aperture-no-alignment-row-20261024"></script>
+  <script type="module" src="assets/aperture-3d.js?v=dialogue-story-20261024"></script>
 </body>
 </html>
