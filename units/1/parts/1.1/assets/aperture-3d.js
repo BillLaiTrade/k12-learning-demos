@@ -154,6 +154,8 @@ if (canvas) {
   const result = document.querySelector('#aperture-result');
   const resultText = result.querySelector('span:last-child');
   let selectedIndex = 1;
+  const standardHeightTolerance = 0.02;
+  const fullBlockOffset = 0.36;
   const selectableSurfaces = plates.map(({ pickSurface }) => pickSurface);
 
   const updateExperiment = () => {
@@ -169,27 +171,30 @@ if (canvas) {
     const selected = plateStates[selectedIndex];
     heightInput.value = String(Math.round(selected.height / 0.62 * 100));
     const heightPercent = Number(heightInput.value);
-    const isStandardHeight = Math.abs(selected.height) <= 0.02;
-    heightOutput.textContent = isStandardHeight ? '標準高度' : heightPercent > 0 ? '偏高' : '偏低';
+    const selectedDeviation = Math.abs(selected.height);
+    const isStandardHeight = selectedDeviation <= standardHeightTolerance;
+    const isFullyBlocked = selectedDeviation >= fullBlockOffset;
+    heightOutput.textContent = isStandardHeight ? '標準高度' : isFullyBlocked ? (heightPercent > 0 ? '偏高' : '偏低') : (heightPercent > 0 ? '略微偏高' : '略微偏低');
     heightOutput.classList.toggle('is-standard', isStandardHeight);
     const plateNames = ['小孔板 1', '中間板', '小孔板 3'];
     plateButtons.forEach((button, index) => {
-      const letsLightThrough = Math.abs(plateStates[index].height) <= 0.02;
+      const letsLightThrough = Math.abs(plateStates[index].height) < fullBlockOffset;
       button.classList.toggle('is-transmitting', letsLightThrough);
-      button.setAttribute('aria-label', `${plateNames[index]}，${letsLightThrough ? '小孔對準，光可通過' : '小孔偏移，光受阻'}`);
-      button.title = letsLightThrough ? '小孔對準光路' : '小孔偏離光路';
+      button.setAttribute('aria-label', `${plateNames[index]}，${letsLightThrough ? '仍有光通過' : '偏移過大，光被擋住'}`);
+      button.title = letsLightThrough ? '仍有光通過這片小孔板' : '偏移過大，光被這片小孔板擋住';
     });
     selectedLabel.textContent = `調整${plateNames[selectedIndex]}`;
     const maxDeviation = Math.max(...plateStates.map((state) => Math.abs(state.height)));
-    const transmission = maxDeviation <= 0.02 ? 1 : 0;
+    const transmission = THREE.MathUtils.clamp(1 - maxDeviation / fullBlockOffset, 0, 1);
     mats.spot.opacity = transmission;
     mats.spotGlow.opacity = transmission * 0.34;
     spot.scale.setScalar(0.72 + transmission * 0.28);
     spotGlow.scale.setScalar(0.6 + transmission * 0.4);
-    alignmentOutput.textContent = transmission > 0 ? '小孔對齊' : '小孔沒有對齊';
-    result.classList.toggle('is-blocked', transmission < 0.2);
-    if (transmission > 0) resultText.textContent = '三個小孔排成一直線，屏幕上出現清楚亮點。';
-    else resultText.textContent = '光被偏移的小孔板擋住，屏幕亮點消失。';
+    alignmentOutput.textContent = isStandardHeight && maxDeviation <= standardHeightTolerance ? '小孔對齊' : transmission > 0 ? '小孔略有偏移' : '小孔沒有對齊';
+    result.classList.toggle('is-blocked', transmission <= 0);
+    if (maxDeviation <= standardHeightTolerance) resultText.textContent = '三個小孔排成一直線，屏幕上出現清楚亮點。';
+    else if (transmission > 0) resultText.textContent = '小孔略有偏移，仍有部分光線通過，屏幕亮點變暗。';
+    else resultText.textContent = '光被偏移過大的小孔板擋住，屏幕亮點消失。';
   };
 
   const selectPlate = (index) => {
