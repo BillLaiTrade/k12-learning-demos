@@ -268,7 +268,9 @@ if (canvas) {
     if (!width || !height) return;
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
+    camera.fov = camera.aspect < 1.15 ? 50 : 38;
     camera.updateProjectionMatrix();
+    updateCamera();
   };
   new ResizeObserver(resize).observe(canvas);
   resize();
