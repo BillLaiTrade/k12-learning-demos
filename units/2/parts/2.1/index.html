@@ -249,7 +249,7 @@
                 <path d="M40 140H680" class="equilibrium"/>
                 <path id="amplitude-wave" d="M40 140 C90 140 105 62 160 62 S230 218 285 218 S355 62 410 62 S480 218 535 218 S605 62 660 62" class="wave-line"/>
                 <circle id="amplitude-peak" cx="160" cy="62" r="6" fill="#176b53"/><circle id="amplitude-trough" cx="285" cy="218" r="6" fill="#176b53"/>
-                <text x="600" y="131">平衡位置</text><text x="160" y="37" text-anchor="middle">波峰</text><text x="285" y="251" text-anchor="middle">波谷</text>
+                <text x="600" y="131">平衡位置</text><text x="160" y="22" text-anchor="middle">波峰</text><text x="285" y="260" text-anchor="middle">波谷</text>
                 <path id="amplitude-measure" d="M185 140V80" class="measure" marker-start="url(#arrow-a)" marker-end="url(#arrow-a)"/><text id="amplitude-label" x="202" y="110">A = 0.5 m</text>
                 <path id="peak-trough-measure" d="M322 80V200" stroke="#82978a" stroke-width="2" stroke-dasharray="5 5" marker-start="url(#arrow-a)" marker-end="url(#arrow-a)"/><text id="twice-amplitude-label" x="337" y="144">2A = 1.0 m</text>
                 <text class="small-label" x="54" y="274">示意圖使用橫波的上下位移呈現介質偏離平衡位置的距離</text>
@@ -472,12 +472,12 @@
       const amplitudeOutput=document.querySelector("#amplitude-output");
       const twiceAmplitudeOutput=document.querySelector("#twice-amplitude-output");
       const updateAmplitudeModel=()=>{
-        const amplitude=Number(amplitudeSlider.value);const pixels=amplitude*120;const top=140-pixels;const bottom=140+pixels;let d="M 40 140";
-        for(let x=40;x<=660;x+=4){const y=140-pixels*Math.cos((2*Math.PI*(x-160))/250);d+=` L ${x} ${y.toFixed(2)}`;}
+        const amplitude=Number(amplitudeSlider.value);const pixels=amplitude*120;const top=140-pixels;const bottom=140+pixels;const startY=140-pixels*Math.cos((2*Math.PI*(40-160))/250);let d=`M 40 ${startY.toFixed(2)}`;
+        for(let x=44;x<=660;x+=4){const y=140-pixels*Math.cos((2*Math.PI*(x-160))/250);d+=` L ${x} ${y.toFixed(2)}`;}
         amplitudeWave.setAttribute("d",d);amplitudePeak.setAttribute("cy",String(top));amplitudeTrough.setAttribute("cy",String(bottom));
         amplitudeMeasure.setAttribute("d",`M185 140V${top}`);peakTroughMeasure.setAttribute("d",`M322 ${top}V${bottom}`);
         amplitudeLabel.textContent=`A = ${amplitude.toFixed(1)} m`;amplitudeLabel.setAttribute("y",String(140-pixels/2+5));
-        twiceAmplitudeLabel.textContent=`2A = ${(amplitude*2).toFixed(1)} m`;twiceAmplitudeLabel.setAttribute("y","145");
+        twiceAmplitudeLabel.textContent=`2A = ${(amplitude*2).toFixed(1)} m`;twiceAmplitudeLabel.setAttribute("y","130");
         amplitudeOutput.textContent=`${amplitude.toFixed(1)} m`;twiceAmplitudeOutput.textContent=`${(amplitude*2).toFixed(1)} m`;
       };
       amplitudeSlider.addEventListener("input",updateAmplitudeModel);updateAmplitudeModel();
