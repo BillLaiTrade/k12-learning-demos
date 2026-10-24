@@ -112,6 +112,8 @@ if (canvas) {
 
   const homeX = [-2.35, 0, 2.35];
   const plateStates = homeX.map((x) => ({ x, height: 0 }));
+  const plateGap = 0.16;
+  const railLimits = { min: -3.65, max: 3.85 };
   const plates = [];
   const makePlate = (index) => {
     const carriage = new THREE.Group();
@@ -217,6 +219,7 @@ if (canvas) {
   let pointerDragged = false;
   let movingPlateIndex = null;
   let plateDragStart = null;
+  let plateDragPositions = null;
   const findPlateAt = (clientX, clientY) => {
     const bounds = canvas.getBoundingClientRect();
     const pointer = new THREE.Vector2(
@@ -249,6 +252,7 @@ if (canvas) {
         selectPlate(movingPlateIndex);
         const state = plateStates[movingPlateIndex];
         plateDragStart = { x: state.x, y: 1.28 + state.height, screen: projectWorldPoint(state.x, 1.28 + state.height) };
+        plateDragPositions = plateStates.map((plateState) => plateState.x);
         canvas.style.cursor = 'grabbing';
       }
     } else {
@@ -287,9 +291,34 @@ if (canvas) {
           const dy = event.clientY - pointerStart[1];
           const moveX = (dx * d - b * dy) / determinant;
           const moveY = (a * dy - dx * c) / determinant;
-          const state = plateStates[movingPlateIndex];
-          state.x = THREE.MathUtils.clamp(plateDragStart.x + moveX, homeX[movingPlateIndex] - 0.82, homeX[movingPlateIndex] + 0.82);
-          state.height = THREE.MathUtils.clamp(plateDragStart.y + moveY - 1.28, -0.62, 0.62);
+          const desiredX = plateDragStart.x + moveX;
+          const positions = [...plateDragPositions];
+          positions[movingPlateIndex] = desiredX;
+          if (desiredX >= plateDragPositions[movingPlateIndex]) {
+            for (let index = movingPlateIndex + 1; index < positions.length; index += 1) {
+              positions[index] = Math.max(positions[index], positions[index - 1] + plateGap);
+            }
+            const overflow = Math.max(0, positions.at(-1) - railLimits.max);
+            if (overflow) {
+              positions[movingPlateIndex] -= overflow;
+              for (let index = movingPlateIndex + 1; index < positions.length; index += 1) {
+                positions[index] = Math.max(plateDragPositions[index], positions[index - 1] + plateGap);
+              }
+            }
+          } else {
+            for (let index = movingPlateIndex - 1; index >= 0; index -= 1) {
+              positions[index] = Math.min(positions[index], positions[index + 1] - plateGap);
+            }
+            const overflow = Math.max(0, railLimits.min - positions[0]);
+            if (overflow) {
+              positions[movingPlateIndex] += overflow;
+              for (let index = movingPlateIndex - 1; index >= 0; index -= 1) {
+                positions[index] = Math.min(plateDragPositions[index], positions[index + 1] - plateGap);
+              }
+            }
+          }
+          plateStates.forEach((state, index) => { state.x = positions[index]; });
+          plateStates[movingPlateIndex].height = THREE.MathUtils.clamp(plateDragStart.y + moveY - 1.28, -0.62, 0.62);
           updateExperiment();
         }
       }
@@ -310,6 +339,7 @@ if (canvas) {
     if (activePointers.size === 0) {
       pointerStart = null;
       plateDragStart = null;
+      plateDragPositions = null;
       movingPlateIndex = null;
       pointerDragged = false;
       canvas.style.cursor = 'grab';
