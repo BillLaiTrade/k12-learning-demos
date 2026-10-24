@@ -545,10 +545,11 @@
         const fixedPointRope=fixedPointSvg.querySelector(".rope-underlay");
         let fixedPointX=350;
         const fixedPointMin=46, fixedPointMax=714, fixedPointBaseline=142, fixedPointAmplitude=46;
-        let fixedPointStart=0;
+        let fixedPointStart=0, fixedPointOffset=0;
         const setFixedPointX=x=>{
           fixedPointX=Math.max(fixedPointMin,Math.min(fixedPointMax,Math.round(x)));
           fixedPointMarker.setAttribute("cx",String(fixedPointX));
+          fixedPointMarker.setAttribute("cy",String(fixedPointBaseline-waveAt(fixedPointX,fixedPointOffset,fixedPointAmplitude)));
           fixedPointMarker.setAttribute("aria-valuenow",String(fixedPointX));
           fixedPointMarker.setAttribute("aria-valuetext",`繩上位置 ${fixedPointX}`);
           fixedPointGuide.setAttribute("d",`M${fixedPointX} 90V194`);
@@ -576,12 +577,12 @@
         const renderFixedPointWave=time=>{
           if(!fixedPointStart)fixedPointStart=time;
           const elapsed=reducedMotion?0:(time-fixedPointStart)/1000;
-          const offset=(elapsed*132)%232;
-          let path=`M 46 ${fixedPointBaseline-waveAt(46,offset,fixedPointAmplitude)}`;
-          for(let x=49;x<=714;x+=3)path+=` L ${x} ${fixedPointBaseline-waveAt(x,offset,fixedPointAmplitude)}`;
+          fixedPointOffset=(elapsed*132)%232;
+          let path=`M 46 ${fixedPointBaseline-waveAt(46,fixedPointOffset,fixedPointAmplitude)}`;
+          for(let x=49;x<=714;x+=3)path+=` L ${x} ${fixedPointBaseline-waveAt(x,fixedPointOffset,fixedPointAmplitude)}`;
           fixedPointRope.setAttribute("d",path);
           renderRopeTexture(fixedPointRope);
-          fixedPointMarker.setAttribute("cy",String(fixedPointBaseline-waveAt(fixedPointX,offset,fixedPointAmplitude)));
+          fixedPointMarker.setAttribute("cy",String(fixedPointBaseline-waveAt(fixedPointX,fixedPointOffset,fixedPointAmplitude)));
           if(!reducedMotion)window.requestAnimationFrame(renderFixedPointWave);
         };
         window.requestAnimationFrame(renderFixedPointWave);
