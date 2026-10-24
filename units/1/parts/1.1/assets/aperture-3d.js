@@ -145,9 +145,7 @@ if (canvas) {
   homeX.forEach((_, index) => makePlate(index));
 
   const plateButtons = [...document.querySelectorAll('[data-plate]')];
-  const depthInput = document.querySelector('#aperture-depth');
   const heightInput = document.querySelector('#aperture-offset');
-  const depthOutput = document.querySelector('#aperture-depth-output');
   const heightOutput = document.querySelector('#aperture-offset-output');
   const selectedLabel = document.querySelector('#aperture-selected-label');
   const alignmentOutput = document.querySelector('#aperture-alignment-output');
@@ -167,11 +165,8 @@ if (canvas) {
       collar.position.y = 0.19 + post.scale.y - 0.03;
     });
     const selected = plateStates[selectedIndex];
-    depthInput.value = String(Math.round((selected.x - homeX[selectedIndex]) / 0.82 * 100));
     heightInput.value = String(Math.round(selected.height / 0.62 * 100));
-    const depthPercent = Number(depthInput.value);
     const heightPercent = Number(heightInput.value);
-    depthOutput.textContent = Math.abs(depthPercent) < 2 ? '基準位置' : depthPercent > 0 ? '向屏幕移動' : '向光源移動';
     heightOutput.textContent = Math.abs(heightPercent) < 2 ? '光孔等高' : heightPercent > 0 ? '高於基準' : '低於基準';
     selectedLabel.textContent = `調整小孔板 ${selectedIndex + 1}`;
     const maxDeviation = Math.max(...plateStates.map((state) => Math.abs(state.height)));
@@ -195,10 +190,6 @@ if (canvas) {
   plateButtons.forEach((button) => button.addEventListener('click', () => {
     selectPlate(Number(button.dataset.plate));
   }));
-  depthInput.addEventListener('input', () => {
-    plateStates[selectedIndex].x = homeX[selectedIndex] + Number(depthInput.value) / 100 * 0.82;
-    updateExperiment();
-  });
   heightInput.addEventListener('input', () => {
     plateStates[selectedIndex].height = Number(heightInput.value) / 100 * 0.62;
     updateExperiment();
