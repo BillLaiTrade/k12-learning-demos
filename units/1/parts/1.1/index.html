@@ -78,6 +78,27 @@
     .visual { margin: 20px 0; padding: 20px; border: 1px solid var(--line); border-radius: 20px; background: #f6f8f3; }
     .visual svg { display: block; width: 100%; height: auto; }
     .visual-caption { margin: 8px 2px 0; color: var(--muted); font-size: .84rem; }
+    .shadow-lab { margin: 16px 0; }
+    .shadow-scene-frame { position: relative; height: clamp(320px, 46vw, 480px); overflow: hidden; border: 1px solid #dbe2d8; border-radius: 17px; background: linear-gradient(#e9eee8, #f6f1e6); box-shadow: 0 5px 18px #243a3514; }
+    #shadow-3d-scene { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+    #shadow-3d-scene:active { cursor: grabbing; }
+    .shadow-scene-actions { position: absolute; z-index: 2; top: 10px; left: 10px; }
+    .shadow-scene-action { min-height: 44px; padding: 7px 13px; border: 1px solid #aebfae; border-radius: 11px; background: rgb(255 253 248 / 97%); color: #213a32; font-size: .9rem; font-weight: 800; box-shadow: 0 3px 9px #243a351a; backdrop-filter: blur(4px); }
+    .shadow-scene-action:hover, .shadow-scene-action:focus-visible { border-color: var(--green); outline: 2px solid rgb(23 107 83 / 12%); }
+    .shadow-scene-status { position: absolute; right: 12px; bottom: 12px; max-width: min(80%, 420px); margin: 0; padding: 8px 12px; border: 1px solid #d7dfd3; border-radius: 11px; background: rgb(255 253 248 / 94%); color: #405851; font-size: .84rem; line-height: 1.4; box-shadow: 0 2px 8px #243a3512; }
+    .shadow-controls { display: grid; grid-template-columns: minmax(0, 1fr) minmax(210px, 1.2fr) minmax(0, 1fr); align-items: center; gap: 12px; margin-top: 11px; }
+    .shadow-fixed-label { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 8px; border: 1px solid var(--line); border-radius: 13px; background: #fffdf8; color: #52665d; font-size: .87rem; font-weight: 750; text-align: center; }
+    .shadow-fixed-label span { color: var(--green); }
+    .shadow-block-toggle { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 58px; padding: 8px 12px 8px 15px; border: 1px solid #b8cdb9; border-radius: 14px; background: #edf4eb; color: var(--ink); text-align: left; }
+    .shadow-block-toggle:hover, .shadow-block-toggle:focus-visible { border-color: var(--green); outline: 2px solid rgb(23 107 83 / 12%); }
+    .shadow-toggle-copy strong, .shadow-toggle-copy small { display: block; }
+    .shadow-toggle-copy strong { color: #315a46; font-size: .92rem; }
+    .shadow-toggle-copy small { margin-top: 1px; color: var(--muted); font-size: .76rem; }
+    .shadow-toggle-track { position: relative; display: block; width: 43px; height: 25px; border-radius: 99px; background: #b7c1b8; transition: background .2s ease; }
+    .shadow-toggle-track i { position: absolute; top: 3px; left: 3px; width: 19px; height: 19px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px #18362935; transition: transform .25s ease; }
+    .shadow-block-toggle[aria-pressed="true"] { border-color: #91b69c; background: #e4f0e6; }
+    .shadow-block-toggle[aria-pressed="true"] .shadow-toggle-track { background: var(--green); }
+    .shadow-block-toggle[aria-pressed="true"] .shadow-toggle-track i { transform: translateX(18px); }
     .scene-pair { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
     .scene-example { min-width: 0; margin: 0; padding: 24px; border: 1px solid #e5dfd1; border-radius: 20px; background: #fffdf8; box-shadow: 0 5px 16px #243a3509; }
     .scene-example-head { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; }
@@ -203,6 +224,11 @@
       .scene-example-head h3 { font-size: 1.02rem; }
       .scene-summary { margin-bottom: 12px; font-size: .88rem; }
       .scene-path { margin-top: 12px; font-size: .88rem; }
+      .shadow-scene-frame { height: clamp(290px, 82vw, 390px); }
+      .shadow-controls { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+      .shadow-block-toggle { grid-column: 1 / -1; grid-row: 1; }
+      .shadow-fixed-label { min-height: 44px; font-size: .8rem; }
+      .shadow-scene-status { right: 8px; bottom: 8px; max-width: 78%; padding: 7px 9px; font-size: .76rem; }
     }
     @media (max-width: 460px) {
       .shell { width: calc(100% - 20px); }
@@ -363,19 +389,21 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>剛才孔板擋住了光；如果換成一顆不透明球，屏幕上是不是也會留下暗的地方？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>沿著光源到屏幕的路徑看一看，球擋住光之後，屏幕哪裡收不到光？</p></div>
             <p>光源發出的光沿直線前進。當不透明物體擋在光源和屏幕之間，沒有光到達的區域就形成影子。</p>
-            <div class="visual">
-              <svg viewBox="0 0 720 260" role="img" aria-labelledby="shadow-title shadow-desc">
-                <title id="shadow-title">不透明物體擋住光，在屏幕上形成影子</title><desc id="shadow-desc">點光源發出的光沿直線前進，被球形不透明物體擋住，屏幕上出現暗色影子。</desc>
-                <defs><linearGradient id="shadow-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8f3e5"/><stop offset="1" stop-color="#edf4ef"/></linearGradient><radialGradient id="shadow-glow"><stop stop-color="#ffe9ad" stop-opacity=".8"/><stop offset="1" stop-color="#ffe9ad" stop-opacity="0"/></radialGradient><marker id="shadow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d99a36"/></marker></defs>
-                <rect width="720" height="260" rx="14" fill="url(#shadow-bg)"/><circle cx="90" cy="130" r="74" fill="url(#shadow-glow)"/>
-                <circle cx="90" cy="130" r="23" fill="#ffd46b" stroke="#bd8a27" stroke-width="4"/><path d="M90 103v54M63 130h54M71 111l38 38M109 111l-38 38" stroke="#fff4c8" stroke-width="3" stroke-linecap="round"/>
-                <path d="M113 130 332 94 624 55M113 130 332 166 624 205" fill="none" stroke="#d99a36" stroke-width="4" stroke-linecap="round" marker-end="url(#shadow-arrow)"/>
-                <path d="M348 75a36 36 0 1 1-1 0Z" fill="#71827b" stroke="#445951" stroke-width="4"/><path d="M327 61q17-18 36-5" fill="none" stroke="#aebbb4" stroke-width="4" stroke-linecap="round"/>
-                <path d="M625 35v190" stroke="#526f65" stroke-width="9" stroke-linecap="round"/><rect x="615" y="109" width="19" height="42" rx="5" fill="#42534d"/>
-                <text x="90" y="204" text-anchor="middle" fill="#52665d" font-size="15" font-weight="700">光源</text><text x="348" y="232" text-anchor="middle" fill="#52665d" font-size="15" font-weight="700">不透明物體</text><text x="664" y="132" fill="#52665d" font-size="15" font-weight="700">屏幕</text>
-                <rect x="206" y="25" width="133" height="27" rx="13" fill="#fffdf8" stroke="#ead8b6"/><text x="272" y="43" text-anchor="middle" fill="#8a672d" font-size="13" font-weight="700">直線光路</text>
-              </svg>
-              <p class="visual-caption">球擋住部分光，屏幕上相應的位置收不到光，於是出現影子。</p>
+            <div class="shadow-lab">
+              <div class="shadow-scene-frame">
+                <canvas id="shadow-3d-scene" role="img" aria-label="可旋轉觀察的立體影子實驗：光源與屏幕固定，球體沿導軌移入或退出光路。" aria-describedby="shadow-scene-status shadow-view-hint"></canvas>
+                <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-view-reset" type="button">重設視角</button></div>
+                <p class="shadow-scene-status" id="shadow-scene-status" aria-live="polite">球體停在光路旁，屏幕均勻受光。</p>
+              </div>
+              <div class="shadow-controls" role="group" aria-label="影子形成實驗控制">
+                <div class="shadow-fixed-label"><span aria-hidden="true">●</span>光源固定</div>
+                <button class="shadow-block-toggle" id="shadow-block-toggle" type="button" aria-pressed="false" aria-label="將遮擋球沿導軌滑入光路">
+                  <span class="shadow-toggle-copy"><strong>遮擋物</strong><small id="shadow-toggle-label">滑入光路</small></span>
+                  <span class="shadow-toggle-track" aria-hidden="true"><i></i></span>
+                </button>
+                <div class="shadow-fixed-label"><span aria-hidden="true">▯</span>屏幕固定</div>
+              </div>
+              <p class="visual-caption" id="shadow-view-hint">球體沿導軌滑入光路時，影子逐漸出現在屏幕上；淡金色線條是光路示意。拖曳場景可旋轉觀察，滾輪或雙指可縮放。</p>
             </div>
             <div class="fact"><p><strong>形成原因：</strong>影子不是物體發出的，而是光被不透明物體遮住後留下的暗區。</p></div>
           </div>
@@ -593,5 +621,6 @@
     })();
   </script>
   <script type="module" src="assets/aperture-3d.js?v=dialogue-story-20261024"></script>
+  <script type="module" src="assets/shadow-3d.js?v=shadow-lab-20261024"></script>
 </body>
 </html>
