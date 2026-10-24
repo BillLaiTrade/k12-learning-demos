@@ -103,14 +103,6 @@
     .lamp-switch[aria-pressed="true"] .switch-status { color: #9b681d; }
     .night-scene { position: relative; margin: 0; overflow: hidden; border: 1px solid #263d48; border-radius: 17px; background: #07172a; box-shadow: 0 5px 18px #243a3514; }
     .night-scene img { display: block; width: 100%; height: auto; aspect-ratio: 1672 / 941; object-fit: cover; }
-    .light-rays { position: absolute; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
-    .ray-path { opacity: 1; transition: opacity .25s ease; }
-    .ray-path[hidden] { display: none; }
-    .ray { fill: none; stroke: #c6edff; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; filter: url(#ray-glow); }
-    .sun-ray { stroke-dasharray: 10 13; stroke-width: 4; opacity: .88; }
-    .lamp-ray, .book-ray { stroke: #ffd16f; }
-    .ray-point { fill: #f8fdff; stroke: #83d7ff; stroke-width: 5; }
-    .lamp-point { fill: #fff9e8; stroke: #f2b949; }
     .path-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
     .path-chip { padding: 6px 10px; border: 1px solid #dce7e8; border-radius: 10px; background: #eef6f8; color: #426e84; font-size: .79rem; font-weight: 750; }
     .path-chip.lamp { border-color: #f0dfbd; background: #fff6e7; color: #916222; }
@@ -267,21 +259,7 @@
               </div>
               <figure class="night-scene">
                 <img id="night-scene-image" src="assets/night-scene-both-on.webp" alt="夜晚的小葵在檯燈下看書，窗外月亮明亮可見。">
-                <svg class="light-rays" viewBox="0 0 1672 941" preserveAspectRatio="none" aria-hidden="true">
-                  <defs>
-                    <filter id="ray-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                  </defs>
-                  <g id="moon-ray-path" class="ray-path">
-                    <path d="M18 174 286 174" class="ray sun-ray"/>
-                    <path d="M298 178 1118 365" class="ray moon-ray"/>
-                    <circle cx="292" cy="176" r="7" class="ray-point moon-point"/>
-                  </g>
-                  <g id="lamp-ray-path" class="ray-path">
-                    <path d="M802 370 811 716" class="ray lamp-ray"/>
-                    <path d="M814 716 1118 369" class="ray book-ray"/>
-                    <circle cx="811" cy="716" r="7" class="ray-point lamp-point"/>
-                  </g>
-                </svg>
+
               </figure>
               <div class="path-legend" id="path-legend" aria-live="polite"></div>
               <div class="night-feedback" id="night-feedback" aria-live="polite"></div>
@@ -424,8 +402,6 @@
       const moonToggle = document.querySelector('#moonlight-toggle');
       const lampToggle = document.querySelector('#lamp-toggle');
       const nightImage = document.querySelector('#night-scene-image');
-      const moonPath = document.querySelector('#moon-ray-path');
-      const lampPath = document.querySelector('#lamp-ray-path');
       const nightFeedback = document.querySelector('#night-feedback');
       const pathLegend = document.querySelector('#path-legend');
       const nightScenes = {
@@ -459,8 +435,6 @@
         nightImage.alt = state.alt;
         moonToggle.querySelector('.switch-status').textContent = moonOn ? '開啟' : '關閉';
         lampToggle.querySelector('.switch-status').textContent = lampOn ? '開啟' : '關閉';
-        moonPath.hidden = !moonOn;
-        lampPath.hidden = !lampOn;
         pathLegend.innerHTML = `${moonOn ? '<span class="path-chip">陽光 → 月球 → 眼睛</span>' : '<span class="path-chip inactive">月亮的反射光路中斷</span>'}${lampOn ? '<span class="path-chip lamp">檯燈 → 書頁 → 眼睛</span>' : '<span class="path-chip inactive">檯燈照明光路中斷</span>'}`;
         nightFeedback.textContent = state.text;
       };
