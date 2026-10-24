@@ -169,8 +169,16 @@ if (canvas) {
     const selected = plateStates[selectedIndex];
     heightInput.value = String(Math.round(selected.height / 0.62 * 100));
     const heightPercent = Number(heightInput.value);
-    heightOutput.textContent = Math.abs(heightPercent) < 2 ? '標準' : heightPercent > 0 ? '偏高' : '偏低';
+    const isStandardHeight = Math.abs(selected.height) <= 0.02;
+    heightOutput.textContent = isStandardHeight ? '標準高度' : heightPercent > 0 ? '偏高' : '偏低';
+    heightOutput.classList.toggle('is-standard', isStandardHeight);
     const plateNames = ['小孔板 1', '中間板', '小孔板 3'];
+    plateButtons.forEach((button, index) => {
+      const letsLightThrough = Math.abs(plateStates[index].height) <= 0.05;
+      button.classList.toggle('is-transmitting', letsLightThrough);
+      button.setAttribute('aria-label', `${plateNames[index]}，${letsLightThrough ? '小孔對準，光可通過' : '小孔偏移，光受阻'}`);
+      button.title = letsLightThrough ? '小孔對準光路' : '小孔偏離光路';
+    });
     selectedLabel.textContent = `調整${plateNames[selectedIndex]}`;
     const maxDeviation = Math.max(...plateStates.map((state) => Math.abs(state.height)));
     const transmission = THREE.MathUtils.clamp(1 - maxDeviation / 0.36, 0, 1);

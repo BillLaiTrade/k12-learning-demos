@@ -133,13 +133,16 @@
     .aperture-scene-action { min-height: 44px; padding: 7px 13px; border: 1px solid #aebfae; border-radius: 11px; background: rgb(255 253 248 / 97%); color: #213a32; font-size: .9rem; font-weight: 800; box-shadow: 0 3px 9px #243a351a; backdrop-filter: blur(4px); }
     .aperture-scene-action:hover, .aperture-scene-action:focus-visible { border-color: var(--green); outline: 2px solid rgb(23 107 83 / 12%); }
     .aperture-height-control { display: flex; flex-direction: column; align-items: center; justify-content: space-between; min-width: 0; padding: 10px 6px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
-    .aperture-height-control output { min-height: 3em; color: #125840; font-size: .78rem; font-weight: 850; line-height: 1.35; text-align: center; }
+    .aperture-height-control output { box-sizing: border-box; width: 100%; min-height: 2em; padding: 5px 2px; border-radius: 8px; color: #125840; font-size: .78rem; font-weight: 850; line-height: 1.35; text-align: center; }
+    .aperture-height-control output.is-standard { background: #176b53; color: #fffdf8; box-shadow: 0 2px 6px #176b5330; }
     .aperture-height-arrow { color: #73827b; font-size: .8rem; line-height: 1; }
     #aperture-offset { display: block; flex: 1 1 0; width: 100%; min-height: 0; height: 0; margin: 4px 0; accent-color: var(--green); writing-mode: vertical-lr; direction: rtl; touch-action: none; }
     .equipment-labels { display: grid; grid-template-columns: 1.2fr repeat(3, 1fr) 1.1fr; gap: 4px; margin: 7px 4px 13px; color: var(--muted); font-size: .72rem; text-align: center; }
     .equipment-labels button { min-width: 0; min-height: 32px; padding: 2px 3px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: inherit; font: inherit; text-align: center; white-space: nowrap; cursor: pointer; }
     .equipment-labels button:hover { background: #f1f5ef; color: var(--green); }
     .equipment-labels button[aria-pressed="true"] { border-color: #c6dccb; background: var(--green-pale); color: var(--green); font-weight: 800; }
+    .aperture-through-icon { display: none; width: 14px; height: 14px; margin-left: 3px; vertical-align: -3px; filter: drop-shadow(0 1px 1px #9a741c45); }
+    .equipment-labels button.is-transmitting .aperture-through-icon { display: inline-block; }
     .equipment-labels button:focus-visible { outline: 3px solid rgb(23 107 83 / 28%); outline-offset: 1px; }
     .aperture-selected-readout { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 2px 10px; }
     .aperture-selected-readout strong { color: var(--ink); font-size: .9rem; }
@@ -155,7 +158,7 @@
       #aperture-3d-scene { height: 300px; }
       .aperture-scene-with-height { grid-template-columns: minmax(0, 1fr) 52px; gap: 7px; }
       .aperture-height-control { padding: 9px 3px; }
-      .aperture-height-control output { font-size: .68rem; }
+      .aperture-height-control output { padding-inline: 0; font-size: .66rem; letter-spacing: -.055em; }
       .equipment-labels { font-size: .64rem; gap: 1px; }
       .aperture-scene-actions { top: 8px; left: 8px; gap: 6px; }
       .aperture-scene-action { min-height: 42px; padding: 6px 11px; font-size: .84rem; }
@@ -319,13 +322,13 @@
                   </div>
                 </div>
                 <div class="aperture-height-control">
-                  <output id="aperture-offset-output">標準</output>
+                  <output id="aperture-offset-output" class="is-standard">標準高度</output>
                   <span class="aperture-height-arrow" aria-hidden="true">↑</span>
                   <input id="aperture-offset" type="range" min="-100" max="100" step="1" value="0" aria-label="上下調整選取小孔板的高度">
                   <span class="aperture-height-arrow" aria-hidden="true">↓</span>
                 </div>
               </div>
-              <div class="equipment-labels"><span>光源</span><button type="button" data-plate="0" aria-pressed="false">小孔板 1</button><button type="button" data-plate="1" aria-pressed="true">中間板</button><button type="button" data-plate="2" aria-pressed="false">小孔板 3</button><span>屏幕</span></div>
+              <div class="equipment-labels"><span>光源</span><button type="button" data-plate="0" aria-pressed="false">小孔板 1<svg class="aperture-through-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4m-2-20a7 7 0 0 0-4.2 12.6c.8.6 1.2 1.3 1.2 2.4h6c0-1.1.4-1.8 1.2-2.4A7 7 0 0 0 12 1Z" fill="#f5c64d" stroke="#9b701b" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 5.2a4.2 4.2 0 0 0-2.1 4" fill="none" stroke="#fff4c2" stroke-width="1.4" stroke-linecap="round"/></svg></button><button type="button" data-plate="1" aria-pressed="true">中間板<svg class="aperture-through-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4m-2-20a7 7 0 0 0-4.2 12.6c.8.6 1.2 1.3 1.2 2.4h6c0-1.1.4-1.8 1.2-2.4A7 7 0 0 0 12 1Z" fill="#f5c64d" stroke="#9b701b" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 5.2a4.2 4.2 0 0 0-2.1 4" fill="none" stroke="#fff4c2" stroke-width="1.4" stroke-linecap="round"/></svg></button><button type="button" data-plate="2" aria-pressed="false">小孔板 3<svg class="aperture-through-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4m-2-20a7 7 0 0 0-4.2 12.6c.8.6 1.2 1.3 1.2 2.4h6c0-1.1.4-1.8 1.2-2.4A7 7 0 0 0 12 1Z" fill="#f5c64d" stroke="#9b701b" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 5.2a4.2 4.2 0 0 0-2.1 4" fill="none" stroke="#fff4c2" stroke-width="1.4" stroke-linecap="round"/></svg></button><span>屏幕</span></div>
               <div class="aperture-selected-readout"><strong id="aperture-selected-label">調整中間板</strong><output id="aperture-alignment-output">小孔對齊</output></div>
               <div class="aperture-result" id="aperture-result" aria-live="polite"><span class="aperture-result-dot" aria-hidden="true"></span><span>三個小孔排成一直線，屏幕上出現亮點。</span></div>
               <p class="aperture-observation">小孔前後距離改變時，只要仍排成直線，光就能通過；小孔偏離直線，光會被板片擋住，屏幕亮點便會變暗或消失。</p>
@@ -562,6 +565,6 @@
       }
     })();
   </script>
-  <script type="module" src="assets/aperture-3d.js?v=plate-collision-push-20261024"></script>
+  <script type="module" src="assets/aperture-3d.js?v=aperture-bulb-standard-20261024"></script>
 </body>
 </html>
