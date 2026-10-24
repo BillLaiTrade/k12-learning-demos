@@ -35,7 +35,11 @@
     .brand-row { font-size: .9rem; font-weight: 750; }
     .crumb { color: var(--muted); font-weight: 500; }
     .back-link { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; }
-    .hero { max-width: 780px; padding: 36px 0 28px; }
+    .hero-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(320px, .9fr); align-items: center; gap: 26px; padding: 36px 0 28px; }
+    .hero { min-width: 0; }
+    .hero h1 { font-size: clamp(2rem, 3.8vw, 3.2rem); }
+    .hero-art { min-width: 0; margin: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); }
+    .hero-art img { display: block; width: 100%; height: auto; aspect-ratio: 1672 / 941; object-fit: cover; }
     .eyebrow { color: var(--green); font-size: .82rem; font-weight: 800; letter-spacing: .12em; }
     h1 { margin: 8px 0 12px; font-size: clamp(2rem, 4.4vw, 3.55rem); line-height: 1.18; letter-spacing: -.04em; }
     .hero p { margin: 0; color: var(--muted); font-size: 1.08rem; }
@@ -179,7 +183,9 @@
     footer { padding: 22px 0 36px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
     @media (max-width: 780px) {
       .shell { width: min(100% - 24px, 680px); }
-      .hero { padding: 26px 0 20px; }
+      .hero-layout { grid-template-columns: 1fr; gap: 16px; padding: 26px 0 20px; }
+      .hero-art { max-height: 250px; }
+      .hero-art img { max-height: 250px; object-fit: cover; object-position: center 42%; }
       .lesson-layout { grid-template-columns: 1fr; gap: 8px; }
       .route { z-index: 5; top: 0; max-height: none; margin: 0 -12px; padding: 6px 12px 10px; overflow-x: auto; overflow-y: hidden; background: var(--paper); }
       .route-label { margin: 0 0 6px; }
@@ -229,10 +235,15 @@
       <a class="back-link" href="../../index.html" aria-label="返回光學單元學習路線">← 返回學習路線</a>
       <span class="crumb">國二上・理化</span>
     </div>
-    <div class="hero">
-      <div class="eyebrow">第一段學習・光與看見</div>
-      <h1>光如何傳播，讓我們看見？</h1>
-      <p>從光源與看見物體開始，觀察光沿直線前進、影子如何形成，最後感受光速的尺度。</p>
+    <div class="hero-layout">
+      <div class="hero">
+        <div class="eyebrow">第一段學習・光與看見</div>
+        <h1>光如何傳播，讓我們看見？</h1>
+        <p>從光源與看見物體開始，觀察光沿直線前進、影子如何形成，最後感受光速的尺度。</p>
+      </div>
+      <figure class="hero-art">
+        <img src="assets/unit-1-light-title.png" alt="夜晚的實驗室裡，小葵和阿公觀察三個小孔的直線光路、球體在屏幕上形成的影子，以及地球和月球模型。">
+      </figure>
     </div>
   </header>
   <main class="shell">
