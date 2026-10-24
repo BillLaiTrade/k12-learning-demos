@@ -458,13 +458,12 @@
       const waveCaption = document.querySelector("[data-wave-caption]");
       let pulsePlaying = false;
       let pulseMode = "idle";
-      let singleWaveStarted = false;
       let pulseTime = 0;
       let previousTime = 0;
       let pulseFrame = null;
       const ns="http://www.w3.org/2000/svg";
       const waveAt = (x,offset,amplitude=74) => amplitude * Math.sin((x-offset-92)*2*Math.PI/232);
-      let singleWaveFinished = false;
+      const singlePulses = [];
       const renderRopeTexture = ropePath => {
         const fallback=ropePath.nextElementSibling;
         if(fallback&&fallback.classList.contains("rope-fallback"))fallback.setAttribute("d",ropePath.getAttribute("d"));
@@ -488,8 +487,7 @@
         const firstCard = Boolean(svg.closest("#card-01"));
         const single = pulseMode === "single" && firstCard;
         const initial = pulseMode === "idle" && firstCard;
-        const pulseCenter = 64 + time * 150;
-        const shapeAt = x => initial ? 0 : single ? ((!singleWaveStarted||singleWaveFinished) ? 0 : 72*Math.exp(-0.5*((x-pulseCenter)/32)**2)) : waveAt(x,(time*132)%232);
+        const shapeAt = x => initial ? 0 : single ? singlePulses.reduce((sum,center)=>sum+72*Math.exp(-0.5*((x-center)/32)**2),0) : waveAt(x,(time*132)%232);
         const end = svg.viewBox.baseVal.width - 38;
         let path = `M 38 ${baseline-shapeAt(38)}`;
         for (let x=41;x<=end;x+=3) path += ` L ${x} ${baseline-shapeAt(x)}`;
@@ -499,16 +497,23 @@
       const updatePulseControls = () => {
         continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續波";
         continuousButton.setAttribute("aria-pressed",String(pulseMode==="continuous"&&pulsePlaying));
-        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的波形持續向右傳播。":"單次波：波源只擾動一次，形成一個波形向右傳播。";
-        pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?"單次波正在向右傳播。":"單次波已傳過；按「單次播」可再看一次。"):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續波」可繼續。");});
+        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的波形持續向右傳播。":"單次波：每按一次，波源擾動一次；前一個波形尚未傳完時再按，會送出另一個單次波。";
+        pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?"單次波正在向右傳播；再按「單次波」可送出下一個波形。":"單次波已傳過；按「單次波」可再看一次。"):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續波」可繼續。");});
       };
       const schedulePulse = () => { if(pulsePlaying&&pulseFrame===null) pulseFrame=window.requestAnimationFrame(animatePulse); };
-      singleButton.addEventListener("click",()=>{pulseMode="single";pulseTime=0;singleWaveStarted=true;singleWaveFinished=false;pulsePlaying=true;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();schedulePulse();});
-      continuousButton.addEventListener("click",()=>{if(pulseMode==="continuous"&&pulsePlaying){pulsePlaying=false;}else{if(pulseMode!=="continuous"){pulseMode="continuous";pulseTime=0;}pulsePlaying=true;}singleWaveFinished=false;previousTime=0;updatePulseControls();schedulePulse();});
+      singleButton.addEventListener("click",()=>{pulseMode="single";pulseTime=0;singlePulses.push(64);pulsePlaying=true;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();schedulePulse();});
+      continuousButton.addEventListener("click",()=>{if(pulseMode==="continuous"&&pulsePlaying){pulsePlaying=false;}else{if(pulseMode!=="continuous"){pulseMode="continuous";pulseTime=0;singlePulses.length=0;}pulsePlaying=true;}previousTime=0;updatePulseControls();schedulePulse();});
       const animatePulse = time => {
-        if (previousTime) { const delta=Math.min((time-previousTime)/1000,.05); if(pulsePlaying) pulseTime+=delta; }
+        if (previousTime) {
+          const delta=Math.min((time-previousTime)/1000,.05);
+          if(pulsePlaying&&pulseMode==="continuous")pulseTime+=delta;
+          if(pulsePlaying&&pulseMode==="single"){
+            for(let i=0;i<singlePulses.length;i++)singlePulses[i]+=delta*150;
+            for(let i=singlePulses.length-1;i>=0;i--)if(singlePulses[i]>746)singlePulses.splice(i,1);
+            if(!singlePulses.length){pulsePlaying=false;updatePulseControls();}
+          }
+        }
         previousTime=time;
-        if(pulseMode==="single"&&pulseTime>4.55){singleWaveFinished=true;pulsePlaying=false;updatePulseControls();}
         pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));
         pulseFrame=pulsePlaying?window.requestAnimationFrame(animatePulse):null;
       };
