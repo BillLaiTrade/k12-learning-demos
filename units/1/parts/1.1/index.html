@@ -185,6 +185,34 @@
     .aperture-result.is-blocked .aperture-result-dot { background: #89938b; box-shadow: 0 0 0 4px #e4e8e1; }
     .aperture-observation { margin: 9px 2px 0; color: var(--muted); font-size: .8rem; line-height: 1.55; }
     .aperture-conclusion { margin-top: 11px; }
+    .light-speed-fact { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding: 13px 16px; border: 1px solid #dce5d8; border-radius: 14px; background: #fffdf8; }
+    .light-speed-fact-icon { display: grid; flex: none; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #f8edce; color: #916923; font-size: 1.25rem; }
+    .light-speed-fact p { margin: 0; color: #405851; }
+    .light-speed-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, .8fr); gap: 14px; }
+    .light-speed-measure, .light-speed-earth { min-width: 0; padding: 18px; border: 1px solid #e2ddcf; border-radius: 17px; background: #fffdf9; }
+    .light-speed-measure h3, .light-speed-earth h3 { margin: 0 0 5px; font-size: 1rem; }
+    .light-speed-measure > p, .light-speed-earth > p { margin: 0; color: var(--muted); font-size: .88rem; }
+    .light-speed-tap { display: block; width: 100%; min-height: 100px; margin: 15px 0 12px; border: 0; border-radius: 16px; background: linear-gradient(145deg, #24765d, #125a45); color: white; font-size: 1.12rem; font-weight: 850; box-shadow: 0 5px 13px #176b5330, inset 0 1px #ffffff38; transition: transform .12s ease, background .18s ease, box-shadow .18s ease; touch-action: manipulation; }
+    .light-speed-tap:hover { background: linear-gradient(145deg, #2d8468, #176b53); box-shadow: 0 7px 16px #176b5338, inset 0 1px #ffffff38; }
+    .light-speed-tap:active { transform: translateY(2px) scale(.99); }
+    .light-speed-tap:focus-visible { outline: 3px solid #dfb95e; outline-offset: 3px; }
+    .light-speed-tap[data-phase="measuring"] { background: linear-gradient(145deg, #c27d2e, #a75b25); box-shadow: 0 5px 13px #a75b2530; }
+    .light-speed-readouts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .light-speed-readout { min-width: 0; padding: 10px 12px; border: 1px solid #e7e2d7; border-radius: 12px; background: #f8f8f2; }
+    .light-speed-readout span { display: block; color: var(--muted); font-size: .78rem; }
+    .light-speed-readout output { display: block; margin-top: 2px; color: #215c48; font-size: 1.08rem; font-variant-numeric: tabular-nums; white-space: normal; }
+    .light-speed-feedback { min-height: 45px; margin: 10px 0 0; padding: 9px 11px; border-radius: 11px; background: #f0f5eb; color: #405851; font-size: .84rem; }
+    .light-speed-earth { display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; background: radial-gradient(ellipse at 50% 45%, #edf4ec 0, #f8f7ef 70%); text-align: center; }
+    .light-speed-earth h3 { align-self: stretch; text-align: left; }
+    .light-speed-earth-visual { position: relative; display: grid; place-items: center; width: min(100%, 250px); aspect-ratio: 1; margin: 4px auto 0; }
+    .light-speed-earth-visual::before, .light-speed-earth-visual::after { position: absolute; inset: 13%; border: 1px solid rgb(179 157 102 / 38%); border-radius: 50%; content: ""; transform: rotate(-24deg) scaleY(.36); }
+    .light-speed-earth-visual::after { inset: 18%; border-color: rgb(179 157 102 / 18%); transform: rotate(28deg) scaleY(.47); }
+    .light-speed-earth-visual img { position: relative; z-index: 1; display: block; width: 69%; height: 69%; object-fit: contain; filter: drop-shadow(0 9px 12px #183c3540); }
+    .light-speed-orbit-dot { position: absolute; z-index: 2; left: 14%; top: 45%; width: 12px; height: 12px; border: 2px solid white; border-radius: 50%; background: #efb94f; box-shadow: 0 0 0 4px #efb94f40, 0 0 15px #f1ba54; transform: rotate(-24deg) translateX(0); transition: transform .35s ease; }
+    .light-speed-laps { margin: -3px 0 0 !important; color: #176b53 !important; font-size: 1.15rem !important; font-weight: 850; }
+    .light-speed-earth .visual-caption { align-self: stretch; margin-top: 7px; text-align: center; }
+    .light-speed-note { margin-top: 12px; }
+    @media (max-width: 620px) { .light-speed-layout { grid-template-columns: 1fr; } .light-speed-measure, .light-speed-earth { padding: 15px; } .light-speed-tap { min-height: 82px; } .light-speed-earth-visual { width: min(76vw, 230px); } }
     @media (max-width: 520px) {
       #aperture-3d-scene { height: 300px; }
       .aperture-scene-with-height { grid-template-columns: minmax(0, 1fr) 52px; gap: 7px; }
@@ -435,22 +463,35 @@
           <div class="card-side"><span class="card-number">06</span><h3>感受光速的尺度</h3><span class="card-role">光不是瞬間到達</span></div>
           <div class="card-main">
             <h2>光傳得有多快？</h2>
-            <p>光沿直線傳播，但也需要時間走過距離。以地球和月球的平均距離作例子，感受光速的尺度。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>從地球到月球這麼遠，光要走多久？我平常怎麼感覺不到它在路上呢？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>拖動時間，跟著光點從地球走向月球；看看它是否一開始就到了。</p></div>
+            <p>光沿直線傳播，但並非瞬間到達。快速點擊兩次，從這段短短的時間感受光速的尺度。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>如果只有兩次點擊之間這麼短的時間，光能走多遠？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>快速點下面的按鈕兩次：第一次開始計時，第二次停止，再看看這段時間光能繞地球幾圈。</p></div>
             <div class="visual">
-              <svg viewBox="0 0 720 210" role="img" aria-labelledby="moon-title moon-desc">
-                <title id="moon-title">光從地球傳到月球的時間示意</title><desc id="moon-desc">圖中顯示地球、月球及兩者之間的光路，路徑長度不按比例。</desc>
-                <defs><marker id="arrow-path" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#91ae9a"/></marker></defs>
-                <path d="M95 96H618" stroke="#91ae9a" stroke-width="5" stroke-dasharray="9 9" marker-end="url(#arrow-path)"/>
-                <circle cx="95" cy="96" r="43" fill="#73a9bd" stroke="#4d7d90" stroke-width="4"/><path d="M75 84q14-14 29-4l8 11-14 5-6 18-12-8zM103 116l10 4-5 12-10-7z" fill="#9ac390"/><circle cx="618" cy="96" r="27" fill="#e9e7d5" stroke="#b5b39f" stroke-width="4"/><circle id="photon" cx="95" cy="96" r="12" fill="#efaa32" stroke="#fffefa" stroke-width="4"/>
-                <text x="95" y="171" text-anchor="middle" fill="#53665d" font-size="17">地球</text><text x="618" y="151" text-anchor="middle" fill="#53665d" font-size="17">月球</text><text x="357" y="57" text-anchor="middle" fill="#53665d" font-size="16">平均距離約 38 萬公里</text>
-              </svg>
-              <div class="range-row"><input id="light-time" type="range" min="0" max="1.28" step="0.01" value="0" aria-label="調整光從地球前往月球所經過的時間"><output id="light-time-output" for="light-time">0.00 秒</output></div>
-              <div class="scale-legend"><span>光從地球出發</span><span>約 1.28 秒後抵達月球</span></div>
-              <p class="visual-caption" id="light-distance">拖動時間，觀察光走過的距離。</p><p class="visual-caption">示意圖的地球、月球與路徑長度不按比例。</p>
+              <div class="light-speed-fact"><span class="light-speed-fact-icon" aria-hidden="true">✦</span><p><strong>真空中的光，每秒約走 30 萬公里。</strong><br>人的反應時間雖短，光在這段時間已能走過很長的距離。</p></div>
+              <div class="light-speed-layout">
+                <section class="light-speed-measure" aria-labelledby="light-speed-measure-title">
+                  <h3 id="light-speed-measure-title">試試你的反應時間</h3>
+                  <p>按一下開始，再按一下停止</p>
+                  <button class="light-speed-tap" id="light-speed-tap" type="button" data-phase="ready" aria-describedby="light-speed-instructions">點擊開始</button>
+                  <span class="sr-only" id="light-speed-instructions">快速點擊此按鈕兩次，第一次開始計時，第二次停止計時。</span>
+                  <div class="light-speed-readouts">
+                    <div class="light-speed-readout"><span>兩次點擊相隔</span><output id="light-time-output" aria-live="polite">— 秒</output></div>
+                    <div class="light-speed-readout"><span>光在這段時間走過</span><output id="light-distance">— 公里</output></div>
+                  </div>
+                  <p class="light-speed-feedback" id="light-speed-feedback" aria-live="polite">準備好後，點一下綠色按鈕開始。</p>
+                </section>
+                <section class="light-speed-earth" aria-labelledby="light-speed-earth-title">
+                  <h3 id="light-speed-earth-title">換算成繞地球</h3>
+                  <div class="light-speed-earth-visual" aria-hidden="true">
+                    <span class="light-speed-orbit-dot" id="light-speed-orbit-dot"></span>
+                    <img src="assets/light-speed-earth.png" alt="">
+                  </div>
+                  <p class="light-speed-laps" id="earth-lap-result" aria-live="polite">點擊兩次後顯示圈數</p>
+                  <p class="visual-caption">以地球赤道一圈約 40,000 公里估算</p>
+                </section>
+              </div>
+              <p class="visual-caption light-speed-note">這個活動量出的是兩次點擊的間隔，再用已知的光速換算距離；點擊本身不是直接測量光速。</p>
             </div>
-            <div class="fact"><p><strong>光速：</strong>真空中的光每秒約走 30 萬公里。這裡用距離感受光速，不需要代公式計算。</p></div>
           </div>
         </section>
 
@@ -520,24 +561,6 @@
       }));
       updateNightScene();
 
-      const timeInput = document.querySelector('#light-time');
-      const timeOutput = document.querySelector('#light-time-output');
-      const photon = document.querySelector('#photon');
-      const distanceCopy = document.querySelector('#light-distance');
-      const moonDistanceKm = 384400;
-      const speedKmPerSecond = 300000;
-      timeInput.addEventListener('input', () => {
-        const seconds = Number(timeInput.value);
-        const distance = Math.min(moonDistanceKm, speedKmPerSecond * seconds);
-        const progress = distance / moonDistanceKm;
-        timeOutput.value = `${seconds.toFixed(2)} 秒`;
-        timeOutput.textContent = `${seconds.toFixed(2)} 秒`;
-        photon.setAttribute('cx', String(95 + progress * (618 - 95)));
-        distanceCopy.textContent = seconds >= 1.28
-          ? '約 1.28 秒，光走過約 38 萬公里，抵達月球。'
-          : `約 ${Math.round(distance).toLocaleString('zh-TW')} 公里；光正往月球前進。`;
-      });
-
       const choices = [...document.querySelectorAll('[data-answer]')];
       const checkFeedback = document.querySelector('#check-feedback');
       choices.forEach((button) => button.addEventListener('click', () => {
@@ -591,5 +614,6 @@
   <script type="module" src="assets/aperture-3d.js?v=dialogue-story-20261024"></script>
   <script type="module" src="assets/shadow-3d.js?v=shadow-short-rail-20261024"></script>
   <script type="module" src="assets/shadow-size-3d.js?v=shadow-size-drag-only-20261024"></script>
+  <script type="module" src="assets/light-speed-timer.js?v=light-speed-double-tap-20261024"></script>
 </body>
 </html>
