@@ -55,11 +55,8 @@
     .visual text { fill:#314640; font-family:inherit; font-size:15px; }
     .visual .small-label { fill:#59696b; font-size:12px; }
     .visual .wave-line { fill:none; stroke:#176b53; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
-    .visual .rope-outline,.visual .rope-core,.visual .rope-braid,.visual .rope-glint { fill:none; stroke-linecap:round; stroke-linejoin:round; }
-    .visual .rope-outline { stroke:#80603e; stroke-width:13; }
-    .visual .rope-core { stroke:#c89a61; stroke-width:9; }
-    .visual .rope-braid { stroke:#956c43; stroke-width:1.25; }
-    .visual .rope-glint { stroke:#f1d8ad; stroke-width:1.2; opacity:.72; }
+    .visual .rope-underlay { fill:none; stroke:#d4ad7b; stroke-width:13; stroke-linecap:round; stroke-linejoin:round; }
+    .visual .rope-texture-layer { pointer-events:none; }
     .visual .equilibrium { stroke:#9aaca1; stroke-width:1.5; stroke-dasharray:7 7; }
     .visual .motion-arrow { fill:none; stroke:#176b53; stroke-width:2.5; stroke-linecap:round; }
     .visual .measure { fill:none; stroke:#bc612b; stroke-width:2; stroke-linecap:round; }
@@ -175,7 +172,7 @@
               <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="繩波由左側波源向右傳播；可切換連續波與波源只擾動一次形成的單次波">
                 <defs><marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
-                <path class="pulse-path rope-outline" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><path class="pulse-path rope-core" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><path class="pulse-path rope-braid" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><path class="pulse-path rope-glint" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/>
+                <path class="pulse-path rope-underlay" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <path d="M64 116V87M58 94L64 86L70 94M64 139V168M58 161L64 169L70 161" fill="none" stroke="#748b7e" stroke-width="2"/>
                 <text x="84" y="45">波源上下振動</text>
                 <path d="M130 228H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
@@ -197,7 +194,7 @@
               <svg class="rope-wave" data-static-rope viewBox="0 0 720 280" role="img" aria-label="同一條編織繩的波形示意圖，標示平衡位置、波峰、波谷與波形傳播方向">
                 <defs><marker id="wave-vocab-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M48 140H672" class="equilibrium"/>
-                <path class="rope-outline" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><path class="rope-core" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><path class="rope-braid" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><path class="rope-glint" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/>
+                <path class="rope-underlay" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <circle cx="150" cy="66" r="6" fill="#176b53"/><circle cx="266" cy="214" r="6" fill="#176b53"/>
                 <text x="150" y="40" text-anchor="middle">波峰</text><text x="266" y="248" text-anchor="middle">波谷</text>
                 <path d="M520 117V136" stroke="#748b7e" stroke-width="1.5"/><rect x="472" y="91" width="98" height="25" rx="8" fill="#fffefa" stroke="#d7e1dd"/><text x="521" y="108" text-anchor="middle">平衡位置</text>
@@ -220,7 +217,7 @@
               <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="三個連續時刻的繩波位置；波峰往右移，固定繩點只上下振動">
                 <defs><marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
-                <path class="pulse-path rope-outline" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><path class="pulse-path rope-core" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><path class="pulse-path rope-braid" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><path class="pulse-path rope-glint" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/>
+                <path class="pulse-path rope-underlay" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <path d="M118 228H565" class="motion-arrow" marker-end="url(#arrow-rope-2)"/>
                 <text x="341" y="253" text-anchor="middle">波形與能量向右傳</text>
                 <path d="M350 64V178" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
@@ -490,7 +487,24 @@
           const bx=x+tx*3.2+direction*nx*4.1,by=y+ty*3.2+direction*ny*4.1;
           braid+=`M ${ax.toFixed(1)} ${ay.toFixed(1)} L ${bx.toFixed(1)} ${by.toFixed(1)} `;
         }
-        svg.querySelectorAll(".pulse-path").forEach(wave=>wave.setAttribute("d",wave.classList.contains("rope-braid")?braid:path));
+        svg.querySelectorAll(".rope-underlay").forEach(rope=>rope.setAttribute("d",path));
+        const textureLayer=svg.querySelector(".rope-texture-layer");
+        if(textureLayer){
+          textureLayer.replaceChildren();
+          let index=0;
+          for(let x=43;x<end-6;x+=12,index++){
+            const y=baseline-shapeAt(x);
+            const slope=((baseline-shapeAt(x+1))-(baseline-shapeAt(x-1)))/2;
+            const angle=Math.atan2(slope,1)*180/Math.PI;
+            const cropX=(index*180)%1872;
+            const tile=document.createElementNS(ns,"svg");
+            tile.setAttribute("x",String(x-10));tile.setAttribute("y",String(y-6.5));tile.setAttribute("width","22");tile.setAttribute("height","13");
+            tile.setAttribute("viewBox",`${cropX} 270 300 180`);tile.setAttribute("preserveAspectRatio","none");
+            tile.setAttribute("transform",`rotate(${angle} ${x} ${y})`);
+            const image=document.createElementNS(ns,"image");image.setAttribute("href","assets/wave-rope-texture.png");image.setAttribute("width","2172");image.setAttribute("height","724");
+            tile.append(image);textureLayer.append(tile);
+          }
+        }
       };
       const updatePulseControls = () => {
         continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續波";
