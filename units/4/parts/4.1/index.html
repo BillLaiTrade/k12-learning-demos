@@ -437,11 +437,36 @@
     .property-card,.class-card { padding:13px; border:1px solid #ded8ca; border-radius:12px; background:#fff; }
     .property-card strong,.class-card strong { display:block; margin-bottom:5px; }
     .property-card p,.class-card p { margin:0; color:#607067; font-size:.83rem; }
-    .rust-pair { display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:stretch; }
-    .barrel-card { padding:12px; border-radius:13px; background:#f1f3ed; text-align:center; }
-    .barrel-card svg { width:min(100%,180px); height:142px; }
-    .barrel-card strong { display:block; font-size:.84rem; }
-    .barrel-card p { margin:4px 0 0; color:#65736c; font-size:.78rem; }
+    .rust-investigation { display:grid; gap:13px; margin:14px 0; }
+    .rust-timeline { padding:14px; border:1px solid #d9e2d9; border-radius:15px; background:#f7f9f4; }
+    .rust-timeline-scene { display:grid; place-items:center; min-height:220px; overflow:hidden; border-radius:11px; background:linear-gradient(180deg,#fffefa,#eef3ec); }
+    .rust-timeline-scene svg { display:block; width:min(100%,340px); height:auto; }
+    #rust-layer { opacity:0; transition:opacity .45s ease; }
+    .rust-timeline[data-stage="1"] #rust-layer { opacity:.52; }
+    .rust-timeline[data-stage="2"] #rust-layer { opacity:1; }
+    .rust-timeline-controls { display:grid; grid-template-columns:auto minmax(0,1fr); gap:9px 14px; align-items:center; margin-top:11px; }
+    .rust-play { min-height:40px; padding:7px 13px; border:1px solid #c8d1c8; border-radius:10px; background:#fffefa; color:#31594b; font-weight:750; cursor:pointer; }
+    .rust-timeline-controls input { width:100%; accent-color:#a84d31; }
+    .rust-stage-labels { display:flex; justify-content:space-between; gap:8px; grid-column:1/-1; color:#66756d; font-size:.78rem; }
+    .rust-stage-status { margin:8px 0 0!important; color:#4f6159; font-size:.85rem; }
+    .rust-evidence-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .rust-evidence-card { display:grid; grid-template-columns:34px 1fr; gap:3px 10px; align-items:start; min-height:100px; padding:13px; border:1px solid #d8dfd6; border-radius:12px; background:#fffefa; text-align:left; cursor:pointer; }
+    .rust-evidence-card[aria-pressed="true"] { border-color:#176b53; background:#eef5ee; box-shadow:inset 0 0 0 1px #176b53; }
+    .rust-evidence-icon { display:grid; place-items:center; width:32px; height:32px; border-radius:50%; background:#f4e9d8; color:#9e4d31; font-size:1.05rem; }
+    .rust-evidence-card strong { display:block; color:#31594b; }
+    .rust-evidence-card small { grid-column:2; color:#65736c; font-size:.8rem; line-height:1.5; }
+    .rust-decision { padding:14px; border:1px solid #e0daca; border-radius:13px; background:#fffefa; }
+    .rust-decision h3 { margin:0 0 8px; font-size:1rem; }
+    .rust-answer-options { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+    .rust-answer-options button { min-height:45px; padding:8px 12px; border:1px solid #d2d9d1; border-radius:10px; background:#fff; cursor:pointer; font-weight:700; }
+    .rust-answer-options button[aria-pressed="true"] { border-color:#176b53; background:#e6f1e8; color:#174c3e; box-shadow:inset 0 0 0 1px #176b53; }
+    .rust-feedback { min-height:24px; margin:9px 0!important; color:#607067!important; font-size:.84rem; }
+    .rust-feedback[data-result="incorrect"] { color:#8a5035!important; }
+    .rust-feedback[data-result="correct"] { color:#176b53!important; }
+    .rust-record:disabled { opacity:.55; cursor:not-allowed; }
+    .rust-takeaway { margin-top:10px; padding:12px 14px; border-left:3px solid #a84d31; border-radius:0 10px 10px 0; background:#f8f1e8; }
+    .rust-takeaway[hidden] { display:none; }
+    .rust-takeaway p { margin:3px 0 0; color:#58675e; font-size:.86rem; }
     .comparison { width:100%; border-collapse:collapse; margin:12px 0; font-size:.88rem; }
     .comparison th,.comparison td { padding:9px 10px; border-bottom:1px solid #e1dccf; text-align:left; vertical-align:top; }
     .comparison th { color:#53645d; background:#f5f2e9; }
@@ -482,7 +507,10 @@
       .bucket-detail { min-height:auto; }
       .record-task { grid-template-columns:100px 1fr; }
       .state-property-list { grid-template-columns:1fr; }
-      .rust-pair { grid-template-columns:1fr 1fr; gap:7px; }
+      .rust-timeline { padding:10px; }
+      .rust-timeline-scene { min-height:175px; }
+      .rust-evidence-grid,.rust-answer-options { grid-template-columns:1fr; }
+      .rust-evidence-card { min-height:82px; }
       .comparison { font-size:.78rem; }
       .comparison th,.comparison td { padding:7px 6px; }
       .section-top { align-items:start; flex-direction:column; gap:3px; }
@@ -787,23 +815,64 @@
             <h2>水的狀態會改變，鐵桶生鏽又有什麼不同？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水變成冰還是水；那鐵桶生鏽後，鐵也還是原來的鐵嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>看看生鏽前後的材料是否相同，再找找鏽層提供了什麼線索。</p></div>
-            <p>水結冰或蒸發後仍是水，沒有生成新物質，屬於物理變化。鐵桶生鏽時會形成不同於鐵的新物質，是化學變化；鐵能生鏽則是它的一種化學性質。</p>
-            <figure class="visual">
-              <div class="rust-pair">
-                <div class="barrel-card">
-                  <svg viewBox="0 0 150 135" role="img" aria-label="尚未生鏽的鐵製雨水桶"><path d="M32 28h86l-7 85c-1 8-6 12-14 12H53c-8 0-13-4-14-12z" fill="#b8c3bc" stroke="#64766e" stroke-width="4"/><ellipse cx="75" cy="28" rx="43" ry="10" fill="#d8ded9" stroke="#64766e" stroke-width="4"/><path d="M39 57h78M37 70h81" stroke="#e6eae6" stroke-width="3"/></svg>
-                  <strong>桶身尚未出現鏽層</strong><p>作為對照影像</p>
+            <div class="rust-investigation" id="rust-investigation">
+              <div class="rust-timeline" id="rust-timeline" data-stage="0">
+                <div class="rust-timeline-scene">
+                  <svg viewBox="0 0 360 230" role="img" aria-label="同一只鐵製雨水桶從表面乾淨到逐漸形成鏽層的示意圖">
+                    <defs>
+                      <linearGradient id="rust-bucket-metal" x2="1" y2="0"><stop stop-color="#aab8b0"/><stop offset=".48" stop-color="#eef1ec"/><stop offset="1" stop-color="#9eaca4"/></linearGradient>
+                      <linearGradient id="rust-bucket-rim" x2="0" y2="1"><stop stop-color="#f9fbf8"/><stop offset="1" stop-color="#aebbb3"/></linearGradient>
+                    </defs>
+                    <path d="M92 64Q180-9 268 64" fill="none" stroke="#74877d" stroke-width="9" stroke-linecap="round"/>
+                    <path d="M75 68H285L264 187Q180 209 96 187Z" fill="url(#rust-bucket-metal)" stroke="#687e72" stroke-width="4" stroke-linejoin="round"/>
+                    <ellipse cx="180" cy="68" rx="105" ry="20" fill="url(#rust-bucket-rim)" stroke="#687e72" stroke-width="4"/>
+                    <path d="M87 105H273M84 119H276" stroke="#fff" stroke-width="4" opacity=".68"/>
+                    <g id="rust-layer" aria-hidden="true">
+                      <path d="M101 88q13-12 25 0t-3 18q-19 3-22-18m116 9q15-10 27 2t-5 16q-17 1-22-18m-78 39q14-10 25 2t-5 18q-17 1-20-20m74 15q12-12 23-2t-4 18q-15 2-19-16m-111 10q9-9 17-1t-2 13q-13 1-15-12" fill="#a84d31"/>
+                      <path d="M115 94q9-6 15 2m100 8q9-6 15 1m-99 24q8-6 14 2m55 17q8-6 14 1" fill="none" stroke="#d68a57" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+                    </g>
+                    <path d="M96 187Q180 207 264 187" fill="none" stroke="#687e72" stroke-width="3"/>
+                  </svg>
                 </div>
-                <div class="barrel-card">
-                  <svg viewBox="0 0 150 135" role="img" aria-label="桶身有鏽層的鐵製雨水桶"><path d="M32 28h86l-7 85c-1 8-6 12-14 12H53c-8 0-13-4-14-12z" fill="#b8c3bc" stroke="#64766e" stroke-width="4"/><ellipse cx="75" cy="28" rx="43" ry="10" fill="#d8ded9" stroke="#64766e" stroke-width="4"/><path d="M39 57h78M37 70h81" stroke="#e6eae6" stroke-width="3"/><path d="M45 45q12-8 18 2t-6 13q-16-2-12-15m43 20q15-8 20 5t-9 12q-15-3-11-17m-39 25q10-6 15 2t-5 11q-12-1-10-13m44 16q9-8 16 0t-6 12q-11 0-10-12" fill="#a84d31"/></svg>
-                  <strong>桶身形成鏽層</strong><p>鏽層是不同於原金屬的新物質</p>
+                <div class="rust-timeline-controls">
+                  <button class="rust-play" type="button" id="rust-play">播放變化</button>
+                  <input type="range" id="rust-progress" min="0" max="2" step="1" value="0" aria-label="拖曳查看鐵桶生鏽的變化過程" aria-valuetext="剛開始：桶身尚未出現鏽層">
+                  <div class="rust-stage-labels" aria-hidden="true"><span>剛開始</span><span>出現鏽斑</span><span>形成鏽層</span></div>
+                </div>
+                <p class="rust-stage-status" id="rust-stage-status" aria-live="polite">桶身表面尚未看到鏽層。</p>
+                <p class="caption">時間軸示意變化先後，不代表實際生鏽所需時間。</p>
+              </div>
+
+              <div>
+                <p class="prompt">點選資料，看看哪些線索能支持判斷。</p>
+                <div class="rust-evidence-grid" role="group" aria-label="選擇觀察到的線索和材料資料">
+                  <button class="rust-evidence-card" type="button" data-rust-evidence="appearance" aria-pressed="false">
+                    <span class="rust-evidence-icon" aria-hidden="true">◒</span><strong>外觀觀察</strong>
+                    <small>出現橘褐色鏽斑；顏色改變是觀察線索。</small>
+                  </button>
+                  <button class="rust-evidence-card" type="button" data-rust-evidence="material" aria-pressed="false">
+                    <span class="rust-evidence-icon" aria-hidden="true">▤</span><strong>材料資料</strong>
+                    <small>資料指出：鏽層含有不同於金屬鐵的新物質。</small>
+                  </button>
                 </div>
               </div>
-              <figcaption>材料資料指出，鏽層是不同於原金屬的新物質。</figcaption>
-            </figure>
-            <button class="action-button" type="button" data-record="change">把變化線索記入紀錄</button>
-            <p class="live-note" id="note-s6" aria-live="polite">「可能形成新物質」描述化學性質；「已形成鏽層」描述化學變化。</p>
-            <p class="next-hint">水的物態變化沒有生成新物質，生鏽則形成鏽層。接著把兩種變化並列比較。</p>
+
+              <div class="rust-decision">
+                <h3>根據線索判斷</h3>
+                <div class="rust-answer-options" role="group" aria-label="判斷鐵桶生鏽的變化">
+                  <button type="button" data-rust-answer="appearance" aria-pressed="false">只看到外觀改變</button>
+                  <button type="button" data-rust-answer="new-substance" aria-pressed="false">形成了新物質</button>
+                </div>
+                <p class="rust-feedback" id="rust-feedback" aria-live="polite">選出判斷，再選擇支持它的資料。</p>
+                <button class="action-button rust-record" type="button" id="rust-record" data-record="change" disabled>記錄我的判斷</button>
+                <div class="rust-takeaway" id="rust-takeaway" hidden>
+                  <strong>判斷完成：生鏽是化學變化。</strong>
+                  <p>鐵能生鏽是化學性質；鏽層形成，則是已發生的化學變化。</p>
+                </div>
+              </div>
+            </div>
+            <p class="live-note" id="note-s6" aria-live="polite">觀察時間軸與材料資料，完成判斷後再記錄結果。</p>
+            <p class="next-hint">下一區將把水的物態變化和生鏽並列，整理判斷物理與化學變化的依據。</p>
           </div>
         </section>
 
@@ -925,6 +994,50 @@
       const note = card.querySelector(".live-note");
       note.textContent = recordValues[key][1];
     }));
+
+    const rustTimeline=document.getElementById("rust-timeline"),rustProgress=document.getElementById("rust-progress"),rustPlay=document.getElementById("rust-play"),rustStatus=document.getElementById("rust-stage-status"),rustFeedback=document.getElementById("rust-feedback"),rustRecord=document.getElementById("rust-record"),rustTakeaway=document.getElementById("rust-takeaway");
+    const rustStages=["桶身表面尚未看到鏽層。","桶身開始出現橘褐色鏽斑。","鏽層逐漸形成，和一開始的桶身不同。"];
+    let rustPlayTimer=null,rustAnswer="";
+    function setRustStage(value){
+      const stage=Math.max(0,Math.min(2,Number(value)));
+      rustTimeline.dataset.stage=String(stage);rustProgress.value=String(stage);rustStatus.textContent=rustStages[stage];rustProgress.setAttribute("aria-valuetext",`${["剛開始","一段時間後","形成鏽層"][stage]}：${rustStages[stage]}`);
+      validateRustJudgment();
+    }
+    function stopRustPlayback(label="播放變化"){
+      if(rustPlayTimer){clearInterval(rustPlayTimer);rustPlayTimer=null;}
+      rustPlay.textContent=label;
+    }
+    rustProgress.addEventListener("input",()=>{stopRustPlayback();setRustStage(rustProgress.value);});
+    rustPlay.addEventListener("click",()=>{
+      if(rustPlayTimer){stopRustPlayback();return;}
+      if(Number(rustProgress.value)>=2)setRustStage(0);
+      rustPlay.textContent="暫停變化";
+      rustPlayTimer=setInterval(()=>{
+        const next=Number(rustProgress.value)+1;setRustStage(next);
+        if(next>=2)stopRustPlayback("重播變化");
+      },1100);
+    });
+    document.querySelectorAll("[data-rust-evidence]").forEach(button=>button.addEventListener("click",()=>{
+      button.setAttribute("aria-pressed",String(button.getAttribute("aria-pressed")!=="true"));
+      validateRustJudgment();
+    }));
+    document.querySelectorAll("[data-rust-answer]").forEach(button=>button.addEventListener("click",()=>{
+      rustAnswer=button.dataset.rustAnswer;
+      document.querySelectorAll("[data-rust-answer]").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+      rustTakeaway.hidden=true;validateRustJudgment();
+    }));
+    function validateRustJudgment(){
+      const sawRust=Number(rustProgress.value)===2;
+      const hasMaterialEvidence=document.querySelector('[data-rust-evidence="material"]').getAttribute("aria-pressed")==="true";
+      rustRecord.disabled=!(sawRust&&rustAnswer==="new-substance"&&hasMaterialEvidence);
+      rustFeedback.dataset.result="";
+      if(!sawRust){rustFeedback.textContent="先播放或拖曳時間軸，觀察鏽層形成。";return;}
+      if(!rustAnswer){rustFeedback.textContent="選出判斷，再選擇支持它的資料。";return;}
+      if(rustAnswer==="appearance"){rustFeedback.dataset.result="incorrect";rustFeedback.textContent="顏色改變是觀察線索；再看看材料資料是否指出鏽層和原鐵不同。";return;}
+      if(!hasMaterialEvidence){rustFeedback.textContent="這個判斷還需要證據；選取「材料資料」看看鏽層和鐵是否相同。";return;}
+      rustFeedback.dataset.result="correct";rustFeedback.textContent="判斷有資料支持：鏽層含有不同於金屬鐵的新物質；顏色只是觀察線索。";
+    }
+    rustRecord.addEventListener("click",()=>{if(!rustRecord.disabled)rustTakeaway.hidden=false;});
 
     const stateNames={solid:"固體・金屬物體",liquid:"液體・水",gas:"氣體・空氣"};
     const propertyNames={shape:"形狀",volume:"體積",compressibility:"可壓縮性"};
