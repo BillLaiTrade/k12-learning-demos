@@ -576,14 +576,14 @@
         });
         const renderFixedPointWave=time=>{
           if(!fixedPointStart)fixedPointStart=time;
-          const elapsed=reducedMotion?0:(time-fixedPointStart)/1000;
+          const elapsed=(time-fixedPointStart)/1000;
           fixedPointOffset=(elapsed*132)%232;
           let path=`M 46 ${fixedPointBaseline-waveAt(46,fixedPointOffset,fixedPointAmplitude)}`;
           for(let x=49;x<=714;x+=3)path+=` L ${x} ${fixedPointBaseline-waveAt(x,fixedPointOffset,fixedPointAmplitude)}`;
           fixedPointRope.setAttribute("d",path);
           renderRopeTexture(fixedPointRope);
           fixedPointMarker.setAttribute("cy",String(fixedPointBaseline-waveAt(fixedPointX,fixedPointOffset,fixedPointAmplitude)));
-          if(!reducedMotion)window.requestAnimationFrame(renderFixedPointWave);
+          window.requestAnimationFrame(renderFixedPointWave);
         };
         window.requestAnimationFrame(renderFixedPointWave);
       }
