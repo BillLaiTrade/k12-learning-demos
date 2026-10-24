@@ -150,8 +150,6 @@ if (canvas) {
   const plateButtons = [...document.querySelectorAll('[data-plate]')];
   const heightInput = document.querySelector('#aperture-offset');
   const heightOutput = document.querySelector('#aperture-offset-output');
-  const selectedLabel = document.querySelector('#aperture-selected-label');
-  const alignmentOutput = document.querySelector('#aperture-alignment-output');
   const result = document.querySelector('#aperture-result');
   const resultText = result.querySelector('span:last-child');
   let selectedIndex = 1;
@@ -189,14 +187,12 @@ if (canvas) {
       button.setAttribute('aria-label', `${plateNames[index]}，${letsLightThrough ? '仍有光通過' : '偏移過大，光被擋住'}`);
       button.title = letsLightThrough ? '仍有光通過這片小孔板' : '偏移過大，光被這片小孔板擋住';
     });
-    selectedLabel.textContent = `調整${plateNames[selectedIndex]}`;
     const maxDeviation = Math.max(...plateStates.map((state) => Math.abs(state.height)));
     const transmission = lightRemainingAtOffset(maxDeviation);
     mats.spot.opacity = transmission;
     mats.spotGlow.opacity = transmission * 0.34;
     spot.scale.setScalar(0.72 + transmission * 0.28);
     spotGlow.scale.setScalar(0.6 + transmission * 0.4);
-    alignmentOutput.textContent = isStandardHeight && maxDeviation <= standardHeightTolerance ? '小孔對齊' : transmission > 0 ? '小孔略有偏移' : '小孔沒有對齊';
     result.classList.toggle('is-blocked', transmission <= 0);
     if (maxDeviation <= standardHeightTolerance) resultText.textContent = '三個小孔排成一直線，屏幕上出現清楚亮點。';
     else if (transmission > 0) resultText.textContent = '小孔略有偏移，仍有部分光線通過，屏幕亮點變暗。';
