@@ -1613,7 +1613,7 @@
       }
       const scores=freezeParticles.map((p,i)=>process.to==="solid"?ends[i].y:key==="melt"?-p.y:p.y),minScore=Math.min(...scores),maxScore=Math.max(...scores),spread=key==="melt"?5000:key==="deposition"?4800:3600,duration=key==="melt"?2000:key==="deposition"?2200:key==="condensation"?650:1600;
       const delays=scores.map(score=>{const delay=maxScore===minScore?0:(score-minScore)/(maxScore-minScore)*spread;return key==="sublimation"||key==="condensation"?Math.max(0,Math.min(spread,delay+(Math.random()-.5)*260)):delay;});
-      phaseDemoTransition={key,to:process.to,fromLabel:key==="melt"?"固態冰":process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態",status:process.status,startedAt:null,pausedAt:null,hold:key==="melt"?2000:key==="deposition"?2000:key==="vaporization"?2000:key==="condensation"?2000:900,spread,duration,delays};
+      phaseDemoTransition={key,to:process.to,fromLabel:key==="melt"?"固態冰":process.from==="solid"?"固態":process.from==="liquid"?"液態":"氣態",status:process.status,startedAt:null,pausedAt:null,hold:key==="melt"?1500:key==="deposition"?2000:key==="vaporization"?2000:key==="condensation"?2000:900,spread,duration,delays};
       phaseDemoFrame=requestAnimationFrame(now=>animatePhaseTransition(now,runId));
     }
     document.getElementById("freeze-demo-replay").addEventListener("click",()=>activePhaseProcess==="freeze"?playFreezeDemo():playPhaseTransition(activePhaseProcess));
