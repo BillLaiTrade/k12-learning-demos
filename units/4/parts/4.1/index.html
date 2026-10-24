@@ -367,8 +367,6 @@
     .phase-detail.is-solid-overview .freeze-demo-head { display:none; }
     .phase-detail.is-solid-overview .freeze-demo-scene { background:transparent; }
     .phase-detail.is-solid-overview .freeze-demo-scene #freeze-demo-vessel { fill:transparent; }
-    .phase-detail.is-solid-overview .freeze-demo-scene #phase-demo-ice { display:none; }
-    .phase-detail.is-solid-overview .freeze-demo-particle.is-solid { clip-path:none; }
     .phase-detail.is-solid-overview .freeze-demo-scene #phase-demo-source,.phase-detail.is-solid-overview .freeze-demo-scene #phase-demo-arrows { display:none; }
     .phase-detail.is-solid-overview .freeze-demo-status { text-align:center; }
     .phase-detail.is-solid-overview .freeze-demo-caption { display:none; }
@@ -411,7 +409,7 @@
     .freeze-demo-scene { display:block; width:100%; height:auto; border-radius:9px; background:#f4f8f5; }
     .freeze-demo-particle { fill:#438bb8; stroke:#fff; stroke-width:1; transition:fill .55s ease; }
     .freeze-demo-particle.is-solid { fill:#2346bd; }
-    .freeze-demo-particle.is-solid { clip-path:url(#phase-demo-ice-clip); }
+    .freeze-demo-scene #phase-demo-ice { display:none; }
     .freeze-demo-particle.is-liquid { fill:#438bb8; }
     .freeze-demo-particle.is-gas { fill:#94c8da; }
     .freeze-demo-particle.is-vibrating { animation:freeze-particle-vibration .42s ease-in-out infinite alternate; animation-delay:var(--vibration-delay,0ms); transform-box:fill-box; transform-origin:center; }
@@ -771,7 +769,7 @@
                   <button type="button" class="phase-solid-process" id="phase-overview-bottom-right" data-overview-slot="bottom-right" data-phase-process="sublimation" data-energy="heat"><strong>昇華</strong><span class="phase-solid-open">點擊觀察 ›</span><span class="phase-solid-direction">冰 → 水蒸氣</span><span class="phase-solid-energy">吸熱</span></button>
                   <div class="freeze-demo" id="freeze-demo" hidden>
                     <div class="freeze-demo-head"><span id="phase-demo-heading">冰中的粒子</span><button type="button" class="freeze-demo-replay" id="freeze-demo-replay">重播</button></div>
-                    <svg class="freeze-demo-scene" viewBox="0 0 360 150" role="img" aria-label="冰塊中的粒子排列與物態變化"><defs><linearGradient id="phase-demo-ice-top" x2="1" y2="1"><stop stop-color="#e0fbff"/><stop offset="1" stop-color="#89d8ee"/></linearGradient><linearGradient id="phase-demo-ice-front" x2="1" y2="1"><stop stop-color="#a6e5f4"/><stop offset="1" stop-color="#67c5e5"/></linearGradient><linearGradient id="phase-demo-ice-side" x2="1" y2="1"><stop stop-color="#77cce8"/><stop offset="1" stop-color="#48a9d4"/></linearGradient><clipPath id="freeze-demo-clip"><rect x="12" y="12" width="336" height="136" rx="2"/></clipPath><clipPath id="phase-demo-ice-clip"><path d="M178 12 248 34V91L182 118 112 91V34Z"/></clipPath></defs><rect id="freeze-demo-vessel" x="10" y="8" width="340" height="114" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><g id="phase-demo-ice"><path d="M112 34 178 12 248 34 182 58Z" fill="url(#phase-demo-ice-top)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M112 34 182 58V118L112 91Z" fill="url(#phase-demo-ice-front)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M182 58 248 34V91L182 118Z" fill="url(#phase-demo-ice-side)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="m124 39 46 16m-45 2 48 16m-48 3 48 17m20-32 41-16m-41 38 42-17" fill="none" stroke="#e6fbff" stroke-width="3.5" opacity=".75"/></g><g id="freeze-demo-particles" clip-path="url(#freeze-demo-clip)"></g><text id="phase-demo-source" x="20" y="25" fill="#43839a" font-size="10" font-weight="700">冷端</text><path id="phase-demo-arrows" d="M110 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4" fill="none" stroke="#43839a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg class="freeze-demo-scene" viewBox="0 0 360 150" role="img" aria-label="容器中的水分子排列與物態變化"><defs><linearGradient id="phase-demo-ice-top" x2="1" y2="1"><stop stop-color="#e0fbff"/><stop offset="1" stop-color="#89d8ee"/></linearGradient><linearGradient id="phase-demo-ice-front" x2="1" y2="1"><stop stop-color="#a6e5f4"/><stop offset="1" stop-color="#67c5e5"/></linearGradient><linearGradient id="phase-demo-ice-side" x2="1" y2="1"><stop stop-color="#77cce8"/><stop offset="1" stop-color="#48a9d4"/></linearGradient><clipPath id="freeze-demo-clip"><rect x="12" y="12" width="336" height="136" rx="2"/></clipPath><clipPath id="phase-demo-ice-clip"><path d="M178 12 248 34V91L182 118 112 91V34Z"/></clipPath></defs><rect id="freeze-demo-vessel" x="10" y="8" width="340" height="114" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><g id="phase-demo-ice"><path d="M112 34 178 12 248 34 182 58Z" fill="url(#phase-demo-ice-top)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M112 34 182 58V118L112 91Z" fill="url(#phase-demo-ice-front)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M182 58 248 34V91L182 118Z" fill="url(#phase-demo-ice-side)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="m124 39 46 16m-45 2 48 16m-48 3 48 17m20-32 41-16m-41 38 42-17" fill="none" stroke="#e6fbff" stroke-width="3.5" opacity=".75"/></g><g id="freeze-demo-particles" clip-path="url(#freeze-demo-clip)"></g><text id="phase-demo-source" x="20" y="25" fill="#43839a" font-size="10" font-weight="700">冷端</text><path id="phase-demo-arrows" d="M110 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4" fill="none" stroke="#43839a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     <p class="freeze-demo-status" id="freeze-demo-status" aria-live="polite">固態粒子在固定位置附近微微振動</p><p class="freeze-demo-caption" id="phase-demo-caption">圓點代表水分子；粒子大小與間距並非實際比例。</p>
                   </div>
                 </div>
@@ -1480,9 +1478,8 @@
     }
     function playFreezeDemo(fromSolidOverview=false){
       stopFreezeDemo();const runId=freezeRunId;freezeDone=0;
-      setPhaseDemoIceScale(fromSolidOverview);
       phaseDemoIce.style.opacity="0";
-      activePhaseProcess="freeze";phaseDemoHeading.textContent="水 → 冰：晶核形成並逐步長大";phaseDemoSource.textContent="放熱／冷端";phaseDemoArrows.setAttribute("d",phaseDemoDefaultArrowPath);phaseDemoArrows.setAttribute("transform","translate(0 50) scale(1 -1)");phaseDemoArrows.setAttribute("stroke","#43839a");phaseDemoCaption.textContent="圓點代表水中的粒子；冷端先形成小晶核，有序排列逐步擴展。此圖不另畫一層水，也不按實際大小比例呈現。";
+      activePhaseProcess="freeze";phaseDemoHeading.textContent="水 → 冰：晶核形成並逐步長大";phaseDemoSource.textContent="放熱";phaseDemoArrows.setAttribute("d",phaseDemoDefaultArrowPath);phaseDemoArrows.setAttribute("transform","translate(0 50) scale(1 -1)");phaseDemoArrows.setAttribute("stroke","#43839a");phaseDemoCaption.textContent="圓點代表水中的粒子；冷端先形成小晶核，有序排列逐步擴展。此圖不另畫一層水，也不按實際大小比例呈現。";
       const demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox",fromSolidOverview?"0 0 360 150":"0 0 360 132");phaseDemoSource.setAttribute("x","20");phaseDemoSource.setAttribute("y","25");
       const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches,scale=demoSvg.getBoundingClientRect().width/360,solidTargets=fromSolidOverview?phaseDemoTargets("solid",true):null;
       freezeParticles.forEach(p=>{
@@ -1508,12 +1505,8 @@
     const phaseDemoHeading=document.getElementById("phase-demo-heading"),phaseDemoSource=document.getElementById("phase-demo-source"),phaseDemoCaption=document.getElementById("phase-demo-caption"),phaseDemoArrows=document.getElementById("phase-demo-arrows");
     const phaseDemoDefaultArrowPath="M110 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4";
     let phaseDemoRun=0,phaseDemoFrame=0,phaseDemoLastFrame=0,phaseDemoTransition=null,activePhaseProcess="freeze",phaseDemoMotionState="";
-    function setPhaseDemoIceScale(enabled){
-      const transform=enabled?"translate(-45 0) scale(1.25)":"";
-      phaseDemoIce.setAttribute("transform",transform);phaseDemoIceClip.setAttribute("transform",transform);
-    }
     const phaseDemoMotion={
-      freeze:{from:"liquid",to:"solid",heading:"水 → 冰：放熱凝固",source:"放熱／冷端",status:"液態粒子逐步排列成冰晶"},
+      freeze:{from:"liquid",to:"solid",heading:"水 → 冰：放熱凝固",source:"放熱",status:"液態粒子逐步排列成冰晶"},
       melt:{from:"solid",to:"liquid",heading:"冰 → 水：吸熱融化",source:"吸熱",status:"底層粒子先融化並開始流動；上層冰晶隨支撐減少逐步下沉"},
       vaporization:{from:"liquid",to:"gas",heading:"水 → 水蒸氣：液面蒸發",source:"吸熱",status:"液面粒子先離開液體並進入氣體運動；其餘液體粒子繼續流動"},
       condensation:{from:"gas",to:"liquid",heading:"水蒸氣 → 水：放熱凝結",source:"放熱",status:"氣態粒子減速、靠近，凝結成液態水"},
@@ -1569,7 +1562,7 @@
         if(stateKey==="liquid"){const base=phaseDemoTargets("liquid")[index],row=Math.floor(index/16);return{x:base.x+(Math.random()-.5)*4,y:91+row*11+(Math.random()-.5)*4};}
         return{x:20+Math.random()*320,y:20+Math.random()*98};
       });
-      setPhaseDemoIceScale(solid);activePhaseProcess=stateKey;phaseDetail.dataset.overviewState=stateKey;configurePhaseOverview(stateKey);
+      activePhaseProcess=stateKey;phaseDetail.dataset.overviewState=stateKey;configurePhaseOverview(stateKey);
       freezeDemo.hidden=false;const demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox","0 0 360 132");demoSvg.setAttribute("aria-label",stateKey==="solid"?"容器中的固態水分子規則排列並在固定位置微微振動":stateKey==="liquid"?"液態水分子在容器底部附近流動":"水蒸氣分子在容器中分散移動");phaseDemoHeading.textContent=phaseStates[stateKey].title;phaseDemoSource.textContent="";phaseDemoArrows.setAttribute("d","");phaseSolidFlowParticles.replaceChildren();document.querySelectorAll(".phase-solid-flow path,.phase-solid-flow-mobile path").forEach(path=>path.classList.remove("is-active"));
       freezeParticles.forEach((p,index)=>{p.x=targets[index].x;p.y=targets[index].y;p.element.style.transform="none";p.element.setAttribute("class",`freeze-demo-particle is-${stateKey}${solid?" is-vibrating":""}`);p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
       phaseDemoIce.style.opacity="0";freezeDemoStatus.textContent=phaseStates[stateKey].title;phaseDemoCaption.textContent=phaseStates[stateKey].title;
@@ -1749,7 +1742,6 @@
     }
     function playPhaseTransition(key,fromSolidOverview=false){
       stopPhaseDemoMotion();const runId=phaseDemoRun,process=phaseDemoMotion[key],starts=phaseDemoTargets(process.from,fromSolidOverview),ends=phaseDemoTargets(process.to,fromSolidOverview);
-      setPhaseDemoIceScale(fromSolidOverview);
       phaseDemoIce.style.opacity=process.from==="solid"?"1":"0";
       if(key==="condensation")starts.forEach((point,index)=>{point.y=16+(index%8)*14+(Math.random()-.5)*3;});
       activePhaseProcess=key;phaseDemoHeading.textContent=process.heading;phaseDemoSource.textContent=process.source;
