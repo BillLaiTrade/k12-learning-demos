@@ -164,7 +164,7 @@
                 <circle class="rope-marker" cx="350" cy="142" r="10" fill="#df8b41" stroke="#fff" stroke-width="3"/>
                 <text x="350" y="45" text-anchor="middle">繩上的同一個記號</text>
               </svg>
-              <figcaption>同一條繩子、同一個記號；比較波峰的位置和繩點的位置。</figcaption>
+              <figcaption>同一條繩子、同一個記號；觀察繩上的凸起往哪裡移動，記號又在哪裡振動。</figcaption>
             </figure>
             <div class="control-panel"><div class="controls"><button class="secondary" type="button" data-pulse-toggle aria-pressed="true">暫停波形</button><button class="secondary" type="button" data-pulse-reset>重新播放</button><span class="live-note" data-pulse-status aria-live="polite">動畫播放中；橘點代表繩上的固定記號。</span></div></div>
           </div>
@@ -174,9 +174,9 @@
           <div class="card-side"><span class="card-number">02</span><h3>追蹤固定繩點</h3><span class="card-role">介質振動，波形前進</span></div>
           <div class="card-main">
             <h2>波往前走，標記怎麼沒有跟著跑？</h2>
-            <p>波形通過時，記號附近的繩段上下振動；波形離開後，繩段回到原位置附近，沒有跟著波峰一路向右跑。繩上的振動把能量傳到較遠的位置，因此波向前傳，介質卻沒有整段隨波形前進。</p>
+            <p>波形通過時，記號附近的繩段上下振動；繩上的凸起移開後，繩段回到原位置附近，沒有跟著那個凸起一路向右跑。繩上的振動把能量傳到較遠的位置，因此波向前傳，介質卻沒有整段隨波形前進。</p>
             <figure class="visual">
-              <svg class="rope-wave" viewBox="0 0 760 220" role="img" aria-label="三個連續時刻的繩波位置；波峰往右移，固定繩點只上下振動">
+              <svg class="rope-wave" viewBox="0 0 760 220" role="img" aria-label="三個連續時刻的繩波位置；繩上的凸起往右移，固定繩點只上下振動">
                 <defs><marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
                 <path class="pulse-path wave-line" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/>
@@ -188,9 +188,9 @@
                 <path d="M602 94L610 84L618 94M602 152L610 162L618 152" fill="none" stroke="#748b7e" stroke-width="2"/>
                 <text x="630" y="126">繩點上下</text><text x="630" y="147">振動</text>
               </svg>
-              <figcaption>橘點在原位置附近上下移動，波峰則沿繩子向右傳播。</figcaption>
+              <figcaption>橘點在原位置附近上下移動；繩上的凸起則沿繩子向右傳播。</figcaption>
             </figure>
-            <div class="fact"><p><strong>分清楚兩種運動：</strong>繩點在原處附近振動；波形把擾動和能量傳到遠處。波峰不是一團繩子一路移動。</p></div>
+            <div class="fact"><p><strong>分清楚兩種運動：</strong>繩點在原處附近振動；波形把擾動和能量傳到遠處。繩上的凸起不是一團繩子一路移動。</p></div>
           </div>
         </section>
 
@@ -428,7 +428,7 @@
       };
       const updatePulseControls = () => {
         pulseToggles.forEach(button => { button.textContent = pulsePlaying ? "暫停波形" : "播放波形"; button.setAttribute("aria-pressed",String(pulsePlaying)); });
-        pulseStatuses.forEach(note => { note.textContent = reducedMotion ? pulsePlaying ? "系統偏好減少動態效果；目前依你的操作手動播放。" : "系統偏好減少動態效果；動畫不自動播放，按下播放即可觀看。" : pulsePlaying ? "動畫播放中；橘點代表繩上的固定記號。" : "波形已暫停；可觀察橘點位置與波峰位置。"; });
+        pulseStatuses.forEach(note => { note.textContent = reducedMotion ? pulsePlaying ? "系統偏好減少動態效果；目前依你的操作手動播放。" : "系統偏好減少動態效果；動畫不自動播放，按下播放即可觀看。" : pulsePlaying ? "動畫播放中；橘點代表繩上的固定記號。" : "波形已暫停；可觀察橘點位置與凸起位置。"; });
       };
       const schedulePulse = () => { if(pulsePlaying&&pulseFrame===null) pulseFrame=window.requestAnimationFrame(animatePulse); };
       pulseToggles.forEach(button => button.addEventListener("click",() => { pulsePlaying = !pulsePlaying; updatePulseControls(); schedulePulse(); }));
