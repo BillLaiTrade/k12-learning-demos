@@ -1451,10 +1451,21 @@
       const meltLayerProgress=transition.key==="melt"?Array.from({length:6},(_,row)=>{const local=Math.max(0,Math.min(1,(elapsed-transition.delays[row*8])/transition.duration));return local*local*(3-2*local);}):null;
       freezeParticles.forEach((p,index)=>{
         const local=Math.max(0,Math.min(1,(elapsed-transition.delays[index])/transition.duration));
-        if(transition.key==="condensation"&&p.isCondensed){
-          p.x+=p.vx*dt;p.y+=p.vy*dt;
-          if(p.x<17){p.x=17;p.vx=Math.abs(p.vx);}if(p.x>343){p.x=343;p.vx=-Math.abs(p.vx);}
-          if(p.y<85){p.y=85;p.vy=Math.abs(p.vy)*.55;}if(p.y>116){p.y=116;p.vy=-Math.abs(p.vy)*.55;}
+        if(transition.key==="condensation"){
+          if(!p.isCondensed&&elapsed>=transition.delays[index]){
+            p.isCondensed=true;p.vx=(Math.random()-.5)*40;p.vy=0;
+            p.element.setAttribute("class","freeze-demo-particle is-liquid");
+          }
+          if(p.isCondensed){
+            p.vy+=125*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
+            if(p.x<17){p.x=17;p.vx=Math.abs(p.vx);}if(p.x>343){p.x=343;p.vx=-Math.abs(p.vx);}
+            if(p.y>116){p.y=116;p.vy=-Math.abs(p.vy)*.22;}
+          }else{
+            p.x+=p.vx*dt;p.y+=p.vy*dt;
+            if(p.x<17){p.x=17;p.vx=Math.abs(p.vx);}if(p.x>343){p.x=343;p.vx=-Math.abs(p.vx);}
+            if(p.y<16){p.y=16;p.vy=Math.abs(p.vy);}if(p.y>116){p.y=116;p.vy=-Math.abs(p.vy);}
+            p.startX=p.x;p.startY=p.y;
+          }
           p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));return;
         }
         if(transition.key==="sublimation"){
@@ -1505,7 +1516,6 @@
         p.x=p.startX+(p.targetX-p.startX)*eased+p.curveX*curve+p.finalVx*seconds*drift;
         p.y=shiftedStartY+(p.targetY-shiftedStartY)*eased+p.curveY*curve+p.finalVy*seconds*drift;
         if(transition.key==="melt"&&local>=1){p.melted=true;p.vx=(Math.random()-.5)*38;p.vy=(Math.random()-.5)*14;p.element.setAttribute("class","freeze-demo-particle is-liquid");}
-        if(transition.key==="condensation"&&local>=1&&!p.isCondensed){p.isCondensed=true;p.vx=(Math.random()-.5)*44;p.vy=(Math.random()-.5)*14;p.element.setAttribute("class","freeze-demo-particle is-liquid");}
         if(transition.to==="solid"&&local>=1)p.element.setAttribute("class","freeze-demo-particle is-solid is-vibrating");
         p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
       });
