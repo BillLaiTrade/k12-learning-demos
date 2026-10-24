@@ -1755,6 +1755,9 @@
     if(window.location.hash==="#phase-detail"){
       selectPhaseProcess("freeze");
       requestAnimationFrame(()=>document.getElementById("phase-detail").scrollIntoView({block:"start"}));
+    }else if(window.location.hash==="#solid-overview"){
+      selectPhaseState("solid");
+      requestAnimationFrame(()=>phaseSolidOverview.scrollIntoView({block:"center"}));
     }
 
     const changes={evaporation:["水分蒸發","沒有生成另一種物質","物理變化","水分從液態變成水蒸氣，物質仍是水。"],rust:["桶身生鏽","形成不同於原金屬的鏽層","化學變化","生鏽形成新物質；外觀改變是線索，分類依據是是否生成新物質。"]};
