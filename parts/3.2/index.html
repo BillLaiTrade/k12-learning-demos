@@ -63,6 +63,7 @@
     #gold-scene:not(.is-immersed) .comparison-cylinder .cylinder-scale i[data-volume="750"]{display:none}
     #gold-scene.is-immersed .comparison-cylinder .cylinder-scale i[data-volume="750"]::before{width:12px;border-color:#176b53;border-top-width:2px}
     #gold-scene.is-immersed .comparison-cylinder .cylinder-scale i[data-volume="750"]::after{color:#145c46;font-weight:850}
+    #measuring-cylinder,#measuring-cylinder *{pointer-events:none}
     .sample-display img{width:86px;height:70px}
     .displacement-scene .displacement-rock.is-immersed{left:calc(62% - 59px);transform:none}
     .sample-display.in-water{left:calc(88% - 123px)}
@@ -158,7 +159,7 @@
       const navLinks=$$('#lesson-nav a'), pathSections=$$('.lesson, .unit-quiz');
       const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.hash===`#${entry.target.id}`));}})},{rootMargin:'-15% 0px -70% 0px'});pathSections.forEach(s=>observer.observe(s));
       // 全單元共用同一顆隕石模型與表面材質；靜態示意圖使用該模型的固定角度渲染圖。
-      const pageVersion=new URL(location.href).searchParams.get('v')||'meteorite-20261023-42';
+      const pageVersion=new URL(location.href).searchParams.get('v')||'meteorite-20261023-43';
       const observerModule=new URL('./assets/stone-observer.js',document.baseURI);if(pageVersion)observerModule.searchParams.set('v',pageVersion);
       import(observerModule.href).then(({mountStoneObserver})=>mountStoneObserver()).catch(()=>{const status=$('#observer-loading');if(status)status.textContent='立體模型無法載入，請重新整理頁面。'});
       const massModule=new URL('./assets/mass-measurement.js',document.baseURI);if(pageVersion)massModule.searchParams.set('v',pageVersion);
