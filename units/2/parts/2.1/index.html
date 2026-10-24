@@ -53,6 +53,7 @@
     .visual { overflow:hidden; padding:14px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(135deg,#f2f8f1,#fffefa 68%); }
     .visual svg { display:block; width:100%; height:auto; }
     .visual text { fill:#314640; font-family:inherit; font-size:15px; }
+    .visual .wave-vocabulary text { font-size:22px; }
     .visual .small-label { fill:#59696b; font-size:12px; }
     .visual .wave-line { fill:none; stroke:#176b53; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
     .visual .rope-underlay { fill:none; stroke:#d4ad7b; stroke-width:14; stroke-linecap:round; stroke-linejoin:round; }
@@ -187,23 +188,19 @@
         <section class="lesson-card" id="card-02">
           <div class="card-side"><span class="card-number">02</span><h3>讀懂波形</h3><span class="card-role">建立共同的圖像詞彙</span></div>
           <div class="card-main">
-            <h2>波形圖上，我們要認出哪些要素？</h2>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我們把這段繩波畫下來了。要描述起伏在哪裡，先認出哪些位置？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先找繩子原本的位置，再認出最高處、最低處和波形傳播方向。</p></div>
-            <p>沿用剛才的繩波，將某一時刻的形狀畫成波形圖。繩子是這個例子中的介質；沒有波通過時，繩子所在的位置稱為平衡位置。圖上的最高處叫波峰，最低處叫波谷；箭頭表示波形傳播方向。這些名稱幫助我們描述波形上的位置，不是波由哪些實體零件組成。</p><figure class="visual">
-              <svg class="rope-wave" data-static-rope viewBox="0 0 720 280" role="img" aria-label="同一條編織繩的波形示意圖，標示平衡位置、波峰、波谷與波形傳播方向">
-                <defs><marker id="wave-vocab-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
+            <h2>繩波有些地方凸起、有些地方凹下，圖上怎麼讀？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩波有些地方凸起來，有些地方凹下去。中間的虛線好像是繩子原本的位置。</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>沒錯。繩子原本的位置叫平衡位置；凸起的最高處叫波峰，凹下的最低處叫波谷。</p></div>
+            <p>波形圖用曲線呈現繩子的高低起伏。平衡位置是繩子原本所在的位置；波峰、波谷分別是相對於它而言凸起最高、凹下最低的位置。</p><figure class="visual">
+              <svg class="rope-wave wave-vocabulary" data-static-rope viewBox="0 0 720 260" role="img" aria-label="波形圖標示平衡位置、波峰與波谷">
                 <path d="M48 140H672" class="equilibrium"/>
                 <path class="wave-line" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/>
-                <circle cx="150" cy="66" r="6" fill="#176b53"/><circle cx="266" cy="214" r="6" fill="#176b53"/>
-                <text x="150" y="40" text-anchor="middle">波峰</text><text x="266" y="248" text-anchor="middle">波谷</text>
-                <path d="M520 117V136" stroke="#748b7e" stroke-width="1.5"/><rect x="472" y="91" width="98" height="25" rx="8" fill="#fffefa" stroke="#d7e1dd"/><text x="521" y="108" text-anchor="middle">平衡位置</text>
-                <path d="M204 270H600" class="motion-arrow" marker-end="url(#wave-vocab-arrow)"/><text x="520" y="250" text-anchor="middle">波形傳播方向</text>
-                <text class="small-label" x="54" y="22">繩子：此例中的介質</text>
+                <text x="150" y="40" text-anchor="middle">波峰</text><text x="266" y="250" text-anchor="middle">波谷</text>
+                <path d="M521 122V136" stroke="#748b7e" stroke-width="1.5"/><rect x="460" y="88" width="122" height="34" rx="8" fill="#fffefa" stroke="#d7e1dd"/><text x="521" y="112" text-anchor="middle">平衡位置</text>
               </svg>
-              <figcaption>波峰、波谷是波形上的位置名稱；箭頭說明波形往哪個方向傳播。</figcaption>
+              <figcaption>虛線是平衡位置；凸起的最高處是波峰，凹下的最低處是波谷。</figcaption>
             </figure>
-            <div class="fact"><p><strong>讀圖提示：</strong>先找平衡位置，再看波峰與波谷在哪裡，最後確認波形傳播方向。之後會用這些位置描述波的距離。</p></div>
+            <div class="fact"><p><strong>讀圖提示：</strong>先找平衡位置，再依照曲線的高低辨認波峰和波谷。</p></div>
           </div>
         </section>
 
