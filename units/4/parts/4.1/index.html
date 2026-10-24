@@ -1447,7 +1447,7 @@
     const freezeTimers=[],freezeDemoStatus=document.getElementById("freeze-demo-status");
     let freezeRunId=0,freezeLastFrame=0,freezeMotionFrame=0,freezeDone=0;
     function updateFreezeProgress(){
-      phaseDemoIce.style.opacity=(freezeDone/freezeParticles.length).toFixed(3);
+      phaseDemoIce.style.opacity="0";
       if(freezeDone===0)freezeDemoStatus.textContent="液態水：粒子持續移動";
       else if(freezeDone<3)freezeDemoStatus.textContent="冷端開始形成微小晶核";
       else if(freezeDone<freezeParticles.length)freezeDemoStatus.textContent=freezeDone<12?"小晶核逐漸穩定並向周圍擴展":"冰晶向液體內部逐步生長；未凝固區仍在移動";
@@ -1544,7 +1544,7 @@
         else if(!continueVelocity){if(state==="gas"){const angle=Math.random()*Math.PI*2,speed=44+Math.random()*34;p.vx=Math.cos(angle)*speed;p.vy=Math.sin(angle)*speed;}else{p.vx=(Math.random()-.5)*44;p.vy=(Math.random()-.5)*38;}}
         p.element.setAttribute("class",`freeze-demo-particle is-${state}${state==="solid"?" is-vibrating":""}`);
       });
-      phaseDemoIce.style.opacity=state==="solid"&&activePhaseProcess==="freeze"?"1":"0";
+      phaseDemoIce.style.opacity="0";
       phaseDemoLastFrame=0;phaseDemoFrame=requestAnimationFrame(now=>animatePhaseDemoMotion(now,runId));
     }
     function configurePhaseOverview(stateKey){
