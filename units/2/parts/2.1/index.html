@@ -473,6 +473,11 @@
         if(phase<=0||phase>=1)return 0;
         return singlePulseAmplitude*Math.sin(2*Math.PI*phase);
       };
+      const continuousWaveAt=(x,time)=>{
+        const sourceTime=time-(x-singlePulseSource)/singlePulseSpeed;
+        if(sourceTime<0)return 0;
+        return singlePulseAmplitude*Math.sin(2*Math.PI*sourceTime/singlePulseDuration);
+      };
       const renderRopeTexture = ropePath => {
         const fallback=ropePath.nextElementSibling;
         if(fallback&&fallback.classList.contains("rope-fallback"))fallback.setAttribute("d",ropePath.getAttribute("d"));
@@ -496,7 +501,8 @@
         const firstCard = Boolean(svg.closest("#card-01"));
         const single = pulseMode === "single" && firstCard;
         const initial = pulseMode === "idle" && firstCard;
-        const shapeAt = x => initial ? 0 : single ? singleEvents.reduce((sum,eventStart)=>sum+singlePulseAt(x,eventStart,time),0) : waveAt(x,(time*132)%232);
+        const continuous=pulseMode==="continuous"&&firstCard;
+        const shapeAt = x => initial ? 0 : single ? singleEvents.reduce((sum,eventStart)=>sum+singlePulseAt(x,eventStart,time),0) : continuous ? continuousWaveAt(x,time) : waveAt(x,(time*132)%232);
         const end = svg.viewBox.baseVal.width - 38;
         let path = `M 38 ${baseline-shapeAt(38)}`;
         for (let x=41;x<=end;x+=3) path += ` L ${x} ${baseline-shapeAt(x)}`;
