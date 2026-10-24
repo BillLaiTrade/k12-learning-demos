@@ -186,30 +186,26 @@
                   <p class="scene-summary">燈泡發出的光，直接到達眼睛。</p>
                   <svg viewBox="0 0 520 250" role="img" aria-labelledby="direct-title direct-desc">
                     <title id="direct-title">燈泡發出的光直接進入眼睛</title>
-                    <desc id="direct-desc">桌燈發出暖黃色光線，光線沿直線前進並進入眼睛。</desc>
+                    <desc id="direct-desc">桌燈和眼睛位於同一個情境中；帶箭頭的直線表示燈光直接進入眼睛。</desc>
                     <defs>
-                      <linearGradient id="direct-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8f3e5"/><stop offset="1" stop-color="#edf4ef"/></linearGradient>
-                      <radialGradient id="lamp-glow"><stop stop-color="#ffe8a2" stop-opacity=".8"/><stop offset="1" stop-color="#ffe8a2" stop-opacity="0"/></radialGradient>
-                      <marker id="direct-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d99a36"/></marker>
+                      <linearGradient id="direct-bg" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f7f8f3"/><stop offset="1" stop-color="#e9efe7"/></linearGradient>
+                      <radialGradient id="direct-glow"><stop stop-color="#f8d67c" stop-opacity=".72"/><stop offset="1" stop-color="#f8d67c" stop-opacity="0"/></radialGradient>
+                      <marker id="direct-arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d28a24"/></marker>
                     </defs>
                     <rect width="520" height="250" rx="12" fill="url(#direct-bg)"/>
-                    <circle cx="94" cy="102" r="78" fill="url(#lamp-glow)"/>
-                    <path d="M60 193h84M102 149v44M102 150 75 170" fill="none" stroke="#59766b" stroke-width="9" stroke-linecap="round"/>
-                    <path d="m50 84 18-48h69l18 48q-52 26-105 0Z" fill="#dbe8dd" stroke="#55766a" stroke-width="4" stroke-linejoin="round"/>
-                    <path d="M64 78q38 17 77 0" fill="none" stroke="#97b8a4" stroke-width="4"/>
-                    <ellipse cx="102" cy="87" rx="30" ry="12" fill="#ffe19a"/>
-                    <circle cx="102" cy="90" r="10" fill="#ffc84f" stroke="#c98c2e" stroke-width="3"/>
-                    <path d="M144 82 354 94M148 96 354 103M145 110 354 112" fill="none" stroke="#e0a13b" stroke-width="3" stroke-linecap="round" marker-end="url(#direct-arrow)" opacity=".88"/>
-                    <path d="M389 50q-28 13-34 46l-14 17 14 9q3 33 35 48l28 28 20-8v-40l25-36-8-42q-27-34-66-22Z" fill="#e5c7a1" stroke="#8a7560" stroke-width="3" stroke-linejoin="round"/>
-                    <path d="M353 96q20-19 44-4l-2 15q-22 11-42-1Z" fill="#fffdf8" stroke="#526f65" stroke-width="3" stroke-linejoin="round"/>
-                    <circle cx="378" cy="101" r="9" fill="#83aa91"/><circle cx="380" cy="101" r="4.5" fill="#253d37"/><circle cx="382" cy="98" r="2" fill="#fff"/>
-                    <path d="M351 89q23-17 49-7" fill="none" stroke="#65584b" stroke-width="5" stroke-linecap="round"/>
-                    <path d="M396 116q12 3 19-1" fill="none" stroke="#a56e58" stroke-width="2.5" stroke-linecap="round"/>
-                    <path d="M374 202q31-20 64-3" fill="none" stroke="#8a7560" stroke-width="3"/>
-                    <text x="102" y="226" text-anchor="middle" fill="#52665d" font-size="14" font-weight="700">發光的桌燈</text>
-                    <text x="404" y="226" text-anchor="middle" fill="#52665d" font-size="14" font-weight="700">眼睛</text>
-                    <rect x="201" y="151" width="116" height="27" rx="13" fill="#fffdf8" stroke="#ead8b6"/>
-                    <text x="259" y="169" text-anchor="middle" fill="#8a672d" font-size="12" font-weight="700">光沿直線前進</text>
+                    <path d="M0 190H520" stroke="#c8d3c8" stroke-width="2"/><path d="M0 195H520V250H0Z" fill="#e5ebe2"/>
+                    <circle cx="115" cy="91" r="90" fill="url(#direct-glow)"/>
+                    <path d="M58 183h114q8 0 8 8v5H50v-5q0-8 8-8Z" fill="#627e72"/><path d="M65 185h100" stroke="#9db2a7" stroke-width="3" stroke-linecap="round"/>
+                    <path d="m105 181 7-36 20-35" fill="none" stroke="#58766b" stroke-width="11" stroke-linecap="round"/><circle cx="111" cy="143" r="8" fill="#dce7dc" stroke="#58766b" stroke-width="4"/>
+                    <path d="m124 99 20-31q3-5 9-5h51q7 0 10 7l14 31q-50 21-104-2Z" fill="#edf3eb" stroke="#527267" stroke-width="4" stroke-linejoin="round"/>
+                    <path d="M143 96q34 12 71 0" fill="none" stroke="#b9c9bc" stroke-width="3"/>
+                    <path d="M154 99q28 12 55 1" fill="none" stroke="#edc15d" stroke-width="8" stroke-linecap="round"/><circle cx="183" cy="102" r="8" fill="#f6d577" stroke="#bd8228" stroke-width="3"/>
+                    <path d="M194 94 389 94" fill="none" stroke="#d28a24" stroke-width="3.5" stroke-linecap="round" marker-end="url(#direct-arrow)"/>
+                    <path d="M425 81c-19 0-35 9-45 23 10 14 26 23 45 23s35-9 45-23c-10-14-26-23-45-23Z" fill="#fffefa" stroke="#42665b" stroke-width="4"/>
+                    <circle cx="425" cy="104" r="13" fill="#79a394"/><circle cx="425" cy="104" r="6" fill="#263b36"/><circle cx="428" cy="101" r="2.5" fill="#fff"/>
+                    <path d="M381 104q8-13 18-17M451 87q9 4 15 13" fill="none" stroke="#42665b" stroke-width="3" stroke-linecap="round"/>
+                    <rect x="78" y="207" width="117" height="25" rx="12" fill="#fffefa" stroke="#d8dfd5"/><text x="136" y="224" text-anchor="middle" fill="#405b51" font-size="13" font-weight="700">發光的桌燈</text>
+                    <rect x="396" y="207" width="58" height="25" rx="12" fill="#fffefa" stroke="#d8dfd5"/><text x="425" y="224" text-anchor="middle" fill="#405b51" font-size="13" font-weight="700">眼睛</text>
                   </svg>
                   <figcaption class="scene-path"><span class="scene-path-label">光路</span><span>光源</span><span class="path-arrow">→</span><span>眼睛</span></figcaption>
                 </figure>
@@ -218,36 +214,36 @@
                   <p class="scene-summary">燈光照亮書本，反射的光進入眼睛。</p>
                   <svg viewBox="0 0 520 250" role="img" aria-labelledby="reflected-title reflected-desc">
                     <title id="reflected-title">燈光照到書本後反射進入眼睛</title>
-                    <desc id="reflected-desc">桌燈照向書本，光在書本表面反射，接著進入眼睛。</desc>
+                    <desc id="reflected-desc">桌燈、書本和眼睛構成同一個觀察情境。光沿直線照到書頁，書頁將光向不同方向反射，其中一部分進入眼睛。</desc>
                     <defs>
-                      <linearGradient id="reflected-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8f3e5"/><stop offset="1" stop-color="#edf4ef"/></linearGradient>
-                      <radialGradient id="reflected-glow"><stop stop-color="#ffe8a2" stop-opacity=".72"/><stop offset="1" stop-color="#ffe8a2" stop-opacity="0"/></radialGradient>
-                      <marker id="incident-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d99a36"/></marker>
-                      <marker id="bounce-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#247c67"/></marker>
+                      <linearGradient id="reflected-bg" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f7f8f3"/><stop offset="1" stop-color="#e9efe7"/></linearGradient>
+                      <radialGradient id="book-glow"><stop stop-color="#f8d67c" stop-opacity=".55"/><stop offset="1" stop-color="#f8d67c" stop-opacity="0"/></radialGradient>
+                      <marker id="reflected-arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d28a24"/></marker>
                     </defs>
                     <rect width="520" height="250" rx="12" fill="url(#reflected-bg)"/>
-                    <circle cx="76" cy="99" r="67" fill="url(#reflected-glow)"/>
-                    <path d="M46 191h67M79 153v38M79 153 58 170" fill="none" stroke="#59766b" stroke-width="8" stroke-linecap="round"/>
-                    <path d="m39 90 15-39h52l15 39q-41 21-82 0Z" fill="#dbe8dd" stroke="#55766a" stroke-width="4" stroke-linejoin="round"/>
-                    <ellipse cx="80" cy="92" rx="24" ry="9" fill="#ffe19a"/><circle cx="80" cy="94" r="8" fill="#ffc84f" stroke="#c98c2e" stroke-width="2.5"/>
-                    <path d="m108 98 140 42" fill="none" stroke="#d99a36" stroke-width="4" stroke-linecap="round" marker-end="url(#incident-arrow)"/>
-                    <circle cx="157" cy="111" r="13" fill="#fffdf8" stroke="#e4bd73" stroke-width="2"/><text x="157" y="116" text-anchor="middle" fill="#956b25" font-size="13" font-weight="800">1</text>
-                    <path d="m250 128 52-29 56 31v49H250Z" fill="#e8d49d" stroke="#907a49" stroke-width="3" stroke-linejoin="round"/>
-                    <path d="m302 99 1 79M261 141h35M312 141h34" fill="none" stroke="#b79c63" stroke-width="2"/>
-                    <path d="m352 128 43-26" fill="none" stroke="#247c67" stroke-width="4" stroke-linecap="round" marker-end="url(#bounce-arrow)"/>
-                    <circle cx="376" cy="112" r="13" fill="#fffdf8" stroke="#91b8a0" stroke-width="2"/><text x="376" y="117" text-anchor="middle" fill="#176b53" font-size="13" font-weight="800">2</text>
-                    <path d="M425 56q-26 14-30 39l-13 15 13 9q3 28 34 45l26 24 19-8v-37l23-34-8-38q-26-31-64-15Z" fill="#e5c7a1" stroke="#8a7560" stroke-width="3" stroke-linejoin="round"/>
-                    <path d="M394 104q19-17 40-3l-2 14q-20 10-39-1Z" fill="#fffdf8" stroke="#526f65" stroke-width="3" stroke-linejoin="round"/>
-                    <circle cx="417" cy="109" r="8.5" fill="#83aa91"/><circle cx="419" cy="109" r="4" fill="#253d37"/><circle cx="421" cy="106" r="1.8" fill="#fff"/>
-                    <path d="M392 97q21-15 45-6" fill="none" stroke="#65584b" stroke-width="5" stroke-linecap="round"/>
-                    <text x="79" y="222" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">桌燈</text>
-                    <text x="302" y="222" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">書本</text>
-                    <text x="439" y="222" text-anchor="middle" fill="#52665d" font-size="13" font-weight="700">眼睛</text>
+                    <path d="M0 190H520" stroke="#c8d3c8" stroke-width="2"/><path d="M0 195H520V250H0Z" fill="#e5ebe2"/>
+                    <path d="M50 183h106q8 0 8 8v5H42v-5q0-8 8-8Z" fill="#627e72"/><path d="M57 185h92" stroke="#9db2a7" stroke-width="3" stroke-linecap="round"/>
+                    <path d="m91 181 8-36 19-35" fill="none" stroke="#58766b" stroke-width="11" stroke-linecap="round"/><circle cx="98" cy="143" r="8" fill="#dce7dc" stroke="#58766b" stroke-width="4"/>
+                    <path d="m110 99 19-30q3-5 9-5h46q7 0 10 7l13 31q-48 20-97-3Z" fill="#edf3eb" stroke="#527267" stroke-width="4" stroke-linejoin="round"/>
+                    <path d="M127 97q31 11 65 0" fill="none" stroke="#b9c9bc" stroke-width="3"/><path d="M138 100q26 11 51 1" fill="none" stroke="#edc15d" stroke-width="8" stroke-linecap="round"/><circle cx="164" cy="103" r="7" fill="#f6d577" stroke="#bd8228" stroke-width="3"/>
+                    <circle cx="293" cy="128" r="62" fill="url(#book-glow)"/>
+                    <path d="M225 145q34-9 69 1 35-10 70-1v34q-35-9-70 1-35-10-69-1Z" fill="#fffdf6" stroke="#82977c" stroke-width="3" stroke-linejoin="round"/>
+                    <path d="M294 146v32M240 154q20-5 39 0M240 163q20-5 39 0M309 154q20-5 39 0M309 163q20-5 39 0" fill="none" stroke="#c4b98d" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M174 105 252 145" fill="none" stroke="#d28a24" stroke-width="3.5" stroke-linecap="round" marker-end="url(#reflected-arrow)"/>
+                    <path d="M294 142 394 103" fill="none" stroke="#d28a24" stroke-width="3.5" stroke-linecap="round" marker-end="url(#reflected-arrow)"/>
+                    <path d="M294 143 337 87M296 145 357 145" fill="none" stroke="#d28a24" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 6" opacity=".55" marker-end="url(#reflected-arrow)"/>
+                    <circle cx="211" cy="123" r="12" fill="#fffefa" stroke="#d7b16b" stroke-width="2"/><text x="211" y="127" text-anchor="middle" fill="#966b25" font-size="11" font-weight="800">1</text>
+                    <circle cx="350" cy="120" r="12" fill="#fffefa" stroke="#d7b16b" stroke-width="2"/><text x="350" y="124" text-anchor="middle" fill="#966b25" font-size="11" font-weight="800">2</text>
+                    <path d="M425 81c-19 0-35 9-45 23 10 14 26 23 45 23s35-9 45-23c-10-14-26-23-45-23Z" fill="#fffefa" stroke="#42665b" stroke-width="4"/>
+                    <circle cx="425" cy="104" r="13" fill="#79a394"/><circle cx="425" cy="104" r="6" fill="#263b36"/><circle cx="428" cy="101" r="2.5" fill="#fff"/><path d="M381 104q8-13 18-17M451 87q9 4 15 13" fill="none" stroke="#42665b" stroke-width="3" stroke-linecap="round"/>
+                    <rect x="43" y="207" width="108" height="25" rx="12" fill="#fffefa" stroke="#d8dfd5"/><text x="97" y="224" text-anchor="middle" fill="#405b51" font-size="13" font-weight="700">發光的桌燈</text>
+                    <rect x="263" y="207" width="60" height="25" rx="12" fill="#fffefa" stroke="#d8dfd5"/><text x="293" y="224" text-anchor="middle" fill="#405b51" font-size="13" font-weight="700">書本</text>
+                    <rect x="396" y="207" width="58" height="25" rx="12" fill="#fffefa" stroke="#d8dfd5"/><text x="425" y="224" text-anchor="middle" fill="#405b51" font-size="13" font-weight="700">眼睛</text>
                   </svg>
                   <figcaption class="scene-path"><span class="scene-path-label">光路</span><span>光源</span><span class="path-arrow">→</span><span>書本</span><span class="path-arrow">→</span><span>眼睛</span></figcaption>
                 </figure>
               </div>
-              <p class="visual-caption">黃色光線表示光源發出的光；綠色光線表示物體反射後進入眼睛的光。</p>
+              <p class="visual-caption">箭頭表示光前進的方向；光照到書頁後向不同方向反射，部分反射光進入眼睛。</p>
             </div>
             <div class="fact"><p><strong>先記住：</strong>看見物體，需要有光進入眼睛；光可能直接來自光源，也可能先照到物體再反射進眼睛。</p></div>
           </div>
