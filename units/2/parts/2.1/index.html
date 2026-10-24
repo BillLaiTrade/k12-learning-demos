@@ -59,6 +59,8 @@
     .visual .rope-underlay { fill:none; stroke:#d4ad7b; stroke-width:14; stroke-linecap:round; stroke-linejoin:round; }
     .visual .rope-fallback { fill:none; stroke-width:14; stroke-linecap:round; stroke-linejoin:round; }
     .visual .rope-texture-layer { pointer-events:none; }
+    #fixed-rope-marker { cursor:ew-resize; touch-action:none; }
+    #fixed-rope-marker:focus { stroke:#176b53; stroke-width:5; }
     .visual .equilibrium { stroke:#9aaca1; stroke-width:1.5; stroke-dasharray:7 7; }
     .visual .motion-arrow { fill:none; stroke:#176b53; stroke-width:2.5; stroke-linecap:round; }
     .visual .measure { fill:none; stroke:#bc612b; stroke-width:2; stroke-linecap:round; }
@@ -212,19 +214,16 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>波峰往右傳，繩上的橘點也會跟著往右跑嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>把波峰的位置和橘色繩點分開看：繩點在原處附近上下振動，波形和能量往右傳。</p></div>
             <p>橘點代表繩上的同一點。波形向右傳時，這個繩點只在原來的水平位置附近上下振動；波峰通過後，它會接著往下，再回到平衡位置附近，沒有隨波形一路向右跑。繩上的振動把能量傳到遠處，繩子本身沒有整段隨波前進。</p><figure class="visual">
-              <svg class="rope-wave" data-fixed-point-wave viewBox="0 0 760 270" role="img" aria-label="繩波持續向右傳播；固定水平位置上的橘點隨繩子上下振動">
+              <svg class="rope-wave" data-fixed-point-wave viewBox="0 0 760 270" role="group" aria-label="互動繩波示意：可移動橘點選取繩上的位置，觀察繩點上下振動">
                 <defs><pattern id="rope-fallback-3" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern><marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
                 <path class="pulse-path rope-underlay" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><path class="rope-fallback" stroke="url(#rope-fallback-3)" aria-hidden="true" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <path d="M118 228H565" class="motion-arrow" marker-end="url(#arrow-rope-2)"/>
                 <text x="341" y="253" text-anchor="middle">波形與能量向右傳</text>
-                <path d="M350 90V194" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
-                <circle class="rope-marker" id="fixed-rope-marker" cx="350" cy="142" r="10" fill="#df8b41" stroke="#fff" stroke-width="3"/>
-                <path d="M610 85V161" stroke="#748b7e" stroke-width="2"/>
-                <path d="M602 94L610 84L618 94M602 152L610 162L618 152" fill="none" stroke="#748b7e" stroke-width="2"/>
-                <text x="630" y="126">繩點上下</text><text x="630" y="147">振動</text>
+                <path id="fixed-rope-guide" d="M350 90V194" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
+                <circle class="rope-marker" id="fixed-rope-marker" cx="350" cy="142" r="14" fill="#df8b41" stroke="#fff" stroke-width="3" tabindex="0" role="slider" aria-label="選擇繩上的固定點" aria-orientation="horizontal" aria-valuemin="46" aria-valuemax="714" aria-valuenow="350" aria-valuetext="繩上位置 350"/>
               </svg>
-              <figcaption>橘點在原位置附近上下移動；波峰則沿繩子向右傳播。</figcaption>
+              <figcaption>拖曳橘點可選擇繩上的不同位置；橘點會在該處上下振動，波形則沿繩子向右傳播。也可聚焦橘點後按左右鍵移動。</figcaption>
             </figure>
             <div class="fact"><p><strong>分清楚兩種運動：</strong>繩點在原處附近振動；波形把擾動和能量傳到遠處。波峰不是一團繩子一路移動。</p></div>
           </div>
@@ -541,10 +540,38 @@
 
       const fixedPointSvg=document.querySelector("[data-fixed-point-wave]");
       const fixedPointMarker=document.querySelector("#fixed-rope-marker");
-      if(fixedPointSvg&&fixedPointMarker){
+      const fixedPointGuide=document.querySelector("#fixed-rope-guide");
+      if(fixedPointSvg&&fixedPointMarker&&fixedPointGuide){
         const fixedPointRope=fixedPointSvg.querySelector(".rope-underlay");
-        const fixedPointX=350, fixedPointBaseline=142, fixedPointAmplitude=46;
+        let fixedPointX=350;
+        const fixedPointMin=46, fixedPointMax=714, fixedPointBaseline=142, fixedPointAmplitude=46;
         let fixedPointStart=0;
+        const setFixedPointX=x=>{
+          fixedPointX=Math.max(fixedPointMin,Math.min(fixedPointMax,Math.round(x)));
+          fixedPointMarker.setAttribute("cx",String(fixedPointX));
+          fixedPointMarker.setAttribute("aria-valuenow",String(fixedPointX));
+          fixedPointMarker.setAttribute("aria-valuetext",`繩上位置 ${fixedPointX}`);
+          fixedPointGuide.setAttribute("d",`M${fixedPointX} 90V194`);
+        };
+        const pointerSvgX=event=>{
+          const point=fixedPointSvg.createSVGPoint();
+          point.x=event.clientX;point.y=event.clientY;
+          return point.matrixTransform(fixedPointSvg.getScreenCTM().inverse()).x;
+        };
+        fixedPointMarker.addEventListener("pointerdown",event=>{
+          event.preventDefault();fixedPointMarker.focus({preventScroll:true});
+          fixedPointMarker.setPointerCapture(event.pointerId);setFixedPointX(pointerSvgX(event));
+        });
+        fixedPointMarker.addEventListener("pointermove",event=>{
+          if(fixedPointMarker.hasPointerCapture(event.pointerId))setFixedPointX(pointerSvgX(event));
+        });
+        fixedPointMarker.addEventListener("keydown",event=>{
+          const step=event.shiftKey?1:8;
+          if(event.key==="ArrowLeft"){event.preventDefault();setFixedPointX(fixedPointX-step);}
+          else if(event.key==="ArrowRight"){event.preventDefault();setFixedPointX(fixedPointX+step);}
+          else if(event.key==="Home"){event.preventDefault();setFixedPointX(fixedPointMin);}
+          else if(event.key==="End"){event.preventDefault();setFixedPointX(fixedPointMax);}
+        });
         const renderFixedPointWave=time=>{
           if(!fixedPointStart)fixedPointStart=time;
           const elapsed=reducedMotion?0:(time-fixedPointStart)/1000;
