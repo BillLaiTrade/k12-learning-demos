@@ -459,6 +459,7 @@
       let pulseTime = 0;
       let previousTime = 0;
       let pulseFrame = null;
+      let queuedState = false;
       const ns="http://www.w3.org/2000/svg";
       const waveAt = (x,offset,amplitude=74) => amplitude * Math.sin((x-offset-92)*2*Math.PI/232);
       const singleEvents = [];
@@ -507,11 +508,12 @@
       const updatePulseControls = () => {
         continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續波";
         continuousButton.setAttribute("aria-pressed",String(pulseMode==="continuous"&&pulsePlaying));
-        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的波形持續向右傳播。":"單次波：波源完成一次上下振動，繩上各處依序被帶動，形成含有波峰與波谷的波形；再按一次，就會送出下一個。";
-        pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?"繩上的單次波正依序形成並向右傳播；再按「單次波」可送出下一個。":"單次波已傳過；按「單次波」可再看一次。"):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續波」可繼續。");});
+        queuedState=pulseMode==="single"&&singleEvents.some(start=>start>pulseTime);
+        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的波形持續向右傳播。":"單次波：波源完成一次上下振動，繩上各處依序被帶動，形成含有波峰與波谷的波形；再按一次，下一輪會接著送出。";
+        pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?(queuedState?"下一輪已排入；波源完成目前這次上下振動後，會接著送出。已發出的波仍繼續傳播。":"單次波正從波源形成並向右傳播；再按「單次波」可排入下一輪。"):("單次波已傳過；按「單次波」可再看一次。")):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續波」可繼續。");});
       };
       const schedulePulse = () => { if(pulsePlaying&&pulseFrame===null) pulseFrame=window.requestAnimationFrame(animatePulse); };
-      singleButton.addEventListener("click",()=>{if(pulseMode!=="single"){pulseMode="single";pulseTime=0;singleEvents.length=0;}singleEvents.push(pulseTime);pulsePlaying=true;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();schedulePulse();});
+      singleButton.addEventListener("click",()=>{if(pulseMode!=="single"){pulseMode="single";pulseTime=0;singleEvents.length=0;}const lastStart=singleEvents[singleEvents.length-1];const nextStart=lastStart===undefined?pulseTime:Math.max(pulseTime,lastStart+singlePulseDuration);singleEvents.push(nextStart);pulsePlaying=true;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();schedulePulse();});
       continuousButton.addEventListener("click",()=>{if(pulseMode==="continuous"&&pulsePlaying){pulsePlaying=false;}else{if(pulseMode!=="continuous"){pulseMode="continuous";pulseTime=0;singleEvents.length=0;}pulsePlaying=true;}previousTime=0;updatePulseControls();schedulePulse();});
       const animatePulse = time => {
         if (previousTime) {
@@ -521,6 +523,7 @@
             const pulseLifetime=singlePulseDuration+(722-singlePulseSource)/singlePulseSpeed;
             for(let i=singleEvents.length-1;i>=0;i--)if(pulseTime-singleEvents[i]>pulseLifetime)singleEvents.splice(i,1);
             if(!singleEvents.length){pulsePlaying=false;updatePulseControls();}
+            else if(queuedState&&!singleEvents.some(start=>start>pulseTime))updatePulseControls();
           }
         }
         previousTime=time;
