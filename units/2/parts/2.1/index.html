@@ -57,6 +57,8 @@
     .visual .wave-line { fill:none; stroke:#176b53; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
     .visual .rope-underlay { fill:none; stroke:#d4ad7b; stroke-width:14; stroke-linecap:round; stroke-linejoin:round; }
     .visual .rope-texture-layer { pointer-events:none; }
+    .visual .rope-wave.formal-mode .rope-underlay { stroke:#176b53; stroke-width:5; }
+    .visual .rope-wave.formal-mode .rope-texture-layer { display:none; }
     .visual .equilibrium { stroke:#9aaca1; stroke-width:1.5; stroke-dasharray:7 7; }
     .visual .motion-arrow { fill:none; stroke:#176b53; stroke-width:2.5; stroke-linecap:round; }
     .visual .measure { fill:none; stroke:#bc612b; stroke-width:2; stroke-linecap:round; }
@@ -194,7 +196,7 @@
               <svg class="rope-wave" data-static-rope viewBox="0 0 720 280" role="img" aria-label="同一條編織繩的波形示意圖，標示平衡位置、波峰、波谷與波形傳播方向">
                 <defs><marker id="wave-vocab-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M48 140H672" class="equilibrium"/>
-                <path class="rope-underlay" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><g class="rope-texture-layer" aria-hidden="true"></g>
+                <path class="wave-line" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/>
                 <circle cx="150" cy="66" r="6" fill="#176b53"/><circle cx="266" cy="214" r="6" fill="#176b53"/>
                 <text x="150" y="40" text-anchor="middle">波峰</text><text x="266" y="248" text-anchor="middle">波谷</text>
                 <path d="M520 117V136" stroke="#748b7e" stroke-width="1.5"/><rect x="472" y="91" width="98" height="25" rx="8" fill="#fffefa" stroke="#d7e1dd"/><text x="521" y="108" text-anchor="middle">平衡位置</text>
@@ -244,7 +246,7 @@
                 <svg viewBox="0 0 500 230" role="img" aria-label="繩點上下振動，波向右傳播的橫波示意圖">
                   <defs><marker id="arrow-transverse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker><marker id="arrow-particle-v" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#bc612b"/></marker></defs>
                   <path d="M38 112H455" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
-                  <path class="small-transverse-wave rope-underlay" d="M38 112 C72 112 78 58 112 58 S152 166 186 166 S226 58 260 58 S300 166 334 166 S374 58 408 58 S442 112 455 112"/><g class="rope-texture-layer" aria-hidden="true"></g>
+                  <path class="small-transverse-wave wave-line" d="M38 112 C72 112 78 58 112 58 S152 166 186 166 S226 58 260 58 S300 166 334 166 S374 58 408 58 S442 112 455 112"/>
                   <g class="transverse-particles"></g>
                   <path d="M85 204H408" class="motion-arrow" marker-end="url(#arrow-transverse)"/><text x="246" y="226" text-anchor="middle">波前進方向</text>
                   <path d="M112 111V67" class="measure" marker-end="url(#arrow-particle-v)"/><path d="M112 111V154" class="measure" marker-end="url(#arrow-particle-v)"/>
@@ -486,6 +488,7 @@
         const firstCard = Boolean(svg.closest("#card-01"));
         const single = pulseMode === "single" && firstCard;
         const initial = pulseMode === "idle" && firstCard;
+        svg.classList.toggle("formal-mode",initial);
         const pulseCenter = 64 + time * 150;
         const shapeAt = x => initial ? 0 : single ? ((!singleWaveStarted||singleWaveFinished) ? 0 : 72*Math.exp(-0.5*((x-pulseCenter)/32)**2)) : waveAt(x,(time*132)%232);
         const end = svg.viewBox.baseVal.width - 38;
