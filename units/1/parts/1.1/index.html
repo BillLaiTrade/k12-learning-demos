@@ -132,8 +132,10 @@
     .aperture-control-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
     .aperture-control-head label { color: var(--ink); font-size: .91rem; font-weight: 800; }
     #aperture-offset-output { color: var(--green); font-size: .84rem; font-weight: 800; }
-    .aperture-range-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 10px; color: var(--muted); font-size: .76rem; }
+    .aperture-range-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; color: var(--muted); font-size: .76rem; }
     .aperture-range-row input { min-width: 0; accent-color: var(--green); }
+    .aperture-control-stack { display: grid; gap: 8px; }
+    .aperture-reset-row { display: flex; justify-content: flex-end; margin-top: 8px; }
     .aperture-reset { min-height: 38px; padding: 6px 11px; font-size: .8rem; }
     .aperture-result { display: flex; align-items: flex-start; gap: 10px; min-height: 48px; margin-top: 10px; padding: 11px 13px; border-left: 4px solid #d6aa4e; border-radius: 0 11px 11px 0; background: #f5f7ef; color: #3f5c4d; font-size: .89rem; }
     .aperture-result-dot { flex: none; width: 10px; height: 10px; margin-top: 5px; border-radius: 50%; background: #e9b34c; box-shadow: 0 0 0 4px #f8edd5; }
@@ -145,7 +147,7 @@
       #aperture-3d-scene { height: 270px; }
       .equipment-labels { font-size: .64rem; gap: 1px; }
       .aperture-range-row { grid-template-columns: auto minmax(0, 1fr) auto; gap: 7px; }
-      .aperture-reset { grid-column: 1 / -1; justify-self: end; }
+      .aperture-reset-row { margin-top: 7px; }
       .aperture-controls { padding: 11px; }
     }
     .end-card { border-color: #bfd1be; background: #f4f8ef; }
@@ -296,18 +298,27 @@
           <div class="card-side"><span class="card-number">03</span><h3>觀察光的路徑</h3><span class="card-role">光沿直線前進</span></div>
           <div class="card-main">
             <h2>光路會彎嗎？</h2>
-            <p>操作 3D 小孔實驗台，移動中間板，觀察屏幕上的亮點如何改變。</p>
+            <p>操作 3D 小孔實驗台，讓中間板上下偏移或沿光路前後移動，觀察屏幕亮點的變化。</p>
             <div class="aperture-lab">
               <div class="aperture-scene-frame">
                 <canvas id="aperture-3d-scene" role="img" aria-label="3D 小孔實驗台：光源、三片小孔板和屏幕沿實驗台排列，初始時小孔對齊，屏幕上有亮點。"></canvas>
               </div>
               <div class="equipment-labels"><span>光源</span><span>小孔板 1</span><span>中間板</span><span>小孔板 3</span><span>屏幕</span></div>
               <div class="aperture-controls">
-                <div class="aperture-control-head"><label for="aperture-offset">上下移動中間板</label><output id="aperture-offset-output" for="aperture-offset">小孔對齊</output></div>
-                <div class="aperture-range-row"><span>下移</span><input id="aperture-offset" type="range" min="-100" max="100" step="1" value="0" aria-label="上下移動 3D 實驗台的中間小孔板"><span>上移</span><button class="secondary aperture-reset" id="aperture-reset" type="button">重新對齊</button></div>
+                <div class="aperture-control-stack">
+                  <div>
+                    <div class="aperture-control-head"><label for="aperture-offset">上下移動中間板</label><output id="aperture-offset-output" for="aperture-offset">小孔對齊</output></div>
+                    <div class="aperture-range-row"><span>下移</span><input id="aperture-offset" type="range" min="-100" max="100" step="1" value="0" aria-label="上下移動 3D 實驗台的中間小孔板"><span>上移</span></div>
+                  </div>
+                  <div>
+                    <div class="aperture-control-head"><label for="aperture-depth">沿光路前後移動</label><output id="aperture-depth-output" for="aperture-depth">基準位置</output></div>
+                    <div class="aperture-range-row"><span>靠近板 1</span><input id="aperture-depth" type="range" min="-100" max="100" step="1" value="0" aria-label="沿光路前後移動 3D 實驗台的中間小孔板"><span>靠近板 3</span></div>
+                  </div>
+                </div>
+                <div class="aperture-reset-row"><button class="secondary aperture-reset" id="aperture-reset" type="button">回到中央位置</button></div>
               </div>
               <div class="aperture-result" id="aperture-result" aria-live="polite"><span class="aperture-result-dot" aria-hidden="true"></span><span>三個小孔排成一直線，屏幕上出現亮點。</span></div>
-              <p class="aperture-observation">操作提示：小孔錯開時，屏幕亮點會變暗或消失；移回對齊位置，亮點重新出現。空氣中的光路看不見，我們以屏幕上的亮點判斷光是否通過。</p>
+              <p class="aperture-observation">操作提示：上下移動會讓小孔錯開，屏幕亮點隨之變暗或消失；沿光路前後移動時，只要小孔仍排成直線，亮點就會保留。空氣中的光路看不見，我們以屏幕上的亮點判斷光是否通過。</p>
               <div class="fact aperture-conclusion"><p><strong>從現象推想：</strong>小孔要排成一直線，光才能通過。光在均勻介質中沿直線傳播。</p></div>
             </div>
           </div>
@@ -450,11 +461,14 @@
       const apertureCanvas = document.querySelector('#aperture-3d-scene');
       const apertureContext = apertureCanvas.getContext('2d');
       const apertureSlider = document.querySelector('#aperture-offset');
+      const apertureDepthSlider = document.querySelector('#aperture-depth');
       const apertureOutput = document.querySelector('#aperture-offset-output');
+      const apertureDepthOutput = document.querySelector('#aperture-depth-output');
       const apertureResult = document.querySelector('#aperture-result');
       const apertureResultText = apertureResult.querySelector('span:last-child');
       const apertureReset = document.querySelector('#aperture-reset');
       let apertureOffset = 0;
+      let apertureDepth = 0;
       const vecSub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
       const vecDot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
       const vecCross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
@@ -548,7 +562,7 @@
         labCircle(-.07, .77, 1.55, .18, .18, '#ffc85b', '#fff0b3');
         labCircle(-.075, .77, 1.55, .085, .085, '#fff5ce');
         drawAperturePlate(2.7);
-        const middle = drawAperturePlate(4.9, apertureOffset, true);
+        const middle = drawAperturePlate(4.9 + apertureDepth, apertureOffset, true);
         drawAperturePlate(7.1);
         labBox(9.35, 9.52, -.05, 1.68, .42, 3.45, { top: '#e5e9e4', front: '#f5f4ec', side: '#c7d0cb', edge: '#82918a' });
         const transmission = Math.max(0, 1 - Math.abs(apertureOffset) / .2);
@@ -569,19 +583,28 @@
         const sliderPercent = Number(apertureSlider.value);
         if (Math.abs(sliderPercent) < 3) apertureOutput.textContent = '小孔對齊';
         else apertureOutput.textContent = `中間板向${sliderPercent > 0 ? '上' : '下'}移 ${Math.round(Math.abs(sliderPercent))}%`;
+        const depthPercent = Number(apertureDepthSlider.value);
+        if (Math.abs(depthPercent) < 3) apertureDepthOutput.textContent = '基準位置';
+        else apertureDepthOutput.textContent = `偏向小孔板 ${depthPercent > 0 ? '3' : '1'}`;
         apertureResult.classList.toggle('is-blocked', transmission < .2);
         if (transmission > .78) apertureResultText.textContent = '三個小孔排成一直線，屏幕上出現清楚亮點。';
         else if (transmission > .04) apertureResultText.textContent = '中間小孔逐漸偏離直線，屏幕上的亮點變暗。';
         else apertureResultText.textContent = '中間小孔偏離直線，光被板面擋住；屏幕亮點消失，亮斑出現在中間板上。';
-        apertureCanvas.setAttribute('aria-label', `3D 小孔實驗台：${apertureResultText.textContent}`);
+        apertureCanvas.setAttribute('aria-label', `3D 小孔實驗台：${apertureDepthOutput.textContent}；${apertureResultText.textContent}`);
       };
       apertureSlider.addEventListener('input', () => {
         apertureOffset = Number(apertureSlider.value) / 100 * .75;
         drawApertureLab();
       });
+      apertureDepthSlider.addEventListener('input', () => {
+        apertureDepth = Number(apertureDepthSlider.value) / 100 * 1.2;
+        drawApertureLab();
+      });
       apertureReset.addEventListener('click', () => {
         apertureSlider.value = '0';
+        apertureDepthSlider.value = '0';
         apertureOffset = 0;
+        apertureDepth = 0;
         drawApertureLab();
         apertureSlider.focus();
       });
