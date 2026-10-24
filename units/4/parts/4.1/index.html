@@ -468,10 +468,10 @@
     .rust-stage-card { display:grid; justify-items:center; min-width:0; padding:8px 7px 6px; border:1px solid transparent; border-radius:13px; background:transparent; cursor:pointer; transition:background .2s,border-color .2s,transform .2s; }
     .rust-stage-card:hover { transform:translateY(-2px); }
     .rust-stage-card[aria-pressed="true"] { border-color:#b9cbb8; background:#f0f4eb; }
-    .rust-bucket-photo { display:block; width:min(100%,260px); aspect-ratio:1; border-radius:8px; background-image:url("assets/rust-reference-sheet.webp"); background-size:200% 216%; background-repeat:no-repeat; }
-    .rust-bucket-photo[data-rust-photo="0"] { background-position:0 0; }
-    .rust-bucket-photo[data-rust-photo="1"] { background-position:100% 0; }
-    .rust-bucket-photo[data-rust-photo="2"] { background-position:0 85%; }
+    .rust-bucket-photo { position:relative; display:block; width:min(100%,260px); aspect-ratio:1; overflow:hidden; border-radius:8px; background-image:url("assets/rust-reference-sheet.webp"); background-size:200% 216%; background-position:0 0; background-repeat:no-repeat; }
+    .rust-bucket-photo::after { position:absolute; inset:0; background-image:url("assets/rust-reference-sheet.webp"); background-size:200% 216%; background-position:100% 85%; background-repeat:no-repeat; clip-path:polygon(19% 43%,81% 43%,77% 88%,23% 88%); content:""; opacity:0; pointer-events:none; }
+    .rust-bucket-photo[data-rust-photo="1"]::after { opacity:.96; mask-image:radial-gradient(ellipse 4.2% 3% at 31% 54%,#000 75%,transparent 100%),radial-gradient(ellipse 3.5% 2.8% at 62% 51%,#000 75%,transparent 100%),radial-gradient(ellipse 3.2% 2.7% at 47% 62%,#000 75%,transparent 100%),radial-gradient(ellipse 4.5% 3.2% at 68% 72%,#000 75%,transparent 100%),radial-gradient(ellipse 3.3% 2.5% at 36% 77%,#000 75%,transparent 100%),radial-gradient(ellipse 2.5% 2% at 53% 48%,#000 75%,transparent 100%); }
+    .rust-bucket-photo[data-rust-photo="2"]::after { opacity:1; mask-image:radial-gradient(ellipse 12% 7% at 31% 52%,#000 75%,transparent 100%),radial-gradient(ellipse 10% 6% at 58% 51%,#000 75%,transparent 100%),radial-gradient(ellipse 8% 7% at 72% 58%,#000 75%,transparent 100%),radial-gradient(ellipse 11% 7% at 43% 64%,#000 75%,transparent 100%),radial-gradient(ellipse 13% 8% at 65% 70%,#000 75%,transparent 100%),radial-gradient(ellipse 11% 7% at 30% 75%,#000 75%,transparent 100%),radial-gradient(ellipse 9% 7% at 51% 80%,#000 75%,transparent 100%),radial-gradient(ellipse 8% 6% at 73% 81%,#000 75%,transparent 100%); }
     .rust-stage-card span:not(.rust-bucket-photo) { margin-top:2px; padding:3px 15px; border-radius:999px; background:#e8ece4; color:#40594b; font-size:.8rem; font-weight:750; white-space:nowrap; }
     .rust-stage-controls { display:grid; gap:4px; margin:7px 7px 0; }
     .rust-stage-controls input { width:100%; margin:0; accent-color:#588366; cursor:pointer; }
@@ -486,7 +486,7 @@
     .rust-evidence-head small { display:block; color:#68776e; font-size:.79rem; line-height:1.4; }
     .rust-evidence-art { display:block; width:100%; height:150px; overflow:hidden; border-radius:10px; background:#b7b8ae; }
     .rust-evidence-photo { display:block; width:100%; height:100%; background-image:url("assets/rust-reference-sheet.webp"); background-size:200% auto; background-repeat:no-repeat; }
-    .rust-evidence-photo[data-rust-photo="appearance"] { background-position:100% 25%; }
+    .rust-evidence-photo[data-rust-photo="appearance"] { background-position:100% 78%; }
     .rust-evidence-photo[data-rust-photo="material"] { background-position:100% 100%; }
     .rust-evidence-note { display:flex; align-items:center; gap:8px; margin-top:9px; padding:9px 11px; border-radius:9px; background:#f0f4e9; color:#3d5747; font-size:.83rem; font-weight:750; }
     .rust-evidence-note::before { content:"✦"; color:#82966a; }
