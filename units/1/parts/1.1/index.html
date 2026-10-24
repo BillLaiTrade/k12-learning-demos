@@ -134,6 +134,10 @@
     .aperture-height-arrow { color: #73827b; font-size: .8rem; line-height: 1; }
     #aperture-offset { display: block; flex: 1 1 0; width: 100%; min-height: 0; height: 0; margin: 4px 0; accent-color: var(--green); writing-mode: vertical-lr; direction: rtl; touch-action: none; }
     .equipment-labels { display: grid; grid-template-columns: 1.2fr repeat(3, 1fr) 1.1fr; gap: 4px; margin: 7px 4px 13px; color: var(--muted); font-size: .72rem; text-align: center; }
+    .equipment-labels button { min-width: 0; min-height: 32px; padding: 2px 3px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: inherit; font: inherit; text-align: center; white-space: nowrap; cursor: pointer; }
+    .equipment-labels button:hover { background: #f1f5ef; color: var(--green); }
+    .equipment-labels button[aria-pressed="true"] { border-color: #c6dccb; background: var(--green-pale); color: var(--green); font-weight: 800; }
+    .equipment-labels button:focus-visible { outline: 3px solid rgb(23 107 83 / 28%); outline-offset: 1px; }
     .aperture-controls { padding: 13px 15px 11px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
     .aperture-control-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
     .aperture-control-head label { color: var(--ink); font-size: .91rem; font-weight: 800; }
@@ -141,10 +145,7 @@
     .aperture-range-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; color: var(--muted); font-size: .76rem; }
     .aperture-range-row input { min-width: 0; accent-color: var(--green); }
     .aperture-reset-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 11px; }
-    .aperture-plate-selectors { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
-    .aperture-plate-selectors button { min-height: 38px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink); font-size: .84rem; }
-    .aperture-plate-selectors button[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); color: var(--green); font-weight: 800; }
-    .aperture-plate-selectors button:focus-visible, #aperture-3d-scene:focus-visible { outline: 3px solid rgb(23 107 83 / 28%); outline-offset: 2px; }
+    #aperture-3d-scene:focus-visible { outline: 3px solid rgb(23 107 83 / 28%); outline-offset: 2px; }
     .aperture-reset { min-height: 38px; padding: 6px 11px; font-size: .8rem; }
     .aperture-result { display: flex; align-items: flex-start; gap: 10px; min-height: 48px; margin-top: 10px; padding: 11px 13px; border-left: 4px solid #d6aa4e; border-radius: 0 11px 11px 0; background: #f5f7ef; color: #3f5c4d; font-size: .89rem; }
     .aperture-result-dot { flex: none; width: 10px; height: 10px; margin-top: 5px; border-radius: 50%; background: #e9b34c; box-shadow: 0 0 0 4px #f8edd5; }
@@ -323,14 +324,9 @@
                   <span class="aperture-height-arrow" aria-hidden="true">↓</span>
                 </div>
               </div>
-              <div class="equipment-labels"><span>光源</span><span>小孔板 1</span><span>中間板</span><span>小孔板 3</span><span>屏幕</span></div>
+              <div class="equipment-labels"><span>光源</span><button type="button" data-plate="0" aria-pressed="false">小孔板 1</button><button type="button" data-plate="1" aria-pressed="true">中間板</button><button type="button" data-plate="2" aria-pressed="false">小孔板 3</button><span>屏幕</span></div>
               <div class="aperture-controls">
-                <div class="aperture-control-head"><strong id="aperture-selected-label">調整小孔板 2</strong><output id="aperture-alignment-output">小孔對齊</output></div>
-                <div class="aperture-plate-selectors" role="group" aria-label="選擇要移動的小孔板">
-                  <button type="button" data-plate="0" aria-pressed="false">小孔板 1</button>
-                  <button type="button" data-plate="1" aria-pressed="true">小孔板 2</button>
-                  <button type="button" data-plate="2" aria-pressed="false">小孔板 3</button>
-                </div>
+                <div class="aperture-control-head"><strong id="aperture-selected-label">調整中間板</strong><output id="aperture-alignment-output">小孔對齊</output></div>
                 <div class="aperture-reset-row"><button class="secondary aperture-reset" id="aperture-reset" type="button">重設實驗位置</button><button class="secondary" id="aperture-view-reset" type="button">重設視角</button></div>
               </div>
               <div class="aperture-result" id="aperture-result" aria-live="polite"><span class="aperture-result-dot" aria-hidden="true"></span><span>三個小孔排成一直線，屏幕上出現亮點。</span></div>

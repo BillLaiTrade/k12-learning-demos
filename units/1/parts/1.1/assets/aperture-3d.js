@@ -168,7 +168,8 @@ if (canvas) {
     heightInput.value = String(Math.round(selected.height / 0.62 * 100));
     const heightPercent = Number(heightInput.value);
     heightOutput.textContent = Math.abs(heightPercent) < 2 ? '光孔等高' : heightPercent > 0 ? '高於基準' : '低於基準';
-    selectedLabel.textContent = `調整小孔板 ${selectedIndex + 1}`;
+    const plateNames = ['小孔板 1', '中間板', '小孔板 3'];
+    selectedLabel.textContent = `調整${plateNames[selectedIndex]}`;
     const maxDeviation = Math.max(...plateStates.map((state) => Math.abs(state.height)));
     const transmission = THREE.MathUtils.clamp(1 - maxDeviation / 0.36, 0, 1);
     mats.spot.opacity = transmission;
