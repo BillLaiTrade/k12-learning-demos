@@ -33,7 +33,7 @@ export function mountDisplacementExperiment() {
     resetButton.disabled = !immersed || animating;
     status.dataset.state = immersed ? 'complete' : 'ready';
     if (immersed) {
-      status.textContent = '隕石已完全浸入。拖曳隕石移動，放開時它會依正下方的位置落回量筒或落在筒外。';
+      status.textContent = '隕石已完全浸入。';
     } else {
       status.textContent = '把隕石拖到量筒口正上方並放開，讓它落入水中；也可使用下方按鈕。';
     }
