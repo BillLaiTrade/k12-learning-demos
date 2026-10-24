@@ -58,8 +58,8 @@
     .visual .rope-outline,.visual .rope-core,.visual .rope-braid,.visual .rope-glint { fill:none; stroke-linecap:round; stroke-linejoin:round; }
     .visual .rope-outline { stroke:#80603e; stroke-width:13; }
     .visual .rope-core { stroke:#c89a61; stroke-width:9; }
-    .visual .rope-braid { stroke:#956c43; stroke-width:2.2; stroke-dasharray:3 5; }
-    .visual .rope-glint { stroke:#f1d8ad; stroke-width:1.5; stroke-dasharray:2 8; }
+    .visual .rope-braid { stroke:#956c43; stroke-width:1.25; }
+    .visual .rope-glint { stroke:#f1d8ad; stroke-width:1.2; opacity:.72; }
     .visual .equilibrium { stroke:#9aaca1; stroke-width:1.5; stroke-dasharray:7 7; }
     .visual .motion-arrow { fill:none; stroke:#176b53; stroke-width:2.5; stroke-linecap:round; }
     .visual .measure { fill:none; stroke:#bc612b; stroke-width:2; stroke-linecap:round; }
@@ -194,7 +194,7 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我們把這段繩波畫下來了。要描述起伏在哪裡，先認出哪些位置？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先找繩子原本的位置，再認出最高處、最低處和波形傳播方向。</p></div>
             <p>沿用剛才的繩波，將某一時刻的形狀畫成波形圖。繩子是這個例子中的介質；沒有波通過時，繩子所在的位置稱為平衡位置。圖上的最高處叫波峰，最低處叫波谷；箭頭表示波形傳播方向。這些名稱幫助我們描述波形上的位置，不是波由哪些實體零件組成。</p><figure class="visual">
-              <svg viewBox="0 0 720 280" role="img" aria-label="繩子介質的波形示意圖，標示平衡位置、波峰、波谷與波形傳播方向">
+              <svg class="rope-wave" data-static-rope viewBox="0 0 720 280" role="img" aria-label="同一條編織繩的波形示意圖，標示平衡位置、波峰、波谷與波形傳播方向">
                 <defs><marker id="wave-vocab-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M48 140H672" class="equilibrium"/>
                 <path class="rope-outline" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><path class="rope-core" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><path class="rope-braid" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/><path class="rope-glint" d="M48 140 C92 140 104 66 150 66 S208 214 266 214 S324 66 382 66 S440 214 498 214 S556 66 614 66 S654 140 672 140"/>
@@ -453,7 +453,8 @@
   <script>
     (() => {
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const pulseSvgs = [...document.querySelectorAll(".rope-wave")];
+      const pulseSvgs = [...document.querySelectorAll(".rope-wave:not([data-static-rope])")];
+      const staticRopeSvgs = [...document.querySelectorAll(".rope-wave[data-static-rope]")];
       const pulseStatuses = [...document.querySelectorAll("[data-pulse-status]")];
       const singleButton = document.querySelector("[data-wave-single]");
       const continuousButton = document.querySelector("[data-wave-continuous]");
@@ -474,9 +475,22 @@
         const initial = pulseMode === "idle" && firstCard;
         const pulseCenter = 64 + time * 150;
         const shapeAt = x => initial ? 0 : single ? ((!singleWaveStarted||singleWaveFinished) ? 0 : 72*Math.exp(-0.5*((x-pulseCenter)/32)**2)) : waveAt(x,(time*132)%232);
+        const end = svg.viewBox.baseVal.width - 38;
         let path = `M 38 ${baseline-shapeAt(38)}`;
-        for (let x=44;x<=722;x+=6) path += ` L ${x} ${baseline-shapeAt(x)}`;
-        svg.querySelectorAll(".pulse-path").forEach(wave=>wave.setAttribute("d",path));
+        for (let x=44;x<=end;x+=6) path += ` L ${x} ${baseline-shapeAt(x)}`;
+        let braid = "";
+        let strand = 0;
+        for(let x=46;x<end-5;x+=9,strand++){
+          const y=baseline-shapeAt(x);
+          const slope=((baseline-shapeAt(x+1))-(baseline-shapeAt(x-1)))/2;
+          const length=Math.hypot(1,slope);
+          const tx=1/length,ty=slope/length,nx=-ty,ny=tx;
+          const direction=strand%2===0?1:-1;
+          const ax=x-tx*3.2-direction*nx*4.1,ay=y-ty*3.2-direction*ny*4.1;
+          const bx=x+tx*3.2+direction*nx*4.1,by=y+ty*3.2+direction*ny*4.1;
+          braid+=`M ${ax.toFixed(1)} ${ay.toFixed(1)} L ${bx.toFixed(1)} ${by.toFixed(1)} `;
+        }
+        svg.querySelectorAll(".pulse-path").forEach(wave=>wave.setAttribute("d",wave.classList.contains("rope-braid")?braid:path));
       };
       const updatePulseControls = () => {
         continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續波";
@@ -494,6 +508,7 @@
         pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));
         pulseFrame=pulsePlaying?window.requestAnimationFrame(animatePulse):null;
       };
+      staticRopeSvgs.forEach(svg=>renderPulse(svg,0));
       pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime)); updatePulseControls(); schedulePulse();
 
       const transverseGroup=document.querySelector(".transverse-particles");
