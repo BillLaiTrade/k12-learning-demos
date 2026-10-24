@@ -1450,7 +1450,7 @@
       phaseHeatWaveRings[index].forEach((ring,ringIndex)=>{
         if(!changing){ring.classList.remove("is-active");return;}
         const phase=((elapsed/1150+index*.29+ringIndex*.5)%1+1)%1;
-        const radius=absorbing?23-phase*19:4+phase*19;
+        const radius=absorbing?28-phase*22:6+phase*22;
         const strength=Math.sin(Math.PI*phase);
         ring.setAttribute("cx",p.x.toFixed(2));ring.setAttribute("cy",p.y.toFixed(2));ring.setAttribute("r",radius.toFixed(2));
         ring.style.opacity=(.78*strength).toFixed(3);ring.classList.add("is-active");
@@ -1598,8 +1598,8 @@
         const delay=index*.52,traveler=document.createElementNS("http://www.w3.org/2000/svg","g"),motion=document.createElementNS("http://www.w3.org/2000/svg","animateMotion"),pathRef=document.createElementNS("http://www.w3.org/2000/svg","mpath"),absorbing=phaseProcesses[key].energy.startsWith("吸熱");
         for(let waveIndex=0;waveIndex<2;waveIndex++){
           const wave=document.createElementNS("http://www.w3.org/2000/svg","circle"),radius=document.createElementNS("http://www.w3.org/2000/svg","animate"),opacity=document.createElementNS("http://www.w3.org/2000/svg","animate");
-          wave.setAttribute("class","phase-demo-heat-wave is-active");wave.setAttribute("r",absorbing?"20":"4");wave.setAttribute("stroke-width","1.8");
-          radius.setAttribute("attributeName","r");radius.setAttribute("values",absorbing?"20;4":"4;20");radius.setAttribute("dur","1.35s");radius.setAttribute("begin",`${delay+waveIndex*.34}s`);radius.setAttribute("repeatCount","indefinite");
+          wave.setAttribute("class","phase-demo-heat-wave is-active");wave.setAttribute("r",absorbing?"25":"6");wave.setAttribute("stroke-width","1.8");
+          radius.setAttribute("attributeName","r");radius.setAttribute("values",absorbing?"25;6":"6;25");radius.setAttribute("dur","1.35s");radius.setAttribute("begin",`${delay+waveIndex*.34}s`);radius.setAttribute("repeatCount","indefinite");
           opacity.setAttribute("attributeName","opacity");opacity.setAttribute("values","0.08;0.78;0.08");opacity.setAttribute("dur","1.35s");opacity.setAttribute("begin",`${delay+waveIndex*.34}s`);opacity.setAttribute("repeatCount","indefinite");
           wave.append(radius,opacity);traveler.append(wave);
         }
