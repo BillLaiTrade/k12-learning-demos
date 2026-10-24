@@ -209,17 +209,17 @@
           <div class="card-side"><span class="card-number">03</span><h3>追蹤固定繩點</h3><span class="card-role">介質振動，波形前進</span></div>
           <div class="card-main">
             <h2>波往前走，標記怎麼沒有跟著跑？</h2>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>波峰已經往右移過橘色記號，可是記號沒有離開原處；這個繩點究竟怎麼動？</p></div>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>波峰往右傳，繩上的橘點也會跟著往右跑嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>把波峰的位置和橘色繩點分開看：繩點在原處附近上下振動，波形和能量往右傳。</p></div>
-            <p>波峰經過記號時，記號附近的繩段上下振動；波峰移開後，繩段回到原位置附近，沒有跟著波峰一路向右跑。繩上的振動把能量傳到較遠的位置，因此波向前傳，介質卻沒有整段隨波形前進。</p><figure class="visual">
-              <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="三個連續時刻的繩波位置；波峰往右移，固定繩點只上下振動">
+            <p>橘點代表繩上的同一點。波形向右傳時，這個繩點只在原來的水平位置附近上下振動；波峰通過後，它會接著往下，再回到平衡位置附近，沒有隨波形一路向右跑。繩上的振動把能量傳到遠處，繩子本身沒有整段隨波前進。</p><figure class="visual">
+              <svg class="rope-wave" data-fixed-point-wave viewBox="0 0 760 270" role="img" aria-label="繩波持續向右傳播；固定水平位置上的橘點隨繩子上下振動">
                 <defs><pattern id="rope-fallback-3" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern><marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
                 <path class="pulse-path rope-underlay" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><path class="rope-fallback" stroke="url(#rope-fallback-3)" aria-hidden="true" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <path d="M118 228H565" class="motion-arrow" marker-end="url(#arrow-rope-2)"/>
                 <text x="341" y="253" text-anchor="middle">波形與能量向右傳</text>
-                <path d="M350 64V178" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
-                <circle class="rope-marker" cx="350" cy="142" r="10" fill="#df8b41" stroke="#fff" stroke-width="3"/>
+                <path d="M350 90V194" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
+                <circle class="rope-marker" id="fixed-rope-marker" cx="350" cy="142" r="10" fill="#df8b41" stroke="#fff" stroke-width="3"/>
                 <path d="M610 85V161" stroke="#748b7e" stroke-width="2"/>
                 <path d="M602 94L610 84L618 94M602 152L610 162L618 152" fill="none" stroke="#748b7e" stroke-width="2"/>
                 <text x="630" y="126">繩點上下</text><text x="630" y="147">振動</text>
@@ -448,7 +448,7 @@
   <script>
     (() => {
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const pulseSvgs = [...document.querySelectorAll(".rope-wave:not([data-static-rope])")];
+      const pulseSvgs = [...document.querySelectorAll(".rope-wave:not([data-static-rope]):not([data-fixed-point-wave])")];
       const staticRopeSvgs = [...document.querySelectorAll(".rope-wave[data-static-rope]")];
       const pulseStatuses = [...document.querySelectorAll("[data-pulse-status]")];
       const singleButton = document.querySelector("[data-wave-single]");
@@ -538,6 +538,26 @@
       pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));
       document.querySelectorAll("svg .rope-underlay").forEach(rope=>{if(!rope.closest(".rope-wave"))renderRopeTexture(rope);});
       updatePulseControls(); schedulePulse();
+
+      const fixedPointSvg=document.querySelector("[data-fixed-point-wave]");
+      const fixedPointMarker=document.querySelector("#fixed-rope-marker");
+      if(fixedPointSvg&&fixedPointMarker){
+        const fixedPointRope=fixedPointSvg.querySelector(".rope-underlay");
+        const fixedPointX=350, fixedPointBaseline=142, fixedPointAmplitude=46;
+        let fixedPointStart=0;
+        const renderFixedPointWave=time=>{
+          if(!fixedPointStart)fixedPointStart=time;
+          const elapsed=reducedMotion?0:(time-fixedPointStart)/1000;
+          const offset=(elapsed*132)%232;
+          let path=`M 46 ${fixedPointBaseline-waveAt(46,offset,fixedPointAmplitude)}`;
+          for(let x=49;x<=714;x+=3)path+=` L ${x} ${fixedPointBaseline-waveAt(x,offset,fixedPointAmplitude)}`;
+          fixedPointRope.setAttribute("d",path);
+          renderRopeTexture(fixedPointRope);
+          fixedPointMarker.setAttribute("cy",String(fixedPointBaseline-waveAt(fixedPointX,offset,fixedPointAmplitude)));
+          if(!reducedMotion)window.requestAnimationFrame(renderFixedPointWave);
+        };
+        window.requestAnimationFrame(renderFixedPointWave);
+      }
 
       const transverseGroup=document.querySelector(".transverse-particles");
       const transverseParticles=[];
