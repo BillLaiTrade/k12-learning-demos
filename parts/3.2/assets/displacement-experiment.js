@@ -229,7 +229,19 @@ export function mountDisplacementExperiment() {
     const cylinderRect = cylinder.getBoundingClientRect();
     const startLeft = startRect.left - sceneRect.left;
     const startTop = startRect.top - sceneRect.top;
-    const left = Math.max(4, Math.min(sceneRect.width - startRect.width - 4, startLeft));
+    const minLeft = 4;
+    const maxLeft = sceneRect.width - startRect.width - 4;
+    let left = Math.max(minLeft, Math.min(maxLeft, startLeft));
+    const cylinderLeft = cylinderRect.left - sceneRect.left;
+    const cylinderRight = cylinderRect.right - sceneRect.left;
+    if (left < cylinderRight && left + startRect.width > cylinderLeft) {
+      const leftLanding = cylinderLeft - startRect.width - 6;
+      const rightLanding = cylinderRight + 6;
+      const center = startLeft + startRect.width / 2;
+      if (center < (cylinderLeft + cylinderRight) / 2 && leftLanding >= minLeft) left = leftLanding;
+      else if (rightLanding <= maxLeft) left = rightLanding;
+      else left = Math.max(minLeft, Math.min(maxLeft, leftLanding));
+    }
     const floorTop = Math.max(0, cylinderRect.bottom - sceneRect.top - startRect.height);
     rock.style.left = startLeft + 'px';
     rock.style.top = startTop + 'px';
@@ -366,12 +378,17 @@ export function mountDisplacementExperiment() {
       rock.classList.remove('is-immersed');
       rockRect = rock.getBoundingClientRect();
     }
+    const initialLeft = rockRect.left - sceneRect.left;
+    const initialTop = rockRect.top - sceneRect.top;
     drag = {
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
-      left: rockRect.left - sceneRect.left,
-      top: rockRect.top - sceneRect.top,
+      left: initialLeft,
+      top: initialTop,
+      currentLeft: initialLeft,
+      currentTop: initialTop,
+      enteredThroughMouth: wasImmersed,
       wasImmersed
     };
     rock.classList.add('is-dragging');
@@ -382,19 +399,56 @@ export function mountDisplacementExperiment() {
     if (!drag || event.pointerId !== drag.pointerId) return;
     let nextLeft = drag.left + event.clientX - drag.startX;
     const nextTop = drag.top + event.clientY - drag.startY;
+    const sceneRect = scene.getBoundingClientRect();
+    const cylinderRect = cylinder.getBoundingClientRect();
+    const rockRect = rock.getBoundingClientRect();
+    const rockWidth = rockRect.width;
+    const rockHeight = rockRect.height;
+    const cylinderLeft = cylinderRect.left - sceneRect.left;
+    const cylinderRight = cylinderRect.right - sceneRect.left;
+    const cylinderTop = cylinderRect.top - sceneRect.top;
+    const cylinderBottom = cylinderRect.bottom - sceneRect.top;
+    const nextCenterX = nextLeft + rockWidth / 2;
+    const insideMouth = nextCenterX >= cylinderLeft + 12 && nextCenterX <= cylinderRight - 12;
+    const crossedMouthFromAbove = !drag.wasImmersed
+      && !drag.enteredThroughMouth
+      && insideMouth
+      && drag.currentTop + rockHeight <= cylinderTop + 8
+      && nextTop > drag.currentTop
+      && nextTop + rockHeight > cylinderTop + 8
+      && nextTop < cylinderBottom;
+    if (crossedMouthFromAbove) drag.enteredThroughMouth = true;
+
+    const overlapsCylinderBody = nextTop + rockHeight > cylinderTop + 8
+      && nextTop < cylinderBottom - 8
+      && nextLeft < cylinderRight
+      && nextLeft + rockWidth > cylinderLeft;
+    if (!drag.wasImmersed && !drag.enteredThroughMouth && overlapsCylinderBody) {
+      if (drag.currentLeft + rockWidth <= cylinderLeft) nextLeft = cylinderLeft - rockWidth;
+      else if (drag.currentLeft >= cylinderRight) nextLeft = cylinderRight;
+      else {
+        const leftEdge = cylinderLeft - rockWidth;
+        const rightEdge = cylinderRight;
+        nextLeft = Math.abs(nextLeft - leftEdge) <= Math.abs(nextLeft - rightEdge) ? leftEdge : rightEdge;
+      }
+    }
+    drag.currentLeft = nextLeft;
+    drag.currentTop = nextTop;
     rock.style.bottom = 'auto';
-    // The user chooses the landing spot; gravity is resolved when released.
+    // The user chooses the landing spot; the cylinder wall blocks side entry.
     rock.style.left = nextLeft + 'px';
     rock.style.top = nextTop + 'px';
-    const overTarget = centerIsInCylinder() || rockIsAboveCylinderMouth();
+    const inside = centerIsInCylinder();
+    const overTarget = rockIsAboveCylinderMouth() || (inside && (drag.wasImmersed || drag.enteredThroughMouth));
     cylinder.classList.toggle('drop-ready', overTarget);
   });
 
   function finishDrag(event) {
     if (!drag || event.pointerId !== drag.pointerId) return;
     const aboveMouth = rockIsAboveCylinderMouth();
-    const validDrop = centerIsInCylinder() || aboveMouth;
+    const inside = centerIsInCylinder();
     const wasImmersed = drag.wasImmersed;
+    const validDrop = aboveMouth || (inside && (wasImmersed || drag.enteredThroughMouth));
     drag = null;
     if (validDrop) {
       if (wasImmersed) dropDraggedRockIntoCylinder();
