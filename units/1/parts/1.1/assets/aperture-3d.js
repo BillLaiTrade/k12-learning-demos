@@ -167,7 +167,7 @@ if (canvas) {
     const selected = plateStates[selectedIndex];
     heightInput.value = String(Math.round(selected.height / 0.62 * 100));
     const heightPercent = Number(heightInput.value);
-    heightOutput.textContent = Math.abs(heightPercent) < 2 ? '光孔等高' : heightPercent > 0 ? '高於基準' : '低於基準';
+    heightOutput.textContent = Math.abs(heightPercent) < 2 ? '標準' : heightPercent > 0 ? '偏高' : '偏低';
     const plateNames = ['小孔板 1', '中間板', '小孔板 3'];
     selectedLabel.textContent = `調整${plateNames[selectedIndex]}`;
     const maxDeviation = Math.max(...plateStates.map((state) => Math.abs(state.height)));
