@@ -55,7 +55,7 @@
     .visual text { fill:#314640; font-family:inherit; font-size:15px; }
     .visual .small-label { fill:#59696b; font-size:12px; }
     .visual .wave-line { fill:none; stroke:#176b53; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
-    .visual .rope-underlay { fill:none; stroke:#d4ad7b; stroke-width:22; stroke-linecap:round; stroke-linejoin:round; }
+    .visual .rope-underlay { fill:none; stroke:#d4ad7b; stroke-width:14; stroke-linecap:round; stroke-linejoin:round; }
     .visual .rope-texture-layer { pointer-events:none; }
     .visual .equilibrium { stroke:#9aaca1; stroke-width:1.5; stroke-dasharray:7 7; }
     .visual .motion-arrow { fill:none; stroke:#176b53; stroke-width:2.5; stroke-linecap:round; }
@@ -483,11 +483,11 @@
           layer.replaceChildren();
           const segments=[];let total=0;
           for(let i=0;i<points.length-1;i++){const a=points[i],b=points[i+1],length=Math.hypot(b.x-a.x,b.y-a.y);segments.push({a,b,length,distance:total});total+=length;}
-          const materialWidth=22*2172/176,materialSourceWidth=2172;
+          const materialWidth=14*2172/176,materialSourceWidth=2172;
           for(const segment of segments){
             const {a,b,length,distance}=segment,sourceX=(distance%materialWidth)/materialWidth*materialSourceWidth,sourceWidth=length/materialWidth*materialSourceWidth,width=length+0.35;
             const tile=document.createElementNS(ns,"svg");
-            tile.setAttribute("x",String(-width/2));tile.setAttribute("y","-11");tile.setAttribute("width",String(width));tile.setAttribute("height","22");
+            tile.setAttribute("x",String(-width/2));tile.setAttribute("y","-7");tile.setAttribute("width",String(width));tile.setAttribute("height","14");
             tile.setAttribute("viewBox",`${sourceX} 0 ${sourceWidth} 176`);tile.setAttribute("preserveAspectRatio","none");
             tile.setAttribute("transform",`translate(${(a.x+b.x)/2} ${(a.y+b.y)/2}) rotate(${Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI})`);
             for(const offset of [0,2172]){const image=document.createElementNS(ns,"image");image.setAttribute("href","assets/wave-rope-strip.png");image.setAttribute("x",String(offset));image.setAttribute("width","2172");image.setAttribute("height","176");tile.append(image);}
