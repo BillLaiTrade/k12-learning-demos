@@ -437,36 +437,91 @@
     .property-card,.class-card { padding:13px; border:1px solid #ded8ca; border-radius:12px; background:#fff; }
     .property-card strong,.class-card strong { display:block; margin-bottom:5px; }
     .property-card p,.class-card p { margin:0; color:#607067; font-size:.83rem; }
-    .rust-investigation { display:grid; gap:13px; margin:14px 0; }
-    .rust-timeline { padding:14px; border:1px solid #d9e2d9; border-radius:15px; background:#f7f9f4; }
-    .rust-timeline-scene { display:grid; place-items:center; min-height:220px; overflow:hidden; border-radius:11px; background:linear-gradient(180deg,#fffefa,#eef3ec); }
-    .rust-timeline-scene svg { display:block; width:min(100%,340px); height:auto; }
-    #rust-layer { opacity:0; transition:opacity .45s ease; }
-    .rust-timeline[data-stage="1"] #rust-layer { opacity:.52; }
-    .rust-timeline[data-stage="2"] #rust-layer { opacity:1; }
-    .rust-timeline-controls { display:grid; grid-template-columns:auto minmax(0,1fr); gap:9px 14px; align-items:center; margin-top:11px; }
-    .rust-play { min-height:40px; padding:7px 13px; border:1px solid #c8d1c8; border-radius:10px; background:#fffefa; color:#31594b; font-weight:750; cursor:pointer; }
-    .rust-timeline-controls input { width:100%; accent-color:#a84d31; }
-    .rust-stage-labels { display:flex; justify-content:space-between; gap:8px; grid-column:1/-1; color:#66756d; font-size:.78rem; }
-    .rust-stage-status { margin:8px 0 0!important; color:#4f6159; font-size:.85rem; }
-    .rust-evidence-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    .rust-evidence-card { display:grid; grid-template-columns:34px 1fr; gap:3px 10px; align-items:start; min-height:100px; padding:13px; border:1px solid #d8dfd6; border-radius:12px; background:#fffefa; text-align:left; cursor:pointer; }
-    .rust-evidence-card[aria-pressed="true"] { border-color:#176b53; background:#eef5ee; box-shadow:inset 0 0 0 1px #176b53; }
-    .rust-evidence-icon { display:grid; place-items:center; width:32px; height:32px; border-radius:50%; background:#f4e9d8; color:#9e4d31; font-size:1.05rem; }
-    .rust-evidence-card strong { display:block; color:#31594b; }
-    .rust-evidence-card small { grid-column:2; color:#65736c; font-size:.8rem; line-height:1.5; }
-    .rust-decision { padding:14px; border:1px solid #e0daca; border-radius:13px; background:#fffefa; }
-    .rust-decision h3 { margin:0 0 8px; font-size:1rem; }
-    .rust-answer-options { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
-    .rust-answer-options button { min-height:45px; padding:8px 12px; border:1px solid #d2d9d1; border-radius:10px; background:#fff; cursor:pointer; font-weight:700; }
-    .rust-answer-options button[aria-pressed="true"] { border-color:#176b53; background:#e6f1e8; color:#174c3e; box-shadow:inset 0 0 0 1px #176b53; }
-    .rust-feedback { min-height:24px; margin:9px 0!important; color:#607067!important; font-size:.84rem; }
+    #s6.lesson-card { display:block; padding:24px; }
+    #s6 .card-main { width:100%; }
+    .rust-lesson-header { display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:20px; align-items:center; margin-bottom:16px; padding:5px 0 17px; border-bottom:1px solid #e4e0d5; }
+    .rust-topic-tag { display:inline-flex; align-items:center; gap:8px; margin-bottom:8px; color:#557063; font-size:.82rem; font-weight:800; }
+    .rust-topic-tag b { padding:3px 11px; border-radius:999px; background:#174c3e; color:#fff; letter-spacing:.04em; }
+    #s6 .rust-lesson-header h2 { margin:0 0 5px; color:#173c30; font-size:clamp(1.75rem,3.5vw,2.6rem); line-height:1.2; }
+    .rust-lesson-header p { margin:0; color:#596b61; font-size:.98rem; }
+    .rust-focus { padding:12px 15px; border-radius:14px; background:#f0f4e9; }
+    .rust-focus strong { display:block; margin-bottom:6px; color:#284d3d; }
+    .rust-focus ul { display:grid; gap:3px; margin:0; padding-left:19px; color:#52645a; font-size:.83rem; }
+    .rust-dialogue-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:14px 0 20px; padding:14px 16px; border:1px solid #ece8dd; border-radius:16px; background:#fbfaf5; }
+    .rust-dialogue-row .dialogue { gap:14px; align-items:center; min-width:0; margin:0; padding:0; border:0; background:transparent; }
+    .rust-dialogue-row .dialogue:not(.dialogue--xiaokui) { flex-direction:row-reverse; }
+    .rust-dialogue-row .speaker { position:relative; align-self:center; }
+    .rust-dialogue-row .speaker::before { width:88px; height:88px; border-width:0; background-size:200% 100%; box-shadow:none; }
+    .rust-dialogue-row .dialogue--xiaokui .speaker::after,.rust-dialogue-row .dialogue:not(.dialogue--xiaokui) .speaker::after { position:absolute; bottom:-5px; left:50%; transform:translateX(-50%); padding:1px 9px; border-radius:999px; background:#2f634d; color:#fff; content:"阿公"; font-size:.74rem; font-weight:800; white-space:nowrap; }
+    .rust-dialogue-row .dialogue--xiaokui .speaker::after { background:#b66c43; content:"小葵"; }
+    .rust-dialogue-row .dialogue p { flex:1; padding:13px 15px; border-radius:14px; background:#f0f4e9; font-size:.91rem; line-height:1.55; }
+    .rust-dialogue-row .dialogue:not(.dialogue--xiaokui) p { background:#f8f0e2; }
+    .rust-investigation { display:grid; gap:14px; margin:14px 0; }
+    .rust-timeline { padding:17px; border:1px solid #dbe3d8; border-radius:16px; background:#fbfcf8; }
+    .rust-timeline-head { display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:12px; align-items:center; margin-bottom:8px; }
+    .rust-timeline-icon,.rust-evidence-icon,.rust-decision-icon { display:grid; place-items:center; width:42px; height:42px; border-radius:50%; background:#edf2e7; color:#315f49; }
+    .rust-timeline-head h3 { margin:0; font-size:1.2rem; line-height:1.3; }
+    .rust-timeline-head p { margin:3px 0 0; color:#6b7971; font-size:.84rem; }
+    .rust-play { display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:8px 16px; border:1px solid #bdcfbf; border-radius:999px; background:#edf3e9; color:#244a39; font-weight:800; cursor:pointer; }
+    .rust-play svg { width:18px; height:18px; }
+    .rust-stage-gallery { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; align-items:end; }
+    .rust-stage-card { display:grid; justify-items:center; min-width:0; padding:8px 7px 6px; border:1px solid transparent; border-radius:13px; background:transparent; cursor:pointer; transition:background .2s,border-color .2s,transform .2s; }
+    .rust-stage-card:hover { transform:translateY(-2px); }
+    .rust-stage-card[aria-pressed="true"] { border-color:#b9cbb8; background:#f0f4eb; }
+    .rust-stage-card svg { display:block; width:min(100%,260px); height:auto; overflow:visible; }
+    .rust-stage-card span { margin-top:2px; padding:3px 15px; border-radius:999px; background:#e8ece4; color:#40594b; font-size:.8rem; font-weight:750; white-space:nowrap; }
+    .rust-stage-controls { display:grid; gap:4px; margin:7px 7px 0; }
+    .rust-stage-controls input { width:100%; margin:0; accent-color:#588366; cursor:pointer; }
+    .rust-stage-status { margin:3px 0 0!important; color:#53665b; font-size:.84rem; }
+    .rust-time-note { margin:5px 0 0!important; color:#7b847c; font-size:.76rem; }
+    .rust-evidence-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .rust-evidence-card { display:block; min-width:0; padding:13px; border:1px solid #dfe4da; border-radius:14px; background:#fffefa; text-align:left; cursor:pointer; transition:border-color .18s,background .18s,box-shadow .18s; }
+    .rust-evidence-card[aria-pressed="true"] { border-color:#557f61; background:#f7faf4; box-shadow:0 0 0 2px #dceadd; }
+    .rust-evidence-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .rust-evidence-icon { flex:0 0 auto; width:38px; height:38px; }
+    .rust-evidence-head strong { display:block; color:#294b3c; font-size:1.05rem; }
+    .rust-evidence-head small { display:block; color:#68776e; font-size:.79rem; line-height:1.4; }
+    .rust-evidence-art { display:block; width:100%; height:150px; overflow:hidden; border-radius:10px; background:#b7b8ae; }
+    .rust-evidence-art svg { display:block; width:100%; height:100%; }
+    .rust-evidence-note { display:flex; align-items:center; gap:8px; margin-top:9px; padding:9px 11px; border-radius:9px; background:#f0f4e9; color:#3d5747; font-size:.83rem; font-weight:750; }
+    .rust-evidence-note::before { content:"✦"; color:#82966a; }
+    .rust-decision { padding:16px; border:1px solid #e2ded2; border-radius:15px; background:#fffefa; }
+    .rust-decision-heading { display:flex; align-items:center; gap:11px; margin-bottom:11px; }
+    .rust-decision-icon { flex:0 0 auto; background:#eff1e7; }
+    .rust-decision-heading h3 { margin:0; font-size:1.12rem; }
+    .rust-decision-heading p { margin:2px 0 0; color:#6b7971; font-size:.84rem; }
+    .rust-answer-options { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .rust-answer-options button { display:flex; align-items:center; gap:12px; min-height:58px; padding:10px 14px; border:1px solid #d4d9d1; border-radius:12px; background:#fff; text-align:left; cursor:pointer; font-weight:750; }
+    .rust-answer-options button::before { flex:0 0 auto; width:21px; height:21px; border:2px solid #aab0a8; border-radius:50%; content:""; }
+    .rust-answer-options button[aria-pressed="true"] { border-color:#557f61; background:#f1f6ee; color:#174c3e; box-shadow:inset 0 0 0 1px #557f61; }
+    .rust-answer-options button[aria-pressed="true"]::before { border:6px solid #557f61; }
+    .rust-evidence-select-title { margin:13px 0 2px!important; font-weight:800; }
+    .rust-evidence-select-hint { margin:0!important; color:#6b7971!important; font-size:.82rem; }
+    .rust-feedback { min-height:24px; margin:8px 0!important; color:#607067!important; font-size:.84rem; }
     .rust-feedback[data-result="incorrect"] { color:#8a5035!important; }
     .rust-feedback[data-result="correct"] { color:#176b53!important; }
-    .rust-record:disabled { opacity:.55; cursor:not-allowed; }
-    .rust-takeaway { margin-top:10px; padding:12px 14px; border-left:3px solid #a84d31; border-radius:0 10px 10px 0; background:#f8f1e8; }
+    .rust-record { display:block; width:min(100%,310px); min-height:48px; margin:10px auto 0; border-radius:12px; background:#e6efe5; color:#365b44; }
+    .rust-record:disabled { border-color:#d4d8d2; background:#e9e9e5; color:#9c9f99; opacity:1; cursor:not-allowed; }
+    .rust-takeaway { margin-top:12px; padding:12px 14px; border-left:3px solid #a84d31; border-radius:0 10px 10px 0; background:#f8f1e8; }
     .rust-takeaway[hidden] { display:none; }
     .rust-takeaway p { margin:3px 0 0; color:#58675e; font-size:.86rem; }
+    @media(max-width:680px) {
+      #s6.lesson-card { padding:14px; }
+      .rust-lesson-header { grid-template-columns:1fr; gap:10px; }
+      .rust-focus { padding:10px 13px; }
+      .rust-dialogue-row { grid-template-columns:1fr; gap:11px; padding:12px; }
+      .rust-dialogue-row .speaker::before { width:64px; height:64px; }
+      .rust-timeline { padding:11px; }
+      .rust-timeline-head { grid-template-columns:36px 1fr; gap:8px; }
+      .rust-timeline-icon { width:34px; height:34px; }
+      .rust-play { grid-column:1/-1; justify-self:end; min-height:38px; padding:6px 13px; }
+      .rust-stage-gallery { gap:3px; }
+      .rust-stage-card { padding:5px 1px; }
+      .rust-stage-card span { padding:3px 6px; font-size:.69rem; }
+      .rust-stage-card svg { width:100%; }
+      .rust-evidence-grid,.rust-answer-options { grid-template-columns:1fr; }
+      .rust-evidence-art { height:100px; }
+    }
     .comparison { width:100%; border-collapse:collapse; margin:12px 0; font-size:.88rem; }
     .comparison th,.comparison td { padding:9px 10px; border-bottom:1px solid #e1dccf; text-align:left; vertical-align:top; }
     .comparison th { color:#53645d; background:#f5f2e9; }
@@ -810,59 +865,51 @@
         </section>
 
         <section class="lesson-card" id="s6">
-          <div class="card-side"><span class="card-number">05</span><h3>化學變化</h3><span class="card-role">觀察是否生成新物質</span></div>
           <div class="card-main">
-            <h2>水的狀態會改變，鐵桶生鏽又有什麼不同？</h2>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水變成冰還是水；那鐵桶生鏽後，鐵也還是原來的鐵嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>看看生鏽前後的材料是否相同，再找找鏽層提供了什麼線索。</p></div>
+            <div class="rust-lesson-header">
+              <div><div class="rust-topic-tag"><b>05</b><span>物質的變化</span></div><h2>鐵生鏽是化學變化</h2><p>觀察鐵生鏽的過程，找出證據，判斷是否產生了新物質。</p></div>
+              <aside class="rust-focus"><strong>學習重點</strong><ul><li>觀察物質變化的現象</li><li>根據證據進行推論</li><li>認識化學變化與新物質</li></ul></aside>
+            </div>
+            <div class="rust-dialogue-row">
+              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水變成冰還是水；那鐵桶生鏽後，鐵也還是原來的鐵嗎？</p></div>
+              <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>看看生鏽前後的材料是否相同，再找找鏽層提供了什麼線索。</p></div>
+            </div>
             <div class="rust-investigation" id="rust-investigation">
-              <div class="rust-timeline" id="rust-timeline" data-stage="0">
-                <div class="rust-timeline-scene">
-                  <svg viewBox="0 0 360 230" role="img" aria-label="同一只鐵製雨水桶從表面乾淨到逐漸形成鏽層的示意圖">
-                    <defs>
-                      <linearGradient id="rust-bucket-metal" x2="1" y2="0"><stop stop-color="#aab8b0"/><stop offset=".48" stop-color="#eef1ec"/><stop offset="1" stop-color="#9eaca4"/></linearGradient>
-                      <linearGradient id="rust-bucket-rim" x2="0" y2="1"><stop stop-color="#f9fbf8"/><stop offset="1" stop-color="#aebbb3"/></linearGradient>
-                    </defs>
-                    <path d="M92 64Q180-9 268 64" fill="none" stroke="#74877d" stroke-width="9" stroke-linecap="round"/>
-                    <path d="M75 68H285L264 187Q180 209 96 187Z" fill="url(#rust-bucket-metal)" stroke="#687e72" stroke-width="4" stroke-linejoin="round"/>
-                    <ellipse cx="180" cy="68" rx="105" ry="20" fill="url(#rust-bucket-rim)" stroke="#687e72" stroke-width="4"/>
-                    <path d="M87 105H273M84 119H276" stroke="#fff" stroke-width="4" opacity=".68"/>
-                    <g id="rust-layer" aria-hidden="true">
-                      <path d="M101 88q13-12 25 0t-3 18q-19 3-22-18m116 9q15-10 27 2t-5 16q-17 1-22-18m-78 39q14-10 25 2t-5 18q-17 1-20-20m74 15q12-12 23-2t-4 18q-15 2-19-16m-111 10q9-9 17-1t-2 13q-13 1-15-12" fill="#a84d31"/>
-                      <path d="M115 94q9-6 15 2m100 8q9-6 15 1m-99 24q8-6 14 2m55 17q8-6 14 1" fill="none" stroke="#d68a57" stroke-width="3" stroke-linecap="round" opacity=".85"/>
-                    </g>
-                    <path d="M96 187Q180 207 264 187" fill="none" stroke="#687e72" stroke-width="3"/>
-                  </svg>
+              <div class="rust-timeline" id="rust-timeline" data-stage="1">
+                <div class="rust-timeline-head"><span class="rust-timeline-icon" aria-hidden="true">⚗</span><div><h3>觀察鐵桶生鏽的過程</h3><p>拖動時間軸，觀察同一個鐵桶在不同時間的變化。</p></div><button class="rust-play" type="button" id="rust-play"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3.5v13l11-6.5z" fill="currentColor"/></svg>播放變化</button></div>
+                <div class="rust-stage-gallery" aria-label="鐵桶生鏽的三個時間點">
+                  <button class="rust-stage-card" type="button" data-rust-stage="0" aria-pressed="false" aria-label="查看剛開始"><svg viewBox="0 0 220 220" role="img" aria-label="剛開始，乾淨的金屬桶"><defs><clipPath id="bucket-rust-clip-0"><path d="M38 64h144l-9 140q-63 18-126 0z"/></clipPath></defs><image href="assets/metal-bucket.png" width="220" height="220" preserveAspectRatio="xMidYMid meet"/><path d="M101 6q0-3 4-3h30q4 0 4 3v5q0 4-4 4h-30q-4 0-4-4z" fill="#aeb9b3" stroke="#59665f" stroke-width="1.3"/><path d="M104 6h28" stroke="#eff1ec" stroke-width="1.2"/><g clip-path="url(#bucket-rust-clip-0)"></g></svg><span>剛開始</span></button>
+                  <button class="rust-stage-card" type="button" data-rust-stage="1" aria-pressed="true" aria-label="查看一段時間後"><svg viewBox="0 0 220 220" role="img" aria-label="一段時間後，桶身出現鏽斑"><defs><clipPath id="bucket-rust-clip-1"><path d="M38 64h144l-9 140q-63 18-126 0z"/></clipPath></defs><image href="assets/metal-bucket.png" width="220" height="220" preserveAspectRatio="xMidYMid meet"/><path d="M101 6q0-3 4-3h30q4 0 4 3v5q0 4-4 4h-30q-4 0-4-4z" fill="#aeb9b3" stroke="#59665f" stroke-width="1.3"/><path d="M104 6h28" stroke="#eff1ec" stroke-width="1.2"/><g clip-path="url(#bucket-rust-clip-1)"><g fill="#a64d2c" opacity=".94"><path d="M53 94q9-9 17 1t-8 11q-10-2-9-12m57 17q12-8 19 3t-10 12q-10-2-9-15m37-28q10-7 17 3t-9 10q-9-2-8-13m-75 54q10-7 17 2t-8 11q-9-2-9-13m57 11q10-8 18 2t-9 12q-10-2-9-14"/><circle cx="83" cy="128" r="4"/><circle cx="154" cy="116" r="3"/></g></g></svg><span>一段時間後</span></button>
+                  <button class="rust-stage-card" type="button" data-rust-stage="2" aria-pressed="false" aria-label="查看形成鏽層"><svg viewBox="0 0 220 220" role="img" aria-label="形成鏽層"><defs><clipPath id="bucket-rust-clip-2"><path d="M38 64h144l-9 140q-63 18-126 0z"/></clipPath></defs><image href="assets/metal-bucket.png" width="220" height="220" preserveAspectRatio="xMidYMid meet"/><path d="M101 6q0-3 4-3h30q4 0 4 3v5q0 4-4 4h-30q-4 0-4-4z" fill="#aeb9b3" stroke="#59665f" stroke-width="1.3"/><path d="M104 6h28" stroke="#eff1ec" stroke-width="1.2"/><g clip-path="url(#bucket-rust-clip-2)"><g fill="#9a482b" opacity=".96"><path d="M44 91q11-10 19 2t-10 12q-10-2-9-14m29 16q10-8 18 3t-10 12q-10-2-8-15m34-25q12-9 20 3t-11 13q-10-2-9-16m34 17q11-9 19 2t-10 13q-10-2-9-15M53 129q10-9 19 2t-10 12q-10-2-9-14m31 9q12-8 19 3t-10 12q-10-2-9-15m36 2q11-9 20 3t-11 13q-10-2-9-16m29 7q11-9 19 3t-10 12q-10-2-9-15M65 157q10-8 18 2t-9 11q-9-2-9-13m39 2q11-8 18 2t-9 11q-10-2-9-13m37 0q10-8 17 2t-9 10q-9-2-8-12"/></g></g></svg><span>形成鏽層</span></button>
                 </div>
-                <div class="rust-timeline-controls">
-                  <button class="rust-play" type="button" id="rust-play">播放變化</button>
-                  <input type="range" id="rust-progress" min="0" max="2" step="1" value="0" aria-label="拖曳查看鐵桶生鏽的變化過程" aria-valuetext="剛開始：桶身尚未出現鏽層">
-                  <div class="rust-stage-labels" aria-hidden="true"><span>剛開始</span><span>出現鏽斑</span><span>形成鏽層</span></div>
-                </div>
-                <p class="rust-stage-status" id="rust-stage-status" aria-live="polite">桶身表面尚未看到鏽層。</p>
-                <p class="caption">時間軸示意變化先後，不代表實際生鏽所需時間。</p>
+                <div class="rust-stage-controls"><input type="range" id="rust-progress" min="0" max="2" step="1" value="1" aria-label="拖曳查看鐵桶生鏽的變化過程" aria-valuetext="一段時間後：桶身開始出現橘褐色鏽斑"></div>
+                <p class="rust-stage-status" id="rust-stage-status" aria-live="polite">桶身開始出現橘褐色鏽斑。</p>
+                <p class="rust-time-note">ⓘ 這是示意性的時間推移，並非真實時間。</p>
               </div>
 
               <div>
                 <p class="prompt">點選資料，看看哪些線索能支持判斷。</p>
                 <div class="rust-evidence-grid" role="group" aria-label="選擇觀察到的線索和材料資料">
                   <button class="rust-evidence-card" type="button" data-rust-evidence="appearance" aria-pressed="false">
-                    <span class="rust-evidence-icon" aria-hidden="true">◒</span><strong>外觀觀察</strong>
-                    <small>出現橘褐色鏽斑；顏色改變是觀察線索。</small>
+                    <span class="rust-evidence-head"><span class="rust-evidence-icon" aria-hidden="true">⌕</span><span><strong>外觀觀察</strong><small>觀察鐵桶生鏽後的顏色與表面狀態。</small></span></span>
+                    <span class="rust-evidence-art"><svg viewBox="0 0 500 150" preserveAspectRatio="xMidYMid slice" role="img" aria-label="灰色金屬表面出現橘褐色鏽斑"><defs><linearGradient id="rust-macro-bg" x2="0.8" y2="1"><stop stop-color="#9b9e98"/><stop offset=".5" stop-color="#bbb4a8"/><stop offset="1" stop-color="#757c76"/></linearGradient><filter id="rust-grain"><feTurbulence type="fractalNoise" baseFrequency=".12" numOctaves="2"/><feColorMatrix values=".8 0 0 0 .2 .7 0 0 0 .15 .5 0 0 0 .1 0 0 0 .18 0"/></filter></defs><rect width="500" height="150" fill="url(#rust-macro-bg)"/><path d="M0 103q57-32 103 0t89-9q44-31 95 3t101-5q49-25 112 2v56H0Z" fill="#874426"/><path d="M12 82q29-31 67-4t62-9q25-25 56 2t53-2q34-29 64 4t54-8q38-26 61 5t71-4" fill="none" stroke="#cc7540" stroke-width="17" stroke-linecap="round"/><path d="M0 0h500v150H0z" filter="url(#rust-grain)" opacity=".6"/></svg></span>
+                    <span class="rust-evidence-note">顏色改變是線索</span>
                   </button>
                   <button class="rust-evidence-card" type="button" data-rust-evidence="material" aria-pressed="false">
-                    <span class="rust-evidence-icon" aria-hidden="true">▤</span><strong>材料資料</strong>
-                    <small>資料指出：鏽層含有不同於金屬鐵的新物質。</small>
+                    <span class="rust-evidence-head"><span class="rust-evidence-icon" aria-hidden="true">▤</span><span><strong>材料資料</strong><small>放大觀察鏽層的樣子，並與原本的鐵比較。</small></span></span>
+                    <span class="rust-evidence-art"><svg viewBox="0 0 500 150" preserveAspectRatio="xMidYMid slice" role="img" aria-label="鏽層與金屬鐵的放大比較"><defs><linearGradient id="rust-layer-bg" x2="0.8" y2="1"><stop stop-color="#68402c"/><stop offset=".48" stop-color="#bf7544"/><stop offset="1" stop-color="#b7b7ae"/></linearGradient></defs><rect width="500" height="150" fill="url(#rust-layer-bg)"/><path d="M0 115 90 70l82 34 68-68 85 55 85-46 90 42v63H0Z" fill="#8d4b2c"/><path d="m5 110 88-48 81 33 68-68 85 48 83-47 90 38" fill="none" stroke="#d68d55" stroke-width="12"/><circle cx="388" cy="75" r="55" fill="#a45a32" stroke="#fffefa" stroke-width="7"/><path d="M357 76q20-38 45-12t-7 42q-34 8-38-30m30-18q17 19 34 2" fill="#d99155"/><path d="M0 0h500v150H0z" fill="#7d6857" opacity=".18"/></svg></span>
+                    <span class="rust-evidence-note">鏽層不同於原本的鐵</span>
                   </button>
                 </div>
               </div>
 
               <div class="rust-decision">
-                <h3>根據線索判斷</h3>
+                <div class="rust-decision-heading"><span class="rust-decision-icon" aria-hidden="true">✎</span><span><h3>根據線索判斷</h3><p>綜合以上的線索，你認為鐵生鏽後，鐵是否還是原來的鐵？</p></span></div>
                 <div class="rust-answer-options" role="group" aria-label="判斷鐵桶生鏽的變化">
                   <button type="button" data-rust-answer="appearance" aria-pressed="false">只看到外觀改變</button>
                   <button type="button" data-rust-answer="new-substance" aria-pressed="false">形成了新物質</button>
                 </div>
+                <p class="rust-evidence-select-title">選出支持判斷的資料</p><p class="rust-evidence-select-hint">從上面的證據中，選一項最能支持你判斷的資料。</p>
                 <p class="rust-feedback" id="rust-feedback" aria-live="polite">選出判斷，再選擇支持它的資料。</p>
                 <button class="action-button rust-record" type="button" id="rust-record" data-record="change" disabled>記錄我的判斷</button>
                 <div class="rust-takeaway" id="rust-takeaway" hidden>
@@ -1001,6 +1048,7 @@
     function setRustStage(value){
       const stage=Math.max(0,Math.min(2,Number(value)));
       rustTimeline.dataset.stage=String(stage);rustProgress.value=String(stage);rustStatus.textContent=rustStages[stage];rustProgress.setAttribute("aria-valuetext",`${["剛開始","一段時間後","形成鏽層"][stage]}：${rustStages[stage]}`);
+      document.querySelectorAll("[data-rust-stage]").forEach(button=>button.setAttribute("aria-pressed",String(Number(button.dataset.rustStage)===stage)));
       validateRustJudgment();
     }
     function stopRustPlayback(label="播放變化"){
@@ -1008,6 +1056,7 @@
       rustPlay.textContent=label;
     }
     rustProgress.addEventListener("input",()=>{stopRustPlayback();setRustStage(rustProgress.value);});
+    document.querySelectorAll("[data-rust-stage]").forEach(button=>button.addEventListener("click",()=>{stopRustPlayback();setRustStage(button.dataset.rustStage);}));
     rustPlay.addEventListener("click",()=>{
       if(rustPlayTimer){stopRustPlayback();return;}
       if(Number(rustProgress.value)>=2)setRustStage(0);
