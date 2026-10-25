@@ -33,7 +33,7 @@ if (tapButton) {
 
   const clearOrbit = () => {
     orbitLaps.replaceChildren();
-    moveOrbitDot(64, 21, 0);
+    moveOrbitDot(90, 54, 0);
     lapDetail.hidden = true;
   };
 
@@ -43,8 +43,8 @@ if (tapButton) {
     const wholeLaps = Math.floor(displayLaps);
     const partialLap = Math.round((displayLaps - wholeLaps) * 10) / 10;
     const ringCount = Math.ceil(displayLaps);
-    const ringSpacing = ringCount > 1 ? Math.min(16, 59 / (ringCount - 1)) : 8;
-    const verticalSpacing = ringSpacing * 0.4;
+    const ringSpacing = ringCount > 1 ? Math.min(14, 40 / (ringCount - 1)) : 8;
+    const verticalSpacing = ringSpacing * 0.55;
     const addOrbitPath = (rx, ry, partial = false) => {
       const path = document.createElementNS(SVG_NS, 'ellipse');
       path.setAttribute('class', `light-speed-orbit-lap${partial ? ' is-partial' : ''}`);
@@ -58,13 +58,13 @@ if (tapButton) {
       return path;
     };
     for (let index = 0; index < wholeLaps; index += 1) {
-      addOrbitPath(64 + index * ringSpacing, 21 + index * verticalSpacing);
+      addOrbitPath(90 + index * ringSpacing, 54 + index * verticalSpacing);
     }
-    let finalRx = wholeLaps > 0 ? 64 + (wholeLaps - 1) * ringSpacing : 64;
-    let finalRy = wholeLaps > 0 ? 21 + (wholeLaps - 1) * verticalSpacing : 21;
+    let finalRx = wholeLaps > 0 ? 90 + (wholeLaps - 1) * ringSpacing : 90;
+    let finalRy = wholeLaps > 0 ? 54 + (wholeLaps - 1) * verticalSpacing : 54;
     if (partialLap > 0) {
-      finalRx = 64 + wholeLaps * ringSpacing;
-      finalRy = 21 + wholeLaps * verticalSpacing;
+      finalRx = 90 + wholeLaps * ringSpacing;
+      finalRy = 54 + wholeLaps * verticalSpacing;
       const partialPath = addOrbitPath(finalRx, finalRy, true);
       const length = partialPath.getTotalLength();
       partialPath.style.strokeDasharray = `${partialLap * length} ${length}`;
