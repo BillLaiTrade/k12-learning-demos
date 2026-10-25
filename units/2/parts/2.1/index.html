@@ -503,22 +503,42 @@
         if(sourceTime<0)return 0;
         return singlePulseAmplitude*Math.sin(2*Math.PI*sourceTime/singlePulseDuration);
       };
-      const renderRopeTexture = ropePath => {
+      const renderRopeTexture = (ropePath,materialPoints=null) => {
         const fallback=ropePath.nextElementSibling;
         if(fallback&&fallback.classList.contains("rope-fallback"))fallback.setAttribute("d",ropePath.getAttribute("d"));
         const layer=ropePath.ownerSVGElement.querySelector(".rope-texture-layer");
         if(!layer)return;
         layer.replaceChildren();
-        const totalLength=ropePath.getTotalLength(),materialWidth=14*2172/176,step=Math.max(6,totalLength/100);
-        for(let distance=0;distance<totalLength;distance+=step){
-          const next=Math.min(totalLength,distance+step),a=ropePath.getPointAtLength(distance),b=ropePath.getPointAtLength(next),length=next-distance;
-          const sourceX=(distance%materialWidth)/materialWidth*2172,sourceWidth=length/materialWidth*2172,width=length+0.35;
+        const materialWidth=14*2172/176;
+        const drawTile=(a,b,sourceX,sourceWidth)=>{
+          const length=Math.hypot(b.x-a.x,b.y-a.y),width=length+0.35;
           const tile=document.createElementNS(ns,"svg");
           tile.setAttribute("x",String(-width/2));tile.setAttribute("y","-7");tile.setAttribute("width",String(width));tile.setAttribute("height","14");
           tile.setAttribute("viewBox",`${sourceX} 0 ${sourceWidth} 176`);tile.setAttribute("preserveAspectRatio","none");
           tile.setAttribute("transform",`translate(${(a.x+b.x)/2} ${(a.y+b.y)/2}) rotate(${Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI})`);
           for(const offset of [0,2172]){const image=document.createElementNS(ns,"image");image.setAttribute("href","assets/wave-rope-strip.png");image.setAttribute("x",String(offset));image.setAttribute("width","2172");image.setAttribute("height","176");tile.append(image);}
           layer.append(tile);
+        };
+        if(materialPoints&&materialPoints.length>1){
+          const firstX=materialPoints[0].x,lastX=materialPoints[materialPoints.length-1].x,step=Math.max(6,(lastX-firstX)/100);
+          let segment=0;
+          const pointAtX=x=>{
+            while(segment<materialPoints.length-2&&materialPoints[segment+1].x<x)segment++;
+            const a=materialPoints[segment],b=materialPoints[segment+1],ratio=(x-a.x)/(b.x-a.x);
+            return {x,y:a.y+(b.y-a.y)*ratio};
+          };
+          for(let x=firstX;x<lastX;x+=step){
+            const nextX=Math.min(lastX,x+step),a=pointAtX(x),b=pointAtX(nextX);
+            const phase=((x%materialWidth)+materialWidth)%materialWidth,sourceX=phase/materialWidth*2172,sourceWidth=(nextX-x)/materialWidth*2172;
+            drawTile(a,b,sourceX,sourceWidth);
+          }
+        }else{
+          const totalLength=ropePath.getTotalLength(),step=Math.max(6,totalLength/100);
+          for(let distance=0;distance<totalLength;distance+=step){
+            const next=Math.min(totalLength,distance+step),a=ropePath.getPointAtLength(distance),b=ropePath.getPointAtLength(next),length=next-distance;
+            const sourceX=(distance%materialWidth)/materialWidth*2172,sourceWidth=length/materialWidth*2172;
+            drawTile(a,b,sourceX,sourceWidth);
+          }
         }
       };
       const renderPulse = (svg,time) => {
@@ -529,9 +549,10 @@
         const continuous=pulseMode==="continuous"&&firstCard;
         const shapeAt = x => initial ? 0 : single ? singleEvents.reduce((sum,eventStart)=>sum+singlePulseAt(x,eventStart,time),0) : continuous ? continuousWaveAt(x,time) : waveAt(x,(time*132)%232);
         const end = svg.viewBox.baseVal.width - 38;
-        let path = `M 38 ${baseline-shapeAt(38)}`;
-        for (let x=41;x<=end;x+=3) path += ` L ${x} ${baseline-shapeAt(x)}`;
-        svg.querySelectorAll(".rope-underlay").forEach(rope=>{rope.setAttribute("d",path);renderRopeTexture(rope);});
+        const firstY=baseline-shapeAt(38),materialPoints=[{x:38,y:firstY}];
+        let path = `M 38 ${firstY}`;
+        for (let x=41;x<=end;x+=3){const y=baseline-shapeAt(x);path+=` L ${x} ${y}`;materialPoints.push({x,y});}
+        svg.querySelectorAll(".rope-underlay").forEach(rope=>{rope.setAttribute("d",path);renderRopeTexture(rope,materialPoints);});
         svg.querySelectorAll(".rope-fallback").forEach(rope=>rope.setAttribute("d",path));
       };
       const updatePulseControls = () => {
@@ -606,10 +627,11 @@
           if(!fixedPointStart)fixedPointStart=time;
           const elapsed=(time-fixedPointStart)/1000;
           fixedPointOffset=(elapsed*132)%232;
-          let path=`M 46 ${fixedPointBaseline-waveAt(46,fixedPointOffset,fixedPointAmplitude)}`;
-          for(let x=49;x<=714;x+=3)path+=` L ${x} ${fixedPointBaseline-waveAt(x,fixedPointOffset,fixedPointAmplitude)}`;
+          const firstY=fixedPointBaseline-waveAt(46,fixedPointOffset,fixedPointAmplitude),materialPoints=[{x:46,y:firstY}];
+          let path=`M 46 ${firstY}`;
+          for(let x=49;x<=714;x+=3){const y=fixedPointBaseline-waveAt(x,fixedPointOffset,fixedPointAmplitude);path+=` L ${x} ${y}`;materialPoints.push({x,y});}
           fixedPointRope.setAttribute("d",path);
-          renderRopeTexture(fixedPointRope);
+          renderRopeTexture(fixedPointRope,materialPoints);
           fixedPointMarker.setAttribute("cy",String(fixedPointBaseline-waveAt(fixedPointX,fixedPointOffset,fixedPointAmplitude)));
           window.requestAnimationFrame(renderFixedPointWave);
         };
@@ -646,9 +668,10 @@
         if(!waveTypeStart)waveTypeStart=time;
         const elapsed=(time-waveTypeStart)/1000;
         const transverseOffset=(elapsed*100)%transverseWavelength;
-        let ropePath=`M 46 ${transverseBaseline-waveAt(46,transverseOffset,transverseAmplitude)}`;
-        for(let x=49;x<=714;x+=3)ropePath+=` L ${x} ${transverseBaseline-waveAt(x,transverseOffset,transverseAmplitude)}`;
-        transverseWaveRope.setAttribute("d",ropePath);renderRopeTexture(transverseWaveRope);
+        const firstY=transverseBaseline-waveAt(46,transverseOffset,transverseAmplitude),materialPoints=[{x:46,y:firstY}];
+        let ropePath=`M 46 ${firstY}`;
+        for(let x=49;x<=714;x+=3){const y=transverseBaseline-waveAt(x,transverseOffset,transverseAmplitude);ropePath+=` L ${x} ${y}`;materialPoints.push({x,y});}
+        transverseWaveRope.setAttribute("d",ropePath);renderRopeTexture(transverseWaveRope,materialPoints);
         transverseFixedPoint.setAttribute("cy",String(transverseBaseline-waveAt(transversePointX,transverseOffset,transverseAmplitude)));
         springCoils.forEach((coil,i)=>{
           const restX=springFirstX+i*springSpacing;
