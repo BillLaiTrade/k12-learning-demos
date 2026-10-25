@@ -75,6 +75,7 @@
     .definition-card--plain { background:#eef5ec; border-color:#d6e4d5; }
     .definition-label { display:block; margin-bottom:6px; color:#176b53; font-size:.82rem; font-weight:800; letter-spacing:.04em; }
     .definition-card p { margin:0; color:var(--ink); }
+    .definition-equation { margin-top:9px!important; color:#176b53!important; font-size:1.08rem; font-weight:800; font-variant-numeric:tabular-nums; }
     .legend { display:flex; flex-wrap:wrap; gap:8px 18px; margin:10px 0 0; color:var(--muted); font-size:.84rem; }
     .legend span { display:inline-flex; align-items:center; gap:7px; }
     .legend i { display:inline-block; width:11px; height:11px; border-radius:50%; background:#176b53; }
@@ -261,7 +262,7 @@
             <h3 class="measurement-subheading">先量垂直距離：振幅 A</h3>
             <div class="definition-pair" aria-label="振幅的正式定義與白話理解">
               <div class="definition-card"><span class="definition-label">正式定義</span><p>振幅 <em>A</em> 是介質振動時，相對平衡位置的最大位移。</p></div>
-              <div class="definition-card definition-card--plain"><span class="definition-label">白話理解</span><p>把虛線當作繩子原本的位置，從虛線量到上方最高處，或下方最低處；量到最遠的上下距離，就是振幅。</p></div>
+              <div class="definition-card definition-card--plain"><span class="definition-label">白話理解</span><p>這張圖的虛線剛好在最高點和最低點中間。量波峰到波谷的總高度，再除以 2，就得到振幅。</p><p class="definition-equation"><span id="amplitude-height-output">1.0 m</span> ÷ 2 = <span id="amplitude-half-output">0.5 m</span></p></div>
             </div><figure class="visual">
               <svg class="amplitude-diagram" viewBox="0 0 720 280" role="img" aria-label="橫波圖標示平衡位置、波峰、波谷和振幅 A">
                 <defs><marker id="arrow-a" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" refX="0" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
@@ -686,13 +687,15 @@
       const amplitudeMeasure=document.querySelector("#amplitude-measure");
       const amplitudeLabel=document.querySelector("#amplitude-label");
       const amplitudeOutput=document.querySelector("#amplitude-output");
+      const amplitudeHeightOutput=document.querySelector("#amplitude-height-output");
+      const amplitudeHalfOutput=document.querySelector("#amplitude-half-output");
       const updateAmplitudeModel=()=>{
         const amplitude=Number(amplitudeSlider.value);const pixels=amplitude*120;const top=140-pixels;const bottom=140+pixels;const waveY=x=>140-pixels*Math.sin((2*Math.PI*(x-40))/208);let d="M 40 140";
         for(let x=44;x<=560;x+=4){const y=waveY(x);d+=` L ${x} ${y.toFixed(2)}`;}
         amplitudeWave.setAttribute("d",d);amplitudePeak.setAttribute("cy",String(top));amplitudeTrough.setAttribute("cy",String(bottom));
         amplitudeMeasure.setAttribute("d",`M115 140V${top}`);
         amplitudeLabel.textContent=`A = ${amplitude.toFixed(1)} m`;amplitudeLabel.setAttribute("y",String(top-8));
-        amplitudeOutput.textContent=`${amplitude.toFixed(1)} m`;
+        amplitudeOutput.textContent=`${amplitude.toFixed(1)} m`;amplitudeHeightOutput.textContent=`${(amplitude*2).toFixed(1)} m`;amplitudeHalfOutput.textContent=`${amplitude.toFixed(1)} m`;
       };
       amplitudeSlider.addEventListener("input",updateAmplitudeModel);updateAmplitudeModel();
 
