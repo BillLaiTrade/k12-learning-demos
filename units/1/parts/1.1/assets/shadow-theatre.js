@@ -80,8 +80,8 @@ if (canvas) {
   const screenY = 1.63;
   const screenWidth = 4.55;
   const screenHeight = 2.65;
-  const lightSource = new THREE.Vector3(-0.8, 2.55, 3.7);
-  const shadowLight = new THREE.SpotLight('#ffe2a4', 140, 13, 0.78, 0.28, 2);
+  const lightSource = new THREE.Vector3(-0.8, 3.05, 3.5);
+  const shadowLight = new THREE.SpotLight('#ffe2a4', 140, 13, 0.95, 0.28, 2);
   shadowLight.position.copy(lightSource);
   shadowLight.target.position.set(0, screenY, screenZ);
   shadowLight.castShadow = true;
@@ -158,40 +158,22 @@ if (canvas) {
     stage.add(tassel);
   }
 
-  // A detailed lamp stand reaches the same point as the real spotlight.
+  // Keep the light source compact and beside the screen so it never crowds the movable props.
   const lamp = new THREE.Group();
-  lamp.position.set(-0.08, 0.34, 3.05);
+  lamp.position.copy(lightSource);
   stage.add(lamp);
-  const lampBase = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.32, 0.12, 28), dark);
-  lampBase.position.y = 0.06;
-  lampBase.castShadow = false;
-  lamp.add(lampBase);
-  const lampStem = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.065, 1.78, 18), woodTrim);
-  lampStem.position.set(0, 0.98, 0);
-  lampStem.castShadow = false;
-  lamp.add(lampStem);
-  const armStart = new THREE.Vector3(0, 1.82, 0);
-  const headLocal = new THREE.Vector3(lightSource.x - lamp.position.x, lightSource.y - lamp.position.y, lightSource.z - lamp.position.z);
-  const armDelta = headLocal.clone().sub(armStart);
-  const lampArm = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, armDelta.length(), 14), dark);
-  lampArm.position.copy(armStart).add(headLocal).multiplyScalar(0.5);
-  lampArm.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), armDelta.normalize());
-  lampArm.castShadow = false;
-  lamp.add(lampArm);
-  const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.2, 0.43, 32, 1, true), dark);
-  shade.rotation.x = Math.PI / 2;
-  shade.position.copy(headLocal);
-  shade.castShadow = false;
-  lamp.add(shade);
-  const lensRing = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.035, 10, 28), gold);
-  lensRing.position.copy(headLocal).add(new THREE.Vector3(0, 0, 0.21));
-  lensRing.castShadow = false;
-  lamp.add(lensRing);
-  const bulb = new THREE.Mesh(new THREE.CircleGeometry(0.22, 28), new THREE.MeshBasicMaterial({ color: '#ffe6a0', side: THREE.DoubleSide }));
-  bulb.position.copy(headLocal).add(new THREE.Vector3(0, 0, 0.215));
-  lamp.add(bulb);
-  const lampGlow = new THREE.PointLight('#ffcf75', 9, 4.2, 2);
-  lampGlow.position.copy(headLocal);
+  const lampBody = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.21, 0.34, 24, 1, false), dark);
+  lampBody.rotation.x = Math.PI / 2;
+  lampBody.castShadow = false;
+  lamp.add(lampBody);
+  const lampRim = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.025, 8, 24), woodTrim);
+  lampRim.position.z = 0.18;
+  lamp.add(lampRim);
+  const lampLens = new THREE.Mesh(new THREE.CircleGeometry(0.145, 24), new THREE.MeshBasicMaterial({ color: '#ffe6a0', side: THREE.DoubleSide }));
+  lampLens.position.z = 0.181;
+  lamp.add(lampLens);
+  const lampGlow = new THREE.PointLight('#ffcf75', 7, 2.6, 2);
+  lampGlow.position.z = 0.1;
   lamp.add(lampGlow);
 
   // Tiny carved stars on the theatre valance.
@@ -364,10 +346,11 @@ if (canvas) {
   };
 
   const syncPropRim = (prop) => prop.rim.position.copy(prop.mesh.position);
+  const placementSnapDistance = 0.52;
   const checkPlacement = (prop) => {
     if (prop.placed) return;
     const d = prop.mesh.position.distanceTo(prop.targetPosition);
-    if (d > 0.28) {
+    if (d > placementSnapDistance) {
       setSelected(prop.id);
       status.textContent = `影子還沒對上「${prop.label}」描邊，再調整一下位置`;
       return;
@@ -551,7 +534,7 @@ if (canvas) {
   const animate = () => {
     animationId = requestAnimationFrame(animate);
     const t = clock.getElapsedTime();
-    bulb.material.color.setHSL(0.12, 0.62, 0.78 + Math.sin(t * 2.1) * 0.035);
+    lampLens.material.color.setHSL(0.12, 0.62, 0.78 + Math.sin(t * 2.1) * 0.035);
     for (const prop of props.values()) {
       if (prop.guide.userData.fadeStart === null) continue;
       const progress = Math.min((performance.now() - prop.guide.userData.fadeStart) / 420, 1);
