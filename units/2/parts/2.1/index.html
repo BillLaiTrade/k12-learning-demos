@@ -565,9 +565,9 @@
                 </g>
               </svg>
               <div class="cycle-wave-control">
-                <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note" id="cycle-wave-status" role="status" aria-live="polite">每一段移動一個振幅 A；按下按鈕觀察四段上下移動。</span></div>
+                <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note">按下按鈕，觀察粒子完成四段位移，繩上同步描出完整波形。</span></div>
               </div>
-              <figcaption>粒子上下振動，帶動波形向右形成。<span id="cycle-wave-complete-note" hidden>振動一輪形成一個完整波，長度就是一個波長 λ。</span></figcaption>
+              <figcaption>粒子上下振動，帶動波形向右形成；完成一輪振動，描出一個完整波，長度為一個波長 λ。</figcaption>
             </figure>
             <div class="cycle-amplitude-sequence" aria-label="一個完整振動的四段位移">
               <p>一個完整振動：每一段移動一個振幅 A</p>
@@ -968,20 +968,11 @@
       const cycleWavePath=document.querySelector("#cycle-wave-path");
       const cycleSourceMarker=document.querySelector("#cycle-source-marker");
       const cycleWaveLengthAnnotation=document.querySelector("#cycle-wave-length-annotation");
-      const cycleWaveCompleteNote=document.querySelector("#cycle-wave-complete-note");
       const cycleWaveReplay=document.querySelector("#cycle-wave-replay");
-      const cycleWaveStatus=document.querySelector("#cycle-wave-status");
       const cycleAmplitudeSteps=[...document.querySelectorAll("#card-06 [data-cycle-step]")];
-      if(cycleWavePath&&cycleSourceMarker&&cycleWaveLengthAnnotation&&cycleWaveCompleteNote&&cycleWaveReplay&&cycleWaveStatus&&cycleAmplitudeSteps.length===4){
+      if(cycleWavePath&&cycleSourceMarker&&cycleWaveLengthAnnotation&&cycleWaveReplay&&cycleAmplitudeSteps.length===4){
         const cycleStartX=90,cycleWidth=510,cycleMidY=170,cycleAmplitude=55,cycleSteps=120;
-        const cycleStepMessages=[
-          "第 1 段：從平衡位置上行到 +A，移動一個振幅 A。",
-          "第 2 段：從 +A 下行到平衡位置，移動一個振幅 A。",
-          "第 3 段：從平衡位置再下行到 −A，移動一個振幅 A。",
-          "第 4 段：從 −A 上行回到平衡位置，移動一個振幅 A。"
-        ];
         let cycleAnimationFrame=0;
-        let cycleActiveStep=-1;
         const updateCycleAmplitudeSteps=progress=>{
           const activeStep=progress<1?Math.min(3,Math.floor(progress*4)):-1;
           cycleAmplitudeSteps.forEach((step,index)=>{
@@ -989,8 +980,6 @@
             step.classList.toggle("is-complete",progress>=(index+1)/4);
             if(index===activeStep)step.setAttribute("aria-current","step");else step.removeAttribute("aria-current");
           });
-          if(activeStep>=0&&activeStep!==cycleActiveStep)cycleWaveStatus.textContent=cycleStepMessages[activeStep];
-          cycleActiveStep=activeStep;
         };
         const showCycleProgress=progress=>{
           const step=Math.floor(cycleSteps*progress);
@@ -1006,13 +995,12 @@
           }
           cycleWavePath.setAttribute("d",path);
           cycleWaveLengthAnnotation.setAttribute("visibility",progress>=1?"visible":"hidden");
-          cycleWaveCompleteNote.hidden=progress<1;
           cycleSourceMarker.setAttribute("cy",String(sourceY));
         };
         const playCompleteCycle=()=>{
-          cancelAnimationFrame(cycleAnimationFrame);showCycleProgress(0);updateCycleAmplitudeSteps(0);cycleWaveReplay.disabled=true;cycleWaveReplay.textContent="產生中…";
+          cancelAnimationFrame(cycleAnimationFrame);showCycleProgress(0);updateCycleAmplitudeSteps(0);cycleWaveReplay.disabled=true;
           let startTime=null;
-          const draw=time=>{if(startTime===null)startTime=time;const progress=Math.min(1,(time-startTime)/3200);showCycleProgress(progress);updateCycleAmplitudeSteps(progress);if(progress<1){cycleAnimationFrame=requestAnimationFrame(draw);}else{cycleWaveReplay.disabled=false;cycleWaveReplay.textContent="再產生一次";cycleWaveStatus.textContent="四段位移各是一個振幅 A；粒子回到平衡位置，綠線形成一個完整波，長度為 λ。";}};
+          const draw=time=>{if(startTime===null)startTime=time;const progress=Math.min(1,(time-startTime)/3200);showCycleProgress(progress);updateCycleAmplitudeSteps(progress);if(progress<1){cycleAnimationFrame=requestAnimationFrame(draw);}else{cycleWaveReplay.disabled=false;}};
           cycleAnimationFrame=requestAnimationFrame(draw);
         };
         showCycleProgress(0);
