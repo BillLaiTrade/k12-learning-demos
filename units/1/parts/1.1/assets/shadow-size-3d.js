@@ -8,8 +8,8 @@ if (canvas) {
 
   try {
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#e9eee8');
-    scene.fog = new THREE.Fog('#e9eee8', 16, 34);
+    scene.background = new THREE.Color('#14232b');
+    scene.fog = new THREE.Fog('#273a3d', 16, 34);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -25,16 +25,38 @@ if (canvas) {
       source.height = 512;
       const context = source.getContext('2d');
       const wash = context.createLinearGradient(0, 0, 0, 512);
-      wash.addColorStop(0, '#d6e0d6');
-      wash.addColorStop(0.52, '#e8e7da');
-      wash.addColorStop(1, '#f5e8d2');
+      wash.addColorStop(0, '#23363b');
+      wash.addColorStop(0.32, '#304341');
+      wash.addColorStop(0.58, '#465047');
+      wash.addColorStop(0.82, '#625b48');
+      wash.addColorStop(1, '#78624d');
       context.fillStyle = wash;
       context.fillRect(0, 0, 1024, 512);
-      const glow = context.createRadialGradient(650, 240, 25, 650, 240, 470);
-      glow.addColorStop(0, 'rgba(255, 250, 231, 0.55)');
-      glow.addColorStop(1, 'rgba(255, 250, 231, 0)');
+      const glow = context.createRadialGradient(700, 300, 25, 700, 300, 500);
+      glow.addColorStop(0, 'rgba(255, 195, 111, 0.28)');
+      glow.addColorStop(1, 'rgba(255, 195, 111, 0)');
       context.fillStyle = glow;
       context.fillRect(0, 0, 1024, 512);
+      context.save();
+      context.filter = 'blur(7px)';
+      context.fillStyle = 'rgba(12, 24, 26, 0.52)';
+      context.fillRect(70, 226, 884, 20);
+      context.fillRect(70, 352, 884, 15);
+      context.fillStyle = 'rgba(209, 157, 88, 0.42)';
+      context.fillRect(118, 219, 790, 5);
+      for (const [x, y, width, height, color] of [
+        [142, 145, 34, 74, 'rgba(100, 162, 150, .42)'], [205, 158, 24, 59, 'rgba(214, 177, 115, .38)'],
+        [306, 132, 42, 87, 'rgba(90, 142, 141, .4)'], [730, 147, 30, 72, 'rgba(198, 139, 83, .38)'],
+        [812, 125, 40, 94, 'rgba(97, 157, 151, .38)'], [890, 163, 22, 57, 'rgba(222, 175, 102, .4)']
+      ]) {
+        context.fillStyle = color;
+        context.beginPath();
+        context.roundRect(x, y, width, height, [5, 5, 10, 10]);
+        context.fill();
+        context.fillStyle = 'rgba(255, 224, 164, .35)';
+        context.fillRect(x + 5, y + 7, width - 10, 2);
+      }
+      context.restore();
       const texture = new THREE.CanvasTexture(source);
       texture.mapping = THREE.EquirectangularReflectionMapping;
       texture.colorSpace = THREE.SRGBColorSpace;
@@ -43,7 +65,7 @@ if (canvas) {
     const environment = makeEnvironment();
     scene.background = environment;
     scene.environment = environment;
-    scene.environmentIntensity = 0.32;
+    scene.environmentIntensity = 0.42;
 
     const camera = new THREE.PerspectiveCamera(37, 1, 0.1, 80);
     const target = new THREE.Vector3(0, 1.25, 0.05);
@@ -62,10 +84,13 @@ if (canvas) {
       camera.lookAt(target);
     };
 
-    scene.add(new THREE.HemisphereLight('#fffdf4', '#77867d', 1.65));
-    const fill = new THREE.DirectionalLight('#e2ece8', 1.25);
+    scene.add(new THREE.HemisphereLight('#e7f0e9', '#31443f', 1.2));
+    const fill = new THREE.DirectionalLight('#d3e3e3', 0.9);
     fill.position.set(5, 8, -5);
     scene.add(fill);
+    const warmBounce = new THREE.PointLight('#ffbd70', 16, 8, 1.8);
+    warmBounce.position.set(-1.6, 2.3, -2.4);
+    scene.add(warmBounce);
 
     const makeWoodTexture = () => {
       const source = document.createElement('canvas');
@@ -144,6 +169,7 @@ if (canvas) {
       woodEdge: material('#805c3c', { roughness: 0.56 }),
       metal: material('#9aa79d', { metalness: 0.42, roughness: 0.34 }),
       metalDark: material('#526158', { metalness: 0.34, roughness: 0.37 }),
+      brass: material('#c6974e', { metalness: 0.72, roughness: 0.26 }),
       lamp: material('#35443e', { metalness: 0.38, roughness: 0.34 }),
       ball: new THREE.MeshStandardMaterial({ color: '#dce4d9', map: ballTexture, roughness: 0.78, metalness: 0.015, bumpMap: ballTexture, bumpScale: 0.008 }),
       screen: new THREE.MeshPhysicalMaterial({ color: '#fffdf5', map: screenTexture, roughness: 0.91, metalness: 0, side: THREE.DoubleSide }),
@@ -228,6 +254,9 @@ if (canvas) {
     spotlight.shadow.normalBias = 0.018;
     spotlight.shadow.radius = 4;
     scene.add(spotlight, spotlight.target);
+    const lampBounce = new THREE.PointLight('#ffc765', 8, 5.5, 1.7);
+    lampBounce.position.set(0, 1.5, -3.4);
+    scene.add(lampBounce);
 
     const screenZ = 3.72;
     const screenWidth = 4.25;
@@ -245,6 +274,9 @@ if (canvas) {
     }
     box(scene, [screenWidth + 0.18, 0.1, 0.1], [0, screenCenterY + screenHeight / 2 + 0.045, screenZ + 0.04], materials.screenFrame);
     box(scene, [screenWidth + 0.18, 0.1, 0.1], [0, screenCenterY - screenHeight / 2 - 0.045, screenZ + 0.04], materials.screenFrame);
+    for (const x of [-screenWidth / 2 + 0.13, screenWidth / 2 - 0.13]) {
+      box(scene, [0.018, screenHeight - 0.32, 0.018], [x, screenCenterY, screenZ - 0.028], materials.brass, { cast: false, receive: false });
+    }
     for (const x of [-screenWidth / 2 - 0.055, screenWidth / 2 + 0.055]) {
       for (const y of [screenCenterY - screenHeight / 2 + 0.18, screenCenterY + screenHeight / 2 - 0.18]) {
         const screw = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.018, 16), materials.metalDark);
