@@ -167,6 +167,8 @@
     .cycle-wave-control .live-note { width:100%; margin:0; padding:8px 11px; border-radius:10px; background:#f8f9f4; }
     .cycle-wave-figure { container-type:inline-size; }
     .cycle-wave-figure figcaption { margin-top:10px; padding-top:9px; border-top:1px solid var(--line); }
+    .cycle-wave-summary { margin:10px 0 0; padding:12px; border-radius:12px; background:#edf4ea; color:var(--green); font-size:1.05rem; font-weight:750; text-align:center; }
+    #cycle-wave-summary[hidden] { display:none!important; }
     .cycle-amplitude-sequence { margin:0 0 12px; }
     .cycle-amplitude-sequence>p { margin:0 0 8px; font-weight:700; }
     .cycle-amplitude-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; }
@@ -616,9 +618,9 @@
                 </g>
               </svg>
               <div class="cycle-wave-control">
-                <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note">按下按鈕，觀察粒子完成四段位移，繩上同步描出完整波形。</span></div>
+                <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note">按下按鈕，觀察橘色粒子完成一輪振動。</span></div>
               </div>
-              <figcaption>粒子上下振動，帶動波形向右形成；完成一輪振動，描出一個完整波，長度為一個波長 λ。</figcaption>
+              <p class="cycle-wave-summary" id="cycle-wave-summary" role="status" aria-live="polite" hidden>一輪完整振動 → 繩上形成一個完整波形</p>
             </figure>
           </div>
         </section>
@@ -1060,8 +1062,9 @@
       const cycleSourceMarker=document.querySelector("#cycle-source-marker");
       const cycleWaveLengthAnnotation=document.querySelector("#cycle-wave-length-annotation");
       const cycleWaveReplay=document.querySelector("#cycle-wave-replay");
+      const cycleWaveSummary=document.querySelector("#cycle-wave-summary");
       const cycleAmplitudeSteps=[...document.querySelectorAll("#card-06 [data-cycle-step]")];
-      if(cycleWavePath&&cycleSourceMarker&&cycleWaveLengthAnnotation&&cycleWaveReplay&&cycleAmplitudeSteps.length===4){
+      if(cycleWavePath&&cycleSourceMarker&&cycleWaveLengthAnnotation&&cycleWaveReplay&&cycleWaveSummary&&cycleAmplitudeSteps.length===4){
         const cycleStartX=90,cycleWidth=510,cycleMidY=170,cycleAmplitude=55,cycleSteps=120;
         let cycleAnimationFrame=0;
         const updateCycleAmplitudeSteps=progress=>{
@@ -1086,6 +1089,7 @@
           }
           cycleWavePath.setAttribute("d",path);
           cycleWaveLengthAnnotation.setAttribute("visibility",progress>=1?"visible":"hidden");
+          cycleWaveSummary.hidden=progress<1;
           cycleSourceMarker.setAttribute("cy",String(sourceY));
         };
         const playCompleteCycle=()=>{
