@@ -14,7 +14,6 @@ if (tapButton) {
   const orbitRotation = -24 * Math.PI / 180;
   let phase = 'ready';
   let startTime = 0;
-  let orbitAnimation = 0;
 
   const formatLaps = (laps) => {
     const rounded = Math.round(laps * 10) / 10;
@@ -32,7 +31,6 @@ if (tapButton) {
   };
 
   const clearOrbit = () => {
-    cancelAnimationFrame(orbitAnimation);
     orbitLaps.replaceChildren();
     moveOrbitDot(100, 38, 0);
   };
@@ -54,29 +52,13 @@ if (tapButton) {
       path.setAttribute('ry', String(ry));
       orbitLaps.append(path);
       const length = path.getTotalLength();
-      path.style.strokeDasharray = `0 ${length}`;
+      path.style.strokeDasharray = `${amount * length} ${length}`;
       paths.push({ path, length, amount, rx, ry });
     }
-
-    const lapDuration = 850;
-    const startedAt = performance.now();
-    const animate = (now) => {
-      const elapsedLaps = (now - startedAt) / lapDuration;
-      let active = null;
-      for (let index = 0; index < paths.length; index += 1) {
-        const lap = paths[index];
-        const progress = Math.min(lap.amount, Math.max(0, elapsedLaps - index));
-        lap.path.style.strokeDasharray = `${progress * lap.length} ${lap.length}`;
-        if (!active && progress < lap.amount) active = { ...lap, progress };
-      }
-      if (active) moveOrbitDot(active.rx, active.ry, active.progress);
-      else if (paths.length) {
-        const last = paths[paths.length - 1];
-        moveOrbitDot(last.rx, last.ry, last.amount % 1);
-      }
-      if (elapsedLaps < paths.length) orbitAnimation = requestAnimationFrame(animate);
-    };
-    orbitAnimation = requestAnimationFrame(animate);
+    if (paths.length) {
+      const last = paths[paths.length - 1];
+      moveOrbitDot(last.rx, last.ry, last.amount % 1);
+    }
   };
 
   const showMeasurement = (seconds) => {
