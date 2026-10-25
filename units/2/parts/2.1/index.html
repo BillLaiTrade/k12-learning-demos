@@ -624,7 +624,7 @@
                 <h3 id="frequency-panel-title">頻率 f</h3>
                 <div class="frequency-definition">
                   <p>波源每秒完成的完整振動次數。</p>
-                  <small>完整振動要回到起始位置，且運動方向相同。連續波中，波源每完成一輪，就送出一個完整波形。</small>
+                  <small>一輪振動會回到起始位置且運動方向相同；連續波中，這一輪對應一個完整波形週期，沿繩方向的長度是一個波長 λ。</small>
                 </div>
                 <div class="frequency-stepper" role="group" aria-label="調整頻率">
                   <button class="secondary" type="button" id="frequency-step-down" aria-label="降低頻率">−</button>
@@ -636,7 +636,7 @@
               <section class="frequency-period-panel" aria-labelledby="period-panel-title">
                 <h3 id="period-panel-title">週期 T</h3>
                 <div class="frequency-definition">
-                  <p>波源完成一輪完整振動所需的時間。</p>
+                  <p>波源完成一輪完整振動（對應波形的一個完整週期）所需的時間。</p>
                 </div>
                 <label class="sr-only" for="card07-period-range">調整週期，完成一輪完整振動所需的秒數</label>
                 <input class="period-range" id="card07-period-range" type="range" min="0.25" max="1" step="0.0001" value="1">
