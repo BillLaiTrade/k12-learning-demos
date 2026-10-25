@@ -123,6 +123,15 @@
     #cycle-wave-path { fill:none; }
     .cycle-wave-control .controls { align-items:flex-start; }
     .cycle-wave-control .live-note { flex:1 1 220px; margin:0; }
+    .cycle-amplitude-sequence { margin:12px 0 0; }
+    .cycle-amplitude-sequence>p { margin:0 0 8px; font-weight:700; }
+    .cycle-amplitude-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; }
+    .cycle-amplitude-step { min-width:0; padding:9px 7px; border:1px solid var(--line); border-radius:10px; background:#f8f9f4; text-align:center; transition:background-color .18s,border-color .18s; }
+    .cycle-amplitude-step strong,.cycle-amplitude-step small { display:block; }
+    .cycle-amplitude-step small { margin-top:3px; color:var(--muted); }
+    .cycle-amplitude-step.is-active { border-color:#d98a44; background:#fff2e5; }
+    .cycle-amplitude-step.is-complete { border-color:#9bbba7; background:#eef5ef; }
+    @media (max-width:520px) { .cycle-amplitude-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
     @media (max-width:520px) { #card-06 .visual svg text { font-size:25px; } #card-06 .visual svg .small-label { font-size:21px; } }
     .longitudinal-wavelength-panel svg text { font-size:18px; }
     .longitudinal-wavelength-panel svg .lambda-symbol { font-size:25px; font-weight:800; }
@@ -535,17 +544,18 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩上的一點先往上、再往下；把它的動作記下來，會畫出什麼波形？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>看左邊同一點上下振動，右邊同步記下它的位置。從平衡位置出發，經過波峰、波谷再回來，就描出一個完整的波形。</p></div>
             <div class="control-panel cycle-wave-control">
-              <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note" id="cycle-wave-status" role="status" aria-live="polite">按下按鈕，橘色粒子會上下振動並留下軌跡，綠色波形從它所在端向右形成。</span></div>
+              <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note" id="cycle-wave-status" role="status" aria-live="polite">每一段移動一個振幅 A；按下按鈕觀察四段上下移動。</span></div>
             </div>
             <figure class="visual cycle-wave-figure">
-              <svg viewBox="0 0 700 370" role="img" aria-label="動畫中橘色粒子位於波形最左端並上下振動，綠色波形從與粒子相連的左端向右延伸；粒子完成一次往返時，繩上剛好形成一個完整波形">
+              <svg viewBox="0 0 700 370" role="img" aria-label="動畫中橘色粒子從平衡位置上行到正振幅，再下行到負振幅，最後上行回到平衡位置；綠色波形從粒子所在左端向右形成">
                 <defs>
                   <marker id="arrow-wave-direction" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#176b53"/></marker>
                   <marker id="arrow-cycle-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
                 </defs>
                 <text x="90" y="68" text-anchor="middle">繩端粒子上下振動</text>
-                <path d="M50 170H130" class="equilibrium"/>
-                <path id="cycle-source-trail" d="M90 170" fill="none" stroke="#dc8b3f" stroke-width="3" stroke-linecap="round"/>
+                <text x="45" y="120" text-anchor="end" class="small-label">+A</text>
+                <text x="45" y="175" text-anchor="end" class="small-label">平衡</text>
+                <text x="45" y="230" text-anchor="end" class="small-label">−A</text>
                 <circle id="cycle-source-marker" cx="90" cy="170" r="10" class="marker"/>
                 <text x="412" y="68" text-anchor="middle">振動帶動波形向右形成</text>
                 <path d="M50 170H645" class="equilibrium"/>
@@ -557,8 +567,17 @@
                 <text x="415" y="300" text-anchor="middle" fill="#176b53">波形傳播方向</text>
                 <path d="M180 320H650" stroke="#176b53" stroke-width="1.8" marker-end="url(#arrow-wave-direction)"/>
               </svg>
-              <figcaption>橘色粒子走過的位置會留下橘色軌跡；綠線與粒子相連，從這個繩端向右傳開。<span id="cycle-wave-complete-note" hidden>粒子從平衡位置上行到 +A（波峰），再下行經過平衡位置到 −A（波谷），最後回到平衡位置。這一輪振動形成一個完整波；波形沿繩子傳播方向的長度，就是一個波長 λ。</span></figcaption>
+              <figcaption>橘色粒子與綠線左端相連；粒子上下振動時，綠色波形從繩端向右傳開。<span id="cycle-wave-complete-note" hidden>粒子完成四段位移：從平衡位置上行到 +A，再下行到平衡位置、繼續下行到 −A，最後上行回到平衡位置；每一段都是一個振幅 A。這一輪振動形成的完整波，沿繩子傳播方向的長度就是一個波長 λ。</span></figcaption>
             </figure>
+            <div class="cycle-amplitude-sequence" aria-label="一個完整振動的四段位移">
+              <p>一個完整振動：每一段移動一個振幅 A</p>
+              <div class="cycle-amplitude-steps">
+                <div class="cycle-amplitude-step" data-cycle-step><strong>平衡位置到 +A</strong><small>上行一個振幅 A</small></div>
+                <div class="cycle-amplitude-step" data-cycle-step><strong>+A 到平衡位置</strong><small>下行一個振幅 A</small></div>
+                <div class="cycle-amplitude-step" data-cycle-step><strong>平衡位置到 −A</strong><small>再下行一個振幅 A</small></div>
+                <div class="cycle-amplitude-step" data-cycle-step><strong>−A 到平衡位置</strong><small>上行一個振幅 A</small></div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -947,26 +966,36 @@
       updateLambdaMeasure();
 
       const cycleWavePath=document.querySelector("#cycle-wave-path");
-      const cycleSourceTrail=document.querySelector("#cycle-source-trail");
       const cycleSourceMarker=document.querySelector("#cycle-source-marker");
       const cycleWaveLengthAnnotation=document.querySelector("#cycle-wave-length-annotation");
       const cycleWaveCompleteNote=document.querySelector("#cycle-wave-complete-note");
       const cycleWaveReplay=document.querySelector("#cycle-wave-replay");
       const cycleWaveStatus=document.querySelector("#cycle-wave-status");
-      if(cycleWavePath&&cycleSourceTrail&&cycleSourceMarker&&cycleWaveLengthAnnotation&&cycleWaveCompleteNote&&cycleWaveReplay&&cycleWaveStatus){
+      const cycleAmplitudeSteps=[...document.querySelectorAll("#card-06 [data-cycle-step]")];
+      if(cycleWavePath&&cycleSourceMarker&&cycleWaveLengthAnnotation&&cycleWaveCompleteNote&&cycleWaveReplay&&cycleWaveStatus&&cycleAmplitudeSteps.length===4){
         const cycleStartX=90,cycleWidth=510,cycleMidY=170,cycleAmplitude=55,cycleSteps=120;
+        const cycleStepMessages=[
+          "第 1 段：從平衡位置上行到 +A，移動一個振幅 A。",
+          "第 2 段：從 +A 下行到平衡位置，移動一個振幅 A。",
+          "第 3 段：從平衡位置再下行到 −A，移動一個振幅 A。",
+          "第 4 段：從 −A 上行回到平衡位置，移動一個振幅 A。"
+        ];
         let cycleAnimationFrame=0;
+        let cycleActiveStep=-1;
+        const updateCycleAmplitudeSteps=progress=>{
+          const activeStep=progress<1?Math.min(3,Math.floor(progress*4)):-1;
+          cycleAmplitudeSteps.forEach((step,index)=>{
+            step.classList.toggle("is-active",index===activeStep);
+            step.classList.toggle("is-complete",progress>=(index+1)/4);
+            if(index===activeStep)step.setAttribute("aria-current","step");else step.removeAttribute("aria-current");
+          });
+          if(activeStep>=0&&activeStep!==cycleActiveStep)cycleWaveStatus.textContent=cycleStepMessages[activeStep];
+          cycleActiveStep=activeStep;
+        };
         const showCycleProgress=progress=>{
           const step=Math.floor(cycleSteps*progress);
           const phaseAtSource=progress*Math.PI*2;
           const sourceY=cycleMidY-cycleAmplitude*Math.sin(phaseAtSource);
-          let trail=`M${cycleStartX} ${cycleMidY}`;
-          for(let i=1;i<=step;i++){
-            const trailY=cycleMidY-cycleAmplitude*Math.sin((i/cycleSteps)*Math.PI*2);
-            trail+=` L${cycleStartX} ${trailY.toFixed(2)}`;
-          }
-          trail+=` L${cycleStartX} ${sourceY.toFixed(2)}`;
-          cycleSourceTrail.setAttribute("d",trail);
           let path=`M${cycleStartX} ${sourceY.toFixed(2)}`;
           for(let i=1;i<=step;i++){
             const distance=i/cycleSteps;
@@ -981,10 +1010,9 @@
           cycleSourceMarker.setAttribute("cy",String(sourceY));
         };
         const playCompleteCycle=()=>{
-          cancelAnimationFrame(cycleAnimationFrame);showCycleProgress(0);cycleWaveReplay.disabled=true;cycleWaveReplay.textContent="產生中…";
-          cycleWaveStatus.textContent="橘色軌跡保留粒子的運動路徑，綠色波形從相連左端向右延伸。";
+          cancelAnimationFrame(cycleAnimationFrame);showCycleProgress(0);updateCycleAmplitudeSteps(0);cycleWaveReplay.disabled=true;cycleWaveReplay.textContent="產生中…";
           let startTime=null;
-          const draw=time=>{if(startTime===null)startTime=time;const progress=Math.min(1,(time-startTime)/3200);showCycleProgress(progress);if(progress<1){cycleAnimationFrame=requestAnimationFrame(draw);}else{cycleWaveReplay.disabled=false;cycleWaveReplay.textContent="再產生一次";cycleWaveStatus.textContent="粒子完成一次上下往返，橘色軌跡保留；綠色波形形成一個完整波形。";}};
+          const draw=time=>{if(startTime===null)startTime=time;const progress=Math.min(1,(time-startTime)/3200);showCycleProgress(progress);updateCycleAmplitudeSteps(progress);if(progress<1){cycleAnimationFrame=requestAnimationFrame(draw);}else{cycleWaveReplay.disabled=false;cycleWaveReplay.textContent="再產生一次";cycleWaveStatus.textContent="四段位移各是一個振幅 A；粒子回到平衡位置，綠線形成一個完整波，長度為 λ。";}};
           cycleAnimationFrame=requestAnimationFrame(draw);
         };
         showCycleProgress(0);
