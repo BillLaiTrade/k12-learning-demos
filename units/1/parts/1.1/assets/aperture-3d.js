@@ -1,4 +1,4 @@
-import * as THREE from './vendor/three/build/three.module.js?v=aperture-refresh-20261025';
+import * as THREE from './vendor/three/build/three.module.js?v=webgl-render-refresh-20261025';
 
 const canvas = document.querySelector('#aperture-3d-scene');
 if (canvas) {

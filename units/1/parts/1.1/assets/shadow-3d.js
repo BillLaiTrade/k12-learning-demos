@@ -1,4 +1,4 @@
-import * as THREE from './vendor/three/build/three.module.js';
+import * as THREE from './vendor/three/build/three.module.js?v=webgl-render-refresh-20261025';
 
 const canvas = document.querySelector('#shadow-3d-scene');
 if (canvas) {
