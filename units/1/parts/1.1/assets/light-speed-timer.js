@@ -5,7 +5,6 @@ if (tapButton) {
   const distanceOutput = document.querySelector('#light-distance');
   const lapOutput = document.querySelector('#earth-lap-result');
   const lapDetail = document.querySelector('#earth-lap-detail');
-  const lapCounter = document.querySelector('#earth-lap-counter');
   const feedback = document.querySelector('#light-speed-feedback');
   const orbitDot = document.querySelector('#light-speed-orbit-dot');
   const orbitLaps = document.querySelector('#light-speed-orbit-laps');
@@ -34,8 +33,7 @@ if (tapButton) {
 
   const clearOrbit = () => {
     orbitLaps.replaceChildren();
-    lapCounter.replaceChildren();
-    moveOrbitDot(100, 38, 0);
+    moveOrbitDot(64, 21, 0);
     lapDetail.hidden = true;
   };
 
@@ -44,40 +42,34 @@ if (tapButton) {
     const displayLaps = Math.round(laps * 10) / 10;
     const wholeLaps = Math.floor(displayLaps);
     const partialLap = Math.round((displayLaps - wholeLaps) * 10) / 10;
-    const addOrbitPath = (partial = false) => {
+    const ringCount = Math.ceil(displayLaps);
+    const ringSpacing = ringCount > 1 ? Math.min(16, 59 / (ringCount - 1)) : 8;
+    const verticalSpacing = ringSpacing * 0.4;
+    const addOrbitPath = (rx, ry, partial = false) => {
       const path = document.createElementNS(SVG_NS, 'ellipse');
       path.setAttribute('class', `light-speed-orbit-lap${partial ? ' is-partial' : ''}`);
       path.setAttribute('cx', String(orbitCenter));
       path.setAttribute('cy', String(orbitCenter));
-      path.setAttribute('rx', '100');
-      path.setAttribute('ry', '38');
+      path.setAttribute('rx', String(rx));
+      path.setAttribute('ry', String(ry));
       orbitLaps.append(path);
       const length = path.getTotalLength();
       path.style.strokeDasharray = `${length} ${length}`;
       return path;
     };
-    if (wholeLaps > 0) addOrbitPath();
+    for (let index = 0; index < wholeLaps; index += 1) {
+      addOrbitPath(64 + index * ringSpacing, 21 + index * verticalSpacing);
+    }
+    let finalRx = wholeLaps > 0 ? 64 + (wholeLaps - 1) * ringSpacing : 64;
+    let finalRy = wholeLaps > 0 ? 21 + (wholeLaps - 1) * verticalSpacing : 21;
     if (partialLap > 0) {
-      const partialPath = addOrbitPath(true);
+      finalRx = 64 + wholeLaps * ringSpacing;
+      finalRy = 21 + wholeLaps * verticalSpacing;
+      const partialPath = addOrbitPath(finalRx, finalRy, true);
       const length = partialPath.getTotalLength();
       partialPath.style.strokeDasharray = `${partialLap * length} ${length}`;
     }
-    moveOrbitDot(100, 38, partialLap);
-    const loopCount = wholeLaps + (partialLap > 0 ? 1 : 0);
-    for (let index = 0; index < loopCount; index += 1) {
-      const amount = index < wholeLaps ? 1 : partialLap;
-      const item = document.createElement('span');
-      item.style.setProperty('--lap-progress', String(amount * 100));
-      const number = document.createElement('b');
-      number.textContent = String(index + 1);
-      item.append(number);
-      lapCounter.append(item);
-    }
-    lapCounter.setAttribute('aria-label', wholeLaps === 0
-      ? `未滿一圈，已走 ${formatLaps(partialLap)} 圈`
-      : partialLap > 0
-        ? `${wholeLaps} 圈完整，再走 ${formatLaps(partialLap)} 圈`
-        : `完成 ${wholeLaps} 圈`);
+    moveOrbitDot(finalRx, finalRy, partialLap);
     lapDetail.textContent = wholeLaps === 0
       ? `未滿 1 圈・已走 ${formatLaps(partialLap)} 圈`
       : partialLap > 0
