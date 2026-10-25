@@ -449,7 +449,7 @@
     .composition-connector::before { left:0; }.composition-connector::after { right:0; }
     .composition-lens { position:absolute; z-index:2; top:50%; right:5%; display:grid; width:min(47%,116px); aspect-ratio:1; place-items:center; overflow:hidden; border:3px solid #55775f; border-radius:50%; background:#ffffffec; box-shadow:0 2px 7px #273c2e55,inset 0 0 0 2px #fff; transform:translateY(-50%); }
     .composition-lens svg { display:block; width:100%; height:100%; }
-    .composition-lens--soil img { display:block; width:100%; height:100%; object-fit:cover; }
+    .composition-lens--soil img { position:absolute; left:-68%; top:-60%; display:block; width:220%; height:220%; max-width:none; object-fit:cover; }
     .composition-result { display:flex; min-height:48px; align-items:center; justify-content:center; gap:7px; margin:0!important; padding:8px 5px; background:#f0f4e8; color:#315340; font-size:.86rem; font-weight:750; text-align:center; }
     .composition-result span+span::before { content:"｜"; padding-right:7px; color:#789078; }
     .composition-principle { display:flex; align-items:center; gap:12px; margin:9px 0 10px; padding:10px 14px; border-radius:12px; background:#eaf1df; color:#344e3d; font-weight:750; }
@@ -1062,7 +1062,7 @@
                 <div class="composition-sample-visual" role="img" aria-label="花圃土壤樣本，放大後可見大小與顏色不同的礦物及有機顆粒">
                   <img class="composition-sample-photo" src="assets/lesson-soil-sample.webp" alt="">
                   <span class="composition-connector" aria-hidden="true"></span>
-                  <span class="composition-lens composition-lens--soil" aria-hidden="true"><img src="assets/lesson-soil-magnified.webp?v=2" alt=""></span>
+                  <span class="composition-lens composition-lens--soil" aria-hidden="true"><img src="assets/lesson-soil-sample.webp?zoom=2" alt=""></span>
                 </div>
                 <p class="composition-result"><span>多種成分</span><span>混合物</span></p>
               </article>
