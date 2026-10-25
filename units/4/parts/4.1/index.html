@@ -606,6 +606,7 @@
     .particle-photo-model { display:grid; grid-template-columns:145px minmax(0,1fr); gap:9px; align-items:stretch; padding:9px; background:#fbfcf8; }
     .particle-sample-photo { min-width:0; margin:0; overflow:hidden; border:1px solid #e0e4d9; border-radius:9px; background:#fff; }
     .particle-sample-photo img { display:block; width:100%; height:124px; object-fit:cover; }
+    .particle-sample-photo--iron img { object-fit:contain; background:#f5f6f2; }
     .particle-sample-photo figcaption { padding:3px 5px; color:#617066; font-size:.72rem; text-align:center; }
     .particle-photo-model .particle-model { min-height:118px; }
     .particle-photo-model .particle-model--water { grid-template-columns:repeat(3,55px); gap:10px 7px; }
@@ -1113,7 +1114,7 @@
                 <div class="particle-card-body">
                   <p class="particle-example">例子：純鐵</p>
                   <div class="particle-photo-model">
-                    <figure class="particle-sample-photo"><img src="assets/lesson-pure-iron-sample.webp" alt="純鐵圓柱樣本的實物照片"><figcaption>純鐵樣本實拍</figcaption></figure>
+                    <figure class="particle-sample-photo particle-sample-photo--iron"><img src="assets/lesson-pure-iron-sample.webp" alt="不同形狀的純鐵樣品實拍照"><figcaption>純鐵樣本實拍</figcaption></figure>
                     <div class="particle-model particle-model--iron" role="img" aria-label="純鐵粒子模型中只有一種種類的粒子">
                       <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
                       <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
