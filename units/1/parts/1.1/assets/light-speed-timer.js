@@ -28,11 +28,15 @@ if (tapButton) {
     const rotatedY = orbitCenter + x * Math.sin(orbitRotation) + y * Math.cos(orbitRotation);
     orbitDot.style.left = `${rotatedX / 300 * 100}%`;
     orbitDot.style.top = `${rotatedY / 300 * 100}%`;
+    orbitDot.style.opacity = '1';
+    orbitDot.style.visibility = 'visible';
   };
 
   const clearOrbit = () => {
     orbitLaps.replaceChildren();
     moveOrbitDot(108, 72, 0);
+    orbitDot.style.opacity = '0';
+    orbitDot.style.visibility = 'hidden';
   };
 
   const drawOrbit = (laps) => {
