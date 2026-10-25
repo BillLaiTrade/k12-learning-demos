@@ -93,8 +93,8 @@ if (canvas) {
     carriage: material('#76847d', { metalness: 0.5, roughness: 0.42 }),
     screen: material('#f4f0e3', { roughness: 0.84 }),
     screenFrame: material('#697970', { metalness: 0.36, roughness: 0.43 }),
-    spot: new THREE.MeshBasicMaterial({ color: '#ffe090', transparent: true, opacity: 1, depthWrite: false }),
-    spotGlow: new THREE.MeshBasicMaterial({ color: '#ffc64b', transparent: true, opacity: 0.34, depthWrite: false })
+    spot: new THREE.MeshBasicMaterial({ color: '#fff4b2', transparent: true, opacity: 1, depthWrite: false }),
+    spotGlow: new THREE.MeshBasicMaterial({ color: '#ffd45c', transparent: true, opacity: 0.38, depthWrite: false })
   };
 
   const addBox = (parent, size, position, mat, castShadow = true, receiveShadow = true) => {
@@ -196,10 +196,10 @@ if (canvas) {
   }
   addBox(scene, [0.22, 0.11, 0.22], [4.4, 0.18, 0], mats.carriage);
   addBox(scene, [0.11, 0.96, 0.11], [4.42, 0.67, 0], mats.railDark);
-  const spot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 24, 16), mats.spot);
+  const spot = new THREE.Mesh(new THREE.SphereGeometry(0.15, 24, 16), mats.spot);
   spot.position.set(4.265, 1.28, 0);
   scene.add(spot);
-  const spotGlow = new THREE.Mesh(new THREE.SphereGeometry(0.2, 24, 16), mats.spotGlow);
+  const spotGlow = new THREE.Mesh(new THREE.SphereGeometry(0.27, 24, 16), mats.spotGlow);
   spotGlow.position.copy(spot.position);
   scene.add(spotGlow);
 
@@ -301,7 +301,7 @@ if (canvas) {
     const maxDeviation = Math.max(...plateStates.map((state) => Math.abs(state.height)));
     const transmission = lightRemainingAtOffset(maxDeviation);
     mats.spot.opacity = transmission;
-    mats.spotGlow.opacity = transmission * 0.34;
+    mats.spotGlow.opacity = transmission * 0.38;
     spot.scale.setScalar(0.72 + transmission * 0.28);
     spotGlow.scale.setScalar(0.6 + transmission * 0.4);
     result.classList.toggle('is-blocked', transmission <= 0);
