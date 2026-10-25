@@ -8,7 +8,7 @@
 - **Creator:** Hi-Res Images of Chemical Elements
 - **License:** [Creative Commons Attribution 3.0 (CC BY 3.0)](https://creativecommons.org/licenses/by/3.0/)
 - **Changes:** Resized and converted to WebP for the pure-iron example.
-- **Photo:** [Glass of water ouside](https://commons.wikimedia.org/wiki/File:Glass_of_water_ouside.jpg)
-- **Creator:** Kurt Kaiser
-- **License:** [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
+- **Photo:** [A simple close-up of a clear glass of water](https://www.pexels.com/photo/10965842/)
+- **Creator:** Engin Akyurt
+- **License:** [Pexels License](https://www.pexels.com/license/)
 - **Changes:** Cropped, resized, and converted to WebP for the distilled-water example.
