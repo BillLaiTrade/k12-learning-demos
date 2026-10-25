@@ -3,18 +3,20 @@ import * as THREE from './vendor/three/build/three.module.js';
 const canvas = document.querySelector('#aperture-3d-scene');
 if (canvas) {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#e9eee8');
-  scene.fog = new THREE.Fog('#e9eee8', 13, 28);
+  scene.background = new THREE.Color('#dce4df');
+  scene.fog = new THREE.Fog('#dce4df', 15, 32);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.14;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 60);
   const target = new THREE.Vector3(0, 1, 0);
-  const initialOrbit = { azimuth: -0.66, polar: 1.02, radius: 11.8 };
+  const initialOrbit = { azimuth: -0.66, polar: 1.16, radius: 11.8 };
   let azimuth = initialOrbit.azimuth;
   let polar = initialOrbit.polar;
   let radius = initialOrbit.radius;
@@ -30,30 +32,64 @@ if (canvas) {
   };
   updateCamera();
 
-  scene.add(new THREE.HemisphereLight('#fffdf3', '#82928a', 2.25));
-  const keyLight = new THREE.DirectionalLight('#fff4dc', 2.1);
-  keyLight.position.set(-4, 9, 6);
+  scene.add(new THREE.HemisphereLight('#fff7e7', '#526b65', 1.8));
+  const keyLight = new THREE.DirectionalLight('#ffe3b4', 3.15);
+  keyLight.position.set(-4, 8, 5);
   keyLight.castShadow = true;
-  keyLight.shadow.mapSize.set(1024, 1024);
+  keyLight.shadow.mapSize.set(2048, 2048);
+  keyLight.shadow.bias = -0.00018;
+  keyLight.shadow.radius = 4;
   scene.add(keyLight);
-  const fillLight = new THREE.DirectionalLight('#e4f1f4', 0.75);
+  const fillLight = new THREE.DirectionalLight('#b3d6e4', 1.1);
   fillLight.position.set(6, 5, -6);
   scene.add(fillLight);
 
+  const makeWoodTexture = () => {
+    const woodCanvas = document.createElement('canvas');
+    woodCanvas.width = 1024;
+    woodCanvas.height = 512;
+    const context = woodCanvas.getContext('2d');
+    const base = context.createLinearGradient(0, 0, 0, 512);
+    base.addColorStop(0, '#d0ae82');
+    base.addColorStop(0.48, '#bb9264');
+    base.addColorStop(1, '#a97c53');
+    context.fillStyle = base;
+    context.fillRect(0, 0, 1024, 512);
+    let seed = 31;
+    const random = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+    for (let line = 0; line < 185; line += 1) {
+      const y = random() * 512;
+      context.beginPath();
+      context.moveTo(0, y);
+      for (let x = 0; x <= 1024; x += 96) context.quadraticCurveTo(x + 48, y + (random() - 0.5) * 10, x + 96, y + (random() - 0.5) * 5);
+      context.strokeStyle = random() > 0.5 ? `rgba(74, 45, 27, ${0.018 + random() * 0.032})` : `rgba(255, 235, 202, ${0.025 + random() * 0.04})`;
+      context.lineWidth = 0.6 + random() * 1.4;
+      context.stroke();
+    }
+    const texture = new THREE.CanvasTexture(woodCanvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(2.4, 1.2);
+    texture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
+    return texture;
+  };
+  const woodTexture = makeWoodTexture();
+
   const material = (color, options = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.66, metalness: 0.08, ...options });
   const mats = {
-    floor: material('#e9eee8'),
-    benchTop: material('#bf986b'),
-    benchSide: material('#8a6847'),
+    floor: material('#dce4df'),
+    benchTop: new THREE.MeshPhysicalMaterial({ color: '#fff3df', map: woodTexture, roughness: 0.46, metalness: 0.015, clearcoat: 0.2, clearcoatRoughness: 0.58 }),
+    benchSide: material('#78563a', { roughness: 0.55 }),
     rail: material('#87928d', { metalness: 0.64, roughness: 0.35 }),
     railDark: material('#586560', { metalness: 0.45, roughness: 0.4 }),
-    source: material('#33413f'),
-    sourceFace: material('#f0bd4b', { emissive: '#d88b20', emissiveIntensity: 0.65 }),
-    plate: material('#273238', { roughness: 0.48, metalness: 0.15 }),
-    selectedPlate: material('#315c4c', { roughness: 0.48, metalness: 0.12 }),
-    plateEdge: material('#8b9b92', { metalness: 0.36, roughness: 0.42 }),
+    source: material('#1d2928', { roughness: 0.38, metalness: 0.34 }),
+    sourceFace: material('#ffe3a0', { emissive: '#ffad35', emissiveIntensity: 1.25, roughness: 0.24 }),
+    plate: material('#273330', { roughness: 0.34, metalness: 0.38 }),
+    selectedPlate: material('#315648', { roughness: 0.34, metalness: 0.32 }),
+    plateEdge: material('#b0bcb0', { metalness: 0.62, roughness: 0.28 }),
+    brass: material('#c6974e', { metalness: 0.72, roughness: 0.26 }),
     carriage: material('#76847d', { metalness: 0.5, roughness: 0.42 }),
-    screen: material('#faf8ed', { roughness: 0.92 }),
+    screen: material('#f4f0e3', { roughness: 0.84 }),
     screenFrame: material('#697970', { metalness: 0.36, roughness: 0.43 }),
     spot: new THREE.MeshBasicMaterial({ color: '#ffe090', transparent: true, opacity: 1, depthWrite: false }),
     spotGlow: new THREE.MeshBasicMaterial({ color: '#ffc64b', transparent: true, opacity: 0.34, depthWrite: false })
@@ -84,15 +120,60 @@ if (canvas) {
   for (const x of [-4.6, 4.6]) {
     for (const z of [-0.82, 0.82]) addBox(scene, [0.13, 0.24, 0.13], [x, -0.01, z], mats.railDark);
   }
+  // Fine engraved scale and brass index marks give the rail a precision optical-bench finish.
+  for (let tick = 0; tick <= 40; tick += 1) {
+    const x = -4 + tick * 0.2;
+    const major = tick % 5 === 0;
+    addBox(scene, [0.018, 0.008, major ? 0.2 : 0.11], [x, 0.139, 0.92], major ? mats.brass : mats.railDark, false, false);
+  }
+  for (const x of [-5.03, 5.03]) {
+    const foot = addBox(scene, [0.48, 0.09, 2.08], [x, -0.17, 0], mats.benchSide);
+    foot.castShadow = true;
+    for (const z of [-0.78, 0.78]) {
+      const footPad = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.11, 0.08, 20), mats.railDark);
+      footPad.position.set(x, -0.25, z);
+      scene.add(footPad);
+    }
+  }
 
-  // Fixed lamp housing and a luminous aperture facing the hole plates.
-  addBox(scene, [0.78, 1.3, 0.82], [-4.45, 0.68, 0], mats.source);
-  addBox(scene, [0.26, 0.5, 0.5], [-4.01, 1.28, 0], mats.plateEdge);
+  // Fixed compact optical lamp, with a machined barrel and warm glass aperture.
+  const lampBody = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.38, 0.72, 48), mats.source);
+  lampBody.rotation.z = Math.PI / 2;
+  lampBody.position.set(-4.42, 1.28, 0);
+  lampBody.castShadow = true;
+  scene.add(lampBody);
+  for (const [x, size] of [[-4.79, 0.35], [-4.04, 0.39]]) {
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(size, 0.035, 10, 48), mats.plateEdge);
+    rim.position.set(x, 1.28, 0);
+    rim.rotation.y = Math.PI / 2;
+    scene.add(rim);
+  }
+  const visibleEmitter = new THREE.Mesh(new THREE.CircleGeometry(0.2, 40), mats.sourceFace);
+  visibleEmitter.position.set(-4.805, 1.28, 0);
+  visibleEmitter.rotation.y = -Math.PI / 2;
+  scene.add(visibleEmitter);
+  const emitterBezel = new THREE.Mesh(new THREE.TorusGeometry(0.215, 0.025, 10, 40), mats.brass);
+  emitterBezel.position.set(-4.82, 1.28, 0);
+  emitterBezel.rotation.y = -Math.PI / 2;
+  scene.add(emitterBezel);
+  for (let vent = 0; vent < 8; vent += 1) {
+    const angle = (vent / 8) * Math.PI * 2;
+    const groove = addBox(scene, [0.16, 0.018, 0.014], [-4.44, 1.28 + Math.sin(angle) * 0.31, Math.cos(angle) * 0.31], mats.railDark, false, false);
+    groove.rotation.x = angle;
+  }
   const lampMount = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.18, 0.12, 28), mats.plateEdge);
-  lampMount.position.set(-4.45, 1.18, 0);
+  lampMount.position.set(-4.42, 0.88, 0);
   scene.add(lampMount);
-  const lampLens = new THREE.Mesh(new THREE.SphereGeometry(0.15, 28, 20), mats.sourceFace);
-  lampLens.position.set(-4.45, 1.28, 0);
+  const lensDisc = new THREE.Mesh(new THREE.CircleGeometry(0.29, 48), mats.sourceFace);
+  lensDisc.position.set(-4.035, 1.28, 0);
+  lensDisc.rotation.y = Math.PI / 2;
+  scene.add(lensDisc);
+  const lensRing = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.044, 10, 48), mats.brass);
+  lensRing.position.set(-4.015, 1.28, 0);
+  lensRing.rotation.y = Math.PI / 2;
+  scene.add(lensRing);
+  const lampLens = new THREE.Mesh(new THREE.SphereGeometry(0.09, 28, 20), mats.sourceFace);
+  lampLens.position.set(-4.0, 1.28, 0);
   scene.add(lampLens);
   const lampGlow = new THREE.PointLight('#ffd778', 1.4, 3.2);
   lampGlow.position.copy(lampLens.position);
@@ -101,6 +182,16 @@ if (canvas) {
   // Fixed matte screen. Only the spot changes when the holes no longer line up.
   addBox(scene, [0.13, 2.75, 1.85], [4.4, 1.28, 0], mats.screenFrame);
   addBox(scene, [0.08, 2.58, 1.68], [4.32, 1.28, 0], mats.screen, false, true);
+  addBox(scene, [0.018, 2.38, 0.018], [4.273, 1.28, -0.72], mats.brass, false, false);
+  addBox(scene, [0.018, 2.38, 0.018], [4.273, 1.28, 0.72], mats.brass, false, false);
+  for (const y of [0.12, 2.44]) {
+    for (const z of [-0.76, 0.76]) {
+      const screw = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.018, 16), mats.brass);
+      screw.position.set(4.327, y, z);
+      screw.rotation.z = Math.PI / 2;
+      scene.add(screw);
+    }
+  }
   addBox(scene, [0.22, 0.11, 0.22], [4.4, 0.18, 0], mats.carriage);
   addBox(scene, [0.11, 0.96, 0.11], [4.42, 0.67, 0], mats.railDark);
   const spot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 24, 16), mats.spot);
@@ -140,6 +231,23 @@ if (canvas) {
     const edgeMat = mats.plateEdge;
     bar([0.035, 2.2, 0.045], [0.075, 0, -0.81]).material = edgeMat;
     bar([0.035, 2.2, 0.045], [0.075, 0, 0.81]).material = edgeMat;
+    // Small countersunk fasteners and a fine brass aperture bezel make each plate feel machined.
+    for (const y of [-0.99, 0.99]) {
+      for (const z of [-0.68, 0.68]) {
+        const washer = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.018, 24), mats.railDark);
+        washer.position.set(-0.078, y, z);
+        washer.rotation.z = Math.PI / 2;
+        plate.add(washer);
+        const screw = new THREE.Mesh(new THREE.CylinderGeometry(0.033, 0.033, 0.022, 20), mats.brass);
+        screw.position.set(-0.09, y, z);
+        screw.rotation.z = Math.PI / 2;
+        plate.add(screw);
+      }
+    }
+    for (const [y, z, size] of [[0, -0.29, [0.018, 0.38, 0.018]], [0, 0.29, [0.018, 0.38, 0.018]], [-0.19, 0, [0.018, 0.018, 0.58]], [0.19, 0, [0.018, 0.018, 0.58]]]) {
+      const bezel = addBox(plate, size, [0.092, y, z], mats.plateEdge, false, false);
+      bezel.material = mats.brass;
+    }
     plate.position.y = 1.28;
     carriage.position.set(plateStates[index].x, 0, 0);
     plates.push({ carriage, plate, post, collar, plateBars, pickSurface });

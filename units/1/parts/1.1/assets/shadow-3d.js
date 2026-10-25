@@ -9,8 +9,8 @@ if (canvas) {
 
   try {
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#e9eee8');
-    scene.fog = new THREE.Fog('#e9eee8', 14, 28);
+    scene.background = new THREE.Color('#14232b');
+    scene.fog = new THREE.Fog('#273a3d', 16, 34);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -69,10 +69,13 @@ if (canvas) {
       camera.lookAt(target);
     };
 
-    scene.add(new THREE.HemisphereLight('#fffdf4', '#77867d', 1.65));
-    const fill = new THREE.DirectionalLight('#e2ece8', 1.25);
+    scene.add(new THREE.HemisphereLight('#e7f0e9', '#31443f', 1.2));
+    const fill = new THREE.DirectionalLight('#d3e3e3', 0.9);
     fill.position.set(5, 8, -5);
     scene.add(fill);
+    const warmBounce = new THREE.PointLight('#ffbd70', 16, 8, 1.8);
+    warmBounce.position.set(-1.6, 2.3, -2.4);
+    scene.add(warmBounce);
 
     const makeWoodTexture = () => {
       const textureCanvas = document.createElement('canvas');
@@ -121,16 +124,39 @@ if (canvas) {
       textureCanvas.height = 512;
       const context = textureCanvas.getContext('2d');
       const wash = context.createLinearGradient(0, 0, 0, textureCanvas.height);
-      wash.addColorStop(0, '#d6e0d6');
-      wash.addColorStop(0.48, '#e8e7da');
-      wash.addColorStop(1, '#f5e8d2');
+      wash.addColorStop(0, '#23363b');
+      wash.addColorStop(0.32, '#304341');
+      wash.addColorStop(0.58, '#465047');
+      wash.addColorStop(0.82, '#625b48');
+      wash.addColorStop(1, '#78624d');
       context.fillStyle = wash;
       context.fillRect(0, 0, textureCanvas.width, textureCanvas.height);
-      const glow = context.createRadialGradient(650, 240, 25, 650, 240, 470);
-      glow.addColorStop(0, 'rgba(255, 250, 231, 0.55)');
-      glow.addColorStop(1, 'rgba(255, 250, 231, 0)');
+      const glow = context.createRadialGradient(700, 300, 25, 700, 300, 500);
+      glow.addColorStop(0, 'rgba(255, 195, 111, 0.28)');
+      glow.addColorStop(1, 'rgba(255, 195, 111, 0)');
       context.fillStyle = glow;
       context.fillRect(0, 0, textureCanvas.width, textureCanvas.height);
+      // Soft-focus shelves and glassware echo the night laboratory in the unit artwork.
+      context.save();
+      context.filter = 'blur(7px)';
+      context.fillStyle = 'rgba(12, 24, 26, 0.52)';
+      context.fillRect(70, 226, 884, 20);
+      context.fillRect(70, 352, 884, 15);
+      context.fillStyle = 'rgba(209, 157, 88, 0.42)';
+      context.fillRect(118, 219, 790, 5);
+      for (const [x, y, width, height, color] of [
+        [142, 145, 34, 74, 'rgba(100, 162, 150, .42)'], [205, 158, 24, 59, 'rgba(214, 177, 115, .38)'],
+        [306, 132, 42, 87, 'rgba(90, 142, 141, .4)'], [730, 147, 30, 72, 'rgba(198, 139, 83, .38)'],
+        [812, 125, 40, 94, 'rgba(97, 157, 151, .38)'], [890, 163, 22, 57, 'rgba(222, 175, 102, .4)']
+      ]) {
+        context.fillStyle = color;
+        context.beginPath();
+        context.roundRect(x, y, width, height, [5, 5, 10, 10]);
+        context.fill();
+        context.fillStyle = 'rgba(255, 224, 164, .35)';
+        context.fillRect(x + 5, y + 7, width - 10, 2);
+      }
+      context.restore();
       let seed = 213;
       const random = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
       for (let grain = 0; grain < 7200; grain += 1) {
@@ -296,6 +322,9 @@ if (canvas) {
     spotlight.shadow.bias = -0.0002;
     spotlight.shadow.radius = 4;
     scene.add(spotlight, spotlight.target);
+    const lampBounce = new THREE.PointLight('#ffc765', 8, 5.5, 1.7);
+    lampBounce.position.set(0, 1.5, -3.4);
+    scene.add(lampBounce);
 
     // Fixed screen with a light-catching front surface and a slim physical frame.
     const screenZ = 3.72;
