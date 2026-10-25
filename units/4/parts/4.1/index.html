@@ -620,26 +620,16 @@
     .particle-card .particle-color-note { margin:0 10px 9px!important; }
     .particle-decomposition { margin-top:10px; padding:10px; border-top:1px solid #e3e8dd; background:#f8f9f4; }
     .particle-decomposition h4 { margin:0 0 7px; color:#294b3c; font-size:.92rem; }
-    .decomposition-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 7px; color:#294b3c; font-size:.98rem; }
-    .decomposition-play { min-height:36px; padding:6px 11px; border:1px solid #b7cbb8; border-radius:9px; background:#fffefa; color:#315a46; font-weight:700; cursor:pointer; }
-    .decomposition-play:hover { background:#f0f4e9; }
-    .decomposition-play:focus-visible { outline:3px solid #d7a94a; outline-offset:2px; }
+    .decomposition-heading { margin:0 0 7px; color:#294b3c; font-size:.92rem; }
     .decomposition-particles { display:flex; min-height:34px; align-items:center; justify-content:center; gap:5px; color:#294b3c; font-size:.96rem; font-weight:800; white-space:nowrap; }
     .decomposition-particles .particle-ball { width:17px; height:17px; }
     .decomposition-particles .particle-ball--hydrogen { width:14px; height:14px; }
     .decomposition-water-scene { position:relative; display:flex; min-height:38px; align-items:center; justify-content:center; gap:5px; overflow:hidden; color:#294b3c; font-size:.92rem; font-weight:800; white-space:nowrap; }
-    .decomposition-reactants,.decomposition-products { display:inline-flex; flex:0 0 auto; align-items:center; justify-content:center; gap:5px; transition:opacity .35s,transform .45s; }
-    .decomposition-products { opacity:1; transform:none; }
-    .particle-card--compound.is-playing .decomposition-reactants { animation:decomposition-reactants 1.25s ease-in-out; }
-    .particle-card--compound.is-playing .decomposition-products { animation:decomposition-products 1.25s ease-in-out; }
-    @keyframes decomposition-reactants { 0%,100% { opacity:1; transform:translateX(0) scale(1); } 36% { opacity:.45; transform:translateX(9px) scale(.78); } 58% { opacity:.8; transform:translateX(3px) scale(.92); } }
-    @keyframes decomposition-products { 0%,100% { opacity:1; transform:scale(1); } 38% { opacity:.58; transform:scale(.82); } 62% { opacity:1; transform:scale(1.12); } }
-    .decomposition-status { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .decomposition-reactants,.decomposition-products { display:inline-flex; flex:0 0 auto; align-items:center; justify-content:center; gap:5px; }
     .decomposition-explanation { margin:6px 0 0!important; color:#627168!important; font-size:.78rem; text-align:center; }
     .particle-color-note { margin:0 0 8px!important; color:#68776e!important; font-size:.8rem; }
     .pure-summary { margin:8px 0 0; }
-    @media(prefers-reduced-motion:reduce) { .decomposition-reactants,.decomposition-products { transition:none; animation:none!important; } }
-    @media(max-width:680px) { .pure-particle-comparison { grid-template-columns:1fr; } .particle-photo-model { grid-template-columns:104px minmax(0,1fr); } .particle-sample-photo img { height:94px; } .particle-card h3 { flex-wrap:wrap; gap:6px; } .particle-tag { flex:0 0 auto; white-space:nowrap; } .particle-model--water { grid-template-columns:repeat(3,55px); } .decomposition-heading { flex-wrap:wrap; align-items:flex-start; } .decomposition-heading h4 { flex:1 1 100%; } }
+    @media(max-width:680px) { .pure-particle-comparison { grid-template-columns:1fr; } .particle-photo-model { grid-template-columns:104px minmax(0,1fr); } .particle-sample-photo img { height:94px; } .particle-card h3 { flex-wrap:wrap; gap:6px; } .particle-tag { flex:0 0 auto; white-space:nowrap; } .particle-model--water { grid-template-columns:repeat(3,55px); } }
     .evidence-box { padding:13px 15px; border-left:4px solid var(--blue); border-radius:8px; background:#edf3f7; color:#34536a; }
     .check-options { display:grid; gap:8px; margin:12px 0; }
     .check-option { display:flex; gap:9px; align-items:flex-start; padding:11px 12px; border:1px solid #d9d4c8; border-radius:10px; background:#fff; cursor:pointer; }
@@ -1158,14 +1148,13 @@
                   </div>
                   <p class="particle-caption">每個水粒子都由兩種不同的小粒子結合</p>
                   <div class="particle-decomposition">
-                    <div class="decomposition-heading"><h4>用化學方法能不能再分解？</h4><button class="decomposition-play" id="decomposition-play" type="button" aria-controls="water-decomposition-scene">播放示意</button></div>
-                    <div class="decomposition-water-scene" id="water-decomposition-scene" role="img" aria-label="兩個水粒子可分解並重新組成氫和氧兩種不同粒子">
+                    <h4 class="decomposition-heading">用化學方法能不能再分解？</h4>
+                    <div class="decomposition-water-scene" role="img" aria-label="兩個水粒子可分解並重新組成氫和氧兩種不同粒子">
                       <span class="decomposition-reactants"><span>2×</span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span></span>
                       <span class="decomposition-arrow" aria-hidden="true">→</span>
                       <span class="decomposition-products"><span>2×</span><span class="particle-unit"><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span>＋</span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--oxygen"></i></span></span>
                     </div>
                     <p class="decomposition-explanation">可以分解成不同的純物質：氫和氧（示意）。</p>
-                    <p class="decomposition-status" id="decomposition-status" aria-live="polite">示意動畫尚未播放。</p>
                   </div>
                 </div>
               </article>
@@ -2279,16 +2268,6 @@
       selectPhaseState(window.location.hash==="#liquid-overview"?"liquid":window.location.hash==="#gas-overview"?"gas":"solid");
       requestAnimationFrame(()=>phaseSolidOverview.scrollIntoView({block:"center"}));
     }
-
-    const decompositionPanel=document.getElementById("compound-example");
-    const decompositionPlay=document.getElementById("decomposition-play");
-    decompositionPlay.addEventListener("click",()=>{
-      decompositionPanel.classList.remove("is-playing");
-      void decompositionPanel.offsetWidth;
-      decompositionPanel.classList.add("is-playing");
-      decompositionPlay.textContent="再看一次";
-      document.getElementById("decomposition-status").textContent="兩個水粒子可分解成氫和氧兩種不同粒子。";
-    });
 
     document.getElementById("check-answer").addEventListener("click",()=>{
       const selected=document.querySelector('input[name="final-check"]:checked');
