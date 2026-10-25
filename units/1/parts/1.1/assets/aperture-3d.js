@@ -1,7 +1,22 @@
 import * as THREE from './vendor/three/build/three.module.js?v=webgl-render-refresh-20261025';
 
+const waitUntilCanvasIsNearViewport = (canvas) => new Promise((resolve) => {
+  if (!('IntersectionObserver' in window)) {
+    resolve();
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) {
+      observer.disconnect();
+      resolve();
+    }
+  }, { rootMargin: '320px 0px' });
+  observer.observe(canvas);
+});
+
 const canvas = document.querySelector('#aperture-3d-scene');
 if (canvas) {
+  await waitUntilCanvasIsNearViewport(canvas);
   const scene = new THREE.Scene();
   scene.background = new THREE.Color('#dce4df');
   scene.fog = new THREE.Fog('#dce4df', 15, 32);

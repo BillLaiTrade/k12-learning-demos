@@ -1,7 +1,22 @@
 import * as THREE from './vendor/three/build/three.module.js?v=webgl-render-refresh-20261025';
 
+const waitUntilCanvasIsNearViewport = (canvas) => new Promise((resolve) => {
+  if (!('IntersectionObserver' in window)) {
+    resolve();
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) {
+      observer.disconnect();
+      resolve();
+    }
+  }, { rootMargin: '320px 0px' });
+  observer.observe(canvas);
+});
+
 const canvas = document.querySelector('#shadow-3d-scene');
 if (canvas) {
+  await waitUntilCanvasIsNearViewport(canvas);
   const status = document.querySelector('#shadow-scene-status');
   const xiaokuiObservation = document.querySelector('#shadow-xiaokui-observation');
   const toggle = document.querySelector('#shadow-block-toggle');
