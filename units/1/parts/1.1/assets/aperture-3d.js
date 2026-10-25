@@ -1,4 +1,4 @@
-import * as THREE from './vendor/three/build/three.module.js?v=webgl-render-refresh-20261025';
+import * as THREE from './vendor/three-webgl1/build/three.module.min.js?v=three-r160-webgl1';
 import { manageRendererContextVisibility } from './renderer-visibility.js';
 
 const waitUntilCanvasIsNearViewport = (canvas) => new Promise((resolve) => {
