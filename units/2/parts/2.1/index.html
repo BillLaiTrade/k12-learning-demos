@@ -92,6 +92,11 @@
     .diagram-panel { padding:14px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
     .diagram-panel h3 { margin:0 0 5px; font-size:1rem; }
     .diagram-panel p { margin:6px 0 0; color:var(--muted); font-size:.88rem; }
+    .wave-type-diagrams { grid-template-columns:1fr; gap:14px; }
+    .wave-type-panel { transition:border-color .2s,box-shadow .2s; }
+    .wave-type-panel.is-highlighted { border-color:#7fa58d; box-shadow:0 0 0 2px rgba(23,107,83,.08); }
+    .spring-coil { fill:none; stroke:url(#spring-metal-gradient); stroke-width:3; }
+    .spring-coil.is-selected { stroke:#c66d35; stroke-width:3.8; }
     .data-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
     .data-cell { padding:13px 15px; border:1px solid var(--line); border-radius:14px; background:#f8f9f4; }
     .data-cell small { display:block; color:var(--muted); }
@@ -241,41 +246,54 @@
           <div class="card-side"><span class="card-number">04</span><h3>比較兩個方向</h3><span class="card-role">認識橫波與縱波</span></div>
           <div class="card-main">
             <h2>橫波和縱波，差別在振動方向？</h2>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩上的記號上下動，彈簧線圈前後擠動；判斷波型時要比較哪兩個方向？</p></div>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩點上下振動，波往右傳；彈簧線圈前後動，疏密變化也往右傳。這兩種波該怎麼分？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>比較介質振動方向和波前進方向：互相垂直是橫波，互相平行是縱波。</p></div>
-            <p>判斷波型時，比較介質振動方向和波前進方向。兩個方向互相垂直是橫波，互相平行是縱波。繩子上下振動、波向右傳是橫波；彈簧各圈前後振動、疏密狀態向前傳是縱波。</p><div class="diagram-grid">
-              <figure class="visual diagram-panel">
-                <h3>橫波｜振動方向與傳播方向垂直</h3>
-                <svg viewBox="0 0 500 230" role="img" aria-label="繩點上下振動，波向右傳播的橫波示意圖">
-                  <defs><pattern id="rope-fallback-4" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern><marker id="arrow-transverse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker><marker id="arrow-particle-v" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#bc612b"/></marker></defs>
-                  <path d="M38 112H455" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
-                  <path class="small-transverse-wave rope-underlay" d="M38 112 C72 112 78 58 112 58 S152 166 186 166 S226 58 260 58 S300 166 334 166 S374 58 408 58 S442 112 455 112"/><path class="rope-fallback" stroke="url(#rope-fallback-4)" aria-hidden="true" d="M38 112 C72 112 78 58 112 58 S152 166 186 166 S226 58 260 58 S300 166 334 166 S374 58 408 58 S442 112 455 112"/><g class="rope-texture-layer" aria-hidden="true"></g>
-                  <g class="transverse-particles"></g>
-                  <path d="M85 204H408" class="motion-arrow" marker-end="url(#arrow-transverse)"/><text x="246" y="226" text-anchor="middle">波前進方向</text>
-                  <path d="M112 111V67" class="measure" marker-end="url(#arrow-particle-v)"/><path d="M112 111V154" class="measure" marker-end="url(#arrow-particle-v)"/>
-                  <text x="128" y="125">介質振動方向</text>
+            <p>判斷波型時，比較介質振動方向和波前進方向。兩個方向互相垂直是橫波，互相平行是縱波。下面兩種波都向右傳，差別在介質如何振動。</p>
+            <div class="diagram-grid wave-type-diagrams">
+              <figure class="visual diagram-panel wave-type-panel is-highlighted" data-wave-diagram="transverse">
+                <h3>橫波｜繩點上下振動，波形向右傳</h3>
+                <svg id="transverse-wave-diagram" viewBox="0 0 760 270" role="img" aria-label="繩波持續向右傳播；繩上的固定點沿垂直方向上下振動">
+                  <defs>
+                    <pattern id="rope-fallback-4" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern>
+                    <marker id="arrow-transverse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
+                    <marker id="arrow-particle-v" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
+                  </defs>
+                  <path d="M46 116H714" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
+                  <path id="transverse-wave-rope" class="rope-underlay" d="M46 116 C94 116 108 68 156 68 S218 164 276 164 S334 68 392 68 S450 164 508 164 S566 68 624 68 S674 116 714 116"/>
+                  <path class="rope-fallback" stroke="url(#rope-fallback-4)" aria-hidden="true" d="M46 116 C94 116 108 68 156 68 S218 164 276 164 S334 68 392 68 S450 164 508 164 S566 68 624 68 S674 116 714 116"/>
+                  <g class="rope-texture-layer" aria-hidden="true"></g>
+                  <path id="transverse-point-guide" d="M350 66V166" stroke="#df8b41" stroke-width="1.5" stroke-dasharray="5 5"/>
+                  <circle id="transverse-fixed-point" cx="350" cy="116" r="7" fill="#df8b41" stroke="#fff" stroke-width="2.5"/>
+                  <path d="M326 87V145" class="measure" marker-start="url(#arrow-particle-v)" marker-end="url(#arrow-particle-v)"/>
+                  <path d="M118 207H650" class="motion-arrow" marker-end="url(#arrow-transverse)"/>
+                  <text x="384" y="236" text-anchor="middle">波前進方向</text>
                 </svg>
-                <p>繩點在原位置附近上下振動，波形沿繩子向右傳。</p>
+                <p>橘點固定在同一水平位置，隨繩子上下振動；波形沿繩子向右傳。兩個方向互相垂直。</p>
               </figure>
-              <figure class="visual diagram-panel">
-                <h3>縱波｜振動方向與傳播方向平行</h3>
-                <svg class="spring-wave" viewBox="0 0 500 230" role="img" aria-label="彈簧圈前後振動，壓縮區向右傳播的縱波示意圖">
-                  <defs><marker id="arrow-longitudinal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker><marker id="arrow-particle-h" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#bc612b"/></marker></defs>
-                  <path d="M38 112H455" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
-                  <g class="spring-particles"></g>
-                  <path d="M85 204H408" class="motion-arrow" marker-end="url(#arrow-longitudinal)"/><text x="246" y="226" text-anchor="middle">疏密波形前進方向</text>
-                  <path d="M122 72H156" class="measure" marker-end="url(#arrow-particle-h)"/><path d="M156 72H122" class="measure" marker-end="url(#arrow-particle-h)"/>
-                  <text x="170" y="77">彈簧圈前後振動</text>
+              <figure class="visual diagram-panel wave-type-panel" data-wave-diagram="longitudinal">
+                <h3>縱波｜線圈前後振動，疏密變化向右傳</h3>
+                <svg id="longitudinal-wave-diagram" viewBox="0 0 760 280" role="img" aria-label="彈簧線圈沿水平方向前後振動；壓縮和疏鬆區向右傳播">
+                  <defs>
+                    <linearGradient id="spring-metal-gradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#64717a"/><stop offset=".2" stop-color="#d8dfe2"/><stop offset=".45" stop-color="#fff"/><stop offset=".7" stop-color="#87939a"/><stop offset="1" stop-color="#e8edef"/></linearGradient>
+                    <marker id="arrow-longitudinal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
+                    <marker id="arrow-particle-h" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
+                  </defs>
+                  <path d="M46 126H714" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
+                  <g id="longitudinal-spring-coils"></g>
+                  <path id="longitudinal-point-guide" d="M380 76V176" stroke="#df8b41" stroke-width="1.5" stroke-dasharray="5 5"/>
+                  <path d="M352 64H408" class="measure" marker-start="url(#arrow-particle-h)" marker-end="url(#arrow-particle-h)"/>
+                  <path d="M118 218H650" class="motion-arrow" marker-end="url(#arrow-longitudinal)"/>
+                  <text x="384" y="248" text-anchor="middle">疏密波形前進方向</text>
                 </svg>
-                <p>彈簧圈在原位置附近前後振動，壓縮與疏鬆的狀態向右傳。</p>
+                <p>橘色線圈在原位置附近前後往返；線圈密集與疏開的區域一起向右傳。兩個方向互相平行。</p>
               </figure>
             </div>
             <div class="fact"><p>接下來先用繩波這種容易看出上下位移的橫波圖，示範如何量振幅與波長。縱波也有波長，例如一個壓縮區到下一個壓縮區。</p></div>
             <div class="control-panel">
-              <p><strong>點選波型，整理判斷依據</strong></p>
-              <div class="controls" role="group" aria-label="選擇波型查看說明">
-                <button class="secondary" type="button" data-wave-detail="transverse" aria-pressed="true">查看橫波</button>
-                <button class="secondary" type="button" data-wave-detail="longitudinal" aria-pressed="false">查看縱波</button>
+              <p><strong>選擇一種波型，聚焦觀看方向關係（完整說明已列在上方）</strong></p>
+              <div class="controls" role="group" aria-label="選擇波型聚焦圖示">
+                <button class="secondary" type="button" data-wave-detail="transverse" aria-pressed="true">聚焦橫波</button>
+                <button class="secondary" type="button" data-wave-detail="longitudinal" aria-pressed="false">聚焦縱波</button>
               </div>
               <p class="live-note" id="wave-type-explanation" aria-live="polite">橫波：介質在原位置附近上下振動，波形沿水平方向傳播；兩個方向互相垂直。</p>
             </div>
@@ -598,25 +616,48 @@
         window.requestAnimationFrame(renderFixedPointWave);
       }
 
-      const transverseGroup=document.querySelector(".transverse-particles");
-      const transverseParticles=[];
-      if(transverseGroup){for(let i=0;i<27;i++){const circle=document.createElementNS(ns,"circle");circle.setAttribute("r","5.5");circle.setAttribute("class","particle");transverseGroup.append(circle);transverseParticles.push(circle);}}
-      const springGroup=document.querySelector(".spring-particles");
-      const springDots=[];
-      if(springGroup){for(let i=0;i<27;i++){const circle=document.createElementNS(ns,"circle");circle.setAttribute("r","6");circle.setAttribute("cy","112");circle.setAttribute("class","particle");springGroup.append(circle);springDots.push(circle);}}
-      let waveStart=0;
-      const animateWaveTypes=time=>{
-        const t=reducedMotion?0:(time-waveStart)/1000;
-        transverseParticles.forEach((dot,i)=>{const x=42+i*16;dot.setAttribute("cx",String(x));dot.setAttribute("cy",String(112-54*Math.sin((2*Math.PI*(x-75)/148)-t*2)));});
-        springDots.forEach((dot,i)=>{const x=42+i*16;const shift=12*Math.sin((x/65)-t*2);dot.setAttribute("cx",String(x+shift));});
-        if(!reducedMotion) window.requestAnimationFrame(animateWaveTypes);
-      };
-      if(reducedMotion) animateWaveTypes(0); else window.requestAnimationFrame(time=>{waveStart=time;animateWaveTypes(time);});
-
-      const waveDetailButtons=[...document.querySelectorAll("[data-wave-detail]")];
+      const transverseWaveRope=document.querySelector("#transverse-wave-rope");
+      const transverseFixedPoint=document.querySelector("#transverse-fixed-point");
+      const longitudinalCoilGroup=document.querySelector("#longitudinal-spring-coils");
+      const springCoils=[];
+      const springCoilCount=47, springFirstX=58, springSpacing=14, springSelectedIndex=23;
+      if(longitudinalCoilGroup){
+        for(let i=0;i<springCoilCount;i++){
+          const coil=document.createElementNS(ns,"ellipse");
+          coil.setAttribute("class",i===springSelectedIndex?"spring-coil is-selected":"spring-coil");
+          coil.setAttribute("cy","126");coil.setAttribute("rx","6.2");coil.setAttribute("ry","44");
+          longitudinalCoilGroup.append(coil);springCoils.push(coil);
+        }
+      }
+      const waveTypeButtons=[...document.querySelectorAll("[data-wave-detail]")];
+      const waveTypePanels=[...document.querySelectorAll("[data-wave-diagram]")];
       const waveTypeExplanation=document.querySelector("#wave-type-explanation");
-      const waveTypeDetails={transverse:"橫波：介質在原位置附近上下振動，波形沿水平方向傳播；兩個方向互相垂直。",longitudinal:"縱波：介質在原位置附近前後振動，疏密狀態沿同方向傳播；兩個方向互相平行。"};
-      waveDetailButtons.forEach(button=>button.addEventListener("click",()=>{const type=button.dataset.waveDetail;waveDetailButtons.forEach(item=>item.setAttribute("aria-pressed",String(item===button)));waveTypeExplanation.textContent=waveTypeDetails[type];}));
+      const waveTypeDetails={transverse:"橫波：繩點在固定水平位置附近上下振動；波形向右傳，兩個方向互相垂直。",longitudinal:"縱波：彈簧線圈在原位置附近前後振動；壓縮、疏鬆區向右傳，兩個方向互相平行。"};
+      waveTypeButtons.forEach(button=>button.addEventListener("click",()=>{
+        const type=button.dataset.waveDetail;
+        waveTypeButtons.forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+        waveTypePanels.forEach(panel=>panel.classList.toggle("is-highlighted",panel.dataset.waveDiagram===type));
+        waveTypeExplanation.textContent=waveTypeDetails[type];
+      }));
+      const transversePointX=350, transverseBaseline=116, transverseAmplitude=48, transverseWavelength=232;
+      const springAmplitude=22, springWavelength=220, springSpeed=100;
+      let waveTypeStart=0;
+      const animateWaveTypes=time=>{
+        if(!waveTypeStart)waveTypeStart=time;
+        const elapsed=(time-waveTypeStart)/1000;
+        const transverseOffset=(elapsed*100)%transverseWavelength;
+        let ropePath=`M 46 ${transverseBaseline-waveAt(46,transverseOffset,transverseAmplitude)}`;
+        for(let x=49;x<=714;x+=3)ropePath+=` L ${x} ${transverseBaseline-waveAt(x,transverseOffset,transverseAmplitude)}`;
+        transverseWaveRope.setAttribute("d",ropePath);renderRopeTexture(transverseWaveRope);
+        transverseFixedPoint.setAttribute("cy",String(transverseBaseline-waveAt(transversePointX,transverseOffset,transverseAmplitude)));
+        springCoils.forEach((coil,i)=>{
+          const restX=springFirstX+i*springSpacing;
+          const phase=2*Math.PI*(restX-springSpeed*elapsed)/springWavelength;
+          coil.setAttribute("cx",String(restX+springAmplitude*Math.sin(phase)));
+        });
+        window.requestAnimationFrame(animateWaveTypes);
+      };
+      window.requestAnimationFrame(time=>{waveTypeStart=time;animateWaveTypes(time);});
 
       const amplitudeSlider=document.querySelector("#amplitude-slider");
       const amplitudeWave=document.querySelector("#amplitude-wave");
