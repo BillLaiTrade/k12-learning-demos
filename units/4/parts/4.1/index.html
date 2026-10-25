@@ -466,13 +466,8 @@
     .rust-play svg { width:18px; height:18px; }
     .rust-single-scene { position:relative; display:grid; place-items:center; min-height:370px; margin:3px 0 0; overflow:hidden; border-radius:12px; background:linear-gradient(180deg,#fffefa,#eef3ec); --rust-progress:0%; }
     .rust-single-bucket { display:block; width:min(100%,370px); height:auto; border-radius:10px; }
-    .rust-single-corrosion { position:absolute; top:50%; left:50%; width:min(100%,370px); aspect-ratio:1; transform:translate(-50%,-50%); overflow:hidden; clip-path:polygon(18% 37%,82% 37%,80% 55%,77% 75%,74% 91%,26% 91%,23% 75%,20% 55%); pointer-events:none; }
-    .rust-patch { position:absolute; display:block; background-image:url("assets/rust-reference-sheet.webp"); background-size:420% 420%; background-position:100% 100%; background-repeat:no-repeat; opacity:clamp(0,calc((var(--rust-growth,0) - var(--rust-start,0)) * 4),1); transform:scale(calc(.82 + var(--rust-growth,0) * .18)); transform-origin:center; filter:saturate(1.3) contrast(1.12); transition:transform .12s linear,opacity .12s linear; mix-blend-mode:multiply; }
-    .rust-patch--lower { left:27%; top:66%; width:49%; height:22%; clip-path:polygon(0 42%,5% 29%,12% 33%,17% 14%,24% 22%,29% 4%,36% 17%,43% 10%,49% 28%,58% 16%,64% 35%,72% 20%,80% 30%,88% 12%,94% 26%,100% 39%,96% 52%,100% 66%,91% 72%,87% 91%,77% 82%,69% 100%,60% 83%,51% 94%,43% 79%,34% 96%,28% 77%,19% 86%,14% 68%,6% 72%); }
-    .rust-patch--left { left:27%; top:49%; width:22%; height:24%; --rust-start:.22; clip-path:polygon(18% 0,31% 11%,43% 5%,48% 19%,64% 18%,72% 34%,94% 39%,84% 53%,100% 66%,81% 72%,75% 92%,61% 83%,47% 100%,39% 82%,24% 88%,22% 70%,5% 63%,17% 48%,0 35%,16% 28%); }
-    .rust-patch--right { left:54%; top:48%; width:22%; height:25%; --rust-start:.28; background-position:87% 92%; clip-path:polygon(7% 18%,21% 9%,31% 18%,42% 0,53% 15%,67% 8%,74% 28%,96% 32%,87% 48%,100% 59%,82% 67%,85% 82%,66% 77%,55% 100%,45% 81%,31% 92%,26% 72%,8% 75%,16% 56%,0 43%,13% 34%); }
-    .rust-patch--streak { left:39%; top:39%; width:37%; height:15%; --rust-start:.48; background-position:100% 88%; clip-path:polygon(0 42%,11% 33%,19% 47%,27% 16%,36% 31%,45% 8%,54% 27%,63% 13%,73% 36%,83% 23%,92% 39%,100% 34%,96% 62%,85% 58%,76% 86%,66% 69%,55% 100%,47% 68%,38% 83%,28% 58%,19% 76%,11% 55%,4% 67%); }
-    .rust-patch--flecks { left:31%; top:57%; width:42%; height:23%; --rust-start:.1; background-position:90% 98%; clip-path:polygon(2% 43%,8% 34%,14% 42%,20% 29%,27% 38%,32% 23%,38% 34%,44% 24%,51% 39%,57% 26%,63% 36%,71% 21%,77% 38%,85% 27%,92% 42%,99% 35%,95% 54%,88% 61%,80% 52%,73% 69%,66% 57%,59% 77%,50% 62%,43% 82%,34% 64%,26% 77%,19% 60%,11% 70%,7% 55%); }
+    .rust-single-corrosion { position:absolute; inset:0; pointer-events:none; }
+    .rust-clean-overlay { position:absolute; top:50%; left:50%; display:block; width:min(100%,370px); height:auto; transform:translate(-50%,-50%); clip-path:polygon(0 0,100% 0,100% 100%,0 100%); transition:clip-path .12s linear; }
     .rust-stage-controls { display:grid; gap:4px; margin:9px 7px 0; }
     .rust-stage-labels { display:flex; justify-content:space-between; gap:8px; color:#66756d; font-size:.78rem; }
     .rust-stage-controls input { width:100%; margin:0; accent-color:#588366; cursor:pointer; }
@@ -522,7 +517,7 @@
       .rust-timeline-icon { width:34px; height:34px; }
       .rust-play { grid-column:1/-1; justify-self:end; min-height:38px; padding:6px 13px; }
       .rust-single-scene { min-height:300px; }
-      .rust-single-bucket,.rust-single-corrosion { width:min(100%,300px); }
+      .rust-single-bucket { width:min(100%,300px); }
       .rust-evidence-grid,.rust-answer-options { grid-template-columns:1fr; }
       .rust-evidence-art { height:100px; }
     }
@@ -881,12 +876,12 @@
             <div class="rust-investigation" id="rust-investigation">
               <div class="rust-timeline" id="rust-timeline" data-stage="1">
                 <div class="rust-timeline-head"><span class="rust-timeline-icon" aria-hidden="true">⚗</span><div><h3>觀察鐵桶生鏽的過程</h3><p>拖動時間軸，觀察同一個鐵桶在不同時間的變化。</p></div><button class="rust-play" type="button" id="rust-play"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3.5v13l11-6.5z" fill="currentColor"/></svg>播放變化</button></div>
-                <div class="rust-single-scene" id="rust-bucket-scene" role="img" aria-label="同一只鐵桶隨時間逐漸出現鏽斑" style="--rust-growth:.65">
-                  <img class="rust-single-bucket" src="assets/rust-clean-bucket.webp" alt="一只乾淨的鍍鋅鐵桶，桶身將逐漸出現鏽斑">
-                  <div class="rust-single-corrosion" aria-hidden="true"><span class="rust-patch rust-patch--lower"></span><span class="rust-patch rust-patch--left"></span><span class="rust-patch rust-patch--right"></span><span class="rust-patch rust-patch--streak"></span><span class="rust-patch rust-patch--flecks"></span></div>
+                <div class="rust-single-scene" id="rust-bucket-scene" role="img" aria-label="同一只鐵桶隨時間逐漸形成鏽層" style="--rust-growth:.65">
+                  <img class="rust-single-bucket" src="assets/rust-rusted-bucket.webp" alt="一只表面形成鏽層的鐵桶">
+                  <div class="rust-single-corrosion" aria-hidden="true"><img class="rust-clean-overlay" src="assets/rust-clean-matched.webp" alt=""></div>
                 </div>
-                <div class="rust-stage-controls"><div class="rust-stage-labels" aria-hidden="true"><span>剛開始</span><span>一段時間後</span><span>形成鏽層</span></div><input type="range" id="rust-progress" min="0" max="100" step="1" value="65" aria-label="拖曳查看同一只鐵桶逐漸生鏽" aria-valuetext="一段時間後：鏽斑正從桶身下方逐漸擴展"></div>
-                <p class="rust-stage-status" id="rust-stage-status" aria-live="polite">鏽斑正從桶身下方逐漸擴展。</p>
+                <div class="rust-stage-controls"><div class="rust-stage-labels" aria-hidden="true"><span>剛開始</span><span>一段時間後</span><span>形成鏽層</span></div><input type="range" id="rust-progress" min="0" max="100" step="1" value="65" aria-label="拖曳查看同一只鐵桶逐漸生鏽" aria-valuetext="一段時間後：鏽層正沿桶身表面逐步形成"></div>
+                <p class="rust-stage-status" id="rust-stage-status" aria-live="polite">鏽層正沿桶身表面逐步形成。</p>
                 <p class="rust-time-note">ⓘ 這是示意性的時間推移，並非真實時間。</p>
               </div>
 
@@ -1045,14 +1040,16 @@
       note.textContent = recordValues[key][1];
     }));
 
-    const rustTimeline=document.getElementById("rust-timeline"),rustBucketScene=document.getElementById("rust-bucket-scene"),rustProgress=document.getElementById("rust-progress"),rustPlay=document.getElementById("rust-play"),rustStatus=document.getElementById("rust-stage-status"),rustFeedback=document.getElementById("rust-feedback"),rustRecord=document.getElementById("rust-record"),rustTakeaway=document.getElementById("rust-takeaway");
-    const rustStages=["桶身尚未出現鏽斑。","鏽斑正從桶身下方逐漸擴展。","鏽層逐漸形成，和一開始的桶身不同。"];
+    const rustTimeline=document.getElementById("rust-timeline"),rustBucketScene=document.getElementById("rust-bucket-scene"),rustCleanOverlay=document.querySelector(".rust-clean-overlay"),rustProgress=document.getElementById("rust-progress"),rustPlay=document.getElementById("rust-play"),rustStatus=document.getElementById("rust-stage-status"),rustFeedback=document.getElementById("rust-feedback"),rustRecord=document.getElementById("rust-record"),rustTakeaway=document.getElementById("rust-takeaway");
+    const rustStages=["桶身尚未出現鏽層。","鏽層正沿桶身表面逐步形成。","桶身表面已形成鏽層，和一開始的金屬不同。"];
     let rustPlayTimer=null,rustAnswer="";
     function setRustStage(value){
       const progress=Math.max(0,Math.min(100,Number(value))),stage=progress===0?0:progress===100?2:1;
-      rustTimeline.dataset.stage=String(stage);rustProgress.value=String(progress);rustBucketScene.style.setProperty("--rust-growth",String(progress/100));rustStatus.textContent=rustStages[stage];rustProgress.setAttribute("aria-valuetext",`${["剛開始","一段時間後","形成鏽層"][stage]}：${rustStages[stage]}`);
+      const growth=progress/100,edge=100*(1-growth),roughness=8*Math.sin(Math.PI*growth),front=[0,.55,-.25,.8,-.35,.6,0].map(offset=>Math.max(0,Math.min(100,edge+roughness*offset)));
+      rustTimeline.dataset.stage=String(stage);rustProgress.value=String(progress);rustBucketScene.style.setProperty("--rust-growth",String(growth));rustCleanOverlay.style.clipPath=`polygon(0 0,100% 0,100% ${front[0]}%,85% ${front[1]}%,70% ${front[2]}%,55% ${front[3]}%,40% ${front[4]}%,25% ${front[5]}%,0 ${front[6]}%)`;rustStatus.textContent=rustStages[stage];rustProgress.setAttribute("aria-valuetext",`${["剛開始","一段時間後","形成鏽層"][stage]}：${rustStages[stage]}`);
       validateRustJudgment();
     }
+    setRustStage(rustProgress.value);
     function stopRustPlayback(label="播放變化"){
       if(rustPlayTimer){clearInterval(rustPlayTimer);rustPlayTimer=null;}
       rustPlay.textContent=label;
