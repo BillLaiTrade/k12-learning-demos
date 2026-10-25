@@ -419,8 +419,8 @@
           <div class="card-main">
             <h2>今晚，哪些光讓小葵看得見？</h2>
             <p>切換照向月球的陽光和書桌檯燈，觀察月亮、書頁與光路如何改變。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>那月亮和書頁是不是也都自己發光？把燈關掉後，又會剩下什麼？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先猜一猜，再分別關掉照向月球的陽光和書桌檯燈，觀察畫面。</p></div>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>月亮自己不會發光，是把太陽光反射過來的。那月光照到書頁後，書頁也會把光反射進我們眼睛嗎？如果關掉檯燈，還看得到嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>會，不過月光比檯燈微弱得多。先關掉檯燈，看看書頁暗了多少；再用另一個開關模擬月亮接收不到陽光，觀察這條光路會怎麼變。</p></div>
             <div class="night-experiment">
               <div class="night-switches" role="group" aria-label="切換夜間場景中的光源">
                 <button class="light-switch moon-switch" id="moonlight-toggle" type="button" aria-pressed="true" aria-describedby="moonlight-hint">
@@ -442,7 +442,7 @@
               </figure>
               <div class="path-legend" id="path-legend" aria-live="polite"></div>
               <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p id="night-feedback" aria-live="polite"></p></div>
-              <div class="fact night-takeaway"><p><strong>觀察重點：</strong>月亮和書本本身都不發光；月亮反射陽光、書頁反射檯燈的光，這些光進入眼睛後，我們才能看見它們。</p></div>
+              <div class="fact night-takeaway"><p><strong>觀察重點：</strong>月亮和書本都不會自行發光。月亮反射太陽光；書頁會反射照到它的光，無論來自檯燈或月光。反射光進入眼睛，我們就能看見它們。月光遠比檯燈微弱，所以關掉檯燈後，書頁仍暗得難以讀清楚。</p></div>
             </div>
           </div>
         </section>
@@ -623,7 +623,7 @@
         'true-true': {
           image: 'assets/night-scene-both-on.webp',
           alt: '月亮明亮可見，檯燈照亮書頁，小葵在夜裡看書。',
-          text: '月亮反射陽光，書頁反射檯燈光；這些反射光都進入我的眼睛。'
+          text: '月亮反射陽光；書頁主要反射檯燈光，這些光進入我的眼睛。'
         },
         'false-true': {
           image: 'assets/night-scene-sun-off-lamp-on.webp',
@@ -633,12 +633,12 @@
         'true-false': {
           image: 'assets/night-scene-sun-on-lamp-off.webp',
           alt: '月亮仍反射陽光而可見；檯燈關閉，室內只剩微弱月光。',
-          text: '檯燈關掉後，書頁變暗，我難以閱讀；月亮仍反射陽光，所以還看得見。'
+          text: '檯燈關掉後，微弱月光仍照到書頁，書頁反射的光也進入眼睛；但書頁暗得多，我很難讀清楚。月亮仍反射陽光，所以還看得見。'
         },
         'false-false': {
           image: 'assets/night-scene-both-off.webp',
           alt: '陽光和檯燈都關閉，月亮與書頁都暗下來，只剩微弱輪廓。',
-          text: '陽光和檯燈都關掉了，月亮和書頁都暗下來。它們沒有消失，只是沒有足夠的光進入我的眼睛。'
+          text: '照向月亮的陽光被遮住後，月亮暗下來；檯燈也關了，書頁幾乎沒有光反射進眼睛。它們沒有消失，只是變得很難看見。'
         }
       };
       Object.values(nightScenes).forEach(({ image }) => { const preload = new Image(); preload.src = image; });
