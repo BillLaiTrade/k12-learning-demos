@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e8">
+  <meta name="description" content="透過互動實驗探索光的反射規律、光路圖、面鏡成像，以及反射在生活中的應用。">
+  <link rel="icon" href="data:,">
+  <title>光遇到表面會怎樣？｜光學單元 1.2</title>
+  <style>
+    :root { color-scheme: light; --ink:#243a35; --muted:#64736d; --line:#d9d3c4; --paper:#f4f1e8; --card:#fffdf8; --green:#176b53; --green-pale:#e5f2e9; --orange:#bc612b; --orange-pale:#fff0e3; --shadow:0 7px 20px #243a3508; font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--paper); color:var(--ink); line-height:1.7; }
+    button,input { font:inherit; }
+    button { cursor:pointer; }
+    a { color:var(--green); }
+    .shell { width:min(1160px,calc(100% - 40px)); margin:0 auto; }
+    .masthead { padding:22px 0 12px; }
+    .brand-row,.section-top,.card-head,.range-row { display:flex; align-items:center; justify-content:space-between; gap:14px; }
+    .brand-row { font-size:.9rem; font-weight:750; }
+    .back-link { text-decoration:none; }
+    .crumb,.hero p,.card-main>p,.visual-caption,.muted { color:var(--muted); }
+    .hero-layout { display:grid; grid-template-columns:minmax(0,.9fr) minmax(320px,1.1fr); align-items:center; gap:32px; padding:36px 0 28px; }
+    .eyebrow { color:var(--green); font-size:.82rem; font-weight:800; letter-spacing:.12em; }
+    h1 { margin:8px 0 12px; font-size:clamp(2rem,4.4vw,3.55rem); line-height:1.18; letter-spacing:-.04em; }
+    .hero p { margin:0; font-size:1.08rem; }
+    .hero-scene { display:block; width:100%; border:1px solid var(--line); border-radius:18px; background:linear-gradient(#e8eee7,#fbf5e9); box-shadow:var(--shadow); }
+    main { padding:0 0 76px; }
+    .section-top { align-items:end; margin:0 0 18px; }
+    .section-top h2 { margin:0; font-size:1.32rem; }
+    .progress-copy { color:var(--muted); font-size:.9rem; white-space:nowrap; }
+    progress { display:block; width:100%; height:8px; margin:12px 0 0; border:0; border-radius:99px; overflow:hidden; }
+    progress::-webkit-progress-bar { background:#dfe7df; }
+    progress::-webkit-progress-value { background:var(--green); border-radius:99px; }
+    progress::-moz-progress-bar { background:var(--green); border-radius:99px; }
+    .lesson-layout { display:grid; grid-template-columns:220px minmax(0,1fr); gap:28px; align-items:start; }
+    .route { position:sticky; top:18px; max-height:calc(100svh - 36px); overflow-y:auto; padding:8px 10px 12px 0; scrollbar-width:thin; }
+    .route-label { margin:0 0 8px; color:var(--muted); font-size:.76rem; letter-spacing:.08em; }
+    .route-inner { display:grid; gap:4px; }
+    .route a { display:grid; grid-template-columns:28px minmax(0,1fr); align-items:start; gap:8px; padding:10px 11px; border:1px solid transparent; border-left:3px solid transparent; border-radius:0 10px 10px 0; color:var(--muted); font-size:.88rem; line-height:1.45; text-decoration:none; }
+    .route a:hover,.route a:focus-visible { border-color:var(--line); outline:2px solid transparent; }
+    .route a[aria-current="step"] { border-left-color:var(--green); background:#e7eee0; color:#315a46; font-weight:750; }
+    .route b { color:var(--green); font-size:.76rem; }
+    .cards { display:grid; gap:20px; }
+    .lesson-card { position:relative; scroll-margin-top:22px; display:grid; grid-template-columns:160px minmax(0,1fr); gap:24px; padding:25px; border:1px solid var(--line); border-radius:24px; background:var(--card); box-shadow:var(--shadow); }
+    .card-side { border-right:1px solid var(--line); padding-right:16px; }
+    .card-number { color:var(--green); font-weight:850; font-size:.84rem; letter-spacing:.08em; }
+    .card-side h3 { margin:10px 0 8px; font-size:1.04rem; line-height:1.45; }
+    .card-role { color:var(--muted); font-size:.84rem; }
+    .card-main h2 { margin:0 0 8px; font-size:clamp(1.3rem,2.6vw,1.75rem); line-height:1.38; }
+    .card-main>p { margin:0 0 16px; }
+    .dialogue { display:flex; gap:10px; align-items:center; margin:12px 0; padding:11px 15px; border-left:4px solid #8cae91; border-radius:0 13px 13px 0; background:#f0f5eb; }
+    .dialogue p { margin:0; }
+    .speaker { display:block; flex:0 0 auto; width:44px; height:44px; border:2px solid #8cae91; border-radius:50%; background-image:url("../1.1/assets/dialogue-character-avatars.png"); background-repeat:no-repeat; background-position:100% 50%; background-size:200% 100%; box-shadow:0 2px 6px #152f261f; }
+    .dialogue--xiaokui { border-left-color:#d39765; background:#fff4e8; }
+    .dialogue--xiaokui .speaker { border-color:#d39765; background-position:0 50%; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .visual { margin:17px 0; padding:18px; border:1px solid var(--line); border-radius:19px; background:#f6f8f3; }
+    .visual svg { display:block; width:100%; height:auto; }
+    .visual-caption { margin:8px 2px 0; font-size:.84rem; }
+    .controls { display:flex; flex-wrap:wrap; gap:9px; margin:12px 0; }
+    .control-button,.action,.secondary { min-height:44px; padding:8px 14px; border:1px solid #b7c8b7; border-radius:12px; background:#fffdf8; color:var(--ink); font-weight:750; }
+    .control-button[aria-pressed="true"] { border-color:var(--green); background:var(--green-pale); color:#14563f; box-shadow:inset 0 0 0 1px #176b5322; }
+    .range-row { justify-content:flex-start; margin:14px 0 4px; }
+    .range-row label { min-width:135px; font-weight:750; }
+    input[type="range"] { width:min(100%,360px); accent-color:var(--green); }
+    output { min-width:4.5em; color:var(--green); font-weight:800; }
+    .readout { margin:10px 0 0; padding:10px 13px; border-radius:12px; background:#eaf2e8; color:#315a46; font-weight:700; }
+    .reflection-ray { fill:none; stroke:#d99a26; stroke-width:5; stroke-linecap:round; }
+    .ray-arrow { fill:#d99a26; }
+    .normal-line { stroke:#78877e; stroke-width:2; stroke-dasharray:7 6; }
+    .mirror-line { stroke:#526a5d; stroke-width:8; stroke-linecap:round; }
+    .mirror-edge { stroke:#c8d5c8; stroke-width:2; }
+    .rough-top { fill:#b7a887; stroke:#8c8068; stroke-width:2; }
+    .ray-soft { stroke:#d99a26; stroke-width:3.4; fill:none; stroke-linecap:round; }
+    .end-card { border-color:#bfd1be; background:#f4f8ef; }
+    .end-card .card-side { border-color:#d0ddcb; }
+    .takeaway { margin:14px 0 0; padding:14px 17px; border-radius:14px; background:#e8f0e3; font-weight:750; }
+    .quiz { margin-top:14px; padding:15px; border:1px solid var(--line); border-radius:15px; background:#fff; }
+    .quiz h3 { margin:0 0 9px; font-size:1rem; }
+    .quiz-options { display:flex; flex-wrap:wrap; gap:8px; }
+    .quiz-options button { min-height:42px; padding:7px 12px; border:1px solid var(--line); border-radius:10px; background:#fffdf8; color:var(--ink); }
+    .quiz-options button[aria-pressed="true"] { border-color:var(--green); background:var(--green-pale); }
+    .quiz-feedback { min-height:1.5em; margin:8px 0 0; color:var(--muted); }
+    footer { padding:22px 0 36px; border-top:1px solid var(--line); color:var(--muted); font-size:.88rem; }
+    @media(max-width:780px) {
+      .shell { width:min(100% - 24px,680px); }
+      .hero-layout { grid-template-columns:1fr; gap:16px; padding:26px 0 20px; }
+      .hero-scene { max-height:250px; }
+      .lesson-layout { grid-template-columns:1fr; gap:8px; }
+      .route { z-index:5; top:0; max-height:none; margin:0 -12px; padding:6px 12px 10px; overflow-x:auto; overflow-y:hidden; background:var(--paper); }
+      .route-label { margin:0 0 6px; }
+      .route-inner { display:flex; width:max-content; gap:6px; }
+      .route a { display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border:1px solid var(--line); border-radius:999px; background:var(--card); white-space:nowrap; }
+      .route a[aria-current="step"] { border-color:var(--green); }
+      .lesson-card { grid-template-columns:1fr; gap:12px; padding:19px; border-radius:19px; }
+      .card-side { display:flex; align-items:baseline; gap:10px; border-right:0; border-bottom:1px solid var(--line); padding:0 0 10px; }
+      .card-side h3 { margin:0; }
+      .card-role { display:none; }
+      .visual { padding:11px; }
+    }
+    @media(max-width:460px) { .shell { width:calc(100% - 20px); } .route { margin-inline:-10px; } .brand-row { align-items:flex-start; } .section-top { align-items:start; } .progress-copy { font-size:.82rem; } .visual { padding:8px; } .range-row { display:grid; grid-template-columns:1fr auto; gap:5px 10px; } .range-row label { grid-column:1/-1; } .range-row input { width:100%; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <header class="shell masthead">
+    <div class="brand-row"><a class="back-link" href="../../index.html">← 返回學習路線</a><span class="crumb">國二上・理化</span></div>
+    <div class="hero-layout">
+      <div class="hero"><div class="eyebrow">第二段學習・光的反射與面鏡</div><h1>光遇到表面會怎樣？</h1><p>阿公拿出兩面小鏡子，想和小葵做一支能看見牆角另一側的潛望鏡。從鏡子、白紙和光路開始，找出光反射的規律，再用面鏡把光送到想去的地方。</p></div>
+      <svg class="hero-scene" viewBox="0 0 640 300" role="img" aria-label="小葵和阿公在桌上觀察鏡子與光路">
+        <defs><linearGradient id="wall" x2="0" y2="1"><stop stop-color="#e8eee7"/><stop offset="1" stop-color="#f8f2e6"/></linearGradient><marker id="hero-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8Z" fill="#d99a26"/></marker></defs>
+        <rect width="640" height="300" rx="18" fill="url(#wall)"/><path d="M0 224H640V300H0Z" fill="#c39b6b"/><path d="M0 224H640" stroke="#8d704e" stroke-width="5"/>
+        <rect x="116" y="123" width="96" height="83" rx="7" fill="#dfe8df" stroke="#547266" stroke-width="8"/><path d="M126 132H202V197H126Z" fill="#fffdf5"/>
+        <path d="M212 174 330 145 396 157" fill="none" stroke="#d99a26" stroke-width="5" stroke-linecap="round" marker-end="url(#hero-arrow)"/><path d="M403 126V196" stroke="#547266" stroke-width="10"/><path d="M438 126V196" stroke="#547266" stroke-width="10"/>
+        <circle cx="492" cy="119" r="31" fill="#f7d4b8"/><path d="M466 113q26-43 54-4l-3 16h-52Z" fill="#674e3d"/><path d="M457 220q5-73 69-70 56 8 61 74Z" fill="#d9a172"/><circle cx="504" cy="121" r="3" fill="#243a35"/><circle cx="520" cy="121" r="3" fill="#243a35"/><path d="M505 134q8 5 15 0" fill="none" stroke="#a45e4e" stroke-width="2"/>
+        <text x="136" y="219" fill="#315a46" font-size="16" font-weight="700">面鏡</text><text x="461" y="253" fill="#315a46" font-size="16" font-weight="700">小葵和阿公</text>
+      </svg>
+    </div>
+  </header>
+  <main class="shell">
+    <div class="section-top"><div><h2>沿著探索路線，找出反射規律</h2><progress id="lesson-progress" max="5" value="1" aria-label="學習路線閱讀進度"></progress></div><span class="progress-copy" id="progress-copy" aria-live="polite">第 1 / 5 段</span></div>
+    <div class="lesson-layout">
+      <nav class="route" aria-label="學習路線"><p class="route-label">學習路線</p><div class="route-inner">
+        <a href="#card-01" aria-current="step"><b>01</b>不同表面的反射</a><a href="#card-02"><b>02</b>反射方向的規律</a><a href="#card-03"><b>03</b>面鏡裡的像在哪裡</a><a href="#card-04"><b>04</b>面鏡成像的特性</a><a href="#card-05"><b>05</b>用面鏡看見牆角</a>
+      </div></nav>
+      <div class="cards">
+        <section class="lesson-card" id="card-01">
+          <aside class="card-side"><span class="card-number">01</span><h3>比較不同表面</h3><span class="card-role">反射會發生在各種表面</span></aside>
+          <div class="card-main"><h2>為什麼鏡子映得清楚，白紙卻不會？</h2><p>阿公把手電筒照向鏡面和白紙。兩種表面都會反射光，但反射後的光分布不同。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>光照到白紙也會反射，為什麼我看得到白紙，卻看不到清楚的影像？</p></div>
+            <div class="controls" role="group" aria-label="選擇觀察的表面"><button class="control-button" type="button" data-surface="smooth" aria-pressed="true">平滑表面</button><button class="control-button" type="button" data-surface="rough" aria-pressed="false">粗糙表面</button></div>
+            <div class="visual"><svg id="surface-svg" viewBox="0 0 620 280" role="img" aria-label="平行光照到表面後的反射方向比較">
+              <defs><marker id="surface-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8Z" fill="#d99a26"/></marker></defs>
+              <text x="70" y="32" fill="#315a46" font-size="18" font-weight="700" id="surface-title">平滑表面：反射光方向整齊</text>
+              <path d="M110 70V164M205 70V164M300 70V164" stroke="#557568" stroke-width="4" marker-end="url(#surface-arrow)"/>
+              <g id="smooth-rays" stroke="#d99a26" stroke-width="4" fill="none" stroke-linecap="round"><path d="M110 164 166 70" marker-end="url(#surface-arrow)"/><path d="M205 164 261 70" marker-end="url(#surface-arrow)"/><path d="M300 164 356 70" marker-end="url(#surface-arrow)"/></g>
+              <g id="rough-rays" stroke="#d99a26" stroke-width="4" fill="none" stroke-linecap="round" hidden><path d="M110 164 72 87" marker-end="url(#surface-arrow)"/><path d="M205 164 252 72" marker-end="url(#surface-arrow)"/><path d="M300 164 363 106" marker-end="url(#surface-arrow)"/></g>
+              <path id="smooth-surface" class="mirror-line" d="M65 180H355"/><path id="rough-surface" class="rough-top" d="M65 175 86 169 103 177 123 167 144 177 165 168 187 178 207 168 229 176 249 166 271 177 294 168 315 177 337 167 355 174V188H65Z" hidden/>
+              <rect x="420" y="76" width="135" height="112" rx="12" fill="#fffdf8" stroke="#d9d3c4"/><text x="487" y="109" text-anchor="middle" fill="#64736d" font-size="15">看到的結果</text><text x="487" y="143" text-anchor="middle" fill="#243a35" font-size="19" font-weight="700" id="surface-result">能映出清楚影像</text><text x="487" y="168" text-anchor="middle" fill="#64736d" font-size="13" id="surface-subresult">反射光大致朝同一方向</text>
+            </svg><p class="visual-caption">改變表面，觀察反射光的方向如何分布。示意圖中的每一道入射光，在表面反射時都遵守反射定律。</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>鏡面和白紙都會反射光。平滑表面讓反射光較整齊；粗糙表面各處朝不同方向反射，所以我們能從不同方向看見它，卻看不到清晰的鏡像。</p></div>
+            <div class="takeaway">重點：鏡面反射和漫反射都遵守反射定律，差別在表面各處反射光的方向分布。</div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-02">
+          <aside class="card-side"><span class="card-number">02</span><h3>追蹤光線方向</h3><span class="card-role">入射角等於反射角</span></aside>
+          <div class="card-main"><h2>光照到面鏡後，會往哪裡反射？</h2><p>把一束光照向水平面鏡，移動光線的入射角，觀察反射方向。角度都從鏡面交點的法線量起。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>如果我改變光照向鏡子的方向，反射光也會跟著改變嗎？</p></div>
+            <div class="range-row"><label for="incident-angle">入射角</label><input id="incident-angle" type="range" min="15" max="70" value="40"><output id="angle-output" for="incident-angle">40°</output></div>
+            <div class="visual"><svg viewBox="0 0 620 330" role="img" aria-label="入射線、法線與反射線的互動光路圖">
+              <defs><marker id="ray-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d99a26"/></marker></defs>
+              <path class="mirror-line" d="M100 224H520"/><path class="mirror-edge" d="M100 234H520"/>
+              <path id="normal-line" class="normal-line" d="M310 75V224"/><text x="320" y="91" fill="#64736d" font-size="15">法線</text>
+              <path id="incident-ray" class="reflection-ray" marker-end="url(#ray-arrow)" d="M 214 110 L 310 224"/>
+              <path id="reflected-ray" class="reflection-ray" marker-end="url(#ray-arrow)" d="M310 224 406 110"/>
+              <circle cx="310" cy="224" r="7" fill="#176b53"/><text x="322" y="251" fill="#315a46" font-size="15">入射點</text>
+              <text id="incidence-label" x="190" y="150" fill="#835b17" font-size="17" font-weight="700">入射角 40°</text><text id="reflection-label" x="398" y="150" fill="#835b17" font-size="17" font-weight="700">反射角 40°</text>
+              <text x="118" y="281" fill="#64736d" font-size="14">入射線</text><text x="443" y="281" fill="#64736d" font-size="14">反射線</text>
+            </svg><p class="visual-caption">虛線是通過入射點、垂直於鏡面的法線。拖曳上方滑桿，觀察入射線和反射線相對法線的角度。</p>
+              <div class="readout" id="law-readout" aria-live="polite">入射角 40°，反射角 40°。兩角相等。</div>
+              <div class="controls"><button class="control-button" id="reverse-path" type="button" aria-pressed="false">反轉光路，觀察可逆性</button></div>
+            </div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>反射時，入射角等於反射角；角度是從法線量起。把光路方向反過來，光也會沿原來的路徑返回，這就是光路可逆。</p></div>
+            <div class="takeaway">反射定律：入射線、法線和反射線在同一平面內；入射角等於反射角。光路可以反向傳播。</div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-03">
+          <aside class="card-side"><span class="card-number">03</span><h3>找出像的位置</h3><span class="card-role">物體移動，像也跟著移動</span></aside>
+          <div class="card-main"><h2>鏡子裡的像，離鏡面多遠？</h2><p>小葵把物體慢慢移近面鏡。拖動滑桿，觀察物體和像相對鏡面的位置變化。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>我離鏡子愈近，鏡子裡的像也會跟著靠近嗎？</p></div>
+            <div class="range-row"><label for="object-distance">物體到鏡面的距離</label><input id="object-distance" type="range" min="65" max="190" value="130"><output id="distance-output" for="object-distance">130 cm</output></div>
+            <div class="visual"><svg viewBox="0 0 620 330" role="img" aria-label="平面鏡前物體與鏡後虛像距離相等的互動圖">
+              <defs><marker id="distance-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8Z" fill="#718078"/></marker></defs>
+              <path d="M375 48V268" stroke="#526a5d" stroke-width="13"/><path d="M366 48V268" stroke="#c8d5c8" stroke-width="3"/>
+              <text x="375" y="35" text-anchor="middle" fill="#315a46" font-size="16" font-weight="700">平面鏡</text>
+              <g id="object-shape"><circle id="object-circle" cx="245" cy="140" r="28" fill="#d9a172" stroke="#9a6037" stroke-width="3"/><path id="object-stem" d="M245 169V218" stroke="#9a6037" stroke-width="7" stroke-linecap="round"/><path id="object-base" d="M221 222H269" stroke="#9a6037" stroke-width="8" stroke-linecap="round"/></g>
+              <g id="image-shape" opacity=".42"><circle id="image-circle" cx="505" cy="140" r="28" fill="#d9a172" stroke="#9a6037" stroke-width="3"/><path id="image-stem" d="M505 169V218" stroke="#9a6037" stroke-width="7" stroke-linecap="round"/><path id="image-base" d="M481 222H529" stroke="#9a6037" stroke-width="8" stroke-linecap="round"/></g>
+              <path id="object-dimension" d="M245 260H375" stroke="#718078" stroke-width="2" marker-start="url(#distance-arrow)" marker-end="url(#distance-arrow)"/><path id="image-dimension" d="M375 260H505" stroke="#718078" stroke-width="2" marker-start="url(#distance-arrow)" marker-end="url(#distance-arrow)"/>
+              <text id="object-distance-label" x="310" y="289" text-anchor="middle" fill="#315a46" font-size="16" font-weight="700">物距 130 cm</text><text id="image-distance-label" x="440" y="289" text-anchor="middle" fill="#315a46" font-size="16" font-weight="700">像距 130 cm</text>
+            </svg><p class="visual-caption">圖中的鏡後像以淡色表示。它是眼睛沿反射光線反向延長後看見的位置，不是光真的穿過鏡子聚在那裡。</p>
+              <div class="readout" id="image-readout" aria-live="polite">物體距離鏡面 130 cm，像看起來在鏡後 130 cm。</div>
+            </div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>面鏡成像的位置會隨物體到鏡面的距離改變。觀察可發現，像看起來在鏡後的距離，和物體在鏡前的距離相等。</p></div>
+            <div class="takeaway">面鏡成像觀察：物體離鏡面多遠，像看起來就在鏡後同樣遠的位置。</div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-04">
+          <aside class="card-side"><span class="card-number">04</span><h3>比較物體和像</h3><span class="card-role">從觀察整理成像特性</span></aside>
+          <div class="card-main"><h2>鏡中的影像和物體有哪些相同或不同？</h2><p>在物體和鏡中像上各取一個對應位置，觀察方向、大小與到鏡面的距離。再用觀察結果整理平面鏡成像特性。</p>
+            <div class="visual"><svg viewBox="0 0 620 260" role="img" aria-label="平面鏡中物體與像的方向、大小和對稱位置比較">
+              <path d="M310 25V229" stroke="#526a5d" stroke-width="12"/><path d="M302 25V229" stroke="#c8d5c8" stroke-width="3"/><text x="310" y="18" text-anchor="middle" fill="#315a46" font-size="15" font-weight="700">鏡面</text>
+              <g fill="#d9a172" stroke="#9a6037" stroke-width="3"><circle cx="202" cy="92" r="25"/><path d="M202 118V177M174 179H230" fill="none" stroke-linecap="round" stroke-width="7"/></g>
+              <g opacity=".45" fill="#d9a172" stroke="#9a6037" stroke-width="3"><circle cx="418" cy="92" r="25"/><path d="M418 118V177M390 179H446" fill="none" stroke-linecap="round" stroke-width="7"/></g>
+              <path d="M202 213H310M310 213H418" stroke="#8a958d" stroke-width="2" stroke-dasharray="5 5"/><text x="202" y="238" text-anchor="middle" fill="#315a46" font-size="15">物體</text><text x="418" y="238" text-anchor="middle" fill="#315a46" font-size="15">鏡中像</text>
+              <path d="M184 62H220" stroke="#176b53" stroke-width="2"/><path d="M400 62H436" stroke="#176b53" stroke-width="2"/><text x="310" y="70" text-anchor="middle" fill="#64736d" font-size="14">等大、正立、與鏡面對稱</text>
+            </svg><p class="visual-caption">以相同尺度比較物體和像；淡色像表示它看起來在鏡後。</p></div>
+            <div class="quiz" aria-labelledby="mirror-check-title"><h3 id="mirror-check-title">檢查你的觀察：平面鏡中的像有什麼特性？</h3><div class="quiz-options" role="group" aria-label="選擇平面鏡影像特性"><button type="button" data-answer="wrong" aria-pressed="false">倒立、大小不一定相同</button><button type="button" data-answer="correct" aria-pressed="false">正立、與物體等大，和物體到鏡面的距離相等</button></div><p class="quiz-feedback" id="mirror-check-feedback" aria-live="polite">先比較圖中物體和像的方向、大小與距離，再選擇。</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>平面鏡中的像是正立的，大小和物體相同，並且與物體相對鏡面對稱；像到鏡面的距離等於物體到鏡面的距離。</p></div>
+            <div class="takeaway">平面鏡成像：正立、等大，物像相對鏡面對稱；像距等於物距。</div>
+          </div>
+        </section>
+
+        <section class="lesson-card end-card" id="card-05">
+          <aside class="card-side"><span class="card-number">05</span><h3>把規律用在生活裡</h3><span class="card-role">兩次反射組成潛望鏡</span></aside>
+          <div class="card-main"><h2>兩面鏡子要怎麼擺，才能看見牆角另一側？</h2><p>阿公和小葵把兩面平面鏡裝進紙筒。拖動滑桿改變上方鏡面的角度，觀察光路能不能依序轉向下方鏡面，再進入眼睛。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>光要轉兩次彎，才能從牆角外面跑到我的眼睛裡嗎？</p></div>
+            <div class="range-row"><label for="periscope-angle">上方鏡面角度</label><input id="periscope-angle" type="range" min="30" max="60" value="45"><output id="periscope-output" for="periscope-angle">45°</output></div>
+            <div class="visual"><svg viewBox="0 0 620 350" role="img" aria-label="兩面平面鏡組成的潛望鏡反射光路">
+              <defs><marker id="periscope-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#d99a26"/></marker></defs>
+              <path d="M205 70H263V275H205Z" fill="#eef2e9" stroke="#87968a" stroke-width="13"/>
+              <path id="periscope-top-frame" d="M205 70 263 128" stroke="#526a5d" stroke-width="12" stroke-linecap="round"/><path id="periscope-top-mirror" d="M205 70 263 128" stroke="#c8d5c8" stroke-width="3"/>
+              <path d="M205 217 263 275" stroke="#526a5d" stroke-width="12" stroke-linecap="round"/><path d="M205 217 263 275" stroke="#c8d5c8" stroke-width="3"/>
+              <path id="periscope-ray-1" d="M55 99H234V246H510" fill="none" stroke="#d99a26" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" marker-mid="url(#periscope-arrow)" marker-end="url(#periscope-arrow)"/>
+              <path d="M47 80v38M38 99h18" stroke="#526a5d" stroke-width="4"/><text x="44" y="61" text-anchor="middle" fill="#315a46" font-size="15">牆角外的物體</text>
+              <path d="M514 228q30 18 0 36M528 222q40 24 0 48" fill="none" stroke="#176b53" stroke-width="4" stroke-linecap="round"/><text x="535" y="295" text-anchor="middle" fill="#315a46" font-size="15">眼睛</text>
+              <text x="195" y="55" fill="#315a46" font-size="14">上方鏡面</text><text x="195" y="306" fill="#315a46" font-size="14">下方鏡面</text>
+              <circle cx="234" cy="99" r="6" fill="#176b53"/><circle cx="234" cy="246" r="6" fill="#176b53"/>
+            </svg><p class="visual-caption">上下兩面平面鏡平行放置，鏡面約與筒身成 45°，光線經兩次反射後改變前進方向。</p>
+              <div class="readout" id="periscope-readout" aria-live="polite">兩面鏡面約 45°，光線經兩次反射後進入眼睛。</div>
+            </div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>光在上方鏡面反射向下，再在下方鏡面反射進入眼睛。調整鏡面的角度，讓每次反射都符合反射定律，就能把牆角外的光送到眼睛。</p></div>
+            <div class="takeaway">本段結論：光在表面反射時遵守反射定律，光路可以逆向；面鏡能改變光的方向並形成影像。理解這些規律，就能解釋鏡中成像，也能設計簡單的潛望鏡。</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="shell">光學單元・1.2 光的反射與面鏡</footer>
+  <script>
+    (() => {
+      const routeLinks = [...document.querySelectorAll('.route a')];
+      const cards = [...document.querySelectorAll('.lesson-card')];
+      const progress = document.querySelector('#lesson-progress');
+      const progressCopy = document.querySelector('#progress-copy');
+      const observer = new IntersectionObserver(entries => {
+        const visible = entries.filter(entry => entry.isIntersecting).sort((a,b) => b.intersectionRatio-a.intersectionRatio)[0];
+        if (!visible) return;
+        const index = cards.indexOf(visible.target);
+        routeLinks.forEach((link,i) => i === index ? link.setAttribute('aria-current','step') : link.removeAttribute('aria-current'));
+        progress.value = index + 1;
+        progressCopy.textContent = `第 ${index+1} / ${cards.length} 段`;
+      }, {threshold:[.15,.35,.6]});
+      cards.forEach(card => observer.observe(card));
+
+      const surfaceButtons = [...document.querySelectorAll('[data-surface]')];
+      const surfaceTitle = document.querySelector('#surface-title');
+      const surfaceResult = document.querySelector('#surface-result');
+      const surfaceSubresult = document.querySelector('#surface-subresult');
+      surfaceButtons.forEach(button => button.addEventListener('click', () => {
+        const smooth = button.dataset.surface === 'smooth';
+        surfaceButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+        document.querySelector('#smooth-rays').hidden = !smooth;
+        document.querySelector('#rough-rays').hidden = smooth;
+        document.querySelector('#smooth-surface').hidden = !smooth;
+        document.querySelector('#rough-surface').hidden = smooth;
+        surfaceTitle.textContent = smooth ? '平滑表面：反射光方向整齊' : '粗糙表面：反射光散向不同方向';
+        surfaceResult.textContent = smooth ? '能映出清楚影像' : '看得到表面，影像不清楚';
+        surfaceSubresult.textContent = smooth ? '反射光大致朝同一方向' : '各處反射方向不完全相同';
+      }));
+
+      const angle = document.querySelector('#incident-angle');
+      const angleOutput = document.querySelector('#angle-output');
+      const reverseButton = document.querySelector('#reverse-path');
+      let reversed = false;
+      const updateAngle = () => {
+        const degrees = Number(angle.value);
+        const radians = degrees * Math.PI / 180;
+        const centerX = 310, centerY = 224, length = 142;
+        const dx = Math.sin(radians) * length, dy = Math.cos(radians) * length;
+        const incident = document.querySelector('#incident-ray');
+        const reflected = document.querySelector('#reflected-ray');
+        incident.setAttribute('d', reversed ? `M${centerX+dx} ${centerY-dy} L${centerX} ${centerY}` : `M${centerX-dx} ${centerY-dy} L${centerX} ${centerY}`);
+        reflected.setAttribute('d', reversed ? `M${centerX} ${centerY} L${centerX-dx} ${centerY-dy}` : `M${centerX} ${centerY} L${centerX+dx} ${centerY-dy}`);
+        angleOutput.value = `${degrees}°`;
+        document.querySelector('#incidence-label').textContent = `入射角 ${degrees}°`;
+        document.querySelector('#reflection-label').textContent = `反射角 ${degrees}°`;
+        document.querySelector('#law-readout').textContent = `入射角 ${degrees}°，反射角 ${degrees}°。兩角相等。${reversed ? '反轉光路後，光沿原路返回。' : ''}`;
+      };
+      angle.addEventListener('input', updateAngle);
+      reverseButton.addEventListener('click', () => { reversed = !reversed; reverseButton.setAttribute('aria-pressed', String(reversed)); reverseButton.textContent = reversed ? '恢復原光路方向' : '反轉光路，觀察可逆性'; updateAngle(); });
+
+      const distance = document.querySelector('#object-distance');
+      const updateDistance = () => {
+        const d = Number(distance.value);
+        const mirror = 375, objectX = mirror - d, imageX = mirror + d;
+        const object = document.querySelector('#object-shape');
+        const image = document.querySelector('#image-shape');
+        const oc = object.querySelector('circle'); oc.setAttribute('cx', objectX);
+        const op = object.querySelectorAll('path'); op[0].setAttribute('d',`M${objectX} 169V218`); op[1].setAttribute('d',`M${objectX-24} 222H${objectX+24}`);
+        const ic = image.querySelector('circle'); ic.setAttribute('cx', imageX);
+        const ip = image.querySelectorAll('path'); ip[0].setAttribute('d',`M${imageX} 169V218`); ip[1].setAttribute('d',`M${imageX-24} 222H${imageX+24}`);
+        document.querySelector('#object-dimension').setAttribute('d',`M${objectX} 260H${mirror}`);
+        document.querySelector('#image-dimension').setAttribute('d',`M${mirror} 260H${imageX}`);
+        document.querySelector('#object-distance-label').setAttribute('x',(objectX+mirror)/2); document.querySelector('#image-distance-label').setAttribute('x',(mirror+imageX)/2);
+        document.querySelector('#object-distance-label').textContent=`物距 ${d} cm`; document.querySelector('#image-distance-label').textContent=`像距 ${d} cm`;
+        document.querySelector('#distance-output').value=`${d} cm`; document.querySelector('#image-readout').textContent=`物體距離鏡面 ${d} cm，像看起來在鏡後 ${d} cm。`;
+      };
+      distance.addEventListener('input', updateDistance); updateDistance();
+
+      document.querySelectorAll('[data-answer]').forEach(button => button.addEventListener('click', () => {
+        document.querySelectorAll('[data-answer]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+        document.querySelector('#mirror-check-feedback').textContent = button.dataset.answer === 'correct' ? '答對了。平面鏡中的像正立、等大，且像距等於物距。' : '再觀察一次物體與像的高度和方向；平面鏡中的像並非倒立。';
+      }));
+
+      const periscopeAngle = document.querySelector('#periscope-angle');
+      periscopeAngle.addEventListener('input', () => {
+        const value = Number(periscopeAngle.value);
+        document.querySelector('#periscope-output').value=`${value}°`;
+        const good = value === 45;
+        const radians = value * Math.PI / 180;
+        const half = 41;
+        const ax = 234 - half * Math.cos(radians), ay = 99 - half * Math.sin(radians);
+        const bx = 234 + half * Math.cos(radians), by = 99 + half * Math.sin(radians);
+        const mirrorPath = `M${ax.toFixed(1)} ${ay.toFixed(1)} ${bx.toFixed(1)} ${by.toFixed(1)}`;
+        document.querySelector('#periscope-top-frame').setAttribute('d', mirrorPath);
+        document.querySelector('#periscope-top-mirror').setAttribute('d', mirrorPath);
+        const wallX = value < 45 ? 263 : 205;
+        const wallY = 99 + (wallX - 234) * Math.tan(2 * radians);
+        document.querySelector('#periscope-ray-1').setAttribute('d', good ? 'M55 99H234V246H510' : `M55 99H234L${wallX} ${wallY.toFixed(1)}`);
+        document.querySelector('#periscope-readout').textContent = good ? '兩面鏡面約 45°，光線經兩次反射後進入眼睛。' : `上方鏡面 ${value}°，反射方向偏離；調回約 45°，讓光線順利轉向下方。`;
+        document.querySelector('#periscope-ray-1').setAttribute('opacity', good ? '1' : '.48');
+      });
+    })();
+  </script>
+</body>
+</html>
