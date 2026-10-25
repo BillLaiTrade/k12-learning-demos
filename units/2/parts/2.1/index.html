@@ -45,6 +45,7 @@
     .card-side { border-right:1px solid var(--line); padding-right:20px; }
     .card-number { color:var(--green); font-size:.84rem; font-weight:850; letter-spacing:.08em; }
     .card-side h3 { margin:10px 0 8px; font-size:1.08rem; line-height:1.45; }
+    .card-role { color:var(--muted); font-size:.87rem; }
     .card-main h2 { margin:0 0 8px; font-size:clamp(1.32rem,2.8vw,1.85rem); line-height:1.35; }
     .card-main>p { color:var(--muted); margin:0 0 18px; }
     figure { margin:16px 0; }
@@ -135,6 +136,7 @@
       .lesson-card { grid-template-columns:1fr; gap:14px; padding:18px; border-radius:19px; }
       .card-side { display:flex; align-items:baseline; gap:10px; border-right:0; border-bottom:1px solid var(--line); padding:0 0 10px; }
       .card-side h3 { margin:0; }
+      .card-role { display:none; }
       .section-top { align-items:start; flex-direction:column; gap:3px; }
     }
     @media (max-width:520px) { .diagram-grid,.data-grid,.example-grid { grid-template-columns:1fr; } .lesson-card { padding:16px; } .visual { padding:8px; } }
@@ -158,7 +160,7 @@
         <div class="route-inner">
           <a href="#card-01" aria-current="step"><b>01</b><span>繩子一端被抖動，變化怎麼傳到另一端？</span></a>
           <a href="#card-02"><b>02</b><span>波形向前傳，繩上的點會跟著走嗎？</span></a>
-          <a href="#card-03"><b>03</b><span>波形圖上，波峰、波谷和平衡位置怎麼認？</span></a>
+          <a href="#card-03"><b>03</b><span>繩波有些地方凸起、有些地方凹下，圖上怎麼讀？</span></a>
           <a href="#card-04"><b>04</b><span>波形的高低和重複間隔，怎麼量？</span></a>
           <a href="#card-05"><b>05</b><span>橫波和縱波，差別在振動方向？</span></a>
           <a href="#card-06"><b>06</b><span>振得快慢，如何用頻率和週期表示？</span></a>
@@ -171,7 +173,7 @@
         <div class="section-top"><h2>從認識波形，走到波速關係</h2><span class="progress-copy">完整說明直接呈現在每張卡片</span></div>
 
         <section class="lesson-card" id="card-01">
-          <div class="card-side"><span class="card-number">01</span><h3>繩子一端被抖動，變化怎麼傳到另一端？</h3></div>
+          <div class="card-side"><span class="card-number">01</span><h3>認識波</h3><span class="card-role">變化如何傳開</span></div>
           <div class="card-main">
             <h2>繩子一端被抖動，變化怎麼傳到另一端？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，繩子一端上下振動，起伏怎麼會往另一端傳？</p></div>
@@ -192,7 +194,7 @@
         </section>
 
         <section class="lesson-card" id="card-02">
-          <div class="card-side"><span class="card-number">02</span><h3>波形向前傳，繩上的點會跟著走嗎？</h3></div>
+          <div class="card-side"><span class="card-number">02</span><h3>追蹤固定繩點</h3><span class="card-role">介質振動，波形前進</span></div>
           <div class="card-main">
             <h2>波形向前傳，繩上的點會跟著走嗎？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩子一端抖動後，起伏往前傳；繩上的橘點也會跟著往前走嗎？</p></div>
@@ -220,7 +222,7 @@
         </section>
 
         <section class="lesson-card" id="card-03">
-          <div class="card-side"><span class="card-number">03</span><h3>繩波有些地方凸起、有些地方凹下，圖上怎麼讀？</h3></div>
+          <div class="card-side"><span class="card-number">03</span><h3>讀懂波形</h3><span class="card-role">建立共同的圖像詞彙</span></div>
           <div class="card-main">
             <h2>繩波有些地方凸起、有些地方凹下，圖上怎麼讀？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩波有些地方凸起來，有些地方凹下去。中間的虛線好像是繩子原本的位置。</p></div>
@@ -240,7 +242,7 @@
         </section>
 
         <section class="lesson-card" id="card-04">
-          <div class="card-side"><span class="card-number">04</span><h3>波形的高低和重複間隔，怎麼量？</h3></div>
+          <div class="card-side"><span class="card-number">04</span><h3>測量波形</h3><span class="card-role">認識振幅與波長</span></div>
           <div class="card-main">
             <h2>波形的高低和重複間隔，怎麼量？</h2>
             <p>讀取波形時，可以量出垂直的高低，也可以量出水平的重複間隔。這兩種距離分別是振幅和波長。</p>
@@ -298,7 +300,7 @@
         </section>
 
         <section class="lesson-card" id="card-05">
-          <div class="card-side"><span class="card-number">05</span><h3>橫波和縱波，差別在振動方向？</h3></div>
+          <div class="card-side"><span class="card-number">05</span><h3>比較兩個方向</h3><span class="card-role">認識橫波與縱波</span></div>
           <div class="card-main">
             <h2>橫波和縱波，差別在振動方向？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩點上下振動，波往右傳；彈簧線圈前後動，疏密變化也往右傳。這兩種波該怎麼分？</p></div>
@@ -358,7 +360,7 @@
         </section>
 
         <section class="lesson-card" id="card-06">
-          <div class="card-side"><span class="card-number">06</span><h3>振得快慢，如何用頻率和週期表示？</h3></div>
+          <div class="card-side"><span class="card-number">06</span><h3>讀時間尺度</h3><span class="card-role">頻率與週期互為倒數</span></div>
           <div class="card-main">
             <h2>振得快慢，如何用頻率和週期表示？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>波長描述波形的空間間隔；波源振動的快慢又要怎麼表示？</p></div>
@@ -390,7 +392,7 @@
         </section>
 
         <section class="lesson-card" id="card-07">
-          <div class="card-side"><span class="card-number">07</span><h3>波速、頻率和波長，怎麼連在一起？</h3></div>
+          <div class="card-side"><span class="card-number">07</span><h3>連結時間和距離</h3><span class="card-role">得到波速關係</span></div>
           <div class="card-main">
             <h2>波速、頻率和波長，怎麼連在一起？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>頻率表示每秒振幾次；那麼一個週期內，波形會前進多遠？</p></div>
@@ -420,7 +422,7 @@
         </section>
 
         <section class="lesson-card end-card" id="card-08">
-          <div class="card-side"><span class="card-number">08</span><h3>讀懂這段波，可以解釋什麼？</h3></div>
+          <div class="card-side"><span class="card-number">08</span><h3>整合理解</h3><span class="card-role">回到最初的問題</span></div>
           <div class="card-main">
             <span class="assessment-label">理解檢核・共 1 題</span>
             <h2>讀懂這段波，可以解釋什麼？</h2>
