@@ -80,11 +80,10 @@
     .visual-caption { margin: 8px 2px 0; color: var(--muted); font-size: .84rem; }
     .shadow-lab { margin: 16px 0; }
     .shadow-scene-frame { position: relative; height: clamp(320px, 46vw, 480px); overflow: hidden; border: 1px solid #dbe2d8; border-radius: 17px; background: linear-gradient(#e9eee8, #f6f1e6); box-shadow: 0 5px 18px #243a3514; }
-    #shadow-3d-scene { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
-    #shadow-3d-scene:active { cursor: grabbing; }
-    #shadow-3d-scene.dragging-blocker { cursor: grabbing; }
-    #shadow-size-3d-scene { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
-    #shadow-size-3d-scene:active, #shadow-size-3d-scene.dragging-size-object { cursor: grabbing; }
+    .optics-stage { position: relative; display: block; width: 100%; height: 100%; overflow: hidden; cursor: grab; touch-action: none; outline: none; }
+    .optics-stage:active, .optics-stage.is-dragging { cursor: grabbing; }
+    .optics-stage:focus-visible { outline: 3px solid rgb(23 107 83 / 35%); outline-offset: -4px; }
+    .optics-stage svg { display: block; width: 100%; height: 100%; }
     .shadow-scene-actions { position: absolute; z-index: 2; top: 10px; left: 10px; }
     .shadow-scene-action { min-height: 44px; padding: 7px 13px; border: 1px solid #aebfae; border-radius: 11px; background: rgb(255 253 248 / 97%); color: #213a32; font-size: .9rem; font-weight: 800; box-shadow: 0 3px 9px #243a351a; backdrop-filter: blur(4px); }
     .shadow-scene-action:hover, .shadow-scene-action:focus-visible { border-color: var(--green); outline: 2px solid rgb(23 107 83 / 12%); }
@@ -160,8 +159,7 @@
     .aperture-lab { margin-top: 16px; }
     .aperture-scene-with-height { display: grid; grid-template-columns: minmax(0, 1fr) 70px; align-items: stretch; gap: 10px; }
     .aperture-scene-frame { position: relative; overflow: hidden; border: 1px solid #dbe2d8; border-radius: 17px; background: linear-gradient(#eaf0ea, #f6f1e6); box-shadow: 0 5px 18px #243a3514; }
-    #aperture-3d-scene { display: block; width: 100%; height: clamp(300px, 44vw, 440px); cursor: grab; touch-action: none; }
-    #aperture-3d-scene:active { cursor: grabbing; }
+    #aperture-3d-scene { height: clamp(300px, 44vw, 440px); }
     .aperture-scene-actions { position: absolute; z-index: 2; top: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 7px; }
     .aperture-scene-action { min-height: 44px; padding: 7px 13px; border: 1px solid #aebfae; border-radius: 11px; background: rgb(255 253 248 / 97%); color: #213a32; font-size: .9rem; font-weight: 800; box-shadow: 0 3px 9px #243a351a; backdrop-filter: blur(4px); }
     .aperture-scene-action:hover, .aperture-scene-action:focus-visible { border-color: var(--green); outline: 2px solid rgb(23 107 83 / 12%); }
@@ -177,7 +175,7 @@
     .aperture-through-icon { display: none; width: 14px; height: 14px; margin-left: 3px; vertical-align: -3px; filter: drop-shadow(0 1px 1px #9a741c45); }
     .equipment-labels button.is-transmitting .aperture-through-icon { display: inline-block; }
     .equipment-labels button:focus-visible { outline: 3px solid rgb(23 107 83 / 28%); outline-offset: 1px; }
-    #aperture-3d-scene:focus-visible { outline: 3px solid rgb(23 107 83 / 28%); outline-offset: 2px; }
+
     .aperture-result { display: flex; align-items: flex-start; gap: 10px; min-height: 48px; margin-top: 10px; padding: 11px 13px; border-left: 4px solid #d6aa4e; border-radius: 0 11px 11px 0; background: #f5f7ef; color: #3f5c4d; font-size: .89rem; }
     .aperture-result-dot { flex: none; width: 10px; height: 10px; margin-top: 5px; border-radius: 50%; background: #e9b34c; box-shadow: 0 0 0 4px #f8edd5; }
     .aperture-result.is-blocked { border-left-color: #b68a4a; background: #f5f2e9; }
@@ -229,7 +227,7 @@
     .booklet-stage-frame { position: relative; min-width: 0; height: clamp(340px, 43vw, 480px); overflow: hidden; border: 1px solid #263a3a; border-radius: 18px; background: #0a1726; box-shadow: 0 8px 24px #17271d26; }
     #shadow-theatre-scene { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
     #shadow-theatre-scene:active { cursor: grabbing; }
-    #shadow-theatre-scene:focus-visible { outline: 3px solid #eac969; outline-offset: -4px; }
+
     .booklet-stage-actions { position: absolute; z-index: 2; top: 10px; left: 10px; display: flex; gap: 7px; }
     .booklet-stage-button { min-height: 40px; padding: 6px 11px; border: 1px solid #d5c79e; border-radius: 11px; background: rgb(255 251 238 / 95%); color: #2b463e; font-size: .82rem; font-weight: 800; box-shadow: 0 3px 10px #05101840; }
     .booklet-stage-button:hover, .booklet-stage-button:focus-visible { border-color: #edbf4c; outline: 2px solid #edbf4c55; }
@@ -455,7 +453,7 @@
             <div class="aperture-lab">
               <div class="aperture-scene-with-height">
                 <div class="aperture-scene-frame">
-                  <canvas id="aperture-3d-scene" tabindex="0" aria-label="3D 小孔實驗台"></canvas>
+                  <div id="aperture-3d-scene" class="optics-stage" tabindex="0" role="application" aria-label="互動式小孔實驗台"></div>
                   <div class="aperture-scene-actions">
                     <button class="aperture-scene-action" type="button" id="aperture-reset">重設位置</button>
                     <button class="aperture-scene-action" type="button" id="aperture-view-reset">重設視角</button>
@@ -485,7 +483,7 @@
             <p>光源發出的光沿直線前進。當不透明物體擋在光源和屏幕之間，沒有光到達的區域就形成影子。</p>
             <div class="shadow-lab">
               <div class="shadow-scene-frame">
-                <canvas id="shadow-3d-scene" role="img" aria-label="可旋轉觀察的立體影子實驗：可直接拖曳球體沿導軌移動，觀察屏幕影子變化。" aria-describedby="shadow-scene-status shadow-view-hint"></canvas>
+                <div id="shadow-3d-scene" class="optics-stage" tabindex="0" role="application" aria-label="互動式影子形成實驗：拖曳球體沿導軌移動，觀察屏幕影子變化。" aria-describedby="shadow-scene-status shadow-view-hint"></div>
                 <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-view-reset" type="button">重設視角</button></div>
                 <p class="shadow-scene-status" id="shadow-scene-status" aria-live="polite">球體停在光路旁，屏幕均勻受光。</p>
               </div>
@@ -513,7 +511,7 @@
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>試著讓遮擋物靠近光源，再慢慢遠離光源，觀察影子的大小如何改變。</p></div>
             <div class="visual">
               <div class="shadow-scene-frame shadow-size-scene-frame">
-                <canvas id="shadow-size-3d-scene" role="img" aria-label="可旋轉觀察的立體影子大小實驗：直接拖曳球體沿光源到屏幕的方向前後移動，觀察屏幕上的影子大小變化。" aria-describedby="shadow-size-scene-status shadow-size-feedback"></canvas>
+                <div id="shadow-size-3d-scene" class="optics-stage" tabindex="0" role="application" aria-label="互動式影子大小實驗：拖曳球體在光源和屏幕之間移動，觀察影子大小變化。" aria-describedby="shadow-size-scene-status shadow-size-feedback"></div>
                 <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-size-view-reset" type="button">重設視角</button></div>
                 <p class="shadow-scene-status" id="shadow-size-scene-status" aria-live="polite">球體靠近光源，屏幕上的影子較大。</p>
               </div>
@@ -689,9 +687,7 @@
       }
     })();
   </script>
-  <script type="module" src="assets/aperture-3d.js?v=known-good-three-20261025"></script>
-  <script type="module" src="assets/shadow-3d.js?v=known-good-three-20261025"></script>
-  <script type="module" src="assets/shadow-size-3d.js?v=known-good-three-20261025"></script>
+  <script type="module" src="assets/optics-labs.js?v=rebuilt-optics-20261025"></script>
   <script type="module" src="assets/light-speed-timer.js?v=light-speed-orbit-dot-after-result-20261025"></script>
   <script type="module" src="assets/shadow-theatre.js?v=known-good-three-20261025"></script>
 </body>
