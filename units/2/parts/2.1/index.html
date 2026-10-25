@@ -121,6 +121,7 @@
     #card-06 .visual svg text { font-size:18px; }
     #card-06 .visual svg .small-label { font-size:14px; }
     #cycle-wave-path { fill:none; }
+    .cycle-wave-control { margin-top:8px; padding-top:10px; border-top:1px solid var(--line); }
     .cycle-wave-control .controls { align-items:flex-start; }
     .cycle-wave-control .live-note { flex:1 1 220px; margin:0; }
     .cycle-amplitude-sequence { margin:12px 0 0; }
@@ -543,9 +544,6 @@
             <h2>一個完整的波形，是怎麼形成的？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩上的一點先往上、再往下；把它的動作記下來，會畫出什麼波形？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>看左邊同一點上下振動，右邊同步記下它的位置。從平衡位置出發，經過波峰、波谷再回來，就描出一個完整的波形。</p></div>
-            <div class="control-panel cycle-wave-control">
-              <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note" id="cycle-wave-status" role="status" aria-live="polite">每一段移動一個振幅 A；按下按鈕觀察四段上下移動。</span></div>
-            </div>
             <figure class="visual cycle-wave-figure">
               <svg viewBox="0 0 700 285" role="img" aria-label="動畫中橘色粒子從平衡位置上行到 +A 輔助線，再下行到 −A 輔助線，最後上行回到平衡位置；綠色波形從粒子所在左端向右形成">
                 <defs>
@@ -565,6 +563,9 @@
                   <path d="M90 255H600" stroke="#bc612b" stroke-width="2" marker-start="url(#arrow-cycle-lambda)" marker-end="url(#arrow-cycle-lambda)"/>
                 </g>
               </svg>
+              <div class="cycle-wave-control">
+                <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note" id="cycle-wave-status" role="status" aria-live="polite">每一段移動一個振幅 A；按下按鈕觀察四段上下移動。</span></div>
+              </div>
               <figcaption>橘色粒子與綠線左端相連；粒子上下振動時，綠色波形從繩端向右傳開。<span id="cycle-wave-complete-note" hidden>粒子完成四段位移：從平衡位置上行到 +A，再下行到平衡位置、繼續下行到 −A，最後上行回到平衡位置；每一段都是一個振幅 A。這一輪振動形成的完整波，沿繩子傳播方向的長度就是一個波長 λ。</span></figcaption>
             </figure>
             <div class="cycle-amplitude-sequence" aria-label="一個完整振動的四段位移">
