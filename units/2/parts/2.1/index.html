@@ -155,14 +155,14 @@
     .frequency-relation-formulas { display:grid; gap:7px; }
     .frequency-relation-formula { display:grid; grid-template-columns:minmax(100px,.3fr) minmax(0,1fr); align-items:center; gap:10px; padding:8px 10px; border-radius:10px; background:#fffefa; }
     .frequency-relation-formula .frequency-equation { justify-content:flex-start; font-size:1.08rem; }
-    .frequency-relation-formula p { margin:0; font-size:.9rem; line-height:1.45; }
+    .frequency-meaning-formula { display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-size:.88rem; line-height:1.4; }
+    .frequency-meaning-fraction { display:inline-grid; grid-template-rows:auto 1px auto; justify-items:center; max-width:100%; text-align:center; line-height:1.35; }
+    .frequency-meaning-fraction>span:not(.fraction-rule) { padding:0 4px; }
+    .frequency-meaning-fraction .fraction-rule { display:block; align-self:stretch; width:100%; min-width:2.5em; height:2px; margin:2px 0; padding:0; background:#314640; }
     .frequency-relation-copy { display:grid; gap:5px; align-content:center; }
     .frequency-relation-copy p { margin:0; text-align:center; }
     .frequency-relation-copy p:first-child { color:var(--ink); font-weight:650; }
     .frequency-relation-copy p:last-child { color:var(--muted); font-size:.9rem; }
-    .frequency-calculation-example { margin-top:10px; padding:12px 14px; border:1px solid var(--line); border-radius:14px; background:#f8f9f4; }
-    .frequency-calculation-example p { margin:0; }
-    .frequency-calculation-example .frequency-equation { justify-content:center; flex-wrap:wrap; margin-top:8px; }
     @media (max-width:700px) { .frequency-wave-control-grid { grid-template-columns:1fr; gap:12px; } }
     @media (max-width:520px) { .frequency-period-definitions { grid-template-columns:1fr; } .frequency-definition,.frequency-plain-definition { min-height:0; } .frequency-period-figure svg text { font-size:26px; } .frequency-period-figure .small-label { font-size:20px; } .frequency-relation-formula { grid-template-columns:1fr; justify-items:center; text-align:center; } .frequency-relation-formula .frequency-equation { justify-content:center; } .frequency-relation-copy { text-align:center; } }
     #card-06 .visual svg text { font-size:18px; }
@@ -709,21 +709,23 @@
               <div class="frequency-relation-formulas">
                 <div class="frequency-relation-formula">
                   <div class="frequency-equation" role="math" aria-label="頻率等於一除以週期"><em>f</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>T</em></span></span></div>
-                  <p>每秒完成的完整振動次數 = 1 ÷ 一次完整振動所需的秒數</p>
+                  <div class="frequency-meaning-formula" aria-label="每秒完成的完整振動次數等於一除以一次完整振動所需的秒數">
+                    <span>每秒完成的完整振動次數 =</span>
+                    <span class="frequency-meaning-fraction"><span>1</span><span class="fraction-rule"></span><span>一次完整振動所需的秒數</span></span>
+                  </div>
                 </div>
                 <div class="frequency-relation-formula">
                   <div class="frequency-equation" role="math" aria-label="週期等於一除以頻率"><em>T</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>f</em></span></span></div>
-                  <p>一次完整振動所需的秒數 = 1 ÷ 每秒完成的完整振動次數</p>
+                  <div class="frequency-meaning-formula" aria-label="一次完整振動所需的秒數等於一除以每秒完成的完整振動次數">
+                    <span>一次完整振動所需的秒數 =</span>
+                    <span class="frequency-meaning-fraction"><span>1</span><span class="fraction-rule"></span><span>每秒完成的完整振動次數</span></span>
+                  </div>
                 </div>
               </div>
               <div class="frequency-relation-copy">
                 <p>頻率越高，週期越短；兩者互為倒數。</p>
                 <p><strong>白話：</strong>一秒內完成的完整振動越多，每次完整振動所需的時間越短。</p>
               </div>
-            </div>
-            <div class="frequency-calculation-example">
-              <p><strong>例題：</strong>頻率 <em>f</em> = 4 Hz，求週期 <em>T</em>。</p>
-              <div class="frequency-equation"><em>T</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>f</em></span></span> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span>4</span></span> s = 0.25 s</div>
             </div>
           </div>
         </section>
