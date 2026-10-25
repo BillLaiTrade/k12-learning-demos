@@ -67,7 +67,7 @@ if (canvas) {
       ]) {
         context.fillStyle = color;
         context.beginPath();
-        context.roundRect(x, y, width, height, [5, 5, 10, 10]);
+        context.rect(x, y, width, height);
         context.fill();
         context.fillStyle = 'rgba(255, 224, 164, .35)';
         context.fillRect(x + 5, y + 7, width - 10, 2);
@@ -477,7 +477,7 @@ if (canvas) {
   } catch (error) {
     console.error('Shadow size 3D scene failed to initialize:', error);
     const reason = error instanceof Error ? error.message : String(error);
-    status.textContent = /webgl|context|gpu|graphics/i.test(reason)
+    status.textContent = /webgl|gpu|graphics|failed to (?:create|initialize).*context|context.*(?:webgl|gpu)/i.test(reason)
       ? '瀏覽器無法啟動 WebGL 立體畫面；請在 Chrome 設定中開啟「使用圖形加速功能」並重新啟動。'
       : `立體場景初始化失敗：${reason.slice(0, 90) || '請重新載入頁面再試。'}`;
     canvas.setAttribute('aria-label', '影子大小實驗場景無法載入');

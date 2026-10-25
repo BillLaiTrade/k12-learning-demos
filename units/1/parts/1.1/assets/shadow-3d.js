@@ -167,7 +167,7 @@ if (canvas) {
       ]) {
         context.fillStyle = color;
         context.beginPath();
-        context.roundRect(x, y, width, height, [5, 5, 10, 10]);
+        context.rect(x, y, width, height);
         context.fill();
         context.fillStyle = 'rgba(255, 224, 164, .35)';
         context.fillRect(x + 5, y + 7, width - 10, 2);
