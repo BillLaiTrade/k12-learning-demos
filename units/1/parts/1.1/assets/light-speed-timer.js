@@ -4,7 +4,6 @@ if (tapButton) {
   const timeOutput = document.querySelector('#light-time-output');
   const distanceOutput = document.querySelector('#light-distance');
   const lapOutput = document.querySelector('#earth-lap-result');
-  const lapDetail = document.querySelector('#earth-lap-detail');
   const feedback = document.querySelector('#light-speed-feedback');
   const orbitDot = document.querySelector('#light-speed-orbit-dot');
   const orbitLaps = document.querySelector('#light-speed-orbit-laps');
@@ -34,7 +33,6 @@ if (tapButton) {
   const clearOrbit = () => {
     orbitLaps.replaceChildren();
     moveOrbitDot(108, 72, 0);
-    lapDetail.hidden = true;
   };
 
   const drawOrbit = (laps) => {
@@ -70,12 +68,6 @@ if (tapButton) {
       partialPath.style.strokeDasharray = `${partialLap * length} ${length}`;
     }
     moveOrbitDot(finalRx, finalRy, partialLap);
-    lapDetail.textContent = wholeLaps === 0
-      ? `未滿 1 圈・已走 ${formatLaps(partialLap)} 圈`
-      : partialLap > 0
-        ? `${wholeLaps} 圈完整＋再走 ${formatLaps(partialLap)} 圈`
-        : `完成 ${wholeLaps} 圈`;
-    lapDetail.hidden = false;
   };
 
   const showMeasurement = (seconds) => {
