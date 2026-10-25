@@ -648,7 +648,7 @@
                 <strong>同一個繩點的位移—時間圖</strong>
                 <span class="frequency-graph-values"><span id="graph-frequency-value">f = 1 Hz</span><span id="graph-period-value">T = 1.00 s</span></span>
               </div>
-              <svg id="frequency-period-graph" viewBox="0 0 760 310" role="img" aria-label="固定觀察一秒內，同一個繩點位移隨時間的變化；目前頻率一赫茲，週期一秒">
+              <svg id="frequency-period-graph" viewBox="0 0 760 310" role="img" aria-label="同一個繩點的位移隨時間持續振動；目前頻率一赫茲，週期一秒">
                 <defs>
                   <marker id="frequency-time-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#314640"/></marker>
                   <marker id="frequency-period-arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#bc612b"/></marker>
@@ -664,8 +664,8 @@
                 <path id="frequency-period-guides" d="M80 67V260M620 67V260" fill="none" stroke="#d98a66" stroke-width="1.2" stroke-dasharray="4 5"/>
                 <text id="frequency-period-bracket-label" x="350" y="55" text-anchor="middle" fill="#bc612b">T = 1.00 s</text>
                 <circle id="frequency-period-cursor" cx="80" cy="170" r="7" class="marker"/>
-                <text x="80" y="286" text-anchor="middle" class="small-label">0 s</text>
-                <text x="620" y="286" text-anchor="middle" class="small-label">1 s</text>
+                <text x="80" y="286" text-anchor="middle" class="small-label">現在</text>
+                <text x="620" y="286" text-anchor="middle" class="small-label">未來 1 s</text>
                 <text x="670" y="180" class="small-label">時間</text>
                 <text x="33" y="75" class="small-label">位移</text>
               </svg>
@@ -1091,13 +1091,31 @@
       const frequencyPeriodGraph=document.querySelector("#frequency-period-graph");
       if(frequencyStepDown&&frequencyStepUp&&frequencyControlValue&&periodRange&&periodControlValue&&periodOneCycleButton&&periodTimerReadout&&frequencyPeriodWave&&frequencyPeriodCursor&&frequencyPeriodBracket&&frequencyPeriodGuides&&frequencyPeriodBracketLabel&&graphFrequencyValue&&graphPeriodValue&&frequencyCycleCount&&frequencyPeriodGraph){
         const graphStartX=80,graphWidth=540,graphMidY=170,graphAmplitude=70;
-        let frequency=1,periodAnimationFrame=0;
+        let frequency=1,periodAnimationFrame=0,waveAnimationFrame=0,waveStartTime=null,currentWavePhase=0;
         const formatFrequency=value=>String(Number(value.toFixed(2)));
         const formatPeriod=value=>{const rounded=Number(value.toFixed(4));return Number.isInteger(rounded)?rounded.toFixed(2):String(rounded);};
+        const drawFrequencyPeriodWave=phase=>{
+          let path=`M${graphStartX} ${graphMidY-graphAmplitude*Math.sin(phase)}`;
+          const samples=240;
+          for(let index=1;index<=samples;index++){
+            const time=index/samples;
+            const x=graphStartX+graphWidth*time;
+            const y=graphMidY-graphAmplitude*Math.sin(phase+2*Math.PI*frequency*time);
+            path+=` L${x.toFixed(2)} ${y.toFixed(2)}`;
+          }
+          frequencyPeriodWave.setAttribute("d",path);
+          frequencyPeriodCursor.setAttribute("cx",String(graphStartX));
+          frequencyPeriodCursor.setAttribute("cy",String(graphMidY-graphAmplitude*Math.sin(phase)));
+        };
+        const animateFrequencyPeriodWave=time=>{
+          if(waveStartTime===null)waveStartTime=time;
+          currentWavePhase=2*Math.PI*frequency*((time-waveStartTime)/1000);
+          drawFrequencyPeriodWave(currentWavePhase);
+          waveAnimationFrame=window.requestAnimationFrame(animateFrequencyPeriodWave);
+        };
         const resetPeriodTimer=()=>{
           if(periodAnimationFrame)cancelAnimationFrame(periodAnimationFrame);
           periodAnimationFrame=0;periodOneCycleButton.disabled=false;
-          frequencyPeriodCursor.setAttribute("cx",String(graphStartX));frequencyPeriodCursor.setAttribute("cy",String(graphMidY));
           periodTimerReadout.textContent="按下「計時一輪」，觀察一輪所需的時間。";
         };
         const updateFrequencyPeriod=({syncPeriod=true}={})=>{
@@ -1110,16 +1128,8 @@
           frequencyCycleCount.textContent=`一秒完成 ${formatFrequency(frequency)} 輪`;
           frequencyStepDown.disabled=frequency<=1;frequencyStepUp.disabled=frequency>=4;
           periodRange.setAttribute("aria-valuetext",periodText);
-          frequencyPeriodGraph.setAttribute("aria-label",`固定觀察一秒內，同一個繩點位移隨時間的變化；目前頻率 ${frequencyText}，週期 ${periodText}`);
-          let path=`M${graphStartX} ${graphMidY}`;
-          const samples=240;
-          for(let index=1;index<=samples;index++){
-            const time=index/samples;
-            const x=graphStartX+graphWidth*time;
-            const y=graphMidY-graphAmplitude*Math.sin(2*Math.PI*frequency*time);
-            path+=` L${x.toFixed(2)} ${y.toFixed(2)}`;
-          }
-          frequencyPeriodWave.setAttribute("d",path);
+          frequencyPeriodGraph.setAttribute("aria-label",`同一個繩點的位移隨時間持續振動；目前頻率 ${frequencyText}，週期 ${periodText}`);
+          drawFrequencyPeriodWave(currentWavePhase);
           const periodEndX=graphStartX+graphWidth*period;
           frequencyPeriodBracket.setAttribute("d",`M${graphStartX} 65H${periodEndX.toFixed(2)}`);
           frequencyPeriodGuides.setAttribute("d",`M${graphStartX} 67V260M${periodEndX.toFixed(2)} 67V260`);
@@ -1132,24 +1142,21 @@
         periodRange.addEventListener("input",()=>{frequency=1/Number(periodRange.value);updateFrequencyPeriod({syncPeriod:false});});
         periodOneCycleButton.addEventListener("click",()=>{
           resetPeriodTimer();periodOneCycleButton.disabled=true;
-          const selectedFrequency=frequency,selectedPeriod=1/selectedFrequency;
-          const playbackDuration=selectedPeriod*1000;
+          const selectedPeriod=1/frequency;
           let startTime=null;
           const animateCycle=time=>{
             if(startTime===null)startTime=time;
-            const progress=Math.min(1,(time-startTime)/playbackDuration);
-            const elapsed=selectedPeriod*progress;
-            const x=graphStartX+graphWidth*elapsed;
-            const y=graphMidY-graphAmplitude*Math.sin(2*Math.PI*selectedFrequency*elapsed);
-            frequencyPeriodCursor.setAttribute("cx",String(x));frequencyPeriodCursor.setAttribute("cy",String(y));
+            const elapsed=Math.min(selectedPeriod,(time-startTime)/1000);
+            const progress=elapsed/selectedPeriod;
             periodTimerReadout.textContent=`計時中：${formatPeriod(elapsed)} / ${formatPeriod(selectedPeriod)} s`;
             if(progress<1)periodAnimationFrame=requestAnimationFrame(animateCycle);
             else{periodAnimationFrame=0;periodOneCycleButton.disabled=false;periodTimerReadout.textContent=`一輪所需時間：${formatPeriod(selectedPeriod)} s（週期 T）`;
-              frequencyPeriodCursor.setAttribute("cx",String(graphStartX+graphWidth*selectedPeriod));frequencyPeriodCursor.setAttribute("cy",String(graphMidY));}
+            }
           };
           periodAnimationFrame=requestAnimationFrame(animateCycle);
         });
         updateFrequencyPeriod();
+        waveAnimationFrame=window.requestAnimationFrame(animateFrequencyPeriodWave);
       }
 
       const frequencySlider=document.querySelector("#frequency-slider");
