@@ -67,6 +67,11 @@
     input[type="range"] { width:min(100%,360px); accent-color:var(--green); }
     output { min-width:4.5em; color:var(--green); font-weight:800; }
     .readout { margin:10px 0 0; padding:10px 13px; border-radius:12px; background:#eaf2e8; color:#315a46; font-weight:700; }
+    .mirror-types { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; margin:16px 0 8px; }
+    .mirror-type-card { padding:15px; border:1px solid var(--line); border-radius:16px; background:#fffdf8; }
+    .mirror-type-card h3 { margin:0 0 6px; color:var(--green); font-size:1.08rem; }
+    .mirror-type-card svg { display:block; width:100%; height:auto; }
+    .mirror-type-card p { margin:7px 0 0; color:var(--muted); font-size:.9rem; }
     .reflection-ray { fill:none; stroke:#d99a26; stroke-width:5; stroke-linecap:round; }
     .ray-arrow { fill:#d99a26; }
     .normal-line { stroke:#78877e; stroke-width:2; stroke-dasharray:7 6; }
@@ -99,6 +104,7 @@
       .card-side h3 { margin:0; }
       .card-role { display:none; }
       .visual { padding:11px; }
+      .mirror-types { grid-template-columns:1fr; }
     }
     @media(max-width:460px) { .shell { width:calc(100% - 20px); } .route { margin-inline:-10px; } .brand-row { align-items:flex-start; } .section-top { align-items:start; } .progress-copy { font-size:.82rem; } .visual { padding:8px; } .range-row { display:grid; grid-template-columns:1fr auto; gap:5px 10px; } .range-row label { grid-column:1/-1; } .range-row input { width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; } }
@@ -120,10 +126,10 @@
     </div>
   </header>
   <main class="shell">
-    <div class="section-top"><div><h2>沿著探索路線，找出反射規律</h2><progress id="lesson-progress" max="5" value="1" aria-label="學習路線閱讀進度"></progress></div><span class="progress-copy" id="progress-copy" aria-live="polite">第 1 / 5 段</span></div>
+    <div class="section-top"><div><h2>沿著探索路線，找出反射規律</h2><progress id="lesson-progress" max="6" value="1" aria-label="學習路線閱讀進度"></progress></div><span class="progress-copy" id="progress-copy" aria-live="polite">第 1 / 6 段</span></div>
     <div class="lesson-layout">
       <nav class="route" aria-label="學習路線"><p class="route-label">學習路線</p><div class="route-inner">
-        <a href="#card-01" aria-current="step"><b>01</b>不同表面的反射</a><a href="#card-02"><b>02</b>反射方向的規律</a><a href="#card-03"><b>03</b>面鏡裡的像在哪裡</a><a href="#card-04"><b>04</b>面鏡成像的特性</a><a href="#card-05"><b>05</b>用面鏡看見牆角</a>
+        <a href="#card-01" aria-current="step"><b>01</b>不同表面的反射</a><a href="#card-02"><b>02</b>反射方向的規律</a><a href="#card-03"><b>03</b>面鏡裡的像在哪裡</a><a href="#card-04"><b>04</b>面鏡成像的特性</a><a href="#card-05"><b>05</b>認識凹面鏡和凸面鏡</a><a href="#card-06"><b>06</b>面鏡的生活應用</a>
       </div></nav>
       <div class="cards">
         <section class="lesson-card" id="card-01">
@@ -205,9 +211,22 @@
           </div>
         </section>
 
-        <section class="lesson-card end-card" id="card-05">
-          <aside class="card-side"><span class="card-number">05</span><h3>把規律用在生活裡</h3><span class="card-role">兩次反射組成潛望鏡</span></aside>
-          <div class="card-main"><h2>兩面鏡子要怎麼擺，才能看見牆角另一側？</h2><p>阿公和小葵把兩面平面鏡裝進紙筒。拖動滑桿改變上方鏡面的角度，觀察光路能不能依序轉向下方鏡面，再進入眼睛。</p>
+        <section class="lesson-card" id="card-05">
+          <aside class="card-side"><span class="card-number">05</span><h3>認識凹面鏡和凸面鏡</h3><span class="card-role">比較形狀、反射光和用途</span></aside>
+          <div class="card-main"><h2>凹面鏡和凸面鏡會怎麼改變反射光？</h2><p>除了平面鏡，生活中也會用到凹面鏡和凸面鏡。觀察反射面的形狀、平行光反射後的大致方向，以及它們在生活中的用途。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>凹面鏡和凸面鏡看起來不一樣，它們反射光的方式和用途也不同嗎？</p></div>
+            <div class="mirror-types">
+              <article class="mirror-type-card"><h3>凹面鏡</h3><svg viewBox="0 0 300 190" role="img" aria-label="平行光照向凹面鏡後，反射光會聚的示意圖"><defs><marker id="curve-arrow-concave" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8Z" fill="#d99a26"/></marker></defs><path d="M225 25Q278 95 225 165" fill="none" stroke="#526a5d" stroke-width="10" stroke-linecap="round"/><path d="M218 25Q271 95 218 165" fill="none" stroke="#c8d5c8" stroke-width="3"/><path d="M22 58H250M22 95H271M22 132H250" fill="none" stroke="#d99a26" stroke-width="3.5" stroke-linecap="round" marker-end="url(#curve-arrow-concave)"/><path d="M250 58 142 95M271 95 142 95M250 132 142 95" fill="none" stroke="#c77e24" stroke-width="3.5" stroke-linecap="round" marker-end="url(#curve-arrow-concave)"/><circle cx="142" cy="95" r="5" fill="#176b53"/><text x="142" y="115" text-anchor="middle" fill="#315a46" font-size="13">光線較集中</text><text x="26" y="181" fill="#64736d" font-size="12">平行光</text></svg><p>反射面向內彎，平行入射光反射後會聚。常見用途：化妝鏡、牙科檢查鏡、手電筒反光罩。</p></article>
+              <article class="mirror-type-card"><h3>凸面鏡</h3><svg viewBox="0 0 300 190" role="img" aria-label="平行光照向凸面鏡後，反射光向外散開的示意圖"><defs><marker id="curve-arrow-convex" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8Z" fill="#d99a26"/></marker></defs><path d="M225 25Q172 95 225 165" fill="none" stroke="#526a5d" stroke-width="10" stroke-linecap="round"/><path d="M232 25Q179 95 232 165" fill="none" stroke="#c8d5c8" stroke-width="3"/><path d="M22 58H195M22 95H172M22 132H195" fill="none" stroke="#d99a26" stroke-width="3.5" stroke-linecap="round" marker-end="url(#curve-arrow-convex)"/><path d="M195 58 36 17M172 95 30 95M195 132 36 173" fill="none" stroke="#c77e24" stroke-width="3.5" stroke-linecap="round" marker-end="url(#curve-arrow-convex)"/><text x="102" y="181" text-anchor="middle" fill="#315a46" font-size="13">反射光向外散開</text></svg><p>反射面向外凸，反射光向外散開，能看到較廣的範圍。常見用途：道路轉角鏡、車輛後視鏡。</p></article>
+            </div>
+            <p class="visual-caption">先認識凹面鏡、凸面鏡的形狀、反射光趨勢和生活用途；圖示用平行光說明大致方向。</p>
+            <div class="takeaway">凹面鏡的反射光較集中；凸面鏡的反射光向外散開，視野較廣。兩者都是利用光的反射。</div>
+          </div>
+        </section>
+
+        <section class="lesson-card end-card" id="card-06">
+          <aside class="card-side"><span class="card-number">06</span><h3>面鏡的生活應用</h3><span class="card-role">兩次反射組成潛望鏡</span></aside>
+          <div class="card-main"><h2>兩面平面鏡要怎麼擺，才能看見牆角另一側？</h2><p>阿公和小葵把兩面平面鏡裝進紙筒。拖動滑桿改變上方鏡面的角度，觀察光路能不能依序轉向下方鏡面，再進入眼睛。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>光要轉兩次彎，才能從牆角外面跑到我的眼睛裡嗎？</p></div>
             <div class="range-row"><label for="periscope-angle">上方鏡面角度</label><input id="periscope-angle" type="range" min="30" max="60" value="45"><output id="periscope-output" for="periscope-angle">45°</output></div>
             <div class="visual"><svg viewBox="0 0 620 350" role="img" aria-label="兩面平面鏡組成的潛望鏡反射光路">
@@ -224,7 +243,7 @@
               <div class="readout" id="periscope-readout" aria-live="polite">兩面鏡面約 45°，光線經兩次反射後進入眼睛。</div>
             </div>
             <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>光在上方鏡面反射向下，再在下方鏡面反射進入眼睛。調整鏡面的角度，讓每次反射都符合反射定律，就能把牆角外的光送到眼睛。</p></div>
-            <div class="takeaway">本段結論：光在表面反射時遵守反射定律，光路可以逆向；面鏡能改變光的方向並形成影像。理解這些規律，就能解釋鏡中成像，也能設計簡單的潛望鏡。</div>
+            <div class="takeaway">兩面平面鏡依照反射定律改變光的方向，讓牆角外的光經兩次反射後進入眼睛；潛望鏡就是面鏡反射的生活應用。</div>
           </div>
         </section>
       </div>
