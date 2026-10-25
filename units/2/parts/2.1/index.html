@@ -669,22 +669,21 @@
               </div>
               <svg id="frequency-period-graph" viewBox="0 0 760 310" role="img" aria-label="繩上的波形持續向右傳播；雙向箭頭標示一個波長；目前頻率一赫茲，週期一秒">
                 <defs>
-                  <marker id="frequency-position-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#314640"/></marker>
+                  <marker id="frequency-displacement-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#314640"/></marker>
                   <marker id="frequency-wavelength-marker" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#bc612b"/></marker>
                 </defs>
                 <text x="38" y="103" text-anchor="end" class="small-label">+A</text>
                 <text x="38" y="176" text-anchor="end" class="small-label">平衡</text>
                 <text x="38" y="248" text-anchor="end" class="small-label">−A</text>
                 <path d="M52 100H642 M52 240H642" fill="none" stroke="#c4d0c7" stroke-width="1.3" stroke-dasharray="5 6"/>
-                <path d="M52 170H654" class="equilibrium" marker-end="url(#frequency-position-arrow)"/>
-                <path d="M80 252V78" fill="none" stroke="#84988a" stroke-width="1.6" marker-end="url(#frequency-position-arrow)"/>
+                <path d="M52 170H642" class="equilibrium"/>
+                <path d="M80 252V78" fill="none" stroke="#84988a" stroke-width="1.6" marker-end="url(#frequency-displacement-arrow)"/>
                 <path id="frequency-period-wave" class="wave-line" d="M80 170"/>
                 <path id="frequency-wavelength-arrow" d="M80 65H440" fill="none" stroke="#bc612b" stroke-width="2" marker-start="url(#frequency-wavelength-marker)" marker-end="url(#frequency-wavelength-marker)"/>
                 <path id="frequency-wavelength-guides" d="M80 67V260M440 67V260" fill="none" stroke="#d98a66" stroke-width="1.2" stroke-dasharray="4 5"/>
                 <text id="frequency-wavelength-label" x="260" y="55" text-anchor="middle" fill="#bc612b">一個波長 λ</text>
                 <circle id="frequency-period-cursor" cx="80" cy="170" r="7" class="marker"/>
                 <text x="80" y="286" text-anchor="middle" class="small-label">0</text>
-                <text x="670" y="180" class="small-label">位置</text>
                 <text x="33" y="75" class="small-label">位移</text>
               </svg>
               <div class="frequency-wave-controls" aria-label="調整頻率和週期，觀察繩波變化">
