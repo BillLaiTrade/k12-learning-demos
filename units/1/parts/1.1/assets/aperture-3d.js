@@ -2,9 +2,10 @@ import * as THREE from './vendor/three/build/three.module.js';
 
 const canvas = document.querySelector('#aperture-3d-scene');
 if (canvas) {
+  const stageColor = '#b7c4bc';
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#dce4df');
-  scene.fog = new THREE.Fog('#dce4df', 15, 32);
+  scene.background = new THREE.Color(stageColor);
+  scene.fog = new THREE.Fog(stageColor, 15, 32);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -77,7 +78,7 @@ if (canvas) {
 
   const material = (color, options = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.66, metalness: 0.08, ...options });
   const mats = {
-    floor: material('#dce4df'),
+    floor: material(stageColor),
     benchTop: new THREE.MeshPhysicalMaterial({ color: '#fff3df', map: woodTexture, roughness: 0.46, metalness: 0.015, clearcoat: 0.2, clearcoatRoughness: 0.58 }),
     benchSide: material('#78563a', { roughness: 0.55 }),
     rail: material('#87928d', { metalness: 0.64, roughness: 0.35 }),
