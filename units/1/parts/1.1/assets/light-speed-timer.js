@@ -11,7 +11,7 @@ if (tapButton) {
   const LIGHT_SPEED_KM_PER_SECOND = 300_000;
   const EARTH_EQUATOR_KM = 40_000;
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const orbitCenter = 125;
+  const orbitCenter = 150;
   const orbitRotation = -24 * Math.PI / 180;
   let phase = 'ready';
   let startTime = 0;
@@ -27,13 +27,13 @@ if (tapButton) {
     const y = ry * Math.sin(angle);
     const rotatedX = orbitCenter + x * Math.cos(orbitRotation) - y * Math.sin(orbitRotation);
     const rotatedY = orbitCenter + x * Math.sin(orbitRotation) + y * Math.cos(orbitRotation);
-    orbitDot.style.left = `${rotatedX / 250 * 100}%`;
-    orbitDot.style.top = `${rotatedY / 250 * 100}%`;
+    orbitDot.style.left = `${rotatedX / 300 * 100}%`;
+    orbitDot.style.top = `${rotatedY / 300 * 100}%`;
   };
 
   const clearOrbit = () => {
     orbitLaps.replaceChildren();
-    moveOrbitDot(90, 54, 0);
+    moveOrbitDot(108, 72, 0);
     lapDetail.hidden = true;
   };
 
@@ -43,7 +43,7 @@ if (tapButton) {
     const wholeLaps = Math.floor(displayLaps);
     const partialLap = Math.round((displayLaps - wholeLaps) * 10) / 10;
     const ringCount = Math.ceil(displayLaps);
-    const ringSpacing = ringCount > 1 ? Math.min(14, 40 / (ringCount - 1)) : 8;
+    const ringSpacing = ringCount > 1 ? Math.min(10, 32 / (ringCount - 1)) : 8;
     const verticalSpacing = ringSpacing * 0.55;
     const addOrbitPath = (rx, ry, partial = false) => {
       const path = document.createElementNS(SVG_NS, 'ellipse');
@@ -58,13 +58,13 @@ if (tapButton) {
       return path;
     };
     for (let index = 0; index < wholeLaps; index += 1) {
-      addOrbitPath(90 + index * ringSpacing, 54 + index * verticalSpacing);
+      addOrbitPath(108 + index * ringSpacing, 72 + index * verticalSpacing);
     }
-    let finalRx = wholeLaps > 0 ? 90 + (wholeLaps - 1) * ringSpacing : 90;
-    let finalRy = wholeLaps > 0 ? 54 + (wholeLaps - 1) * verticalSpacing : 54;
+    let finalRx = wholeLaps > 0 ? 108 + (wholeLaps - 1) * ringSpacing : 108;
+    let finalRy = wholeLaps > 0 ? 72 + (wholeLaps - 1) * verticalSpacing : 72;
     if (partialLap > 0) {
-      finalRx = 90 + wholeLaps * ringSpacing;
-      finalRy = 54 + wholeLaps * verticalSpacing;
+      finalRx = 108 + wholeLaps * ringSpacing;
+      finalRy = 72 + wholeLaps * verticalSpacing;
       const partialPath = addOrbitPath(finalRx, finalRy, true);
       const length = partialPath.getTotalLength();
       partialPath.style.strokeDasharray = `${partialLap * length} ${length}`;

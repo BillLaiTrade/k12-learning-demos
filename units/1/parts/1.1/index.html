@@ -204,11 +204,11 @@
     .light-speed-feedback { min-height: 45px; margin: 10px 0 0; padding: 9px 11px; border-radius: 11px; background: #f0f5eb; color: #405851; font-size: .84rem; }
     .light-speed-earth { display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; background: radial-gradient(ellipse at 50% 45%, #edf4ec 0, #f8f7ef 70%); text-align: center; }
     .light-speed-earth h3 { align-self: stretch; text-align: left; }
-    .light-speed-earth-visual { position: relative; display: grid; place-items: center; width: min(100%, 250px); aspect-ratio: 1; margin: 4px auto 0; }
-    .light-speed-earth-visual img { position: relative; z-index: 1; display: block; width: 60%; height: 60%; object-fit: contain; filter: drop-shadow(0 9px 12px #183c3540); }
+    .light-speed-earth-visual { position: relative; display: grid; place-items: center; width: min(100%, 300px); aspect-ratio: 1; margin: 4px auto 0; }
+    .light-speed-earth-visual img { position: relative; z-index: 1; display: block; width: 69%; height: 69%; object-fit: contain; filter: drop-shadow(0 9px 12px #183c3540); }
     .light-speed-orbit-trails { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-    .light-speed-orbit-track { fill: none; stroke: #bda66d; stroke-width: 1.15; opacity: .3; transform: rotate(-24deg); transform-origin: 125px 125px; }
-    .light-speed-orbit-lap { fill: none; stroke: #d4ad58; stroke-width: 1.65; stroke-linecap: round; opacity: .94; transform: rotate(-24deg); transform-origin: 125px 125px; }
+    .light-speed-orbit-track { fill: none; stroke: #bda66d; stroke-width: 1.15; opacity: .3; transform: rotate(-24deg); transform-origin: 150px 150px; }
+    .light-speed-orbit-lap { fill: none; stroke: #d4ad58; stroke-width: 1.65; stroke-linecap: round; opacity: .94; transform: rotate(-24deg); transform-origin: 150px 150px; }
     .light-speed-orbit-lap.is-partial { stroke: #f0b746; stroke-width: 2.8; opacity: 1; filter: drop-shadow(0 1px 2px #be8b3650); }
     .light-speed-orbit-dot { position: absolute; z-index: 3; left: 50%; top: 50%; width: 12px; height: 12px; border: 2px solid white; border-radius: 50%; background: #efb94f; box-shadow: 0 0 0 4px #efb94f40, 0 0 15px #f1ba54; transform: translate(-50%, -50%); }
     .light-speed-laps { margin: -3px 0 0 !important; color: #176b53 !important; font-size: 1.15rem !important; font-weight: 850; }
@@ -550,7 +550,7 @@
                   <h3 id="light-speed-earth-title">換算成繞地球</h3>
                   <div class="light-speed-earth-visual" aria-hidden="true">
                     <img src="assets/light-speed-earth.png" alt="">
-                  <svg class="light-speed-orbit-trails" viewBox="0 0 250 250" aria-hidden="true"><ellipse class="light-speed-orbit-track" cx="125" cy="125" rx="90" ry="54"/><g id="light-speed-orbit-laps"></g></svg>
+                  <svg class="light-speed-orbit-trails" viewBox="0 0 300 300" aria-hidden="true"><ellipse class="light-speed-orbit-track" cx="150" cy="150" rx="108" ry="72"/><g id="light-speed-orbit-laps"></g></svg>
                     <span class="light-speed-orbit-dot" id="light-speed-orbit-dot"></span>
                   </div>
                   <p class="light-speed-laps" id="earth-lap-result" aria-live="polite">點擊兩次後顯示圈數</p>
@@ -693,7 +693,7 @@
   <script type="module" src="assets/aperture-3d.js?v=dialogue-story-20261024"></script>
   <script type="module" src="assets/shadow-3d.js?v=shadow-short-rail-20261024"></script>
   <script type="module" src="assets/shadow-size-3d.js?v=shadow-size-drag-only-20261024"></script>
-  <script type="module" src="assets/light-speed-timer.js?v=light-speed-orbits-expanded-20261025"></script>
+  <script type="module" src="assets/light-speed-timer.js?v=light-speed-orbits-around-large-earth-20261025"></script>
   <script type="module" src="assets/shadow-theatre.js?v=booklet-theatre-20261025-v5"></script>
 </body>
 </html>
