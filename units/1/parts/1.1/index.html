@@ -213,6 +213,79 @@
     .light-speed-earth .visual-caption { align-self: stretch; margin-top: 7px; text-align: center; }
     .light-speed-note { margin-top: 12px; }
     @media (max-width: 620px) { .light-speed-layout { grid-template-columns: 1fr; } .light-speed-measure, .light-speed-earth { padding: 15px; } .light-speed-tap { min-height: 82px; } .light-speed-earth-visual { width: min(76vw, 230px); } }
+    .booklet-route-link { margin-top: 8px; border-top: 1px solid var(--line) !important; padding-top: 14px !important; color: #795b20 !important; }
+    .booklet-route-link b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #f5e9c9; color: #795b20; }
+    .booklet-route-link[aria-current="step"] { border-left-color: #c09139 !important; background: #f8f0dd !important; color: #795b20 !important; }
+    .unit-booklet { scroll-margin-top: 22px; padding: clamp(18px, 3vw, 30px); border: 1px solid #d6c9a5; border-radius: 24px; background: linear-gradient(150deg, #fffdf7, #f8f5e9); box-shadow: 0 10px 30px #453b2210; }
+    .booklet-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .booklet-kicker { margin: 0 0 3px; color: #9a712b; font-size: .78rem; font-weight: 850; letter-spacing: .1em; }
+    .booklet-heading h2 { margin: 0 0 5px; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.3; }
+    .booklet-heading p:last-child { max-width: 700px; margin: 0; color: var(--muted); }
+    .booklet-stamp { display: grid; flex: none; place-items: center; width: 62px; height: 62px; border: 2px solid #d8bc77; border-radius: 50%; color: #9a712b; font-family: serif; font-size: 1.02rem; font-weight: 900; line-height: 1.1; text-align: center; transform: rotate(8deg); }
+    .unit-booklet > .dialogue { margin: 12px 0; }
+    .booklet-game-layout { display: grid; grid-template-columns: minmax(0, 1fr) 228px; align-items: stretch; gap: 13px; margin-top: 15px; }
+    .booklet-stage-column { min-width: 0; }
+    .booklet-stage-frame { position: relative; min-width: 0; height: clamp(340px, 43vw, 480px); overflow: hidden; border: 1px solid #263a3a; border-radius: 18px; background: #0a1726; box-shadow: 0 8px 24px #17271d26; }
+    #shadow-theatre-scene { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+    #shadow-theatre-scene:active { cursor: grabbing; }
+    #shadow-theatre-scene:focus-visible { outline: 3px solid #eac969; outline-offset: -4px; }
+    .booklet-stage-actions { position: absolute; z-index: 2; top: 10px; left: 10px; display: flex; gap: 7px; }
+    .booklet-stage-button { min-height: 40px; padding: 6px 11px; border: 1px solid #d5c79e; border-radius: 11px; background: rgb(255 251 238 / 95%); color: #2b463e; font-size: .82rem; font-weight: 800; box-shadow: 0 3px 10px #05101840; }
+    .booklet-stage-button:hover, .booklet-stage-button:focus-visible { border-color: #edbf4c; outline: 2px solid #edbf4c55; }
+    .booklet-stage-badge { position: absolute; right: 11px; bottom: 10px; display: flex; align-items: center; gap: 8px; max-width: 76%; padding: 8px 11px; border: 1px solid #e5d6a9; border-radius: 11px; background: rgb(255 251 238 / 94%); color: #344d42; font-size: .8rem; font-weight: 750; box-shadow: 0 3px 10px #05101830; }
+    .booklet-live-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #d69f35; box-shadow: 0 0 0 4px #e8c66d55; }
+    .booklet-stage-help { margin: 7px 3px 8px; color: var(--muted); font-size: .79rem; }
+    .booklet-depth-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 8px; padding: 6px 8px; border: 1px solid #e1dac9; border-radius: 11px; background: #fffdf8; }
+    .booklet-depth-controls[hidden] { display: none; }
+    .booklet-depth-controls > span { margin: 0 3px; color: var(--muted); font-size: .72rem; font-weight: 750; }
+    .booklet-depth-controls button { min-height: 34px; padding: 4px 9px; border: 1px solid #d8cda9; border-radius: 9px; background: #faf4e4; color: #675128; font-size: .75rem; font-weight: 800; }
+    .booklet-depth-controls button:hover, .booklet-depth-controls button:focus-visible { border-color: #b9872e; outline: 2px solid #d8bd7655; }
+    .booklet-depth-controls output { margin-left: auto; color: #886a2e; font-size: .7rem; }
+    .booklet-prop-tray { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+    .booklet-prop-token { display: grid; grid-template-columns: 34px minmax(0,1fr); grid-template-rows: auto auto; align-items: center; column-gap: 8px; min-width: 0; min-height: 60px; padding: 7px 9px; border: 1px solid #ded5bf; border-radius: 13px; background: #fffdf8; color: var(--ink); text-align: left; cursor: pointer; }
+    .booklet-prop-token:hover, .booklet-prop-token:focus-visible { border-color: #bd9c53; outline: 2px solid #d8bd7655; }
+    .booklet-prop-token[aria-pressed="true"] { border-color: #b9872e; background: #fbf2dc; box-shadow: inset 0 0 0 1px #b9872e; }
+    .booklet-prop-icon { display: grid; grid-row: span 2; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: #f5edda; color: #8e6728; }
+    .booklet-prop-icon svg { display: block; width: 24px; height: 24px; fill: currentColor; }
+    .booklet-prop-token > span:nth-child(2) { align-self: end; font-size: .84rem; font-weight: 850; }
+    .booklet-prop-state { align-self: start; color: var(--muted); font-size: .69rem; }
+    .booklet-prop-token.is-placed .booklet-prop-state { color: var(--green); font-weight: 800; }
+    .booklet-mission-panel { display: flex; flex-direction: column; min-width: 0; padding: 16px 14px; border: 1px solid #e2d6b9; border-radius: 17px; background: #fffdf8; box-shadow: 0 4px 14px #2f2b1b0c; }
+    .booklet-mission-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: #8f6727; font-size: .76rem; font-weight: 850; }
+    .booklet-mission-stars { color: #d2a442; letter-spacing: .13em; }
+    .booklet-mission-panel h3 { margin: 8px 0 2px; font-size: 1.25rem; }
+    .booklet-mission-panel > p { margin: 0; color: var(--muted); font-size: .81rem; line-height: 1.5; }
+    .booklet-target-card { display: grid; grid-template-columns: 1fr; justify-items: center; margin: 13px 0 10px; padding: 9px 10px 8px; border: 1px solid #eadfca; border-radius: 13px; background: #f7f4ea; color: #6e6958; font-size: .75rem; font-weight: 750; }
+    .booklet-target-card svg { display: block; width: 100%; max-width: 188px; height: 105px; margin: 4px 0 1px; }
+    .booklet-target-status { color: #88703b; font-size: .72rem; font-weight: 700; }
+    .booklet-progress-track { height: 7px; margin: 3px 0 9px; overflow: hidden; border-radius: 9px; background: #eee9dc; }
+    .booklet-progress-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #d8b351, #a77b2d); transition: width .35s ease; }
+    .booklet-slot-list { display: grid; gap: 5px; margin-bottom: 12px; }
+    .booklet-slot-list span { display: flex; align-items: center; gap: 8px; color: #758079; font-size: .79rem; transition: color .2s ease; }
+    .booklet-slot-list i { display: grid; place-items: center; width: 21px; height: 21px; border: 1px solid #ddd4bd; border-radius: 50%; color: #92886e; font-style: normal; }
+    .booklet-slot-list span.is-placed { color: #28634e; font-weight: 800; }
+    .booklet-slot-list span.is-placed i { border-color: #8eaf91; background: #e6f0e3; color: #176b53; }
+    .booklet-finish-button { width: 100%; min-height: 44px; margin-top: auto; border: 0; border-radius: 12px; background: linear-gradient(145deg, #d8ad4a, #b77d2c); color: #fffdf8; font-weight: 850; box-shadow: 0 3px 9px #96733230; }
+    .booklet-finish-button:disabled { background: #d8d4c9; color: #7e817b; box-shadow: none; cursor: not-allowed; }
+    .booklet-finish-button:not(:disabled):hover { filter: brightness(1.04); }
+    .booklet-finish-note { min-height: 35px; margin: 7px 1px 0 !important; color: #77776c !important; font-size: .72rem !important; text-align: center; }
+    .booklet-finish-note[data-done="true"] { color: #176b53 !important; font-weight: 750; }
+    .booklet-recap { margin-top: 14px; border: 1px solid #e0d6bd; border-radius: 15px; background: rgb(255 253 248 / 80%); }
+    .booklet-recap summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 62px; padding: 10px 15px; color: var(--ink); cursor: pointer; list-style: none; }
+    .booklet-recap summary::-webkit-details-marker { display: none; }
+    .booklet-recap summary span, .booklet-recap summary strong, .booklet-recap summary small { display: block; }
+    .booklet-recap summary strong { font-size: .91rem; }
+    .booklet-recap summary small { margin-top: 2px; color: var(--muted); font-size: .78rem; }
+    .booklet-recap summary b { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #f3ecd8; color: #8f6727; font-size: 1.1rem; transition: transform .2s ease; }
+    .booklet-recap[open] summary b { transform: rotate(45deg); }
+    .booklet-recap-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 0 12px 12px; }
+    .booklet-recap-grid article { min-width: 0; padding: 10px 11px; border: 1px solid #e8e2d3; border-radius: 11px; background: #fffefa; }
+    .booklet-recap-grid article > span { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 6px; border-radius: 50%; background: #f6edda; color: #926b2d; font-size: .67rem; font-weight: 850; }
+    .booklet-recap-grid article > strong { font-size: .81rem; }
+    .booklet-recap-grid article p { margin: 4px 0 0; color: var(--muted); font-size: .73rem; line-height: 1.45; }
+    @media (max-width: 900px) { .booklet-game-layout { grid-template-columns: minmax(0, 1fr) 195px; gap: 9px; } .booklet-mission-panel { padding: 13px 11px; } }
+    @media (max-width: 700px) { .booklet-game-layout { grid-template-columns: 1fr; } .booklet-stage-frame { height: clamp(310px, 72vw, 420px); } .booklet-mission-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; } .booklet-mission-top, .booklet-mission-panel h3, .booklet-mission-panel > p, .booklet-target-card, .booklet-progress-track, .booklet-slot-list, .booklet-finish-button, .booklet-finish-note { grid-column: 1 / -1; } .booklet-mission-panel h3 { margin-top: 7px; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 150px; align-items: center; justify-items: start; } .booklet-target-card svg { grid-column: 2; grid-row: 1 / span 2; height: 84px; } .booklet-target-status { align-self: start; } .booklet-slot-list { grid-template-columns: repeat(3,1fr); gap: 3px; } .booklet-slot-list span { justify-content: center; font-size: .73rem; } .booklet-recap-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 460px) { .unit-booklet { padding: 15px; border-radius: 19px; } .booklet-stamp { width: 49px; height: 49px; font-size: .82rem; } .booklet-stage-frame { height: 300px; } .booklet-stage-button { min-height: 38px; padding: 5px 9px; font-size: .76rem; } .booklet-stage-badge { font-size: .72rem; } .booklet-prop-token { grid-template-columns: 28px minmax(0,1fr); padding: 6px; column-gap: 6px; } .booklet-prop-icon { width: 28px; height: 28px; font-size: 1.1rem; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 120px; } .booklet-depth-controls { gap: 4px; padding: 5px; } .booklet-depth-controls > span { width: 100%; } .booklet-depth-controls button { flex: 1; padding-inline: 5px; font-size: .7rem; } .booklet-depth-controls output { width: 100%; margin: 0; text-align: right; } .booklet-recap-grid { gap: 6px; padding-inline: 8px; } .booklet-recap-grid article { padding: 8px; } .booklet-recap-grid article > strong { font-size: .75rem; } .booklet-recap-grid article p { font-size: .68rem; } }
     @media (max-width: 520px) {
       #aperture-3d-scene { height: 300px; }
       .aperture-scene-with-height { grid-template-columns: minmax(0, 1fr) 52px; gap: 7px; }
@@ -304,8 +377,8 @@
   </header>
   <main class="shell">
     <div class="section-top">
-      <div><h2>沿著探索路線，一步步認識光</h2><progress id="lesson-progress" max="7" value="1" aria-label="學習路線閱讀進度"></progress></div>
-      <span class="progress-copy" id="progress-copy">目前在第 1 段，共 7 段</span>
+      <div><h2>沿著探索路線，一步步認識光</h2><progress id="lesson-progress" max="6" value="1" aria-label="學習路線閱讀進度"></progress></div>
+      <span class="progress-copy" id="progress-copy">目前在第 1 段，共 6 段</span>
     </div>
     <div class="lesson-layout">
       <nav class="route" aria-label="探索路線">
@@ -317,7 +390,7 @@
           <a href="#card-04"><b>04</b><span>影子怎麼形成？</span></a>
           <a href="#card-05"><b>05</b><span>影子的大小如何改變？</span></a>
           <a href="#card-06"><b>06</b><span>光傳得有多快？</span></a>
-          <a href="#card-07"><b>07</b><span>整理：用光路解釋觀察</span></a>
+          <a class="booklet-route-link" href="#unit-booklet"><b aria-hidden="true">✦</b><span>單元小冊・月光影子劇場</span></a>
         </div>
       </nav>
       <div class="cards">
@@ -495,20 +568,49 @@
           </div>
         </section>
 
-        <section class="lesson-card end-card" id="card-07">
-          <div class="card-side"><span class="card-number">07</span><h3>把觀察連起來</h3><span class="card-role">整合理解</span></div>
-          <div class="card-main">
-            <h2>整理：用光路解釋看見與影子</h2>
-            <p>一本書本身不發光，卻能被看見；手電筒前方放一個不透明物體，屏幕上會出現影子。哪個說法能解釋這兩個現象？</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我們看過書頁反射光，也看過物體擋住光；我想把這兩種現象用光路一起說清楚。</p></div>
-            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>選一個說法，看看它能不能同時解釋看見書本和形成影子。</p></div>
-            <div class="choices" role="group" aria-label="選擇能解釋看見書本和形成影子的光路">
-              <button class="choice" type="button" data-answer="wrong" aria-pressed="false">書本自己發光；光遇到物體會繞過去</button>
-              <button class="choice" type="button" data-answer="right" aria-pressed="false">燈光照到書本後反射進眼睛；不透明物體會擋住直線光路</button>
+        <section class="unit-booklet" id="unit-booklet" aria-labelledby="unit-booklet-title">
+          <header class="booklet-heading">
+            <div><p class="booklet-kicker">第一段學習・單元小冊</p><h2 id="unit-booklet-title">月光影子劇場</h2><p>替小葵和阿公完成一幕影子戲。把舞台道具移到合適的位置，讓實際投影和目標描邊重合。</p></div>
+            <span class="booklet-stamp" aria-hidden="true">光<br>影</span>
+          </header>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我想讓月亮兔出現在幕上！可是道具要放在哪裡，影子才會剛好對上呢？</p></div>
+          <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>試著移動舞台上的剪影；影子對準淡色描邊時，提示就會退場，留下你完成的畫面。</p></div>
+          <div class="booklet-game-layout">
+            <div class="booklet-stage-column">
+              <div class="booklet-stage-frame">
+                <canvas id="shadow-theatre-scene" tabindex="0" aria-label="可旋轉的 3D 月光影子劇場。拖動月亮、兔子和樹影道具，將它們投出的影子移到屏幕上的描邊位置；拖動空白處可旋轉舞台。" aria-describedby="shadow-theatre-help"></canvas>
+                <div class="booklet-stage-actions"><button class="booklet-stage-button" id="shadow-theatre-reset" type="button">重設舞台</button><button class="booklet-stage-button" id="shadow-theatre-view" type="button">轉動舞台</button></div>
+                <div class="booklet-stage-badge"><span class="booklet-live-dot"></span><span id="shadow-theatre-status" aria-live="polite">月亮、兔子、樹影，等你上場</span></div>
+              </div>
+              <p class="booklet-stage-help" id="shadow-theatre-help">拖動道具移動位置，或拖空白處轉動舞台。選取道具後，可調整它和光源、屏幕的前後距離。</p>
+              <div class="booklet-depth-controls" id="shadow-theatre-depth-controls" hidden><span>調整前後距離</span><button type="button" data-depth-step="-1">靠近屏幕</button><button type="button" data-depth-step="1">靠近光源</button><output id="shadow-theatre-depth-readout">選一個道具</output></div>
+              <div class="booklet-prop-tray" role="group" aria-label="舞台上的可移動道具">
+                <button type="button" class="booklet-prop-token" data-prop-select="moon" aria-pressed="false"><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M16 8c-1 15 8 26 23 27-9 10-25 8-31-3C2 21 7 11 16 8Z"/></svg></span><span>月亮</span><span class="booklet-prop-state" data-prop-state="moon">待定位</span></button>
+                <button type="button" class="booklet-prop-token" data-prop-select="rabbit" aria-pressed="false"><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M13 38c-5-7 0-14 8-16-4-8-3-17 1-17 5 0 3 12 6 17 2-8 8-15 11-12 3 3-5 12-6 17 7 4 8 11 2 15-6 4-17 2-22-4Z"/></svg></span><span>兔子</span><span class="booklet-prop-state" data-prop-state="rabbit">待定位</span></button>
+                <button type="button" class="booklet-prop-token" data-prop-select="tree" aria-pressed="false"><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M23 43h5V29h11l-5-6h6l-7-8h4L27 5 17 15h4l-7 8h6l-5 6h8Z"/></svg></span><span>樹影</span><span class="booklet-prop-state" data-prop-state="tree">待定位</span></button>
+              </div>
             </div>
-            <div class="check-actions"><button class="action" id="check-answer" type="button">看看解釋</button><button class="secondary" id="reset-answer" type="button">重新選擇</button></div>
-            <div class="feedback" id="check-feedback" aria-live="polite">先選一個說法，再用光路檢查它能否同時解釋兩個現象。</div>
+            <aside class="booklet-mission-panel" aria-label="影子劇場任務">
+              <div class="booklet-mission-top"><span class="booklet-mission-number">任務 01</span><span class="booklet-mission-stars" aria-hidden="true">✦ ✦ ✦</span></div>
+              <h3>月亮兔</h3><p>讓幕上的三個影子，和目標圖案合在一起。</p>
+              <div class="booklet-target-card"><span>完成目標</span><svg viewBox="0 0 220 140" role="img" aria-label="月亮、兔子與樹影組成的剪影目標"><path d="M42 74a32 32 0 1 0 30-47A27 27 0 0 1 42 74Z" fill="#45564f"/><path d="M108 110c-19-6-21-21-12-33 5-7 11-11 12-20 1-8-2-14-5-20-1-2 1-4 3-3 9 5 16 17 15 29 4-14 13-25 23-29 2-1 4 1 2 3-7 9-11 21-8 31 2 7 10 10 15 16 13 15 7 32-8 36-11 3-25-1-37-10Z" fill="#45564f"/><path d="M165 112h48l-5-27-8 8-5-31-9 19-9-28-8 38-8-8zM185 112v20m8-20v20" fill="#45564f"/></svg><span class="booklet-target-status" id="booklet-target-status">3 個影子等待定位</span></div>
+              <div class="booklet-progress-track" role="progressbar" aria-label="影子道具對位進度" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><span id="booklet-progress-fill"></span></div>
+              <div class="booklet-slot-list"><span data-prop-slot="moon"><i>1</i>月亮</span><span data-prop-slot="rabbit"><i>2</i>兔子</span><span data-prop-slot="tree"><i>3</i>樹影</span></div>
+              <button class="booklet-finish-button" id="shadow-theatre-finish" type="button" disabled>完成演出</button>
+              <p class="booklet-finish-note" id="shadow-theatre-finish-note" aria-live="polite">道具就位後，描邊會全部消失。</p>
+            </aside>
           </div>
+          <details class="booklet-recap">
+            <summary><span><strong>翻開小冊</strong><small>回看一路收集的六個光線線索</small></span><b aria-hidden="true">＋</b></summary>
+            <div class="booklet-recap-grid">
+              <article><span>01</span><strong>光進入眼睛</strong><p>看見光源，或看見物體反射進眼睛的光。</p></article>
+              <article><span>02</span><strong>月亮和書本</strong><p>它們不是光源；反射光進入眼睛，我們才看得見。</p></article>
+              <article><span>03</span><strong>光沿直線前進</strong><p>三個小孔排成一直線，光才會穿過。</p></article>
+              <article><span>04</span><strong>影子出現</strong><p>不透明物體擋住光，屏幕上留下暗影。</p></article>
+              <article><span>05</span><strong>影子會改變</strong><p>光源、物體和屏幕的相對位置會影響影子大小。</p></article>
+              <article><span>06</span><strong>光有傳播時間</strong><p>真空中的光每秒約走 30 萬公里。</p></article>
+            </div>
+          </details>
         </section>
       </div>
     </div>
@@ -561,40 +663,22 @@
       }));
       updateNightScene();
 
-      const choices = [...document.querySelectorAll('[data-answer]')];
-      const checkFeedback = document.querySelector('#check-feedback');
-      choices.forEach((button) => button.addEventListener('click', () => {
-        choices.forEach((item) => {
-          item.setAttribute('aria-pressed', String(item === button));
-          item.classList.remove('correct', 'incorrect');
-        });
-        button.classList.add(button.dataset.answer === 'right' ? 'correct' : 'incorrect');
-        checkFeedback.textContent = '已選好，按「看看解釋」檢查光路是否能說明看見和影子。';
-        checkFeedback.dataset.state = '';
-      }));
-      document.querySelector('#check-answer').addEventListener('click', () => {
-        const selected = choices.find((button) => button.getAttribute('aria-pressed') === 'true');
-        if (!selected) {
-          checkFeedback.textContent = '先選一個說法，再看看解釋。';
-          checkFeedback.dataset.state = 'try';
-          return;
-        }
-        checkFeedback.textContent = '書本本身不發光；燈光照到書本後反射進入眼睛。光沿直線前進，不透明物體擋住光路時，屏幕上會出現影子。';
-        checkFeedback.dataset.state = selected.dataset.answer === 'right' ? 'good' : 'try';
-      });
-      document.querySelector('#reset-answer').addEventListener('click', () => {
-        choices.forEach((item) => { item.setAttribute('aria-pressed', 'false'); item.classList.remove('correct', 'incorrect'); });
-        checkFeedback.textContent = '先選一個說法，再用光路檢查它能否同時解釋兩個現象。';
-        checkFeedback.dataset.state = '';
-      });
-
       const cards = [...document.querySelectorAll('.lesson-card')];
-      const routeLinks = [...document.querySelectorAll('.route a')];
+      const routeLinks = [...document.querySelectorAll('.route a:not(.booklet-route-link)')];
+      const bookletLink = document.querySelector('.booklet-route-link');
       const progress = document.querySelector('#lesson-progress');
       const progressCopy = document.querySelector('#progress-copy');
       const setCurrent = (id) => {
+        if (id === 'unit-booklet') {
+          routeLinks.forEach((link) => link.removeAttribute('aria-current'));
+          bookletLink.setAttribute('aria-current', 'step');
+          progress.value = cards.length;
+          progressCopy.textContent = '六段學習完成・單元小冊';
+          return;
+        }
         const index = cards.findIndex((card) => card.id === id);
         if (index < 0) return;
+        bookletLink.removeAttribute('aria-current');
         routeLinks.forEach((link) => {
           if (link.hash === `#${id}`) link.setAttribute('aria-current', 'step');
           else link.removeAttribute('aria-current');
@@ -608,6 +692,7 @@
           if (visible) setCurrent(visible.target.id);
         }, { rootMargin: '-18% 0px -58% 0px', threshold: [0, .15, .35, .6] });
         cards.forEach((card) => observer.observe(card));
+        observer.observe(document.querySelector('#unit-booklet'));
       }
     })();
   </script>
@@ -615,5 +700,6 @@
   <script type="module" src="assets/shadow-3d.js?v=shadow-short-rail-20261024"></script>
   <script type="module" src="assets/shadow-size-3d.js?v=shadow-size-drag-only-20261024"></script>
   <script type="module" src="assets/light-speed-timer.js?v=light-speed-double-tap-20261024"></script>
+  <script type="module" src="assets/shadow-theatre.js?v=booklet-theatre-20261025-v2"></script>
 </body>
 </html>
