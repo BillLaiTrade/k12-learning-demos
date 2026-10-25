@@ -650,7 +650,7 @@
         nightImage.alt = state.alt;
         moonToggle.querySelector('.switch-status').textContent = moonOn ? '開啟' : '關閉';
         lampToggle.querySelector('.switch-status').textContent = lampOn ? '開啟' : '關閉';
-        pathLegend.innerHTML = `${moonOn ? '<span class="path-chip">陽光 → 月球 → 眼睛</span>' : '<span class="path-chip inactive">月亮的反射光路中斷</span>'}${lampOn ? '<span class="path-chip lamp">檯燈 → 書頁 → 眼睛</span>' : '<span class="path-chip inactive">檯燈照明光路中斷</span>'}`;
+        pathLegend.innerHTML = `${moonOn ? '<span class="path-chip">陽光 → 月球 → 書頁 → 眼睛</span>' : '<span class="path-chip inactive">月亮的反射光路中斷</span>'}${lampOn ? '<span class="path-chip lamp">檯燈 → 書頁 → 眼睛</span>' : '<span class="path-chip inactive">檯燈照明光路中斷</span>'}`;
         nightFeedback.textContent = state.text;
       };
       [moonToggle, lampToggle].forEach((button) => button.addEventListener('click', () => {
