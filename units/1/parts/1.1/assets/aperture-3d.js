@@ -1,5 +1,4 @@
-import * as THREE from './vendor/three-webgl1/build/three.module.min.js?v=three-r160-webgl1';
-import { manageRendererContextVisibility } from './renderer-visibility.js';
+import * as THREE from './vendor/three/build/three.module.js?v=known-good-three-20261025';
 
 const waitUntilCanvasIsNearViewport = (canvas) => new Promise((resolve) => {
   if (!('IntersectionObserver' in window)) {
@@ -23,7 +22,6 @@ if (canvas) {
   scene.fog = new THREE.Fog('#dce4df', 15, 32);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-  manageRendererContextVisibility(renderer, canvas);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
