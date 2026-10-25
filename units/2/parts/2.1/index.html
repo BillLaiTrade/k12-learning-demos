@@ -150,9 +150,12 @@
     .frequency-graph-hint { color:var(--muted); font-size:.84rem; }
     .frequency-graph-values { display:flex; flex-wrap:wrap; gap:8px; }
     .frequency-graph-values span { padding:3px 8px; border-radius:8px; background:#e5f2e9; color:#315a46; font-size:.84rem; font-weight:750; }
-    .frequency-relation { display:grid; grid-template-columns:auto auto auto minmax(0,1fr); align-items:center; gap:10px; margin:14px 0 0; padding:14px; border:1px solid #efcfaa; border-radius:14px; background:#fff8ef; }
+    .frequency-relation { display:grid; gap:10px; margin:14px 0 0; padding:14px; border:1px solid #efcfaa; border-radius:14px; background:#fff8ef; }
     .frequency-relation-title { color:var(--orange); font-weight:800; }
-    .frequency-relation .frequency-equation { font-size:1.12rem; }
+    .frequency-relation-formulas { display:grid; gap:7px; }
+    .frequency-relation-formula { display:grid; grid-template-columns:minmax(100px,.3fr) minmax(0,1fr); align-items:center; gap:10px; padding:8px 10px; border-radius:10px; background:#fffefa; }
+    .frequency-relation-formula .frequency-equation { justify-content:flex-start; font-size:1.08rem; }
+    .frequency-relation-formula p { margin:0; font-size:.9rem; line-height:1.45; }
     .frequency-relation-copy { display:grid; gap:5px; align-content:center; }
     .frequency-relation-copy p { margin:0; text-align:center; }
     .frequency-relation-copy p:first-child { color:var(--ink); font-weight:650; }
@@ -161,7 +164,7 @@
     .frequency-calculation-example p { margin:0; }
     .frequency-calculation-example .frequency-equation { justify-content:center; flex-wrap:wrap; margin-top:8px; }
     @media (max-width:700px) { .frequency-wave-control-grid { grid-template-columns:1fr; gap:12px; } }
-    @media (max-width:520px) { .frequency-period-definitions { grid-template-columns:1fr; } .frequency-definition,.frequency-plain-definition { min-height:0; } .frequency-period-figure svg text { font-size:26px; } .frequency-period-figure .small-label { font-size:20px; } .frequency-relation { grid-template-columns:1fr; justify-items:center; text-align:center; } }
+    @media (max-width:520px) { .frequency-period-definitions { grid-template-columns:1fr; } .frequency-definition,.frequency-plain-definition { min-height:0; } .frequency-period-figure svg text { font-size:26px; } .frequency-period-figure .small-label { font-size:20px; } .frequency-relation-formula { grid-template-columns:1fr; justify-items:center; text-align:center; } .frequency-relation-formula .frequency-equation { justify-content:center; } .frequency-relation-copy { text-align:center; } }
     #card-06 .visual svg text { font-size:18px; }
     #card-06 .visual svg .small-label { font-size:14px; }
     #cycle-wave-path { fill:none; }
@@ -703,8 +706,16 @@
             </figure>
             <div class="frequency-relation" aria-label="頻率和週期的公式與白話解釋">
               <span class="frequency-relation-title">公式與關係</span>
-              <div class="frequency-equation" role="math" aria-label="頻率等於一除以週期"><em>f</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>T</em></span></span></div>
-              <div class="frequency-equation" role="math" aria-label="週期等於一除以頻率"><em>T</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>f</em></span></span></div>
+              <div class="frequency-relation-formulas">
+                <div class="frequency-relation-formula">
+                  <div class="frequency-equation" role="math" aria-label="頻率等於一除以週期"><em>f</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>T</em></span></span></div>
+                  <p>每秒完成的完整振動次數 = 1 ÷ 一次完整振動所需的秒數</p>
+                </div>
+                <div class="frequency-relation-formula">
+                  <div class="frequency-equation" role="math" aria-label="週期等於一除以頻率"><em>T</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>f</em></span></span></div>
+                  <p>一次完整振動所需的秒數 = 1 ÷ 每秒完成的完整振動次數</p>
+                </div>
+              </div>
               <div class="frequency-relation-copy">
                 <p>頻率越高，週期越短；兩者互為倒數。</p>
                 <p><strong>白話：</strong>一秒內完成的完整振動越多，每次完整振動所需的時間越短。</p>
