@@ -2,7 +2,6 @@ import * as THREE from './vendor/three/build/three.module.js';
 
 const canvas = document.querySelector('#shadow-size-3d-scene');
 if (canvas) {
-  const feedback = document.querySelector('#shadow-size-feedback');
   const status = document.querySelector('#shadow-size-scene-status');
   const xiaokuiObservation = document.querySelector('#shadow-size-xiaokui-observation');
   const resetButton = document.querySelector('#shadow-size-view-reset');
@@ -331,11 +330,6 @@ if (canvas) {
       const value = THREE.MathUtils.clamp(position, minPosition, maxPosition);
       const nearLight = value <= 28;
       const nearScreen = value >= 72;
-      feedback.textContent = nearLight
-        ? '球體靠近光源，屏幕上的影子較大；往屏幕方向拖動，影子會逐漸縮小。'
-        : nearScreen
-          ? '球體靠近屏幕，影子較小；往光源方向拖動，影子會逐漸放大。'
-          : '球體越靠近光源，屏幕上的影子越大；越靠近屏幕，影子越小。';
       xiaokuiObservation.textContent = !hasMovedSphere
         ? '遮擋物靠近光源時，影子會變大；遠離光源時，影子會變小。'
         : nearLight
