@@ -65,7 +65,7 @@ if (canvas) {
     const environment = makeEnvironment();
     scene.background = environment;
     scene.environment = environment;
-    scene.environmentIntensity = 0.42;
+    scene.environmentIntensity = 0.78;
 
     const camera = new THREE.PerspectiveCamera(37, 1, 0.1, 80);
     const target = new THREE.Vector3(0, 1.25, 0.05);
@@ -84,10 +84,13 @@ if (canvas) {
       camera.lookAt(target);
     };
 
-    scene.add(new THREE.HemisphereLight('#e7f0e9', '#31443f', 1.2));
-    const fill = new THREE.DirectionalLight('#d3e3e3', 0.9);
+    scene.add(new THREE.HemisphereLight('#e7f0e9', '#52635b', 2.3));
+    const fill = new THREE.DirectionalLight('#d3e3e3', 1.25);
     fill.position.set(5, 8, -5);
     scene.add(fill);
+    const rearFill = new THREE.DirectionalLight('#d8e1d7', 0.85);
+    rearFill.position.set(-4, 7, 8);
+    scene.add(rearFill);
     const warmBounce = new THREE.PointLight('#ffbd70', 16, 8, 1.8);
     warmBounce.position.set(-1.6, 2.3, -2.4);
     scene.add(warmBounce);
@@ -172,7 +175,7 @@ if (canvas) {
       brass: material('#c6974e', { metalness: 0.72, roughness: 0.26 }),
       lamp: material('#35443e', { metalness: 0.38, roughness: 0.34 }),
       ball: new THREE.MeshStandardMaterial({ color: '#dce4d9', map: ballTexture, roughness: 0.78, metalness: 0.015, bumpMap: ballTexture, bumpScale: 0.008 }),
-      screen: new THREE.MeshPhysicalMaterial({ color: '#fffdf5', map: screenTexture, roughness: 0.91, metalness: 0, side: THREE.DoubleSide }),
+      screen: new THREE.MeshPhysicalMaterial({ color: '#fffdf5', map: screenTexture, roughness: 0.91, metalness: 0, emissive: '#c9bea1', emissiveIntensity: 0.45, side: THREE.DoubleSide }),
       screenFrame: material('#52645c', { metalness: 0.55, roughness: 0.31 }),
       lampLens: new THREE.MeshStandardMaterial({ color: '#ffe4a0', emissive: '#ffb937', emissiveIntensity: 2.2, roughness: 0.24 })
     };
