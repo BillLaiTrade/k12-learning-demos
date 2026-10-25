@@ -153,7 +153,10 @@
     .frequency-relation { display:grid; grid-template-columns:auto auto auto minmax(0,1fr); align-items:center; gap:10px; margin:14px 0 0; padding:14px; border:1px solid #efcfaa; border-radius:14px; background:#fff8ef; }
     .frequency-relation-title { color:var(--orange); font-weight:800; }
     .frequency-relation .frequency-equation { font-size:1.12rem; }
-    .frequency-relation p { margin:0; text-align:center; }
+    .frequency-relation-copy { display:grid; gap:5px; align-content:center; }
+    .frequency-relation-copy p { margin:0; text-align:center; }
+    .frequency-relation-copy p:first-child { color:var(--ink); font-weight:650; }
+    .frequency-relation-copy p:last-child { color:var(--muted); font-size:.9rem; }
     .frequency-calculation-example { margin-top:10px; padding:12px 14px; border:1px solid var(--line); border-radius:14px; background:#f8f9f4; }
     .frequency-calculation-example p { margin:0; }
     .frequency-calculation-example .frequency-equation { justify-content:center; flex-wrap:wrap; margin-top:8px; }
@@ -702,7 +705,10 @@
               <span class="frequency-relation-title">公式與關係</span>
               <div class="frequency-equation" role="math" aria-label="頻率等於一除以週期"><em>f</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>T</em></span></span></div>
               <div class="frequency-equation" role="math" aria-label="週期等於一除以頻率"><em>T</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>f</em></span></span></div>
-              <p><strong>白話：</strong>一秒內完成的完整振動越多，每次完整振動所需的時間越短。</p>
+              <div class="frequency-relation-copy">
+                <p>頻率越高，週期越短；兩者互為倒數。</p>
+                <p><strong>白話：</strong>一秒內完成的完整振動越多，每次完整振動所需的時間越短。</p>
+              </div>
             </div>
             <div class="frequency-calculation-example">
               <p><strong>例題：</strong>頻率 <em>f</em> = 4 Hz，求週期 <em>T</em>。</p>
