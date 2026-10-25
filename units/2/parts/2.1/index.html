@@ -556,7 +556,7 @@
                 <path d="M180 300H650" stroke="#9aaca1" stroke-width="1.5" marker-end="url(#arrow-cycle-time)"/>
                 <text x="660" y="306" text-anchor="start" class="small-label">波形傳播方向</text>
               </svg>
-              <figcaption>橘色粒子與綠線左端相連。粒子從平衡位置上行到 +A（波峰），再下行經過平衡位置到 −A（波谷），最後回到平衡位置。這一輪振動形成一個完整波；波形沿繩子傳播方向的長度，就是一個波長 λ。</figcaption>
+              <figcaption>橘色粒子與綠線左端相連。粒子上下振動時，波形從這個繩端向右傳開。<span id="cycle-wave-complete-note" hidden>粒子從平衡位置上行到 +A（波峰），再下行經過平衡位置到 −A（波谷），最後回到平衡位置。這一輪振動形成一個完整波；波形沿繩子傳播方向的長度，就是一個波長 λ。</span></figcaption>
             </figure>
           </div>
         </section>
@@ -948,9 +948,10 @@
       const cycleWavePath=document.querySelector("#cycle-wave-path");
       const cycleSourceMarker=document.querySelector("#cycle-source-marker");
       const cycleWaveLengthAnnotation=document.querySelector("#cycle-wave-length-annotation");
+      const cycleWaveCompleteNote=document.querySelector("#cycle-wave-complete-note");
       const cycleWaveReplay=document.querySelector("#cycle-wave-replay");
       const cycleWaveStatus=document.querySelector("#cycle-wave-status");
-      if(cycleWavePath&&cycleSourceMarker&&cycleWaveLengthAnnotation&&cycleWaveReplay&&cycleWaveStatus){
+      if(cycleWavePath&&cycleSourceMarker&&cycleWaveLengthAnnotation&&cycleWaveCompleteNote&&cycleWaveReplay&&cycleWaveStatus){
         const cycleStartX=90,cycleWidth=510,cycleMidY=170,cycleAmplitude=55,cycleSteps=120;
         let cycleAnimationFrame=0;
         const showCycleProgress=progress=>{
@@ -967,6 +968,7 @@
           }
           cycleWavePath.setAttribute("d",path);
           cycleWaveLengthAnnotation.setAttribute("visibility",progress>=1?"visible":"hidden");
+          cycleWaveCompleteNote.hidden=progress<1;
           cycleSourceMarker.setAttribute("cy",String(sourceY));
         };
         const playCompleteCycle=()=>{
