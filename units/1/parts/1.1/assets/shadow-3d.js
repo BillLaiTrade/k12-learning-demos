@@ -3,6 +3,7 @@ import * as THREE from './vendor/three/build/three.module.js';
 const canvas = document.querySelector('#shadow-3d-scene');
 if (canvas) {
   const status = document.querySelector('#shadow-scene-status');
+  const xiaokuiObservation = document.querySelector('#shadow-xiaokui-observation');
   const toggle = document.querySelector('#shadow-block-toggle');
   const toggleLabel = document.querySelector('#shadow-toggle-label');
   const resetButton = document.querySelector('#shadow-view-reset');
@@ -411,6 +412,7 @@ if (canvas) {
       toggleLabel.textContent = value ? '滑出光路' : '滑入光路';
       toggle.setAttribute('aria-label', value ? '將遮擋球沿導軌滑出光路' : '將遮擋球沿導軌滑入光路');
     };
+    const setObservation = (message) => { xiaokuiObservation.textContent = message; };
     toggle.addEventListener('click', () => {
       const nextState = !blocked;
       setToggleState(nextState);
@@ -418,6 +420,7 @@ if (canvas) {
       const to = nextState ? targetX : parkedX;
       animation = { from, to, started: performance.now(), duration: duration * Math.max(0.25, Math.abs(to - from) / (parkedX - targetX)) };
       status.textContent = nextState ? '球體沿導軌滑入光路，屏幕上的影子逐漸形成。' : '球體沿導軌退出光路，屏幕逐漸恢復受光。';
+      setObservation(nextState ? '球正滑進光路，屏幕上的影子慢慢出現了。' : '球正離開光路，屏幕上的影子慢慢淡去了。');
     });
 
     const resetView = () => {
@@ -459,6 +462,11 @@ if (canvas) {
         : blocker.position.x > parkedX - 0.35
           ? '球體位於光路旁，屏幕均勻受光。'
           : '球體正在移動，屏幕影子隨位置改變。';
+      setObservation(blocker.position.x < 0.55
+        ? '原來球擋住光的地方，屏幕上就留下了影子。'
+        : blocker.position.x > parkedX - 0.35
+          ? '球移開後，屏幕又亮起來了；影子是在光被擋住時出現的。'
+          : '球移動時，屏幕上的影子也跟著改變。');
     };
     const pinchDistance = () => {
       const points = [...pointers.values()];
@@ -472,6 +480,7 @@ if (canvas) {
         blockerPointerId = event.pointerId;
         canvas.classList.add('dragging-blocker');
         status.textContent = '拖曳球體，讓它沿導軌移動。';
+        setObservation('我拖動球體時，屏幕上的影子也跟著變了。');
       } else if (pointers.size > 0) {
         blockerPointerId = null;
         canvas.classList.remove('dragging-blocker');
@@ -527,6 +536,7 @@ if (canvas) {
         if (progress >= 1) {
           animation = null;
           status.textContent = blocked ? '球體擋住部分光，屏幕相應位置形成影子。' : '球體停在光路旁，屏幕均勻受光。';
+          setObservation(blocked ? '原來球擋住光的地方，屏幕上就留下了影子。' : '球移開後，屏幕又亮起來了；影子是在光被擋住時出現的。');
         }
       }
       renderer.render(scene, camera);

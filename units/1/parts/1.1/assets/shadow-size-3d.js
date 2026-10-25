@@ -4,6 +4,7 @@ const canvas = document.querySelector('#shadow-size-3d-scene');
 if (canvas) {
   const feedback = document.querySelector('#shadow-size-feedback');
   const status = document.querySelector('#shadow-size-scene-status');
+  const xiaokuiObservation = document.querySelector('#shadow-size-xiaokui-observation');
   const resetButton = document.querySelector('#shadow-size-view-reset');
 
   try {
@@ -324,7 +325,9 @@ if (canvas) {
     const maxPosition = 100;
     const zFromPosition = (position) => THREE.MathUtils.lerp(nearLightZ, nearScreenZ, position / maxPosition);
     const positionFromZ = (z) => THREE.MathUtils.mapLinear(z, nearLightZ, nearScreenZ, minPosition, maxPosition);
+    let hasMovedSphere = false;
     const updateReadout = (position, dragging = false) => {
+      if (dragging) hasMovedSphere = true;
       const value = THREE.MathUtils.clamp(position, minPosition, maxPosition);
       const nearLight = value <= 28;
       const nearScreen = value >= 72;
@@ -333,6 +336,13 @@ if (canvas) {
         : nearScreen
           ? '球體靠近屏幕，影子較小；往光源方向拖動，影子會逐漸放大。'
           : '球體越靠近光源，屏幕上的影子越大；越靠近屏幕，影子越小。';
+      xiaokuiObservation.textContent = !hasMovedSphere
+        ? '球的大小沒有改變；移動位置後，影子會怎麼變呢？'
+        : nearLight
+          ? '球和光源的距離變近，影子反而變大了！'
+          : nearScreen
+            ? '球靠近屏幕後，影子縮小了。'
+            : '物體大小不變，移動位置也會改變影子的大小。';
       if (dragging) status.textContent = '拖曳球體前後移動，屏幕影子會即時改變。';
       else if (nearLight) status.textContent = '球體靠近光源，屏幕上的影子較大。';
       else if (nearScreen) status.textContent = '球體靠近屏幕，影子縮小。';

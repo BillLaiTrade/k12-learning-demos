@@ -260,6 +260,7 @@ if (canvas) {
   const heightOutput = document.querySelector('#aperture-offset-output');
   const result = document.querySelector('#aperture-result');
   const resultText = result.querySelector('span:last-child');
+  const xiaokuiObservation = document.querySelector('#aperture-xiaokui-observation');
   let selectedIndex = 1;
   const standardHeightTolerance = 0.02;
   const fullBlockOffset = 0.36;
@@ -305,6 +306,9 @@ if (canvas) {
     if (maxDeviation <= standardHeightTolerance) resultText.textContent = '三個小孔排成一直線，屏幕上出現清楚亮點。';
     else if (transmission > 0) resultText.textContent = '小孔略有偏移，仍有部分光線通過，屏幕亮點變暗。';
     else resultText.textContent = '光被偏移過大的小孔板擋住，屏幕亮點消失。';
+    if (maxDeviation <= standardHeightTolerance) xiaokuiObservation.textContent = '所以小孔排成一直線，光才能一路通過。';
+    else if (transmission > 0) xiaokuiObservation.textContent = '亮點變暗了，表示還有一些光穿過小孔。';
+    else xiaokuiObservation.textContent = '原來光沒有繞過孔板，得讓小孔對齊才能通過。';
   };
 
   const selectPlate = (index) => {
