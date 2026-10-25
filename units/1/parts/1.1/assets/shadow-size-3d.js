@@ -27,7 +27,7 @@ if (canvas) {
     scene.background = new THREE.Color('#14232b');
     scene.fog = new THREE.Fog('#273a3d', 16, 34);
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'low-power', failIfMajorPerformanceCaveat: false });
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -477,9 +477,7 @@ if (canvas) {
   } catch (error) {
     console.error('Shadow size 3D scene failed to initialize:', error);
     const reason = error instanceof Error ? error.message : String(error);
-    status.textContent = /webgl|gpu|graphics|failed to (?:create|initialize).*context|context.*(?:webgl|gpu)/i.test(reason)
-      ? '瀏覽器無法啟動 WebGL 立體畫面；請在 Chrome 設定中開啟「使用圖形加速功能」並重新啟動。'
-      : `立體場景初始化失敗：${reason.slice(0, 90) || '請重新載入頁面再試。'}`;
+    status.textContent = `立體場景初始化失敗：${reason.slice(0, 110) || '請重新載入頁面再試。'}`;
     canvas.setAttribute('aria-label', '影子大小實驗場景無法載入');
   }
 }
