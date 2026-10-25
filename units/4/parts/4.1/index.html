@@ -507,6 +507,26 @@
     .comparison { width:100%; border-collapse:collapse; margin:12px 0; font-size:.88rem; }
     .comparison th,.comparison td { padding:9px 10px; border-bottom:1px solid #e1dccf; text-align:left; vertical-align:top; }
     .comparison th { color:#53645d; background:#f5f2e9; }
+    .change-rule { margin:13px 0; padding:11px 14px; border-left:4px solid #567d63; border-radius:0 10px 10px 0; background:#edf4ee; color:#315540; font-weight:750; }
+    .change-comparison-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
+    .change-example-card { min-width:0; padding:15px; border:1px solid #dce3d9; border-radius:14px; background:#fffefa; }
+    .change-example-card h3 { margin:0 0 10px; color:#294b3c; font-size:1.08rem; }
+    .change-water-states { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:5px; min-height:128px; padding:8px; border-radius:11px; background:#f1f6f3; }
+    .change-water-states>div { display:grid; justify-items:center; align-content:center; min-width:0; text-align:center; }
+    .change-water-states img { display:block; width:100%; max-width:76px; height:68px; object-fit:contain; }
+    .change-water-states span { color:#465b50; font-size:.72rem; line-height:1.3; }
+    .change-water-states b { margin-top:3px; padding:1px 7px; border-radius:999px; background:#e1edf2; color:#3e718d; font-size:.72rem; }
+    .change-water-states i,.change-rust-samples>i { color:#829087; font-size:1.15rem; font-style:normal; font-weight:800; }
+    .change-rust-samples { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,.85fr) auto minmax(0,1fr); align-items:center; gap:7px; min-height:128px; padding:8px; border-radius:11px; background:#f6f1e9; }
+    .change-rust-samples figure { min-width:0; margin:0; text-align:center; }
+    .change-rust-samples figure img { display:block; width:100%; height:78px; object-fit:cover; border-radius:8px; }
+    .change-rust-samples figcaption { margin-top:4px; color:#465b50; font-size:.76rem; font-weight:750; }
+    .change-oxygen { padding:6px 3px; color:#52645d; font-size:.72rem; font-weight:750; text-align:center; }
+    .change-oxygen small { color:#79847c; font-size:.65rem; font-weight:500; }
+    .change-example-fact { min-height:48px; margin:10px 0!important; color:#596b61; font-size:.83rem; line-height:1.5; }
+    .change-type-tag { display:block; padding:8px 10px; border-radius:9px; font-size:.8rem; }
+    .change-type-tag.is-physical { background:#eaf2f6; color:#3c6b85; }
+    .change-type-tag.is-chemical { background:#f8eee7; color:#9a5034; }
     .classification-tree { display:grid; justify-items:center; gap:9px; padding:15px; border-radius:12px; background:#f5f2e9; }
     .tree-root,.tree-branch { padding:9px 14px; border-radius:999px; background:#e5efe8; color:#174c3e; font-weight:750; }
     .tree-branches { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
@@ -547,6 +567,7 @@
       .rust-timeline { padding:10px; }
       .rust-timeline-scene { min-height:175px; }
       .rust-material-comparison { grid-template-columns:1fr 1fr; }
+      .change-comparison-grid { grid-template-columns:1fr; }
       .comparison { font-size:.78rem; }
       .comparison th,.comparison td { padding:7px 6px; }
       .section-top { align-items:start; flex-direction:column; gap:3px; }
@@ -602,8 +623,8 @@
           <a href="#s2"><b>02</b><span>桶身、水和空氣，各有哪些不同？</span></a>
           <a href="#s3"><b>03</b><span>固體、液體和氣體裡的粒子，各自在做什麼？</span></a>
           <a href="#s4"><b>04</b><span>冰、水和水蒸氣，如何互相轉變？</span></a>
-          <a href="#s6"><b>05</b><span>鐵桶生鏽了，這告訴我們什麼？</span></a>
-          <a href="#s7"><b>06</b><span>東西變了樣，就代表變成另一種物質嗎？</span></a>
+          <a href="#s6"><b>05</b><span>鐵桶生鏽了，表面發生什麼變化？</span></a>
+          <a href="#s7"><b>06</b><span>怎麼分辨物理變化和化學變化？</span></a>
           <a href="#s8"><b>07</b><span>雨水看起來像一種東西，裡面可能混了什麼？</span></a>
           <a href="#s9"><b>08</b><span>純鐵和蒸餾水，為什麼分到不同類？</span></a>
           <a href="#s10"><b>09</b><span>這桶混濁的雨水，怎麼證明它是混合物？</span></a>
@@ -848,12 +869,12 @@
         <section class="lesson-card" id="s6">
           <div class="card-main">
             <div class="rust-lesson-header">
-              <div><div class="rust-topic-tag"><b>05</b><span>物質的變化</span></div><h2>鐵生鏽是化學變化</h2><p>觀察鐵生鏽的過程，找出證據，判斷是否產生了新物質。</p></div>
-              <aside class="rust-focus"><strong>學習重點</strong><ul><li>觀察物質變化的現象</li><li>根據證據進行推論</li><li>認識化學變化與新物質</li></ul></aside>
+              <div><div class="rust-topic-tag"><b>05</b><span>物質的變化</span></div><h2>鐵桶生鏽了，外觀有什麼變化？</h2><p>沿著時間軸觀察同一個鐵桶，看看桶身表面如何改變。</p></div>
+              <aside class="rust-focus"><strong>觀察重點</strong><ul><li>顏色和表面狀態如何變化</li><li>鏽層在哪些位置出現</li><li>先觀察現象，暫不急著分類</li></ul></aside>
             </div>
             <div class="rust-dialogue-row">
-              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水變成冰還是水；那鐵桶生鏽後，鐵也還是原來的鐵嗎？</p></div>
-              <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>看看生鏽前後的材料是否相同，再找找鏽層提供了什麼線索。</p></div>
+              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>桶身慢慢出現紅褐色的鏽，表面也變粗糙了。這些鏽還是原本的鐵嗎？</p></div>
+              <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>先沿時間軸看清楚生鏽的過程；鐵和鏽層是不是同一種物質，我們下一區再一起比較。</p></div>
             </div>
             <div class="rust-investigation" id="rust-investigation">
               <div class="rust-timeline" id="rust-timeline" data-stage="1">
@@ -867,7 +888,7 @@
                 <p class="rust-time-note">ⓘ 這是示意性的時間推移，並非真實時間。</p>
               </div>
 
-              <div class="rust-lab" role="group" aria-label="放大觀察並比較鐵和鐵鏽">
+              <div class="rust-lab" role="group" aria-label="放大觀察鐵桶生鏽前後的外觀">
                 <div>
                   <h3>拖動放大鏡觀察桶身</h3>
                   <p class="rust-lab-intro">看看鏽層和金屬表面交錯的地方。</p>
@@ -878,15 +899,15 @@
                   <p class="rust-magnifier-hint" id="rust-magnifier-hint" aria-live="polite">拖動放大鏡，查看桶身不同位置的鏽蝕。</p>
                 </div>
                 <div>
-                  <h3>並排比較材料</h3>
-                  <p class="rust-lab-intro">兩個樣本取自同一個桶身的生鏽前後。</p>
+                  <h3>比較生鏽前後的表面</h3>
+                  <p class="rust-lab-intro">兩個畫面取自同一個桶身的生鏽前後。</p>
                   <div class="rust-material-comparison">
-                    <figure class="rust-sample"><img src="assets/rust-iron-sample.webp" alt="未生鏽的灰銀色鐵桶表面"><figcaption>原本的鐵</figcaption><small>灰銀色，帶有金屬光澤。</small></figure>
-                    <figure class="rust-sample"><img src="assets/rust-layer-sample.webp" alt="生鏽後粗糙斑駁的鐵桶表面"><figcaption>形成的鐵鏽</figcaption><small>紅褐色，表面粗糙且斑駁。</small></figure>
+                    <figure class="rust-sample"><img src="assets/rust-iron-sample.webp" alt="生鏽前，灰銀色的桶身表面"><figcaption>生鏽前</figcaption><small>灰銀色，有金屬光澤。</small></figure>
+                    <figure class="rust-sample"><img src="assets/rust-layer-sample.webp" alt="生鏽後，紅褐色且斑駁的桶身表面"><figcaption>生鏽後</figcaption><small>紅褐色，表面粗糙斑駁。</small></figure>
                   </div>
                   <p class="rust-observation">觀察線索：兩者顏色、光澤和表面狀態都不同。</p>
                 </div>
-                <div class="rust-conclusion"><strong>生鏽是化學變化。</strong><p>鐵與氧氣、水分作用後會形成鐵鏽；鐵鏽是不同於金屬鐵的新物質。</p></div>
+                <div class="rust-conclusion"><strong>表面改變了，組成也改變了嗎？</strong><p>先留著這個問題；下一區會把水的三態變化和鐵桶生鏽並排比較。</p></div>
               </div>
             </div>
             <p class="live-note" id="note-s6" aria-live="polite">拖動放大鏡觀察桶身，再並排比較鐵和鐵鏽。</p>
@@ -897,15 +918,32 @@
         <section class="lesson-card" id="s7">
           <div class="card-side"><span class="card-number">06</span><h3>物理與化學變化</h3><span class="card-role">看有沒有生成新物質</span></div>
           <div class="card-main">
-            <h2>東西變了樣，就代表變成另一種物質嗎？</h2>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水變成冰和鐵桶生鏽，看起來都變了；要怎麼分辨這兩種變化？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>比較變化前後有沒有生成新物質：水的狀態改變仍是水，生鏽則形成鏽層。</p></div>
-            <p>蒸發和生鏽都會讓外觀改變；比較變化前後有沒有生成新物質，就能分辨物理變化和化學變化。</p>
-            <div class="choice-row" role="group" aria-label="比較兩種變化">
-              <button type="button" data-change="evaporation" aria-pressed="true">水分蒸發</button><button type="button" data-change="rust" aria-pressed="false">桶身生鏽</button>
+            <h2>怎麼分辨物理變化和化學變化？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>冰、水和水蒸氣看起來不同，鐵桶生鏽也變了樣。它們的變化有什麼關鍵不同？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>要比較變化前後的物質組成：水的三種狀態都還是水；鐵生鏽則形成了鐵鏽。</p></div>
+            <p class="change-rule">顏色和外觀改變是觀察線索；分類的關鍵是變化後有沒有生成新物質。</p>
+            <div class="change-comparison-grid" aria-label="水的三態變化與鐵桶生鏽的比較">
+              <article class="change-example-card change-example-card--water">
+                <h3>水的三態變化</h3>
+                <div class="change-water-states" aria-label="固態冰、液態水和水蒸氣">
+                  <div><img src="assets/phase-ice.webp" alt="冰"><span>固態・冰</span><b>H₂O</b></div><i aria-hidden="true">↔</i>
+                  <div><img src="assets/phase-water.webp" alt="液態水"><span>液態・水</span><b>H₂O</b></div><i aria-hidden="true">↔</i>
+                  <div><img src="assets/phase-vapor.webp" alt="水蒸氣"><span>氣態・水蒸氣</span><b>H₂O</b></div>
+                </div>
+                <p class="change-example-fact">狀態和粒子排列、運動改變，組成仍是 H₂O；水蒸氣無色、肉眼看不見。</p>
+                <strong class="change-type-tag is-physical">物理變化・沒有生成新物質</strong>
+              </article>
+              <article class="change-example-card change-example-card--rust">
+                <h3>鐵桶生鏽</h3>
+                <div class="change-rust-samples">
+                  <figure><img src="assets/rust-iron-sample.webp" alt="生鏽前的鐵表面"><figcaption>鐵</figcaption></figure><i aria-hidden="true">+</i>
+                  <span class="change-oxygen">氧氣<br><small>有水分時</small></span><i aria-hidden="true">→</i>
+                  <figure><img src="assets/rust-layer-sample.webp" alt="生鏽後形成的鏽層"><figcaption>鐵鏽</figcaption></figure>
+                </div>
+                <p class="change-example-fact">鐵和氧氣在水分存在下作用，形成鐵鏽；鏽層含有鐵的氧化物。</p>
+                <strong class="change-type-tag is-chemical">化學變化・生成新物質</strong>
+              </article>
             </div>
-            <table class="comparison"><thead><tr><th>觀察的變化</th><th>變化前後</th><th>分類</th></tr></thead><tbody><tr><td id="change-name">水分蒸發</td><td id="change-result">沒有生成另一種物質</td><td id="change-type">物理變化</td></tr></tbody></table>
-            <p class="live-note" id="change-note" aria-live="polite">水分從液態變成水蒸氣，物質仍是水。</p>
             <p class="next-hint">從「物質怎麼變」轉向「水樣由哪些物質組成」。</p>
           </div>
         </section>
@@ -1956,16 +1994,6 @@
       selectPhaseState(window.location.hash==="#liquid-overview"?"liquid":window.location.hash==="#gas-overview"?"gas":"solid");
       requestAnimationFrame(()=>phaseSolidOverview.scrollIntoView({block:"center"}));
     }
-
-    const changes={evaporation:["水分蒸發","沒有生成另一種物質","物理變化","水分從液態變成水蒸氣，物質仍是水。"],rust:["桶身生鏽","形成不同於原金屬的鏽層","化學變化","生鏽形成新物質；外觀改變是線索，分類依據是是否生成新物質。"]};
-    document.querySelectorAll("[data-change]").forEach(button=>button.addEventListener("click",()=>{
-      const [name,result,type,note]=changes[button.dataset.change];
-      document.getElementById("change-name").textContent=name;
-      document.getElementById("change-result").textContent=result;
-      document.getElementById("change-type").textContent=type;
-      document.getElementById("change-note").textContent=note;
-      document.querySelectorAll("[data-change]").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
-    }));
 
     document.querySelectorAll("[data-pure]").forEach(button=>button.addEventListener("click",()=>{
       const iron=button.dataset.pure==="iron";
