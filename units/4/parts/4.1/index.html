@@ -606,7 +606,7 @@
     .particle-photo-model { display:grid; grid-template-columns:145px minmax(0,1fr); gap:9px; align-items:stretch; padding:9px; background:#fbfcf8; }
     .particle-sample-photo { min-width:0; margin:0; overflow:hidden; border:1px solid #e0e4d9; border-radius:9px; background:#fff; }
     .particle-sample-photo img { display:block; width:100%; height:124px; object-fit:cover; }
-    .particle-sample-photo--iron img { object-fit:contain; background:#f5f6f2; }
+    .particle-sample-photo--iron img { height:145px; object-fit:contain; background:#f5f6f2; }
     .particle-sample-photo figcaption { padding:3px 5px; color:#617066; font-size:.72rem; text-align:center; }
     .particle-photo-model .particle-model { min-height:118px; }
     .particle-photo-model .particle-model--water { grid-template-columns:repeat(3,55px); gap:10px 7px; }
@@ -630,7 +630,7 @@
     .decomposition-explanation { margin:6px 0 0!important; color:#627168!important; font-size:.78rem; text-align:center; }
     .particle-color-note { margin:0 0 8px!important; color:#68776e!important; font-size:.8rem; }
     .pure-summary { margin:8px 0 0; }
-    @media(max-width:680px) { .pure-particle-comparison { grid-template-columns:1fr; } .particle-photo-model { grid-template-columns:104px minmax(0,1fr); } .particle-sample-photo img { height:94px; } .particle-card h3 { flex-wrap:wrap; gap:6px; } .particle-tag { flex:0 0 auto; white-space:nowrap; } .particle-model--water { grid-template-columns:repeat(3,55px); } }
+    @media(max-width:680px) { .pure-particle-comparison { grid-template-columns:1fr; } .particle-photo-model { grid-template-columns:104px minmax(0,1fr); } .particle-sample-photo img { height:94px; } .particle-sample-photo--iron img { height:104px; } .particle-card h3 { flex-wrap:wrap; gap:6px; } .particle-tag { flex:0 0 auto; white-space:nowrap; } .particle-model--water { grid-template-columns:repeat(3,55px); } }
     .evidence-box { padding:13px 15px; border-left:4px solid var(--blue); border-radius:8px; background:#edf3f7; color:#34536a; }
     .check-options { display:grid; gap:8px; margin:12px 0; }
     .check-option { display:flex; gap:9px; align-items:flex-start; padding:11px 12px; border:1px solid #d9d4c8; border-radius:10px; background:#fff; cursor:pointer; }
@@ -1114,7 +1114,7 @@
                 <div class="particle-card-body">
                   <p class="particle-example">例子：純鐵</p>
                   <div class="particle-photo-model">
-                    <figure class="particle-sample-photo particle-sample-photo--iron"><img src="assets/lesson-pure-iron-sample.webp" alt="不同形狀的純鐵樣品實拍照"><figcaption>純鐵樣本實拍</figcaption></figure>
+                    <figure class="particle-sample-photo particle-sample-photo--iron"><img src="assets/lesson-pure-iron-sample.webp" alt="純鐵方塊（1 立方公分）實拍照片"><figcaption>純鐵方塊實拍</figcaption></figure>
                     <div class="particle-model particle-model--iron" role="img" aria-label="純鐵粒子模型中只有一種種類的粒子">
                       <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
                       <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
