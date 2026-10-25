@@ -122,8 +122,8 @@
     .frequency-period-controls { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:12px 0; }
     .frequency-period-panel { min-width:0; padding:14px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
     .frequency-period-panel h3 { margin:0 0 4px; color:var(--green); font-size:1.08rem; }
-    .frequency-definition { margin:8px 0 12px; }
-    .frequency-definition p { margin:0; color:var(--ink); font-size:1rem; font-weight:800; line-height:1.45; }
+    .frequency-definition { min-height:94px; margin:8px 0 12px; }
+    .frequency-definition p { margin:0; color:var(--ink); font-size:1rem; font-weight:500; line-height:1.45; }
     .frequency-definition small { display:block; margin-top:5px; color:var(--muted); font-size:.84rem; line-height:1.5; }
     .frequency-period-panel>p { margin:0; color:var(--muted); font-size:.88rem; }
     .frequency-stepper { display:grid; grid-template-columns:42px minmax(58px,1fr) 42px; align-items:center; gap:7px; margin:12px 0 6px; }
@@ -148,7 +148,7 @@
     .frequency-calculation-example { margin-top:10px; padding:12px 14px; border:1px solid var(--line); border-radius:14px; background:#f8f9f4; }
     .frequency-calculation-example p { margin:0; }
     .frequency-calculation-example .frequency-equation { justify-content:center; flex-wrap:wrap; margin-top:8px; }
-    @media (max-width:520px) { .frequency-period-controls { grid-template-columns:1fr; } .frequency-period-figure svg text { font-size:26px; } .frequency-period-figure .small-label { font-size:20px; } .frequency-relation { grid-template-columns:1fr; justify-items:center; text-align:center; } }
+    @media (max-width:520px) { .frequency-period-controls { grid-template-columns:1fr; } .frequency-definition { min-height:0; } .frequency-period-figure svg text { font-size:26px; } .frequency-period-figure .small-label { font-size:20px; } .frequency-relation { grid-template-columns:1fr; justify-items:center; text-align:center; } }
     #card-06 .visual svg text { font-size:18px; }
     #card-06 .visual svg .small-label { font-size:14px; }
     #cycle-wave-path { fill:none; }
@@ -623,7 +623,7 @@
                 <h3 id="frequency-panel-title">頻率 f</h3>
                 <div class="frequency-definition">
                   <p>波源每秒完成的完整振動次數。</p>
-                  <small>一輪振動會回到起始位置且運動方向相同；連續波中，這一輪對應一個完整波形週期，沿繩方向的長度是一個波長 λ。</small>
+                  <small>完整振動會回到起始位置，運動方向也相同。連續波中，每輪對應一個完整波形週期；沿繩長度就是一個波長 λ。</small>
                 </div>
                 <div class="frequency-stepper" role="group" aria-label="調整頻率">
                   <button class="secondary" type="button" id="frequency-step-down" aria-label="降低頻率">−</button>
@@ -635,7 +635,8 @@
               <section class="frequency-period-panel" aria-labelledby="period-panel-title">
                 <h3 id="period-panel-title">週期 T</h3>
                 <div class="frequency-definition">
-                  <p>波源完成一輪完整振動（對應波形的一個完整週期）所需的時間。</p>
+                  <p>波源完成一輪完整振動所需的時間。</p>
+                  <small>一輪振動對應波形的一個完整週期。</small>
                 </div>
                 <label class="sr-only" for="card07-period-range">調整週期，完成一輪完整振動所需的秒數</label>
                 <input class="period-range" id="card07-period-range" type="range" min="0.25" max="1" step="0.0001" value="1">
