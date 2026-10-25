@@ -250,10 +250,10 @@
           <div class="card-side"><span class="card-number">04</span><h3>測量波形</h3><span class="card-role">認識振幅與波長</span></div>
           <div class="card-main">
             <h2>波形的高低和重複間隔，怎麼量？</h2>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>波形的高低和重複間隔，要怎麼從圖上量出來？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>垂直量平衡位置到波峰或波谷，是振幅；沿波前進方向量相鄰重複位置，是波長。</p></div>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>波有高有低，要怎麼從圖上量出起伏的大小？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>從平衡位置量到波峰或波谷；這段最大的垂直距離，就是振幅。</p></div>
             <h3 class="measurement-subheading">先量垂直距離：振幅 A</h3>
-            <p>先找平衡位置。從平衡位置到波峰或波谷的最大垂直距離是振幅 <em>A</em>；對稱波形中，波峰到波谷的距離是 <em>2A</em>。</p><figure class="visual">
+            <p>從平衡位置到波峰或波谷的最大垂直距離，叫作振幅 <em>A</em>。</p><figure class="visual">
               <svg class="amplitude-diagram" viewBox="0 0 720 280" role="img" aria-label="橫波圖標示平衡位置、波峰、波谷和振幅 A">
                 <defs><marker id="arrow-a" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" refX="0" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
                 <path d="M40 140H680" class="equilibrium"/>
@@ -268,8 +268,8 @@
               <label class="field" for="amplitude-slider">調整波源振幅；波形離平衡位置的最大距離會跟著改變
                 <input id="amplitude-slider" type="range" min="0.3" max="0.8" step="0.1" value="0.5" aria-describedby="amplitude-model-note">
               </label>
-              <div class="readout" aria-live="polite"><div class="data-cell"><small>振幅 A</small><strong id="amplitude-output">0.5 m</strong></div><div class="data-cell"><small>波峰到波谷 2A</small><strong id="twice-amplitude-output">1.0 m</strong></div></div>
-              <p class="live-note" id="amplitude-model-note">滑桿只改變振幅，不改變波長。</p>
+              <div class="readout" aria-live="polite"><div class="data-cell"><small>振幅 A</small><strong id="amplitude-output">0.5 m</strong></div></div>
+              <p class="live-note" id="amplitude-model-note">拖曳滑桿，觀察振幅變大或變小。</p>
             </div>
 
             <h3 class="measurement-subheading measurement-subheading--next">再量水平間隔：相鄰重複位置，相隔多遠？</h3>
@@ -674,14 +674,13 @@
       const amplitudeMeasure=document.querySelector("#amplitude-measure");
       const amplitudeLabel=document.querySelector("#amplitude-label");
       const amplitudeOutput=document.querySelector("#amplitude-output");
-      const twiceAmplitudeOutput=document.querySelector("#twice-amplitude-output");
       const updateAmplitudeModel=()=>{
         const amplitude=Number(amplitudeSlider.value);const pixels=amplitude*120;const top=140-pixels;const bottom=140+pixels;const waveY=x=>140-pixels*Math.sin((2*Math.PI*(x-40))/208);let d="M 40 140";
         for(let x=44;x<=560;x+=4){const y=waveY(x);d+=` L ${x} ${y.toFixed(2)}`;}
         amplitudeWave.setAttribute("d",d);amplitudePeak.setAttribute("cy",String(top));amplitudeTrough.setAttribute("cy",String(bottom));
         amplitudeMeasure.setAttribute("d",`M115 140V${top}`);
         amplitudeLabel.textContent=`A = ${amplitude.toFixed(1)} m`;amplitudeLabel.setAttribute("y",String(top-8));
-        amplitudeOutput.textContent=`${amplitude.toFixed(1)} m`;twiceAmplitudeOutput.textContent=`${(amplitude*2).toFixed(1)} m`;
+        amplitudeOutput.textContent=`${amplitude.toFixed(1)} m`;
       };
       amplitudeSlider.addEventListener("input",updateAmplitudeModel);updateAmplitudeModel();
 
