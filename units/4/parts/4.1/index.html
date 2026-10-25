@@ -984,10 +984,10 @@
                 <h3>鐵桶生鏽｜化學變化</h3>
                 <div class="rust-photo-comparison" aria-label="拖曳放大鏡比較生鏽前後的鐵桶表面與粒子模型">
                   <figure class="microscope-source rust-microscope-source" data-microscope-phase="iron" data-microscope="生鏽前：放大鏡中的粒子都是鐵，排列緊密。"><img src="assets/rust-iron-sample.webp" alt="生鏽前的鐵桶表面，呈灰銀色並帶有金屬光澤"><span class="microscope-glass" role="slider" tabindex="0" aria-label="拖曳放大鏡觀察生鏽前的鐵粒子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>生鏽前</figcaption></figure>
-                  <figure class="microscope-source rust-microscope-source" data-microscope-phase="rust" data-microscope="生鏽後：放大鏡中的粒子包含鐵和氧，形成不同於原本鐵的新物質。"><img src="assets/rust-layer-sample.webp" alt="生鏽後的鐵桶表面，紅褐色鏽層與灰銀色金屬交錯"><span class="microscope-glass" role="slider" tabindex="0" aria-label="拖曳放大鏡觀察生鏽後含鐵和氧的粒子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>生鏽後</figcaption></figure>
+                  <figure class="microscope-source rust-microscope-source" data-microscope-phase="rust" data-microscope="鏽層分布不均；鏽色較深處顯示較多含鐵、氧的粒子，灰銀色金屬處則較多鐵粒子。此為簡化模型，不呈現真實分子結構。"><img src="assets/rust-layer-sample.webp" alt="生鏽後的鐵桶表面，紅褐色鏽層與灰銀色金屬交錯"><span class="microscope-glass" role="slider" tabindex="0" aria-label="拖曳放大鏡觀察生鏽後的局部鐵與氧粒子模型；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>生鏽後</figcaption></figure>
                 </div>
                 <p class="microscope-instruction">分別拖曳兩張近照上的放大鏡，觀察生鏽前後的粒子組成。</p>
-                <p class="microscope-note" aria-live="polite">生鏽前是鐵粒子；生鏽後出現含鐵、氧的新物質。</p>
+                <p class="microscope-note" aria-live="polite">灰色代表鐵、紅褐色代表氧；分布依照片鏽色估算。鐵鏽成分與結構複雜，粒子排列僅作示意。</p>
               </article>
             </div>
             <p class="change-rule">分類關鍵：變化後有沒有生成新物質。</p>
@@ -1143,16 +1143,30 @@
     requestAnimationFrame(()=>moveRustMagnifier({clientX:rustMagnifierScene.getBoundingClientRect().left+rustMagnifierScene.getBoundingClientRect().width*rustLensPosition.x,clientY:rustMagnifierScene.getBoundingClientRect().top+rustMagnifierScene.getBoundingClientRect().height*rustLensPosition.y}));
 
     const waterMolecule=()=>`<g><path d="M0 0-4.8-3.8M0 0 4.8-3.8" stroke="#758b7e" stroke-width="1.6" stroke-linecap="round"/><circle r="4.3" fill="#d65e48" stroke="#fff" stroke-width="1"/><circle cx="-4.8" cy="-3.8" r="2.6" fill="#fff" stroke="#82948a"/><circle cx="4.8" cy="-3.8" r="2.6" fill="#fff" stroke="#82948a"/></g>`;
-    function microscopeSvg(phase,index){
+    function readRustPixels(image){
+      if(!image.complete||!image.naturalWidth)return null;
+      try{const canvas=document.createElement("canvas");canvas.width=370;canvas.height=370;const context=canvas.getContext("2d",{willReadFrequently:true});context.drawImage(image,0,0,370,370);return context.getImageData(0,0,370,370).data;}catch{return null;}
+    }
+    function rustCoverage(pixels,cx,cy,radius=11){
+      if(!pixels)return .5;
+      let rusty=0,total=0;const left=Math.max(0,Math.floor(cx-radius)),right=Math.min(369,Math.ceil(cx+radius)),top=Math.max(0,Math.floor(cy-radius)),bottom=Math.min(369,Math.ceil(cy+radius)),step=3;
+      for(let y=top;y<=bottom;y+=step)for(let x=left;x<=right;x+=step){if((x-cx)**2+(y-cy)**2>radius**2)continue;const offset=(y*370+x)*4,r=pixels[offset],g=pixels[offset+1],b=pixels[offset+2],maximum=Math.max(r,g,b),minimum=Math.min(r,g,b);total++;if(r-g>Math.max(16,maximum*.12)&&r-b>Math.max(26,maximum*.2)&&(maximum-minimum)/Math.max(1,maximum)>.2)rusty++;}
+      return total?rusty/total:.5;
+    }
+    function microscopeSvg(phase,index,rustPixels=null){
       const seed=Math.abs((index+1)*7919),random=(()=>{let value=seed+1;return()=>{value=(value*48271)%2147483647;return (value-1)/2147483646;};})(),positions=[];
       if(phase==="iron"){
         const iron=[];
         for(let row=0;row<17;row++)for(let column=0;column<17;column++){const x=11+column*21.5,y=11+row*21.5;iron.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5.2" fill="#aab4b4" stroke="#6f7d7b" stroke-width="1.2"/>`);}
         return `<svg viewBox="0 0 370 370" preserveAspectRatio="none" aria-hidden="true"><g>${iron.join("")}</g></svg>`;
       }else if(phase==="rust"){
-        const compounds=[];
-        for(let row=0;row<11;row++)for(let column=0;column<11;column++){const x=18+column*33,y=18+row*33;compounds.push(`<g transform="translate(${x} ${y})"><path d="M-6 0-7-8M6 0 7-8M-6 0 0 9M6 0 0 9" fill="none" stroke="#8b7a64" stroke-width="1.8"/><circle cx="-6" cy="0" r="4.6" fill="#aab4b4" stroke="#6f7d7b"/><circle cx="6" cy="0" r="4.6" fill="#aab4b4" stroke="#6f7d7b"/><circle cx="-7" cy="-8" r="3.7" fill="#d96c47" stroke="#fff"/><circle cx="7" cy="-8" r="3.7" fill="#d96c47" stroke="#fff"/><circle cy="9" r="3.7" fill="#d96c47" stroke="#fff"/></g>`);}
-        return `<svg viewBox="0 0 370 370" preserveAspectRatio="none" aria-hidden="true"><g>${compounds.join("")}</g></svg>`;
+        const pixels=rustPixels,material=[];
+        for(let row=0;row<17;row++)for(let column=0;column<17;column++){
+          const x=11+column*21.5,y=11+row*21.5,coverage=rustCoverage(pixels,x,y,10),hasRust=random()<coverage;
+          if(hasRust)material.push(`<g data-particle-type="iron-oxide" data-rust-coverage="${coverage.toFixed(2)}" data-model-x="${x.toFixed(1)}" data-model-y="${y.toFixed(1)}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><path d="M-6 0-7-8M6 0 7-8M-6 0 0 9M6 0 0 9" fill="none" stroke="#8b7a64" stroke-width="1.8"/><circle cx="-6" cy="0" r="4.6" fill="#aab4b4" stroke="#6f7d7d"/><circle cx="6" cy="0" r="4.6" fill="#aab4b4" stroke="#6f7d7d"/><circle cx="-7" cy="-8" r="3.7" fill="#d96c47" stroke="#fff"/><circle cx="7" cy="-8" r="3.7" fill="#d96c47" stroke="#fff"/><circle cy="9" r="3.7" fill="#d96c47" stroke="#fff"/></g>`);
+          else material.push(`<circle data-particle-type="iron" data-rust-coverage="${coverage.toFixed(2)}" data-model-x="${x.toFixed(1)}" data-model-y="${y.toFixed(1)}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5.2" fill="#aab4b4" stroke="#6f7d6f" stroke-width="1.2"/>`);
+        }
+        return `<svg viewBox="0 0 370 370" preserveAspectRatio="none" aria-hidden="true"><g>${material.join("")}</g></svg>`;
       }else if(phase==="ice"){
         for(let row=0;row<18;row++)for(let column=0;column<18;column++)positions.push({x:14+column*20,y:14+row*20});
       }else if(phase==="liquid"){
@@ -1168,18 +1182,22 @@
       return `<svg viewBox="0 0 370 370" preserveAspectRatio="none" aria-hidden="true"><g>${particles}</g></svg>`;
     }
     document.querySelectorAll("#s7 [data-microscope]").forEach((source,index)=>{
-      const card=source.closest(".change-example-card"),note=card.querySelector(".microscope-note"),lens=source.querySelector(".microscope-glass"),sample=source.querySelector("img"),glass=source.querySelector(".microscope-lens-content");
-      const reveal=document.createElement("div");reveal.className="microscope-reveal";reveal.setAttribute("aria-hidden","true");reveal.innerHTML=microscopeSvg(source.dataset.microscopePhase,index);source.prepend(reveal);glass.replaceChildren();const revealSvg=reveal.querySelector("svg"),magnification=1.3;
+      const card=source.closest(".change-example-card"),note=card.querySelector(".microscope-note"),lens=source.querySelector(".microscope-glass"),sample=source.querySelector("img"),glass=source.querySelector(".microscope-lens-content"),phase=source.dataset.microscopePhase;
+      let rustPixels=phase==="rust"?readRustPixels(sample):null;
+      const reveal=document.createElement("div");reveal.className="microscope-reveal";reveal.setAttribute("aria-hidden","true");source.prepend(reveal);glass.replaceChildren();let revealSvg;const magnification=1.3;
+      const renderReveal=()=>{if(phase==="rust"&&!rustPixels)rustPixels=readRustPixels(sample);reveal.innerHTML=microscopeSvg(phase,index,rustPixels);revealSvg=reveal.querySelector("svg");};
+      renderReveal();
       let dragging=false,position={x:.5,y:.5};
       const inspect=()=>{
         card.querySelectorAll(".microscope-source").forEach(item=>item.classList.toggle("is-active",item===source));
-        note.textContent=source.dataset.microscope;
+        if(phase==="rust"&&rustPixels){const inset=source.clientTop+(parseFloat(getComputedStyle(source).paddingTop)||0),centerX=(parseFloat(lens.style.left||"0")-inset)*370/sample.offsetWidth,centerY=(parseFloat(lens.style.top||"0")-inset)*370/sample.offsetHeight,radius=lens.offsetWidth*.5/magnification*370/sample.offsetWidth,coverage=rustCoverage(rustPixels,centerX,centerY,radius);note.textContent=`照片估計：此處鏽色覆蓋約 ${Math.round(coverage*100)}%；模型中的含氧粒子比例隨之變化。`;}else note.textContent=source.dataset.microscope;
       };
       const lensLimits=()=>{
         const bounds=source.getBoundingClientRect(),inset=source.clientTop+parseFloat(getComputedStyle(source).paddingTop)||0,radius=lens.offsetWidth/2;
         return {bounds,inset,radius,minX:inset+radius,maxX:inset+sample.offsetWidth-radius,minY:inset+radius,maxY:inset+sample.offsetHeight-radius};
       };
       const moveLens=(clientX,clientY)=>{
+        if(phase==="rust"&&!rustPixels){rustPixels=readRustPixels(sample);if(rustPixels)renderReveal();}
         const {bounds,inset,minX,maxX,minY,maxY,radius}=lensLimits();
         const x=Math.max(minX,Math.min(maxX,clientX-bounds.left));
         const y=Math.max(minY,Math.min(maxY,clientY-bounds.top));
@@ -1198,6 +1216,7 @@
       const stopDrag=()=>{dragging=false;lens.classList.remove("is-dragging");};
       lens.addEventListener("pointerup",stopDrag);lens.addEventListener("pointercancel",stopDrag);
       lens.addEventListener("focus",inspect);
+      if(phase==="rust"&&!rustPixels)sample.addEventListener("load",()=>{rustPixels=readRustPixels(sample);if(rustPixels)renderReveal();inspect();},{once:true});
       lens.addEventListener("keydown",event=>{
         const step=event.shiftKey?14:7;let {x,y}=position;const {bounds,minX,maxX,minY,maxY}=lensLimits();
         if(event.key==="ArrowLeft")x-=step/Math.max(1,maxX-minX);else if(event.key==="ArrowRight")x+=step/Math.max(1,maxX-minX);else if(event.key==="ArrowUp")y-=step/Math.max(1,maxY-minY);else if(event.key==="ArrowDown")y+=step/Math.max(1,maxY-minY);else return;
