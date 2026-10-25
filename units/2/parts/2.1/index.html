@@ -642,7 +642,7 @@
       const transverseFixedPoint=document.querySelector("#transverse-fixed-point");
       const longitudinalCoilGroup=document.querySelector("#longitudinal-spring-coils");
       const springCoils=[];
-      const springCoilCount=47, springFirstX=58, springSpacing=14, springSelectedIndex=23;
+      const springCoilCount=47, springFirstX=74, springSpacing=13.3, springSelectedIndex=23;
       if(longitudinalCoilGroup){
         for(let i=0;i<springCoilCount;i++){
           const coil=document.createElementNS(ns,"ellipse");
@@ -662,7 +662,7 @@
         waveTypeExplanation.textContent=waveTypeDetails[type];
       }));
       const transversePointX=350, transverseBaseline=116, transverseAmplitude=48, transverseWavelength=232;
-      const springAmplitude=22, springWavelength=220, springSpeed=100;
+      const springAmplitude=28, springWavelength=220, springSpeed=100;
       let waveTypeStart=0;
       const animateWaveTypes=time=>{
         if(!waveTypeStart)waveTypeStart=time;
