@@ -547,7 +547,7 @@
               <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note" id="cycle-wave-status" role="status" aria-live="polite">每一段移動一個振幅 A；按下按鈕觀察四段上下移動。</span></div>
             </div>
             <figure class="visual cycle-wave-figure">
-              <svg viewBox="0 0 700 370" role="img" aria-label="動畫中橘色粒子從平衡位置上行到正振幅，再下行到負振幅，最後上行回到平衡位置；綠色波形從粒子所在左端向右形成">
+              <svg viewBox="0 0 700 370" role="img" aria-label="動畫中橘色粒子從平衡位置上行到 +A 輔助線，再下行到 −A 輔助線，最後上行回到平衡位置；綠色波形從粒子所在左端向右形成">
                 <defs>
                   <marker id="arrow-wave-direction" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#176b53"/></marker>
                   <marker id="arrow-cycle-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
@@ -556,10 +556,11 @@
                 <text x="45" y="120" text-anchor="end" class="small-label">+A</text>
                 <text x="45" y="175" text-anchor="end" class="small-label">平衡</text>
                 <text x="45" y="230" text-anchor="end" class="small-label">−A</text>
-                <circle id="cycle-source-marker" cx="90" cy="170" r="10" class="marker"/>
                 <text x="412" y="68" text-anchor="middle">振動帶動波形向右形成</text>
+                <path d="M50 115H645 M50 225H645" fill="none" stroke="#c4d0c7" stroke-width="1.3" stroke-dasharray="4 6"/>
                 <path d="M50 170H645" class="equilibrium"/>
                 <path id="cycle-wave-path" class="wave-line cycle-wave-path" d="M90 170"/>
+                <circle id="cycle-source-marker" cx="90" cy="170" r="10" class="marker"/>
                 <g id="cycle-wave-length-annotation" visibility="hidden" aria-label="完整波形的長度是一個波長 λ">
                   <text x="345" y="239" text-anchor="middle" fill="#bc612b">λ（一個波長）</text>
                   <path d="M90 255H600" stroke="#bc612b" stroke-width="2" marker-start="url(#arrow-cycle-lambda)" marker-end="url(#arrow-cycle-lambda)"/>
