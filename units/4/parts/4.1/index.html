@@ -531,14 +531,14 @@
     .change-definition h3 { margin:0 0 4px; color:#294b3c; font-size:1rem; }
     .change-definition p { margin:0; color:#58685f; font-size:.85rem; }
     .change-definition--chemical { background:#fcf8f2; }
-    .change-comparison-grid { grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr); align-items:start; gap:16px; }
+    .change-comparison-grid { grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); align-items:start; gap:16px; }
     .change-example-card { display:flex; flex-direction:column; gap:9px; }
     .change-example-card h3 { margin:0; }
     .change-example-fact { min-height:0; margin:0!important; }
     .microscope-source-row { display:grid; grid-template-columns:1fr; gap:12px; align-items:start; }
     .microscope-source-row .microscope-source { width:min(100%,370px); justify-self:center; padding:0; }
-    .change-example-card--water .microscope-source-row { gap:8px; }
-    .change-example-card--water .microscope-source { width:min(100%,180px); padding:4px; }
+    .change-example-card--water .microscope-source-row { grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+    .change-example-card--water .microscope-source { width:100%; padding:4px; }
     .change-example-card--water .microscope-source img { height:auto; aspect-ratio:1; object-fit:cover; transform:none; }
     .microscope-source { position:relative; min-width:0; margin:0; padding:7px; overflow:hidden; border:1px solid #e1e6df; border-radius:11px; background:#fff; text-align:center; cursor:zoom-in; transition:border-color .18s ease,box-shadow .18s ease; }
     .microscope-source:hover,.microscope-source:focus-visible { border-color:#7eaa8c; box-shadow:0 0 0 3px #dcebe0; outline:0; }
@@ -566,12 +566,12 @@
     .rust-photo-comparison { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; align-content:center; }
     .rust-photo-comparison .microscope-source { padding:6px; }
     .rust-photo-comparison .microscope-source img { height:auto; aspect-ratio:1; object-fit:cover; border-radius:6px; }
-    .rust-photo-comparison .microscope-glass { width:clamp(48px,24%,92px); }
-    .change-example-card--water .microscope-glass { width:clamp(42px,24%,60px); }
+    .rust-photo-comparison .microscope-glass,.change-example-card--water .microscope-glass { width:clamp(24px,24%,44px); }
+    .rust-photo-comparison .microscope-glass::after,.change-example-card--water .microscope-glass::after { width:18px; height:5px; right:-14px; bottom:-5px; }
     .rust-photo-comparison figcaption { margin-top:5px; color:#315f49; font-size:.76rem; font-weight:800; }
     .microscope-note { margin:0!important; padding:7px 9px; border-radius:8px; background:#eef4e9; color:#4c6255; font-size:.75rem; text-align:center; }
     @media(max-width:780px) { .change-definitions,.change-comparison-grid { grid-template-columns:1fr; } }
-    @media(max-width:680px) { .microscope-source-row .microscope-source { width:min(100%,300px); } .microscope-source { padding:0; } .microscope-source img { height:300px; } .change-example-card--water .microscope-source-row .microscope-source { width:min(100%,160px); padding:4px; } .change-example-card--water .microscope-source img { height:auto; } .rust-photo-comparison { gap:8px; } .rust-photo-comparison .microscope-source { padding:4px; } }
+    @media(max-width:680px) { .microscope-source-row .microscope-source { width:min(100%,300px); } .microscope-source { padding:0; } .microscope-source img { height:300px; } .change-example-card--water .microscope-source-row { grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; } .change-example-card--water .microscope-source-row .microscope-source { width:100%; padding:3px; } .change-example-card--water .microscope-source img { height:auto; } .rust-photo-comparison { gap:8px; } .rust-photo-comparison .microscope-source { padding:4px; } }
     .classification-tree { display:grid; justify-items:center; gap:9px; padding:15px; border-radius:12px; background:#f5f2e9; }
     .tree-root,.tree-branch { padding:9px 14px; border-radius:999px; background:#e5efe8; color:#174c3e; font-weight:750; }
     .tree-branches { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
