@@ -534,6 +534,9 @@
             <h2>一個完整的波形，是怎麼形成的？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩上的一點先往上、再往下；把它的動作記下來，會畫出什麼波形？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>看左邊同一點上下振動，右邊同步記下它的位置。從平衡位置出發，經過波峰、波谷再回來，就描出一個完整的波形。</p></div>
+            <div class="control-panel cycle-wave-control">
+              <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">播放一次完整波形</button><span class="live-note" id="cycle-wave-status" role="status" aria-live="polite">按下按鈕，橘點會上下振動一次，右側同步描出一個完整波形。</span></div>
+            </div>
             <figure class="visual cycle-wave-figure">
               <svg viewBox="0 0 700 470" role="img" aria-label="動畫上方顯示繩上的同一橘點固定在原位上下振動，下方同步逐步描出它的位移時間曲線；橘點完成向上、向下並回到平衡位置時，曲線剛好形成一個完整波形">
                 <defs>
@@ -555,9 +558,6 @@
               </svg>
               <figcaption>左邊的橘點只在原位上下振動；右邊把它每一刻的位置依時間記下來。它向上到波峰、再向下到波谷並回到平衡位置時，剛好描出一個完整波形。</figcaption>
             </figure>
-            <div class="control-panel cycle-wave-control">
-              <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">播放完整波形</button><span class="live-note" id="cycle-wave-status" role="status" aria-live="polite">動畫會從起點依序描出一個完整波形。</span></div>
-            </div>
           </div>
         </section>
 
@@ -950,9 +950,8 @@
       const cycleWaveReplay=document.querySelector("#cycle-wave-replay");
       const cycleWaveStatus=document.querySelector("#cycle-wave-status");
       if(cycleWavePath&&cycleSourceMarker&&cycleWaveReplay&&cycleWaveStatus){
-        const reduceCycleMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const cycleStartX=95,cycleWidth=510,cycleMidY=285,cycleAmplitude=60,cycleSourceMidY=100,cycleSourceAmplitude=43,cycleSteps=120;
-        let cycleAnimationFrame=0,cycleStarted=false;
+        let cycleAnimationFrame=0;
         const showCycleProgress=progress=>{
           const step=Math.floor(cycleSteps*progress);
           let path=`M${cycleStartX} ${cycleMidY}`;
@@ -967,15 +966,14 @@
           cycleSourceMarker.setAttribute("cy",String(cycleSourceMidY-cycleSourceAmplitude*Math.sin(phase)));
         };
         const playCompleteCycle=()=>{
-          if(reduceCycleMotion){showCycleProgress(1);cycleWaveStatus.textContent="完整波形已顯示；橘點上下振動一次，曲線也完成一個波形。";cycleWaveReplay.textContent="再看一次";return;}
           cancelAnimationFrame(cycleAnimationFrame);showCycleProgress(0);cycleWaveReplay.disabled=true;cycleWaveReplay.textContent="描繪中…";
           cycleWaveStatus.textContent="觀察左邊橘點上下振動，右邊同步描出完整波形。";
           let startTime=null;
-          const draw=time=>{if(startTime===null)startTime=time;const progress=Math.min(1,(time-startTime)/3200);showCycleProgress(progress);if(progress<1){cycleAnimationFrame=requestAnimationFrame(draw);}else{cycleWaveReplay.disabled=false;cycleWaveReplay.textContent="再看一次";cycleWaveStatus.textContent="橘點完成一次上下往返，右邊也剛好描出一個完整波形。";}};
+          const draw=time=>{if(startTime===null)startTime=time;const progress=Math.min(1,(time-startTime)/3200);showCycleProgress(progress);if(progress<1){cycleAnimationFrame=requestAnimationFrame(draw);}else{cycleWaveReplay.disabled=false;cycleWaveReplay.textContent="再看一次完整波形";cycleWaveStatus.textContent="橘點完成一次上下往返，右邊也剛好描出一個完整波形。";}};
           cycleAnimationFrame=requestAnimationFrame(draw);
         };
-        if(reduceCycleMotion){showCycleProgress(1);cycleWaveReplay.textContent="顯示完整波形";cycleWaveStatus.textContent="完整波形已顯示；橘點上下振動一次，曲線也完成一個波形。";}
-        else{showCycleProgress(0);cycleWaveReplay.addEventListener("click",playCompleteCycle);if("IntersectionObserver" in window){const cycleObserver=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){if(!cycleStarted){cycleStarted=true;playCompleteCycle();}cycleObserver.disconnect();}},{threshold:.35});cycleObserver.observe(document.querySelector("#card-06 .cycle-wave-figure"));}else{cycleStarted=true;playCompleteCycle();}}
+        showCycleProgress(0);
+        cycleWaveReplay.addEventListener("click",playCompleteCycle);
       }
 
       const frequencyExampleButtons=[...document.querySelectorAll("[data-frequency-example]")];
