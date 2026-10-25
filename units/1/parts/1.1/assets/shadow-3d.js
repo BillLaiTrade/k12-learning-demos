@@ -465,7 +465,7 @@ if (canvas) {
       setObservation(blocker.position.x < 0.55
         ? '原來球擋住光的地方，屏幕上就留下了影子。'
         : blocker.position.x > parkedX - 0.35
-          ? '球移開後，屏幕又亮起來了；影子是在光被擋住時出現的。'
+          ? '原來球沒有擋住光時，光就能照到屏幕上，不會形成影子。'
           : '球移動時，屏幕上的影子也跟著改變。');
     };
     const pinchDistance = () => {
@@ -536,7 +536,7 @@ if (canvas) {
         if (progress >= 1) {
           animation = null;
           status.textContent = blocked ? '球體擋住部分光，屏幕相應位置形成影子。' : '球體停在光路旁，屏幕均勻受光。';
-          setObservation(blocked ? '原來球擋住光的地方，屏幕上就留下了影子。' : '球移開後，屏幕又亮起來了；影子是在光被擋住時出現的。');
+          setObservation(blocked ? '原來球擋住光的地方，屏幕上就留下了影子。' : '原來球沒有擋住光時，光就能照到屏幕上，不會形成影子。');
         }
       }
       renderer.render(scene, camera);
