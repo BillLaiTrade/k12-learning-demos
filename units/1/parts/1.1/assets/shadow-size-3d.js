@@ -1,22 +1,7 @@
-import * as THREE from './vendor/three/build/three.module.js?v=known-good-three-20261025';
-
-const waitUntilCanvasIsNearViewport = (canvas) => new Promise((resolve) => {
-  if (!('IntersectionObserver' in window)) {
-    resolve();
-    return;
-  }
-  const observer = new IntersectionObserver((entries) => {
-    if (entries.some((entry) => entry.isIntersecting)) {
-      observer.disconnect();
-      resolve();
-    }
-  }, { rootMargin: '320px 0px' });
-  observer.observe(canvas);
-});
+import * as THREE from './vendor/three/build/three.module.js';
 
 const canvas = document.querySelector('#shadow-size-3d-scene');
 if (canvas) {
-  await waitUntilCanvasIsNearViewport(canvas);
   const feedback = document.querySelector('#shadow-size-feedback');
   const status = document.querySelector('#shadow-size-scene-status');
   const xiaokuiObservation = document.querySelector('#shadow-size-xiaokui-observation');
@@ -263,7 +248,7 @@ if (canvas) {
     spotlight.position.set(0, 1.55, -3.46);
     spotlight.target.position.set(0, 1.55, 3.7);
     spotlight.castShadow = true;
-    spotlight.shadow.mapSize.set(512, 512);
+    spotlight.shadow.mapSize.set(1024, 1024);
     spotlight.shadow.camera.near = 0.1;
     spotlight.shadow.camera.far = 12;
     spotlight.shadow.bias = -0.0002;

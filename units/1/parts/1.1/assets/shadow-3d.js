@@ -1,22 +1,7 @@
-import * as THREE from './vendor/three/build/three.module.js?v=known-good-three-20261025';
-
-const waitUntilCanvasIsNearViewport = (canvas) => new Promise((resolve) => {
-  if (!('IntersectionObserver' in window)) {
-    resolve();
-    return;
-  }
-  const observer = new IntersectionObserver((entries) => {
-    if (entries.some((entry) => entry.isIntersecting)) {
-      observer.disconnect();
-      resolve();
-    }
-  }, { rootMargin: '320px 0px' });
-  observer.observe(canvas);
-});
+import * as THREE from './vendor/three/build/three.module.js';
 
 const canvas = document.querySelector('#shadow-3d-scene');
 if (canvas) {
-  await waitUntilCanvasIsNearViewport(canvas);
   const status = document.querySelector('#shadow-scene-status');
   const xiaokuiObservation = document.querySelector('#shadow-xiaokui-observation');
   const toggle = document.querySelector('#shadow-block-toggle');
@@ -421,13 +406,13 @@ if (canvas) {
     let animation = null;
     const duration = 920;
     const ease = (value) => value < 0.5 ? 4 * value ** 3 : 1 - ((-2 * value + 2) ** 3) / 2;
+    const setObservation = (message) => { xiaokuiObservation.textContent = message; };
     const setToggleState = (value) => {
       blocked = value;
       toggle.setAttribute('aria-pressed', String(value));
       toggleLabel.textContent = value ? '滑出光路' : '滑入光路';
       toggle.setAttribute('aria-label', value ? '將遮擋球沿導軌滑出光路' : '將遮擋球沿導軌滑入光路');
     };
-    const setObservation = (message) => { xiaokuiObservation.textContent = message; };
     toggle.addEventListener('click', () => {
       const nextState = !blocked;
       setToggleState(nextState);
@@ -472,16 +457,16 @@ if (canvas) {
       if (!raycaster.ray.intersectPlane(blockerDragPlane, dragIntersection)) return;
       blocker.position.x = THREE.MathUtils.clamp(dragIntersection.x, targetX, parkedX);
       setToggleState(blocker.position.x < (targetX + parkedX) / 2);
-      status.textContent = blocker.position.x < 0.55
-        ? '球體已移至光路中央，屏幕形成影子。'
-        : blocker.position.x > parkedX - 0.35
-          ? '球體位於光路旁，屏幕均勻受光。'
-          : '球體正在移動，屏幕影子隨位置改變。';
       setObservation(blocker.position.x < 0.55
         ? '原來球擋住光的地方，屏幕上就留下了影子。'
         : blocker.position.x > parkedX - 0.35
           ? '原來不透明的球擋住光線後，光照不到的地方就在屏幕上形成影子。'
           : '球移動時，屏幕上的影子也跟著改變。');
+      status.textContent = blocker.position.x < 0.55
+        ? '球體已移至光路中央，屏幕形成影子。'
+        : blocker.position.x > parkedX - 0.35
+          ? '球體位於光路旁，屏幕均勻受光。'
+          : '球體正在移動，屏幕影子隨位置改變。';
     };
     const pinchDistance = () => {
       const points = [...pointers.values()];
@@ -494,8 +479,8 @@ if (canvas) {
         animation = null;
         blockerPointerId = event.pointerId;
         canvas.classList.add('dragging-blocker');
-        status.textContent = '拖曳球體，讓它沿導軌移動。';
         setObservation('我拖動球體時，屏幕上的影子也跟著變了。');
+        status.textContent = '拖曳球體，讓它沿導軌移動。';
       } else if (pointers.size > 0) {
         blockerPointerId = null;
         canvas.classList.remove('dragging-blocker');
