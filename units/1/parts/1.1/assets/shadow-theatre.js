@@ -508,7 +508,6 @@ if (canvas) {
     status.textContent = '演出完成！你的影子戲登上月光舞台。';
     warmFill.intensity = 43;
     window.setTimeout(() => { if (completed) warmFill.intensity = 32; }, 750);
-    if (document.querySelector('details.booklet-recap')) document.querySelector('details.booklet-recap').open = true;
   });
 
   canvas.addEventListener('keydown', (event) => {

@@ -270,22 +270,9 @@
     .booklet-finish-button:not(:disabled):hover { filter: brightness(1.04); }
     .booklet-finish-note { min-height: 35px; margin: 7px 1px 0 !important; color: #77776c !important; font-size: .72rem !important; text-align: center; }
     .booklet-finish-note[data-done="true"] { color: #176b53 !important; font-weight: 750; }
-    .booklet-recap { margin-top: 14px; border: 1px solid #e0d6bd; border-radius: 15px; background: rgb(255 253 248 / 80%); }
-    .booklet-recap summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 62px; padding: 10px 15px; color: var(--ink); cursor: pointer; list-style: none; }
-    .booklet-recap summary::-webkit-details-marker { display: none; }
-    .booklet-recap summary span, .booklet-recap summary strong, .booklet-recap summary small { display: block; }
-    .booklet-recap summary strong { font-size: .91rem; }
-    .booklet-recap summary small { margin-top: 2px; color: var(--muted); font-size: .78rem; }
-    .booklet-recap summary b { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #f3ecd8; color: #8f6727; font-size: 1.1rem; transition: transform .2s ease; }
-    .booklet-recap[open] summary b { transform: rotate(45deg); }
-    .booklet-recap-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 0 12px 12px; }
-    .booklet-recap-grid article { min-width: 0; padding: 10px 11px; border: 1px solid #e8e2d3; border-radius: 11px; background: #fffefa; }
-    .booklet-recap-grid article > span { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 6px; border-radius: 50%; background: #f6edda; color: #926b2d; font-size: .67rem; font-weight: 850; }
-    .booklet-recap-grid article > strong { font-size: .81rem; }
-    .booklet-recap-grid article p { margin: 4px 0 0; color: var(--muted); font-size: .73rem; line-height: 1.45; }
     @media (max-width: 900px) { .booklet-game-layout { grid-template-columns: minmax(0, 1fr) 195px; gap: 9px; } .booklet-mission-panel { padding: 13px 11px; } }
-    @media (max-width: 700px) { .booklet-game-layout { grid-template-columns: 1fr; } .booklet-stage-frame { height: clamp(310px, 72vw, 420px); } .booklet-mission-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; } .booklet-mission-top, .booklet-mission-panel h3, .booklet-mission-panel > p, .booklet-target-card, .booklet-progress-track, .booklet-slot-list, .booklet-finish-button, .booklet-finish-note { grid-column: 1 / -1; } .booklet-mission-panel h3 { margin-top: 7px; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 150px; align-items: center; justify-items: start; } .booklet-target-card svg { grid-column: 2; grid-row: 1 / span 2; height: 84px; } .booklet-target-status { align-self: start; } .booklet-slot-list { grid-template-columns: repeat(3,1fr); gap: 3px; } .booklet-slot-list span { justify-content: center; font-size: .73rem; } .booklet-recap-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-    @media (max-width: 460px) { .unit-booklet { padding: 15px; border-radius: 19px; } .booklet-stamp { width: 49px; height: 49px; font-size: .82rem; } .booklet-stage-frame { height: 300px; } .booklet-stage-button { min-height: 38px; padding: 5px 9px; font-size: .76rem; } .booklet-stage-badge { font-size: .72rem; } .booklet-prop-token { grid-template-columns: 28px minmax(0,1fr); padding: 6px; column-gap: 6px; } .booklet-prop-icon { width: 28px; height: 28px; font-size: 1.1rem; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 120px; } .booklet-depth-controls { gap: 4px; padding: 5px; } .booklet-depth-controls > span { width: 100%; } .booklet-depth-controls button { flex: 1; padding-inline: 5px; font-size: .7rem; } .booklet-depth-controls output { width: 100%; margin: 0; text-align: right; } .booklet-recap-grid { gap: 6px; padding-inline: 8px; } .booklet-recap-grid article { padding: 8px; } .booklet-recap-grid article > strong { font-size: .75rem; } .booklet-recap-grid article p { font-size: .68rem; } }
+    @media (max-width: 700px) { .booklet-game-layout { grid-template-columns: 1fr; } .booklet-stage-frame { height: clamp(310px, 72vw, 420px); } .booklet-mission-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; } .booklet-mission-top, .booklet-mission-panel h3, .booklet-mission-panel > p, .booklet-target-card, .booklet-progress-track, .booklet-slot-list, .booklet-finish-button, .booklet-finish-note { grid-column: 1 / -1; } .booklet-mission-panel h3 { margin-top: 7px; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 150px; align-items: center; justify-items: start; } .booklet-target-card svg { grid-column: 2; grid-row: 1 / span 2; height: 84px; } .booklet-target-status { align-self: start; } .booklet-slot-list { grid-template-columns: repeat(3,1fr); gap: 3px; } .booklet-slot-list span { justify-content: center; font-size: .73rem; } }
+    @media (max-width: 460px) { .unit-booklet { padding: 15px; border-radius: 19px; } .booklet-stamp { width: 49px; height: 49px; font-size: .82rem; } .booklet-stage-frame { height: 300px; } .booklet-stage-button { min-height: 38px; padding: 5px 9px; font-size: .76rem; } .booklet-stage-badge { font-size: .72rem; } .booklet-prop-token { grid-template-columns: 28px minmax(0,1fr); padding: 6px; column-gap: 6px; } .booklet-prop-icon { width: 28px; height: 28px; font-size: 1.1rem; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 120px; } .booklet-depth-controls { gap: 4px; padding: 5px; } .booklet-depth-controls > span { width: 100%; } .booklet-depth-controls button { flex: 1; padding-inline: 5px; font-size: .7rem; } .booklet-depth-controls output { width: 100%; margin: 0; text-align: right; } }
     @media (max-width: 520px) {
       #aperture-3d-scene { height: 300px; }
       .aperture-scene-with-height { grid-template-columns: minmax(0, 1fr) 52px; gap: 7px; }
@@ -600,17 +587,6 @@
               <p class="booklet-finish-note" id="shadow-theatre-finish-note" aria-live="polite">道具就位後，描邊會全部消失。</p>
             </aside>
           </div>
-          <details class="booklet-recap">
-            <summary><span><strong>翻開小冊</strong><small>回看一路收集的六個光線線索</small></span><b aria-hidden="true">＋</b></summary>
-            <div class="booklet-recap-grid">
-              <article><span>01</span><strong>光進入眼睛</strong><p>看見光源，或看見物體反射進眼睛的光。</p></article>
-              <article><span>02</span><strong>月亮和書本</strong><p>它們不是光源；反射光進入眼睛，我們才看得見。</p></article>
-              <article><span>03</span><strong>光沿直線前進</strong><p>三個小孔排成一直線，光才會穿過。</p></article>
-              <article><span>04</span><strong>影子出現</strong><p>不透明物體擋住光，屏幕上留下暗影。</p></article>
-              <article><span>05</span><strong>影子會改變</strong><p>光源、物體和屏幕的相對位置會影響影子大小。</p></article>
-              <article><span>06</span><strong>光有傳播時間</strong><p>真空中的光每秒約走 30 萬公里。</p></article>
-            </div>
-          </details>
         </section>
       </div>
     </div>
@@ -700,6 +676,6 @@
   <script type="module" src="assets/shadow-3d.js?v=shadow-short-rail-20261024"></script>
   <script type="module" src="assets/shadow-size-3d.js?v=shadow-size-drag-only-20261024"></script>
   <script type="module" src="assets/light-speed-timer.js?v=light-speed-double-tap-20261024"></script>
-  <script type="module" src="assets/shadow-theatre.js?v=booklet-theatre-20261025-v4"></script>
+  <script type="module" src="assets/shadow-theatre.js?v=booklet-theatre-20261025-v5"></script>
 </body>
 </html>
