@@ -124,8 +124,9 @@
     .cycle-wave-control { margin-top:8px; padding-top:10px; border-top:1px solid var(--line); }
     .cycle-wave-control .controls { flex-direction:column; align-items:flex-start; gap:8px; }
     .cycle-wave-control .live-note { width:100%; margin:0; padding:8px 11px; border-radius:10px; background:#f8f9f4; }
+    .cycle-wave-figure { container-type:inline-size; }
     .cycle-wave-figure figcaption { margin-top:10px; padding-top:9px; border-top:1px solid var(--line); }
-    .cycle-amplitude-sequence { margin:12px 0 0; }
+    .cycle-amplitude-sequence { margin:0 0 12px; }
     .cycle-amplitude-sequence>p { margin:0 0 8px; font-weight:700; }
     .cycle-amplitude-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; }
     .cycle-amplitude-step { min-width:0; padding:9px 7px; border:1px solid var(--line); border-radius:10px; background:#f8f9f4; text-align:center; transition:background-color .18s,border-color .18s; }
@@ -133,7 +134,7 @@
     .cycle-amplitude-step small { margin-top:3px; color:var(--muted); }
     .cycle-amplitude-step.is-active { border-color:#d98a44; background:#fff2e5; }
     .cycle-amplitude-step.is-complete { border-color:#9bbba7; background:#eef5ef; }
-    @media (max-width:520px) { .cycle-amplitude-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @container (max-width:520px) { .cycle-amplitude-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
     @media (max-width:520px) { #card-06 .visual svg text { font-size:25px; } #card-06 .visual svg .small-label { font-size:21px; } }
     .longitudinal-wavelength-panel svg text { font-size:18px; }
     .longitudinal-wavelength-panel svg .lambda-symbol { font-size:25px; font-weight:800; }
@@ -546,6 +547,15 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩上的一點先往上、再往下；把它的動作記下來，會畫出什麼波形？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>看左邊同一點上下振動，右邊同步記下它的位置。從平衡位置出發，經過波峰、波谷再回來，就描出一個完整的波形。</p></div>
             <figure class="visual cycle-wave-figure">
+              <div class="cycle-amplitude-sequence" aria-label="一個完整振動的四段位移">
+                <p>一個完整振動：每一段移動一個振幅 A</p>
+                <div class="cycle-amplitude-steps">
+                  <div class="cycle-amplitude-step" data-cycle-step><strong>平衡位置到 +A</strong><small>上行一個振幅 A</small></div>
+                  <div class="cycle-amplitude-step" data-cycle-step><strong>+A 到平衡位置</strong><small>下行一個振幅 A</small></div>
+                  <div class="cycle-amplitude-step" data-cycle-step><strong>平衡位置到 −A</strong><small>再下行一個振幅 A</small></div>
+                  <div class="cycle-amplitude-step" data-cycle-step><strong>−A 到平衡位置</strong><small>上行一個振幅 A</small></div>
+                </div>
+              </div>
               <svg viewBox="0 0 700 285" role="img" aria-label="動畫中橘色粒子從平衡位置上行到 +A 輔助線，再下行到 −A 輔助線，最後上行回到平衡位置；綠色波形從粒子所在左端向右形成">
                 <defs>
                   <marker id="arrow-cycle-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
@@ -569,15 +579,6 @@
               </div>
               <figcaption>粒子上下振動，帶動波形向右形成；完成一輪振動，描出一個完整波，長度為一個波長 λ。</figcaption>
             </figure>
-            <div class="cycle-amplitude-sequence" aria-label="一個完整振動的四段位移">
-              <p>一個完整振動：每一段移動一個振幅 A</p>
-              <div class="cycle-amplitude-steps">
-                <div class="cycle-amplitude-step" data-cycle-step><strong>平衡位置到 +A</strong><small>上行一個振幅 A</small></div>
-                <div class="cycle-amplitude-step" data-cycle-step><strong>+A 到平衡位置</strong><small>下行一個振幅 A</small></div>
-                <div class="cycle-amplitude-step" data-cycle-step><strong>平衡位置到 −A</strong><small>再下行一個振幅 A</small></div>
-                <div class="cycle-amplitude-step" data-cycle-step><strong>−A 到平衡位置</strong><small>上行一個振幅 A</small></div>
-              </div>
-            </div>
           </div>
         </section>
 
