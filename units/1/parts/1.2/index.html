@@ -191,17 +191,17 @@
 
         <section class="lesson-card" id="card-04">
           <aside class="card-side"><span class="card-number">04</span><h3>比較物體和像</h3><span class="card-role">從觀察整理成像特性</span></aside>
-          <div class="card-main"><h2>鏡中的影像和物體有哪些相同或不同？</h2><p>在物體和鏡中像上各取一個對應位置，觀察方向、大小與到鏡面的距離。再用觀察結果整理平面鏡成像特性。</p>
+          <div class="card-main"><h2>鏡中的影像和物體有哪些相同或不同？</h2><p>前一段已觀察像到鏡面的距離。這一段比較物體和像的方向、大小及相對鏡面的位置，整理平面鏡成像的其他特性。</p>
             <div class="visual"><svg viewBox="0 0 620 260" role="img" aria-label="平面鏡中物體與像的方向、大小和對稱位置比較">
               <path d="M310 25V229" stroke="#526a5d" stroke-width="12"/><path d="M302 25V229" stroke="#c8d5c8" stroke-width="3"/><text x="310" y="18" text-anchor="middle" fill="#315a46" font-size="15" font-weight="700">鏡面</text>
               <g fill="#d9a172" stroke="#9a6037" stroke-width="3"><circle cx="202" cy="92" r="25"/><path d="M202 118V177M174 179H230" fill="none" stroke-linecap="round" stroke-width="7"/></g>
               <g opacity=".45" fill="#d9a172" stroke="#9a6037" stroke-width="3"><circle cx="418" cy="92" r="25"/><path d="M418 118V177M390 179H446" fill="none" stroke-linecap="round" stroke-width="7"/></g>
               <path d="M202 213H310M310 213H418" stroke="#8a958d" stroke-width="2" stroke-dasharray="5 5"/><text x="202" y="238" text-anchor="middle" fill="#315a46" font-size="15">物體</text><text x="418" y="238" text-anchor="middle" fill="#315a46" font-size="15">鏡中像</text>
-              <path d="M184 62H220" stroke="#176b53" stroke-width="2"/><path d="M400 62H436" stroke="#176b53" stroke-width="2"/><text x="310" y="70" text-anchor="middle" fill="#64736d" font-size="14">等大、正立、與鏡面對稱</text>
+              <path d="M184 62H220" stroke="#176b53" stroke-width="2"/><path d="M400 62H436" stroke="#176b53" stroke-width="2"/><text x="310" y="70" text-anchor="middle" fill="#64736d" font-size="14">等大、正立、相對鏡面對稱</text>
             </svg><p class="visual-caption">以相同尺度比較物體和像；淡色像表示它看起來在鏡後。</p></div>
-            <div class="quiz" aria-labelledby="mirror-check-title"><h3 id="mirror-check-title">檢查你的觀察：平面鏡中的像有什麼特性？</h3><div class="quiz-options" role="group" aria-label="選擇平面鏡影像特性"><button type="button" data-answer="wrong" aria-pressed="false">倒立、大小不一定相同</button><button type="button" data-answer="correct" aria-pressed="false">正立、與物體等大，和物體到鏡面的距離相等</button></div><p class="quiz-feedback" id="mirror-check-feedback" aria-live="polite">先比較圖中物體和像的方向、大小與距離，再選擇。</p></div>
-            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>平面鏡中的像是正立的，大小和物體相同，並且與物體相對鏡面對稱；像到鏡面的距離等於物體到鏡面的距離。</p></div>
-            <div class="takeaway">平面鏡成像：正立、等大，物像相對鏡面對稱；像距等於物距。</div>
+            <div class="quiz" aria-labelledby="mirror-check-title"><h3 id="mirror-check-title">檢查你的觀察：平面鏡中的像有什麼特性？</h3><div class="quiz-options" role="group" aria-label="選擇平面鏡影像特性"><button type="button" data-answer="wrong" aria-pressed="false">倒立、大小不一定相同</button><button type="button" data-answer="correct" aria-pressed="false">正立、與物體等大，並相對鏡面對稱</button></div><p class="quiz-feedback" id="mirror-check-feedback" aria-live="polite">先比較圖中物體和像的方向與大小，再選擇。</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>平面鏡中的像是正立的，大小和物體相同，並且與物體相對鏡面對稱。像看起來在鏡後，是因為反射光進入眼睛後，眼睛沿直線判斷光的來源。</p></div>
+            <div class="takeaway">平面鏡成像：正立、等大，並與物體相對鏡面對稱。像距和物距的關係已在上一段觀察。</div>
           </div>
         </section>
 
@@ -304,7 +304,7 @@
 
       document.querySelectorAll('[data-answer]').forEach(button => button.addEventListener('click', () => {
         document.querySelectorAll('[data-answer]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-        document.querySelector('#mirror-check-feedback').textContent = button.dataset.answer === 'correct' ? '答對了。平面鏡中的像正立、等大，且像距等於物距。' : '再觀察一次物體與像的高度和方向；平面鏡中的像並非倒立。';
+        document.querySelector('#mirror-check-feedback').textContent = button.dataset.answer === 'correct' ? '答對了。平面鏡中的像正立、等大，並與物體相對鏡面對稱。' : '再觀察一次物體與像的高度和方向；平面鏡中的像並非倒立。';
       }));
 
       const periscopeAngle = document.querySelector('#periscope-angle');
