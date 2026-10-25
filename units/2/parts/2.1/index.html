@@ -161,8 +161,8 @@
           <a href="#card-01" aria-current="step"><b>01</b><span>繩子一端被抖動，變化怎麼傳到另一端？</span></a>
           <a href="#card-02"><b>02</b><span>波形向前傳，繩上的點會跟著走嗎？</span></a>
           <a href="#card-03"><b>03</b><span>波形圖上，波峰、波谷和平衡位置怎麼認？</span></a>
-          <a href="#card-04"><b>04</b><span>橫波和縱波，差別在振動方向？</span></a>
-          <a href="#card-05"><b>05</b><span>波形的高低和重複間隔，怎麼量？</span></a>
+          <a href="#card-04"><b>04</b><span>波形的高低和重複間隔，怎麼量？</span></a>
+          <a href="#card-05"><b>05</b><span>橫波和縱波，差別在振動方向？</span></a>
           <a href="#card-06"><b>06</b><span>振得快慢，如何用頻率和週期表示？</span></a>
           <a href="#card-07"><b>07</b><span>波速、頻率和波長，怎麼連在一起？</span></a>
           <a href="#card-08"><b>08</b><span>讀懂這段波，可以解釋什麼？</span></a>
@@ -242,57 +242,7 @@
         </section>
 
         <section class="lesson-card" id="card-04">
-          <div class="card-side"><span class="card-number">04</span><h3>比較兩個方向</h3><span class="card-role">認識橫波與縱波</span></div>
-          <div class="card-main">
-            <h2>橫波和縱波，差別在振動方向？</h2>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩點上下振動，波往右傳；彈簧線圈前後動，疏密變化也往右傳。這兩種波該怎麼分？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>比較介質振動方向和波前進方向：互相垂直是橫波，互相平行是縱波。</p></div>
-            <p>判斷波型時，比較介質振動方向和波前進方向。兩個方向互相垂直是橫波，互相平行是縱波。下面兩種波都向右傳，差別在介質如何振動。</p>
-            <div class="diagram-grid wave-type-diagrams">
-              <figure class="visual diagram-panel">
-                <h3>橫波｜繩點上下振動，波形向右傳</h3>
-                <svg id="transverse-wave-diagram" viewBox="0 0 760 270" role="img" aria-label="繩波持續向右傳播；繩上的固定點沿垂直方向上下振動">
-                  <defs>
-                    <pattern id="rope-fallback-4" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern>
-                    <marker id="arrow-transverse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
-                    <marker id="arrow-particle-v" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
-                  </defs>
-                  <path d="M46 116H714" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
-                  <path id="transverse-wave-rope" class="rope-underlay" d="M46 116 C94 116 108 68 156 68 S218 164 276 164 S334 68 392 68 S450 164 508 164 S566 68 624 68 S674 116 714 116"/>
-                  <path class="rope-fallback" stroke="url(#rope-fallback-4)" aria-hidden="true" d="M46 116 C94 116 108 68 156 68 S218 164 276 164 S334 68 392 68 S450 164 508 164 S566 68 624 68 S674 116 714 116"/>
-                  <g class="rope-texture-layer" aria-hidden="true"></g>
-                  <path id="transverse-point-guide" d="M350 66V166" stroke="#df8b41" stroke-width="1.5" stroke-dasharray="5 5"/>
-                  <circle id="transverse-fixed-point" cx="350" cy="116" r="7" fill="#df8b41" stroke="#fff" stroke-width="2.5"/>
-                  <path d="M326 87V145" class="measure" marker-start="url(#arrow-particle-v)" marker-end="url(#arrow-particle-v)"/>
-                  <path d="M118 207H650" class="motion-arrow" marker-end="url(#arrow-transverse)"/>
-                  <text x="384" y="236" text-anchor="middle">波前進方向</text>
-                </svg>
-                <p>橘點固定在同一水平位置，隨繩子上下振動；波形沿繩子向右傳。兩個方向互相垂直。</p>
-              </figure>
-              <figure class="visual diagram-panel">
-                <h3>縱波｜線圈前後振動，疏密變化向右傳</h3>
-                <svg id="longitudinal-wave-diagram" viewBox="0 0 760 280" role="img" aria-label="彈簧線圈沿水平方向前後振動；壓縮和疏鬆區向右傳播">
-                  <defs>
-                    <linearGradient id="spring-metal-gradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#64717a"/><stop offset=".2" stop-color="#d8dfe2"/><stop offset=".45" stop-color="#fff"/><stop offset=".7" stop-color="#87939a"/><stop offset="1" stop-color="#e8edef"/></linearGradient>
-                    <marker id="arrow-longitudinal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
-                    <marker id="arrow-particle-h" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
-                  </defs>
-                  <path d="M46 126H714" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
-                  <g id="longitudinal-spring-coils"></g>
-                  <path id="longitudinal-point-guide" d="M380 76V176" stroke="#df8b41" stroke-width="1.5" stroke-dasharray="5 5"/>
-                  <path d="M352 64H408" class="measure" marker-start="url(#arrow-particle-h)" marker-end="url(#arrow-particle-h)"/>
-                  <path d="M118 218H650" class="motion-arrow" marker-end="url(#arrow-longitudinal)"/>
-                  <text x="384" y="248" text-anchor="middle">疏密波形前進方向</text>
-                </svg>
-                <p>橘色線圈在原位置附近前後往返；線圈密集與疏開的區域一起向右傳。兩個方向互相平行。</p>
-              </figure>
-            </div>
-            <div class="fact"><p>接下來先用繩波這種容易看出上下位移的橫波圖，示範如何量振幅與波長。縱波也有波長，例如一個壓縮區到下一個壓縮區。</p></div>
-          </div>
-        </section>
-
-        <section class="lesson-card" id="card-05">
-          <div class="card-side"><span class="card-number">05</span><h3>測量波形</h3><span class="card-role">認識振幅與波長</span></div>
+          <div class="card-side"><span class="card-number">04</span><h3>測量波形</h3><span class="card-role">認識振幅與波長</span></div>
           <div class="card-main">
             <h2>波形的高低和重複間隔，怎麼量？</h2>
             <p>讀取波形時，可以量出垂直的高低，也可以量出水平的重複間隔。這兩種距離分別是振幅和波長。</p>
@@ -345,6 +295,57 @@
               </div>
               <p class="live-note" id="lambda-explanation" aria-live="polite">兩個相鄰波峰之間的水平距離，就是一個波長 λ。</p>
             </div>
+            <div class="fact"><p><strong>量測方向：</strong>波長沿著波前進方向量；橫波可量相鄰波峰或波谷，縱波可量相鄰壓縮區。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-05">
+          <div class="card-side"><span class="card-number">05</span><h3>比較兩個方向</h3><span class="card-role">認識橫波與縱波</span></div>
+          <div class="card-main">
+            <h2>橫波和縱波，差別在振動方向？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩點上下振動，波往右傳；彈簧線圈前後動，疏密變化也往右傳。這兩種波該怎麼分？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>比較介質振動方向和波前進方向：互相垂直是橫波，互相平行是縱波。</p></div>
+            <p>判斷波型時，比較介質振動方向和波前進方向。兩個方向互相垂直是橫波，互相平行是縱波。下面兩種波都向右傳，差別在介質如何振動。</p>
+            <div class="diagram-grid wave-type-diagrams">
+              <figure class="visual diagram-panel">
+                <h3>橫波｜繩點上下振動，波形向右傳</h3>
+                <svg id="transverse-wave-diagram" viewBox="0 0 760 270" role="img" aria-label="繩波持續向右傳播；繩上的固定點沿垂直方向上下振動">
+                  <defs>
+                    <pattern id="rope-fallback-4" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern>
+                    <marker id="arrow-transverse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
+                    <marker id="arrow-particle-v" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
+                  </defs>
+                  <path d="M46 116H714" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
+                  <path id="transverse-wave-rope" class="rope-underlay" d="M46 116 C94 116 108 68 156 68 S218 164 276 164 S334 68 392 68 S450 164 508 164 S566 68 624 68 S674 116 714 116"/>
+                  <path class="rope-fallback" stroke="url(#rope-fallback-4)" aria-hidden="true" d="M46 116 C94 116 108 68 156 68 S218 164 276 164 S334 68 392 68 S450 164 508 164 S566 68 624 68 S674 116 714 116"/>
+                  <g class="rope-texture-layer" aria-hidden="true"></g>
+                  <path id="transverse-point-guide" d="M350 66V166" stroke="#df8b41" stroke-width="1.5" stroke-dasharray="5 5"/>
+                  <circle id="transverse-fixed-point" cx="350" cy="116" r="7" fill="#df8b41" stroke="#fff" stroke-width="2.5"/>
+                  <path d="M326 87V145" class="measure" marker-start="url(#arrow-particle-v)" marker-end="url(#arrow-particle-v)"/>
+                  <path d="M118 207H650" class="motion-arrow" marker-end="url(#arrow-transverse)"/>
+                  <text x="384" y="236" text-anchor="middle">波前進方向</text>
+                </svg>
+                <p>橘點固定在同一水平位置，隨繩子上下振動；波形沿繩子向右傳。兩個方向互相垂直。</p>
+              </figure>
+              <figure class="visual diagram-panel">
+                <h3>縱波｜線圈前後振動，疏密變化向右傳</h3>
+                <svg id="longitudinal-wave-diagram" viewBox="0 0 760 280" role="img" aria-label="彈簧線圈沿水平方向前後振動；壓縮和疏鬆區向右傳播">
+                  <defs>
+                    <linearGradient id="spring-metal-gradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#64717a"/><stop offset=".2" stop-color="#d8dfe2"/><stop offset=".45" stop-color="#fff"/><stop offset=".7" stop-color="#87939a"/><stop offset="1" stop-color="#e8edef"/></linearGradient>
+                    <marker id="arrow-longitudinal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
+                    <marker id="arrow-particle-h" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
+                  </defs>
+                  <path d="M46 126H714" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
+                  <g id="longitudinal-spring-coils"></g>
+                  <path id="longitudinal-point-guide" d="M380 76V176" stroke="#df8b41" stroke-width="1.5" stroke-dasharray="5 5"/>
+                  <path d="M352 64H408" class="measure" marker-start="url(#arrow-particle-h)" marker-end="url(#arrow-particle-h)"/>
+                  <path d="M118 218H650" class="motion-arrow" marker-end="url(#arrow-longitudinal)"/>
+                  <text x="384" y="248" text-anchor="middle">疏密波形前進方向</text>
+                </svg>
+                <p>橘色線圈在原位置附近前後往返；線圈密集與疏開的區域一起向右傳。兩個方向互相平行。</p>
+              </figure>
+            </div>
+            <p>縱波也能用波長描述重複間隔；沿著波前進方向，量相鄰壓縮區之間的距離。</p>
             <div class="diagram-panel">
               <h3>縱波也有波長</h3>
               <svg viewBox="0 0 620 120" role="img" aria-label="彈簧縱波中相鄰兩個壓縮區之間的距離為波長">
@@ -354,7 +355,7 @@
                 <path d="M130 80V102M482 80V102" stroke="#84988a" stroke-width="1.5" stroke-dasharray="4 4"/><path d="M134 94H478" class="measure" marker-start="url(#arrow-long-lambda)" marker-end="url(#arrow-long-lambda)"/><text x="306" y="118" text-anchor="middle">相鄰壓縮區的距離也是波長 λ</text>
               </svg>
             </div>
-            <div class="fact"><p><strong>量測方向：</strong>波長沿著波前進方向量；橫波可量相鄰波峰或波谷，縱波可量相鄰壓縮區。</p></div>
+            <div class="fact"><p><strong>共同的量測方式：</strong>不論橫波或縱波，波長都沿著波前進方向，量相鄰重複位置的距離。</p></div>
           </div>
         </section>
 
