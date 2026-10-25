@@ -159,8 +159,8 @@
         <p class="route-label">本單元的探索路線</p>
         <div class="route-inner">
           <a href="#card-01" aria-current="step"><b>01</b><span>繩子一端被抖動，變化怎麼傳到另一端？</span></a>
-          <a href="#card-02"><b>02</b><span>波形圖上，我們要認出哪些要素？</span></a>
-          <a href="#card-03"><b>03</b><span>波往前傳，繩上的記號也跟著跑嗎？</span></a>
+          <a href="#card-02"><b>02</b><span>波形向前傳，繩上的點會跟著走嗎？</span></a>
+          <a href="#card-03"><b>03</b><span>波形圖上，波峰、波谷和平衡位置怎麼認？</span></a>
           <a href="#card-04"><b>04</b><span>橫波和縱波，差別在振動方向？</span></a>
           <a href="#card-05"><b>05</b><span>波形的高低和重複間隔，怎麼量？</span></a>
           <a href="#card-06"><b>06</b><span>振得快慢，如何用頻率和週期表示？</span></a>
@@ -177,9 +177,9 @@
           <div class="card-main">
             <h2>繩子一端被抖動，變化怎麼傳到另一端？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，繩子一端上下振動，起伏怎麼會往另一端傳？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>波源完成一次上下振動，會送出一個有波峰和波谷的單次波；持續振動則形成連續波。</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>波源完成一次上下振動，會送出一個起伏向右傳播的單次波；持續振動則形成連續波。</p></div>
             <p>波是振動或擾動的傳播，能把能量由一處傳到另一處。繩子一端振動後，變化沿著繩子傳開。</p><figure class="visual">
-              <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="繩波由左側波源向右傳播；可播放含有波峰和波谷的單次波，或切換連續波">
+              <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="繩波由左側波源向右傳播；可播放單次起伏，或切換連續波">
                 <defs><pattern id="rope-fallback-1" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern><marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path class="pulse-path rope-underlay" d="M38 142H722"/><path class="rope-fallback" stroke="url(#rope-fallback-1)" aria-hidden="true" d="M38 142H722"/><g class="rope-texture-layer" aria-hidden="true"></g>
                 <path d="M38 116V87M32 94L38 86L44 94M38 139V168M32 161L38 169L44 161" fill="none" stroke="#748b7e" stroke-width="2"/>
@@ -187,39 +187,19 @@
                 <path d="M130 228H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
                 <text x="345" y="253" text-anchor="middle">波形傳播方向</text>
               </svg>
-              <figcaption data-wave-caption>單次波：波源完成一次上下振動，形成一個有波峰和波谷的波形向右傳播。</figcaption>
+              <figcaption data-wave-caption>單次波：波源完成一次上下振動，形成一個起伏向右傳播。</figcaption>
             </figure>
             <div class="control-panel"><div class="controls" role="group" aria-label="繩波播放控制"><button class="secondary" type="button" data-wave-single>單次波</button><button class="secondary" type="button" data-wave-continuous aria-pressed="false">連續波</button><span class="live-note" data-pulse-status aria-live="polite">初始狀態：繩子維持平衡。可播放一次波形，或持續振動。</span></div></div>
           </div>
         </section>
 
         <section class="lesson-card" id="card-02">
-          <div class="card-side"><span class="card-number">02</span><h3>讀懂波形</h3><span class="card-role">建立共同的圖像詞彙</span></div>
+          <div class="card-side"><span class="card-number">02</span><h3>追蹤固定繩點</h3><span class="card-role">介質振動，波形前進</span></div>
           <div class="card-main">
-            <h2>繩波有些地方凸起、有些地方凹下，圖上怎麼讀？</h2>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩波有些地方凸起來，有些地方凹下去。中間的虛線好像是繩子原本的位置。</p></div>
-            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>沒錯。繩子原本的位置叫平衡位置；凸起的最高處叫波峰，凹下的最低處叫波谷。</p></div>
-            <p>波形圖用曲線呈現繩子的高低起伏。平衡位置是繩子原本所在的位置；波峰、波谷分別是相對於它而言凸起最高、凹下最低的位置。</p><figure class="visual">
-              <svg class="rope-wave wave-vocabulary" data-static-rope viewBox="0 0 720 270" role="img" aria-label="波形圖完整呈現兩個波峰、兩個波谷和平衡位置">
-                <path d="M48 140H672" class="equilibrium"/>
-                <path class="wave-line" d="M48 140.00 L52 134.05 L56 128.13 L60 122.29 L64 116.57 L68 110.99 L72 105.61 L76 100.45 L80 95.55 L84 90.93 L88 86.63 L92 82.68 L96 79.10 L100 75.91 L104 73.14 L108 70.81 L112 68.92 L116 67.50 L120 66.54 L124 66.06 L128 66.06 L132 66.54 L136 67.50 L140 68.92 L144 70.81 L148 73.14 L152 75.91 L156 79.10 L160 82.68 L164 86.63 L168 90.93 L172 95.55 L176 100.45 L180 105.61 L184 110.99 L188 116.57 L192 122.29 L196 128.13 L200 134.05 L204 140.00 L208 145.95 L212 151.87 L216 157.71 L220 163.43 L224 169.01 L228 174.39 L232 179.55 L236 184.45 L240 189.07 L244 193.37 L248 197.32 L252 200.90 L256 204.09 L260 206.86 L264 209.19 L268 211.08 L272 212.50 L276 213.46 L280 213.94 L284 213.94 L288 213.46 L292 212.50 L296 211.08 L300 209.19 L304 206.86 L308 204.09 L312 200.90 L316 197.32 L320 193.37 L324 189.07 L328 184.45 L332 179.55 L336 174.39 L340 169.01 L344 163.43 L348 157.71 L352 151.87 L356 145.95 L360 140.00 L364 134.05 L368 128.13 L372 122.29 L376 116.57 L380 110.99 L384 105.61 L388 100.45 L392 95.55 L396 90.93 L400 86.63 L404 82.68 L408 79.10 L412 75.91 L416 73.14 L420 70.81 L424 68.92 L428 67.50 L432 66.54 L436 66.06 L440 66.06 L444 66.54 L448 67.50 L452 68.92 L456 70.81 L460 73.14 L464 75.91 L468 79.10 L472 82.68 L476 86.63 L480 90.93 L484 95.55 L488 100.45 L492 105.61 L496 110.99 L500 116.57 L504 122.29 L508 128.13 L512 134.05 L516 140.00 L520 145.95 L524 151.87 L528 157.71 L532 163.43 L536 169.01 L540 174.39 L544 179.55 L548 184.45 L552 189.07 L556 193.37 L560 197.32 L564 200.90 L568 204.09 L572 206.86 L576 209.19 L580 211.08 L584 212.50 L588 213.46 L592 213.94 L596 213.94 L600 213.46 L604 212.50 L608 211.08 L612 209.19 L616 206.86 L620 204.09 L624 200.90 L628 197.32 L632 193.37 L636 189.07 L640 184.45 L644 179.55 L648 174.39 L652 169.01 L656 163.43 L660 157.71 L664 151.87 L668 145.95 L672 140.00"/>
-                <text x="126" y="38" text-anchor="middle">波峰</text><text x="438" y="38" text-anchor="middle">波峰</text>
-                <text x="282" y="252" text-anchor="middle">波谷</text><text x="594" y="252" text-anchor="middle">波谷</text>
-                <path d="M112 177V145" stroke="#748b7e" stroke-width="1.5"/><rect x="52" y="177" width="120" height="34" rx="8" fill="#fffefa" stroke="#d7e1dd"/><text x="112" y="201" text-anchor="middle">平衡位置</text>
-              </svg>
-              <figcaption>虛線是平衡位置；凸起的最高處是波峰，凹下的最低處是波谷。</figcaption>
-            </figure>
-            <div class="fact"><p><strong>讀圖提示：</strong>先找平衡位置，再依照曲線的高低辨認波峰和波谷。</p></div>
-          </div>
-        </section>
-
-        <section class="lesson-card" id="card-03">
-          <div class="card-side"><span class="card-number">03</span><h3>追蹤固定繩點</h3><span class="card-role">介質振動，波形前進</span></div>
-          <div class="card-main">
-            <h2>波往前走，標記怎麼沒有跟著跑？</h2>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>波峰往右傳，繩上的橘點也會跟著往右跑嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>把波峰的位置和橘色繩點分開看：繩點在原處附近上下振動，波形和能量往右傳。</p></div>
-            <p>橘點代表繩上的同一點。波形向右傳時，這個繩點只在原來的水平位置附近上下振動；波峰通過後，它會接著往下，再回到平衡位置附近，沒有隨波形一路向右跑。繩上的振動把能量傳到遠處，繩子本身沒有整段隨波前進。</p><figure class="visual">
+            <h2>波形向前傳，繩上的點會跟著走嗎？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩子一端抖動後，起伏往前傳；繩上的橘點也會跟著往前走嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>不會。橘點代表繩上的同一點，它只在原來的位置附近上下振動；繩子各處依序振動，讓波形和能量往右傳。</p></div>
+            <p>觀察動畫，起伏向右傳時，橘點只在原來的水平位置附近上下振動。繩上的振動把能量傳到遠處，但繩子本身沒有整段跟著波形往前移動。</p><figure class="visual">
               <svg class="rope-wave" data-fixed-point-wave viewBox="0 0 760 280" role="group" aria-label="互動繩波示意：可拖曳下方左右箭頭選擇繩上的位置，觀察繩點上下振動">
                 <defs><pattern id="rope-fallback-3" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern><marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
@@ -237,7 +217,27 @@
               </svg>
               <figcaption>拖曳波形下方的左右箭頭控制鈕，可選擇繩上的不同位置；上方橘點會貼著繩子上下振動。也可聚焦控制鈕後按左右鍵移動。</figcaption>
             </figure>
-            <div class="fact"><p><strong>分清楚兩種運動：</strong>繩點在原處附近振動；波形把擾動和能量傳到遠處。波峰不是一團繩子一路移動。</p></div>
+            <div class="fact"><p><strong>分清楚兩種運動：</strong>繩點在原處附近振動；波形把擾動和能量傳到遠處。波形不是一整段繩子向右移動。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-03">
+          <div class="card-side"><span class="card-number">03</span><h3>讀懂波形</h3><span class="card-role">建立共同的圖像詞彙</span></div>
+          <div class="card-main">
+            <h2>繩波有些地方凸起、有些地方凹下，圖上怎麼讀？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩波有些地方凸起來，有些地方凹下去。中間的虛線好像是繩子原本的位置。</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>沒錯。繩子原本的位置叫平衡位置；凸起的最高處叫波峰，凹下的最低處叫波谷。</p></div>
+            <p>波形圖用曲線呈現繩子的高低起伏。平衡位置是繩子原本所在的位置；波峰、波谷分別是相對於它而言凸起最高、凹下最低的位置。</p><figure class="visual">
+              <svg class="rope-wave wave-vocabulary" data-static-rope viewBox="0 0 720 270" role="img" aria-label="波形圖完整呈現兩個波峰、兩個波谷和平衡位置">
+                <path d="M48 140H672" class="equilibrium"/>
+                <path class="wave-line" d="M48 140.00 L52 134.05 L56 128.13 L60 122.29 L64 116.57 L68 110.99 L72 105.61 L76 100.45 L80 95.55 L84 90.93 L88 86.63 L92 82.68 L96 79.10 L100 75.91 L104 73.14 L108 70.81 L112 68.92 L116 67.50 L120 66.54 L124 66.06 L128 66.06 L132 66.54 L136 67.50 L140 68.92 L144 70.81 L148 73.14 L152 75.91 L156 79.10 L160 82.68 L164 86.63 L168 90.93 L172 95.55 L176 100.45 L180 105.61 L184 110.99 L188 116.57 L192 122.29 L196 128.13 L200 134.05 L204 140.00 L208 145.95 L212 151.87 L216 157.71 L220 163.43 L224 169.01 L228 174.39 L232 179.55 L236 184.45 L240 189.07 L244 193.37 L248 197.32 L252 200.90 L256 204.09 L260 206.86 L264 209.19 L268 211.08 L272 212.50 L276 213.46 L280 213.94 L284 213.94 L288 213.46 L292 212.50 L296 211.08 L300 209.19 L304 206.86 L308 204.09 L312 200.90 L316 197.32 L320 193.37 L324 189.07 L328 184.45 L332 179.55 L336 174.39 L340 169.01 L344 163.43 L348 157.71 L352 151.87 L356 145.95 L360 140.00 L364 134.05 L368 128.13 L372 122.29 L376 116.57 L380 110.99 L384 105.61 L388 100.45 L392 95.55 L396 90.93 L400 86.63 L404 82.68 L408 79.10 L412 75.91 L416 73.14 L420 70.81 L424 68.92 L428 67.50 L432 66.54 L436 66.06 L440 66.06 L444 66.54 L448 67.50 L452 68.92 L456 70.81 L460 73.14 L464 75.91 L468 79.10 L472 82.68 L476 86.63 L480 90.93 L484 95.55 L488 100.45 L492 105.61 L496 110.99 L500 116.57 L504 122.29 L508 128.13 L512 134.05 L516 140.00 L520 145.95 L524 151.87 L528 157.71 L532 163.43 L536 169.01 L540 174.39 L544 179.55 L548 184.45 L552 189.07 L556 193.37 L560 197.32 L564 200.90 L568 204.09 L572 206.86 L576 209.19 L580 211.08 L584 212.50 L588 213.46 L592 213.94 L596 213.94 L600 213.46 L604 212.50 L608 211.08 L612 209.19 L616 206.86 L620 204.09 L624 200.90 L628 197.32 L632 193.37 L636 189.07 L640 184.45 L644 179.55 L648 174.39 L652 169.01 L656 163.43 L660 157.71 L664 151.87 L668 145.95 L672 140.00"/>
+                <text x="126" y="38" text-anchor="middle">波峰</text><text x="438" y="38" text-anchor="middle">波峰</text>
+                <text x="282" y="252" text-anchor="middle">波谷</text><text x="594" y="252" text-anchor="middle">波谷</text>
+                <path d="M112 177V145" stroke="#748b7e" stroke-width="1.5"/><rect x="52" y="177" width="120" height="34" rx="8" fill="#fffefa" stroke="#d7e1dd"/><text x="112" y="201" text-anchor="middle">平衡位置</text>
+              </svg>
+              <figcaption>虛線是平衡位置；凸起的最高處是波峰，凹下的最低處是波谷。</figcaption>
+            </figure>
+            <div class="fact"><p><strong>讀圖提示：</strong>先找平衡位置，再依照曲線的高低辨認波峰和波谷。</p></div>
           </div>
         </section>
 
@@ -547,7 +547,7 @@
         continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續波";
         continuousButton.setAttribute("aria-pressed",String(pulseMode==="continuous"&&pulsePlaying));
         queuedState=pulseMode==="single"&&singleEvents.some(start=>start>pulseTime);
-        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的波形持續向右傳播。":"單次波：波源完成一次上下振動，繩上各處依序被帶動，形成含有波峰與波谷的波形；再按一次，下一輪會接著送出。";
+        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的起伏持續向右傳播。":"單次波：波源完成一次上下振動，繩上各處依序被帶動，形成一個向右傳播的起伏；再按一次，下一輪會接著送出。";
         pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?(queuedState?"下一輪已排入；波源完成目前這次上下振動後，會接著送出。已發出的波仍繼續傳播。":"單次波正從波源形成並向右傳播；再按「單次波」可排入下一輪。"):("單次波已傳過；按「單次波」可再看一次。")):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續波」可繼續。");});
       };
       const schedulePulse = () => { if(pulsePlaying&&pulseFrame===null) pulseFrame=window.requestAnimationFrame(animatePulse); };
