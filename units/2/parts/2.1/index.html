@@ -122,6 +122,11 @@
     .frequency-period-controls { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:12px 0; }
     .frequency-period-panel { min-width:0; padding:14px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
     .frequency-period-panel h3 { margin:0 0 4px; color:var(--green); font-size:1.08rem; }
+    .frequency-definition { margin:10px 0; padding:10px 12px; border-left:4px solid var(--green); border-radius:10px; background:#eaf3eb; }
+    .frequency-definition-label { display:block; color:var(--green); font-size:.8rem; font-weight:850; }
+    .frequency-definition p { margin:3px 0 0; color:var(--ink); font-size:1rem; font-weight:800; line-height:1.45; }
+    .frequency-definition small { display:block; margin-top:5px; color:#43574e; font-size:.84rem; line-height:1.5; }
+    .frequency-current-meaning { margin:6px 0 0!important; color:#315a46!important; font-size:.88rem!important; font-weight:750; }
     .frequency-period-panel>p { margin:0; color:var(--muted); font-size:.88rem; }
     .frequency-stepper { display:grid; grid-template-columns:42px minmax(58px,1fr) 42px; align-items:center; gap:7px; margin:12px 0 6px; }
     .frequency-stepper button { min-width:0; min-height:42px; padding:4px; font-size:1.25rem; }
@@ -622,18 +627,26 @@
             <div class="frequency-period-controls" aria-label="分別調整頻率和週期">
               <section class="frequency-period-panel" aria-labelledby="frequency-panel-title">
                 <h3 id="frequency-panel-title">頻率 f</h3>
-                <p>一秒內完成的完整振動次數</p>
+                <div class="frequency-definition">
+                  <strong class="frequency-definition-label">定義</strong>
+                  <p>波源在 1 秒內完成的完整振動次數。</p>
+                  <small>完整振動要回到起始位置，且運動方向相同。連續波中，波源每完成一輪，就送出一個完整波形。</small>
+                </div>
                 <div class="frequency-stepper" role="group" aria-label="調整頻率">
                   <button class="secondary" type="button" id="frequency-step-down" aria-label="降低頻率">−</button>
                   <output class="frequency-control-value" id="card07-frequency-value" aria-live="polite">1 Hz</output>
                   <button class="secondary" type="button" id="frequency-step-up" aria-label="提高頻率">+</button>
                 </div>
                 <small class="frequency-range-note">範圍 1–4 Hz；每次增減 1 Hz</small>
-                <p>看一段時間內，振動完成了幾輪。</p>
+                <p class="frequency-current-meaning" id="frequency-current-meaning">目前：每秒完成 1 次完整振動。</p>
               </section>
               <section class="frequency-period-panel" aria-labelledby="period-panel-title">
                 <h3 id="period-panel-title">週期 T</h3>
-                <p>完成一輪完整振動所需的時間</p>
+                <div class="frequency-definition">
+                  <strong class="frequency-definition-label">定義</strong>
+                  <p>波源完成一輪完整振動所需的時間。</p>
+                  <small>從某一位置、某一運動方向出發，到再次回到相同位置、相同方向。</small>
+                </div>
                 <label class="sr-only" for="card07-period-range">調整週期（秒）</label>
                 <input class="period-range" id="card07-period-range" type="range" min="0.25" max="1" step="0.0001" value="1" aria-describedby="period-range-help">
                 <div class="period-range-values"><span>0.25 s</span><output id="card07-period-value">1.00 s</output><span>1.00 s</span></div>
@@ -1088,6 +1101,7 @@
       const graphFrequencyValue=document.querySelector("#graph-frequency-value");
       const graphPeriodValue=document.querySelector("#graph-period-value");
       const frequencyCycleCount=document.querySelector("#frequency-cycle-count");
+      const frequencyCurrentMeaning=document.querySelector("#frequency-current-meaning");
       const frequencyPeriodGraph=document.querySelector("#frequency-period-graph");
       if(frequencyStepDown&&frequencyStepUp&&frequencyControlValue&&periodRange&&periodControlValue&&periodOneCycleButton&&periodTimerReadout&&frequencyPeriodWave&&frequencyPeriodCursor&&frequencyPeriodBracket&&frequencyPeriodGuides&&frequencyPeriodBracketLabel&&graphFrequencyValue&&graphPeriodValue&&frequencyCycleCount&&frequencyPeriodGraph){
         const graphStartX=80,graphWidth=540,graphDuration=1.5,graphMidY=170,graphAmplitude=70;
@@ -1126,6 +1140,7 @@
           frequencyControlValue.textContent=frequencyText;periodControlValue.textContent=periodText;
           graphFrequencyValue.textContent=`f = ${frequencyText}`;graphPeriodValue.textContent=`T = ${periodText}`;
           frequencyCycleCount.textContent=`一秒完成 ${formatFrequency(frequency)} 輪`;
+          if(frequencyCurrentMeaning)frequencyCurrentMeaning.textContent=`目前：每秒完成 ${formatFrequency(frequency)} 次完整振動。`;
           frequencyStepDown.disabled=frequency<=1;frequencyStepUp.disabled=frequency>=4;
           periodRange.setAttribute("aria-valuetext",periodText);
           frequencyPeriodGraph.setAttribute("aria-label",`同一個繩點的位移隨時間持續振動；圖上顯示未來一點五秒；目前頻率 ${frequencyText}，週期 ${periodText}`);
