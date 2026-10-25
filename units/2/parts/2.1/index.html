@@ -119,19 +119,27 @@
     .frequency-worked-example { display:grid; gap:8px; }
     .frequency-worked-example strong { display:flex; align-items:center; justify-content:center; gap:.15em; font-size:1.25rem; }
     .frequency-period-intro { margin:0 0 14px; color:var(--muted); }
-    .frequency-period-controls { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:12px 0; }
-    .frequency-period-panel { min-width:0; padding:14px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
-    .frequency-period-panel h3 { margin:0 0 4px; color:var(--green); font-size:1.08rem; }
-    .frequency-definition { min-height:62px; margin:8px 0 12px; }
-    .frequency-definition p { margin:0; color:var(--ink); font-size:1rem; font-weight:500; line-height:1.45; }
-    .frequency-definition small { display:block; margin-top:5px; color:var(--muted); font-size:.84rem; line-height:1.5; }
-    .frequency-period-panel>p { margin:0; color:var(--muted); font-size:.88rem; }
+    .frequency-period-definitions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:12px 0; }
+    .frequency-period-panel { display:grid; grid-template-rows:auto repeat(2,minmax(72px,1fr)); gap:8px; min-width:0; padding:14px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
+    .frequency-period-panel h3 { margin:0; color:var(--green); font-size:1.08rem; }
+    .frequency-definition,.frequency-plain-definition { min-height:72px; margin:0; padding:10px 12px; border-radius:12px; }
+    .frequency-definition { background:#edf4ea; }
+    .frequency-plain-definition { background:#e8f2e8; }
+    .frequency-definition-label,.frequency-plain-label { display:block; margin-bottom:5px; color:var(--green); font-size:.84rem; font-weight:750; }
+    .frequency-definition p,.frequency-plain-definition p { margin:0; color:var(--ink); font-size:.96rem; font-weight:500; line-height:1.45; }
+    .frequency-plain-definition p { color:var(--green); font-weight:750; }
+    .frequency-wave-controls { margin-top:12px; padding:13px 14px 12px; border:1px solid var(--line); border-radius:14px; background:#f1f5ef; }
+    .frequency-wave-controls-title { display:block; margin:0 0 10px; color:var(--green); font-size:.95rem; }
+    .frequency-wave-control-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+    .frequency-wave-control { min-width:0; }
+    .frequency-wave-control>label,.frequency-wave-control-title { display:block; margin-bottom:5px; color:var(--muted); font-size:.84rem; font-weight:700; }
     .frequency-stepper { display:grid; grid-template-columns:42px minmax(58px,1fr) 42px; align-items:center; gap:7px; margin:12px 0 6px; }
+    .frequency-wave-control .frequency-stepper { margin:4px 0; }
     .frequency-stepper button { min-width:0; min-height:42px; padding:4px; font-size:1.25rem; }
     .frequency-control-value { display:block; padding:7px 5px; border-radius:10px; background:#e5f2e9; text-align:center; font-size:1.12rem; font-weight:800; white-space:nowrap; }
     .frequency-range-note { display:block; margin-bottom:8px; color:var(--muted); text-align:center; font-size:.8rem; }
-    .frequency-period-panel>p.frequency-plain-definition { margin:8px 0 0; color:var(--green); font-size:.9rem; font-weight:700; line-height:1.45; text-align:center; }
     .period-range { display:block; width:100%!important; margin:12px 0 2px; }
+    .frequency-wave-control .period-range { margin:4px 0 2px; }
     .period-range-values { display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--muted); font-size:.78rem; }
     .period-range-values output { color:var(--ink); font-size:1.08rem; font-weight:800; }
     .frequency-period-figure { margin:12px 0; }
@@ -139,9 +147,9 @@
     .frequency-period-figure .small-label { font-size:15px; }
     .frequency-period-figure .frequency-graph-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px; }
     .frequency-period-figure .frequency-graph-heading strong { font-size:1.05rem; }
+    .frequency-graph-hint { color:var(--muted); font-size:.84rem; }
     .frequency-graph-values { display:flex; flex-wrap:wrap; gap:8px; }
     .frequency-graph-values span { padding:3px 8px; border-radius:8px; background:#e5f2e9; color:#315a46; font-size:.84rem; font-weight:750; }
-    .frequency-cycle-count { margin:7px 0 0; color:#754322; font-weight:750; text-align:center; }
     .frequency-relation { display:grid; grid-template-columns:auto auto auto minmax(0,1fr); align-items:center; gap:10px; margin:14px 0 0; padding:14px; border:1px solid #efcfaa; border-radius:14px; background:#fff8ef; }
     .frequency-relation-title { color:var(--orange); font-weight:800; }
     .frequency-relation .frequency-equation { font-size:1.12rem; }
@@ -149,7 +157,8 @@
     .frequency-calculation-example { margin-top:10px; padding:12px 14px; border:1px solid var(--line); border-radius:14px; background:#f8f9f4; }
     .frequency-calculation-example p { margin:0; }
     .frequency-calculation-example .frequency-equation { justify-content:center; flex-wrap:wrap; margin-top:8px; }
-    @media (max-width:520px) { .frequency-period-controls { grid-template-columns:1fr; } .frequency-definition { min-height:0; } .frequency-period-figure svg text { font-size:26px; } .frequency-period-figure .small-label { font-size:20px; } .frequency-relation { grid-template-columns:1fr; justify-items:center; text-align:center; } }
+    @media (max-width:700px) { .frequency-wave-control-grid { grid-template-columns:1fr; gap:12px; } }
+    @media (max-width:520px) { .frequency-period-definitions { grid-template-columns:1fr; } .frequency-definition,.frequency-plain-definition { min-height:0; } .frequency-period-figure svg text { font-size:26px; } .frequency-period-figure .small-label { font-size:20px; } .frequency-relation { grid-template-columns:1fr; justify-items:center; text-align:center; } }
     #card-06 .visual svg text { font-size:18px; }
     #card-06 .visual svg .small-label { font-size:14px; }
     #cycle-wave-path { fill:none; }
@@ -619,34 +628,34 @@
           <div class="card-main">
             <h2>頻率和週期，如何互相影響？</h2>
             <p class="frequency-period-intro">沿用上一區學到的一輪完整振動，現在加入時間來觀察。</p>
-            <div class="frequency-period-controls" aria-label="分別調整頻率和週期">
+            <div class="frequency-period-definitions" aria-label="頻率和週期的正式定義與白話說明">
               <section class="frequency-period-panel" aria-labelledby="frequency-panel-title">
                 <h3 id="frequency-panel-title">頻率 f</h3>
                 <div class="frequency-definition">
+                  <small class="frequency-definition-label">正式定義</small>
                   <p>波源每秒完成的完整振動次數。</p>
                 </div>
-                <div class="frequency-stepper" role="group" aria-label="調整頻率">
-                  <button class="secondary" type="button" id="frequency-step-down" aria-label="降低頻率">−</button>
-                  <output class="frequency-control-value" id="card07-frequency-value" aria-live="polite">1 Hz</output>
-                  <button class="secondary" type="button" id="frequency-step-up" aria-label="提高頻率">+</button>
+                <div class="frequency-plain-definition">
+                  <small class="frequency-plain-label">白話版本</small>
+                  <p>一秒鐘可以產出幾個完整的波？</p>
                 </div>
-                <small class="frequency-range-note">範圍 1–4 Hz；每次增減 1 Hz</small>
-                <p class="frequency-plain-definition"><strong>白話版本：</strong>一秒鐘可以產出幾個完整的波？</p>
               </section>
               <section class="frequency-period-panel" aria-labelledby="period-panel-title">
                 <h3 id="period-panel-title">週期 T</h3>
                 <div class="frequency-definition">
+                  <small class="frequency-definition-label">正式定義</small>
                   <p>波源完成一輪完整振動所需的時間。</p>
                 </div>
-                <label class="sr-only" for="card07-period-range">調整週期，完成一輪完整振動所需的秒數</label>
-                <input class="period-range" id="card07-period-range" type="range" min="0.25" max="1" step="0.0001" value="1">
-                <div class="period-range-values"><span>0.25 s</span><output id="card07-period-value">1.00 s</output><span>1.00 s</span></div>
-                <p class="frequency-plain-definition"><strong>白話版本：</strong>產出一個完整的波，需要多少時間？</p>
+                <div class="frequency-plain-definition">
+                  <small class="frequency-plain-label">白話版本</small>
+                  <p>產出一個完整的波，需要多少時間？</p>
+                </div>
               </section>
             </div>
             <figure class="visual frequency-period-figure">
               <div class="frequency-graph-heading">
                 <strong>繩上波形：位移隨位置的變化</strong>
+                <span class="frequency-graph-hint">波形隨頻率、週期同步變化</span>
               </div>
               <svg id="frequency-period-graph" viewBox="0 0 760 310" role="img" aria-label="繩上的波形持續向右傳播；雙向箭頭標示一個波長；目前頻率一赫茲，週期一秒">
                 <defs>
@@ -668,7 +677,25 @@
                 <text x="670" y="180" class="small-label">位置</text>
                 <text x="33" y="75" class="small-label">位移</text>
               </svg>
-              <p class="frequency-cycle-count" id="frequency-cycle-count">每秒完成 1 次完整振動</p>
+              <div class="frequency-wave-controls" aria-label="調整頻率和週期，觀察繩波變化">
+                <strong class="frequency-wave-controls-title">調整後即時觀察波形</strong>
+                <div class="frequency-wave-control-grid">
+                  <div class="frequency-wave-control">
+                    <span class="frequency-wave-control-title">頻率 f</span>
+                    <div class="frequency-stepper" role="group" aria-label="調整頻率">
+                      <button class="secondary" type="button" id="frequency-step-down" aria-label="降低頻率">−</button>
+                      <output class="frequency-control-value" id="card07-frequency-value" aria-live="polite">1 Hz</output>
+                      <button class="secondary" type="button" id="frequency-step-up" aria-label="提高頻率">+</button>
+                    </div>
+                    <small class="frequency-range-note">範圍 1–4 Hz；每次增減 1 Hz</small>
+                  </div>
+                  <div class="frequency-wave-control">
+                    <label class="frequency-wave-control-title" for="card07-period-range">週期 T</label>
+                    <input class="period-range" id="card07-period-range" type="range" min="0.25" max="1" step="0.0001" value="1" aria-label="調整週期；頻率會同步改變">
+                    <div class="period-range-values"><span>0.25 s</span><output id="card07-period-value">1.00 s</output><span>1.00 s</span></div>
+                  </div>
+                </div>
+              </div>
             </figure>
             <div class="frequency-relation" aria-label="頻率和週期的公式與白話解釋">
               <span class="frequency-relation-title">公式與關係</span>
@@ -1081,9 +1108,8 @@
       const frequencyWavelengthArrow=document.querySelector("#frequency-wavelength-arrow");
       const frequencyWavelengthGuides=document.querySelector("#frequency-wavelength-guides");
       const frequencyWavelengthLabel=document.querySelector("#frequency-wavelength-label");
-      const frequencyCycleCount=document.querySelector("#frequency-cycle-count");
       const frequencyPeriodGraph=document.querySelector("#frequency-period-graph");
-      if(frequencyStepDown&&frequencyStepUp&&frequencyControlValue&&periodRange&&periodControlValue&&frequencyPeriodWave&&frequencyPeriodCursor&&frequencyWavelengthArrow&&frequencyWavelengthGuides&&frequencyWavelengthLabel&&frequencyCycleCount&&frequencyPeriodGraph){
+      if(frequencyStepDown&&frequencyStepUp&&frequencyControlValue&&periodRange&&periodControlValue&&frequencyPeriodWave&&frequencyPeriodCursor&&frequencyWavelengthArrow&&frequencyWavelengthGuides&&frequencyWavelengthLabel&&frequencyPeriodGraph){
         const graphStartX=80,graphWidth=540,graphMidY=170,graphAmplitude=70,waveSpeed=3;
         let frequency=1,waveAnimationFrame=0,waveStartTime=null,currentWavePhase=0;
         let wavelength=waveSpeed/frequency,visibleDistance=1.5*wavelength;
@@ -1114,7 +1140,6 @@
           const frequencyText=`${formatFrequency(frequency)} Hz`;
           const periodText=`${formatPeriod(period)} s`;
           frequencyControlValue.textContent=frequencyText;periodControlValue.textContent=periodText;
-          frequencyCycleCount.textContent=`每秒完成 ${formatFrequency(frequency)} 次完整振動`;
           frequencyStepDown.disabled=frequency<=1;frequencyStepUp.disabled=frequency>=4;
           periodRange.setAttribute("aria-valuetext",periodText);
           wavelength=waveSpeed/frequency;visibleDistance=1.5*wavelength;
