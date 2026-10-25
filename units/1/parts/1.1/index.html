@@ -633,12 +633,12 @@
         'true-false': {
           image: 'assets/night-scene-sun-on-lamp-off.webp',
           alt: '月亮仍反射陽光而可見；檯燈關閉，室內只剩微弱月光。',
-          text: '檯燈關掉後，微弱月光仍照到書頁，書頁反射的光也進入眼睛；但書頁暗得多，我很難讀清楚。月亮仍反射陽光，所以還看得見。'
+          text: '關掉檯燈後，書頁反射的光變少了；不過還有月光，所以仍看得到書本。'
         },
         'false-false': {
           image: 'assets/night-scene-both-off.webp',
           alt: '陽光和檯燈都關閉，月亮與書頁都暗下來，只剩微弱輪廓。',
-          text: '照向月亮的陽光被遮住後，月亮暗下來；檯燈也關了，書頁幾乎沒有光反射進眼睛。它們沒有消失，只是變得很難看見。'
+          text: '如果連月光都沒有，書頁就沒有光可以反射進眼睛，我們也就看不到書本了。'
         }
       };
       Object.values(nightScenes).forEach(({ image }) => { const preload = new Image(); preload.src = image; });
