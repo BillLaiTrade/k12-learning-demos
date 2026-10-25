@@ -75,6 +75,8 @@
     .definition-card--plain { background:#eef5ec; border-color:#d6e4d5; }
     .definition-label { display:block; margin-bottom:6px; color:#176b53; font-size:.82rem; font-weight:800; letter-spacing:.04em; }
     .definition-card p { margin:0; color:var(--ink); }
+    .definition-examples { margin:8px 0 0; padding-left:20px; color:var(--ink); }
+    .definition-examples li+li { margin-top:4px; }
     .definition-equation { margin-top:9px!important; color:#176b53!important; font-size:1.08rem; font-weight:800; font-variant-numeric:tabular-nums; }
     .legend { display:flex; flex-wrap:wrap; gap:8px 18px; margin:10px 0 0; color:var(--muted); font-size:.84rem; }
     .legend span { display:inline-flex; align-items:center; gap:7px; }
@@ -286,33 +288,29 @@
 
             <div class="definition-pair" aria-label="波長的正式定義與白話理解">
               <div class="definition-card"><span class="definition-label">正式定義</span><p>波長 <em>λ</em> 是波形沿傳播方向，相鄰兩個相同位置之間的距離。</p></div>
-              <div class="definition-card definition-card--plain"><span class="definition-label">白話理解</span><p>波形往前走，隔一段就會再出現相同的起伏。從一個凸起量到下一個凸起，或從一個凹處量到下一個凹處，就是波長。</p></div>
+              <div class="definition-card definition-card--plain"><span class="definition-label">白話理解</span><p>把波形往前移一個 λ，兩端會對到下一個相同位置：</p><ul class="definition-examples"><li>最高點 → 下一個最高點</li><li>最低點 → 下一個最低點</li><li>虛線上同方向通過的位置 → 下一個同方向位置</li></ul></div>
             </div><figure class="visual">
-              <svg viewBox="0 0 720 310" role="img" aria-label="可切換波峰或波谷作為量測端點，觀察波長 lambda">
+              <svg viewBox="0 0 720 310" role="img" aria-label="平移固定一個波長長度的標尺，觀察波峰、波谷和平衡位置如何相隔一個波長">
                 <defs>
                   <marker id="arrow-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
                 </defs>
                 <path d="M40 125H680" class="equilibrium"/>
                 <path id="lambda-wave" class="wave-line" d="M40 125 C70 125 91 53 130 53 S190 197 250 197 S310 53 370 53 S430 197 490 197 S550 53 610 53 S650 125 680 125"/>
-                <circle id="lambda-left-point" cx="130" cy="53" r="6" fill="#176b53" stroke="#fffefa" stroke-width="2.5"/>
-                <circle id="lambda-right-point" cx="370" cy="53" r="6" fill="#176b53" stroke="#fffefa" stroke-width="2.5"/>
+                <circle id="lambda-left-point" cx="130" cy="53" r="7" fill="#df8b41" stroke="#fffefa" stroke-width="2.5"/>
+                <circle id="lambda-right-point" cx="370" cy="53" r="7" fill="#df8b41" stroke="#fffefa" stroke-width="2.5"/>
                 <text class="small-label" x="45" y="15">橫波圖示</text>
-                <text id="lambda-left-name" x="130" y="31" text-anchor="middle">波峰</text>
-                <text id="lambda-right-name" x="370" y="31" text-anchor="middle">相鄰波峰</text>
                 <path id="lambda-left-guide" d="M130 60V254" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
                 <path id="lambda-right-guide" d="M370 60V254" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
                 <path id="lambda-measure" d="M134 254H366" class="measure" marker-start="url(#arrow-lambda)" marker-end="url(#arrow-lambda)"/>
-                <text id="lambda-label" x="250" y="286" text-anchor="middle">波峰到波峰：λ</text>
+                <text id="lambda-label" x="250" y="286" text-anchor="middle">一個波長 λ</text>
               </svg>
-              <figcaption>下方按鈕可切換以波峰或波谷作為量測端點。</figcaption>
+              <figcaption>平移標尺，觀察它如何從一個位置移到下一個相同位置；標尺長度固定為一個波長。</figcaption>
             </figure>
             <div class="control-panel">
-              <p><strong>選擇量測端點</strong></p>
-              <div class="controls" role="group" aria-label="選擇波長的量測端點">
-                <button class="secondary" type="button" data-lambda-pair="crest" aria-pressed="true">波峰到下一個波峰</button>
-                <button class="secondary" type="button" data-lambda-pair="trough" aria-pressed="false">波谷到下一個波谷</button>
-              </div>
-              <p class="live-note" id="lambda-explanation" aria-live="polite">兩個相鄰波峰之間的水平距離，就是一個波長 λ。</p>
+              <label class="field" for="lambda-shift-slider">拖動滑桿，平移整段波長標尺
+                <input id="lambda-shift-slider" type="range" min="130" max="370" step="1" value="130" aria-describedby="lambda-explanation">
+              </label>
+              <p class="live-note" id="lambda-explanation" aria-live="polite">波峰對到下一個波峰。標尺平移後，也能對準波谷、或平衡線上同方向通過的位置；兩端始終相隔一個 λ。</p>
             </div>
             <div class="fact"><p><strong>對照：</strong>振幅 <em>A</em> 是介質偏離平衡位置的最大位移；波長 <em>λ</em> 是波形沿傳播方向的重複間隔。</p></div>
           </div>
@@ -699,7 +697,8 @@
       };
       amplitudeSlider.addEventListener("input",updateAmplitudeModel);updateAmplitudeModel();
 
-      const lambdaPairButtons=[...document.querySelectorAll("[data-lambda-pair]")];
+      const lambdaWave=document.querySelector("#lambda-wave");
+      const lambdaShiftSlider=document.querySelector("#lambda-shift-slider");
       const lambdaLeftGuide=document.querySelector("#lambda-left-guide");
       const lambdaRightGuide=document.querySelector("#lambda-right-guide");
       const lambdaMeasure=document.querySelector("#lambda-measure");
@@ -707,22 +706,31 @@
       const lambdaExplanation=document.querySelector("#lambda-explanation");
       const lambdaLeftPoint=document.querySelector("#lambda-left-point");
       const lambdaRightPoint=document.querySelector("#lambda-right-point");
-      const lambdaLeftName=document.querySelector("#lambda-left-name");
-      const lambdaRightName=document.querySelector("#lambda-right-name");
-      const setLambdaPair=type=>{
-        const crest=type==="crest",left=crest?130:250,right=crest?370:490,y=crest?53:197;
-        const name=crest?"波峰":"波谷",labelY=crest?31:222;
-        const guide=crest?x=>`M${x} 60V254`:x=>`M${x} 204V207 M${x} 231V254`;
-        lambdaLeftGuide.setAttribute("d",guide(left));lambdaRightGuide.setAttribute("d",guide(right));
-        lambdaMeasure.setAttribute("d",`M${left+4} 254H${right-4}`);lambdaLabel.setAttribute("x",String((left+right)/2));lambdaLabel.textContent=`${name}到下一個${name}：λ`;
-        lambdaLeftPoint.setAttribute("cx",String(left));lambdaLeftPoint.setAttribute("cy",String(y));lambdaRightPoint.setAttribute("cx",String(right));lambdaRightPoint.setAttribute("cy",String(y));
-        lambdaLeftName.setAttribute("x",String(left));lambdaLeftName.setAttribute("y",String(labelY));lambdaLeftName.textContent=name;
-        lambdaRightName.setAttribute("x",String(right));lambdaRightName.setAttribute("y",String(labelY));lambdaRightName.textContent=`相鄰${name}`;
-        lambdaExplanation.textContent=`從一個${name}到下一個${name}，沿波前進方向量出的水平距離，就是一個波長 λ。`;
-        lambdaPairButtons.forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.lambdaPair===type)));
+      const lambdaPathLength=lambdaWave.getTotalLength();
+      const lambdaPointAtX=x=>{
+        let low=0,high=lambdaPathLength;
+        for(let i=0;i<22;i++){
+          const middle=(low+high)/2,point=lambdaWave.getPointAtLength(middle);
+          if(point.x<x)low=middle;else high=middle;
+        }
+        return lambdaWave.getPointAtLength((low+high)/2);
       };
-      lambdaPairButtons.forEach(button=>button.addEventListener("click",()=>setLambdaPair(button.dataset.lambdaPair)));
-      setLambdaPair("crest");
+      const updateLambdaMeasure=()=>{
+        const left=Number(lambdaShiftSlider.value),right=left+240;
+        const leftPoint=lambdaPointAtX(left),rightPoint=lambdaPointAtX(right);
+        lambdaLeftPoint.setAttribute("cx",String(leftPoint.x));lambdaLeftPoint.setAttribute("cy",String(leftPoint.y));
+        lambdaRightPoint.setAttribute("cx",String(rightPoint.x));lambdaRightPoint.setAttribute("cy",String(rightPoint.y));
+        lambdaLeftGuide.setAttribute("d",`M${leftPoint.x} ${leftPoint.y+9}V254`);lambdaRightGuide.setAttribute("d",`M${rightPoint.x} ${rightPoint.y+9}V254`);
+        lambdaMeasure.setAttribute("d",`M${left+4} 254H${right-4}`);lambdaLabel.setAttribute("x",String((left+right)/2));
+        const near=(value,target)=>Math.abs(value-target)<3;
+        let description="起點和終點落在相同的波形位置；兩端固定相隔一個波長 λ。";
+        if(near(left,130)||near(left,370))description="最高點對到下一個最高點；兩端相隔一個波長 λ。";
+        else if(near(left,250))description="最低點對到下一個最低點；兩端相隔一個波長 λ。";
+        else if(near(left,190))description="平衡線上往下通過的位置，對到下一個同方向的位置；兩端相隔一個波長 λ。";
+        else if(near(left,310))description="平衡線上往上通過的位置，對到下一個同方向的位置；兩端相隔一個波長 λ。";
+        lambdaExplanation.textContent=description;lambdaShiftSlider.setAttribute("aria-valuetext",description);
+      };
+      lambdaShiftSlider.addEventListener("input",updateLambdaMeasure);updateLambdaMeasure();
 
       const frequencyExampleButtons=[...document.querySelectorAll("[data-frequency-example]")];
       const frequencyExampleNote=document.querySelector("#frequency-example-note");
