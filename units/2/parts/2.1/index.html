@@ -60,7 +60,9 @@
     .visual .rope-fallback { fill:none; stroke-width:14; stroke-linecap:round; stroke-linejoin:round; }
     .visual .rope-texture-layer { pointer-events:none; }
     #fixed-point-slider { cursor:ew-resize; touch-action:none; }
-    #fixed-point-slider:focus-visible:not(.is-dragging) { stroke:#176b53; stroke-width:5; }
+    #fixed-point-slider:focus-visible:not(.is-dragging) .slider-handle-bg { stroke:#176b53; stroke-width:3; }
+    .slider-horizontal-icon { fill:none; stroke:#176b53; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; pointer-events:none; }
+    .slider-hitarea { fill:transparent; pointer-events:all; }
     .visual .equilibrium { stroke:#9aaca1; stroke-width:1.5; stroke-dasharray:7 7; }
     .visual .motion-arrow { fill:none; stroke:#176b53; stroke-width:2.5; stroke-linecap:round; }
     .visual .measure { fill:none; stroke:#bc612b; stroke-width:2; stroke-linecap:round; }
@@ -214,18 +216,22 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>波峰往右傳，繩上的橘點也會跟著往右跑嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>把波峰的位置和橘色繩點分開看：繩點在原處附近上下振動，波形和能量往右傳。</p></div>
             <p>橘點代表繩上的同一點。波形向右傳時，這個繩點只在原來的水平位置附近上下振動；波峰通過後，它會接著往下，再回到平衡位置附近，沒有隨波形一路向右跑。繩上的振動把能量傳到遠處，繩子本身沒有整段隨波前進。</p><figure class="visual">
-              <svg class="rope-wave" data-fixed-point-wave viewBox="0 0 760 270" role="group" aria-label="互動繩波示意：可拖曳下方橘色控制點選擇繩上的位置，觀察繩點上下振動">
+              <svg class="rope-wave" data-fixed-point-wave viewBox="0 0 760 280" role="group" aria-label="互動繩波示意：可拖曳下方左右箭頭選擇繩上的位置，觀察繩點上下振動">
                 <defs><pattern id="rope-fallback-3" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern><marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
                 <path d="M46 142H714" stroke="#b7c7bc" stroke-width="5" stroke-linecap="round"/>
                 <path class="pulse-path rope-underlay" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><path class="rope-fallback" stroke="url(#rope-fallback-3)" aria-hidden="true" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/><g class="rope-texture-layer" aria-hidden="true"></g>
-                <path d="M118 236H565" class="motion-arrow" marker-end="url(#arrow-rope-2)"/>
-                <text x="341" y="260" text-anchor="middle">波形與能量向右傳</text>
-                <path id="fixed-rope-guide" d="M350 90V204" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
+                <path d="M118 244H565" class="motion-arrow" marker-end="url(#arrow-rope-2)"/>
+                <text x="341" y="270" text-anchor="middle">波形與能量向右傳</text>
+                <path id="fixed-rope-guide" d="M350 90V214" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
                 <circle class="rope-marker" id="fixed-rope-marker" cx="350" cy="142" r="10" fill="#df8b41" stroke="#fff" stroke-width="3" pointer-events="none" aria-hidden="true"/>
-                <path id="fixed-point-track" d="M46 204H714" stroke="#b7c7bc" stroke-width="2" stroke-linecap="round"/>
-                <circle id="fixed-point-slider" cx="350" cy="204" r="15" fill="#df8b41" stroke="#fff" stroke-width="3" tabindex="0" role="slider" aria-label="拖曳下方控制點選擇繩上的位置" aria-orientation="horizontal" aria-valuemin="46" aria-valuemax="714" aria-valuenow="350" aria-valuetext="繩上位置 350"/>
+                <path id="fixed-point-track" d="M46 214H714" stroke="#b7c7bc" stroke-width="2" stroke-linecap="round"/>
+                <g id="fixed-point-slider" transform="translate(350 214)" tabindex="0" role="slider" aria-label="拖曳左右箭頭選擇繩上的位置" aria-orientation="horizontal" aria-valuemin="46" aria-valuemax="714" aria-valuenow="350" aria-valuetext="繩上位置 350">
+                  <rect class="slider-handle-bg" x="-27" y="-12" width="54" height="24" rx="12" fill="#fffefa" stroke="#82978a" stroke-width="1.5"/>
+                  <path class="slider-horizontal-icon" d="M-10 0H10M-6-4L-10 0L-6 4M6-4L10 0L6 4"/>
+                  <rect class="slider-hitarea" x="-30" y="-18" width="60" height="36"/>
+                </g>
               </svg>
-              <figcaption>拖曳波形下方的橘色控制點，可選擇繩上的不同位置；上方橘點會貼著繩子上下振動。也可聚焦下方控制點後按左右鍵移動。</figcaption>
+              <figcaption>拖曳波形下方的左右箭頭控制鈕，可選擇繩上的不同位置；上方橘點會貼著繩子上下振動。也可聚焦控制鈕後按左右鍵移動。</figcaption>
             </figure>
             <div class="fact"><p><strong>分清楚兩種運動：</strong>繩點在原處附近振動；波形把擾動和能量傳到遠處。波峰不是一團繩子一路移動。</p></div>
           </div>
@@ -547,13 +553,13 @@
       if(fixedPointSvg&&fixedPointMarker&&fixedPointSlider&&fixedPointGuide){
         const fixedPointRope=fixedPointSvg.querySelector(".rope-underlay");
         let fixedPointX=350;
-        const fixedPointMin=46, fixedPointMax=714, fixedPointBaseline=142, fixedPointAmplitude=46, fixedPointSliderY=204;
+        const fixedPointMin=46, fixedPointMax=714, fixedPointBaseline=142, fixedPointAmplitude=46, fixedPointSliderY=214;
         let fixedPointStart=0, fixedPointOffset=0;
         const setFixedPointX=x=>{
           fixedPointX=Math.max(fixedPointMin,Math.min(fixedPointMax,Math.round(x)));
           fixedPointMarker.setAttribute("cx",String(fixedPointX));
           fixedPointMarker.setAttribute("cy",String(fixedPointBaseline-waveAt(fixedPointX,fixedPointOffset,fixedPointAmplitude)));
-          fixedPointSlider.setAttribute("cx",String(fixedPointX));
+          fixedPointSlider.setAttribute("transform",`translate(${fixedPointX} ${fixedPointSliderY})`);
           fixedPointSlider.setAttribute("aria-valuenow",String(fixedPointX));
           fixedPointSlider.setAttribute("aria-valuetext",`繩上位置 ${fixedPointX}`);
           fixedPointGuide.setAttribute("d",`M${fixedPointX} 90V${fixedPointSliderY}`);
