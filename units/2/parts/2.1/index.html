@@ -93,6 +93,8 @@
     .diagram-panel h3 { margin:0 0 5px; font-size:1rem; }
     .diagram-panel p { margin:6px 0 0; color:var(--muted); font-size:.88rem; }
     .wave-type-diagrams { grid-template-columns:1fr; gap:14px; }
+    .measurement-subheading { margin:22px 0 6px; color:var(--green); font-size:1.08rem; }
+    .measurement-subheading--next { margin-top:28px; padding-top:18px; border-top:1px solid var(--line); }
     .spring-coil { fill:none; stroke:url(#spring-metal-gradient); stroke-width:3; }
     .spring-coil.is-selected { stroke:#c66d35; stroke-width:3.8; }
     .data-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
@@ -160,13 +162,12 @@
           <a href="#card-02"><b>02</b><span>波形圖上，我們要認出哪些要素？</span></a>
           <a href="#card-03"><b>03</b><span>波往前傳，繩上的記號也跟著跑嗎？</span></a>
           <a href="#card-04"><b>04</b><span>橫波和縱波，差別在振動方向？</span></a>
-          <a href="#card-05"><b>05</b><span>波峰、波谷和振幅，要從哪裡量？</span></a>
-          <a href="#card-06"><b>06</b><span>相鄰兩個波峰，相隔多遠？</span></a>
-          <a href="#card-07"><b>07</b><span>振得快慢，如何用頻率和週期表示？</span></a>
-          <a href="#card-08"><b>08</b><span>波速、頻率和波長，怎麼連在一起？</span></a>
-          <a href="#card-09"><b>09</b><span>讀懂這段波，可以解釋什麼？</span></a>
+          <a href="#card-05"><b>05</b><span>波形的高低和重複間隔，怎麼量？</span></a>
+          <a href="#card-06"><b>06</b><span>振得快慢，如何用頻率和週期表示？</span></a>
+          <a href="#card-07"><b>07</b><span>波速、頻率和波長，怎麼連在一起？</span></a>
+          <a href="#card-08"><b>08</b><span>讀懂這段波，可以解釋什麼？</span></a>
         </div>
-        <p class="route-note">依序閱讀九段說明；動畫和操作可用來加深觀察。</p>
+        <p class="route-note">依序閱讀八段說明；動畫和操作可用來加深觀察。</p>
       </nav>
       <div class="cards">
         <div class="section-top"><h2>從認識波形，走到波速關係</h2><span class="progress-copy">完整說明直接呈現在每張卡片</span></div>
@@ -291,11 +292,13 @@
         </section>
 
         <section class="lesson-card" id="card-05">
-          <div class="card-side"><span class="card-number">05</span><h3>量垂直距離</h3><span class="card-role">認識振幅</span></div>
+          <div class="card-side"><span class="card-number">05</span><h3>測量波形</h3><span class="card-role">認識振幅與波長</span></div>
           <div class="card-main">
-            <h2>波峰、波谷和振幅，要從哪裡量？</h2>
+            <h2>波形的高低和重複間隔，怎麼量？</h2>
+            <p>讀取波形時，可以量出垂直的高低，也可以量出水平的重複間隔。這兩種距離分別是振幅和波長。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我從波峰量到波谷，這是整段高度；振幅要怎麼量才對？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>從平衡位置量到波峰或波谷；這段最大位移才是振幅。</p></div>
+            <h3 class="measurement-subheading">先量垂直距離：振幅 A</h3>
             <p>沒有波通過時介質所在的位置稱為平衡位置。在這張橫波圖中，最高處是波峰、最低處是波谷；從平衡位置到波峰（或波谷）的最大距離是振幅 <em>A</em>。對稱波形的波峰到波谷高度是 <em>2A</em>，不是振幅本身。</p><figure class="visual">
               <svg viewBox="0 0 720 280" role="img" aria-label="橫波圖標示平衡位置、波峰、波谷、振幅 A 與波峰至波谷高度 2A">
                 <defs><pattern id="rope-fallback-5" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern><marker id="arrow-a" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
@@ -317,13 +320,7 @@
               <p class="live-note" id="amplitude-model-note">調整後波峰與波谷離平衡位置的距離會一起變化；這項調整不改變波長。</p>
             </div>
             <div class="fact"><p><strong>量測方向：</strong>振幅是介質偏離平衡位置的最大位移。此圖以橫波示範，所以位移畫成上下方向。</p></div>
-          </div>
-        </section>
-
-        <section class="lesson-card" id="card-06">
-          <div class="card-side"><span class="card-number">06</span><h3>量水平距離</h3><span class="card-role">認識波長</span></div>
-          <div class="card-main">
-            <h2>相鄰兩個波峰，相隔多遠？</h2>
+            <h3 class="measurement-subheading measurement-subheading--next">再量水平間隔：相鄰兩個波峰，相隔多遠？</h3>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>振幅量的是上下位移；若要量波形重複的間隔，該量哪一段？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>沿波前進方向，從一個波峰量到下一個波峰；這段距離就是波長。</p></div>
             <p>波長 <em>λ</em> 是波形中相鄰重複位置之間的距離，例如一個波峰到下一個波峰，或一個波谷到下一個波谷。波長沿著波前進方向量，和振幅的上下位移不同。</p><figure class="visual">
@@ -357,11 +354,12 @@
                 <path d="M130 80V102M482 80V102" stroke="#84988a" stroke-width="1.5" stroke-dasharray="4 4"/><path d="M134 94H478" class="measure" marker-start="url(#arrow-long-lambda)" marker-end="url(#arrow-long-lambda)"/><text x="306" y="118" text-anchor="middle">相鄰壓縮區的距離也是波長 λ</text>
               </svg>
             </div>
+            <div class="fact"><p><strong>量測方向：</strong>波長沿著波前進方向量；橫波可量相鄰波峰或波谷，縱波可量相鄰壓縮區。</p></div>
           </div>
         </section>
 
-        <section class="lesson-card" id="card-07">
-          <div class="card-side"><span class="card-number">07</span><h3>讀時間尺度</h3><span class="card-role">頻率與週期互為倒數</span></div>
+        <section class="lesson-card" id="card-06">
+          <div class="card-side"><span class="card-number">06</span><h3>讀時間尺度</h3><span class="card-role">頻率與週期互為倒數</span></div>
           <div class="card-main">
             <h2>振得快慢，如何用頻率和週期表示？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>波長描述波形的空間間隔；波源振動的快慢又要怎麼表示？</p></div>
@@ -392,8 +390,8 @@
           </div>
         </section>
 
-        <section class="lesson-card" id="card-08">
-          <div class="card-side"><span class="card-number">08</span><h3>連結時間和距離</h3><span class="card-role">得到波速關係</span></div>
+        <section class="lesson-card" id="card-07">
+          <div class="card-side"><span class="card-number">07</span><h3>連結時間和距離</h3><span class="card-role">得到波速關係</span></div>
           <div class="card-main">
             <h2>波速、頻率和波長，怎麼連在一起？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>頻率表示每秒振幾次；那麼一個週期內，波形會前進多遠？</p></div>
@@ -422,8 +420,8 @@
           </div>
         </section>
 
-        <section class="lesson-card end-card" id="card-09">
-          <div class="card-side"><span class="card-number">09</span><h3>整合理解</h3><span class="card-role">回到最初的問題</span></div>
+        <section class="lesson-card end-card" id="card-08">
+          <div class="card-side"><span class="card-number">08</span><h3>整合理解</h3><span class="card-role">回到最初的問題</span></div>
           <div class="card-main">
             <span class="assessment-label">理解檢核・共 1 題</span>
             <h2>讀懂這段波，可以解釋什麼？</h2>
