@@ -542,21 +542,22 @@
                 <defs>
                   <marker id="arrow-cycle-motion" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
                   <marker id="arrow-cycle-time" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#748b7e"/></marker>
+                  <marker id="arrow-cycle-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
                 </defs>
                 <text x="90" y="68" text-anchor="middle">繩端粒子上下振動</text>
                 <path d="M90 105V235" stroke="#b7c7bc" stroke-width="4" stroke-linecap="round"/>
                 <path d="M90 110V230" stroke="#bc612b" stroke-width="2" marker-start="url(#arrow-cycle-motion)" marker-end="url(#arrow-cycle-motion)"/>
                 <path d="M50 170H130" class="equilibrium"/>
                 <circle id="cycle-source-marker" cx="90" cy="170" r="10" class="marker"/>
-                <text x="90" y="258" text-anchor="middle" class="small-label">固定位置上下移動</text>
                 <text x="412" y="68" text-anchor="middle">振動帶動波形向右形成</text>
                 <path d="M50 170H645" class="equilibrium"/>
                 <path id="cycle-wave-path" class="wave-line cycle-wave-path" d="M90 170"/>
-                <path d="M180 275H650" stroke="#9aaca1" stroke-width="1.5" marker-end="url(#arrow-cycle-time)"/>
-                <text x="660" y="280" text-anchor="start" class="small-label">波形傳播方向</text>
-                <text x="412" y="330" text-anchor="middle">粒子振動一輪，繩上形成一個完整波形</text>
+                <text x="345" y="239" text-anchor="middle" fill="#bc612b">λ（一個波長）</text>
+                <path d="M90 255H600" stroke="#bc612b" stroke-width="2" marker-start="url(#arrow-cycle-lambda)" marker-end="url(#arrow-cycle-lambda)"/>
+                <path d="M180 300H650" stroke="#9aaca1" stroke-width="1.5" marker-end="url(#arrow-cycle-time)"/>
+                <text x="660" y="306" text-anchor="start" class="small-label">波形傳播方向</text>
               </svg>
-              <figcaption>橘色粒子與綠線左端相連。粒子上下振動時，波形從這個繩端向右傳開；粒子完成一次往返，繩上剛好形成一個完整波形。</figcaption>
+              <figcaption>橘色粒子與綠線左端相連。粒子從平衡位置上行到 +A（波峰），再下行經過平衡位置到 −A（波谷），最後回到平衡位置。這一輪振動形成一個完整波；波形沿繩子傳播方向的長度，就是一個波長 λ。</figcaption>
             </figure>
           </div>
         </section>
