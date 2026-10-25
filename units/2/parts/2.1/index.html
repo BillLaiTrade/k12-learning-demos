@@ -646,26 +646,26 @@
             <p class="frequency-sync-note">調整任一數值，另一項同步更新；下方同一個波形即時改變。</p>
             <figure class="visual frequency-period-figure">
               <div class="frequency-graph-heading">
-                <strong>同一個繩點的位移—時間圖</strong>
-                <span class="frequency-graph-values"><span id="graph-frequency-value">f = 1 Hz</span><span id="graph-period-value">T = 1.00 s</span></span>
+                <strong>繩上波形：位移隨位置的變化</strong>
               </div>
-              <svg id="frequency-period-graph" viewBox="0 0 760 310" role="img" aria-label="同一個繩點的位移隨時間持續振動；圖上顯示未來一點五秒；目前頻率一赫茲，週期一秒">
+              <svg id="frequency-period-graph" viewBox="0 0 760 310" role="img" aria-label="繩上的波形持續向右傳播；雙向箭頭標示一個波長；目前頻率一赫茲，週期一秒">
                 <defs>
-                  <marker id="frequency-time-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#314640"/></marker>
+                  <marker id="frequency-position-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#314640"/></marker>
+                  <marker id="frequency-wavelength-marker" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#bc612b"/></marker>
                 </defs>
                 <text x="38" y="103" text-anchor="end" class="small-label">+A</text>
                 <text x="38" y="176" text-anchor="end" class="small-label">平衡</text>
                 <text x="38" y="248" text-anchor="end" class="small-label">−A</text>
                 <path d="M52 100H642 M52 240H642" fill="none" stroke="#c4d0c7" stroke-width="1.3" stroke-dasharray="5 6"/>
-                <path d="M52 170H654" class="equilibrium" marker-end="url(#frequency-time-arrow)"/>
-                <path d="M80 252V78" fill="none" stroke="#84988a" stroke-width="1.6" marker-end="url(#frequency-time-arrow)"/>
+                <path d="M52 170H654" class="equilibrium" marker-end="url(#frequency-position-arrow)"/>
+                <path d="M80 252V78" fill="none" stroke="#84988a" stroke-width="1.6" marker-end="url(#frequency-position-arrow)"/>
                 <path id="frequency-period-wave" class="wave-line" d="M80 170"/>
-                <path id="frequency-period-guide" d="M440 67V260" fill="none" stroke="#d98a66" stroke-width="1.2" stroke-dasharray="4 5"/>
-                <text id="frequency-period-after-label" x="440" y="55" text-anchor="middle" fill="#bc612b">一輪後</text>
+                <path id="frequency-wavelength-arrow" d="M80 65H440" fill="none" stroke="#bc612b" stroke-width="2" marker-start="url(#frequency-wavelength-marker)" marker-end="url(#frequency-wavelength-marker)"/>
+                <path id="frequency-wavelength-guides" d="M80 67V260M440 67V260" fill="none" stroke="#d98a66" stroke-width="1.2" stroke-dasharray="4 5"/>
+                <text id="frequency-wavelength-label" x="260" y="55" text-anchor="middle" fill="#bc612b">一個波長 λ</text>
                 <circle id="frequency-period-cursor" cx="80" cy="170" r="7" class="marker"/>
-                <text x="80" y="286" text-anchor="middle" class="small-label">現在</text>
-                <text x="620" y="286" text-anchor="middle" class="small-label">未來 1.5 s</text>
-                <text x="670" y="180" class="small-label">時間</text>
+                <text x="80" y="286" text-anchor="middle" class="small-label">0</text>
+                <text x="670" y="180" class="small-label">位置</text>
                 <text x="33" y="75" class="small-label">位移</text>
               </svg>
               <p class="frequency-cycle-count" id="frequency-cycle-count">每秒完成 1 次完整振動</p>
@@ -1078,24 +1078,24 @@
       const periodControlValue=document.querySelector("#card07-period-value");
       const frequencyPeriodWave=document.querySelector("#frequency-period-wave");
       const frequencyPeriodCursor=document.querySelector("#frequency-period-cursor");
-      const frequencyPeriodGuide=document.querySelector("#frequency-period-guide");
-      const frequencyPeriodAfterLabel=document.querySelector("#frequency-period-after-label");
-      const graphFrequencyValue=document.querySelector("#graph-frequency-value");
-      const graphPeriodValue=document.querySelector("#graph-period-value");
+      const frequencyWavelengthArrow=document.querySelector("#frequency-wavelength-arrow");
+      const frequencyWavelengthGuides=document.querySelector("#frequency-wavelength-guides");
+      const frequencyWavelengthLabel=document.querySelector("#frequency-wavelength-label");
       const frequencyCycleCount=document.querySelector("#frequency-cycle-count");
       const frequencyPeriodGraph=document.querySelector("#frequency-period-graph");
-      if(frequencyStepDown&&frequencyStepUp&&frequencyControlValue&&periodRange&&periodControlValue&&frequencyPeriodWave&&frequencyPeriodCursor&&frequencyPeriodGuide&&frequencyPeriodAfterLabel&&graphFrequencyValue&&graphPeriodValue&&frequencyCycleCount&&frequencyPeriodGraph){
-        const graphStartX=80,graphWidth=540,graphDuration=1.5,graphMidY=170,graphAmplitude=70;
+      if(frequencyStepDown&&frequencyStepUp&&frequencyControlValue&&periodRange&&periodControlValue&&frequencyPeriodWave&&frequencyPeriodCursor&&frequencyWavelengthArrow&&frequencyWavelengthGuides&&frequencyWavelengthLabel&&frequencyCycleCount&&frequencyPeriodGraph){
+        const graphStartX=80,graphWidth=540,graphMidY=170,graphAmplitude=70,waveSpeed=3;
         let frequency=1,waveAnimationFrame=0,waveStartTime=null,currentWavePhase=0;
+        let wavelength=waveSpeed/frequency,visibleDistance=1.5*wavelength;
         const formatFrequency=value=>String(Number(value.toFixed(2)));
         const formatPeriod=value=>{const rounded=Number(value.toFixed(4));return Number.isInteger(rounded)?rounded.toFixed(2):String(rounded);};
         const drawFrequencyPeriodWave=phase=>{
           let path=`M${graphStartX} ${graphMidY-graphAmplitude*Math.sin(phase)}`;
           const samples=240;
           for(let index=1;index<=samples;index++){
-            const time=graphDuration*index/samples;
             const x=graphStartX+graphWidth*index/samples;
-            const y=graphMidY-graphAmplitude*Math.sin(phase+2*Math.PI*frequency*time);
+            const position=visibleDistance*index/samples;
+            const y=graphMidY-graphAmplitude*Math.sin(phase-2*Math.PI*position/wavelength);
             path+=` L${x.toFixed(2)} ${y.toFixed(2)}`;
           }
           frequencyPeriodWave.setAttribute("d",path);
@@ -1114,15 +1114,16 @@
           const frequencyText=`${formatFrequency(frequency)} Hz`;
           const periodText=`${formatPeriod(period)} s`;
           frequencyControlValue.textContent=frequencyText;periodControlValue.textContent=periodText;
-          graphFrequencyValue.textContent=`f = ${frequencyText}`;graphPeriodValue.textContent=`T = ${periodText}`;
           frequencyCycleCount.textContent=`每秒完成 ${formatFrequency(frequency)} 次完整振動`;
           frequencyStepDown.disabled=frequency<=1;frequencyStepUp.disabled=frequency>=4;
           periodRange.setAttribute("aria-valuetext",periodText);
-          frequencyPeriodGraph.setAttribute("aria-label",`同一個繩點的位移隨時間持續振動；圖上顯示未來一點五秒；目前頻率 ${frequencyText}，週期 ${periodText}`);
+          wavelength=waveSpeed/frequency;visibleDistance=1.5*wavelength;
+          frequencyPeriodGraph.setAttribute("aria-label",`繩上的波形持續向右傳播；雙向箭頭標示一個波長；目前頻率 ${frequencyText}，週期 ${periodText}`);
           drawFrequencyPeriodWave(currentWavePhase);
-          const periodEndX=graphStartX+graphWidth*(period/graphDuration);
-          frequencyPeriodGuide.setAttribute("d",`M${periodEndX.toFixed(2)} 67V260`);
-          frequencyPeriodAfterLabel.setAttribute("x",String(periodEndX));
+          const wavelengthEndX=graphStartX+graphWidth*(wavelength/visibleDistance);
+          frequencyWavelengthArrow.setAttribute("d",`M${graphStartX} 65H${wavelengthEndX.toFixed(2)}`);
+          frequencyWavelengthGuides.setAttribute("d",`M${graphStartX} 67V260M${wavelengthEndX.toFixed(2)} 67V260`);
+          frequencyWavelengthLabel.setAttribute("x",String((graphStartX+wavelengthEndX)/2));
         };
         frequencyStepDown.addEventListener("click",()=>{frequency=Math.max(1,frequency-1);updateFrequencyPeriod();});
         frequencyStepUp.addEventListener("click",()=>{frequency=Math.min(4,frequency+1);updateFrequencyPeriod();});
