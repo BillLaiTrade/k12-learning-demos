@@ -194,6 +194,19 @@ if (canvas) {
       texture.colorSpace = THREE.SRGBColorSpace;
       return texture;
     };
+    const makeProjectedShadowTexture = () => {
+      const textureCanvas = document.createElement('canvas');
+      textureCanvas.width = 256;
+      textureCanvas.height = 256;
+      const context = textureCanvas.getContext('2d');
+      const shade = context.createRadialGradient(128, 128, 12, 128, 128, 128);
+      shade.addColorStop(0, 'rgba(27, 24, 19, 0.88)');
+      shade.addColorStop(0.68, 'rgba(27, 24, 19, 0.72)');
+      shade.addColorStop(1, 'rgba(27, 24, 19, 0)');
+      context.fillStyle = shade;
+      context.fillRect(0, 0, 256, 256);
+      return new THREE.CanvasTexture(textureCanvas);
+    };
     const makeBallTexture = () => {
       const textureCanvas = document.createElement('canvas');
       textureCanvas.width = 512;
@@ -233,7 +246,7 @@ if (canvas) {
       ball: new THREE.MeshStandardMaterial({ color: '#dce4d9', map: ballTexture, roughness: 0.78, metalness: 0.015, bumpMap: ballTexture, bumpScale: 0.008 }),
       screen: new THREE.MeshPhysicalMaterial({ color: '#fffdf5', map: screenTexture, roughness: 0.91, metalness: 0, emissive: '#c9bea1', emissiveIntensity: 0.45, side: THREE.DoubleSide }),
       screenFrame: mat('#52645c', { metalness: 0.55, roughness: 0.31 }),
-      lens: new THREE.MeshStandardMaterial({ color: '#ffe4a0', emissive: '#ffb937', emissiveIntensity: 2.2, roughness: 0.24 })
+      lens: new THREE.MeshStandardMaterial({ color: '#ffe4a0', emissive: '#ffb937', emissiveIntensity: 3.2, roughness: 0.24 })
     };
 
     const box = (parent, size, position, material, { cast = true, receive = true } = {}) => {
@@ -316,7 +329,7 @@ if (canvas) {
     powerCable.castShadow = true;
     scene.add(powerCable);
 
-    const spotlight = new THREE.SpotLight('#ffe0a0', 78, 12, 0.41, 0.18, 1.35);
+    const spotlight = new THREE.SpotLight('#ffe0a0', 112, 12, 0.41, 0.18, 1.35);
     spotlight.position.set(0, 1.55, -3.46);
     spotlight.target.position.set(0, 1.55, 3.7);
     spotlight.castShadow = true;
@@ -341,6 +354,19 @@ if (canvas) {
     screen.receiveShadow = true;
     screen.castShadow = false;
     scene.add(screen);
+    const projectedShadowMaterial = new THREE.MeshBasicMaterial({
+      map: makeProjectedShadowTexture(),
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      toneMapped: false
+    });
+    const projectedShadow = new THREE.Mesh(new THREE.CircleGeometry(1, 64), projectedShadowMaterial);
+    projectedShadow.position.set(0, screenCenterY, screenZ - 0.025);
+    projectedShadow.scale.setScalar(0.72);
+    projectedShadow.renderOrder = 2;
+    scene.add(projectedShadow);
     for (const x of [-screenWidth / 2 - 0.055, screenWidth / 2 + 0.055]) {
       box(scene, [0.11, screenHeight + 0.16, 0.11], [x, screenCenterY, screenZ + 0.04], materials.screenFrame);
       box(scene, [0.42, 0.09, 0.36], [x, 0.07, screenZ + 0.05], materials.metalDark);
@@ -542,6 +568,15 @@ if (canvas) {
           setObservation(blocked ? '原來球擋住光的地方，屏幕上就留下了影子。' : '原來不透明的球擋住光線後，光照不到的地方就在屏幕上形成影子。');
         }
       }
+      const projectionRatio = (screenZ - spotlight.position.z) / (railZ - spotlight.position.z);
+      projectedShadow.position.x = THREE.MathUtils.clamp(
+        blocker.position.x * projectionRatio,
+        -screenWidth / 2 + 0.72,
+        screenWidth / 2 - 0.72
+      );
+      const beamCoverage = THREE.MathUtils.clamp((1.65 - Math.abs(blocker.position.x)) / 1.4, 0, 1);
+      projectedShadowMaterial.opacity = beamCoverage * 0.76;
+      projectedShadow.visible = beamCoverage > 0.01;
       renderer.render(scene, camera);
     };
     animate();
