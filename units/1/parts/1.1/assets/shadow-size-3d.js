@@ -479,7 +479,95 @@ if (canvas) {
   } catch (error) {
     console.error('Shadow size 3D scene failed to initialize:', error);
     const reason = error instanceof Error ? error.message : String(error);
-    status.textContent = `立體場景初始化失敗：${reason.slice(0, 110) || '請重新載入頁面再試。'}`;
-    canvas.setAttribute('aria-label', '影子大小實驗場景無法載入');
+    const frame = canvas.closest('.shadow-size-scene-frame');
+    const fallback = document.createElement('div');
+    fallback.className = 'shadow-size-2d-fallback';
+    fallback.setAttribute('role', 'group');
+    fallback.setAttribute('aria-label', '影子大小互動示意場景');
+    fallback.style.cssText = 'position:absolute;inset:0;z-index:1;overflow:hidden;border-radius:inherit;';
+    fallback.innerHTML = `
+      <svg viewBox="0 0 1000 600" preserveAspectRatio="none" style="display:block;width:100%;height:100%" role="img" aria-label="拖曳球體在光源與屏幕之間移動，觀察屏幕影子大小">
+        <defs>
+          <linearGradient id="fallback-room" x2="0" y2="1"><stop stop-color="#e7ede7"/><stop offset=".64" stop-color="#eff0e5"/><stop offset="1" stop-color="#f8f1df"/></linearGradient>
+          <linearGradient id="fallback-table" x2="0" y2="1"><stop stop-color="#d8b37d"/><stop offset="1" stop-color="#9b7149"/></linearGradient>
+          <linearGradient id="fallback-screen" x2="1" y2="1"><stop stop-color="#fffdf2"/><stop offset="1" stop-color="#ded9c7"/></linearGradient>
+          <radialGradient id="fallback-lamp-glow"><stop stop-color="#fff4b5" stop-opacity=".9"/><stop offset="1" stop-color="#ffc85b" stop-opacity="0"/></radialGradient>
+          <radialGradient id="fallback-ball-gradient" cx=".32" cy=".25"><stop stop-color="#899b8d"/><stop offset=".42" stop-color="#435c50"/><stop offset="1" stop-color="#1d302c"/></radialGradient>
+          <filter id="fallback-blur"><feGaussianBlur stdDeviation="12"/></filter>
+        </defs>
+        <rect width="1000" height="600" fill="url(#fallback-room)"/>
+        <g opacity=".26" fill="#71847b"><path d="M70 125h860v14H70zM70 205h860v12H70z"/><path d="M115 74h35v50h-35zm78 13h25v37h-25zm565-9h30v46h-30zm83 4h44v42h-44z"/></g>
+        <path d="M0 447 1000 382v218H0z" fill="url(#fallback-table)"/><path d="m0 447 1000-65v16L0 464z" fill="#775a3e" opacity=".45"/>
+        <path d="m90 468 720-48" stroke="#596b61" stroke-width="12" stroke-linecap="round"/><path d="m90 464 720-48" stroke="#b8c2b8" stroke-width="4" stroke-linecap="round"/>
+        <g opacity=".52" stroke="#485b50" stroke-width="3"><path d="m180 458 2 16m90-22 2 16m90-22 2 16m90-22 2 16m90-22 2 16m90-22 2 16"/></g>
+        <ellipse cx="242" cy="370" rx="115" ry="110" fill="url(#fallback-lamp-glow)"/>
+        <path d="M188 452h96l-13 17h-70z" fill="#35443e"/><path d="M219 452V357l22-30 22 30v95z" fill="#263631"/><ellipse cx="241" cy="357" rx="23" ry="15" fill="#e5c47f"/><ellipse cx="241" cy="354" rx="14" ry="8" fill="#fff5bf"/>
+        <path id="fallback-beam" d="" fill="#ffdc8a" opacity=".23"/>
+        <path d="M770 194 912 205v298l-142-12z" fill="#718077"/><path d="M787 210 897 218v270l-110-9z" fill="url(#fallback-screen)" stroke="#69776b" stroke-width="4"/>
+        <ellipse id="fallback-shadow-blur" cx="842" cy="350" rx="40" ry="52" fill="#475047" opacity=".16" filter="url(#fallback-blur)"/>
+        <ellipse id="fallback-shadow" cx="842" cy="350" rx="40" ry="52" fill="#4d5147" opacity=".75"/>
+        <g id="fallback-size-ball" tabindex="0" role="slider" aria-label="沿光路調整球體位置" aria-valuemin="0" aria-valuemax="100" aria-valuenow="14" style="cursor:grab;touch-action:none">
+          <path id="fallback-post" d="" stroke="#526258" stroke-width="8"/>
+          <rect id="fallback-carriage" x="305" y="430" width="70" height="20" rx="6" fill="#414f48"/>
+          <circle id="fallback-ball-object" cx="340" cy="370" r="39" fill="url(#fallback-ball-gradient)" stroke="#c6d1c6" stroke-width="4"/>
+          <ellipse id="fallback-highlight" cx="330" cy="355" rx="12" ry="7" fill="#d8e3d8" opacity=".42"/>
+        </g>
+        <g fill="#33483f" font-family="system-ui,sans-serif" font-size="20" font-weight="700"><text x="170" y="525">光源</text><text x="778" y="545">屏幕</text><text x="394" y="575" font-size="17" font-weight="500">拖曳球體，觀察影子大小變化</text></g>
+      </svg>`;
+    frame.insertBefore(fallback, canvas);
+    canvas.hidden = true;
+    resetButton.parentElement.hidden = true;
+    status.textContent = '拖曳球體靠近或遠離光源，觀察影子大小。';
+    feedback.textContent = '靠近光源時，影子較大；遠離光源時，影子較小。';
+    xiaokuiObservation.textContent = '遮擋物靠近光源時，影子會變大；遠離光源時，影子會變小。';
+    const svg = fallback.querySelector('svg');
+    const ballHandle = fallback.querySelector('#fallback-size-ball');
+    const beam = fallback.querySelector('#fallback-beam');
+    const shadow = fallback.querySelector('#fallback-shadow');
+    const shadowBlur = fallback.querySelector('#fallback-shadow-blur');
+    const post = fallback.querySelector('#fallback-post');
+    const carriage = fallback.querySelector('#fallback-carriage');
+    const ball = fallback.querySelector('#fallback-ball-object');
+    const highlight = fallback.querySelector('#fallback-highlight');
+    let position = 340;
+    let draggingFallback = false;
+    const updateFallback = (next) => {
+      position = THREE.MathUtils.clamp(next, 320, 710);
+      const shadowRadius = THREE.MathUtils.mapLinear(position, 320, 710, 46, 17);
+      ballHandle.setAttribute('aria-valuenow', String(Math.round((position - 320) / 3.9)));
+      post.setAttribute('d', `M${position} 405v27`);
+      carriage.setAttribute('x', String(position - 35));
+      ball.setAttribute('cx', String(position));
+      highlight.setAttribute('cx', String(position - 10));
+      shadow.setAttribute('rx', String(shadowRadius));
+      shadow.setAttribute('ry', String(shadowRadius * 1.12));
+      shadowBlur.setAttribute('rx', String(shadowRadius * 1.2));
+      shadowBlur.setAttribute('ry', String(shadowRadius * 1.35));
+      beam.setAttribute('d', `M250 337 L${position} 331 L842 ${350 - shadowRadius} L842 ${350 + shadowRadius} L${position} 409 L250 386 Z`);
+      const nearLight = position < 430;
+      feedback.textContent = nearLight
+        ? '球體靠近光源，屏幕上的影子較大；往屏幕方向移動，影子會縮小。'
+        : position > 610
+          ? '球體遠離光源、靠近屏幕，影子較小；往光源方向移動，影子會放大。'
+          : '球體越靠近光源，屏幕上的影子越大；越遠離光源，影子越小。';
+      status.textContent = nearLight ? '球體靠近光源，影子較大。' : position > 610 ? '球體遠離光源，影子較小。' : '拖曳球體，觀察屏幕影子變化。';
+      xiaokuiObservation.textContent = '遮擋物靠近光源時，影子會變大；遠離光源時，影子會變小。';
+    };
+    const moveFallback = (event) => {
+      const bounds = svg.getBoundingClientRect();
+      updateFallback((event.clientX - bounds.left) * 1000 / bounds.width);
+    };
+    ballHandle.addEventListener('pointerdown', (event) => { draggingFallback = true; svg.setPointerCapture(event.pointerId); ballHandle.style.cursor = 'grabbing'; moveFallback(event); });
+    svg.addEventListener('pointermove', (event) => { if (draggingFallback) moveFallback(event); });
+    const stopFallback = (event) => { draggingFallback = false; if (svg.hasPointerCapture(event.pointerId)) svg.releasePointerCapture(event.pointerId); ballHandle.style.cursor = 'grab'; };
+    svg.addEventListener('pointerup', stopFallback);
+    svg.addEventListener('pointercancel', stopFallback);
+    ballHandle.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      updateFallback(position + (event.key === 'ArrowLeft' ? -18 : 18));
+    });
+    updateFallback(position);
+    canvas.setAttribute('aria-label', '使用可拖曳的影子大小互動示意場景');
   }
 }
