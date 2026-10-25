@@ -594,9 +594,7 @@
     .microscope-model-disclaimer { margin:0!important; padding:9px 12px; border-radius:9px; background:#f2f1e8; color:#59665e; font-size:.76rem; text-align:center; }
     @media(max-width:780px) { .change-definitions,.change-comparison-grid { grid-template-columns:1fr; } }
     @media(max-width:680px) { .microscope-source-row .microscope-source { width:min(100%,300px); } .microscope-source { padding:0; } .microscope-source img { height:300px; } .change-example-card--water .microscope-source-row { grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; } .change-example-card--water .microscope-source-row .microscope-source { width:100%; padding:3px; } .change-example-card--water .microscope-source img { height:auto; } .rust-photo-comparison { gap:8px; } .rust-photo-comparison .microscope-source { padding:4px; } .rust-photo-comparison .microscope-glass,.change-example-card--water .microscope-glass { width:clamp(30px,24%,44px); } .rust-photo-comparison .microscope-glass::after,.change-example-card--water .microscope-glass::after { width:16px; height:4px; right:-12px; bottom:-4px; } }
-    .learning-step-title { display:flex; align-items:center; gap:9px; margin:12px 0 8px; color:#294b3c; font-size:1.04rem; }
-    .learning-step-title::before { content:""; width:7px; height:23px; border-radius:99px; background:#88a77d; }
-    .pure-particle-comparison,.decomposition-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; }
+    .pure-particle-comparison { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; align-items:stretch; }
     .particle-card { overflow:hidden; border:2px solid #c6d6c5; border-radius:13px; background:#fffefa; }
     .particle-card--element { border-color:#99b79b; }
     .particle-card--compound { border-color:#91b7b1; }
@@ -605,6 +603,12 @@
     .particle-example { margin:0!important; padding:5px 13px; background:#fafbf7; color:#56685e!important; font-size:.82rem; font-weight:700; }
     .particle-tag { padding:3px 9px; border-radius:99px; background:#e4ebdc; color:#526d55; font-size:.76rem; font-weight:700; }
     .particle-model { display:grid; min-height:118px; place-content:center; justify-content:center; background:#fbfcf8; }
+    .particle-photo-model { display:grid; grid-template-columns:120px minmax(0,1fr); gap:9px; align-items:stretch; padding:9px; background:#fbfcf8; }
+    .particle-sample-photo { min-width:0; margin:0; overflow:hidden; border:1px solid #e0e4d9; border-radius:9px; background:#fff; }
+    .particle-sample-photo img { display:block; width:100%; height:104px; object-fit:cover; }
+    .particle-sample-photo figcaption { padding:3px 5px; color:#617066; font-size:.72rem; text-align:center; }
+    .particle-photo-model .particle-model { min-height:118px; }
+    .particle-photo-model .particle-model--water { grid-template-columns:repeat(3,55px); gap:10px 7px; }
     .particle-model--iron { grid-template-columns:repeat(5,22px); gap:12px 16px; }
     .particle-model--water { grid-template-columns:repeat(4,55px); gap:13px 9px; }
     .particle-ball { display:inline-block; flex:0 0 auto; width:21px; height:21px; border-radius:50%; background:radial-gradient(circle at 30% 25%,#d9e4e8,#85959a 60%,#4b5b60); box-shadow:0 2px 3px #39484a44; }
@@ -612,29 +616,30 @@
     .particle-ball--hydrogen { width:15px; height:15px; background:radial-gradient(circle at 30% 25%,#fff,#d9e2de 70%,#9eaca6); }
     .particle-unit { display:inline-flex; align-items:center; gap:2px; }
     .particle-caption { margin:0!important; padding:7px 11px; background:#f7f8f2; color:#52645a!important; font-size:.83rem; text-align:center; }
-    .decomposition-panel { margin:9px 0; padding:11px 13px; border:1px solid #d9e2d8; border-radius:14px; background:#f8f9f4; }
-    .decomposition-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 8px; color:#294b3c; font-size:.98rem; }
+    .particle-card-body { padding:10px; }
+    .particle-card .particle-color-note { margin:0 10px 9px!important; }
+    .particle-decomposition { margin-top:10px; padding:10px; border-top:1px solid #e3e8dd; background:#f8f9f4; }
+    .particle-decomposition h4 { margin:0 0 7px; color:#294b3c; font-size:.92rem; }
+    .decomposition-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 7px; color:#294b3c; font-size:.98rem; }
     .decomposition-play { min-height:36px; padding:6px 11px; border:1px solid #b7cbb8; border-radius:9px; background:#fffefa; color:#315a46; font-weight:700; cursor:pointer; }
     .decomposition-play:hover { background:#f0f4e9; }
     .decomposition-play:focus-visible { outline:3px solid #d7a94a; outline-offset:2px; }
-    .decomposition-case { min-width:0; padding:9px 11px; border:1px solid #e0e4d9; border-radius:11px; background:#fffefa; }
-    .decomposition-case h4 { margin:0 0 6px; color:#315a46; font-size:.92rem; }
     .decomposition-particles { display:flex; min-height:34px; align-items:center; justify-content:center; gap:5px; color:#294b3c; font-size:.96rem; font-weight:800; white-space:nowrap; }
     .decomposition-particles .particle-ball { width:17px; height:17px; }
     .decomposition-particles .particle-ball--hydrogen { width:14px; height:14px; }
     .decomposition-water-scene { position:relative; display:flex; min-height:38px; align-items:center; justify-content:center; gap:5px; overflow:hidden; color:#294b3c; font-size:.92rem; font-weight:800; white-space:nowrap; }
     .decomposition-reactants,.decomposition-products { display:inline-flex; flex:0 0 auto; align-items:center; justify-content:center; gap:5px; transition:opacity .35s,transform .45s; }
     .decomposition-products { opacity:1; transform:none; }
-    .decomposition-panel.is-playing .decomposition-reactants { animation:decomposition-reactants 1.25s ease-in-out; }
-    .decomposition-panel.is-playing .decomposition-products { animation:decomposition-products 1.25s ease-in-out; }
+    .particle-card--compound.is-playing .decomposition-reactants { animation:decomposition-reactants 1.25s ease-in-out; }
+    .particle-card--compound.is-playing .decomposition-products { animation:decomposition-products 1.25s ease-in-out; }
     @keyframes decomposition-reactants { 0%,100% { opacity:1; transform:translateX(0) scale(1); } 36% { opacity:.45; transform:translateX(9px) scale(.78); } 58% { opacity:.8; transform:translateX(3px) scale(.92); } }
     @keyframes decomposition-products { 0%,100% { opacity:1; transform:scale(1); } 38% { opacity:.58; transform:scale(.82); } 62% { opacity:1; transform:scale(1.12); } }
     .decomposition-status { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-    .decomposition-case p { margin:5px 0 0; color:#627168; font-size:.78rem; text-align:center; }
+    .decomposition-explanation { margin:6px 0 0!important; color:#627168!important; font-size:.78rem; text-align:center; }
     .particle-color-note { margin:0 0 8px!important; color:#68776e!important; font-size:.8rem; }
     .pure-summary { margin:8px 0 0; }
     @media(prefers-reduced-motion:reduce) { .decomposition-reactants,.decomposition-products { transition:none; animation:none!important; } }
-    @media(max-width:680px) { .pure-particle-comparison,.decomposition-grid { grid-template-columns:1fr; } .particle-card h3 { flex-wrap:wrap; gap:6px; } .particle-tag { flex:0 0 auto; white-space:nowrap; } .particle-model--water { grid-template-columns:repeat(3,55px); } .decomposition-heading { flex-wrap:wrap; align-items:flex-start; } .decomposition-heading h3 { flex:1 1 100%; } }
+    @media(max-width:680px) { .pure-particle-comparison { grid-template-columns:1fr; } .particle-photo-model { grid-template-columns:104px minmax(0,1fr); } .particle-sample-photo img { height:94px; } .particle-card h3 { flex-wrap:wrap; gap:6px; } .particle-tag { flex:0 0 auto; white-space:nowrap; } .particle-model--water { grid-template-columns:repeat(3,55px); } .decomposition-heading { flex-wrap:wrap; align-items:flex-start; } .decomposition-heading h4 { flex:1 1 100%; } }
     .evidence-box { padding:13px 15px; border-left:4px solid var(--blue); border-radius:8px; background:#edf3f7; color:#34536a; }
     .check-options { display:grid; gap:8px; margin:12px 0; }
     .check-option { display:flex; gap:9px; align-items:flex-start; padding:11px 12px; border:1px solid #d9d4c8; border-radius:10px; background:#fff; cursor:pointer; }
@@ -1111,54 +1116,59 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>純鐵和蒸餾水都是純物質，裡面的粒子卻不一樣，這代表什麼？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先觀察粒子怎麼組成，再看看用化學方法處理後，它們會不會變成別種物質。</p></div>
 
-            <h3 class="learning-step-title">① 先觀察：粒子種類和組成</h3>
             <p class="particle-color-note">圖中顏色代表不同種類的原子，不是物質實際的顏色。</p>
             <div class="pure-particle-comparison">
               <article class="particle-card particle-card--element">
                 <h3>元素 <span class="particle-tag">只有一種顏色的原子</span></h3>
-                <p class="particle-example">例子：純鐵</p>
-                <div class="particle-model particle-model--iron" role="img" aria-label="純鐵粒子模型中只有一種顏色，代表只有一種原子">
-                  <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
-                  <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
-                  <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
-                </div>
-                <p class="particle-caption">只有一種顏色，代表只有一種原子</p>
-              </article>
-              <article class="particle-card particle-card--compound">
-                <h3>化合物 <span class="particle-tag">至少兩種顏色的原子結合</span></h3>
-                <p class="particle-example">例子：蒸餾水</p>
-                <div class="particle-model particle-model--water" role="img" aria-label="每個水分子都由兩種顏色、兩種種類的原子組成，各個水分子相同">
-                  <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
-                  <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
-                  <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
-                  <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
-                  <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
-                  <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
-                  <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
-                </div>
-                <p class="particle-caption">每個水分子含兩種顏色的原子；各組水分子都相同</p>
-              </article>
-            </div>
-
-            <div class="decomposition-panel" id="pure-decomposition">
-              <div class="decomposition-heading"><h3>② 再觀察：化學方法能不能分解？</h3><button class="decomposition-play" id="decomposition-play" type="button" aria-controls="pure-decomposition">播放分解示意</button></div>
-              <div class="decomposition-grid">
-                <article class="decomposition-case">
-                  <h4>純鐵</h4>
-                  <div class="decomposition-particles" role="img" aria-label="純鐵處理前後，粒子仍然相同"><i class="particle-ball"></i><i class="particle-ball"></i><span aria-hidden="true">→</span><i class="particle-ball"></i><i class="particle-ball"></i></div>
-                  <p>仍是同一種粒子，不能分解成更簡單的純物質</p>
-                </article>
-                <article class="decomposition-case">
-                  <h4>蒸餾水</h4>
-                  <div class="decomposition-water-scene" role="img" aria-label="兩組水粒子可重新組合成兩組氫粒子和一組氧粒子">
-                    <span class="decomposition-reactants"><span>2×</span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span></span>
-                    <span class="decomposition-arrow" aria-hidden="true">→</span>
-                    <span class="decomposition-products"><span>2×</span><span class="particle-unit"><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span>＋</span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--oxygen"></i></span></span>
+                <div class="particle-card-body">
+                  <p class="particle-example">例子：純鐵</p>
+                  <div class="particle-photo-model">
+                    <figure class="particle-sample-photo"><img src="assets/lesson-pure-iron-sample.webp" alt="乾淨、無鏽的金屬鐵樣本"><figcaption>鐵樣本照片</figcaption></figure>
+                    <div class="particle-model particle-model--iron" role="img" aria-label="純鐵粒子模型中只有一種顏色，代表只有一種原子">
+                      <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
+                      <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
+                      <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
+                    </div>
                   </div>
-                  <p>可用化學方法分解成不同的純物質（示意）</p>
-                </article>
-              </div>
-              <p class="decomposition-status" id="decomposition-status" aria-live="polite">示意動畫尚未播放。</p>
+                  <p class="particle-caption">粒子都是同一種類的原子</p>
+                  <div class="particle-decomposition">
+                    <h4>用化學方法能不能再分解？</h4>
+                    <div class="decomposition-particles" role="img" aria-label="純鐵處理前後仍是相同種類的鐵原子">
+                      <span class="particle-unit"><i class="particle-ball"></i><i class="particle-ball"></i></span><span aria-hidden="true">→</span><span class="particle-unit"><i class="particle-ball"></i><i class="particle-ball"></i></span>
+                    </div>
+                    <p class="decomposition-explanation">不能分解成更簡單的純物質，仍是同一種原子。</p>
+                  </div>
+                </div>
+              </article>
+              <article class="particle-card particle-card--compound" id="compound-example">
+                <h3>化合物 <span class="particle-tag">至少兩種顏色的原子結合</span></h3>
+                <div class="particle-card-body">
+                  <p class="particle-example">例子：蒸餾水</p>
+                  <div class="particle-photo-model">
+                    <figure class="particle-sample-photo"><img src="assets/microscope-water.webp" alt="裝有清澈蒸餾水的玻璃杯"><figcaption>蒸餾水照片</figcaption></figure>
+                    <div class="particle-model particle-model--water" role="img" aria-label="每個水分子都由兩種顏色、兩種種類的原子組成，各個水分子相同">
+                      <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
+                      <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
+                      <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
+                      <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
+                      <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
+                      <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
+                      <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
+                    </div>
+                  </div>
+                  <p class="particle-caption">每個水分子都由兩種原子結合</p>
+                  <div class="particle-decomposition">
+                    <div class="decomposition-heading"><h4>用化學方法能不能再分解？</h4><button class="decomposition-play" id="decomposition-play" type="button" aria-controls="water-decomposition-scene">播放示意</button></div>
+                    <div class="decomposition-water-scene" id="water-decomposition-scene" role="img" aria-label="兩個水分子可分解並重新組成兩個氫分子和一個氧分子">
+                      <span class="decomposition-reactants"><span>2×</span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span></span>
+                      <span class="decomposition-arrow" aria-hidden="true">→</span>
+                      <span class="decomposition-products"><span>2×</span><span class="particle-unit"><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span>＋</span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--oxygen"></i></span></span>
+                    </div>
+                    <p class="decomposition-explanation">可以分解成不同的純物質：氫和氧（示意）。</p>
+                    <p class="decomposition-status" id="decomposition-status" aria-live="polite">示意動畫尚未播放。</p>
+                  </div>
+                </div>
+              </article>
             </div>
 
             <div class="dialogue dialogue--xiaokui pure-summary"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>原來，元素只由一種原子構成；化合物則由不同種類的原子結合。看粒子的種類，再觀察能不能用化學方法分解，就能分辨它們。</p></div>
@@ -2270,14 +2280,14 @@
       requestAnimationFrame(()=>phaseSolidOverview.scrollIntoView({block:"center"}));
     }
 
-    const decompositionPanel=document.getElementById("pure-decomposition");
+    const decompositionPanel=document.getElementById("compound-example");
     const decompositionPlay=document.getElementById("decomposition-play");
     decompositionPlay.addEventListener("click",()=>{
       decompositionPanel.classList.remove("is-playing");
       void decompositionPanel.offsetWidth;
       decompositionPanel.classList.add("is-playing");
       decompositionPlay.textContent="再看一次";
-      document.getElementById("decomposition-status").textContent="水粒子重新組合成兩種不同的小粒子組合；純鐵的粒子仍然相同。";
+      document.getElementById("decomposition-status").textContent="兩個水分子可分解成兩個氫分子和一個氧分子。";
     });
 
     document.getElementById("check-answer").addEventListener("click",()=>{
