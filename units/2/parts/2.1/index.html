@@ -122,11 +122,9 @@
     .frequency-period-controls { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:12px 0; }
     .frequency-period-panel { min-width:0; padding:14px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
     .frequency-period-panel h3 { margin:0 0 4px; color:var(--green); font-size:1.08rem; }
-    .frequency-definition { margin:10px 0; padding:10px 12px; border-left:4px solid var(--green); border-radius:10px; background:#eaf3eb; }
-    .frequency-definition-label { display:block; color:var(--green); font-size:.8rem; font-weight:850; }
-    .frequency-definition p { margin:3px 0 0; color:var(--ink); font-size:1rem; font-weight:800; line-height:1.45; }
-    .frequency-definition small { display:block; margin-top:5px; color:#43574e; font-size:.84rem; line-height:1.5; }
-    .frequency-current-meaning { margin:6px 0 0!important; color:#315a46!important; font-size:.88rem!important; font-weight:750; }
+    .frequency-definition { margin:8px 0 12px; }
+    .frequency-definition p { margin:0; color:var(--ink); font-size:1rem; font-weight:800; line-height:1.45; }
+    .frequency-definition small { display:block; margin-top:5px; color:var(--muted); font-size:.84rem; line-height:1.5; }
     .frequency-period-panel>p { margin:0; color:var(--muted); font-size:.88rem; }
     .frequency-stepper { display:grid; grid-template-columns:42px minmax(58px,1fr) 42px; align-items:center; gap:7px; margin:12px 0 6px; }
     .frequency-stepper button { min-width:0; min-height:42px; padding:4px; font-size:1.25rem; }
@@ -135,9 +133,6 @@
     .period-range { display:block; width:100%!important; margin:12px 0 2px; }
     .period-range-values { display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--muted); font-size:.78rem; }
     .period-range-values output { color:var(--ink); font-size:1.08rem; font-weight:800; }
-    .period-timer-button { width:100%; margin-top:10px; border:0; background:var(--orange); color:#fff; }
-    .period-timer-button:hover { background:#a95020; }
-    .period-timer-readout { min-height:1.5em; margin-top:6px!important; color:var(--muted); font-size:.82rem!important; text-align:center; }
     .frequency-sync-note { margin:10px 0 12px; padding:10px 13px; border-radius:12px; background:var(--orange-pale); color:#754322; text-align:center; font-weight:750; }
     .frequency-period-figure { margin:12px 0; }
     .frequency-period-figure svg text { font-size:18px; }
@@ -628,8 +623,7 @@
               <section class="frequency-period-panel" aria-labelledby="frequency-panel-title">
                 <h3 id="frequency-panel-title">頻率 f</h3>
                 <div class="frequency-definition">
-                  <strong class="frequency-definition-label">定義</strong>
-                  <p>波源在 1 秒內完成的完整振動次數。</p>
+                  <p>波源每秒完成的完整振動次數。</p>
                   <small>完整振動要回到起始位置，且運動方向相同。連續波中，波源每完成一輪，就送出一個完整波形。</small>
                 </div>
                 <div class="frequency-stepper" role="group" aria-label="調整頻率">
@@ -638,21 +632,15 @@
                   <button class="secondary" type="button" id="frequency-step-up" aria-label="提高頻率">+</button>
                 </div>
                 <small class="frequency-range-note">範圍 1–4 Hz；每次增減 1 Hz</small>
-                <p class="frequency-current-meaning" id="frequency-current-meaning">目前：每秒完成 1 次完整振動。</p>
               </section>
               <section class="frequency-period-panel" aria-labelledby="period-panel-title">
                 <h3 id="period-panel-title">週期 T</h3>
                 <div class="frequency-definition">
-                  <strong class="frequency-definition-label">定義</strong>
                   <p>波源完成一輪完整振動所需的時間。</p>
-                  <small>從某一位置、某一運動方向出發，到再次回到相同位置、相同方向。</small>
                 </div>
-                <label class="sr-only" for="card07-period-range">調整週期（秒）</label>
-                <input class="period-range" id="card07-period-range" type="range" min="0.25" max="1" step="0.0001" value="1" aria-describedby="period-range-help">
+                <label class="sr-only" for="card07-period-range">調整週期，完成一輪完整振動所需的秒數</label>
+                <input class="period-range" id="card07-period-range" type="range" min="0.25" max="1" step="0.0001" value="1">
                 <div class="period-range-values"><span>0.25 s</span><output id="card07-period-value">1.00 s</output><span>1.00 s</span></div>
-                <button class="secondary period-timer-button" type="button" id="period-one-cycle">計時一輪</button>
-                <p id="period-range-help">從同一位置、同一方向出發，計時到它再次回到同一狀態。</p>
-                <p class="period-timer-readout" id="period-timer-readout" role="status" aria-live="polite">按下「計時一輪」，觀察一輪所需的時間。</p>
               </section>
             </div>
             <p class="frequency-sync-note">調整任一數值，另一項同步更新；下方同一個波形即時改變。</p>
@@ -682,8 +670,7 @@
                 <text x="670" y="180" class="small-label">時間</text>
                 <text x="33" y="75" class="small-label">位移</text>
               </svg>
-              <p class="frequency-cycle-count" id="frequency-cycle-count">一秒完成 1 輪</p>
-              <figcaption>頻率數一秒內完成幾輪；週期量完成一輪所需的時間。</figcaption>
+              <p class="frequency-cycle-count" id="frequency-cycle-count">每秒完成 1 次完整振動</p>
             </figure>
             <div class="frequency-relation" aria-label="頻率和週期的公式與白話解釋">
               <span class="frequency-relation-title">公式與關係</span>
@@ -1091,8 +1078,6 @@
       const frequencyControlValue=document.querySelector("#card07-frequency-value");
       const periodRange=document.querySelector("#card07-period-range");
       const periodControlValue=document.querySelector("#card07-period-value");
-      const periodOneCycleButton=document.querySelector("#period-one-cycle");
-      const periodTimerReadout=document.querySelector("#period-timer-readout");
       const frequencyPeriodWave=document.querySelector("#frequency-period-wave");
       const frequencyPeriodCursor=document.querySelector("#frequency-period-cursor");
       const frequencyPeriodBracket=document.querySelector("#frequency-period-bracket");
@@ -1101,11 +1086,10 @@
       const graphFrequencyValue=document.querySelector("#graph-frequency-value");
       const graphPeriodValue=document.querySelector("#graph-period-value");
       const frequencyCycleCount=document.querySelector("#frequency-cycle-count");
-      const frequencyCurrentMeaning=document.querySelector("#frequency-current-meaning");
       const frequencyPeriodGraph=document.querySelector("#frequency-period-graph");
-      if(frequencyStepDown&&frequencyStepUp&&frequencyControlValue&&periodRange&&periodControlValue&&periodOneCycleButton&&periodTimerReadout&&frequencyPeriodWave&&frequencyPeriodCursor&&frequencyPeriodBracket&&frequencyPeriodGuides&&frequencyPeriodBracketLabel&&graphFrequencyValue&&graphPeriodValue&&frequencyCycleCount&&frequencyPeriodGraph){
+      if(frequencyStepDown&&frequencyStepUp&&frequencyControlValue&&periodRange&&periodControlValue&&frequencyPeriodWave&&frequencyPeriodCursor&&frequencyPeriodBracket&&frequencyPeriodGuides&&frequencyPeriodBracketLabel&&graphFrequencyValue&&graphPeriodValue&&frequencyCycleCount&&frequencyPeriodGraph){
         const graphStartX=80,graphWidth=540,graphDuration=1.5,graphMidY=170,graphAmplitude=70;
-        let frequency=1,periodAnimationFrame=0,waveAnimationFrame=0,waveStartTime=null,currentWavePhase=0;
+        let frequency=1,waveAnimationFrame=0,waveStartTime=null,currentWavePhase=0;
         const formatFrequency=value=>String(Number(value.toFixed(2)));
         const formatPeriod=value=>{const rounded=Number(value.toFixed(4));return Number.isInteger(rounded)?rounded.toFixed(2):String(rounded);};
         const drawFrequencyPeriodWave=phase=>{
@@ -1127,11 +1111,6 @@
           drawFrequencyPeriodWave(currentWavePhase);
           waveAnimationFrame=window.requestAnimationFrame(animateFrequencyPeriodWave);
         };
-        const resetPeriodTimer=()=>{
-          if(periodAnimationFrame)cancelAnimationFrame(periodAnimationFrame);
-          periodAnimationFrame=0;periodOneCycleButton.disabled=false;
-          periodTimerReadout.textContent="按下「計時一輪」，觀察一輪所需的時間。";
-        };
         const updateFrequencyPeriod=({syncPeriod=true}={})=>{
           const period=1/frequency;
           if(syncPeriod)periodRange.value=String(period);
@@ -1139,8 +1118,7 @@
           const periodText=`${formatPeriod(period)} s`;
           frequencyControlValue.textContent=frequencyText;periodControlValue.textContent=periodText;
           graphFrequencyValue.textContent=`f = ${frequencyText}`;graphPeriodValue.textContent=`T = ${periodText}`;
-          frequencyCycleCount.textContent=`一秒完成 ${formatFrequency(frequency)} 輪`;
-          if(frequencyCurrentMeaning)frequencyCurrentMeaning.textContent=`目前：每秒完成 ${formatFrequency(frequency)} 次完整振動。`;
+          frequencyCycleCount.textContent=`每秒完成 ${formatFrequency(frequency)} 次完整振動`;
           frequencyStepDown.disabled=frequency<=1;frequencyStepUp.disabled=frequency>=4;
           periodRange.setAttribute("aria-valuetext",periodText);
           frequencyPeriodGraph.setAttribute("aria-label",`同一個繩點的位移隨時間持續振動；圖上顯示未來一點五秒；目前頻率 ${frequencyText}，週期 ${periodText}`);
@@ -1150,26 +1128,10 @@
           frequencyPeriodGuides.setAttribute("d",`M${graphStartX} 67V260M${periodEndX.toFixed(2)} 67V260`);
           frequencyPeriodBracketLabel.setAttribute("x",String((graphStartX+periodEndX)/2));
           frequencyPeriodBracketLabel.textContent=`T = ${periodText}`;
-          resetPeriodTimer();
         };
         frequencyStepDown.addEventListener("click",()=>{frequency=Math.max(1,frequency-1);updateFrequencyPeriod();});
         frequencyStepUp.addEventListener("click",()=>{frequency=Math.min(4,frequency+1);updateFrequencyPeriod();});
         periodRange.addEventListener("input",()=>{frequency=1/Number(periodRange.value);updateFrequencyPeriod({syncPeriod:false});});
-        periodOneCycleButton.addEventListener("click",()=>{
-          resetPeriodTimer();periodOneCycleButton.disabled=true;
-          const selectedPeriod=1/frequency;
-          let startTime=null;
-          const animateCycle=time=>{
-            if(startTime===null)startTime=time;
-            const elapsed=Math.min(selectedPeriod,(time-startTime)/1000);
-            const progress=elapsed/selectedPeriod;
-            periodTimerReadout.textContent=`計時中：${formatPeriod(elapsed)} / ${formatPeriod(selectedPeriod)} s`;
-            if(progress<1)periodAnimationFrame=requestAnimationFrame(animateCycle);
-            else{periodAnimationFrame=0;periodOneCycleButton.disabled=false;periodTimerReadout.textContent=`一輪所需時間：${formatPeriod(selectedPeriod)} s（週期 T）`;
-            }
-          };
-          periodAnimationFrame=requestAnimationFrame(animateCycle);
-        });
         updateFrequencyPeriod();
         waveAnimationFrame=window.requestAnimationFrame(animateFrequencyPeriodWave);
       }
