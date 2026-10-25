@@ -35,6 +35,9 @@
     .route a b { color:#8c8061; font-size:.72rem; }
     .route a:hover,.route a[aria-current="step"] { color:#174c3e; background:#e5efe8; }
     .route a[aria-current="step"] b { color:var(--green); }
+    .route a.quiz-nav { margin-top:12px; border-top:1px solid var(--line); padding-top:17px; color:#8a6726; font-weight:750; }
+    .route a.quiz-nav b { color:#946f2d; }
+    .route a.quiz-nav[aria-current="step"] { background:#faf3e4; color:#795b25; box-shadow:inset 3px 0 #d9a74f; }
     .route-hint { margin:12px 2px 0; color:#77837b; font-size:.75rem; }
     .route-progress { margin:0 0 10px; color:#425b50; font-size:.8rem; font-weight:800; }
     .record-panel { margin-top:15px; padding:13px 12px; border-radius:12px; background:#f1ead6; }
@@ -632,6 +635,22 @@
     .matter-relationship-figure { grid-column:1 / -1; width:100%; margin:0; padding:10px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
     .matter-relationship-figure img { display:block; width:100%; height:auto; border-radius:10px; }
     @media(max-width:680px) { .pure-particle-comparison { grid-template-columns:1fr; } .particle-photo-model { grid-template-columns:104px minmax(0,1fr); } .particle-sample-photo img { height:94px; } .particle-sample-photo--iron img { height:104px; } .particle-card h3 { flex-wrap:wrap; gap:6px; } .particle-tag { flex:0 0 auto; white-space:nowrap; } .particle-model--water { grid-template-columns:repeat(3,55px); } }
+    .unit-quiz { margin:20px 0 28px; border:1px solid var(--line); border-radius:18px; background:var(--card); box-shadow:var(--shadow); overflow:hidden; scroll-margin-top:18px; }
+    .quiz-head { display:flex; gap:16px; align-items:center; padding:22px 24px; border-bottom:1px solid #e7ece5; background:linear-gradient(105deg,#fffdf6,#fdfbf3); }
+    .quiz-mark { display:grid; place-items:center; width:48px; height:48px; flex:none; border-radius:15px; background:#f5ead0; color:#8b6725; font-size:1.4rem; font-weight:800; }
+    .quiz-kicker { margin:0 0 3px; color:#946f2d; font-size:.8rem; font-weight:800; letter-spacing:.06em; }
+    .quiz-head h2 { margin:0; font-size:clamp(1.22rem,2.3vw,1.65rem); line-height:1.4; }
+    .quiz-body { padding:22px 24px 24px; }
+    .quiz-question { margin-top:20px; padding-top:18px; border-top:1px solid #e7e9e2; }
+    .quiz-options { display:grid; gap:8px; margin:12px 0; }
+    .quiz-choice { display:flex; gap:10px; align-items:flex-start; padding:11px 13px; border:1px solid #d9d4c8; border-radius:10px; background:#fff; cursor:pointer; }
+    .quiz-choice:has(input:checked) { border-color:var(--green); background:#edf4ef; }
+    .quiz-choice input { margin-top:5px; accent-color:var(--green); }
+    .quiz-actions { display:flex; align-items:center; gap:14px; margin-top:14px; }
+    .quiz-feedback { min-height:50px; margin-top:11px; padding:10px 12px; border-radius:10px; background:#f1eee5; color:#56645d; }
+    .quiz-feedback[data-kind="correct"] { background:#e4f1e8; color:#23533e; }
+    .quiz-feedback[data-kind="wrong"] { background:#fbefdf; color:#795125; }
+    .unit-quiz .next-hint { margin-top:14px!important; }
     .evidence-box { padding:13px 15px; border-left:4px solid var(--blue); border-radius:8px; background:#edf3f7; color:#34536a; }
     .check-options { display:grid; gap:8px; margin:12px 0; }
     .check-option { display:flex; gap:9px; align-items:flex-start; padding:11px 12px; border:1px solid #d9d4c8; border-radius:10px; background:#fff; cursor:pointer; }
@@ -653,7 +672,11 @@
       .route a { flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border:1px solid var(--line); border-radius:999px; background:var(--card); font-size:.74rem; white-space:nowrap; }
       .route a[aria-current="step"] { border-color:var(--green); }
       .route-progress { margin-bottom:6px; }
-      .lesson-card { scroll-margin-top:116px; }
+      .lesson-card,.unit-quiz { scroll-margin-top:116px; }
+      .quiz-head { padding:18px 16px; }
+      .quiz-body { padding:17px 15px 19px; }
+      .quiz-actions { align-items:stretch; flex-direction:column; }
+      .quiz-actions .action-button { width:100%; }
       .record-panel { display:none; }
       .lesson-card { grid-template-columns:1fr; gap:10px; padding:15px; }
       .card-side { display:grid; grid-template-columns:38px 1fr; align-items:center; column-gap:10px; border:0; border-bottom:1px solid #e5dfd1; padding:0 0 9px; }
@@ -718,7 +741,7 @@
     <div class="lesson-layout">
       <nav class="route" aria-label="學習路徑">
         <p class="route-label">沿著問題一步步探索</p>
-        <p class="route-progress" id="route-progress" aria-live="polite">學習進度：01／09</p>
+        <p class="route-progress" id="route-progress" aria-live="polite">學習進度：01／08</p>
         <div class="route-inner">
           <a href="#s1" aria-current="step"><b>01</b><span>這個水桶是什麼做的？桶子和材料有什麼不同？</span></a>
           <a href="#s2"><b>02</b><span>桶身、水和空氣，各有哪些不同？</span></a>
@@ -728,7 +751,7 @@
           <a href="#s7"><b>06</b><span>怎麼分辨物理變化和化學變化？</span></a>
           <a href="#s8"><b>07</b><span>雨水看起來像一種東西，裡面可能混了什麼？</span></a>
           <a href="#s9"><b>08</b><span>純鐵和蒸餾水，為什麼分到不同類？</span></a>
-          <a href="#s10"><b>09</b><span>這桶混濁的雨水，怎麼證明它是混合物？</span></a>
+          <a href="#unit-quiz" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
         </div>
         <p class="route-hint">每段補上一項資料，最後用證據完成分類。</p>
         <section class="record-panel" aria-labelledby="record-title">
@@ -1169,23 +1192,22 @@
           </figure>
         </section>
 
-        <section class="lesson-card" id="s10">
-          <div class="card-side"><span class="card-number">09</span><h3>用證據完成分類</h3><span class="card-role">整合本段學到的判斷方法</span></div>
-          <div class="card-main">
-            <h2>這桶混濁的雨水，怎麼證明它是混合物？</h2>
+        <section class="unit-quiz" id="unit-quiz" aria-labelledby="unit-quiz-title">
+          <header class="quiz-head"><div class="quiz-mark" aria-hidden="true">?</div><div><p class="quiz-kicker">單元小測</p><h2 id="unit-quiz-title">這桶混濁的雨水，怎麼證明它是混合物？</h2></div></header>
+          <div class="quiz-body">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>資料卡列出水和泥沙兩種成分；根據我們學過的標準，這份水樣該怎麼分類？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>先看成分有幾種，再依分類標準說出判斷和證據。</p></div>
             <p>這次不只看水樣外觀。資料卡明確提供成分紀錄：樣本含有水和泥沙。根據「由多種物質組成」的分類依據，判斷這個水樣。</p>
             <div class="evidence-box"><strong>樣本成分紀錄</strong><br>水樣含有水與泥沙兩種成分。這是題目提供的資料，不是由混濁外觀推測。</div>
-            <fieldset style="border:0;padding:0;margin:14px 0">
-              <legend><strong>依資料判斷，這份水樣屬於哪一類？</strong></legend>
-              <div class="check-options">
-                <label class="check-option"><input type="radio" name="final-check" value="pure"><span>純物質，因為它是一份水樣。</span></label>
-                <label class="check-option"><input type="radio" name="final-check" value="mixture"><span>混合物，因為資料指出它含水和泥沙。</span></label>
-              </div>
-            </fieldset>
-            <button class="action-button" type="button" id="check-answer">查看判斷</button>
-            <p class="feedback" id="final-feedback" aria-live="polite">先選擇一個判斷，再查看資料如何支持答案。</p>
+            <div class="quiz-question">
+              <fieldset class="quiz-options" aria-labelledby="quiz-question-title" style="border:0;padding:0;margin:14px 0">
+                <legend id="quiz-question-title"><strong>依資料判斷，這份水樣屬於哪一類？</strong></legend>
+                <label class="quiz-choice"><input type="radio" name="final-check" value="pure"><span>純物質，因為它是一份水樣。</span></label>
+                <label class="quiz-choice"><input type="radio" name="final-check" value="mixture"><span>混合物，因為資料指出它含水和泥沙。</span></label>
+              </fieldset>
+              <div class="quiz-actions"><button class="action-button" type="button" id="check-answer">查看判斷</button></div>
+              <p class="quiz-feedback" id="final-feedback" aria-live="polite">先選擇一個判斷，再查看資料如何支持答案。</p>
+            </div>
             <p class="next-hint">已確認這是混合物；下一步，如何利用成分差異分出泥沙？</p>
           </div>
         </section>
@@ -2282,28 +2304,35 @@
       else {feedback.dataset.kind="wrong";feedback.textContent="再看一次成分紀錄：樣本含水和泥沙，不是只有一種物質。依據組成，應分類為混合物。";}
     });
 
-    const routeLinks=[...document.querySelectorAll(".route a[href^='#s']")];
+    const routeLinks=[...document.querySelectorAll(".route-inner a[href^='#s']")];
+    const quizNav=document.querySelector(".route-inner .quiz-nav");
     const lessonCards=routeLinks.map(link=>document.querySelector(link.getAttribute("href"))).filter(Boolean);
+    const unitQuiz=document.getElementById("unit-quiz");
     const markActiveCard=card=>{
+      const quizIsActive=card===unitQuiz;
       const index=lessonCards.indexOf(card);
       routeLinks.forEach(link=>{
-        if(link.hash===`#${card.id}`){link.setAttribute("aria-current","step");link.scrollIntoView({block:"nearest",inline:"nearest"});}
+        if(!quizIsActive&&link.hash==="#"+card.id){link.setAttribute("aria-current","step");link.scrollIntoView({block:"nearest",inline:"nearest"});}
         else link.removeAttribute("aria-current");
       });
-      document.getElementById("route-progress").textContent=`學習進度：${String(index+1).padStart(2,"0")}／${lessonCards.length}`;
+      if(quizIsActive){quizNav.setAttribute("aria-current","step");quizNav.scrollIntoView({block:"nearest",inline:"nearest"});}
+      else quizNav.removeAttribute("aria-current");
+      document.getElementById("route-progress").textContent=quizIsActive?"單元小測":"學習進度："+String(index+1).padStart(2,"0")+"／"+lessonCards.length;
     };
     if("IntersectionObserver" in window){
+      const observedSections=[...lessonCards,unitQuiz];
       const syncActiveCard=()=>{
-        const currentCard=[...lessonCards].reverse().find(card=>card.getBoundingClientRect().top<=window.innerHeight*.32);
+        const currentCard=[...observedSections].reverse().find(card=>card.getBoundingClientRect().top<=window.innerHeight*.32);
         markActiveCard(currentCard||lessonCards[0]);
       };
       const cardObserver=new IntersectionObserver(entries=>{
         if(entries.some(entry=>entry.isIntersecting))syncActiveCard();
       },{rootMargin:"-18% 0px -68% 0px",threshold:0});
-      lessonCards.forEach(card=>cardObserver.observe(card));
+      observedSections.forEach(card=>cardObserver.observe(card));
     }else{
       const syncActiveCard=()=>{
-        const currentCard=[...lessonCards].reverse().find(card=>card.getBoundingClientRect().top<=window.innerHeight*.35);
+        const observedSections=[...lessonCards,unitQuiz];
+        const currentCard=[...observedSections].reverse().find(card=>card.getBoundingClientRect().top<=window.innerHeight*.35);
         markActiveCard(currentCard||lessonCards[0]);
       };
       window.addEventListener("scroll",syncActiveCard,{passive:true});syncActiveCard();
