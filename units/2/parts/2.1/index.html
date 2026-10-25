@@ -130,6 +130,7 @@
     .frequency-stepper button { min-width:0; min-height:42px; padding:4px; font-size:1.25rem; }
     .frequency-control-value { display:block; padding:7px 5px; border-radius:10px; background:#e5f2e9; text-align:center; font-size:1.12rem; font-weight:800; white-space:nowrap; }
     .frequency-range-note { display:block; margin-bottom:8px; color:var(--muted); text-align:center; font-size:.8rem; }
+    .frequency-plain-definition { margin:8px 0 0; color:var(--green); font-size:.9rem; font-weight:700; line-height:1.45; text-align:center; }
     .period-range { display:block; width:100%!important; margin:12px 0 2px; }
     .period-range-values { display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--muted); font-size:.78rem; }
     .period-range-values output { color:var(--ink); font-size:1.08rem; font-weight:800; }
@@ -623,7 +624,6 @@
                 <h3 id="frequency-panel-title">頻率 f</h3>
                 <div class="frequency-definition">
                   <p>波源每秒完成的完整振動次數。</p>
-                  <small><strong>白話版本：</strong>一秒鐘可以產出幾個完整的波？</small>
                 </div>
                 <div class="frequency-stepper" role="group" aria-label="調整頻率">
                   <button class="secondary" type="button" id="frequency-step-down" aria-label="降低頻率">−</button>
@@ -631,16 +631,17 @@
                   <button class="secondary" type="button" id="frequency-step-up" aria-label="提高頻率">+</button>
                 </div>
                 <small class="frequency-range-note">範圍 1–4 Hz；每次增減 1 Hz</small>
+                <p class="frequency-plain-definition"><strong>白話版本：</strong>一秒鐘可以產出幾個完整的波？</p>
               </section>
               <section class="frequency-period-panel" aria-labelledby="period-panel-title">
                 <h3 id="period-panel-title">週期 T</h3>
                 <div class="frequency-definition">
                   <p>波源完成一輪完整振動所需的時間。</p>
-                  <small><strong>白話版本：</strong>產出一個完整的波，需要多少時間？</small>
                 </div>
                 <label class="sr-only" for="card07-period-range">調整週期，完成一輪完整振動所需的秒數</label>
                 <input class="period-range" id="card07-period-range" type="range" min="0.25" max="1" step="0.0001" value="1">
                 <div class="period-range-values"><span>0.25 s</span><output id="card07-period-value">1.00 s</output><span>1.00 s</span></div>
+                <p class="frequency-plain-definition"><strong>白話版本：</strong>產出一個完整的波，需要多少時間？</p>
               </section>
             </div>
             <figure class="visual frequency-period-figure">
