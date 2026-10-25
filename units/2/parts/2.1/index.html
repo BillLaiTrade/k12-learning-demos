@@ -93,8 +93,6 @@
     .diagram-panel h3 { margin:0 0 5px; font-size:1rem; }
     .diagram-panel p { margin:6px 0 0; color:var(--muted); font-size:.88rem; }
     .wave-type-diagrams { grid-template-columns:1fr; gap:14px; }
-    .wave-type-panel { transition:border-color .2s,box-shadow .2s; }
-    .wave-type-panel.is-highlighted { border-color:#7fa58d; box-shadow:0 0 0 2px rgba(23,107,83,.08); }
     .spring-coil { fill:none; stroke:url(#spring-metal-gradient); stroke-width:3; }
     .spring-coil.is-selected { stroke:#c66d35; stroke-width:3.8; }
     .data-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
@@ -250,7 +248,7 @@
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>比較介質振動方向和波前進方向：互相垂直是橫波，互相平行是縱波。</p></div>
             <p>判斷波型時，比較介質振動方向和波前進方向。兩個方向互相垂直是橫波，互相平行是縱波。下面兩種波都向右傳，差別在介質如何振動。</p>
             <div class="diagram-grid wave-type-diagrams">
-              <figure class="visual diagram-panel wave-type-panel is-highlighted" data-wave-diagram="transverse">
+              <figure class="visual diagram-panel">
                 <h3>橫波｜繩點上下振動，波形向右傳</h3>
                 <svg id="transverse-wave-diagram" viewBox="0 0 760 270" role="img" aria-label="繩波持續向右傳播；繩上的固定點沿垂直方向上下振動">
                   <defs>
@@ -270,7 +268,7 @@
                 </svg>
                 <p>橘點固定在同一水平位置，隨繩子上下振動；波形沿繩子向右傳。兩個方向互相垂直。</p>
               </figure>
-              <figure class="visual diagram-panel wave-type-panel" data-wave-diagram="longitudinal">
+              <figure class="visual diagram-panel">
                 <h3>縱波｜線圈前後振動，疏密變化向右傳</h3>
                 <svg id="longitudinal-wave-diagram" viewBox="0 0 760 280" role="img" aria-label="彈簧線圈沿水平方向前後振動；壓縮和疏鬆區向右傳播">
                   <defs>
@@ -289,14 +287,6 @@
               </figure>
             </div>
             <div class="fact"><p>接下來先用繩波這種容易看出上下位移的橫波圖，示範如何量振幅與波長。縱波也有波長，例如一個壓縮區到下一個壓縮區。</p></div>
-            <div class="control-panel">
-              <p><strong>選擇一種波型，聚焦觀看方向關係（完整說明已列在上方）</strong></p>
-              <div class="controls" role="group" aria-label="選擇波型聚焦圖示">
-                <button class="secondary" type="button" data-wave-detail="transverse" aria-pressed="true">聚焦橫波</button>
-                <button class="secondary" type="button" data-wave-detail="longitudinal" aria-pressed="false">聚焦縱波</button>
-              </div>
-              <p class="live-note" id="wave-type-explanation" aria-live="polite">橫波：介質在原位置附近上下振動，波形沿水平方向傳播；兩個方向互相垂直。</p>
-            </div>
           </div>
         </section>
 
@@ -651,16 +641,6 @@
           longitudinalCoilGroup.append(coil);springCoils.push(coil);
         }
       }
-      const waveTypeButtons=[...document.querySelectorAll("[data-wave-detail]")];
-      const waveTypePanels=[...document.querySelectorAll("[data-wave-diagram]")];
-      const waveTypeExplanation=document.querySelector("#wave-type-explanation");
-      const waveTypeDetails={transverse:"橫波：繩點在固定水平位置附近上下振動；波形向右傳，兩個方向互相垂直。",longitudinal:"縱波：彈簧線圈在原位置附近前後振動；壓縮、疏鬆區向右傳，兩個方向互相平行。"};
-      waveTypeButtons.forEach(button=>button.addEventListener("click",()=>{
-        const type=button.dataset.waveDetail;
-        waveTypeButtons.forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
-        waveTypePanels.forEach(panel=>panel.classList.toggle("is-highlighted",panel.dataset.waveDiagram===type));
-        waveTypeExplanation.textContent=waveTypeDetails[type];
-      }));
       const transversePointX=350, transverseBaseline=116, transverseAmplitude=48, transverseWavelength=232;
       const springAmplitude=28, springWavelength=220, springSpeed=100;
       let waveTypeStart=0;
