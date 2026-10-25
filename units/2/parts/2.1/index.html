@@ -535,28 +535,28 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩上的一點先往上、再往下；把它的動作記下來，會畫出什麼波形？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>看左邊同一點上下振動，右邊同步記下它的位置。從平衡位置出發，經過波峰、波谷再回來，就描出一個完整的波形。</p></div>
             <div class="control-panel cycle-wave-control">
-              <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note" id="cycle-wave-status" role="status" aria-live="polite">按下按鈕，左側粒子會上下振動一次，右側同步描出一個完整波形。</span></div>
+              <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note" id="cycle-wave-status" role="status" aria-live="polite">按下按鈕，左側粒子會上下振動，波形會從粒子所在端向右形成。</span></div>
             </div>
             <figure class="visual cycle-wave-figure">
-              <svg viewBox="0 0 700 370" role="img" aria-label="動畫左側的橘色粒子在固定水平位置上下振動，右側同步逐步描出粒子的位移時間曲線；粒子完成一次向上、向下並回到平衡位置時，曲線剛好形成一個完整波形">
+              <svg viewBox="0 0 700 370" role="img" aria-label="動畫中橘色粒子位於波形最左端並上下振動，綠色波形從與粒子相連的左端向右延伸；粒子完成一次往返時，繩上剛好形成一個完整波形">
                 <defs>
                   <marker id="arrow-cycle-motion" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
                   <marker id="arrow-cycle-time" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#748b7e"/></marker>
                 </defs>
-                <text x="90" y="68" text-anchor="middle">繩上粒子上下振動</text>
+                <text x="90" y="68" text-anchor="middle">繩端粒子上下振動</text>
                 <path d="M90 105V235" stroke="#b7c7bc" stroke-width="4" stroke-linecap="round"/>
                 <path d="M90 110V230" stroke="#bc612b" stroke-width="2" marker-start="url(#arrow-cycle-motion)" marker-end="url(#arrow-cycle-motion)"/>
                 <path d="M50 170H130" class="equilibrium"/>
                 <circle id="cycle-source-marker" cx="90" cy="170" r="10" class="marker"/>
                 <text x="90" y="258" text-anchor="middle" class="small-label">固定位置上下移動</text>
-                <text x="412" y="68" text-anchor="middle">依時間記錄粒子位置</text>
-                <path d="M180 170H645" class="equilibrium"/>
-                <path id="cycle-wave-path" class="wave-line cycle-wave-path" d="M180 170"/>
+                <text x="412" y="68" text-anchor="middle">振動帶動波形向右形成</text>
+                <path d="M50 170H645" class="equilibrium"/>
+                <path id="cycle-wave-path" class="wave-line cycle-wave-path" d="M90 170"/>
                 <path d="M180 275H650" stroke="#9aaca1" stroke-width="1.5" marker-end="url(#arrow-cycle-time)"/>
-                <text x="660" y="280" text-anchor="start" class="small-label">時間</text>
-                <text x="412" y="330" text-anchor="middle">粒子上下振動一輪，曲線形成一個完整波形</text>
+                <text x="660" y="280" text-anchor="start" class="small-label">波形傳播方向</text>
+                <text x="412" y="330" text-anchor="middle">粒子振動一輪，繩上形成一個完整波形</text>
               </svg>
-              <figcaption>左側橘色粒子只在原位上下振動；右側依時間記下它的位置。粒子向上到波峰、再向下到波谷並回到平衡位置時，剛好描出一個完整波形。</figcaption>
+              <figcaption>橘色粒子與綠線左端相連。粒子上下振動時，波形從這個繩端向右傳開；粒子完成一次往返，繩上剛好形成一個完整波形。</figcaption>
             </figure>
           </div>
         </section>
@@ -950,26 +950,28 @@
       const cycleWaveReplay=document.querySelector("#cycle-wave-replay");
       const cycleWaveStatus=document.querySelector("#cycle-wave-status");
       if(cycleWavePath&&cycleSourceMarker&&cycleWaveReplay&&cycleWaveStatus){
-        const cycleStartX=180,cycleWidth=465,cycleMidY=170,cycleAmplitude=55,cycleSourceMidY=170,cycleSourceAmplitude=60,cycleSteps=120;
+        const cycleStartX=90,cycleWidth=510,cycleMidY=170,cycleAmplitude=55,cycleSteps=120;
         let cycleAnimationFrame=0;
         const showCycleProgress=progress=>{
           const step=Math.floor(cycleSteps*progress);
-          let path=`M${cycleStartX} ${cycleMidY}`;
+          const phaseAtSource=progress*Math.PI*2;
+          const sourceY=cycleMidY-cycleAmplitude*Math.sin(phaseAtSource);
+          let path=`M${cycleStartX} ${sourceY.toFixed(2)}`;
           for(let i=1;i<=step;i++){
-            const phase=(i/cycleSteps)*Math.PI*2;
-            const x=cycleStartX+cycleWidth*(i/cycleSteps);
-            const y=cycleMidY-cycleAmplitude*Math.sin(phase);
+            const distance=i/cycleSteps;
+            const phase=progress-distance;
+            const x=cycleStartX+cycleWidth*distance;
+            const y=cycleMidY-cycleAmplitude*Math.sin(phase*Math.PI*2);
             path+=` L${x.toFixed(2)} ${y.toFixed(2)}`;
           }
           cycleWavePath.setAttribute("d",path);
-          const phase=progress*Math.PI*2;
-          cycleSourceMarker.setAttribute("cy",String(cycleSourceMidY-cycleSourceAmplitude*Math.sin(phase)));
+          cycleSourceMarker.setAttribute("cy",String(sourceY));
         };
         const playCompleteCycle=()=>{
           cancelAnimationFrame(cycleAnimationFrame);showCycleProgress(0);cycleWaveReplay.disabled=true;cycleWaveReplay.textContent="產生中…";
-          cycleWaveStatus.textContent="觀察左邊橘點上下振動，右邊同步描出完整波形。";
+          cycleWaveStatus.textContent="橘色粒子上下振動，綠色波形從相連的左端向右延伸。";
           let startTime=null;
-          const draw=time=>{if(startTime===null)startTime=time;const progress=Math.min(1,(time-startTime)/3200);showCycleProgress(progress);if(progress<1){cycleAnimationFrame=requestAnimationFrame(draw);}else{cycleWaveReplay.disabled=false;cycleWaveReplay.textContent="再產生一次";cycleWaveStatus.textContent="粒子完成一次上下往返，右側也剛好描出一個完整波形。";}};
+          const draw=time=>{if(startTime===null)startTime=time;const progress=Math.min(1,(time-startTime)/3200);showCycleProgress(progress);if(progress<1){cycleAnimationFrame=requestAnimationFrame(draw);}else{cycleWaveReplay.disabled=false;cycleWaveReplay.textContent="再產生一次";cycleWaveStatus.textContent="粒子完成一次上下往返，綠色波形從它所在端延伸成一個完整波形。";}};
           cycleAnimationFrame=requestAnimationFrame(draw);
         };
         showCycleProgress(0);
