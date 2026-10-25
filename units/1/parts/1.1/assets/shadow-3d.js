@@ -559,7 +559,10 @@ if (canvas) {
     animate();
   } catch (error) {
     console.error('Shadow 3D scene failed to initialize:', error);
-    status.textContent = '立體實驗場景無法載入，請重新整理頁面再試。';
+    const reason = error instanceof Error ? error.message : String(error);
+    status.textContent = /webgl|gpu|graphics|failed to (?:create|initialize).*context|context.*(?:webgl|gpu)/i.test(reason)
+      ? '瀏覽器無法啟動 WebGL 立體畫面；請重新載入頁面，若仍無法顯示，請回報此訊息。'
+      : `立體場景初始化失敗：${reason.slice(0, 90) || '請重新載入頁面再試。'}`;
     canvas.setAttribute('aria-label', '影子實驗場景無法載入');
   }
 }
