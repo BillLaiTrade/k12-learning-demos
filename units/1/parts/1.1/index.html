@@ -208,9 +208,16 @@
     .light-speed-earth-visual img { position: relative; z-index: 1; display: block; width: 69%; height: 69%; object-fit: contain; filter: drop-shadow(0 9px 12px #183c3540); }
     .light-speed-orbit-trails { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
     .light-speed-orbit-track { fill: none; stroke: #bda66d; stroke-width: 1.15; opacity: .3; transform: rotate(-24deg); transform-origin: 125px 125px; }
-    .light-speed-orbit-lap { fill: none; stroke: #e3ad43; stroke-width: 3.4; stroke-linecap: round; filter: drop-shadow(0 1px 2px #be8b363f); transform: rotate(-24deg); transform-origin: 125px 125px; }
+    .light-speed-orbit-lap { fill: none; stroke: #d4ad58; stroke-width: 2; stroke-linecap: round; opacity: .95; transform: rotate(-24deg); transform-origin: 125px 125px; }
+    .light-speed-orbit-lap.is-partial { stroke: #f0b746; stroke-width: 2.8; opacity: 1; filter: drop-shadow(0 1px 2px #be8b3650); }
     .light-speed-orbit-dot { position: absolute; z-index: 3; left: 50%; top: 50%; width: 12px; height: 12px; border: 2px solid white; border-radius: 50%; background: #efb94f; box-shadow: 0 0 0 4px #efb94f40, 0 0 15px #f1ba54; transform: translate(-50%, -50%); }
     .light-speed-laps { margin: -3px 0 0 !important; color: #176b53 !important; font-size: 1.15rem !important; font-weight: 850; }
+    .light-speed-lap-detail { margin: 3px 0 0 !important; padding: 4px 9px; border: 1px solid #e6d9b8; border-radius: 999px; background: #fffaf0; color: #80622b !important; font-size: .76rem !important; font-weight: 750; }
+    .light-speed-lap-counter { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; min-height: 22px; margin: 7px 0 1px; }
+    .light-speed-lap-counter span { display: grid; position: relative; place-items: center; width: 21px; height: 21px; overflow: hidden; border: 1.5px solid #d5c49b; border-radius: 50%; background: #eee9dc; color: #80622b; font-size: .57rem; font-weight: 850; }
+    .light-speed-lap-counter span::before { position: absolute; inset: 0; background: conic-gradient(#d8a941 calc(var(--lap-progress) * 1%), #eee9dc 0); content: ""; }
+    .light-speed-lap-counter span::after { position: absolute; inset: 3px; border-radius: 50%; background: #fffdf8; content: ""; }
+    .light-speed-lap-counter span b { z-index: 1; font-size: .55rem; }
     .light-speed-earth .visual-caption { align-self: stretch; margin-top: 7px; text-align: center; }
     .light-speed-note { margin-top: 12px; }
     @media (max-width: 620px) { .light-speed-layout { grid-template-columns: 1fr; } .light-speed-measure, .light-speed-earth { padding: 15px; } .light-speed-tap { min-height: 82px; } .light-speed-earth-visual { width: min(76vw, 230px); } }
@@ -552,6 +559,8 @@
                     <span class="light-speed-orbit-dot" id="light-speed-orbit-dot"></span>
                   </div>
                   <p class="light-speed-laps" id="earth-lap-result" aria-live="polite">點擊兩次後顯示圈數</p>
+                  <p class="light-speed-lap-detail" id="earth-lap-detail" aria-live="polite" hidden></p>
+                  <div class="light-speed-lap-counter" id="earth-lap-counter" role="img" aria-label="圈數圖示會在測量後顯示"></div>
                   <p class="visual-caption">以地球赤道一圈約 40,000 公里估算</p>
                 </section>
               </div>
@@ -690,7 +699,7 @@
   <script type="module" src="assets/aperture-3d.js?v=dialogue-story-20261024"></script>
   <script type="module" src="assets/shadow-3d.js?v=shadow-short-rail-20261024"></script>
   <script type="module" src="assets/shadow-size-3d.js?v=shadow-size-drag-only-20261024"></script>
-  <script type="module" src="assets/light-speed-timer.js?v=light-speed-orbit-trails-instant-20261025"></script>
+  <script type="module" src="assets/light-speed-timer.js?v=light-speed-orbit-count-20261025-v2"></script>
   <script type="module" src="assets/shadow-theatre.js?v=booklet-theatre-20261025-v5"></script>
 </body>
 </html>
