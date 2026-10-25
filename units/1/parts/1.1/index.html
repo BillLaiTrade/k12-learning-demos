@@ -255,9 +255,12 @@
     .booklet-mission-stars { color: #d2a442; letter-spacing: .13em; }
     .booklet-mission-panel h3 { margin: 8px 0 2px; font-size: 1.25rem; }
     .booklet-mission-panel > p { margin: 0; color: var(--muted); font-size: .81rem; line-height: 1.5; }
-    .booklet-target-card { display: grid; grid-template-columns: 1fr; justify-items: center; margin: 13px 0 10px; padding: 9px 10px 8px; border: 1px solid #eadfca; border-radius: 13px; background: #f7f4ea; color: #6e6958; font-size: .75rem; font-weight: 750; }
-    .booklet-target-card svg { display: block; width: 100%; max-width: 188px; height: 105px; margin: 4px 0 1px; }
-    .booklet-target-status { color: #88703b; font-size: .72rem; font-weight: 700; }
+    .booklet-target-card { position: relative; display: grid; grid-template-columns: 1fr; justify-items: center; margin: 13px 0 10px; padding: 10px 11px 9px; overflow: hidden; border: 1px solid #e5d8b9; border-radius: 15px; background: radial-gradient(ellipse at 50% 38%, #fffef9 0%, #f8f4e8 72%); color: #76633a; font-size: .73rem; font-weight: 800; box-shadow: inset 0 1px #ffffffb8, 0 3px 9px #5742220a; }
+    .booklet-target-card > span:first-child { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; color: #8b6a2c; letter-spacing: .04em; }
+    .booklet-target-card > span:first-child::before, .booklet-target-card > span:first-child::after { content: ""; width: 21px; height: 1px; background: linear-gradient(90deg, transparent, #d6bf83); }
+    .booklet-target-card > span:first-child::after { transform: scaleX(-1); }
+    .booklet-target-card svg { display: block; width: 100%; max-width: 196px; height: 112px; margin: 2px 0 0; filter: drop-shadow(0 3px 2px #3e49381c); }
+    .booklet-target-status { margin-top: 1px; padding: 4px 10px; border: 1px solid #e7d9b7; border-radius: 999px; background: #fffaf0; color: #82652e; font-size: .69rem; font-weight: 750; }
     .booklet-progress-track { height: 7px; margin: 3px 0 9px; overflow: hidden; border-radius: 9px; background: #eee9dc; }
     .booklet-progress-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #d8b351, #a77b2d); transition: width .35s ease; }
     .booklet-slot-list { display: grid; gap: 5px; margin-bottom: 12px; }
@@ -580,7 +583,17 @@
             <aside class="booklet-mission-panel" aria-label="影子劇場任務">
               <div class="booklet-mission-top"><span class="booklet-mission-number">任務 01</span><span class="booklet-mission-stars" aria-hidden="true">✦ ✦ ✦</span></div>
               <h3>月亮兔</h3><p>讓幕上的三個影子，和目標圖案合在一起。</p>
-              <div class="booklet-target-card"><span>完成目標</span><svg viewBox="0 0 220 140" role="img" aria-label="月亮、兔子與樹影組成的剪影目標"><path d="M42 74a32 32 0 1 0 30-47A27 27 0 0 1 42 74Z" fill="#45564f"/><path d="M108 110c-19-6-21-21-12-33 5-7 11-11 12-20 1-8-2-14-5-20-1-2 1-4 3-3 9 5 16 17 15 29 4-14 13-25 23-29 2-1 4 1 2 3-7 9-11 21-8 31 2 7 10 10 15 16 13 15 7 32-8 36-11 3-25-1-37-10Z" fill="#45564f"/><path d="M165 112h48l-5-27-8 8-5-31-9 19-9-28-8 38-8-8zM185 112v20m8-20v20" fill="#45564f"/></svg><span class="booklet-target-status" id="booklet-target-status">3 個影子等待定位</span></div>
+              <div class="booklet-target-card"><span>完成目標</span><svg viewBox="0 0 240 145" role="img" aria-label="月亮、兔子與樹影組成的剪影目標">
+                <defs><linearGradient id="targetSky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fffef9"/><stop offset="1" stop-color="#f2ead7"/></linearGradient><linearGradient id="targetSilhouette" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#294a3e"/><stop offset="1" stop-color="#49675a"/></linearGradient><radialGradient id="targetGlow"><stop stop-color="#f6e6b8" stop-opacity=".78"/><stop offset="1" stop-color="#f6e6b8" stop-opacity="0"/></radialGradient></defs>
+                <rect x="4" y="4" width="232" height="137" rx="18" fill="url(#targetSky)"/>
+                <ellipse cx="119" cy="64" rx="101" ry="56" fill="url(#targetGlow)"/>
+                <path d="M19 112h202" stroke="#c9b783" stroke-width="1.2"/><path d="M29 118h182" stroke="#ded1af" stroke-width="3" stroke-linecap="round"/><path d="M39 123h162" stroke="#eee5d0" stroke-width="2" stroke-linecap="round"/>
+                <path d="M42 70a26 26 0 1 0 29-38A22 22 0 0 1 42 70Z" fill="url(#targetSilhouette)"/>
+                <circle cx="53" cy="51" r="2.1" fill="#d9c68f" opacity=".72"/><circle cx="62" cy="62" r="1.35" fill="#d9c68f" opacity=".6"/>
+                <path d="M111 105c-12-2-19-9-19-19 0-9 6-16 15-19l-3-34c-.3-4 2.4-7 5.7-6.4 6.6 1.2 10.4 19.5 12 31l5-37c.5-3.8 3.1-6 6-5.3 6.2 1.5 3.7 24.8 1.9 38.6 8-12.8 17.3-19.2 22.3-14.7 4.5 4-4.7 17.1-12.4 26.9 8.8 4.3 14.2 12.1 12.4 20.8-2.3 10.9-14.6 17.7-28.8 17.7-5.9 0-11.6-1.2-17.1-3.6Z" fill="url(#targetSilhouette)"/>
+                <path d="M176 107h43l-5-25-8 7-6-29-8 20-8-23-7 33-7-5zM193 107v10m9-10v10" fill="url(#targetSilhouette)"/>
+                <path d="m91 27 2.2 4.8 5.2.6-3.9 3.5 1.1 5-4.6-2.6-4.6 2.6 1.1-5-3.9-3.5 5.2-.6z" fill="#d8bd79" opacity=".75"/><circle cx="205" cy="42" r="2" fill="#d8bd79"/><circle cx="31" cy="91" r="1.7" fill="#d8bd79"/>
+              </svg><span class="booklet-target-status" id="booklet-target-status">3 個影子等待定位</span></div>
               <div class="booklet-progress-track" role="progressbar" aria-label="影子道具對位進度" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><span id="booklet-progress-fill"></span></div>
               <div class="booklet-slot-list"><span data-prop-slot="moon"><i>1</i>月亮</span><span data-prop-slot="rabbit"><i>2</i>兔子</span><span data-prop-slot="tree"><i>3</i>樹影</span></div>
               <button class="booklet-finish-button" id="shadow-theatre-finish" type="button" disabled>完成演出</button>
