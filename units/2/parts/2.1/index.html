@@ -1436,7 +1436,8 @@
         const animateSingleWave=time=>{
           if(runStartedAt===null)runStartedAt=time;
           const transitTime=getTransitTime();
-          const progress=reducedMotion?1:clamp((time-runStartedAt)/(transitTime*1000),0,1);
+          const elapsedProgress=clamp((time-runStartedAt)/(transitTime*1000),0,1);
+          const progress=reducedMotion&&elapsedProgress<1?Math.floor(elapsedProgress*4)/4:elapsedProgress;
           const distance=routeLength*progress;
           drawSingleWave(distance);drawProgress(distance);
           runTime.textContent=`${format(transitTime*progress,2)} / ${format(transitTime,2)} s`;
