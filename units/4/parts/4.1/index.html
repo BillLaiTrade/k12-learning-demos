@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f1e8">
+  <link rel="icon" href="data:,">
   <title>水桶裡的水變混濁了，裡面到底有什麼？</title>
   <style>
     :root { color-scheme:light; --ink:#263a36; --muted:#5c6c65; --paper:#f4f1e8; --card:#fffdf8; --line:#d9d3c4; --green:#176b53; --green2:#e2efe8; --gold:#d7a94a; --rust:#a84d31; --blue:#477ba4; --shadow:0 10px 26px #243a3509; }
@@ -641,17 +642,56 @@
     .quiz-kicker { margin:0 0 3px; color:#946f2d; font-size:.8rem; font-weight:800; letter-spacing:.06em; }
     .quiz-head h2 { margin:0; font-size:clamp(1.22rem,2.3vw,1.65rem); line-height:1.4; }
     .quiz-subtitle { margin:5px 0 0; color:var(--muted); font-size:.88rem; }
-    .quiz-body { padding:22px 24px 24px; }
-    .quiz-question { margin-top:20px; padding-top:18px; border-top:1px solid #e7e9e2; }
-    .quiz-options { display:grid; gap:8px; margin:12px 0; }
-    .quiz-choice { display:flex; gap:10px; align-items:flex-start; padding:11px 13px; border:1px solid #d9d4c8; border-radius:10px; background:#fff; cursor:pointer; }
-    .quiz-choice:has(input:checked) { border-color:var(--green); background:#edf4ef; }
-    .quiz-choice input { margin-top:5px; accent-color:var(--green); }
-    .quiz-actions { display:flex; align-items:center; gap:14px; margin-top:14px; }
-    .quiz-feedback { min-height:50px; margin-top:11px; padding:10px 12px; border-radius:10px; background:#f1eee5; color:#56645d; }
-    .quiz-feedback[data-kind="correct"] { background:#e4f1e8; color:#23533e; }
-    .quiz-feedback[data-kind="wrong"] { background:#fbefdf; color:#795125; }
-    .unit-quiz .next-hint { margin-top:14px!important; }
+    .quiz-body { padding:20px 24px 24px; }
+    .workbench-intro { margin:0 0 12px; color:#516159; }
+    .workbench-viewport { overflow-x:auto; border:1px solid #b5c2b4; border-radius:15px; background:#d7c09d; scrollbar-color:#829b89 #eee8dc; }
+    .workbench-scene { position:relative; width:100%; min-width:760px; aspect-ratio:1672 / 941; overflow:hidden; background:#9a7550 url("assets/specimen-workbench.png") center / 100% 100% no-repeat; }
+    .workbench-book { position:absolute; z-index:3; left:1.6%; top:49%; width:20%; height:39%; padding:8px; border:1px solid #b9a783; border-radius:8px 13px 13px 8px; background:linear-gradient(90deg,#d1c09c 0 4%,#fff9e9 4% 49%,#d5c39e 49.5% 51%,#fff9e9 51% 96%,#b8a57e 96%); box-shadow:0 8px 18px #301f1240; transform:rotate(-2deg); }
+    .workbench-book h3 { margin:0 0 5px; color:#29483a; font-size:clamp(.65rem,1vw,.88rem); text-align:center; }
+    .book-page-content { display:block; height:calc(100% - 22px); }
+    .book-page { display:none; height:100%; min-width:0; grid-template-columns:1fr 1fr; border:1px solid #ece1c8; border-radius:5px; background:#fffdf4; color:#43564a; font-size:clamp(.52rem,.82vw,.72rem); line-height:1.35; box-shadow:inset 0 0 12px #77613c10; }
+    .book-page.is-active { display:grid; }
+    .book-leaf { min-width:0; padding:5px 4px; }
+    .book-leaf+ .book-leaf { border-left:1px solid #ddd1b4; }
+    .book-page strong { display:block; margin-bottom:3px; color:#276449; font-size:1.02em; }
+    .book-model { display:flex; min-height:22px; align-items:center; justify-content:center; gap:4px; margin-top:4px; }
+    .book-model i { display:block; width:clamp(5px,.8vw,9px); height:clamp(5px,.8vw,9px); border:1px solid #fff; border-radius:50%; background:#6e9d75; box-shadow:0 1px 2px #203b2e44; }
+    .book-model--mixed i:nth-child(2n) { background:#d99a5e; }
+    .book-model--compound i:nth-child(2n) { background:#df684f; }
+    .book-controls { display:flex; align-items:center; justify-content:space-between; height:22px; margin-top:3px; }
+    .book-controls button { width:24px; height:22px; padding:0; border:1px solid #a7b5a7; border-radius:999px; background:#edf3e9; color:#315844; font-size:.8rem; cursor:pointer; }
+    .book-controls span { color:#657368; font-size:.65rem; }
+    .case-heading { position:absolute; z-index:2; top:4%; padding:2px 8px; border:1px solid #c5ad78; border-radius:4px; background:#f5e4b8eF; color:#453823; box-shadow:0 2px 6px #27160855; font-size:clamp(.62rem,1vw,.84rem); font-weight:800; }
+    .case-heading--pure { left:55%; }
+    .case-heading--mixture { left:82%; }
+    .cabinet-target { position:absolute; z-index:5; display:grid; place-items:center; min-width:85px; min-height:32px; padding:4px 8px; border:1px solid #d0bf91; border-radius:5px; background:#f7e9c8ed; color:#40503e; box-shadow:0 2px 7px #27160855; font-size:clamp(.58rem,.85vw,.76rem); font-weight:800; cursor:pointer; transition:transform .15s,background .15s,box-shadow .15s; }
+    .cabinet-target:hover,.cabinet-target:focus-visible { transform:scale(1.06); background:#fff2d0; box-shadow:0 0 0 3px #e0b65f80,0 3px 8px #27160855; outline:none; }
+    .cabinet-target[data-target="element"] { left:55%; top:25%; }
+    .cabinet-target[data-target="compound"] { left:55%; top:42%; }
+    .cabinet-target[data-target="mixture"] { left:82%; top:30%; }
+    .scene-sample { position:absolute; z-index:4; left:var(--sample-x); top:var(--sample-y); display:grid; grid-template-rows:minmax(0,1fr) 18px; justify-items:center; align-content:end; width:12%; height:19%; padding:0; border:0; background:transparent; cursor:grab; touch-action:none; transition:left .65s cubic-bezier(.2,.75,.25,1),top .65s cubic-bezier(.2,.75,.25,1),width .65s,height .65s,filter .2s,transform .2s; }
+    .scene-sample:active { cursor:grabbing; }
+    .scene-sample.is-dragging { z-index:12; transform:scale(1.12); filter:drop-shadow(0 12px 12px #30211199); transition:none; cursor:grabbing; }
+    .scene-sample:focus-visible { outline:3px solid #f7d375; outline-offset:2px; border-radius:10px; }
+    .scene-sample.is-selected { z-index:8; transform:translateY(-7px) scale(1.08); filter:drop-shadow(0 7px 8px #30211180); }
+    .scene-sample.is-placed { z-index:6; width:6%; height:9%; grid-template-rows:1fr; transform:none; filter:drop-shadow(0 3px 4px #24180d80); cursor:pointer; }
+    .scene-sample .sample-art { display:block; width:100%; height:100%; background-image:url("assets/specimen-samples-sprite.png"); background-repeat:no-repeat; background-size:300% 200%; background-position:var(--sprite-x) var(--sprite-y); filter:drop-shadow(0 5px 5px #2d21134a); }
+    .scene-sample.is-placed .sample-art { height:100%; }
+    .scene-sample .sample-tag { display:block; max-width:100%; margin-top:1px; padding:0 5px; border:1px solid #cdbd9c; border-radius:2px; background:#f6edda; color:#584a34; box-shadow:0 2px 4px #28190d40; font-size:clamp(.48rem,.72vw,.62rem); line-height:16px; white-space:nowrap; }
+    .scene-sample.is-placed .sample-tag { display:none; }
+    .scene-pan-hint { display:none; margin:0 0 8px; color:#68756d; font-size:.8rem; }
+    .sample-info { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:14px; min-height:72px; margin-top:12px; padding:12px 15px; border:1px solid #c7d3c6; border-radius:12px; background:#f3f7ef; }
+    .sample-info[hidden] { display:none; }
+    .sample-info h3 { margin:0 0 2px; color:#315843; font-size:.94rem; }
+    .sample-info p { margin:0; color:#53645b; font-size:.86rem; }
+    .sample-state { color:#738078; font-size:.76rem; }
+    .workbench-feedback { min-height:24px; margin:10px 0 0; color:#526158; font-size:.86rem; }
+    .workbench-feedback[data-kind="correct"] { color:#176b53; font-weight:750; }
+    .workbench-feedback[data-kind="wrong"] { color:#9d4d2f; }
+    .workbench-actions { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:5px; }
+    .workbench-reset { min-height:36px; padding:6px 12px; border:1px solid #becbbf; border-radius:9px; background:#fffdf8; color:#40564b; cursor:pointer; }
+    .workbench-hint { margin:0; color:#728077; font-size:.78rem; }
+    @media(max-width:680px) { .quiz-head { padding:18px 16px; } .quiz-body { padding:16px 12px 19px; } .workbench-intro { font-size:.9rem; } .scene-pan-hint { display:block; } .workbench-scene { min-width:820px; } .sample-info { grid-template-columns:1fr; gap:2px; padding:10px 12px; } .workbench-actions { align-items:flex-start; flex-direction:column; } }
     .evidence-box { padding:13px 15px; border-left:4px solid var(--blue); border-radius:8px; background:#edf3f7; color:#34536a; }
     .check-options { display:grid; gap:8px; margin:12px 0; }
     .check-option { display:flex; gap:9px; align-items:flex-start; padding:11px 12px; border:1px solid #d9d4c8; border-radius:10px; background:#fff; cursor:pointer; }
@@ -673,7 +713,7 @@
       .route a { flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border:1px solid var(--line); border-radius:999px; background:var(--card); font-size:.74rem; white-space:nowrap; }
       .route a[aria-current="step"] { border-color:var(--green); }
       .route-progress { margin-bottom:6px; }
-      .lesson-card,.unit-quiz { scroll-margin-top:116px; }
+      .lesson-card,.unit-quiz { scroll-margin-top:152px; }
       .quiz-head { padding:18px 16px; }
       .quiz-body { padding:17px 15px 19px; }
       .quiz-actions { align-items:stretch; flex-direction:column; }
@@ -1194,22 +1234,38 @@
         </section>
 
         <section class="unit-quiz" id="unit-quiz" aria-labelledby="unit-quiz-title">
-          <header class="quiz-head"><div class="quiz-mark" aria-hidden="true">?</div><div><p class="quiz-kicker">單元小測</p><h2 id="unit-quiz-title">這桶混濁的雨水，怎麼證明它是混合物？</h2><p class="quiz-subtitle">用證據完成分類｜整合本段學到的判斷方法</p></div></header>
+          <header class="quiz-head"><div class="quiz-mark" aria-hidden="true">?</div><div><p class="quiz-kicker">單元小冊</p><h2 id="unit-quiz-title">翻閱線索，替樣本找到分類</h2><p class="quiz-subtitle">查看桌上的樣本，翻閱手冊找線索，再把樣本放進展示櫃。</p></div></header>
           <div class="quiz-body">
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>資料卡列出水和泥沙兩種成分；根據我們學過的標準，這份水樣該怎麼分類？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>先看成分有幾種，再依分類標準說出判斷和證據。</p></div>
-            <p>這次不只看水樣外觀。資料卡明確提供成分紀錄：樣本含有水和泥沙。根據「由多種物質組成」的分類依據，判斷這個水樣。</p>
-            <div class="evidence-box"><strong>樣本成分紀錄</strong><br>水樣含有水與泥沙兩種成分。這是題目提供的資料，不是由混濁外觀推測。</div>
-            <div class="quiz-question">
-              <fieldset class="quiz-options" aria-labelledby="quiz-question-title" style="border:0;padding:0;margin:14px 0">
-                <legend id="quiz-question-title"><strong>依資料判斷，這份水樣屬於哪一類？</strong></legend>
-                <label class="quiz-choice"><input type="radio" name="final-check" value="pure"><span>純物質，因為它是一份水樣。</span></label>
-                <label class="quiz-choice"><input type="radio" name="final-check" value="mixture"><span>混合物，因為資料指出它含水和泥沙。</span></label>
-              </fieldset>
-              <div class="quiz-actions"><button class="action-button" type="button" id="check-answer">查看判斷</button></div>
-              <p class="quiz-feedback" id="final-feedback" aria-live="polite">先選擇一個判斷，再查看資料如何支持答案。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這些樣本要怎麼分類？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>翻翻手冊找線索，再替它們找到位置。</p></div>
+            <p class="workbench-intro">選一份樣本查看資料卡，翻閱旁邊的分類手冊，再選擇適合的展示位置。</p>
+            <p class="scene-pan-hint">左右滑動桌面，查看所有樣本和展示櫃。</p>
+            <div class="workbench-viewport" aria-label="可左右滑動查看桌面上的分類工作區">
+              <div class="workbench-scene" id="classification-workbench" aria-label="木桌上有待分類的樣本，旁邊有物質分類手冊，後方是玻璃展示櫃">
+                <section class="workbench-book" aria-label="可翻頁的物質分類手冊">
+                  <h3>物質分類手冊</h3>
+                  <div class="book-page-content" aria-live="polite">
+                    <div class="book-page is-active" data-book-page="0"><div class="book-leaf"><strong>先看有幾種物質</strong>只有一種物質，屬於純物質。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>多種物質混在一起</strong>樣本同時含有多種物質，屬於混合物。<div class="book-model book-model--mixed"><i></i><i></i><i></i><i></i></div></div></div>
+                    <div class="book-page" data-book-page="1"><div class="book-leaf"><strong>元素</strong>純物質裡只有一種粒子。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>化合物</strong>每個粒子都由不同種類的小粒子固定結合。<div class="book-model book-model--compound"><i></i><i></i><i></i></div></div></div>
+                    <div class="book-page" data-book-page="2"><div class="book-leaf"><strong>物理變化</strong>變化前後仍是同一種物質。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>化學變化</strong>變化後產生不同的物質。<div class="book-model book-model--mixed"><i></i><i></i><i></i><i></i></div></div></div>
+                  </div>
+                  <div class="book-controls"><button type="button" id="book-prev" aria-label="翻到前一頁">‹</button><span id="book-page-number">1 / 3</span><button type="button" id="book-next" aria-label="翻到後一頁">›</button></div>
+                </section>
+                <span class="case-heading case-heading--pure">純物質</span><span class="case-heading case-heading--mixture">混合物</span>
+                <button class="cabinet-target" type="button" data-target="element" aria-label="將選取的樣本放入純物質展示櫃的元素層">元素</button>
+                <button class="cabinet-target" type="button" data-target="compound" aria-label="將選取的樣本放入純物質展示櫃的化合物層">化合物</button>
+                <button class="cabinet-target" type="button" data-target="mixture" aria-label="將選取的樣本放入混合物展示櫃">混合物</button>
+                <button class="scene-sample" type="button" data-sample="copper" aria-pressed="false" aria-label="選取桌上的樣本一，查看資料卡" style="--sample-x:30%;--sample-y:57%;--sprite-x:0%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 1</span></button>
+                <button class="scene-sample" type="button" data-sample="aluminum" aria-pressed="false" aria-label="選取桌上的樣本二，查看資料卡" style="--sample-x:43%;--sample-y:57%;--sprite-x:50%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 2</span></button>
+                <button class="scene-sample" type="button" data-sample="sugar" aria-pressed="false" aria-label="選取桌上的樣本三，查看資料卡" style="--sample-x:57%;--sample-y:57%;--sprite-x:100%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 3</span></button>
+                <button class="scene-sample" type="button" data-sample="air" aria-pressed="false" aria-label="選取桌上的樣本四，查看資料卡" style="--sample-x:29%;--sample-y:76%;--sprite-x:0%;--sprite-y:100%"><span class="sample-art"></span><span class="sample-tag">樣本 4</span></button>
+                <button class="scene-sample" type="button" data-sample="granite" aria-pressed="false" aria-label="選取桌上的樣本五，查看資料卡" style="--sample-x:43%;--sample-y:76%;--sprite-x:50%;--sprite-y:100%"><span class="sample-art"></span><span class="sample-tag">樣本 5</span></button>
+                <button class="scene-sample" type="button" data-sample="alloy" aria-pressed="false" aria-label="選取桌上的樣本六，查看資料卡" style="--sample-x:57%;--sample-y:76%;--sprite-x:100%;--sprite-y:100%"><span class="sample-art"></span><span class="sample-tag">樣本 6</span></button>
+              </div>
             </div>
-            <p class="next-hint">已確認這是混合物；下一步，如何利用成分差異分出泥沙？</p>
+            <div class="sample-info" id="sample-info" hidden aria-live="polite"><div><h3 id="sample-info-title">樣本資料卡</h3><p id="sample-clue"></p></div><span class="sample-state" id="sample-state">先翻閱手冊，再選擇展示位置。</span></div>
+            <p class="workbench-feedback" id="workbench-feedback" role="status" aria-live="polite">先選一份樣本，查看它的資料線索。</p>
+            <div class="workbench-actions"><p class="workbench-hint" id="sort-progress">已分類 0 / 6 份樣本</p><button class="workbench-reset" type="button" id="reset-samples">重新整理樣本</button></div>
           </div>
         </section>
 
@@ -2297,12 +2353,86 @@
       requestAnimationFrame(()=>phaseSolidOverview.scrollIntoView({block:"center"}));
     }
 
-    document.getElementById("check-answer").addEventListener("click",()=>{
-      const selected=document.querySelector('input[name="final-check"]:checked');
-      const feedback=document.getElementById("final-feedback");
-      if(!selected){feedback.dataset.kind="";feedback.textContent="先選一個判斷，再用成分紀錄說明理由。";return;}
-      if(selected.value==="mixture") {feedback.dataset.kind="correct";feedback.textContent="判斷正確。資料列出水和泥沙兩種物質，因此樣本是混合物；下一步才是選擇合適的分離方法。";}
-      else {feedback.dataset.kind="wrong";feedback.textContent="再看一次成分紀錄：樣本含水和泥沙，不是只有一種物質。依據組成，應分類為混合物。";}
+    const specimenRules={
+      copper:{label:"樣本 1",clue:"資料卡：樣本只由一種物質構成，粒子模型中只有一種粒子。",category:"element",dest:"元素展示層"},
+      aluminum:{label:"樣本 2",clue:"資料卡：樣本只由一種物質構成，粒子模型中只有一種粒子。",category:"element",dest:"元素展示層"},
+      sugar:{label:"樣本 3",clue:"資料卡：樣本只由一種物質構成；每個粒子都由兩種不同的小粒子固定結合。",category:"compound",dest:"化合物展示層"},
+      air:{label:"樣本 4",clue:"資料卡：樣本中同時含有數種不同的氣體。",category:"mixture",dest:"混合物展示櫃"},
+      granite:{label:"樣本 5",clue:"資料卡：這份岩石樣本含有石英、長石和雲母等不同礦物。",category:"mixture",dest:"混合物展示櫃"},
+      alloy:{label:"樣本 6",clue:"資料卡：這種金屬材料由兩種金屬物質組成。",category:"mixture",dest:"混合物展示櫃"}
+    };
+    const specimenButtons=[...document.querySelectorAll(".scene-sample")];
+    const sampleInfo=document.getElementById("sample-info");
+    const sampleInfoTitle=document.getElementById("sample-info-title");
+    const sampleClue=document.getElementById("sample-clue");
+    const sampleState=document.getElementById("sample-state");
+    const workbenchFeedback=document.getElementById("workbench-feedback");
+    const sampleStatus=new Map();
+    let selectedSpecimen=null;
+    const selectSpecimen=button=>{
+      selectedSpecimen=button;
+      specimenButtons.forEach(item=>{item.classList.toggle("is-selected",item===button);item.setAttribute("aria-pressed",String(item===button));});
+      const data=specimenRules[button.dataset.sample];
+      sampleInfo.hidden=false;sampleInfoTitle.textContent=data.label+"資料卡";sampleClue.textContent=data.clue;
+      sampleState.textContent=sampleStatus.has(button.dataset.sample)?"目前位置："+specimenRules[sampleStatus.get(button.dataset.sample)].dest:"先翻閱手冊，再選擇展示位置。";
+      workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="查看資料卡中的線索，再點選展示櫃中的分類位置。";
+    };
+    const specimenRulesCount=Object.keys(specimenRules).length;
+    const cabinetTargets=[...document.querySelectorAll(".cabinet-target")];
+    const placeSpecimen=(button,target)=>{
+      const key=button.dataset.sample;const data=specimenRules[key];
+      if(target.dataset.target!==data.category){workbenchFeedback.dataset.kind="wrong";workbenchFeedback.textContent="這個位置和樣本資料對不起來。翻翻手冊，再看看線索。";return false;}
+      sampleStatus.set(key,target.dataset.target);button.classList.remove("is-selected");button.classList.add("is-placed");
+      const count=[...sampleStatus.entries()].filter(([,category])=>category===target.dataset.target).findIndex(([sample])=>sample===key);
+      const placement={element:{left:52,top:32},compound:{left:52,top:49},mixture:{left:80,top:39}}[target.dataset.target];
+      button.style.left=(placement.left+(count%3)*6.5)+"%";button.style.top=(placement.top+Math.floor(count/3)*5.5)+"%";
+      button.setAttribute("aria-label",data.label+"已放入"+data.dest+"，點選可重新分類");button.setAttribute("aria-pressed","false");
+      sampleState.textContent="已放入："+data.dest;workbenchFeedback.dataset.kind="correct";
+      workbenchFeedback.textContent="分類正確。你根據樣本資料和手冊線索，將"+data.label+"放入「"+data.dest+"」。";
+      document.getElementById("sort-progress").textContent="已分類 "+sampleStatus.size+" / "+specimenRulesCount+" 份樣本";
+      if(sampleStatus.size===specimenRulesCount)workbenchFeedback.textContent="六份樣本都已完成分類。你是根據組成線索安排展品，不只看外觀。";
+      return true;
+    };
+    let dragState=null;let suppressSampleClick=false;
+    specimenButtons.forEach(button=>{
+      button.addEventListener("click",()=>{if(!suppressSampleClick)selectSpecimen(button);});
+      button.addEventListener("pointerdown",event=>{
+        if(event.button!==0)return;
+        const sceneRect=document.getElementById("classification-workbench").getBoundingClientRect();
+        const left=button.style.left?parseFloat(button.style.left):parseFloat(button.style.getPropertyValue("--sample-x"));
+        const top=button.style.top?parseFloat(button.style.top):parseFloat(button.style.getPropertyValue("--sample-y"));
+        dragState={button,pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,startLeft:left,startTop:top,sceneRect,moved:false};
+        button.setPointerCapture(event.pointerId);
+      });
+      button.addEventListener("pointermove",event=>{
+        if(!dragState||dragState.button!==button||dragState.pointerId!==event.pointerId)return;
+        const dx=event.clientX-dragState.startX;const dy=event.clientY-dragState.startY;
+        if(Math.abs(dx)+Math.abs(dy)>7){dragState.moved=true;button.classList.add("is-dragging");}
+        if(dragState.moved){button.style.left=(dragState.startLeft+dx/dragState.sceneRect.width*100)+"%";button.style.top=(dragState.startTop+dy/dragState.sceneRect.height*100)+"%";}
+      });
+      button.addEventListener("pointerup",event=>{
+        if(!dragState||dragState.button!==button||dragState.pointerId!==event.pointerId)return;
+        const state=dragState;dragState=null;button.classList.remove("is-dragging");
+        if(!state.moved)return;
+        suppressSampleClick=true;window.setTimeout(()=>{suppressSampleClick=false;},120);
+        const target=cabinetTargets.find(item=>{const rect=item.getBoundingClientRect();return event.clientX>=rect.left&&event.clientX<=rect.right&&event.clientY>=rect.top&&event.clientY<=rect.bottom;});
+        if(target){selectSpecimen(button);if(!placeSpecimen(button,target)){button.style.left=state.startLeft+"%";button.style.top=state.startTop+"%";}}
+        else{button.style.left=state.startLeft+"%";button.style.top=state.startTop+"%";workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="把樣本拖到展示櫃的分類位置，或點選樣本後再點選展示層。";}
+      });
+      button.addEventListener("pointercancel",()=>{if(dragState&&dragState.button===button){button.style.left=dragState.startLeft+"%";button.style.top=dragState.startTop+"%";button.classList.remove("is-dragging");dragState=null;}});
+    });
+    cabinetTargets.forEach(target=>target.addEventListener("click",()=>{
+      if(!selectedSpecimen){workbenchFeedback.dataset.kind="wrong";workbenchFeedback.textContent="先從桌面選一份樣本，再放進展示櫃。";return;}
+      placeSpecimen(selectedSpecimen,target);
+    }));
+    let bookPage=0;const bookPages=[...document.querySelectorAll("[data-book-page]")];
+    const showBookPage=next=>{bookPage=(next+bookPages.length)%bookPages.length;bookPages.forEach((page,index)=>page.classList.toggle("is-active",index===bookPage));document.getElementById("book-page-number").textContent=(bookPage+1)+" / "+bookPages.length;};
+    document.getElementById("book-prev").addEventListener("click",()=>showBookPage(bookPage-1));
+    document.getElementById("book-next").addEventListener("click",()=>showBookPage(bookPage+1));
+    document.getElementById("reset-samples").addEventListener("click",()=>{
+      sampleStatus.clear();selectedSpecimen=null;sampleInfo.hidden=true;specimenButtons.forEach(button=>{button.classList.remove("is-selected","is-placed");button.setAttribute("aria-pressed","false");button.removeAttribute("aria-label");button.style.left="";button.style.top="";});
+      specimenButtons.forEach((button,index)=>button.setAttribute("aria-label","選取桌上的樣本"+(index+1)+"，查看資料卡"));
+      workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="樣本已回到桌面，重新開始分類。";document.getElementById("sort-progress").textContent="已分類 0 / "+specimenRulesCount+" 份樣本";
     });
 
     const routeLinks=[...document.querySelectorAll(".route-inner a[href^='#s']")];
