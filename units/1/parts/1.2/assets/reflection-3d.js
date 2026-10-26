@@ -59,7 +59,7 @@ try {
     tableEdge: standard('#67503b', { roughness: 0.58 }),
     source: standard('#273330', { metalness: 0.32, roughness: 0.38 }),
     frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
-    mirror: new THREE.MeshPhysicalMaterial({ color: '#eef1ef', metalness: 0.22, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.06 }),
+    mirror: new THREE.MeshPhysicalMaterial({ color: '#dfe4e1', metalness: 1, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.025 }),
     mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
     paper: new THREE.MeshStandardMaterial({ color: '#f5f1e6', roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
@@ -198,7 +198,7 @@ try {
       const screenCenter = target.clone().addScaledVector(reflectedDirection, 2.05);
       const screen = new THREE.Mesh(
         new THREE.PlaneGeometry(1.35, 1.45),
-        new THREE.MeshStandardMaterial({ color: '#fffdf5', roughness: 0.94, side: THREE.DoubleSide })
+        new THREE.MeshStandardMaterial({ color: '#424a45', roughness: 0.94, side: THREE.DoubleSide })
       );
       screen.position.copy(screenCenter);
       screen.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), reflectedDirection.clone().negate());
@@ -220,7 +220,7 @@ try {
       const poolTexture = new THREE.CanvasTexture(poolCanvas);
       poolTexture.colorSpace = THREE.SRGBColorSpace;
       const lightPool = new THREE.Mesh(
-        new THREE.CircleGeometry(0.52, 48),
+        new THREE.CircleGeometry(0.38, 48),
         new THREE.MeshBasicMaterial({ map: poolTexture, transparent: true, opacity: 0, depthWrite: false, depthTest: false, side: THREE.DoubleSide, toneMapped: false })
       );
       lightPool.position.copy(screenCenter).addScaledVector(reflectedDirection.clone().negate(), 0.025);
@@ -290,7 +290,7 @@ try {
   const setIllumination = (index, progress) => {
     const eased = 1 - Math.pow(1 - progress, 3);
     spotLights[index].intensity = 75 * eased;
-    if (reflectedSpotLights[index]) reflectedSpotLights[index].intensity = 88 * eased;
+    if (reflectedSpotLights[index]) reflectedSpotLights[index].intensity = 135 * eased;
     if (reflectedLightPools[index]) reflectedLightPools[index].material.opacity = eased;
     sourceGlows[index].intensity = 0.65 * eased;
     lampLenses[index].emissiveIntensity = 1.8 * eased;
