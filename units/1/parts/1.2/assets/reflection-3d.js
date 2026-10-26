@@ -287,18 +287,34 @@ try {
   let startedAt = 0;
   const duration = 1150;
   const render = () => renderer.render(scene, camera);
+  const raycaster = new THREE.Raycaster();
+  const pointerPosition = new THREE.Vector2();
+  const isOverFlashlight = (event) => {
+    const bounds = canvas.getBoundingClientRect();
+    pointerPosition.set(
+      ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
+      -((event.clientY - bounds.top) / bounds.height) * 2 + 1
+    );
+    raycaster.setFromCamera(pointerPosition, camera);
+    return raycaster.intersectObject(lamp, true).length > 0;
+  };
 
   canvas.addEventListener('pointerdown', (event) => {
     if (event.button !== 0) return;
-    pointerDrag = { id: event.pointerId, x: event.clientX, y: event.clientY };
+    pointerDrag = { id: event.pointerId, x: event.clientX, y: event.clientY, startX: event.clientX, startY: event.clientY, moved: false };
     canvas.setPointerCapture(event.pointerId);
     canvas.classList.add('is-dragging');
+    canvas.classList.remove('is-pointing-source');
     event.preventDefault();
   });
   canvas.addEventListener('pointermove', (event) => {
-    if (!pointerDrag || pointerDrag.id !== event.pointerId) return;
+    if (!pointerDrag || pointerDrag.id !== event.pointerId) {
+      if (event.pointerType !== 'touch') canvas.classList.toggle('is-pointing-source', isOverFlashlight(event));
+      return;
+    }
     const deltaX = event.clientX - pointerDrag.x;
     const deltaY = event.clientY - pointerDrag.y;
+    if (Math.hypot(event.clientX - pointerDrag.startX, event.clientY - pointerDrag.startY) > 6) pointerDrag.moved = true;
     pointerDrag.x = event.clientX;
     pointerDrag.y = event.clientY;
     cameraAzimuth -= deltaX * 0.008;
@@ -308,8 +324,10 @@ try {
   });
   const endPointerDrag = (event) => {
     if (!pointerDrag || pointerDrag.id !== event.pointerId) return;
+    const clickedFlashlight = event.type === 'pointerup' && !pointerDrag.moved && isOverFlashlight(event);
     pointerDrag = null;
     canvas.classList.remove('is-dragging');
+    if (clickedFlashlight) fireLight();
   };
   canvas.addEventListener('pointerup', endPointerDrag);
   canvas.addEventListener('pointercancel', endPointerDrag);
@@ -344,7 +362,7 @@ try {
   resize();
 
   let animationFrame = 0;
-  button.addEventListener('click', () => {
+  const fireLight = () => {
     cancelAnimationFrame(animationFrame);
     button.textContent = '再發出光';
     status.textContent = '光已照到兩種表面：鏡面在一張白卡形成集中亮斑；粗糙表面讓周圍多張白卡柔和受光。';
@@ -359,7 +377,8 @@ try {
       if (progress < 1) animationFrame = requestAnimationFrame(animate);
     };
     animationFrame = requestAnimationFrame(animate);
-  });
+  };
+  button.addEventListener('click', fireLight);
 
   window.addEventListener('resize', resize);
   window.addEventListener('pagehide', () => {
