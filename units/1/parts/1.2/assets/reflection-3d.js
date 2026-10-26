@@ -59,7 +59,7 @@ try {
     tableEdge: standard('#67503b', { roughness: 0.58 }),
     source: standard('#273330', { metalness: 0.32, roughness: 0.38 }),
     frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
-    mirror: new THREE.MeshPhysicalMaterial({ color: '#eef1ef', metalness: 1, roughness: 0.005, clearcoat: 0, clearcoatRoughness: 0.005 }),
+    mirror: new THREE.MeshPhysicalMaterial({ color: '#eef1ef', metalness: 0.22, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.06 }),
     mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
     paper: new THREE.MeshStandardMaterial({ color: '#f5f1e6', roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
@@ -142,13 +142,15 @@ try {
   const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: '#f3eee1', roughness: 0.98, metalness: 0, side: THREE.DoubleSide });
   addBox(scene, [1.55, 0.018, 1.18], [paperCenter.x, 0.102, paperCenter.z], roughMaterial, false, true);
   const stations = [
-    { kind: 'mirror', surface: mirrorCenter, source: new THREE.Vector3(-3.55, 1.62, -0.78) },
+    { kind: 'mirror', surface: mirrorCenter, source: new THREE.Vector3(-3.55, 1.62, -2.7) },
     { kind: 'paper', surface: paperCenter, source: new THREE.Vector3(0.05, 1.62, 0.78) }
   ];
   const lamps = [];
   const lampLenses = [];
   const sourceGlows = [];
   const spotLights = [];
+  const reflectedSpotLights = [];
+  const reflectedLightPools = [];
   for (const station of stations) {
     const target = station.surface.clone();
     const direction = target.clone().sub(station.source).normalize();
@@ -187,6 +189,55 @@ try {
     spotLights.push(spotLight);
     station.target = target;
     station.incident = target.clone().sub(station.source).normalize();
+
+    // Three.js does not trace light bouncing off a mirror. Add the real reflected
+    // path as a second light and let a matte screen make the outgoing reflection
+    // visible, instead of drawing a beam in the air.
+    if (station.kind === 'mirror') {
+      const reflectedDirection = station.incident.clone().reflect(new THREE.Vector3(0, 1, 0)).normalize();
+      const screenCenter = target.clone().addScaledVector(reflectedDirection, 2.05);
+      const screen = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.35, 1.45),
+        new THREE.MeshStandardMaterial({ color: '#fffdf5', roughness: 0.94, side: THREE.DoubleSide })
+      );
+      screen.position.copy(screenCenter);
+      screen.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), reflectedDirection.clone().negate());
+      screen.receiveShadow = true;
+      scene.add(screen);
+
+      // A softly falling off spot makes the bounced illumination legible in
+      // WebGL renderers that cannot calculate mirror reflections themselves.
+      const poolCanvas = document.createElement('canvas');
+      poolCanvas.width = poolCanvas.height = 128;
+      const poolContext = poolCanvas.getContext('2d');
+      const poolGradient = poolContext.createRadialGradient(64, 64, 2, 64, 64, 62);
+      poolGradient.addColorStop(0, 'rgba(255,250,223,0.96)');
+      poolGradient.addColorStop(0.38, 'rgba(255,235,178,0.76)');
+      poolGradient.addColorStop(0.78, 'rgba(255,215,142,0.2)');
+      poolGradient.addColorStop(1, 'rgba(255,205,128,0)');
+      poolContext.fillStyle = poolGradient;
+      poolContext.fillRect(0, 0, 128, 128);
+      const poolTexture = new THREE.CanvasTexture(poolCanvas);
+      poolTexture.colorSpace = THREE.SRGBColorSpace;
+      const lightPool = new THREE.Mesh(
+        new THREE.CircleGeometry(0.52, 48),
+        new THREE.MeshBasicMaterial({ map: poolTexture, transparent: true, opacity: 0, depthWrite: false, depthTest: false, side: THREE.DoubleSide, toneMapped: false })
+      );
+      lightPool.position.copy(screenCenter).addScaledVector(reflectedDirection.clone().negate(), 0.025);
+      lightPool.quaternion.copy(screen.quaternion);
+      lightPool.renderOrder = 2;
+      scene.add(lightPool);
+      reflectedLightPools.push(lightPool);
+
+      const reflectedSpot = new THREE.SpotLight('#fff0ce', 0, 4.2, 0.34, 0.78, 1.2);
+      reflectedSpot.position.copy(target).add(new THREE.Vector3(0, 0.025, 0));
+      reflectedSpot.target.position.copy(screenCenter);
+      reflectedSpot.castShadow = true;
+      reflectedSpot.shadow.mapSize.set(512, 512);
+      reflectedSpot.shadow.bias = -0.0002;
+      scene.add(reflectedSpot, reflectedSpot.target);
+      reflectedSpotLights.push(reflectedSpot);
+    }
   }
 
   let startedAt = 0;
@@ -239,6 +290,8 @@ try {
   const setIllumination = (index, progress) => {
     const eased = 1 - Math.pow(1 - progress, 3);
     spotLights[index].intensity = 75 * eased;
+    if (reflectedSpotLights[index]) reflectedSpotLights[index].intensity = 88 * eased;
+    if (reflectedLightPools[index]) reflectedLightPools[index].material.opacity = eased;
     sourceGlows[index].intensity = 0.65 * eased;
     lampLenses[index].emissiveIntensity = 1.8 * eased;
     render();
@@ -265,7 +318,7 @@ try {
     illuminated[index] = true;
     fireButtons[index].querySelector('small').textContent = '再照一次';
     fireButtons[index].setAttribute('aria-pressed', 'true');
-    const chosen = index === 0 ? '左側平面鏡已點亮：反光朝特定方向離開目前視角。' : '右側霧面紙已點亮：漫反射會讓表面從較多方向看起來明亮。';
+    const chosen = index === 0 ? '左側平面鏡已點亮：鏡面反射光落在前方白色接收屏上。' : '右側霧面紙已點亮：漫反射會讓表面從較多方向看起來明亮。';
     const other = illuminated[1 - index]
       ? (index === 0 ? '右側霧面紙也已點亮。' : '左側平面鏡也已點亮。')
       : (index === 0 ? '右側霧面紙仍未點亮。' : '左側平面鏡仍未點亮。');
