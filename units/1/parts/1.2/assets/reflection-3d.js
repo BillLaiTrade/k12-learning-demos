@@ -44,7 +44,8 @@ try {
   };
   updateCamera();
 
-  scene.add(new THREE.HemisphereLight('#ffffff', '#858b88', 0.42));
+  scene.add(new THREE.HemisphereLight('#ffffff', '#c1c6c3', 0.78));
+  scene.add(new THREE.AmbientLight('#ffffff', 1.1));
   const keyLight = new THREE.DirectionalLight('#ffffff', 0.55);
   keyLight.position.set(-1.5, 7, 4.5);
   keyLight.castShadow = true;
@@ -60,13 +61,13 @@ try {
   const mats = {
     tableTop: new THREE.MeshPhysicalMaterial({ color: '#c4a57c', roughness: 0.48, metalness: 0.015, clearcoat: 0.16, clearcoatRoughness: 0.58 }),
     tableEdge: standard('#67503b', { roughness: 0.58 }),
-    frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
+    frame: standard('#84918e', { metalness: 0.42, roughness: 0.36 }),
     lampBody: standard('#9aa7a8', { metalness: 0.52, roughness: 0.3 }),
     lampTrim: standard('#c4cfcd', { metalness: 0.42, roughness: 0.26 }),
     // Match the paper's neutral base tint while retaining a narrow mirror
     // highlight; the environment map supplies reflections from the lab scene.
     mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.94, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.02 }),
-    mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
+    mirrorBacking: standard('#7c8885', { metalness: 0.3, roughness: 0.38 }),
     paper: new THREE.MeshStandardMaterial({ color: surfaceBaseColor, roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
   };
@@ -119,13 +120,14 @@ try {
   const mirrorCenter = new THREE.Vector3(-1.8, 0.114, 0);
   const paperCenter = new THREE.Vector3(1.8, 0.114, 0);
   const stationBase = (center, accent) => {
-    addBox(scene, [1.9, 0.12, 1.55], [center.x, -0.005, center.z], mats.frame);
-    addBox(scene, [1.7, 0.035, 1.35], [center.x, 0.072, center.z], accent);
+    // Keep the raised mounts from producing heavy black patches on the desk.
+    addBox(scene, [1.9, 0.12, 1.55], [center.x, -0.005, center.z], mats.frame, false, true);
+    addBox(scene, [1.7, 0.035, 1.35], [center.x, 0.072, center.z], accent, false, true);
   };
   stationBase(mirrorCenter, mats.mirrorBacking);
   stationBase(paperCenter, mats.mirrorBacking);
   // A flat polished mirror tile and a visually flat sheet of matte paper.
-  const mirrorTile = addBox(scene, [1.55, 0.025, 1.18], [mirrorCenter.x, 0.102, mirrorCenter.z], mats.mirror);
+  const mirrorTile = addBox(scene, [1.55, 0.025, 1.18], [mirrorCenter.x, 0.102, mirrorCenter.z], mats.mirror, false, true);
 
   const roughTextureCanvas = document.createElement('canvas');
   roughTextureCanvas.width = 256;
