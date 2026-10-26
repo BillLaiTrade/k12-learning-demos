@@ -336,7 +336,8 @@
     .field-response-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px 15px; margin-bottom:10px; }
     .field-response h3 { margin:0; color:var(--ink); font-size:1.08rem; }
     .field-response-head p { margin:0; color:var(--muted); font-size:.86rem; }
-    .field-distance-answer { max-width:360px; margin-bottom:12px; }
+    .field-distance-source { max-width:360px; margin-bottom:11px; padding:9px 11px; border-radius:9px; background:#fff3df; color:#745027; font-size:.84rem; }
+    .field-distance-source strong { float:right; }
     .field-parameter-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
     .field-parameter-card { min-width:0; padding:10px; border:1px solid var(--line); border-radius:11px; background:#fffefa; }
     .field-parameter-card h4 { margin:0 0 8px; color:var(--green); font-size:.9rem; }
@@ -1036,7 +1037,7 @@
                   </svg>
                 </div>
                 <p class="field-map-credit">衛星影像來源：Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community</p>
-                <p class="field-distance">震央至南投埔里設定點：約 120 km</p>
+                <p class="field-distance" data-distance-km="120">震央至南投埔里設定點：約 120 km</p>
               </div>
             </section>
             <section class="field-panel field-signal-panel" aria-labelledby="field-signal-title">
@@ -1065,8 +1066,8 @@
             </section>
           </div>
           <form class="field-response" id="field-response-form" novalidate>
-            <div class="field-response-head"><h3>作答區</h3><p>從地圖讀距離、從波形讀參數；填妥後由系統計算抵達時間。</p></div>
-            <div class="field-answer field-distance-answer"><label for="field-distance-km">震央到觀測點距離（km）</label><input id="field-distance-km" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入地圖上的距離" required><small>資料來源：左側地圖下方的距離標示。</small></div>
+            <div class="field-response-head"><h3>作答區</h3><p>地圖距離已自動帶入；填入波形資料後，系統計算抵達時間。</p></div>
+            <div class="field-distance-source">地圖距離已帶入<strong><span id="field-distance-value">120</span> km</strong></div>
             <div class="field-parameter-grid">
               <section class="field-parameter-card is-p" aria-labelledby="field-p-data-title">
                 <h4 id="field-p-data-title">P 波資料</h4>
@@ -1129,24 +1130,25 @@
       }
       const fieldResponseForm=document.querySelector("#field-response-form");
       if(fieldResponseForm){
-        const fieldDistance=document.querySelector("#field-distance-km"),fieldPFrequency=document.querySelector("#field-p-frequency"),fieldPWavelength=document.querySelector("#field-p-wavelength"),fieldSPeriod=document.querySelector("#field-s-period"),fieldSWavelength=document.querySelector("#field-s-wavelength"),fieldFeedback=document.querySelector("#field-feedback"),fieldResults=document.querySelector("#field-results");
+        const fieldDistance=Number(document.querySelector("[data-distance-km]").dataset.distanceKm),fieldPFrequency=document.querySelector("#field-p-frequency"),fieldPWavelength=document.querySelector("#field-p-wavelength"),fieldSPeriod=document.querySelector("#field-s-period"),fieldSWavelength=document.querySelector("#field-s-wavelength"),fieldFeedback=document.querySelector("#field-feedback"),fieldResults=document.querySelector("#field-results");
         const fieldPResult=document.querySelector("#field-p-result"),fieldSResult=document.querySelector("#field-s-result"),fieldWarningResult=document.querySelector("#field-warning-result"),fieldCalculation=document.querySelector("#field-calculation");
         const fieldFormat=value=>Number(value.toFixed(2)).toLocaleString("zh-TW");
+        document.querySelector("#field-distance-value").textContent=fieldFormat(fieldDistance);
         fieldResponseForm.addEventListener("submit",event=>{
           event.preventDefault();
-          const inputs=[fieldDistance,fieldPFrequency,fieldPWavelength,fieldSPeriod,fieldSWavelength],values=inputs.map(input=>Number(input.value));
+          const inputs=[fieldPFrequency,fieldPWavelength,fieldSPeriod,fieldSWavelength],values=inputs.map(input=>Number(input.value));
           fieldFeedback.hidden=false;
           if(values.some(value=>!Number.isFinite(value)||value<=0)){
-            fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent="請依照每個欄位下方的資料來源，從地圖和波形圖填入五個數值。";
+            fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent="請依照每個欄位下方的資料來源，從 P、S 波形圖填入四個數值。地圖距離已自動帶入。";
             inputs.find(input=>!input.value||!Number.isFinite(Number(input.value))||Number(input.value)<=0)?.focus();return;
           }
-          const [distance,fieldFrequency,pWavelength,fieldPeriod,sWavelength]=values,pSpeed=fieldFrequency*pWavelength,sSpeed=sWavelength/fieldPeriod,pArrival=distance/pSpeed,sArrival=distance/sSpeed,warningTime=Math.max(0,sArrival-pArrival);
+          const [fieldFrequency,pWavelength,fieldPeriod,sWavelength]=values,pSpeed=fieldFrequency*pWavelength,sSpeed=sWavelength/fieldPeriod,pArrival=fieldDistance/pSpeed,sArrival=fieldDistance/sSpeed,warningTime=Math.max(0,sArrival-pArrival);
           fieldPResult.textContent=`${fieldFormat(pArrival)} 秒`;fieldSResult.textContent=`${fieldFormat(sArrival)} 秒`;
           fieldWarningResult.textContent=pArrival<sArrival?`${fieldFormat(warningTime)} 秒`:"P 波未先到";
-          fieldCalculation.textContent=`P 波：${fieldFrequency} Hz × ${fieldFormat(pWavelength)} km = ${fieldFormat(pSpeed)} km/s；${fieldFormat(distance)} km ÷ ${fieldFormat(pSpeed)} km/s = ${fieldFormat(pArrival)} 秒。S 波：${fieldFormat(sWavelength)} km ÷ ${fieldPeriod} s = ${fieldFormat(sSpeed)} km/s；${fieldFormat(distance)} km ÷ ${fieldFormat(sSpeed)} km/s = ${fieldFormat(sArrival)} 秒。`;
+          fieldCalculation.textContent=`P 波：${fieldFrequency} Hz × ${fieldFormat(pWavelength)} km = ${fieldFormat(pSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(pSpeed)} km/s = ${fieldFormat(pArrival)} 秒。S 波：${fieldFormat(sWavelength)} km ÷ ${fieldPeriod} s = ${fieldFormat(sSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(sSpeed)} km/s = ${fieldFormat(sArrival)} 秒。`;
           fieldResults.hidden=false;fieldFeedback.dataset.state="good";fieldFeedback.textContent="已依照你從地圖與波形圖找到的資料，計算兩種波的抵達時間。";
         });
-        [fieldDistance,fieldPFrequency,fieldPWavelength,fieldSPeriod,fieldSWavelength].forEach(input=>input.addEventListener("input",()=>{fieldResults.hidden=true;fieldFeedback.hidden=true;}));
+        [fieldPFrequency,fieldPWavelength,fieldSPeriod,fieldSWavelength].forEach(input=>input.addEventListener("input",()=>{fieldResults.hidden=true;fieldFeedback.hidden=true;}));
       }
       const pulseSvgs = [...document.querySelectorAll(".rope-wave:not([data-static-rope]):not([data-fixed-point-wave])")];
       const staticRopeSvgs = [...document.querySelectorAll(".rope-wave[data-static-rope]")];
