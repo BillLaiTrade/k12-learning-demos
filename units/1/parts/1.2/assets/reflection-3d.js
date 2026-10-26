@@ -63,8 +63,8 @@ try {
     tableTop: new THREE.MeshPhysicalMaterial({ color: '#c4a57c', roughness: 0.48, metalness: 0.015, clearcoat: 0.16, clearcoatRoughness: 0.58 }),
     tableEdge: standard('#67503b', { roughness: 0.58 }),
     frame: standard('#84918e', { metalness: 0.42, roughness: 0.36 }),
-    lampBody: standard('#9aa7a8', { metalness: 0.52, roughness: 0.3 }),
-    lampTrim: standard('#c4cfcd', { metalness: 0.42, roughness: 0.26 }),
+    lampBody: standard('#171b1a', { metalness: 0.32, roughness: 0.38 }),
+    lampTrim: standard('#303735', { metalness: 0.55, roughness: 0.34 }),
     // Match the paper's neutral base tint while retaining a narrow mirror
     // highlight; the environment map supplies reflections from the lab scene.
     mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.94, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.02 }),
@@ -215,12 +215,14 @@ try {
   });
   const mirrorEnvironmentCamera = new THREE.CubeCamera(0.1, 24, mirrorEnvironmentTarget);
   mirrorEnvironmentCamera.position.set(mirrorCenter.x, 0.14, mirrorCenter.z);
+  const mirrorEnvironmentScene = new THREE.Scene();
+  mirrorEnvironmentScene.background = scene.background;
   mats.mirror.envMap = mirrorEnvironmentTarget.texture;
   mats.mirror.envMapIntensity = 1.25;
   const refreshMirrorEnvironment = () => {
-    mirrorTile.visible = false;
-    mirrorEnvironmentCamera.update(renderer, scene);
-    mirrorTile.visible = true;
+    // Reflect only the bright background. The direct spotlight still reaches
+    // the mirror in the main scene, but flashlight models cannot appear in it.
+    mirrorEnvironmentCamera.update(renderer, mirrorEnvironmentScene);
   };
   refreshMirrorEnvironment();
 
