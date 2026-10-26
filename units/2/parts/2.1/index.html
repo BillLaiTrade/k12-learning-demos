@@ -349,6 +349,8 @@
     .field-answer { min-width:0; }
     .field-answer label { display:block; margin-bottom:4px; color:var(--ink); font-size:.84rem; font-weight:750; }
     .field-answer input { width:100%; min-width:0; }
+    .field-answer input[data-answer-state="correct"] { border-color:#538c69; background:#f2f8f1; }
+    .field-answer input[data-answer-state="incorrect"] { border-color:#bf714f; background:#fff7f1; }
     .field-answer small { display:block; min-height:2.6em; margin-top:5px; color:var(--muted); font-size:.75rem; line-height:1.45; }
     .field-response > .action { min-height:44px; margin-top:11px; white-space:nowrap; }
     .field-feedback { margin:11px 0 0; padding:10px 12px; border-radius:10px; background:#f1f5ee; color:#40574b; font-size:.9rem; }
@@ -1044,7 +1046,7 @@
             </section>
             <section class="field-panel field-signal-panel" aria-labelledby="field-signal-title">
               <h3 class="field-panel-heading" id="field-signal-title">地震波形監測</h3>
-              <div class="signal-row signal-row-p">
+              <div class="signal-row signal-row-p" data-frequency-hz="1.22" data-wavelength-km="5">
                 <div class="signal-meta"><span class="signal-type">P 波｜縱波</span><span class="signal-value">頻率 f = 1.22 Hz</span><span class="signal-direction">介質振動方向與波傳方向平行</span></div>
                 <svg class="signal-svg" viewBox="0 0 460 126" role="img" aria-label="P波縱波的空間示意；距離刻度由0到10公里，密集與疏散位置重複出現">
                   <g id="field-p-wave-particles" aria-hidden="true"></g>
@@ -1054,7 +1056,7 @@
                   <g><text x="30" y="116" text-anchor="middle">0 km</text><text x="70" y="116" text-anchor="middle">1 km</text><text x="110" y="116" text-anchor="middle">2 km</text><text x="150" y="116" text-anchor="middle">3 km</text><text x="190" y="116" text-anchor="middle">4 km</text><text x="230" y="116" text-anchor="middle">5 km</text><text x="270" y="116" text-anchor="middle">6 km</text><text x="310" y="116" text-anchor="middle">7 km</text><text x="350" y="116" text-anchor="middle">8 km</text><text x="390" y="116" text-anchor="middle">9 km</text><text x="430" y="116" text-anchor="middle">10 km</text></g>
                 </svg>
               </div>
-              <div class="signal-row signal-row-s">
+              <div class="signal-row signal-row-s" data-period-s="0.84" data-wavelength-km="3">
                 <div class="signal-meta"><span class="signal-type">S 波｜橫波</span><span class="signal-value">週期 T = 0.84 s</span><span class="signal-direction">介質振動方向與波傳方向垂直</span></div>
                 <svg class="signal-svg" viewBox="0 0 460 150" role="img" aria-label="S波橫波的空間示意；距離刻度由0到6公里，曲線重複起伏">
                   <path class="signal-baseline" d="M30 56H430"/>
@@ -1069,7 +1071,7 @@
             </section>
           </div>
           <form class="field-response" id="field-response-form" novalidate>
-            <div class="field-response-head"><h3>作答區</h3><p>填入波形圖上的參數，系統會依地圖距離計算抵達時間。</p></div>
+            <div class="field-response-head"><h3>作答區</h3><p>從波形標示與刻度讀取參數；讀值正確後，系統計算抵達時間。</p></div>
             <div class="field-parameter-grid">
               <section class="field-parameter-card is-p" aria-labelledby="field-p-data-title">
                 <h4 id="field-p-data-title">P 波資料</h4>
@@ -1136,11 +1138,13 @@
       }
       const fieldResponseForm=document.querySelector("#field-response-form");
       if(fieldResponseForm){
-        const fieldDistance=Number(document.querySelector("[data-distance-km]").dataset.distanceKm),fieldPFrequency=document.querySelector("#field-p-frequency"),fieldPPeriod=document.querySelector("#field-p-period"),fieldPWavelength=document.querySelector("#field-p-wavelength"),fieldSFrequency=document.querySelector("#field-s-frequency"),fieldSPeriod=document.querySelector("#field-s-period"),fieldSWavelength=document.querySelector("#field-s-wavelength"),fieldFeedback=document.querySelector("#field-feedback"),fieldResults=document.querySelector("#field-results");
+        const fieldDistance=Number(document.querySelector("[data-distance-km]").dataset.distanceKm),fieldPRow=document.querySelector(".signal-row-p"),fieldSRow=document.querySelector(".signal-row-s"),fieldPFrequency=document.querySelector("#field-p-frequency"),fieldPPeriod=document.querySelector("#field-p-period"),fieldPWavelength=document.querySelector("#field-p-wavelength"),fieldSFrequency=document.querySelector("#field-s-frequency"),fieldSPeriod=document.querySelector("#field-s-period"),fieldSWavelength=document.querySelector("#field-s-wavelength"),fieldFeedback=document.querySelector("#field-feedback"),fieldResults=document.querySelector("#field-results");
         const fieldPResult=document.querySelector("#field-p-result"),fieldSResult=document.querySelector("#field-s-result"),fieldWarningResult=document.querySelector("#field-warning-result"),fieldCalculation=document.querySelector("#field-calculation");
         const fieldFormat=value=>Number(value.toFixed(2)).toLocaleString("zh-TW");
         let fieldPInputMode="frequency",fieldSInputMode="frequency";
-        const invalidateFieldResults=()=>{fieldResults.hidden=true;fieldFeedback.hidden=true;};
+        const allFieldInputs=[fieldPFrequency,fieldPPeriod,fieldPWavelength,fieldSFrequency,fieldSPeriod,fieldSWavelength];
+        const clearFieldAnswerStates=()=>allFieldInputs.forEach(input=>{delete input.dataset.answerState;input.removeAttribute("aria-invalid");});
+        const invalidateFieldResults=()=>{fieldResults.hidden=true;fieldFeedback.hidden=true;clearFieldAnswerStates();};
         const connectReciprocalInputs=(frequencyInput,periodInput,setInputMode)=>{
           const sync=(source,target,mode)=>{
             const value=Number(source.value);
@@ -1160,14 +1164,24 @@
             fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent="請在 P 波和 S 波各輸入頻率或週期，並填入波長；另一個時間參數會自動換算。";
             inputs.find(input=>!input.value||!Number.isFinite(Number(input.value))||Number(input.value)<=0)?.focus();return;
           }
-          const [pFrequency,pPeriod,pWavelength,sFrequency,sPeriod,sWavelength]=values,pSpeed=fieldPInputMode==="frequency"?pFrequency*pWavelength:pWavelength/pPeriod,sSpeed=fieldSInputMode==="frequency"?sFrequency*sWavelength:sWavelength/sPeriod,pArrival=fieldDistance/pSpeed,sArrival=fieldDistance/sSpeed,warningTime=Math.max(0,sArrival-pArrival);
+          const [pFrequency,pPeriod,pWavelength,sFrequency,sPeriod,sWavelength]=values;
+          const closeTo=(actual,expected,tolerance)=>Math.abs(actual-expected)<=tolerance;
+          const pExpectedFrequency=Number(fieldPRow.dataset.frequencyHz),pExpectedPeriod=1/pExpectedFrequency,pExpectedWavelength=Number(fieldPRow.dataset.wavelengthKm),sExpectedPeriod=Number(fieldSRow.dataset.periodS),sExpectedFrequency=1/sExpectedPeriod,sExpectedWavelength=Number(fieldSRow.dataset.wavelengthKm);
+          const pTimeCorrect=fieldPInputMode==="frequency"?closeTo(pFrequency,pExpectedFrequency,.015):closeTo(pPeriod,pExpectedPeriod,.012);
+          const sTimeCorrect=fieldSInputMode==="frequency"?closeTo(sFrequency,sExpectedFrequency,.02):closeTo(sPeriod,sExpectedPeriod,.012);
+          const pWavelengthCorrect=closeTo(pWavelength,pExpectedWavelength,.15),sWavelengthCorrect=closeTo(sWavelength,sExpectedWavelength,.15);
+          [[fieldPFrequency,fieldPPeriod,pTimeCorrect],[fieldPWavelength,null,pWavelengthCorrect],[fieldSFrequency,fieldSPeriod,sTimeCorrect],[fieldSWavelength,null,sWavelengthCorrect]].forEach(([first,second,correct])=>[first,second].filter(Boolean).forEach(input=>{input.dataset.answerState=correct?"correct":"incorrect";input.setAttribute("aria-invalid",String(!correct));}));
+          const incorrectItems=[];
+          if(!pTimeCorrect)incorrectItems.push("P 波頻率／週期");if(!pWavelengthCorrect)incorrectItems.push("P 波波長");if(!sTimeCorrect)incorrectItems.push("S 波頻率／週期");if(!sWavelengthCorrect)incorrectItems.push("S 波波長");
+          if(incorrectItems.length){fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent=`這些讀值還不正確：${incorrectItems.join("、")}。請重新對照波形標示與距離刻度。`;return;}
+          const pSpeed=fieldPInputMode==="frequency"?pFrequency*pWavelength:pWavelength/pPeriod,sSpeed=fieldSInputMode==="frequency"?sFrequency*sWavelength:sWavelength/sPeriod,pArrival=fieldDistance/pSpeed,sArrival=fieldDistance/sSpeed,warningTime=Math.max(0,sArrival-pArrival);
           fieldPResult.textContent=`${fieldFormat(pArrival)} 秒`;fieldSResult.textContent=`${fieldFormat(sArrival)} 秒`;
           fieldWarningResult.textContent=pArrival<sArrival?`${fieldFormat(warningTime)} 秒`:"P 波未先到";
           const pSpeedLine=fieldPInputMode==="frequency"?`${fieldFormat(pFrequency)} Hz × ${fieldFormat(pWavelength)} km`:`${fieldFormat(pWavelength)} km ÷ ${fieldFormat(pPeriod)} s`,sSpeedLine=fieldSInputMode==="frequency"?`${fieldFormat(sFrequency)} Hz × ${fieldFormat(sWavelength)} km`:`${fieldFormat(sWavelength)} km ÷ ${fieldFormat(sPeriod)} s`;
           fieldCalculation.textContent=`P 波：${pSpeedLine} = ${fieldFormat(pSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(pSpeed)} km/s = ${fieldFormat(pArrival)} 秒。S 波：${sSpeedLine} = ${fieldFormat(sSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(sSpeed)} km/s = ${fieldFormat(sArrival)} 秒。`;
-          fieldResults.hidden=false;fieldFeedback.dataset.state="good";fieldFeedback.textContent="已依照你從地圖與波形圖找到的資料，計算兩種波的抵達時間。";
+          fieldResults.hidden=false;fieldFeedback.dataset.state="good";fieldFeedback.textContent="讀值正確，以下是兩種波抵達觀測站的計算結果。";
         });
-        [fieldPFrequency,fieldPPeriod,fieldPWavelength,fieldSFrequency,fieldSPeriod,fieldSWavelength].forEach(input=>input.addEventListener("input",invalidateFieldResults));
+        allFieldInputs.forEach(input=>input.addEventListener("input",invalidateFieldResults));
       }
       const pulseSvgs = [...document.querySelectorAll(".rope-wave:not([data-static-rope]):not([data-fixed-point-wave])")];
       const staticRopeSvgs = [...document.querySelectorAll(".rope-wave[data-static-rope]")];
