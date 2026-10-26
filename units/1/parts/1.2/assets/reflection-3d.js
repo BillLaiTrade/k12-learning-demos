@@ -59,7 +59,7 @@ try {
     tableEdge: standard('#67503b', { roughness: 0.58 }),
     source: standard('#273330', { metalness: 0.32, roughness: 0.38 }),
     frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
-    mirror: new THREE.MeshPhysicalMaterial({ color: '#dfe4e1', metalness: 1, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.025 }),
+    mirror: new THREE.MeshPhysicalMaterial({ color: '#ffffff', metalness: 0.96, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0.025 }),
     mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
     paper: new THREE.MeshStandardMaterial({ color: '#f5f1e6', roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
@@ -119,7 +119,7 @@ try {
   stationBase(mirrorCenter, mats.mirrorBacking);
   stationBase(paperCenter, mats.tableEdge);
   // A flat polished mirror tile and a visually flat sheet of matte paper.
-  addBox(scene, [1.55, 0.025, 1.18], [mirrorCenter.x, 0.102, mirrorCenter.z], mats.mirror);
+  const mirrorTile = addBox(scene, [1.55, 0.025, 1.18], [mirrorCenter.x, 0.102, mirrorCenter.z], mats.mirror);
 
   const roughTextureCanvas = document.createElement('canvas');
   roughTextureCanvas.width = 256;
@@ -195,6 +195,24 @@ try {
 
   }
 
+  // Capture the nearby scene as a dynamic environment map for the mirror.
+  // This supplies actual reflected surroundings instead of rendering an
+  // unlit, fully metallic surface as black.
+  const mirrorEnvironmentTarget = new THREE.WebGLCubeRenderTarget(128, {
+    generateMipmaps: true,
+    minFilter: THREE.LinearMipmapLinearFilter
+  });
+  const mirrorEnvironmentCamera = new THREE.CubeCamera(0.1, 24, mirrorEnvironmentTarget);
+  mirrorEnvironmentCamera.position.set(mirrorCenter.x, 0.14, mirrorCenter.z);
+  mats.mirror.envMap = mirrorEnvironmentTarget.texture;
+  mats.mirror.envMapIntensity = 1.25;
+  const refreshMirrorEnvironment = () => {
+    mirrorTile.visible = false;
+    mirrorEnvironmentCamera.update(renderer, scene);
+    mirrorTile.visible = true;
+  };
+  refreshMirrorEnvironment();
+
   let startedAt = 0;
   const duration = 1150;
   const render = () => renderer.render(scene, camera);
@@ -247,6 +265,7 @@ try {
     spotLights[index].intensity = 75 * eased;
     sourceGlows[index].intensity = 0.65 * eased;
     lampLenses[index].emissiveIntensity = 1.8 * eased;
+    if (progress >= 1) refreshMirrorEnvironment();
     render();
   };
 
@@ -296,6 +315,7 @@ try {
     renderer.dispose();
     roughTexture.dispose();
     woodTexture.dispose();
+    mirrorEnvironmentTarget.dispose();
   }, { once: true });
 } catch (error) {
   console.error('Unable to initialize the 3D reflection scene:', error);
