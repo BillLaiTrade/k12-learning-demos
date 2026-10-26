@@ -23,8 +23,9 @@ try {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.18;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  // This comparison should show the reflected light patterns without dark
+  // cast shadows from the lamps and stands.
+  renderer.shadowMap.enabled = false;
 
   const camera = new THREE.PerspectiveCamera(39, 1, 0.1, 45);
   const cameraTarget = new THREE.Vector3(-0.05, 0.38, 0);
