@@ -174,27 +174,27 @@ try {
     lamp.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
     lamp.scale.setScalar(1.15);
     scene.add(lamp);
-    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.18, 0.58, 28), mats.lampBody);
-    barrel.position.y = -0.29;
+    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.08, 0.72, 24), mats.lampBody);
+    barrel.position.y = -0.34;
     barrel.castShadow = true;
     lamp.add(barrel);
-    const head = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.15, 0.2, 28), mats.lampTrim);
-    head.position.y = 0.02;
+    const head = new THREE.Mesh(new THREE.CylinderGeometry(0.078, 0.065, 0.11, 24), mats.lampTrim);
+    head.position.y = 0.055;
     lamp.add(head);
-    const lensMaterial = new THREE.MeshStandardMaterial({ color: '#f8faf9', emissive: '#ffffff', emissiveIntensity: 0, roughness: 0.18 });
-    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.16, 36), lensMaterial);
-    lens.position.y = 0.125;
+    const lensMaterial = new THREE.MeshStandardMaterial({ color: '#ff7777', emissive: '#ff1717', emissiveIntensity: 0, roughness: 0.18 });
+    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.046, 28), lensMaterial);
+    lens.position.y = 0.113;
     lamp.add(lens);
     lampLenses.push(lensMaterial);
-    const rim = new THREE.Mesh(new THREE.TorusGeometry(0.165, 0.022, 10, 36), mats.lampTrim);
-    rim.position.y = 0.13;
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(0.05, 0.009, 8, 28), mats.lampTrim);
+    rim.position.y = 0.116;
     lamp.add(rim);
     lamps.push(lamp);
-    const sourceGlow = new THREE.PointLight('#ffffff', 0, 1.4);
+    const sourceGlow = new THREE.PointLight('#ff3028', 0, 0.7);
     sourceGlow.position.copy(station.source);
     scene.add(sourceGlow);
     sourceGlows.push(sourceGlow);
-    const spotLight = new THREE.SpotLight('#ffffff', 0, 9, 0.28, 0.42, 1.4);
+    const spotLight = new THREE.SpotLight('#ff3028', 0, 9, 0.012, 0.08, 1.4);
     spotLight.position.copy(station.source);
     spotLight.target.position.copy(target);
     spotLight.castShadow = true;
@@ -277,7 +277,7 @@ try {
   const setIllumination = (index, level) => {
     illuminationLevels[index] = level;
     spotLights[index].intensity = 75 * level;
-    sourceGlows[index].intensity = 0.65 * level;
+    sourceGlows[index].intensity = 0.12 * level;
     lampLenses[index].emissiveIntensity = 1.8 * level;
     render();
   };
@@ -300,10 +300,10 @@ try {
   const illuminated = [false, false];
   const updateLightControls = () => {
     illuminated.forEach((isOn, index) => {
-      fireButtons[index].querySelector('small').textContent = `${isOn ? '關閉' : '開啟'}手電筒`;
+      fireButtons[index].querySelector('small').textContent = `${isOn ? '關閉' : '開啟'}雷射`;
       fireButtons[index].setAttribute('aria-pressed', String(isOn));
     });
-    status.textContent = `平面鏡${illuminated[0] ? '已開啟' : '已關閉'}；霧面紙${illuminated[1] ? '已開啟' : '已關閉'}。`;
+    status.textContent = `照向平面鏡的雷射${illuminated[0] ? '已開啟' : '已關閉'}；照向霧面紙的雷射${illuminated[1] ? '已開啟' : '已關閉'}。`;
   };
   const toggleLight = (index) => {
     cancelAnimationFrame(animationFrames[index]);
