@@ -197,7 +197,6 @@
     .data-cell small { display:block; color:var(--muted); }
     .data-cell strong { display:block; font-size:1.26rem; }
     .formula { margin:14px 0; padding:16px; border-radius:16px; background:#eaf3e9; text-align:center; color:#183c31; font-size:clamp(1.25rem,3vw,1.8rem); font-weight:800; letter-spacing:.02em; }
-    .speed-formula-context { margin:12px 0 0!important; color:var(--muted); }
     .speed-formula-panel { margin:14px 0 18px; padding:10px 16px 12px; border:1px solid #d6e4d5; border-radius:16px; background:#eaf3e9; }
     .speed-formula { display:flex; align-items:center; justify-content:center; gap:.28em; margin:0 0 5px; padding:8px 12px; background:transparent; font-size:clamp(1.5rem,4vw,2.15rem); }
     .speed-formula-meaning { display:grid; justify-items:center; gap:6px; margin:0; padding:12px 4px; border-block:1px solid #d6e4d5; color:var(--ink); text-align:center; font-size:.9rem; line-height:1.5; }
@@ -822,7 +821,6 @@
             <h2>波速、頻率和波長，怎麼連在一起？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>波形上下變化得越快，就代表它往前傳得越快嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>不一定。還要看一秒內有幾個完整的波，以及每個波有多長；兩者相乘，才是波每秒前進的距離。</p></div>
-            <p class="speed-formula-context">一個週期 <em>T</em> 內，波形前進一個波長 <em>λ</em>：</p>
             <div class="speed-formula-panel">
                 <div class="formula speed-formula" role="math" aria-label="波速等於頻率乘以波長，等於波長除以週期"><em>v</em> = <em>f</em> × <em>λ</em> = <span class="stacked-fraction" aria-hidden="true"><span><em>λ</em></span><span class="fraction-rule"></span><span><em>T</em></span></span></div>
               <div class="speed-formula-meaning">
