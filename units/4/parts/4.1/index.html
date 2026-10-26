@@ -647,7 +647,22 @@
     .workbench-viewport { overflow-x:auto; border:1px solid #b5c2b4; border-radius:15px; background:#d7c09d; scrollbar-color:#829b89 #eee8dc; }
     .workbench-scene { position:relative; width:100%; min-width:760px; aspect-ratio:1672 / 941; overflow:hidden; background:#9a7550 url("assets/specimen-workbench.png") center / 100% 100% no-repeat; }
     .workbench-book { position:absolute; z-index:3; left:1.6%; top:49%; width:20%; height:39%; padding:8px; border:1px solid #b9a783; border-radius:8px 13px 13px 8px; background:linear-gradient(90deg,#d1c09c 0 4%,#fff9e9 4% 49%,#d5c39e 49.5% 51%,#fff9e9 51% 96%,#b8a57e 96%); box-shadow:0 8px 18px #301f1240; transform:rotate(-2deg); }
-    .workbench-book h3 { margin:0 0 5px; color:#29483a; font-size:clamp(.65rem,1vw,.88rem); text-align:center; }
+    .book-title-row { display:flex; align-items:center; justify-content:center; gap:4px; min-height:22px; margin-bottom:4px; }
+    .workbench-book h3 { margin:0; color:#29483a; font-size:clamp(.65rem,1vw,.88rem); text-align:center; }
+    .book-expand { flex:none; padding:2px 5px; border:1px solid #a7b5a7; border-radius:5px; background:#edf3e9; color:#315844; font-size:clamp(.48rem,.68vw,.62rem); line-height:1.2; cursor:pointer; }
+    .book-reader { width:min(720px,calc(100vw - 32px)); max-width:none; max-height:min(80vh,760px); padding:18px; border:1px solid #bac9b7; border-radius:16px; background:#fffdf7; color:#344a3b; box-shadow:0 18px 60px #18251c66; }
+    .book-reader::backdrop { background:#16231dcc; backdrop-filter:blur(3px); }
+    .book-reader-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
+    .book-reader-header h3 { margin:0; font-size:1.15rem; }
+    .book-reader-close,.book-reader-nav button { min-height:38px; padding:6px 12px; border:1px solid #b8c8b9; border-radius:9px; background:#f2f5ee; color:#315844; cursor:pointer; }
+    .book-reader-pages { min-height:220px; }
+    .book-reader-pages .book-page { min-height:220px; font-size:1rem; line-height:1.55; }
+    .book-reader-pages .book-leaf { padding:18px; }
+    .book-reader-pages .book-page strong { margin-bottom:10px; font-size:1.05rem; }
+    .book-reader-pages .book-model { min-height:54px; margin-top:12px; }
+    .book-reader-pages .book-model i { width:15px; height:15px; }
+    .book-reader-nav { display:flex; justify-content:space-between; align-items:center; margin-top:12px; color:#5d6e62; }
+    .book-reader-nav span { font-size:.9rem; }
     .book-page-content { display:block; height:calc(100% - 22px); }
     .book-page { display:none; height:100%; min-width:0; grid-template-columns:1fr 1fr; border:1px solid #ece1c8; border-radius:5px; background:#fffdf4; color:#43564a; font-size:clamp(.52rem,.82vw,.72rem); line-height:1.35; box-shadow:inset 0 0 12px #77613c10; }
     .book-page.is-active { display:grid; }
@@ -669,13 +684,13 @@
     .cabinet-target[data-target="element"] { left:55%; top:25%; }
     .cabinet-target[data-target="compound"] { left:55%; top:42%; }
     .cabinet-target[data-target="mixture"] { left:82%; top:30%; }
-    .scene-sample { position:absolute; z-index:4; left:var(--sample-x); top:var(--sample-y); display:grid; grid-template-rows:minmax(0,1fr) 18px; justify-items:center; align-content:end; width:12%; height:19%; padding:0; border:0; background:transparent; cursor:grab; touch-action:none; transition:left .65s cubic-bezier(.2,.75,.25,1),top .65s cubic-bezier(.2,.75,.25,1),width .65s,height .65s,filter .2s,transform .2s; }
+    .scene-sample { position:absolute; z-index:4; left:var(--sample-x); top:var(--sample-y); display:grid; grid-template-rows:minmax(0,1fr) 18px; justify-items:center; align-content:end; width:11%; height:14%; padding:0; border:0; background:transparent; cursor:grab; touch-action:none; transition:left .65s cubic-bezier(.2,.75,.25,1),top .65s cubic-bezier(.2,.75,.25,1),width .65s,height .65s,filter .2s,transform .2s; }
     .scene-sample:active { cursor:grabbing; }
     .scene-sample.is-dragging { z-index:12; transform:scale(1.12); filter:drop-shadow(0 12px 12px #30211199); transition:none; cursor:grabbing; }
     .scene-sample:focus-visible { outline:3px solid #f7d375; outline-offset:2px; border-radius:10px; }
     .scene-sample.is-selected { z-index:8; transform:translateY(-7px) scale(1.08); filter:drop-shadow(0 7px 8px #30211180); }
     .scene-sample.is-placed { z-index:6; width:6%; height:9%; grid-template-rows:1fr; transform:none; filter:drop-shadow(0 3px 4px #24180d80); cursor:pointer; }
-    .scene-sample .sample-art { display:block; width:100%; height:100%; background-image:url("assets/specimen-samples-sprite.png"); background-repeat:no-repeat; background-size:300% 200%; background-position:var(--sprite-x) var(--sprite-y); filter:drop-shadow(0 5px 5px #2d21134a); }
+    .scene-sample .sample-art { display:block; width:100%; height:100%; background-image:url("assets/specimen-samples-sprite.png"); background-repeat:no-repeat; background-size:300% 300%; background-position:var(--sprite-x) var(--sprite-y); filter:drop-shadow(0 5px 5px #2d21134a); }
     .scene-sample.is-placed .sample-art { height:100%; }
     .scene-sample .sample-tag { display:block; max-width:100%; margin-top:1px; padding:0 5px; border:1px solid #cdbd9c; border-radius:2px; background:#f6edda; color:#584a34; box-shadow:0 2px 4px #28190d40; font-size:clamp(.48rem,.72vw,.62rem); line-height:16px; white-space:nowrap; }
     .scene-sample.is-placed .sample-tag { display:none; }
@@ -691,7 +706,7 @@
     .workbench-actions { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:5px; }
     .workbench-reset { min-height:36px; padding:6px 12px; border:1px solid #becbbf; border-radius:9px; background:#fffdf8; color:#40564b; cursor:pointer; }
     .workbench-hint { margin:0; color:#728077; font-size:.78rem; }
-    @media(max-width:680px) { .quiz-head { padding:18px 16px; } .quiz-body { padding:16px 12px 19px; } .workbench-intro { font-size:.9rem; } .scene-pan-hint { display:block; } .workbench-scene { min-width:820px; } .sample-info { grid-template-columns:1fr; gap:2px; padding:10px 12px; } .workbench-actions { align-items:flex-start; flex-direction:column; } }
+    @media(max-width:680px) { .book-reader { padding:12px; } .book-reader-pages { min-height:260px; } .book-reader-pages .book-page { min-height:260px; font-size:.88rem; } .book-reader-pages .book-leaf { padding:11px 8px; } .book-reader-pages .book-page strong { font-size:.94rem; } .quiz-head { padding:18px 16px; } .quiz-body { padding:16px 12px 19px; } .workbench-intro { font-size:.9rem; } .scene-pan-hint { display:block; } .workbench-scene { min-width:820px; } .sample-info { grid-template-columns:1fr; gap:2px; padding:10px 12px; } .workbench-actions { align-items:flex-start; flex-direction:column; } }
     .evidence-box { padding:13px 15px; border-left:4px solid var(--blue); border-radius:8px; background:#edf3f7; color:#34536a; }
     .check-options { display:grid; gap:8px; margin:12px 0; }
     .check-option { display:flex; gap:9px; align-items:flex-start; padding:11px 12px; border:1px solid #d9d4c8; border-radius:10px; background:#fff; cursor:pointer; }
@@ -1233,17 +1248,22 @@
           </figure>
         </section>
 
+        <dialog class="book-reader" id="book-reader" aria-labelledby="book-reader-title">
+          <div class="book-reader-header"><h3 id="book-reader-title">物質分類手冊</h3><button class="book-reader-close" type="button" id="book-reader-close">關閉</button></div>
+          <div class="book-reader-pages" id="book-reader-pages" aria-live="polite"></div>
+          <div class="book-reader-nav"><button type="button" class="book-reader-nav-button" id="reader-prev">上一頁</button><span id="reader-page-number">1 / 3</span><button type="button" class="book-reader-nav-button" id="reader-next">下一頁</button></div>
+        </dialog>
         <section class="unit-quiz" id="unit-quiz" aria-labelledby="unit-quiz-title">
           <header class="quiz-head"><div class="quiz-mark" aria-hidden="true">?</div><div><p class="quiz-kicker">單元小冊</p><h2 id="unit-quiz-title">翻閱線索，替樣本找到分類</h2><p class="quiz-subtitle">查看桌上的樣本，翻閱手冊找線索，再把樣本放進展示櫃。</p></div></header>
           <div class="quiz-body">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這些樣本要怎麼分類？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>翻翻手冊找線索，再替它們找到位置。</p></div>
-            <p class="workbench-intro">選一份樣本查看資料卡，翻閱旁邊的分類手冊，再選擇適合的展示位置。</p>
+            <p class="workbench-intro">點選樣本查看資料線索，再翻閱分類手冊；可將樣本拖進展示櫃，或先選樣本再點選分類位置。</p>
             <p class="scene-pan-hint">左右滑動桌面，查看所有樣本和展示櫃。</p>
             <div class="workbench-viewport" aria-label="可左右滑動查看桌面上的分類工作區">
               <div class="workbench-scene" id="classification-workbench" aria-label="木桌上有待分類的樣本，旁邊有物質分類手冊，後方是玻璃展示櫃">
                 <section class="workbench-book" aria-label="可翻頁的物質分類手冊">
-                  <h3>物質分類手冊</h3>
+                  <div class="book-title-row"><h3>物質分類手冊</h3><button class="book-expand" type="button" id="book-expand" aria-haspopup="dialog">放大閱讀</button></div>
                   <div class="book-page-content" aria-live="polite">
                     <div class="book-page is-active" data-book-page="0"><div class="book-leaf"><strong>先看有幾種物質</strong>只有一種物質，屬於純物質。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>多種物質混在一起</strong>樣本同時含有多種物質，屬於混合物。<div class="book-model book-model--mixed"><i></i><i></i><i></i><i></i></div></div></div>
                     <div class="book-page" data-book-page="1"><div class="book-leaf"><strong>元素</strong>純物質裡只有一種粒子。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>化合物</strong>每個粒子都由不同種類的小粒子固定結合。<div class="book-model book-model--compound"><i></i><i></i><i></i></div></div></div>
@@ -1254,18 +1274,21 @@
                 <span class="case-heading case-heading--pure">純物質</span><span class="case-heading case-heading--mixture">混合物</span>
                 <button class="cabinet-target" type="button" data-target="element" aria-label="將選取的樣本放入純物質展示櫃的元素層">元素</button>
                 <button class="cabinet-target" type="button" data-target="compound" aria-label="將選取的樣本放入純物質展示櫃的化合物層">化合物</button>
-                <button class="cabinet-target" type="button" data-target="mixture" aria-label="將選取的樣本放入混合物展示櫃">混合物</button>
-                <button class="scene-sample" type="button" data-sample="copper" aria-pressed="false" aria-label="選取桌上的樣本一，查看資料卡" style="--sample-x:30%;--sample-y:57%;--sprite-x:0%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 1</span></button>
-                <button class="scene-sample" type="button" data-sample="aluminum" aria-pressed="false" aria-label="選取桌上的樣本二，查看資料卡" style="--sample-x:43%;--sample-y:57%;--sprite-x:50%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 2</span></button>
-                <button class="scene-sample" type="button" data-sample="sugar" aria-pressed="false" aria-label="選取桌上的樣本三，查看資料卡" style="--sample-x:57%;--sample-y:57%;--sprite-x:100%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 3</span></button>
-                <button class="scene-sample" type="button" data-sample="air" aria-pressed="false" aria-label="選取桌上的樣本四，查看資料卡" style="--sample-x:29%;--sample-y:76%;--sprite-x:0%;--sprite-y:100%"><span class="sample-art"></span><span class="sample-tag">樣本 4</span></button>
-                <button class="scene-sample" type="button" data-sample="granite" aria-pressed="false" aria-label="選取桌上的樣本五，查看資料卡" style="--sample-x:43%;--sample-y:76%;--sprite-x:50%;--sprite-y:100%"><span class="sample-art"></span><span class="sample-tag">樣本 5</span></button>
-                <button class="scene-sample" type="button" data-sample="alloy" aria-pressed="false" aria-label="選取桌上的樣本六，查看資料卡" style="--sample-x:57%;--sample-y:76%;--sprite-x:100%;--sprite-y:100%"><span class="sample-art"></span><span class="sample-tag">樣本 6</span></button>
+                <button class="cabinet-target" type="button" data-target="mixture" aria-label="將選取的樣本放入混合物展示櫃">放入樣本</button>
+                <button class="scene-sample" type="button" data-sample="copper" aria-pressed="false" aria-label="選取桌上的樣本一，查看資料卡" style="--sample-x:28%;--sample-y:53%;--sprite-x:0%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 1</span></button>
+                <button class="scene-sample" type="button" data-sample="aluminum" aria-pressed="false" aria-label="選取桌上的樣本二，查看資料卡" style="--sample-x:42%;--sample-y:53%;--sprite-x:50%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 2</span></button>
+                <button class="scene-sample" type="button" data-sample="silver" aria-pressed="false" aria-label="選取桌上的樣本三，查看資料卡" style="--sample-x:56%;--sample-y:53%;--sprite-x:100%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 3</span></button>
+                <button class="scene-sample" type="button" data-sample="sugar" aria-pressed="false" aria-label="選取桌上的樣本四，查看資料卡" style="--sample-x:28%;--sample-y:68%;--sprite-x:0%;--sprite-y:50%"><span class="sample-art"></span><span class="sample-tag">樣本 4</span></button>
+                <button class="scene-sample" type="button" data-sample="salt" aria-pressed="false" aria-label="選取桌上的樣本五，查看資料卡" style="--sample-x:42%;--sample-y:68%;--sprite-x:50%;--sprite-y:50%"><span class="sample-art"></span><span class="sample-tag">樣本 5</span></button>
+                <button class="scene-sample" type="button" data-sample="chalk" aria-pressed="false" aria-label="選取桌上的樣本六，查看資料卡" style="--sample-x:56%;--sample-y:68%;--sprite-x:100%;--sprite-y:50%"><span class="sample-art"></span><span class="sample-tag">樣本 6</span></button>
+                <button class="scene-sample" type="button" data-sample="air" aria-pressed="false" aria-label="選取桌上的樣本七，查看資料卡" style="--sample-x:28%;--sample-y:82%;--sprite-x:0%;--sprite-y:100%"><span class="sample-art"></span><span class="sample-tag">樣本 7</span></button>
+                <button class="scene-sample" type="button" data-sample="granite" aria-pressed="false" aria-label="選取桌上的樣本八，查看資料卡" style="--sample-x:42%;--sample-y:82%;--sprite-x:50%;--sprite-y:100%"><span class="sample-art"></span><span class="sample-tag">樣本 8</span></button>
+                <button class="scene-sample" type="button" data-sample="alloy" aria-pressed="false" aria-label="選取桌上的樣本九，查看資料卡" style="--sample-x:56%;--sample-y:82%;--sprite-x:100%;--sprite-y:100%"><span class="sample-art"></span><span class="sample-tag">樣本 9</span></button>
               </div>
             </div>
             <div class="sample-info" id="sample-info" hidden aria-live="polite"><div><h3 id="sample-info-title">樣本資料卡</h3><p id="sample-clue"></p></div><span class="sample-state" id="sample-state">先翻閱手冊，再選擇展示位置。</span></div>
             <p class="workbench-feedback" id="workbench-feedback" role="status" aria-live="polite">先選一份樣本，查看它的資料線索。</p>
-            <div class="workbench-actions"><p class="workbench-hint" id="sort-progress">已分類 0 / 6 份樣本</p><button class="workbench-reset" type="button" id="reset-samples">重新整理樣本</button></div>
+            <div class="workbench-actions"><p class="workbench-hint" id="sort-progress">已分類 0 / 9 份樣本</p><button class="workbench-reset" type="button" id="reset-samples">重新整理樣本</button></div>
           </div>
         </section>
 
@@ -2356,10 +2379,13 @@
     const specimenRules={
       copper:{label:"樣本 1",clue:"資料卡：樣本只由一種物質構成，粒子模型中只有一種粒子。",category:"element",dest:"元素展示層"},
       aluminum:{label:"樣本 2",clue:"資料卡：樣本只由一種物質構成，粒子模型中只有一種粒子。",category:"element",dest:"元素展示層"},
-      sugar:{label:"樣本 3",clue:"資料卡：樣本只由一種物質構成；每個粒子都由兩種不同的小粒子固定結合。",category:"compound",dest:"化合物展示層"},
-      air:{label:"樣本 4",clue:"資料卡：樣本中同時含有數種不同的氣體。",category:"mixture",dest:"混合物展示櫃"},
-      granite:{label:"樣本 5",clue:"資料卡：這份岩石樣本含有石英、長石和雲母等不同礦物。",category:"mixture",dest:"混合物展示櫃"},
-      alloy:{label:"樣本 6",clue:"資料卡：這種金屬材料由兩種金屬物質組成。",category:"mixture",dest:"混合物展示櫃"}
+      silver:{label:"樣本 3",clue:"資料卡：樣本只由一種物質構成，粒子模型中只有一種粒子。",category:"element",dest:"元素展示層"},
+      sugar:{label:"樣本 4",clue:"資料卡：樣本只由一種物質構成；每個粒子都由不同種類的小粒子固定結合。",category:"compound",dest:"化合物展示層"},
+      salt:{label:"樣本 5",clue:"資料卡：樣本只由一種物質構成；每個粒子都由不同種類的小粒子固定結合。",category:"compound",dest:"化合物展示層"},
+      chalk:{label:"樣本 6",clue:"資料卡：樣本只由一種物質構成；每個粒子都由不同種類的小粒子固定結合。",category:"compound",dest:"化合物展示層"},
+      air:{label:"樣本 7",clue:"資料卡：樣本中同時含有數種不同的氣體。",category:"mixture",dest:"混合物展示櫃"},
+      granite:{label:"樣本 8",clue:"資料卡：這份岩石樣本含有石英、長石和雲母等不同礦物。",category:"mixture",dest:"混合物展示櫃"},
+      alloy:{label:"樣本 9",clue:"資料卡：這種金屬材料由兩種金屬物質組成。",category:"mixture",dest:"混合物展示櫃"}
     };
     const specimenButtons=[...document.querySelectorAll(".scene-sample")];
     const sampleInfo=document.getElementById("sample-info");
@@ -2390,7 +2416,7 @@
       sampleState.textContent="已放入："+data.dest;workbenchFeedback.dataset.kind="correct";
       workbenchFeedback.textContent="分類正確。你根據樣本資料和手冊線索，將"+data.label+"放入「"+data.dest+"」。";
       document.getElementById("sort-progress").textContent="已分類 "+sampleStatus.size+" / "+specimenRulesCount+" 份樣本";
-      if(sampleStatus.size===specimenRulesCount)workbenchFeedback.textContent="六份樣本都已完成分類。你是根據組成線索安排展品，不只看外觀。";
+      if(sampleStatus.size===specimenRulesCount)workbenchFeedback.textContent="九份樣本都已完成分類。你是根據組成線索安排展品，不只看外觀。";
       return true;
     };
     let dragState=null;let suppressSampleClick=false;
@@ -2427,8 +2453,15 @@
     }));
     let bookPage=0;const bookPages=[...document.querySelectorAll("[data-book-page]")];
     const showBookPage=next=>{bookPage=(next+bookPages.length)%bookPages.length;bookPages.forEach((page,index)=>page.classList.toggle("is-active",index===bookPage));document.getElementById("book-page-number").textContent=(bookPage+1)+" / "+bookPages.length;};
-    document.getElementById("book-prev").addEventListener("click",()=>showBookPage(bookPage-1));
-    document.getElementById("book-next").addEventListener("click",()=>showBookPage(bookPage+1));
+    const bookReader=document.getElementById("book-reader");
+    const readerPages=document.getElementById("book-reader-pages");
+    const showReaderPage=next=>{showBookPage(next);readerPages.replaceChildren(bookPages[bookPage].cloneNode(true));readerPages.firstElementChild.classList.add("is-active");document.getElementById("reader-page-number").textContent=(bookPage+1)+" / "+bookPages.length;};
+    document.getElementById("book-prev").addEventListener("click",()=>{showBookPage(bookPage-1);if(bookReader.open)showReaderPage(bookPage);});
+    document.getElementById("book-next").addEventListener("click",()=>{showBookPage(bookPage+1);if(bookReader.open)showReaderPage(bookPage);});
+    document.getElementById("book-expand").addEventListener("click",()=>{showReaderPage(bookPage);bookReader.showModal();});
+    document.getElementById("reader-prev").addEventListener("click",()=>showReaderPage(bookPage-1));
+    document.getElementById("reader-next").addEventListener("click",()=>showReaderPage(bookPage+1));
+    document.getElementById("book-reader-close").addEventListener("click",()=>bookReader.close());
     document.getElementById("reset-samples").addEventListener("click",()=>{
       sampleStatus.clear();selectedSpecimen=null;sampleInfo.hidden=true;specimenButtons.forEach(button=>{button.classList.remove("is-selected","is-placed");button.setAttribute("aria-pressed","false");button.removeAttribute("aria-label");button.style.left="";button.style.top="";});
       specimenButtons.forEach((button,index)=>button.setAttribute("aria-label","選取桌上的樣本"+(index+1)+"，查看資料卡"));
