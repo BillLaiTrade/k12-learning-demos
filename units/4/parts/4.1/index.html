@@ -39,15 +39,7 @@
     .route a.quiz-nav { margin-top:12px; border-top:1px solid var(--line); padding-top:17px; color:#8a6726; font-weight:750; }
     .route a.quiz-nav b { color:#946f2d; }
     .route a.quiz-nav[aria-current="step"] { background:#faf3e4; color:#795b25; box-shadow:inset 3px 0 #d9a74f; }
-    .route-hint { margin:12px 2px 0; color:#77837b; font-size:.75rem; }
     .route-progress { margin:0 0 10px; color:#425b50; font-size:.8rem; font-weight:800; }
-    .record-panel { margin-top:15px; padding:13px 12px; border-radius:12px; background:#f1ead6; }
-    .record-panel h2 { margin:0 0 8px; font-size:.9rem; }
-    .record-panel p { margin:0; color:#5d5a4d; font-size:.77rem; }
-    .record-list { display:grid; gap:5px; margin:0; }
-    .record-list div { display:grid; grid-template-columns:60px 1fr; gap:6px; font-size:.75rem; }
-    .record-list dt { color:#726a52; }
-    .record-list dd { margin:0; color:#394b43; }
     .cards { min-width:0; }
     .section-top { display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:2px 4px 12px; }
     .section-top h2 { margin:0; font-size:1.28rem; }
@@ -744,7 +736,6 @@
       .quiz-body { padding:17px 15px 19px; }
       .quiz-actions { align-items:stretch; flex-direction:column; }
       .quiz-actions .action-button { width:100%; }
-      .record-panel { display:none; }
       .lesson-card { grid-template-columns:1fr; gap:10px; padding:15px; }
       .card-side { display:grid; grid-template-columns:38px 1fr; align-items:center; column-gap:10px; border:0; border-bottom:1px solid #e5dfd1; padding:0 0 9px; }
       .card-number { grid-row:span 2; margin:0; }
@@ -820,16 +811,6 @@
           <a href="#s9"><b>08</b><span>純鐵和蒸餾水，為什麼分到不同類？</span></a>
           <a href="#unit-quiz" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
         </div>
-        <p class="route-hint">每段補上一項資料，最後用證據完成分類。</p>
-        <section class="record-panel" aria-labelledby="record-title">
-          <h2 id="record-title">雨水樣本紀錄</h2>
-          <dl class="record-list">
-            <div><dt>研究物體</dt><dd id="record-object">水桶</dd></div>
-            <div><dt>狀態</dt><dd id="record-state">待觀察</dd></div>
-            <div><dt>變化</dt><dd id="record-change">待整理</dd></div>
-            <div><dt>組成</dt><dd id="record-composition">待判斷</dd></div>
-          </dl>
-        </section>
       </nav>
 
       <div class="cards">
@@ -1335,19 +1316,6 @@
       const currentPart=document.getElementById("bucket-image-art").dataset.view;
       if(currentPart!=="overview"&&!event.target.closest("[data-bucket-part]"))selectBucketPart(currentPart);
     });
-
-    const recordValues = {
-      change: ["鏽層是不同於原金屬的新物質", "已分開記錄形成新物質的可能性與已發生的變化。"],
-      composition: ["待依成分資料判斷", "已建立純物質／混合物的分類依據。"]
-    };
-    const recordRows = { change:"record-change", composition:"record-composition" };
-    document.querySelectorAll("[data-record]").forEach(button => button.addEventListener("click", () => {
-      const key = button.dataset.record;
-      document.getElementById(recordRows[key]).textContent = recordValues[key][0];
-      const card = button.closest(".lesson-card");
-      const note = card.querySelector(".live-note");
-      note.textContent = recordValues[key][1];
-    }));
 
     const rustTimeline=document.getElementById("rust-timeline"),rustBucketScene=document.getElementById("rust-bucket-scene"),rustRevealPaths=document.getElementById("rust-reveal-paths"),rustFinishReveal=document.getElementById("rust-finish-reveal"),rustProgress=document.getElementById("rust-progress"),rustPlay=document.getElementById("rust-play"),rustStatus=document.getElementById("rust-stage-status"),rustMagnifierScene=document.getElementById("rust-magnifier-scene"),rustMagnifierLens=document.getElementById("rust-magnifier-lens"),rustMagnifierHint=document.getElementById("rust-magnifier-hint");
     const rustStages=["桶身尚未出現鏽層。","鏽層在桶身多處不規則地逐步形成。","桶身表面已形成較大範圍的鏽層。"];
