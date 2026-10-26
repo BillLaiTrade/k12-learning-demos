@@ -455,9 +455,13 @@
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>波源完成一次上下振動，會送出一個起伏向右傳播的單次波；持續振動則形成連續波。</p></div>
             <p>波是振動或擾動的傳播，能把能量由一處傳到另一處。繩子一端振動後，變化沿著繩子傳開。</p><figure class="visual">
               <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="繩波由左側波源向右傳播；可播放單次起伏，或切換連續波">
-                <defs><marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
+                <defs>
+                  <marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
+                  <marker id="arrow-source-motion" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#748b7e"/></marker>
+                </defs>
                 <path class="pulse-path rope-underlay" d="M38 142H722"/>
-                <path d="M38 116V87M32 94L38 86L44 94M38 139V168M32 161L38 169L44 161" fill="none" stroke="#748b7e" stroke-width="2"/>
+                <path d="M24 98V186" fill="none" stroke="#748b7e" stroke-width="1.8" marker-start="url(#arrow-source-motion)" marker-end="url(#arrow-source-motion)"/>
+                <circle cx="38" cy="142" r="6.5" fill="#df8b41" stroke="#fffefa" stroke-width="2.5"/>
                 <text x="84" y="45">波源上下振動</text>
                 <path d="M130 228H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
                 <text x="345" y="253" text-anchor="middle">波形傳播方向</text>
