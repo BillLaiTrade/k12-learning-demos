@@ -54,14 +54,15 @@ try {
   scene.add(fillLight);
 
   const standard = (color, options = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.68, ...options });
+  const surfaceBaseColor = '#deded8';
   const mats = {
     tableTop: new THREE.MeshPhysicalMaterial({ color: '#c4a57c', roughness: 0.48, metalness: 0.015, clearcoat: 0.16, clearcoatRoughness: 0.58 }),
     tableEdge: standard('#67503b', { roughness: 0.58 }),
     source: standard('#273330', { metalness: 0.32, roughness: 0.38 }),
     frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
-    mirror: new THREE.MeshPhysicalMaterial({ color: '#ffffff', metalness: 0.96, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0.025 }),
+    mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.96, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0.025 }),
     mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
-    paper: new THREE.MeshStandardMaterial({ color: '#f5f1e6', roughness: 0.9, side: THREE.DoubleSide }),
+    paper: new THREE.MeshStandardMaterial({ color: surfaceBaseColor, roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
   };
 
@@ -117,7 +118,7 @@ try {
     addBox(scene, [1.7, 0.035, 1.35], [center.x, 0.072, center.z], accent);
   };
   stationBase(mirrorCenter, mats.mirrorBacking);
-  stationBase(paperCenter, mats.tableEdge);
+  stationBase(paperCenter, mats.mirrorBacking);
   // A flat polished mirror tile and a visually flat sheet of matte paper.
   const mirrorTile = addBox(scene, [1.55, 0.025, 1.18], [mirrorCenter.x, 0.102, mirrorCenter.z], mats.mirror);
 
@@ -125,12 +126,12 @@ try {
   roughTextureCanvas.width = 256;
   roughTextureCanvas.height = 256;
   const roughContext = roughTextureCanvas.getContext('2d');
-  roughContext.fillStyle = '#8a806e';
+  roughContext.fillStyle = surfaceBaseColor;
   roughContext.fillRect(0, 0, 256, 256);
   let seed = 19;
   const random = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
   for (let i = 0; i < 1800; i += 1) {
-    const shade = random() > 0.52 ? '255,245,220' : '41,48,43';
+    const shade = random() > 0.52 ? '255,255,255' : '38,42,40';
     roughContext.fillStyle = `rgba(${shade},${0.035 + random() * 0.11})`;
     const size = 1 + random() * 4;
     roughContext.fillRect(random() * 256, random() * 256, size, size);
@@ -139,7 +140,7 @@ try {
   roughTexture.colorSpace = THREE.SRGBColorSpace;
   roughTexture.wrapS = roughTexture.wrapT = THREE.RepeatWrapping;
   roughTexture.repeat.set(2, 1.4);
-  const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: '#f3eee1', roughness: 0.98, metalness: 0, side: THREE.DoubleSide });
+  const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: surfaceBaseColor, roughness: 0.98, metalness: 0, side: THREE.DoubleSide });
   addBox(scene, [1.55, 0.018, 1.18], [paperCenter.x, 0.102, paperCenter.z], roughMaterial, false, true);
   // Aim the initial view along the mirror's specular direction. The second
   // lamp uses the same incident direction, so only the surface changes.
