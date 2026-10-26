@@ -150,11 +150,11 @@ try {
   roughTexture.repeat.set(2, 1.4);
   const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: surfaceBaseColor, roughness: 0.98, metalness: 0, side: THREE.DoubleSide });
   addBox(scene, [1.55, 0.018, 1.18], [paperCenter.x, 0.102, paperCenter.z], roughMaterial, false, true);
-  // Start slightly outside the mirror's specular direction so the matte paper
-  // remains visible while the mirror sends its reflected light away from view.
-  // The second lamp uses the same incident direction, so only the surface changes.
+  // Aim the plane mirror's reflected beam toward the initial observer so the
+  // specular reflection is clear as soon as the left flashlight is switched on.
+  // The second lamp keeps the same incident direction to isolate surface texture.
   const initialViewDirection = camera.position.clone().sub(mirrorCenter).normalize();
-  const mirrorReflectionDirection = initialViewDirection.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.degToRad(20));
+  const mirrorReflectionDirection = initialViewDirection.clone();
   const incidentTowardMirror = mirrorReflectionDirection.clone().reflect(new THREE.Vector3(0, 1, 0));
   const mirrorSource = mirrorCenter.clone().addScaledVector(incidentTowardMirror, -3.2);
   const sourceOffset = mirrorSource.clone().sub(mirrorCenter);
