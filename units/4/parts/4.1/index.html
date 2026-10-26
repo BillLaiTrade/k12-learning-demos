@@ -2378,13 +2378,15 @@
     const workbenchFeedback=document.getElementById("workbench-feedback");
     const sampleStatus=new Map();
     let selectedSpecimen=null;
-    const selectSpecimen=button=>{
+    const selectSpecimen=(button,openManual=false)=>{
       selectedSpecimen=button;
       specimenButtons.forEach(item=>{item.classList.toggle("is-selected",item===button);item.setAttribute("aria-pressed",String(item===button));});
       const data=specimenRules[button.dataset.sample];
       sampleInfo.hidden=false;sampleInfoTitle.textContent="已選取"+data.label;sampleClue.textContent=data.clue;
       sampleState.textContent=sampleStatus.has(button.dataset.sample)?"目前位置："+specimenRules[sampleStatus.get(button.dataset.sample)].dest:"先翻閱手冊，再選擇展示位置。";
       workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="到手冊找相同編號，根據性質和粒子組成判斷分類。";
+      const linkedPage=specimenButtons.indexOf(button);
+      if(linkedPage>=0){showReaderPage(linkedPage);if(openManual&&!bookReader.open)bookReader.showModal();}
     };
     const specimenRulesCount=Object.keys(specimenRules).length;
     const cabinetTargets=[...document.querySelectorAll(".cabinet-target")];
@@ -2405,7 +2407,7 @@
     };
     let dragState=null;let suppressSampleClick=false;
     specimenButtons.forEach(button=>{
-      button.addEventListener("click",()=>{if(!suppressSampleClick)selectSpecimen(button);});
+      button.addEventListener("click",()=>{if(!suppressSampleClick)selectSpecimen(button,true);});
       button.addEventListener("pointerdown",event=>{
         if(event.button!==0)return;
         const sceneRect=document.getElementById("classification-workbench").getBoundingClientRect();
