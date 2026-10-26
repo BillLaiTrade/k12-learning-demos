@@ -62,19 +62,19 @@
             <p>小葵把光照向鏡面，再換成一般表面。留意反射光的方向如何呈現。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光落在白紙上了；換成一般表面，反射方向也一樣嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>好，先固定光源和照射位置，再看看反射光落在哪些方向。</p></div>
-            <p class="prompt">按下按鈕發出光，觀察兩種表面附近的受光情況。</p>
+            <p class="prompt">兩座實驗台使用相同的光線角度；點亮後直接比較反射光路。</p>
             <div class="reflection-controls">
-              <button class="reflection-fire" id="reflection-fire" type="button" aria-describedby="reflection-hint">發出光</button>
-              <p class="reflection-hint" id="reflection-hint">拖曳場景可轉動視角；點手電筒或按下按鈕，都能發出光。</p>
+              <button class="reflection-fire" id="reflection-fire" type="button" aria-describedby="reflection-hint">同時照亮兩區</button>
+              <p class="reflection-hint" id="reflection-hint">左右各是一座獨立實驗台；點任一手電筒或按鈕可同時發光，拖曳可轉動視角。</p>
             </div>
             <figure class="reflection-stage">
-              <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="3D 光學實驗桌：上方的平整鏡面將反射光集中到一張白卡，下方的粗糙表面使光散向周圍多張白卡。按下發出光可觀看光束和亮斑出現。" aria-describedby="reflection-status reflection-note"></canvas>
+              <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="左右分開的兩座 3D 反射實驗台：左邊是平面鏡，右邊是外觀平整的霧面紙；各有一支手電筒以相同角度照射。點亮後可直接比較一束集中反射光和向多方向散射的光路。" aria-describedby="reflection-status reflection-note"></canvas>
               <p class="reflection-fallback" id="reflection-fallback" hidden>這個 3D 實驗場景無法在目前裝置顯示；你仍可閱讀下方的觀察說明。</p>
-              <div class="reflection-stage-labels" aria-hidden="true"><span><i class="reflection-dot-smooth"></i>平滑表面 → 一束明亮反射光</span><span><i class="reflection-dot-rough"></i>粗糙表面 → 多方向散射</span></div>
-              <figcaption class="visual-caption">明黃窄光束落在一張卡；橘色箭頭是多方向散射的代表路徑，周圍多張卡都出現受光點。</figcaption>
+              <div class="reflection-stage-labels" aria-hidden="true"><span><i class="reflection-dot-smooth"></i>平面鏡實驗區・一束集中反射光</span><span><i class="reflection-dot-rough"></i>霧面紙實驗區・多方向散射</span></div>
+              <figcaption class="visual-caption">兩個實驗區分開呈現，不放接光屏；橘色箭頭標出霧面紙反射光的代表方向。</figcaption>
             </figure>
-            <p class="reflection-status" id="reflection-status" aria-live="polite">點亮後比較兩種表面的反射光：是一束集中，還是散向多處？</p>
-            <p class="reflection-note" id="reflection-note">空氣中的光束平常不易看見；場景中的微塵用來顯示光路，亮斑則依反射方向呈現。</p>
+            <p class="reflection-status" id="reflection-status" aria-live="polite">先觀察兩個分開的實驗區；準備好後同時照亮，直接看反射光的方向差異。</p>
+            <p class="reflection-note" id="reflection-note">微塵讓空氣中的入射光束較容易看見；橘色箭頭是微觀表面反射方向的代表示意。</p>
             <div class="fact"><p>光照到表面後會改變方向。表面不同，反射光的分布也可能不同；先記住觀察到的差異，接著追蹤一束光的路徑。</p></div>
           </div>
         </section>
@@ -248,6 +248,6 @@
     const answerButtons=[...document.querySelectorAll("[data-answer]")];answerButtons.forEach(function(button){button.addEventListener("click",function(){answerButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===button));item.classList.remove("correct","incorrect")});button.classList.add(button.dataset.answer==="correct"?"correct":"incorrect")})});document.querySelector("#check-answer").addEventListener("click",function(){const selected=answerButtons.find(function(button){return button.getAttribute("aria-pressed")==="true"}),feedback=document.querySelector("#check-feedback");if(!selected){feedback.dataset.state="try";feedback.textContent="先選一段完整說明，再用角度量法和像的位置觀察來檢查。";return}if(selected.dataset.answer==="correct"){feedback.dataset.state="good";feedback.textContent="這段說明符合觀察：反射角和入射角都從法線量起，移動物體時鏡中像的位置也會改變。"}else{feedback.dataset.state="try";feedback.textContent="再想一想：兩個角的基準線是法線；移動物體時，鏡中像相對鏡面的位置也會變化。"}});document.querySelector("#reset-answer").addEventListener("click",function(){answerButtons.forEach(function(button){button.setAttribute("aria-pressed","false");button.classList.remove("correct","incorrect")});const feedback=document.querySelector("#check-feedback");feedback.removeAttribute("data-state");feedback.textContent="選好後再確認，回想證據：角度從哪條基準線量起？改變物體位置後觀察到什麼？"});
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
-  <script type="module" src="assets/reflection-3d.js?v=4"></script>
+  <script type="module" src="assets/reflection-3d.js?v=5"></script>
 </body>
 </html>
