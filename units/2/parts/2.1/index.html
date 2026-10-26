@@ -422,7 +422,6 @@
           <a href="#card-06"><b>06</b><span>一個完整的波形，是怎麼形成的？</span></a>
           <a href="#card-07"><b>07</b><span>頻率和週期，如何互相影響？</span></a>
           <a href="#card-08"><b>08</b><span>波速、頻率和波長，怎麼連在一起？</span></a>
-          <a href="#earthquake-task" class="task-nav"><b>任務</b><span>南投觀測站防災演練</span></a>
           <a href="#unit-quiz" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
         </div>
       </nav>
@@ -992,10 +991,10 @@
             </section>
           </div>
         </section>
-        <section class="field-task" id="earthquake-task" aria-labelledby="field-task-title">
+        <section class="field-task" id="unit-quiz" aria-labelledby="unit-quiz-title">
           <header class="field-task-head">
-            <div><p class="field-task-kicker">地震觀測站｜防災演練</p><h2 id="field-task-title">南投觀測站還要多久會感受到震動？</h2><p class="field-task-subtitle">從波形和刻度判讀資料，估算 P 波與 S 波抵達的時間。</p></div>
-            <span class="drill-badge">教學演練</span>
+            <div><p class="field-task-kicker">單元小測｜防災演練</p><h2 id="unit-quiz-title">南投觀測站還要多久會感受到震動？</h2><p class="field-task-subtitle">從波形和刻度判讀資料，估算 P 波與 S 波抵達的時間。</p></div>
+            <span class="drill-badge">情境題</span>
           </header>
           <div class="field-task-grid">
             <section class="field-panel field-map-panel" aria-labelledby="field-map-title">
@@ -1042,7 +1041,7 @@
             </section>
           </div>
           <form class="field-response" id="field-response-form" novalidate>
-            <div class="field-response-head"><h3>值班任務</h3><p>估算兩種波抵達觀測站的時間，判斷較強震動到來前還有幾秒。</p></div>
+            <div class="field-response-head"><h3>作答區</h3><p>估算兩種波抵達觀測站的時間，判斷較強震動到來前還有幾秒。</p></div>
             <div class="field-answer-grid">
               <div class="field-answer"><label for="field-p-arrival">P 波抵達時間（秒）</label><input id="field-p-arrival" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入秒數" required></div>
               <div class="field-answer"><label for="field-s-arrival">S 波抵達時間（秒）</label><input id="field-s-arrival" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入秒數" required></div>
@@ -1052,42 +1051,7 @@
             <div class="field-feedback" id="field-feedback" role="status" aria-live="polite" hidden></div>
           </form>
         </section>
-        <section class="unit-quiz" id="unit-quiz" aria-labelledby="unit-quiz-title">
-          <header class="quiz-head">
-            <div class="quiz-mark" aria-hidden="true">?</div>
-            <div><p class="quiz-kicker">單元小測</p><h2 id="unit-quiz-title">讀懂這段波，可以解釋什麼？</h2><p>運用波形判讀和波速關係，整合本單元學到的概念。</p></div>
-          </header>
-          <div class="quiz-body">
-            <p class="quiz-lead">繩波向右傳，頻率是 2 Hz；相鄰波峰距離是 1.5 m，振幅是 0.5 m。請觀察圖示並回答問題。</p>
-            <figure class="visual quiz-measurement-figure">
-              <svg viewBox="0 0 720 250" role="img" aria-label="繩波向右傳；橘色標記代表同一繩點；振幅為零點五公尺，波長為一點五公尺">
-                <defs><pattern id="rope-fallback-9" patternUnits="userSpaceOnUse" width="173" height="14"><image href="assets/wave-rope-strip.png" width="173" height="14" preserveAspectRatio="none"/></pattern><marker id="arrow-check" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#176b53"/></marker><marker id="arrow-check-measure" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
-                <path d="M35 120H685" class="equilibrium"/><path class="summary-wave-path rope-underlay" d="M35 120 C75 120 90 60 135 60 S195 180 255 180 S315 60 375 60 S435 180 495 180 S555 60 615 60 S660 120 685 120"/><path class="rope-fallback" stroke="url(#rope-fallback-9)" aria-hidden="true" d="M35 120 C75 120 90 60 135 60 S195 180 255 180 S315 60 375 60 S435 180 495 180 S555 60 615 60 S660 120 685 120"/><g class="rope-texture-layer" aria-hidden="true"></g>
-                <circle class="summary-rope-marker marker" cx="255" cy="180" r="9"/><path d="M255 192V221" stroke="#df8b41" stroke-width="2" stroke-dasharray="4 4"/><text x="255" y="242" text-anchor="middle">固定繩點</text>
-                <path d="M135 80V118" stroke="#bc612b" stroke-width="2" marker-start="url(#arrow-check-measure)" marker-end="url(#arrow-check-measure)"/><text x="149" y="105">A = 0.5 m</text>
-                <path d="M135 38V22M375 38V22" stroke="#84988a" stroke-width="1.5"/><path d="M139 28H371" class="measure" marker-start="url(#arrow-check-measure)" marker-end="url(#arrow-check-measure)"/><text x="255" y="17" text-anchor="middle">λ = 1.5 m</text>
-                <path d="M420 220H640" class="motion-arrow" marker-end="url(#arrow-check)"/><text x="530" y="244" text-anchor="middle">波形向右傳</text>
-              </svg>
-            </figure>
-            <div class="quiz-question">
-              <p class="quiz-prompt">請完成兩項回答</p>
-              <h3>繩上的橘點如何移動？這列波的波速是多少？</h3>
-              <div class="assessment-row">
-                <label for="marker-motion">橘色繩點的運動
-                  <select id="marker-motion"><option value="">選一項</option><option value="local">在原位置附近上下振動</option><option value="travel">跟著波峰向右移到另一端</option></select>
-                </label>
-                <label for="answer-speed">波速 v（m/s）
-                  <input id="answer-speed" type="number" min="0" step="0.1" inputmode="decimal" placeholder="輸入數值">
-                </label>
-                <button class="action" id="check-answer" type="button">檢查答案</button>
-              </div>
-              <span class="quiz-helper">先完成兩項回答，再查看回饋或展開完整解析。</span>
-              <div class="quiz-feedback" id="answer-feedback" role="status" aria-live="polite" hidden></div>
-            </div>
-            <details class="answer"><summary>查看完整解析</summary><p>橘點是繩上的同一小段介質，只在原位置附近上下振動；波峰和能量向右傳。圖中振幅 <em>A = 0.5 m</em>、波長 <em>λ = 1.5 m</em>；波速 <em>v = f × λ = 2 Hz × 1.5 m = 3 m/s</em>。</p></details>
-            <p class="next-hint">下一個問題：空氣中的聲音如何傳到耳朵？</p>
-          </div>
-        </section>
+
 
 
 
@@ -1633,32 +1597,7 @@
         drawGeneratedWave(0);drawProgress(0);updateReadouts();
       }
 
-      const summaryWavePath=document.querySelector(".summary-wave-path");
-      const summaryMarker=document.querySelector(".summary-rope-marker");
-      const animateSummaryWave=(time)=>{
-        const t=reducedMotion?0:time/1000;
-        const x0=135;const periodPx=240;const amplitude=60;let d="M 35 120";
-        for(let x=35;x<=685;x+=4){const y=120-amplitude*Math.cos((2*Math.PI*(x-x0)/periodPx)-t*1.8);d+=` L ${x} ${y.toFixed(2)}`;}
-        summaryWavePath.setAttribute("d",d);renderRopeTexture(summaryWavePath);
-        const markerY=120-amplitude*Math.cos((2*Math.PI*(255-x0)/periodPx)-t*1.8);
-        summaryMarker.setAttribute("cy",String(markerY));
-        if(!reducedMotion) window.requestAnimationFrame(animateSummaryWave);
-      };
-      if(reducedMotion) animateSummaryWave(0); else window.requestAnimationFrame(animateSummaryWave);
-
-      const checkAnswer=document.querySelector("#check-answer");
-      checkAnswer.addEventListener("click",()=>{
-        const motion=document.querySelector("#marker-motion").value;
-        const speedText=document.querySelector("#answer-speed").value.trim();
-        const speed=speedText===""?Number.NaN:Number(speedText);
-        const feedback=document.querySelector("#answer-feedback");
-        if(!motion||!Number.isFinite(speed)){feedback.hidden=false;feedback.dataset.state="try";feedback.textContent="請選擇橘點的運動方式並輸入波速，再查看完整解析。";return;}
-        feedback.hidden=false;
-        if(motion==="local"&&Math.abs(speed-3)<0.01){feedback.dataset.state="good";feedback.textContent="說明完整：繩點在原位置附近上下振動，波形向右傳；v = 2 Hz × 1.5 m = 3 m/s。";}
-        else {feedback.dataset.state="try";feedback.textContent="再對照圖示：橘點留在繩上的同一位置附近振動；用 v = f × λ 計算波速。完整解釋已列在下方。";}
-      });
-
-      const routeLinks=[...document.querySelectorAll(".route a[href^='#card-'], .route a[href='#earthquake-task'], .route a[href='#unit-quiz']")];
+      const routeLinks=[...document.querySelectorAll(".route a[href^='#card-'], .route a[href='#unit-quiz']")];
       const cards=routeLinks.map(link=>document.querySelector(link.getAttribute("href"))).filter(Boolean);
       const markActive=id=>routeLinks.forEach(link=>{if(link.hash===`#${id}`){link.setAttribute("aria-current","step");link.scrollIntoView({block:"nearest",inline:"nearest"});}else link.removeAttribute("aria-current");});
       if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)markActive(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});cards.forEach(card=>observer.observe(card));}
