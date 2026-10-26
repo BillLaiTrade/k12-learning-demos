@@ -267,16 +267,16 @@ try {
     const clickedFlashlight = event.type === 'pointerup' && !pointerDrag.moved ? flashlightIndexAtPointer(event) : -1;
     pointerDrag = null;
     canvas.classList.remove('is-dragging');
-    if (clickedFlashlight >= 0) fireLight(clickedFlashlight);
+    if (clickedFlashlight >= 0) toggleLight(clickedFlashlight);
   };
   canvas.addEventListener('pointerup', endPointerDrag);
   canvas.addEventListener('pointercancel', endPointerDrag);
-  const setIllumination = (index, progress) => {
-    const eased = 1 - Math.pow(1 - progress, 3);
-    spotLights[index].intensity = 75 * eased;
-    sourceGlows[index].intensity = 0.65 * eased;
-    lampLenses[index].emissiveIntensity = 1.8 * eased;
-    if (progress >= 1) refreshMirrorEnvironment();
+  const illuminationLevels = [0, 0];
+  const setIllumination = (index, level) => {
+    illuminationLevels[index] = level;
+    spotLights[index].intensity = 75 * level;
+    sourceGlows[index].intensity = 0.65 * level;
+    lampLenses[index].emissiveIntensity = 1.8 * level;
     render();
   };
 
@@ -296,29 +296,36 @@ try {
 
   const animationFrames = [0, 0];
   const illuminated = [false, false];
-  const fireLight = (index) => {
+  const surfaceNames = ['平面鏡', '霧面紙'];
+  const updateLightControls = () => {
+    illuminated.forEach((isOn, index) => {
+      fireButtons[index].querySelector('small').textContent = `${isOn ? '關閉' : '開啟'}${surfaceNames[index]}`;
+      fireButtons[index].setAttribute('aria-pressed', String(isOn));
+    });
+    status.textContent = `平面鏡${illuminated[0] ? '已開啟' : '已關閉'}；霧面紙${illuminated[1] ? '已開啟' : '已關閉'}。`;
+  };
+  const toggleLight = (index) => {
     cancelAnimationFrame(animationFrames[index]);
-    illuminated[index] = true;
-    fireButtons[index].querySelector('small').textContent = '再照一次';
-    fireButtons[index].setAttribute('aria-pressed', 'true');
-    const chosen = index === 0 ? '已亮：平面鏡。' : '已亮：霧面紙。';
-    const other = illuminated[1 - index]
-      ? (index === 0 ? '霧面紙也亮。' : '平面鏡也亮。')
-      : (index === 0 ? '霧面紙未亮。' : '平面鏡未亮。');
-    status.textContent = `${chosen} ${other}`;
+    illuminated[index] = !illuminated[index];
+    const startLevel = illuminationLevels[index];
+    const targetLevel = illuminated[index] ? 1 : 0;
+    updateLightControls();
     if (reducedMotion.matches) {
-      setIllumination(index, 1);
+      setIllumination(index, targetLevel);
+      refreshMirrorEnvironment();
       return;
     }
     const startedAt = performance.now();
     const animate = (now) => {
       const progress = THREE.MathUtils.clamp((now - startedAt) / duration, 0, 1);
-      setIllumination(index, progress);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setIllumination(index, startLevel + (targetLevel - startLevel) * eased);
       if (progress < 1) animationFrames[index] = requestAnimationFrame(animate);
+      else refreshMirrorEnvironment();
     };
     animationFrames[index] = requestAnimationFrame(animate);
   };
-  fireButtons.forEach((button, index) => button.addEventListener('click', () => fireLight(index)));
+  fireButtons.forEach((button, index) => button.addEventListener('click', () => toggleLight(index)));
 
   window.addEventListener('resize', resize);
   window.addEventListener('pagehide', () => {
