@@ -313,10 +313,11 @@
     .field-distance { margin:0; padding:9px 12px; background:#fff3df; color:#745027; text-align:center; font-size:.88rem; font-weight:800; }
     .field-signal-panel { padding-bottom:8px; background:#153d33; color:#f4f7ef; }
     .field-signal-panel .field-panel-heading { background:#193f35; color:#f4f7ef; border-bottom:1px solid #426d5e; }
-    .signal-row { padding:10px 13px 8px; }
-    .signal-row + .signal-row { border-top:1px solid #426d5e; }
+    .signal-row { margin:10px 12px; padding:10px 12px 8px; border:1px solid #438b73; border-left:4px solid #81d8b5; border-radius:11px; background:#1b4b40; }
+    .signal-row-s { border-color:#9c7849; border-left-color:#efbd74; background:#39463b; }
     .signal-meta { display:flex; flex-wrap:wrap; align-items:center; gap:6px 9px; margin-bottom:4px; }
-    .signal-type { min-width:76px; padding:4px 8px; border-radius:7px; background:#285b49; color:#f6faf2; font-weight:800; }
+    .signal-type { min-width:76px; padding:4px 8px; border-radius:7px; background:#d6f0e4; color:#145d47; font-weight:800; }
+    .signal-row-s .signal-type { background:#f3ddb8; color:#69451f; }
     .signal-value { padding:4px 8px; border:1px solid #638b79; border-radius:7px; color:#f3f6ea; font-size:.86rem; }
     .signal-direction { margin-left:auto; color:#b8c9be; font-size:.75rem; text-align:right; }
     .signal-svg { display:block; width:100%; height:auto; }
@@ -325,6 +326,9 @@
     .signal-axis,.signal-tick { stroke:#afc7b7; stroke-width:1.2; }
     .signal-particle { fill:#d9edde; }
     .signal-pulse { fill:none; stroke:#92e69f; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+    .signal-row-p .signal-particle { fill:#a6ead3; }
+    .signal-row-s .signal-pulse { stroke:#f2c277; }
+    .signal-row-s .signal-baseline { stroke:#b59c70; }
     .signal-baseline { stroke:#729281; stroke-width:1; stroke-dasharray:5 5; }
     .signal-hint { margin:0; padding:7px 13px 5px; color:#d8e7dc; font-size:.83rem; }
     .signal-hint strong { color:#f2d79d; }
@@ -1024,7 +1028,7 @@
             </section>
             <section class="field-panel field-signal-panel" aria-labelledby="field-signal-title">
               <h3 class="field-panel-heading" id="field-signal-title">地震波形監測</h3>
-              <div class="signal-row">
+              <div class="signal-row signal-row-p">
                 <div class="signal-meta"><span class="signal-type">P 波｜縱波</span><span class="signal-value">頻率 f = 2 Hz</span><span class="signal-direction">介質振動方向與波傳方向平行</span></div>
                 <svg class="signal-svg" viewBox="0 0 460 126" role="img" aria-label="P波縱波的空間示意；距離刻度由0到6公里，密集與疏散位置重複出現">
                   <g id="field-p-wave-particles" aria-hidden="true"></g>
@@ -1034,7 +1038,7 @@
                   <g><text x="30" y="116" text-anchor="middle">0 km</text><text x="230" y="116" text-anchor="middle">3 km</text><text x="430" y="116" text-anchor="middle">6 km</text></g>
                 </svg>
               </div>
-              <div class="signal-row">
+              <div class="signal-row signal-row-s">
                 <div class="signal-meta"><span class="signal-type">S 波｜橫波</span><span class="signal-value">週期 T = 1 s</span><span class="signal-direction">介質振動方向與波傳方向垂直</span></div>
                 <svg class="signal-svg" viewBox="0 0 460 150" role="img" aria-label="S波橫波的空間示意；距離刻度由0到8公里，曲線重複起伏">
                   <path class="signal-baseline" d="M30 56H430"/>
