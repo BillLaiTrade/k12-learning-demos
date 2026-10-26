@@ -62,7 +62,7 @@
   </header>
   <main class="shell">
     <div class="section-top">
-      <div><h2>沿著探索路線，一步步認識光的反射</h2><progress id="lesson-progress" max="9" value="1" aria-label="學習路線閱讀進度"></progress></div>
+      <div><h2>沿著探索路線，一步步認識光的反射</h2><progress id="lesson-progress" max="7" value="1" aria-label="學習路線閱讀進度"></progress></div>
       <span class="progress-copy" id="progress-copy">正在探索第 1 段</span>
     </div>
     <div class="lesson-layout">
@@ -70,14 +70,12 @@
         <p class="route-label">本段探索路線</p>
         <div class="route-inner">
           <a href="#card-01" aria-current="step"><span class="route-number">01</span><span>同一束光照到不同表面，反射方向一樣嗎？</span></a>
-          <a href="#card-02"><span class="route-number">02</span><span>要說明光從哪裡來、往哪裡去，可以怎麼畫？</span></a>
-          <a href="#card-03"><span class="route-number">03</span><span>轉動入射光線，反射光會怎麼跟著改變？</span></a>
-          <a href="#card-04"><span class="route-number">04</span><span>多量幾次，兩個角度的關係還一樣嗎？</span></a>
-          <a href="#card-05"><span class="route-number">05</span><span>鏡中的像看起來在哪一側？</span></a>
-          <a href="#card-06"><span class="route-number">06</span><span>只移動物體，像的位置怎麼變？</span></a>
-          <a href="#card-07"><span class="route-number">07</span><span>鏡面彎起來，反射方向還會一樣嗎？</span></a>
-          <a href="#card-08"><span class="route-number">08</span><span>把光線方向倒過來，路徑會改變嗎？</span></a>
-          <a href="#card-09"><span class="route-number">09</span><span>小葵要向阿公解釋平面鏡和曲面鏡的反射差異。哪一段說法正確？</span></a>
+          <a href="#card-02"><span class="route-number">02</span><span>光路與反射定律</span></a>
+          <a href="#card-03"><span class="route-number">03</span><span>鏡中的像看起來在哪一側？</span></a>
+          <a href="#card-04"><span class="route-number">04</span><span>只移動物體，像的位置怎麼變？</span></a>
+          <a href="#card-05"><span class="route-number">05</span><span>鏡面彎起來，反射方向還會一樣嗎？</span></a>
+          <a href="#card-06"><span class="route-number">06</span><span>把光線方向倒過來，路徑會改變嗎？</span></a>
+          <a href="#card-07"><span class="route-number">07</span><span>整理觀察：平面鏡與曲面鏡</span></a>
         </div>
       </nav>
       <div class="lesson-list">
@@ -103,33 +101,12 @@
           </div>
         </section>
         <section class="lesson-card" id="card-02">
-          <div class="card-side"><span class="card-number">02</span><h3>怎麼畫出反射光路？</h3><span class="card-role">建立共同標記</span></div>
+          <div class="card-side"><span class="card-number">02</span><h3>光路與反射定律</h3><span class="card-role">認識・操作・驗證</span></div>
           <div class="card-main">
-            <h2>要說明光從哪裡來、往哪裡去，可以怎麼畫？</h2>
-            <p>回到鏡面上的同一個照射點，將入射線、反射線和垂直鏡面的法線標在圖上。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>如果只說光被反射了，還看不出它往哪裡走。</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>把照向鏡面的光叫入射線，把離開鏡面的光叫反射線；再從照射點畫一條垂直鏡面的法線。</p></div>
-            <figure class="visual">
-              <svg viewBox="0 0 620 300" role="img" aria-labelledby="ray-title ray-desc">
-                <title id="ray-title">入射線、反射線和法線</title><desc id="ray-desc">一束光從左下方入射到直立鏡面，在照射點向左上方反射。水平虛線是法線。</desc>
-                <defs><marker id="arrow-ray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#d5962d"/></marker></defs>
-                <rect x="391" y="35" width="14" height="225" rx="5" fill="#8daaa0"/><text x="420" y="57" fill="#64736d" font-size="17">平面鏡</text>
-                <circle cx="398" cy="150" r="6" fill="#bc612b"/><text x="413" y="157" fill="#64736d" font-size="15">照射點</text>
-                <path d="M68 249L398 150" stroke="#d5962d" stroke-width="4" marker-end="url(#arrow-ray)"/><path d="M398 150L68 51" stroke="#d5962d" stroke-width="4" marker-end="url(#arrow-ray)"/>
-                <path d="M72 150H545" stroke="#71867a" stroke-width="2" stroke-dasharray="8 7"/>
-                <text x="101" y="238" fill="#315a46" font-size="17" font-weight="700">入射線</text><text x="103" y="72" fill="#315a46" font-size="17" font-weight="700">反射線</text><text x="478" y="139" fill="#64736d" font-size="16">法線</text>
-              </svg>
-              <figcaption class="visual-caption">法線通過照射點，並與鏡面垂直；它是接下來描述角度的基準線。</figcaption>
-            </figure>
-          </div>
-        </section>
-        <section class="lesson-card" id="card-03">
-          <div class="card-side"><span class="card-number">03</span><h3>入射方向改變，反射方向如何變？</h3><span class="card-role">操作同一束光</span></div>
-          <div class="card-main">
-            <h2>轉動入射光線，反射光會怎麼跟著改變？</h2>
-            <p>拖動滑桿改變光線方向。鏡面和照射點保持不動，觀察兩條光線相對法線的角度。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光線轉得越斜，另一邊的反射光也會跟著轉嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>試著改變入射方向，先觀察反射方向和法線的相對位置，再比較兩邊的角度。</p></div>
+            <h2>怎麼用光路和雷射實驗看懂反射定律？</h2>
+            <p>先找出入射線、反射線和法線，再轉動雷射觀察兩側角度；最後用多組量測檢查它們的關係。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光在鏡面轉了方向，要怎麼把光路和角度說清楚？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先從入射點畫出垂直鏡面的法線，再沿著光的方向標出入射線和反射線。</p></div>
             <div class="laser-lesson" aria-label="平面鏡反射定律說明與雷射實驗">
               <section class="laser-concept" aria-labelledby="laser-concept-title">
                 <div class="laser-concept-copy">
@@ -169,25 +146,19 @@
               </section>
               <p class="laser-observation" id="angle-observation" aria-live="polite">入射角和反射角都是 30°。調整雷射方向，觀察反射線與光點如何改變。</p>
             </div>
-          </div>
-        </section>
-        <section class="lesson-card" id="card-04">
-          <div class="card-side"><span class="card-number">04</span><h3>反射定律成立嗎？</h3><span class="card-role">用量測比較</span></div>
-          <div class="card-main">
-            <h2>多量幾次，兩個角度的關係還一樣嗎？</h2>
-            <p>選一個入射角，讀取相對法線的角度並記錄。再改變入射角，看看量測結果是否支持剛才的觀察。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>只看一個角度還不夠，我想再量幾組來比較。</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>可以。每次都從法線量起，記下入射角和反射角，再找出它們的關係。</p></div>
+            <h3 class="prompt">再量幾次，檢查剛才的發現</h3>
+            <p>改選幾個入射角並記下讀值，看看這個關係是否每次都成立。</p>
             <div class="range-row"><label for="measure-angle">設定這次的入射角</label><output id="measure-angle-value" for="measure-angle">20°</output></div>
             <input id="measure-angle" type="range" min="10" max="70" step="10" value="20" aria-label="設定量測用的入射角">
             <div class="readout-row"><div class="readout"><small>入射角（從法線量）</small><strong id="measure-incident">20°</strong></div><div class="readout"><small>反射角（從法線量）</small><strong id="measure-reflected">20°</strong></div></div>
             <div class="controls"><button class="control-button" id="record-angle" type="button">記錄這組角度</button><button class="secondary" id="reset-angles" type="button">清除紀錄</button></div>
             <div class="table-wrap"><table><caption class="visually-hidden">入射角與反射角量測紀錄</caption><thead><tr><th scope="col">量測</th><th scope="col">入射角</th><th scope="col">反射角</th></tr></thead><tbody id="angle-records"><tr><td>示範</td><td>20°</td><td>20°</td></tr><tr><td>示範</td><td>40°</td><td>40°</td></tr></tbody></table></div>
-            <div class="fact"><p>量測結果符合反射定律：反射角等於入射角。兩個角都是從照射點的法線量起，不是從鏡面量起。</p></div>
+            <div class="fact"><p>比較記錄可見：每一組中，反射角都和入射角相等。</p></div>
+
           </div>
         </section>
-        <section class="lesson-card" id="card-05">
-          <div class="card-side"><span class="card-number">05</span><h3>平面鏡裡的像在哪裡？</h3><span class="card-role">從光路看成像</span></div>
+        <section class="lesson-card" id="card-03">
+          <div class="card-side"><span class="card-number">03</span><h3>平面鏡裡的像在哪裡？</h3><span class="card-role">從光路看成像</span></div>
           <div class="card-main">
             <h2>鏡中的像看起來在哪一側？</h2>
             <p>阿公把小物體放到平面鏡前。小葵從不同位置觀察，再用反射光路追蹤她看到的像。</p>
@@ -208,8 +179,8 @@
             </figure>
           </div>
         </section>
-        <section class="lesson-card" id="card-06">
-          <div class="card-side"><span class="card-number">06</span><h3>物體靠近鏡子，像也會怎樣？</h3><span class="card-role">只改變物體位置</span></div>
+        <section class="lesson-card" id="card-04">
+          <div class="card-side"><span class="card-number">04</span><h3>物體靠近鏡子，像也會怎樣？</h3><span class="card-role">只改變物體位置</span></div>
           <div class="card-main">
             <h2>只移動物體，像的位置怎麼變？</h2>
             <p>固定鏡面，沿直線移動物體。觀察像相對鏡面的位置變化，注意這裡改變的是物體位置，不是鏡子。</p>
@@ -231,8 +202,8 @@
             <div class="fact"><p id="distance-observation">物體位置改變時，鏡中像的位置也跟著改變。請比較像相對鏡面的位置變化。</p></div>
           </div>
         </section>
-        <section class="lesson-card" id="card-07">
-          <div class="card-side"><span class="card-number">07</span><h3>曲面鏡會怎樣改變反射光？</h3><span class="card-role">由平面延伸到曲面</span></div>
+        <section class="lesson-card" id="card-05">
+          <div class="card-side"><span class="card-number">05</span><h3>曲面鏡會怎樣改變反射光？</h3><span class="card-role">由平面延伸到曲面</span></div>
           <div class="card-main">
             <h2>鏡面彎起來，反射方向還會一樣嗎？</h2>
             <p>看過平面鏡後，阿公換上曲面鏡。小葵發現，鏡面各處的方向不同，反射光也會往不同方向改變。</p>
@@ -269,8 +240,8 @@
             <div class="fact"><p>曲面鏡仍遵守反射定律；因各處法線方向不同，凹面鏡可使平行光會聚，凸面鏡則使反射光發散。本卡比較光的方向，不延伸到曲面鏡成像性質。</p></div>
           </div>
         </section>
-        <section class="lesson-card" id="card-08">
-          <div class="card-side"><span class="card-number">08</span><h3>光路能倒著走回去嗎？</h3><span class="card-role">反向追蹤路徑</span></div>
+        <section class="lesson-card" id="card-06">
+          <div class="card-side"><span class="card-number">06</span><h3>光路能倒著走回去嗎？</h3><span class="card-role">反向追蹤路徑</span></div>
           <div class="card-main">
             <h2>把光線方向倒過來，路徑會改變嗎？</h2>
             <p>小葵和阿公回到照射點，將光線方向反過來，檢查它是否沿著原本的路徑返回。</p>
@@ -292,8 +263,8 @@
             <div class="fact"><p>反轉光線方向後，光可以沿原路徑返回，這種性質稱為光路可逆。下一段會再比較光進入不同介質時的路徑。</p></div>
           </div>
         </section>
-        <section class="lesson-card end-card" id="card-09">
-          <div class="card-side"><span class="card-number">09</span><h3>用反射規律解釋鏡面</h3><span class="card-role">整理觀察</span></div>
+        <section class="lesson-card end-card" id="card-07">
+          <div class="card-side"><span class="card-number">07</span><h3>用反射規律解釋鏡面</h3><span class="card-role">整理觀察</span></div>
           <div class="card-main">
             <h2>小葵要向阿公解釋平面鏡和曲面鏡的反射差異。哪一段說法正確？</h2>
             <p>回想入射角與反射角、移動物體時的像，以及凹面鏡和凸面鏡改變反射方向的方式。</p>
