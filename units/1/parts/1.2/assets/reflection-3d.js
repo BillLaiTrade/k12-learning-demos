@@ -13,8 +13,8 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 try {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#202b2a');
-  scene.fog = new THREE.Fog('#202b2a', 11, 22);
+  scene.background = new THREE.Color('#394541');
+  scene.fog = new THREE.Fog('#394541', 11, 22);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
@@ -60,9 +60,9 @@ try {
     tableEdge: standard('#67503b', { roughness: 0.58 }),
     source: standard('#273330', { metalness: 0.32, roughness: 0.38 }),
     frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
-    // Keep the same neutral base color as the paper; the clearcoat preserves
-    // the mirror's narrow highlight without tinting the whole surface dark.
-    mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.12, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0.025 }),
+    // Match the paper's neutral base tint while retaining a narrow mirror
+    // highlight; the environment map supplies reflections from the lab scene.
+    mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.94, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.02 }),
     mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
     paper: new THREE.MeshStandardMaterial({ color: surfaceBaseColor, roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
@@ -144,10 +144,12 @@ try {
   roughTexture.repeat.set(2, 1.4);
   const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: surfaceBaseColor, roughness: 0.98, metalness: 0, side: THREE.DoubleSide });
   addBox(scene, [1.55, 0.018, 1.18], [paperCenter.x, 0.102, paperCenter.z], roughMaterial, false, true);
-  // Aim the initial view along the mirror's specular direction. The second
-  // lamp uses the same incident direction, so only the surface changes.
-  const outgoingToViewer = camera.position.clone().sub(mirrorCenter).normalize();
-  const incidentTowardMirror = outgoingToViewer.clone().reflect(new THREE.Vector3(0, 1, 0));
+  // Start slightly outside the mirror's specular direction so the matte paper
+  // remains visible while the mirror sends its reflected light away from view.
+  // The second lamp uses the same incident direction, so only the surface changes.
+  const initialViewDirection = camera.position.clone().sub(mirrorCenter).normalize();
+  const mirrorReflectionDirection = initialViewDirection.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.degToRad(20));
+  const incidentTowardMirror = mirrorReflectionDirection.clone().reflect(new THREE.Vector3(0, 1, 0));
   const mirrorSource = mirrorCenter.clone().addScaledVector(incidentTowardMirror, -3.2);
   const sourceOffset = mirrorSource.clone().sub(mirrorCenter);
   const stations = [
