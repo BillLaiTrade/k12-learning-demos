@@ -286,6 +286,60 @@
     .quiz-feedback { margin-top:12px; padding:11px 13px; border-radius:10px; background:#f1f5ee; color:#40574b; font-size:.92rem; }
     .quiz-feedback[data-state="good"] { background:#e8f3e8; color:var(--green); }
     .quiz-feedback[data-state="try"] { background:#faf3e4; color:#755a2d; }
+    .field-task { margin:20px 0; overflow:hidden; border:1px solid var(--line); border-radius:20px; background:var(--card); box-shadow:var(--shadow); container-type:inline-size; scroll-margin-top:100px; }
+    .field-task-head { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; padding:22px 26px 15px; }
+    .field-task-kicker { margin:0 0 5px; color:var(--green); font-size:.82rem; font-weight:800; letter-spacing:.05em; }
+    .field-task-head h2 { margin:0; font-size:clamp(1.2rem,2vw,1.65rem); line-height:1.35; }
+    .field-task-subtitle { margin:7px 0 0; color:var(--muted); }
+    .drill-badge { flex:none; padding:6px 10px; border:1px solid #c7ddce; border-radius:999px; background:#edf5ed; color:var(--green); font-size:.82rem; font-weight:750; }
+    .field-task-grid { display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr); gap:14px; padding:0 20px; }
+    .field-panel { min-width:0; overflow:hidden; border:1px solid var(--line); border-radius:15px; }
+    .field-panel-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:11px 14px; background:#edf4ec; color:var(--ink); font-weight:800; }
+    .field-map-wrap { padding:12px; background:linear-gradient(145deg,#f2f7f0,#fffefa); }
+    .field-map { display:block; width:100%; height:auto; }
+    .field-map text { fill:#29473b; font-family:inherit; font-size:13px; }
+    .field-map .map-place { font-size:12px; font-weight:750; }
+    .field-map .map-water { fill:#e5f0ed; }
+    .field-map .taiwan-shape { fill:#8eb69d; stroke:#527c69; stroke-width:2; }
+    .field-map .map-route { fill:none; stroke:#bd782d; stroke-width:2.5; stroke-dasharray:6 6; }
+    .field-map .station-dot { fill:#176b53; stroke:#fff; stroke-width:3; }
+    .field-map .quake-dot { fill:#df8840; stroke:#fff; stroke-width:3; }
+    .field-distance { margin:8px 0 0; padding:7px 9px; border-radius:9px; background:#fff4e4; color:#755126; text-align:center; font-size:.88rem; font-weight:750; }
+    .field-signal-panel { padding-bottom:8px; background:#153d33; color:#f4f7ef; }
+    .field-signal-panel .field-panel-heading { background:#193f35; color:#f4f7ef; border-bottom:1px solid #426d5e; }
+    .signal-row { padding:10px 13px 8px; }
+    .signal-row + .signal-row { border-top:1px solid #426d5e; }
+    .signal-meta { display:flex; flex-wrap:wrap; align-items:center; gap:6px 9px; margin-bottom:4px; }
+    .signal-type { min-width:76px; padding:4px 8px; border-radius:7px; background:#285b49; color:#f6faf2; font-weight:800; }
+    .signal-value { padding:4px 8px; border:1px solid #638b79; border-radius:7px; color:#f3f6ea; font-size:.86rem; }
+    .signal-direction { margin-left:auto; color:#b8c9be; font-size:.75rem; text-align:right; }
+    .signal-svg { display:block; width:100%; height:auto; }
+    .signal-svg text { fill:#d8e7dc; font-family:inherit; font-size:12px; }
+    .signal-axis,.signal-tick { stroke:#afc7b7; stroke-width:1.2; }
+    .signal-particle { fill:#d9edde; }
+    .signal-pulse { fill:none; stroke:#92e69f; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+    .signal-baseline { stroke:#729281; stroke-width:1; stroke-dasharray:5 5; }
+    .signal-hint { margin:0; padding:5px 13px 2px; color:#d8e7dc; font-size:.83rem; }
+    .signal-hint strong { color:#f2d79d; }
+    .field-response { margin:16px 20px 20px; padding:15px 16px; border-top:1px solid var(--line); background:#fbfcf8; }
+    .field-response-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px 15px; margin-bottom:10px; }
+    .field-response h3 { margin:0; color:var(--ink); font-size:1.08rem; }
+    .field-response-head p { margin:0; color:var(--muted); font-size:.86rem; }
+    .field-answer-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)) auto; align-items:end; gap:10px; }
+    .field-answer { min-width:0; }
+    .field-answer label { display:block; margin-bottom:4px; color:var(--ink); font-size:.84rem; font-weight:750; }
+    .field-answer input { width:100%; min-width:0; }
+    .field-answer-grid .action { min-height:44px; white-space:nowrap; }
+    .field-feedback { margin:11px 0 0; padding:10px 12px; border-radius:10px; background:#f1f5ee; color:#40574b; font-size:.9rem; }
+    .field-feedback[hidden] { display:none; }
+    .field-feedback[data-state="good"] { background:#e8f3e8; color:var(--green); }
+    .field-feedback[data-state="try"] { background:#faf3e4; color:#755a2d; }
+    .field-worked-answer { display:block; margin-top:5px; color:inherit; font-weight:600; }
+    .route a.task-nav { margin:0 0 0 4px; border-top:0; border-left:1px solid var(--line); padding-top:7px; }
+    .route a.task-nav[aria-current="step"] { border-color:var(--green); }
+    @container (max-width:760px) { .field-task-grid { grid-template-columns:1fr; } }
+    @container (max-width:620px) { .field-task-head { padding:19px 18px 13px; } .field-task-grid { padding:0 14px; } .field-response { margin:14px; padding:13px 2px 2px; } .field-response-head { align-items:flex-start; flex-direction:column; gap:4px; } .field-answer-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .field-answer-grid .action { grid-column:1/-1; } }
+    @container (max-width:420px) { .field-task-head { flex-direction:column; gap:8px; } .field-answer-grid { grid-template-columns:1fr; } .field-answer-grid .action { grid-column:auto; } .field-map-wrap { padding:8px; } .signal-row { padding-inline:8px; } .signal-direction { font-size:.68rem; } }
     .answer { margin-top:14px; padding:13px 15px; border:1px solid #cbded0; border-radius:14px; background:#eef5ec; }
     .answer summary { color:#315a46; font-weight:800; cursor:pointer; }
     .answer p { margin:8px 0 0; }
@@ -363,6 +417,7 @@
           <a href="#card-06"><b>06</b><span>一個完整的波形，是怎麼形成的？</span></a>
           <a href="#card-07"><b>07</b><span>頻率和週期，如何互相影響？</span></a>
           <a href="#card-08"><b>08</b><span>波速、頻率和波長，怎麼連在一起？</span></a>
+          <a href="#earthquake-task" class="task-nav"><b>任務</b><span>南投觀測站防災演練</span></a>
           <a href="#unit-quiz" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
         </div>
       </nav>
@@ -932,6 +987,62 @@
             </section>
           </div>
         </section>
+        <section class="field-task" id="earthquake-task" aria-labelledby="field-task-title">
+          <header class="field-task-head">
+            <div><p class="field-task-kicker">地震觀測站｜防災演練</p><h2 id="field-task-title">南投觀測站還要多久會感受到震動？</h2><p class="field-task-subtitle">從波形和刻度判讀資料，估算 P 波與 S 波抵達的時間。</p></div>
+            <span class="drill-badge">教學演練</span>
+          </header>
+          <div class="field-task-grid">
+            <section class="field-panel" aria-labelledby="field-map-title">
+              <h3 class="field-panel-heading" id="field-map-title">震央與觀測站位置</h3>
+              <div class="field-map-wrap">
+                <svg class="field-map" viewBox="0 0 360 300" role="img" aria-label="台灣示意圖，南投觀測站位於中部，震央在台灣東部外海；兩地情境距離120公里">
+                  <rect class="map-water" x="0" y="0" width="360" height="300" rx="12"/>
+                  <path class="taiwan-shape" d="M151 18 C170 30 183 48 179 67 C194 83 190 102 199 121 C207 139 196 156 194 174 C191 192 180 208 174 228 C168 249 154 272 141 286 C128 275 124 256 117 239 C110 221 104 204 98 185 C91 167 95 149 91 132 C87 113 96 95 98 78 C101 58 112 40 125 28 C133 21 141 17 151 18Z"/>
+                  <path class="map-route" d="M154 153 Q195 145 251 163"/>
+                  <circle class="station-dot" cx="154" cy="153" r="8"/><text class="map-place" x="139" y="139" text-anchor="middle">南投觀測站</text>
+                  <circle class="quake-dot" cx="253" cy="164" r="9"/><text class="map-place" x="268" y="168">震央</text>
+                  <text x="243" y="190" text-anchor="middle">臺灣東部外海</text>
+                  <text x="18" y="26" class="map-place">N ↑</text>
+                </svg>
+                <p class="field-distance">震央至觀測站：120 km（演練假設）</p>
+              </div>
+            </section>
+            <section class="field-panel field-signal-panel" aria-labelledby="field-signal-title">
+              <h3 class="field-panel-heading" id="field-signal-title">地震波形監測</h3>
+              <div class="signal-row">
+                <div class="signal-meta"><span class="signal-type">P 波｜縱波</span><span class="signal-value">頻率 f = 2 Hz</span><span class="signal-direction">介質振動方向與波傳方向平行</span></div>
+                <svg class="signal-svg" viewBox="0 0 460 126" role="img" aria-label="P波縱波的空間示意；距離刻度由0到6公里，密集與疏散位置重複出現">
+                  <g id="field-p-wave-particles" aria-hidden="true"></g>
+                  <path class="signal-axis" d="M30 91H430"/>
+                  <g class="signal-tick"><path d="M30 87V97M96.67 87V97M163.33 87V97M230 87V97M296.67 87V97M363.33 87V97M430 87V97"/></g>
+                  <g><text x="30" y="116" text-anchor="middle">0 km</text><text x="230" y="116" text-anchor="middle">3 km</text><text x="430" y="116" text-anchor="middle">6 km</text></g>
+                </svg>
+              </div>
+              <div class="signal-row">
+                <div class="signal-meta"><span class="signal-type">S 波｜橫波</span><span class="signal-value">週期 T = 1 s</span><span class="signal-direction">介質振動方向與波傳方向垂直</span></div>
+                <svg class="signal-svg" viewBox="0 0 460 150" role="img" aria-label="S波橫波的空間示意；距離刻度由0到8公里，曲線重複起伏">
+                  <path class="signal-baseline" d="M30 56H430"/>
+                  <path class="signal-pulse" d="M30 56 C44 42 65 31 80 31 S116 42 130 56 S166 81 180 81 S216 70 230 56 S266 31 280 31 S316 42 330 56 S366 81 380 81 S416 70 430 56"/>
+                  <path class="signal-axis" d="M30 108H430"/>
+                  <path class="signal-tick" d="M30 103V113M80 103V113M130 103V113M180 103V113M230 103V113M280 103V113M330 103V113M380 103V113M430 103V113"/>
+                  <g><text x="30" y="136" text-anchor="middle">0 km</text><text x="230" y="136" text-anchor="middle">4 km</text><text x="430" y="136" text-anchor="middle">8 km</text></g>
+                </svg>
+              </div>
+              <p class="signal-hint"><strong>判讀提示：</strong>從刻度找出波形重複的間距。</p>
+            </section>
+          </div>
+          <form class="field-response" id="field-response-form" novalidate>
+            <div class="field-response-head"><h3>值班任務</h3><p>估算兩種波抵達觀測站的時間，判斷較強震動到來前還有幾秒。</p></div>
+            <div class="field-answer-grid">
+              <div class="field-answer"><label for="field-p-arrival">P 波抵達時間（秒）</label><input id="field-p-arrival" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入秒數" required></div>
+              <div class="field-answer"><label for="field-s-arrival">S 波抵達時間（秒）</label><input id="field-s-arrival" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入秒數" required></div>
+              <div class="field-answer"><label for="field-warning-time">可提前警示（秒）</label><input id="field-warning-time" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入秒數" required></div>
+              <button class="action" id="field-submit" type="submit">送出判斷</button>
+            </div>
+            <div class="field-feedback" id="field-feedback" role="status" aria-live="polite" hidden></div>
+          </form>
+        </section>
         <section class="unit-quiz" id="unit-quiz" aria-labelledby="unit-quiz-title">
           <header class="quiz-head">
             <div class="quiz-mark" aria-hidden="true">?</div>
@@ -987,6 +1098,37 @@
         formulaTargets.forEach(target=>target.classList.toggle("is-formula-related",activeFormula!==null&&(target.dataset.formulaTarget===activeFormula||target.dataset.formulaTarget==="both")));
       };
       formulaChoices.forEach(button=>button.addEventListener("click",()=>selectFormula(button.dataset.formulaFocus)));
+      const fieldParticles=document.querySelector("#field-p-wave-particles");
+      if(fieldParticles){
+        const fieldNs="http://www.w3.org/2000/svg",rows=[25,36,47,58],count=91;
+        for(const y of rows)for(let i=0;i<count;i++){
+          const equilibrium=i/(count-1)*400;
+          const x=30+equilibrium-26*Math.sin(2*Math.PI*equilibrium/200);
+          const particle=document.createElementNS(fieldNs,"circle");
+          particle.setAttribute("cx",x.toFixed(2));particle.setAttribute("cy",String(y));particle.setAttribute("r","2.1");particle.setAttribute("class","signal-particle");
+          fieldParticles.append(particle);
+        }
+      }
+      const fieldResponseForm=document.querySelector("#field-response-form");
+      if(fieldResponseForm){
+        const fieldPArrival=document.querySelector("#field-p-arrival"),fieldSArrival=document.querySelector("#field-s-arrival"),fieldWarningTime=document.querySelector("#field-warning-time"),fieldFeedback=document.querySelector("#field-feedback");
+        const fieldSubmit=document.querySelector("#field-submit"),isNear=(value,target)=>Number.isFinite(value)&&Math.abs(value-target)<=.05;
+        fieldResponseForm.addEventListener("submit",event=>{
+          event.preventDefault();
+          const pText=fieldPArrival.value.trim(),sText=fieldSArrival.value.trim(),warningText=fieldWarningTime.value.trim();
+          fieldFeedback.hidden=false;
+          if(!pText||!sText||!warningText){fieldFeedback.dataset.state="try";fieldFeedback.textContent="先填入 P 波、S 波抵達時間和可提前警示的秒數，再送出判斷。";return;}
+          const pCorrect=isNear(Number(pText),20),sCorrect=isNear(Number(sText),30),warningCorrect=isNear(Number(warningText),10);
+          if(pCorrect&&sCorrect&&warningCorrect){
+            fieldFeedback.dataset.state="good";
+            fieldFeedback.innerHTML="判斷正確：P 波約 20 秒抵達，S 波約 30 秒抵達；P 波先到，較強震動約晚 10 秒。<span class=\"field-worked-answer\">P 波：λ = 3 km，v = f × λ = 2 × 3 = 6 km/s，120 ÷ 6 = 20 秒。S 波：λ = 4 km，v = λ ÷ T = 4 ÷ 1 = 4 km/s，120 ÷ 4 = 30 秒。</span>";
+            return;
+          }
+          const check=(correct,label)=>`${label}${correct?"✓":"再檢查"}`;
+          fieldFeedback.dataset.state="try";
+          fieldFeedback.textContent=`${check(pCorrect,"P 波：")}　${check(sCorrect,"S 波：")}　${check(warningCorrect,"預警時間：")}。先從距離刻度判讀波長，再算波速，最後用「距離 ÷ 波速」求抵達時間。`;
+        });
+      }
       const pulseSvgs = [...document.querySelectorAll(".rope-wave:not([data-static-rope]):not([data-fixed-point-wave])")];
       const staticRopeSvgs = [...document.querySelectorAll(".rope-wave[data-static-rope]")];
       const pulseStatuses = [...document.querySelectorAll("[data-pulse-status]")];
@@ -1507,7 +1649,7 @@
         else {feedback.dataset.state="try";feedback.textContent="再對照圖示：橘點留在繩上的同一位置附近振動；用 v = f × λ 計算波速。完整解釋已列在下方。";}
       });
 
-      const routeLinks=[...document.querySelectorAll(".route a[href^='#card-'], .route a[href='#unit-quiz']")];
+      const routeLinks=[...document.querySelectorAll(".route a[href^='#card-'], .route a[href='#earthquake-task'], .route a[href='#unit-quiz']")];
       const cards=routeLinks.map(link=>document.querySelector(link.getAttribute("href"))).filter(Boolean);
       const markActive=id=>routeLinks.forEach(link=>{if(link.hash===`#${id}`){link.setAttribute("aria-current","step");link.scrollIntoView({block:"nearest",inline:"nearest"});}else link.removeAttribute("aria-current");});
       if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)markActive(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});cards.forEach(card=>observer.observe(card));}
