@@ -1263,7 +1263,7 @@
           <div class="quiz-body">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這些樣本要怎麼分類？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>翻翻手冊找線索，再替它們找到位置。</p></div>
-            <p class="workbench-intro">點選桌上的手冊可放大翻閱；點選樣本查看線索，再把樣本拖到層板標籤，或先選樣本再點選標籤。</p>
+            <p class="workbench-intro">點選桌上的手冊可放大翻閱；點選樣本查看線索，再把樣本拖進對應展示櫃，也可以先選樣本再點選層板標籤。</p>
             <p class="scene-pan-hint">左右滑動桌面，查看所有樣本和展示櫃。</p>
             <div class="workbench-viewport" aria-label="可左右滑動查看桌面上的分類工作區">
               <div class="workbench-scene" id="classification-workbench" aria-label="木桌上有待分類的樣本，旁邊有物質分類手冊，後方是玻璃展示櫃">
@@ -2403,11 +2403,12 @@
     const specimenRulesCount=Object.keys(specimenRules).length;
     const cabinetTargets=[...document.querySelectorAll(".cabinet-target")];
     const placeSpecimen=(button,target)=>{
+      const targetCategory=typeof target==="string"?target:target.dataset.target;
       const key=button.dataset.sample;const data=specimenRules[key];
-      if(target.dataset.target!==data.category){workbenchFeedback.dataset.kind="wrong";workbenchFeedback.textContent="這個位置和樣本資料對不起來。翻翻手冊，再看看線索。";return false;}
-      sampleStatus.set(key,target.dataset.target);button.classList.remove("is-selected");button.classList.add("is-placed");
-      const count=[...sampleStatus.entries()].filter(([,category])=>category===target.dataset.target).findIndex(([sample])=>sample===key);
-      const placement={element:{left:49,top:7},compound:{left:49,top:20},mixture:{left:80,top:7}}[target.dataset.target];
+      if(targetCategory!==data.category){workbenchFeedback.dataset.kind="wrong";workbenchFeedback.textContent="這個位置和樣本資料對不起來。翻翻手冊，再看看線索。";return false;}
+      sampleStatus.set(key,targetCategory);button.classList.remove("is-selected");button.classList.add("is-placed");
+      const count=[...sampleStatus.entries()].filter(([,category])=>category===targetCategory).findIndex(([sample])=>sample===key);
+      const placement={element:{left:49,top:7},compound:{left:49,top:20},mixture:{left:80,top:7}}[targetCategory];
       button.style.left=(placement.left+(count%3)*6.5)+"%";button.style.top=(placement.top+Math.floor(count/3)*5.5)+"%";
       button.setAttribute("aria-label",data.label+"已放入"+data.dest+"，點選可重新分類");button.setAttribute("aria-pressed","false");
       sampleState.textContent="已放入："+data.dest;workbenchFeedback.dataset.kind="correct";
@@ -2438,8 +2439,11 @@
         const state=dragState;dragState=null;button.classList.remove("is-dragging");
         if(!state.moved)return;
         suppressSampleClick=true;window.setTimeout(()=>{suppressSampleClick=false;},120);
-        const target=cabinetTargets.find(item=>{const rect=item.getBoundingClientRect();return event.clientX>=rect.left&&event.clientX<=rect.right&&event.clientY>=rect.top&&event.clientY<=rect.bottom;});
-        if(target){selectSpecimen(button);if(!placeSpecimen(button,target)){button.style.left=state.startLeft+"%";button.style.top=state.startTop+"%";}}
+        const targetLabel=cabinetTargets.find(item=>{const rect=item.getBoundingClientRect();return event.clientX>=rect.left&&event.clientX<=rect.right&&event.clientY>=rect.top&&event.clientY<=rect.bottom;});
+        const scene=document.getElementById("classification-workbench").getBoundingClientRect();
+        const x=(event.clientX-scene.left)/scene.width*100;const y=(event.clientY-scene.top)/scene.height*100;
+        const dropCategory=targetLabel?.dataset.target||(x>=43&&x<=75&&y>=0&&y<=47?(y<24?"element":"compound"):x>=77&&x<=100&&y>=0&&y<=47?"mixture":null);
+        if(dropCategory){selectSpecimen(button);if(!placeSpecimen(button,dropCategory)){button.style.left=state.startLeft+"%";button.style.top=state.startTop+"%";}}
         else{button.style.left=state.startLeft+"%";button.style.top=state.startTop+"%";workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="把樣本拖到展示櫃的分類位置，或點選樣本後再點選展示層。";}
       });
       button.addEventListener("pointercancel",()=>{if(dragState&&dragState.button===button){button.style.left=dragState.startLeft+"%";button.style.top=dragState.startTop+"%";button.classList.remove("is-dragging");dragState=null;}});
