@@ -295,10 +295,10 @@ try {
     illuminated[index] = true;
     fireButtons[index].querySelector('small').textContent = '再照一次';
     fireButtons[index].setAttribute('aria-pressed', 'true');
-    const chosen = index === 0 ? '左側平面鏡已點亮：反光集中在特定方向；轉動視角觀察反光變化。' : '右側霧面紙已點亮：漫反射會讓表面從較多方向看起來明亮。';
+    const chosen = index === 0 ? '已亮：平面鏡。' : '已亮：霧面紙。';
     const other = illuminated[1 - index]
-      ? (index === 0 ? '右側霧面紙也已點亮。' : '左側平面鏡也已點亮。')
-      : (index === 0 ? '右側霧面紙仍未點亮。' : '左側平面鏡仍未點亮。');
+      ? (index === 0 ? '霧面紙也亮。' : '平面鏡也亮。')
+      : (index === 0 ? '霧面紙未亮。' : '平面鏡未亮。');
     status.textContent = `${chosen} ${other}`;
     if (reducedMotion.matches) {
       setIllumination(index, 1);

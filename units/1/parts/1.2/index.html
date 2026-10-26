@@ -71,13 +71,13 @@
               <div class="reflection-controls">
                 <button class="reflection-fire" id="reflection-fire-mirror" type="button" aria-pressed="false" aria-describedby="reflection-hint"><span>左側手電筒</span><small>照亮平面鏡</small></button>
                 <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false" aria-describedby="reflection-hint"><span>右側手電筒</span><small>照亮霧面紙</small></button>
-                <p class="reflection-hint" id="reflection-hint">左側按鈕只控制左側平面鏡；右側按鈕只控制右側霧面紙。點手電筒也能單獨照亮對應一側；拖曳可轉動視角。</p>
+                <p class="reflection-hint" id="reflection-hint">左右按鈕各管一側，也可點手電筒；拖曳旋轉視角。</p>
               </div>
-              <figcaption class="visual-caption">此視角下，鏡面把光反射到別處；霧面紙把光散向多個方向，因此仍看得到受光。拖曳旋轉，尋找鏡面反光的方向。</figcaption>
+              <figcaption class="visual-caption">拖曳視角，尋找鏡面反光。</figcaption>
             </figure>
-              <p class="reflection-status" id="reflection-status" aria-live="polite">選擇左側或右側按鈕，分別照亮對應的實驗區。</p>
-            <p class="reflection-note" id="reflection-note">清澈空氣中的光束不可見；直接觀察表面反光，並轉動視角找出鏡面反射方向。</p>
-            <div class="fact"><p>鏡面各處的法線方向大致一致，反射光集中在較窄的方向範圍；霧面紙表面微觀起伏讓各處法線略有不同，反射光因此散向多個方向。兩種表面都遵守反射定律。</p></div>
+              <p class="reflection-status" id="reflection-status" aria-live="polite">點按鈕或手電筒點亮光源。</p>
+            <p class="reflection-note" id="reflection-note">空氣中的光束不可見，觀察表面反光。</p>
+            <div class="fact"><p>鏡面反光集中；霧面紙把光散向多處。兩者都遵守反射定律。</p></div>
           </div>
         </section>
         <section class="lesson-card" id="card-02">
@@ -289,6 +289,6 @@
     const answerButtons=[...document.querySelectorAll("[data-answer]")];answerButtons.forEach(function(button){button.addEventListener("click",function(){answerButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===button));item.classList.remove("correct","incorrect")});button.classList.add(button.dataset.answer==="correct"?"correct":"incorrect")})});document.querySelector("#check-answer").addEventListener("click",function(){const selected=answerButtons.find(function(button){return button.getAttribute("aria-pressed")==="true"}),feedback=document.querySelector("#check-feedback");if(!selected){feedback.dataset.state="try";feedback.textContent="先選一段完整說明，再回想平面鏡與曲面鏡的反射差異。";return}if(selected.dataset.answer==="correct"){feedback.dataset.state="good";feedback.textContent="正確：平面鏡像隨物體移動；曲面各處遵守反射定律，凹面會聚光、凸面發散光。"}else{feedback.dataset.state="try";feedback.textContent="再想一想：曲面鏡各處法線方向不同，但每一處都遵守反射定律。"}});document.querySelector("#reset-answer").addEventListener("click",function(){answerButtons.forEach(function(button){button.setAttribute("aria-pressed","false");button.classList.remove("correct","incorrect")});const feedback=document.querySelector("#check-feedback");feedback.removeAttribute("data-state");feedback.textContent="選好後再確認：曲面鏡各處的法線方向相同嗎？"});
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
-  <script type="module" src="assets/reflection-3d.js?v=22"></script>
+  <script type="module" src="assets/reflection-3d.js?v=24"></script>
 </body>
 </html>
