@@ -69,7 +69,6 @@ try {
     // highlight; the environment map supplies reflections from the lab scene.
     mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.94, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.02 }),
     mirrorBacking: standard('#7c8885', { metalness: 0.3, roughness: 0.38 }),
-    labelBase: standard('#f3f4ef', { roughness: 0.78 }),
     paper: new THREE.MeshStandardMaterial({ color: surfaceBaseColor, roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
   };
@@ -152,39 +151,51 @@ try {
   const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: surfaceBaseColor, roughness: 0.98, metalness: 0, side: THREE.DoubleSide });
   addBox(scene, [1.55, 0.018, 1.18], [paperCenter.x, 0.102, paperCenter.z], roughMaterial, false, true);
   const surfaceLabelTextures = [];
-  const addSurfaceLabel = (center, text) => {
-    const labelZ = 1.16;
-    addBox(scene, [1.48, 0.025, 0.32], [center.x, -0.0575, 1.32], mats.labelBase, false, true);
+  const addSurfaceLabel = (center, title, subtitle) => {
     const labelCanvas = document.createElement('canvas');
     labelCanvas.width = 512;
     labelCanvas.height = 180;
     const context = labelCanvas.getContext('2d');
-    context.fillStyle = '#f3f4ef';
+    context.fillStyle = '#f4f2eb';
     context.beginPath();
-    context.roundRect(8, 8, 496, 164, 24);
+    context.roundRect(16, 12, 480, 156, 28);
     context.fill();
-    context.strokeStyle = '#89968f';
-    context.lineWidth = 5;
+    context.strokeStyle = '#d2c9b6';
+    context.lineWidth = 2;
     context.stroke();
+    context.fillStyle = '#b4823e';
+    context.beginPath();
+    context.roundRect(28, 38, 8, 104, 4);
+    context.fill();
     context.fillStyle = '#263a34';
-    context.font = '700 66px "Noto Sans TC", "Microsoft JhengHei", sans-serif';
-    context.textAlign = 'center';
+    context.font = '700 64px "Noto Sans TC", "Microsoft JhengHei", sans-serif';
+    context.textAlign = 'left';
     context.textBaseline = 'middle';
-    context.fillText(text, 256, 90);
+    context.fillText(title, 64, 76);
+    context.fillStyle = '#66736d';
+    context.font = '500 27px "Noto Sans TC", "Microsoft JhengHei", sans-serif';
+    context.fillText(subtitle, 64, 128);
     const texture = new THREE.CanvasTexture(labelCanvas);
     texture.colorSpace = THREE.SRGBColorSpace;
     surfaceLabelTextures.push(texture);
-    const label = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.42, 0.48),
-      new THREE.MeshStandardMaterial({ map: texture, roughness: 0.85, side: THREE.DoubleSide })
+    const tag = new THREE.Group();
+    tag.position.set(center.x, 0.12, 1.16);
+    tag.rotation.x = -Math.PI / 4;
+    const backing = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.56, 0.56),
+      new THREE.MeshBasicMaterial({ color: '#c3cbc4', toneMapped: false, side: THREE.DoubleSide })
     );
-    label.rotation.x = -Math.PI / 4;
-    label.position.set(center.x, 0.12, labelZ);
-    label.receiveShadow = false;
-    scene.add(label);
+    tag.add(backing);
+    const label = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.5, 0.52),
+      new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, toneMapped: false })
+    );
+    label.position.z = 0.003;
+    tag.add(label);
+    scene.add(tag);
   };
-  addSurfaceLabel(mirrorCenter, '平面鏡');
-  addSurfaceLabel(paperCenter, '霧面白紙');
+  addSurfaceLabel(mirrorCenter, '平面鏡', '鏡面反射');
+  addSurfaceLabel(paperCenter, '霧面白紙', '漫反射');
   // Aim the plane mirror's reflected beam toward the initial observer so the
   // specular reflection is clear as soon as the left flashlight is switched on.
   // The second lamp keeps the same incident direction to isolate surface texture.
