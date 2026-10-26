@@ -13,8 +13,8 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 try {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#394541');
-  scene.fog = new THREE.Fog('#394541', 11, 22);
+  scene.background = new THREE.Color('#eceeea');
+  scene.fog = new THREE.Fog('#eceeea', 11, 22);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
@@ -210,7 +210,7 @@ try {
   const mirrorEnvironmentCamera = new THREE.CubeCamera(0.1, 24, mirrorEnvironmentTarget);
   mirrorEnvironmentCamera.position.set(mirrorCenter.x, 0.14, mirrorCenter.z);
   mats.mirror.envMap = mirrorEnvironmentTarget.texture;
-  mats.mirror.envMapIntensity = 0.6;
+  mats.mirror.envMapIntensity = 1.25;
   const refreshMirrorEnvironment = () => {
     mirrorTile.visible = false;
     mirrorEnvironmentCamera.update(renderer, scene);
