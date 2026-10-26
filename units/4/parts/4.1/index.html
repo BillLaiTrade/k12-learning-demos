@@ -2392,7 +2392,7 @@
       const data=specimenRules[button.dataset.sample];
       const key=button.dataset.sample;
       sampleInfo.hidden=false;sampleInfoTitle.textContent=sampleStatus.has(key)?data.realName:"已選取"+data.label;
-      sampleClue.textContent=sampleStatus.has(key)||incorrectLocations.has(key)?"性質："+data.property+" 粒子觀察："+data.particles:data.clue;
+      sampleClue.textContent=sampleStatus.has(key)?"":incorrectLocations.has(key)?"位置不符，請在手冊中查看線索後調整。":data.clue;
       sampleState.textContent=sampleStatus.has(key)?"目前位置："+data.dest:incorrectLocations.has(key)?"目前位置不符，請再參考手冊線索。":"先翻閱手冊，再選擇展示位置。";
       returnSampleButton.hidden=!sampleLocations.has(key);
       workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="到手冊找相同編號，根據性質和粒子組成判斷分類。";
@@ -2423,7 +2423,7 @@
       if(!isCorrect){
         sampleStatus.delete(key);incorrectLocations.set(key,targetCategory);button.classList.add("is-incorrect");button.querySelector(".sample-tag").textContent=data.label;
         button.setAttribute("aria-label",data.label+"目前放在不符的位置，請重新分類");button.setAttribute("aria-pressed","false");
-        if(selectedSpecimen===button){sampleInfoTitle.textContent="已選取"+data.label;sampleClue.textContent="性質："+data.property+" 粒子觀察："+data.particles;}
+        if(selectedSpecimen===button){sampleInfoTitle.textContent="已選取"+data.label;sampleClue.textContent="位置不符，請在手冊中查看線索後調整。";}
         sampleState.textContent="位置不符，請再參考手冊線索。";workbenchFeedback.dataset.kind="wrong";
         workbenchFeedback.textContent="這個位置和樣本資料不符，請再看看線索並重新分類。";
         document.getElementById("sort-progress").textContent="已分類 "+sampleStatus.size+" / "+specimenRulesCount+" 份樣本";
@@ -2431,7 +2431,7 @@
       }
       incorrectLocations.delete(key);sampleStatus.set(key,targetCategory);button.classList.remove("is-incorrect");button.querySelector(".sample-tag").textContent=data.realName;
       button.setAttribute("aria-label",data.realName+"已正確分類於"+data.dest+"，點選可重新分類");button.setAttribute("aria-pressed","false");
-      if(selectedSpecimen===button){sampleInfoTitle.textContent=data.realName;sampleClue.textContent="性質："+data.property+" 粒子觀察："+data.particles;}
+      if(selectedSpecimen===button){sampleInfoTitle.textContent=data.realName;sampleClue.textContent="";}
       sampleState.textContent="已放入："+data.dest;workbenchFeedback.dataset.kind="correct";
       workbenchFeedback.textContent="分類正確。這份樣本是「"+data.realName+"」。";
       document.getElementById("sort-progress").textContent="已分類 "+sampleStatus.size+" / "+specimenRulesCount+" 份樣本";
@@ -2440,7 +2440,7 @@
     };
     let dragState=null;let suppressSampleClick=false;
     specimenButtons.forEach(button=>{
-      button.addEventListener("click",()=>{if(!suppressSampleClick)selectSpecimen(button,!sampleLocations.has(button.dataset.sample));});
+      button.addEventListener("click",()=>{if(!suppressSampleClick)selectSpecimen(button,true);});
       button.addEventListener("pointerdown",event=>{
         if(event.button!==0)return;
         const sceneRect=document.getElementById("classification-workbench").getBoundingClientRect();
@@ -2477,7 +2477,7 @@
     returnSampleButton.addEventListener("click",()=>{if(selectedSpecimen)returnSpecimen(selectedSpecimen);});
     let bookPage=0;const bookPages=[...document.querySelectorAll("[data-book-page]")];
     const bookReader=document.getElementById("book-reader");
-    const showBookPage=next=>{bookPage=(next+bookPages.length)%bookPages.length;bookPages.forEach((page,index)=>page.classList.toggle("is-active",index===bookPage));document.getElementById("reader-page-number").textContent=(bookPage+1)+" / "+bookPages.length;};
+    const showBookPage=next=>{bookPage=(next+bookPages.length)%bookPages.length;bookPages.forEach((page,index)=>{page.classList.toggle("is-active",index===bookPage);if(index===bookPage){const key=specimenButtons[index].dataset.sample;page.querySelector(".book-specimen-info-page h4").textContent=sampleStatus.has(key)?specimenRules[key].realName:"外觀與性質";}});document.getElementById("reader-page-number").textContent=(bookPage+1)+" / "+bookPages.length;};
     const showReaderPage=next=>showBookPage(next);
     document.getElementById("book-open").addEventListener("click",()=>{showReaderPage(bookPage);bookReader.showModal();});
     document.getElementById("reader-prev").addEventListener("click",()=>showReaderPage(bookPage-1));
