@@ -65,6 +65,7 @@ try {
     spotGlow: new THREE.MeshBasicMaterial({ color: '#ffcb55', transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide }),
     beam: new THREE.MeshBasicMaterial({ color: '#ffcf71', transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }),
     beamBounce: new THREE.MeshBasicMaterial({ color: '#ffe29b', transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }),
+    roughRay: new THREE.MeshBasicMaterial({ color: '#f47b20', transparent: true, opacity: 0, depthTest: false, depthWrite: false, side: THREE.DoubleSide }),
     dust: new THREE.PointsMaterial({ color: '#ffe5ad', size: 0.055, transparent: true, opacity: 0, depthWrite: false, sizeAttenuation: true }),
     roughGlow: new THREE.PointLight('#ffd27a', 0, 3.3, 2)
   };
@@ -216,37 +217,48 @@ try {
   mirrorCard.position.z = 0.026;
   mirrorCard.receiveShadow = true;
   mirrorTarget.add(mirrorCard);
-  const mirrorSpot = new THREE.Mesh(new THREE.CircleGeometry(0.12, 40), mats.spot);
+  const mirrorSpot = new THREE.Mesh(new THREE.CircleGeometry(0.18, 40), mats.spot);
   mirrorSpot.position.set(0.08, -0.04, 0.035);
   mirrorTarget.add(mirrorSpot);
-  const mirrorGlow = new THREE.Mesh(new THREE.CircleGeometry(0.25, 40), mats.spotGlow);
+  const mirrorGlow = new THREE.Mesh(new THREE.CircleGeometry(0.34, 40), mats.spotGlow);
   mirrorGlow.position.set(0.08, -0.04, 0.033);
   mirrorTarget.add(mirrorGlow);
 
   // Small matte cards around the rough sample make diffuse light visible at several places.
   const roughCards = [];
+  const roughSpots = [];
   const makeRoughCard = (position, facing) => {
     const group = new THREE.Group();
     group.position.copy(position);
     group.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), facing.clone().normalize());
     scene.add(group);
-    const frame = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.62, 0.045), mats.paperFrame);
+    const frame = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.78, 0.045), mats.paperFrame);
     frame.castShadow = true;
     group.add(frame);
-    const cardMaterial = new THREE.MeshStandardMaterial({ color: '#ece7d8', roughness: 0.9, emissive: '#f3c96c', emissiveIntensity: 0.02, side: THREE.DoubleSide });
-    const card = new THREE.Mesh(new THREE.PlaneGeometry(0.43, 0.57), cardMaterial);
+    const cardMaterial = new THREE.MeshStandardMaterial({ color: '#85877d', roughness: 0.9, emissive: '#ffd080', emissiveIntensity: 0, side: THREE.DoubleSide });
+    const card = new THREE.Mesh(new THREE.PlaneGeometry(0.57, 0.73), cardMaterial);
     card.position.z = 0.026;
     group.add(card);
     roughCards.push(cardMaterial);
+    const spotGlow = new THREE.Mesh(new THREE.CircleGeometry(0.27, 40), new THREE.MeshBasicMaterial({ color: '#ff9d32', transparent: true, opacity: 0, depthTest: false, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }));
+    spotGlow.position.set(0, 0.015, 0.031);
+    spotGlow.renderOrder = 11;
+    group.add(spotGlow);
+    const spot = new THREE.Mesh(new THREE.CircleGeometry(0.16, 40), new THREE.MeshBasicMaterial({ color: '#fff0a2', transparent: true, opacity: 0, depthTest: false, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }));
+    spot.position.set(0, 0.015, 0.033);
+    spot.renderOrder = 12;
+    group.add(spot);
+    roughSpots.push({ glow: spotGlow.material, spot: spot.material });
+    return { position, facing: facing.clone().normalize() };
   };
   const roughSource = new THREE.Vector3(0.42, 0.18, 0.66);
   const cardSpecs = [
-    [new THREE.Vector3(0.95, 0.47, 0.66), new THREE.Vector3(-1, 0.18, 0)],
-    [new THREE.Vector3(-0.55, 0.48, 0.66), new THREE.Vector3(1, 0.2, 0)],
-    [new THREE.Vector3(0.06, 0.48, 1.38), new THREE.Vector3(0, 0.2, -1)],
-    [new THREE.Vector3(0.06, 0.48, -0.06), new THREE.Vector3(0, 0.2, 1)]
+    [new THREE.Vector3(1.15, 0.52, 0.66), new THREE.Vector3(-1, 0.18, 0)],
+    [new THREE.Vector3(-0.85, 0.52, 0.66), new THREE.Vector3(1, 0.2, 0)],
+    [new THREE.Vector3(0.06, 0.52, 1.55), new THREE.Vector3(0, 0.2, -1)],
+    [new THREE.Vector3(0.06, 0.52, -0.25), new THREE.Vector3(0, 0.2, 1)]
   ];
-  cardSpecs.forEach(([position, facing]) => makeRoughCard(position, facing));
+  const roughTargets = cardSpecs.map(([position, facing]) => makeRoughCard(position, facing));
   mats.roughGlow.position.copy(roughSource);
   scene.add(mats.roughGlow);
 
@@ -264,7 +276,28 @@ try {
   const sourceBeamLength = source.distanceTo(sourceBeamEnd);
   const sourceBeam = makeBeamCone(source, sourceBeamEnd, Math.tan(0.49) * sourceBeamLength, mats.beam);
   const reflectionBeamEnd = mirrorScreenPoint.clone();
-  const reflectionBeam = makeBeamCone(mirrorHit, reflectionBeamEnd, Math.min(0.095, Math.tan(0.045) * screenDistance), mats.beamBounce);
+  const reflectionBeam = makeBeamCone(mirrorHit, reflectionBeamEnd, Math.min(0.075, Math.tan(0.035) * screenDistance), mats.beamBounce);
+  const makeDirectionArrow = (start, end, material) => {
+    const direction = end.clone().sub(start);
+    const length = direction.length();
+    const unitDirection = direction.normalize();
+    const headLength = 0.16;
+    const shaftLength = length - headLength;
+    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.034, 0.034, shaftLength, 10), material);
+    shaft.position.copy(start).addScaledVector(unitDirection, shaftLength / 2);
+    shaft.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), unitDirection);
+    shaft.renderOrder = 10;
+    scene.add(shaft);
+    const arrowHead = new THREE.Mesh(new THREE.ConeGeometry(0.11, headLength, 12), material);
+    arrowHead.position.copy(end).addScaledVector(unitDirection, -headLength / 2);
+    arrowHead.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), unitDirection);
+    arrowHead.renderOrder = 10;
+    scene.add(arrowHead);
+  };
+  roughTargets.forEach(({ position, facing }) => {
+    const target = position.clone().sub(facing.clone().multiplyScalar(0.035));
+    makeDirectionArrow(roughHit.clone().add(new THREE.Vector3(0, 0.025, 0)), target, mats.roughRay);
+  });
 
   const dustGeometry = new THREE.BufferGeometry();
   const dustPositions = [];
@@ -333,17 +366,22 @@ try {
   canvas.addEventListener('pointercancel', endPointerDrag);
   const setIllumination = (progress) => {
     const eased = 1 - Math.pow(1 - progress, 3);
-    mats.beam.opacity = 0.055 * eased;
-    mats.beamBounce.opacity = 0.22 * eased;
+    mats.beam.opacity = 0.065 * eased;
+    mats.beamBounce.opacity = 0.88 * eased;
+    mats.roughRay.opacity = 0.8 * eased;
     mats.dust.opacity = 0.62 * eased;
     spotLight.intensity = 10.5 * eased;
     sourceGlow.intensity = 0.85 * eased;
-    mats.roughGlow.intensity = 4.1 * eased;
+    mats.roughGlow.intensity = 9.5 * eased;
     mats.spot.opacity = eased;
-    mats.spotGlow.opacity = 0.48 * eased;
+    mats.spotGlow.opacity = 0.7 * eased;
     mats.paper.emissive = new THREE.Color('#f2bf58');
     mats.paper.emissiveIntensity = 0.12 * eased;
-    for (const cardMaterial of roughCards) cardMaterial.emissiveIntensity = 0.3 * eased;
+    for (const cardMaterial of roughCards) cardMaterial.emissiveIntensity = 0.9 * eased;
+    for (const { glow, spot } of roughSpots) {
+      glow.opacity = 0.72 * eased;
+      spot.opacity = 0.95 * eased;
+    }
     render();
   };
 
@@ -365,7 +403,7 @@ try {
   const fireLight = () => {
     cancelAnimationFrame(animationFrame);
     button.textContent = '再發出光';
-    status.textContent = '光已照到兩種表面：鏡面在一張白卡形成集中亮斑；粗糙表面讓周圍多張白卡柔和受光。';
+    status.textContent = '看反射光路：平滑表面讓光集中成一束，粗糙表面則把光散向多個方向。';
     if (reducedMotion.matches) {
       setIllumination(1);
       return;

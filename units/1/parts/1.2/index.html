@@ -70,10 +70,10 @@
             <figure class="reflection-stage">
               <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="3D 光學實驗桌：上方的平整鏡面將反射光集中到一張白卡，下方的粗糙表面使光散向周圍多張白卡。按下發出光可觀看光束和亮斑出現。" aria-describedby="reflection-status reflection-note"></canvas>
               <p class="reflection-fallback" id="reflection-fallback" hidden>這個 3D 實驗場景無法在目前裝置顯示；你仍可閱讀下方的觀察說明。</p>
-              <div class="reflection-stage-labels" aria-hidden="true"><span><i class="reflection-dot-smooth"></i>平整鏡面・集中亮斑</span><span><i class="reflection-dot-rough"></i>粗糙表面・多處柔和受光</span></div>
-              <figcaption class="visual-caption">亮斑顯示光照到白卡的位置；周圍亮斑則呈現粗糙表面的多方向散射。</figcaption>
+              <div class="reflection-stage-labels" aria-hidden="true"><span><i class="reflection-dot-smooth"></i>平滑表面 → 一束明亮反射光</span><span><i class="reflection-dot-rough"></i>粗糙表面 → 多方向散射</span></div>
+              <figcaption class="visual-caption">明黃窄光束落在一張卡；橘色箭頭是多方向散射的代表路徑，周圍多張卡都出現受光點。</figcaption>
             </figure>
-            <p class="reflection-status" id="reflection-status" aria-live="polite">等待發光：先觀察手電筒、鏡面、粗糙表面和白卡的位置。</p>
+            <p class="reflection-status" id="reflection-status" aria-live="polite">點亮後比較兩種表面的反射光：是一束集中，還是散向多處？</p>
             <p class="reflection-note" id="reflection-note">空氣中的光束平常不易看見；場景中的微塵用來顯示光路，亮斑則依反射方向呈現。</p>
             <div class="fact"><p>光照到表面後會改變方向。表面不同，反射光的分布也可能不同；先記住觀察到的差異，接著追蹤一束光的路徑。</p></div>
           </div>
@@ -248,6 +248,6 @@
     const answerButtons=[...document.querySelectorAll("[data-answer]")];answerButtons.forEach(function(button){button.addEventListener("click",function(){answerButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===button));item.classList.remove("correct","incorrect")});button.classList.add(button.dataset.answer==="correct"?"correct":"incorrect")})});document.querySelector("#check-answer").addEventListener("click",function(){const selected=answerButtons.find(function(button){return button.getAttribute("aria-pressed")==="true"}),feedback=document.querySelector("#check-feedback");if(!selected){feedback.dataset.state="try";feedback.textContent="先選一段完整說明，再用角度量法和像的位置觀察來檢查。";return}if(selected.dataset.answer==="correct"){feedback.dataset.state="good";feedback.textContent="這段說明符合觀察：反射角和入射角都從法線量起，移動物體時鏡中像的位置也會改變。"}else{feedback.dataset.state="try";feedback.textContent="再想一想：兩個角的基準線是法線；移動物體時，鏡中像相對鏡面的位置也會變化。"}});document.querySelector("#reset-answer").addEventListener("click",function(){answerButtons.forEach(function(button){button.setAttribute("aria-pressed","false");button.classList.remove("correct","incorrect")});const feedback=document.querySelector("#check-feedback");feedback.removeAttribute("data-state");feedback.textContent="選好後再確認，回想證據：角度從哪條基準線量起？改變物體位置後觀察到什麼？"});
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
-  <script type="module" src="assets/reflection-3d.js?v=3"></script>
+  <script type="module" src="assets/reflection-3d.js?v=4"></script>
 </body>
 </html>
