@@ -2397,7 +2397,7 @@
       sampleClue.textContent=sampleStatus.has(key)?"":incorrectLocations.has(key)?"位置不符，請在手冊中查看線索後調整。":data.clue;
       sampleState.textContent=sampleStatus.has(key)?"目前位置："+data.dest:incorrectLocations.has(key)?"目前位置不符，請再參考手冊線索。":"先翻閱手冊，再選擇展示位置。";
       returnSampleButton.hidden=!sampleLocations.has(key);
-      workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="到手冊找相同編號，根據性質和粒子組成判斷分類。";
+      workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="讀完線索後，再選擇展示櫃中的分類位置。";
       const linkedPage=specimenButtons.indexOf(button);
       if(linkedPage>=0){showReaderPage(linkedPage);if(openManual&&!bookReader.open)bookReader.showModal();}
     };
