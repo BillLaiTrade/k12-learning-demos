@@ -9,7 +9,7 @@
 - 鉛筆圖像的木紋、漆面、筆箍和橡皮擦為本單元另行繪製的通用產品示意，不含品牌標誌。
 - 質量換算假設每支模型鉛筆約 5 g，僅用於教學示範，不代表一般鉛筆的固定質量。
 - `meteorite-recording-opening.png` 是小葵與阿公在實驗室準備記錄隕石資料的故事開場插圖；小葵外觀依人物設定圖，阿公依已確認的人物文字設定描繪。圖片不含文字，說明與對話由頁面呈現。
-- `dialogue-character-avatars.png` 是小葵與阿公的並列頭像圖；頁面以 CSS 裁切左側的小葵頭像。阿公的對話頭像直接從 `meteorite-recording-opening.png` 裁切，保持與開場圖的角色造型一致。
+- 共用人物頭像已集中至專案根目錄 `shared-assets/characters/dialogue-character-avatars.png`；所有單元請直接引用此檔，不要在單元素材夾另存副本。
 
 ## 視差場景
 
