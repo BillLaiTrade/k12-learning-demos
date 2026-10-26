@@ -178,21 +178,14 @@ try {
     const texture = new THREE.CanvasTexture(labelCanvas);
     texture.colorSpace = THREE.SRGBColorSpace;
     surfaceLabelTextures.push(texture);
-    const tag = new THREE.Group();
-    tag.position.set(center.x, 0.12, 1.16);
-    tag.rotation.x = -Math.PI / 4;
-    const backing = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.56, 0.56),
-      new THREE.MeshBasicMaterial({ color: '#c3cbc4', toneMapped: false, side: THREE.DoubleSide })
-    );
-    tag.add(backing);
     const label = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.5, 0.52),
-      new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, toneMapped: false })
+      new THREE.PlaneGeometry(1.8, 0.62),
+      new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, toneMapped: false, transparent: true })
     );
-    label.position.z = 0.003;
-    tag.add(label);
-    scene.add(tag);
+    label.rotation.x = -Math.PI / 2;
+    label.position.set(center.x, -0.067, 1.25);
+    label.receiveShadow = false;
+    scene.add(label);
   };
   addSurfaceLabel(mirrorCenter, '平面鏡', '鏡面反射');
   addSurfaceLabel(paperCenter, '霧面白紙', '漫反射');
