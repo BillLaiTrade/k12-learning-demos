@@ -200,8 +200,9 @@
     .speed-formula-context { margin:12px 0 0!important; color:var(--muted); }
     .speed-formula-panel { margin:14px 0 18px; padding:10px 16px 12px; border:1px solid #d6e4d5; border-radius:16px; background:#eaf3e9; }
     .speed-formula { display:flex; align-items:center; justify-content:center; gap:.28em; margin:0 0 5px; padding:8px 12px; background:transparent; font-size:clamp(1.5rem,4vw,2.15rem); }
-    .speed-formula-meaning { margin:0; padding:8px 4px 2px; border-top:1px solid #d6e4d5; color:var(--ink); text-align:center; font-size:.9rem; line-height:1.5; }
+    .speed-formula-meaning { display:grid; justify-items:center; gap:3px; margin:0; padding:8px 4px 2px; border-top:1px solid #d6e4d5; color:var(--ink); text-align:center; font-size:.9rem; line-height:1.5; }
     .speed-formula-meaning strong { color:var(--green); font-weight:800; }
+    .speed-formula-chinese-line { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px; }
     .speed-formula-note { margin:0; color:var(--muted); text-align:center; font-size:.9rem; }
     .speed-formula-note strong { color:var(--ink); font-weight:800; }
     .speed-interactive { margin-top:18px; padding:18px; border:1px solid var(--line); border-radius:18px; background:#fbfcf8; }
@@ -802,7 +803,11 @@
             <p class="speed-formula-context">一個週期 <em>T</em> 內，波形前進一個波長 <em>λ</em>：</p>
             <div class="speed-formula-panel">
               <div class="formula speed-formula" role="math" aria-label="波速等於波長除以週期，等於頻率乘以波長"><em>v</em> = <span class="stacked-fraction" aria-hidden="true"><span><em>λ</em></span><span class="fraction-rule"></span><span><em>T</em></span></span> = <em>f</em> × <em>λ</em></div>
-              <p class="speed-formula-meaning"><strong>中文公式：</strong>波速 = 每秒產生的完整波數 × 每個完整波的長度</p>
+              <div class="speed-formula-meaning">
+                <strong>中文公式：</strong>
+                <div class="speed-formula-chinese-line"><span>波速 =</span><span class="frequency-meaning-fraction"><span>一個波長的長度</span><span class="fraction-rule"></span><span>一個週期所需的時間</span></span></div>
+                <div class="speed-formula-chinese-line">= 每秒產生的完整波數 × 每個完整波的長度</div>
+              </div>
               <p class="speed-formula-note"><strong>白話：</strong>每秒能走多遠，取決於每秒走幾步（頻率 <em>f</em>），以及每一步有多大（波長 <em>λ</em>）。</p>
             </div>
             <section class="speed-interactive" aria-labelledby="speed-interactive-title">
