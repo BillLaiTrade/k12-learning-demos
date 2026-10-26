@@ -42,14 +42,14 @@ try {
   };
   updateCamera();
 
-  scene.add(new THREE.HemisphereLight('#fff1d5', '#334744', 1.45));
-  const keyLight = new THREE.DirectionalLight('#ffe2ac', 2.15);
+  scene.add(new THREE.HemisphereLight('#fff1d5', '#334744', 0.42));
+  const keyLight = new THREE.DirectionalLight('#ffe2ac', 0.55);
   keyLight.position.set(-1.5, 7, 4.5);
   keyLight.castShadow = true;
   keyLight.shadow.mapSize.set(1024, 1024);
   keyLight.shadow.bias = -0.0003;
   scene.add(keyLight);
-  const fillLight = new THREE.DirectionalLight('#9eb9c4', 0.65);
+  const fillLight = new THREE.DirectionalLight('#9eb9c4', 0.16);
   fillLight.position.set(3, 4, -5);
   scene.add(fillLight);
 
@@ -58,14 +58,11 @@ try {
     tableTop: new THREE.MeshPhysicalMaterial({ color: '#c4a57c', roughness: 0.48, metalness: 0.015, clearcoat: 0.16, clearcoatRoughness: 0.58 }),
     tableEdge: standard('#67503b', { roughness: 0.58 }),
     source: standard('#273330', { metalness: 0.32, roughness: 0.38 }),
-    sourceLens: new THREE.MeshStandardMaterial({ color: '#fff0c0', emissive: '#f4a72f', emissiveIntensity: 0.22, roughness: 0.22 }),
     frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
-    mirror: new THREE.MeshPhysicalMaterial({ color: '#cbd6d2', metalness: 0.18, roughness: 0.055, clearcoat: 1, clearcoatRoughness: 0.025 }),
+    mirror: new THREE.MeshPhysicalMaterial({ color: '#d9e0dd', metalness: 0.08, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.015 }),
     mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
-    paper: new THREE.MeshStandardMaterial({ color: '#f5f1e6', roughness: 0.84, side: THREE.DoubleSide }),
+    paper: new THREE.MeshStandardMaterial({ color: '#f5f1e6', roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
-    beamBounce: new THREE.MeshBasicMaterial({ color: '#ffe29b', transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }),
-    roughRay: new THREE.MeshBasicMaterial({ color: '#f47b20', transparent: true, opacity: 0, depthTest: false, depthWrite: false, side: THREE.DoubleSide }),
   };
 
   const woodCanvas = document.createElement('canvas');
@@ -142,17 +139,16 @@ try {
   roughTexture.colorSpace = THREE.SRGBColorSpace;
   roughTexture.wrapS = roughTexture.wrapT = THREE.RepeatWrapping;
   roughTexture.repeat.set(2, 1.4);
-  const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: '#f3eee1', roughness: 0.98, metalness: 0, side: THREE.DoubleSide, emissive: '#ffd080', emissiveIntensity: 0 });
+  const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: '#f3eee1', roughness: 0.98, metalness: 0, side: THREE.DoubleSide });
   addBox(scene, [1.55, 0.018, 1.18], [paperCenter.x, 0.102, paperCenter.z], roughMaterial, false, true);
   const stations = [
     { kind: 'mirror', surface: mirrorCenter, source: new THREE.Vector3(-3.55, 1.62, -0.78) },
     { kind: 'paper', surface: paperCenter, source: new THREE.Vector3(0.05, 1.62, 0.78) }
   ];
   const lamps = [];
+  const lampLenses = [];
   const sourceGlows = [];
   const spotLights = [];
-  const inputBeamMaterials = stations.map(() => new THREE.MeshBasicMaterial({ color: '#ffcf71', transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }));
-  const dustMaterials = stations.map(() => new THREE.PointsMaterial({ color: '#ffe5ad', size: 0.055, transparent: true, opacity: 0, depthWrite: false, sizeAttenuation: true }));
   for (const station of stations) {
     const target = station.surface.clone();
     const direction = target.clone().sub(station.source).normalize();
@@ -167,18 +163,20 @@ try {
     const head = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.15, 0.2, 28), mats.frame);
     head.position.y = 0.02;
     lamp.add(head);
-    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.16, 36), mats.sourceLens);
+    const lensMaterial = new THREE.MeshStandardMaterial({ color: '#fff4d6', emissive: '#ffc653', emissiveIntensity: 0, roughness: 0.18 });
+    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.16, 36), lensMaterial);
     lens.position.y = 0.125;
     lamp.add(lens);
+    lampLenses.push(lensMaterial);
     const rim = new THREE.Mesh(new THREE.TorusGeometry(0.165, 0.022, 10, 36), mats.frame);
     rim.position.y = 0.13;
     lamp.add(rim);
     lamps.push(lamp);
-    const sourceGlow = new THREE.PointLight('#ffc864', 0.22, 1.4);
+    const sourceGlow = new THREE.PointLight('#ffc864', 0, 1.4);
     sourceGlow.position.copy(station.source);
     scene.add(sourceGlow);
     sourceGlows.push(sourceGlow);
-    const spotLight = new THREE.SpotLight('#ffe1a3', 0, 9, 0.4, 0.22, 1.4);
+    const spotLight = new THREE.SpotLight('#fff0ce', 0, 9, 0.28, 0.42, 1.4);
     spotLight.position.copy(station.source);
     spotLight.target.position.copy(target);
     spotLight.castShadow = true;
@@ -189,71 +187,6 @@ try {
     station.target = target;
     station.incident = target.clone().sub(station.source).normalize();
   }
-
-  const makeBeamCone = (start, end, radius, material) => {
-    const direction = end.clone().sub(start);
-    const length = direction.length();
-    const mesh = new THREE.Mesh(new THREE.ConeGeometry(radius, length, 28, 1, true), material);
-    mesh.position.copy(start).add(end).multiplyScalar(0.5);
-    mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize().negate());
-    mesh.renderOrder = 2;
-    scene.add(mesh);
-    return mesh;
-  };
-  stations.forEach(({ source, target }, index) => makeBeamCone(source, target, 0.42, inputBeamMaterials[index]));
-  const mirrorStation = stations.find(({ kind }) => kind === 'mirror');
-  const paperStation = stations.find(({ kind }) => kind === 'paper');
-  const mirrorReflection = mirrorStation.incident.clone().reflect(new THREE.Vector3(0, 1, 0)).normalize();
-  const mirrorRayEnd = mirrorStation.target.clone().addScaledVector(mirrorReflection, 2.25);
-  makeBeamCone(mirrorStation.target, mirrorRayEnd, 0.075, mats.beamBounce);
-  const makeDirectionArrow = (start, end, material) => {
-    const direction = end.clone().sub(start);
-    const length = direction.length();
-    const unitDirection = direction.normalize();
-    const headLength = 0.16;
-    const shaftLength = length - headLength;
-    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.034, 0.034, shaftLength, 10), material);
-    shaft.position.copy(start).addScaledVector(unitDirection, shaftLength / 2);
-    shaft.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), unitDirection);
-    shaft.renderOrder = 10;
-    scene.add(shaft);
-    const arrowHead = new THREE.Mesh(new THREE.ConeGeometry(0.11, headLength, 12), material);
-    arrowHead.position.copy(end).addScaledVector(unitDirection, -headLength / 2);
-    arrowHead.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), unitDirection);
-    arrowHead.renderOrder = 10;
-    scene.add(arrowHead);
-  };
-  const diffuseDirections = [
-    new THREE.Vector3(0.94, 0.31, 0.14),
-    new THREE.Vector3(0.54, 0.79, 0.30),
-    new THREE.Vector3(0.68, 0.67, -0.54),
-    new THREE.Vector3(0.28, 0.89, -0.62)
-  ].map((direction) => direction.normalize());
-  diffuseDirections.forEach((direction) => {
-    const localNormal = direction.clone().sub(paperStation.incident).normalize();
-    if (paperStation.incident.clone().reflect(localNormal).dot(direction) < 0.999) throw new Error('Diffuse ray does not follow the local reflection law.');
-    makeDirectionArrow(paperStation.target.clone().add(new THREE.Vector3(0, 0.025, 0)), paperStation.target.clone().addScaledVector(direction, 2), mats.roughRay);
-  });
-
-  stations.forEach(({ source, target }, index) => {
-    const dustGeometry = new THREE.BufferGeometry();
-    const dustPositions = [];
-    const axis = target.clone().sub(source).normalize();
-    const tangentA = new THREE.Vector3().crossVectors(axis, new THREE.Vector3(0, 0, 1)).normalize();
-    const tangentB = new THREE.Vector3().crossVectors(axis, tangentA).normalize();
-    const beamLength = source.distanceTo(target);
-    for (let i = 0; i < 55; i += 1) {
-      const t = 0.06 + random() * 0.9;
-      const angle = random() * Math.PI * 2;
-      const radial = Math.sqrt(random()) * 0.42 * t * 0.8;
-      const point = source.clone().addScaledVector(axis, beamLength * t)
-        .addScaledVector(tangentA, Math.cos(angle) * radial)
-        .addScaledVector(tangentB, Math.sin(angle) * radial);
-      dustPositions.push(point.x, point.y, point.z);
-    }
-    dustGeometry.setAttribute('position', new THREE.Float32BufferAttribute(dustPositions, 3));
-    scene.add(new THREE.Points(dustGeometry, dustMaterials[index]));
-  });
 
   let startedAt = 0;
   const duration = 1150;
@@ -304,15 +237,9 @@ try {
   canvas.addEventListener('pointercancel', endPointerDrag);
   const setIllumination = (index, progress) => {
     const eased = 1 - Math.pow(1 - progress, 3);
-    inputBeamMaterials[index].opacity = 0.065 * eased;
-    dustMaterials[index].opacity = 0.62 * eased;
-    spotLights[index].intensity = 10.5 * eased;
-    sourceGlows[index].intensity = 0.85 * eased;
-    if (index === 0) mats.beamBounce.opacity = 0.88 * eased;
-    else {
-      mats.roughRay.opacity = 0.8 * eased;
-      roughMaterial.emissiveIntensity = 0.3 * eased;
-    }
+    spotLights[index].intensity = 75 * eased;
+    sourceGlows[index].intensity = 0.65 * eased;
+    lampLenses[index].emissiveIntensity = 1.8 * eased;
     render();
   };
 
@@ -337,7 +264,7 @@ try {
     illuminated[index] = true;
     fireButtons[index].querySelector('small').textContent = '再照一次';
     fireButtons[index].setAttribute('aria-pressed', 'true');
-    const chosen = index === 0 ? '左側平面鏡：反射光集中成一束。' : '右側霧面紙：反射光散向多個方向。';
+    const chosen = index === 0 ? '左側平面鏡已點亮：觀察鏡面上的清晰反光。' : '右側霧面紙已點亮：觀察表面上較均勻的漫反射。';
     const other = illuminated[1 - index]
       ? (index === 0 ? '右側霧面紙也已點亮。' : '左側平面鏡也已點亮。')
       : (index === 0 ? '右側霧面紙仍未點亮。' : '左側平面鏡仍未點亮。');
