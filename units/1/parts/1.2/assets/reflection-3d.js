@@ -60,7 +60,9 @@ try {
     tableEdge: standard('#67503b', { roughness: 0.58 }),
     source: standard('#273330', { metalness: 0.32, roughness: 0.38 }),
     frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
-    mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.96, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0.025 }),
+    // Keep the same neutral base color as the paper; the clearcoat preserves
+    // the mirror's narrow highlight without tinting the whole surface dark.
+    mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.12, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0.025 }),
     mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
     paper: new THREE.MeshStandardMaterial({ color: surfaceBaseColor, roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
