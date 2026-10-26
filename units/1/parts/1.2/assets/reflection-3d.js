@@ -13,8 +13,10 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 try {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#eceeea');
-  scene.fog = new THREE.Fog('#eceeea', 11, 22);
+  // Keep the open lab environment bright so the mirror reflects a light
+  // neutral background instead of a dark green field.
+  scene.background = new THREE.Color('#faf9f6');
+  scene.fog = new THREE.Fog('#faf9f6', 11, 22);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
