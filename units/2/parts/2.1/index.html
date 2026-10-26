@@ -1228,7 +1228,7 @@
         continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續波";
         continuousButton.setAttribute("aria-pressed",String(pulseMode==="continuous"&&pulsePlaying));
         queuedState=pulseMode==="single"&&singleEvents.some(start=>start>pulseTime);
-        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的起伏持續向右傳播。":"單次波：波源完成一次上下振動，繩上各處依序被帶動，形成一個向右傳播的起伏；再按一次，下一輪會接著送出。";
+        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的起伏持續向右傳播。":"單次波：波源完成一次上下振動，繩上各處依序被帶動，形成一個向右傳播的起伏。";
         pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?(queuedState?"下一輪已排入；波源完成目前這次上下振動後，會接著送出。已發出的波仍繼續傳播。":"單次波正從波源形成並向右傳播；再按「單次波」可排入下一輪。"):("單次波已傳過；按「單次波」可再看一次。")):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續波」可繼續。");});
       };
       const schedulePulse = () => { if(pulsePlaying&&pulseFrame===null) pulseFrame=window.requestAnimationFrame(animatePulse); };
