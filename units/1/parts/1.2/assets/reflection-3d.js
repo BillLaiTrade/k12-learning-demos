@@ -62,7 +62,7 @@ try {
     frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
     // Match the paper's neutral base tint while retaining a narrow mirror
     // highlight; the environment map supplies reflections from the lab scene.
-    mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.94, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.02 }),
+    mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.12, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.02 }),
     mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
     paper: new THREE.MeshStandardMaterial({ color: surfaceBaseColor, roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
@@ -148,7 +148,7 @@ try {
   // remains visible while the mirror sends its reflected light away from view.
   // The second lamp uses the same incident direction, so only the surface changes.
   const initialViewDirection = camera.position.clone().sub(mirrorCenter).normalize();
-  const mirrorReflectionDirection = initialViewDirection.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.degToRad(20));
+  const mirrorReflectionDirection = initialViewDirection.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.degToRad(5));
   const incidentTowardMirror = mirrorReflectionDirection.clone().reflect(new THREE.Vector3(0, 1, 0));
   const mirrorSource = mirrorCenter.clone().addScaledVector(incidentTowardMirror, -3.2);
   const sourceOffset = mirrorSource.clone().sub(mirrorCenter);
@@ -184,11 +184,11 @@ try {
     rim.position.y = 0.13;
     lamp.add(rim);
     lamps.push(lamp);
-    const sourceGlow = new THREE.PointLight('#ffc864', 0, 1.4);
+    const sourceGlow = new THREE.PointLight('#ffffff', 0, 1.4);
     sourceGlow.position.copy(station.source);
     scene.add(sourceGlow);
     sourceGlows.push(sourceGlow);
-    const spotLight = new THREE.SpotLight('#fff0ce', 0, 9, 0.28, 0.42, 1.4);
+    const spotLight = new THREE.SpotLight('#ffffff', 0, 9, 0.28, 0.42, 1.4);
     spotLight.position.copy(station.source);
     spotLight.target.position.copy(target);
     spotLight.castShadow = true;
@@ -210,7 +210,7 @@ try {
   const mirrorEnvironmentCamera = new THREE.CubeCamera(0.1, 24, mirrorEnvironmentTarget);
   mirrorEnvironmentCamera.position.set(mirrorCenter.x, 0.14, mirrorCenter.z);
   mats.mirror.envMap = mirrorEnvironmentTarget.texture;
-  mats.mirror.envMapIntensity = 1.25;
+  mats.mirror.envMapIntensity = 0.25;
   const refreshMirrorEnvironment = () => {
     mirrorTile.visible = false;
     mirrorEnvironmentCamera.update(renderer, scene);
