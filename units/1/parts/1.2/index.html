@@ -20,29 +20,34 @@
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
   </style>
   <style>
-    .laser-lesson{margin-top:20px;border:1px solid #d8dfdf;border-radius:18px;overflow:hidden;background:#fff}
-    .laser-concept{display:grid;grid-template-columns:minmax(240px,.75fr) minmax(0,1.25fr);align-items:center;gap:24px;padding:22px 26px;background:linear-gradient(135deg,#f8fcff,#fff)}
+    .laser-lesson{width:calc(100% + 201px);margin-top:20px;margin-left:-201px;border:1px solid #d8dfdf;border-radius:18px;overflow:hidden;background:#fff}
+    #card-02 .card-side{border-right:0}
+    .laser-concept{display:grid;grid-template-columns:minmax(280px,1fr) minmax(0,1.3fr);align-items:center;gap:16px;padding:14px 22px;background:linear-gradient(135deg,#f8fcff,#fff)}
     .laser-concept-copy{padding:12px 16px;border-radius:16px;background:#e6f4ff}
     .laser-concept-copy h3{margin:0 0 14px;font-size:clamp(1.2rem,2.1vw,1.48rem);line-height:1.25;color:#102c54}
     .laser-law{margin:0;padding:8px 10px;border-radius:12px;background:#fff2d2;color:#c51d17;text-align:center;font-size:clamp(1.3rem,2.6vw,2rem);font-weight:900;white-space:nowrap}
     .laser-rule{margin:8px 0 0;color:#1e3550;text-align:center;font-size:1rem;font-weight:750}
-    .laser-diagram{width:100%;min-height:200px;max-height:285px}
-    .laser-lab{position:relative;min-height:440px;overflow:hidden;background:#b8895f}
-    #laser-reflection-scene{display:block;width:100%;height:440px}
-    .laser-lab-ui{position:absolute;z-index:2;top:24px;left:24px;display:grid;width:min(150px,25%);grid-template-columns:1fr auto;gap:6px 12px;padding:12px 10px;border:1px solid #ffffffb8;border-radius:16px;background:#f5fbffed;box-shadow:0 5px 22px #25374730}
-    .laser-slider-label{grid-column:1/-1;color:#102c54;font-size:1rem;font-weight:850}
-    .laser-lab-ui output{align-self:center;color:#102c54;font-size:1.1rem}
-    .laser-lab-ui input{grid-column:1/-1;width:100%;accent-color:#1672d4}
-    .laser-angle-readout{grid-column:1/-1;display:grid;gap:1px;margin-top:2px;color:#1459af;font-size:.94rem;font-weight:850}
+    .laser-diagram{width:100%;min-height:170px;max-height:180px}
+    .laser-lab{position:relative;min-height:280px;overflow:hidden;background:#b8895f}
+    #laser-reflection-scene{display:block;width:100%;height:280px}
+    .laser-lab-ui{position:absolute;z-index:2;top:24px;left:24px;display:grid;width:min(360px,22%);gap:8px;padding:0;border:0;background:transparent;box-shadow:none}
+    .laser-control-panel,.laser-angle-readout{display:grid;padding:10px 12px;border:1px solid #ffffffc9;border-radius:14px;background:#f5fbffed;box-shadow:0 5px 22px #25374730}
+    .laser-control-panel{gap:6px}
+    .laser-slider-label{color:#102c54;font-size:.9rem;font-weight:850}
+    .laser-slider-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}
+    .laser-slider-row output{color:#102c54;font-size:1rem;font-weight:850}
+    .laser-lab-ui input{width:100%;accent-color:#1672d4}
+    .laser-angle-readout{gap:1px;color:#1459af;font-size:.82rem;font-weight:850}
     .laser-angle-readout span:last-child{color:#24783a}
     .laser-angle-readout strong{padding-left:4px;font-variant-numeric:tabular-nums}
     .laser-tag{position:absolute;z-index:2;padding:4px 10px;border-radius:9px;background:#fffef0e8;color:#223342;font-size:.9rem;font-weight:800;line-height:1.3;box-shadow:0 2px 8px #33271d24;pointer-events:none}
     .laser-tag small{font-size:.75rem;font-weight:600}
-    .laser-tag-source{top:24px;left:40%;}.laser-tag-mirror{top:12%;right:6%;}.laser-tag-normal{left:34%;top:56%;}.laser-tag-spot{right:14%;top:52%;color:#c51d17}.laser-tag-screen{left:17%;bottom:17%;}.laser-tag-in{left:53%;top:34%;color:#c51d17}.laser-tag-out{left:51%;bottom:27%;color:#c51d17}
-    .laser-caption{position:absolute;z-index:2;right:18px;bottom:12px;max-width:76%;margin:0;padding:6px 11px;border-radius:10px;background:#fffef0e8;color:#4e332a;font-size:.83rem;line-height:1.4}
+    .laser-tag-source{top:24px;left:34%;}.laser-tag-mirror{top:13%;left:74%;right:auto;}.laser-tag-normal{left:38%;top:46%;}.laser-tag-spot{left:67%;right:auto;top:20%;color:#c51d17}.laser-tag-screen{left:24%;top:76%;bottom:auto;}.laser-tag-in{left:53%;top:18%;color:#c51d17}.laser-tag-out{left:53%;top:54%;bottom:auto;color:#c51d17}
+    .laser-caption,.laser-caption-secondary{position:absolute;z-index:2;bottom:4px;margin:0;padding:5px 9px;border-radius:10px;background:#fffef0e8;color:#24374a;font-size:.75rem;line-height:1.25}
+    .laser-caption{left:24px;max-width:52%}.laser-caption-secondary{right:24px;max-width:37%;background:#fff2e9ed;color:#743b32}
     .laser-observation{margin:0;padding:13px 18px;background:#f0f5eb;color:#315a46;font-weight:750}
-    @media(max-width:760px){.laser-concept{grid-template-columns:1fr;gap:8px;padding:16px}.laser-concept-copy{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}.laser-concept-copy h3{margin:0}.laser-law{font-size:1.2rem}.laser-rule{grid-column:1/-1;margin:0}.laser-diagram{max-height:240px}.laser-lab,#laser-reflection-scene{min-height:380px;height:380px}.laser-lab-ui{top:12px;left:12px;width:min(180px,48%);padding:10px 12px}.laser-tag-source{left:43%;top:13px}.laser-tag-mirror{right:3%;top:18%}.laser-tag-normal{left:25%;top:55%;font-size:.72rem}.laser-tag-spot{right:3%;}.laser-tag-screen{left:6%;bottom:20%}.laser-caption{right:8px;bottom:8px;max-width:82%;font-size:.72rem}.laser-tag-in{left:57%;top:37%;font-size:.75rem}.laser-tag-out{left:55%;bottom:29%;font-size:.75rem}}
-    @media(max-width:440px){.laser-lab,#laser-reflection-scene{min-height:340px;height:340px}.laser-lab-ui{right:10px;left:auto;top:10px;width:min(158px,48%)}.laser-tag{padding:3px 6px;font-size:.72rem}.laser-caption{max-width:88%;font-size:.68rem}.laser-tag-source,.laser-tag-mirror,.laser-tag-normal,.laser-tag-spot,.laser-tag-screen,.laser-tag-in,.laser-tag-out{display:none}}
+    @media(max-width:760px){.laser-lesson{width:auto;margin-left:0}.laser-concept{grid-template-columns:1fr;gap:8px;padding:16px}.laser-concept-copy{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}.laser-concept-copy h3{margin:0}.laser-law{font-size:1.2rem}.laser-rule{grid-column:1/-1;margin:0}.laser-diagram{max-height:240px}.laser-lab{height:500px;min-height:500px}#laser-reflection-scene{height:340px;min-height:340px}.laser-lab-ui{top:auto;right:12px;bottom:12px;left:12px;width:auto;padding:0}.laser-caption,.laser-caption-secondary{display:none}.laser-tag-source{left:38%;top:13px}.laser-tag-mirror{left:auto;right:4%;top:40%}.laser-tag-normal{left:22%;top:33%;font-size:.72rem}.laser-tag-spot{left:auto;right:4%;top:18%}.laser-tag-screen{left:6%;top:auto;bottom:40%}.laser-tag-in{left:55%;top:18%;font-size:.75rem}.laser-tag-out{left:52%;top:36%;bottom:auto;font-size:.75rem}}
+    @media(max-width:440px){.laser-lab-ui{grid-template-columns:1fr auto}.laser-tag{padding:3px 6px;font-size:.72rem}.laser-tag-source,.laser-tag-mirror,.laser-tag-normal,.laser-tag-spot,.laser-tag-screen,.laser-tag-in,.laser-tag-out{display:none}}
   </style>
 </head>
 <body>
@@ -114,35 +119,33 @@
                   <p class="laser-law">入射角 ＝ 反射角</p>
                   <p class="laser-rule">角度從法線量起。</p>
                 </div>
-                <svg class="laser-diagram" viewBox="0 0 600 260" role="img" aria-labelledby="law-title law-desc">
+                <svg class="laser-diagram" viewBox="0 0 600 340" role="img" aria-labelledby="law-title law-desc">
                   <title id="law-title">平面鏡上的入射角等於反射角</title><desc id="law-desc">紅色入射線與反射線相對垂直鏡面的虛線法線對稱。角度會隨下方實驗滑桿更新。</desc>
                   <defs><marker id="law-arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#e1261c"/></marker></defs>
-                  <path d="M474 14V246" stroke="#71889b" stroke-width="15"/><path d="M464 14V246" stroke="#c6d8e8" stroke-width="4"/>
-                  <path d="M474 20l17-12M474 44l17-12M474 68l17-12M474 92l17-12M474 116l17-12M474 140l17-12M474 164l17-12M474 188l17-12M474 212l17-12M474 236l17-12" stroke="#40566c" stroke-width="2"/>
-                  <path d="M72 130H474" stroke="#7b7d78" stroke-width="2" stroke-dasharray="9 8"/><text x="24" y="119" fill="#253747" font-size="16" font-weight="700">法線</text>
-                  <path id="law-incident" d="M162 31L474 130" stroke="#e1261c" stroke-width="4" marker-end="url(#law-arrow)"/>
-                  <path id="law-reflected" d="M474 130L162 229" stroke="#e1261c" stroke-width="4" marker-end="url(#law-arrow)"/>
-                  <path id="law-arc-incident" d="M414 130A60 60 0 0 0 417 100" fill="none" stroke="#1463c5" stroke-width="4"/>
-                  <path id="law-arc-reflected" d="M417 160A60 60 0 0 1 414 130" fill="none" stroke="#27833d" stroke-width="4"/>
-                  <circle cx="474" cy="130" r="7" fill="#ed2b20"/>
-                  <text id="law-angle-in" x="300" y="101" fill="#165fc2" font-size="18" font-weight="800" text-anchor="middle">入射角 30°</text>
-                  <text id="law-angle-out" x="300" y="176" fill="#24783a" font-size="18" font-weight="800" text-anchor="middle">反射角 30°</text>
-                  <text x="122" y="36" fill="#cf261c" font-size="15" font-weight="800">入射線</text><text x="122" y="232" fill="#cf261c" font-size="15" font-weight="800">反射線</text><text x="500" y="138" fill="#cf261c" font-size="14" font-weight="800">入射點</text>
+                  <path d="M474 10V330" stroke="#71889b" stroke-width="15"/><path d="M464 10V330" stroke="#c6d8e8" stroke-width="4"/>
+                  <path d="M474 20l17-12M474 50l17-12M474 80l17-12M474 110l17-12M474 140l17-12M474 170l17-12M474 200l17-12M474 230l17-12M474 260l17-12M474 290l17-12M474 320l17-12" stroke="#40566c" stroke-width="2"/>
+                  <path d="M72 170H474" stroke="#7b7d78" stroke-width="2" stroke-dasharray="9 8"/><text x="24" y="159" fill="#253747" font-size="16" font-weight="700">法線</text>
+                  <path id="law-incident" d="M309 75L474 170" stroke="#e1261c" stroke-width="4" marker-end="url(#law-arrow)"/>
+                  <path id="law-reflected" d="M474 170L309 265" stroke="#e1261c" stroke-width="4" marker-end="url(#law-arrow)"/>
+                  <path id="law-arc-incident" d="M416 170A58 58 0 0 0 424 141" fill="none" stroke="#1463c5" stroke-width="4"/>
+                  <path id="law-arc-reflected" d="M424 199A58 58 0 0 1 416 170" fill="none" stroke="#27833d" stroke-width="4"/>
+                  <circle cx="474" cy="170" r="7" fill="#ed2b20"/>
+                  <text id="law-angle-in" x="300" y="139" fill="#165fc2" font-size="18" font-weight="800" text-anchor="middle">入射角 30°</text>
+                  <text id="law-angle-out" x="300" y="208" fill="#24783a" font-size="18" font-weight="800" text-anchor="middle">反射角 30°</text>
+                  <text x="246" y="60" fill="#cf261c" font-size="15" font-weight="800">入射線</text><text x="246" y="316" fill="#cf261c" font-size="15" font-weight="800">反射線</text><text x="500" y="178" fill="#cf261c" font-size="14" font-weight="800">入射點</text>
                   <text x="512" y="46" fill="#172635" font-size="18" font-weight="800">平面鏡</text><text x="512" y="70" fill="#34495b" font-size="14">反射面在左側</text>
                 </svg>
               </section>
               <section class="laser-lab" aria-label="可調整入射角的雷射反射實驗">
                 <canvas id="laser-reflection-scene" aria-label="桌面上的雷射、平面鏡和接收屏；紅色教學線顯示入射與反射路徑"></canvas>
                 <div class="laser-lab-ui">
-                  <label class="laser-slider-label" for="incident-angle">調整入射角</label>
-                  <output id="incident-angle-value" for="incident-angle">30°</output>
-                  <input id="incident-angle" type="range" min="10" max="60" step="1" value="30" aria-label="調整入射角">
+                  <div class="laser-control-panel"><label class="laser-slider-label" for="incident-angle">調整入射角</label><div class="laser-slider-row"><input id="incident-angle" type="range" min="20" max="40" step="1" value="30" aria-label="調整入射角"><output id="incident-angle-value" for="incident-angle">30°</output></div></div>
                   <div class="laser-angle-readout"><span>入射角 <strong id="lab-angle-in">30°</strong></span><span>反射角 <strong id="lab-angle-out">30°</strong></span></div>
                 </div>
                 <span class="laser-tag laser-tag-source">雷射發射器</span><span class="laser-tag laser-tag-mirror">平面鏡<br><small>反射面在左側</small></span>
                 <span class="laser-tag laser-tag-normal">法線（過入射點，垂直鏡面）</span><span class="laser-tag laser-tag-spot">入射點</span><span class="laser-tag laser-tag-screen">接收屏</span>
                 <span class="laser-tag laser-tag-in">入射線</span><span class="laser-tag laser-tag-out">反射線</span>
-                <p class="laser-caption">調整雷射時，光路、法線、角度讀數與接收屏光點同步更新。紅線是教學標記；空氣中的光束平時看不見。</p>
+                <p class="laser-caption">調整雷射時，法線、光路、角度讀數同步更新；觀察接收屏光點。</p><p class="laser-caption-secondary">紅線是教學光路標記；空氣中的光束平時看不見。</p>
               </section>
               <p class="laser-observation" id="angle-observation" aria-live="polite">入射角和反射角都是 30°。調整雷射方向，觀察反射線與光點如何改變。</p>
             </div>
