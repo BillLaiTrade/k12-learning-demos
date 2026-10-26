@@ -59,7 +59,7 @@ try {
     tableEdge: standard('#67503b', { roughness: 0.58 }),
     source: standard('#273330', { metalness: 0.32, roughness: 0.38 }),
     frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
-    mirror: new THREE.MeshPhysicalMaterial({ color: '#d9e0dd', metalness: 0.08, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.015 }),
+    mirror: new THREE.MeshPhysicalMaterial({ color: '#e3e8e6', metalness: 0.72, roughness: 0.018, clearcoat: 0.92, clearcoatRoughness: 0.01 }),
     mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
     paper: new THREE.MeshStandardMaterial({ color: '#f5f1e6', roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
@@ -141,9 +141,14 @@ try {
   roughTexture.repeat.set(2, 1.4);
   const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: '#f3eee1', roughness: 0.98, metalness: 0, side: THREE.DoubleSide });
   addBox(scene, [1.55, 0.018, 1.18], [paperCenter.x, 0.102, paperCenter.z], roughMaterial, false, true);
+  const sourceForVisibleReflection = (surface) => {
+    const viewDirection = camera.position.clone().sub(surface).normalize();
+    const reflectedSourceDirection = new THREE.Vector3(-viewDirection.x, viewDirection.y, -viewDirection.z).normalize();
+    return surface.clone().addScaledVector(reflectedSourceDirection, 2.3);
+  };
   const stations = [
-    { kind: 'mirror', surface: mirrorCenter, source: new THREE.Vector3(-3.55, 1.62, -0.78) },
-    { kind: 'paper', surface: paperCenter, source: new THREE.Vector3(0.05, 1.62, 0.78) }
+    { kind: 'mirror', surface: mirrorCenter, source: sourceForVisibleReflection(mirrorCenter) },
+    { kind: 'paper', surface: paperCenter, source: sourceForVisibleReflection(paperCenter) }
   ];
   const lamps = [];
   const lampLenses = [];
@@ -155,6 +160,7 @@ try {
     const lamp = new THREE.Group();
     lamp.position.copy(station.source);
     lamp.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
+    lamp.scale.setScalar(1.15);
     scene.add(lamp);
     const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.18, 0.58, 28), mats.source);
     barrel.position.y = -0.29;
@@ -186,7 +192,11 @@ try {
     spotLights.push(spotLight);
     station.target = target;
     station.incident = target.clone().sub(station.source).normalize();
+    station.reflected = station.incident.clone().reflect(new THREE.Vector3(0, 1, 0)).normalize();
   }
+
+  const mirrorViewDirection = camera.position.clone().sub(mirrorCenter).normalize();
+  if (stations[0].reflected.dot(mirrorViewDirection) < 0.999) throw new Error('Mirror and flashlight are not aligned for a visible specular reflection.');
 
   let startedAt = 0;
   const duration = 1150;
@@ -200,7 +210,7 @@ try {
       -((event.clientY - bounds.top) / bounds.height) * 2 + 1
     );
     raycaster.setFromCamera(pointerPosition, camera);
-    return lamps.findIndex((lamp) => raycaster.intersectObject(lamp, true).length > 0);
+    return lamps.findIndex((lamp) => raycaster.intersectObject(lamp, true).length > 0 || raycaster.ray.distanceToPoint(lamp.position) < 0.42);
   };
 
   canvas.addEventListener('pointerdown', (event) => {

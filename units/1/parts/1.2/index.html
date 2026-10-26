@@ -62,7 +62,7 @@
             <p>小葵把光照向鏡面，再換成一般表面。留意反射光的方向如何呈現。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光落在白紙上了；換成一般表面，反射方向也一樣嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>好，先固定光源和照射位置，再看看反射光落在哪些方向。</p></div>
-            <p class="prompt">分別照亮左、右實驗台，觀察光在兩種表面上呈現的樣子。</p>
+            <p class="prompt">先照亮左側，看看鏡面如何反射光源；再照亮右側，比較霧面紙上的漫反射。</p>
             <div class="reflection-controls">
               <button class="reflection-fire" id="reflection-fire-mirror" type="button" aria-pressed="false" aria-describedby="reflection-hint"><span>左側手電筒</span><small>照亮平面鏡</small></button>
               <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false" aria-describedby="reflection-hint"><span>右側手電筒</span><small>照亮霧面紙</small></button>
@@ -72,7 +72,7 @@
               <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="左右分開的兩座 3D 反射實驗台：左邊是平面鏡，右邊是外觀平整的霧面紙；各有一支手電筒以相同角度照射。點亮後觀察兩種表面的照明效果。" aria-describedby="reflection-status reflection-note"></canvas>
               <p class="reflection-fallback" id="reflection-fallback" hidden>這個 3D 實驗場景無法在目前裝置顯示；你仍可閱讀下方的觀察說明。</p>
               <div class="reflection-stage-labels" aria-hidden="true"><span><i class="reflection-dot-smooth"></i>平面鏡・鏡面反射</span><span><i class="reflection-dot-rough"></i>霧面紙・漫反射</span></div>
-              <figcaption class="visual-caption">空氣中的光束不可見；點亮後觀察兩種表面上的實際照明效果。</figcaption>
+              <figcaption class="visual-caption">從目前視角可看見鏡面的清晰反光；霧面紙則把光均勻散向各處。空氣中的光束不可見。</figcaption>
             </figure>
               <p class="reflection-status" id="reflection-status" aria-live="polite">選擇左側或右側按鈕，分別照亮對應的實驗區。</p>
             <p class="reflection-note" id="reflection-note">真實光束在清澈空氣中看不見；這裡只呈現手電筒照亮表面後的效果，不繪製光路。</p>
@@ -249,6 +249,6 @@
     const answerButtons=[...document.querySelectorAll("[data-answer]")];answerButtons.forEach(function(button){button.addEventListener("click",function(){answerButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===button));item.classList.remove("correct","incorrect")});button.classList.add(button.dataset.answer==="correct"?"correct":"incorrect")})});document.querySelector("#check-answer").addEventListener("click",function(){const selected=answerButtons.find(function(button){return button.getAttribute("aria-pressed")==="true"}),feedback=document.querySelector("#check-feedback");if(!selected){feedback.dataset.state="try";feedback.textContent="先選一段完整說明，再用角度量法和像的位置觀察來檢查。";return}if(selected.dataset.answer==="correct"){feedback.dataset.state="good";feedback.textContent="這段說明符合觀察：反射角和入射角都從法線量起，移動物體時鏡中像的位置也會改變。"}else{feedback.dataset.state="try";feedback.textContent="再想一想：兩個角的基準線是法線；移動物體時，鏡中像相對鏡面的位置也會變化。"}});document.querySelector("#reset-answer").addEventListener("click",function(){answerButtons.forEach(function(button){button.setAttribute("aria-pressed","false");button.classList.remove("correct","incorrect")});const feedback=document.querySelector("#check-feedback");feedback.removeAttribute("data-state");feedback.textContent="選好後再確認，回想證據：角度從哪條基準線量起？改變物體位置後觀察到什麼？"});
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
-  <script type="module" src="assets/reflection-3d.js?v=8"></script>
+  <script type="module" src="assets/reflection-3d.js?v=9"></script>
 </body>
 </html>
