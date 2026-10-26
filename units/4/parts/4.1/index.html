@@ -678,15 +678,15 @@
     .case-heading::before,.case-heading::after,.cabinet-target::before,.cabinet-target::after { position:absolute; top:50%; width:3px; height:3px; border:1px solid #947649; border-radius:50%; background:#f4e0ad; content:""; transform:translateY(-50%); }
     .case-heading::before,.cabinet-target::before { left:3px; }
     .case-heading::after,.cabinet-target::after { right:3px; }
-    .case-heading { z-index:8; left:48.5%; top:2.5%; display:grid; place-items:center; width:21%; min-width:0; height:5.5%; min-height:0; padding:0 8px; border:3px ridge #947348; border-radius:3px; background:linear-gradient(180deg,#f0dfb4 0%,#d0b77f 48%,#a98854 100%); box-shadow:0 3px 6px #21150c88,inset 0 1px #fff1ce; color:#382b1c; font-size:clamp(.88rem,1.35vw,1.12rem); line-height:1; text-align:center; }
+    .case-heading { z-index:8; left:12%; top:2.5%; display:grid; place-items:center; width:28%; min-width:0; height:5.5%; min-height:0; padding:0 8px; border:3px ridge #947348; border-radius:3px; background:linear-gradient(180deg,#f0dfb4 0%,#d0b77f 48%,#a98854 100%); box-shadow:0 3px 6px #21150c88,inset 0 1px #fff1ce; color:#382b1c; font-size:clamp(.88rem,1.35vw,1.12rem); line-height:1; text-align:center; }
     .case-heading::before,.case-heading::after,.cabinet-target[data-target="mixture"]::before,.cabinet-target[data-target="mixture"]::after { top:-46%; width:2px; height:46%; border:0; border-radius:0; background:#a98959; box-shadow:0 -1px 1px #30211166; content:""; transform:none; }
     .case-heading::before,.cabinet-target[data-target="mixture"]::before { left:22%; }
     .case-heading::after,.cabinet-target[data-target="mixture"]::after { right:22%; }
     .cabinet-target { z-index:7; min-height:28px; cursor:pointer; transition:filter .15s,box-shadow .15s,transform .15s; }
     .cabinet-target:hover,.cabinet-target:focus-visible { filter:brightness(1.08); box-shadow:inset 0 1px 0 #fff5d7,0 0 0 3px #ead6a477,0 2px 4px #2b1c1055; outline:none; transform:translateY(-1px); }
-    .cabinet-target[data-target="element"] { left:55%; top:25%; }
-    .cabinet-target[data-target="compound"] { left:55%; top:43%; }
-    .cabinet-target[data-target="mixture"] { z-index:8; left:80%; top:2.5%; display:grid; place-items:center; width:17%; min-width:0; min-height:0; height:5.5%; padding:0 6px; border:3px ridge #947348; border-radius:3px; background:linear-gradient(180deg,#f0dfb4 0%,#d0b77f 48%,#a98854 100%); box-shadow:0 3px 6px #21150c88,inset 0 1px #fff1ce; color:#382b1c; font-size:clamp(.88rem,1.35vw,1.12rem); line-height:1; text-align:center; }
+    .cabinet-target[data-target="element"] { left:21%; top:25%; }
+    .cabinet-target[data-target="compound"] { left:21%; top:43%; }
+    .cabinet-target[data-target="mixture"] { z-index:8; left:61%; top:2.5%; display:grid; place-items:center; width:28%; min-width:0; min-height:0; height:5.5%; padding:0 6px; border:3px ridge #947348; border-radius:3px; background:linear-gradient(180deg,#f0dfb4 0%,#d0b77f 48%,#a98854 100%); box-shadow:0 3px 6px #21150c88,inset 0 1px #fff1ce; color:#382b1c; font-size:clamp(.88rem,1.35vw,1.12rem); line-height:1; text-align:center; }
     .cabinet-target[data-target="mixture"]:hover,.cabinet-target[data-target="mixture"]:focus-visible { filter:brightness(1.12); box-shadow:0 3px 8px #21150c99,inset 0 1px #fff1ce; outline:2px solid #f3dfba; transform:none; }
     .scene-sample { position:absolute; z-index:4; left:var(--sample-x); top:var(--sample-y); display:grid; grid-template-rows:minmax(0,1fr) 18px; justify-items:center; align-content:end; width:11%; height:14%; padding:0; border:0; background:transparent; cursor:grab; touch-action:none; transition:left .65s cubic-bezier(.2,.75,.25,1),top .65s cubic-bezier(.2,.75,.25,1),width .65s,height .65s,filter .2s,transform .2s; }
     .scene-sample:active { cursor:grabbing; }
@@ -2411,7 +2411,7 @@
       if(targetCategory!==data.category){workbenchFeedback.dataset.kind="wrong";workbenchFeedback.textContent="這個位置和樣本資料對不起來。翻翻手冊，再看看線索。";return false;}
       sampleStatus.set(key,targetCategory);button.classList.remove("is-selected");button.classList.add("is-placed");
       const count=[...sampleStatus.entries()].filter(([,category])=>category===targetCategory).findIndex(([sample])=>sample===key);
-      const placement={element:{left:49,top:9},compound:{left:49,top:31},mixture:{left:80,top:9}}[targetCategory];
+      const placement={element:{left:14,top:9},compound:{left:14,top:31},mixture:{left:64,top:9}}[targetCategory];
       button.style.left=(placement.left+(count%3)*6.5)+"%";button.style.top=(placement.top+Math.floor(count/3)*5.5)+"%";
       button.setAttribute("aria-label",data.label+"已放入"+data.dest+"，點選可重新分類");button.setAttribute("aria-pressed","false");
       sampleState.textContent="已放入："+data.dest;workbenchFeedback.dataset.kind="correct";
@@ -2445,7 +2445,7 @@
         const targetLabel=cabinetTargets.find(item=>{const rect=item.getBoundingClientRect();return event.clientX>=rect.left&&event.clientX<=rect.right&&event.clientY>=rect.top&&event.clientY<=rect.bottom;});
         const scene=document.getElementById("classification-workbench").getBoundingClientRect();
         const x=(event.clientX-scene.left)/scene.width*100;const y=(event.clientY-scene.top)/scene.height*100;
-        const dropCategory=targetLabel?.dataset.target||(x>=40&&x<=76&&y>=0&&y<=55?(y<27?"element":"compound"):x>=76&&x<=100&&y>=0&&y<=55?"mixture":null);
+        const dropCategory=targetLabel?.dataset.target||(x>=1&&x<=50&&y>=0&&y<=55?(y<27?"element":"compound"):x>50&&x<=100&&y>=0&&y<=55?"mixture":null);
         if(dropCategory){selectSpecimen(button);if(!placeSpecimen(button,dropCategory)){button.style.left=state.startLeft+"%";button.style.top=state.startTop+"%";}}
         else{button.style.left=state.startLeft+"%";button.style.top=state.startTop+"%";workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="把樣本拖進展示櫃對應層，或點選樣本後再點選層板標籤。";}
       });
