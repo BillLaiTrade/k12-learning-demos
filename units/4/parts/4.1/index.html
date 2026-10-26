@@ -23,9 +23,6 @@
     h1,h2,h3,p { margin-top:0; }
     .hero h1 { max-width:780px; margin:10px 0 14px; font-size:clamp(2rem,4.6vw,3.45rem); line-height:1.2; letter-spacing:-.045em; }
     .hero-copy { max-width:710px; margin:0; color:#53645d; font-size:1.05rem; }
-    .hero-note { padding:19px 20px; border:1px solid #d8cda9; border-radius:17px; background:#f8f1dc; }
-    .hero-note strong { display:block; margin-bottom:5px; color:#594a28; font-size:1rem; }
-    .hero-note p { margin:0; color:#665c43; font-size:.91rem; }
     .hero-cover { margin:0; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:var(--card); box-shadow:var(--shadow); }
     .hero-cover img { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; }
     .hero-scene { display:block; width:min(100%,360px); margin:16px auto 0; }
@@ -738,7 +735,6 @@
     @media(max-width:680px) {
       .shell { width:min(100% - 24px,600px); }
       .hero { grid-template-columns:1fr; gap:16px; padding-top:28px; }
-      .hero-note { order:2; }
       .lesson-layout { display:block; }
       .route { position:sticky; top:0; z-index:5; max-height:none; margin:0 -12px 16px; padding:10px 12px; border:0; border-block:1px solid var(--line); border-radius:0; background:rgb(244 241 232 / 96%); backdrop-filter:blur(12px); }
       .route-inner { display:flex; gap:6px; overflow-x:auto; padding-bottom:3px; scrollbar-width:thin; }
@@ -801,10 +797,6 @@
         <div class="eyebrow">從一只水桶開始認識物質</div>
         <h1>水桶裡的水變混濁了，裡面到底有什麼？</h1>
         <p class="hero-copy">花圃旁的水桶中有一份變混濁的水樣。要了解水樣的組成，先分清楚水桶這個物體與構成它的材料，再沿著觀察紀錄逐步整理證據。</p>
-        <aside class="hero-note">
-          <strong>先別急著猜水裡有什麼</strong>
-          <p>混濁是觀察線索，不能單靠外觀證明組成。沿著樣本紀錄逐步補上證據。</p>
-        </aside>
       </div>
       <figure class="hero-cover"><img src="assets/unit-opening-cover.png" alt="阿公和小葵在科學桌旁觀察冰塊；桌上有水桶、清水、冰塊、沸水、放大鏡和觀察本，後方展示著單元樣本。"></figure>
     </div>
