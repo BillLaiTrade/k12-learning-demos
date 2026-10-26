@@ -461,7 +461,7 @@
                 </defs>
                 <path class="pulse-path rope-underlay" d="M38 142H722"/>
                 <path d="M24 98V186" fill="none" stroke="#748b7e" stroke-width="1.8" marker-start="url(#arrow-source-motion)" marker-end="url(#arrow-source-motion)"/>
-                <circle cx="38" cy="142" r="6.5" fill="#df8b41" stroke="#fffefa" stroke-width="2.5"/>
+                <circle id="wave-source-marker-1" cx="38" cy="142" r="6.5" fill="#df8b41" stroke="#fffefa" stroke-width="2.5"/>
                 <text x="84" y="45">波源上下振動</text>
                 <path d="M130 228H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
                 <text x="345" y="253" text-anchor="middle">波形傳播方向</text>
@@ -1218,6 +1218,8 @@
         const shapeAt = x => initial ? 0 : single ? singleEvents.reduce((sum,eventStart)=>sum+singlePulseAt(x,eventStart,time),0) : continuous ? continuousWaveAt(x,time) : waveAt(x,(time*132)%232);
         const end = svg.viewBox.baseVal.width - 38;
         const firstY=baseline-shapeAt(38);
+        const sourceMarker=svg.querySelector("#wave-source-marker-1");
+        if(sourceMarker)sourceMarker.setAttribute("cy",String(firstY));
         let path = `M 38 ${firstY}`;
         for (let x=41;x<=end;x+=3){const y=baseline-shapeAt(x);path+=` L ${x} ${y}`;}
         svg.querySelectorAll(".rope-underlay").forEach(rope=>rope.setAttribute("d",path));
