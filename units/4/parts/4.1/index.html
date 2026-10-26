@@ -648,17 +648,22 @@
     .workbench-scene { position:relative; width:100%; min-width:760px; aspect-ratio:1672 / 941; overflow:hidden; background:#9a7550 url("assets/specimen-workbench-equal-cabinets.png") center / 100% 100% no-repeat; }
     .book-open-hotspot { position:absolute; z-index:3; left:0%; top:63%; width:34%; height:18%; padding:0; border:0; border-radius:10px; background:transparent; cursor:zoom-in; }
     .book-open-hotspot:focus-visible { outline:3px solid #f3d17a; outline-offset:2px; background:#fff7d522; }
-    .book-reader { width:min(720px,calc(100vw - 32px)); max-width:none; max-height:min(80vh,760px); padding:18px; border:1px solid #bac9b7; border-radius:16px; background:#fffdf7; color:#344a3b; box-shadow:0 18px 60px #18251c66; }
+    .book-reader { width:min(900px,calc(100vw - 32px)); max-width:none; max-height:min(80vh,760px); padding:18px; border:1px solid #bac9b7; border-radius:16px; background:#fffdf7; color:#344a3b; box-shadow:0 18px 60px #18251c66; }
     .book-reader::backdrop { background:#16231dcc; backdrop-filter:blur(3px); }
     .book-reader-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
     .book-reader-header h3 { margin:0; font-size:1.15rem; }
     .book-reader-close,.book-reader-nav button { min-height:38px; padding:6px 12px; border:1px solid #b8c8b9; border-radius:9px; background:#f2f5ee; color:#315844; cursor:pointer; }
-    .book-reader-pages { min-height:220px; }
-    .book-reader-pages .book-page { min-height:220px; font-size:1rem; line-height:1.55; }
-    .book-reader-pages .book-leaf { padding:18px; }
-    .book-reader-pages .book-page strong { margin-bottom:10px; font-size:1.05rem; }
-    .book-reader-pages .book-model { min-height:54px; margin-top:12px; }
-    .book-reader-pages .book-model i { width:15px; height:15px; }
+    .book-reader-pages { min-height:390px; }
+    .book-reader-pages .book-page { min-height:390px; font-size:.9rem; line-height:1.4; }
+    .book-reader-pages .book-leaf { padding:12px; }
+    .book-sample-stack { display:grid; height:100%; grid-template-rows:repeat(2,minmax(0,1fr)); gap:10px; }
+    .book-sample-focus { display:flex; height:100%; flex-direction:column; justify-content:center; gap:14px; }
+    .book-sample-card { display:grid; min-width:0; grid-template-columns:78px minmax(0,1fr); gap:10px; align-items:center; padding:9px; border:1px solid #e2d8c1; border-radius:10px; background:#fffefa; box-shadow:0 2px 5px #59492a12; }
+    .book-sample-thumb { display:block; width:78px; height:82px; border-radius:7px; background-image:url("assets/specimen-samples-sprite.png"); background-repeat:no-repeat; background-size:360% 360%; background-position:var(--thumb-x) var(--thumb-y); }
+    .book-sample-card h4 { margin:0 0 5px; color:#315843; font-size:.9rem; }
+    .book-sample-card p { margin:3px 0 0; color:#58655c; font-size:.77rem; line-height:1.35; }
+    .book-sample-card b { color:#3c5948; }
+    .book-sample-note { margin:0; padding:10px 12px; border-left:3px solid #95ae8e; border-radius:5px; background:#f1f5ea; color:#59685d; font-size:.8rem; line-height:1.45; }
     .book-reader-nav { display:flex; justify-content:space-between; align-items:center; margin-top:12px; color:#5d6e62; }
     .book-reader-nav span { font-size:.9rem; }
     .book-page-content { display:block; height:calc(100% - 22px); }
@@ -710,7 +715,8 @@
     .workbench-actions { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:5px; }
     .workbench-reset { min-height:36px; padding:6px 12px; border:1px solid #becbbf; border-radius:9px; background:#fffdf8; color:#40564b; cursor:pointer; }
     .workbench-hint { margin:0; color:#728077; font-size:.78rem; }
-    @media(max-width:680px) { .book-reader { padding:12px; } .book-reader-pages { min-height:260px; } .book-reader-pages .book-page { min-height:260px; font-size:.88rem; } .book-reader-pages .book-leaf { padding:11px 8px; } .book-reader-pages .book-page strong { font-size:.94rem; } .quiz-head { padding:18px 16px; } .quiz-body { padding:16px 12px 19px; } .workbench-intro { font-size:.9rem; } .scene-pan-hint { display:block; } .workbench-scene { min-width:820px; } .sample-info { grid-template-columns:1fr; gap:2px; padding:10px 12px; } .workbench-actions { align-items:flex-start; flex-direction:column; } }
+    @media(max-width:680px) { .book-reader { padding:10px; } .book-reader-pages { min-height:520px; } .book-reader-pages .book-page { min-height:520px; font-size:.78rem; } .book-reader-pages .book-leaf { padding:6px; } .book-sample-stack { gap:7px; } .book-sample-card { grid-template-columns:52px minmax(0,1fr); gap:6px; padding:6px; } .book-sample-thumb { width:52px; height:62px; } .book-sample-card h4 { font-size:.72rem; } .book-sample-card p { font-size:.62rem; line-height:1.32; } .book-sample-note { padding:8px; font-size:.68rem; } .quiz-head { padding:18px 16px; } .quiz-body { padding:16px 12px 19px; } .workbench-intro { font-size:.9rem; } .scene-pan-hint { display:block; } .workbench-scene { min-width:820px; } .sample-info { grid-template-columns:1fr; gap:2px; padding:10px 12px; } .workbench-actions { align-items:flex-start; flex-direction:column; } }
+    @media(max-width:680px) { .book-reader { max-height:88vh; } .book-reader-pages { min-height:0; max-height:calc(88vh - 112px); overflow-y:auto; } .book-reader-pages .book-page,.book-reader-pages .book-page.is-active { height:auto; min-height:0; grid-template-columns:1fr; } .book-reader-pages .book-leaf { padding:8px; } .book-reader-pages .book-leaf+.book-leaf { border-left:0; border-top:1px solid #ddd1b4; } .book-sample-stack { height:auto; grid-template-rows:none; } .book-sample-focus { height:auto; } .book-sample-card { grid-template-columns:58px minmax(0,1fr); } .book-sample-thumb { width:56px; height:62px; } .book-sample-card h4 { font-size:.76rem; } .book-sample-card p { font-size:.68rem; } }
     .evidence-box { padding:13px 15px; border-left:4px solid var(--blue); border-radius:8px; background:#edf3f7; color:#34536a; }
     .check-options { display:grid; gap:8px; margin:12px 0; }
     .check-option { display:flex; gap:9px; align-items:flex-start; padding:11px 12px; border:1px solid #d9d4c8; border-radius:10px; background:#fff; cursor:pointer; }
@@ -1255,9 +1261,9 @@
         <dialog class="book-reader" id="book-reader" aria-labelledby="book-reader-title">
           <div class="book-reader-header"><h3 id="book-reader-title">物質分類手冊</h3><button class="book-reader-close" type="button" id="book-reader-close">關閉</button></div>
           <div class="book-reader-pages" id="book-reader-pages" aria-live="polite">
-            <div class="book-page is-active" data-book-page="0"><div class="book-leaf"><strong>先看有幾種物質</strong>只有一種物質，屬於純物質。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>多種物質混在一起</strong>樣本同時含有多種物質，屬於混合物。<div class="book-model book-model--mixed"><i></i><i></i><i></i><i></i></div></div></div>
-            <div class="book-page" data-book-page="1"><div class="book-leaf"><strong>元素</strong>純物質裡只有一種粒子。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>化合物</strong>每個粒子都由不同種類的小粒子固定結合。<div class="book-model book-model--compound"><i></i><i></i><i></i></div></div></div>
-            <div class="book-page" data-book-page="2"><div class="book-leaf"><strong>物理變化</strong>變化前後仍是同一種物質。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>化學變化</strong>變化後產生不同的物質。<div class="book-model book-model--mixed"><i></i><i></i><i></i><i></i></div></div></div>
+            <div class="book-page is-active" data-book-page="0"><div class="book-leaf book-sample-stack"><article class="book-sample-card"><span class="book-sample-thumb" role="img" aria-label="樣本 1：銅片" style="--thumb-x:0%;--thumb-y:0%"></span><div><h4>樣本 1｜銅片</h4><p><b>性質：</b>紅棕色薄片，表面有金屬光澤。</p><p><b>粒子組成：</b>只有一種相同的粒子。</p></div></article><article class="book-sample-card"><span class="book-sample-thumb" role="img" aria-label="樣本 4：糖晶" style="--thumb-x:0%;--thumb-y:46.15%"></span><div><h4>樣本 4｜糖晶</h4><p><b>性質：</b>白色透明的結晶顆粒，能溶於水。</p><p><b>粒子組成：</b>每個粒子由不同種類的小粒子固定組成。</p></div></article></div><div class="book-leaf book-sample-focus"><article class="book-sample-card"><span class="book-sample-thumb" role="img" aria-label="樣本 7：空氣樣本" style="--thumb-x:0%;--thumb-y:92.3%"></span><div><h4>樣本 7｜空氣樣本</h4><p><b>性質：</b>無色，會充滿容器。</p><p><b>粒子組成：</b>含有多種不同的氣體粒子。</p></div></article><p class="book-sample-note">對照樣本外觀，再找粒子組成線索：粒子種類有幾種？它們是固定組成，還是混在一起？</p></div></div>
+            <div class="book-page" data-book-page="1"><div class="book-leaf book-sample-stack"><article class="book-sample-card"><span class="book-sample-thumb" role="img" aria-label="樣本 2：鋁塊" style="--thumb-x:46.15%;--thumb-y:0%"></span><div><h4>樣本 2｜鋁塊</h4><p><b>性質：</b>銀白色、輕且有金屬光澤。</p><p><b>粒子組成：</b>只有一種粒子種類。</p></div></article><article class="book-sample-card"><span class="book-sample-thumb" role="img" aria-label="樣本 5：食鹽" style="--thumb-x:46.15%;--thumb-y:46.15%"></span><div><h4>樣本 5｜食鹽</h4><p><b>性質：</b>白色結晶顆粒，能溶於水。</p><p><b>粒子組成：</b>每個粒子由不同種類的小粒子固定組成。</p></div></article></div><div class="book-leaf book-sample-focus"><article class="book-sample-card"><span class="book-sample-thumb" role="img" aria-label="樣本 8：花崗岩" style="--thumb-x:46.15%;--thumb-y:92.3%"></span><div><h4>樣本 8｜花崗岩</h4><p><b>性質：</b>可見黑、白、粉色等不同顆粒。</p><p><b>粒子組成：</b>含有多種不同礦物的粒子。</p></div></article><p class="book-sample-note">留意外觀相似的樣本，不能只靠顏色判斷；粒子組成線索更重要。</p></div></div>
+            <div class="book-page" data-book-page="2"><div class="book-leaf book-sample-stack"><article class="book-sample-card"><span class="book-sample-thumb" role="img" aria-label="樣本 3：銀錠" style="--thumb-x:92.3%;--thumb-y:0%"></span><div><h4>樣本 3｜銀錠</h4><p><b>性質：</b>銀白色金屬塊，表面有光澤。</p><p><b>粒子組成：</b>只有一種粒子種類。</p></div></article><article class="book-sample-card"><span class="book-sample-thumb" role="img" aria-label="樣本 6：粉筆粉" style="--thumb-x:92.3%;--thumb-y:46.15%"></span><div><h4>樣本 6｜粉筆粉</h4><p><b>性質：</b>白色粉末，不易溶於水。</p><p><b>粒子組成：</b>每個粒子包含不同種類的小粒子。</p></div></article></div><div class="book-leaf book-sample-focus"><article class="book-sample-card"><span class="book-sample-thumb" role="img" aria-label="樣本 9：合金珠" style="--thumb-x:92.3%;--thumb-y:92.3%"></span><div><h4>樣本 9｜合金珠</h4><p><b>性質：</b>金黃色，有金屬光澤。</p><p><b>粒子組成：</b>由不同種類的粒子混合構成。</p></div></article><p class="book-sample-note">把性質和粒子組成合在一起看，再決定樣本適合放在哪個展示櫃。</p></div></div>
           </div>
           <div class="book-reader-nav"><button type="button" class="book-reader-nav-button" id="reader-prev">上一頁</button><span id="reader-page-number">1 / 3</span><button type="button" class="book-reader-nav-button" id="reader-next">下一頁</button></div>
         </dialog>
@@ -2377,15 +2383,15 @@
     }
 
     const specimenRules={
-      copper:{label:"樣本 1",clue:"資料卡：樣本只由一種物質構成，粒子模型中只有一種粒子。",category:"element",dest:"元素展示層"},
-      aluminum:{label:"樣本 2",clue:"資料卡：樣本只由一種物質構成，粒子模型中只有一種粒子。",category:"element",dest:"元素展示層"},
-      silver:{label:"樣本 3",clue:"資料卡：樣本只由一種物質構成，粒子模型中只有一種粒子。",category:"element",dest:"元素展示層"},
-      sugar:{label:"樣本 4",clue:"資料卡：樣本只由一種物質構成；每個粒子都由不同種類的小粒子固定結合。",category:"compound",dest:"化合物展示層"},
-      salt:{label:"樣本 5",clue:"資料卡：樣本只由一種物質構成；每個粒子都由不同種類的小粒子固定結合。",category:"compound",dest:"化合物展示層"},
-      chalk:{label:"樣本 6",clue:"資料卡：樣本只由一種物質構成；每個粒子都由不同種類的小粒子固定結合。",category:"compound",dest:"化合物展示層"},
-      air:{label:"樣本 7",clue:"資料卡：樣本中同時含有數種不同的氣體。",category:"mixture",dest:"混合物展示櫃"},
-      granite:{label:"樣本 8",clue:"資料卡：這份岩石樣本含有石英、長石和雲母等不同礦物。",category:"mixture",dest:"混合物展示櫃"},
-      alloy:{label:"樣本 9",clue:"資料卡：這種金屬材料由兩種金屬物質組成。",category:"mixture",dest:"混合物展示櫃"}
+      copper:{label:"樣本 1",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
+      aluminum:{label:"樣本 2",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
+      silver:{label:"樣本 3",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
+      sugar:{label:"樣本 4",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
+      salt:{label:"樣本 5",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
+      chalk:{label:"樣本 6",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
+      air:{label:"樣本 7",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"},
+      granite:{label:"樣本 8",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"},
+      alloy:{label:"樣本 9",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"}
     };
     const specimenButtons=[...document.querySelectorAll(".scene-sample")];
     const sampleInfo=document.getElementById("sample-info");
@@ -2399,9 +2405,9 @@
       selectedSpecimen=button;
       specimenButtons.forEach(item=>{item.classList.toggle("is-selected",item===button);item.setAttribute("aria-pressed",String(item===button));});
       const data=specimenRules[button.dataset.sample];
-      sampleInfo.hidden=false;sampleInfoTitle.textContent=data.label+"資料卡";sampleClue.textContent=data.clue;
+      sampleInfo.hidden=false;sampleInfoTitle.textContent="已選取"+data.label;sampleClue.textContent=data.clue;
       sampleState.textContent=sampleStatus.has(button.dataset.sample)?"目前位置："+specimenRules[sampleStatus.get(button.dataset.sample)].dest:"先翻閱手冊，再選擇展示位置。";
-      workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="查看資料卡中的線索，再點選展示櫃中的分類位置。";
+      workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="到手冊找相同編號，根據性質和粒子組成判斷分類。";
     };
     const specimenRulesCount=Object.keys(specimenRules).length;
     const cabinetTargets=[...document.querySelectorAll(".cabinet-target")];
