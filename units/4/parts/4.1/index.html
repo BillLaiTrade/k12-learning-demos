@@ -2370,12 +2370,12 @@
       copper:{label:"樣本 1",realName:"銅片",property:"紅棕色薄片，表面可見明亮的金屬光澤。",particles:"放大後，視野中的微粒都呈現相同的樣式。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
       aluminum:{label:"樣本 4",realName:"鋁塊",property:"銀白色立方塊，表面帶有金屬光澤，重量較輕。",particles:"放大後，可見同一種樣式的微粒反覆出現。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
       silver:{label:"樣本 9",realName:"銀錠",property:"銀白色金屬塊，表面平滑並反射光線。",particles:"放大後，視野中的微粒呈現相同的樣式。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
-      sugar:{label:"樣本 2",realName:"糖晶",property:"白色透明的結晶顆粒，能溶於水。",particles:"每個微粒都由三種不同的小粒子，按固定數量組成。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
-      salt:{label:"樣本 6",realName:"食鹽",property:"白色結晶顆粒，放入水中能逐漸溶解。",particles:"兩種小粒子依一比一交錯排列，形成食鹽晶體。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
-      chalk:{label:"樣本 8",realName:"粉筆粉",property:"白色粉末，不易溶於水。",particles:"以常見碳酸鈣粉筆為例，每組由三種小粒子按固定數量組成。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
+      sugar:{label:"樣本 2",realName:"糖晶",property:"白色透明的結晶顆粒，能溶於水。",particles:"每個微粒由三種不同的小粒子，按固定數量組成。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
+      salt:{label:"樣本 6",realName:"食鹽",property:"白色結晶顆粒，放入水中能逐漸溶解。",particles:"晶體中的兩種小粒子依一比一交錯排列。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
+      chalk:{label:"樣本 8",realName:"粉筆粉",property:"白色粉末，不易溶於水。",particles:"每組由三種不同的小粒子，按固定數量組成。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
       air:{label:"樣本 3",realName:"空氣",property:"無色，會向四周擴散並充滿容器。",particles:"空氣含多種氣體粒子；每種氣體各自的組成固定，彼此比例不固定。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"},
       granite:{label:"樣本 5",realName:"花崗岩",property:"可見黑、白、粉紅等不同顆粒，外觀並不均一。",particles:"由多種礦物混合，各種礦物的組成固定，但種類和比例會因樣本不同而變。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"},
-      alloy:{label:"樣本 7",realName:"合金",property:"金黃色並帶有金屬光澤，整體外觀均勻。",particles:"以常見黃銅為例，兩種金屬小粒子約按七比三混合；不同合金比例不同。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"}
+      alloy:{label:"樣本 7",realName:"合金",property:"金黃色並帶有金屬光澤，整體外觀均勻。",particles:"兩種金屬小粒子混合排列；不同合金的種類和比例不同。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"}
     };
     const specimenButtons=[...document.querySelectorAll(".scene-sample")];
     const sampleInfo=document.getElementById("sample-info");
@@ -2479,15 +2479,15 @@
     returnSampleButton.addEventListener("click",()=>{if(selectedSpecimen)returnSpecimen(selectedSpecimen);});
     let bookPage=0;const bookPages=[...document.querySelectorAll("[data-book-page]")];
     const particleModelNotes=[
-      "銅片中的粒子都是同一種類；顏色只用來區分種類，不代表實際顏色。",
-      "每組都按蔗糖的實際組成呈現三種粒子的數量；顏色不代表實際顏色。",
-      "顯示空氣中的常見氣體粒子；每組數量正確，但不同氣體的數量不按空氣比例呈現。",
-      "鋁塊中的粒子都是同一種類；顏色只用來區分種類，不代表實際顏色。",
-      "以石英、長石、雲母的組成單位示意；花崗岩所含礦物種類和比例會變。",
-      "食鹽中的兩種粒子依一比一交錯排列；圖中不把它們畫成一顆顆獨立小組。",
-      "以常見黃銅為例，粒子比例約七比三；不同合金的種類和比例會不同。",
-      "以碳酸鈣粉筆為例；每組粒子數量依實際組成呈現。",
-      "銀錠中的粒子都是同一種類；顏色只用來區分種類，不代表實際顏色。"
+      "這份樣本中的粒子都是同一種類；顏色只用來區分種類，不代表實際顏色。",
+      "每組都由三種不同的小粒子按固定數量組成；顏色不代表實際顏色。",
+      "圖中顯示幾種常見氣體粒子；每組數量正確，不同氣體的數量不按真實混合比例呈現。",
+      "這份樣本中的粒子都是同一種類；顏色只用來區分種類，不代表實際顏色。",
+      "每框表示一種礦物的組成單位；各組數量固定，但礦物種類和比例會因樣本不同而變。",
+      "晶體中的兩種小粒子依一比一交錯排列；圖中不把它們畫成獨立小組。",
+      "圖中以常見比例呈現兩種金屬小粒子混合；不同種類比例會變。",
+      "每組由三種不同的小粒子按固定數量組成。",
+      "這份樣本中的粒子都是同一種類；顏色只用來區分種類，不代表實際顏色。"
     ];
     const particleColors={metal:"#71858b",C:"#53636b",H:"#eee9dc",O:"#d8755c",N:"#4c78a8",Ar:"#b9925b",Si:"#647c87",K:"#a88758",Al:"#8b78a4",Ca:"#6486a1",Na:"#6e7da6",Cl:"#9a9d67",Cu:"#b96b4d",Zn:"#7c8990"};
     const svgDot=(x,y,kind,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${particleColors[kind]}" stroke="#fffefa" stroke-opacity=".72" stroke-width="1.2"/>`;
