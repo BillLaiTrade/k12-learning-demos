@@ -204,6 +204,8 @@
     .speed-formula-meaning strong { color:var(--green); font-weight:800; }
     .speed-formula-chinese-line { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px; }
     .speed-formula-note { margin:0; color:var(--muted); text-align:center; font-size:.9rem; }
+    .speed-formula-notes { display:grid; gap:7px; }
+    .speed-formula-note--second { padding-top:7px; border-top:1px solid #d6e4d5; }
     .speed-formula-note strong { color:var(--ink); font-weight:800; }
     .speed-interactive { margin-top:18px; padding:18px; border:1px solid var(--line); border-radius:18px; background:#fbfcf8; }
     .speed-interactive-heading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:4px 14px; }
@@ -808,7 +810,10 @@
                 <div class="speed-formula-chinese-line">波速 = 每秒產生的完整波數 × 每個完整波的長度</div>
                 <div class="speed-formula-chinese-line">= <span class="frequency-meaning-fraction"><span>一個完整波的長度</span><span class="fraction-rule"></span><span>波形前進一個完整波長所需的時間</span></span></div>
               </div>
-              <p class="speed-formula-note"><strong>白話：</strong>你走多快，取決於每一步走多遠，以及走完這一步花多少時間。在波裡，每一步的距離是一個波長 <em>λ</em>，走完一步的時間是一個週期 <em>T</em>。</p>
+              <div class="speed-formula-notes">
+                <p class="speed-formula-note"><strong>白話：</strong>每秒能走多遠，取決於每秒走幾步（頻率 <em>f</em>），以及每一步有多大（波長 <em>λ</em>）。</p>
+                <p class="speed-formula-note speed-formula-note--second"><strong>也可以這樣想：</strong>你走多快，取決於每一步走多遠，以及走完這一步要花多少時間。在波裡，每一步的距離是一個波長 <em>λ</em>，走完一步的時間是一個週期 <em>T</em>。</p>
+              </div>
             </div>
             <section class="speed-interactive" aria-labelledby="speed-interactive-title">
               <div class="speed-interactive-heading"><h3 id="speed-interactive-title">調整頻率，觀察波長變化</h3><span class="speed-condition">同一介質，波速固定為 3 m/s</span></div>
