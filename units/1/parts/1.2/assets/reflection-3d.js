@@ -59,7 +59,7 @@ try {
     tableEdge: standard('#67503b', { roughness: 0.58 }),
     source: standard('#273330', { metalness: 0.32, roughness: 0.38 }),
     frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
-    mirror: new THREE.MeshPhysicalMaterial({ color: '#e3e8e6', metalness: 0.72, roughness: 0.018, clearcoat: 0.92, clearcoatRoughness: 0.01 }),
+    mirror: new THREE.MeshPhysicalMaterial({ color: '#eef1ef', metalness: 1, roughness: 0.005, clearcoat: 0, clearcoatRoughness: 0.005 }),
     mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
     paper: new THREE.MeshStandardMaterial({ color: '#f5f1e6', roughness: 0.9, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
@@ -141,14 +141,9 @@ try {
   roughTexture.repeat.set(2, 1.4);
   const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: '#f3eee1', roughness: 0.98, metalness: 0, side: THREE.DoubleSide });
   addBox(scene, [1.55, 0.018, 1.18], [paperCenter.x, 0.102, paperCenter.z], roughMaterial, false, true);
-  const sourceForVisibleReflection = (surface) => {
-    const viewDirection = camera.position.clone().sub(surface).normalize();
-    const reflectedSourceDirection = new THREE.Vector3(-viewDirection.x, viewDirection.y, -viewDirection.z).normalize();
-    return surface.clone().addScaledVector(reflectedSourceDirection, 2.3);
-  };
   const stations = [
-    { kind: 'mirror', surface: mirrorCenter, source: sourceForVisibleReflection(mirrorCenter) },
-    { kind: 'paper', surface: paperCenter, source: sourceForVisibleReflection(paperCenter) }
+    { kind: 'mirror', surface: mirrorCenter, source: new THREE.Vector3(-3.55, 1.62, -0.78) },
+    { kind: 'paper', surface: paperCenter, source: new THREE.Vector3(0.05, 1.62, 0.78) }
   ];
   const lamps = [];
   const lampLenses = [];
@@ -192,11 +187,7 @@ try {
     spotLights.push(spotLight);
     station.target = target;
     station.incident = target.clone().sub(station.source).normalize();
-    station.reflected = station.incident.clone().reflect(new THREE.Vector3(0, 1, 0)).normalize();
   }
-
-  const mirrorViewDirection = camera.position.clone().sub(mirrorCenter).normalize();
-  if (stations[0].reflected.dot(mirrorViewDirection) < 0.999) throw new Error('Mirror and flashlight are not aligned for a visible specular reflection.');
 
   let startedAt = 0;
   const duration = 1150;
@@ -274,7 +265,7 @@ try {
     illuminated[index] = true;
     fireButtons[index].querySelector('small').textContent = '再照一次';
     fireButtons[index].setAttribute('aria-pressed', 'true');
-    const chosen = index === 0 ? '左側平面鏡已點亮：觀察鏡面上的清晰反光。' : '右側霧面紙已點亮：觀察表面上較均勻的漫反射。';
+    const chosen = index === 0 ? '左側平面鏡已點亮：反光朝特定方向離開目前視角。' : '右側霧面紙已點亮：漫反射會讓表面從較多方向看起來明亮。';
     const other = illuminated[1 - index]
       ? (index === 0 ? '右側霧面紙也已點亮。' : '左側平面鏡也已點亮。')
       : (index === 0 ? '右側霧面紙仍未點亮。' : '左側平面鏡仍未點亮。');
