@@ -65,18 +65,15 @@
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>好，先固定光源和照射位置，再看看反射光落在哪些方向。</p></div>
             <p class="prompt">分別開啟左右手電筒，從目前視角比較鏡面與霧面紙的反光。</p>
             <figure class="reflection-stage">
-              <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="左右分開的兩座 3D 反射實驗台：左邊是平面鏡，右邊是霧面白紙，兩個表面前方各有對應標籤；各有一支手電筒以相同角度照射。開啟後觀察兩種表面的反光。" aria-describedby="reflection-status reflection-note"></canvas>
+              <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="左右分開的兩座 3D 反射實驗台：左邊是平面鏡，右邊是霧面白紙，兩個表面前方各有對應標籤；各有一支手電筒以相同角度照射。開啟後觀察兩種表面的反光。" aria-describedby="reflection-status"></canvas>
               <p class="reflection-fallback" id="reflection-fallback" hidden>這個 3D 實驗場景無法在目前裝置顯示；你仍可閱讀下方的觀察說明。</p>
               <div class="reflection-stage-labels" aria-hidden="true"><span><i class="reflection-dot-smooth"></i>平面鏡・鏡面反射</span><span><i class="reflection-dot-rough"></i>霧面紙・漫反射</span></div>
               <div class="reflection-controls">
-                <button class="reflection-fire" id="reflection-fire-mirror" type="button" aria-pressed="false" aria-describedby="reflection-hint"><span>左側手電筒</span><small>開啟手電筒</small></button>
-                <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false" aria-describedby="reflection-hint"><span>右側手電筒</span><small>開啟手電筒</small></button>
-                <p class="reflection-hint" id="reflection-hint">左右按鈕各管一側，也可點手電筒；拖曳旋轉視角。</p>
+                <button class="reflection-fire" id="reflection-fire-mirror" type="button" aria-pressed="false"><span>左側手電筒</span><small>開啟手電筒</small></button>
+                <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false"><span>右側手電筒</span><small>開啟手電筒</small></button>
               </div>
-              <figcaption class="visual-caption">拖曳視角，尋找鏡面反光。</figcaption>
             </figure>
               <p class="reflection-status visually-hidden" id="reflection-status" aria-live="polite">左右手電筒目前都已關閉。</p>
-            <p class="reflection-note" id="reflection-note">空氣中的光束不可見，觀察表面反光。</p>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>鏡面反光集中；霧面紙把光散向多處。兩者都遵守反射定律。</p></div>
           </div>
         </section>
