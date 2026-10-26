@@ -296,10 +296,9 @@ try {
 
   const animationFrames = [0, 0];
   const illuminated = [false, false];
-  const surfaceNames = ['平面鏡', '霧面紙'];
   const updateLightControls = () => {
     illuminated.forEach((isOn, index) => {
-      fireButtons[index].querySelector('small').textContent = `${isOn ? '關閉' : '開啟'}${surfaceNames[index]}`;
+      fireButtons[index].querySelector('small').textContent = `${isOn ? '關閉' : '開啟'}手電筒`;
       fireButtons[index].setAttribute('aria-pressed', String(isOn));
     });
     status.textContent = `平面鏡${illuminated[0] ? '已開啟' : '已關閉'}；霧面紙${illuminated[1] ? '已開啟' : '已關閉'}。`;
