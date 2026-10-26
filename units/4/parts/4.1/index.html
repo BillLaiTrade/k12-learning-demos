@@ -646,10 +646,8 @@
     .workbench-intro { margin:0 0 12px; color:#516159; }
     .workbench-viewport { overflow-x:auto; border:1px solid #b5c2b4; border-radius:15px; background:#d7c09d; scrollbar-color:#829b89 #eee8dc; }
     .workbench-scene { position:relative; width:100%; min-width:760px; aspect-ratio:1672 / 941; overflow:hidden; background:#9a7550 url("assets/specimen-workbench.png") center / 100% 100% no-repeat; }
-    .workbench-book { position:absolute; z-index:3; left:1.6%; top:49%; width:20%; height:39%; padding:8px; border:1px solid #b9a783; border-radius:8px 13px 13px 8px; background:linear-gradient(90deg,#d1c09c 0 4%,#fff9e9 4% 49%,#d5c39e 49.5% 51%,#fff9e9 51% 96%,#b8a57e 96%); box-shadow:0 8px 18px #301f1240; transform:rotate(-2deg); }
-    .book-title-row { display:flex; align-items:center; justify-content:center; gap:4px; min-height:22px; margin-bottom:4px; }
-    .workbench-book h3 { margin:0; color:#29483a; font-size:clamp(.65rem,1vw,.88rem); text-align:center; }
-    .book-expand { flex:none; padding:2px 5px; border:1px solid #a7b5a7; border-radius:5px; background:#edf3e9; color:#315844; font-size:clamp(.48rem,.68vw,.62rem); line-height:1.2; cursor:pointer; }
+    .book-open-hotspot { position:absolute; z-index:3; left:.5%; top:53%; width:17%; height:12%; padding:0; border:0; border-radius:10px; background:transparent; cursor:zoom-in; }
+    .book-open-hotspot:focus-visible { outline:3px solid #f3d17a; outline-offset:2px; background:#fff7d522; }
     .book-reader { width:min(720px,calc(100vw - 32px)); max-width:none; max-height:min(80vh,760px); padding:18px; border:1px solid #bac9b7; border-radius:16px; background:#fffdf7; color:#344a3b; box-shadow:0 18px 60px #18251c66; }
     .book-reader::backdrop { background:#16231dcc; backdrop-filter:blur(3px); }
     .book-reader-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
@@ -676,20 +674,23 @@
     .book-controls { display:flex; align-items:center; justify-content:space-between; height:22px; margin-top:3px; }
     .book-controls button { width:24px; height:22px; padding:0; border:1px solid #a7b5a7; border-radius:999px; background:#edf3e9; color:#315844; font-size:.8rem; cursor:pointer; }
     .book-controls span { color:#657368; font-size:.65rem; }
-    .case-heading { position:absolute; z-index:2; top:4%; padding:2px 8px; border:1px solid #c5ad78; border-radius:4px; background:#f5e4b8eF; color:#453823; box-shadow:0 2px 6px #27160855; font-size:clamp(.62rem,1vw,.84rem); font-weight:800; }
-    .case-heading--pure { left:55%; }
-    .case-heading--mixture { left:82%; }
-    .cabinet-target { position:absolute; z-index:5; display:grid; place-items:center; min-width:85px; min-height:32px; padding:4px 8px; border:1px solid #d0bf91; border-radius:5px; background:#f7e9c8ed; color:#40503e; box-shadow:0 2px 7px #27160855; font-size:clamp(.58rem,.85vw,.76rem); font-weight:800; cursor:pointer; transition:transform .15s,background .15s,box-shadow .15s; }
-    .cabinet-target:hover,.cabinet-target:focus-visible { transform:scale(1.06); background:#fff2d0; box-shadow:0 0 0 3px #e0b65f80,0 3px 8px #27160855; outline:none; }
-    .cabinet-target[data-target="element"] { left:55%; top:25%; }
-    .cabinet-target[data-target="compound"] { left:55%; top:42%; }
-    .cabinet-target[data-target="mixture"] { left:82%; top:30%; }
+    .case-heading,.cabinet-target { position:absolute; z-index:5; display:grid; place-items:center; min-width:78px; min-height:25px; padding:3px 10px; border:1px solid #755a32; border-radius:2px; background:linear-gradient(180deg,#d5c18f 0%,#f3e2b7 22%,#d9c28c 78%,#b99b62 100%); color:#453923; box-shadow:inset 0 1px 0 #fff1c9,0 1px 2px #2b1c1044; font-size:clamp(.58rem,.82vw,.72rem); font-weight:800; line-height:1.1; white-space:nowrap; }
+    .case-heading::before,.case-heading::after,.cabinet-target::before,.cabinet-target::after { position:absolute; top:50%; width:3px; height:3px; border:1px solid #947649; border-radius:50%; background:#f4e0ad; content:""; transform:translateY(-50%); }
+    .case-heading::before,.cabinet-target::before { left:3px; }
+    .case-heading::after,.cabinet-target::after { right:3px; }
+    .case-heading { z-index:4; }
+    .case-heading--pure { left:55%; top:45%; }
+    .cabinet-target { z-index:7; min-height:28px; cursor:pointer; transition:filter .15s,box-shadow .15s,transform .15s; }
+    .cabinet-target:hover,.cabinet-target:focus-visible { filter:brightness(1.08); box-shadow:inset 0 1px 0 #fff5d7,0 0 0 3px #ead6a477,0 2px 4px #2b1c1055; outline:none; transform:translateY(-1px); }
+    .cabinet-target[data-target="element"] { left:55%; top:18%; }
+    .cabinet-target[data-target="compound"] { left:55%; top:30%; }
+    .cabinet-target[data-target="mixture"] { left:82%; top:25%; }
     .scene-sample { position:absolute; z-index:4; left:var(--sample-x); top:var(--sample-y); display:grid; grid-template-rows:minmax(0,1fr) 18px; justify-items:center; align-content:end; width:11%; height:14%; padding:0; border:0; background:transparent; cursor:grab; touch-action:none; transition:left .65s cubic-bezier(.2,.75,.25,1),top .65s cubic-bezier(.2,.75,.25,1),width .65s,height .65s,filter .2s,transform .2s; }
     .scene-sample:active { cursor:grabbing; }
     .scene-sample.is-dragging { z-index:12; transform:scale(1.12); filter:drop-shadow(0 12px 12px #30211199); transition:none; cursor:grabbing; }
     .scene-sample:focus-visible { outline:3px solid #f7d375; outline-offset:2px; border-radius:10px; }
     .scene-sample.is-selected { z-index:8; transform:translateY(-7px) scale(1.08); filter:drop-shadow(0 7px 8px #30211180); }
-    .scene-sample.is-placed { z-index:6; width:6%; height:9%; grid-template-rows:1fr; transform:none; filter:drop-shadow(0 3px 4px #24180d80); cursor:pointer; }
+    .scene-sample.is-placed { z-index:6; width:6%; height:8%; grid-template-rows:1fr; transform:none; filter:drop-shadow(0 3px 4px #24180d80); cursor:pointer; }
     .scene-sample .sample-art { display:block; width:100%; height:100%; background-image:url("assets/specimen-samples-sprite.png"); background-repeat:no-repeat; background-size:300% 300%; background-position:var(--sprite-x) var(--sprite-y); filter:drop-shadow(0 5px 5px #2d21134a); }
     .scene-sample.is-placed .sample-art { height:100%; }
     .scene-sample .sample-tag { display:block; max-width:100%; margin-top:1px; padding:0 5px; border:1px solid #cdbd9c; border-radius:2px; background:#f6edda; color:#584a34; box-shadow:0 2px 4px #28190d40; font-size:clamp(.48rem,.72vw,.62rem); line-height:16px; white-space:nowrap; }
@@ -1250,7 +1251,11 @@
 
         <dialog class="book-reader" id="book-reader" aria-labelledby="book-reader-title">
           <div class="book-reader-header"><h3 id="book-reader-title">物質分類手冊</h3><button class="book-reader-close" type="button" id="book-reader-close">關閉</button></div>
-          <div class="book-reader-pages" id="book-reader-pages" aria-live="polite"></div>
+          <div class="book-reader-pages" id="book-reader-pages" aria-live="polite">
+            <div class="book-page is-active" data-book-page="0"><div class="book-leaf"><strong>先看有幾種物質</strong>只有一種物質，屬於純物質。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>多種物質混在一起</strong>樣本同時含有多種物質，屬於混合物。<div class="book-model book-model--mixed"><i></i><i></i><i></i><i></i></div></div></div>
+            <div class="book-page" data-book-page="1"><div class="book-leaf"><strong>元素</strong>純物質裡只有一種粒子。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>化合物</strong>每個粒子都由不同種類的小粒子固定結合。<div class="book-model book-model--compound"><i></i><i></i><i></i></div></div></div>
+            <div class="book-page" data-book-page="2"><div class="book-leaf"><strong>物理變化</strong>變化前後仍是同一種物質。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>化學變化</strong>變化後產生不同的物質。<div class="book-model book-model--mixed"><i></i><i></i><i></i><i></i></div></div></div>
+          </div>
           <div class="book-reader-nav"><button type="button" class="book-reader-nav-button" id="reader-prev">上一頁</button><span id="reader-page-number">1 / 3</span><button type="button" class="book-reader-nav-button" id="reader-next">下一頁</button></div>
         </dialog>
         <section class="unit-quiz" id="unit-quiz" aria-labelledby="unit-quiz-title">
@@ -1258,23 +1263,15 @@
           <div class="quiz-body">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這些樣本要怎麼分類？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>翻翻手冊找線索，再替它們找到位置。</p></div>
-            <p class="workbench-intro">點選樣本查看資料線索，再翻閱分類手冊；可將樣本拖進展示櫃，或先選樣本再點選分類位置。</p>
+            <p class="workbench-intro">點選桌上的手冊可放大翻閱；點選樣本查看線索，再把樣本拖到層板標籤，或先選樣本再點選標籤。</p>
             <p class="scene-pan-hint">左右滑動桌面，查看所有樣本和展示櫃。</p>
             <div class="workbench-viewport" aria-label="可左右滑動查看桌面上的分類工作區">
               <div class="workbench-scene" id="classification-workbench" aria-label="木桌上有待分類的樣本，旁邊有物質分類手冊，後方是玻璃展示櫃">
-                <section class="workbench-book" aria-label="可翻頁的物質分類手冊">
-                  <div class="book-title-row"><h3>物質分類手冊</h3><button class="book-expand" type="button" id="book-expand" aria-haspopup="dialog">放大閱讀</button></div>
-                  <div class="book-page-content" aria-live="polite">
-                    <div class="book-page is-active" data-book-page="0"><div class="book-leaf"><strong>先看有幾種物質</strong>只有一種物質，屬於純物質。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>多種物質混在一起</strong>樣本同時含有多種物質，屬於混合物。<div class="book-model book-model--mixed"><i></i><i></i><i></i><i></i></div></div></div>
-                    <div class="book-page" data-book-page="1"><div class="book-leaf"><strong>元素</strong>純物質裡只有一種粒子。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>化合物</strong>每個粒子都由不同種類的小粒子固定結合。<div class="book-model book-model--compound"><i></i><i></i><i></i></div></div></div>
-                    <div class="book-page" data-book-page="2"><div class="book-leaf"><strong>物理變化</strong>變化前後仍是同一種物質。<div class="book-model"><i></i><i></i><i></i></div></div><div class="book-leaf"><strong>化學變化</strong>變化後產生不同的物質。<div class="book-model book-model--mixed"><i></i><i></i><i></i><i></i></div></div></div>
-                  </div>
-                  <div class="book-controls"><button type="button" id="book-prev" aria-label="翻到前一頁">‹</button><span id="book-page-number">1 / 3</span><button type="button" id="book-next" aria-label="翻到後一頁">›</button></div>
-                </section>
-                <span class="case-heading case-heading--pure">純物質</span><span class="case-heading case-heading--mixture">混合物</span>
+                <button class="book-open-hotspot" type="button" id="book-open" aria-label="打開桌上的物質分類手冊並放大閱讀" aria-haspopup="dialog"></button>
+                <span class="case-heading case-heading--pure">純物質</span>
                 <button class="cabinet-target" type="button" data-target="element" aria-label="將選取的樣本放入純物質展示櫃的元素層">元素</button>
                 <button class="cabinet-target" type="button" data-target="compound" aria-label="將選取的樣本放入純物質展示櫃的化合物層">化合物</button>
-                <button class="cabinet-target" type="button" data-target="mixture" aria-label="將選取的樣本放入混合物展示櫃">放入樣本</button>
+                <button class="cabinet-target" type="button" data-target="mixture" aria-label="將選取的樣本放入混合物展示櫃">混合物</button>
                 <button class="scene-sample" type="button" data-sample="copper" aria-pressed="false" aria-label="選取桌上的樣本一，查看資料卡" style="--sample-x:28%;--sample-y:53%;--sprite-x:0%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 1</span></button>
                 <button class="scene-sample" type="button" data-sample="aluminum" aria-pressed="false" aria-label="選取桌上的樣本二，查看資料卡" style="--sample-x:42%;--sample-y:53%;--sprite-x:50%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 2</span></button>
                 <button class="scene-sample" type="button" data-sample="silver" aria-pressed="false" aria-label="選取桌上的樣本三，查看資料卡" style="--sample-x:56%;--sample-y:53%;--sprite-x:100%;--sprite-y:0%"><span class="sample-art"></span><span class="sample-tag">樣本 3</span></button>
@@ -2410,7 +2407,7 @@
       if(target.dataset.target!==data.category){workbenchFeedback.dataset.kind="wrong";workbenchFeedback.textContent="這個位置和樣本資料對不起來。翻翻手冊，再看看線索。";return false;}
       sampleStatus.set(key,target.dataset.target);button.classList.remove("is-selected");button.classList.add("is-placed");
       const count=[...sampleStatus.entries()].filter(([,category])=>category===target.dataset.target).findIndex(([sample])=>sample===key);
-      const placement={element:{left:52,top:32},compound:{left:52,top:49},mixture:{left:80,top:39}}[target.dataset.target];
+      const placement={element:{left:49,top:7},compound:{left:49,top:20},mixture:{left:80,top:7}}[target.dataset.target];
       button.style.left=(placement.left+(count%3)*6.5)+"%";button.style.top=(placement.top+Math.floor(count/3)*5.5)+"%";
       button.setAttribute("aria-label",data.label+"已放入"+data.dest+"，點選可重新分類");button.setAttribute("aria-pressed","false");
       sampleState.textContent="已放入："+data.dest;workbenchFeedback.dataset.kind="correct";
@@ -2452,13 +2449,10 @@
       placeSpecimen(selectedSpecimen,target);
     }));
     let bookPage=0;const bookPages=[...document.querySelectorAll("[data-book-page]")];
-    const showBookPage=next=>{bookPage=(next+bookPages.length)%bookPages.length;bookPages.forEach((page,index)=>page.classList.toggle("is-active",index===bookPage));document.getElementById("book-page-number").textContent=(bookPage+1)+" / "+bookPages.length;};
     const bookReader=document.getElementById("book-reader");
-    const readerPages=document.getElementById("book-reader-pages");
-    const showReaderPage=next=>{showBookPage(next);readerPages.replaceChildren(bookPages[bookPage].cloneNode(true));readerPages.firstElementChild.classList.add("is-active");document.getElementById("reader-page-number").textContent=(bookPage+1)+" / "+bookPages.length;};
-    document.getElementById("book-prev").addEventListener("click",()=>{showBookPage(bookPage-1);if(bookReader.open)showReaderPage(bookPage);});
-    document.getElementById("book-next").addEventListener("click",()=>{showBookPage(bookPage+1);if(bookReader.open)showReaderPage(bookPage);});
-    document.getElementById("book-expand").addEventListener("click",()=>{showReaderPage(bookPage);bookReader.showModal();});
+    const showBookPage=next=>{bookPage=(next+bookPages.length)%bookPages.length;bookPages.forEach((page,index)=>page.classList.toggle("is-active",index===bookPage));document.getElementById("reader-page-number").textContent=(bookPage+1)+" / "+bookPages.length;};
+    const showReaderPage=next=>showBookPage(next);
+    document.getElementById("book-open").addEventListener("click",()=>{showReaderPage(bookPage);bookReader.showModal();});
     document.getElementById("reader-prev").addEventListener("click",()=>showReaderPage(bookPage-1));
     document.getElementById("reader-next").addEventListener("click",()=>showReaderPage(bookPage+1));
     document.getElementById("book-reader-close").addEventListener("click",()=>bookReader.close());
