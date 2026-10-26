@@ -336,8 +336,6 @@
     .field-response-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px 15px; margin-bottom:10px; }
     .field-response h3 { margin:0; color:var(--ink); font-size:1.08rem; }
     .field-response-head p { margin:0; color:var(--muted); font-size:.86rem; }
-    .field-distance-source { max-width:360px; margin-bottom:11px; padding:9px 11px; border-radius:9px; background:#fff3df; color:#745027; font-size:.84rem; }
-    .field-distance-source strong { float:right; }
     .field-time-mode { margin:0 0 11px; padding:0; border:0; }
     .field-time-mode legend { margin-bottom:5px; color:var(--ink); font-size:.82rem; font-weight:750; }
     .field-time-options { display:flex; gap:7px; }
@@ -1071,8 +1069,7 @@
             </section>
           </div>
           <form class="field-response" id="field-response-form" novalidate>
-            <div class="field-response-head"><h3>作答區</h3><p>地圖距離已自動帶入；填入波形資料後，系統計算抵達時間。</p></div>
-            <div class="field-distance-source">地圖距離已帶入<strong><span id="field-distance-value">120</span> km</strong></div>
+            <div class="field-response-head"><h3>作答區</h3><p>填入波形圖上的參數，系統會依地圖距離計算抵達時間。</p></div>
             <fieldset class="field-time-mode">
               <legend>選擇輸入方式（P、S 波同步）</legend>
               <div class="field-time-options">
@@ -1147,7 +1144,6 @@
         const fieldPResult=document.querySelector("#field-p-result"),fieldSResult=document.querySelector("#field-s-result"),fieldWarningResult=document.querySelector("#field-warning-result"),fieldCalculation=document.querySelector("#field-calculation");
         const fieldFormat=value=>Number(value.toFixed(2)).toLocaleString("zh-TW");
         let fieldTimeMode="frequency";
-        document.querySelector("#field-distance-value").textContent=fieldFormat(fieldDistance);
         const updateFieldTimeMode=clearTimeInputs=>{
           const isFrequency=fieldTimeMode==="frequency",label=isFrequency?"頻率 f（Hz）":"週期 T（s）",placeholder=isFrequency?"填入頻率":"填入週期",source=isFrequency?"頻率標示":"週期標示";
           fieldPTimeLabel.textContent=label;fieldSTimeLabel.textContent=label;fieldPTime.placeholder=placeholder;fieldSTime.placeholder=placeholder;
