@@ -679,12 +679,12 @@
     .case-heading::before,.cabinet-target::before { left:3px; }
     .case-heading::after,.cabinet-target::after { right:3px; }
     .case-heading { z-index:4; }
-    .case-heading--pure { left:55%; top:45%; }
+    .case-heading--pure { left:55%; top:1%; }
     .cabinet-target { z-index:7; min-height:28px; cursor:pointer; transition:filter .15s,box-shadow .15s,transform .15s; }
     .cabinet-target:hover,.cabinet-target:focus-visible { filter:brightness(1.08); box-shadow:inset 0 1px 0 #fff5d7,0 0 0 3px #ead6a477,0 2px 4px #2b1c1055; outline:none; transform:translateY(-1px); }
     .cabinet-target[data-target="element"] { left:55%; top:18%; }
     .cabinet-target[data-target="compound"] { left:55%; top:30%; }
-    .cabinet-target[data-target="mixture"] { left:82%; top:25%; }
+    .cabinet-target[data-target="mixture"] { left:82%; top:1%; }
     .scene-sample { position:absolute; z-index:4; left:var(--sample-x); top:var(--sample-y); display:grid; grid-template-rows:minmax(0,1fr) 18px; justify-items:center; align-content:end; width:11%; height:14%; padding:0; border:0; background:transparent; cursor:grab; touch-action:none; transition:left .65s cubic-bezier(.2,.75,.25,1),top .65s cubic-bezier(.2,.75,.25,1),width .65s,height .65s,filter .2s,transform .2s; }
     .scene-sample:active { cursor:grabbing; }
     .scene-sample.is-dragging { z-index:12; transform:scale(1.12); filter:drop-shadow(0 12px 12px #30211199); transition:none; cursor:grabbing; }
@@ -2408,7 +2408,7 @@
       if(targetCategory!==data.category){workbenchFeedback.dataset.kind="wrong";workbenchFeedback.textContent="這個位置和樣本資料對不起來。翻翻手冊，再看看線索。";return false;}
       sampleStatus.set(key,targetCategory);button.classList.remove("is-selected");button.classList.add("is-placed");
       const count=[...sampleStatus.entries()].filter(([,category])=>category===targetCategory).findIndex(([sample])=>sample===key);
-      const placement={element:{left:49,top:7},compound:{left:49,top:20},mixture:{left:80,top:7}}[targetCategory];
+      const placement={element:{left:49,top:7},compound:{left:49,top:20},mixture:{left:80,top:8}}[targetCategory];
       button.style.left=(placement.left+(count%3)*6.5)+"%";button.style.top=(placement.top+Math.floor(count/3)*5.5)+"%";
       button.setAttribute("aria-label",data.label+"已放入"+data.dest+"，點選可重新分類");button.setAttribute("aria-pressed","false");
       sampleState.textContent="已放入："+data.dest;workbenchFeedback.dataset.kind="correct";
