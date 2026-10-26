@@ -24,8 +24,20 @@ try {
   const camera = new THREE.PerspectiveCamera(39, 1, 0.1, 45);
   const cameraTarget = new THREE.Vector3(-0.05, 0.38, 0);
   const cameraOffset = new THREE.Vector3(-4.7, 3.35, 7.4);
-  camera.position.copy(cameraTarget).add(cameraOffset);
-  camera.lookAt(cameraTarget);
+  const cameraDistance = cameraOffset.length();
+  let cameraAzimuth = Math.atan2(cameraOffset.x, cameraOffset.z);
+  let cameraPolar = Math.acos(cameraOffset.y / cameraDistance);
+  let pointerDrag = null;
+  const updateCamera = (distance = cameraDistance) => {
+    const sinPolar = Math.sin(cameraPolar);
+    camera.position.set(
+      cameraTarget.x + Math.sin(cameraAzimuth) * sinPolar * distance,
+      cameraTarget.y + Math.cos(cameraPolar) * distance,
+      cameraTarget.z + Math.cos(cameraAzimuth) * sinPolar * distance
+    );
+    camera.lookAt(cameraTarget);
+  };
+  updateCamera();
 
   scene.add(new THREE.HemisphereLight('#fff1d5', '#334744', 1.45));
   const keyLight = new THREE.DirectionalLight('#ffe2ac', 2.15);
@@ -275,6 +287,32 @@ try {
   let startedAt = 0;
   const duration = 1150;
   const render = () => renderer.render(scene, camera);
+
+  canvas.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0) return;
+    pointerDrag = { id: event.pointerId, x: event.clientX, y: event.clientY };
+    canvas.setPointerCapture(event.pointerId);
+    canvas.classList.add('is-dragging');
+    event.preventDefault();
+  });
+  canvas.addEventListener('pointermove', (event) => {
+    if (!pointerDrag || pointerDrag.id !== event.pointerId) return;
+    const deltaX = event.clientX - pointerDrag.x;
+    const deltaY = event.clientY - pointerDrag.y;
+    pointerDrag.x = event.clientX;
+    pointerDrag.y = event.clientY;
+    cameraAzimuth -= deltaX * 0.008;
+    cameraPolar = THREE.MathUtils.clamp(cameraPolar + deltaY * 0.008, 0.2, 1.48);
+    updateCamera(cameraDistance * (camera.aspect < 1.1 ? 1.08 : 1));
+    render();
+  });
+  const endPointerDrag = (event) => {
+    if (!pointerDrag || pointerDrag.id !== event.pointerId) return;
+    pointerDrag = null;
+    canvas.classList.remove('is-dragging');
+  };
+  canvas.addEventListener('pointerup', endPointerDrag);
+  canvas.addEventListener('pointercancel', endPointerDrag);
   const setIllumination = (progress) => {
     const eased = 1 - Math.pow(1 - progress, 3);
     mats.beam.opacity = 0.055 * eased;
@@ -298,8 +336,7 @@ try {
     camera.aspect = width / height;
     camera.fov = camera.aspect < 1.1 ? 46 : 39;
     const zoom = camera.aspect < 1.1 ? 1.08 : 1;
-    camera.position.copy(cameraTarget).addScaledVector(cameraOffset, zoom);
-    camera.lookAt(cameraTarget);
+    updateCamera(cameraDistance * zoom);
     camera.updateProjectionMatrix();
     render();
   };
