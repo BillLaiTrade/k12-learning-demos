@@ -3,7 +3,10 @@ import * as THREE from '../../1.1/assets/vendor/three/build/three.module.js';
 const canvas = document.querySelector('#reflection-3d-scene');
 if (!canvas) throw new Error('Reflection scene canvas is missing.');
 
-const button = document.querySelector('#reflection-fire');
+const fireButtons = [
+  document.querySelector('#reflection-fire-mirror'),
+  document.querySelector('#reflection-fire-paper')
+];
 const status = document.querySelector('#reflection-status');
 const fallback = document.querySelector('#reflection-fallback');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -61,10 +64,8 @@ try {
     mirrorBacking: standard('#374743', { metalness: 0.38, roughness: 0.3 }),
     paper: new THREE.MeshStandardMaterial({ color: '#f5f1e6', roughness: 0.84, side: THREE.DoubleSide }),
     paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
-    beam: new THREE.MeshBasicMaterial({ color: '#ffcf71', transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }),
     beamBounce: new THREE.MeshBasicMaterial({ color: '#ffe29b', transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }),
     roughRay: new THREE.MeshBasicMaterial({ color: '#f47b20', transparent: true, opacity: 0, depthTest: false, depthWrite: false, side: THREE.DoubleSide }),
-    dust: new THREE.PointsMaterial({ color: '#ffe5ad', size: 0.055, transparent: true, opacity: 0, depthWrite: false, sizeAttenuation: true })
   };
 
   const woodCanvas = document.createElement('canvas');
@@ -150,6 +151,8 @@ try {
   const lamps = [];
   const sourceGlows = [];
   const spotLights = [];
+  const inputBeamMaterials = stations.map(() => new THREE.MeshBasicMaterial({ color: '#ffcf71', transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }));
+  const dustMaterials = stations.map(() => new THREE.PointsMaterial({ color: '#ffe5ad', size: 0.055, transparent: true, opacity: 0, depthWrite: false, sizeAttenuation: true }));
   for (const station of stations) {
     const target = station.surface.clone();
     const direction = target.clone().sub(station.source).normalize();
@@ -197,7 +200,7 @@ try {
     scene.add(mesh);
     return mesh;
   };
-  stations.forEach(({ source, target }) => makeBeamCone(source, target, 0.42, mats.beam));
+  stations.forEach(({ source, target }, index) => makeBeamCone(source, target, 0.42, inputBeamMaterials[index]));
   const mirrorStation = stations.find(({ kind }) => kind === 'mirror');
   const paperStation = stations.find(({ kind }) => kind === 'paper');
   const mirrorReflection = mirrorStation.incident.clone().reflect(new THREE.Vector3(0, 1, 0)).normalize();
@@ -232,9 +235,9 @@ try {
     makeDirectionArrow(paperStation.target.clone().add(new THREE.Vector3(0, 0.025, 0)), paperStation.target.clone().addScaledVector(direction, 2), mats.roughRay);
   });
 
-  const dustGeometry = new THREE.BufferGeometry();
-  const dustPositions = [];
-  for (const { source, target } of stations) {
+  stations.forEach(({ source, target }, index) => {
+    const dustGeometry = new THREE.BufferGeometry();
+    const dustPositions = [];
     const axis = target.clone().sub(source).normalize();
     const tangentA = new THREE.Vector3().crossVectors(axis, new THREE.Vector3(0, 0, 1)).normalize();
     const tangentB = new THREE.Vector3().crossVectors(axis, tangentA).normalize();
@@ -248,24 +251,23 @@ try {
         .addScaledVector(tangentB, Math.sin(angle) * radial);
       dustPositions.push(point.x, point.y, point.z);
     }
-  }
-  dustGeometry.setAttribute('position', new THREE.Float32BufferAttribute(dustPositions, 3));
-  const dust = new THREE.Points(dustGeometry, mats.dust);
-  scene.add(dust);
+    dustGeometry.setAttribute('position', new THREE.Float32BufferAttribute(dustPositions, 3));
+    scene.add(new THREE.Points(dustGeometry, dustMaterials[index]));
+  });
 
   let startedAt = 0;
   const duration = 1150;
   const render = () => renderer.render(scene, camera);
   const raycaster = new THREE.Raycaster();
   const pointerPosition = new THREE.Vector2();
-  const isOverFlashlight = (event) => {
+  const flashlightIndexAtPointer = (event) => {
     const bounds = canvas.getBoundingClientRect();
     pointerPosition.set(
       ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
       -((event.clientY - bounds.top) / bounds.height) * 2 + 1
     );
     raycaster.setFromCamera(pointerPosition, camera);
-    return lamps.some((lamp) => raycaster.intersectObject(lamp, true).length > 0);
+    return lamps.findIndex((lamp) => raycaster.intersectObject(lamp, true).length > 0);
   };
 
   canvas.addEventListener('pointerdown', (event) => {
@@ -278,7 +280,7 @@ try {
   });
   canvas.addEventListener('pointermove', (event) => {
     if (!pointerDrag || pointerDrag.id !== event.pointerId) {
-      if (event.pointerType !== 'touch') canvas.classList.toggle('is-pointing-source', isOverFlashlight(event));
+      if (event.pointerType !== 'touch') canvas.classList.toggle('is-pointing-source', flashlightIndexAtPointer(event) >= 0);
       return;
     }
     const deltaX = event.clientX - pointerDrag.x;
@@ -293,22 +295,24 @@ try {
   });
   const endPointerDrag = (event) => {
     if (!pointerDrag || pointerDrag.id !== event.pointerId) return;
-    const clickedFlashlight = event.type === 'pointerup' && !pointerDrag.moved && isOverFlashlight(event);
+    const clickedFlashlight = event.type === 'pointerup' && !pointerDrag.moved ? flashlightIndexAtPointer(event) : -1;
     pointerDrag = null;
     canvas.classList.remove('is-dragging');
-    if (clickedFlashlight) fireLight();
+    if (clickedFlashlight >= 0) fireLight(clickedFlashlight);
   };
   canvas.addEventListener('pointerup', endPointerDrag);
   canvas.addEventListener('pointercancel', endPointerDrag);
-  const setIllumination = (progress) => {
+  const setIllumination = (index, progress) => {
     const eased = 1 - Math.pow(1 - progress, 3);
-    mats.beam.opacity = 0.065 * eased;
-    mats.beamBounce.opacity = 0.88 * eased;
-    mats.roughRay.opacity = 0.8 * eased;
-    mats.dust.opacity = 0.62 * eased;
-    spotLights.forEach((spotLight) => { spotLight.intensity = 10.5 * eased; });
-    sourceGlows.forEach((sourceGlow) => { sourceGlow.intensity = 0.85 * eased; });
-    roughMaterial.emissiveIntensity = 0.3 * eased;
+    inputBeamMaterials[index].opacity = 0.065 * eased;
+    dustMaterials[index].opacity = 0.62 * eased;
+    spotLights[index].intensity = 10.5 * eased;
+    sourceGlows[index].intensity = 0.85 * eased;
+    if (index === 0) mats.beamBounce.opacity = 0.88 * eased;
+    else {
+      mats.roughRay.opacity = 0.8 * eased;
+      roughMaterial.emissiveIntensity = 0.3 * eased;
+    }
     render();
   };
 
@@ -326,28 +330,35 @@ try {
   new ResizeObserver(resize).observe(canvas);
   resize();
 
-  let animationFrame = 0;
-  const fireLight = () => {
-    cancelAnimationFrame(animationFrame);
-    button.textContent = '再次照亮兩區';
-    status.textContent = '兩座實驗台同時照亮：平面鏡的反射光集中；霧面紙把光散向多個方向。';
+  const animationFrames = [0, 0];
+  const illuminated = [false, false];
+  const fireLight = (index) => {
+    cancelAnimationFrame(animationFrames[index]);
+    illuminated[index] = true;
+    fireButtons[index].querySelector('small').textContent = '再照一次';
+    fireButtons[index].setAttribute('aria-pressed', 'true');
+    const chosen = index === 0 ? '左側平面鏡：反射光集中成一束。' : '右側霧面紙：反射光散向多個方向。';
+    const other = illuminated[1 - index]
+      ? (index === 0 ? '右側霧面紙也已點亮。' : '左側平面鏡也已點亮。')
+      : (index === 0 ? '右側霧面紙仍未點亮。' : '左側平面鏡仍未點亮。');
+    status.textContent = `${chosen} ${other}`;
     if (reducedMotion.matches) {
-      setIllumination(1);
+      setIllumination(index, 1);
       return;
     }
-    startedAt = performance.now();
+    const startedAt = performance.now();
     const animate = (now) => {
       const progress = THREE.MathUtils.clamp((now - startedAt) / duration, 0, 1);
-      setIllumination(progress);
-      if (progress < 1) animationFrame = requestAnimationFrame(animate);
+      setIllumination(index, progress);
+      if (progress < 1) animationFrames[index] = requestAnimationFrame(animate);
     };
-    animationFrame = requestAnimationFrame(animate);
+    animationFrames[index] = requestAnimationFrame(animate);
   };
-  button.addEventListener('click', fireLight);
+  fireButtons.forEach((button, index) => button.addEventListener('click', () => fireLight(index)));
 
   window.addEventListener('resize', resize);
   window.addEventListener('pagehide', () => {
-    cancelAnimationFrame(animationFrame);
+    animationFrames.forEach((frame) => cancelAnimationFrame(frame));
     renderer.dispose();
     roughTexture.dispose();
     woodTexture.dispose();
@@ -356,6 +367,6 @@ try {
   console.error('Unable to initialize the 3D reflection scene:', error);
   canvas.hidden = true;
   fallback.hidden = false;
-  button.disabled = true;
+  fireButtons.forEach((button) => { button.disabled = true; });
   status.textContent = '目前裝置無法呈現 3D 場景；請閱讀卡片說明了解反射差異。';
 }
