@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e8">
+  <meta name="description" content="跟著小葵和阿公觀察光的反射，畫出光路，再探索平面鏡中的像。">
+  <link rel="icon" href="data:,">
+  <title>光的反射與平面鏡成像｜光學單元</title>
+  <style>
+    :root{color-scheme:light;--ink:#243a35;--muted:#64736d;--line:#d9d3c4;--paper:#f4f1e8;--card:#fffdf8;--green:#176b53;--green-pale:#e5f2e9;--orange:#bc612b;--orange-pale:#fff0e3;--shadow:0 7px 20px #243a3508;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);line-height:1.7}button,input{font:inherit}button{cursor:pointer}.shell{width:min(1160px,calc(100% - 40px));margin-inline:auto}.masthead{padding:22px 0 20px}.brand-row,.section-top,.card-head{display:flex;align-items:center;justify-content:space-between;gap:16px}.brand-row{font-size:.9rem;font-weight:750}.back-link{color:var(--green);text-decoration:none}.crumb{color:var(--muted);font-weight:500}.hero{display:grid;grid-template-columns:minmax(280px,.84fr) minmax(0,1.16fr);gap:34px;align-items:center;padding:28px 0 24px}.eyebrow{color:var(--green);font-size:.82rem;font-weight:800;letter-spacing:.1em}.hero h1{margin:8px 0 12px;font-size:clamp(2rem,4.4vw,3.4rem);line-height:1.2;letter-spacing:-.04em}.hero-copy p{margin:0;color:var(--muted);font-size:1.05rem}.hero-figure{margin:0;overflow:hidden;border:1px solid var(--line);border-radius:22px;background:#182436;box-shadow:var(--shadow)}.hero-figure img{display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:cover}.hero-figure figcaption{padding:8px 12px;background:#fffdf8;color:var(--muted);font-size:.8rem}
+    main{padding:0 0 76px}.section-top{align-items:end;margin:0 0 18px}.section-top h2{margin:0;font-size:1.32rem}.progress-copy{color:var(--muted);font-size:.9rem;white-space:nowrap}progress{display:block;width:100%;height:8px;margin:12px 0 0;border:0;border-radius:99px;overflow:hidden}progress::-webkit-progress-bar{background:#dfe7df}progress::-webkit-progress-value{background:var(--green);border-radius:99px}progress::-moz-progress-bar{background:var(--green);border-radius:99px}
+    .lesson-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px;align-items:start}.route{position:sticky;top:18px;max-height:calc(100svh - 36px);overflow-y:auto;padding:8px 10px 12px 0;scrollbar-width:thin}.route-label{margin:0 0 8px;color:var(--muted);font-size:.76rem;letter-spacing:.08em}.route-inner{display:grid;gap:4px}.route a{display:grid;grid-template-columns:28px minmax(0,1fr);align-items:start;gap:8px;padding:10px 11px;border:1px solid transparent;border-left:3px solid transparent;border-radius:0 10px 10px 0;color:var(--muted);font-size:.88rem;line-height:1.45;text-decoration:none}.route a:hover,.route a:focus-visible{border-color:var(--line);outline:2px solid transparent}.route a[aria-current=step]{border-left-color:var(--green);background:#e7eee0;color:#315a46;font-weight:800}.route-number{font-size:.75rem;font-weight:850;font-variant-numeric:tabular-nums}.lesson-list{display:grid;gap:22px}.lesson-card{position:relative;scroll-margin-top:22px;display:grid;grid-template-columns:175px minmax(0,1fr);gap:26px;padding:26px;border:1px solid var(--line);border-radius:24px;background:var(--card);box-shadow:var(--shadow)}.card-side{padding-right:16px;border-right:1px solid var(--line)}.card-side h3{margin:0 0 8px;font-size:1.25rem;line-height:1.4}.card-number{display:block;margin-bottom:10px;color:var(--green);font-size:.82rem;font-weight:850;letter-spacing:.08em}.card-role{color:var(--muted);font-size:.83rem}.card-main h2{margin:0 0 10px;font-size:clamp(1.3rem,2.6vw,1.75rem);line-height:1.38}.card-main>p{margin:0 0 16px;color:var(--muted)}.prompt{margin:14px 0 8px;font-weight:750}.visual{margin:20px 0;padding:20px;border:1px solid var(--line);border-radius:20px;background:#f6f8f3}.visual svg{display:block;width:100%;height:auto}.visual-caption{margin:8px 2px 0;color:var(--muted);font-size:.84rem}.dialogue{display:flex;align-items:center;gap:10px;margin:14px 0;padding:11px 15px;border-left:4px solid #8cae91;border-radius:0 13px 13px 0;background:#f0f5eb}.dialogue p{margin:0}.dialogue .speaker{display:inline-flex;flex:0 0 auto;align-items:center;gap:0;color:#315a46;font-weight:800}.dialogue .speaker:before{content:"";display:block;width:44px;height:44px;border:2px solid #8cae91;border-radius:50%;background-image:url("assets/dialogue-character-avatars.png");background-repeat:no-repeat;background-position:100% 50%;background-size:200% 100%;box-shadow:0 2px 6px #152f261f}.dialogue--xiaokui{border-left-color:#d39765;background:#fff4e8}.dialogue--xiaokui .speaker{color:#945523}.dialogue--xiaokui .speaker:before{border-color:#d39765;background-position:0 50%}
+    .controls,.toggle-row,.choices{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}.control-button,.choice{min-height:44px;border:1px solid var(--line);border-radius:13px;padding:9px 13px;background:#fff;color:var(--ink);text-align:left}.control-button:hover,.choice:hover,.control-button:focus-visible,.choice:focus-visible{border-color:var(--green);outline:2px solid #176b531f}.control-button[aria-pressed=true],.choice[aria-pressed=true]{border-color:var(--green);background:var(--green-pale);box-shadow:inset 0 0 0 1px var(--green)}.range-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;margin-top:15px}.range-row input{width:100%;accent-color:var(--green)}output,.strong-readout{color:var(--green);font-weight:850;white-space:nowrap}.readout-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.readout{flex:1 1 150px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}.readout small,.readout strong{display:block}.readout small{color:var(--muted)}.readout strong{color:var(--green);font-size:1.05rem}.fact,.feedback{margin-top:13px;padding:13px 15px;border-radius:13px;background:#f0f5eb;color:#405851}.fact p{margin:0}.feedback{min-height:50px;border-left:4px solid #b8cda9;border-radius:0 12px 12px 0}.feedback[data-state=good]{border-left-color:var(--green)}.feedback[data-state=try]{border-left-color:var(--orange);background:var(--orange-pale);color:#6b4028}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}th,td{padding:9px 12px;border-bottom:1px solid #e8e8df;text-align:center}th{background:#eaf1e8;color:#315a46}tbody tr:last-child td{border-bottom:0}.end-card{border-color:#bfd1be;background:#f4f8ef}.check-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}.action,.secondary{min-height:44px;border-radius:13px;padding:9px 16px;font-weight:750}.action{border:0;background:var(--green);color:#fff}.action:hover{background:#105640}.secondary{border:1px solid var(--line);background:#fff;color:var(--ink)}.choice.correct[aria-pressed=true]{border-color:var(--green);background:var(--green-pale)}.choice.incorrect[aria-pressed=true]{border-color:var(--orange);background:var(--orange-pale)}footer{padding:22px 0 36px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+    .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:780px){.shell{width:min(100% - 24px,680px)}.hero{grid-template-columns:1fr;gap:16px;padding:24px 0 20px}.hero-figure{order:-1}.lesson-layout{grid-template-columns:1fr;gap:8px}.route{z-index:5;top:0;max-height:none;margin:0 -12px;padding:6px 12px 10px;overflow-x:auto;overflow-y:hidden;background:var(--paper)}.route-label{margin:0 0 6px}.route-inner{display:flex;width:max-content;gap:6px}.route a{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);white-space:nowrap}.route a[aria-current=step]{border-color:var(--green)}.lesson-card{grid-template-columns:1fr;gap:13px;padding:19px;border-radius:19px}.card-side{display:flex;align-items:baseline;gap:10px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0}.card-number{margin:0}.card-role{display:none}}
+    @media(max-width:460px){.shell{width:calc(100% - 20px)}.route{margin-inline:-10px}.brand-row,.section-top{align-items:flex-start}.section-top h2{font-size:1.15rem}.progress-copy{font-size:.82rem}.visual{padding:9px}.range-row{grid-template-columns:1fr;gap:4px}.range-row output{text-align:right}.dialogue{align-items:flex-start;padding:10px}.dialogue .speaker:before{width:38px;height:38px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <header class="shell masthead">
+    <div class="brand-row"><a class="back-link" href="../../index.html">← 返回光學單元</a><span class="crumb">國二上・理化</span></div>
+    <div class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">一起走進光學實驗室</div>
+        <h1>光遇到表面會怎樣？</h1>
+        <p>小葵和阿公在實驗桌前追蹤一束光：先看光如何反射，再用光路理解平面鏡中的像。</p>
+      </div>
+      <figure class="hero-figure">
+        <img src="assets/optics-lab-opening.png" alt="夜晚的光學實驗室裡，小葵和阿公一起觀察光源、鏡面、屏幕與光路器材。" width="1672" height="941" fetchpriority="high">
+        <figcaption>小葵和阿公準備開始探索光的反射與平面鏡成像。</figcaption>
+      </figure>
+    </div>
+  </header>
+  <main class="shell">
+    <div class="section-top">
+      <div><h2>沿著探索路線，一步步認識光的反射</h2><progress id="lesson-progress" max="8" value="1" aria-label="學習路線閱讀進度"></progress></div>
+      <span class="progress-copy" id="progress-copy">正在探索第 1 段</span>
+    </div>
+    <div class="lesson-layout">
+      <nav class="route" aria-label="探索路線">
+        <p class="route-label">本段探索路線</p>
+        <div class="route-inner">
+          <a href="#card-01" aria-current="step"><span class="route-number">01</span><span>光遇到表面</span></a>
+          <a href="#card-02"><span class="route-number">02</span><span>畫出光路</span></a>
+          <a href="#card-03"><span class="route-number">03</span><span>改變入射方向</span></a>
+          <a href="#card-04"><span class="route-number">04</span><span>比較角度</span></a>
+          <a href="#card-05"><span class="route-number">05</span><span>鏡中的像</span></a>
+          <a href="#card-06"><span class="route-number">06</span><span>移動物體</span></a>
+          <a href="#card-07"><span class="route-number">07</span><span>反向追光</span></a>
+          <a href="#card-08"><span class="route-number">08</span><span>整理觀察</span></a>
+        </div>
+      </nav>
+      <div class="lesson-list">
+        <section class="lesson-card" id="card-01">
+          <div class="card-side"><span class="card-number">01</span><h3>光遇到表面會怎樣？</h3><span class="card-role">先觀察反射</span></div>
+          <div class="card-main">
+            <h2>同一束光照到不同表面，反射方向一樣嗎？</h2>
+            <p>小葵把光照向鏡面，再換成一般表面。留意反射光的方向如何呈現。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光照到鏡子和白紙，反射的方向會一樣嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先固定光源和照射位置，切換表面，看看反射光往哪些方向走。</p></div>
+            <p class="prompt">試著切換表面，觀察反射光的分布。</p>
+            <div class="toggle-row" role="group" aria-label="選擇受光表面">
+              <button class="control-button" type="button" data-surface="mirror" aria-pressed="true">鏡面</button>
+              <button class="control-button" type="button" data-surface="matte" aria-pressed="false">一般表面</button>
+            </div>
+            <figure class="visual">
+              <svg id="surface-scene" viewBox="0 0 620 260" role="img" aria-labelledby="surface-title surface-desc">
+                <title id="surface-title">光線照到表面後反射</title><desc id="surface-desc">切換表面，觀察反射光集中往一個方向或分散往不同方向。</desc>
+                <defs><marker id="arrow-gold" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#d5962d"/></marker></defs>
+                <text x="28" y="32" fill="#64736d" font-size="16">光源</text><circle cx="75" cy="78" r="18" fill="#f5c967" stroke="#b97a25" stroke-width="3"/>
+                <path d="M92 87L298 176" stroke="#d5962d" stroke-width="5" marker-end="url(#arrow-gold)"/>
+                <rect x="270" y="178" width="250" height="18" rx="6" fill="#8a9d92"/><path d="M282 178V91" stroke="#71867a" stroke-width="4"/>
+                <g id="mirror-rays"><path d="M300 174L488 91" stroke="#d5962d" stroke-width="4" marker-end="url(#arrow-gold)"/></g>
+                <g id="matte-rays" hidden><path d="M300 174L408 78M300 174L470 124M300 174L535 170M300 174L412 232" stroke="#d5962d" stroke-width="3" marker-end="url(#arrow-gold)"/></g>
+                <text id="surface-label" x="306" y="224" fill="#315a46" font-size="17" font-weight="700">鏡面：反射光較集中</text>
+              </svg>
+              <figcaption class="visual-caption">示意圖顯示反射方向；一般表面上的光線示意為多個方向，不代表所有表面都完全相同。</figcaption>
+            </figure>
+            <div class="fact"><p>光照到表面後會改變方向。表面不同，反射光的分布也可能不同；先記住觀察到的差異，接著追蹤一束光的路徑。</p></div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-02">
+          <div class="card-side"><span class="card-number">02</span><h3>怎麼畫出反射光路？</h3><span class="card-role">建立共同標記</span></div>
+          <div class="card-main">
+            <h2>要說明光從哪裡來、往哪裡去，可以怎麼畫？</h2>
+            <p>回到鏡面上的同一個照射點，將入射線、反射線和垂直鏡面的法線標在圖上。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>如果只說光被反射了，還看不出它往哪裡走。</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>把照向鏡面的光叫入射線，把離開鏡面的光叫反射線；再從照射點畫一條垂直鏡面的法線。</p></div>
+            <figure class="visual">
+              <svg viewBox="0 0 620 300" role="img" aria-labelledby="ray-title ray-desc">
+                <title id="ray-title">入射線、反射線和法線</title><desc id="ray-desc">一束光從左下方入射到直立鏡面，在照射點向左上方反射。水平虛線是法線。</desc>
+                <defs><marker id="arrow-ray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#d5962d"/></marker></defs>
+                <rect x="391" y="35" width="14" height="225" rx="5" fill="#8daaa0"/><text x="420" y="57" fill="#64736d" font-size="17">平面鏡</text>
+                <circle cx="398" cy="150" r="6" fill="#bc612b"/><text x="413" y="157" fill="#64736d" font-size="15">照射點</text>
+                <path d="M68 249L398 150" stroke="#d5962d" stroke-width="4" marker-end="url(#arrow-ray)"/><path d="M398 150L68 51" stroke="#d5962d" stroke-width="4" marker-end="url(#arrow-ray)"/>
+                <path d="M72 150H545" stroke="#71867a" stroke-width="2" stroke-dasharray="8 7"/>
+                <text x="101" y="238" fill="#315a46" font-size="17" font-weight="700">入射線</text><text x="103" y="72" fill="#315a46" font-size="17" font-weight="700">反射線</text><text x="478" y="139" fill="#64736d" font-size="16">法線</text>
+              </svg>
+              <figcaption class="visual-caption">法線通過照射點，並與鏡面垂直；它是接下來描述角度的基準線。</figcaption>
+            </figure>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-03">
+          <div class="card-side"><span class="card-number">03</span><h3>入射方向改變，反射方向如何變？</h3><span class="card-role">操作同一束光</span></div>
+          <div class="card-main">
+            <h2>轉動入射光線，反射光會怎麼跟著改變？</h2>
+            <p>拖動滑桿改變光線方向。鏡面和照射點保持不動，觀察兩條光線相對法線的角度。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光線轉得越斜，另一邊的反射光也會跟著轉嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>試著改變入射方向，先觀察反射方向和法線的相對位置，再比較兩邊的角度。</p></div>
+            <div class="range-row"><label for="incident-angle">調整入射角</label><output id="incident-angle-value" for="incident-angle">30°</output></div>
+            <input id="incident-angle" type="range" min="15" max="65" step="5" value="30" aria-label="調整入射角">
+            <figure class="visual">
+              <svg viewBox="0 0 620 330" role="img" aria-labelledby="angle-title angle-desc">
+                <title id="angle-title">調整入射方向並觀察反射方向</title><desc id="angle-desc">移動滑桿，入射光線和反射光線會相對水平法線對稱轉動。</desc>
+                <defs><marker id="arrow-angle" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#d5962d"/></marker></defs>
+                <rect x="422" y="38" width="14" height="250" rx="5" fill="#8daaa0"/><text x="446" y="60" fill="#64736d" font-size="16">鏡面</text>
+                <circle cx="429" cy="165" r="6" fill="#bc612b"/>
+                <path id="angle-incident" d="M100 235L429 165" stroke="#d5962d" stroke-width="4" marker-end="url(#arrow-angle)"/>
+                <path id="angle-reflected" d="M429 165L100 95" stroke="#d5962d" stroke-width="4" marker-end="url(#arrow-angle)"/>
+                <path d="M68 165H555" stroke="#71867a" stroke-width="2" stroke-dasharray="8 7"/>
+                <text x="76" y="154" fill="#64736d" font-size="15">法線</text>
+                <text id="angle-incident-label" x="178" y="222" fill="#315a46" font-size="16" font-weight="700">入射角 30°</text>
+                <text id="angle-reflected-label" x="178" y="119" fill="#315a46" font-size="16" font-weight="700">反射角 30°</text>
+              </svg>
+              <figcaption class="visual-caption">滑桿只改變入射方向；鏡面方向和照射點固定。圖上角度以法線為基準。</figcaption>
+            </figure>
+            <div class="fact"><p id="angle-observation">觀察兩條光線如何相對法線轉動；下一步用量測記錄檢查這個關係。</p></div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-04">
+          <div class="card-side"><span class="card-number">04</span><h3>反射定律成立嗎？</h3><span class="card-role">用量測比較</span></div>
+          <div class="card-main">
+            <h2>多量幾次，兩個角度的關係還一樣嗎？</h2>
+            <p>選一個入射角，讀取相對法線的角度並記錄。再改變入射角，看看量測結果是否支持剛才的觀察。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>只看一個角度還不夠，我想再量幾組來比較。</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>可以。每次都從法線量起，記下入射角和反射角，再找出它們的關係。</p></div>
+            <div class="range-row"><label for="measure-angle">設定這次的入射角</label><output id="measure-angle-value" for="measure-angle">20°</output></div>
+            <input id="measure-angle" type="range" min="10" max="70" step="10" value="20" aria-label="設定量測用的入射角">
+            <div class="readout-row"><div class="readout"><small>入射角（從法線量）</small><strong id="measure-incident">20°</strong></div><div class="readout"><small>反射角（從法線量）</small><strong id="measure-reflected">20°</strong></div></div>
+            <div class="controls"><button class="control-button" id="record-angle" type="button">記錄這組角度</button><button class="secondary" id="reset-angles" type="button">清除紀錄</button></div>
+            <div class="table-wrap"><table><caption class="visually-hidden">入射角與反射角量測紀錄</caption><thead><tr><th scope="col">量測</th><th scope="col">入射角</th><th scope="col">反射角</th></tr></thead><tbody id="angle-records"><tr><td>示範</td><td>20°</td><td>20°</td></tr><tr><td>示範</td><td>40°</td><td>40°</td></tr></tbody></table></div>
+            <div class="fact"><p>量測結果符合反射定律：反射角等於入射角。兩個角都是從照射點的法線量起，不是從鏡面量起。</p></div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-05">
+          <div class="card-side"><span class="card-number">05</span><h3>平面鏡裡的像在哪裡？</h3><span class="card-role">從光路看成像</span></div>
+          <div class="card-main">
+            <h2>鏡中的像看起來在哪一側？</h2>
+            <p>阿公把小物體放到平面鏡前。小葵從不同位置觀察，再用反射光路追蹤她看到的像。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我看見鏡子裡也有一個物體，它是真的在鏡子後面嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先觀察像相對鏡面的位置，再打開光路，看看進入眼睛的反射光從哪裡延伸而來。</p></div>
+            <div class="toggle-row"><button class="control-button" id="show-image-rays" type="button" aria-pressed="false">顯示光路</button></div>
+            <figure class="visual">
+              <svg viewBox="0 0 620 300" role="img" aria-labelledby="image-title image-desc">
+                <title id="image-title">平面鏡前的物體與鏡中的像</title><desc id="image-desc">物體在鏡面左側，對應的像以虛線箭頭顯示在鏡面右側。可切換顯示反射光路及其延長線。</desc>
+                <defs><marker id="arrow-object" markerWidth="8" markerHeight="8" refX="4" refY="2" orient="auto"><path d="M0 4L4 0L8 4Z" fill="#bc612b"/></marker></defs>
+                <rect x="305" y="35" width="14" height="230" rx="5" fill="#8daaa0"/><text x="326" y="56" fill="#64736d" font-size="16">平面鏡</text>
+                <line x1="180" y1="210" x2="180" y2="110" stroke="#bc612b" stroke-width="8" marker-end="url(#arrow-object)"/><text x="140" y="238" fill="#315a46" font-size="17">物體</text>
+                <line x1="430" y1="210" x2="430" y2="110" stroke="#7d8f85" stroke-width="6" stroke-dasharray="9 7" marker-end="url(#arrow-object)"/><text x="407" y="238" fill="#64736d" font-size="17">像</text>
+                <g id="image-rays" hidden><path d="M180 145L305 190L100 264" fill="none" stroke="#d5962d" stroke-width="3"/><path d="M305 190L520 113" fill="none" stroke="#78988a" stroke-width="2.5" stroke-dasharray="7 6"/><circle cx="305" cy="190" r="5" fill="#bc612b"/><text x="107" y="263" fill="#64736d" font-size="14">觀察者</text><text x="454" y="137" fill="#64736d" font-size="14">反射光的延長方向</text></g>
+                <path d="M180 260H305M319 260H444" stroke="#71867a" stroke-width="1.5"/><text x="198" y="282" fill="#64736d" font-size="14">鏡前</text><text x="356" y="282" fill="#64736d" font-size="14">鏡後</text>
+              </svg>
+              <figcaption class="visual-caption">虛線像是光路模型中的位置標記，不代表鏡後真的有物體；成像特徵依課程教材進一步確認。</figcaption>
+            </figure>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-06">
+          <div class="card-side"><span class="card-number">06</span><h3>物體靠近鏡子，像也會怎樣？</h3><span class="card-role">只改變物體位置</span></div>
+          <div class="card-main">
+            <h2>只移動物體，像的位置怎麼變？</h2>
+            <p>固定鏡面，沿直線移動物體。觀察像相對鏡面的位置變化，注意這裡改變的是物體位置，不是鏡子。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我把物體往鏡子移，像會留在原地嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>試著慢慢移動物體，觀察像和鏡面的相對位置；其他條件先保持不變。</p></div>
+            <div class="range-row"><label for="object-distance">移動物體到鏡面的距離</label><output id="object-distance-value" for="object-distance">較遠</output></div>
+            <input id="object-distance" type="range" min="1" max="4" step="1" value="4" aria-label="調整物體到鏡面的距離">
+            <figure class="visual">
+              <svg viewBox="0 0 620 280" role="img" aria-labelledby="distance-title distance-desc">
+                <title id="distance-title">移動物體並觀察鏡中像的位置</title><desc id="distance-desc">移動滑桿改變鏡前物體位置，鏡面固定，鏡後像的位置也隨之改變。</desc>
+                <rect x="305" y="30" width="14" height="215" rx="5" fill="#8daaa0"/>
+                <line id="distance-object" x1="125" y1="185" x2="125" y2="85" stroke="#bc612b" stroke-width="8" marker-end="url(#arrow-object)"/>
+                <line id="distance-image" x1="495" y1="185" x2="495" y2="85" stroke="#7d8f85" stroke-width="6" stroke-dasharray="9 7" marker-end="url(#arrow-object)"/>
+                <text id="distance-object-label" x="110" y="220" fill="#315a46" font-size="16">物體</text><text id="distance-image-label" x="470" y="220" fill="#64736d" font-size="16">像</text><text x="326" y="52" fill="#64736d" font-size="15">固定的鏡面</text>
+                <path id="distance-guide" d="M125 238H305M319 238H495" stroke="#71867a" stroke-width="1.5" stroke-dasharray="5 5"/>
+              </svg>
+              <figcaption class="visual-caption">模型用相對位置呈現觀察到的變化；平面鏡像距的精確描述依指定教材版本確認。</figcaption>
+            </figure>
+            <div class="fact"><p id="distance-observation">物體位置改變時，鏡中像的位置也跟著改變。請比較像相對鏡面的位置變化。</p></div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-07">
+          <div class="card-side"><span class="card-number">07</span><h3>光路能倒著走回去嗎？</h3><span class="card-role">反向追蹤路徑</span></div>
+          <div class="card-main">
+            <h2>把光線方向倒過來，路徑會改變嗎？</h2>
+            <p>小葵和阿公回到照射點，將光線方向反過來，檢查它是否沿著原本的路徑返回。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>如果光從反射光那一端照回來，還會沿剛才的路走嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>把入射和反射的方向交換，追蹤同一段路徑，看看光是否能倒著走回去。</p></div>
+            <div class="toggle-row"><button class="control-button" id="reverse-ray" type="button" aria-pressed="false">反轉光線方向</button></div>
+            <figure class="visual">
+              <svg viewBox="0 0 620 280" role="img" aria-labelledby="reverse-title reverse-desc">
+                <title id="reverse-title">反轉反射光路</title><desc id="reverse-desc">切換按鈕後，兩段相同的光路箭頭方向互換，鏡面與照射點保持不變。</desc>
+                <defs><marker id="arrow-reverse" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#d5962d"/></marker></defs>
+                <rect x="407" y="32" width="14" height="215" rx="5" fill="#8daaa0"/><circle cx="414" cy="140" r="6" fill="#bc612b"/>
+                <path id="reverse-left" d="M414 140L115 218" stroke="#d5962d" stroke-width="4" marker-end="url(#arrow-reverse)"/>
+                <path id="reverse-right" d="M115 62L414 140" stroke="#d5962d" stroke-width="4" marker-end="url(#arrow-reverse)"/>
+                <path d="M68 140H550" stroke="#71867a" stroke-width="2" stroke-dasharray="8 7"/>
+                <text id="reverse-state" x="92" y="252" fill="#315a46" font-size="17" font-weight="700">目前：光由左上方入射，再向左下方反射</text>
+              </svg>
+              <figcaption class="visual-caption">切換時只改變光線箭頭方向；鏡面、照射點和路徑都固定。</figcaption>
+            </figure>
+            <div class="fact"><p>反轉光線方向後，光可以沿原路徑返回，這種性質稱為光路可逆。下一段會再比較光進入不同介質時的路徑。</p></div>
+          </div>
+        </section>
+        <section class="lesson-card end-card" id="card-08">
+          <div class="card-side"><span class="card-number">08</span><h3>用光路解釋鏡中像</h3><span class="card-role">整理觀察</span></div>
+          <div class="card-main">
+            <h2>小葵要向阿公說明她看到的鏡中像。哪一段解釋同時用對反射光路和位置觀察？</h2>
+            <p>想想前面量過的角度、標過的法線，以及移動物體時看到的像的位置變化，再選一段完整說明。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我要把剛才的光路和觀察到的位置一起說清楚。</p></div>
+            <div class="choices" role="group" aria-label="選擇最完整的光路解釋">
+              <button class="choice" type="button" data-answer="wrong-a" aria-pressed="false">入射角從鏡面量起；物體移動時，鏡中像的位置不會改變。</button>
+              <button class="choice" type="button" data-answer="correct" aria-pressed="false">角度從法線量起，反射角等於入射角；移動物體時，鏡中像相對鏡面的位置也會改變。</button>
+              <button class="choice" type="button" data-answer="wrong-b" aria-pressed="false">反射光離開鏡面後不再沿直線前進；鏡中像就是鏡後真的物體。</button>
+            </div>
+            <div class="check-actions"><button class="action" id="check-answer" type="button">確認這段解釋</button><button class="secondary" id="reset-answer" type="button">重新選擇</button></div>
+            <div class="feedback" id="check-feedback" aria-live="polite">選好後再確認，回想證據：角度從哪條基準線量起？改變物體位置後觀察到什麼？</div>
+            <figure class="visual">
+              <svg viewBox="0 0 620 250" role="img" aria-labelledby="summary-title summary-desc">
+                <title id="summary-title">光的反射與平面鏡成像觀察重點</title><desc id="summary-desc">由光源到鏡面，再由鏡面反射；鏡前物體位置改變時，鏡中像的位置也隨之改變。</desc>
+                <circle cx="82" cy="102" r="18" fill="#f5c967" stroke="#b97a25" stroke-width="3"/><text x="53" y="145" fill="#64736d" font-size="15">光源</text>
+                <path d="M103 110L290 165L103 220" fill="none" stroke="#d5962d" stroke-width="4"/><path d="M290 165L415 82" fill="none" stroke="#78988a" stroke-width="2.5" stroke-dasharray="7 6"/><rect x="283" y="34" width="14" height="190" rx="5" fill="#8daaa0"/>
+                <line x1="218" y1="190" x2="218" y2="125" stroke="#bc612b" stroke-width="7"/><line x1="360" y1="190" x2="360" y2="125" stroke="#7d8f85" stroke-width="5" stroke-dasharray="7 6"/>
+                <text x="192" y="220" fill="#315a46" font-size="15">物體</text><text x="347" y="220" fill="#64736d" font-size="15">像</text>
+              </svg>
+              <figcaption class="visual-caption">反射光路提供解釋鏡中像的線索；圖示為概念模型。</figcaption>
+            </figure>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="shell"><a href="../../index.html">回到光學單元學習路線</a>　·　接下來：光進入不同介質會怎樣？</footer>
+  <script>
+    const surfaceButtons=[...document.querySelectorAll("[data-surface]")];
+    surfaceButtons.forEach(function(button){button.addEventListener("click",function(){const matte=button.dataset.surface==="matte";surfaceButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===button))});document.querySelector("#mirror-rays").hidden=matte;document.querySelector("#matte-rays").hidden=!matte;document.querySelector("#surface-label").textContent=matte?"一般表面：反射光往多個方向":"鏡面：反射光較集中"})});
+    const angleInput=document.querySelector("#incident-angle");
+    function updateRayAngle(){const angle=Number(angleInput.value),rad=angle*Math.PI/180,x=429-300*Math.cos(rad),dy=300*Math.sin(rad),top=165-dy,bottom=165+dy;document.querySelector("#angle-incident").setAttribute("d","M"+x+" "+bottom+"L429 165");document.querySelector("#angle-reflected").setAttribute("d","M429 165L"+x+" "+top);document.querySelector("#incident-angle-value").value=angle+"°";document.querySelector("#angle-incident-label").textContent="入射角 "+angle+"°";document.querySelector("#angle-reflected-label").textContent="反射角 "+angle+"°";document.querySelector("#angle-observation").textContent="現在兩個角都是 "+angle+"°。繼續調整，觀察入射方向改變時反射方向如何跟著變化。"}angleInput.addEventListener("input",updateRayAngle);
+    const measureInput=document.querySelector("#measure-angle"),records=document.querySelector("#angle-records");function updateMeasure(){const angle=Number(measureInput.value);document.querySelector("#measure-angle-value").value=angle+"°";document.querySelector("#measure-incident").textContent=angle+"°";document.querySelector("#measure-reflected").textContent=angle+"°"}measureInput.addEventListener("input",updateMeasure);document.querySelector("#record-angle").addEventListener("click",function(){const angle=Number(measureInput.value),row=document.createElement("tr");row.innerHTML="<td>量測 "+(records.children.length-1)+"</td><td>"+angle+"°</td><td>"+angle+"°</td>";records.appendChild(row)});document.querySelector("#reset-angles").addEventListener("click",function(){records.innerHTML="<tr><td>示範</td><td>20°</td><td>20°</td></tr><tr><td>示範</td><td>40°</td><td>40°</td></tr>"});
+    document.querySelector("#show-image-rays").addEventListener("click",function(event){const shown=event.currentTarget.getAttribute("aria-pressed")!=="true";event.currentTarget.setAttribute("aria-pressed",String(shown));event.currentTarget.textContent=shown?"隱藏光路":"顯示光路";document.querySelector("#image-rays").hidden=!shown});
+    const distanceInput=document.querySelector("#object-distance");function updateDistance(){const value=Number(distanceInput.value),x=305-value*45,imageX=610-x;document.querySelector("#distance-object").setAttribute("x1",x);document.querySelector("#distance-object").setAttribute("x2",x);document.querySelector("#distance-object-label").setAttribute("x",x-15);document.querySelector("#distance-image").setAttribute("x1",imageX);document.querySelector("#distance-image").setAttribute("x2",imageX);document.querySelector("#distance-image-label").setAttribute("x",imageX-12);document.querySelector("#object-distance-value").value=value===1?"靠近":"較遠";document.querySelector("#distance-observation").textContent=value===1?"物體靠近鏡面時，鏡中像的位置也隨著改變；鏡面保持不動。":"把物體往鏡面移動或移遠，觀察像相對鏡面的位置也跟著變化。"}distanceInput.addEventListener("input",updateDistance);
+    let reversed=false;document.querySelector("#reverse-ray").addEventListener("click",function(event){reversed=!reversed;event.currentTarget.setAttribute("aria-pressed",String(reversed));event.currentTarget.textContent=reversed?"恢復原本方向":"反轉光線方向";const left=document.querySelector("#reverse-left"),right=document.querySelector("#reverse-right");left.setAttribute("d",reversed?"M115 218L414 140":"M414 140L115 218");right.setAttribute("d",reversed?"M414 140L115 62":"M115 62L414 140");document.querySelector("#reverse-state").textContent=reversed?"方向已反轉：光沿原路徑返回":"目前：光由左上方入射，再向左下方反射"});
+    const answerButtons=[...document.querySelectorAll("[data-answer]")];answerButtons.forEach(function(button){button.addEventListener("click",function(){answerButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===button));item.classList.remove("correct","incorrect")});button.classList.add(button.dataset.answer==="correct"?"correct":"incorrect")})});document.querySelector("#check-answer").addEventListener("click",function(){const selected=answerButtons.find(function(button){return button.getAttribute("aria-pressed")==="true"}),feedback=document.querySelector("#check-feedback");if(!selected){feedback.dataset.state="try";feedback.textContent="先選一段完整說明，再用角度量法和像的位置觀察來檢查。";return}if(selected.dataset.answer==="correct"){feedback.dataset.state="good";feedback.textContent="這段說明符合觀察：反射角和入射角都從法線量起，移動物體時鏡中像的位置也會改變。"}else{feedback.dataset.state="try";feedback.textContent="再想一想：兩個角的基準線是法線；移動物體時，鏡中像相對鏡面的位置也會變化。"}});document.querySelector("#reset-answer").addEventListener("click",function(){answerButtons.forEach(function(button){button.setAttribute("aria-pressed","false");button.classList.remove("correct","incorrect")});const feedback=document.querySelector("#check-feedback");feedback.removeAttribute("data-state");feedback.textContent="選好後再確認，回想證據：角度從哪條基準線量起？改變物體位置後觀察到什麼？"});
+    const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
+  </script>
+</body>
+</html>
