@@ -44,24 +44,25 @@ try {
   };
   updateCamera();
 
-  scene.add(new THREE.HemisphereLight('#fff1d5', '#334744', 0.42));
-  const keyLight = new THREE.DirectionalLight('#ffe2ac', 0.55);
+  scene.add(new THREE.HemisphereLight('#ffffff', '#858b88', 0.42));
+  const keyLight = new THREE.DirectionalLight('#ffffff', 0.55);
   keyLight.position.set(-1.5, 7, 4.5);
   keyLight.castShadow = true;
   keyLight.shadow.mapSize.set(1024, 1024);
   keyLight.shadow.bias = -0.0003;
   scene.add(keyLight);
-  const fillLight = new THREE.DirectionalLight('#9eb9c4', 0.16);
+  const fillLight = new THREE.DirectionalLight('#e6eceb', 0.16);
   fillLight.position.set(3, 4, -5);
   scene.add(fillLight);
 
   const standard = (color, options = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.68, ...options });
-  const surfaceBaseColor = '#deded8';
+  const surfaceBaseColor = '#f6f6f3';
   const mats = {
     tableTop: new THREE.MeshPhysicalMaterial({ color: '#c4a57c', roughness: 0.48, metalness: 0.015, clearcoat: 0.16, clearcoatRoughness: 0.58 }),
     tableEdge: standard('#67503b', { roughness: 0.58 }),
-    source: standard('#273330', { metalness: 0.32, roughness: 0.38 }),
     frame: standard('#52645e', { metalness: 0.55, roughness: 0.34 }),
+    lampBody: standard('#9aa7a8', { metalness: 0.52, roughness: 0.3 }),
+    lampTrim: standard('#c4cfcd', { metalness: 0.42, roughness: 0.26 }),
     // Match the paper's neutral base tint while retaining a narrow mirror
     // highlight; the environment map supplies reflections from the lab scene.
     mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.94, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.02 }),
@@ -130,7 +131,7 @@ try {
   roughTextureCanvas.width = 256;
   roughTextureCanvas.height = 256;
   const roughContext = roughTextureCanvas.getContext('2d');
-  roughContext.fillStyle = surfaceBaseColor;
+  roughContext.fillStyle = '#ffffff';
   roughContext.fillRect(0, 0, 256, 256);
   let seed = 19;
   const random = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
@@ -170,19 +171,19 @@ try {
     lamp.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
     lamp.scale.setScalar(1.15);
     scene.add(lamp);
-    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.18, 0.58, 28), mats.source);
+    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.18, 0.58, 28), mats.lampBody);
     barrel.position.y = -0.29;
     barrel.castShadow = true;
     lamp.add(barrel);
-    const head = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.15, 0.2, 28), mats.frame);
+    const head = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.15, 0.2, 28), mats.lampTrim);
     head.position.y = 0.02;
     lamp.add(head);
-    const lensMaterial = new THREE.MeshStandardMaterial({ color: '#fff4d6', emissive: '#ffc653', emissiveIntensity: 0, roughness: 0.18 });
+    const lensMaterial = new THREE.MeshStandardMaterial({ color: '#f8faf9', emissive: '#ffffff', emissiveIntensity: 0, roughness: 0.18 });
     const lens = new THREE.Mesh(new THREE.CircleGeometry(0.16, 36), lensMaterial);
     lens.position.y = 0.125;
     lamp.add(lens);
     lampLenses.push(lensMaterial);
-    const rim = new THREE.Mesh(new THREE.TorusGeometry(0.165, 0.022, 10, 36), mats.frame);
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(0.165, 0.022, 10, 36), mats.lampTrim);
     rim.position.y = 0.13;
     lamp.add(rim);
     lamps.push(lamp);
