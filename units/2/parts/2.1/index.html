@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="沿著繩波追蹤介質如何振動與波形如何傳播，認識橫波、縱波、波的特徵與速度關係。">
   <title>波的傳播｜波動與聲音</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <style>
     :root { color-scheme:light; --ink:#182326; --muted:#59696b; --line:#d7e1dd; --paper:#f4f7f1; --card:#fffefa; --green:#176b53; --green-pale:#e5f2e9; --orange:#bc612b; --orange-pale:#fff0e3; --shadow:0 14px 38px rgb(21 47 38 / 8%); font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; }
     * { box-sizing:border-box; }
@@ -298,18 +299,18 @@
     .field-panel-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:11px 14px; background:#edf4ec; color:var(--ink); font-weight:800; }
     .map-panel-tag { padding:3px 7px; border-radius:999px; background:rgb(255 255 255 / 72%); color:var(--muted); font-size:.72rem; font-weight:650; }
     .field-map-wrap { display:flex; flex:1; flex-direction:column; min-height:0; padding:0; background:#163f38; }
-    .field-map-scene { position:relative; flex:1; min-height:330px; overflow:hidden; }
-    .field-map-art { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.86) brightness(.83); }
-    .field-map-scene::after { position:absolute; inset:0; background:linear-gradient(180deg,transparent 58%,rgb(6 28 26 / 38%)); content:""; pointer-events:none; }
-    .field-map { position:absolute; inset:0; display:block; width:100%; height:100%; pointer-events:none; }
-    .field-map text { fill:#fff; font-family:inherit; font-size:3.5px; font-weight:750; paint-order:stroke; stroke:rgb(8 32 28 / 70%); stroke-width:.9px; stroke-linejoin:round; }
-    .field-map .map-route { fill:none; stroke:#f6c66d; stroke-width:.8; stroke-dasharray:2.2 1.7; filter:drop-shadow(0 1px 2px rgb(0 0 0 / 60%)); }
-    .field-map .map-scale path { fill:none; stroke:#fff; stroke-width:.65; stroke-linecap:round; filter:drop-shadow(0 1px 1px rgb(0 0 0 / 75%)); }
-    .field-map .map-scale text { font-size:3px; font-weight:700; text-anchor:middle; }
-    .field-map .station-halo { fill:#176b53; stroke:#fff; stroke-width:1; }
-    .field-map .quake-halo { fill:#df8840; stroke:#fff; stroke-width:1; }
-    .field-map .quake-ring { fill:none; stroke:#f3aa59; stroke-width:.65; opacity:.8; }
-    .field-map .map-label-bg { fill:rgb(9 39 34 / 86%); stroke:rgb(255 255 255 / 45%); stroke-width:.35; }
+    .field-map-scene { position:relative; flex:1; min-height:330px; overflow:hidden; background:#143d36; }
+    .field-real-map { position:absolute; inset:0; width:100%; height:100%; }
+    .field-real-map .leaflet-control-attribution { max-width:78%; background:rgb(255 255 255 / 82%); font-size:8px; line-height:1.2; }
+    .field-real-map .leaflet-control-scale-line { border-color:#183c32; background:rgb(255 255 255 / 90%); color:#183c32; font-size:10px; font-weight:750; }
+    .field-map-marker { background:transparent; border:0; }
+    .field-station-dot { display:block; width:15px; height:15px; border:3px solid #fff; border-radius:50%; background:#176b53; box-shadow:0 1px 5px rgb(0 0 0 / 60%); }
+    .field-quake-dot { position:relative; display:block; width:15px; height:15px; border:3px solid #fff; border-radius:50%; background:#df8840; box-shadow:0 1px 5px rgb(0 0 0 / 60%); }
+    .field-quake-dot::before,.field-quake-dot::after { position:absolute; inset:-8px; border:2px solid #df8840; border-radius:50%; content:""; }
+    .field-quake-dot::after { inset:-15px; border-width:1.5px; }
+    .field-map-tooltip { padding:3px 7px; border:1px solid rgb(255 255 255 / 65%); border-radius:7px; background:rgb(9 39 34 / 92%); box-shadow:0 1px 4px rgb(0 0 0 / 25%); color:#fff; font-family:inherit; font-size:12px; font-weight:750; }
+    .field-map-tooltip::before { border-top-color:rgb(9 39 34 / 92%); }
+    .field-map-north { position:absolute; z-index:500; top:9px; left:10px; color:#fff; font-size:13px; font-weight:800; text-shadow:0 1px 3px #102c28,0 0 3px #102c28; pointer-events:none; }
     .field-distance { margin:0; padding:9px 12px; background:#fff3df; color:#745027; text-align:center; font-size:.88rem; font-weight:800; }
     .field-signal-panel { padding-bottom:8px; background:#153d33; color:#f4f7ef; }
     .field-signal-panel .field-panel-heading { background:#193f35; color:#f4f7ef; border-bottom:1px solid #426d5e; }
@@ -346,7 +347,7 @@
     .route a.task-nav[aria-current="step"] { border-color:var(--green); }
     @container (max-width:760px) { .field-task-grid { grid-template-columns:1fr; } }
     @container (max-width:620px) { .field-task-head { padding:19px 18px 13px; } .field-task-grid { padding:0 14px; } .field-response { margin:14px; padding:13px 2px 2px; } .field-response-head { align-items:flex-start; flex-direction:column; gap:4px; } .field-answer-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .field-answer-grid .action { grid-column:1/-1; } }
-    @container (max-width:420px) { .field-task-head { flex-direction:column; gap:8px; } .field-answer-grid { grid-template-columns:1fr; } .field-answer-grid .action { grid-column:auto; } .field-map-wrap { padding:8px; } .signal-row { padding-inline:8px; } .signal-direction { font-size:.68rem; } }
+    @container (max-width:420px) { .field-task-head { flex-direction:column; gap:8px; } .field-answer-grid { grid-template-columns:1fr; } .field-answer-grid .action { grid-column:auto; } .field-map-wrap { padding:8px; } .field-map-scene { min-height:365px; } .signal-row { padding-inline:8px; } .signal-direction { font-size:.68rem; } }
     .answer { margin-top:14px; padding:13px 15px; border:1px solid #cbded0; border-radius:14px; background:#eef5ec; }
     .answer summary { color:#315a46; font-weight:800; cursor:pointer; }
     .answer p { margin:8px 0 0; }
@@ -1003,22 +1004,11 @@
               <h3 class="field-panel-heading" id="field-map-title">震央與觀測站位置<span class="map-panel-tag">位置示意</span></h3>
               <div class="field-map-wrap">
                 <div class="field-map-scene">
-                  <img class="field-map-art" src="assets/taiwan-relief-map.png" alt="" aria-hidden="true">
-                  <svg class="field-map" viewBox="0 0 100 100" preserveAspectRatio="none" role="img" aria-label="地形圖標示南投觀測站位於臺灣中部，震央位於臺灣東部外海；兩點座標情境值約為北緯23.96度東經120.97度與北緯23.80度東經122.15度，直線距離約121公里">
-                    <path class="map-route" d="M49 51 Q66 42 90 56"/>
-                    <circle class="quake-ring" cx="90" cy="56" r="6"/><circle class="quake-ring" cx="90" cy="56" r="9"/>
-                    <circle class="station-halo" cx="49" cy="51" r="2.3"/>
-                    <circle class="quake-halo" cx="90" cy="56" r="2.5"/>
-                    <rect class="map-label-bg" x="27" y="40" width="32" height="7" rx="2"/><text x="43" y="44.7" text-anchor="middle">南投觀測站</text>
-                    <rect class="map-label-bg" x="81" y="63" width="18" height="7" rx="2"/><text x="90" y="67.7" text-anchor="middle">震央</text><text x="88" y="75" text-anchor="middle">東部外海</text>
-                    <text x="6" y="9">N ↑</text>
-                    <g class="map-scale" aria-hidden="true">
-                      <path id="field-map-scale-line" d="M6 89 H40 M6 87.7 V90.3 M40 87.7 V90.3"/>
-                      <text id="field-map-scale-label" x="23" y="86">100 km</text>
-                    </g>
-                  </svg>
+                  <div class="field-real-map" id="field-real-map" role="region" aria-label="臺灣衛星地圖，標示南投市觀測站設定點和臺灣東部外海震央情境點">
+                    <span class="field-map-north" aria-hidden="true">N ↑</span>
+                  </div>
                 </div>
-                <p class="field-distance">震央至觀測站：約 120 km</p>
+                <p class="field-distance">震央至南投市設定點：約 120 km</p>
               </div>
             </section>
             <section class="field-panel field-signal-panel" aria-labelledby="field-signal-title">
@@ -1065,26 +1055,28 @@
     </div>
   </main>
   <footer><div class="shell">本頁繩波與彈簧波為概念示意模型；動畫時間與振幅用來呈現運動方向及量值關係，不代表特定實際繩長或真實介質尺度。</div></footer>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
     (() => {
-      const fieldMapSvg=document.querySelector(".field-map");
-      if(fieldMapSvg){
-        const route=fieldMapSvg.querySelector(".map-route"),scaleLine=fieldMapSvg.querySelector("#field-map-scale-line"),scaleLabel=fieldMapSvg.querySelector("#field-map-scale-label");
-        const station=[23.96,120.97],epicenter=[23.80,122.15],toRadians=value=>value*Math.PI/180;
-        const lat1=toRadians(station[0]),lat2=toRadians(epicenter[0]),deltaLat=lat2-lat1,deltaLon=toRadians(epicenter[1]-station[1]);
+      const fieldRealMap=document.querySelector("#field-real-map");
+      if(fieldRealMap&&window.L){
+        const station=[23.9099561,120.6837059],epicenter=[23.91,121.86];
+        const map=L.map(fieldRealMap,{attributionControl:false,boxZoom:false,doubleClickZoom:false,dragging:false,keyboard:false,scrollWheelZoom:false,touchZoom:false,zoomControl:false}).setView([23.65,121.04],7);
+        L.control.attribution({prefix:false,position:"topright"}).addTo(map);
+        L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:19,attribution:'Tiles &copy; <a href="https://www.esri.com/">Esri</a> — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'}).addTo(map);
+        L.control.scale({imperial:false,metric:true,maxWidth:120,position:"bottomleft"}).addTo(map);
+        L.polyline([station,epicenter],{color:"#f6c66d",weight:3,dashArray:"7 6",opacity:.95}).addTo(map);
+        const stationIcon=L.divIcon({className:"field-map-marker",html:'<span class="field-station-dot" aria-hidden="true"></span>',iconSize:[15,15],iconAnchor:[7.5,7.5]});
+        const quakeIcon=L.divIcon({className:"field-map-marker",html:'<span class="field-quake-dot" aria-hidden="true"></span>',iconSize:[15,15],iconAnchor:[7.5,7.5]});
+        L.marker(station,{icon:stationIcon,keyboard:false}).addTo(map).bindTooltip("南投觀測站",{permanent:true,direction:"top",offset:[0,-8],className:"field-map-tooltip"});
+        L.marker(epicenter,{icon:quakeIcon,keyboard:false}).addTo(map).bindTooltip("震央・東部外海",{permanent:true,direction:"top",offset:[0,-8],className:"field-map-tooltip"});
+        const radians=value=>value*Math.PI/180,lat1=radians(station[0]),lat2=radians(epicenter[0]),deltaLat=lat2-lat1,deltaLon=radians(epicenter[1]-station[1]);
         const haversine=Math.sin(deltaLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(deltaLon/2)**2;
         const distanceKm=6371*2*Math.atan2(Math.sqrt(haversine),Math.sqrt(1-haversine));
-        const resizeMapScale=()=>{
-          const routeLength=route.getTotalLength(),start=route.getPointAtLength(0),end=route.getPointAtLength(routeLength),matrix=fieldMapSvg.getScreenCTM();
-          if(!matrix)return;
-          const startOnScreen=start.matrixTransform(matrix),endOnScreen=end.matrixTransform(matrix),routePixels=Math.hypot(endOnScreen.x-startOnScreen.x,endOnScreen.y-startOnScreen.y);
-          const viewBox=fieldMapSvg.viewBox.baseVal,svgPixelsPerUnit=fieldMapSvg.getBoundingClientRect().width/viewBox.width,scaleWidth=routePixels*100/distanceKm/svgPixelsPerUnit,x1=6,x2=x1+scaleWidth;
-          scaleLine.setAttribute("d",`M${x1} 89 H${x2} M${x1} 87.7 V90.3 M${x2} 87.7 V90.3`);
-          scaleLabel.setAttribute("x",String((x1+x2)/2));
-        };
-        if("ResizeObserver" in window)new ResizeObserver(resizeMapScale).observe(fieldMapSvg);
-        else window.addEventListener("resize",resizeMapScale,{passive:true});
-        requestAnimationFrame(resizeMapScale);
+        document.querySelector(".field-distance").textContent=`震央至南投市設定點：約 ${Math.round(distanceKm)} km`;
+        fieldRealMap.setAttribute("aria-label",`衛星地圖標示南投市觀測站設定點（北緯${station[0]}度、東經${station[1]}度）與臺灣東部外海震央情境點（北緯${epicenter[0]}度、東經${epicenter[1]}度），直線距離約${distanceKm.toFixed(1)}公里；比例尺依地圖投影計算。`);
+      }else if(fieldRealMap){
+        fieldRealMap.textContent="地圖載入失敗，請確認網路連線。";
       }
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const formulaChoices=[...document.querySelectorAll("#card-08 [data-formula-focus]")];
