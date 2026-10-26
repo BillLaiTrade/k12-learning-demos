@@ -72,14 +72,14 @@ function cylinder(parent, radiusTop, radiusBottom, height, position, material, r
   mesh.position.set(...position); mesh.rotation.set(...rotation); mesh.castShadow = true; parent.add(mesh); return mesh;
 }
 
-// Wooden tabletop with a restrained grain texture and fine plank seams.
+// Wooden tabletop with subtle grain and no seams across the experiment surface.
 const tabletop = new THREE.Mesh(new THREE.BoxGeometry(17, 0.28, 18), [woodEdge, woodEdge, woodTop, woodEdge, woodEdge, woodEdge]);
 tabletop.position.set(-4, -0.16, 2); tabletop.castShadow = true; tabletop.receiveShadow = true; scene.add(tabletop);
 // Fine grain remains visible without plank seams competing with the laser paths.
 for (const x of [-11.1, 3.1]) for (const z of [-5.5, 9.5]) box(scene, [0.2, 1.15, 0.2], [x, -0.86, z], wood);
 // Small feet are kept out of the rays and the tabletop reflection path.
 
-// Upright mirror: the silver face is at x=-0.04, facing the laser on its left.
+// Upright mirror: its reflective face points left toward the laser source.
 box(scene, [0.16, 3.05, 2.30], [2.065, 1.59, 0], black);
 const mirror = box(scene, [0.055, 2.90, 2.14], [1.96, 1.59, 0], mirrorMaterial);
 mirror.castShadow = false;
@@ -87,8 +87,7 @@ box(scene, [0.42, 0.12, 0.4], [2.12, 0.06, 0], black);
 box(scene, [0.12, 0.24, 0.12], [2.09, 0.2, -0.17], steel);
 box(scene, [0.12, 0.24, 0.12], [2.09, 0.2, 0.17], steel);
 
-// The fixed receiving screen is set obliquely so the full 10°–60° sweep lands on it.
-// Its short width makes the moving hit spot visible without an oversized backdrop.
+// The fixed receiving screen is angled to catch the reflected beam across the 20°–40° control range.
 const screenAngle = THREE.MathUtils.degToRad(30);
 const screenDistance = 11;
 const rayAtDefault = new THREE.Vector3(-Math.cos(screenAngle), 0, Math.sin(screenAngle));
