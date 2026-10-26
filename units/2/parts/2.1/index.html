@@ -868,13 +868,13 @@
                 <svg id="speed-wave" viewBox="0 0 720 225" role="img" aria-label="30 公尺路徑上準備送出一個完整波形；頻率二赫茲、週期零點五秒、波長六公尺、波速每秒十二公尺">
                   <defs><marker id="speed-measure" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
                   <path d="M30 90H690" class="equilibrium"/>
-                  <path d="M30 52V128" fill="none" stroke="#d9b28e" stroke-width="1.5" stroke-dasharray="4 5"/>
-                  <text x="38" y="43" text-anchor="start" fill="#bc612b">波源</text>
+                  <path d="M30 36V144" fill="none" stroke="#d9b28e" stroke-width="1.5" stroke-dasharray="4 5"/>
+                  <text x="38" y="28" text-anchor="start" fill="#bc612b">波源</text>
                   <path id="speed-wave-path" class="speed-wave-path" d=""/>
                   <path id="speed-wave-guides" d="" fill="none" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
                   <path id="speed-wavelength-arrow" d="" class="measure" marker-start="url(#speed-measure)" marker-end="url(#speed-measure)"/>
                   <text id="speed-lambda-label" x="96" y="143" text-anchor="middle" visibility="hidden">λ = 6 m</text>
-                  <circle id="speed-source-marker" cx="30" cy="90" r="9" class="marker"/>
+                  <circle id="speed-source-marker" cx="30" cy="90" r="10" class="marker"/>
                   <path d="M30 180H690" class="speed-axis"/>
                   <g class="small-label" text-anchor="middle">
                     <path d="M30 175V185M250 175V185M470 175V185M690 175V185" class="speed-axis-tick"/>
@@ -924,7 +924,7 @@
                   <div class="speed-progress" id="speed-progress" role="progressbar" aria-label="波形通過 30 公尺路徑的進度" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0"><span id="speed-progress-bar"></span></div>
                 </div>
               </div>
-              <p class="speed-model-note">理想化模型中，可調整頻率（或週期）與波長；每組參數依 <em>v = f × λ</em> 計算波速。</p>
+              <p class="speed-model-note">動畫放慢呈現波源一次振動與波形生成；可調整頻率（或週期）與波長，依 <em>v = f × λ</em> 計算波速。</p>
             </section>
           </div>
         </section>
@@ -1367,7 +1367,7 @@
       const progressBar=document.querySelector("#speed-progress-bar");
       const progressTrack=document.querySelector("#speed-progress");
       if(speedWave&&speedWavePath&&speedWaveGuides&&speedWavelengthArrow&&speedLambdaLabel&&speedSourceMarker&&speedFrequencyValue&&speedPeriodValue&&speedWavelengthValue&&speedValue&&speedTransitTime&&speedEquation&&sendWaveButton&&runMessage&&runTime&&progressBar&&progressTrack){
-        const routeLength=30,routeStartX=30,routeEndX=690,routeWidth=routeEndX-routeStartX,waveMidY=90,waveAmplitude=36;
+        const routeLength=30,routeStartX=30,routeEndX=690,routeWidth=routeEndX-routeStartX,waveMidY=90,waveAmplitude=48,playbackScale=2.5;
         const frequencyDown=document.querySelector("#speed-frequency-down"),frequencyUp=document.querySelector("#speed-frequency-up");
         const periodDown=document.querySelector("#speed-period-down"),periodUp=document.querySelector("#speed-period-up");
         const wavelengthDown=document.querySelector("#speed-wavelength-down"),wavelengthUp=document.querySelector("#speed-wavelength-up");
@@ -1378,22 +1378,24 @@
         const format=(value,digits=3)=>Number(value.toFixed(digits)).toString();
         const getWaveSpeed=()=>frequency*wavelength;
         const getTransitTime=()=>routeLength/getWaveSpeed();
-        const drawGeneratedWave=(frontDistance,sourceY)=>{
-          const front=clamp(frontDistance,0,routeLength),tail=Math.max(0,front-wavelength);
+        const drawGeneratedWave=simulationTime=>{
+          const speed=getWaveSpeed(),front=clamp(speed*simulationTime,0,routeLength);
+          const sourcePhase=simulationTime/period;
+          const sourceY=sourcePhase>0&&sourcePhase<1?waveMidY-waveAmplitude*Math.sin(2*Math.PI*sourcePhase):waveMidY;
           speedSourceMarker.setAttribute("cy",String(sourceY));
-          if(front<=0){speedWavePath.setAttribute("d","");speedWaveGuides.setAttribute("d","");speedWavelengthArrow.setAttribute("d","");speedLambdaLabel.setAttribute("visibility","hidden");return;}
-          const startX=routeStartX+routeWidth*tail/routeLength;
-          const endX=routeStartX+routeWidth*front/routeLength;
-          const visibleLength=front-tail,samples=Math.max(24,Math.ceil(96*visibleLength/wavelength));let path="";
-          for(let index=0;index<=samples;index++){
-            const position=tail+visibleLength*index/samples;
-            const localDistance=front-position;
-            const x=routeStartX+routeWidth*position/routeLength;
-            const y=waveMidY-waveAmplitude*Math.sin(2*Math.PI*localDistance/wavelength);
-            path+=`${index===0?"M":" L"}${x.toFixed(2)} ${y.toFixed(2)}`;
+          let path=`M${routeStartX} ${sourceY}`;
+          const samples=220;
+          for(let index=1;index<=samples;index++){
+            const x=routeStartX+routeWidth*index/samples;
+            const distance=routeLength*index/samples;
+            const phase=(simulationTime-distance/speed)/period;
+            const y=phase>0&&phase<1?waveMidY-waveAmplitude*Math.sin(2*Math.PI*phase):waveMidY;
+            path+=` L${x.toFixed(2)} ${y.toFixed(2)}`;
           }
           speedWavePath.setAttribute("d",path);
-          if(front>=wavelength){
+          const tail=Math.max(0,front-wavelength);
+          if(simulationTime>=period&&front>=wavelength){
+            const startX=routeStartX+routeWidth*tail/routeLength,endX=routeStartX+routeWidth*front/routeLength;
             speedWaveGuides.setAttribute("d",`M${startX.toFixed(2)} ${waveMidY}V150M${endX.toFixed(2)} ${waveMidY}V150`);
             speedWavelengthArrow.setAttribute("d",`M${startX.toFixed(2)} 151H${endX.toFixed(2)}`);
             speedLambdaLabel.setAttribute("x",String((startX+endX)/2));
@@ -1430,31 +1432,30 @@
         const resetSingleWave=()=>{
           if(animationFrame)window.cancelAnimationFrame(animationFrame);
           animationFrame=0;runStartedAt=null;isRunning=false;sendWaveButton.disabled=false;sendWaveButton.textContent="讓波源振動一次";
-          setControlsDisabled(false);drawGeneratedWave(0,waveMidY);drawProgress(0);updateReadouts();
+          setControlsDisabled(false);drawGeneratedWave(0);drawProgress(0);updateReadouts();
           runMessage.textContent="參數已更新；按下按鈕讓橘色波源振動一次。";
         };
         const finishSingleWave=()=>{
           isRunning=false;animationFrame=0;runStartedAt=null;sendWaveButton.disabled=false;sendWaveButton.textContent="再產生一個完整波";
-          setControlsDisabled(false);drawGeneratedWave(routeLength,waveMidY);drawProgress(routeLength);
+          setControlsDisabled(false);drawGeneratedWave(getTransitTime());drawProgress(routeLength);
           runTime.textContent=`${format(getTransitTime(),2)} / ${format(getTransitTime(),2)} s`;
           runMessage.textContent=`完整波已傳到 ${routeLength} 公尺處。`;
           updateControls();
         };
         const animateSingleWave=time=>{
           if(runStartedAt===null)runStartedAt=time;
-          const transitTime=getTransitTime(),elapsed=clamp((time-runStartedAt)/1000,0,transitTime);
+          const transitTime=getTransitTime(),elapsed=clamp((time-runStartedAt)/(1000*playbackScale),0,transitTime);
           const distance=Math.min(routeLength,getWaveSpeed()*elapsed);
-          const sourcePhase=Math.min(elapsed,period);
-          const sourceY=elapsed<period?waveMidY-waveAmplitude*Math.sin(2*Math.PI*frequency*sourcePhase):waveMidY;
-          drawGeneratedWave(distance,sourceY);drawProgress(distance);
+          drawGeneratedWave(elapsed);drawProgress(distance);
           runTime.textContent=`${format(elapsed,2)} / ${format(transitTime,2)} s`;
+          runMessage.textContent=elapsed<period?"橘色波源點上下振動，繩上各點依序被帶動，波形由左向右形成。":"波源已完成一次上下振動，完整波形正向右傳播。";
           if(elapsed<transitTime)animationFrame=window.requestAnimationFrame(animateSingleWave);else finishSingleWave();
         };
         const launchSingleWave=()=>{
           if(isRunning)return;
           if(animationFrame)window.cancelAnimationFrame(animationFrame);
           isRunning=true;runStartedAt=null;sendWaveButton.disabled=true;sendWaveButton.textContent="波形傳播中…";
-          setControlsDisabled(true);drawGeneratedWave(0,waveMidY);drawProgress(0);updateControls();
+          setControlsDisabled(true);drawGeneratedWave(0);drawProgress(0);updateControls();
           runMessage.textContent="橘色波源上下振動，波形正向右生成並傳播。";
           animationFrame=window.requestAnimationFrame(animateSingleWave);
         };
@@ -1465,7 +1466,7 @@
         periodDown.addEventListener("click",()=>changePeriod(-.05));periodUp.addEventListener("click",()=>changePeriod(.05));
         wavelengthDown.addEventListener("click",()=>changeWavelength(-1));wavelengthUp.addEventListener("click",()=>changeWavelength(1));
         sendWaveButton.addEventListener("click",launchSingleWave);
-        drawGeneratedWave(0,waveMidY);drawProgress(0);updateReadouts();
+        drawGeneratedWave(0);drawProgress(0);updateReadouts();
       }
 
       const summaryWavePath=document.querySelector(".summary-wave-path");
