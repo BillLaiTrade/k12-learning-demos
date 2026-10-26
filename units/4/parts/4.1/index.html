@@ -2363,15 +2363,15 @@
     }
 
     const specimenRules={
-      copper:{label:"樣本 1",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
-      aluminum:{label:"樣本 4",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
-      silver:{label:"樣本 9",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
-      sugar:{label:"樣本 2",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
-      salt:{label:"樣本 6",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
-      chalk:{label:"樣本 8",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
-      air:{label:"樣本 3",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"},
-      granite:{label:"樣本 5",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"},
-      alloy:{label:"樣本 7",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"}
+      copper:{label:"樣本 1",realName:"銅片",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
+      aluminum:{label:"樣本 4",realName:"鋁塊",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
+      silver:{label:"樣本 9",realName:"銀錠",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},
+      sugar:{label:"樣本 2",realName:"糖晶",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
+      salt:{label:"樣本 6",realName:"食鹽",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
+      chalk:{label:"樣本 8",realName:"粉筆粉",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"compound",dest:"化合物展示層"},
+      air:{label:"樣本 3",realName:"空氣",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"},
+      granite:{label:"樣本 5",realName:"花崗岩",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"},
+      alloy:{label:"樣本 7",realName:"合金",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"}
     };
     const specimenButtons=[...document.querySelectorAll(".scene-sample")];
     const sampleInfo=document.getElementById("sample-info");
@@ -2386,7 +2386,7 @@
       selectedSpecimen=button;
       specimenButtons.forEach(item=>{item.classList.toggle("is-selected",item===button);item.setAttribute("aria-pressed",String(item===button));});
       const data=specimenRules[button.dataset.sample];
-      sampleInfo.hidden=false;sampleInfoTitle.textContent="已選取"+data.label;sampleClue.textContent=data.clue;
+      sampleInfo.hidden=false;sampleInfoTitle.textContent=sampleStatus.has(button.dataset.sample)?data.realName:"已選取"+data.label;sampleClue.textContent=data.clue;
       sampleState.textContent=sampleStatus.has(button.dataset.sample)?"目前位置："+specimenRules[sampleStatus.get(button.dataset.sample)].dest:"先翻閱手冊，再選擇展示位置。";
       returnSampleButton.hidden=!sampleStatus.has(button.dataset.sample);
       workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="到手冊找相同編號，根據性質和粒子組成判斷分類。";
@@ -2397,6 +2397,7 @@
       const key=button.dataset.sample;
       if(!sampleStatus.has(key))return;
       sampleStatus.delete(key);button.classList.remove("is-placed");button.style.left="";button.style.top="";
+      button.querySelector(".sample-tag").textContent=specimenRules[key].label;
       button.setAttribute("aria-label",specimenRules[key].label+"已放回桌面，點選查看觀察資料");
       selectSpecimen(button);
       document.getElementById("sort-progress").textContent="已分類 "+sampleStatus.size+" / "+specimenRulesCount+" 份樣本";
@@ -2410,12 +2411,14 @@
       if(targetCategory!==data.category){workbenchFeedback.dataset.kind="wrong";workbenchFeedback.textContent="這個位置和樣本資料對不起來。翻翻手冊，再看看線索。";return false;}
       sampleStatus.set(key,targetCategory);button.classList.remove("is-selected");button.classList.add("is-placed");
       returnSampleButton.hidden=selectedSpecimen!==button;
+      button.querySelector(".sample-tag").textContent=data.realName;
       const count=[...sampleStatus.entries()].filter(([,category])=>category===targetCategory).findIndex(([sample])=>sample===key);
       const placement={element:{left:9,top:9},compound:{left:9,top:31},mixture:{left:59,top:9}}[targetCategory];
       button.style.left=(placement.left+(count%3)*12)+"%";button.style.top=(placement.top+Math.floor(count/3)*5.5)+"%";
-      button.setAttribute("aria-label",data.label+"已放入"+data.dest+"，點選可重新分類");button.setAttribute("aria-pressed","false");
+      button.setAttribute("aria-label",data.realName+"已正確分類於"+data.dest+"，點選可重新分類");button.setAttribute("aria-pressed","false");
+      if(selectedSpecimen===button)sampleInfoTitle.textContent=data.realName;
       sampleState.textContent="已放入："+data.dest;workbenchFeedback.dataset.kind="correct";
-      workbenchFeedback.textContent="分類正確。你根據樣本資料和手冊線索，將"+data.label+"放入「"+data.dest+"」。";
+      workbenchFeedback.textContent="分類正確。這份樣本是「"+data.realName+"」。";
       document.getElementById("sort-progress").textContent="已分類 "+sampleStatus.size+" / "+specimenRulesCount+" 份樣本";
       if(sampleStatus.size===specimenRulesCount)workbenchFeedback.textContent="九份樣本都已完成分類。你是根據組成線索安排展品，不只看外觀。";
       return true;
@@ -2466,7 +2469,7 @@
     document.getElementById("reader-next").addEventListener("click",()=>showReaderPage(bookPage+1));
     document.getElementById("book-reader-close").addEventListener("click",()=>bookReader.close());
     document.getElementById("reset-samples").addEventListener("click",()=>{
-      sampleStatus.clear();selectedSpecimen=null;sampleInfo.hidden=true;specimenButtons.forEach(button=>{button.classList.remove("is-selected","is-placed");button.setAttribute("aria-pressed","false");button.removeAttribute("aria-label");button.style.left="";button.style.top="";});
+      sampleStatus.clear();selectedSpecimen=null;sampleInfo.hidden=true;specimenButtons.forEach(button=>{button.classList.remove("is-selected","is-placed");button.setAttribute("aria-pressed","false");button.removeAttribute("aria-label");button.style.left="";button.style.top="";button.querySelector(".sample-tag").textContent=specimenRules[button.dataset.sample].label;});
       specimenButtons.forEach((button,index)=>button.setAttribute("aria-label","選取桌上的樣本"+(index+1)+"，查看資料卡"));
       workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="樣本已回到桌面，重新開始分類。";document.getElementById("sort-progress").textContent="已分類 0 / "+specimenRulesCount+" 份樣本";
     });
