@@ -338,6 +338,11 @@
     .field-response-head p { margin:0; color:var(--muted); font-size:.86rem; }
     .field-distance-source { max-width:360px; margin-bottom:11px; padding:9px 11px; border-radius:9px; background:#fff3df; color:#745027; font-size:.84rem; }
     .field-distance-source strong { float:right; }
+    .field-time-mode { margin:0 0 11px; padding:0; border:0; }
+    .field-time-mode legend { margin-bottom:5px; color:var(--ink); font-size:.82rem; font-weight:750; }
+    .field-time-options { display:flex; gap:7px; }
+    .field-time-options label { display:flex; align-items:center; gap:5px; padding:6px 10px; border:1px solid var(--line); border-radius:8px; background:#fffefa; color:var(--ink); font-size:.82rem; cursor:pointer; }
+    .field-time-options input { margin:0; accent-color:var(--green); }
     .field-parameter-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
     .field-parameter-card { min-width:0; padding:10px; border:1px solid var(--line); border-radius:11px; background:#fffefa; }
     .field-parameter-card h4 { margin:0 0 8px; color:var(--green); font-size:.9rem; }
@@ -1043,7 +1048,7 @@
             <section class="field-panel field-signal-panel" aria-labelledby="field-signal-title">
               <h3 class="field-panel-heading" id="field-signal-title">地震波形監測</h3>
               <div class="signal-row signal-row-p">
-                <div class="signal-meta"><span class="signal-type">P 波｜縱波</span><span class="signal-value">頻率 f = 2 Hz</span><span class="signal-direction">介質振動方向與波傳方向平行</span></div>
+                <div class="signal-meta"><span class="signal-type">P 波｜縱波</span><span class="signal-value" data-frequency-hz="2" data-period-s="0.5">頻率 f = 2 Hz</span><span class="signal-direction">介質振動方向與波傳方向平行</span></div>
                 <svg class="signal-svg" viewBox="0 0 460 126" role="img" aria-label="P波縱波的空間示意；距離刻度由0到6公里，密集與疏散位置重複出現">
                   <g id="field-p-wave-particles" aria-hidden="true"></g>
                   <g aria-hidden="true"><text class="signal-note" x="130" y="15" text-anchor="middle">疏散</text><text class="signal-note" x="230" y="15" text-anchor="middle">壓縮</text><text class="signal-note" x="330" y="15" text-anchor="middle">疏散</text></g>
@@ -1053,7 +1058,7 @@
                 </svg>
               </div>
               <div class="signal-row signal-row-s">
-                <div class="signal-meta"><span class="signal-type">S 波｜橫波</span><span class="signal-value">頻率 f = 1 Hz</span><span class="signal-direction">介質振動方向與波傳方向垂直</span></div>
+                <div class="signal-meta"><span class="signal-type">S 波｜橫波</span><span class="signal-value" data-frequency-hz="1" data-period-s="1">頻率 f = 1 Hz</span><span class="signal-direction">介質振動方向與波傳方向垂直</span></div>
                 <svg class="signal-svg" viewBox="0 0 460 150" role="img" aria-label="S波橫波的空間示意；距離刻度由0到8公里，曲線重複起伏">
                   <path class="signal-baseline" d="M30 56H430"/>
                   <path class="signal-pulse" d="M30 56 C44 42 65 31 80 31 S116 42 130 56 S166 81 180 81 S216 70 230 56 S266 31 280 31 S316 42 330 56 S366 81 380 81 S416 70 430 56"/>
@@ -1068,18 +1073,25 @@
           <form class="field-response" id="field-response-form" novalidate>
             <div class="field-response-head"><h3>作答區</h3><p>地圖距離已自動帶入；填入波形資料後，系統計算抵達時間。</p></div>
             <div class="field-distance-source">地圖距離已帶入<strong><span id="field-distance-value">120</span> km</strong></div>
+            <fieldset class="field-time-mode">
+              <legend>選擇輸入方式（P、S 波同步）</legend>
+              <div class="field-time-options">
+                <label><input type="radio" name="field-time-mode" value="frequency" checked>頻率 f</label>
+                <label><input type="radio" name="field-time-mode" value="period">週期 T</label>
+              </div>
+            </fieldset>
             <div class="field-parameter-grid">
               <section class="field-parameter-card is-p" aria-labelledby="field-p-data-title">
                 <h4 id="field-p-data-title">P 波資料</h4>
                 <div class="field-card-inputs">
-                  <div class="field-answer"><label for="field-p-frequency">頻率 f（Hz）</label><input id="field-p-frequency" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入頻率" required><small>資料來源：P 波旁的頻率標示。</small></div>
+                  <div class="field-answer"><label id="field-p-time-label" for="field-p-time-param">頻率 f（Hz）</label><input id="field-p-time-param" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入頻率" required><small id="field-p-time-source">資料來源：P 波旁的頻率標示。</small></div>
                   <div class="field-answer"><label for="field-p-wavelength">波長 λ（km）</label><input id="field-p-wavelength" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入波長" required><small>資料來源：粒子圖相鄰密集區的刻度間距。</small></div>
                 </div>
               </section>
               <section class="field-parameter-card is-s" aria-labelledby="field-s-data-title">
                 <h4 id="field-s-data-title">S 波資料</h4>
                 <div class="field-card-inputs">
-                  <div class="field-answer"><label for="field-s-frequency">頻率 f（Hz）</label><input id="field-s-frequency" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入頻率" required><small>資料來源：S 波旁的頻率標示。</small></div>
+                  <div class="field-answer"><label id="field-s-time-label" for="field-s-time-param">頻率 f（Hz）</label><input id="field-s-time-param" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入頻率" required><small id="field-s-time-source">資料來源：S 波旁的頻率標示。</small></div>
                   <div class="field-answer"><label for="field-s-wavelength">波長 λ（km）</label><input id="field-s-wavelength" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入波長" required><small>資料來源：波形圖相鄰波峰的刻度間距。</small></div>
                 </div>
               </section>
@@ -1130,25 +1142,36 @@
       }
       const fieldResponseForm=document.querySelector("#field-response-form");
       if(fieldResponseForm){
-        const fieldDistance=Number(document.querySelector("[data-distance-km]").dataset.distanceKm),fieldPFrequency=document.querySelector("#field-p-frequency"),fieldPWavelength=document.querySelector("#field-p-wavelength"),fieldSFrequency=document.querySelector("#field-s-frequency"),fieldSWavelength=document.querySelector("#field-s-wavelength"),fieldFeedback=document.querySelector("#field-feedback"),fieldResults=document.querySelector("#field-results");
+        const fieldDistance=Number(document.querySelector("[data-distance-km]").dataset.distanceKm),fieldPTime=document.querySelector("#field-p-time-param"),fieldPWavelength=document.querySelector("#field-p-wavelength"),fieldSTime=document.querySelector("#field-s-time-param"),fieldSWavelength=document.querySelector("#field-s-wavelength"),fieldFeedback=document.querySelector("#field-feedback"),fieldResults=document.querySelector("#field-results"),fieldTimeModeInputs=[...document.querySelectorAll("[name='field-time-mode']")];
+        const fieldPTimeLabel=document.querySelector("#field-p-time-label"),fieldSTimeLabel=document.querySelector("#field-s-time-label"),fieldPTimeSource=document.querySelector("#field-p-time-source"),fieldSTimeSource=document.querySelector("#field-s-time-source"),fieldSignalValues=[...document.querySelectorAll(".signal-value[data-frequency-hz]")];
         const fieldPResult=document.querySelector("#field-p-result"),fieldSResult=document.querySelector("#field-s-result"),fieldWarningResult=document.querySelector("#field-warning-result"),fieldCalculation=document.querySelector("#field-calculation");
         const fieldFormat=value=>Number(value.toFixed(2)).toLocaleString("zh-TW");
+        let fieldTimeMode="frequency";
         document.querySelector("#field-distance-value").textContent=fieldFormat(fieldDistance);
+        const updateFieldTimeMode=clearTimeInputs=>{
+          const isFrequency=fieldTimeMode==="frequency",label=isFrequency?"頻率 f（Hz）":"週期 T（s）",placeholder=isFrequency?"填入頻率":"填入週期",source=isFrequency?"頻率標示":"週期標示";
+          fieldPTimeLabel.textContent=label;fieldSTimeLabel.textContent=label;fieldPTime.placeholder=placeholder;fieldSTime.placeholder=placeholder;
+          fieldPTimeSource.textContent=`資料來源：P 波旁的${source}。`;fieldSTimeSource.textContent=`資料來源：S 波旁的${source}。`;
+          fieldSignalValues.forEach(signal=>{const value=Number(signal.dataset[isFrequency?"frequencyHz":"periodS"]);signal.textContent=isFrequency?`頻率 f = ${fieldFormat(value)} Hz`:`週期 T = ${fieldFormat(value)} s`;});
+          if(clearTimeInputs){fieldPTime.value="";fieldSTime.value="";fieldResults.hidden=true;fieldFeedback.hidden=true;}
+        };
+        updateFieldTimeMode(false);
+        fieldTimeModeInputs.forEach(input=>input.addEventListener("change",()=>{if(!input.checked)return;fieldTimeMode=input.value;updateFieldTimeMode(true);}));
         fieldResponseForm.addEventListener("submit",event=>{
           event.preventDefault();
-          const inputs=[fieldPFrequency,fieldPWavelength,fieldSFrequency,fieldSWavelength],values=inputs.map(input=>Number(input.value));
+          const inputs=[fieldPTime,fieldPWavelength,fieldSTime,fieldSWavelength],values=inputs.map(input=>Number(input.value));
           fieldFeedback.hidden=false;
           if(values.some(value=>!Number.isFinite(value)||value<=0)){
-            fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent="請依照每個欄位下方的資料來源，從 P、S 波形圖填入四個數值。地圖距離已自動帶入。";
+            fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent=`請依照每個欄位下方的資料來源，從 P、S 波形圖填入${fieldTimeMode==="frequency"?"頻率":"週期"}和波長。地圖距離已自動帶入。`;
             inputs.find(input=>!input.value||!Number.isFinite(Number(input.value))||Number(input.value)<=0)?.focus();return;
           }
-          const [pFrequency,pWavelength,sFrequency,sWavelength]=values,pSpeed=pFrequency*pWavelength,sSpeed=sFrequency*sWavelength,pArrival=fieldDistance/pSpeed,sArrival=fieldDistance/sSpeed,warningTime=Math.max(0,sArrival-pArrival);
+          const [pTime,pWavelength,sTime,sWavelength]=values,isFrequency=fieldTimeMode==="frequency",pSpeed=isFrequency?pTime*pWavelength:pWavelength/pTime,sSpeed=isFrequency?sTime*sWavelength:sWavelength/sTime,pArrival=fieldDistance/pSpeed,sArrival=fieldDistance/sSpeed,warningTime=Math.max(0,sArrival-pArrival),parameterUnit=isFrequency?"Hz":"s";
           fieldPResult.textContent=`${fieldFormat(pArrival)} 秒`;fieldSResult.textContent=`${fieldFormat(sArrival)} 秒`;
           fieldWarningResult.textContent=pArrival<sArrival?`${fieldFormat(warningTime)} 秒`:"P 波未先到";
-          fieldCalculation.textContent=`P 波：${pFrequency} Hz × ${fieldFormat(pWavelength)} km = ${fieldFormat(pSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(pSpeed)} km/s = ${fieldFormat(pArrival)} 秒。S 波：${sFrequency} Hz × ${fieldFormat(sWavelength)} km = ${fieldFormat(sSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(sSpeed)} km/s = ${fieldFormat(sArrival)} 秒。`;
+          fieldCalculation.textContent=isFrequency?`P 波：${fieldFormat(pTime)} ${parameterUnit} × ${fieldFormat(pWavelength)} km = ${fieldFormat(pSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(pSpeed)} km/s = ${fieldFormat(pArrival)} 秒。S 波：${fieldFormat(sTime)} ${parameterUnit} × ${fieldFormat(sWavelength)} km = ${fieldFormat(sSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(sSpeed)} km/s = ${fieldFormat(sArrival)} 秒。`:`P 波：${fieldFormat(pWavelength)} km ÷ ${fieldFormat(pTime)} ${parameterUnit} = ${fieldFormat(pSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(pSpeed)} km/s = ${fieldFormat(pArrival)} 秒。S 波：${fieldFormat(sWavelength)} km ÷ ${fieldFormat(sTime)} ${parameterUnit} = ${fieldFormat(sSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(sSpeed)} km/s = ${fieldFormat(sArrival)} 秒。`;
           fieldResults.hidden=false;fieldFeedback.dataset.state="good";fieldFeedback.textContent="已依照你從地圖與波形圖找到的資料，計算兩種波的抵達時間。";
         });
-        [fieldPFrequency,fieldPWavelength,fieldSFrequency,fieldSWavelength].forEach(input=>input.addEventListener("input",()=>{fieldResults.hidden=true;fieldFeedback.hidden=true;}));
+        [fieldPTime,fieldPWavelength,fieldSTime,fieldSWavelength].forEach(input=>input.addEventListener("input",()=>{fieldResults.hidden=true;fieldFeedback.hidden=true;}));
       }
       const pulseSvgs = [...document.querySelectorAll(".rope-wave:not([data-static-rope]):not([data-fixed-point-wave])")];
       const staticRopeSvgs = [...document.querySelectorAll(".rope-wave[data-static-rope]")];
