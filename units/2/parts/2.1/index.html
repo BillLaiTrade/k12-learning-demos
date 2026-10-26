@@ -294,17 +294,21 @@
     .drill-badge { flex:none; padding:6px 10px; border:1px solid #c7ddce; border-radius:999px; background:#edf5ed; color:var(--green); font-size:.82rem; font-weight:750; }
     .field-task-grid { display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr); gap:14px; padding:0 20px; }
     .field-panel { min-width:0; overflow:hidden; border:1px solid var(--line); border-radius:15px; }
+    .field-map-panel { display:flex; flex-direction:column; }
     .field-panel-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:11px 14px; background:#edf4ec; color:var(--ink); font-weight:800; }
-    .field-map-wrap { padding:12px; background:linear-gradient(145deg,#f2f7f0,#fffefa); }
-    .field-map { display:block; width:100%; height:auto; }
-    .field-map text { fill:#29473b; font-family:inherit; font-size:13px; }
-    .field-map .map-place { font-size:12px; font-weight:750; }
-    .field-map .map-water { fill:#e5f0ed; }
-    .field-map .taiwan-shape { fill:#8eb69d; stroke:#527c69; stroke-width:2; }
-    .field-map .map-route { fill:none; stroke:#bd782d; stroke-width:2.5; stroke-dasharray:6 6; }
-    .field-map .station-dot { fill:#176b53; stroke:#fff; stroke-width:3; }
-    .field-map .quake-dot { fill:#df8840; stroke:#fff; stroke-width:3; }
-    .field-distance { margin:8px 0 0; padding:7px 9px; border-radius:9px; background:#fff4e4; color:#755126; text-align:center; font-size:.88rem; font-weight:750; }
+    .map-panel-tag { padding:3px 7px; border-radius:999px; background:rgb(255 255 255 / 72%); color:var(--muted); font-size:.72rem; font-weight:650; }
+    .field-map-wrap { display:flex; flex:1; flex-direction:column; min-height:0; padding:0; background:#163f38; }
+    .field-map-scene { position:relative; flex:1; min-height:330px; overflow:hidden; }
+    .field-map-art { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.86) brightness(.83); }
+    .field-map-scene::after { position:absolute; inset:0; background:linear-gradient(180deg,transparent 58%,rgb(6 28 26 / 38%)); content:""; pointer-events:none; }
+    .field-map { position:absolute; inset:0; display:block; width:100%; height:100%; pointer-events:none; }
+    .field-map text { fill:#fff; font-family:inherit; font-size:3.5px; font-weight:750; paint-order:stroke; stroke:rgb(8 32 28 / 70%); stroke-width:.9px; stroke-linejoin:round; }
+    .field-map .map-route { fill:none; stroke:#f6c66d; stroke-width:.8; stroke-dasharray:2.2 1.7; filter:drop-shadow(0 1px 2px rgb(0 0 0 / 60%)); }
+    .field-map .station-halo { fill:#176b53; stroke:#fff; stroke-width:1; }
+    .field-map .quake-halo { fill:#df8840; stroke:#fff; stroke-width:1; }
+    .field-map .quake-ring { fill:none; stroke:#f3aa59; stroke-width:.65; opacity:.8; }
+    .field-map .map-label-bg { fill:rgb(9 39 34 / 86%); stroke:rgb(255 255 255 / 45%); stroke-width:.35; }
+    .field-distance { margin:0; padding:9px 12px; background:#fff3df; color:#745027; text-align:center; font-size:.88rem; font-weight:800; }
     .field-signal-panel { padding-bottom:8px; background:#153d33; color:#f4f7ef; }
     .field-signal-panel .field-panel-heading { background:#193f35; color:#f4f7ef; border-bottom:1px solid #426d5e; }
     .signal-row { padding:10px 13px 8px; }
@@ -315,11 +319,12 @@
     .signal-direction { margin-left:auto; color:#b8c9be; font-size:.75rem; text-align:right; }
     .signal-svg { display:block; width:100%; height:auto; }
     .signal-svg text { fill:#d8e7dc; font-family:inherit; font-size:12px; }
+    .signal-svg .signal-note { fill:#b6c9bc; font-size:11px; }
     .signal-axis,.signal-tick { stroke:#afc7b7; stroke-width:1.2; }
     .signal-particle { fill:#d9edde; }
     .signal-pulse { fill:none; stroke:#92e69f; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
     .signal-baseline { stroke:#729281; stroke-width:1; stroke-dasharray:5 5; }
-    .signal-hint { margin:0; padding:5px 13px 2px; color:#d8e7dc; font-size:.83rem; }
+    .signal-hint { margin:0; padding:7px 13px 5px; color:#d8e7dc; font-size:.83rem; }
     .signal-hint strong { color:#f2d79d; }
     .field-response { margin:16px 20px 20px; padding:15px 16px; border-top:1px solid var(--line); background:#fbfcf8; }
     .field-response-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px 15px; margin-bottom:10px; }
@@ -993,18 +998,21 @@
             <span class="drill-badge">教學演練</span>
           </header>
           <div class="field-task-grid">
-            <section class="field-panel" aria-labelledby="field-map-title">
-              <h3 class="field-panel-heading" id="field-map-title">震央與觀測站位置</h3>
+            <section class="field-panel field-map-panel" aria-labelledby="field-map-title">
+              <h3 class="field-panel-heading" id="field-map-title">震央與觀測站位置<span class="map-panel-tag">位置示意</span></h3>
               <div class="field-map-wrap">
-                <svg class="field-map" viewBox="0 0 360 300" role="img" aria-label="台灣示意圖，南投觀測站位於中部，震央在台灣東部外海；兩地情境距離120公里">
-                  <rect class="map-water" x="0" y="0" width="360" height="300" rx="12"/>
-                  <path class="taiwan-shape" d="M151 18 C170 30 183 48 179 67 C194 83 190 102 199 121 C207 139 196 156 194 174 C191 192 180 208 174 228 C168 249 154 272 141 286 C128 275 124 256 117 239 C110 221 104 204 98 185 C91 167 95 149 91 132 C87 113 96 95 98 78 C101 58 112 40 125 28 C133 21 141 17 151 18Z"/>
-                  <path class="map-route" d="M154 153 Q195 145 251 163"/>
-                  <circle class="station-dot" cx="154" cy="153" r="8"/><text class="map-place" x="139" y="139" text-anchor="middle">南投觀測站</text>
-                  <circle class="quake-dot" cx="253" cy="164" r="9"/><text class="map-place" x="268" y="168">震央</text>
-                  <text x="243" y="190" text-anchor="middle">臺灣東部外海</text>
-                  <text x="18" y="26" class="map-place">N ↑</text>
-                </svg>
+                <div class="field-map-scene">
+                  <img class="field-map-art" src="assets/taiwan-relief-map.png" alt="" aria-hidden="true">
+                  <svg class="field-map" viewBox="0 0 100 100" preserveAspectRatio="none" role="img" aria-label="地形圖標示南投觀測站位於台灣中部，震央位於台灣東部外海">
+                    <path class="map-route" d="M49 51 Q61 47 76 56"/>
+                    <circle class="quake-ring" cx="76" cy="56" r="6"/><circle class="quake-ring" cx="76" cy="56" r="9"/>
+                    <circle class="station-halo" cx="49" cy="51" r="2.3"/>
+                    <circle class="quake-halo" cx="76" cy="56" r="2.5"/>
+                    <rect class="map-label-bg" x="27" y="40" width="32" height="7" rx="2"/><text x="43" y="44.7" text-anchor="middle">南投觀測站</text>
+                    <rect class="map-label-bg" x="70" y="62" width="19" height="7" rx="2"/><text x="79.5" y="66.7" text-anchor="middle">震央</text><text x="80" y="74" text-anchor="middle">臺灣東部外海</text>
+                    <text x="6" y="9">N ↑</text>
+                  </svg>
+                </div>
                 <p class="field-distance">震央至觀測站：120 km（演練假設）</p>
               </div>
             </section>
@@ -1014,6 +1022,7 @@
                 <div class="signal-meta"><span class="signal-type">P 波｜縱波</span><span class="signal-value">頻率 f = 2 Hz</span><span class="signal-direction">介質振動方向與波傳方向平行</span></div>
                 <svg class="signal-svg" viewBox="0 0 460 126" role="img" aria-label="P波縱波的空間示意；距離刻度由0到6公里，密集與疏散位置重複出現">
                   <g id="field-p-wave-particles" aria-hidden="true"></g>
+                  <g aria-hidden="true"><text class="signal-note" x="130" y="15" text-anchor="middle">疏散</text><text class="signal-note" x="230" y="15" text-anchor="middle">壓縮</text><text class="signal-note" x="330" y="15" text-anchor="middle">疏散</text></g>
                   <path class="signal-axis" d="M30 91H430"/>
                   <g class="signal-tick"><path d="M30 87V97M96.67 87V97M163.33 87V97M230 87V97M296.67 87V97M363.33 87V97M430 87V97"/></g>
                   <g><text x="30" y="116" text-anchor="middle">0 km</text><text x="230" y="116" text-anchor="middle">3 km</text><text x="430" y="116" text-anchor="middle">6 km</text></g>
@@ -1100,12 +1109,12 @@
       formulaChoices.forEach(button=>button.addEventListener("click",()=>selectFormula(button.dataset.formulaFocus)));
       const fieldParticles=document.querySelector("#field-p-wave-particles");
       if(fieldParticles){
-        const fieldNs="http://www.w3.org/2000/svg",rows=[25,36,47,58],count=91;
+        const fieldNs="http://www.w3.org/2000/svg",rows=[25,36,47,58],count=63;
         for(const y of rows)for(let i=0;i<count;i++){
           const equilibrium=i/(count-1)*400;
-          const x=30+equilibrium-26*Math.sin(2*Math.PI*equilibrium/200);
+          const x=30+equilibrium-44*Math.sin(2*Math.PI*equilibrium/200);
           const particle=document.createElementNS(fieldNs,"circle");
-          particle.setAttribute("cx",x.toFixed(2));particle.setAttribute("cy",String(y));particle.setAttribute("r","2.1");particle.setAttribute("class","signal-particle");
+          particle.setAttribute("cx",x.toFixed(2));particle.setAttribute("cy",String(y));particle.setAttribute("r","2.25");particle.setAttribute("class","signal-particle");
           fieldParticles.append(particle);
         }
       }
