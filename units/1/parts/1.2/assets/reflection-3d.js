@@ -163,29 +163,32 @@ try {
     context.strokeStyle = '#d2c9b6';
     context.lineWidth = 2;
     context.stroke();
-    context.fillStyle = '#b4823e';
-    context.beginPath();
-    context.roundRect(28, 38, 8, 104, 4);
-    context.fill();
     context.fillStyle = '#263a34';
     context.font = '700 64px "Noto Sans TC", "Microsoft JhengHei", sans-serif';
-    context.textAlign = 'left';
+    context.textAlign = 'center';
     context.textBaseline = 'middle';
-    context.fillText(title, 64, 76);
+    context.fillText(title, 256, 76);
     context.fillStyle = '#66736d';
     context.font = '500 27px "Noto Sans TC", "Microsoft JhengHei", sans-serif';
-    context.fillText(subtitle, 64, 128);
+    context.fillText(subtitle, 256, 128);
     const texture = new THREE.CanvasTexture(labelCanvas);
     texture.colorSpace = THREE.SRGBColorSpace;
     surfaceLabelTextures.push(texture);
-    const label = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.8, 0.62),
-      new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, toneMapped: false, transparent: true })
+    const tag = new THREE.Group();
+    tag.position.set(center.x, 0.12, 1.16);
+    tag.rotation.x = -Math.PI / 4;
+    const backing = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.56, 0.56),
+      new THREE.MeshBasicMaterial({ color: '#c3cbc4', toneMapped: false, side: THREE.DoubleSide })
     );
-    label.rotation.x = -Math.PI / 2;
-    label.position.set(center.x, -0.067, 1.25);
-    label.receiveShadow = false;
-    scene.add(label);
+    tag.add(backing);
+    const label = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.5, 0.52),
+      new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, toneMapped: false })
+    );
+    label.position.z = 0.003;
+    tag.add(label);
+    scene.add(tag);
   };
   addSurfaceLabel(mirrorCenter, '平面鏡', '鏡面反射');
   addSurfaceLabel(paperCenter, '霧面白紙', '漫反射');
