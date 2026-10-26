@@ -113,8 +113,8 @@ try {
     for (const z of [-1.55, 1.55]) addBox(scene, [0.16, 0.66, 0.16], [x, -0.75, z], mats.tableEdge);
   }
 
-  const mirrorCenter = new THREE.Vector3(-1.85, 0.114, -0.78);
-  const paperCenter = new THREE.Vector3(1.75, 0.114, 0.78);
+  const mirrorCenter = new THREE.Vector3(-1.8, 0.114, 0);
+  const paperCenter = new THREE.Vector3(1.8, 0.114, 0);
   const stationBase = (center, accent) => {
     addBox(scene, [1.9, 0.12, 1.55], [center.x, -0.005, center.z], mats.frame);
     addBox(scene, [1.7, 0.035, 1.35], [center.x, 0.072, center.z], accent);
