@@ -221,12 +221,13 @@
     .speed-axis { stroke:#84988a; stroke-width:1.5; }
     .speed-axis-tick { stroke:#84988a; stroke-width:1.5; }
     .speed-wave-path { fill:none; stroke:#176b53; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
-    .speed-control-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
-    .speed-control { min-width:0; padding:12px; border:1px solid var(--line); border-radius:14px; background:#f8f9f4; }
+    .speed-control-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--line); }
+    .speed-control { min-width:0; padding:2px 12px; border-right:1px solid var(--line); }
+    .speed-control:last-child { border-right:0; }
     .speed-control-title { display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--ink); font-weight:750; }
     .speed-control-title output { color:var(--green); font-size:1.08rem; font-weight:850; font-variant-numeric:tabular-nums; white-space:nowrap; }
-    .speed-stepper { display:grid; grid-template-columns:42px minmax(60px,1fr) 42px; align-items:center; gap:7px; margin-top:8px; }
-    .speed-stepper button { min-width:0; min-height:40px; padding:4px; font-size:1.2rem; }
+    .speed-stepper { display:grid; grid-template-columns:36px minmax(48px,1fr) 36px; align-items:center; gap:5px; margin-top:6px; }
+    .speed-stepper button { min-width:0; min-height:36px; padding:3px; font-size:1.15rem; }
     .speed-stepper button:disabled { cursor:not-allowed; opacity:.48; }
     .speed-step-value { overflow:hidden; padding:7px 4px; border-radius:9px; background:#e5f2e9; text-align:center; font-size:1rem; font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap; }
     .speed-step-note { display:block; margin-top:5px; color:var(--muted); text-align:center; font-size:.76rem; }
@@ -240,9 +241,8 @@
     .speed-progress { height:6px; margin-top:7px; overflow:hidden; border-radius:999px; background:#e3e9e2; }
     .speed-progress span { display:block; width:0; height:100%; border-radius:inherit; background:var(--orange); transition:width .08s linear; }
     .speed-model-note { margin:10px 0 0; color:var(--muted); font-size:.84rem; }
-    @container (max-width:520px) { .speed-control-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; } }
-    @container (max-width:410px) { .speed-control-grid { grid-template-columns:1fr; } }
-    @media (max-width:760px) { .speed-control-grid { grid-template-columns:1fr; gap:8px; } .speed-control { padding:10px 12px; } .speed-run-controls { grid-template-columns:1fr; } .speed-run-controls .action { width:100%; } }
+    @container (max-width:520px) { .speed-control-grid { grid-template-columns:1fr; gap:0; } .speed-control { display:grid; grid-template-columns:minmax(56px,.45fr) minmax(0,1fr); align-items:center; gap:3px 10px; padding:7px 0; border-right:0; border-bottom:1px solid var(--line); } .speed-control:last-child { border-bottom:0; } .speed-control-title { grid-row:1 / span 2; } .speed-stepper { margin:0; } .speed-step-note { grid-column:2; margin:0; text-align:center; } }
+    @media (max-width:760px) { .speed-run-controls { grid-template-columns:1fr; } .speed-run-controls .action { width:100%; } }
     @media (max-width:520px) { #card-08 .speed-visual { padding:7px 5px; } #card-08 .speed-visual text { font-size:22px; } }
     .example-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
     .example { padding:14px 16px; border:1px solid var(--line); border-radius:15px; background:#f9faf5; }
@@ -865,6 +865,35 @@
             <section class="speed-interactive" aria-labelledby="speed-interactive-title">
               <div class="speed-interactive-heading"><h3 id="speed-interactive-title">波源振動一次，讓波形向右傳</h3><span class="speed-condition">理想化參數實驗｜固定路徑 30 m</span></div>
               <figure class="visual speed-visual">
+                <div class="speed-control-grid" aria-label="調整波的參數">
+                  <div class="speed-control">
+                    <div class="speed-control-title"><span>頻率 f</span></div>
+                    <div class="speed-stepper" role="group" aria-label="調整頻率">
+                      <button class="secondary" id="speed-frequency-down" type="button" aria-label="降低頻率">−</button>
+                      <span class="speed-step-value" id="speed-frequency-value">2 Hz</span>
+                      <button class="secondary" id="speed-frequency-up" type="button" aria-label="提高頻率">＋</button>
+                    </div>
+                    <small class="speed-step-note">每次調整 0.5 Hz；週期同步更新</small>
+                  </div>
+                  <div class="speed-control">
+                    <div class="speed-control-title"><span>週期 T</span></div>
+                    <div class="speed-stepper" role="group" aria-label="調整週期">
+                      <button class="secondary" id="speed-period-down" type="button" aria-label="縮短週期">−</button>
+                      <span class="speed-step-value" id="speed-period-value">0.50 s</span>
+                      <button class="secondary" id="speed-period-up" type="button" aria-label="延長週期">＋</button>
+                    </div>
+                    <small class="speed-step-note">每次調整 0.05 s；頻率同步更新</small>
+                  </div>
+                  <div class="speed-control">
+                    <div class="speed-control-title"><span>波長 λ</span></div>
+                    <div class="speed-stepper" role="group" aria-label="調整波長">
+                      <button class="secondary" id="speed-wavelength-down" type="button" aria-label="縮短波長">−</button>
+                      <span class="speed-step-value" id="speed-wavelength-value">6 m</span>
+                      <button class="secondary" id="speed-wavelength-up" type="button" aria-label="增加波長">＋</button>
+                    </div>
+                    <small class="speed-step-note">每次調整 1 m</small>
+                  </div>
+                </div>
                 <svg id="speed-wave" viewBox="0 0 720 225" role="img" aria-label="30 公尺路徑上準備送出一個完整波形；頻率二赫茲、週期零點五秒、波長六公尺、波速每秒十二公尺">
                   <defs><marker id="speed-measure" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
                   <path d="M30 90H690" class="equilibrium"/>
@@ -883,35 +912,6 @@
                 </svg>
                 <figcaption>橘點是波源；它上下振動一次，產生一個完整波形，再向右傳播。</figcaption>
               </figure>
-              <div class="speed-control-grid" aria-label="調整波的參數">
-                <div class="speed-control">
-                  <div class="speed-control-title"><span>頻率 f</span></div>
-                  <div class="speed-stepper" role="group" aria-label="調整頻率">
-                    <button class="secondary" id="speed-frequency-down" type="button" aria-label="降低頻率">−</button>
-                    <span class="speed-step-value" id="speed-frequency-value">2 Hz</span>
-                    <button class="secondary" id="speed-frequency-up" type="button" aria-label="提高頻率">＋</button>
-                  </div>
-                  <small class="speed-step-note">每次調整 0.5 Hz；週期同步更新</small>
-                </div>
-                <div class="speed-control">
-                  <div class="speed-control-title"><span>週期 T</span></div>
-                  <div class="speed-stepper" role="group" aria-label="調整週期">
-                    <button class="secondary" id="speed-period-down" type="button" aria-label="縮短週期">−</button>
-                    <span class="speed-step-value" id="speed-period-value">0.50 s</span>
-                    <button class="secondary" id="speed-period-up" type="button" aria-label="延長週期">＋</button>
-                  </div>
-                  <small class="speed-step-note">每次調整 0.05 s；頻率同步更新</small>
-                </div>
-                <div class="speed-control">
-                  <div class="speed-control-title"><span>波長 λ</span></div>
-                  <div class="speed-stepper" role="group" aria-label="調整波長">
-                    <button class="secondary" id="speed-wavelength-down" type="button" aria-label="縮短波長">−</button>
-                    <span class="speed-step-value" id="speed-wavelength-value">6 m</span>
-                    <button class="secondary" id="speed-wavelength-up" type="button" aria-label="增加波長">＋</button>
-                  </div>
-                  <small class="speed-step-note">每次調整 1 m</small>
-                </div>
-              </div>
               <div class="speed-live-readout" aria-live="polite">
                 <div class="data-cell"><small>波速 v</small><strong id="speed-value">12 m/s</strong></div>
                 <div class="data-cell"><small>通過 30 m 所需時間</small><strong id="speed-transit-time">2.50 s</strong></div>
