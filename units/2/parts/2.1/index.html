@@ -1465,9 +1465,9 @@
           if(elapsed<transitTime)animationFrame=window.requestAnimationFrame(animateSingleWave);else finishSingleWave();
         };
         const launchSingleWave=()=>{
-          if(isRunning)return;
+          if(isRunning){resetSingleWave();runMessage.textContent="傳播已取消，波形已回到起始狀態。";return;}
           if(animationFrame)window.cancelAnimationFrame(animationFrame);
-          isRunning=true;runStartedAt=null;sendWaveButton.disabled=true;sendWaveButton.textContent="波形傳播中…";
+          isRunning=true;runStartedAt=null;sendWaveButton.disabled=false;sendWaveButton.textContent="取消並重設";
           setControlsDisabled(true);drawGeneratedWave(0);drawProgress(0);updateControls();
           runMessage.textContent="橘色波源上下振動，波形正向右生成並傳播。";
           animationFrame=window.requestAnimationFrame(animateSingleWave);
