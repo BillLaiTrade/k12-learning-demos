@@ -200,15 +200,18 @@
     .speed-formula-context { margin:12px 0 0!important; color:var(--muted); }
     .speed-formula-panel { margin:14px 0 18px; padding:10px 16px 12px; border:1px solid #d6e4d5; border-radius:16px; background:#eaf3e9; }
     .speed-formula { display:flex; align-items:center; justify-content:center; gap:.28em; margin:0 0 5px; padding:8px 12px; background:transparent; font-size:clamp(1.5rem,4vw,2.15rem); }
-    .speed-formula-meaning { display:grid; justify-items:center; gap:3px; margin:0; padding:8px 4px 2px; border-top:1px solid #d6e4d5; color:var(--ink); text-align:center; font-size:.9rem; line-height:1.5; }
-    .speed-formula-meaning strong { color:var(--green); font-weight:800; }
+    .speed-formula-meaning { display:grid; justify-items:center; gap:6px; margin:0; padding:12px 4px; border-block:1px solid #d6e4d5; color:var(--ink); text-align:center; font-size:.9rem; line-height:1.5; }
+    .speed-formula-meaning-title { margin:0; color:var(--green); font-size:.88rem; font-weight:800; }
     .speed-formula-chinese-line { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px; }
-    .speed-formula-note { margin:0; color:var(--muted); text-align:center; font-size:.9rem; }
-    .speed-formula-notes { display:grid; gap:7px; }
-    .speed-formula-note--second { padding-top:7px; border-top:1px solid #d6e4d5; }
-    .speed-formula-mapping { margin:0; padding:7px 4px 0; border-top:1px solid #d6e4d5; color:var(--muted); text-align:center; font-size:.84rem; line-height:1.45; }
-    .speed-formula-mapping strong { color:var(--green); font-weight:800; }
-    .speed-formula-note strong { color:var(--ink); font-weight:800; }
+    .speed-formula-explanations { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .speed-formula-explanation { min-width:0; padding:12px 14px; border:1px solid #d6e4d5; border-radius:12px; background:#f7faf6; }
+    .speed-formula-explanation h4 { margin:0 0 5px; color:var(--green); font-size:.86rem; }
+    .speed-formula-explanation p { margin:0; color:var(--ink); font-size:.88rem; line-height:1.5; }
+    .speed-quantity-map { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:12px; padding-top:12px; border-top:1px solid #d6e4d5; }
+    .speed-quantity-map div { min-width:0; padding:8px 6px; border-radius:10px; background:#f7faf6; text-align:center; }
+    .speed-quantity-map span,.speed-quantity-map strong { display:block; }
+    .speed-quantity-map span { color:var(--muted); font-size:.78rem; }
+    .speed-quantity-map strong { color:var(--green); font-size:.85rem; }
     .speed-interactive { margin-top:18px; padding:18px; border:1px solid var(--line); border-radius:18px; background:#fbfcf8; }
     .speed-interactive-heading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:4px 14px; }
     .speed-interactive-heading h3 { margin:0; font-size:1.08rem; }
@@ -291,12 +294,27 @@
       .quiz-actions { align-items:stretch; flex-direction:column; gap:8px; }
       .quiz-actions .action { width:100%; }
       .quiz-helper { font-size:.82rem; }
+      .speed-formula-explanations { grid-template-columns:1fr; gap:8px; }
       .definition-pair { grid-template-columns:1fr; }
       .section-top { align-items:start; flex-direction:column; gap:3px; }
       .visual .amplitude-diagram text { font-size:25px; }
       .visual .amplitude-diagram #amplitude-label { font-size:28px; }
     }
-    @media (max-width:520px) { .diagram-grid,.data-grid,.example-grid { grid-template-columns:1fr; } .lesson-card { padding:16px; } .visual { padding:8px; } .longitudinal-wavelength-panel svg text { font-size:26px; } .longitudinal-wavelength-panel svg .lambda-symbol { font-size:32px; } }
+    @media (min-width:761px) and (max-width:900px) {
+      .lesson-layout { grid-template-columns:minmax(0,1fr); gap:12px; }
+      .route { top:0; z-index:5; max-height:none; margin:0 -12px; padding:10px 12px; border-block:1px solid var(--line); background:rgb(244 247 241 / 96%); backdrop-filter:blur(12px); }
+      .route-label { margin-bottom:6px; }
+      .route-inner { display:flex; gap:6px; overflow-x:auto; padding-bottom:3px; scrollbar-width:thin; }
+      .route a { display:inline-flex; flex:0 0 auto; align-items:center; gap:6px; padding:7px 10px; border:1px solid var(--line); border-radius:999px; background:var(--card); white-space:nowrap; }
+      .route a[aria-current="step"] { border-color:var(--green); }
+      .route a.quiz-nav { margin:0 0 0 4px; border-top:0; border-left:1px solid var(--line); padding-top:7px; }
+      .route a.quiz-nav[aria-current="step"] { border-color:#d9a74f; }
+      .lesson-card { grid-template-columns:1fr; gap:14px; padding:18px; border-radius:19px; }
+      .card-side { display:flex; align-items:baseline; gap:10px; border-right:0; border-bottom:1px solid var(--line); padding:0 0 10px; }
+      .card-side h3 { margin:0; }
+      .card-role { display:none; }
+    }
+    @media (max-width:520px) { .diagram-grid,.data-grid,.example-grid { grid-template-columns:1fr; } .lesson-card { padding:16px; } .visual { padding:8px; } .speed-quantity-map { grid-template-columns:1fr; gap:5px; } .speed-quantity-map div { display:flex; align-items:baseline; justify-content:center; gap:8px; } .longitudinal-wavelength-panel svg text { font-size:26px; } .longitudinal-wavelength-panel svg .lambda-symbol { font-size:32px; } }
     @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
   </style>
 </head>
@@ -808,14 +826,24 @@
             <div class="speed-formula-panel">
                 <div class="formula speed-formula" role="math" aria-label="波速等於頻率乘以波長，等於波長除以週期"><em>v</em> = <em>f</em> × <em>λ</em> = <span class="stacked-fraction" aria-hidden="true"><span><em>λ</em></span><span class="fraction-rule"></span><span><em>T</em></span></span></div>
               <div class="speed-formula-meaning">
-                <strong>中文公式：</strong>
+                <p class="speed-formula-meaning-title">中文公式</p>
                 <div class="speed-formula-chinese-line">波速 = 每秒產生的完整波數 × 每個完整波的長度</div>
                 <div class="speed-formula-chinese-line">= <span class="frequency-meaning-fraction"><span>一個完整波的長度</span><span class="fraction-rule"></span><span>波形前進一個完整波長所需的時間</span></span></div>
               </div>
-              <div class="speed-formula-notes">
-                <p class="speed-formula-note"><strong>白話：</strong>每秒能走多遠，取決於每秒走幾步，以及每一步有多大。</p>
-                <p class="speed-formula-note speed-formula-note--second"><strong>也可以這樣想：</strong>你走多快，取決於每一步走多遠，以及走完這一步要花多少時間；每一步花的時間越短，你走得就越快。</p>
-                <p class="speed-formula-mapping"><strong>對照波的量：</strong>每秒步數是頻率 <em>f</em>，步長是波長 <em>λ</em>，走完一步所需時間是週期 <em>T</em>。</p>
+              <div class="speed-formula-explanations">
+                <section class="speed-formula-explanation" aria-labelledby="speed-plain-frequency">
+                  <h4 id="speed-plain-frequency">白話一・看每秒的步數</h4>
+                  <p>每秒能走多遠，取決於每秒走幾步，以及每一步有多大。</p>
+                </section>
+                <section class="speed-formula-explanation" aria-labelledby="speed-plain-period">
+                  <h4 id="speed-plain-period">白話二・看每一步花多久</h4>
+                  <p>你走多快，取決於每一步走多遠，以及走完這一步要花多少時間；每一步花的時間越短，你走得就越快。</p>
+                </section>
+              </div>
+              <div class="speed-quantity-map" aria-label="比喻和波的物理量對照">
+                <div><span>每秒步數</span><strong>頻率 f</strong></div>
+                <div><span>每步距離</span><strong>波長 λ</strong></div>
+                <div><span>一步所需時間</span><strong>週期 T</strong></div>
               </div>
             </div>
             <section class="speed-interactive" aria-labelledby="speed-interactive-title">
