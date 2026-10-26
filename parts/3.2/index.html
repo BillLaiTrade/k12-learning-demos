@@ -22,14 +22,14 @@
 
 
 
-    /* 小葵與阿公的對話沿用 3.1 的角色頭像與色彩。 */
+    /* 對話頭像沿用 3.1 正式角色圖，避免使用舊版有鬍子的阿公頭像。 */
     .dialogue{display:flex;gap:10px;align-items:center;margin:12px 0;padding:11px 15px;border-left:4px solid #8cae91;border-radius:0 13px 13px 0;background:#f0f5eb}
     .dialogue p{margin:0}
     .dialogue .speaker{display:inline-flex;flex:0 0 auto;align-items:center;gap:0;color:#315a46;font-weight:800}
-    .dialogue .speaker::before{content:"";display:block;width:44px;height:44px;border:2px solid #8cae91;border-radius:50%;background-image:url("../3.1/assets/dialogue-character-avatars.png");background-repeat:no-repeat;background-position:100% 50%;background-size:200% 100%;box-shadow:0 2px 6px rgb(21 47 38 / 12%)}
+    .dialogue .speaker::before{content:"";display:block;width:44px;height:44px;border:2px solid #8cae91;border-radius:50%;background-image:url("../3.1/assets/meteorite-recording-opening.png?v=meteorite-20261026-58");background-repeat:no-repeat;background-position:68% 2%;background-size:540% auto;box-shadow:0 2px 6px rgb(21 47 38 / 12%)}
     .dialogue--xiaokui{border-left-color:#d39765;background:#fff4e8}
     .dialogue--xiaokui .speaker{color:#945523}
-    .dialogue--xiaokui .speaker::before{border-color:#d39765;background-position:0 50%}
+    .dialogue--xiaokui .speaker::before{border-color:#d39765;background-image:url("../3.1/assets/dialogue-character-avatars.png?v=meteorite-20261026-58");background-position:0 50%;background-size:200% 100%}
 
     .intro{display:grid;grid-template-columns:minmax(0,.9fr) minmax(320px,1.1fr);gap:32px;align-items:center;padding:44px 0 38px}
     .intro-copy h1{max-width:660px;margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-spacing:-.04em}
@@ -109,7 +109,7 @@
 </style>
   <script>
     const experimentStyles = new URL("assets/density-experiment-quiz.css", document.baseURI);
-    const styleVersion = new URL(location.href).searchParams.get("v") || "meteorite-20261026-57";
+    const styleVersion = new URL(location.href).searchParams.get("v") || "meteorite-20261026-58";
     if (styleVersion) experimentStyles.searchParams.set("v", styleVersion);
     const experimentStyleLink = document.createElement("link");
     experimentStyleLink.rel = "stylesheet";
@@ -160,7 +160,7 @@
       const navLinks=$$('#lesson-nav a'), pathSections=$$('.lesson, .unit-quiz');
       const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.hash===`#${entry.target.id}`));}})},{rootMargin:'-15% 0px -70% 0px'});pathSections.forEach(s=>observer.observe(s));
       // 全單元共用同一顆隕石模型與表面材質；靜態示意圖使用該模型的固定角度渲染圖。
-      const pageVersion=new URL(location.href).searchParams.get('v')||'meteorite-20261026-57';
+      const pageVersion=new URL(location.href).searchParams.get('v')||'meteorite-20261026-58';
       const observerModule=new URL('./assets/stone-observer.js',document.baseURI);if(pageVersion)observerModule.searchParams.set('v',pageVersion);
       import(observerModule.href).then(({mountStoneObserver})=>mountStoneObserver()).catch(()=>{const status=$('#observer-loading');if(status)status.textContent='立體模型無法載入，請重新整理頁面。'});
       const massModule=new URL('./assets/mass-measurement.js',document.baseURI);if(pageVersion)massModule.searchParams.set('v',pageVersion);
