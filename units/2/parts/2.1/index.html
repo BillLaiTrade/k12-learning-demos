@@ -336,21 +336,34 @@
     .field-response-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px 15px; margin-bottom:10px; }
     .field-response h3 { margin:0; color:var(--ink); font-size:1.08rem; }
     .field-response-head p { margin:0; color:var(--muted); font-size:.86rem; }
-    .field-answer-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)) auto; align-items:end; gap:10px; }
+    .field-distance-answer { max-width:360px; margin-bottom:12px; }
+    .field-parameter-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .field-parameter-card { min-width:0; padding:10px; border:1px solid var(--line); border-radius:11px; background:#fffefa; }
+    .field-parameter-card h4 { margin:0 0 8px; color:var(--green); font-size:.9rem; }
+    .field-parameter-card.is-p h4 { color:#19715b; }
+    .field-parameter-card.is-s h4 { color:#95601e; }
+    .field-card-inputs { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
     .field-answer { min-width:0; }
     .field-answer label { display:block; margin-bottom:4px; color:var(--ink); font-size:.84rem; font-weight:750; }
     .field-answer input { width:100%; min-width:0; }
-    .field-answer-grid .action { min-height:44px; white-space:nowrap; }
+    .field-answer small { display:block; min-height:2.6em; margin-top:5px; color:var(--muted); font-size:.75rem; line-height:1.45; }
+    .field-response > .action { min-height:44px; margin-top:11px; white-space:nowrap; }
     .field-feedback { margin:11px 0 0; padding:10px 12px; border-radius:10px; background:#f1f5ee; color:#40574b; font-size:.9rem; }
     .field-feedback[hidden] { display:none; }
     .field-feedback[data-state="good"] { background:#e8f3e8; color:var(--green); }
     .field-feedback[data-state="try"] { background:#faf3e4; color:#755a2d; }
-    .field-worked-answer { display:block; margin-top:5px; color:inherit; font-weight:600; }
+    .field-results { margin-top:13px; padding:13px; border:1px solid #cddfd1; border-radius:12px; background:#eef5ec; }
+    .field-results[hidden] { display:none; }
+    .field-results h4 { margin:0 0 9px; color:var(--green); font-size:.96rem; }
+    .field-result-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+    .field-result { padding:9px 10px; border-radius:9px; background:#fffefa; color:var(--muted); font-size:.8rem; }
+    .field-result strong { display:block; margin-top:2px; color:var(--ink); font-size:1.15rem; }
+    .field-calculation { margin:9px 0 0; color:#52665d; font-size:.78rem; line-height:1.55; }
     .route a.task-nav { margin:0 0 0 4px; border-top:0; border-left:1px solid var(--line); padding-top:7px; }
     .route a.task-nav[aria-current="step"] { border-color:var(--green); }
     @container (max-width:760px) { .field-task-grid { grid-template-columns:1fr; } }
-    @container (max-width:620px) { .field-task-head { padding:19px 18px 13px; } .field-task-grid { padding:0 14px; } .field-response { margin:14px; padding:13px 2px 2px; } .field-response-head { align-items:flex-start; flex-direction:column; gap:4px; } .field-answer-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .field-answer-grid .action { grid-column:1/-1; } }
-    @container (max-width:420px) { .field-task-head { flex-direction:column; gap:8px; } .field-answer-grid { grid-template-columns:1fr; } .field-answer-grid .action { grid-column:auto; } .field-map-wrap { padding:8px; } .signal-row { padding-inline:8px; } .signal-direction { font-size:.68rem; } }
+    @container (max-width:620px) { .field-task-head { padding:19px 18px 13px; } .field-task-grid { padding:0 14px; } .field-response { margin:14px; padding:13px 2px 2px; } .field-response-head { align-items:flex-start; flex-direction:column; gap:4px; } .field-answer small { min-height:0; } .field-result-grid { grid-template-columns:1fr; } }
+    @container (max-width:420px) { .field-task-head { flex-direction:column; gap:8px; } .field-parameter-grid { grid-template-columns:1fr; } .field-card-inputs { grid-template-columns:1fr; } .field-map-wrap { padding:8px; } .signal-row { padding-inline:8px; } .signal-direction { font-size:.68rem; } }
     .answer { margin-top:14px; padding:13px 15px; border:1px solid #cbded0; border-radius:14px; background:#eef5ec; }
     .answer summary { color:#315a46; font-weight:800; cursor:pointer; }
     .answer p { margin:8px 0 0; }
@@ -1048,18 +1061,39 @@
                   <g><text x="30" y="136" text-anchor="middle">0 km</text><text x="80" y="136" text-anchor="middle">1 km</text><text x="130" y="136" text-anchor="middle">2 km</text><text x="180" y="136" text-anchor="middle">3 km</text><text x="230" y="136" text-anchor="middle">4 km</text><text x="280" y="136" text-anchor="middle">5 km</text><text x="330" y="136" text-anchor="middle">6 km</text><text x="380" y="136" text-anchor="middle">7 km</text><text x="430" y="136" text-anchor="middle">8 km</text></g>
                 </svg>
               </div>
-              <p class="signal-hint"><strong>判讀提示：</strong>從刻度找出波形重複的間距。</p>
+              <p class="signal-hint"><strong>判讀提示：</strong>相同波形再次出現的位置間距，就是一個波長 λ。</p>
             </section>
           </div>
           <form class="field-response" id="field-response-form" novalidate>
-            <div class="field-response-head"><h3>作答區</h3><p>估算兩種波抵達觀測站的時間，判斷較強震動到來前還有幾秒。</p></div>
-            <div class="field-answer-grid">
-              <div class="field-answer"><label for="field-p-arrival">P 波抵達時間（秒）</label><input id="field-p-arrival" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入秒數" required></div>
-              <div class="field-answer"><label for="field-s-arrival">S 波抵達時間（秒）</label><input id="field-s-arrival" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入秒數" required></div>
-              <div class="field-answer"><label for="field-warning-time">可提前警示（秒）</label><input id="field-warning-time" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入秒數" required></div>
-              <button class="action" id="field-submit" type="submit">送出判斷</button>
+            <div class="field-response-head"><h3>作答區</h3><p>從地圖讀距離、從波形讀參數；填妥後由系統計算抵達時間。</p></div>
+            <div class="field-answer field-distance-answer"><label for="field-distance-km">震央到觀測點距離（km）</label><input id="field-distance-km" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入地圖上的距離" required><small>資料來源：左側地圖下方的距離標示。</small></div>
+            <div class="field-parameter-grid">
+              <section class="field-parameter-card is-p" aria-labelledby="field-p-data-title">
+                <h4 id="field-p-data-title">P 波資料</h4>
+                <div class="field-card-inputs">
+                  <div class="field-answer"><label for="field-p-frequency">頻率 f（Hz）</label><input id="field-p-frequency" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入頻率" required><small>資料來源：P 波旁的頻率標示。</small></div>
+                  <div class="field-answer"><label for="field-p-wavelength">波長 λ（km）</label><input id="field-p-wavelength" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入波長" required><small>資料來源：粒子圖相鄰密集區的刻度間距。</small></div>
+                </div>
+              </section>
+              <section class="field-parameter-card is-s" aria-labelledby="field-s-data-title">
+                <h4 id="field-s-data-title">S 波資料</h4>
+                <div class="field-card-inputs">
+                  <div class="field-answer"><label for="field-s-period">週期 T（s）</label><input id="field-s-period" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入週期" required><small>資料來源：S 波旁的週期標示。</small></div>
+                  <div class="field-answer"><label for="field-s-wavelength">波長 λ（km）</label><input id="field-s-wavelength" type="number" min="0.01" step="any" inputmode="decimal" placeholder="填入波長" required><small>資料來源：波形圖相鄰波峰的刻度間距。</small></div>
+                </div>
+              </section>
             </div>
+            <button class="action" id="field-submit" type="submit">計算抵達時間</button>
             <div class="field-feedback" id="field-feedback" role="status" aria-live="polite" hidden></div>
+            <section class="field-results" id="field-results" aria-labelledby="field-results-title" aria-live="polite" hidden>
+              <h4 id="field-results-title">系統計算結果</h4>
+              <div class="field-result-grid">
+                <div class="field-result">P 波抵達時間<strong id="field-p-result">—</strong></div>
+                <div class="field-result">S 波抵達時間<strong id="field-s-result">—</strong></div>
+                <div class="field-result">兩波抵達時間差<strong id="field-warning-result">—</strong></div>
+              </div>
+              <p class="field-calculation" id="field-calculation"></p>
+            </section>
           </form>
         </section>
 
@@ -1095,23 +1129,24 @@
       }
       const fieldResponseForm=document.querySelector("#field-response-form");
       if(fieldResponseForm){
-        const fieldPArrival=document.querySelector("#field-p-arrival"),fieldSArrival=document.querySelector("#field-s-arrival"),fieldWarningTime=document.querySelector("#field-warning-time"),fieldFeedback=document.querySelector("#field-feedback");
-        const fieldSubmit=document.querySelector("#field-submit"),isNear=(value,target)=>Number.isFinite(value)&&Math.abs(value-target)<=.05;
+        const fieldDistance=document.querySelector("#field-distance-km"),fieldPFrequency=document.querySelector("#field-p-frequency"),fieldPWavelength=document.querySelector("#field-p-wavelength"),fieldSPeriod=document.querySelector("#field-s-period"),fieldSWavelength=document.querySelector("#field-s-wavelength"),fieldFeedback=document.querySelector("#field-feedback"),fieldResults=document.querySelector("#field-results");
+        const fieldPResult=document.querySelector("#field-p-result"),fieldSResult=document.querySelector("#field-s-result"),fieldWarningResult=document.querySelector("#field-warning-result"),fieldCalculation=document.querySelector("#field-calculation");
+        const fieldFormat=value=>Number(value.toFixed(2)).toLocaleString("zh-TW");
         fieldResponseForm.addEventListener("submit",event=>{
           event.preventDefault();
-          const pText=fieldPArrival.value.trim(),sText=fieldSArrival.value.trim(),warningText=fieldWarningTime.value.trim();
+          const inputs=[fieldDistance,fieldPFrequency,fieldPWavelength,fieldSPeriod,fieldSWavelength],values=inputs.map(input=>Number(input.value));
           fieldFeedback.hidden=false;
-          if(!pText||!sText||!warningText){fieldFeedback.dataset.state="try";fieldFeedback.textContent="先填入 P 波、S 波抵達時間和可提前警示的秒數，再送出判斷。";return;}
-          const pCorrect=isNear(Number(pText),20),sCorrect=isNear(Number(sText),30),warningCorrect=isNear(Number(warningText),10);
-          if(pCorrect&&sCorrect&&warningCorrect){
-            fieldFeedback.dataset.state="good";
-            fieldFeedback.innerHTML="判斷正確：P 波約 20 秒抵達，S 波約 30 秒抵達；P 波先到，較強震動約晚 10 秒。<span class=\"field-worked-answer\">P 波：λ = 3 km，v = f × λ = 2 × 3 = 6 km/s，120 ÷ 6 = 20 秒。S 波：λ = 4 km，v = λ ÷ T = 4 ÷ 1 = 4 km/s，120 ÷ 4 = 30 秒。</span>";
-            return;
+          if(values.some(value=>!Number.isFinite(value)||value<=0)){
+            fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent="請依照每個欄位下方的資料來源，從地圖和波形圖填入五個數值。";
+            inputs.find(input=>!input.value||!Number.isFinite(Number(input.value))||Number(input.value)<=0)?.focus();return;
           }
-          const check=(correct,label)=>`${label}${correct?"✓":"再檢查"}`;
-          fieldFeedback.dataset.state="try";
-          fieldFeedback.textContent=`${check(pCorrect,"P 波：")}　${check(sCorrect,"S 波：")}　${check(warningCorrect,"預警時間：")}。先從距離刻度判讀波長，再算波速，最後用「距離 ÷ 波速」求抵達時間。`;
+          const [distance,fieldFrequency,pWavelength,fieldPeriod,sWavelength]=values,pSpeed=fieldFrequency*pWavelength,sSpeed=sWavelength/fieldPeriod,pArrival=distance/pSpeed,sArrival=distance/sSpeed,warningTime=Math.max(0,sArrival-pArrival);
+          fieldPResult.textContent=`${fieldFormat(pArrival)} 秒`;fieldSResult.textContent=`${fieldFormat(sArrival)} 秒`;
+          fieldWarningResult.textContent=pArrival<sArrival?`${fieldFormat(warningTime)} 秒`:"P 波未先到";
+          fieldCalculation.textContent=`P 波：${fieldFrequency} Hz × ${fieldFormat(pWavelength)} km = ${fieldFormat(pSpeed)} km/s；${fieldFormat(distance)} km ÷ ${fieldFormat(pSpeed)} km/s = ${fieldFormat(pArrival)} 秒。S 波：${fieldFormat(sWavelength)} km ÷ ${fieldPeriod} s = ${fieldFormat(sSpeed)} km/s；${fieldFormat(distance)} km ÷ ${fieldFormat(sSpeed)} km/s = ${fieldFormat(sArrival)} 秒。`;
+          fieldResults.hidden=false;fieldFeedback.dataset.state="good";fieldFeedback.textContent="已依照你從地圖與波形圖找到的資料，計算兩種波的抵達時間。";
         });
+        [fieldDistance,fieldPFrequency,fieldPWavelength,fieldSPeriod,fieldSWavelength].forEach(input=>input.addEventListener("input",()=>{fieldResults.hidden=true;fieldFeedback.hidden=true;}));
       }
       const pulseSvgs = [...document.querySelectorAll(".rope-wave:not([data-static-rope]):not([data-fixed-point-wave])")];
       const staticRopeSvgs = [...document.querySelectorAll(".rope-wave[data-static-rope]")];
