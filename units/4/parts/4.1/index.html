@@ -695,6 +695,8 @@
     .scene-sample:focus-visible { outline:3px solid #f7d375; outline-offset:2px; border-radius:10px; }
     .scene-sample.is-selected { z-index:8; transform:translateY(-7px) scale(1.08); filter:drop-shadow(0 7px 8px #30211180); }
     .scene-sample.is-placed { z-index:6; width:8.5%; height:14%; grid-template-rows:minmax(0,1fr) 18px; transform:none; filter:drop-shadow(0 3px 4px #24180d80); cursor:pointer; }
+    .scene-sample.is-incorrect { outline:2px solid #d44e43; outline-offset:2px; border-radius:7px; filter:drop-shadow(0 0 7px #ef5848cc); animation:wrong-sample-pulse .6s ease-in-out 3; }
+    @keyframes wrong-sample-pulse { 50% { filter:drop-shadow(0 0 13px #ef4d40); } }
     .scene-sample .sample-art { display:block; width:100%; height:100%; background-image:url("assets/specimen-samples-sprite.png"); background-repeat:no-repeat; background-size:300% 300%; background-position:var(--sprite-x) var(--sprite-y); filter:drop-shadow(0 5px 5px #2d21134a); }
     .scene-sample.is-placed .sample-art { height:100%; }
     .scene-sample .sample-tag { display:block; max-width:100%; margin-top:1px; padding:0 5px; border:1px solid #cdbd9c; border-radius:2px; background:#f6edda; color:#584a34; box-shadow:0 2px 4px #28190d40; font-size:clamp(.48rem,.72vw,.62rem); line-height:16px; white-space:nowrap; }
@@ -710,7 +712,7 @@
     .sample-return:hover,.sample-return:focus-visible { background:#edf4e9; outline:2px solid #95ae8e; outline-offset:1px; }
     .workbench-feedback { min-height:24px; margin:10px 0 0; color:#526158; font-size:.86rem; }
     .workbench-feedback[data-kind="correct"] { color:#176b53; font-weight:750; }
-    .workbench-feedback[data-kind="wrong"] { color:#9d4d2f; }
+    .workbench-feedback[data-kind="wrong"] { padding:5px 8px; border-left:3px solid #c94d41; border-radius:4px; background:#fff0ee; color:#9d3f35; }
     .workbench-actions { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:5px; }
     .workbench-reset { min-height:36px; padding:6px 12px; border:1px solid #becbbf; border-radius:9px; background:#fffdf8; color:#40564b; cursor:pointer; }
     .workbench-hint { margin:0; color:#728077; font-size:.78rem; }
@@ -2381,22 +2383,25 @@
     const returnSampleButton=document.getElementById("return-sample");
     const workbenchFeedback=document.getElementById("workbench-feedback");
     const sampleStatus=new Map();
+    const sampleLocations=new Map();
+    const incorrectLocations=new Map();
     let selectedSpecimen=null;
     const selectSpecimen=(button,openManual=false)=>{
       selectedSpecimen=button;
       specimenButtons.forEach(item=>{item.classList.toggle("is-selected",item===button);item.setAttribute("aria-pressed",String(item===button));});
       const data=specimenRules[button.dataset.sample];
-      sampleInfo.hidden=false;sampleInfoTitle.textContent=sampleStatus.has(button.dataset.sample)?data.realName:"已選取"+data.label;sampleClue.textContent=data.clue;
-      sampleState.textContent=sampleStatus.has(button.dataset.sample)?"目前位置："+specimenRules[sampleStatus.get(button.dataset.sample)].dest:"先翻閱手冊，再選擇展示位置。";
-      returnSampleButton.hidden=!sampleStatus.has(button.dataset.sample);
+      const key=button.dataset.sample;
+      sampleInfo.hidden=false;sampleInfoTitle.textContent=sampleStatus.has(key)?data.realName:"已選取"+data.label;sampleClue.textContent=data.clue;
+      sampleState.textContent=sampleStatus.has(key)?"目前位置："+specimenRules[sampleStatus.get(key)].dest:incorrectLocations.has(key)?"目前位置不符，請再參考手冊線索。":"先翻閱手冊，再選擇展示位置。";
+      returnSampleButton.hidden=!sampleLocations.has(key);
       workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="到手冊找相同編號，根據性質和粒子組成判斷分類。";
       const linkedPage=specimenButtons.indexOf(button);
       if(linkedPage>=0){showReaderPage(linkedPage);if(openManual&&!bookReader.open)bookReader.showModal();}
     };
     const returnSpecimen=button=>{
       const key=button.dataset.sample;
-      if(!sampleStatus.has(key))return;
-      sampleStatus.delete(key);button.classList.remove("is-placed");button.style.left="";button.style.top="";
+      if(!sampleLocations.has(key))return;
+      sampleStatus.delete(key);sampleLocations.delete(key);incorrectLocations.delete(key);button.classList.remove("is-placed","is-incorrect");button.style.left="";button.style.top="";
       button.querySelector(".sample-tag").textContent=specimenRules[key].label;
       button.setAttribute("aria-label",specimenRules[key].label+"已放回桌面，點選查看觀察資料");
       selectSpecimen(button);
@@ -2408,13 +2413,22 @@
     const placeSpecimen=(button,target)=>{
       const targetCategory=typeof target==="string"?target:target.dataset.target;
       const key=button.dataset.sample;const data=specimenRules[key];
-      if(targetCategory!==data.category){workbenchFeedback.dataset.kind="wrong";workbenchFeedback.textContent="這個位置和樣本資料對不起來。翻翻手冊，再看看線索。";return false;}
-      sampleStatus.set(key,targetCategory);button.classList.remove("is-selected");button.classList.add("is-placed");
-      returnSampleButton.hidden=selectedSpecimen!==button;
-      button.querySelector(".sample-tag").textContent=data.realName;
-      const count=[...sampleStatus.entries()].filter(([,category])=>category===targetCategory).findIndex(([sample])=>sample===key);
+      const isCorrect=targetCategory===data.category;
+      sampleLocations.set(key,targetCategory);
+      const count=[...sampleLocations.entries()].filter(([,category])=>category===targetCategory).findIndex(([sample])=>sample===key);
       const placement={element:{left:9,top:9},compound:{left:9,top:31},mixture:{left:59,top:9}}[targetCategory];
+      button.classList.remove("is-selected");button.classList.add("is-placed");returnSampleButton.hidden=selectedSpecimen!==button;
       button.style.left=(placement.left+(count%3)*12)+"%";button.style.top=(placement.top+Math.floor(count/3)*5.5)+"%";
+      if(!isCorrect){
+        sampleStatus.delete(key);incorrectLocations.set(key,targetCategory);button.classList.add("is-incorrect");button.querySelector(".sample-tag").textContent=data.label;
+        button.setAttribute("aria-label",data.label+"目前放在不符的位置，請重新分類");button.setAttribute("aria-pressed","false");
+        if(selectedSpecimen===button)sampleInfoTitle.textContent="已選取"+data.label;
+        sampleState.textContent="位置不符，請再參考手冊線索。";workbenchFeedback.dataset.kind="wrong";
+        workbenchFeedback.textContent="這個位置和樣本資料不符，請再看看線索並重新分類。";
+        document.getElementById("sort-progress").textContent="已分類 "+sampleStatus.size+" / "+specimenRulesCount+" 份樣本";
+        return true;
+      }
+      incorrectLocations.delete(key);sampleStatus.set(key,targetCategory);button.classList.remove("is-incorrect");button.querySelector(".sample-tag").textContent=data.realName;
       button.setAttribute("aria-label",data.realName+"已正確分類於"+data.dest+"，點選可重新分類");button.setAttribute("aria-pressed","false");
       if(selectedSpecimen===button)sampleInfoTitle.textContent=data.realName;
       sampleState.textContent="已放入："+data.dest;workbenchFeedback.dataset.kind="correct";
@@ -2431,7 +2445,7 @@
         const sceneRect=document.getElementById("classification-workbench").getBoundingClientRect();
         const left=button.style.left?parseFloat(button.style.left):parseFloat(button.style.getPropertyValue("--sample-x"));
         const top=button.style.top?parseFloat(button.style.top):parseFloat(button.style.getPropertyValue("--sample-y"));
-        dragState={button,pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,startLeft:left,startTop:top,sceneRect,moved:false,wasPlaced:sampleStatus.has(button.dataset.sample)};
+        dragState={button,pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,startLeft:left,startTop:top,sceneRect,moved:false,wasPlaced:sampleLocations.has(button.dataset.sample)};
         button.setPointerCapture(event.pointerId);
       });
       button.addEventListener("pointermove",event=>{
@@ -2449,7 +2463,7 @@
         const scene=document.getElementById("classification-workbench").getBoundingClientRect();
         const x=(event.clientX-scene.left)/scene.width*100;const y=(event.clientY-scene.top)/scene.height*100;
         const dropCategory=targetLabel?.dataset.target||(x>=1&&x<=50&&y>=0&&y<=55?(y<27?"element":"compound"):x>50&&x<=100&&y>=0&&y<=55?"mixture":null);
-        if(dropCategory){selectSpecimen(button);if(!placeSpecimen(button,dropCategory)){button.style.left=state.startLeft+"%";button.style.top=state.startTop+"%";}}
+        if(dropCategory){selectSpecimen(button);placeSpecimen(button,dropCategory);}
         else if(state.wasPlaced&&y>55)returnSpecimen(button);
         else{button.style.left=state.startLeft+"%";button.style.top=state.startTop+"%";workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="把樣本拖進展示櫃對應層，或點選樣本後再點選層板標籤。";}
       });
@@ -2469,7 +2483,7 @@
     document.getElementById("reader-next").addEventListener("click",()=>showReaderPage(bookPage+1));
     document.getElementById("book-reader-close").addEventListener("click",()=>bookReader.close());
     document.getElementById("reset-samples").addEventListener("click",()=>{
-      sampleStatus.clear();selectedSpecimen=null;sampleInfo.hidden=true;specimenButtons.forEach(button=>{button.classList.remove("is-selected","is-placed");button.setAttribute("aria-pressed","false");button.removeAttribute("aria-label");button.style.left="";button.style.top="";button.querySelector(".sample-tag").textContent=specimenRules[button.dataset.sample].label;});
+      sampleStatus.clear();sampleLocations.clear();incorrectLocations.clear();selectedSpecimen=null;sampleInfo.hidden=true;specimenButtons.forEach(button=>{button.classList.remove("is-selected","is-placed","is-incorrect");button.setAttribute("aria-pressed","false");button.removeAttribute("aria-label");button.style.left="";button.style.top="";button.querySelector(".sample-tag").textContent=specimenRules[button.dataset.sample].label;});
       specimenButtons.forEach((button,index)=>button.setAttribute("aria-label","選取桌上的樣本"+(index+1)+"，查看資料卡"));
       workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="樣本已回到桌面，重新開始分類。";document.getElementById("sort-progress").textContent="已分類 0 / "+specimenRulesCount+" 份樣本";
     });
