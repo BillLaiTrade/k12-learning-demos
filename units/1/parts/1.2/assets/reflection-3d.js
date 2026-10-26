@@ -151,7 +151,7 @@ try {
   const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: surfaceBaseColor, roughness: 0.98, metalness: 0, side: THREE.DoubleSide });
   addBox(scene, [1.55, 0.018, 1.18], [paperCenter.x, 0.102, paperCenter.z], roughMaterial, false, true);
   const surfaceLabelTextures = [];
-  const addSurfaceLabel = (center, title, subtitle) => {
+  const addSurfaceLabel = (center, title) => {
     const labelCanvas = document.createElement('canvas');
     labelCanvas.width = 512;
     labelCanvas.height = 180;
@@ -167,10 +167,7 @@ try {
     context.font = '700 64px "Noto Sans TC", "Microsoft JhengHei", sans-serif';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
-    context.fillText(title, 256, 76);
-    context.fillStyle = '#66736d';
-    context.font = '500 27px "Noto Sans TC", "Microsoft JhengHei", sans-serif';
-    context.fillText(subtitle, 256, 128);
+    context.fillText(title, 256, 90);
     const texture = new THREE.CanvasTexture(labelCanvas);
     texture.colorSpace = THREE.SRGBColorSpace;
     surfaceLabelTextures.push(texture);
@@ -190,8 +187,8 @@ try {
     tag.add(label);
     scene.add(tag);
   };
-  addSurfaceLabel(mirrorCenter, '平面鏡', '鏡面反射');
-  addSurfaceLabel(paperCenter, '霧面白紙', '漫反射');
+  addSurfaceLabel(mirrorCenter, '平面鏡');
+  addSurfaceLabel(paperCenter, '霧面白紙');
   // Aim the plane mirror's reflected beam toward the initial observer so the
   // specular reflection is clear as soon as the left flashlight is switched on.
   // The second lamp keeps the same incident direction to isolate surface texture.
