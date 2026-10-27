@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f7f2">
   <link rel="icon" href="data:,">
-  <title>混在一起的東西，怎麼分開？</title>
+  <title>混在一起的東西，怎麼分開？溶液裡有多少？</title>
   <style>
     :root { color-scheme:light; --ink:#243a35; --muted:#64736d; --paper:#f3f7f2; --card:#fff; --line:#d8e2da; --green:#176b53; --gold:#82a98c; --blue:#dce9e5; --rust:#a85c3d; }
     * { box-sizing:border-box; }
@@ -164,28 +164,29 @@
     <div class="brand-row"><a class="brand" href="../../index.html">← 物質、分離與水溶液</a><span class="crumb">國二上・自然科學</span></div>
     <div class="hero">
       <div>
-        <div class="eyebrow">混合物分離｜三個樣本，三種任務</div>
-        <h1>混在一起的東西，怎麼分開？</h1>
-        <p class="hero-copy">泥沙混在水裡、鹽溶在水裡、顏色混在墨水裡。想分離的東西不同，方法也會不同。</p>
+        <div class="eyebrow">混合物分離與溶液濃度｜從分離成分到比較含量</div>
+        <h1>混在一起的東西，怎麼分開？溶液裡有多少？</h1>
+        <p class="hero-copy">泥沙混在水裡、鹽溶在水裡、顏色混在墨水裡。先依成分差異選擇分離方法，再用濃度表示溶液中的溶質含量。</p>
       </div>
-      <aside class="hero-note"><strong>三種樣本，能用同一種方法嗎？</strong><p>沿著操作找答案：過濾後泥沙和水分別在哪裡？水蒸發後又有什麼？一滴墨水會分出幾種顏色？</p></aside>
+      <aside class="hero-note"><strong>分離成分和比較含量，是同一個問題嗎？</strong><p>先觀察泥沙、鹽水與墨水如何分開，再看看兩杯外觀相似的溶液，溶質含量是否相同。</p></aside>
     </div>
   </header>
   <main class="shell lesson-layout">
     <nav class="route" aria-label="學習路徑">
       <p class="route-label">沿著問題一步步探索</p>
-      <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／04 個問題</p>
+      <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／05 個問題</p>
       <div class="route-inner">
         <a href="#s1" aria-current="step"><b>01</b><span>如何把泥沙從水裡分開？</span></a>
         <a href="#s2"><b>02</b><span>鹽溶在水裡，還能把鹽分離出來嗎？</span></a>
         <a href="#s3"><b>03</b><span>一滴綠色墨水，會分出幾種顏色？</span></a>
         <a href="#s4"><b>04</b><span>看完三種結果，該選哪個方法？</span></a>
+        <a href="#s5"><b>05</b><span>水溶液裡的溶質有多少？</span></a>
       </div>
       <p class="route-hint">先帶著問題看操作，再用結果找答案。</p>
-      <section class="record-panel"><h2>本段目標</h2><p>依分離目標選擇方法，操作並判讀結果。</p></section>
+      <section class="record-panel"><h2>本段目標</h2><p>選擇混合物分離方法，並用重量百分濃度與 ppm 表示溶質含量。</p></section>
     </nav>
     <div class="cards">
-      <div class="section-top"><h2>三個樣本，三個問題：各自怎麼分開？</h2><span class="progress-copy">提出問題 → 觀察操作 → 找到答案</span></div>
+      <div class="section-top"><h2>先分離混合物，再比較溶液含量</h2><span class="progress-copy">提出問題 → 觀察證據 → 表示含量</span></div>
 
       <section class="lesson-card" id="s1">
         <div class="card-side"><span class="card-number">01</span><h3>如何把泥沙從水裡分開？</h3><span class="card-role">讓固體和液體分開</span></div>
@@ -245,7 +246,7 @@
             <div class="dish-wrap"><div class="heat-lines" aria-hidden="true">⌁　⌁　⌁</div><div class="evap-cup"><div class="salt-crystals"></div></div><p id="evap-caption" class="live-note">加熱前：鹽在水中，肉眼看不見分開的鹽粒。</p></div>
           </div>
           <div class="control-row"><button class="control-button" type="button" id="evap-play">開始</button><button class="control-button" type="button" id="evap-step">下一步</button><button class="control-button" type="button" id="evap-reset">重設</button></div>
-          <div class="note-box">這裡以安全示意呈現加熱與蒸發，不要求學生自行操作火源。重點是觀察結晶分離結果，不計算濃度或探討溶解度。</div>
+          <div class="note-box">這裡以安全示意呈現加熱與蒸發，不要求學生自行操作火源。本區先聚焦觀察結晶分離結果；溶質含量的表示法會在本段最後討論。</div>
         </div>
       </section>
 
@@ -290,7 +291,44 @@
           </div>
           <div class="control-row"><button class="control-button" type="button" id="check-answers">看看方法合不合適</button><button class="control-button" type="button" id="reset-answers">重新選一次</button></div>
           <p class="feedback" id="quiz-feedback" aria-live="polite">選完方法後，看看分離目標和結果是否對得上。</p>
-          <div class="note-box">方法要配合分離目標與成分差異。本段不重教物質分類，也不涵蓋濃度表示或計算。</div>
+          <div class="note-box">方法要配合分離目標與成分差異。接下來再用濃度表示溶液中的溶質含量。</div>
+        </div>
+      </section>
+
+      <section class="lesson-card" id="s5">
+        <div class="card-side"><span class="card-number">05</span><h3>水溶液裡的溶質有多少？</h3><span class="card-role">用濃度表示含量</span></div>
+        <div class="card-main">
+          <h2>兩杯看起來相似的糖水，含糖量一樣嗎？</h2>
+          <p>過濾能分開泥沙和水，蒸發能讓鹽從鹽水中留下；但如果不把溶質分離出來，要怎麼比較兩杯溶液裡含有多少溶質？</p>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>兩杯糖水看起來差不多，光看外表能知道哪一杯含糖比較多嗎？</p></div>
+          <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先知道溶質和整份溶液各有多少，再用濃度把含量表示出來。</p></div>
+
+          <h3>先認識溶液裡有哪些成分</h3>
+          <p>糖溶解在水中後形成均勻的糖水。這種均勻混合物稱為溶液。糖是溶質，水是溶劑；糖沒有消失，而是分散在水中。不同糖水的溶質含量可以不同。</p>
+          <div class="compare-grid solution-compare" aria-label="兩杯糖水的質量組成比較">
+            <article class="compare-card"><h3>甲杯｜5% 糖水</h3><p>5 克糖＋95 克水，共 100 克溶液</p></article>
+            <article class="compare-card"><h3>乙杯｜10% 糖水</h3><p>10 克糖＋90 克水，共 100 克溶液</p></article>
+            <article class="compare-card"><h3>比較結果</h3><p>兩杯溶液總質量相同，乙杯含糖較多。</p></article>
+          </div>
+
+          <h3>用重量百分濃度表示含量</h3>
+          <div class="filter-principle"><strong>重量百分濃度（P%）</strong>溶質質量 ÷ 溶液質量 × 100%。溶液質量是溶質與溶劑質量的總和。</div>
+          <p>甲杯的重量百分濃度是 5 克 ÷ 100 克 × 100%＝5%；乙杯是 10 克 ÷ 100 克 × 100%＝10%。</p>
+          <div class="quiz-grid" aria-label="重量百分濃度練習">
+            <div class="quiz-row"><div><label for="solution-q1">3 克糖溶於 97 克水，重量百分濃度是多少？</label><p>先算溶液總質量，再用溶質質量除以溶液質量。</p></div><select id="solution-q1"><option value="">選擇答案</option><option value="3">3%</option><option value="about3">約 3.1%</option><option value="97">97%</option></select></div>
+          </div>
+          <div class="control-row"><button class="control-button" type="button" id="check-concentration">檢查答案</button><button class="control-button" type="button" id="reset-concentration">重新選擇</button></div>
+          <p class="feedback" id="concentration-feedback" aria-live="polite">選出答案後檢查計算結果。</p>
+
+          <h3>含量非常少時，可以用 ppm 表示</h3>
+          <p>有些物質在空氣或水中的含量非常少，使用百分比不容易閱讀。ppm 是「百萬分點」的表示法，表示每一百萬份樣本中所含的份數；例如 3 ppm 表示每一百萬份樣本中有 3 份該物質。</p>
+          <div class="compare-grid solution-compare">
+            <article class="compare-card"><h3>含量較多時</h3><p>可用重量百分濃度表示，例如糖水中的糖。</p></article>
+            <article class="compare-card"><h3>含量很少時</h3><p>可用 ppm 表示，例如空氣或水污染物的含量。</p></article>
+            <article class="compare-card"><h3>讀數時要看清楚</h3><p>百分濃度和 ppm 都是在描述溶質含量，使用的表示尺度不同。</p></article>
+          </div>
+          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>原來分離方法告訴我們成分怎麼分開，濃度則能表示溶液裡的溶質含量。</p></div>
+          <div class="note-box">本區依課綱介紹溶液、重量百分濃度與 ppm，著重理解表示法和簡單判讀；不進行溶液混合或稀釋後的濃度變化計算。</div>
         </div>
       </section>
     </div>
@@ -344,6 +382,10 @@
     document.querySelectorAll('.ink-choice').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.ink-choice').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.getElementById('strip-scene').dataset.ink=button.dataset.ink;document.getElementById('ink-dot').style.background=button.dataset.ink==='green'?'#285943':'#343a45';if(stripStep===2){stripStep=0;updateStrip();}}));
 
     document.getElementById('check-answers').addEventListener('click',()=>{const ids=['q-filter','q-crystal','q-paper'];const values=ids.map(id=>document.getElementById(id).value);const feedback=document.getElementById('quiz-feedback');if(values.some(value=>!value)){feedback.textContent='請先完成三個分離目標的配對，再查看結果。';feedback.style.color='#48634f';return;}const correct=values[0]==='filter'&&values[1]==='crystal'&&values[2]==='paper';feedback.textContent=correct?'三個方法都選對了！過濾分開泥沙和水、結晶讓鹽從鹽水中分離、濾紙層析讓混合色素分出不同色帶。':'還有方法和目標沒有對上。回頭想想：要分開泥沙和水、把鹽從鹽水中分離，還是觀察墨水裡有幾種色素？';feedback.style.color=correct?'#176b53':'#48634f';});
+    const concentrationAnswer=document.getElementById('solution-q1');
+    const concentrationFeedback=document.getElementById('concentration-feedback');
+    document.getElementById('check-concentration').addEventListener('click',()=>{if(!concentrationAnswer.value){concentrationFeedback.textContent='請先選擇一個答案。';concentrationFeedback.style.color='#48634f';return;}const correct=concentrationAnswer.value==='3';concentrationFeedback.textContent=correct?'答對了。溶液總質量是 3＋97＝100 克，3÷100×100%＝3%。':'再算一次：溶液總質量是溶質加溶劑，也就是 3＋97 克。';concentrationFeedback.style.color=correct?'#176b53':'#48634f';});
+    document.getElementById('reset-concentration').addEventListener('click',()=>{concentrationAnswer.value='';concentrationFeedback.textContent='選出答案後檢查計算結果。';concentrationFeedback.style.color='';});
     document.getElementById('reset-answers').addEventListener('click',()=>{['q-filter','q-crystal','q-paper'].forEach(id=>document.getElementById(id).value='');const feedback=document.getElementById('quiz-feedback');feedback.textContent='完成三個配對後，查看回饋。';feedback.style.color='';});
   </script>
 </body>
