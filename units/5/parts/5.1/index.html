@@ -35,6 +35,7 @@
   </style>
   <link rel="stylesheet" href="assets/measurement-scene.css">
   <link rel="stylesheet" href="assets/touch-story.css">
+  <link rel="stylesheet" href="assets/water-lab.css">
 </head>
 <body>
   <header class="shell masthead">
@@ -78,7 +79,70 @@
             <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>「先前接觸的冷熱不同，感覺就可能不同。要知道水有幾度，我們用溫度計量量看。」</p></div>
           </div>
         </section>
-        <section class="lesson-card" id="card-02"><div class="card-side"><span class="card-number">02</span><h3>溫度計怎麼測量</h3><span class="card-role">觀察液柱如何改變</span></div><div class="card-main"><h2>溫度計裡的液柱為什麼會升降？</h2><p>液體溫度計利用測溫液體的體積隨溫度改變而改變，讓細管中的液面位置移動，再由刻度讀取溫度。</p><div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>所以液面變高不是讀值本身，我還要看旁邊的刻度，對嗎？</p></div><div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>對。液柱的位置會隨溫度改變；刻度讓我們把位置轉成可以比較的溫度數值。</p></div><div class="visual"><svg viewBox="0 0 700 170" role="img" aria-label="液體溫度計由液泡、細管和刻度組成；液柱高度對應刻度讀值。"><rect x="255" y="20" width="36" height="112" rx="18" fill="#fff" stroke="#60776d" stroke-width="4"/><circle cx="273" cy="135" r="27" fill="#fff" stroke="#60776d" stroke-width="4"/><rect x="265" y="73" width="16" height="62" rx="8" fill="#d45e4e"/><circle cx="273" cy="135" r="19" fill="#d45e4e"/><path d="M294 35h55m-55 15h34m-34 15h55m-55 15h34m-34 15h55m-55 15h34" stroke="#344b42" stroke-width="3"/><text x="385" y="56" fill="#314640">細管液面的位置對應溫度</text><text x="385" y="88" fill="#59696b" font-size="15">溫度改變 → 液柱升降 → 依刻度讀值</text></svg></div><div class="fact"><p><strong>重點：</strong>液柱的位置要和刻度一起讀；完整的熱脹冷縮原理會在 5.4 再深入學習。</p></div></div></section>
+        <section class="lesson-card" id="card-02" aria-labelledby="water-lab-title">
+          <div class="card-side"><span class="card-number">02</span><h2 id="water-lab-title">溫度計裡的液柱為什麼會升降？</h2></div>
+          <div class="card-main">
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>加冰塊或加熱水，液柱會怎麼變？</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>先固定溫度計，讓液泡浸在水中，不碰杯底。</p></div>
+            <div id="water-lab" class="water-lab" data-mode="idle" aria-label="加冰塊與加熱水，觀察液柱變化">
+              <div class="water-lab-scene">
+                <div class="water-lab-viewport">
+                  <div class="water-lab-art">
+                    <img src="assets/water-lab-apparatus.webp" width="1642" height="958" alt="支架與夾具固定直立的液體溫度計，液泡完全浸在燒杯水中，與杯底及杯壁保持距離。電熱板在燒杯下方，只加熱水。">
+                    <svg id="water-lab-overlay" viewBox="0 0 1642 958" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="wl-red"><stop stop-color="#9e1420"/><stop offset=".35" stop-color="#ff5543"/><stop offset=".6" stop-color="#f52028"/><stop offset="1" stop-color="#a70b17"/></linearGradient>
+                        <radialGradient id="wl-bulb"><stop offset="0" stop-color="#ff6d52"/><stop offset=".65" stop-color="#ee2027"/><stop offset="1" stop-color="#a10c1b"/></radialGradient>
+                        <linearGradient id="wl-ice" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".96"/><stop offset=".5" stop-color="#cbe9f6" stop-opacity=".65"/><stop offset="1" stop-color="#8cc0d8" stop-opacity=".8"/></linearGradient>
+                        <marker id="wl-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#334c50"/></marker>
+                      </defs>
+                      <ellipse id="water-lab-heat-glow" cx="590" cy="723" rx="220" ry="15" fill="#f97316" opacity="0"/>
+                      <g id="water-lab-scale" stroke="#34454b" stroke-width="2"></g>
+                      <g id="water-lab-fluid"><rect id="water-lab-liquid" x="574" y="452" width="12" height="136" fill="url(#wl-red)"/><circle cx="580" cy="588" r="21" fill="url(#wl-bulb)"/><circle cx="573" cy="581" r="5" fill="#fff" opacity=".7"/><path id="water-lab-meniscus" d="M574 452Q580 456 586 452" fill="none" stroke="#9d1522" stroke-width="2"/></g>
+                      <path id="water-lab-connector" fill="none" stroke="#176b53" stroke-width="3" stroke-dasharray="10 8"/>
+                      <circle id="water-lab-source" cx="580" cy="452" r="14" fill="none" stroke="#176b53" stroke-width="3"/>
+                      <g id="water-lab-direction" fill="#2381c8" hidden><path d="M634 -30H645V10H658L639 32L620 10H634Z"/></g>
+                      <g id="water-lab-ice" hidden>
+                        <g id="water-lab-cube-a"><path d="M-29-17L10-30L34-10L-5 4Z" fill="#eefaff" stroke="#7fa3bb" stroke-width="2"/><path d="M-29-17L-5 4V33L-29 11Z" fill="url(#wl-ice)" stroke="#7fa3bb" stroke-width="2"/><path d="M-5 4L34-10V19L-5 33Z" fill="url(#wl-ice)" stroke="#7fa3bb" stroke-width="2"/><path d="M-21-12L7-21L23-10" fill="none" stroke="#fff" stroke-width="5"/></g>
+                        <g id="water-lab-cube-b"><path d="M-29-17L10-30L34-10L-5 4Z" fill="#eefaff" stroke="#7fa3bb" stroke-width="2"/><path d="M-29-17L-5 4V33L-29 11Z" fill="url(#wl-ice)" stroke="#7fa3bb" stroke-width="2"/><path d="M-5 4L34-10V19L-5 33Z" fill="url(#wl-ice)" stroke="#7fa3bb" stroke-width="2"/><path d="M-21-12L7-21L23-10" fill="none" stroke="#fff" stroke-width="5"/></g>
+                      </g>
+                      <circle id="water-lab-lamp" cx="810" cy="825" r="8" fill="#454b49"/>
+                      <g class="water-lab-annotations" fill="#233a3d" stroke="#334c50" stroke-width="2">
+                        <path d="M430 280H545"/><circle cx="550" cy="280" r="4" fill="#233a3d"/><text x="353" y="290" stroke="none">刻度</text>
+                        <path d="M430 365H574"/><circle cx="580" cy="365" r="4" fill="#233a3d"/><text x="353" y="375" stroke="none">細管</text>
+                        <path d="M602 588L653 607"/><text x="665" y="617" stroke="none">液泡浸在水中</text>
+                        <path d="M580 625V675" marker-start="url(#wl-arrow)" marker-end="url(#wl-arrow)"/><path d="M620 659L600 650"/><text x="630" y="674" stroke="none">不碰杯底、杯壁</text>
+                      </g>
+                    </svg>
+                  </div>
+                </div>
+                <div class="water-lab-lens">
+                  <h3>液面局部放大</h3>
+                  <svg id="water-lab-zoom" viewBox="0 0 320 360" role="img" aria-label="測溫液體的液面局部放大">
+                    <defs><linearGradient id="wl-zoom-bg"><stop stop-color="#e6e3da"/><stop offset=".5" stop-color="#f7f5f0"/><stop offset="1" stop-color="#dbd6cc"/></linearGradient><linearGradient id="wl-zoom-glass"><stop stop-color="#8a969e"/><stop offset=".2" stop-color="#e9f1f3"/><stop offset=".35" stop-color="#aab8bd"/><stop offset=".55" stop-color="#fff" stop-opacity=".8"/><stop offset=".8" stop-color="#d9e2e5"/><stop offset="1" stop-color="#687983"/></linearGradient><linearGradient id="wl-zoom-red"><stop stop-color="#95131e"/><stop offset=".25" stop-color="#fd6f64"/><stop offset=".5" stop-color="#ff2b28"/><stop offset=".75" stop-color="#d81b29"/><stop offset="1" stop-color="#950f1b"/></linearGradient></defs>
+                    <rect width="320" height="360" rx="16" fill="url(#wl-zoom-bg)"/>
+                    <rect x="80" y="0" width="118" height="360" fill="url(#wl-zoom-glass)"/>
+                    <path id="water-lab-zoom-fluid" d="M99 190Q139 207 179 190V360H99Z" fill="url(#wl-zoom-red)"/>
+                    <path id="water-lab-zoom-meniscus" d="M99 190Q139 207 179 190" fill="none" stroke="#a5202c" stroke-width="4"/>
+                    <path d="M92 0V360M186 0V360" stroke="#fff" stroke-width="5" opacity=".7"/>
+                    <g id="water-lab-zoom-scale" stroke="#293434" stroke-width="3"></g>
+                  </svg>
+                  <p id="water-lab-feedback" class="water-lab-feedback" role="status">觀察同一支溫度計的液面</p>
+                </div>
+                <p id="water-lab-heater-status" class="water-lab-heater-status"><i aria-hidden="true"></i><span>電熱板已關閉</span></p>
+              </div>
+              <div class="water-lab-controls" role="group" aria-label="調整水的冷暖">
+                <button id="water-lab-add-ice" type="button" class="water-lab-ice-button"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 13L20 5L34 13V29L20 37L6 29Z M6 13L20 21L34 13 M20 21V37" fill="#d9f1ff" stroke="currentColor" stroke-width="2"/></svg><span>加入冰塊</span></button>
+                <button id="water-lab-heat" type="button" class="water-lab-heat-button" aria-pressed="false"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M9 24C1 16 17 14 9 5M20 24C12 16 28 14 20 5M31 24C23 16 39 14 31 5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="5" y="28" width="30" height="8" rx="3" fill="currentColor"/></svg><span>加熱水</span></button>
+                <button id="water-lab-reset" type="button" class="water-lab-reset-button"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M31 15A13 13 0 1 0 32 28M31 15V5M31 15H21" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>重設</span></button>
+              </div>
+              <p class="water-lab-helper">電熱板加熱水，溫度計測量水溫。</p>
+              <p class="water-lab-model-note">冷暖變化為教學示意，並非真實加熱或融冰所需時間。</p>
+            </div>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>加冰塊後液柱下降，加熱水後液柱上升！</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>水溫改變，測溫液體的體積和液面位置也會改變。</p></div>
+          </div>
+        </section>
         <section class="lesson-card" id="card-03"><div class="card-side"><span class="card-number">03</span><h3>攝氏刻度參考點</h3><span class="card-role">認識 0°C 與 100°C</span></div><div class="card-main"><h2>攝氏刻度上的 0 和 100 從哪裡來？</h2><p>在標準大氣壓下，純水的冰點約為 0°C，沸點約為 100°C，常用來介紹攝氏刻度的參考點。沸點會隨氣壓改變。</p><div class="visual"><svg viewBox="0 0 700 130" role="img" aria-label="攝氏溫標以標準氣壓附近純水的冰點 0 度和沸點 100 度作為參考。"><path d="M105 63H595" stroke="#9eafa6" stroke-width="8" stroke-linecap="round"/><path d="M105 48v30M595 48v30" stroke="#176b53" stroke-width="5"/><circle cx="105" cy="63" r="13" fill="#8cc4cb" stroke="#fff" stroke-width="4"/><circle cx="595" cy="63" r="13" fill="#df8b41" stroke="#fff" stroke-width="4"/><text x="105" y="30" text-anchor="middle" fill="#176b53" font-weight="700">0°C</text><text x="595" y="30" text-anchor="middle" fill="#bc612b" font-weight="700">100°C</text><text x="105" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水冰點</text><text x="595" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水沸點</text></svg></div><div class="fact"><p><strong>讀值範圍：</strong>本練習使用 0–100°C 刻度。只練習攝氏溫度，不進行攝氏與華氏換算。</p></div></div></section>
         <section class="lesson-card" id="measurement" aria-labelledby="measurement-title">
           <div class="card-side"><span class="card-number">04</span><h3>先取得穩定的讀值</h3><span class="card-role">放入、觀察、平視、記錄</span></div>
@@ -174,5 +238,6 @@
   </main>
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
   <script src="assets/temperature-lesson.js" defer></script>
+  <script type="module" src="assets/water-lab.js"></script>
 </body>
 </html>

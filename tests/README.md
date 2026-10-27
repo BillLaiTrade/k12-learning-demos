@@ -70,3 +70,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-1.2-
 ```
 
 第六區檢查41組光路、沿用共用場景及模型、第二區實際器材拖曳與角度回歸、角度承接、新場景拖曳、記錄後鎖定、反向分段描線及重合、動畫中途重設、重播、鍵盤、五種寬度、觸控、減少動態與無WebGL替代。與既有第三至五區測試一起執行；版面另以實際截圖對照核可圖。
+
+## 5.1 第二區塊：加冰塊與加熱水
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.1-water-lab.test.cjs tests/unit-5.1.test.cjs
+```
+
+新測試涵蓋冷卻與加熱的連續變化、冰塊落下／融化、熱源與冰塊分開操作、溫度與液柱界限、停止／重設、鍵盤、主圖與放大窗同一畫面同步，以及五種視窗寬度。可用 `WATER_LAB_CAPTURE_DIR=/tmp/water-lab-review` 另存桌機／手機狀態截圖；`WATER_LAB_URL` 可指定待檢查的頁面。器材配置與核可示意圖的外觀比對見 `docs/reviews/unit-5.1-card02/review.md`。

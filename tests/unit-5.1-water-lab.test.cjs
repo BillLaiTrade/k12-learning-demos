@@ -1,0 +1,135 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const {spawn}=require('node:child_process');
+const path=require('node:path');
+const fs=require('node:fs/promises');
+const {chromium}=require('playwright');
+const {pathToFileURL}=require('node:url');
+const repo=path.resolve(__dirname,'..');
+const moduleURL=pathToFileURL(path.join(repo,'units/5/parts/5.1/assets/water-lab-state.mjs')).href;
+
+test('temperature model preserves physical teaching constraints',async()=>{
+  const m=await import(moduleURL);
+  let s=m.initialState();
+  assert.equal(m.isMoving(s),false);
+  s=m.toggleHeat(s);
+  for(let i=0;i<1000;i++)s=m.advance(s,.1);
+  assert.equal(s.water,m.MAX_TEMPERATURE);assert.equal(s.probe,m.MAX_TEMPERATURE);assert.equal(s.heating,false);
+  assert.equal(s.atUpperLimit,true);
+  s=m.addIce(s);assert.equal(s.heating,false);
+  const locked=m.toggleHeat(s);assert.equal(locked.heating,false);
+  for(let cycle=0;cycle<10;cycle++){
+    s=m.addIce(s);
+    for(let i=0;i<70;i++){s=m.advance(s,.1);assert.ok(s.water>=m.MIN_TEMPERATURE);assert.ok(s.probe>=m.MIN_TEMPERATURE);}
+  }
+  assert.equal(s.water,m.MIN_TEMPERATURE);assert.equal(m.addIce(s).iceRemaining,0);
+  assert.ok(Number.isFinite(s.probe));assert.equal(s.probe,s.water);
+  const initial=m.initialState();assert.equal(initial.water,22);assert.equal(initial.probe,22);assert.equal(initial.iceRemaining,0);
+});
+
+test('water lab functional and visual checks in Chromium',{timeout:65000},async t=>{
+  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:repo,stdio:['ignore','pipe','pipe']});
+  t.after(()=>server.kill());
+  const port=await new Promise((resolve,reject)=>{let output='';const timer=setTimeout(()=>reject(Error('Server startup timed out')),5000);server.once('error',reject);server.stdout.on('data',c=>{output+=c;const m=output.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1])}})});
+  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined});t.after(()=>browser.close());
+  const page=await browser.newPage({viewport:{width:1440,height:1100}});
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>errors.push(r.url()));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`)});
+  const url=process.env.WATER_LAB_URL||`http://127.0.0.1:${port}/units/5/parts/5.1/index.html`;
+  await page.goto(url);
+  const ice=page.locator('#water-lab-add-ice'),heat=page.locator('#water-lab-heat'),reset=page.locator('#water-lab-reset');
+  const state=()=>page.locator('#water-lab').evaluate(n=>({water:Number(n.dataset.water),probe:Number(n.dataset.probe),ice:Number(n.dataset.ice),heating:n.dataset.heating==='true'}));
+  const sync=async()=>{
+    const snapshot=await page.evaluate(()=>({
+      probe:Number(document.getElementById('water-lab').dataset.probe),
+      main:Number(document.getElementById('water-lab-liquid').getAttribute('y')),
+      zoom:Number(document.getElementById('water-lab-zoom-fluid').getAttribute('d').match(/^M99 ([0-9.]+)/)[1]),
+      source:Number(document.getElementById('water-lab-source').getAttribute('cy'))
+    }));
+    assert.ok(Math.abs((545-snapshot.main)/300-(270-snapshot.zoom)/230)<.000001);
+    assert.ok(Math.abs(snapshot.main-(545-(snapshot.probe-5)/55*300))<.001);
+    assert.equal(snapshot.source,snapshot.main);
+  };
+  await t.test('matches approved composition and starts with safe fixed apparatus',async()=>{
+    await page.locator('#card-02 .water-lab-art img').evaluate(n=>n.decode());
+    assert.equal((await state()).probe,22);assert.equal((await state()).heating,false);
+    const sequence=await page.locator('#card-02 .card-main').evaluate(n=>[...n.children].map(c=>c.className));
+    assert.deepEqual(sequence,['dialogue dialogue--xiaokui','dialogue','water-lab','dialogue dialogue--xiaokui','dialogue']);
+    assert.equal(await page.locator('#card-02 .water-lab-lens h3').textContent(),'液面局部放大');
+    assert.equal(await ice.textContent(),'加入冰塊');assert.equal(await heat.textContent(),'加熱水');
+    assert.equal(await page.locator('#water-lab-ice').isVisible(),false);
+    await sync();
+  });
+  await t.test('ice falls, floats, cools water and lowers both liquid views',async()=>{
+    const start=await state();await ice.click();
+    assert.equal(await heat.isDisabled(),true);assert.equal(await ice.isDisabled(),true);
+    await page.waitForTimeout(350);
+    const a=await page.locator('#water-lab-cube-a').getAttribute('transform');
+    assert.equal(await page.locator('#water-lab-ice').isVisible(),true);
+    await page.waitForTimeout(600);
+    assert.notEqual(await page.locator('#water-lab-cube-a').getAttribute('transform'),a);
+    const now=await state();assert.ok(now.water<start.water);assert.ok(now.probe<start.probe);assert.ok(now.probe>now.water);
+    assert.equal(now.heating,false);await sync();
+    assert.match(await page.locator('#water-lab-feedback').textContent(),/液柱下降/);
+    await page.waitForFunction(()=>Number(document.querySelector('#water-lab').dataset.ice)===0);
+    assert.equal(await page.locator('#water-lab-ice').isVisible(),false);assert.equal(await heat.isDisabled(),false);
+  });
+  await t.test('heater warms water continuously and can stop independently of the probe lag',async()=>{
+    const start=await state();await heat.click();
+    assert.equal(await heat.getAttribute('aria-pressed'),'true');assert.match(await heat.textContent(),/停止/);
+    await page.waitForTimeout(1100);const middle=await state();
+    await page.waitForTimeout(500);const end=await state();
+    assert.ok(middle.water>start.water);assert.ok(end.water>middle.water);assert.ok(end.probe>middle.probe);assert.ok(end.probe<end.water);
+    assert.equal(await page.locator('#water-lab-heat-glow').getAttribute('opacity'),'.24');await sync();
+    await heat.click();const stopped=await state();await page.waitForTimeout(500);
+    assert.equal((await state()).water,stopped.water);assert.equal((await state()).heating,false);
+    assert.equal(await page.locator('#water-lab-heat-glow').getAttribute('opacity'),'0');
+  });
+  await t.test('ice stops the heater and reset clears all animation and state',async()=>{
+    await heat.click();assert.equal((await state()).heating,true);await ice.click();
+    assert.equal((await state()).heating,false);assert.equal(await heat.isDisabled(),true);
+    await reset.click();await page.waitForTimeout(350);
+    assert.deepEqual(await state(),{water:22,probe:22,ice:0,heating:false});
+    assert.equal(await page.locator('#water-lab-ice').isVisible(),false);
+    assert.equal(await heat.getAttribute('aria-pressed'),'false');assert.equal(await heat.isDisabled(),false);await sync();
+    await heat.click();await page.waitForTimeout(200);await reset.click();await page.waitForTimeout(200);
+    assert.equal((await state()).water,22);assert.equal((await state()).probe,22);
+  });
+  await t.test('keyboard and reduced motion preferences keep all operations usable',async()=>{
+    await page.emulateMedia({reducedMotion:'reduce'});
+    await ice.focus();await page.keyboard.press('Enter');assert.ok((await state()).ice>0);
+    await reset.focus();await page.keyboard.press('Space');assert.equal((await state()).ice,0);
+    await heat.focus();await page.keyboard.press('Enter');assert.equal((await state()).heating,true);
+    await page.keyboard.press('Enter');assert.equal((await state()).heating,false);await reset.click();
+  });
+  await t.test('repeated controls remain bounded at both temperature limits',async()=>{
+    await page.clock.install();
+    await heat.click();await page.clock.runFor(14000);
+    assert.equal((await state()).water,60);assert.equal((await state()).heating,false);
+    assert.equal(await heat.isDisabled(),true);await sync();
+    for(let i=0;i<7;i++){await ice.click();await page.clock.runFor(5000);}
+    assert.equal((await state()).water,5);assert.equal((await state()).probe,5);
+    assert.equal(await ice.isDisabled(),true);assert.equal(await heat.isDisabled(),false);await sync();
+    await reset.click();await page.clock.resume();
+  });
+  await t.test('desktop and narrow layouts retain controls, annotations and insets without overlap',async()=>{
+    for(const width of [1440,1280,1024,768,390]){
+      await page.setViewportSize({width,height:1000});
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`overflow at ${width}`);
+      for(const button of [ice,heat,reset])assert.equal(await button.isVisible(),true);
+      const lens=await page.locator('.water-lab-lens').boundingBox(),status=await page.locator('.water-lab-heater-status').boundingBox();
+      assert.ok(lens.y+lens.height<=status.y+1,`inset overlaps status at ${width}`);
+    }
+    assert.deepEqual(errors,[]);
+  });
+  if(process.env.WATER_LAB_CAPTURE_DIR){
+    const dir=process.env.WATER_LAB_CAPTURE_DIR;await fs.mkdir(dir,{recursive:true});
+    await page.setViewportSize({width:1440,height:1200});await reset.click();
+    await page.locator('#card-02').screenshot({path:path.join(dir,'desktop-initial.png')});
+    await ice.click();await page.waitForTimeout(900);
+    await page.locator('#card-02').screenshot({path:path.join(dir,'desktop-cooling.png')});
+    await reset.click();await heat.click();await page.waitForTimeout(1600);
+    await page.locator('#card-02').screenshot({path:path.join(dir,'desktop-heating.png')});await reset.click();
+    await page.setViewportSize({width:390,height:900});
+    await page.locator('#card-02').screenshot({path:path.join(dir,'mobile.png')});
+  }
+});
