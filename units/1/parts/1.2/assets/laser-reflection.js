@@ -109,14 +109,19 @@ const emitterStem = cylinder(scene, 0.055, 0.065, 1.2, [-2.0, 0.62, -1.8], steel
 const emitterFoot = box(scene, [0.72, 0.11, 0.72], [-2.0, 0.07, -1.8], black);
 const pivot = new THREE.Mesh(new THREE.TorusGeometry(0.25, 0.035, 8, 48), steel);
 pivot.rotation.x = Math.PI / 2; pivot.position.set(-2.0, 0.15, -1.8); scene.add(pivot);
-const rayMaterial = new THREE.LineBasicMaterial({ color: '#fa1e20', transparent: true, opacity: 0.94, depthTest: false });
-function dynamicLine() {
-  const geometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
-  const line = new THREE.Line(geometry, rayMaterial); line.renderOrder = 10; scene.add(line); return line;
+const rayMaterial = new THREE.MeshBasicMaterial({ color: '#fa1e20', transparent: true, opacity: 0.96, depthTest: false, depthWrite: false });
+function dynamicBeam() {
+  const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.028, 1, 10), rayMaterial);
+  beam.renderOrder = 10; beam.frustumCulled = false; scene.add(beam); return beam;
 }
-function setLine(line, a, b) { line.geometry.dispose(); line.geometry = new THREE.BufferGeometry().setFromPoints([a, b]); }
-const incoming = dynamicLine(), reflected = dynamicLine();
-const normalGeometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(centerPoint.x - 4.8, 1.405, 0), new THREE.Vector3(centerPoint.x - 0.1, 1.405, 0)]);
+function setBeam(beam, a, b) {
+  const direction = new THREE.Vector3().subVectors(b, a), length = direction.length();
+  beam.position.copy(a).add(b).multiplyScalar(0.5);
+  beam.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
+  beam.scale.set(1, length, 1);
+}
+const incoming = dynamicBeam(), reflected = dynamicBeam();
+const normalGeometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(centerPoint.x - 4.8, centerPoint.y + 0.005, 0), new THREE.Vector3(centerPoint.x, centerPoint.y + 0.005, 0)]);
 const normal = new THREE.Line(normalGeometry, new THREE.LineDashedMaterial({ color: '#fff8df', dashSize: 0.22, gapSize: 0.12, transparent: true, opacity: 0.96, depthTest: false }));
 normal.computeLineDistances(); normal.renderOrder = 11; scene.add(normal);
 function arc(radius, angle, direction) {
@@ -128,9 +133,13 @@ function arc(radius, angle, direction) {
   }
   return points;
 }
-const incomingArc = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: '#2878df', depthTest: false, linewidth: 3 }));
-const outgoingArc = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: '#27833d', depthTest: false, linewidth: 3 }));
+const incomingArc = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: '#2878df', depthTest: false }));
+const outgoingArc = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: '#27833d', depthTest: false }));
 incomingArc.renderOrder = outgoingArc.renderOrder = 11; scene.add(incomingArc, outgoingArc);
+function setThickArc(mesh, points) {
+  mesh.geometry.dispose();
+  mesh.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), Math.max(12, points.length * 2), 0.05, 7, false);
+}
 
 const protractorRadius = 5.0;
 const protractor = new THREE.Group();
@@ -170,7 +179,7 @@ function addProtractorNumber(degrees, side) {
   const context = labelCanvas.getContext('2d'); context.fillStyle = '#29483e'; context.font = 'bold 136px sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle'; context.fillText(`${degrees}°`, 256, 100);
   const texture = new THREE.CanvasTexture(labelCanvas); texture.colorSpace = THREE.SRGBColorSpace;
   const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false }));
-  label.scale.set(1.0, 0.64, 1); label.renderOrder = 10;
+  label.scale.set(1.0, 0.64, 1); label.renderOrder = 12;
   if (degrees === 0) label.position.set(-protractorRadius + 0.34, 0.11, 0.62);
   else {
     const angle = THREE.MathUtils.degToRad(side * degrees), radius = protractorRadius - 0.72;
@@ -240,13 +249,13 @@ function update() {
   emitterStem.position.set(standPosition.x, 0.62, standPosition.z);
   emitterFoot.position.set(standPosition.x, 0.07, standPosition.z);
   pivot.position.set(standPosition.x, 0.15, standPosition.z);
-  setLine(incoming, source, hit);
-  setLine(reflected, hit, reflectedEnd);
-  incomingArc.geometry.dispose(); incomingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(1.8, angle, -1));
-  outgoingArc.geometry.dispose(); outgoingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(1.8, angle, 1));
+  setBeam(incoming, source, hit);
+  setBeam(reflected, hit, reflectedEnd);
+  setThickArc(incomingArc, arc(1.8, angle, -1));
+  setThickArc(outgoingArc, arc(1.8, angle, 1));
   incomingScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z - protractorRadius * Math.sin(angle));
   reflectedScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z + protractorRadius * Math.sin(angle));
-  normalLabel.position.set(centerPoint.x - 5.5, 1.5, canvas.clientWidth < 500 ? -1.1 : -0.7);
+  normalLabel.position.set(centerPoint.x - 5.5, 1.5, centerPoint.z);
   updateAngleLabel(normalLabel, '法線');
 
   const diagramLength = 190, dx = diagramLength * Math.sin(angle), dy = diagramLength * Math.cos(angle);
