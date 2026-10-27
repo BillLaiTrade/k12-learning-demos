@@ -221,12 +221,12 @@ function updateAngleLabel(sprite, text) {
 const equalityLabel = makeAngleLabel('#14533f', [4.8, 0.92]);
 equalityLabel.visible = true;
 
-function svgArc(radius, degrees, lower) {
+function svgArc(radius, degrees, rightSide) {
   const steps = Math.max(5, Math.ceil(degrees / 3));
   let d = '';
   for (let i = 0; i <= steps; i++) {
     const a = degrees * Math.PI / 180 * i / steps;
-    const x = 474 - radius * Math.cos(a), y = 170 + (lower ? 1 : -1) * radius * Math.sin(a);
+    const x = 300 + (rightSide ? 1 : -1) * radius * Math.sin(a), y = 280 - radius * Math.cos(a);
     d += `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
   }
   return d;
@@ -256,11 +256,11 @@ function update() {
   equalityLabel.position.set(-4, 1.5, canvas.clientWidth < 500 ? -0.8 : 0.3);
   updateAngleLabel(equalityLabel, '入射角 ＝ 反射角');
 
-  const diagramLength = 190, x = 474 - diagramLength * Math.cos(angle), dy = diagramLength * Math.sin(angle);
-  document.querySelector('#law-incident').setAttribute('d', `M${x.toFixed(1)} ${(170 - dy).toFixed(1)}L474 170`);
-  document.querySelector('#law-reflected').setAttribute('d', `M474 170L${x.toFixed(1)} ${(170 + dy).toFixed(1)}`);
-  document.querySelector('#law-arc-incident').setAttribute('d', svgArc(58, deg, false));
-  document.querySelector('#law-arc-reflected').setAttribute('d', svgArc(58, deg, true));
+  const diagramLength = 190, dx = diagramLength * Math.sin(angle), dy = diagramLength * Math.cos(angle);
+  document.querySelector('#law-incident').setAttribute('d', `M${(300 - dx).toFixed(1)} ${(280 - dy).toFixed(1)}L300 280`);
+  document.querySelector('#law-reflected').setAttribute('d', `M300 280L${(300 + dx).toFixed(1)} ${(280 - dy).toFixed(1)}`);
+  document.querySelector('#law-arc-incident').setAttribute('d', svgArc(48, deg, false));
+  document.querySelector('#law-arc-reflected').setAttribute('d', svgArc(48, deg, true));
   document.querySelector('#law-angle-in').textContent = `入射角 ${deg}°`;
   document.querySelector('#law-angle-out').textContent = `反射角 ${deg}°`;
   document.querySelector('#lab-angle-in').textContent = `${deg}°`;
