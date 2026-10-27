@@ -1767,6 +1767,7 @@
         };
         const getArrivalTime=()=>routeLength/getWaveSpeed();
         const getFullPassageTime=()=>((routeLength+wavelength)/getWaveSpeed());
+        const getArrivalMessage=()=>`波形前端到達 ${routeLength} 公尺處需時 ${format(getArrivalTime(),2)} 秒。`;
         const drawGeneratedWave=simulationTime=>{
           const speed=getWaveSpeed(),frontDistance=speed*simulationTime,front=clamp(frontDistance,0,routeLength);
           const sourcePhase=simulationTime/period;
@@ -1832,7 +1833,7 @@
           const arrivalTime=getArrivalTime(),fullPassageTime=getFullPassageTime();
           setControlsDisabled(false);drawGeneratedWave(fullPassageTime);drawProgress(1);
           runTime.textContent=`${format(arrivalTime,2)} / ${format(arrivalTime,2)} s`;
-          runMessage.textContent=`波形前端到達 ${routeLength} 公尺處需時 ${format(arrivalTime,2)} 秒。`;
+          runMessage.textContent=getArrivalMessage();
           updateControls();
         };
         const animateSingleWave=time=>{
@@ -1840,7 +1841,6 @@
           const arrivalTime=getArrivalTime(),fullPassageTime=getFullPassageTime(),elapsed=clamp((time-runStartedAt)/(1000*playbackScale),0,fullPassageTime);
           drawGeneratedWave(elapsed);drawProgress(Math.min(elapsed,arrivalTime)/arrivalTime);
           runTime.textContent=`${format(Math.min(elapsed,arrivalTime),2)} / ${format(arrivalTime,2)} s`;
-          runMessage.textContent=elapsed<period?"橘色波源點上下振動，繩上各點依序被帶動，波形由左向右形成。":elapsed<arrivalTime?"波形前端正向 30 公尺處傳播。":"波形前端已抵達 30 公尺處；完整波形繼續通過路徑。";
           if(elapsed<fullPassageTime)animationFrame=window.requestAnimationFrame(animateSingleWave);else finishSingleWave();
         };
         const launchSingleWave=()=>{
@@ -1848,7 +1848,7 @@
           if(animationFrame)window.cancelAnimationFrame(animationFrame);
           isRunning=true;runStartedAt=null;sendWaveButton.disabled=false;sendWaveButton.textContent="取消並重設";
           setControlsDisabled(true);drawGeneratedWave(0);drawProgress(0);updateControls();
-          runMessage.textContent="橘色波源上下振動，波形正向右生成並傳播。";
+          runMessage.textContent=getArrivalMessage();
           animationFrame=window.requestAnimationFrame(animateSingleWave);
         };
         const changeFrequency=delta=>{frequency=round(clamp(frequency+delta,1,4),3);period=round(1/frequency,6);resetSingleWave();};
