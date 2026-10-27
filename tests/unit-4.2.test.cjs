@@ -4,7 +4,7 @@ const { spawn } = require('node:child_process');
 const path = require('node:path');
 const { chromium } = require('playwright');
 
-test('4.2 evaporation plays the chosen stage from its step or picture', { timeout: 150000 }, async t => {
+test('4.2 evaporation plays from the chosen step through the final stage', { timeout: 150000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], {
     cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'pipe']
   });
@@ -48,13 +48,13 @@ test('4.2 evaporation plays the chosen stage from its step or picture', { timeou
     await page.clock.fastForward(milliseconds);
   };
   const stopped = async () => {
-    await advance(3200);
+    await advance(11000);
     await page.waitForFunction(() => document.querySelector('#evap-stage').dataset.playing === 'false');
   };
 
   await t.test('observation lasts 1.5 seconds and the remaining stages last three', async () => {
     const timing = await page.evaluate(async () => {
-      const { DURATION, CHECKPOINTS, evaporationState } = await import('./assets/evaporation-state.js?v=step-playback-1');
+      const { DURATION, CHECKPOINTS, evaporationState } = await import('./assets/evaporation-state.js?v=continuous-playback-1');
       return {
         duration: DURATION,
         starts: CHECKPOINTS.map(progress => progress * DURATION),
@@ -105,27 +105,45 @@ test('4.2 evaporation plays the chosen stage from its step or picture', { timeou
     assert.notDeepEqual(first, second, 'liquid and bubbles must actually move');
     assert.deepEqual(fixedFirst, fixedSecond, 'the photographed hotplate must stay fixed');
     await stopped();
-    assert.equal((await state()).step, 2);
+    assert.equal((await state()).step, 4);
   });
 
-  await t.test('each selected step stops at its own endpoint without selecting the next step', async () => {
-    const endpoints = [1.5 / 10.5, 4.5 / 10.5, 7.5 / 10.5, 1];
+  await t.test('playback advances the selected step, caption and picture label across boundaries', async () => {
+    await button(1).click();
+    await advance(1600);
+    assert.equal((await state()).step, 2);
+    assert.equal((await state()).playing, true);
+    assert.match(await picture.getAttribute('aria-label'), /水分蒸發/);
+    assert.match(await page.locator('#evap-phase').innerText(), /沸騰/);
+    await advance(3000);
+    assert.equal((await state()).step, 3);
+    assert.equal((await state()).playing, true);
+    assert.match(await picture.getAttribute('aria-label'), /晶體析出/);
+    assert.match(await page.locator('#evap-phase').innerText(), /細晶逐漸長大/);
+    await advance(3000);
+    assert.equal((await state()).step, 4);
+    assert.equal((await state()).playing, true);
+    assert.match(await picture.getAttribute('aria-label'), /留下鹽晶體/);
+    await stopped();
+  });
+
+  await t.test('every starting step reaches the dry endpoint and remains stopped', async () => {
     for (const number of [1, 2, 3, 4]) {
       await button(number).click();
       assert.equal((await state()).step, number);
       assert.equal((await state()).playing, true);
       await stopped();
       const final = await state();
-      assert.equal(final.step, number);
-      assert.ok(Math.abs(final.progress - endpoints[number - 1]) < 0.00001);
+      assert.equal(final.step, 4);
+      assert.equal(final.progress, 1);
+      assert.equal(final.water, 0);
+      assert.equal(final.bubbles, 0);
+      assert.equal(final.crystals, 1);
       assert.equal(await page.locator('.evap-step[aria-pressed="true"]').count(), 1);
-      assert.equal(await button(number).getAttribute('aria-pressed'), 'true');
+      assert.equal(await button(4).getAttribute('aria-pressed'), 'true');
       await page.clock.fastForward(200);
-      assert.deepEqual(await state(), final, 'completed stage must remain stopped');
+      assert.deepEqual(await state(), final, 'completed animation must remain stopped');
     }
-    assert.equal((await state()).water, 0);
-    assert.equal((await state()).bubbles, 0);
-    assert.equal((await state()).crystals, 1);
   });
 
   await t.test('clicking the picture replays the current step and switching steps cancels the old run', async () => {
@@ -140,7 +158,7 @@ test('4.2 evaporation plays the chosen stage from its step or picture', { timeou
     assert.equal(restarted.playing, true);
     assert.ok(restarted.progress < 0.50);
     await button(1).click();
-    await stopped();
+    await advance(400);
     assert.equal((await state()).step, 1);
     assert.ok((await state()).progress < 0.15);
     await picture.click();
@@ -148,13 +166,12 @@ test('4.2 evaporation plays the chosen stage from its step or picture', { timeou
     assert.ok((await state()).progress < 0.04);
     for (const number of [2, 4, 2]) await button(number).click();
     await stopped();
-    assert.equal((await state()).step, 2);
-    assert.ok(Math.abs((await state()).progress - 4.5 / 10.5) < 0.00001);
+    assert.equal((await state()).step, 4);
+    assert.equal((await state()).progress, 1);
   });
 
   await t.test('native picture and step buttons support keyboard and touch', async () => {
     await button(1).click();
-    await stopped();
     await picture.focus();
     await page.keyboard.press('Enter');
     assert.equal((await state()).playing, true);
@@ -163,6 +180,7 @@ test('4.2 evaporation plays the chosen stage from its step or picture', { timeou
     await picture.focus();
     await page.keyboard.press('Space');
     assert.equal((await state()).playing, true);
+    assert.equal((await state()).step, 4);
     await button(2).focus();
     await page.keyboard.press('Enter');
     await advance(1000);

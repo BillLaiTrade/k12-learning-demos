@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from '../../../../../parts/3.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
-import { CHECKPOINTS, DURATION, evaporationState } from './evaporation-state.js?v=step-playback-1';
+import { CHECKPOINTS, DURATION, evaporationState } from './evaporation-state.js?v=continuous-playback-1';
 
 const host = document.getElementById('evap-visual');
 const stage = document.getElementById('evap-stage');
@@ -200,7 +200,8 @@ async function initialize() {
     stage.dataset.grains = String(visibleGrains);
     stage.dataset.ripple = surfaceDisplacement.toFixed(5);
     stage.dataset.phase = state.phase;
-    stage.dataset.step = String(activeStep + 1);
+    activeStep = state.step - 1;
+    stage.dataset.step = String(state.step);
     stage.dataset.playing = String(playing);
     if (activeStep + 1 !== currentStep) {
       currentStep = activeStep + 1;
@@ -211,7 +212,7 @@ async function initialize() {
       document.getElementById('evap-phase').textContent = phases[currentPhase][0];
       caption.textContent = phases[currentPhase][1];
     }
-    host.setAttribute('aria-label', `播放「${steps[activeStep].textContent.trim()}」`);
+    host.setAttribute('aria-label', `從「${steps[activeStep].textContent.trim()}」播放至結束`);
     renderer.render(scene, camera);
   }
   function pause(redraw = true) {
@@ -223,13 +224,10 @@ async function initialize() {
   }
   function frame(timestamp) {
     if (!playing) return;
-    const end = CHECKPOINTS[activeStep + 1] ?? 1;
     if (lastTime !== null) progress += Math.max(0, timestamp - lastTime) / (DURATION * 1000);
     lastTime = timestamp;
-    if (progress >= end) {
-      // Hold this chapter's final frame without advancing its selected button
-      // or its observation caption into the following chapter.
-      progress = activeStep === steps.length - 1 ? 1 : end - 1e-9;
+    if (progress >= 1) {
+      progress = 1;
       pause();
       return;
     }
@@ -238,7 +236,6 @@ async function initialize() {
   }
   function playStep(index) {
     pause(false);
-    activeStep = index;
     progress = CHECKPOINTS[index];
     playing = true;
     lastTime = null;

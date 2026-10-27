@@ -257,11 +257,11 @@
             <li><button class="evap-step" type="button" data-evap-step="4" aria-pressed="false" disabled>④ 留下鹽晶體</button></li>
           </ol>
           <div class="scene evap-stage" id="evap-stage" data-step="1" aria-label="鹽水蒸發與鹽晶體留下的示意">
-            <button class="evap-visual" id="evap-visual" type="button" aria-label="播放「① 觀察鹽水」" aria-describedby="evap-caption" disabled></button>
+            <button class="evap-visual" id="evap-visual" type="button" aria-label="從「① 觀察鹽水」播放至結束" aria-describedby="evap-caption" disabled></button>
             <aside class="evap-observation"><strong id="evap-phase">受熱升溫</strong><p id="evap-caption" class="live-note" aria-live="polite">鹽水正在受熱，水面仍較平靜；水在還沒沸騰時也會蒸發。</p></aside>
           </div>
           <div class="filter-principle"><strong>分離後，水和鹽各去了哪裡？</strong>水分蒸發後離開容器；原本溶在水中的鹽形成晶體，留在容器裡。這個過程利用水能蒸發、鹽不隨水一起蒸發的差異來分離成分，沒有生成新物質。</div>
-          <div class="note-box">點選上方步驟或點擊畫面，即可播放該階段；播放完即停止，再次點擊可重播。本例呈現加熱至沸騰的過程；水在未沸騰時也會蒸發，水蒸氣本身看不見。</div>
+          <div class="note-box">點選上方步驟，會從該步驟連續播放至第四步結束；點擊畫面，則從目前步驟重新播放至結束。本例呈現加熱至沸騰的過程；水在未沸騰時也會蒸發，水蒸氣本身看不見。</div>
         </div>
       </section>
 
@@ -398,6 +398,6 @@
     document.getElementById('reset-answers').addEventListener('click',()=>{['q-filter','q-crystal','q-paper'].forEach(id=>document.getElementById(id).value='');const feedback=document.getElementById('quiz-feedback');feedback.textContent='完成三個配對後，查看回饋。';feedback.style.color='';});
   </script>
   <script type="importmap">{"imports":{"three":"../../../1/parts/1.1/assets/vendor/three/build/three.module.js"}}</script>
-  <script type="module" src="assets/evaporation-animation.js?v=step-playback-1"></script>
+  <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
 </body>
 </html>
