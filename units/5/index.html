@@ -3,282 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="國中自然科學溫度與熱單元的課綱範圍與分段規劃。">
+  <meta name="description" content="溫度與熱學習路線：從溫度測量開始，認識熱傳遞、熱量、比熱與物質受熱後的變化。">
   <meta name="theme-color" content="#f4f7f1">
-  <link rel="icon" href="data:,">
-  <title>溫度與熱｜單元 5 規劃</title>
+  <title>溫度與熱｜國二上自然科學</title>
   <style>
-    :root { color-scheme:light; --ink:#243a35; --muted:#63736b; --paper:#f4f7f1; --card:#fffefa; --line:#d7e1dd; --green:#176b53; --green-pale:#e5f2e9; --gold:#d7a94a; font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; }
-    * { box-sizing:border-box; }
-    body { margin:0; background:var(--paper); color:var(--ink); line-height:1.7; }
-    a { color:var(--green); }
-    .shell { width:min(1080px,calc(100% - 40px)); margin-inline:auto; }
-    .masthead { padding:28px 0 10px; }
-    .brand { font-size:.9rem; font-weight:750; text-decoration:none; }
-    .hero { max-width:800px; padding:42px 0 32px; }
-    .eyebrow { color:var(--green); font-size:.8rem; font-weight:850; letter-spacing:.1em; }
-    h1 { margin:8px 0 12px; font-size:clamp(2.2rem,5vw,3.8rem); line-height:1.2; letter-spacing:-.04em; }
-    .hero p { margin:0; color:#53645d; font-size:1.08rem; }
-    .status { display:inline-flex; margin-top:18px; padding:5px 12px; border-radius:999px; background:#efe6cd; color:#594a28; font-size:.82rem; font-weight:800; }
-    main { padding-bottom:64px; }
-    .notice { margin:10px 0 28px; padding:14px 17px; border-left:4px solid var(--gold); border-radius:0 11px 11px 0; background:#fff8e7; color:#5b543f; }
-    .section { margin-top:28px; }
-    h2 { margin:0 0 8px; font-size:1.45rem; }
-    .section-intro { margin:0 0 16px; color:var(--muted); }
-    .scope-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-    .scope-card,.sequence-card { padding:18px; border:1px solid var(--line); border-radius:16px; background:var(--card); }
-    .scope-card h3 { margin:0 0 5px; color:var(--green); font-size:1rem; }
-    .scope-card p { margin:0; color:#53645d; }
-    code { padding:1px 5px; border-radius:5px; background:#edf2ed; color:#315748; font-family:inherit; font-size:.86em; font-weight:800; }
-    .sequence { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-    .sequence-card { display:grid; grid-template-columns:52px minmax(0,1fr); gap:4px 12px; align-content:start; }
-    .step { grid-row:span 2; color:var(--green); font-size:1.05rem; font-weight:850; }
-    .sequence-card h3 { margin:0; font-size:1rem; line-height:1.45; }
-    .sequence-card p { margin:0; color:var(--muted); font-size:.91rem; }
-    .next-steps { margin:0; padding:18px 22px 18px 42px; border:1px solid var(--line); border-radius:16px; background:#fffefa; }
-    .next-steps li+li { margin-top:7px; }
-    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:#fffefa; }
-    table { width:100%; border-collapse:collapse; font-size:.91rem; }
-    th,td { padding:12px 14px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
-    th { background:#edf3ed; color:#315748; font-size:.84rem; }
-    tr:last-child td { border-bottom:0; }
-    .comparison-note { margin:10px 0 0; color:var(--muted); font-size:.88rem; }
-    .lesson-plan { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-    .lesson-card { padding:17px 18px; border:1px solid var(--line); border-radius:15px; background:var(--card); }
-    .lesson-card h3 { margin:0 0 7px; color:var(--green); font-size:1rem; }
-    .lesson-card p { margin:0; color:#53645d; }
-    .lesson-card ul,.lesson-card ol { margin:0; padding-left:21px; color:#53645d; }
-    .lesson-card li+li { margin-top:5px; }
-    .lesson-card.wide { grid-column:1/-1; }
-    .thermometer-demo { display:grid; grid-template-columns:minmax(190px,260px) minmax(0,1fr); align-items:center; gap:24px; padding:20px; border:1px solid var(--line); border-radius:16px; background:#fffefa; }
-    .thermometer-svg { display:block; width:100%; max-width:250px; height:auto; margin:auto; }
-    .thermometer-controls label { display:block; margin:0 0 6px; font-weight:750; }
-    .thermometer-controls input[type="range"] { width:100%; accent-color:var(--green); }
-    .thermometer-controls input[type="number"] { width:130px; padding:9px 10px; border:1px solid #9cafa5; border-radius:8px; font:inherit; }
-    .thermometer-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:12px; }
-    .thermometer-actions button { padding:9px 14px; border:1px solid var(--green); border-radius:9px; background:var(--green); color:white; font:inherit; font-weight:750; cursor:pointer; }
-    .thermometer-actions button.secondary { background:white; color:var(--green); }
-    .thermometer-hint,.thermometer-feedback { margin:10px 0 0; color:var(--muted); }
-    .thermometer-feedback { min-height:1.7em; color:var(--green); font-weight:750; }
-    .sources { padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:.88rem; }
-    .sources ul { padding-left:22px; }
-    .sources li+li { margin-top:5px; }
-    footer { padding:18px 0 30px; border-top:1px solid var(--line); color:var(--muted); font-size:.85rem; }
-    @media(max-width:700px) { .shell { width:min(100% - 24px,620px); } .hero { padding:32px 0 24px; } .scope-grid,.sequence,.lesson-plan { grid-template-columns:1fr; } .scope-card,.sequence-card { padding:15px; } .lesson-card.wide { grid-column:auto; } .thermometer-demo { grid-template-columns:1fr; gap:10px; } .thermometer-svg { max-height:390px; } }
+    :root{color-scheme:light;--ink:#182326;--muted:#59696b;--line:#d7e1dd;--paper:#f4f7f1;--card:#fffefa;--green:#176b53;--pale:#e5f2e9;--shadow:0 14px 38px rgb(21 47 38 / 8%);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);line-height:1.7}a{color:var(--green)}.shell{width:min(1080px,calc(100% - 40px));margin:0 auto}.masthead{padding:26px 0 18px}.brand-row{display:flex;justify-content:space-between;gap:16px;align-items:center}.brand{color:var(--green);font-size:.9rem;font-weight:800;text-decoration:none}.crumb,.part-detail,.sequence-note{color:var(--muted)}.hero{max-width:780px;padding:58px 0 44px}.eyebrow{color:var(--green);font-size:.82rem;font-weight:800;letter-spacing:.12em}h1{margin:8px 0 14px;font-size:clamp(2.2rem,5vw,4rem);line-height:1.15;letter-spacing:-.04em}.hero p{max-width:700px;margin:0;color:var(--muted);font-size:1.08rem}main{padding:0 0 72px}.section-heading{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:18px}.section-heading h2{margin:0;font-size:1.45rem}.sequence-note{margin:5px 0 0}.curriculum-link{flex:0 0 auto;font-size:.9rem;font-weight:750;text-decoration:none}.parts{display:grid;gap:16px}.part-card{display:grid;grid-template-columns:94px minmax(0,1fr) auto;gap:20px;align-items:center;padding:23px 25px;border:1px solid var(--line);border-radius:22px;background:var(--card);box-shadow:var(--shadow);color:inherit;text-decoration:none}.part-card.available{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}.part-card.available:hover,.part-card.available:focus-visible{transform:translateY(-2px);border-color:var(--green);outline:3px solid rgb(23 107 83 / 14%)}.part-number{color:var(--green);font-size:1.2rem;font-weight:850;letter-spacing:.03em}.part-title{margin:0;font-size:clamp(1.08rem,2.3vw,1.35rem);line-height:1.4}.part-detail{margin:6px 0 0}.part-status{flex:0 0 auto;padding:6px 12px;border-radius:999px;background:var(--pale);color:var(--green);font-size:.84rem;font-weight:800}.part-status.pending{background:#edf0ed;color:#66716f}footer{padding:22px 0 38px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}@media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{padding:38px 0 30px}.section-heading{align-items:start;flex-direction:column}.part-card{grid-template-columns:65px minmax(0,1fr);gap:10px 14px;padding:18px}.part-status{grid-column:2;justify-self:start}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
   </style>
 </head>
 <body>
   <header class="shell masthead">
-    <a class="brand" href="../../index.html">← 所有單元</a>
-    <div class="hero">
-      <div class="eyebrow">國二上・自然科學　／　單元 5</div>
-      <h1>溫度與熱</h1>
-      <p>從「冷熱怎麼描述」開始，逐步理解熱量的傳遞、物質受熱後的變化，以及不同材料升溫的差異。</p>
-      <span class="status">課綱逐項對照完成・出版社公開資料初步核對</span>
-    </div>
+    <div class="brand-row"><a class="brand" href="../../index.html">← 所有單元</a><span class="crumb">國二上・自然科學</span></div>
+    <div class="hero"><div class="eyebrow">國二上・自然科學　／　學習單元 5</div><h1>溫度與熱</h1><p>從測量冷熱開始，追蹤熱如何傳遞、不同材料升溫為何不同，以及熱會怎樣改變物質。</p></div>
   </header>
   <main class="shell">
-    <aside class="notice"><strong>年級範圍說明：</strong>教育部自然科學課綱以國中「第四學習階段」（七至九年級）列出學習內容，沒有指定每一項必須在國二哪一冊教授。此單元先依你的國二課程架構建立，正式分冊仍可依採用的教材版本調整。</aside>
-
-    <section class="section" aria-labelledby="scope-title">
-      <h2 id="scope-title">教育部課綱範圍</h2>
-      <p class="section-intro">國中物理「能量的形式、轉換及流動」主題中的「溫度與熱量（Bb）」，並銜接物質狀態的相關內容。</p>
-      <div class="scope-grid">
-        <article class="scope-card"><h3><code>Bb-Ⅳ-1</code> 溫度與熱的方向</h3><p>熱具有從高溫處傳到低溫處的趨勢；溫度用來量化物體的冷熱表現。</p></article>
-        <article class="scope-card"><h3><code>Bb-Ⅳ-2</code> 熱量</h3><p>透過水升高溫度時吸收的熱能，介紹熱量單位；觀察熱量與水的質量、升高溫度的關係。</p></article>
-        <article class="scope-card"><h3><code>Bb-Ⅳ-3</code> 比熱</h3><p>比較相同質量的不同物質受熱後的溫度變化，認識比熱；課綱說明不涉及複雜計算。</p></article>
-        <article class="scope-card"><h3><code>Bb-Ⅳ-4</code> 熱的傳播</h3><p>透過實驗觀察傳導、對流與輻射三種方式。</p></article>
-        <article class="scope-card"><h3><code>Bb-Ⅳ-5</code> 熱造成的變化</h3><p>熱會造成物質狀態改變，也會使物質體積膨脹或收縮；可用簡易溫度計觀察水與玻璃的熱脹冷縮。</p></article>
-        <article class="scope-card"><h3><code>Ab-Ⅳ-2</code> 相關銜接</h3><p>溫度會影響物質狀態。單元 5 可連結已學的物質三態，著重解釋熱如何造成變化。</p></article>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="sequence-title">
-      <h2 id="sequence-title">建議的學習順序</h2>
-      <p class="section-intro">先建立可觀察、可量測的溫度概念，再理解熱如何傳遞、傳遞多少，以及熱對物質造成的變化。</p>
-      <div class="sequence">
-        <article class="sequence-card"><span class="step">5.1</span><h3>溫度如何描述冷熱？</h3><p>以液體溫度計說明測量原理，認識攝氏刻度的冰點與沸點參考，練習讀值與估讀；數位、耳溫等只作生活補充，不做溫標換算。</p></article>
-        <article class="sequence-card"><span class="step">5.2</span><h3>熱如何傳遞？</h3><p>區分溫度與熱量，理解熱由高溫處傳向低溫處，並以溫度趨於相同說明熱平衡；再透過實驗辨認傳導、對流與輻射，連結導熱、隔熱材料與生活現象。</p></article>
-        <article class="sequence-card"><span class="step">5.3</span><h3>熱量與比熱：吸收多少熱，升溫為何不同？</h3><p>先以加熱水認識熱量單位（1 cal 約為使 1 g 水升高 1°C 所需的熱量），比較質量、升溫幅度與熱量的關係；再控制質量與加熱條件比較不同物質的比熱，做簡單判讀與生活應用，不做複雜計算。</p></article>
-        <article class="sequence-card"><span class="step">5.4</span><h3>熱如何改變物質？</h3><p>連結單元四已學的狀態變化，解釋吸熱或放熱；觀察固體、液體的熱脹冷縮，包含水與玻璃的簡易溫度計示例。</p></article>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="coverage-title">
-    <section class="section" aria-labelledby="thermometer-practice-title">
-      <h2 id="thermometer-practice-title">5.1 溫度計讀值練習</h2>
-      <p class="section-intro">調整溫度，觀察液柱升降，再讀取攝氏刻度。先讀整數刻度，也試著估讀兩個刻度之間的位置。</p>
-      <div class="thermometer-demo">
-        <svg class="thermometer-svg" viewBox="0 0 230 410" role="img" aria-labelledby="thermo-title thermo-description">
-          <title id="thermo-title">可調整液柱的攝氏溫度計</title>
-          <desc id="thermo-description">溫度計範圍為 0 到 100 攝氏度，每 1 度一小格，每 10 度標示數字。</desc>
-          <rect x="93" y="28" width="30" height="335" rx="15" fill="#f8fbf8" stroke="#60776d" stroke-width="3" />
-          <circle cx="108" cy="365" r="28" fill="#f8fbf8" stroke="#60776d" stroke-width="3" />
-          <rect id="thermo-liquid" x="101" y="235" width="14" height="120" rx="7" fill="#d45e4e" />
-          <circle cx="108" cy="365" r="20" fill="#d45e4e" />
-          <g id="thermo-ticks" fill="none" stroke="#344b42" stroke-width="1.4"></g>
-          <g id="thermo-labels" fill="#344b42" font-family="sans-serif" font-size="12" text-anchor="start"></g>
-          <text x="155" y="22" fill="#176b53" font-family="sans-serif" font-size="13" font-weight="700">°C</text>
-        </svg>
-        <div class="thermometer-controls">
-          <label for="thermo-control">調整水溫並觀察液柱（0–100°C）</label>
-          <input id="thermo-control" type="range" min="0" max="100" step="0.5" value="37.5" aria-describedby="thermo-hint">
-          <label for="thermo-answer" style="margin-top:16px">液面讀值（°C）</label>
-          <input id="thermo-answer" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="輸入讀值">
-          <div class="thermometer-actions">
-            <button id="thermo-check" type="button">檢查讀值</button>
-            <button id="thermo-new" class="secondary" type="button">換一題</button>
-          </div>
-          <p id="thermo-hint" class="thermometer-hint">每 1°C 一小格，每 10°C 標示數字。0°C 和 100°C 是水的冰點與沸點參考（標準氣壓附近；沸點會受氣壓影響）。</p>
-          <p id="thermo-feedback" class="thermometer-feedback" aria-live="polite"></p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="coverage-title">
-    <section class="section" aria-labelledby="lesson-51-title">
-      <h2 id="lesson-51-title">5.1 教學腳本初稿：溫度與溫度計</h2>
-      <p class="section-intro">本節從「感覺冷熱準不準」出發，建立溫度是可量測的量，再練習理解溫度計與讀取攝氏刻度。</p>
-      <div class="lesson-plan">
-        <article class="lesson-card"><h3>學習目標</h3><ul><li>說明溫度用來量化物體的冷熱，手的感覺不能代替準確測量。</li><li>用「溫度改變時，測溫物質的某種性質也跟著改變」說明液體溫度計的基本原理。</li><li>讀取攝氏刻度，讓視線與液面同高，並能估讀兩個刻度之間的數值。</li></ul></article>
-        <article class="lesson-card"><h3>概念順序與教學流程</h3><ol><li>先比較手感和溫度計讀值，發現冷熱感受可能受先前經驗影響。</li><li>觀察液體溫度計：溫度改變時，管內液柱高度改變；刻度把變化對應成溫度讀值。</li><li>以水的冰點與沸點介紹攝氏刻度參考；說明沸點會受氣壓影響，不進行攝氏／華氏換算。</li><li>練習讀整數刻度，再估讀兩個刻度之間的液面位置。</li></ol></article>
-        <article class="lesson-card"><h3>互動示意規劃</h3><p>以一支放大、清楚標示液泡、細管和攝氏刻度的液體溫度計為主圖。拖動溫度控制點時，液柱連續升降；學生先讀取整數刻度，再估讀刻度間的位置並提交答案，之後顯示視線高度、液面和刻度的對齊。數位、耳溫等溫度計只用小圖作生活補充。液柱頂端與刻度線清楚對齊，不使用殘影表示變化。</p></article>
-        <article class="lesson-card"><h3>容易混淆的地方</h3><ul><li>手覺得比較冷或比較熱，不代表能準確知道溫度。</li><li>溫度表示冷熱程度；熱量是能量傳遞，兩者不是同一個量。</li><li>液柱高度本身不是溫度，必須依刻度讀值。</li><li>溫度計的液柱變化可先作為測量原理；物質受熱膨脹的完整解釋放在 5.4。</li></ul></article>
-        <article class="lesson-card wide"><h3>理解檢核</h3><p><strong>題目：</strong>把溫度計放進較暖的水中，液柱上升。下列哪個說法最合適？接著請讀出液面所在的溫度；若液面落在兩個刻度之間，應如何記錄？<br><strong>預期回答：</strong>溫度改變使溫度計內液體的體積改變，液柱位置因此改變；讀值要依攝氏刻度，視線與液面同高。液面在刻度間時，根據最小刻度間距合理估讀。<br><strong>觀察重點：</strong>學生能否把「液柱變化」和「刻度讀值」連起來，並正確估讀，而非只憑手感或猜數字。</p></article>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="coverage-title">
-      <h2 id="coverage-title">課綱概念如何放進四個章節</h2>
-      <p class="section-intro">以下把每一項課綱代碼拆成可教、可檢核的概念，再標出所屬章節。課綱代碼涵蓋完整；熱平衡、生活應用等則作為幫助理解的教材內容補充。</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>課綱代碼</th><th>應涵蓋的概念</th><th>放入章節與安排</th></tr></thead>
-          <tbody>
-            <tr><td><code>Bb-Ⅳ-1</code></td><td>溫度量化物體的冷熱；熱有由高溫處傳向低溫處的趨勢。</td><td><strong>5.1</strong> 認識溫度與溫度計；<strong>5.2</strong> 觀察熱傳方向，並以熱平衡作為理解傳遞終點的補充概念。</td></tr>
-            <tr><td><code>Bb-Ⅳ-2</code></td><td>以水吸收熱量時的升溫引入熱量單位；探討熱量和水的質量、升高溫度的關係。</td><td><strong>5.3</strong> 透過加熱水引入 cal，比較質量與溫度變化，做簡單關係判讀。</td></tr>
-            <tr><td><code>Bb-Ⅳ-3</code></td><td>不同物質受熱後升溫不同；以比熱描述差異。課綱建議比較相同質量，不要求複雜計算。</td><td><strong>5.3</strong> 接續熱量概念，在相同質量與加熱條件下比較材料升溫，理解比熱及簡單生活應用。</td></tr>
-            <tr><td><code>Bb-Ⅳ-4</code></td><td>熱的傳播方式包括傳導、對流、輻射，並透過實驗觀察。</td><td><strong>5.2</strong> 先理解傳遞方向與熱平衡，再用實驗觀察三種傳播方式。</td></tr>
-            <tr><td><code>Bb-Ⅳ-5</code></td><td>熱會造成物質狀態改變及體積膨脹或收縮；可用水和玻璃的熱脹冷縮說明簡易溫度計。</td><td><strong>5.4</strong> 分別處理吸熱／放熱與狀態改變、固體和液體的熱脹冷縮，並連結簡易溫度計。</td></tr>
-            <tr><td><code>Ab-Ⅳ-2</code><br>銜接</td><td>溫度會影響物質狀態。</td><td><strong>5.4</strong> 連結單元四已學的物質三態，聚焦溫度與熱造成的變化，不重教三態分類。</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="comparison-title">
-      <h2 id="comparison-title">出版社內容初步對照</h2>
-      <p class="section-intro">我把課綱條文和目前能公開查到的康軒、南一、翰林章節資料分開核對。三家都涵蓋溫度、熱量／比熱、熱造成的變化和熱傳；小節拆法不同，所以以下按各版本公開資料列出。</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>版本與可查到的編排</th><th>核對到的重點</th><th>本單元對應</th></tr></thead>
-          <tbody>
-            <tr><td>康軒：公開章節整理列 5-1 溫度與溫度計、5-2 熱量與比熱、5-3 熱對物質的影響、5-4 熱的傳播。</td><td>溫度計原理、熱量與比熱、物質受熱變化，以及傳導／對流／輻射。</td><td>康軒 5-1 → 本單元 5.1；5-2 → 5.3；5-3 → 5.4；5-4 → 5.2。熱傳方向與熱平衡補在 5.2。</td></tr>
-            <tr><td>南一：公開第三冊筆記可查到「熱與溫度」及 5-1 至 5-4 的章節架構；細項依公開資料可見範圍整理。</td><td>公開資料可確認溫度與溫度計、熱量／比熱、熱對物質的影響及熱傳等共同主題；各小節細目尚未逐項確認。</td><td>共同主題分別對應本單元 5.1、5.3、5.4、5.2。此列未以南一當年度官方電子課本逐頁確認小節名稱。</td></tr>
-            <tr><td>翰林：公開教學資源按 5-1 溫度計、5-2 熱量、5-3 比熱、5-4 熱的影響、5-5 熱的傳播拆分。</td><td>可見主題包括溫度計、熱量、比熱、熱對物質的影響和熱傳；熱量與比熱分節安排。</td><td>翰林 5-1 → 本單元 5.1；5-2、5-3 → 5.3；5-4 → 5.4；5-5 → 5.2。熱傳方向與熱平衡補在 5.2。</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="comparison-note"><strong>比對結論與限制：</strong>課綱要求的 Bb-Ⅳ-1 至 Bb-Ⅳ-5 均已安排，並銜接 Ab-Ⅳ-2；三家公開資料中的共同主題也都能在本單元找到位置。此處的 5.1–5.4 是本單元的教學分區，不是各出版社原有節次。這是公開資料的交叉核對，不是三家當年度官方課本與教師手冊逐頁審查，因此不能宣稱已保證每一版本、每個例題都零遺漏。若確定採用版本，最後仍要以該版官方教材目次、實驗和例題做一次定稿核對。</p>
-    </section>
-
-    <section class="section" aria-labelledby="next-title">
-      <h2 id="next-title">接下來建議這樣做</h2>
-      <ol class="next-steps">
-        <li><strong>先確認單元邊界：</strong>第四單元已介紹物質三態；第五單元以熱傳與溫度變化解釋狀態改變，避免重複教三態分類。</li>
-        <li><strong>選一個貫穿情境：</strong>可用「一杯熱水如何變涼」串連溫度測量、熱傳、材料差異與保溫設計。</li>
-        <li><strong>逐段安排互動：</strong>每段設定一個可觀察的現象、一個可操作或可比較的示意，以及一題檢核；先完成 5.1，再依序製作。</li>
-        <li><strong>控制數學負擔：</strong>保留教材常見的簡單熱量／比熱關係判讀，依課綱避免複雜計算。</li>
-        <li><strong>最後核對採用版本：</strong>若學校已確定康軒、南一或翰林及年度，再對該版電子課本目次和教師手冊逐項確認用語、實驗與例題深度。</li>
-      </ol>
-    </section>
-
-    <section class="section sources" aria-labelledby="sources-title">
-      <h2 id="sources-title">課綱來源</h2>
-      <ul>
-        <li><a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001823" target="_blank" rel="noreferrer">教育部主管法規共用系統：十二年國民基本教育自然科學領域課程綱要</a>（國民中小學暨普通型高級中等學校附件）。</li>
-        <li><a href="https://edu.law.moe.gov.tw/Download.ashx?FileID=31187&amp;id=GL001823&amp;type=LAW" target="_blank" rel="noreferrer">教育部課綱 PDF</a>：國中自然科學學習內容的「溫度與熱量（Bb）」及其學習內容說明，參見國中物理相關表格。</li>
-        <li><a href="https://www.clearnotebooks.com/zh-TW/notebooks/2700061" target="_blank" rel="noreferrer">公開跨版本學習筆記：第三冊第五課「溫度與熱」</a>，整理 5-1 至 5-4 常見章節（屬公開使用者整理，非出版社原版教材）。</li>
-        <li><a href="https://www.clearnotebooks.com/zh-TW/notebooks/2698195" target="_blank" rel="noreferrer">康軒溫度計章節公開筆記</a>；<a href="https://www.clearnotebooks.com/zh-TW/notebooks/1857735" target="_blank" rel="noreferrer">南一熱與溫度公開筆記</a>；<a href="https://www.clearnotebooks.com/zh-TW/notebooks/2553266" target="_blank" rel="noreferrer">翰林熱量公開筆記</a>、<a href="https://www.clearnotebooks.com/zh-TW/notebooks/850324" target="_blank" rel="noreferrer">翰林比熱公開筆記</a>。這些是可讀到的公開學習資料，用來交叉確認章節與概念，不等同官方課本。</li>
-        <li><a href="https://www.learnmode.net/flip/video/13693" target="_blank" rel="noreferrer">LearnMode：熱平衡</a>、<a href="https://www.learnmode.net/flip/video/12771" target="_blank" rel="noreferrer">比熱</a>、<a href="https://www.learnmode.net/flip/video/5314" target="_blank" rel="noreferrer">熱與三態變化</a>、<a href="https://www.learnmode.net/flip/video/5315" target="_blank" rel="noreferrer">熱脹冷縮</a>等公開國中教學資源。</li>
-        <li><a href="https://945cloud.knsh.com.tw/" target="_blank" rel="noreferrer">康軒雲</a>、<a href="https://nanidigi.nani.com.tw/" target="_blank" rel="noreferrer">南一數位資源入口</a>、<a href="https://www.ehanlin.com.tw/" target="_blank" rel="noreferrer">翰林雲端學院</a>：出版社公開資源入口；完整教材內容需依帳號權限查閱。</li>
-      </ul>
+    <div class="section-heading"><div><h2>選擇一段開始探索</h2><p class="sequence-note">溫度測量 → 熱的傳遞 → 熱量與比熱 → 熱對物質的影響。</p></div><a class="curriculum-link" href="curriculum.html">課綱與出版社對照 ↗</a></div>
+    <section class="parts" aria-label="溫度與熱的學習內容">
+      <a class="part-card available" href="parts/5.1/index.html"><span class="part-number">5.1</span><span><h3 class="part-title">溫度計如何量出冷熱？</h3><p class="part-detail">比較手感與測量結果，認識液體溫度計，練習讀取攝氏刻度。</p></span><span class="part-status">開始探索</span></a>
+      <div class="part-card"><span class="part-number">5.2</span><span><h3 class="part-title">熱如何傳遞？</h3><p class="part-detail">從高溫到低溫的熱傳方向與熱平衡，探索傳導、對流和輻射。</p></span><span class="part-status pending">規劃中</span></div>
+      <div class="part-card"><span class="part-number">5.3</span><span><h3 class="part-title">熱量與比熱，如何解釋升溫差異？</h3><p class="part-detail">觀察水吸收熱量後的升溫，再比較不同材料的比熱。</p></span><span class="part-status pending">規劃中</span></div>
+      <div class="part-card"><span class="part-number">5.4</span><span><h3 class="part-title">熱如何改變物質？</h3><p class="part-detail">連結吸熱、放熱、狀態變化與熱脹冷縮。</p></span><span class="part-status pending">規劃中</span></div>
     </section>
   </main>
   <footer><div class="shell">國二上・自然科學｜單元 5：溫度與熱</div></footer>
-  <script>
-    (() => {
-      const slider = document.getElementById("thermo-control");
-      const liquid = document.getElementById("thermo-liquid");
-      const ticks = document.getElementById("thermo-ticks");
-      const labels = document.getElementById("thermo-labels");
-      const answer = document.getElementById("thermo-answer");
-      const feedback = document.getElementById("thermo-feedback");
-      const bottom = 355;
-      const top = 35;
-      const height = bottom - top;
-
-      for (let degree = 0; degree <= 100; degree += 1) {
-        const y = bottom - (degree / 100) * height;
-        const major = degree % 10 === 0;
-        const mid = degree % 5 === 0;
-        const length = major ? 16 : mid ? 10 : 6;
-        const mark = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        mark.setAttribute("x1", "123");
-        mark.setAttribute("x2", String(123 + length));
-        mark.setAttribute("y1", y.toFixed(2));
-        mark.setAttribute("y2", y.toFixed(2));
-        ticks.appendChild(mark);
-        if (major) {
-          const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-          label.setAttribute("x", "146");
-          label.setAttribute("y", String(y + 4));
-          label.textContent = String(degree);
-          labels.appendChild(label);
-        }
-      }
-
-      const format = value => Number.isInteger(value) ? String(value) : value.toFixed(1);
-      const update = () => {
-        const value = Number(slider.value);
-        const y = bottom - (value / 100) * height;
-        liquid.setAttribute("y", y.toFixed(2));
-        liquid.setAttribute("height", (bottom - y).toFixed(2));
-        slider.setAttribute("aria-valuetext", `${format(value)} 攝氏度`);
-      };
-
-      slider.addEventListener("input", () => {
-        update();
-        answer.value = "";
-        feedback.textContent = "";
-      });
-
-      document.getElementById("thermo-check").addEventListener("click", () => {
-        if (answer.value.trim() === "") {
-          feedback.textContent = "請先輸入你讀到的溫度。";
-          return;
-        }
-        const guess = Number(answer.value);
-        const actual = Number(slider.value);
-        if (!Number.isFinite(guess) || guess < 0 || guess > 100) {
-          feedback.textContent = "請輸入 0 到 100°C 之間的讀值。";
-          return;
-        }
-        feedback.textContent = Math.abs(guess - actual) <= 0.3
-          ? `讀得準確！液面約在 ${format(actual)}°C。`
-          : `再看一次液面和刻度的位置；這題讀值約為 ${format(actual)}°C。`;
-      });
-
-      document.getElementById("thermo-new").addEventListener("click", () => {
-        const halfDegrees = Math.floor(Math.random() * 141) + 30;
-        slider.value = String(halfDegrees / 2);
-        answer.value = "";
-        feedback.textContent = "新題目已準備好，請重新讀取液柱。";
-        update();
-      });
-
-      update();
-    })();
-  </script>
 </body>
 </html>
