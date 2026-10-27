@@ -153,15 +153,6 @@
               </section>
               <p class="laser-observation" id="angle-observation" aria-live="polite">入射角和反射角都是 30°。調整雷射方向，觀察反射線與光點如何改變。</p>
             </div>
-            <h3 class="prompt">再量幾次，檢查剛才的發現</h3>
-            <p>改選幾個入射角並記下讀值，看看這個關係是否每次都成立。</p>
-            <div class="range-row"><label for="measure-angle">設定這次的入射角</label><output id="measure-angle-value" for="measure-angle">20°</output></div>
-            <input id="measure-angle" type="range" min="10" max="70" step="10" value="20" aria-label="設定量測用的入射角">
-            <div class="readout-row"><div class="readout"><small>入射角（從法線量）</small><strong id="measure-incident">20°</strong></div><div class="readout"><small>反射角（從法線量）</small><strong id="measure-reflected">20°</strong></div></div>
-            <div class="controls"><button class="control-button" id="record-angle" type="button">記錄這組角度</button><button class="secondary" id="reset-angles" type="button">清除紀錄</button></div>
-            <div class="table-wrap"><table><caption class="visually-hidden">入射角與反射角量測紀錄</caption><thead><tr><th scope="col">量測</th><th scope="col">入射角</th><th scope="col">反射角</th></tr></thead><tbody id="angle-records"><tr><td>示範</td><td>20°</td><td>20°</td></tr><tr><td>示範</td><td>40°</td><td>40°</td></tr></tbody></table></div>
-            <div class="fact"><p>比較記錄可見：每一組中，反射角都和入射角相等。</p></div>
-
           </div>
         </section>
         <section class="lesson-card" id="card-03">
@@ -300,7 +291,6 @@
   </main>
   <footer class="shell"><a href="../../index.html">回到光學單元學習路線</a>　·　接下來：光進入不同介質會怎樣？</footer>
   <script>
-    const measureInput=document.querySelector("#measure-angle"),records=document.querySelector("#angle-records");function updateMeasure(){const angle=Number(measureInput.value);document.querySelector("#measure-angle-value").value=angle+"°";document.querySelector("#measure-incident").textContent=angle+"°";document.querySelector("#measure-reflected").textContent=angle+"°"}measureInput.addEventListener("input",updateMeasure);document.querySelector("#record-angle").addEventListener("click",function(){const angle=Number(measureInput.value),row=document.createElement("tr");row.innerHTML="<td>量測 "+(records.children.length-1)+"</td><td>"+angle+"°</td><td>"+angle+"°</td>";records.appendChild(row)});document.querySelector("#reset-angles").addEventListener("click",function(){records.innerHTML="<tr><td>示範</td><td>20°</td><td>20°</td></tr><tr><td>示範</td><td>40°</td><td>40°</td></tr>"});
     document.querySelector("#show-image-rays").addEventListener("click",function(event){const shown=event.currentTarget.getAttribute("aria-pressed")!=="true";event.currentTarget.setAttribute("aria-pressed",String(shown));event.currentTarget.textContent=shown?"隱藏光路":"顯示光路";document.querySelector("#image-rays").hidden=!shown});
     const distanceInput=document.querySelector("#object-distance");function updateDistance(){const value=Number(distanceInput.value),x=305-value*45,imageX=610-x;document.querySelector("#distance-object").setAttribute("x1",x);document.querySelector("#distance-object").setAttribute("x2",x);document.querySelector("#distance-object-label").setAttribute("x",x-15);document.querySelector("#distance-image").setAttribute("x1",imageX);document.querySelector("#distance-image").setAttribute("x2",imageX);document.querySelector("#distance-image-label").setAttribute("x",imageX-12);document.querySelector("#object-distance-value").value=value===1?"靠近":"較遠";document.querySelector("#distance-observation").textContent=value===1?"物體靠近鏡面時，鏡中像的位置也隨著改變；鏡面保持不動。":"把物體往鏡面移動或移遠，觀察像相對鏡面的位置也跟著變化。"}distanceInput.addEventListener("input",updateDistance);
     document.querySelectorAll(".curved-mirror-choice").forEach(function(button){button.addEventListener("click",function(){const mode=button.dataset.curvedMirror;document.querySelectorAll(".curved-mirror-choice").forEach(function(item){item.setAttribute("aria-pressed",String(item===button))});document.querySelector("#curved-concave").setAttribute("display",mode==="concave"?"inline":"none");document.querySelector("#curved-convex").setAttribute("display",mode==="convex"?"inline":"none");document.querySelector("#curved-mirror-model").dataset.state=mode;document.querySelector("#curved-mirror-caption").textContent=mode==="concave"?"凹面鏡的平行入射光反射後會聚。圖中只畫光路，清澈空氣中的光束本身不可見。":"凸面鏡的平行入射光反射後向外發散。圖中只畫光路，清澈空氣中的光束本身不可見。"})});
