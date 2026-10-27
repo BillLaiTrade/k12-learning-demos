@@ -1,17 +1,17 @@
 #card-01{grid-template-columns:minmax(0,1fr);gap:14px}
 #card-01 .card-side{display:flex;align-items:baseline;gap:12px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 12px}
 #card-01 .card-side h3{margin:0;font-size:1.05rem}
-#card-01 .touch-story-comic{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;width:100%;margin:18px 0}
-#card-01 .touch-story-scene{overflow:hidden;min-width:0;width:50%;margin:0 auto;border:1px solid #ddd8c9;border-radius:12px;background:#fffdf8}
-#card-01 figcaption{padding:12px 16px;background:#f2f4e9}
+#card-01 .touch-story-comic{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%;margin:18px 0}
+#card-01 .touch-story-scene{overflow:hidden;min-width:0;width:100%;margin:0;border:1px solid #ddd8c9;border-radius:12px;background:#fffdf8}
+#card-01 figcaption{display:flex;align-items:center;min-height:48px;padding:10px 12px;background:#f2f4e9}
 #card-01 figcaption h2{margin:0;font-size:1rem;line-height:1.5;color:var(--ink)}
 #card-01 img{display:block;width:100%;height:auto}
-@media(max-width:640px){#card-01 .touch-story-comic{gap:14px}#card-01 figcaption{padding:10px 12px}}
+@media(max-width:640px){#card-01 .touch-story-comic{grid-template-columns:minmax(0,1fr);gap:14px}#card-01 figcaption{padding:10px 12px}}
 
 #card-01 .touch-story-picture{position:relative}
 #card-01 .touch-story-water-labels{position:absolute;left:12.5%;right:12.5%;top:83%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));text-align:center}
-#card-01 .touch-story-water-labels span{justify-self:center;padding:3px 7px;border:1px solid #b8bdb5;border-radius:7px;background:rgb(255 253 248 / 96%);color:#3e4e45;font-size:.75rem;font-weight:800;line-height:1.5;white-space:nowrap;box-shadow:0 2px 5px #243a351a}
-#card-01 .touch-story-water-labels .water-ice{color:#205e7b;border-color:#7caebe}
-#card-01 .touch-story-water-labels .water-warm{color:#945023;border-color:#c49a74}
+#card-01 .touch-story-water-labels span{justify-self:center;padding:3px 6px;border:1px solid #829084;border-radius:7px;background:#fffdf8;color:#293d30;font-size:.875rem;font-weight:800;line-height:1.5;white-space:nowrap;box-shadow:0 2px 5px #243a351a}
+#card-01 .touch-story-water-labels .water-ice{color:#174b63;border-color:#4c8197}
+#card-01 .touch-story-water-labels .water-warm{color:#7e3e1d;border-color:#ad784e}
 #card-01 .touch-story-water-labels .is-touched{border-width:2px;background:#fffef8}
-@media(max-width:640px){#card-01 .touch-story-scene{width:100%;max-width:400px}#card-01 .touch-story-water-labels span{font-size:.7rem;padding:2px 5px}}
+@media(max-width:640px){#card-01 .touch-story-scene{width:100%;max-width:none}#card-01 .touch-story-water-labels span{font-size:.8125rem;padding:3px 6px}}
