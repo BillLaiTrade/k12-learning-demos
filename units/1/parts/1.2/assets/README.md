@@ -5,3 +5,10 @@
 - `mirror/teddy-rear.webp`：2026-10-27 依既有小熊正面圖生成的透明背景背面素材，供平面鏡成像及物距活動的鏡前實物使用；鏡中像仍引用正面圖。舊 `teddy-back.webp` 的畫面實際為正面，本次改用新檔避免混淆。
 - `mirror/teddy-side.webp`：依既有小熊生成的朝右側面素材。第三段左圖以此呈現小熊面向鏡子，虛像使用同一素材作幾何鏡射，朝向與位置均對應鏡面。
 - `mirror/xiaokui-profile.webp`：依共用人物設定生成的小葵朝右側臉，僅用於第三段光路圖的觀察位置，讓反射光連到可辨識的眼睛；對話頭像仍使用共用素材。
+
+## 第五區素材與光學模型
+
+- `curved-mirrors-geometry.mjs`：球面輪廓、局部法線與精確反射向量；成像外觀採近軸面鏡模型。與 DOM 分開以便獨立驗證科學關係。
+- `curved-mirrors.js`／`curved-mirrors.css`：三種鏡面同時比較、反射點詳解及成像外觀；無外部執行依賴。
+- `mirror/dressing-mirror.webp`、`mirror/makeup-mirror.webp`、`mirror/traffic-mirror.webp`：2026-10-27 生成的生活器材情境，依序為穿衣鏡、放大化妝鏡、路口廣角鏡，各 480 × 480。由同一三聯生成圖裁切、縮放並轉為 WebP；圖片只輔助辨認器材，不驗證實際成像或放大率。
+- 來源及示意圖對照保留於 `docs/reviews/unit-1.2-card05/`。所有可量化光路由程式產生，不使用生成圖片作為光學幾何。
