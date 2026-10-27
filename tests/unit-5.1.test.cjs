@@ -49,22 +49,38 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
     assert.equal(await page.locator('.speaker').first().evaluate(node => getComputedStyle(node, '::before').backgroundImage.includes('dialogue-character-avatars')), true);
   });
 
-  await t.test('demonstrates immersion, stabilization, eye level and recording', async () => {
-    assert.equal(await page.locator('#measurement-sight').isVisible(), false);
-    await page.locator('[data-demo-step="1"]').click();
+  await t.test('measures only after immersion and stabilization, compares view without changing liquid', async () => {
+    assert.equal(await page.locator('#measurement-save').isDisabled(), true);
+    await page.locator('#measurement-insert').click();
+    assert.equal(await page.locator('#measurement-save').isDisabled(), true);
     await page.waitForFunction(() => document.getElementById('measurement-note').textContent.startsWith('液柱已穩定'));
-    assert.equal(Number(await page.locator('#measurement-liquid').getAttribute('y')), 185.5);
-    await page.locator('[data-demo-step="2"]').click();
-    assert.equal(await page.locator('#measurement-sight').isVisible(), true);
+    const liquid = await page.locator('#measurement-liquid').getAttribute('y');
+    for (const eye of ['-1','1','0']) {
+      await page.locator(`[data-eye="${eye}"]`).click();
+      assert.equal(await page.locator('#measurement-liquid').getAttribute('y'), liquid);
+      assert.equal(await page.locator('#measurement-save').isDisabled(), eye !== '0');
+      const hit = Number(await page.locator('#sight-hit').getAttribute('cy'));
+      if (eye === '-1') assert.ok(hit < Number(liquid));
+      if (eye === '1') assert.ok(hit > Number(liquid));
+      if (eye === '0') assert.equal(hit, Number(liquid));
+    }
+    await page.locator('#measurement-save').click();
+    assert.match(await text('#measurement-record'), /37.5°C/);
+    assert.equal(await page.locator('#measurement-lens line').count(), 10);
+    await page.locator('#measurement-reset').click();
     assert.equal(await page.locator('#measurement-record').isVisible(), false);
-    await page.locator('[data-demo-step="3"]').click();
-    assert.equal(await page.locator('#measurement-record').isVisible(), true);
-    await page.locator('[data-demo-step="1"]').click();
-    await page.locator('[data-demo-step="0"]').click();
-    await page.waitForTimeout(1500);
-    assert.match(await text('#measurement-note'), /剛放入/);
-    assert.equal(Number(await page.locator('#measurement-liquid').getAttribute('y')), 222.7);
-    assert.equal(await page.locator('[data-demo-step][aria-pressed=true]').count(), 1);
+    assert.equal(await page.locator('#measurement-save').isDisabled(), true);
+    await page.locator('#measurement-insert').click();
+    await page.locator('#measurement-reset').click();
+    await page.waitForTimeout(1900);
+    assert.match(await text('#measurement-note'), /杯外/);
+    const svg=await page.locator('#measurement-diagram').boundingBox();
+    const toPoint=(x,y)=>({x:svg.x+x*svg.width/640,y:svg.y+y*svg.height/480});
+    const start=toPoint(445,260),end=toPoint(235,100);
+    await page.mouse.move(start.x,start.y);await page.mouse.down();await page.mouse.move(end.x,end.y,{steps:12});await page.mouse.up();
+    await page.waitForFunction(() => document.getElementById('measurement-note').textContent.startsWith('液柱已穩定'));
+    assert.equal(await page.locator('#measurement-save').isDisabled(), false);
+    await page.locator('#measurement-reset').click();
   });
 
   await t.test('observation guides track whole and half degrees, including boundaries', async () => {
@@ -142,9 +158,13 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
     await page.keyboard.press('Space');
     assert.equal((await order())[1], 'immerse');
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.locator('[data-demo-step="1"]').click();
+    await page.locator('#measurement-instrument').focus();
+    await page.keyboard.press('Enter');
     await page.waitForFunction(() => document.getElementById('measurement-note').textContent.startsWith('液柱已穩定'));
-    assert.equal(Number(await page.locator('#measurement-liquid').getAttribute('y')), 185.5);
+    assert.equal(Number(await page.locator('#measurement-liquid').getAttribute('y')), 223.75);
+    await page.locator('#measurement-instrument').focus();
+    await page.keyboard.press('Space');
+    assert.equal(await page.locator('#measurement-save').isDisabled(), true);
   });
 
   await t.test('fits desktop and narrow windows and links back to the unit', async () => {

@@ -1,0 +1,13 @@
+#measurement,#card-04{grid-template-columns:minmax(0,1fr);gap:16px}
+#measurement .card-side,#card-04 .card-side{display:flex;align-items:baseline;gap:12px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 12px}
+#measurement .card-side h3,#card-04 .card-side h3{margin:0}
+.measurement-lab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.lab-scene,.lab-observation{min-width:0;border:1px solid var(--line);border-radius:18px;padding:16px;background:linear-gradient(140deg,#edf5ee,#fffefa)}
+.lab-observation h3{margin:0 0 10px}.lab-scene>svg{display:block;width:100%;height:auto;background:#f8faf5;border-radius:12px}
+#measurement-diagram text{font-size:15px;fill:#344b42}#measurement-labels text{font-size:12px}
+#measurement-instrument{cursor:grab;touch-action:none}#measurement-instrument:active{cursor:grabbing}#measurement-instrument:focus-visible{outline:3px solid #bc612b}
+.temperature-lens{display:block;width:100%;height:auto;max-height:330px;background:#fff;border:1px solid var(--line);border-radius:14px}
+.temperature-lens text{font-family:inherit;fill:#344b42;font-size:15px}
+.lab-observation [aria-pressed=true]{border-color:var(--green);background:var(--pale)}
+button:disabled{opacity:.5;cursor:default}.reading-observation{display:grid;grid-template-columns:minmax(140px,.65fr) minmax(0,1.35fr);gap:18px;align-items:center}
+@media(max-width:700px){.measurement-lab,.reading-observation{grid-template-columns:minmax(0,1fr)}#measurement .card-side,#card-04 .card-side{flex-wrap:wrap}.lab-scene,.lab-observation{padding:12px}}

@@ -33,6 +33,7 @@
     @media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{grid-template-columns:1fr;padding:32px 0 25px}.lesson{padding-top:20px}.lesson-card{grid-template-columns:1fr;padding:18px;gap:14px}.card-side{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:0 7px;border:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0;font-size:.95rem}.card-role{grid-column:2;font-size:.79rem}.card-number{grid-row:1/3}.visual{padding:8px}.quiz-head{padding:18px}.quiz-body{padding:19px 17px 22px}.quiz-actions{align-items:stretch;flex-direction:column}.thermo-wrap{grid-template-columns:1fr}.thermo-svg{max-height:340px}.range-row{align-items:center;flex-direction:row}.sequence-step{grid-template-columns:22px minmax(0,1fr)}.sequence-controls{grid-column:2}.range-row input{width:100%}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
+  <link rel="stylesheet" href="assets/measurement-scene.css">
 </head>
 <body>
   <header class="shell masthead">
@@ -55,42 +56,41 @@
         <section class="lesson-card" id="card-02"><div class="card-side"><span class="card-number">02</span><h3>溫度計怎麼測量</h3><span class="card-role">觀察液柱如何改變</span></div><div class="card-main"><h2>溫度計裡的液柱為什麼會升降？</h2><p>液體溫度計利用測溫液體的體積隨溫度改變而改變，讓細管中的液面位置移動，再由刻度讀取溫度。</p><div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>所以液面變高不是讀值本身，我還要看旁邊的刻度，對嗎？</p></div><div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>對。液柱的位置會隨溫度改變；刻度讓我們把位置轉成可以比較的溫度數值。</p></div><div class="visual"><svg viewBox="0 0 700 170" role="img" aria-label="液體溫度計由液泡、細管和刻度組成；液柱高度對應刻度讀值。"><rect x="255" y="20" width="36" height="112" rx="18" fill="#fff" stroke="#60776d" stroke-width="4"/><circle cx="273" cy="135" r="27" fill="#fff" stroke="#60776d" stroke-width="4"/><rect x="265" y="73" width="16" height="62" rx="8" fill="#d45e4e"/><circle cx="273" cy="135" r="19" fill="#d45e4e"/><path d="M294 35h55m-55 15h34m-34 15h55m-55 15h34m-34 15h55m-55 15h34" stroke="#344b42" stroke-width="3"/><text x="385" y="56" fill="#314640">細管液面的位置對應溫度</text><text x="385" y="88" fill="#59696b" font-size="15">溫度改變 → 液柱升降 → 依刻度讀值</text></svg></div><div class="fact"><p><strong>重點：</strong>液柱的位置要和刻度一起讀；完整的熱脹冷縮原理會在 5.4 再深入學習。</p></div></div></section>
         <section class="lesson-card" id="card-03"><div class="card-side"><span class="card-number">03</span><h3>攝氏刻度參考點</h3><span class="card-role">認識 0°C 與 100°C</span></div><div class="card-main"><h2>攝氏刻度上的 0 和 100 從哪裡來？</h2><p>在標準大氣壓下，純水的冰點約為 0°C，沸點約為 100°C，常用來介紹攝氏刻度的參考點。沸點會隨氣壓改變。</p><div class="visual"><svg viewBox="0 0 700 130" role="img" aria-label="攝氏溫標以標準氣壓附近純水的冰點 0 度和沸點 100 度作為參考。"><path d="M105 63H595" stroke="#9eafa6" stroke-width="8" stroke-linecap="round"/><path d="M105 48v30M595 48v30" stroke="#176b53" stroke-width="5"/><circle cx="105" cy="63" r="13" fill="#8cc4cb" stroke="#fff" stroke-width="4"/><circle cx="595" cy="63" r="13" fill="#df8b41" stroke="#fff" stroke-width="4"/><text x="105" y="30" text-anchor="middle" fill="#176b53" font-weight="700">0°C</text><text x="595" y="30" text-anchor="middle" fill="#bc612b" font-weight="700">100°C</text><text x="105" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水冰點</text><text x="595" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水沸點</text></svg></div><div class="fact"><p><strong>讀值範圍：</strong>本練習使用 0–100°C 刻度。只練習攝氏溫度，不進行攝氏與華氏換算。</p></div></div></section>
         <section class="lesson-card" id="measurement" aria-labelledby="measurement-title">
-          <div class="card-side"><span class="card-number">04</span><h3>先取得穩定的讀值</h3><span class="card-role">浸入、等待、平視、記錄</span></div>
+          <div class="card-side"><span class="card-number">04</span><h3>先取得穩定的讀值</h3><span class="card-role">放入、觀察、平視、記錄</span></div>
           <div class="card-main">
-            <h2 id="measurement-title">把溫度計放進水裡，就能立刻讀嗎？</h2>
-            <p>先選擇量程適合的溫度計，依工具標示的浸入深度使用。讓液泡完全浸在水中，不碰杯壁或杯底；等液柱穩定後，讓溫度計留在水中，平視液面並記錄讀值。</p>
-            <div class="controls measurement-steps" role="group" aria-label="切換測量示範步驟">
-              <button class="secondary" type="button" data-demo-step="0" aria-pressed="true">1 浸入水中</button>
-              <button class="secondary" type="button" data-demo-step="1" aria-pressed="false">2 等待穩定</button>
-              <button class="secondary" type="button" data-demo-step="2" aria-pressed="false">3 平視液面</button>
-              <button class="secondary" type="button" data-demo-step="3" aria-pressed="false">4 記錄讀值</button>
+            <h2 id="measurement-title">親手量一次這杯水的溫度</h2>
+            <p>把溫度計拖到杯口上方放入，觀察液柱逐漸穩定，再比較視線位置。液泡要浸在水中，不碰杯壁、杯底，並依工具標示的浸入深度使用。</p>
+            <div class="measurement-lab">
+              <div class="lab-scene">
+                <svg id="measurement-diagram" viewBox="0 0 640 480" aria-labelledby="measurement-description">
+                  <title id="measurement-description">可拖曳的溫度計與水杯</title>
+                  <defs><linearGradient id="water-fill" x2="0" y2="1"><stop stop-color="#d4eff0" stop-opacity=".6"/><stop offset="1" stop-color="#8ac5c9" stop-opacity=".8"/></linearGradient><linearGradient id="glass-fill"><stop stop-color="#fff"/><stop offset=".5" stop-color="#ecf3ef"/><stop offset="1" stop-color="#fff"/></linearGradient></defs>
+                  <path d="M105 235V424Q105 438 120 438H350Q365 438 365 424V235" fill="#fffefa" stroke="#60776d" stroke-width="3"/>
+                  <path d="M108 310H362V424Q362 435 350 435H120Q108 435 108 424Z" fill="url(#water-fill)"/>
+                  <path d="M110 310H360" stroke="#56959d" stroke-width="2"/>
+                  <text x="118" y="468">水杯・液泡與杯底保持距離</text>
+                  <rect x="140" y="212" width="190" height="35" rx="12" fill="none" stroke="#8cae91" stroke-dasharray="6 4"/><text x="145" y="200">液泡從杯口上方放入</text>
+                  <g id="measurement-instrument" tabindex="0" role="button" aria-label="溫度計，拖到杯口上方放入；也可按 Enter 放入" transform="translate(210,0)">
+                    <rect x="212" y="30" width="62" height="390" fill="transparent"/>
+                    <rect x="221" y="30" width="28" height="365" rx="14" fill="url(#glass-fill)" stroke="#60776d" stroke-width="3"/>
+                    <circle cx="235" cy="395" r="20" fill="url(#glass-fill)" stroke="#60776d" stroke-width="3"/>
+                    <rect id="measurement-liquid" x="228" y="272" width="14" height="123" fill="#d45e4e"/>
+                    <circle cx="235" cy="395" r="14" fill="#d45e4e"/>
+                    <g id="measurement-ticks" stroke="#344b42" stroke-width="1.5"></g><g id="measurement-labels"></g><text x="315" y="36">°C</text>
+                  </g>
+                  <g id="measurement-sight" hidden><path id="sight-ray" stroke="#176b53" stroke-width="2" stroke-dasharray="6 4"/><circle id="sight-hit" r="5" fill="#bc612b"/><g id="sight-eye"><path d="M-18 0Q0-20 18 0Q0 20-18 0" fill="#fff" stroke="#176b53" stroke-width="2"/><circle r="5" fill="#176b53"/></g></g>
+                </svg>
+                <div class="controls"><button class="action" id="measurement-insert" type="button">放入水中</button><button class="secondary" id="measurement-reset" type="button">取出並重設</button></div>
+                <p id="measurement-note" class="fact" role="status">溫度計還在杯外。先放入水中，看看液柱會如何改變。</p>
+              </div>
+              <div class="lab-observation">
+                <h3>液面附近放大看</h3><svg id="measurement-lens" class="temperature-lens" viewBox="0 0 380 290" role="img" aria-label="液面局部放大"></svg>
+                <div class="controls" role="group" aria-label="比較觀看位置"><button class="secondary" data-eye="-1" aria-pressed="false" disabled>視線較高</button><button class="secondary" data-eye="0" aria-pressed="true" disabled>與液面同高</button><button class="secondary" data-eye="1" aria-pressed="false" disabled>視線較低</button></div>
+                <p id="measurement-comparison" class="live-note">放入溫度計後，可以比較不同觀看位置。</p>
+                <button class="action" id="measurement-save" type="button" disabled>記錄水溫</button><p id="measurement-record" class="fact" role="status" hidden></p>
+              </div>
             </div>
-            <div class="visual">
-              <svg id="measurement-diagram" viewBox="0 0 640 360" role="img" aria-labelledby="measurement-description">
-                <title id="measurement-description">液泡浸在水中且不碰杯底，液柱尚未穩定。</title>
-                <path d="M110 160V325Q110 335 120 335H350Q360 335 360 325V160" fill="#fff" stroke="#60776d" stroke-width="3"/>
-                <path d="M113 210H357V325Q357 332 350 332H120Q113 332 113 325Z" fill="#c6e6eb"/>
-                <path d="M114 210H356" stroke="#6eaeb3" stroke-width="2"/>
-                <rect x="221" y="20" width="28" height="275" rx="14" fill="#fffefa" stroke="#60776d" stroke-width="3"/>
-                <circle cx="235" cy="292" r="20" fill="#fffefa" stroke="#60776d" stroke-width="3"/>
-                <rect id="measurement-liquid" x="228" y="222.2" width="14" height="69.8" fill="#d45e4e"/>
-                <circle cx="235" cy="292" r="14" fill="#d45e4e"/>
-                <g id="measurement-ticks" stroke="#344b42" stroke-width="1.5"></g>
-                <g id="measurement-labels"></g>
-                <text x="274" y="23">°C</text>
-                <path d="M365 300H403" stroke="#176b53" stroke-width="2"/>
-                <text x="410" y="305">液泡不碰杯壁、杯底</text>
-                <g id="measurement-sight" hidden>
-                  <path d="M230 185.5H570" stroke="#176b53" stroke-width="2" stroke-dasharray="6 4"/>
-                  <path d="M540 185.5q14-16 28 0q-14 16-28 0" fill="#fff" stroke="#176b53" stroke-width="2"/>
-                  <circle cx="554" cy="185.5" r="4" fill="#176b53"/>
-                  <text x="410" y="165">視線與液面同高</text>
-                </g>
-                <text id="measurement-record" x="400" y="240" hidden>水溫約 37.5°C</text>
-              </svg>
-            </div>
-            <p class="fact" id="measurement-note" role="status">液泡已浸在水中，與杯壁、杯底保持距離。剛放入時，液柱還可能改變，先不要記錄。</p>
-            <p class="live-note">這是分步觀察示意；動畫時間不代表實際溫度計的等待時間。讀值時不把溫度計拿出水面。</p>
+            <p class="live-note">紅色液面與刻度分處不同位置，斜視時會出現視差。圖中間距為了觀察而放大，偏移幅度不代表真實儀器誤差；放大窗不增加刻線。等待時間也是示意。</p>
           </div>
         </section>
         <section class="lesson-card" id="card-04">
@@ -98,9 +98,10 @@
           <div class="card-main">
             <h2>液面落在兩條刻度之間，該怎麼讀？</h2>
             <p>液柱穩定後，先找液面頂端，再沿水平視線對齊刻度。每 1°C 一小格，每 10°C 標示數字；液面在刻線之間時，依間距合理估讀。</p>
-            <div class="visual thermo-wrap">
+            <div class="visual reading-observation">
               <svg id="observation-thermometer" class="thermo-svg" viewBox="0 0 260 410" role="img" aria-label="攝氏溫度計"></svg>
               <div>
+                <svg id="observation-lens" class="temperature-lens" viewBox="0 0 380 290" role="img" aria-label="液面附近的刻線放大"></svg>
                 <label for="thermo-control"><strong>調整水溫並觀察液柱</strong></label>
                 <div class="range-row"><span>0°C</span><input id="thermo-control" type="range" min="0" max="100" step="0.5" value="37.5" aria-describedby="thermo-hint"><span>100°C</span></div>
                 <button class="secondary" id="thermo-guide" type="button" aria-pressed="false">顯示讀值對照</button>
@@ -135,7 +136,7 @@
               <h3>3. 請記錄穩定後的水溫</h3><p>這支溫度計每 1°C 一小格。仔細看液面頂端，估讀刻線之間的位置。</p>
               <div class="thermo-wrap">
                 <svg id="quiz-thermometer" class="thermo-svg" viewBox="0 0 260 410" role="img" aria-label="攝氏溫度計"></svg>
-                <div><label for="quiz-reading">水溫讀值（°C）</label><div class="controls"><input class="read-input" id="quiz-reading" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="輸入估讀值" aria-describedby="reading-feedback"><span aria-hidden="true">°C</span></div><p class="quiz-feedback" id="reading-feedback" aria-live="polite"></p></div>
+                <div><svg id="quiz-lens" class="temperature-lens" viewBox="0 0 380 290" role="img" aria-label="估讀題液面附近的刻線放大"></svg><label for="quiz-reading">水溫讀值（°C）</label><div class="controls"><input class="read-input" id="quiz-reading" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="輸入估讀值" aria-describedby="reading-feedback"><span aria-hidden="true">°C</span></div><p class="quiz-feedback" id="reading-feedback" aria-live="polite"></p></div>
               </div>
             </div>
             <div class="quiz-actions"><button class="action" id="quiz-check" type="button">檢查測量紀錄</button><button class="secondary" id="quiz-reset" type="button">重新作答</button></div>
