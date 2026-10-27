@@ -4,7 +4,7 @@ const { spawn } = require('node:child_process');
 const path = require('node:path');
 const { chromium } = require('playwright');
 
-test('4.2 evaporation is a continuous, controllable scene', { timeout: 150000 }, async t => {
+test('4.2 evaporation plays the chosen stage from its step or picture', { timeout: 150000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], {
     cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'pipe']
   });
@@ -21,28 +21,40 @@ test('4.2 evaporation is a continuous, controllable scene', { timeout: 150000 },
   });
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox'] });
   t.after(() => browser.close());
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
+  const page = await browser.newPage({ viewport: { width: 1440, height: 1100 }, hasTouch: true });
   const failures = [];
   page.on('pageerror', error => failures.push(error.message));
   page.on('console', message => { if (message.type() === 'error') failures.push(message.text()); });
   page.on('requestfailed', request => failures.push(request.url()));
-  page.on('response', response => { if (response.status() >= 400) failures.push(`${response.status()} ${response.url()}`); });
-  const url = `http://127.0.0.1:${port}/units/4/parts/4.2/`;
+  page.on('response', response => { if (response.status() >= 400) failures.push(response.status() + ' ' + response.url()); });
+  const url = 'http://127.0.0.1:' + port + '/units/4/parts/4.2/';
+  // Keep real DOM events and WebGL rendering. Control only the clock so a
+  // short chapter cannot finish while software-GPU screenshots are captured.
+  await page.clock.install({ time: new Date('2026-10-27T00:00:00Z') });
   await page.goto(url);
   await page.waitForFunction(() => document.querySelector('#evap-stage').dataset.ready === 'true', null, { timeout: 30000 });
+  await page.clock.pauseAt(new Date('2026-10-27T00:01:00Z'));
   const state = () => page.locator('#evap-stage').evaluate(element => ({
     progress: Number(element.dataset.progress), water: Number(element.dataset.water),
     crystals: Number(element.dataset.crystals), step: Number(element.dataset.step),
     boiling: Number(element.dataset.boiling), bubbles: Number(element.dataset.bubbles),
-    grains: Number(element.dataset.grains), ripple: Number(element.dataset.ripple), phase: element.dataset.phase
+    grains: Number(element.dataset.grains), ripple: Number(element.dataset.ripple),
+    phase: element.dataset.phase, playing: element.dataset.playing === 'true'
   }));
-  const scrub = value => page.locator('#evap-seek').evaluate((input, value) => {
-    input.value = String(value); input.dispatchEvent(new Event('input', { bubbles: true }));
-  }, value);
+  const button = number => page.locator('[data-evap-step="' + number + '"]');
+  const picture = page.locator('#evap-visual');
+  const advance = async milliseconds => {
+    await page.clock.runFor(20); // Present the first frame of a new run.
+    await page.clock.fastForward(milliseconds);
+  };
+  const stopped = async () => {
+    await advance(3200);
+    await page.waitForFunction(() => document.querySelector('#evap-stage').dataset.playing === 'false');
+  };
 
-  await t.test('observation lasts 1.5 seconds and each later chapter lasts three', async () => {
+  await t.test('observation lasts 1.5 seconds and the remaining stages last three', async () => {
     const timing = await page.evaluate(async () => {
-      const { DURATION, CHECKPOINTS, evaporationState } = await import('./assets/evaporation-state.js?v=short-observation-1');
+      const { DURATION, CHECKPOINTS, evaporationState } = await import('./assets/evaporation-state.js?v=step-playback-1');
       return {
         duration: DURATION,
         starts: CHECKPOINTS.map(progress => progress * DURATION),
@@ -53,129 +65,117 @@ test('4.2 evaporation is a continuous, controllable scene', { timeout: 150000 },
     assert.equal(timing.duration, 10.5);
     assert.deepEqual(timing.starts, [0, 1.5, 4.5, 7.5]);
     assert.deepEqual(timing.steps, [1, 1, 2, 2, 3, 3, 4, 4, 4]);
-    timing.dry.forEach(state => { assert.equal(state.water, 0); assert.equal(state.crystals, 1); assert.equal(state.boiling, 0); });
+    timing.dry.forEach(state => {
+      assert.equal(state.water, 0); assert.equal(state.crystals, 1); assert.equal(state.boiling, 0);
+    });
   });
 
-  await t.test('arbitrary times render distinct liquid levels while the equipment stays fixed', async () => {
+  await t.test('only the step buttons and the picture control playback', async () => {
+    assert.equal(await page.locator('#evap-seek, #evap-play, #evap-prev, #evap-next, #evap-replay, #evap-progress, .evap-controls, .evap-timeline').count(), 0);
+    assert.equal(await page.locator('#s2').getByRole('slider').count(), 0);
     assert.equal(await page.locator('#evap-visual canvas').count(), 1);
-    assert.equal(await page.locator('.evap-frame').count(), 0);
-    const readouts = [];
-    for (const value of [123, 456, 821, 1000]) {
-      await scrub(value);
-      const current = await state();
-      assert.equal(current.progress, value / 1000);
-      readouts.push(current);
-    }
-    assert.ok(readouts[0].water > readouts[1].water && readouts[1].water > readouts[2].water);
-    assert.equal(readouts[0].crystals, 0);
-    assert.ok(readouts[2].crystals > 0);
-    assert.equal(readouts[3].water, 0);
-    assert.equal(readouts[3].crystals, 1);
-    await scrub(100);
-    const first = await page.locator('#evap-visual').screenshot();
-    const bounds = await page.locator('#evap-visual').boundingBox();
+    assert.equal(await picture.getAttribute('type'), 'button');
+    assert.match(await picture.getAttribute('aria-label'), /觀察鹽水/);
+    const initial = await state();
+    await page.waitForTimeout(300);
+    assert.deepEqual(await state(), initial);
+    assert.equal(initial.playing, false);
+    assert.equal(initial.progress, 0);
+    assert.equal(initial.bubbles, 0);
+    assert.equal(initial.grains, 0);
+  });
+
+  await t.test('selecting evaporation immediately animates boiling while the apparatus stays fixed', async () => {
+    await button(2).click();
+    await advance(400);
+    await page.waitForFunction(() => {
+      const data = document.querySelector('#evap-stage').dataset;
+      return data.playing === 'true' && Number(data.boiling) > 0.95;
+    });
+    const boiling = await state();
+    assert.equal(boiling.step, 2);
+    assert.ok(boiling.bubbles > 20 && boiling.ripple > 0.002);
+    const first = await picture.screenshot();
+    const bounds = await picture.boundingBox();
     const clip = { x: bounds.x + bounds.width * 0.78, y: bounds.y + bounds.height * 0.74, width: bounds.width * 0.16, height: bounds.height * 0.16 };
     const fixedFirst = await page.screenshot({ clip });
-    await scrub(900);
-    const second = await page.locator('#evap-visual').screenshot();
+    await advance(180);
+    const second = await picture.screenshot();
     const fixedSecond = await page.screenshot({ clip });
-    assert.notDeepEqual(first, second, 'the actual rendered liquid/crystals must change');
-    assert.deepEqual(fixedFirst, fixedSecond, 'the photographed knob and hotplate must not morph');
+    assert.notDeepEqual(first, second, 'liquid and bubbles must actually move');
+    assert.deepEqual(fixedFirst, fixedSecond, 'the photographed hotplate must stay fixed');
+    await stopped();
+    assert.equal((await state()).step, 2);
   });
 
-  await t.test('continuous playback, pause and resume preserve the exact position', async () => {
-    await scrub(100);
-    await page.locator('#evap-play').click();
-    const positions = [];
-    for (let i = 0; i < 8; i++) { await page.waitForTimeout(150); positions.push((await state()).progress); }
-    assert.ok(new Set(positions).size >= 6, 'playback must visit many intermediate positions');
-    for (let i = 1; i < positions.length; i++) assert.ok(positions[i] >= positions[i - 1]);
-    await page.locator('#evap-play').click();
-    const paused = await state();
-    await page.waitForTimeout(400);
-    assert.deepEqual(await state(), paused);
-    await page.locator('#evap-play').click();
-    await page.waitForTimeout(500);
-    assert.ok((await state()).progress > paused.progress);
-    await scrub(500);
-    await page.waitForTimeout(300);
-    assert.equal((await state()).progress, 0.5, 'scrubbing must stop playback');
-  });
-
-  await t.test('heating produces rising bubbles and moving water before early crystal growth', async () => {
-    await scrub(0);
-    const warming = await state();
-    assert.equal(warming.phase, 'warming');
-    assert.equal(warming.bubbles, 0);
-    assert.equal(warming.grains, 0);
-    await scrub(114);
-    const smallBubbles = await state();
-    assert.equal(smallBubbles.phase, 'bubbles');
-    assert.ok(smallBubbles.bubbles > 0);
-    await scrub(177);
-    const boiling = await state();
-    assert.equal(boiling.phase, 'boiling');
-    assert.ok(boiling.bubbles > 20 && boiling.bubbles > smallBubbles.bubbles);
-    assert.ok(boiling.ripple > 0.002 && boiling.ripple > warming.ripple, 'boiling must deform the actual water mesh');
-    const frameA = await page.locator('#evap-visual').screenshot();
-    await scrub(183);
-    const frameB = await page.locator('#evap-visual').screenshot();
-    assert.notDeepEqual(frameA, frameB, 'closely spaced times must show changing bubbles and surface detail');
-    await scrub(486);
-    const earlyCrystals = await state();
-    assert.equal(earlyCrystals.phase, 'crystallizing');
-    assert.ok(earlyCrystals.grains > 30 && earlyCrystals.water > 0, 'visible crystals must appear by the middle of playback');
-    await scrub(600);
-    const growing = await state();
-    assert.ok(growing.crystals > earlyCrystals.crystals && growing.grains >= earlyCrystals.grains);
-    await scrub(680);
-    const shallow = await state();
-    assert.equal(shallow.phase, 'shallow');
-    assert.ok(shallow.water < 0.1 && shallow.bubbles < boiling.bubbles);
-    assert.ok(shallow.ripple < boiling.ripple);
-    await scrub(1000);
-    const dry = await state();
-    assert.equal(dry.phase, 'dry');
-    assert.equal(dry.bubbles, 0);
-    assert.equal(dry.ripple, 0);
-    assert.ok(dry.grains > earlyCrystals.grains);
-    assert.match(await page.locator('#s2').innerText(), /未沸騰時也會蒸發/);
-  });
-
-  await t.test('chapter buttons, boundaries and keyboard seeking remain usable', async () => {
-    for (const step of [1, 2, 3, 4]) {
-      await page.locator(`[data-evap-step="${step}"]`).click();
-      assert.equal((await state()).step, step);
+  await t.test('each selected step stops at its own endpoint without selecting the next step', async () => {
+    const endpoints = [1.5 / 10.5, 4.5 / 10.5, 7.5 / 10.5, 1];
+    for (const number of [1, 2, 3, 4]) {
+      await button(number).click();
+      assert.equal((await state()).step, number);
+      assert.equal((await state()).playing, true);
+      await stopped();
+      const final = await state();
+      assert.equal(final.step, number);
+      assert.ok(Math.abs(final.progress - endpoints[number - 1]) < 0.00001);
       assert.equal(await page.locator('.evap-step[aria-pressed="true"]').count(), 1);
+      assert.equal(await button(number).getAttribute('aria-pressed'), 'true');
+      await page.clock.fastForward(200);
+      assert.deepEqual(await state(), final, 'completed stage must remain stopped');
     }
-    assert.equal(await page.locator('#evap-next').isDisabled(), true);
-    await page.locator('#evap-prev').click(); assert.equal((await state()).step, 3);
-    await page.locator('#evap-next').click(); assert.ok(Math.abs((await state()).progress - 7.5 / 10.5) < 0.00001);
-    assert.equal(await page.locator('#evap-next').isDisabled(), true);
-    await page.locator('[data-evap-step="1"]').click();
-    assert.equal(await page.locator('#evap-prev').isDisabled(), true);
-    await page.locator('#evap-seek').focus(); await page.keyboard.press('ArrowRight');
-    assert.equal((await state()).progress, 0.001);
+    assert.equal((await state()).water, 0);
+    assert.equal((await state()).bubbles, 0);
+    assert.equal((await state()).crystals, 1);
   });
 
-  await t.test('one replay traverses evaporation and growth and finishes on dry salt', async () => {
-    await page.locator('#evap-replay').click();
-    await page.waitForFunction(() => Number(document.querySelector('#evap-stage').dataset.progress) > 0.52, null, { timeout: 20000 });
+  await t.test('clicking the picture replays the current step and switching steps cancels the old run', async () => {
+    await button(3).click();
+    await advance(1200);
+    await page.waitForFunction(() => Number(document.querySelector('#evap-stage').dataset.progress) > 0.53);
     const growing = await state();
-    assert.equal(growing.step, 3);
-    assert.ok(growing.water > 0 && growing.crystals > 0);
-    await page.waitForFunction(() => Number(document.querySelector('#evap-stage').dataset.progress) === 1, null, { timeout: 20000 });
-    assert.equal((await state()).water, 0);
-    assert.equal((await state()).crystals, 1);
-    assert.equal(await page.locator('#evap-play').getAttribute('aria-pressed'), 'false');
-    await page.locator('#evap-replay').click();
-    await page.locator('[data-evap-step="2"]').click();
-    await page.waitForTimeout(400);
-    assert.ok(Math.abs((await state()).progress - 1.5 / 10.5) < 0.00001, 'chapter navigation must cancel an old replay');
+    assert.ok(growing.grains > 30 && growing.water > 0);
+    await picture.click();
+    const restarted = await state();
+    assert.equal(restarted.step, 3);
+    assert.equal(restarted.playing, true);
+    assert.ok(restarted.progress < 0.50);
+    await button(1).click();
+    await stopped();
+    assert.equal((await state()).step, 1);
+    assert.ok((await state()).progress < 0.15);
+    await picture.click();
+    assert.equal((await state()).playing, true);
+    assert.ok((await state()).progress < 0.04);
+    for (const number of [2, 4, 2]) await button(number).click();
+    await stopped();
+    assert.equal((await state()).step, 2);
+    assert.ok(Math.abs((await state()).progress - 4.5 / 10.5) < 0.00001);
+  });
+
+  await t.test('native picture and step buttons support keyboard and touch', async () => {
+    await button(1).click();
+    await stopped();
+    await picture.focus();
+    await page.keyboard.press('Enter');
+    assert.equal((await state()).playing, true);
+    assert.equal((await state()).step, 1);
+    await stopped();
+    await picture.focus();
+    await page.keyboard.press('Space');
+    assert.equal((await state()).playing, true);
+    await button(2).focus();
+    await page.keyboard.press('Enter');
+    await advance(1000);
+    await page.waitForFunction(() => Number(document.querySelector('#evap-stage').dataset.progress) > 0.23);
+    await picture.tap();
+    assert.equal((await state()).step, 2);
+    assert.equal((await state()).playing, true);
+    assert.ok((await state()).progress < 0.20);
+    await stopped();
     assert.deepEqual(failures, []);
   });
 
-  await t.test('unavailable WebGL is reported without breaking the rest of the lesson', async () => {
+  await t.test('unavailable WebGL disables only animation buttons and reports the error', async () => {
     const unsupported = await browser.newPage();
     try {
       await unsupported.addInitScript(() => {
@@ -188,7 +188,8 @@ test('4.2 evaporation is a continuous, controllable scene', { timeout: 150000 },
       await unsupported.goto(url);
       await unsupported.waitForFunction(() => document.querySelector('#evap-stage').dataset.ready === 'error');
       assert.match(await unsupported.locator('#evap-caption').innerText(), /WebGL/);
-      assert.equal(await unsupported.locator('#evap-play').isDisabled(), true);
+      assert.equal(await unsupported.locator('#evap-visual').isDisabled(), true);
+      assert.equal(await unsupported.locator('.evap-step:disabled').count(), 4);
       assert.equal(await unsupported.locator('#strip-start').isEnabled(), true);
     } finally { await unsupported.close(); }
   });

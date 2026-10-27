@@ -121,20 +121,13 @@
     .evap-step:focus-visible { outline:3px solid #82a98c; outline-offset:3px; }
     .evap-arrow { color:#a4b5a8; font-size:1.2rem; font-weight:800; text-align:center; }
     .evap-stage { min-height:0; display:grid; grid-template-columns:minmax(0,1fr) 210px; gap:14px; align-items:center; padding:38px 18px 14px; background:radial-gradient(ellipse at 48% 68%,#fff8eb 0,#faf5ea 49%,#f0f4ef 100%); }
-    .evap-visual { position:relative; width:100%; max-width:620px; margin:0 auto; aspect-ratio:1586/992; overflow:hidden; border-radius:10px; background:#e7e0d4; }
+    .evap-visual { position:relative; display:block; width:100%; max-width:620px; margin:0 auto; padding:0; border:0; aspect-ratio:1586/992; overflow:hidden; border-radius:10px; background:#e7e0d4; cursor:pointer; touch-action:manipulation; }
+    .evap-visual:disabled { cursor:not-allowed; }
     .evap-visual canvas { display:block; width:100%; height:100%; }
-    .evap-timeline { display:flex; align-items:center; gap:10px; margin:14px 0 0; color:#53645d; font-size:.85rem; }
-    .evap-timeline input { min-width:0; flex:1; accent-color:var(--green); cursor:pointer; }
-    .evap-timeline output { min-width:3.5ch; text-align:right; font-variant-numeric:tabular-nums; }
     .evap-observation { align-self:stretch; display:flex; flex-direction:column; justify-content:center; padding:16px; border:1px solid #e2ddcc; border-radius:14px; background:#fffdf8e8; box-shadow:0 5px 16px #243a3508; }
     .evap-observation strong { margin-bottom:8px; color:#8b6b32; font-size:.82rem; letter-spacing:.04em; }
     .evap-observation p { margin:0; color:#4c5d55; font-size:.94rem; line-height:1.7; }
     .evap-observation .live-note { min-height:0; }
-    .evap-controls { justify-content:center; gap:10px; margin:14px 0; }
-    .evap-controls .control-button { min-width:112px; padding:9px 15px; }
-    .evap-controls .primary { border-color:#176b53; background:#176b53; color:white; }
-    .evap-controls .primary:hover { background:#10543f; }
-    .evap-controls .control-button:disabled { opacity:.45; cursor:not-allowed; }
     .strip-scene { min-height:205px; padding:40px 18px 14px; display:grid; place-items:center; }
     .paper-strip { height:145px; width:94px; position:relative; border:1px solid #cbd9ce; background:repeating-linear-gradient(0deg,#fff,#fff 17px,#eff5ef 18px); box-shadow:0 3px 10px #243a3514; }
     .solvent { position:absolute; z-index:1; bottom:0; left:-20px; right:-20px; height:12%; border-top:2px solid #689f9e; background:#a8d3d080; }
@@ -169,7 +162,7 @@
     @media(max-width:850px) { .lesson-layout { grid-template-columns:1fr; gap:12px; } .route { position:relative; top:auto; max-height:none; } .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); } .record-panel { display:none; } }
     @media(max-width:850px) { .filter-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
     @media(max-width:760px) { .evap-stage { grid-template-columns:1fr; gap:10px; padding:38px 12px 13px; } .evap-visual { max-width:560px; } .evap-observation { min-height:104px; } .evap-observation strong { margin-bottom:3px; } }
-    @media(max-width:560px) { .evap-stepper { grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr); gap:5px; } .evap-step { min-height:49px; padding:6px 3px; font-size:.75rem; line-height:1.35; } .evap-arrow { font-size:.95rem; } .evap-controls { gap:6px; } .evap-controls .control-button { min-width:0; flex:1; padding:8px 7px; font-size:.86rem; } }
+    @media(max-width:560px) { .evap-stepper { grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr); gap:5px; } .evap-step { min-height:49px; padding:6px 3px; font-size:.75rem; line-height:1.35; } .evap-arrow { font-size:.95rem; } }
     @media(max-width:680px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:16px; padding-top:20px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .filter-details { padding:13px; } .goal-choice { min-width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
@@ -258,20 +251,18 @@
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>如果東西已經溶在水裡，例如鹽，要怎麼把它分離出來呢？</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們讓水慢慢蒸發，再觀察容器裡最後留下什麼。</p></div>
           <ol class="evap-stepper" aria-label="鹽水蒸發與結晶的四個步驟">
-            <li><button class="evap-step" type="button" data-evap-step="1" aria-pressed="true">① 觀察鹽水</button></li><span class="evap-arrow" aria-hidden="true">→</span>
-            <li><button class="evap-step" type="button" data-evap-step="2" aria-pressed="false">② 水分蒸發</button></li><span class="evap-arrow" aria-hidden="true">→</span>
-            <li><button class="evap-step" type="button" data-evap-step="3" aria-pressed="false">③ 晶體析出</button></li><span class="evap-arrow" aria-hidden="true">→</span>
-            <li><button class="evap-step" type="button" data-evap-step="4" aria-pressed="false">④ 留下鹽晶體</button></li>
+            <li><button class="evap-step" type="button" data-evap-step="1" aria-pressed="true" disabled>① 觀察鹽水</button></li><span class="evap-arrow" aria-hidden="true">→</span>
+            <li><button class="evap-step" type="button" data-evap-step="2" aria-pressed="false" disabled>② 水分蒸發</button></li><span class="evap-arrow" aria-hidden="true">→</span>
+            <li><button class="evap-step" type="button" data-evap-step="3" aria-pressed="false" disabled>③ 晶體析出</button></li><span class="evap-arrow" aria-hidden="true">→</span>
+            <li><button class="evap-step" type="button" data-evap-step="4" aria-pressed="false" disabled>④ 留下鹽晶體</button></li>
           </ol>
           <div class="scene evap-stage" id="evap-stage" data-step="1" aria-label="鹽水蒸發與鹽晶體留下的示意">
             <span class="scene-label">10.5 秒示意｜非真實加熱時間</span>
-            <div class="evap-visual" id="evap-visual" aria-hidden="true"></div>
+            <button class="evap-visual" id="evap-visual" type="button" aria-label="播放「① 觀察鹽水」" aria-describedby="evap-caption" disabled></button>
             <aside class="evap-observation"><strong id="evap-phase">受熱升溫</strong><p id="evap-caption" class="live-note" aria-live="polite">鹽水正在受熱，水面仍較平靜；水在還沒沸騰時也會蒸發。</p></aside>
           </div>
-          <div class="evap-timeline"><label for="evap-seek">示意進度</label><input id="evap-seek" type="range" min="0" max="1000" step="1" value="0"><output id="evap-progress" for="evap-seek">0%</output></div>
-          <div class="control-row evap-controls"><button class="control-button" type="button" id="evap-prev">上一步</button><button class="control-button primary" type="button" id="evap-play" aria-pressed="false">播放</button><button class="control-button" type="button" id="evap-replay">重播動畫</button><button class="control-button" type="button" id="evap-next">下一步</button></div>
           <div class="filter-principle"><strong>分離後，水和鹽各去了哪裡？</strong>水分蒸發後離開容器；原本溶在水中的鹽形成晶體，留在容器裡。這個過程利用水能蒸發、鹽不隨水一起蒸發的差異來分離成分，沒有生成新物質。</div>
-          <div class="note-box">本例呈現加熱至沸騰的過程；水在未沸騰時也會蒸發。沸騰時可見的氣泡在液體內部形成，水蒸氣本身看不見。按「播放」觀察完整過程，可暫停或拖曳示意進度。</div>
+          <div class="note-box">點選上方步驟或點擊畫面，即可播放該階段；播放完即停止，再次點擊可重播。本例呈現加熱至沸騰的過程；水在未沸騰時也會蒸發，水蒸氣本身看不見。</div>
         </div>
       </section>
 
@@ -408,6 +399,6 @@
     document.getElementById('reset-answers').addEventListener('click',()=>{['q-filter','q-crystal','q-paper'].forEach(id=>document.getElementById(id).value='');const feedback=document.getElementById('quiz-feedback');feedback.textContent='完成三個配對後，查看回饋。';feedback.style.color='';});
   </script>
   <script type="importmap">{"imports":{"three":"../../../1/parts/1.1/assets/vendor/three/build/three.module.js"}}</script>
-  <script type="module" src="assets/evaporation-animation.js?v=short-observation-1"></script>
+  <script type="module" src="assets/evaporation-animation.js?v=step-playback-1"></script>
 </body>
 </html>

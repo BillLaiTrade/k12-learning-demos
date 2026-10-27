@@ -1,15 +1,10 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from '../../../../../parts/3.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
-import { CHECKPOINTS, DURATION, evaporationState } from './evaporation-state.js?v=short-observation-1';
+import { CHECKPOINTS, DURATION, evaporationState } from './evaporation-state.js?v=step-playback-1';
 
 const host = document.getElementById('evap-visual');
 const stage = document.getElementById('evap-stage');
 const caption = document.getElementById('evap-caption');
-const seek = document.getElementById('evap-seek');
-const play = document.getElementById('evap-play');
-const previous = document.getElementById('evap-prev');
-const next = document.getElementById('evap-next');
-const replay = document.getElementById('evap-replay');
 const steps = [...document.querySelectorAll('[data-evap-step]')];
 const phases = {
   warming: ['受熱升溫', '鹽水正在受熱，水面仍較平靜；水在還沒沸騰時也會蒸發。'],
@@ -133,7 +128,7 @@ async function initialize() {
   contact.receiveShadow = true;
   scene.add(contact);
 
-  let progress = 0, playing = false, lastTime = null, animationId = null, currentStep = 0, currentPhase = '';
+  let progress = 0, playing = false, lastTime = null, animationId = null, activeStep = 0, currentStep = 0, currentPhase = '';
   function draw(time = 0) {
     const state = evaporationState(progress);
     const height = state.water * 0.45;
@@ -205,9 +200,10 @@ async function initialize() {
     stage.dataset.grains = String(visibleGrains);
     stage.dataset.ripple = surfaceDisplacement.toFixed(5);
     stage.dataset.phase = state.phase;
-    stage.dataset.step = String(state.step);
-    if (state.step !== currentStep) {
-      currentStep = state.step;
+    stage.dataset.step = String(activeStep + 1);
+    stage.dataset.playing = String(playing);
+    if (activeStep + 1 !== currentStep) {
+      currentStep = activeStep + 1;
       steps.forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.evapStep) === currentStep)));
     }
     if (state.phase !== currentPhase) {
@@ -215,45 +211,42 @@ async function initialize() {
       document.getElementById('evap-phase').textContent = phases[currentPhase][0];
       caption.textContent = phases[currentPhase][1];
     }
-    seek.value = String(Math.round(progress * 1000));
-    seek.setAttribute('aria-valuetext', `示意進度 ${Math.round(progress * 100)}%，${steps[currentStep - 1].textContent}`);
-    document.getElementById('evap-progress').textContent = `${Math.round(progress * 100)}%`;
-    previous.disabled = progress <= 0;
-    next.disabled = state.step === 4;
-    play.textContent = playing ? '暫停' : progress >= 1 ? '重新播放' : '播放';
-    play.setAttribute('aria-pressed', String(playing));
+    host.setAttribute('aria-label', `播放「${steps[activeStep].textContent.trim()}」`);
     renderer.render(scene, camera);
   }
-  function pause() {
+  function pause(redraw = true) {
     playing = false;
     lastTime = null;
     if (animationId !== null) cancelAnimationFrame(animationId);
     animationId = null;
-    draw(progress * DURATION);
+    if (redraw) draw(progress * DURATION);
   }
   function frame(timestamp) {
     if (!playing) return;
-    if (lastTime !== null) progress = Math.min(1, progress + Math.max(0, timestamp - lastTime) / (DURATION * 1000));
+    const end = CHECKPOINTS[activeStep + 1] ?? 1;
+    if (lastTime !== null) progress += Math.max(0, timestamp - lastTime) / (DURATION * 1000);
     lastTime = timestamp;
-    if (progress >= 1) { pause(); return; }
+    if (progress >= end) {
+      // Hold this chapter's final frame without advancing its selected button
+      // or its observation caption into the following chapter.
+      progress = activeStep === steps.length - 1 ? 1 : end - 1e-9;
+      pause();
+      return;
+    }
     draw(progress * DURATION);
     animationId = requestAnimationFrame(frame);
   }
-  function start() {
-    if (playing) return;
-    if (progress >= 1) progress = 0;
+  function playStep(index) {
+    pause(false);
+    activeStep = index;
+    progress = CHECKPOINTS[index];
     playing = true;
     lastTime = null;
     draw(progress * DURATION);
     animationId = requestAnimationFrame(frame);
   }
-  function jump(value) { pause(); progress = evaporationState(value).progress; draw(progress * DURATION); }
-  play.addEventListener('click', () => playing ? pause() : start());
-  replay.addEventListener('click', () => { jump(0); start(); });
-  seek.addEventListener('input', () => jump(Number(seek.value) / 1000));
-  steps.forEach(button => button.addEventListener('click', () => jump(CHECKPOINTS[Number(button.dataset.evapStep) - 1])));
-  previous.addEventListener('click', () => jump([...CHECKPOINTS].reverse().find(value => value < progress - 0.001) ?? 0));
-  next.addEventListener('click', () => jump(CHECKPOINTS.find(value => value > progress + 0.001) ?? 1));
+  host.addEventListener('click', () => playStep(activeStep));
+  steps.forEach((button, index) => button.addEventListener('click', () => playStep(index)));
   document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
   new ResizeObserver(() => {
     const { width, height } = host.getBoundingClientRect();
@@ -264,6 +257,7 @@ async function initialize() {
     camera.updateProjectionMatrix();
     draw(progress * DURATION);
   }).observe(host);
+  [host, ...steps].forEach(control => { control.disabled = false; });
   stage.dataset.ready = 'true';
   draw();
 }
@@ -271,6 +265,6 @@ async function initialize() {
 initialize().catch(error => {
   stage.dataset.ready = 'error';
   caption.textContent = '無法載入連續動畫，請重新整理頁面，或使用支援 WebGL 的瀏覽器。';
-  [play, replay, previous, next, seek, ...steps].forEach(control => { control.disabled = true; });
+  [host, ...steps].forEach(control => { control.disabled = true; });
   console.error('Evaporation animation failed:', error);
 });
