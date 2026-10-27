@@ -34,6 +34,7 @@
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
   <link rel="stylesheet" href="assets/measurement-scene.css">
+  <link rel="stylesheet" href="assets/touch-story.css">
 </head>
 <body>
   <header class="shell masthead">
@@ -52,7 +53,30 @@
       </div></nav>
       <div class="cards">
         <div class="section-top"><h2>從手感開始，用刻度讀出溫度</h2><span class="progress-copy">五個學習區塊・一個單元小測</span></div>
-        <section class="lesson-card" id="card-01"><div class="card-side"><span class="card-number">01</span><h3>手感能量出溫度嗎？</h3><span class="card-role">感覺可能受先前經驗影響</span></div><div class="card-main"><h2>只靠手摸，能判斷哪杯水幾度嗎？</h2><p>同一杯水，剛摸過冷水和溫水的人，可能會有不同感覺。手感適合察覺冷熱，卻不適合當作準確的溫度讀值。</p><div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>如果我先摸冷水，接著摸同一杯室溫水，可能會覺得它變暖了。</p></div><div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>同樣的水溫，手感卻可能不同；先前接觸的冷熱會影響感覺。要比較溫度，最好用溫度計測量。</p></div><div class="fact"><p><strong>重點：</strong>溫度用來量化物體的冷熱；要知道溫度，需要使用溫度計測量。</p></div></div></section>
+        <section class="lesson-card" id="card-01" aria-labelledby="touch-story-title">
+          <div class="card-side"><span class="card-number">01</span><h3>手感能量出溫度嗎？</h3><span class="card-role">同一杯水，感覺可能不同</span></div>
+          <div class="card-main">
+            <h2 id="touch-story-title">同一杯水，為什麼可能有不同的冷熱感覺？</h2>
+            <p class="touch-story-intro">小葵和阿公準備了冷水、室溫水和溫水。兩隻手碰到同一杯水時，感覺一定相同嗎？</p>
+            <figure class="touch-story-scene">
+              <figcaption class="touch-story-heading"><span class="touch-story-step">1</span><div><h3>先接觸不同冷熱的水</h3><p>一隻手先碰冷水，另一隻手先碰溫水，中間的室溫水先不碰。</p></div></figcaption>
+              <img src="assets/touch-story-before.webp" width="1536" height="1024" decoding="async" alt="第一幕：小葵坐在阿公身旁，兩隻手分別浸在畫面左側的冷水與右側的溫水中，中間一杯室溫水尚未接觸。三個透明水杯放在同一張木桌上。">
+              <div class="touch-story-bowls" aria-hidden="true"><span class="touch-cold">冷水</span><span>室溫水・先不碰</span><span class="touch-warm">溫水</span></div>
+              <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>「這隻手碰的是冷水，另一隻碰的是溫水。」</p></div>
+            </figure>
+            <p class="touch-story-transition">接著，把兩隻手移到中間同一杯室溫水裡。<span aria-hidden="true">↓</span></p>
+            <figure class="touch-story-scene">
+              <figcaption class="touch-story-heading"><span class="touch-story-step">2</span><div><h3>再接觸同一杯室溫水</h3><p>兩隻手現在碰的是同一杯水，先前接觸的冷熱卻不同。</p></div></figcaption>
+              <img src="assets/touch-story-after.webp" width="1536" height="1024" decoding="async" alt="第二幕延續相同人物、視角和水杯位置：小葵把兩隻手都浸入中央同一杯室溫水，露出疑惑的表情，阿公在旁觀察。左右兩杯水中都已沒有手。">
+              <div class="touch-story-bowls" aria-hidden="true"><span class="touch-cold">冷水・手已移開</span><span>同一杯室溫水・兩隻手</span><span class="touch-warm">溫水・手已移開</span></div>
+              <div class="touch-story-feelings"><p><span>先碰冷水的手</span><strong>此時可能覺得比較暖</strong></p><p><span>先碰溫水的手</span><strong>此時可能覺得比較涼</strong></p></div>
+              <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>「明明是同一杯水，怎麼兩隻手的感覺可能不一樣？」</p></div>
+            </figure>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>「先前接觸的冷熱會影響手的感覺。感覺不同，不代表兩隻手碰到的水溫不同；要知道水有幾度，我們用溫度計確認。」</p></div>
+            <div class="fact touch-story-takeaway"><p><strong>手能感覺冷熱，但不能代替溫度測量。</strong><br>溫度用來描述物體的冷熱程度；用溫度計測量，才能用數值與單位把結果說清楚。</p></div>
+            <p class="touch-story-bridge">那麼，溫度計是怎麼量出溫度的呢？</p>
+          </div>
+        </section>
         <section class="lesson-card" id="card-02"><div class="card-side"><span class="card-number">02</span><h3>溫度計怎麼測量</h3><span class="card-role">觀察液柱如何改變</span></div><div class="card-main"><h2>溫度計裡的液柱為什麼會升降？</h2><p>液體溫度計利用測溫液體的體積隨溫度改變而改變，讓細管中的液面位置移動，再由刻度讀取溫度。</p><div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>所以液面變高不是讀值本身，我還要看旁邊的刻度，對嗎？</p></div><div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>對。液柱的位置會隨溫度改變；刻度讓我們把位置轉成可以比較的溫度數值。</p></div><div class="visual"><svg viewBox="0 0 700 170" role="img" aria-label="液體溫度計由液泡、細管和刻度組成；液柱高度對應刻度讀值。"><rect x="255" y="20" width="36" height="112" rx="18" fill="#fff" stroke="#60776d" stroke-width="4"/><circle cx="273" cy="135" r="27" fill="#fff" stroke="#60776d" stroke-width="4"/><rect x="265" y="73" width="16" height="62" rx="8" fill="#d45e4e"/><circle cx="273" cy="135" r="19" fill="#d45e4e"/><path d="M294 35h55m-55 15h34m-34 15h55m-55 15h34m-34 15h55m-55 15h34" stroke="#344b42" stroke-width="3"/><text x="385" y="56" fill="#314640">細管液面的位置對應溫度</text><text x="385" y="88" fill="#59696b" font-size="15">溫度改變 → 液柱升降 → 依刻度讀值</text></svg></div><div class="fact"><p><strong>重點：</strong>液柱的位置要和刻度一起讀；完整的熱脹冷縮原理會在 5.4 再深入學習。</p></div></div></section>
         <section class="lesson-card" id="card-03"><div class="card-side"><span class="card-number">03</span><h3>攝氏刻度參考點</h3><span class="card-role">認識 0°C 與 100°C</span></div><div class="card-main"><h2>攝氏刻度上的 0 和 100 從哪裡來？</h2><p>在標準大氣壓下，純水的冰點約為 0°C，沸點約為 100°C，常用來介紹攝氏刻度的參考點。沸點會隨氣壓改變。</p><div class="visual"><svg viewBox="0 0 700 130" role="img" aria-label="攝氏溫標以標準氣壓附近純水的冰點 0 度和沸點 100 度作為參考。"><path d="M105 63H595" stroke="#9eafa6" stroke-width="8" stroke-linecap="round"/><path d="M105 48v30M595 48v30" stroke="#176b53" stroke-width="5"/><circle cx="105" cy="63" r="13" fill="#8cc4cb" stroke="#fff" stroke-width="4"/><circle cx="595" cy="63" r="13" fill="#df8b41" stroke="#fff" stroke-width="4"/><text x="105" y="30" text-anchor="middle" fill="#176b53" font-weight="700">0°C</text><text x="595" y="30" text-anchor="middle" fill="#bc612b" font-weight="700">100°C</text><text x="105" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水冰點</text><text x="595" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水沸點</text></svg></div><div class="fact"><p><strong>讀值範圍：</strong>本練習使用 0–100°C 刻度。只練習攝氏溫度，不進行攝氏與華氏換算。</p></div></div></section>
         <section class="lesson-card" id="measurement" aria-labelledby="measurement-title">

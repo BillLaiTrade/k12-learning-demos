@@ -40,6 +40,11 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
   await t.test('loads the complete lesson, images, and navigation', async () => {
     assert.equal(await page.locator('.lesson-card').count(), 5);
     assert.equal(await page.locator('.quiz').count(), 1);
+    assert.equal(await page.locator('#card-01 .touch-story-scene img').count(), 2);
+    for (const image of await page.locator('#card-01 .touch-story-scene img').all()) {
+      assert.equal(await image.evaluate(node => node.complete && node.naturalWidth === 1536 && node.naturalHeight === 1024), true);
+    }
+    assert.equal(await page.locator('#card-01 button, #card-01 input').count(), 0);
     assert.equal(await page.locator('#card-04 input[type=number]').count(), 0);
     assert.equal(await page.locator('.hero-art img').evaluate(image => image.complete && image.naturalWidth > 0), true);
     assert.equal(await page.locator('.lesson-layout').evaluate(node => getComputedStyle(node).display), 'grid');
