@@ -46,6 +46,28 @@
     @media(max-width:440px){.laser-angle-readout{gap:6px;font-size:.8rem}.laser-angle-readout span{padding:7px 8px}}
     @media(max-width:360px){.laser-concept-copy{grid-template-columns:minmax(0,1fr)}.laser-law{white-space:normal}}
   </style>
+  <style>
+    #card-03 .mirror-views,#card-04 .mirror-views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+    .mirror-view{min-width:0;margin:0;overflow:hidden;border:1px solid var(--line);border-radius:13px;background:#fff}
+    .mirror-view h3{margin:0;padding:7px 10px;background:#e8f3f8;color:#23465a;font-size:.9rem;line-height:1.35}
+    .mirror-view svg{display:block;width:100%;height:auto;background:linear-gradient(#fbfcfa,#f3f5ef)}
+    .mirror-controls{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:12px 0}
+    .mirror-sync-note{flex:1 1 190px;margin:0;padding:9px 11px;border-radius:11px;background:#f0f5eb;color:#315a46;font-size:.88rem}
+    .mirror-btn:disabled{cursor:default;opacity:.55}
+    .mirror-live{min-height:1.5em;margin:7px 0 0;color:var(--green);font-size:.88rem;font-weight:700}
+    .distance-controls{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:10px;margin:10px 0}
+    .distance-controls label{font-weight:750}
+    .distance-controls input{width:100%;accent-color:var(--green)}
+    .distance-metrics{display:flex;flex-wrap:wrap;gap:8px}
+    .distance-metric{flex:1 1 110px;padding:8px 11px;border:1px solid var(--line);border-radius:11px;background:#fff}
+    .distance-metric small,.distance-metric strong{display:block}
+    .distance-metric small{color:var(--muted);font-size:.78rem}
+    .distance-metric strong{color:var(--green);font-size:1rem;font-variant-numeric:tabular-nums}
+    .ruler-line{stroke:#516b65;stroke-width:1.5}.ruler-tick{stroke:#516b65;stroke-width:1}.ruler-label{fill:#405851;font-size:17px;text-anchor:middle}.measure-line{stroke:#286ac2;stroke-width:2;stroke-dasharray:4 3}.measure-text{font-size:17px;font-weight:800;text-anchor:middle}
+    .drag-object{cursor:ew-resize;touch-action:none}.drag-object:focus-visible{outline:3px solid #176b5380}
+    @media(max-width:1150px){#card-03 .mirror-views,#card-04 .mirror-views{grid-template-columns:minmax(0,1fr)}}
+    @media(max-width:780px){.distance-controls{grid-template-columns:1fr auto}.distance-controls label{grid-column:1/-1}}
+  </style>
 </head>
 <body>
   <header class="shell masthead">
@@ -153,46 +175,88 @@
         <section class="lesson-card" id="card-03">
           <div class="card-side"><span class="card-number">03</span><h3>平面鏡裡的像在哪裡？</h3><span class="card-role">從光路看成像</span></div>
           <div class="card-main">
-            <h2>鏡中的像看起來在哪一側？</h2>
-            <p>阿公把小物體放到平面鏡前。小葵從不同位置觀察，再用反射光路追蹤她看到的像。</p>
+            <h2>鏡中的像是怎麼形成的？</h2>
+            <p>從鏡子側面分析反射光路，再從正面看看鏡中的成像。兩個視角呈現同一個物體。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我看見鏡子裡也有一個物體，它是真的在鏡子後面嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先觀察像相對鏡面的位置，再打開光路，看看進入眼睛的反射光從哪裡延伸而來。</p></div>
-            <div class="toggle-row"><button class="control-button" id="show-image-rays" type="button" aria-pressed="false">顯示光路</button></div>
-            <figure class="visual">
-              <svg viewBox="0 0 620 300" role="img" aria-labelledby="image-title image-desc">
-                <title id="image-title">平面鏡前的物體與鏡中的像</title><desc id="image-desc">物體在鏡面左側，對應的像以虛線箭頭顯示在鏡面右側。可切換顯示反射光路及其延長線。</desc>
-                <defs><marker id="arrow-object" markerWidth="8" markerHeight="8" refX="4" refY="2" orient="auto"><path d="M0 4L4 0L8 4Z" fill="#bc612b"/></marker></defs>
-                <rect x="305" y="35" width="14" height="230" rx="5" fill="#8daaa0"/><text x="326" y="56" fill="#64736d" font-size="16">平面鏡</text>
-                <line x1="180" y1="210" x2="180" y2="110" stroke="#bc612b" stroke-width="8" marker-end="url(#arrow-object)"/><text x="140" y="238" fill="#315a46" font-size="17">物體</text>
-                <line x1="430" y1="210" x2="430" y2="110" stroke="#7d8f85" stroke-width="6" stroke-dasharray="9 7" marker-end="url(#arrow-object)"/><text x="407" y="238" fill="#64736d" font-size="17">像</text>
-                <g id="image-rays" hidden><path d="M180 145L305 190L100 264" fill="none" stroke="#d5962d" stroke-width="3"/><path d="M305 190L520 113" fill="none" stroke="#78988a" stroke-width="2.5" stroke-dasharray="7 6"/><circle cx="305" cy="190" r="5" fill="#bc612b"/><text x="107" y="263" fill="#64736d" font-size="14">觀察者</text><text x="454" y="137" fill="#64736d" font-size="14">反射光的延長方向</text></g>
-                <path d="M180 260H305M319 260H444" stroke="#71867a" stroke-width="1.5"/><text x="198" y="282" fill="#64736d" font-size="14">鏡前</text><text x="356" y="282" fill="#64736d" font-size="14">鏡後</text>
-              </svg>
-              <figcaption class="visual-caption">虛線像是光路模型中的位置標記，不代表鏡後真的有物體；成像特徵依課程教材進一步確認。</figcaption>
-            </figure>
+            <div class="mirror-views" aria-label="平面鏡成像的同步雙視角">
+              <figure class="mirror-view">
+                <h3>鏡子側面｜分析光路</h3>
+                <svg id="image-side-view" viewBox="0 0 620 300" role="img" aria-labelledby="image-side-title image-side-desc">
+                  <title id="image-side-title">從鏡子側面分析平面鏡成像光路</title><desc id="image-side-desc">物體發出的光在鏡面反射後進入眼睛，反射光的延長線指向鏡後的虛像。</desc>
+                  <defs><marker id="ray-arrow-side" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L7 3L0 6Z" fill="#d5962d"/></marker></defs>
+                  <line x1="40" y1="258" x2="580" y2="258" stroke="#d7d8cf" stroke-width="2"/>
+                  <g id="image-side-object"><rect x="151" y="150" width="42" height="70" rx="8" fill="#bc612b"/><circle cx="172" cy="140" r="16" fill="#d58a4d"/><text x="172" y="241" text-anchor="middle" fill="#315a46" font-size="16">物體</text></g>
+                  <rect x="302" y="42" width="16" height="208" rx="5" fill="#8daaa0"/><text x="310" y="29" text-anchor="middle" fill="#315a46" font-size="15">平面鏡</text>
+                  <g id="image-side-virtual"><rect x="427" y="150" width="42" height="70" rx="8" fill="#7d8f85" fill-opacity=".18" stroke="#7d8f85" stroke-width="3" stroke-dasharray="7 5"/><circle cx="448" cy="140" r="16" fill="#7d8f85" fill-opacity=".18" stroke="#7d8f85" stroke-dasharray="5 4"/><text x="448" y="241" text-anchor="middle" fill="#64736d" font-size="16">虛像</text></g>
+                  <g id="image-side-rays"><path d="M172 140L310 174L112 224" fill="none" stroke="#d5962d" stroke-width="3" marker-end="url(#ray-arrow-side)"/><path d="M310 174L448 140" fill="none" stroke="#7396a2" stroke-width="2.5" stroke-dasharray="7 6"/><circle cx="310" cy="174" r="4" fill="#bc612b"/></g>
+                  <g aria-label="觀察位置"><circle cx="88" cy="230" r="19" fill="#fff" stroke="#b9c9c2" stroke-width="2"/><path d="M76 230Q88 216 100 230Q88 244 76 230Z" fill="none" stroke="#315a46" stroke-width="2"/><circle cx="88" cy="230" r="4" fill="#315a46"/><text x="88" y="278" text-anchor="middle" fill="#64736d" font-size="13">觀察位置</text></g>
+                  <text x="105" y="107" fill="#b5792a" font-size="13">反射光</text><text x="368" y="105" fill="#547886" font-size="13">反射光延長線</text>
+                </svg>
+              </figure>
+              <figure class="mirror-view">
+                <h3>鏡子正面｜實際成像</h3>
+                <svg id="image-front-view" viewBox="0 0 620 300" role="img" aria-labelledby="image-front-title image-front-desc">
+                  <title id="image-front-title">從正面看見物體在平面鏡中的像</title><desc id="image-front-desc">鏡前物體與鏡面中的對應影像同步出現或移除。</desc>
+                  <rect x="189" y="30" width="244" height="210" rx="8" fill="#e5f1f3" stroke="#647d7a" stroke-width="8"/><rect x="200" y="42" width="222" height="186" fill="#f5faf9"/>
+                  <line x1="40" y1="240" x2="580" y2="240" stroke="#c5b7a3" stroke-width="8"/>
+                  <g id="image-front-object"><path d="M118 218V167Q118 151 132 151H158Q172 151 172 167V218Z" fill="#bc612b"/><circle cx="145" cy="139" r="18" fill="#d58a4d"/><text x="145" y="263" text-anchor="middle" fill="#315a46" font-size="15">物體</text></g>
+                  <g id="image-front-reflection"><path d="M284 198V157Q284 144 296 144H318Q330 144 330 157V198Z" fill="#bc612b" fill-opacity=".58"/><circle cx="307" cy="134" r="16" fill="#d58a4d" fill-opacity=".58"/><text x="307" y="218" text-anchor="middle" fill="#315a46" font-size="14">鏡中像</text></g>
+                  <text x="310" y="286" text-anchor="middle" fill="#64736d" font-size="13">正面觀察視角</text>
+                </svg>
+              </figure>
+            </div>
+            <div class="mirror-controls" role="group" aria-label="同步移除或放回物體">
+              <button class="control-button mirror-btn" id="remove-image-object" type="button">移除物體</button>
+              <button class="control-button mirror-btn" id="restore-image-object" type="button" disabled>放回物體</button>
+              <p class="mirror-sync-note">兩個視角同步更新；移除物體時，鏡中像與光路也會消失。</p>
+            </div>
+            <p class="mirror-live" id="image-object-status" aria-live="polite">物體在鏡前，鏡中像與側面光路都已顯示。</p>
           </div>
         </section>
         <section class="lesson-card" id="card-04">
           <div class="card-side"><span class="card-number">04</span><h3>物體靠近鏡子，像也會怎樣？</h3><span class="card-role">只改變物體位置</span></div>
           <div class="card-main">
-            <h2>只移動物體，像的位置怎麼變？</h2>
-            <p>固定鏡面，沿直線移動物體。觀察像相對鏡面的位置變化，注意這裡改變的是物體位置，不是鏡子。</p>
+            <h2>物體移近鏡子，像的位置怎麼變？</h2>
+            <p>固定鏡面，只改變物體到鏡面的距離。拖動左側物體或調整滑桿，右側成像與距離刻度會同步更新。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我把物體往鏡子移，像會留在原地嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>試著慢慢移動物體，觀察像和鏡面的相對位置；其他條件先保持不變。</p></div>
-            <div class="range-row"><label for="object-distance">移動物體到鏡面的距離</label><output id="object-distance-value" for="object-distance">較遠</output></div>
-            <input id="object-distance" type="range" min="1" max="4" step="1" value="4" aria-label="調整物體到鏡面的距離">
-            <figure class="visual">
-              <svg viewBox="0 0 620 280" role="img" aria-labelledby="distance-title distance-desc">
-                <title id="distance-title">移動物體並觀察鏡中像的位置</title><desc id="distance-desc">移動滑桿改變鏡前物體位置，鏡面固定，鏡後像的位置也隨之改變。</desc>
-                <rect x="305" y="30" width="14" height="215" rx="5" fill="#8daaa0"/>
-                <line id="distance-object" x1="125" y1="185" x2="125" y2="85" stroke="#bc612b" stroke-width="8" marker-end="url(#arrow-object)"/>
-                <line id="distance-image" x1="495" y1="185" x2="495" y2="85" stroke="#7d8f85" stroke-width="6" stroke-dasharray="9 7" marker-end="url(#arrow-object)"/>
-                <text id="distance-object-label" x="110" y="220" fill="#315a46" font-size="16">物體</text><text id="distance-image-label" x="470" y="220" fill="#64736d" font-size="16">像</text><text x="326" y="52" fill="#64736d" font-size="15">固定的鏡面</text>
-                <path id="distance-guide" d="M125 238H305M319 238H495" stroke="#71867a" stroke-width="1.5" stroke-dasharray="5 5"/>
-              </svg>
-              <figcaption class="visual-caption">模型用相對位置呈現觀察到的變化；平面鏡像距的精確描述依指定教材版本確認。</figcaption>
-            </figure>
-            <div class="fact"><p id="distance-observation">物體位置改變時，鏡中像的位置也跟著改變。請比較像相對鏡面的位置變化。</p></div>
+            <div class="mirror-views" aria-label="調整物體距離並同步查看成像">
+              <figure class="mirror-view">
+                <h3>鏡子側面｜拖動物體</h3>
+                <svg id="distance-side-view" viewBox="0 0 620 350" role="img" aria-labelledby="distance-side-title distance-side-desc">
+                  <title id="distance-side-title">側面觀察物距和像距</title><desc id="distance-side-desc">拖動物體改變物距，鏡後虛像位於鏡面另一側相同距離；刻度尺以鏡面為零點。</desc>
+                  <defs><marker id="dim-arrow" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0 0L7 3.5L0 7Z" fill="#286ac2"/></marker></defs>
+                  <line x1="30" y1="222" x2="590" y2="222" stroke="#d7d8cf" stroke-width="3"/>
+                  <rect x="302" y="35" width="16" height="188" rx="5" fill="#8daaa0"/><text x="310" y="26" text-anchor="middle" fill="#315a46" font-size="14">平面鏡</text>
+                  <g id="distance-side-object" class="drag-object" tabindex="0" role="slider" aria-label="拖動物體調整物距" aria-valuemin="10" aria-valuemax="60" aria-valuenow="40">
+                    <rect x="166" y="127" width="32" height="65" rx="7" fill="#bc612b"/><circle cx="182" cy="119" r="13" fill="#d58a4d"/><text id="distance-side-object-label" x="182" y="211" text-anchor="middle" fill="#315a46" font-size="13">物體</text>
+                  </g>
+                  <g id="distance-side-image"><rect x="422" y="127" width="32" height="65" rx="7" fill="#7d8f85" fill-opacity=".18" stroke="#7d8f85" stroke-width="2" stroke-dasharray="5 4"/><circle cx="438" cy="119" r="13" fill="#7d8f85" fill-opacity=".18" stroke="#7d8f85" stroke-dasharray="4 3"/><text id="distance-side-image-label" x="438" y="211" text-anchor="middle" fill="#64736d" font-size="13">虛像</text></g>
+                  <path id="distance-object-measure" d="M182 88H310" class="measure-line" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><path id="distance-image-measure" d="M310 88H438" class="measure-line" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/>
+                  <text id="distance-object-measure-label" x="246" y="78" class="measure-text" fill="#286ac2">物距 40 cm</text><text id="distance-image-measure-label" x="374" y="78" class="measure-text" fill="#286ac2">像距 40 cm</text>
+                  <line x1="118" y1="260" x2="502" y2="260" class="ruler-line"/><g id="distance-ruler-ticks"></g><g id="distance-ruler-values"></g><text x="310" y="339" text-anchor="middle" fill="#64736d" font-size="13">鏡面為 0（畫面參考刻度）</text>
+                  <line id="distance-ruler-object-marker" x1="182" y1="236" x2="182" y2="290" stroke="#bc612b" stroke-width="3"/><line id="distance-ruler-image-marker" x1="438" y1="236" x2="438" y2="290" stroke="#7d8f85" stroke-width="3" stroke-dasharray="4 3"/>
+                </svg>
+              </figure>
+              <figure class="mirror-view">
+                <h3>鏡子正面｜同步看成像</h3>
+                <svg id="distance-front-view" viewBox="0 0 620 350" role="img" aria-labelledby="distance-front-title distance-front-desc">
+                  <title id="distance-front-title">正面看物體移動後的鏡中像</title><desc id="distance-front-desc">鏡前物體與鏡面中的像保持同高同大小，側面物距改變時，本視角同步更新狀態。</desc>
+                  <rect x="170" y="38" width="280" height="220" rx="9" fill="#e5f1f3" stroke="#647d7a" stroke-width="8"/><rect x="182" y="50" width="256" height="196" fill="#f5faf9"/>
+                  <line x1="30" y1="260" x2="590" y2="260" stroke="#c5b7a3" stroke-width="9"/>
+                  <g id="distance-front-object"><path d="M95 247V194Q95 180 108 180H132Q145 180 145 194V247Z" fill="#bc612b"/><circle cx="120" cy="169" r="17" fill="#d58a4d"/></g>
+                  <g id="distance-front-reflection"><path d="M280 218V178Q280 166 292 166H314Q326 166 326 178V218Z" fill="#bc612b" fill-opacity=".62"/><circle cx="303" cy="156" r="15" fill="#d58a4d" fill-opacity=".62"/></g>
+                  <text x="120" y="285" text-anchor="middle" fill="#315a46" font-size="14">物體</text><text x="303" y="239" text-anchor="middle" fill="#315a46" font-size="14">鏡中像</text>
+                  <rect x="115" y="300" width="390" height="30" rx="10" fill="#f0f5eb"/><text id="distance-front-status" x="310" y="320" text-anchor="middle" fill="#315a46" font-size="14" font-weight="700">目前物距 40 cm｜像距 40 cm</text>
+                </svg>
+              </figure>
+            </div>
+            <div class="distance-controls">
+              <label for="object-distance">拖動物體：靠近　←</label>
+              <input id="object-distance" type="range" min="10" max="60" step="10" value="40" aria-label="調整物體到鏡面的距離" aria-valuetext="物距 40 公分，像距 40 公分">
+              <span aria-hidden="true">→　移遠</span>
+            </div>
+            <div class="distance-metrics" aria-live="polite"><div class="distance-metric"><small>物距</small><strong id="object-distance-value">40 cm</strong></div><div class="distance-metric"><small>像距</small><strong id="image-distance-value">40 cm</strong></div><p class="mirror-sync-note">左側操作，右側同步更新</p></div>
+            <p class="visual-caption">尺以鏡面為零點，是畫面中的參考刻度；虛像在鏡後，不能用實體尺直接量取。</p>
           </div>
         </section>
         <section class="lesson-card" id="card-05">
@@ -286,8 +350,22 @@
   </main>
   <footer class="shell"><a href="../../index.html">回到光學單元學習路線</a>　·　接下來：光進入不同介質會怎樣？</footer>
   <script>
-    document.querySelector("#show-image-rays").addEventListener("click",function(event){const shown=event.currentTarget.getAttribute("aria-pressed")!=="true";event.currentTarget.setAttribute("aria-pressed",String(shown));event.currentTarget.textContent=shown?"隱藏光路":"顯示光路";document.querySelector("#image-rays").hidden=!shown});
-    const distanceInput=document.querySelector("#object-distance");function updateDistance(){const value=Number(distanceInput.value),x=305-value*45,imageX=610-x;document.querySelector("#distance-object").setAttribute("x1",x);document.querySelector("#distance-object").setAttribute("x2",x);document.querySelector("#distance-object-label").setAttribute("x",x-15);document.querySelector("#distance-image").setAttribute("x1",imageX);document.querySelector("#distance-image").setAttribute("x2",imageX);document.querySelector("#distance-image-label").setAttribute("x",imageX-12);document.querySelector("#object-distance-value").value=value===1?"靠近":"較遠";document.querySelector("#distance-observation").textContent=value===1?"物體靠近鏡面時，鏡中像的位置也隨著改變；鏡面保持不動。":"把物體往鏡面移動或移遠，觀察像相對鏡面的位置也跟著變化。"}distanceInput.addEventListener("input",updateDistance);
+    const imageGroups=["#image-side-object","#image-side-virtual","#image-side-rays","#image-front-object","#image-front-reflection"],removeImageObject=document.querySelector("#remove-image-object"),restoreImageObject=document.querySelector("#restore-image-object"),imageObjectStatus=document.querySelector("#image-object-status");let imagePresent=true;
+    function setImageObjectPresent(present){imagePresent=present;imageGroups.forEach(function(selector){document.querySelector(selector).style.display=present?"":"none"});removeImageObject.disabled=!present;restoreImageObject.disabled=present;imageObjectStatus.textContent=present?"物體在鏡前，鏡中像與側面光路都已顯示。":"物體已移除；兩個視角中的鏡中像與光路也已同步消失。"}
+    removeImageObject.addEventListener("click",function(){setImageObjectPresent(false)});restoreImageObject.addEventListener("click",function(){setImageObjectPresent(true)});
+    const distanceInput=document.querySelector("#object-distance"),distanceSideObject=document.querySelector("#distance-side-object"),distanceSideImage=document.querySelector("#distance-side-image"),distanceFrontObject=document.querySelector("#distance-front-object"),distanceFrontReflection=document.querySelector("#distance-front-reflection"),rulerTicks=document.querySelector("#distance-ruler-ticks"),rulerValues=document.querySelector("#distance-ruler-values");
+    for(let cm=-60;cm<=60;cm+=5){const x=310+cm*3.2,longTick=cm%10===0;const tick=document.createElementNS("http://www.w3.org/2000/svg","line");tick.setAttribute("x1",x);tick.setAttribute("x2",x);tick.setAttribute("y1",260);tick.setAttribute("y2",longTick?274:267);tick.setAttribute("class","ruler-tick");rulerTicks.appendChild(tick);if(longTick){const label=document.createElementNS("http://www.w3.org/2000/svg","text");label.setAttribute("x",x);label.setAttribute("y",292);label.setAttribute("class","ruler-label");label.textContent=cm===0?"0":String(Math.abs(cm));rulerValues.appendChild(label)}}
+    function updateDistance(){const value=Number(distanceInput.value),offset=value*3.2,objectX=310-offset,imageX=310+offset;
+      distanceSideObject.setAttribute("transform","translate("+(objectX-182)+" 0)");distanceSideImage.setAttribute("transform","translate("+(imageX-438)+" 0)");
+      document.querySelector("#distance-object-measure").setAttribute("d","M"+objectX+" 88H310");document.querySelector("#distance-image-measure").setAttribute("d","M310 88H"+imageX);
+      document.querySelector("#distance-object-measure-label").setAttribute("x",225);document.querySelector("#distance-image-measure-label").setAttribute("x",395);
+      document.querySelector("#distance-object-measure-label").textContent="物距 "+value+" cm";document.querySelector("#distance-image-measure-label").textContent="像距 "+value+" cm";
+      document.querySelector("#distance-ruler-object-marker").setAttribute("x1",objectX);document.querySelector("#distance-ruler-object-marker").setAttribute("x2",objectX);document.querySelector("#distance-ruler-image-marker").setAttribute("x1",imageX);document.querySelector("#distance-ruler-image-marker").setAttribute("x2",imageX);
+      document.querySelector("#object-distance-value").textContent=value+" cm";document.querySelector("#image-distance-value").textContent=value+" cm";distanceInput.setAttribute("aria-valuetext","物距 "+value+" 公分，像距 "+value+" 公分");distanceSideObject.setAttribute("aria-valuenow",value);distanceSideObject.setAttribute("aria-valuetext","物距 "+value+" 公分，像距 "+value+" 公分");document.querySelector("#distance-front-status").textContent="目前物距 "+value+" cm｜像距 "+value+" cm";distanceFrontObject.setAttribute("transform","translate(0 "+((value-40)*.35)+")");distanceFrontReflection.setAttribute("transform","translate(0 "+((40-value)*.35)+")");
+    }
+    distanceInput.addEventListener("input",updateDistance);updateDistance();
+    let distanceDragging=false;function distanceFromPointer(event){const rect=document.querySelector("#distance-side-view").getBoundingClientRect(),svgX=(event.clientX-rect.left)*620/rect.width;const cm=Math.round(Math.max(10,Math.min(60,(310-svgX)/3.2))/10)*10;distanceInput.value=String(cm);updateDistance()}
+    distanceSideObject.addEventListener("pointerdown",function(event){distanceDragging=true;distanceSideObject.setPointerCapture(event.pointerId);distanceFromPointer(event)});distanceSideObject.addEventListener("pointermove",function(event){if(distanceDragging)distanceFromPointer(event)});distanceSideObject.addEventListener("pointerup",function(){distanceDragging=false});distanceSideObject.addEventListener("pointercancel",function(){distanceDragging=false});distanceSideObject.addEventListener("keydown",function(event){let value=Number(distanceInput.value);if(event.key==="ArrowLeft"||event.key==="ArrowDown")value=Math.max(10,value-10);else if(event.key==="ArrowRight"||event.key==="ArrowUp")value=Math.min(60,value+10);else return;event.preventDefault();distanceInput.value=String(value);updateDistance()});
     document.querySelectorAll(".curved-mirror-choice").forEach(function(button){button.addEventListener("click",function(){const mode=button.dataset.curvedMirror;document.querySelectorAll(".curved-mirror-choice").forEach(function(item){item.setAttribute("aria-pressed",String(item===button))});document.querySelector("#curved-concave").setAttribute("display",mode==="concave"?"inline":"none");document.querySelector("#curved-convex").setAttribute("display",mode==="convex"?"inline":"none");document.querySelector("#curved-mirror-model").dataset.state=mode;document.querySelector("#curved-mirror-caption").textContent=mode==="concave"?"凹面鏡的平行入射光反射後會聚。圖中只畫光路，清澈空氣中的光束本身不可見。":"凸面鏡的平行入射光反射後向外發散。圖中只畫光路，清澈空氣中的光束本身不可見。"})});
     let reversed=false;document.querySelector("#reverse-ray").addEventListener("click",function(event){reversed=!reversed;event.currentTarget.setAttribute("aria-pressed",String(reversed));event.currentTarget.textContent=reversed?"恢復原本方向":"反轉光線方向";const left=document.querySelector("#reverse-left"),right=document.querySelector("#reverse-right");left.setAttribute("d",reversed?"M115 218L414 140":"M414 140L115 218");right.setAttribute("d",reversed?"M414 140L115 62":"M115 62L414 140");document.querySelector("#reverse-state").textContent=reversed?"方向已反轉：光沿原路徑返回":"目前：光由左上方入射，再向左下方反射"});
     const answerButtons=[...document.querySelectorAll("[data-answer]")];answerButtons.forEach(function(button){button.addEventListener("click",function(){answerButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===button));item.classList.remove("correct","incorrect")});button.classList.add(button.dataset.answer==="correct"?"correct":"incorrect")})});document.querySelector("#check-answer").addEventListener("click",function(){const selected=answerButtons.find(function(button){return button.getAttribute("aria-pressed")==="true"}),feedback=document.querySelector("#check-feedback");if(!selected){feedback.dataset.state="try";feedback.textContent="先選一段完整說明，再回想平面鏡與曲面鏡的反射差異。";return}if(selected.dataset.answer==="correct"){feedback.dataset.state="good";feedback.textContent="正確：平面鏡像隨物體移動；曲面各處遵守反射定律，凹面會聚光、凸面發散光。"}else{feedback.dataset.state="try";feedback.textContent="再想一想：曲面鏡各處法線方向不同，但每一處都遵守反射定律。"}});document.querySelector("#reset-answer").addEventListener("click",function(){answerButtons.forEach(function(button){button.setAttribute("aria-pressed","false");button.classList.remove("correct","incorrect")});const feedback=document.querySelector("#check-feedback");feedback.removeAttribute("data-state");feedback.textContent="選好後再確認：曲面鏡各處的法線方向相同嗎？"});
