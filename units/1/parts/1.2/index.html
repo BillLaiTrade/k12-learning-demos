@@ -32,22 +32,17 @@
     .laser-diagram{display:block;width:min(100%,660px);height:auto;justify-self:center}
     .laser-lab{overflow:hidden;border:1px solid #d8dfdf;border-radius:16px;background:#b8895f}
     #laser-reflection-scene{display:block;width:100%;height:clamp(320px,38vw,430px);touch-action:pan-y;cursor:default}
-    .laser-lab-ui{display:grid;grid-template-columns:minmax(140px,auto) minmax(150px,1fr) minmax(190px,auto);align-items:center;gap:16px;padding:12px 18px;background:#fffdf8}
-    .laser-view-current{grid-column:1/-1;margin:0;color:#47645a;font-size:.82rem;font-weight:800}
-    .laser-control-panel,.laser-angle-readout{display:grid;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
-    .laser-control-panel{grid-template-columns:auto minmax(150px,1fr);align-items:center;gap:16px}
-    .laser-slider-label{color:#102c54;font-size:.9rem;font-weight:850}
-    .laser-slider-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}
-    .laser-slider-row output{color:#102c54;font-size:1rem;font-weight:850}
-    .laser-lab-ui input{width:100%;accent-color:#1672d4}
-    .laser-angle-readout{grid-template-columns:1fr 1fr;gap:8px;color:#1459af;font-size:.88rem;font-weight:850}
+    #laser-reflection-scene:focus-visible{outline:3px solid #176b53;outline-offset:-4px}
+    .laser-lab-ui{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,auto);align-items:center;gap:12px 16px;padding:12px 18px;background:#fffdf8}
+    .laser-view-current{margin:0;color:#47645a;font-size:.82rem;font-weight:800}
+    .laser-angle-readout{display:grid;grid-template-columns:1fr 1fr;gap:8px;color:#1459af;font-size:.88rem;font-weight:850}
     .laser-angle-readout span{padding:7px 10px;border-radius:10px;background:#edf4fb;white-space:nowrap}
     .laser-angle-readout span:last-child{background:#eef5eb;color:#24783a}
     .laser-angle-readout strong{padding-left:4px;font-variant-numeric:tabular-nums}
     .laser-observation{margin:0;padding:13px 18px;background:#f0f5eb;color:#315a46;font-weight:750}
-    @media(max-width:960px){.laser-lab-ui{grid-template-columns:minmax(125px,auto) minmax(120px,1fr);gap:12px}.laser-control-panel{grid-column:1/-1;grid-template-columns:145px minmax(140px,1fr)}.laser-angle-readout{grid-column:1/-1}}
+    @media(max-width:960px){.laser-lab-ui{grid-template-columns:minmax(0,1fr) minmax(175px,auto);gap:12px}}
     @media(max-width:780px){.laser-lesson{width:auto;margin-left:0}}
-    @media(max-width:760px){.laser-concept{padding:16px}.laser-concept-copy{gap:8px}.laser-law{font-size:clamp(1.2rem,5vw,1.55rem)}.laser-diagram #law-angle-name-in,.laser-diagram #law-angle-name-out{font-size:15px}.laser-diagram #law-angle-in,.laser-diagram #law-angle-out{font-size:17px}#laser-reflection-scene{height:clamp(140px,70vw,280px)}.laser-lab-ui{grid-template-columns:1fr;padding:14px}.laser-control-panel{grid-column:auto;grid-template-columns:1fr;gap:4px}.laser-angle-readout{grid-column:auto}}
+    @media(max-width:760px){.laser-concept{padding:16px}.laser-concept-copy{gap:8px}.laser-law{font-size:clamp(1.2rem,5vw,1.55rem)}.laser-diagram #law-angle-name-in,.laser-diagram #law-angle-name-out{font-size:15px}.laser-diagram #law-angle-in,.laser-diagram #law-angle-out{font-size:17px}#laser-reflection-scene{height:clamp(140px,70vw,280px)}.laser-lab-ui{grid-template-columns:1fr;padding:14px}}
     @media(max-width:440px){.laser-angle-readout{gap:6px;font-size:.8rem}.laser-angle-readout span{padding:7px 8px}}
     @media(max-width:360px){.laser-concept-copy{grid-template-columns:minmax(0,1fr)}.laser-law{white-space:normal}}
   </style>
@@ -144,14 +139,13 @@
                 </svg>
               </section>
               <section class="laser-lab" aria-label="可調整入射角的雷射反射實驗">
-                <canvas id="laser-reflection-scene" aria-label="反射板位於畫面下方。可拖動雷射發射器或操作下方滑桿，在 20 到 90 度間調整入射角，觀察紅色反射光路的方向變化。" aria-describedby="laser-drag-instruction"></canvas>
+                <canvas id="laser-reflection-scene" tabindex="0" role="slider" aria-label="調整入射角。使用方向鍵每次調整一度，Home 和 End 可快速調整至 20 度或 90 度。" aria-valuemin="20" aria-valuemax="90" aria-valuenow="30" aria-valuetext="入射角 30 度，反射角 30 度" aria-describedby="laser-drag-instruction"></canvas>
                 <div class="laser-lab-ui" aria-label="雷射角度操作與讀數">
-                  <p class="laser-view-current" id="laser-drag-instruction">反射板角度視角・可拖動雷射或操作下方滑桿調整入射角</p>
-                  <div class="laser-control-panel"><label class="laser-slider-label" for="incident-angle">調整入射角</label><div class="laser-slider-row"><input id="incident-angle" type="range" min="20" max="90" step="1" value="30" aria-label="調整入射角"><output id="incident-angle-value" for="incident-angle">30°</output></div></div>
+                  <p class="laser-view-current" id="laser-drag-instruction">反射板角度視角・拖動雷射即可調整入射角；也可聚焦畫面後使用方向鍵微調</p>
                   <div class="laser-angle-readout"><span>入射角 <strong id="lab-angle-in">30°</strong></span><span>反射角 <strong id="lab-angle-out">30°</strong></span></div>
                 </div>
               </section>
-              <p class="laser-observation" id="angle-observation" aria-live="polite">入射角和反射角都是 30°。拖動雷射或調整滑桿，觀察反射光方向如何改變。</p>
+              <p class="laser-observation" id="angle-observation" aria-live="polite">入射角和反射角都是 30°。拖動雷射，觀察反射光方向如何改變。</p>
             </div>
           </div>
         </section>
@@ -299,6 +293,6 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
-  <script type="module" src="assets/laser-reflection.js?v=25"></script>
+  <script type="module" src="assets/laser-reflection.js?v=26"></script>
 </body>
 </html>

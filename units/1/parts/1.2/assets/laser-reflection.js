@@ -1,8 +1,9 @@
 import * as THREE from '../../1.1/assets/vendor/three/build/three.module.js';
 
 const canvas = document.querySelector('#laser-reflection-scene');
-const slider = document.querySelector('#incident-angle');
-if (!canvas || !slider) throw new Error('Laser reflection controls are missing.');
+if (!canvas) throw new Error('Laser reflection scene is missing.');
+const MIN_ANGLE = 20, MAX_ANGLE = 90;
+let angleDegrees = 30;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color('#8a6346');
@@ -227,7 +228,7 @@ function svgSector(radius, degrees, rightSide) {
   return d + 'Z';
 }
 function update() {
-  const deg = Number(slider.value), angle = THREE.MathUtils.degToRad(deg), radius = 7.0;
+  const deg = angleDegrees, angle = THREE.MathUtils.degToRad(deg), radius = 7.0;
   const source = new THREE.Vector3(centerPoint.x - radius * Math.cos(angle), centerPoint.y, -radius * Math.sin(angle));
   const hit = new THREE.Vector3(centerPoint.x, centerPoint.y, 0);
   const directionOut = new THREE.Vector3(-Math.cos(angle), 0, Math.sin(angle));
@@ -272,9 +273,17 @@ function update() {
   document.querySelector('#law-angle-out').textContent = `${deg}°`;
   document.querySelector('#lab-angle-in').textContent = `${deg}°`;
   document.querySelector('#lab-angle-out').textContent = `${deg}°`;
-  document.querySelector('#incident-angle-value').value = `${deg}°`;
+  canvas.setAttribute('aria-valuenow', String(deg));
+  canvas.setAttribute('aria-valuetext', `入射角 ${deg} 度，反射角 ${deg} 度`);
   document.querySelector('#angle-observation').textContent = `發射器轉到 ${deg}°；觀察反射光方向如何改變，入射角與反射角始終相等。`;
   renderer.render(scene, camera);
+}
+
+function setAngle(value) {
+  const next = Math.round(THREE.MathUtils.clamp(value, MIN_ANGLE, MAX_ANGLE));
+  if (next === angleDegrees) return;
+  angleDegrees = next;
+  update();
 }
 
 function resize() {
@@ -288,7 +297,6 @@ function resize() {
   camera.updateProjectionMatrix();
   update();
 }
-slider.addEventListener('input', update);
 new ResizeObserver(resize).observe(canvas);
 resize();
 
@@ -328,7 +336,7 @@ canvas.addEventListener('pointerdown', (event) => {
   const point = pointerWorldPoint(event);
   if (!point || !dragRaycaster.intersectObjects(emitterHitMeshes, false).length) return;
   draggingEmitter = true;
-  dragAngleOffset = Number(slider.value) - pointerAngle(point);
+  dragAngleOffset = angleDegrees - pointerAngle(point);
   canvas.style.cursor = 'grabbing';
   canvas.setPointerCapture(event.pointerId);
   event.preventDefault();
@@ -338,11 +346,7 @@ canvas.addEventListener('pointermove', (event) => {
   if (draggingEmitter) {
     const point = pointerWorldPoint(event);
     if (!point) return;
-    const target = Math.round(THREE.MathUtils.clamp(pointerAngle(point) + dragAngleOffset, Number(slider.min), Number(slider.max)));
-    if (target !== Number(slider.value)) {
-      slider.value = String(target);
-      slider.dispatchEvent(new Event('input', { bubbles: true }));
-    }
+    setAngle(pointerAngle(point) + dragAngleOffset);
     return;
   }
   canvas.style.cursor = isEmitterAtPointer(event) ? 'grab' : 'default';
@@ -351,3 +355,11 @@ canvas.addEventListener('pointermove', (event) => {
 canvas.addEventListener('pointerup', finishEmitterDrag);
 canvas.addEventListener('pointercancel', finishEmitterDrag);
 canvas.addEventListener('lostpointercapture', () => { draggingEmitter = false; canvas.style.cursor = 'default'; });
+canvas.addEventListener('keydown', (event) => {
+  if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') setAngle(angleDegrees - 1);
+  else if (event.key === 'ArrowRight' || event.key === 'ArrowUp') setAngle(angleDegrees + 1);
+  else if (event.key === 'Home') setAngle(MIN_ANGLE);
+  else if (event.key === 'End') setAngle(MAX_ANGLE);
+  else return;
+  event.preventDefault();
+});
