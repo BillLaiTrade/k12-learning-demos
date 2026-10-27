@@ -26,3 +26,12 @@
 #card-01 .touch-story-scene .speaker::before{width:32px;height:32px}
 @media(max-width:560px){#card-01 .touch-story-comic{grid-template-columns:minmax(0,1fr);gap:12px;max-width:380px;margin-inline:auto}}
 @media(min-width:561px){#card-01 .touch-story-heading{min-height:96px}}
+
+#card-01 .touch-story-mini{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;border-radius:12px}
+#card-01 .touch-story-picture{min-width:0}
+#card-01 .touch-story-mini .touch-story-bowls{padding:6px 2px;font-size:.65rem;gap:2px;border-bottom:0}
+#card-01 .touch-story-caption{min-width:0;padding:10px;background:#f8f8ef}
+#card-01 .touch-story-caption h3{margin:0 0 8px;font-size:.88rem;line-height:1.5}
+#card-01 .touch-story-caption h3 span{color:var(--green);margin-right:4px}
+#card-01 .touch-story-caption p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.6}
+#card-01 .touch-story-caption .touch-story-quote{margin-top:8px;color:#724a2d}
