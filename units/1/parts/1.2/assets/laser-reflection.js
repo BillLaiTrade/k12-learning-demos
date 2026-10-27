@@ -7,8 +7,8 @@ if (!canvas || !slider) throw new Error('Laser reflection controls are missing.'
 const scene = new THREE.Scene();
 scene.background = new THREE.Color('#e5e6e1');
 scene.fog = new THREE.Fog('#e5e6e1', 14, 28);
-const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-camera.position.set(-9.4, 9.2, 13.0);
+const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+camera.position.set(-10.5, 13, 10.5);
 camera.lookAt(-4.5, 0.55, 2.2);
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -110,16 +110,16 @@ box(screenGroup, [0.08, 1.0, 0.08], [-0.16, -1.4, 0.22], steel);
 // Laser housing with a fixed-height beam, mounted on a moving goniometer base.
 const emitter = new THREE.Group(); scene.add(emitter);
 const emitterBody = new THREE.Group(); emitter.add(emitterBody);
-// Keep the housing large enough to read as a rotating instrument at the lesson's compact canvas size.
-emitterBody.scale.setScalar(1.75);
-const body = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.21, 0.72, 32), black);
-body.rotation.x = Math.PI / 2; body.position.z = -0.24; body.castShadow = true; emitterBody.add(body);
-const rear = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.19, 0.08, 32), steel);
-rear.rotation.x = Math.PI / 2; rear.position.z = -0.62; emitterBody.add(rear);
-const bezel = new THREE.Mesh(new THREE.CylinderGeometry(0.215, 0.215, 0.12, 32), steel);
-bezel.rotation.x = Math.PI / 2; bezel.position.z = 0.13; emitterBody.add(bezel);
-const lens = new THREE.Mesh(new THREE.CircleGeometry(0.155, 32), new THREE.MeshBasicMaterial({ color: '#ef3030' }));
-lens.position.z = 0.195; emitterBody.add(lens);
+// The long, asymmetric housing makes its changing aim visible; its front lens sits at the beam origin.
+emitterBody.scale.setScalar(2.3);
+box(emitterBody, [0.46, 0.38, 1.05], [0, 0, -0.525], black);
+box(emitterBody, [0.50, 0.42, 0.12], [0, 0, -1.08], steel);
+box(emitterBody, [0.18, 0.16, 0.58], [0, 0.26, -0.40], steel);
+box(emitterBody, [0.34, 0.08, 0.25], [0, 0.42, -0.83], black);
+const bezel = new THREE.Mesh(new THREE.CylinderGeometry(0.235, 0.235, 0.08, 32), steel);
+bezel.rotation.x = Math.PI / 2; bezel.position.z = -0.015; emitterBody.add(bezel);
+const lens = new THREE.Mesh(new THREE.CircleGeometry(0.18, 32), new THREE.MeshBasicMaterial({ color: '#ef3030' }));
+lens.position.z = 0.028; emitterBody.add(lens);
 const emitterStem = cylinder(scene, 0.055, 0.065, 1.2, [-2.0, 0.62, -1.8], steel);
 const emitterFoot = box(scene, [0.72, 0.11, 0.72], [-2.0, 0.07, -1.8], black);
 const pivot = new THREE.Mesh(new THREE.TorusGeometry(0.25, 0.035, 8, 48), steel);
@@ -192,7 +192,7 @@ function update() {
   document.querySelector('#lab-angle-in').textContent = `${deg}°`;
   document.querySelector('#lab-angle-out').textContent = `${deg}°`;
   document.querySelector('#incident-angle-value').value = `${deg}°`;
-  document.querySelector('#angle-observation').textContent = `入射角和反射角都是 ${deg}°。雷射移到新角度，反射光點也沿接收屏移動。`;
+  document.querySelector('#angle-observation').textContent = `發射器轉到 ${deg}°；入射角和反射角相等，反射光點沿接收屏移動。`;
   renderer.render(scene, camera);
 }
 
@@ -201,7 +201,7 @@ function resize() {
   if (!width || !height) return;
   renderer.setSize(width, height, false);
   camera.aspect = width / height;
-  camera.fov = width < 500 ? 55 : 36;
+  camera.fov = width < 500 ? 55 : 40;
   camera.updateProjectionMatrix();
   update();
 }
