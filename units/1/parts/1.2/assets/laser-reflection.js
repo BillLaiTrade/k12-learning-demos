@@ -121,9 +121,18 @@ function setBeam(beam, a, b) {
   beam.scale.set(1, length, 1);
 }
 const incoming = dynamicBeam(), reflected = dynamicBeam();
-const normalGeometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(centerPoint.x - 4.8, centerPoint.y + 0.005, 0), new THREE.Vector3(centerPoint.x, centerPoint.y + 0.005, 0)]);
-const normal = new THREE.Line(normalGeometry, new THREE.LineDashedMaterial({ color: '#fff8df', dashSize: 0.22, gapSize: 0.12, transparent: true, opacity: 0.96, depthTest: false }));
-normal.computeLineDistances(); normal.renderOrder = 11; scene.add(normal);
+const normalDashCount = 10, normalDashLength = 0.28, normalDashSpacing = 0.5;
+const normalDashRotation = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(1, 0, 0));
+const normalDashDark = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.068, 0.068, 1, 10), new THREE.MeshBasicMaterial({ color: '#40564c', depthTest: false, depthWrite: false }), normalDashCount);
+const normalDashLight = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.038, 0.038, 1, 10), new THREE.MeshBasicMaterial({ color: '#fff8df', depthTest: false, depthWrite: false }), normalDashCount);
+for (let i = 0; i < normalDashCount; i++) {
+  const x = centerPoint.x - normalDashLength / 2 - (normalDashCount - 1 - i) * normalDashSpacing;
+  const position = new THREE.Vector3(x, centerPoint.y + 0.025, centerPoint.z);
+  normalDashDark.setMatrixAt(i, new THREE.Matrix4().compose(position, normalDashRotation, new THREE.Vector3(1, normalDashLength, 1)));
+  normalDashLight.setMatrixAt(i, new THREE.Matrix4().compose(position, normalDashRotation, new THREE.Vector3(1, normalDashLength - 0.02, 1)));
+}
+normalDashDark.instanceMatrix.needsUpdate = true; normalDashLight.instanceMatrix.needsUpdate = true;
+normalDashDark.renderOrder = normalDashLight.renderOrder = 11; scene.add(normalDashDark, normalDashLight);
 function arc(radius, angle, direction) {
   const points = [];
   const steps = Math.max(8, Math.ceil(angle * 1.5));
