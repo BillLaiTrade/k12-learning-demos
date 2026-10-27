@@ -104,6 +104,34 @@
     .diagram-panel h3 { margin:0 0 5px; font-size:1rem; }
     .diagram-panel p { margin:6px 0 0; color:var(--muted); font-size:.88rem; }
     .wave-type-diagrams { grid-template-columns:1fr; gap:14px; }
+    .water-wave-demo { margin-top:14px; padding:14px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(135deg,#f2f8f1,#fffefa 68%); }
+    .water-wave-demo-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .water-wave-demo-head p { margin:0; color:var(--muted); font-size:.9rem; }
+    .water-wave-reset { flex:0 0 auto; min-height:38px; padding:6px 12px; border:1px solid var(--line); border-radius:11px; background:#fffefa; color:var(--ink); font-weight:700; }
+    .water-wave-reset:hover { border-color:var(--green); }
+    .water-wave-view { margin:10px 0 0; overflow:hidden; border:1px solid var(--line); border-radius:14px; background:#fbfcf8; }
+    .water-wave-view figcaption { padding:8px 12px 0; color:var(--green); font-size:.88rem; font-weight:800; }
+    .water-wave-stage { position:relative; width:100%; aspect-ratio:640/240; touch-action:none; }
+    .water-wave-stage svg { display:block; width:100%; height:100%; }
+    .water-wave-stage .water-surface { fill:url(#water-surface-gradient); stroke:#75a9ab; stroke-width:2; }
+    .water-ripple { fill:none; stroke:#4d929a; stroke-width:2.8; }
+    .water-impact { fill:#df8b41; stroke:#fff; stroke-width:2; }
+    .water-cross-section { stroke:#527f78; stroke-width:1.5; stroke-dasharray:5 6; opacity:.4; }
+    .water-pebble { position:absolute; z-index:2; left:7%; top:50%; display:grid; place-items:center; width:34px; height:28px; padding:0; transform:translate(-50%,-50%); border:1px solid #9a542e; border-radius:48% 43% 46% 42%; background:linear-gradient(145deg,#d99052,#a85b30); box-shadow:0 3px 6px rgb(64 43 29 / 25%); color:#fff9ef; font-size:0; cursor:grab; touch-action:none; user-select:none; }
+    .water-pebble[hidden] { display:none; }
+    .water-pebble::before { content:""; width:16px; height:8px; border-radius:50%; background:rgb(255 239 210 / 35%); transform:rotate(-18deg); }
+    .water-pebble:active,.water-pebble.is-dragging { cursor:grabbing; }
+    .water-pebble:focus-visible,.water-wave-reset:focus-visible { outline:3px solid #df8b41; outline-offset:3px; }
+    .water-side-fill { fill:#d7edef; }
+    .water-side-level { fill:none; stroke:#78abad; stroke-width:3; stroke-linecap:round; }
+    .water-side-baseline { fill:none; stroke:#a3bcb8; stroke-width:1.2; stroke-dasharray:5 6; }
+    .water-side-particle { fill:#56858a; stroke:#eaf5f3; stroke-width:1; }
+    .water-side-particle.is-highlighted { fill:#df8b41; stroke:#fff; stroke-width:2; }
+    .water-particle-trace { fill:none; stroke:#c47a43; stroke-width:1.2; opacity:.32; }
+    .water-wave-direction { fill:none; stroke:#176b53; stroke-width:2; stroke-linecap:round; }
+    .water-wave-direction-head { fill:#176b53; }
+    .water-wave-status { min-height:1.5em; margin:9px 2px 0; color:var(--muted); font-size:.86rem; }
+    .water-wave-status[aria-live] { speak:normal; }
     .measurement-subheading { margin:22px 0 6px; color:var(--green); font-size:1.08rem; }
     .measurement-subheading--next { margin-top:28px; padding-top:18px; border-top:1px solid var(--line); }
     .spring-coil { fill:none; stroke:url(#spring-metal-gradient); stroke-width:3; }
@@ -775,6 +803,49 @@
             <h3 class="measurement-subheading">補充：水面波</h3>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>那水面上的波，是橫波還是縱波？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>它叫表面波，因為波沿著水面傳開；水面附近的水粒子不只上下動，也會前後動，所以不能簡單說它是單純的橫波或縱波</p></div>
+            <div class="water-wave-demo" data-water-wave-demo>
+              <div class="water-wave-demo-head">
+                <p>把小石子拖進水盤；按一下石子也能投入水中</p>
+                <button class="water-wave-reset" type="button" data-water-reset>重設</button>
+              </div>
+              <figure class="water-wave-view">
+                <figcaption>俯視：波紋向外擴散</figcaption>
+                <div class="water-wave-stage" data-water-top-stage>
+                  <svg viewBox="0 0 640 240" role="img" aria-label="俯視水盤。投入小石子後，圓形波紋從落點向四周擴散">
+                    <defs>
+                      <linearGradient id="water-surface-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2f1ef"/><stop offset="1" stop-color="#c2e0e2"/></linearGradient>
+                      <clipPath id="water-surface-clip"><rect x="34" y="22" width="572" height="196" rx="20"/></clipPath>
+                    </defs>
+                    <rect x="25" y="13" width="590" height="214" rx="25" fill="#d9e0db" stroke="#8ca49c" stroke-width="2"/>
+                    <rect x="34" y="22" width="572" height="196" rx="20" class="water-surface"/>
+                    <path id="water-cross-section-guide" class="water-cross-section" d="M40 120H600"/>
+                    <g id="water-ripple-group" clip-path="url(#water-surface-clip)"></g>
+                    <circle id="water-impact-dot" class="water-impact" cx="320" cy="120" r="6" opacity="0"/>
+                  </svg>
+                  <button class="water-pebble" type="button" data-water-pebble aria-label="拖曳小石子到水盤，或按一下投入水中">小石子</button>
+                </div>
+              </figure>
+              <figure class="water-wave-view">
+                <figcaption>剖面：選一個水粒子看它附近的運動</figcaption>
+                <div class="water-wave-stage">
+                  <svg id="water-side-svg" viewBox="0 0 640 240" role="img" aria-label="水盤剖面。水面波形從石子落點向兩側傳播，水中粒子在原位置附近移動">
+                    <defs>
+                      <clipPath id="water-side-clip"><rect x="24" y="48" width="592" height="168" rx="10"/></clipPath>
+                      <marker id="water-direction-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" class="water-wave-direction-head"/></marker>
+                    </defs>
+                    <rect x="24" y="48" width="592" height="168" rx="10" class="water-side-fill"/>
+                    <path id="water-side-baseline" class="water-side-baseline" d="M24 52H616"/>
+                    <path id="water-side-surface" class="water-side-level" d="M24 52H616"/>
+                    <g id="water-side-particles" clip-path="url(#water-side-clip)"></g>
+                    <ellipse id="water-particle-trace" class="water-particle-trace" cx="400" cy="76" rx="9" ry="4"/>
+                    <circle id="water-highlight-particle" class="water-side-particle is-highlighted" cx="400" cy="76" r="4.5"/>
+                    <path id="water-left-direction" class="water-wave-direction" d="M300 31H246" marker-end="url(#water-direction-arrow)" opacity="0"/>
+                    <path id="water-right-direction" class="water-wave-direction" d="M340 31H394" marker-end="url(#water-direction-arrow)" opacity="0"/>
+                  </svg>
+                </div>
+              </figure>
+              <p class="water-wave-status" data-water-status aria-live="polite">拖曳小石子投入水盤，觀察波紋和水中粒子怎麼動</p>
+            </div>
           </div>
         </section>
         <section class="lesson-card" id="card-06">
@@ -1127,6 +1198,117 @@
         formulaTargets.forEach(target=>target.classList.toggle("is-formula-related",activeFormula!==null&&(target.dataset.formulaTarget===activeFormula||target.dataset.formulaTarget==="both")));
       };
       formulaChoices.forEach(button=>button.addEventListener("click",()=>selectFormula(button.dataset.formulaFocus)));
+      const waterWaveDemo=document.querySelector("[data-water-wave-demo]");
+      if(waterWaveDemo){
+        const waterNs="http://www.w3.org/2000/svg",topStage=waterWaveDemo.querySelector("[data-water-top-stage]"),topSvg=topStage.querySelector("svg"),pebble=waterWaveDemo.querySelector("[data-water-pebble]"),resetWater=waterWaveDemo.querySelector("[data-water-reset]"),status=waterWaveDemo.querySelector("[data-water-status]"),rippleGroup=waterWaveDemo.querySelector("#water-ripple-group"),crossGuide=waterWaveDemo.querySelector("#water-cross-section-guide"),impactDot=waterWaveDemo.querySelector("#water-impact-dot"),sideSvg=waterWaveDemo.querySelector("#water-side-svg"),sideSurface=waterWaveDemo.querySelector("#water-side-surface"),sideParticles=waterWaveDemo.querySelector("#water-side-particles"),particleTrace=waterWaveDemo.querySelector("#water-particle-trace"),highlightParticle=waterWaveDemo.querySelector("#water-highlight-particle"),leftDirection=waterWaveDemo.querySelector("#water-left-direction"),rightDirection=waterWaveDemo.querySelector("#water-right-direction");
+        const waveSpeed=150,wavePeriod=.17,waveTrainDuration=.68,waveAmplitude=10,ringSpacing=19,baseSurfaceY=52;
+        const rippleNodes=[];for(let i=0;i<7;i++){const ring=document.createElementNS(waterNs,"circle");ring.setAttribute("class","water-ripple");ring.setAttribute("opacity","0");rippleGroup.append(ring);rippleNodes.push(ring);}
+        const particleNodes=[];let selectedBase={x:400,y:76};
+        for(let y=76;y<=178;y+=24)for(let x=44;x<=596;x+=28){
+          if(y===76&&x===400)continue;
+          const particle=document.createElementNS(waterNs,"circle");particle.setAttribute("class","water-side-particle");particle.setAttribute("r",y===76?"2.3":"2");particle.dataset.baseX=String(x);particle.dataset.baseY=String(y);sideParticles.append(particle);particleNodes.push(particle);
+        }
+        let impact=null,waterStart=null,waterFrame=0,waterRunning=false,drag=null,suppressClick=false;
+        const updateSideWave=(elapsed=0)=>{
+          const sourceX=impact?impact.x:320;
+          let path=`M24 ${baseSurfaceY}`;
+          for(let x=26;x<=616;x+=3){
+            const distance=Math.abs(x-sourceX),localTime=elapsed-distance/waveSpeed;
+            let elevation=0;
+            if(impact&&localTime>=0&&localTime<=waveTrainDuration){
+              const envelope=Math.sin(Math.PI*localTime/waveTrainDuration);
+              elevation=waveAmplitude*Math.sin(2*Math.PI*localTime/wavePeriod)*envelope;
+            }
+            path+=` L${x} ${(baseSurfaceY-elevation).toFixed(2)}`;
+          }
+          sideSurface.setAttribute("d",path);
+          particleNodes.forEach(particle=>{
+            const x=Number(particle.dataset.baseX),y=Number(particle.dataset.baseY),distance=Math.abs(x-sourceX),localTime=elapsed-distance/waveSpeed;
+            let dx=0,dy=0;
+            if(impact&&localTime>=0&&localTime<=waveTrainDuration){
+              const depth=Math.max(0,y-baseSurfaceY),decay=Math.exp(-depth/72),phase=2*Math.PI*localTime/wavePeriod,envelope=Math.sin(Math.PI*localTime/waveTrainDuration),side=x<sourceX?-1:1;
+              dx=side*3.4*decay*envelope*Math.cos(phase);dy=2.6*decay*envelope*Math.sin(phase);
+            }
+            particle.setAttribute("cx",(x+dx).toFixed(2));particle.setAttribute("cy",(y+dy).toFixed(2));
+          });
+          const selectedDistance=Math.abs(selectedBase.x-sourceX),selectedTime=elapsed-selectedDistance/waveSpeed;
+          let selectedDx=0,selectedDy=0;
+          if(impact&&selectedTime>=0&&selectedTime<=waveTrainDuration){
+            const phase=2*Math.PI*selectedTime/wavePeriod,envelope=Math.sin(Math.PI*selectedTime/waveTrainDuration),side=selectedBase.x<sourceX?-1:1;
+            selectedDx=side*4.1*envelope*Math.cos(phase);selectedDy=3.1*envelope*Math.sin(phase);
+          }
+          particleTrace.setAttribute("cx",String(selectedBase.x));particleTrace.setAttribute("cy",String(selectedBase.y));
+          highlightParticle.setAttribute("cx",(selectedBase.x+selectedDx).toFixed(2));highlightParticle.setAttribute("cy",(selectedBase.y+selectedDy).toFixed(2));
+        };
+        const drawWater=(elapsed)=>{
+          const x=impact.x,y=impact.y;
+          rippleNodes.forEach((ring,index)=>{
+            const age=elapsed-index*.14,radius=age*waveSpeed;
+            const maxRadius=Math.hypot(Math.max(x-34,606-x),Math.max(y-22,218-y));
+            const visible=age>=0&&radius<=maxRadius+10;
+            ring.setAttribute("cx",String(x));ring.setAttribute("cy",String(y));ring.setAttribute("r",String(Math.max(0,radius)));
+            ring.style.opacity=visible?String(Math.max(.08,.68*(1-radius/(maxRadius+30)))):"0";
+          });
+          impactDot.setAttribute("cx",String(x));impactDot.setAttribute("cy",String(y));impactDot.style.opacity=String(Math.max(0,1-elapsed/.28));
+          crossGuide.setAttribute("d",`M40 ${y}H600`);
+          const sideX=Math.max(48,Math.min(592,x));
+          leftDirection.setAttribute("d",`M${sideX-15} 30H${Math.max(30,sideX-66)}`);rightDirection.setAttribute("d",`M${sideX+15} 30H${Math.min(610,sideX+66)}`);
+          leftDirection.setAttribute("opacity",sideX>48?".9":"0");rightDirection.setAttribute("opacity",sideX<592?".9":"0");
+          updateSideWave(elapsed);
+        };
+        const resetWaterWave=()=>{
+          if(waterFrame)window.cancelAnimationFrame(waterFrame);
+          waterFrame=0;waterRunning=false;waterStart=null;impact=null;
+          pebble.style.left="7%";pebble.style.top="50%";pebble.classList.remove("is-dragging");pebble.hidden=false;
+          rippleNodes.forEach(ring=>{ring.setAttribute("opacity","0");ring.style.opacity="0";});impactDot.setAttribute("opacity","0");impactDot.style.opacity="0";crossGuide.setAttribute("d","M40 120H600");leftDirection.setAttribute("opacity","0");rightDirection.setAttribute("opacity","0");
+          selectedBase={x:400,y:76};particleTrace.setAttribute("cx","400");particleTrace.setAttribute("cy","76");updateSideWave(0);
+          status.textContent="拖曳小石子投入水盤，觀察波紋和水中粒子怎麼動";
+        };
+        const animateWater=time=>{
+          if(!waterRunning||waterStart===null)return;
+          const elapsed=(time-waterStart)/1000;
+          const duration=3.2;
+          drawWater(Math.min(elapsed,duration));
+          if(elapsed<duration){waterFrame=window.requestAnimationFrame(animateWater);return;}
+          waterRunning=false;waterFrame=0;pebble.hidden=false;pebble.style.left="7%";pebble.style.top="50%";
+          status.textContent="波紋已向水盤四周傳開；按「重設」後可以再投入一次";
+        };
+        const launchWaterWave=(x,y)=>{
+          if(waterFrame)window.cancelAnimationFrame(waterFrame);
+          impact={x:Math.max(42,Math.min(598,x)),y:Math.max(28,Math.min(212,y))};waterStart=null;waterRunning=true;
+          const selectedX=impact.x<480?impact.x+78:impact.x-78;
+          selectedBase={x:Math.max(45,Math.min(595,selectedX)),y:76};
+          particleTrace.setAttribute("cx",String(selectedBase.x));particleTrace.setAttribute("cy",String(selectedBase.y));
+          pebble.hidden=true;status.textContent="水面波紋正從落點向外擴散；觀察剖面裡的粒子在附近移動";
+          if(reducedMotion){drawWater(1.1);waterRunning=false;waterFrame=0;pebble.hidden=false;pebble.style.left="7%";pebble.style.top="50%";status.textContent="波紋已展開；剖面中的粒子只在附近移動";return;}
+          const animate=time=>{if(waterStart===null)waterStart=time;animateWater(time);};
+          waterFrame=window.requestAnimationFrame(animate);
+        };
+        const returnPebble=()=>{pebble.style.left="7%";pebble.style.top="50%";pebble.classList.remove("is-dragging");};
+        pebble.addEventListener("pointerdown",event=>{
+          drag={pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,left:pebble.offsetLeft,top:pebble.offsetTop,moved:false};
+          pebble.setPointerCapture(event.pointerId);
+        });
+        pebble.addEventListener("pointermove",event=>{
+          if(!drag||drag.pointerId!==event.pointerId)return;
+          const dx=event.clientX-drag.startX,dy=event.clientY-drag.startY;
+          if(Math.hypot(dx,dy)>6){drag.moved=true;pebble.classList.add("is-dragging");}
+          if(drag.moved){const bounds=topStage.getBoundingClientRect();pebble.style.left=`${Math.max(0,Math.min(100,(drag.left+dx)/bounds.width*100))}%`;pebble.style.top=`${Math.max(0,Math.min(100,(drag.top+dy)/bounds.height*100))}%`;event.preventDefault();}
+        });
+        pebble.addEventListener("pointerup",event=>{
+          if(!drag||drag.pointerId!==event.pointerId)return;
+          const wasDragged=drag.moved,point={x:event.clientX,y:event.clientY};drag=null;
+          if(wasDragged){
+            suppressClick=true;const rect=topStage.getBoundingClientRect(),x=(point.x-rect.left)/rect.width*640,y=(point.y-rect.top)/rect.height*240;
+            if(x>=34&&x<=606&&y>=22&&y<=218)launchWaterWave(x,y);else returnPebble();
+            window.setTimeout(()=>{suppressClick=false;},0);
+          }
+        });
+        pebble.addEventListener("pointercancel",()=>{drag=null;returnPebble();});
+        pebble.addEventListener("click",event=>{if(suppressClick){event.preventDefault();return;}launchWaterWave(320,120);});
+        resetWater.addEventListener("click",resetWaterWave);
+        resetWaterWave();
+      }
       const fieldParticles=document.querySelector("#field-p-wave-particles");
       if(fieldParticles){
         const fieldNs="http://www.w3.org/2000/svg",rows=[25,36,47,58],count=63;
