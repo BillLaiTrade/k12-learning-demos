@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="從發聲物體的振動出發，認識聲音如何透過介質傳播，以及介質和溫度如何影響聲速。">
+  <title>聲音的產生與傳播｜波動與聲音</title>
+  <style>
+    :root{color-scheme:light;--ink:#182326;--muted:#59696b;--line:#d7e1dd;--paper:#f4f7f1;--card:#fffefa;--green:#176b53;--pale:#e5f2e9;--orange:#bc612b;--orange-pale:#fff1e5;--blue:#6eaeb3;--shadow:0 14px 38px rgb(21 47 38 / 8%);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);line-height:1.7}button,input{font:inherit}button{cursor:pointer}a{color:var(--green)}.shell{width:min(1120px,calc(100% - 40px));margin:0 auto}.masthead{padding:26px 0 18px}.brand-row,.section-top,.control-row,.quiz-head{display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{color:var(--ink);font-size:.9rem;font-weight:800;text-decoration:none}.crumb{color:var(--muted);font-size:.9rem}.hero{display:grid;grid-template-columns:minmax(0,.9fr) minmax(320px,1.1fr);gap:32px;align-items:center;padding:42px 0 34px}.eyebrow{color:var(--green);font-size:.82rem;font-weight:800;letter-spacing:.12em}h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.6rem);line-height:1.18;letter-spacing:-.04em}.hero-copy>p{max-width:660px;color:var(--muted);font-size:1.06rem}.hero-art{overflow:hidden;margin:0;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#e5f1eb,#f9f6e9 62%,#fffefa);box-shadow:var(--shadow)}.hero-art svg{display:block;width:100%;height:auto}.hero-caption{padding:9px 14px;color:var(--muted);font-size:.84rem}.hero-dialogue{margin-top:18px}.lesson{padding:30px 0 80px}.lesson-layout{display:grid;grid-template-columns:minmax(195px,240px) minmax(0,1fr);gap:30px;align-items:start}.route{position:sticky;top:24px;max-height:calc(100svh - 48px);overflow:auto;padding:8px 12px 12px 0}.route-label{margin:0 0 10px;color:var(--muted);font-size:.74rem;letter-spacing:.08em}.route-inner{display:grid;gap:4px}.route a{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:start;padding:10px 11px;border:1px solid transparent;border-left:3px solid transparent;border-radius:0 10px 10px 0;color:var(--muted);font-size:.86rem;line-height:1.45;text-decoration:none}.route a:hover,.route a:focus-visible{border-color:var(--line);outline:2px solid transparent}.route a[aria-current="step"]{border-left-color:var(--green);background:#e7eee0;color:#315a46;font-weight:750}.route b{color:var(--green);font-size:.76rem;font-weight:650}.route a.quiz-nav{margin-top:12px;border-top:1px solid var(--line);padding-top:17px;color:#8a6726;font-weight:750}.route a.quiz-nav b{color:#946f2d}.cards{display:grid;gap:20px}.section-top{align-items:end;margin:0 0 18px}.section-top h2{margin:0;font-size:1.35rem}.progress-copy{color:var(--muted);font-size:.9rem}.lesson-card{scroll-margin-top:100px;display:grid;grid-template-columns:176px minmax(0,1fr);gap:24px;padding:25px;border:1px solid var(--line);border-radius:24px;background:var(--card);box-shadow:var(--shadow)}.card-side{border-right:1px solid var(--line);padding-right:18px}.card-number{color:var(--green);font-size:.84rem;font-weight:850;letter-spacing:.08em}.card-side h3{margin:10px 0 8px;font-size:1.05rem;line-height:1.45}.card-role{color:var(--muted);font-size:.85rem}.card-main h2{margin:0 0 8px;font-size:clamp(1.28rem,2.7vw,1.78rem);line-height:1.35}.card-main>p{margin:0 0 17px;color:var(--muted)}.dialogue{display:flex;align-items:center;gap:11px;margin:12px 0;padding:10px 13px;border-left:4px solid #8cae91;border-radius:0 12px 12px 0;background:#f0f5eb}.dialogue p{margin:0}.dialogue .speaker{display:inline-flex;flex:0 0 auto;align-items:center}.dialogue .speaker::before{content:"";display:block;width:42px;height:42px;border:2px solid #8cae91;border-radius:50%;background-image:url("../../../../shared-assets/characters/dialogue-character-avatars.png?v=clean-shaven-grandpa");background-repeat:no-repeat;background-position:100% 50%;background-size:200% 100%;box-shadow:0 2px 6px rgb(21 47 38 / 12%)}.dialogue--xiaokui{border-left-color:#d39765;background:var(--orange-pale)}.dialogue--xiaokui .speaker::before{border-color:#d39765;background-position:0 50%}.visual{overflow:hidden;margin:16px 0;padding:14px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#f2f8f1,#fffefa 68%)}.visual svg{display:block;width:100%;height:auto}.visual text{fill:#314640;font-family:inherit;font-size:15px}.visual .muted-label{fill:var(--muted);font-size:12px}.fact{margin-top:14px;padding:13px 15px;border-left:4px solid #b8cda9;border-radius:0 12px 12px 0;background:#f0f5eb}.fact p{margin:0}.controls{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:13px}.secondary,.action{min-height:44px;padding:9px 15px;border-radius:13px;font-weight:750}.secondary{border:1px solid var(--line);background:#fff;color:var(--ink)}.secondary:hover{border-color:var(--green)}.action{border:0;background:var(--green);color:#fff}.action:hover{background:#105640}.live-note{color:var(--muted);font-size:.9rem}.ruler-blade{transform-box:fill-box;transform-origin:left center}.is-vibrating .ruler-blade{animation:ruler-vibrate .11s ease-in-out infinite alternate}.is-vibrating .sound-ripple{animation:ripple-fade 1.15s ease-out infinite}.sound-ripple:nth-child(2){animation-delay:.38s}.sound-ripple:nth-child(3){animation-delay:.76s}@keyframes ruler-vibrate{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}@keyframes ripple-fade{0%{opacity:.08;transform:scale(.85)}40%{opacity:.8}100%{opacity:.08;transform:scale(1.12)}}.particle-stage{touch-action:pan-y}.particle-dot{fill:#6eaeb3;stroke:#fff;stroke-width:1}.particle-dot.focus{fill:#df8b41;stroke:#fff;stroke-width:2}.air-wave{fill:none;stroke:#176b53;stroke-width:3;stroke-linecap:round}.bell-jar{fill:#e6f3f2;fill-opacity:.48;stroke:#7ba7a3;stroke-width:4}.vacuum-level{height:10px;overflow:hidden;border-radius:999px;background:#e4e9e5}.vacuum-level span{display:block;width:100%;height:100%;border-radius:inherit;background:#77aaa6;transition:width .3s ease}.range-row{display:flex;align-items:center;gap:12px;margin:12px 0}.range-row label{min-width:95px;font-weight:700}.range-row input{width:100%;accent-color:var(--green)}.readout{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}.readout-card{flex:1 1 130px;padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:#fff}.readout-card small{display:block;color:var(--muted)}.readout-card strong{font-size:1.1rem;font-variant-numeric:tabular-nums}.medium-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}.medium-card{padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#fff}.medium-card strong{display:block;color:var(--green);font-size:1.05rem}.medium-card span{color:var(--muted);font-size:.86rem}.speed-meter{height:9px;margin-top:9px;overflow:hidden;border-radius:999px;background:#e8eeea}.speed-meter span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7cb9ac,#176b53);transform-origin:left;transition:transform .25s ease}.quiz{overflow:hidden;border:1px solid #eadfca;border-radius:24px;background:#fffefa;box-shadow:var(--shadow)}.quiz-head{justify-content:flex-start;padding:22px 26px;background:#f8f1e4}.quiz-mark{display:grid;place-items:center;flex:0 0 auto;width:50px;height:50px;border-radius:15px;background:#e8d8ad;color:#705b2a;font-size:1.3rem}.quiz-head h2{margin:0;font-size:1.45rem}.quiz-head p{margin:2px 0 0;color:var(--muted);font-size:.9rem}.quiz-body{padding:24px 28px 28px}.quiz-question{padding:17px 0;border-top:1px solid var(--line)}.quiz-question h3{margin:0 0 11px;font-size:1.05rem}.quiz-option{display:flex;align-items:flex-start;gap:10px;margin:8px 0;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer}.quiz-option:has(input:checked){border-color:var(--green);background:#f1f7f1}.quiz-option input{margin-top:5px;accent-color:var(--green)}.quiz-feedback{min-height:1.5em;margin:7px 0 0;color:var(--muted);font-size:.9rem}.quiz-result{margin-top:12px;padding:14px 16px;border-radius:13px;background:#eff4ea;color:#315a46;font-weight:750}.quiz-actions{display:flex;align-items:center;gap:12px}.quiz-helper{color:var(--muted);font-size:.86rem}.foot{padding:24px 0 38px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}.end-link{display:inline-flex;margin-top:18px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;text-decoration:none;font-weight:750}
+    @media(max-width:850px){.lesson-layout{grid-template-columns:1fr}.route{z-index:5;top:0;max-height:none;margin:0 -10px;padding:8px 10px;background:rgb(244 247 241 / 94%);backdrop-filter:blur(10px)}.route-inner{display:flex;overflow-x:auto;gap:7px;padding-bottom:5px}.route a{display:inline-flex;flex:0 0 auto;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);white-space:nowrap}.route a[aria-current="step"]{border-color:var(--green)}.route a.quiz-nav{margin:0 0 0 4px;border-top:0;border-left:1px solid var(--line);padding-top:7px}.route a.quiz-nav[aria-current="step"]{border-color:#d9a74f}.hero{gap:22px}.lesson-card{grid-template-columns:150px minmax(0,1fr);gap:18px}}
+    @media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{grid-template-columns:1fr;padding:32px 0 25px}.hero-art{order:2}.lesson{padding-top:20px}.lesson-card{grid-template-columns:1fr;padding:18px;gap:14px}.card-side{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:0 7px;border:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0;font-size:.95rem}.card-role{grid-column:2;font-size:.79rem}.card-number{grid-row:1/3}.visual{padding:8px}.medium-grid{grid-template-columns:1fr}.quiz-head{padding:18px}.quiz-body{padding:19px 17px 22px}.quiz-actions{align-items:stretch;flex-direction:column}.quiz-actions .action{width:100%}.range-row label{min-width:74px;font-size:.9rem}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <header class="shell masthead">
+    <div class="brand-row"><a class="brand" href="../../index.html">← 波動與聲音</a><span class="crumb">國二上・聲音的產生與傳播</span></div>
+    <div class="hero">
+      <div class="hero-copy"><div class="eyebrow">波動與聲音｜學習單元 2.2</div><h1>鐘聲從操場另一端傳來，<br>它怎麼到達我們耳邊？</h1><p>校園科學活動中，小葵和阿公正在準備聲音展示。遠處的鐘聲傳來，他們從發聲物體的振動開始，追蹤聲音如何經過介質傳播。</p>
+        <div class="dialogue dialogue--xiaokui hero-dialogue"><span class="speaker" aria-hidden="true"></span><p>剛才繩子上的波沿著繩子傳過來了，那鐘聲是怎麼穿過操場傳到這裡的？</p></div>
+      </div>
+      <figure class="hero-art"><svg viewBox="0 0 760 410" role="img" aria-label="校園鐘樓發出鐘聲，聲音波紋越過操場傳向小葵和阿公。">
+        <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#dceef0"/><stop offset="1" stop-color="#f6f5e8"/></linearGradient><linearGradient id="grass" x2="0" y2="1"><stop stop-color="#b7d4a1"/><stop offset="1" stop-color="#7fae83"/></linearGradient></defs>
+        <rect width="760" height="410" fill="url(#sky)"/><circle cx="622" cy="74" r="33" fill="#f7d88a" opacity=".8"/><path d="M0 244 Q125 220 240 246 T500 238 T760 245 V410 H0Z" fill="url(#grass)"/>
+        <path d="M58 249V161H144V249M48 162H154L101 119Z" fill="#f6eee0" stroke="#879c8a" stroke-width="4"/><path d="M83 161V131H119V161" fill="#7a9e9e" stroke="#879c8a" stroke-width="3"/><path d="M92 145Q101 133 110 145" fill="none" stroke="#bc612b" stroke-width="4"/><path d="M101 143V154" stroke="#bc612b" stroke-width="4" stroke-linecap="round"/>
+        <g fill="none" stroke="#bc8a4e" stroke-width="3" opacity=".8"><path d="M162 143Q191 155 162 168"/><path d="M176 132Q223 155 176 180"/><path d="M193 120Q252 155 193 192"/></g>
+        <path d="M220 310H736" stroke="#e6e8cf" stroke-width="6" opacity=".8"/><path d="M278 245V201H355V245M273 201H360L316 169Z" fill="#f8f3e8" stroke="#889d8b" stroke-width="4"/><rect x="298" y="215" width="15" height="30" rx="7" fill="#9bb7ad"/><rect x="324" y="215" width="15" height="30" rx="7" fill="#9bb7ad"/>
+        <path d="M488 265q0-34 27-34t27 34v31h-54z" fill="#df944e" stroke="#a96839" stroke-width="3"/><path d="M481 296h68l-9 12h-50z" fill="#a96839"/><circle cx="515" cy="227" r="6" fill="#704d37"/>
+        <path d="M637 245q-20 12-16 36l9 33q5 16 17 9l7-17q3-8 12-11 14-5 12-19-2-19-18-25-12-5-23-6Z" fill="#f7ead8" stroke="#7b8f83" stroke-width="4"/><path d="M651 267q17-1 17 14-1 9-11 12-6 2-6 9m0 8v2" fill="none" stroke="#bc612b" stroke-width="4" stroke-linecap="round"/>
+        <path d="M605 259q-15 16 0 32M590 249q-26 26 0 52" fill="none" stroke="#bc8a4e" stroke-width="3" opacity=".7"/><text x="655" y="348" text-anchor="middle" font-size="13" fill="#46605b">聽見鐘聲</text>
+        <text x="45" y="35" fill="#46605b" font-size="17" font-family="sans-serif">校園科學活動・鐘聲傳來</text>
+      </svg><figcaption class="hero-caption">從遠處傳來的鐘聲，帶出聲音如何產生與傳播</figcaption></figure>
+    </div>
+  </header>
+  <main class="shell lesson">
+    <div class="lesson-layout">
+      <nav class="route" aria-label="學習區塊導覽"><p class="route-label">學習路線</p><div class="route-inner">
+        <a href="#card-01"><b>01</b><span>聲音從振動產生</span></a><a href="#card-02"><b>02</b><span>聲音如何傳播</span></a><a href="#card-03"><b>03</b><span>聲音需要介質</span></a><a href="#card-04"><b>04</b><span>哪些因素影響聲速</span></a><a class="quiz-nav" href="#unit-quiz"><b aria-hidden="true">✦</b><span>單元小測</span></a>
+      </div></nav>
+      <div class="cards">
+        <div class="section-top"><h2>追蹤鐘聲，認識聲音的傳播</h2><span class="progress-copy">四個學習區塊・一個單元小測</span></div>
+        <section class="lesson-card" id="card-01">
+          <div class="card-side"><span class="card-number">01</span><h3>聲音從振動產生</h3><span class="card-role">看見發聲時的物體</span></div>
+          <div class="card-main"><h2>撥動鋼尺時，聲音是怎麼出現的？</h2><p>阿公拿出桌邊的鋼尺，讓小葵觀察它發出聲音時的狀態。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>尺一邊發出聲音，一邊抖得好快，聲音跟它在動有關嗎？</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>你觀察得很仔細。發聲的物體會振動；讓振動停下來，聲音也會停止。</p></div>
+            <figure class="visual"><svg id="ruler-demo" viewBox="0 0 760 300" role="img" aria-label="鋼尺伸出桌面，示意尺振動時發出聲音。">
+              <rect x="48" y="206" width="664" height="34" rx="8" fill="#c99b70"/><path d="M48 206h664" stroke="#a97c56" stroke-width="4"/><path d="M182 202 L182 150 Q240 147 300 150 L300 202Z" fill="#d7b188" stroke="#9a7654" stroke-width="3"/>
+              <g class="sound-lines" fill="none" stroke="#d39558" stroke-width="3"><path class="sound-ripple" d="M345 154q25-22 0-44"/><path class="sound-ripple" d="M363 164q39-34 0-68"/><path class="sound-ripple" d="M384 174q54-47 0-94"/></g>
+              <g class="ruler-blade"><path d="M294 152H620" stroke="#788b86" stroke-width="20" stroke-linecap="round"/><path d="M311 148H600" stroke="#d9e0dc" stroke-width="5" stroke-linecap="round"/><path d="M430 139v18m42-18v18m42-18v18m42-18v18" stroke="#82948d" stroke-width="2"/></g>
+              <text x="473" y="112" text-anchor="middle">鋼尺振動</text><text x="516" y="278" text-anchor="middle" class="muted-label">桌面固定一端，另一端伸出桌外</text>
+              <circle cx="663" cy="64" r="24" fill="#f2e5c6"/><path d="M663 49v19m0 11v2" stroke="#a56b35" stroke-width="4" stroke-linecap="round"/><text x="663" y="104" text-anchor="middle" class="muted-label">聲音</text>
+            </svg><figcaption>動畫示意鋼尺的振動；不同聲源的振動方式和快慢會有差異。</figcaption></figure>
+            <div class="controls"><button class="action" id="ruler-start" type="button">撥動鋼尺</button><button class="secondary" id="ruler-stop" type="button" disabled>讓鋼尺停下</button><span class="live-note" id="ruler-status" aria-live="polite">鋼尺靜止，尚未發聲。</span></div>
+            <div class="fact"><p><strong>重點：</strong>聲音由物體的振動產生。用手按住振動中的鋼尺，振動減弱，聲音也會變小並停止。</p></div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-02">
+          <div class="card-side"><span class="card-number">02</span><h3>聲音如何傳播</h3><span class="card-role">空氣粒子在原位附近振動</span></div>
+          <div class="card-main"><h2>鐘的振動，怎麼穿過空氣傳到耳朵？</h2><p>聲源的振動會造成周圍空氣疏密改變；這些變化逐步傳開，形成縱波。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>空氣看起來沒有往我們這邊跑，鐘聲怎麼還是傳過來了？</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>空氣粒子只在原來位置附近來回振動，並把擾動依序傳給鄰近粒子；傳到耳邊的是聲音的能量。</p></div>
+            <figure class="visual"><svg id="air-wave" class="particle-stage" viewBox="0 0 760 310" role="img" aria-label="空氣粒子沿聲音傳播方向前後振動，疏密變化向右傳播。">
+              <defs><marker id="arrow-right" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#176b53"/></marker><clipPath id="particle-clip"><rect x="45" y="76" width="670" height="160" rx="22"/></clipPath></defs>
+              <rect x="44" y="76" width="672" height="160" rx="22" fill="#e7f2ef" stroke="#d7e1dd" stroke-width="2"/><g id="air-particles" clip-path="url(#particle-clip)"></g>
+              <path d="M90 54H668" stroke="#176b53" stroke-width="2.5" marker-end="url(#arrow-right)"/><text x="380" y="37" text-anchor="middle">疏密變化向右傳播</text>
+              <path d="M374 255H430" stroke="#bc612b" stroke-width="2.5" marker-start="url(#arrow-left)" marker-end="url(#arrow-right)"/><text x="401" y="286" text-anchor="middle" class="muted-label">選中粒子在原位附近前後振動</text>
+              <defs><marker id="arrow-left" markerWidth="9" markerHeight="9" refX="2" refY="4.5" orient="auto"><path d="M9 0L0 4.5L9 9Z" fill="#bc612b"/></marker></defs>
+            </svg><figcaption>橘色粒子只在原位附近來回振動；聲音的疏密變化向前傳播。粒子位移在圖中放大呈現。</figcaption></figure>
+            <div class="controls"><button class="action" id="air-play" type="button" aria-pressed="false">播放粒子運動</button><span class="live-note" id="air-status" aria-live="polite">按下播放，觀察粒子運動方向和聲音傳播方向。</span></div>
+            <div class="fact"><p><strong>重點：</strong>在空氣中，聲音是縱波：空氣粒子的振動方向與聲音傳播方向平行。粒子沒有一路從聲源移動到耳朵。</p></div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-03">
+          <div class="card-side"><span class="card-number">03</span><h3>聲音需要介質</h3><span class="card-role">觀察抽氣時聲音的變化</span></div>
+          <div class="card-main"><h2>如果把鐘罩裡的空氣抽掉，聲音還傳得出來嗎？</h2><p>讓小葵比較鐘罩裡的空氣量，同時觀察聲源是否仍在振動。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>空氣粒子會幫忙傳遞擾動；如果空氣越來越少，鐘聲會怎麼變？</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>我們可以逐步抽走鐘罩裡的空氣來觀察。空氣越少，傳到外面的聲音越弱；理想真空中沒有介質，聲音無法傳播。</p></div>
+            <figure class="visual"><svg viewBox="0 0 760 335" role="img" aria-label="透明鐘罩內有持續振動的蜂鳴器，罩內空氣粒子數量會隨抽氣減少。">
+              <path class="bell-jar" d="M180 256V116a200 174 0 0 1 400 0v140"/><path d="M162 257h436" stroke="#718c84" stroke-width="7" stroke-linecap="round"/><path d="M350 244v-59q0-16 16-16h28q16 0 16 16v59" fill="#d79854" stroke="#9b693c" stroke-width="3"/><path d="M360 169v-12h51v12" fill="#7d8e84"/><path d="M375 169l6-16 8 16" fill="#db8764"/><g id="bell-air-dots" fill="#70aeb3" opacity=".76"></g>
+              <g id="bell-sound-rings" fill="none" stroke="#bc612b" stroke-width="3"><path d="M428 189q20 15 0 30"/><path d="M442 177q39 29 0 54"/><path d="M458 165q57 42 0 78"/></g>
+              <path d="M598 215h56v40h-56" fill="#a8b9b2" stroke="#72867d" stroke-width="3"/><path d="M654 235h30" stroke="#72867d" stroke-width="4"/><text x="378" y="40" text-anchor="middle">鐘罩內：空氣逐漸減少，蜂鳴器仍在振動</text><text id="jar-label" x="378" y="300" text-anchor="middle" class="muted-label">空氣充足｜聲音清楚</text>
+            </svg><figcaption>示意實驗：抽氣時聲音會逐漸變弱；實際鐘罩不能達到絕對真空。</figcaption></figure>
+            <div class="range-row"><label for="air-amount">罩內空氣量</label><input id="air-amount" type="range" min="0" max="100" step="1" value="100" aria-describedby="air-amount-value"><output id="air-amount-value">充足</output></div>
+            <div class="vacuum-level" aria-hidden="true"><span id="vacuum-bar"></span></div>
+            <div class="controls"><button class="secondary" id="air-reset" type="button">恢復空氣</button><span class="live-note" id="jar-status" aria-live="polite">蜂鳴器正在振動，鐘罩內有足夠空氣傳聲。</span></div>
+            <div class="fact"><p><strong>重點：</strong>聲音需要介質傳播。氣體、液體和固體都能傳聲；真空中沒有介質，聲音不能傳播。</p></div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-04">
+          <div class="card-side"><span class="card-number">04</span><h3>哪些因素影響聲速</h3><span class="card-role">比較介質與空氣溫度</span></div>
+          <div class="card-main"><h2>聲音在不同介質裡，傳得一樣快嗎？</h2><p>介質不同，聲速也不同；在空氣中，溫度改變也會影響聲速。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>聲音可以在空氣、水和固體裡傳，那它們傳得一樣快嗎？</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>不一樣。聲速會受介質影響；以空氣為例，溫度升高時，聲速也會增加。</p></div>
+            <div class="medium-grid" aria-label="約攝氏20度時常見介質中的聲速">
+              <div class="medium-card"><strong>空氣</strong><span>約 343 m/s｜約 20°C</span><div class="speed-meter"><span style="width:6%"></span></div></div>
+              <div class="medium-card"><strong>水</strong><span>約 1,480 m/s｜約 20°C</span><div class="speed-meter"><span style="width:25%"></span></div></div>
+              <div class="medium-card"><strong>鋼</strong><span>約 5,900 m/s｜近似值</span><div class="speed-meter"><span style="width:100%"></span></div></div>
+            </div>
+            <p class="live-note">數值為常見材料的近似值；實際聲速會隨材料性質與條件而變。</p>
+            <figure class="visual"><svg viewBox="0 0 760 195" role="img" aria-label="空氣溫度升高時，聲速也會增加的示意圖。">
+              <path d="M78 144H690" stroke="#aab8b0" stroke-width="2"/><path d="M92 140C230 133 335 116 442 94S610 51 676 34" fill="none" stroke="#176b53" stroke-width="5" stroke-linecap="round"/><path d="M666 35l15-5-7 15" fill="none" stroke="#176b53" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle id="temp-dot" cx="500" cy="82" r="10" fill="#df8b41" stroke="#fff" stroke-width="3"/><text x="80" y="177" class="muted-label">較低溫</text><text x="680" y="177" text-anchor="end" class="muted-label">較高溫</text><text x="380" y="25" text-anchor="middle">空氣溫度升高，聲速增加</text><text x="380" y="177" text-anchor="middle" class="muted-label">空氣溫度</text>
+            </svg><figcaption>空氣中的近似關係：0°C 時約 331 m/s，每升高 1°C 約增加 0.6 m/s。</figcaption></figure>
+            <div class="range-row"><label for="air-temperature">空氣溫度</label><input id="air-temperature" type="range" min="0" max="30" step="1" value="20" aria-describedby="temperature-value"><output id="temperature-value">20°C</output></div>
+            <div class="readout"><div class="readout-card"><small>此溫度下空氣中的近似聲速</small><strong id="temperature-speed">343 m/s</strong></div><div class="readout-card"><small>每秒傳播距離</small><strong id="temperature-distance">343 m</strong></div></div>
+            <div class="fact"><p><strong>重點：</strong>聲速取決於介質；在同一種氣體中，溫度也會影響聲速。這裡的溫度滑桿只描述空氣。</p></div>
+          </div>
+        </section>
+        <section class="quiz" id="unit-quiz" aria-labelledby="quiz-title">
+          <header class="quiz-head"><span class="quiz-mark" aria-hidden="true">✦</span><div><h2 id="quiz-title">單元小測｜幫小葵檢查聲音展示</h2><p>選出最合適的說法，看看你是否掌握聲音的產生與傳播。</p></div></header>
+          <div class="quiz-body">
+            <div class="quiz-question" data-question="q1"><h3>1. 鋼尺發出聲音時，最直接的原因是什麼？</h3><label class="quiz-option"><input type="radio" name="q1" value="a">鋼尺正在振動</label><label class="quiz-option"><input type="radio" name="q1" value="b">鋼尺周圍的空氣自己發出聲音</label><label class="quiz-option"><input type="radio" name="q1" value="c">聲音讓鋼尺開始振動</label><p class="quiz-feedback" aria-live="polite"></p></div>
+            <div class="quiz-question" data-question="q2"><h3>2. 聲音從聲源傳到耳朵時，空氣粒子如何運動？</h3><label class="quiz-option"><input type="radio" name="q2" value="a">一路從聲源移動到耳朵</label><label class="quiz-option"><input type="radio" name="q2" value="b">在原位附近振動，把擾動傳給鄰近粒子</label><label class="quiz-option"><input type="radio" name="q2" value="c">完全不動，只有聲音移動</label><p class="quiz-feedback" aria-live="polite"></p></div>
+            <div class="quiz-question" data-question="q3"><h3>3. 聲音能不能在真空中傳播？</h3><label class="quiz-option"><input type="radio" name="q3" value="a">可以，因為聲音不需要介質</label><label class="quiz-option"><input type="radio" name="q3" value="b">不可以，真空中沒有介質傳遞聲音</label><label class="quiz-option"><input type="radio" name="q3" value="c">只有很大的聲音可以</label><p class="quiz-feedback" aria-live="polite"></p></div>
+            <div class="quiz-question" data-question="q4"><h3>4. 其他條件相同時，空氣溫度升高，聲速通常會怎樣？</h3><label class="quiz-option"><input type="radio" name="q4" value="a">增加</label><label class="quiz-option"><input type="radio" name="q4" value="b">降低</label><label class="quiz-option"><input type="radio" name="q4" value="c">保持完全不變</label><p class="quiz-feedback" aria-live="polite"></p></div>
+            <div class="quiz-actions"><button class="action" id="quiz-check" type="button">檢查答案</button><button class="secondary" id="quiz-reset" type="button">重新作答</button><span class="quiz-helper">每題答對後會顯示簡短說明。</span></div><div class="quiz-result" id="quiz-result" aria-live="polite" hidden></div>
+          </div>
+        </section>
+        <a class="end-link" href="../../index.html">回到波動與聲音單元總覽</a>
+      </div>
+    </div>
+  </main>
+  <footer class="shell foot">國二上理化・波動與聲音｜學習單元 2.2</footer>
+  <script>
+    (()=>{
+      const ruler=document.querySelector("#ruler-demo"),rulerStart=document.querySelector("#ruler-start"),rulerStop=document.querySelector("#ruler-stop"),rulerStatus=document.querySelector("#ruler-status");
+      const setRuler=active=>{ruler.classList.toggle("is-vibrating",active);rulerStart.disabled=active;rulerStop.disabled=!active;rulerStatus.textContent=active?"鋼尺正在振動，示意它同時發出聲音。":"鋼尺振動停止，聲音也停止。";ruler.setAttribute("aria-label",active?"鋼尺正在振動並發出聲音。":"鋼尺靜止，沒有發聲。");};
+      rulerStart.addEventListener("click",()=>setRuler(true));rulerStop.addEventListener("click",()=>setRuler(false));
+
+      const particleGroup=document.querySelector("#air-particles"),airSvg=document.querySelector("#air-wave"),airPlay=document.querySelector("#air-play"),airStatus=document.querySelector("#air-status"),dots=[];
+      const ns="http://www.w3.org/2000/svg";
+      for(let row=0;row<6;row++)for(let col=0;col<47;col++){const dot=document.createElementNS(ns,"circle"),x=58+col*14,y=94+row*24;dot.setAttribute("cx",x);dot.setAttribute("cy",y);dot.setAttribute("r",row===2&&col===23?5:3.5);dot.setAttribute("class",row===2&&col===23?"particle-dot focus":"particle-dot");dot.dataset.x=x;dot.dataset.phase=(col/47)*Math.PI*4;particleGroup.append(dot);dots.push(dot);}
+      let playing=false,airFrame=0,airStart=0;
+      const animateAir=time=>{if(!playing)return;if(!airStart)airStart=time;const elapsed=(time-airStart)/1000;dots.forEach(dot=>{const phase=Number(dot.dataset.phase)-elapsed*5;dot.setAttribute("cx",String(Number(dot.dataset.x)+Math.sin(phase)*6));});airFrame=requestAnimationFrame(animateAir);};
+      airPlay.addEventListener("click",()=>{playing=!playing;airPlay.textContent=playing?"暫停粒子運動":"播放粒子運動";airPlay.setAttribute("aria-pressed",String(playing));airStatus.textContent=playing?"觀察橘色粒子：它前後振動，疏密變化則向右傳播。":"粒子運動已暫停。";if(playing){airStart=0;airFrame=requestAnimationFrame(animateAir);}else{cancelAnimationFrame(airFrame);dots.forEach(dot=>dot.setAttribute("cx",dot.dataset.x));}});
+
+      const airRange=document.querySelector("#air-amount"),airValue=document.querySelector("#air-amount-value"),vacuumBar=document.querySelector("#vacuum-bar"),airDots=document.querySelector("#bell-air-dots"),soundRings=document.querySelector("#bell-sound-rings"),jarLabel=document.querySelector("#jar-label"),jarStatus=document.querySelector("#jar-status");
+      for(let i=0;i<48;i++){const dot=document.createElementNS(ns,"circle"),x=218+(i%8)*43,y=88+Math.floor(i/8)*28;dot.setAttribute("cx",x);dot.setAttribute("cy",y);dot.setAttribute("r",3);airDots.append(dot);}
+      const updateAir=()=>{const amount=Number(airRange.value),count=Math.round(48*amount/100);[...airDots.children].forEach((dot,index)=>dot.style.opacity=index<count?".76":"0");vacuumBar.style.width=`${amount}%`;airRange.setAttribute("aria-valuetext",amount>65?"空氣充足":amount>25?"空氣逐漸減少":"接近真空");
+        if(amount>65){airValue.textContent="充足";jarLabel.textContent="空氣充足｜聲音清楚";jarStatus.textContent="蜂鳴器正在振動，鐘罩內有足夠空氣傳聲。";soundRings.style.opacity="1";}
+        else if(amount>25){airValue.textContent="逐漸減少";jarLabel.textContent="空氣減少｜聲音變弱";jarStatus.textContent="抽走部分空氣後，傳到鐘罩外的聲音變弱；蜂鳴器仍在振動。";soundRings.style.opacity=".48";}
+        else{airValue.textContent="接近真空";jarLabel.textContent="介質很少｜聲音幾乎聽不見";jarStatus.textContent="鐘罩內接近真空，聲音幾乎無法傳出；蜂鳴器本身仍在振動。";soundRings.style.opacity=".12";}
+      };
+      airRange.addEventListener("input",updateAir);document.querySelector("#air-reset").addEventListener("click",()=>{airRange.value="100";updateAir();});updateAir();
+
+      const temperature=document.querySelector("#air-temperature"),tempValue=document.querySelector("#temperature-value"),tempSpeed=document.querySelector("#temperature-speed"),tempDistance=document.querySelector("#temperature-distance"),tempDot=document.querySelector("#temp-dot");
+      const updateTemperature=()=>{const c=Number(temperature.value),speed=331+.6*c;tempValue.textContent=`${c}°C`;tempSpeed.textContent=`${Math.round(speed)} m/s`;tempDistance.textContent=`${Math.round(speed)} m`;tempDot.setAttribute("cx",String(92+(c/30)*584));tempDot.setAttribute("cy",String(140-(c/30)*106));temperature.setAttribute("aria-valuetext",`${c}攝氏度，聲速約${Math.round(speed)}公尺每秒`);};
+      temperature.addEventListener("input",updateTemperature);updateTemperature();
+
+      const explanations={q1:["正確。鋼尺振動時發出聲音。","鋼尺旁的空氣不是聲音的來源；發聲的是正在振動的鋼尺。","是鋼尺的振動產生聲音，不是聲音先讓鋼尺振動。"],q2:["空氣粒子在原位附近振動，並把擾動傳給鄰近粒子。","粒子不會一路從聲源跑到耳朵。","粒子會在原位附近振動，聲音的擾動向前傳播。"],q3:["正確。聲音需要介質，真空中沒有介質傳播聲音。","聲音必須透過介質傳播。","聲音大小不會改變真空中缺少介質這件事。"],q4:["正確。在一般空氣條件下，溫度升高，聲速通常增加。","空氣溫度升高時，聲速通常增加。","空氣溫度會影響聲速。"]};
+      const answers={q1:"a",q2:"b",q3:"b",q4:"a"},quizResult=document.querySelector("#quiz-result");
+      document.querySelector("#quiz-check").addEventListener("click",()=>{let score=0,answered=0;Object.entries(answers).forEach(([name,correct])=>{const selected=document.querySelector(`input[name="${name}"]:checked`),feedback=document.querySelector(`[data-question="${name}"] .quiz-feedback`);if(!selected){feedback.textContent="請選一個答案。";return;}answered++;const right=selected.value===correct;if(right)score++;feedback.textContent=explanations[name][selected.value===correct?0:selected.value==="b"?1:selected.value==="c"?2:0];feedback.style.color=right?"#176b53":"#755a2d";});quizResult.hidden=false;quizResult.textContent=answered<4?`已作答 ${answered} 題，答對 ${score} 題。完成所有題目後再檢查一次。`:`答對 ${score} / 4 題。${score===4?"太好了，你已掌握聲音產生、傳播與聲速的重點。":"可以回到對應區塊，再看一次相關示範後重答。"}`;});
+      document.querySelector("#quiz-reset").addEventListener("click",()=>{document.querySelectorAll(".quiz-question input").forEach(input=>input.checked=false);document.querySelectorAll(".quiz-feedback").forEach(node=>{node.textContent="";node.style.color="";});quizResult.hidden=true;});
+
+      const links=[...document.querySelectorAll(".route a[href^='#card-'],.route a[href='#unit-quiz']")],targets=links.map(link=>document.querySelector(link.getAttribute("href"))).filter(Boolean);
+      const activate=id=>links.forEach(link=>{if(link.hash===`#${id}`){link.setAttribute("aria-current","step");link.scrollIntoView({block:"nearest",inline:"nearest"});}else link.removeAttribute("aria-current");});
+      if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)activate(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});targets.forEach(target=>observer.observe(target));}
+    })();
+  </script>
+</body>
+</html>
