@@ -1418,7 +1418,7 @@
         const bounds=source.getBoundingClientRect(),inset=source.clientTop+parseFloat(getComputedStyle(source).paddingTop)||0,radius=lens.offsetWidth/2;
         return {bounds,inset,radius,minX:inset+radius,maxX:inset+sample.offsetWidth-radius,minY:inset+radius,maxY:inset+sample.offsetHeight-radius};
       };
-      const refreshLensLayout=()=>{cachedLensLimits=measureLensLimits();reveal.style.height=`${sample.offsetHeight}px`;};
+      const refreshLensLayout=()=>{cachedLensLimits=measureLensLimits();const inset=cachedLensLimits.inset-1;reveal.style.left=`${inset}px`;reveal.style.top=`${inset}px`;reveal.style.right="auto";reveal.style.width=`${sample.offsetWidth}px`;reveal.style.height=`${sample.offsetHeight}px`;};
       const moveLens=(clientX,clientY,updateCard=true)=>{
         if(phase==="rust"&&!rustPixels){rustPixels=readRustPixels(sample);if(rustPixels)renderReveal();}
         const {bounds,inset,minX,maxX,minY,maxY,radius}=cachedLensLimits||measureLensLimits();
@@ -1426,7 +1426,7 @@
         const y=Math.max(minY,Math.min(maxY,clientY-bounds.top));
         position={x:(x-minX)/Math.max(1,maxX-minX),y:(y-minY)/Math.max(1,maxY-minY)};
         lens.style.left=`${x}px`;lens.style.top=`${y}px`;
-        const revealX=x-inset,revealY=y-inset;reveal.style.setProperty("--lens-x",`${revealX}px`);reveal.style.setProperty("--lens-y",`${revealY}px`);reveal.style.setProperty("--lens-radius",`${Math.max(4,radius-2)}px`);
+        const revealX=x-inset,revealY=y-inset;reveal.style.setProperty("--lens-x",`${revealX}px`);reveal.style.setProperty("--lens-y",`${revealY}px`);reveal.style.setProperty("--lens-radius",`${Math.max(4,radius-5)}px`);
         revealSvg.style.transform=`translate(${(1-magnification)*revealX}px,${(1-magnification)*revealY}px) scale(${magnification})`;
         lens.setAttribute("aria-valuenow",String(Math.round(position.x*100)));
         if(updateCard)inspect();
