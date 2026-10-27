@@ -49,17 +49,21 @@
               <img class="ruler-photo-background" src="assets/ruler-suspended-background.png" alt="" aria-hidden="true">
               <svg class="ruler-model" viewBox="0 0 1000 562.5" role="group" aria-label="平放鋼尺互動示範">
                 <defs>
-                  <image id="ruler-photo" href="assets/ruler-flat-assembly.png" width="1000" height="562.5" preserveAspectRatio="none"/>
-                  <clipPath id="ruler-free-region"><path d="M320 142L990 409V515L880 503L320 241Z"/></clipPath>
-                  <clipPath id="ruler-fixed-region"><path clip-rule="evenodd" d="M0 0H1000V562.5H0ZM320 142L990 409V515L880 503L320 241Z"/></clipPath>
+                  <image id="ruler-photo" href="assets/ruler-parallel-assembly.png" width="1000" height="562.5" preserveAspectRatio="xMidYMid meet"/>
+                  <clipPath id="ruler-face-region"><path d="M255 183H990V264H188V208H235L255 200Z"/></clipPath>
+                  <clipPath id="ruler-clamp-region"><path clip-rule="evenodd" d="M0 0H1000V562.5H0ZM255 183H990V264H188V208H235L255 200Z"/></clipPath>
+                  <clipPath id="ruler-fixed-region"><rect x="0" y="0" width="255" height="562.5"/></clipPath>
                 </defs>
-                <g transform="translate(245 173) scale(.65 .535)">
-                  <g clip-path="url(#ruler-fixed-region)" aria-hidden="true"><use href="#ruler-photo"/></g>
-                  <g id="ruler-moving-blade" aria-hidden="true"></g>
-                  <path class="ruler-hit" id="ruler-pluck" role="button" tabindex="0" aria-label="點擊鋼尺撥動並聆聽，也可按 Enter 或空白鍵" aria-describedby="ruler-caption"/>
+                <g id="ruler-assembly" transform="translate(300 163) rotate(-1) scale(.55)">
+                  <g id="ruler-face" transform="matrix(1 0 -.65 .65 119.6 64.4)">
+                    <g clip-path="url(#ruler-fixed-region)" aria-hidden="true"><g clip-path="url(#ruler-face-region)"><use href="#ruler-photo"/></g></g>
+                    <g id="ruler-moving-blade" aria-hidden="true"></g>
+                    <path class="ruler-hit" id="ruler-pluck" role="button" tabindex="0" aria-label="點擊鋼尺撥動並聆聽，也可按 Enter 或空白鍵" aria-describedby="ruler-caption"/>
+                  </g>
+                  <g clip-path="url(#ruler-clamp-region)" aria-hidden="true"><use href="#ruler-photo"/></g>
                 </g>
               </svg>
-            </div><figcaption id="ruler-caption">尺面朝上平放，短段夾緊在桌邊，長段懸空。直接點擊尺面即可撥動並聆聽，再點一次可重新撥動；振動畫面放慢呈現。</figcaption></figure>
+            </div><figcaption id="ruler-caption">尺面朝上平放，長邊與靠近我們的桌子前緣平行；短段夾緊，長段懸空。直接點擊尺面即可撥動並聆聽，再點一次可重新撥動；振動畫面放慢呈現。</figcaption></figure>
             <div class="controls"><button class="action" id="ruler-start" type="button" aria-pressed="false">撥動鋼尺並聆聽</button><button class="secondary" id="ruler-stop" type="button" disabled>按住鋼尺停止</button><span class="live-note" id="ruler-status" aria-live="polite">直接點擊尺面，讓鋼尺振動並播放聲音。</span></div>
             <div class="fact"><p><strong>重點：</strong>聲音由物體的振動產生。用手按住振動中的鋼尺，振動減弱，聲音也會變小並停止。</p></div>
           </div>
@@ -133,27 +137,25 @@
   <script>
     (()=>{
       const ruler=document.querySelector("#ruler-demo"),movingBlade=document.querySelector("#ruler-moving-blade"),rulerStart=document.querySelector("#ruler-start"),rulerStop=document.querySelector("#ruler-stop"),rulerStatus=document.querySelector("#ruler-status");
-      // Deform the photographic ruler in narrow overlapping strips. The clamp
-      // and supported portion stay in the fixed layer. Rest projection reduces
-      // the downward viewing angle; vibration adds zero displacement and slope
-      // at the cantilever root. Source coordinates precede perspective scaling.
-      const rulerRoot=320,rulerTip=980,rulerPluck=document.querySelector("#ruler-pluck"),rulerSlices=[];
+      // The entire ruler is one flat plane, parallel to the front table edge.
+      // Only oscillation deforms the free segment: every strip is the identity
+      // transform at rest, and displacement/slope start at zero at the clamp.
+      const rulerRoot=255,rulerTip=980,rulerPluck=document.querySelector("#ruler-pluck"),rulerSlices=[];
       const rulerSvgNS="http://www.w3.org/2000/svg",rulerDefs=document.querySelector(".ruler-model defs");
       for(let i=0;i<80;i++){
         const x=rulerRoot+(rulerTip-rulerRoot)*i/80,width=(rulerTip-rulerRoot)/80;
         const clip=document.createElementNS(rulerSvgNS,"clipPath"),rect=document.createElementNS(rulerSvgNS,"rect");
         clip.id=`ruler-strip-${i}`;rect.setAttribute("x",String(x-.2));rect.setAttribute("y","0");rect.setAttribute("width",String(width+.4));rect.setAttribute("height","562.5");clip.append(rect);rulerDefs.append(clip);
         const slice=document.createElementNS(rulerSvgNS,"g"),region=document.createElementNS(rulerSvgNS,"g"),strip=document.createElementNS(rulerSvgNS,"g"),photo=document.createElementNS(rulerSvgNS,"use");
-        region.setAttribute("clip-path","url(#ruler-free-region)");strip.setAttribute("clip-path",`url(#${clip.id})`);photo.setAttribute("href","#ruler-photo");strip.append(photo);region.append(strip);slice.append(region);movingBlade.append(slice);rulerSlices.push({x:x+width/2,slice});
+        region.setAttribute("clip-path","url(#ruler-face-region)");strip.setAttribute("clip-path",`url(#${clip.id})`);photo.setAttribute("href","#ruler-photo");strip.append(photo);region.append(strip);slice.append(region);movingBlade.append(slice);rulerSlices.push({x:x+width/2,slice});
       }
       const rulerBend=(x,tipDisplacement)=>{
         const u=Math.max(0,Math.min(1,(x-rulerRoot)/(rulerTip-rulerRoot)));
-        const restSlope=-.25;
-        return {offset:restSlope*(x-rulerRoot)+tipDisplacement*u*u*(3-u)/2,slope:restSlope+tipDisplacement*(3*u-1.5*u*u)/(rulerTip-rulerRoot)};
+        return {offset:tipDisplacement*u*u*(3-u)/2,slope:tipDisplacement*(3*u-1.5*u*u)/(rulerTip-rulerRoot)};
       };
       const drawRuler=tipDisplacement=>{
         rulerSlices.forEach(({x,slice})=>{const {offset,slope}=rulerBend(x,tipDisplacement);slice.setAttribute("transform",`matrix(1 ${slope} 0 1 0 ${offset-slope*x})`);});
-        const edge=side=>Array.from({length:51},(_,i)=>{const x=rulerRoot+(rulerTip-rulerRoot)*i/50;return `${x} ${.425*x+53+side*42+rulerBend(x,tipDisplacement).offset}`;});
+        const edge=side=>Array.from({length:51},(_,i)=>{const x=rulerRoot+(rulerTip-rulerRoot)*i/50;return `${x} ${223.5+side*40.5+rulerBend(x,tipDisplacement).offset}`;});
         rulerPluck.setAttribute("d",`M${edge(-1).join("L")}L${edge(1).reverse().join("L")}Z`);
       };
       drawRuler(0);

@@ -47,6 +47,43 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
   };
   const stop = () => page.locator('#ruler-stop').click();
 
+  await t.test('ruler long edges are parallel with no rest deformation at the clamp', async () => {
+    const edges = await page.evaluate(async () => {
+      const image = new Image();
+      image.src = document.querySelector('#ruler-photo').getAttribute('href');
+      await image.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = image.naturalWidth; canvas.height = image.naturalHeight;
+      const ctx = canvas.getContext('2d'); ctx.drawImage(image, 0, 0);
+      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      return [.45, .55, .65, .75, .85].map(fraction => {
+        const x = Math.round(canvas.width * fraction), ys = [];
+        for (let y = 0; y < canvas.height; y++) if (pixels[(y * canvas.width + x) * 4 + 3] > 220) ys.push(y);
+        return [ys[0], ys.at(-1)];
+      });
+    });
+    assert.ok(edges.every(([top, bottom]) => Number.isFinite(top) && bottom > top));
+    for (const index of [0, 1]) {
+      const ys = edges.map(edge => edge[index]);
+      assert.ok(Math.max(...ys) - Math.min(...ys) <= 6, 'photographed long edges should be parallel to the front table edge');
+    }
+    assert.equal(await page.locator('#ruler-assembly').evaluate(node => {
+      const m = node.transform.baseVal.consolidate().matrix;
+      return Math.abs(m.a - m.d) < 1e-9 && Math.abs(m.b + m.c) < 1e-9;
+    }), true, 'position, uniformly scale and rotate the entire assembly without skewing it');
+    const screenSlopes = await page.locator('#ruler-face').evaluate(node => {
+      const matrix = node.getScreenCTM();
+      return [190, 250].map(y => {
+        const a = new DOMPoint(450, y).matrixTransform(matrix);
+        const b = new DOMPoint(850, y).matrixTransform(matrix);
+        return (b.y - a.y) / (b.x - a.x);
+      });
+    });
+    assert.ok(screenSlopes.every(slope => Math.abs(slope + Math.tan(Math.PI / 180)) < 1e-6));
+    assert.ok(Math.abs(screenSlopes[0] - screenSlopes[1]) < 1e-9, 'both long edges follow the same front table edge direction');
+    assert.equal(await page.locator('#ruler-moving-blade > g').evaluateAll(nodes => nodes.every(node => { const m = node.transform.baseVal.consolidate().matrix; return m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1 && m.e === 0 && m.f === 0; })), true);
+  });
+
   await t.test('pointer pluck bends only the free segment and can be stopped', async () => {
     await hit.scrollIntoViewIfNeeded();
     const fixed = await page.locator('[clip-path="url(#ruler-fixed-region)"]').innerHTML();
@@ -63,6 +100,7 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
     assert.notDeepEqual(transforms[0], transforms.at(-1));
     await stop();
     assert.equal(await shape(), rest);
+    assert.equal(await page.locator('#ruler-moving-blade > g').evaluateAll(nodes => nodes.every(node => { const m = node.transform.baseVal.consolidate().matrix; return m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1 && m.e === 0 && m.f === 0; })), true);
     assert.equal(await hit.evaluate(node => getComputedStyle(node).outlineStyle), 'none');
     await page.clock.runFor(1500);
     assert.equal(await shape(), rest);
