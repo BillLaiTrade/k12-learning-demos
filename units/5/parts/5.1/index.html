@@ -35,7 +35,7 @@
   </style>
   <link rel="stylesheet" href="assets/measurement-scene.css">
   <link rel="stylesheet" href="assets/touch-story.css">
-  <link rel="stylesheet" href="assets/water-lab.css?v=calibrated-scale-1">
+  <link rel="stylesheet" href="assets/water-lab.css?v=engraved-glass-1">
 </head>
 <body>
   <header class="shell masthead">
@@ -92,14 +92,18 @@
                     <svg id="water-lab-overlay" viewBox="0 0 1642 958" aria-hidden="true">
                       <defs>
                         <linearGradient id="wl-red"><stop stop-color="#9e1420"/><stop offset=".35" stop-color="#ff5543"/><stop offset=".6" stop-color="#f52028"/><stop offset="1" stop-color="#a70b17"/></linearGradient>
+                        <linearGradient id="wl-main-glass"><stop stop-color="#71868d" stop-opacity=".16"/><stop offset=".14" stop-color="#fff" stop-opacity=".7"/><stop offset=".6" stop-color="#f5f7ee" stop-opacity=".66"/><stop offset=".9" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#71868d" stop-opacity=".15"/></linearGradient>
                         <radialGradient id="wl-bulb"><stop offset="0" stop-color="#ff6d52"/><stop offset=".65" stop-color="#ee2027"/><stop offset="1" stop-color="#a10c1b"/></radialGradient>
                         <linearGradient id="wl-ice" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".96"/><stop offset=".5" stop-color="#cbe9f6" stop-opacity=".65"/><stop offset="1" stop-color="#8cc0d8" stop-opacity=".8"/></linearGradient>
                         <marker id="wl-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#334c50"/></marker>
                       </defs>
                       <ellipse id="water-lab-heat-glow" cx="590" cy="723" rx="220" ry="15" fill="#f97316" opacity="0"/>
-                      <g id="water-lab-scale" stroke="#34454b" stroke-width="2"></g>
-                      <text id="water-lab-scale-unit" x="555" y="223" text-anchor="middle" class="water-lab-scale-unit">°C</text>
-                      <g id="water-lab-fluid"><path id="water-lab-liquid" d="M574 450Q580 454 586 450V588H574Z" fill="url(#wl-red)"/><circle cx="580" cy="588" r="21" fill="url(#wl-bulb)"/><circle cx="573" cy="581" r="5" fill="#fff" opacity=".7"/><path id="water-lab-meniscus" d="M574 450Q580 454 586 450" fill="none" stroke="#9d1522" stroke-width="2"/></g>
+                      <g id="water-lab-thermometer">
+                        <rect id="water-lab-body" x="550" y="214" width="57" height="344" rx="3" fill="url(#wl-main-glass)"/>
+                        <g id="water-lab-scale" stroke="#34454b" stroke-width="1"></g>
+                        <text id="water-lab-scale-unit" x="565" y="232" text-anchor="middle" class="water-lab-scale-unit">°C</text>
+                        <g id="water-lab-fluid"><path id="water-lab-liquid" d="M577 434.3Q580 435.7 583 434.3V588H577Z" fill="url(#wl-red)"/><circle cx="580" cy="588" r="21" fill="url(#wl-bulb)"/><circle cx="573" cy="581" r="5" fill="#fff" opacity=".7"/><path id="water-lab-meniscus" d="M577 434.3Q580 435.7 583 434.3" fill="none" stroke="#9d1522" stroke-width=".8"/></g>
+                      </g>
                       <path id="water-lab-connector" fill="none" stroke="#176b53" stroke-width="3" stroke-dasharray="10 8"/>
                       <circle id="water-lab-source" cx="580" cy="452" r="14" fill="none" stroke="#176b53" stroke-width="3"/>
                       <g id="water-lab-direction" fill="#2381c8" hidden><path d="M634 -30H645V10H658L639 32L620 10H634Z"/></g>
@@ -120,16 +124,20 @@
                 <div class="water-lab-lens">
                   <h3>液面局部放大</h3>
                   <svg id="water-lab-zoom" viewBox="0 0 320 360" role="img" aria-label="測溫液體的液面局部放大">
-                    <defs><linearGradient id="wl-zoom-bg"><stop stop-color="#e6e3da"/><stop offset=".5" stop-color="#f7f5f0"/><stop offset="1" stop-color="#dbd6cc"/></linearGradient><linearGradient id="wl-zoom-glass"><stop stop-color="#8a969e"/><stop offset=".2" stop-color="#e9f1f3"/><stop offset=".35" stop-color="#aab8bd"/><stop offset=".55" stop-color="#fff" stop-opacity=".8"/><stop offset=".8" stop-color="#d9e2e5"/><stop offset="1" stop-color="#687983"/></linearGradient><linearGradient id="wl-zoom-red"><stop stop-color="#95131e"/><stop offset=".25" stop-color="#fd6f64"/><stop offset=".5" stop-color="#ff2b28"/><stop offset=".75" stop-color="#d81b29"/><stop offset="1" stop-color="#950f1b"/></linearGradient></defs>
+                    <defs><linearGradient id="wl-zoom-bg"><stop stop-color="#e3ede8"/><stop offset=".5" stop-color="#f4f7f0"/><stop offset="1" stop-color="#dbe7e2"/></linearGradient><linearGradient id="wl-zoom-glass"><stop stop-color="#6e828b"/><stop offset=".035" stop-color="#f9ffff"/><stop offset=".09" stop-color="#a8b9bc"/><stop offset=".18" stop-color="#f0f5ef"/><stop offset=".55" stop-color="#fafbf3"/><stop offset=".82" stop-color="#e9efe9"/><stop offset=".94" stop-color="#a5b7bc"/><stop offset=".98" stop-color="#faffff"/><stop offset="1" stop-color="#687e88"/></linearGradient><linearGradient id="wl-zoom-channel"><stop stop-color="#859da3"/><stop offset=".18" stop-color="#e6eff0"/><stop offset=".5" stop-color="#fff"/><stop offset=".82" stop-color="#d3e1e3"/><stop offset="1" stop-color="#8199a0"/></linearGradient><linearGradient id="wl-zoom-red"><stop stop-color="#95131e"/><stop offset=".25" stop-color="#fd6f64"/><stop offset=".5" stop-color="#ff2b28"/><stop offset=".75" stop-color="#d81b29"/><stop offset="1" stop-color="#950f1b"/></linearGradient></defs>
                     <rect width="320" height="360" rx="16" fill="url(#wl-zoom-bg)"/>
-                    <rect x="80" y="0" width="118" height="360" fill="url(#wl-zoom-glass)"/>
-                    <path id="water-lab-zoom-fluid" d="M99 190Q139 207 179 190V360H99Z" fill="url(#wl-zoom-red)"/>
-                    <path id="water-lab-zoom-meniscus" d="M99 190Q139 207 179 190" fill="none" stroke="#a5202c" stroke-width="2"/>
-                    <path d="M92 0V360M186 0V360" stroke="#fff" stroke-width="5" opacity=".7"/>
-                    <g id="water-lab-zoom-scale" stroke="#293434" stroke-width="3"></g>
-                    <text id="water-lab-zoom-unit" x="268" y="21" text-anchor="middle" class="water-lab-scale-unit">°C</text>
-                    <text x="251" y="337" text-anchor="middle" class="water-lab-scale-detail">每小格 1°C</text>
+                    <g id="water-lab-zoom-thermometer">
+                      <rect id="water-lab-zoom-body" x="60" y="-2" width="199.5" height="364" fill="url(#wl-zoom-glass)" stroke="#7f959b" stroke-width="1.4"/>
+                      <rect x="150" y="-2" width="30" height="364" fill="url(#wl-zoom-channel)"/>
+                      <g id="water-lab-zoom-scale" stroke="#34454b" stroke-width="1.5"></g>
+                      <text id="water-lab-zoom-unit" x="112.5" y="23" text-anchor="middle" class="water-lab-scale-unit">°C</text>
+                      <path id="water-lab-zoom-fluid" d="M154.5 202Q165 207 175.5 202V360H154.5Z" fill="url(#wl-zoom-red)"/>
+                      <path id="water-lab-zoom-meniscus" d="M154.5 202Q165 207 175.5 202" fill="none" stroke="#a5202c" stroke-width="1.4"/>
+                      <path d="M69 0V360M246 0V360" stroke="#fff" stroke-width="3" opacity=".6"/>
+                      <path d="M76 0V360M239 0V360" stroke="#fff" stroke-width="1" opacity=".5"/>
+                    </g>
                   </svg>
+                  <small class="water-lab-scale-detail">每小格 1°C</small>
                   <p id="water-lab-feedback" class="water-lab-feedback" role="status">觀察同一支溫度計的液面</p>
                 </div>
                 <p id="water-lab-heater-status" class="water-lab-heater-status"><i aria-hidden="true"></i><span>電熱板已關閉</span></p>
@@ -241,6 +249,6 @@
   </main>
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
   <script src="assets/temperature-lesson.js" defer></script>
-  <script type="module" src="assets/water-lab.js?v=calibrated-scale-1"></script>
+  <script type="module" src="assets/water-lab.js?v=engraved-glass-1"></script>
 </body>
 </html>

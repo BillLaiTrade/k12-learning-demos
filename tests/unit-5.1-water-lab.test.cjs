@@ -59,8 +59,8 @@ test('water lab functional and visual checks in Chromium',{timeout:150000},async
       zoom:meniscusY('water-lab-zoom-fluid'),
       source:Number(document.getElementById('water-lab-source').getAttribute('cy'))
     }});
-    assert.ok(Math.abs((545-snapshot.main)/300-(270-snapshot.zoom)/230)<.000001);
-    assert.ok(Math.abs(snapshot.main-(545-(snapshot.probe-5)/55*300))<.001);
+    assert.ok(Math.abs((545-snapshot.main)/300-(300-snapshot.zoom)/260)<.000001);
+    assert.ok(Math.abs(snapshot.main-(545-snapshot.probe*5))<.001);
     assert.equal(snapshot.source,snapshot.main);
   };
   await t.test('matches approved composition and starts with safe fixed apparatus',async()=>{
@@ -89,6 +89,14 @@ test('water lab functional and visual checks in Chromium',{timeout:150000},async
       const labels=await page.locator(`#${id} text`).evaluateAll(nodes=>nodes.map(n=>({degree:Number(n.dataset.degree),text:n.textContent,y:Number(n.getAttribute('y'))})));
       assert.deepEqual(labels.map(n=>n.text),['0','10','20','30','40','50','60']);
       for(const label of labels)assert.equal(label.y,marks[label.degree].y);
+      const containment=await page.locator(`#${id}`).evaluate(group=>{
+        const body=document.getElementById(group.id==='water-lab-scale'?'water-lab-body':'water-lab-zoom-body').getBBox();
+        return [...group.children].every(n=>{
+          const b=n.getBBox();
+          return b.x>=body.x&&b.x+b.width<=body.x+body.width&&b.y>=body.y&&b.y+b.height<=body.y+body.height;
+        });
+      });
+      assert.ok(containment,`${id} marks and numbers are engraved within the glass body`);
     }
     assert.equal(await page.locator('#water-lab-scale-unit').textContent(),'°C');
     assert.equal(await page.locator('#water-lab-zoom-unit').textContent(),'°C');

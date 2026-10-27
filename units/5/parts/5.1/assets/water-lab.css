@@ -8,11 +8,11 @@
 #card-02 .water-lab-art>img,#card-02 .water-lab-art>svg{position:absolute;inset:0;display:block;width:100%;height:100%}
 #card-02 .water-lab-art>svg{pointer-events:none;overflow:visible}
 #card-02 .water-lab-scale-number,#card-02 .water-lab-scale-unit{fill:#263b40;font-family:"Helvetica Neue",Arial,sans-serif;font-variant-numeric:tabular-nums;font-weight:500;stroke:none}
-#card-02 #water-lab-scale .water-lab-scale-number{font-size:22px;text-anchor:end;stroke:#f7faf5;stroke-width:1.8;paint-order:stroke fill}
-#card-02 #water-lab-scale-unit{font-size:23px;stroke:#f7faf5;stroke-width:1.8;paint-order:stroke fill}
-#card-02 #water-lab-zoom-scale .water-lab-scale-number{font-size:22px}
+#card-02 #water-lab-scale .water-lab-scale-number{font-size:12.5px;text-anchor:end}
+#card-02 #water-lab-scale-unit{font-size:13px}
+#card-02 #water-lab-zoom-scale .water-lab-scale-number{font-size:22px;text-anchor:end}
 #card-02 #water-lab-zoom-unit{font-size:20px}
-#card-02 .water-lab-scale-detail{font:17px "Noto Sans TC",system-ui,sans-serif;fill:#52615d}
+#card-02 .water-lab-scale-detail{display:block;flex:0 0 auto;margin-top:4px;text-align:center;font-size:.72rem;line-height:1.4;color:#52615d}
 #card-02 .water-lab-annotations text{font:30px "Noto Sans TC",system-ui,sans-serif}
 #card-02 .water-lab-lens{position:absolute;left:60.5%;right:3.5%;top:7%;bottom:22%;display:flex;flex-direction:column;padding:14px 12px 10px;border:2px solid #176b53;border-radius:20px;background:#fffffc;box-shadow:0 6px 16px #213d3510}
 #card-02 .water-lab-lens h3{text-align:center;flex:0 0 auto;margin:0 0 10px;font-size:clamp(.9rem,1.8vw,1.25rem);line-height:1.4}
