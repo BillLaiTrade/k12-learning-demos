@@ -231,6 +231,16 @@ function svgArc(radius, degrees, rightSide) {
   }
   return d;
 }
+function svgSector(radius, degrees, rightSide) {
+  const steps = Math.max(5, Math.ceil(degrees / 3));
+  let d = 'M300 280L300 ' + (280 - radius).toFixed(1);
+  for (let i = 1; i <= steps; i++) {
+    const a = degrees * Math.PI / 180 * i / steps;
+    const x = 300 + (rightSide ? 1 : -1) * radius * Math.sin(a), y = 280 - radius * Math.cos(a);
+    d += `L${x.toFixed(1)} ${y.toFixed(1)}`;
+  }
+  return d + 'Z';
+}
 function update() {
   const deg = Number(slider.value), angle = THREE.MathUtils.degToRad(deg), radius = 8.0;
   const source = new THREE.Vector3(centerPoint.x - radius * Math.cos(angle), centerPoint.y, -radius * Math.sin(angle));
@@ -257,12 +267,27 @@ function update() {
   updateAngleLabel(equalityLabel, '入射角 ＝ 反射角');
 
   const diagramLength = 190, dx = diagramLength * Math.sin(angle), dy = diagramLength * Math.cos(angle);
-  document.querySelector('#law-incident').setAttribute('d', `M${(300 - dx).toFixed(1)} ${(280 - dy).toFixed(1)}L300 280`);
-  document.querySelector('#law-reflected').setAttribute('d', `M300 280L${(300 + dx).toFixed(1)} ${(280 - dy).toFixed(1)}`);
-  document.querySelector('#law-arc-incident').setAttribute('d', svgArc(48, deg, false));
-  document.querySelector('#law-arc-reflected').setAttribute('d', svgArc(48, deg, true));
-  document.querySelector('#law-angle-in').textContent = `入射角 ${deg}°`;
-  document.querySelector('#law-angle-out').textContent = `反射角 ${deg}°`;
+  const endOffset = 14, halfAngle = angle / 2, labelRadius = 150;
+  const contactX = 300 - dx / diagramLength * endOffset, contactY = 280 - dy / diagramLength * endOffset;
+  const reflectedStartX = 300 + dx / diagramLength * endOffset;
+  document.querySelector('#law-incident').setAttribute('d', `M${(300 - dx).toFixed(1)} ${(280 - dy).toFixed(1)}L${contactX.toFixed(1)} ${contactY.toFixed(1)}`);
+  document.querySelector('#law-reflected').setAttribute('d', `M${reflectedStartX.toFixed(1)} ${contactY.toFixed(1)}L${(300 + dx).toFixed(1)} ${(280 - dy).toFixed(1)}`);
+  document.querySelector('#law-wedge-incident').setAttribute('d', svgSector(166, deg, false));
+  document.querySelector('#law-wedge-reflected').setAttribute('d', svgSector(166, deg, true));
+  document.querySelector('#law-arc-incident').setAttribute('d', svgArc(82, deg, false));
+  document.querySelector('#law-arc-reflected').setAttribute('d', svgArc(82, deg, true));
+  const angleLabelX = 300 - labelRadius * Math.sin(halfAngle), angleLabelY = 280 - labelRadius * Math.cos(halfAngle);
+  const valueX = 300 - 110 * Math.sin(halfAngle), valueY = 280 - 110 * Math.cos(halfAngle);
+  document.querySelector('#law-angle-name-in').setAttribute('x', angleLabelX.toFixed(1));
+  document.querySelector('#law-angle-name-out').setAttribute('x', (600 - angleLabelX).toFixed(1));
+  document.querySelector('#law-angle-name-in').setAttribute('y', (angleLabelY + 4).toFixed(1));
+  document.querySelector('#law-angle-name-out').setAttribute('y', (angleLabelY + 4).toFixed(1));
+  document.querySelector('#law-angle-in').setAttribute('x', valueX.toFixed(1));
+  document.querySelector('#law-angle-out').setAttribute('x', (600 - valueX).toFixed(1));
+  document.querySelector('#law-angle-in').setAttribute('y', (valueY + 4).toFixed(1));
+  document.querySelector('#law-angle-out').setAttribute('y', (valueY + 4).toFixed(1));
+  document.querySelector('#law-angle-in').textContent = `${deg}°`;
+  document.querySelector('#law-angle-out').textContent = `${deg}°`;
   document.querySelector('#lab-angle-in').textContent = `${deg}°`;
   document.querySelector('#lab-angle-out').textContent = `${deg}°`;
   document.querySelector('#incident-angle-value').value = `${deg}°`;
