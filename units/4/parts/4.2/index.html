@@ -128,24 +128,6 @@
     .evap-observation strong { margin-bottom:8px; color:#8b6b32; font-size:.82rem; letter-spacing:.04em; }
     .evap-observation p { margin:0; color:#4c5d55; font-size:.94rem; line-height:1.7; }
     .evap-observation .live-note { min-height:0; }
-    .strip-scene { min-height:205px; padding:40px 18px 14px; display:grid; place-items:center; }
-    .paper-strip { height:145px; width:94px; position:relative; border:1px solid #cbd9ce; background:repeating-linear-gradient(0deg,#fff,#fff 17px,#eff5ef 18px); box-shadow:0 3px 10px #243a3514; }
-    .solvent { position:absolute; z-index:1; bottom:0; left:-20px; right:-20px; height:12%; border-top:2px solid #689f9e; background:#a8d3d080; }
-    .paper-wet { position:absolute; bottom:0; left:0; right:0; height:12%; border-top:2px dashed #408367; background:#dcece0; transition:height .9s; }
-    .ink-dot { position:absolute; z-index:2; top:82%; left:50%; width:12px; height:7px; border-radius:50%; transform:translate(-50%,-50%); background:#285943; }
-    .baseline { position:absolute; z-index:1; top:82%; left:8px; right:8px; border-top:1px dashed #84988a; }
-    .band { position:absolute; z-index:3; left:50%; width:16px; height:8px; border-radius:50%; transform:translate(-50%,0); opacity:0; }
-    .band.one { background:#3a8c65; top:57%; }
-    .band.two { background:#c7a52c; top:39%; }
-    .band.three { background:#b95645; top:22%; }
-    .strip-scene[data-ink="dark"] .band.one { background:#4776ad; }
-    .strip-scene[data-ink="dark"] .band.two { background:#7960a9; }
-    .strip-scene[data-ink="dark"] .band.three { background:#41464e; }
-    .strip-scene[data-step="0"] .paper-wet { transition:none; }
-    .strip-scene[data-step="2"] .paper-wet { height:86%; }
-    .strip-scene[data-step="2"] .band { opacity:1; transition:opacity .3s .9s; }
-    .strip-scene[data-step="2"] .ink-dot { opacity:0; transition:opacity .3s; }
-    #strip-pause:disabled { opacity:.45; cursor:not-allowed; }
     .compare-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:12px 0; }
     .compare-card { padding:12px; border:1px solid var(--line); border-radius:11px; background:#fff; transition:all .2s; }
     .compare-card.active { border-color:var(--green); background:#edf4ef; box-shadow:0 0 0 2px #176b5316; }
@@ -166,6 +148,7 @@
     @media(max-width:680px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:16px; padding-top:20px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .filter-details { padding:13px; } .goal-choice { min-width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
+  <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
 </head>
 <body>
   <header class="shell masthead">
@@ -270,20 +253,22 @@
         <div class="card-main">
           <h2>一滴綠色墨水，會分出不同色帶嗎？</h2>
           <p>綠色水性筆墨水看起來均勻呈綠色，單看外觀不容易判斷裡面是否含有不同色素。</p>
-          <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>有些東西混在一起後，看不出各自的樣子，還是可以試著用方法把成分分開。像這支綠色筆的墨水，我們來試試看。</p></div>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>看起來都是綠色的，也能分離出不同顏色嗎？</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們用濾紙層析觀察，看看墨水裡的色素會不會分成不同色帶。</p></div>
           <div class="choice-row" role="group" aria-label="選擇彩色筆墨水">
-            <button class="choice-button ink-choice" type="button" data-ink="green" aria-pressed="true">綠色筆</button>
-            <button class="choice-button ink-choice" type="button" data-ink="dark" aria-pressed="false">深色筆</button>
+            <button class="choice-button ink-choice" type="button" data-ink="green" aria-pressed="true" disabled>綠色筆</button>
+            <button class="choice-button ink-choice" type="button" data-ink="dark" aria-pressed="false" disabled>深色筆</button>
           </div>
-          <div class="scene strip-scene" id="strip-scene" data-step="0" data-ink="green" aria-label="濾紙層析操作示意">
-            <span class="scene-label">基線上的墨點要高於溶劑液面</span>
-            <div class="paper-strip"><div class="paper-wet"></div><div class="solvent"></div><div class="ink-dot" id="ink-dot"></div><div class="baseline"></div><span class="band one"></span><span class="band two"></span><span class="band three"></span></div>
+          <div class="chrom-lab" id="chrom-lab" data-mode="ready" data-ink="green" aria-label="濾紙層析互動實驗">
+            <canvas id="chrom-canvas" width="1536" height="1024" aria-hidden="true"></canvas>
+            <button class="chrom-drop" id="chrom-drop" type="button" aria-label="將選取的濾紙放入燒杯；實驗中可暫停或繼續" disabled></button>
+            <button class="chrom-paper" id="chrom-paper" type="button" aria-label="拿起濾紙，放入燒杯" aria-pressed="false" disabled></button>
+            <button class="chrom-clip" id="chrom-clip" type="button" aria-label="鬆開夾具，取新濾紙重新放置" disabled></button>
+            <button class="chrom-reset" id="chrom-reset" type="button" aria-label="重新實驗" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></button>
           </div>
-          <div class="control-row"><button class="control-button" type="button" id="strip-start">開始觀察</button><button class="control-button" type="button" id="strip-pause" disabled>暫停／繼續</button><button class="control-button" type="button" id="strip-reset">重設</button></div>
-          <p class="live-note" id="strip-note" aria-live="polite">先確認墨點在溶劑液面上方，再開始觀察。</p>
-          <div class="note-box">底部實線表示溶劑液面，保持在起始墨點下方；淡綠色表示濾紙已潤濕的區域，上緣虛線是溶劑前緣。色帶顏色、數量與移動位置是本例的示意，不代表所有同色筆的實驗結果。</div>
+          <p class="chrom-status" id="chrom-status" role="status" aria-live="polite">可選擇墨水觀看，或拿起濾紙放入燒杯。</p>
+          <div class="filter-principle"><strong>一種顏色，也可能含有不同色素</strong>若觀察到不同色帶，表示這份墨水樣本含有可分離的不同色素。</div>
+          <div class="note-box">不同墨水的分離結果可能不同；本例的色帶顏色、數量與位置為特定樣本的示意。</div>
         </div>
       </section>
 
@@ -381,15 +366,6 @@
     filterAnimation.dataset.stage=String(filterStage);
     if(!reduceFilterMotion){setInterval(()=>{filterStage=(filterStage+1)%4;filterAnimation.dataset.stage=String(filterStage);},2200);}
 
-    const stripNotes=['先看好基線、墨點與溶劑液面的相對位置。','溶劑接觸濾紙下端，墨點仍在液面上方。','觀察結果：濾紙上的溶劑前緣向上移動，墨水分成不同色帶；底部的溶劑液面沒有升高。'];
-    let stripStep=0,stripTimer=null;
-    function updateStrip(){document.getElementById('strip-scene').dataset.step=stripStep;document.getElementById('strip-note').textContent=stripNotes[stripStep];document.getElementById('strip-pause').disabled=stripStep!==1;}
-    function stopStrip(){if(stripTimer){clearTimeout(stripTimer);stripTimer=null;}document.getElementById('strip-pause').textContent='暫停／繼續';}
-    document.getElementById('strip-start').addEventListener('click',()=>{stopStrip();stripStep=1;updateStrip();stripTimer=setTimeout(()=>{stripStep=2;updateStrip();stripTimer=null;},1200);});
-    document.getElementById('strip-pause').addEventListener('click',()=>{if(stripTimer){clearTimeout(stripTimer);stripTimer=null;document.getElementById('strip-pause').textContent='繼續觀察';}else if(stripStep===1){document.getElementById('strip-pause').textContent='暫停／繼續';stripTimer=setTimeout(()=>{stripStep=2;updateStrip();stripTimer=null;},1200);}});
-    document.getElementById('strip-reset').addEventListener('click',()=>{stopStrip();stripStep=0;updateStrip();});
-    document.querySelectorAll('.ink-choice').forEach(button=>button.addEventListener('click',()=>{stopStrip();stripStep=0;document.querySelectorAll('.ink-choice').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.getElementById('strip-scene').dataset.ink=button.dataset.ink;document.getElementById('ink-dot').style.background=button.dataset.ink==='green'?'#285943':'#343a45';updateStrip();}));
-
     document.getElementById('check-answers').addEventListener('click',()=>{const ids=['q-filter','q-crystal','q-paper'];const values=ids.map(id=>document.getElementById(id).value);const feedback=document.getElementById('quiz-feedback');if(values.some(value=>!value)){feedback.textContent='請先完成三個分離目標的配對，再查看結果。';feedback.style.color='#48634f';return;}const correct=values[0]==='filter'&&values[1]==='crystal'&&values[2]==='paper';feedback.textContent=correct?'三個方法都選對了！過濾分開泥沙和水、結晶讓鹽從鹽水中分離、濾紙層析讓混合色素分出不同色帶。':'還有方法和目標沒有對上。回頭想想：要分開泥沙和水、把鹽從鹽水中分離，還是觀察墨水裡有幾種色素？';feedback.style.color=correct?'#176b53':'#48634f';});
     const concentrationAnswer=document.getElementById('solution-q1');
     const concentrationFeedback=document.getElementById('concentration-feedback');
@@ -399,5 +375,6 @@
   </script>
   <script type="importmap">{"imports":{"three":"../../../1/parts/1.1/assets/vendor/three/build/three.module.js"}}</script>
   <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
+  <script type="module" src="assets/chromatography.js?v=lab-1"></script>
 </body>
 </html>

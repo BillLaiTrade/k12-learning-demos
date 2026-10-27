@@ -1,0 +1,20 @@
+.card-main { min-width:0; }
+.chrom-lab { position:relative; margin:12px 0; overflow:hidden; border:1px solid #cdd8d2; border-radius:13px; background:#ece6db; isolation:isolate; aspect-ratio:3/2; }
+.chrom-lab canvas { display:block; width:100%; height:100%; }
+.chrom-paper,.chrom-drop,.chrom-clip { position:absolute; margin:0; padding:0; border:0; background:transparent; touch-action:none; }
+.chrom-paper { z-index:2; left:36.7%; top:33%; width:7.1%; min-width:32px; height:43.5%; transform-origin:50% 0; transform:translateX(-50%) rotate(6.6deg); border-radius:2px; cursor:grab; }
+.chrom-paper:hover,.chrom-paper:focus-visible,.chrom-lab[data-mode="selected"] .chrom-paper,.chrom-lab[data-mode="dragging"] .chrom-paper { outline:1.5px solid #176b5380; outline-offset:1px; box-shadow:0 3px 12px #243a3522; }
+.chrom-lab[data-mode="dragging"] .chrom-paper { cursor:grabbing; }
+.chrom-lab:is([data-mode="running"],[data-mode="paused"],[data-mode="complete"],[data-mode="dry"],[data-mode="spilled"]) .chrom-paper { cursor:pointer; }
+.chrom-drop { z-index:1; left:54%; top:24%; width:31%; height:61%; cursor:default; border-radius:15%; touch-action:pan-y; }
+.chrom-drop::before { content:""; position:absolute; top:0; left:0; right:0; height:7%; border-radius:50%; border:2px solid transparent; pointer-events:none; }
+.chrom-lab:is([data-mode="selected"],[data-mode="dragging"]) .chrom-drop { cursor:copy; }
+.chrom-lab:is([data-mode="selected"],[data-mode="dragging"]) .chrom-drop::before { border-color:#83b594b3; box-shadow:0 0 12px #c1dbb8b3; }
+.chrom-clip { z-index:3; left:65.2%; top:14%; width:7.5%; height:13.5%; cursor:pointer; }
+.chrom-clip:disabled { cursor:default; }
+.chrom-reset { position:absolute; z-index:4; right:12px; bottom:12px; display:grid; place-items:center; width:38px; height:38px; padding:6px; border:1px solid #bdc8bf; border-radius:10px; background:#ffffffeb; color:#176b53; cursor:pointer; }
+.chrom-reset svg { width:23px; height:23px; }
+.chrom-lab button:disabled { pointer-events:none; }
+.chrom-status { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.chrom-status.chrom-error { position:static; width:auto; height:auto; padding:12px; margin:0; overflow:visible; clip-path:none; white-space:normal; }
+@media(max-width:680px) { .chrom-paper { min-width:28px; } .chrom-reset { right:8px; bottom:8px; width:34px; height:34px; } }

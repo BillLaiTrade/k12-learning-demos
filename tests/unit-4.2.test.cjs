@@ -208,7 +208,8 @@ test('4.2 evaporation plays from the chosen step through the final stage', { tim
       assert.match(await unsupported.locator('#evap-caption').innerText(), /WebGL/);
       assert.equal(await unsupported.locator('#evap-visual').isDisabled(), true);
       assert.equal(await unsupported.locator('.evap-step:disabled').count(), 4);
-      assert.equal(await unsupported.locator('#strip-start').isEnabled(), true);
+      await unsupported.waitForFunction(() => document.querySelector('#chrom-lab').dataset.ready === 'true');
+      assert.equal(await unsupported.locator('.ink-choice[data-ink="green"]').isEnabled(), true);
     } finally { await unsupported.close(); }
   });
 });
