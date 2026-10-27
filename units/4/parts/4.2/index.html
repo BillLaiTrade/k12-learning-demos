@@ -121,28 +121,14 @@
     .evap-step:focus-visible { outline:3px solid #82a98c; outline-offset:3px; }
     .evap-arrow { color:#a4b5a8; font-size:1.2rem; font-weight:800; text-align:center; }
     .evap-stage { min-height:0; display:grid; grid-template-columns:minmax(0,1fr) 210px; gap:14px; align-items:center; padding:38px 18px 14px; background:radial-gradient(ellipse at 48% 68%,#fff8eb 0,#faf5ea 49%,#f0f4ef 100%); }
-    .evap-visual { position:relative; width:100%; max-width:620px; margin:0 auto; aspect-ratio:1586/992; }
-    .evap-appliance { position:absolute; inset:0; z-index:2; display:block; width:100%; height:100%; object-fit:contain; pointer-events:none; }
-    .evap-liquid { position:absolute; z-index:3; left:21%; top:23%; width:58%; height:23%; border-radius:50%; background:radial-gradient(ellipse at 50% 35%,#e8f4f0e8 0,#b4d9d0db 65%,#8eb9afd1 100%); box-shadow:inset 0 3px 10px #fff9,0 2px 8px #52756a1a; transform:scaleY(.9); transition:top 1.1s cubic-bezier(.2,.7,.25,1),height 1.1s cubic-bezier(.2,.7,.25,1),opacity .6s; }
-    .evap-salt { position:absolute; z-index:4; left:29%; top:29%; width:42%; height:22%; border-radius:50%; opacity:.55; background-image:radial-gradient(circle,#fff 0 2px,transparent 3px),radial-gradient(circle,#7fac9f 0 1.5px,transparent 2.5px); background-size:27px 21px,31px 25px; transition:opacity .5s; }
-    .evap-crystals { position:absolute; z-index:4; left:32%; top:41%; width:36%; height:12%; display:flex; align-items:flex-end; justify-content:center; gap:7px; opacity:0; transform:translateY(9px) scale(.7); transition:opacity .55s,transform .7s cubic-bezier(.2,.7,.25,1); }
-    .evap-crystals i { display:block; width:17px; height:23px; background:linear-gradient(135deg,#fff 0 34%,#dbe9e4 35% 68%,#a8c4ba 69%); clip-path:polygon(50% 0,100% 35%,78% 100%,22% 100%,0 35%); filter:drop-shadow(0 2px 2px #243a3560); }
-    .evap-crystals i:nth-child(2),.evap-crystals i:nth-child(4) { width:14px; height:18px; }
-    .evap-crystals i:nth-child(3) { width:20px; height:28px; }
-    .evap-steam { position:absolute; z-index:5; left:35%; top:14%; width:30%; height:23%; opacity:0; pointer-events:none; }
-    .evap-steam i { position:absolute; bottom:0; width:4px; height:43%; border-radius:50%; background:linear-gradient(transparent,#fff,#b8cfc8aa,transparent); filter:blur(1px); animation:evap-rise 1.8s ease-in-out infinite; }
-    .evap-steam i:nth-child(1) { left:20%; animation-delay:-.7s; }
-    .evap-steam i:nth-child(2) { left:49%; height:58%; animation-delay:-1.2s; }
-    .evap-steam i:nth-child(3) { left:76%; animation-delay:-.2s; }
-    .evap-stage[data-step="1"] .evap-liquid { top:23%; height:23%; }
-    .evap-stage[data-step="2"] .evap-liquid { top:31%; height:15%; }
-    .evap-stage[data-step="3"] .evap-liquid { top:39%; height:7%; opacity:.8; }
-    .evap-stage[data-step="4"] .evap-liquid { top:44%; height:2%; opacity:.35; }
-    .evap-stage[data-step="3"] .evap-salt,.evap-stage[data-step="4"] .evap-salt { opacity:0; }
-    .evap-stage[data-step="3"] .evap-crystals,.evap-stage[data-step="4"] .evap-crystals { opacity:1; transform:translateY(0) scale(1); }
-    .evap-stage[data-step="2"] .evap-steam,.evap-stage[data-step="3"] .evap-steam { opacity:.9; }
-    .evap-stage[data-step="4"] .evap-steam { opacity:0; }
-    @keyframes evap-rise { 0%,100% { transform:translateY(5px) scaleY(.8); opacity:.35; } 50% { transform:translateY(-8px) scaleY(1.1); opacity:.9; } }
+    .evap-visual { position:relative; width:100%; max-width:620px; margin:0 auto; aspect-ratio:3/2; overflow:hidden; border-radius:10px; background:#e7e0d4; }
+    .evap-frame { position:absolute; inset:0; background-image:url("assets/evaporation-realistic-stages.png"); background-size:200% 200%; background-repeat:no-repeat; opacity:0; transition:opacity .6s ease; pointer-events:none; }
+    .evap-frame--1 { background-position:0 0; }
+    .evap-frame--2 { background-position:100% 0; }
+    .evap-frame--3 { background-position:0 100%; }
+    .evap-frame--4 { background-position:100% 100%; }
+    .evap-frame--3,.evap-frame--4 { transform:translateY(4.5%); }
+    .evap-stage[data-step="1"] .evap-frame--1,.evap-stage[data-step="2"] .evap-frame--2,.evap-stage[data-step="3"] .evap-frame--3,.evap-stage[data-step="4"] .evap-frame--4 { z-index:1; opacity:1; }
     .evap-observation { align-self:stretch; display:flex; flex-direction:column; justify-content:center; padding:16px; border:1px solid #e2ddcc; border-radius:14px; background:#fffdf8e8; box-shadow:0 5px 16px #243a3508; }
     .evap-observation strong { margin-bottom:8px; color:#8b6b32; font-size:.82rem; letter-spacing:.04em; }
     .evap-observation p { margin:0; color:#4c5d55; font-size:.94rem; line-height:1.7; }
@@ -154,21 +140,22 @@
     .evap-controls .control-button:disabled { opacity:.45; cursor:not-allowed; }
     .strip-scene { min-height:205px; padding:40px 18px 14px; display:grid; place-items:center; }
     .paper-strip { height:145px; width:94px; position:relative; border:1px solid #cbd9ce; background:repeating-linear-gradient(0deg,#fff,#fff 17px,#eff5ef 18px); box-shadow:0 3px 10px #243a3514; }
-    .solvent { position:absolute; bottom:0; left:0; right:0; height:20%; background:#c6ddd8; transition:height 1s; }
-    .ink-dot { position:absolute; z-index:2; top:79%; left:50%; width:12px; height:7px; border-radius:50%; transform:translateX(-50%); background:#285943; }
+    .solvent { position:absolute; z-index:1; bottom:0; left:-20px; right:-20px; height:12%; border-top:2px solid #689f9e; background:#a8d3d080; }
+    .paper-wet { position:absolute; bottom:0; left:0; right:0; height:12%; border-top:2px dashed #408367; background:#dcece0; transition:height .9s; }
+    .ink-dot { position:absolute; z-index:2; top:82%; left:50%; width:12px; height:7px; border-radius:50%; transform:translate(-50%,-50%); background:#285943; }
     .baseline { position:absolute; z-index:1; top:82%; left:8px; right:8px; border-top:1px dashed #84988a; }
-    .band { position:absolute; z-index:3; left:50%; width:16px; height:8px; border-radius:50%; transform:translate(-50%,0); opacity:0; transition:all .9s; }
-    .band.one { background:#3a8c65; top:49%; }
-    .band.two { background:#c7a52c; top:32%; }
-    .band.three { background:#b95645; top:17%; }
+    .band { position:absolute; z-index:3; left:50%; width:16px; height:8px; border-radius:50%; transform:translate(-50%,0); opacity:0; }
+    .band.one { background:#3a8c65; top:57%; }
+    .band.two { background:#c7a52c; top:39%; }
+    .band.three { background:#b95645; top:22%; }
     .strip-scene[data-ink="dark"] .band.one { background:#4776ad; }
     .strip-scene[data-ink="dark"] .band.two { background:#7960a9; }
     .strip-scene[data-ink="dark"] .band.three { background:#41464e; }
-    .strip-scene[data-step="1"] .solvent { height:17%; }
-    .strip-scene[data-step="2"] .solvent { height:72%; }
-    .strip-scene[data-step="2"] .band.one { top:57%; opacity:1; }
-    .strip-scene[data-step="2"] .band.two { top:39%; opacity:1; }
-    .strip-scene[data-step="2"] .band.three { top:22%; opacity:1; }
+    .strip-scene[data-step="0"] .paper-wet { transition:none; }
+    .strip-scene[data-step="2"] .paper-wet { height:86%; }
+    .strip-scene[data-step="2"] .band { opacity:1; transition:opacity .3s .9s; }
+    .strip-scene[data-step="2"] .ink-dot { opacity:0; transition:opacity .3s; }
+    #strip-pause:disabled { opacity:.45; cursor:not-allowed; }
     .compare-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:12px 0; }
     .compare-card { padding:12px; border:1px solid var(--line); border-radius:11px; background:#fff; transition:all .2s; }
     .compare-card.active { border-color:var(--green); background:#edf4ef; box-shadow:0 0 0 2px #176b5316; }
@@ -282,13 +269,15 @@
           <div class="scene evap-stage" id="evap-stage" data-step="1" aria-label="鹽水蒸發與鹽晶體留下的示意">
             <span class="scene-label">過程示意｜動畫時間不代表實際加熱時間</span>
             <div class="evap-visual" aria-hidden="true">
-              <div class="evap-liquid"></div><div class="evap-salt"></div><div class="evap-crystals"><i></i><i></i><i></i><i></i><i></i></div>
-              <div class="evap-steam"><i></i><i></i><i></i></div>
-              <img class="evap-appliance" src="assets/evaporation-dish.webp" width="1586" height="992" alt="">
+              <div class="evap-frame evap-frame--1"></div>
+              <div class="evap-frame evap-frame--2"></div>
+              <div class="evap-frame evap-frame--3"></div>
+              <div class="evap-frame evap-frame--4"></div>
             </div>
             <aside class="evap-observation"><strong>觀察線索</strong><p id="evap-caption" class="live-note" aria-live="polite">鹽均勻溶在水裡，肉眼看不見分開的鹽粒。</p></aside>
           </div>
           <div class="control-row evap-controls"><button class="control-button" type="button" id="evap-prev">上一步</button><button class="control-button primary" type="button" id="evap-replay">重播動畫</button><button class="control-button" type="button" id="evap-next">下一步</button></div>
+          <div class="filter-principle"><strong>分離後，水和鹽各去了哪裡？</strong>水分蒸發後離開容器；原本溶在水中的鹽形成晶體，留在容器裡。這個過程利用水能蒸發、鹽不隨水一起蒸發的差異來分離成分，沒有生成新物質。</div>
           <div class="note-box">這裡以安全示意呈現加熱與蒸發，不要求學生自行操作火源。本區先聚焦觀察結晶分離結果；溶質含量的表示法會在本段最後討論。</div>
         </div>
       </section>
@@ -305,13 +294,13 @@
             <button class="choice-button ink-choice" type="button" data-ink="green" aria-pressed="true">綠色筆</button>
             <button class="choice-button ink-choice" type="button" data-ink="dark" aria-pressed="false">深色筆</button>
           </div>
-          <div class="scene strip-scene" id="strip-scene" data-step="0" aria-label="濾紙層析操作示意">
+          <div class="scene strip-scene" id="strip-scene" data-step="0" data-ink="green" aria-label="濾紙層析操作示意">
             <span class="scene-label">基線上的墨點要高於溶劑液面</span>
-            <div class="paper-strip"><div class="solvent"></div><div class="ink-dot" id="ink-dot"></div><div class="baseline"></div><span class="band one"></span><span class="band two"></span><span class="band three"></span></div>
+            <div class="paper-strip"><div class="paper-wet"></div><div class="solvent"></div><div class="ink-dot" id="ink-dot"></div><div class="baseline"></div><span class="band one"></span><span class="band two"></span><span class="band three"></span></div>
           </div>
-          <div class="control-row"><button class="control-button" type="button" id="strip-start">開始觀察</button><button class="control-button" type="button" id="strip-pause">暫停／繼續</button><button class="control-button" type="button" id="strip-reset">重設</button></div>
+          <div class="control-row"><button class="control-button" type="button" id="strip-start">開始觀察</button><button class="control-button" type="button" id="strip-pause" disabled>暫停／繼續</button><button class="control-button" type="button" id="strip-reset">重設</button></div>
           <p class="live-note" id="strip-note" aria-live="polite">先確認墨點在溶劑液面上方，再開始觀察。</p>
-          <div class="note-box">操作前確認墨點位於溶劑液面上方。示意圖呈現簡易濾紙層析的可見結果，不代表真實色帶寬度或移動速度。</div>
+          <div class="note-box">底部實線表示溶劑液面，保持在起始墨點下方；淡綠色表示濾紙已潤濕的區域，上緣虛線是溶劑前緣。色帶顏色、數量與移動位置是本例的示意，不代表所有同色筆的實驗結果。</div>
         </div>
       </section>
 
@@ -366,10 +355,11 @@
 
           <h3>含量非常少時，可以用 ppm 表示</h3>
           <p>有些物質在空氣或水中的含量非常少，使用百分比不容易閱讀。ppm 是「百萬分點」的表示法，表示每一百萬份樣本中所含的份數；例如 3 ppm 表示每一百萬份樣本中有 3 份該物質。</p>
+          <div class="filter-principle"><strong>以質量比表示的 3 ppm 為例</strong>每 1,000,000 克溶液含有 3 克溶質，也就是每 1 公斤溶液含有 3 毫克溶質。分子和分母必須使用相同的比較基準；此例比較的是質量，總量指整份溶液。</div>
           <div class="compare-grid solution-compare">
             <article class="compare-card"><h3>含量較多時</h3><p>可用重量百分濃度表示，例如糖水中的糖。</p></article>
             <article class="compare-card"><h3>含量很少時</h3><p>可用 ppm 表示，例如空氣或水污染物的含量。</p></article>
-            <article class="compare-card"><h3>讀數時要看清楚</h3><p>百分濃度和 ppm 都是在描述溶質含量，使用的表示尺度不同。</p></article>
+            <article class="compare-card"><h3>讀數時要看清楚</h3><p>除了數值，也要看比較基準。例如這裡的重量百分濃度和質量比 ppm，都比較溶質質量與溶液總質量。</p></article>
           </div>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>原來分離方法告訴我們成分怎麼分開，濃度則能表示溶液裡的溶質含量。</p></div>
           <div class="note-box">本區依課綱介紹溶液、重量百分濃度與 ppm，著重理解表示法和簡單判讀；不進行溶液混合或稀釋後的濃度變化計算。</div>
@@ -408,7 +398,7 @@
     filterAnimation.dataset.stage=String(filterStage);
     if(!reduceFilterMotion){setInterval(()=>{filterStage=(filterStage+1)%4;filterAnimation.dataset.stage=String(filterStage);},2200);}
 
-    const evapCaptions={1:'鹽均勻溶在水裡，肉眼看不見分開的鹽粒。',2:'水受熱後逐漸蒸發，鹽仍留在溶液中。',3:'水分持續減少，鹽開始從溶液中形成晶體。',4:'水分蒸發後，容器裡留下固態的鹽晶體。'};
+    const evapCaptions={1:'鹽水無色透明，鹽均勻溶在水裡，肉眼看不見分開的鹽粒。',2:'水受熱後逐漸蒸發，水位下降，鹽仍留在溶液中。水蒸氣本身看不見。',3:'只剩淺淺的水層，容器底部開始出現細小的鹽晶體。',4:'水分蒸發後，容器底部留下固態的鹽晶體，不再有液層。'};
     let evapStep=1,evapTimer=null;
     const evapStage=document.getElementById('evap-stage');
     const evapCaption=document.getElementById('evap-caption');
@@ -423,14 +413,14 @@
     document.getElementById('evap-replay').addEventListener('click',()=>{stopEvap();evapStep=1;updateEvap();const replayNext=()=>{if(evapStep>=4){evapTimer=null;return;}evapTimer=setTimeout(()=>{evapStep+=1;updateEvap();replayNext();},1100);};replayNext();});
     updateEvap();
 
-    const stripNotes=['先看好基線、墨點與溶劑液面的相對位置。','溶劑接觸濾紙下端，墨點仍在液面上方。','答案：墨水分成不同色帶，表示其中可能混有不同色素。'];
+    const stripNotes=['先看好基線、墨點與溶劑液面的相對位置。','溶劑接觸濾紙下端，墨點仍在液面上方。','觀察結果：濾紙上的溶劑前緣向上移動，墨水分成不同色帶；底部的溶劑液面沒有升高。'];
     let stripStep=0,stripTimer=null;
-    function updateStrip(){document.getElementById('strip-scene').dataset.step=stripStep;document.getElementById('strip-note').textContent=stripNotes[stripStep];}
-    function stopStrip(){if(stripTimer){clearInterval(stripTimer);stripTimer=null;}document.getElementById('strip-pause').textContent='暫停／繼續';}
+    function updateStrip(){document.getElementById('strip-scene').dataset.step=stripStep;document.getElementById('strip-note').textContent=stripNotes[stripStep];document.getElementById('strip-pause').disabled=stripStep!==1;}
+    function stopStrip(){if(stripTimer){clearTimeout(stripTimer);stripTimer=null;}document.getElementById('strip-pause').textContent='暫停／繼續';}
     document.getElementById('strip-start').addEventListener('click',()=>{stopStrip();stripStep=1;updateStrip();stripTimer=setTimeout(()=>{stripStep=2;updateStrip();stripTimer=null;},1200);});
     document.getElementById('strip-pause').addEventListener('click',()=>{if(stripTimer){clearTimeout(stripTimer);stripTimer=null;document.getElementById('strip-pause').textContent='繼續觀察';}else if(stripStep===1){document.getElementById('strip-pause').textContent='暫停／繼續';stripTimer=setTimeout(()=>{stripStep=2;updateStrip();stripTimer=null;},1200);}});
     document.getElementById('strip-reset').addEventListener('click',()=>{stopStrip();stripStep=0;updateStrip();});
-    document.querySelectorAll('.ink-choice').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.ink-choice').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.getElementById('strip-scene').dataset.ink=button.dataset.ink;document.getElementById('ink-dot').style.background=button.dataset.ink==='green'?'#285943':'#343a45';if(stripStep===2){stripStep=0;updateStrip();}}));
+    document.querySelectorAll('.ink-choice').forEach(button=>button.addEventListener('click',()=>{stopStrip();stripStep=0;document.querySelectorAll('.ink-choice').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));document.getElementById('strip-scene').dataset.ink=button.dataset.ink;document.getElementById('ink-dot').style.background=button.dataset.ink==='green'?'#285943':'#343a45';updateStrip();}));
 
     document.getElementById('check-answers').addEventListener('click',()=>{const ids=['q-filter','q-crystal','q-paper'];const values=ids.map(id=>document.getElementById(id).value);const feedback=document.getElementById('quiz-feedback');if(values.some(value=>!value)){feedback.textContent='請先完成三個分離目標的配對，再查看結果。';feedback.style.color='#48634f';return;}const correct=values[0]==='filter'&&values[1]==='crystal'&&values[2]==='paper';feedback.textContent=correct?'三個方法都選對了！過濾分開泥沙和水、結晶讓鹽從鹽水中分離、濾紙層析讓混合色素分出不同色帶。':'還有方法和目標沒有對上。回頭想想：要分開泥沙和水、把鹽從鹽水中分離，還是觀察墨水裡有幾種色素？';feedback.style.color=correct?'#176b53':'#48634f';});
     const concentrationAnswer=document.getElementById('solution-q1');
