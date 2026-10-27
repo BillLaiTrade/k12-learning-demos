@@ -1,10 +1,7 @@
 // 慢速的一維縱波示意。q 是粒子的平衡位置，不隨波向右漂移。
 const scene = document.querySelector('#air-wave');
 const group = document.querySelector('#air-particles');
-const play = document.querySelector('#air-play');
-const playLabel = document.querySelector('#air-play-label');
-const icon = play.querySelector('.sound-control-icon');
-const replay = document.querySelector('#air-replay');
+const strikeButton = document.querySelector('#air-strike');
 const bell = document.querySelector('#sound-bell');
 const bellBody = document.querySelector('#sound-bell-body');
 const eardrum = document.querySelector('#sound-eardrum');
@@ -65,19 +62,13 @@ function draw() {
   }
   scene.dataset.elapsed = elapsed.toFixed(4);
 }
-function controls(state) {
-  scene.dataset.state = state;
-  play.setAttribute('aria-pressed', String(playing));
-  playLabel.textContent = playing ? '暫停' : state === 'paused' ? '繼續播放' : state === 'ended' ? '再次播放' : '播放';
-  icon.textContent = playing ? 'Ⅱ' : '▶';
-}
 function announce() {
   const next = elapsed >= ARRIVAL ? 'received' : 'travelling';
   if (next === phase) return;
   phase = next;
   status.textContent = next === 'received'
     ? '疏密變化抵達耳朵，耳膜隨之振動；橘色粒子仍在原位附近往返。'
-    : '鐘開始振動，疏密變化逐步向右傳播。';
+    : '鐘受到敲擊開始振動，疏密變化逐步向右傳播。';
 }
 function animate(now) {
   if (!playing) return;
@@ -86,34 +77,29 @@ function animate(now) {
   draw(); announce();
   if (elapsed >= END) {
     playing = false; frame = 0; lastTime = null;
-    controls('ended');
-    status.textContent = '示範完成。疏密變化已通過，粒子回到原位附近；可重新播放。';
+    scene.dataset.state = 'ended';
+    status.textContent = '疏密變化已通過，粒子回到原位附近。再敲一次鐘，可重新觀察。';
     return;
   }
   frame = requestAnimationFrame(animate);
 }
-function start(fromBeginning = false) {
+function strike() {
   cancelAnimationFrame(frame);
-  if (fromBeginning || elapsed >= END) elapsed = 0;
-  lastTime = null; phase = ''; playing = true;
-  draw(); controls('playing'); announce();
+  elapsed = 0; lastTime = null; phase = ''; playing = true;
+  draw(); scene.dataset.state = 'playing'; announce();
   frame = requestAnimationFrame(animate);
 }
-function pause() {
-  playing = false;
-  cancelAnimationFrame(frame); frame = 0; lastTime = null;
-  controls('paused');
-  status.textContent = '已暫停：比較密部、疏部與橘色粒子的位置；繼續播放會從此刻接續。';
-}
-play.addEventListener('click', () => playing ? pause() : start());
-replay.addEventListener('click', () => start(true));
-bell.addEventListener('click', () => start(true));
+strikeButton.addEventListener('click', strike);
+bell.addEventListener('click', strike);
 bell.addEventListener('keydown', event => {
   if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault();
-    if (!event.repeat) start(true);
+    if (!event.repeat) strike();
   }
 });
-// 背景分頁不跳過傳播過程；回來後由使用者繼續。
-document.addEventListener('visibilitychange', () => { if (document.hidden && playing) pause(); });
-draw(); controls('ready');
+// 背景分頁凍結時間；返回時接續，不額外觸發一次敲擊。
+document.addEventListener('visibilitychange', () => {
+  cancelAnimationFrame(frame); frame = 0; lastTime = null;
+  if (!document.hidden && playing) frame = requestAnimationFrame(animate);
+});
+draw(); scene.dataset.state = 'ready';

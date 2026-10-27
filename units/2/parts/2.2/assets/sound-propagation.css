@@ -17,7 +17,6 @@
 .sound-focus-ring{fill:transparent;stroke:transparent}
 .sound-controls{justify-content:center;margin:16px 0 8px}
 .sound-controls button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-width:140px;border-radius:999px;font-size:1rem}
-.sound-controls .sound-control-icon{font-size:1.2rem;line-height:1}
 #air-status{display:block;flex-basis:100%;text-align:center;font-size:.86rem;min-height:1.7em}
 #card-02 .sound-takeaway{padding:14px 18px;text-align:center;border:1px solid #b8cda9;border-radius:12px;background:#eff4e8;color:#183e2f;font-size:clamp(1rem,1.7vw,1.2rem)}
 .sound-note{margin:8px 0 0!important;text-align:center;font-size:.8rem;color:var(--muted)}

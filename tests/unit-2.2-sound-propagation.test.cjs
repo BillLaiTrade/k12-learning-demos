@@ -24,7 +24,7 @@ test('2.2 sound travels through air while particles stay near their origins', { 
   await page.clock.install();
   const url = `http://127.0.0.1:${port}/units/2/parts/2.2/`;
   await page.goto(url, { waitUntil: 'networkidle' });
-  const play = page.locator('#air-play');
+  const strike = page.locator('#air-strike');
   const scene = page.locator('#air-wave');
   const positions = () => page.locator('#air-particles circle').evaluateAll(nodes => nodes.map(n => Number(n.getAttribute('cx'))));
   const state = () => scene.getAttribute('data-state');
@@ -36,7 +36,7 @@ test('2.2 sound travels through air while particles stay near their origins', { 
     assert.equal(await state(), 'ready');
     await page.clock.runFor(1000);
     assert.deepEqual(await positions(), still);
-    await play.click(); await page.clock.runFor(500);
+    await strike.click(); await page.clock.runFor(500);
     const current = await positions();
     assert.notEqual(current[0], still[0]);
     assert.equal(current[21], still[21]);
@@ -48,21 +48,23 @@ test('2.2 sound travels through air while particles stay near their origins', { 
     assert.equal(await drum(), silentDrum);
   });
 
-  await t.test('pause preserves the whole scene and resume continues without a time jump', async () => {
-    await play.click();
-    const snapshot = await scene.innerHTML(), time = await elapsed();
-    assert.equal(await state(), 'paused');
-    await page.clock.runFor(3000);
-    assert.equal(await scene.innerHTML(), snapshot);
-    assert.equal(await elapsed(), time);
-    await play.click(); await page.clock.runFor(80);
-    assert.ok(await elapsed() > time && await elapsed() < time + .1);
-    assert.notEqual(await scene.innerHTML(), snapshot);
-    await play.click();
+  await t.test('direct bell and button strikes restart one animation without stacking', async () => {
+    assert.equal(await page.locator('#air-play, #air-replay').count(), 0);
+    assert.equal(await page.locator('.sound-controls button').count(), 1);
+    assert.equal(await strike.textContent(), '敲擊鐘');
+    for (const target of [page.locator('#sound-bell'), strike, page.locator('#sound-bell')]) {
+      await target.click(); await page.clock.runFor(100);
+      assert.equal(await state(), 'playing');
+      assert.ok(await elapsed() < .15);
+      assert.equal((await positions())[42], still[42]);
+      assert.equal(await drum(), silentDrum);
+    }
+    await page.clock.runFor(1000);
+    assert.ok(await elapsed() > 1 && await elapsed() < 1.2, 'rapid strikes must not stack animation frames');
   });
 
-  await t.test('replay resets the wave and compression travels right while particles oscillate locally', async () => {
-    await page.locator('#air-replay').click();
+  await t.test('a strike launches compression right while particles oscillate locally', async () => {
+    await page.locator('#air-strike').click();
     await page.clock.runFor(2000);
     const a = Number(await page.locator('#sound-dense-label').evaluate(n => n.transform.baseVal.consolidate().matrix.e));
     await page.clock.runFor(500);
@@ -85,7 +87,7 @@ test('2.2 sound travels through air while particles stay near their origins', { 
   });
 
   await t.test('ear responds only after arrival; completion and keyboard restart leave no stale animation', async () => {
-    await page.locator('#air-replay').click(); await page.clock.runFor(7500);
+    await page.locator('#air-strike').click(); await page.clock.runFor(7500);
     assert.equal(await drum(), silentDrum);
     await page.clock.runFor(1000);
     assert.notEqual(await drum(), silentDrum);
@@ -100,7 +102,7 @@ test('2.2 sound travels through air while particles stay near their origins', { 
     assert.equal(await state(), 'playing'); assert.ok(await elapsed() < .4);
     await page.keyboard.press('Space'); await page.clock.runFor(100);
     assert.ok(await elapsed() < .2);
-    await play.click();
+    await strike.click();
   });
 
   await t.test('touch controls, enlarged mobile observation, small screens and reduced motion', async () => {
@@ -112,10 +114,7 @@ test('2.2 sound travels through air while particles stay near their origins', { 
     assert.ok(await mobile.locator('.sound-mobile-zoom').isVisible());
     await mobile.locator('#sound-bell').tap(); await mobile.clock.runFor(5000);
     assert.equal(await mobile.locator('#air-wave').getAttribute('data-state'), 'playing');
-    await mobile.locator('#air-play').tap();
-    const frozen = await mobile.locator('#air-particles').innerHTML();
-    await mobile.clock.runFor(1000); assert.equal(await mobile.locator('#air-particles').innerHTML(), frozen);
-    await mobile.locator('#air-replay').tap(); await mobile.clock.runFor(100);
+    await mobile.locator('#air-strike').tap(); await mobile.clock.runFor(100);
     assert.ok(Number(await mobile.locator('#air-wave').getAttribute('data-elapsed')) < .2);
     for (const width of [390, 320, 768]) {
       await mobile.setViewportSize({ width, height: 844 });

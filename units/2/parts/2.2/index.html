@@ -22,7 +22,7 @@
     .ruler-photo-stage:focus-visible{outline:3px solid #176b53;outline-offset:3px}
     @media(max-width:640px){.ruler-photo-stage{border-radius:9px}}
   </style>
-  <link rel="stylesheet" href="assets/sound-propagation.css?v=1">
+  <link rel="stylesheet" href="assets/sound-propagation.css?v=2">
 </head>
 <body>
   <header class="shell masthead">
@@ -91,7 +91,7 @@
                     <g clip-path="url(#sound-bell-static)"><use href="#sound-object-sheet"/></g>
                     <g id="sound-bell-body"><g clip-path="url(#sound-bell-body-clip)"><use href="#sound-object-sheet"/></g></g>
                   </g>
-                  <rect id="sound-bell" class="sound-bell-hit sound-focus-ring" role="button" tabindex="0" aria-label="敲鐘，重新播放聲音傳播示範" x="6" y="60" width="198" height="310" rx="14"/>
+                  <rect id="sound-bell" class="sound-bell-hit sound-focus-ring" role="button" tabindex="0" aria-label="敲擊鐘，觀察聲音傳播" x="6" y="60" width="198" height="310" rx="14"/>
                 </g>
                 <svg x="825" y="67" width="255" height="310" viewBox="810 150 690 700" style="overflow:hidden" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#sound-object-sheet"/></svg>
                 <g id="sound-eardrum" aria-hidden="true"><ellipse cx="968" cy="222" rx="10" ry="21" transform="rotate(-19 968 222)" fill="#e88a88" fill-opacity=".18" stroke="#ba5d60" stroke-opacity=".65" stroke-width="1.5"/></g>
@@ -116,7 +116,7 @@
                 <text class="sound-orange" x="525" y="337" text-anchor="middle" style="font-size:28px">空氣粒子來回振動</text>
               </svg></div>
             </figure>
-            <div class="controls sound-controls"><button class="action" id="air-play" type="button" aria-pressed="false"><span class="sound-control-icon" aria-hidden="true">▶</span><span id="air-play-label">播放</span></button><button class="secondary" id="air-replay" type="button"><span class="sound-control-icon" aria-hidden="true">↻</span>重新播放</button><span class="live-note" id="air-status" aria-live="polite">點擊鐘或播放，觀察振動如何傳到耳朵。</span></div>
+            <div class="controls sound-controls"><button class="action" id="air-strike" type="button">敲擊鐘</button><span class="live-note" id="air-status" aria-live="polite">點擊鐘或下方按鈕，敲擊鐘並觀察聲音傳播。</span></div>
             <div class="sound-takeaway"><strong>粒子在原位附近來回振動，疏密變化向前傳播。</strong></div>
             <p class="sound-note" id="sound-model-note">粒子位移放大、過程放慢呈現；空氣中的聲音是縱波。</p>
           </div>
@@ -271,6 +271,6 @@
       if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)activate(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});targets.forEach(target=>observer.observe(target));}
     })();
   </script>
-  <script type="module" src="assets/sound-propagation.js?v=1"></script>
+  <script type="module" src="assets/sound-propagation.js?v=2"></script>
 </body>
 </html>
