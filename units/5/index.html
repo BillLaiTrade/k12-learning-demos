@@ -37,6 +37,12 @@
     .sequence-card p { margin:0; color:var(--muted); font-size:.91rem; }
     .next-steps { margin:0; padding:18px 22px 18px 42px; border:1px solid var(--line); border-radius:16px; background:#fffefa; }
     .next-steps li+li { margin-top:7px; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:#fffefa; }
+    table { width:100%; border-collapse:collapse; font-size:.91rem; }
+    th,td { padding:12px 14px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { background:#edf3ed; color:#315748; font-size:.84rem; }
+    tr:last-child td { border-bottom:0; }
+    .comparison-note { margin:10px 0 0; color:var(--muted); font-size:.88rem; }
     .sources { padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:.88rem; }
     .sources ul { padding-left:22px; }
     .sources li+li { margin-top:5px; }
@@ -51,7 +57,7 @@
       <div class="eyebrow">國二上・自然科學　／　單元 5</div>
       <h1>溫度與熱</h1>
       <p>從「冷熱怎麼描述」開始，逐步理解熱量的傳遞、物質受熱後的變化，以及不同材料升溫的差異。</p>
-      <span class="status">課綱範圍已確認・課程內容規劃中</span>
+      <span class="status">課綱逐項對照完成・出版社公開資料初步核對</span>
     </div>
   </header>
   <main class="shell">
@@ -74,13 +80,29 @@
       <h2 id="sequence-title">建議的學習順序</h2>
       <p class="section-intro">先建立可觀察、可量測的溫度概念，再談熱量、材料差異與熱傳；最後回到物質變化。</p>
       <div class="sequence">
-        <article class="sequence-card"><span class="step">5.1</span><h3>溫度如何描述冷熱？</h3><p>讀取溫度計，認識攝氏與常見溫標；不把重點放在溫標換算。</p></article>
-        <article class="sequence-card"><span class="step">5.2</span><h3>熱會往哪裡傳？</h3><p>區分溫度與熱量，觀察熱由高溫處傳向低溫處。</p></article>
-        <article class="sequence-card"><span class="step">5.3</span><h3>水升溫時吸收多少熱？</h3><p>以加熱水的實驗引入熱量單位，觀察水的質量、溫度變化與吸收熱量的關係。</p></article>
-        <article class="sequence-card"><span class="step">5.4</span><h3>不同材料升溫一樣快嗎？</h3><p>控制質量與加熱條件，比較不同物質的溫度變化，建立比熱的定性概念；不做繁複計算。</p></article>
-        <article class="sequence-card"><span class="step">5.5</span><h3>熱如何在生活中傳播？</h3><p>用簡單實驗辨認傳導、對流與輻射，連結日常隔熱與受熱現象。</p></article>
-        <article class="sequence-card"><span class="step">5.6</span><h3>熱如何改變物質？</h3><p>銜接物質狀態變化，觀察水與玻璃熱脹冷縮，說明熱造成的狀態與體積變化。</p></article>
+        <article class="sequence-card"><span class="step">5.1</span><h3>溫度如何描述冷熱？</h3><p>認識溫度計依據物質性質隨溫度改變來測量；讀取攝氏溫標，簡介常見溫標但不把重點放在換算。</p></article>
+        <article class="sequence-card"><span class="step">5.2</span><h3>熱會往哪裡傳，何時達到平衡？</h3><p>區分溫度與熱量，觀察熱由高溫處傳向低溫處，並以兩物體溫度趨於相同說明熱平衡。</p></article>
+        <article class="sequence-card"><span class="step">5.3</span><h3>如何描述水吸收的熱量？</h3><p>以加熱水引入熱量單位：1 cal 約為使 1 g 水升高 1°C 所需的熱量；比較水的質量、溫度變化與熱量，做簡單比例或直接代入，不做複雜計算。</p></article>
+        <article class="sequence-card"><span class="step">5.4</span><h3>不同材料升溫一樣快嗎？</h3><p>控制質量與加熱條件比較比熱，做定性判讀與簡單量化；用海陸風、海邊與沙地的日夜溫差作為生活應用。</p></article>
+        <article class="sequence-card"><span class="step">5.5</span><h3>熱如何在生活中傳播？</h3><p>實驗辨認傳導、對流與輻射，說明三種方式的基本特徵，並比較導熱與隔熱材料。</p></article>
+        <article class="sequence-card"><span class="step">5.6</span><h3>熱如何改變物質？</h3><p>連結單元四已學的狀態變化，解釋吸熱或放熱；觀察固體、液體的熱脹冷縮，包含水與玻璃的簡易溫度計示例。</p></article>
       </div>
+    </section>
+
+    <section class="section" aria-labelledby="comparison-title">
+      <h2 id="comparison-title">出版社內容初步對照</h2>
+      <p class="section-intro">我把課綱條文和目前能公開查到的康軒、南一、翰林章節資料分開核對。三家都涵蓋溫度、熱量／比熱、熱造成的變化和熱傳；小節拆法不同，所以以下按各版本公開資料列出。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>版本與可查到的編排</th><th>核對到的重點</th><th>本單元對應</th></tr></thead>
+          <tbody>
+            <tr><td>康軒：公開章節整理列 5-1 溫度與溫度計、5-2 熱量與比熱、5-3 熱對物質的影響、5-4 熱的傳播。</td><td>溫度計原理、熱量與比熱、物質受熱變化，以及傳導／對流／輻射。</td><td>5.1–5.6；拆分熱量和比熱，另把熱平衡及水、玻璃熱脹冷縮明確列出。</td></tr>
+            <tr><td>南一：公開第三冊筆記可查到「熱與溫度」及 5-1 至 5-4 的章節架構；細項依公開資料可見範圍整理。</td><td>共同主題涵蓋溫度與溫度計、熱量／比熱、熱對物質的影響及熱傳。</td><td>5.1–5.6；涵蓋共同主題。此列未以南一當年度官方電子課本逐頁確認小節名稱。</td></tr>
+            <tr><td>翰林：公開教學資源按 5-1 溫度計、5-2 熱量、5-3 比熱、5-4 熱的影響、5-5 熱的傳播拆分。</td><td>和前兩版主題相同，但將熱量、比熱及熱的影響拆成較多小節。</td><td>5.1–5.6；分段可對應其五組內容，並將狀態變化和熱脹冷縮分開講清楚。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="comparison-note"><strong>比對結論與限制：</strong>課綱要求的 Bb-Ⅳ-1 至 Bb-Ⅳ-5 均已安排，並銜接 Ab-Ⅳ-2；三家公開資料中的共同主題也都能在本單元找到位置。這是公開資料的交叉核對，不是三家當年度官方課本與教師手冊逐頁審查，因此不能宣稱已保證每一版本、每個例題都零遺漏。若確定採用版本，最後仍要以該版官方教材目次、實驗和例題做一次定稿核對。</p>
     </section>
 
     <section class="section" aria-labelledby="next-title">
@@ -89,7 +111,8 @@
         <li><strong>先確認單元邊界：</strong>第四單元已介紹物質三態；第五單元以熱傳與溫度變化解釋狀態改變，避免重複教三態分類。</li>
         <li><strong>選一個貫穿情境：</strong>可用「一杯熱水如何變涼」串連溫度測量、熱傳、材料差異與保溫設計。</li>
         <li><strong>逐段安排互動：</strong>每段設定一個可觀察的現象、一個可操作或可比較的示意，以及一題檢核；先完成 5.1，再依序製作。</li>
-        <li><strong>控制數學負擔：</strong>依課綱以實驗比較和定性推理介紹比熱，不進入複雜熱量計算。</li>
+        <li><strong>控制數學負擔：</strong>保留教材常見的簡單熱量／比熱關係判讀，依課綱避免複雜計算。</li>
+        <li><strong>最後核對採用版本：</strong>若學校已確定康軒、南一或翰林及年度，再對該版電子課本目次和教師手冊逐項確認用語、實驗與例題深度。</li>
       </ol>
     </section>
 
@@ -98,6 +121,10 @@
       <ul>
         <li><a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001823" target="_blank" rel="noreferrer">教育部主管法規共用系統：十二年國民基本教育自然科學領域課程綱要</a>（國民中小學暨普通型高級中等學校附件）。</li>
         <li><a href="https://edu.law.moe.gov.tw/Download.ashx?FileID=31187&amp;id=GL001823&amp;type=LAW" target="_blank" rel="noreferrer">教育部課綱 PDF</a>：國中自然科學學習內容的「溫度與熱量（Bb）」及其學習內容說明，參見國中物理相關表格。</li>
+        <li><a href="https://www.clearnotebooks.com/zh-TW/notebooks/2700061" target="_blank" rel="noreferrer">公開跨版本學習筆記：第三冊第五課「溫度與熱」</a>，整理 5-1 至 5-4 常見章節（屬公開使用者整理，非出版社原版教材）。</li>
+        <li><a href="https://www.clearnotebooks.com/zh-TW/notebooks/2698195" target="_blank" rel="noreferrer">康軒溫度計章節公開筆記</a>；<a href="https://www.clearnotebooks.com/zh-TW/notebooks/1857735" target="_blank" rel="noreferrer">南一熱與溫度公開筆記</a>；<a href="https://www.clearnotebooks.com/zh-TW/notebooks/2553266" target="_blank" rel="noreferrer">翰林熱量公開筆記</a>、<a href="https://www.clearnotebooks.com/zh-TW/notebooks/850324" target="_blank" rel="noreferrer">翰林比熱公開筆記</a>。這些是可讀到的公開學習資料，用來交叉確認章節與概念，不等同官方課本。</li>
+        <li><a href="https://www.learnmode.net/flip/video/13693" target="_blank" rel="noreferrer">LearnMode：熱平衡</a>、<a href="https://www.learnmode.net/flip/video/12771" target="_blank" rel="noreferrer">比熱</a>、<a href="https://www.learnmode.net/flip/video/5314" target="_blank" rel="noreferrer">熱與三態變化</a>、<a href="https://www.learnmode.net/flip/video/5315" target="_blank" rel="noreferrer">熱脹冷縮</a>等公開國中教學資源。</li>
+        <li><a href="https://945cloud.knsh.com.tw/" target="_blank" rel="noreferrer">康軒雲</a>、<a href="https://nanidigi.nani.com.tw/" target="_blank" rel="noreferrer">南一數位資源入口</a>、<a href="https://www.ehanlin.com.tw/" target="_blank" rel="noreferrer">翰林雲端學院</a>：出版社公開資源入口；完整教材內容需依帳號權限查閱。</li>
       </ul>
     </section>
   </main>
