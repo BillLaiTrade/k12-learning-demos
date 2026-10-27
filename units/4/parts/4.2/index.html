@@ -121,14 +121,11 @@
     .evap-step:focus-visible { outline:3px solid #82a98c; outline-offset:3px; }
     .evap-arrow { color:#a4b5a8; font-size:1.2rem; font-weight:800; text-align:center; }
     .evap-stage { min-height:0; display:grid; grid-template-columns:minmax(0,1fr) 210px; gap:14px; align-items:center; padding:38px 18px 14px; background:radial-gradient(ellipse at 48% 68%,#fff8eb 0,#faf5ea 49%,#f0f4ef 100%); }
-    .evap-visual { position:relative; width:100%; max-width:620px; margin:0 auto; aspect-ratio:3/2; overflow:hidden; border-radius:10px; background:#e7e0d4; }
-    .evap-frame { position:absolute; inset:0; background-image:url("assets/evaporation-realistic-stages.png"); background-size:200% 200%; background-repeat:no-repeat; opacity:0; transition:opacity .6s ease; pointer-events:none; }
-    .evap-frame--1 { background-position:0 0; }
-    .evap-frame--2 { background-position:100% 0; }
-    .evap-frame--3 { background-position:0 100%; }
-    .evap-frame--4 { background-position:100% 100%; }
-    .evap-frame--3,.evap-frame--4 { transform:translateY(4.5%); }
-    .evap-stage[data-step="1"] .evap-frame--1,.evap-stage[data-step="2"] .evap-frame--2,.evap-stage[data-step="3"] .evap-frame--3,.evap-stage[data-step="4"] .evap-frame--4 { z-index:1; opacity:1; }
+    .evap-visual { position:relative; width:100%; max-width:620px; margin:0 auto; aspect-ratio:1586/992; overflow:hidden; border-radius:10px; background:#e7e0d4; }
+    .evap-visual canvas { display:block; width:100%; height:100%; }
+    .evap-timeline { display:flex; align-items:center; gap:10px; margin:14px 0 0; color:#53645d; font-size:.85rem; }
+    .evap-timeline input { min-width:0; flex:1; accent-color:var(--green); cursor:pointer; }
+    .evap-timeline output { min-width:3.5ch; text-align:right; font-variant-numeric:tabular-nums; }
     .evap-observation { align-self:stretch; display:flex; flex-direction:column; justify-content:center; padding:16px; border:1px solid #e2ddcc; border-radius:14px; background:#fffdf8e8; box-shadow:0 5px 16px #243a3508; }
     .evap-observation strong { margin-bottom:8px; color:#8b6b32; font-size:.82rem; letter-spacing:.04em; }
     .evap-observation p { margin:0; color:#4c5d55; font-size:.94rem; line-height:1.7; }
@@ -268,17 +265,13 @@
           </ol>
           <div class="scene evap-stage" id="evap-stage" data-step="1" aria-label="鹽水蒸發與鹽晶體留下的示意">
             <span class="scene-label">過程示意｜動畫時間不代表實際加熱時間</span>
-            <div class="evap-visual" aria-hidden="true">
-              <div class="evap-frame evap-frame--1"></div>
-              <div class="evap-frame evap-frame--2"></div>
-              <div class="evap-frame evap-frame--3"></div>
-              <div class="evap-frame evap-frame--4"></div>
-            </div>
+            <div class="evap-visual" id="evap-visual" aria-hidden="true"></div>
             <aside class="evap-observation"><strong>觀察線索</strong><p id="evap-caption" class="live-note" aria-live="polite">鹽均勻溶在水裡，肉眼看不見分開的鹽粒。</p></aside>
           </div>
-          <div class="control-row evap-controls"><button class="control-button" type="button" id="evap-prev">上一步</button><button class="control-button primary" type="button" id="evap-replay">重播動畫</button><button class="control-button" type="button" id="evap-next">下一步</button></div>
+          <div class="evap-timeline"><label for="evap-seek">示意進度</label><input id="evap-seek" type="range" min="0" max="1000" step="1" value="0"><output id="evap-progress" for="evap-seek">0%</output></div>
+          <div class="control-row evap-controls"><button class="control-button" type="button" id="evap-prev">上一步</button><button class="control-button primary" type="button" id="evap-play" aria-pressed="false">播放</button><button class="control-button" type="button" id="evap-replay">重播動畫</button><button class="control-button" type="button" id="evap-next">下一步</button></div>
           <div class="filter-principle"><strong>分離後，水和鹽各去了哪裡？</strong>水分蒸發後離開容器；原本溶在水中的鹽形成晶體，留在容器裡。這個過程利用水能蒸發、鹽不隨水一起蒸發的差異來分離成分，沒有生成新物質。</div>
-          <div class="note-box">這裡以安全示意呈現加熱與蒸發，不要求學生自行操作火源。本區先聚焦觀察結晶分離結果；溶質含量的表示法會在本段最後討論。</div>
+          <div class="note-box">按「播放」觀察完整過程；可暫停或拖曳示意進度，四個步驟按鈕則可定位到對應階段。溶質含量的表示法會在本段最後討論。</div>
         </div>
       </section>
 
@@ -398,21 +391,6 @@
     filterAnimation.dataset.stage=String(filterStage);
     if(!reduceFilterMotion){setInterval(()=>{filterStage=(filterStage+1)%4;filterAnimation.dataset.stage=String(filterStage);},2200);}
 
-    const evapCaptions={1:'鹽水無色透明，鹽均勻溶在水裡，肉眼看不見分開的鹽粒。',2:'水受熱後逐漸蒸發，水位下降，鹽仍留在溶液中。水蒸氣本身看不見。',3:'只剩淺淺的水層，容器底部開始出現細小的鹽晶體。',4:'水分蒸發後，容器底部留下固態的鹽晶體，不再有液層。'};
-    let evapStep=1,evapTimer=null;
-    const evapStage=document.getElementById('evap-stage');
-    const evapCaption=document.getElementById('evap-caption');
-    const evapStepButtons=[...document.querySelectorAll('[data-evap-step]')];
-    const evapPrev=document.getElementById('evap-prev'),evapNext=document.getElementById('evap-next');
-    function updateEvap(){evapStage.dataset.step=String(evapStep);evapCaption.textContent=evapCaptions[evapStep];evapStepButtons.forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.evapStep)===evapStep)));evapPrev.disabled=evapStep===1;evapNext.disabled=evapStep===4;}
-    function stopEvap(){if(evapTimer){clearTimeout(evapTimer);evapTimer=null;}}
-    function selectEvapStep(step){stopEvap();evapStep=Math.max(1,Math.min(4,step));updateEvap();}
-    evapStepButtons.forEach(button=>button.addEventListener('click',()=>selectEvapStep(Number(button.dataset.evapStep))));
-    evapPrev.addEventListener('click',()=>selectEvapStep(evapStep-1));
-    evapNext.addEventListener('click',()=>selectEvapStep(evapStep+1));
-    document.getElementById('evap-replay').addEventListener('click',()=>{stopEvap();evapStep=1;updateEvap();const replayNext=()=>{if(evapStep>=4){evapTimer=null;return;}evapTimer=setTimeout(()=>{evapStep+=1;updateEvap();replayNext();},1100);};replayNext();});
-    updateEvap();
-
     const stripNotes=['先看好基線、墨點與溶劑液面的相對位置。','溶劑接觸濾紙下端，墨點仍在液面上方。','觀察結果：濾紙上的溶劑前緣向上移動，墨水分成不同色帶；底部的溶劑液面沒有升高。'];
     let stripStep=0,stripTimer=null;
     function updateStrip(){document.getElementById('strip-scene').dataset.step=stripStep;document.getElementById('strip-note').textContent=stripNotes[stripStep];document.getElementById('strip-pause').disabled=stripStep!==1;}
@@ -429,5 +407,7 @@
     document.getElementById('reset-concentration').addEventListener('click',()=>{concentrationAnswer.value='';concentrationFeedback.textContent='選出答案後檢查計算結果。';concentrationFeedback.style.color='';});
     document.getElementById('reset-answers').addEventListener('click',()=>{['q-filter','q-crystal','q-paper'].forEach(id=>document.getElementById(id).value='');const feedback=document.getElementById('quiz-feedback');feedback.textContent='完成三個配對後，查看回饋。';feedback.style.color='';});
   </script>
+  <script type="importmap">{"imports":{"three":"../../../1/parts/1.1/assets/vendor/three/build/three.module.js"}}</script>
+  <script type="module" src="assets/evaporation-animation.js"></script>
 </body>
 </html>
