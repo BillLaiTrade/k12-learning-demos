@@ -196,11 +196,11 @@ function updateAngleLabel(sprite, text) {
   context.clearRect(0, 0, labelCanvas.width, labelCanvas.height);
   context.fillStyle = '#fffdf4ee'; context.strokeStyle = `${labelColor}aa`; context.lineWidth = 5;
   context.beginPath(); context.roundRect(8, 8, 496, 112, 26); context.fill(); context.stroke();
-  context.fillStyle = labelColor; context.font = 'bold 58px "Noto Sans TC", "Microsoft JhengHei", sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle';
+  context.fillStyle = labelColor; context.font = 'bold 82px "Noto Sans TC", "Microsoft JhengHei", sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle';
   context.fillText(text, 256, 66); texture.needsUpdate = true; sprite.userData.labelText = text;
 }
-const equalityLabel = makeAngleLabel('#14533f', [4.8, 0.92]);
-equalityLabel.visible = true;
+const normalLabel = makeAngleLabel('#40566c', [1.9, 0.8]);
+normalLabel.visible = true;
 
 function svgArc(radius, degrees, rightSide) {
   const steps = Math.max(5, Math.ceil(degrees / 3));
@@ -241,8 +241,8 @@ function update() {
   outgoingArc.geometry.dispose(); outgoingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(1.8, angle, 1));
   incomingScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z - protractorRadius * Math.sin(angle));
   reflectedScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z + protractorRadius * Math.sin(angle));
-  equalityLabel.position.set(-4, 1.5, canvas.clientWidth < 500 ? -0.8 : 0.3);
-  updateAngleLabel(equalityLabel, '入射角 ＝ 反射角');
+  normalLabel.position.set(centerPoint.x - 5.5, 1.5, canvas.clientWidth < 500 ? -1.1 : -0.7);
+  updateAngleLabel(normalLabel, '法線');
 
   const diagramLength = 190, dx = diagramLength * Math.sin(angle), dy = diagramLength * Math.cos(angle);
   const endOffset = 14, halfAngle = angle / 2, labelRadius = 150;
