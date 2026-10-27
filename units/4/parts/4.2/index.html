@@ -18,12 +18,14 @@
     .brand-row { margin-bottom:20px; display:flex; justify-content:space-between; gap:12px; align-items:center; }
     .brand { color:var(--green); font-size:.9rem; font-weight:750; text-decoration:none; }
     .crumb { color:var(--muted); font-size:.83rem; }
-    .hero { display:grid; grid-template-columns:minmax(0,1fr) minmax(230px,.42fr); gap:24px; align-items:end; }
+    .hero { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:28px; align-items:center; padding:26px 0 14px; }
     .eyebrow { color:var(--green); font-size:.78rem; font-weight:800; letter-spacing:.1em; }
     h1,h2,h3,p { margin-top:0; }
     h1 { max-width:800px; margin:6px 0 12px; font-size:clamp(2rem,5vw,3.25rem); line-height:1.2; letter-spacing:-.035em; }
     .hero-copy { max-width:740px; color:#52635d; font-size:1.06rem; }
     .hero-note { padding:15px 17px; border:1px solid var(--line); border-radius:14px; background:#fff; }
+    .hero-cover { margin:0; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:var(--card); box-shadow:0 8px 24px #243a3512; }
+    .hero-cover img { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; }
     .hero-note strong { color:var(--green); }
     .hero-note p { margin:5px 0 0; color:var(--muted); font-size:.9rem; }
     .lesson-layout { display:grid; grid-template-columns:260px minmax(0,1fr); gap:28px; align-items:start; }
@@ -155,7 +157,7 @@
     footer { padding:16px 0 28px; color:#718078; font-size:.82rem; }
     @media(max-width:850px) { .lesson-layout { grid-template-columns:1fr; gap:12px; } .route { position:relative; top:auto; max-height:none; } .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); } .record-panel { display:none; } }
     @media(max-width:850px) { .filter-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-    @media(max-width:620px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:8px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .filter-details { padding:13px; } .goal-choice { min-width:100%; } }
+    @media(max-width:680px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:16px; padding-top:20px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .filter-details { padding:13px; } .goal-choice { min-width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
 </head>
@@ -167,8 +169,9 @@
         <div class="eyebrow">混合物分離與溶液濃度｜從分離成分到比較含量</div>
         <h1>混在一起的東西，怎麼分開？溶液裡有多少？</h1>
         <p class="hero-copy">雨後，小葵從院子裡的水桶取了一杯混濁的水，帶到阿公的工作桌。她看得見水裡有泥沙，卻不知道怎麼把它們分開。阿公在桌上準備了幾種不同的混合物樣本，讓她觀察成分看得見或溶在水裡時，可以怎麼分離；也試著比較兩杯溶液含有多少溶質。</p>
+        <aside class="hero-note"><strong>分離成分和比較含量，是同一個問題嗎？</strong><p>先觀察泥沙、鹽水與墨水如何分開，再看看兩杯外觀相似的溶液，溶質含量是否相同。</p></aside>
       </div>
-      <aside class="hero-note"><strong>分離成分和比較含量，是同一個問題嗎？</strong><p>先觀察泥沙、鹽水與墨水如何分開，再看看兩杯外觀相似的溶液，溶質含量是否相同。</p></aside>
+      <figure class="hero-cover"><img src="assets/unit-opening-cover.png" alt="阿公和小葵在工作桌前觀察泥沙水；桌上有過濾器材、不同份量的液體樣本、色帶分離的濾紙和一盤晶體。"></figure>
     </div>
   </header>
   <main class="shell lesson-layout">
