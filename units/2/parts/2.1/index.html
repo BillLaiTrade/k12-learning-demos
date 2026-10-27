@@ -1112,7 +1112,7 @@
                 </div>
                 <div class="speed-color-range" aria-hidden="true"><span>較慢｜4 m/s</span><span>較快｜32 m/s</span></div>
               </div>
-              <p class="speed-equation-live" id="speed-equation-live">波速 = 頻率 × 波長 = 2 Hz × 6 m = 12 m/s</p>
+              <p class="speed-equation-live" id="speed-equation-live">波速 = v = f × λ = 2 Hz × 6 m = 12 m/s</p>
             </section>
           </div>
         </section>
@@ -1817,7 +1817,7 @@
           speedFrequencyValue.textContent=frequencyText;speedPeriodValue.textContent=periodText;speedWavelengthValue.textContent=wavelengthText;
           speedWavePath.style.stroke=color;speedColorMarker.style.left=`${colorPosition.toFixed(2)}%`;speedColorMarker.style.backgroundColor=color;
           speedColorScale.setAttribute("aria-valuenow",format(speed,2));speedColorScale.setAttribute("aria-valuetext",`${format(speed,2)} 公尺每秒，色階位置 ${format(colorPosition,1)}%`);
-          speedEquation.textContent=`波速 = 頻率 × 波長 = ${format(frequency,3)} Hz × ${format(wavelength,1)} m = ${format(speed,2)} m/s`;
+          speedEquation.textContent=`波速 = v = f × λ = ${format(frequency,3)} Hz × ${format(wavelength,1)} m = ${format(speed,2)} m/s`;
           speedWave.setAttribute("aria-label",`橘色波源上下振動一次，產生一個完整波形並向右傳播；頻率 ${frequencyText}，週期 ${periodText}，波長 ${wavelengthText}，波速 ${format(speed,2)} 公尺每秒，波形前端到達30公尺處需 ${format(arrivalTime,2)} 秒`);
           runTime.textContent=`0.00 / ${format(arrivalTime,2)} s`;
           updateControls();
