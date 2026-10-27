@@ -149,6 +149,60 @@ const incomingArc = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBas
 const outgoingArc = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: '#27833d', depthTest: false, linewidth: 3 }));
 incomingArc.renderOrder = outgoingArc.renderOrder = 11; scene.add(incomingArc, outgoingArc);
 
+const protractorRadius = 3.3;
+const protractor = new THREE.Group();
+protractor.position.set(centerPoint.x, 1.405, centerPoint.z); protractor.visible = false; scene.add(protractor);
+const protractorShape = new THREE.Shape(); protractorShape.moveTo(0, 0);
+for (let i = 0; i <= 90; i++) {
+  const angle = THREE.MathUtils.degToRad(-90 + i * 2);
+  protractorShape.lineTo(-protractorRadius * Math.cos(angle), protractorRadius * Math.sin(angle));
+}
+protractorShape.closePath();
+const protractorFaceGeometry = new THREE.ShapeGeometry(protractorShape); protractorFaceGeometry.rotateX(Math.PI / 2);
+const protractorFace = new THREE.Mesh(protractorFaceGeometry, new THREE.MeshBasicMaterial({ color: '#dff4ed', transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false, depthTest: false }));
+protractorFace.renderOrder = 6; protractor.add(protractorFace);
+const protractorArcPoints = [];
+for (let i = 0; i <= 90; i++) {
+  const angle = THREE.MathUtils.degToRad(-90 + i * 2);
+  protractorArcPoints.push(new THREE.Vector3(-protractorRadius * Math.cos(angle), 0.035, protractorRadius * Math.sin(angle)));
+}
+const protractorArc = new THREE.Line(new THREE.BufferGeometry().setFromPoints(protractorArcPoints), new THREE.LineBasicMaterial({ color: '#57736b', transparent: true, opacity: 0.9, depthTest: false }));
+protractorArc.renderOrder = 8; protractor.add(protractorArc);
+const minorTicks = [], majorTicks = [];
+for (const side of [-1, 1]) for (let degrees = 5; degrees <= 90; degrees += 5) {
+  const angle = THREE.MathUtils.degToRad(side * degrees), direction = new THREE.Vector3(-Math.cos(angle), 0, Math.sin(angle));
+  const length = degrees % 10 === 0 ? 0.34 : 0.18, inner = direction.clone().multiplyScalar(protractorRadius - length), outer = direction.clone().multiplyScalar(protractorRadius);
+  const points = degrees % 10 === 0 ? majorTicks : minorTicks;
+  points.push(inner.x, 0.04, inner.z, outer.x, 0.04, outer.z);
+}
+function protractorTickLines(points, color, opacity, width) {
+  const geometry = new THREE.BufferGeometry(); geometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
+  const lines = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({ color, transparent: true, opacity, linewidth: width, depthTest: false }));
+  lines.renderOrder = 9; protractor.add(lines);
+}
+protractorTickLines(minorTicks, '#71877e', 0.65, 1);
+protractorTickLines(majorTicks, '#405e54', 0.95, 2);
+function addProtractorNumber(degrees, side) {
+  const labelCanvas = document.createElement('canvas'); labelCanvas.width = 256; labelCanvas.height = 96;
+  const context = labelCanvas.getContext('2d'); context.fillStyle = '#29483e'; context.font = 'bold 54px sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle'; context.fillText(`${degrees}°`, 128, 50);
+  const texture = new THREE.CanvasTexture(labelCanvas); texture.colorSpace = THREE.SRGBColorSpace;
+  const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false }));
+  label.scale.set(0.7, 0.38, 1); label.renderOrder = 10;
+  if (degrees === 0) label.position.set(-protractorRadius + 0.25, 0.11, 0.45);
+  else {
+    const angle = THREE.MathUtils.degToRad(side * degrees), radius = protractorRadius - 0.42;
+    label.position.set(-radius * Math.cos(angle), 0.11, radius * Math.sin(angle));
+  }
+  protractor.add(label);
+}
+for (let degrees = 0; degrees <= 90; degrees += 10) {
+  addProtractorNumber(degrees, -1);
+  if (degrees) addProtractorNumber(degrees, 1);
+}
+const incomingScaleHit = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), new THREE.MeshBasicMaterial({ color: '#2878df', depthTest: false }));
+const reflectedScaleHit = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), new THREE.MeshBasicMaterial({ color: '#27833d', depthTest: false }));
+incomingScaleHit.renderOrder = reflectedScaleHit.renderOrder = 12; protractor.add(incomingScaleHit, reflectedScaleHit);
+
 function makeAngleLabel(color, size = [3.3, 0.82]) {
   const labelCanvas = document.createElement('canvas'); labelCanvas.width = 512; labelCanvas.height = 128;
   const context = labelCanvas.getContext('2d');
@@ -180,11 +234,13 @@ function setView(view) {
     camera.position.set(focusX, 18.5, focusZ);
     camera.lookAt(focusX, 1.4, focusZ);
     incidentAngleLabel.visible = reflectedAngleLabel.visible = normalLabel.visible = equalityLabel.visible = true;
+    protractor.visible = true;
   } else {
     camera.up.set(0, 1, 0);
     camera.position.set(-10.5, 13, 10.5);
     camera.lookAt(-4.5, 0.55, 2.2);
     incidentAngleLabel.visible = reflectedAngleLabel.visible = normalLabel.visible = equalityLabel.visible = false;
+    protractor.visible = false;
   }
   document.querySelector('#view-overview').setAttribute('aria-pressed', String(view === 'overview'));
   document.querySelector('#view-reflection-angles').setAttribute('aria-pressed', String(view === 'reflection-angles'));
@@ -222,6 +278,8 @@ function update() {
   spot.position.copy(receiverSpot); glow.position.copy(receiverSpot);
   incomingArc.geometry.dispose(); incomingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(0.68, angle, -1));
   outgoingArc.geometry.dispose(); outgoingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(0.68, angle, 1));
+  incomingScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z - protractorRadius * Math.sin(angle));
+  reflectedScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z + protractorRadius * Math.sin(angle));
   const labelDistance = 1.8 / Math.sin(angle);
   incidentAngleLabel.position.copy(hit).addScaledVector(sourceDirection, -labelDistance).add(new THREE.Vector3(-0.45, 0, 0)); incidentAngleLabel.position.y = 1.5;
   reflectedAngleLabel.position.copy(hit).addScaledVector(outgoingDirection, labelDistance).add(new THREE.Vector3(-0.45, 0, 0)); reflectedAngleLabel.position.y = 1.5;
@@ -251,7 +309,7 @@ function resize() {
   if (!width || !height) return;
   renderer.setSize(width, height, false);
   camera.aspect = width / height;
-  camera.fov = activeView === 'reflection-angles' ? (width < 500 ? 38 : 45) : (width < 500 ? 55 : 40);
+  camera.fov = activeView === 'reflection-angles' ? (width < 500 ? 33 : 45) : (width < 500 ? 55 : 40);
   if (activeView === 'reflection-angles') {
     const focusX = width < 500 ? -2.2 : -2.5, focusZ = width < 500 ? -2 : 0.3;
     camera.up.set(-1, 0, 0); camera.position.set(focusX, 18.5, focusZ); camera.lookAt(focusX, 1.4, focusZ);

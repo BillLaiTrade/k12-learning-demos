@@ -138,7 +138,7 @@
                 </svg>
               </section>
               <section class="laser-lab" aria-label="可調整入射角的雷射反射實驗">
-                <canvas id="laser-reflection-scene" aria-label="可切換桌面總覽與反射板上方角度視角的雷射反射實驗"></canvas>
+                <canvas id="laser-reflection-scene" aria-label="可切換桌面總覽與反射板在下方的角度視角；角度視角顯示透明量角板刻度"></canvas>
                 <div class="laser-lab-ui" aria-label="雷射角度操作與讀數">
                   <div class="laser-view-switch" role="group" aria-label="選擇實驗觀察視角"><button class="laser-view-button" id="view-overview" type="button" aria-pressed="true">桌面總覽</button><button class="laser-view-button" id="view-reflection-angles" type="button" aria-pressed="false">反射板角度視角</button></div>
                   <div class="laser-control-panel"><label class="laser-slider-label" for="incident-angle">調整入射角</label><div class="laser-slider-row"><input id="incident-angle" type="range" min="20" max="40" step="1" value="30" aria-label="調整入射角"><output id="incident-angle-value" for="incident-angle">30°</output></div></div>
@@ -303,6 +303,6 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
-  <script type="module" src="assets/laser-reflection.js?v=8"></script>
+  <script type="module" src="assets/laser-reflection.js?v=9"></script>
 </body>
 </html>
