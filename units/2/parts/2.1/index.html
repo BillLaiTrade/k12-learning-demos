@@ -112,6 +112,7 @@
     .water-wave-view { margin:10px 0 0; overflow:hidden; border:1px solid var(--line); border-radius:14px; background:#fbfcf8; }
     .water-wave-view figcaption { padding:8px 12px 0; color:var(--green); font-size:.88rem; font-weight:800; }
     .water-wave-stage { position:relative; width:100%; aspect-ratio:640/240; touch-action:none; }
+    .water-wave-stage--section { aspect-ratio:640/160; }
     .water-wave-stage svg { display:block; width:100%; height:100%; }
     .water-wave-stage .water-surface { fill:url(#water-surface-gradient); stroke:#75a9ab; stroke-width:2; }
     .water-ripple { fill:none; stroke:#4d929a; stroke-width:2.8; }
@@ -834,13 +835,13 @@
               </figure>
               <figure class="water-wave-view">
                 <figcaption>剖面：近水面的粒子沿橢圓軌跡運動，越深位移越小</figcaption>
-                <div class="water-wave-stage">
-                  <svg id="water-side-svg" viewBox="0 0 640 240" role="img" aria-label="水盤剖面。水面波形從石子落點向兩側傳播，水中粒子在原位置附近移動">
+                <div class="water-wave-stage water-wave-stage--section">
+                  <svg id="water-side-svg" viewBox="0 0 640 160" role="img" aria-label="水盤剖面。水面波形從石子落點向兩側傳播，水中粒子在原位置附近移動">
                     <defs>
-                      <clipPath id="water-side-clip"><rect x="24" y="48" width="592" height="168" rx="10"/></clipPath>
+                      <clipPath id="water-side-clip"><rect x="24" y="48" width="592" height="78" rx="10"/></clipPath>
                       <marker id="water-direction-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" class="water-wave-direction-head"/></marker>
                     </defs>
-                    <rect x="24" y="48" width="592" height="168" rx="10" class="water-side-fill"/>
+                    <rect x="24" y="48" width="592" height="78" rx="10" class="water-side-fill"/>
                     <path id="water-side-baseline" class="water-side-baseline" d="M24 52H616"/>
                     <path id="water-side-surface" class="water-side-level" d="M24 52H616"/>
                     <g id="water-side-particles" clip-path="url(#water-side-clip)"></g>
@@ -1220,7 +1221,7 @@
         const waveSpeed=reducedMotion?85:110,wavePeriod=reducedMotion ? 0.5 : 0.45,waveTrainDuration=wavePeriod*4,waveAmplitude=10,baseSurfaceY=52,wavelength=waveSpeed*wavePeriod;
         const rippleNodes=[];for(let i=0;i<7;i++){const ring=document.createElementNS(waterNs,"circle");ring.setAttribute("class","water-ripple");ring.setAttribute("opacity","0");rippleGroup.append(ring);rippleNodes.push(ring);}
         const particleNodes=[];let selectedBase={x:400,y:54};
-        for(let y=58;y<=178;y+=24)for(let x=44;x<=596;x+=28){
+        for(let y=58;y<=106;y+=24)for(let x=44;x<=596;x+=28){
           if(y===58&&x===400)continue;
           const particle=document.createElementNS(waterNs,"circle");particle.setAttribute("class","water-side-particle");particle.setAttribute("r",y===58?"2.3":"2");particle.dataset.baseX=String(x);particle.dataset.baseY=String(y);sideParticles.append(particle);particleNodes.push(particle);
         }
