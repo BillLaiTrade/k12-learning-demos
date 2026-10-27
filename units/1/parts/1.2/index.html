@@ -80,6 +80,16 @@
     #distance-front-object,#distance-front-reflection{transition:transform .2s ease-out}
     @media(max-width:1050px){#card-03 .mirror-views,#card-04 .mirror-views{grid-template-columns:minmax(0,1fr)}}
     @media(max-width:780px){.distance-controls{grid-template-columns:1fr auto}.distance-controls label{grid-column:1/-1}.mirror-task{grid-template-columns:1fr;gap:4px}}
+
+    #card-03 .mirror-view h3{flex-wrap:wrap;font-size:1rem}
+    #card-03 .mirror-view h3 small{font-size:.8rem}
+    .mirror-ray-legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin:12px 0;color:#405851;font-size:.88rem}
+    .mirror-ray-legend span{display:inline-flex;align-items:center;gap:8px}
+    .mirror-ray-legend i{display:inline-block;width:30px;border-top:3px solid #ab6815}
+    .mirror-ray-legend .mirror-ray-dashed{border-top:3px dashed #397f98}
+    .mirror-explanation{margin-top:12px;padding:14px 16px;border-left:4px solid #397f98;border-radius:0 12px 12px 0;background:#edf5f7;color:#23465a}
+    .mirror-explanation p{margin:6px 0 0}
+    .mirror-ray-legend[hidden],.mirror-ray-legend [hidden],.mirror-explanation[hidden]{display:none}
   </style>
 </head>
 <body>
@@ -189,41 +199,55 @@
           <div class="card-side"><span class="card-number">03</span><h3>平面鏡裡的像在哪裡？</h3><span class="card-role">移除物體・追蹤光路</span></div>
           <div class="card-main">
             <h2>鏡中的像是怎麼形成的？</h2>
-            <p>從鏡子側面分析反射光路，再從正面看看鏡中的成像。兩個視角呈現同一個物體。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我看見鏡子裡也有一個物體，它是真的在鏡子後面嗎？</p></div>
-            <div class="mirror-task"><strong>先操作，再解釋</strong><p>移除物體，觀察兩個視角的像；放回後顯示光路，看看延長線指向哪裡。</p></div>
+            <p>先從鏡前觀察小熊，再用側面光路示意，找出鏡中像看起來的位置。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我看見鏡子裡也有一個小熊，它真的在鏡子後面嗎？</p></div>
+            <div class="mirror-task"><strong>先觀察，再追蹤</strong><p>移除小熊，看看鏡中像還在不在；放回後按「顯示光路」，追蹤光怎麼進入眼睛。</p></div>
             <div class="mirror-views" aria-label="平面鏡成像的同步雙視角">
               <figure class="mirror-view">
-                <h3>鏡子側面｜分析光路 <small>觀察反射光與延長線</small></h3>
-                <svg id="image-side-view" viewBox="0 0 620 300" role="img" aria-labelledby="image-side-title image-side-desc">
-                  <title id="image-side-title">從鏡子側面分析平面鏡成像光路</title><desc id="image-side-desc">物體發出的光在鏡面反射後進入眼睛，反射光的延長線指向鏡後的虛像。</desc>
-                  <defs><marker id="ray-arrow-side" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L7 3L0 6Z" fill="#d5962d"/></marker><linearGradient id="ray-room" x2="0" y2="1"><stop stop-color="#fbfaf5"/><stop offset="1" stop-color="#eae5d9"/></linearGradient><linearGradient id="ray-wood" x2="0" y2="1"><stop stop-color="#cfad85"/><stop offset="1" stop-color="#ad8158"/></linearGradient><linearGradient id="ray-mirror" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a8c4c8"/><stop offset=".48" stop-color="#f7fcfb"/><stop offset="1" stop-color="#9eb8bd"/></linearGradient><filter id="ray-mirror-shadow" x="-.5" y="-.1" width="2" height="1.4"><feDropShadow dx="3" dy="4" stdDeviation="3" flood-color="#243a35" flood-opacity=".22"/></filter></defs>
-                  <rect x="0" y="0" width="620" height="258" fill="url(#ray-room)"/><rect x="0" y="258" width="620" height="42" fill="url(#ray-wood)"/><path d="M0 260H620M0 278H620" stroke="#866846" stroke-opacity=".18"/>
-                  <g id="image-side-object"><image href="assets/mirror/teddy-front.webp" x="122" y="112" width="100" height="140" preserveAspectRatio="xMidYMax meet"/><text x="172" y="281" text-anchor="middle" fill="#fffdf8" font-size="16" font-weight="700">物體</text></g>
-                  <rect x="294" y="249" width="32" height="9" rx="3" fill="#82938d"/><rect x="302" y="42" width="16" height="208" rx="4" fill="#617c7d" filter="url(#ray-mirror-shadow)"/><rect x="305" y="45" width="10" height="201" rx="2" fill="url(#ray-mirror)"/><path d="M307 48V240" stroke="#fff" stroke-opacity=".68" stroke-width="2"/><text x="310" y="29" text-anchor="middle" fill="#315a46" font-size="15">平面鏡</text>
-                  <g id="image-side-virtual" opacity=".48"><image href="assets/mirror/teddy-front.webp" x="398" y="112" width="100" height="140" preserveAspectRatio="xMidYMax meet"/><text x="448" y="254" text-anchor="middle" fill="#64736d" font-size="16">虛像</text></g>
-                  <g id="image-side-rays" style="display:none"><path d="M172 140L310 174L112 224" fill="none" stroke="#d5962d" stroke-width="4" marker-end="url(#ray-arrow-side)"/><path d="M310 174L448 140" fill="none" stroke="#397f98" stroke-width="3" stroke-dasharray="8 6"/><circle cx="310" cy="174" r="5" fill="#bc612b"/><rect x="104" y="83" width="82" height="25" rx="9" fill="#fffdf8" fill-opacity=".96"/><text x="145" y="100" text-anchor="middle" fill="#9a6520" font-size="13" font-weight="800">反射光</text><rect x="350" y="83" width="116" height="25" rx="9" fill="#fffdf8" fill-opacity=".96"/><text x="408" y="100" text-anchor="middle" fill="#397f98" font-size="13" font-weight="800">反射光延長線</text></g>
-                  <g aria-label="觀察位置"><circle cx="88" cy="230" r="19" fill="#fff" stroke="#b9c9c2" stroke-width="2"/><path d="M76 230Q88 216 100 230Q88 244 76 230Z" fill="none" stroke="#315a46" stroke-width="2"/><circle cx="88" cy="230" r="4" fill="#315a46"/><text x="88" y="278" text-anchor="middle" fill="#64736d" font-size="13">觀察位置</text></g>
+                <h3>側面光路示意 <small>找出像的位置</small></h3>
+                <svg id="image-side-view" viewBox="0 0 620 380" role="img" aria-labelledby="image-side-title image-side-desc">
+                  <title id="image-side-title">從側面追蹤平面鏡成像光路</title>
+                  <desc id="image-side-desc">先觀察鏡前小熊；顯示光路後，兩條光從小熊同一點在鏡面反射，進入眼睛，再以虛線向鏡後延長，找出虛像位置。</desc>
+                  <defs>
+                    <marker id="ray-arrow-side" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#ab6815"/></marker>
+                    <linearGradient id="ray-room" x2="0" y2="1"><stop stop-color="#fbfaf5"/><stop offset="1" stop-color="#eae5d9"/></linearGradient>
+                    <linearGradient id="ray-wood" x2="0" y2="1"><stop stop-color="#cfad85"/><stop offset="1" stop-color="#ad8158"/></linearGradient>
+                    <linearGradient id="ray-mirror" x2="1" y2="1"><stop stop-color="#a8c4c8"/><stop offset=".48" stop-color="#f7fcfb"/><stop offset="1" stop-color="#9eb8bd"/></linearGradient>
+                  </defs>
+                  <rect width="620" height="300" fill="url(#ray-room)"/><rect y="300" width="620" height="80" fill="url(#ray-wood)"/>
+                  <g id="image-side-object"><image href="assets/mirror/teddy-front.webp" x="122" y="200" width="100" height="100" preserveAspectRatio="xMidYMax meet"/><rect x="126" y="314" width="92" height="32" rx="9" fill="#fffdf8"/><text x="172" y="336" text-anchor="middle" fill="#315a46" font-size="20" font-weight="700">物體</text></g>
+                  <rect x="314" y="291" width="32" height="9" rx="3" fill="#82938d"/><rect x="326" y="82" width="8" height="210" rx="3" fill="url(#ray-mirror)" stroke="#617c7d" stroke-width="3"/><text x="330" y="62" text-anchor="middle" fill="#315a46" font-size="20" font-weight="700">平面鏡</text>
+                  <g id="image-side-virtual" style="display:none"><image href="assets/mirror/teddy-front.webp" x="438" y="200" width="100" height="100" opacity=".4" preserveAspectRatio="xMidYMax meet"/><rect x="442" y="314" width="92" height="32" rx="9" fill="#fffdf8"/><text x="488" y="336" text-anchor="middle" fill="#266c85" font-size="20" font-weight="700">虛像</text><circle cx="488" cy="245" r="6" fill="#397f98" stroke="#fff" stroke-width="2"/></g>
+                  <g id="image-side-rays" style="display:none" fill="none" stroke="#ab6815" stroke-width="3" stroke-linejoin="round">
+                    <path id="image-ray-a-in" d="M172 245L330 195" marker-end="url(#ray-arrow-side)"/><path id="image-ray-a-out" d="M330 195L88 118.4177215190" marker-end="url(#ray-arrow-side)"/>
+                    <path id="image-ray-b-in" d="M172 245L330 205" marker-end="url(#ray-arrow-side)"/><path id="image-ray-b-out" d="M330 205L88 143.7341772152" marker-end="url(#ray-arrow-side)"/>
+                    <path d="M220 160.1898734177L200 153.8607594937" marker-end="url(#ray-arrow-side)"/><path d="M220 177.1518987342L200 172.0886075949" marker-end="url(#ray-arrow-side)"/>
+                    <circle cx="172" cy="245" r="5" fill="#ab6815" stroke="#fff" stroke-width="2"/>
+                  </g>
+                  <g id="image-side-extensions" style="display:none" fill="none" stroke="#397f98" stroke-width="3" stroke-dasharray="8 6"><path id="image-extension-a" d="M330 195L488 245"/><path id="image-extension-b" d="M330 205L488 245"/></g>
+                  <g aria-label="眼睛，示意位置"><rect x="52" y="102" width="58" height="58" rx="28" fill="#fffdf8" stroke="#b9c9c2" stroke-width="2"/><path d="M62 133Q88 101 102 133Q88 165 62 133Z" fill="#e5f2e9" stroke="#315a46" stroke-width="2"/><path d="M88 117V145" stroke="#315a46" stroke-width="6" stroke-linecap="round"/><text x="81" y="190" text-anchor="middle" fill="#315a46" font-size="20" font-weight="700">眼睛</text></g>
+                  <text x="310" y="368" text-anchor="middle" fill="#5a4938" font-size="18">光路示意，未依實際比例繪製</text>
                 </svg>
               </figure>
               <figure class="mirror-view">
-                <h3>鏡子正面｜實際成像 <small>你看到的鏡中像</small></h3>
-                <svg id="image-front-view" viewBox="0 0 620 300" role="img" aria-labelledby="image-front-title image-front-desc">
-                  <title id="image-front-title">從正面看見物體在平面鏡中的像</title><desc id="image-front-desc">鏡前物體與鏡面中的對應影像同步出現或移除。</desc>
-                  <defs><linearGradient id="front-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d8edf1"/><stop offset=".52" stop-color="#f8fcfa"/><stop offset="1" stop-color="#c8e0e4"/></linearGradient><linearGradient id="front-wood" x2="0" y2="1"><stop stop-color="#c9a77f"/><stop offset="1" stop-color="#a77e56"/></linearGradient><filter id="front-shadow" x="-.2" y="-.2" width="1.4" height="1.5"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#243a35" flood-opacity=".22"/></filter></defs>
-                  <image href="assets/mirror/mirror-room-bg.webp" x="0" y="0" width="620" height="300" preserveAspectRatio="xMidYMid slice"/><rect x="189" y="30" width="244" height="210" rx="8" fill="#647d7a" filter="url(#front-shadow)"/><rect x="198" y="39" width="226" height="192" rx="3" fill="url(#front-glass)"/><path d="M210 49L302 49L205 218Z" fill="#fff" fill-opacity=".22"/><path d="M0 240H620" stroke="#e4c9a4" stroke-width="4"/>
-                  <g id="image-front-reflection" opacity=".92"><image href="assets/mirror/teddy-front.webp" x="261" y="43" width="98" height="110" preserveAspectRatio="xMidYMax meet"/><rect x="348" y="51" width="67" height="22" rx="8" fill="#fffdf8" fill-opacity=".94"/><text x="381" y="66" text-anchor="middle" fill="#315a46" font-size="12" font-weight="700">鏡中像</text></g>
-                  <g id="image-front-object"><image href="assets/mirror/teddy-back.webp" x="261" y="177" width="98" height="108" preserveAspectRatio="xMidYMax meet"/><text x="310" y="294" text-anchor="middle" fill="#315a46" font-size="14" font-weight="700">鏡前實物</text></g>
+                <h3>從鏡前看到的景象 <small>小熊面向鏡子</small></h3>
+                <svg id="image-front-view" viewBox="0 0 620 380" role="img" aria-labelledby="image-front-title image-front-desc">
+                  <title id="image-front-title">小熊面向鏡子時，觀察者看到實物背面與鏡中正面</title><desc id="image-front-desc">鏡前小熊面向鏡子，觀察者在它後方；移除小熊時，鏡中像也消失。</desc>
+                  <defs><linearGradient id="front-glass" x2="1" y2="1"><stop stop-color="#d8edf1"/><stop offset=".52" stop-color="#f8fcfa"/><stop offset="1" stop-color="#c8e0e4"/></linearGradient></defs>
+                  <image href="assets/mirror/mirror-room-bg.webp" width="620" height="380" preserveAspectRatio="xMidYMid slice"/><rect x="185" y="44" width="250" height="252" rx="8" fill="#647d7a"/><rect x="194" y="53" width="232" height="234" rx="3" fill="url(#front-glass)"/><path d="M205 62H286L202 275Z" fill="#fff" fill-opacity=".22"/>
+                  <g id="image-front-reflection"><image href="assets/mirror/teddy-front.webp" x="260" y="91" width="100" height="104" preserveAspectRatio="xMidYMax meet"/><rect x="350" y="70" width="74" height="30" rx="8" fill="#fffdf8"/><text x="387" y="91" text-anchor="middle" fill="#315a46" font-size="18" font-weight="700">鏡中像</text></g>
+                  <g id="image-front-object"><image href="assets/mirror/teddy-rear.webp" x="260" y="238" width="100" height="104" preserveAspectRatio="xMidYMax meet"/><rect x="220" y="347" width="180" height="28" rx="8" fill="#fffdf8"/><text x="310" y="367" text-anchor="middle" fill="#315a46" font-size="18" font-weight="700">鏡前實物（背面）</text></g>
                 </svg>
               </figure>
             </div>
-            <div class="mirror-controls" role="group" aria-label="同步移除或放回物體">
+            <div class="mirror-ray-legend" id="image-ray-legend" hidden><span><i class="mirror-ray-solid"></i>光實際走過的路徑</span><span id="image-extension-legend" hidden><i class="mirror-ray-dashed"></i>向後延長的示意線</span></div>
+            <div class="mirror-controls" role="group" aria-label="觀察小熊與追蹤光路">
               <button class="control-button mirror-btn mirror-primary" id="remove-image-object" type="button">移除物體</button>
               <button class="control-button mirror-btn" id="restore-image-object" type="button" disabled>放回物體</button>
-              <button class="control-button mirror-btn mirror-secondary" id="toggle-image-rays" type="button" aria-pressed="false" disabled>顯示光路</button>
-              <p class="mirror-sync-note">兩個畫面共用同一個物體。光路顯示後，延長線會指向鏡後的虛像位置。</p>
+              <button class="control-button mirror-btn mirror-secondary" id="toggle-image-rays" type="button" aria-pressed="false" aria-controls="image-side-rays image-side-extensions image-side-virtual">顯示光路</button>
             </div>
-            <p class="mirror-live" id="image-object-status" aria-live="polite">先按「移除物體」觀察鏡中像，再放回物體並顯示光路。</p>
+            <p class="mirror-sync-note" id="image-object-status" aria-live="polite">先移除小熊，觀察鏡中像；也可以顯示光路，找出像的位置。</p>
+            <div class="mirror-explanation" id="image-explanation" hidden><strong>鏡後沒有光真的通過。</strong><p>小熊反射的光經鏡面反射後進入眼睛。眼睛沿著光來的方向看，像是光從鏡後的交會位置傳來，因此看見那裡的虛像；藍色虛線只是向後延長的示意線。</p></div>
           </div>
         </section>
         <section class="lesson-card" id="card-04">
@@ -259,7 +283,7 @@
                   <defs><linearGradient id="distance-front-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d6e8e8"/><stop offset=".5" stop-color="#fffdf7"/><stop offset="1" stop-color="#c5d8d7"/></linearGradient><linearGradient id="distance-front-wood" x2="0" y2="1"><stop stop-color="#c9a77f"/><stop offset="1" stop-color="#a77e56"/></linearGradient><filter id="distance-mirror-shadow" x="-.2" y="-.2" width="1.4" height="1.5"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#243a35" flood-opacity=".2"/></filter></defs>
                   <image href="assets/mirror/mirror-room-bg.webp" x="0" y="0" width="620" height="350" preserveAspectRatio="xMidYMid slice"/><rect x="170" y="38" width="280" height="220" rx="9" fill="#647d7a" filter="url(#distance-mirror-shadow)"/><rect x="179" y="47" width="262" height="202" fill="url(#distance-front-glass)"/><path d="M193 56H295L184 236Z" fill="#fff" fill-opacity=".22"/><path d="M0 260H620" stroke="#e4c9a4" stroke-width="4"/>
                   <g id="distance-front-reflection" opacity=".92"><image href="assets/mirror/teddy-front.webp" x="260" y="45" width="100" height="104" preserveAspectRatio="xMidYMax meet"/><rect x="350" y="57" width="67" height="22" rx="8" fill="#fffdf8" fill-opacity=".94"/><text x="383" y="72" text-anchor="middle" fill="#315a46" font-size="12" font-weight="700">鏡中像</text></g>
-                  <g id="distance-front-object"><image href="assets/mirror/teddy-back.webp" x="260" y="180" width="100" height="104" preserveAspectRatio="xMidYMax meet"/></g><text x="374" y="286" text-anchor="middle" fill="#315a46" font-size="13" font-weight="700">鏡前實物</text>
+                  <g id="distance-front-object"><image href="assets/mirror/teddy-rear.webp" x="260" y="180" width="100" height="104" preserveAspectRatio="xMidYMax meet"/></g><text x="374" y="286" text-anchor="middle" fill="#315a46" font-size="13" font-weight="700">鏡前實物</text>
                   <rect x="115" y="300" width="390" height="30" rx="10" fill="#f0f5eb"/><text id="distance-front-status" x="310" y="320" text-anchor="middle" fill="#315a46" font-size="14" font-weight="700">目前物距 40 cm｜像距 40 cm</text>
                 </svg>
               </figure>
@@ -364,10 +388,6 @@
   </main>
   <footer class="shell"><a href="../../index.html">回到光學單元學習路線</a>　·　接下來：光進入不同介質會怎樣？</footer>
   <script>
-    const imageGroups=["#image-side-object","#image-side-virtual","#image-front-object","#image-front-reflection"],removeImageObject=document.querySelector("#remove-image-object"),restoreImageObject=document.querySelector("#restore-image-object"),toggleImageRays=document.querySelector("#toggle-image-rays"),imageObjectStatus=document.querySelector("#image-object-status"),imageSideRays=document.querySelector("#image-side-rays");let imagePresent=true,raysShown=false;
-    function updateImageRays(){imageSideRays.style.display=imagePresent&&raysShown?"":"none";toggleImageRays.disabled=!imagePresent;toggleImageRays.setAttribute("aria-pressed",String(raysShown));toggleImageRays.textContent=raysShown?"隱藏光路":"顯示光路"}
-    function setImageObjectPresent(present){imagePresent=present;if(!present)raysShown=false;imageGroups.forEach(function(selector){document.querySelector(selector).style.display=present?"":"none"});removeImageObject.disabled=!present;restoreImageObject.disabled=present;updateImageRays();imageObjectStatus.textContent=present?(raysShown?"追蹤光路：反射光進入觀察位置，延長線指向鏡後的虛像。":"物體和鏡中像都已出現；顯示光路，看看像為什麼在鏡後。"):"移除後，兩個視角的物體與像都消失了；放回物體，再追蹤光路。"}
-    removeImageObject.addEventListener("click",function(){setImageObjectPresent(false)});restoreImageObject.addEventListener("click",function(){setImageObjectPresent(true)});toggleImageRays.addEventListener("click",function(){raysShown=!raysShown;updateImageRays();imageObjectStatus.textContent=raysShown?"追蹤光路：反射光進入觀察位置，延長線指向鏡後的虛像。":"光路已隱藏；可再顯示光路，觀察延長線的方向。"});updateImageRays();
     const distanceInput=document.querySelector("#object-distance"),distanceSideObject=document.querySelector("#distance-side-object"),distanceSideImage=document.querySelector("#distance-side-image"),distanceFrontObject=document.querySelector("#distance-front-object"),distanceFrontReflection=document.querySelector("#distance-front-reflection"),rulerTicks=document.querySelector("#distance-ruler-ticks"),rulerValues=document.querySelector("#distance-ruler-values");
     for(let cm=-60;cm<=60;cm+=5){const x=310+cm*4,longTick=cm%10===0;const tick=document.createElementNS("http://www.w3.org/2000/svg","line");tick.setAttribute("x1",x);tick.setAttribute("x2",x);tick.setAttribute("y1",260);tick.setAttribute("y2",longTick?274:267);tick.setAttribute("class","ruler-tick");rulerTicks.appendChild(tick);if(longTick){const label=document.createElementNS("http://www.w3.org/2000/svg","text");label.setAttribute("x",x);label.setAttribute("y",292);label.setAttribute("class","ruler-label");label.textContent=cm===0?"0":String(Math.abs(cm));rulerValues.appendChild(label)}}
     function updateDistance(){const value=Number(distanceInput.value),offset=value*4,objectX=310-offset,imageX=310+offset;
@@ -386,6 +406,7 @@
     const answerButtons=[...document.querySelectorAll("[data-answer]")];answerButtons.forEach(function(button){button.addEventListener("click",function(){answerButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===button));item.classList.remove("correct","incorrect")});button.classList.add(button.dataset.answer==="correct"?"correct":"incorrect")})});document.querySelector("#check-answer").addEventListener("click",function(){const selected=answerButtons.find(function(button){return button.getAttribute("aria-pressed")==="true"}),feedback=document.querySelector("#check-feedback");if(!selected){feedback.dataset.state="try";feedback.textContent="先選一段完整說明，再回想平面鏡與曲面鏡的反射差異。";return}if(selected.dataset.answer==="correct"){feedback.dataset.state="good";feedback.textContent="正確：平面鏡像隨物體移動；曲面各處遵守反射定律，凹面會聚光、凸面發散光。"}else{feedback.dataset.state="try";feedback.textContent="再想一想：曲面鏡各處法線方向不同，但每一處都遵守反射定律。"}});document.querySelector("#reset-answer").addEventListener("click",function(){answerButtons.forEach(function(button){button.setAttribute("aria-pressed","false");button.classList.remove("correct","incorrect")});const feedback=document.querySelector("#check-feedback");feedback.removeAttribute("data-state");feedback.textContent="選好後再確認：曲面鏡各處的法線方向相同嗎？"});
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
+  <script type="module" src="assets/mirror-image.js?v=1"></script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
   <script type="module" src="assets/laser-reflection.js?v=35"></script>
 </body>
