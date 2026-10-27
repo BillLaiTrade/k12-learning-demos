@@ -8,9 +8,6 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color('#e5e6e1');
 scene.fog = new THREE.Fog('#e5e6e1', 14, 28);
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-camera.position.set(-10.5, 13, 10.5);
-camera.lookAt(-4.5, 0.55, 2.2);
-let activeView = 'overview';
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.shadowMap.enabled = true;
@@ -149,9 +146,9 @@ const incomingArc = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBas
 const outgoingArc = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: '#27833d', depthTest: false, linewidth: 3 }));
 incomingArc.renderOrder = outgoingArc.renderOrder = 11; scene.add(incomingArc, outgoingArc);
 
-const protractorRadius = 3.3;
+const protractorRadius = 5.0;
 const protractor = new THREE.Group();
-protractor.position.set(centerPoint.x, 1.405, centerPoint.z); protractor.visible = false; scene.add(protractor);
+protractor.position.set(centerPoint.x, 1.405, centerPoint.z); scene.add(protractor);
 const protractorShape = new THREE.Shape(); protractorShape.moveTo(0, 0);
 for (let i = 0; i <= 90; i++) {
   const angle = THREE.MathUtils.degToRad(-90 + i * 2);
@@ -159,7 +156,7 @@ for (let i = 0; i <= 90; i++) {
 }
 protractorShape.closePath();
 const protractorFaceGeometry = new THREE.ShapeGeometry(protractorShape); protractorFaceGeometry.rotateX(Math.PI / 2);
-const protractorFace = new THREE.Mesh(protractorFaceGeometry, new THREE.MeshBasicMaterial({ color: '#dff4ed', transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false, depthTest: false }));
+const protractorFace = new THREE.Mesh(protractorFaceGeometry, new THREE.MeshBasicMaterial({ color: '#dff4ed', transparent: true, opacity: 0.13, side: THREE.DoubleSide, depthWrite: false, depthTest: false }));
 protractorFace.renderOrder = 6; protractor.add(protractorFace);
 const protractorArcPoints = [];
 for (let i = 0; i <= 90; i++) {
@@ -171,7 +168,7 @@ protractorArc.renderOrder = 8; protractor.add(protractorArc);
 const minorTicks = [], majorTicks = [];
 for (const side of [-1, 1]) for (let degrees = 5; degrees <= 90; degrees += 5) {
   const angle = THREE.MathUtils.degToRad(side * degrees), direction = new THREE.Vector3(-Math.cos(angle), 0, Math.sin(angle));
-  const length = degrees % 10 === 0 ? 0.34 : 0.18, inner = direction.clone().multiplyScalar(protractorRadius - length), outer = direction.clone().multiplyScalar(protractorRadius);
+  const length = degrees % 10 === 0 ? 0.44 : 0.22, inner = direction.clone().multiplyScalar(protractorRadius - length), outer = direction.clone().multiplyScalar(protractorRadius);
   const points = degrees % 10 === 0 ? majorTicks : minorTicks;
   points.push(inner.x, 0.04, inner.z, outer.x, 0.04, outer.z);
 }
@@ -184,13 +181,13 @@ protractorTickLines(minorTicks, '#71877e', 0.65, 1);
 protractorTickLines(majorTicks, '#405e54', 0.95, 2);
 function addProtractorNumber(degrees, side) {
   const labelCanvas = document.createElement('canvas'); labelCanvas.width = 256; labelCanvas.height = 96;
-  const context = labelCanvas.getContext('2d'); context.fillStyle = '#29483e'; context.font = 'bold 54px sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle'; context.fillText(`${degrees}°`, 128, 50);
+  const context = labelCanvas.getContext('2d'); context.fillStyle = '#29483e'; context.font = 'bold 68px sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle'; context.fillText(`${degrees}°`, 128, 50);
   const texture = new THREE.CanvasTexture(labelCanvas); texture.colorSpace = THREE.SRGBColorSpace;
   const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false }));
-  label.scale.set(0.7, 0.38, 1); label.renderOrder = 10;
-  if (degrees === 0) label.position.set(-protractorRadius + 0.25, 0.11, 0.45);
+  label.scale.set(1.0, 0.64, 1); label.renderOrder = 10;
+  if (degrees === 0) label.position.set(-protractorRadius + 0.34, 0.11, 0.62);
   else {
-    const angle = THREE.MathUtils.degToRad(side * degrees), radius = protractorRadius - 0.42;
+    const angle = THREE.MathUtils.degToRad(side * degrees), radius = protractorRadius - 0.72;
     label.position.set(-radius * Math.cos(angle), 0.11, radius * Math.sin(angle));
   }
   protractor.add(label);
@@ -221,31 +218,8 @@ function updateAngleLabel(sprite, text) {
   context.fillStyle = labelColor; context.font = 'bold 58px "Noto Sans TC", "Microsoft JhengHei", sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle';
   context.fillText(text, 256, 66); texture.needsUpdate = true; sprite.userData.labelText = text;
 }
-const incidentAngleLabel = makeAngleLabel('#165fc2', [2.7, 0.72]);
-const reflectedAngleLabel = makeAngleLabel('#24783a', [2.7, 0.72]);
-const normalLabel = makeAngleLabel('#43534d', [1.5, 0.62]);
 const equalityLabel = makeAngleLabel('#14533f', [4.8, 0.92]);
-function setView(view) {
-  activeView = view;
-  if (view === 'reflection-angles') {
-    const isCompact = canvas.clientWidth < 500;
-    const focusX = isCompact ? -2.2 : -2.5, focusZ = isCompact ? -2 : 0.3;
-    camera.up.set(-1, 0, 0);
-    camera.position.set(focusX, 18.5, focusZ);
-    camera.lookAt(focusX, 1.4, focusZ);
-    incidentAngleLabel.visible = reflectedAngleLabel.visible = normalLabel.visible = equalityLabel.visible = true;
-    protractor.visible = true;
-  } else {
-    camera.up.set(0, 1, 0);
-    camera.position.set(-10.5, 13, 10.5);
-    camera.lookAt(-4.5, 0.55, 2.2);
-    incidentAngleLabel.visible = reflectedAngleLabel.visible = normalLabel.visible = equalityLabel.visible = false;
-    protractor.visible = false;
-  }
-  document.querySelector('#view-overview').setAttribute('aria-pressed', String(view === 'overview'));
-  document.querySelector('#view-reflection-angles').setAttribute('aria-pressed', String(view === 'reflection-angles'));
-  update();
-}
+equalityLabel.visible = true;
 
 function svgArc(radius, degrees, lower) {
   const steps = Math.max(5, Math.ceil(degrees / 3));
@@ -266,7 +240,6 @@ function update() {
   const receiverSpot = directionOut.multiplyScalar(travel).add(centerPoint);
   receiverSpot.y = centerPoint.y;
   const sourceDirection = new THREE.Vector3().subVectors(hit, source).normalize();
-  const outgoingDirection = new THREE.Vector3(-Math.cos(angle), 0, Math.sin(angle));
   emitter.position.copy(source);
   emitterBody.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), sourceDirection);
   const standPosition = new THREE.Vector3(source.x, 0, source.z);
@@ -280,14 +253,7 @@ function update() {
   outgoingArc.geometry.dispose(); outgoingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(0.68, angle, 1));
   incomingScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z - protractorRadius * Math.sin(angle));
   reflectedScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z + protractorRadius * Math.sin(angle));
-  const labelDistance = 1.8 / Math.sin(angle);
-  incidentAngleLabel.position.copy(hit).addScaledVector(sourceDirection, -labelDistance).add(new THREE.Vector3(-0.45, 0, 0)); incidentAngleLabel.position.y = 1.5;
-  reflectedAngleLabel.position.copy(hit).addScaledVector(outgoingDirection, labelDistance).add(new THREE.Vector3(-0.45, 0, 0)); reflectedAngleLabel.position.y = 1.5;
-  normalLabel.position.set(centerPoint.x - 3.2, 1.5, centerPoint.z);
-  equalityLabel.position.set(-4, 1.5, canvas.clientWidth < 500 ? -2 : 0.3);
-  updateAngleLabel(incidentAngleLabel, `入射角 ${deg}°`);
-  updateAngleLabel(reflectedAngleLabel, `反射角 ${deg}°`);
-  updateAngleLabel(normalLabel, '法線');
+  equalityLabel.position.set(-4, 1.5, canvas.clientWidth < 500 ? -0.8 : 0.3);
   updateAngleLabel(equalityLabel, '入射角 ＝ 反射角');
 
   const diagramLength = 190, x = 474 - diagramLength * Math.cos(angle), dy = diagramLength * Math.sin(angle);
@@ -309,16 +275,12 @@ function resize() {
   if (!width || !height) return;
   renderer.setSize(width, height, false);
   camera.aspect = width / height;
-  camera.fov = activeView === 'reflection-angles' ? (width < 500 ? 33 : 45) : (width < 500 ? 55 : 40);
-  if (activeView === 'reflection-angles') {
-    const focusX = width < 500 ? -2.2 : -2.5, focusZ = width < 500 ? -2 : 0.3;
-    camera.up.set(-1, 0, 0); camera.position.set(focusX, 18.5, focusZ); camera.lookAt(focusX, 1.4, focusZ);
-  }
+  camera.fov = width < 500 ? 33 : 45;
+  const compact = width < 500, focusX = compact ? -2.7 : -2.5, focusZ = compact ? -0.8 : 0.3;
+  camera.up.set(-1, 0, 0); camera.position.set(focusX, compact ? 20 : 18.5, focusZ); camera.lookAt(focusX, 1.4, focusZ);
   camera.updateProjectionMatrix();
   update();
 }
 slider.addEventListener('input', update);
-document.querySelector('#view-overview').addEventListener('click', () => setView('overview'));
-document.querySelector('#view-reflection-angles').addEventListener('click', () => setView('reflection-angles'));
 new ResizeObserver(resize).observe(canvas);
 resize();
