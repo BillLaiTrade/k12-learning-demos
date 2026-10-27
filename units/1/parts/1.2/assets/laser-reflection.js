@@ -202,6 +202,7 @@ function makeAngleLabel(color, size = [3.3, 0.82]) {
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false }));
   sprite.scale.set(size[0], size[1], 1); sprite.renderOrder = 14; sprite.visible = false; scene.add(sprite);
   sprite.userData.labelCanvas = labelCanvas; sprite.userData.context = context; sprite.userData.texture = texture; sprite.userData.labelColor = color; sprite.userData.labelText = '';
+  sprite.userData.textScaleX = (labelCanvas.width / labelCanvas.height) / (size[0] / size[1]);
   return sprite;
 }
 function updateAngleLabel(sprite, text) {
@@ -211,7 +212,9 @@ function updateAngleLabel(sprite, text) {
   context.fillStyle = '#fffdf4ee'; context.strokeStyle = `${labelColor}aa`; context.lineWidth = 10;
   context.beginPath(); context.roundRect(16, 16, 992, 224, 52); context.fill(); context.stroke();
   context.fillStyle = labelColor; context.font = 'bold 164px "Noto Sans TC", "Microsoft JhengHei", sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle';
-  context.fillText(text, 512, 132); texture.needsUpdate = true; sprite.userData.labelText = text;
+  context.save(); context.translate(512, 0); context.scale(sprite.userData.textScaleX, 1); context.translate(-512, 0);
+  context.fillText(text, 512, 132); context.restore();
+  texture.needsUpdate = true; sprite.userData.labelText = text;
 }
 const normalLabel = makeAngleLabel('#40566c', [1.9, 0.8]);
 normalLabel.visible = true;
