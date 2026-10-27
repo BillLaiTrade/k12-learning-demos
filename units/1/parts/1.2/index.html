@@ -31,6 +31,10 @@
     .laser-lab{overflow:hidden;border:1px solid #d8dfdf;border-radius:16px;background:#b8895f}
     #laser-reflection-scene{display:block;width:100%;height:clamp(320px,38vw,430px)}
     .laser-lab-ui{display:grid;grid-template-columns:minmax(140px,auto) minmax(150px,1fr) minmax(190px,auto);align-items:center;gap:16px;padding:12px 18px;background:#fffdf8}
+    .laser-view-switch{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid #e8e4d9}
+    .laser-view-button{min-height:38px;padding:6px 13px;border:1px solid #d9d3c4;border-radius:999px;background:#fff;color:#344a43;font:inherit;font-size:.85rem;font-weight:750;cursor:pointer}
+    .laser-view-button:hover,.laser-view-button:focus-visible{border-color:#176b53;outline:2px solid #176b5326}
+    .laser-view-button[aria-pressed=true]{border-color:#176b53;background:#e5f2e9;color:#14533f}
     .laser-control-panel,.laser-angle-readout{display:grid;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
     .laser-control-panel{grid-template-columns:auto minmax(150px,1fr);align-items:center;gap:16px}
     .laser-slider-label{color:#102c54;font-size:.9rem;font-weight:850}
@@ -42,7 +46,7 @@
     .laser-angle-readout span:last-child{background:#eef5eb;color:#24783a}
     .laser-angle-readout strong{padding-left:4px;font-variant-numeric:tabular-nums}
     .laser-observation{margin:0;padding:13px 18px;background:#f0f5eb;color:#315a46;font-weight:750}
-    @media(max-width:960px){.laser-lab-ui{grid-template-columns:minmax(125px,auto) minmax(120px,1fr);gap:12px}.laser-control-panel{grid-column:1/-1;grid-template-columns:145px minmax(140px,1fr)}.laser-angle-readout{grid-column:1/-1}}
+    @media(max-width:960px){.laser-lab-ui{grid-template-columns:minmax(125px,auto) minmax(120px,1fr);gap:12px}.laser-view-switch{grid-column:1/-1}.laser-control-panel{grid-column:1/-1;grid-template-columns:145px minmax(140px,1fr)}.laser-angle-readout{grid-column:1/-1}}
     @media(max-width:760px){.laser-lesson{width:auto;margin-left:0}.laser-concept{grid-template-columns:1fr;gap:8px;padding:16px}.laser-concept-copy{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}.laser-concept-copy h3{margin:0}.laser-law{font-size:1.2rem}.laser-rule{grid-column:1/-1;margin:0}.laser-diagram{max-height:240px}#laser-reflection-scene{height:clamp(280px,70vw,360px)}.laser-lab-ui{grid-template-columns:1fr;padding:14px}.laser-control-panel{grid-column:auto;grid-template-columns:1fr;gap:4px}.laser-angle-readout{grid-column:auto}}
     @media(max-width:440px){.laser-angle-readout{gap:6px;font-size:.8rem}.laser-angle-readout span{padding:7px 8px}}
   </style>
@@ -134,8 +138,9 @@
                 </svg>
               </section>
               <section class="laser-lab" aria-label="可調整入射角的雷射反射實驗">
-                <canvas id="laser-reflection-scene" aria-label="桌面上的雷射、平面鏡和接收屏；紅色教學線顯示入射與反射路徑"></canvas>
+                <canvas id="laser-reflection-scene" aria-label="可切換桌面總覽與反射板上方角度視角的雷射反射實驗"></canvas>
                 <div class="laser-lab-ui" aria-label="雷射角度操作與讀數">
+                  <div class="laser-view-switch" role="group" aria-label="選擇實驗觀察視角"><button class="laser-view-button" id="view-overview" type="button" aria-pressed="true">桌面總覽</button><button class="laser-view-button" id="view-reflection-angles" type="button" aria-pressed="false">反射板角度視角</button></div>
                   <div class="laser-control-panel"><label class="laser-slider-label" for="incident-angle">調整入射角</label><div class="laser-slider-row"><input id="incident-angle" type="range" min="20" max="40" step="1" value="30" aria-label="調整入射角"><output id="incident-angle-value" for="incident-angle">30°</output></div></div>
                   <div class="laser-angle-readout"><span>入射角 <strong id="lab-angle-in">30°</strong></span><span>反射角 <strong id="lab-angle-out">30°</strong></span></div>
                 </div>
@@ -298,6 +303,6 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
-  <script type="module" src="assets/laser-reflection.js?v=5"></script>
+  <script type="module" src="assets/laser-reflection.js?v=6"></script>
 </body>
 </html>
