@@ -1,22 +1,22 @@
 # 鋼尺聲音來源與處理
 
-- 作品：ruler on table_ST.wav
-- 作者：wilhelmsqueek
-- 原始作品頁：https://freesound.org/s/347392/
-- 公開高品質預聽音檔：https://cdn.freesound.org/previews/347/347392_6222517-hq.mp3
+- 作品：ruler twanging.wav
+- 作者：BeeProductive
+- 原始作品頁：https://freesound.org/people/BeeProductive/sounds/383135/
+- 公開高品質預聽音檔：https://cdn.freesound.org/previews/383/383135_4298084-hq.mp3
 - 授權：Creative Commons 0（CC0 1.0），https://creativecommons.org/publicdomain/zero/1.0/；可免署名使用。
-- 查閱日期：2026-10-27。作品說明為把鋼尺放在桌緣，一端懸空並按住另一端後撥動錄音。
-- 頁面不顯示音效署名；此檔案保留來源與授權紀錄。
+- 查閱日期：2026-10-27。作者說明為在桌邊撥動尺，先錄塑膠尺，再錄金屬尺。
+- 使用者從候選音效中選定第 1 項；本地示範擷取後半段 1:31.85～1:34.50 的一次撥動。頁面不顯示署名，此檔保留來源紀錄。
 
 ## 本地衍生檔
 
-`metal-ruler-twang.wav`：取預聽檔 11.3 至 13.25 秒，48 kHz、16-bit PCM、雙聲道，1.95 秒。經低頻整理、動態壓縮、響度正規化及尾端淡出；量測約 −16.0 LUFS、真峰值 −4.4 dBTP。音量設定為 100%。
+`metal-ruler-twang.wav`：48 kHz、16-bit PCM、雙聲道，2.65 秒。保留原速、原音高，做低頻整理、動態壓縮、響度正規化及起尾淡化。成品量測約 −16.66 LUFS、真峰值 −4.51 dBTP；播放器音量固定為 100%。音檔網址帶版本參數，避免瀏覽器沿用前一版快取。
 
 重製命令（`source.mp3` 為上述公開預聽檔）：
 
 ```sh
-ffmpeg -ss 11.3 -i source.mp3 -t 1.95 -af 'highpass=f=60,acompressor=threshold=0.03:ratio=4:attack=0.5:release=80:makeup=3,loudnorm=I=-16:TP=-1.5:LRA=7,afade=t=out:st=1.85:d=0.1' -ar 48000 -ac 2 -c:a pcm_s16le metal-ruler-twang.wav
+ffmpeg -ss 91.85 -i source.mp3 -af 'atrim=duration=2.65,asetpts=PTS-STARTPTS,highpass=f=60,acompressor=threshold=0.035:ratio=3:attack=2:release=100,afade=t=in:d=0.003,afade=t=out:st=2.45:d=0.2,loudnorm=I=-16:TP=-1.5:LRA=7' -ar 48000 -ac 2 -c:a pcm_s16le metal-ruler-twang.wav
 ```
 
-- 預聽檔 SHA-256：`12993f245f927df8a4986428cc9d40aee7d8e31cd3a31fc2fa381ff712136ef4`
-- 衍生 WAV SHA-256：`19c9304f878c2b363915502045645e7bcd3ac74ab59abc3f787cebf4ecc1b244`
+- 預聽檔 SHA-256：`8645a4241badc827e83b43616f05e774103607cfa5545f78b536a6068d3f8598`
+- 衍生 WAV SHA-256：`3259212de78fac715bacdbd3194cf33c4d1db0366e9c5312c457a2396249bdf1`
