@@ -197,10 +197,6 @@ for (let degrees = 10; degrees <= 90; degrees += 10) {
   addProtractorNumber(degrees, -1);
   addProtractorNumber(degrees, 1);
 }
-const incomingScaleHit = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), new THREE.MeshBasicMaterial({ color: '#2878df', depthTest: false }));
-const reflectedScaleHit = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), new THREE.MeshBasicMaterial({ color: '#27833d', depthTest: false }));
-incomingScaleHit.renderOrder = reflectedScaleHit.renderOrder = 12; protractor.add(incomingScaleHit, reflectedScaleHit);
-
 function makeAngleLabel(color, size = [3.3, 0.82]) {
   const labelCanvas = document.createElement('canvas'); labelCanvas.width = 1024; labelCanvas.height = 256;
   const context = labelCanvas.getContext('2d');
@@ -262,8 +258,6 @@ function update() {
   setBeam(reflected, hit, reflectedEnd);
   setThickArc(incomingArc, arc(1.8, angle, -1));
   setThickArc(outgoingArc, arc(1.8, angle, 1));
-  incomingScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z - protractorRadius * Math.sin(angle));
-  reflectedScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z + protractorRadius * Math.sin(angle));
   normalLabel.position.set(centerPoint.x - 5.5, 1.5, centerPoint.z);
   updateAngleLabel(normalLabel, '法線');
 
