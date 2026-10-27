@@ -309,3 +309,63 @@ function resize() {
 slider.addEventListener('input', update);
 new ResizeObserver(resize).observe(canvas);
 resize();
+
+const dragRaycaster = new THREE.Raycaster();
+const dragPointer = new THREE.Vector2();
+const dragPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -centerPoint.y);
+const emitterHitMeshes = [];
+emitterBody.traverse((object) => { if (object.isMesh) emitterHitMeshes.push(object); });
+let draggingEmitter = false;
+let dragAngleOffset = 0;
+
+function pointerWorldPoint(event) {
+  const rect = canvas.getBoundingClientRect();
+  dragPointer.set(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
+  dragRaycaster.setFromCamera(dragPointer, camera);
+  const point = new THREE.Vector3();
+  return dragRaycaster.ray.intersectPlane(dragPlane, point) ? point : null;
+}
+
+function pointerAngle(point) {
+  return THREE.MathUtils.radToDeg(Math.atan2(-point.z, centerPoint.x - point.x));
+}
+
+function isEmitterAtPointer(event) {
+  pointerWorldPoint(event);
+  return dragRaycaster.intersectObjects(emitterHitMeshes, false).length > 0;
+}
+
+function finishEmitterDrag(event) {
+  if (!draggingEmitter) return;
+  draggingEmitter = false;
+  canvas.style.cursor = isEmitterAtPointer(event) ? 'grab' : 'default';
+  if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+}
+
+canvas.addEventListener('pointerdown', (event) => {
+  const point = pointerWorldPoint(event);
+  if (!point || !dragRaycaster.intersectObjects(emitterHitMeshes, false).length) return;
+  draggingEmitter = true;
+  dragAngleOffset = Number(slider.value) - pointerAngle(point);
+  canvas.style.cursor = 'grabbing';
+  canvas.setPointerCapture(event.pointerId);
+  event.preventDefault();
+});
+
+canvas.addEventListener('pointermove', (event) => {
+  if (draggingEmitter) {
+    const point = pointerWorldPoint(event);
+    if (!point) return;
+    const target = Math.round(THREE.MathUtils.clamp(pointerAngle(point) + dragAngleOffset, Number(slider.min), Number(slider.max)));
+    if (target !== Number(slider.value)) {
+      slider.value = String(target);
+      slider.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    return;
+  }
+  canvas.style.cursor = isEmitterAtPointer(event) ? 'grab' : 'default';
+});
+
+canvas.addEventListener('pointerup', finishEmitterDrag);
+canvas.addEventListener('pointercancel', finishEmitterDrag);
+canvas.addEventListener('lostpointercapture', () => { draggingEmitter = false; canvas.style.cursor = 'default'; });
