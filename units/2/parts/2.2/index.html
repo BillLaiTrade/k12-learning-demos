@@ -14,11 +14,11 @@
   </style>
   <style>
     .ruler-photo-stage{position:relative;isolation:isolate;overflow:hidden;width:100%;aspect-ratio:16/9;border-radius:13px;background:#e8e5dc}
-    .ruler-photo-background,.ruler-clamp-foreground,.ruler-photo-blade{position:absolute;display:block;max-width:none;pointer-events:none;user-select:none}
+    .ruler-photo-background,.ruler-model{position:absolute;display:block;max-width:none;pointer-events:none;user-select:none}
     .ruler-photo-background{z-index:0;inset:0;width:100%;height:100%;object-fit:cover}
-    .ruler-photo-blade{left:20%;top:33%;width:70%;height:auto;transform-origin:17% 30%}
-    .ruler-photo-blade--fixed{z-index:1}
-    .ruler-photo-blade--moving{z-index:2;clip-path:polygon(14% 26%,21% 33%,100% 100%,100% 93%)}
+    .ruler-model{z-index:1;inset:0;width:100%;height:100%}
+    .ruler-model .ruler-scale-label{fill:#30383a;font:11px system-ui,sans-serif}
+    .ruler-model .ruler-scene-label{fill:#233c34;font-size:18px;font-weight:750;paint-order:stroke;stroke:#fffefa;stroke-width:5px;stroke-linejoin:round}
     .ruler-photo-stage:focus-visible{outline:3px solid #176b53;outline-offset:3px}
     @media(max-width:640px){.ruler-photo-stage{border-radius:9px}}
   </style>
@@ -46,10 +46,28 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>尺一邊發出聲音，一邊抖得好快，聲音跟它在動有關嗎？</p></div>
             <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>你觀察得很仔細。發聲的物體會振動；讓振動停下來，聲音也會停止。</p></div>
             <figure class="visual"><div class="ruler-photo-stage" id="ruler-demo" role="img" aria-label="鋼尺一端夾在木桌邊，另一端伸出桌外；按下播放按鈕可讓鋼尺振動並聽見聲音。">
-              <img class="ruler-photo-background" src="assets/ruler-clamp-background.png" alt="" aria-hidden="true">
-              <img class="ruler-photo-blade ruler-photo-blade--fixed" src="assets/steel-ruler-cutout.png" alt="" aria-hidden="true">
-              <img class="ruler-photo-blade ruler-photo-blade--moving" id="ruler-moving-blade" src="assets/steel-ruler-cutout.png" alt="" aria-hidden="true">
-            </div><figcaption>按下按鈕，聽鋼尺彈振發出的聲音；振動畫面放慢呈現，方便觀察。</figcaption></figure>
+              <img class="ruler-photo-background" src="assets/ruler-suspended-background.png" alt="" aria-hidden="true">
+              <svg class="ruler-model" viewBox="0 0 1000 562.5" aria-hidden="true">
+                <defs>
+                  <linearGradient id="ruler-metal" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#f5f6f6"/><stop offset=".25" stop-color="#b6bfc2"/><stop offset=".65" stop-color="#e2e6e7"/><stop offset="1" stop-color="#919da2"/></linearGradient>
+                  <linearGradient id="clamp-metal"><stop stop-color="#262c2e"/><stop offset=".45" stop-color="#677175"/><stop offset=".65" stop-color="#31383b"/><stop offset="1" stop-color="#171d20"/></linearGradient>
+                </defs>
+                <path id="ruler-fixed-blade" d="M240 256H400V284H240Q236 284 236 280V260Q236 256 240 256Z" fill="url(#ruler-metal)" stroke="#6f7c82" stroke-width="1.5"/>
+                <path id="ruler-moving-blade" fill="url(#ruler-metal)" stroke="#6f7c82" stroke-width="1.5"/>
+                <g id="ruler-scale"></g>
+                <g id="ruler-clamp" transform="translate(50 -7)" fill="url(#clamp-metal)" stroke="#212a2d" stroke-width="2">
+                  <path d="M311 250H358V400H307V383H336V270H311Z"/>
+                  <path d="M292 252H354V266H292Z" fill="#495459"/>
+                  <path d="M309 375H333V386H309Z" fill="#778185"/>
+                  <path d="M321 381V425" fill="none" stroke="#a8b0b2" stroke-width="8"/>
+                  <path d="M316 391H326M316 398H326M316 405H326M316 412H326" fill="none" stroke="#414b50"/>
+                  <rect x="302" y="418" width="39" height="15" rx="4"/>
+                </g>
+                <path d="M372 211V237M820 211V242" stroke="#50685e" stroke-width="1.5" fill="none"/>
+                <text class="ruler-scene-label" x="372" y="199" text-anchor="middle">夾緊處</text>
+                <text class="ruler-scene-label" x="820" y="199" text-anchor="middle">懸空端</text>
+              </svg>
+            </div><figcaption>短段夾緊在桌面，長段伸出桌外。按下按鈕，觀察懸空段彎曲並聆聽彈振聲；振動畫面放慢呈現。</figcaption></figure>
             <div class="controls"><button class="action" id="ruler-start" type="button" aria-pressed="false">撥動鋼尺並聆聽</button><button class="secondary" id="ruler-stop" type="button" disabled>按住鋼尺停止</button><span class="live-note" id="ruler-status" aria-live="polite">按下按鈕，讓鋼尺振動並播放聲音。</span></div>
             <div class="fact"><p><strong>重點：</strong>聲音由物體的振動產生。用手按住振動中的鋼尺，振動減弱，聲音也會變小並停止。</p></div>
           </div>
@@ -123,6 +141,30 @@
   <script>
     (()=>{
       const ruler=document.querySelector("#ruler-demo"),movingBlade=document.querySelector("#ruler-moving-blade"),rulerStart=document.querySelector("#ruler-start"),rulerStop=document.querySelector("#ruler-stop"),rulerStatus=document.querySelector("#ruler-status");
+      // Cantilever shape: displacement and slope are zero at the clamp;
+      // curvature decreases toward the free tip. This is a visual teaching model.
+      const rulerRoot=400,rulerTip=900,rulerY=270,rulerHalfWidth=14,rulerScale=document.querySelector("#ruler-scale");
+      const rulerMarks=[];
+      for(let i=0;i<=150;i++){
+        const x=240+i*4.4,mark=document.createElementNS("http://www.w3.org/2000/svg","g"),tick=document.createElementNS("http://www.w3.org/2000/svg","path");
+        const length=i%10===0?11:i%5===0?8:4;
+        tick.setAttribute("d",`M0 -12v${length}`);tick.setAttribute("stroke","#465256");tick.setAttribute("stroke-width",i%10===0?1.1:.7);mark.append(tick);
+        if(i%10===0){const label=document.createElementNS("http://www.w3.org/2000/svg","text");label.setAttribute("class","ruler-scale-label");label.setAttribute("x","2");label.setAttribute("y","11");label.textContent=String(i/10);mark.append(label);}
+        rulerScale.append(mark);rulerMarks.push({x,mark});
+      }
+      const rulerBend=(x,tipDisplacement)=>{
+        const u=Math.max(0,Math.min(1,(x-rulerRoot)/(rulerTip-rulerRoot)));
+        return {offset:tipDisplacement*u*u*(3-u)/2,slope:tipDisplacement*(3*u-1.5*u*u)/(rulerTip-rulerRoot)};
+      };
+      const drawRuler=tipDisplacement=>{
+        const edge=side=>Array.from({length:51},(_,i)=>{
+          const x=rulerRoot+(rulerTip-rulerRoot)*i/50,{offset,slope}=rulerBend(x,tipDisplacement),normal=Math.hypot(1,slope);
+          return `${(x-side*rulerHalfWidth*slope/normal).toFixed(3)} ${(rulerY+offset+side*rulerHalfWidth/normal).toFixed(3)}`;
+        });
+        movingBlade.setAttribute("d",`M${edge(-1).join("L")}L${edge(1).reverse().join("L")}Z`);
+        rulerMarks.forEach(({x,mark})=>{const {offset,slope}=rulerBend(x,tipDisplacement);mark.setAttribute("transform",`translate(${x} ${rulerY+offset}) rotate(${Math.atan(slope)*180/Math.PI})`);});
+      };
+      drawRuler(0);
       let rulerAudioContext=null,rulerVoice=null,rulerFrame=0,rulerAnimationStart=null;
       const playRulerSound=()=>{
         const AudioContextClass=window.AudioContext||window.webkitAudioContext;
@@ -157,7 +199,7 @@
         rulerVoice=null;
       };
       const finishRuler=()=>{
-        rulerFrame=0;rulerAnimationStart=null;rulerVoice=null;movingBlade.style.transform="rotate(0deg)";
+        rulerFrame=0;rulerAnimationStart=null;rulerVoice=null;drawRuler(0);
         rulerStart.disabled=false;rulerStart.setAttribute("aria-pressed","false");rulerStop.disabled=true;
         ruler.setAttribute("aria-label","鋼尺固定在桌邊，伸出桌外的一端靜止。");
         rulerStatus.textContent="鋼尺的振動和彈振聲已自然衰減停止。";
@@ -166,8 +208,8 @@
         if(rulerAnimationStart===null)rulerAnimationStart=time;
         const elapsed=(time-rulerAnimationStart)/1000;
         if(elapsed>=1.15){finishRuler();return;}
-        const angle=3.2*Math.sin(2*Math.PI*11*elapsed)*Math.exp(-elapsed/.42);
-        movingBlade.style.transform=`rotate(${angle.toFixed(3)}deg)`;
+        const displacement=34*Math.sin(2*Math.PI*8*elapsed)*Math.exp(-elapsed/.42);
+        drawRuler(displacement);
         rulerFrame=window.requestAnimationFrame(animateRuler);
       };
       const startRuler=async()=>{
