@@ -110,6 +110,8 @@ box(screenGroup, [0.08, 1.0, 0.08], [-0.16, -1.4, 0.22], steel);
 // Laser housing with a fixed-height beam, mounted on a moving goniometer base.
 const emitter = new THREE.Group(); scene.add(emitter);
 const emitterBody = new THREE.Group(); emitter.add(emitterBody);
+// Keep the housing large enough to read as a rotating instrument at the lesson's compact canvas size.
+emitterBody.scale.setScalar(1.75);
 const body = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.21, 0.72, 32), black);
 body.rotation.x = Math.PI / 2; body.position.z = -0.24; body.castShadow = true; emitterBody.add(body);
 const rear = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.19, 0.08, 32), steel);
