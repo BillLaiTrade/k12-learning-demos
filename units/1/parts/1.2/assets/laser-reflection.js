@@ -237,8 +237,8 @@ function update() {
   pivot.position.set(standPosition.x, 0.15, standPosition.z);
   setLine(incoming, source, hit);
   setLine(reflected, hit, reflectedEnd);
-  incomingArc.geometry.dispose(); incomingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(1.2, angle, -1));
-  outgoingArc.geometry.dispose(); outgoingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(1.2, angle, 1));
+  incomingArc.geometry.dispose(); incomingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(1.8, angle, -1));
+  outgoingArc.geometry.dispose(); outgoingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(1.8, angle, 1));
   incomingScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z - protractorRadius * Math.sin(angle));
   reflectedScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z + protractorRadius * Math.sin(angle));
   equalityLabel.position.set(-4, 1.5, canvas.clientWidth < 500 ? -0.8 : 0.3);
