@@ -31,6 +31,10 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
   const hit = page.locator('#ruler-pluck');
   const shape = () => hit.getAttribute('d');
   const rest = await shape();
+  const waitForSound = () => page.waitForFunction(() => {
+    const audio = document.querySelector('#ruler-audio');
+    return !audio.paused && audio.readyState >= 3 && document.querySelector('#ruler-status').textContent.startsWith('鋼尺正在振動');
+  });
   // Convert a point on the photographed ruler to viewport pixels: this checks
   // actual hit testing, rather than dispatching synthetic events to a selector.
   const pointOnRuler = () => hit.evaluate(node => {
@@ -43,9 +47,32 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
     const { x, y } = await pointOnRuler();
     assert.equal(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.id, { x, y }), 'ruler-pluck');
     await page.mouse.click(x, y);
+    await waitForSound();
     await page.clock.runFor(40);
   };
   const stop = () => page.locator('#ruler-stop').click();
+
+  await t.test('recording is audible without clipping, defaults to full volume and is adjustable', async () => {
+    const signal = await page.evaluate(async () => {
+      const audio = document.querySelector('#ruler-audio');
+      const bytes = await (await fetch(audio.currentSrc || audio.src)).arrayBuffer();
+      const context = new OfflineAudioContext(2, 128, 48000);
+      const buffer = await context.decodeAudioData(bytes);
+      let energy = 0, peak = 0, count = 0;
+      for (let c = 0; c < buffer.numberOfChannels; c++) for (const sample of buffer.getChannelData(c)) {
+        energy += sample * sample; peak = Math.max(peak, Math.abs(sample)); count++;
+      }
+      return { rms: Math.sqrt(energy / count), peak, duration: buffer.duration, volume: audio.volume, paused: audio.paused };
+    });
+    assert.ok(signal.rms > .08, 'recording should not be near-silent');
+    assert.ok(signal.peak > .5 && signal.peak < .95, 'recording should be strong with headroom below clipping');
+    assert.ok(signal.duration > 2 && signal.duration < 3);
+    assert.equal(signal.volume, 1); assert.equal(signal.paused, true);
+    await page.locator('#ruler-volume').evaluate(input => { input.value = '35'; input.dispatchEvent(new Event('input', { bubbles: true })); });
+    assert.equal(await page.locator('#ruler-audio').evaluate(audio => audio.volume), .35);
+    assert.equal(await page.locator('#ruler-volume-value').textContent(), '35%');
+    await page.locator('#ruler-volume').evaluate(input => { input.value = '100'; input.dispatchEvent(new Event('input', { bubbles: true })); });
+  });
 
   await t.test('ruler long edges are parallel with no rest deformation at the clamp', async () => {
     const edges = await page.evaluate(async () => {
@@ -90,6 +117,12 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
     await pluck();
     assert.notEqual(await shape(), rest);
     assert.equal(await page.locator('#ruler-stop').isDisabled(), false);
+    const soundTime = await page.locator('#ruler-audio').evaluate(audio => audio.currentTime);
+    await new Promise(resolve => setTimeout(resolve, 100));
+    assert.ok(await page.locator('#ruler-audio').evaluate(audio => audio.currentTime) > soundTime, 'recording playback should advance');
+    await page.locator('#ruler-volume').evaluate(input => { input.value = '50'; input.dispatchEvent(new Event('input', { bubbles: true })); });
+    assert.equal(await page.locator('#ruler-audio').evaluate(audio => audio.volume === .5 && !audio.paused), true);
+    await page.locator('#ruler-volume').evaluate(input => { input.value = '100'; input.dispatchEvent(new Event('input', { bubbles: true })); });
     assert.equal(await hit.evaluate(node => getComputedStyle(node).outlineStyle), 'none');
     assert.equal(await hit.evaluate(node => getComputedStyle(node).webkitTapHighlightColor), 'rgba(0, 0, 0, 0)');
     assert.equal(await page.locator('[clip-path="url(#ruler-fixed-region)"]').innerHTML(), fixed);
@@ -99,6 +132,7 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
     }));
     assert.notDeepEqual(transforms[0], transforms.at(-1));
     await stop();
+    assert.equal(await page.locator('#ruler-audio').evaluate(audio => audio.paused && audio.currentTime === 0), true);
     assert.equal(await shape(), rest);
     assert.equal(await page.locator('#ruler-moving-blade > g').evaluateAll(nodes => nodes.every(node => { const m = node.transform.baseVal.consolidate().matrix; return m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1 && m.e === 0 && m.f === 0; })), true);
     assert.equal(await hit.evaluate(node => getComputedStyle(node).outlineStyle), 'none');
@@ -109,15 +143,16 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
   await t.test('repeated plucks, keyboard, fallback button and natural decay', async () => {
     await pluck(); await pluck();
     await page.clock.runFor(1400);
+    await page.waitForFunction(() => document.querySelector('#ruler-audio').ended, null, { timeout: 5000, polling: 50 });
     assert.equal(await shape(), rest);
     assert.equal(await page.locator('#ruler-start').isDisabled(), false);
     for (const key of ['Enter', 'Space']) {
-      await hit.focus(); await page.keyboard.press(key); await page.clock.runFor(40);
+      await hit.focus(); await page.keyboard.press(key); await waitForSound(); await page.clock.runFor(40);
       assert.notEqual(await shape(), rest);
       assert.equal(await hit.evaluate(node => getComputedStyle(node).outlineStyle), 'none');
       await stop();
     }
-    await page.locator('#ruler-start').click(); await page.clock.runFor(40);
+    await page.locator('#ruler-start').click(); await waitForSound(); await page.clock.runFor(40);
     assert.notEqual(await shape(), rest); await stop();
   });
 
@@ -132,7 +167,7 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
       return { x: point.x, y: point.y };
     });
     await mobile.touchscreen.tap(p.x, p.y);
-    await mobile.waitForFunction(() => !document.querySelector('#ruler-stop').disabled);
+    await mobile.waitForFunction(() => !document.querySelector('#ruler-audio').paused);
     assert.equal(await target.evaluate(node => getComputedStyle(node).outlineStyle), 'none');
     assert.equal(await target.evaluate(node => getComputedStyle(node).webkitTapHighlightColor), 'rgba(0, 0, 0, 0)');
     await mobile.locator('#ruler-stop').click();

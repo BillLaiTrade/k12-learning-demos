@@ -65,6 +65,9 @@
               </svg>
             </div><figcaption id="ruler-caption">尺面朝上平放，長邊與靠近我們的桌子前緣平行；短段夾緊，長段懸空。直接點擊尺面即可撥動並聆聽，再點一次可重新撥動；振動畫面放慢呈現。</figcaption></figure>
             <div class="controls"><button class="action" id="ruler-start" type="button" aria-pressed="false">撥動鋼尺並聆聽</button><button class="secondary" id="ruler-stop" type="button" disabled>按住鋼尺停止</button><span class="live-note" id="ruler-status" aria-live="polite">直接點擊尺面，讓鋼尺振動並播放聲音。</span></div>
+            <audio id="ruler-audio" src="assets/metal-ruler-twang.wav" preload="auto"></audio>
+            <div class="range-row"><label for="ruler-volume">音量</label><input id="ruler-volume" type="range" min="0" max="100" step="5" value="100" aria-describedby="ruler-volume-value"><output id="ruler-volume-value">100%</output></div>
+            <p class="live-note">聲音：<a href="https://freesound.org/people/calebowenw/sounds/219337/" target="_blank" rel="noopener noreferrer">calebowenw，Metal Ruler Twang.wav</a>（<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer">CC BY 3.0</a>；已調整音量）。</p>
             <div class="fact"><p><strong>重點：</strong>聲音由物體的振動產生。用手按住振動中的鋼尺，振動減弱，聲音也會變小並停止。</p></div>
           </div>
         </section>
@@ -159,41 +162,21 @@
         rulerPluck.setAttribute("d",`M${edge(-1).join("L")}L${edge(1).reverse().join("L")}Z`);
       };
       drawRuler(0);
-      let rulerAudioContext=null,rulerVoice=null,rulerFrame=0,rulerAnimationStart=null,rulerPlayRequest=0;
-      const playRulerSound=()=>{
-        const AudioContextClass=window.AudioContext||window.webkitAudioContext;
-        if(!AudioContextClass)return false;
-        if(!rulerAudioContext)rulerAudioContext=new AudioContextClass();
-        const context=rulerAudioContext,now=context.currentTime,master=context.createGain(),sources=[];
-        master.gain.setValueAtTime(.62,now);master.gain.exponentialRampToValueAtTime(.0001,now+1.08);master.connect(context.destination);
-        [
-          {frequency:92,level:.12},
-          {frequency:92*6.27,level:.035},
-          {frequency:92*17.55,level:.012}
-        ].forEach(partial=>{
-          const oscillator=context.createOscillator(),envelope=context.createGain();
-          oscillator.type="sine";oscillator.frequency.setValueAtTime(partial.frequency,now);
-          envelope.gain.setValueAtTime(partial.level,now);envelope.gain.exponentialRampToValueAtTime(.0001,now+1.02);
-          oscillator.connect(envelope);envelope.connect(master);oscillator.start(now);oscillator.stop(now+1.1);sources.push(oscillator);
-        });
-        const noiseLength=Math.max(1,Math.floor(context.sampleRate*.055)),buffer=context.createBuffer(1,noiseLength,context.sampleRate),samples=buffer.getChannelData(0);
-        for(let i=0;i<noiseLength;i++)samples[i]=(Math.random()*2-1)*Math.exp(-i/(context.sampleRate*.009));
-        const noise=context.createBufferSource(),filter=context.createBiquadFilter(),noiseEnvelope=context.createGain();
-        noise.buffer=buffer;filter.type="bandpass";filter.frequency.setValueAtTime(1450,now);filter.Q.setValueAtTime(.8,now);
-        noiseEnvelope.gain.setValueAtTime(.12,now);noiseEnvelope.gain.exponentialRampToValueAtTime(.0001,now+.055);
-        noise.connect(filter);filter.connect(noiseEnvelope);noiseEnvelope.connect(master);noise.start(now);noise.stop(now+.06);sources.push(noise);
-        rulerVoice={master,sources};
-        return true;
+      const rulerAudio=document.querySelector("#ruler-audio"),rulerVolume=document.querySelector("#ruler-volume"),rulerVolumeValue=document.querySelector("#ruler-volume-value");
+      let rulerFrame=0,rulerAnimationStart=null,rulerPlayRequest=0;
+      const updateRulerVolume=()=>{
+        rulerAudio.volume=Number(rulerVolume.value)/100;
+        rulerVolumeValue.textContent=`${rulerVolume.value}%`;
+        rulerVolume.setAttribute("aria-valuetext",`${rulerVolume.value}%`);
       };
-      const stopRulerSound=()=>{
-        if(!rulerVoice||!rulerAudioContext)return;
-        const now=rulerAudioContext.currentTime;
-        rulerVoice.master.gain.cancelScheduledValues(now);rulerVoice.master.gain.setTargetAtTime(.0001,now,.012);
-        rulerVoice.sources.forEach(source=>{try{source.stop(now+.06);}catch(_error){}});
-        rulerVoice=null;
+      rulerVolume.addEventListener("input",updateRulerVolume);updateRulerVolume();
+      const playRulerSound=async()=>{
+        rulerAudio.currentTime=0;
+        try{await rulerAudio.play();return true;}catch(_error){return false;}
       };
+      const stopRulerSound=()=>{rulerAudio.pause();rulerAudio.currentTime=0;};
       const finishRuler=()=>{
-        rulerFrame=0;rulerAnimationStart=null;rulerVoice=null;drawRuler(0);
+        rulerFrame=0;rulerAnimationStart=null;drawRuler(0);
         rulerStart.disabled=false;rulerStart.setAttribute("aria-pressed","false");rulerStop.disabled=true;
         ruler.setAttribute("aria-label","鋼尺固定在桌邊，伸出桌外的一端靜止。");
         rulerStatus.textContent="鋼尺的振動和彈振聲已自然衰減停止。";
@@ -201,7 +184,7 @@
       const animateRuler=time=>{
         if(rulerAnimationStart===null)rulerAnimationStart=time;
         const elapsed=(time-rulerAnimationStart)/1000;
-        if(elapsed>=1.15){finishRuler();return;}
+        if(rulerAudio.ended||(rulerAudio.paused&&elapsed>=1.15)){finishRuler();return;}
         const displacement=45*Math.sin(2*Math.PI*8*elapsed)*Math.exp(-elapsed/.42);
         drawRuler(displacement);
         rulerFrame=window.requestAnimationFrame(animateRuler);
@@ -209,14 +192,12 @@
       const startRuler=async()=>{
         const request=++rulerPlayRequest;
         if(rulerFrame)window.cancelAnimationFrame(rulerFrame);
-        rulerFrame=0;stopRulerSound();
-        const AudioContextClass=window.AudioContext||window.webkitAudioContext;
-        if(!rulerAudioContext&&AudioContextClass)rulerAudioContext=new AudioContextClass();
-        if(rulerAudioContext&&rulerAudioContext.state==="suspended"){try{await rulerAudioContext.resume();}catch(_error){}}
-        if(request!==rulerPlayRequest)return;
-        const soundStarted=playRulerSound();
+        rulerFrame=0;stopRulerSound();drawRuler(0);
         rulerStart.disabled=true;rulerStart.setAttribute("aria-pressed","true");rulerStop.disabled=false;
-        rulerStatus.textContent=soundStarted?"鋼尺正在振動，請聽它彈振發出的聲音。":"這個瀏覽器無法播放示範聲音。";
+        rulerStatus.textContent="正在準備鋼尺彈振聲。";
+        const soundStarted=await playRulerSound();
+        if(request!==rulerPlayRequest)return;
+        rulerStatus.textContent=soundStarted?"鋼尺正在振動，請聽它彈振發出的聲音。":"聲音暫時無法播放，請重新點擊尺面。";
         ruler.setAttribute("aria-label","鋼尺固定在桌邊，伸出桌外的一端正在振動。");
         rulerAnimationStart=null;rulerFrame=window.requestAnimationFrame(animateRuler);
       };
@@ -227,6 +208,11 @@
         rulerStatus.textContent="已按住鋼尺，振動和聲音停止。";
         ruler.setAttribute("aria-label","鋼尺固定在桌邊；按住後振動與聲音停止。");
       };
+      rulerAudio.addEventListener("ended",()=>{
+        if(!rulerAudio.ended)return;
+        if(rulerFrame)window.cancelAnimationFrame(rulerFrame);
+        finishRuler();
+      });
       rulerStart.addEventListener("click",startRuler);rulerStop.addEventListener("click",stopRuler);
       rulerPluck.addEventListener("click",startRuler);
       rulerPluck.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();if(!event.repeat)startRuler();}});
