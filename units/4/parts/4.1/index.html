@@ -1118,7 +1118,6 @@
                   <figure class="microscope-source rust-microscope-source" data-microscope-phase="rust" data-microscope="鏽層分布不均；鏽色較深處顯示較多含鐵、氧的粒子，灰銀色金屬處則較多鐵粒子。此為簡化模型，不呈現真實分子結構。"><img src="assets/rust-layer-sample.webp" alt="生鏽後的鐵桶表面，紅褐色鏽層與灰銀色金屬交錯"><span class="microscope-glass" role="slider" tabindex="0" aria-label="拖曳放大鏡觀察生鏽後的局部鐵與氧粒子模型；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>生鏽後</figcaption></figure>
                 </div>
                 <p class="microscope-instruction">分別拖曳兩張近照上的放大鏡，觀察生鏽前後的粒子組成。</p>
-                <p class="microscope-note" aria-live="polite">灰色代表鐵、紅褐色代表氧；分布依照片鏽色估算。鐵鏽成分與結構複雜，粒子排列僅作示意。</p>
               </article>
             </div>
             <p class="microscope-model-disclaimer">放大鏡中的粒子、顏色與排列皆為示意，不代表原子和分子的真實外觀或比例。</p>
@@ -1412,7 +1411,10 @@
       let dragging=false,position={x:.5,y:.5},cachedLensLimits=null,pendingPointer=null,moveFrame=0;
       const inspect=()=>{
         card.querySelectorAll(".microscope-source").forEach(item=>item.classList.toggle("is-active",item===source));
-        if(phase==="rust"&&rustPixels){const inset=source.clientTop+(parseFloat(getComputedStyle(source).paddingTop)||0),centerX=(parseFloat(lens.style.left||"0")-inset)*370/sample.offsetWidth,centerY=(parseFloat(lens.style.top||"0")-inset)*370/sample.offsetHeight,radius=lens.offsetWidth*.5/magnification*370/sample.offsetWidth,coverage=rustCoverage(rustPixels,centerX,centerY,radius);note.textContent=`照片估計：此處鏽色覆蓋約 ${Math.round(coverage*100)}%；模型中的含氧粒子比例隨之變化。`;}else note.textContent=source.dataset.microscope;
+        if(note){
+          if(phase==="rust"&&rustPixels){const inset=source.clientTop+(parseFloat(getComputedStyle(source).paddingTop)||0),centerX=(parseFloat(lens.style.left||"0")-inset)*370/sample.offsetWidth,centerY=(parseFloat(lens.style.top||"0")-inset)*370/sample.offsetHeight,radius=lens.offsetWidth*.5/magnification*370/sample.offsetWidth,coverage=rustCoverage(rustPixels,centerX,centerY,radius);note.textContent=`照片估計：此處鏽色覆蓋約 ${Math.round(coverage*100)}%；模型中的含氧粒子比例隨之變化。`;}
+          else note.textContent=source.dataset.microscope;
+        }
       };
       const measureLensLimits=()=>{
         const bounds=source.getBoundingClientRect(),inset=source.clientTop+parseFloat(getComputedStyle(source).paddingTop)||0,radius=lens.offsetWidth/2;
