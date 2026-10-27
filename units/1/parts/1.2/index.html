@@ -102,6 +102,7 @@
     @media(max-width:460px){#card-03 .mirror-stable-controls{display:grid;grid-template-columns:1.1fr 1.6fr .7fr;gap:6px}#toggle-image-object,#toggle-image-rays,#reset-image-activity{min-width:0;min-height:60px;padding-inline:6px;font-size:.85rem}#card-03 .mirror-step-explanation{min-height:230px}}
   </style>
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
+  <link rel="stylesheet" href="assets/reversible-light.css?v=1">
 </head>
 <body>
   <header class="shell masthead">
@@ -355,27 +356,36 @@
             <noscript><p>請啟用 JavaScript 查看可操作光路。平面鏡使平行光仍互相平行，凹面鏡使近軸平行光會聚，凸面鏡使反射光發散；每一處都遵守反射定律。</p></noscript>
           </div>
         </section>
-        <section class="lesson-card" id="card-06">
+        <section class="lesson-card" id="card-06" data-reverse-state="setup">
           <div class="card-side"><span class="card-number">06</span><h3>光路能倒著走回去嗎？</h3><span class="card-role">反向追蹤路徑</span></div>
           <div class="card-main">
-            <h2>把光線方向倒過來，路徑會改變嗎？</h2>
-            <p>小葵和阿公回到照射點，將光線方向反過來，檢查它是否沿著原本的路徑返回。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>如果光從反射光那一端照回來，還會沿剛才的路走嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>把入射和反射的方向交換，追蹤同一段路徑，看看光是否能倒著走回去。</p></div>
-            <div class="toggle-row"><button class="control-button" id="reverse-ray" type="button" aria-pressed="false">反轉光線方向</button></div>
-            <figure class="visual">
-              <svg viewBox="0 0 620 280" role="img" aria-labelledby="reverse-title reverse-desc">
-                <title id="reverse-title">反轉反射光路</title><desc id="reverse-desc">切換按鈕後，兩段相同的光路箭頭方向互換，鏡面與照射點保持不變。</desc>
-                <defs><marker id="arrow-reverse" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#d5962d"/></marker></defs>
-                <rect x="407" y="32" width="14" height="215" rx="5" fill="#8daaa0"/><circle cx="414" cy="140" r="6" fill="#bc612b"/>
-                <path id="reverse-left" d="M414 140L115 218" stroke="#d5962d" stroke-width="4" marker-end="url(#arrow-reverse)"/>
-                <path id="reverse-right" d="M115 62L414 140" stroke="#d5962d" stroke-width="4" marker-end="url(#arrow-reverse)"/>
-                <path d="M68 140H550" stroke="#71867a" stroke-width="2" stroke-dasharray="8 7"/>
-                <text id="reverse-state" x="92" y="252" fill="#315a46" font-size="17" font-weight="700">目前：光由左上方入射，再向左下方反射</text>
-              </svg>
-              <figcaption class="visual-caption">切換時只改變光線箭頭方向；鏡面、照射點和路徑都固定。</figcaption>
-            </figure>
-            <div class="fact"><p>反轉光線方向後，光可以沿原路徑返回，這種性質稱為光路可逆。下一段會再比較光進入不同介質時的路徑。</p></div>
+            <h2>從另一端照回，光路會重合嗎？</h2>
+            <p>沿用前面的雷射實驗，先記下光路，再從另一端重新發光。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我把光源放在剛才光到達的位置，能照回原來的地方嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>保持鏡面不動，從 B 朝原反射點照射，比較兩次光路。</p></div>
+            <div class="reverse-steps" role="group" aria-label="光路可逆的三步觀察">
+              <button type="button" class="reverse-step" id="reverse-setup" aria-current="step">① 設定方向</button>
+              <button type="button" class="reverse-step" id="reverse-record">② 記下光路</button>
+              <button type="button" class="reverse-step" id="reverse-ray" disabled>③ 從 B 照回</button>
+            </div>
+            <div class="reverse-lab">
+              <div class="reverse-stage">
+                <canvas id="reverse-scene" role="slider" tabindex="0" aria-label="拖動 A 發射器設定方向；方向鍵每次調整一度，Home 與 End 調至 20 度與 60 度" aria-valuemin="20" aria-valuemax="60" aria-valuenow="30" aria-describedby="reverse-lock-note"></canvas>
+                <div class="reverse-device-label" id="reverse-label-a"><strong>A 原出發點</strong><small id="reverse-status-a">正在發光</small></div>
+                <div class="reverse-device-label" id="reverse-label-b"><strong>B 反射光到達處</strong><small id="reverse-status-b">反射光到達處</small></div>
+                <div class="reverse-device-label reverse-m-label" id="reverse-label-m"><strong>M 反射點</strong></div>
+                <div class="reverse-overlap" id="reverse-overlap" hidden>兩次光路重合</div>
+                <div class="reverse-fallback" id="reverse-fallback" hidden><p id="reverse-fallback-message"></p><svg id="reverse-fallback-svg" viewBox="0 0 400 325" role="img" aria-label="光路可逆的替代俯視圖"></svg></div>
+              </div>
+              <div class="reverse-lab-footer"><span id="reverse-lock-note">拖動 A 發射器設定方向。</span><button type="button" id="reverse-reset">↻ 重新設定</button><label class="reverse-angle-settings" for="reverse-angle"><span>入射角</span><input id="reverse-angle" type="range" min="20" max="60" step="1" value="30" aria-label="設定第一次入射角"><output id="reverse-angle-value" for="reverse-angle">30°</output></label></div>
+            </div>
+            <div class="reverse-legend"><span><i></i>灰色：第一次光路紀錄</span><span><i class="reverse-blue"></i>藍色：第二次光路</span></div>
+            <div class="reverse-paths"><div><small>第一次</small><strong>A → M → B</strong></div><div><small>第二次</small><strong id="reverse-route-back">等待從 B 發光</strong></div></div>
+            <p class="reverse-state" id="reverse-state" aria-live="polite">先調整 A 的方向，再記下第一次光路。</p>
+            <details class="reverse-reason"><summary>查看原因：入射角與反射角交換後，仍然相等</summary><p>從 B 朝 M 照射時，原本的反射線成了入射線；原本的入射線則成為返回 A 的反射線。鏡面與法線固定，交換後兩個角仍相等，所以光會沿原路返回。</p><p id="reverse-reason-angles">兩次的入射角與反射角都是 30°。</p></details>
+            <p class="reverse-note">光路描線為示意，非真實光速；兩次發光分別進行。灰色保留第一次紀錄，藍色用來區分第二次，並非同時發光或光在鏡面變色。</p>
+            <div class="fact reverse-fact"><p><strong>重點：</strong>鏡面固定，從 B 沿原光路反向照射，光會經同一反射點回到 A，稱為光路可逆。後續學習折射時，再觀察這個性質。</p></div>
+            <noscript><p>請啟用 JavaScript 操作：先由 A 經鏡面 M 照到 B，再由 B 沿原路照向 M，反射光會回到 A。</p></noscript>
           </div>
         </section>
         <section class="lesson-card end-card" id="card-07">
@@ -421,13 +431,13 @@
     distanceInput.addEventListener("input",updateDistance);updateDistance();
     let distanceDragging=false;function distanceFromPointer(event){const rect=document.querySelector("#distance-side-view").getBoundingClientRect(),svgX=(event.clientX-rect.left)*620/rect.width;const cm=Math.round(Math.max(10,Math.min(60,(310-svgX)/4))/10)*10;distanceInput.value=String(cm);updateDistance()}
     distanceSideObject.addEventListener("pointerdown",function(event){distanceDragging=true;distanceSideObject.setPointerCapture(event.pointerId);distanceFromPointer(event)});distanceSideObject.addEventListener("pointermove",function(event){if(distanceDragging)distanceFromPointer(event)});distanceSideObject.addEventListener("pointerup",function(){distanceDragging=false});distanceSideObject.addEventListener("pointercancel",function(){distanceDragging=false});distanceSideObject.addEventListener("keydown",function(event){let value=Number(distanceInput.value);if(event.key==="ArrowLeft"||event.key==="ArrowDown")value=Math.max(10,value-10);else if(event.key==="ArrowRight"||event.key==="ArrowUp")value=Math.min(60,value+10);else return;event.preventDefault();distanceInput.value=String(value);updateDistance()});
-    let reversed=false;document.querySelector("#reverse-ray").addEventListener("click",function(event){reversed=!reversed;event.currentTarget.setAttribute("aria-pressed",String(reversed));event.currentTarget.textContent=reversed?"恢復原本方向":"反轉光線方向";const left=document.querySelector("#reverse-left"),right=document.querySelector("#reverse-right");left.setAttribute("d",reversed?"M115 218L414 140":"M414 140L115 218");right.setAttribute("d",reversed?"M414 140L115 62":"M115 62L414 140");document.querySelector("#reverse-state").textContent=reversed?"方向已反轉：光沿原路徑返回":"目前：光由左上方入射，再向左下方反射"});
     const answerButtons=[...document.querySelectorAll("[data-answer]")];answerButtons.forEach(function(button){button.addEventListener("click",function(){answerButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===button));item.classList.remove("correct","incorrect")});button.classList.add(button.dataset.answer==="correct"?"correct":"incorrect")})});document.querySelector("#check-answer").addEventListener("click",function(){const selected=answerButtons.find(function(button){return button.getAttribute("aria-pressed")==="true"}),feedback=document.querySelector("#check-feedback");if(!selected){feedback.dataset.state="try";feedback.textContent="先選一段完整說明，再回想平面鏡與曲面鏡的反射差異。";return}if(selected.dataset.answer==="correct"){feedback.dataset.state="good";feedback.textContent="正確：平面鏡像隨物體移動；曲面各處遵守反射定律，凹面會聚光、凸面發散光。"}else{feedback.dataset.state="try";feedback.textContent="再想一想：曲面鏡各處法線方向不同，但每一處都遵守反射定律。"}});document.querySelector("#reset-answer").addEventListener("click",function(){answerButtons.forEach(function(button){button.setAttribute("aria-pressed","false");button.classList.remove("correct","incorrect")});const feedback=document.querySelector("#check-feedback");feedback.removeAttribute("data-state");feedback.textContent="選好後再確認：曲面鏡各處的法線方向相同嗎？"});
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/curved-mirrors.js?v=1"></script>
   <script type="module" src="assets/mirror-image.js?v=2"></script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
-  <script type="module" src="assets/laser-reflection.js?v=35"></script>
+  <script type="module" src="assets/laser-reflection.js?v=36"></script>
+  <script type="module" src="assets/reversible-light.js?v=1"></script>
 </body>
 </html>

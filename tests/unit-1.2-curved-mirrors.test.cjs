@@ -164,6 +164,7 @@ test('1.2 three mirrors: scientific relationships, interaction and layout', { ti
     await expect(touch.locator('#mirror-detail')).toBeVisible();
     await context.close();
     await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.locator('#reverse-record').click();
     await page.locator('#reverse-ray').click();
     await expect(page.locator('#reverse-state')).toContainText('方向已反轉');
     await page.locator('#object-distance').fill('20');
