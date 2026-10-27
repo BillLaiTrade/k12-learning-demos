@@ -32,6 +32,27 @@ test('2.2 sound travels through air while particles stay near their origins', { 
   const drum = () => page.locator('#sound-eardrum').getAttribute('transform');
   const still = await positions(), silentDrum = await drum();
 
+  const waitForBell = () => page.waitForFunction(() => {
+    const audio = document.querySelector('#bell-audio');
+    return !audio.paused && audio.readyState >= 3;
+  });
+  await t.test('actual bell recording is audible with headroom and no autoplay or volume slider', async () => {
+    const signal = await page.locator('#bell-audio').evaluate(async audio => {
+      const context = new OfflineAudioContext(2, 128, 48000);
+      const buffer = await context.decodeAudioData(await (await fetch(audio.currentSrc || audio.src)).arrayBuffer());
+      let energy = 0, peak = 0, count = 0;
+      for (let ch = 0; ch < buffer.numberOfChannels; ch++) for (const sample of buffer.getChannelData(ch)) {
+        energy += sample * sample; peak = Math.max(peak, Math.abs(sample)); count++;
+      }
+      return { rms: Math.sqrt(energy / count), peak, duration: buffer.duration, volume: audio.volume, paused: audio.paused, muted: audio.muted };
+    });
+    assert.ok(signal.rms > .025);
+    assert.ok(signal.peak > .2 && signal.peak < .95);
+    assert.ok(signal.duration > 1.5 && signal.duration < 3);
+    assert.equal(signal.volume, 1); assert.equal(signal.paused, true); assert.equal(signal.muted, false);
+    assert.equal(await page.locator('#card-02 input[type="range"]').count(), 0);
+  });
+
   await t.test('starts at rest and the disturbance reaches nearby particles before distant ones', async () => {
     assert.equal(await state(), 'ready');
     await page.clock.runFor(1000);
@@ -53,7 +74,8 @@ test('2.2 sound travels through air while particles stay near their origins', { 
     assert.equal(await page.locator('.sound-controls button').count(), 1);
     assert.equal(await strike.textContent(), '敲擊鐘');
     for (const target of [page.locator('#sound-bell'), strike, page.locator('#sound-bell')]) {
-      await target.click(); await page.clock.runFor(100);
+      await target.click(); await waitForBell(); await page.clock.runFor(100);
+      assert.ok(await page.locator('#bell-audio').evaluate(a => a.currentTime < .3 && a.volume === 1));
       assert.equal(await state(), 'playing');
       assert.ok(await elapsed() < .15);
       assert.equal((await positions())[42], still[42]);
@@ -105,6 +127,17 @@ test('2.2 sound travels through air while particles stay near their origins', { 
     await strike.click();
   });
 
+  await t.test('bell playback advances, restarts from zero, and ends without looping', async () => {
+    await strike.click(); await waitForBell();
+    const before = await page.locator('#bell-audio').evaluate(a => a.currentTime);
+    await new Promise(resolve => setTimeout(resolve, 150));
+    assert.ok(await page.locator('#bell-audio').evaluate(a => a.currentTime) > before);
+    await page.locator('#sound-bell').click(); await waitForBell();
+    assert.ok(await page.locator('#bell-audio').evaluate(a => a.currentTime < .2));
+    await page.waitForFunction(() => document.querySelector('#bell-audio').ended, null, { timeout: 5000, polling: 50 });
+    assert.equal(await page.locator('#bell-audio').evaluate(a => a.loop), false);
+  });
+
   await t.test('touch controls, enlarged mobile observation, small screens and reduced motion', async () => {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce' });
     const mobile = await context.newPage();
@@ -114,8 +147,10 @@ test('2.2 sound travels through air while particles stay near their origins', { 
     assert.ok(await mobile.locator('.sound-mobile-zoom').isVisible());
     await mobile.locator('#sound-bell').tap(); await mobile.clock.runFor(5000);
     assert.equal(await mobile.locator('#air-wave').getAttribute('data-state'), 'playing');
+    await mobile.waitForFunction(() => !document.querySelector('#bell-audio').paused);
     await mobile.locator('#air-strike').tap(); await mobile.clock.runFor(100);
     assert.ok(Number(await mobile.locator('#air-wave').getAttribute('data-elapsed')) < .2);
+    await mobile.waitForFunction(() => !document.querySelector('#bell-audio').paused);
     for (const width of [390, 320, 768]) {
       await mobile.setViewportSize({ width, height: 844 });
       assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);

@@ -116,6 +116,7 @@
                 <text class="sound-orange" x="525" y="337" text-anchor="middle" style="font-size:28px">空氣粒子來回振動</text>
               </svg></div>
             </figure>
+            <audio id="bell-audio" src="assets/brass-bell-strike.wav?v=1" preload="auto"></audio>
             <div class="controls sound-controls"><button class="action" id="air-strike" type="button">敲擊鐘</button><span class="live-note" id="air-status" aria-live="polite">點擊鐘或下方按鈕，敲擊鐘並觀察聲音傳播。</span></div>
             <div class="sound-takeaway"><strong>粒子在原位附近來回振動，疏密變化向前傳播。</strong></div>
             <p class="sound-note" id="sound-model-note">粒子位移放大、過程放慢呈現；空氣中的聲音是縱波。</p>
@@ -271,6 +272,6 @@
       if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)activate(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});targets.forEach(target=>observer.observe(target));}
     })();
   </script>
-  <script type="module" src="assets/sound-propagation.js?v=2"></script>
+  <script type="module" src="assets/sound-propagation.js?v=3"></script>
 </body>
 </html>

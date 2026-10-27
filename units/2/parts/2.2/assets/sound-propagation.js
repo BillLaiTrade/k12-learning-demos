@@ -2,6 +2,9 @@
 const scene = document.querySelector('#air-wave');
 const group = document.querySelector('#air-particles');
 const strikeButton = document.querySelector('#air-strike');
+const bellAudio = document.querySelector('#bell-audio');
+bellAudio.volume = 1;
+let soundRequest = 0;
 const bell = document.querySelector('#sound-bell');
 const bellBody = document.querySelector('#sound-bell-body');
 const eardrum = document.querySelector('#sound-eardrum');
@@ -83,11 +86,22 @@ function animate(now) {
   }
   frame = requestAnimationFrame(animate);
 }
+function playBell() {
+  const request = ++soundRequest;
+  bellAudio.pause();
+  bellAudio.currentTime = 0;
+  // 在真實點擊／按鍵事件內呼叫 play，符合行動瀏覽器的播放限制。
+  bellAudio.play().catch(() => {
+    if (request !== soundRequest) return;
+    status.textContent = '鐘的振動示範已開始，但鐘聲暫時無法播放，請再敲一次鐘。';
+  });
+}
 function strike() {
   cancelAnimationFrame(frame);
   elapsed = 0; lastTime = null; phase = ''; playing = true;
   draw(); scene.dataset.state = 'playing'; announce();
   frame = requestAnimationFrame(animate);
+  playBell();
 }
 strikeButton.addEventListener('click', strike);
 bell.addEventListener('click', strike);
@@ -100,6 +114,8 @@ bell.addEventListener('keydown', event => {
 // 背景分頁凍結時間；返回時接續，不額外觸發一次敲擊。
 document.addEventListener('visibilitychange', () => {
   cancelAnimationFrame(frame); frame = 0; lastTime = null;
-  if (!document.hidden && playing) frame = requestAnimationFrame(animate);
+  if (document.hidden) {
+    ++soundRequest; bellAudio.pause(); bellAudio.currentTime = 0;
+  } else if (playing) frame = requestAnimationFrame(animate);
 });
 draw(); scene.dataset.state = 'ready';
