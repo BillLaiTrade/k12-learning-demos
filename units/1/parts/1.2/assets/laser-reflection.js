@@ -10,7 +10,7 @@ scene.background = new THREE.Color('#8a6346');
 scene.fog = new THREE.Fog('#8a6346', 22, 48);
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.setPixelRatio(Math.min(Math.max(window.devicePixelRatio || 1, 2), 3));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -166,8 +166,8 @@ function protractorTickLines(points, color, opacity, width) {
 protractorTickLines(minorTicks, '#71877e', 0.65, 1);
 protractorTickLines(majorTicks, '#405e54', 0.95, 2);
 function addProtractorNumber(degrees, side) {
-  const labelCanvas = document.createElement('canvas'); labelCanvas.width = 256; labelCanvas.height = 96;
-  const context = labelCanvas.getContext('2d'); context.fillStyle = '#29483e'; context.font = 'bold 68px sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle'; context.fillText(`${degrees}°`, 128, 50);
+  const labelCanvas = document.createElement('canvas'); labelCanvas.width = 512; labelCanvas.height = 192;
+  const context = labelCanvas.getContext('2d'); context.fillStyle = '#29483e'; context.font = 'bold 136px sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle'; context.fillText(`${degrees}°`, 256, 100);
   const texture = new THREE.CanvasTexture(labelCanvas); texture.colorSpace = THREE.SRGBColorSpace;
   const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false }));
   label.scale.set(1.0, 0.64, 1); label.renderOrder = 10;
@@ -187,7 +187,7 @@ const reflectedScaleHit = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16),
 incomingScaleHit.renderOrder = reflectedScaleHit.renderOrder = 12; protractor.add(incomingScaleHit, reflectedScaleHit);
 
 function makeAngleLabel(color, size = [3.3, 0.82]) {
-  const labelCanvas = document.createElement('canvas'); labelCanvas.width = 512; labelCanvas.height = 128;
+  const labelCanvas = document.createElement('canvas'); labelCanvas.width = 1024; labelCanvas.height = 256;
   const context = labelCanvas.getContext('2d');
   const texture = new THREE.CanvasTexture(labelCanvas); texture.colorSpace = THREE.SRGBColorSpace;
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false }));
@@ -199,10 +199,10 @@ function updateAngleLabel(sprite, text) {
   if (sprite.userData.labelText === text) return;
   const { labelCanvas, context, texture, labelColor } = sprite.userData;
   context.clearRect(0, 0, labelCanvas.width, labelCanvas.height);
-  context.fillStyle = '#fffdf4ee'; context.strokeStyle = `${labelColor}aa`; context.lineWidth = 5;
-  context.beginPath(); context.roundRect(8, 8, 496, 112, 26); context.fill(); context.stroke();
-  context.fillStyle = labelColor; context.font = 'bold 82px "Noto Sans TC", "Microsoft JhengHei", sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle';
-  context.fillText(text, 256, 66); texture.needsUpdate = true; sprite.userData.labelText = text;
+  context.fillStyle = '#fffdf4ee'; context.strokeStyle = `${labelColor}aa`; context.lineWidth = 10;
+  context.beginPath(); context.roundRect(16, 16, 992, 224, 52); context.fill(); context.stroke();
+  context.fillStyle = labelColor; context.font = 'bold 164px "Noto Sans TC", "Microsoft JhengHei", sans-serif'; context.textAlign = 'center'; context.textBaseline = 'middle';
+  context.fillText(text, 512, 132); texture.needsUpdate = true; sprite.userData.labelText = text;
 }
 const normalLabel = makeAngleLabel('#40566c', [1.9, 0.8]);
 normalLabel.visible = true;
@@ -291,8 +291,8 @@ function resize() {
   if (!width || !height) return;
   renderer.setSize(width, height, false);
   camera.aspect = width / height;
-  camera.fov = width < 200 ? 45 : width < 500 ? 33 : 45;
-  const compact = width < 500, focusX = compact ? -2.7 : -2.5, focusZ = compact ? -0.8 : 0.3;
+  camera.fov = width < 200 ? 40 : width < 500 ? 34 : 38;
+  const compact = width < 500, focusX = compact ? -2.7 : -2.0, focusZ = compact ? -0.8 : 0.3;
   camera.up.set(-1, 0, 0); camera.position.set(focusX, compact ? 20 : 18.5, focusZ); camera.lookAt(focusX, 1.4, focusZ);
   camera.updateProjectionMatrix();
   update();
