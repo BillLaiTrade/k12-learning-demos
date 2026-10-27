@@ -267,8 +267,6 @@
     .speed-stepper button:disabled { cursor:not-allowed; opacity:.48; }
     .speed-step-value { overflow:hidden; padding:7px 4px; border-radius:9px; background:#e5f2e9; text-align:center; font-size:1rem; font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap; }
     .speed-step-note { display:block; margin-top:5px; color:var(--muted); text-align:center; font-size:.76rem; }
-    .speed-live-readout { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:12px; }
-    .speed-live-readout .data-cell { padding:10px 13px; }
     .speed-equation-live { margin:12px 0 0; padding:10px 12px; border-radius:11px; background:#edf4ea; color:#315a46; text-align:center; font-weight:750; font-variant-numeric:tabular-nums; }
     .speed-run-controls { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:12px; margin-top:12px; padding-top:12px; border-top:1px solid var(--line); }
     .speed-run-controls .action { min-width:190px; }
@@ -1113,10 +1111,6 @@
                 </div>
                 <div class="speed-color-range" aria-hidden="true"><span>較慢｜4 m/s</span><span>較快｜32 m/s</span></div>
               </div>
-              <div class="speed-live-readout" aria-live="polite">
-                <div class="data-cell"><small>波速 v</small><strong id="speed-value">12 m/s</strong></div>
-                <div class="data-cell"><small>完整波形通過 30 m 所需時間</small><strong id="speed-transit-time">3.00 s</strong></div>
-              </div>
               <p class="speed-equation-live" id="speed-equation-live">v = f × λ = 2 Hz × 6 m = 12 m/s</p>
             </section>
           </div>
@@ -1746,8 +1740,6 @@
       const speedFrequencyValue=document.querySelector("#speed-frequency-value");
       const speedPeriodValue=document.querySelector("#speed-period-value");
       const speedWavelengthValue=document.querySelector("#speed-wavelength-value");
-      const speedValue=document.querySelector("#speed-value");
-      const speedTransitTime=document.querySelector("#speed-transit-time");
       const speedEquation=document.querySelector("#speed-equation-live");
       const speedColorScale=document.querySelector("#speed-color-scale");
       const speedColorMarker=document.querySelector("#speed-color-marker");
@@ -1756,7 +1748,7 @@
       const runTime=document.querySelector("#speed-run-time");
       const progressBar=document.querySelector("#speed-progress-bar");
       const progressTrack=document.querySelector("#speed-progress");
-      if(speedWave&&speedWavePath&&speedWaveGuides&&speedWavelengthArrow&&speedLambdaLabel&&speedSourceMarker&&speedFrequencyValue&&speedPeriodValue&&speedWavelengthValue&&speedValue&&speedTransitTime&&speedEquation&&speedColorScale&&speedColorMarker&&sendWaveButton&&runMessage&&runTime&&progressBar&&progressTrack){
+      if(speedWave&&speedWavePath&&speedWaveGuides&&speedWavelengthArrow&&speedLambdaLabel&&speedSourceMarker&&speedFrequencyValue&&speedPeriodValue&&speedWavelengthValue&&speedEquation&&speedColorScale&&speedColorMarker&&sendWaveButton&&runMessage&&runTime&&progressBar&&progressTrack){
         const routeLength=30,routeStartX=30,routeEndX=690,routeWidth=routeEndX-routeStartX,waveMidY=90,waveAmplitude=48,playbackScale=2.5;
         const frequencyDown=document.querySelector("#speed-frequency-down"),frequencyUp=document.querySelector("#speed-frequency-up");
         const periodDown=document.querySelector("#speed-period-down"),periodUp=document.querySelector("#speed-period-up");
@@ -1820,7 +1812,6 @@
           const frequencyText=`${format(frequency,3)} Hz`,periodText=`${format(period,3)} s`,wavelengthText=`${format(wavelength,1)} m`;
           const color=speedColorAt(speed),colorPosition=clamp((speed-4)/(32-4),0,1)*100;
           speedFrequencyValue.textContent=frequencyText;speedPeriodValue.textContent=periodText;speedWavelengthValue.textContent=wavelengthText;
-          speedValue.textContent=`${format(speed,2)} m/s`;speedTransitTime.textContent=`${format(travelTime,2)} s`;
           speedWavePath.style.stroke=color;speedColorMarker.style.left=`${colorPosition.toFixed(2)}%`;speedColorMarker.style.backgroundColor=color;
           speedColorScale.setAttribute("aria-valuenow",format(speed,2));speedColorScale.setAttribute("aria-valuetext",`${format(speed,2)} 公尺每秒，色階位置 ${format(colorPosition,1)}%`);
           speedEquation.textContent=`v = f × λ = ${format(frequency,3)} Hz × ${format(wavelength,1)} m = ${format(speed,2)} m/s`;
@@ -1837,8 +1828,8 @@
         const finishSingleWave=()=>{
           isRunning=false;animationFrame=0;runStartedAt=null;sendWaveButton.disabled=false;sendWaveButton.textContent="再產生一個完整波";
           setControlsDisabled(false);drawGeneratedWave(getTransitTime());drawProgress(1);
-          runTime.textContent=`${format(getTransitTime(),2)} / ${format(getTransitTime(),2)} s`;
-          runMessage.textContent=`完整波形已完全通過 ${routeLength} 公尺路徑；繩子回到平衡位置。`;
+          runTime.textContent="";
+          runMessage.textContent=`完整波形通過 ${routeLength} 公尺需時 ${format(getTransitTime(),2)} 秒；繩子已回到平衡位置。`;
           updateControls();
         };
         const animateSingleWave=time=>{
