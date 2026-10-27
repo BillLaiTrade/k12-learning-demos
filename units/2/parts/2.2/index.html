@@ -272,6 +272,6 @@
       if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)activate(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});targets.forEach(target=>observer.observe(target));}
     })();
   </script>
-  <script type="module" src="assets/sound-propagation.js?v=3"></script>
+  <script type="module" src="assets/sound-propagation.js?v=4"></script>
 </body>
 </html>

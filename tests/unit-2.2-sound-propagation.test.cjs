@@ -4,7 +4,7 @@ const { spawn } = require('node:child_process');
 const path = require('node:path');
 const { chromium } = require('playwright');
 
-test('2.2 sound travels through air while particles stay near their origins', { timeout: 30000 }, async t => {
+test('2.2 sound travels through air while particles stay near their origins', { timeout: 45000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], {
     cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'pipe']
   });
@@ -108,6 +108,52 @@ test('2.2 sound travels through air while particles stay near their origins', { 
     assert.ok(Math.max(...gaps) / Math.min(...gaps) > 3, 'dense and sparse regions should be visibly distinct');
   });
 
+  await t.test('labels follow the same bands and fade once without jumping back or reappearing', async () => {
+    await strike.click();
+    await page.evaluate(() => {
+      window.bandFrames = [];
+      const scene = document.querySelector('#air-wave');
+      const read = id => {
+        const node = document.getElementById(id);
+        return { x: node.transform.baseVal.consolidate().matrix.e, opacity: Number(node.getAttribute('opacity')), visible: node.getAttribute('visibility') === 'visible' };
+      };
+      window.bandObserver = new MutationObserver(() => {
+        window.bandFrames.push({
+          dense: read('sound-dense-label'), sparse: read('sound-sparse-label'),
+          mobileDense: read('sound-mobile-dense'), mobileSparse: read('sound-mobile-sparse')
+        });
+      });
+      window.bandObserver.observe(scene, { subtree: true, attributes: true });
+    });
+    await page.clock.runFor(18000);
+    const frames = await page.evaluate(() => { window.bandObserver.disconnect(); return window.bandFrames; });
+    assert.ok(frames.length > 100);
+    for (const key of ['dense', 'sparse']) {
+      let lastX = -Infinity, hasAppeared = false, hasLeft = false, lastOpacity = 1;
+      for (const frame of frames) {
+        const band = frame[key];
+        assert.ok(band.x >= lastX - .001, `${key} must never jump left, including after the old wrap boundaries`);
+        lastX = band.x;
+        assert.deepEqual(frame[key === 'dense' ? 'mobileDense' : 'mobileSparse'], band, 'mobile labels must share position, fade and visibility');
+        if (band.visible) {
+          assert.equal(hasLeft, false, 'a label must not reappear on a different band');
+          hasAppeared = true;
+          assert.ok(band.opacity <= lastOpacity + .0001);
+          lastOpacity = band.opacity;
+        } else if (hasAppeared) hasLeft = true;
+      }
+      assert.ok(hasAppeared && hasLeft);
+      assert.ok(frames.some(f => f[key].visible && f[key].opacity > 0 && f[key].opacity < 1), 'label should fade gradually before disappearing');
+      assert.equal(frames.at(-1)[key].visible, false);
+      assert.equal(frames.at(-1)[key].opacity, 0);
+    }
+    await strike.click(); await page.clock.runFor(5000);
+    for (const id of ['sound-dense-label', 'sound-sparse-label']) {
+      assert.equal(await page.locator('#' + id).getAttribute('visibility'), 'visible');
+      assert.equal(Number(await page.locator('#' + id).getAttribute('opacity')), 1, 'new strike must reset fading');
+    }
+  });
+
   await t.test('ear responds only after arrival; completion and keyboard restart leave no stale animation', async () => {
     await page.locator('#air-strike').click(); await page.clock.runFor(7500);
     assert.equal(await drum(), silentDrum);
@@ -148,6 +194,11 @@ test('2.2 sound travels through air while particles stay near their origins', { 
     await mobile.locator('#sound-bell').tap(); await mobile.clock.runFor(5000);
     assert.equal(await mobile.locator('#air-wave').getAttribute('data-state'), 'playing');
     await mobile.waitForFunction(() => !document.querySelector('#bell-audio').paused);
+    await mobile.clock.runFor(3250);
+    const fading = Number(await mobile.locator('#sound-mobile-dense').getAttribute('opacity'));
+    assert.ok(fading > 0 && fading < 1);
+    await mobile.clock.runFor(2250);
+    for (const id of ['sound-mobile-dense', 'sound-mobile-sparse']) assert.equal(await mobile.locator('#' + id).getAttribute('visibility'), 'hidden');
     await mobile.locator('#air-strike').tap(); await mobile.clock.runFor(100);
     assert.ok(Number(await mobile.locator('#air-wave').getAttribute('data-elapsed')) < .2);
     await mobile.waitForFunction(() => !document.querySelector('#bell-audio').paused);

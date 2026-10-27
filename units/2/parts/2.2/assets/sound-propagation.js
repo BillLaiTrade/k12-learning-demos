@@ -43,12 +43,14 @@ for (let row = 0; row < 3; row++) for (let col = 0; col < 43; col++) {
 
 let elapsed = 0, playing = false, frame = 0, lastTime = null, phase = '';
 function labelBand(node, offset) {
-  // 跟著實際密部／疏部的位置走；離開觀察區後追蹤下一個同相位區域。
-  let q = LEFT + SPEED * elapsed - offset;
-  while (q > RIGHT - 42) q -= WAVELENGTH;
+  // 始終追蹤同一個相位區域，接近耳朵時淡出，不切換到後面的區域。
+  const q = LEFT + SPEED * elapsed - offset;
+  const edge = RIGHT - 42;
+  const opacity = Math.max(0, Math.min(1, (edge - q) / 70));
   const local = elapsed - (q - LEFT) / SPEED;
-  const visible = q >= LEFT + 42 && q <= RIGHT - 42 && local > .5 && local < TRAIN - .5;
+  const visible = q >= LEFT + 42 && q < edge && local > .5 && local < TRAIN - .5;
   node.setAttribute('visibility', visible ? 'visible' : 'hidden');
+  node.setAttribute('opacity', opacity.toFixed(4));
   node.setAttribute('transform', `translate(${q.toFixed(3)} 0)`);
 }
 function draw() {
@@ -61,6 +63,7 @@ function draw() {
   labelBand(sparseLabel, WAVELENGTH);
   for (const [mobile, original] of mobileLabels) {
     mobile.setAttribute('visibility', original.getAttribute('visibility'));
+    mobile.setAttribute('opacity', original.getAttribute('opacity'));
     mobile.setAttribute('transform', original.getAttribute('transform'));
   }
   scene.dataset.elapsed = elapsed.toFixed(4);
