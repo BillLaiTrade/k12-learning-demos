@@ -1,37 +1,7 @@
-#card-01{grid-template-columns:minmax(0,1fr);gap:18px}
-#card-01 .card-side{display:flex;align-items:baseline;gap:12px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 12px}
-#card-01 .card-side h3{margin:0}
-#card-01 .touch-story-intro{margin-bottom:16px}
-#card-01 .touch-story-comic{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:14px}
-#card-01 .touch-story-scene{overflow:hidden;margin:0;border:1px solid #ddd8c9;border-radius:18px;background:#fffdf8}
-#card-01 .touch-story-heading{display:flex;align-items:flex-start;gap:8px;padding:12px;background:#f2f4e9}
-#card-01 .touch-story-heading h3{margin:0 0 4px;font-size:1rem;line-height:1.4}
-#card-01 .touch-story-heading p{margin:0;color:var(--muted);font-size:.83rem}
-#card-01 .touch-story-step{display:grid;place-items:center;flex:0 0 26px;height:26px;border-radius:50%;background:var(--green);color:#fff;font-weight:800}
-#card-01 .touch-story-scene img{display:block;width:100%;height:auto}
-#card-01 .touch-story-bowls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:8px 6px;border-bottom:1px solid var(--line);background:#faf6eb;text-align:center;font-size:.72rem;font-weight:750}
-#card-01 .touch-cold{color:#27647c}#card-01 .touch-warm{color:#945523}
-#card-01 .touch-story-scene .dialogue{margin:10px}
-#card-01 .touch-story-transition{display:grid;gap:6px;justify-items:center;margin:20px 0;color:#526b5c;font-size:.88rem;text-align:center}
-#card-01 .touch-story-transition span{font-size:1.6rem;line-height:1.1}
-#card-01 .touch-story-feelings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:10px 10px 0}
-#card-01 .touch-story-feelings p{margin:0;padding:9px;border:1px solid #e3dac8;border-radius:12px;background:#f8f4e9}
-#card-01 .touch-story-feelings span{display:block;color:var(--muted);font-size:.85rem}
-#card-01 .touch-story-feelings strong{display:block;margin-top:4px;color:var(--ink);font-size:.88rem}
-#card-01 .touch-story-takeaway{margin-top:14px;padding:14px}
-#card-01 .touch-story-bridge{margin:18px 0 0;color:var(--green);font-weight:750}
-@media(max-width:640px){#card-01 .card-side{flex-wrap:wrap;gap:6px 12px}#card-01 .touch-story-heading{padding:14px}#card-01 .touch-story-bowls{gap:4px;padding:9px 5px;font-size:.73rem}#card-01 .touch-story-feelings{gap:8px;padding:12px 12px 0}#card-01 .touch-story-feelings p{padding:10px}#card-01 .touch-story-feelings strong{font-size:.9rem}#card-01 .touch-story-scene .dialogue{margin:12px}}
-
-#card-01 .touch-story-scene .dialogue{padding:8px;font-size:.88rem;gap:8px}
-#card-01 .touch-story-scene .speaker::before{width:32px;height:32px}
-@media(max-width:560px){#card-01 .touch-story-comic{grid-template-columns:minmax(0,1fr);gap:12px;max-width:380px;margin-inline:auto}}
-@media(min-width:561px){#card-01 .touch-story-heading{min-height:96px}}
-
-#card-01 .touch-story-mini{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;border-radius:12px}
-#card-01 .touch-story-picture{min-width:0}
-#card-01 .touch-story-mini .touch-story-bowls{padding:6px 2px;font-size:.65rem;gap:2px;border-bottom:0}
-#card-01 .touch-story-caption{min-width:0;padding:10px;background:#f8f8ef}
-#card-01 .touch-story-caption h3{margin:0 0 8px;font-size:.88rem;line-height:1.5}
-#card-01 .touch-story-caption h3 span{color:var(--green);margin-right:4px}
-#card-01 .touch-story-caption p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.6}
-#card-01 .touch-story-caption .touch-story-quote{margin-top:8px;color:#724a2d}
+#card-01{grid-template-columns:minmax(0,1fr);gap:0}
+#card-01 .touch-story-comic{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(100%,404px);margin-inline:auto}
+#card-01 .touch-story-scene{overflow:hidden;min-width:0;margin:0;border:1px solid #ddd8c9;border-radius:10px;background:#fffdf8}
+#card-01 figcaption{display:flex;align-items:center;min-height:48px;padding:8px;background:#f2f4e9}
+#card-01 h2{margin:0;font-size:.875rem;line-height:1.5;color:var(--ink)}
+#card-01 img{display:block;width:100%;height:auto}
+@media(max-width:560px){#card-01 .touch-story-comic{gap:10px}#card-01 figcaption{padding:7px}#card-01 h2{font-size:.8rem}}
