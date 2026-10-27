@@ -12,6 +12,17 @@
     @media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{grid-template-columns:1fr;padding:32px 0 25px}.hero-art{order:2}.lesson{padding-top:20px}.lesson-card{grid-template-columns:1fr;padding:18px;gap:14px}.card-side{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:0 7px;border:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0;font-size:.95rem}.card-role{grid-column:2;font-size:.79rem}.card-number{grid-row:1/3}.visual{padding:8px}.medium-grid{grid-template-columns:1fr}.quiz-head{padding:18px}.quiz-body{padding:19px 17px 22px}.quiz-actions{align-items:stretch;flex-direction:column}.quiz-actions .action{width:100%}.range-row label{min-width:74px;font-size:.9rem}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
+  <style>
+    .ruler-photo-stage{position:relative;isolation:isolate;overflow:hidden;width:100%;aspect-ratio:16/9;border-radius:13px;background:#e8e5dc}
+    .ruler-photo-background,.ruler-clamp-foreground,.ruler-photo-blade{position:absolute;inset:0 auto auto 0;display:block;width:100%;height:auto;max-width:none;pointer-events:none;user-select:none}
+    .ruler-photo-background{z-index:0;aspect-ratio:16/9;height:100%;object-fit:cover}
+    .ruler-photo-blade{top:-2.7%;transform-origin:50% 47%;}
+    .ruler-photo-blade--fixed{z-index:1;clip-path:inset(0 44% 0 0)}
+    .ruler-photo-blade--moving{z-index:2;clip-path:inset(0 0 0 52%)}
+    .ruler-clamp-foreground{z-index:3;clip-path:inset(14% 40% 12% 32%)}
+    .ruler-photo-stage:focus-visible{outline:3px solid #176b53;outline-offset:3px}
+    @media(max-width:640px){.ruler-photo-stage{border-radius:9px}}
+  </style>
 </head>
 <body>
   <header class="shell masthead">
@@ -35,14 +46,13 @@
           <div class="card-main"><h2>撥動鋼尺時，聲音是怎麼出現的？</h2><p>阿公拿出桌邊的鋼尺，讓小葵觀察它發出聲音時的狀態。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>尺一邊發出聲音，一邊抖得好快，聲音跟它在動有關嗎？</p></div>
             <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>你觀察得很仔細。發聲的物體會振動；讓振動停下來，聲音也會停止。</p></div>
-            <figure class="visual"><svg id="ruler-demo" viewBox="0 0 760 300" role="img" aria-label="鋼尺伸出桌面，示意尺振動時發出聲音。">
-              <rect x="48" y="206" width="664" height="34" rx="8" fill="#c99b70"/><path d="M48 206h664" stroke="#a97c56" stroke-width="4"/><path d="M182 202 L182 150 Q240 147 300 150 L300 202Z" fill="#d7b188" stroke="#9a7654" stroke-width="3"/>
-              <g class="sound-lines" fill="none" stroke="#d39558" stroke-width="3"><path class="sound-ripple" d="M345 154q25-22 0-44"/><path class="sound-ripple" d="M363 164q39-34 0-68"/><path class="sound-ripple" d="M384 174q54-47 0-94"/></g>
-              <g class="ruler-blade"><path d="M294 152H620" stroke="#788b86" stroke-width="20" stroke-linecap="round"/><path d="M311 148H600" stroke="#d9e0dc" stroke-width="5" stroke-linecap="round"/><path d="M430 139v18m42-18v18m42-18v18m42-18v18" stroke="#82948d" stroke-width="2"/></g>
-              <text x="473" y="112" text-anchor="middle">鋼尺振動</text><text x="516" y="278" text-anchor="middle" class="muted-label">桌面固定一端，另一端伸出桌外</text>
-              <circle cx="663" cy="64" r="24" fill="#f2e5c6"/><path d="M663 49v19m0 11v2" stroke="#a56b35" stroke-width="4" stroke-linecap="round"/><text x="663" y="104" text-anchor="middle" class="muted-label">聲音</text>
-            </svg><figcaption>動畫示意鋼尺的振動；不同聲源的振動方式和快慢會有差異。</figcaption></figure>
-            <div class="controls"><button class="action" id="ruler-start" type="button">撥動鋼尺</button><button class="secondary" id="ruler-stop" type="button" disabled>讓鋼尺停下</button><span class="live-note" id="ruler-status" aria-live="polite">鋼尺靜止，尚未發聲。</span></div>
+            <figure class="visual"><div class="ruler-photo-stage" id="ruler-demo" role="img" aria-label="鋼尺一端夾在木桌邊，另一端伸出桌外；按下播放按鈕可讓鋼尺振動並聽見聲音。">
+              <img class="ruler-photo-background" src="assets/ruler-clamp-background.png" alt="" aria-hidden="true">
+              <img class="ruler-photo-blade ruler-photo-blade--fixed" src="assets/steel-ruler-cutout.png" alt="" aria-hidden="true">
+              <img class="ruler-photo-blade ruler-photo-blade--moving" id="ruler-moving-blade" src="assets/steel-ruler-cutout.png" alt="" aria-hidden="true">
+              <img class="ruler-clamp-foreground" src="assets/ruler-clamp-background.png" alt="" aria-hidden="true">
+            </div><figcaption>按下按鈕，聽鋼尺彈振發出的聲音；振動畫面放慢呈現，方便觀察。</figcaption></figure>
+            <div class="controls"><button class="action" id="ruler-start" type="button" aria-pressed="false">撥動鋼尺並聆聽</button><button class="secondary" id="ruler-stop" type="button" disabled>按住鋼尺停止</button><span class="live-note" id="ruler-status" aria-live="polite">按下按鈕，讓鋼尺振動並播放聲音。</span></div>
             <div class="fact"><p><strong>重點：</strong>聲音由物體的振動產生。用手按住振動中的鋼尺，振動減弱，聲音也會變小並停止。</p></div>
           </div>
         </section>
@@ -114,9 +124,71 @@
   <footer class="shell foot">國二上理化・波動與聲音｜學習單元 2.2</footer>
   <script>
     (()=>{
-      const ruler=document.querySelector("#ruler-demo"),rulerStart=document.querySelector("#ruler-start"),rulerStop=document.querySelector("#ruler-stop"),rulerStatus=document.querySelector("#ruler-status");
-      const setRuler=active=>{ruler.classList.toggle("is-vibrating",active);rulerStart.disabled=active;rulerStop.disabled=!active;rulerStatus.textContent=active?"鋼尺正在振動，示意它同時發出聲音。":"鋼尺振動停止，聲音也停止。";ruler.setAttribute("aria-label",active?"鋼尺正在振動並發出聲音。":"鋼尺靜止，沒有發聲。");};
-      rulerStart.addEventListener("click",()=>setRuler(true));rulerStop.addEventListener("click",()=>setRuler(false));
+      const ruler=document.querySelector("#ruler-demo"),movingBlade=document.querySelector("#ruler-moving-blade"),rulerStart=document.querySelector("#ruler-start"),rulerStop=document.querySelector("#ruler-stop"),rulerStatus=document.querySelector("#ruler-status");
+      let rulerAudioContext=null,rulerVoice=null,rulerFrame=0,rulerAnimationStart=null;
+      const playRulerSound=()=>{
+        const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+        if(!AudioContextClass)return false;
+        if(!rulerAudioContext)rulerAudioContext=new AudioContextClass();
+        const context=rulerAudioContext,now=context.currentTime,master=context.createGain(),sources=[];
+        master.gain.setValueAtTime(.62,now);master.gain.exponentialRampToValueAtTime(.0001,now+1.08);master.connect(context.destination);
+        [
+          {frequency:92,level:.12},
+          {frequency:92*6.27,level:.035},
+          {frequency:92*17.55,level:.012}
+        ].forEach(partial=>{
+          const oscillator=context.createOscillator(),envelope=context.createGain();
+          oscillator.type="sine";oscillator.frequency.setValueAtTime(partial.frequency,now);
+          envelope.gain.setValueAtTime(partial.level,now);envelope.gain.exponentialRampToValueAtTime(.0001,now+1.02);
+          oscillator.connect(envelope);envelope.connect(master);oscillator.start(now);oscillator.stop(now+1.1);sources.push(oscillator);
+        });
+        const noiseLength=Math.max(1,Math.floor(context.sampleRate*.055)),buffer=context.createBuffer(1,noiseLength,context.sampleRate),samples=buffer.getChannelData(0);
+        for(let i=0;i<noiseLength;i++)samples[i]=(Math.random()*2-1)*Math.exp(-i/(context.sampleRate*.009));
+        const noise=context.createBufferSource(),filter=context.createBiquadFilter(),noiseEnvelope=context.createGain();
+        noise.buffer=buffer;filter.type="bandpass";filter.frequency.setValueAtTime(1450,now);filter.Q.setValueAtTime(.8,now);
+        noiseEnvelope.gain.setValueAtTime(.12,now);noiseEnvelope.gain.exponentialRampToValueAtTime(.0001,now+.055);
+        noise.connect(filter);filter.connect(noiseEnvelope);noiseEnvelope.connect(master);noise.start(now);noise.stop(now+.06);sources.push(noise);
+        rulerVoice={master,sources};
+        return true;
+      };
+      const stopRulerSound=()=>{
+        if(!rulerVoice||!rulerAudioContext)return;
+        const now=rulerAudioContext.currentTime;
+        rulerVoice.master.gain.cancelScheduledValues(now);rulerVoice.master.gain.setTargetAtTime(.0001,now,.012);
+        rulerVoice.sources.forEach(source=>{try{source.stop(now+.06);}catch(_error){}});
+        rulerVoice=null;
+      };
+      const finishRuler=()=>{
+        rulerFrame=0;rulerAnimationStart=null;rulerVoice=null;movingBlade.style.transform="rotate(0deg)";
+        rulerStart.disabled=false;rulerStart.setAttribute("aria-pressed","false");rulerStop.disabled=true;
+        ruler.setAttribute("aria-label","鋼尺固定在桌邊，伸出桌外的一端靜止。");
+        rulerStatus.textContent="鋼尺的振動和彈振聲已自然衰減停止。";
+      };
+      const animateRuler=time=>{
+        if(rulerAnimationStart===null)rulerAnimationStart=time;
+        const elapsed=(time-rulerAnimationStart)/1000;
+        if(elapsed>=1.15){finishRuler();return;}
+        const angle=3.2*Math.sin(2*Math.PI*11*elapsed)*Math.exp(-elapsed/.42);
+        movingBlade.style.transform=`rotate(${angle.toFixed(3)}deg)`;
+        rulerFrame=window.requestAnimationFrame(animateRuler);
+      };
+      const startRuler=async()=>{
+        const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+        if(!rulerAudioContext&&AudioContextClass)rulerAudioContext=new AudioContextClass();
+        if(rulerAudioContext&&rulerAudioContext.state==="suspended"){try{await rulerAudioContext.resume();}catch(_error){}}
+        const soundStarted=playRulerSound();
+        rulerStart.disabled=true;rulerStart.setAttribute("aria-pressed","true");rulerStop.disabled=false;
+        rulerStatus.textContent=soundStarted?"鋼尺正在振動，請聽它彈振發出的聲音。":"這個瀏覽器無法播放示範聲音。";
+        ruler.setAttribute("aria-label","鋼尺固定在桌邊，伸出桌外的一端正在振動。");
+        rulerAnimationStart=null;rulerFrame=window.requestAnimationFrame(animateRuler);
+      };
+      const stopRuler=()=>{
+        if(rulerFrame)window.cancelAnimationFrame(rulerFrame);
+        stopRulerSound();finishRuler();
+        rulerStatus.textContent="已按住鋼尺，振動和聲音停止。";
+        ruler.setAttribute("aria-label","鋼尺固定在桌邊；按住後振動與聲音停止。");
+      };
+      rulerStart.addEventListener("click",startRuler);rulerStop.addEventListener("click",stopRuler);
 
       const particleGroup=document.querySelector("#air-particles"),airSvg=document.querySelector("#air-wave"),airPlay=document.querySelector("#air-play"),airStatus=document.querySelector("#air-status"),dots=[];
       const ns="http://www.w3.org/2000/svg";
