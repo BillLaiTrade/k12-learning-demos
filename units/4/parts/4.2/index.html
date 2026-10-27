@@ -264,7 +264,7 @@
             <li><button class="evap-step" type="button" data-evap-step="4" aria-pressed="false">④ 留下鹽晶體</button></li>
           </ol>
           <div class="scene evap-stage" id="evap-stage" data-step="1" aria-label="鹽水蒸發與鹽晶體留下的示意">
-            <span class="scene-label">12 秒示意｜每步 3 秒，非真實加熱時間</span>
+            <span class="scene-label">10.5 秒示意｜非真實加熱時間</span>
             <div class="evap-visual" id="evap-visual" aria-hidden="true"></div>
             <aside class="evap-observation"><strong id="evap-phase">受熱升溫</strong><p id="evap-caption" class="live-note" aria-live="polite">鹽水正在受熱，水面仍較平靜；水在還沒沸騰時也會蒸發。</p></aside>
           </div>
@@ -408,6 +408,6 @@
     document.getElementById('reset-answers').addEventListener('click',()=>{['q-filter','q-crystal','q-paper'].forEach(id=>document.getElementById(id).value='');const feedback=document.getElementById('quiz-feedback');feedback.textContent='完成三個配對後，查看回饋。';feedback.style.color='';});
   </script>
   <script type="importmap">{"imports":{"three":"../../../1/parts/1.1/assets/vendor/three/build/three.module.js"}}</script>
-  <script type="module" src="assets/evaporation-animation.js?v=twelve-seconds-1"></script>
+  <script type="module" src="assets/evaporation-animation.js?v=short-observation-1"></script>
 </body>
 </html>
