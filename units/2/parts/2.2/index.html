@@ -17,7 +17,7 @@
     .ruler-photo-background,.ruler-model{position:absolute;display:block;max-width:none;pointer-events:none;user-select:none}
     .ruler-photo-background{z-index:0;inset:0;width:100%;height:100%;object-fit:cover}
     .ruler-model{z-index:1;inset:0;width:100%;height:100%}
-    .ruler-hit{pointer-events:all;cursor:pointer;touch-action:manipulation;fill:transparent;stroke:transparent;stroke-width:32px}
+    .ruler-hit{pointer-events:all;cursor:pointer;touch-action:manipulation;fill:transparent;stroke:transparent;stroke-width:32px;outline:none;-webkit-tap-highlight-color:transparent}
     .ruler-hit:focus-visible{outline:none;stroke:#e9ad4b;stroke-width:5px;stroke-opacity:.8;fill:#fff7d51c}
     .ruler-photo-stage:focus-visible{outline:3px solid #176b53;outline-offset:3px}
     @media(max-width:640px){.ruler-photo-stage{border-radius:9px}}
@@ -134,8 +134,9 @@
     (()=>{
       const ruler=document.querySelector("#ruler-demo"),movingBlade=document.querySelector("#ruler-moving-blade"),rulerStart=document.querySelector("#ruler-start"),rulerStop=document.querySelector("#ruler-stop"),rulerStatus=document.querySelector("#ruler-status");
       // Deform the photographic ruler in narrow overlapping strips. The clamp
-      // and supported portion stay in the fixed layer; displacement and slope
-      // are zero at the cantilever root. Source coordinates precede perspective scaling.
+      // and supported portion stay in the fixed layer. Rest projection reduces
+      // the downward viewing angle; vibration adds zero displacement and slope
+      // at the cantilever root. Source coordinates precede perspective scaling.
       const rulerRoot=320,rulerTip=980,rulerPluck=document.querySelector("#ruler-pluck"),rulerSlices=[];
       const rulerSvgNS="http://www.w3.org/2000/svg",rulerDefs=document.querySelector(".ruler-model defs");
       for(let i=0;i<80;i++){
@@ -147,7 +148,8 @@
       }
       const rulerBend=(x,tipDisplacement)=>{
         const u=Math.max(0,Math.min(1,(x-rulerRoot)/(rulerTip-rulerRoot)));
-        return {offset:tipDisplacement*u*u*(3-u)/2,slope:tipDisplacement*(3*u-1.5*u*u)/(rulerTip-rulerRoot)};
+        const restSlope=-.25;
+        return {offset:restSlope*(x-rulerRoot)+tipDisplacement*u*u*(3-u)/2,slope:restSlope+tipDisplacement*(3*u-1.5*u*u)/(rulerTip-rulerRoot)};
       };
       const drawRuler=tipDisplacement=>{
         rulerSlices.forEach(({x,slice})=>{const {offset,slope}=rulerBend(x,tipDisplacement);slice.setAttribute("transform",`matrix(1 ${slope} 0 1 0 ${offset-slope*x})`);});

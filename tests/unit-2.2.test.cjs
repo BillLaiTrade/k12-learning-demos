@@ -34,7 +34,8 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
   // Convert a point on the photographed ruler to viewport pixels: this checks
   // actual hit testing, rather than dispatching synthetic events to a selector.
   const pointOnRuler = () => hit.evaluate(node => {
-    const p = new DOMPoint(700, .425 * 700 + 53);
+    const bounds = node.getBBox();
+    const p = new DOMPoint(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
     const point = p.matrixTransform(node.getScreenCTM());
     return { x: point.x, y: point.y };
   });
@@ -52,6 +53,8 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
     await pluck();
     assert.notEqual(await shape(), rest);
     assert.equal(await page.locator('#ruler-stop').isDisabled(), false);
+    assert.equal(await hit.evaluate(node => getComputedStyle(node).outlineStyle), 'none');
+    assert.equal(await hit.evaluate(node => getComputedStyle(node).webkitTapHighlightColor), 'rgba(0, 0, 0, 0)');
     assert.equal(await page.locator('[clip-path="url(#ruler-fixed-region)"]').innerHTML(), fixed);
     const transforms = await page.locator('#ruler-moving-blade > g').evaluateAll(nodes => nodes.map(n => {
       const matrix = n.transform.baseVal.consolidate().matrix;
@@ -60,6 +63,7 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
     assert.notDeepEqual(transforms[0], transforms.at(-1));
     await stop();
     assert.equal(await shape(), rest);
+    assert.equal(await hit.evaluate(node => getComputedStyle(node).outlineStyle), 'none');
     await page.clock.runFor(1500);
     assert.equal(await shape(), rest);
   });
@@ -71,7 +75,9 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
     assert.equal(await page.locator('#ruler-start').isDisabled(), false);
     for (const key of ['Enter', 'Space']) {
       await hit.focus(); await page.keyboard.press(key); await page.clock.runFor(40);
-      assert.notEqual(await shape(), rest); await stop();
+      assert.notEqual(await shape(), rest);
+      assert.equal(await hit.evaluate(node => getComputedStyle(node).outlineStyle), 'none');
+      await stop();
     }
     await page.locator('#ruler-start').click(); await page.clock.runFor(40);
     assert.notEqual(await shape(), rest); await stop();
@@ -83,11 +89,14 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
     await mobile.goto(page.url(), { waitUntil: 'networkidle' });
     const target = mobile.locator('#ruler-pluck'); await target.scrollIntoViewIfNeeded();
     const p = await target.evaluate(node => {
-      const point = new DOMPoint(700, 350.5).matrixTransform(node.getScreenCTM());
+      const bounds = node.getBBox();
+      const point = new DOMPoint(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2).matrixTransform(node.getScreenCTM());
       return { x: point.x, y: point.y };
     });
     await mobile.touchscreen.tap(p.x, p.y);
     await mobile.waitForFunction(() => !document.querySelector('#ruler-stop').disabled);
+    assert.equal(await target.evaluate(node => getComputedStyle(node).outlineStyle), 'none');
+    assert.equal(await target.evaluate(node => getComputedStyle(node).webkitTapHighlightColor), 'rgba(0, 0, 0, 0)');
     await mobile.locator('#ruler-stop').click();
     await mobile.locator('#ruler-demo').click({ position: { x: 10, y: 10 } });
     assert.equal(await mobile.locator('#ruler-stop').isDisabled(), true);
