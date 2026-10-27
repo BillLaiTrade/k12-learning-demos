@@ -4,7 +4,6 @@ import { reciprocalPath } from './planar-reflection.mjs';
 
 const section = document.querySelector('#card-06');
 const canvas = section.querySelector('#reverse-scene');
-const input = section.querySelector('#reverse-angle');
 const prior = document.querySelector('#laser-reflection-scene');
 const clamp = n => Math.round(Math.max(20, Math.min(60, n)));
 let degrees = clamp(Number(prior.dataset.angle || 30));
@@ -110,7 +109,6 @@ function updateUI() {
   section.dataset.lightA = lights.a ? 'on' : 'off'; section.dataset.lightB = lights.b ? 'on' : 'off';
   section.dataset.reverseAngle = String(degrees);
   section.dataset.reverseModel = JSON.stringify(model);
-  input.value = String(degrees);
   section.querySelector('#reverse-angle-value').textContent = `${degrees}°`;
   canvas.setAttribute('aria-valuenow', String(degrees));
   canvas.setAttribute('aria-valuetext', `入射角 ${degrees} 度；A 紅光${lights.a ? '開啟' : '關閉'}，B 藍光${lights.b ? '開啟' : '關閉'}`);
@@ -129,7 +127,6 @@ function updateUI() {
 function refresh() { updateUI(); reframe(); draw(); }
 function toggle(key) { lights[key] = !lights[key]; started = true; refresh(); }
 function setAngle(value) { degrees = clamp(value); started = true; model = reciprocalPath(degrees); refresh(); }
-input.addEventListener('input', () => setAngle(Number(input.value)));
 for (const key of ['a', 'b']) section.querySelector(`#reverse-toggle-${key}`).addEventListener('click', () => toggle(key));
 section.querySelector('#reverse-reset').addEventListener('click', () => { lights = { a: false, b: false }; started = true; refresh(); });
 prior.addEventListener('laser-angle-change', event => { if (!started) { degrees = clamp(event.detail.degrees); model = reciprocalPath(degrees); refresh(); } });

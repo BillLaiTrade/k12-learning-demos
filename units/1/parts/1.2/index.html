@@ -102,7 +102,7 @@
     @media(max-width:460px){#card-03 .mirror-stable-controls{display:grid;grid-template-columns:1.1fr 1.6fr .7fr;gap:6px}#toggle-image-object,#toggle-image-rays,#reset-image-activity{min-width:0;min-height:60px;padding-inline:6px;font-size:.85rem}#card-03 .mirror-step-explanation{min-height:230px}}
   </style>
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
-  <link rel="stylesheet" href="assets/reversible-light.css?v=2">
+  <link rel="stylesheet" href="assets/reversible-light.css?v=3">
 </head>
 <body>
   <header class="shell masthead">
@@ -376,7 +376,7 @@
                 <div class="reverse-overlap" id="reverse-overlap" hidden>紅藍光路重合</div>
                 <div class="reverse-fallback" id="reverse-fallback" hidden><p id="reverse-fallback-message"></p><svg id="reverse-fallback-svg" viewBox="0 0 400 325" role="img" aria-label="光路可逆的替代俯視圖"></svg></div>
               </div>
-              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><button type="button" id="reverse-reset">↻ 重新設定</button><label class="reverse-angle-settings" for="reverse-angle"><span>入射角</span><input id="reverse-angle" type="range" min="20" max="60" step="1" value="30" aria-label="調整兩支光源的對應角度"><output id="reverse-angle-value" for="reverse-angle">30°</output></label></div>
+              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><span class="reverse-angle-readout">入射角 <output id="reverse-angle-value" aria-label="目前入射角">30°</output></span><button type="button" id="reverse-reset">↻ 重新設定</button></div>
             </div>
             <div class="reverse-legend"><span><i class="reverse-red"></i>A：紅光</span><span><i class="reverse-blue"></i>B：藍光</span></div>
             <div class="reverse-paths"><div><small>A 紅光路徑</small><strong>A → M → B</strong><span id="reverse-path-a-status">已關閉</span></div><div><small>B 藍光路徑</small><strong>B → M → A</strong><span id="reverse-path-b-status">已關閉</span></div></div>
@@ -437,6 +437,6 @@
   <script type="module" src="assets/mirror-image.js?v=2"></script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
-  <script type="module" src="assets/reversible-light.js?v=2"></script>
+  <script type="module" src="assets/reversible-light.js?v=3"></script>
 </body>
 </html>

@@ -61,7 +61,13 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
   const section = page.locator('#card-06');
   const canvas = page.locator('#reverse-scene');
   const toggleA = page.locator('#reverse-toggle-a'), toggleB = page.locator('#reverse-toggle-b'), reset = page.locator('#reverse-reset');
-  const setAngle = async n => { await page.locator('#reverse-angle').fill(String(n)); await page.locator('#reverse-angle').dispatchEvent('input'); };
+  const setAngle = async n => {
+    // Only the scene's keyboard/drag handlers adjust the angle; no range input.
+    await canvas.evaluate((el, n) => {
+      el.dispatchEvent(new KeyboardEvent('keydown', { key: n <= 40 ? 'Home' : 'End', bubbles: true }));
+      for (let i = 0; i < (n <= 40 ? n - 20 : 60 - n); i++) el.dispatchEvent(new KeyboardEvent('keydown', { key: n <= 40 ? 'ArrowRight' : 'ArrowLeft', bubbles: true }));
+    }, n);
+  };
 
   async function dragEmitter(target, dx) {
     // Focus and the initial hash can still have a smooth scroll in flight.
@@ -103,6 +109,8 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
     assert.ok(changed > 21);
     await expect(section).toHaveAttribute('data-reverse-angle', String(Math.min(60, changed)));
     await status(false, false);
+    await expect(section.locator('input[type=range]')).toHaveCount(0);
+    await expect(page.locator('#reverse-angle-value')).toHaveText(`${Math.min(60, changed)}°`);
   });
 
   await t.test('actual device clicks independently traverse all four light states without a record step', async () => {
@@ -155,7 +163,9 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
   await t.test('dragging A changes angle without toggling either source; pointer cancellation and background clicks are inert', async () => {
     await setAngle(30); await toggleA.click(); await toggleB.click();
     await dragEmitter(canvas, 30);
-    assert.ok(Number(await section.getAttribute('data-reverse-angle')) > 30);
+    const draggedAngle = Number(await section.getAttribute('data-reverse-angle'));
+    assert.ok(draggedAngle > 30);
+    await expect(page.locator('#reverse-angle-value')).toHaveText(`${draggedAngle}°`);
     await status(true, true);
     const point = await sourcePoint('a');
     await page.mouse.move(point.x, point.y); await page.mouse.down();
@@ -211,6 +221,14 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
       await touch.touchscreen.tap(box.x + p[0], box.y + p[1]);
       await expect(touch.locator('#card-06')).toHaveAttribute(`data-light-${key}`, value);
     }
+    const touchAngle = Number(await touch.locator('#card-06').getAttribute('data-reverse-angle'));
+    const cdp = await context.newCDPSession(touch);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: box.x + a[0], y: box.y + a[1], id: 1 }] });
+    for (let step = 1; step <= 5; step++) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: box.x + a[0] + step * 6, y: box.y + a[1], id: 1 }] });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    assert.ok(Number(await touch.locator('#card-06').getAttribute('data-reverse-angle')) > touchAngle);
+    await expect(touch.locator('#card-06')).toHaveAttribute('data-light-a', 'off');
+    await expect(touch.locator('#card-06')).toHaveAttribute('data-light-b', 'off');
     await context.close();
     const fallback = await browser.newContext();
     await fallback.addInitScript(() => {
