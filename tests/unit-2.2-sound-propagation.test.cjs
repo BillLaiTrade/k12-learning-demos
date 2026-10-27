@@ -48,7 +48,7 @@ test('2.2 sound travels through air while particles stay near their origins', { 
     });
     assert.ok(signal.rms > .025);
     assert.ok(signal.peak > .2 && signal.peak < .95);
-    assert.ok(signal.duration > 1.5 && signal.duration < 3);
+    assert.ok(signal.duration > 5.5 && signal.duration < 6.5);
     assert.equal(signal.volume, 1); assert.equal(signal.paused, true); assert.equal(signal.muted, false);
     assert.equal(await page.locator('#card-02 input[type="range"]').count(), 0);
   });
@@ -180,7 +180,7 @@ test('2.2 sound travels through air while particles stay near their origins', { 
     assert.ok(await page.locator('#bell-audio').evaluate(a => a.currentTime) > before);
     await page.locator('#sound-bell').click(); await waitForBell();
     assert.ok(await page.locator('#bell-audio').evaluate(a => a.currentTime < .2));
-    await page.waitForFunction(() => document.querySelector('#bell-audio').ended, null, { timeout: 5000, polling: 50 });
+    await page.waitForFunction(() => document.querySelector('#bell-audio').ended, null, { timeout: 9000, polling: 50 });
     assert.equal(await page.locator('#bell-audio').evaluate(a => a.loop), false);
   });
 
