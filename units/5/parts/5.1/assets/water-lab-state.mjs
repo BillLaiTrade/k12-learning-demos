@@ -1,12 +1,14 @@
 // A bounded qualitative teaching model. It does not simulate laboratory timing.
 export const MIN_TEMPERATURE = 5;
 export const MAX_TEMPERATURE = 60;
+export const ICE_DURATION = 20;
+export const ICE_FLOAT_DURATION = 8;
 export function initialState() {
   return { water:22, probe:22, heating:false, iceRemaining:0, iceTarget:22, mode:'idle', atUpperLimit:false };
 }
 export function addIce(state) {
   if (state.iceRemaining > 0 || state.water <= MIN_TEMPERATURE + .01) return state;
-  return {...state, heating:false, iceRemaining:3, iceTarget:Math.max(MIN_TEMPERATURE,state.water-8), mode:'cooling', atUpperLimit:false};
+  return {...state, heating:false, iceRemaining:ICE_DURATION, iceTarget:Math.max(MIN_TEMPERATURE,state.water-8), mode:'cooling', atUpperLimit:false};
 }
 export function toggleHeat(state) {
   if (state.iceRemaining > 0 || state.water >= MAX_TEMPERATURE) return {...state,heating:false};
@@ -21,11 +23,11 @@ export function advance(state, seconds) {
   }
   if(next.iceRemaining>0){
     const remaining=Math.max(0,next.iceRemaining-dt);
-    next.water=remaining===0?next.iceTarget:Math.max(next.iceTarget,next.water-8/3*dt);
+    next.water=remaining===0?next.iceTarget:Math.max(next.iceTarget,next.water-8/ICE_DURATION*dt);
     next.iceRemaining=remaining;
   }
   next.probe+= (next.water-next.probe)*(1-Math.exp(-dt/.45));
-  if(Math.abs(next.probe-next.water)<.01)next.probe=next.water;
+  if(!next.heating&&next.iceRemaining===0&&Math.abs(next.probe-next.water)<.01)next.probe=next.water;
   next.probe=Math.max(MIN_TEMPERATURE,Math.min(MAX_TEMPERATURE,next.probe));
   return next;
 }

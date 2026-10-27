@@ -17,17 +17,26 @@ test('temperature model preserves physical teaching constraints',async()=>{
   assert.equal(s.water,m.MAX_TEMPERATURE);assert.equal(s.probe,m.MAX_TEMPERATURE);assert.equal(s.heating,false);
   assert.equal(s.atUpperLimit,true);
   s=m.addIce(s);assert.equal(s.heating,false);
+  assert.equal(s.iceRemaining,20);
   const locked=m.toggleHeat(s);assert.equal(locked.heating,false);
+  const coolingStart=s.water;
+  for(let i=0;i<80;i++)s=m.advance(s,.1);
+  assert.ok(s.iceRemaining>11.9);assert.ok(s.water<coolingStart);
+  for(let i=0;i<130;i++)s=m.advance(s,.1);
+  assert.equal(s.iceRemaining,0);
   for(let cycle=0;cycle<10;cycle++){
     s=m.addIce(s);
-    for(let i=0;i<70;i++){s=m.advance(s,.1);assert.ok(s.water>=m.MIN_TEMPERATURE);assert.ok(s.probe>=m.MIN_TEMPERATURE);}
+    for(let i=0;i<230;i++){s=m.advance(s,.1);assert.ok(s.water>=m.MIN_TEMPERATURE);assert.ok(s.probe>=m.MIN_TEMPERATURE);}
   }
   assert.equal(s.water,m.MIN_TEMPERATURE);assert.equal(m.addIce(s).iceRemaining,0);
   assert.ok(Number.isFinite(s.probe));assert.equal(s.probe,s.water);
   const initial=m.initialState();assert.equal(initial.water,22);assert.equal(initial.probe,22);assert.equal(initial.iceRemaining,0);
+  let slowCooling=m.addIce(initial);
+  for(let frame=0;frame<60;frame++)slowCooling=m.advance(slowCooling,1/60);
+  assert.ok(slowCooling.probe>slowCooling.water,'gentle cooling preserves the thermometer response lag at 60 fps');
 });
 
-test('water lab functional and visual checks in Chromium',{timeout:65000},async t=>{
+test('water lab functional and visual checks in Chromium',{timeout:150000},async t=>{
   const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:repo,stdio:['ignore','pipe','pipe']});
   t.after(()=>server.kill());
   const port=await new Promise((resolve,reject)=>{let output='';const timer=setTimeout(()=>reject(Error('Server startup timed out')),5000);server.once('error',reject);server.stdout.on('data',c=>{output+=c;const m=output.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1])}})});
@@ -60,18 +69,31 @@ test('water lab functional and visual checks in Chromium',{timeout:65000},async 
     await sync();
   });
   await t.test('ice falls, floats, cools water and lowers both liquid views',async()=>{
+    await page.clock.install();
     const start=await state();await ice.click();
     assert.equal(await heat.isDisabled(),true);assert.equal(await ice.isDisabled(),true);
-    await page.waitForTimeout(350);
+    await page.clock.runFor(400);
     const a=await page.locator('#water-lab-cube-a').getAttribute('transform');
     assert.equal(await page.locator('#water-lab-ice').isVisible(),true);
-    await page.waitForTimeout(600);
+    await page.clock.runFor(600);
     assert.notEqual(await page.locator('#water-lab-cube-a').getAttribute('transform'),a);
     const now=await state();assert.ok(now.water<start.water);assert.ok(now.probe<start.probe);assert.ok(now.probe>now.water);
     assert.equal(now.heating,false);await sync();
     assert.match(await page.locator('#water-lab-feedback').textContent(),/液柱下降/);
-    await page.waitForFunction(()=>Number(document.querySelector('#water-lab').dataset.ice)===0);
+    await page.clock.runFor(6500);
+    const floating=await state();assert.ok(floating.ice>12);assert.ok(floating.water<now.water);
+    const cube=await page.locator('#water-lab-cube-a').getAttribute('transform');
+    assert.match(cube,/scale\(1\)$/,'ice stays full size for the observation period');
+    const surfaceY=Number(cube.match(/translate\(448,([0-9.]+)/)[1]);
+    assert.ok(surfaceY>=455&&surfaceY<=461,'ice floats at the water surface');
+    await page.clock.runFor(6500);
+    assert.equal(await page.locator('#water-lab-ice').isVisible(),true);
+    const size=Number((await page.locator('#water-lab-cube-a').getAttribute('transform')).match(/scale\(([0-9.]+)/)[1]);
+    assert.ok(size>.35&&size<.7,'ice melts gradually after floating');await sync();
+    await page.clock.runFor(7500);
+    assert.equal((await state()).ice,0);
     assert.equal(await page.locator('#water-lab-ice').isVisible(),false);assert.equal(await heat.isDisabled(),false);
+    await page.clock.resume();
   });
   await t.test('heater warms water continuously and can stop independently of the probe lag',async()=>{
     const start=await state();await heat.click();
@@ -102,11 +124,11 @@ test('water lab functional and visual checks in Chromium',{timeout:65000},async 
     await page.keyboard.press('Enter');assert.equal((await state()).heating,false);await reset.click();
   });
   await t.test('repeated controls remain bounded at both temperature limits',async()=>{
-    await page.clock.install();
     await heat.click();await page.clock.runFor(14000);
     assert.equal((await state()).water,60);assert.equal((await state()).heating,false);
     assert.equal(await heat.isDisabled(),true);await sync();
-    for(let i=0;i<7;i++){await ice.click();await page.clock.runFor(5000);}
+    await reset.click();
+    for(let i=0;i<3;i++){await ice.click();await page.clock.runFor(23000);}
     assert.equal((await state()).water,5);assert.equal((await state()).probe,5);
     assert.equal(await ice.isDisabled(),true);assert.equal(await heat.isDisabled(),false);await sync();
     await reset.click();await page.clock.resume();

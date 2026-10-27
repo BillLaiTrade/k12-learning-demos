@@ -1,4 +1,4 @@
-import {initialState,addIce,toggleHeat,advance,fraction,isMoving,MIN_TEMPERATURE,MAX_TEMPERATURE} from './water-lab-state.mjs';
+import {initialState,addIce,toggleHeat,advance,fraction,isMoving,MIN_TEMPERATURE,MAX_TEMPERATURE,ICE_DURATION,ICE_FLOAT_DURATION} from './water-lab-state.mjs?v=ice-float-20s';
 const $=id=>document.getElementById(id), root=$('water-lab'), ns='http://www.w3.org/2000/svg';
 let state=initialState(), request=0, previous=null;
 function line(group,attrs){const n=document.createElementNS(ns,'line');Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,String(v)));group.append(n);}
@@ -27,7 +27,9 @@ function render(){
   $('water-lab-lamp').setAttribute('fill',state.heating?'#ff762e':'#454b49');
   $('water-lab-ice').toggleAttribute('hidden',state.iceRemaining===0);
   if(state.iceRemaining>0){
-    const age=3-state.iceRemaining, drop=Math.min(1,age/.35), size=Math.min(1,state.iceRemaining/1.7);
+    const age=ICE_DURATION-state.iceRemaining, drop=Math.min(1,age/.35);
+    // Let students observe full-size floating ice before it slowly melts.
+    const size=Math.min(1,state.iceRemaining/(ICE_DURATION-ICE_FLOAT_DURATION));
     $('water-lab-cube-a').setAttribute('transform',`translate(448,${458-(1-drop)*130+Math.sin(age*5)*3}) rotate(-12) scale(${size})`);
     $('water-lab-cube-b').setAttribute('transform',`translate(716,${462-(1-drop)*110+Math.sin(age*5+1)*3}) rotate(14) scale(${size*.85})`);
   }
