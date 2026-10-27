@@ -72,7 +72,7 @@ function cylinder(parent, radiusTop, radiusBottom, height, position, material, r
 }
 
 // Wooden tabletop with subtle grain and no seams across the experiment surface.
-const tabletop = new THREE.Mesh(new THREE.BoxGeometry(17, 0.28, 18), [woodEdge, woodEdge, woodTop, woodEdge, woodEdge, woodEdge]);
+const tabletop = new THREE.Mesh(new THREE.BoxGeometry(17, 0.28, 26), [woodEdge, woodEdge, woodTop, woodEdge, woodEdge, woodEdge]);
 tabletop.position.set(-4, -0.16, 2); tabletop.castShadow = true; tabletop.receiveShadow = true; scene.add(tabletop);
 // Fine grain remains visible without plank seams competing with the laser paths.
 for (const x of [-11.1, 3.1]) for (const z of [-5.5, 9.5]) box(scene, [0.2, 1.15, 0.2], [x, -0.86, z], wood);
@@ -86,21 +86,32 @@ box(scene, [0.42, 0.12, 0.4], [2.12, 0.06, 0], black);
 box(scene, [0.12, 0.24, 0.12], [2.09, 0.2, -0.17], steel);
 box(scene, [0.12, 0.24, 0.12], [2.09, 0.2, 0.17], steel);
 
-// The fixed receiving screen is angled to catch the reflected beam across the 20°–40° control range.
-const screenAngle = THREE.MathUtils.degToRad(30);
-const screenDistance = 11;
-const rayAtDefault = new THREE.Vector3(-Math.cos(screenAngle), 0, Math.sin(screenAngle));
 const centerPoint = new THREE.Vector3(2, 1.4, 0);
-const screenHeight = 1.8, screenY = screenHeight / 2;
-const screenCenter = rayAtDefault.clone().multiplyScalar(screenDistance).add(new THREE.Vector3(centerPoint.x, screenY, centerPoint.z));
-const screenNormal = new THREE.Vector3(Math.cos(screenAngle), 0, -Math.sin(screenAngle));
-const screenGroup = new THREE.Group();
-screenGroup.position.set(screenCenter.x, screenY, screenCenter.z);
-screenGroup.rotation.y = screenAngle;
-scene.add(screenGroup);
-box(screenGroup, [0.08, screenHeight, 3.8], [0, 0, 0], screenMaterial);
-box(screenGroup, [0.10, screenHeight + 0.04, 0.08], [0.005, 0, -1.88], screenRim);
-box(screenGroup, [0.10, screenHeight + 0.04, 0.08], [0.005, 0, 1.88], screenRim);
+// A curved receiver catches the reflected ray throughout the full 0°–90° range.
+const screenHeight = 1.8, screenRadius = 7.5, screenStartAngle = THREE.MathUtils.degToRad(15), screenAngleSpan = Math.PI / 2 - THREE.MathUtils.degToRad(15), screenSegments = 72;
+function curvedScreen(radius, height, material) {
+  const positions = [], indices = [];
+  for (let i = 0; i <= screenSegments; i++) {
+    const angle = screenStartAngle + screenAngleSpan * i / screenSegments;
+    const x = centerPoint.x - radius * Math.cos(angle), z = centerPoint.z + radius * Math.sin(angle);
+    positions.push(x, 0, z, x, height, z);
+  }
+  for (let i = 0; i < screenSegments; i++) {
+    const bottom = i * 2, top = bottom + 1, nextBottom = bottom + 2, nextTop = bottom + 3;
+    indices.push(bottom, nextTop, nextBottom, bottom, top, nextTop);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.castShadow = false; mesh.receiveShadow = false; scene.add(mesh);
+  return mesh;
+}
+const receiverBacking = screenRim.clone(); receiverBacking.side = THREE.DoubleSide;
+const receiverFace = screenMaterial.clone(); receiverFace.side = THREE.DoubleSide;
+curvedScreen(screenRadius + 0.10, screenHeight + 0.04, receiverBacking);
+curvedScreen(screenRadius, screenHeight, receiverFace);
 
 // Laser housing with a fixed-height beam, mounted on a moving goniometer base.
 const emitter = new THREE.Group(); scene.add(emitter);
@@ -242,13 +253,11 @@ function svgSector(radius, degrees, rightSide) {
   return d + 'Z';
 }
 function update() {
-  const deg = Number(slider.value), angle = THREE.MathUtils.degToRad(deg), radius = 8.0;
+  const deg = Number(slider.value), angle = THREE.MathUtils.degToRad(deg), radius = 7.0;
   const source = new THREE.Vector3(centerPoint.x - radius * Math.cos(angle), centerPoint.y, -radius * Math.sin(angle));
   const hit = new THREE.Vector3(centerPoint.x, centerPoint.y, 0);
   const directionOut = new THREE.Vector3(-Math.cos(angle), 0, Math.sin(angle));
-  const travel = screenCenter.clone().sub(centerPoint).dot(screenNormal) / directionOut.dot(screenNormal);
-  const receiverSpot = directionOut.multiplyScalar(travel).add(centerPoint);
-  receiverSpot.y = centerPoint.y;
+  const receiverSpot = centerPoint.clone().addScaledVector(directionOut, screenRadius);
   const sourceDirection = new THREE.Vector3().subVectors(hit, source).normalize();
   emitter.position.copy(source);
   emitterBody.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), sourceDirection);

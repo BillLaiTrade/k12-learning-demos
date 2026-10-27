@@ -144,10 +144,10 @@
                 </svg>
               </section>
               <section class="laser-lab" aria-label="可調整入射角的雷射反射實驗">
-                <canvas id="laser-reflection-scene" aria-label="反射板位於畫面下方。可拖動雷射發射器，或使用下方滑桿調整入射角；光線與量角板讀數會同步更新。" aria-describedby="laser-drag-instruction"></canvas>
+                <canvas id="laser-reflection-scene" aria-label="反射板位於畫面下方，弧形接收屏顯示反射光點。可拖動雷射發射器或操作下方滑桿，在 20 到 90 度間調整入射角。" aria-describedby="laser-drag-instruction"></canvas>
                 <div class="laser-lab-ui" aria-label="雷射角度操作與讀數">
-                  <p class="laser-view-current" id="laser-drag-instruction">反射板角度視角・拖動雷射或操作下方滑桿調整入射角</p>
-                  <div class="laser-control-panel"><label class="laser-slider-label" for="incident-angle">調整入射角</label><div class="laser-slider-row"><input id="incident-angle" type="range" min="20" max="40" step="1" value="30" aria-label="調整入射角"><output id="incident-angle-value" for="incident-angle">30°</output></div></div>
+                  <p class="laser-view-current" id="laser-drag-instruction">反射板角度視角・可拖動雷射或操作下方滑桿調整入射角；弧形接收屏顯示光點位置</p>
+                  <div class="laser-control-panel"><label class="laser-slider-label" for="incident-angle">調整入射角</label><div class="laser-slider-row"><input id="incident-angle" type="range" min="20" max="90" step="1" value="30" aria-label="調整入射角"><output id="incident-angle-value" for="incident-angle">30°</output></div></div>
                   <div class="laser-angle-readout"><span>入射角 <strong id="lab-angle-in">30°</strong></span><span>反射角 <strong id="lab-angle-out">30°</strong></span></div>
                 </div>
               </section>
@@ -309,6 +309,6 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
-  <script type="module" src="assets/laser-reflection.js?v=17"></script>
+  <script type="module" src="assets/laser-reflection.js?v=19"></script>
 </body>
 </html>
