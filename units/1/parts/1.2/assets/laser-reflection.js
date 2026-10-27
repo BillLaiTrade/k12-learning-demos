@@ -48,8 +48,6 @@ const woodTop = new THREE.MeshStandardMaterial({ color: '#ffffff', map: woodText
 const woodEdge = mat('#75472d', 0.72);
 const black = mat('#171b1e', 0.34, 0.22);
 const steel = mat('#4d5e61', 0.33, 0.7);
-const screenMaterial = mat('#fbfaf5', 0.93);
-const screenRim = mat('#d8dfdb', 0.62, 0.08);
 const reflectionEnvironmentCanvas = document.createElement('canvas');
 reflectionEnvironmentCanvas.width = 512; reflectionEnvironmentCanvas.height = 256;
 const reflectionContext = reflectionEnvironmentCanvas.getContext('2d');
@@ -87,31 +85,7 @@ box(scene, [0.12, 0.24, 0.12], [2.09, 0.2, -0.17], steel);
 box(scene, [0.12, 0.24, 0.12], [2.09, 0.2, 0.17], steel);
 
 const centerPoint = new THREE.Vector3(2, 1.4, 0);
-// A curved receiver catches the reflected ray throughout the full 0°–90° range.
-const screenHeight = 1.8, screenRadius = 7.5, screenStartAngle = THREE.MathUtils.degToRad(15), screenAngleSpan = Math.PI / 2 - THREE.MathUtils.degToRad(15), screenSegments = 72;
-function curvedScreen(radius, height, material) {
-  const positions = [], indices = [];
-  for (let i = 0; i <= screenSegments; i++) {
-    const angle = screenStartAngle + screenAngleSpan * i / screenSegments;
-    const x = centerPoint.x - radius * Math.cos(angle), z = centerPoint.z + radius * Math.sin(angle);
-    positions.push(x, 0, z, x, height, z);
-  }
-  for (let i = 0; i < screenSegments; i++) {
-    const bottom = i * 2, top = bottom + 1, nextBottom = bottom + 2, nextTop = bottom + 3;
-    indices.push(bottom, nextTop, nextBottom, bottom, top, nextTop);
-  }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  const mesh = new THREE.Mesh(geometry, material);
-  mesh.castShadow = false; mesh.receiveShadow = false; scene.add(mesh);
-  return mesh;
-}
-const receiverBacking = screenRim.clone(); receiverBacking.side = THREE.DoubleSide;
-const receiverFace = screenMaterial.clone(); receiverFace.side = THREE.DoubleSide;
-curvedScreen(screenRadius + 0.10, screenHeight + 0.04, receiverBacking);
-curvedScreen(screenRadius, screenHeight, receiverFace);
+const reflectedRayLength = 10.5;
 
 // Laser housing with a fixed-height beam, mounted on a moving goniometer base.
 const emitter = new THREE.Group(); scene.add(emitter);
@@ -140,10 +114,6 @@ const incoming = dynamicLine(), reflected = dynamicLine();
 const normalGeometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(centerPoint.x - 4.8, 1.405, 0), new THREE.Vector3(centerPoint.x - 0.1, 1.405, 0)]);
 const normal = new THREE.Line(normalGeometry, new THREE.LineDashedMaterial({ color: '#fff8df', dashSize: 0.22, gapSize: 0.12, transparent: true, opacity: 0.96, depthTest: false }));
 normal.computeLineDistances(); normal.renderOrder = 11; scene.add(normal);
-const spotMaterial = new THREE.MeshBasicMaterial({ color: '#ff2529', depthTest: false });
-const spot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 24, 24), spotMaterial); spot.renderOrder = 12; scene.add(spot);
-const glow = new THREE.PointLight('#ff3535', 2.2, 1.8); scene.add(glow);
-
 function arc(radius, angle, direction) {
   const points = [];
   const steps = Math.max(8, Math.ceil(angle * 1.5));
@@ -257,7 +227,7 @@ function update() {
   const source = new THREE.Vector3(centerPoint.x - radius * Math.cos(angle), centerPoint.y, -radius * Math.sin(angle));
   const hit = new THREE.Vector3(centerPoint.x, centerPoint.y, 0);
   const directionOut = new THREE.Vector3(-Math.cos(angle), 0, Math.sin(angle));
-  const receiverSpot = centerPoint.clone().addScaledVector(directionOut, screenRadius);
+  const reflectedEnd = centerPoint.clone().addScaledVector(directionOut, reflectedRayLength);
   const sourceDirection = new THREE.Vector3().subVectors(hit, source).normalize();
   emitter.position.copy(source);
   emitterBody.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), sourceDirection);
@@ -266,8 +236,7 @@ function update() {
   emitterFoot.position.set(standPosition.x, 0.07, standPosition.z);
   pivot.position.set(standPosition.x, 0.15, standPosition.z);
   setLine(incoming, source, hit);
-  setLine(reflected, hit, receiverSpot);
-  spot.position.copy(receiverSpot); glow.position.copy(receiverSpot);
+  setLine(reflected, hit, reflectedEnd);
   incomingArc.geometry.dispose(); incomingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(1.2, angle, -1));
   outgoingArc.geometry.dispose(); outgoingArc.geometry = new THREE.BufferGeometry().setFromPoints(arc(1.2, angle, 1));
   incomingScaleHit.position.set(centerPoint.x - protractorRadius * Math.cos(angle), 1.47, centerPoint.z - protractorRadius * Math.sin(angle));
@@ -300,7 +269,7 @@ function update() {
   document.querySelector('#lab-angle-in').textContent = `${deg}°`;
   document.querySelector('#lab-angle-out').textContent = `${deg}°`;
   document.querySelector('#incident-angle-value').value = `${deg}°`;
-  document.querySelector('#angle-observation').textContent = `發射器轉到 ${deg}°；入射角和反射角相等，反射光點沿接收屏移動。`;
+  document.querySelector('#angle-observation').textContent = `發射器轉到 ${deg}°；觀察反射光方向如何改變，入射角與反射角始終相等。`;
   renderer.render(scene, camera);
 }
 
