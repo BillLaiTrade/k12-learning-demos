@@ -14,6 +14,14 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.1.test.cjs
 
 這些操作檢查不代表課綱、指定版本教材或完整單元已通過外部驗收。
 
+## 1.2 平面鏡成像區塊
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-1.2-mirror.test.cjs
+```
+
+涵蓋三步觀察順序、物體與像同步、固定螢幕座標下的移除／放回、鍵盤、觸控、重設、兩條反射光與延長線的幾何關係、側面素材引用、相鄰物距活動及資源載入。固定座標檢查在 1440／1280／768 px 與三種學習步驟各執行五次循環，共 45 次，避免測試工具重新定位按鈕而漏掉版面移位造成的點擊落空。測試啟動與關閉自己的本機伺服器；軟體 WebGL 供無 GPU 的雲端執行使用。
+
 ## 2.2 鋼尺操作檢查
 
 同樣使用現有 Python 3、Playwright 及 Chromium，於 repo 根目錄執行：
