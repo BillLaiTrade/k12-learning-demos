@@ -1088,14 +1088,14 @@
               </div>
               <div class="speed-live-readout" aria-live="polite">
                 <div class="data-cell"><small>波速 v</small><strong id="speed-value">12 m/s</strong></div>
-                <div class="data-cell"><small>通過 30 m 所需時間</small><strong id="speed-transit-time">2.50 s</strong></div>
+                <div class="data-cell"><small>完整波形通過 30 m 所需時間</small><strong id="speed-transit-time">3.00 s</strong></div>
               </div>
               <p class="speed-equation-live" id="speed-equation-live">v = f × λ = 2 Hz × 6 m = 12 m/s</p>
               <div class="speed-run-controls">
                 <button class="action" id="speed-send-wave" type="button">讓波源振動一次</button>
                 <div>
-                  <p class="speed-run-status"><span id="speed-run-message" aria-live="polite">調整參數後，按下按鈕讓橘色波源振動一次。</span><output id="speed-run-time">0.00 / 2.50 s</output></p>
-                  <div class="speed-progress" id="speed-progress" role="progressbar" aria-label="波形通過 30 公尺路徑的進度" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0"><span id="speed-progress-bar"></span></div>
+                  <p class="speed-run-status"><span id="speed-run-message" aria-live="polite">調整參數後，按下按鈕讓橘色波源振動一次。</span><output id="speed-run-time">0.00 / 3.00 s</output></p>
+                  <div class="speed-progress" id="speed-progress" role="progressbar" aria-label="完整波形通過 30 公尺路徑的進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="speed-progress-bar"></span></div>
                 </div>
               </div>
               <p class="speed-model-note">動畫放慢呈現波源一次振動與波形生成；可調整頻率（或週期）與波長，依 <em>v = f × λ</em> 計算波速。</p>
@@ -1752,9 +1752,9 @@
           const left=ratio<=.5?stops[0]:stops[1],right=ratio<=.5?stops[1]:stops[2],local=(ratio-left.at)/(right.at-left.at);
           return `rgb(${left.color.map((channel,index)=>Math.round(channel+(right.color[index]-channel)*local)).join(",")})`;
         };
-        const getTransitTime=()=>routeLength/getWaveSpeed();
+        const getTransitTime=()=>((routeLength+wavelength)/getWaveSpeed());
         const drawGeneratedWave=simulationTime=>{
-          const speed=getWaveSpeed(),front=clamp(speed*simulationTime,0,routeLength);
+          const speed=getWaveSpeed(),frontDistance=speed*simulationTime,front=clamp(frontDistance,0,routeLength);
           const sourcePhase=simulationTime/period;
           const sourceY=sourcePhase>0&&sourcePhase<1?waveMidY-waveAmplitude*Math.sin(2*Math.PI*sourcePhase):waveMidY;
           speedSourceMarker.setAttribute("cy",String(sourceY));
@@ -1769,7 +1769,7 @@
           }
           speedWavePath.setAttribute("d",path);
           const tail=Math.max(0,front-wavelength);
-          if(simulationTime>=period&&front>=wavelength){
+          if(simulationTime>=period&&front>=wavelength&&frontDistance<=routeLength&&simulationTime<getTransitTime()){
             const startX=routeStartX+routeWidth*tail/routeLength,endX=routeStartX+routeWidth*front/routeLength;
             speedWaveGuides.setAttribute("d",`M${startX.toFixed(2)} ${waveMidY}V150M${endX.toFixed(2)} ${waveMidY}V150`);
             speedWavelengthArrow.setAttribute("d",`M${startX.toFixed(2)} 151H${endX.toFixed(2)}`);
@@ -1781,10 +1781,11 @@
           }
         };
         const setControlsDisabled=disabled=>stepButtons.forEach(button=>{if(button)button.disabled=disabled;});
-        const drawProgress=distance=>{
-          const progress=clamp(distance/routeLength,0,1);
+        const drawProgress=progressValue=>{
+          const progress=clamp(progressValue,0,1);
           progressBar.style.width=`${(progress*100).toFixed(2)}%`;
-          progressTrack.setAttribute("aria-valuenow",String(round(progress*routeLength,2)));
+          progressTrack.setAttribute("aria-valuenow",String(round(progress*100,1)));
+          progressTrack.setAttribute("aria-valuetext",`${round(progress*100,1)}%`);
         };
         const updateControls=()=>{
           frequencyDown.disabled=isRunning||frequency<=1;
@@ -1803,7 +1804,7 @@
           speedWavePath.style.stroke=color;speedColorMarker.style.left=`${colorPosition.toFixed(2)}%`;speedColorMarker.style.backgroundColor=color;
           speedColorScale.setAttribute("aria-valuenow",format(speed,2));speedColorScale.setAttribute("aria-valuetext",`${format(speed,2)} 公尺每秒，色階位置 ${format(colorPosition,1)}%`);
           speedEquation.textContent=`v = f × λ = ${format(frequency,3)} Hz × ${format(wavelength,1)} m = ${format(speed,2)} m/s`;
-          speedWave.setAttribute("aria-label",`橘色波源上下振動一次，產生一個完整波形並向右傳播；頻率 ${frequencyText}，週期 ${periodText}，波長 ${wavelengthText}，波速 ${format(speed,2)} 公尺每秒，預計通過時間 ${format(travelTime,2)} 秒`);
+          speedWave.setAttribute("aria-label",`橘色波源上下振動一次，產生一個完整波形並向右傳播；頻率 ${frequencyText}，週期 ${periodText}，波長 ${wavelengthText}，波速 ${format(speed,2)} 公尺每秒，完整波形完全通過30公尺路徑需 ${format(travelTime,2)} 秒`);
           runTime.textContent=`0.00 / ${format(travelTime,2)} s`;
           updateControls();
         };
@@ -1815,16 +1816,15 @@
         };
         const finishSingleWave=()=>{
           isRunning=false;animationFrame=0;runStartedAt=null;sendWaveButton.disabled=false;sendWaveButton.textContent="再產生一個完整波";
-          setControlsDisabled(false);drawGeneratedWave(getTransitTime());drawProgress(routeLength);
+          setControlsDisabled(false);drawGeneratedWave(getTransitTime());drawProgress(1);
           runTime.textContent=`${format(getTransitTime(),2)} / ${format(getTransitTime(),2)} s`;
-          runMessage.textContent=`完整波已傳到 ${routeLength} 公尺處。`;
+          runMessage.textContent=`完整波形已完全通過 ${routeLength} 公尺路徑；繩子回到平衡位置。`;
           updateControls();
         };
         const animateSingleWave=time=>{
           if(runStartedAt===null)runStartedAt=time;
           const transitTime=getTransitTime(),elapsed=clamp((time-runStartedAt)/(1000*playbackScale),0,transitTime);
-          const distance=Math.min(routeLength,getWaveSpeed()*elapsed);
-          drawGeneratedWave(elapsed);drawProgress(distance);
+          drawGeneratedWave(elapsed);drawProgress(elapsed/transitTime);
           runTime.textContent=`${format(elapsed,2)} / ${format(transitTime,2)} s`;
           runMessage.textContent=elapsed<period?"橘色波源點上下振動，繩上各點依序被帶動，波形由左向右形成。":"波源已完成一次上下振動，完整波形正向右傳播。";
           if(elapsed<transitTime)animationFrame=window.requestAnimationFrame(animateSingleWave);else finishSingleWave();
