@@ -28,27 +28,23 @@
     .laser-law{margin:0;padding:8px 10px;border-radius:12px;background:#fff2d2;color:#c51d17;text-align:center;font-size:clamp(1.3rem,2.6vw,2rem);font-weight:900;white-space:nowrap}
     .laser-rule{margin:8px 0 0;color:#1e3550;text-align:center;font-size:1rem;font-weight:750}
     .laser-diagram{width:100%;min-height:170px;max-height:180px}
-    .laser-lab{position:relative;min-height:280px;overflow:hidden;background:#b8895f}
-    #laser-reflection-scene{display:block;width:100%;height:280px}
-    .laser-lab-ui{position:absolute;z-index:2;top:24px;left:24px;display:grid;width:clamp(180px,22%,280px);gap:8px;padding:0;border:0;background:transparent;box-shadow:none}
-    .laser-control-panel,.laser-angle-readout{display:grid;padding:10px 12px;border:1px solid #ffffffc9;border-radius:14px;background:#f5fbffed;box-shadow:0 5px 22px #25374730}
-    .laser-control-panel{gap:6px}
+    .laser-lab{overflow:hidden;border:1px solid #d8dfdf;border-radius:16px;background:#b8895f}
+    #laser-reflection-scene{display:block;width:100%;height:clamp(320px,38vw,430px)}
+    .laser-lab-ui{display:grid;grid-template-columns:minmax(140px,auto) minmax(150px,1fr) minmax(190px,auto);align-items:center;gap:16px;padding:12px 18px;background:#fffdf8}
+    .laser-control-panel,.laser-angle-readout{display:grid;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+    .laser-control-panel{grid-template-columns:auto minmax(150px,1fr);align-items:center;gap:16px}
     .laser-slider-label{color:#102c54;font-size:.9rem;font-weight:850}
     .laser-slider-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}
     .laser-slider-row output{color:#102c54;font-size:1rem;font-weight:850}
     .laser-lab-ui input{width:100%;accent-color:#1672d4}
-    .laser-angle-readout{gap:1px;color:#1459af;font-size:.82rem;font-weight:850}
-    .laser-angle-readout span:last-child{color:#24783a}
+    .laser-angle-readout{grid-template-columns:1fr 1fr;gap:8px;color:#1459af;font-size:.88rem;font-weight:850}
+    .laser-angle-readout span{padding:7px 10px;border-radius:10px;background:#edf4fb;white-space:nowrap}
+    .laser-angle-readout span:last-child{background:#eef5eb;color:#24783a}
     .laser-angle-readout strong{padding-left:4px;font-variant-numeric:tabular-nums}
-    .laser-tag{position:absolute;z-index:2;padding:4px 10px;border-radius:9px;background:#fffef0e8;color:#223342;font-size:.9rem;font-weight:800;line-height:1.3;box-shadow:0 2px 8px #33271d24;pointer-events:none}
-    .laser-tag small{font-size:.75rem;font-weight:600}
-    .laser-tag-source{top:2px;left:20%;}.laser-tag-mirror{top:13%;left:74%;right:auto;}.laser-tag-normal{left:38%;top:46%;}.laser-tag-spot{left:67%;right:auto;top:20%;color:#c51d17}.laser-tag-screen{left:24%;top:76%;bottom:auto;}.laser-tag-in{left:53%;top:18%;color:#c51d17}.laser-tag-out{left:53%;top:54%;bottom:auto;color:#c51d17}
-    .laser-caption,.laser-caption-secondary{position:absolute;z-index:2;bottom:4px;margin:0;padding:5px 9px;border-radius:10px;background:#fffef0e8;color:#24374a;font-size:.75rem;line-height:1.25}
-    .laser-caption{left:24px;max-width:52%}.laser-caption-secondary{right:24px;max-width:37%;background:#fff2e9ed;color:#743b32}
     .laser-observation{margin:0;padding:13px 18px;background:#f0f5eb;color:#315a46;font-weight:750}
-    @media(min-width:761px) and (max-width:960px){.laser-lab{height:auto;min-height:0;display:grid;overflow:hidden}.laser-lab-ui{position:relative;top:auto;left:auto;width:auto;margin:12px;grid-template-columns:minmax(0,1fr) minmax(140px,.6fr)}.laser-tag{display:none}.laser-caption,.laser-caption-secondary{position:static;display:block;max-width:none;margin:0 12px 8px}.laser-caption-secondary{margin-bottom:12px}}
-    @media(max-width:760px){.laser-lesson{width:auto;margin-left:0}.laser-concept{grid-template-columns:1fr;gap:8px;padding:16px}.laser-concept-copy{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}.laser-concept-copy h3{margin:0}.laser-law{font-size:1.2rem}.laser-rule{grid-column:1/-1;margin:0}.laser-diagram{max-height:240px}.laser-lab{height:500px;min-height:500px}#laser-reflection-scene{height:340px;min-height:340px}.laser-lab-ui{top:auto;right:12px;bottom:12px;left:12px;width:auto;padding:0}.laser-caption,.laser-caption-secondary{display:none}.laser-tag-source{left:4%;top:22%}.laser-tag-mirror{left:auto;right:4%;top:40%}.laser-tag-normal{left:22%;top:33%;font-size:.72rem}.laser-tag-spot{left:auto;right:4%;top:18%}.laser-tag-screen{left:6%;top:auto;bottom:40%}.laser-tag-in{left:55%;top:18%;font-size:.75rem}.laser-tag-out{left:52%;top:36%;bottom:auto;font-size:.75rem}}
-    @media(max-width:440px){.laser-lab-ui{grid-template-columns:1fr auto}.laser-tag{padding:3px 6px;font-size:.72rem}.laser-tag-source,.laser-tag-mirror,.laser-tag-normal,.laser-tag-spot,.laser-tag-screen,.laser-tag-in,.laser-tag-out{display:none}}
+    @media(max-width:960px){.laser-lab-ui{grid-template-columns:minmax(125px,auto) minmax(120px,1fr);gap:12px}.laser-control-panel{grid-column:1/-1;grid-template-columns:145px minmax(140px,1fr)}.laser-angle-readout{grid-column:1/-1}}
+    @media(max-width:760px){.laser-lesson{width:auto;margin-left:0}.laser-concept{grid-template-columns:1fr;gap:8px;padding:16px}.laser-concept-copy{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}.laser-concept-copy h3{margin:0}.laser-law{font-size:1.2rem}.laser-rule{grid-column:1/-1;margin:0}.laser-diagram{max-height:240px}#laser-reflection-scene{height:clamp(280px,70vw,360px)}.laser-lab-ui{grid-template-columns:1fr;padding:14px}.laser-control-panel{grid-column:auto;grid-template-columns:1fr;gap:4px}.laser-angle-readout{grid-column:auto}}
+    @media(max-width:440px){.laser-angle-readout{gap:6px;font-size:.8rem}.laser-angle-readout span{padding:7px 8px}}
   </style>
 </head>
 <body>
@@ -139,14 +135,10 @@
               </section>
               <section class="laser-lab" aria-label="可調整入射角的雷射反射實驗">
                 <canvas id="laser-reflection-scene" aria-label="桌面上的雷射、平面鏡和接收屏；紅色教學線顯示入射與反射路徑"></canvas>
-                <div class="laser-lab-ui">
+                <div class="laser-lab-ui" aria-label="雷射角度操作與讀數">
                   <div class="laser-control-panel"><label class="laser-slider-label" for="incident-angle">調整入射角</label><div class="laser-slider-row"><input id="incident-angle" type="range" min="20" max="40" step="1" value="30" aria-label="調整入射角"><output id="incident-angle-value" for="incident-angle">30°</output></div></div>
                   <div class="laser-angle-readout"><span>入射角 <strong id="lab-angle-in">30°</strong></span><span>反射角 <strong id="lab-angle-out">30°</strong></span></div>
                 </div>
-                <span class="laser-tag laser-tag-source">雷射發射器</span><span class="laser-tag laser-tag-mirror">平面鏡<br><small>反射面在左側</small></span>
-                <span class="laser-tag laser-tag-normal">法線（過入射點，垂直鏡面）</span><span class="laser-tag laser-tag-spot">入射點</span><span class="laser-tag laser-tag-screen">接收屏</span>
-                <span class="laser-tag laser-tag-in">入射線</span><span class="laser-tag laser-tag-out">反射線</span>
-                <p class="laser-caption">調整雷射時，法線、光路、角度讀數同步更新；觀察接收屏光點。</p><p class="laser-caption-secondary">紅線是教學光路標記；空氣中的光束平時看不見。</p>
               </section>
               <p class="laser-observation" id="angle-observation" aria-live="polite">入射角和反射角都是 30°。調整雷射方向，觀察反射線與光點如何改變。</p>
             </div>
@@ -306,6 +298,6 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
-  <script type="module" src="assets/laser-reflection.js?v=4"></script>
+  <script type="module" src="assets/laser-reflection.js?v=5"></script>
 </body>
 </html>
