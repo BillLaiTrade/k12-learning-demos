@@ -1102,7 +1102,7 @@
                 <button class="action" id="speed-send-wave" type="button">讓波源振動一次</button>
                 <div>
                   <p class="speed-run-status"><span id="speed-run-message" aria-live="polite">調整參數後，按下按鈕讓橘色波源振動一次。</span><output id="speed-run-time">0.00 / 3.00 s</output></p>
-                  <div class="speed-progress" id="speed-progress" role="progressbar" aria-label="完整波形通過 30 公尺路徑的進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="speed-progress-bar"></span></div>
+                  <div class="speed-progress" id="speed-progress" role="progressbar" aria-label="波形前端抵達 30 公尺處的進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="speed-progress-bar"></span></div>
                 </div>
               </div>
               <div class="speed-color-legend">
@@ -1112,8 +1112,7 @@
                 </div>
                 <div class="speed-color-range" aria-hidden="true"><span>較慢｜4 m/s</span><span>較快｜32 m/s</span></div>
               </div>
-              <p class="speed-equation-live" id="speed-equation-live">v = f × λ = 2 Hz × 6 m = 12 m/s</p>
-              <p class="speed-equation-note"><em>f</em>：每秒產生的完整波數</p>
+              <p class="speed-equation-live" id="speed-equation-live">波速 = 頻率 × 波長 = 2 Hz × 6 m = 12 m/s</p>
             </section>
           </div>
         </section>
@@ -1817,7 +1816,7 @@
           speedFrequencyValue.textContent=frequencyText;speedPeriodValue.textContent=periodText;speedWavelengthValue.textContent=wavelengthText;
           speedWavePath.style.stroke=color;speedColorMarker.style.left=`${colorPosition.toFixed(2)}%`;speedColorMarker.style.backgroundColor=color;
           speedColorScale.setAttribute("aria-valuenow",format(speed,2));speedColorScale.setAttribute("aria-valuetext",`${format(speed,2)} 公尺每秒，色階位置 ${format(colorPosition,1)}%`);
-          speedEquation.textContent=`v = f × λ = ${format(frequency,3)} Hz × ${format(wavelength,1)} m = ${format(speed,2)} m/s`;
+          speedEquation.textContent=`波速 = 頻率 × 波長 = ${format(frequency,3)} Hz × ${format(wavelength,1)} m = ${format(speed,2)} m/s`;
           speedWave.setAttribute("aria-label",`橘色波源上下振動一次，產生一個完整波形並向右傳播；頻率 ${frequencyText}，週期 ${periodText}，波長 ${wavelengthText}，波速 ${format(speed,2)} 公尺每秒，波形前端到達30公尺處需 ${format(arrivalTime,2)} 秒`);
           runTime.textContent=`0.00 / ${format(arrivalTime,2)} s`;
           updateControls();
@@ -1833,13 +1832,13 @@
           const arrivalTime=getArrivalTime(),fullPassageTime=getFullPassageTime();
           setControlsDisabled(false);drawGeneratedWave(fullPassageTime);drawProgress(1);
           runTime.textContent=`${format(arrivalTime,2)} / ${format(arrivalTime,2)} s`;
-          runMessage.textContent=`波形前端到達 ${routeLength} 公尺處需時 ${format(arrivalTime,2)} 秒；完整波形已通過路徑，繩子回到平衡位置。`;
+          runMessage.textContent=`波形前端到達 ${routeLength} 公尺處需時 ${format(arrivalTime,2)} 秒。`;
           updateControls();
         };
         const animateSingleWave=time=>{
           if(runStartedAt===null)runStartedAt=time;
           const arrivalTime=getArrivalTime(),fullPassageTime=getFullPassageTime(),elapsed=clamp((time-runStartedAt)/(1000*playbackScale),0,fullPassageTime);
-          drawGeneratedWave(elapsed);drawProgress(elapsed/fullPassageTime);
+          drawGeneratedWave(elapsed);drawProgress(Math.min(elapsed,arrivalTime)/arrivalTime);
           runTime.textContent=`${format(Math.min(elapsed,arrivalTime),2)} / ${format(arrivalTime,2)} s`;
           runMessage.textContent=elapsed<period?"橘色波源點上下振動，繩上各點依序被帶動，波形由左向右形成。":elapsed<arrivalTime?"波形前端正向 30 公尺處傳播。":"波形前端已抵達 30 公尺處；完整波形繼續通過路徑。";
           if(elapsed<fullPassageTime)animationFrame=window.requestAnimationFrame(animateSingleWave);else finishSingleWave();
