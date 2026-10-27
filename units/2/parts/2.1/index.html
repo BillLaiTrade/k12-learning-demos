@@ -1099,6 +1099,13 @@
                 </svg>
               </figure>
               <p class="speed-model-note">理想化示範：此互動可分別調整頻率與波長，用來觀察公式中各量的關係；真實繩波在同一條繩子、拉緊程度不變時，頻率與波長不會各自獨立改變。</p>
+              <div class="speed-run-controls">
+                <button class="action" id="speed-send-wave" type="button">讓波源振動一次</button>
+                <div>
+                  <p class="speed-run-status"><span id="speed-run-message" aria-live="polite">調整參數後，按下按鈕讓橘色波源振動一次。</span><output id="speed-run-time">0.00 / 3.00 s</output></p>
+                  <div class="speed-progress" id="speed-progress" role="progressbar" aria-label="完整波形通過 30 公尺路徑的進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="speed-progress-bar"></span></div>
+                </div>
+              </div>
               <div class="speed-color-legend">
                 <span class="speed-color-legend-title">繩子的顏色代表目前波速</span>
                 <div class="speed-color-scale" id="speed-color-scale" role="meter" aria-label="繩子顏色對應波速，綠色較慢、紅色較快" aria-valuemin="4" aria-valuemax="32" aria-valuenow="12" aria-valuetext="12 公尺每秒">
@@ -1111,13 +1118,6 @@
                 <div class="data-cell"><small>完整波形通過 30 m 所需時間</small><strong id="speed-transit-time">3.00 s</strong></div>
               </div>
               <p class="speed-equation-live" id="speed-equation-live">v = f × λ = 2 Hz × 6 m = 12 m/s</p>
-              <div class="speed-run-controls">
-                <button class="action" id="speed-send-wave" type="button">讓波源振動一次</button>
-                <div>
-                  <p class="speed-run-status"><span id="speed-run-message" aria-live="polite">調整參數後，按下按鈕讓橘色波源振動一次。</span><output id="speed-run-time">0.00 / 3.00 s</output></p>
-                  <div class="speed-progress" id="speed-progress" role="progressbar" aria-label="完整波形通過 30 公尺路徑的進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="speed-progress-bar"></span></div>
-                </div>
-              </div>
             </section>
           </div>
         </section>
