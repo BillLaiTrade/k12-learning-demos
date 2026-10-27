@@ -142,6 +142,22 @@ function arc(radius, angle, direction) {
   }
   return points;
 }
+function makeAngleSector(color) {
+  const material = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.26, side: THREE.DoubleSide, depthTest: false, depthWrite: false });
+  const sector = new THREE.Mesh(new THREE.BufferGeometry(), material);
+  sector.renderOrder = 7; scene.add(sector); return sector;
+}
+function setAngleSector(sector, points) {
+  const center = new THREE.Vector3(centerPoint.x, centerPoint.y + 0.02, centerPoint.z), positions = [];
+  for (let i = 1; i < points.length; i++) {
+    const a = points[i - 1], b = points[i];
+    positions.push(center.x, center.y, center.z, a.x, center.y, a.z, b.x, center.y, b.z);
+  }
+  sector.geometry.dispose(); sector.geometry = new THREE.BufferGeometry();
+  sector.geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  sector.geometry.computeBoundingSphere();
+}
+const incomingSector = makeAngleSector('#72aefa'), reflectedSector = makeAngleSector('#78c98c');
 const incomingArc = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: '#2878df', depthTest: false }));
 const outgoingArc = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: '#27833d', depthTest: false }));
 incomingArc.renderOrder = outgoingArc.renderOrder = 11; scene.add(incomingArc, outgoingArc);
@@ -256,6 +272,8 @@ function update() {
   pivot.position.set(standPosition.x, 0.15, standPosition.z);
   setBeam(incoming, source, hit);
   setBeam(reflected, hit, reflectedEnd);
+  setAngleSector(incomingSector, arc(1.8, angle, -1));
+  setAngleSector(reflectedSector, arc(1.8, angle, 1));
   setThickArc(incomingArc, arc(1.8, angle, -1));
   setThickArc(outgoingArc, arc(1.8, angle, 1));
   normalLabel.position.set(centerPoint.x - 5.5, 1.5, centerPoint.z);
