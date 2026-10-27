@@ -52,7 +52,7 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
   };
   const stop = () => page.locator('#ruler-stop').click();
 
-  await t.test('recording is audible without clipping, defaults to full volume and is adjustable', async () => {
+  await t.test('recording is audible without clipping at full volume with no volume slider', async () => {
     const signal = await page.evaluate(async () => {
       const audio = document.querySelector('#ruler-audio');
       const bytes = await (await fetch(audio.currentSrc || audio.src)).arrayBuffer();
@@ -68,10 +68,7 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
     assert.ok(signal.peak > .5 && signal.peak < .95, 'recording should be strong with headroom below clipping');
     assert.ok(signal.duration > 2 && signal.duration < 3);
     assert.equal(signal.volume, 1); assert.equal(signal.paused, true);
-    await page.locator('#ruler-volume').evaluate(input => { input.value = '35'; input.dispatchEvent(new Event('input', { bubbles: true })); });
-    assert.equal(await page.locator('#ruler-audio').evaluate(audio => audio.volume), .35);
-    assert.equal(await page.locator('#ruler-volume-value').textContent(), '35%');
-    await page.locator('#ruler-volume').evaluate(input => { input.value = '100'; input.dispatchEvent(new Event('input', { bubbles: true })); });
+    assert.equal(await page.locator('#card-01 input[type="range"]').count(), 0);
   });
 
   await t.test('ruler long edges are parallel with no rest deformation at the clamp', async () => {
@@ -120,9 +117,7 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
     const soundTime = await page.locator('#ruler-audio').evaluate(audio => audio.currentTime);
     await new Promise(resolve => setTimeout(resolve, 100));
     assert.ok(await page.locator('#ruler-audio').evaluate(audio => audio.currentTime) > soundTime, 'recording playback should advance');
-    await page.locator('#ruler-volume').evaluate(input => { input.value = '50'; input.dispatchEvent(new Event('input', { bubbles: true })); });
-    assert.equal(await page.locator('#ruler-audio').evaluate(audio => audio.volume === .5 && !audio.paused), true);
-    await page.locator('#ruler-volume').evaluate(input => { input.value = '100'; input.dispatchEvent(new Event('input', { bubbles: true })); });
+    assert.equal(await page.locator('#ruler-audio').evaluate(audio => audio.volume === 1 && !audio.paused), true);
     assert.equal(await hit.evaluate(node => getComputedStyle(node).outlineStyle), 'none');
     assert.equal(await hit.evaluate(node => getComputedStyle(node).webkitTapHighlightColor), 'rgba(0, 0, 0, 0)');
     assert.equal(await page.locator('[clip-path="url(#ruler-fixed-region)"]').innerHTML(), fixed);
