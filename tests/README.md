@@ -79,4 +79,4 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-1.2-
 CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.1-water-lab.test.cjs tests/unit-5.1.test.cjs
 ```
 
-新測試涵蓋冷卻與加熱的連續變化、冰塊落下／漂浮／融化（前 8 秒維持完整、後 12 秒逐漸縮小）、熱源與冰塊分開操作、溫度與液柱界限、停止／重設、鍵盤、主圖與放大窗同一畫面同步，以及五種視窗寬度。可用 `WATER_LAB_CAPTURE_DIR=/tmp/water-lab-review` 另存桌機／手機狀態截圖；`WATER_LAB_URL` 可指定待檢查的頁面。器材配置與核可示意圖的外觀比對見 `docs/reviews/unit-5.1-card02/review.md`。
+新測試涵蓋 0–60°C 刻度的每度等距分度、長中短刻線、數字及攝氏單位、凹液面最低點校準、冷卻與加熱的連續變化、冰塊落下／漂浮／融化（前 8 秒維持完整、後 12 秒逐漸縮小）、熱源與冰塊分開操作、溫度與液柱界限、停止／重設、鍵盤、主圖與放大窗同一畫面同步，以及五種視窗寬度。可用 `WATER_LAB_CAPTURE_DIR=/tmp/water-lab-review` 另存桌機／手機狀態截圖；`WATER_LAB_URL` 可指定待檢查的頁面。器材配置與核可示意圖的外觀比對見 `docs/reviews/unit-5.1-card02/review.md`。

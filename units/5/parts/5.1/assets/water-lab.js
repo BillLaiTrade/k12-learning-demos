@@ -1,22 +1,35 @@
-import {initialState,addIce,toggleHeat,advance,fraction,isMoving,MIN_TEMPERATURE,MAX_TEMPERATURE,ICE_DURATION,ICE_FLOAT_DURATION} from './water-lab-state.mjs?v=ice-float-20s';
+import {initialState,addIce,toggleHeat,advance,isMoving,MIN_TEMPERATURE,MAX_TEMPERATURE,ICE_DURATION,ICE_FLOAT_DURATION} from './water-lab-state.mjs?v=ice-float-20s';
 const $=id=>document.getElementById(id), root=$('water-lab'), ns='http://www.w3.org/2000/svg';
 let state=initialState(), request=0, previous=null;
 function line(group,attrs){const n=document.createElementNS(ns,'line');Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,String(v)));group.append(n);}
-for(let degree=5;degree<=60;degree+=5){
-  const y=545-fraction(degree)*300;
-  line($('water-lab-scale'),{x1:degree%10===0?540:548,x2:560,y1:y,y2:y});
-  const zoomY=270-fraction(degree)*230;
-  line($('water-lab-zoom-scale'),{x1:216,x2:degree%10===0?257:241,y1:zoomY,y2:zoomY});
+// The two views use the same calibration for engraved marks and liquid level.
+const mainY=temperature=>545-(temperature-5)/55*300;
+const zoomY=temperature=>270-(temperature-5)/55*230;
+function scaleNumber(group,degree,x,y){
+  const n=document.createElementNS(ns,'text');
+  Object.entries({x,y,'dominant-baseline':'middle','data-degree':degree,class:'water-lab-scale-number'}).forEach(([k,v])=>n.setAttribute(k,String(v)));
+  n.textContent=degree;group.append(n);
+}
+for(let degree=0;degree<=60;degree++){
+  const major=degree%10===0, middle=degree%5===0;
+  const weight=major?2.1:middle?1.6:1.1;
+  const y=mainY(degree), zy=zoomY(degree);
+  line($('water-lab-scale'),{'data-degree':degree,'data-interval':major?'major':middle?'middle':'minor',x1:major?540:middle?548:557,x2:566,y1:y,y2:y,'stroke-width':weight});
+  line($('water-lab-zoom-scale'),{'data-degree':degree,'data-interval':major?'major':middle?'middle':'minor',x1:210,x2:major?243:middle?232:222,y1:zy,y2:zy,'stroke-width':weight});
+  if(major){scaleNumber($('water-lab-scale'),degree,531,y);scaleNumber($('water-lab-zoom-scale'),degree,254,zy);}
 }
 function render(){
-  const f=fraction(state.probe), y=545-f*300, zy=270-f*230;
+  const y=mainY(state.probe), zy=zoomY(state.probe);
   root.dataset.mode=state.mode;root.dataset.heating=String(state.heating);
   root.dataset.water=state.water.toFixed(4);root.dataset.probe=state.probe.toFixed(4);
   root.dataset.ice=state.iceRemaining.toFixed(4);
-  $('water-lab-liquid').setAttribute('y',y);$('water-lab-liquid').setAttribute('height',588-y);
-  $('water-lab-meniscus').setAttribute('d',`M574 ${y}Q580 ${y+4} 586 ${y}`);
-  $('water-lab-zoom-fluid').setAttribute('d',`M99 ${zy}Q139 ${zy+17} 179 ${zy}V360H99Z`);
-  $('water-lab-zoom-meniscus').setAttribute('d',`M99 ${zy}Q139 ${zy+17} 179 ${zy}`);
+  // A concave meniscus is read at its central low point in both views.
+  const meniscus=`M574 ${y-2}Q580 ${y+2} 586 ${y-2}`;
+  const zoomMeniscus=`M99 ${zy-8.5}Q139 ${zy+8.5} 179 ${zy-8.5}`;
+  $('water-lab-liquid').setAttribute('d',`${meniscus}V588H574Z`);
+  $('water-lab-meniscus').setAttribute('d',meniscus);
+  $('water-lab-zoom-fluid').setAttribute('d',`${zoomMeniscus}V360H99Z`);
+  $('water-lab-zoom-meniscus').setAttribute('d',zoomMeniscus);
   $('water-lab-source').setAttribute('cy',y);
   $('water-lab-connector').setAttribute('d',`M594 ${y}L1030 220`);
   const cooling=state.mode==='cooling';

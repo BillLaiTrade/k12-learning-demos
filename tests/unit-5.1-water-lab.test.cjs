@@ -48,12 +48,17 @@ test('water lab functional and visual checks in Chromium',{timeout:150000},async
   const ice=page.locator('#water-lab-add-ice'),heat=page.locator('#water-lab-heat'),reset=page.locator('#water-lab-reset');
   const state=()=>page.locator('#water-lab').evaluate(n=>({water:Number(n.dataset.water),probe:Number(n.dataset.probe),ice:Number(n.dataset.ice),heating:n.dataset.heating==='true'}));
   const sync=async()=>{
-    const snapshot=await page.evaluate(()=>({
+    const snapshot=await page.evaluate(()=>{
+      const meniscusY=id=>{
+        const [,edge,control]=document.getElementById(id).getAttribute('d').match(/^M\S+ ([0-9.]+)Q\S+ ([0-9.]+)/);
+        return (Number(edge)+Number(control))/2;
+      };
+      return {
       probe:Number(document.getElementById('water-lab').dataset.probe),
-      main:Number(document.getElementById('water-lab-liquid').getAttribute('y')),
-      zoom:Number(document.getElementById('water-lab-zoom-fluid').getAttribute('d').match(/^M99 ([0-9.]+)/)[1]),
+      main:meniscusY('water-lab-liquid'),
+      zoom:meniscusY('water-lab-zoom-fluid'),
       source:Number(document.getElementById('water-lab-source').getAttribute('cy'))
-    }));
+    }});
     assert.ok(Math.abs((545-snapshot.main)/300-(270-snapshot.zoom)/230)<.000001);
     assert.ok(Math.abs(snapshot.main-(545-(snapshot.probe-5)/55*300))<.001);
     assert.equal(snapshot.source,snapshot.main);
@@ -66,6 +71,29 @@ test('water lab functional and visual checks in Chromium',{timeout:150000},async
     assert.equal(await page.locator('#card-02 .water-lab-lens h3').textContent(),'液面局部放大');
     assert.equal(await ice.textContent(),'加入冰塊');assert.equal(await heat.textContent(),'加熱水');
     assert.equal(await page.locator('#water-lab-ice').isVisible(),false);
+    await sync();
+  });
+  await t.test('both thermometer views have calibrated one-degree marks and numbered Celsius scales',async()=>{
+    for(const id of ['water-lab-scale','water-lab-zoom-scale']){
+      const marks=await page.locator(`#${id} line`).evaluateAll(nodes=>nodes.map(n=>({
+        degree:Number(n.dataset.degree),interval:n.dataset.interval,
+        y:Number(n.getAttribute('y1')),length:Math.abs(Number(n.getAttribute('x2'))-Number(n.getAttribute('x1')))
+      })));
+      assert.equal(marks.length,61);
+      assert.deepEqual(marks.map(n=>n.degree),Array.from({length:61},(_,degree)=>degree));
+      assert.equal(marks.filter(n=>n.interval==='major').length,7);
+      assert.equal(marks.filter(n=>n.interval==='middle').length,6);
+      assert.ok(marks[0].length>marks[5].length&&marks[5].length>marks[1].length);
+      const spacing=marks[0].y-marks[1].y;
+      for(let i=1;i<marks.length;i++)assert.ok(Math.abs(marks[i-1].y-marks[i].y-spacing)<.000001);
+      const labels=await page.locator(`#${id} text`).evaluateAll(nodes=>nodes.map(n=>({degree:Number(n.dataset.degree),text:n.textContent,y:Number(n.getAttribute('y'))})));
+      assert.deepEqual(labels.map(n=>n.text),['0','10','20','30','40','50','60']);
+      for(const label of labels)assert.equal(label.y,marks[label.degree].y);
+    }
+    assert.equal(await page.locator('#water-lab-scale-unit').textContent(),'°C');
+    assert.equal(await page.locator('#water-lab-zoom-unit').textContent(),'°C');
+    const main22=Number(await page.locator('#water-lab-scale line[data-degree="22"]').getAttribute('y1'));
+    assert.ok(Math.abs(main22-Number(await page.locator('#water-lab-source').getAttribute('cy')))<.000001);
     await sync();
   });
   await t.test('ice falls, floats, cools water and lowers both liquid views',async()=>{
