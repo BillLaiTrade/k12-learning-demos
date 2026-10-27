@@ -275,7 +275,7 @@ function resize() {
   if (!width || !height) return;
   renderer.setSize(width, height, false);
   camera.aspect = width / height;
-  camera.fov = width < 500 ? 33 : 45;
+  camera.fov = width < 200 ? 45 : width < 500 ? 33 : 45;
   const compact = width < 500, focusX = compact ? -2.7 : -2.5, focusZ = compact ? -0.8 : 0.3;
   camera.up.set(-1, 0, 0); camera.position.set(focusX, compact ? 20 : 18.5, focusZ); camera.lookAt(focusX, 1.4, focusZ);
   camera.updateProjectionMatrix();
