@@ -104,47 +104,21 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="coverage-title">
     <section class="section" aria-labelledby="thermometer-practice-title">
-      <h2 id="thermometer-practice-title">5.1 溫度計讀值練習</h2>
-      <p class="section-intro">調整溫度，觀察液柱升降，再讀取攝氏刻度。先讀整數刻度，也試著估讀兩個刻度之間的位置。</p>
-      <div class="thermometer-demo">
-        <svg class="thermometer-svg" viewBox="0 0 230 410" role="img" aria-labelledby="thermo-title thermo-description">
-          <title id="thermo-title">可調整液柱的攝氏溫度計</title>
-          <desc id="thermo-description">溫度計範圍為 0 到 100 攝氏度，每 1 度一小格，每 10 度標示數字。</desc>
-          <rect x="93" y="28" width="30" height="335" rx="15" fill="#f8fbf8" stroke="#60776d" stroke-width="3" />
-          <circle cx="108" cy="365" r="28" fill="#f8fbf8" stroke="#60776d" stroke-width="3" />
-          <rect id="thermo-liquid" x="101" y="235" width="14" height="120" rx="7" fill="#d45e4e" />
-          <circle cx="108" cy="365" r="20" fill="#d45e4e" />
-          <g id="thermo-ticks" fill="none" stroke="#344b42" stroke-width="1.4"></g>
-          <g id="thermo-labels" fill="#344b42" font-family="sans-serif" font-size="12" text-anchor="start"></g>
-          <text x="155" y="22" fill="#176b53" font-family="sans-serif" font-size="13" font-weight="700">°C</text>
-        </svg>
-        <div class="thermometer-controls">
-          <label for="thermo-control">調整水溫並觀察液柱（0–100°C）</label>
-          <input id="thermo-control" type="range" min="0" max="100" step="0.5" value="37.5" aria-describedby="thermo-hint">
-          <label for="thermo-answer" style="margin-top:16px">液面讀值（°C）</label>
-          <input id="thermo-answer" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="輸入讀值">
-          <div class="thermometer-actions">
-            <button id="thermo-check" type="button">檢查讀值</button>
-            <button id="thermo-new" class="secondary" type="button">換一題</button>
-          </div>
-          <p id="thermo-hint" class="thermometer-hint">每 1°C 一小格，每 10°C 標示數字。0°C 和 100°C 是水的冰點與沸點參考（標準氣壓附近；沸點會受氣壓影響）。</p>
-          <p id="thermo-feedback" class="thermometer-feedback" aria-live="polite"></p>
-        </div>
-      </div>
+      <h2 id="thermometer-practice-title">5.1 學習頁與修訂紀錄</h2>
+      <p class="section-intro">2026-10-27 修訂：補上完整測量示範，將讀值對照作為觀察引導，並把程序、原理與實際估讀整合為結尾的一處檢核。頁面待使用者檢視，尚未代表完整單元驗收。</p>
+      <p><a href="parts/5.1/index.html">開啟 5.1：溫度計如何量出冷熱？</a></p>
     </section>
 
-    <section class="section" aria-labelledby="coverage-title">
     <section class="section" aria-labelledby="lesson-51-title">
       <h2 id="lesson-51-title">5.1 教學腳本初稿：溫度與溫度計</h2>
       <p class="section-intro">本節從「感覺冷熱準不準」出發，建立溫度是可量測的量，再練習理解溫度計與讀取攝氏刻度。</p>
       <div class="lesson-plan">
-        <article class="lesson-card"><h3>學習目標</h3><ul><li>說明溫度用來量化物體的冷熱，手的感覺不能代替準確測量。</li><li>用「溫度改變時，測溫物質的某種性質也跟著改變」說明液體溫度計的基本原理。</li><li>讀取攝氏刻度，讓視線與液面同高，並能估讀兩個刻度之間的數值。</li></ul></article>
-        <article class="lesson-card"><h3>概念順序與教學流程</h3><ol><li>先比較手感和溫度計讀值，發現冷熱感受可能受先前經驗影響。</li><li>觀察液體溫度計：溫度改變時，管內液柱高度改變；刻度把變化對應成溫度讀值。</li><li>以水的冰點與沸點介紹攝氏刻度參考；說明沸點會受氣壓影響，不進行攝氏／華氏換算。</li><li>練習讀整數刻度，再估讀兩個刻度之間的液面位置。</li></ol></article>
-        <article class="lesson-card"><h3>互動示意規劃</h3><p>以一支放大、清楚標示液泡、細管和攝氏刻度的液體溫度計為主圖。拖動溫度控制點時，液柱連續升降；學生先讀取整數刻度，再估讀刻度間的位置並提交答案，之後顯示視線高度、液面和刻度的對齊。數位、耳溫等溫度計只用小圖作生活補充。液柱頂端與刻度線清楚對齊，不使用殘影表示變化。</p></article>
+        <article class="lesson-card"><h3>學習目標</h3><ul><li>說明溫度用來量化物體的冷熱，手的感覺不能代替準確測量。</li><li>用「測溫液體的體積隨溫度改變」說明液體溫度計的基本原理。</li><li>讀取攝氏刻度，讓視線與液面同高，並能估讀兩個刻度之間的數值。</li></ul></article>
+        <article class="lesson-card"><h3>概念順序與教學流程</h3><ol><li>先比較手感和溫度計讀值，發現冷熱感受可能受先前經驗影響。</li><li>觀察液體溫度計：溫度改變時，管內液柱高度改變；刻度把變化對應成溫度讀值。</li><li>以水的冰點與沸點介紹攝氏刻度參考；說明沸點會受氣壓影響，不進行攝氏／華氏換算。</li><li>先示範依標示浸入、等待穩定、留在水中平視、記錄讀值的程序。</li><li>調整液柱，對照刻度讀整數與估讀，再於結尾整合測量程序、原理與實際讀值。</li></ol></article>
+        <article class="lesson-card"><h3>互動示意規劃</h3><p>以一支放大、清楚標示液泡、細管和攝氏刻度的液體溫度計為主圖。拖動溫度控制點時，液柱連續升降；學生先讀取整數刻度，再估讀刻度間的位置；可開啟水平視線、液面與刻度的對照，不在教學區判定對錯。正式讀值作答放在結尾檢核。數位、耳溫等只列為生活補充候選，本次不新增。液柱頂端與刻度線清楚對齊，不使用殘影表示變化。</p></article>
         <article class="lesson-card"><h3>容易混淆的地方</h3><ul><li>手覺得比較冷或比較熱，不代表能準確知道溫度。</li><li>溫度表示冷熱程度；熱量是能量傳遞，兩者不是同一個量。</li><li>液柱高度本身不是溫度，必須依刻度讀值。</li><li>溫度計的液柱變化可先作為測量原理；物質受熱膨脹的完整解釋放在 5.4。</li></ul></article>
-        <article class="lesson-card wide"><h3>理解檢核</h3><p><strong>題目：</strong>把溫度計放進較暖的水中，液柱上升。下列哪個說法最合適？接著請讀出液面所在的溫度；若液面落在兩個刻度之間，應如何記錄？<br><strong>預期回答：</strong>溫度改變使溫度計內液體的體積改變，液柱位置因此改變；讀值要依攝氏刻度，視線與液面同高。液面在刻度間時，根據最小刻度間距合理估讀。<br><strong>觀察重點：</strong>學生能否把「液柱變化」和「刻度讀值」連起來，並正確估讀，而非只憑手感或猜數字。</p></article>
+        <article class="lesson-card wide"><h3>理解檢核</h3><p><strong>題目：</strong>先排列測量步驟，再解釋放入較暖的水後液柱上升的原因，最後讀取另一支溫度計的穩定液面，記錄估讀值與 °C。三項任務在同一個結尾檢核一起檢查。<br><strong>預期回答：</strong>溫度改變使溫度計內液體的體積改變，液柱位置因此改變；讀值要依攝氏刻度，視線與液面同高。液面在刻度間時，根據最小刻度間距合理估讀。<br><strong>觀察重點：</strong>學生能否把「液柱變化」和「刻度讀值」連起來，並正確估讀，而非只憑手感或猜數字。</p></article>
       </div>
     </section>
 
@@ -206,79 +180,6 @@
     </section>
   </main>
   <footer><div class="shell">國二上・自然科學｜單元 5：溫度與熱</div></footer>
-  <script>
-    (() => {
-      const slider = document.getElementById("thermo-control");
-      const liquid = document.getElementById("thermo-liquid");
-      const ticks = document.getElementById("thermo-ticks");
-      const labels = document.getElementById("thermo-labels");
-      const answer = document.getElementById("thermo-answer");
-      const feedback = document.getElementById("thermo-feedback");
-      const bottom = 355;
-      const top = 35;
-      const height = bottom - top;
 
-      for (let degree = 0; degree <= 100; degree += 1) {
-        const y = bottom - (degree / 100) * height;
-        const major = degree % 10 === 0;
-        const mid = degree % 5 === 0;
-        const length = major ? 16 : mid ? 10 : 6;
-        const mark = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        mark.setAttribute("x1", "123");
-        mark.setAttribute("x2", String(123 + length));
-        mark.setAttribute("y1", y.toFixed(2));
-        mark.setAttribute("y2", y.toFixed(2));
-        ticks.appendChild(mark);
-        if (major) {
-          const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-          label.setAttribute("x", "146");
-          label.setAttribute("y", String(y + 4));
-          label.textContent = String(degree);
-          labels.appendChild(label);
-        }
-      }
-
-      const format = value => Number.isInteger(value) ? String(value) : value.toFixed(1);
-      const update = () => {
-        const value = Number(slider.value);
-        const y = bottom - (value / 100) * height;
-        liquid.setAttribute("y", y.toFixed(2));
-        liquid.setAttribute("height", (bottom - y).toFixed(2));
-        slider.setAttribute("aria-valuetext", `${format(value)} 攝氏度`);
-      };
-
-      slider.addEventListener("input", () => {
-        update();
-        answer.value = "";
-        feedback.textContent = "";
-      });
-
-      document.getElementById("thermo-check").addEventListener("click", () => {
-        if (answer.value.trim() === "") {
-          feedback.textContent = "請先輸入你讀到的溫度。";
-          return;
-        }
-        const guess = Number(answer.value);
-        const actual = Number(slider.value);
-        if (!Number.isFinite(guess) || guess < 0 || guess > 100) {
-          feedback.textContent = "請輸入 0 到 100°C 之間的讀值。";
-          return;
-        }
-        feedback.textContent = Math.abs(guess - actual) <= 0.3
-          ? `讀得準確！液面約在 ${format(actual)}°C。`
-          : `再看一次液面和刻度的位置；這題讀值約為 ${format(actual)}°C。`;
-      });
-
-      document.getElementById("thermo-new").addEventListener("click", () => {
-        const halfDegrees = Math.floor(Math.random() * 141) + 30;
-        slider.value = String(halfDegrees / 2);
-        answer.value = "";
-        feedback.textContent = "新題目已準備好，請重新讀取液柱。";
-        update();
-      });
-
-      update();
-    })();
-  </script>
 </body>
 </html>

@@ -4,11 +4,33 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="從手感的限制出發，認識液體溫度計的原理並練習讀取攝氏刻度。">
   <title>溫度計如何量出冷熱？｜溫度與熱</title>
+  <link rel="icon" href="data:,">
   <style>
     :root{color-scheme:light;--ink:#182326;--muted:#59696b;--line:#d7e1dd;--paper:#f4f7f1;--card:#fffefa;--green:#176b53;--pale:#e5f2e9;--orange:#bc612b;--orange-pale:#fff1e5;--shadow:0 14px 38px rgb(21 47 38 / 8%);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);line-height:1.7}button,input{font:inherit}button{cursor:pointer}a{color:var(--green)}.shell{width:min(1120px,calc(100% - 40px));margin:0 auto}.masthead{padding:26px 0 18px}.brand-row,.section-top,.control-row,.quiz-head{display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{color:var(--ink);font-size:.9rem;font-weight:800;text-decoration:none}.crumb{color:var(--muted);font-size:.9rem}.hero{display:grid;grid-template-columns:minmax(0,.9fr) minmax(320px,1.1fr);gap:32px;align-items:center;padding:42px 0 34px}.eyebrow{color:var(--green);font-size:.82rem;font-weight:800;letter-spacing:.12em}h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.6rem);line-height:1.18;letter-spacing:-.04em}.hero-copy>p{max-width:660px;color:var(--muted);font-size:1.06rem}.hero-art{overflow:hidden;margin:0;border:1px solid var(--line);border-radius:22px;background:#fffefa;box-shadow:var(--shadow)}.hero-art img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}.hero-caption{padding:9px 14px;color:var(--muted);font-size:.84rem}.hero-dialogue{margin-top:18px}.lesson{padding:30px 0 80px}.lesson-layout{display:grid;grid-template-columns:minmax(195px,240px) minmax(0,1fr);gap:30px;align-items:start}.route{position:sticky;top:24px;max-height:calc(100svh - 48px);overflow:auto;padding:8px 12px 12px 0}.route-label{margin:0 0 10px;color:var(--muted);font-size:.74rem;letter-spacing:.08em}.route-inner{display:grid;gap:4px}.route a{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:start;padding:10px 11px;border:1px solid transparent;border-left:3px solid transparent;border-radius:0 10px 10px 0;color:var(--muted);font-size:.86rem;line-height:1.45;text-decoration:none}.route a:hover,.route a:focus-visible{border-color:var(--line);outline:2px solid transparent}.route a[aria-current="step"]{border-left-color:var(--green);background:#e7eee0;color:#315a46;font-weight:750}.route b{color:var(--green);font-size:.76rem;font-weight:650}.route a.quiz-nav{margin-top:12px;border-top:1px solid var(--line);padding-top:17px;color:#8a6726;font-weight:750}.route a.quiz-nav b{color:#946f2d}.cards{display:grid;gap:20px}.section-top{align-items:end;margin:0 0 18px}.section-top h2{margin:0;font-size:1.35rem}.progress-copy{color:var(--muted);font-size:.9rem}.lesson-card{scroll-margin-top:100px;display:grid;grid-template-columns:176px minmax(0,1fr);gap:24px;padding:25px;border:1px solid var(--line);border-radius:24px;background:var(--card);box-shadow:var(--shadow)}.card-side{border-right:1px solid var(--line);padding-right:18px}.card-number{color:var(--green);font-size:.84rem;font-weight:850;letter-spacing:.08em}.card-side h3{margin:10px 0 8px;font-size:1.05rem;line-height:1.45}.card-role{color:var(--muted);font-size:.85rem}.card-main h2{margin:0 0 8px;font-size:clamp(1.28rem,2.7vw,1.78rem);line-height:1.35}.card-main>p{margin:0 0 17px;color:var(--muted)}.dialogue{display:flex;align-items:center;gap:11px;margin:12px 0;padding:10px 13px;border-left:4px solid #8cae91;border-radius:0 12px 12px 0;background:#f0f5eb}.dialogue p{margin:0}.dialogue .speaker{display:inline-flex;flex:0 0 auto;align-items:center}.dialogue .speaker::before{content:"";display:block;width:42px;height:42px;border:2px solid #8cae91;border-radius:50%;background-image:url("../../../../shared-assets/characters/dialogue-character-avatars.png?v=clean-shaven-grandpa");background-repeat:no-repeat;background-position:100% 50%;background-size:200% 100%;box-shadow:0 2px 6px rgb(21 47 38 / 12%)}.dialogue--xiaokui{border-left-color:#d39765;background:var(--orange-pale)}.dialogue--xiaokui .speaker::before{border-color:#d39765;background-position:0 50%}.visual{overflow:hidden;margin:16px 0;padding:14px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#f2f8f1,#fffefa 68%)}.visual svg{display:block;width:100%;height:auto}.visual text{fill:#314640;font-family:inherit;font-size:15px}.visual .muted-label{fill:var(--muted);font-size:12px}.fact{margin-top:14px;padding:13px 15px;border-left:4px solid #b8cda9;border-radius:0 12px 12px 0;background:#f0f5eb}.fact p{margin:0}.controls{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:13px}.secondary,.action{min-height:44px;padding:9px 15px;border-radius:13px;font-weight:750}.secondary{border:1px solid var(--line);background:#fff;color:var(--ink)}.secondary:hover{border-color:var(--green)}.action{border:0;background:var(--green);color:#fff}.action:hover{background:#105640}.live-note{color:var(--muted);font-size:.9rem}
+    .quiz{overflow:hidden;border:1px solid #eadfca;border-radius:24px;background:#fffefa;box-shadow:var(--shadow)}.quiz-head{justify-content:flex-start;padding:22px 26px;background:#f8f1e4}.quiz-mark{display:grid;place-items:center;flex:0 0 auto;width:50px;height:50px;border-radius:15px;background:#e8d8ad;color:#705b2a;font-size:1.3rem}.quiz-head h2{margin:0;font-size:1.45rem}.quiz-head p{margin:2px 0 0;color:var(--muted);font-size:.9rem}.quiz-body{padding:24px 28px 28px}.quiz-question{padding:17px 0;border-top:1px solid var(--line)}.quiz-question h3{margin:0 0 11px;font-size:1.05rem}.quiz-option{display:flex;align-items:flex-start;gap:10px;margin:8px 0;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer}.quiz-option:has(input:checked){border-color:var(--green);background:#f1f7f1}.quiz-option input{margin-top:5px;accent-color:var(--green)}.quiz-feedback{min-height:1.5em;margin:7px 0 0;color:var(--muted);font-size:.9rem}.quiz-result{margin-top:12px;padding:14px 16px;border-radius:13px;background:#eff4ea;color:#315a46;font-weight:750}.quiz-actions{display:flex;align-items:center;gap:12px}.quiz-helper{color:var(--muted);font-size:.86rem}.foot{padding:24px 0 38px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}.end-link{display:inline-flex;margin-top:18px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;text-decoration:none;font-weight:750}
     .quiz-kicker{margin:0 0 2px;color:#8a6726;font-size:.78rem;font-weight:850;letter-spacing:.1em}.quiz-lead{margin:0 0 16px;color:var(--muted)}
+
+    [hidden]{display:none!important}
+    button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #bc612b;outline-offset:3px}
+    .card-main,.cards{min-width:0}.section-top{flex-wrap:wrap}
+    .thermo-wrap{display:grid;grid-template-columns:minmax(170px,230px) minmax(0,1fr);align-items:center;gap:16px}
+    .thermo-svg{display:block;width:100%;max-height:410px;margin:auto}
+    .thermo-svg text{font:12px sans-serif;fill:#344b42}
+    .read-input{width:145px;max-width:100%;min-height:44px;padding:8px 10px;border:1px solid #9cafa5;border-radius:10px}
+    .range-row{display:flex;align-items:center;gap:10px;margin:16px 0}.range-row input{width:100%;min-width:0;accent-color:var(--green)}
+    .measurement-steps button[aria-pressed="true"]{border-color:var(--green);background:var(--pale);color:var(--green)}
+    #measurement-diagram text{font-size:14px}#measurement-labels text{font-size:12px}
+    .sequence-list{display:grid;gap:10px;padding:0;list-style:none}
+    .sequence-step{display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px;border:1px solid var(--line);border-radius:12px;background:white}
+    .sequence-number{font-weight:800;color:var(--green)}.sequence-controls{display:flex;gap:6px}
+    .sequence-controls button{min-width:36px;min-height:40px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--green)}
+    .sequence-controls button:disabled{color:#83918a;background:#f2f4f1;cursor:default}
+    fieldset.quiz-question{min-width:0;margin:18px 0 0;border:0;border-top:1px solid var(--line);padding:16px 0}
+    .quiz-question legend{padding:0 8px 0 0;font-size:1.05rem;font-weight:750}
+    .quiz{scroll-margin-top:100px}
     @media(max-width:850px){.lesson-layout{grid-template-columns:1fr}.route{z-index:5;top:0;max-height:none;margin:0 -10px;padding:8px 10px;background:rgb(244 247 241 / 94%);backdrop-filter:blur(10px)}.route-inner{display:flex;overflow-x:auto;gap:7px;padding-bottom:5px}.route a{display:inline-flex;flex:0 0 auto;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);white-space:nowrap}.route a[aria-current="step"]{border-color:var(--green)}.route a.quiz-nav{margin:0 0 0 4px;border-top:0;border-left:1px solid var(--line);padding-top:7px}.hero{gap:22px}.lesson-card{grid-template-columns:150px minmax(0,1fr);gap:18px}}
-    @media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{grid-template-columns:1fr;padding:32px 0 25px}.lesson{padding-top:20px}.lesson-card{grid-template-columns:1fr;padding:18px;gap:14px}.card-side{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:0 7px;border:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0;font-size:.95rem}.card-role{grid-column:2;font-size:.79rem}.card-number{grid-row:1/3}.visual{padding:8px}.quiz-head{padding:18px}.quiz-body{padding:19px 17px 22px}.quiz-actions{align-items:stretch;flex-direction:column}.thermo-wrap{grid-template-columns:1fr}.thermo-svg{max-height:340px}.range-row{align-items:flex-start;flex-direction:column}.range-row input{width:100%}}
+    @media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{grid-template-columns:1fr;padding:32px 0 25px}.lesson{padding-top:20px}.lesson-card{grid-template-columns:1fr;padding:18px;gap:14px}.card-side{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:0 7px;border:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0;font-size:.95rem}.card-role{grid-column:2;font-size:.79rem}.card-number{grid-row:1/3}.visual{padding:8px}.quiz-head{padding:18px}.quiz-body{padding:19px 17px 22px}.quiz-actions{align-items:stretch;flex-direction:column}.thermo-wrap{grid-template-columns:1fr}.thermo-svg{max-height:340px}.range-row{align-items:center;flex-direction:row}.sequence-step{grid-template-columns:22px minmax(0,1fr)}.sequence-controls{grid-column:2}.range-row input{width:100%}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
 </head>
@@ -25,53 +47,106 @@
   <main class="shell lesson">
     <div class="lesson-layout">
       <nav class="route" aria-label="學習區塊導覽"><p class="route-label">學習路線</p><div class="route-inner">
-        <a href="#card-01"><b>01</b><span>手感能量出溫度嗎</span></a><a href="#card-02"><b>02</b><span>溫度計怎麼測量</span></a><a href="#card-03"><b>03</b><span>攝氏刻度參考點</span></a><a href="#card-04"><b>04</b><span>讀取與估讀刻度</span></a><a class="quiz-nav" href="#unit-quiz"><b aria-hidden="true">✦</b><span>單元小測</span></a>
+        <a href="#card-01"><b>01</b><span>手感能量出溫度嗎</span></a><a href="#card-02"><b>02</b><span>溫度計怎麼測量</span></a><a href="#card-03"><b>03</b><span>攝氏刻度參考點</span></a><a href="#measurement"><b>04</b><span>先取得穩定的讀值</span></a><a href="#card-04"><b>05</b><span>讀取與估讀刻度</span></a><a class="quiz-nav" href="#unit-quiz"><b aria-hidden="true">✦</b><span>單元小測</span></a>
       </div></nav>
       <div class="cards">
-        <div class="section-top"><h2>從手感開始，用刻度讀出溫度</h2><span class="progress-copy">四個學習區塊・一個單元小測</span></div>
-        <section class="lesson-card" id="card-01"><div class="card-side"><span class="card-number">01</span><h3>手感能量出溫度嗎？</h3><span class="card-role">感覺可能受先前經驗影響</span></div><div class="card-main"><h2>只靠手摸，能判斷哪杯水幾度嗎？</h2><p>同一杯水，剛摸過冷水和溫水的人，可能會有不同感覺。手感適合察覺冷熱，卻不適合當作準確的溫度讀值。</p><div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>如果我先摸冷水，接著摸同一杯室溫水，可能會覺得它變暖了。</p></div><div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>水其實沒有變；改變的是手先前感受到的冷熱。要比較溫度，最好用溫度計測量。</p></div><div class="fact"><p><strong>重點：</strong>溫度用來量化物體的冷熱；要知道溫度，需要使用溫度計測量。</p></div></div></section>
+        <div class="section-top"><h2>從手感開始，用刻度讀出溫度</h2><span class="progress-copy">五個學習區塊・一個單元小測</span></div>
+        <section class="lesson-card" id="card-01"><div class="card-side"><span class="card-number">01</span><h3>手感能量出溫度嗎？</h3><span class="card-role">感覺可能受先前經驗影響</span></div><div class="card-main"><h2>只靠手摸，能判斷哪杯水幾度嗎？</h2><p>同一杯水，剛摸過冷水和溫水的人，可能會有不同感覺。手感適合察覺冷熱，卻不適合當作準確的溫度讀值。</p><div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>如果我先摸冷水，接著摸同一杯室溫水，可能會覺得它變暖了。</p></div><div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>同樣的水溫，手感卻可能不同；先前接觸的冷熱會影響感覺。要比較溫度，最好用溫度計測量。</p></div><div class="fact"><p><strong>重點：</strong>溫度用來量化物體的冷熱；要知道溫度，需要使用溫度計測量。</p></div></div></section>
         <section class="lesson-card" id="card-02"><div class="card-side"><span class="card-number">02</span><h3>溫度計怎麼測量</h3><span class="card-role">觀察液柱如何改變</span></div><div class="card-main"><h2>溫度計裡的液柱為什麼會升降？</h2><p>液體溫度計利用測溫液體的體積隨溫度改變而改變，讓細管中的液面位置移動，再由刻度讀取溫度。</p><div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>所以液面變高不是讀值本身，我還要看旁邊的刻度，對嗎？</p></div><div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>對。液柱的位置會隨溫度改變；刻度讓我們把位置轉成可以比較的溫度數值。</p></div><div class="visual"><svg viewBox="0 0 700 170" role="img" aria-label="液體溫度計由液泡、細管和刻度組成；液柱高度對應刻度讀值。"><rect x="255" y="20" width="36" height="112" rx="18" fill="#fff" stroke="#60776d" stroke-width="4"/><circle cx="273" cy="135" r="27" fill="#fff" stroke="#60776d" stroke-width="4"/><rect x="265" y="73" width="16" height="62" rx="8" fill="#d45e4e"/><circle cx="273" cy="135" r="19" fill="#d45e4e"/><path d="M294 35h55m-55 15h34m-34 15h55m-55 15h34m-34 15h55m-55 15h34" stroke="#344b42" stroke-width="3"/><text x="385" y="56" fill="#314640">細管液面的位置對應溫度</text><text x="385" y="88" fill="#59696b" font-size="15">溫度改變 → 液柱升降 → 依刻度讀值</text></svg></div><div class="fact"><p><strong>重點：</strong>液柱的位置要和刻度一起讀；完整的熱脹冷縮原理會在 5.4 再深入學習。</p></div></div></section>
-        <section class="lesson-card" id="card-03"><div class="card-side"><span class="card-number">03</span><h3>攝氏刻度參考點</h3><span class="card-role">認識 0°C 與 100°C</span></div><div class="card-main"><h2>攝氏刻度上的 0 和 100 從哪裡來？</h2><p>在標準氣壓附近，純水結冰時約為 0°C，沸騰時約為 100°C，常用來介紹攝氏刻度的參考點。沸點會隨氣壓改變。</p><div class="visual"><svg viewBox="0 0 700 130" role="img" aria-label="攝氏溫標以標準氣壓附近純水的冰點 0 度和沸點 100 度作為參考。"><path d="M105 63H595" stroke="#9eafa6" stroke-width="8" stroke-linecap="round"/><path d="M105 48v30M595 48v30" stroke="#176b53" stroke-width="5"/><circle cx="105" cy="63" r="13" fill="#8cc4cb" stroke="#fff" stroke-width="4"/><circle cx="595" cy="63" r="13" fill="#df8b41" stroke="#fff" stroke-width="4"/><text x="105" y="30" text-anchor="middle" fill="#176b53" font-weight="700">0°C</text><text x="595" y="30" text-anchor="middle" fill="#bc612b" font-weight="700">100°C</text><text x="105" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水冰點</text><text x="595" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水沸點</text></svg></div><div class="fact"><p><strong>讀值範圍：</strong>本練習使用 0–100°C 刻度。只練習攝氏溫度，不進行攝氏與華氏換算。</p></div></div></section>
-        <section class="lesson-card" id="card-04"><div class="card-side"><span class="card-number">04</span><h3>讀取與估讀刻度</h3><span class="card-role">先對齊，再估讀</span></div><div class="card-main"><h2>液面落在兩條刻度之間，該怎麼讀？</h2><p>調整溫度，觀察液柱升降，再輸入你讀到的數值。視線要和液面同高；每 1°C 一小格，每 10°C 標示數字。</p>
-          <div class="visual thermo-wrap"><svg class="thermo-svg" viewBox="0 0 230 410" role="img" aria-labelledby="thermo-title thermo-description"><title id="thermo-title">可調整液柱的攝氏溫度計</title><desc id="thermo-description">溫度計範圍為 0 到 100 攝氏度，每 1 度一小格，每 10 度標示數字。</desc><rect x="93" y="28" width="30" height="335" rx="15" fill="#f8fbf8" stroke="#60776d" stroke-width="3"/><circle cx="108" cy="365" r="28" fill="#f8fbf8" stroke="#60776d" stroke-width="3"/><rect id="thermo-liquid" x="101" y="235" width="14" height="120" rx="7" fill="#d45e4e"/><circle cx="108" cy="365" r="20" fill="#d45e4e"/><g id="thermo-ticks" fill="none" stroke="#344b42" stroke-width="1.4"></g><g id="thermo-labels" fill="#344b42" font-family="sans-serif" font-size="12" text-anchor="start"></g><text x="155" y="22" fill="#176b53" font-family="sans-serif" font-size="13" font-weight="700">°C</text></svg>
-            <div><label for="thermo-control"><strong>調整水溫並觀察液柱</strong></label><div class="range-row"><span>0°C</span><input id="thermo-control" type="range" min="0" max="100" step="0.5" value="37.5" aria-describedby="thermo-hint"><span>100°C</span></div><label for="thermo-answer"><strong>液面讀值（°C）</strong></label><div class="controls"><input class="read-input" id="thermo-answer" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="輸入讀值"><button class="action" id="thermo-check" type="button">檢查答案</button><button class="secondary" id="thermo-new" type="button">換一題</button></div><p id="thermo-hint" class="live-note">先讀整數刻度，再估讀刻度間的位置。</p><p id="thermo-feedback" class="fact" aria-live="polite">0°C 和 100°C 是水的冰點與沸點參考（標準氣壓附近；沸點會受氣壓影響）。</p></div>
-          </div><div class="fact"><p><strong>讀值步驟：</strong>先找液面頂端，再確認視線與液面同高，最後依最小刻度間距估讀並寫上 °C。</p></div>
-        </div></section>
-        <section class="quiz" id="unit-quiz" aria-labelledby="quiz-title"><header class="quiz-head"><span class="quiz-mark" aria-hidden="true">?</span><div><p class="quiz-kicker">單元小測</p><h2 id="quiz-title">幫小葵完成水溫測量紀錄</h2><p>整理測量步驟，再用溫度計的原理解釋讀值。</p></div></header><div class="quiz-body">
-          <p class="quiz-lead">小葵準備測量一杯水，請把步驟排成合理順序，再回答問題。</p>
-          <div class="sequence-task"><h3>排列測量步驟</h3><p>使用右側按鈕調整順序；也可以用鍵盤操作每張步驟卡。</p><ol class="sequence-list" id="measure-sequence">
-            <li class="sequence-step" data-step="read"><span class="sequence-number">1</span><span>讀取液面對應的刻度，記下數值和 °C。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="讀取刻度：往上移">↑</button><button type="button" data-move="down" aria-label="讀取刻度：往下移">↓</button></span></li>
-            <li class="sequence-step" data-step="immerse"><span class="sequence-number">2</span><span>把溫度計液泡浸入水中，避免碰到杯底。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="放入水中：往上移">↑</button><button type="button" data-move="down" aria-label="放入水中：往下移">↓</button></span></li>
-            <li class="sequence-step" data-step="level"><span class="sequence-number">3</span><span>確認視線與液面同高，避免斜看刻度。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="平視液面：往上移">↑</button><button type="button" data-move="down" aria-label="平視液面：往下移">↓</button></span></li>
-            <li class="sequence-step" data-step="wait"><span class="sequence-number">4</span><span>等待液柱穩定，再準備讀值。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="等待穩定：往上移">↑</button><button type="button" data-move="down" aria-label="等待穩定：往下移">↓</button></span></li>
-          </ol><div class="controls"><button class="action" id="sequence-check" type="button">檢查步驟</button><button class="secondary" id="sequence-reset" type="button">重新排列</button></div><p class="sequence-feedback" id="sequence-feedback" role="status" aria-live="polite"></p></div>
-          <div class="quiz-question"><h3>1. 想準確比較兩杯水的冷熱，應該怎麼做？</h3><label class="quiz-option"><input type="radio" name="q1" value="a">只用手摸，感覺比較冷的就是低幾度</label><label class="quiz-option"><input type="radio" name="q1" value="b">用溫度計測量並讀取刻度</label><label class="quiz-option"><input type="radio" name="q1" value="c">看哪一杯比較大杯</label><p class="quiz-feedback" aria-live="polite"></p></div>
-          <div class="quiz-question"><h3>2. 液面剛好落在兩條刻度之間時，應該怎麼辦？</h3><label class="quiz-option"><input type="radio" name="q2" value="a">依最小刻度間距合理估讀</label><label class="quiz-option"><input type="radio" name="q2" value="b">一律讀成較大的整數</label><label class="quiz-option"><input type="radio" name="q2" value="c">不看刻度，只報液柱高度</label><p class="quiz-feedback" aria-live="polite"></p></div>
-          <div class="quiz-actions"><button class="action" id="quiz-check" type="button">檢查答案</button><button class="secondary" id="quiz-reset" type="button">重新作答</button><span class="quiz-helper">答對後會顯示概念提醒。</span></div><div class="quiz-result" id="quiz-result" aria-live="polite" hidden></div>
-        </div></section>
+        <section class="lesson-card" id="card-03"><div class="card-side"><span class="card-number">03</span><h3>攝氏刻度參考點</h3><span class="card-role">認識 0°C 與 100°C</span></div><div class="card-main"><h2>攝氏刻度上的 0 和 100 從哪裡來？</h2><p>在標準大氣壓下，純水的冰點約為 0°C，沸點約為 100°C，常用來介紹攝氏刻度的參考點。沸點會隨氣壓改變。</p><div class="visual"><svg viewBox="0 0 700 130" role="img" aria-label="攝氏溫標以標準氣壓附近純水的冰點 0 度和沸點 100 度作為參考。"><path d="M105 63H595" stroke="#9eafa6" stroke-width="8" stroke-linecap="round"/><path d="M105 48v30M595 48v30" stroke="#176b53" stroke-width="5"/><circle cx="105" cy="63" r="13" fill="#8cc4cb" stroke="#fff" stroke-width="4"/><circle cx="595" cy="63" r="13" fill="#df8b41" stroke="#fff" stroke-width="4"/><text x="105" y="30" text-anchor="middle" fill="#176b53" font-weight="700">0°C</text><text x="595" y="30" text-anchor="middle" fill="#bc612b" font-weight="700">100°C</text><text x="105" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水冰點</text><text x="595" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水沸點</text></svg></div><div class="fact"><p><strong>讀值範圍：</strong>本練習使用 0–100°C 刻度。只練習攝氏溫度，不進行攝氏與華氏換算。</p></div></div></section>
+        <section class="lesson-card" id="measurement" aria-labelledby="measurement-title">
+          <div class="card-side"><span class="card-number">04</span><h3>先取得穩定的讀值</h3><span class="card-role">浸入、等待、平視、記錄</span></div>
+          <div class="card-main">
+            <h2 id="measurement-title">把溫度計放進水裡，就能立刻讀嗎？</h2>
+            <p>先選擇量程適合的溫度計，依工具標示的浸入深度使用。讓液泡完全浸在水中，不碰杯壁或杯底；等液柱穩定後，讓溫度計留在水中，平視液面並記錄讀值。</p>
+            <div class="controls measurement-steps" role="group" aria-label="切換測量示範步驟">
+              <button class="secondary" type="button" data-demo-step="0" aria-pressed="true">1 浸入水中</button>
+              <button class="secondary" type="button" data-demo-step="1" aria-pressed="false">2 等待穩定</button>
+              <button class="secondary" type="button" data-demo-step="2" aria-pressed="false">3 平視液面</button>
+              <button class="secondary" type="button" data-demo-step="3" aria-pressed="false">4 記錄讀值</button>
+            </div>
+            <div class="visual">
+              <svg id="measurement-diagram" viewBox="0 0 640 360" role="img" aria-labelledby="measurement-description">
+                <title id="measurement-description">液泡浸在水中且不碰杯底，液柱尚未穩定。</title>
+                <path d="M110 160V325Q110 335 120 335H350Q360 335 360 325V160" fill="#fff" stroke="#60776d" stroke-width="3"/>
+                <path d="M113 210H357V325Q357 332 350 332H120Q113 332 113 325Z" fill="#c6e6eb"/>
+                <path d="M114 210H356" stroke="#6eaeb3" stroke-width="2"/>
+                <rect x="221" y="20" width="28" height="275" rx="14" fill="#fffefa" stroke="#60776d" stroke-width="3"/>
+                <circle cx="235" cy="292" r="20" fill="#fffefa" stroke="#60776d" stroke-width="3"/>
+                <rect id="measurement-liquid" x="228" y="222.2" width="14" height="69.8" fill="#d45e4e"/>
+                <circle cx="235" cy="292" r="14" fill="#d45e4e"/>
+                <g id="measurement-ticks" stroke="#344b42" stroke-width="1.5"></g>
+                <g id="measurement-labels"></g>
+                <text x="274" y="23">°C</text>
+                <path d="M365 300H403" stroke="#176b53" stroke-width="2"/>
+                <text x="410" y="305">液泡不碰杯壁、杯底</text>
+                <g id="measurement-sight" hidden>
+                  <path d="M230 185.5H570" stroke="#176b53" stroke-width="2" stroke-dasharray="6 4"/>
+                  <path d="M540 185.5q14-16 28 0q-14 16-28 0" fill="#fff" stroke="#176b53" stroke-width="2"/>
+                  <circle cx="554" cy="185.5" r="4" fill="#176b53"/>
+                  <text x="410" y="165">視線與液面同高</text>
+                </g>
+                <text id="measurement-record" x="400" y="240" hidden>水溫約 37.5°C</text>
+              </svg>
+            </div>
+            <p class="fact" id="measurement-note" role="status">液泡已浸在水中，與杯壁、杯底保持距離。剛放入時，液柱還可能改變，先不要記錄。</p>
+            <p class="live-note">這是分步觀察示意；動畫時間不代表實際溫度計的等待時間。讀值時不把溫度計拿出水面。</p>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-04">
+          <div class="card-side"><span class="card-number">05</span><h3>讀取與估讀刻度</h3><span class="card-role">先對齊，再估讀</span></div>
+          <div class="card-main">
+            <h2>液面落在兩條刻度之間，該怎麼讀？</h2>
+            <p>液柱穩定後，先找液面頂端，再沿水平視線對齊刻度。每 1°C 一小格，每 10°C 標示數字；液面在刻線之間時，依間距合理估讀。</p>
+            <div class="visual thermo-wrap">
+              <svg id="observation-thermometer" class="thermo-svg" viewBox="0 0 260 410" role="img" aria-label="攝氏溫度計"></svg>
+              <div>
+                <label for="thermo-control"><strong>調整水溫並觀察液柱</strong></label>
+                <div class="range-row"><span>0°C</span><input id="thermo-control" type="range" min="0" max="100" step="0.5" value="37.5" aria-describedby="thermo-hint"><span>100°C</span></div>
+                <button class="secondary" id="thermo-guide" type="button" aria-pressed="false">顯示讀值對照</button>
+                <p id="thermo-detail" class="fact" hidden></p>
+                <p id="thermo-hint" class="live-note">拖動滑桿，看液面與刻度如何一起改變，再開啟對照觀察。</p>
+              </div>
+            </div>
+            <div class="fact"><p><strong>觀察：</strong>37.5°C 位於 37°C 與 38°C 的正中央。對齊標線只是幫助觀看，不會讓溫度計多出更細的刻度。接下來請自己讀一次，並解釋液柱為什麼會升高。</p></div>
+          </div>
+        </section>
+        <section class="quiz" id="unit-quiz" aria-labelledby="quiz-title">
+          <header class="quiz-head"><span class="quiz-mark" aria-hidden="true">?</span><div><p class="quiz-kicker">單元小測</p><h2 id="quiz-title">幫小葵完成水溫測量紀錄</h2><p>把測量程序、液柱變化的原因和實際讀值連起來。</p></div></header>
+          <div class="quiz-body">
+            <p class="quiz-lead">小葵把原本較冷的溫度計放入較暖的水中。請整理操作步驟，說明液柱變化，最後讀出穩定後的水溫。</p>
+            <div class="sequence-task">
+              <h3>1. 排列測量步驟</h3><p>使用上下按鈕調整順序；按 Tab 選取按鈕，再按 Enter 或空白鍵操作。</p>
+              <ol class="sequence-list" id="measure-sequence">
+                <li class="sequence-step" data-step="read"><span class="sequence-number">1</span><span>讀取液面對應的刻度，記下數值和 °C。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="讀取刻度：往上移">↑</button><button type="button" data-move="down" aria-label="讀取刻度：往下移">↓</button></span></li>
+                <li class="sequence-step" data-step="immerse"><span class="sequence-number">2</span><span>依工具標示浸入水中，液泡不碰杯壁或杯底。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="放入水中：往上移">↑</button><button type="button" data-move="down" aria-label="放入水中：往下移">↓</button></span></li>
+                <li class="sequence-step" data-step="level"><span class="sequence-number">3</span><span>溫度計留在水中，讓視線與液面同高。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="平視液面：往上移">↑</button><button type="button" data-move="down" aria-label="平視液面：往下移">↓</button></span></li>
+                <li class="sequence-step" data-step="wait"><span class="sequence-number">4</span><span>等待液柱穩定，再準備讀值。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="等待穩定：往上移">↑</button><button type="button" data-move="down" aria-label="等待穩定：往下移">↓</button></span></li>
+              </ol>
+              <p class="quiz-feedback" id="sequence-feedback" role="status"></p>
+            </div>
+            <fieldset class="quiz-question"><legend>2. 放入較暖的水後，液柱為什麼上升？</legend>
+              <label class="quiz-option"><input type="radio" name="principle" value="volume">測溫液體溫度升高、體積增大，液柱上升，再依刻度讀取溫度。</label>
+              <label class="quiz-option"><input type="radio" name="principle" value="water">杯裡的水流進溫度計，液柱就被水推高了。</label>
+              <label class="quiz-option"><input type="radio" name="principle" value="touch">只要手感覺比較熱，液柱就會上升，不需要觀察刻度。</label>
+              <p class="quiz-feedback" id="principle-feedback" aria-live="polite"></p>
+            </fieldset>
+            <div class="quiz-question">
+              <h3>3. 請記錄穩定後的水溫</h3><p>這支溫度計每 1°C 一小格。仔細看液面頂端，估讀刻線之間的位置。</p>
+              <div class="thermo-wrap">
+                <svg id="quiz-thermometer" class="thermo-svg" viewBox="0 0 260 410" role="img" aria-label="攝氏溫度計"></svg>
+                <div><label for="quiz-reading">水溫讀值（°C）</label><div class="controls"><input class="read-input" id="quiz-reading" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="輸入估讀值" aria-describedby="reading-feedback"><span aria-hidden="true">°C</span></div><p class="quiz-feedback" id="reading-feedback" aria-live="polite"></p></div>
+              </div>
+            </div>
+            <div class="quiz-actions"><button class="action" id="quiz-check" type="button">檢查測量紀錄</button><button class="secondary" id="quiz-reset" type="button">重新作答</button></div>
+            <div class="quiz-result" id="quiz-result" aria-live="polite" hidden></div>
+          </div>
+        </section>
         <a class="end-link" href="../../index.html">回到溫度與熱單元總覽</a>
       </div>
     </div>
   </main>
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
-  <script>
-    (()=>{
-      const slider=document.getElementById("thermo-control"),liquid=document.getElementById("thermo-liquid"),ticks=document.getElementById("thermo-ticks"),labels=document.getElementById("thermo-labels"),answer=document.getElementById("thermo-answer"),feedback=document.getElementById("thermo-feedback"),bottom=355,top=35,height=320;
-      for(let degree=0;degree<=100;degree++){const y=bottom-degree/100*height,major=degree%10===0,mid=degree%5===0,len=major?16:mid?10:6,line=document.createElementNS("http://www.w3.org/2000/svg","line");line.setAttribute("x1","123");line.setAttribute("x2",String(123+len));line.setAttribute("y1",y.toFixed(2));line.setAttribute("y2",y.toFixed(2));ticks.appendChild(line);if(major){const text=document.createElementNS("http://www.w3.org/2000/svg","text");text.setAttribute("x","146");text.setAttribute("y",String(y+4));text.textContent=String(degree);labels.appendChild(text)}}
-      const format=v=>Number.isInteger(v)?String(v):v.toFixed(1),update=()=>{const value=Number(slider.value),y=bottom-value/100*height;liquid.setAttribute("y",y.toFixed(2));liquid.setAttribute("height",(bottom-y).toFixed(2));slider.setAttribute("aria-valuetext",`${format(value)} 攝氏度`)};
-      slider.addEventListener("input",()=>{update();answer.value="";feedback.textContent=""});
-      document.getElementById("thermo-check").addEventListener("click",()=>{if(answer.value.trim()===""){feedback.textContent="請先輸入你讀到的溫度。";return}const guess=Number(answer.value),actual=Number(slider.value);if(!Number.isFinite(guess)||guess<0||guess>100){feedback.textContent="請輸入 0 到 100°C 之間的讀值。";return}feedback.textContent=Math.abs(guess-actual)<=.3?`讀得準確！液面約在 ${format(actual)}°C。`:`再看一次液面和刻度的位置；這題讀值約為 ${format(actual)}°C。`});
-      document.getElementById("thermo-new").addEventListener("click",()=>{slider.value=String((Math.floor(Math.random()*141)+30)/2);answer.value="";feedback.textContent="新題目已準備好，請重新讀取液柱。";update()});
-      const sequence=document.getElementById("measure-sequence"),initialSteps=[...sequence.children].map(item=>item.dataset.step),correctSteps=["immerse","wait","level","read"];
-      const updateSequence=()=>{[...sequence.children].forEach((item,index)=>{item.querySelector(".sequence-number").textContent=String(index+1);item.querySelector('[data-move="up"]').disabled=index===0;item.querySelector('[data-move="down"]').disabled=index===sequence.children.length-1})};
-      sequence.addEventListener("click",event=>{const button=event.target.closest("button[data-move]");if(!button)return;const item=button.closest(".sequence-step");if(button.dataset.move==="up"&&item.previousElementSibling)sequence.insertBefore(item,item.previousElementSibling);if(button.dataset.move==="down"&&item.nextElementSibling)sequence.insertBefore(item.nextElementSibling,item);updateSequence();document.getElementById("sequence-feedback").textContent="順序已調整，完成後檢查。"});
-      document.getElementById("sequence-check").addEventListener("click",()=>{const current=[...sequence.children].map(item=>item.dataset.step),isCorrect=current.every((step,index)=>step===correctSteps[index]);document.getElementById("sequence-feedback").textContent=isCorrect?"順序正確：浸入水中、等待穩定、平視液面、讀值並記錄單位。":"再檢查一次：先讓溫度計測到水溫，等液柱穩定後再平視讀值。"});
-      document.getElementById("sequence-reset").addEventListener("click",()=>{initialSteps.forEach(step=>sequence.appendChild(sequence.querySelector(`[data-step="${step}"]`)));updateSequence();document.getElementById("sequence-feedback").textContent="已恢復原順序，請重新排列。"});
-      updateSequence();
-      document.getElementById("quiz-check").addEventListener("click",()=>{const correct={q1:"b",q2:"a"};let score=0;document.querySelectorAll(".quiz-question").forEach((row,i)=>{const name=`q${i+1}`,pick=row.querySelector(`input[name=${name}]:checked`),msg=row.querySelector(".quiz-feedback");if(!pick){msg.textContent="請選一個答案。";return}if(pick.value===correct[name]){score++;msg.textContent=name==="q1"?"正確：溫度計能提供可比較的讀值。":"正確：讀值時依刻度間距估讀。"}else msg.textContent="再想想本節的測量與讀值方法。"});const result=document.getElementById("quiz-result");result.hidden=false;result.textContent=`答對 ${score} / 2 題。`});
-      document.getElementById("quiz-reset").addEventListener("click",()=>{document.querySelectorAll(".quiz-question input").forEach(input=>input.checked=false);document.querySelectorAll(".quiz-feedback").forEach(item=>item.textContent="");const result=document.getElementById("quiz-result");result.hidden=true;result.textContent=""});
-      const navLinks=[...document.querySelectorAll(".route a[href^='#']")],sections=navLinks.map(link=>document.querySelector(link.getAttribute("href"))).filter(Boolean);const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){navLinks.forEach(link=>link.removeAttribute("aria-current"));const current=navLinks.find(link=>link.getAttribute("href")===`#${entry.target.id}`);if(current)current.setAttribute("aria-current","step")}}),{rootMargin:"-20% 0px -65% 0px"});sections.forEach(section=>observer.observe(section));
-    })();
-  </script>
+  <script src="assets/temperature-lesson.js" defer></script>
 </body>
 </html>
