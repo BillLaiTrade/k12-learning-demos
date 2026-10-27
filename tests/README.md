@@ -71,7 +71,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.2-sound-propagation.tes
 CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-1.2-reversible.test.cjs tests/unit-1.2-curved-mirrors.test.cjs tests/unit-1.2-mirror.test.cjs
 ```
 
-第六區檢查41組光路、沿用共用場景及模型、第二區實際器材拖曳與角度回歸、角度承接、新場景拖曳、記錄後鎖定、反向分段描線及重合、動畫中途重設、重播、鍵盤、五種寬度、觸控、減少動態與無WebGL替代。與既有第三至五區測試一起執行；版面另以實際截圖對照核可圖。
+第六區檢查41組光路、共用場景及第二區實際器材拖曳回歸；最新操作依使用者指示改為雙光源獨立開關，檢查實際器材固定座標連點四種組合、紅藍及同開的畫面色彩像素、拖曳不切換、取消手勢、背景點擊、鍵盤、五種寬度、真實觸控及SVG器材點擊。原三步記錄與分段動畫測試已由上述行為取代。與既有第三至五區測試一起執行，另以實際截圖檢視畫面。
 
 ## 5.1 第二區塊：加冰塊與加熱水
 

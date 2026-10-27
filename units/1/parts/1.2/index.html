@@ -102,7 +102,7 @@
     @media(max-width:460px){#card-03 .mirror-stable-controls{display:grid;grid-template-columns:1.1fr 1.6fr .7fr;gap:6px}#toggle-image-object,#toggle-image-rays,#reset-image-activity{min-width:0;min-height:60px;padding-inline:6px;font-size:.85rem}#card-03 .mirror-step-explanation{min-height:230px}}
   </style>
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
-  <link rel="stylesheet" href="assets/reversible-light.css?v=1">
+  <link rel="stylesheet" href="assets/reversible-light.css?v=2">
 </head>
 <body>
   <header class="shell masthead">
@@ -356,36 +356,35 @@
             <noscript><p>請啟用 JavaScript 查看可操作光路。平面鏡使平行光仍互相平行，凹面鏡使近軸平行光會聚，凸面鏡使反射光發散；每一處都遵守反射定律。</p></noscript>
           </div>
         </section>
-        <section class="lesson-card" id="card-06" data-reverse-state="setup">
+        <section class="lesson-card" id="card-06" data-light-a="off" data-light-b="off">
           <div class="card-side"><span class="card-number">06</span><h3>光路能倒著走回去嗎？</h3><span class="card-role">反向追蹤路徑</span></div>
           <div class="card-main">
             <h2>從另一端照回，光路會重合嗎？</h2>
-            <p>沿用前面的雷射實驗，先記下光路，再從另一端重新發光。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我把光源放在剛才光到達的位置，能照回原來的地方嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>保持鏡面不動，從 B 朝原反射點照射，比較兩次光路。</p></div>
-            <div class="reverse-steps" role="group" aria-label="光路可逆的三步觀察">
-              <button type="button" class="reverse-step" id="reverse-setup" aria-current="step">① 設定方向</button>
-              <button type="button" class="reverse-step" id="reverse-record">② 記下光路</button>
-              <button type="button" class="reverse-step" id="reverse-ray" disabled>③ 從 B 照回</button>
+            <p>點擊 A、B 發射器，分別開關紅光與藍光，比較兩個方向的反射路徑。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我可以分別開啟紅光和藍光，看看它們走的路一不一樣嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>可以。點擊哪一支，就開關那一支；兩支一起開啟時，觀察光路是否重合。</p></div>
+            <div class="reverse-switches" role="group" aria-label="獨立開關兩支發射器">
+              <button type="button" class="reverse-switch reverse-switch-a" id="reverse-toggle-a" aria-pressed="false">開啟 A 紅光</button>
+              <button type="button" class="reverse-switch reverse-switch-b" id="reverse-toggle-b" aria-pressed="false">開啟 B 藍光</button>
             </div>
             <div class="reverse-lab">
               <div class="reverse-stage">
-                <canvas id="reverse-scene" role="slider" tabindex="0" aria-label="拖動 A 發射器設定方向；方向鍵每次調整一度，Home 與 End 調至 20 度與 60 度" aria-valuemin="20" aria-valuemax="60" aria-valuenow="30" aria-describedby="reverse-lock-note"></canvas>
-                <div class="reverse-device-label" id="reverse-label-a"><strong>A 原出發點</strong><small id="reverse-status-a">正在發光</small></div>
-                <div class="reverse-device-label" id="reverse-label-b"><strong>B 反射光到達處</strong><small id="reverse-status-b">反射光到達處</small></div>
+                <canvas id="reverse-scene" role="slider" tabindex="0" aria-label="點擊 A 或 B 發射器開關紅光與藍光；拖動 A 或用方向鍵調角，A 與 B 鍵可開關對應光源" aria-valuemin="20" aria-valuemax="60" aria-valuenow="30" aria-describedby="reverse-lock-note"></canvas>
+                <div class="reverse-device-label" id="reverse-label-a"><strong>A 紅光發射器</strong><small id="reverse-status-a">已關閉</small></div>
+                <div class="reverse-device-label" id="reverse-label-b"><strong>B 藍光發射器</strong><small id="reverse-status-b">已關閉</small></div>
                 <div class="reverse-device-label reverse-m-label" id="reverse-label-m"><strong>M 反射點</strong></div>
-                <div class="reverse-overlap" id="reverse-overlap" hidden>兩次光路重合</div>
+                <div class="reverse-overlap" id="reverse-overlap" hidden>紅藍光路重合</div>
                 <div class="reverse-fallback" id="reverse-fallback" hidden><p id="reverse-fallback-message"></p><svg id="reverse-fallback-svg" viewBox="0 0 400 325" role="img" aria-label="光路可逆的替代俯視圖"></svg></div>
               </div>
-              <div class="reverse-lab-footer"><span id="reverse-lock-note">拖動 A 發射器設定方向。</span><button type="button" id="reverse-reset">↻ 重新設定</button><label class="reverse-angle-settings" for="reverse-angle"><span>入射角</span><input id="reverse-angle" type="range" min="20" max="60" step="1" value="30" aria-label="設定第一次入射角"><output id="reverse-angle-value" for="reverse-angle">30°</output></label></div>
+              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><button type="button" id="reverse-reset">↻ 重新設定</button><label class="reverse-angle-settings" for="reverse-angle"><span>入射角</span><input id="reverse-angle" type="range" min="20" max="60" step="1" value="30" aria-label="調整兩支光源的對應角度"><output id="reverse-angle-value" for="reverse-angle">30°</output></label></div>
             </div>
-            <div class="reverse-legend"><span><i></i>灰色：第一次光路紀錄</span><span><i class="reverse-blue"></i>藍色：第二次光路</span></div>
-            <div class="reverse-paths"><div><small>第一次</small><strong>A → M → B</strong></div><div><small>第二次</small><strong id="reverse-route-back">等待從 B 發光</strong></div></div>
-            <p class="reverse-state" id="reverse-state" aria-live="polite">先調整 A 的方向，再記下第一次光路。</p>
+            <div class="reverse-legend"><span><i class="reverse-red"></i>A：紅光</span><span><i class="reverse-blue"></i>B：藍光</span></div>
+            <div class="reverse-paths"><div><small>A 紅光路徑</small><strong>A → M → B</strong><span id="reverse-path-a-status">已關閉</span></div><div><small>B 藍光路徑</small><strong>B → M → A</strong><span id="reverse-path-b-status">已關閉</span></div></div>
+            <p class="reverse-state" id="reverse-state" aria-live="polite">點擊任一發射器，開啟對應顏色的光；再點一次即可關閉。</p>
             <details class="reverse-reason"><summary>查看原因：入射角與反射角交換後，仍然相等</summary><p>從 B 朝 M 照射時，原本的反射線成了入射線；原本的入射線則成為返回 A 的反射線。鏡面與法線固定，交換後兩個角仍相等，所以光會沿原路返回。</p><p id="reverse-reason-angles">兩次的入射角與反射角都是 30°。</p></details>
-            <p class="reverse-note">光路描線為示意，非真實光速；兩次發光分別進行。灰色保留第一次紀錄，藍色用來區分第二次，並非同時發光或光在鏡面變色。</p>
+            <p class="reverse-note">紅光由 A 出發，藍光由 B 出發；可單獨或同時開啟。重合處以紅色外緣與藍色細線區分，兩條中心路徑相同。圖中光路為傳播方向示意。</p>
             <div class="fact reverse-fact"><p><strong>重點：</strong>鏡面固定，從 B 沿原光路反向照射，光會經同一反射點回到 A，稱為光路可逆。後續學習折射時，再觀察這個性質。</p></div>
-            <noscript><p>請啟用 JavaScript 操作：先由 A 經鏡面 M 照到 B，再由 B 沿原路照向 M，反射光會回到 A。</p></noscript>
+            <noscript><p>請啟用 JavaScript 點選 A、B 發射器。紅光沿 A→M→B，藍光沿 B→M→A，各自遵守反射定律。</p></noscript>
           </div>
         </section>
         <section class="lesson-card end-card" id="card-07">
@@ -438,6 +437,6 @@
   <script type="module" src="assets/mirror-image.js?v=2"></script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
-  <script type="module" src="assets/reversible-light.js?v=1"></script>
+  <script type="module" src="assets/reversible-light.js?v=2"></script>
 </body>
 </html>

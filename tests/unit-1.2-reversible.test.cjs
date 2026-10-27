@@ -60,7 +60,7 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
   await page.goto(url, { waitUntil: 'networkidle' });
   const section = page.locator('#card-06');
   const canvas = page.locator('#reverse-scene');
-  const record = page.locator('#reverse-record'), emit = page.locator('#reverse-ray'), reset = page.locator('#reverse-reset');
+  const toggleA = page.locator('#reverse-toggle-a'), toggleB = page.locator('#reverse-toggle-b'), reset = page.locator('#reverse-reset');
   const setAngle = async n => { await page.locator('#reverse-angle').fill(String(n)); await page.locator('#reverse-angle').dispatchEvent('input'); };
 
   async function dragEmitter(target, dx) {
@@ -74,132 +74,157 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
       const second = await target.boundingBox();
       return Math.abs(first.y - second.y) < 0.5;
     }).toBe(true);
-    const box = await target.boundingBox(), [x, y] = JSON.parse(await target.getAttribute('data-emitter-screen'));
+    const box = await target.boundingBox(), [x, y] = JSON.parse(await target.getAttribute(target === canvas ? 'data-emitter-a-screen' : 'data-emitter-screen'));
     await page.mouse.move(box.x + x, box.y + y); await page.mouse.down();
-    if (await target.getAttribute('aria-disabled') !== 'true') assert.equal(await target.evaluate(el => el.hasPointerCapture(1)), true, 'Physical pointer must actually hit the emitter');
+    assert.equal(await target.evaluate(el => el.hasPointerCapture(1)), true, 'Physical pointer must actually hit the emitter');
     await page.mouse.move(box.x + x + dx, box.y + y, { steps: 6 }); await page.mouse.up();
   }
 
-  await t.test('section 02 retains keyboard, actual emitter drag and inherited angle', async () => {
+  async function sourcePoint(key) {
+    await canvas.evaluate(el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await expect.poll(async () => { const a = await canvas.boundingBox(); await page.waitForTimeout(100); const b = await canvas.boundingBox(); return Math.abs(a.y - b.y) < 0.5; }).toBe(true);
+    const box = await canvas.boundingBox(), [x, y] = JSON.parse(await canvas.getAttribute(`data-emitter-${key}-screen`));
+    return { x: box.x + x, y: box.y + y };
+  }
+  async function status(a, b) {
+    await expect(section).toHaveAttribute('data-light-a', a ? 'on' : 'off');
+    await expect(section).toHaveAttribute('data-light-b', b ? 'on' : 'off');
+    await expect(toggleA).toHaveAttribute('aria-pressed', String(a));
+    await expect(toggleB).toHaveAttribute('aria-pressed', String(b));
+  }
+
+  await t.test('section 02 keeps its actual drag and keyboard, with initial angle inherited', async () => {
     const original = page.locator('#laser-reflection-scene');
-    await original.focus(); await page.keyboard.press('Home');
-    await expect(page.locator('#lab-angle-in')).toHaveText('20°');
-    await expect(page.locator('#lab-angle-out')).toHaveText('20°');
-    await expect(section).toHaveAttribute('data-reverse-angle', '20');
-    await page.keyboard.press('ArrowRight');
+    await original.focus(); await page.keyboard.press('Home'); await page.keyboard.press('ArrowRight');
     await expect(page.locator('#law-angle-in')).toHaveText('21°');
+    await expect(section).toHaveAttribute('data-reverse-angle', '21');
     await dragEmitter(original, 35);
     const changed = Number(await original.getAttribute('aria-valuenow'));
-    assert.ok(changed > 21, 'Dragging the physical housing must alter the original angle');
+    assert.ok(changed > 21);
     await expect(section).toHaveAttribute('data-reverse-angle', String(Math.min(60, changed)));
-    await original.focus(); await page.keyboard.press('End');
-    await expect(page.locator('#lab-angle-in')).toHaveText('90°');
-    await expect(section).toHaveAttribute('data-reverse-angle', '60');
+    await status(false, false);
   });
 
-  await t.test('new experiment drag works; recording locks geometry against all input routes', async () => {
-    await reset.click(); await setAngle(30);
-    await expect(emit).toBeDisabled();
-    await dragEmitter(canvas, 30);
-    assert.ok(Number(await section.getAttribute('data-reverse-angle')) > 30);
-    await setAngle(40); await record.click();
-    const locked = await section.getAttribute('data-reverse-model');
-    await expect(page.locator('#reverse-angle')).toBeDisabled();
-    await expect(emit).toBeEnabled();
-    await canvas.focus(); await page.keyboard.press('ArrowRight');
-    await dragEmitter(canvas, -30);
-    await page.locator('#laser-reflection-scene').focus(); await page.keyboard.press('Home');
-    assert.equal(await section.getAttribute('data-reverse-model'), locked);
-    await expect(section).toHaveAttribute('data-reverse-angle', '40');
-    await expect(page.locator('#reverse-lock-note')).toContainText('已鎖定 40°');
-  });
-
-  await t.test('reverse beam traces progressively, then overlays its retained path at three angles', async () => {
+  await t.test('actual device clicks independently traverse all four light states without a record step', async () => {
     for (const angle of [20, 40, 60]) {
-      await reset.click(); await setAngle(angle); await record.click();
-      const before = await canvas.screenshot();
-      await emit.click();
-      await expect(section).toHaveAttribute('data-reverse-state', 'tracing');
-      await page.waitForFunction(() => { const p = Number(document.querySelector('#card-06').dataset.reverseProgress); return p > 0.05 && p < 1; });
-      const intermediate = Number(await section.getAttribute('data-reverse-progress'));
-      assert.ok(intermediate > 0 && intermediate < 1);
-      await expect(section).toHaveAttribute('data-reverse-state', 'complete', { timeout: 10000 });
-      const model = JSON.parse(await section.getAttribute('data-reverse-model'));
-      vectorClose(model.forward.source, model.backward.end);
-      vectorClose(model.forward.hit, model.backward.hit);
-      vectorClose(model.forward.end, model.backward.source);
-      const after = await canvas.screenshot();
-      assert.ok(!before.equals(after), 'Visible blue trace must change the actual rendered scene');
-      await expect(page.locator('#reverse-overlap')).toBeVisible();
-      await expect(page.locator('#reverse-route-back')).toHaveText('B → M → A');
-      await expect(page.locator('#reverse-status-a')).toHaveText('現在接收');
-      await expect(page.locator('#reverse-status-b')).toHaveText('正在發光');
+      await reset.click(); await setAngle(angle);
+      const a = await sourcePoint('a'), b = await sourcePoint('b');
+      // Keep fixed screen coordinates during each cycle; no relocated buttons.
+      for (let i = 0; i < 3; i++) {
+        await page.mouse.click(a.x, a.y); await status(true, false);
+        await page.mouse.click(b.x, b.y); await status(true, true);
+        await expect(page.locator('#reverse-overlap')).toBeVisible();
+        await page.mouse.click(a.x, a.y); await status(false, true);
+        await expect(page.locator('#reverse-overlap')).toBeHidden();
+        await page.mouse.click(b.x, b.y); await status(false, false);
+      }
     }
   });
 
-  await t.test('reset during tracing cancels stale completion; replay and keyboard controls recover', async () => {
-    await emit.click();
-    await expect(section).toHaveAttribute('data-reverse-state', 'tracing');
-    await page.locator('#reverse-setup').click();
-    await page.waitForTimeout(2000);
-    await expect(section).toHaveAttribute('data-reverse-state', 'setup');
-    await expect(page.locator('#reverse-overlap')).toBeHidden();
-    await expect(emit).toBeDisabled();
-    await canvas.focus(); await page.keyboard.press('Home');
-    await expect(section).toHaveAttribute('data-reverse-angle', '20');
-    await page.keyboard.press('End'); await expect(section).toHaveAttribute('data-reverse-angle', '60');
-    await page.keyboard.press('ArrowLeft'); await expect(section).toHaveAttribute('data-reverse-angle', '59');
-    await record.focus(); await page.keyboard.press('Enter');
-    await emit.focus(); await page.keyboard.press('Space');
-    await expect(section).toHaveAttribute('data-reverse-state', 'complete', { timeout: 10000 });
-    await emit.click(); await expect(section).toHaveAttribute('data-reverse-state', 'complete', { timeout: 10000 });
-    await page.locator('.reverse-reason summary').click();
-    await expect(page.locator('#reverse-reason-angles')).toContainText('59°');
+  await t.test('red, blue and simultaneous illumination all change the actual rendered scene', async () => {
+    await reset.click(); await setAngle(30);
+    const off = await canvas.screenshot();
+    await toggleA.click(); const red = await canvas.screenshot();
+    await toggleA.click(); await toggleB.click(); const blue = await canvas.screenshot();
+    await toggleA.click(); const both = await canvas.screenshot();
+    for (const [a, b] of [[off, red], [off, blue], [red, blue], [red, both], [blue, both]]) assert.ok(!a.equals(b));
+    const pixels = async buffer => page.evaluate(async bytes => {
+      const image = await createImageBitmap(new Blob([new Uint8Array(bytes)], { type: 'image/png' }));
+      const surface = document.createElement('canvas'); surface.width = image.width; surface.height = image.height;
+      const ctx = surface.getContext('2d'); ctx.drawImage(image, 0, 0);
+      // Exclude the colored status labels near the emitters: inspect the rays.
+      const data = ctx.getImageData(0, Math.floor(image.height / 3), image.width, Math.floor(image.height * 2 / 3)).data;
+      let red = 0, blue = 0;
+      for (let i = 0; i < data.length; i += 4) {
+        if (data[i] > 130 && data[i] > data[i + 1] * 1.7 && data[i] > data[i + 2] * 1.7) red++;
+        if (data[i + 2] > 150 && data[i + 2] > data[i] * 1.7 && data[i + 2] > data[i + 1] * 1.4) blue++;
+      }
+      image.close(); return { red, blue };
+    }, [...buffer]);
+    const r = await pixels(red), b = await pixels(blue), overlap = await pixels(both);
+    assert.ok(overlap.blue > r.blue + 300, 'The blue beam must stay visible when red is also on');
+    assert.ok(overlap.red > b.red + 300, 'The red beam must stay visible when blue is also on');
+    const model = JSON.parse(await section.getAttribute('data-reverse-model'));
+    vectorClose(model.forward.source, model.backward.end); vectorClose(model.forward.hit, model.backward.hit);
+    const source = fs.readFileSync(path.join(asset, 'reversible-light.js'), 'utf8');
+    assert.match(source, /a: '#ed2924', b: '#205df5'/);
+    await status(true, true);
+    await reset.click(); await status(false, false);
   });
 
-  await t.test('approved layout and labels fit at desktop, intermediate and narrow widths', async () => {
+  await t.test('dragging A changes angle without toggling either source; pointer cancellation and background clicks are inert', async () => {
+    await setAngle(30); await toggleA.click(); await toggleB.click();
+    await dragEmitter(canvas, 30);
+    assert.ok(Number(await section.getAttribute('data-reverse-angle')) > 30);
+    await status(true, true);
+    const point = await sourcePoint('a');
+    await page.mouse.move(point.x, point.y); await page.mouse.down();
+    await canvas.dispatchEvent('pointercancel', { pointerId: 1 }); await page.mouse.up();
+    await status(true, true);
+    const box = await canvas.boundingBox(); await page.mouse.click(box.x + 8, box.y + box.height - 12);
+    await status(true, true);
+    await setAngle(50);
+    const before = await section.getAttribute('data-reverse-model');
+    await page.locator('#laser-reflection-scene').focus(); await page.keyboard.press('Home');
+    assert.equal(await section.getAttribute('data-reverse-model'), before);
+    await reset.click(); await status(false, false);
+  });
+
+  await t.test('keyboard switches, live angle controls and reset reflect the independent state', async () => {
+    await toggleA.focus(); await page.keyboard.press('Enter'); await status(true, false);
+    await toggleB.focus(); await page.keyboard.press('Space'); await status(true, true);
+    await canvas.focus(); await page.keyboard.press('a'); await status(false, true);
+    await page.keyboard.press('b'); await status(false, false);
+    await page.keyboard.press('Home'); await expect(section).toHaveAttribute('data-reverse-angle', '20');
+    await page.keyboard.press('End'); await expect(section).toHaveAttribute('data-reverse-angle', '60');
+    await page.locator('.reverse-reason summary').click();
+    await expect(page.locator('#reverse-reason-angles')).toContainText('60°');
+  });
+
+  await t.test('independent controls and device labels fit five widths', async () => {
     for (const width of [1440, 1280, 1024, 768, 390]) {
       await page.setViewportSize({ width, height: 1050 });
-      for (const angle of [20, 30, 60]) {
-        await reset.click(); await setAngle(angle); await record.click();
+      for (const angle of [20, 60]) {
+        await setAngle(angle);
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
         const bounds = await page.locator('.reverse-stage').boundingBox();
         for (const selector of ['#reverse-label-a', '#reverse-label-b', '#reverse-label-m']) {
           const box = await page.locator(selector).boundingBox();
-          assert.ok(box.x >= bounds.x && box.x + box.width <= bounds.x + bounds.width + 1, `${selector} outside width ${width}/${angle}`);
-          assert.ok(box.y >= bounds.y && box.y + box.height <= bounds.y + bounds.height + 1, `${selector} outside height ${width}/${angle}`);
+          assert.ok(box.x >= bounds.x && box.x + box.width <= bounds.x + bounds.width + 1);
+          assert.ok(box.y >= bounds.y && box.y + box.height <= bounds.y + bounds.height + 1);
         }
-        const boxes = await page.locator('.reverse-step').evaluateAll(els => els.map(el => { const b = el.getBoundingClientRect(); return { x: b.x, y: b.y, right: b.right }; }));
-        close(boxes[0].y, boxes[1].y, 1); close(boxes[1].y, boxes[2].y, 1);
-        assert.ok(boxes[0].right < boxes[1].x && boxes[1].right < boxes[2].x);
       }
     }
     await page.setViewportSize({ width: 1440, height: 1050 });
   });
 
-  await t.test('touch/reduced motion and unavailable WebGL keep a usable independent activity', async () => {
+  await t.test('real touch taps toggle the devices; fallback diagram and native switches remain usable', async () => {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce' });
-    const touch = await context.newPage();
-    await touch.goto(url, { waitUntil: 'networkidle' });
-    await touch.locator('#reverse-record').tap(); await touch.locator('#reverse-ray').tap();
-    await expect(touch.locator('#card-06')).toHaveAttribute('data-reverse-state', 'complete');
-    await touch.locator('#reverse-reset').tap();
-    await expect(touch.locator('#reverse-ray')).toBeDisabled();
+    const touch = await context.newPage(); await touch.goto(url, { waitUntil: 'networkidle' });
+    const scene = touch.locator('#reverse-scene');
+    await scene.evaluate(el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await touch.waitForTimeout(150);
+    const box = await scene.boundingBox();
+    const a = JSON.parse(await scene.getAttribute('data-emitter-a-screen'));
+    const b = JSON.parse(await scene.getAttribute('data-emitter-b-screen'));
+    for (const [p, key, value] of [[a, 'a', 'on'], [b, 'b', 'on'], [a, 'a', 'off'], [b, 'b', 'off']]) {
+      await touch.touchscreen.tap(box.x + p[0], box.y + p[1]);
+      await expect(touch.locator('#card-06')).toHaveAttribute(`data-light-${key}`, value);
+    }
     await context.close();
-    const fallback = await browser.newContext({ reducedMotion: 'reduce' });
+    const fallback = await browser.newContext();
     await fallback.addInitScript(() => {
       const getContext = HTMLCanvasElement.prototype.getContext;
-      HTMLCanvasElement.prototype.getContext = function (kind, ...args) {
-        if (this.id === 'reverse-scene' && kind.startsWith('webgl')) return null;
-        return getContext.call(this, kind, ...args);
-      };
+      HTMLCanvasElement.prototype.getContext = function (kind, ...args) { return this.id === 'reverse-scene' && kind.startsWith('webgl') ? null : getContext.call(this, kind, ...args); };
     });
     const alt = await fallback.newPage(); await alt.goto(url, { waitUntil: 'networkidle' });
     await expect(alt.locator('#reverse-fallback')).toBeVisible();
-    await expect(alt.locator('#reverse-scene')).toBeHidden();
-    await alt.locator('#reverse-record').click(); await alt.locator('#reverse-ray').click();
-    await expect(alt.locator('#card-06')).toHaveAttribute('data-reverse-state', 'complete');
-    assert.ok(await alt.locator('#reverse-fallback-svg path').count() >= 5);
+    await alt.locator('[data-source="a"]').click(); await alt.locator('[data-source="b"]').click();
+    await expect(alt.locator('#card-06')).toHaveAttribute('data-light-a', 'on');
+    await expect(alt.locator('#card-06')).toHaveAttribute('data-light-b', 'on');
+    await expect(alt.locator('[data-ray="a"]')).toHaveAttribute('stroke', '#ed2924');
+    await expect(alt.locator('[data-ray="b"]')).toHaveAttribute('stroke', '#205df5');
+    await alt.locator('#reverse-reset').click(); await expect(alt.locator('[data-ray]')).toHaveCount(0);
     await fallback.close();
     assert.deepEqual(errors, []);
   });
