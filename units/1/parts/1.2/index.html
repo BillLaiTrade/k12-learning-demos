@@ -133,7 +133,8 @@
                   <text id="law-angle-name-out" x="280" y="176" fill="#24783a" font-size="12" font-weight="850" text-anchor="middle">反射角</text>
                   <text id="law-angle-in" x="323" y="204" fill="#165fc2" font-size="14" font-weight="850" text-anchor="middle">30°</text>
                   <text id="law-angle-out" x="277" y="204" fill="#24783a" font-size="14" font-weight="850" text-anchor="middle">30°</text>
-                  <text x="420" y="95" fill="#cf261c" font-size="15" font-weight="800">入射線</text><text x="118" y="95" fill="#cf261c" font-size="15" font-weight="800">反射線</text>
+                  <g id="law-line-name-in" transform="translate(440 100)"><rect x="-38" y="-14" width="76" height="28" rx="9" fill="#fffdf7" fill-opacity=".96" stroke="#e8b3ae"/><text y="5" fill="#cf261c" font-size="14" font-weight="800" text-anchor="middle">入射線</text></g>
+                  <g id="law-line-name-out" transform="translate(160 100)"><rect x="-38" y="-14" width="76" height="28" rx="9" fill="#fffdf7" fill-opacity=".96" stroke="#e8b3ae"/><text y="5" fill="#cf261c" font-size="14" font-weight="800" text-anchor="middle">反射線</text></g>
                   <path d="M334 257L309 275" fill="none" stroke="#cf261c" stroke-width="1.5"/><rect x="334" y="242" width="68" height="24" rx="8" fill="#fff" stroke="#e8b3ae"/><text x="368" y="258" fill="#cf261c" font-size="13" font-weight="800" text-anchor="middle">入射點</text>
                   <text x="300" y="330" fill="#172635" font-size="18" font-weight="800" text-anchor="middle">平面鏡（反射面朝上）</text>
                 </svg>
@@ -293,6 +294,6 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
-  <script type="module" src="assets/laser-reflection.js?v=27"></script>
+  <script type="module" src="assets/laser-reflection.js?v=28"></script>
 </body>
 </html>

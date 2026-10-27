@@ -271,6 +271,10 @@ function update() {
   document.querySelector('#law-angle-out').setAttribute('y', (valueY + 4).toFixed(1));
   document.querySelector('#law-angle-in').textContent = `${deg}°`;
   document.querySelector('#law-angle-out').textContent = `${deg}°`;
+  const lineLabelX = 300 + dx + 40;
+  const lineLabelY = 280 - dy - 24;
+  document.querySelector('#law-line-name-in').setAttribute('transform', `translate(${lineLabelX.toFixed(1)} ${lineLabelY.toFixed(1)})`);
+  document.querySelector('#law-line-name-out').setAttribute('transform', `translate(${(600 - lineLabelX).toFixed(1)} ${lineLabelY.toFixed(1)})`);
   document.querySelector('#lab-angle-in').textContent = `${deg}°`;
   document.querySelector('#lab-angle-out').textContent = `${deg}°`;
   canvas.setAttribute('aria-valuenow', String(deg));
