@@ -1289,6 +1289,16 @@
           leftDirection.setAttribute("opacity",sideX>48?".9":"0");rightDirection.setAttribute("opacity",sideX<592?".9":"0");
           updateSideWave(elapsed);
         };
+        const settleWater=()=>{
+          impact=null;waterStart=null;
+          rippleNodes.forEach(ring=>{ring.setAttribute("opacity","0");ring.style.opacity="0";});
+          impactDot.setAttribute("opacity","0");impactDot.style.opacity="0";
+          leftDirection.setAttribute("opacity","0");rightDirection.setAttribute("opacity","0");
+          sideSurface.setAttribute("d",`M24 ${baseSurfaceY}H616`);
+          selectedBase={x:400,y:54};
+          pebble.hidden=false;pebble.style.left="7%";pebble.style.top="50%";pebble.classList.remove("is-dragging");
+          updateSideWave(0);
+        };
         const animateWater=time=>{
           if(!waterRunning||waterStart===null)return;
           const elapsed=(time-waterStart)/1000;
@@ -1296,7 +1306,7 @@
           const duration=Math.min(5.5,farthestCorner/waveSpeed+.12);
           drawWater(Math.min(elapsed,duration));
           if(elapsed<duration){waterFrame=window.requestAnimationFrame(animateWater);return;}
-          waterRunning=false;waterFrame=0;pebble.hidden=false;pebble.style.left="7%";pebble.style.top="50%";
+          waterRunning=false;waterFrame=0;settleWater();
         };
         const launchWaterWave=(x,y)=>{
           if(waterFrame)window.cancelAnimationFrame(waterFrame);
