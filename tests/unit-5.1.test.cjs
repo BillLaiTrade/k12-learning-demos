@@ -80,6 +80,8 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
     await page.mouse.move(start.x,start.y);await page.mouse.down();await page.mouse.move(end.x,end.y,{steps:12});await page.mouse.up();
     await page.waitForFunction(() => document.getElementById('measurement-note').textContent.startsWith('液柱已穩定'));
     assert.equal(await page.locator('#measurement-save').isDisabled(), false);
+    await page.locator('#measurement-instrument').click();
+    assert.equal(await page.locator('#measurement-save').isDisabled(), false);
     await page.locator('#measurement-reset').click();
   });
 

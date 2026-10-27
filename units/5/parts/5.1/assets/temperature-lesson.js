@@ -136,7 +136,7 @@
   instrument.addEventListener('pointermove',event=>{if(!drag)return;const p=point(event);instrument.setAttribute('transform',`translate(${drag.tx+p.x-drag.x},${drag.ty+p.y-drag.y})`);});
   instrument.addEventListener('pointerup',event=>{
     if(!drag)return;const m=instrument.transform.baseVal.consolidate().matrix;
-    const valid=235+m.e>140&&235+m.e<330&&395+m.f>150&&395+m.f<260;
+    const valid=235+m.e>140&&235+m.e<330&&(395+m.f>150&&395+m.f<260||drag.wasImmersed&&395+m.f>=260&&395+m.f<430);
     const was=drag.wasImmersed;drag=null;
     if(valid){if(was){instrument.setAttribute('transform','translate(0,0)');if(!stable){immersed=false;insert();}else renderScene();}else insert();}
     else{resetScene();$('measurement-note').textContent='溫度計已回到杯外。將液泡從杯口上方放入，或使用「放入水中」按鈕。';}
