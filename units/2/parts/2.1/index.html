@@ -114,13 +114,18 @@
     .water-wave-stage { position:relative; width:100%; aspect-ratio:640/240; touch-action:none; }
     .water-wave-stage--section { aspect-ratio:640/160; }
     .water-wave-stage svg { display:block; width:100%; height:100%; }
-    .water-wave-stage .water-surface { fill:url(#water-surface-gradient); stroke:#75a9ab; stroke-width:2; }
+    .water-wave-stage .water-surface { fill:url(#water-surface-gradient); stroke:#77aeb0; stroke-width:1.6; }
+    .water-tray-shadow { filter:drop-shadow(0 5px 6px rgb(46 72 68 / 18%)); }
+    .water-tray-inner-rim { fill:none; stroke:rgb(255 255 255 / 72%); stroke-width:2; }
+    .water-glint { fill:none; stroke:#fff; stroke-linecap:round; opacity:.34; }
     .water-ripple { fill:none; stroke:#4d929a; stroke-width:2.8; }
     .water-impact { fill:#df8b41; stroke:#fff; stroke-width:2; }
     .water-cross-section { stroke:#527f78; stroke-width:1.5; stroke-dasharray:5 6; opacity:.4; }
-    .water-pebble { position:absolute; z-index:2; left:7%; top:50%; display:grid; place-items:center; width:34px; height:28px; padding:0; transform:translate(-50%,-50%); border:1px solid #9a542e; border-radius:48% 43% 46% 42%; background:linear-gradient(145deg,#d99052,#a85b30); box-shadow:0 3px 6px rgb(64 43 29 / 25%); color:#fff9ef; font-size:0; cursor:grab; touch-action:none; user-select:none; }
+    .water-pebble { position:absolute; z-index:2; left:7%; top:50%; display:grid; place-items:center; width:46px; height:40px; padding:0; transform:translate(-50%,-50%); border:0; border-radius:50%; background:transparent; color:transparent; font-size:0; cursor:grab; touch-action:none; user-select:none; }
+    .water-pebble-art { display:block; width:44px; height:36px; overflow:visible; filter:drop-shadow(0 3px 2px rgb(45 59 55 / 28%)); transition:filter .18s ease,transform .18s ease; }
     .water-pebble[hidden] { display:none; }
-    .water-pebble::before { content:""; width:16px; height:8px; border-radius:50%; background:rgb(255 239 210 / 35%); transform:rotate(-18deg); }
+    .water-pebble:hover .water-pebble-art { filter:drop-shadow(0 5px 3px rgb(45 59 55 / 32%)); transform:translateY(-2px) rotate(-5deg); }
+    .water-pebble.is-dragging .water-pebble-art { filter:drop-shadow(0 8px 5px rgb(45 59 55 / 34%)); transform:translateY(-5px) rotate(-8deg); }
     .water-pebble:active,.water-pebble.is-dragging { cursor:grabbing; }
     .water-pebble:focus-visible,.water-wave-reset:focus-visible { outline:3px solid #df8b41; outline-offset:3px; }
     .water-side-fill { fill:#d7edef; }
@@ -821,16 +826,35 @@
                 <div class="water-wave-stage" data-water-top-stage>
                   <svg viewBox="0 0 640 240" role="img" aria-label="俯視水盤。投入小石子後，圓形波紋從落點向四周擴散">
                     <defs>
-                      <linearGradient id="water-surface-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2f1ef"/><stop offset="1" stop-color="#c2e0e2"/></linearGradient>
+                      <radialGradient id="water-surface-gradient" cx="38%" cy="25%" r="92%"><stop offset="0" stop-color="#edf8f4"/><stop offset=".58" stop-color="#cce8e6"/><stop offset="1" stop-color="#b3d5da"/></radialGradient>
+                      <linearGradient id="water-tray-rim-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#faf9f0"/><stop offset=".38" stop-color="#b7c5be"/><stop offset=".72" stop-color="#879b95"/><stop offset="1" stop-color="#e9eee7"/></linearGradient>
+                      <linearGradient id="water-tray-lip-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffefa"/><stop offset="1" stop-color="#d6e0da"/></linearGradient>
+                      <linearGradient id="river-stone-gradient" x1=".12" y1=".08" x2=".88" y2=".92"><stop offset="0" stop-color="#a9b2a8"/><stop offset=".36" stop-color="#77847b"/><stop offset=".72" stop-color="#59655f"/><stop offset="1" stop-color="#3e4b47"/></linearGradient>
+                      <radialGradient id="river-stone-sheen" cx="32%" cy="22%" r="80%"><stop offset="0" stop-color="#f0e6cd" stop-opacity=".82"/><stop offset=".38" stop-color="#d4d0bd" stop-opacity=".3"/><stop offset="1" stop-color="#bbc8bf" stop-opacity="0"/></radialGradient>
                       <clipPath id="water-surface-clip"><rect x="34" y="22" width="572" height="196" rx="20"/></clipPath>
                     </defs>
-                    <rect x="25" y="13" width="590" height="214" rx="25" fill="#d9e0db" stroke="#8ca49c" stroke-width="2"/>
+                    <rect class="water-tray-shadow" x="25" y="13" width="590" height="214" rx="25" fill="url(#water-tray-rim-gradient)" stroke="#81938c" stroke-width="2"/>
+                    <rect x="29" y="17" width="582" height="206" rx="23" fill="url(#water-tray-lip-gradient)" stroke="#fffefa" stroke-width="1.5"/>
+                    <rect class="water-tray-inner-rim" x="32" y="20" width="576" height="200" rx="21"/>
                     <rect x="34" y="22" width="572" height="196" rx="20" class="water-surface"/>
+                    <g clip-path="url(#water-surface-clip)" aria-hidden="true">
+                      <path class="water-glint" stroke-width="2" d="M55 37H172M475 38H581"/>
+                      <path class="water-glint" stroke-width="1.2" d="M52 42H116M519 44H586" opacity=".2"/>
+                    </g>
                     <path id="water-cross-section-guide" class="water-cross-section" d="M40 120H600"/>
                     <g id="water-ripple-group" clip-path="url(#water-surface-clip)"></g>
                     <circle id="water-impact-dot" class="water-impact" cx="320" cy="120" r="6" opacity="0"/>
                   </svg>
-                  <button class="water-pebble" type="button" data-water-pebble aria-label="拖曳小石子到水盤，或按一下投入水中">小石子</button>
+                  <button class="water-pebble" type="button" data-water-pebble aria-label="拖曳小石子到水盤，或按一下投入水中">
+                    <svg class="water-pebble-art" viewBox="0 0 64 48" aria-hidden="true">
+                      <path d="M7 28Q8 20 15 16L21 9Q27 4 35 7L45 6Q52 7 55 15L60 25Q60 33 52 38L42 42L26 40Q17 42 11 36Q6 33 7 28Z" fill="url(#river-stone-gradient)" stroke="#46534d" stroke-width="1.4"/>
+                      <path d="M11 26Q14 18 23 15L28 9Q34 7 40 10L49 10Q54 14 55 21Q49 26 44 27Q34 31 25 29Q17 31 11 26Z" fill="url(#river-stone-sheen)"/>
+                      <path d="M13 31Q24 35 35 32Q47 34 56 28Q54 36 45 39L34 40Q22 39 15 36Z" fill="#37443f" opacity=".32"/>
+                      <ellipse cx="24" cy="15" rx="6.5" ry="2.2" fill="#fff8e9" opacity=".42" transform="rotate(-24 24 15)"/>
+                      <circle cx="47" cy="18" r="1" fill="#e4e1d4" opacity=".7"/><circle cx="18" cy="29" r=".9" fill="#d9ddd0" opacity=".6"/><circle cx="43" cy="34" r="1.1" fill="#aeb8ac" opacity=".62"/>
+                    </svg>
+                    <span class="sr-only">小石子</span>
+                  </button>
                 </div>
               </figure>
               <figure class="water-wave-view">
