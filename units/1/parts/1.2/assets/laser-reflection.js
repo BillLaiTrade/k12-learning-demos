@@ -246,16 +246,16 @@ function update() {
 
   const diagramLength = 190, dx = diagramLength * Math.sin(angle), dy = diagramLength * Math.cos(angle);
   const endOffset = 14, halfAngle = angle / 2, labelRadius = 150;
-  const contactX = 300 - dx / diagramLength * endOffset, contactY = 280 - dy / diagramLength * endOffset;
-  const reflectedStartX = 300 + dx / diagramLength * endOffset;
-  document.querySelector('#law-incident').setAttribute('d', `M${(300 - dx).toFixed(1)} ${(280 - dy).toFixed(1)}L${contactX.toFixed(1)} ${contactY.toFixed(1)}`);
-  document.querySelector('#law-reflected').setAttribute('d', `M${reflectedStartX.toFixed(1)} ${contactY.toFixed(1)}L${(300 + dx).toFixed(1)} ${(280 - dy).toFixed(1)}`);
-  document.querySelector('#law-wedge-incident').setAttribute('d', svgSector(166, deg, false));
-  document.querySelector('#law-wedge-reflected').setAttribute('d', svgSector(166, deg, true));
-  document.querySelector('#law-arc-incident').setAttribute('d', svgArc(82, deg, false));
-  document.querySelector('#law-arc-reflected').setAttribute('d', svgArc(82, deg, true));
-  const angleLabelX = 300 - labelRadius * Math.sin(halfAngle), angleLabelY = 280 - labelRadius * Math.cos(halfAngle);
-  const valueX = 300 - 110 * Math.sin(halfAngle), valueY = 280 - 110 * Math.cos(halfAngle);
+  const incidentEndX = 300 + dx / diagramLength * endOffset, contactY = 280 - dy / diagramLength * endOffset;
+  const reflectedStartX = 300 - dx / diagramLength * endOffset;
+  document.querySelector('#law-incident').setAttribute('d', `M${(300 + dx).toFixed(1)} ${(280 - dy).toFixed(1)}L${incidentEndX.toFixed(1)} ${contactY.toFixed(1)}`);
+  document.querySelector('#law-reflected').setAttribute('d', `M${reflectedStartX.toFixed(1)} ${contactY.toFixed(1)}L${(300 - dx).toFixed(1)} ${(280 - dy).toFixed(1)}`);
+  document.querySelector('#law-wedge-incident').setAttribute('d', svgSector(166, deg, true));
+  document.querySelector('#law-wedge-reflected').setAttribute('d', svgSector(166, deg, false));
+  document.querySelector('#law-arc-incident').setAttribute('d', svgArc(82, deg, true));
+  document.querySelector('#law-arc-reflected').setAttribute('d', svgArc(82, deg, false));
+  const angleLabelX = 300 + labelRadius * Math.sin(halfAngle), angleLabelY = 280 - labelRadius * Math.cos(halfAngle);
+  const valueX = 300 + 110 * Math.sin(halfAngle), valueY = 280 - 110 * Math.cos(halfAngle);
   document.querySelector('#law-angle-name-in').setAttribute('x', angleLabelX.toFixed(1));
   document.querySelector('#law-angle-name-out').setAttribute('x', (600 - angleLabelX).toFixed(1));
   document.querySelector('#law-angle-name-in').setAttribute('y', (angleLabelY + 4).toFixed(1));

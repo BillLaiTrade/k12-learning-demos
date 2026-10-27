@@ -122,23 +122,23 @@
                   <p class="laser-rule">角度從法線量起。</p>
                 </div>
                 <svg class="laser-diagram" viewBox="0 0 600 340" role="img" aria-labelledby="law-title law-desc">
-                  <title id="law-title">鏡面朝上的平面鏡反射定律</title><desc id="law-desc">平面鏡位於下方，法線垂直鏡面向上。紅色入射線與反射線相對法線對稱，角度會隨下方實驗滑桿更新。</desc>
+                  <title id="law-title">鏡面朝上的平面鏡反射定律</title><desc id="law-desc">平面鏡位於下方，法線垂直鏡面向上。紅色入射線從右側入射，反射線往左；兩線相對法線對稱，角度會隨下方實驗更新。</desc>
                   <defs><marker id="law-arrow" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto"><path d="M0 0L6 3L0 6Z" fill="#e1261c"/></marker></defs>
                   <path d="M90 280H510" stroke="#71889b" stroke-width="15"/><path d="M90 273H510" stroke="#c6d8e8" stroke-width="4"/>
                   <path d="M110 287l-10 16M150 287l-10 16M190 287l-10 16M230 287l-10 16M270 287l-10 16M310 287l-10 16M350 287l-10 16M390 287l-10 16M430 287l-10 16M470 287l-10 16" stroke="#40566c" stroke-width="2"/>
                   <path d="M300 36V280" stroke="#7b7d78" stroke-width="2" stroke-dasharray="9 8"/><text x="313" y="55" fill="#253747" font-size="16" font-weight="700">法線</text>
-                  <path id="law-wedge-incident" d="M300 280L300 114A166 166 0 0 0 243 166Z" fill="#1463c5" fill-opacity=".09"/>
-                  <path id="law-wedge-reflected" d="M300 280L300 114A166 166 0 0 1 357 166Z" fill="#27833d" fill-opacity=".09"/>
-                  <path id="law-incident" d="M205 115L293 268" stroke="#e1261c" stroke-width="4" stroke-linecap="round" marker-end="url(#law-arrow)"/>
-                  <path id="law-arc-incident" d="M300 202A78 78 0 0 0 261 212" fill="none" stroke="#1463c5" stroke-width="5" stroke-linecap="round"/>
-                  <path id="law-arc-reflected" d="M300 202A78 78 0 0 1 339 212" fill="none" stroke="#27833d" stroke-width="5" stroke-linecap="round"/>
-                  <path id="law-reflected" d="M307 268L395 115" stroke="#e1261c" stroke-width="4" stroke-linecap="round" marker-end="url(#law-arrow)"/>
+                  <path id="law-wedge-incident" d="M300 280L300 114A166 166 0 0 1 357 166Z" fill="#1463c5" fill-opacity=".09"/>
+                  <path id="law-wedge-reflected" d="M300 280L300 114A166 166 0 0 0 243 166Z" fill="#27833d" fill-opacity=".09"/>
+                  <path id="law-incident" d="M395 115L307 268" stroke="#e1261c" stroke-width="4" stroke-linecap="round" marker-end="url(#law-arrow)"/>
+                  <path id="law-arc-incident" d="M300 202A78 78 0 0 1 339 212" fill="none" stroke="#1463c5" stroke-width="5" stroke-linecap="round"/>
+                  <path id="law-arc-reflected" d="M300 202A78 78 0 0 0 261 212" fill="none" stroke="#27833d" stroke-width="5" stroke-linecap="round"/>
+                  <path id="law-reflected" d="M293 268L205 115" stroke="#e1261c" stroke-width="4" stroke-linecap="round" marker-end="url(#law-arrow)"/>
                   <circle cx="300" cy="280" r="10" fill="#fff"/><circle cx="300" cy="280" r="6" fill="#ed2b20"/>
-                  <text id="law-angle-name-in" x="280" y="176" fill="#165fc2" font-size="12" font-weight="850" text-anchor="middle">入射角</text>
-                  <text id="law-angle-name-out" x="320" y="176" fill="#24783a" font-size="12" font-weight="850" text-anchor="middle">反射角</text>
-                  <text id="law-angle-in" x="277" y="204" fill="#165fc2" font-size="14" font-weight="850" text-anchor="middle">30°</text>
-                  <text id="law-angle-out" x="323" y="204" fill="#24783a" font-size="14" font-weight="850" text-anchor="middle">30°</text>
-                  <text x="118" y="95" fill="#cf261c" font-size="15" font-weight="800">入射線</text><text x="420" y="95" fill="#cf261c" font-size="15" font-weight="800">反射線</text>
+                  <text id="law-angle-name-in" x="320" y="176" fill="#165fc2" font-size="12" font-weight="850" text-anchor="middle">入射角</text>
+                  <text id="law-angle-name-out" x="280" y="176" fill="#24783a" font-size="12" font-weight="850" text-anchor="middle">反射角</text>
+                  <text id="law-angle-in" x="323" y="204" fill="#165fc2" font-size="14" font-weight="850" text-anchor="middle">30°</text>
+                  <text id="law-angle-out" x="277" y="204" fill="#24783a" font-size="14" font-weight="850" text-anchor="middle">30°</text>
+                  <text x="420" y="95" fill="#cf261c" font-size="15" font-weight="800">入射線</text><text x="118" y="95" fill="#cf261c" font-size="15" font-weight="800">反射線</text>
                   <path d="M334 257L309 275" fill="none" stroke="#cf261c" stroke-width="1.5"/><rect x="334" y="242" width="68" height="24" rx="8" fill="#fff" stroke="#e8b3ae"/><text x="368" y="258" fill="#cf261c" font-size="13" font-weight="800" text-anchor="middle">入射點</text>
                   <text x="300" y="330" fill="#172635" font-size="18" font-weight="800" text-anchor="middle">平面鏡（反射面朝上）</text>
                 </svg>
@@ -299,6 +299,6 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
-  <script type="module" src="assets/laser-reflection.js?v=20"></script>
+  <script type="module" src="assets/laser-reflection.js?v=21"></script>
 </body>
 </html>
