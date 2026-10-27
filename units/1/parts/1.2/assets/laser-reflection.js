@@ -5,8 +5,8 @@ const slider = document.querySelector('#incident-angle');
 if (!canvas || !slider) throw new Error('Laser reflection controls are missing.');
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#e5e6e1');
-scene.fog = new THREE.Fog('#e5e6e1', 14, 28);
+scene.background = new THREE.Color('#8a6346');
+scene.fog = new THREE.Fog('#8a6346', 22, 48);
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -44,6 +44,10 @@ for (let i = 0; i < 72; i++) {
 }
 const woodTexture = new THREE.CanvasTexture(woodTextureCanvas);
 woodTexture.colorSpace = THREE.SRGBColorSpace;
+woodTexture.wrapS = THREE.RepeatWrapping;
+woodTexture.wrapT = THREE.RepeatWrapping;
+woodTexture.repeat.set(4.7, 2.67);
+scene.background = new THREE.Color('#8a6346');
 const woodTop = new THREE.MeshStandardMaterial({ color: '#ffffff', map: woodTexture, roughness: 0.58 });
 const woodEdge = mat('#75472d', 0.72);
 const black = mat('#171b1e', 0.34, 0.22);
@@ -70,7 +74,7 @@ function cylinder(parent, radiusTop, radiusBottom, height, position, material, r
 }
 
 // Wooden tabletop with subtle grain and no seams across the experiment surface.
-const tabletop = new THREE.Mesh(new THREE.BoxGeometry(17, 0.28, 26), [woodEdge, woodEdge, woodTop, woodEdge, woodEdge, woodEdge]);
+const tabletop = new THREE.Mesh(new THREE.BoxGeometry(80, 0.28, 80), [woodEdge, woodEdge, woodTop, woodEdge, woodEdge, woodEdge]);
 tabletop.position.set(-4, -0.16, 2); tabletop.castShadow = true; tabletop.receiveShadow = true; scene.add(tabletop);
 // Fine grain remains visible without plank seams competing with the laser paths.
 for (const x of [-11.1, 3.1]) for (const z of [-5.5, 9.5]) box(scene, [0.2, 1.15, 0.2], [x, -0.86, z], wood);
