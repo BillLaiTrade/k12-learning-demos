@@ -114,17 +114,44 @@
     .live-note { min-height:1.6em; color:#315e4e; font-size:.9rem; font-weight:650; }
     .scene { position:relative; min-height:190px; margin:12px 0; overflow:hidden; border:1px solid #cdd8d2; border-radius:13px; background:linear-gradient(#f6faf7,#eef3ef); }
     .scene-label { position:absolute; top:10px; left:12px; color:var(--muted); font-size:.78rem; font-weight:700; }
-    .evap-stage { min-height:200px; display:grid; place-items:center; padding:38px 16px 14px; }
-    .dish-wrap { width:min(420px,100%); text-align:center; }
-    .evap-cup { height:118px; position:relative; overflow:hidden; border:3px solid #647e72; border-top:0; border-radius:0 0 52% 52%; background:linear-gradient(to top,#b9d5cc var(--water,65%),transparent var(--water,65%)); transition:background .8s; }
-    .salt-crystals { position:absolute; bottom:4px; left:15%; right:15%; height:0; opacity:0; transition:all .5s; background:radial-gradient(circle at 15% 70%,#fff 0 4px,transparent 5px),radial-gradient(circle at 35% 90%,#fff 0 5px,transparent 6px),radial-gradient(circle at 58% 72%,#fff 0 4px,transparent 5px),radial-gradient(circle at 80% 88%,#fff 0 5px,transparent 6px); }
-    .evap-stage[data-step="3"] .salt-crystals,.evap-stage[data-step="4"] .salt-crystals { height:28px; opacity:1; }
-    .evap-stage[data-step="1"] .evap-cup { --water:65%; }
-    .evap-stage[data-step="2"] .evap-cup { --water:50%; }
-    .evap-stage[data-step="3"] .evap-cup { --water:24%; }
-    .evap-stage[data-step="4"] .evap-cup { --water:10%; }
-    .heat-lines { height:24px; color:#5c997b; letter-spacing:10px; opacity:0; }
-    .evap-stage[data-step="2"] .heat-lines,.evap-stage[data-step="3"] .heat-lines { opacity:1; }
+    .evap-stepper { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:7px; margin:18px 0 14px; padding:0; list-style:none; }
+    .evap-step { min-width:0; min-height:54px; padding:9px 8px; border:1px solid #d8e2da; border-radius:12px; background:#fff; color:#53645d; font-weight:750; cursor:pointer; transition:background-color .25s,border-color .25s,color .25s,box-shadow .25s,transform .25s; }
+    .evap-step:hover { border-color:#8cae91; transform:translateY(-1px); }
+    .evap-step[aria-pressed="true"] { border-color:#176b53; background:#eaf3ec; color:#145540; box-shadow:0 0 0 2px #176b5314; }
+    .evap-step:focus-visible { outline:3px solid #82a98c; outline-offset:3px; }
+    .evap-arrow { color:#a4b5a8; font-size:1.2rem; font-weight:800; text-align:center; }
+    .evap-stage { min-height:0; display:grid; grid-template-columns:minmax(0,1fr) 210px; gap:14px; align-items:center; padding:38px 18px 14px; background:radial-gradient(ellipse at 48% 68%,#fff8eb 0,#faf5ea 49%,#f0f4ef 100%); }
+    .evap-visual { position:relative; width:100%; max-width:620px; margin:0 auto; aspect-ratio:1586/992; }
+    .evap-appliance { position:absolute; inset:0; z-index:2; display:block; width:100%; height:100%; object-fit:contain; pointer-events:none; }
+    .evap-liquid { position:absolute; z-index:3; left:21%; top:23%; width:58%; height:23%; border-radius:50%; background:radial-gradient(ellipse at 50% 35%,#e8f4f0e8 0,#b4d9d0db 65%,#8eb9afd1 100%); box-shadow:inset 0 3px 10px #fff9,0 2px 8px #52756a1a; transform:scaleY(.9); transition:top 1.1s cubic-bezier(.2,.7,.25,1),height 1.1s cubic-bezier(.2,.7,.25,1),opacity .6s; }
+    .evap-salt { position:absolute; z-index:4; left:29%; top:29%; width:42%; height:22%; border-radius:50%; opacity:.55; background-image:radial-gradient(circle,#fff 0 2px,transparent 3px),radial-gradient(circle,#7fac9f 0 1.5px,transparent 2.5px); background-size:27px 21px,31px 25px; transition:opacity .5s; }
+    .evap-crystals { position:absolute; z-index:4; left:32%; top:41%; width:36%; height:12%; display:flex; align-items:flex-end; justify-content:center; gap:7px; opacity:0; transform:translateY(9px) scale(.7); transition:opacity .55s,transform .7s cubic-bezier(.2,.7,.25,1); }
+    .evap-crystals i { display:block; width:17px; height:23px; background:linear-gradient(135deg,#fff 0 34%,#dbe9e4 35% 68%,#a8c4ba 69%); clip-path:polygon(50% 0,100% 35%,78% 100%,22% 100%,0 35%); filter:drop-shadow(0 2px 2px #243a3560); }
+    .evap-crystals i:nth-child(2),.evap-crystals i:nth-child(4) { width:14px; height:18px; }
+    .evap-crystals i:nth-child(3) { width:20px; height:28px; }
+    .evap-steam { position:absolute; z-index:5; left:35%; top:14%; width:30%; height:23%; opacity:0; pointer-events:none; }
+    .evap-steam i { position:absolute; bottom:0; width:4px; height:43%; border-radius:50%; background:linear-gradient(transparent,#fff,#b8cfc8aa,transparent); filter:blur(1px); animation:evap-rise 1.8s ease-in-out infinite; }
+    .evap-steam i:nth-child(1) { left:20%; animation-delay:-.7s; }
+    .evap-steam i:nth-child(2) { left:49%; height:58%; animation-delay:-1.2s; }
+    .evap-steam i:nth-child(3) { left:76%; animation-delay:-.2s; }
+    .evap-stage[data-step="1"] .evap-liquid { top:23%; height:23%; }
+    .evap-stage[data-step="2"] .evap-liquid { top:31%; height:15%; }
+    .evap-stage[data-step="3"] .evap-liquid { top:39%; height:7%; opacity:.8; }
+    .evap-stage[data-step="4"] .evap-liquid { top:44%; height:2%; opacity:.35; }
+    .evap-stage[data-step="3"] .evap-salt,.evap-stage[data-step="4"] .evap-salt { opacity:0; }
+    .evap-stage[data-step="3"] .evap-crystals,.evap-stage[data-step="4"] .evap-crystals { opacity:1; transform:translateY(0) scale(1); }
+    .evap-stage[data-step="2"] .evap-steam,.evap-stage[data-step="3"] .evap-steam { opacity:.9; }
+    .evap-stage[data-step="4"] .evap-steam { opacity:0; }
+    @keyframes evap-rise { 0%,100% { transform:translateY(5px) scaleY(.8); opacity:.35; } 50% { transform:translateY(-8px) scaleY(1.1); opacity:.9; } }
+    .evap-observation { align-self:stretch; display:flex; flex-direction:column; justify-content:center; padding:16px; border:1px solid #e2ddcc; border-radius:14px; background:#fffdf8e8; box-shadow:0 5px 16px #243a3508; }
+    .evap-observation strong { margin-bottom:8px; color:#8b6b32; font-size:.82rem; letter-spacing:.04em; }
+    .evap-observation p { margin:0; color:#4c5d55; font-size:.94rem; line-height:1.7; }
+    .evap-observation .live-note { min-height:0; }
+    .evap-controls { justify-content:center; gap:10px; margin:14px 0; }
+    .evap-controls .control-button { min-width:112px; padding:9px 15px; }
+    .evap-controls .primary { border-color:#176b53; background:#176b53; color:white; }
+    .evap-controls .primary:hover { background:#10543f; }
+    .evap-controls .control-button:disabled { opacity:.45; cursor:not-allowed; }
     .strip-scene { min-height:205px; padding:40px 18px 14px; display:grid; place-items:center; }
     .paper-strip { height:145px; width:94px; position:relative; border:1px solid #cbd9ce; background:repeating-linear-gradient(0deg,#fff,#fff 17px,#eff5ef 18px); box-shadow:0 3px 10px #243a3514; }
     .solvent { position:absolute; bottom:0; left:0; right:0; height:20%; background:#c6ddd8; transition:height 1s; }
@@ -157,6 +184,8 @@
     footer { padding:16px 0 28px; color:#718078; font-size:.82rem; }
     @media(max-width:850px) { .lesson-layout { grid-template-columns:1fr; gap:12px; } .route { position:relative; top:auto; max-height:none; } .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); } .record-panel { display:none; } }
     @media(max-width:850px) { .filter-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:760px) { .evap-stage { grid-template-columns:1fr; gap:10px; padding:38px 12px 13px; } .evap-visual { max-width:560px; } .evap-observation { min-height:104px; } .evap-observation strong { margin-bottom:3px; } }
+    @media(max-width:560px) { .evap-stepper { grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr); gap:5px; } .evap-step { min-height:49px; padding:6px 3px; font-size:.75rem; line-height:1.35; } .evap-arrow { font-size:.95rem; } .evap-controls { gap:6px; } .evap-controls .control-button { min-width:0; flex:1; padding:8px 7px; font-size:.86rem; } }
     @media(max-width:680px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:16px; padding-top:20px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .compare-grid { grid-template-columns:1fr; } .quiz-row { grid-template-columns:1fr; gap:6px; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .filter-details { padding:13px; } .goal-choice { min-width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
@@ -244,11 +273,22 @@
           <p>泥沙沒有溶在水裡；鹽則能均勻溶解在水中，形成看起來透明的鹽水，肉眼看不見鹽的固體顆粒。</p>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>如果東西已經溶在水裡，例如鹽，要怎麼把它分離出來呢？</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們讓水慢慢蒸發，再觀察容器裡最後留下什麼。</p></div>
+          <ol class="evap-stepper" aria-label="鹽水蒸發與結晶的四個步驟">
+            <li><button class="evap-step" type="button" data-evap-step="1" aria-pressed="true">① 觀察鹽水</button></li><span class="evap-arrow" aria-hidden="true">→</span>
+            <li><button class="evap-step" type="button" data-evap-step="2" aria-pressed="false">② 水分蒸發</button></li><span class="evap-arrow" aria-hidden="true">→</span>
+            <li><button class="evap-step" type="button" data-evap-step="3" aria-pressed="false">③ 晶體析出</button></li><span class="evap-arrow" aria-hidden="true">→</span>
+            <li><button class="evap-step" type="button" data-evap-step="4" aria-pressed="false">④ 留下鹽晶體</button></li>
+          </ol>
           <div class="scene evap-stage" id="evap-stage" data-step="1" aria-label="鹽水蒸發與鹽晶體留下的示意">
-            <span class="scene-label">過程示意，動畫時間不代表真實加熱時間</span>
-            <div class="dish-wrap"><div class="heat-lines" aria-hidden="true">⌁　⌁　⌁</div><div class="evap-cup"><div class="salt-crystals"></div></div><p id="evap-caption" class="live-note">加熱前：鹽在水中，肉眼看不見分開的鹽粒。</p></div>
+            <span class="scene-label">過程示意｜動畫時間不代表實際加熱時間</span>
+            <div class="evap-visual" aria-hidden="true">
+              <div class="evap-liquid"></div><div class="evap-salt"></div><div class="evap-crystals"><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="evap-steam"><i></i><i></i><i></i></div>
+              <img class="evap-appliance" src="assets/evaporation-dish.webp" width="1586" height="992" alt="">
+            </div>
+            <aside class="evap-observation"><strong>觀察線索</strong><p id="evap-caption" class="live-note" aria-live="polite">鹽均勻溶在水裡，肉眼看不見分開的鹽粒。</p></aside>
           </div>
-          <div class="control-row"><button class="control-button" type="button" id="evap-play">開始</button><button class="control-button" type="button" id="evap-step">下一步</button><button class="control-button" type="button" id="evap-reset">重設</button></div>
+          <div class="control-row evap-controls"><button class="control-button" type="button" id="evap-prev">上一步</button><button class="control-button primary" type="button" id="evap-replay">重播動畫</button><button class="control-button" type="button" id="evap-next">下一步</button></div>
           <div class="note-box">這裡以安全示意呈現加熱與蒸發，不要求學生自行操作火源。本區先聚焦觀察結晶分離結果；溶質含量的表示法會在本段最後討論。</div>
         </div>
       </section>
@@ -368,13 +408,20 @@
     filterAnimation.dataset.stage=String(filterStage);
     if(!reduceFilterMotion){setInterval(()=>{filterStage=(filterStage+1)%4;filterAnimation.dataset.stage=String(filterStage);},2200);}
 
-    const evapCaptions=['尚未開始：準備觀察鹽水的分離。','加熱前：鹽在水中，肉眼看不見分開的鹽粒。','加熱示意：水逐漸離開，容器中的液體變少。','繼續蒸發：容器中開始出現鹽的固體。','結果：容器中形成鹽的固體。'];
+    const evapCaptions={1:'鹽均勻溶在水裡，肉眼看不見分開的鹽粒。',2:'水受熱後逐漸蒸發，鹽仍留在溶液中。',3:'水分持續減少，鹽開始從溶液中形成晶體。',4:'水分蒸發後，容器裡留下固態的鹽晶體。'};
     let evapStep=1,evapTimer=null;
-    function updateEvap(){const stage=document.getElementById('evap-stage');stage.dataset.step=evapStep;document.getElementById('evap-caption').textContent=evapCaptions[evapStep];document.getElementById('evap-play').textContent=evapTimer?'暫停':'開始';document.getElementById('evap-step').disabled=evapStep>=4;}
-    function stopEvap(){if(evapTimer){clearInterval(evapTimer);evapTimer=null;}updateEvap();}
-    document.getElementById('evap-play').addEventListener('click',()=>{if(evapTimer){stopEvap();return;}if(evapStep>=4)evapStep=1;evapTimer=setInterval(()=>{if(evapStep>=4){stopEvap();return;}evapStep++;updateEvap();},1000);updateEvap();});
-    document.getElementById('evap-step').addEventListener('click',()=>{stopEvap();evapStep=Math.min(4,evapStep+1);updateEvap();});
-    document.getElementById('evap-reset').addEventListener('click',()=>{stopEvap();evapStep=1;updateEvap();});updateEvap();
+    const evapStage=document.getElementById('evap-stage');
+    const evapCaption=document.getElementById('evap-caption');
+    const evapStepButtons=[...document.querySelectorAll('[data-evap-step]')];
+    const evapPrev=document.getElementById('evap-prev'),evapNext=document.getElementById('evap-next');
+    function updateEvap(){evapStage.dataset.step=String(evapStep);evapCaption.textContent=evapCaptions[evapStep];evapStepButtons.forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.evapStep)===evapStep)));evapPrev.disabled=evapStep===1;evapNext.disabled=evapStep===4;}
+    function stopEvap(){if(evapTimer){clearTimeout(evapTimer);evapTimer=null;}}
+    function selectEvapStep(step){stopEvap();evapStep=Math.max(1,Math.min(4,step));updateEvap();}
+    evapStepButtons.forEach(button=>button.addEventListener('click',()=>selectEvapStep(Number(button.dataset.evapStep))));
+    evapPrev.addEventListener('click',()=>selectEvapStep(evapStep-1));
+    evapNext.addEventListener('click',()=>selectEvapStep(evapStep+1));
+    document.getElementById('evap-replay').addEventListener('click',()=>{stopEvap();evapStep=1;updateEvap();const replayNext=()=>{if(evapStep>=4){evapTimer=null;return;}evapTimer=setTimeout(()=>{evapStep+=1;updateEvap();replayNext();},1100);};replayNext();});
+    updateEvap();
 
     const stripNotes=['先看好基線、墨點與溶劑液面的相對位置。','溶劑接觸濾紙下端，墨點仍在液面上方。','答案：墨水分成不同色帶，表示其中可能混有不同色素。'];
     let stripStep=0,stripTimer=null;
