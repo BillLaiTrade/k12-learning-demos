@@ -20,8 +20,10 @@
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
   </style>
   <style>
-    .laser-lesson{width:calc(100% + 201px);margin-top:20px;margin-left:-201px;border:1px solid #d8dfdf;border-radius:18px;overflow:hidden;background:#fff}
-    #card-02 .card-side{border-right:0}
+    #card-02{grid-template-columns:minmax(0,1fr);gap:13px;max-width:760px;margin-inline:auto}
+    #card-02 .card-side{display:flex;align-items:baseline;gap:10px;padding:0 0 12px;border-right:0;border-bottom:1px solid var(--line)}
+    #card-02 .card-side h3,#card-02 .card-number{margin:0}
+    .laser-lesson{width:100%;margin-top:20px;border:1px solid #d8dfdf;border-radius:18px;overflow:hidden;background:#fff}
     .laser-concept{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:8px;padding:14px 22px;background:linear-gradient(135deg,#f8fcff,#fff)}
     .laser-concept-copy{display:grid;width:100%;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 16px;padding:12px 16px;border-radius:16px;background:#e6f4ff}
     .laser-concept-copy h3{margin:0;font-size:clamp(1.2rem,2.1vw,1.48rem);line-height:1.25;color:#102c54}
