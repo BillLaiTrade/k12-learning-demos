@@ -180,16 +180,13 @@ function addProtractorNumber(degrees, side) {
   const texture = new THREE.CanvasTexture(labelCanvas); texture.colorSpace = THREE.SRGBColorSpace;
   const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false }));
   label.scale.set(1.0, 0.64, 1); label.renderOrder = 12;
-  if (degrees === 0) label.position.set(-protractorRadius + 0.34, 0.11, 0.62);
-  else {
-    const angle = THREE.MathUtils.degToRad(side * degrees), radius = protractorRadius - 0.72;
-    label.position.set(-radius * Math.cos(angle), 0.11, radius * Math.sin(angle));
-  }
+  const angle = THREE.MathUtils.degToRad(side * degrees), radius = protractorRadius - 0.72;
+  label.position.set(-radius * Math.cos(angle), 0.11, radius * Math.sin(angle));
   protractor.add(label);
 }
-for (let degrees = 0; degrees <= 90; degrees += 10) {
+for (let degrees = 10; degrees <= 90; degrees += 10) {
   addProtractorNumber(degrees, -1);
-  if (degrees) addProtractorNumber(degrees, 1);
+  addProtractorNumber(degrees, 1);
 }
 const incomingScaleHit = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), new THREE.MeshBasicMaterial({ color: '#2878df', depthTest: false }));
 const reflectedScaleHit = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), new THREE.MeshBasicMaterial({ color: '#27833d', depthTest: false }));
