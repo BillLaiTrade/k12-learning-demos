@@ -1691,7 +1691,8 @@
       if(frequencyStepDown&&frequencyStepUp&&frequencyControlValue&&periodRange&&periodControlValue&&frequencyPeriodWave&&frequencyPeriodCursor&&frequencyWavelengthArrow&&frequencyWavelengthGuides&&frequencyWavelengthLabel&&frequencyPeriodGraph){
         const graphStartX=80,graphWidth=540,graphMidY=170,graphAmplitude=70,waveSpeed=3;
         let frequency=1,waveAnimationFrame=0,waveStartTime=null,currentWavePhase=0;
-        let wavelength=waveSpeed/frequency,visibleDistance=1.5*wavelength;
+        const visibleDistance=4.5;
+        let wavelength=waveSpeed/frequency;
         const formatFrequency=value=>String(Number(value.toFixed(2)));
         const formatPeriod=value=>{const rounded=Number(value.toFixed(4));return Number.isInteger(rounded)?rounded.toFixed(2):String(rounded);};
         const drawFrequencyPeriodWave=phase=>{
@@ -1721,7 +1722,7 @@
           frequencyControlValue.textContent=frequencyText;periodControlValue.textContent=periodText;
           frequencyStepDown.disabled=frequency<=1;frequencyStepUp.disabled=frequency>=4;
           periodRange.setAttribute("aria-valuetext",periodText);
-          wavelength=waveSpeed/frequency;visibleDistance=1.5*wavelength;
+          wavelength=waveSpeed/frequency;
           frequencyPeriodGraph.setAttribute("aria-label",`繩上的波形持續向右傳播；雙向箭頭標示一個波長；目前頻率 ${frequencyText}，週期 ${periodText}`);
           drawFrequencyPeriodWave(currentWavePhase);
           const wavelengthEndX=graphStartX+graphWidth*(wavelength/visibleDistance);
