@@ -795,8 +795,8 @@
     <div class="hero">
       <div>
         <div class="eyebrow">從一只水桶開始認識物質</div>
-        <h1>水桶、提把和桶裡的水，是一樣的東西嗎？</h1>
-        <p class="hero-copy">澆完花後，阿公和小葵把水桶拿到工作桌旁準備收好。小葵發現桶身、提把和握把看起來不太一樣；這只水桶是由哪些材料做成的？</p>
+        <h1>水桶、提把支架和桶裡的水，是一樣的東西嗎？</h1>
+        <p class="hero-copy">澆完花後，阿公和小葵把水桶拿到工作桌旁準備收好。小葵發現桶身、提把支架和握把看起來不太一樣；這只水桶是由哪些材料做成的？</p>
       </div>
       <figure class="hero-cover"><img src="assets/unit-opening-cover.png" alt="阿公和小葵在科學桌旁觀察冰塊；桌上有水桶、清水、冰塊、沸水、放大鏡和觀察本，後方展示著單元樣本。"></figure>
     </div>
@@ -827,7 +827,7 @@
           <div class="card-side"><span class="card-number">01</span><h3>物體和物質</h3><span class="card-role">先分清楚正在研究什麼</span></div>
           <div class="card-main">
             <h2>水桶是一個物體，桶身、提把支架和握把由什麼製成？</h2>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這只水桶是整個物體；桶身、提把和握把都是同一種材料做的嗎？</p></div>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這只水桶是整個物體；桶身、提把支架和握把都是同一種材料做的嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>點選不同部位仔細看看，找出水桶是由哪些材料組成的。</p></div>
             <p>依序查看水桶的不同部位，找出製作各部位所用的材料。</p>
             <div class="visual">
@@ -841,7 +841,7 @@
                 <figure class="bucket-figure">
                   <div class="bucket-image-window">
                     <div class="bucket-image-art" id="bucket-image-art" data-view="overview">
-                      <img class="bucket-image" id="bucket-image" src="assets/metal-bucket.png" alt="完整的空水桶，包含鐵製桶身、鐵絲提把和紅色塑膠握把">
+                      <img class="bucket-image" id="bucket-image" src="assets/metal-bucket.png" alt="完整的空水桶，包含桶身、提把支架和握把">
                     </div>
                     <div class="bucket-image-hotspots">
                       <button class="bucket-hotspot bucket-hotspot-body" type="button" data-bucket-part="body" aria-label="點選桶身，查看使用的材料"></button>
@@ -1300,10 +1300,10 @@
 
   <script>
     const bucketPartViews = {
-      overview: { label:"物體", heading:"整只水桶", copy:"水桶是看得見、摸得到的整體，由桶身、提把支架和握把組成。", alt:"完整的空水桶，包含鐵製桶身、鐵絲提把和紅色塑膠握把" },
+      overview: { label:"物體", heading:"整只水桶", copy:"水桶是看得見、摸得到的整體，由桶身、提把支架和握把組成。", alt:"完整的空水桶，包含桶身、提把支架和握把" },
       body: { label:"物體的一部分", heading:"桶身", copy:"桶身是水桶的一部分，使用鐵製材料製成。", alt:"水桶的鐵製桶身" },
-      handle: { label:"物體的一部分", heading:"提把支架", copy:"提把支架連接水桶兩側，由鐵絲製成。", alt:"水桶兩側連接桶身的鐵絲提把支架" },
-      grip: { label:"物體的一部分", heading:"握把", copy:"握把套在提把支架上，方便手握，使用塑膠製成。", alt:"水桶提把中央的紅色塑膠握把" }
+      handle: { label:"物體的一部分", heading:"提把支架", copy:"提把支架連接水桶兩側，由鐵絲製成。", alt:"水桶兩側連接桶身的提把支架" },
+      grip: { label:"物體的一部分", heading:"握把", copy:"握把套在提把支架上，方便手握，使用塑膠製成。", alt:"提把支架中央的紅色塑膠握把" }
     };
     function selectBucketPart(part) {
       const nextPart=part!=="overview"&&document.getElementById("bucket-image-art").dataset.view===part?"overview":part;
@@ -1356,7 +1356,7 @@
     function moveRustMagnifier(event){
       const bounds=rustMagnifierScene.getBoundingClientRect(),x=Math.max(0,Math.min(1,(event.clientX-bounds.left)/bounds.width)),y=Math.max(0,Math.min(1,(event.clientY-bounds.top)/bounds.height)),zoom=3.2,lensSize=rustMagnifierLens.offsetWidth;
       rustLensPosition={x,y};rustMagnifierLens.style.left=`${x*100}%`;rustMagnifierLens.style.top=`${y*100}%`;rustMagnifierLens.style.backgroundSize=`${bounds.width*zoom}px ${bounds.height*zoom}px`;rustMagnifierLens.style.backgroundPosition=`${lensSize/2-x*bounds.width*zoom}px ${lensSize/2-y*bounds.height*zoom}px`;
-      rustMagnifierHint.textContent=y<.37?"放大看看桶口和提把附近，也能找到不規則的鏽蝕。":"放大可看到紅褐色鏽層與銀灰色金屬交錯，分布並不整齊。";
+      rustMagnifierHint.textContent=y<.37?"放大看看桶口和提把支架附近，也能找到不規則的鏽蝕。":"放大可看到紅褐色鏽層與銀灰色金屬交錯，分布並不整齊。";
     }
     rustMagnifierScene.addEventListener("pointerdown",event=>{rustLensDragging=true;rustMagnifierScene.setPointerCapture(event.pointerId);moveRustMagnifier(event);});
     rustMagnifierScene.addEventListener("pointermove",event=>{if(rustLensDragging||event.pointerType==="mouse")moveRustMagnifier(event);});
