@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from '../../../../../parts/3.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
-import { CHECKPOINTS, DURATION, evaporationState } from './evaporation-state.js?v=boiling-1';
+import { CHECKPOINTS, DURATION, evaporationState } from './evaporation-state.js?v=twelve-seconds-1';
 
 const host = document.getElementById('evap-visual');
 const stage = document.getElementById('evap-stage');
@@ -219,7 +219,7 @@ async function initialize() {
     seek.setAttribute('aria-valuetext', `示意進度 ${Math.round(progress * 100)}%，${steps[currentStep - 1].textContent}`);
     document.getElementById('evap-progress').textContent = `${Math.round(progress * 100)}%`;
     previous.disabled = progress <= 0;
-    next.disabled = progress >= 1;
+    next.disabled = state.step === 4;
     play.textContent = playing ? '暫停' : progress >= 1 ? '重新播放' : '播放';
     play.setAttribute('aria-pressed', String(playing));
     renderer.render(scene, camera);

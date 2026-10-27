@@ -40,6 +40,22 @@ test('4.2 evaporation is a continuous, controllable scene', { timeout: 150000 },
     input.value = String(value); input.dispatchEvent(new Event('input', { bubbles: true }));
   }, value);
 
+  await t.test('four chapters each occupy exactly three seconds', async () => {
+    const timing = await page.evaluate(async () => {
+      const { DURATION, CHECKPOINTS, evaporationState } = await import('./assets/evaporation-state.js?v=twelve-seconds-1');
+      return {
+        duration: DURATION,
+        starts: CHECKPOINTS.map(progress => progress * DURATION),
+        steps: [0, 2.999, 3, 5.999, 6, 8.999, 9, 11.999, 12].map(seconds => evaporationState(seconds / DURATION).step),
+        dry: [9, 10.5, 12].map(seconds => evaporationState(seconds / DURATION))
+      };
+    });
+    assert.equal(timing.duration, 12);
+    assert.deepEqual(timing.starts, [0, 3, 6, 9]);
+    assert.deepEqual(timing.steps, [1, 1, 2, 2, 3, 3, 4, 4, 4]);
+    timing.dry.forEach(state => { assert.equal(state.water, 0); assert.equal(state.crystals, 1); assert.equal(state.boiling, 0); });
+  });
+
   await t.test('arbitrary times render distinct liquid levels while the equipment stays fixed', async () => {
     assert.equal(await page.locator('#evap-visual canvas').count(), 1);
     assert.equal(await page.locator('.evap-frame').count(), 0);
@@ -92,7 +108,7 @@ test('4.2 evaporation is a continuous, controllable scene', { timeout: 150000 },
     assert.equal(warming.phase, 'warming');
     assert.equal(warming.bubbles, 0);
     assert.equal(warming.grains, 0);
-    await scrub(120);
+    await scrub(200);
     const smallBubbles = await state();
     assert.equal(smallBubbles.phase, 'bubbles');
     assert.ok(smallBubbles.bubbles > 0);
@@ -105,14 +121,14 @@ test('4.2 evaporation is a continuous, controllable scene', { timeout: 150000 },
     await scrub(285);
     const frameB = await page.locator('#evap-visual').screenshot();
     assert.notDeepEqual(frameA, frameB, 'closely spaced times must show changing bubbles and surface detail');
-    await scrub(500);
+    await scrub(550);
     const earlyCrystals = await state();
     assert.equal(earlyCrystals.phase, 'crystallizing');
     assert.ok(earlyCrystals.grains > 30 && earlyCrystals.water > 0, 'visible crystals must appear by the middle of playback');
     await scrub(650);
     const growing = await state();
     assert.ok(growing.crystals > earlyCrystals.crystals && growing.grains >= earlyCrystals.grains);
-    await scrub(880);
+    await scrub(720);
     const shallow = await state();
     assert.equal(shallow.phase, 'shallow');
     assert.ok(shallow.water < 0.1 && shallow.bubbles < boiling.bubbles);
@@ -134,7 +150,8 @@ test('4.2 evaporation is a continuous, controllable scene', { timeout: 150000 },
     }
     assert.equal(await page.locator('#evap-next').isDisabled(), true);
     await page.locator('#evap-prev').click(); assert.equal((await state()).step, 3);
-    await page.locator('#evap-next').click(); assert.equal((await state()).progress, 1);
+    await page.locator('#evap-next').click(); assert.equal((await state()).progress, 0.75);
+    assert.equal(await page.locator('#evap-next').isDisabled(), true);
     await page.locator('[data-evap-step="1"]').click();
     assert.equal(await page.locator('#evap-prev').isDisabled(), true);
     await page.locator('#evap-seek').focus(); await page.keyboard.press('ArrowRight');
@@ -154,7 +171,7 @@ test('4.2 evaporation is a continuous, controllable scene', { timeout: 150000 },
     await page.locator('#evap-replay').click();
     await page.locator('[data-evap-step="2"]').click();
     await page.waitForTimeout(400);
-    assert.equal((await state()).progress, 0.28, 'chapter navigation must cancel an old replay');
+    assert.equal((await state()).progress, 0.25, 'chapter navigation must cancel an old replay');
     assert.deepEqual(failures, []);
   });
 
