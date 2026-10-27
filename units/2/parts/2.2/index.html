@@ -22,6 +22,7 @@
     .ruler-photo-stage:focus-visible{outline:3px solid #176b53;outline-offset:3px}
     @media(max-width:640px){.ruler-photo-stage{border-radius:9px}}
   </style>
+  <link rel="stylesheet" href="assets/sound-propagation.css?v=1">
 </head>
 <body>
   <header class="shell masthead">
@@ -70,19 +71,54 @@
           </div>
         </section>
         <section class="lesson-card" id="card-02">
-          <div class="card-side"><span class="card-number">02</span><h3>聲音如何傳播</h3><span class="card-role">空氣粒子在原位附近振動</span></div>
-          <div class="card-main"><h2>鐘的振動，怎麼穿過空氣傳到耳朵？</h2><p>聲源的振動會造成周圍空氣疏密改變；這些變化逐步傳開，形成縱波。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>空氣看起來沒有往我們這邊跑，鐘聲怎麼還是傳過來了？</p></div>
-            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>空氣粒子只在原來位置附近來回振動，並把擾動依序傳給鄰近粒子；傳到耳邊的是聲音的能量。</p></div>
-            <figure class="visual"><svg id="air-wave" class="particle-stage" viewBox="0 0 760 310" role="img" aria-label="空氣粒子沿聲音傳播方向前後振動，疏密變化向右傳播。">
-              <defs><marker id="arrow-right" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#176b53"/></marker><clipPath id="particle-clip"><rect x="45" y="76" width="670" height="160" rx="22"/></clipPath></defs>
-              <rect x="44" y="76" width="672" height="160" rx="22" fill="#e7f2ef" stroke="#d7e1dd" stroke-width="2"/><g id="air-particles" clip-path="url(#particle-clip)"></g>
-              <path d="M90 54H668" stroke="#176b53" stroke-width="2.5" marker-end="url(#arrow-right)"/><text x="380" y="37" text-anchor="middle">疏密變化向右傳播</text>
-              <path d="M374 255H430" stroke="#bc612b" stroke-width="2.5" marker-start="url(#arrow-left)" marker-end="url(#arrow-right)"/><text x="401" y="286" text-anchor="middle" class="muted-label">選中粒子在原位附近前後振動</text>
-              <defs><marker id="arrow-left" markerWidth="9" markerHeight="9" refX="2" refY="4.5" orient="auto"><path d="M9 0L0 4.5L9 9Z" fill="#bc612b"/></marker></defs>
-            </svg><figcaption>橘色粒子只在原位附近來回振動；聲音的疏密變化向前傳播。粒子位移在圖中放大呈現。</figcaption></figure>
-            <div class="controls"><button class="action" id="air-play" type="button" aria-pressed="false">播放粒子運動</button><span class="live-note" id="air-status" aria-live="polite">按下播放，觀察粒子運動方向和聲音傳播方向。</span></div>
-            <div class="fact"><p><strong>重點：</strong>在空氣中，聲音是縱波：空氣粒子的振動方向與聲音傳播方向平行。粒子沒有一路從聲源移動到耳朵。</p></div>
+          <div class="card-side"><span class="card-number">02</span><h3>聲音如何傳播</h3><span class="card-role">從聲源到耳膜</span></div>
+          <div class="card-main"><h2>鐘聲是怎麼傳到耳朵的？</h2><p>觀察空氣的疏密變化，如何從鐘傳到耳膜。</p>
+            <figure class="visual sound-visual">
+              <svg id="air-wave" class="sound-scene" viewBox="0 0 1080 440" role="group" aria-label="鐘、空氣粒子與耳膜的聲音傳播示範" aria-describedby="sound-model-note">
+                <defs>
+                  <linearGradient id="sound-green-arrow" gradientUnits="userSpaceOnUse" x1="228" x2="842" y1="64" y2="64"><stop stop-color="#c9dec3"/><stop offset="1" stop-color="#167347"/></linearGradient>
+                  <radialGradient id="sound-dot-shade" cx="30%" cy="25%"><stop stop-color="#9bd4d7"/><stop offset="1" stop-color="#3b9da7"/></radialGradient>
+                  <marker id="sound-arrow" markerUnits="userSpaceOnUse" markerWidth="32" markerHeight="32" refX="29" refY="16" orient="auto"><path d="M0 0L32 16L0 32Z" fill="#167347"/></marker>
+                  <marker id="sound-orange-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto-start-reverse"><path d="M0 0L7 3.5L0 7Z" fill="#cf701a"/></marker>
+                  <image id="sound-object-sheet" href="assets/sound-bell-ear.png" width="1536" height="1024"/>
+                  <clipPath id="sound-bell-static"><path clip-rule="evenodd" d="M0 0H700V1024H0ZM250 195H670V675H250Z"/></clipPath>
+                  <clipPath id="sound-bell-body-clip"><path d="M250 195H670V675H250Z"/></clipPath>
+                </defs>
+                <path d="M228 64H842" stroke="url(#sound-green-arrow)" stroke-width="10" marker-end="url(#sound-arrow)"/>
+                <text class="sound-scene-words" x="530" y="36" text-anchor="middle">聲音傳播方向</text>
+                <g id="sound-bell-art">
+                  <g transform="translate(0 60) scale(.30)">
+                    <g clip-path="url(#sound-bell-static)"><use href="#sound-object-sheet"/></g>
+                    <g id="sound-bell-body"><g clip-path="url(#sound-bell-body-clip)"><use href="#sound-object-sheet"/></g></g>
+                  </g>
+                  <rect id="sound-bell" class="sound-bell-hit sound-focus-ring" role="button" tabindex="0" aria-label="敲鐘，重新播放聲音傳播示範" x="6" y="60" width="198" height="310" rx="14"/>
+                </g>
+                <svg x="825" y="67" width="255" height="310" viewBox="810 150 690 700" style="overflow:hidden" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><use href="#sound-object-sheet"/></svg>
+                <g id="sound-eardrum" aria-hidden="true"><ellipse cx="968" cy="222" rx="10" ry="21" transform="rotate(-19 968 222)" fill="#e88a88" fill-opacity=".18" stroke="#ba5d60" stroke-opacity=".65" stroke-width="1.5"/></g>
+                <g id="air-observation" aria-hidden="true">
+                  <path class="sound-reference" d="M525 160V279"/>
+                  <path d="M503 215H547" stroke="#f3c584" stroke-width="15" stroke-linecap="round" opacity=".18"/>
+                  <g id="air-particles"></g>
+                  <path d="M493 299H557" stroke="#cf701a" stroke-width="2.5" marker-start="url(#sound-orange-arrow)" marker-end="url(#sound-orange-arrow)"/>
+                </g>
+                <g class="sound-scene-words" aria-hidden="true">
+                  <g id="sound-dense-label" visibility="hidden"><path d="M-34 149V141H34V149" fill="none" stroke="#2f7154" stroke-width="1.5"/><text x="0" y="129" text-anchor="middle">密部</text></g>
+                  <g id="sound-sparse-label" visibility="hidden"><path d="M-34 149V141H34V149" fill="none" stroke="#2f7154" stroke-width="1.5"/><text x="0" y="129" text-anchor="middle">疏部</text></g>
+                  <text class="sound-orange" x="525" y="337" text-anchor="middle">空氣粒子來回振動</text>
+                </g>
+                <text class="sound-small sound-scene-words" x="525" y="376" text-anchor="middle">空氣放大示意</text>
+                <g class="sound-scene-words"><text x="104" y="418" text-anchor="middle">鐘振動</text><path d="M210 411H352M698 411H853" stroke="#9ab09e"/><text x="525" y="418" text-anchor="middle">疏密變化向右傳播</text><text x="973" y="418" text-anchor="middle">耳膜振動</text></g>
+              </svg>
+              <div class="sound-mobile-labels" aria-hidden="true"><span>鐘振動</span><span>疏密變化 →</span><span>耳膜振動</span></div>
+              <div class="sound-mobile-zoom" aria-hidden="true"><p>放大觀察空氣</p><svg viewBox="195 105 670 255"><use href="#air-observation"/>
+                <g id="sound-mobile-dense" visibility="hidden"><path d="M-34 149V141H34V149" fill="none" stroke="#2f7154" stroke-width="1.5"/><text x="0" y="129" text-anchor="middle" style="font-size:28px">密部</text></g>
+                <g id="sound-mobile-sparse" visibility="hidden"><path d="M-34 149V141H34V149" fill="none" stroke="#2f7154" stroke-width="1.5"/><text x="0" y="129" text-anchor="middle" style="font-size:28px">疏部</text></g>
+                <text class="sound-orange" x="525" y="337" text-anchor="middle" style="font-size:28px">空氣粒子來回振動</text>
+              </svg></div>
+            </figure>
+            <div class="controls sound-controls"><button class="action" id="air-play" type="button" aria-pressed="false"><span class="sound-control-icon" aria-hidden="true">▶</span><span id="air-play-label">播放</span></button><button class="secondary" id="air-replay" type="button"><span class="sound-control-icon" aria-hidden="true">↻</span>重新播放</button><span class="live-note" id="air-status" aria-live="polite">點擊鐘或播放，觀察振動如何傳到耳朵。</span></div>
+            <div class="sound-takeaway"><strong>粒子在原位附近來回振動，疏密變化向前傳播。</strong></div>
+            <p class="sound-note" id="sound-model-note">粒子位移放大、過程放慢呈現；空氣中的聲音是縱波。</p>
           </div>
         </section>
         <section class="lesson-card" id="card-03">
@@ -210,12 +246,7 @@
       rulerPluck.addEventListener("click",startRuler);
       rulerPluck.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();if(!event.repeat)startRuler();}});
 
-      const particleGroup=document.querySelector("#air-particles"),airSvg=document.querySelector("#air-wave"),airPlay=document.querySelector("#air-play"),airStatus=document.querySelector("#air-status"),dots=[];
       const ns="http://www.w3.org/2000/svg";
-      for(let row=0;row<6;row++)for(let col=0;col<47;col++){const dot=document.createElementNS(ns,"circle"),x=58+col*14,y=94+row*24;dot.setAttribute("cx",x);dot.setAttribute("cy",y);dot.setAttribute("r",row===2&&col===23?5:3.5);dot.setAttribute("class",row===2&&col===23?"particle-dot focus":"particle-dot");dot.dataset.x=x;dot.dataset.phase=(col/47)*Math.PI*4;particleGroup.append(dot);dots.push(dot);}
-      let playing=false,airFrame=0,airStart=0;
-      const animateAir=time=>{if(!playing)return;if(!airStart)airStart=time;const elapsed=(time-airStart)/1000;dots.forEach(dot=>{const phase=Number(dot.dataset.phase)-elapsed*5;dot.setAttribute("cx",String(Number(dot.dataset.x)+Math.sin(phase)*6));});airFrame=requestAnimationFrame(animateAir);};
-      airPlay.addEventListener("click",()=>{playing=!playing;airPlay.textContent=playing?"暫停粒子運動":"播放粒子運動";airPlay.setAttribute("aria-pressed",String(playing));airStatus.textContent=playing?"觀察橘色粒子：它前後振動，疏密變化則向右傳播。":"粒子運動已暫停。";if(playing){airStart=0;airFrame=requestAnimationFrame(animateAir);}else{cancelAnimationFrame(airFrame);dots.forEach(dot=>dot.setAttribute("cx",dot.dataset.x));}});
 
       const airRange=document.querySelector("#air-amount"),airValue=document.querySelector("#air-amount-value"),vacuumBar=document.querySelector("#vacuum-bar"),airDots=document.querySelector("#bell-air-dots"),soundRings=document.querySelector("#bell-sound-rings"),jarLabel=document.querySelector("#jar-label"),jarStatus=document.querySelector("#jar-status");
       for(let i=0;i<48;i++){const dot=document.createElementNS(ns,"circle"),x=218+(i%8)*43,y=88+Math.floor(i/8)*28;dot.setAttribute("cx",x);dot.setAttribute("cy",y);dot.setAttribute("r",3);airDots.append(dot);}
@@ -240,5 +271,6 @@
       if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)activate(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});targets.forEach(target=>observer.observe(target));}
     })();
   </script>
+  <script type="module" src="assets/sound-propagation.js?v=1"></script>
 </body>
 </html>

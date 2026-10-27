@@ -1,0 +1,119 @@
+// 慢速的一維縱波示意。q 是粒子的平衡位置，不隨波向右漂移。
+const scene = document.querySelector('#air-wave');
+const group = document.querySelector('#air-particles');
+const play = document.querySelector('#air-play');
+const playLabel = document.querySelector('#air-play-label');
+const icon = play.querySelector('.sound-control-icon');
+const replay = document.querySelector('#air-replay');
+const bell = document.querySelector('#sound-bell');
+const bellBody = document.querySelector('#sound-bell-body');
+const eardrum = document.querySelector('#sound-eardrum');
+const status = document.querySelector('#air-status');
+const denseLabel = document.querySelector('#sound-dense-label');
+const sparseLabel = document.querySelector('#sound-sparse-label');
+const LEFT = 210, RIGHT = 840, SPEED = 80, WAVELENGTH = 200;
+const PERIOD = WAVELENGTH / SPEED, AMPLITUDE = 22, TRAIN = 9;
+const ARRIVAL = (RIGHT - LEFT) / SPEED, END = ARRIVAL + TRAIN;
+const TAU = Math.PI * 2;
+const mobileLabels = [[document.querySelector('#sound-mobile-dense'), denseLabel], [document.querySelector('#sound-mobile-sparse'), sparseLabel]];
+
+function envelope(localTime) {
+  if (localTime <= 0 || localTime >= TRAIN) return 0;
+  const ramp = Math.min(1, localTime / .5, (TRAIN - localTime) / .5);
+  return Math.sin(ramp * Math.PI / 2) ** 2;
+}
+function displacement(q, time) {
+  const localTime = time - (q - LEFT) / SPEED;
+  return -AMPLITUDE * Math.sin(TAU * localTime / PERIOD) * envelope(localTime);
+}
+const dots = [];
+for (let row = 0; row < 3; row++) for (let col = 0; col < 43; col++) {
+  const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  const q = LEFT + col * 15;
+  const focus = row === 1 && col === 21;
+  dot.setAttribute('cx', q);
+  dot.setAttribute('cy', 180 + row * 35);
+  dot.setAttribute('r', focus ? 8 : 4.2);
+  dot.setAttribute('class', focus ? 'particle-dot focus' : 'particle-dot');
+  if (focus) dot.id = 'sound-focus-particle';
+  dot.dataset.origin = q;
+  group.append(dot);
+  dots.push({ node: dot, q });
+}
+
+let elapsed = 0, playing = false, frame = 0, lastTime = null, phase = '';
+function labelBand(node, offset) {
+  // 跟著實際密部／疏部的位置走；離開觀察區後追蹤下一個同相位區域。
+  let q = LEFT + SPEED * elapsed - offset;
+  while (q > RIGHT - 42) q -= WAVELENGTH;
+  const local = elapsed - (q - LEFT) / SPEED;
+  const visible = q >= LEFT + 42 && q <= RIGHT - 42 && local > .5 && local < TRAIN - .5;
+  node.setAttribute('visibility', visible ? 'visible' : 'hidden');
+  node.setAttribute('transform', `translate(${q.toFixed(3)} 0)`);
+}
+function draw() {
+  for (const { node, q } of dots) node.setAttribute('cx', (q + displacement(q, elapsed)).toFixed(4));
+  const source = displacement(LEFT, elapsed) / AMPLITUDE;
+  const received = displacement(RIGHT, elapsed) / AMPLITUDE;
+  bellBody.setAttribute('transform', `rotate(${(source * 1.8).toFixed(4)} 440 200)`);
+  eardrum.setAttribute('transform', `translate(${(received * 3.5).toFixed(4)} 0)`);
+  labelBand(denseLabel, WAVELENGTH / 2);
+  labelBand(sparseLabel, WAVELENGTH);
+  for (const [mobile, original] of mobileLabels) {
+    mobile.setAttribute('visibility', original.getAttribute('visibility'));
+    mobile.setAttribute('transform', original.getAttribute('transform'));
+  }
+  scene.dataset.elapsed = elapsed.toFixed(4);
+}
+function controls(state) {
+  scene.dataset.state = state;
+  play.setAttribute('aria-pressed', String(playing));
+  playLabel.textContent = playing ? '暫停' : state === 'paused' ? '繼續播放' : state === 'ended' ? '再次播放' : '播放';
+  icon.textContent = playing ? 'Ⅱ' : '▶';
+}
+function announce() {
+  const next = elapsed >= ARRIVAL ? 'received' : 'travelling';
+  if (next === phase) return;
+  phase = next;
+  status.textContent = next === 'received'
+    ? '疏密變化抵達耳朵，耳膜隨之振動；橘色粒子仍在原位附近往返。'
+    : '鐘開始振動，疏密變化逐步向右傳播。';
+}
+function animate(now) {
+  if (!playing) return;
+  if (lastTime !== null) elapsed = Math.min(END, elapsed + (now - lastTime) / 1000);
+  lastTime = now;
+  draw(); announce();
+  if (elapsed >= END) {
+    playing = false; frame = 0; lastTime = null;
+    controls('ended');
+    status.textContent = '示範完成。疏密變化已通過，粒子回到原位附近；可重新播放。';
+    return;
+  }
+  frame = requestAnimationFrame(animate);
+}
+function start(fromBeginning = false) {
+  cancelAnimationFrame(frame);
+  if (fromBeginning || elapsed >= END) elapsed = 0;
+  lastTime = null; phase = ''; playing = true;
+  draw(); controls('playing'); announce();
+  frame = requestAnimationFrame(animate);
+}
+function pause() {
+  playing = false;
+  cancelAnimationFrame(frame); frame = 0; lastTime = null;
+  controls('paused');
+  status.textContent = '已暫停：比較密部、疏部與橘色粒子的位置；繼續播放會從此刻接續。';
+}
+play.addEventListener('click', () => playing ? pause() : start());
+replay.addEventListener('click', () => start(true));
+bell.addEventListener('click', () => start(true));
+bell.addEventListener('keydown', event => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    if (!event.repeat) start(true);
+  }
+});
+// 背景分頁不跳過傳播過程；回來後由使用者繼續。
+document.addEventListener('visibilitychange', () => { if (document.hidden && playing) pause(); });
+draw(); controls('ready');
