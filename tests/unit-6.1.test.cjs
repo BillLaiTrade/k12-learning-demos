@@ -63,7 +63,7 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       const revisited = await context.newPage();
       await revisited.goto(base);
       await revisited.locator('[data-classical=fire]').click();
-      assert.match(await revisited.locator('#inquiry-instruction').innerText(), /熟悉的蠟燭/);
+      assert.match(await revisited.locator('#inquiry-illustration img').getAttribute('alt'), /熟悉的蠟燭/);
       assert.equal(await revisited.locator('#inquiry-controls button').count(), 0);
       assert.doesNotMatch(await revisited.locator('#inquiry-diagram').innerText(), /鎂帶|氧化鎂/);
       assert.equal(legacyRequests, 0);
@@ -103,11 +103,12 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       for (const row of await rows.all()) assert.equal(await row.isVisible(), true);
       assert.equal(await page.locator('.water-record').count(), key === 'water' ? 2 : 0);
     }
-    assert.match(await text('#inquiry-feedback'), /已確認的氫與氧/);
-    assert.match(await text('#inquiry-diagram-note'), /未表示氣體體積比例/);
+    assert.match(await text('#inquiry-evidence-summary'), /分解得到氫與氧/);
+    assert.equal(await page.locator('.inquiry-study').isVisible(), false);
     await capture('#s1', 'comparison-water-desktop');
     await page.locator('#inquiry-research summary').click();
     assert.match(await text('#history-scope'), /並不是波以耳/);
+    assert.match(await text('#inquiry-diagram-note'), /未表示氣體體積比例/);
     await page.locator('#classical-close').click();
     assert.equal(await page.locator('#classical-detail').isVisible(), false);
     assert.equal(await page.locator('[data-classical][aria-expanded=true]').count(), 0);
@@ -128,6 +129,10 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       await page.locator(`[data-classical="${key}"]`).click();
       assert.equal(await text('#classical-history-title'), `${name}的觀念發展脈絡`);
       assert.equal(await page.locator('.inquiry-stage').count(), 3);
+      assert.equal(await page.locator('.inquiry-path p').count(), 3);
+      assert.equal(await page.locator('.inquiry-main-figure').count(), 1);
+      assert.equal(await page.locator('.inquiry-study').isVisible(), false);
+      assert.ok((await page.locator('#classical-detail').boundingBox()).height <= 650, `compact desktop panel for ${key}`);
       await page.locator('#inquiry-research summary').click();
       assert.equal(await page.locator('[data-stage=past]').isVisible(), true);
       assert.equal(await page.locator('[data-stage=evidence]').isVisible(), true);
@@ -154,6 +159,7 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await page.setViewportSize({width:390,height:1000});
     await page.locator('[data-classical=air]').click();
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
+    assert.ok((await page.locator('#classical-detail').boundingBox()).height <= 850);
     const panels = await page.locator('.inquiry-stage').all();
     for (let i=1;i<panels.length;i++) {
       const a=await panels[i-1].boundingBox(), b=await panels[i].boundingBox();
@@ -164,9 +170,11 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await page.setViewportSize({width:1440,height:1000});
   });
 
-  await t.test('visual evidence responds to exploration while keeping main results visible', async () => {
+  await t.test('detailed explorations remain available without expanding the primary explanation', async () => {
     await page.locator('[data-classical=earth]').click();
     assert.equal(await page.locator('#inquiry-research').getAttribute('open'), null);
+    assert.equal(await page.locator('#inquiry-controls').isVisible(), false);
+    await page.locator('#inquiry-research summary').click();
     assert.equal(await page.locator('.soil-target').count(), 4);
     assert.equal(await page.locator('.soil-observer image').evaluate(n => n.href.baseVal.endsWith('soil-composition.png')), true);
     for (const value of ['mineral','organic','water','air']) {
@@ -178,6 +186,8 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await page.locator('[data-observe=mineral]').focus(); await page.keyboard.press('Enter');
     assert.match(await text('#inquiry-feedback'), /岩石風化/);
     await page.locator('[data-classical=water]').click();
+    assert.equal(await page.locator('#inquiry-research').getAttribute('open'), null);
+    await page.locator('#inquiry-research summary').click();
     assert.match(await text('.water-record[data-focus=formation]'), /冷卻後，容器壁出現水滴/);
     assert.match(await text('.water-record[data-focus=decomposition]'), /兩側收集的氣體，分別是氫與氧/);
     assert.match(await page.locator('.water-record[data-focus=decomposition] svg').getAttribute('aria-label'), /負極收集氫氣、正極收集氧氣/);
@@ -187,6 +197,7 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       for (const record of await page.locator('.water-record').all()) assert.equal(await record.isVisible(), true);
     }
     await page.locator('[data-classical=air]').click();
+    await page.locator('#inquiry-research summary').click();
     await page.waitForFunction(() => [...document.querySelectorAll('#visual-inquiry img')].every(img => img.complete && img.naturalWidth > 1000));
     assert.equal(await page.locator('.gas-record img').count(), 3);
     assert.match(await text('#inquiry-diagram-note'), /氣體均無色/);
@@ -199,12 +210,13 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await page.locator('button[data-observation=carbon]').click();
     assert.match(await text('#inquiry-feedback'), /不足以證明空氣是混合物/);
     await page.locator('[data-classical=fire]').click();
+    await page.locator('#inquiry-research summary').click();
     assert.match(await text('#inquiry-title'), /火.*燃燒時的現象/);
     await page.waitForFunction(() => [...document.querySelectorAll('#visual-inquiry img')].every(img => img.complete && img.naturalWidth > 1000));
     assert.equal(await page.locator('.fire-sequence img').count(), 2);
     assert.match(await text('.fire-burning'), /火焰發光、放熱/);
     assert.match(await text('.fire-after'), /水蒸氣、二氧化碳/);
-    assert.match(await text('#inquiry-conclusion-title'), /火焰是燃燒時的現象/);
+    assert.match(await text('#inquiry-conclusion-text'), /火焰是燃燒時的現象/);
     assert.equal(await page.locator('.fire-findings,#inquiry-conclusion-visual').count(), 0);
     assert.match(await text('.candle-reaction'), /蠟.*氧氣.*充分燃燒/s);
     assert.equal(await page.locator('#inquiry-controls button').count(), 0);
@@ -213,6 +225,8 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     assert.match(await text('#inquiry-diagram-note'), /蠟融化本身不是燃燒/);
     assert.doesNotMatch(await text('#visual-inquiry'), /鎂帶|氧化鎂/);
     await page.locator('[data-classical=earth]').click();
+    assert.equal(await page.locator('.inquiry-study').isVisible(), false);
+    await page.locator('#inquiry-research summary').click();
     assert.equal(await page.locator('#inquiry-controls').isVisible(), true);
     assert.equal(await page.locator('#inquiry-feedback').isVisible(), true);
     assert.equal(await page.locator('#visual-inquiry').getAttribute('data-observation'), 'water');
@@ -239,21 +253,22 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
       if (width === 390) {
         await capture('#s1', 'comparison-water-mobile');
-        await capture('.water-investigation', 'water-apparatus-mobile');
+        await capture('.inquiry-main-figure', 'water-main-mobile');
       }
       await page.locator('[data-classical=air]').click();
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
-      for (const image of await page.locator('.gas-picture').all()) {
+      for (const image of await page.locator('.inquiry-main-figure').all()) {
         const rect = await image.boundingBox();
         assert.ok(rect.x >= 0 && rect.x + rect.width <= width + 1);
       }
       await page.locator('[data-classical=fire]').click();
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
-      const picturePair = await page.locator('.fire-sequence').boundingBox();
-      const explanation = await page.locator('.fire-explanation').boundingBox();
+      const picturePair = await page.locator('.inquiry-main-figure').boundingBox();
+      const explanation = await page.locator('.inquiry-path').boundingBox();
       const contentWidth = await page.locator('#visual-inquiry').evaluate(node => node.clientWidth - parseFloat(getComputedStyle(node).paddingLeft) - parseFloat(getComputedStyle(node).paddingRight));
-      if (contentWidth >= 680) assert.ok(explanation.x >= picturePair.x + picturePair.width, `fire picture and text at ${width}`);
+      if (contentWidth > 600) assert.ok(explanation.x >= picturePair.x + picturePair.width, `fire picture and text at ${width}`);
       else assert.ok(explanation.y >= picturePair.y + picturePair.height, `stacked fire explanation at ${width}`);
+      assert.ok((await page.locator('#classical-detail').boundingBox()).height <= (contentWidth > 600 ? 650 : 850), `compact panel height at ${width}`);
       const ordered = await page.locator('.inquiry-stage').all();
       for (let i=1;i<ordered.length;i++) {
         const previous=await ordered[i-1].boundingBox(), current=await ordered[i].boundingBox();

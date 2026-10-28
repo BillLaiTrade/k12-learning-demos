@@ -4,32 +4,28 @@
   const book = {
     earth: {
       past: '「土」曾被視為物質的基本成分之一。', title: '看看土壤裡有什麼', instruction: '點選成分，觀察它在土樣中的位置。',
-      conclusion: '日常泥土通常是混合物', result: '同一份土樣含多種成分；不同土樣的組成也可能不同。',
-      brief: '19 世紀後期，道庫恰耶夫進行多地土壤調查；後續成分研究讓人們更清楚認識土壤。',
+      evidence: '土壤調查與成分研究發現，土樣含有多種物質。', today: '日常泥土通常是混合物，不是單一化學元素。',
       note: '組成示意，非顯微照片；不表示各成分比例。',
       choices: [['mineral','礦物'],['organic','有機物'],['water','水'],['air','空氣']], initial: 'water',
       feedback: { mineral: '礦物：來自岩石風化等過程，是土壤固體顆粒的一部分。', organic: '有機物：可包括植物殘體及其分解形成的物質。', water: '水：存在於土壤顆粒之間的孔隙中。', air: '空氣：存在於未被水填滿的孔隙中，不是另一種石粒。' }
     },
     water: {
       past: '水曾被列為構成物質的基本元素。', title: '從兩個方向認識水', instruction: '看研究者做了什麼，以及哪些觀察改變了看法。',
-      conclusion: '水是化合物', result: '水由氫、氧兩種元素組成，可以經化學分解得到其他物質。',
-      brief: '卡文迪西、拉瓦節與拉普拉斯等人的水組成研究，配合後來的水分解證據，逐步改變人們對水的理解。',
+      evidence: '研究發現，水能經化學分解得到氫與氧。', today: '水是由氫、氧兩種元素組成的化合物。',
       note: '不同研究的概念示意，非歷史裝置復原；分解以電解水為例，省略電解質及氣體檢驗細節，未表示氣體體積比例。',
       choices: [['formation','看生成水'],['decomposition','看分解水']], initial: 'decomposition',
       feedback: { formation: '生成水：氫與氧反應產生水蒸氣，冷卻後可凝結成水滴。水不是憑空出現，而是反應的產物。', decomposition: '分解水：適當條件下通電，水發生化學分解；兩側收集的氣體經檢驗，是已確認的氫與氧。不是水沸騰變成水蒸氣。' }
     },
     air: {
       past: '「氣」曾被視為物質的基本成分之一。', title: '看似相近，性質卻不同', instruction: '比較已知的蠟燭燃燒表現，再看空氣組成。',
-      conclusion: '日常空氣是混合物', result: '空氣包含氮、氧及其他氣體，不能當成單一化學元素。',
-      brief: '布萊克、普利斯特里等人研究不同氣體；拉瓦節將氧認識為大氣的一部分。性質比較還需配合組成研究。',
+      evidence: '研究者發現多種氣體，並逐步查明空氣的組成。', today: '日常空氣含氮、氧等多種氣體，是混合物。',
       note: '氣體均無色；燭芯細煙不代表二氧化碳的顏色。插畫為定性示意，不以火焰大小計算空氣組成。',
       choices: [['oxygen','氧氣'],['ordinary','空氣'],['carbon','二氧化碳']], initial: 'ordinary',
       feedback: { oxygen: '氧氣：可使蠟燭燃燒更旺。氧氣是助燃氣體，並不是燃料。', ordinary: '空氣：能讓蠟燭燃燒；組成研究顯示，其中包含氮、氧及其他氣體。', carbon: '二氧化碳：不能維持這裡的蠟燭燃燒。這個比較本身還不足以證明空氣是混合物。' }
     },
     fire: {
       past: '火曾被列為構成物質的基本元素。', title: '火是成分，還是燃燒時的現象？', instruction: '從熟悉的蠟燭，看火焰與物質的變化。',
-      conclusion: '火焰是燃燒時的現象', result: '燃燒涉及物質反應；火焰不是一種化學元素。',
-      brief: '拉瓦節以稱量及氣體研究，解釋鉛、錫等金屬燃燒後增重，來自氧與金屬結合。',
+      evidence: '燃燒研究發現，蠟燭中的蠟會與氧發生反應。', today: '火焰是燃燒時的現象，不是一種化學元素。',
       note: '以蠟充分燃燒為例；生成的氣體通常看不見，身分需由實驗確認。蠟融化本身不是燃燒。',
       choices: [], feedback: {}
     }
@@ -113,6 +109,17 @@
     </div>`;
   }
   const diagrams = { earth:soil, water, air, fire };
+  function mainArtwork(key) {
+    const airAsset='assets/air-candle-study.png?v=f539a640e9de';
+    const fireAsset='assets/candle-combustion-study.png?v=5088e35c57d3';
+    if (key==='earth') return { art:'<img class="compact-earth" src="assets/soil-composition.png" width="1000" height="1000" alt="土樣中交錯分布的礦物、有機物、水與空氣孔隙。">', caption:'土壤組成示意，不表示成分比例。' };
+    if (key==='water') {
+      const diagrams=document.createElement('div');diagrams.innerHTML=water();
+      return { art:diagrams.querySelector('[data-focus=decomposition] svg').outerHTML, caption:'水分解的結果示意，氣體身分經檢驗確認。' };
+    }
+    if (key==='air') return { art:`<div class="compact-image-labels three"><span>氧氣</span><span>空氣</span><span>二氧化碳</span></div><img src="${airAsset}" width="1774" height="887" alt="三種氣體中的蠟燭：氧氣中火焰較旺，空氣中一般燃燒，二氧化碳中熄滅。"><div class="compact-image-results"><span>較旺</span><span>燃燒</span><span>熄滅</span></div>`, caption:'氣體無色；燭芯細煙不是二氧化碳本身。' };
+    return { art:`<div class="compact-image-labels"><span>燃燒前</span><span>燃燒時</span></div><img src="${fireAsset}" width="1448" height="1086" alt="熟悉的蠟燭燃燒前與燃燒中：燭芯上方出現火焰，發光並放熱。">`, caption:'蠟燭燃燒的生活例子（插畫示意）。' };
+  }
   function select(key, observation) {
     const root=$('#visual-inquiry');
     root.querySelectorAll('[data-observation]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.observation===observation)));
@@ -127,8 +134,11 @@
   function render(key) {
     const item=book[key],root=$('#visual-inquiry');
     root.dataset.item=key;
-    const texts={ 'inquiry-past-summary':item.past, 'inquiry-title':item.title, 'inquiry-instruction':item.instruction, 'inquiry-conclusion-title':item.conclusion, 'inquiry-conclusion-text':item.result, 'inquiry-history-brief':item.brief, 'inquiry-diagram-note':item.note };
+    const texts={ 'inquiry-past-summary':item.past, 'inquiry-evidence-summary':item.evidence, 'inquiry-conclusion-text':item.today, 'inquiry-title':item.title, 'inquiry-instruction':item.instruction, 'inquiry-diagram-note':item.note };
     Object.entries(texts).forEach(([id,value])=>{$(`#${id}`).textContent=value;});
+    const artwork=mainArtwork(key);
+    $('#inquiry-illustration').innerHTML=artwork.art;
+    $('#inquiry-figure-note').textContent=artwork.caption;
     $('#inquiry-diagram').innerHTML=diagrams[key]();
     const controls=$('#inquiry-controls');controls.replaceChildren();
     controls.hidden=item.choices.length===0;

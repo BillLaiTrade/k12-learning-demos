@@ -1,39 +1,45 @@
-/* One reading sequence: historical claim, visual evidence, modern explanation. */
-.visual-inquiry{padding:26px 24px;background:#fffdf8;container-type:inline-size}
-.visual-inquiry>h4{margin:0 0 20px;font-size:1.12rem;color:#285e48;letter-spacing:.02em}
-.inquiry-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
-.inquiry-stage{min-width:0}
-.inquiry-kicker{display:flex;align-items:center;gap:9px;font-size:.83rem;font-weight:750;line-height:1.6;color:#5c7057}
-.inquiry-kicker b{display:grid;place-items:center;flex:none;width:29px;height:29px;border-radius:50%;background:#e9eee2;font-size:.85rem}
-.inquiry-past,.inquiry-modern{display:grid;grid-template-columns:165px minmax(0,1fr);align-items:center;gap:20px;padding:18px 20px;border-radius:12px}
-.inquiry-past{background:#faf3e5;border:1px solid #eadfc7}
-.inquiry-past .inquiry-kicker b{background:#f1e4c9}
-.history-context{font-size:.72rem;line-height:1.7;color:#8a7b59;margin:5px 0 0 38px}
-#inquiry-past-summary{margin:0;font-size:1.02rem;line-height:1.8;font-weight:650;color:#665637}
-.inquiry-evidence{padding:0}
-.inquiry-evidence>.inquiry-kicker{margin-bottom:12px}
-.inquiry-evidence h5{margin:0 0 8px;font-size:1.3rem;line-height:1.55;color:#2b4435}
-#inquiry-instruction{margin:0 0 20px;font-size:.9rem;color:#6c7b65;line-height:1.7}
-.inquiry-modern{border:1px solid #d7e0cd;background:#f0f5e9}
-.inquiry-conclusion-copy h5{font-size:1.18rem;line-height:1.6;margin:0 0 5px;color:#345638}
-.inquiry-conclusion-copy p{font-size:.94rem;line-height:1.8;margin:0;color:#51664a}
+/* Compact overview; detailed studies remain inside the optional disclosure. */
+.visual-inquiry{padding:22px 24px;background:#fffdf8;container-type:inline-size}
+.compact-inquiry{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:30px;align-items:center}
+.inquiry-main-figure{min-width:0;width:100%;max-width:360px;margin:0 auto}
+#inquiry-illustration img{display:block;width:100%;height:auto;border-radius:9px}
+#inquiry-illustration .compact-earth{max-width:260px;margin:auto}
+#inquiry-illustration>.inquiry-svg{max-width:360px;margin:auto}
+.compact-image-labels,.compact-image-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));text-align:center;gap:8px;font-size:.78rem;line-height:1.6;color:#617050;margin:0 0 7px}
+.compact-image-labels.three,.compact-image-results{grid-template-columns:repeat(3,minmax(0,1fr))}
+.compact-image-results{margin:7px 0 0;font-size:.75rem}
+#inquiry-figure-note{font-size:.73rem;line-height:1.7;color:#6d7762;text-align:center;margin:10px 0 0}
+.inquiry-path{display:grid;gap:17px;margin:0;padding:0;list-style:none}
+.inquiry-stage{min-width:0;padding:0 0 0 15px;border-left:2px solid #e1e5d5}
+.inquiry-stage>span{display:block;font-size:.76rem;font-weight:650;line-height:1.6;color:#7c805f;margin-bottom:4px}
+.inquiry-stage>p{font-size:.98rem;line-height:1.8;color:#43563d;margin:0}
+.inquiry-stage:last-child{border-left-color:#7d9a6e}
+.inquiry-stage:last-child>p{font-weight:650;color:#345536}
+#inquiry-research{margin-top:18px;padding-top:7px;border-top:1px solid #e2e4d6;font-size:.85rem}
+#inquiry-research summary{min-height:44px;padding:10px 0;color:#496943;cursor:pointer;font-weight:650;line-height:1.7}
+.inquiry-background{padding:16px 20px;border:1px solid #dce4d4;border-radius:10px;background:#f5f7ef;line-height:1.9}
+.inquiry-background h5{font-size:.95rem;margin:15px 0 5px}
+.inquiry-background h5:first-child{margin-top:0}
+.inquiry-background p{margin:5px 0 12px}
+#history-scope{font-size:.83rem;color:#66765d}
+#history-sources{overflow-wrap:anywhere}
+.inquiry-study{margin-top:24px;padding-top:20px;border-top:1px solid #d7e0cb;container-type:inline-size}
+.inquiry-study>h5{font-size:1.1rem;color:#3d5639}
+#inquiry-instruction{font-size:.86rem;color:#6c7b65}
 .inquiry-controls{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 12px}
 .inquiry-controls button{flex:1 1 auto;min-height:42px;padding:8px 12px;border:1px solid #cbd8c5;border-radius:8px;background:#fffefa;color:#365d43;font-weight:700;font-size:.86rem}
 .inquiry-controls button[aria-pressed=true]{background:#35654e;border-color:#35654e;color:white}
 #inquiry-feedback{padding:12px 14px;margin:0;border-left:3px solid #a6b895;background:#eef3e7;color:#3a5c43;font-size:.88rem;line-height:1.8;border-radius:0 8px 8px 0}
 .inquiry-controls[hidden],#inquiry-feedback[hidden]{display:none}
 #inquiry-diagram-note{font-size:.75rem;line-height:1.8;color:#6e7865;margin:14px 0 0}
-.inquiry-history-brief{display:flex;align-items:baseline;gap:18px;margin-top:24px;padding:18px 0 0;border-top:1px solid #e0e3d7;color:#5b6e51}
-.inquiry-history-brief strong{flex:none;font-size:.9rem}
-.inquiry-history-brief p{margin:0;font-size:.84rem;line-height:1.9}
-#inquiry-research{margin-top:15px;font-size:.85rem}
-#inquiry-research summary{min-height:44px;padding:10px 0;color:#496943;cursor:pointer;font-weight:650}
-.inquiry-background{padding:16px 20px;border:1px solid #dce4d4;border-radius:10px;background:#f4f7ef;line-height:1.9}
-.inquiry-background h5{font-size:.95rem;margin:15px 0 5px}
-.inquiry-background h5:first-child{margin-top:0}
-.inquiry-background p{margin:5px 0 12px}
-#history-scope{font-size:.83rem;color:#66765d}
-#history-sources{overflow-wrap:anywhere}
+@container(max-width:600px){
+ .compact-inquiry{grid-template-columns:1fr;gap:19px}
+ .inquiry-main-figure{max-width:280px}
+ #inquiry-illustration .compact-earth{max-width:230px}
+ .inquiry-path{gap:13px}
+ .inquiry-stage>p{font-size:.91rem;line-height:1.75}
+}
+@media(max-width:600px){.visual-inquiry{padding:18px 14px}.inquiry-background{padding:13px}}
 
 /* Preserve the approved soil image and marker coordinates. */
 .soil-observer{max-width:480px;width:100%;margin:auto;border-radius:14px;overflow:hidden;background:#fbfaf1}
@@ -106,30 +112,11 @@
   .water-evidence-link{grid-column:1/-1;grid-row:2}
 }
 @container(max-width:480px){
-  .inquiry-past,.inquiry-modern{grid-template-columns:1fr;gap:10px;padding:15px}
-  .history-context{display:none}
-  #inquiry-past-summary{font-size:.94rem}
-  .inquiry-evidence h5{font-size:1.17rem}
-  .inquiry-conclusion-copy h5{font-size:1.1rem}
-  .inquiry-conclusion-copy p{font-size:.89rem}
-  .inquiry-history-brief{display:block}
-  .inquiry-history-brief p{margin-top:7px}
-  .gas-observations{gap:6px}
-  .gas-record h6{font-size:.81rem;padding:11px 2px}
-  .gas-record p{padding:10px 4px;font-size:.72rem;min-height:90px}
-  .gas-record p>span{font-size:.75rem}
-  .air-composition{padding:13px 8px;gap:7px}
-  .air-composition>div{font-size:.75rem;gap:5px}
-  .fire-sequence{gap:9px}
-  .fire-sequence h6{font-size:.79rem;padding:10px 3px}
-  .fire-sequence p{font-size:.8rem;padding:11px 5px}
-  .fire-explanation>h6{font-size:1.06rem}
-  .fire-explanation>h6 br{display:none}
-  .candle-reaction{margin-top:15px;padding-top:15px;gap:10px}
-}
-@media(max-width:600px){
-  .visual-inquiry{padding:20px 13px}
-  .inquiry-grid{gap:23px}
-  .inquiry-background{padding:14px}
+ .gas-observations{gap:6px}.gas-record h6{font-size:.81rem;padding:11px 2px}
+ .gas-record p{padding:10px 4px;font-size:.72rem;min-height:90px}.gas-record p>span{font-size:.75rem}
+ .air-composition{padding:13px 8px;gap:7px}.air-composition>div{font-size:.75rem;gap:5px}
+ .fire-sequence{gap:9px}.fire-sequence h6{font-size:.79rem;padding:10px 3px}
+ .fire-sequence p{font-size:.8rem;padding:11px 5px}.fire-explanation>h6{font-size:1.06rem}
+ .fire-explanation>h6 br{display:none}.candle-reaction{margin-top:15px;padding-top:15px;gap:10px}
 }
 @media(prefers-reduced-motion:reduce){.water-record,.gas-record{transition:none}}
