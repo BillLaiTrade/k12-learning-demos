@@ -74,6 +74,28 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await capture('#s1', 'history-desktop');
   });
 
+  await t.test('reference format has matching numbered routes and a separate unit assessment', async () => {
+    assert.deepEqual(await page.locator('.lesson-head .num').allTextContents(), ['01','02','03','04','05']);
+    for (let n = 1; n <= 5; n++) {
+      const link = page.locator(`.route a[href="#s${n}"]`);
+      assert.equal(await link.locator('span').innerText(), await text(`#title-${n}`));
+      assert.equal(await link.locator('b').innerText(), String(n).padStart(2, '0'));
+      await link.click();
+      await page.waitForFunction(id => document.querySelector(`.route a[href="#${id}"]`).getAttribute('aria-current') === 'step', `s${n}`);
+      const header = await page.locator(`#s${n} .lesson-head`).boundingBox();
+      const body = await page.locator(`#s${n} .lesson-body`).boundingBox();
+      assert.ok(body.y >= header.y + header.height - 1);
+    }
+    assert.equal(await text('.quiz-nav span'), '單元小測');
+    assert.equal(await text('.quiz-kicker'), '單元小測');
+    await page.locator('.quiz-nav').click();
+    await page.waitForFunction(() => document.querySelector('.quiz-nav').getAttribute('aria-current') === 'step');
+    assert.notEqual(await page.locator('.quiz-head').evaluate(n => getComputedStyle(n).backgroundColor), await page.locator('.lesson-head').first().evaluate(n => getComputedStyle(n).backgroundColor));
+    await capture('#s6', 'quiz-format-desktop');
+    await page.locator('.route a[href="#s1"]').click();
+    if (captureDir) await page.screenshot({ path: path.join(captureDir, 'route-format-desktop.png') });
+  });
+
   await t.test('property controls change the comparison focus, keep samples and do not grade', async () => {
     const originalNames = await page.locator('#properties-table tbody th').allTextContents();
     assert.equal(originalNames.length, 5);

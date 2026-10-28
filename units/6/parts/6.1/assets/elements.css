@@ -3,4 +3,26 @@
 @media(max-width:1050px){.shell{width:calc(100% - 36px)}.layout{grid-template-columns:170px minmax(0,1fr);gap:18px}.lesson-card{padding:22px}.history-grid{grid-template-columns:1fr}.history-labels{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:760px){.shell{width:calc(100% - 24px)}.hero{padding:30px 0 24px}.layout{display:block}.route{position:static;max-height:none;padding:0 0 24px}.route-links{display:grid;grid-template-columns:1fr 1fr;gap:6px}.route a{border:1px solid var(--line);border-left:3px solid var(--line);border-radius:8px;padding:9px;font-size:.84rem}.route a:last-child{margin:0}.lesson-card{padding:20px}.symbol-panel{grid-template-columns:100px minmax(0,1fr);gap:12px;padding:16px}.symbol-glyph{font-size:3.5rem}.dialogue{padding:10px;gap:9px}.speaker::before{width:36px;height:36px}.rule-pair{grid-template-columns:1fr}.carbon-sample figcaption{padding:12px}.carbon-sample svg{height:115px}.carbon-detail{min-height:140px}}
 @media(max-width:420px){.lesson-card{padding:17px}.match-grid{grid-template-columns:1fr}.carbon-grid{grid-template-columns:1fr}.carbon-detail{min-height:0}.symbol-panel{grid-template-columns:1fr}.symbol-glyph{text-align:left}.history-labels{grid-template-columns:repeat(4,1fr)}.controls button{flex:1 1 auto}}
+/* Shared lesson grammar from 3.1 / 3.2: numbered headings, matching route,
+   dialogue and observation body, then a visually separate unit assessment. */
+.layout{grid-template-columns:240px minmax(0,1fr);gap:28px}
+.route a{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:start;border-left-color:transparent;border-radius:0 10px 10px 0;font-size:.86rem;line-height:1.5}
+.route b{color:var(--green);font-size:.76rem;font-weight:700;padding-top:2px}
+.route .next-hint{font-size:.8rem;color:var(--muted);margin-top:18px}
+.route a.quiz-nav{margin-top:14px;padding-top:17px;border-top:1px solid var(--line);border-left-color:transparent;color:#8a6726;font-weight:750}
+.route .quiz-nav b{color:#946f2d}
+.route a.quiz-nav[aria-current="step"]{border-left-color:#d9a74f;background:#faf3e4;color:#795b25}
+.lesson-card{padding:0;overflow:hidden}
+.lesson-head{display:grid;grid-template-columns:50px minmax(0,1fr);gap:24px;align-items:start;padding:26px 28px 22px;border-bottom:1px solid var(--line)}
+.num{display:grid;place-items:center;width:50px;height:50px;border-radius:15px;background:var(--pale);color:#396b36;font-size:1.1rem;font-weight:850}
+.lesson-head h2{margin:0 0 8px}.lesson-head .lead{margin:0;font-size:.94rem}
+.lesson-body,.quiz-body{padding:24px 28px 28px;min-width:0}
+.lesson-body>.dialogue:first-child,.quiz-body>.dialogue:first-child{margin-top:0}
+.quiz-head{display:grid;grid-template-columns:50px minmax(0,1fr);gap:20px;align-items:center;padding:24px 28px;background:#f8f1e4;border-bottom:1px solid #eadfca}
+.quiz-mark{display:grid;place-items:center;width:50px;height:50px;border-radius:15px;background:#e8d8ad;color:#705b2a;font-size:1.5rem;font-weight:800}
+.quiz-kicker{font-size:.8rem;font-weight:800;color:#866025;letter-spacing:.08em;margin:0 0 4px}
+.quiz-head h2{margin:0 0 8px}.quiz-head p:last-child{margin:0;font-size:.94rem;color:var(--muted)}
+@media(max-width:1050px){.layout{grid-template-columns:205px minmax(0,1fr);gap:20px}.lesson-head,.quiz-head{padding:22px;gap:16px}.lesson-body,.quiz-body{padding:22px}}
+@media(max-width:760px){.layout{display:block}.route-links{display:flex;gap:6px;overflow-x:auto;padding:4px 4px 8px}.route a{flex:0 0 auto;display:flex;align-items:center;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:8px 12px}.route a.quiz-nav{margin:0;padding:8px 12px}.route .next-hint{margin-top:5px}.lesson-head,.quiz-head{grid-template-columns:40px minmax(0,1fr);padding:20px;gap:14px}.num,.quiz-mark{width:40px;height:40px;border-radius:12px}.lesson-body,.quiz-body{padding:20px}}
+@media(max-width:420px){.lesson-head,.quiz-head{padding:17px;gap:12px}.lesson-body,.quiz-body{padding:17px}.lesson-head h2,.quiz-head h2{font-size:1.26rem}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
