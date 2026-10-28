@@ -96,6 +96,9 @@
                         <linearGradient id="wl-red"><stop stop-color="#9e1420"/><stop offset=".35" stop-color="#ff5543"/><stop offset=".6" stop-color="#f52028"/><stop offset="1" stop-color="#a70b17"/></linearGradient>
                         <linearGradient id="wl-main-glass"><stop stop-color="#71868d" stop-opacity=".16"/><stop offset=".14" stop-color="#fff" stop-opacity=".7"/><stop offset=".6" stop-color="#f5f7ee" stop-opacity=".66"/><stop offset=".9" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#71868d" stop-opacity=".15"/></linearGradient>
                         <radialGradient id="wl-bulb"><stop offset="0" stop-color="#ff6d52"/><stop offset=".65" stop-color="#ee2027"/><stop offset="1" stop-color="#a10c1b"/></radialGradient>
+                        <clipPath id="wl-ice-air"><rect width="1642" height="475"/></clipPath>
+                        <clipPath id="wl-ice-water"><rect x="380" y="475" width="420" height="250"/></clipPath>
+                        <filter id="wl-ice-submerged"><feColorMatrix type="matrix" values=".72 0 0 0 .16 0 .8 0 0 .16 0 0 .9 0 .1 0 0 0 1 0"/></filter>
                         <linearGradient id="wl-ice" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".96"/><stop offset=".5" stop-color="#cbe9f6" stop-opacity=".65"/><stop offset="1" stop-color="#8cc0d8" stop-opacity=".8"/></linearGradient>
                       </defs>
                       <ellipse id="water-lab-heat-glow" cx="590" cy="723" rx="220" ry="15" fill="#f97316" opacity="0"/>
@@ -109,8 +112,17 @@
                       <circle id="water-lab-source" cx="580" cy="452" r="14" fill="none" stroke="#176b53" stroke-width="3"/>
                       <g id="water-lab-direction" fill="#2381c8" hidden><path d="M634 -30H645V10H658L639 32L620 10H634Z"/></g>
                       <g id="water-lab-ice" hidden>
+                        <g clip-path="url(#wl-ice-air)">
                         <g id="water-lab-cube-a"><path d="M-29-17L10-30L34-10L-5 4Z" fill="#eefaff" stroke="#7fa3bb" stroke-width="2"/><path d="M-29-17L-5 4V33L-29 11Z" fill="url(#wl-ice)" stroke="#7fa3bb" stroke-width="2"/><path d="M-5 4L34-10V19L-5 33Z" fill="url(#wl-ice)" stroke="#7fa3bb" stroke-width="2"/><path d="M-21-12L7-21L23-10" fill="none" stroke="#fff" stroke-width="5"/></g>
                         <g id="water-lab-cube-b"><path d="M-29-17L10-30L34-10L-5 4Z" fill="#eefaff" stroke="#7fa3bb" stroke-width="2"/><path d="M-29-17L-5 4V33L-29 11Z" fill="url(#wl-ice)" stroke="#7fa3bb" stroke-width="2"/><path d="M-5 4L34-10V19L-5 33Z" fill="url(#wl-ice)" stroke="#7fa3bb" stroke-width="2"/><path d="M-21-12L7-21L23-10" fill="none" stroke="#fff" stroke-width="5"/></g>
+                        </g>
+                        <g clip-path="url(#wl-ice-water)" opacity=".68" filter="url(#wl-ice-submerged)">
+                          <use href="#water-lab-cube-a"/><use href="#water-lab-cube-b"/>
+                        </g>
+                        <g id="water-lab-ice-ripples" fill="none" stroke-width="1.7">
+                          <g id="water-lab-ripple-a"><ellipse rx="38" ry="3.5" stroke="#f5ffff" opacity=".85"/><path d="M-36 1Q0 8 36 1" stroke="#83b4c6" opacity=".55"/></g>
+                          <g id="water-lab-ripple-b"><ellipse rx="35" ry="3" stroke="#f5ffff" opacity=".85"/><path d="M-32 1Q0 7 32 1" stroke="#83b4c6" opacity=".55"/></g>
+                        </g>
                       </g>
                       <circle id="water-lab-lamp" cx="810" cy="825" r="8" fill="#454b49"/>
                       <g class="water-lab-annotations" fill="#233a3d" stroke="#334c50" stroke-width="2">
@@ -381,7 +393,7 @@
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
   <script src="assets/temperature-lesson.js?v=quiz-navigation-2" defer></script>
   <script type="module" src="assets/thermometer-quiz.js?v=story-copy-6"></script>
-  <script type="module" src="assets/water-lab.js?v=engraved-glass-1"></script>
+  <script type="module" src="assets/water-lab.js?v=immersed-ice-2"></script>
   <script type="module" src="assets/parallax-reading.js?v=observation-only-4"></script>
   <script src="assets/dual-scale.js?v=dual-scale-4" defer></script>
 </body>

@@ -120,8 +120,15 @@ test('water lab functional and visual checks in Chromium',{timeout:150000},async
     const floating=await state();assert.ok(floating.ice>12);assert.ok(floating.water<now.water);
     const cube=await page.locator('#water-lab-cube-a').getAttribute('transform');
     assert.match(cube,/scale\(1\)$/,'ice stays full size for the observation period');
-    const surfaceY=Number(cube.match(/translate\(448,([0-9.]+)/)[1]);
-    assert.ok(surfaceY>=455&&surfaceY<=461,'ice floats at the water surface');
+    const centerY=Number(cube.match(/translate\(448,([0-9.]+)/)[1]);
+    assert.ok(centerY>=499&&centerY<=501,'floating ice center stays below the water plane');
+    const immersion=await page.locator('#water-lab-cube-a').evaluate(n=>{
+      const box=n.getBBox(),matrix=n.transform.baseVal.consolidate().matrix;
+      const corners=[[box.x,box.y],[box.x+box.width,box.y],[box.x,box.y+box.height],[box.x+box.width,box.y+box.height]].map(([x,y])=>new DOMPoint(x,y).matrixTransform(matrix).y);
+      const top=Math.min(...corners),bottom=Math.max(...corners),waterline=475;
+      return {top,bottom,submerged:(bottom-waterline)/(bottom-top)};
+    });
+    assert.ok(immersion.top<475&&immersion.bottom>475&&immersion.submerged>.8,'only a small cap protrudes above the water');
     await page.clock.runFor(6500);
     assert.equal(await page.locator('#water-lab-ice').isVisible(),true);
     const size=Number((await page.locator('#water-lab-cube-a').getAttribute('transform')).match(/scale\(([0-9.]+)/)[1]);

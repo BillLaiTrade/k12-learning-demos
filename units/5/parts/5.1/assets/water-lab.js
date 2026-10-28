@@ -44,8 +44,14 @@ function render(){
     const age=ICE_DURATION-state.iceRemaining, drop=Math.min(1,age/.35);
     // Let students observe full-size floating ice before it slowly melts.
     const size=Math.min(1,state.iceRemaining/(ICE_DURATION-ICE_FLOAT_DURATION));
-    $('water-lab-cube-a').setAttribute('transform',`translate(448,${458-(1-drop)*130+Math.sin(age*5)*3}) rotate(-12) scale(${size})`);
-    $('water-lab-cube-b').setAttribute('transform',`translate(716,${462-(1-drop)*110+Math.sin(age*5+1)*3}) rotate(14) scale(${size*.85})`);
+    // Keep most of each cube under the fixed water plane. The buoyant
+    // offset shrinks with the ice so a melting cube stays at the surface.
+    const waterline=475, sizeB=size*.85;
+    $('water-lab-cube-a').setAttribute('transform',`translate(448,${waterline+25*size-(1-drop)*130+Math.sin(age*2.2)*.8*size}) rotate(-12) scale(${size})`);
+    $('water-lab-cube-b').setAttribute('transform',`translate(716,${waterline+21*sizeB-(1-drop)*110+Math.sin(age*2.2+1)*.8*sizeB}) rotate(14) scale(${sizeB})`);
+    $('water-lab-ripple-a').setAttribute('transform',`translate(448,${waterline}) scale(${size})`);
+    $('water-lab-ripple-b').setAttribute('transform',`translate(716,${waterline}) scale(${sizeB})`);
+    $('water-lab-ice-ripples').toggleAttribute('hidden',drop<1);
   }
   $('water-lab-add-ice').disabled=state.iceRemaining>0||state.water<=MIN_TEMPERATURE+.01;
   $('water-lab-heat').disabled=state.iceRemaining>0||state.water>=MAX_TEMPERATURE;
