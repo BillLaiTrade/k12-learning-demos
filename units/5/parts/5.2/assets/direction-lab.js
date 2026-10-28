@@ -10,7 +10,27 @@
   };
   const state={environment:25,time:0,playing:false,observed:false,finished:false};
   let frame=0,last=null,shownEnvironment=null;
+  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+  const routes=Object.fromEntries(['hot','cold'].map(key=>{
+    const path=$(`direction-energy-path-${key}`);
+    return [key,{path,length:path.getTotalLength(),group:$(`direction-flow-${key}`),layer:$(`direction-pulses-${key}`),pulses:[...$(`direction-pulses-${key}`).children]}];
+  }));
   function text(id,value){const node=$(id);if(node.textContent!==value)node.textContent=value;}
+  function renderFlow(key,travel,difference){
+    const route=routes[key];
+    route.group.dataset.travelDirection=travel>0?'right':'left';
+    route.layer.style.opacity=String(.6+.4*Math.min(1,Math.abs(difference)/8));
+    route.pulses.forEach((pulse,index)=>{
+      // Use the water model's clock so pause, resume and reset keep both in sync.
+      const phase=reducedMotion.matches?(index+.5)/3:(state.time*.32+(index+.5)/3)%1;
+      const position=(travel>0?phase:1-phase)*route.length;
+      const point=route.path.getPointAtLength(position);
+      const before=route.path.getPointAtLength(Math.max(0,position-1));
+      const after=route.path.getPointAtLength(Math.min(route.length,position+1));
+      const angle=Math.atan2(after.y-before.y,after.x-before.x)*180/Math.PI+(travel<0?180:0);
+      pulse.setAttribute('transform',`translate(${point.x},${point.y}) rotate(${angle})`);
+    });
+  }
   function valueFor(initial){
     const value=state.environment+(initial-state.environment)*Math.exp(-.16*state.time);
     // Integer readouts settle together with the arrows, avoiding a visible
@@ -19,7 +39,7 @@
   }
   function updateCup(key,initial,side){
     const value=valueFor(initial),difference=value-state.environment,hasFlow=difference!==0,visible=state.observed&&hasFlow;
-    const outward=difference>0,scale=side==='left'?(outward?-1:1):(outward?1:-1);
+    const outward=difference>0,travel=side==='left'?(outward?-1:1):(outward?1:-1);
     text(`direction-${key}`,`${Math.round(value)}°C`);
     // Etched 0–80°C scales are calibrated to the two photographed capillaries.
     const level=291-Math.max(0,Math.min(80,value))*3.0625;
@@ -29,8 +49,9 @@
     $(`direction-live-reading-${key}`).setAttribute('transform',`translate(0,${level})`);
     text(`direction-${key}-flow`,!state.observed?'等待觀察':!hasFlow?'同溫・沒有淨熱傳遞':outward?'放熱・降溫':'吸熱・升溫');
     text(`direction-caption-${key}`,outward?'水 → 環境':'環境 → 水');
+    text(`direction-title-${key}`,outward?'放熱':'吸熱');
     $(`direction-flow-${key}`).toggleAttribute('hidden',!visible);
-    $(`direction-arrow-${key}`).setAttribute('transform',`translate(${side==='left'?200:400},295) scale(${scale},1)`);
+    renderFlow(key,travel,difference);
     root.dataset[key==='hot'?'temperatureA':'temperatureB']=String(value);
     root.dataset[key==='hot'?'flowA':'flowB']=!state.observed?'pending':!hasFlow?'none':outward?'out':'in';
     return value;
@@ -79,7 +100,7 @@
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden&&state.playing){state.playing=false;stop();render();}
   });
-  // Preload only clean scene artwork; all readings and arrows remain live UI.
+  // Preload scene artwork; readings, paths and moving pulses remain live UI.
   Object.values(scenes).forEach(scene=>{const img=new Image();img.src=scene.image;});
   render();
 })();

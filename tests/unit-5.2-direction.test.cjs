@@ -65,7 +65,7 @@ test('5.2 first block: three environments and in-water thermometers',{timeout:18
   await t.test('25°C: A releases heat and B absorbs heat; pause freezes readouts',async()=>{
     await select(25);await play.click();await page.clock.runFor(3200);await pause();
     const s=await state(),v=await values();assert.equal(s.flowA,'out');assert.equal(s.flowB,'in');assert.ok(v.a<60&&v.a>25);assert.ok(v.b>10&&v.b<25);
-    assert.match(await page.locator('#direction-arrow-hot').getAttribute('transform'),/scale\(-1,1\)/);assert.match(await page.locator('#direction-arrow-cold').getAttribute('transform'),/scale\(-1,1\)/);
+    assert.equal(await page.locator('#direction-flow-hot').getAttribute('data-travel-direction'),'left');assert.equal(await page.locator('#direction-flow-cold').getAttribute('data-travel-direction'),'left');
     assert.equal(await page.locator('#direction-hot-flow').textContent(),'放熱・降溫');assert.equal(await page.locator('#direction-cold-flow').textContent(),'吸熱・升溫');
     await page.clock.runFor(1200);assert.deepEqual(await values(),v);assert.equal((await state()).phase,'paused');
     await capture('room');
@@ -75,24 +75,39 @@ test('5.2 first block: three environments and in-water thermometers',{timeout:18
     assert.match(await page.locator('.direction-scene-image').first().getAttribute('src'),/direction-fridge/);
     await play.click();await page.clock.runFor(3200);await pause();const s=await state(),v=await values();
     assert.equal(s.flowA,'out');assert.equal(s.flowB,'out');assert.ok(v.a<60&&v.a>5);assert.ok(v.b<10&&v.b>5);
-    assert.match(await page.locator('#direction-arrow-cold').getAttribute('transform'),/scale\(1,1\)/);
+    assert.equal(await page.locator('#direction-flow-cold').getAttribute('data-travel-direction'),'right');
     assert.match(await page.locator('#direction-observation-dialogue').textContent(),/5°C 冷藏室/);await capture('fridge');
   });
   await t.test('70°C: even the initially hot cup absorbs heat; both arrows point inward',async()=>{
     await select(70);await play.click();await page.clock.runFor(3200);await pause();const s=await state(),v=await values();
     assert.equal(s.flowA,'in');assert.equal(s.flowB,'in');assert.ok(v.a>60&&v.a<70);assert.ok(v.b>10&&v.b<70);
-    assert.match(await page.locator('#direction-arrow-hot').getAttribute('transform'),/scale\(1,1\)/);assert.match(await page.locator('#direction-arrow-cold').getAttribute('transform'),/scale\(-1,1\)/);
+    assert.equal(await page.locator('#direction-flow-hot').getAttribute('data-travel-direction'),'right');assert.equal(await page.locator('#direction-flow-cold').getAttribute('data-travel-direction'),'left');
     assert.match(await page.locator('.direction-scene-image').first().getAttribute('src'),/direction-hot/);
     assert.match(await page.locator('#direction-observation-dialogue').textContent(),/70°C 高溫箱/);await capture('hot');
   });
+  await t.test('copper paths cross cup boundaries and pulses move, pause and resume with the model',async()=>{
+    assert.equal(await page.locator('.direction-arrow-body').count(),0);assert.equal(await page.locator('.direction-flow-pulse').count(),6);
+    const ends=await page.locator('.direction-energy-path').evaluateAll(ns=>ns.map(n=>{const a=n.getPointAtLength(0),b=n.getPointAtLength(n.getTotalLength());return{start:a.x,end:b.x};}));
+    assert.ok(ends[0].start<288&&ends[0].end>288&&ends[0].end<540);assert.ok(ends[1].start>60&&ends[1].start<310&&ends[1].end>310);
+    const positions=()=>page.locator('.direction-pulse-layer').evaluateAll(ns=>ns.map(n=>Number(n.firstElementChild.getAttribute('transform').match(/^translate\(([-\d.]+)/)[1])));
+    for(const [environment,directions]of [[25,[-1,-1]],[5,[-1,1]],[70,[1,-1]]]){
+      await select(environment);await play.click();await page.clock.runFor(100);const before=await positions();await page.clock.runFor(200);const after=await positions();
+      directions.forEach((sign,index)=>assert.ok((after[index]-before[index])*sign>0,`${environment}°C pulse direction`));
+      for(const [key,index]of [['hot',0],['cold',1]]){const flow=(await state())[index===0?'flowA':'flowB'];assert.equal(await page.locator(`#direction-title-${key}`).textContent(),flow==='out'?'放熱':'吸熱');}
+      await pause();const stopped=await positions();await page.clock.runFor(500);assert.deepEqual(await positions(),stopped);
+      await play.click();await page.clock.runFor(200);assert.notDeepEqual(await positions(),stopped);await pause();
+    }
+    await select(25);await play.click();await page.clock.runFor(14000);await pause();
+    assert.ok(Number(await page.locator('#direction-pulses-hot').evaluate(n=>n.style.opacity))<1,'flow weakens near equal temperature');
+  });
   await t.test('reset and switching environment during playback cancel old observations',async()=>{
-    await play.click();await page.clock.runFor(500);await page.locator('#direction-reset').click();assert.deepEqual(await values(),{a:60,b:10});assert.equal((await state()).environment,'70');
+    await select(70);await play.click();await page.clock.runFor(500);await page.locator('#direction-reset').click();assert.deepEqual(await values(),{a:60,b:10});assert.equal((await state()).environment,'70');
     await page.clock.runFor(800);assert.deepEqual(await values(),{a:60,b:10});assert.equal((await state()).phase,'ready');
     await play.click();await page.clock.runFor(500);await select(5);await page.clock.runFor(800);
     assert.deepEqual(await values(),{a:60,b:10});assert.equal((await state()).playing,'false');assert.equal((await state()).flowA,'pending');
     assert.equal(await page.locator('#direction-flow-hot').isVisible(),false);
   });
-  await t.test('same displayed temperature removes heat arrows and replay starts cleanly',async()=>{
+  await t.test('same displayed temperature removes heat flow and replay starts cleanly',async()=>{
     await select(25);await play.click();await page.clock.runFor(42000);assert.deepEqual(await values(),{a:25,b:25});
     const s=await state();assert.equal(s.phase,'complete');assert.equal(s.playing,'false');assert.equal(s.flowA,'none');assert.equal(s.flowB,'none');
     assert.equal(await page.locator('#direction-flow-hot').isVisible(),false);assert.equal(await page.locator('#direction-flow-cold').isVisible(),false);assert.equal(await play.textContent(),'重新觀察');
@@ -102,9 +117,12 @@ test('5.2 first block: three environments and in-water thermometers',{timeout:18
     await page.emulateMedia({reducedMotion:'reduce'});await page.locator('#direction-lab button[data-environment="5"]').focus();await page.keyboard.press('Enter');assert.equal((await state()).environment,'5');
     await play.focus();await page.keyboard.press('Space');assert.equal((await state()).playing,'true');await page.clock.runFor(500);await page.keyboard.press('Enter');assert.equal((await state()).playing,'false');
     await page.locator('#direction-reset').focus();await page.keyboard.press('Enter');assert.deepEqual(await values(),{a:60,b:10});
-    assert.equal(await page.locator('.direction-flow-streak').first().evaluate(n=>getComputedStyle(n).animationName),'none');await page.emulateMedia({reducedMotion:'no-preference'});
+    await play.click();const positions=await page.locator('.direction-flow-pulse').evaluateAll(ns=>ns.map(n=>n.getAttribute('transform')));await page.clock.runFor(700);
+    assert.deepEqual(await page.locator('.direction-flow-pulse').evaluateAll(ns=>ns.map(n=>n.getAttribute('transform'))),positions);assert.notDeepEqual(await values(),{a:60,b:10});
+    await page.locator('#direction-reset').click();await page.emulateMedia({reducedMotion:'no-preference'});
   });
   await t.test('in-scene instruments and controls fit desktop, tablet and phone widths',async()=>{
+    await select(25);await play.click();await page.clock.runFor(1800);await pause();
     for(const width of [1440,1280,1024,768,600,390,320]){
       await page.setViewportSize({width,height:1300});await root.scrollIntoViewIfNeeded();
       const result=await root.evaluate(n=>({
@@ -112,7 +130,7 @@ test('5.2 first block: three environments and in-water thermometers',{timeout:18
         height:n.closest('.lesson-card').getBoundingClientRect().height,
         pairs:[...n.querySelectorAll('.direction-cup-view')].map(card=>{
           const p=card.querySelector('.direction-photo').getBoundingClientRect();
-          const items=[...card.querySelectorAll('.direction-thermometer,.direction-live-reading')].map(el=>{
+          const items=[...card.querySelectorAll('.direction-thermometer,.direction-live-reading,.direction-flow-group')].map(el=>{
             const b=el.getBoundingClientRect();return{left:b.left-p.left,top:b.top-p.top,right:b.right-p.right,bottom:b.bottom-p.bottom};
           });return{items};
         }),
