@@ -1,0 +1,36 @@
+▶ 第三區距離模型：2公尺反射＋3公尺入眼，對應5公尺直達光
+  ✔ 中央光路精確為2、3、2、5公尺，物像等距且共線 (1.77914ms)
+  ✔ 81個瞳孔位置的反射向量與直達光方向相同，入眼線不穿過原熊 (4.06411ms)
+  ✔ 同一攝影機顯示整隻熊，近處原熊自然在取景範圍下方 (0.621746ms)
+  ✔ 桌面近裁切先於透視除法，來源與虛像的對應角色正確 (0.528796ms)
+✔ 第三區距離模型：2公尺反射＋3公尺入眼，對應5公尺直達光 (10.542146ms)
+▶ 第三區上下同時對照、整熊觀察及銜接第四區
+  ✔ 初始上下兩排同時呈現；移除切換、鼻尖標記與散光 (3529.896251ms)
+  ✔ 實際SVG光路、距離標籤與全熊畫布一致，完整玩偶沒有被裁掉 (190.322576ms)
+  ✔ 六種寬度的距離標籤留出完整淨空，不遮光線、鏡面、人物與玩偶 (4078.025952ms)
+  ✔ 320／390／650／768／1024／1440px皆維持上下兩列、左右對應欄 (4176.796139ms)
+  ✔ 圖面只保留主要標籤，文字解釋與第四區入口放在圖下 (4171.729802ms)
+  ✔ 滑鼠與鍵盤前往第四區，量距及往返錨點正常 (484.566952ms)
+  ✔ 手機真實觸控閱讀與下一區連結；減少動態模式呈現相同內容 (6196.457843ms)
+  ✔ 慢速素材載入後兩種情境仍固定，不產生重複ID或程式錯誤 (5875.147187ms)
+  ✔ 相關單元入口與1.1頁面可正常載入，1.2離頁無錯誤 (11639.443884ms)
+✔ 第三區上下同時對照、整熊觀察及銜接第四區 (51645.891013ms)
+▶ 1.2 reversible light reuses the reflection laboratory
+  ✔ independent reflection, front surface and reciprocal endpoint checks at every supported angle (2.355382ms)
+  ✔ section 02 keeps its actual drag and keyboard, with initial angle inherited (8689.311005ms)
+  ✔ angle sectors and arcs are absent before light, after off-state angle changes and after reset (7054.469929ms)
+  ✔ actual device clicks independently traverse all four light states without a record step (9639.697519ms)
+  ✔ red, blue and simultaneous illumination all change the actual rendered scene (7945.902531ms)
+  ✔ dragging A changes angle without toggling either source; pointer cancellation and background clicks are inert (3971.732747ms)
+  ✔ keyboard switches, live angle controls and reset reflect the independent state (2160.090154ms)
+  ✔ independent controls and device labels fit five widths (3618.011761ms)
+  ✔ real touch taps toggle the devices; fallback diagram and native switches remain usable (12668.987691ms)
+✔ 1.2 reversible light reuses the reflection laboratory (57285.411914ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109829.108347

@@ -20,7 +20,7 @@ catch {
 const V = p => new THREE.Vector3(...p);
 const vec = (a, b, t) => a.map((v, i) => v + t * (b[i] - v));
 const colors = { a: '#ed2924', b: '#205df5', off: '#435058' };
-let sourceB, bodyB, lensB, stemB, footB, pivotB, blue, arrows;
+let sourceB, bodyB, lensB, stemB, footB, pivotB, blue, arrows, hitDot;
 
 if (bench) {
   const { scene, emitterBody, emitterStem, emitterFoot, pivot } = bench;
@@ -43,7 +43,8 @@ if (bench) {
     const mesh = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.42, 16), new THREE.MeshBasicMaterial({ color: colors[key], transparent: true, opacity: 1, depthTest: false }));
     mesh.renderOrder = 15; scene.add(mesh); return mesh;
   })]));
-  const hitDot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 12), new THREE.MeshBasicMaterial({ color: '#f34230', depthTest: false }));
+  hitDot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 12), new THREE.MeshBasicMaterial({ color: '#f34230', depthTest: false }));
+  hitDot.name = 'reverse-hit-dot';
   hitDot.renderOrder = 16; hitDot.position.copy(bench.centerPoint); scene.add(hitDot);
 }
 
@@ -70,6 +71,12 @@ function draw() {
   b.setBeam(b.incoming, V(f.source), V(f.hit)); b.setBeam(b.reflected, V(f.hit), V(f.end));
   blue.forEach(mesh => { mesh.visible = lights.b; });
   b.setBeam(blue[0], V(r.source), V(r.hit)); b.setBeam(blue[1], V(r.hit), V(r.end));
+  // Both angles belong to either complete reflected path, and disappear with
+  // the last active source. Keep the shared section 02 apparatus unchanged.
+  for (const guide of [b.incomingSector, b.reflectedSector, b.incomingArc, b.outgoingArc, hitDot]) {
+    guide.visible = lights.a || lights.b;
+  }
+  hitDot.material.color.set(lights.a ? colors.a : colors.b);
   for (const [key, path] of [['a', f], ['b', r]]) {
     [[path.source, path.hit], [path.hit, path.end]].forEach(([from, to], index) => {
       const arrow = arrows[key][index]; arrow.visible = lights[key];

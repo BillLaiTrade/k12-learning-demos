@@ -56,6 +56,14 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
   page.on('pageerror', error => errors.push(error.message));
   page.on('requestfailed', request => errors.push(request.url()));
   page.on('response', response => { if (response.status() >= 400) errors.push(response.url()); });
+  // Inspect the actual Three.js meshes through a test-only module transform;
+  // the published module exposes no global scene or testing API.
+  await page.route('**/assets/reversible-light.js*', async route => {
+    const response = await route.fetch();
+    const source = await response.text();
+    assert.ok(source.includes('bench = createLaserBench(canvas);'));
+    await route.fulfill({ response, body: source.replace('bench = createLaserBench(canvas);', 'bench = createLaserBench(canvas); window.__testReverseBench = bench;') });
+  });
   const url = `http://127.0.0.1:${port}/units/1/parts/1.2/#card-06`;
   await page.goto(url, { waitUntil: 'networkidle' });
   const section = page.locator('#card-06');
@@ -97,6 +105,11 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
     await expect(section).toHaveAttribute('data-light-b', b ? 'on' : 'off');
     await expect(toggleA).toHaveAttribute('aria-pressed', String(a));
     await expect(toggleB).toHaveAttribute('aria-pressed', String(b));
+    const guides = await page.evaluate(() => {
+      const b = window.__testReverseBench;
+      return [b.incomingSector, b.reflectedSector, b.incomingArc, b.outgoingArc, b.scene.getObjectByName('reverse-hit-dot')].map(mesh => mesh.visible);
+    });
+    assert.deepEqual(guides, Array(5).fill(a || b), 'Angle sectors, arcs and hit light must follow actual illumination');
   }
 
   await t.test('section 02 keeps its actual drag and keyboard, with initial angle inherited', async () => {
@@ -111,6 +124,22 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
     await status(false, false);
     await expect(section.locator('input[type=range]')).toHaveCount(0);
     await expect(page.locator('#reverse-angle-value')).toHaveText(`${Math.min(60, changed)}°`);
+  });
+
+  await t.test('angle sectors and arcs are absent before light, after off-state angle changes and after reset', async () => {
+    const artifacts = '/tmp/unit1-card6-angle-guides'; fs.mkdirSync(artifacts, { recursive: true });
+    await status(false, false);
+    await setAngle(30); await status(false, false);
+    await canvas.screenshot({ path: `${artifacts}/off.png` });
+    await toggleA.click(); await status(true, false);
+    await canvas.screenshot({ path: `${artifacts}/red.png` });
+    await toggleA.click(); await toggleB.click(); await status(false, true);
+    await canvas.screenshot({ path: `${artifacts}/blue.png` });
+    await toggleA.click(); await status(true, true);
+    await canvas.screenshot({ path: `${artifacts}/both.png` });
+    await reset.click(); await status(false, false);
+    await setAngle(50); await status(false, false);
+    await canvas.screenshot({ path: `${artifacts}/off-adjusted.png` });
   });
 
   await t.test('actual device clicks independently traverse all four light states without a record step', async () => {
