@@ -19,10 +19,10 @@ export function displacement(localTime) {
     * Math.sin(Math.PI / 2 * clamp((PULSE_DURATION - localTime) / .25, 0, 1)) ** 2;
 }
 
-export function conditions(mode, temperature = 80) {
+export function conditions(mode) {
   if (mode === 'temperature') return [
-    { id: 'reference', kind: 'air', name: '20°C 參考組', description: '溫度固定', speed: airSpeed(20), temperature: 20 },
-    { id: 'adjustable', kind: 'air', name: `${new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 1 }).format(temperature)}°C 可調溫組`, description: '溫度可調整', speed: airSpeed(temperature), temperature }
+    { id: 'cold', kind: 'air', name: '0°C 低溫組', description: '溫度固定', speed: airSpeed(0), temperature: 0 },
+    { id: 'hot', kind: 'air', name: '80°C 高溫組', description: '溫度固定', speed: airSpeed(80), temperature: 80 }
   ];
   return [
     { id: 'air', kind: 'air', name: '空氣', description: '氣體・分子分散', speed: 343 },

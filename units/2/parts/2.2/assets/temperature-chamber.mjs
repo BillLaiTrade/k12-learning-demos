@@ -1,10 +1,10 @@
-import { svgNode } from './sound-speed-rendering.mjs?v=compact-21';
+import { svgNode } from './sound-speed-rendering.mjs?v=fixed-22';
 
 export const AIR_CHAMBER = { x: 27, y: 27, width: 412, height: 91 };
 
-// 兩組使用相同的緊湊空氣腔體；溫度由原生按鈕設定。
-export function airChamberScene(root, prefix, adjustable) {
-  const chamber = svgNode('g', { class: 'medium-scene air-chamber', 'data-material': 'air', 'data-adjustable': adjustable, 'aria-hidden': 'true' }, root);
+// 兩組使用相同的緊湊空氣腔體，固定比較 0°C 與 80°C。
+export function airChamberScene(root, prefix) {
+  const chamber = svgNode('g', { class: 'medium-scene air-chamber', 'data-material': 'air', 'aria-hidden': 'true' }, root);
   chamber.innerHTML = `
     <defs>
       <linearGradient id="${prefix}-frame" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#eff3f1"/><stop offset=".21" stop-color="#acbcc0"/><stop offset=".45" stop-color="#f9fbf9"/><stop offset=".72" stop-color="#81999f"/><stop offset="1" stop-color="#c9d3d2"/></linearGradient>
@@ -36,7 +36,7 @@ export function airChamberScene(root, prefix, adjustable) {
     paint() {},
     setTemperature(value) {
       chamber.dataset.temperature = value.toFixed(4);
-      chamber.setAttribute('aria-label', `${adjustable?'可調溫':'參考'}空氣腔體，${value.toFixed(1)} 攝氏度`);
+      chamber.setAttribute('aria-label', `${value.toFixed(0)} 攝氏度空氣腔體`);
     }
   };
 }

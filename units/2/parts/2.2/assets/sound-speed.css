@@ -98,10 +98,11 @@
 .temperature-sound-lab .medium-header{align-self:start;min-height:115px;padding-top:0;border-right:1px solid #e0e8e3;padding-right:8px}
 .temperature-sound-lab .temperature-heading>span,.temperature-sound-lab .temperature-heading>output{display:block}
 .temperature-sound-lab .temperature-heading>:first-child{font-size:1.35rem;color:var(--group-temperature-color,#176b53)}
-.temperature-sound-lab [data-group=adjustable]{--group-temperature-color:#dd7034}
+.temperature-sound-lab [data-group=cold]{--group-temperature-color:#348dc1}
+.temperature-sound-lab [data-group=hot]{--group-temperature-color:#dd7034}
 .temperature-sound-lab .row-body{grid-template-columns:minmax(0,1fr) 94px;border:0;border-radius:0;background:transparent}
 .temperature-sound-lab .row-body{grid-template-areas:"field arrival" "race arrival";gap:0;align-items:start}
-.temperature-sound-lab .medium-row[data-group=reference] .row-body{grid-template-areas:"field arrival"}
+.temperature-sound-lab .medium-row[data-group=cold] .row-body{grid-template-areas:"field arrival"}
 .temperature-sound-lab .field{grid-area:field}
 .temperature-sound-lab .arrival-readout{grid-area:arrival}
 .temperature-sound-lab .arrival-readout{align-self:start;min-height:115px;padding:12px 3px;background:transparent}
@@ -136,18 +137,6 @@
 .temperature-sound-lab .progress-gap{margin:12px 0 0;padding:7px 4px;border-radius:10px;background:#eef3ec;color:#426b53;font-size:.73rem;font-weight:750;line-height:1.6;white-space:nowrap}
 .temperature-sound-lab .progress-gap[data-relation=ahead]{background:#ffead6;color:#a64f1e}
 .temperature-sound-lab .progress-gap[data-relation=behind]{background:#eaf4fa;color:#28749a}
-.temperature-rig{grid-column:1/-1;min-width:0;margin-top:0}
-.thermal-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
-.thermal-button{display:flex;align-items:center;justify-content:center;gap:7px;min-width:0;min-height:58px;padding:9px 7px;border:1px solid #bed0c4;border-radius:12px;background:#f5faf5;color:#286e58;font-size:clamp(.76rem,2.1cqi,.92rem);font-weight:750;line-height:1.4;touch-action:manipulation}
-.thermal-button svg{flex:0 0 28px;width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-.thermal-button span{white-space:nowrap}
-.thermal-button.heat{border-color:#f0be96;background:#fff7ed;color:#bf5a1f}
-.thermal-button.cool{border-color:#aed4ec;background:#f0faff;color:#287fae}
-.thermal-button[aria-pressed=true]{box-shadow:inset 0 0 0 1px currentColor,0 2px 9px #176b5310}
-.thermal-button.heat[aria-pressed=true]{background:#ffead4;box-shadow:inset 0 0 0 1px #ef984b,0 2px 12px #ff9b3a21}
-.thermal-button.cool[aria-pressed=true]{background:#def3ff;box-shadow:inset 0 0 0 1px #60b6e7,0 2px 12px #388cce1a}
-.thermal-button:hover{filter:brightness(.98)}
-.thermal-button:focus-visible{outline:3px solid #b88736;outline-offset:2px}
 @container(max-width:500px){
  .temperature-sound-lab .comparison-board{padding:8px}
  .temperature-sound-lab .medium-row{grid-template-columns:1fr;gap:6px;padding:10px 8px}
@@ -159,18 +148,14 @@
  .temperature-sound-lab .arrival-readout{min-height:75px;padding-top:18px;font-size:.65rem}
  .temperature-sound-lab .arrival-readout output{font-size:.81rem}
  .temperature-sound-lab .result p{font-size:1rem}
- .thermal-button{font-size:.8rem;gap:5px}
- .thermal-button svg{flex-basis:24px;width:24px;height:24px}
 }
 @container(max-width:400px){
- .thermal-actions{grid-template-columns:1fr;gap:7px}
- .thermal-button{min-height:47px;gap:12px;font-size:.88rem}
  .temperature-sound-lab .medium-heading{flex-wrap:wrap;gap:4px 7px}
 }
 
 @container(max-width:400px){
  .temperature-sound-lab .row-body{grid-template-columns:1fr;grid-template-areas:"field" "race" "arrival"}
- .temperature-sound-lab .medium-row[data-group=reference] .row-body{grid-template-areas:"field" "arrival"}
+ .temperature-sound-lab .medium-row[data-group=cold] .row-body{grid-template-areas:"field" "arrival"}
  .temperature-sound-lab .arrival-readout{flex-direction:row;gap:10px;min-height:0;padding:5px 0 0;border:0;justify-content:flex-end}
  .temperature-sound-lab .arrival-readout output{font-size:.86rem}
  .temperature-sound-lab .progress-gap{margin:0;font-size:.72rem}

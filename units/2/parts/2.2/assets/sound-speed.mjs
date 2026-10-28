@@ -1,12 +1,11 @@
 import {
   DISTANCE, START_X, END_X,
-  appearance, arrivalTime, reachedDistance, clamp, conditions,
-  positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=compact-21';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=compact-21';
-import { createTemperatureRig, temperatureText } from './temperature-rig.mjs?v=compact-21';
-import { createTemperatureProgress } from './temperature-progress.mjs?v=compact-21';
-import { airChamberScene } from './temperature-chamber.mjs?v=compact-21';
+  appearance, arrivalTime, reachedDistance, conditions,
+  positions, runEnd, sample
+} from './sound-speed-model.mjs?v=fixed-22';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=fixed-22';
+import { createTemperatureProgress } from './temperature-progress.mjs?v=fixed-22';
+import { airChamberScene } from './temperature-chamber.mjs?v=fixed-22';
 
 export function initSoundSpeed(root) {
 // 兩個獨立區塊共用控制器，原生標籤及 SVG 定義各自使用唯一 ID。
@@ -27,9 +26,8 @@ const svg = (tag, attributes, parent) => {
   return node;
 };
 
-const state = { mode: root.dataset.soundSpeedMode === 'temperature' ? 'temperature' : 'material', temperature: 80, temperatureTarget: 80, phase: 'idle', time: 0, scope: 'together' };
+const state = { mode: root.dataset.soundSpeedMode === 'temperature' ? 'temperature' : 'material', phase: 'idle', time: 0, scope: 'together' };
 let models = [], groups = [], frame = 0, runStartWall = null, runStartTime = 0;
-let temperatureRig = null;
 let noticed = new Set(), context = null, audioFailed = false;
 const tones = new Set();
 const panel = $('#experiment-panel');
@@ -87,7 +85,7 @@ function buildModel(group) {
       <div class="field">
         <p class="propagation-readout"><span>振動已傳到</span><output aria-live="off" aria-label="${group.name}振動目前傳到的位置">0 公尺</output></p>
         <svg viewBox="0 0 456 146" role="img" aria-label="${group.name}的內部放大模型，${group.kind === 'water' ? '水槽中的水分子' : group.kind === 'steel' ? '金屬剖面中的原子' : '透明空氣中的分子'}在原位附近沿水平方向振動。"></svg>
-        <button class="source-hit" type="button" aria-label="單獨敲擊${group.name}組音叉"></button>
+        <button class="source-hit" type="button" aria-label="單獨敲擊${group.name}音叉"></button>
       </div>
       <div class="arrival-readout"><span>到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的實際經過時間">—</output></div>
     </div>`;
@@ -95,14 +93,14 @@ function buildModel(group) {
   row.querySelector('.source-hit').addEventListener('click', () => startSingle(group.id));
   const field = row.querySelector('.field svg'), fill = addMaterials(field, `${idPrefix}${group.id}-field`);
   const temperatureMode = state.mode === 'temperature';
-  const adjustable = group.id === 'adjustable';
+  const hot = group.id === 'hot';
   if (temperatureMode) {
     const height = 150;
     field.setAttribute('viewBox', `0 0 456 ${height}`);
     Object.assign(row.querySelector('.source-hit').style, { top: `${22/height*100}%`, height: `${100/height*100}%`, bottom: 'auto' });
   }
-  const scene = temperatureMode ? airChamberScene(field, `${idPrefix}${group.id}-scene`, adjustable) : mediumScene(field, group.kind, `${idPrefix}${group.id}-scene`);
-  if (temperatureMode) scene.setTemperature(group.temperature, group.temperature);
+  const scene = temperatureMode ? airChamberScene(field, `${idPrefix}${group.id}-scene`) : mediumScene(field, group.kind, `${idPrefix}${group.id}-scene`);
+  if (temperatureMode) scene.setTemperature(group.temperature);
   const source = tuningForkSource(scene.sourceLayer || field, group.kind, fill, { labelY: temperatureMode ? 146 : 139 });
   const bonds = svg('g', { fill: 'none', stroke: '#8a9e9c', 'stroke-width': .8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, scene.interior);
   const dots = svg('g', { 'aria-hidden': 'true' }, scene.interior);
@@ -122,7 +120,7 @@ function buildModel(group) {
   }
   let front = null, reachedTrack = null;
   const trackY = 125;
-  const progress = temperatureMode && adjustable ? createTemperatureProgress(row, group.id) : null;
+  const progress = temperatureMode && hot ? createTemperatureProgress(row, group.id) : null;
   if (!temperatureMode) {
     svg('path', { class: 'distance-track', d: `M${START_X} ${trackY}H${END_X}`, stroke: '#c6d5cd', 'stroke-width': 2.2 }, field);
     reachedTrack = svg('path', { class: 'distance-reached', d: `M${START_X} ${trackY}H${START_X}`, stroke: '#176b53', 'stroke-width': 2.6 }, field);
@@ -136,7 +134,6 @@ function buildModel(group) {
     text(svg('text', { x: START_X, y: trackY+14, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '0 m');
     text(svg('text', { x: END_X, y: trackY+14, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), `${number.format(DISTANCE)} m`);
   }
-  if (temperatureMode && adjustable) temperatureRig = createTemperatureRig(row, { prefix: idPrefix, onSelect: conditionTo, chamber: scene });
   return {
     ...group, trackY, progress, startedAt: null, row, points, links, source, scene, front, reachedTrack,
     timeWrap: row.querySelector('.individual-time'), timeCaption: row.querySelector('.individual-time span'), timeOutput: row.querySelector('.individual-time output'),
@@ -149,22 +146,17 @@ function drawResult() {
   const finished = state.scope === 'together' && groups.length > 0 && groups.every(group => state.time >= arrivalTime(group.speed));
   $('#result').hidden = !finished;
   if (!finished) return;
-  const first = winners(groups);
   text($('#result-title'), '觀察結果');
   let summary;
   if (state.mode === 'material') summary = '在本次條件下，鋼最先、水其次、空氣最後。介質傳遞振動的特性不同，不能只靠粒子疏密判斷快慢。';
   else {
     const difference = Math.abs(arrivalTime(groups[0].speed) - arrivalTime(groups[1].speed));
-    summary = first.length > 1
-      ? '兩組都是 20°C，聲音同時到達。'
-      : state.temperature > 20
-        ? `${temperatureText(state.temperature)}°C 比 20°C 早 ${secondsText(difference)}到達。`
-        : `${temperatureText(state.temperature)}°C 比 20°C 晚 ${secondsText(difference)}到達。`;
+    summary = `80°C 比 0°C 早 ${secondsText(difference)}到達。`;
   }
   text($('#result-summary'), summary);
   // 第五區以核可的一行差值呈現結果，第四區保留原有比較表。
   if (!$('#result-rows')) return;
-  const signature = `${state.mode}:${state.temperature}`;
+  const signature = state.mode;
   if ($('#result-rows').dataset.signature === signature) return;
   $('#result-rows').dataset.signature = signature;
   $('#result-rows').replaceChildren();
@@ -181,12 +173,8 @@ function paint(audible = false) {
   panel.dataset.mode = state.mode; panel.dataset.phase = state.phase;
   panel.dataset.scope = state.scope;
   panel.dataset.time = state.time.toFixed(8); panel.dataset.playbackRate = '1';
-  if (state.mode === 'temperature') {
-    panel.dataset.temperature = state.temperature.toFixed(4);
-    panel.dataset.targetTemperature = String(state.temperatureTarget);
-    panel.dataset.conditioning = 'false';
-    temperatureRig?.render(state.temperature, state.temperatureTarget);
-  }
+  if (state.mode === 'temperature') panel.dataset.temperatures = groups.map(group => group.temperature).join(',');
+
   let newArrival = false;
   for (const model of models) {
     const elapsed = model.startedAt === null ? 0 : Math.min(runEnd([model]), Math.max(0, state.time - model.startedAt));
@@ -298,45 +286,23 @@ function pause() {
 
 function rebuild() {
   resetRun();
-  groups = conditions(state.mode, state.temperature);
+  groups = conditions(state.mode);
   $('#models').replaceChildren();
   models = groups.map(buildModel);
   const temperatureMode = state.mode === 'temperature';
   text($('#lesson-title'), temperatureMode ? '溫度不同，聲音傳到哪裡了？' : '聲音在不同介質中，傳得多快？');
-  text($('#lesson-intro'), temperatureMode ? '固定 20°C 參考組，同時敲擊，比較兩組的傳播進度。' : '觀察相鄰粒子如何逐段受振，再比較終點的到達時間。');
-  text($('#girl-line'), temperatureMode ? '我們把空氣加熱，再敲一次音叉看看！' : '空氣、水和鋼，裡面的粒子是怎麼把振動傳開的？');
-  text($('#grandpa-line'), temperatureMode ? '參考組維持 20°C，用相同距離來比較。' : '音叉被敲一下後來回振動，帶動附近粒子；再看相鄰粒子如何依序受振。');
+  text($('#lesson-intro'), temperatureMode ? '同時敲擊，比較 0°C 與 80°C 空氣中的傳播進度。' : '觀察相鄰粒子如何逐段受振，再比較終點的到達時間。');
+  text($('#girl-line'), temperatureMode ? '一組 0°C，一組 80°C，我們同時敲音叉看看！' : '空氣、水和鋼，裡面的粒子是怎麼把振動傳開的？');
+  text($('#grandpa-line'), temperatureMode ? '兩組都是空氣、距離也相同，只比較溫度的差異。' : '音叉被敲一下後來回振動，帶動附近粒子；再看相鄰粒子如何依序受振。');
   $('#takeaway').innerHTML = temperatureMode
-    ? '<strong>觀察重點：</strong>只改變空氣溫度，振動頻率維持相同；同溫時，振動會同時傳到最右端。'
+    ? '<strong>觀察重點：</strong>其他條件相同時，空氣溫度較高，聲速通常較快。'
     : '<strong>觀察重點：</strong>粒子在原位附近往返；同一聲源頻率相同，三種介質傳遞振動的速度不同。';
   if (temperatureMode && !root.querySelector('.progress-legend')) {
     const legend = document.createElement('p');
     legend.className = 'progress-legend';
-    legend.innerHTML = '<span><i class="legend-own" aria-hidden="true"></i>實線：本組進度</span><span><i class="legend-other" aria-hidden="true"></i>虛線：另一組進度</span>';
+    legend.innerHTML = '<span><i class="legend-own" aria-hidden="true"></i>實線：80°C 組</span><span><i class="legend-other" aria-hidden="true"></i>虛線：0°C 組</span>';
     root.querySelector('.comparison-board').prepend(legend);
   }
-  paint();
-}
-
-function updateTemperature(value) {
-  state.temperature = value;
-  groups = conditions('temperature', value);
-  const model = models.find(model => model.id === 'adjustable');
-  if (!model) return;
-  Object.assign(model, groups.find(group => group.id === 'adjustable'));
-  model.row.dataset.speed = String(model.speed);
-  const heading = model.row.querySelector('h3');
-  text(heading.firstElementChild, `${temperatureText(value)}°C`);
-  model.row.style.setProperty('--group-temperature-color', value>20?'#dd7034':value<20?'#348dc1':'#176b53');
-  attr(model.row.querySelector('.source-hit'), 'aria-label', `單獨敲擊${model.name}音叉`);
-  attr(model.row.querySelector('.field svg'), 'aria-label', `${model.name}的空氣分子放大模型，粒子在原位附近沿水平方向振動。`);
-  attr(model.arrivalOutput, 'aria-label', `${model.name}傳到最右端的實際經過時間`);
-}
-
-function conditionTo(target) {
-  state.temperatureTarget = clamp(target, 0, 80);
-  resetRun();
-  updateTemperature(state.temperatureTarget);
   paint();
 }
 

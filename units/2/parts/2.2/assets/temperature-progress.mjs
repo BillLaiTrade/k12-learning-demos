@@ -1,10 +1,10 @@
-import { DISTANCE, START_X, END_X } from './sound-speed-model.mjs?v=compact-21';
+import { DISTANCE, START_X, END_X } from './sound-speed-model.mjs?v=fixed-22';
 
 const metres = new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 0 });
 const color = model => model.temperature > 20 ? '#bc5722' : model.temperature < 20 ? '#287fae' : '#176b53';
 const setText = (node, value) => { if (node.textContent !== value) node.textContent = value; };
 
-// 兩排用相同起點與長度；對方的標記取同一影格的位置，沒有第二條計時器。
+// 下方單一刻度共用兩組位置與實時時鐘。
 export function createTemperatureProgress(row, id) {
   const progress = document.createElement('div');
   progress.className = 'race-progress';
@@ -45,7 +45,7 @@ export function createTemperatureProgress(row, id) {
     ownLabel.style.setProperty('--position', ownPosition);
     otherLabel.style.setProperty('--position', otherPosition);
     fill.style.width = `${ownPosition}%`;
-    setText(ownLabel, `本組 ${metres.format(own.distance)} m`);
+    setText(ownLabel, `${own.temperature}°C 組 ${metres.format(own.distance)} m`);
     setText(otherLabel, `${other.temperature}°C 組 ${other.active?`${metres.format(other.distance)} m`:'—'}`);
     ownLabel.setAttribute('aria-label', `本組振動已傳到 ${metres.format(own.distance)} 公尺`);
     otherLabel.setAttribute('aria-label', `${other.temperature} 攝氏度組${other.active?`振動已傳到 ${metres.format(other.distance)} 公尺`:'尚未敲擊'}`);

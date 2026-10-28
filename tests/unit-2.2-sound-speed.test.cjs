@@ -23,14 +23,15 @@ test('sound comparison uses one signal and physical travel delays', async t => {
     assert.equal(m.reachedDistance(343,100), 5000);
     assert.equal(m.reachedDistance(343,0), 0);
   });
-  await t.test('temperature changes only the air speed, including a real tie at 20°C', () => {
-    assert.equal(m.airSpeed(20), 343);
-    for(const temperature of [0,20,80]) assert.ok(Math.abs(m.airSpeed(temperature)-343*Math.sqrt((temperature+273.15)/293.15))<1e-10);
-    assert.deepEqual(m.winners(m.conditions('temperature', 0)), ['reference']);
-    assert.deepEqual(m.winners(m.conditions('temperature', 80)), ['adjustable']);
-    assert.deepEqual(m.winners(m.conditions('temperature', 20)), ['reference', 'adjustable']);
-    assert.equal(m.arrivalTime(m.airSpeed(80)).toFixed(3),'13.281');
-    assert.equal((m.arrivalTime(343)-m.arrivalTime(m.airSpeed(80))).toFixed(3),'1.296');
+  await t.test('temperature comparison is fixed at 0°C and 80°C with square-root air speeds', () => {
+    assert.equal(m.airSpeed(20),343);
+    const pair=m.conditions('temperature');
+    assert.deepEqual(pair.map(g=>g.temperature),[0,80]);
+    assert.deepEqual(pair.map(g=>g.id),['cold','hot']);
+    for(const group of pair)assert.ok(Math.abs(group.speed-343*Math.sqrt((group.temperature+273.15)/293.15))<1e-10);
+    assert.deepEqual(m.winners(pair),['hot']);
+    assert.deepEqual(pair.map(g=>m.arrivalTime(g.speed).toFixed(3)),['15.102','13.281']);
+    assert.equal((m.arrivalTime(pair[0].speed)-m.arrivalTime(pair[1].speed)).toFixed(3),'1.820');
   });
   await t.test('every medium uses the same frequency, bounded local motion and exact rest', () => {
     for (const speed of [331, 343, 349, 1480, 5900]) {
@@ -142,7 +143,6 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
   const temperatureLab=page.locator('#card-05');
   const temperatureData=()=>temperatureLab.locator('#temp-experiment-panel').evaluate(n=>({...n.dataset}));
   const temperaturePrimary=temperatureLab.locator('#temp-primary-action');
-  const setTemperature = async value => { await temperatureLab.locator(`[data-temperature-target="${value}"]`).click(); };
   const realWait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   await t.test('initial scene uses the official characters, no orange tracking particle and no autoplay', async () => {
@@ -328,9 +328,9 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     await page.locator('#card-04 [data-group=steel] .source-hit').click();
     assert.equal(await page.locator('#card-04 [data-group=steel] .fork-striker[visibility=visible]').count(),1);
     assert.ok(Number(await page.locator('#card-04 [data-group=water]').getAttribute('data-time'))>.18);
-    await temperatureLab.locator('[data-group=adjustable] .source-hit').click();await page.clock.runFor(1000);
-    assert.equal(await temperatureLab.locator('[data-group=reference]').getAttribute('data-phase'),'idle');
-    assert.ok(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-time'))>.98);
+    await temperatureLab.locator('[data-group=hot] .source-hit').click();await page.clock.runFor(1000);
+    assert.equal(await temperatureLab.locator('[data-group=cold]').getAttribute('data-phase'),'idle');
+    assert.ok(Number(await temperatureLab.locator('[data-group=hot]').getAttribute('data-time'))>.98);
     await temperatureLab.locator('#temp-reset-action').click();
     assert.deepEqual(await temperatureLab.locator('.medium-row').evaluateAll(ns=>ns.map(n=>n.dataset.phase)),['idle','idle']);
     assert.equal((await data()).phase,'running','fifth block reset does not reset fourth block');
@@ -458,47 +458,30 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('#card-04 [data-sound-speed-lab]').locator('.propagation-front').evaluateAll(nodes => nodes.every(n => n.getAttribute('visibility') === 'hidden')), true);
   });
 
-  await t.test('temperature actions immediately update the chamber reading, heading and sound speed', async () => {
-    await fresh();
-    assert.equal((await temperatureData()).mode,'temperature');
+  await t.test('fixed cold and hot groups have no temperature switching controls or apparatus', async () => {
+    await fresh();const m=await model;
+    assert.equal((await temperatureData()).temperatures,'0,80');
     assert.equal(await temperatureLab.locator('.medium-row').count(),2);
-    assert.equal(await temperatureLab.locator('input[type=range],#temp-temperature-down,#temp-temperature-up').count(),0);
-    assert.equal(await temperatureLab.locator('[data-group=reference] .temperature-rig').count(),0);
-    assert.equal(await temperatureLab.locator('[data-group=adjustable] .temperature-rig').count(),1);
-    assert.deepEqual(await temperatureLab.locator('[data-temperature-target]').allTextContents(),['加熱到 80°C','冷卻到 0°C','回到 20°C']);
+    assert.equal(await temperatureLab.locator('input[type=range],[data-temperature-target],.thermal-actions,.temperature-rig,#temp-temperature-value').count(),0);
+    assert.deepEqual(await temperatureLab.locator('h3.temperature-heading').allTextContents(),['0°C 低溫組','80°C 高溫組']);
+    assert.deepEqual(await temperatureLab.locator('.air-chamber').evaluateAll(ns=>ns.map(n=>n.dataset.temperature)),['0.0000','80.0000']);
+    const speeds=await temperatureLab.locator('.medium-row').evaluateAll(ns=>ns.map(n=>Number(n.dataset.speed)));
+    assert.deepEqual(speeds,[m.airSpeed(0),m.airSpeed(80)]);
     const layouts=await temperatureLab.locator('.medium-row').evaluateAll(rows=>rows.map(row=>[...row.querySelectorAll('.particle')].map(n=>[n.dataset.originX,n.dataset.originY])));
     assert.deepEqual(layouts[0],layouts[1]);
-    await temperatureLab.locator('[data-temperature-target="0"]').click();
-    const changed=await temperatureData();assert.equal(changed.conditioning,'false');
-    assert.equal(changed.temperature,'0.0000');
-    assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'0°C');
-    assert.match(await temperatureLab.locator('[data-group=adjustable] h3').textContent(),/^0°C/);
-    assert.equal(await temperatureLab.locator('.rig-controller,.rig-thermometer,image').count(),0,'no detached device/thermometer photograph');
-    assert.ok(Math.abs(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'))-((await model).airSpeed(Number(changed.temperature))))<.001);
-    await page.clock.runFor(2100);
-    assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'0°C');
-    assert.ok(Math.abs(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'))-(await model).airSpeed(0))<1e-10);
-    assert.equal(await temperatureLab.locator('.air-chamber[data-adjustable=true]').getAttribute('data-temperature'),'0.0000');
-    await temperatureLab.locator('[data-temperature-target="20"]').focus();await page.keyboard.press('Enter');
-    assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'20°C');
-    await temperatureLab.locator('[data-temperature-target="80"]').focus();await page.keyboard.press('Space');
-    assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'80°C');
-    assert.equal(await temperatureLab.locator('[data-group=reference]').getAttribute('data-speed'),'343');
-    assert.ok(Math.abs(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'))-(await model).airSpeed(80))<1e-10);
-    assert.equal(await temperatureLab.locator('[aria-pressed=true][data-temperature-target]').count(),1);
+    assert.equal(await temperatureLab.locator('.rig-controller,.rig-thermometer,image').count(),0);
   });
 
-  await t.test('compact chambers omit the apparatus and retain one comparison below the adjustable group', async () => {
+  await t.test('compact chambers omit the apparatus and retain one comparison below the hot group', async () => {
     await fresh();
     assert.equal(await temperatureLab.locator('.chamber-thermal-link,.chamber-probe-port,.chamber-probe-tip,.chamber-sensor-cable,.chamber-meter,.chamber-temperature-value,.rig-heat-light,.rig-cold-light').count(),0);
     assert.equal(await temperatureLab.locator('.race-progress').count(),1);
-    assert.equal(await temperatureLab.locator('[data-group=reference] .race-progress,[data-group=reference] .progress-gap').count(),0);
-    assert.equal(await temperatureLab.locator('[data-group=adjustable] .race-progress').count(),1);
-    assert.equal(await temperatureLab.locator('#temp-temperature-value').evaluate(n=>n.parentElement.classList.contains('temperature-heading')),true);
+    assert.equal(await temperatureLab.locator('[data-group=cold] .race-progress,[data-group=cold] .progress-gap').count(),0);
+    assert.equal(await temperatureLab.locator('[data-group=hot] .race-progress').count(),1);
     assert.deepEqual(await temperatureLab.locator('.field>svg').evaluateAll(ns=>ns.map(n=>n.getAttribute('viewBox'))),['0 0 456 150','0 0 456 150']);
     const shapes=where=>page.locator(where).evaluateAll(ns=>ns.map(n=>({d:n.getAttribute('d'),strokeWidth:n.getAttribute('stroke-width')})));
-    assert.deepEqual(await shapes('#card-04 [data-group=air] .fork-tine'),await shapes('#card-05 [data-group=adjustable] .fork-tine'));
-    assert.deepEqual(await shapes('#card-04 [data-group=air] .fork-fixed path'),await shapes('#card-05 [data-group=adjustable] .fork-fixed path'));
+    assert.deepEqual(await shapes('#card-04 [data-group=air] .fork-tine'),await shapes('#card-05 [data-group=hot] .fork-tine'));
+    assert.deepEqual(await shapes('#card-04 [data-group=air] .fork-fixed path'),await shapes('#card-05 [data-group=hot] .fork-fixed path'));
     assert.equal(await page.evaluate(()=>performance.getEntriesByType('resource').some(r=>r.name.includes('temperature-control-unit.png'))),false);
     for(const width of[320,390,640,768,850,1024,1440]){
       await page.setViewportSize({width,height:1600});await page.clock.runFor(32);
@@ -517,11 +500,11 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     const rails=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>({...n.dataset})));
     assert.equal(rails.length,1);
     assert.ok(Math.abs(Number(rails[0].ownDistance)-speed*elapsed)<.001);
-    assert.ok(Math.abs(Number(rails[0].otherDistance)-343*elapsed)<.001);
-    const gap=Math.round((speed-343)*elapsed);
+    assert.ok(Math.abs(Number(rails[0].otherDistance)-m.airSpeed(0)*elapsed)<.001);
+    const gap=Math.round((speed-m.airSpeed(0))*elapsed);
     assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),[`領先 ${gap} 公尺`]);
-    assert.deepEqual(await temperatureLab.locator('.race-own-label').allTextContents(),['本組 4,518 m']);
-    assert.deepEqual(await temperatureLab.locator('.race-other-label').allTextContents(),['20°C 組 4,116 m']);
+    assert.deepEqual(await temperatureLab.locator('.race-own-label').allTextContents(),['80°C 組 4,518 m']);
+    assert.deepEqual(await temperatureLab.locator('.race-other-label').allTextContents(),['0°C 組 3,973 m']);
     for(const width of[320,390,640,768,850,1024,1440]){
       await page.setViewportSize({width,height:1600});await page.clock.runFor(32);
       const geometry=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>{
@@ -531,7 +514,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
       }));
       const g=geometry[0];
       assert.ok(Math.abs(g.own-(g.left+(g.right-g.left)*speed*elapsed/5000))<.1);
-      assert.ok(Math.abs(g.other-(g.left+(g.right-g.left)*343*elapsed/5000))<.1);
+      assert.ok(Math.abs(g.other-(g.left+(g.right-g.left)*m.airSpeed(0)*elapsed/5000))<.1);
       assert.ok(geometry.every(g=>g.labels.every(l=>l.inside&&!l.overflow)));
     }
     const saved=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>n.innerHTML));
@@ -540,113 +523,71 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     await page.setViewportSize({width:1440,height:1500});
   });
 
-  await t.test('race comparison handles first arrival, finished tracks, ties, reset and separate starts honestly', async () => {
+  await t.test('fixed race handles first arrival, completion, reset and separate starts honestly', async () => {
     await fresh();const m=await model;
-    for(const temperature of[80,0,20]){
-      await setTemperature(temperature);await temperaturePrimary.click();
-      const first=Math.min(m.arrivalTime(343),m.arrivalTime(m.airSpeed(temperature)));
-      await page.clock.runFor(Math.ceil(first*1000)+32);await temperaturePrimary.click();
-      if(temperature===20){
-        assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['均已到達']);
-      }else{
-        assert.equal(await temperatureLab.locator('.arrival-readout output[data-arrival]').count(),1);
-        const ds=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.flatMap(n=>[Number(n.dataset.ownDistance),Number(n.dataset.otherDistance)]));
-        assert.equal(Math.max(...ds),5000);assert.ok(Math.min(...ds)<5000);
-        assert.match(await temperatureLab.locator('.progress-gap').first().textContent(),temperature>20?/領先/:/落後/);
-      }
-      await temperaturePrimary.click();await page.clock.fastForward(20000);
-      assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['均已到達']);
-      assert.equal(await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.every(n=>n.dataset.ownDistance==='5000'&&n.dataset.otherDistance==='5000')),true);
-      await temperatureLab.locator('#temp-reset-action').click();
-      assert.equal(await temperatureLab.locator('.race-marker:not([hidden])').count(),0);
-      assert.equal(await temperatureLab.locator('.progress-gap:not([hidden])').count(),0);
-    }
-    await setTemperature(20);await temperaturePrimary.click();await page.clock.runFor(2000);
-    assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['進度相同']);
-    const equal=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>[n.querySelector('.race-own').style.left,n.querySelector('.race-other').style.left]));
-    assert.ok(equal.every(([a,b])=>a===b));
-    await temperatureLab.locator('#temp-reset-action').click();await setTemperature(80);
-    await temperatureLab.locator('[data-group=adjustable] .source-hit').click();await page.clock.runFor(1000);
-    assert.equal(await temperatureLab.locator('[data-group=adjustable] .race-other').isHidden(),true);
-    assert.equal(await temperatureLab.locator('[data-group=reference] .race-own').count(),0);
-    await temperatureLab.locator('[data-group=reference] .source-hit').click();await page.clock.runFor(1000);
-    assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['分別敲擊']);
-    const separate=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>({...n.dataset})));
-    assert.equal(separate.length,1);
-    assert.equal(separate[0].ownDistance,String(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-reached-distance'))));
-    assert.equal(separate[0].otherDistance,String(Number(await temperatureLab.locator('[data-group=reference]').getAttribute('data-reached-distance'))));
+    await temperaturePrimary.click();await page.clock.runFor(Math.ceil(m.arrivalTime(m.airSpeed(80))*1000)+32);await temperaturePrimary.click();
+    assert.equal(await temperatureLab.locator('.arrival-readout output[data-arrival]').count(),1);
+    assert.equal(await temperatureLab.locator('[data-group=hot] .arrival-readout output').textContent(),'13.281 秒');
+    const ds=await temperatureLab.locator('.race-progress').evaluate(n=>[Number(n.dataset.ownDistance),Number(n.dataset.otherDistance)]);
+    assert.equal(ds[0],5000);assert.ok(ds[1]<5000);
+    assert.match(await temperatureLab.locator('.progress-gap').textContent(),/領先/);
+    await temperaturePrimary.click();await page.clock.fastForward(20000);
+    assert.equal(await temperatureLab.locator('.progress-gap').textContent(),'均已到達');
+    await temperatureLab.locator('#temp-reset-action').click();
+    assert.equal(await temperatureLab.locator('.race-marker:not([hidden]),.progress-gap:not([hidden])').count(),0);
+    await temperatureLab.locator('[data-group=hot] .source-hit').click();await page.clock.runFor(1000);
+    assert.equal(await temperatureLab.locator('[data-group=hot] .race-other').isHidden(),true);
+    assert.equal(await temperatureLab.locator('[data-group=cold] .race-own').count(),0);
+    await temperatureLab.locator('[data-group=cold] .source-hit').click();await page.clock.runFor(1000);
+    assert.equal(await temperatureLab.locator('.progress-gap').textContent(),'分別敲擊');
+    const separate=await temperatureLab.locator('.race-progress').evaluate(n=>({...n.dataset}));
+    assert.equal(separate.ownDistance,String(Number(await temperatureLab.locator('[data-group=hot]').getAttribute('data-reached-distance'))));
+    assert.equal(separate.otherDistance,String(Number(await temperatureLab.locator('[data-group=cold]').getAttribute('data-reached-distance'))));
     await temperaturePrimary.click();await page.clock.runFor(1000);
     assert.equal((await temperatureData()).scope,'together');
-    assert.match(await temperatureLab.locator('.progress-gap').first().textContent(),/領先/);
+    assert.match(await temperatureLab.locator('.progress-gap').textContent(),/領先/);
   });
 
-  await t.test('rapid temperature selections stay fixed at each target and never start sound', async () => {
-    await fresh();const before=await temperatureLab.locator('.particle').evaluateAll(ns=>ns.map(n=>n.getAttribute('transform')));
-    for(const target of[0,80,0,20]){
-      await temperatureLab.locator(`[data-temperature-target="${target}"]`).click();
-      assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),`${target}°C`);
-      assert.equal((await temperatureData()).temperature,target.toFixed(4));
-      await page.clock.runFor(180);
-      assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),`${target}°C`);
-    }
-    await page.clock.runFor(2700);assert.equal((await temperatureData()).conditioning,'false');
-    assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'20°C');
-    assert.equal((await temperatureData()).phase,'idle');assert.equal((await temperatureData()).time,'0.00000000');
-    assert.deepEqual(await temperatureLab.locator('.particle').evaluateAll(ns=>ns.map(n=>n.getAttribute('transform'))),before);
-    assert.equal(await page.evaluate(()=>window.__oscillators.length),0);
-    assert.equal(await temperatureLab.locator('[data-temperature-target][aria-pressed=true]').getAttribute('data-temperature-target'),'20');
-  });
-
-  await t.test('striking immediately after selecting temperature starts the real propagation clock', async () => {
-    await fresh();await temperatureLab.locator('[data-temperature-target="0"]').click();
-    assert.equal((await temperatureData()).conditioning,'false');
-    await temperatureLab.locator('[data-group=adjustable] .source-hit').click();
-    assert.equal((await temperatureData()).conditioning,'false');assert.equal((await temperatureData()).temperature,'0.0000');
+  await t.test('direct fixed-temperature strikes start immediately and reset preserves both temperatures', async () => {
+    await fresh();await temperatureLab.locator('[data-group=hot] .source-hit').click();
     assert.equal(await temperatureLab.locator('.fork-striker[visibility=visible]').count(),1);
-    assert.equal(await temperatureLab.locator('[data-group=reference]').getAttribute('data-phase'),'idle');
+    assert.equal(await temperatureLab.locator('[data-group=cold]').getAttribute('data-phase'),'idle');
     await page.clock.runFor(1000);const state=await temperatureData();assert.ok(Math.abs(Number(state.time)-1)<.02);
-    assert.ok(Math.abs(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-reached-distance'))-(await model).airSpeed(0)*Number(state.time))<.001);
+    assert.ok(Math.abs(Number(await temperatureLab.locator('[data-group=hot]').getAttribute('data-reached-distance'))-(await model).airSpeed(80)*Number(state.time))<.001);
     assert.equal((await data()).phase,'idle');
-    await temperatureLab.locator('[data-temperature-target="20"]').click();await page.clock.runFor(300);
     await temperatureLab.locator('#temp-reset-action').click();await page.clock.runFor(2000);
-    assert.equal((await temperatureData()).temperature,'20.0000');assert.equal((await temperatureData()).conditioning,'false');assert.equal((await temperatureData()).phase,'idle');
+    assert.equal((await temperatureData()).phase,'idle');assert.equal((await temperatureData()).temperatures,'0,80');
+    assert.deepEqual(await temperatureLab.locator('.arrival-readout output').allTextContents(),['—','—']);
   });
 
-  await t.test('backgrounding preserves the selected temperature without starting sound and pauses propagation', async () => {
-    await fresh();await temperatureLab.locator('[data-temperature-target="0"]').click();await page.clock.runFor(300);
+  await t.test('backgrounding preserves fixed temperatures without autoplay and pauses propagation', async () => {
+    await fresh();
     await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
-    assert.equal((await temperatureData()).conditioning,'false');assert.equal((await temperatureData()).temperature,'0.0000');
     assert.equal((await temperatureData()).phase,'idle');await page.clock.runFor(2000);assert.equal((await temperatureData()).time,'0.00000000');
     await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));});
     await temperaturePrimary.click();await page.clock.runFor(500);
     await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
     const saved=await temperatureData();assert.equal(saved.phase,'paused');await page.clock.runFor(2000);assert.equal((await temperatureData()).time,saved.time);
     await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));});
-    await page.clock.runFor(1000);assert.equal((await temperatureData()).phase,'paused');
+    await page.clock.runFor(1000);assert.equal((await temperatureData()).phase,'paused');assert.equal((await temperatureData()).temperatures,'0,80');
   });
 
-  await t.test('warmer, colder and equal-temperature experiments produce correct fifth-block outcomes', async () => {
-    for(const [temperature,expected,times]of[[80,/早 1\.296 秒/,['14.577 秒','13.281 秒']],[0,/晚 0\.524 秒/,['14.577 秒','15.102 秒']],[20,/聲音同時到達/,['14.577 秒','14.577 秒']]]){
-      await setTemperature(temperature);await temperaturePrimary.click();await page.clock.fastForward(20000);
+  await t.test('fixed 0°C and 80°C experiments reproduce the same correct arrival times', async () => {
+    await fresh();
+    for(let attempt=0;attempt<2;attempt++){
+      await temperatureLab.locator('#temp-reset-action').click();await temperaturePrimary.click();await page.clock.fastForward(21000);
       assert.equal((await temperatureData()).phase,'complete');
-      assert.match(await temperatureLab.locator('#temp-result-summary').textContent(),expected);
+      assert.match(await temperatureLab.locator('#temp-result-summary').textContent(),/80°C 比 0°C 早 1\.820 秒/);
       assert.equal(await temperatureLab.locator('#temp-result table').count(),0);
-      assert.equal(await temperatureLab.locator('#temp-result table').count(),0);
-      assert.deepEqual(await temperatureLab.locator('.arrival-readout output').allTextContents(),times);
+      assert.deepEqual(await temperatureLab.locator('.arrival-readout output').allTextContents(),['15.102 秒','13.281 秒']);
       assert.equal((await data()).phase,'idle');
     }
   });
 
-  await t.test('changing temperature clears only the fifth block while both blocks retain independent controls', async () => {
-    await temperaturePrimary.click();await page.clock.runFor(500);
-    const pair=await temperatureLab.locator('.medium-row').evaluateAll(rows=>rows.map(row=>[...row.querySelectorAll('.particle')].map(n=>n.getAttribute('transform'))));
-    assert.deepEqual(pair[0],pair[1]);
-    await setTemperature(80);assert.equal((await temperatureData()).phase,'idle');
-    assert.deepEqual(await temperatureLab.locator('.arrival-readout output').allTextContents(),['—','—']);
-    assert.equal(await temperatureLab.locator('#temp-result').isHidden(),true);
-    await primary.click();await page.clock.runFor(1000);await temperaturePrimary.click();await page.clock.runFor(500);
+  await t.test('fifth-block pause and reset stay independent of the fourth-block controls', async () => {
+    await fresh();await primary.click();await page.clock.runFor(1000);await temperaturePrimary.click();await page.clock.runFor(500);
     assert.ok(Number((await data()).time)>1.48);assert.ok(Number((await temperatureData()).time)>.48);
-    await temperatureLab.locator('[data-temperature-target="0"]').click();
+    await temperatureLab.locator('#temp-reset-action').click();
     assert.equal((await temperatureData()).phase,'idle');const materialTime=await time();
     await page.clock.runFor(500);assert.ok(Math.abs(await time()-materialTime-.5)<.03);
     await primary.click();const saved=await particleXs();
@@ -727,9 +668,9 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     await fresh();await temperatureLab.locator('details.model-notes summary').click();await temperatureLab.locator('#temp-arrival-sound').check();
     await page.waitForFunction(()=>window.__audioContext?.state==='running');
     assert.equal(await page.locator('#arrival-sound').isChecked(),false);
-    await temperatureLab.locator('[data-group=reference] .source-hit').click();await page.clock.fastForward(15000);
+    await temperatureLab.locator('[data-group=cold] .source-hit').click();await page.clock.fastForward(16000);
     assert.equal(await page.evaluate(()=>window.__oscillators.length),1);
-    assert.deepEqual(await temperatureLab.locator('.arrival-readout output').allTextContents(),['14.577 秒','—']);
+    assert.deepEqual(await temperatureLab.locator('.arrival-readout output').allTextContents(),['15.102 秒','—']);
     assert.equal((await data()).phase,'idle');assert.equal(await time(),0);
     await temperatureLab.locator('#temp-arrival-sound').uncheck();await realWait(150);
     assert.equal(await page.evaluate(()=>window.__oscillators.every(n=>n.__ended)),true);
@@ -787,14 +728,14 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
       }
       console.log('real stopwatch:', JSON.stringify(readings));
       const fifth=await realPage.evaluate(()=>window.__temperatureWatch);
-      for(const[id,speed]of[['reference',343],['adjustable',(await model).airSpeed(80)]]){
+      for(const[id,speed]of[['cold',(await model).airSpeed(0)],['hot',(await model).airSpeed(80)]]){
         assert.ok(Math.abs(fifth.arrivals[id].elapsed-5000/speed)<.12);
         assert.equal(fifth.arrivals[id].displayed,`${(5000/speed).toFixed(3)} 秒`);
       }
       assert.equal(fifth.checks.length,3);
       for(const check of fifth.checks){
         assert.ok(Math.abs(check.clock-check.elapsed)<.06);
-        [343,(await model).airSpeed(80)].forEach((speed,i)=>assert.ok(Math.abs(check.distances[i]-Math.min(5000,speed*check.clock))<.001));
+        [(await model).airSpeed(0),(await model).airSpeed(80)].forEach((speed,i)=>assert.ok(Math.abs(check.distances[i]-Math.min(5000,speed*check.clock))<.001));
       }
       console.log('fifth-block real stopwatch:',JSON.stringify(fifth));
     } finally { await realPage.close(); }
@@ -811,11 +752,9 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     for(const kind of ['air','water'])assert.equal(await material.locator(`[data-group=${kind}]`).getAttribute('data-time'),'0.00000000');
     const comparison=await material.locator('#models').boundingBox();assert.ok(comparison.y>=-1&&comparison.y+comparison.height<=845);
     await material.locator('#reset-action').tap();
-    await temperature.locator('[data-temperature-target="0"]').tap();await mobile.clock.runFor(2700);
-    assert.equal(await temperature.locator('#temp-temperature-value').textContent(),'0°C');
-    await temperature.locator('[data-group=adjustable] .source-hit').tap();await mobile.clock.runFor(500);
-    assert.equal(await temperature.locator('[data-group=reference]').getAttribute('data-phase'),'idle');
-    assert.ok(Number(await temperature.locator('[data-group=adjustable]').getAttribute('data-time'))>.48);
+    await temperature.locator('[data-group=hot] .source-hit').tap();await mobile.clock.runFor(500);
+    assert.equal(await temperature.locator('[data-group=cold]').getAttribute('data-phase'),'idle');
+    assert.ok(Number(await temperature.locator('[data-group=hot]').getAttribute('data-time'))>.48);
     assert.equal(await material.locator('#experiment-panel').getAttribute('data-phase'),'idle');
     await temperature.locator('#temp-reset-action').tap();
     for(const [root,prefix]of[[material,''],[temperature,'temp-']]){
@@ -824,7 +763,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
         await mobile.setViewportSize({width,height:844});await mobile.clock.runFor(32);
         assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
         assert.equal(await root.locator('.arrival-readout').evaluateAll(ns=>ns.every(n=>{const a=n.getBoundingClientRect(),b=n.querySelector('output').getBoundingClientRect();return b.left>=a.left&&b.right<=a.right;})),true);
-        const geometry=await root.locator('.card-main').evaluate(n=>{const a=n.getBoundingClientRect();return{left:a.left,right:a.right,items:[...n.querySelectorAll('.medium-row,.controls,.temperature-rig,.thermal-actions')].map(x=>{const b=x.getBoundingClientRect();return{left:b.left,right:b.right};})};});
+        const geometry=await root.locator('.card-main').evaluate(n=>{const a=n.getBoundingClientRect();return{left:a.left,right:a.right,items:[...n.querySelectorAll('.medium-row,.controls')].map(x=>{const b=x.getBoundingClientRect();return{left:b.left,right:b.right};})};});
         for(const item of geometry.items)assert.ok(item.left>=geometry.left-1&&item.right<=geometry.right+1);
         const boxes=await root.locator('button,.sound-option').evaluateAll(ns=>ns.filter(n=>n.getClientRects().length).map(n=>({w:n.getBoundingClientRect().width,h:n.getBoundingClientRect().height})));
         for(const box of boxes)assert.ok(box.w>=43.9&&box.h>=43.9);
