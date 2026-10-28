@@ -6,7 +6,7 @@ if(root) {
   const $=s=>root.querySelector(s), $$=s=>[...root.querySelectorAll(s)];
   const svg=$('#periscope-scene'), canvas=$('#periscope-view'), ctx=canvas.getContext('2d',{alpha:false});
   const groups=[$('#periscope-mirror-0'),$('#periscope-mirror-1')];
-  const state={stage:0,angles:[38,51],done:[false,false,false],order:[null,null],chip:null,diagnosis:null,prediction:null,hint:0,signal:false,verified:false,saved:[45,45]};
+  const state={stage:0,angles:[38,51],done:[false,false,false],diagnosis:null,prediction:null,hint:0,signal:false,verified:false,saved:[45,45]};
   let scenePixels=null, lastViewKey='', pending=0, dragging=null;
   const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
   let pulse=null,pulseFrame=0,pulseEndTimer=0,pulseUnlockTimer=0,nextPulseAt=0,pulseCount=0;
@@ -174,9 +174,7 @@ if(root) {
     $('#periscope-view-copy').textContent=state.stage===2?'鏡片固定，保留剛才看見的景象作對照。':info.kind==='blocked'?'鏡子未把外界的光送進眼睛。看看光在哪裡被擋住。':info.blocked/(info.clear+info.blocked)>.3?'邊緣的暗區是管壁或有限鏡片造成的遮擋。':'試著微轉鏡片，觀察船、天空與海面如何移動。';
     $$('.periscope-steps button').forEach((b,i)=>{b.disabled=i>0&&!state.done[i-1];b.setAttribute('aria-selected',String(i===state.stage));b.tabIndex=i===state.stage?0:-1;b.dataset.complete=String(state.done[i]);});
     $('#periscope-panel').setAttribute('aria-labelledby',`periscope-tab-${state.stage}`);
-    for(let i=0;i<3;i++)$(`#periscope-question-${i}`).hidden=i!==state.stage;
-    $$('.periscope-slot').forEach((b,i)=>{b.textContent=state.order[i]===null?i===0?'第一個位置':'第二個位置':state.order[i]===0?'鏡面一':'鏡面二';b.dataset.filled=String(state.order[i]!==null);b.setAttribute('aria-label',`${i===0?'第一':'第二'}個反射位置，${state.order[i]===null?'尚未填入':b.textContent}`);});
-    $$('.periscope-chip').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.chip)===state.chip)));
+    for(let i=1;i<3;i++)$(`#periscope-question-${i}`).hidden=i!==state.stage;
     $$('[data-diagnosis]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.diagnosis)===state.diagnosis)));
     $$('[data-prediction]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.prediction===state.prediction)));
     updatePulseControls();
@@ -194,7 +192,7 @@ if(root) {
     // A completed design is valid only while its geometry and reasoning match.
     if(state.done[state.stage]) {
       for(let i=state.stage;i<3;i++)state.done[i]=false;
-      feedback('設計已改變，請重新檢查目前的操作與說明。');
+      feedback('設計已改變，請重新檢查目前的結果。');
     }
   }
   function setAngle(i,value) {
@@ -223,22 +221,6 @@ if(root) {
     g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end);g.addEventListener('lostpointercapture',()=>{dragging=null;});
     g.addEventListener('keydown',e=>{if(state.stage===2)return;let n=state.angles[i],step=e.shiftKey?2:.5;if(e.key==='ArrowLeft'||e.key==='ArrowDown')n-=step;else if(e.key==='ArrowRight'||e.key==='ArrowUp')n+=step;else if(e.key==='Home')n=OPTICS.minAngle;else if(e.key==='End')n=OPTICS.maxAngle;else return;e.preventDefault();setAngle(i,n);});
   });
-  function putChip(slot,chip) {
-    if(chip!==0&&chip!==1)return;
-    invalidate();const other=1-slot,old=state.order[slot];if(state.order[other]===chip)state.order[other]=old;
-    state.order[slot]=chip;state.chip=null;render();
-  }
-  $$('.periscope-chip').forEach(b=>{
-    b.addEventListener('click',()=>{state.chip=Number(b.dataset.chip);render();});
-    b.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',b.dataset.chip);e.dataTransfer.effectAllowed='move';});
-  });
-  $$('.periscope-slot').forEach(b=>{
-    b.addEventListener('click',()=>{if(state.chip!==null)putChip(Number(b.dataset.slot),state.chip);else feedback('先點選下方的鏡面標籤，再點要放入的位置。');});
-    b.addEventListener('dragover',e=>{e.preventDefault();b.classList.add('is-drop-target');});
-    b.addEventListener('dragleave',()=>b.classList.remove('is-drop-target'));
-    b.addEventListener('drop',e=>{e.preventDefault();b.classList.remove('is-drop-target');const value=e.dataTransfer.getData('text/plain');if(value==='0'||value==='1')putChip(Number(b.dataset.slot),Number(value));});
-  });
-  $('#periscope-clear-order').addEventListener('click',()=>{invalidate();state.order=[null,null];state.chip=null;render();});
   $$('[data-diagnosis]').forEach(b=>b.addEventListener('click',()=>{invalidate();state.diagnosis=Number(b.dataset.diagnosis);render();}));
   $$('[data-prediction]').forEach(b=>b.addEventListener('click',()=>{invalidate();state.prediction=b.dataset.prediction;state.verified=false;state.signal=false;render();}));
   $('#periscope-pulse').addEventListener('click',emitPulse);
@@ -260,8 +242,8 @@ if(root) {
     ][stage];
     ['#periscope-student','#periscope-grandpa','#periscope-task-title','#periscope-task-copy'].forEach((id,i)=>$(id).textContent=content[i]);
     if(stage===0) {
-      if(reset){state.angles=[38,51];state.order=[null,null];state.chip=null;state.done=[false,false,false];}
-      feedback('先調整觀察窗，再完成光經過鏡面的順序。');
+      if(reset){state.angles=[38,51];state.done=[false,false,false];}
+      feedback('調整兩片鏡子，讓船的駕駛艙出現在觀察窗中央。');
     } else if(stage===1) {
       state.angles=[Math.min(65,state.saved[0]+9),state.saved[1]];state.diagnosis=null;state.done[1]=false;state.done[2]=false;
       feedback('先判斷哪片鏡子偏了，再修復；只碰巧看到船還不算完成。');
@@ -282,8 +264,7 @@ if(root) {
     const info=observe(state.angles);
     if(state.stage===0) {
       if(!info.target){feedback('還沒對準船的駕駛艙。看看觀察窗：目前是天空、海面，還是被管壁擋住？','try');return;}
-      if(state.order[0]!==0||state.order[1]!==1){feedback('已看見船！再追蹤船反射的光，確認先碰到哪片鏡子、接著到哪裡。','try');return;}
-      state.saved=[...state.angles];state.done[0]=true;feedback('設計完成！船反射的光先到鏡面一，再到鏡面二，最後進入眼睛。接著試著排除故障。','good');
+      state.saved=[...state.angles];state.done[0]=true;feedback('設計完成！小葵已看見船的駕駛艙。接著試著排除故障。','good');
     } else if(state.stage===1) {
       if(state.diagnosis===null){feedback('先判斷哪片鏡子被轉動，再檢查修復結果。','try');return;}
       if(state.diagnosis!==0){feedback('這次被轉動的鏡片與你的判斷不同。比較光從哪一處開始偏離，再試一次。','try');return;}

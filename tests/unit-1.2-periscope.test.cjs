@@ -102,8 +102,7 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
   async function settled(){await page.locator('#periscope-scene').evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));await expect.poll(async()=>{const a=await page.locator('#periscope-scene').boundingBox();await page.waitForTimeout(100);const b=await page.locator('#periscope-scene').boundingBox();return Math.abs(a.y-b.y)<.5;}).toBe(true);}
   async function handlePoint(i,angle){return page.locator('#periscope-scene').evaluate((el,{i,angle})=>{const c=[565,i===0?190:590],a=angle*Math.PI/180,p=new DOMPoint(c[0]+60*Math.cos(a),c[1]+60*Math.sin(a)).matrixTransform(el.getScreenCTM());return{x:p.x,y:p.y};},{i,angle});}
   async function drag(i,angle){await settled();const a=(await angles())[i],p=await handlePoint(i,a),q=await handlePoint(i,angle),g=page.locator(`#periscope-mirror-${i}`);await page.mouse.move(p.x,p.y);await page.mouse.down();assert.equal(await g.evaluate(el=>el.hasPointerCapture(1)),true,'mouse must hit actual mirror');await page.mouse.move(q.x,q.y,{steps:12});await page.mouse.up();await expect.poll(async()=>Math.abs((await angles())[i]-angle)<.2).toBe(true);}
-  async function fillOrder(reverse=false){for(let i=0;i<2;i++){await page.locator(`[data-chip="${reverse?1-i:i}"]`).click();await page.locator(`[data-slot="${i}"]`).click();}}
-  async function firstPass(){await setAngle(0,45);await setAngle(1,45);await fillOrder();await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,false,false');}
+  async function firstPass(){await setAngle(0,45);await setAngle(1,45);await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,false,false');}
 
   await t.test('初始狀態、未作答、未對準不通關；沒有角度滑桿',async()=>{
     assert.deepEqual(await angles(),[38,51]);await expect(quiz).toHaveAttribute('data-view','blocked');
@@ -146,11 +145,12 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
       assert.ok(result.maxError<3,JSON.stringify({a,...result}));assert.ok(result.checked+result.blocked>15);
     }
   });
-  await t.test('正確操作仍須光路順序正確；標籤拖放、點擊與修改會使通關失效',async()=>{
-    await setAngle(0,45);await setAngle(1,45);await fillOrder(true);await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','false,false,false');
-    await page.locator('#periscope-clear-order').click();await page.locator('[data-chip="0"]').dragTo(page.locator('[data-slot="0"]'));await page.locator('[data-chip="1"]').dragTo(page.locator('[data-slot="1"]'));
-    await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,false,false');
-    await setAngle(0,46);await expect(quiz).toHaveAttribute('data-completed','false,false,false');await firstPass();
+  await t.test('第一關只檢查實際對準：沒有順序題，角度不對不能通過，改動設計須重檢',async()=>{
+    assert.equal(await page.locator('#periscope-question-0,.periscope-order,[data-chip],[data-slot],#periscope-clear-order').count(),0);
+    await setAngle(0,45);await setAngle(1,55);await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','false,false,false');
+    await setAngle(1,45);await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,false,false');
+    await expect(page.locator('[data-stage="1"]')).toBeEnabled();
+    await setAngle(0,46);await expect(quiz).toHaveAttribute('data-completed','false,false,false');await expect(page.locator('[data-stage="1"]')).toBeDisabled();await firstPass();
   });
   await t.test('故障任務要判斷鏡片並修復；不能只選答案通關',async()=>{
     await page.locator('#periscope-pulse').click();await expect(quiz).toHaveAttribute('data-pulse-status','running');
@@ -249,18 +249,25 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await page.setViewportSize({width:1440,height:1100});await page.locator('#reverse-toggle-a').click();await expect(page.locator('#card-06')).toHaveAttribute('data-light-a','on');
     await page.locator('#reverse-toggle-a').click();
   });
-  await t.test('真實觸控端點拖曳與點擊填入，無頁面溢位',async()=>{
+  await t.test('真實觸控拖曳完成第一關，沒有額外填答與頁面溢位',async()=>{
     const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});const p=await context.newPage();await p.goto(url,{waitUntil:'networkidle'});await expect(p.locator('#unit-quiz')).toHaveAttribute('data-ready','true');
     const scene=p.locator('#periscope-scene'),session=await context.newCDPSession(p);
     await scene.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await expect.poll(async()=>{const a=await scene.boundingBox();await p.waitForTimeout(100);const b=await scene.boundingBox();return Math.abs(a.y-b.y)<.5;}).toBe(true);
-    const position=async(angle)=>scene.evaluate((el,angle)=>{const a=angle*Math.PI/180,pt=new DOMPoint(565+60*Math.cos(a),190+60*Math.sin(a)).matrixTransform(el.getScreenCTM());return{x:pt.x,y:pt.y};},angle);
+    const position=async(i,angle)=>scene.evaluate((el,{i,angle})=>{const a=angle*Math.PI/180,pt=new DOMPoint(565+60*Math.cos(a),(i===0?190:590)+60*Math.sin(a)).matrixTransform(el.getScreenCTM());return{x:pt.x,y:pt.y};},{i,angle});
     await p.locator('#periscope-pulse').tap();await expect(p.locator('#unit-quiz')).toHaveAttribute('data-pulse-status','running');await scene.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await p.waitForTimeout(150);
-    const a=await position(38),b=await position(48);assert.equal(await p.evaluate(pt=>document.elementFromPoint(pt.x,pt.y)?.closest('.mirror-drag')?.id,a),'periscope-mirror-0');
+    const a=await position(0,38),b=await position(0,48);assert.equal(await p.evaluate(pt=>document.elementFromPoint(pt.x,pt.y)?.closest('.mirror-drag')?.id,a),'periscope-mirror-0');
     await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:a.x,y:a.y,id:7}]});
     for(let j=1;j<=8;j++)await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:a.x+(b.x-a.x)*j/8,y:a.y+(b.y-a.y)*j/8,id:7}]});
     await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
     await expect.poll(async()=>Number((await p.locator('#unit-quiz').getAttribute('data-angles')).split(',')[0])).toBe(48);
-    await expect(p.locator('#periscope-light')).toBeEmpty();await p.locator('[data-chip="0"]').tap();await p.locator('[data-slot="0"]').tap();await expect(p.locator('[data-slot="0"]')).toHaveText('鏡面一');
+    await expect(p.locator('#periscope-light')).toBeEmpty();assert.equal(await p.locator('#periscope-question-0,[data-chip],[data-slot]').count(),0);
+    for(const [i,from,to,id] of [[0,48,45,8],[1,51,45,9]]){
+      const start=await position(i,from),end=await position(i,to);
+      await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:start.x,y:start.y,id}]});
+      for(let j=1;j<=8;j++)await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:start.x+(end.x-start.x)*j/8,y:start.y+(end.y-start.y)*j/8,id}]});
+      await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+    }
+    await expect(p.locator('#unit-quiz')).toHaveAttribute('data-angles','45,45');await p.locator('#periscope-check').tap();await expect(p.locator('#unit-quiz')).toHaveAttribute('data-completed','true,false,false');
     assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await context.close();
   });
   await t.test('離開頁面時先釋放 GPU 資源，再關閉繪圖器，不產生例外',async()=>{await page.goto('about:blank');await page.waitForTimeout(150);assert.deepEqual(errors,[]);});
