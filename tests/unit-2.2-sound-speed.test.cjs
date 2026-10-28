@@ -64,7 +64,7 @@ test('sound comparison uses one signal and physical travel delays', async t => {
       }
     }
     const maxAirGap = Math.max(...m.positions('air').filter(p=>p.row===0).slice(1).map((p,i)=>p.distance-m.positions('air')[i].distance));
-    assert.ok(maxAirGap < 343 / (2*m.FREQUENCY), 'spatial samples can resolve the illustrative compression wave');
+    assert.ok(maxAirGap < 331 / (2*m.FREQUENCY), 'spatial samples resolve the wave even at the slowest selectable air speed');
   });
 
   await t.test('particles remain ordered, stay at fixed y and settle in every medium', () => {
@@ -137,7 +137,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('.medium-row').count(), 3);
     assert.equal((await data()).playbackRate, '1');
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('#slowdown, #step-action').count(), 0);
-    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.particle').count(), 208);
+    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.particle').count(), 226);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('[name=prediction], .prediction, #prediction-feedback').count(), 0);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('#result').isHidden(), true);
     assert.equal(await page.evaluate(() => window.__audioContext), undefined);
@@ -172,7 +172,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('[data-group=air] .liquid-volume, [data-group=air] .steel-shell').count(), 0);
     for (const cls of ['liquid-volume','liquid-surface','water-side','glass-front','liquid-reflection']) assert.equal(await page.locator('[data-sound-speed-lab]').locator(`[data-group=water] .field .${cls}`).count(), 1);
     for (const cls of ['steel-shell','steel-top','steel-end','steel-cutaway']) assert.equal(await page.locator('[data-sound-speed-lab]').locator(`[data-group=steel] .field .${cls}`).count(), 1);
-    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.medium-interior > g .particle').count(), 208);
+    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.medium-interior > g .particle').count(), 226);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('.end-particle').evaluateAll(nodes => nodes.every(n => n.closest('.medium-scene') && n.parentElement.classList.contains('medium-interior'))), true);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('[data-group=air] .particle[data-species=nitrogen]').first().locator('.atom').count(), 2);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('[data-group=water] .particle').first().locator('.atom').count(), 3);
@@ -277,7 +277,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('.fork-striker[visibility=hidden]').count(),3);
     const fixed=await page.locator('.fork-fixed').evaluateAll(nodes=>nodes.map(n=>n.innerHTML));
     const arms=()=>page.locator('.fork-tine').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('d')));
-    const tips=()=>page.locator('.tuning-fork').evaluateAll(nodes=>nodes.map(n=>[n.querySelectorAll('.fork-tine')[0],n.querySelectorAll('.fork-tine')[3]].map(path=>{const p=path.getPointAtLength(path.getTotalLength());return n.dataset.medium==='steel'?p.y:p.x;})));
+    const tips=()=>page.locator('.tuning-fork').evaluateAll(nodes=>nodes.map(n=>[n.querySelectorAll('.fork-tine')[0],n.querySelectorAll('.fork-tine')[3]].map(path=>{const p=path.getPointAtLength(path.getTotalLength());return p.x;})));
     const initialArms=await arms(),initialTips=await tips();
     await primary.click();assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),3);
     await page.clock.runFor(150);
@@ -298,7 +298,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
 
   await t.test('visible forks are directly clickable at their real picture positions', async () => {
     await fresh();
-    for(const [kind,x,y]of[['air',74,55],['water',92,70],['steel',45,43]]){
+    for(const [kind,x,y]of[['air',74,55],['water',92,70],['steel',52,55]]){
       const field=page.locator(`[data-group=${kind}] .field svg`);
       await page.locator(`[data-group=${kind}] .source-hit`).scrollIntoViewIfNeeded();
       const target=await field.evaluate((svg,{x,y})=>{const p=svg.createSVGPoint();p.x=x;p.y=y;const screen=p.matrixTransform(svg.getScreenCTM());return{x:screen.x,y:screen.y,hit:document.elementFromPoint(screen.x,screen.y)?.classList.contains('source-hit')};},{x,y});
@@ -307,6 +307,33 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
       assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),3);
       await page.locator('#reset-action').click();
     }
+  });
+
+  await t.test('small repeated tine motion stays connected to steel without a handle pushing the block', async () => {
+    await fresh();await primary.click();
+    const readings=[];
+    for(let i=0;i<39;i++){
+      await page.clock.runFor(100);
+      const reading=await page.locator('[data-group=steel] .tuning-fork').evaluate(n=>{
+        const paths=n.querySelectorAll('.fork-tine'),contact=n.querySelector('.source-contact');
+        const tip=path=>path.getPointAtLength(path.getTotalLength());
+        return{left:tip(paths[0]).x,right:tip(paths[3]).x,tipY:tip(paths[3]).y,
+          edge:Number(contact.dataset.armEdge),steel:Number(contact.dataset.steelEdge),
+          arm:contact.dataset.coupledArm,contactInBase:!!n.querySelector('.fork-fixed .source-contact'),
+          d:paths[3].getAttribute('d')};
+      });
+      assert.equal(reading.arm,'right');assert.equal(reading.contactInBase,false);
+      assert.ok(Math.abs(reading.edge-reading.right-2.8)<.001);
+      assert.equal(reading.steel,94);assert.ok(reading.edge<reading.steel,'contact layer remains positive in width');
+      assert.equal(reading.tipY,35);assert.match(reading.d,/V35$/,'long tine section stays straight');
+      assert.ok(Math.abs(reading.right-86)<=1.8+.001,'small displacement avoids a visibly distorted fork');
+      assert.ok(Math.abs(reading.left+reading.right-138)<.001);
+      readings.push(reading.right-86);
+    }
+    const signs=readings.filter(x=>Math.abs(x)>.01).map(x=>Math.sign(x));
+    assert.ok(signs.slice(1).filter((x,i)=>x!==signs[i]).length>=4,'several genuine direction reversals during the strike signal');
+    await page.clock.runFor(200);
+    assert.equal(await page.locator('[data-group=steel] .source-contact').getAttribute('data-arm-edge'),'88.8');
   });
 
   await t.test('vibrating neighbours carry the disturbance while the position pointer stays below the medium', async () => {

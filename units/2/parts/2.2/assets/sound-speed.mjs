@@ -2,8 +2,8 @@ import {
   DISTANCE, START_X, END_X, ZOOM, PULSE_DURATION,
   appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=fork-9';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=fork-9';
+} from './sound-speed-model.mjs?v=fork-contact-10';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=fork-contact-10';
 
 export function initSoundSpeed(root) {
 const $ = selector => root.querySelector(selector);

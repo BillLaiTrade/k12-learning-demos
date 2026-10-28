@@ -3,10 +3,10 @@
 export const DISTANCE = 5000;
 export const START_X = 110;
 export const END_X = 410;
-export const FREQUENCY = .4;
+export const FREQUENCY = .6;
 export const PULSE_DURATION = 4;
-export const AMPLITUDE = 6;
-export const ZOOM = 1.5;
+export const AMPLITUDE = 4;
+export const ZOOM = 2.25;
 export const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 export const airSpeed = temperature => 331 + .6 * temperature;
 export const arrivalTime = speed => DISTANCE / speed;
@@ -32,7 +32,7 @@ export function conditions(mode, temperature = 30) {
 }
 
 export const appearance = {
-  air: { columns: 16, rows: 3 },
+  air: { columns: 22, rows: 3 },
   water: { columns: 16, rows: 5 },
   steel: { columns: 20, rows: 4 }
 };
