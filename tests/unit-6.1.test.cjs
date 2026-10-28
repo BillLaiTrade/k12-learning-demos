@@ -44,7 +44,7 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
 
   await t.test('asset versions match content and avoid the legacy unversioned fire script', async () => {
     const assetURLs = await page.locator('link[rel=stylesheet],script[src]').evaluateAll(nodes => nodes.map(node => node.href || node.src));
-    assert.equal(assetURLs.length, 5);
+    assert.equal(assetURLs.length, 7);
     for (const assetURL of assetURLs) {
       const url = new URL(assetURL);
       const filename = path.basename(url.pathname);
@@ -341,21 +341,103 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     if (captureDir) await page.screenshot({ path: path.join(captureDir, 'route-format-desktop.png') });
   });
 
-  await t.test('property controls change the comparison focus, keep samples and do not grade', async () => {
-    const originalNames = await page.locator('#properties-table tbody th').allTextContents();
-    assert.equal(originalNames.length, 5);
-    for (const key of ['conductivity', 'ductility', 'uses', 'appearance']) {
+  await t.test('material desk compares identified samples without grading and retains full data', async () => {
+    assert.equal(await page.locator('#s2 [data-desk-sample]').count(), 5);
+    assert.equal(await page.locator('#s2 [data-property]').count(), 3);
+    assert.equal(await page.locator('#s2 .desk-overview').getAttribute('open'), null);
+    const names = await page.locator('#properties-table tbody th').allTextContents();
+    assert.equal(names.length, 5);
+    await page.locator('[data-property="conductivity"]').click();
+    const metal = page.locator('[data-desk-side=metal]');
+    const nonmetal = page.locator('[data-desk-side=nonmetal]');
+    assert.equal(await metal.locator('.desk-circuit').getAttribute('data-lit'), 'true');
+    assert.equal(await nonmetal.locator('.desk-circuit').getAttribute('data-lit'), 'false');
+    assert.match(await metal.locator('.desk-result').innerText(), /銅.*燈亮/);
+    await page.locator('#desk-power').click();
+    assert.equal(await page.locator('#desk-power').getAttribute('aria-checked'), 'false');
+    assert.equal(await page.locator('.desk-circuit[data-lit=true]').count(), 0);
+    await page.locator('[data-desk-sample=aluminium]').click();
+    assert.equal(await metal.locator('.desk-circuit').getAttribute('data-lit'), 'false');
+    assert.match(await text('#desk-use-title'), /鋁箔/);
+    await page.locator('#desk-power').click();
+    assert.equal(await metal.locator('.desk-circuit').getAttribute('data-lit'), 'true');
+    await page.locator('[data-desk-sample=diamond]').click();
+    assert.equal(await nonmetal.locator('.desk-circuit').getAttribute('data-lit'), 'false');
+    assert.match(await nonmetal.locator('.desk-result').innerText(), /碳（鑽石）.*不易導電/);
+    assert.match(await text('#desk-use-title'), /鑽石.*切割/);
+    assert.match(await text('.desk-use-note'), /整件工具不是純碳/);
+    await page.locator('#desk-reset').click();
+    assert.equal(await pressed('[data-desk-sample=copper]'), 'true');
+    assert.equal(await pressed('[data-desk-sample=sulfur]'), 'true');
+    assert.match(await text('#desk-use-title'), /銅.*電線/);
+    for (const id of ['copper','aluminium','iron']) {
+      await page.locator(`[data-desk-sample=${id}]`).click();
+      assert.equal(await metal.locator('.desk-circuit').getAttribute('data-lit'), 'true');
+      assert.equal(await nonmetal.locator('.desk-circuit').getAttribute('data-lit'), 'false');
+    }
+    await page.locator('#desk-reset').click();
+    await page.locator('.desk-overview summary').click();
+    for (const key of ['appearance', 'ductility', 'conductivity']) {
       await page.locator(`[data-property="${key}"]`).click();
       assert.equal(await pressed(`[data-property="${key}"]`), 'true');
       assert.equal(await page.locator('#properties-table .active-column').count(), 6);
       assert.equal(await page.locator('#properties-table .active-column').evaluateAll(nodes => nodes.every(n => n.dataset.column === nodes[0].dataset.column)), true);
-      assert.deepEqual(await page.locator('#properties-table tbody th').allTextContents(), originalNames);
-      assert.ok((await text('#property-note')).length > 30);
+      assert.deepEqual(await page.locator('#properties-table tbody th').allTextContents(), names);
     }
-    await page.locator('[data-property="conductivity"]').click();
     assert.match(await text('#properties-table tr[data-sample="diamond"]'), /不易導電/);
     assert.match(await text('#property-note'), /下一段加入石墨/);
+    await page.locator('.desk-overview summary').click();
+    assert.equal(await page.locator('#s2 input,#s2 select').count(), 0);
     await capture('#s2', 'properties-desktop');
+  });
+
+  await t.test('appearance and processing compare shape without confusing hardness and ductility', async () => {
+    await page.locator('[data-property=appearance]').click();
+    assert.equal(await page.locator('.desk-specimen').count(), 2);
+    assert.equal(await page.locator('#desk-power').isVisible(), false);
+    assert.equal(await page.locator('#desk-process').isVisible(), false);
+    await page.locator('[data-desk-sample=iron]').click();
+    assert.match(await text('[data-desk-side=metal] .desk-result'), /銀灰色/);
+    await page.locator('[data-desk-sample=diamond]').click();
+    assert.match(await text('[data-desk-side=nonmetal] .desk-result'), /透明.*非金屬光澤/);
+    await capture('#s2', 'desk-appearance-desktop');
+    await page.locator('[data-property=ductility]').click();
+    assert.equal(await page.locator('.desk-processing').count(), 2);
+    assert.match(await text('[data-desk-side=metal] .desk-picture'), /拉成線.*壓成片/s);
+    assert.match(await text('[data-desk-side=nonmetal] .desk-picture'), /不能像金屬延展/);
+    assert.doesNotMatch(await text('[data-desk-side=nonmetal] .desk-picture'), /容易碎裂/);
+    await page.locator('#desk-process').click();
+    assert.equal(await page.locator('#desk-process').getAttribute('aria-pressed'), 'false');
+    assert.match(await text('[data-desk-side=nonmetal] .desk-result'), /加工前/);
+    await page.locator('#desk-process').click();
+    await page.locator('[data-desk-sample=sulfur]').click();
+    assert.match(await text('[data-desk-side=nonmetal] .desk-picture'), /容易碎裂/);
+    await page.locator('[data-desk-sample=aluminium]').click();
+    assert.match(await text('#desk-use-title'), /鋁箔/);
+    await capture('#s2', 'desk-processing-desktop');
+    await page.locator('#desk-reset').click();
+    await page.locator('[data-property=conductivity]').click();
+  });
+
+  await t.test('material desk stays paired on desktop and readable at six widths', async () => {
+    for (const width of [1440,1280,1024,768,390,320]) {
+      await page.setViewportSize({width,height:1000});
+      for (const key of ['conductivity','appearance','ductility']) {
+        await page.locator(`[data-property="${key}"]`).click();
+        const left = await page.locator('[data-desk-side=metal]').boundingBox();
+        const right = await page.locator('[data-desk-side=nonmetal]').boundingBox();
+        if (width > 760) { assert.ok(right.x > left.x); assert.ok(Math.abs(left.y-right.y)<1); }
+        else assert.ok(right.y >= left.y+left.height);
+        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth+1), true);
+        for (const button of await page.locator('#s2 button:visible').all()) {
+          const r=await button.boundingBox();
+          assert.ok(r.x>=0 && r.x+r.width<=width+1, `desk control outside ${width}`);
+        }
+        if (width===390) await capture('#s2', `desk-${key}-mobile`);
+      }
+    }
+    await page.setViewportSize({width:1440,height:1000});
+    await page.locator('[data-property=conductivity]').click();
   });
 
   await t.test('exceptions genuinely add independent data, support both counterexamples and reset', async () => {
@@ -458,6 +540,13 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await page.locator('[data-property="ductility"]').focus();
     await page.keyboard.press('Enter');
     assert.equal(await pressed('[data-property="ductility"]'), 'true');
+    await page.locator('[data-property=conductivity]').click();
+    await page.locator('#desk-power').focus();
+    await page.keyboard.press('Space');
+    assert.equal(await page.locator('#desk-power').getAttribute('aria-checked'), 'false');
+    await page.locator('#desk-reset').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#desk-power').getAttribute('aria-checked'), 'true');
     await page.locator('[data-symbol="Cu"]').focus();
     await page.keyboard.press('Space');
     assert.equal(await text('#symbol-glyph'), 'Cu');
@@ -475,7 +564,9 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
         assert.ok(rect.x >= 0 && rect.x + rect.width <= width + 1, `card outside viewport at ${width}`);
       }
       if (width === 390) {
+        await page.locator('.desk-overview summary').click();
         assert.equal(await page.locator('#s2 .table-wrap').evaluate(n => n.scrollWidth > n.clientWidth), true);
+        await page.locator('.desk-overview summary').click();
         await capture('#s2', 'properties-mobile');
         await capture('#s6', 'assessment-mobile');
       }
@@ -500,6 +591,10 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await mobile.locator('[data-classical=water]').tap();
     assert.equal(await mobile.locator('#classical-detail').isVisible(), true);
     assert.equal(await mobile.locator('[data-classical]').count(), 4);
+    await mobile.locator('[data-desk-sample=aluminium]').tap();
+    assert.match(await mobile.locator('#desk-use-title').innerText(), /鋁箔/);
+    await mobile.locator('#desk-power').tap();
+    assert.equal(await mobile.locator('.desk-circuit[data-lit=true]').count(), 0);
     await mobile.locator('[data-exception="graphite"]').tap();
     assert.equal(await mobile.locator('#exceptions-table tr[data-sample="graphite"]').count(), 1);
     await mobile.locator('[data-symbol="He"]').tap();

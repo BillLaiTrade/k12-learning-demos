@@ -9,9 +9,11 @@
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/elements.css?v=9635d239931e">
   <link rel="stylesheet" href="assets/classical-comparison.css?v=4841d9ed847c">
+  <link rel="stylesheet" href="assets/material-desk.css?v=4ac267c189af">
+  <script src="assets/material-desk.js?v=2ee68d305a7a" defer></script>
   <link rel="stylesheet" href="assets/classical-inquiry.css?v=0b290a54e654">
   <script src="assets/classical-inquiry.js?v=c34fac247b43" defer></script>
-  <script src="assets/elements.js?v=7895c93d6683" defer></script>
+  <script src="assets/elements.js?v=47cf8df6668d" defer></script>
 </head>
 <body>
   <header class="shell masthead">
@@ -64,19 +66,30 @@
       </section>
 
       <section class="lesson-card" id="s2" aria-labelledby="title-2">
-        <header class="lesson-head"><div class="num" aria-label="第 2 區塊">02</div><div><h2 id="title-2">金屬與非金屬有哪些典型性質？</h2><p class="lead">性質與用途有關。比較同一組資料，觀察金屬與非金屬常見的差異。</p></div></header>
+        <header class="lesson-head"><div class="num" aria-label="第 2 區塊">02</div><div><h2 id="title-2">金屬與非金屬有哪些典型性質？</h2><p class="lead">觀察材料的反應，理解性質與用途。</p></div></header>
         <div class="lesson-body">
-        <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵：</span></span><p>銅和鋁顏色不同，卻都能用來做電線。只寫顏色，好像還介紹不清楚。</p></div>
-        <div class="dialogue"><span class="speaker"><span class="sr-only">阿公：</span></span><p>除了外觀，也比較導電性和延展性。延展性好，表示材料能被壓成薄片或拉成細線，不容易直接碎裂。</p></div>
-        <div class="controls" role="group" aria-label="選擇性質比較重點">
-          <button type="button" data-property="appearance" aria-pressed="true">外觀與狀態</button><button type="button" data-property="conductivity" aria-pressed="false">導電性</button><button type="button" data-property="ductility" aria-pressed="false">延展性</button><button type="button" data-property="uses" aria-pressed="false">用途</button>
-        </div>
+          <div class="desk-dialogues">
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵：</span></span><p>阿公，這張鋁箔這麼薄，是怎麼做出來的呀？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公：</span></span><p>是把鋁壓薄做出來的喔，銅也能拉成細線。</p></div>
+          </div>
+          <section class="material-desk" id="material-desk" aria-labelledby="desk-title">
+            <div class="desk-heading"><h3 id="desk-title">材料觀察桌</h3><div class="desk-modes" role="group" aria-label="選擇觀察方式"><button type="button" data-property="appearance" aria-pressed="false">看外觀</button><button type="button" data-property="conductivity" aria-pressed="true">接入電路</button><button type="button" data-property="ductility" aria-pressed="false">看加工結果</button></div></div>
+            <div class="desk-pair">
+              <section class="desk-panel" data-desk-side="metal" aria-labelledby="desk-metal-title"><h4 id="desk-metal-title">金屬樣品</h4><div class="desk-samples" role="group" aria-label="選擇金屬樣品"><button type="button" data-desk-sample="copper" aria-pressed="true">銅</button><button type="button" data-desk-sample="aluminium" aria-pressed="false">鋁</button><button type="button" data-desk-sample="iron" aria-pressed="false">鐵</button></div><div class="desk-picture"></div><p class="desk-result" role="status"></p></section>
+              <section class="desk-panel" data-desk-side="nonmetal" aria-labelledby="desk-nonmetal-title"><h4 id="desk-nonmetal-title">非金屬樣品</h4><div class="desk-samples" role="group" aria-label="選擇非金屬樣品"><button type="button" data-desk-sample="sulfur" aria-pressed="true">硫</button><button type="button" data-desk-sample="diamond" aria-pressed="false">鑽石</button></div><div class="desk-picture"></div><p class="desk-result" role="status"></p></section>
+            </div>
+            <div class="desk-actions"><button type="button" id="desk-power" role="switch" aria-checked="true"><span class="desk-switch" aria-hidden="true"></span><span>電源已接通</span></button><button type="button" id="desk-process" aria-pressed="true" hidden>查看加工前</button><button type="button" id="desk-reset">↻ 重設比較</button></div>
+            <p class="desk-scope" id="desk-scope"></p>
+          </section>
+          <section class="desk-application" id="desk-application" aria-labelledby="desk-use-title"><div class="desk-use-image" aria-hidden="true"></div><div><h3 id="desk-use-title"></h3><div class="desk-use-tags"></div><p class="desk-use-note"></p></div></section>
+          <details class="desk-overview"><summary>查看五種樣品的完整比較</summary>
         <div class="table-wrap" tabindex="0" role="region" aria-label="五種元素的性質比較表，可橫向捲動"><table id="properties-table"><caption>比較條件：室溫約 25°C、常壓。碳在這份表中採用鑽石樣品；其他形態稍後比較。</caption><thead><tr><th scope="col">已確認的樣品</th><th scope="col" data-column="appearance">外觀與狀態</th><th scope="col" data-column="conductivity">導電性</th><th scope="col" data-column="ductility">延展性</th><th scope="col" data-column="uses">相關用途</th></tr></thead><tbody></tbody></table></div>
-        <div class="observation" id="property-note" role="status"></div>
+            <div class="observation" id="property-note" role="status"></div>
         <div class="rule-pair"><div><strong>金屬的典型性質</strong>常有金屬光澤、導電性佳、延展性佳。室溫下大多為固體。</div><div><strong>非金屬的典型性質</strong>固態樣品通常較脆、延展性差，通常不易導電。這些描述需要保留例外。</div></div>
-        <p class="caption">表中是元素樣品的資料，用途是生活連結。日常電線、鍋具或其他物品可能含合金、塗層與其他材料，不能直接把整件物品當成純元素。</p>
-        <p class="bridge">這些是常見的性質組合。接下來，加入兩份新資料，看看原本的歸納是否需要補充。</p>
-              </div>
+            <p class="caption">比較的是已確認的元素樣品。生活物品可能含合金、塗層與其他材料，不能直接把整件物品當成純元素。</p>
+          </details>
+          <p class="bridge">這些是典型性質。接下來看看石墨與汞，原本的歸納是否需要補充？</p>
+        </div>
       </section>
 
       <section class="lesson-card" id="s3" aria-labelledby="title-3">

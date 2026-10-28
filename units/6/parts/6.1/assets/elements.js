@@ -42,13 +42,15 @@
     }
   }
   renderProperties();
+  const materialDesk = window.MaterialDesk.create(samples);
   function selectProperty(key) {
     $$('[data-property]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.property === key)));
     $$('#properties-table [data-column]').forEach(node => node.classList.toggle('active-column', node.dataset.column === key));
     $('#property-note').textContent = propertyNotes[key];
+    materialDesk.setMode(key);
   }
   $$('[data-property]').forEach(button => button.addEventListener('click', () => selectProperty(button.dataset.property)));
-  selectProperty('appearance');
+  selectProperty('conductivity');
 
   const classicalDetails = {
     earth: ['土', '日常泥土包含礦物、有機物、水、空氣等成分；不同樣品的組成也可能不同。', '它通常是多種物質的混合物，不能當成單一化學元素。', '這裡以日常泥土作比較，不把古代「土」的意涵直接等同現代泥土。'],
