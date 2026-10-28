@@ -70,3 +70,12 @@ node --test --test-concurrency=1 tests/unit-4.2-concentration.test.cjs tests/uni
 本輪執行 `node --test --test-concurrency=1 tests/unit-4.2-concentration.test.cjs tests/unit-4.2-chromatography.test.cjs tests/unit-4.2.test.cjs`，共 41 項通過、0 失敗（第五區 19、層析 13、蒸發 9，含各外層測試）。第五區涵蓋四個實物位置的滑鼠點擊、Enter 與 320／390px 真實觸控，量杯抬起／傾斜／歸位與離秤讀值、原有拖曳／長按／數字輸入／重設／上下限／ppm，並分別測試三項場景素材的載入失敗。檢視桌面、手機、舀出糖及倒出水的實際畫面，內容留在右側欄位。
 
 最新畫面：[桌面](desktop-apparatus.webp)、[手機](mobile-apparatus.webp)、[舀出糖](scoop-out.webp)、[量杯倒出水](pour-out.webp)。
+
+
+## 2026-10-28：正式公式與代入式對照
+
+在第五區「配成糖水後」的計算區，於數字代入式前新增獨立的「計算公式」框：重量百分濃度＝溶質質量／溶液總質量 × 100%。使用上下分式呈現分子與分母；下方標示「代入這次配方」，保留可隨糖、水質量變動的數字式。既有「溶液總質量＝溶質質量＋溶劑質量」說明供分母對照。
+
+新增正式公式的分子／分母、顯示順序、調整配方後公式保持不變而數字同步，以及 320／390／768／1440px 公式內部不溢出的檢查。最新畫面：[桌面公式](formula-desktop.webp)、[手機公式](formula-mobile.webp)。
+
+本輪執行 `node --test tests/unit-4.2-concentration.test.cjs`，第五區 20 項通過、0 失敗，包含既有器材互動與 ppm 回歸；已檢視桌面及手機公式截圖。此次僅調整第五區 HTML／CSS，未重跑第三區與第二區的測試。

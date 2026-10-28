@@ -55,3 +55,11 @@
 }
 
 #s5 .mix-scene[data-cup-lifted="true"] .water-cup .scene-action,#s5 .mix-scene[data-cup-lifted="true"] .role-tag.water {visibility:hidden;}
+
+#s5 .formula-reference {margin-top:16px;padding:13px 10px 15px;border:1px solid #cbdacf;border-radius:9px;background:#fffffff0;scroll-margin-top:24px;}
+#s5 .formula-caption {margin:0!important;color:#63776a;font-size:.75rem;font-weight:700;}
+#s5 .formula-equation {display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 5px;margin-top:10px;color:#315b46;font-size:.95rem;}
+#s5 .formula-name,#s5 .formula-ratio {white-space:nowrap;}
+#s5 .formula-ratio {display:inline-flex;align-items:center;gap:5px;}
+#s5 .substitution-caption {padding-top:14px;}
+@media(max-width:680px) {#s5 .formula-equation {font-size:.85rem;}#s5 .formula-reference {padding-inline:7px;}}
