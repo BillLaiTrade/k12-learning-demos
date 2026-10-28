@@ -152,7 +152,31 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
   });
   await t.test('圖面只保留主要標籤，文字解釋與第四區入口放在圖下',async()=>{
     const top=await section.locator('.comparison-column-headings').evaluate(e=>e.textContent);assert.ok(top.includes('光的路徑')&&top.includes('小葵看到的熊'));
-    await expect(section.locator('.comparison-equation')).toHaveText('3＋2＝5公尺');await expect(section.locator('.mirror-explanation')).toContainText('沿圖示光路量取');await expect(section.locator('.mirror-explanation')).toContainText('垂直鏡面的距離');
+    await expect(section.locator('.comparison-equation')).toHaveText('3＋2＝5公尺');await expect(section.locator('.mirror-explanation')).toContainText('沿圖示光路量取');await expect(section.locator('.comparison-next')).toContainText('比較物距與像距');
+    const explanation=section.locator('.mirror-explanation');
+    assert.equal(await explanation.locator('.dialogue').count(),2);
+    await expect(explanation.locator('.dialogue--xiaokui')).toContainText('為什麼熊看起來在鏡後');
+    await expect(explanation.locator('.dialogue:not(.dialogue--xiaokui)')).toContainText('從反射點再往鏡後延長2公尺');
+    await expect(explanation.locator('.comparison-clarification')).toContainText('不代表光真的通過鏡後');
+    assert.equal(await explanation.locator(':scope > p:not(.comparison-clarification),h3,.comparison-bridge').count(),0);
+    assert.ok((await explanation.innerText()).replace(/\s/g,'').length<170,'說明維持短對話，不回到長段落');
+    for(const width of [320,390,650,768,1024,1440]){
+      await page.setViewportSize({width,height:1200});
+      const layout=await explanation.evaluate(e=>[...e.querySelectorAll('.dialogue')].map(row=>{
+        const text=row.querySelector('p'),avatar=row.querySelector('.speaker'),style=getComputedStyle(avatar,'::before');
+        const a=avatar.getBoundingClientRect(),b=text.getBoundingClientRect(),r=row.getBoundingClientRect();
+        return {avatar:style.backgroundImage,avatarWidth:style.width,textFits:text.scrollWidth<=text.clientWidth+1,separated:a.right<=b.left,within:b.right<=r.right,background:getComputedStyle(row).backgroundColor};
+      }));
+      assert.ok(layout.every(r=>r.avatar.includes('dialogue-character-avatars.png')&&r.avatarWidth===(width<=460?'38px':'44px')&&r.textFits&&r.separated&&r.within));
+      assert.notEqual(layout[0].background,layout[1].background);
+      if(width===390||width===1440){
+        const name=width===390?'mobile':'desktop';
+        fs.mkdirSync('/tmp/unit1-card3-explanation',{recursive:true});
+        await explanation.screenshot({path:`/tmp/unit1-card3-explanation/${name}-explanation.png`});
+        const style=await page.addStyleTag({content:'.route{visibility:hidden!important}'});
+        await section.screenshot({path:`/tmp/unit1-card3-explanation/${name}.png`});await style.evaluate(e=>e.remove());
+      }
+    }
   });
   await t.test('滑鼠與鍵盤前往第四區，量距及往返錨點正常',async()=>{
     const link=page.locator('#mirror-next-activity');await expect(link).toHaveAttribute('href','#card-04');await link.click();await expect(page).toHaveURL(/#card-04$/);
