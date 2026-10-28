@@ -149,3 +149,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.2-
 32 項第四區模型、實際秒錶、互動與版面檢查全部通過（含群組計數），輸出見 vibration-tests.log。新增每秒十六次換向、最大微移 1.5、訊號外精確歸位的純函式檢查；逐影格核對叉臂 d 永遠相同、不旋轉／縮放，只有反向水平 translate，接觸層仍連接。原敲槌至少半秒、個別／同時敲擊、暫停與重設、七種寬度與手機操作繼續通過。
 
 桌面及手機畫面已檢視；vibration-a.png、b.png、c.png 的間隔約 64ms，叉臂位置依序反向，而直線外形不變；採樣見 vibration-samples.log。振動外觀節奏與微觀粒子追蹤節奏分別為示意，模型說明已交代，不影響實際到達計時。
+
+## 2026-10-28：刪除上方距離／播放／計時及觀察說明
+
+32 項第四區模型、互動、實際秒錶與版面檢查全部通過（含群組計數），輸出見 clean-tests.log。確認上方 model-information／realtime-badge／model-time／observation-caption 節點均已移除，設定區後直接接比較圖；同步、個別敲擊、暫停、重播、背景及條件切換均不因缺少節點報錯。五公里與實際到達時間持續以內部時鐘交叉核對，並涵蓋七種寬度及手機操作。桌面、390px 與 320px 畫面已檢視，主要及個別操作截圖已更新。

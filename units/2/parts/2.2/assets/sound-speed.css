@@ -4,12 +4,6 @@
 :where(.sound-speed-lab) .tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin:20px 0 16px;border-radius:14px;background:#eaf0e5}
 :where(.sound-speed-lab) .tabs button{min-height:46px;padding:9px 7px;border:0;border-radius:10px;background:transparent;color:#5c6e60;font-weight:750;font-size:.95rem}
 :where(.sound-speed-lab) .tabs button[aria-selected=true]{background:var(--green);color:white}
-:where(.sound-speed-lab) .model-information{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding:10px 12px;border-radius:12px;background:#eff4e9;font-size:.8rem;color:#546b58}
-:where(.sound-speed-lab) .model-information strong{color:#284f35}
-:where(.sound-speed-lab) .realtime-badge{padding:4px 9px;border:1px solid #ccdbcc;border-radius:999px;background:#fffefa;color:#315f41;font-size:.74rem;font-weight:650}
-:where(.sound-speed-lab) #model-time{font-variant-numeric:tabular-nums;white-space:nowrap}
-:where(.sound-speed-lab) .model-time-wrap{white-space:nowrap}
-:where(.sound-speed-lab) .observation-caption{display:flex;align-items:center;min-height:3.2em;margin:10px 0;padding:10px 12px;border-left:4px solid #b8cda9;border-radius:0 10px 10px 0;background:#f3f6ee;color:#345c40;font-size:.88rem;font-weight:650}
 :where(.sound-speed-lab) .comparison-board{overflow:hidden;border:1px solid #cfddd2;border-radius:16px;background:#fffefa}
 :where(.sound-speed-lab) .comparison-heading{display:grid;grid-template-columns:64px minmax(0,1fr) 88px;gap:12px;align-items:center;padding:10px 12px;background:#edf3e8;color:#526e5b;font-size:.72rem;font-weight:650}
 :where(.sound-speed-lab) .comparison-heading span:last-child{text-align:center}
@@ -74,8 +68,6 @@
 :where(.sound-speed-lab) .medium-heading p{font-size:.68rem}
 :where(.sound-speed-lab) .row-body{grid-template-columns:minmax(0,1fr) 72px}
 :where(.sound-speed-lab) .arrival-readout output{font-size:.69rem}
-:where(.sound-speed-lab) .model-information{gap:6px 9px;font-size:.74rem}
-:where(.sound-speed-lab) .observation-caption{font-size:.82rem;min-height:3.8em}
 }
 @media(max-width:640px){
 :where(.sound-speed-lab) .tabs button{font-size:.84rem}

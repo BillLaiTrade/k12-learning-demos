@@ -2,8 +2,8 @@ import {
   DISTANCE, START_X, END_X,
   appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=vibration-14';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=vibration-14';
+} from './sound-speed-model.mjs?v=clean-15';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=clean-15';
 
 export function initSoundSpeed(root) {
 const $ = selector => root.querySelector(selector);
@@ -122,18 +122,6 @@ function buildModel(group) {
   };
 }
 
-function caption() {
-  if (state.phase === 'idle') return '敲擊後音叉來回振動，帶動附近粒子，再將擾動逐段傳開。';
-  if (state.scope === 'individual') return state.phase === 'complete'
-    ? '已敲擊的組別都已回復靜止，可再點音叉，或同時敲擊比較。'
-    : '個別敲擊：各組從自己的敲擊時刻計時；可再點其他音叉。';
-  const arrived = groups.filter(group => state.time >= arrivalTime(group.speed));
-  if (!arrived.length) return state.mode === 'material' ? '粒子在原位附近往返，擾動由相鄰粒子逐段傳遞。' : '兩組一起開始，觀察哪一組先傳到最右端。';
-  if (arrived.length === groups.length) return state.phase === 'complete' ? '本輪比較完成，粒子都已回復原位。' : '各組都已傳到最右端，繼續觀察粒子回復原位。';
-  if (state.mode === 'material') return arrived.length === 1 ? '鋼已傳到最右端；水與空氣仍在傳遞。' : '水也已傳到最右端；空氣仍在傳遞。';
-  return arrived[0].id === 'reference' ? '20°C 參考組先傳到；設定組仍在傳遞。' : `${state.temperature}°C 設定組先傳到；20°C 參考組仍在傳遞。`;
-}
-
 function drawResult() {
   const finished = state.scope === 'together' && groups.length > 0 && groups.every(group => state.time >= arrivalTime(group.speed));
   $('#result').hidden = !finished;
@@ -162,7 +150,7 @@ function drawResult() {
   }
 }
 
-function paint(audible = false, overrideCaption = '') {
+function paint(audible = false) {
   panel.dataset.mode = state.mode; panel.dataset.phase = state.phase;
   panel.dataset.scope = state.scope;
   panel.dataset.time = state.time.toFixed(8); panel.dataset.playbackRate = '1';
@@ -201,9 +189,6 @@ function paint(audible = false, overrideCaption = '') {
     if (arrived && !noticed.has(model.id)) { noticed.add(model.id); newArrival = true; }
   }
   if (audible && newArrival) arrivalTone();
-  text($('#model-time'), secondsText(state.time));
-  text($('#clock-caption'), state.scope === 'individual' ? '操作經過時間' : '經過時間');
-  text($('#observation-caption'), overrideCaption || caption());
   const actionLabel = state.scope === 'individual' ? '同時敲擊音叉' : { idle: '同時敲擊音叉', running: '暫停觀察', paused: '繼續觀察', complete: '再次敲擊音叉' }[state.phase];
   text($('#primary-action'), actionLabel);
   $('#pause-action').hidden = state.scope !== 'individual' || !['running','paused'].includes(state.phase);
@@ -263,14 +248,14 @@ function startSingle(id) {
   resume();
 }
 
-function pause(message = '') {
+function pause() {
   if (state.phase !== 'running') return;
   commitTime(performance.now());
   if (state.phase !== 'complete') state.phase = 'paused';
-  stopFrame(); stopTones(); paint(false, message);
+  stopFrame(); stopTones(); paint();
 }
 
-function rebuild(message = '') {
+function rebuild() {
   resetRun();
   groups = conditions(state.mode, state.temperature);
   $('#models').replaceChildren();
@@ -288,7 +273,7 @@ function rebuild(message = '') {
   $('#takeaway').innerHTML = temperatureMode
     ? '<strong>觀察重點：</strong>只改變空氣溫度，振動頻率維持相同；同溫時，振動會同時傳到最右端。'
     : '<strong>觀察重點：</strong>粒子在原位附近往返；同一聲源頻率相同，三種介質傳遞振動的速度不同。';
-  paint(false, message);
+  paint();
 }
 
 function setMode(mode) {
@@ -302,7 +287,7 @@ function setTemperature(value) {
   state.temperature = next; $('#temperature').value = String(next);
   text($('#temperature-value'), `${next}°C`);
   attr($('#temperature'), 'aria-valuetext', `設定組 ${next} 攝氏度`);
-  rebuild(`設定組已改為 ${next}°C，請重新比較。`);
+  rebuild();
 }
 
 $('#primary-action').addEventListener('click', () => {
@@ -331,7 +316,7 @@ tabs.forEach((button, index) => {
   });
 });
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) pause('頁面已暫停，返回後可繼續觀察。');
+  if (document.hidden) pause();
 });
 window.addEventListener('pagehide', () => { pause(); stopTones(); });
 attr($('#temperature'), 'aria-valuetext', '設定組 30 攝氏度');

@@ -198,6 +198,8 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
 
   await t.test('one compact panel gives the embedded scenes the main space and shows only arrival times at the right', async () => {
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('.comparison-board').count(), 1);
+    assert.equal(await page.locator('.model-information, .realtime-badge, #model-time, #observation-caption').count(),0);
+    assert.equal(await page.locator('#experiment-panel').evaluate(n=>n.firstElementChild.id==='temperature-settings'&&n.children[1].classList.contains('comparison-board')),true,'the model follows settings with no leftover explanation panel');
     const rows = await page.locator('[data-sound-speed-lab]').locator('.medium-row').evaluateAll(nodes => nodes.map(row => {
       const box = selector => { const b = row.querySelector(selector).getBoundingClientRect(); return { x: b.x, y: b.y, width: b.width, height: b.height, right: b.right, bottom: b.bottom }; };
       return { label: box('.medium-header'), field: box('.field'), end: box('.arrival-readout'), body: box('.row-body'), row: { y: row.getBoundingClientRect().y, bottom: row.getBoundingClientRect().bottom } };
@@ -226,7 +228,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     const m = await model, current = await time();
     assert.deepEqual(reached, m.conditions('material').map(g => { const points = m.positions(g.kind); return points.filter(p => p.distance <= g.speed * current).length / points.length; }));
     assert.ok(reached[0] < reached[1] && reached[1] < reached[2] && reached[2] === 1);
-    assert.match(await page.locator('[data-sound-speed-lab]').locator('#observation-caption').textContent(), /鋼已傳到/);
+    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.model-information, .realtime-badge, #model-time, #observation-caption').count(),0);
     const { start, end, endpoints } = await page.locator('[data-sound-speed-lab]').locator('[data-group=steel]').evaluate(row => {
       const link = row.querySelector('.elastic-link'), particles = row.querySelectorAll('.particle');
       return { start: link.getPointAtLength(0).x, end: link.getPointAtLength(link.getTotalLength()).x,
@@ -614,7 +616,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
         await mobile.clock.runFor(32);
         assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${mode} must fit ${width}px`);
         assert.equal(await mobile.locator('.arrival-readout').evaluateAll(ns=>ns.every(n=>{const a=n.getBoundingClientRect(),b=n.querySelector('output').getBoundingClientRect();return b.left>=a.left&&b.right<=a.right&&n.querySelectorAll('svg').length===0;})),true,'arrival numbers fit without endpoint illustrations');
-        for (const selector of ['.medium-row', '.controls', '.model-information']) {
+        for (const selector of ['.medium-row', '.controls']) {
           const geometry=await mobile.locator('[data-sound-speed-lab]').evaluate((root,selector)=>{
             const main=root.getBoundingClientRect();
             return { main:{x:main.x,right:main.right},boxes:[...root.querySelectorAll(selector)].map(n=>{const b=n.getBoundingClientRect();return {x:b.x,right:b.right};}) };
