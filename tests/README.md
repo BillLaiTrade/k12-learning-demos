@@ -112,3 +112,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.1-dual-scale.test.cjs t
 ```
 
 新測試涵蓋綠線實際拖曳、抓取偏移、圖外指標捕獲、量程鉗制、放開停止、手機觸控拖曳／取消且不捲動頁面、綠線鍵盤操作，以及 −40°C／−40°F 交會、獨立刻度的 1.8 倍間距、刻字不重疊、一般公式與代入式、五個預設值、降溫／升溫點擊及滑鼠／觸控長按釋放、輸入數字及單位的雙向換算、範圍／空白錯誤、近似值標示、鍵盤、現有頭像、320–1440px 版面及真實觸控。`DUAL_SCALE_CAPTURE_DIR` 可保存截圖，`DUAL_SCALE_URL` 可指定待檢查的頁面。外觀仍須對照核可示意圖檢視。
+
+## 1.2 單元小測：潛望鏡
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-1.2-periscope.test.cjs tests/unit-1.2-mirror.test.cjs tests/unit-1.2-curved-mirrors.test.cjs tests/unit-1.2-reversible.test.cjs
+```
+
+潛望鏡檢查有限鏡片與單面反射、36 × 36 組角度的反射分量及管道邊界、不同視線的獨立反向傳播、船／天空／海面及局部／完全遮擋、觀察窗實際像素與完整三維視線的交叉核對。實際操作涵蓋兩片鏡子的滑鼠拖曳、CDP 觸控拖曳、鍵盤與半度微調、角度上下限、取消拖曳、光路及提示、標籤拖放／點選、三階段答案與操作門檻、反向訊號重合、狀態失效及完整重設，以及 1440／1280／1024／768／390 px 版面和資源錯誤。
+
+與第三至六區循序執行回歸，避免多個軟體 WebGL 瀏覽器競用。實體點擊前取消平滑捲動並確認座標穩定，不以強制點擊略過命中問題。觀察窗取樣核對使用相同 Canvas CPU 色彩取樣方式，以免 GPU／CPU 縮圖插值差異被誤判為光路偏差。整卡截圖暫隱藏外側 sticky 導覽，避免離開視窗的部分在長截圖中混入懸浮導覽；正式頁面不隱藏導覽。截圖與人工對照保留在 `docs/reviews/unit-1.2-periscope/`。

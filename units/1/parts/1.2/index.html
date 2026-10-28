@@ -103,6 +103,7 @@
   </style>
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
   <link rel="stylesheet" href="assets/reversible-light.css?v=3">
+  <link rel="stylesheet" href="assets/periscope.css?v=1">
 </head>
 <body>
   <header class="shell masthead">
@@ -134,7 +135,7 @@
           <a href="#card-04"><span class="route-number">04</span><span>只移動物體，像的位置怎麼變？</span></a>
           <a href="#card-05"><span class="route-number">05</span><span>鏡面彎起來，反射方向還會一樣嗎？</span></a>
           <a href="#card-06"><span class="route-number">06</span><span>把光線方向倒過來，路徑會改變嗎？</span></a>
-          <a href="#card-07"><span class="route-number">07</span><span>整理觀察：平面鏡與曲面鏡</span></a>
+          <a href="#unit-quiz"><span class="route-number">✦</span><span>單元小測｜幫小葵完成潛望鏡</span></a>
         </div>
       </nav>
       <div class="lesson-list">
@@ -387,29 +388,64 @@
             <noscript><p>請啟用 JavaScript 點選 A、B 發射器。紅光沿 A→M→B，藍光沿 B→M→A，各自遵守反射定律。</p></noscript>
           </div>
         </section>
-        <section class="lesson-card end-card" id="card-07">
-          <div class="card-side"><span class="card-number">07</span><h3>用反射規律解釋鏡面</h3><span class="card-role">整理觀察</span></div>
-          <div class="card-main">
-            <h2>小葵要向阿公解釋平面鏡和曲面鏡的反射差異。哪一段說法正確？</h2>
-            <p>回想入射角與反射角、移動物體時的像，以及凹面鏡和凸面鏡改變反射方向的方式。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我要把剛才的光路和觀察到的位置一起說清楚。</p></div>
-            <div class="choices" role="group" aria-label="選擇正確的面鏡反射解釋">
-              <button class="choice" type="button" data-answer="wrong-a" aria-pressed="false">曲面鏡每一處的法線相同，所以凹面鏡與凸面鏡都讓平行光維持平行。</button>
-        <button class="choice" type="button" data-answer="correct" aria-pressed="false">平面鏡中像的位置隨物體改變；曲面鏡各處仍遵守反射定律，凹面鏡使平行光會聚，凸面鏡使其發散。</button>
-              <button class="choice" type="button" data-answer="wrong-b" aria-pressed="false">只有平面鏡遵守反射定律；物體移動時，平面鏡中的像位置不變。</button>
+        <section class="lesson-card" id="unit-quiz" aria-labelledby="periscope-title">
+          <span id="card-07" aria-hidden="true"></span>
+          <header class="periscope-heading"><span class="quiz-icon" aria-hidden="true">?</span><div><small>單元小測</small><h2 id="periscope-title">幫小葵完成潛望鏡</h2><p>讓海面上的光，經過兩面鏡子進入眼睛。</p></div></header>
+          <div class="periscope-body">
+            <div class="periscope-steps" role="tablist" aria-label="潛望鏡任務">
+              <button id="periscope-tab-0" role="tab" aria-selected="true" aria-controls="periscope-panel" type="button" data-stage="0"><span>1</span>組裝潛望鏡</button>
+              <button id="periscope-tab-1" role="tab" aria-selected="false" aria-controls="periscope-panel" type="button" data-stage="1" disabled><span>2</span>修復光路</button>
+              <button id="periscope-tab-2" role="tab" aria-selected="false" aria-controls="periscope-panel" type="button" data-stage="2" disabled><span>3</span>反向傳訊</button>
             </div>
-            <div class="check-actions"><button class="action" id="check-answer" type="button">確認這段解釋</button><button class="secondary" id="reset-answer" type="button">重新選擇</button></div>
-            <div class="feedback" id="check-feedback" aria-live="polite">選好後再確認，回想證據：角度從哪條基準線量起？改變物體位置後觀察到什麼？</div>
-            <figure class="visual">
-              <svg viewBox="0 0 620 250" role="img" aria-labelledby="summary-title summary-desc">
-                <title id="summary-title">光的反射與鏡面觀察重點</title><desc id="summary-desc">光從平面鏡或曲面鏡反射時都遵守反射定律；曲面會改變各處法線方向。</desc>
-                <circle cx="82" cy="102" r="18" fill="#f5c967" stroke="#b97a25" stroke-width="3"/><text x="53" y="145" fill="#64736d" font-size="15">光源</text>
-                <path d="M103 110L290 165L103 220" fill="none" stroke="#d5962d" stroke-width="4"/><path d="M290 165L415 82" fill="none" stroke="#78988a" stroke-width="2.5" stroke-dasharray="7 6"/><rect x="283" y="34" width="14" height="190" rx="5" fill="#8daaa0"/>
-                <line x1="218" y1="190" x2="218" y2="125" stroke="#bc612b" stroke-width="7"/><line x1="360" y1="190" x2="360" y2="125" stroke="#7d8f85" stroke-width="5" stroke-dasharray="7 6"/>
-                <text x="192" y="220" fill="#315a46" font-size="15">物體</text><text x="347" y="220" fill="#64736d" font-size="15">像</text>
-              </svg>
-              <figcaption class="visual-caption">各種鏡面都遵守反射定律，表面形狀會改變反射光的整體方向。</figcaption>
-            </figure>
+            <div id="periscope-panel" role="tabpanel" aria-labelledby="periscope-tab-0">
+              <div class="periscope-talks">
+                <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p id="periscope-student">我在潛水艇裡，怎麼看見海上的船？</p></div>
+                <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p id="periscope-grandpa">先轉動鏡片，再從觀察窗找找船在哪裡。</p></div>
+              </div>
+              <div class="periscope-task"><div><strong id="periscope-task-title">任務一｜把船的駕駛艙調到觀察窗中央</strong><p id="periscope-task-copy">拖曳鏡片端點旋轉。先試著觀察，需要時再顯示輔助光路。</p></div></div>
+              <div class="periscope-workspace">
+                <div class="periscope-cutaway">
+                  <svg id="periscope-scene" viewBox="0 0 900 760" role="group" aria-labelledby="periscope-scene-title periscope-scene-desc">
+                    <title id="periscope-scene-title">潛望鏡剖面與可旋轉平面鏡</title><desc id="periscope-scene-desc">上方入口在海面之上，密封管內與潛水艇艙內都是空氣。拖曳鏡面一或鏡面二的端點旋轉，觀察右側景象。鏡片也可用方向鍵微調。</desc>
+                    <defs>
+                      <linearGradient id="scope-steel" x1="0" x2="1"><stop stop-color="#374a50"/><stop offset=".16" stop-color="#a8b7b5"/><stop offset=".48" stop-color="#596d70"/><stop offset=".8" stop-color="#c0cac4"/><stop offset="1" stop-color="#30454c"/></linearGradient>
+                      <linearGradient id="scope-air" x1="0" x2="1"><stop stop-color="#1f333b"/><stop offset=".24" stop-color="#738783"/><stop offset=".5" stop-color="#bdc6ad"/><stop offset=".8" stop-color="#8b9c8d"/><stop offset="1" stop-color="#263c41"/></linearGradient>
+                      <linearGradient id="scope-mirror" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".3" stop-color="#d8f1f3"/><stop offset=".75" stop-color="#91b3b7"/><stop offset="1" stop-color="#4e717c"/></linearGradient>
+                      <filter id="scope-glow"><feGaussianBlur stdDeviation="4"/></filter>
+                      <filter id="scope-shadow" x="-30%" y="-20%" width="160%" height="140%"><feDropShadow dx="3" dy="5" stdDeviation="5" flood-opacity=".3"/></filter>
+                    </defs>
+                    <image href="assets/periscope/submarine-scene.webp" width="900" height="760" preserveAspectRatio="none"/>
+                    <g filter="url(#scope-shadow)">
+                      <path d="M491 113H639V539H767V641H639V668H491Z" fill="url(#scope-steel)" stroke="#263d43" stroke-width="5"/>
+                      <path d="M508 128H622V555H765V625H622V652H508Z" fill="url(#scope-air)" stroke="#334a50" stroke-width="3"/>
+                      <path d="M491 155H509V225H491" fill="#a5c9d4" fill-opacity=".28" stroke="#d6f7fb" stroke-width="3"/>
+                      <path d="M491 128V150M491 230V650M639 130V535M639 648V658" stroke="#d6dfcd" stroke-opacity=".5" stroke-width="3"/>
+                      <rect x="739" y="553" width="26" height="74" rx="9" fill="#26373f" stroke="#61767c" stroke-width="3"/><rect x="755" y="564" width="12" height="52" rx="5" fill="#17262e"/>
+                      <g fill="#334b50" stroke="#becbc3" stroke-width="2"><circle cx="502" cy="126" r="4"/><circle cx="628" cy="126" r="4"/><circle cx="502" cy="655" r="4"/><circle cx="628" cy="655" r="4"/><circle cx="628" cy="335" r="4"/><circle cx="502" cy="335" r="4"/></g>
+                    </g>
+                    <g id="periscope-recorded" class="periscope-path"></g><g id="periscope-light" class="periscope-path"></g><g id="periscope-normal"></g>
+                    <g id="periscope-mirror-0" class="mirror-drag" role="slider" tabindex="0" aria-label="鏡面一，拖曳端點旋轉，或使用方向鍵" aria-valuemin="30" aria-valuemax="65" aria-valuenow="38" aria-orientation="horizontal"><circle class="scope-mirror-focus" cx="565" cy="190" r="79"/><line class="scope-mirror-hit"/><line class="mirror-back" stroke="#354f58" stroke-width="15" stroke-linecap="round"/><line class="mirror-glass" stroke="url(#scope-mirror)" stroke-width="9" stroke-linecap="round"/><line class="mirror-highlight" stroke="#f0ffff" stroke-width="2"/><circle class="scope-mirror-handle" r="11"/><circle class="scope-mirror-handle" r="11"/></g>
+                    <g id="periscope-mirror-1" class="mirror-drag" role="slider" tabindex="0" aria-label="鏡面二，拖曳端點旋轉，或使用方向鍵" aria-valuemin="30" aria-valuemax="65" aria-valuenow="51" aria-orientation="horizontal"><circle class="scope-mirror-focus" cx="565" cy="590" r="79"/><line class="scope-mirror-hit"/><line class="mirror-back" stroke="#354f58" stroke-width="15" stroke-linecap="round"/><line class="mirror-glass" stroke="url(#scope-mirror)" stroke-width="9" stroke-linecap="round"/><line class="mirror-highlight" stroke="#f0ffff" stroke-width="2"/><circle class="scope-mirror-handle" r="11"/><circle class="scope-mirror-handle" r="11"/></g>
+                    <g class="scene-label"><rect x="310" y="163" width="80" height="35" rx="8"/><text x="350" y="187" text-anchor="middle">海上的船</text><rect x="650" y="153" width="92" height="36" rx="8"/><text x="696" y="178" text-anchor="middle">鏡面一</text><rect x="648" y="637" width="92" height="36" rx="8"/><text x="694" y="662" text-anchor="middle">鏡面二</text><rect x="647" y="350" width="175" height="37" rx="8"/><text x="734" y="375" text-anchor="middle">密封管內：空氣</text><rect x="60" y="283" width="74" height="36" rx="8"/><text x="97" y="308" text-anchor="middle">海面</text><rect x="85" y="483" width="74" height="36" rx="8"/><text x="122" y="508" text-anchor="middle">海水</text><rect x="516" y="695" width="138" height="36" rx="8"/><text x="585" y="720" text-anchor="middle">艙內：空氣</text></g>
+                    <g id="periscope-block-marker" hidden><circle r="11" fill="#fff4dc" stroke="#a5682c" stroke-width="3"/><path d="M-5-5L5 5M5-5L-5 5" stroke="#a5682c" stroke-width="3"/></g>
+                  </svg>
+                </div>
+                <aside class="periscope-view" aria-label="從潛望鏡看到的景象"><h3>小葵的觀察窗</h3><div class="periscope-lens-frame"><canvas id="periscope-view" width="240" height="240" role="img" aria-label="觀察窗載入中"></canvas></div><div id="periscope-view-state" class="periscope-view-state" role="status">正在準備觀察窗…</div><p id="periscope-view-copy">景象隨鏡片轉動；管壁擋住的區域會變暗。</p><div class="periscope-view-meter">轉錯時，可能看見天空、海面，或被管壁遮住。</div></aside>
+              </div>
+              <div class="periscope-controls"><button type="button" id="periscope-toggle-path" aria-pressed="false">◎ 顯示光路</button><button type="button" id="periscope-hint">♧ 給我提示</button><button type="button" id="periscope-reset-stage">↻ 重新組裝</button><button type="button" id="periscope-signal" class="periscope-signal" aria-pressed="false" hidden disabled>發送訊號光</button></div>
+              <div class="periscope-fine" id="periscope-fine" role="group" aria-label="鏡片精細調整"><span>微調鏡片</span><div><span>鏡面一</span><button type="button" data-fine="0,-0.5" aria-label="鏡面一逆時針微調半度">↶</button><button type="button" data-fine="0,0.5" aria-label="鏡面一順時針微調半度">↷</button></div><div><span>鏡面二</span><button type="button" data-fine="1,-0.5" aria-label="鏡面二逆時針微調半度">↶</button><button type="button" data-fine="1,0.5" aria-label="鏡面二順時針微調半度">↷</button></div></div>
+              <p class="periscope-keyboard" id="periscope-drag-help">抓住鏡片端點旋轉；也可點選鏡片後，用 ← → 微調，Shift 加快。</p>
+              <p class="periscope-hint" id="periscope-hint-copy" role="status" hidden></p>
+              <p class="periscope-model-note">剖面與景物為示意比例；觀察窗依有限鏡面、入口與管壁追蹤視線。亮線為輔助光路，清澈空氣中的完整光路通常不可見。</p>
+              <div class="periscope-question" id="periscope-question-0"><h3>船反射的光，依序經過哪些位置才進入眼睛？</h3><p>點選鏡面標籤，再點空格放入；也可以直接拖曳標籤。</p><div class="periscope-order"><span class="path-end">船</span><span aria-hidden="true">→</span><button type="button" class="periscope-slot" data-slot="0" aria-label="第一個反射位置，尚未填入">第一個位置</button><span aria-hidden="true">→</span><button type="button" class="periscope-slot" data-slot="1" aria-label="第二個反射位置，尚未填入">第二個位置</button><span aria-hidden="true">→</span><span class="path-end">眼睛</span></div><div class="periscope-chips"><small>可放入的標籤</small><button type="button" draggable="true" class="periscope-chip" data-chip="0" aria-pressed="false">鏡面一</button><button type="button" draggable="true" class="periscope-chip" data-chip="1" aria-pressed="false">鏡面二</button><button type="button" id="periscope-clear-order" class="secondary">清空順序</button></div></div>
+              <div class="periscope-question" id="periscope-question-1" hidden><h3>哪一片鏡子被轉動了？</h3><p>比較原本的路線，先作判斷，再試著修復。</p><div class="periscope-choice-row"><button class="periscope-answer" type="button" data-diagnosis="0" aria-pressed="false">鏡面一</button><button class="periscope-answer" type="button" data-diagnosis="1" aria-pressed="false">鏡面二</button></div></div>
+              <div class="periscope-question" id="periscope-question-2" hidden><h3>鏡子不動，從眼睛的位置沿原光路反向發出訊號，會怎麼走？</h3><p>先預測，再按「發送訊號光」比較藍光與原本的路線。</p><div class="periscope-answer-list"><button class="periscope-answer" type="button" data-prediction="same" aria-pressed="false">沿完整的原路徑返回，從上方入口照向船。</button><button class="periscope-answer" type="button" data-prediction="inside" aria-pressed="false">只有管內的路徑重合，離開入口後方向會不同。</button><button class="periscope-answer" type="button" data-prediction="turn" aria-pressed="false">兩次反射後會換一條路，需要再調鏡子才能照向船。</button></div></div>
+              <div class="periscope-footer"><button type="button" id="periscope-check" class="action">檢查我的設計</button><button type="button" id="periscope-next" class="action" hidden>前往修復光路 →</button><button type="button" id="periscope-restart" class="secondary">全部重新挑戰</button></div>
+              <div id="periscope-feedback" class="periscope-feedback" role="status">先調整觀察窗，再完成光經過鏡面的順序。</div>
+              <div id="periscope-complete" class="periscope-complete" hidden><h3>任務完成！小葵看見船，也把訊號送回去了。</h3><p>每一次反射都遵守入射角等於反射角。鏡面固定時，光也能沿原路徑反向傳播。</p></div>
+            </div>
+            <div class="periscope-next-lesson"><span aria-hidden="true">≈</span><div><strong>接著想一想</strong><p>潛望鏡內都是空氣。如果改從觀景窗看海裡的魚，光從海水進入空氣，方向會改變嗎？</p></div></div>
+            <noscript><p>這個小測需要 JavaScript。船反射的光經上方、下方兩片平面鏡進入眼睛；鏡片偏轉可能讓視線改向天空、海面或被管壁遮擋。</p></noscript>
           </div>
         </section>
       </div>
@@ -430,13 +466,13 @@
     distanceInput.addEventListener("input",updateDistance);updateDistance();
     let distanceDragging=false;function distanceFromPointer(event){const rect=document.querySelector("#distance-side-view").getBoundingClientRect(),svgX=(event.clientX-rect.left)*620/rect.width;const cm=Math.round(Math.max(10,Math.min(60,(310-svgX)/4))/10)*10;distanceInput.value=String(cm);updateDistance()}
     distanceSideObject.addEventListener("pointerdown",function(event){distanceDragging=true;distanceSideObject.setPointerCapture(event.pointerId);distanceFromPointer(event)});distanceSideObject.addEventListener("pointermove",function(event){if(distanceDragging)distanceFromPointer(event)});distanceSideObject.addEventListener("pointerup",function(){distanceDragging=false});distanceSideObject.addEventListener("pointercancel",function(){distanceDragging=false});distanceSideObject.addEventListener("keydown",function(event){let value=Number(distanceInput.value);if(event.key==="ArrowLeft"||event.key==="ArrowDown")value=Math.max(10,value-10);else if(event.key==="ArrowRight"||event.key==="ArrowUp")value=Math.min(60,value+10);else return;event.preventDefault();distanceInput.value=String(value);updateDistance()});
-    const answerButtons=[...document.querySelectorAll("[data-answer]")];answerButtons.forEach(function(button){button.addEventListener("click",function(){answerButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===button));item.classList.remove("correct","incorrect")});button.classList.add(button.dataset.answer==="correct"?"correct":"incorrect")})});document.querySelector("#check-answer").addEventListener("click",function(){const selected=answerButtons.find(function(button){return button.getAttribute("aria-pressed")==="true"}),feedback=document.querySelector("#check-feedback");if(!selected){feedback.dataset.state="try";feedback.textContent="先選一段完整說明，再回想平面鏡與曲面鏡的反射差異。";return}if(selected.dataset.answer==="correct"){feedback.dataset.state="good";feedback.textContent="正確：平面鏡像隨物體移動；曲面各處遵守反射定律，凹面會聚光、凸面發散光。"}else{feedback.dataset.state="try";feedback.textContent="再想一想：曲面鏡各處法線方向不同，但每一處都遵守反射定律。"}});document.querySelector("#reset-answer").addEventListener("click",function(){answerButtons.forEach(function(button){button.setAttribute("aria-pressed","false");button.classList.remove("correct","incorrect")});const feedback=document.querySelector("#check-feedback");feedback.removeAttribute("data-state");feedback.textContent="選好後再確認：曲面鏡各處的法線方向相同嗎？"});
-    const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent="正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
+    const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent=index===6?"正在進行單元小測":"正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/curved-mirrors.js?v=1"></script>
   <script type="module" src="assets/mirror-image.js?v=2"></script>
   <script type="module" src="assets/reflection-3d.js?v=45"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
   <script type="module" src="assets/reversible-light.js?v=3"></script>
+  <script type="module" src="assets/periscope.js?v=1"></script>
 </body>
 </html>
