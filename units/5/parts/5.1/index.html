@@ -33,7 +33,7 @@
     @media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{grid-template-columns:1fr;padding:32px 0 25px}.lesson{padding-top:20px}.lesson-card{grid-template-columns:1fr;padding:18px;gap:14px}.card-side{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:0 7px;border:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0;font-size:.95rem}.card-role{grid-column:2;font-size:.79rem}.card-number{grid-row:1/3}.visual{padding:8px}.quiz-head{padding:18px}.quiz-body{padding:19px 17px 22px}.quiz-actions{align-items:stretch;flex-direction:column}.thermo-wrap{grid-template-columns:1fr}.thermo-svg{max-height:340px}.range-row{align-items:center;flex-direction:row}.sequence-step{grid-template-columns:22px minmax(0,1fr)}.sequence-controls{grid-column:2}.range-row input{width:100%}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
-  <link rel="stylesheet" href="assets/thermometer-quiz.css?v=oblique-start-4">
+  <link rel="stylesheet" href="assets/thermometer-quiz.css?v=soft-eye-5">
   <link rel="stylesheet" href="assets/measurement-scene.css?v=observation-only-4">
   <link rel="stylesheet" href="assets/touch-story.css">
   <link rel="stylesheet" href="assets/water-lab.css?v=engraved-glass-1">
@@ -316,6 +316,11 @@
                     <linearGradient id="tq-bore"><stop stop-color="#627e87"/><stop offset=".3" stop-color="#fff"/><stop offset=".7" stop-color="#ecf8f6"/><stop offset="1" stop-color="#78979c"/></linearGradient>
                     <linearGradient id="tq-red"><stop stop-color="#9d0720"/><stop offset=".23" stop-color="#e51b35"/><stop offset=".48" stop-color="#ff7b6d"/><stop offset=".73" stop-color="#f62b3b"/><stop offset="1" stop-color="#a90a29"/></linearGradient>
                     <radialGradient id="tq-bulb"><stop offset="0" stop-color="#ff7b67"/><stop offset=".65" stop-color="#f02736"/><stop offset="1" stop-color="#a50929"/></radialGradient>
+                    <radialGradient id="tq-eye-ivory" cx="35%" cy="20%" r="90%"><stop stop-color="#fffdf5"/><stop offset=".7" stop-color="#efece0"/><stop offset="1" stop-color="#d9dccb"/></radialGradient>
+                    <radialGradient id="tq-eye-white" cx="50%" cy="80%" r="85%"><stop stop-color="#fffef8"/><stop offset=".7" stop-color="#e8ebe0"/><stop offset="1" stop-color="#afbbae"/></radialGradient>
+                    <radialGradient id="tq-eye-iris"><stop offset=".25" stop-color="#524b31"/><stop offset=".52" stop-color="#a69961"/><stop offset=".8" stop-color="#718271"/><stop offset="1" stop-color="#3f594d"/></radialGradient>
+                    <clipPath id="tq-eye-opening"><path d="M-30 1C-15-17 10-22 30-1C14 17-12 20-30 1Z"/></clipPath>
+                    <filter id="tq-eye-shadow" x="-25%" y="-40%" width="150%" height="190%"><feDropShadow dy="3" stdDeviation="3" flood-color="#344f3f" flood-opacity=".18"/></filter>
                     <filter id="tq-contact-blur" x="-80%" y="-15%" width="260%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
                     <filter id="tq-shadow" x="-100%" y="-10%" width="300%" height="130%"><feDropShadow dy="3" stdDeviation="3" flood-color="#173d30" flood-opacity=".22"/></filter>
                     <clipPath id="tq-front-clip"><rect x="349" y="225" width="72" height="55"/><rect x="437" y="225" width="48" height="55"/></clipPath>
@@ -329,7 +334,20 @@
                   <g id="tq-instrument-A" class="tq-instrument" data-instrument="A" tabindex="0" role="button" aria-label="溫度計 A，拖到杯口量測；也可點選或按 Enter 後選擇夾具"></g>
                   <g id="tq-instrument-B" class="tq-instrument" data-instrument="B" tabindex="0" role="button" aria-label="溫度計 B，拖到杯口量測；也可點選或按 Enter 後選擇夾具"></g>
                   <image id="tq-clamp-front" href="assets/thermometer-quiz-bench.webp" width="1000" height="1000" clip-path="url(#tq-front-clip)" pointer-events="none" hidden/>
-                  <g id="tq-sight" hidden><path id="tq-eye-rail" fill="none" stroke="#719f85" stroke-opacity=".65" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 7"/><path id="tq-eye-level-mark" fill="none" stroke="#356f50" stroke-width="2"/><text id="tq-eye-hint" x="588" text-anchor="middle" fill="#3c6950" font-size="20">上下拖曳眼睛</text><path id="tq-sight-ray" fill="none" stroke="#187b60" stroke-width="2.5" stroke-dasharray="7 6"/><g id="tq-eye" tabindex="0" role="slider" aria-label="觀看高度" aria-orientation="vertical" aria-valuemin="-100" aria-valuemax="100" aria-valuenow="0" transform="translate(588,345)"><rect x="-40" y="-34" width="80" height="68" rx="28" fill="#fffefa" stroke="#347a62" stroke-width="2"/><path d="M-28 0Q0-31 28 0Q0 31-28 0" fill="#ecf4ec" stroke="#48665b" stroke-width="2"/><circle r="14" fill="#709487"/><circle r="8" fill="#213d35"/><circle cx="-5" cy="-5" r="4" fill="#fff"/></g></g>
+                  <g id="tq-sight" hidden><path id="tq-eye-rail" fill="none" stroke="#719f85" stroke-opacity=".65" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 7"/><path id="tq-eye-level-mark" fill="none" stroke="#356f50" stroke-width="2"/><text id="tq-eye-hint" x="588" text-anchor="middle" fill="#3c6950" font-size="20">上下拖曳眼睛</text><path id="tq-sight-ray" fill="none" stroke="#187b60" stroke-width="2.5" stroke-dasharray="7 6"/><g id="tq-eye" tabindex="0" role="slider" aria-label="觀看高度" aria-orientation="vertical" aria-valuemin="-100" aria-valuemax="100" aria-valuenow="0" transform="translate(588,345)"><rect x="-44" y="-35" width="88" height="70" rx="30" fill="transparent"/>
+                    <ellipse class="tq-eye-frame" rx="43" ry="31" fill="url(#tq-eye-ivory)" stroke="#9ca991" stroke-width="1.4" filter="url(#tq-eye-shadow)"/>
+                    <ellipse rx="39.5" ry="27.5" fill="none" stroke="#fffdf5" stroke-opacity=".8"/>
+                    <path d="M-30-8C-12-25 12-26 29-10" fill="none" stroke="#a2967d" stroke-width="1.7" stroke-linecap="round"/>
+                    <g clip-path="url(#tq-eye-opening)">
+                      <path d="M-30 1C-15-17 10-22 30-1C14 17-12 20-30 1Z" fill="url(#tq-eye-white)"/>
+                      <circle cy="-1" r="14.5" fill="url(#tq-eye-iris)" stroke="#536052" stroke-width=".8"/>
+                      <path d="M0-13V-9M6-12 4-8M11-8 8-6M13-2 9-2M12 5 8 3M7 10 5 6M0 12V8M-7 10-5 6M-12 5-8 3M-13-2-9-2M-11-8-8-6M-6-12-4-8" fill="none" stroke="#d7c98e" stroke-opacity=".55" stroke-width="1"/>
+                      <circle cy="-1" r="6.8" fill="#26382f"/>
+                      <ellipse cx="-4.5" cy="-6" rx="4" ry="3.2" fill="#fffef5" fill-opacity=".95"/><circle cx="5" cy="4" r="1.6" fill="#f6f4d8" fill-opacity=".7"/>
+                    </g>
+                    <path d="M-30 1C-15-17 10-22 30-1" fill="none" stroke="#645e4b" stroke-width="2.7" stroke-linecap="round"/>
+                    <path d="M-30 1C-12 20 14 17 30-1" fill="none" stroke="#8c8f77" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M-23 13Q0 24 23 11" fill="none" stroke="#c3b79b" stroke-width="1.1" stroke-linecap="round"/></g></g>
                 </svg>
                 <p class="tq-scene-tip" id="tq-scene-tip">量完拖回原位，再拿另一支。</p>
               </div>

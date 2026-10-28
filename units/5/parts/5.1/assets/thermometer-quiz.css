@@ -27,7 +27,7 @@
 .tq-instrument{cursor:grab;touch-action:none;outline:none}
 .tq-instrument.is-dragging{cursor:grabbing;filter:url(#tq-shadow)}
 .tq-instrument:focus-visible .tq-glass-body,.tq-instrument:focus-visible .tq-glass-bulb,.tq-instrument.is-picked .tq-glass-body,.tq-instrument.is-picked .tq-glass-bulb{stroke:#368a65;stroke-width:2.5}.tq-instrument.is-dragging .tq-rest-contact{display:none}
-#tq-eye{cursor:ns-resize;touch-action:none;outline:none}#tq-eye:focus-visible>rect{stroke:#91662b;stroke-width:4}
+#tq-eye{cursor:ns-resize;touch-action:none;outline:none}#tq-eye:hover .tq-eye-frame{stroke:#74876b}#tq-eye:focus-visible .tq-eye-frame{stroke:#91662b;stroke-width:3}
 .tq-scene-tip{margin:0;padding:9px 11px;border-top:1px solid #d7e5da;background:#fffdf4e8;text-align:center;color:#566c4c;font-size:.78rem;line-height:1.6}
 .tq-console{min-width:0;padding:16px 15px 13px;border:1px solid #c4dbd0;border-radius:17px;background:linear-gradient(150deg,#fffffd,#fbfdf7)}
 .tq-console h3{margin:0 0 11px;color:#204a39;font-size:1.15rem;line-height:1.5}
