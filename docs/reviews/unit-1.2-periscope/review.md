@@ -46,3 +46,11 @@
 公開交付檢查另以 GitHub Pages HTTPS 頁面實際完成拖曳、四種景象、三階段作答、反向訊號、重設及手機觸控；不以本機測試代替部署檢查。入口為 [單元小測](https://billlaitrade.github.io/k12-learning-demos/units/1/parts/1.2/#unit-quiz)。
 
 公開操作另抓到原第一區塊的離頁例外：先 `renderer.dispose()` 使快取清空，接著釋放 cube render target 時讀到已清空屬性。已調整為先釋放貼圖與 render target、最後關閉 renderer，並加入實際離頁檢查。修正後上述 39 項全數通過。
+
+## 人物造型修正（2026-10-28）
+
+使用者指出潛水艇內的人不是小葵。核對正式共用頭像、開場情境圖與既有側臉素材後確認：先前背景誤用單馬尾、襯衫、綠色背帶，沒有符合棕髮雙丸子頭及白色連帽上衣的正式設定。先前版面／功能驗證漏掉人物身分，不能用功能測試通過作為角色正確的依據。
+
+以 `shared-assets/characters/dialogue-character-avatars.png` 及 `assets/mirror/xiaokui-profile.webp` 作參考修正場景，移除馬尾與綠色背帶，保留側臉眼位及場景構圖。`approved-layout.webp` 保留為歷史版型參考，角色身分以正式人物素材為準。共用人物 README 補上小葵造型核對，避免未來以錯誤示意圖作角色來源。
+
+本輪潛望鏡檢查 16 項全部通過，另以實際桌面、手機與反向任務截圖人工核對人物造型、白色帽兜、雙髮髻及觀察口對位；紀錄保存於 `character-fix-tests.log`，不將像素光路測試描述為人物辨識測試。

@@ -8,7 +8,7 @@ if(root) {
   const state={stage:0,angles:[38,51],done:[false,false,false],order:[null,null],chip:null,diagnosis:null,prediction:null,path:false,hint:0,signal:false,verified:false,saved:[45,45]};
   let scenePixels=null, lastViewKey='', pending=0, dragging=null;
   const sceneImage=new Image();
-  sceneImage.src=new URL('periscope/submarine-scene.webp',import.meta.url).href;
+  sceneImage.src=new URL('periscope/submarine-scene.webp?v=2',import.meta.url).href;
   sceneImage.onload=()=>{
     const source=document.createElement('canvas');source.width=900;source.height=760;
     const sctx=source.getContext('2d',{willReadFrequently:true});sctx.drawImage(sceneImage,0,0,900,760);
