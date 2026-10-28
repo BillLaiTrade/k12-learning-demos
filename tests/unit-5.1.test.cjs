@@ -85,7 +85,34 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
     assert.equal(await page.locator('#parallax-reference').isVisible(),false);
   });
 
+  await t.test('illustrated apparatus and clear labels match the existing lab and stay visible at all views', async () => {
+    const source=await page.locator('#parallax-apparatus').getAttribute('href');
+    assert.equal(source,'assets/water-lab-apparatus.webp');
+    assert.equal(await page.evaluate(async src=>{const img=new Image();img.src=new URL(src,location.href);await img.decode();return img.naturalWidth>1000;},source),true);
+    assert.match(await text('.parallax-apparatus-labels'),/刻度/);
+    assert.match(await text('.parallax-apparatus-labels'),/液面/);
+    assert.match(await text('.parallax-lens-label'),/液面頂端/);
+    for(const view of ['high','low','level']){
+      await page.locator(`button[data-view=${view}]`).click();
+      await page.locator('#parallax-eye').scrollIntoViewIfNeeded();
+      const geometry=await page.evaluate(()=>{
+        const eye=document.querySelector('#parallax-eye'), rect=eye.getBoundingClientRect();
+        const view=document.querySelector('#parallax-view').getBoundingClientRect();
+        const overlaps=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+        return {
+          handleVisible:!!document.elementFromPoint(rect.x+rect.width/2,rect.y+rect.height/2)?.closest('#parallax-eye'),
+          railLabelsClear:[...document.querySelectorAll('.parallax-rail-label')].every(n=>!overlaps(rect,n.getBoundingClientRect())),
+          marksInside:[...document.querySelectorAll('#parallax-ticks text')].every(n=>{const r=n.getBoundingClientRect();return r.top>=view.top&&r.bottom<=view.bottom&&r.left>=view.left&&r.right<=view.right;})
+        };
+      });
+      assert.equal(geometry.handleVisible,true,`${view}: handle is visible and clickable`);
+      assert.equal(geometry.railLabelsClear,true,`${view}: viewpoint labels do not overlap the handle`);
+      assert.equal(geometry.marksInside,true,`${view}: all scale labels remain within the glass window`);
+    }
+  });
+
   await t.test('dragging the eye is continuous, clamped, and supports cancel and keyboard', async () => {
+    await page.locator('button[data-view=level]').click();
     const eye=page.locator('#parallax-eye');
     await eye.scrollIntoViewIfNeeded();
     const box=await eye.boundingBox();

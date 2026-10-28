@@ -39,3 +39,61 @@ button:disabled{opacity:.5;cursor:default}
  .parallax-record-form label{max-width:none;flex-basis:100%}.parallax-record-form button{flex:1}.parallax-comparison{font-size:.84rem}
 }
 @container lesson-content (max-width:360px){.parallax-lab{grid-template-columns:minmax(0,1fr)}.parallax-panel header{flex-direction:row;align-items:center}.parallax-panel svg{max-height:300px}.parallax-presets button{font-size:.74rem}}
+
+/* Match the illustrated bench, cool glass, inset lens and clear labels in card 02. */
+.parallax-lab{grid-template-columns:minmax(0,1.32fr) minmax(0,1fr);gap:0;align-items:center;overflow:hidden;border:1px solid #bfd4ce;border-radius:20px;background:#eaf4ef;box-shadow:inset 0 1px 0 #fff}
+.parallax-panel{overflow:visible;border:0;border-radius:0;background:none}
+.parallax-position{position:relative;align-self:stretch;background:#e7f2ed}
+.parallax-position header{position:absolute;z-index:1;inset:0 0 auto;align-items:center;padding:18px 20px;background:linear-gradient(#edf7f1f2,#edf7f1d9 80%,#edf7f100)}
+.parallax-panel-kicker{display:block;margin-bottom:3px;color:#65857b;font-size:.7rem;font-weight:700;letter-spacing:.09em}
+.parallax-panel h4{color:#213f37;font-size:clamp(.94rem,1.6vw,1.12rem);line-height:1.45}
+.parallax-panel .parallax-stable{display:flex;align-items:center;gap:6px;flex:none;padding:5px 9px;border:1px solid #b9d1c6;border-radius:20px;background:#f9fffa;color:#4b7061;font-size:.65rem;font-weight:700}
+.parallax-stable i{width:6px;height:6px;border-radius:50%;background:#5c9374}
+.parallax-position>svg{aspect-ratio:1000/958;overflow:hidden}
+.parallax-position>p{padding:9px 14px 11px;background:#f9fcf7f5;border-top:1px solid #d9e6df;color:#527365;font-size:.76rem;line-height:1.6}
+.parallax-position>p>span:first-child{font-weight:900;font-size:1.1em;margin-right:4px}
+.parallax-key-hint{display:block;color:#7b9086;font-size:.68rem}
+.parallax-rail-label{fill:#456f60;font-size:25px;font-weight:600;font-family:Arial,sans-serif;paint-order:stroke;stroke:#edf7f0;stroke-width:6px;stroke-linejoin:round}
+#parallax-eye:focus-visible>rect{stroke:#2d7b65;stroke-width:4;filter:url(#px-shadow)}
+#parallax-eye.is-dragging>rect{fill:#f3fff6;stroke-width:4}
+.parallax-observer{z-index:1;align-self:center;margin:20px 20px 20px 0;padding:0 12px 12px;overflow:hidden;border:2px solid #137b63;border-radius:20px;background:#fffefa;box-shadow:0 9px 24px #294f4014}
+.parallax-observer header{padding:14px 5px 12px;align-items:center}
+#parallax-view-badge{padding:4px 11px;border:1px solid #a4c5b4;border-radius:20px;background:#edf6ed;color:#2d6b51;font-size:.72rem}
+.parallax-lens-frame{position:relative;overflow:hidden;border:1px solid #d9e7e1;border-radius:13px;background:#e3eeea}
+#parallax-view{background:radial-gradient(ellipse at 48% 38%,#f0f5ec,#deebe7 85%)}
+.parallax-lens-label{position:absolute;left:76%;top:50%;transform:translate(-50%,-50%);white-space:nowrap;padding:3px 6px;border:1px solid #bdcec4;border-radius:5px;background:#fffff4ed;color:#345f51;font-size:clamp(.6rem,1.15cqw,.76rem);box-shadow:0 1px 4px #183e2910}
+.parallax-observer .parallax-scale-caption{padding:10px 0 6px;text-align:center;font-size:.79rem;line-height:1.5;color:#465f55}
+.parallax-scale-caption>span:last-child{display:block;margin-top:3px;color:#7e8c81;font-size:.67rem;font-weight:400}
+.parallax-scale-icon{margin-right:5px;color:#4d7562}
+.parallax-view-caption{padding:8px 4px;border-radius:9px;background:#eef3e9;text-align:center;color:#3c6551;font-size:.78rem;font-weight:700;line-height:1.5}
+.parallax-presets{gap:10px;margin-top:12px}
+.parallax-presets button{display:flex;justify-content:center;align-items:center;gap:9px;min-height:55px;border:1.5px solid #b8cdc1;border-radius:13px;background:#fffefa;color:#4a665b;font-size:.9rem;font-weight:750;transition:background .15s,border-color .15s}
+.parallax-presets button span{display:grid;place-items:center;width:28px;height:28px;margin:0;border-radius:50%;background:#f0f5ee;color:#4e7e63;font-size:1.22rem}
+.parallax-presets button[aria-pressed=true]{border-color:#217b60;background:#eaf5ec;color:#195c45;box-shadow:inset 0 0 0 .5px #217b60}
+.parallax-presets button[aria-pressed=true] span{background:#d5e8d8;color:#1e694c}
+.parallax-comparison{border:1px solid #dbe7dd;background:#f3f7ef;color:#4c6c58!important}
+.parallax-record-form{padding:17px;border:1px solid #dce7de;border-radius:15px;background:linear-gradient(110deg,#f3f8ef,#fffefa);gap:10px}
+.parallax-reading-field{border-color:#afc5b5}
+.parallax-record-form .action{background:#267a59}.parallax-record-form .secondary{border-color:#c8d8cc;background:#fffffc;color:#4c6756}
+@container lesson-content (max-width:760px){
+ .parallax-position header{padding:12px}.parallax-panel h4{font-size:.96rem}.parallax-stable{display:none!important}
+ .parallax-observer{margin:14px 12px 14px 0;padding:0 9px 9px}.parallax-observer header{padding:11px 2px 9px;gap:5px}.parallax-panel-kicker{font-size:.63rem}
+ #parallax-view-badge{padding:3px 8px;font-size:.65rem}.parallax-position>p{font-size:.69rem}.parallax-lens-label{font-size:.61rem}
+ .parallax-observer .parallax-scale-caption{font-size:.73rem}.parallax-view-caption{font-size:.7rem}
+}
+@container lesson-content (max-width:540px){
+ .parallax-lab{grid-template-columns:minmax(0,1fr)}.parallax-position header{padding:16px}.parallax-position>svg{max-height:490px}
+ .parallax-panel h4{font-size:1.02rem}.parallax-panel-kicker{font-size:.69rem}.parallax-observer{margin:14px;padding:0 13px 12px;border-radius:17px}.parallax-observer header{flex-direction:row;padding:13px 2px 11px}
+ .parallax-lens-frame{width:100%;max-width:360px;margin-inline:auto}.parallax-observer #parallax-view{max-height:360px}.parallax-lens-label{font-size:.7rem}
+ .parallax-presets{gap:6px}.parallax-presets button{gap:4px;padding:9px 2px;font-size:.73rem;min-height:50px}.parallax-presets button span{display:none}
+ .parallax-position>p{font-size:.72rem}.parallax-record-form{padding:13px}
+}
+@media(prefers-reduced-motion:reduce){.parallax-presets button{transition:none}}
+
+/* Keep the upper eye position and both rail labels clear of the scene title. */
+.parallax-position header{right:auto;background:none;pointer-events:none}
+.parallax-position header>div{padding:5px 9px 6px;border-radius:8px;background:#f0f8f1e8}
+.parallax-panel .parallax-stable{display:none}
+@container lesson-content (max-width:540px){.parallax-apparatus-labels text{font-size:34px}.parallax-rail-label{font-size:30px}}
+
+.parallax-position .parallax-panel-kicker{display:none}

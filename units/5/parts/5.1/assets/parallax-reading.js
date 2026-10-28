@@ -22,43 +22,43 @@ function renderPerspective() {
   const path = (points, close = true) => points.map((p, i) => `${i ? 'L' : 'M'}${project(p).map(n => n.toFixed(3)).join(' ')}`).join('') + (close ? 'Z' : '');
   const polygon = (points, attrs) => node('path', { d: path(points), ...attrs });
   const rect = (left, right, bottom, top, z, attrs) => polygon([[left,bottom,z],[right,bottom,z],[right,top,z],[left,top,z]], attrs);
-  const perimeter = [[-1.5,-.35],[-1.25,-.75],[1.25,-.75],[1.5,-.35],[1.5,.55],[1.24,.94],[-1.24,.94],[-1.5,.55]];
+  const perimeter = [[-2.5,-.35],[-2.25,-.75],[2.25,-.75],[2.5,-.35],[2.5,.55],[2.18,.94],[-2.18,.94],[-2.5,.55]];
   const ring = y => perimeter.map(([x,z]) => [x,y,z]);
   const shapes = [];
-  // End faces expose the change from looking down to looking up. Stem extends
-  // outside the magnified window so it reads as a crop of the same instrument.
-  shapes.push(polygon(ring(position >= 0 ? 8 : -8), { fill:'#bdceca', 'fill-opacity':'.5', stroke:'#8da29f', 'stroke-width':'.8' }));
-  shapes.push(rect(-1.5,1.5,-8,8,-.35,{fill:'url(#px-body)',stroke:'#9aacaa','stroke-width':'1'}));
-  // Polished bevels, at different depths from the front face.
-  shapes.push(polygon([[-1.5,-8,.55],[-1.24,-8,.94],[-1.24,8,.94],[-1.5,8,.55]],{fill:'#f9ffff',opacity:'.85',stroke:'#a6b6b2','stroke-width':'.8'}));
-  shapes.push(polygon([[1.24,-8,.94],[1.5,-8,.55],[1.5,8,.55],[1.24,8,.94]],{fill:'#8fa5a3',opacity:'.5',stroke:'#91a7a2','stroke-width':'.8'}));
-  shapes.push(rect(-1.24,1.24,-8,8,.94,{fill:'#f9fcf4','fill-opacity':'.22'}));
-  shapes.push(rect(-.58,-.18,-8,8,0,{fill:'url(#px-bore)',stroke:'#9aafab','stroke-width':'.8'}));
-  // Concave meniscus, not a screen-space rect whose value changes with the eye.
-  const meniscus = [[-.51,0,0],[-.47,-.025,0],[-.38,-.045,0],[-.29,-.025,0],[-.25,0,0]];
-  const liquid = polygon([[-.51,-8,0],[-.25,-8,0],...meniscus.slice().reverse()],{fill:'url(#px-liquid)',id:'parallax-liquid','data-world-temperature':SAMPLE_C});
-  shapes.push(liquid, node('path',{d:path(meniscus,false),fill:'none',stroke:'#a90b24','stroke-width':'1.2',id:'parallax-meniscus'}));
-  shapes.push(rect(-.48,-.455,-8,-.08,0.01,{fill:'#ffd8d3',opacity:'.7'}));
-  // Each line is exactly 1°C apart. Labels and marks occupy the glass face.
-  const ticks = node('g',{id:'parallax-ticks',fill:'#263f39',stroke:'#304a42','stroke-width':'1.35'});
+  shapes.push(polygon(ring(position >= 0 ? 12 : -12), {fill:'#c4d5d1',stroke:'#9ab1ae','stroke-width':'.6'}));
+  shapes.push(rect(-2.5,2.5,-12,12,-.35,{fill:'url(#px-body)',stroke:'#98afb0','stroke-width':'.75'}));
+  shapes.push(polygon([[-2.5,-12,.55],[-2.18,-12,.94],[-2.18,12,.94],[-2.5,12,.55]],{fill:'url(#px-bevel)',stroke:'#9eb6b5','stroke-width':'.6'}));
+  shapes.push(polygon([[2.18,-12,.94],[2.5,-12,.55],[2.5,12,.55],[2.18,12,.94]],{fill:'url(#px-bevel)',stroke:'#8ca7ad','stroke-width':'.6'}));
+  shapes.push(rect(-2.18,2.18,-12,12,.94,{fill:'#eff8f2','fill-opacity':'.1'}));
+  shapes.push(rect(.1,.82,-12,12,0,{fill:'url(#px-bore)',stroke:'#7c9b9e','stroke-width':'.8'}));
+  shapes.push(rect(.19,.25,-12,12,.01,{fill:'#fff',opacity:'.9'}));
+  // The center low point is at exactly 37.5°C; the curved edges rise slightly.
+  const meniscus = [[.25,.045,0],[.3,.018,0],[.46,0,0],[.62,.018,0],[.67,.045,0]];
+  shapes.push(polygon([[.25,-12,0],[.67,-12,0],...meniscus.slice().reverse()],{fill:'url(#px-liquid)',id:'parallax-liquid','data-world-temperature':SAMPLE_C}));
+  shapes.push(node('path',{d:path(meniscus,false),fill:'none',stroke:'#ae0e2c','stroke-width':'1.2',id:'parallax-meniscus'}));
+  shapes.push(rect(.29,.31,-12,-.1,.01,{fill:'#ffd7cf',opacity:'.8'}));
+  const ticks = node('g',{id:'parallax-ticks',fill:'#253f41',stroke:'#2e4649','stroke-width':'1.35','stroke-linecap':'square'});
   for (let degree = 34; degree <= 41; degree++) {
     const y = degreeY(degree), long = degree % 5 === 0;
-    ticks.append(node('path',{d:path([[0,y,SCALE_DEPTH],[long ? .48 : .33,y,SCALE_DEPTH]],false),'data-degree':degree}));
-    const p=project([.55,y,SCALE_DEPTH]);
-    // Text follows the perspective's local scale, just like print on glass.
-    const up=project([.55,y+.3,SCALE_DEPTH]), right=project([.85,y,SCALE_DEPTH]);
+    ticks.append(node('path',{d:path([[-(long ? 1.12 : .89),y,SCALE_DEPTH],[-.19,y,SCALE_DEPTH]],false),'data-degree':degree}));
+    const p=project([-1.3,y,SCALE_DEPTH]);
+    const up=project([-1.3,y+.3,SCALE_DEPTH]), right=project([-1,y,SCALE_DEPTH]);
     const sx=(right[0]-p[0])/12, sy=(p[1]-up[1])/12;
-    ticks.append(node('text',{x:0,y:0,transform:`matrix(${sx} ${(right[1]-p[1])/12} ${(p[0]-up[0])/12} ${sy} ${p[0]} ${p[1]})`,'dominant-baseline':'middle','font-size':17,stroke:'none','font-family':'Georgia, serif'},String(degree)));
+    ticks.append(node('text',{x:0,y:0,transform:`matrix(${sx} ${(right[1]-p[1])/12} ${(p[0]-up[0])/12} ${sy} ${p[0]} ${p[1]})`,'text-anchor':'end','dominant-baseline':'middle','font-size':18,stroke:'none','font-family':'Arial, sans-serif','font-weight':400},String(degree)));
   }
   shapes.push(ticks);
-  // Project the subtle glass highlights at their own depth as well.
-  shapes.push(rect(-1.15,-1.07,-8,8,.95,{fill:'#fff',opacity:'.9'}));
-  shapes.push(rect(.99,1.04,-8,8,.95,{fill:'#fff',opacity:'.65'}));
-  const tip = project([-.38,-.045,0]);
-  const scaleEdge = project([.5,0,SCALE_DEPTH]);
-  shapes.push(node('path',{d:`M${tip[0]} ${tip[1]}H${scaleEdge[0]}`,stroke:'#53865b','stroke-width':'1.2','stroke-dasharray':'3 3',fill:'none',id:'parallax-read-line'}));
-  const unit = project([.55,degreeY(41)+.45,SCALE_DEPTH]);
-  shapes.push(node('text',{x:unit[0],y:unit[1],fill:'#425f54','font-size':14,'font-family':'Georgia, serif'},'°C'));
+  shapes.push(rect(-2.29,-2.24,-12,12,.95,{fill:'#fff',opacity:'.95'}));
+  shapes.push(rect(-2.05,-2.02,-12,12,.95,{fill:'#fff',opacity:'.5'}));
+  shapes.push(rect(2.04,2.12,-12,12,.95,{fill:'#fff',opacity:'.9'}));
+  shapes.push(rect(1.87,1.9,-12,12,.95,{fill:'#fff',opacity:'.55'}));
+  const tip = project([.46,0,0]);
+  const scaleEdge = project([-.7,0,SCALE_DEPTH]);
+  shapes.push(node('path',{d:`M${scaleEdge[0]} ${tip[1]}H${tip[0]}`,stroke:'#067b64','stroke-width':'1.3','stroke-dasharray':'3 3',fill:'none',id:'parallax-read-line'}));
+  // The callout is a screen overlay, distinct from the marks engraved on glass.
+  shapes.push(node('path',{d:`M${tip[0]+4} ${tip[1]}H337`,stroke:'#56857b','stroke-width':'.9',fill:'none',id:'parallax-tip-leader'}));
+  shapes.push(node('circle',{cx:tip[0]+2,cy:tip[1],r:3,fill:'#fff',stroke:'#087e64','stroke-width':'1.2'}));
+  const unit = project([-1.33,degreeY(41)+.45,SCALE_DEPTH]);
+  shapes.push(node('text',{x:unit[0],y:unit[1],fill:'#365558','font-size':14,'font-family':'Arial, sans-serif','text-anchor':'end'},'°C'));
   stage.replaceChildren(...shapes);
   $('parallax-view').setAttribute('aria-label',`${description()}溫度計液面附近，最小刻度為 1°C。液柱保持不動，玻璃與刻線隨觀看角度改變。`);
   $('parallax-view').dataset.view = position === 0 ? 'level' : position > 0 ? 'high' : 'low';
@@ -68,12 +68,13 @@ function setPosition(value) {
   position = clamp(Math.round(value));
   // A small snap zone makes returning to level straightforward on touch screens.
   if (Math.abs(position) < 4) position = 0;
-  const y = 180 - position * 1.1;
-  eye.setAttribute('transform',`translate(314,${y})`);
+  const y = 357.5 - position * 2.25;
+  eye.setAttribute('transform',`translate(915,${y})`);
   eye.setAttribute('aria-valuenow',position);
   eye.setAttribute('aria-valuetext',description());
-  $('parallax-ray').setAttribute('d',`M138 180L292 ${y}`);
+  $('parallax-ray').setAttribute('d',`M580 357.5L850 ${y}`);
   $('parallax-view-badge').textContent = currentView();
+  $('parallax-view-caption').textContent = position === 0 ? '視線與液面同高' : position > 0 ? '由上往下看・刻度看起來偏高' : '由下往上看・刻度看起來偏低';
   $('parallax-comparison').textContent = position === 0
     ? '平視：視線與液面同高，沿液面頂端對照刻度。'
     : position > 0 ? '俯視：你正由上往下看，液面看起來對應較高的刻度；液柱並沒有升高。'
@@ -83,10 +84,12 @@ function setPosition(value) {
   });
   renderPerspective();
 }
-for (let degree=25;degree<=45;degree++) {
-  const y=180-(degree-SAMPLE_C)*9;
-  $('parallax-side-ticks').append(node('path',{d:`M146 ${y}h${degree%5===0?7:4}`}));
+for (let degree=0;degree<=60;degree++) {
+  const y=545-degree*5, major=degree%10===0, middle=degree%5===0;
+  $('parallax-side-ticks').append(node('path',{d:`M${major?567:middle?570:573} ${y}H576`,'stroke-width':major?1.2:.8,'data-degree':degree}));
+  if(major) $('parallax-side-ticks').append(node('text',{x:565,y,'text-anchor':'end','dominant-baseline':'middle','font-size':12.5,'font-family':'Arial, sans-serif',stroke:'none'},degree));
 }
+$('parallax-side-ticks').append(node('text',{x:574,y:231,'text-anchor':'end','font-size':13,'font-family':'Arial, sans-serif',stroke:'none'},'°C'));
 document.querySelectorAll('button[data-view]').forEach(button=>button.addEventListener('click',()=>setPosition({high:100,level:0,low:-100}[button.dataset.view])));
 function svgY(event) {
   const point=side.createSVGPoint();point.x=event.clientX;point.y=event.clientY;
@@ -100,12 +103,12 @@ function stopDrag(event) {
 }
 eye.addEventListener('pointerdown',event=>{
   if (event.button!==0) return;
-  drag={id:event.pointerId,offset:svgY(event)-(180-position*1.1)};
+  drag={id:event.pointerId,offset:svgY(event)-(357.5-position*2.25)};
   eye.setPointerCapture(event.pointerId);eye.focus({preventScroll:true});
   eye.classList.add('is-dragging');event.preventDefault();
 });
 eye.addEventListener('pointermove',event=>{
-  if (drag && event.pointerId===drag.id) setPosition((180-(svgY(event)-drag.offset))/1.1);
+  if (drag && event.pointerId===drag.id) setPosition((357.5-(svgY(event)-drag.offset))/2.25);
 });
 for (const type of ['pointerup','pointercancel','lostpointercapture']) eye.addEventListener(type,stopDrag);
 window.addEventListener('blur',()=>stopDrag());
