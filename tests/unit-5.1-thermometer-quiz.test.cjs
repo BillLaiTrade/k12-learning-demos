@@ -68,7 +68,10 @@ test('physical thermometer assessment in Chromium',{timeout:90000},async t=>{
   });
 
   await t.test('real drag can measure B first, blocks a second instrument and preserves B when returned',async()=>{
-    await fresh();await mount('B');await waitStable();
+    await fresh();const restingB=await page.locator('#tq-instrument-B').getAttribute('transform');
+    assert.equal(await page.locator('#tq-contact-B').isVisible(),true);
+    await mount('B');await waitStable();
+    assert.equal(await page.locator('#tq-contact-B').isVisible(),false);
     assert.equal(await page.locator('#tq-lens').isVisible(),true);
     assert.match(await page.locator('#tq-lens-title').textContent(),/B/);
     const unit=await fill('B');const value=await page.locator('#tq-reading').inputValue();
@@ -78,6 +81,8 @@ test('physical thermometer assessment in Chromium',{timeout:90000},async t=>{
     await dragTo('B',780,680);
     assert.equal(await page.locator('#unit-quiz').getAttribute('data-active'),'');
     assert.equal(await page.locator('#tq-lens-empty').isVisible(),true);
+    assert.equal(await page.locator('#tq-instrument-B').getAttribute('transform'),restingB);
+    assert.equal(await page.locator('#tq-contact-B').isVisible(),true);
     assert.match(await page.locator('#tq-record-B').textContent(),new RegExp(`${value}°${unit}`));
     await mount('A');await waitStable();await fill('A');await dragTo('A',780,680);
     await page.locator('#tq-check').click();assert.equal(await page.locator('#tq-result').getAttribute('data-success'),'true');

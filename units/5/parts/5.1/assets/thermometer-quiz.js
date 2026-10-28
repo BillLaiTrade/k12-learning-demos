@@ -3,7 +3,9 @@ import {projectPoint} from './parallax-model.js';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const root=$('unit-quiz'), scene=$('tq-scene');
 const create=(tag,attrs={},text)=>{const n=document.createElementNS(ns,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;};
-const REST={A:{x:684,y:531,sx:1.05,sy:.42,angle:-2},B:{x:840,y:526,sx:1.05,sy:.42,angle:-3}};
+// The tray grooves recede toward the back: the resting instruments are slimmer
+// and foreshortened, with each axis aligned to its own groove.
+const REST={A:{x:681,y:532,sx:.58,sy:.40,angle:-1.8},B:{x:829,y:530,sx:.58,sy:.40,angle:-6.5}};
 const MOUNT={x:430,y:160,sx:1,sy:1,angle:0};
 let round=makeRound(0,Math.random()<.5), active=null,picked=null,eye=0,drag=null,eyeDrag=null,frame=0,stable=false;
 const builtUnits={};
@@ -20,8 +22,9 @@ function instrumentShape(id){
   if(builtUnits[id]===unit)return;
   builtUnits[id]=unit;
   g.replaceChildren(
+    create('g',{id:`tq-contact-${id}`,class:'tq-rest-contact',transform:'translate(5,7)',filter:'url(#tq-contact-blur)',opacity:.55}),
     create('rect',{class:'tq-hit',x:-66,y:-24,width:132,height:648,rx:25,fill:'transparent'}),
-    create('rect',{x:-26,y:0,width:52,height:573,rx:26,fill:'url(#tq-glass)',stroke:'#819fa6','stroke-width':1.1}),
+    create('rect',{class:'tq-glass-body',x:-26,y:0,width:52,height:573,rx:26,fill:'url(#tq-glass)',stroke:'#819fa6','stroke-width':1.1}),
     create('g',{id:`tq-bulb-shell-${id}`}),
     create('path',{d:'M-17 24V552',stroke:'#fff','stroke-width':3,opacity:.9}),
     create('rect',{x:7,y:22,width:10,height:559,rx:4,fill:'url(#tq-bore)'}),
@@ -30,7 +33,8 @@ function instrumentShape(id){
     create('path',{d:'M10 350V564',stroke:'#ffccc2','stroke-width':1,opacity:.65}),
     create('g',{id:`tq-marks-${id}`,stroke:'#2e4b4b',fill:'#243f3f'})
   );
-  $(`tq-bulb-shell-${id}`).append(create('circle',{r:29,fill:'url(#tq-glass)',stroke:'#819fa6','stroke-width':1.1}));
+  $(`tq-contact-${id}`).append(create('rect',{x:-24,y:12,width:48,height:558,rx:24,fill:'#001d0d'}),create('ellipse',{id:`tq-contact-bulb-${id}`,cx:0,cy:580,rx:29,ry:29,fill:'#001d0d'}));
+  $(`tq-bulb-shell-${id}`).append(create('circle',{class:'tq-glass-bulb',r:29,fill:'url(#tq-glass)',stroke:'#819fa6','stroke-width':1.1}));
   $(`tq-bulb-liquid-${id}`).append(create('circle',{r:21,fill:'url(#tq-bulb)'}),create('ellipse',{cx:-6,cy:-8,rx:6,ry:7,fill:'#fff8e8',opacity:.85}));
   const [min,max]=scaleRange(unit), marks=$(`tq-marks-${id}`);
   for(let value=min;value<=max;value++){
@@ -46,6 +50,9 @@ function renderInstrument(id){
   $('tq-fluid-'+id).setAttribute('d',`M9 ${y-.7}Q12 ${y+.7} 15 ${y-.7}V580H9Z`);
   if(drag?.id!==id)g.setAttribute('transform',transform(active===id?MOUNT:REST[id]));
   const bulbScale=active===id?1:REST[id].sx/REST[id].sy;
+  const hitWidth=active===id?132:232;g.querySelector('.tq-hit').setAttribute('x',-hitWidth/2);g.querySelector('.tq-hit').setAttribute('width',hitWidth);
+  $(`tq-contact-${id}`).toggleAttribute('hidden',active===id);
+  $(`tq-contact-bulb-${id}`).setAttribute('ry',29*bulbScale);
   for(const kind of ['shell','liquid'])$(`tq-bulb-${kind}-${id}`).setAttribute('transform',`translate(0,580) scale(1 ${bulbScale})`);
   $(`tq-mounted-tag-${id}`).toggleAttribute('hidden',active!==id);
   g.classList.toggle('is-picked',picked===id);g.classList.toggle('is-dragging',drag?.id===id&&drag.moved);
