@@ -3,10 +3,8 @@ import { TOOL, renderMix } from './concentration-renderer.js?v=apparatus-3';
 const $=id=>document.getElementById(id);
 const lab=$('mix-lab'),canvas=$('mix-canvas'),ctx=canvas.getContext('2d');
 const spoon=$('mix-spoon'),pitcher=$('mix-pitcher'),cup=$('mix-water-cup'),reset=$('mix-reset'),status=$('mix-status');
-const sources=[...document.querySelectorAll('.ppm-source')],board=$('ppm-recipe'),supply=$('ppm-supply'),tokens=$('ppm-tokens');
-let state={...INITIAL},ready=false,animation=null,queue=[],raf=null,gesture=null,tokenDrag=null,ignoreClick=false,dialogKind=null,lastKey='',lastPpm=null;
+let state={...INITIAL},ready=false,animation=null,queue=[],raf=null,gesture=null,ignoreClick=false,dialogKind=null,lastKey='';
 const massButtons=[...document.querySelectorAll('[data-mass-kind]')];
-const canceledTokenClicks=new WeakSet();
 const images={},reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 function announce(s){status.textContent=s;}
@@ -21,20 +19,13 @@ function update(){
       'formula-sugar':`${format(v.sugar,1)} 克`,'formula-total':`${format(v.total,1)} 克`,percent:`${format(v.percent)}%`,
       'sugar-share':`糖占 ${format(v.percent)}%`,'water-share':`水占 ${format(100-v.percent)}%`,
       meaning:`每 100 克這樣的${v.sugar?'糖水':'水'}，含有 ${format(v.percent)} 克糖。比例條表示質量組成。`,
-      'ppm-mass':`${v.ppm} 毫克`,'ppm-sum':`合計 ${v.ppm} 毫克`,'ppm-numerator':`${v.ppm} 毫克`,ppm:`${v.ppm} ppm`,
-      'micro-percent':`同一個質量比例，也就是 ${format(v.microPercent,4)}%。`
     };
     for(const node of document.querySelectorAll('[data-mix]'))node.textContent=fields[node.dataset.mix];
     $('mix-bar-fill').style.width=`${v.percent}%`;$('mix-bar').setAttribute('aria-label',`糖占質量${format(v.percent)}%，水占${format(100-v.percent)}%`);
     lab.dataset.sugar=String(v.sugar);lab.dataset.water=String(v.water);lab.dataset.total=String(v.total);lab.dataset.percent=String(v.percent);
-    $('ppm-lab').dataset.ppm=String(v.ppm);$('ppm-lab').dataset.totalMg=String(v.totalMg);$('ppm-lab').dataset.solventMg=String(v.solventMg);
     lastKey=key;
   }
-  if(lastPpm!==v.ppm){
-    tokens.replaceChildren();
-    for(let i=0;i<v.ppm;i++){const b=document.createElement('button');b.type='button';b.className='micro-token placed';b.textContent='1 mg';b.setAttribute('aria-label',`取回第 ${i+1} 份1毫克溶質`);wireToken(b,false);tokens.append(b);}
-    sources.forEach(b=>{b.disabled=v.ppm>=LIMITS.ppm[1];});lastPpm=v.ppm;
-  }
+
 }
 function paint(now=performance.now()){
   update();lab.dataset.activity=gesture?.moved?'dragging':animation?animation.hold?'pouring-water':animation.kind==='sugar'?'scooping':animation.delta<0?'removing-water':'pouring-water':'idle';
@@ -124,34 +115,9 @@ $('mass-form').addEventListener('submit',event=>{
   if(n===null||!input.validity.valid){$('mass-error').textContent=`請輸入 ${LIMITS[dialogKind][0]}–${LIMITS[dialogKind][1]} 克，最多一位小數。`;input.focus();return;}
   clearActions();setMass(dialogKind,n);paint();announce(`已設定${dialogKind==='sugar'?'糖':'水'} ${format(n,1)} 克。`);dialog.close();
 });
-function changePpm(delta){state.ppm=clamp(state.ppm+delta,...LIMITS.ppm);update();announce(`溶質 ${state.ppm} 毫克，溶液總質量1公斤，濃度 ${state.ppm} ppm。`);}
-function cleanupToken(cancel=false){if(!tokenDrag)return;if(cancel)canceledTokenClicks.add(tokenDrag.button);tokenDrag.ghost?.remove();tokenDrag=null;board.classList.remove('drop-active');}
-function inside(event,el){const r=el.getBoundingClientRect();return event.clientX>=r.left&&event.clientX<=r.right&&event.clientY>=r.top&&event.clientY<=r.bottom;}
-function wireToken(button,source){
-  let suppress=false;
-  button.addEventListener('pointerdown',event=>{
-    if(event.button!==0)return;cleanupToken();canceledTokenClicks.delete(button);suppress=false;tokenDrag={id:event.pointerId,button,source,x:event.clientX,y:event.clientY,moved:false,ghost:null};button.setPointerCapture(event.pointerId);
-  });
-  button.addEventListener('pointermove',event=>{
-    if(!tokenDrag||tokenDrag.button!==button||tokenDrag.id!==event.pointerId)return;
-    if(Math.hypot(event.clientX-tokenDrag.x,event.clientY-tokenDrag.y)>6)tokenDrag.moved=true;
-    if(!tokenDrag.moved)return;
-    if(!tokenDrag.ghost){tokenDrag.ghost=document.createElement('div');tokenDrag.ghost.id='micro-ghost';tokenDrag.ghost.textContent='1 mg';tokenDrag.ghost.setAttribute('aria-hidden','true');document.body.append(tokenDrag.ghost);}
-    tokenDrag.ghost.style.left=`${event.clientX}px`;tokenDrag.ghost.style.top=`${event.clientY}px`;board.classList.toggle('drop-active',source&&inside(event,board));
-  });
-  button.addEventListener('pointerup',event=>{
-    if(!tokenDrag||tokenDrag.button!==button)return;
-    const moved=tokenDrag.moved,isSource=tokenDrag.source;cleanupToken();
-    if(moved){suppress=true;if(isSource&&inside(event,board))changePpm(1);else if(!isSource&&inside(event,supply))changePpm(-1);}
-  });
-  const cancel=()=>{if(tokenDrag?.button===button){suppress=true;cleanupToken();}};
-  button.addEventListener('pointercancel',cancel);button.addEventListener('lostpointercapture',cancel);
-  button.addEventListener('click',event=>{if((suppress||canceledTokenClicks.has(button))&&event.detail>0){suppress=false;canceledTokenClicks.delete(button);return;}suppress=false;canceledTokenClicks.delete(button);changePpm(source?1:-1);});
-}
-sources.forEach(b=>wireToken(b,true));
-reset.addEventListener('click',()=>{clearActions();cleanupToken(true);ignoreClick=true;state={...INITIAL};lastKey='';lastPpm=null;paint();announce('已重新配製：糖5克、水95克；微量樣本3毫克。');});
-document.addEventListener('keydown',event=>{if(event.key==='Escape'){ignoreClick=true;clearActions();cleanupToken(true);paint();}});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){ignoreClick=true;clearActions();cleanupToken(true);paint();}});
+reset.addEventListener('click',()=>{clearActions();ignoreClick=true;state={...INITIAL};lastKey='';paint();announce('已重新配製：糖5克、水95克。');});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'){ignoreClick=true;clearActions();paint();}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){ignoreClick=true;clearActions();paint();}});
 function load(src){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error(src));img.src=new URL(src,import.meta.url).href;});}
 update();
 Promise.all([load('./concentration-workbench-empty.webp'),load('./concentration-tools.webp'),load('./concentration-beaker.webp')]).then(([background,tools,beaker])=>{

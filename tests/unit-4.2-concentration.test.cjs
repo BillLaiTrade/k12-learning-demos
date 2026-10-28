@@ -9,7 +9,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  await page.clock.install({time:new Date('2026-10-28T00:00:00Z')});await page.goto(url+'#s5');await page.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='true');await page.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));
  const lab=page.locator('#mix-lab'),spoon=page.locator('#mix-spoon'),pitcher=page.locator('#mix-pitcher');
  const state=()=>lab.evaluate(e=>({sugar:Number(e.dataset.sugar),water:Number(e.dataset.water),total:Number(e.dataset.total),percent:Number(e.dataset.percent),activity:e.dataset.activity}));
- const ppm=()=>page.locator('#ppm-lab').evaluate(e=>({ppm:Number(e.dataset.ppm),total:Number(e.dataset.totalMg),solvent:Number(e.dataset.solventMg),tokens:e.querySelectorAll('.placed').length}));
+ const ppm=()=>page.locator('#ppm-lab').evaluate(e=>({ppm:Number(e.dataset.ppm),total:Number(e.dataset.totalMg),solvent:Number(e.dataset.solventMg)}));
  const advance=async ms=>{await page.clock.runFor(20);await page.clock.fastForward(ms);};
  const fresh=()=>page.locator('#mix-reset').click();
  const enter=async(kind,value)=>{await page.locator(`#mix-${kind}-input`).click();await page.locator('#mass-input').fill(value);await page.locator('#mass-form button[type=submit]').click();};
@@ -23,7 +23,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   result.micro.forEach((v,n)=>{assert.equal(v.totalMg,1000000);assert.equal(v.solventMg+n,1000000);assert.equal(v.ppm,n);assert.equal(v.microPercent,n/10000);});
  });
  await t.test('initial approved scene has no sliders or old quiz, and uses official avatars',async()=>{
-  assert.deepEqual(await state(),{sugar:5,water:95,total:100,percent:5,activity:'idle'});assert.deepEqual(await ppm(),{ppm:3,total:1000000,solvent:999997,tokens:3});
+  assert.deepEqual(await state(),{sugar:5,water:95,total:100,percent:5,activity:'idle'});assert.deepEqual(await ppm(),{ppm:1,total:1000000,solvent:999999});
   assert.equal(await page.locator('#s5 input[type=range],#solution-q1,#check-concentration,#reset-concentration').count(),0);
   assert.equal(await page.locator('#mix-canvas').count(),1);assert.match(await page.locator('#s5 .speaker').first().evaluate(e=>getComputedStyle(e,'::before').backgroundImage),/shared-assets\/characters\/dialogue-character-avatars/);
   await advance(2000);assert.equal((await state()).sugar,5);
@@ -118,29 +118,18 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   }
   await page.setViewportSize({width:1440,height:1100});await fresh();
  });
- await t.test('ppm click/keyboard changes count and fixed total mass, and respects zero and ten limits',async()=>{
-  await fresh();const source=page.locator('.ppm-source').first();await source.click();await source.click();assert.equal((await ppm()).ppm,5);assert.match(await page.locator('[data-mix=micro-percent]').innerText(),/0\.0005%/);
-  await page.locator('#ppm-tokens button').first().click();assert.equal((await ppm()).ppm,4);
-  await source.focus();await page.keyboard.press('Enter');assert.equal((await ppm()).ppm,5);
-  for(let i=0;i<5;i++)await source.click();assert.equal((await ppm()).ppm,10);assert.equal(await source.isDisabled(),true);
-  for(let i=0;i<10;i++)await page.locator('#ppm-tokens button').first().click();assert.deepEqual(await ppm(),{ppm:0,total:1000000,solvent:1000000,tokens:0});assert.equal(await source.isEnabled(),true);
- });
- await t.test('ppm drag adds/returns one token; cancel and outside drop do not change the recipe',async()=>{
-  await fresh();const source=page.locator('.ppm-source').first();
-  const drag=async(el,dest,cancel=false)=>{await el.scrollIntoViewIfNeeded();const a=await el.boundingBox(),d=await dest.boundingBox();await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();await page.mouse.move(d.x+d.width/2,d.y+d.height/2,{steps:10});if(cancel)await page.keyboard.press('Escape');await page.mouse.up();};
-  await drag(source,page.locator('#ppm-recipe'));assert.equal((await ppm()).ppm,4);
-  await drag(page.locator('#ppm-tokens button').first(),page.locator('#ppm-supply'));assert.equal((await ppm()).ppm,3);
-  await drag(source,page.locator('#ppm-recipe'),true);assert.equal((await ppm()).ppm,3);
-  await source.click();assert.equal((await ppm()).ppm,4);assert.equal(await page.locator('#micro-ghost').count(),0);
+ await t.test('the new physical ppm samples switch independently of the upper recipe',async()=>{
+  await fresh();await page.locator('.ppm-example-card[data-ppm-sample="gram"]').click();assert.deepEqual(await ppm(),{ppm:1000,total:1000000,solvent:999000});assert.equal((await state()).sugar,5);assert.equal((await state()).water,95);
+  await fresh();assert.deepEqual(await ppm(),{ppm:1,total:1000000,solvent:999999});
  });
  await t.test('native controls also operate by real touch',async()=>{
   await fresh();await spoon.tap();await advance(3000);assert.equal((await state()).sugar,6);
-  await page.locator('.ppm-source').first().tap();assert.equal((await ppm()).ppm,4);
+  await page.locator('.ppm-example-card[data-ppm-sample=gram]').tap();assert.equal((await ppm()).ppm,1000);
   await page.locator('#mix-water-input').tap();assert.equal(await page.locator('#mass-dialog').isVisible(),true);await page.locator('#mass-cancel').tap();
  });
- await t.test('all content remains inside its column on desktop, tablet and mobile, including ten tokens',async()=>{
+ await t.test('all content remains inside its column on desktop, tablet and mobile, including the physical ppm scene',async()=>{
   for(const width of [1440,1024,850,768,680,390,320]){
-   await page.setViewportSize({width,height:1100});await fresh();for(let i=0;i<7;i++)await page.locator('.ppm-source').first().click();
+   await page.setViewportSize({width,height:1100});await fresh();
    assert.equal(await page.locator('#mix-sugar-source:visible,#mix-sugar-pan:visible,#mix-pitcher:visible,#mix-water-cup:visible').count(),4);
    const v=await page.locator('#s5').evaluate(card=>{const m=card.querySelector('.card-main').getBoundingClientRect();return{overflow:document.documentElement.scrollWidth>innerWidth,out:[...card.querySelector('.card-main').children].filter(e=>!e.classList.contains('mix-status')).some(e=>{const r=e.getBoundingClientRect();return r.left<m.left-.5||r.right>m.right+.5;})};});assert.equal(v.overflow,false,`viewport ${width}`);assert.equal(v.out,false,`content ${width}`);
    await enter('sugar','20');await enter('water','150');
@@ -151,7 +140,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  });
  await t.test('loading failure reports an error but ppm and other lesson blocks remain usable',async()=>{
   for(const asset of ['concentration-tools.webp','concentration-workbench-empty.webp','concentration-beaker.webp']){
-   const failed=await browser.newPage();try{await failed.route('**/'+asset,r=>r.abort());await failed.goto(url);await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);assert.equal(await failed.locator('.mix-target:disabled').count(),3);await failed.locator('.ppm-source').first().click();assert.equal(await failed.locator('#ppm-lab').getAttribute('data-ppm'),'4');assert.equal(await failed.locator('#check-answers').isEnabled(),true);}finally{await failed.close();}
+   const failed=await browser.newPage();try{await failed.route('**/'+asset,r=>r.abort());await failed.goto(url);await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);assert.equal(await failed.locator('.mix-target:disabled').count(),3);await failed.locator('.ppm-example-card[data-ppm-sample=gram]').click();assert.equal(await failed.locator('#ppm-lab').getAttribute('data-ppm'),'1000');assert.equal(await failed.locator('#check-answers').isEnabled(),true);}finally{await failed.close();}
   }
  });
 });

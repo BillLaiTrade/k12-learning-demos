@@ -99,3 +99,8 @@ node --test --test-concurrency=1 tests/unit-4.2-concentration.test.cjs tests/uni
 最新畫面：[桌面](polished-desktop.webp)、[手機](polished-mobile.webp)。
 
 重新執行 `node --test tests/unit-4.2-concentration.test.cjs`，20 項全部通過，涵蓋公式順序、內容與數字同步、各器材互動、ppm、載入失敗及響應式排版。
+
+
+## 2026-10-28：ppm 改為實物比例觀察
+
+依使用者核可，舊份量卡改為按密度與毫米尺度建立的 1 公升水／1 克糖／1 毫克糖同場景觀察，可點秤量皿放大並對照正式公式及 1／1,000 ppm。形體、來源、限制、操作及新檢查見 [ppm 核對紀錄](../unit-4.2-ppm/review.md)；上方糖水配方、公式與視覺呈現保留。
