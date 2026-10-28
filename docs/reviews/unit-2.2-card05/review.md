@@ -48,3 +48,9 @@
 先前 approved-concept.png 與 ready.png 等為歷史版本；本輪對照依使用者最新意見。現行截圖為 chamber-ready.png、chamber-cold.png、chamber-room.png、chamber-heating.png、chamber-cooling.png、chamber-playing.png、chamber-result.png、chamber-result-390.png、chamber-result-320.png 及 chamber-context.png。已人工檢視桌面、手機、加熱／冷卻與結果畫面。320px 時到達時間改排在場景下方，讓腔體、底座與讀值窗保有完整寬度。
 
 全頁四組回歸合計 65 項通過，0 失敗，紀錄見 chamber-tests.log。新增探棒位於腔內、夾套連接、底座讀值窗在七種寬度對齊、第四／第五區叉臂與固定柄幾何一致、舊照片不再載入的檢查。保留三種溫度操作、鍵盤／觸控、個別敲擊、兩區獨立、背景與暫停、真實秒錶及前三區回歸。5,000 公尺的 1 倍實時計時與 0.6 秒敲槌未改變。
+
+## 2026-10-28：移除調溫數字跳動
+
+依使用者最新指示，撤下升降溫準備時間軸與數值插值。按下加熱到 30°C、冷卻到 0°C 或回到 20°C，立即同步套用組別溫度、腔內探棒讀值、聲速與按鈕選擇；沒有中間讀值或等待。調溫仍清除第五區當次傳播，敲擊後才開始聲音的實時計時，第四區獨立運作。
+
+原升降溫動畫純函式及其測試一併移除；既有瀏覽器檢查改為點擊當下就讀到目標溫度，連續切換後保持穩定、可立即敲擊，以及背景／重設保留選定值。完整四組回歸 64 項通過、0 失敗，紀錄見 instant-temperature-tests.log。

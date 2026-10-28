@@ -2,10 +2,10 @@ import {
   DISTANCE, START_X, END_X,
   appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=chamber-18';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=chamber-18';
-import { createTemperatureRig, temperatureAt, temperatureTransition, temperatureText } from './temperature-rig.mjs?v=chamber-18';
-import { airChamberScene } from './temperature-chamber.mjs?v=chamber-18';
+} from './sound-speed-model.mjs?v=instant-19';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=instant-19';
+import { createTemperatureRig, temperatureText } from './temperature-rig.mjs?v=instant-19';
+import { airChamberScene } from './temperature-chamber.mjs?v=instant-19';
 
 export function initSoundSpeed(root) {
 // 兩個獨立區塊共用控制器，原生標籤及 SVG 定義各自使用唯一 ID。
@@ -28,7 +28,7 @@ const svg = (tag, attributes, parent) => {
 
 const state = { mode: root.dataset.soundSpeedMode === 'temperature' ? 'temperature' : 'material', temperature: 30, temperatureTarget: 30, phase: 'idle', time: 0, scope: 'together' };
 let models = [], groups = [], frame = 0, runStartWall = null, runStartTime = 0;
-let temperatureRig = null, thermalFrame = 0, transition = null;
+let temperatureRig = null;
 let noticed = new Set(), context = null, audioFailed = false;
 const tones = new Set();
 const panel = $('#experiment-panel');
@@ -179,8 +179,8 @@ function paint(audible = false) {
   if (state.mode === 'temperature') {
     panel.dataset.temperature = state.temperature.toFixed(4);
     panel.dataset.targetTemperature = String(state.temperatureTarget);
-    panel.dataset.conditioning = String(!!transition);
-    temperatureRig?.render(state.temperature, state.temperatureTarget, !!transition);
+    panel.dataset.conditioning = 'false';
+    temperatureRig?.render(state.temperature, state.temperatureTarget);
   }
   let newArrival = false;
   for (const model of models) {
@@ -262,14 +262,12 @@ function resume() {
 }
 
 function startFresh() {
-  finishTemperature();
   resetRun();
   for (const model of models) model.startedAt = 0;
   resume();
 }
 
 function startSingle(id) {
-  finishTemperature();
   if (state.phase === 'running') commitTime(performance.now());
   stopFrame();
   state.scope = 'individual';
@@ -316,32 +314,11 @@ function updateTemperature(value) {
   attr(model.arrivalOutput, 'aria-label', `${model.name}傳到最右端的實際經過時間`);
 }
 
-function finishTemperature() {
-  if (!transition) return;
-  cancelAnimationFrame(thermalFrame); thermalFrame = 0;
-  const target = transition.target; transition = null;
-  updateTemperature(target); paint();
-}
-
-function thermalTick(now) {
-  thermalFrame = 0;
-  if (!transition) return;
-  const next = temperatureAt(transition, now), done = now >= transition.start + transition.duration;
-  updateTemperature(done ? transition.target : next);
-  if (done) transition = null;
-  paint();
-  if (transition) thermalFrame = requestAnimationFrame(thermalTick);
-}
-
 function conditionTo(target) {
-  if (transition) updateTemperature(temperatureAt(transition, performance.now()));
-  if (thermalFrame) cancelAnimationFrame(thermalFrame);
-  thermalFrame = 0; transition = null;
   state.temperatureTarget = clamp(target, 0, 30);
   resetRun();
-  if (Math.abs(state.temperatureTarget - state.temperature) < .00001) { updateTemperature(state.temperatureTarget); paint(); return; }
-  transition = temperatureTransition(state.temperature, state.temperatureTarget, performance.now());
-  paint(); thermalFrame = requestAnimationFrame(thermalTick);
+  updateTemperature(state.temperatureTarget);
+  paint();
 }
 
 $('#primary-action').addEventListener('click', () => {
@@ -351,15 +328,15 @@ $('#primary-action').addEventListener('click', () => {
   else startFresh();
 });
 $('#pause-action').addEventListener('click', () => state.phase === 'running' ? pause() : resume());
-$('#reset-action').addEventListener('click', () => { finishTemperature(); resetRun(); });
+$('#reset-action').addEventListener('click', resetRun);
 $('#arrival-sound').addEventListener('change', () => {
   if ($('#arrival-sound').checked) { audioFailed = false; $('#audio-error').hidden = true; unlockAudio(); }
   else { stopTones(); $('#audio-error').hidden = true; }
 });
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { finishTemperature(); pause(); }
+  if (document.hidden) pause();
 });
-window.addEventListener('pagehide', () => { finishTemperature(); pause(); stopTones(); });
+window.addEventListener('pagehide', () => { pause(); stopTones(); });
 rebuild();
 
 }

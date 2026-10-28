@@ -1,4 +1,4 @@
-import { svgNode } from './sound-speed-rendering.mjs?v=chamber-18';
+import { svgNode } from './sound-speed-rendering.mjs?v=instant-19';
 
 export const AIR_CHAMBER = { x: 27, y: 27, width: 412, height: 91 };
 export const PROBE_TIP = { x: 424, y: 82 };

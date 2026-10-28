@@ -94,18 +94,6 @@ test('fork appearance uses rapid bounded translation without affecting the propa
   for(const t of[.15,.3,1.02])assert.ok(Math.abs(forkVibration(t+.0625)+forkVibration(t))<1e-10);
 });
 
-test('thermal preparation has bounded monotonic readings independent of propagation time', async () => {
-  const {temperatureTransition,temperatureAt}=await import(pathToFileURL(path.resolve(__dirname,'../units/2/parts/2.2/assets/temperature-rig.mjs')).href);
-  for(const[from,target]of[[30,0],[0,20],[20,30],[30,20]]){
-    const state=temperatureTransition(from,target,1000);assert.ok(state.duration>=800);
-    assert.equal(temperatureAt(state,0),from);assert.equal(temperatureAt(state,1000+state.duration),target);
-    assert.equal(temperatureAt(state,1000+state.duration*2),target);
-    const values=Array.from({length:101},(_,i)=>temperatureAt(state,1000+state.duration*i/100));
-    values.forEach(v=>assert.ok(v>=Math.min(from,target)&&v<=Math.max(from,target)));
-    assert.ok(Math.abs(values[50]-(from+target)/2)<1e-10);
-  }
-});
-
 test('fourth learning block works within the complete lesson', { timeout: 180000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], {
     cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'pipe']
@@ -152,7 +140,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
   const temperatureLab=page.locator('#card-05');
   const temperatureData=()=>temperatureLab.locator('#temp-experiment-panel').evaluate(n=>({...n.dataset}));
   const temperaturePrimary=temperatureLab.locator('#temp-primary-action');
-  const setTemperature = async value => { await temperatureLab.locator(`[data-temperature-target="${value}"]`).click(); await page.clock.runFor(2700); };
+  const setTemperature = async value => { await temperatureLab.locator(`[data-temperature-target="${value}"]`).click(); };
   const realWait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   await t.test('initial scene uses the official characters, no orange tracking particle and no autoplay', async () => {
@@ -468,7 +456,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('#card-04 [data-sound-speed-lab]').locator('.propagation-front').evaluateAll(nodes => nodes.every(n => n.getAttribute('visibility') === 'hidden')), true);
   });
 
-  await t.test('temperature apparatus replaces the slider and links three actions to the thermometer and air', async () => {
+  await t.test('temperature actions immediately update the chamber reading, heading and sound speed', async () => {
     await fresh();
     assert.equal((await temperatureData()).mode,'temperature');
     assert.equal(await temperatureLab.locator('.medium-row').count(),2);
@@ -478,23 +466,23 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.deepEqual(await temperatureLab.locator('[data-temperature-target]').allTextContents(),['加熱到 30°C','冷卻到 0°C','回到 20°C']);
     const layouts=await temperatureLab.locator('.medium-row').evaluateAll(rows=>rows.map(row=>[...row.querySelectorAll('.particle')].map(n=>[n.dataset.originX,n.dataset.originY])));
     assert.deepEqual(layouts[0],layouts[1]);
-    const oldReading=Number((await temperatureData()).temperature);
-    await temperatureLab.locator('[data-temperature-target="0"]').click();await page.clock.runFor(600);
-    const changing=await temperatureData();assert.equal(changing.conditioning,'true');
-    assert.ok(Number(changing.temperature)>0&&Number(changing.temperature)<30);
-    assert.ok(Number((await temperatureData()).temperature)<oldReading);
+    await temperatureLab.locator('[data-temperature-target="0"]').click();
+    const changed=await temperatureData();assert.equal(changed.conditioning,'false');
+    assert.equal(changed.temperature,'0.0000');
+    assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'0°C');
+    assert.match(await temperatureLab.locator('[data-group=adjustable] h3').textContent(),/^0°C/);
     assert.equal(await temperatureLab.locator('.rig-controller,.rig-thermometer,image').count(),0,'no detached device/thermometer photograph');
-    assert.ok(Math.abs(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'))-(331+.6*Number(changing.temperature)))<.001);
+    assert.ok(Math.abs(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'))-(331+.6*Number(changed.temperature)))<.001);
     assert.equal(await temperatureLab.locator('.rig-heat-light').getAttribute('opacity'),'0');
     assert.equal(await temperatureLab.locator('.rig-cold-light').getAttribute('opacity'),'1');
     await page.clock.runFor(2100);
     assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'0°C');
     assert.equal(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'),'331');
     assert.equal(await temperatureLab.locator('.air-chamber[data-adjustable=true]').getAttribute('data-temperature'),'0.0000');
-    await temperatureLab.locator('[data-temperature-target="20"]').focus();await page.keyboard.press('Enter');await page.clock.runFor(1800);
+    await temperatureLab.locator('[data-temperature-target="20"]').focus();await page.keyboard.press('Enter');
     assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'20°C');
     assert.equal(await temperatureLab.locator('.rig-heat-light').getAttribute('opacity'),'0');assert.equal(await temperatureLab.locator('.rig-cold-light').getAttribute('opacity'),'0');
-    await temperatureLab.locator('[data-temperature-target="30"]').focus();await page.keyboard.press('Space');await page.clock.runFor(1100);
+    await temperatureLab.locator('[data-temperature-target="30"]').focus();await page.keyboard.press('Space');
     assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'30°C');
     assert.equal(await temperatureLab.locator('[data-group=reference]').getAttribute('data-speed'),'343');
     assert.equal(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'),'349');
@@ -530,9 +518,15 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     await page.setViewportSize({width:1440,height:1500});await page.clock.runFor(32);
   });
 
-  await t.test('rapid thermal changes keep one preparation animation and never start sound', async () => {
+  await t.test('rapid temperature selections stay fixed at each target and never start sound', async () => {
     await fresh();const before=await temperatureLab.locator('.particle').evaluateAll(ns=>ns.map(n=>n.getAttribute('transform')));
-    for(const target of[0,30,0,20]){await temperatureLab.locator(`[data-temperature-target="${target}"]`).click();await page.clock.runFor(180);}
+    for(const target of[0,30,0,20]){
+      await temperatureLab.locator(`[data-temperature-target="${target}"]`).click();
+      assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),`${target}°C`);
+      assert.equal((await temperatureData()).temperature,target.toFixed(4));
+      await page.clock.runFor(180);
+      assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),`${target}°C`);
+    }
     await page.clock.runFor(2700);assert.equal((await temperatureData()).conditioning,'false');
     assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'20°C');
     assert.equal((await temperatureData()).phase,'idle');assert.equal((await temperatureData()).time,'0.00000000');
@@ -541,9 +535,9 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await temperatureLab.locator('[data-temperature-target][aria-pressed=true]').getAttribute('data-temperature-target'),'20');
   });
 
-  await t.test('striking during preparation settles the target before starting the real propagation clock', async () => {
-    await fresh();await temperatureLab.locator('[data-temperature-target="0"]').click();await page.clock.runFor(300);
-    assert.equal((await temperatureData()).conditioning,'true');
+  await t.test('striking immediately after selecting temperature starts the real propagation clock', async () => {
+    await fresh();await temperatureLab.locator('[data-temperature-target="0"]').click();
+    assert.equal((await temperatureData()).conditioning,'false');
     await temperatureLab.locator('[data-group=adjustable] .source-hit').click();
     assert.equal((await temperatureData()).conditioning,'false');assert.equal((await temperatureData()).temperature,'0.0000');
     assert.equal(await temperatureLab.locator('.fork-striker[visibility=visible]').count(),1);
@@ -556,7 +550,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal((await temperatureData()).temperature,'20.0000');assert.equal((await temperatureData()).conditioning,'false');assert.equal((await temperatureData()).phase,'idle');
   });
 
-  await t.test('backgrounding finishes preparation without starting sound and pauses actual propagation', async () => {
+  await t.test('backgrounding preserves the selected temperature without starting sound and pauses propagation', async () => {
     await fresh();await temperatureLab.locator('[data-temperature-target="0"]').click();await page.clock.runFor(300);
     await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
     assert.equal((await temperatureData()).conditioning,'false');assert.equal((await temperatureData()).temperature,'0.0000');
