@@ -174,7 +174,7 @@ test('4.2 hands-on chromatography: science, controls and approved layout', { tim
       await failed.waitForFunction(()=>document.querySelector('#chrom-lab').dataset.ready==='error');
       assert.match(await failed.locator('#chrom-status').innerText(),/無法載入/);
       assert.equal(await failed.locator('#chrom-paper').isDisabled(),true);
-      assert.equal(await failed.locator('#check-answers').isEnabled(),true);
+      await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.ready==='true');assert.equal(await failed.locator('#evap-visual').isEnabled(),true);await failed.locator('[data-evap-step="2"]').click();await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.step==='2');
     }finally{await failed.close();}
   });
 });
