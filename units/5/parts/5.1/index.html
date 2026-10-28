@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="assets/measurement-scene.css">
   <link rel="stylesheet" href="assets/touch-story.css">
   <link rel="stylesheet" href="assets/water-lab.css?v=engraved-glass-1">
-  <link rel="stylesheet" href="assets/dual-scale.css?v=dual-scale-2">
+  <link rel="stylesheet" href="assets/dual-scale.css?v=dual-scale-3">
 </head>
 <body>
   <header class="shell masthead">
@@ -186,17 +186,16 @@
                   <output id="dual-readout" for="dual-temperature dual-unit" aria-live="polite" aria-atomic="true"><span id="dual-celsius">25°C</span><span id="dual-equality" class="dual-equals">＝</span><span id="dual-fahrenheit">77°F</span></output>
                   <p id="dual-formula">25 × 9/5 ＋ 32 ＝ 77</p>
                 </div>
-                <div class="dual-adjust" role="group" aria-label="調整示意溫度，每次一攝氏度，按住持續調整">
-                  <button id="dual-cool" type="button"><span aria-hidden="true">❄</span> 降溫</button>
-                  <button id="dual-warm" type="button"><span aria-hidden="true">☀</span> 升溫</button>
-                </div>
                 <form id="dual-entry" class="dual-entry" novalidate>
-                  <div class="dual-field"><label for="dual-temperature">輸入溫度</label><input id="dual-temperature" type="number" min="-40" max="100" step="any" value="25" inputmode="decimal" aria-describedby="dual-input-range dual-input-error"></div>
-                  <div class="dual-field"><label for="dual-unit">單位</label><select id="dual-unit"><option value="C">攝氏 °C</option><option value="F">華氏 °F</option></select></div>
+                  <div class="dual-field"><label for="dual-temperature">輸入溫度</label><div class="dual-input-group"><input id="dual-temperature" type="number" min="-40" max="100" step="any" value="25" inputmode="decimal" aria-describedby="dual-input-range dual-input-error"><select id="dual-unit" aria-label="溫度單位"><option value="C">攝氏 °C</option><option value="F">華氏 °F</option></select></div></div>
                   <button type="submit" class="dual-apply">設定溫度</button>
                   <p id="dual-input-range">量程：−40～100°C</p>
                   <p id="dual-input-error" role="alert"></p>
                 </form>
+                <div class="dual-adjust" role="group" aria-label="調整示意溫度，每次一攝氏度，按住持續調整">
+                  <button id="dual-cool" type="button"><span aria-hidden="true">❄</span> 降溫</button>
+                  <button id="dual-warm" type="button"><span aria-hidden="true">☀</span> 升溫</button>
+                </div>
                 <div class="dual-presets" role="group" aria-label="跳到重要溫度">
                   <button class="dual-preset" type="button" data-dual-preset="-40" aria-pressed="false"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 17H39M9 31H39" stroke="#718fa5" stroke-width="5" stroke-linecap="round"/></svg><span>同值點</span><strong>−40°</strong></button>
                   <button class="dual-preset" type="button" data-dual-preset="0" aria-pressed="false"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4V44M7 14L41 34M7 34L41 14M18 7L24 13L30 7M18 41L24 35L30 41M7 21L15 20L14 12M34 36L33 28L41 27M7 27L15 28L14 36M34 12L33 20L41 21" fill="none" stroke="#68a6cc" stroke-width="2.5" stroke-linecap="round"/></svg><span>冰點</span><strong>0°C</strong></button>
