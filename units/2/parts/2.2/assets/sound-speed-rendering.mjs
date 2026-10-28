@@ -1,5 +1,5 @@
 // 介質場景、分子／原子與表面取樣共用同一波動模型。
-import { positions, sample, PULSE_DURATION } from './sound-speed-model.mjs?v=split-16';
+import { positions, sample, PULSE_DURATION } from './sound-speed-model.mjs?v=rig-17';
 // 敲擊動作保留 0.6 秒；接觸即起振，不延後傳播時計。
 const STRIKE_DURATION = .6;
 const CONTACT_DURATION = .06;
@@ -158,7 +158,7 @@ export function mediumScene(root, kind, prefix) {
 
 // 叉臂幾何固定，只作水平微幅反向位移，不逐影格變形、旋轉或扭曲。
 // 鋼材由右叉臂經薄接觸層傳振，另一臂自由；不把兩臂夾死。
-export function tuningForkSource(root, kind, fill) {
+export function tuningForkSource(root, kind, fill, { stand = false } = {}) {
   const group = svgNode('g', { class:'sound-source tuning-fork', 'data-medium':kind, 'data-vibrating':'false', 'aria-hidden':'true' }, root);
   const body = svgNode('g', { class:'fork-fixed' }, group);
   const metal = (parent, d, cls='') => {
@@ -183,6 +183,12 @@ export function tuningForkSource(root, kind, fill) {
   } else {
     metal(body,'M42 79C42 104 74 104 74 79');
     metal(body,'M58 98V113');
+    if (stand) {
+      metal(body,'M58 113V119');
+      svgNode('ellipse',{cx:58,cy:123,rx:16,ry:4,fill:fill('source'),stroke:'#596c73','stroke-width':.8},body);
+      svgNode('path',{d:'M42 119V123M74 119V123',stroke:'#596c73','stroke-width':.8},body);
+      svgNode('ellipse',{cx:58,cy:119,rx:16,ry:4,fill:fill('source'),stroke:'#596c73','stroke-width':.8},body);
+    }
     paths = ['M42 79V33','M74 79V33'];
     hit = { x:30, y:33, handle:'M36 39L16 62', dx:-24, dy:3 };
   }

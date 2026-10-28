@@ -2,8 +2,9 @@ import {
   DISTANCE, START_X, END_X,
   appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=split-16';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=split-16';
+} from './sound-speed-model.mjs?v=rig-17';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=rig-17';
+import { createTemperatureRig, temperatureAt, temperatureTransition, temperatureText } from './temperature-rig.mjs?v=rig-17';
 
 export function initSoundSpeed(root) {
 // 兩個獨立區塊共用控制器，原生標籤及 SVG 定義各自使用唯一 ID。
@@ -24,8 +25,9 @@ const svg = (tag, attributes, parent) => {
   return node;
 };
 
-const state = { mode: root.dataset.soundSpeedMode === 'temperature' ? 'temperature' : 'material', temperature: 30, phase: 'idle', time: 0, scope: 'together' };
+const state = { mode: root.dataset.soundSpeedMode === 'temperature' ? 'temperature' : 'material', temperature: 30, temperatureTarget: 30, phase: 'idle', time: 0, scope: 'together' };
 let models = [], groups = [], frame = 0, runStartWall = null, runStartTime = 0;
+let temperatureRig = null, thermalFrame = 0, transition = null;
 let noticed = new Set(), context = null, audioFailed = false;
 const tones = new Set();
 const panel = $('#experiment-panel');
@@ -91,7 +93,7 @@ function buildModel(group) {
   row.querySelector('.source-hit').addEventListener('click', () => startSingle(group.id));
   const field = row.querySelector('.field svg'), fill = addMaterials(field, `${idPrefix}${group.id}-field`);
   const scene = mediumScene(field, group.kind, `${idPrefix}${group.id}-scene`);
-  const source = tuningForkSource(field, group.kind, fill);
+  const source = tuningForkSource(field, group.kind, fill, { stand: state.mode === 'temperature' });
   const bonds = svg('g', { fill: 'none', stroke: '#8a9e9c', 'stroke-width': .8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, scene.interior);
   const dots = svg('g', { 'aria-hidden': 'true' }, scene.interior);
   const points = positions(group.kind).map((point, index) => {
@@ -119,6 +121,7 @@ function buildModel(group) {
   svg('path', { d: 'M-4 116H4L0 122Z', fill: '#176b53' }, front);
   text(svg('text', { x: START_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '0 m');
   text(svg('text', { x: END_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), `${number.format(DISTANCE)} m`);
+  if (state.mode === 'temperature' && group.id === 'adjustable') temperatureRig = createTemperatureRig(row, { prefix: idPrefix, onSelect: conditionTo });
   return {
     ...group, startedAt: null, row, points, links, source, scene, front, reachedTrack,
     timeWrap: row.querySelector('.individual-time'), timeCaption: row.querySelector('.individual-time span'), timeOutput: row.querySelector('.individual-time output'),
@@ -138,10 +141,14 @@ function drawResult() {
   else {
     const difference = Math.abs(arrivalTime(groups[0].speed) - arrivalTime(groups[1].speed));
     summary = first.length > 1
-      ? '兩組都是 20°C，聲速相同，振動同時傳到最右端。'
-      : `${groups.find(group => group.id === first[0]).name}早約 ${secondsText(difference)}到達。同樣是空氣，溫度較高的一組聲速較快。`;
+      ? '兩組都是 20°C，聲音同時到達。'
+      : state.temperature > 20
+        ? `${temperatureText(state.temperature)}°C 比 20°C 早 ${secondsText(difference)}到達。`
+        : `${temperatureText(state.temperature)}°C 比 20°C 晚 ${secondsText(difference)}到達。`;
   }
   text($('#result-summary'), summary);
+  // 第五區以核可的一行差值呈現結果，第四區保留原有比較表。
+  if (!$('#result-rows')) return;
   const signature = `${state.mode}:${state.temperature}`;
   if ($('#result-rows').dataset.signature === signature) return;
   $('#result-rows').dataset.signature = signature;
@@ -159,6 +166,12 @@ function paint(audible = false) {
   panel.dataset.mode = state.mode; panel.dataset.phase = state.phase;
   panel.dataset.scope = state.scope;
   panel.dataset.time = state.time.toFixed(8); panel.dataset.playbackRate = '1';
+  if (state.mode === 'temperature') {
+    panel.dataset.temperature = state.temperature.toFixed(4);
+    panel.dataset.targetTemperature = String(state.temperatureTarget);
+    panel.dataset.conditioning = String(!!transition);
+    temperatureRig?.render(state.temperature, state.temperatureTarget, !!transition);
+  }
   let newArrival = false;
   for (const model of models) {
     const elapsed = model.startedAt === null ? 0 : Math.min(runEnd([model]), Math.max(0, state.time - model.startedAt));
@@ -194,7 +207,7 @@ function paint(audible = false) {
     if (arrived && !noticed.has(model.id)) { noticed.add(model.id); newArrival = true; }
   }
   if (audible && newArrival) arrivalTone();
-  const actionLabel = state.scope === 'individual' ? '同時敲擊音叉' : { idle: '同時敲擊音叉', running: '暫停觀察', paused: '繼續觀察', complete: '再次敲擊音叉' }[state.phase];
+  const actionLabel = state.scope === 'individual' ? '同時敲擊音叉' : { idle: '同時敲擊音叉', running: '暫停觀察', paused: '繼續觀察', complete: state.mode === 'temperature' ? '同時敲擊音叉' : '再次敲擊音叉' }[state.phase];
   text($('#primary-action'), actionLabel);
   $('#pause-action').hidden = state.scope !== 'individual' || !['running','paused'].includes(state.phase);
   text($('#pause-action'), state.phase === 'paused' ? '繼續觀察' : '暫停觀察');
@@ -239,12 +252,14 @@ function resume() {
 }
 
 function startFresh() {
+  finishTemperature();
   resetRun();
   for (const model of models) model.startedAt = 0;
   resume();
 }
 
 function startSingle(id) {
+  finishTemperature();
   if (state.phase === 'running') commitTime(performance.now());
   stopFrame();
   state.scope = 'individual';
@@ -266,23 +281,57 @@ function rebuild() {
   $('#models').replaceChildren();
   models = groups.map(buildModel);
   const temperatureMode = state.mode === 'temperature';
-  text($('#lesson-title'), temperatureMode ? '都是空氣，升溫後會早一點傳到嗎？' : '聲音在不同介質中，傳得多快？');
-  text($('#lesson-intro'), temperatureMode ? '固定參考組，只改變設定組的空氣溫度。' : '觀察相鄰粒子如何逐段受振，再比較終點的到達時間。');
-  text($('#girl-line'), temperatureMode ? '溫度不同時，空氣裡的振動傳遞會怎麼改變？' : '空氣、水和鋼，裡面的粒子是怎麼把振動傳開的？');
-  text($('#grandpa-line'), temperatureMode ? '參考組維持 20°C。只改另一組溫度，再用相同條件一起比較。' : '音叉被敲一下後來回振動，帶動附近粒子；再看相鄰粒子如何依序受振。');
+  text($('#lesson-title'), temperatureMode ? '空氣變熱，聲音會傳得更快嗎？' : '聲音在不同介質中，傳得多快？');
+  text($('#lesson-intro'), temperatureMode ? '固定參考組，觀察加熱或冷卻後的差異。' : '觀察相鄰粒子如何逐段受振，再比較終點的到達時間。');
+  text($('#girl-line'), temperatureMode ? '我們把空氣加熱，再敲一次音叉看看！' : '空氣、水和鋼，裡面的粒子是怎麼把振動傳開的？');
+  text($('#grandpa-line'), temperatureMode ? '參考組維持 20°C，用相同距離來比較。' : '音叉被敲一下後來回振動，帶動附近粒子；再看相鄰粒子如何依序受振。');
   $('#takeaway').innerHTML = temperatureMode
     ? '<strong>觀察重點：</strong>只改變空氣溫度，振動頻率維持相同；同溫時，振動會同時傳到最右端。'
     : '<strong>觀察重點：</strong>粒子在原位附近往返；同一聲源頻率相同，三種介質傳遞振動的速度不同。';
   paint();
 }
 
-function setTemperature(value) {
-  const next = clamp(Math.round(Number(value)), 0, 30);
-  if (!Number.isFinite(next) || next === state.temperature) return;
-  state.temperature = next; $('#temperature').value = String(next);
-  text($('#temperature-value'), `${next}°C`);
-  attr($('#temperature'), 'aria-valuetext', `設定組 ${next} 攝氏度`);
-  rebuild();
+function updateTemperature(value) {
+  state.temperature = value;
+  groups = conditions('temperature', value);
+  const model = models.find(model => model.id === 'adjustable');
+  if (!model) return;
+  Object.assign(model, groups.find(group => group.id === 'adjustable'));
+  model.row.dataset.speed = String(model.speed);
+  const heading = model.row.querySelector('h3');
+  text(heading.firstElementChild, `${temperatureText(value)}°C`);
+  model.row.style.setProperty('--group-temperature-color', value>20?'#dd7034':value<20?'#348dc1':'#176b53');
+  attr(model.row.querySelector('.source-hit'), 'aria-label', `單獨敲擊${model.name}音叉`);
+  attr(model.row.querySelector('.field svg'), 'aria-label', `${model.name}的空氣分子放大模型，粒子在原位附近沿水平方向振動。`);
+  attr(model.arrivalOutput, 'aria-label', `${model.name}傳到最右端的實際經過時間`);
+}
+
+function finishTemperature() {
+  if (!transition) return;
+  cancelAnimationFrame(thermalFrame); thermalFrame = 0;
+  const target = transition.target; transition = null;
+  updateTemperature(target); paint();
+}
+
+function thermalTick(now) {
+  thermalFrame = 0;
+  if (!transition) return;
+  const next = temperatureAt(transition, now), done = now >= transition.start + transition.duration;
+  updateTemperature(done ? transition.target : next);
+  if (done) transition = null;
+  paint();
+  if (transition) thermalFrame = requestAnimationFrame(thermalTick);
+}
+
+function conditionTo(target) {
+  if (transition) updateTemperature(temperatureAt(transition, performance.now()));
+  if (thermalFrame) cancelAnimationFrame(thermalFrame);
+  thermalFrame = 0; transition = null;
+  state.temperatureTarget = clamp(target, 0, 30);
+  resetRun();
+  if (Math.abs(state.temperatureTarget - state.temperature) < .00001) { updateTemperature(state.temperatureTarget); paint(); return; }
+  transition = temperatureTransition(state.temperature, state.temperatureTarget, performance.now());
+  paint(); thermalFrame = requestAnimationFrame(thermalTick);
 }
 
 $('#primary-action').addEventListener('click', () => {
@@ -292,19 +341,15 @@ $('#primary-action').addEventListener('click', () => {
   else startFresh();
 });
 $('#pause-action').addEventListener('click', () => state.phase === 'running' ? pause() : resume());
-$('#reset-action').addEventListener('click', () => resetRun());
-$('#temperature')?.addEventListener('input', event => setTemperature(event.target.value));
-$('#temperature-down')?.addEventListener('click', () => setTemperature(state.temperature - 1));
-$('#temperature-up')?.addEventListener('click', () => setTemperature(state.temperature + 1));
+$('#reset-action').addEventListener('click', () => { finishTemperature(); resetRun(); });
 $('#arrival-sound').addEventListener('change', () => {
   if ($('#arrival-sound').checked) { audioFailed = false; $('#audio-error').hidden = true; unlockAudio(); }
   else { stopTones(); $('#audio-error').hidden = true; }
 });
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) pause();
+  if (document.hidden) { finishTemperature(); pause(); }
 });
-window.addEventListener('pagehide', () => { pause(); stopTones(); });
-if ($('#temperature')) attr($('#temperature'), 'aria-valuetext', '設定組 30 攝氏度');
+window.addEventListener('pagehide', () => { finishTemperature(); pause(); stopTones(); });
 rebuild();
 
 }

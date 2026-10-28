@@ -21,7 +21,7 @@ export function displacement(localTime) {
 export function conditions(mode, temperature = 30) {
   if (mode === 'temperature') return [
     { id: 'reference', kind: 'air', name: '20°C 參考組', description: '溫度固定', speed: airSpeed(20), temperature: 20 },
-    { id: 'adjustable', kind: 'air', name: `${temperature}°C 設定組`, description: '溫度可調整', speed: airSpeed(temperature), temperature }
+    { id: 'adjustable', kind: 'air', name: `${new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 1 }).format(temperature)}°C 可調溫組`, description: '溫度可調整', speed: airSpeed(temperature), temperature }
   ];
   return [
     { id: 'air', kind: 'air', name: '空氣', description: '氣體・分子分散', speed: 343 },

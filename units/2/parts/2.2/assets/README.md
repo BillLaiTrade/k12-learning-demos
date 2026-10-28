@@ -44,3 +44,7 @@
 - `vacuum-apparatus.png`、`sound-level-meter.png` 保留為舊版器材素材，現行頁面不再載入。最新核可示意見 `docs/reviews/unit-2.2-card03/approved-tabletop-meter.png`。
 
 - 寫實修訂：移除第三區塊的空氣粒子生成、繪圖群組及專用裁切區，註記改為「振動放大示意」。第二區塊的縱波粒子模型維持其教學用途，兩區呈現方式分開。
+
+## 第五區溫控裝置
+
+`temperature-control-unit.png` 依使用者核可的示意圖以影像工具產生，1743×902 RGBA 透明底，原圖未裁切或修改像素。照片只包含中性的金屬裝置、未發光的加熱／冷卻面、旋鈕及探棒。溫控文字、兩面發光、LED、溫度計液柱／讀值及按鈕由 `temperature-rig.mjs` 實際繪製並連到狀態，不把結果烘焙在圖中。核可圖存於 `docs/reviews/unit-2.2-card05/approved-concept.png`，角色仍沿用共用正式頭像。

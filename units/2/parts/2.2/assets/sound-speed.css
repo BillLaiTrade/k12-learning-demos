@@ -1,4 +1,4 @@
-/* 第四學習區塊共用互動樣式；不改動其餘區塊的版型。 */
+/* 第四、第五學習區塊共用互動樣式；不改動其餘區塊的版型。 */
 .sound-speed-lab{min-width:0;container-type:inline-size}
 .sound-speed-lab [hidden]{display:none!important}
 :where(.sound-speed-lab) .comparison-board{overflow:hidden;border:1px solid #cfddd2;border-radius:16px;background:#fffefa}
@@ -32,16 +32,6 @@
 :where(.sound-speed-lab) .sound-option{display:flex;align-items:center;gap:7px;min-height:44px;cursor:pointer}
 :where(.sound-speed-lab) .sound-option input{width:17px;height:17px;margin:0;accent-color:var(--green)}
 :where(.sound-speed-lab) .audio-error{margin:8px 0;font-size:.8rem;color:#8d572d}
-:where(.sound-speed-lab) .temperature-settings{margin-bottom:16px;padding:13px 14px;border:1px solid #d6e0d1;border-radius:14px;background:#f5f7ef}
-:where(.sound-speed-lab) .setting-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
-:where(.sound-speed-lab) .setting-heading label{font-weight:700;font-size:.9rem}
-:where(.sound-speed-lab) .setting-heading output{font-size:1.35rem;font-weight:800;color:#315f41;font-variant-numeric:tabular-nums}
-:where(.sound-speed-lab) .temperature-inputs{display:flex;align-items:center;gap:10px}
-:where(.sound-speed-lab) .step-temperature{width:44px;flex:0 0 44px;padding:4px;font-size:1.25rem}
-:where(.sound-speed-lab) .range-track{flex:1;min-width:0;padding-top:8px}
-:where(.sound-speed-lab) .range-track input{display:block;min-height:44px;width:100%;margin:0;accent-color:var(--green);cursor:pointer}
-:where(.sound-speed-lab) .range-ticks{display:flex;justify-content:space-between;color:#6b7d6e;font-size:.65rem;margin-top:4px}
-:where(.sound-speed-lab) .temperature-settings>p{margin:10px 0 0;color:#6b7b6c;font-size:.75rem}
 :where(.sound-speed-lab) .result{margin-top:16px;padding:14px;border:1px solid #ccddc3;border-radius:15px;background:#f1f6e9}
 :where(.sound-speed-lab) .result h3{margin:0 0 5px;color:#28533a;font-size:1rem}
 :where(.sound-speed-lab) .result p{margin:6px 0;font-size:.85rem}
@@ -98,3 +88,66 @@
 :where(.sound-speed-lab) .medium-heading .individual-time{font-size:.65rem;line-height:1.5;font-variant-numeric:tabular-nums;color:#315e3d}
 :where(.sound-speed-lab) .individual-time output{display:block;white-space:nowrap}
 @container (max-width:460px){:where(.sound-speed-lab) .medium-heading{flex-wrap:wrap}:where(.sound-speed-lab) .individual-time output{display:inline;margin-left:4px}}
+
+/* 第五區：核可的雙空氣環境與一體式溫控裝置。 */
+.temperature-sound-lab .comparison-heading{display:none}
+.temperature-sound-lab .comparison-board{padding:10px;background:linear-gradient(145deg,#f5f8f1,#fafbf7)}
+.temperature-sound-lab .models{gap:14px}
+.temperature-sound-lab .medium-row{grid-template-columns:82px minmax(0,1fr);gap:12px;padding:14px 12px;border:1px solid #d4e1db;border-radius:14px;background:#fffffc}
+.temperature-sound-lab .medium-row+.medium-row{border-top:1px solid #d4e1db}
+.temperature-sound-lab .medium-header{align-self:stretch;border-right:1px solid #e0e8e3;padding-right:8px}
+.temperature-sound-lab .temperature-heading span{display:block}
+.temperature-sound-lab .temperature-heading span:first-child{font-size:1.35rem;color:var(--group-temperature-color,#176b53)}
+.temperature-sound-lab [data-group=adjustable]{--group-temperature-color:#dd7034}
+.temperature-sound-lab .row-body{grid-template-columns:minmax(0,1fr) 94px;border:0;border-radius:0;background:transparent}
+.temperature-sound-lab .arrival-readout{padding:12px 3px;background:transparent}
+.temperature-sound-lab .arrival-readout output{font-size:1.05rem;font-weight:800}
+.temperature-sound-lab .propagation-readout{position:absolute;width:1px;height:1px;min-height:0;margin:0;padding:0;overflow:hidden;clip-path:inset(50%)}
+.temperature-sound-lab .source-hit{top:0}
+.temperature-sound-lab .result{margin:14px 0 0;padding:12px 18px;border:0;border-left:4px solid #8cae91;border-radius:0 10px 10px 0;background:#eff5eb}
+.temperature-sound-lab .result p{margin:0;color:#176b53;font-size:1.16rem;font-weight:800}
+.temperature-sound-lab .controls{margin-top:16px}
+.temperature-sound-lab .model-notes{margin-top:12px}
+.temperature-rig{grid-column:1/-1;min-width:0;margin-top:-8px}
+.rig-equipment{display:grid;grid-template-columns:minmax(0,1fr) 26%;align-items:end;gap:4px;min-width:0;margin-bottom:8px;padding:0 8px 1px;background:linear-gradient(to bottom,transparent 65%,#eeedeb 65%,#f8f8f5 100%);border-radius:0 0 9px 9px}
+.rig-controller{position:relative;min-width:0;align-self:end}
+.rig-controller>svg{display:block;width:100%;height:auto;overflow:visible}
+.rig-unit-label{position:absolute;left:13%;top:78%;font-size:clamp(.55rem,2cqi,.85rem);font-weight:650;color:#42474b;line-height:1.2;white-space:nowrap}
+.rig-thermometer{position:relative;justify-self:end;width:100%;max-width:113px}
+.rig-thermometer svg{display:block;width:100%;height:auto}
+.rig-temperature-value{position:absolute;right:0;top:0;padding:2px 7px;border-radius:999px;background:#fff1df;color:var(--temperature-ink,#ef7037);font-size:clamp(.75rem,2.5cqi,1.05rem);font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;box-shadow:0 1px 5px #78624112}
+.temperature-rig[data-target="0"] .rig-temperature-value{background:#eaf7ff}
+.temperature-rig[data-target="20"] .rig-temperature-value{background:#edf5ef}
+.thermal-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.thermal-button{display:flex;align-items:center;justify-content:center;gap:7px;min-width:0;min-height:58px;padding:9px 7px;border:1px solid #bed0c4;border-radius:12px;background:#f5faf5;color:#286e58;font-size:clamp(.76rem,2.1cqi,.92rem);font-weight:750;line-height:1.4;touch-action:manipulation}
+.thermal-button svg{flex:0 0 28px;width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.thermal-button span{white-space:nowrap}
+.thermal-button.heat{border-color:#f0be96;background:#fff7ed;color:#bf5a1f}
+.thermal-button.cool{border-color:#aed4ec;background:#f0faff;color:#287fae}
+.thermal-button[aria-pressed=true]{box-shadow:inset 0 0 0 1px currentColor,0 2px 9px #176b5310}
+.thermal-button.heat[aria-pressed=true]{background:#ffead4;box-shadow:inset 0 0 0 1px #ef984b,0 2px 12px #ff9b3a21}
+.thermal-button.cool[aria-pressed=true]{background:#def3ff;box-shadow:inset 0 0 0 1px #60b6e7,0 2px 12px #388cce1a}
+.thermal-button:hover{filter:brightness(.98)}
+.thermal-button:focus-visible{outline:3px solid #b88736;outline-offset:2px}
+@container(max-width:500px){
+ .temperature-sound-lab .comparison-board{padding:8px}
+ .temperature-sound-lab .medium-row{grid-template-columns:1fr;gap:6px;padding:10px 8px}
+ .temperature-sound-lab .medium-header{border:0;padding:0;justify-content:flex-start}
+ .temperature-sound-lab .temperature-heading{display:flex;align-items:baseline;gap:6px}
+ .temperature-sound-lab .temperature-heading span:first-child{font-size:1.1rem}
+ .temperature-sound-lab .temperature-heading span:last-child{font-size:.87rem}
+ .temperature-sound-lab .row-body{grid-template-columns:minmax(0,1fr) 76px}
+ .temperature-sound-lab .arrival-readout{font-size:.65rem}
+ .temperature-sound-lab .arrival-readout output{font-size:.81rem}
+ .temperature-sound-lab .result p{font-size:1rem}
+ .rig-equipment{grid-template-columns:minmax(0,1fr) 28%;padding:0;margin-bottom:4px}
+ .thermal-button{font-size:.8rem;gap:5px}
+ .thermal-button svg{flex-basis:24px;width:24px;height:24px}
+}
+@container(max-width:400px){
+ .thermal-actions{grid-template-columns:1fr;gap:7px}
+ .thermal-button{min-height:47px;gap:12px;font-size:.88rem}
+ .temperature-sound-lab .medium-heading{flex-wrap:wrap;gap:4px 7px}
+ .rig-unit-label{font-size:.56rem}
+ .rig-thermometer{max-width:88px}
+}

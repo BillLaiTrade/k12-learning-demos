@@ -24,7 +24,7 @@
   </style>
   <link rel="stylesheet" href="assets/sound-propagation.css?v=3">
   <link rel="stylesheet" href="assets/vacuum-lab.css?v=5">
-  <link rel="stylesheet" href="assets/sound-speed.css?v=split-16">
+  <link rel="stylesheet" href="assets/sound-speed.css?v=rig-17">
 </head>
 <body>
   <header class="shell masthead">
@@ -212,46 +212,35 @@
         </section>
         <section class="lesson-card" id="card-05" aria-labelledby="temp-lesson-title">
           <div class="card-side"><span class="card-number">05</span><h3>溫度影響聲速</h3><span class="card-role">只改變空氣溫度</span></div>
-          <div class="card-main sound-speed-lab" data-sound-speed-lab data-sound-speed-mode="temperature" data-id-prefix="temp-">
-            <h2 id="temp-lesson-title">都是空氣，升溫後會早一點傳到嗎？</h2>
-            <p class="intro" id="temp-lesson-intro">固定參考組，只改變設定組的空氣溫度。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p id="temp-girl-line">溫度不同時，空氣裡的振動傳遞會怎麼改變？</p></div>
-            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p id="temp-grandpa-line">參考組維持 20°C。只改另一組溫度，再用相同條件一起比較。</p></div>
+          <div class="card-main sound-speed-lab temperature-sound-lab" data-sound-speed-lab data-sound-speed-mode="temperature" data-id-prefix="temp-">
+            <h2 id="temp-lesson-title">空氣變熱，聲音會傳得更快嗎？</h2>
+            <p class="intro" id="temp-lesson-intro">固定參考組，觀察加熱或冷卻後的差異。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p id="temp-girl-line">我們把空氣加熱，再敲一次音叉看看！</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p id="temp-grandpa-line">參考組維持 20°C，用相同距離來比較。</p></div>
 
             <section id="temp-experiment-panel" role="group" aria-labelledby="temp-lesson-title">
-              <div class="temperature-settings" id="temp-temperature-settings">
-                <div class="setting-heading"><label for="temp-temperature">設定組溫度</label><output id="temp-temperature-value" for="temp-temperature">30°C</output></div>
-                <div class="temperature-inputs">
-                  <button class="secondary step-temperature" id="temp-temperature-down" type="button" aria-label="設定組降溫一度">−</button>
-                  <div class="range-track"><input id="temp-temperature" type="range" min="0" max="30" step="1" value="30" aria-describedby="temp-temperature-help"><div class="range-ticks" aria-hidden="true"><span>0°C</span><span>10°C</span><span>20°C</span><span>30°C</span></div></div>
-                  <button class="secondary step-temperature" id="temp-temperature-up" type="button" aria-label="設定組升溫一度">＋</button>
-                </div>
-                <p id="temp-temperature-help">參考組固定為 20°C；只有設定組的溫度會改變。</p>
-              </div>
-
               <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>空氣溫度</span><span>粒子振動 · 逐段傳遞</span><span>到達時間</span></div><div id="temp-models" class="models" role="group" aria-label="可個別敲擊或同步比較的粒子振動模型"></div></div>
-              <p class="color-key">相鄰粒子依序往返，傳遞擾動；下方綠色刻度只記錄已傳到的位置。</p>
 
               <div class="controls">
                 <button class="action" id="temp-primary-action" type="button">同時敲擊音叉</button>
                 <button class="text-button" id="temp-pause-action" type="button" hidden>暫停觀察</button>
                 <button class="text-button" id="temp-reset-action" type="button">回到起點</button>
               </div>
-              <div class="observation-options"><label class="sound-option"><input type="checkbox" id="temp-arrival-sound">到達提示音</label><span id="temp-playback-state">點按音叉可單獨敲擊該組。</span></div>
               <p id="temp-audio-error" class="audio-error" role="status" hidden></p>
 
               <section class="result" id="temp-result" aria-labelledby="temp-result-title" hidden>
-                <h3 id="temp-result-title">觀察結果</h3><p id="temp-result-summary"></p>
-                <table><caption class="sr-only">本次比較的聲速與到達時間近似值</caption><thead><tr><th scope="col">組別</th><th scope="col">聲速</th><th scope="col">傳到 5,000 公尺</th></tr></thead><tbody id="temp-result-rows"></tbody></table>
+                <h3 class="sr-only" id="temp-result-title">觀察結果</h3><p id="temp-result-summary"></p>
               </section>
             </section>
 
-            <div class="fact"><p id="temp-takeaway"><strong>觀察重點：</strong>只改變空氣溫度，其他條件維持相同；同溫時，振動會同時傳到最右端。</p></div>
-            <details class="model-notes"><summary>模型說明與近似值</summary><ul>
-              <li>兩組皆為空氣，參考組固定 20°C，設定組可在 0～30°C 調整。兩組距離皆為 5,000 公尺，溫度設定以外的比較條件相同。</li>
+            <p class="sr-only" id="temp-takeaway"><strong>觀察重點：</strong>只改變空氣溫度，其他條件維持相同；同溫時，振動會同時傳到最右端。</p>
+            <details class="model-notes"><summary>模型說明與近似值</summary>
+              <div class="observation-options"><label class="sound-option"><input type="checkbox" id="temp-arrival-sound">到達提示音</label><span id="temp-playback-state">點按音叉可單獨敲擊該組。</span></div>
+<ul>
+              <li>兩組皆為空氣，參考組固定 20°C。可調溫組以加熱到 30°C、冷卻到 0°C 或回到 20°C 改變環境；兩組傳播距離皆為 5,000 公尺。調溫為準備過程示意，敲擊時固定該次溫度，再開始計算聲音傳播時間。</li>
               <li>空氣本身透明，圖中的分子、排列、間距與位移為微觀放大示意，省略熱運動。音叉外觀與微觀粒子的振動節奏分別為便於辨識、追蹤的示意，不作頻率量測或音高比較，亦不改變實際傳播時間。</li>
               <li>各組共用持續 4 秒的往返示意訊號，各自從敲擊時刻開始實時計時。1 秒播放對應 1 秒經過，暫停與背景頁面期間不計時。</li>
-              <li>本例空氣在 0～30°C 採近似關係：聲速 ≈ 331 ＋ 0.6 × 溫度（m/s）。20°C 約為 343 m/s；實際聲速也會隨空氣組成等條件改變。</li>
+              <li>溫度較高時，空氣分子的熱運動平均較快，聲速通常也較快；這與音叉的振動頻率或聲音大小不同。本例空氣在 0～30°C 採近似關係：聲速 ≈ 331 ＋ 0.6 × 溫度（m/s）。20°C 約為 343 m/s；實際聲速也會隨空氣組成等條件改變。</li>
               <li>下方刻度依「聲速 × 經過時間」記錄擾動前緣，粒子依各位置的傳播延遲受振。右側只顯示振動首次傳到 5,000 公尺的到達時間，尚未到達時顯示「—」。</li>
               <li>到達提示音只表示振動抵達最右端，不模擬實際音色。</li>
             </ul></details>
@@ -359,6 +348,6 @@
   </script>
   <script type="module" src="assets/sound-propagation.js?v=4"></script>
   <script type="module" src="assets/vacuum-lab.js?v=6"></script>
-  <script type="module" src="assets/sound-speed.mjs?v=split-16"></script>
+  <script type="module" src="assets/sound-speed.mjs?v=rig-17"></script>
 </body>
 </html>
