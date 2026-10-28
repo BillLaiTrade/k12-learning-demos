@@ -1,9 +1,9 @@
 import {
-  DISTANCE, START_X, END_X, ZOOM, PULSE_DURATION,
+  DISTANCE, START_X, END_X,
   appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=individual-11';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=individual-11';
+} from './sound-speed-model.mjs?v=arrival-12';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=arrival-12';
 
 export function initSoundSpeed(root) {
 const $ = selector => root.querySelector(selector);
@@ -80,13 +80,12 @@ function buildModel(group) {
         <svg viewBox="0 0 456 146" role="img" aria-label="${group.name}的內部放大模型，${group.kind === 'water' ? '水槽中的水分子' : group.kind === 'steel' ? '金屬剖面中的原子' : '透明空氣中的分子'}在原位附近沿水平方向振動。"></svg>
         <button class="source-hit" type="button" aria-label="單獨敲擊${group.name}組音叉"></button>
       </div>
-      <div class="end-observation"><p class="zoom-title sr-only">末端相鄰粒子</p><svg class="zoom" viewBox="0 0 150 120" role="img" aria-label="${group.name}末端三個相鄰粒子依序受振，最右邊為終點"></svg><p class="end-state">終點尚未受振</p><div class="arrival-readout"><span>到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的實際經過時間">—</output></div></div>
+      <div class="arrival-readout"><span>到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的實際經過時間">—</output></div>
     </div>`;
   $('#models').append(row);
   row.querySelector('.source-hit').addEventListener('click', () => startSingle(group.id));
   const field = row.querySelector('.field svg'), fill = addMaterials(field, `${group.id}-field`);
   const scene = mediumScene(field, group.kind, `${group.id}-scene`);
-  svg('path', { class: 'end-connection', d: 'M447 41V101M447 71H456', fill: 'none', stroke: '#94aaa0', 'stroke-width': 1.2 }, field);
   const source = tuningForkSource(field, group.kind, fill);
   const bonds = svg('g', { fill: 'none', stroke: '#8a9e9c', 'stroke-width': .8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, scene.interior);
   const dots = svg('g', { 'aria-hidden': 'true' }, scene.interior);
@@ -115,28 +114,11 @@ function buildModel(group) {
   svg('path', { d: 'M-4 116H4L0 122Z', fill: '#176b53' }, front);
   text(svg('text', { x: START_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '0 m');
   text(svg('text', { x: END_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), `${number.format(DISTANCE)} m`);
-  const zoom = row.querySelector('.zoom'), zoomFill = addMaterials(zoom, `${group.id}-zoom`);
-  const zoomScene = mediumScene(zoom, group.kind, `${group.id}-zoom-scene`, true);
-  const rowIndex = Math.floor(settings.rows / 2);
-  const endPoints = points.filter(point => point.row === rowIndex).slice(-3).map((point, index) => {
-    const x = 38 + index * 37;
-    const node = particleGlyph(zoomScene.interior, { kind: group.kind, index: rowIndex * settings.columns + point.column, className: 'end-particle', x, y: 60, fill: zoomFill, scale: 1.45 });
-    attr(node, 'data-origin-x', x); attr(node, 'data-distance', point.distance);
-    return { point, x, node };
-  });
-  const zoomLinks = group.kind === 'steel' ? endPoints.slice(0,-1).map((point, index) => {
-    const other = endPoints[index + 1];
-    const node = svg('path', { class: 'zoom-link', d: springPath(point.x,60,other.x,60), fill:'none', stroke:'#8a9e9c', 'stroke-width':1 }, zoomScene.interior);
-    zoomScene.interior.prepend(node);
-    return { point, other, node };
-  }) : [];
-  text(svg('text', { x:112, y:96, 'text-anchor':'middle', fill:'#526f5c', 'font-size':12 }, zoom), '終點');
   return {
-    ...group, startedAt: null, row, points, links, source, endPoints, zoomLinks, zoom, scene, front, reachedTrack,
+    ...group, startedAt: null, row, points, links, source, scene, front, reachedTrack,
     timeWrap: row.querySelector('.individual-time'), timeCaption: row.querySelector('.individual-time span'), timeOutput: row.querySelector('.individual-time output'),
     distanceOutput: row.querySelector('.propagation-readout output'),
-    arrivalCaption: row.querySelector('.arrival-readout span'), arrivalOutput: row.querySelector('.arrival-readout output'),
-    endState: row.querySelector('.end-state')
+    arrivalCaption: row.querySelector('.arrival-readout span'), arrivalOutput: row.querySelector('.arrival-readout output')
   };
 }
 
@@ -212,17 +194,6 @@ function paint(audible = false, overrideCaption = '') {
       attr(link.node, 'd', springPath(link.point.position, link.point.y, link.other.position, link.other.y));
     }
     model.source.paint(elapsed, phase);
-    const localTime = elapsed - arrivalTime(model.speed);
-    for (const dot of model.endPoints) {
-      const next = sample(dot.point, model.speed, elapsed);
-      dot.position = dot.x + (next.x - dot.point.x) * ZOOM;
-      attr(dot.node, 'transform', `translate(${dot.position.toFixed(4)} 60)`);
-      attr(dot.node, 'data-moving', next.moving);
-    }
-    for (const link of model.zoomLinks) attr(link.node, 'd', springPath(link.point.position,60,link.other.position,60));
-    const endState = !arrived ? '終點尚未受振' : localTime < PULSE_DURATION ? '終點振動中' : '終點已靜止';
-    text(model.endState, endState);
-    attr(model.zoom, 'aria-label', `${model.name}末端三個相鄰粒子依序受振，最右邊為終點，${endState}`);
     text(model.arrivalCaption, '到達時間');
     text(model.arrivalOutput, arrived ? secondsText(arrivalTime(model.speed)) : '—');
     if (arrived) attr(model.arrivalOutput, 'data-arrival', arrivalTime(model.speed));

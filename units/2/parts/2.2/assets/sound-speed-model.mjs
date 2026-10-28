@@ -6,7 +6,6 @@ export const END_X = 410;
 export const FREQUENCY = .6;
 export const PULSE_DURATION = 4;
 export const AMPLITUDE = 4;
-export const ZOOM = 2.25;
 export const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 export const airSpeed = temperature => 331 + .6 * temperature;
 export const arrivalTime = speed => DISTANCE / speed;

@@ -1,5 +1,5 @@
 // 介質場景、分子／原子與表面取樣共用同一波動模型。
-import { positions, sample, displacement, PULSE_DURATION } from './sound-speed-model.mjs?v=individual-11';
+import { positions, sample, displacement, PULSE_DURATION } from './sound-speed-model.mjs?v=arrival-12';
 export const materialInfo = {
   air: {
     name: '空氣', phase: '氣體',
@@ -87,7 +87,7 @@ export function springPath(x1, y1, x2, y2) {
 
 // 先畫介質本體，再把振動圖形置於其內部，最後疊上表面反光。
 // 表面取樣的位移也由 sample 計算，不另設裝飾性的行進光帶。
-export function mediumScene(root, kind, prefix, zoom = false) {
+export function mediumScene(root, kind, prefix) {
   const defs = svgNode('defs', {}, root);
   const gradient = (name, stops, horizontal = false) => {
     const node = svgNode('linearGradient', { id: `${prefix}-${name}`, x1: 0, y1: 0, x2: horizontal ? 1 : 0, y2: horizontal ? 0 : 1 }, defs);
@@ -100,11 +100,11 @@ export function mediumScene(root, kind, prefix, zoom = false) {
   const brushed = gradient('brushed', [[0,'#6b7e85'],[.14,'#e5e9e8'],[.28,'#a3b1b4'],[.53,'#f8faf7'],[.7,'#899da4'],[1,'#50656f']]);
   const cut = gradient('cut', [[0,'#7d929b'],[.1,'#d2dce0'],[.52,'#edf2f0'],[.9,'#bbcace'],[1,'#879ea5']]);
   const face = gradient('face', [[0,'#52656d'],[.5,'#c3ced0'],[1,'#6e8289']], true);
-  const group = svgNode('g', { class: 'medium-scene', 'data-material': kind, 'data-view': zoom ? 'end' : 'field', 'aria-hidden': 'true' }, root);
+  const group = svgNode('g', { class: 'medium-scene', 'data-material': kind, 'data-view': 'field', 'aria-hidden': 'true' }, root);
   const back = svgNode('g', { class: 'medium-body' }, group);
-  const x = zoom ? 16 : kind === 'steel' ? 94 : 53, y = zoom ? 20 : kind === 'water' ? 30 : 25, width = zoom ? 118 : kind === 'steel' ? 334 : 375, height = zoom ? 84 : kind === 'water' ? 83 : 88;
+  const x = kind === 'steel' ? 94 : 53, y = kind === 'water' ? 30 : 25, width = kind === 'steel' ? 334 : 375, height = kind === 'water' ? 83 : 88;
   if (kind !== 'air') {
-    svgNode('ellipse', { cx: x + width / 2 + 4, cy: y + height + 6, rx: width / 2, ry: zoom ? 4 : 5, fill: '#35575a', opacity: .1 }, back);
+    svgNode('ellipse', { cx: x + width / 2 + 4, cy: y + height + 6, rx: width / 2, ry: 5, fill: '#35575a', opacity: .1 }, back);
   }
   if (kind === 'water') {
     // 透明槽壁、上方水面及側面的折射，使液體具有可辨認的體積。
@@ -132,7 +132,7 @@ export function mediumScene(root, kind, prefix, zoom = false) {
     svgNode('path', { d: `M${x + 2} ${y + height}h${width - 4}M${x + 5} ${y + 7}v${height - 16}`, stroke: '#fff', 'stroke-width': 1.4, opacity: .85 }, front);
     svgNode('path', { class: 'liquid-reflection', d: `M${x + width * .12} ${y + 7}h${width * .17}l-14 ${height - 15}h${-width * .17}Z`, fill: '#fff', opacity: .13 }, front);
   }
-  if (!zoom && kind !== 'air') {
+  if (kind !== 'air') {
     const points = positions(kind).filter(p => p.row === 0);
     for (const point of points) {
       const path = kind === 'steel' ? `M0 20l4 -3M0 114v3` : `M-4 111q4 -3 9 -1`;

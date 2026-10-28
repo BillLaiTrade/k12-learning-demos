@@ -11,7 +11,7 @@
 :where(.sound-speed-lab) .model-time-wrap{white-space:nowrap}
 :where(.sound-speed-lab) .observation-caption{display:flex;align-items:center;min-height:3.2em;margin:10px 0;padding:10px 12px;border-left:4px solid #b8cda9;border-radius:0 10px 10px 0;background:#f3f6ee;color:#345c40;font-size:.88rem;font-weight:650}
 :where(.sound-speed-lab) .comparison-board{overflow:hidden;border:1px solid #cfddd2;border-radius:16px;background:#fffefa}
-:where(.sound-speed-lab) .comparison-heading{display:grid;grid-template-columns:64px minmax(0,1fr) 100px;gap:12px;align-items:center;padding:10px 12px;background:#edf3e8;color:#526e5b;font-size:.72rem;font-weight:650}
+:where(.sound-speed-lab) .comparison-heading{display:grid;grid-template-columns:64px minmax(0,1fr) 88px;gap:12px;align-items:center;padding:10px 12px;background:#edf3e8;color:#526e5b;font-size:.72rem;font-weight:650}
 :where(.sound-speed-lab) .comparison-heading span:last-child{text-align:center}
 :where(.sound-speed-lab) .models{display:grid}
 :where(.sound-speed-lab) .medium-row{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:center;min-width:0;margin:0;padding:12px}
@@ -19,17 +19,13 @@
 :where(.sound-speed-lab) .medium-header{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0}
 :where(.sound-speed-lab) .medium-heading h3{margin:0;color:#203c30;font-size:1rem;line-height:1.4}
 :where(.sound-speed-lab) .medium-heading p{margin:2px 0 0;color:#62776a;font-size:.72rem;line-height:1.4}
-:where(.sound-speed-lab) .row-body{display:grid;grid-template-columns:minmax(0,1fr) 100px;align-items:center;min-width:0;border:1px solid #dce6d9;border-radius:11px;background:#fafbf7}
+:where(.sound-speed-lab) .row-body{display:grid;grid-template-columns:minmax(0,1fr) 88px;align-items:center;min-width:0;border:1px solid #dce6d9;border-radius:11px;background:#fafbf7}
 :where(.sound-speed-lab) .field{min-width:0;position:relative}
 :where(.sound-speed-lab) .field svg{display:block;width:100%;height:auto;overflow:visible;pointer-events:none;shape-rendering:geometricPrecision}
 :where(.sound-speed-lab) .source-hit{position:absolute;left:0;top:28px;bottom:0;transform:none;width:max(23%,44px);height:auto;min-height:44px;padding:0;border:0;border-radius:9px;background:transparent;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 :where(.sound-speed-lab) .source-hit:hover{background:#5d83680a}
 :where(.sound-speed-lab) .source-hit:focus-visible{outline:2px solid #bd903d;outline-offset:0}
-:where(.sound-speed-lab) .end-observation{position:relative;align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;padding:31px 3px 7px;border-left:1px dashed #b6c9b9;text-align:center}
-:where(.sound-speed-lab) .end-observation::before{position:absolute;left:-1px;top:calc(50% + 12px);width:12px;content:"";border-top:1px solid #94aaa0}
-:where(.sound-speed-lab) .zoom{display:block;width:83px;max-width:100%;height:auto}
-:where(.sound-speed-lab) .end-state{margin:0;color:#526f5c;font-size:.64rem;line-height:1.5;white-space:nowrap}
-:where(.sound-speed-lab) .arrival-readout{color:#526f5c;font-size:.7rem;line-height:1.6}
+:where(.sound-speed-lab) .arrival-readout{display:flex;flex-direction:column;align-items:center;justify-content:center;align-self:stretch;min-width:0;padding:12px 5px;border-left:1px solid #dce6d9;text-align:center;color:#526f5c;font-size:.7rem;line-height:1.6}
 :where(.sound-speed-lab) .arrival-readout output{display:block;font-size:.78rem;font-weight:750;color:#315e3d;font-variant-numeric:tabular-nums;white-space:nowrap}
 :where(.sound-speed-lab) .color-key{margin:10px 0 0;color:var(--muted);font-size:.77rem}
 :where(.sound-speed-lab) .controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:15px}
@@ -70,15 +66,13 @@
 :where(.sound-speed-lab) .model-notes li{margin:7px 0}
 :where(.sound-speed-lab) .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @container(max-width:500px){
-:where(.sound-speed-lab) .comparison-heading{grid-template-columns:minmax(0,1fr) 76px;padding:9px 10px;gap:0;font-size:.67rem}
+:where(.sound-speed-lab) .comparison-heading{grid-template-columns:minmax(0,1fr) 72px;padding:9px 10px;gap:0;font-size:.67rem}
 :where(.sound-speed-lab) .comparison-heading span:first-child{display:none}
 :where(.sound-speed-lab) .medium-row{grid-template-columns:1fr;gap:7px;padding:10px}
 :where(.sound-speed-lab) .medium-header{flex-direction:row;align-items:center;gap:10px}
 :where(.sound-speed-lab) .medium-heading h3{font-size:.95rem}
 :where(.sound-speed-lab) .medium-heading p{font-size:.68rem}
-:where(.sound-speed-lab) .row-body{grid-template-columns:minmax(0,1fr) 76px}
-:where(.sound-speed-lab) .zoom{width:65px}
-:where(.sound-speed-lab) .end-state{font-size:.59rem}
+:where(.sound-speed-lab) .row-body{grid-template-columns:minmax(0,1fr) 72px}
 :where(.sound-speed-lab) .arrival-readout output{font-size:.69rem}
 :where(.sound-speed-lab) .model-information{gap:6px 9px;font-size:.74rem}
 :where(.sound-speed-lab) .observation-caption{font-size:.82rem;min-height:3.8em}

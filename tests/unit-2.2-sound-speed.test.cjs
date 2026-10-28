@@ -127,7 +127,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
   const data = () => page.locator('[data-sound-speed-lab]').locator('#experiment-panel').evaluate(n => ({ ...n.dataset }));
   const time = async () => Number((await data()).time);
   const primary = page.locator('[data-sound-speed-lab]').locator('#primary-action');
-  const particleXs = () => page.locator('[data-sound-speed-lab]').locator('.particle, .end-particle').evaluateAll(nodes => nodes.map(n => n.getAttribute('transform')));
+  const particleXs = () => page.locator('[data-sound-speed-lab]').locator('.particle').evaluateAll(nodes => nodes.map(n => n.getAttribute('transform')));
   const setTemperature = async value => page.locator('[data-sound-speed-lab]').locator('#temperature').evaluate((n, v) => { n.value = String(v); n.dispatchEvent(new Event('input', { bubbles: true })); }, value);
   const realWait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -166,14 +166,14 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
 
   await t.test('material volumes and distinct molecules are embedded inside the animation', async () => {
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('.specimen-button, .specimen-photo, #material-dialog').count(), 0);
-    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.field image, .zoom image').count(), 0);
+    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.field image').count(), 0);
     assert.equal(await page.evaluate(() => performance.getEntriesByType('resource').some(r => r.name.includes('material-specimens.png'))), false);
     assert.deepEqual(await page.locator('[data-sound-speed-lab]').locator('.field .medium-scene').evaluateAll(nodes => nodes.map(n => n.dataset.material)), ['air','water','steel']);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('[data-group=air] .liquid-volume, [data-group=air] .steel-shell').count(), 0);
     for (const cls of ['liquid-volume','liquid-surface','water-side','glass-front','liquid-reflection']) assert.equal(await page.locator('[data-sound-speed-lab]').locator(`[data-group=water] .field .${cls}`).count(), 1);
     for (const cls of ['steel-shell','steel-top','steel-end','steel-cutaway']) assert.equal(await page.locator('[data-sound-speed-lab]').locator(`[data-group=steel] .field .${cls}`).count(), 1);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('.medium-interior > g .particle').count(), 226);
-    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.end-particle').evaluateAll(nodes => nodes.every(n => n.closest('.medium-scene') && n.parentElement.classList.contains('medium-interior'))), true);
+    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.end-particle, .zoom, .end-observation, .end-state, .end-connection').count(), 0);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('[data-group=air] .particle[data-species=nitrogen]').first().locator('.atom').count(), 2);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('[data-group=water] .particle').first().locator('.atom').count(), 3);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('[data-group=steel] .particle').first().locator('.atom').count(), 1);
@@ -187,21 +187,23 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('#experiment-panel').evaluate(n => /預測|先猜|對錯/.test(n.textContent)), false);
   });
 
-  await t.test('one compact panel gives the embedded scenes the main space and connects end observations', async () => {
+  await t.test('one compact panel gives the embedded scenes the main space and shows only arrival times at the right', async () => {
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('.comparison-board').count(), 1);
     const rows = await page.locator('[data-sound-speed-lab]').locator('.medium-row').evaluateAll(nodes => nodes.map(row => {
       const box = selector => { const b = row.querySelector(selector).getBoundingClientRect(); return { x: b.x, y: b.y, width: b.width, height: b.height, right: b.right, bottom: b.bottom }; };
-      return { label: box('.medium-header'), field: box('.field'), end: box('.end-observation'), body: box('.row-body'), row: { y: row.getBoundingClientRect().y, bottom: row.getBoundingClientRect().bottom } };
+      return { label: box('.medium-header'), field: box('.field'), end: box('.arrival-readout'), body: box('.row-body'), row: { y: row.getBoundingClientRect().y, bottom: row.getBoundingClientRect().bottom } };
     }));
     assert.ok(rows.at(-1).row.bottom - rows[0].row.y < 560, 'all three media fit in a compact comparison');
     for (const row of rows) {
       assert.ok(row.label.right < row.field.x, 'material label sits beside the model');
       assert.ok(row.field.width >= row.label.width * 4.5 && row.field.height >= 100, 'vibration is the main visual');
-      assert.ok(Math.abs(row.field.right - row.end.x) < 1.1, 'end observation directly joins the field');
+      assert.ok(Math.abs(row.field.right - row.end.x) < 1.1, 'arrival readout directly joins the field');
       assert.ok(Math.abs(row.end.bottom - row.body.bottom) < 1.1);
     }
-    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.end-connection').count(), 3);
-    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.end-observation .arrival-readout').count(), 3);
+    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.arrival-readout').count(), 3);
+    assert.deepEqual(await page.locator('.arrival-readout').evaluateAll(ns=>ns.map(n=>[...n.children].map(c=>c.tagName))),Array(3).fill(['SPAN','OUTPUT']));
+    assert.deepEqual(await page.locator('.arrival-readout span').allTextContents(),Array(3).fill('到達時間'));
+    assert.equal(await page.locator('.arrival-readout svg, .end-state, .end-connection').count(),0);
   });
 
   await t.test('vibration begins locally and steel reaches the end while water and air remain still there', async () => {
@@ -209,8 +211,8 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.ok(await time() > .88 && await time() < .92);
     const readings = await page.locator('[data-sound-speed-lab]').locator('.arrival-readout output').allTextContents();
     assert.deepEqual(readings, ['—', '—', '0.847 秒']);
-    for (const id of ['air', 'water']) assert.equal(await page.locator('[data-sound-speed-lab]').locator(`[data-group=${id}] .end-particle`).evaluateAll(nodes => nodes.every(n => n.transform.baseVal.consolidate().matrix.e === Number(n.dataset.originX))), true);
-    assert.notEqual(await page.locator('[data-sound-speed-lab]').locator('[data-group=steel] .end-particle').first().evaluate(n => n.transform.baseVal.consolidate().matrix.e), 38);
+    for (const id of ['air', 'water']) assert.equal(await page.locator('[data-sound-speed-lab]').locator(`[data-group=${id}] .particle[data-distance="5000"]`).evaluateAll(nodes => nodes.every(n => n.transform.baseVal.consolidate().matrix.e === Number(n.dataset.originX))), true);
+    assert.ok(await page.locator('[data-group=steel] .particle[data-distance="5000"]').first().evaluate(n=>Math.abs(n.transform.baseVal.consolidate().matrix.e-Number(n.dataset.originX))>.1));
     const reached = await page.locator('[data-sound-speed-lab]').locator('.medium-row').evaluateAll(rows => rows.map(row => row.querySelectorAll('.particle[data-reached=true]').length / row.querySelectorAll('.particle').length));
     const m = await model, current = await time();
     assert.deepEqual(reached, m.conditions('material').map(g => { const points = m.positions(g.kind); return points.filter(p => p.distance <= g.speed * current).length / points.length; }));
@@ -398,9 +400,9 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('.propagation-front [stroke-dasharray]').count(),0);
     const m=await model, current=await time();
     for (const group of m.conditions('material')) {
-      const samples=await page.locator(`[data-group=${group.id}] .end-particle`).evaluateAll(nodes=>nodes.map(n=>({origin:Number(n.dataset.originX),distance:Number(n.dataset.distance),x:n.transform.baseVal.consolidate().matrix.e})));
+      const samples=await page.locator(`[data-group=${group.id}] .particle`).evaluateAll(nodes=>nodes.slice(-3).map(n=>({origin:Number(n.dataset.originX),distance:Number(n.dataset.distance),x:n.transform.baseVal.consolidate().matrix.e})));
       assert.ok(samples[0].distance<samples[1].distance&&samples[1].distance<samples[2].distance);assert.equal(samples[2].distance,5000);
-      for(const point of samples)assert.ok(Math.abs(point.x-point.origin-m.displacement(current-point.distance/group.speed)*m.ZOOM)<.0002);
+      for(const point of samples)assert.ok(Math.abs(point.x-point.origin-m.displacement(current-point.distance/group.speed))<.0002);
     }
     await page.locator('#reset-action').click();
   });
@@ -414,7 +416,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.match(await page.locator('[data-sound-speed-lab]').locator('#result-summary').textContent(), /鋼最先、水其次、空氣最後/);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('#result-title').textContent(), '觀察結果');
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('.particle').evaluateAll(nodes => nodes.every(n => Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
-    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.end-particle').evaluateAll(nodes => nodes.every(n => n.transform.baseVal.consolidate().matrix.e === Number(n.dataset.originX))), true);
+    assert.equal(await page.locator('.end-particle, .zoom, .end-state').count(),0);
     await page.locator('[data-sound-speed-lab]').locator('#reset-action').click(); assert.equal(await time(), 0); assert.equal(await page.locator('[data-sound-speed-lab]').locator('#result').isHidden(), true);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('[name=prediction]').count(), 0);
     assert.deepEqual(await page.locator('[data-sound-speed-lab]').locator('.propagation-readout output').allTextContents(), ['0 公尺','0 公尺','0 公尺']);
@@ -585,10 +587,12 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await mobile.locator('[data-sound-speed-lab]').locator('#temperature-value').textContent(), `${temperature}°C`);
     for (const mode of ['material', 'temperature']) {
       await mobile.locator('[data-sound-speed-lab]').locator(`#tab-${mode}`).tap();
+      await mobile.locator('#primary-action').tap();await mobile.clock.fastForward(20000);
       for (const width of [320, 390, 640, 768, 850, 1024, 1440]) {
         await mobile.setViewportSize({ width, height: 844 });
         await mobile.clock.runFor(32);
         assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${mode} must fit ${width}px`);
+        assert.equal(await mobile.locator('.arrival-readout').evaluateAll(ns=>ns.every(n=>{const a=n.getBoundingClientRect(),b=n.querySelector('output').getBoundingClientRect();return b.left>=a.left&&b.right<=a.right&&n.querySelectorAll('svg').length===0;})),true,'arrival numbers fit without endpoint illustrations');
         for (const selector of ['.medium-row', '.controls', '.model-information']) {
           const geometry=await mobile.locator('[data-sound-speed-lab]').evaluate((root,selector)=>{
             const main=root.getBoundingClientRect();

@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex">
   <title>第四學習區塊｜完整互動預覽</title>
-  <link rel="stylesheet" href="style.css?v=individual-11">
-  <link rel="stylesheet" href="../../units/2/parts/2.2/assets/sound-speed.css?v=individual-11">
+  <link rel="stylesheet" href="style.css?v=arrival-12">
+  <link rel="stylesheet" href="../../units/2/parts/2.2/assets/sound-speed.css?v=arrival-12">
 </head>
 <body>
   <header class="preview-header shell">
@@ -48,7 +48,7 @@
             <span class="model-time-wrap"><span id="clock-caption">經過時間</span> <output id="model-time" aria-label="實際播放經過時間，不含暫停" aria-live="off">0.000 秒</output></span>
           </div>
           <p class="observation-caption" id="observation-caption" role="status" aria-live="polite">敲擊音叉後，觀察音叉的來回振動如何帶動相鄰粒子。</p>
-          <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>介質</span><span>粒子振動 · 逐段傳遞</span><span>末端相鄰粒子</span></div><div id="models" class="models" role="group" aria-label="可個別敲擊或同步比較的粒子振動模型"></div></div>
+          <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>介質</span><span>粒子振動 · 逐段傳遞</span><span>到達時間</span></div><div id="models" class="models" role="group" aria-label="可個別敲擊或同步比較的粒子振動模型"></div></div>
           <p class="color-key">相鄰粒子依序往返，傳遞擾動；下方綠色刻度只記錄已傳到的位置。</p>
 
           <div class="controls">
@@ -73,13 +73,13 @@
           <li>各組共用持續 4 秒的往返示意訊號、5,000 公尺距離；各組由自己的敲擊時刻開始實時計時。1 秒播放對應 1 秒經過，暫停與背景頁面期間不計時。到達時間以「距離 ÷ 聲速」計算。</li>
           <li>本例取約 20°C 的空氣 343 m/s、水 1,480 m/s，以及鋼中縱波約 5,900 m/s。實際數值會隨材料及環境而變，不能只靠粒子疏密判斷聲速。</li>
           <li>空氣在 0～30°C 採近似關係：聲速 ≈ 331 ＋ 0.6 × 溫度。此設定只用於空氣。</li>
-          <li>下方刻度依「聲速 × 經過時間」記錄擾動前緣，不控制粒子起振。粒子完成訊號後回復原位。右側顯示末端三個相鄰位置，各自依所在位置的傳播延遲受振；最右邊才是終點。</li>
+          <li>下方刻度依「聲速 × 經過時間」記錄擾動前緣，不控制粒子起振。粒子完成訊號後回復原位。右側只顯示振動首次傳到 5,000 公尺的到達時間，尚未到達時顯示「—」。</li>
           <li>提示音只表示振動抵達最右端，不模擬各介質內的實際音色。</li>
         </ul></details>
       </div>
     </section>
   </main>
   <footer class="shell preview-footer"><a href="../../units/2/parts/2.2/#card-04">前往正式 2.2 課程的第四學習區塊</a></footer>
-  <script type="module" src="app.mjs?v=individual-11"></script>
+  <script type="module" src="app.mjs?v=arrival-12"></script>
 </body>
 </html>

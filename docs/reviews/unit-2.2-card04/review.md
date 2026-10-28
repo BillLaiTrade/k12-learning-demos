@@ -135,3 +135,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.2-
 ## 2026-10-28：個別音叉敲擊
 
 新增不同時刻敲擊各組、未敲擊組靜止、連按與 Enter／Space、各組獨立計時、已完成後重新敲擊、同步播放中只重敲一組、全體暫停／繼續、切換成同時敲擊與溫度模式檢查。提示音檢查亦確認其他組會繼續抵達終點。手機觸控確認點鋼不啟動水與空氣，七種寬度與完整課程回歸保留。截圖 individual-desktop.png、individual-mobile.png、individual-small.png、individual-temperature.png 已人工檢視，包含各組時間標示及個別操作控制。58 項檢查全部通過（含群組計數），完整測試輸出保存於 individual-tests.log。
+
+## 2026-10-28：到達時間欄精簡
+
+右側僅留標題與 output；末端放大圖、粒子、狀態與指示線均從 DOM 移除，對應動畫計算一併刪除。檢查三個到達欄子節點只有 SPAN／OUTPUT，且舊圖形與狀態不存在；未抵達顯示「—」，抵達後仍依物理時間顯示。相鄰粒子傳振檢查改取主介質內最後三個粒子，延遲計算維持同一模型。七種寬度在已抵達狀態下檢查秒數位於欄位內，個別敲擊、同步、暫停及前三區塊回歸保留。桌面、390px 與 320px 截圖已檢視，最新截圖已更新；58 項檢查全部通過（含群組計數），完整輸出見 arrival-tests.log。
