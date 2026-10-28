@@ -1,5 +1,5 @@
 import {OPTICS, mirror, viewRay, exteriorSample, observe, traceRay, returnSignal} from './periscope-optics.mjs';
-import {pathLength,pulseSegment} from './periscope-pulse.mjs';
+import {FLASH_MS,STATIC_FLASH_MS,REST_MS,pulseOpacity} from './periscope-pulse.mjs?v=2';
 
 const root=document.querySelector('#unit-quiz');
 if(root) {
@@ -10,7 +10,6 @@ if(root) {
   let scenePixels=null, lastViewKey='', pending=0, dragging=null;
   const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
   let pulse=null,pulseFrame=0,pulseEndTimer=0,pulseUnlockTimer=0,nextPulseAt=0,pulseCount=0;
-  const TRAVEL_MS=1400,HOLD_MS=300,FADE_MS=250,REST_MS=1050;
   const sceneImage=new Image();
   sceneImage.src=new URL('periscope/submarine-scene.webp?v=2',import.meta.url).href;
   sceneImage.onload=()=>{
@@ -21,13 +20,14 @@ if(root) {
   sceneImage.onerror=()=>{feedback('場景素材未載入，請重新整理頁面後再挑戰。','try');root.dataset.ready='error';};
   function feedback(text,kind='') {$('#periscope-feedback').textContent=text;$('#periscope-feedback').dataset.state=kind;}
   function point(p) {return p.slice(0,2).map(n=>n.toFixed(2)).join(',');}
-  function drawPath(el,points,color,reverse=false,muted=false) {
+  function drawPath(el,points,color,{reverse=false,muted=false,arrows=true}={}) {
     el.replaceChildren(); if(points.length<2)return;
     const ns='http://www.w3.org/2000/svg', d='M'+points.map(point).join('L');
     const add=(path,cls,stroke)=>{const e=document.createElementNS(ns,'path');e.setAttribute('d',path);e.setAttribute('class',cls);e.setAttribute('stroke',stroke);el.append(e);};
     if(!muted)add(d,'light-glow',color);
     add(d,'light-line',color);
     if(muted){el.style.opacity='.65';return;} el.style.opacity='1';
+    if(!arrows)return;
     for(let i=1;i<points.length;i++) {
       const a=reverse?points[i]:points[i-1], b=reverse?points[i-1]:points[i], len=Math.hypot(b[0]-a[0],b[1]-a[1]);
       if(len<60)continue;
@@ -56,13 +56,11 @@ if(root) {
       g.setAttribute('aria-valuenow',state.angles[i].toFixed(1));g.setAttribute('aria-valuetext',`鏡面方向 ${state.angles[i].toFixed(1)} 度，可用方向鍵微調`);
       g.setAttribute('aria-disabled',String(state.stage===2));g.setAttribute('tabindex',state.stage===2?'-1':'0');
     });
-    const marker=$('#periscope-block-marker');
-    marker.hidden=true;marker.setAttribute('hidden','');
     $('#periscope-normal').replaceChildren();
     $('#periscope-signal-source').toggleAttribute('hidden',state.stage!==2);
     if(state.stage===2) {
       const saved=returnSignal(state.saved);
-      drawPath($('#periscope-recorded'),signalPoints(saved).reverse(),'#fff0b1',false,true);
+      drawPath($('#periscope-recorded'),signalPoints(saved).reverse(),'#fff0b1',{muted:true});
       if(state.signal)drawPath($('#periscope-light'),signalPoints(returnSignal(state.angles)),'#48a9ff');
       else $('#periscope-light').replaceChildren();
     } else {
@@ -76,52 +74,53 @@ if(root) {
     root.dataset.pulseStatus=busy?'running':waiting?'cooldown':'idle';
     const button=$('#periscope-pulse');
     button.hidden=state.stage===2;button.disabled=busy||waiting;
-    button.textContent=busy?'✦ 提示光行進中':waiting?'✦ 稍後可再試':'✦ 發出提示光';
+    button.textContent=busy?'✦ 提示光亮起':waiting?'✦ 稍後可再試':'✦ 發出提示光';
     $('#periscope-hint').disabled=state.stage!==2&&(busy||waiting);
     $('#periscope-pulse-note').hidden=state.stage===2;
-    $('#periscope-pulse-note').textContent=busy?'這束光只走一次，看看它在哪裡轉彎或被擋住。':waiting?'提示光已結束。先調整鏡片，再試一次。':'發出一束提示光，觀察後再調整；光走完就消失。';
+    $('#periscope-pulse-note').textContent=busy?'這次光路短暫亮起，看看光在哪裡反射或被擋住。':waiting?'提示光已熄滅。先調整鏡片，再試一次。':'按一下短暫照亮目前光路，觀察後再調整。';
   }
   function cancelPulse(reset=false) {
     cancelAnimationFrame(pulseFrame);clearTimeout(pulseEndTimer);pulse=null;
     if(reset){clearTimeout(pulseUnlockTimer);nextPulseAt=0;}
     if(state.stage!==2 || reset){
-      const light=$('#periscope-light');light.replaceChildren();light.style.opacity='1';delete light.dataset.progress;
-      $('#periscope-normal').replaceChildren();$('#periscope-block-marker').setAttribute('hidden','');
+      const light=$('#periscope-light');light.replaceChildren();light.style.opacity='1';delete light.dataset.opacity;
+      $('#periscope-normal').replaceChildren();
     }
     updatePulseControls();
   }
   function drawPulse() {
     if(!pulse || state.stage===2)return;
-    const {ray,progress,opacity,showNormal}=pulse,light=$('#periscope-light');
-    const points=pulseSegment(ray.points,progress);
-    drawPath(light,points,'#ffe471');light.style.opacity=String(opacity);light.dataset.progress=String(progress);
-    const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    dot.setAttribute('cx',points.at(-1)[0]);dot.setAttribute('cy',points.at(-1)[1]);dot.setAttribute('r','5');dot.setAttribute('fill','#fff6c7');light.append(dot);
-    const marker=$('#periscope-block-marker');
-    marker.setAttribute('hidden','');
-    if(progress===1 && ray.kind==='blocked') {marker.removeAttribute('hidden');marker.style.opacity=String(opacity);marker.setAttribute('transform',`translate(${point(ray.points.at(-1))})`);}
+    const {ray,opacity,showNormal}=pulse,light=$('#periscope-light');
+    drawPath(light,ray.points,'#ffe471',{arrows:false});
+    light.style.opacity=String(opacity);light.dataset.opacity=String(opacity);
+    if(ray.kind==='blocked') {
+      const p=ray.points.at(-1),spot=document.createElementNS('http://www.w3.org/2000/svg','g');
+      spot.setAttribute('class','periscope-wall-spot');
+      for(const [radius,fill,alpha] of [[13,'#ffe397',.5],[6,'#ffe9a2',.75],[3,'#fff9de',1]]) {
+        const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+        c.setAttribute('cx',p[0]);c.setAttribute('cy',p[1]);c.setAttribute('r',radius);c.setAttribute('fill',fill);c.setAttribute('opacity',alpha);
+        if(radius===13)c.setAttribute('filter','url(#scope-glow)');spot.append(c);
+      }
+      light.append(spot);
+    }
     $('#periscope-normal').replaceChildren();
     const hit=ray.hits.at(-1);
     if(showNormal && hit) {
-      const lastHitDistance=pathLength(ray.points.slice(0,ray.points.findIndex(p=>Math.hypot(p[0]-hit.point[0],p[1]-hit.point[1])<1e-5)+1));
-      if(progress*pathLength(ray.points)>=lastHitDistance) {
-        const n=document.createElementNS('http://www.w3.org/2000/svg','path'),p=hit.point,v=hit.normal;
-        n.setAttribute('d',`M${p[0]-v[0]*65},${p[1]-v[1]*65}L${p[0]+v[0]*65},${p[1]+v[1]*65}`);n.setAttribute('stroke','#eafff9');n.setAttribute('stroke-width','3');n.setAttribute('stroke-dasharray','8 6');n.setAttribute('opacity',opacity);$('#periscope-normal').append(n);
-      }
+      const n=document.createElementNS('http://www.w3.org/2000/svg','path'),p=hit.point,v=hit.normal;
+      n.setAttribute('d',`M${p[0]-v[0]*65},${p[1]-v[1]*65}L${p[0]+v[0]*65},${p[1]+v[1]*65}`);n.setAttribute('stroke','#eafff9');n.setAttribute('stroke-width','3');n.setAttribute('stroke-dasharray','8 6');n.setAttribute('opacity',opacity);$('#periscope-normal').append(n);
     }
   }
   function emitPulse() {
     const now=performance.now();
     if(state.stage===2 || pulse || dragging || document.hidden || now<nextPulseAt)return;
-    const duration=reducedMotion.matches?700:TRAVEL_MS+HOLD_MS+FADE_MS;
-    const shot={ray:forwardRay(),progress:reducedMotion.matches?1:0,opacity:1,showNormal:state.hint>=2};
+    const duration=reducedMotion.matches?STATIC_FLASH_MS:FLASH_MS;
+    const shot={ray:forwardRay(),opacity:reducedMotion.matches?1:0,showNormal:state.hint>=2};
     pulse=shot;nextPulseAt=now+duration+REST_MS;root.dataset.pulseId=String(++pulseCount);
     render();
     const animate=time=>{
       if(pulse!==shot)return;
       const elapsed=Math.max(0,time-now);
-      shot.progress=Math.min(1,elapsed/TRAVEL_MS);
-      shot.opacity=Math.max(0,1-Math.max(0,elapsed-TRAVEL_MS-HOLD_MS)/FADE_MS);
+      shot.opacity=pulseOpacity(elapsed);
       drawPulse();
       if(elapsed<duration)pulseFrame=requestAnimationFrame(animate);
     };
@@ -248,7 +247,7 @@ if(root) {
   $$('[data-prediction]').forEach(b=>b.addEventListener('click',()=>{invalidate();state.prediction=b.dataset.prediction;state.verified=false;state.signal=false;render();}));
   $('#periscope-pulse').addEventListener('click',emitPulse);
   const hints=[
-    ['先讓眼睛收到下方鏡片反射的光，再觀察上方鏡片把視線帶向哪裡。','看天空或海面時，外界光路仍接通；全暗則先檢查視線有沒有撞上管壁。','沿法線比較入射與反射方向。黃色叉號是這條示例光線被擋住的位置。'],
+    ['先讓眼睛收到下方鏡片反射的光，再觀察上方鏡片把視線帶向哪裡。','看天空或海面時，外界光路仍接通；全暗則先檢查視線有沒有撞上管壁。','沿法線比較入射與反射方向。若出現光斑，表示這條光在那裡被擋住。'],
     ['故障前，下方鏡片已把光送進眼睛。先比較光路從哪一處開始偏離。','法線與鏡面垂直。每一處反射都要讓入射角等於反射角。','只剩天空不代表光消失了，而是看向了另一個方向。'],
     ['將傳播方向反過來，入射線與反射線的角色會交換。','鏡子固定時，同一反射點兩側的角度仍相等。','藍光由原本眼睛的位置出發；比較它和黃色原路線是否完整重合。']
   ];
