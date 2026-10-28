@@ -3,37 +3,37 @@
   const $ = selector => document.querySelector(selector);
   const book = {
     earth: {
-      past: '「土」曾被視為物質的基本成分之一。', title: '看看土壤裡有什麼', instruction: '點選成分，觀察它在土樣中的位置。',
-      evidence: '土壤調查與成分研究發現，土樣含有多種物質。', today: '日常泥土通常是混合物，不是單一化學元素。',
+      past: '「土」是基本成分', title: '看看土壤裡有什麼', instruction: '點選成分，觀察它在土樣中的位置。',
+      evidence: '土樣 → 多種成分', today: '泥土：通常為混合物',
       note: '組成示意，非顯微照片；不表示各成分比例。',
       choices: [['mineral','礦物'],['organic','有機物'],['water','水'],['air','空氣']], initial: 'water',
       feedback: { mineral: '礦物：來自岩石風化等過程，是土壤固體顆粒的一部分。', organic: '有機物：可包括植物殘體及其分解形成的物質。', water: '水：存在於土壤顆粒之間的孔隙中。', air: '空氣：存在於未被水填滿的孔隙中，不是另一種石粒。' }
     },
     water: {
-      past: '水曾被列為構成物質的基本元素。', title: '從兩個方向認識水', instruction: '看研究者做了什麼，以及哪些觀察改變了看法。',
-      evidence: '研究發現，水能經化學分解得到氫與氧。', today: '水是由氫、氧兩種元素組成的化合物。',
+      past: '水是基本元素', title: '從兩個方向認識水', instruction: '看研究者做了什麼，以及哪些觀察改變了看法。',
+      evidence: '水 → 氫 ＋ 氧', today: '水：化合物',
       note: '不同研究的概念示意，非歷史裝置復原；分解以電解水為例，省略電解質及氣體檢驗細節，未表示氣體體積比例。',
       choices: [['formation','看生成水'],['decomposition','看分解水']], initial: 'decomposition',
       feedback: { formation: '生成水：氫與氧反應產生水蒸氣，冷卻後可凝結成水滴。水不是憑空出現，而是反應的產物。', decomposition: '分解水：適當條件下通電，水發生化學分解；兩側收集的氣體經檢驗，是已確認的氫與氧。不是水沸騰變成水蒸氣。' }
     },
     air: {
-      past: '「氣」曾被視為物質的基本成分之一。', title: '看似相近，性質卻不同', instruction: '比較已知的蠟燭燃燒表現，再看空氣組成。',
-      evidence: '研究者發現多種氣體，並逐步查明空氣的組成。', today: '日常空氣含氮、氧等多種氣體，是混合物。',
+      past: '「氣」是基本成分', title: '看似相近，性質卻不同', instruction: '比較已知的蠟燭燃燒表現，再看空氣組成。',
+      evidence: '含氮、氧等氣體', today: '空氣：混合物',
       note: '氣體均無色；燭芯細煙不代表二氧化碳的顏色。插畫為定性示意，不以火焰大小計算空氣組成。',
       choices: [['oxygen','氧氣'],['ordinary','空氣'],['carbon','二氧化碳']], initial: 'ordinary',
       feedback: { oxygen: '氧氣：可使蠟燭燃燒更旺。氧氣是助燃氣體，並不是燃料。', ordinary: '空氣：能讓蠟燭燃燒；組成研究顯示，其中包含氮、氧及其他氣體。', carbon: '二氧化碳：不能維持這裡的蠟燭燃燒。這個比較本身還不足以證明空氣是混合物。' }
     },
     fire: {
-      past: '火曾被列為構成物質的基本元素。', title: '火是成分，還是燃燒時的現象？', instruction: '從熟悉的蠟燭，看火焰與物質的變化。',
-      evidence: '燃燒研究發現，蠟燭中的蠟會與氧發生反應。', today: '火焰是燃燒時的現象，不是一種化學元素。',
+      past: '火是基本元素', title: '火是成分，還是燃燒時的現象？', instruction: '從熟悉的蠟燭，看火焰與物質的變化。',
+      evidence: '燃料 ＋ 氧 → 新物質', today: '火焰：燃燒的現象',
       note: '以蠟充分燃燒為例；生成的氣體通常看不見，身分需由實驗確認。蠟融化本身不是燃燒。',
       choices: [], feedback: {}
     }
   };
   const svg = (content, label, height = 360) => `<svg class="inquiry-svg" viewBox="0 0 600 ${height}" role="img" aria-label="${label}">${content}</svg>`;
-  function soil() {
+  function soil(interactiveLegend=false) {
     const points = [['mineral',310,290,'1'],['organic',760,330,'2'],['water',340,600,'3'],['air',680,720,'4']];
-    return `<div class="soil-observer"><svg viewBox="0 0 1000 1000" role="group" aria-label="土壤組成觀察圖，選擇標記查看成分"><image href="assets/soil-composition.png" width="1000" height="1000"/><g>${points.map(([key,x,y,n])=>`<g data-observe="${key}" class="soil-target" role="button" tabindex="0" aria-label="查看${book.earth.choices.find(c=>c[0]===key)[1]}位置" aria-pressed="false"><circle class="soil-ring" cx="${x}" cy="${y}" r="53"/><circle cx="${x}" cy="${y}" r="20" fill="white" stroke="#366956" stroke-width="3"/><text x="${x}" y="${y+8}" text-anchor="middle" font-size="25" font-weight="800" fill="#214e3e">${n}</text></g>`).join('')}</g></svg></div><div class="soil-legend"><span>1 礦物顆粒</span><span>2 有機物</span><span>3 水</span><span>4 空氣孔隙</span></div>`;
+    return `<div class="soil-observer"><svg viewBox="0 0 1000 1000" role="group" aria-label="土壤組成觀察圖，選擇標記查看成分"><image href="assets/soil-composition.png" width="1000" height="1000"/><g>${points.map(([key,x,y,n])=>`<g data-observe="${key}" class="soil-target" role="button" tabindex="0" aria-label="查看${book.earth.choices.find(c=>c[0]===key)[1]}位置" aria-pressed="false"><circle cx="${x}" cy="${y}" r="100" fill="transparent"/><circle class="soil-ring" cx="${x}" cy="${y}" r="53"/><circle cx="${x}" cy="${y}" r="20" fill="white" stroke="#366956" stroke-width="3"/><text x="${x}" y="${y+8}" text-anchor="middle" font-size="25" font-weight="800" fill="#214e3e">${n}</text></g>`).join('')}</g></svg></div><div class="soil-legend">${book.earth.choices.map(([key,label],i)=>interactiveLegend?`<button type="button" data-observation="${key}" aria-pressed="false">${i+1} ${label}</button>`:`<span>${i+1} ${label}</span>`).join('')}</div>`;
   }
   function water() {
     const drop = (x,y,size=1) => `<path transform="translate(${x} ${y}) scale(${size})" d="M0-15C-4-7-12 0-12 8C-12 24 12 24 12 8C12 0 4-7 0-15Z" fill="#77c9e4" stroke="#4c9bb8" stroke-width="2"/>`;
@@ -112,12 +112,15 @@
   function mainArtwork(key) {
     const airAsset='assets/air-candle-study.png?v=f539a640e9de';
     const fireAsset='assets/candle-combustion-study.png?v=5088e35c57d3';
-    if (key==='earth') return { art:'<img class="compact-earth" src="assets/soil-composition.png" width="1000" height="1000" alt="土樣中交錯分布的礦物、有機物、水與空氣孔隙。">', caption:'土壤組成示意，不表示成分比例。' };
+    if (key==='earth') return { art:soil(true), caption:'點選標記看位置・組成示意，非比例。' };
     if (key==='water') {
       const diagrams=document.createElement('div');diagrams.innerHTML=water();
       return { art:diagrams.querySelector('[data-focus=decomposition] svg').outerHTML, caption:'水分解的結果示意，氣體身分經檢驗確認。' };
     }
-    if (key==='air') return { art:`<div class="compact-image-labels three"><span>氧氣</span><span>空氣</span><span>二氧化碳</span></div><img src="${airAsset}" width="1774" height="887" alt="三種氣體中的蠟燭：氧氣中火焰較旺，空氣中一般燃燒，二氧化碳中熄滅。"><div class="compact-image-results"><span>較旺</span><span>燃燒</span><span>熄滅</span></div>`, caption:'氣體無色；燭芯細煙不是二氧化碳本身。' };
+    if (key==='air') {
+      const views=[['oxygen','氧氣','較旺'],['ordinary','空氣','燃燒'],['carbon','二氧化碳','熄滅']];
+      return { art:`<div class="main-gas-comparison">${views.map(([value,label,result],i)=>`<button type="button" class="gas-thumbnail" data-observation="${value}" data-gas-view="${value}" aria-pressed="false" aria-haspopup="dialog" aria-controls="observation-view" aria-label="放大觀察${label}中的蠟燭"><span>${label}</span><span class="study-picture gas-picture"><img src="${airAsset}" width="1774" height="887" alt="" style="left:${-100*i}%"></span><small>${result}</small></button>`).join('')}</div>`, caption:'點圖放大・氣體無色，細煙來自燭芯。' };
+    }
     return { art:`<div class="compact-image-labels"><span>燃燒前</span><span>燃燒時</span></div><img src="${fireAsset}" width="1448" height="1086" alt="熟悉的蠟燭燃燒前與燃燒中：燭芯上方出現火焰，發光並放熱。">`, caption:'蠟燭燃燒的生活例子（插畫示意）。' };
   }
   function select(key, observation) {
@@ -139,11 +142,11 @@
     const artwork=mainArtwork(key);
     $('#inquiry-illustration').innerHTML=artwork.art;
     $('#inquiry-figure-note').textContent=artwork.caption;
-    $('#inquiry-diagram').innerHTML=diagrams[key]();
+    $('#inquiry-diagram').innerHTML=key==='earth'?'':diagrams[key]();
     const controls=$('#inquiry-controls');controls.replaceChildren();
-    controls.hidden=item.choices.length===0;
-    $('#inquiry-feedback').hidden=controls.hidden;
-    item.choices.forEach(([value,label])=>{
+    controls.hidden=item.choices.length===0 || key==='earth';
+    $('#inquiry-feedback').hidden=item.choices.length===0;
+    (key==='earth'?[]:item.choices).forEach(([value,label])=>{
       const button=document.createElement('button');button.type='button';button.dataset.observation=value;button.textContent=label;
       button.addEventListener('click',()=>select(key,value));controls.append(button);
     });
@@ -151,9 +154,21 @@
       point.addEventListener('click',()=>select(key,point.dataset.observe));
       point.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(key,point.dataset.observe);}});
     });
+    root.querySelectorAll('.soil-legend button[data-observation]').forEach(button=>button.addEventListener('click',()=>select(key,button.dataset.observation)));
+    root.querySelectorAll('[data-gas-view]').forEach(button=>button.addEventListener('click',()=>{
+      select('air',button.dataset.gasView);
+      const keys=['oxygen','ordinary','carbon'],index=keys.indexOf(button.dataset.gasView);
+      $('#observation-view-title').textContent=book.air.choices[index][1]+'中的蠟燭';
+      $('#observation-view-image').innerHTML=`<div class="study-picture gas-picture"><img src="assets/air-candle-study.png?v=f539a640e9de" width="1774" height="887" alt="${book.air.choices[index][1]}中的蠟燭燃燒表現，氣體無色，圖片為示意。" style="left:${-100*index}%"></div>`;
+      $('#observation-view-caption').textContent=book.air.feedback[button.dataset.gasView];
+      $('#observation-view').showModal();
+    }));
+    $('#observation-view').close();
+    $('#observation-view-image').replaceChildren();
     $('#inquiry-research').open=false;
     if (item.choices.length) select(key,item.initial);
     else { delete root.dataset.observation; $('#inquiry-feedback').textContent=''; }
   }
+  $('#observation-view-close').addEventListener('click',()=>$('#observation-view').close());
   window.ClassicalInquiry={render};
 })();

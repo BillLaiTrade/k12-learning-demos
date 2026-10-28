@@ -9,8 +9,8 @@
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/elements.css?v=9635d239931e">
   <link rel="stylesheet" href="assets/classical-comparison.css?v=1629aa07d73a">
-  <link rel="stylesheet" href="assets/classical-inquiry.css?v=94bb347996cd">
-  <script src="assets/classical-inquiry.js?v=95ddd5df10fa" defer></script>
+  <link rel="stylesheet" href="assets/classical-inquiry.css?v=0b290a54e654">
+  <script src="assets/classical-inquiry.js?v=d40ccdbd7db0" defer></script>
   <script src="assets/elements.js?v=7895c93d6683" defer></script>
 </head>
 <body>
@@ -51,11 +51,12 @@
               <div class="compact-inquiry">
                 <figure class="inquiry-main-figure"><div id="inquiry-illustration"></div><figcaption id="inquiry-figure-note"></figcaption></figure>
                 <ol class="inquiry-path">
-                  <li class="inquiry-stage" data-stage="past"><span>以前怎麼想</span><p id="inquiry-past-summary"></p></li>
-                  <li class="inquiry-stage" data-stage="evidence"><span>發現了什麼</span><p id="inquiry-evidence-summary"></p></li>
-                  <li class="inquiry-stage" data-stage="modern"><span>現在怎麼看</span><p id="inquiry-conclusion-text"></p></li>
+                  <li class="inquiry-stage" data-stage="past"><span>古代觀點</span><p id="inquiry-past-summary"></p></li>
+                  <li class="inquiry-stage" data-stage="evidence"><span>研究線索</span><p id="inquiry-evidence-summary"></p></li>
+                  <li class="inquiry-stage" data-stage="modern"><span>現代理解</span><p id="inquiry-conclusion-text"></p></li>
                 </ol>
               </div>
+              <dialog id="observation-view" aria-labelledby="observation-view-title"><button type="button" id="observation-view-close" aria-label="關閉放大觀察">關閉 ×</button><h5 id="observation-view-title"></h5><div id="observation-view-image"></div><p id="observation-view-caption"></p></dialog>
               <details id="inquiry-research"><summary>深入了解：研究過程與資料來源</summary><div class="inquiry-background"><h5 id="history-past-title"></h5><p id="history-past-text"></p><h5 id="history-evidence-title"></h5><p id="history-evidence-text"></p><p id="history-observation"></p><h5 id="history-modern-title"></h5><p id="history-modern-text"></p><p id="history-scope"></p><p>查核資料：<span id="history-sources"></span></p><div class="inquiry-study"><h5 id="inquiry-title"></h5><p id="inquiry-instruction"></p><div id="inquiry-diagram"></div><div class="inquiry-controls" id="inquiry-controls" role="group" aria-label="選擇觀察重點"></div><p id="inquiry-feedback" role="status"></p><p id="inquiry-diagram-note"></p></div></div></details>
             </div>
           </section>

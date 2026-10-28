@@ -103,7 +103,7 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       for (const row of await rows.all()) assert.equal(await row.isVisible(), true);
       assert.equal(await page.locator('.water-record').count(), key === 'water' ? 2 : 0);
     }
-    assert.match(await text('#inquiry-evidence-summary'), /分解得到氫與氧/);
+    assert.match(await text('#inquiry-evidence-summary'), /水.*氫.*氧/);
     assert.equal(await page.locator('.inquiry-study').isVisible(), false);
     await capture('#s1', 'comparison-water-desktop');
     await page.locator('#inquiry-research summary').click();
@@ -170,6 +170,40 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await page.setViewportSize({width:1440,height:1000});
   });
 
+  await t.test('pictures can be explored directly while narrative details stay collapsed', async () => {
+    await page.locator('[data-classical=earth]').click();
+    assert.equal(await page.locator('#inquiry-research').getAttribute('open'), null);
+    assert.equal(await page.locator('.soil-target').count(), 4);
+    await page.locator('.soil-legend button[data-observation=air]').click();
+    assert.equal(await page.locator('.soil-target.focused').getAttribute('data-observe'), 'air');
+    await page.locator('[data-observe=mineral]').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('.soil-legend button[data-observation=mineral]').getAttribute('aria-pressed'), 'true');
+    for (const label of await page.locator('.inquiry-path p').allTextContents()) assert.ok(label.length <= 20);
+    await page.locator('[data-classical=air]').click();
+    const initial = await page.locator('.gas-thumbnail small').allTextContents();
+    assert.deepEqual(initial, ['較旺','燃燒','熄滅']);
+    for (const value of ['oxygen','ordinary','carbon']) {
+      const trigger=page.locator(`[data-gas-view="${value}"]`);
+      await trigger.click();
+      assert.equal(await page.locator('#observation-view').isVisible(), true);
+      await page.waitForFunction(() => document.querySelector('#observation-view-image img').naturalWidth > 1000);
+      if (value === 'oxygen') {
+        assert.match(await text('#observation-view-caption'), /助燃.*不是燃料/);
+        await capture('#observation-view', 'air-magnified');
+        await page.locator('#observation-view-close').click();
+      } else await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#observation-view').isVisible(), false);
+      assert.equal(await trigger.evaluate(node => node === document.activeElement), true);
+      assert.equal(await page.locator('#inquiry-research').getAttribute('open'), null);
+      assert.deepEqual(await page.locator('.gas-thumbnail small').allTextContents(), initial);
+    }
+    await page.locator('[data-classical=fire]').click();
+    assert.equal(await page.locator('.inquiry-main-figure button').count(), 0);
+    for (const label of await page.locator('.inquiry-path p').allTextContents()) assert.ok(label.length <= 20);
+    await page.locator('#classical-close').click();
+  });
+
   await t.test('detailed explorations remain available without expanding the primary explanation', async () => {
     await page.locator('[data-classical=earth]').click();
     assert.equal(await page.locator('#inquiry-research').getAttribute('open'), null);
@@ -178,9 +212,9 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     assert.equal(await page.locator('.soil-target').count(), 4);
     assert.equal(await page.locator('.soil-observer image').evaluate(n => n.href.baseVal.endsWith('soil-composition.png')), true);
     for (const value of ['mineral','organic','water','air']) {
-      await page.locator(`button[data-observation="${value}"]`).click();
+      await page.locator(`.soil-legend button[data-observation="${value}"]`).click();
       assert.equal(await page.locator('.soil-target.focused').getAttribute('data-observe'), value);
-      assert.equal(await page.locator(`button[data-observation="${value}"]`).getAttribute('aria-pressed'), 'true');
+      assert.equal(await page.locator(`.soil-legend button[data-observation="${value}"]`).getAttribute('aria-pressed'), 'true');
     }
     assert.match(await text('#inquiry-feedback'), /未被水填滿的孔隙/);
     await page.locator('[data-observe=mineral]').focus(); await page.keyboard.press('Enter');
@@ -192,7 +226,7 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     assert.match(await text('.water-record[data-focus=decomposition]'), /兩側收集的氣體，分別是氫與氧/);
     assert.match(await page.locator('.water-record[data-focus=decomposition] svg').getAttribute('aria-label'), /負極收集氫氣、正極收集氧氣/);
     for (const value of ['formation','decomposition']) {
-      await page.locator(`button[data-observation="${value}"]`).click();
+      await page.locator(`#inquiry-controls button[data-observation="${value}"]`).click();
       assert.equal(await page.locator('.water-record.focused').getAttribute('data-focus'), value);
       for (const record of await page.locator('.water-record').all()) assert.equal(await record.isVisible(), true);
     }
@@ -202,12 +236,12 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     assert.equal(await page.locator('.gas-record img').count(), 3);
     assert.match(await text('#inquiry-diagram-note'), /氣體均無色/);
     for (const value of ['oxygen','carbon','ordinary']) {
-      await page.locator(`button[data-observation="${value}"]`).click();
+      await page.locator(`#inquiry-controls button[data-observation="${value}"]`).click();
       assert.equal(await page.locator('.gas-record.focused').getAttribute('data-focus'), value);
       assert.equal(await page.locator('.gas-record').count(), 3);
     }
     assert.match(await page.locator('.air-composition').textContent(), /氮.*氧.*其他氣體/);
-    await page.locator('button[data-observation=carbon]').click();
+    await page.locator('#inquiry-controls button[data-observation=carbon]').click();
     assert.match(await text('#inquiry-feedback'), /不足以證明空氣是混合物/);
     await page.locator('[data-classical=fire]').click();
     await page.locator('#inquiry-research summary').click();
@@ -216,7 +250,7 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     assert.equal(await page.locator('.fire-sequence img').count(), 2);
     assert.match(await text('.fire-burning'), /火焰發光、放熱/);
     assert.match(await text('.fire-after'), /水蒸氣、二氧化碳/);
-    assert.match(await text('#inquiry-conclusion-text'), /火焰是燃燒時的現象/);
+    assert.match(await text('#inquiry-conclusion-text'), /火焰.*燃燒.*現象/);
     assert.equal(await page.locator('.fire-findings,#inquiry-conclusion-visual').count(), 0);
     assert.match(await text('.candle-reaction'), /蠟.*氧氣.*充分燃燒/s);
     assert.equal(await page.locator('#inquiry-controls button').count(), 0);
@@ -227,7 +261,8 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await page.locator('[data-classical=earth]').click();
     assert.equal(await page.locator('.inquiry-study').isVisible(), false);
     await page.locator('#inquiry-research summary').click();
-    assert.equal(await page.locator('#inquiry-controls').isVisible(), true);
+    assert.equal(await page.locator('.soil-legend button').first().isVisible(), true);
+    assert.equal(await page.locator('#inquiry-controls').isVisible(), false);
     assert.equal(await page.locator('#inquiry-feedback').isVisible(), true);
     assert.equal(await page.locator('#visual-inquiry').getAttribute('data-observation'), 'water');
     assert.equal(await page.locator('.water-record').count(), 0);
@@ -448,6 +483,16 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     const mobile = await context.newPage();
     watch(mobile);
     await mobile.goto(base);
+    await mobile.locator('[data-classical=earth]').tap();
+    await mobile.locator('.soil-legend button[data-observation=air]').tap();
+    assert.equal(await mobile.locator('.soil-target.focused').getAttribute('data-observe'), 'air');
+    await mobile.locator('[data-classical=air]').tap();
+    await mobile.locator('[data-gas-view=carbon]').tap();
+    assert.equal(await mobile.locator('#observation-view').isVisible(), true);
+    assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
+    if (captureDir) await mobile.locator('#observation-view').screenshot({ path: path.join(captureDir, 'air-magnified-mobile.png') });
+    await mobile.locator('#observation-view-close').tap();
+    assert.equal(await mobile.locator('#observation-view').isVisible(), false);
     await mobile.locator('[data-classical=water]').tap();
     assert.equal(await mobile.locator('#classical-detail').isVisible(), true);
     assert.equal(await mobile.locator('[data-classical]').count(), 4);
