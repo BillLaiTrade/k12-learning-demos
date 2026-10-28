@@ -108,10 +108,8 @@
       <div class="fire-sequence">
         <article class="fire-before"><h6><span>01</span> 燃燒前</h6><div class="study-picture candle-picture" role="img" aria-label="未點燃的蠟燭：可見蠟質、燭芯與陶盤，沒有火焰。"><img src="assets/candle-combustion-study.png?v=5088e35c57d3" width="1448" height="1086" alt="" decoding="async" style="left:0"></div><p>蠟燭與空氣</p></article>
         <article class="fire-burning"><h6><span>02</span> 燃燒時</h6><div class="study-picture candle-picture" role="img" aria-label="蠟燭燃燒：燭芯上方可見火焰，蠟的表面有融化的蠟池，火焰發光放熱。"><img src="assets/candle-combustion-study.png?v=5088e35c57d3" width="1448" height="1086" alt="" decoding="async" style="left:-100%"></div><p>火焰發光、放熱</p></article>
-        <article class="fire-after"><h6><span>03</span> 生成物</h6><p>水蒸氣、二氧化碳<small>通常看不見，需由實驗確認</small></p></article>
       </div>
-      <div class="candle-reaction"><span>蠟（燃料）＋ 空氣中的氧氣</span><b>↓ 充分燃燒</b><span>水蒸氣 ＋ 二氧化碳</span></div>
-      <div class="fire-findings"><strong>火焰是燃燒時的現象</strong><span>蠟與氧反應形成新物質，<br>不是釋出一種叫「火」的元素。</span></div>
+      <div class="fire-explanation"><p class="evidence-eyebrow">觀察到的現象</p><h6>燭芯上方出現火焰，<br>發光，也放熱。</h6><div class="candle-reaction"><span>蠟（燃料）＋ 空氣中的氧氣</span><b>↓ 充分燃燒，形成新物質</b><div class="fire-after"><strong>水蒸氣、二氧化碳</strong><small>通常看不見，身分需由實驗確認</small></div></div></div>
     </div>`;
   }
   const diagrams = { earth:soil, water, air, fire };
@@ -129,11 +127,9 @@
   function render(key) {
     const item=book[key],root=$('#visual-inquiry');
     root.dataset.item=key;
-    $('#inquiry-past-icon').className=`classical-icon icon-${key}`;
     const texts={ 'inquiry-past-summary':item.past, 'inquiry-title':item.title, 'inquiry-instruction':item.instruction, 'inquiry-conclusion-title':item.conclusion, 'inquiry-conclusion-text':item.result, 'inquiry-history-brief':item.brief, 'inquiry-diagram-note':item.note };
     Object.entries(texts).forEach(([id,value])=>{$(`#${id}`).textContent=value;});
     $('#inquiry-diagram').innerHTML=diagrams[key]();
-    $('#inquiry-conclusion-visual').innerHTML=key==='earth'?'<div class="result-chips"><span>礦物</span><span>有機物</span><span>水</span><span>空氣</span></div><span class="classical-icon icon-earth"></span>':key==='water'?'<div class="result-chips"><span>氫元素</span><span>氧元素</span></div><span class="classical-icon icon-water"></span>':key==='air'?'<div class="conclusion-study study-picture gas-picture"><img src="assets/air-candle-study.png?v=f539a640e9de" width="1774" height="887" alt="" decoding="async" style="left:-100%"></div><div class="result-chips"><span>氮</span><span>氧</span><span>其他氣體</span></div>':'<div class="conclusion-study study-picture candle-picture"><img src="assets/candle-combustion-study.png?v=5088e35c57d3" width="1448" height="1086" alt="" decoding="async" style="left:-100%"></div><div class="result-chips"><span>物質反應</span><span>發熱、發光</span></div>';
     const controls=$('#inquiry-controls');controls.replaceChildren();
     controls.hidden=item.choices.length===0;
     $('#inquiry-feedback').hidden=controls.hidden;

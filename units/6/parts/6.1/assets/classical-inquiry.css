@@ -1,17 +1,135 @@
-.visual-inquiry{padding:20px 16px;background:#fffef9}.visual-inquiry>h4{margin:0 0 16px;font-size:1.1rem;color:#285e48}.inquiry-grid{display:grid;grid-template-columns:minmax(125px,.7fr) minmax(0,2.1fr) minmax(160px,.9fr);gap:15px;align-items:stretch}.inquiry-stage{min-width:0;border-radius:15px;padding:15px 12px}.inquiry-past{background:linear-gradient(#fff4df,#fffaf0);border:1px solid #edd8ae}.inquiry-evidence{background:#f9fbf6;padding:15px 0}.inquiry-modern{background:linear-gradient(#e7f4e8,#f5fbf2);border:1px solid #c9e0cc}.inquiry-kicker{display:flex;align-items:center;gap:7px;color:#355f45;font-size:.86rem;font-weight:800;line-height:1.6;min-height:36px;margin-bottom:15px}.inquiry-kicker b{display:grid;place-items:center;width:32px;height:32px;background:#e4ecdc;border-radius:50%;flex:0 0 auto;font-size:.95rem}.inquiry-past .inquiry-kicker b{background:#f6e4c2}.inquiry-evidence h5{font-size:1.24rem;line-height:1.45;margin:0 0 6px}.inquiry-evidence>p:first-of-type{font-size:.85rem;color:#566e62;line-height:1.6;margin:0 0 12px}.ancient-paper{margin:20px 0 18px;padding:14px 6px;border:1px solid #d0b47e;border-radius:3px;background:linear-gradient(110deg,#ecd9af,#fff2d4 30%,#efdeb9);box-shadow:3px 5px 0 #c9b18520;text-align:center;transform:rotate(-3deg)}.ancient-paper>span{display:block;font-size:.72rem;color:#7b5c2b;font-weight:750}.ancient-paper .classical-icon{display:block;width:95px;height:95px;margin:14px auto}.ancient-paper>small{display:block;font-size:.85rem;color:#6b542e;white-space:nowrap}.inquiry-past>p{font-size:1rem;font-weight:750;line-height:1.9;margin:16px 0}.inquiry-modern h5{font-size:1.17rem;line-height:1.65;margin:18px 0 12px}.inquiry-modern>p{font-size:.94rem;line-height:1.85}.result-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:18px 0 8px}.result-chips span{padding:5px 8px;border:1px solid #c6d9c3;border-radius:8px;background:#fffdfa;font-size:.8rem;color:#395943}.inquiry-modern .classical-icon{display:block;width:110px;height:110px;margin:14px auto}.inquiry-svg{display:block;width:100%;height:auto}.inquiry-svg text{font-family:inherit;font-size:21px;font-weight:700;fill:#2f5144}.inquiry-svg .diagram-heading{font-size:19px}.inquiry-svg .diagram-caption{font-size:16px;font-weight:600}.inquiry-svg .gas-result{font-size:18px}.inquiry-svg .smoke-label{font-size:16px;fill:#7e8d86}.inquiry-svg .water-record>rect,.inquiry-svg .gas-record>rect{fill:#f0f6f7;stroke:#c4d6d4;stroke-width:2}.inquiry-svg .water-record.focused>rect,.inquiry-svg .gas-record.focused>rect{fill:#ecf7e9;stroke:#378b61;stroke-width:3}.inquiry-controls{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.inquiry-controls button{flex:1 1 auto;min-height:42px;padding:7px 9px;border:1px solid #c6d7c7;border-radius:10px;background:#fffdf7;color:#28503c;font-weight:750;font-size:.86rem}.inquiry-controls button[aria-pressed="true"]{background:#1b6c53;border-color:#1b6c53;color:white}#inquiry-feedback{padding:11px 12px;background:#e6f3e4;border-radius:9px;font-size:.89rem;line-height:1.8;color:#245640;min-height:76px;margin:0}#inquiry-diagram-note{font-size:.74rem;line-height:1.7;color:#708075;margin:10px 0 0}.soil-observer{width:100%;margin:auto;border-radius:14px;overflow:hidden;background:#fbfaf1}.soil-observer svg{display:block;width:100%;height:auto}.soil-target{cursor:pointer}.soil-ring{fill:transparent;stroke:#f6f7f0;stroke-width:5;stroke-dasharray:10 8}.soil-target.focused .soil-ring{stroke:#20a0cb;stroke-width:9;stroke-dasharray:none;fill:#e5f8ff28}.soil-target:focus-visible{outline:none}.soil-target:focus-visible .soil-ring{stroke:#b9791f;stroke-width:10;stroke-dasharray:none}.soil-legend{display:flex;flex-wrap:wrap;gap:5px 12px;justify-content:center;margin:8px 0;color:#577062;font-size:.74rem}.inquiry-history-brief{padding:15px 17px;border:1px solid #d0ded0;border-radius:12px;background:#f6f9f2;margin-top:18px;display:flex;gap:18px;align-items:center}.inquiry-history-brief strong{flex:0 0 auto;font-size:1rem}.inquiry-history-brief p{margin:0;font-size:.87rem;color:#4b6656;line-height:1.8}#inquiry-research{margin-top:12px;font-size:.86rem}#inquiry-research summary{padding:10px 12px;border:1px solid #c8d9ce;border-radius:8px;color:#24593f;cursor:pointer;font-weight:750;min-height:44px}.inquiry-background{padding:16px;background:#f4f8f0;border-radius:0 0 10px 10px;line-height:1.9}.inquiry-background h5{font-size:.94rem;margin:15px 0 5px}.inquiry-background h5:first-child{margin-top:0}.inquiry-background p{margin:5px 0 12px}#history-scope{color:#5d7363;font-size:.83rem}#history-sources{overflow-wrap:anywhere}
-@media(max-width:1150px){.inquiry-grid{grid-template-columns:minmax(110px,.6fr) minmax(0,1.8fr) minmax(135px,.75fr);gap:10px}.inquiry-stage{padding:12px 10px}.inquiry-evidence{padding:12px 0}.inquiry-modern h5{font-size:1.05rem}.inquiry-modern>p{font-size:.87rem}.inquiry-kicker{font-size:.79rem}.ancient-paper .classical-icon{width:80px;height:80px}.inquiry-past>p{font-size:.91rem}}
-@media(max-width:1000px){.inquiry-grid{grid-template-columns:1fr}.inquiry-past{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px 15px;align-items:center}.inquiry-past .inquiry-kicker{grid-column:1/-1;margin-bottom:0}.ancient-paper{margin:4px 0}.inquiry-past>p{font-size:1rem}.inquiry-evidence{padding:16px 0}.inquiry-modern{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 15px;align-items:center}.inquiry-modern .inquiry-kicker{grid-column:1/-1;margin:0}.inquiry-modern #inquiry-conclusion-visual{grid-row:2/4}.inquiry-modern .classical-icon{width:80px;height:80px}.inquiry-modern h5{font-size:1.2rem;margin:8px 0}.inquiry-modern>p{font-size:.94rem;margin:0}.inquiry-history-brief{display:block}.inquiry-history-brief p{margin-top:8px}.inquiry-evidence h5{font-size:1.3rem}.visual-inquiry{padding:16px}}
-@media(max-width:420px){.visual-inquiry{padding:12px}.inquiry-past{grid-template-columns:92px minmax(0,1fr);gap:8px 12px}.ancient-paper{padding:10px 4px}.ancient-paper>span{font-size:.64rem}.ancient-paper .classical-icon{width:66px;height:66px;margin:8px auto}.ancient-paper>small{font-size:.69rem}.inquiry-modern{grid-template-columns:80px minmax(0,1fr);gap:5px 10px}.inquiry-modern h5{font-size:1.06rem}.inquiry-modern>p{font-size:.87rem}.inquiry-modern .classical-icon{width:66px;height:66px}.result-chips span{font-size:.7rem;padding:3px 5px}.inquiry-controls button{font-size:.82rem}.inquiry-svg .diagram-heading{font-size:21px}.inquiry-svg .diagram-caption{font-size:18px}.inquiry-svg .gas-result{font-size:17px}.inquiry-svg .air-composition .diagram-heading{font-size:19px}.inquiry-history-brief{padding:12px}.inquiry-kicker{font-size:.85rem}}
+/* One reading sequence: historical claim, visual evidence, modern explanation. */
+.visual-inquiry{padding:26px 24px;background:#fffdf8;container-type:inline-size}
+.visual-inquiry>h4{margin:0 0 20px;font-size:1.12rem;color:#285e48;letter-spacing:.02em}
+.inquiry-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
+.inquiry-stage{min-width:0}
+.inquiry-kicker{display:flex;align-items:center;gap:9px;font-size:.83rem;font-weight:750;line-height:1.6;color:#5c7057}
+.inquiry-kicker b{display:grid;place-items:center;flex:none;width:29px;height:29px;border-radius:50%;background:#e9eee2;font-size:.85rem}
+.inquiry-past,.inquiry-modern{display:grid;grid-template-columns:165px minmax(0,1fr);align-items:center;gap:20px;padding:18px 20px;border-radius:12px}
+.inquiry-past{background:#faf3e5;border:1px solid #eadfc7}
+.inquiry-past .inquiry-kicker b{background:#f1e4c9}
+.history-context{font-size:.72rem;line-height:1.7;color:#8a7b59;margin:5px 0 0 38px}
+#inquiry-past-summary{margin:0;font-size:1.02rem;line-height:1.8;font-weight:650;color:#665637}
+.inquiry-evidence{padding:0}
+.inquiry-evidence>.inquiry-kicker{margin-bottom:12px}
+.inquiry-evidence h5{margin:0 0 8px;font-size:1.3rem;line-height:1.55;color:#2b4435}
+#inquiry-instruction{margin:0 0 20px;font-size:.9rem;color:#6c7b65;line-height:1.7}
+.inquiry-modern{border:1px solid #d7e0cd;background:#f0f5e9}
+.inquiry-conclusion-copy h5{font-size:1.18rem;line-height:1.6;margin:0 0 5px;color:#345638}
+.inquiry-conclusion-copy p{font-size:.94rem;line-height:1.8;margin:0;color:#51664a}
+.inquiry-controls{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 12px}
+.inquiry-controls button{flex:1 1 auto;min-height:42px;padding:8px 12px;border:1px solid #cbd8c5;border-radius:8px;background:#fffefa;color:#365d43;font-weight:700;font-size:.86rem}
+.inquiry-controls button[aria-pressed=true]{background:#35654e;border-color:#35654e;color:white}
+#inquiry-feedback{padding:12px 14px;margin:0;border-left:3px solid #a6b895;background:#eef3e7;color:#3a5c43;font-size:.88rem;line-height:1.8;border-radius:0 8px 8px 0}
+.inquiry-controls[hidden],#inquiry-feedback[hidden]{display:none}
+#inquiry-diagram-note{font-size:.75rem;line-height:1.8;color:#6e7865;margin:14px 0 0}
+.inquiry-history-brief{display:flex;align-items:baseline;gap:18px;margin-top:24px;padding:18px 0 0;border-top:1px solid #e0e3d7;color:#5b6e51}
+.inquiry-history-brief strong{flex:none;font-size:.9rem}
+.inquiry-history-brief p{margin:0;font-size:.84rem;line-height:1.9}
+#inquiry-research{margin-top:15px;font-size:.85rem}
+#inquiry-research summary{min-height:44px;padding:10px 0;color:#496943;cursor:pointer;font-weight:650}
+.inquiry-background{padding:16px 20px;border:1px solid #dce4d4;border-radius:10px;background:#f4f7ef;line-height:1.9}
+.inquiry-background h5{font-size:.95rem;margin:15px 0 5px}
+.inquiry-background h5:first-child{margin-top:0}
+.inquiry-background p{margin:5px 0 12px}
+#history-scope{font-size:.83rem;color:#66765d}
+#history-sources{overflow-wrap:anywhere}
 
-/* Water research: show apparatus, observation and identification together. */
-.water-investigation{display:grid;gap:10px}.water-record{overflow:hidden;border:1px solid #c4d6d4;border-radius:14px;background:#f3f8f9;transition:border-color .15s,background-color .15s}.water-record.focused{background:#edf7ea;border-color:#378b61;box-shadow:inset 0 0 0 1px #378b61}.water-record header{display:flex;align-items:center;gap:8px;padding:12px 12px 4px;color:#2e5846;font-size:.91rem;line-height:1.6}.water-direction{flex:none;border-radius:7px;padding:3px 8px;background:#e2ece0;font-size:.8rem;font-weight:800}.water-record.focused .water-direction{color:white;background:#397e5b}.water-record .inquiry-svg{width:100%;max-width:600px;margin:auto}.water-record .water-label{font-size:24px}.water-record .water-small{font-size:20px;font-weight:600}.water-finding{display:flex;gap:9px;align-items:baseline;margin:0;padding:10px 12px;background:#e6efec;color:#29543f;font-size:.9rem;line-height:1.7}.water-finding>span{flex:none;font-size:.77rem;font-weight:800;border:1px solid #acc7b5;border-radius:5px;padding:0 5px}.water-record.focused .water-finding{background:#dcecd9}.water-evidence-link{text-align:center;padding:2px 4px;color:#56745f;font-size:.83rem;font-weight:750;line-height:1.65}
-@media(prefers-reduced-motion:reduce){.water-record{transition:none}}
+/* Preserve the approved soil image and marker coordinates. */
+.soil-observer{max-width:480px;width:100%;margin:auto;border-radius:14px;overflow:hidden;background:#fbfaf1}
+.soil-observer svg{display:block;width:100%;height:auto}
+.soil-target{cursor:pointer}
+.soil-ring{fill:transparent;stroke:#f6f7f0;stroke-width:5;stroke-dasharray:10 8}
+.soil-target.focused .soil-ring{stroke:#20a0cb;stroke-width:9;stroke-dasharray:none;fill:#e5f8ff28}
+.soil-target:focus-visible{outline:none}
+.soil-target:focus-visible .soil-ring{stroke:#b9791f;stroke-width:10;stroke-dasharray:none}
+.soil-legend{display:flex;flex-wrap:wrap;gap:5px 15px;justify-content:center;margin:10px 0;color:#65775c;font-size:.77rem}
 
-.inquiry-controls[hidden],#inquiry-feedback[hidden]{display:none}.fire-sequence small{font-size:.72rem;font-weight:500}.candle-reaction{display:grid;gap:4px;margin:12px 0;padding:13px 8px;text-align:center;background:#edf4ed;border:1px solid #ccdccc;border-radius:11px;color:#365d45;line-height:1.7;font-size:.91rem}.candle-reaction b{font-size:.81rem;color:#6f826e}
+/* Water diagrams compare side by side when the content area is wide enough. */
+.inquiry-svg{display:block;width:100%;height:auto}
+.inquiry-svg text{font-family:inherit;font-size:21px;font-weight:700;fill:#2f5144}
+.inquiry-svg .water-label{font-size:24px}
+.inquiry-svg .water-small{font-size:20px;font-weight:600}
+.water-investigation{display:grid;gap:12px}
+.water-record{display:flex;flex-direction:column;overflow:hidden;border:1px solid #d5ded0;border-radius:12px;background:#f4f7f3;transition:border-color .15s,background-color .15s}
+.water-record.focused{border-color:#90aa85;background:#eff5e9;box-shadow:inset 0 0 0 1px #90aa85}
+.water-record header{display:flex;align-items:center;gap:8px;padding:14px 12px 6px;color:#3b5b42;font-size:.87rem;line-height:1.6}
+.water-direction{flex:none;padding:3px 7px;border-radius:6px;background:#e2eadc;font-size:.76rem;font-weight:750}
+.water-record.focused .water-direction{background:#4e7955;color:white}
+.water-record .inquiry-svg{max-width:600px;margin:auto}
+.water-finding{display:flex;gap:8px;align-items:baseline;padding:11px 12px;margin:0;background:#edf2e9;color:#3b5b42;font-size:.86rem;line-height:1.7}
+.water-finding>span{flex:none;font-size:.75rem;font-weight:700;border:1px solid #b6c9ad;border-radius:4px;padding:0 4px}
+.water-record.focused .water-finding{background:#e4eddc}
+.water-evidence-link{text-align:center;padding:3px 0;color:#6b7e5d;font-size:.83rem;line-height:1.7}
 
-/* Illustrated research plates: printed-paper colors and real material detail. */
-.visual-inquiry{padding:26px 20px;background:#fffdf8}.visual-inquiry>h4{margin-bottom:22px;font-size:1.15rem;letter-spacing:.025em}.inquiry-grid{gap:18px;align-items:start}.inquiry-stage{border-radius:17px}.inquiry-past{background:linear-gradient(145deg,#fff5e3,#fcf6eb);border-color:#e9d8b8}.inquiry-modern{background:linear-gradient(145deg,#edf5e9,#f7faf2);border-color:#d3dfcd}.inquiry-evidence{background:transparent;padding:15px 0}.inquiry-kicker{letter-spacing:.025em;color:#60715c;font-size:.8rem}.inquiry-kicker b{font-size:.85rem;background:#e9eee2}.inquiry-evidence h5{font-size:1.23rem;letter-spacing:.015em;line-height:1.6;margin-bottom:8px}.inquiry-evidence>p:first-of-type{margin-bottom:20px;color:#758171}.ancient-paper{box-shadow:2px 5px 13px #85703a12}.inquiry-history-brief{border-color:#dedfd1;background:#f7f7ef}.inquiry-controls{gap:7px;margin:16px 0 12px}.inquiry-controls button{border-radius:8px;background:#fffefa}.inquiry-controls button[aria-pressed=true]{background:#35654e;border-color:#35654e}#inquiry-feedback{background:#eef3e7;border-left:3px solid #a6b895;border-radius:0 9px 9px 0;color:#3a5c43;font-size:.86rem;min-height:0}#inquiry-diagram-note{margin-top:13px;font-size:.73rem;color:#687460}.air-study{display:grid;gap:18px}.gas-observations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.gas-record{min-width:0;border:1px solid #deddd0;border-radius:11px;overflow:hidden;background:#faf6e9;transition:border-color .15s,box-shadow .15s}.gas-record h6{margin:0;padding:12px 3px 10px;text-align:center;color:#54634e;font-size:.9rem;font-weight:750;letter-spacing:.025em;background:#fffdf6}.gas-record.focused{border-color:#638666;box-shadow:0 0 0 1px #638666}.gas-record.focused h6{background:#edf3e7;color:#365b40}.study-picture{position:relative;overflow:hidden;aspect-ratio:2/3;isolation:isolate}.study-picture img{position:absolute;top:0;max-width:none;height:100%;object-fit:fill;display:block}.gas-picture img{width:300%}.candle-picture img{width:200%}.gas-record p{display:grid;align-content:start;gap:5px;min-height:90px;margin:0;padding:12px 6px 14px;text-align:center;font-size:.75rem;line-height:1.6;color:#65745f;background:#fffdf6}.gas-record p>span{display:block;color:#425c40;font-size:.83rem;font-weight:750}.air-composition{display:grid;gap:7px;justify-items:center;padding:17px 10px;border:1px solid #d9dfd0;border-radius:12px;background:linear-gradient(135deg,#f6f7ef,#eef3e8);color:#536849}.air-composition>span{font-size:.72rem;letter-spacing:.06em;color:#71795f}.air-composition>strong{font-size:1rem}.air-composition>div{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:center;font-size:.83rem}.air-composition b{font-weight:600;padding:5px 9px;border:1px solid #dce1d3;background:#fffef9;border-radius:6px}.fire-sequence{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.fire-sequence article{min-width:0;overflow:hidden;border:1px solid #e1d9c6;border-radius:12px;background:#fbf7ec}.fire-sequence h6{display:flex;justify-content:center;gap:7px;align-items:center;padding:12px 5px;margin:0;color:#686c53;font-size:.83rem;font-weight:650;letter-spacing:.025em}.fire-sequence h6>span{font-size:.68rem;color:#a39b7d;letter-spacing:.08em}.fire-sequence p{margin:0;padding:12px 6px;text-align:center;line-height:1.65;font-size:.85rem;font-weight:700;color:#5f674c;background:#fffdf7}.fire-sequence .fire-burning{border-color:#d6b47c}.fire-burning h6{background:#fbefd7;color:#7e6539}.fire-sequence .fire-after{grid-column:1/-1;display:flex;align-items:center;gap:12px;background:#f3f5ed;border-color:#d9dfcf;padding:14px 13px}.fire-after h6{padding:0;flex:0 0 auto;font-size:.81rem}.fire-after p{padding:0;text-align:left;font-size:.9rem;background:transparent;font-weight:650}.fire-after small{display:block;margin-top:4px;font-size:.73rem;font-weight:400;color:#6a765e}.candle-reaction{margin:17px 0 0;padding:16px 9px;background:#f7f8f1;border-color:#dce1d1;color:#617252;gap:6px;font-size:.86rem}.candle-reaction b{font-size:.73rem;letter-spacing:.04em;color:#969c86}.fire-findings{margin-top:14px;padding:18px 12px;border-top:1px solid #e4d8bf;border-bottom:1px solid #e4d8bf;text-align:center;color:#726143;background:#faf4e7;line-height:1.85}.fire-findings strong,.fire-findings span{display:block}.fire-findings strong{font-size:1.03rem}.fire-findings span{font-size:.82rem;margin-top:5px;color:#8b8068}.conclusion-study{width:110px;margin:17px auto 10px;border-radius:60px 60px 12px 12px;border:1px solid #dfd9c4;box-shadow:0 4px 12px #776e4510}.water-record{border-color:#dadfd4;background:#f4f7f3;box-shadow:0 2px 7px #41593204}.water-record.focused{background:#eff5e9;border-color:#90aa85;box-shadow:inset 0 0 0 1px #90aa85}.water-record header{padding-top:15px}.water-finding{background:#edf2e9}.water-record.focused .water-finding{background:#e4eddc}
-@media(max-width:1150px){.inquiry-grid{gap:12px}}
-@media(max-width:1000px){.inquiry-grid{gap:17px}.visual-inquiry{padding:22px 17px}.inquiry-evidence{padding:5px 0}.conclusion-study{width:83px;margin:12px auto}.gas-record p{font-size:.8rem;min-height:82px}.gas-record p>span{font-size:.95rem}}
-@media(max-width:420px){.visual-inquiry{padding:18px 12px}.inquiry-grid{gap:15px}.inquiry-evidence h5{font-size:1.2rem}.gas-observations{gap:6px}.gas-record h6{font-size:.81rem;padding:11px 2px}.gas-record p{padding:10px 4px;font-size:.72rem;min-height:90px}.gas-record p>span{font-size:.75rem}.air-composition{padding:15px 6px}.air-composition>div{gap:5px;font-size:.75rem}.air-composition b{padding:4px 7px}.fire-sequence{gap:9px}.fire-sequence h6{font-size:.79rem;padding:10px 3px}.fire-sequence p{font-size:.8rem;padding:11px 5px}.fire-sequence .fire-after{gap:9px;padding:13px 10px}.fire-after h6{flex-direction:column;gap:0;padding:0}.fire-after p{padding:0;font-size:.82rem}.fire-after small{font-size:.68rem}.conclusion-study{width:64px}.inquiry-evidence>p:first-of-type{margin-bottom:16px}}
-@media(prefers-reduced-motion:reduce){.gas-record{transition:none}}
+/* Detailed illustrations keep readable native captions. */
+.study-picture{position:relative;overflow:hidden;aspect-ratio:2/3;isolation:isolate}
+.study-picture img{position:absolute;top:0;max-width:none;height:100%;object-fit:fill;display:block}
+.gas-picture img{width:300%}
+.candle-picture img{width:200%}
+.air-study{display:grid;gap:16px;max-width:690px;margin:auto}
+.gas-observations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.gas-record{min-width:0;border:1px solid #deddd0;border-radius:11px;overflow:hidden;background:#faf6e9;transition:border-color .15s,box-shadow .15s}
+.gas-record h6{margin:0;padding:12px 3px;text-align:center;color:#54634e;font-size:.95rem;font-weight:750;background:#fffdf6}
+.gas-record.focused{border-color:#638666;box-shadow:0 0 0 1px #638666}
+.gas-record.focused h6{background:#edf3e7;color:#365b40}
+.gas-record p{display:grid;align-content:start;gap:5px;min-height:84px;margin:0;padding:12px 7px;text-align:center;font-size:.8rem;line-height:1.65;color:#65745f;background:#fffdf6}
+.gas-record p>span{color:#425c40;font-size:.94rem;font-weight:700}
+.air-composition{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 14px;padding:15px 12px;background:#f3f6ed;border-radius:10px;color:#536849}
+.air-composition>span{font-size:.76rem;color:#71795f}
+.air-composition>strong{font-size:.92rem}
+.air-composition>div{display:flex;gap:7px;align-items:center;font-size:.82rem}
+.air-composition b{font-weight:600;padding:4px 7px;background:#fffdf8;border-radius:5px}
+
+/* A single candle spread replaces the narrow column and repeated result cards. */
+.fire-investigation{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:center}
+.fire-sequence{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fire-sequence article{min-width:0;overflow:hidden;border:1px solid #e1d9c6;border-radius:11px;background:#fbf7ec}
+.fire-sequence h6{display:flex;justify-content:center;gap:7px;align-items:center;padding:11px 5px;margin:0;color:#686c53;font-size:.84rem;font-weight:650}
+.fire-sequence h6>span{font-size:.68rem;color:#8d8365;letter-spacing:.07em}
+.fire-sequence p{margin:0;padding:12px 6px;text-align:center;line-height:1.7;font-size:.85rem;font-weight:650;color:#5f674c;background:#fffdf7}
+.fire-sequence .fire-burning{border-color:#d6b47c}
+.fire-burning h6{background:#fbefd7;color:#7e6539}
+.fire-explanation{min-width:0}
+.evidence-eyebrow{font-size:.78rem;letter-spacing:.04em;color:#8a7d5e;margin:0 0 10px}
+.fire-explanation>h6{font-size:1.16rem;font-weight:650;color:#5b543f;line-height:1.8;margin:0}
+.candle-reaction{display:grid;gap:13px;margin-top:22px;padding-top:20px;border-top:1px solid #e3ddca;color:#617252;font-size:.88rem;line-height:1.8}
+.candle-reaction>b{font-size:.78rem;font-weight:500;color:#7e876e}
+.fire-after strong{font-size:1.02rem;font-weight:650;color:#4b6240}
+.fire-after small{display:block;margin-top:6px;font-size:.77rem;color:#6a765e}
+
+@container(min-width:680px){
+  .fire-investigation{grid-template-columns:minmax(0,1.35fr) minmax(0,.9fr);gap:28px}
+  .water-investigation{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .water-record[data-focus=formation]{grid-column:1;grid-row:1}
+  .water-record[data-focus=decomposition]{grid-column:2;grid-row:1}
+  .water-evidence-link{grid-column:1/-1;grid-row:2}
+}
+@container(max-width:480px){
+  .inquiry-past,.inquiry-modern{grid-template-columns:1fr;gap:10px;padding:15px}
+  .history-context{display:none}
+  #inquiry-past-summary{font-size:.94rem}
+  .inquiry-evidence h5{font-size:1.17rem}
+  .inquiry-conclusion-copy h5{font-size:1.1rem}
+  .inquiry-conclusion-copy p{font-size:.89rem}
+  .inquiry-history-brief{display:block}
+  .inquiry-history-brief p{margin-top:7px}
+  .gas-observations{gap:6px}
+  .gas-record h6{font-size:.81rem;padding:11px 2px}
+  .gas-record p{padding:10px 4px;font-size:.72rem;min-height:90px}
+  .gas-record p>span{font-size:.75rem}
+  .air-composition{padding:13px 8px;gap:7px}
+  .air-composition>div{font-size:.75rem;gap:5px}
+  .fire-sequence{gap:9px}
+  .fire-sequence h6{font-size:.79rem;padding:10px 3px}
+  .fire-sequence p{font-size:.8rem;padding:11px 5px}
+  .fire-explanation>h6{font-size:1.06rem}
+  .fire-explanation>h6 br{display:none}
+  .candle-reaction{margin-top:15px;padding-top:15px;gap:10px}
+}
+@media(max-width:600px){
+  .visual-inquiry{padding:20px 13px}
+  .inquiry-grid{gap:23px}
+  .inquiry-background{padding:14px}
+}
+@media(prefers-reduced-motion:reduce){.water-record,.gas-record{transition:none}}

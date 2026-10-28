@@ -141,6 +141,12 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       explanations.add(await text('#history-evidence-text'));
       assert.deepEqual(await page.locator('[data-classical]').allTextContents(), original);
       await page.locator('#inquiry-research summary').click();
+      const orderedStages = await page.locator('.inquiry-stage').all();
+      for (let i=1;i<orderedStages.length;i++) {
+        const previous=await orderedStages[i-1].boundingBox(), current=await orderedStages[i].boundingBox();
+        assert.ok(current.y >= previous.y + previous.height, `ordered stages for ${key}`);
+      }
+      assert.equal(await page.locator('[data-stage=modern] img').count(), 0);
       await capture('#classical-detail', `history-${key}-desktop`);
     }
     assert.equal(explanations.size, 4);
@@ -198,7 +204,8 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     assert.equal(await page.locator('.fire-sequence img').count(), 2);
     assert.match(await text('.fire-burning'), /火焰發光、放熱/);
     assert.match(await text('.fire-after'), /水蒸氣、二氧化碳/);
-    assert.match(await text('.fire-findings'), /火焰是燃燒時的現象/);
+    assert.match(await text('#inquiry-conclusion-title'), /火焰是燃燒時的現象/);
+    assert.equal(await page.locator('.fire-findings,#inquiry-conclusion-visual').count(), 0);
     assert.match(await text('.candle-reaction'), /蠟.*氧氣.*充分燃燒/s);
     assert.equal(await page.locator('#inquiry-controls button').count(), 0);
     assert.equal(await page.locator('#inquiry-controls').isVisible(), false);
@@ -242,6 +249,16 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       }
       await page.locator('[data-classical=fire]').click();
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
+      const picturePair = await page.locator('.fire-sequence').boundingBox();
+      const explanation = await page.locator('.fire-explanation').boundingBox();
+      const contentWidth = await page.locator('#visual-inquiry').evaluate(node => node.clientWidth - parseFloat(getComputedStyle(node).paddingLeft) - parseFloat(getComputedStyle(node).paddingRight));
+      if (contentWidth >= 680) assert.ok(explanation.x >= picturePair.x + picturePair.width, `fire picture and text at ${width}`);
+      else assert.ok(explanation.y >= picturePair.y + picturePair.height, `stacked fire explanation at ${width}`);
+      const ordered = await page.locator('.inquiry-stage').all();
+      for (let i=1;i<ordered.length;i++) {
+        const previous=await ordered[i-1].boundingBox(), current=await ordered[i].boundingBox();
+        assert.ok(current.y >= previous.y + previous.height, `reading order at ${width}`);
+      }
       if (width === 390) await capture('#classical-detail', 'history-fire-mobile');
       await page.locator('#classical-close').click();
     }
