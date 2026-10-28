@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {RoomEnvironment} from '../../../../../parts/3.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
-import {DENSITY_MG_MM3,GRAIN_VOLUME_MM3,WORLD_WIDTH_MM,LENS_FIELD_MM,WATER,SAMPLES,sampleState,grainPositions,grainPose,scaleBarPixels,magnification} from './ppm-scale-state.js?v=amount-5';
+import {DENSITY_MG_MM3,GRAIN_VOLUME_MM3,WORLD_WIDTH_MM,LENS_FIELD_MM,WATER,SAMPLES,sampleState,grainPositions,grainPose,scaleBarPixels,magnification} from './ppm-scale-state.js?v=one-mg-6';
 import {sugarCrystalTriangles} from './ppm-crystal.js?v=realism-3';
 const root=document.getElementById('ppm-lab'),stage=document.getElementById('ppm-scale-scene'),canvas=document.getElementById('ppm-scale-canvas');
 const lens=document.getElementById('ppm-lens'),lensCanvas=document.getElementById('ppm-lens-canvas'),live=document.getElementById('ppm-status');
@@ -43,7 +43,7 @@ lens.addEventListener('lostpointercapture',endDrag);
 lens.addEventListener('pointercancel',()=>{drag=null;lens.classList.remove('is-dragging');if(pendingFrame){cancelAnimationFrame(pendingFrame);pendingFrame=0;}park();});
 handle.addEventListener('keydown',e=>{const moves={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};if(e.key==='Home'){e.preventDefault();park();}else if(e.key in moves){e.preventDefault();const [x,y]=moves[e.key],step=e.shiftKey?1:12;place(position.x+x*step/stage.clientWidth,position.y+y*step/stage.clientHeight);inspectPosition();}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){drag=null;if(pendingFrame){cancelAnimationFrame(pendingFrame);pendingFrame=0;}lens.classList.remove('is-dragging');park();}});
-document.getElementById('mix-reset').addEventListener('click',()=>{key='milligram';drag=null;if(pendingFrame){cancelAnimationFrame(pendingFrame);pendingFrame=0;}lens.classList.remove('is-dragging');park();});
+document.getElementById('mix-reset').addEventListener('click',()=>{key='milligram';drag=null;if(pendingFrame){cancelAnimationFrame(pendingFrame);pendingFrame=0;}lens.classList.remove('is-dragging');choose('milligram');});
 update();
 
 function signedVolume(geo){const p=geo.attributes.position;let sum=0;const a=new THREE.Vector3(),b=new THREE.Vector3(),c=new THREE.Vector3();for(let i=0;i<p.count;i+=3){a.fromBufferAttribute(p,i);b.fromBufferAttribute(p,i+1);c.fromBufferAttribute(p,i+2);sum+=a.dot(b.cross(c))/6;}return Math.abs(sum);}
@@ -71,10 +71,10 @@ async function initialize(){
   const porcelain=new THREE.MeshPhysicalMaterial({color:0x343735,roughness:.72,clearcoat:.12,clearcoatRoughness:.45,specularIntensity:.35});
   const dishTexture=await new THREE.TextureLoader().loadAsync(new URL('./ppm-dish.webp',import.meta.url).href);dishTexture.colorSpace=THREE.SRGBColorSpace;dishTexture.repeat.set(1188/1254,490/1254);dishTexture.offset.set(36/1254,(1254-450-490)/1254);
   const dishMaterial=new THREE.MeshBasicMaterial({map:dishTexture,toneMapped:false,depthWrite:false,blending:THREE.CustomBlending,blendSrc:THREE.SrcAlphaFactor,blendDst:THREE.OneMinusSrcAlphaFactor,blendEquation:THREE.AddEquation});
-  for(const x of [43,126]){const tray=new THREE.Mesh(new THREE.PlaneGeometry(46,19),dishMaterial);tray.quaternion.copy(camera.quaternion);tray.position.set(x,-.8,0);scene.add(tray);}
+  for(const {x} of Object.values(SAMPLES)){const tray=new THREE.Mesh(new THREE.PlaneGeometry(46,19),dishMaterial);tray.quaternion.copy(camera.quaternion);tray.position.set(x,-.8,0);scene.add(tray);}
   const grainNoise=document.createElement('canvas');grainNoise.width=grainNoise.height=128;const noiseCtx=grainNoise.getContext('2d'),noise=noiseCtx.createImageData(128,128);let seed=73;for(let i=0;i<noise.data.length;i+=4){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const value=105+(seed>>>25);noise.data[i]=noise.data[i+1]=noise.data[i+2]=value;noise.data[i+3]=255;}noiseCtx.putImageData(noise,0,0);const ceramicBump=new THREE.CanvasTexture(grainNoise);ceramicBump.wrapS=ceramicBump.wrapT=THREE.RepeatWrapping;ceramicBump.repeat.set(100,100);porcelain.bumpMap=ceramicBump;porcelain.bumpScale=.009;
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=128;const c=shadowCanvas.getContext('2d'),g=c.createRadialGradient(64,64,3,64,64,64);g.addColorStop(0,'#30291842');g.addColorStop(.55,'#30291815');g.addColorStop(1,'#30291800');c.fillStyle=g;c.fillRect(0,0,128,128);const shadowTexture=new THREE.CanvasTexture(shadowCanvas),shadowMat=new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false});
-  for(const [x,radius] of [[-96,65],[43,28],[126,28]]){const shade=new THREE.Mesh(new THREE.PlaneGeometry(radius*2,radius*2),shadowMat);shade.rotation.x=-Math.PI/2;shade.position.set(x,-.1,0);scene.add(shade);}
+  for(const [x,radius] of [[-96,65],...Object.values(SAMPLES).map(({x})=>[x,28])]){const shade=new THREE.Mesh(new THREE.PlaneGeometry(radius*2,radius*2),shadowMat);shade.rotation.x=-Math.PI/2;shade.position.set(x,-.1,0);scene.add(shade);}
   // Unit-volume faceted crystals. Geometry volume is integrated, then normalized
   // before applying the mass/density volume; image visibility never rescales it.
   const grainGeo=new THREE.BufferGeometry();grainGeo.setAttribute('position',new THREE.Float32BufferAttribute(sugarCrystalTriangles(),3));const unitFactor=Math.cbrt(1/signedVolume(grainGeo));grainGeo.scale(unitFactor,unitFactor,unitFactor);grainGeo.computeVertexNormals();
@@ -86,10 +86,10 @@ async function initialize(){
     mesh.castShadow=true;mesh.receiveShadow=true;mesh.instanceMatrix.needsUpdate=true;mesh.position.x=s.x;root.dataset[id+'RenderedVolumeMm3']=String(positions.length*GRAIN_VOLUME_MM3*signedVolume(grainGeo));scene.add(mesh);
     const enlarged=mesh.clone();enlarged.position.x=0;models[id]={main:mesh,macro:enlarged,height};
   }
-  for(const x of [43,126]){const contact=new THREE.Mesh(new THREE.CircleGeometry(15,48),new THREE.ShadowMaterial({opacity:.23,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.set(x,1.79,0);contact.receiveShadow=true;scene.add(contact);}
+  for(const {x} of Object.values(SAMPLES)){const contact=new THREE.Mesh(new THREE.CircleGeometry(15,48),new THREE.ShadowMaterial({opacity:.23,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.set(x,1.79,0);contact.receiveShadow=true;scene.add(contact);}
   const macroFloor=new THREE.Mesh(new THREE.PlaneGeometry(200,200),porcelain);macroFloor.rotation.x=-Math.PI/2;macroFloor.position.y=1.8;macroFloor.receiveShadow=true;macro.add(macroFloor);
   const anchor=(x,y,z)=>{const a=new THREE.Vector3(x,y,z).project(camera);return{x:(a.x+1)*50,y:(1-a.y)*50};};
-  for(const [id,s] of Object.entries(SAMPLES)){const b=document.getElementById(id==='gram'?'ppm-gram':'ppm-milligram'),pos=anchor(s.x,1.8,0);b.style.left=`${pos.x}%`;b.style.top=`${pos.y-7}%`;}
+  for(const [id,s] of Object.entries(SAMPLES)){const b=document.getElementById('ppm-'+id),pos=anchor(s.x,1.8,0);b.style.left=`${pos.x}%`;b.style.top=`${pos.y-7}%`;}
   const waterAnchor=anchor(-96,0,0);document.getElementById('ppm-water-label').style.left=`${waterAnchor.x}%`;document.getElementById('ppm-water-label').style.top=`${waterAnchor.y+6}%`;
   for(const [id,s] of Object.entries(SAMPLES)){const focusY=1.8+(models[id].height-1.8)/2,pos=anchor(s.x,focusY,0);anchors[id]={x:pos.x/100,y:pos.y/100};root.dataset[id+'AnchorX']=String(pos.x/100);root.dataset[id+'AnchorY']=String(pos.y/100);}
   root.dataset.waterVolumeMm3=String(Math.PI*WATER.radiusMm**2*WATER.heightMm);root.dataset.grainGeometryVolume=String(signedVolume(grainGeo));root.dataset.waterDiameterMm=String(WATER.radiusMm*2);
@@ -110,7 +110,7 @@ async function initialize(){
     const zoom=magnification(size,field,width);document.getElementById('ppm-zoom-factor').textContent=`畫面放大 ${formatted(Math.round(zoom*10)/10)} 倍`;
     root.dataset.lensFieldMm=String(field);root.dataset.scaleBarMm=String(barMm);root.dataset.scaleBarPixels=String(bar);root.dataset.zoom=String(zoom);
   }
-  view={draw};const observer=new ResizeObserver(()=>update());observer.observe(stage);root.dataset.ready='true';selects.forEach(b=>b.disabled=false);update();
+  view={draw};const observer=new ResizeObserver(()=>update());observer.observe(stage);root.dataset.ready='true';opened=true;selects.forEach(b=>b.disabled=false);update();
   const lose=event=>{event.preventDefault();root.dataset.ready='error';view=null;opened=false;update();live.classList.add('error');live.textContent='比例畫面暫時無法顯示，請重新整理頁面。下方公式與數值仍可對照。';};canvas.addEventListener('webglcontextlost',lose);lensCanvas.addEventListener('webglcontextlost',lose);
   window.addEventListener('pagehide',event=>{if(event.persisted)return;disposed=true;observer.disconnect();const geos=new Set(),mats=new Set();for(const s of [scene,macro])s.traverse(o=>{if(o.geometry)geos.add(o.geometry);if(o.material)mats.add(o.material);});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());background.dispose();cupTexture.dispose();dishTexture.dispose();ceramicBump.dispose();shadowTexture.dispose();environment.dispose();macroEnvironment.dispose();renderer.dispose();zoomRenderer.dispose();});
 }

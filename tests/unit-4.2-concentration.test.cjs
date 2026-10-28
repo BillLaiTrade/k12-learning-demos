@@ -118,13 +118,13 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   }
   await page.setViewportSize({width:1440,height:1100});await fresh();
  });
- await t.test('the new physical ppm samples switch independently of the upper recipe',async()=>{
-  await fresh();await page.locator('.ppm-example-card[data-ppm-sample="gram"]').click();assert.deepEqual(await ppm(),{ppm:1000,total:1000000,solvent:999000});assert.equal((await state()).sugar,5);assert.equal((await state()).water,95);
+ await t.test('the one milligram observation works independently of the upper recipe',async()=>{
+  await fresh();await page.locator('#ppm-milligram').click();assert.deepEqual(await ppm(),{ppm:1,total:1000000,solvent:999999});assert.equal((await state()).sugar,5);assert.equal((await state()).water,95);
   await fresh();assert.deepEqual(await ppm(),{ppm:1,total:1000000,solvent:999999});
  });
  await t.test('native controls also operate by real touch',async()=>{
   await fresh();await spoon.tap();await advance(3000);assert.equal((await state()).sugar,6);
-  await page.locator('.ppm-example-card[data-ppm-sample=gram]').tap();assert.equal((await ppm()).ppm,1000);
+  await page.locator('#ppm-milligram').tap();assert.equal((await ppm()).ppm,1);
   await page.locator('#mix-water-input').tap();assert.equal(await page.locator('#mass-dialog').isVisible(),true);await page.locator('#mass-cancel').tap();
  });
  await t.test('all content remains inside its column on desktop, tablet and mobile, including the physical ppm scene',async()=>{
@@ -140,7 +140,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  });
  await t.test('loading failure reports an error but ppm and other lesson blocks remain usable',async()=>{
   for(const asset of ['concentration-tools.webp','concentration-workbench-empty.webp','concentration-beaker.webp']){
-   const failed=await browser.newPage();try{await failed.route('**/'+asset,r=>r.abort());await failed.goto(url);await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);assert.equal(await failed.locator('.mix-target:disabled').count(),3);await failed.locator('.ppm-example-card[data-ppm-sample=gram]').click();assert.equal(await failed.locator('#ppm-lab').getAttribute('data-ppm'),'1000');assert.equal(await failed.locator('#check-answers').isEnabled(),true);}finally{await failed.close();}
+   const failed=await browser.newPage();try{await failed.route('**/'+asset,r=>r.abort());await failed.goto(url);await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);assert.equal(await failed.locator('.mix-target:disabled').count(),3);await failed.locator('#ppm-milligram').click();assert.equal(await failed.locator('#ppm-lab').getAttribute('data-ppm'),'1');assert.equal(await failed.locator('#check-answers').isEnabled(),true);}finally{await failed.close();}
   }
  });
 });
