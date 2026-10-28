@@ -101,7 +101,21 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
   }
   async function settled(){await page.locator('#periscope-scene').evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));await expect.poll(async()=>{const a=await page.locator('#periscope-scene').boundingBox();await page.waitForTimeout(100);const b=await page.locator('#periscope-scene').boundingBox();return Math.abs(a.y-b.y)<.5;}).toBe(true);}
   async function handlePoint(i,angle){return page.locator('#periscope-scene').evaluate((el,{i,angle})=>{const c=[565,i===0?190:590],a=angle*Math.PI/180,p=new DOMPoint(c[0]+60*Math.cos(a),c[1]+60*Math.sin(a)).matrixTransform(el.getScreenCTM());return{x:p.x,y:p.y};},{i,angle});}
-  async function drag(i,angle){await settled();const a=(await angles())[i],p=await handlePoint(i,a),q=await handlePoint(i,angle),g=page.locator(`#periscope-mirror-${i}`);await page.mouse.move(p.x,p.y);await page.mouse.down();assert.equal(await g.evaluate(el=>el.hasPointerCapture(1)),true,'mouse must hit actual mirror');await page.mouse.move(q.x,q.y,{steps:12});await page.mouse.up();await expect.poll(async()=>Math.abs((await angles())[i]-angle)<.2).toBe(true);}
+  async function drag(i,angle){
+    await settled();
+    // 重新載入或重新排版後，等待實際畫面命中區與 SVG 幾何同步。
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    const a=(await angles())[i],g=page.locator(`#periscope-mirror-${i}`);
+    await expect.poll(async()=>{
+      const p=await handlePoint(i,a);
+      return page.evaluate(p=>document.elementFromPoint(p.x,p.y)?.closest('.mirror-drag')?.id,p);
+    }).toBe(`periscope-mirror-${i}`);
+    const p=await handlePoint(i,a),q=await handlePoint(i,a+(angle-a)/.35);
+    await page.mouse.move(p.x,p.y);await page.mouse.down();
+    assert.equal(await g.evaluate(el=>el.hasPointerCapture(1)),true,'mouse must hit actual mirror');
+    await page.mouse.move(q.x,q.y,{steps:12});await page.mouse.up();
+    await expect.poll(async()=>Math.abs((await angles())[i]-angle)<.2).toBe(true);
+  }
   async function firstPass(){await setAngle(0,45);await setAngle(1,45);await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,false,false');}
 
   await t.test('初始狀態、未作答、未對準不通關；沒有角度滑桿',async()=>{
@@ -113,6 +127,31 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     assert.equal(await quiz.locator('input[type=range]').count(),0);assert.equal(await page.locator('#periscope-toggle-path').count(),0);assert.equal(await page.locator('#periscope-pulse').getAttribute('aria-pressed'),null);await expect(page.locator('[data-stage="1"]')).toBeDisabled();
     await page.locator('#periscope-check').click();await expect(page.locator('#periscope-feedback')).toHaveAttribute('data-state','try');
     assert.equal(await page.locator('.route a[href="#unit-quiz"] .route-number').textContent(),'✦');assert.equal(await page.locator('#card-07').count(),1);
+  });
+  await t.test('兩片鏡子拖曳靈敏度為原本 35%，碰邊界可立即回調，穿過中心不跳動',async()=>{
+    for(const i of [0,1]){
+      const g=page.locator(`#periscope-mirror-${i}`);
+      await setAngle(i,45);await settled();
+      let p=await handlePoint(i,45),q=await handlePoint(i,65);
+      await page.mouse.move(p.x,p.y);await page.mouse.down();
+      assert.equal(await g.evaluate(el=>el.hasPointerCapture(1)),true);
+      await page.mouse.move(q.x,q.y,{steps:12});await expect.poll(async()=>(await angles())[i]).toBe(52);
+      await page.mouse.move(p.x,p.y,{steps:12});await expect.poll(async()=>(await angles())[i]).toBe(45);
+      await page.mouse.up();
+      for(const [initial,pointerEnd,limit,pointerBack,expected] of [[64,84,65,82,64.3],[31,11,30,13,30.7]]){
+        await setAngle(i,initial);await settled();p=await handlePoint(i,initial);q=await handlePoint(i,pointerEnd);
+        await page.mouse.move(p.x,p.y);await page.mouse.down();await page.mouse.move(q.x,q.y,{steps:12});
+        await expect.poll(async()=>(await angles())[i]).toBe(limit);
+        q=await handlePoint(i,pointerBack);await page.mouse.move(q.x,q.y,{steps:4});
+        await expect.poll(async()=>(await angles())[i]).toBe(expected);await page.mouse.up();
+      }
+      await setAngle(i,45);await settled();p=await handlePoint(i,45);
+      const center=await page.locator('#periscope-scene').evaluate((el,i)=>{const p=new DOMPoint(565,i===0?190:590).matrixTransform(el.getScreenCTM());return{x:p.x,y:p.y};},i);
+      await page.mouse.move(p.x,p.y);await page.mouse.down();await page.mouse.move(center.x,center.y);
+      q=await handlePoint(i,225);await page.mouse.move(q.x,q.y);assert.equal((await angles())[i],45);
+      q=await handlePoint(i,245);await page.mouse.move(q.x,q.y,{steps:8});await expect.poll(async()=>(await angles())[i]).toBe(52);
+      await page.mouse.up();await setAngle(i,45);
+    }
   });
   await t.test('兩片鏡子實際拖曳；天空／海面連續改變，偏太多會被擋',async()=>{
     await drag(1,45);await drag(0,45);await expect(quiz).toHaveAttribute('data-target','true');
@@ -283,10 +322,10 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:a.x,y:a.y,id:7}]});
     for(let j=1;j<=8;j++)await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:a.x+(b.x-a.x)*j/8,y:a.y+(b.y-a.y)*j/8,id:7}]});
     await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
-    await expect.poll(async()=>Number((await p.locator('#unit-quiz').getAttribute('data-angles')).split(',')[0])).toBe(48);
+    await expect.poll(async()=>Number((await p.locator('#unit-quiz').getAttribute('data-angles')).split(',')[0])).toBe(41.5);
     await expect(p.locator('#periscope-light')).toBeEmpty();assert.equal(await p.locator('#periscope-question-0,[data-chip],[data-slot]').count(),0);
-    for(const [i,from,to,id] of [[0,48,45,8],[1,51,45,9]]){
-      const start=await position(i,from),end=await position(i,to);
+    for(const [i,from,to,id] of [[0,41.5,45,8],[1,51,45,9]]){
+      const start=await position(i,from),end=await position(i,from+(to-from)/.35);
       await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:start.x,y:start.y,id}]});
       for(let j=1;j<=8;j++)await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:start.x+(end.x-start.x)*j/8,y:start.y+(end.y-start.y)*j/8,id}]});
       await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});

@@ -6,6 +6,7 @@ if(root) {
   const $=s=>root.querySelector(s), $$=s=>[...root.querySelectorAll(s)];
   const svg=$('#periscope-scene'), canvas=$('#periscope-view'), ctx=canvas.getContext('2d',{alpha:false});
   const groups=[$('#periscope-mirror-0'),$('#periscope-mirror-1')];
+  const DRAG_GAIN=.35,DRAG_CENTER_RADIUS=18;
   const state={stage:0,angles:[38,51],done:[false,false,false],prediction:null,signal:false,verified:false,saved:[45,45]};
   let scenePixels=null, lastViewKey='', pending=0, dragging=null;
   const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
@@ -205,13 +206,20 @@ if(root) {
       if(state.stage===2||e.button>0)return;e.preventDefault();cancelPulse();
       const p=svgPoint(e),c=i===0?OPTICS.upper:OPTICS.lower;
       const initial=Math.atan2(p[1]-c[1],p[0]-c[0])*180/Math.PI;
-      dragging={i,id:e.pointerId,start:initial,angle:state.angles[i]};g.setPointerCapture(e.pointerId);g.focus({preventScroll:true});
+      dragging={i,id:e.pointerId,last:Math.hypot(p[0]-c[0],p[1]-c[1])<DRAG_CENTER_RADIUS?null:initial,angle:state.angles[i]};g.setPointerCapture(e.pointerId);g.focus({preventScroll:true});
     });
     g.addEventListener('pointermove',e=>{
       if(!dragging||dragging.i!==i||dragging.id!==e.pointerId)return;
-      const p=svgPoint(e),c=i===0?OPTICS.upper:OPTICS.lower,angle=Math.atan2(p[1]-c[1],p[0]-c[0])*180/Math.PI;
-      let delta=angle-dragging.start;if(delta>180)delta-=360;if(delta<-180)delta+=360;
-      setAngle(i,dragging.angle+delta);
+      const p=svgPoint(e),c=i===0?OPTICS.upper:OPTICS.lower;
+      // 轉軸附近無穩定方向；離開後以新的指向重新接續，避免突然翻轉。
+      if(Math.hypot(p[0]-c[0],p[1]-c[1])<DRAG_CENTER_RADIUS){dragging.last=null;return;}
+      const angle=Math.atan2(p[1]-c[1],p[0]-c[0])*180/Math.PI;
+      if(dragging.last===null){dragging.last=angle;return;}
+      let delta=angle-dragging.last;if(delta>180)delta-=360;if(delta<-180)delta+=360;
+      dragging.last=angle;
+      // 保留未取整的小數；碰到邊界時同步收住，反向拖動立即有反應。
+      dragging.angle=Math.max(OPTICS.minAngle,Math.min(OPTICS.maxAngle,dragging.angle+delta*DRAG_GAIN));
+      setAngle(i,dragging.angle);
     });
     const end=e=>{if(dragging?.id===e.pointerId){dragging=null;if(g.hasPointerCapture(e.pointerId))g.releasePointerCapture(e.pointerId);}};
     g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end);g.addEventListener('lostpointercapture',()=>{dragging=null;});
