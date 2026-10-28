@@ -94,3 +94,11 @@ node --test tests/unit-4.2-chromatography.test.cjs tests/unit-4.2.test.cjs
 版面檢查 1440、850、768、390px：所有右側內容位於 `.card-main`，不跨入卡片編號欄、不造成水平溢出，使用共用正式頭像，沒有額外操作說明面板。另與使用者核可的靜態預覽比較主要欄位、兩列對話、按鈕、實驗場景與下方概念區的位置與尺寸，並檢視桌面、手機及結果截圖。
 
 2026-10-28 層析暈染修訂：示意延長為 24 秒，檢查前緣在約 4 秒到達墨點、先形成混合暈染再逐漸分色，原點淡化但不消失。新增實際 Canvas 像素檢查，比較原點／拖尾與鄰近紙張的色差，避免只驗證內部資料卻沒有真正畫出殘色。相關區塊的 13 項檢查通過。
+
+## 5.1 第三區塊：攝氏／華氏雙刻度
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.1-dual-scale.test.cjs tests/unit-5.1-water-lab.test.cjs tests/unit-5.1.test.cjs
+```
+
+新測試涵蓋獨立刻度的 1.8 倍間距、0°C／32°F 與 100°C／212°F 同高、液柱及換算同步、四個預設值、實際滑桿拖曳、鍵盤 Home／End／方向鍵、半度值、選取狀態、現有頭像引用、320–1440px 版面及真實觸控。`DUAL_SCALE_CAPTURE_DIR` 可保存截圖，`DUAL_SCALE_URL` 可指定待檢查的頁面。外觀仍須對照核可示意圖檢視。

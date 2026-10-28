@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="assets/measurement-scene.css">
   <link rel="stylesheet" href="assets/touch-story.css">
   <link rel="stylesheet" href="assets/water-lab.css?v=engraved-glass-1">
+  <link rel="stylesheet" href="assets/dual-scale.css?v=dual-scale-1">
 </head>
 <body>
   <header class="shell masthead">
@@ -50,7 +51,7 @@
   <main class="shell lesson">
     <div class="lesson-layout">
       <nav class="route" aria-label="學習區塊導覽"><p class="route-label">學習路線</p><div class="route-inner">
-        <a href="#card-01"><b>01</b><span>手感能量出溫度嗎</span></a><a href="#card-02"><b>02</b><span>溫度計怎麼測量</span></a><a href="#card-03"><b>03</b><span>攝氏刻度參考點</span></a><a href="#measurement"><b>04</b><span>先取得穩定的讀值</span></a><a href="#card-04"><b>05</b><span>讀取與估讀刻度</span></a><a class="quiz-nav" href="#unit-quiz"><b aria-hidden="true">✦</b><span>單元小測</span></a>
+        <a href="#card-01"><b>01</b><span>手感能量出溫度嗎</span></a><a href="#card-02"><b>02</b><span>溫度計怎麼測量</span></a><a href="#card-03"><b>03</b><span>攝氏與華氏換算</span></a><a href="#measurement"><b>04</b><span>先取得穩定的讀值</span></a><a href="#card-04"><b>05</b><span>讀取與估讀刻度</span></a><a class="quiz-nav" href="#unit-quiz"><b aria-hidden="true">✦</b><span>單元小測</span></a>
       </div></nav>
       <div class="cards">
         <div class="section-top"><h2>從手感開始，用刻度讀出溫度</h2><span class="progress-copy">五個學習區塊・一個單元小測</span></div>
@@ -151,7 +152,55 @@
             <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>水溫改變，測溫液體的體積和液面位置也會改變。</p></div>
           </div>
         </section>
-        <section class="lesson-card" id="card-03"><div class="card-side"><span class="card-number">03</span><h3>攝氏刻度參考點</h3><span class="card-role">認識 0°C 與 100°C</span></div><div class="card-main"><h2>攝氏刻度上的 0 和 100 從哪裡來？</h2><p>在標準大氣壓下，純水的冰點約為 0°C，沸點約為 100°C，常用來介紹攝氏刻度的參考點。沸點會隨氣壓改變。</p><div class="visual"><svg viewBox="0 0 700 130" role="img" aria-label="攝氏溫標以標準氣壓附近純水的冰點 0 度和沸點 100 度作為參考。"><path d="M105 63H595" stroke="#9eafa6" stroke-width="8" stroke-linecap="round"/><path d="M105 48v30M595 48v30" stroke="#176b53" stroke-width="5"/><circle cx="105" cy="63" r="13" fill="#8cc4cb" stroke="#fff" stroke-width="4"/><circle cx="595" cy="63" r="13" fill="#df8b41" stroke="#fff" stroke-width="4"/><text x="105" y="30" text-anchor="middle" fill="#176b53" font-weight="700">0°C</text><text x="595" y="30" text-anchor="middle" fill="#bc612b" font-weight="700">100°C</text><text x="105" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水冰點</text><text x="595" y="111" text-anchor="middle" fill="#59696b" font-size="15">純水沸點</text></svg></div><div class="fact"><p><strong>讀值範圍：</strong>本練習使用 0–100°C 刻度。只練習攝氏溫度，不進行攝氏與華氏換算。</p></div></div></section>
+        <section class="lesson-card" id="card-03" aria-labelledby="dual-title">
+          <div class="card-side"><span class="card-number">03</span><h2 id="dual-title">同一個溫度，為什麼有兩種數字？</h2></div>
+          <div class="card-main">
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>天氣預報寫 77°F，到底有多熱？</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>看看同一支溫度計上的兩種刻度。</p></div>
+            <div class="dual-lab">
+              <figure class="dual-instrument">
+                <svg id="dual-thermometer" viewBox="0 0 260 680" role="img" aria-label="攝氏與華氏雙刻度溫度計">
+                  <defs>
+                    <linearGradient id="ds-glass"><stop stop-color="#718186"/><stop offset=".025" stop-color="#fff"/><stop offset=".065" stop-color="#a8bab9"/><stop offset=".14" stop-color="#fcfff9"/><stop offset=".3" stop-color="#dfdfcd"/><stop offset=".5" stop-color="#fffdf2"/><stop offset=".72" stop-color="#e8e6d6"/><stop offset=".91" stop-color="#fffef6"/><stop offset=".97" stop-color="#86999b"/><stop offset="1" stop-color="#effaf6"/></linearGradient>
+                    <linearGradient id="ds-face"><stop stop-color="#eeedde"/><stop offset=".5" stop-color="#fffdf1"/><stop offset="1" stop-color="#ece8d9"/></linearGradient>
+                    <linearGradient id="ds-channel"><stop stop-color="#80989b"/><stop offset=".2" stop-color="#edf6f3"/><stop offset=".5" stop-color="#fff"/><stop offset=".8" stop-color="#d6e0db"/><stop offset="1" stop-color="#819799"/></linearGradient>
+                    <linearGradient id="ds-red"><stop stop-color="#9b0f1b"/><stop offset=".28" stop-color="#ff6a58"/><stop offset=".55" stop-color="#ee2029"/><stop offset="1" stop-color="#9f0b19"/></linearGradient>
+                    <radialGradient id="ds-bulb" cx=".35" cy=".28"><stop stop-color="#ff8b72"/><stop offset=".45" stop-color="#f52a30"/><stop offset=".85" stop-color="#b10f20"/><stop offset="1" stop-color="#710c1a"/></radialGradient>
+                  </defs>
+                  <path id="dual-body" d="M130 8C77 8 42 35 42 88V598C42 641 76 665 130 665S218 641 218 598V88C218 35 183 8 130 8Z" fill="url(#ds-glass)" stroke="#8e9f9b" stroke-width="1.5"/>
+                  <path d="M130 21C81 21 53 46 53 91V595C53 634 81 652 130 652S207 634 207 595V91C207 46 179 21 130 21Z" fill="none" stroke="#fff" stroke-width="2.5" opacity=".8"/>
+                  <path d="M68 69Q130 48 192 69V592Q192 640 130 640T68 592Z" fill="url(#ds-face)" opacity=".9"/>
+                  <path d="M119 54Q119 42 130 42T141 54V588Q166 596 166 614A36 36 0 0 1 94 614Q94 596 119 588Z" fill="url(#ds-channel)" stroke="#b7c6c1" stroke-width="1"/>
+                  <g id="dual-scale-c" stroke="#35433b"></g><g id="dual-scale-f" stroke="#35433b"></g>
+                  <text x="93" y="103" class="dual-scale-unit">°C</text><text x="167" y="103" class="dual-scale-unit">°F</text>
+                  <g id="dual-fluid"><path id="dual-liquid" d="M124 451.5Q130 453.5 136 451.5V614H124Z" fill="url(#ds-red)"/><circle cx="130" cy="614" r="24" fill="url(#ds-bulb)"/><ellipse cx="122" cy="606" rx="6" ry="8" fill="#fff" opacity=".85" transform="rotate(35 122 606)"/><path id="dual-meniscus" d="M124 451.5Q130 453.5 136 451.5" fill="none" stroke="#a70f1c" stroke-width=".8"/></g>
+                  <line id="dual-guide" x1="57" x2="203" y1="452.5" y2="452.5" stroke="#3a8052" stroke-width="1.5"/>
+                  <path d="M48 90V591Q48 648 127 658M212 93V590" fill="none" stroke="#fff" stroke-width="2" opacity=".75"/>
+                  <path d="M123 55V588" stroke="#fff" stroke-width="1" opacity=".6"/>
+                </svg>
+              </figure>
+              <div class="dual-console">
+                <h3>同一個溫度，兩種刻度</h3>
+                <div class="dual-result">
+                  <output id="dual-readout" for="dual-temperature" aria-live="off"><span id="dual-celsius">25°C</span><span class="dual-equals">＝</span><span id="dual-fahrenheit">77°F</span></output>
+                  <p id="dual-formula">25 × 9/5 ＋ 32 ＝ 77</p>
+                </div>
+                <label for="dual-temperature" class="dual-slider-label">調整示意溫度</label>
+                <input id="dual-temperature" type="range" min="0" max="100" step="0.5" value="25" aria-describedby="dual-formula">
+                <div class="dual-range-labels" aria-hidden="true"><span>0°C</span><span>100°C</span></div>
+                <div class="dual-presets" role="group" aria-label="跳到重要溫度">
+                  <button class="dual-preset" type="button" data-dual-preset="0" aria-pressed="false"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4V44M7 14L41 34M7 34L41 14M18 7L24 13L30 7M18 41L24 35L30 41M7 21L15 20L14 12M34 36L33 28L41 27M7 27L15 28L14 36M34 12L33 20L41 21" fill="none" stroke="#68a6cc" stroke-width="2.5" stroke-linecap="round"/></svg><span>冰點</span><strong>0°C</strong></button>
+                  <button class="dual-preset" type="button" data-dual-preset="25" aria-pressed="true" title="室內溫度示例"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 22H39V43H9Z" fill="#eee4c9"/><path d="M3 24L24 6L45 24" fill="none" stroke="#df8854" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 43V29H30V43" fill="#849369"/><path d="M34 14V6H40V20" fill="#a0a396"/></svg><span>室內</span><strong>25°C</strong></button>
+                  <button class="dual-preset" type="button" data-dual-preset="37" aria-pressed="false"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="12" r="10" fill="#f4bf8b"/><path d="M5 45V37C5 18 43 18 43 37V45" fill="#eab481"/></svg><span>體溫參考</span><strong>37°C</strong></button>
+                  <button class="dual-preset" type="button" data-dual-preset="100" aria-pressed="false"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 15C5 10 17 7 12 2M24 15C17 10 29 7 24 2M36 15C29 10 41 7 36 2" fill="none" stroke="#d47c54" stroke-width="2.5" stroke-linecap="round"/><path d="M6 23H42V43H6Z" fill="#88928e"/><path d="M3 23H45M1 29H7M41 29H47" stroke="#596462" stroke-width="3" stroke-linecap="round"/></svg><span>沸點</span><strong>100°C</strong></button>
+                </div>
+                <p class="dual-condition">純水冰點、沸點以標準大氣壓為條件。</p>
+              </div>
+            </div>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>原來 25°C 和 77°F 一樣暖！</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>液面高度相同，只是刻度和數字不同。</p></div>
+          </div>
+        </section>
         <section class="lesson-card" id="measurement" aria-labelledby="measurement-title">
           <div class="card-side"><span class="card-number">04</span><h3>先取得穩定的讀值</h3><span class="card-role">放入、觀察、平視、記錄</span></div>
           <div class="card-main">
@@ -247,5 +296,6 @@
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
   <script src="assets/temperature-lesson.js" defer></script>
   <script type="module" src="assets/water-lab.js?v=engraved-glass-1"></script>
+  <script src="assets/dual-scale.js?v=dual-scale-1" defer></script>
 </body>
 </html>

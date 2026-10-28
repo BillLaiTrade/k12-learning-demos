@@ -1,0 +1,31 @@
+#card-03{grid-template-columns:minmax(0,1fr);gap:14px}
+#card-03 .card-side{display:flex;align-items:baseline;gap:12px;border:0;padding:0}
+#card-03 .card-side h2{margin:0;font-size:clamp(1.4rem,3vw,2rem);line-height:1.35}
+#card-03 .dual-lab{display:grid;grid-template-columns:minmax(160px,.38fr) minmax(0,.62fr);gap:22px;align-items:center;margin:18px 0;padding:22px;border:1.5px solid #709781;border-radius:20px;background:radial-gradient(ellipse at 17% 46%,#dbe7d1a8,transparent 50%),linear-gradient(110deg,#f0f6ee,#fffdf7 75%)}
+#card-03 .dual-instrument{margin:0;min-width:0;filter:drop-shadow(5px 8px 8px #203a2420)}
+#card-03 #dual-thermometer{display:block;width:100%;max-height:590px;overflow:visible}
+#card-03 #dual-thermometer text{font-family:"Helvetica Neue",Arial,sans-serif;font-variant-numeric:tabular-nums;fill:#273a37}
+#card-03 .dual-scale-label{font-size:17px;dominant-baseline:middle;stroke:none;font-weight:400}
+#card-03 .dual-scale-unit{font-size:23px;font-weight:500;text-anchor:middle}
+#card-03 .dual-console{min-width:0;padding:4px 0}
+#card-03 .dual-console h3{margin:0 0 24px;padding-bottom:17px;border-bottom:1px solid #8eaf99;color:#174f37;font-size:clamp(1.15rem,2.25vw,1.75rem);line-height:1.4;text-align:center}
+#card-03 .dual-result{padding:23px 8px 18px;border:1px solid #d8dfc9;border-radius:17px;background:#fffdf8b3;text-align:center}
+#card-03 #dual-readout{display:flex;align-items:baseline;justify-content:center;gap:9px;color:#164f32;font-size:clamp(2rem,3.7vw,3.25rem);font-weight:800;line-height:1.3;font-variant-numeric:tabular-nums;letter-spacing:-.04em;white-space:nowrap}
+#card-03 #dual-readout .dual-equals{font-size:.7em;font-weight:500;color:#657067}
+#card-03 #dual-formula{margin:14px 0 0;font-size:clamp(.85rem,1.5vw,1.08rem);line-height:1.6;color:#5e655d;font-variant-numeric:tabular-nums}
+#card-03 .dual-slider-label{display:block;margin:28px 0 6px;color:#204f38;font-size:1.05rem;font-weight:750}
+#card-03 #dual-temperature{display:block;appearance:none;-webkit-appearance:none;width:100%;height:38px;margin:0;background:transparent;cursor:pointer}
+#card-03 #dual-temperature::-webkit-slider-runnable-track{height:8px;border:1px solid #c4cdbd;border-radius:99px;background:linear-gradient(to right,#94b17b 0 var(--dual-progress,25%),#e0e3db var(--dual-progress,25%) 100%)}
+#card-03 #dual-temperature::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:25px;height:25px;margin-top:-9px;border:4px solid #fffef9;border-radius:50%;background:#88a96b;box-shadow:0 2px 6px #283c293b}
+#card-03 #dual-temperature::-moz-range-track{height:6px;border:1px solid #c4cdbd;border-radius:99px;background:linear-gradient(to right,#94b17b 0 var(--dual-progress,25%),#e0e3db var(--dual-progress,25%) 100%)}
+#card-03 #dual-temperature::-moz-range-thumb{width:17px;height:17px;border:4px solid #fffef9;border-radius:50%;background:#88a96b;box-shadow:0 2px 6px #283c293b}
+#card-03 .dual-range-labels{display:flex;justify-content:space-between;color:#59665b;font-size:.85rem}
+#card-03 .dual-presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:20px}
+#card-03 .dual-preset{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:112px;min-width:0;padding:9px 3px;border:1px solid #c4cec3;border-radius:13px;background:#fffefa;color:#303e35;line-height:1.35}
+#card-03 .dual-preset[aria-pressed=true]{border:2px solid #3a6e38;padding:8px 2px;background:#e7f3d7;box-shadow:0 2px 7px #49694012}
+#card-03 .dual-preset:hover{background:#f0f6e8}
+#card-03 .dual-preset svg{width:36px;height:36px;flex:0 0 auto}
+#card-03 .dual-preset span{font-size:.75rem;white-space:nowrap}
+#card-03 .dual-preset strong{font-size:1.08rem}
+#card-03 .dual-condition{margin:14px 0 0;color:#6b7367;font-size:.73rem;line-height:1.6;text-align:right}
+@media(max-width:640px){#card-03 .dual-lab{grid-template-columns:minmax(0,1fr);gap:12px;padding:16px 12px}#card-03 .dual-instrument{width:180px;max-width:100%;margin:0 auto}#card-03 #dual-thermometer{max-height:420px}#card-03 .dual-console h3{margin-bottom:15px;padding-bottom:12px;font-size:1.22rem}#card-03 #dual-readout{font-size:clamp(1.8rem,7.7vw,2.5rem)}#card-03 .dual-result{padding:17px 5px 13px}#card-03 .dual-slider-label{margin-top:20px}#card-03 .dual-presets{gap:5px;margin-top:14px}#card-03 .dual-preset{min-height:100px}#card-03 .dual-preset svg{width:29px;height:29px}#card-03 .dual-preset span{font-size:.69rem}#card-03 .dual-preset strong{font-size:1rem}#card-03 .dual-condition{text-align:center}}
