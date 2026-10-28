@@ -27,16 +27,14 @@
       feedback: { oxygen: '氧氣：可使蠟燭燃燒更旺。氧氣是助燃氣體，並不是燃料。', ordinary: '空氣：能讓蠟燭燃燒；組成研究顯示，其中包含氮、氧及其他氣體。', carbon: '二氧化碳：不能維持這裡的蠟燭燃燒。這個比較本身還不足以證明空氣是混合物。' }
     },
     fire: {
-      past: '火曾被列為構成物質的基本元素。', title: '火是成分，還是燃燒時的現象？', instruction: '以鎂在氧氣中燃燒為例，觀察發光與生成物。',
+      past: '火曾被列為構成物質的基本元素。', title: '火是成分，還是燃燒時的現象？', instruction: '從熟悉的蠟燭，看火焰與物質的變化。',
       conclusion: '火焰是燃燒時的現象', result: '燃燒涉及物質反應；火焰不是一種化學元素。',
       brief: '拉瓦節以稱量及氣體研究，解釋鉛、錫等金屬燃燒後增重，來自氧與金屬結合。',
-      note: '鎂在氧氣中燃燒的概念示意，非拉瓦節歷史裝置復原。增重比較的是樣品，不是密閉系統總質量。',
-      choices: [['samples','看燃燒前後'],['oxygen','追蹤氧的去向']], initial: 'samples',
-      feedback: { samples: '燃燒前後：鎂帶發出耀眼白光並放熱，反應後得到氧化鎂。亮光是反應時的現象，不是多出一種叫「火」的成分。', oxygen: '追蹤氧：氧與鎂反應，成為氧化鎂的一部分。若鎂完全反應且產物完整收集，增加的質量來自結合的氧。' }
+      note: '以蠟充分燃燒為例；生成的氣體通常看不見，身分需由實驗確認。蠟融化本身不是燃燒。',
+      choices: [], feedback: {}
     }
   };
   const svg = (content, label, height = 360) => `<svg class="inquiry-svg" viewBox="0 0 600 ${height}" role="img" aria-label="${label}">${content}</svg>`;
-  const arrow = (x,y,width=100) => `<path d="M${x} ${y-8}h${width-22}v-12l22 20-22 20v-12H${x}Z" fill="#86b9c7"/>`;
   function soil() {
     const points = [['mineral',310,290,'1'],['organic',760,330,'2'],['water',340,600,'3'],['air',680,720,'4']];
     return `<div class="soil-observer"><svg viewBox="0 0 1000 1000" role="group" aria-label="土壤組成觀察圖，選擇標記查看成分"><image href="assets/soil-composition.png" width="1000" height="1000"/><g>${points.map(([key,x,y,n])=>`<g data-observe="${key}" class="soil-target" role="button" tabindex="0" aria-label="查看${book.earth.choices.find(c=>c[0]===key)[1]}位置" aria-pressed="false"><circle class="soil-ring" cx="${x}" cy="${y}" r="53"/><circle cx="${x}" cy="${y}" r="20" fill="white" stroke="#366956" stroke-width="3"/><text x="${x}" y="${y+8}" text-anchor="middle" font-size="25" font-weight="800" fill="#214e3e">${n}</text></g>`).join('')}</g></svg></div><div class="soil-legend"><span>1 礦物顆粒</span><span>2 有機物</span><span>3 水</span><span>4 空氣孔隙</span></div>`;
@@ -107,20 +105,27 @@
     return svg(drawing+'<g class="air-composition"><path d="M115 317H485" stroke="#a4bdaf" stroke-width="2"/><text x="300" y="342" text-anchor="middle" class="diagram-heading">空氣組成研究：氮 ＋ 氧 ＋ 其他氣體</text></g>','氧氣、空氣與二氧化碳中的蠟燭燃燒表現不同；下方另列空氣包含的氣體。',365);
   }
   function fire() {
+    const candle = lit => `<svg viewBox="0 0 180 205" role="img" aria-label="${lit?'蠟燭燃燒，燭芯上方有火焰，周圍發光放熱':'未點燃的蠟燭，包含蠟與燭芯'}">
+      ${lit?'<ellipse cx="90" cy="73" rx="50" ry="61" fill="#ffedbd" opacity=".65"/>':''}
+      <ellipse cx="90" cy="182" rx="48" ry="9" fill="#dce6e0"/>
+      <rect x="60" y="${lit?119:91}" width="60" height="${lit?63:91}" rx="7" fill="#eddfb4" stroke="#b7a581" stroke-width="2"/>
+      <ellipse cx="90" cy="${lit?119:91}" rx="30" ry="7" fill="#fff1cb" stroke="#b7a581" stroke-width="2"/>
+      <path d="M90 ${lit?119:91}v-15" stroke="#5b5849" stroke-width="4"/>
+      ${lit?flame(90,106,.95):''}</svg>`;
     return `<div class="fire-investigation">
-      <div class="oxygen-route" data-focus="oxygen"><span>參與反應的氧氣</span><strong>↓ 與鎂反應</strong></div>
-      <div class="metal-record fire-sequence" data-focus="samples">
-        <article class="fire-before"><h6>燃燒前</h6>
-          <svg viewBox="0 0 180 205" role="img" aria-label="燃燒前的銀白色鎂帶"><path d="M34 118Q55 62 104 74Q139 84 120 108Q104 126 83 111Q66 101 68 89L56 133Q54 149 77 156" fill="none" stroke="#81999e" stroke-width="19"/><path d="M34 114Q55 58 104 70Q139 80 120 104Q104 122 83 107Q66 97 68 85L56 129Q54 145 77 152" fill="none" stroke="#cddadd" stroke-width="13"/></svg>
-          <p>銀白色鎂帶</p></article>
-        <article class="fire-burning"><h6>燃燒時</h6>
-          <svg viewBox="0 0 210 205" role="img" aria-label="鎂燃燒發出耀眼白光並放熱，圖為靜態示意"><circle cx="105" cy="104" r="73" fill="#f8e8b5" opacity=".6"/><circle cx="105" cy="104" r="52" fill="#fffbed"/><path d="M105 32l10 39 30-27-12 39 43 1-33 24 33 25-43 1 12 40-30-27-10 40-11-40-31 27 13-40-43-1 33-25-33-24 43-1-13-39 31 27Z" fill="white" stroke="#dab877" stroke-width="2"/><path d="M100 165l13-25 9 4-12 29Z" fill="#a9b9ba" stroke="#799192" stroke-width="2"/><circle cx="105" cy="105" r="19" fill="white"/></svg>
-          <p>耀眼白光、放熱</p></article>
-        <article class="fire-after"><h6>燃燒後</h6>
-          <svg viewBox="0 0 180 205" role="img" aria-label="燃燒後形成白色的氧化鎂粉末"><ellipse cx="90" cy="143" rx="69" ry="25" fill="#e6eeed" stroke="#9cb0ac" stroke-width="2"/><path d="M35 142l19-20 12 7 16-25 18 13 13-9 13 21 18 13Q91 161 35 142Z" fill="#fffef9" stroke="#afbbb5" stroke-width="2"/><path d="M65 137l10-4m25-4 8 5m-20 6 7 4" stroke="#d2d9d3" stroke-width="3"/></svg>
-          <p>白色氧化鎂</p></article>
+      <div class="fire-sequence">
+        <article class="fire-before"><h6>燃燒前</h6>${candle(false)}<p>蠟燭與空氣</p></article>
+        <article class="fire-burning"><h6>燃燒時</h6>${candle(true)}<p>火焰發光、放熱</p></article>
+        <article class="fire-after"><h6>生成物</h6>
+          <svg viewBox="0 0 180 205" role="img" aria-label="燃燒生成的無色氣體需經實驗確認，圖示為氣體擴散與檢驗紀錄，不是可見的煙">
+            <path d="M42 105V41m-12 14 12-14 12 14M89 89V25m-12 14 12-14 12 14M136 105V41m-12 14 12-14 12 14" fill="none" stroke="#9ab4b8" stroke-width="3" stroke-linecap="round"/>
+            <rect x="31" y="111" width="118" height="75" rx="10" fill="#fdfefb" stroke="#a5bcb1" stroke-width="2"/>
+            <path d="M45 135l6 6 12-14m-18 33 6 6 12-14" fill="none" stroke="#6f9d80" stroke-width="3"/>
+            <path d="M76 135h57m-57 25h57" stroke="#b2c5ba" stroke-width="4"/>
+          </svg><p>水蒸氣、二氧化碳<br><small>由實驗確認</small></p></article>
       </div>
-      <div class="fire-findings"><strong>亮光是燃燒時的現象</strong><span>鎂與氧反應，形成新物質「氧化鎂」。</span></div>
+      <div class="candle-reaction"><span>蠟（燃料）＋ 空氣中的氧氣</span><b>↓ 充分燃燒</b><span>水蒸氣 ＋ 二氧化碳</span></div>
+      <div class="fire-findings"><strong>火焰是燃燒時的現象</strong><span>蠟與氧反應形成新物質，<br>不是釋出一種叫「火」的元素。</span></div>
     </div>`;
   }
   const diagrams = { earth:soil, water, air, fire };
@@ -144,6 +149,8 @@
     $('#inquiry-diagram').innerHTML=diagrams[key]();
     $('#inquiry-conclusion-visual').innerHTML=key==='earth'?'<div class="result-chips"><span>礦物</span><span>有機物</span><span>水</span><span>空氣</span></div><span class="classical-icon icon-earth"></span>':key==='water'?'<div class="result-chips"><span>氫元素</span><span>氧元素</span></div><span class="classical-icon icon-water"></span>':key==='air'?'<div class="result-chips"><span>氮</span><span>氧</span><span>其他氣體</span></div><span class="classical-icon icon-air"></span>':'<span class="classical-icon icon-fire"></span><div class="result-chips"><span>物質反應</span><span>發熱、發光</span></div>';
     const controls=$('#inquiry-controls');controls.replaceChildren();
+    controls.hidden=item.choices.length===0;
+    $('#inquiry-feedback').hidden=controls.hidden;
     item.choices.forEach(([value,label])=>{
       const button=document.createElement('button');button.type='button';button.dataset.observation=value;button.textContent=label;
       button.addEventListener('click',()=>select(key,value));controls.append(button);
@@ -153,7 +160,8 @@
       point.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(key,point.dataset.observe);}});
     });
     $('#inquiry-research').open=false;
-    select(key,item.initial);
+    if (item.choices.length) select(key,item.initial);
+    else { delete root.dataset.observation; $('#inquiry-feedback').textContent=''; }
   }
   window.ClassicalInquiry={render};
 })();
