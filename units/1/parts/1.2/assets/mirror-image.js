@@ -1,5 +1,5 @@
-import {COMPARISON,comparisonRay,pupilBundle,sidePath,scatterRays,otherReflections} from './mirror-comparison.mjs?v=1';
-import {createComparisonView} from './mirror-comparison-view.mjs?v=1';
+import {COMPARISON,comparisonRay,pupilBundle,sidePath} from './mirror-comparison.mjs?v=2';
+import {createComparisonView} from './mirror-comparison-view.mjs?v=2';
 
 const section=document.getElementById('card-03');
 if(section) {
@@ -19,9 +19,6 @@ if(section) {
       find('near-shape').setAttribute('opacity',mirror?'1':'.4');find('far-shape').setAttribute('opacity',mirror?'.48':'1');
       find('near-label').textContent=mirror?'鏡前實物':'原小熊（位置不變）';
       find('far-label').textContent=mirror?'虛像位置（示意）':'放入的真實對照熊';
-      find('scatter').replaceChildren(...scatterRays(COMPARISON.source,1).map(p=>path(p,'gray')),
-        ...(!mirror?scatterRays(COMPARISON.image,-1).map(p=>path(p,'gray')):[]));
-      find('other-reflections').replaceChildren(...(mirror?otherReflections().flatMap(r=>[path([r.source,r.hit],'gray',false),path([r.hit,r.end],'gray')]):[]));
       const rays=[],extensions=[],hits=[];
       bundle.forEach((r,i)=>{
         const segments=mirror?[[r.source,r.hit],[r.hit,r.eye]]:[[r.image,r.eye]];
@@ -31,9 +28,9 @@ if(section) {
       find('rays').replaceChildren(...rays);find('extensions').replaceChildren(...extensions);find('hits').replaceChildren(...hits);
       const title=panel.querySelector(`#${prefix}-side-title`),desc=panel.querySelector(`#${prefix}-side-desc`);
       title.textContent=mirror?'有鏡子時，鼻尖的光經反射進入眼睛':'撤鏡並放入對照熊，鼻尖的光直接進入眼睛';
-      desc.textContent=mirror?'鼻尖把照到它的光散向許多方向；一小束經鏡面反射進入瞳孔。鏡後淡色熊與虛線只標示虛像位置，沒有實際光在鏡後傳播。':'原小熊仍在原位，淡化只為突出對照熊。鏡子已撤掉，另將一隻真實小熊放在原虛像位置並面向小葵，光直接進入同一瞳孔。';
+      desc.textContent=mirror?'小熊鼻尖的光經鏡面反射，沿藍色光路進入瞳孔。鏡後淡色熊與虛線只標示虛像位置，沒有實際光在鏡後傳播。':'原小熊仍在原位，淡化只為突出對照熊。鏡子已撤掉，另將一隻真實小熊放在原虛像位置並面向小葵，光直接進入同一瞳孔。';
       panel.querySelector(`#${prefix}-eye-title`).textContent=mirror?'小葵透過鏡面看到的小熊':'小葵直接看到放在原虛像位置的對照熊';
-      panel.querySelector(`#${prefix}-caption`).textContent=mirror?'鼻尖向多個方向散光；照到鏡面的光遵守入射角＝反射角，只有部分反射光進入眼睛。':'撤鏡後，在原虛像位置另放真熊，光直接進入眼睛。';
+      panel.querySelector(`#${prefix}-caption`).textContent=mirror?'鏡前小熊的光經鏡面反射，沿藍色光路進入眼睛。':'撤鏡後，在原虛像位置另放真熊，光直接進入眼睛。';
       svg.dataset.source=COMPARISON.source.join(',');svg.dataset.image=COMPARISON.image.join(',');svg.dataset.eye=COMPARISON.eye.join(',');svg.dataset.hit=ray.hit.join(',');
       renderView(next);
     }

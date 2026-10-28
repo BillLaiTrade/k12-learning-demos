@@ -29,20 +29,6 @@ export function sidePath(points,arrows=false) {
   const p=arrows&&points.length===2?[points[0],points[0].map((v,i)=>(v+points[1][i])/2),points[1]]:points;
   return 'M'+p.map(point=>point.slice(0,2).join(',')).join('L');
 }
-export function scatterRays(source,side) {
-  return [-80,-60,-40,-5,20,45,55,70].map((angle,i)=>{
-    const a=angle*Math.PI/180,length=48+(i%3)*11;
-    return [source,[source[0]+side*Math.cos(a)*length,source[1]+Math.sin(a)*length,source[2]]];
-  });
-}
-export function otherReflections() {
-  return [-55,-10,20].map(angle=>{
-    const a=angle*Math.PI/180,s=COMPARISON.source;
-    const hit=[COMPARISON.mirrorX,s[1]+Math.tan(a)*(COMPARISON.mirrorX-s[0]),s[2]];
-    return {source:s,hit,end:[hit[0]-Math.cos(a)*88,hit[1]+Math.sin(a)*88,0]};
-  });
-}
-
 // Both eye views use this same camera. z provides the foreground parallax that
 // is absent from the side projection; the pupil rays above use the same 3D eye.
 export function comparisonCamera() {

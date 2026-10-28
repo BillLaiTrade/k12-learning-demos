@@ -83,7 +83,7 @@
 
 
   </style>
-  <link rel="stylesheet" href="assets/mirror-image.css?v=4">
+  <link rel="stylesheet" href="assets/mirror-image.css?v=5">
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
   <link rel="stylesheet" href="assets/reversible-light.css?v=3">
   <link rel="stylesheet" href="assets/periscope.css?v=8">
@@ -200,14 +200,13 @@
             <p class="comparison-intro">左邊保留有鏡子的基準；按下按鈕，切換右邊的情境。</p>
             <div class="mirror-comparison-grid" aria-label="有鏡子的基準與可切換的對照情境"><article class="comparison-state" id="comparison-reference" data-mode="mirror" aria-labelledby="reference-heading">
 <figure class="mirror-view comparison-diagram"><h3 id="reference-heading"><span class="comparison-step">①</span><span data-role="heading">有鏡子：看見鏡後的虛像</span></h3><svg class="comparison-side" id="reference-side" viewBox="0 0 900 650" role="img" aria-labelledby="reference-side-title reference-side-desc">
-<title id="reference-side-title">有鏡子時的反射光路</title><desc id="reference-side-desc">小葵位置固定。鼻尖把照到它的光散向許多方向，其中一小束經鏡面反射進入瞳孔；虛線表示反射光的反向延長，鏡後的小熊只是虛像位置示意。</desc>
+<title id="reference-side-title">有鏡子時的反射光路</title><desc id="reference-side-desc">小葵位置固定。鼻尖的光經鏡面反射進入瞳孔；虛線表示反射光的反向延長，鏡後的小熊只是虛像位置示意。</desc>
 <defs>
  <linearGradient id="reference-room" x2="0" y2="1"><stop stop-color="#fbfaf5"/><stop offset="1" stop-color="#eee9df"/></linearGradient>
  <linearGradient id="reference-wood" x2="0" y2="1"><stop stop-color="#d5b38c"/><stop offset="1" stop-color="#b98e64"/></linearGradient>
  <linearGradient id="reference-silver" x2="1" y2="0"><stop stop-color="#91afb3"/><stop offset=".5" stop-color="#f3faf9"/><stop offset="1" stop-color="#a1bdc0"/></linearGradient>
  <pattern id="reference-backing" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 10L10 0" stroke="#a7b2ad" stroke-width="1.2"/></pattern>
  <marker id="reference-blue-arrow" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto"><path d="M0 0L6 3L0 6Z" fill="#236f9f"/></marker>
- <marker id="reference-gray-arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0 0L5 2.5L0 5Z" fill="#819195"/></marker>
  <image id="reference-bear-sprite" href="assets/mirror/teddy-side.webp" x="199.4" y="374.2" width="203" height="203"/>
 </defs>
 <rect width="900" height="570" fill="url(#reference-room)"/>
@@ -218,13 +217,11 @@
 <g data-side="mirror"><rect x="540" y="68" width="9" height="502" rx="3" fill="url(#reference-silver)" stroke="#607e7f" stroke-width="2"/><rect x="552" y="70" width="12" height="498" fill="url(#reference-backing)"/><rect x="522" y="565" width="46" height="7" rx="3" fill="#81948b"/><text x="540" y="44" text-anchor="middle" font-size="28" font-weight="700" fill="#315a46">平面鏡</text></g>
 <g data-side="mirror-tick" style="display:none"><path d="M540 566V578" stroke="#829694" stroke-width="2"/><circle cx="540" cy="570" r="4" fill="#fffdf8" stroke="#829694"/><text x="540" y="622" text-anchor="middle" font-size="22" fill="#fffdf8">原鏡面位置</text></g>
 <g data-side="far"><use data-side="far-shape" href="#reference-bear-sprite" transform="translate(1080 0) scale(-1 1)" opacity=".48"/><rect x="616" y="597" width="272" height="35" rx="12" fill="#fffdf8"/><text data-side="far-label" x="752" y="622" text-anchor="middle" font-size="25" font-weight="700" fill="#286580">虛像位置（示意）</text></g>
-<g data-side="scatter" fill="none" stroke="#819195" stroke-width="1.9" stroke-dasharray="5 4" opacity=".65"></g>
-<g data-side="other-reflections" fill="none" stroke="#819195" stroke-width="1.6" opacity=".34"></g>
 <g data-side="extensions" fill="none" stroke="#397d9f" stroke-dasharray="8 6" stroke-width="2"></g>
 <g data-side="rays" fill="none" stroke="#236f9f" stroke-linejoin="round"></g>
 <g data-side="hits" fill="#dceff8" stroke="#236f9f" stroke-width="1.8"></g>
 <circle data-side="source-point" cx="345" cy="440" r="6" fill="#f5d477" stroke="#9d701b" stroke-width="1.5"/><circle data-side="image-point" cx="735" cy="440" r="6" fill="#f5d477" stroke="#9d701b" stroke-width="1.5"/>
-</svg><figcaption id="reference-caption">鼻尖向多個方向散光；照到鏡面的光遵守入射角＝反射角，只有部分反射光進入眼睛。</figcaption></figure>
+</svg><figcaption id="reference-caption">鏡前小熊的光經鏡面反射，沿藍色光路進入眼睛。</figcaption></figure>
 <figure class="mirror-view comparison-observation"><h3>小葵眼中看到的小熊</h3><svg class="comparison-eye" id="reference-eye" viewBox="0 0 900 400" role="img" aria-labelledby="reference-eye-title reference-eye-desc">
 <title id="reference-eye-title">小葵透過鏡面看到的小熊</title><desc id="reference-eye-desc">與側面圖共用同一眼位；金色鼻尖標記對應同一物點。切換後對照熊的位置、朝向與視大小保持相同，鏡框和背景可不同。</desc>
 <defs><linearGradient id="reference-eye-wall" x2="1" y2="1"><stop stop-color="#f5f0e5"/><stop offset="1" stop-color="#dfd5c5"/></linearGradient><linearGradient id="reference-eye-wood" x2="0" y2="1"><stop stop-color="#d5b38b"/><stop offset="1" stop-color="#ad8054"/></linearGradient><linearGradient id="reference-glass" x2="1" y2="1"><stop stop-color="#e5f3f3"/><stop offset="1" stop-color="#cfe3e5"/></linearGradient><clipPath id="reference-eye-clip"><path data-view="clip"/></clipPath></defs>
@@ -236,14 +233,13 @@
 </svg></figure>
 </article><article class="comparison-state" id="comparison-trial" data-mode="mirror" aria-labelledby="trial-heading">
 <figure class="mirror-view comparison-diagram"><h3 id="trial-heading"><span class="comparison-step">②</span><span data-role="heading">操作比較：目前有鏡子</span></h3><svg class="comparison-side" id="trial-side" viewBox="0 0 900 650" role="img" aria-labelledby="trial-side-title trial-side-desc">
-<title id="trial-side-title">有鏡子時的反射光路</title><desc id="trial-side-desc">小葵位置固定。鼻尖把照到它的光散向許多方向，其中一小束經鏡面反射進入瞳孔；虛線表示反射光的反向延長，鏡後的小熊只是虛像位置示意。</desc>
+<title id="trial-side-title">有鏡子時的反射光路</title><desc id="trial-side-desc">小葵位置固定。鼻尖的光經鏡面反射進入瞳孔；虛線表示反射光的反向延長，鏡後的小熊只是虛像位置示意。</desc>
 <defs>
  <linearGradient id="trial-room" x2="0" y2="1"><stop stop-color="#fbfaf5"/><stop offset="1" stop-color="#eee9df"/></linearGradient>
  <linearGradient id="trial-wood" x2="0" y2="1"><stop stop-color="#d5b38c"/><stop offset="1" stop-color="#b98e64"/></linearGradient>
  <linearGradient id="trial-silver" x2="1" y2="0"><stop stop-color="#91afb3"/><stop offset=".5" stop-color="#f3faf9"/><stop offset="1" stop-color="#a1bdc0"/></linearGradient>
  <pattern id="trial-backing" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 10L10 0" stroke="#a7b2ad" stroke-width="1.2"/></pattern>
  <marker id="trial-blue-arrow" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto"><path d="M0 0L6 3L0 6Z" fill="#236f9f"/></marker>
- <marker id="trial-gray-arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0 0L5 2.5L0 5Z" fill="#819195"/></marker>
  <image id="trial-bear-sprite" href="assets/mirror/teddy-side.webp" x="199.4" y="374.2" width="203" height="203"/>
 </defs>
 <rect width="900" height="570" fill="url(#trial-room)"/>
@@ -254,13 +250,11 @@
 <g data-side="mirror"><rect x="540" y="68" width="9" height="502" rx="3" fill="url(#trial-silver)" stroke="#607e7f" stroke-width="2"/><rect x="552" y="70" width="12" height="498" fill="url(#trial-backing)"/><rect x="522" y="565" width="46" height="7" rx="3" fill="#81948b"/><text x="540" y="44" text-anchor="middle" font-size="28" font-weight="700" fill="#315a46">平面鏡</text></g>
 <g data-side="mirror-tick" style="display:none"><path d="M540 566V578" stroke="#829694" stroke-width="2"/><circle cx="540" cy="570" r="4" fill="#fffdf8" stroke="#829694"/><text x="540" y="622" text-anchor="middle" font-size="22" fill="#fffdf8">原鏡面位置</text></g>
 <g data-side="far"><use data-side="far-shape" href="#trial-bear-sprite" transform="translate(1080 0) scale(-1 1)" opacity=".48"/><rect x="616" y="597" width="272" height="35" rx="12" fill="#fffdf8"/><text data-side="far-label" x="752" y="622" text-anchor="middle" font-size="25" font-weight="700" fill="#286580">虛像位置（示意）</text></g>
-<g data-side="scatter" fill="none" stroke="#819195" stroke-width="1.9" stroke-dasharray="5 4" opacity=".65"></g>
-<g data-side="other-reflections" fill="none" stroke="#819195" stroke-width="1.6" opacity=".34"></g>
 <g data-side="extensions" fill="none" stroke="#397d9f" stroke-dasharray="8 6" stroke-width="2"></g>
 <g data-side="rays" fill="none" stroke="#236f9f" stroke-linejoin="round"></g>
 <g data-side="hits" fill="#dceff8" stroke="#236f9f" stroke-width="1.8"></g>
 <circle data-side="source-point" cx="345" cy="440" r="6" fill="#f5d477" stroke="#9d701b" stroke-width="1.5"/><circle data-side="image-point" cx="735" cy="440" r="6" fill="#f5d477" stroke="#9d701b" stroke-width="1.5"/>
-</svg><figcaption id="trial-caption">鼻尖向多個方向散光；照到鏡面的光遵守入射角＝反射角，只有部分反射光進入眼睛。</figcaption></figure>
+</svg><figcaption id="trial-caption">鏡前小熊的光經鏡面反射，沿藍色光路進入眼睛。</figcaption></figure>
 <figure class="mirror-view comparison-observation"><h3>小葵眼中看到的小熊</h3><svg class="comparison-eye" id="trial-eye" viewBox="0 0 900 400" role="img" aria-labelledby="trial-eye-title trial-eye-desc">
 <title id="trial-eye-title">小葵透過鏡面看到的小熊</title><desc id="trial-eye-desc">與側面圖共用同一眼位；金色鼻尖標記對應同一物點。切換後對照熊的位置、朝向與視大小保持相同，鏡框和背景可不同。</desc>
 <defs><linearGradient id="trial-eye-wall" x2="1" y2="1"><stop stop-color="#f5f0e5"/><stop offset="1" stop-color="#dfd5c5"/></linearGradient><linearGradient id="trial-eye-wood" x2="0" y2="1"><stop stop-color="#d5b38b"/><stop offset="1" stop-color="#ad8054"/></linearGradient><linearGradient id="trial-glass" x2="1" y2="1"><stop stop-color="#e5f3f3"/><stop offset="1" stop-color="#cfe3e5"/></linearGradient><clipPath id="trial-eye-clip"><path data-view="clip"/></clipPath></defs>
@@ -276,12 +270,12 @@
               <button class="control-button mirror-btn mirror-primary" id="toggle-comparison-mirror" type="button" aria-pressed="false" aria-controls="comparison-trial comparison-status">撤鏡，放入對照熊</button>
               <p id="comparison-button-hint">點一下，切換比較；小葵與原小熊的位置保持不變。</p>
             </div>
-            <div class="comparison-status" id="comparison-status" role="status" aria-live="polite" aria-atomic="true">先看左圖：鼻尖把照到它的光散向許多方向，其中一小束經鏡面反射進入小葵的瞳孔。</div>
-            <div class="comparison-legend" aria-label="光路圖例"><span><i class="comparison-real"></i>藍實線：實際光路</span><span><i class="comparison-other"></i>灰線：其他散光與反射方向</span><span><i class="comparison-extension"></i>藍虛線：反向延長輔助線</span></div>
+            <div class="comparison-status" id="comparison-status" role="status" aria-live="polite" aria-atomic="true">先看左圖：鏡前小熊的光經鏡面反射進入眼睛。再切換右邊，看看直接來自對照熊的光，會不會沿同一方向進入眼睛。</div>
+            <div class="comparison-legend" aria-label="光路圖例"><span><i class="comparison-real"></i>藍實線：實際光路</span><span><i class="comparison-extension"></i>藍虛線：反向延長輔助線</span></div>
             <div class="mirror-explanation">
               <strong>光的實際來處不同，進入眼睛的情形相同</strong>
               <p>鏡前實物的反射光，與對照熊的直達光，具有相同的入眼方向與發散情形。因此，鏡中像看起來就在對照熊的位置。</p>
-              <p class="comparison-clarification">鼻尖把外界照到它的光散開，本身不是光源。藍色虛線只標示光看起來的來向，沒有光真的沿虛線通過鏡後。</p>
+              <p class="comparison-clarification">有鏡子時，藍色虛線只標示光看起來的來向，沒有光真的沿虛線通過鏡後。</p>
             </div>
           </div>
         </section>
@@ -487,7 +481,7 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent=index===6?"正在進行單元小測":"正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/curved-mirrors.js?v=1"></script>
-  <script type="module" src="assets/mirror-image.js?v=6"></script>
+  <script type="module" src="assets/mirror-image.js?v=7"></script>
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
   <script type="module" src="assets/reversible-light.js?v=3"></script>

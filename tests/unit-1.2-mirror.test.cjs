@@ -15,7 +15,7 @@ let model;
 
 test('第三區光學：反射、瞳孔光束與真實對照熊等效',async t=>{
   model=await import(pathToFileURL(path.resolve(__dirname,'../units/1/parts/1.2/assets/mirror-comparison.mjs')));
-  const {COMPARISON:s,comparisonRay,pupilBundle,scatterRays,otherReflections,comparisonCamera,project,quad,planePoint,VIEW_PLANES,clipNear}=model;
+  const {COMPARISON:s,comparisonRay,pupilBundle,comparisonCamera,project,quad,planePoint,VIEW_PLANES,clipNear}=model;
   await t.test('81 個瞳孔位置獨立核對三維反射向量及直達方向',()=>{
     near(s.mirrorX-s.source[0],s.image[0]-s.mirrorX);assert.deepEqual(s.image,[735,440,0]);
     for(let y=-2;y<=2;y+=.5)for(let z=-2;z<=2;z+=.5){
@@ -30,15 +30,12 @@ test('第三區光學：反射、瞳孔光束與真實對照熊等效',async t=>
     }
     const bundle=pupilBundle();assert.equal(bundle.length,3);assert.notDeepEqual(bundle[0].eye,bundle[2].eye);assert.notDeepEqual(bundle[0].hit,bundle[2].hit);
   });
-  await t.test('散光由真實物點出發，其他反射方向遵守定律且未被指定進眼',()=>{
-    for(const side of [1,-1]){
-      const origin=side===1?s.source:s.image,rays=scatterRays(origin,side);assert.equal(rays.length,8);
-      for(const [start,end] of rays){assert.deepEqual(start,origin);assert.ok((end[0]-start[0])*side>0);assert.ok(end[1]<570);}
-      assert.ok(new Set(rays.map(r=>Math.sign(r[1][1]-r[0][1]))).size>1);
-    }
-    for(const ray of otherReflections()){
-      const a=unit(vector(ray.hit,ray.source)),b=unit(vector(ray.end,ray.hit));near(a[0],-b[0]);near(a[1],b[1]);assert.ok(ray.hit[1]>=68&&ray.hit[1]<=570);
-      assert.ok(Math.hypot(...vector(b,unit(vector(s.eye,ray.hit))))>.05);
+  await t.test('反射光與直達光從真實物點出發，虛像只作反向延長位置',()=>{
+    for(const ray of pupilBundle()){
+      assert.deepEqual(ray.reflected[0],s.source);assert.deepEqual(ray.direct[0],s.image);
+      assert.deepEqual(ray.reflected.at(-1),ray.eye);assert.deepEqual(ray.direct.at(-1),ray.eye);
+      assert.deepEqual(ray.extension,[ray.hit,s.image]);
+      assert.notDeepEqual(ray.reflected[0],ray.eye);assert.notDeepEqual(ray.direct[0],ray.eye);
     }
   });
   await t.test('三維攝影機基底、鼻尖與反射點投影一致，紋理位置固定',()=>{
@@ -74,7 +71,7 @@ test('第三區：撤鏡並放入對照熊的操作、畫面與教學說明',{ti
       const screen=(x,y)=>{const q=new DOMPoint(x,y).matrixTransform(svg.getScreenCTM());return[q.x,q.y];};
       const source=svg.dataset.source.split(',').map(Number),image=svg.dataset.image.split(',').map(Number);
       const box=name=>{const r=find(name).getBoundingClientRect();return[r.width,r.height];};
-      return {mode:svg.dataset.mode,source,image,eye:svg.dataset.eye.split(',').map(Number),rays:[...find('rays').children].map(points),extensions:[...find('extensions').children].map(points),screen:[screen(...source),screen(540,source[1]),screen(...image)],shapes:[box('near-shape'),box('far-shape')],farTransform:find('far-shape').getAttribute('transform'),mirrorVisible:getComputedStyle(find('mirror')).display!=='none',scatter:[...find('scatter').children].map(points)};
+      return {mode:svg.dataset.mode,source,image,eye:svg.dataset.eye.split(',').map(Number),rays:[...find('rays').children].map(points),extensions:[...find('extensions').children].map(points),screen:[screen(...source),screen(540,source[1]),screen(...image)],shapes:[box('near-shape'),box('far-shape')],farTransform:find('far-shape').getAttribute('transform'),mirrorVisible:getComputedStyle(find('mirror')).display!=='none',auxiliaryCount:svg.querySelectorAll('[data-side=scatter],[data-side=other-reflections]').length};
     };return{reference:read('reference'),trial:read('trial')};
   });}
   async function verify(p=page){
@@ -84,7 +81,7 @@ test('第三區：撤鏡並放入對照熊的操作、畫面與教學說明',{ti
       near(item.screen[1][0]-item.screen[0][0],item.screen[2][0]-item.screen[1][0],.01);near(item.screen[0][1],item.screen[2][1],.01);
       near(item.shapes[0][0],item.shapes[1][0],.01);near(item.shapes[0][1],item.shapes[1][1],.01);
       assert.equal(item.mirrorVisible,item.mode==='mirror');assert.equal(item.rays.length,item.mode==='mirror'?6:3);assert.equal(item.extensions.length,item.mode==='mirror'?3:0);
-      assert.equal(item.scatter.length,item.mode==='mirror'?8:16);
+      assert.equal(item.auxiliaryCount,0);
     }
     const a=data.reference,b=data.trial;
     if(b.mode==='direct')for(let i=0;i<3;i++){
@@ -115,8 +112,8 @@ test('第三區：撤鏡並放入對照熊的操作、畫面與教學說明',{ti
     await setMode('mirror');const b=await raster();assert.deepEqual(a,b);await verify();
     await expect(page.locator('#trial-eye [data-view=mirror]')).toBeVisible();await expect(page.locator('#trial-eye [data-view=far]')).toHaveAttribute('clip-path','url(#trial-eye-clip)');
   });
-  await t.test('教學文字說明散光、反射與直達等效，不將撤鏡描述成物體憑空出現',async()=>{
-    await expect(section).toContainText('鼻尖把外界照到它的光散開，本身不是光源');await expect(section).toContainText('藍色虛線只標示光看起來的來向');
+  await t.test('移除散光示意及文字，聚焦反射光與直達光的比較',async()=>{
+    await expect(section).not.toContainText('散光');await expect(section).not.toContainText('散向');await expect(section).not.toContainText('散開');assert.equal(await section.locator('[id$=gray-arrow],.comparison-other,[data-side=scatter],[data-side=other-reflections]').count(),0);await expect(section).toContainText('藍色虛線只標示光看起來的來向');
     await expect(section).toContainText('具有相同的入眼方向與發散情形');await expect(section).toContainText('鏡框與背景可以不同');
     await setMode('direct');await expect(page.locator('#comparison-status')).toContainText('另外放入真實對照熊');await expect(page.locator('#trial-side-desc')).toContainText('淡化只為突出對照熊');
     await setMode('mirror');await expect(page.locator('#comparison-status')).toContainText('對照熊已移開');

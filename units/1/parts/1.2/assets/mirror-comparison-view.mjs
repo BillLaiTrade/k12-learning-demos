@@ -1,4 +1,4 @@
-import {COMPARISON,comparisonCamera,project,quad,planePoint,VIEW_PLANES,clipNear} from './mirror-comparison.mjs?v=1';
+import {COMPARISON,comparisonCamera,project,quad,planePoint,VIEW_PLANES,clipNear} from './mirror-comparison.mjs?v=2';
 const polygon=points=>'M'+points.map(p=>p.slice(0,2).join(',')).join('L')+'Z';
 
 export function createComparisonView(svg) {
