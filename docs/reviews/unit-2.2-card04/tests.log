@@ -1,0 +1,57 @@
+▶ sound comparison uses one signal and physical travel delays
+  ✔ the same distance produces the material arrival times and ranking (1.006918ms)
+  ✔ temperature changes only the air speed, including a real tie at 20°C (0.262849ms)
+  ✔ every medium uses the same frequency, bounded local motion and exact rest (0.83903ms)
+  ✔ particles remain ordered, stay at fixed y and settle in every medium (24.82135ms)
+✔ sound comparison uses one signal and physical travel delays (28.463524ms)
+▶ complete fourth-card preview works as one consistent experiment
+  ✔ initial scene uses the official characters, no orange tracking particle and no autoplay (731.235443ms)
+  ✔ vibration begins locally and steel reaches the end while water and air remain still there (359.108467ms)
+  ✔ pause, resume, exact stepping and a shared speed change keep one timeline (842.408581ms)
+  ✔ source clicks and keyboard restart all groups without overlapping animations (1120.656059ms)
+  ✔ complete results retain the actual times, feedback and rest positions (3733.427866ms)
+  ✔ temperature controls are synchronized, bounded and use identical air layouts (195.137049ms)
+  ✔ warmer, colder and equal-temperature experiments produce correct outcomes (8063.86661ms)
+  ✔ changing conditions clears running results and a tie has identical live motion (257.548763ms)
+  ✔ optional arrival cues use real audio nodes and stop when muted or paused (2203.361413ms)
+  ✔ backgrounding pauses at the same model time and never resumes automatically (1682.354094ms)
+  ✔ touch, both modes and seven viewport widths keep the layout usable (1791.288727ms)
+✔ complete fourth-card preview works as one consistent experiment (21429.311666ms)
+▶ 2.2 sound travels through air while particles stay near their origins
+  ✔ actual bell recording is audible with headroom and no autoplay or volume slider (44.036975ms)
+  ✔ starts at rest and the disturbance reaches nearby particles before distant ones (1273.270344ms)
+  ✔ direct bell and button strikes restart one animation without stacking (503.788178ms)
+  ✔ a strike launches compression right while particles oscillate locally (1271.90821ms)
+  ✔ labels follow the same bands and fade once without jumping back or reappearing (6330.690027ms)
+  ✔ ear responds only after arrival; completion and keyboard restart leave no stale animation (4797.213695ms)
+  ✔ bell playback advances, restarts from zero, and ends without looping (6379.069577ms)
+  ✔ touch controls, enlarged mobile observation, small screens and reduced motion (5302.648177ms)
+✔ 2.2 sound travels through air while particles stay near their origins (27051.341771ms)
+▶ vacuum jar: manipulate air while the bell keeps working
+  ✔ full jar begins silent with no autoplay and a valid sustained recording (103.047812ms)
+  ✔ tabletop meter follows the approved scene with live segmented digits and aligned controls (50.701045ms)
+  ✔ power starts actual audio and a visible hammer without changing the air (933.913625ms)
+  ✔ pump picture and button share controls; stop preserves pressure while the source keeps moving (2022.981043ms)
+  ✔ near vacuum keeps the stop-pumping controls enabled while air and audio stay bounded (3507.147952ms)
+  ✔ inlet picture restores air and audio; changing direction cancels the previous action (2905.87063ms)
+  ✔ meter observes the audio signal independently of the air state and clears on silence (1132.46668ms)
+  ✔ switch, keyboard and rapid toggles stop audio and preserve the chosen air amount (808.061681ms)
+  ✔ leaving the experiment stops ringing and pumping without resetting air or autoplaying on return (407.299542ms)
+  ✔ touch targets, full apparatus, qualitative readings and layout work at narrow widths (20169.722014ms)
+  ✔ second and third learning cards share the first card layout and teaching sequence (96.208871ms)
+✔ vacuum jar: manipulate air while the bell keeps working (33240.567227ms)
+▶ 2.2 ruler can be plucked directly
+  ✔ recording is audible without clipping at full volume with no volume slider (23.493373ms)
+  ✔ ruler long edges are parallel with no rest deformation at the clamp (69.191018ms)
+  ✔ pointer pluck bends only the free segment and can be stopped (284.995983ms)
+  ✔ repeated plucks, keyboard, fallback button and natural decay (3088.733678ms)
+  ✔ touch pluck on a narrow screen and inactive background (993.573995ms)
+✔ 2.2 ruler can be plucked directly (5670.466098ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 88529.459968

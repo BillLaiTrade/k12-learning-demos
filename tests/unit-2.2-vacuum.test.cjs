@@ -41,9 +41,13 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
   const realWait = ms => new Promise(r => setTimeout(r, ms));
   let fullDb = null, lowDb = null;
   const checkDisplay = async () => {
-    const output = await page.locator('#vacuum-db-value').textContent();
-    assert.equal(await page.locator('#vacuum-led-digits').getAttribute('data-reading'), output);
-    const painted = await page.locator('#vacuum-led-digits > g').evaluateAll(nodes => nodes.map(n => [...n.querySelectorAll('.is-lit')].map(p => p.dataset.segment).join('')));
+    // 同一次讀取，避免持續更新的讀值與筆畫分別來自相鄰影格。
+    const { output, reading, painted } = await page.evaluate(() => ({
+      output: document.querySelector('#vacuum-db-value').textContent,
+      reading: document.querySelector('#vacuum-led-digits').dataset.reading,
+      painted: [...document.querySelectorAll('#vacuum-led-digits > g')].map(n => [...n.querySelectorAll('.is-lit')].map(p => p.dataset.segment).join(''))
+    }));
+    assert.equal(reading, output);
     const patterns = { '0':'abcdef', '1':'bc', '2':'abdeg', '3':'abcdg', '4':'bcfg', '5':'acdfg', '6':'acdefg', '7':'abc', '8':'abcdefg', '9':'abcdfg', '-':'g' };
     const expected = (output === '—' ? '--' : output.padStart(2, ' ')).split('').map(c => patterns[c] || '');
     assert.deepEqual(painted, expected, 'visible LED strokes must show the current output');

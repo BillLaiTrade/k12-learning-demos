@@ -1,0 +1,27 @@
+▶ sound comparison uses one signal and physical travel delays
+  ✔ the same distance produces the material arrival times and ranking (1.050522ms)
+  ✔ temperature changes only the air speed, including a real tie at 20°C (0.326492ms)
+  ✔ every medium uses the same frequency, bounded local motion and exact rest (0.990744ms)
+  ✔ particles remain ordered, stay at fixed y and settle in every medium (27.312281ms)
+✔ sound comparison uses one signal and physical travel delays (30.95924ms)
+▶ complete fourth-card preview works as one consistent experiment
+  ✔ initial scene uses the official characters, no orange tracking particle and no autoplay (728.686921ms)
+  ✔ vibration begins locally and steel reaches the end while water and air remain still there (471.973323ms)
+  ✔ pause, resume, exact stepping and a shared speed change keep one timeline (1054.361711ms)
+  ✔ source clicks and keyboard restart all groups without overlapping animations (1154.913556ms)
+  ✔ complete results retain the actual times, feedback and rest positions (3920.379115ms)
+  ✔ temperature controls are synchronized, bounded and use identical air layouts (208.539213ms)
+  ✔ warmer, colder and equal-temperature experiments produce correct outcomes (8284.701655ms)
+  ✔ changing conditions clears running results and a tie has identical live motion (241.96829ms)
+  ✔ optional arrival cues use real audio nodes and stop when muted or paused (2222.242882ms)
+  ✔ backgrounding pauses at the same model time and never resumes automatically (1693.226684ms)
+  ✔ touch, both modes and seven viewport widths keep the layout usable (1776.238136ms)
+✔ complete fourth-card preview works as one consistent experiment (22222.902276ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22547.988294
