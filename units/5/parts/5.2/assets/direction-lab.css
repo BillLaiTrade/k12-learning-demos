@@ -16,11 +16,10 @@
 #direction-lab .direction-flow-caption{fill:#7b341b;font:700 25px "Noto Sans TC","Microsoft JhengHei",sans-serif;paint-order:stroke;stroke:#fff9e9;stroke-opacity:.65;stroke-width:3px;stroke-linejoin:round}
 #direction-lab .direction-flow-streak{animation:direction-energy 1s linear infinite;animation-play-state:paused}
 #direction-lab[data-playing=true] .direction-flow-streak{animation-play-state:running}
-#direction-lab .direction-thermometer{filter:drop-shadow(1px 2px 2px #354a4530)}
-#direction-lab .direction-degree{fill:none;stroke:#304b47;stroke-width:1;stroke-linecap:butt}
-#direction-lab .direction-degree-number{fill:#2a423f;font:17px Arial,sans-serif;font-variant-numeric:tabular-nums}
-#direction-lab .direction-unit{fill:#2a423f;font:16px Arial,sans-serif}
-#direction-lab .direction-live-temperature{fill:#214d37;font:700 28px Arial,sans-serif;font-variant-numeric:tabular-nums}
+#direction-lab .direction-degree{fill:none;stroke:#233c3b;stroke-width:.65;stroke-opacity:.85;stroke-linecap:butt}
+#direction-lab .direction-degree-number{fill:#263d3a;font:9.5px Arial,sans-serif;font-variant-numeric:tabular-nums}
+#direction-lab .direction-unit{fill:#263d3a;font:9px Arial,sans-serif}
+#direction-lab .direction-live-temperature{fill:#214d37;stroke:#fffdf4;stroke-opacity:.92;stroke-width:4px;stroke-linejoin:round;paint-order:stroke;font:650 28px Arial,sans-serif;font-variant-numeric:tabular-nums}
 #direction-lab .direction-controls{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:10px;padding:8px 14px;border-top:1px solid #ccd6c2;background:#fcfbf2}
 #direction-lab .direction-controls button{width:100%;min-height:44px;padding:8px 12px;border-radius:10px;font-size:1rem}
 #direction-lab .direction-controls .action{background:#315b36}

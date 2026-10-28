@@ -26,12 +26,14 @@ test('5.2 first block: three environments and in-water thermometers',{timeout:18
     assert.deepEqual(await values(),{a:60,b:10});assert.equal((await state()).phase,'ready');
     assert.equal(await page.locator('#direction-flow-hot').isVisible(),false);assert.equal(await page.locator('#direction-flow-cold').isVisible(),false);
     assert.equal(await page.locator('#direction-hot-flow').textContent(),'等待觀察');
-    for(const name of ['fridge','room','hot']){const response=await page.request.get(new URL(`assets/direction-${name}.webp`,url).href);assert.equal(response.status(),200);}
+    for(const name of ['fridge','room','hot']){const response=await page.request.get(new URL(`assets/direction-${name}-glass.webp`,url).href);assert.equal(response.status(),200);}
     assert.equal(await page.locator('#card-01 .speaker').count(),4);
     assert.match(await page.locator('#card-01 .speaker').first().evaluate(n=>getComputedStyle(n,'::before').backgroundImage),/dialogue-character-avatars\.png/);
     assert.equal(await page.locator('#direction-lab .direction-reading').count(),0);
     assert.equal(await page.locator('.direction-thermometer').count(),2);
-    assert.equal(await page.locator('.direction-rim-clip').count(),2);
+    assert.equal(await page.locator('.direction-reflection-image').count(),4);
+    assert.equal(await page.locator('.direction-instrument-body').count(),0);
+    assert.deepEqual(await page.locator('.direction-thermometer').evaluateAll(ns=>ns.map(n=>n.dataset.artwork)),['integrated-glass','integrated-glass']);
     for(const key of ['hot','cold']){
       assert.equal(await page.locator(`#direction-thermometer-${key} .direction-degree`).count(),81);
       assert.deepEqual(await page.locator(`#direction-thermometer-${key} .direction-degree-number`).allTextContents(),['0','20','40','60','80']);
@@ -40,18 +42,20 @@ test('5.2 first block: three environments and in-water thermometers',{timeout:18
   await t.test('matching scales, immersed bulbs and synchronized liquid/readout levels',async()=>{
     for(const key of ['hot','cold']){
       const geometry=await page.locator(`#direction-thermometer-${key}`).evaluate(n=>({
-        bulb:{y:Number(n.querySelector('.direction-bulb-glass').getAttribute('cy')),r:Number(n.querySelector('.direction-bulb-glass').getAttribute('r'))},
+        bulb:{y:Number(n.dataset.bulbY),r:Number(n.dataset.bulbRadius)},
         ticks:[...n.querySelectorAll('.direction-degree')].map(t=>({degree:Number(t.dataset.degree),y:Number(t.getAttribute('d').match(/^M3 ([\d.]+)/)[1])}))
       }));
       assert.ok(geometry.bulb.y-geometry.bulb.r>215,'bulb below water surface');
       assert.ok(geometry.bulb.y+geometry.bulb.r<350,'bulb above cup floor');
-      for(const tick of geometry.ticks)assert.equal(tick.y,298-tick.degree*3.25);
+      for(const tick of geometry.ticks)assert.equal(tick.y,291-tick.degree*3.0625);
     }
     for(const environment of [5,25,70]){
       await select(environment);await play.click();await page.clock.runFor(700);await pause();const s=await state();
+      const sceneSource=await page.locator('.direction-scene-image').first().getAttribute('src');
+      assert.deepEqual(await page.locator('.direction-reflection-image').evaluateAll(ns=>ns.map(n=>n.getAttribute('href'))),Array(4).fill(sceneSource));
       for(const [key,raw]of [['hot',s.temperatureA],['cold',s.temperatureB]]){
-        const y=298-Number(raw)*3.25;
-        assert.ok(Math.abs(Number((await page.locator(`#direction-liquid-${key}`).getAttribute('d')).match(/^M-9 ([\d.]+)/)[1])-y)<1e-6);
+        const y=291-Number(raw)*3.0625;
+        assert.ok(Math.abs(Number((await page.locator(`#direction-liquid-${key}`).getAttribute('d')).match(/^M-2\.2 ([\d.]+)/)[1])-y)<1e-6);
         assert.equal(await page.locator(`#direction-live-reading-${key}`).getAttribute('transform'),`translate(0,${y})`);
         assert.equal(await page.locator(`#direction-${key}`).textContent(),`${Math.round(Number(raw))}°C`);
       }

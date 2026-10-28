@@ -4,9 +4,9 @@
   if(!root)return;
   const $=id=>document.getElementById(id);
   const scenes={
-    5:{name:'冷藏室',image:'assets/direction-fridge.webp',observation:'在 5°C 冷藏室，連 10°C 的冷水也繼續降溫！原來兩杯水都比周圍暖，都在放熱。'},
-    25:{name:'房間',image:'assets/direction-room.webp',observation:'在 25°C 房間，A 杯降溫、B 杯升溫，卻都是熱從溫度較高的地方傳向較低的地方！'},
-    70:{name:'高溫箱',image:'assets/direction-hot.webp',observation:'在 70°C 高溫箱，連 60°C 的熱水也升溫了！原來兩杯水都比周圍冷，都在吸熱。'}
+    5:{name:'冷藏室',image:'assets/direction-fridge-glass.webp',observation:'在 5°C 冷藏室，連 10°C 的冷水也繼續降溫！原來兩杯水都比周圍暖，都在放熱。'},
+    25:{name:'房間',image:'assets/direction-room-glass.webp',observation:'在 25°C 房間，A 杯降溫、B 杯升溫，卻都是熱從溫度較高的地方傳向較低的地方！'},
+    70:{name:'高溫箱',image:'assets/direction-hot-glass.webp',observation:'在 70°C 高溫箱，連 60°C 的熱水也升溫了！原來兩杯水都比周圍冷，都在吸熱。'}
   };
   const state={environment:25,time:0,playing:false,observed:false,finished:false};
   let frame=0,last=null,shownEnvironment=null;
@@ -21,10 +21,10 @@
     const value=valueFor(initial),difference=value-state.environment,hasFlow=difference!==0,visible=state.observed&&hasFlow;
     const outward=difference>0,scale=side==='left'?(outward?-1:1):(outward?1:-1);
     text(`direction-${key}`,`${Math.round(value)}°C`);
-    // Both instruments share an actual 0–80°C scale: 3.25 SVG units per °C.
-    const level=298-Math.max(0,Math.min(80,value))*3.25;
-    const surface=`M-9 ${level}Q-5 ${level+2}-1 ${level}`;
-    $(`direction-liquid-${key}`).setAttribute('d',`${surface}V320H-9Z`);
+    // Etched 0–80°C scales are calibrated to the two photographed capillaries.
+    const level=291-Math.max(0,Math.min(80,value))*3.0625;
+    const surface=`M-2.2 ${level}Q0 ${level+1}2.2 ${level}`;
+    $(`direction-liquid-${key}`).setAttribute('d',`${surface}V310H-2.2Z`);
     $(`direction-meniscus-${key}`).setAttribute('d',surface);
     $(`direction-live-reading-${key}`).setAttribute('transform',`translate(0,${level})`);
     text(`direction-${key}-flow`,!state.observed?'等待觀察':!hasFlow?'同溫・沒有淨熱傳遞':outward?'放熱・降溫':'吸熱・升溫');
@@ -44,6 +44,7 @@
       root.querySelectorAll('.direction-scene-image').forEach((img,index)=>{
         img.src=scene.image;img.alt=`${scene.name}中自然放置的水杯 ${index===0?'A':'B'}`;
       });
+      root.querySelectorAll('.direction-reflection-image').forEach(img=>img.setAttribute('href',scene.image));
       root.querySelectorAll('[data-environment]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.environment)===state.environment)));
     }
     const a=updateCup('hot',60,'left'),b=updateCup('cold',10,'right');
