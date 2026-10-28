@@ -48,3 +48,11 @@
  #s5 .mass-equation {gap:4px;}
  #s5 .item b {font-size:.78rem;}
 }
+
+#s5 .mix-mass-controls {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+#s5 .mix-control-pair {display:grid;grid-template-columns:1fr 1fr;gap:7px;min-width:0;}
+#s5 .mix-mass-action {min-width:0;min-height:44px;padding:8px 5px;border:1px solid #176b53;border-radius:9px;background:#176b53;color:#fff;font:inherit;font-size:.82rem;font-weight:750;cursor:pointer;white-space:nowrap;}
+#s5 .mix-mass-action.remove {background:#fff;color:#365e49;border-color:#a7bbaa;}
+#s5 .mix-mass-action:hover:not(:disabled) {box-shadow:0 2px 7px #243a3528;filter:brightness(.96);}
+#s5 .mix-mass-action:disabled {opacity:.4;cursor:default;}
+@media(max-width:680px) {#s5 .mix-mass-controls {gap:10px;}#s5 .mix-control-pair {grid-template-columns:1fr;}#s5 .mix-mass-action {font-size:.8rem;}}

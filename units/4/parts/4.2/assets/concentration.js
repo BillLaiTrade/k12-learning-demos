@@ -1,16 +1,18 @@
-import { LIMITS, INITIAL, massValue, concentrationState, format } from './concentration-state.js?v=lab-1';
-import { TOOL, renderMix } from './concentration-renderer.js?v=lab-1';
+import { LIMITS, INITIAL, ACTION_MS, POUR_DELAY, POUR_RATE, massValue, concentrationState, format } from './concentration-state.js?v=controls-2';
+import { TOOL, renderMix } from './concentration-renderer.js?v=controls-2';
 const $=id=>document.getElementById(id);
 const lab=$('mix-lab'),canvas=$('mix-canvas'),ctx=canvas.getContext('2d');
 const spoon=$('mix-spoon'),pitcher=$('mix-pitcher'),reset=$('mix-reset'),status=$('mix-status');
 const sources=[...document.querySelectorAll('.ppm-source')],board=$('ppm-recipe'),supply=$('ppm-supply'),tokens=$('ppm-tokens');
 let state={...INITIAL},ready=false,animation=null,queue=[],raf=null,gesture=null,tokenDrag=null,ignoreClick=false,dialogKind=null,lastKey='',lastPpm=null;
+const massButtons=[...document.querySelectorAll('[data-mass-kind]')];
 const canceledTokenClicks=new WeakSet();
 const images={},reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 function announce(s){status.textContent=s;}
 function values(){return concentrationState(state.sugar,state.water,state.ppm);}
 function update(){
+  for(const button of massButtons){const kind=button.dataset.massKind,delta=Number(button.dataset.massDelta);button.disabled=!ready||(delta>0?state[kind]>=LIMITS[kind][1]:state[kind]<=LIMITS[kind][0]);}
   const v=values(),key=[state.sugar,state.water,state.ppm].join('/');
   if(key!==lastKey){
     const fields={
@@ -35,7 +37,7 @@ function update(){
   }
 }
 function paint(now=performance.now()){
-  update();lab.dataset.activity=gesture?.moved?'dragging':animation?animation.hold?'pouring-water':animation.kind==='sugar'?'scooping':'pouring-water':'idle';
+  update();lab.dataset.activity=gesture?.moved?'dragging':animation?animation.hold?'pouring-water':animation.kind==='sugar'?'scooping':animation.delta<0?'removing-water':'pouring-water':'idle';
   if(!ready)return;
   const poses=renderMix(ctx,images,values(),animation,gesture?.moved?gesture:null,now);
   for(const [kind,button] of [['sugar',spoon],['water',pitcher]]){
@@ -49,18 +51,19 @@ function startNext(now){
   if(animation||!queue.length)return;
   const action=queue.shift(),startMass=state[action.kind],target=clamp(startMass+action.delta,...LIMITS[action.kind]);
   if(target===startMass){startNext(now);return;}
-  animation={...action,start:now,startMass,target,duration:reduceMotion?80:650};
+  animation={...action,start:now,startMass,target,duration:reduceMotion?80:ACTION_MS[action.kind]};
 }
 function frame(now){
   raf=null;
   if(gesture?.kind==='water'&&!gesture.moved&&!gesture.capped&&now-gesture.start>=220){
-    if(!animation?.hold)animation={kind:'water',delta:1,hold:true,start:gesture.start,startMass:state.water,duration:650};
-    const amount=clamp(animation.startMass+Math.max(0,now-animation.start-220)/1000*12,...LIMITS.water);
+    if(!animation?.hold)animation={kind:'water',delta:1,hold:true,start:gesture.start,startMass:state.water,duration:ACTION_MS.water};
+    const amount=clamp(animation.startMass+Math.max(0,now-animation.start-POUR_DELAY)/1000*POUR_RATE,...LIMITS.water);
     setMass('water',amount);gesture.held=true;
     if(amount>=LIMITS.water[1]){gesture.capped=true;animation=null;announce('已量得水150克，停止倒水。');}
   }
   if(animation&&!animation.hold){
-    const p=clamp((now-animation.start)/animation.duration,0,1),flow=clamp((p-.2)/.6,0,1);
+    const p=clamp((now-animation.start)/animation.duration,0,1);
+    const flow=animation.kind==='water'?clamp((p-.25)/.55,0,1):clamp((p-.2)/.6,0,1);
     setMass(animation.kind,animation.startMass+(animation.target-animation.startMass)*flow);
     if(p>=1){const kind=animation.kind;setMass(kind,animation.target);animation=null;announce(`${kind==='sugar'?'糖':'水'}已量得 ${format(state[kind],1)} 克，濃度 ${format(values().percent)}%。`);}
   }
@@ -78,7 +81,7 @@ function wireTool(button,kind){
     if(event.button!==0)return;ignoreClick=false;
     if(animation&&!animation.hold)setMass(animation.kind,animation.target);
     for(const action of queue)setMass(action.kind,clamp(state[action.kind]+action.delta,...LIMITS[action.kind]));
-    clearActions();const p=point(event);gesture={kind,id:event.pointerId,start:performance.now(),px:p.x,py:p.y,x:TOOL[kind].x,y:TOOL[kind].y,moved:false,held:false};button.setPointerCapture(event.pointerId);
+    clearActions();const p=point(event);gesture={kind,id:event.pointerId,start:performance.now(),px:p.x,py:p.y,x:TOOL[kind].x,y:TOOL[kind].y,moved:false,held:false,startWater:state.water};button.setPointerCapture(event.pointerId);
     if(kind==='water')schedule();
   });
   button.addEventListener('pointermove',event=>{
@@ -96,7 +99,7 @@ function wireTool(button,kind){
       if(kind==='sugar'&&p.x>330&&p.x<740&&p.y>450&&p.y<660)act('sugar',1);
       else if(kind==='sugar'&&p.x<300&&p.y>450&&p.y<760)act('sugar',-1);
       else if(kind==='water'&&p.x>830&&p.x<1130&&p.y>270&&p.y<590)act('water',1);
-    }else if(g.held){ignoreClick=true;animation=null;announce(`水已量得 ${format(state.water,1)} 克，濃度 ${format(values().percent)}%。`);}
+    }else if(g.held){ignoreClick=true;animation=null;if(state.water===g.startWater)act('water',1);else announce(`水已量得 ${format(state.water,1)} 克，濃度 ${format(values().percent)}%。`);}
     paint();
   });
   const cancel=()=>{if(gesture?.kind===kind){gesture=null;animation=null;ignoreClick=true;paint();}};
@@ -104,6 +107,7 @@ function wireTool(button,kind){
   button.addEventListener('click',event=>{if(ignoreClick&&event.detail>0){ignoreClick=false;return;}ignoreClick=false;act(kind,1);});
   button.addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown'].includes(event.key)){event.preventDefault();act(kind,event.key==='ArrowUp'?1:-1);}});
 }
+massButtons.forEach(button=>button.addEventListener('click',()=>act(button.dataset.massKind,Number(button.dataset.massDelta))));
 wireTool(spoon,'sugar');wireTool(pitcher,'water');$('mix-return').addEventListener('click',()=>act('sugar',-1));
 const dialog=$('mass-dialog'),input=$('mass-input');
 function openMass(kind){
@@ -149,4 +153,4 @@ function load(src){return new Promise((resolve,reject)=>{const img=new Image();i
 update();
 Promise.all([load('./concentration-workbench.webp'),load('./concentration-tools.webp')]).then(([background,tools])=>{
   images.background=background;images.tools=tools;ready=true;lab.dataset.ready='true';[spoon,pitcher,reset,$('mix-return'),$('mix-sugar-input'),$('mix-water-input')].forEach(b=>b.disabled=false);paint();
-}).catch(()=>{ready=false;[spoon,pitcher,reset,$('mix-return'),$('mix-sugar-input'),$('mix-water-input')].forEach(b=>b.disabled=true);lab.dataset.ready='error';status.classList.add('error');status.textContent='無法載入配製場景，請重新整理頁面。下方 ppm 仍可操作。';});
+}).catch(()=>{ready=false;[spoon,pitcher,reset,$('mix-return'),$('mix-sugar-input'),$('mix-water-input'),...massButtons].forEach(b=>b.disabled=true);lab.dataset.ready='error';status.classList.add('error');status.textContent='無法載入配製場景，請重新整理頁面。下方 ppm 仍可操作。';});

@@ -1,5 +1,8 @@
 // Fresh, fully dissolved sugar-water recipes. Bounds avoid saturation teaching.
 export const LIMITS = { sugar: [0, 20], water: [50, 150], ppm: [0, 10] };
+export const ACTION_MS = { sugar: 1100, water: 2600 };
+export const POUR_DELAY = 650;
+export const POUR_RATE = 4;
 export const INITIAL = { sugar: 5, water: 95, ppm: 3 };
 export function massValue(kind, value) {
   if (value === null || String(value).trim() === "") return null;

@@ -1,16 +1,18 @@
+import { POUR_DELAY } from './concentration-state.js?v=controls-2';
 // Apparatus positions follow the approved 1536 x 1024 photograph.
 export const TOOL = {
   sugar: { x: 407, y: 392, w: 335, h: 147, angle: 0 },
   water: { x: 1372, y: 477, w: 302, h: 378, angle: 0 }
 };
 const lerp = (a,b,t) => a+(b-a)*t;
+const clampFill = t => Math.max(0,Math.min(1,(t-.25)/.55));
 const ease = t => { t=Math.max(0,Math.min(1,t));return t*t*(3-2*t); };
 export function toolPose(kind, animation, drag, now) {
   const home=TOOL[kind];
   if(drag?.kind===kind&&drag.moved) return {...home,x:drag.x,y:drag.y};
-  if(!animation||animation.kind!==kind)return home;
+  if(!animation||animation.kind!==kind||kind==='water'&&animation.delta<0)return home;
   const t=Math.max(0,Math.min(1,(now-animation.start)/animation.duration));
-  const strength=animation.hold?ease((now-animation.start)/250):ease(Math.min(t/.3,(1-t)/.25));
+  const strength=animation.hold?ease((now-animation.start)/POUR_DELAY):ease(Math.min(t/.3,(1-t)/.25));
   const target=kind==='water'?{x:1195,y:240,angle:-1.0}:animation.delta<0?{x:284,y:441,angle:-.08}:{x:405,y:398,angle:.12};
   return {...home,x:lerp(home.x,target.x,strength),y:lerp(home.y,target.y,strength),angle:lerp(0,target.angle,strength),flip:kind==='sugar'&&animation.delta<0?-1:1};
 }
@@ -55,7 +57,7 @@ export function renderMix(ctx,images,state,animation,drag,now) {
   ctx.clearRect(0,0,1536,1024);ctx.drawImage(images.background,0,0,1536,1024);
   const sugarPose=toolPose('sugar',animation,drag,now),waterPose=toolPose('water',animation,drag,now);
   const t=animation?Math.max(0,Math.min(1,(now-animation.start)/animation.duration)):0;
-  const flowing=animation?.kind==='water'&&(animation.hold?now-animation.start>220:t>.25&&t<.8);
+  const flowing=animation?.kind==='water'&&animation.delta>0&&(animation.hold?now-animation.start>POUR_DELAY:t>.25&&t<.8);
   const surface=water(ctx,state.water,now,flowing);sugarPile(ctx,state.sugar);
   ctx.save();ctx.beginPath();ctx.ellipse(1382,661,110,16,0,0,Math.PI*2);ctx.fillStyle='#4e46331a';ctx.fill();ctx.restore();
   drawTool(ctx,images.tools,'water',waterPose);drawTool(ctx,images.tools,'sugar',sugarPose);
@@ -63,6 +65,15 @@ export function renderMix(ctx,images,state,animation,drag,now) {
     const lx=-waterPose.w*.45,ly=-waterPose.h*.41;
     const x=waterPose.x+lx*Math.cos(waterPose.angle)-ly*Math.sin(waterPose.angle),y=waterPose.y+lx*Math.sin(waterPose.angle)+ly*Math.cos(waterPose.angle);
     ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x-5,(y+surface)/2,987,surface);ctx.strokeStyle='#d7e6e272';ctx.lineWidth=6;ctx.lineCap='round';ctx.stroke();ctx.strokeStyle='#f8ffffdb';ctx.lineWidth=1.8;ctx.stroke();
+  }
+  if(animation?.kind==='water'&&animation.delta<0){
+    // The beaker contains only the separately weighed solvent. Withdraw it
+    // into a pipette instead of showing an inward stream while mass falls.
+    const strength=ease(Math.min(t/.25,(1-t)/.2));
+    const tip=lerp(surface-145,surface+23,strength),x=1008,top=tip-170;
+    ctx.save();ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x,top+29);ctx.lineTo(x,tip);ctx.lineWidth=9;ctx.strokeStyle='#a3bcb47a';ctx.stroke();ctx.lineWidth=5;ctx.strokeStyle='#ffffffc9';ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x,tip-8);ctx.lineTo(x,tip-8-65*clampFill(t));ctx.lineWidth=3;ctx.strokeStyle='#b9d7ccbc';ctx.stroke();
+    ctx.beginPath();ctx.ellipse(x,top+13,15,25,0,0,Math.PI*2);const rubber=ctx.createLinearGradient(x-15,0,x+15,0);rubber.addColorStop(0,'#496c57');rubber.addColorStop(.4,'#84a389');rubber.addColorStop(1,'#345743');ctx.fillStyle=rubber;ctx.fill();ctx.restore();
   }
   if(animation?.kind==='sugar'&&t>.18&&t<.8){
     const back=animation.delta<0,tipX=back?145:552,tipY=back?483:450,destX=back?145:544,destY=back?558:577;
