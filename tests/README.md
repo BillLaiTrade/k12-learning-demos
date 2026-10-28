@@ -149,3 +149,5 @@ node --test --test-concurrency=1 tests/unit-4.2-concentration.test.cjs tests/uni
 ## 5.1 第四區：合併視差、估讀與記錄
 
 `unit-5.1.test.cjs` 已取代原放入動畫及獨立溫度滑桿測試，現有 10 個瀏覽器情境（含外層 runner 共 11 項）。與第二、三區測試合跑共 32 項。`TEMPERATURE_LESSON_URL` 可指定線上版本；不設定則啟動本機頁面。外觀參照、三種視角及手機截圖見 `docs/reviews/unit-5.1-card04/`。
+
+第五區公式位置修訂：正式公式必須是整個「配成糖水後」結果面板的前一個同層區域，並檢查 320–1440px 的實際上下順序，避免再插入質量列與數字代入式之間。

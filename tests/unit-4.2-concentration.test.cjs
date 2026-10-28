@@ -105,15 +105,16 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   await page.locator('#mix-sugar-input').click();await page.locator('#mass-input').fill('9');await page.locator('#mass-cancel').click();assert.equal((await state()).sugar,2.5);
   await enter('sugar','');assert.equal(await page.locator('#mass-dialog').isVisible(),true);await page.locator('#mass-cancel').click();
  });
- await t.test('formal mass-percent formula precedes the live substitution and remains constant when the recipe changes',async()=>{
+ await t.test('formal mass-percent formula stands before the entire worked example and remains constant when the recipe changes',async()=>{
   await fresh();const formula=page.locator('#mass-percent-formula');
   assert.equal(await formula.isVisible(),true);assert.equal(await formula.locator('.num').innerText(),'溶質質量');assert.equal(await formula.locator('.den').innerText(),'溶液總質量');assert.match(await formula.innerText(),/× 100%/);
-  assert.equal(await formula.evaluate(e=>!!(e.compareDocumentPosition(document.querySelector('#s5 .concentration'))&Node.DOCUMENT_POSITION_FOLLOWING)),true);
+  assert.equal(await formula.evaluate(e=>{const result=document.querySelector('#s5 .live-result');return e.parentElement===result.parentElement&&e.nextElementSibling===result&&!result.contains(e)&&!!(e.compareDocumentPosition(result)&Node.DOCUMENT_POSITION_FOLLOWING);}),true);
   const original=await formula.innerText();await enter('sugar','3');await enter('water','97');assert.equal((await state()).percent,3);assert.equal(await formula.innerText(),original);assert.equal(await page.locator('[data-mix=formula-sugar]').innerText(),'3 克');assert.equal(await page.locator('[data-mix=formula-total]').innerText(),'100 克');
   for(const width of [1440,768,390,320]){
    await page.setViewportSize({width,height:1100});
    const fits=await formula.evaluate(e=>{const r=e.getBoundingClientRect();return e.scrollWidth<=e.clientWidth+1&&[...e.querySelectorAll('.formula-equation,.formula-name,.formula-ratio')].every(c=>{const b=c.getBoundingClientRect();return b.left>=r.left-.5&&b.right<=r.right+.5;});});assert.equal(fits,true,`formal formula fits at ${width}`);
-   if(width===1440||width===390)await page.locator('#s5 .live-result').screenshot({path:`/tmp/concentration-formula-${width}.png`});
+   assert.equal(await formula.evaluate(e=>e.getBoundingClientRect().bottom<=document.querySelector('#s5 .live-result').getBoundingClientRect().top),true,`formula above full result at ${width}`);
+   if(width===1440||width===390)await page.locator('#s5').screenshot({path:`/tmp/concentration-formula-first-${width}.png`});
   }
   await page.setViewportSize({width:1440,height:1100});await fresh();
  });
