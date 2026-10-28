@@ -35,3 +35,21 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-direction.test.cjs
 推送後需確認 Pages 部署成功、公開 HTML／腳本／樣式／場景與本機一致，並對公開版本重跑上述互動檢查。公開入口：
 
 https://billlaitrade.github.io/k12-learning-demos/units/5/parts/5.2/index.html#card-01
+
+## 尺寸修訂：比照 3.1／3.2 的閱讀節奏
+
+使用者指出第一區偏大，實際比對後核可縮小面板、收緊讀數欄、控制與留白；保留標題、摘要、操作前後對話及全部操作內容。本次只有第一區專用 CSS 與其快取版本更新，HTML 正文、腳本與原圖不變。
+
+相同 1440×900 視窗的第一區量測：
+
+| 項目 | 修訂前 | 修訂後 |
+| --- | ---: | ---: |
+| 互動面板寬度 | 996px | 780px，置中 |
+| 場景高度 | 414px | 324px，完整等比例 |
+| 讀數欄高度 | 166px | 93px |
+| 互動面板高度 | 868px | 646px |
+| 整區高度 | 1405px | 1176px |
+
+3.1 第一區約 836×1019px；3.2 第一區約 1054×960px。5.2 保留與 3.2 相同的 1054px 外卡片寬度，整區高度已落在核可建議的 1100–1200px。1280px 寬視窗下整區 1175px；390px 手機下由 1736px 收至 1588px，讀數和按鈕仍易讀、可觸控。
+
+`compact-room.webp`、`compact-fridge.webp`、`compact-hot.webp`、`compact-mobile.webp` 為本輪實際瀏覽器視窗截圖，僅轉換格式。逐張確認杯底、場景、箭頭、讀數、操作列及對話完整。沿用原 11 項互動檢查，本機全數通過，沒有 JavaScript／HTTP 錯誤；第 2–6 區及小測 HTML 雜湊仍相同。

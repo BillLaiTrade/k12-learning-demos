@@ -1,8 +1,8 @@
 /* Card 01: realistic scene above a fixed, flat observation bar. */
-#direction-lab{background:#fffdf5;border-color:#aebfa2;border-radius:18px}
-#direction-lab .direction-scene-heading{padding:12px 18px;background:#617c56;text-align:center}
-#direction-lab .direction-scene-heading h3{margin:0;color:#fffdf4;font-size:1.4rem;line-height:1.4;font-weight:700;letter-spacing:.04em}
-#direction-lab .direction-toolbar{display:flex;align-items:center;justify-content:center;gap:18px;padding:12px 16px;border-bottom:1px solid #c9d5bf;background:#f7f6ec}
+#direction-lab{width:100%;max-width:780px;margin:16px auto;background:#fffdf5;border-color:#aebfa2;border-radius:18px}
+#direction-lab .direction-scene-heading{padding:8px 14px;background:#617c56;text-align:center}
+#direction-lab .direction-scene-heading h3{margin:0;color:#fffdf4;font-size:1.2rem;line-height:1.3;font-weight:700;letter-spacing:.04em}
+#direction-lab .direction-toolbar{display:flex;align-items:center;justify-content:center;gap:14px;padding:8px 14px;border-bottom:1px solid #c9d5bf;background:#f7f6ec}
 #direction-lab .direction-environments{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;flex:1;max-width:540px}
 #direction-lab .direction-environments button{min-height:44px;border:1px solid #b8c3ac;border-radius:11px;background:#fffdf5;color:#344f39;font:inherit;font-size:1rem}
 #direction-lab .direction-environments button[aria-pressed=true]{background:#617f54;border-color:#617f54;color:#fff}
@@ -16,34 +16,31 @@
 #direction-lab .direction-flow-caption{fill:#7b341b;font:700 25px "Noto Sans TC","Microsoft JhengHei",sans-serif;paint-order:stroke;stroke:#fff9e9;stroke-opacity:.65;stroke-width:3px;stroke-linejoin:round}
 #direction-lab .direction-flow-streak{animation:direction-energy 1s linear infinite;animation-play-state:paused}
 #direction-lab[data-playing=true] .direction-flow-streak{animation-play-state:running}
-#direction-lab .direction-reading{padding:12px 12px 13px;text-align:center;border-top:1px solid #b9c7ad;background:#faf9ee}
+#direction-lab .direction-reading{display:grid;grid-template-columns:auto auto;justify-content:center;align-items:baseline;column-gap:10px;padding:8px 10px;text-align:center;border-top:1px solid #b9c7ad;background:#faf9ee}
 #direction-lab [data-cup=B] .direction-reading{border-left:1px solid #c8d2bd}
-#direction-lab .direction-reading h4{margin:0;font-size:1rem;font-weight:700;color:#274d37;line-height:1.5}
-#direction-lab .direction-temperature{display:block;color:#16472e;font-size:clamp(2rem,5cqw,3.15rem);font-weight:750;line-height:1.3;font-variant-numeric:tabular-nums}
-#direction-lab .direction-status{margin:2px 0;color:#963b1b;font-size:1rem;font-weight:650;line-height:1.5}
+#direction-lab .direction-reading h4{margin:0;font-size:.9rem;font-weight:700;color:#274d37;line-height:1.4}
+#direction-lab .direction-temperature{display:block;color:#16472e;font-size:1.9rem;font-weight:750;line-height:1.15;font-variant-numeric:tabular-nums}
+#direction-lab .direction-status{grid-column:1/-1;margin:2px 0;color:#963b1b;font-size:.9rem;font-weight:650;line-height:1.4}
 #direction-lab[data-phase=ready] .direction-status{color:#7d876f;font-weight:400}
-#direction-lab .direction-initial{margin:4px 0 0;color:#687060;font-size:.88rem;line-height:1.5}
-#direction-lab .direction-controls{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px;padding:12px 18px;border-top:1px solid #ccd6c2;background:#fcfbf2}
-#direction-lab .direction-controls button{width:100%;min-height:52px;border-radius:12px;font-size:1.1rem}
+#direction-lab .direction-initial{grid-column:1/-1;margin:0;color:#687060;font-size:.78rem;line-height:1.35}
+#direction-lab .direction-controls{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:10px;padding:8px 14px;border-top:1px solid #ccd6c2;background:#fcfbf2}
+#direction-lab .direction-controls button{width:100%;min-height:44px;padding:8px 12px;border-radius:10px;font-size:1rem}
 #direction-lab .direction-controls .action{background:#315b36}
 #direction-lab .direction-controls .secondary{border:1px solid #39583b;background:#fffdf5;color:#2c4c34}
-#direction-lab .direction-principle{margin:0;padding:11px 12px;border-top:1px solid #d4deca;background:#e9efdf;text-align:center;color:#284e32;font-size:1rem;font-weight:700}
-#direction-lab .direction-note{margin:0;padding:7px 12px 10px;text-align:center;color:#718067;font-size:.73rem;line-height:1.5}
+#direction-lab .direction-principle{margin:0;padding:7px 12px;border-top:1px solid #d4deca;background:#e9efdf;text-align:center;color:#284e32;font-size:.9rem;font-weight:700;line-height:1.5}
+#direction-lab .direction-note{margin:0;padding:4px 10px 6px;text-align:center;color:#718067;font-size:.73rem;line-height:1.4}
 .direction-sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @keyframes direction-energy{to{stroke-dashoffset:-50}}
 @container lesson-content (max-width:520px){
  #direction-lab .direction-views{grid-template-columns:minmax(0,1fr)}
  #direction-lab .direction-cup-view+.direction-cup-view{border-top:1px solid #b9c7ad}
  #direction-lab [data-cup=B] .direction-reading{border-left:0}
- #direction-lab .direction-scene-heading{padding:10px 12px}
- #direction-lab .direction-scene-heading h3{font-size:1.2rem}
- #direction-lab .direction-toolbar{gap:10px;padding:10px}
+ #direction-lab .direction-scene-heading{padding:8px 12px}
+ #direction-lab .direction-scene-heading h3{font-size:1.1rem}
+ #direction-lab .direction-toolbar{gap:10px;padding:8px 10px}
  #direction-lab .direction-toolbar .control-label{font-size:.8rem;white-space:nowrap}
  #direction-lab .direction-environments{gap:5px}
  #direction-lab .direction-environments button{font-size:.9rem}
- #direction-lab .direction-reading{padding:9px 10px}
- #direction-lab .direction-temperature{font-size:2.25rem}
- #direction-lab .direction-controls{gap:9px;padding:12px}
- #direction-lab .direction-controls button{min-height:48px;font-size:1rem}
+ #direction-lab .direction-controls{gap:9px;padding:8px 10px}
 }
 @media(prefers-reduced-motion:reduce){#direction-lab .direction-flow-streak{animation:none}}
