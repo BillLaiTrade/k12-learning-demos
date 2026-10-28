@@ -1,8 +1,8 @@
-import { LIMITS, INITIAL, ACTION_MS, POUR_DELAY, POUR_RATE, massValue, concentrationState, format } from './concentration-state.js?v=controls-2';
-import { TOOL, renderMix } from './concentration-renderer.js?v=controls-2';
+import { LIMITS, INITIAL, ACTION_MS, POUR_DELAY, POUR_RATE, massValue, concentrationState, format } from './concentration-state.js?v=apparatus-3';
+import { TOOL, renderMix } from './concentration-renderer.js?v=apparatus-3';
 const $=id=>document.getElementById(id);
 const lab=$('mix-lab'),canvas=$('mix-canvas'),ctx=canvas.getContext('2d');
-const spoon=$('mix-spoon'),pitcher=$('mix-pitcher'),reset=$('mix-reset'),status=$('mix-status');
+const spoon=$('mix-spoon'),pitcher=$('mix-pitcher'),cup=$('mix-water-cup'),reset=$('mix-reset'),status=$('mix-status');
 const sources=[...document.querySelectorAll('.ppm-source')],board=$('ppm-recipe'),supply=$('ppm-supply'),tokens=$('ppm-tokens');
 let state={...INITIAL},ready=false,animation=null,queue=[],raf=null,gesture=null,tokenDrag=null,ignoreClick=false,dialogKind=null,lastKey='',lastPpm=null;
 const massButtons=[...document.querySelectorAll('[data-mass-kind]')];
@@ -38,9 +38,12 @@ function update(){
 }
 function paint(now=performance.now()){
   update();lab.dataset.activity=gesture?.moved?'dragging':animation?animation.hold?'pouring-water':animation.kind==='sugar'?'scooping':animation.delta<0?'removing-water':'pouring-water':'idle';
+  const lifted=animation?.kind==='water'&&animation.delta<0&&(now-animation.start)/animation.duration>.03&&(now-animation.start)/animation.duration<.97;
+  lab.dataset.cupLifted=String(!!lifted);
+  document.querySelector('[data-mix="water-read"]').textContent=lifted?'—':`${state.water.toFixed(1)} g`;
   if(!ready)return;
   const poses=renderMix(ctx,images,values(),animation,gesture?.moved?gesture:null,now);
-  for(const [kind,button] of [['sugar',spoon],['water',pitcher]]){
+  for(const [kind,button] of [['sugar',spoon],['water',pitcher],['beaker',cup]]){
     const p=poses[kind];button.style.left=`${(p.x-p.w/2)/1536*100}%`;button.style.top=`${(p.y-p.h/2)/1024*100}%`;button.style.width=`${p.w/1536*100}%`;button.style.height=`${p.h/1024*100}%`;button.style.transform=`rotate(${p.angle}rad)`;
   }
 }
@@ -108,7 +111,7 @@ function wireTool(button,kind){
   button.addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown'].includes(event.key)){event.preventDefault();act(kind,event.key==='ArrowUp'?1:-1);}});
 }
 massButtons.forEach(button=>button.addEventListener('click',()=>act(button.dataset.massKind,Number(button.dataset.massDelta))));
-wireTool(spoon,'sugar');wireTool(pitcher,'water');$('mix-return').addEventListener('click',()=>act('sugar',-1));
+wireTool(spoon,'sugar');wireTool(pitcher,'water');
 const dialog=$('mass-dialog'),input=$('mass-input');
 function openMass(kind){
   clearActions();paint();dialogKind=kind;const [min,max]=LIMITS[kind];
@@ -151,6 +154,6 @@ document.addEventListener('keydown',event=>{if(event.key==='Escape'){ignoreClick
 document.addEventListener('visibilitychange',()=>{if(document.hidden){ignoreClick=true;clearActions();cleanupToken(true);paint();}});
 function load(src){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error(src));img.src=new URL(src,import.meta.url).href;});}
 update();
-Promise.all([load('./concentration-workbench.webp'),load('./concentration-tools.webp')]).then(([background,tools])=>{
-  images.background=background;images.tools=tools;ready=true;lab.dataset.ready='true';[spoon,pitcher,reset,$('mix-return'),$('mix-sugar-input'),$('mix-water-input')].forEach(b=>b.disabled=false);paint();
-}).catch(()=>{ready=false;[spoon,pitcher,reset,$('mix-return'),$('mix-sugar-input'),$('mix-water-input'),...massButtons].forEach(b=>b.disabled=true);lab.dataset.ready='error';status.classList.add('error');status.textContent='無法載入配製場景，請重新整理頁面。下方 ppm 仍可操作。';});
+Promise.all([load('./concentration-workbench-empty.webp'),load('./concentration-tools.webp'),load('./concentration-beaker.webp')]).then(([background,tools,beaker])=>{
+  images.background=background;images.tools=tools;images.beaker=beaker;ready=true;lab.dataset.ready='true';[spoon,pitcher,reset,...massButtons,$('mix-sugar-input'),$('mix-water-input')].forEach(b=>b.disabled=false);paint();
+}).catch(()=>{ready=false;[spoon,pitcher,reset,...massButtons,$('mix-sugar-input'),$('mix-water-input')].forEach(b=>b.disabled=true);lab.dataset.ready='error';status.classList.add('error');status.textContent='無法載入配製場景，請重新整理頁面。下方 ppm 仍可操作。';});

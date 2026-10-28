@@ -50,3 +50,23 @@ node --test --test-concurrency=1 tests/unit-4.2-concentration.test.cjs tests/uni
 另以正常時間實測單次加水 2.590 秒、減水 2.591 秒完成（從點擊回應後起算），最終分別增加／減少 1 克，無 JavaScript 錯誤。
 
 最新畫面：[桌面](desktop-controls.webp)、[手機](mobile-controls.webp)、[慢速加水](slow-pour.webp)、[減水](remove-water.webp)。
+
+
+## 2026-10-28：直接點器材加入／取出
+
+依使用者澄清，撤除實驗桌下方的四個加減按鈕，將入口直接放在實物上；器材下緣的小型「＋／− 糖／水」標記協助辨識，整個器材區域均可點擊，不必只點標記。
+
+| 點擊位置 | 結果 |
+| --- | --- |
+| 左邊糖罐 | 糖匙加入 1 克糖到秤量盤 |
+| 左秤上的糖 | 糖匙伸入秤量盤、舀出 1 克糖，取回糖罐 |
+| 右邊水壺 | 倒入 1 克水；仍可長按持續倒水 |
+| 右秤上的量杯 | 量杯抬起並傾斜，將 1 克水倒回供水壺，回到原秤面 |
+
+量杯離秤時秤面顯示「—」，放回才顯示新的淨質量；配方與濃度隨取出量更新。杯內是分別稱量的純水，因此取回供水壺不涉及混合糖水或稀釋計算。保留糖 0–20 克、水 50–150 克、每次 1 克、糖動畫 1.1 秒、水動畫 2.6 秒及長按每秒 4 克。杯內水面依重力維持水平，使用旋轉後的容器截面裁切；這是定性視覺模擬，不把器材影像當成精密容量刻度。
+
+為讓量杯獨立移動，使用影像生成工具製作移除量杯的背景 `concentration-workbench-empty.webp` 及透明量杯 `concentration-beaker.webp`；兩者沿用核可場景的視角與尺度。其餘版面、角色、公式與 ppm 保持既有呈現。
+
+本輪執行 `node --test --test-concurrency=1 tests/unit-4.2-concentration.test.cjs tests/unit-4.2-chromatography.test.cjs tests/unit-4.2.test.cjs`，共 41 項通過、0 失敗（第五區 19、層析 13、蒸發 9，含各外層測試）。第五區涵蓋四個實物位置的滑鼠點擊、Enter 與 320／390px 真實觸控，量杯抬起／傾斜／歸位與離秤讀值、原有拖曳／長按／數字輸入／重設／上下限／ppm，並分別測試三項場景素材的載入失敗。檢視桌面、手機、舀出糖及倒出水的實際畫面，內容留在右側欄位。
+
+最新畫面：[桌面](desktop-apparatus.webp)、[手機](mobile-apparatus.webp)、[舀出糖](scoop-out.webp)、[量杯倒出水](pour-out.webp)。

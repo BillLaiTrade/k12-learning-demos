@@ -16,7 +16,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  const local=async(x,y)=>{await lab.scrollIntoViewIfNeeded();const r=await lab.boundingBox();return{x:r.x+r.width*x,y:r.y+r.height*y};};
  const dragTool=async(button,x,y)=>{await button.scrollIntoViewIfNeeded();const b=await button.boundingBox(),p=await local(x,y);await page.mouse.move(b.x+b.width*.5,b.y+b.height*.5);await page.mouse.down();await page.mouse.move(p.x,p.y,{steps:10});await page.mouse.up();};
  await t.test('independent ratio cases and input validation use solution mass as denominator',async()=>{
-  const result=await page.evaluate(async()=>{const m=await import('./assets/concentration-state.js?v=controls-2');return{timing:[m.ACTION_MS.sugar,m.ACTION_MS.water,m.POUR_DELAY,m.POUR_RATE],cases:[[5,95],[3,97],[0,50],[20,50],[.1,149.9]].map(([s,w])=>m.concentrationState(s,w,3)),invalid:[m.massValue('sugar',''),m.massValue('water',0),m.massValue('sugar',21),m.massValue('water',Infinity)],micro:Array.from({length:11},(_,n)=>m.concentrationState(5,95,n))};});
+  const result=await page.evaluate(async()=>{const m=await import('./assets/concentration-state.js?v=apparatus-3');return{timing:[m.ACTION_MS.sugar,m.ACTION_MS.water,m.POUR_DELAY,m.POUR_RATE],cases:[[5,95],[3,97],[0,50],[20,50],[.1,149.9]].map(([s,w])=>m.concentrationState(s,w,3)),invalid:[m.massValue('sugar',''),m.massValue('water',0),m.massValue('sugar',21),m.massValue('water',Infinity)],micro:Array.from({length:11},(_,n)=>m.concentrationState(5,95,n))};});
   assert.deepEqual(result.timing,[1100,2600,650,4]);
   const expected=[[100,5],[100,3],[50,0],[70,20/70*100],[150,.1/150*100]];
   result.cases.forEach((v,i)=>{assert.equal(v.total,expected[i][0]);assert.ok(Math.abs(v.percent-expected[i][1])<1e-12);});assert.deepEqual(result.invalid,[null,null,null,null]);
@@ -28,10 +28,10 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   assert.equal(await page.locator('#mix-canvas').count(),1);assert.match(await page.locator('#s5 .speaker').first().evaluate(e=>getComputedStyle(e,'::before').backgroundImage),/shared-assets\/characters\/dialogue-character-avatars/);
   await advance(2000);assert.equal((await state()).sugar,5);
  });
- await t.test('spoon click adds mass with real changing pixels; bowl and keyboard can take it back',async()=>{
+ await t.test('spoon click adds mass with real changing pixels; weighed sugar and keyboard can take it back',async()=>{
   const before=await lab.screenshot();await spoon.click();await advance(350);const moving=await lab.screenshot();assert.notDeepEqual(before,moving);
   await advance(1000);assert.equal((await state()).sugar,6);assert.equal((await state()).total,101);assert.match(await page.locator('[data-mix=percent]').innerText(),/^5\.941%$/);
-  await page.locator('#mix-return').click();await advance(3000);assert.equal((await state()).sugar,5);
+  await page.locator('#mix-sugar-pan').click();await advance(3000);assert.equal((await state()).sugar,5);
   await spoon.focus();await page.keyboard.press('ArrowDown');await advance(3000);assert.equal((await state()).sugar,4);
  });
  await t.test('rapid clicks do not lose or duplicate aliquots; reset cancels pending transfers',async()=>{
@@ -54,32 +54,48 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   await pitcher.focus();await page.keyboard.press('ArrowDown');await advance(3000);assert.equal((await state()).water,95);
   const p=await spoon.boundingBox(),target=await local(.36,.55);await page.mouse.move(p.x+p.width/2,p.y+p.height/2);await page.mouse.down();await page.mouse.move(target.x,target.y,{steps:8});await page.keyboard.press('Escape');await page.mouse.up();await advance(3000);assert.equal((await state()).sugar,5);
  });
- await t.test('four visible buttons clearly add and remove sugar and water',async()=>{
-  await fresh();
-  const action=(kind,delta)=>page.locator(`[data-mass-kind="${kind}"][data-mass-delta="${delta}"]`);
-  for(const [kind,delta,label] of [['sugar',1,'加糖'],['sugar',-1,'減糖'],['water',1,'加水'],['water',-1,'減水']]){
-   const button=action(kind,delta);assert.equal(await button.isVisible(),true);assert.match(await button.innerText(),new RegExp(label));
+ await t.test('clicking the four real apparatus locations adds from supplies and removes from scales',async()=>{
+  await fresh();assert.equal(await page.locator('.mix-mass-controls,.mix-mass-action').count(),0);
+  for(const [id,kind,delta] of [['mix-sugar-source','sugar',1],['mix-sugar-pan','sugar',-1],['mix-pitcher','water',1],['mix-water-cup','water',-1]]){
+   const button=page.locator('#'+id);assert.equal(await button.isVisible(),true);
    const before=(await state())[kind];await button.click();await advance(3000);assert.equal((await state())[kind],before+delta);
   }
-  await action('sugar',-1).focus();await page.keyboard.press('Enter');await advance(3000);assert.equal((await state()).sugar,4);
-  await action('water',-1).tap();await advance(3000);assert.equal((await state()).water,94);
+  await page.locator('#mix-sugar-source').focus();await page.keyboard.press('Enter');await advance(3000);assert.equal((await state()).sugar,6);
+  await page.locator('#mix-sugar-pan').tap();await advance(3000);assert.equal((await state()).sugar,5);
+  await page.locator('#mix-water-cup').tap();await advance(3000);assert.equal((await state()).water,94);
  });
  await t.test('single pours remain observable for 2.6 seconds; removing water uses its own animation',async()=>{
-  await fresh();await page.locator('[data-mass-kind="water"][data-mass-delta="1"]').click();
+  await fresh();await pitcher.click();
   await advance(900);const first=await state();assert.equal(first.activity,'pouring-water');assert.ok(first.water>95&&first.water<96);
   const early=await lab.screenshot();await advance(800);const later=await state();assert.equal(later.activity,'pouring-water');assert.ok(later.water>first.water);
   assert.notDeepEqual(early,await lab.screenshot());await lab.screenshot({path:'/tmp/concentration-slow-pour.png'});
   await advance(1200);assert.equal((await state()).water,96);assert.equal((await state()).activity,'idle');
-  await page.locator('[data-mass-kind="water"][data-mass-delta="-1"]').click();await advance(1300);
+  await page.locator('#mix-water-cup').click();await advance(1300);
   assert.equal((await state()).activity,'removing-water');assert.ok((await state()).water<96);await lab.screenshot({path:'/tmp/concentration-remove-water.png'});
-  await advance(1500);assert.equal((await state()).water,95);assert.equal((await state()).activity,'idle');
+  assert.equal(await lab.getAttribute('data-cup-lifted'),'true');assert.equal(await page.locator('[data-mix=water-read]').innerText(),'—');
+  await advance(1500);assert.equal((await state()).water,95);assert.equal((await state()).activity,'idle');assert.equal(await lab.getAttribute('data-cup-lifted'),'false');assert.equal(await page.locator('[data-mix=water-read]').innerText(),'95.0 g');
  });
- await t.test('explicit controls disable at recipe bounds and reset cancels a slow pour',async()=>{
+ await t.test('apparatus actions stop at recipe bounds and reset cancels a slow pour',async()=>{
   await enter('sugar','0');assert.equal(await page.locator('[data-mass-kind="sugar"][data-mass-delta="-1"]').isDisabled(),true);
   await enter('sugar','20');assert.equal(await page.locator('[data-mass-kind="sugar"][data-mass-delta="1"]').isDisabled(),true);
-  await enter('water','50');assert.equal(await page.locator('[data-mass-kind="water"][data-mass-delta="-1"]').isDisabled(),true);
-  await enter('water','150');assert.equal(await page.locator('[data-mass-kind="water"][data-mass-delta="1"]').isDisabled(),true);
-  await fresh();await page.locator('[data-mass-kind="water"][data-mass-delta="1"]').click();await advance(1000);await fresh();await advance(4000);assert.equal((await state()).water,95);assert.equal((await state()).activity,'idle');
+  await enter('water','50');assert.equal(await page.locator('#mix-water-cup').isDisabled(),true);
+  await enter('water','150');await pitcher.click();await advance(3000);assert.equal((await state()).water,150);
+  await fresh();await pitcher.click();await advance(1000);await fresh();await advance(4000);assert.equal((await state()).water,95);assert.equal((await state()).activity,'idle');
+ });
+ await t.test('the beaker visibly lifts and tips over the supply pitcher, then returns to the same scale',async()=>{
+  await fresh();
+  const poses=await page.evaluate(async()=>{const m=await import('./assets/concentration-renderer.js?v=apparatus-3');const a={kind:'water',delta:-1,start:0,duration:2600};return{home:m.beakerPose(null,0),start:m.beakerPose(a,0),mid:m.beakerPose(a,1300),end:m.beakerPose(a,2600)};});
+  assert.deepEqual(poses.start,poses.home);assert.deepEqual(poses.end,poses.home);assert.ok(poses.mid.angle>1);assert.ok(poses.mid.y<poses.home.y-200);assert.ok(poses.mid.x>poses.home.x+100);
+  await page.locator('#mix-water-cup').click();await advance(1300);const b=await page.locator('#mix-water-cup').boundingBox(),l=await lab.boundingBox();assert.ok(b.y<l.y+l.height*.25);await fresh();await advance(4000);assert.equal((await state()).water,95);assert.equal(await page.locator('[data-mix=water-read]').innerText(),'95.0 g');
+ });
+ await t.test('all four apparatus hitboxes are directly reachable by touch at narrow widths',async()=>{
+  for(const width of [390,320]){
+   await page.setViewportSize({width,height:1000});await fresh();
+   for(const [id,kind,delta] of [['mix-sugar-source','sugar',1],['mix-sugar-pan','sugar',-1],['mix-pitcher','water',1],['mix-water-cup','water',-1]]){
+    const before=(await state())[kind];await page.locator('#'+id).tap();await advance(3000);assert.equal((await state())[kind],before+delta,`${id} at ${width}`);
+   }
+  }
+  await page.setViewportSize({width:1440,height:1100});
  });
  await t.test('scale inputs accept decimals, synchronize formula, reject bad values and support cancel',async()=>{
   await fresh();await enter('sugar','3');await enter('water','97');assert.equal((await state()).percent,3);assert.match(await page.locator('[data-mix=formula-total]').innerText(),/^100 克$/);
@@ -112,7 +128,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  await t.test('all content remains inside its column on desktop, tablet and mobile, including ten tokens',async()=>{
   for(const width of [1440,1024,850,768,680,390,320]){
    await page.setViewportSize({width,height:1100});await fresh();for(let i=0;i<7;i++)await page.locator('.ppm-source').first().click();
-   assert.equal(await page.locator('.mix-mass-action:visible').count(),4);
+   assert.equal(await page.locator('#mix-sugar-source:visible,#mix-sugar-pan:visible,#mix-pitcher:visible,#mix-water-cup:visible').count(),4);
    const v=await page.locator('#s5').evaluate(card=>{const m=card.querySelector('.card-main').getBoundingClientRect();return{overflow:document.documentElement.scrollWidth>innerWidth,out:[...card.querySelector('.card-main').children].filter(e=>!e.classList.contains('mix-status')).some(e=>{const r=e.getBoundingClientRect();return r.left<m.left-.5||r.right>m.right+.5;})};});assert.equal(v.overflow,false,`viewport ${width}`);assert.equal(v.out,false,`content ${width}`);
    await enter('sugar','20');await enter('water','150');
    const row=await page.locator('#s5 .mass-equation').evaluate(el=>({width:el.clientWidth,scroll:el.scrollWidth}));assert.ok(row.scroll<=row.width+1,`maximum recipe fits mass row at ${width}`);
@@ -121,6 +137,8 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   await page.setViewportSize({width:1440,height:1100});await fresh();await page.locator('#s5').screenshot({path:'/tmp/concentration-desktop.png'});assert.deepEqual(failures,[]);
  });
  await t.test('loading failure reports an error but ppm and other lesson blocks remain usable',async()=>{
-  const failed=await browser.newPage();try{await failed.route('**/concentration-tools.webp',r=>r.abort());await failed.goto(url);await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);assert.equal(await failed.locator('.mix-mass-action:disabled').count(),4);await failed.locator('.ppm-source').first().click();assert.equal(await failed.locator('#ppm-lab').getAttribute('data-ppm'),'4');assert.equal(await failed.locator('#check-answers').isEnabled(),true);}finally{await failed.close();}
+  for(const asset of ['concentration-tools.webp','concentration-workbench-empty.webp','concentration-beaker.webp']){
+   const failed=await browser.newPage();try{await failed.route('**/'+asset,r=>r.abort());await failed.goto(url);await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);assert.equal(await failed.locator('.mix-target:disabled').count(),3);await failed.locator('.ppm-source').first().click();assert.equal(await failed.locator('#ppm-lab').getAttribute('data-ppm'),'4');assert.equal(await failed.locator('#check-answers').isEnabled(),true);}finally{await failed.close();}
+  }
  });
 });
