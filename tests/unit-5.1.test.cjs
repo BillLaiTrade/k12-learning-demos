@@ -87,7 +87,8 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
 
   await t.test('illustrated apparatus and clear labels match the existing lab and stay visible at all views', async () => {
     const source=await page.locator('#parallax-apparatus').getAttribute('href');
-    assert.equal(source,'assets/water-lab-apparatus.webp');
+    assert.equal(source,'assets/parallax-apparatus.webp');
+    assert.doesNotMatch(await text('#measurement'),/電熱板|加熱水|熱源/);
     assert.equal(await page.evaluate(async src=>{const img=new Image();img.src=new URL(src,location.href);await img.decode();return img.naturalWidth>1000;},source),true);
     assert.match(await text('.parallax-apparatus-labels'),/刻度/);
     assert.match(await text('.parallax-apparatus-labels'),/液面/);
