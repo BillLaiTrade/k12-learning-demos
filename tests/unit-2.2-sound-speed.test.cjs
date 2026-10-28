@@ -475,15 +475,12 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.match(await temperatureLab.locator('[data-group=adjustable] h3').textContent(),/^0°C/);
     assert.equal(await temperatureLab.locator('.rig-controller,.rig-thermometer,image').count(),0,'no detached device/thermometer photograph');
     assert.ok(Math.abs(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'))-((await model).airSpeed(Number(changed.temperature))))<.001);
-    assert.equal(await temperatureLab.locator('.rig-heat-light').getAttribute('opacity'),'0');
-    assert.equal(await temperatureLab.locator('.rig-cold-light').getAttribute('opacity'),'1');
     await page.clock.runFor(2100);
     assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'0°C');
     assert.ok(Math.abs(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'))-(await model).airSpeed(0))<1e-10);
     assert.equal(await temperatureLab.locator('.air-chamber[data-adjustable=true]').getAttribute('data-temperature'),'0.0000');
     await temperatureLab.locator('[data-temperature-target="20"]').focus();await page.keyboard.press('Enter');
     assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'20°C');
-    assert.equal(await temperatureLab.locator('.rig-heat-light').getAttribute('opacity'),'0');assert.equal(await temperatureLab.locator('.rig-cold-light').getAttribute('opacity'),'0');
     await temperatureLab.locator('[data-temperature-target="80"]').focus();await page.keyboard.press('Space');
     assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'80°C');
     assert.equal(await temperatureLab.locator('[data-group=reference]').getAttribute('data-speed'),'343');
@@ -491,49 +488,40 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await temperatureLab.locator('[aria-pressed=true][data-temperature-target]').count(),1);
   });
 
-  await t.test('thermal jacket, chamber sensor and live meter form one connected scene with the fourth-block fork', async () => {
+  await t.test('compact chambers omit the apparatus and retain one comparison below the adjustable group', async () => {
     await fresh();
-    const {AIR_CHAMBER,PROBE_TIP}=await import(pathToFileURL(path.resolve(__dirname,'../units/2/parts/2.2/assets/temperature-chamber.mjs')).href);
-    assert.ok(PROBE_TIP.x>AIR_CHAMBER.x&&PROBE_TIP.x<AIR_CHAMBER.x+AIR_CHAMBER.width);
-    assert.ok(PROBE_TIP.y>AIR_CHAMBER.y&&PROBE_TIP.y<AIR_CHAMBER.y+AIR_CHAMBER.height);
-    const scene=temperatureLab.locator('[data-group=adjustable] .air-chamber');
-    assert.equal(await scene.locator('.chamber-thermal-link,.chamber-probe-port,.chamber-probe-tip,.chamber-sensor-cable,.chamber-meter').count(),5);
-    assert.equal(await scene.locator('.chamber-probe-tip').evaluate(n=>Number(n.getAttribute('cx'))===424&&Number(n.getAttribute('cy'))===82),true);
-    assert.equal(await scene.locator('.chamber-thermal-link').getAttribute('data-contact-y'),'118');
-    const meter=temperatureLab.locator('#temp-temperature-value');
-    assert.equal(await meter.evaluate(n=>n.parentElement.classList.contains('field')),true);
-    assert.match(await meter.getAttribute('aria-describedby'),/sensor-help/);
+    assert.equal(await temperatureLab.locator('.chamber-thermal-link,.chamber-probe-port,.chamber-probe-tip,.chamber-sensor-cable,.chamber-meter,.chamber-temperature-value,.rig-heat-light,.rig-cold-light').count(),0);
+    assert.equal(await temperatureLab.locator('.race-progress').count(),1);
+    assert.equal(await temperatureLab.locator('[data-group=reference] .race-progress,[data-group=reference] .progress-gap').count(),0);
+    assert.equal(await temperatureLab.locator('[data-group=adjustable] .race-progress').count(),1);
+    assert.equal(await temperatureLab.locator('#temp-temperature-value').evaluate(n=>n.parentElement.classList.contains('temperature-heading')),true);
+    assert.deepEqual(await temperatureLab.locator('.field>svg').evaluateAll(ns=>ns.map(n=>n.getAttribute('viewBox'))),['0 0 456 150','0 0 456 150']);
     const shapes=where=>page.locator(where).evaluateAll(ns=>ns.map(n=>({d:n.getAttribute('d'),strokeWidth:n.getAttribute('stroke-width')})));
     assert.deepEqual(await shapes('#card-04 [data-group=air] .fork-tine'),await shapes('#card-05 [data-group=adjustable] .fork-tine'));
     assert.deepEqual(await shapes('#card-04 [data-group=air] .fork-fixed path'),await shapes('#card-05 [data-group=adjustable] .fork-fixed path'));
     assert.equal(await page.evaluate(()=>performance.getEntriesByType('resource').some(r=>r.name.includes('temperature-control-unit.png'))),false);
     for(const width of[320,390,640,768,850,1024,1440]){
       await page.setViewportSize({width,height:1600});await page.clock.runFor(32);
-      const geometry=await temperatureLab.locator('[data-group=adjustable] .field').evaluate(field=>{
-        const svg=field.querySelector('svg'),screen=svg.querySelector('.chamber-meter'),read=field.querySelector('.chamber-temperature-value');
-        const a=screen.getBoundingClientRect(),b=read.getBoundingClientRect();
-        return{read:{x:b.x,right:b.right,y:b.y,bottom:b.bottom},screen:{x:a.x,right:a.right,y:a.y,bottom:a.bottom}};
-      });
-      assert.ok(geometry.read.x>=geometry.screen.x&&geometry.read.right<=geometry.screen.right);
-      assert.ok(geometry.read.y>=geometry.screen.y&&geometry.read.bottom<=geometry.screen.bottom+1);
+      const geometry=await temperatureLab.locator('.temperature-heading').evaluateAll(ns=>ns.map(n=>{const a=n.getBoundingClientRect(),b=n.firstElementChild.getBoundingClientRect();return b.left>=a.left-1&&b.right<=a.right+1;}));
+      assert.ok(geometry.every(Boolean));
     }
     await page.setViewportSize({width:1440,height:1500});await page.clock.runFor(32);
   });
 
-  await t.test('both temperature rails mirror the same live positions and stay aligned across seven widths', async () => {
+  await t.test('one lower rail compares both live positions at the same scale across seven widths', async () => {
     await fresh();const m=await model;
     assert.equal(await temperatureLab.locator('.progress-legend').count(),1);
     assert.equal(await temperatureLab.locator('.field .race-marker,.field .propagation-front').count(),0);
     await temperaturePrimary.click();await page.clock.runFor(12000);await temperaturePrimary.click();
     const elapsed=Number((await temperatureData()).time),speed=m.airSpeed(80);
     const rails=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>({...n.dataset})));
-    assert.ok(Math.abs(Number(rails[0].ownDistance)-343*elapsed)<.001);
-    assert.ok(Math.abs(Number(rails[1].ownDistance)-speed*elapsed)<.001);
-    assert.equal(rails[0].ownDistance,rails[1].otherDistance);
-    assert.equal(rails[1].ownDistance,rails[0].otherDistance);
+    assert.equal(rails.length,1);
+    assert.ok(Math.abs(Number(rails[0].ownDistance)-speed*elapsed)<.001);
+    assert.ok(Math.abs(Number(rails[0].otherDistance)-343*elapsed)<.001);
     const gap=Math.round((speed-343)*elapsed);
-    assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),[`落後 ${gap} 公尺`,`領先 ${gap} 公尺`]);
-    assert.deepEqual(await temperatureLab.locator('.race-own-label').allTextContents(),['本組 4,116 m','本組 4,518 m']);
+    assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),[`領先 ${gap} 公尺`]);
+    assert.deepEqual(await temperatureLab.locator('.race-own-label').allTextContents(),['本組 4,518 m']);
+    assert.deepEqual(await temperatureLab.locator('.race-other-label').allTextContents(),['20°C 組 4,116 m']);
     for(const width of[320,390,640,768,850,1024,1440]){
       await page.setViewportSize({width,height:1600});await page.clock.runFor(32);
       const geometry=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>{
@@ -541,10 +529,9 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
         const marker=selector=>{const b=n.querySelector(selector).getBoundingClientRect();return b.x+b.width/2;};
         return{left:scale.left,right:scale.right,own:marker('.race-own'),other:marker('.race-other'),labels:[...n.querySelectorAll('.race-label')].map(l=>{const b=l.getBoundingClientRect();return{inside:b.x>=box.x-1&&b.right<=box.right+1,overflow:l.scrollWidth>l.clientWidth+1};})};
       }));
-      assert.ok(Math.abs(geometry[0].left-geometry[1].left)<.1);
-      assert.ok(Math.abs(geometry[0].right-geometry[1].right)<.1);
-      assert.ok(Math.abs(geometry[0].own-geometry[1].other)<.1);
-      assert.ok(Math.abs(geometry[1].own-geometry[0].other)<.1);
+      const g=geometry[0];
+      assert.ok(Math.abs(g.own-(g.left+(g.right-g.left)*speed*elapsed/5000))<.1);
+      assert.ok(Math.abs(g.other-(g.left+(g.right-g.left)*343*elapsed/5000))<.1);
       assert.ok(geometry.every(g=>g.labels.every(l=>l.inside&&!l.overflow)));
     }
     const saved=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>n.innerHTML));
@@ -560,36 +547,37 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
       const first=Math.min(m.arrivalTime(343),m.arrivalTime(m.airSpeed(temperature)));
       await page.clock.runFor(Math.ceil(first*1000)+32);await temperaturePrimary.click();
       if(temperature===20){
-        assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['均已到達','均已到達']);
+        assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['均已到達']);
       }else{
         assert.equal(await temperatureLab.locator('.arrival-readout output[data-arrival]').count(),1);
-        const ds=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>Number(n.dataset.ownDistance)));
+        const ds=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.flatMap(n=>[Number(n.dataset.ownDistance),Number(n.dataset.otherDistance)]));
         assert.equal(Math.max(...ds),5000);assert.ok(Math.min(...ds)<5000);
-        assert.match(await temperatureLab.locator('.progress-gap').first().textContent(),temperature>20?/落後/:/領先/);
+        assert.match(await temperatureLab.locator('.progress-gap').first().textContent(),temperature>20?/領先/:/落後/);
       }
       await temperaturePrimary.click();await page.clock.fastForward(20000);
-      assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['均已到達','均已到達']);
+      assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['均已到達']);
       assert.equal(await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.every(n=>n.dataset.ownDistance==='5000'&&n.dataset.otherDistance==='5000')),true);
       await temperatureLab.locator('#temp-reset-action').click();
       assert.equal(await temperatureLab.locator('.race-marker:not([hidden])').count(),0);
       assert.equal(await temperatureLab.locator('.progress-gap:not([hidden])').count(),0);
     }
     await setTemperature(20);await temperaturePrimary.click();await page.clock.runFor(2000);
-    assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['進度相同','進度相同']);
+    assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['進度相同']);
     const equal=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>[n.querySelector('.race-own').style.left,n.querySelector('.race-other').style.left]));
     assert.ok(equal.every(([a,b])=>a===b));
     await temperatureLab.locator('#temp-reset-action').click();await setTemperature(80);
     await temperatureLab.locator('[data-group=adjustable] .source-hit').click();await page.clock.runFor(1000);
     assert.equal(await temperatureLab.locator('[data-group=adjustable] .race-other').isHidden(),true);
-    assert.equal(await temperatureLab.locator('[data-group=reference] .race-own').isHidden(),true);
+    assert.equal(await temperatureLab.locator('[data-group=reference] .race-own').count(),0);
     await temperatureLab.locator('[data-group=reference] .source-hit').click();await page.clock.runFor(1000);
-    assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['分別敲擊','分別敲擊']);
+    assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),['分別敲擊']);
     const separate=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>({...n.dataset})));
-    assert.equal(separate[0].ownDistance,separate[1].otherDistance);
-    assert.equal(separate[1].ownDistance,separate[0].otherDistance);
+    assert.equal(separate.length,1);
+    assert.equal(separate[0].ownDistance,String(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-reached-distance'))));
+    assert.equal(separate[0].otherDistance,String(Number(await temperatureLab.locator('[data-group=reference]').getAttribute('data-reached-distance'))));
     await temperaturePrimary.click();await page.clock.runFor(1000);
     assert.equal((await temperatureData()).scope,'together');
-    assert.match(await temperatureLab.locator('.progress-gap').first().textContent(),/落後/);
+    assert.match(await temperatureLab.locator('.progress-gap').first().textContent(),/領先/);
   });
 
   await t.test('rapid temperature selections stay fixed at each target and never start sound', async () => {
@@ -825,7 +813,6 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     await material.locator('#reset-action').tap();
     await temperature.locator('[data-temperature-target="0"]').tap();await mobile.clock.runFor(2700);
     assert.equal(await temperature.locator('#temp-temperature-value').textContent(),'0°C');
-    assert.equal(await temperature.locator('.rig-cold-light').getAttribute('opacity'),'1');
     await temperature.locator('[data-group=adjustable] .source-hit').tap();await mobile.clock.runFor(500);
     assert.equal(await temperature.locator('[data-group=reference]').getAttribute('data-phase'),'idle');
     assert.ok(Number(await temperature.locator('[data-group=adjustable]').getAttribute('data-time'))>.48);

@@ -2,11 +2,11 @@ import {
   DISTANCE, START_X, END_X,
   appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=race-20';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=race-20';
-import { createTemperatureRig, temperatureText } from './temperature-rig.mjs?v=race-20';
-import { createTemperatureProgress } from './temperature-progress.mjs?v=race-20';
-import { airChamberScene } from './temperature-chamber.mjs?v=race-20';
+} from './sound-speed-model.mjs?v=compact-21';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=compact-21';
+import { createTemperatureRig, temperatureText } from './temperature-rig.mjs?v=compact-21';
+import { createTemperatureProgress } from './temperature-progress.mjs?v=compact-21';
+import { airChamberScene } from './temperature-chamber.mjs?v=compact-21';
 
 export function initSoundSpeed(root) {
 // 兩個獨立區塊共用控制器，原生標籤及 SVG 定義各自使用唯一 ID。
@@ -97,13 +97,13 @@ function buildModel(group) {
   const temperatureMode = state.mode === 'temperature';
   const adjustable = group.id === 'adjustable';
   if (temperatureMode) {
-    const height = adjustable?250:170;
+    const height = 150;
     field.setAttribute('viewBox', `0 0 456 ${height}`);
     Object.assign(row.querySelector('.source-hit').style, { top: `${22/height*100}%`, height: `${100/height*100}%`, bottom: 'auto' });
   }
   const scene = temperatureMode ? airChamberScene(field, `${idPrefix}${group.id}-scene`, adjustable) : mediumScene(field, group.kind, `${idPrefix}${group.id}-scene`);
   if (temperatureMode) scene.setTemperature(group.temperature, group.temperature);
-  const source = tuningForkSource(scene.sourceLayer || field, group.kind, fill, { labelY: temperatureMode ? 160 : 139 });
+  const source = tuningForkSource(scene.sourceLayer || field, group.kind, fill, { labelY: temperatureMode ? 146 : 139 });
   const bonds = svg('g', { fill: 'none', stroke: '#8a9e9c', 'stroke-width': .8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, scene.interior);
   const dots = svg('g', { 'aria-hidden': 'true' }, scene.interior);
   const points = positions(group.kind).map((point, index) => {
@@ -122,7 +122,7 @@ function buildModel(group) {
   }
   let front = null, reachedTrack = null;
   const trackY = 125;
-  const progress = temperatureMode ? createTemperatureProgress(row, group.id) : null;
+  const progress = temperatureMode && adjustable ? createTemperatureProgress(row, group.id) : null;
   if (!temperatureMode) {
     svg('path', { class: 'distance-track', d: `M${START_X} ${trackY}H${END_X}`, stroke: '#c6d5cd', 'stroke-width': 2.2 }, field);
     reachedTrack = svg('path', { class: 'distance-reached', d: `M${START_X} ${trackY}H${START_X}`, stroke: '#176b53', 'stroke-width': 2.6 }, field);
@@ -227,7 +227,7 @@ function paint(audible = false) {
     const observations = models.map(model => ({
       ...model, distance: Number(model.row.dataset.reachedDistance), active: model.startedAt !== null
     }));
-    models.forEach((model, index) => model.progress.render(observations[index], observations[1-index], state.scope === 'together'));
+    models.forEach((model, index) => model.progress?.render(observations[index], observations[1-index], state.scope === 'together'));
   }
   if (audible && newArrival) arrivalTone();
   const actionLabel = state.scope === 'individual' ? '同時敲擊音叉' : { idle: '同時敲擊音叉', running: '暫停觀察', paused: '繼續觀察', complete: state.mode === 'temperature' ? '同時敲擊音叉' : '再次敲擊音叉' }[state.phase];

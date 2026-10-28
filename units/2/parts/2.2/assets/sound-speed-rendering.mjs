@@ -1,5 +1,5 @@
 // 介質場景、分子／原子與表面取樣共用同一波動模型。
-import { positions, sample, PULSE_DURATION } from './sound-speed-model.mjs?v=race-20';
+import { positions, sample, PULSE_DURATION } from './sound-speed-model.mjs?v=compact-21';
 // 敲擊動作保留 0.6 秒；接觸即起振，不延後傳播時計。
 const STRIKE_DURATION = .6;
 const CONTACT_DURATION = .06;

@@ -1,4 +1,4 @@
-import { DISTANCE, START_X, END_X } from './sound-speed-model.mjs?v=race-20';
+import { DISTANCE, START_X, END_X } from './sound-speed-model.mjs?v=compact-21';
 
 const metres = new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 0 });
 const color = model => model.temperature > 20 ? '#bc5722' : model.temperature < 20 ? '#287fae' : '#176b53';
