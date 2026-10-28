@@ -1,26 +1,31 @@
-#card-03 .mirror-views{grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);gap:14px;margin:15px 0 12px;align-items:stretch}
-#card-03 .mirror-view{display:flex;flex-direction:column;background:#fbfaf6}
-#card-03 .mirror-view h3{flex:0 0 auto;min-height:43px;padding:10px 13px;font-size:1rem;line-height:1.4}
-#card-03 #image-side-view{flex:0 0 auto}
-#card-03 #image-front-view{flex:1;min-height:0;height:100%}
-#card-03 .mirror-ray-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px 18px;min-height:42px;margin:0;padding:9px 13px;background:#fffdf8;color:#405851;font-size:.74rem;line-height:1.5}
-#card-03 .mirror-ray-legend span{display:inline-flex;align-items:center;gap:7px}
-#card-03 .mirror-ray-legend i{display:inline-block;width:27px;border-top:3px solid #a75d16}
-#card-03 .mirror-ray-legend .mirror-ray-dashed{border-top:3px dashed #397f98}
-#card-03 .mirror-stable-controls{flex-wrap:nowrap;gap:11px;min-height:46px;margin:13px 0}
-#card-03 #change-image-observer{min-width:156px;text-align:center;font-weight:800}
-#card-03 #toggle-image-object{min-width:112px;text-align:center}
-#card-03 .mirror-explanation{min-height:116px;margin-top:12px;padding:14px 16px;border-left:4px solid #397f98;border-radius:0 12px 12px 0;background:#edf5f7;color:#23465a}
+#card-03 .mirror-comparison-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:8px}
+#card-03 .comparison-intro{margin:12px 0 8px;color:#385967;font-size:.86rem}
+#card-03 .comparison-state{display:grid;grid-template-rows:auto auto;gap:12px;min-width:0}
+#card-03 .mirror-view{margin:0;background:#fbfaf6;overflow:hidden}
+#card-03 .mirror-view h3{display:flex;align-items:center;gap:8px;min-height:48px;margin:0;padding:10px 12px;background:#e7f3f7;font-size:.9rem;line-height:1.45}
+#card-03 .comparison-step{display:inline-grid;place-items:center;flex:0 0 auto;width:23px;height:23px;border-radius:50%;background:#245d79;color:white;font-size:.85rem}
+#card-03 .comparison-side,#card-03 .comparison-eye{display:block;width:100%;height:auto;overflow:hidden}
+#card-03 .comparison-diagram figcaption{min-height:53px;margin:0;padding:9px 12px;background:#fffdf8;color:#3e5b64;font-size:.77rem;line-height:1.6}
+#card-03 .comparison-observation h3{min-height:35px;padding:7px 12px;font-size:.79rem}
+#card-03 .comparison-view-note{margin:9px 0 0;text-align:center;color:#48626a;font-size:.78rem;line-height:1.6}
+#card-03 .comparison-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 15px;margin:17px 0 11px}
+#card-03 #toggle-comparison-mirror{min-width:230px;min-height:50px;text-align:center;font-weight:800}
+#card-03 .comparison-controls p{flex:0 1 320px;margin:0;color:#48626a;font-size:.8rem;line-height:1.6}
+#card-03 .comparison-status{min-height:70px;padding:11px 14px;border:1px solid #d7e3de;border-radius:12px;background:#f5f8f3;color:#36584b;font-size:.85rem;line-height:1.7}
+#card-03 .comparison-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:12px 0;color:#566b6e;font-size:.73rem;line-height:1.6}
+#card-03 .comparison-legend span{display:inline-flex;align-items:center;gap:7px}
+#card-03 .comparison-legend i{width:25px;border-top:2px solid #236f9f}
+#card-03 .comparison-legend .comparison-other{border-top:2px dashed #819195}
+#card-03 .comparison-legend .comparison-extension{border-top:2px dashed #397d9f}
+#card-03 .mirror-explanation{margin-top:13px;padding:14px 17px;border-left:4px solid #397f98;border-radius:0 12px 12px 0;background:#edf5f7;color:#23465a}
 #card-03 .mirror-explanation strong{font-size:1.05rem}
-#card-03 .mirror-explanation p{margin:6px 0 0;font-size:.9rem;line-height:1.65}
-@media(max-width:1050px){#card-03 .mirror-views{grid-template-columns:minmax(0,1fr)}#card-03 #image-front-view{flex:0 0 auto;width:min(100%,380px);height:auto;align-self:center;aspect-ratio:400/700}}
-@media(max-width:600px){#card-03{padding:16px}#card-03 .card-side{gap:8px}#card-03 .card-side h3{font-size:1rem}#card-03 .mirror-view h3{font-size:.94rem}#card-03 .mirror-ray-legend{gap:5px 12px;padding:9px 10px;font-size:.72rem}#card-03 .mirror-explanation{min-height:148px;padding:12px}#card-03 .mirror-explanation p{font-size:.83rem}#card-03 .mirror-stable-controls{display:grid;grid-template-columns:1.25fr 1fr}#card-03 #change-image-observer,#card-03 #toggle-image-object{min-width:0;min-height:48px;padding-inline:8px;font-size:.9rem}}
-
-#card-03 .mirror-ray-legend .mirror-ray-record{border-color:#b86116}#card-03 .mirror-ray-legend .mirror-ray-current{border-color:#246fa5}#card-03 .mirror-ray-legend .mirror-ray-solid{border-color:#617879}#card-03 .mirror-ray-legend .mirror-ray-dashed{border-color:#617879}
-#image-observer{touch-action:none;cursor:grab;outline:none}#image-observer:active{cursor:grabbing}#image-observer[aria-disabled=true]{cursor:default}#image-observer:focus-visible #image-observer-hit{stroke:#246fa5;stroke-width:3;stroke-dasharray:6 4}#image-observer use{pointer-events:none}
-#image-side-rays,#image-side-extensions,#image-mirror-guides,#image-observer-record,#image-current-label,#image-record-label,#image-point-callout,#image-drag-hint,#image-symmetry-guide{pointer-events:none}
-#image-observer-hit{touch-action:none}
-#image-side-view{touch-action:none}
-
-#card-03 .mirror-eye-caption{flex:0 0 auto;margin:0;padding:10px 13px;background:#fffdf8;color:#405851;font-size:.76rem;line-height:1.6}
-#card-03 #image-front-view{width:100%;aspect-ratio:400/700;overflow:hidden}
+#card-03 .mirror-explanation p{margin:7px 0 0;font-size:.88rem;line-height:1.75}
+#card-03 .mirror-explanation .comparison-clarification{font-size:.79rem;color:#4d6870}
+#card-03 #comparison-trial[data-mode=direct] .comparison-diagram{border-color:#7fae9e}
+#card-03 #comparison-trial[data-mode=direct] .comparison-step{background:#176c55}
+@media(max-width:1050px){#card-03 .mirror-comparison-grid{gap:12px}#card-03 .mirror-view h3{min-height:67px;font-size:.86rem}#card-03 .comparison-observation h3{min-height:35px}#card-03 .comparison-diagram figcaption{min-height:65px}}
+@media(max-width:650px){#card-03{padding:16px}#card-03 .card-side{gap:8px}#card-03 .card-side h3{font-size:1rem}#card-03 .mirror-comparison-grid{grid-template-columns:minmax(0,1fr);gap:18px}#card-03 .mirror-view h3{min-height:47px;font-size:.91rem}#card-03 .comparison-observation h3{min-height:35px;font-size:.8rem}#card-03 .comparison-diagram figcaption{min-height:54px;font-size:.78rem}#card-03 .comparison-controls{flex-direction:column;align-items:stretch;gap:8px}#card-03 #toggle-comparison-mirror{width:100%;min-width:0}#card-03 .comparison-controls p{flex:auto;text-align:center;min-height:41px}#card-03 .comparison-status{min-height:125px;font-size:.82rem}#card-03 .comparison-view-note{font-size:.75rem}#card-03 .mirror-explanation{padding:12px 14px}#card-03 .mirror-explanation strong{font-size:1rem}#card-03 .mirror-explanation p{font-size:.84rem}#card-03 .comparison-legend{font-size:.71rem;gap:6px 12px}}
+#card-03 .mirror-view h3{justify-content:flex-start}
+#card-03 #toggle-comparison-mirror,#card-03 #toggle-comparison-mirror[aria-pressed=true]{background:#176c55;border-color:#176c55;color:#fff}
+#card-03 #toggle-comparison-mirror:hover{background:#105640;border-color:#105640}
+#card-03 .comparison-diagram figcaption{min-height:80px}

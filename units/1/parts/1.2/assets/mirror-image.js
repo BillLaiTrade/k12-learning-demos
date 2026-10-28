@@ -1,140 +1,53 @@
-import {MIRROR_SCENE as scene, observation, spriteAt, opticalPath, clampEye, mirrorPoint} from './mirror-image-geometry.mjs?v=1';
+import {COMPARISON,comparisonRay,pupilBundle,sidePath,scatterRays,otherReflections} from './mirror-comparison.mjs?v=1';
+import {createComparisonView} from './mirror-comparison-view.mjs?v=1';
 
-import {createEyeView} from './mirror-eye-view.mjs?v=1';
-
-const section = document.getElementById('card-03');
-if (section) {
-  const find = id => section.querySelector(`#${id}`);
-  const svg = find('image-side-view'), observer = find('image-observer');
-  const objectButton = find('toggle-image-object'), changeButton = find('change-image-observer');
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  const objects = ['image-side-object', 'image-side-virtual', 'image-front-object', 'image-front-reflection'].map(find);
-  const renderEyeView = createEyeView(section);
-  const state = {present: true, eyeY: scene.initialEye, recordedY: null};
-  let dragging = null, animation = 0;
-  const show = (element, visible) => { element.style.display = visible ? 'inline' : 'none'; };
-  const attrs = (element, values) => { for (const [name, value] of Object.entries(values)) element.setAttribute(name, value); };
-
-  // Both bears use this exact sprite; the virtual copy reflects all points across the same plane.
-  attrs(find('image-bear-sprite'), spriteAt(scene.source, scene.bearNose, scene.bearSize));
-  const profile = spriteAt([0, 0], scene.observerEye, scene.observerSize);
-  attrs(find('image-observer-profile'), profile);
-  attrs(find('image-observer-hit'), {x: profile.x - 8, y: profile.y - 8, width: profile.width + 16, height: profile.height + 16});
-  attrs(find('image-side-virtual-shape'), {transform: `translate(${2 * scene.mirrorX} 0) scale(-1 1)`});
-  const image = mirrorPoint(scene.source);
-  attrs(find('image-object-point'), {cx: scene.source[0], cy: scene.source[1]});
-  attrs(find('image-virtual-point'), {cx: image[0], cy: image[1]});
-  attrs(find('image-distance-guide'), {d: `M${scene.source[0]},650H${scene.mirrorX}H${image[0]}M${scene.source[0]},643V657M${scene.mirrorX},643V657M${image[0]},643V657`});
-
-  function drawRay(prefix, ray) {
-    attrs(find(`image-ray-${prefix}-in`), {d: opticalPath(ray.incoming, true)});
-    attrs(find(`image-ray-${prefix}-out`), {d: opticalPath(ray.outgoing, true)});
-    attrs(find(`image-extension-${prefix}`), {d: opticalPath(ray.extension)});
-    attrs(find(`image-hit-${prefix}`), {cx: ray.hit[0], cy: ray.hit[1]});
-  }
-  function render() {
-    const current = observation(state.eyeY);
-    renderEyeView(state.eyeY, state.present);
-    const compare = state.recordedY !== null && Math.abs(state.eyeY - state.recordedY) > .1;
-    objects.forEach(group => show(group, state.present));
-    show(find('image-side-rays'), state.present);
-    show(find('image-side-extensions'), state.present);
-    show(find('image-mirror-guides'), state.present);
-    show(find('image-record-rays'), state.present && compare);
-    show(find('image-extension-record'), state.present && compare);
-    show(find('image-hit-record'), state.present && compare);
-    show(find('image-observer-record'), state.present && compare);
-    show(find('image-record-label'), state.present && compare);
-    show(find('image-point-callout'), state.present && compare);
-    drawRay('current', current);
-    attrs(observer, {transform: `translate(${current.eye.join(' ')})`});
-    if (state.recordedY !== null) {
-      const recorded = observation(state.recordedY);
-      drawRay('record', recorded);
-      attrs(find('image-observer-record'), {transform: `translate(${recorded.eye.join(' ')})`});
-      const above = recorded.eye[1] < current.eye[1];
-      attrs(find('image-record-label'), {transform: `translate(20 ${Math.max(4, recorded.eye[1] + (above ? -100 : 90))})`});
+const section=document.getElementById('card-03');
+if(section) {
+  const ns='http://www.w3.org/2000/svg',button=section.querySelector('#toggle-comparison-mirror');
+  const ray=comparisonRay(),bundle=pupilBundle();
+  let mode='mirror';
+  const node=(name,attributes)=>{const element=document.createElementNS(ns,name);for(const [k,v] of Object.entries(attributes))element.setAttribute(k,v);return element;};
+  const show=(element,visible)=>{element.style.display=visible?'inline':'none';};
+  function createScene(prefix) {
+    const panel=section.querySelector(`#comparison-${prefix}`),svg=panel.querySelector('.comparison-side');
+    const find=name=>svg.querySelector(`[data-side="${name}"]`),eye=panel.querySelector('.comparison-eye');
+    const renderView=createComparisonView(eye);
+    const path=(points,color,arrows=true)=>node('path',{d:sidePath(points,arrows),'marker-mid':arrows?`url(#${prefix}-${color}-arrow)`:'none'});
+    function render(next) {
+      const mirror=next==='mirror';panel.dataset.mode=next;svg.dataset.mode=next;
+      show(find('mirror'),mirror);show(find('mirror-tick'),!mirror);show(find('virtual-region'),mirror);
+      find('near-shape').setAttribute('opacity',mirror?'1':'.4');find('far-shape').setAttribute('opacity',mirror?'.48':'1');
+      find('near-label').textContent=mirror?'鏡前實物':'原小熊（位置不變）';
+      find('far-label').textContent=mirror?'虛像位置（示意）':'放入的真實對照熊';
+      find('scatter').replaceChildren(...scatterRays(COMPARISON.source,1).map(p=>path(p,'gray')),
+        ...(!mirror?scatterRays(COMPARISON.image,-1).map(p=>path(p,'gray')):[]));
+      find('other-reflections').replaceChildren(...(mirror?otherReflections().flatMap(r=>[path([r.source,r.hit],'gray',false),path([r.hit,r.end],'gray')]):[]));
+      const rays=[],extensions=[],hits=[];
+      bundle.forEach((r,i)=>{
+        const segments=mirror?[[r.source,r.hit],[r.hit,r.eye]]:[[r.image,r.eye]];
+        for(const points of segments){const p=path(points,'blue');p.setAttribute('stroke-width',i===1?'3.6':'1.3');p.setAttribute('opacity',i===1?'1':'.62');rays.push(p);}
+        if(mirror){extensions.push(path(r.extension,'blue',false));hits.push(node('circle',{cx:r.hit[0],cy:r.hit[1],r:i===1?4:2}));}
+      });
+      find('rays').replaceChildren(...rays);find('extensions').replaceChildren(...extensions);find('hits').replaceChildren(...hits);
+      const title=panel.querySelector(`#${prefix}-side-title`),desc=panel.querySelector(`#${prefix}-side-desc`);
+      title.textContent=mirror?'有鏡子時，鼻尖的光經反射進入眼睛':'撤鏡並放入對照熊，鼻尖的光直接進入眼睛';
+      desc.textContent=mirror?'鼻尖把照到它的光散向許多方向；一小束經鏡面反射進入瞳孔。鏡後淡色熊與虛線只標示虛像位置，沒有實際光在鏡後傳播。':'原小熊仍在原位，淡化只為突出對照熊。鏡子已撤掉，另將一隻真實小熊放在原虛像位置並面向小葵，光直接進入同一瞳孔。';
+      panel.querySelector(`#${prefix}-eye-title`).textContent=mirror?'小葵透過鏡面看到的小熊':'小葵直接看到放在原虛像位置的對照熊';
+      panel.querySelector(`#${prefix}-caption`).textContent=mirror?'鼻尖向多個方向散光；照到鏡面的光遵守入射角＝反射角，只有部分反射光進入眼睛。':'撤鏡後，在原虛像位置另放真熊，光直接進入眼睛。';
+      svg.dataset.source=COMPARISON.source.join(',');svg.dataset.image=COMPARISON.image.join(',');svg.dataset.eye=COMPARISON.eye.join(',');svg.dataset.hit=ray.hit.join(',');
+      renderView(next);
     }
-    const currentBelow = !compare || state.eyeY > state.recordedY;
-    attrs(find('image-current-label'), {transform: `translate(20 ${Math.max(4, state.eyeY + (currentBelow ? 90 : -100))})`});
-    find('image-current-label-text').textContent = compare ? 'B 現在的位置' : '小葵目前的位置';
-    const dragHintY = state.eyeY > 190 ? state.eyeY + 74 : state.eyeY + 45;
-    attrs(find('image-drag-hint'), {transform: `translate(240 ${dragHintY})`});
-    observer.setAttribute('aria-valuenow', String(Math.round((scene.eyeMax - state.eyeY) / (scene.eyeMax - scene.eyeMin) * 100)));
-    observer.setAttribute('aria-valuetext', `觀察位置${state.eyeY < 190 ? '較高' : '較低'}，可上下拖動或使用方向鍵`);
-    observer.setAttribute('aria-disabled', String(!state.present));
-    observer.setAttribute('tabindex', state.present ? '0' : '-1');
-    objectButton.textContent = state.present ? '移除小熊' : '放回小熊';
-    changeButton.disabled = !state.present;
-    find('image-object-status').textContent = !state.present
-      ? '小熊已移除，鏡中像與鏡後的虛像示意也一起消失。'
-      : compare
-        ? '橘色保留上一次觀察，藍色是目前光路；兩次反向延長線指向同一個鼻尖像點。'
-        : '先沿藍色實線看光怎麼進入眼睛，再拖動小葵或按「換個位置看看」。';
-    find('image-final-explanation').textContent = state.present
-      ? '小熊各點都能這樣找像，合起來就是完整的虛像；虛線只是輔助線，鏡後沒有光真的通過。'
-      : '按「放回小熊」，實物與對稱的虛像就會一起回來。';
-    section.dataset.objectPresent = String(state.present);
-    section.dataset.eyeY = String(state.eyeY);
-    section.dataset.recordedY = state.recordedY === null ? '' : String(state.recordedY);
-    section.dataset.observationCount = String(compare ? 2 : 1);
-    svg.dataset.mirrorX = String(scene.mirrorX);
-    svg.dataset.objectPoint = current.source.join(',');
-    svg.dataset.imagePoint = current.image.join(',');
-    svg.dataset.eyePoint = current.eye.join(',');
+    render('mirror');return render;
   }
-  function stopAnimation() { cancelAnimationFrame(animation); animation = 0; }
-  function move(y) { state.eyeY = clampEye(y); render(); }
-  changeButton.addEventListener('click', () => {
-    if (!state.present) return;
-    stopAnimation();
-    state.recordedY = state.eyeY;
-    const start = state.eyeY, target = start < 190 ? scene.otherEye : scene.initialEye;
-    if (reducedMotion.matches) { move(target); return; }
-    const began = performance.now();
-    const frame = now => {
-      const t = Math.min(1, (now - began) / 450), eased = t * t * (3 - 2 * t);
-      move(start + (target - start) * eased);
-      if (t < 1) animation = requestAnimationFrame(frame); else animation = 0;
-    };
-    render(); animation = requestAnimationFrame(frame);
+  createScene('reference');const renderTrial=createScene('trial');
+  button.addEventListener('click',()=>{
+    mode=mode==='mirror'?'direct':'mirror';renderTrial(mode);section.dataset.comparisonMode=mode;
+    button.setAttribute('aria-pressed',String(mode==='direct'));
+    button.textContent=mode==='direct'?'放回鏡子，移開對照熊':'撤鏡，放入對照熊';
+    section.querySelector('#trial-heading [data-role="heading"]').textContent=mode==='direct'?'撤鏡＋放入對照熊：直接看見真熊':'操作比較：目前有鏡子';
+    section.querySelector('#comparison-status').textContent=mode==='direct'
+      ?'現在看右圖：鏡子已撤掉，另外放入真實對照熊。比較金色鼻尖的位置，以及進入眼睛的那一小束光：反射光與直達光的入眼方向和發散情形相同。'
+      :'鏡子已放回，對照熊已移開。再比較一次：鏡前小熊的光經反射進入眼睛，看起來像從鏡後同一個鼻尖位置傳來。';
+    section.querySelector('#comparison-button-hint').textContent=mode==='direct'?'再點一下，回到有鏡子的情境；原小熊仍留在原位。':'點一下，切換比較；小葵與原小熊的位置保持不變。';
   });
-  function svgY(event) { return new DOMPoint(event.clientX, event.clientY).matrixTransform(svg.getScreenCTM().inverse()).y; }
-  observer.addEventListener('pointerdown', event => {
-    if (!state.present || event.button > 0) return;
-    event.preventDefault();stopAnimation();state.recordedY = state.eyeY;
-    dragging = {id: event.pointerId, last: svgY(event), eye: state.eyeY};
-    observer.setPointerCapture(event.pointerId);observer.focus({preventScroll: true});render();
-  });
-  function updateDrag(event) {
-    if (!dragging || dragging.id !== event.pointerId) return;
-    const y = svgY(event);
-    dragging.eye = clampEye(dragging.eye + (y - dragging.last) * .7);
-    dragging.last = y;move(dragging.eye);
-  }
-  observer.addEventListener('pointermove', event => {
-    if (dragging && dragging.id === event.pointerId) {event.preventDefault();updateDrag(event);}
-  });
-  function release(event) {
-    if (!dragging || dragging.id !== event.pointerId) return;
-    if (event.type === 'pointerup') updateDrag(event);
-    dragging = null;if (observer.hasPointerCapture(event.pointerId)) observer.releasePointerCapture(event.pointerId);
-  }
-  observer.addEventListener('pointerup', release);observer.addEventListener('pointercancel', release);
-  observer.addEventListener('lostpointercapture', () => { dragging = null; });
-  observer.addEventListener('keydown', event => {
-    if (!state.present) return;
-    const step = event.shiftKey ? 12 : 4;
-    const next = {ArrowUp: state.eyeY - step, ArrowDown: state.eyeY + step, Home: scene.eyeMax, End: scene.eyeMin}[event.key];
-    if (next === undefined) return;
-    event.preventDefault();stopAnimation();if (!event.repeat) state.recordedY = state.eyeY;move(next);
-  });
-  objectButton.addEventListener('click', () => {
-    stopAnimation();
-    if (dragging && observer.hasPointerCapture(dragging.id)) observer.releasePointerCapture(dragging.id);
-    dragging = null;state.present = !state.present;state.recordedY = null;render();
-  });
-  reducedMotion.addEventListener('change', stopAnimation);
-  addEventListener('pagehide', stopAnimation);
-  render();
 }

@@ -6,212 +6,166 @@ const path=require('node:path');
 const {pathToFileURL}=require('node:url');
 const {chromium}=require('playwright');
 const {expect}=require('playwright/test');
-const close=(a,b,epsilon=1e-9)=>assert.ok(Math.abs(a-b)<epsilon,`${a} != ${b}`);
+const near=(a,b,e=1e-8)=>assert.ok(Math.abs(a-b)<e,`${a} != ${b}`);
+const vector=(a,b)=>a.map((v,i)=>v-b[i]);
+const dot=(a,b)=>a.reduce((sum,v,i)=>sum+v*b[i],0);
+const unit=a=>{const length=Math.hypot(...a);return a.map(v=>v/length);};
+const artifacts='/tmp/unit1-card3-comparison';
+let model;
 
-test('平面鏡幾何：對稱、反射與不同觀察位置的同一像點',async t=>{
-  const model=await import(pathToFileURL(path.resolve(__dirname,'../units/1/parts/1.2/assets/mirror-image-geometry.mjs')));
-  const {MIRROR_SCENE:s,observation,mirrorPoint,spriteAt,incomingDirection,outgoingDirection}=model;
-  await t.test('401 個觀察高度：物像等距、向量反射、共線、有限鏡面與物體遮擋',()=>{
-    const bear=spriteAt(s.source,s.bearNose,s.bearSize);
-    for(let y=s.eyeMin;y<=s.eyeMax;y+=.5){
-      const ray=observation(y),incoming=incomingDirection(ray),outgoing=outgoingDirection(ray);
-      assert.deepEqual(ray.source,[345,440]);assert.deepEqual(ray.image,[735,440]);
-      close(s.mirrorX-ray.source[0],ray.image[0]-s.mirrorX);close(ray.source[1],ray.image[1]);
-      close(incoming[0],-outgoing[0]);close(incoming[1],outgoing[1]);
-      assert.ok(ray.visible&&ray.hit[1]>=s.mirrorTop&&ray.hit[1]<=s.mirrorBottom);
-      const time=(ray.eye[0]-ray.hit[0])/outgoing[0];
-      close(ray.hit[1]+outgoing[1]*time,ray.eye[1]);assert.ok(time>0);
-      const extended=ray.image.map((n,i)=>n-ray.hit[i]);
-      close(extended[0]*outgoing[1]-extended[1]*outgoing[0],0);
-      // 入眼線在熊的整個圖框上方，不穿越實物小熊。
-      for(let x=bear.x;x<=bear.x+bear.width;x+=2){const yAt=ray.hit[1]+(x-ray.hit[0])*outgoing[1]/outgoing[0];assert.ok(yAt<bear.y);}
+test('第三區光學：反射、瞳孔光束與真實對照熊等效',async t=>{
+  model=await import(pathToFileURL(path.resolve(__dirname,'../units/1/parts/1.2/assets/mirror-comparison.mjs')));
+  const {COMPARISON:s,comparisonRay,pupilBundle,scatterRays,otherReflections,comparisonCamera,project,quad,planePoint,VIEW_PLANES,clipNear}=model;
+  await t.test('81 個瞳孔位置獨立核對三維反射向量及直達方向',()=>{
+    near(s.mirrorX-s.source[0],s.image[0]-s.mirrorX);assert.deepEqual(s.image,[735,440,0]);
+    for(let y=-2;y<=2;y+=.5)for(let z=-2;z<=2;z+=.5){
+      const eye=s.eye.map((v,i)=>v+(i===1?y:i===2?z:0)),r=comparisonRay(eye);
+      const incoming=unit(vector(r.hit,s.source)),reflected=[-incoming[0],incoming[1],incoming[2]],out=unit(vector(eye,r.hit)),direct=unit(vector(eye,s.image));
+      reflected.forEach((v,i)=>near(v,out[i]));out.forEach((v,i)=>near(v,direct[i]));
+      near(r.hit[0],540);assert.ok(r.hit[1]>=68&&r.hit[1]<=570&&Math.abs(r.hit[2])<170);
+      const cosineIn=incoming[0],cosineOut=-out[0];near(cosineIn,cosineOut);
+      // 展開鏡面後的總光程等於由對照物點直達同一瞳孔的距離。
+      near(Math.hypot(...vector(r.hit,s.source))+Math.hypot(...vector(eye,r.hit)),Math.hypot(...vector(eye,s.image)));
+      const bear=s.sideBear;for(let x=bear.x;x<=bear.x+bear.width;x+=2){const u=(x-r.hit[0])/(eye[0]-r.hit[0]);assert.ok(r.hit[1]+u*(eye[1]-r.hit[1])<bear.y);}
     }
-    const pose=spriteAt(s.source,s.bearNose,s.bearSize);close(pose.x+pose.width*s.bearNose[0],s.source[0]);close(pose.y+pose.height*s.bearNose[1],s.source[1]);
-    for(const point of [[pose.x,pose.y],[pose.x+pose.width,pose.y],[pose.x,pose.y+pose.height],s.source])mirrorPoint(mirrorPoint(point)).forEach((n,i)=>close(n,point[i]));
+    const bundle=pupilBundle();assert.equal(bundle.length,3);assert.notDeepEqual(bundle[0].eye,bundle[2].eye);assert.notDeepEqual(bundle[0].hit,bundle[2].hit);
   });
-  await t.test('各組不同入眼方向獨立求交，延長線交於同一鼻尖像點',()=>{
-    for(let y=90;y<=270;y+=10){
-      const a=observation(y),b=observation(y+20),r=a.image.map((v,i)=>v-a.eye[i]),q=b.image.map((v,i)=>v-b.eye[i]);
-      const cross=(u,v)=>u[0]*v[1]-u[1]*v[0],between=b.eye.map((v,i)=>v-a.eye[i]);
-      const t=cross(between,q)/cross(r,q);const point=a.eye.map((v,i)=>v+t*r[i]);
-      close(point[0],735);close(point[1],440);assert.ok(t>0);assert.notEqual(a.hit[1],b.hit[1]);
+  await t.test('散光由真實物點出發，其他反射方向遵守定律且未被指定進眼',()=>{
+    for(const side of [1,-1]){
+      const origin=side===1?s.source:s.image,rays=scatterRays(origin,side);assert.equal(rays.length,8);
+      for(const [start,end] of rays){assert.deepEqual(start,origin);assert.ok((end[0]-start[0])*side>0);assert.ok(end[1]<570);}
+      assert.ok(new Set(rays.map(r=>Math.sign(r[1][1]-r[0][1]))).size>1);
+    }
+    for(const ray of otherReflections()){
+      const a=unit(vector(ray.hit,ray.source)),b=unit(vector(ray.end,ray.hit));near(a[0],-b[0]);near(a[1],b[1]);assert.ok(ray.hit[1]>=68&&ray.hit[1]<=570);
+      assert.ok(Math.hypot(...vector(b,unit(vector(s.eye,ray.hit))))>.05);
     }
   });
-  await t.test('401 個眼位：右側針孔投影、鏡面交點、反射鼻尖與反算紋理逐列一致',async()=>{
-    const {eyeCamera,eyeView,projectPoint,planeRow,EYE_PLANES}=await import(pathToFileURL(path.resolve(__dirname,'../units/1/parts/1.2/assets/mirror-eye-projection.mjs')));
-    for(let y=90;y<=290;y+=.5){
-      const camera=eyeCamera(y),view=eyeView(y),ray=observation(y);
-      assert.deepEqual(camera.eye,[150,y,0]);assert.deepEqual(camera.target,[735,440,0]);
-      // 獨立用世界向量旋轉／透視除法核對，非只檢查 renderer 的資料值。
-      const angle=Math.atan2(440-y,585);
-      const independent=([x,h,z=0])=>{const dx=x-150,dy=h-y,d=dx*Math.cos(angle)+dy*Math.sin(angle);return[200+320*z/d,310+320*(dy*Math.cos(angle)-dx*Math.sin(angle))/d];};
-      for(const point of [[540,68,-180],[540,570,180],[735,440,0],...ray.outgoing.map(p=>[...p,0]).slice(0,1)]){
-        const a=projectPoint(camera,point),b=independent(point);close(a[0],b[0]);close(a[1],b[1]);assert.ok(a[2]>0);
-      }
-      const hit=projectPoint(camera,[...ray.hit,0]);close(hit[0],view.nose[0]);close(hit[1],view.nose[1]);close(view.nose[0],200);close(view.nose[1],310);
-      for(const plane of [EYE_PLANES.front,EYE_PLANES.rear])for(let v=0;v<=1;v+=.05){
-        const p=projectPoint(camera,[plane.x,plane.top+v*plane.height,plane.left]),row=planeRow(camera,plane,p[1]);
-        close(row.v,v);close(row.x,p[0]);close(row.width,320*plane.width/p[2]);
-      }
-    }
-    assert.notDeepEqual(eyeView(108).frame,eyeView(270).frame);
-    assert.notDeepEqual(eyeView(108).front,eyeView(270).front);
-    assert.notDeepEqual(eyeView(108).rear,eyeView(270).rear);
+  await t.test('三維攝影機基底、鼻尖與反射點投影一致，紋理位置固定',()=>{
+    const c=comparisonCamera();for(const axis of [c.forward,c.right,c.down])near(Math.hypot(...axis),1);near(dot(c.forward,c.right),0);near(dot(c.forward,c.down),0);near(dot(c.right,c.down),0);
+    const target=project(c,s.image),hit=project(c,comparisonRay().hit);near(target[0],450);near(target[1],145);near(hit[0],target[0]);near(hit[1],target[1]);
+    const plane=VIEW_PLANES.front;const nose=planePoint(plane,209/400,132/385);nose.forEach((v,i)=>near(v,s.image[i]));
+    for(const p of Object.values(VIEW_PLANES))for(const q of quad(c,p))assert.ok(q.every(Number.isFinite)&&q[2]>0);
+    assert.ok(project(c,[s.source[0],440,0])[0]<target[0],'前景實物因同一眼位產生橫向視差');
+  });
+  await t.test('桌面與紋理先做近裁切，不把相機後方的幾何反投影到上方',()=>{
+    const c=comparisonCamera(),world=[[170,570,-2500],[1400,570,-2500],[1400,570,2500],[170,570,2500]],clipped=clipNear(c,world);
+    assert.ok(clipped.length>=3);for(const p of clipped){const screen=project(c,p);assert.ok(screen.every(Number.isFinite));assert.ok(screen[2]>=5-1e-8);}
+    const a=c.eye.map((v,i)=>v-c.forward[i]*10),b=c.eye.map((v,i)=>v+c.forward[i]*20);const segment=clipNear(c,[a,b],false);assert.equal(segment.length,2);near(project(c,segment[0])[2],5);near(project(c,segment[1])[2],20);
   });
 });
 
-test('第三區：移動小葵、保留兩次光路與精確對稱',{timeout:180000},async t=>{
-  fs.mkdirSync('/tmp/unit1-card3-observer',{recursive:true});
-  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','pipe']});
-  t.after(()=>server.kill());
-  const port=await new Promise((resolve,reject)=>{let out='';const timer=setTimeout(()=>reject(new Error('Static server timeout')),5000);server.stdout.on('data',d=>{out+=d;const m=out.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject);});
+test('第三區：撤鏡並放入對照熊的操作、畫面與教學說明',{timeout:180000},async t=>{
+  fs.mkdirSync(artifacts,{recursive:true});
+  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','pipe']});t.after(()=>server.kill());
+  const port=await new Promise((resolve,reject)=>{let output='';const timeout=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{output+=d;const m=output.match(/port (\d+)/);if(m){clearTimeout(timeout);resolve(m[1]);}});server.once('error',reject);});
   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});t.after(()=>browser.close());
-  const page=await browser.newPage({viewport:{width:1440,height:1100}}),errors=[];
-  page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>errors.push(r.url()));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
-  const url=`http://127.0.0.1:${port}/units/1/parts/1.2/#card-03`;
-  await page.goto(url,{waitUntil:'networkidle'});
-  await page.locator('#image-front-view[data-ready=true]').waitFor();
-  const section=page.locator('#card-03'),change=page.locator('#change-image-observer'),toggle=page.locator('#toggle-image-object'),person=page.locator('#image-observer');
-  const objects=['#image-side-object','#image-side-virtual','#image-front-object','#image-front-reflection'];
-  const eye=async()=>+await section.getAttribute('data-eye-y');
-  async function changePose(){const next=(await eye())<190?270:108;await change.click();await expect.poll(eye).toBe(next);return next;}
-  async function clearHistory(){if(await section.getAttribute('data-object-present')==='false')await toggle.click();await toggle.click();await toggle.click();await expect(section).toHaveAttribute('data-observation-count','1');}
-  async function screenshot(name){await page.evaluate(()=>document.activeElement?.blur());const hidden=await page.addStyleTag({content:'.route{visibility:hidden!important}'});await section.screenshot({path:`/tmp/unit1-card3-observer/${name}.png`});await hidden.evaluate(e=>e.remove());}
-  async function screenPoint(x,y){return page.locator('#image-side-view').evaluate((svg,p)=>{const q=new DOMPoint(p[0],p[1]).matrixTransform(svg.getScreenCTM());return{x:q.x,y:q.y};},[x,y]);}
-  async function settle(){await page.locator('#image-side-view').evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await page.waitForTimeout(200);}
-  async function verifyGeometry(){
-    const data=await page.locator('#image-side-view').evaluate(svg=>{
-      const p=n=>svg.dataset[n].split(',').map(Number),path=id=>document.getElementById(id).getAttribute('d').match(/-?\d+(?:\.\d+)?/g).map(Number);
-      const project=(x,y)=>{const q=new DOMPoint(x,y).matrixTransform(svg.getScreenCTM());return[q.x,q.y];};
-      const source=p('objectPoint'),image=p('imagePoint'),mx=+svg.dataset.mirrorX;
-      const sprite=document.querySelector('#image-bear-sprite');const box=id=>{const r=document.getElementById(id).getBoundingClientRect();return[r.width,r.height];};
-      const result={source,image,mx,eye:p('eyePoint'),current:{in:path('image-ray-current-in'),out:path('image-ray-current-out'),ext:path('image-extension-current')},screen:[project(...source),project(mx,source[1]),project(...image)],boxes:[box('image-side-object-shape'),box('image-side-virtual-shape')],shape:[sprite.getAttribute('x'),sprite.getAttribute('y'),sprite.getAttribute('width'),sprite.getAttribute('height')]};
-      if(document.querySelector('#card-03').dataset.observationCount==='2')result.record={in:path('image-ray-record-in'),out:path('image-ray-record-out'),ext:path('image-extension-record')};
-      return result;
-    });
-    assert.deepEqual(data.source,[345,440]);assert.deepEqual(data.image,[735,440]);close(data.mx-data.source[0],data.image[0]-data.mx);
-    close(data.screen[1][0]-data.screen[0][0],data.screen[2][0]-data.screen[1][0]);close(data.screen[0][1],data.screen[2][1]);
-    close(data.boxes[0][0],data.boxes[1][0],.01);close(data.boxes[0][1],data.boxes[1][1],.01);
-    for(const ray of [data.current,data.record].filter(Boolean)){
-      assert.deepEqual(ray.in.slice(0,2),data.source);const hit=ray.in.slice(-2),e=ray.out.slice(-2);
-      assert.deepEqual(ray.out.slice(0,2),hit);assert.deepEqual(ray.ext.slice(0,2),hit);assert.deepEqual(ray.ext.slice(-2),data.image);
-      close(hit[0],data.mx);const a=(hit[1]-data.source[1])/(hit[0]-data.source[0]),b=(e[1]-hit[1])/(e[0]-hit[0]),c=(data.image[1]-hit[1])/(data.image[0]-hit[0]);close(a,-b);close(b,c);
+  const errors=[],url=process.env.MIRROR_COMPARISON_URL||`http://127.0.0.1:${port}/units/1/parts/1.2/#card-03`;
+  const page=await browser.newPage({viewport:{width:1440,height:1200}});
+  function monitor(p){p.on('pageerror',e=>errors.push(e.message));p.on('requestfailed',r=>errors.push(r.url()));p.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});}
+  monitor(page);await page.goto(url,{waitUntil:'networkidle'});await page.locator('#reference-eye[data-ready=true]').waitFor();await page.locator('#trial-eye[data-ready=true]').waitFor();
+  const section=page.locator('#card-03'),button=page.locator('#toggle-comparison-mirror'),reference=page.locator('#comparison-reference'),trial=page.locator('#comparison-trial');
+  async function setMode(mode,p=page){if(await p.locator('#card-03').getAttribute('data-comparison-mode')!==mode)await p.locator('#toggle-comparison-mirror').click();}
+  async function capture(name,p=page){await p.evaluate(()=>document.activeElement?.blur());const style=await p.addStyleTag({content:'.route{visibility:hidden!important}'});await p.locator('#card-03').screenshot({path:`${artifacts}/${name}.png`});await style.evaluate(e=>e.remove());}
+  async function opticalDOM(p=page){return p.locator('#card-03').evaluate(section=>{
+    const read=prefix=>{
+      const svg=section.querySelector(`#${prefix}-side`),find=n=>svg.querySelector(`[data-side="${n}"]`);
+      const points=path=>path.getAttribute('d').match(/-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/g).map(Number);
+      const screen=(x,y)=>{const q=new DOMPoint(x,y).matrixTransform(svg.getScreenCTM());return[q.x,q.y];};
+      const source=svg.dataset.source.split(',').map(Number),image=svg.dataset.image.split(',').map(Number);
+      const box=name=>{const r=find(name).getBoundingClientRect();return[r.width,r.height];};
+      return {mode:svg.dataset.mode,source,image,eye:svg.dataset.eye.split(',').map(Number),rays:[...find('rays').children].map(points),extensions:[...find('extensions').children].map(points),screen:[screen(...source),screen(540,source[1]),screen(...image)],shapes:[box('near-shape'),box('far-shape')],farTransform:find('far-shape').getAttribute('transform'),mirrorVisible:getComputedStyle(find('mirror')).display!=='none',scatter:[...find('scatter').children].map(points)};
+    };return{reference:read('reference'),trial:read('trial')};
+  });}
+  async function verify(p=page){
+    const data=await opticalDOM(p);assert.equal(data.reference.mode,'mirror');
+    for(const item of Object.values(data)){
+      assert.deepEqual(item.source,[345,440,0]);assert.deepEqual(item.image,[735,440,0]);assert.deepEqual(item.eye,[150,180,160]);assert.equal(item.farTransform,'translate(1080 0) scale(-1 1)');
+      near(item.screen[1][0]-item.screen[0][0],item.screen[2][0]-item.screen[1][0],.01);near(item.screen[0][1],item.screen[2][1],.01);
+      near(item.shapes[0][0],item.shapes[1][0],.01);near(item.shapes[0][1],item.shapes[1][1],.01);
+      assert.equal(item.mirrorVisible,item.mode==='mirror');assert.equal(item.rays.length,item.mode==='mirror'?6:3);assert.equal(item.extensions.length,item.mode==='mirror'?3:0);
+      assert.equal(item.scatter.length,item.mode==='mirror'?8:16);
     }
-    await expect(page.locator('#image-side-object > use')).toHaveAttribute('href','#image-bear-sprite');await expect(page.locator('#image-side-virtual-shape')).toHaveAttribute('href','#image-bear-sprite');
-    await expect(page.locator('#image-side-virtual-shape')).toHaveAttribute('transform','translate(1080 0) scale(-1 1)');
-    await expect(page.locator('#image-front-view')).toHaveAttribute('data-eye-y',String(data.eye[1]));
-    await expect(page.locator('#image-front-view')).toHaveAttribute('data-target','735,440,0');
-    const projected=await page.locator('#image-front-view').evaluate(e=>({nose:e.dataset.nose,frame:JSON.parse(e.dataset.frame),path:document.querySelector('#image-eye-frame').getAttribute('d')}));
-    const values=projected.nose.split(',').map(Number);close(values[0],200);close(values[1],310);
-    assert.ok(projected.frame.every(p=>p.every(Number.isFinite)));assert.ok(projected.path.startsWith('M'+projected.frame[0].slice(0,2).join(',')));
+    const a=data.reference,b=data.trial;
+    if(b.mode==='direct')for(let i=0;i<3;i++){
+      const out=a.rays[i*2+1],direct=b.rays[i],ext=a.extensions[i];
+      const slope=(v)=>(v[v.length-1]-v[1])/(v[v.length-2]-v[0]);near(slope(out),slope(direct));near(slope(out),slope(ext));assert.deepEqual(out.slice(-2),direct.slice(-2));assert.deepEqual(direct.slice(0,2),[735,440]);
+    }
+    const views=await p.locator('.comparison-eye').evaluateAll(nodes=>nodes.map(e=>({eye:e.dataset.eye,nose:e.dataset.nose,quad:e.dataset.farQuad,mode:e.dataset.mode})));
+    assert.equal(views[0].eye,views[1].eye);assert.equal(views[0].nose,views[1].nose);assert.equal(views[0].quad,views[1].quad);assert.equal(views[1].mode,b.mode);
     return data;
   }
-  await t.test('初始物像共用圖形且等距，只有換位置與移除兩個按鈕',async()=>{
-    for(const selector of objects)await expect(page.locator(selector)).toBeVisible();
-    assert.deepEqual(await section.locator('.mirror-controls button').allTextContents(),['換個位置看看','移除小熊']);
-    assert.equal(await page.locator('#toggle-image-rays,#reset-image-activity').count(),0);
-    await expect(section).toHaveAttribute('data-observation-count','1');await expect(page.locator('#image-observer-record')).toBeHidden();
-    await verifyGeometry();await screenshot('desktop-initial');
+  async function raster(p=page){return p.locator('.comparison-eye').evaluateAll(nodes=>nodes.map(svg=>Object.fromEntries(['front','rear'].map(name=>{
+    const canvas=svg.querySelector(`[data-view="${name}"]`),data=canvas.getContext('2d').getImageData(0,0,900,400).data;let h=2166136261,opaque=0;for(let i=0;i<data.length;i++){h=Math.imul(h^data[i],16777619);if(i%4===3&&data[i]>200)opaque++;}return[name,{hash:h>>>0,opaque}];
+  }))));}
+  await t.test('初始雙欄、同眼位、有鏡子基準與唯一主要操作',async()=>{
+    await expect(section).toHaveAttribute('data-comparison-mode','mirror');await expect(reference).toHaveAttribute('data-mode','mirror');await expect(trial).toHaveAttribute('data-mode','mirror');
+    await expect(button).toHaveText('撤鏡，放入對照熊');await expect(button).toHaveAttribute('aria-pressed','false');assert.equal(await section.locator('button').count(),1);
+    assert.equal(await page.locator('#change-image-observer,#toggle-image-object,#image-observer').count(),0);await verify();await capture('initial');
   });
-  await t.test('換位置保留前次觀察，兩條延長線共同指向固定像點',async()=>{
-    const initial=await verifyGeometry();await changePose();await expect(section).toHaveAttribute('data-observation-count','2');
-    await expect(page.locator('#image-observer-record')).toBeVisible();await expect(page.locator('#image-record-label')).toContainText('紀錄');
-    const changed=await verifyGeometry();assert.deepEqual(changed.image,initial.image);assert.notDeepEqual(changed.current.out,changed.record.out);
-    await expect(page.locator('#image-point-callout')).toBeVisible();await screenshot('desktop-comparison');
-    await changePose();await verifyGeometry();
+  await t.test('撤鏡同時放入對照熊：實線取代虛線、原熊與眼位固定',async()=>{
+    const before=await opticalDOM();await button.click();await expect(section).toHaveAttribute('data-comparison-mode','direct');await expect(button).toHaveAttribute('aria-pressed','true');
+    await expect(page.locator('#trial-side [data-side=mirror]')).toBeHidden();await expect(page.locator('#trial-side [data-side=mirror-tick]')).toBeVisible();
+    await expect(page.locator('#trial-side [data-side=far-label]')).toHaveText('放入的真實對照熊');await expect(page.locator('#trial-side [data-side=far-shape]')).toHaveAttribute('opacity','1');
+    await expect(page.locator('#trial-eye [data-view=mirror]')).toBeHidden();await expect(page.locator('#trial-eye [data-view=far]')).toHaveAttribute('clip-path','none');
+    const after=await verify();assert.deepEqual(before.reference,after.reference);assert.deepEqual(before.trial.shapes,after.trial.shapes);await capture('compared');
   });
-  await t.test('右側實際畫布隨眼位重繪，有限鏡面裁切、前後遮擋及移除恢復一致',async()=>{
-    async function raster(){return page.evaluate(()=>{
-      const read=id=>{const c=document.getElementById(id),pixels=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let hash=2166136261,opaque=0;for(let i=0;i<pixels.length;i++){hash=Math.imul(hash^pixels[i],16777619);if(i%4===3&&pixels[i]>200)opaque++;}return{hash:hash>>>0,opaque};};
-      return{front:read('image-eye-front'),rear:read('image-eye-rear'),frame:document.querySelector('#image-eye-frame').getAttribute('d')};
-    });}
-    await person.press('End');const high=await raster();await person.press('Home');const low=await raster();
-    for(const k of ['front','rear']){assert.notEqual(high[k].hash,low[k].hash);assert.ok(high[k].opaque>1000&&low[k].opaque>1000);}
-    assert.notEqual(high.frame,low.frame);
-    const mask=await page.evaluate(()=>{
-      const front=document.querySelector('#image-eye-front'),rear=document.querySelector('#image-eye-rear');
-      const a=front.getContext('2d').getImageData(0,0,800,1400).data,b=rear.getContext('2d').getImageData(0,0,800,1400).data;let overlap=0;
-      for(let i=3;i<a.length;i+=4)if(a[i]>180&&b[i]>180)overlap++;
-      return {overlap,clip:document.querySelector('#image-front-reflection').parentElement.getAttribute('clip-path'),order:!!(document.querySelector('#image-front-reflection').compareDocumentPosition(document.querySelector('#image-front-object'))&Node.DOCUMENT_POSITION_FOLLOWING)};
-    });
-    assert.ok(mask.overlap>0,'最低眼位有實物遮住鏡中像的實際不透明像素');assert.equal(mask.clip,'url(#image-eye-clip)');assert.equal(mask.order,true);
-    await screenshot('linked-lowest');await toggle.click();const removed=await raster();assert.equal(removed.front.opaque,0);assert.equal(removed.rear.opaque,0);
-    await toggle.click();assert.deepEqual(await raster(),low);await verifyGeometry();
-    await person.press('End');await screenshot('linked-highest');
-    await changePose();await screenshot('linked-comparison');
-    const frames=await page.evaluate(()=>new Promise(resolve=>{
-      const samples=[],began=performance.now();document.querySelector('#change-image-observer').click();
-      const frame=()=>{const s=document.querySelector('#card-03'),v=document.querySelector('#image-front-view');samples.push([s.dataset.eyeY,v.dataset.eyeY,document.querySelector('#image-eye-frame').getAttribute('d')]);
-        if(performance.now()-began<550)requestAnimationFrame(frame);else resolve(samples);};requestAnimationFrame(frame);
-    }));
-    assert.ok(new Set(frames.map(f=>f[0])).size>2,'換位動畫有多個中間眼位');
-    assert.ok(new Set(frames.map(f=>f[2])).size>2,'右側鏡框在動畫中逐格重算');
-    assert.ok(frames.every(f=>f[0]===f[1]),'每個動畫畫格左右眼位一致');
-    await verifyGeometry();
+  await t.test('實際畫布像素一致、物體不移動，鏡框與背景允許改變',async()=>{
+    const a=await raster();assert.deepEqual(a[0],a[1]);for(const object of Object.values(a[0]))assert.ok(object.opaque>1000);
+    await setMode('mirror');const b=await raster();assert.deepEqual(a,b);await verify();
+    await expect(page.locator('#trial-eye [data-view=mirror]')).toBeVisible();await expect(page.locator('#trial-eye [data-view=far]')).toHaveAttribute('clip-path','url(#trial-eye-clip)');
   });
-  await t.test('真實滑鼠拖動、逐格光路更新、上下邊界立即回調與取消捕捉',async()=>{
-    await settle();let y=await eye(),start=await screenPoint(150,y),end=await screenPoint(150,y+(260-y)/.7);
-    await page.mouse.move(start.x,start.y);await page.mouse.down();assert.equal(await person.evaluate(e=>e.hasPointerCapture(1)),true);
-    await page.mouse.move(end.x,end.y,{steps:15});await expect.poll(eye).toBeCloseTo(260,4);await verifyGeometry();
-    end=await screenPoint(150,600);await page.mouse.move(end.x,end.y,{steps:8});await expect.poll(eye).toBe(290);
-    end=await screenPoint(150,598);await page.mouse.move(end.x,end.y);await expect.poll(eye).toBeCloseTo(288.6,4);
-    end=await screenPoint(150,50);await page.mouse.move(end.x,end.y,{steps:15});await expect.poll(eye).toBe(90);
-    end=await screenPoint(150,52);await page.mouse.move(end.x,end.y);await expect.poll(eye).toBeCloseTo(91.4,4);await verifyGeometry();
-    await person.dispatchEvent('pointercancel',{pointerId:1});await page.mouse.up();assert.equal(await person.evaluate(e=>e.hasPointerCapture(1)),false);
+  await t.test('教學文字說明散光、反射與直達等效，不將撤鏡描述成物體憑空出現',async()=>{
+    await expect(section).toContainText('鼻尖把外界照到它的光散開，本身不是光源');await expect(section).toContainText('藍色虛線只標示光看起來的來向');
+    await expect(section).toContainText('具有相同的入眼方向與發散情形');await expect(section).toContainText('鏡框與背景可以不同');
+    await setMode('direct');await expect(page.locator('#comparison-status')).toContainText('另外放入真實對照熊');await expect(page.locator('#trial-side-desc')).toContainText('淡化只為突出對照熊');
+    await setMode('mirror');await expect(page.locator('#comparison-status')).toContainText('對照熊已移開');
   });
-  await t.test('三種寬度、單次及兩次觀察，共 30 次固定座標移除／放回',async()=>{
-    for(const width of [1440,1280,768]){
-      await page.setViewportSize({width,height:1100});
-      for(const comparison of [false,true])for(let cycle=0;cycle<5;cycle++){
-        await clearHistory();if(comparison)await changePose();
-        await toggle.scrollIntoViewIfNeeded();await page.waitForTimeout(150);const b=await toggle.boundingBox(),x=b.x+b.width/2,y=b.y+b.height/2;
-        const before=await eye();await page.mouse.click(x,y);for(const selector of objects)await expect(page.locator(selector)).toBeHidden();await expect(change).toBeDisabled();
-        const removed=await toggle.boundingBox();close(removed.y,b.y,.5);close(removed.x,b.x,.5);
-        await page.mouse.click(x,y);for(const selector of objects)await expect(page.locator(selector)).toBeVisible();await expect(change).toBeEnabled();await expect(section).toHaveAttribute('data-observation-count','1');close(await eye(),before);
+  await t.test('三種寬度下固定座標切換30次，按鈕不跳動且基準不變',async()=>{
+    for(const width of [1440,1024,768]){
+      await page.setViewportSize({width,height:1200});await setMode('mirror');await button.scrollIntoViewIfNeeded();await page.waitForTimeout(100);const a=await button.boundingBox();
+      const baseline=(await opticalDOM()).reference;
+      for(let n=0;n<10;n++){
+        await page.mouse.click(a.x+a.width/2,a.y+a.height/2);await expect(section).toHaveAttribute('data-comparison-mode',n%2===0?'direct':'mirror');
+        const b=await button.boundingBox();near(a.x,b.x,.5);near(a.y,b.y,.5);near(a.width,b.width,.5);assert.deepEqual((await opticalDOM()).reference,baseline);
       }
     }
   });
-  await t.test('動畫中移除、快速連點與鍵盤操作不留下舊動畫',async()=>{
-    await change.click();await toggle.click();const y=await eye();await page.waitForTimeout(600);close(await eye(),y);await toggle.click();
-    await change.click();await change.click();await expect.poll(async()=>[108,270].includes(await eye())).toBe(true);await verifyGeometry();
-    await person.press('End');await expect.poll(eye).toBe(90);await person.press('ArrowUp');await expect.poll(eye).toBe(90);
-    await person.press('ArrowDown');await expect.poll(eye).toBe(94);await person.press('Home');await expect.poll(eye).toBe(290);await person.press('ArrowDown');await expect.poll(eye).toBe(290);await person.press('Shift+ArrowUp');await expect.poll(eye).toBe(278);
-    await expect(person).toHaveAttribute('aria-valuenow','6');await verifyGeometry();
+  await t.test('鍵盤、快速連點與離頁無動畫殘留',async()=>{
+    await setMode('mirror');await button.focus();await page.keyboard.press('Enter');await expect(section).toHaveAttribute('data-comparison-mode','direct');await page.keyboard.press('Space');await expect(section).toHaveAttribute('data-comparison-mode','mirror');
+    await button.evaluate(e=>{for(let i=0;i<21;i++)e.click();});await expect(section).toHaveAttribute('data-comparison-mode','direct');await page.waitForTimeout(300);await verify();
+    await button.evaluate(e=>{for(let i=0;i<21;i++)e.click();});await expect(section).toHaveAttribute('data-comparison-mode','mirror');await verify();
   });
-  await t.test('1440／1280／1024／768／390 px：左右比例、實際畫面等距與無溢位',async()=>{
-    for(const width of [1440,1280,1024,768,390]){
-      await page.setViewportSize({width,height:1100});await clearHistory();await changePose();await section.scrollIntoViewIfNeeded();
+  await t.test('320／390／650／768／1024／1440px：兩情境與觀察窗對齊、字與按鈕無溢出',async()=>{
+    for(const width of [320,390,650,768,1024,1440]){
+      await page.setViewportSize({width,height:1200});await setMode('direct');await verify();
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
-      const a=await section.locator('.mirror-side-panel').boundingBox(),b=await section.locator('.mirror-front-panel').boundingBox();
-      if(width>1050){assert.ok(a.width/b.width>1.85&&a.width/b.width<1.95);close(a.y,b.y,1);close(a.height,b.height,1);}else assert.ok(b.y>=a.y+a.height);
-      await verifyGeometry();for(const button of [change,toggle]){const box=await button.boundingBox();assert.ok(box.width>=100&&box.height>=44);}
-      if(width===390)await screenshot('mobile-comparison');
+      const a=await reference.boundingBox(),b=await trial.boundingBox();
+      if(width>650){near(a.y,b.y,1);near(a.width,b.width,1);const x=await page.locator('#reference-eye').boundingBox(),y=await page.locator('#trial-eye').boundingBox();near(x.y,y.y,1);near(x.height,y.height,1);}else assert.ok(b.y>=a.y+a.height);
+      const c=await button.boundingBox();assert.ok(c.height>=44&&c.width>=200);assert.equal(await button.evaluate(e=>e.scrollWidth<=e.clientWidth),true);
+      if(width===390)await capture('mobile-compared');if(width===1440)await capture('desktop-compared');
     }
-    await page.setViewportSize({width:1440,height:1100});
   });
-  await t.test('手機真實觸控拖動與固定座標恢復；減少動態直接換位置',async()=>{
-    const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,reducedMotion:'reduce'});
-    const mobile=await context.newPage();mobile.on('pageerror',e=>errors.push(e.message));
+  await t.test('手機真實觸控、減少動態與同座標來回切換',async()=>{
+    const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,reducedMotion:'reduce'});const mobile=await context.newPage();monitor(mobile);
     try{
-      await mobile.goto(url,{waitUntil:'networkidle'});await mobile.locator('#change-image-observer').tap();await expect(mobile.locator('#card-03')).toHaveAttribute('data-eye-y','270');
-      await mobile.locator('#image-front-view[data-ready=true]').waitFor();await expect(mobile.locator('#image-front-view')).toHaveAttribute('data-eye-y','270');
-      const svg=mobile.locator('#image-side-view');await svg.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await mobile.waitForTimeout(200);
-      const point=async y=>svg.evaluate((e,y)=>{const p=new DOMPoint(150,y).matrixTransform(e.getScreenCTM());return{x:p.x,y:p.y};},y);
-      const start=await point(270),end=await point(270+(160-270)/.7),session=await context.newCDPSession(mobile);
-      assert.equal(await mobile.evaluate(p=>document.elementFromPoint(p.x,p.y)?.closest('#image-observer')?.id,start),'image-observer');
-      await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...start,id:7}]});
-      for(let j=1;j<=12;j++)await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:start.x+(end.x-start.x)*j/12,y:start.y+(end.y-start.y)*j/12,id:7}]});
-      await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await expect.poll(async()=>+await mobile.locator('#card-03').getAttribute('data-eye-y')).toBeCloseTo(160,3);
-      await expect(mobile.locator('#card-03')).toHaveAttribute('data-recorded-y','270');await expect(mobile.locator('#image-side-virtual')).toBeVisible();
-      assert.ok(Math.abs(+await mobile.locator('#image-front-view').getAttribute('data-eye-y')-160)<.001);
-      const button=mobile.locator('#toggle-image-object');await button.scrollIntoViewIfNeeded();await mobile.waitForTimeout(150);const b=await button.boundingBox(),x=b.x+b.width/2,y=b.y+b.height/2;
-      await mobile.touchscreen.tap(x,y);await expect(mobile.locator('#image-side-virtual')).toBeHidden();await mobile.touchscreen.tap(x,y);for(const selector of objects)await expect(mobile.locator(selector)).toBeVisible();
-      await mobile.locator('#change-image-observer').tap();await mobile.locator('#card-03').screenshot({path:'/tmp/unit1-card3-observer/mobile-touch.png'});
-      assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+      await mobile.goto(url,{waitUntil:'networkidle'});await mobile.locator('#trial-eye[data-ready=true]').waitFor();const target=mobile.locator('#toggle-comparison-mirror');await target.scrollIntoViewIfNeeded();const a=await target.boundingBox();
+      await mobile.touchscreen.tap(a.x+a.width/2,a.y+a.height/2);await expect(mobile.locator('#card-03')).toHaveAttribute('data-comparison-mode','direct');await verify(mobile);
+      const b=await target.boundingBox();near(a.y,b.y,.5);await mobile.touchscreen.tap(a.x+a.width/2,a.y+a.height/2);await expect(mobile.locator('#card-03')).toHaveAttribute('data-comparison-mode','mirror');
+      await mobile.touchscreen.tap(a.x+a.width/2,a.y+a.height/2);await verify(mobile);const pixels=await raster(mobile);assert.deepEqual(pixels[0],pixels[1]);await capture('mobile-touch',mobile);
     }finally{await context.close();}
   });
-  await t.test('相鄰第四區保持獨立，所有素材及離頁無程式例外',async()=>{
-    await changePose();const before=await verifyGeometry();await page.locator('#object-distance').fill('20');await page.locator('#object-distance').dispatchEvent('input');await expect(page.locator('#image-distance-value')).toHaveText('20 cm');
-    assert.deepEqual((await verifyGeometry()).image,before.image);await page.goto('about:blank');await page.waitForTimeout(200);assert.deepEqual(errors,[]);
+  await t.test('素材載入途中切換，完成後保留最新情境',async()=>{
+    const context=await browser.newContext({viewport:{width:1280,height:1000}});const delayed=await context.newPage();monitor(delayed);let release;const wait=new Promise(resolve=>release=resolve);
+    await delayed.route('**/teddy-front.webp',async route=>{await wait;await route.continue();});
+    try{
+      await delayed.goto(url,{waitUntil:'domcontentloaded'});await delayed.locator('#toggle-comparison-mirror').click();await expect(delayed.locator('#card-03')).toHaveAttribute('data-comparison-mode','direct');release();
+      await delayed.locator('#trial-eye[data-ready=true]').waitFor();await delayed.locator('#reference-eye[data-ready=true]').waitFor();await verify(delayed);await expect(delayed.locator('#trial-eye [data-view=mirror]')).toBeHidden();
+    }finally{release();await context.close();}
+  });
+  await t.test('第四區量距保持獨立、圖形ID唯一、資源與離頁正常',async()=>{
+    await page.locator('#object-distance').fill('20');await page.locator('#object-distance').dispatchEvent('input');await expect(page.locator('#image-distance-value')).toHaveText('20 cm');await verify();
+    const duplicates=await page.evaluate(()=>{const ids=[...document.querySelectorAll('[id]')].map(e=>e.id);return ids.filter((id,i)=>ids.indexOf(id)!==i);});assert.deepEqual(duplicates,[]);
+    await page.goto('about:blank');await page.waitForTimeout(100);assert.deepEqual(errors,[]);
   });
 });
