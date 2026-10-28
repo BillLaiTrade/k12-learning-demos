@@ -50,18 +50,49 @@
   $$('[data-property]').forEach(button => button.addEventListener('click', () => selectProperty(button.dataset.property)));
   selectProperty('appearance');
 
-  const historyNotes = [
-    '先看古代的說法，再選取後續資料。前面的觀點會保留下來，方便比較。',
-    '波以耳質疑傳統觀點，強調實驗研究；古代觀點保留在旁邊，方便對照。',
-    '後來的水分解證據，讓我們看出古今「元素」的意義不同。不要把這項水電解實驗歸給波以耳。'
-  ];
-  function selectHistory(stage) {
-    $$('[data-history]').forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.history) === stage)));
-    $$('[data-history-panel]').forEach(panel => { panel.hidden = Number(panel.dataset.historyPanel) > stage; });
-    $('#history-note').textContent = historyNotes[stage];
+  const classicalDetails = {
+    earth: ['土', '日常泥土包含礦物、有機物、水、空氣等成分；不同樣品的組成也可能不同。', '它通常是多種物質的混合物，不能當成單一化學元素。', '這裡以日常泥土作比較，不把古代「土」的意涵直接等同現代泥土。'],
+    water: ['水', '水可以經由化學分解得到氫和氧。', '依今天的化學判準，水是化合物。', '回顧第四單元已學過的結果；氣體身分來自已確認的實驗資料，不能只靠外觀判定。'],
+    air: ['氣', '日常空氣含有氮、氧等多種氣體。', '空氣是混合物，不是單一化學元素。', '這裡以日常空氣作對照；古代「氣」的意涵，不等於現代空氣的完整科學描述。'],
+    fire: ['火', '火焰是燃燒過程中可見的現象，涉及高溫氣體等發光。', '火焰不是一種化學元素，不能和銅、鐵等元素並列。', '古代四元素曾是一套解釋物質的觀點；今天依物質組成及實驗證據使用不同的分類。']
+  };
+  let classicalSelection = null;
+  const detail = $('#classical-detail');
+  function showClassicalDetail(key) {
+    classicalSelection = key;
+    const [name, main, conclusion, note] = classicalDetails[key];
+    $$('[data-classical]').forEach(button => {
+      const selected = button.dataset.classical === key;
+      button.setAttribute('aria-expanded', String(selected));
+      button.classList.toggle('selected', selected);
+    });
+    $('#classical-detail-title').textContent = `補充說明｜${name}`;
+    $('#classical-detail-main').textContent = main;
+    $('#classical-detail-conclusion').textContent = conclusion;
+    $('#classical-detail-note').textContent = note;
+    $('#classical-detail-icon').className = `detail-symbol classical-icon icon-${key}`;
+    $('#classical-detail-icon').hidden = key === 'water';
+    $('#water-evidence').hidden = key !== 'water';
+    $('#boyle-toggle').hidden = key !== 'water';
+    $('#boyle-toggle').setAttribute('aria-expanded', 'false');
+    $('#boyle-explanation').hidden = true;
+    detail.hidden = false;
+    $('#classical-announcement').textContent = `已展開${name}的補充說明，四列對照仍完整顯示。`;
   }
-  $$('[data-history]').forEach(button => button.addEventListener('click', () => selectHistory(Number(button.dataset.history))));
-  selectHistory(0);
+  $$('[data-classical]').forEach(button => button.addEventListener('click', () => showClassicalDetail(button.dataset.classical)));
+  $('#classical-close').addEventListener('click', () => {
+    const previous = classicalSelection;
+    detail.hidden = true;
+    classicalSelection = null;
+    $$('[data-classical]').forEach(button => { button.setAttribute('aria-expanded', 'false'); button.classList.remove('selected'); });
+    $('#classical-announcement').textContent = '補充說明已收起，四列對照仍完整顯示。';
+    if (previous) $(`[data-classical="${previous}"]`).focus({ preventScroll: true });
+  });
+  $('#boyle-toggle').addEventListener('click', () => {
+    const open = $('#boyle-toggle').getAttribute('aria-expanded') !== 'true';
+    $('#boyle-toggle').setAttribute('aria-expanded', String(open));
+    $('#boyle-explanation').hidden = !open;
+  });
 
   const shownExceptions = new Set();
   function renderExceptions() {

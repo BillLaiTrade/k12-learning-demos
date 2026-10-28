@@ -58,20 +58,55 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     assert.equal(await page.locator('#review-submit').isEnabled(), true);
   });
 
-  await t.test('history reveals cumulative evidence and preserves chronological distinction', async () => {
-    assert.equal(await page.locator('[data-history-panel="1"]').isVisible(), false);
-    await page.locator('[data-history="1"]').click();
-    assert.equal(await page.locator('[data-history-panel="0"]').isVisible(), true);
-    assert.equal(await page.locator('[data-history-panel="1"]').isVisible(), true);
-    assert.equal(await page.locator('[data-history-panel="2"]').isVisible(), false);
-    await page.locator('[data-history="2"]').click();
-    for (const panel of await page.locator('[data-history-panel]').all()) assert.equal(await panel.isVisible(), true);
-    assert.match(await text('#history-note'), /不要把這項水電解實驗歸給波以耳/);
-    assert.match(await text('[data-history-panel="2"]'), /後來/);
-    await page.locator('[data-history="0"]').click();
-    assert.equal(await page.locator('[data-history-panel="1"]').isVisible(), false);
-    await page.locator('[data-history="2"]').click();
-    await capture('#s1', 'history-desktop');
+  await t.test('four complete aligned pairs are visible before clicking; details never replace results', async () => {
+    const rows = page.locator('[data-classical]');
+    assert.equal(await rows.count(), 4);
+    assert.equal(await page.locator('#classical-detail').isVisible(), false);
+    const expected = ['日常泥土通常是混合物','水是化合物','日常空氣是混合物','火焰是燃燒的現象'];
+    assert.deepEqual(await page.locator('.modern-cell strong').allTextContents(), expected);
+    const initial = await rows.allTextContents();
+    await capture('#s1', 'comparison-initial-desktop');
+    for (const key of ['earth','fire','air','water','earth','water']) {
+      await page.locator(`[data-classical="${key}"]`).click();
+      assert.equal(await page.locator('#classical-detail').isVisible(), true);
+      assert.equal(await page.locator('[data-classical][aria-expanded=true]').count(), 1);
+      assert.deepEqual(await rows.allTextContents(), initial);
+      for (const row of await rows.all()) assert.equal(await row.isVisible(), true);
+      assert.equal(await page.locator('#water-evidence').isVisible(), key === 'water');
+    }
+    assert.match(await text('#classical-detail-main'), /化學分解得到氫和氧/);
+    assert.match(await text('#water-evidence'), /未表示體積比例/);
+    await capture('#s1', 'comparison-water-desktop');
+    await page.locator('#boyle-toggle').click();
+    assert.match(await text('#boyle-explanation'), /不能說波以耳完成了水電解/);
+    await page.locator('#classical-close').click();
+    assert.equal(await page.locator('#classical-detail').isVisible(), false);
+    assert.equal(await page.locator('[data-classical][aria-expanded=true]').count(), 0);
+    assert.equal(await page.locator('[data-classical=water]').evaluate(n => n === document.activeElement), true);
+    assert.deepEqual(await rows.allTextContents(), initial);
+  });
+
+  await t.test('comparison pairs share a row at every width, and details appear below all pairs', async () => {
+    for (const width of [1440,1280,1024,768,390,320]) {
+      await page.setViewportSize({width,height:1000});
+      const rects = [];
+      for (const row of await page.locator('[data-classical]').all()) {
+        const left = await row.locator('.ancient-cell').boundingBox();
+        const right = await row.locator('.modern-cell').boundingBox();
+        assert.ok(left.x + left.width <= right.x, `left/right at ${width}`);
+        assert.ok(Math.abs(left.y - right.y) < 1, `paired y at ${width}`);
+        assert.ok(Math.abs(left.height - right.height) < 1, `paired height at ${width}`);
+        rects.push(await row.boundingBox());
+      }
+      for (let i=1;i<rects.length;i++) assert.ok(rects[i].y >= rects[i-1].y + rects[i-1].height - 1);
+      await page.locator('[data-classical=water]').click();
+      const detail = await page.locator('#classical-detail').boundingBox();
+      assert.ok(detail.y > rects[3].y + rects[3].height);
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
+      if (width === 390) await capture('#s1', 'comparison-water-mobile');
+      await page.locator('#classical-close').click();
+    }
+    await page.setViewportSize({width:1440,height:1000});
   });
 
   await t.test('reference format has matching numbered routes and a separate unit assessment', async () => {
@@ -204,6 +239,12 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
 
   await t.test('native controls work by keyboard and reduced motion', async () => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.locator('[data-classical=fire]').focus();
+    await page.keyboard.press('Enter');
+    assert.match(await text('#classical-detail-title'), /火/);
+    await page.locator('#classical-close').focus();
+    await page.keyboard.press('Space');
+    assert.equal(await page.locator('#classical-detail').isVisible(), false);
     await page.locator('[data-property="ductility"]').focus();
     await page.keyboard.press('Enter');
     assert.equal(await pressed('[data-property="ductility"]'), 'true');
@@ -236,8 +277,9 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     const mobile = await context.newPage();
     watch(mobile);
     await mobile.goto(base);
-    await mobile.locator('[data-history="2"]').tap();
-    assert.equal(await mobile.locator('[data-history-panel="2"]').isVisible(), true);
+    await mobile.locator('[data-classical=water]').tap();
+    assert.equal(await mobile.locator('#classical-detail').isVisible(), true);
+    assert.equal(await mobile.locator('[data-classical]').count(), 4);
     await mobile.locator('[data-exception="graphite"]').tap();
     assert.equal(await mobile.locator('#exceptions-table tr[data-sample="graphite"]').count(), 1);
     await mobile.locator('[data-symbol="He"]').tap();

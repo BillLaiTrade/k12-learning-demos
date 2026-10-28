@@ -15,3 +15,9 @@
 ## 製作原則
 
 使用者已指示先完成 6.1 六張的內容與可操作初稿，故事保留基本銜接，後續可調整，不以敘事完美作為製作前提。五段教學不判分，只在最後安排一次整合檢核。頁面不是全單元完成或最終驗收紀錄。
+
+## 第一區塊四列對照修訂（2026-10-28）
+
+使用者核可四列逐項左右對齊、主要結果預設全部可見，點選只在下方補充說明的示意。`classical-comparison.css` 為第一區塊樣式；`classical-elements.png` 為依核可圖生成的透明土、水、氣、火插畫素材，以 CSS 定位取用。插畫不是真實樣品照片或實驗證據；水分解紀錄為 inline SVG，兩瓶氣體沒有液面或氣體顏色，且註明未表示體積比例。共用角色頭像維持直接引用。
+
+新增查核來源（實際讀取）：[Soil Science Society of America 教師資源：Soil Basics](https://www.soils4teachers.org/soil-basics)、[OpenStax Chemistry 2e：Phases and Classification of Matter](https://openstax.org/books/chemistry-2e/pages/1-2-phases-and-classification-of-matter)、[Britannica：Air](https://www.britannica.com/science/air)、[Britannica：Flame](https://www.britannica.com/science/flame)，並重新讀取上述波以耳科學史。分別支持泥土為多成分混合物、水可分解、空氣為氣體混合物、火焰涉及燃燒與氣體發光；古代意涵與現代日常對應事物不直接等同。

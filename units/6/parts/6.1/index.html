@@ -8,6 +8,7 @@
   <title>元素的探索｜探索物質的組成</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/elements.css">
+  <link rel="stylesheet" href="assets/classical-comparison.css">
   <script src="assets/elements.js" defer></script>
 </head>
 <body>
@@ -27,22 +28,47 @@
     </div><p class="next-hint">沿著學習順序閱讀、操作與觀察。</p></nav>
     <div class="cards">
       <section class="lesson-card" id="s1" aria-labelledby="title-1">
-        <header class="lesson-head"><div class="num" aria-label="第 1 區塊">01</div><div><h2 id="title-1">古人說的「元素」，和今天一樣嗎？</h2><p class="lead">眼前的資料寫著銅、鋁、鐵、硫和碳。人們不是一開始就知道有哪些元素，連「元素」的意思，也曾經不同。</p></div></header>
-        <div class="lesson-body">
-        <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵：</span></span><p>人們一開始就知道這些是元素嗎？</p></div>
-        <div class="dialogue"><span class="speaker"><span class="sr-only">阿公：</span></span><p>不是。以前有不同的想法；後來，人們逐漸用實驗檢查物質的組成。看看說法和證據怎麼改變。</p></div>
-        <div class="controls" role="group" aria-label="查看元素觀念的發展">
-          <button type="button" data-history="0" aria-pressed="true">古代的觀點</button><button type="button" data-history="1" aria-pressed="false">重視實驗的判準</button><button type="button" data-history="2" aria-pressed="false">後來的水分解證據</button>
+        <header class="lesson-head"><div class="num" aria-label="第 1 區塊">01</div><div><h2 id="title-1">古人說的「元素」，和今天一樣嗎？</h2><p class="lead">先看完整對照，再點圖示深入了解。</p></div></header>
+        <div class="lesson-body classical-lesson">
+          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵：</span></span><p>原來古人說的「元素」，和今天的意思不同！</p></div>
+          <div class="dialogue"><span class="speaker"><span class="sr-only">阿公：</span></span><p>先把兩邊的資料一起看。想了解原因，再點圖示看下方說明。</p></div>
+          <div class="comparison-heading"><h3>說法與證據對照桌</h3><p>對照內容完整顯示；點選任一列，可在下方查看補充解釋。</p></div>
+          <div class="comparison-table" role="group" aria-label="古代四元素與今天對日常事物的理解，四列完整對照">
+            <div class="comparison-head" aria-hidden="true"><strong>古代四元素觀點</strong><strong>今天對日常對應事物的理解</strong></div>
+          <button class="comparison-row" type="button" data-classical="earth" aria-expanded="false" aria-controls="classical-detail"><span class="ancient-cell"><span class="classical-icon icon-earth" aria-hidden="true"></span><strong>土</strong></span><span class="compare-arrow" aria-hidden="true">→</span><span class="modern-cell"><span class="classical-icon icon-earth" aria-hidden="true"></span><span><strong>日常泥土通常是混合物</strong><small>含有多種物質。</small></span></span></button>
+          <button class="comparison-row" type="button" data-classical="water" aria-expanded="false" aria-controls="classical-detail"><span class="ancient-cell"><span class="classical-icon icon-water" aria-hidden="true"></span><strong>水</strong></span><span class="compare-arrow" aria-hidden="true">→</span><span class="modern-cell"><svg class="modern-water" viewBox="0 0 64 72" aria-hidden="true"><path d="M9 12L14 62Q32 70 50 62L55 12" fill="#e8f8ff" stroke="#6598b3" stroke-width="2"/><path d="M12 31Q32 38 52 31L48 60Q32 66 16 60Z" fill="#a9dff1"/><ellipse cx="32" cy="12" rx="23" ry="6" fill="#f8fdff" stroke="#6598b3" stroke-width="2"/><ellipse cx="32" cy="31" rx="20" ry="5" fill="#d3f0fa" stroke="#8ec7de"/><path d="M18 22L21 56" stroke="white" stroke-width="3"/></svg><span><strong>水是化合物</strong><small>可經化學分解，得到氫與氧。</small></span></span></button>
+          <button class="comparison-row" type="button" data-classical="air" aria-expanded="false" aria-controls="classical-detail"><span class="ancient-cell"><span class="classical-icon icon-air" aria-hidden="true"></span><strong>氣</strong></span><span class="compare-arrow" aria-hidden="true">→</span><span class="modern-cell"><span class="classical-icon icon-air" aria-hidden="true"></span><span><strong>日常空氣是混合物</strong><small>以日常空氣為例，含有多種氣體。</small></span></span></button>
+          <button class="comparison-row" type="button" data-classical="fire" aria-expanded="false" aria-controls="classical-detail"><span class="ancient-cell"><span class="classical-icon icon-fire" aria-hidden="true"></span><strong>火</strong></span><span class="compare-arrow" aria-hidden="true">→</span><span class="modern-cell"><span class="classical-icon icon-fire" aria-hidden="true"></span><span><strong>火焰是燃燒的現象</strong><small>不是一種化學元素。</small></span></span></button>
+          </div>
+          <p class="comparison-caveat">以日常對應事物作比較；古代四元素的意涵，不等於現代的物質分類。</p>
+          <p class="sr-only" id="classical-announcement" role="status"></p>
+          <section class="classical-detail" id="classical-detail" aria-labelledby="classical-detail-title" hidden>
+            <div class="detail-head"><h4 id="classical-detail-title">補充說明</h4><button type="button" id="classical-close">收起說明 <span aria-hidden="true">⌃</span></button></div>
+            <div class="detail-body">
+              <figure class="water-evidence" id="water-evidence" hidden>
+                <svg viewBox="0 0 460 238" role="img" aria-labelledby="water-record-title water-record-desc">
+                  <title id="water-record-title">水經化學分解，得到已確認的氫與氧</title><desc id="water-record-desc">一杯水指向兩瓶無色氣體產物。這是已學過的實驗結果示意，沒有表示體積比例。</desc>
+                  <defs><linearGradient id="water-glass"><stop stop-color="#d9edf4" stop-opacity=".65"/><stop offset=".45" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#d5e9f1" stop-opacity=".6"/></linearGradient><linearGradient id="record-water" x2="0" y2="1"><stop stop-color="#98def3" stop-opacity=".55"/><stop offset="1" stop-color="#6fc7e8" stop-opacity=".8"/></linearGradient><linearGradient id="record-arrow"><stop stop-color="#b8dce9"/><stop offset="1" stop-color="#6cabc4"/></linearGradient></defs>
+                  <path d="M28 63Q72 76 116 63L110 181Q72 196 34 181Z" fill="url(#water-glass)" stroke="#528ba5" stroke-width="2"/>
+                  <path d="M34 101Q72 114 110 101L106 178Q72 189 38 178Z" fill="url(#record-water)"/>
+                  <ellipse cx="72" cy="63" rx="44" ry="10" fill="#f8fdff" stroke="#528ba5" stroke-width="2"/><ellipse cx="72" cy="102" rx="38" ry="8" fill="#b9e7f7" fill-opacity=".7" stroke="#77bcd5"/>
+                  <path d="M45 77L50 174" stroke="white" stroke-width="4" opacity=".9"/><text x="72" y="216" text-anchor="middle">水</text>
+                  <text x="186" y="101" text-anchor="middle" class="diagram-small">化學分解</text><path d="M135 124H209V113L239 139L209 165V153H135Z" fill="url(#record-arrow)"/>
+                  <g id="gas-samples" fill="url(#water-glass)" stroke="#6b8997" stroke-width="2">
+                    <path d="M278 68V84Q258 91 258 110V178Q258 189 270 189H306Q318 189 318 178V110Q318 91 298 84V68Z"/><path d="M375 68V84Q355 91 355 110V178Q355 189 367 189H403Q415 189 415 178V110Q415 91 395 84V68Z"/>
+                    <rect x="275" y="58" width="26" height="16" rx="4" fill="#d4dfe3"/><ellipse cx="288" cy="58" rx="13" ry="4" fill="#f4f8fa"/>
+                    <rect x="372" y="58" width="26" height="16" rx="4" fill="#d4dfe3"/><ellipse cx="385" cy="58" rx="13" ry="4" fill="#f4f8fa"/>
+                    <path d="M268 110V174M365 110V174" stroke="white" stroke-width="4"/>
+                  </g>
+                  <text x="288" y="211" text-anchor="middle">氫</text><text x="385" y="211" text-anchor="middle">氧</text><path d="M258 218Q258 226 266 226H409Q417 226 417 218" fill="none" stroke="#6b8997"/><text x="338" y="237" text-anchor="middle" class="diagram-caption">已確認的產物</text>
+                </svg><figcaption>產物示意，未表示體積比例。</figcaption>
+              </figure>
+              <div class="detail-copy"><div class="detail-symbol" id="classical-detail-icon" aria-hidden="true"></div><p id="classical-detail-main"></p><p id="classical-detail-conclusion"></p><p class="caption" id="classical-detail-note"></p><button type="button" id="boyle-toggle" aria-expanded="false" aria-controls="boyle-explanation" hidden>波以耳的質疑，和這項證據有什麼關係？ <span aria-hidden="true">›</span></button><p id="boyle-explanation" hidden>波以耳質疑傳統元素觀點，強調以實驗研究物質。水分解的證據是後來累積的成果，不能說波以耳完成了水電解，也不是只靠一項實驗就一次改寫整套觀點。</p></div>
+            </div>
+          </section>
+          <div class="concept-history"><h3>觀念發展脈絡</h3><div class="history-path"><div><span aria-hidden="true">Ⅰ</span><p><strong>古代四元素觀點</strong><small>用土、水、氣、火解釋物質。</small></p></div><b aria-hidden="true">→</b><div><span aria-hidden="true">Ⅱ</span><p><strong>波以耳：重視實驗檢查</strong><small>質疑傳統觀點，重視實驗研究。</small></p></div><b aria-hidden="true">→</b><div><span aria-hidden="true">Ⅲ</span><p><strong>後來：累積水分解證據</strong><small>逐漸建立對物質組成的認識。</small></p></div></div><p class="caption">波以耳的工作與後來的水分解證據，發生於不同時期。</p></div>
+          <div class="classical-takeaway">科學上的解釋需要證據支持，也會隨新發現修正。</div>
         </div>
-        <div class="history-grid">
-          <article class="history-item" data-history-panel="0"><h3>古代的物質觀點</h3><div class="history-labels" aria-label="古希臘四元素觀點"><span>土</span><span>水</span><span>氣</span><span>火</span></div><p>古希臘的四元素觀點，曾用這四者的不同組合解釋物質。這是當時的一套物質觀點，和今天的化學元素意義不同。</p></article>
-          <article class="history-item" data-history-panel="1"><h3>用實驗檢查想法</h3><p>波以耳質疑傳統的元素觀點，強調以實驗研究物質。判斷物質的組成，不能只沿用原有名稱或分類。</p><p>我們在第四單元學過：能否經由化學分解得到其他物質，是認識元素與化合物的判準之一。</p></article>
-          <article class="history-item" data-history-panel="2"><h3>回看已學過的證據</h3><div class="decomposition" aria-label="水經化學分解可得到氫和氧"><strong>水</strong><span>→<br><small>化學分解</small></span><strong>氫、氧</strong></div><p>後來累積的實驗證據顯示，水能化學分解成氫與氧。因此，今天將水歸為化合物。</p><p class="caption">這是後來的水分解證據，不是說波以耳做了水電解實驗。</p></article>
-        </div>
-        <div class="observation" role="status" id="history-note">先看古代的說法，再選取後續資料。前面的觀點會保留下來，方便比較。</div>
-        <p><strong>帶走的理解：</strong>科學上的解釋需要證據支持，也可能隨新發現修正。「古代四元素」不是今天的元素清單。</p>
-        <p class="bridge">小葵又注意到：同樣是元素，銅、鋁和硫的用途卻不同。接著把它們的性質資料放在一起看看。</p>
-              </div>
       </section>
 
       <section class="lesson-card" id="s2" aria-labelledby="title-2">
