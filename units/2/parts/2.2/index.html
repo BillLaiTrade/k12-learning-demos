@@ -24,6 +24,7 @@
   </style>
   <link rel="stylesheet" href="assets/sound-propagation.css?v=3">
   <link rel="stylesheet" href="assets/vacuum-lab.css?v=5">
+  <link rel="stylesheet" href="assets/sound-speed.css?v=integrated-7">
 </head>
 <body>
   <header class="shell masthead">
@@ -171,23 +172,62 @@
             <p class="vacuum-model-note" id="vacuum-model-note">振動放大示意；分貝值非現場實測。實際鐘罩僅能接近真空。</p>
           </div>
         </section>
-        <section class="lesson-card" id="card-04">
+        <section class="lesson-card" id="card-04" aria-labelledby="lesson-title">
           <div class="card-side"><span class="card-number">04</span><h3>哪些因素影響聲速</h3><span class="card-role">比較介質與空氣溫度</span></div>
-          <div class="card-main"><h2>聲音在不同介質裡，傳得一樣快嗎？</h2><p>介質不同，聲速也不同；在空氣中，溫度改變也會影響聲速。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>聲音可以在空氣、水和固體裡傳，那它們傳得一樣快嗎？</p></div>
-            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>不一樣。聲速會受介質影響；以空氣為例，溫度升高時，聲速也會增加。</p></div>
-            <div class="medium-grid" aria-label="約攝氏20度時常見介質中的聲速">
-              <div class="medium-card"><strong>空氣</strong><span>約 343 m/s｜約 20°C</span><div class="speed-meter"><span style="width:6%"></span></div></div>
-              <div class="medium-card"><strong>水</strong><span>約 1,480 m/s｜約 20°C</span><div class="speed-meter"><span style="width:25%"></span></div></div>
-              <div class="medium-card"><strong>鋼</strong><span>約 5,900 m/s｜近似值</span><div class="speed-meter"><span style="width:100%"></span></div></div>
+          <div class="card-main sound-speed-lab" data-sound-speed-lab>
+            <h2 id="lesson-title">聲音在不同介質中，傳得多快？</h2>
+            <p class="intro" id="lesson-intro">觀察粒子逐段受振，再比較最右端開始振動的時間。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p id="girl-line">空氣、水和鋼，裡面的粒子是怎麼把振動傳開的？</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p id="grandpa-line">一起啟動，觀察三種介質裡的粒子如何往返，再比較振動傳到最右端的時間。</p></div>
+
+            <div class="tabs" role="tablist" aria-label="選擇比較方式">
+              <button id="tab-material" type="button" role="tab" aria-selected="true" aria-controls="experiment-panel">比較介質</button>
+              <button id="tab-temperature" type="button" role="tab" aria-selected="false" aria-controls="experiment-panel" tabindex="-1">改變空氣溫度</button>
             </div>
-            <p class="live-note">數值為常見材料的近似值；實際聲速會隨材料性質與條件而變。</p>
-            <figure class="visual"><svg viewBox="0 0 760 195" role="img" aria-label="空氣溫度升高時，聲速也會增加的示意圖。">
-              <path d="M78 144H690" stroke="#aab8b0" stroke-width="2"/><path d="M92 140C230 133 335 116 442 94S610 51 676 34" fill="none" stroke="#176b53" stroke-width="5" stroke-linecap="round"/><path d="M666 35l15-5-7 15" fill="none" stroke="#176b53" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle id="temp-dot" cx="500" cy="82" r="10" fill="#df8b41" stroke="#fff" stroke-width="3"/><text x="80" y="177" class="muted-label">較低溫</text><text x="680" y="177" text-anchor="end" class="muted-label">較高溫</text><text x="380" y="25" text-anchor="middle">空氣溫度升高，聲速增加</text><text x="380" y="177" text-anchor="middle" class="muted-label">空氣溫度</text>
-            </svg><figcaption>空氣中的近似關係：0°C 時約 331 m/s，每升高 1°C 約增加 0.6 m/s。</figcaption></figure>
-            <div class="range-row"><label for="air-temperature">空氣溫度</label><input id="air-temperature" type="range" min="0" max="30" step="1" value="20" aria-describedby="temperature-value"><output id="temperature-value">20°C</output></div>
-            <div class="readout"><div class="readout-card"><small>此溫度下空氣中的近似聲速</small><strong id="temperature-speed">343 m/s</strong></div><div class="readout-card"><small>每秒傳播距離</small><strong id="temperature-distance">343 m</strong></div></div>
-            <div class="fact"><p><strong>重點：</strong>聲速取決於介質；在同一種氣體中，溫度也會影響聲速。這裡的溫度滑桿只描述空氣。</p></div>
+
+            <section id="experiment-panel" role="tabpanel" aria-labelledby="tab-material">
+              <div class="temperature-settings" id="temperature-settings" hidden>
+                <div class="setting-heading"><label for="temperature">設定組溫度</label><output id="temperature-value" for="temperature">30°C</output></div>
+                <div class="temperature-inputs">
+                  <button class="secondary step-temperature" id="temperature-down" type="button" aria-label="設定組降溫一度">−</button>
+                  <div class="range-track"><input id="temperature" type="range" min="0" max="30" step="1" value="30" aria-describedby="temperature-help"><div class="range-ticks" aria-hidden="true"><span>0°C</span><span>10°C</span><span>20°C</span><span>30°C</span></div></div>
+                  <button class="secondary step-temperature" id="temperature-up" type="button" aria-label="設定組升溫一度">＋</button>
+                </div>
+                <p id="temperature-help">參考組固定為 20°C；只有設定組的溫度會改變。</p>
+              </div>
+
+              <div class="model-information">
+                <span>共同傳播距離 <strong>5,000 公尺</strong></span>
+                <span class="realtime-badge">1 倍實時播放</span>
+                <span class="model-time-wrap">經過時間 <output id="model-time" aria-label="實際播放經過時間，不含暫停" aria-live="off">0.000 秒</output></span>
+              </div>
+              <p class="observation-caption" id="observation-caption" role="status" aria-live="polite">同時啟動左側振動源，觀察不同介質的振動傳遞。</p>
+              <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>介質</span><span>介質內部 · 放大示意</span><span>最右端放大</span></div><div id="models" class="models" role="group" aria-label="同步的粒子振動模型"></div></div>
+              <p class="color-key">綠色虛線標示振動目前傳到的位置；粒子只在原位附近往返。</p>
+
+              <div class="controls">
+                <button class="action" id="primary-action" type="button">同時啟動振動</button>
+                <button class="text-button" id="reset-action" type="button">回到起點</button>
+              </div>
+              <div class="observation-options"><label class="sound-option"><input type="checkbox" id="arrival-sound">到達提示音</label><span id="playback-state">也可以直接點按各列左側的振動源。</span></div>
+              <p id="audio-error" class="audio-error" role="status" hidden></p>
+
+              <section class="result" id="result" aria-labelledby="result-title" hidden>
+                <h3 id="result-title">觀察結果</h3><p id="result-summary"></p>
+                <table><caption class="sr-only">本次比較的聲速與到達時間近似值</caption><thead><tr><th scope="col">組別</th><th scope="col">聲速</th><th scope="col">傳到 5,000 公尺</th></tr></thead><tbody id="result-rows"></tbody></table>
+              </section>
+            </section>
+
+            <div class="fact"><p id="takeaway"><strong>觀察重點：</strong>粒子在原位附近往返；同一聲源頻率相同，三種介質傳遞振動的速度不同。</p></div>
+            <details class="model-notes"><summary>模型說明與近似值</summary><ul>
+              <li>空氣以透明空間、水以有液面及折射的水槽、鋼以金屬剖面呈現。介質內的分子／原子是放大透視示意，實際肉眼看不到；器材外形不代表真實 5,000 公尺裝置。</li>
+              <li>微觀模型以常見氣體分子、彎折水分子及鋼中原子呈現。配色、球棒外形、排列、間距與振幅為辨識及放大示意，省略熱運動；鋼中的連結表示彈性作用。</li>
+              <li>各組共用持續 1 秒的振動訊號、5,000 公尺距離及同一個實時計時。1 秒播放對應 1 秒經過，暫停與背景頁面期間不計時。到達時間以「距離 ÷ 聲速」計算。</li>
+              <li>本例取約 20°C 的空氣 343 m/s、水 1,480 m/s，以及鋼中縱波約 5,900 m/s。實際數值會隨材料及環境而變，不能只靠粒子疏密判斷聲速。</li>
+              <li>空氣在 0～30°C 採近似關係：聲速 ≈ 331 ＋ 0.6 × 溫度。此設定只用於空氣。</li>
+              <li>綠色虛線及下方刻度記錄振動前緣，位置＝聲速 × 經過時間；標記不是一顆向前移動的粒子。深淺記錄振動已傳到的位置；粒子完成脈衝後回復原位。最右端放大區顯示同一截面的粒子，位移另放大 5 倍。</li>
+              <li>提示音只表示振動抵達最右端，不模擬各介質內的實際音色。</li>
+            </ul></details>
           </div>
         </section>
         <section class="quiz" id="unit-quiz" aria-labelledby="quiz-title">
@@ -280,10 +320,6 @@
       rulerPluck.addEventListener("click",startRuler);
       rulerPluck.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();if(!event.repeat)startRuler();}});
 
-      const temperature=document.querySelector("#air-temperature"),tempValue=document.querySelector("#temperature-value"),tempSpeed=document.querySelector("#temperature-speed"),tempDistance=document.querySelector("#temperature-distance"),tempDot=document.querySelector("#temp-dot");
-      const updateTemperature=()=>{const c=Number(temperature.value),speed=331+.6*c;tempValue.textContent=`${c}°C`;tempSpeed.textContent=`${Math.round(speed)} m/s`;tempDistance.textContent=`${Math.round(speed)} m`;tempDot.setAttribute("cx",String(92+(c/30)*584));tempDot.setAttribute("cy",String(140-(c/30)*106));temperature.setAttribute("aria-valuetext",`${c}攝氏度，聲速約${Math.round(speed)}公尺每秒`);};
-      temperature.addEventListener("input",updateTemperature);updateTemperature();
-
       const explanations={q1:["正確。鋼尺振動時發出聲音。","鋼尺旁的空氣不是聲音的來源；發聲的是正在振動的鋼尺。","是鋼尺的振動產生聲音，不是聲音先讓鋼尺振動。"],q2:["空氣粒子在原位附近振動，並把擾動傳給鄰近粒子。","粒子不會一路從聲源跑到耳朵。","粒子會在原位附近振動，聲音的擾動向前傳播。"],q3:["正確。聲音需要介質，真空中沒有介質傳播聲音。","聲音必須透過介質傳播。","聲音大小不會改變真空中缺少介質這件事。"],q4:["正確。在一般空氣條件下，溫度升高，聲速通常增加。","空氣溫度升高時，聲速通常增加。","空氣溫度會影響聲速。"]};
       const answers={q1:"a",q2:"b",q3:"b",q4:"a"},quizResult=document.querySelector("#quiz-result");
       document.querySelector("#quiz-check").addEventListener("click",()=>{let score=0,answered=0;Object.entries(answers).forEach(([name,correct])=>{const selected=document.querySelector(`input[name="${name}"]:checked`),feedback=document.querySelector(`[data-question="${name}"] .quiz-feedback`);if(!selected){feedback.textContent="請選一個答案。";return;}answered++;const right=selected.value===correct;if(right)score++;feedback.textContent=explanations[name][selected.value===correct?0:selected.value==="b"?1:selected.value==="c"?2:0];feedback.style.color=right?"#176b53":"#755a2d";});quizResult.hidden=false;quizResult.textContent=answered<4?`已作答 ${answered} 題，答對 ${score} 題。完成所有題目後再檢查一次。`:`答對 ${score} / 4 題。${score===4?"太好了，你已掌握聲音產生、傳播與聲速的重點。":"可以回到對應區塊，再看一次相關示範後重答。"}`;});
@@ -296,5 +332,6 @@
   </script>
   <script type="module" src="assets/sound-propagation.js?v=4"></script>
   <script type="module" src="assets/vacuum-lab.js?v=6"></script>
+  <script type="module" src="assets/sound-speed.mjs?v=integrated-7"></script>
 </body>
 </html>

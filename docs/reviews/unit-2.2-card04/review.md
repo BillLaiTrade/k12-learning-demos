@@ -1,8 +1,8 @@
 # 第四學習區塊：整合預覽檢視
 
-日期：2026-10-28（Asia/Taipei）。狀態：獨立預覽待使用者核可，正式第四區塊尚未替換。
+日期：2026-10-28（Asia/Taipei）。狀態：依使用者指示，已整合至正式 2.2 第四學習區塊。
 
-[開啟完整互動預覽](https://billlaitrade.github.io/k12-learning-demos/previews/unit-2.2-card04/)。
+[開啟正式第四學習區塊](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.2/#card-04)。
 
 ## 回饋落實
 
@@ -21,7 +21,7 @@
 ## 檢查方式
 
 ```sh
-CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.2-card04-preview.test.cjs tests/unit-2.2-vacuum.test.cjs tests/unit-2.2-sound-propagation.test.cjs tests/unit-2.2.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.2-sound-speed.test.cjs tests/unit-2.2-vacuum.test.cjs tests/unit-2.2-sound-propagation.test.cjs tests/unit-2.2.test.cjs
 ```
 
 前一輪整合版本的上述完整命令共 44 項通過：新預覽 17 個模型及瀏覽器檢查（含群組計數），前三區塊 27 項回歸。輸出保存於 `tests.log`；最後版面文字微調後再執行新預覽的 17 項檢查，通過紀錄見 `preview-final.log`。互動測試以凍結時鐘推進，避免讀取時經過的真實時間造成錯判；音訊提示以實際 AudioContext／振盪器檢查。既有分貝儀的筆畫驗證改為同一次取得數字與筆畫，避免量到不同影格；未修改正式課程的行為。
@@ -79,7 +79,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.2-
 六張主要截圖已更新。`material-desktop.png`／`material-mobile.png` 是模型 0.300 秒時的暫停畫面：鋼已到 1,000 公尺，水到 444 公尺，空氣顯示已傳 102 公尺（對未到達終點的位置取整數下限，避免提前顯示到達）。其餘測試記錄和近照為歷史版本，不代表目前距離。
 
 
-## 最新修訂：5 公里與真實的 1 倍計時
+## 前輪修訂：5 公里與真實的 1 倍計時
 
 依使用者指定，距離設為 5,000 公尺、固定 1 倍實時播放，移除倍率選單與逐格快轉。顯示「經過時間」及「到達時間」，不再將觀看秒數與模擬秒數分開。所有動畫以 `performance.now()` 的經過時間為依據，跳過影格仍追上同一時間；暫停與背景頁面不計時。共同訊號持續 1 秒，仍是實時的一秒，讓內部振動有可見的持續區間。
 
@@ -94,3 +94,14 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.2-
 實際 1.0131／5.0128／10.0121 秒時，畫面計時分別為 1.0104／5.0105／10.0100 秒，前緣均符合聲速乘以同一經過時間。測試容許到達首次繪製 120ms、秒數顯示 60ms 誤差；此輪實測秒數差約 2～3ms，到達繪製差約 16～19ms，屬瀏覽器影格更新，未使用速度倍率或固定步進計時。輸出含原始實測資料，見 `realtime-tests.log`。
 
 六張主要截圖已更新：介質比較在經過 1.500 秒時暫停，空氣約 514 公尺、水 2,220 公尺、鋼已到 5,000 公尺；之後繼續會從原經過時間接續，不包含暫停等待。既有其他測試檔與近照截圖保留為歷史。正式第四區塊尚未替換。
+
+
+## 最新修訂：正式課程整合
+
+完整互動已直接放入正式 `#card-04`，沿用全頁版型、導覽及正式頭像。`formal-context.png` 可見第三區塊尾端、側邊導覽、第四區塊與下方小測位置；六張主要截圖也已改為正式頁畫面。沒有以 iframe 嵌入獨立頁。
+
+程式與樣式的正式來源為 `assets/sound-speed.mjs`／`sound-speed-model.mjs`／`sound-speed-rendering.mjs`／`sound-speed.css`。控制查詢與樣式限定在第四區塊，預覽入口共用同一份程式，避免兩份版本不同步。舊溫度控制與處理程式一併撤下，避免空節點錯誤影響後面的單元小測。
+
+正式頁聲速模型／整合／實時秒錶共 25 項，加上前三區塊 27 項回歸，共 52 項全部通過（含群組計數）。涵蓋四個區塊存在、導覽可到第四區、內部 ID 不與其餘頁面衝突、無 iframe、小測未完成／全對／重設，以及原有七種寬度、手機觸控與真實到達等待。完整紀錄見 `formal-tests.log`。另以同一份實作分別開啟正式與獨立入口，在 320／390／768／1440px 核對無溢出、三列不重複初始化、1.5 秒鋼已到達／其他仍傳遞，以及溫度模式切換，未發現資源或 JavaScript 錯誤。
+
+測試的 fresh helper 使用唯一 query 來載入全新頁面，避免含 `#card-04` 的相同網址被當作同文件錨點導覽、保留上輪播放狀態；此修正只在測試中。
