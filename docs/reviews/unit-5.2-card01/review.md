@@ -131,3 +131,9 @@ https://billlaitrade.github.io/k12-learning-demos/units/5/parts/5.2/index.html#c
 本機 14 項全數通過（含外層）。新增真實時間檢查：在一般與減少動態兩種設定下，各比較間隔 300ms 的實際瀏覽器截圖及亮帶位移，播放中的像素不同；暫停後再比對兩張截圖則完全相同，繼續後位移恢復、重來後歸零。其餘校準、三環境、方向、鍵盤、手機、七種寬度及小測回歸保留。
 
 `continuous-standard-1.webp`／`continuous-standard-2.webp` 與 `continuous-gentle-1.webp`／`continuous-gentle-2.webp` 是上述兩組實際畫面；`continuous-room.webp`、`continuous-mobile.webp` 為整區截圖。只轉換格式，沒有製造或修補移動效果。第 2–6 區及小測 HTML 雜湊相同；未把本次修正當成單元最終驗收。
+
+## 吸放熱文字配色
+
+使用者希望兩種行為的文字樣式有所差異。放熱改為暖赭紅搭配暖白描邊，吸熱改為深藍綠搭配冷白描邊；標題與下方方向文字同步切換。以既有狀態資料套用 CSS，沒有變更動畫腳本、溫度計、對話、模型或其他區塊。
+
+實際瀏覽器預覽記錄：25°C 為左紅／右藍綠，5°C 兩杯皆紅，70°C 兩杯皆藍綠；手機保留同樣配色。計算樣式分別為 `rgb(155,59,34)` 與 `rgb(13,96,114)`。畫面見 `label-colors-room.webp`、`label-colors-fridge.webp`、`label-colors-hot.webp`、`label-colors-mobile.webp`。本輪僅文字樣式與 CSS 快取版本更新，沒有新增或重跑功能測試；前述 14 項結果為前一輪。
