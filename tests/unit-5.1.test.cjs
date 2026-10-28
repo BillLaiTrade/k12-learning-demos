@@ -82,7 +82,7 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
     const y = d => Number(d.match(/^M[\d.-]+ ([\d.-]+)/)[1]);
     const atLevel=snapshots.level.ticks;
     assert.ok(Math.abs((y(atLevel[3][1])+y(atLevel[4][1]))/2-200)<.001);
-    assert.equal(await page.locator('#parallax-reference').isVisible(),false);
+    assert.equal(await page.locator('#measurement input, #measurement form, #parallax-reference').count(),0);
   });
 
   await t.test('illustrated apparatus and clear labels match the existing lab and stay visible at all views', async () => {
@@ -157,29 +157,6 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
       await mobile.locator('button[data-view=level]').tap();
       assert.equal(await mobile.locator('#parallax-eye').getAttribute('aria-valuenow'),'0');
     } finally { await context.close(); }
-  });
-
-  await t.test('records the student estimate with units and viewpoint, with an optional ungraded reference', async () => {
-    await page.locator('#parallax-record-form button[type=submit]').click();
-    assert.equal(await page.locator('#parallax-reading').getAttribute('aria-invalid'),'true');
-    await page.locator('#parallax-reading').fill('101');
-    await page.locator('#parallax-record-form button[type=submit]').click();
-    assert.match(await text('#parallax-record'),/0 到 100/);
-    await page.locator('button[data-view=high]').click();
-    await page.locator('#parallax-reading').fill('38');
-    await page.locator('#parallax-reading').press('Enter');
-    assert.match(await text('#parallax-record'),/38°C（俯視）/);
-    await page.locator('button[data-view=level]').click();
-    await page.locator('#parallax-reading').fill('37.5');
-    await page.locator('#parallax-record-form button[type=submit]').click();
-    assert.match(await text('#parallax-record'),/37.5°C（平視）/);
-    assert.doesNotMatch(await text('#parallax-record'),/正確|錯誤|得分/);
-    await page.locator('#parallax-reference-button').click();
-    assert.equal(await page.locator('#parallax-reference').isVisible(),true);
-    assert.match(await text('#parallax-reference'),/37.5°C/);
-    assert.equal(await page.locator('#parallax-reading').inputValue(),'37.5');
-    await page.locator('#parallax-reference-button').click();
-    assert.equal(await page.locator('#parallax-reference').isVisible(),false);
   });
 
   await t.test('incomplete and incorrect measurement records receive specific feedback', async () => {

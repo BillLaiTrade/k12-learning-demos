@@ -33,7 +33,7 @@
     @media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{grid-template-columns:1fr;padding:32px 0 25px}.lesson{padding-top:20px}.lesson-card{grid-template-columns:1fr;padding:18px;gap:14px}.card-side{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:0 7px;border:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0;font-size:.95rem}.card-role{grid-column:2;font-size:.79rem}.card-number{grid-row:1/3}.visual{padding:8px}.quiz-head{padding:18px}.quiz-body{padding:19px 17px 22px}.quiz-actions{align-items:stretch;flex-direction:column}.thermo-wrap{grid-template-columns:1fr}.thermo-svg{max-height:340px}.range-row{align-items:center;flex-direction:row}.sequence-step{grid-template-columns:22px minmax(0,1fr)}.sequence-controls{grid-column:2}.range-row input{width:100%}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
-  <link rel="stylesheet" href="assets/measurement-scene.css?v=parallax-polish-2">
+  <link rel="stylesheet" href="assets/measurement-scene.css?v=observation-only-4">
   <link rel="stylesheet" href="assets/touch-story.css">
   <link rel="stylesheet" href="assets/water-lab.css?v=engraved-glass-1">
   <link rel="stylesheet" href="assets/dual-scale.css?v=dual-scale-5">
@@ -288,13 +288,6 @@
               <button type="button" class="secondary" data-view="low" aria-pressed="false"><span aria-hidden="true">↗</span> 視線較低</button>
             </div>
             <p id="parallax-comparison" class="parallax-comparison" role="status">平視：視線與液面同高，沿液面頂端對照刻度。</p>
-            <form id="parallax-record-form" class="parallax-record-form" novalidate>
-              <label for="parallax-reading">我的估讀<span class="parallax-reading-field"><input id="parallax-reading" type="number" inputmode="decimal" step="0.1" min="0" max="100" placeholder="輸入讀值" aria-describedby="parallax-record"><span>°C</span></span></label>
-              <button class="action" type="submit">記錄讀數</button>
-              <button class="secondary" id="parallax-reference-button" type="button" aria-expanded="false" aria-controls="parallax-reference">顯示參考讀值</button>
-            </form>
-            <p id="parallax-record" class="parallax-record" role="status">先自己估讀，再開啟參考比較。</p>
-            <div id="parallax-reference" class="fact" hidden><p><strong>平視參考：約 37.5°C。</strong>液面在 37°C 和 38°C 的正中央。放大沒有增加刻線，仍依原本的 1°C 間距估讀。</p></div>
             <p class="parallax-model-note">玻璃與刻線的透視隨視角改變；圖中前後間距與視角為教學放大，視差幅度不代表真實儀器的誤差規格。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>「先平視，再看液面落在兩條刻線的哪裡。」</p></div>
             <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「記下數字和單位，才能把測量結果說清楚。」</p></div>
@@ -338,7 +331,7 @@
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
   <script src="assets/temperature-lesson.js?v=merged-reading-1" defer></script>
   <script type="module" src="assets/water-lab.js?v=engraved-glass-1"></script>
-  <script type="module" src="assets/parallax-reading.js?v=parallax-polish-2"></script>
+  <script type="module" src="assets/parallax-reading.js?v=observation-only-4"></script>
   <script src="assets/dual-scale.js?v=dual-scale-4" defer></script>
 </body>
 </html>

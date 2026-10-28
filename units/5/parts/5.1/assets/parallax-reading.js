@@ -117,20 +117,4 @@ eye.addEventListener('keydown',event=>{
   const actions={ArrowUp:()=>position+10,ArrowRight:()=>position+10,ArrowDown:()=>position-10,ArrowLeft:()=>position-10,PageUp:()=>position+25,PageDown:()=>position-25,Home:()=>0,End:()=>-100};
   if(actions[event.key]){event.preventDefault();setPosition(actions[event.key]());}
 });
-$('parallax-record-form').addEventListener('submit',event=>{
-  event.preventDefault();
-  const input=$('parallax-reading'), raw=input.value.trim(), value=Number(raw);
-  if(raw===''||!Number.isFinite(value)||value<0||value>100){
-    input.setAttribute('aria-invalid','true');$('parallax-record').textContent='請輸入 0 到 100°C 之間的估讀值。';input.focus();return;
-  }
-  input.removeAttribute('aria-invalid');
-  $('parallax-record').textContent=`我的紀錄：${value}°C（${currentView()}）。${position===0?'已記下數值與單位，可開啟參考比較。':'再回到平視，看看自己的估讀會不會不同。'}`;
-});
-$('parallax-reading').addEventListener('input',()=>{$('parallax-reading').removeAttribute('aria-invalid');});
-$('parallax-reference-button').addEventListener('click',()=>{
-  const show=$('parallax-reference').hidden;
-  $('parallax-reference').hidden=!show;
-  $('parallax-reference-button').setAttribute('aria-expanded',String(show));
-  $('parallax-reference-button').textContent=show?'隱藏參考讀值':'顯示參考讀值';
-});
 setPosition(0);
