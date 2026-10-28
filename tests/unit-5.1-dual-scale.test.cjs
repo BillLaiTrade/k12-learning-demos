@@ -29,7 +29,7 @@ test('dual-scale temperature lesson in Chromium',{timeout:45000},async t=>{
     assert.ok(Math.abs(y-(560-(c+40)/140*430))<.00001);
     assert.ok(Math.abs(y-Number(await page.locator('#dual-guide').getAttribute('y1')))<.00001);
   };
-  await t.test('starts with a general formula, number and unit controls, existing avatars and no slider',async()=>{
+  await t.test('starts with a general formula, number and unit controls, existing avatars and no range input',async()=>{
     await checkReading(25,77);
     assert.equal(await page.locator('#card-03 input[type=range]').count(),0);
     assert.equal(await page.locator('#dual-rule').getAttribute('aria-label'),'°F ＝ °C × 9/5 ＋ 32');
@@ -65,6 +65,36 @@ test('dual-scale temperature lesson in Chromium',{timeout:45000},async t=>{
       assert.equal(await page.locator('#card-03 [aria-pressed=true]').count(),1);
       assert.equal(await page.locator(`[data-dual-preset="${c}"]`).getAttribute('aria-pressed'),'true');
     }
+  });
+  const screenPoint=async(target,x,y)=>target.locator('#dual-thermometer').evaluate((svg,{x,y})=>{
+    const p=new DOMPoint(x,y).matrixTransform(svg.getScreenCTM());return{x:p.x,y:p.y};
+  },{x,y});
+  await t.test('dragging the green line updates all readings, captures outside moves and clamps the range',async()=>{
+    await apply(77,'F');
+    const guide=page.locator('#dual-guide-control');await guide.scrollIntoViewIfNeeded();
+    const startY=Number(await page.locator('#dual-guide').getAttribute('y1'));
+    const start=await screenPoint(page,180,startY+10);
+    await page.mouse.move(start.x,start.y);await page.mouse.down();await checkReading(25,77);
+    for(const [c,x] of [[40,180],[70,340]]){
+      const y=Number(await page.locator(`#dual-scale-c line[data-degree="${c}"]`).getAttribute('y1'));
+      const end=await screenPoint(page,x,y+10);await page.mouse.move(end.x,end.y,{steps:8});
+      await checkReading(c);assert.equal(Number(await input.inputValue()),c*1.8+32);
+      assert.equal(Number(await guide.getAttribute('aria-valuenow')),c);
+    }
+    const above=await screenPoint(page,180,50);await page.mouse.move(above.x,above.y);await checkReading(100,212);
+    const below=await screenPoint(page,180,650);await page.mouse.move(below.x,below.y);await checkReading(-40,-40);
+    await page.mouse.up();assert.equal(await guide.getAttribute('data-dragging'),null);
+    await page.mouse.move(start.x,start.y);await checkReading(-40,-40);
+    await apply(25,'C');
+  });
+  await t.test('green line supports keyboard adjustment and leaves unrelated apparatus clicks inert',async()=>{
+    const guide=page.locator('#dual-guide-control');await guide.focus();
+    for(const [key,c] of [['Home',-40],['End',100],['ArrowDown',99],['PageDown',89],['PageUp',99],['ArrowLeft',98],['ArrowRight',99],['ArrowUp',100]]){
+      await page.keyboard.press(key);await checkReading(c);
+    }
+    await apply(25,'C');
+    await page.locator('.dual-instrument').scrollIntoViewIfNeeded();
+    const background=await screenPoint(page,130,105);await page.mouse.click(background.x,background.y);await checkReading(25,77);
   });
   await t.test('warming and cooling support click, keyboard, hold and release without extra steps',async()=>{
     await warm.click();await checkReading(26);await cool.click();await checkReading(25);
@@ -133,6 +163,17 @@ test('dual-scale temperature lesson in Chromium',{timeout:45000},async t=>{
     await mobile.waitForTimeout(300);assert.equal(await mobile.locator('#dual-celsius').textContent(),reading);
     await mobile.locator('#dual-temperature').fill('-40');await mobile.locator('#dual-unit').selectOption('F');await mobile.locator('.dual-apply').tap();
     assert.equal(await mobile.locator('#dual-celsius').textContent(),'−40°C');assert.equal(await mobile.locator('#dual-fahrenheit').textContent(),'−40°F');
+    const guide=mobile.locator('#dual-guide-control');await guide.scrollIntoViewIfNeeded();
+    const y=Number(await mobile.locator('#dual-guide').getAttribute('y1'));
+    const start=await screenPoint(mobile,180,y),targetY=Number(await mobile.locator('#dual-scale-c line[data-degree="37"]').getAttribute('y1'));
+    const end=await screenPoint(mobile,180,targetY),scrollY=await mobile.evaluate(()=>window.scrollY);
+    await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:start.x,y:start.y}]});
+    await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:end.x,y:end.y}]});
+    assert.equal(await mobile.locator('#dual-fahrenheit').textContent(),'98.6°F');
+    assert.equal(await mobile.evaluate(()=>window.scrollY),scrollY);
+    await cdp.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});
+    assert.equal(await guide.getAttribute('data-dragging'),null);
+    await mobile.locator('#dual-warm').tap();assert.equal(await mobile.locator('#dual-celsius').textContent(),'38°C');
     await context.close();
   });
   if(process.env.DUAL_SCALE_CAPTURE_DIR){

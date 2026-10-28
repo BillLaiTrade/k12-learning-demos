@@ -111,4 +111,4 @@ node --test tests/unit-4.2-chromatography.test.cjs tests/unit-4.2.test.cjs
 CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.1-dual-scale.test.cjs tests/unit-5.1-water-lab.test.cjs tests/unit-5.1.test.cjs
 ```
 
-新測試涵蓋 −40°C／−40°F 交會、獨立刻度的 1.8 倍間距、刻字不重疊、一般公式與代入式、五個預設值、降溫／升溫點擊及滑鼠／觸控長按釋放、輸入數字及單位的雙向換算、範圍／空白錯誤、近似值標示、鍵盤、現有頭像、320–1440px 版面及真實觸控。`DUAL_SCALE_CAPTURE_DIR` 可保存截圖，`DUAL_SCALE_URL` 可指定待檢查的頁面。外觀仍須對照核可示意圖檢視。
+新測試涵蓋綠線實際拖曳、抓取偏移、圖外指標捕獲、量程鉗制、放開停止、手機觸控拖曳／取消且不捲動頁面、綠線鍵盤操作，以及 −40°C／−40°F 交會、獨立刻度的 1.8 倍間距、刻字不重疊、一般公式與代入式、五個預設值、降溫／升溫點擊及滑鼠／觸控長按釋放、輸入數字及單位的雙向換算、範圍／空白錯誤、近似值標示、鍵盤、現有頭像、320–1440px 版面及真實觸控。`DUAL_SCALE_CAPTURE_DIR` 可保存截圖，`DUAL_SCALE_URL` 可指定待檢查的頁面。外觀仍須對照核可示意圖檢視。

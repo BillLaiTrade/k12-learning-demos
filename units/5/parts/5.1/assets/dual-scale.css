@@ -44,3 +44,9 @@
 #card-03 .dual-preset strong{font-size:1rem}
 #card-03 .dual-condition{margin:14px 0 0;color:#6b7367;font-size:.73rem;line-height:1.6;text-align:right}
 @media(max-width:640px){#card-03 .dual-lab{grid-template-columns:minmax(0,1fr);gap:12px;padding:16px 12px}#card-03 .dual-instrument{width:180px;max-width:100%;margin:0 auto}#card-03 #dual-thermometer{max-height:420px}#card-03 .dual-console h3{margin-bottom:15px;padding-bottom:12px;font-size:1.22rem}#card-03 #dual-readout{font-size:clamp(1.55rem,7.1vw,2.3rem)}#card-03 .dual-result{padding:17px 5px 13px}#card-03 .dual-presets{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:14px}#card-03 .dual-entry{grid-template-columns:minmax(0,1fr)}#card-03 .dual-apply{grid-column:1/-1}#card-03 .dual-preset{min-height:88px}#card-03 .dual-preset svg{width:29px;height:29px}#card-03 .dual-preset span{font-size:.69rem}#card-03 .dual-preset strong{font-size:1rem}#card-03 .dual-condition{text-align:center}}
+
+#card-03 .dual-guide-control{cursor:ns-resize;touch-action:none;user-select:none}
+#card-03 #dual-guide-hit{pointer-events:all}
+#card-03 .dual-guide-control:hover #dual-guide,#card-03 .dual-guide-control[data-dragging] #dual-guide{stroke-width:3}
+#card-03 .dual-guide-control:focus-visible{outline:none}
+#card-03 .dual-guide-control:focus-visible #dual-guide-hit{stroke:#3a8052;stroke-width:1.5;stroke-dasharray:4 3}

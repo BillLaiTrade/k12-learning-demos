@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="assets/measurement-scene.css">
   <link rel="stylesheet" href="assets/touch-story.css">
   <link rel="stylesheet" href="assets/water-lab.css?v=engraved-glass-1">
-  <link rel="stylesheet" href="assets/dual-scale.css?v=dual-scale-4">
+  <link rel="stylesheet" href="assets/dual-scale.css?v=dual-scale-5">
 </head>
 <body>
   <header class="shell masthead">
@@ -159,7 +159,7 @@
             <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>看看同一支溫度計上的兩種刻度。</p></div>
             <div class="dual-lab">
               <figure class="dual-instrument">
-                <svg id="dual-thermometer" viewBox="0 0 260 680" role="img" aria-label="攝氏與華氏雙刻度溫度計">
+                <svg id="dual-thermometer" viewBox="0 0 260 680" role="group" aria-label="攝氏與華氏雙刻度溫度計">
                   <defs>
                     <linearGradient id="ds-glass"><stop stop-color="#718186"/><stop offset=".025" stop-color="#fff"/><stop offset=".065" stop-color="#a8bab9"/><stop offset=".14" stop-color="#fcfff9"/><stop offset=".3" stop-color="#dfdfcd"/><stop offset=".5" stop-color="#fffdf2"/><stop offset=".72" stop-color="#e8e6d6"/><stop offset=".91" stop-color="#fffef6"/><stop offset=".97" stop-color="#86999b"/><stop offset="1" stop-color="#effaf6"/></linearGradient>
                     <linearGradient id="ds-face"><stop stop-color="#eeedde"/><stop offset=".5" stop-color="#fffdf1"/><stop offset="1" stop-color="#ece8d9"/></linearGradient>
@@ -174,9 +174,14 @@
                   <g id="dual-scale-c" stroke="#35433b"></g><g id="dual-scale-f" stroke="#35433b"></g>
                   <text x="93" y="103" class="dual-scale-unit">°C</text><text x="167" y="103" class="dual-scale-unit">°F</text>
                   <g id="dual-fluid"><path id="dual-liquid" d="M124 359.357143Q130 361.357143 136 359.357143V614H124Z" fill="url(#ds-red)"/><circle cx="130" cy="614" r="24" fill="url(#ds-bulb)"/><ellipse cx="122" cy="606" rx="6" ry="8" fill="#fff" opacity=".85" transform="rotate(35 122 606)"/><path id="dual-meniscus" d="M124 359.357143Q130 361.357143 136 359.357143" fill="none" stroke="#a70f1c" stroke-width=".8"/></g>
-                  <line id="dual-guide" x1="57" x2="203" y1="360.357143" y2="360.357143" stroke="#3a8052" stroke-width="1.5"/>
                   <path d="M48 90V591Q48 648 127 658M212 93V590" fill="none" stroke="#fff" stroke-width="2" opacity=".75"/>
                   <path d="M123 55V588" stroke="#fff" stroke-width="1" opacity=".6"/>
+                  <g id="dual-guide-control" class="dual-guide-control" tabindex="0" role="slider" aria-label="拖曳綠線調整示意溫度" aria-orientation="vertical" aria-valuemin="-40" aria-valuemax="100" aria-valuenow="25" aria-valuetext="25°C，77°F">
+                    <title>上下拖曳綠線調整溫度；也可用方向鍵調整。</title>
+                    <rect id="dual-guide-hit" x="50" y="338.357143" width="160" height="44" rx="7" fill="transparent"/>
+                    <line id="dual-guide" x1="57" x2="203" y1="360.357143" y2="360.357143" stroke="#3a8052" stroke-width="2"/>
+                    <circle id="dual-guide-handle" cx="203" cy="360.357143" r="5" fill="#fffefa" stroke="#3a8052" stroke-width="2"/>
+                  </g>
                 </svg>
               </figure>
               <div class="dual-console">
@@ -305,6 +310,6 @@
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
   <script src="assets/temperature-lesson.js" defer></script>
   <script type="module" src="assets/water-lab.js?v=engraved-glass-1"></script>
-  <script src="assets/dual-scale.js?v=dual-scale-3" defer></script>
+  <script src="assets/dual-scale.js?v=dual-scale-4" defer></script>
 </body>
 </html>

@@ -5,7 +5,7 @@ const MIN=-40,MAX=100,celsiusY=c=>560-(c-MIN)/(MAX-MIN)*430;
 const fahrenheitY=f=>celsiusY((f-32)*5/9);
 const rounded=n=>Number(n.toFixed(1)),format=n=>String(rounded(n)).replace('-', '−');
 const operand=n=>String(Number(n.toFixed(6))).replace('-', '−');
-let temperature=25,repeatDelay=0,repeatTimer=0;
+let temperature=25,repeatDelay=0,repeatTimer=0,guidePointer=null,guideOffset=0;
 function stopRepeating(){clearTimeout(repeatDelay);clearInterval(repeatTimer);repeatDelay=repeatTimer=0;}
 function mark(group,degree,y,left){
   const major=degree%20===0,medium=degree%5===0,length=major?12:medium?8:4;
@@ -46,6 +46,9 @@ function render(){
   $('dual-liquid').setAttribute('d',`${meniscus}V614H124Z`);
   $('dual-meniscus').setAttribute('d',meniscus);
   $('dual-guide').setAttribute('y1',y);$('dual-guide').setAttribute('y2',y);
+  $('dual-guide-hit').setAttribute('y',y-22);$('dual-guide-handle').setAttribute('cy',y);
+  $('dual-guide-control').setAttribute('aria-valuenow',c);
+  $('dual-guide-control').setAttribute('aria-valuetext',`${format(c)}°C，${format(f)}°F`);
   const approx=Math.abs(rounded(c)-c)>1e-8||Math.abs(rounded(f)-f)>1e-8;
   $('dual-celsius').textContent=`${format(c)}°C`;$('dual-fahrenheit').textContent=`${format(f)}°F`;
   $('dual-equality').textContent=approx?'≈':'＝';
@@ -58,8 +61,39 @@ function render(){
   document.querySelectorAll('#card-03 [data-dual-preset]').forEach(button=>button.setAttribute('aria-pressed',String(Math.abs(Number(button.dataset.dualPreset)-c)<1e-8)));
   clearError();
 }
+const guide=$('dual-guide-control');
+function stopGuideDrag(){
+  const pointer=guidePointer;guidePointer=null;guide.removeAttribute('data-dragging');
+  if(pointer!==null&&guide.hasPointerCapture(pointer))guide.releasePointerCapture(pointer);
+}
+function pointerY(event){
+  const matrix=$('dual-thermometer').getScreenCTM();
+  return matrix?new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse()).y:null;
+}
+guide.addEventListener('pointerdown',event=>{
+  if(event.button!==0||!event.isPrimary)return;
+  const y=pointerY(event);if(y===null)return;
+  event.preventDefault();stopRepeating();stopGuideDrag();
+  guideOffset=y-celsiusY(temperature);guidePointer=event.pointerId;
+  guide.setPointerCapture(event.pointerId);guide.setAttribute('data-dragging','');guide.focus({preventScroll:true});
+});
+guide.addEventListener('pointermove',event=>{
+  if(event.pointerId!==guidePointer)return;
+  const y=pointerY(event);if(y===null)return;
+  temperature=rounded(Math.max(MIN,Math.min(MAX,MIN+(560-(y-guideOffset))/430*(MAX-MIN))));
+  render();
+});
+for(const name of ['pointerup','pointercancel','lostpointercapture'])guide.addEventListener(name,event=>{
+  if(event.pointerId===guidePointer)stopGuideDrag();
+});
+guide.addEventListener('keydown',event=>{
+  const amounts={ArrowUp:1,ArrowRight:1,ArrowDown:-1,ArrowLeft:-1,PageUp:10,PageDown:-10};
+  if(!(event.key in amounts)&&event.key!=='Home'&&event.key!=='End')return;
+  event.preventDefault();stopRepeating();stopGuideDrag();
+  temperature=event.key==='Home'?MIN:event.key==='End'?MAX:Math.min(MAX,Math.max(MIN,temperature+amounts[event.key]));render();
+});
 function changeTemperature(delta){
-  temperature=Math.min(MAX,Math.max(MIN,temperature+delta));render();
+  stopGuideDrag();temperature=Math.min(MAX,Math.max(MIN,temperature+delta));render();
 }
 for(const [id,delta] of [['dual-cool',-1],['dual-warm',1]]){
   const button=$(id);
@@ -75,12 +109,12 @@ for(const [id,delta] of [['dual-cool',-1],['dual-warm',1]]){
   button.addEventListener('click',event=>{if(event.detail===0){stopRepeating();changeTemperature(delta);}});
   for(const name of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(name,stopRepeating);
 }
-window.addEventListener('blur',stopRepeating);
-document.addEventListener('visibilitychange',()=>{if(document.hidden)stopRepeating();});
+window.addEventListener('blur',()=>{stopRepeating();stopGuideDrag();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopRepeating();stopGuideDrag();}});
 $('dual-unit').addEventListener('change',updateUnit);
 $('dual-temperature').addEventListener('input',clearError);
 $('dual-entry').addEventListener('submit',event=>{
-  event.preventDefault();stopRepeating();
+  event.preventDefault();stopRepeating();stopGuideDrag();
   const input=$('dual-temperature'),value=input.valueAsNumber,isC=$('dual-unit').value==='C',max=isC?MAX:212;
   if(!Number.isFinite(value)||value<MIN||value>max){
     $('dual-input-error').textContent=Number.isFinite(value)?`請輸入 −40～${max}°${isC?'C':'F'}。`:'請輸入有效的溫度數字。';
@@ -89,7 +123,7 @@ $('dual-entry').addEventListener('submit',event=>{
   temperature=isC?value:(value-32)*5/9;render();
 });
 document.querySelectorAll('#card-03 [data-dual-preset]').forEach(button=>button.addEventListener('click',()=>{
-  stopRepeating();temperature=Number(button.dataset.dualPreset);render();
+  stopRepeating();stopGuideDrag();temperature=Number(button.dataset.dualPreset);render();
 }));
 updateUnit();render();
 })();
