@@ -151,6 +151,7 @@
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=polish-6">
   <link rel="stylesheet" href="assets/ppm-scale.css?v=approved-8">
+  <link rel="stylesheet" href="assets/investigation.css?v=lab-1">
 </head>
 <body>
   <header class="shell masthead">
@@ -175,6 +176,7 @@
         <a href="#s3"><b>03</b><span>一滴綠色墨水，會分出不同色帶嗎？</span></a>
         <a href="#s4"><b>04</b><span>分離混合物時，該怎麼選方法？</span></a>
         <a href="#s5"><b>05</b><span>水溶液裡的溶質有多少？</span></a>
+        <a href="#unit-quiz"><b>小測</b><span>未知樣本調查</span></a>
       </div>
       <p class="route-hint">先帶著問題看操作，再用結果找答案。</p>
       <section class="record-panel"><h2>本段目標</h2><p>選擇混合物分離方法，並用重量百分濃度與 ppm 表示溶質含量。</p></section>
@@ -326,10 +328,58 @@
 <p class="ppm-unit-note">溶液總質量包含溶質；計算時分子與分母用相同質量單位。</p></div></section>
 <p class="ppm-status" id="ppm-status" role="status" aria-live="polite"></p></div>
 <p class="mix-status" id="mix-status" role="status" aria-live="polite"></p></div></section>
+      <section class="lesson-card investigation-card" id="unit-quiz" aria-labelledby="invest-title">
+        <div class="card-side"><span class="invest-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v7L5 20h14l-5-10V3M8 15h8"/></svg> 單元小測</span><h3>未知樣本調查</h3><span class="card-role">自由取樣・觀察・推論</span></div>
+        <div class="card-main">
+          <div class="invest-intro"><div><h2 id="invest-title">這杯樣本，裡面藏了什麼？</h2><p>取一份試試，接著由你決定怎麼研究。</p></div><div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我想先取一點，看看裡面有什麼。</p></div></div>
+          <div class="invest-lab" id="invest-lab" data-ready="loading" data-busy="false">
+            <div class="invest-stage">
+              <div class="invest-picture" id="invest-picture">
+                <canvas id="invest-canvas" width="1536" height="1024" role="img" aria-label="未知混合物樣本瓶、空燒杯與收好的器材盤"></canvas>
+                <span class="invest-stage-title">實驗桌</span>
+                <button type="button" class="invest-reset" id="invest-reset" aria-label="重新開始未知樣本調查" disabled>↻ <span>重新開始</span></button>
+                <button type="button" class="invest-cup" id="invest-cup" data-invest-tool="sample" aria-label="拿空燒杯從樣本瓶取一份；也可拖到樣本瓶" disabled></button>
+                <button type="button" class="invest-take" id="invest-take" data-invest-tool="sample" disabled>取一份試試 <span aria-hidden="true">›</span></button>
+                <span class="invest-loading" id="invest-loading" role="status">準備實驗桌……</span>
+              </div>
+              <div class="invest-tools" aria-label="自由選用的器材盤">
+                <button type="button" data-invest-tool="filter" class="invest-tool" aria-label="使用漏斗與濾紙測試目前取樣；也可拖到燒杯" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 5h26L18 18v10l-4-2v-8z"/></svg><span>過濾器材</span></button>
+                <button type="button" data-invest-tool="heat" class="invest-tool" aria-label="使用蒸發皿與電熱板測試目前取樣；也可拖到燒杯" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 11h24c0 9-4 12-12 12S4 20 4 11zM5 27h22M10 3v4M16 2v5M22 3v4"/></svg><span>加熱器材</span></button>
+                <button type="button" data-invest-tool="weigh" class="invest-tool" aria-label="用電子秤稱量目前取樣；也可拖到燒杯" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 5h20v7H6zM5 16h22l2 12H3zM11 21h10v4H11z"/></svg><span>電子秤</span></button>
+              </div>
+            </div>
+            <div class="invest-samples" id="invest-samples" aria-label="已取樣的容器，選擇一份繼續測試" hidden></div>
+            <div class="invest-current" id="invest-current" hidden><strong id="invest-current-label"></strong><button type="button" id="invest-settle">靜置觀察</button></div>
+            <p class="invest-status" id="invest-status" role="status" aria-live="polite">可重複取樣，自由選用器材測試。</p>
+            <div class="invest-record-action" id="invest-record-action" hidden><label for="invest-event">這份取樣的觀察</label><select id="invest-event"></select><button type="button" id="invest-record">記一筆</button></div>
+            <button type="button" class="invest-retry" id="invest-retry" hidden>重新載入器材</button>
+          </div>
+          <details class="invest-notebook" id="invest-notebook">
+            <summary><span class="invest-notebook-icon" aria-hidden="true">▤</span><span><strong>實驗筆記 <small id="invest-note-count">尚無紀錄</small></strong><span class="invest-summary-copy">記下觀察，也整理你的推論。</span></span><span class="invest-chevron" aria-hidden="true">⌄</span></summary>
+            <div class="invest-notebook-body">
+              <p class="invest-empty" id="invest-empty">做過測試後，點「記一筆」收進筆記；也可以回到先前的取樣繼續研究。</p>
+              <div id="invest-records"></div>
+              <form id="invest-report" hidden novalidate>
+                <fieldset class="invest-inference"><legend>我的成分推論</legend><p>這份教學樣本可能由水、泥沙與食鹽調製，實際組合未知。用紀錄支持你的推論。</p>
+                  <div class="invest-evidence-row"><label><input type="checkbox" name="component" value="sand"> 泥沙</label><label class="invest-evidence-label" for="invest-evidence-sand">支持泥沙推論的紀錄</label><select id="invest-evidence-sand"><option value="">選擇支持的紀錄</option></select></div>
+                  <div class="invest-evidence-row"><label><input type="checkbox" name="component" value="salt"> 食鹽</label><label class="invest-evidence-label" for="invest-evidence-salt">支持食鹽推論的紀錄</label><select id="invest-evidence-salt"><option value="">選擇支持的紀錄</option></select></div>
+                  <div class="invest-evidence-row"><label><input type="checkbox" name="component" value="water"> 水</label><label class="invest-evidence-label" for="invest-evidence-water">支持水推論的紀錄</label><select id="invest-evidence-water"><option value="">選擇支持的紀錄</option></select></div>
+                </fieldset>
+                <details class="invest-concentration"><summary>濃度紀錄 <span>選填</span></summary><label class="invest-include"><input type="checkbox" id="invest-include-concentration"> 把濃度計算一起放進報告</label><label for="invest-concentration-sample">使用哪一份取樣的稱量結果？</label><select id="invest-concentration-sample"></select><div class="invest-masses"><span>蒸發前的濾液 <b id="invest-solution-mass">—</b></span><span>乾燥白色固體 <b id="invest-solute-mass">—</b></span></div><p>分別稱量同一份濾液與蒸乾後的固體；兩次皆扣除容器質量，泥沙不列入溶液質量。</p><div class="invest-answer"><label for="invest-concentration-value">原本濾液的濃度</label><input id="invest-concentration-value" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入數值"><select id="invest-concentration-unit" aria-label="濃度單位"><option value="percent">%</option><option value="ppm">ppm</option></select></div></details>
+                <div class="invest-report-actions"><button type="button" id="invest-continue">繼續測試</button><button type="submit">提交調查報告</button></div>
+                <div class="invest-feedback" id="invest-feedback" role="status" aria-live="polite" hidden></div>
+              </form>
+              <p class="invest-note-foot">這是可重做的教學模擬；動畫時間與器材大小不代表真實實驗尺度。筆記保留於本次頁面，重新開始會清除。</p>
+            </div>
+          </details>
+          <noscript><p>請啟用 JavaScript，才能取樣、操作器材與填寫實驗筆記。</p></noscript>
+        </div>
+      </section>
     </div>
   </main>
   <footer class="shell">國二上・自然科學</footer>
   <dialog class="mass-dialog" id="mass-dialog" aria-labelledby="mass-dialog-title"><form id="mass-form" novalidate><h3 id="mass-dialog-title">設定質量</h3><div class="mass-input-row"><input id="mass-input" type="number" inputmode="decimal" step="0.1" required aria-describedby="mass-range mass-error"><span>克</span></div><p class="mass-range" id="mass-range"></p><p class="mass-error" id="mass-error" role="alert"></p><div class="mass-actions"><button type="button" id="mass-cancel">取消</button><button type="submit">套用</button></div></form></dialog>
+  <dialog id="invest-reset-dialog" class="invest-reset-dialog" aria-labelledby="invest-reset-title"><form method="dialog"><h3 id="invest-reset-title">重新開始調查？</h3><p>這會清除桌上的取樣與本次實驗筆記。</p><div><button value="cancel" autofocus>保留實驗</button><button value="reset">重新開始</button></div></form></dialog>
   <script>
     const routeLinks=[...document.querySelectorAll('.route-inner a')];
     const cards=routeLinks.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean);
@@ -368,5 +418,6 @@
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
   <script type="module" src="assets/ppm-scale.js?v=approved-8"></script>
+  <script type="module" src="assets/investigation.js?v=lab-1"></script>
 </body>
 </html>
