@@ -8,21 +8,23 @@
     25:{name:'房間',image:'assets/direction-room-glass.webp',observation:'在 25°C 房間，A 杯降溫、B 杯升溫，卻都是熱從溫度較高的地方傳向較低的地方！'},
     70:{name:'高溫箱',image:'assets/direction-hot-glass.webp',observation:'在 70°C 高溫箱，連 60°C 的熱水也升溫了！原來兩杯水都比周圍冷，都在吸熱。'}
   };
-  const state={environment:25,time:0,playing:false,observed:false,finished:false};
+  const state={environment:25,time:0,flowPhase:0,playing:false,observed:false,finished:false};
   let frame=0,last=null,shownEnvironment=null;
   const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
   const routes=Object.fromEntries(['hot','cold'].map(key=>{
     const path=$(`direction-energy-path-${key}`);
-    return [key,{path,length:path.getTotalLength(),group:$(`direction-flow-${key}`),layer:$(`direction-pulses-${key}`),pulses:[...$(`direction-pulses-${key}`).children]}];
+    return [key,{path,length:path.getTotalLength(),group:$(`direction-flow-${key}`),trail:$(`direction-trail-${key}`),layer:$(`direction-pulses-${key}`),pulses:[...$(`direction-pulses-${key}`).children]}];
   }));
   function text(id,value){const node=$(id);if(node.textContent!==value)node.textContent=value;}
   function renderFlow(key,travel,difference){
     const route=routes[key];
     route.group.dataset.travelDirection=travel>0?'right':'left';
-    route.layer.style.opacity=String(.6+.4*Math.min(1,Math.abs(difference)/8));
+    const strength=String(.6+.4*Math.min(1,Math.abs(difference)/8));
+    route.layer.style.opacity=strength;route.trail.style.opacity=strength;
+    route.trail.setAttribute('stroke-dashoffset',String(-travel*state.flowPhase*route.length));
     route.pulses.forEach((pulse,index)=>{
       // Use the water model's clock so pause, resume and reset keep both in sync.
-      const phase=reducedMotion.matches?(index+.5)/3:(state.time*.32+(index+.5)/3)%1;
+      const phase=(state.flowPhase+(index+.5)/3)%1;
       const position=(travel>0?phase:1-phase)*route.length;
       const point=route.path.getPointAtLength(position);
       const before=route.path.getPointAtLength(Math.max(0,position-1));
@@ -82,14 +84,19 @@
   function stop(){cancelAnimationFrame(frame);frame=0;last=null;}
   function tick(now){
     const dt=last===null?0:Math.max(0,Math.min(.1,(now-last)/1000));last=now;
-    if(state.playing)state.time+=dt;
+    if(state.playing){
+      state.time+=dt;
+      // Heat transfer is essential motion. Use slower, steady movement for
+      // reduced motion, with no flashing, zooming or abrupt phase changes.
+      state.flowPhase+=dt*(reducedMotion.matches ? .24 : .48);
+    }
     render();
     if(state.playing)frame=requestAnimationFrame(tick);else{frame=0;last=null;}
   }
   function start(){if(!frame){last=null;frame=requestAnimationFrame(tick);}}
-  function reset(){stop();state.time=0;state.playing=false;state.observed=false;state.finished=false;render();}
+  function reset(){stop();state.time=0;state.flowPhase=0;state.playing=false;state.observed=false;state.finished=false;render();}
   $('direction-play').addEventListener('click',()=>{
-    if(state.finished){state.time=0;state.finished=false;}
+    if(state.finished){state.time=0;state.flowPhase=0;state.finished=false;}
     state.observed=true;state.playing=!state.playing;
     if(!state.playing)stop();render();if(state.playing)start();
   });

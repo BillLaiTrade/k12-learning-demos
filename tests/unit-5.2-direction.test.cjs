@@ -118,7 +118,7 @@ test('5.2 first block: three environments and in-water thermometers',{timeout:18
     await play.focus();await page.keyboard.press('Space');assert.equal((await state()).playing,'true');await page.clock.runFor(500);await page.keyboard.press('Enter');assert.equal((await state()).playing,'false');
     await page.locator('#direction-reset').focus();await page.keyboard.press('Enter');assert.deepEqual(await values(),{a:60,b:10});
     await play.click();const positions=await page.locator('.direction-flow-pulse').evaluateAll(ns=>ns.map(n=>n.getAttribute('transform')));await page.clock.runFor(700);
-    assert.deepEqual(await page.locator('.direction-flow-pulse').evaluateAll(ns=>ns.map(n=>n.getAttribute('transform'))),positions);assert.notDeepEqual(await values(),{a:60,b:10});
+    assert.notDeepEqual(await page.locator('.direction-flow-pulse').evaluateAll(ns=>ns.map(n=>n.getAttribute('transform'))),positions);assert.notDeepEqual(await values(),{a:60,b:10});
     await page.locator('#direction-reset').click();await page.emulateMedia({reducedMotion:'no-preference'});
   });
   await t.test('in-scene instruments and controls fit desktop, tablet and phone widths',async()=>{
@@ -143,6 +143,25 @@ test('5.2 first block: three environments and in-water thermometers',{timeout:18
       if(width===390||width===1440)await capture(`width-${width}`);
     }
     await page.setViewportSize({width:1440,height:1300});
+  });
+  await t.test('real rendered flow keeps moving with either motion preference and freezes only when paused',async()=>{
+    for(const motion of ['no-preference','reduce']){
+      const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:motion});
+      try{
+        const live=await context.newPage();await live.goto(url);await live.locator('#direction-play').click();await live.locator('#direction-lab').scrollIntoViewIfNeeded();await live.waitForTimeout(200);
+        const bounds=await live.locator('#direction-energy-path-hot').boundingBox();
+        const clip={x:Math.floor(bounds.x-16),y:Math.floor(bounds.y-16),width:Math.ceil(bounds.width+32),height:Math.ceil(bounds.height+32)};
+        const offsets=()=>live.locator('.direction-flow-trail').evaluateAll(ns=>ns.map(n=>n.getAttribute('stroke-dashoffset')));
+        const first=await live.screenshot({clip}),start=await offsets();await live.waitForTimeout(300);const second=await live.screenshot({clip});
+        assert.notDeepEqual(await offsets(),start,`${motion}: highlight offset must advance`);
+        assert.notDeepEqual(second,first,`${motion}: actual painted pixels must move`);
+        if(process.env.DIRECTION_CAPTURE_DIR){const fs=require('node:fs/promises');await fs.mkdir(process.env.DIRECTION_CAPTURE_DIR,{recursive:true});for(const [index,buffer]of [[1,first],[2,second]])await fs.writeFile(path.join(process.env.DIRECTION_CAPTURE_DIR,`motion-${motion}-${index}.png`),buffer);}
+        await live.locator('#direction-play').click();await live.waitForTimeout(100);const paused=await live.screenshot({clip}),stopped=await offsets();await live.waitForTimeout(300);
+        assert.deepEqual(await offsets(),stopped,`${motion}: paused offset`);assert.deepEqual(await live.screenshot({clip}),paused,`${motion}: paused pixels`);
+        await live.locator('#direction-play').click();await live.waitForTimeout(200);assert.notDeepEqual(await offsets(),stopped,`${motion}: resume`);
+        await live.locator('#direction-reset').click();assert.deepEqual(await offsets(),['0','0']);assert.equal(await live.locator('#direction-flow-hot').isVisible(),false);
+      }finally{await context.close();}
+    }
   });
   await t.test('real mobile taps change scene, play, pause and restart',async()=>{
     const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});t.after(()=>context.close());const mobile=await context.newPage();await mobile.goto(url);

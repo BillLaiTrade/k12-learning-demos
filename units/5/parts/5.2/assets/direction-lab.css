@@ -19,6 +19,7 @@
 #direction-lab :is(.direction-flow-keyline,.direction-energy-path){fill:none;stroke-linecap:round}
 #direction-lab .direction-flow-keyline{stroke:#fff1c8;stroke-width:13px}
 #direction-lab .direction-energy-path{stroke:#713114;stroke-width:8px}
+#direction-lab .direction-flow-trail{fill:none;stroke:#ffce68;stroke-width:4.5px;stroke-linecap:round;stroke-dasharray:22 48}
 #direction-lab .direction-flow-pulse path{fill:none;stroke-linecap:round;stroke-linejoin:round}
 #direction-lab .direction-pulse-halo{stroke:#ff9e16;stroke-width:15px;opacity:.65}
 #direction-lab .direction-pulse-edge{stroke:#ffae28;stroke-width:10px}
