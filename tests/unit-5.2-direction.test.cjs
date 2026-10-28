@@ -1,0 +1,104 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const {spawn}=require('node:child_process');
+const path=require('node:path');
+const {chromium}=require('playwright');
+
+test('5.2 first block: three environments and fixed observation bar',{timeout:180000},async t=>{
+  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','pipe']});
+  t.after(()=>server.kill());
+  const port=await new Promise((resolve,reject)=>{let out='';const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{out+=d;const m=out.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject);});
+  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined});t.after(()=>browser.close());
+  const page=await browser.newPage({viewport:{width:1440,height:1300}});const errors=[];
+  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
+  const url=process.env.DIRECTION_LAB_URL||`http://127.0.0.1:${port}/units/5/parts/5.2/index.html`;
+  await page.goto(url);await page.locator('#direction-lab').scrollIntoViewIfNeeded();await page.clock.install();
+  const root=page.locator('#direction-lab'),play=page.locator('#direction-play');
+  const select=async n=>{await page.locator(`#direction-lab button[data-environment="${n}"]`).click();await page.locator('.direction-scene-image').evaluateAll(nodes=>Promise.all(nodes.map(n=>n.decode())));};
+  const state=()=>root.evaluate(n=>({...n.dataset}));
+  const pause=async()=>{if(await root.getAttribute('data-playing')==='true')await play.click();};
+  const values=async()=>({a:Number((await page.locator('#direction-hot').textContent()).replace('°C','')),b:Number((await page.locator('#direction-cold').textContent()).replace('°C',''))});
+  async function capture(name){if(!process.env.DIRECTION_CAPTURE_DIR)return;const fs=require('node:fs/promises');await fs.mkdir(process.env.DIRECTION_CAPTURE_DIR,{recursive:true});await page.locator('#card-01').evaluate(n=>n.scrollIntoView({block:'start',behavior:'instant'}));await page.waitForTimeout(150);await page.screenshot({path:path.join(process.env.DIRECTION_CAPTURE_DIR,name+'.png')});}
+
+  await t.test('starts with three clean scenes, pending observations and authentic portraits',async()=>{
+    assert.equal(await page.locator('#direction-lab button[data-environment]').count(),3);
+    assert.deepEqual(await page.locator('#direction-lab button[data-environment]').evaluateAll(ns=>ns.map(n=>Number(n.dataset.environment))),[5,25,70]);
+    assert.deepEqual(await values(),{a:60,b:10});assert.equal((await state()).phase,'ready');
+    assert.equal(await page.locator('#direction-flow-hot').isVisible(),false);assert.equal(await page.locator('#direction-flow-cold').isVisible(),false);
+    assert.equal(await page.locator('#direction-hot-flow').textContent(),'等待觀察');
+    for(const name of ['fridge','room','hot']){const response=await page.request.get(new URL(`assets/direction-${name}.webp`,url).href);assert.equal(response.status(),200);}
+    assert.equal(await page.locator('#card-01 .speaker').count(),4);
+    assert.match(await page.locator('#card-01 .speaker').first().evaluate(n=>getComputedStyle(n,'::before').backgroundImage),/dialogue-character-avatars\.png/);
+    assert.equal(await page.locator('#direction-lab .direction-photo .direction-reading').count(),0);
+  });
+  await t.test('25°C: A releases heat and B absorbs heat; pause freezes readouts',async()=>{
+    await select(25);await play.click();await page.clock.runFor(3200);await pause();
+    const s=await state(),v=await values();assert.equal(s.flowA,'out');assert.equal(s.flowB,'in');assert.ok(v.a<60&&v.a>25);assert.ok(v.b>10&&v.b<25);
+    assert.match(await page.locator('#direction-arrow-hot').getAttribute('transform'),/scale\(-1,1\)/);assert.match(await page.locator('#direction-arrow-cold').getAttribute('transform'),/scale\(-1,1\)/);
+    assert.equal(await page.locator('#direction-hot-flow').textContent(),'放熱・降溫');assert.equal(await page.locator('#direction-cold-flow').textContent(),'吸熱・升溫');
+    await page.clock.runFor(1200);assert.deepEqual(await values(),v);assert.equal((await state()).phase,'paused');
+    await capture('room');
+  });
+  await t.test('5°C: both release heat and scene/captions change together',async()=>{
+    await select(5);assert.deepEqual(await values(),{a:60,b:10});assert.equal((await state()).phase,'ready');
+    assert.match(await page.locator('.direction-scene-image').first().getAttribute('src'),/direction-fridge/);
+    await play.click();await page.clock.runFor(3200);await pause();const s=await state(),v=await values();
+    assert.equal(s.flowA,'out');assert.equal(s.flowB,'out');assert.ok(v.a<60&&v.a>5);assert.ok(v.b<10&&v.b>5);
+    assert.match(await page.locator('#direction-arrow-cold').getAttribute('transform'),/scale\(1,1\)/);
+    assert.match(await page.locator('#direction-observation-dialogue').textContent(),/5°C 冷藏室/);await capture('fridge');
+  });
+  await t.test('70°C: even the initially hot cup absorbs heat; both arrows point inward',async()=>{
+    await select(70);await play.click();await page.clock.runFor(3200);await pause();const s=await state(),v=await values();
+    assert.equal(s.flowA,'in');assert.equal(s.flowB,'in');assert.ok(v.a>60&&v.a<70);assert.ok(v.b>10&&v.b<70);
+    assert.match(await page.locator('#direction-arrow-hot').getAttribute('transform'),/scale\(1,1\)/);assert.match(await page.locator('#direction-arrow-cold').getAttribute('transform'),/scale\(-1,1\)/);
+    assert.match(await page.locator('.direction-scene-image').first().getAttribute('src'),/direction-hot/);
+    assert.match(await page.locator('#direction-observation-dialogue').textContent(),/70°C 高溫箱/);await capture('hot');
+  });
+  await t.test('reset and switching environment during playback cancel old observations',async()=>{
+    await play.click();await page.clock.runFor(500);await page.locator('#direction-reset').click();assert.deepEqual(await values(),{a:60,b:10});assert.equal((await state()).environment,'70');
+    await page.clock.runFor(800);assert.deepEqual(await values(),{a:60,b:10});assert.equal((await state()).phase,'ready');
+    await play.click();await page.clock.runFor(500);await select(5);await page.clock.runFor(800);
+    assert.deepEqual(await values(),{a:60,b:10});assert.equal((await state()).playing,'false');assert.equal((await state()).flowA,'pending');
+    assert.equal(await page.locator('#direction-flow-hot').isVisible(),false);
+  });
+  await t.test('same displayed temperature removes heat arrows and replay starts cleanly',async()=>{
+    await select(25);await play.click();await page.clock.runFor(42000);assert.deepEqual(await values(),{a:25,b:25});
+    const s=await state();assert.equal(s.phase,'complete');assert.equal(s.playing,'false');assert.equal(s.flowA,'none');assert.equal(s.flowB,'none');
+    assert.equal(await page.locator('#direction-flow-hot').isVisible(),false);assert.equal(await page.locator('#direction-flow-cold').isVisible(),false);assert.equal(await play.textContent(),'重新觀察');
+    await play.click();assert.equal((await state()).playing,'true');await page.clock.runFor(100);assert.ok((await values()).a>=59);await pause();
+  });
+  await t.test('keyboard and reduced motion preserve all basic controls',async()=>{
+    await page.emulateMedia({reducedMotion:'reduce'});await page.locator('#direction-lab button[data-environment="5"]').focus();await page.keyboard.press('Enter');assert.equal((await state()).environment,'5');
+    await play.focus();await page.keyboard.press('Space');assert.equal((await state()).playing,'true');await page.clock.runFor(500);await page.keyboard.press('Enter');assert.equal((await state()).playing,'false');
+    await page.locator('#direction-reset').focus();await page.keyboard.press('Enter');assert.deepEqual(await values(),{a:60,b:10});
+    assert.equal(await page.locator('.direction-flow-streak').first().evaluate(n=>getComputedStyle(n).animationName),'none');await page.emulateMedia({reducedMotion:'no-preference'});
+  });
+  await t.test('observation bars stay outside the scene at desktop, tablet and phone widths',async()=>{
+    for(const width of [1440,1024,768,600,390,320]){
+      await page.setViewportSize({width,height:1300});await root.scrollIntoViewIfNeeded();
+      const result=await root.evaluate(n=>({
+        overflow:document.documentElement.scrollWidth>innerWidth,
+        pairs:[...n.querySelectorAll('.direction-cup-view')].map(card=>{const p=card.querySelector('.direction-photo').getBoundingClientRect(),r=card.querySelector('.direction-reading'),b=r.getBoundingClientRect(),style=getComputedStyle(r);return{photoBottom:p.bottom,readingTop:b.top,shadow:style.boxShadow,position:style.position};})
+      }));
+      assert.equal(result.overflow,false,`${width}px horizontal overflow`);
+      for(const pair of result.pairs){assert.ok(pair.readingTop>=pair.photoBottom-1);assert.equal(pair.shadow,'none');assert.equal(pair.position,'static');}
+      if(width===390||width===1440)await capture(`width-${width}`);
+    }
+    await page.setViewportSize({width:1440,height:1300});
+  });
+  await t.test('real mobile taps change scene, play, pause and restart',async()=>{
+    const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});t.after(()=>context.close());const mobile=await context.newPage();await mobile.goto(url);
+    await mobile.locator('#direction-lab button[data-environment="70"]').tap();await mobile.locator('.direction-scene-image').evaluateAll(ns=>Promise.all(ns.map(n=>n.decode())));
+    assert.equal(await mobile.locator('#direction-lab').getAttribute('data-environment'),'70');await mobile.locator('#direction-play').tap();
+    await mobile.waitForFunction(()=>Number(document.querySelector('#direction-lab').dataset.temperatureA)>60);
+    await mobile.locator('#direction-play').tap();assert.equal(await mobile.locator('#direction-lab').getAttribute('data-playing'),'false');
+    await mobile.locator('#direction-reset').tap();assert.equal(await mobile.locator('#direction-hot').textContent(),'60°C');assert.equal(await mobile.locator('#direction-cold').textContent(),'10°C');
+  });
+  await t.test('remaining learning blocks and quiz still operate independently',async()=>{
+    await page.locator('#balance-play').click();await page.clock.runFor(800);const a=Number((await page.locator('#balance-temp-a').textContent()).replace('°C',''));await select(70);await page.clock.runFor(800);const b=Number((await page.locator('#balance-temp-a').textContent()).replace('°C',''));assert.ok(b<a);await page.locator('#balance-play').click();
+    await page.locator('#radiation-shield-toggle').click();assert.equal(await page.locator('#radiation-shield-toggle').getAttribute('aria-pressed'),'true');
+    await page.locator('input[value="outside"]').check();for(const [name,value]of [['metal','conduction'],['air','convection'],['sun','radiation']])await page.locator(`select[name="${name}"]`).selectOption(value);
+    await page.locator('#heat-quiz button[type="submit"]').click();assert.match(await page.locator('#heat-quiz-result').textContent(),/判斷都合理/);
+    assert.deepEqual(errors,[]);
+  });
+});

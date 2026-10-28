@@ -2,7 +2,6 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const states = {
-    direction: {time:0, playing:false, environment:25},
     balance: {time:0, playing:false, same:false},
     conduction: {time:0, playing:false, metal:Array(13).fill(20), wood:Array(13).fill(20)},
     convection: {time:0, playing:false, medium:'water'},
@@ -19,20 +18,6 @@
     const f=Math.max(0,Math.min(1,(t-20)/40));
     return `rgb(${Math.round(167+62*f)},${Math.round(201-31*f)},${Math.round(213-97*f)})`;
   };
-  function flow(id, value, ambient, outside) {
-    const difference=value-ambient, towardEnvironment=difference>0;
-    $(id).hidden=Math.abs(difference)<.05;
-    $(id).style.display=Math.abs(difference)<.05?'none':'';
-    $(id).setAttribute('transform',`translate(${outside==='left'?150:750},180) scale(${outside==='left'?(towardEnvironment?-1:1):(towardEnvironment?1:-1)},1)`);
-    return Math.abs(difference)<.05?'同溫・沒有淨熱傳遞':towardEnvironment?'水 → 環境':'環境 → 水';
-  }
-  function renderDirection() {
-    const s=states.direction, hot=temperature(60,s.environment,s.time), cold=temperature(10,s.environment,s.time);
-    $('direction-environment').textContent=`${s.environment}°C`;
-    $('direction-hot').textContent=degrees(hot);$('direction-cold').textContent=degrees(cold);
-    $('direction-hot-flow').textContent=flow('direction-arrow-hot',hot,s.environment,'left');
-    $('direction-cold-flow').textContent=flow('direction-arrow-cold',cold,s.environment,'right');
-  }
   function renderBalance() {
     const s=states.balance, difference=s.same?0:20*Math.exp(-.24*s.time);
     const d=difference<.05?0:difference, a=40+d, b=40-d;
@@ -85,7 +70,7 @@
     $('insulation-coat').toggleAttribute('hidden',!wall);$('insulation-silver').toggleAttribute('hidden',!reflect);
     $('insulation-conduction').textContent=wall?'減少':'原先';$('insulation-convection').textContent=air?'減少':'原先';$('insulation-radiation').textContent=reflect?'減少':'原先';
   }
-  const renderers={direction:renderDirection,balance:renderBalance,conduction:renderConduction,convection:renderConvection,radiation:renderRadiation,insulation:renderInsulation};
+  const renderers={balance:renderBalance,conduction:renderConduction,convection:renderConvection,radiation:renderRadiation,insulation:renderInsulation};
   function renderOne(id) {
     renderers[id]();
     const button=$(`${id}-play`), label=states[id].playing?'暫停觀察':states[id].time>0?'繼續觀察':'開始觀察';
@@ -117,10 +102,6 @@
     $(`${id}-play`).addEventListener('click',()=>{states[id].playing=!states[id].playing;renderOne(id);start();});
     $(`${id}-reset`).addEventListener('click',()=>reset(id));
   });
-  document.querySelectorAll('[data-environment]').forEach(button=>button.addEventListener('click',()=>{
-    states.direction.environment=Number(button.dataset.environment);
-    document.querySelectorAll('[data-environment]').forEach(n=>n.setAttribute('aria-pressed',String(n===button)));reset('direction');
-  }));
   document.querySelectorAll('[data-balance]').forEach(button=>button.addEventListener('click',()=>{
     states.balance.same=button.dataset.balance==='same';
     document.querySelectorAll('[data-balance]').forEach(n=>n.setAttribute('aria-pressed',String(n===button)));reset('balance');
