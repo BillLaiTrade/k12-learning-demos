@@ -148,7 +148,7 @@
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=polish-6">
   <link rel="stylesheet" href="assets/ppm-scale.css?v=approved-8">
-  <link rel="stylesheet" href="assets/investigation.css?v=lab-1">
+  <link rel="stylesheet" href="assets/investigation.css?v=layout-2">
 </head>
 <body>
   <header class="shell masthead">
@@ -164,15 +164,15 @@
   </header>
   <main class="shell lesson-layout">
     <nav class="route" aria-label="學習路徑">
-      <p class="route-label">沿著問題一步步探索</p>
-      <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／05 個問題</p>
+      <p class="route-label">本單元的探索路線</p>
+      <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／05 個學習區塊</p>
       <div class="route-inner">
-        <a href="#s1" aria-current="step"><b>01</b><span>如何把泥沙從水裡分開？</span></a>
-        <a href="#s2"><b>02</b><span>鹽溶在水裡，要怎麼把鹽分離出來？</span></a>
+        <a href="#s1" aria-current="step"><b>01</b><span>把泥沙水倒進漏斗，會發生什麼？</span></a>
+        <a href="#s2"><b>02</b><span>鹽溶在水裡，要怎麼分離出來？</span></a>
         <a href="#s3"><b>03</b><span>一滴綠色墨水，會分出不同色帶嗎？</span></a>
-        <a href="#s4"><b>04</b><span>分離混合物時，該怎麼選方法？</span></a>
-        <a href="#s5"><b>05</b><span>水溶液裡的溶質有多少？</span></a>
-        <a href="#unit-quiz"><b>小測</b><span>未知樣本調查</span></a>
+        <a href="#s4"><b>04</b><span>泥沙、鹽、墨水：面對不同目標，要怎麼選？</span></a>
+        <a href="#s5"><b>05</b><span>自己配糖水，濃度是多少？</span></a>
+        <a href="#unit-quiz" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
       </div>
       <p class="route-hint">先帶著問題看操作，再用結果找答案。</p>
       <section class="record-panel"><h2>本段目標</h2><p>選擇混合物分離方法，並用重量百分濃度與 ppm 表示溶質含量。</p></section>
@@ -324,10 +324,10 @@
 <p class="ppm-unit-note">溶液總質量包含溶質；計算時分子與分母用相同質量單位。</p></div></section>
 <p class="ppm-status" id="ppm-status" role="status" aria-live="polite"></p></div>
 <p class="mix-status" id="mix-status" role="status" aria-live="polite"></p></div></section>
-      <section class="lesson-card investigation-card" id="unit-quiz" aria-labelledby="invest-title">
-        <div class="card-side"><span class="invest-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v7L5 20h14l-5-10V3M8 15h8"/></svg> 單元小測</span><h3>未知樣本調查</h3><span class="card-role">自由取樣・觀察・推論</span></div>
-        <div class="card-main">
-          <div class="invest-intro"><div><h2 id="invest-title">這杯樣本，裡面藏了什麼？</h2><p>取一份試試，接著由你決定怎麼研究。</p></div><div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我想先取一點，看看裡面有什麼。</p></div></div>
+      <section class="unit-quiz investigation-card" id="unit-quiz" aria-labelledby="invest-title">
+        <header class="quiz-head"><div class="quiz-mark" aria-hidden="true">?</div><div><p class="quiz-kicker">單元小測</p><h2 id="invest-title">這杯樣本，裡面藏了什麼？</h2><p>未知樣本調查｜取一份試試，接著由你決定怎麼研究。</p></div></header>
+        <div class="card-main quiz-body">
+          <div class="invest-intro"><div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我想先取一點，看看裡面有什麼。</p></div></div>
           <div class="invest-lab" id="invest-lab" data-ready="loading" data-busy="false">
             <div class="invest-stage">
               <div class="invest-picture" id="invest-picture">
@@ -379,8 +379,10 @@
   <script>
     const routeLinks=[...document.querySelectorAll('.route-inner a')];
     const cards=routeLinks.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean);
+    const learningCards=cards.filter(card=>card.id!=='unit-quiz');
     const routeProgress=document.getElementById('route-progress');
-    function setCurrentCard(card){const index=cards.indexOf(card);if(index<0)return;routeLinks.forEach((link,i)=>{if(i===index)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');});routeProgress.textContent=`目前位置：第 ${String(index+1).padStart(2,'0')}／${String(cards.length).padStart(2,'0')} 個問題`;}
+    function setCurrentCard(card){const index=cards.indexOf(card);if(index<0)return;routeLinks.forEach((link,i)=>{if(i===index)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');});routeProgress.textContent=card.id==='unit-quiz'?'目前位置：單元小測':`目前位置：第 ${String(learningCards.indexOf(card)+1).padStart(2,'0')}／${String(learningCards.length).padStart(2,'0')} 個學習區塊`;}
+    setCurrentCard(cards.find(card=>location.hash===`#${card.id}`)||cards[0]);
     if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible[0])setCurrentCard(visible[0].target);},{rootMargin:'-15% 0px -65% 0px'});cards.forEach(card=>observer.observe(card));}
 
     const filterAnimation=document.getElementById('filter-animation');
@@ -414,6 +416,6 @@
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
   <script type="module" src="assets/ppm-scale.js?v=approved-8"></script>
-  <script type="module" src="assets/investigation.js?v=lab-1"></script>
+  <script type="module" src="assets/investigation.js?v=layout-2"></script>
 </body>
 </html>

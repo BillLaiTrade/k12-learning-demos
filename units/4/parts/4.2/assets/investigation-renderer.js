@@ -35,7 +35,7 @@ export function createRenderer(canvas,{table,atlas,glass}) {
     fluid(x,y,w,h,sample.water>0?(sample.water+sample.salt)*fill:0,sample.sand,settled);
     // A light second glass layer preserves reflections without hiding contents.
     ctx.save();ctx.globalAlpha=.18;ctx.drawImage(glass,805,195,430,530,x,y,w,h);ctx.restore();
-    if(sample.water===0){grains(x+w*.5,y+h*.85,w*.25,h*.02,95,true);if(sample.sand>0)grains(x+w*.5,y+h*.87,w*.28,h*.022,60);}
+    if(sample.water===0&&sample.salt>0){grains(x+w*.5,y+h*.85,w*.25,h*.02,95,true);if(sample.sand>0)grains(x+w*.5,y+h*.87,w*.28,h*.022,60);}
   }
   function source(stock,animation,t){
     const move=animation?.kind==='sample'&&!animation.reduced?smooth(Math.min(t/.24,(1-t)/.2)):0;

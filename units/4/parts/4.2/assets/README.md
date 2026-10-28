@@ -10,7 +10,7 @@
 - `investigation.js` 管理點擊、滑鼠／觸控拖曳、鍵盤、取樣保留切換、筆記、成分證據及選填濃度。先直接蒸發、靜置或過濾都允許，結果依實際組成改變；沒有規定的作答步驟。
 - `investigation.css` 保留核可的初始構圖與收合筆記；手機將器材控制放在照片下方，避免縮成難以點選的按鈕。
 - 素材是生成的教學外觀，不是真實實驗照片；器材與顆粒大小、動畫時間不供量測。科學界線見 `docs/decisions/unit-4.2-unknown-sample-investigation.md`，核可圖及實作截圖見 `docs/reviews/unit-4.2-investigation/`。
-- 檢查：`node --test tests/unit-4.2-investigation.test.cjs`；本輪與既有四組整合回歸共 74 項全部通過。
+- 檢查：`node --test tests/unit-4.2-investigation.test.cjs`；初版與既有四組整合回歸共 74 項通過。後續依 3.1／3.2 修正導覽與獨立小測標頭，完整回歸 75 項通過；空杯渲染修正後小測最終 20 項通過。
 
 ## 蒸發結晶連續動畫（目前使用）
 

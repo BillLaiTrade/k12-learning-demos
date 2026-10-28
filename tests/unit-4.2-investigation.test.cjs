@@ -24,6 +24,30 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
   assert.equal((await state()).sampleCount,'0');assert.equal(await $('cup').isVisible(),true);assert.equal(await $('notebook').getAttribute('open'),null);assert.equal(await $('report').isVisible(),false);
   assert.match(await $('take').innerText(),/取一份試試/);assert.match(await page.locator('#unit-quiz .speaker').evaluate(e=>getComputedStyle(e,'::before').backgroundImage),/shared-assets\/characters\/dialogue-character-avatars/);
   assert.equal(await page.locator('.route-inner a[href="#unit-quiz"]').count(),1);assert.equal(await page.locator('#unit-quiz input[type=range]').count(),0);await capture('initial-desktop');
+  assert.equal(await page.locator('#unit-quiz>.quiz-head .quiz-kicker').innerText(),'單元小測');assert.equal(await page.locator('#unit-quiz>.card-side').count(),0);assert.equal(await page.locator('#unit-quiz').evaluate(e=>e.classList.contains('unit-quiz')&&!e.classList.contains('lesson-card')),true);
+  const residue=await page.evaluate(async()=>{
+   const renderer=await import('./assets/investigation-renderer.js?v=layout-2'),model=await import('./assets/investigation-state.js?v=lab-1');
+   const [table,atlas,glass]=await Promise.all(['investigation-table.webp','investigation-apparatus.webp','concentration-beaker.webp'].map(file=>renderer.loadPicture(new URL('./assets/'+file,location.href))));
+   const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),fill=ctx.fill.bind(ctx);let white=0;
+   ctx.fill=(...args)=>{if(['#fffef8','#e6e2d5','#fbfaf5','#d7d1c1'].includes(ctx.fillStyle))white++;return fill(...args);};
+   const view=renderer.createRenderer(canvas,{table,atlas,glass});view.render({sample:null,stock:0,animation:null});const empty=white;white=0;
+   const dry=model.finishTest(model.finishTest(model.newSample(1),'filter').sample,'heat').sample;view.render({sample:dry,stock:0,animation:null});return{empty,dry:white};
+  });assert.equal(residue.empty,0,'the initial empty beaker contains no drawn crystals');assert.ok(residue.dry>0,'dry material remains visible after an actual experiment');
+ });
+ await t.test('navigation matches each main heading and separates the quiz from the five learning sections',async()=>{
+  const links=await page.locator('.route-inner a:not(.quiz-nav)').evaluateAll(anchors=>anchors.map(a=>({href:a.getAttribute('href'),label:a.querySelector('span').textContent,title:document.querySelector(a.getAttribute('href')).querySelector('.card-main>h2').textContent})));
+  assert.equal(links.length,5);for(const link of links)assert.equal(link.label,link.title,link.href);
+  assert.equal(await page.locator('.route-inner a.quiz-nav span').innerText(),'單元小測');assert.equal(await page.locator('.route-inner a.quiz-nav').evaluate(e=>parseFloat(getComputedStyle(e).borderTopWidth)>0),true);
+  await page.evaluate(()=>document.documentElement.style.scrollBehavior='auto');
+  for(const [i,link] of links.entries()){
+   await page.locator(`.route-inner a[href="${link.href}"]`).click();await page.clock.runFor(200);
+   assert.equal(await page.locator('.route-inner a[aria-current=step]').getAttribute('href'),link.href);
+   assert.equal(await page.locator('#route-progress').innerText(),`目前位置：第 ${String(i+1).padStart(2,'0')}／05 個學習區塊`);
+   const top=await page.locator(link.href).evaluate(e=>e.getBoundingClientRect().top);assert.ok(top>=0&&top<100,`anchor ${link.href} at ${top}`);
+  }
+  await page.locator('.route-inner a.quiz-nav').focus();await page.keyboard.press('Enter');await page.clock.runFor(200);
+  assert.equal(await page.locator('.route-inner a[aria-current=step]').getAttribute('href'),'#unit-quiz');assert.equal(await page.locator('#route-progress').innerText(),'目前位置：單元小測');
+  await page.evaluate(()=>document.documentElement.style.scrollBehavior='');
  });
  await t.test('mass is conserved across filtration; evaporation removes only water',async()=>{
   const model=await page.evaluate(async()=>{const m=await import('./assets/investigation-state.js?v=lab-1');const raw=m.newSample(1),settled=m.finishTest(raw,'settle').sample,filtered=m.finishTest(raw,'filter').sample,again=m.finishTest(filtered,'filter').sample,dry=m.finishTest(filtered,'heat').sample,direct=m.finishTest(raw,'heat').sample;return {raw,settled,filtered,again,dry,direct,masses:[raw,settled,filtered,dry,direct].map(m.totalMass),blocked:m.canTest(direct,'filter')};});
