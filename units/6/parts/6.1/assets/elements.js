@@ -134,15 +134,7 @@
       button.classList.toggle('selected', selected);
     });
     $('#classical-detail-title').textContent = `補充說明｜${name}`;
-    $('#classical-detail-main').textContent = main;
-    $('#classical-detail-conclusion').textContent = conclusion;
-    $('#classical-detail-note').textContent = note;
-    $('#classical-detail-icon').className = `detail-symbol classical-icon icon-${key}`;
-    $('#classical-detail-icon').hidden = key === 'water';
-    $('#water-evidence').hidden = key !== 'water';
-    $('#boyle-toggle').hidden = key !== 'water';
-    $('#boyle-toggle').setAttribute('aria-expanded', 'false');
-    $('#boyle-explanation').hidden = true;
+    window.ClassicalInquiry.render(key, classicalHistories[key]);
     detail.hidden = false;
     $('#classical-announcement').textContent = `已展開${name}的補充說明，四列對照仍完整顯示。`;
   }
@@ -155,12 +147,6 @@
     $('#classical-announcement').textContent = '補充說明已收起，四列對照仍完整顯示。';
     if (previous) $(`[data-classical="${previous}"]`).focus({ preventScroll: true });
   });
-  $('#boyle-toggle').addEventListener('click', () => {
-    const open = $('#boyle-toggle').getAttribute('aria-expanded') !== 'true';
-    $('#boyle-toggle').setAttribute('aria-expanded', String(open));
-    $('#boyle-explanation').hidden = !open;
-  });
-
   const shownExceptions = new Set();
   function renderExceptions() {
     const body = $('#exceptions-table tbody');

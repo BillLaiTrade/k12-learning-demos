@@ -72,13 +72,13 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       assert.equal(await page.locator('[data-classical][aria-expanded=true]').count(), 1);
       assert.deepEqual(await rows.allTextContents(), initial);
       for (const row of await rows.all()) assert.equal(await row.isVisible(), true);
-      assert.equal(await page.locator('#water-evidence').isVisible(), key === 'water');
+      assert.equal(await page.locator('.water-record').count(), key === 'water' ? 2 : 0);
     }
-    assert.match(await text('#classical-detail-main'), /化學分解得到氫和氧/);
-    assert.match(await text('#water-evidence'), /未表示體積比例/);
+    assert.match(await text('#inquiry-feedback'), /已確認的氫與氧/);
+    assert.match(await text('#inquiry-diagram-note'), /未表示氣體體積比例/);
     await capture('#s1', 'comparison-water-desktop');
-    await page.locator('#boyle-toggle').click();
-    assert.match(await text('#boyle-explanation'), /不能說波以耳完成了水電解/);
+    await page.locator('#inquiry-research summary').click();
+    assert.match(await text('#history-scope'), /並不是波以耳/);
     await page.locator('#classical-close').click();
     assert.equal(await page.locator('#classical-detail').isVisible(), false);
     assert.equal(await page.locator('[data-classical][aria-expanded=true]').count(), 0);
@@ -98,8 +98,11 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     for (const [key, [name, first, second, conclusion]] of Object.entries(expected)) {
       await page.locator(`[data-classical="${key}"]`).click();
       assert.equal(await text('#classical-history-title'), `${name}的觀念發展脈絡`);
-      assert.equal(await page.locator('.personal-history .concept-step').count(), 3);
-      assert.deepEqual(await page.locator('.step-label>strong').allTextContents(), ['古代看法','後來的研究與證據','今天的理解']);
+      assert.equal(await page.locator('.inquiry-stage').count(), 3);
+      await page.locator('#inquiry-research summary').click();
+      assert.equal(await page.locator('[data-stage=past]').isVisible(), true);
+      assert.equal(await page.locator('[data-stage=evidence]').isVisible(), true);
+      assert.equal(await page.locator('[data-stage=modern]').isVisible(), true);
       assert.match(await text('#history-evidence-text'), first);
       assert.match((await text('#history-evidence-text')) + (await text('#history-observation')), second);
       assert.match(await text('#history-modern-title'), conclusion);
@@ -108,14 +111,15 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       assert.ok(await page.locator('#history-sources a').count() >= 2);
       explanations.add(await text('#history-evidence-text'));
       assert.deepEqual(await page.locator('[data-classical]').allTextContents(), original);
+      await page.locator('#inquiry-research summary').click();
       await capture('#classical-detail', `history-${key}-desktop`);
     }
     assert.equal(explanations.size, 4);
-    assert.equal(await page.locator('#s1 .concept-history').count(), 1);
+    assert.equal(await page.locator('#s1 .visual-inquiry').count(), 1);
     await page.setViewportSize({width:390,height:1000});
     await page.locator('[data-classical=air]').click();
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
-    const panels = await page.locator('.personal-history .concept-step').all();
+    const panels = await page.locator('.inquiry-stage').all();
     for (let i=1;i<panels.length;i++) {
       const a=await panels[i-1].boundingBox(), b=await panels[i].boundingBox();
       assert.ok(b.y >= a.y + a.height);
@@ -123,6 +127,47 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await capture('#classical-detail', 'history-air-mobile');
     await page.locator('#classical-close').click();
     await page.setViewportSize({width:1440,height:1000});
+  });
+
+  await t.test('visual evidence responds to exploration while keeping main results visible', async () => {
+    await page.locator('[data-classical=earth]').click();
+    assert.equal(await page.locator('#inquiry-research').getAttribute('open'), null);
+    assert.equal(await page.locator('.soil-target').count(), 4);
+    assert.equal(await page.locator('.soil-observer image').evaluate(n => n.href.baseVal.endsWith('soil-composition.png')), true);
+    for (const value of ['mineral','organic','water','air']) {
+      await page.locator(`button[data-observation="${value}"]`).click();
+      assert.equal(await page.locator('.soil-target.focused').getAttribute('data-observe'), value);
+      assert.equal(await page.locator(`button[data-observation="${value}"]`).getAttribute('aria-pressed'), 'true');
+    }
+    assert.match(await text('#inquiry-feedback'), /未被水填滿的孔隙/);
+    await page.locator('[data-observe=mineral]').focus(); await page.keyboard.press('Enter');
+    assert.match(await text('#inquiry-feedback'), /岩石風化/);
+    await page.locator('[data-classical=water]').click();
+    for (const value of ['formation','decomposition']) {
+      await page.locator(`button[data-observation="${value}"]`).click();
+      assert.equal(await page.locator('.water-record.focused').getAttribute('data-focus'), value);
+      for (const record of await page.locator('.water-record').all()) assert.equal(await record.isVisible(), true);
+    }
+    await page.locator('[data-classical=air]').click();
+    for (const value of ['oxygen','carbon','ordinary']) {
+      await page.locator(`button[data-observation="${value}"]`).click();
+      assert.equal(await page.locator('.gas-record.focused').getAttribute('data-focus'), value);
+      assert.equal(await page.locator('.gas-record').count(), 3);
+    }
+    assert.match(await page.locator('.air-composition').textContent(), /氮.*氧.*其他氣體/);
+    await page.locator('button[data-observation=carbon]').click();
+    assert.match(await text('#inquiry-feedback'), /不足以證明空氣是混合物/);
+    await page.locator('[data-classical=fire]').click();
+    await page.locator('button[data-observation=oxygen]').click();
+    assert.equal(await page.locator('.oxygen-route').evaluate(n => n.classList.contains('focused')), true);
+    assert.match(await text('#inquiry-feedback'), /質量來自/);
+    assert.match(await text('#inquiry-diagram-note'), /不是密閉系統總質量/);
+    await page.locator('button[data-observation=samples]').click();
+    assert.equal(await page.locator('.metal-record').evaluate(n => n.classList.contains('focused')), true);
+    await page.locator('[data-classical=earth]').click();
+    assert.equal(await page.locator('#visual-inquiry').getAttribute('data-observation'), 'water');
+    assert.equal(await page.locator('.water-record').count(), 0);
+    await page.locator('#classical-close').click();
   });
 
   await t.test('comparison pairs share a row at every width, and details appear below all pairs', async () => {

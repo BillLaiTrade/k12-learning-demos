@@ -9,6 +9,8 @@
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/elements.css">
   <link rel="stylesheet" href="assets/classical-comparison.css">
+  <link rel="stylesheet" href="assets/classical-inquiry.css">
+  <script src="assets/classical-inquiry.js" defer></script>
   <script src="assets/elements.js" defer></script>
 </head>
 <body>
@@ -44,38 +46,15 @@
           <p class="sr-only" id="classical-announcement" role="status"></p>
           <section class="classical-detail" id="classical-detail" aria-labelledby="classical-detail-title" hidden>
             <div class="detail-head"><h4 id="classical-detail-title">補充說明</h4><button type="button" id="classical-close">收起說明 <span aria-hidden="true">⌃</span></button></div>
-            <div class="concept-history personal-history" aria-labelledby="classical-history-title">
-              <h4 id="classical-history-title">觀念發展脈絡</h4>
-              <div class="history-path personal-history-path">
-                <article class="concept-step"><div class="step-label"><span aria-hidden="true">Ⅰ</span><strong>古代看法</strong></div><h5 id="history-past-title"></h5><p id="history-past-text"></p></article>
-                <b class="history-arrow" aria-hidden="true">→</b>
-                <article class="concept-step evidence-step"><div class="step-label"><span aria-hidden="true">Ⅱ</span><strong>後來的研究與證據</strong></div><h5 id="history-evidence-title"></h5><p id="history-evidence-text"></p><p class="evidence-observation" id="history-observation"></p></article>
-                <b class="history-arrow" aria-hidden="true">→</b>
-                <article class="concept-step"><div class="step-label"><span aria-hidden="true">Ⅲ</span><strong>今天的理解</strong></div><h5 id="history-modern-title"></h5><p id="history-modern-text"></p></article>
+            <div class="visual-inquiry" id="visual-inquiry">
+              <h4 id="classical-history-title"></h4>
+              <div class="inquiry-grid">
+                <article class="inquiry-past inquiry-stage" data-stage="past"><div class="inquiry-kicker"><b>Ⅰ</b> 古代看法</div><div class="ancient-paper"><span>古希臘四元素觀點</span><div id="inquiry-past-icon" class="classical-icon" aria-hidden="true"></div><small>土・水・氣・火</small></div><p id="inquiry-past-summary"></p></article>
+                <article class="inquiry-evidence inquiry-stage" data-stage="evidence"><div class="inquiry-kicker"><b>Ⅱ</b> 觀察研究證據</div><h5 id="inquiry-title"></h5><p id="inquiry-instruction"></p><div id="inquiry-diagram"></div><div class="inquiry-controls" id="inquiry-controls" role="group" aria-label="選擇觀察重點"></div><p id="inquiry-feedback" role="status"></p><p id="inquiry-diagram-note"></p></article>
+                <article class="inquiry-modern inquiry-stage" data-stage="modern"><div class="inquiry-kicker"><b>Ⅲ</b> 今天的理解</div><div id="inquiry-conclusion-visual" aria-hidden="true"></div><h5 id="inquiry-conclusion-title"></h5><p id="inquiry-conclusion-text"></p><div class="inquiry-principle">不只看外觀，還要查證據。</div></article>
               </div>
-              <p class="history-scope" id="history-scope"></p>
-              <p class="history-sources">查核資料：<span id="history-sources"></span></p>
-            </div>
-            <div class="detail-body">
-              <figure class="water-evidence" id="water-evidence" hidden>
-                <svg viewBox="0 0 460 238" role="img" aria-labelledby="water-record-title water-record-desc">
-                  <title id="water-record-title">水經化學分解，得到已確認的氫與氧</title><desc id="water-record-desc">一杯水指向兩瓶無色氣體產物。這是已學過的實驗結果示意，沒有表示體積比例。</desc>
-                  <defs><linearGradient id="water-glass"><stop stop-color="#d9edf4" stop-opacity=".65"/><stop offset=".45" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#d5e9f1" stop-opacity=".6"/></linearGradient><linearGradient id="record-water" x2="0" y2="1"><stop stop-color="#98def3" stop-opacity=".55"/><stop offset="1" stop-color="#6fc7e8" stop-opacity=".8"/></linearGradient><linearGradient id="record-arrow"><stop stop-color="#b8dce9"/><stop offset="1" stop-color="#6cabc4"/></linearGradient></defs>
-                  <path d="M28 63Q72 76 116 63L110 181Q72 196 34 181Z" fill="url(#water-glass)" stroke="#528ba5" stroke-width="2"/>
-                  <path d="M34 101Q72 114 110 101L106 178Q72 189 38 178Z" fill="url(#record-water)"/>
-                  <ellipse cx="72" cy="63" rx="44" ry="10" fill="#f8fdff" stroke="#528ba5" stroke-width="2"/><ellipse cx="72" cy="102" rx="38" ry="8" fill="#b9e7f7" fill-opacity=".7" stroke="#77bcd5"/>
-                  <path d="M45 77L50 174" stroke="white" stroke-width="4" opacity=".9"/><text x="72" y="216" text-anchor="middle">水</text>
-                  <text x="186" y="101" text-anchor="middle" class="diagram-small">化學分解</text><path d="M135 124H209V113L239 139L209 165V153H135Z" fill="url(#record-arrow)"/>
-                  <g id="gas-samples" fill="url(#water-glass)" stroke="#6b8997" stroke-width="2">
-                    <path d="M278 68V84Q258 91 258 110V178Q258 189 270 189H306Q318 189 318 178V110Q318 91 298 84V68Z"/><path d="M375 68V84Q355 91 355 110V178Q355 189 367 189H403Q415 189 415 178V110Q415 91 395 84V68Z"/>
-                    <rect x="275" y="58" width="26" height="16" rx="4" fill="#d4dfe3"/><ellipse cx="288" cy="58" rx="13" ry="4" fill="#f4f8fa"/>
-                    <rect x="372" y="58" width="26" height="16" rx="4" fill="#d4dfe3"/><ellipse cx="385" cy="58" rx="13" ry="4" fill="#f4f8fa"/>
-                    <path d="M268 110V174M365 110V174" stroke="white" stroke-width="4"/>
-                  </g>
-                  <text x="288" y="211" text-anchor="middle">氫</text><text x="385" y="211" text-anchor="middle">氧</text><path d="M258 218Q258 226 266 226H409Q417 226 417 218" fill="none" stroke="#6b8997"/><text x="338" y="237" text-anchor="middle" class="diagram-caption">已確認的產物</text>
-                </svg><figcaption>產物示意，未表示體積比例。</figcaption>
-              </figure>
-              <div class="detail-copy"><div class="detail-symbol" id="classical-detail-icon" aria-hidden="true"></div><p id="classical-detail-main"></p><p id="classical-detail-conclusion"></p><p class="caption" id="classical-detail-note"></p><button type="button" id="boyle-toggle" aria-expanded="false" aria-controls="boyle-explanation" hidden>波以耳的質疑，和這項證據有什麼關係？ <span aria-hidden="true">›</span></button><p id="boyle-explanation" hidden>波以耳質疑傳統元素觀點，強調以實驗研究物質。水分解的證據是後來累積的成果，不能說波以耳完成了水電解，也不是只靠一項實驗就一次改寫整套觀點。</p></div>
+              <div class="inquiry-history-brief"><strong>研究是怎麼累積的？</strong><p id="inquiry-history-brief"></p></div>
+              <details id="inquiry-research"><summary>查看研究背景與資料來源</summary><div class="inquiry-background"><h5 id="history-past-title"></h5><p id="history-past-text"></p><h5 id="history-evidence-title"></h5><p id="history-evidence-text"></p><p id="history-observation"></p><h5 id="history-modern-title"></h5><p id="history-modern-text"></p><p id="history-scope"></p><p>查核資料：<span id="history-sources"></span></p></div></details>
             </div>
           </section>
           <div class="classical-takeaway">科學上的解釋需要證據支持，也會隨新發現修正。</div>
