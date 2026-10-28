@@ -220,7 +220,7 @@ $('tq-check').addEventListener('click',()=>{
   const results=['A','B'].map(id=>({id,...assessInstrument(round.instruments[id],round.waterC)}));
   const ok=results.every(r=>r.ok), result=$('tq-result');result.hidden=false;result.dataset.success=String(ok);result.replaceChildren();
   const add=text=>{const p=document.createElement('p');p.textContent=text;result.append(p);};
-  if(ok){add('兩支都完成了！你能讀出刻度，並判斷同一杯水的兩種溫標。');add(`平視參考：${round.waterC}°C ＝ ${Number((round.waterC*9/5+32).toFixed(1))}°F。`);}
+  if(ok){add('兩支都完成了！小葵說：「現在我知道了，記錄水溫不能只寫『暖暖的』，要讀準數字，也要寫清楚單位。」');add(`平視參考：${round.waterC}°C ＝ ${Number((round.waterC*9/5+32).toFixed(1))}°F。`);}
   else{add('再確認一下，完成的作答會保留。');for(const r of results)add(`${r.id}：${r.message}`);}
 });
 $('tq-reset').addEventListener('click',()=>{
