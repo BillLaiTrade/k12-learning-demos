@@ -1,45 +1,89 @@
-// Both scales describe one physical temperature and one liquid meniscus.
+// One physical temperature, independently graduated Celsius and Fahrenheit scales.
+(()=>{
 const $=id=>document.getElementById(id), svgNS='http://www.w3.org/2000/svg';
-const celsiusY=c=>560-c*4.3;
+const MIN=-40,MAX=100,celsiusY=c=>560-(c-MIN)/(MAX-MIN)*430;
 const fahrenheitY=f=>celsiusY((f-32)*5/9);
-const format=value=>String(Number(value.toFixed(1)));
+const rounded=n=>Number(n.toFixed(1)),format=n=>String(rounded(n)).replace('-', '−');
+const operand=n=>String(Number(n.toFixed(6))).replace('-', '−');
+let temperature=25,repeatDelay=0,repeatTimer=0;
+function stopRepeating(){clearTimeout(repeatDelay);clearInterval(repeatTimer);repeatDelay=repeatTimer=0;}
 function mark(group,degree,y,left){
-  const major=degree%20===0, medium=degree%10===0||degree%5===0;
-  const length=major?12:medium?8:4;
+  const major=degree%20===0,medium=degree%5===0,length=major?12:medium?8:4;
   const n=document.createElementNS(svgNS,'line');
-  Object.entries({'data-degree':degree,x1:left?120-length:140,x2:left?120:140+length,y1:y,y2:y,'stroke-width':major?1.2:.7}).forEach(([k,v])=>n.setAttribute(k,String(v)));
+  Object.entries({'data-degree':degree,x1:left?120-length:140,x2:left?120:140+length,y1:y,y2:y,'stroke-width':major?1.2:.65}).forEach(([k,v])=>n.setAttribute(k,String(v)));
   group.append(n);
 }
 function label(group,value,y,left){
   const n=document.createElementNS(svgNS,'text');
   Object.entries({'data-degree':value,x:left?100:160,y,'text-anchor':left?'end':'start',class:'dual-scale-label'}).forEach(([k,v])=>n.setAttribute(k,String(v)));
-  n.textContent=value;group.append(n);
+  n.textContent=String(value).replace('-', '−');group.append(n);
 }
-const cScale=$('dual-scale-c'),fScale=$('dual-scale-f');
-for(let c=0;c<=100;c++){
-  mark(cScale,c,celsiusY(c),true);
-  if(c%20===0)label(cScale,c,celsiusY(c),true);
+for(let c=MIN;c<=MAX;c++){
+  mark($('dual-scale-c'),c,celsiusY(c),true);
+  if(c%20===0)label($('dual-scale-c'),c,celsiusY(c),true);
 }
-for(let f=32;f<=212;f++){
-  mark(fScale,f,fahrenheitY(f),false);
-  if(f%20===0||f===32||f===212)label(fScale,f,fahrenheitY(f),false);
+for(let f=-40;f<=212;f++){
+  mark($('dual-scale-f'),f,fahrenheitY(f),false);
+  // Avoid overlapping 32°F and 40°F labels in the extended scale.
+  if((f%40===0&&f!==40)||f===32||f===212)label($('dual-scale-f'),f,fahrenheitY(f),false);
+}
+function clearError(){ $('dual-input-error').textContent='';$('dual-temperature').removeAttribute('aria-invalid'); }
+function updateUnit(){
+  const isC=$('dual-unit').value==='C';
+  $('dual-temperature').min=MIN;$('dual-temperature').max=isC?MAX:212;
+  $('dual-input-range').textContent=isC?'量程：−40～100°C':'量程：−40～212°F';
+  clearError();
 }
 function render(){
-  const c=Number($('dual-temperature').value),f=c*9/5+32,y=celsiusY(c);
+  const c=temperature,f=c*9/5+32,y=celsiusY(c),isC=$('dual-unit').value==='C';
   const meniscus=`M124 ${y-1}Q130 ${y+1} 136 ${y-1}`;
   $('dual-liquid').setAttribute('d',`${meniscus}V614H124Z`);
   $('dual-meniscus').setAttribute('d',meniscus);
   $('dual-guide').setAttribute('y1',y);$('dual-guide').setAttribute('y2',y);
-  $('dual-celsius').textContent=`${format(c)}°C`;
-  $('dual-fahrenheit').textContent=`${format(f)}°F`;
-  $('dual-formula').textContent=`${format(c)} × 9/5 ＋ 32 ＝ ${format(f)}`;
-  $('dual-temperature').setAttribute('aria-valuetext',`${format(c)} 攝氏度，等於 ${format(f)} 華氏度`);
-  $('dual-temperature').style.setProperty('--dual-progress',`${c}%`);
-  $('dual-thermometer').setAttribute('aria-label',`同一根液柱，攝氏 ${format(c)} 度與華氏 ${format(f)} 度位於同一液面高度。攝氏每 1 度的間距為華氏每 1 度的 1.8 倍。`);
-  document.querySelectorAll('#card-03 [data-dual-preset]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.dualPreset)===c)));
+  const approx=Math.abs(rounded(c)-c)>1e-8||Math.abs(rounded(f)-f)>1e-8;
+  $('dual-celsius').textContent=`${format(c)}°C`;$('dual-fahrenheit').textContent=`${format(f)}°F`;
+  $('dual-equality').textContent=approx?'≈':'＝';
+  $('dual-rule').textContent=isC?'°F ＝ °C × 9/5 ＋ 32':'°C ＝（°F − 32）× 5/9';
+  const target=isC?f:c,sign=Math.abs(rounded(target)-target)>1e-8?'≈':'＝';
+  $('dual-formula').textContent=isC?`${operand(c)} × 9/5 ＋ 32 ${sign} ${format(f)}`:`（${operand(f)} − 32）× 5/9 ${sign} ${format(c)}`;
+  $('dual-temperature').value=Number((isC?c:f).toFixed(6));
+  $('dual-thermometer').setAttribute('aria-label',`同一根液柱，攝氏 ${operand(c)} 度與華氏 ${operand(f)} 度位於同一液面高度。攝氏每 1 度的間距為華氏每 1 度的 1.8 倍。`);
+  $('dual-cool').disabled=c<=MIN;$('dual-warm').disabled=c>=MAX;
+  document.querySelectorAll('#card-03 [data-dual-preset]').forEach(button=>button.setAttribute('aria-pressed',String(Math.abs(Number(button.dataset.dualPreset)-c)<1e-8)));
+  clearError();
 }
-$('dual-temperature').addEventListener('input',render);
+function changeTemperature(delta){
+  temperature=Math.min(MAX,Math.max(MIN,temperature+delta));render();
+}
+for(const [id,delta] of [['dual-cool',-1],['dual-warm',1]]){
+  const button=$(id);
+  button.addEventListener('pointerdown',event=>{
+    if(event.button!==0||!event.isPrimary)return;
+    stopRepeating();button.setPointerCapture(event.pointerId);changeTemperature(delta);
+    if(button.disabled)return;
+    repeatDelay=setTimeout(()=>{repeatTimer=setInterval(()=>{
+      if(button.disabled){stopRepeating();return;}changeTemperature(delta);
+    },120);},350);
+  });
+  // Pointer actions already step on press; native keyboard / assistive clicks step here.
+  button.addEventListener('click',event=>{if(event.detail===0){stopRepeating();changeTemperature(delta);}});
+  for(const name of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(name,stopRepeating);
+}
+window.addEventListener('blur',stopRepeating);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopRepeating();});
+$('dual-unit').addEventListener('change',updateUnit);
+$('dual-temperature').addEventListener('input',clearError);
+$('dual-entry').addEventListener('submit',event=>{
+  event.preventDefault();stopRepeating();
+  const input=$('dual-temperature'),value=input.valueAsNumber,isC=$('dual-unit').value==='C',max=isC?MAX:212;
+  if(!Number.isFinite(value)||value<MIN||value>max){
+    $('dual-input-error').textContent=Number.isFinite(value)?`請輸入 −40～${max}°${isC?'C':'F'}。`:'請輸入有效的溫度數字。';
+    input.setAttribute('aria-invalid','true');return;
+  }
+  temperature=isC?value:(value-32)*5/9;render();
+});
 document.querySelectorAll('#card-03 [data-dual-preset]').forEach(button=>button.addEventListener('click',()=>{
-  $('dual-temperature').value=button.dataset.dualPreset;render();
+  stopRepeating();temperature=Number(button.dataset.dualPreset);render();
 }));
-render();
+updateUnit();render();
+})();

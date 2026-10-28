@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="assets/measurement-scene.css">
   <link rel="stylesheet" href="assets/touch-story.css">
   <link rel="stylesheet" href="assets/water-lab.css?v=engraved-glass-1">
-  <link rel="stylesheet" href="assets/dual-scale.css?v=dual-scale-1">
+  <link rel="stylesheet" href="assets/dual-scale.css?v=dual-scale-2">
 </head>
 <body>
   <header class="shell masthead">
@@ -173,8 +173,8 @@
                   <path d="M119 54Q119 42 130 42T141 54V588Q166 596 166 614A36 36 0 0 1 94 614Q94 596 119 588Z" fill="url(#ds-channel)" stroke="#b7c6c1" stroke-width="1"/>
                   <g id="dual-scale-c" stroke="#35433b"></g><g id="dual-scale-f" stroke="#35433b"></g>
                   <text x="93" y="103" class="dual-scale-unit">°C</text><text x="167" y="103" class="dual-scale-unit">°F</text>
-                  <g id="dual-fluid"><path id="dual-liquid" d="M124 451.5Q130 453.5 136 451.5V614H124Z" fill="url(#ds-red)"/><circle cx="130" cy="614" r="24" fill="url(#ds-bulb)"/><ellipse cx="122" cy="606" rx="6" ry="8" fill="#fff" opacity=".85" transform="rotate(35 122 606)"/><path id="dual-meniscus" d="M124 451.5Q130 453.5 136 451.5" fill="none" stroke="#a70f1c" stroke-width=".8"/></g>
-                  <line id="dual-guide" x1="57" x2="203" y1="452.5" y2="452.5" stroke="#3a8052" stroke-width="1.5"/>
+                  <g id="dual-fluid"><path id="dual-liquid" d="M124 359.357143Q130 361.357143 136 359.357143V614H124Z" fill="url(#ds-red)"/><circle cx="130" cy="614" r="24" fill="url(#ds-bulb)"/><ellipse cx="122" cy="606" rx="6" ry="8" fill="#fff" opacity=".85" transform="rotate(35 122 606)"/><path id="dual-meniscus" d="M124 359.357143Q130 361.357143 136 359.357143" fill="none" stroke="#a70f1c" stroke-width=".8"/></g>
+                  <line id="dual-guide" x1="57" x2="203" y1="360.357143" y2="360.357143" stroke="#3a8052" stroke-width="1.5"/>
                   <path d="M48 90V591Q48 648 127 658M212 93V590" fill="none" stroke="#fff" stroke-width="2" opacity=".75"/>
                   <path d="M123 55V588" stroke="#fff" stroke-width="1" opacity=".6"/>
                 </svg>
@@ -182,13 +182,23 @@
               <div class="dual-console">
                 <h3>同一個溫度，兩種刻度</h3>
                 <div class="dual-result">
-                  <output id="dual-readout" for="dual-temperature" aria-live="off"><span id="dual-celsius">25°C</span><span class="dual-equals">＝</span><span id="dual-fahrenheit">77°F</span></output>
+                  <p id="dual-rule" class="dual-rule">°F ＝ °C × 9/5 ＋ 32</p>
+                  <output id="dual-readout" for="dual-temperature dual-unit" aria-live="polite" aria-atomic="true"><span id="dual-celsius">25°C</span><span id="dual-equality" class="dual-equals">＝</span><span id="dual-fahrenheit">77°F</span></output>
                   <p id="dual-formula">25 × 9/5 ＋ 32 ＝ 77</p>
                 </div>
-                <label for="dual-temperature" class="dual-slider-label">調整示意溫度</label>
-                <input id="dual-temperature" type="range" min="0" max="100" step="0.5" value="25" aria-describedby="dual-formula">
-                <div class="dual-range-labels" aria-hidden="true"><span>0°C</span><span>100°C</span></div>
+                <div class="dual-adjust" role="group" aria-label="調整示意溫度，每次一攝氏度，按住持續調整">
+                  <button id="dual-cool" type="button"><span aria-hidden="true">❄</span> 降溫</button>
+                  <button id="dual-warm" type="button"><span aria-hidden="true">☀</span> 升溫</button>
+                </div>
+                <form id="dual-entry" class="dual-entry" novalidate>
+                  <div class="dual-field"><label for="dual-temperature">輸入溫度</label><input id="dual-temperature" type="number" min="-40" max="100" step="any" value="25" inputmode="decimal" aria-describedby="dual-input-range dual-input-error"></div>
+                  <div class="dual-field"><label for="dual-unit">單位</label><select id="dual-unit"><option value="C">攝氏 °C</option><option value="F">華氏 °F</option></select></div>
+                  <button type="submit" class="dual-apply">設定溫度</button>
+                  <p id="dual-input-range">量程：−40～100°C</p>
+                  <p id="dual-input-error" role="alert"></p>
+                </form>
                 <div class="dual-presets" role="group" aria-label="跳到重要溫度">
+                  <button class="dual-preset" type="button" data-dual-preset="-40" aria-pressed="false"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 17H39M9 31H39" stroke="#718fa5" stroke-width="5" stroke-linecap="round"/></svg><span>同值點</span><strong>−40°</strong></button>
                   <button class="dual-preset" type="button" data-dual-preset="0" aria-pressed="false"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4V44M7 14L41 34M7 34L41 14M18 7L24 13L30 7M18 41L24 35L30 41M7 21L15 20L14 12M34 36L33 28L41 27M7 27L15 28L14 36M34 12L33 20L41 21" fill="none" stroke="#68a6cc" stroke-width="2.5" stroke-linecap="round"/></svg><span>冰點</span><strong>0°C</strong></button>
                   <button class="dual-preset" type="button" data-dual-preset="25" aria-pressed="true" title="室內溫度示例"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 22H39V43H9Z" fill="#eee4c9"/><path d="M3 24L24 6L45 24" fill="none" stroke="#df8854" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 43V29H30V43" fill="#849369"/><path d="M34 14V6H40V20" fill="#a0a396"/></svg><span>室內</span><strong>25°C</strong></button>
                   <button class="dual-preset" type="button" data-dual-preset="37" aria-pressed="false"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="12" r="10" fill="#f4bf8b"/><path d="M5 45V37C5 18 43 18 43 37V45" fill="#eab481"/></svg><span>體溫參考</span><strong>37°C</strong></button>
@@ -296,6 +306,6 @@
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
   <script src="assets/temperature-lesson.js" defer></script>
   <script type="module" src="assets/water-lab.js?v=engraved-glass-1"></script>
-  <script src="assets/dual-scale.js?v=dual-scale-1" defer></script>
+  <script src="assets/dual-scale.js?v=dual-scale-2" defer></script>
 </body>
 </html>
