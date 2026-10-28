@@ -33,7 +33,7 @@ test('sound comparison uses one signal and physical travel delays', async t => {
       assert.equal(m.sample(point, speed, 40 / speed + m.PULSE_DURATION + .01).x, point.x);
     }
     const values = Array.from({ length: 1601 }, (_, i) => m.displacement(i / 10000));
-    assert.ok(Math.max(...values) > 4 && Math.min(...values) < -4);
+    assert.ok(Math.max(...values) > m.AMPLITUDE * .7 && Math.min(...values) < -m.AMPLITUDE * .7);
     assert.ok(values.every(v => Math.abs(v) <= m.AMPLITUDE));
     assert.equal(m.displacement(-.1), 0); assert.equal(m.displacement(m.PULSE_DURATION), 0);
   });
@@ -92,7 +92,7 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
   const data = () => page.locator('#experiment-panel').evaluate(n => ({ ...n.dataset }));
   const time = async () => Number((await data()).time);
   const primary = page.locator('#primary-action');
-  const particleXs = () => page.locator('.particle, .end-particle').evaluateAll(nodes => nodes.map(n => n.getAttribute('cx')));
+  const particleXs = () => page.locator('.particle, .end-particle').evaluateAll(nodes => nodes.map(n => n.getAttribute('transform')));
   const setTemperature = async value => page.locator('#temperature').evaluate((n, v) => { n.value = String(v); n.dispatchEvent(new Event('input', { bubbles: true })); }, value);
   const realWait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -100,14 +100,30 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     await fresh();
     assert.equal((await data()).phase, 'idle'); assert.equal(await time(), 0);
     assert.equal(await page.locator('.medium-row').count(), 3);
-    assert.equal(await page.locator('.particle').count(), 592);
-    assert.equal(await page.locator('[name=prediction]:checked').count(), 0);
+    assert.equal(await page.locator('.particle').count(), 304);
+    assert.equal(await page.locator('[name=prediction], .prediction, #prediction-feedback').count(), 0);
     assert.equal(await page.locator('#result').isHidden(), true);
     assert.equal(await page.evaluate(() => window.__audioContext), undefined);
     assert.equal(await page.locator('.speaker').first().evaluate(n => getComputedStyle(n, '::before').backgroundImage.includes('/shared-assets/characters/dialogue-character-avatars.png')), true);
-    assert.equal(await page.locator('.particle').evaluateAll(nodes => nodes.every(n => n.getAttribute('fill') === '#d2dcd5' && n.getAttribute('cx') === Number(n.dataset.originX).toFixed(4))), true);
+    assert.equal(await page.locator('.particle').evaluateAll(nodes => nodes.every(n => Number(n.getAttribute('opacity')) === .34 && Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
     assert.equal(await page.locator('.field [stroke-dasharray], .field path[stroke="#be773a"]').count(), 0);
     const before = await particleXs(); await page.clock.runFor(1000); assert.deepEqual(await particleXs(), before);
+  });
+
+  await t.test('material photos and distinct molecules replace flat color-only rows', async () => {
+    await page.waitForFunction(() => document.documentElement.dataset.materials === 'ready');
+    assert.deepEqual(await page.locator('.specimen-photo').evaluateAll(nodes => nodes.map(n => n.getAttribute('viewBox'))), ['0 0 1024 512','0 512 1024 512','0 1024 1024 512']);
+    assert.equal(await page.locator('[data-group=air] .particle[data-species=nitrogen]').first().locator('.atom').count(), 2);
+    assert.equal(await page.locator('[data-group=water] .particle').first().locator('.atom').count(), 3);
+    assert.equal(await page.locator('[data-group=steel] .particle').first().locator('.atom').count(), 1);
+    const waterAngle = await page.locator('[data-group=water] .particle').first().evaluate(group => {
+      const h = [...group.querySelectorAll('[data-element=hydrogen]')].map(n => [Number(n.getAttribute('cx')), Number(n.getAttribute('cy'))]);
+      return Math.acos((h[0][0] * h[1][0] + h[0][1] * h[1][1]) / Math.hypot(...h[0]) / Math.hypot(...h[1])) * 180 / Math.PI;
+    });
+    assert.ok(Math.abs(waterAngle - 104.5) < .0001);
+    assert.ok(await page.locator('[data-group=steel] .elastic-link').count() > 150);
+    assert.equal(await page.locator('.particle .atom').evaluateAll(nodes => nodes.every(n => n.getAttribute('fill').startsWith('url(#'))), true, 'visible atoms have material shading');
+    assert.equal(await page.locator('#experiment-panel').evaluate(n => /預測|先猜|對錯/.test(n.textContent)), false);
   });
 
   await t.test('vibration begins locally and steel reaches the end while water and air remain still there', async () => {
@@ -115,16 +131,18 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     assert.ok(await time() > .019 && await time() < .021);
     const readings = await page.locator('.arrival-readout output').allTextContents();
     assert.deepEqual(readings, ['—', '—', '16.9 毫秒']);
-    for (const id of ['air', 'water']) assert.equal(await page.locator(`[data-group=${id}] .end-particle`).first().getAttribute('cx'), '75.0000');
-    assert.notEqual(await page.locator('[data-group=steel] .end-particle').first().getAttribute('cx'), '75.0000');
+    for (const id of ['air', 'water']) assert.equal(await page.locator(`[data-group=${id}] .end-particle`).first().evaluate(n => n.transform.baseVal.consolidate().matrix.e), 75);
+    assert.notEqual(await page.locator('[data-group=steel] .end-particle').first().evaluate(n => n.transform.baseVal.consolidate().matrix.e), 75);
     const reached = await page.locator('.medium-row').evaluateAll(rows => rows.map(row => row.querySelectorAll('.particle[data-reached=true]').length / row.querySelectorAll('.particle').length));
     assert.ok(reached[0] < .1 && reached[1] > .25 && reached[1] < .35 && reached[2] === 1);
     assert.match(await page.locator('#observation-caption').textContent(), /鋼已傳到/);
-    const { link, endpoints } = await page.locator('[data-group=steel]').evaluate(row => {
-      const line = row.querySelector('line');
-      return { link: { x1: Number(line.getAttribute('x1')), x2: Number(line.getAttribute('x2')) }, endpoints: [...row.querySelectorAll('.particle')].slice(0, 2).map(n => Number(n.getAttribute('cx'))) };
+    const { start, end, endpoints } = await page.locator('[data-group=steel]').evaluate(row => {
+      const link = row.querySelector('.elastic-link'), particles = row.querySelectorAll('.particle');
+      return { start: link.getPointAtLength(0).x, end: link.getPointAtLength(link.getTotalLength()).x,
+        endpoints: [Number(link.dataset.first), Number(link.dataset.second)].map(i => particles[i].transform.baseVal.consolidate().matrix.e) };
     });
-    assert.ok(Math.abs(link.x1 - endpoints[0]) < .0001 && Math.abs(link.x2 - endpoints[1]) < .0001);
+    assert.ok(Math.abs(start - endpoints[0] - 3.8) < .002 && Math.abs(end - endpoints[1] + 3.8) < .002);
+
   });
 
   await t.test('pause, resume, exact stepping and a shared speed change keep one timeline', async () => {
@@ -148,20 +166,19 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     assert.ok(await time() > .049 && await time() < .051);
   });
 
-  await t.test('complete results retain the actual times, feedback and rest positions', async () => {
-    await fresh(); await page.locator('[name=prediction][value=water]').check();
+  await t.test('teaching results retain actual times and rest positions without prediction or grading', async () => {
+    await fresh();
     await page.locator('#slowdown').selectOption('20'); await primary.click(); await page.clock.runFor(10000);
     assert.equal((await data()).phase, 'complete');
     assert.deepEqual(await page.locator('.arrival-readout output').allTextContents(), ['291.5 毫秒', '67.6 毫秒', '16.9 毫秒']);
     assert.equal(await page.locator('#result-rows tr').count(), 3);
     assert.match(await page.locator('#result-summary').textContent(), /鋼最先、水其次、空氣最後/);
-    assert.equal(await page.locator('#result-title').textContent(), '一起比較這次的結果');
-    assert.equal(await page.locator('.particle').evaluateAll(nodes => nodes.every(n => Math.abs(Number(n.getAttribute('cx')) - Number(n.dataset.originX)) < .0001)), true);
-    assert.equal(await page.locator('.end-particle').evaluateAll(nodes => nodes.every(n => Number(n.getAttribute('cx')) === 75)), true);
-    await page.locator('[name=prediction][value=steel]').check(); assert.equal(await page.locator('#result-title').textContent(), '預測符合觀察');
+    assert.equal(await page.locator('#result-title').textContent(), '觀察結果');
+    assert.equal(await page.locator('.particle').evaluateAll(nodes => nodes.every(n => Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
+    assert.equal(await page.locator('.end-particle').evaluateAll(nodes => nodes.every(n => n.transform.baseVal.consolidate().matrix.e === 75)), true);
     await page.locator('#step-action').click(); assert.equal((await data()).phase, 'paused'); assert.equal(await time(), .002);
     await page.locator('#reset-action').click(); assert.equal(await time(), 0); assert.equal(await page.locator('#result').isHidden(), true);
-    assert.equal(await page.locator('[name=prediction][value=steel]').isChecked(), true);
+    assert.equal(await page.locator('[name=prediction]').count(), 0);
   });
 
   await t.test('temperature controls are synchronized, bounded and use identical air layouts', async () => {
@@ -183,12 +200,12 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
 
   await t.test('warmer, colder and equal-temperature experiments produce correct outcomes', async () => {
     await page.locator('#slowdown').selectOption('20');
-    for (const [temperature, prediction, expected] of [[30, 'adjustable', /早約 5\.0 毫秒/], [0, 'reference', /早約 10\.6 毫秒/], [20, 'same', /振動同時傳到/]]) {
-      await setTemperature(temperature); await page.locator(`[name=prediction][value=${prediction}]`).check();
+    for (const [temperature, expected] of [[30, /早約 5\.0 毫秒/], [0, /早約 10\.6 毫秒/], [20, /振動同時傳到/]]) {
+      await setTemperature(temperature);
       await primary.click(); await page.clock.runFor(11000);
       assert.equal((await data()).phase, 'complete');
       assert.match(await page.locator('#result-summary').textContent(), expected);
-      assert.equal(await page.locator('#result-title').textContent(), '預測符合觀察');
+      assert.equal(await page.locator('#result-title').textContent(), '觀察結果');
       assert.equal(await page.locator('#result-rows tr').count(), 2);
       if (temperature === 20) assert.deepEqual(await page.locator('.arrival-readout output').allTextContents(), ['291.5 毫秒', '291.5 毫秒']);
     }
@@ -196,17 +213,43 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
 
   await t.test('changing conditions clears running results and a tie has identical live motion', async () => {
     await primary.click(); await page.clock.runFor(500);
-    const pair = await page.locator('.medium-row').evaluateAll(rows => rows.map(row => [...row.querySelectorAll('.particle')].map(n => n.getAttribute('cx'))));
+    const pair = await page.locator('.medium-row').evaluateAll(rows => rows.map(row => [...row.querySelectorAll('.particle')].map(n => n.getAttribute('transform'))));
     assert.deepEqual(pair[0], pair[1]);
     await page.locator('#temperature-up').click();
     assert.equal((await data()).phase, 'idle'); assert.equal(await time(), 0);
-    assert.equal(await page.locator('[name=prediction]:checked').count(), 0);
+    assert.equal(await page.locator('[name=prediction], .prediction, #prediction-feedback').count(), 0);
     assert.deepEqual(await page.locator('.arrival-readout output').allTextContents(), ['—', '—']);
     assert.equal(await page.locator('#result').isHidden(), true);
     await page.clock.runFor(1000); assert.equal(await time(), 0);
     await page.locator('#tab-temperature').focus(); await page.keyboard.press('Home');
     assert.equal((await data()).mode, 'material'); assert.equal(await page.locator('.medium-row').count(), 3);
     assert.equal(await page.locator('#temperature-settings').isHidden(), true);
+  });
+
+  await t.test('material closeups pause the experiment, preserve time and support keyboard dismissal', async () => {
+    await fresh(); await primary.click(); await page.clock.runFor(2000);
+    await page.locator('[data-group=water] .specimen-button').click();
+    assert.equal(await page.locator('#material-dialog').evaluate(n => n.open), true);
+    assert.match(await page.locator('#material-dialog-title').textContent(), /水.*液體/);
+    assert.equal((await data()).phase, 'paused'); const saved = await time(), snapshot = await particleXs();
+    await page.clock.runFor(1000); assert.equal(await time(), saved); assert.deepEqual(await particleXs(), snapshot);
+    await page.keyboard.press('Escape'); assert.equal(await page.locator('#material-dialog').evaluate(n => n.open), false);
+    assert.equal((await data()).phase, 'paused');
+    await primary.click(); await page.clock.runFor(1000); assert.ok(await time() > saved);
+    await page.locator('[data-group=steel] .specimen-button').click();
+    assert.match(await page.locator('#material-dialog-title').textContent(), /鋼.*固體/);
+    await page.locator('#close-material').click(); assert.equal(await page.locator('#material-dialog').evaluate(n => n.open), false);
+  });
+
+  await t.test('an unavailable photo has a readable fallback and does not break the simulation', async () => {
+    const fallback = await browser.newPage(); await fallback.route('**/material-specimens.png', route => route.abort('failed'));
+    await fallback.goto(url, { waitUntil:'networkidle' });
+    await fallback.waitForFunction(() => document.documentElement.dataset.materials === 'error');
+    assert.equal(await fallback.locator('.specimen-status').first().isVisible(), true);
+    assert.match(await fallback.locator('.specimen-status').first().textContent(), /暫時無法載入/);
+    await fallback.locator('#primary-action').click();
+    assert.equal(await fallback.locator('#experiment-panel').getAttribute('data-phase'), 'running');
+    await fallback.close();
   });
 
   await t.test('optional arrival cues use real audio nodes and stop when muted or paused', async () => {
@@ -260,12 +303,12 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
         await mobile.setViewportSize({ width, height: 844 });
         assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${mode} must fit ${width}px`);
         const main = await mobile.locator('.card-main').boundingBox();
-        for (const selector of ['.medium-row', '.controls', '.model-information', '#prediction-options']) {
+        for (const selector of ['.medium-row', '.controls', '.model-information']) {
           for (const box of await mobile.locator(selector).evaluateAll(nodes => nodes.map(n => ({ x: n.getBoundingClientRect().x, right: n.getBoundingClientRect().right })))) {
             assert.ok(box.x >= main.x - 1 && box.right <= main.x + main.width + 1, 'all content stays in the main column');
           }
         }
-        const selectors = ['button', '.prediction-option', '#slowdown', '.sound-option'];
+        const selectors = ['button', '#slowdown', '.sound-option'];
         if (mode === 'temperature') selectors.push('#temperature');
         for (const selector of selectors) for (const box of await mobile.locator(selector).evaluateAll(nodes => nodes.filter(n => n.getClientRects().length).map(n => n.getBoundingClientRect()).map(b => ({ width: b.width, height: b.height })))) {
           assert.ok(box.width >= 43.9 && box.height >= 43.9, `${selector} has a full touch target at ${width}px`);

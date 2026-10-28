@@ -1,0 +1,30 @@
+▶ sound comparison uses one signal and physical travel delays
+  ✔ the same distance produces the material arrival times and ranking (0.99473ms)
+  ✔ temperature changes only the air speed, including a real tie at 20°C (0.259013ms)
+  ✔ every medium uses the same frequency, bounded local motion and exact rest (0.812821ms)
+  ✔ particles remain ordered, stay at fixed y and settle in every medium (16.801117ms)
+✔ sound comparison uses one signal and physical travel delays (19.976119ms)
+▶ complete fourth-card preview works as one consistent experiment
+  ✔ initial scene uses the official characters, no orange tracking particle and no autoplay (777.662574ms)
+  ✔ material photos and distinct molecules replace flat color-only rows (43.981847ms)
+  ✔ vibration begins locally and steel reaches the end while water and air remain still there (578.587677ms)
+  ✔ pause, resume, exact stepping and a shared speed change keep one timeline (1103.906516ms)
+  ✔ source clicks and keyboard restart all groups without overlapping animations (1679.302109ms)
+  ✔ teaching results retain actual times and rest positions without prediction or grading (4574.621292ms)
+  ✔ temperature controls are synchronized, bounded and use identical air layouts (231.408727ms)
+  ✔ warmer, colder and equal-temperature experiments produce correct outcomes (8417.599064ms)
+  ✔ changing conditions clears running results and a tie has identical live motion (273.647835ms)
+  ✔ material closeups pause the experiment, preserve time and support keyboard dismissal (2263.097604ms)
+  ✔ an unavailable photo has a readable fallback and does not break the simulation (845.724053ms)
+  ✔ optional arrival cues use real audio nodes and stop when muted or paused (2483.59431ms)
+  ✔ backgrounding pauses at the same model time and never resumes automatically (1962.881137ms)
+  ✔ touch, both modes and seven viewport widths keep the layout usable (2002.309688ms)
+✔ complete fourth-card preview works as one consistent experiment (27707.820528ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 28016.765111

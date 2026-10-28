@@ -4,9 +4,9 @@ export const START_X = 64;
 export const END_X = 604;
 export const FREQUENCY = 25;
 export const PULSE_DURATION = .16;
-export const AMPLITUDE = 5.5;
+export const AMPLITUDE = 4.2;
 export const STEP = .002;
-export const ZOOM = 4;
+export const ZOOM = 5;
 export const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 export const airSpeed = temperature => 331 + .6 * temperature;
 export const arrivalTime = speed => DISTANCE / speed;
@@ -23,16 +23,16 @@ export function conditions(mode, temperature = 30) {
     { id: 'adjustable', kind: 'air', name: `${temperature}°C 設定組`, description: '溫度可調整', speed: airSpeed(temperature), temperature }
   ];
   return [
-    { id: 'air', kind: 'air', name: '空氣', description: '粒子較分散', speed: 343 },
-    { id: 'water', kind: 'water', name: '水', description: '粒子較密集', speed: 1480 },
-    { id: 'steel', kind: 'steel', name: '鋼', description: '簡化晶格與彈性連結', speed: 5900 }
+    { id: 'air', kind: 'air', name: '空氣', description: '氣體・分子分散', speed: 343 },
+    { id: 'water', kind: 'water', name: '水', description: '液體・水分子密集', speed: 1480 },
+    { id: 'steel', kind: 'steel', name: '鋼', description: '固體・原子彈性連結', speed: 5900 }
   ];
 }
 
 export const appearance = {
-  air: { columns: 38, rows: 3, color: '#367b8e', radius: 2.5 },
-  water: { columns: 62, rows: 5, color: '#286b7c', radius: 2 },
-  steel: { columns: 42, rows: 4, color: '#53635d', radius: 2.7 }
+  air: { columns: 24, rows: 3 },
+  water: { columns: 24, rows: 5 },
+  steel: { columns: 28, rows: 4 }
 };
 
 export function positions(kind) {
@@ -41,10 +41,12 @@ export function positions(kind) {
   for (let row = 0; row < rows; row++) for (let column = 0; column < columns; column++) {
     const seed = Math.sin((column + 1) * 127.1 + (row + 1) * 311.7) * 43758.5453;
     const noise = kind === 'steel' ? 0 : 2 * (seed - Math.floor(seed)) - 1;
-    const x = START_X + column / (columns - 1) * (END_X - START_X)
-      + (column === 0 || column === columns - 1 ? 0 : noise * 1.1);
+    const fraction = column / (columns - 1);
+    const stagger = kind === 'water' ? Math.sin(Math.PI * fraction) * (row % 2 ? 6 : -6) : 0;
+    const x = START_X + fraction * (END_X - START_X)
+      + (column === 0 || column === columns - 1 ? 0 : noise * 1.1 + stagger);
     points.push({
-      x, y: 41 + row / (rows - 1) * 60 + noise * 1.8,
+      x, y: 41 + row / (rows - 1) * 60 + noise * (kind === 'air' ? 7 : 1.8),
       distance: (x - START_X) / (END_X - START_X) * DISTANCE,
       row, column
     });

@@ -2,7 +2,8 @@ import {
   DISTANCE, START_X, END_X, STEP, ZOOM, PULSE_DURATION,
   appearance, arrivalTime, clamp, conditions, displacement,
   positions, runEnd, sample, winners
-} from './model.mjs?v=complete-1';
+} from './model.mjs?v=materials-2';
+import { addMaterials, particleGlyph, springPath, specimenSvg, materialInfo, SPECIMEN_URL } from './rendering.mjs?v=materials-2';
 
 const $ = selector => document.querySelector(selector);
 const svgNS = 'http://www.w3.org/2000/svg';
@@ -20,7 +21,7 @@ const svg = (tag, attributes, parent) => {
   return node;
 };
 
-const state = { mode: 'material', temperature: 30, slowdown: 50, phase: 'idle', time: 0, prediction: null };
+const state = { mode: 'material', temperature: 30, slowdown: 50, phase: 'idle', time: 0 };
 let models = [], groups = [], frame = 0, lastWallTime = null;
 let noticed = new Set(), context = null, audioFailed = false;
 const tones = new Set();
@@ -64,58 +65,64 @@ function arrivalTone() {
 }
 
 function buildModel(group) {
-  const settings = appearance[group.kind];
+  const settings = appearance[group.kind], material = materialInfo[group.kind];
   const row = document.createElement('figure');
-  row.className = 'medium-row'; row.dataset.group = group.id;
+  row.className = 'medium-row'; row.dataset.group = group.id; row.dataset.kind = group.kind;
   row.dataset.speed = String(group.speed);
   row.innerHTML = `
     <header class="medium-header">
-      <div class="medium-heading"><h2>${group.name}</h2><p>${group.description}</p></div>
-      <div class="arrival-readout"><span>尚未傳到最右端</span><output aria-live="off" aria-label="${group.name}傳到最右端的模型時間">—</output></div>
+      <button class="specimen-button" type="button" aria-label="放大觀察${group.name}的${material.name}材質">${specimenSvg(group.kind)}<span class="specimen-status">近照載入中</span><span class="enlarge-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><circle cx="8" cy="8" r="5"/><path d="M12 12L17 17"/></svg></span></button>
+      <div class="medium-heading"><h2>${group.name}</h2><p>${state.mode === 'temperature' ? group.description : material.phase}</p></div>
+      <div class="arrival-readout"><span>最右端到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的模型時間">—</output></div>
     </header>
     <div class="row-body">
       <div class="field">
-        <svg viewBox="0 0 660 154" role="img" aria-label="${group.name}的粒子在原位附近沿水平方向振動，振動從左側傳向右側。"></svg>
+        <svg viewBox="0 0 660 158" role="img" aria-label="${group.name}的微觀放大模型，分子或原子在原位附近沿水平方向振動。"></svg>
         <button class="source-hit" type="button" aria-label="點按${group.name}振動源，重新同時啟動所有組別"></button>
       </div>
       <div class="end-observation"><p class="zoom-title">最右端放大</p><svg class="zoom" viewBox="0 0 150 120" role="img" aria-label="${group.name}最右端的粒子，尚未開始振動"></svg><p class="end-state">尚未開始振動</p></div>
     </div>`;
   $('#models').append(row);
   row.querySelector('.source-hit').addEventListener('click', startFresh);
-  const field = row.querySelector('.field svg');
-  svg('rect', { x: 56, y: 16, width: 558, height: 105, rx: 10, fill: group.kind === 'water' ? '#eef5f5' : '#f6f8f3', stroke: '#d6e1d8' }, field);
-  svg('rect', { x: 14, y: 44, width: 18, height: 54, rx: 3, fill: '#526b5e' }, field);
-  const sourceRod = svg('path', { d: 'M30 71H49', stroke: '#6d8374', 'stroke-width': 5 }, field);
-  const piston = svg('rect', { x: 45, y: 35, width: 8, height: 72, rx: 2, fill: '#a4b3a9', stroke: '#536e5b' }, field);
-  const bonds = svg('g', { stroke: '#b3bfb7', 'stroke-width': 1.15 }, field);
+  row.querySelector('.specimen-button').addEventListener('click', () => openMaterial(group.kind));
+  if (document.documentElement.dataset.materials === 'error') text(row.querySelector('.specimen-status'), '近照暫時無法載入');
+  const field = row.querySelector('.field svg'), fill = addMaterials(field, `${group.id}-field`);
+  svg('rect', { x: 50, y: 22, width: 578, height: 99, rx: 11, fill: '#fafbf7', stroke: '#d6e1d8' }, field);
+  text(svg('text', { x: 59, y: 13, fill: '#788a7c', 'font-size': 10.5 }, field), group.kind === 'steel' ? '微觀放大 · 原子與彈性作用' : '微觀放大 · 分子整體往返');
+  svg('rect', { x: 10, y: 43, width: 26, height: 59, rx: 4, fill: fill('source'), stroke: '#7f9495', 'stroke-width': .8 }, field);
+  svg('path', { d: 'M15 48V96M31 48V96', stroke: '#dce4df', 'stroke-width': .8, opacity: .7 }, field);
+  const sourceRod = svg('path', { d: 'M30 71H49', stroke: '#728b8b', 'stroke-width': 4 }, field);
+  const piston = svg('rect', { x: 45, y: 35, width: 8, height: 72, rx: 2, fill: fill('source'), stroke: '#718a8d', 'stroke-width': .8 }, field);
+  const bonds = svg('g', { fill: 'none', stroke: '#8a9e9c', 'stroke-width': .8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, field);
   const dots = svg('g', { 'aria-hidden': 'true' }, field);
-  const points = positions(group.kind).map(point => ({ ...point, node: svg('circle', {
-    class: 'particle', cx: point.x, cy: point.y, r: settings.radius, fill: '#d2dcd5',
-    'data-origin-x': point.x, 'data-origin-y': point.y, 'data-distance': point.distance
-  }, dots) }));
+  const points = positions(group.kind).map((point, index) => {
+    const node = particleGlyph(dots, { kind: group.kind, index, className: 'particle', x: point.x, y: point.y, fill, scale: group.kind === 'steel' ? 1.2 : 1.15 });
+    attr(node, 'data-origin-x', point.x); attr(node, 'data-origin-y', point.y); attr(node, 'data-distance', point.distance);
+    return { ...point, node };
+  });
   const links = [];
   if (group.kind === 'steel') for (const point of points) {
     const index = point.row * settings.columns + point.column;
     for (const offset of [point.column < settings.columns - 1 ? 1 : 0, point.row < settings.rows - 1 ? settings.columns : 0]) {
       if (!offset) continue;
       const other = points[index + offset];
-      links.push({ point, other, node: svg('line', { x1: point.x, y1: point.y, x2: other.x, y2: other.y }, bonds) });
+      links.push({ point, other, node: svg('path', { class: 'elastic-link', 'data-first': index, 'data-second': index + offset, d: springPath(point.x, point.y, other.x, other.y) }, bonds) });
     }
   }
-  for (const x of [START_X, END_X]) svg('path', { d: `M${x} 124V133`, stroke: '#a0b1a3', 'stroke-width': 1.5 }, field);
-  text(svg('text', { x: START_X, y: 148, 'text-anchor': 'middle', fill: '#718573', 'font-size': 11 }, field), '0 m');
-  text(svg('text', { x: END_X, y: 148, 'text-anchor': 'middle', fill: '#718573', 'font-size': 11 }, field), '100 m');
-  const zoom = row.querySelector('.zoom');
-  const endPoints = [33, 60, 87].map(y => svg('circle', { class: 'end-particle', cx: 75, cy: y, r: 5.7, fill: '#d2dcd5' }, zoom));
+  for (const x of [START_X, END_X]) svg('path', { d: `M${x} 124V133`, stroke: '#a0b1a3', 'stroke-width': 1.2 }, field);
+  text(svg('text', { x: START_X, y: 148, 'text-anchor': 'middle', fill: '#718573', 'font-size': 10.5 }, field), '0 m');
+  text(svg('text', { x: END_X, y: 148, 'text-anchor': 'middle', fill: '#718573', 'font-size': 10.5 }, field), '100 m');
+  const zoom = row.querySelector('.zoom'), zoomFill = addMaterials(zoom, `${group.id}-zoom`);
+  const endPoints = [30, 60, 90].map((y, index) => particleGlyph(zoom, { kind: group.kind, index: Math.round(index * (settings.rows - 1) / 2) * settings.columns + settings.columns - 1, className: 'end-particle', x: 75, y, fill: zoomFill, scale: 1.8 }));
   return {
     ...group, row, points, links, piston, sourceRod, endPoints, zoom,
     arrivalCaption: row.querySelector('.arrival-readout span'), arrivalOutput: row.querySelector('.arrival-readout output'),
-    endState: row.querySelector('.end-state'), positions: []
+    endState: row.querySelector('.end-state')
   };
 }
 
 function caption() {
-  if (state.phase === 'idle') return '可先預測，再同時啟動左側振動源。';
+  if (state.phase === 'idle') return '一起啟動振動源，觀察介質裡的振動如何逐段傳開。';
   const arrived = groups.filter(group => state.time >= arrivalTime(group.speed));
   if (!arrived.length) return state.mode === 'material' ? '三組一起開始，觀察粒子逐段受振。' : '兩組一起開始，觀察哪一組先傳到最右端。';
   if (arrived.length === groups.length) return state.phase === 'complete' ? '本輪比較完成，粒子都已回復原位。' : '各組都已傳到最右端，繼續觀察粒子回復原位。';
@@ -127,10 +134,8 @@ function drawResult() {
   const finished = groups.length > 0 && groups.every(group => state.time >= arrivalTime(group.speed));
   $('#result').hidden = !finished;
   if (!finished) return;
-  const first = winners(groups), answer = first.length > 1 ? 'same' : first[0];
-  text($('#result-title'), state.prediction === null ? '觀察結果' : state.prediction === answer ? '預測符合觀察' : '一起比較這次的結果');
-  const chosen = state.prediction === 'same' ? '同時到達' : groups.find(group => group.id === state.prediction)?.name;
-  text($('#prediction-feedback'), chosen ? `你的預測：${chosen}。` : '可回到起點，再選一組作預測。');
+  const first = winners(groups);
+  text($('#result-title'), '觀察結果');
   let summary;
   if (state.mode === 'material') summary = '在本次條件下，鋼最先、水其次、空氣最後。介質傳遞振動的特性不同，不能只靠粒子疏密判斷快慢。';
   else {
@@ -158,29 +163,29 @@ function paint(audible = false, overrideCaption = '') {
   panel.dataset.time = state.time.toFixed(8); panel.dataset.slowdown = state.slowdown;
   let newArrival = false;
   for (const model of models) {
-    const settings = appearance[model.kind], arrived = state.time >= arrivalTime(model.speed);
+    const arrived = state.time >= arrivalTime(model.speed);
     for (const point of model.points) {
       const next = sample(point, model.speed, state.time); point.position = next.x;
-      attr(point.node, 'cx', next.x.toFixed(4));
-      attr(point.node, 'fill', next.reached ? settings.color : '#d2dcd5');
+      attr(point.node, 'transform', `translate(${next.x.toFixed(4)} ${point.y.toFixed(4)})`);
+      attr(point.node, 'opacity', next.reached ? 1 : .34);
       attr(point.node, 'data-reached', next.reached);
     }
     for (const link of model.links) {
-      attr(link.node, 'x1', link.point.position.toFixed(4)); attr(link.node, 'x2', link.other.position.toFixed(4));
+      attr(link.node, 'd', springPath(link.point.position, link.point.y, link.other.position, link.other.y));
     }
     const sourcePosition = 45 + displacement(state.time);
     attr(model.piston, 'x', sourcePosition.toFixed(4));
     attr(model.sourceRod, 'd', `M30 71H${sourcePosition + 4}`);
     const localTime = state.time - arrivalTime(model.speed);
     const offset = displacement(localTime) * ZOOM;
-    for (const dot of model.endPoints) {
-      attr(dot, 'cx', (75 + offset).toFixed(4));
-      attr(dot, 'fill', arrived ? settings.color : '#d2dcd5');
-    }
+    model.endPoints.forEach((dot, index) => {
+      attr(dot, 'transform', `translate(${(75 + offset).toFixed(4)} ${30 + index * 30})`);
+      attr(dot, 'opacity', arrived ? 1 : .34);
+    });
     const endState = !arrived ? '尚未開始振動' : localTime < PULSE_DURATION ? '正在往返振動' : '已回復靜止';
     text(model.endState, endState);
-    attr(model.zoom, 'aria-label', `${model.name}最右端粒子，${endState}，位移放大四倍`);
-    text(model.arrivalCaption, arrived ? '傳到最右端' : '尚未傳到最右端');
+    attr(model.zoom, 'aria-label', `${model.name}最右端粒子，${endState}，位移放大五倍`);
+    text(model.arrivalCaption, arrived ? '已傳到最右端' : '最右端到達時間');
     text(model.arrivalOutput, arrived ? `${milliseconds(arrivalTime(model.speed))} 毫秒` : '—');
     if (arrived) attr(model.arrivalOutput, 'data-arrival', arrivalTime(model.speed));
     else model.arrivalOutput.removeAttribute('data-arrival');
@@ -200,13 +205,9 @@ function stopFrame() {
   frame = 0; lastWallTime = null;
 }
 
-function resetRun(clearPrediction = false) {
+function resetRun() {
   stopFrame(); stopTones();
   state.phase = 'idle'; state.time = 0; noticed = new Set();
-  if (clearPrediction) {
-    state.prediction = null;
-    for (const input of document.querySelectorAll('[name=prediction]')) input.checked = false;
-  }
   paint();
 }
 
@@ -243,39 +244,35 @@ function pause(message = '') {
   stopFrame(); stopTones(); paint(false, message);
 }
 
-function buildPredictions() {
-  $('#prediction-options').replaceChildren();
-  const options = groups.map(group => ({ id: group.id, label: group.name }));
-  if (state.mode === 'temperature') options.push({ id: 'same', label: '同時到達' });
-  for (const option of options) {
-    const label = document.createElement('label'); label.className = 'prediction-option';
-    const input = document.createElement('input'); input.type = 'radio'; input.name = 'prediction'; input.value = option.id;
-    const title = document.createElement('span'); title.textContent = option.label;
-    input.addEventListener('change', () => { state.prediction = option.id; drawResult(); });
-    label.append(input, title); $('#prediction-options').append(label);
-  }
-}
-
 function rebuild(message = '') {
-  resetRun(true);
+  resetRun();
   groups = conditions(state.mode, state.temperature);
   $('#models').replaceChildren();
   models = groups.map(buildModel);
-  buildPredictions();
   $('#temperature-settings').hidden = state.mode !== 'temperature';
   const temperatureMode = state.mode === 'temperature';
   for (const [mode, button] of [['material', $('#tab-material')], ['temperature', $('#tab-temperature')]]) {
     attr(button, 'aria-selected', mode === state.mode); button.tabIndex = mode === state.mode ? 0 : -1;
   }
   attr(panel, 'aria-labelledby', temperatureMode ? 'tab-temperature' : 'tab-material');
-  text($('#lesson-title'), temperatureMode ? '都是空氣，升溫後會早一點傳到嗎？' : '同樣的距離，哪一組先傳到？');
+  text($('#lesson-title'), temperatureMode ? '都是空氣，升溫後會早一點傳到嗎？' : '聲音在不同介質中，傳得多快？');
   text($('#lesson-intro'), temperatureMode ? '固定參考組，只改變設定組的空氣溫度。' : '觀察粒子逐段受振，再比較最右端開始振動的時間。');
-  text($('#girl-line'), temperatureMode ? '把其中一組的空氣升溫，最右端會比較早開始動嗎？' : '空氣、水和鋼，哪一邊最右端的粒子會先開始動？');
-  text($('#grandpa-line'), temperatureMode ? '參考組維持 20°C。只改另一組溫度，再用相同條件一起比較。' : '先猜看看，再同時啟動。注意粒子在原位附近往返，以及振動傳到哪裡。');
+  text($('#girl-line'), temperatureMode ? '溫度不同時，空氣裡的振動傳遞會怎麼改變？' : '空氣、水和鋼，裡面的粒子是怎麼把振動傳開的？');
+  text($('#grandpa-line'), temperatureMode ? '參考組維持 20°C。只改另一組溫度，再用相同條件一起比較。' : '一起啟動，觀察三種介質裡的粒子如何往返，再比較振動傳到最右端的時間。');
   $('#takeaway').innerHTML = temperatureMode
     ? '<strong>觀察重點：</strong>只改變空氣溫度，振動頻率維持相同；同溫時，振動會同時傳到最右端。'
     : '<strong>觀察重點：</strong>粒子在原位附近往返；同一聲源頻率相同，三種介質傳遞振動的速度不同。';
   paint(false, message);
+}
+
+function openMaterial(kind) {
+  const wasRunning = state.phase === 'running';
+  pause();
+  const material = materialInfo[kind];
+  text($('#material-dialog-title'), `${material.name} · ${material.phase}`);
+  text($('#material-dialog-description'), material.description + (wasRunning ? ' 比較已暫停，關閉近照後可繼續。' : ''));
+  $('#material-dialog-photo').innerHTML = `${specimenSvg(kind, 'specimen-dialog-photo')}<p class="specimen-status">${document.documentElement.dataset.materials === 'error' ? '近照暫時無法載入' : '近照載入中'}</p>`;
+  $('#material-dialog').showModal();
 }
 
 function setMode(mode) {
@@ -333,5 +330,15 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) pause('頁面已暫停，返回後可繼續觀察。');
 });
 window.addEventListener('pagehide', () => { pause(); stopTones(); });
+$('#close-material').addEventListener('click', () => $('#material-dialog').close());
+$('#material-dialog').addEventListener('click', event => { if (event.target === $('#material-dialog')) $('#material-dialog').close(); });
+document.documentElement.dataset.materials = 'loading';
+const specimenLoader = new Image();
+specimenLoader.onload = () => { document.documentElement.dataset.materials = 'ready'; };
+specimenLoader.onerror = () => {
+  document.documentElement.dataset.materials = 'error';
+  for (const node of document.querySelectorAll('.specimen-status')) text(node, '近照暫時無法載入');
+};
+specimenLoader.src = SPECIMEN_URL;
 attr($('#temperature'), 'aria-valuetext', '設定組 30 攝氏度');
 rebuild();
