@@ -130,7 +130,7 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await page.locator('[data-diagnosis="0"]').click();await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,true,false');
   });
   await t.test('反向訊號、原路重合、先預測後驗證；三階段與重設',async()=>{
-    await page.locator('#periscope-next').click();await expect(quiz).toHaveAttribute('data-phase','2');await expect(page.locator('#periscope-signal')).toBeDisabled();
+    await page.locator('#periscope-next').click();await expect(quiz).toHaveAttribute('data-phase','2');await expect(page.locator('#periscope-signal')).toBeDisabled();await expect(page.locator('#periscope-signal-source')).toBeVisible();
     const before=await angles();await page.locator('#periscope-mirror-0').dispatchEvent('keydown',{key:'ArrowRight'});assert.deepEqual(await angles(),before);
     await page.locator('[data-prediction="inside"]').click();await page.locator('#periscope-signal').click();await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,true,false');
     await page.locator('[data-prediction="same"]').click();await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,true,false');

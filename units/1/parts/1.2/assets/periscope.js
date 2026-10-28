@@ -55,6 +55,7 @@ if(root) {
     const ray=forwardRay(), marker=$('#periscope-block-marker');
     marker.hidden=true;marker.setAttribute('hidden','');
     $('#periscope-normal').replaceChildren();
+    $('#periscope-signal-source').toggleAttribute('hidden',state.stage!==2);
     if(state.stage===2) {
       const saved=returnSignal(state.saved);
       drawPath($('#periscope-recorded'),signalPoints(saved).reverse(),'#fff0b1',false,true);
@@ -119,7 +120,7 @@ if(root) {
     root.dataset.phase=String(state.stage);root.dataset.angles=state.angles.join(',');root.dataset.view=info.kind;root.dataset.target=String(info.target);root.dataset.completed=state.done.join(',');root.dataset.path=String(state.path);root.dataset.signal=String(state.signal);
     $('#periscope-view-state').textContent=messages[info.kind];$('#periscope-view-state').dataset.kind=info.kind;
     $('#periscope-view').setAttribute('aria-label',messages[info.kind]+'。'+(info.blocked?'部分視線受到遮擋。':''));
-    $('#periscope-view-copy').textContent=state.stage===2?'鏡片保持固定；這是剛才修復後的景象。':info.kind==='blocked'?'鏡子未把外界的光送進眼睛。看看光在哪裡被擋住。':info.blocked/(info.clear+info.blocked)>.3?'邊緣的暗區是管壁或有限鏡片造成的遮擋。':'試著微轉鏡片，觀察船、天空與海面如何移動。';
+    $('#periscope-view-copy').textContent=state.stage===2?'鏡片固定，保留剛才看見的景象作對照。':info.kind==='blocked'?'鏡子未把外界的光送進眼睛。看看光在哪裡被擋住。':info.blocked/(info.clear+info.blocked)>.3?'邊緣的暗區是管壁或有限鏡片造成的遮擋。':'試著微轉鏡片，觀察船、天空與海面如何移動。';
     $$('.periscope-steps button').forEach((b,i)=>{b.disabled=i>0&&!state.done[i-1];b.setAttribute('aria-selected',String(i===state.stage));b.tabIndex=i===state.stage?0:-1;b.dataset.complete=String(state.done[i]);});
     $('#periscope-panel').setAttribute('aria-labelledby',`periscope-tab-${state.stage}`);
     for(let i=0;i<3;i++)$(`#periscope-question-${i}`).hidden=i!==state.stage;
@@ -204,7 +205,7 @@ if(root) {
     const content=[
       ['我在潛水艇裡，怎麼看見海上的船？','先轉動鏡片，再從觀察窗找找船在哪裡。','任務一｜把船的駕駛艙調到觀察窗中央','拖曳鏡片端點旋轉。先試著觀察，需要時再顯示輔助光路。'],
       ['剛才明明看見船，怎麼現在偏向天空了？','先判斷哪片鏡子被轉動，再把景象修回來。','任務二｜找出故障，讓船重新回到中央','先選擇你的判斷，再拖動鏡片修復；需要時可顯示光路。'],
-      ['我能沿同一條路，把訊號送回船上嗎？','鏡片保持不動，先預測，再發送藍色訊號光。','任務三｜讓訊號沿原光路返回','黃色是剛才進入眼睛的一條代表光線；藍光由眼睛原位置反向發出。']
+      ['我能沿同一條路，把訊號送回船上嗎？','鏡片保持不動，先預測，再發送藍色訊號光。','任務三｜讓訊號沿原光路返回','暫以訊號光源替換眼睛；黃色是原入眼光線，藍光從同一位置反向發出。']
     ][stage];
     ['#periscope-student','#periscope-grandpa','#periscope-task-title','#periscope-task-copy'].forEach((id,i)=>$(id).textContent=content[i]);
     if(stage===0) {
