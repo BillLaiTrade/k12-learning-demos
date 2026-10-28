@@ -4,6 +4,7 @@ const { spawn } = require('node:child_process');
 const path = require('node:path');
 const fs = require('node:fs/promises');
 const { chromium } = require('playwright');
+const { createHash } = require('node:crypto');
 
 test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], {
@@ -40,6 +41,34 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
   async function capture(selector, name) {
     if (captureDir) await page.locator(selector).screenshot({ path: path.join(captureDir, `${name}.png`) });
   }
+
+  await t.test('asset versions match content and avoid the legacy unversioned fire script', async () => {
+    const assetURLs = await page.locator('link[rel=stylesheet],script[src]').evaluateAll(nodes => nodes.map(node => node.href || node.src));
+    assert.equal(assetURLs.length, 5);
+    for (const assetURL of assetURLs) {
+      const url = new URL(assetURL);
+      const filename = path.basename(url.pathname);
+      const bytes = await fs.readFile(path.resolve(__dirname, '../units/6/parts/6.1/assets', filename));
+      assert.equal(url.searchParams.get('v'), createHash('sha256').update(bytes).digest('hex').slice(0, 12), filename);
+    }
+    const context = await browser.newContext();
+    try {
+      let legacyRequests = 0;
+      await context.route('**/assets/classical-inquiry.js*', async route => {
+        if (!new URL(route.request().url()).search) {
+          legacyRequests++;
+          await route.fulfill({ contentType: 'text/javascript', body: 'window.ClassicalInquiry={render(){document.querySelector("#inquiry-diagram").textContent="銀白色鎂帶"}};' });
+        } else await route.continue();
+      });
+      const revisited = await context.newPage();
+      await revisited.goto(base);
+      await revisited.locator('[data-classical=fire]').click();
+      assert.match(await revisited.locator('#inquiry-instruction').innerText(), /熟悉的蠟燭/);
+      assert.equal(await revisited.locator('#inquiry-controls button').count(), 0);
+      assert.doesNotMatch(await revisited.locator('#inquiry-diagram').innerText(), /鎂帶|氧化鎂/);
+      assert.equal(legacyRequests, 0);
+    } finally { await context.close(); }
+  });
 
   await t.test('six approved topics, one assessment, shared characters and working anchors', async () => {
     assert.deepEqual(await page.locator('.lesson-card h2').allTextContents(), [
