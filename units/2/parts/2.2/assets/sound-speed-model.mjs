@@ -1,11 +1,12 @@
-// 所有組別使用同一振動脈衝；只改變傳播延遲。
+// 所有組別使用同一個便於觀察的往返訊號；傳播延遲依真實聲速計算。
+// 往返節奏與振幅是微觀放大示意，不用來模擬可聽聲音的音高。
 export const DISTANCE = 5000;
-export const START_X = 64;
+export const START_X = 72;
 export const END_X = 410;
-export const FREQUENCY = 25;
-export const PULSE_DURATION = 1;
-export const AMPLITUDE = 4.2;
-export const ZOOM = 5;
+export const FREQUENCY = .4;
+export const PULSE_DURATION = 4;
+export const AMPLITUDE = 6;
+export const ZOOM = 1.5;
 export const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 export const airSpeed = temperature => 331 + .6 * temperature;
 export const arrivalTime = speed => DISTANCE / speed;
@@ -14,7 +15,8 @@ export const reachedDistance = (speed, time) => clamp(speed * time, 0, DISTANCE)
 export function displacement(localTime) {
   if (localTime <= 0 || localTime >= PULSE_DURATION) return 0;
   return AMPLITUDE * Math.sin(2 * Math.PI * FREQUENCY * localTime)
-    * Math.sin(Math.PI * localTime / PULSE_DURATION) ** 2;
+    * Math.sin(Math.PI / 2 * clamp(localTime / .04, 0, 1)) ** 2
+    * Math.sin(Math.PI / 2 * clamp((PULSE_DURATION - localTime) / .25, 0, 1)) ** 2;
 }
 
 export function conditions(mode, temperature = 30) {

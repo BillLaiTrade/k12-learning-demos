@@ -2,8 +2,8 @@ import {
   DISTANCE, START_X, END_X, ZOOM, PULSE_DURATION,
   appearance, arrivalTime, reachedDistance, clamp, conditions, displacement,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=integrated-7';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene } from './sound-speed-rendering.mjs?v=integrated-7';
+} from './sound-speed-model.mjs?v=causal-8';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene } from './sound-speed-rendering.mjs?v=causal-8';
 
 export function initSoundSpeed(root) {
 const $ = selector => root.querySelector(selector);
@@ -80,7 +80,7 @@ function buildModel(group) {
         <svg viewBox="0 0 456 146" role="img" aria-label="${group.name}的內部放大模型，${group.kind === 'water' ? '水槽中的水分子' : group.kind === 'steel' ? '金屬剖面中的原子' : '透明空氣中的分子'}在原位附近沿水平方向振動。"></svg>
         <button class="source-hit" type="button" aria-label="點按${group.name}振動源，重新同時啟動所有組別"></button>
       </div>
-      <div class="end-observation"><p class="zoom-title sr-only">最右端放大</p><svg class="zoom" viewBox="0 0 150 120" role="img" aria-label="${group.name}最右端的粒子，尚未開始振動"></svg><p class="end-state">尚未開始振動</p><div class="arrival-readout"><span>到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的實際經過時間">—</output></div></div>
+      <div class="end-observation"><p class="zoom-title sr-only">末端相鄰粒子</p><svg class="zoom" viewBox="0 0 150 120" role="img" aria-label="${group.name}末端三個相鄰粒子依序受振，最右邊為終點"></svg><p class="end-state">終點尚未受振</p><div class="arrival-readout"><span>到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的實際經過時間">—</output></div></div>
     </div>`;
   $('#models').append(row);
   row.querySelector('.source-hit').addEventListener('click', startFresh);
@@ -114,15 +114,28 @@ function buildModel(group) {
     svg('path', { d: `M${x} 123V130`, stroke: '#91aa9b', 'stroke-width': 1 }, field);
   }
   const front = svg('g', { class: 'propagation-front', transform: `translate(${START_X} 0)`, visibility: 'hidden', 'aria-hidden': 'true' }, field);
-  svg('path', { d: 'M0 23V117', stroke: '#176b53', 'stroke-width': 1.6, 'stroke-dasharray': '4 3', 'vector-effect': 'non-scaling-stroke' }, front);
-  svg('path', { d: 'M-4 15H4L0 21Z', fill: '#176b53' }, front);
+  svg('path', { d: 'M0 123V131', stroke: '#176b53', 'stroke-width': 1.8, 'vector-effect': 'non-scaling-stroke' }, front);
+  svg('path', { d: 'M-4 116H4L0 122Z', fill: '#176b53' }, front);
   text(svg('text', { x: START_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '0 m');
   text(svg('text', { x: END_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), `${number.format(DISTANCE)} m`);
   const zoom = row.querySelector('.zoom'), zoomFill = addMaterials(zoom, `${group.id}-zoom`);
   const zoomScene = mediumScene(zoom, group.kind, `${group.id}-zoom-scene`, true);
-  const endPoints = [30, 60, 90].map((y, index) => particleGlyph(zoomScene.interior, { kind: group.kind, index: Math.round(index * (settings.rows - 1) / 2) * settings.columns + settings.columns - 1, className: 'end-particle', x: 75, y, fill: zoomFill, scale: 1.8 }));
+  const rowIndex = Math.floor(settings.rows / 2);
+  const endPoints = points.filter(point => point.row === rowIndex).slice(-3).map((point, index) => {
+    const x = 38 + index * 37;
+    const node = particleGlyph(zoomScene.interior, { kind: group.kind, index: rowIndex * settings.columns + point.column, className: 'end-particle', x, y: 60, fill: zoomFill, scale: 1.45 });
+    attr(node, 'data-origin-x', x); attr(node, 'data-distance', point.distance);
+    return { point, x, node };
+  });
+  const zoomLinks = group.kind === 'steel' ? endPoints.slice(0,-1).map((point, index) => {
+    const other = endPoints[index + 1];
+    const node = svg('path', { class: 'zoom-link', d: springPath(point.x,60,other.x,60), fill:'none', stroke:'#8a9e9c', 'stroke-width':1 }, zoomScene.interior);
+    zoomScene.interior.prepend(node);
+    return { point, other, node };
+  }) : [];
+  text(svg('text', { x:112, y:96, 'text-anchor':'middle', fill:'#526f5c', 'font-size':12 }, zoom), '終點');
   return {
-    ...group, row, points, links, piston, sourceRod, endPoints, zoom, scene, front, reachedTrack,
+    ...group, row, points, links, piston, sourceRod, endPoints, zoomLinks, zoom, scene, front, reachedTrack,
     distanceOutput: row.querySelector('.propagation-readout output'),
     arrivalCaption: row.querySelector('.arrival-readout span'), arrivalOutput: row.querySelector('.arrival-readout output'),
     endState: row.querySelector('.end-state')
@@ -130,9 +143,9 @@ function buildModel(group) {
 }
 
 function caption() {
-  if (state.phase === 'idle') return '一起啟動振動源，觀察介質裡的振動如何逐段傳開。';
+  if (state.phase === 'idle') return '啟動後，觀察左邊粒子先往返，再帶動鄰近粒子。';
   const arrived = groups.filter(group => state.time >= arrivalTime(group.speed));
-  if (!arrived.length) return state.mode === 'material' ? '三組一起開始，觀察粒子逐段受振。' : '兩組一起開始，觀察哪一組先傳到最右端。';
+  if (!arrived.length) return state.mode === 'material' ? '粒子在原位附近往返，擾動由相鄰粒子逐段傳遞。' : '兩組一起開始，觀察哪一組先傳到最右端。';
   if (arrived.length === groups.length) return state.phase === 'complete' ? '本輪比較完成，粒子都已回復原位。' : '各組都已傳到最右端，繼續觀察粒子回復原位。';
   if (state.mode === 'material') return arrived.length === 1 ? '鋼已傳到最右端；水與空氣仍在傳遞。' : '水也已傳到最右端；空氣仍在傳遞。';
   return arrived[0].id === 'reference' ? '20°C 參考組先傳到；設定組仍在傳遞。' : `${state.temperature}°C 設定組先傳到；20°C 參考組仍在傳遞。`;
@@ -182,7 +195,7 @@ function paint(audible = false, overrideCaption = '') {
     for (const point of model.points) {
       const next = sample(point, model.speed, state.time); point.position = next.x;
       attr(point.node, 'transform', `translate(${next.x.toFixed(4)} ${point.y.toFixed(4)})`);
-      attr(point.node, 'opacity', next.reached ? 1 : .64);
+      attr(point.node, 'data-moving', next.moving);
       attr(point.node, 'data-reached', next.reached);
     }
     model.scene.paint(state.time, model.speed);
@@ -193,14 +206,16 @@ function paint(audible = false, overrideCaption = '') {
     attr(model.piston, 'x', sourcePosition.toFixed(4));
     attr(model.sourceRod, 'd', `M30 71H${sourcePosition + 4}`);
     const localTime = state.time - arrivalTime(model.speed);
-    const offset = displacement(localTime) * ZOOM;
-    model.endPoints.forEach((dot, index) => {
-      attr(dot, 'transform', `translate(${(75 + offset).toFixed(4)} ${30 + index * 30})`);
-      attr(dot, 'opacity', arrived ? 1 : .64);
-    });
-    const endState = !arrived ? '尚未開始振動' : localTime < PULSE_DURATION ? '正在往返振動' : '已回復靜止';
+    for (const dot of model.endPoints) {
+      const next = sample(dot.point, model.speed, state.time);
+      dot.position = dot.x + (next.x - dot.point.x) * ZOOM;
+      attr(dot.node, 'transform', `translate(${dot.position.toFixed(4)} 60)`);
+      attr(dot.node, 'data-moving', next.moving);
+    }
+    for (const link of model.zoomLinks) attr(link.node, 'd', springPath(link.point.position,60,link.other.position,60));
+    const endState = !arrived ? '終點尚未受振' : localTime < PULSE_DURATION ? '終點振動中' : '終點已靜止';
     text(model.endState, endState);
-    attr(model.zoom, 'aria-label', `${model.name}最右端粒子，${endState}，位移放大五倍`);
+    attr(model.zoom, 'aria-label', `${model.name}末端三個相鄰粒子依序受振，最右邊為終點，${endState}`);
     text(model.arrivalCaption, '到達時間');
     text(model.arrivalOutput, arrived ? secondsText(arrivalTime(model.speed)) : '—');
     if (arrived) attr(model.arrivalOutput, 'data-arrival', arrivalTime(model.speed));
@@ -271,9 +286,9 @@ function rebuild(message = '') {
   }
   attr(panel, 'aria-labelledby', temperatureMode ? 'tab-temperature' : 'tab-material');
   text($('#lesson-title'), temperatureMode ? '都是空氣，升溫後會早一點傳到嗎？' : '聲音在不同介質中，傳得多快？');
-  text($('#lesson-intro'), temperatureMode ? '固定參考組，只改變設定組的空氣溫度。' : '觀察粒子逐段受振，再比較最右端開始振動的時間。');
+  text($('#lesson-intro'), temperatureMode ? '固定參考組，只改變設定組的空氣溫度。' : '觀察相鄰粒子如何逐段受振，再比較終點的到達時間。');
   text($('#girl-line'), temperatureMode ? '溫度不同時，空氣裡的振動傳遞會怎麼改變？' : '空氣、水和鋼，裡面的粒子是怎麼把振動傳開的？');
-  text($('#grandpa-line'), temperatureMode ? '參考組維持 20°C。只改另一組溫度，再用相同條件一起比較。' : '一起啟動，觀察三種介質裡的粒子如何往返，再比較振動傳到最右端的時間。');
+  text($('#grandpa-line'), temperatureMode ? '參考組維持 20°C。只改另一組溫度，再用相同條件一起比較。' : '先看靠近聲源的粒子往返，再看它帶動鄰近粒子；下方刻度只記錄擾動傳到的位置。');
   $('#takeaway').innerHTML = temperatureMode
     ? '<strong>觀察重點：</strong>只改變空氣溫度，振動頻率維持相同；同溫時，振動會同時傳到最右端。'
     : '<strong>觀察重點：</strong>粒子在原位附近往返；同一聲源頻率相同，三種介質傳遞振動的速度不同。';

@@ -1,5 +1,5 @@
 // 介質場景、分子／原子與表面取樣共用同一波動模型。
-import { positions, sample } from './sound-speed-model.mjs?v=integrated-7';
+import { positions, sample } from './sound-speed-model.mjs?v=causal-8';
 export const materialInfo = {
   air: {
     name: '空氣', phase: '氣體',
@@ -54,7 +54,7 @@ function atom(parent, x, y, radius, material, fill) {
 
 export function particleGlyph(parent, { kind, index, className, x, y, fill, scale = 1 }) {
   const species = speciesFor(kind, index);
-  const group = svgNode('g', { class: className, transform: `translate(${x} ${y})`, 'data-species': species, opacity: .64 }, parent);
+  const group = svgNode('g', { class: className, transform: `translate(${x} ${y})`, 'data-species': species, opacity: 1 }, parent);
   const angle = kind === 'steel' ? 0 : ((index * 73.17) % 160) - 80;
   const body = svgNode('g', { transform: `rotate(${angle}) scale(${scale})` }, group);
   if (species === 'water') {

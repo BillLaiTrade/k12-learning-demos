@@ -46,6 +46,27 @@ test('sound comparison uses one signal and physical travel delays', async t => {
     assert.ok(values.every(v => Math.abs(v) <= m.AMPLITUDE));
     assert.equal(m.displacement(-.1), 0); assert.equal(m.displacement(m.PULSE_DURATION), 0);
   });
+  await t.test('each neighbour receives a delayed copy of the preceding vibration and never starts first', () => {
+    for (const group of m.conditions('material')) {
+      const row = m.positions(group.kind).filter(p => p.row === 0);
+      for (let i = 1; i < row.length; i++) {
+        const left = row[i-1], right = row[i], delay = (right.distance-left.distance)/group.speed;
+        const onset = right.distance/group.speed;
+        assert.equal(m.sample(right,group.speed,onset-.0001).x,right.x);
+        assert.equal(m.sample(right,group.speed,onset-.0001).moving,false);
+        for (const age of [.02,.1,.4,1.2,2.1]) {
+          const t = onset+age;
+          assert.ok(Math.abs((m.sample(right,group.speed,t).x-right.x)-(m.sample(left,group.speed,t-delay).x-left.x))<1e-10);
+        }
+        const between = left.distance/group.speed + delay/2;
+        assert.equal(m.sample(left,group.speed,between).moving,true);
+        assert.equal(m.sample(right,group.speed,between).moving,false);
+      }
+    }
+    const maxAirGap = Math.max(...m.positions('air').filter(p=>p.row===0).slice(1).map((p,i)=>p.distance-m.positions('air')[i].distance));
+    assert.ok(maxAirGap < 343 / (2*m.FREQUENCY), 'spatial samples can resolve the illustrative compression wave');
+  });
+
   await t.test('particles remain ordered, stay at fixed y and settle in every medium', () => {
     for (const group of m.conditions('material')) {
       const points = m.positions(group.kind), end = m.runEnd([group]);
@@ -121,7 +142,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('#result').isHidden(), true);
     assert.equal(await page.evaluate(() => window.__audioContext), undefined);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('.speaker').first().evaluate(n => getComputedStyle(n, '::before').backgroundImage.includes('/shared-assets/characters/dialogue-character-avatars.png')), true);
-    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.particle').evaluateAll(nodes => nodes.every(n => Number(n.getAttribute('opacity')) === .64 && Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
+    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.particle').evaluateAll(nodes => nodes.every(n => Number(n.getAttribute('opacity')) === 1 && Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('.particle [stroke-dasharray], .field path[stroke="#be773a"]').count(), 0);
     const before = await particleXs(); await page.clock.runFor(1000); assert.deepEqual(await particleXs(), before);
   });
@@ -188,8 +209,8 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.ok(await time() > .88 && await time() < .92);
     const readings = await page.locator('[data-sound-speed-lab]').locator('.arrival-readout output').allTextContents();
     assert.deepEqual(readings, ['—', '—', '0.847 秒']);
-    for (const id of ['air', 'water']) assert.equal(await page.locator('[data-sound-speed-lab]').locator(`[data-group=${id}] .end-particle`).first().evaluate(n => n.transform.baseVal.consolidate().matrix.e), 75);
-    assert.notEqual(await page.locator('[data-sound-speed-lab]').locator('[data-group=steel] .end-particle').first().evaluate(n => n.transform.baseVal.consolidate().matrix.e), 75);
+    for (const id of ['air', 'water']) assert.equal(await page.locator('[data-sound-speed-lab]').locator(`[data-group=${id}] .end-particle`).evaluateAll(nodes => nodes.every(n => n.transform.baseVal.consolidate().matrix.e === Number(n.dataset.originX))), true);
+    assert.notEqual(await page.locator('[data-sound-speed-lab]').locator('[data-group=steel] .end-particle').first().evaluate(n => n.transform.baseVal.consolidate().matrix.e), 38);
     const reached = await page.locator('[data-sound-speed-lab]').locator('.medium-row').evaluateAll(rows => rows.map(row => row.querySelectorAll('.particle[data-reached=true]').length / row.querySelectorAll('.particle').length));
     const m = await model, current = await time();
     assert.deepEqual(reached, m.conditions('material').map(g => { const points = m.positions(g.kind); return points.filter(p => p.distance <= g.speed * current).length / points.length; }));
@@ -250,6 +271,32 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.ok(await time() > .98 && await time() < 1.02);
   });
 
+  await t.test('vibrating neighbours carry the disturbance while the position pointer stays below the medium', async () => {
+    await fresh(); await primary.click(); await page.clock.runFor(100);
+    const pair = kind => page.locator(`[data-group=${kind}] .particle`).evaluateAll(nodes => nodes.slice(0,3).map(n => ({ moved:n.transform.baseVal.consolidate().matrix.e-Number(n.dataset.originX), moving:n.dataset.moving })));
+    for (const kind of ['air','water']) {
+      const points = await pair(kind);
+      assert.ok(points[0].moved > .1); assert.equal(points[0].moving,'true');
+      assert.ok(Math.abs(points[1].moved)<.0001); assert.ok(Math.abs(points[2].moved)<.0001);
+    }
+    await page.clock.runFor(250);
+    const water = await pair('water');
+    assert.ok(Math.abs(water[1].moved)>.1); assert.ok(Math.abs(water[2].moved)<.0001);
+    await page.clock.runFor(750);
+    const air = await pair('air');
+    assert.ok(Math.abs(air[1].moved)>.1); assert.ok(Math.abs(air[2].moved)<.0001);
+    assert.equal(await page.locator('.particle').evaluateAll(nodes=>nodes.every(n=>n.getAttribute('opacity')==='1')),true);
+    assert.equal(await page.locator('.propagation-front path').evaluateAll(nodes=>nodes.every(n=>n.getBBox().y>=116)),true);
+    assert.equal(await page.locator('.propagation-front [stroke-dasharray]').count(),0);
+    const m=await model, current=await time();
+    for (const group of m.conditions('material')) {
+      const samples=await page.locator(`[data-group=${group.id}] .end-particle`).evaluateAll(nodes=>nodes.map(n=>({origin:Number(n.dataset.originX),distance:Number(n.dataset.distance),x:n.transform.baseVal.consolidate().matrix.e})));
+      assert.ok(samples[0].distance<samples[1].distance&&samples[1].distance<samples[2].distance);assert.equal(samples[2].distance,5000);
+      for(const point of samples)assert.ok(Math.abs(point.x-point.origin-m.displacement(current-point.distance/group.speed)*m.ZOOM)<.0002);
+    }
+    await page.locator('#reset-action').click();
+  });
+
   await t.test('teaching results retain actual times and rest positions without prediction or grading', async () => {
     await fresh();
     await primary.click(); await page.clock.fastForward(20000);
@@ -259,7 +306,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.match(await page.locator('[data-sound-speed-lab]').locator('#result-summary').textContent(), /鋼最先、水其次、空氣最後/);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('#result-title').textContent(), '觀察結果');
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('.particle').evaluateAll(nodes => nodes.every(n => Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
-    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.end-particle').evaluateAll(nodes => nodes.every(n => n.transform.baseVal.consolidate().matrix.e === 75)), true);
+    assert.equal(await page.locator('[data-sound-speed-lab]').locator('.end-particle').evaluateAll(nodes => nodes.every(n => n.transform.baseVal.consolidate().matrix.e === Number(n.dataset.originX))), true);
     await page.locator('[data-sound-speed-lab]').locator('#reset-action').click(); assert.equal(await time(), 0); assert.equal(await page.locator('[data-sound-speed-lab]').locator('#result').isHidden(), true);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('[name=prediction]').count(), 0);
     assert.deepEqual(await page.locator('[data-sound-speed-lab]').locator('.propagation-readout output').allTextContents(), ['0 公尺','0 公尺','0 公尺']);
