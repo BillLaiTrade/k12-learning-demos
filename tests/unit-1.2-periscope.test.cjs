@@ -107,6 +107,10 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
 
   await t.test('初始狀態、未作答、未對準不通關；沒有角度滑桿',async()=>{
     assert.deepEqual(await angles(),[38,51]);await expect(quiz).toHaveAttribute('data-view','blocked');
+    assert.deepEqual(await page.locator('#periscope-scene text').allTextContents(),['鏡面一','鏡面二']);
+    assert.equal(await page.locator('#periscope-scene title').count(),0);
+    await expect(page.locator('#periscope-scene')).toHaveAttribute('aria-label','潛望鏡剖面與可旋轉平面鏡');
+    assert.equal(await page.locator('#periscope-scene desc').count(),1);
     assert.equal(await quiz.locator('input[type=range]').count(),0);assert.equal(await page.locator('#periscope-toggle-path').count(),0);assert.equal(await page.locator('#periscope-pulse').getAttribute('aria-pressed'),null);await expect(page.locator('[data-stage="1"]')).toBeDisabled();
     await page.locator('#periscope-check').click();await expect(page.locator('#periscope-feedback')).toHaveAttribute('data-state','try');
     assert.equal(await page.locator('.route a[href="#unit-quiz"] .route-number').textContent(),'✦');assert.equal(await page.locator('#card-07').count(),1);
