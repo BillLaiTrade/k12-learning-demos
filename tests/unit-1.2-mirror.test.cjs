@@ -110,6 +110,36 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
       return outside;
     });assert.equal(inside,0,'鏡面裁切仍完整容納玩偶的不透明部分');
   });
+  await t.test('六種寬度的距離標籤留出完整淨空，不遮光線、鏡面、人物與玩偶',async()=>{
+    for(const width of [320,390,650,768,1024,1440]){
+      await page.setViewportSize({width,height:1200});
+      const collisions=await section.locator('.comparison-side').evaluateAll(nodes=>{
+        const issues=[];
+        const intersects=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+        for(const svg of nodes){
+          const matrix=svg.getScreenCTM(),padding=Math.hypot(matrix.a,matrix.b)*8;
+          const paths=[...svg.querySelectorAll('[data-side=rays] path,[data-side=extensions] path')];
+          const actors=[...svg.querySelectorAll('[data-side=profile],[data-side=near-shape],[data-side=far-shape],[data-side=mirror] rect')];
+          const canvas=svg.getBoundingClientRect(),title=svg.closest('figure').querySelector('h3').getBoundingClientRect();
+          for(const rect of svg.querySelectorAll('[data-side^=distance-] rect')){
+            const r=rect.getBoundingClientRect(),box={left:r.left-padding,right:r.right+padding,top:r.top-padding,bottom:r.bottom+padding},label=rect.parentElement.textContent;
+            if(box.left<canvas.left||box.right>canvas.right||box.top<canvas.top||box.bottom>canvas.bottom)issues.push(`${svg.id} ${label}: clipped`);
+            if(intersects(box,title))issues.push(`${svg.id} ${label}: row title`);
+            for(const actor of actors){const bounds=actor.getBoundingClientRect();if(bounds.width&&bounds.height&&intersects(box,bounds))issues.push(`${svg.id} ${label}: ${actor.dataset.side||'mirror'}`);}
+            for(const path of paths){
+              const length=path.getTotalLength(),transform=path.getScreenCTM();
+              for(let n=0;n<=240;n++){
+                const p=path.getPointAtLength(length*n/240),q=new DOMPoint(p.x,p.y).matrixTransform(transform);
+                if(q.x>box.left&&q.x<box.right&&q.y>box.top&&q.y<box.bottom){issues.push(`${svg.id} ${label}: optical path`);break;}
+              }
+            }
+          }
+        }return issues;
+      });
+      assert.deepEqual(collisions,[],`${width}px visual clearance`);
+      if(width===390)await capture('clearance-mobile');if(width===1440)await capture('clearance-desktop');
+    }
+  });
   await t.test('320／390／650／768／1024／1440px皆維持上下兩列、左右對應欄',async()=>{
     for(const width of [320,390,650,768,1024,1440]){
       await page.setViewportSize({width,height:1200});await verify();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);

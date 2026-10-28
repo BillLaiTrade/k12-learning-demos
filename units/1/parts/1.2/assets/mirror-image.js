@@ -16,14 +16,18 @@ if(section) {
     find('rays').setAttribute('stroke-width','4');
     find('extensions').replaceChildren(...(mirror?[path(ray.extension,false)]:[]));
     find('hits').replaceChildren(...(mirror?[node('circle',{cx:ray.hit[0],cy:ray.hit[1],r:4})]:[]));
-    function distanceLabel(name,points,text,color) {
+    function distanceLabel(name,points,text,color,fraction=.5) {
       const [a,b]=points,length=Math.hypot(b[0]-a[0],b[1]-a[1]);
-      const x=(a[0]+b[0])/2+(b[1]-a[1])/length*36,y=(a[1]+b[1])/2-(b[0]-a[0])/length*36;
+      const width=210,height=70,nx=(b[1]-a[1])/length,ny=-(b[0]-a[0])/length;
+      // Offset the WHOLE badge, not just its centre. Its projected half-extent
+      // along the path normal needs to clear the line before adding a gap.
+      const offset=Math.abs(nx)*width/2+Math.abs(ny)*height/2+20;
+      const x=a[0]+(b[0]-a[0])*fraction+nx*offset,y=a[1]+(b[1]-a[1])*fraction+ny*offset;
       attrs(find(name),{transform:`translate(${x} ${y})`});
       const label=node('text',{x:0,y:18,'text-anchor':'middle','font-size':52,'font-weight':800,fill:'#244e6b'});label.textContent=text;
-      find(name).replaceChildren(node('rect',{x:-105,y:-35,width:210,height:70,rx:18,fill:color}),label);
+      find(name).replaceChildren(node('rect',{x:-width/2,y:-height/2,width,height,rx:18,fill:color}),label);
     }
-    distanceLabel('distance-three',[ray.eye,ray.hit],'3公尺','#c9e6fb');
+    distanceLabel('distance-three',[ray.eye,ray.hit],'3公尺','#c9e6fb',.43);
     distanceLabel('distance-two',[ray.hit,ray.image],'2公尺','#fbd3ae');
     svg.dataset.mode=mode;svg.dataset.eye=COMPARISON.eye.join(',');svg.dataset.source=COMPARISON.source.join(',');svg.dataset.image=COMPARISON.image.join(',');svg.dataset.hit=ray.hit.join(',');
     svg.dataset.distances=JSON.stringify(distances);
