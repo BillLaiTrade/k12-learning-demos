@@ -370,11 +370,12 @@ try {
   window.addEventListener('resize', resize);
   window.addEventListener('pagehide', () => {
     animationFrames.forEach((frame) => cancelAnimationFrame(frame));
-    renderer.dispose();
+    // Dispose GPU resources while their renderer property cache still exists.
     roughTexture.dispose();
     surfaceLabelTextures.forEach((texture) => texture.dispose());
     woodTexture.dispose();
     mirrorEnvironmentTarget.dispose();
+    renderer.dispose();
   }, { once: true });
 } catch (error) {
   console.error('Unable to initialize the 3D reflection scene:', error);

@@ -169,5 +169,6 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await p.locator('[data-chip="0"]').tap();await p.locator('[data-slot="0"]').tap();await expect(p.locator('[data-slot="0"]')).toHaveText('鏡面一');
     assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await context.close();
   });
+  await t.test('離開頁面時先釋放 GPU 資源，再關閉繪圖器，不產生例外',async()=>{await page.goto('about:blank');await page.waitForTimeout(150);assert.deepEqual(errors,[]);});
   assert.deepEqual(errors,[]);
 });

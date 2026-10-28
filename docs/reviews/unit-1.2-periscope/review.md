@@ -39,8 +39,10 @@
 
 檢查命令見 `tests/README.md` 的潛望鏡節。初次檢查發現並修正：新舊 `mirror-hit` CSS 命名衝突；改為專用 `scope-mirror-*`，保留第五區的點擊區。觀察窗像素交叉核對統一 Canvas CPU 縮圖取樣，消除與 GPU 插值的數個色階差異；觸控測試取消平滑捲動並確認實體命中。手機順序題改為完整單列，補等效微調按鈕。
 
-最終循序執行結果：**38 項通過、0 失敗**（包含外層項目）；潛望鏡本身 15 項，第三至六區既有回歸 23 項。測試記錄於 `tests.log`。所有測試頁未回報 JavaScript 或 HTTP 資源錯誤。
+最終循序執行結果：**39 項通過、0 失敗**（包含外層項目）；潛望鏡及離頁檢查 16 項，第三至六區既有回歸 23 項。測試記錄於 `tests.log`。所有測試頁未回報 JavaScript 或 HTTP 資源錯誤。
 
 人工檢視 `desktop.webp`、`mobile.webp` 與 `completed-desktop.webp`，對照核可圖確認標頭、三階段、角色對話、剖面與觀察窗、順序題及操作按鈕層級；手機觀察窗改在剖面下方。另檢視四種實際觀察窗 `view-boat.webp`、`view-sky.webp`、`view-sea.webp`、`view-blocked.webp`，確認不是只有狀態文字改變。手機完整順序列不換到下一行，微調鍵可實際操作。
 
 公開交付檢查另以 GitHub Pages HTTPS 頁面實際完成拖曳、四種景象、三階段作答、反向訊號、重設及手機觸控；不以本機測試代替部署檢查。入口為 [單元小測](https://billlaitrade.github.io/k12-learning-demos/units/1/parts/1.2/#unit-quiz)。
+
+公開操作另抓到原第一區塊的離頁例外：先 `renderer.dispose()` 使快取清空，接著釋放 cube render target 時讀到已清空屬性。已調整為先釋放貼圖與 render target、最後關閉 renderer，並加入實際離頁檢查。修正後上述 39 項全數通過。
