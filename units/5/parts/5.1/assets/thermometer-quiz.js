@@ -1,4 +1,4 @@
-import {makeRound,valueFor,celsiusFor,scaleY,scaleRange,assessInstrument} from './thermometer-quiz-model.mjs';
+import {makeRound,valueFor,celsiusFor,scaleY,scaleRange,assessInstrument} from './thermometer-quiz-model.mjs?v=oblique-start-4';
 import {projectPoint} from './parallax-model.js';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const root=$('unit-quiz'), scene=$('tq-scene');
@@ -109,10 +109,12 @@ function renderUI(){
     $(`tq-record-${id}`).textContent=filled?`${i.value}°${i.answerUnit==='C'?'C':'F'}・已填寫`:'尚未完成';
     $(`tq-record-${id}`).parentElement.classList.toggle('is-active',active===id);
   }
-  $('tq-level').hidden=!present||eye===0;
   $('tq-sight').toggleAttribute('hidden',!present);
   if(present){
     const y=MOUNT.y+510-round.instruments[active].c*10, eyeY=y-eye*1.1;
+    $('tq-eye-rail').setAttribute('d',`M588 ${y-110}V${y+110}`);
+    $('tq-eye-level-mark').setAttribute('d',`M578 ${y}H598`);
+    $('tq-eye-hint').setAttribute('y',y+143);
     $('tq-sight-ray').setAttribute('d',`M442 ${y}L551 ${eyeY}`);
     $('tq-eye').setAttribute('transform',`translate(588,${eyeY})`);
     $('tq-eye').setAttribute('aria-valuenow',eye);
@@ -128,7 +130,7 @@ function loadDraft(){
 function stopAnimation(){cancelAnimationFrame(frame);frame=0;}
 function mount(id){
   if(active){announce(`先將杯中的 ${active} 放回托盤，再放入另一支。`);picked=null;renderUI();return;}
-  stopAnimation();active=id;picked=null;eye=0;const i=round.instruments[id],startC=i.c;
+  stopAnimation();active=id;picked=null;const i=round.instruments[id],startC=i.c;eye=i.initialEye;
   stable=Math.abs(startC-round.waterC)<.001;
   if(stable)i.measured=true;
   loadDraft();renderUI();invalidate();
@@ -199,7 +201,6 @@ function updateDraft(){
 $('tq-reading').addEventListener('input',updateDraft);$('tq-unit').addEventListener('change',updateDraft);
 $('tq-answer-form').addEventListener('submit',event=>{event.preventDefault();updateDraft();});
 function setEye(value){eye=Math.max(-100,Math.min(100,Math.round(value)));if(Math.abs(eye)<10)eye=0;renderUI();}
-$('tq-level').addEventListener('click',()=>{setEye(0);if(active&&round.instruments[active].value.trim()!==''&&round.instruments[active].answerUnit)updateDraft();announce('視線已回到與液面同高，請再確認刻度讀值。');});
 const eyeHandle=$('tq-eye');
 eyeHandle.addEventListener('pointerdown',event=>{
   if(!active||event.button!==0)return;const p=point(event);if(!p)return;
@@ -207,9 +208,10 @@ eyeHandle.addEventListener('pointerdown',event=>{
   eyeDrag={pointer:event.pointerId,offset:p.y-matrix.f};eyeHandle.setPointerCapture(event.pointerId);eyeHandle.focus({preventScroll:true});event.preventDefault();
 });
 eyeHandle.addEventListener('pointermove',event=>{if(!active||!eyeDrag||event.pointerId!==eyeDrag.pointer)return;const p=point(event);if(p){const y=MOUNT.y+510-round.instruments[active].c*10;setEye((y-(p.y-eyeDrag.offset))/1.1);}});
-function stopEye(event){if(!eyeDrag||event&&event.pointerId!==undefined&&event.pointerId!==eyeDrag.pointer)return;const id=eyeDrag.pointer;eyeDrag=null;if(eyeHandle.hasPointerCapture(id))eyeHandle.releasePointerCapture(id);}
+function captureAdjustedView(){if(active&&(round.instruments[active].value.trim()!==''||round.instruments[active].answerUnit))updateDraft();}
+function stopEye(event){if(!eyeDrag||event&&event.pointerId!==undefined&&event.pointerId!==eyeDrag.pointer)return;const id=eyeDrag.pointer;eyeDrag=null;if(eyeHandle.hasPointerCapture(id))eyeHandle.releasePointerCapture(id);captureAdjustedView();}
 for(const name of ['pointerup','pointercancel','lostpointercapture'])eyeHandle.addEventListener(name,stopEye);
-eyeHandle.addEventListener('keydown',event=>{const amount={ArrowUp:10,ArrowDown:-10,ArrowRight:10,ArrowLeft:-10};if(event.key in amount||event.key==='Home'){event.preventDefault();setEye(event.key==='Home'?0:eye+amount[event.key]);}});
+eyeHandle.addEventListener('keydown',event=>{const amount={ArrowUp:10,ArrowDown:-10,ArrowRight:10,ArrowLeft:-10};if(event.key in amount){event.preventDefault();setEye(eye+amount[event.key]);captureAdjustedView();}});
 window.addEventListener('blur',()=>{endDrag(null,true);stopEye();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){endDrag(null,true);stopEye();}});
 root.addEventListener('keydown',event=>{if(event.key==='Escape'){endDrag(null,true);stopEye();picked=null;renderUI();}});

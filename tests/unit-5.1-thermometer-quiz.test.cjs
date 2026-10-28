@@ -11,6 +11,9 @@ test('thermometer quiz model preserves calibration and independent feedback',asy
     const round=m.makeRound(0,swap);
     assert.equal(round.waterC,32.5);
     assert.notEqual(round.instruments.A.unit,round.instruments.B.unit);
+    assert.equal(round.instruments.A.initialEye,60);
+    assert.equal(round.instruments.B.initialEye,-60);
+    assert.equal(m.makeRound(1,swap).instruments.A.initialEye,-60);
     assert.equal(m.valueFor('F',round.waterC),90.5);
     assert.equal(m.scaleY('C',32.5),m.scaleY('F',90.5));
     assert.ok(Math.abs((m.scaleY('C',31)-m.scaleY('C',32))/(m.scaleY('F',88)-m.scaleY('F',89))-1.8)<1e-10);
@@ -45,7 +48,16 @@ test('physical thermometer assessment in Chromium',{timeout:90000},async t=>{
   const mount=async id=>{await dragTo(id,430,250);await page.waitForFunction(id=>document.querySelector('#unit-quiz').dataset.active===id,id);};
   const waitStable=()=>page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.stable==='true');
   const unitFor=async id=>Number(await page.locator(`#tq-marks-${id} [data-mark]`).first().getAttribute('data-mark'))===32?'F':'C';
-  const fill=async(id,wrong=false,c=32.5)=>{const u=await unitFor(id);await page.locator('#tq-reading').fill(String(u==='C'?c:Number((c*1.8+32).toFixed(1))));await page.locator('#tq-unit').selectOption(wrong?(u==='C'?'F':'C'):u);return u;};
+  const alignView=async()=>{
+    const eye=page.locator('#tq-eye');if(await eye.getAttribute('aria-valuenow')==='0')return;
+    await eye.scrollIntoViewIfNeeded();
+    const start=await localPoint('#tq-eye',0,0);
+    const y=Number((await page.locator('#tq-eye-level-mark').getAttribute('d')).match(/^M578 ([\d.-]+)/)[1]);
+    const end=await localPoint('#tq-scene',588,y);
+    await page.mouse.move(start.x,start.y);await page.mouse.down();await page.mouse.move(end.x,end.y,{steps:8});await page.mouse.up();
+    assert.equal(await eye.getAttribute('aria-valuenow'),'0');
+  };
+  const fill=async(id,wrong=false,c=32.5,adjust=true)=>{if(adjust)await alignView();const u=await unitFor(id);await page.locator('#tq-reading').fill(String(u==='C'?c:Number((c*1.8+32).toFixed(1))));await page.locator('#tq-unit').selectOption(wrong?(u==='C'?'F':'C'):u);return u;};
 
   await t.test('approved initial composition has real portraits, two tray objects and no identifying units',async()=>{
     await fresh();
@@ -55,6 +67,7 @@ test('physical thermometer assessment in Chromium',{timeout:90000},async t=>{
     assert.equal(await page.locator('#tq-reading').isDisabled(),true);
     assert.equal(await page.locator('#tq-unit').isDisabled(),true);
     assert.equal(await page.locator('#tq-result').isVisible(),false);
+    assert.equal(await page.locator('#tq-level').count(),0);
     assert.doesNotMatch(await page.locator('#tq-scene').textContent(),/°C|°F|攝氏|華氏|電熱板/);
     assert.equal(await page.locator('#unit-quiz .speaker').count(),2);
     const positions=[];
@@ -71,6 +84,7 @@ test('physical thermometer assessment in Chromium',{timeout:90000},async t=>{
     await fresh();const restingB=await page.locator('#tq-instrument-B').getAttribute('transform');
     assert.equal(await page.locator('#tq-contact-B').isVisible(),true);
     await mount('B');await waitStable();
+    assert.notEqual(await page.locator('#tq-eye').getAttribute('aria-valuenow'),'0');
     assert.equal(await page.locator('#tq-contact-B').isVisible(),false);
     assert.equal(await page.locator('#tq-lens').isVisible(),true);
     assert.match(await page.locator('#tq-lens-title').textContent(),/B/);
@@ -92,7 +106,7 @@ test('physical thermometer assessment in Chromium',{timeout:90000},async t=>{
   await t.test('engraved scales use different spacing while the same water gives consistent readings',async()=>{
     await fresh();const observations={};
     for(const id of ['A','B']){
-      await mount(id);await waitStable();
+      await mount(id);await waitStable();await alignView();
       const unit=await unitFor(id),mark=unit==='C'?32:90;
       const ys=await page.locator('#tq-lens-marks path').evaluateAll((nodes,v)=>[v,v+1].map(value=>{const d=nodes.find(n=>Number(n.dataset.mark)===value).getAttribute('d');return Number(d.match(/^M[\d.-]+ ([\d.-]+)/)[1]);}),mark);
       observations[unit]=Math.abs(ys[0]-ys[1]);
@@ -105,11 +119,14 @@ test('physical thermometer assessment in Chromium',{timeout:90000},async t=>{
 
   await t.test('feedback distinguishes incomplete work, early reading, wrong units and wrong viewpoint',async()=>{
     await fresh();await page.locator('#tq-check').click();assert.match(await page.locator('#tq-result').textContent(),/請完成量測/);
-    await mount('B');await fill('B');await dragTo('B',780,680);await page.locator('#tq-check').click();assert.match(await page.locator('#tq-result').textContent(),/尚未穩定/);
-    await mount('B');await waitStable();await fill('B',true);await page.locator('#tq-check').click();assert.match(await page.locator('#tq-result').textContent(),/刻度讀值合理/);
+    await mount('B');await fill('B',false,32.5,false);await dragTo('B',780,680);await page.locator('#tq-check').click();assert.match(await page.locator('#tq-result').textContent(),/尚未穩定/);
+    await mount('B');await waitStable();
+    await fill('B',false,32.5,false);await page.locator('#tq-check').click();assert.match(await page.locator('#tq-result').textContent(),/斜視/);
+    await fill('B',true);await page.locator('#tq-check').click();assert.match(await page.locator('#tq-result').textContent(),/刻度讀值合理/);
     await page.locator('#tq-eye').focus();await page.keyboard.press('ArrowUp');await page.keyboard.press('ArrowUp');
-    const oldFluid=await page.locator('#tq-lens-fluid').getAttribute('d');await fill('B');await page.locator('#tq-check').click();assert.match(await page.locator('#tq-result').textContent(),/斜視/);
-    await page.locator('#tq-level').click();assert.equal(await page.locator('#tq-eye').getAttribute('aria-valuenow'),'0');assert.notEqual(await page.locator('#tq-lens-fluid').getAttribute('d'),oldFluid);
+    const oldFluid=await page.locator('#tq-lens-fluid').getAttribute('d');await fill('B',false,32.5,false);await page.locator('#tq-check').click();assert.match(await page.locator('#tq-result').textContent(),/斜視/);
+    await alignView();assert.notEqual(await page.locator('#tq-lens-fluid').getAttribute('d'),oldFluid);
+    await page.locator('#tq-check').click();assert.match(await page.locator('#tq-result').textContent(),/B：讀值與單位都合理/);
     await fill('B');await page.locator('#tq-reading').fill('249');await page.locator('#tq-check').click();assert.match(await page.locator('#tq-result').textContent(),/單位判斷正確/);
     await page.locator('#tq-reading').fill('-1');await page.locator('#tq-check').click();assert.match(await page.locator('#tq-result').textContent(),/有效讀值/);
     assert.doesNotMatch(await page.locator('#tq-result').textContent(),/90\.5|32\.5/);
@@ -121,6 +138,10 @@ test('physical thermometer assessment in Chromium',{timeout:90000},async t=>{
     const p=await localPoint('#tq-instrument-A',0,260);await page.mouse.move(p.x,p.y);await page.mouse.down();await page.mouse.move(p.x-90,p.y-80,{steps:4});await page.keyboard.press('Escape');await page.mouse.up();assert.equal(await page.locator('#tq-instrument-A').getAttribute('transform'),before);
     await page.locator('#tq-instrument-A').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('#tq-drop-target').evaluate(n=>n===document.activeElement),true);await page.keyboard.press('Enter');await waitStable();
     assert.equal(await page.locator('#unit-quiz').getAttribute('data-active'),'A');
+    const startingEye=Number(await page.locator('#tq-eye').getAttribute('aria-valuenow'));assert.notEqual(startingEye,0);
+    await page.locator('#tq-eye').focus();await page.keyboard.press('Home');assert.equal(Number(await page.locator('#tq-eye').getAttribute('aria-valuenow')),startingEye);
+    for(let n=0;n<Math.abs(startingEye)/10;n++)await page.keyboard.press(startingEye>0?'ArrowDown':'ArrowUp');
+    assert.equal(await page.locator('#tq-eye').getAttribute('aria-valuenow'),'0');
     await page.locator('#tq-instrument-A').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('#tq-tray-target').evaluate(n=>n===document.activeElement),true);await page.keyboard.press('Enter');assert.equal(await page.locator('#unit-quiz').getAttribute('data-active'),'');
   });
 
@@ -151,6 +172,13 @@ test('physical thermometer assessment in Chromium',{timeout:90000},async t=>{
       const client=await context.newCDPSession(mobile);await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[points.from]});for(let i=1;i<=8;i++)await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:points.from.x+(points.to.x-points.from.x)*i/8,y:points.from.y+(points.to.y-points.from.y)*i/8}]});await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
       assert.equal(await mobile.locator('#unit-quiz').getAttribute('data-active'),'B');
       await mobile.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.stable==='true');
+      assert.notEqual(await mobile.locator('#tq-eye').getAttribute('aria-valuenow'),'0');
+      await mobile.locator('#tq-eye').scrollIntoViewIfNeeded();
+      const sight=await mobile.evaluate(()=>{const root=document.querySelector('#tq-scene'),eye=document.querySelector('#tq-eye'),y=Number(document.querySelector('#tq-eye-level-mark').getAttribute('d').match(/^M578 ([\d.-]+)/)[1]),a=new DOMPoint(0,0).matrixTransform(eye.getScreenCTM()),b=new DOMPoint(588,y).matrixTransform(root.getScreenCTM());return{a:{x:a.x,y:a.y},b:{x:b.x,y:b.y}};});
+      await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[sight.a]});
+      for(let step=1;step<=6;step++)await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:sight.a.x+(sight.b.x-sight.a.x)*step/6,y:sight.a.y+(sight.b.y-sight.a.y)*step/6}]});
+      await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+      assert.equal(await mobile.locator('#tq-eye').getAttribute('aria-valuenow'),'0');
       const before=await mobile.locator('#tq-instrument-B').getAttribute('transform');
       const p=await mobile.locator('#tq-instrument-B').evaluate(n=>{const p=new DOMPoint(0,260).matrixTransform(n.getScreenCTM());return{x:p.x,y:p.y};});
       await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:p.x+40,y:p.y-30}]});await client.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});assert.equal(await mobile.locator('#tq-instrument-B').getAttribute('transform'),before);

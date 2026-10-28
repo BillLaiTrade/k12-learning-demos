@@ -68,6 +68,6 @@
 /* SVG text and marks must not hand a drag gesture to browser scrolling. */
 .tq-instrument *{touch-action:none;user-select:none}
 
-.tq-observation-controls{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0 8px;margin:7px 0 14px}.tq-observation-controls .tq-observation-note{margin:0}.tq-observation-controls button{padding:2px 3px;border:0;background:none;color:#3e765b;text-decoration:underline;font:inherit;font-size:.72rem}
+.tq-observation-controls{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0 8px;margin:7px 0 14px}.tq-observation-controls .tq-observation-note{margin:0}
 
 .tq-left{min-width:0}.tq-workspace{align-items:stretch}

@@ -11,6 +11,7 @@ export function makeRound(index=0, aIsF=false) {
   return {index, waterC:TEMPERATURES_C[index%TEMPERATURES_C.length], aIsF,
     instruments:Object.fromEntries(['A','B'].map((id,i)=>[id,{
       id, unit:(i===0?aIsF:!aIsF)?'F':'C', c:ROOM_C, measured:false,
+      initialEye:(i===0?1:-1)*(index%2?-1:1)*60,
       value:'', answerUnit:'', snapshot:null
     }]))};
 }
