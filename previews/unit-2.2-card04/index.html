@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex">
   <title>第四學習區塊｜完整互動預覽</title>
-  <link rel="stylesheet" href="style.css?v=medium-4">
+  <link rel="stylesheet" href="style.css?v=distance-5">
 </head>
 <body>
   <header class="preview-header shell">
@@ -42,13 +42,13 @@
           </div>
 
           <div class="model-information">
-            <span>共同模型距離 <strong>100 公尺</strong></span>
-            <label for="slowdown">動畫放慢 <select id="slowdown"><option value="20">20 倍</option><option value="50" selected>50 倍</option></select></label>
-            <span class="model-time-wrap">模型時間 <output id="model-time" aria-label="模型經過時間" aria-live="off">0.0 毫秒</output></span>
+            <span>共同模型距離 <strong>1,000 公尺</strong></span>
+            <label for="slowdown">動畫放慢 <select id="slowdown"><option value="10">10 倍</option><option value="20" selected>20 倍</option></select></label>
+            <span class="model-time-wrap">模型時間 <output id="model-time" aria-label="模型經過時間" aria-live="off">0.000 秒</output></span>
           </div>
           <p class="observation-caption" id="observation-caption" role="status" aria-live="polite">同時啟動左側振動源，觀察不同介質的振動傳遞。</p>
           <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>介質</span><span>介質內部 · 放大示意</span><span>最右端放大</span></div><div id="models" class="models" role="group" aria-label="同步的粒子振動模型"></div></div>
-          <p class="color-key">粒子在原位附近往返；較清晰的區域表示振動已傳到。</p>
+          <p class="color-key">綠色虛線標示振動目前傳到的位置；粒子只在原位附近往返。</p>
 
           <div class="controls">
             <button class="action" id="primary-action" type="button">同時啟動振動</button>
@@ -60,24 +60,24 @@
 
           <section class="result" id="result" aria-labelledby="result-title" hidden>
             <h2 id="result-title">觀察結果</h2><p id="result-summary"></p>
-            <table><caption class="sr-only">本次比較的聲速與到達時間近似值</caption><thead><tr><th scope="col">組別</th><th scope="col">聲速</th><th scope="col">傳到 100 公尺</th></tr></thead><tbody id="result-rows"></tbody></table>
+            <table><caption class="sr-only">本次比較的聲速與到達時間近似值</caption><thead><tr><th scope="col">組別</th><th scope="col">聲速</th><th scope="col">傳到 1,000 公尺</th></tr></thead><tbody id="result-rows"></tbody></table>
           </section>
         </section>
 
         <div class="fact"><p id="takeaway"><strong>觀察重點：</strong>粒子在原位附近往返；同一聲源頻率相同，三種介質傳遞振動的速度不同。</p></div>
         <details class="model-notes"><summary>模型說明與近似值</summary><ul>
-          <li>空氣以透明空間、水以有液面及折射的水槽、鋼以金屬剖面呈現。介質內的分子／原子是放大透視示意，實際肉眼看不到；器材外形不代表真實 100 公尺裝置。</li>
+          <li>空氣以透明空間、水以有液面及折射的水槽、鋼以金屬剖面呈現。介質內的分子／原子是放大透視示意，實際肉眼看不到；器材外形不代表真實 1,000 公尺裝置。</li>
           <li>微觀模型以常見氣體分子、彎折水分子及鋼中原子呈現。配色、球棒外形、排列、間距與振幅為辨識及放大示意，省略熱運動；鋼中的連結表示彈性作用。</li>
-          <li>各組共用相同振動脈衝、100 公尺模型距離與放慢倍率。到達時間以「距離 ÷ 聲速」計算。</li>
+          <li>各組共用相同振動脈衝、1,000 公尺模型距離與放慢倍率。到達時間以「距離 ÷ 聲速」計算。</li>
           <li>本例取約 20°C 的空氣 343 m/s、水 1,480 m/s，以及鋼中縱波約 5,900 m/s。實際數值會隨材料及環境而變，不能只靠粒子疏密判斷聲速。</li>
           <li>空氣在 0～30°C 採近似關係：聲速 ≈ 331 ＋ 0.6 × 溫度。此設定只用於空氣。</li>
-          <li>深淺記錄振動已傳到的位置；粒子完成脈衝後回復原位。最右端放大區顯示同一截面的粒子，位移另放大 5 倍。</li>
+          <li>綠色虛線及下方刻度記錄振動前緣，位置＝聲速 × 經過時間；標記不是一顆向前移動的粒子。深淺記錄振動已傳到的位置；粒子完成脈衝後回復原位。最右端放大區顯示同一截面的粒子，位移另放大 5 倍。</li>
           <li>提示音只表示振動抵達最右端，不模擬各介質內的實際音色。</li>
         </ul></details>
       </div>
     </section>
   </main>
   <footer class="shell preview-footer">此頁供第四學習區塊檢視；正式的 2.2 課程頁尚未替換。</footer>
-  <script type="module" src="app.mjs?v=medium-4"></script>
+  <script type="module" src="app.mjs?v=distance-5"></script>
 </body>
 </html>

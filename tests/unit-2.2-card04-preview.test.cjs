@@ -11,15 +11,24 @@ test('sound comparison uses one signal and physical travel delays', async t => {
   await t.test('the same distance produces the material arrival times and ranking', () => {
     const groups = m.conditions('material');
     assert.deepEqual(groups.map(g => g.speed), [343, 1480, 5900]);
-    assert.deepEqual(groups.map(g => (100000 / g.speed).toFixed(1)), ['291.5', '67.6', '16.9']);
+    assert.deepEqual(groups.map(g => (1000 / g.speed).toFixed(3)), ['2.915', '0.676', '0.169']);
     assert.deepEqual(m.winners(groups), ['steel']);
+  });
+  await t.test('one kilometre and clamped travel positions use actual speed and elapsed seconds', () => {
+    assert.equal(m.DISTANCE, 1000);
+    assert.ok(Math.abs(m.reachedDistance(343,.3) - 102.9) < 1e-10);
+    assert.equal(m.reachedDistance(1480,.3), 444);
+    assert.equal(m.reachedDistance(5900,.3), 1000);
+    assert.equal(m.reachedDistance(343,-1), 0);
+    assert.equal(m.reachedDistance(343,100), 1000);
+    assert.equal(m.reachedDistance(343,0), 0);
   });
   await t.test('temperature changes only the air speed, including a real tie at 20°C', () => {
     assert.equal(m.airSpeed(0), 331); assert.equal(m.airSpeed(20), 343); assert.equal(m.airSpeed(30), 349);
     assert.deepEqual(m.winners(m.conditions('temperature', 0)), ['reference']);
     assert.deepEqual(m.winners(m.conditions('temperature', 30)), ['adjustable']);
     assert.deepEqual(m.winners(m.conditions('temperature', 20)), ['reference', 'adjustable']);
-    assert.ok(Math.abs((m.arrivalTime(343) - m.arrivalTime(349)) * 1000 - 600000 / (343 * 349)) < 1e-12);
+    assert.ok(Math.abs((m.arrivalTime(343) - m.arrivalTime(349)) * 1000 - 6000000 / (343 * 349)) < 1e-12);
   });
   await t.test('every medium uses the same frequency, bounded local motion and exact rest', () => {
     for (const speed of [331, 343, 349, 1480, 5900]) {
@@ -40,7 +49,7 @@ test('sound comparison uses one signal and physical travel delays', async t => {
   await t.test('particles remain ordered, stay at fixed y and settle in every medium', () => {
     for (const group of m.conditions('material')) {
       const points = m.positions(group.kind), end = m.runEnd([group]);
-      assert.equal(points[0].distance, 0); assert.equal(points.at(-1).distance, 100);
+      assert.equal(points[0].distance, 0); assert.equal(points.at(-1).distance, 1000);
       for (let step = 0; step <= 300; step++) {
         const time = end * step / 300;
         const samples = points.map(p => m.sample(p, group.speed, time));
@@ -106,7 +115,7 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     assert.equal(await page.evaluate(() => window.__audioContext), undefined);
     assert.equal(await page.locator('.speaker').first().evaluate(n => getComputedStyle(n, '::before').backgroundImage.includes('/shared-assets/characters/dialogue-character-avatars.png')), true);
     assert.equal(await page.locator('.particle').evaluateAll(nodes => nodes.every(n => Number(n.getAttribute('opacity')) === .64 && Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
-    assert.equal(await page.locator('.field [stroke-dasharray], .field path[stroke="#be773a"]').count(), 0);
+    assert.equal(await page.locator('.particle [stroke-dasharray], .field path[stroke="#be773a"]').count(), 0);
     const before = await particleXs(); await page.clock.runFor(1000); assert.deepEqual(await particleXs(), before);
   });
 
@@ -139,7 +148,7 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
       const box = selector => { const b = row.querySelector(selector).getBoundingClientRect(); return { x: b.x, y: b.y, width: b.width, height: b.height, right: b.right, bottom: b.bottom }; };
       return { label: box('.medium-header'), field: box('.field'), end: box('.end-observation'), body: box('.row-body'), row: { y: row.getBoundingClientRect().y, bottom: row.getBoundingClientRect().bottom } };
     }));
-    assert.ok(rows.at(-1).row.bottom - rows[0].row.y < 470, 'all three media fit in a compact comparison');
+    assert.ok(rows.at(-1).row.bottom - rows[0].row.y < 560, 'all three media fit in a compact comparison');
     for (const row of rows) {
       assert.ok(row.label.right < row.field.x, 'material label sits beside the model');
       assert.ok(row.field.width >= row.label.width * 4.5 && row.field.height >= 100, 'vibration is the main visual');
@@ -151,14 +160,16 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
   });
 
   await t.test('vibration begins locally and steel reaches the end while water and air remain still there', async () => {
-    await primary.click(); await page.clock.runFor(1000);
-    assert.ok(await time() > .019 && await time() < .021);
+    await primary.click(); await page.clock.runFor(4000);
+    assert.ok(await time() > .199 && await time() < .201);
     const readings = await page.locator('.arrival-readout output').allTextContents();
-    assert.deepEqual(readings, ['—', '—', '16.9 毫秒']);
+    assert.deepEqual(readings, ['—', '—', '0.169 秒']);
     for (const id of ['air', 'water']) assert.equal(await page.locator(`[data-group=${id}] .end-particle`).first().evaluate(n => n.transform.baseVal.consolidate().matrix.e), 75);
     assert.notEqual(await page.locator('[data-group=steel] .end-particle').first().evaluate(n => n.transform.baseVal.consolidate().matrix.e), 75);
     const reached = await page.locator('.medium-row').evaluateAll(rows => rows.map(row => row.querySelectorAll('.particle[data-reached=true]').length / row.querySelectorAll('.particle').length));
-    assert.ok(reached[0] < .1 && reached[1] > .25 && reached[1] < .35 && reached[2] === 1);
+    const m = await model, current = await time();
+    assert.deepEqual(reached, m.conditions('material').map(g => { const points = m.positions(g.kind); return points.filter(p => p.distance <= g.speed * current).length / points.length; }));
+    assert.ok(reached[0] < reached[1] && reached[1] < reached[2] && reached[2] === 1);
     assert.match(await page.locator('#observation-caption').textContent(), /鋼已傳到/);
     const { start, end, endpoints } = await page.locator('[data-group=steel]').evaluate(row => {
       const link = row.querySelector('.elastic-link'), particles = row.querySelectorAll('.particle');
@@ -169,10 +180,35 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
 
   });
 
+  await t.test('distance markers, reached rails and readable metre values follow speed times time', async () => {
+    const saved = await time(), m = await model;
+    assert.ok(saved > .199 && saved < .201);
+    const frontState = () => page.locator('.medium-row').evaluateAll(rows => rows.map(row => ({
+      distance: Number(row.dataset.reachedDistance), speed: Number(row.dataset.speed),
+      x: row.querySelector('.propagation-front').transform.baseVal.consolidate().matrix.e,
+      visibility: row.querySelector('.propagation-front').getAttribute('visibility'),
+      rail: row.querySelector('.distance-reached').getAttribute('d'),
+      text: row.querySelector('.propagation-readout output').textContent
+    })));
+    const rows = await frontState();
+    assert.ok(rows[0].distance < rows[1].distance && rows[1].distance < rows[2].distance);
+    for (const row of rows) {
+      const distance = Math.min(1000, row.speed * saved), x = m.START_X + distance / 1000 * (m.END_X - m.START_X);
+      assert.ok(Math.abs(row.distance - distance) < .00011);
+      assert.ok(Math.abs(row.x - x) < .00011);
+      assert.equal(row.rail, `M${m.START_X} 125H${x.toFixed(4)}`);
+      assert.equal(row.visibility, 'visible');
+      assert.match(row.text, new RegExp(Math.floor(distance + 1e-8).toLocaleString('en-US') + ' 公尺'));
+    }
+    assert.match(rows[2].text, /已到終點/);
+  });
+
   await t.test('pause, resume, exact stepping and a shared speed change keep one timeline', async () => {
     await primary.click(); const paused = await time(), snapshot = await particleXs();
+    const markers = await page.locator('.propagation-front, .distance-reached').evaluateAll(nodes => nodes.map(n => [n.getAttribute('transform'),n.getAttribute('d')]));
     await page.clock.runFor(2000); assert.equal(await time(), paused); assert.deepEqual(await particleXs(), snapshot);
-    await page.locator('#step-action').click(); assert.ok(Math.abs(await time() - paused - .002) < 1e-7);
+    assert.deepEqual(await page.locator('.propagation-front, .distance-reached').evaluateAll(nodes => nodes.map(n => [n.getAttribute('transform'),n.getAttribute('d')])), markers);
+    await page.locator('#step-action').click(); assert.ok(Math.abs(await time() - paused - .02) < 1e-7);
     assert.equal((await data()).phase, 'paused');
     await primary.click(); await page.clock.runFor(1000); const resumed = await time(); assert.ok(resumed > paused + .02);
     await page.locator('#slowdown').selectOption('20'); const changed = await time();
@@ -192,17 +228,19 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
 
   await t.test('teaching results retain actual times and rest positions without prediction or grading', async () => {
     await fresh();
-    await page.locator('#slowdown').selectOption('20'); await primary.click(); await page.clock.runFor(10000);
+    await page.locator('#slowdown').selectOption('20'); await primary.click(); await page.clock.fastForward(70000);
     assert.equal((await data()).phase, 'complete');
-    assert.deepEqual(await page.locator('.arrival-readout output').allTextContents(), ['291.5 毫秒', '67.6 毫秒', '16.9 毫秒']);
+    assert.deepEqual(await page.locator('.arrival-readout output').allTextContents(), ['2.915 秒', '0.676 秒', '0.169 秒']);
     assert.equal(await page.locator('#result-rows tr').count(), 3);
     assert.match(await page.locator('#result-summary').textContent(), /鋼最先、水其次、空氣最後/);
     assert.equal(await page.locator('#result-title').textContent(), '觀察結果');
     assert.equal(await page.locator('.particle').evaluateAll(nodes => nodes.every(n => Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
     assert.equal(await page.locator('.end-particle').evaluateAll(nodes => nodes.every(n => n.transform.baseVal.consolidate().matrix.e === 75)), true);
-    await page.locator('#step-action').click(); assert.equal((await data()).phase, 'paused'); assert.equal(await time(), .002);
+    await page.locator('#step-action').click(); assert.equal((await data()).phase, 'paused'); assert.equal(await time(), .02);
     await page.locator('#reset-action').click(); assert.equal(await time(), 0); assert.equal(await page.locator('#result').isHidden(), true);
     assert.equal(await page.locator('[name=prediction]').count(), 0);
+    assert.deepEqual(await page.locator('.propagation-readout output').allTextContents(), ['0 公尺','0 公尺','0 公尺']);
+    assert.equal(await page.locator('.propagation-front').evaluateAll(nodes => nodes.every(n => n.getAttribute('visibility') === 'hidden')), true);
   });
 
   await t.test('temperature controls are synchronized, bounded and use identical air layouts', async () => {
@@ -224,14 +262,14 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
 
   await t.test('warmer, colder and equal-temperature experiments produce correct outcomes', async () => {
     await page.locator('#slowdown').selectOption('20');
-    for (const [temperature, expected] of [[30, /早約 5\.0 毫秒/], [0, /早約 10\.6 毫秒/], [20, /振動同時傳到/]]) {
+    for (const [temperature, expected] of [[30, /早約 0\.050 秒/], [0, /早約 0\.106 秒/], [20, /振動同時傳到/]]) {
       await setTemperature(temperature);
-      await primary.click(); await page.clock.runFor(11000);
+      await primary.click(); await page.clock.fastForward(70000);
       assert.equal((await data()).phase, 'complete');
       assert.match(await page.locator('#result-summary').textContent(), expected);
       assert.equal(await page.locator('#result-title').textContent(), '觀察結果');
       assert.equal(await page.locator('#result-rows tr').count(), 2);
-      if (temperature === 20) assert.deepEqual(await page.locator('.arrival-readout output').allTextContents(), ['291.5 毫秒', '291.5 毫秒']);
+      if (temperature === 20) assert.deepEqual(await page.locator('.arrival-readout output').allTextContents(), ['2.915 秒', '2.915 秒']);
     }
   });
 
@@ -271,7 +309,7 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     await fresh();
     await page.locator('#slowdown').selectOption('20'); await primary.click();
     for (let i = 0; i < 12; i++) {
-      await page.clock.runFor(800);
+      await page.clock.fastForward(5500);
       const escaped = await page.locator('.field .particle').evaluateAll(nodes => nodes.flatMap(n => {
         const interior = n.closest('.medium-interior'), id = interior.getAttribute('clip-path').slice(5,-1);
         const clip = document.getElementById(id).querySelector('rect');
@@ -289,7 +327,7 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     await fresh(); await page.locator('#arrival-sound').check();
     await page.waitForFunction(() => window.__audioContext?.state === 'running');
     assert.equal(await page.evaluate(() => window.__oscillators.length), 0);
-    await page.locator('#slowdown').selectOption('20'); await primary.click(); await page.clock.runFor(500);
+    await page.locator('#slowdown').selectOption('20'); await primary.click(); await page.clock.runFor(3500);
     assert.equal(await page.evaluate(() => window.__oscillators.length), 1);
     assert.equal(await page.evaluate(() => window.__oscillators[0].frequency.value), 740);
     assert.equal(await page.evaluate(() => window.__oscillators[0].__started), true);
@@ -297,7 +335,7 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     assert.equal(await page.evaluate(() => window.__oscillators.length), 1);
     assert.equal(await page.evaluate(() => window.__oscillators[0].__ended), true);
     await page.locator('#arrival-sound').check();
-    await page.locator('[data-group=steel] .source-hit').click(); await page.clock.runFor(500);
+    await page.locator('[data-group=steel] .source-hit').click(); await page.clock.runFor(3500);
     assert.equal(await page.evaluate(() => window.__oscillators.length), 2);
     await primary.click(); await realWait(150); assert.equal(await page.evaluate(() => window.__oscillators[1].__ended), true);
     assert.equal(await page.locator('#audio-error').isHidden(), true);

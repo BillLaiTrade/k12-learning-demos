@@ -1,0 +1,33 @@
+▶ sound comparison uses one signal and physical travel delays
+  ✔ the same distance produces the material arrival times and ranking (1.012347ms)
+  ✔ one kilometre and clamped travel positions use actual speed and elapsed seconds (0.192724ms)
+  ✔ temperature changes only the air speed, including a real tie at 20°C (0.222178ms)
+  ✔ every medium uses the same frequency, bounded local motion and exact rest (0.729889ms)
+  ✔ particles remain ordered, stay at fixed y and settle in every medium (13.617624ms)
+✔ sound comparison uses one signal and physical travel delays (16.97651ms)
+▶ complete fourth-card preview works as one consistent experiment
+  ✔ initial scene uses the official characters, no orange tracking particle and no autoplay (715.176578ms)
+  ✔ material volumes and distinct molecules are embedded inside the animation (86.238708ms)
+  ✔ one compact panel gives the embedded scenes the main space and connects end observations (9.720151ms)
+  ✔ vibration begins locally and steel reaches the end while water and air remain still there (1460.206942ms)
+  ✔ distance markers, reached rails and readable metre values follow speed times time (20.211133ms)
+  ✔ pause, resume, exact stepping and a shared speed change keep one timeline (896.107183ms)
+  ✔ source clicks and keyboard restart all groups without overlapping animations (1180.037596ms)
+  ✔ teaching results retain actual times and rest positions without prediction or grading (784.351561ms)
+  ✔ temperature controls are synchronized, bounded and use identical air layouts (212.052204ms)
+  ✔ warmer, colder and equal-temperature experiments produce correct outcomes (247.920743ms)
+  ✔ changing conditions clears running results and a tie has identical live motion (250.761552ms)
+  ✔ medium surface detail follows the same travel delay and stops on pause (1383.919099ms)
+  ✔ molecules stay within the material cross sections throughout the pulse (734.0089ms)
+  ✔ optional arrival cues use real audio nodes and stop when muted or paused (4253.59459ms)
+  ✔ backgrounding pauses at the same model time and never resumes automatically (1729.752415ms)
+  ✔ touch, both modes and seven viewport widths keep the layout usable (1909.396218ms)
+✔ complete fourth-card preview works as one consistent experiment (16292.434186ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16585.310264

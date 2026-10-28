@@ -1,14 +1,14 @@
 import {
   DISTANCE, START_X, END_X, STEP, ZOOM, PULSE_DURATION,
-  appearance, arrivalTime, clamp, conditions, displacement,
+  appearance, arrivalTime, reachedDistance, clamp, conditions, displacement,
   positions, runEnd, sample, winners
-} from './model.mjs?v=medium-4';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene } from './rendering.mjs?v=medium-4';
+} from './model.mjs?v=distance-5';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene } from './rendering.mjs?v=distance-5';
 
 const $ = selector => document.querySelector(selector);
 const svgNS = 'http://www.w3.org/2000/svg';
 const number = new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 1 });
-const milliseconds = seconds => (seconds * 1000).toFixed(1);
+const secondsText = seconds => `${seconds.toFixed(3)} 秒`;
 const text = (node, value) => { if (node.textContent !== value) node.textContent = value; };
 const attr = (node, name, value) => {
   const next = String(value);
@@ -21,7 +21,7 @@ const svg = (tag, attributes, parent) => {
   return node;
 };
 
-const state = { mode: 'material', temperature: 30, slowdown: 50, phase: 'idle', time: 0 };
+const state = { mode: 'material', temperature: 30, slowdown: 20, phase: 'idle', time: 0 };
 let models = [], groups = [], frame = 0, lastWallTime = null;
 let noticed = new Set(), context = null, audioFailed = false;
 const tones = new Set();
@@ -75,6 +75,7 @@ function buildModel(group) {
     </header>
     <div class="row-body">
       <div class="field">
+        <p class="propagation-readout"><span>振動已傳到</span><output aria-live="off" aria-label="${group.name}振動目前傳到的位置">0 公尺</output></p>
         <svg viewBox="0 0 456 146" role="img" aria-label="${group.name}的內部放大模型，${group.kind === 'water' ? '水槽中的水分子' : group.kind === 'steel' ? '金屬剖面中的原子' : '透明空氣中的分子'}在原位附近沿水平方向振動。"></svg>
         <button class="source-hit" type="button" aria-label="點按${group.name}振動源，重新同時啟動所有組別"></button>
       </div>
@@ -105,14 +106,23 @@ function buildModel(group) {
       links.push({ point, other, node: svg('path', { class: 'elastic-link', 'data-first': index, 'data-second': index + offset, d: springPath(point.x, point.y, other.x, other.y) }, bonds) });
     }
   }
-  for (const x of [START_X, END_X]) svg('path', { d: `M${x} 124V133`, stroke: '#a0b1a3', 'stroke-width': 1.2 }, field);
+  svg('path', { class: 'distance-track', d: `M${START_X} 125H${END_X}`, stroke: '#c6d5cd', 'stroke-width': 2.2 }, field);
+  const reachedTrack = svg('path', { class: 'distance-reached', d: `M${START_X} 125H${START_X}`, stroke: '#176b53', 'stroke-width': 2.6 }, field);
+  for (let i = 0; i <= 4; i++) {
+    const x = START_X + (END_X - START_X) * i / 4;
+    svg('path', { d: `M${x} 123V130`, stroke: '#91aa9b', 'stroke-width': 1 }, field);
+  }
+  const front = svg('g', { class: 'propagation-front', transform: `translate(${START_X} 0)`, visibility: 'hidden', 'aria-hidden': 'true' }, field);
+  svg('path', { d: 'M0 23V117', stroke: '#176b53', 'stroke-width': 1.6, 'stroke-dasharray': '4 3', 'vector-effect': 'non-scaling-stroke' }, front);
+  svg('path', { d: 'M-4 15H4L0 21Z', fill: '#176b53' }, front);
   text(svg('text', { x: START_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '0 m');
-  text(svg('text', { x: END_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '100 m');
+  text(svg('text', { x: END_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), `${number.format(DISTANCE)} m`);
   const zoom = row.querySelector('.zoom'), zoomFill = addMaterials(zoom, `${group.id}-zoom`);
   const zoomScene = mediumScene(zoom, group.kind, `${group.id}-zoom-scene`, true);
   const endPoints = [30, 60, 90].map((y, index) => particleGlyph(zoomScene.interior, { kind: group.kind, index: Math.round(index * (settings.rows - 1) / 2) * settings.columns + settings.columns - 1, className: 'end-particle', x: 75, y, fill: zoomFill, scale: 1.8 }));
   return {
-    ...group, row, points, links, piston, sourceRod, endPoints, zoom, scene,
+    ...group, row, points, links, piston, sourceRod, endPoints, zoom, scene, front, reachedTrack,
+    distanceOutput: row.querySelector('.propagation-readout output'),
     arrivalCaption: row.querySelector('.arrival-readout span'), arrivalOutput: row.querySelector('.arrival-readout output'),
     endState: row.querySelector('.end-state')
   };
@@ -139,7 +149,7 @@ function drawResult() {
     const difference = Math.abs(arrivalTime(groups[0].speed) - arrivalTime(groups[1].speed));
     summary = first.length > 1
       ? '兩組都是 20°C，聲速相同，振動同時傳到最右端。'
-      : `${groups.find(group => group.id === first[0]).name}早約 ${milliseconds(difference)} 毫秒到達。同樣是空氣，溫度較高的一組聲速較快。`;
+      : `${groups.find(group => group.id === first[0]).name}早約 ${secondsText(difference)}到達。同樣是空氣，溫度較高的一組聲速較快。`;
   }
   text($('#result-summary'), summary);
   const signature = `${state.mode}:${state.temperature}`;
@@ -148,7 +158,7 @@ function drawResult() {
   $('#result-rows').replaceChildren();
   for (const group of [...groups].sort((a, b) => b.speed - a.speed)) {
     const row = document.createElement('tr');
-    for (const value of [group.name, `${number.format(group.speed)} m/s`, `${milliseconds(arrivalTime(group.speed))} 毫秒`]) {
+    for (const value of [group.name, `${number.format(group.speed)} m/s`, secondsText(arrivalTime(group.speed))]) {
       const cell = document.createElement('td'); cell.textContent = value; row.append(cell);
     }
     $('#result-rows').append(row);
@@ -161,6 +171,13 @@ function paint(audible = false, overrideCaption = '') {
   let newArrival = false;
   for (const model of models) {
     const arrived = state.time >= arrivalTime(model.speed);
+    const distance = reachedDistance(model.speed, state.time);
+    const frontX = START_X + distance / DISTANCE * (END_X - START_X);
+    model.row.dataset.reachedDistance = distance.toFixed(4);
+    attr(model.front, 'transform', `translate(${frontX.toFixed(4)} 0)`);
+    attr(model.front, 'visibility', state.time > 0 ? 'visible' : 'hidden');
+    attr(model.reachedTrack, 'd', `M${START_X} 125H${frontX.toFixed(4)}`);
+    text(model.distanceOutput, `${number.format(Math.floor(distance + 1e-8))} 公尺${arrived ? ' · 已到終點' : ''}`);
     for (const point of model.points) {
       const next = sample(point, model.speed, state.time); point.position = next.x;
       attr(point.node, 'transform', `translate(${next.x.toFixed(4)} ${point.y.toFixed(4)})`);
@@ -184,13 +201,13 @@ function paint(audible = false, overrideCaption = '') {
     text(model.endState, endState);
     attr(model.zoom, 'aria-label', `${model.name}最右端粒子，${endState}，位移放大五倍`);
     text(model.arrivalCaption, arrived ? '已傳到最右端' : '最右端到達時間');
-    text(model.arrivalOutput, arrived ? `${milliseconds(arrivalTime(model.speed))} 毫秒` : '—');
+    text(model.arrivalOutput, arrived ? secondsText(arrivalTime(model.speed)) : '—');
     if (arrived) attr(model.arrivalOutput, 'data-arrival', arrivalTime(model.speed));
     else model.arrivalOutput.removeAttribute('data-arrival');
     if (arrived && !noticed.has(model.id)) { noticed.add(model.id); newArrival = true; }
   }
   if (audible && newArrival) arrivalTone();
-  text($('#model-time'), `${milliseconds(state.time)} 毫秒`);
+  text($('#model-time'), secondsText(state.time));
   text($('#observation-caption'), overrideCaption || caption());
   const actionLabel = { idle: '同時啟動振動', running: '暫停觀察', paused: '繼續觀察', complete: '再次比較' }[state.phase];
   text($('#primary-action'), actionLabel);
@@ -296,7 +313,7 @@ $('#temperature-down').addEventListener('click', () => setTemperature(state.temp
 $('#temperature-up').addEventListener('click', () => setTemperature(state.temperature + 1));
 $('#slowdown').addEventListener('change', event => {
   const value = Number(event.target.value);
-  if (![20, 50].includes(value)) return;
+  if (![10, 20].includes(value)) return;
   if (state.phase === 'running') commitTime(performance.now());
   state.slowdown = value; paint();
 });
