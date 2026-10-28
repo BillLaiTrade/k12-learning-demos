@@ -6,7 +6,7 @@ if(root) {
   const $=s=>root.querySelector(s), $$=s=>[...root.querySelectorAll(s)];
   const svg=$('#periscope-scene'), canvas=$('#periscope-view'), ctx=canvas.getContext('2d',{alpha:false});
   const groups=[$('#periscope-mirror-0'),$('#periscope-mirror-1')];
-  const state={stage:0,angles:[38,51],done:[false,false,false],diagnosis:null,prediction:null,hint:0,signal:false,verified:false,saved:[45,45]};
+  const state={stage:0,angles:[38,51],done:[false,false,false],diagnosis:null,prediction:null,signal:false,verified:false,saved:[45,45]};
   let scenePixels=null, lastViewKey='', pending=0, dragging=null;
   const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
   let pulse=null,pulseFrame=0,pulseEndTimer=0,pulseUnlockTimer=0,nextPulseAt=0,pulseCount=0;
@@ -52,7 +52,6 @@ if(root) {
       g.setAttribute('aria-valuenow',state.angles[i].toFixed(1));g.setAttribute('aria-valuetext',`鏡面方向 ${state.angles[i].toFixed(1)} 度，可用方向鍵微調`);
       g.setAttribute('aria-disabled',String(state.stage===2));g.setAttribute('tabindex',state.stage===2?'-1':'0');
     });
-    $('#periscope-normal').replaceChildren();
     $('#periscope-signal-source').toggleAttribute('hidden',state.stage!==2);
     if(state.stage===2) {
       const saved=returnSignal(state.saved);
@@ -71,7 +70,6 @@ if(root) {
     const button=$('#periscope-pulse');
     button.hidden=state.stage===2;button.disabled=busy||waiting;
     button.textContent=busy?'✦ 視線追蹤中':waiting?'✦ 稍後可再試':'✦ 追蹤目前視線';
-    $('#periscope-hint').disabled=state.stage!==2&&(busy||waiting);
     $('#periscope-pulse-note').hidden=state.stage===2;
     $('#periscope-pulse-note').textContent=busy?'從小葵的觀察口出發，看看這次視線通往哪裡。':waiting?'追蹤已結束。先調整鏡片，再追蹤一次。':'從眼睛的位置反向追蹤目前視線；短暫顯示後消失。';
   }
@@ -80,13 +78,12 @@ if(root) {
     if(reset){clearTimeout(pulseUnlockTimer);nextPulseAt=0;}
     if(state.stage!==2 || reset){
       const light=$('#periscope-light');light.replaceChildren();light.style.opacity='1';delete light.dataset.opacity;
-      $('#periscope-normal').replaceChildren();
     }
     updatePulseControls();
   }
   function drawPulse() {
     if(!pulse || state.stage===2)return;
-    const {ray,opacity,showNormal}=pulse,light=$('#periscope-light');
+    const {ray,opacity}=pulse,light=$('#periscope-light');
     drawPath(light,ray.points,'#ffe471',{arrows:false});
     light.style.opacity=String(opacity);light.dataset.opacity=String(opacity);
     if(ray.kind==='blocked') {
@@ -99,18 +96,13 @@ if(root) {
       }
       light.append(spot);
     }
-    $('#periscope-normal').replaceChildren();
-    const hit=ray.hits.at(-1);
-    if(showNormal && hit) {
-      const n=document.createElementNS('http://www.w3.org/2000/svg','path'),p=hit.point,v=hit.normal;
-      n.setAttribute('d',`M${p[0]-v[0]*65},${p[1]-v[1]*65}L${p[0]+v[0]*65},${p[1]+v[1]*65}`);n.setAttribute('stroke','#eafff9');n.setAttribute('stroke-width','3');n.setAttribute('stroke-dasharray','8 6');n.setAttribute('opacity',opacity);$('#periscope-normal').append(n);
-    }
+
   }
   function emitPulse() {
     const now=performance.now();
     if(state.stage===2 || pulse || dragging || document.hidden || now<nextPulseAt)return;
     const duration=reducedMotion.matches?STATIC_FLASH_MS:FLASH_MS;
-    const shot={ray:traceSightline(state.angles),opacity:reducedMotion.matches?1:0,showNormal:state.hint>=2};
+    const shot={ray:traceSightline(state.angles),opacity:reducedMotion.matches?1:0};
     pulse=shot;nextPulseAt=now+duration+REST_MS;root.dataset.pulseId=String(++pulseCount);
     render();
     const animate=time=>{
@@ -179,7 +171,6 @@ if(root) {
     $$('[data-prediction]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.prediction===state.prediction)));
     updatePulseControls();
     $('#periscope-signal').hidden=state.stage!==2;$('#periscope-signal').disabled=!state.prediction;$('#periscope-signal').setAttribute('aria-pressed',String(state.signal));$('#periscope-signal').textContent=state.signal?'關閉訊號光':'發送訊號光';
-    $('#periscope-reset-stage').textContent=['↻ 重新組裝','↻ 重現故障','↻ 重做預測'][state.stage];
     $('#periscope-check').textContent=['檢查我的設計','檢查修復結果','確認我的預測'][state.stage];
     $('#periscope-next').hidden=!state.done[state.stage]||state.stage===2;$('#periscope-next').textContent=state.stage===0?'前往修復光路 →':'前往反向傳訊 →';
     $('#periscope-complete').hidden=!state.done[2];
@@ -224,17 +215,10 @@ if(root) {
   $$('[data-diagnosis]').forEach(b=>b.addEventListener('click',()=>{invalidate();state.diagnosis=Number(b.dataset.diagnosis);render();}));
   $$('[data-prediction]').forEach(b=>b.addEventListener('click',()=>{invalidate();state.prediction=b.dataset.prediction;state.verified=false;state.signal=false;render();}));
   $('#periscope-pulse').addEventListener('click',emitPulse);
-  const hints=[
-    ['先確認視線能到下方鏡片，再觀察上方鏡片把視線帶向哪裡。','看天空或海面時，外界光路仍接通；全暗則先檢查視線有沒有撞上管壁。','沿法線比較入射與反射方向。若出現光斑，表示這條光在那裡被擋住。'],
-    ['故障前，下方鏡片已把光送進眼睛。先比較光路從哪一處開始偏離。','法線與鏡面垂直。每一處反射都要讓入射角等於反射角。','只剩天空不代表光消失了，而是看向了另一個方向。'],
-    ['將傳播方向反過來，入射線與反射線的角色會交換。','鏡子固定時，同一反射點兩側的角度仍相等。','藍光由原本眼睛的位置出發；比較它和黃色原路線是否完整重合。']
-  ];
-  $('#periscope-hint').addEventListener('click',()=>{state.hint=Math.min(3,state.hint+1);$('#periscope-hint-copy').hidden=false;$('#periscope-hint-copy').textContent=hints[state.stage][state.hint-1];if(state.stage!==2)emitPulse();render();});
   $('#periscope-signal').addEventListener('click',()=>{if(!state.prediction)return;state.signal=!state.signal;if(state.signal)state.verified=true;render();});
   function enterStage(stage,reset=false) {
     if(stage>0&&!state.done[stage-1])return;
-    cancelPulse(true);state.stage=stage;state.hint=0;state.signal=false;state.verified=false;
-    $('#periscope-hint-copy').hidden=true;
+    cancelPulse(true);state.stage=stage;state.signal=false;state.verified=false;
     const content=[
       ['我在潛水艇裡，怎麼看見海上的船？','先轉動鏡片，再從觀察窗找找船在哪裡。','任務一｜把船的駕駛艙調到觀察窗中央','拖曳鏡片端點旋轉。先試著觀察，需要時從觀察口追蹤視線，再修正鏡片。'],
       ['剛才明明看見船，怎麼現在偏向天空了？','先判斷哪片鏡子被轉動，再把景象修回來。','任務二｜找出故障，讓船重新回到中央','先選擇你的判斷，再拖動鏡片修復；需要時從觀察口反向追蹤視線。'],
@@ -255,10 +239,6 @@ if(root) {
     b.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const available=$$('.periscope-steps button').filter(x=>!x.disabled),at=available.indexOf(b),next=e.key==='Home'?0:e.key==='End'?available.length-1:(at+(e.key==='ArrowRight'?1:-1)+available.length)%available.length;available[next].click();available[next].focus();});
   });
   $('#periscope-next').addEventListener('click',()=>{enterStage(state.stage+1);$('#periscope-panel').scrollIntoView({block:'start',behavior:'smooth'});});
-  $('#periscope-reset-stage').addEventListener('click',()=>{
-    for(let i=state.stage;i<3;i++)state.done[i]=false;
-    enterStage(state.stage,state.stage===0);
-  });
   $('#periscope-restart').addEventListener('click',()=>enterStage(0,true));
   $('#periscope-check').addEventListener('click',()=>{
     const info=observe(state.angles);

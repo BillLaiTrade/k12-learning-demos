@@ -103,7 +103,7 @@
   </style>
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
   <link rel="stylesheet" href="assets/reversible-light.css?v=3">
-  <link rel="stylesheet" href="assets/periscope.css?v=4">
+  <link rel="stylesheet" href="assets/periscope.css?v=5">
 </head>
 <body>
   <header class="shell masthead">
@@ -423,7 +423,7 @@
                       <rect x="739" y="553" width="26" height="74" rx="9" fill="#26373f" stroke="#61767c" stroke-width="3"/><rect x="755" y="564" width="12" height="52" rx="5" fill="#17262e"/>
                       <g fill="#334b50" stroke="#becbc3" stroke-width="2"><circle cx="502" cy="126" r="4"/><circle cx="628" cy="126" r="4"/><circle cx="502" cy="655" r="4"/><circle cx="628" cy="655" r="4"/><circle cx="628" cy="335" r="4"/><circle cx="502" cy="335" r="4"/></g>
                     </g>
-                    <g id="periscope-recorded" class="periscope-path"></g><g id="periscope-light" class="periscope-path"></g><g id="periscope-normal"></g>
+                    <g id="periscope-recorded" class="periscope-path"></g><g id="periscope-light" class="periscope-path"></g>
                     <g id="periscope-mirror-0" class="mirror-drag" role="slider" tabindex="0" aria-label="鏡面一，拖曳端點旋轉，或使用方向鍵" aria-valuemin="30" aria-valuemax="65" aria-valuenow="38" aria-orientation="horizontal"><circle class="scope-mirror-focus" cx="565" cy="190" r="79"/><line class="scope-mirror-hit"/><line class="mirror-back" stroke="#354f58" stroke-width="15" stroke-linecap="round"/><line class="mirror-glass" stroke="url(#scope-mirror)" stroke-width="9" stroke-linecap="round"/><line class="mirror-highlight" stroke="#f0ffff" stroke-width="2"/><circle class="scope-mirror-handle" r="11"/><circle class="scope-mirror-handle" r="11"/></g>
                     <g id="periscope-mirror-1" class="mirror-drag" role="slider" tabindex="0" aria-label="鏡面二，拖曳端點旋轉，或使用方向鍵" aria-valuemin="30" aria-valuemax="65" aria-valuenow="51" aria-orientation="horizontal"><circle class="scope-mirror-focus" cx="565" cy="590" r="79"/><line class="scope-mirror-hit"/><line class="mirror-back" stroke="#354f58" stroke-width="15" stroke-linecap="round"/><line class="mirror-glass" stroke="url(#scope-mirror)" stroke-width="9" stroke-linecap="round"/><line class="mirror-highlight" stroke="#f0ffff" stroke-width="2"/><circle class="scope-mirror-handle" r="11"/><circle class="scope-mirror-handle" r="11"/></g>
                     <g class="scene-label"><rect x="650" y="153" width="92" height="36" rx="8"/><text x="696" y="178" text-anchor="middle">鏡面一</text><rect x="648" y="637" width="92" height="36" rx="8"/><text x="694" y="662" text-anchor="middle">鏡面二</text></g>
@@ -432,10 +432,9 @@
                 </div>
                 <aside class="periscope-view" aria-label="從潛望鏡看到的景象"><h3>小葵的觀察窗</h3><div class="periscope-lens-frame"><canvas id="periscope-view" width="240" height="240" role="img" aria-label="觀察窗載入中"></canvas></div><div id="periscope-view-state" class="periscope-view-state" role="status">正在準備觀察窗…</div><p id="periscope-view-copy">景象隨鏡片轉動；管壁擋住的區域會變暗。</p><div class="periscope-view-meter">轉錯時，可能看見天空、海面，或被管壁遮住。</div></aside>
               </div>
-              <div class="periscope-controls"><button type="button" id="periscope-pulse" aria-describedby="periscope-pulse-note">✦ 追蹤目前視線</button><button type="button" id="periscope-hint">♧ 給我提示</button><button type="button" id="periscope-reset-stage">↻ 重新組裝</button><button type="button" id="periscope-signal" class="periscope-signal" aria-pressed="false" hidden disabled>發送訊號光</button></div>
+              <div class="periscope-controls"><button type="button" id="periscope-pulse" aria-describedby="periscope-pulse-note">✦ 追蹤目前視線</button><button type="button" id="periscope-signal" class="periscope-signal" aria-pressed="false" hidden disabled>發送訊號光</button></div>
               <p class="periscope-pulse-note" id="periscope-pulse-note" role="status">從眼睛的位置反向追蹤目前視線；短暫顯示後消失。</p>
               <p class="periscope-keyboard" id="periscope-drag-help">抓住鏡片端點，直接拖曳旋轉。</p>
-              <p class="periscope-hint" id="periscope-hint-copy" role="status" hidden></p>
               <p class="periscope-model-note">黃色輔助線從小葵的眼睛位置反向追蹤視線。實際看見物體時，是外界的光進入眼睛；剖面與景物為示意比例。</p>
               <div class="periscope-question" id="periscope-question-1" hidden><h3>哪一片鏡子被轉動了？</h3><p>比較原本的路線，先作判斷，再試著修復。</p><div class="periscope-choice-row"><button class="periscope-answer" type="button" data-diagnosis="0" aria-pressed="false">鏡面一</button><button class="periscope-answer" type="button" data-diagnosis="1" aria-pressed="false">鏡面二</button></div></div>
               <div class="periscope-question" id="periscope-question-2" hidden><h3>鏡子不動，從眼睛的位置沿原光路反向發出訊號，會怎麼走？</h3><p>先預測，再按「發送訊號光」比較藍光與原本的路線。</p><div class="periscope-answer-list"><button class="periscope-answer" type="button" data-prediction="same" aria-pressed="false">沿完整的原路徑返回，從上方入口照向船。</button><button class="periscope-answer" type="button" data-prediction="inside" aria-pressed="false">只有管內的路徑重合，離開入口後方向會不同。</button><button class="periscope-answer" type="button" data-prediction="turn" aria-pressed="false">兩次反射後會換一條路，需要再調鏡子才能照向船。</button></div></div>
@@ -472,6 +471,6 @@
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
   <script type="module" src="assets/reversible-light.js?v=3"></script>
-  <script type="module" src="assets/periscope.js?v=8"></script>
+  <script type="module" src="assets/periscope.js?v=9"></script>
 </body>
 </html>

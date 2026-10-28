@@ -198,7 +198,7 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await setAngle(0,45);await setAngle(1,45);
     const button=page.locator('#periscope-pulse');await expect(button).toBeEnabled();await button.click();
     await expect(quiz).toHaveAttribute('data-pulse-status','running');const id=await quiz.getAttribute('data-pulse-id');
-    await expect(button).toBeDisabled();await expect(page.locator('#periscope-hint')).toBeDisabled();
+    await expect(button).toBeDisabled();
     await button.evaluate(el=>{for(let i=0;i<10;i++)el.dispatchEvent(new MouseEvent('click',{bubbles:true}));});
     assert.equal(await quiz.getAttribute('data-pulse-id'),id);
     await expect.poll(async()=>Number(await page.locator('#periscope-light').getAttribute('data-opacity'))>.95).toBe(true);
@@ -208,7 +208,7 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     assert.ok(first.startsWith('M755.00,590.00L'));assert.ok(first.endsWith('200.67,190.00'));
     assert.equal(first,expected);assert.equal(await page.locator('#periscope-light .light-arrow').count(),0);assert.equal(await page.locator('#periscope-light circle').count(),0);assert.equal(await page.locator('#periscope-block-marker').count(),0);
     await page.waitForTimeout(180);assert.equal(await page.locator('#periscope-light .light-line').getAttribute('d'),first);
-    await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('#periscope-light')).toBeEmpty();await expect(page.locator('#periscope-normal')).toBeEmpty();
+    await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('#periscope-light')).toBeEmpty();await expect(page.locator('#periscope-normal')).toHaveCount(0);
     await expect(button).toBeDisabled();await expect(button).toBeEnabled();await expect(quiz).toHaveAttribute('data-pulse-status','idle');
   });
   await t.test('拖動或鏡片方向鍵操作立即收起提示光，後續重繪不留下舊路線',async()=>{
@@ -218,25 +218,23 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await expect(button).toBeEnabled();await button.click();await page.locator('#periscope-mirror-0').press('ArrowRight');await expect(page.locator('#periscope-light')).toBeEmpty();
     await expect(button).toBeEnabled();
   });
-  await t.test('給我提示同樣短暫亮起；撞壁只有光斑，法線與光斑隨光熄滅',async()=>{
-    await setAngle(0,45);await setAngle(1,45);
-    const hint=page.locator('#periscope-hint');await hint.click();await expect(page.locator('#periscope-hint-copy')).toBeVisible();await expect(quiz).toHaveAttribute('data-pulse-status','running');
-    await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('#periscope-light')).toBeEmpty();await expect(hint).toBeEnabled();
-    await hint.click();await expect(page.locator('#periscope-normal path')).toHaveCount(1);await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');
-    await expect(page.locator('#periscope-normal')).toBeEmpty();await expect(page.locator('#periscope-block-marker')).toHaveCount(0);await expect(hint).toBeEnabled();
-    await page.locator('#periscope-reset-stage').click();await expect(quiz).toHaveAttribute('data-pulse-status','idle');
-    await page.locator('#periscope-pulse').click();await expect.poll(async()=>Number(await page.locator('#periscope-light').getAttribute('data-opacity'))>.95).toBe(true);await expect(page.locator('.periscope-wall-spot')).toBeVisible();
+  await t.test('移除額外提示與分關重設；視線追蹤撞壁仍有短暫光斑',async()=>{
+    assert.equal(await page.locator('#periscope-hint,#periscope-hint-copy,#periscope-reset-stage,#periscope-normal').count(),0);
+    const button=page.locator('#periscope-pulse');await expect(button).toBeEnabled();
+    assert.deepEqual(await page.locator('.periscope-controls button:visible').allTextContents(),['✦ 追蹤目前視線']);
+    await setAngle(0,38);await setAngle(1,51);await button.click();
+    await expect.poll(async()=>Number(await page.locator('#periscope-light').getAttribute('data-opacity'))>.95).toBe(true);await expect(page.locator('.periscope-wall-spot')).toBeVisible();
     const at=await page.locator('.periscope-wall-spot circle').last().evaluate(e=>[+e.getAttribute('cx'),+e.getAttribute('cy')]);
     const hit=await page.evaluate(async()=>{const {traceRay,OPTICS}=await import('./assets/periscope-optics.mjs?v=2');return traceRay(OPTICS.eye,[-1,0,0],document.querySelector('#unit-quiz').dataset.angles.split(',').map(Number)).points.at(-1).slice(0,2);});at.forEach((n,i)=>close(n,hit[i]));
     assert.equal(await page.locator('#periscope-light .light-arrow').count(),0);assert.equal(await page.locator('#periscope-block-marker').count(),0);
-    await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('.periscope-wall-spot')).toHaveCount(0);await expect(hint).toBeEnabled();
+    await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('.periscope-wall-spot')).toHaveCount(0);await expect(button).toBeEnabled();
   });
   await t.test('減少動態以短暫靜態全光路呈現；重設取消舊淡出與計時器',async()=>{
     await page.emulateMedia({reducedMotion:'reduce'});await setAngle(0,45);await setAngle(1,45);
     const button=page.locator('#periscope-pulse');await button.click();await expect(page.locator('#periscope-light')).toHaveAttribute('data-opacity','1');
     const d=await page.locator('#periscope-light .light-line').getAttribute('d');await page.waitForTimeout(150);assert.equal(await page.locator('#periscope-light .light-line').getAttribute('d'),d);
     await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('#periscope-light')).toBeEmpty();await expect(button).toBeEnabled();
-    await page.emulateMedia({reducedMotion:'no-preference'});await button.click();await page.locator('#periscope-reset-stage').click();await expect(quiz).toHaveAttribute('data-pulse-status','idle');await expect(page.locator('#periscope-light')).toBeEmpty();
+    await page.emulateMedia({reducedMotion:'no-preference'});await button.click();await page.locator('#periscope-restart').click();await expect(quiz).toHaveAttribute('data-pulse-status','idle');await expect(page.locator('#periscope-light')).toBeEmpty();
     await button.click();await page.waitForTimeout(250);await expect(quiz).toHaveAttribute('data-pulse-status','running');await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(button).toBeEnabled();
   });
   await t.test('鍵盤邊界與取消拖曳不會留下卡住狀態',async()=>{
