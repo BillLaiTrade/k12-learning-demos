@@ -11,6 +11,9 @@ const status = document.querySelector('#vacuum-status');
 const MIN_AIR = .02;
 let air = 1, power = false, mode = 'idle', frame = 0, lastTime = null, phase = 0;
 let context = null, gain = null, mediaSource = null, soundRequest = 0, audioState = 'off', audioError = '';
+let analysers = [], meterBuffers = [], meterEnergy = null, lastMeterTime = null;
+// 以這段錄音的全段雙聲道 RMS 作 70 dB 示意參考，不代表校準過的聲壓值。
+const DB_REFERENCE_OFFSET = 92.3276669648;
 audio.volume = 1;
 const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
 const text = (id, value) => { const node = document.getElementById(id); if (node.textContent !== value) node.textContent = value; };
@@ -49,6 +52,36 @@ function setGain() {
   lab.dataset.gain = target.toFixed(5);
   if (gain) gain.gain.setTargetAtTime(target, context.currentTime, .035);
 }
+function updateMeter() {
+  if (!power || audioState !== 'playing' || !analysers.length) {
+    meterEnergy = null; lastMeterTime = null;
+    text('vacuum-db-value', '—');
+    document.querySelector('#vacuum-db-value').removeAttribute('data-value');
+    document.querySelector('#vacuum-db-bar').style.width = '0%';
+    return;
+  }
+  const now = context.currentTime;
+  if (lastMeterTime !== null && now - lastMeterTime < .1) return;
+  const delta = lastMeterTime === null ? .1 : now - lastMeterTime;
+  lastMeterTime = now;
+  let sum = 0, count = 0;
+  analysers.forEach((node, channel) => {
+    const samples = meterBuffers[channel]; node.getFloatTimeDomainData(samples);
+    for (const value of samples) { sum += value * value; count++; }
+  });
+  const energy = sum / count;
+  if (energy < 1e-12) {
+    meterEnergy = null; text('vacuum-db-value', '—');
+    document.querySelector('#vacuum-db-value').removeAttribute('data-value');
+    document.querySelector('#vacuum-db-bar').style.width = '0%'; return;
+  }
+  const weight = 1 - Math.exp(-delta / .16);
+  meterEnergy = meterEnergy === null ? energy : meterEnergy + weight * (energy - meterEnergy);
+  const db = DB_REFERENCE_OFFSET + 10 * Math.log10(meterEnergy);
+  text('vacuum-db-value', String(Math.round(db)));
+  document.querySelector('#vacuum-db-value').dataset.value = db.toFixed(2);
+  document.querySelector('#vacuum-db-bar').style.width = `${(clamp((db - 20) / 60) * 100).toFixed(1)}%`;
+}
 function render() {
   const airLabel = air > .67 ? '充足' : air > .15 ? '逐漸減少' : '接近真空';
   const heard = !power ? '未發聲' : air > .67 ? '清楚' : air > .15 ? '變弱' : '幾乎聽不見';
@@ -59,8 +92,6 @@ function render() {
   text('vacuum-switch-word', power ? 'ON' : 'OFF');
   text('vacuum-mode', modeLabel); text('vacuum-air-label', airLabel);
   text('vacuum-source-tag', power ? '電鈴持續振動' : '電鈴已關閉');
-  text('vacuum-source-state', power ? '持續運作' : '尚未啟動');
-  text('vacuum-sound-state', heard);
   text('vacuum-extract-label', mode === 'pump' ? '停止抽氣' : '抽氣');
   text('vacuum-admit-label', mode === 'inlet' ? '關閉進氣' : '放入空氣');
   for (const button of pumpButtons) { button.disabled = air <= MIN_AIR + .0001; button.setAttribute('aria-pressed', String(mode === 'pump')); }
@@ -70,12 +101,12 @@ function render() {
   needle.setAttribute('transform', `translate(1665 535) rotate(${(-60 + air * 120).toFixed(3)})`);
   const count = 3 + 81 * air;
   particles.forEach((dot, index) => dot.setAttribute('opacity', (clamp(count - index) * .75).toFixed(3)));
-  document.querySelectorAll('.vacuum-bars i').forEach((bar, index) => { bar.style.opacity = power ? String(clamp(soundLevel() * 3 - index * .55, .13, 1)) : '.13'; });
   const sentence = audioError || (!power && mode === 'idle' && air === 1
     ? '先開啟電鈴，再抽氣比較聽到的鈴聲。'
     : `${modeLabel}，罩內空氣${airLabel}；${power ? `電鈴持續運作，聽到的鈴聲${heard}。` : '電鈴已關閉，可開啟電鈴比較鈴聲。'}`);
   if (status.textContent !== sentence) status.textContent = sentence;
-  setGain();
+  status.classList.toggle('vacuum-status-error', Boolean(audioError));
+  setGain(); updateMeter();
 }
 function drawHammer() {
   const angle = power ? -5 * Math.sin(phase * Math.PI * 2 * 3.5) ** 2 : 0;
@@ -104,7 +135,16 @@ function setPower(enabled) {
     if (!context) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       context = new AudioContext(); gain = context.createGain();
-      mediaSource = context.createMediaElementSource(audio); mediaSource.connect(gain); gain.connect(context.destination);
+      mediaSource = context.createMediaElementSource(audio); mediaSource.connect(gain);
+      // 各聲道分別量取調整後訊號能量，避免直接合成單聲道時相位抵銷。
+      const splitter = context.createChannelSplitter(2), merger = context.createChannelMerger(2);
+      gain.connect(splitter);
+      analysers = [0, 1].map(channel => {
+        const node = context.createAnalyser(); node.fftSize = 4096;
+        splitter.connect(node, channel); node.connect(merger, 0, channel); return node;
+      });
+      meterBuffers = analysers.map(node => new Float32Array(node.fftSize));
+      merger.connect(context.destination);
     }
     gain.gain.setValueAtTime(soundLevel(), context.currentTime);
     // 兩個播放要求都在使用者事件內提出，支援行動瀏覽器的手勢限制。

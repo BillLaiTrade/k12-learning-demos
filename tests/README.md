@@ -71,7 +71,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.2-sound-propagation.tes
 CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.2-vacuum.test.cjs tests/unit-2.2-sound-propagation.test.cjs tests/unit-2.2.test.cjs
 ```
 
-鐘罩檢查包括預設靜音、實錄解碼、實際 AudioContext／媒體播放、圖上及下方控制一致、抽氣中途停止、進氣反向操作、上下限、粒子全罩分布、敲錘在低空氣量時持續動作，以及直接量測 GainNode 隨抽氣降低、進氣恢復，確認不是僅更新文字。另涵蓋開關／快速切換／鍵盤、離開區塊停止聲音且保留空氣量、手機觸控、320／390／768／1024 px 無溢出、點擊區尺寸與完整器材顯示。截圖與核可示意另保存於 `docs/reviews/unit-2.2-card03/`，操作通過不代替人工畫面對照。
+鐘罩檢查包括預設靜音、實錄解碼、實際 AudioContext／媒體播放、圖上及下方控制一致、抽氣中途停止、進氣反向操作、上下限、粒子全罩分布、敲錘在低空氣量時持續動作，以及直接量測 GainNode 隨抽氣降低、進氣恢復，確認不是僅更新文字。另涵蓋開關／快速切換／鍵盤、離開區塊停止聲音且保留空氣量、手機觸控、320／390／768／1024 px 無溢出、點擊區尺寸與完整器材顯示。新增罩外分貝儀檢查逐聲道 RMS 讀值隨抽氣下降、進氣恢復，並在空氣量不變時暫停實際音訊驗證讀值清除；關閉顯示「—」、手機 LCD 不溢出，原狀態列移除。截圖與核可示意另保存於 `docs/reviews/unit-2.2-card03/`，操作通過不代替人工畫面對照。
 
 ## 1.2 第六區光路可逆與第二區共用場景
 
