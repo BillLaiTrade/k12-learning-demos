@@ -45,3 +45,10 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.1-water-lab.test.cjs te
 本次只改 SVG 呈現與冰塊位置計算，`water-lab-state.mjs` 完全未修改：維持約 20 秒消退、前 8 秒完整大小觀察、冷卻與測溫液體延遲、加熱互斥及重設行為。浸水位置為畫面示意，未新增浮力或折射的精密物理模型。
 
 本機 `unit-5.1-water-lab.test.cjs` 與 `unit-5.1.test.cjs` 共 18 項全數通過（含 runner）。同步修正原有漂浮位置斷言，改為檢查中心在水下、僅小部分輪廓露出；既有降溫、融化、加熱、重設與窄視窗檢查通過。已檢視桌機、手機、入水後局部與融化中畫面，保存 `ice-immersed-closeup.webp`、`ice-immersed-desktop.webp`、`ice-immersed-melting.webp`、`ice-immersed-mobile.webp`。
+
+
+## 加熱狀態移至操作區
+
+使用者指出木桌上浮動的加熱狀態標籤不協調。已將同一個狀態節點移至三個按鈕下方、對齊中間的加熱按鈕，改為小字與指示燈，移除外框、白底及絕對定位。桌機與手機採同一排列，320px 時狀態可利用整列寬度，避免文字擠入單一窄欄。已檢視加熱、停止與桌機／390px／320px 畫面，保存 `heater-status-desktop.webp`、`heater-status-mobile.webp`。
+
+只調整 HTML 位置及 CSS，JavaScript、加熱／冷卻、冰塊與判分模型完全未改；本輪未重跑功能測試。
