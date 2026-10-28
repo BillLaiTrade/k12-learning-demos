@@ -85,6 +85,15 @@ test('sound comparison uses one signal and physical travel delays', async t => {
   });
 });
 
+test('fork appearance uses rapid bounded translation without affecting the propagation signal', async () => {
+  const {forkVibration}=await import(pathToFileURL(path.resolve(__dirname,'../units/2/parts/2.2/assets/sound-speed-rendering.mjs')).href);
+  const values=Array.from({length:1001},(_,i)=>forkVibration(.251+i/1000));
+  assert.ok(values.every(v=>Math.abs(v)<=1.5));
+  const signs=values.map(Math.sign);assert.equal(signs.slice(1).filter((v,i)=>v!==signs[i]).length,16);
+  for(const t of[-1,0,4,5])assert.equal(forkVibration(t),0);
+  for(const t of[.15,.3,1.02])assert.ok(Math.abs(forkVibration(t+.0625)+forkVibration(t))<1e-10);
+});
+
 test('fourth learning block works within the complete lesson', { timeout: 180000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], {
     cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'pipe']
@@ -320,8 +329,8 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('.tuning-fork').count(),3);
     assert.equal(await page.locator('.fork-striker[visibility=hidden]').count(),3);
     const fixed=await page.locator('.fork-fixed').evaluateAll(nodes=>nodes.map(n=>n.innerHTML));
-    const arms=()=>page.locator('.fork-tine').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('d')));
-    const tips=()=>page.locator('.tuning-fork').evaluateAll(nodes=>nodes.map(n=>[n.querySelectorAll('.fork-tine')[0],n.querySelectorAll('.fork-tine')[3]].map(path=>{const p=path.getPointAtLength(path.getTotalLength());return p.x;})));
+    const arms=()=>page.locator('.fork-tine').evaluateAll(nodes=>nodes.map(n=>[n.getAttribute('d'),n.getAttribute('transform')]));
+    const tips=()=>page.locator('.tuning-fork').evaluateAll(nodes=>nodes.map(n=>[n.querySelectorAll('.fork-tine')[0],n.querySelectorAll('.fork-tine')[3]].map(path=>{const p=path.getPointAtLength(path.getTotalLength());return p.x+path.transform.baseVal.consolidate().matrix.e;})));
     const initialArms=await arms(),initialTips=await tips();
     await primary.click();assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),3);
     await page.clock.runFor(150);
@@ -364,21 +373,23 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
   await t.test('small repeated tine motion stays connected to steel without a handle pushing the block', async () => {
     await fresh();await primary.click();
     const readings=[];
+    const shapes=await page.locator('.fork-tine').evaluateAll(ns=>ns.map(n=>n.getAttribute('d')));
     for(let i=0;i<39;i++){
       await page.clock.runFor(100);
       const reading=await page.locator('[data-group=steel] .tuning-fork').evaluate(n=>{
         const paths=n.querySelectorAll('.fork-tine'),contact=n.querySelector('.source-contact');
-        const tip=path=>path.getPointAtLength(path.getTotalLength());
+        const tip=path=>{const p=path.getPointAtLength(path.getTotalLength());return{x:p.x+path.transform.baseVal.consolidate().matrix.e,y:p.y};};
         return{left:tip(paths[0]).x,right:tip(paths[3]).x,tipY:tip(paths[3]).y,
           edge:Number(contact.dataset.armEdge),steel:Number(contact.dataset.steelEdge),
           arm:contact.dataset.coupledArm,contactInBase:!!n.querySelector('.fork-fixed .source-contact'),
           d:paths[3].getAttribute('d')};
       });
+      assert.deepEqual(await page.locator('.fork-tine').evaluateAll(ns=>ns.map(n=>n.getAttribute('d'))),shapes,'no path morphing');
       assert.equal(reading.arm,'right');assert.equal(reading.contactInBase,false);
       assert.ok(Math.abs(reading.edge-reading.right-2.8)<.001);
       assert.equal(reading.steel,94);assert.ok(reading.edge<reading.steel,'contact layer remains positive in width');
-      assert.equal(reading.tipY,35);assert.match(reading.d,/V35$/,'long tine section stays straight');
-      assert.ok(Math.abs(reading.right-86)<=1.8+.001,'small displacement avoids a visibly distorted fork');
+      assert.equal(reading.tipY,35);assert.match(reading.d,/^M86 99V35$/,'tine geometry is constant and straight');
+      assert.ok(Math.abs(reading.right-86)<=1.5+.001,'small displacement avoids a visibly distorted fork');
       assert.ok(Math.abs(reading.left+reading.right-138)<.001);
       readings.push(reading.right-86);
     }

@@ -1,8 +1,16 @@
 // 介質場景、分子／原子與表面取樣共用同一波動模型。
-import { positions, sample, displacement, PULSE_DURATION } from './sound-speed-model.mjs?v=strike-13';
+import { positions, sample, PULSE_DURATION } from './sound-speed-model.mjs?v=vibration-14';
 // 敲擊動作保留 0.6 秒；接觸即起振，不延後傳播時計。
 const STRIKE_DURATION = .6;
 const CONTACT_DURATION = .06;
+// 聲源外觀採微幅快速振動示意；微觀粒子另用便於追蹤的往返節奏。
+// 此頻率不代表實際音高，亦不參與聲速、位置與到達時間計算。
+export function forkVibration(time) {
+  if(time<=0 || time>=PULSE_DURATION) return 0;
+  const envelope=Math.sin(Math.PI/2*Math.min(1,time/.04))**2
+    *Math.sin(Math.PI/2*Math.min(1,(PULSE_DURATION-time)/.25))**2;
+  return 1.5*Math.sin(2*Math.PI*8*time)*envelope;
+}
 export const materialInfo = {
   air: {
     name: '空氣', phase: '氣體',
@@ -148,7 +156,7 @@ export function mediumScene(root, kind, prefix) {
   } };
 }
 
-// 叉臂以小幅反向往返呈現振動，根部平滑過渡，長直段不拉伸或扭曲。
+// 叉臂幾何固定，只作水平微幅反向位移，不逐影格變形、旋轉或扭曲。
 // 鋼材由右叉臂經薄接觸層傳振，另一臂自由；不把兩臂夾死。
 export function tuningForkSource(root, kind, fill) {
   const group = svgNode('g', { class:'sound-source tuning-fork', 'data-medium':kind, 'data-vibrating':'false', 'aria-hidden':'true' }, root);
@@ -163,22 +171,27 @@ export function tuningForkSource(root, kind, fill) {
   if (kind === 'water') {
     metal(body,'M80 7V25');
     metal(body,'M68 44C68 19 92 19 92 44');
-    paths = value => [`M68 44C68 53 ${68-value} 56 ${68-value} 65V99`,`M92 44C92 53 ${92+value} 56 ${92+value} 65V99`];
+    paths = ['M68 44V99','M92 44V99'];
     hit = { x:68, y:9, handle:'M73 14L53 1', dx:-20, dy:4 };
     svgNode('path',{class:'fork-waterline',d:'M61 30H73M86 30H98',stroke:'#eaf9f7','stroke-width':1.5,opacity:.9},group);
   } else if (kind === 'steel') {
     metal(body,'M52 99C52 123 86 123 86 99');
     metal(body,'M69 117V125');
-    paths = value => [`M52 99C52 90 ${52-value} 87 ${52-value} 80V35`,`M86 99C86 90 ${86+value} 87 ${86+value} 80V35`];
+    paths = ['M52 99V35','M86 99V35'];
     contact = svgNode('path',{class:'source-contact','data-coupled-arm':'right',fill:'#9cabad',stroke:'#617980','stroke-width':.5},group);
     hit = { x:40, y:35, handle:'M46 41L27 63', dx:-20, dy:3 };
   } else {
     metal(body,'M42 79C42 104 74 104 74 79');
     metal(body,'M58 98V113');
-    paths = value => [`M42 79C42 70 ${42-value} 67 ${42-value} 60V33`,`M74 79C74 70 ${74+value} 67 ${74+value} 60V33`];
+    paths = ['M42 79V33','M74 79V33'];
     hit = { x:30, y:33, handle:'M36 39L16 62', dx:-24, dy:3 };
   }
-  const arms = paths(0).map(d => metal(group,d,'fork-tine'));
+  const traces=svgNode('g',{class:'fork-vibration-trace',visibility:'hidden','aria-hidden':'true'},group);
+  for(const d of paths) for(const offset of [-2.1,2.1]) svgNode('path',{
+    d,transform:`translate(${offset} 0)`,fill:'none',stroke:'#819ba3','stroke-width':1.2,
+    'stroke-linecap':'round',opacity:.25
+  },traces);
+  const arms = paths.map(d => metal(group,d,'fork-tine'));
   const mallet = svgNode('g',{class:'fork-striker',visibility:'hidden','data-strike':'idle'},group);
   svgNode('path',{d:hit.handle,stroke:'#956b43','stroke-width':4.5,'stroke-linecap':'round'},mallet);
   svgNode('rect',{x:hit.x,y:hit.y,width:12,height:12,rx:4,fill:'#3a4649',stroke:'#1e3034','stroke-width':.8},mallet);
@@ -186,10 +199,11 @@ export function tuningForkSource(root, kind, fill) {
   const label=svgNode('text',{x:kind==='water'?78:55,y:139,'text-anchor':'middle',fill:'#526f5c','font-size':12},group);
   label.textContent='音叉';
   return { paint(time,phase) {
-    const value=displacement(time)*.45;
+    const value=forkVibration(time);
     const active=time>0&&time<PULSE_DURATION;
     group.setAttribute('data-vibrating',String(active));
-    paths(value).forEach((d,i)=>arms[i].forEach(node=>node.setAttribute('d',d)));
+    arms.forEach((arm,i)=>arm.forEach(node=>node.setAttribute('transform',`translate(${((i?1:-1)*value).toFixed(5)} 0)`)));
+    traces.setAttribute('visibility',active?'visible':'hidden');
     if(contact) {
       // 右臂外緣與鋼端面之間始終連接，薄層彈性變形傳遞振動。
       const edge=86+value+2.8;
