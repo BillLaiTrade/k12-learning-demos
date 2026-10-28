@@ -4,9 +4,9 @@
   if(!root)return;
   const $=id=>document.getElementById(id);
   const scenes={
-    5:{name:'冷藏室',image:'assets/direction-fridge.webp',observation:'在 5°C 冷藏室，兩杯水都比環境暖，所以都放熱、降溫。'},
-    25:{name:'房間',image:'assets/direction-room.webp',observation:'在 25°C 房間，A 放熱降溫，B 吸熱升溫；原來要先比較溫度高低！'},
-    70:{name:'高溫箱',image:'assets/direction-hot.webp',observation:'在 70°C 高溫箱，連原本 60°C 的水也比環境冷，所以兩杯都吸熱、升溫。'}
+    5:{name:'冷藏室',image:'assets/direction-fridge.webp',observation:'在 5°C 冷藏室，連 10°C 的冷水也繼續降溫！原來兩杯水都比周圍暖，都在放熱。'},
+    25:{name:'房間',image:'assets/direction-room.webp',observation:'在 25°C 房間，A 杯降溫、B 杯升溫，卻都是熱從溫度較高的地方傳向較低的地方！'},
+    70:{name:'高溫箱',image:'assets/direction-hot.webp',observation:'在 70°C 高溫箱，連 60°C 的熱水也升溫了！原來兩杯水都比周圍冷，都在吸熱。'}
   };
   const state={environment:25,time:0,playing:false,observed:false,finished:false};
   let frame=0,last=null,shownEnvironment=null;
@@ -49,7 +49,7 @@
     text('direction-play',label);$('direction-play').setAttribute('aria-pressed',String(state.playing));
     const message=phase==='ready'?'準備好，按開始觀察。':phase==='complete'?'兩杯水已和環境同溫，沒有淨熱傳遞。':phase==='running'?'觀察中。':'已暫停觀察。';
     text('direction-run-state',message);
-    text('direction-observation-dialogue',!state.observed?'「先選一個環境，觀察這兩杯水的變化。」':state.finished?'「兩杯水最後都和環境同溫了。溫度差消失時，就沒有淨熱傳遞。」':`「${scene.observation}」`);
+    text('direction-observation-dialogue',!state.observed?'「原來不能只看水有多冷、多熱，還得比較它和周圍環境的溫度！」':state.finished?'「兩杯水最後都和周圍同溫了！溫度差消失，就沒有淨熱傳遞了。」':`「${scene.observation}」`);
   }
   function stop(){cancelAnimationFrame(frame);frame=0;last=null;}
   function tick(now){
