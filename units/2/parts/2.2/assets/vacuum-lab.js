@@ -18,6 +18,40 @@ audio.volume = 1;
 const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
 const text = (id, value) => { const node = document.getElementById(id); if (node.textContent !== value) node.textContent = value; };
 
+// 七段顯示器的可見筆畫與無障礙讀值共用相同資料，未烘焙在照片內。
+const meterDigits = document.querySelector('#vacuum-led-digits');
+const segmentPaths = [
+  'M10 0H46L51 5L46 10H10L5 5Z', 'M48 12L53 7L58 12V39L53 44L48 39Z',
+  'M48 51L53 46L58 51V78L53 83L48 78Z', 'M10 80H46L51 85L46 90H10L5 85Z',
+  'M0 51L5 46L10 51V78L5 83L0 78Z', 'M0 12L5 7L10 12V39L5 44L0 39Z',
+  'M10 40H46L51 45L46 50H10L5 45Z'
+];
+const numeralSegments = ['abcdef', 'bc', 'abdeg', 'abcdg', 'bcfg', 'acdfg', 'acdefg', 'abc', 'abcdefg', 'abcdfg'];
+const digitGroups = [0, 1].map(index => {
+  const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  group.setAttribute('transform', `translate(${index * 74} 0) skewX(-5)`);
+  segmentPaths.forEach((d, segment) => {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', d); path.classList.add('vacuum-led-segment');
+    path.dataset.segment = 'abcdefg'[segment]; group.append(path);
+  });
+  meterDigits.append(group); return group;
+});
+function showMeter(value, measured = null) {
+  const output = document.querySelector('#vacuum-db-value');
+  text('vacuum-db-value', value);
+  if (measured === null) output.removeAttribute('data-value');
+  else output.dataset.value = measured.toFixed(2);
+  if (meterDigits.dataset.reading === value) return;
+  meterDigits.dataset.reading = value;
+  const characters = value === '—' ? '--' : value.padStart(2, ' ');
+  digitGroups.forEach((group, index) => {
+    const character = characters[index]; group.dataset.digit = character;
+    const lit = character === '-' ? 'g' : character === ' ' ? '' : numeralSegments[Number(character)] || '';
+    for (const path of group.children) path.classList.toggle('is-lit', lit.includes(path.dataset.segment));
+  });
+}
+
 // 先建立均勻候選位置，再以最遠點順序選取：空氣變少時仍分布在整個自由空間。
 const halton = (index, base) => {
   let value = 0, fraction = 1 / base;
@@ -26,10 +60,10 @@ const halton = (index, base) => {
 };
 const pool = [];
 for (let i = 1; i < 600; i++) {
-  const x = 342 + 363 * halton(i, 2), y = 180 + 427 * halton(i, 3);
-  const inDome = y > 290 || ((x - 525) / 183) ** 2 + ((y - 290) / 125) ** 2 < 1;
-  const inBell = ((x - 510) / 108) ** 2 + ((y - 445) / 104) ** 2 < 1;
-  const inStand = x > 431 && x < 611 && y > 491;
+  const x = 546 + 294 * halton(i, 2), y = 266 + 321 * halton(i, 3);
+  const inDome = y > 340 || ((x - 694) / 148) ** 2 + ((y - 340) / 80) ** 2 < 1;
+  const inBell = ((x - 684) / 88) ** 2 + ((y - 450) / 86) ** 2 < 1;
+  const inStand = x > 619 && x < 760 && y > 491;
   if (inDome && !inBell && !inStand) pool.push({ x, y });
 }
 const particles = [], chosen = [];
@@ -37,7 +71,7 @@ for (let i = 0; i < 84; i++) {
   let best = 0, distance = -1;
   for (let j = 0; j < pool.length; j++) {
     const p = pool[j];
-    const d = chosen.length ? Math.min(...chosen.map(q => (q.x - p.x) ** 2 + (q.y - p.y) ** 2)) : -((p.x - 410) ** 2 + (p.y - 220) ** 2);
+    const d = chosen.length ? Math.min(...chosen.map(q => (q.x - p.x) ** 2 + (q.y - p.y) ** 2)) : -((p.x - 600) ** 2 + (p.y - 285) ** 2);
     if (d > distance || j === 0) { best = j; distance = d; }
   }
   const position = pool.splice(best, 1)[0]; chosen.push(position);
@@ -55,9 +89,7 @@ function setGain() {
 function updateMeter() {
   if (!power || audioState !== 'playing' || !analysers.length) {
     meterEnergy = null; lastMeterTime = null;
-    text('vacuum-db-value', '—');
-    document.querySelector('#vacuum-db-value').removeAttribute('data-value');
-    document.querySelector('#vacuum-db-bar').style.width = '0%';
+    showMeter('—');
     return;
   }
   const now = context.currentTime;
@@ -71,16 +103,12 @@ function updateMeter() {
   });
   const energy = sum / count;
   if (energy < 1e-12) {
-    meterEnergy = null; text('vacuum-db-value', '—');
-    document.querySelector('#vacuum-db-value').removeAttribute('data-value');
-    document.querySelector('#vacuum-db-bar').style.width = '0%'; return;
+    meterEnergy = null; showMeter('—'); return;
   }
   const weight = 1 - Math.exp(-delta / .16);
   meterEnergy = meterEnergy === null ? energy : meterEnergy + weight * (energy - meterEnergy);
   const db = DB_REFERENCE_OFFSET + 10 * Math.log10(meterEnergy);
-  text('vacuum-db-value', String(Math.round(db)));
-  document.querySelector('#vacuum-db-value').dataset.value = db.toFixed(2);
-  document.querySelector('#vacuum-db-bar').style.width = `${(clamp((db - 20) / 60) * 100).toFixed(1)}%`;
+  showMeter(String(Math.round(clamp(db, 0, 99))), db);
 }
 function render() {
   const airLabel = air > .67 ? '充足' : air > .15 ? '逐漸減少' : '接近真空';
@@ -97,7 +125,7 @@ function render() {
   for (const button of inletButtons) { button.disabled = air >= .99999; button.setAttribute('aria-pressed', String(mode === 'inlet')); }
   pumpButtons[0].setAttribute('aria-label', mode === 'pump' ? '停止抽氣' : '點按幫浦抽氣');
   inletButtons[0].setAttribute('aria-label', mode === 'inlet' ? '關閉進氣閥' : '打開進氣閥，放入空氣');
-  needle.setAttribute('transform', `translate(1665 535) rotate(${(-60 + air * 120).toFixed(3)})`);
+  needle.setAttribute('transform', `translate(1770 534) rotate(${(-60 + air * 120).toFixed(3)})`);
   const count = 3 + 81 * air;
   particles.forEach((dot, index) => dot.setAttribute('opacity', (clamp(count - index) * .75).toFixed(3)));
   const sentence = audioError || (!power && mode === 'idle' && air === 1
@@ -109,7 +137,7 @@ function render() {
 }
 function drawHammer() {
   const angle = power ? -5 * Math.sin(phase * Math.PI * 2 * 3.5) ** 2 : 0;
-  hammer.setAttribute('transform', `rotate(${angle.toFixed(3)} 635 607)`);
+  hammer.setAttribute('transform', `rotate(${angle.toFixed(3)} 783 594)`);
   vibration.setAttribute('opacity', power ? '.85' : '0');
 }
 function tick(now) {

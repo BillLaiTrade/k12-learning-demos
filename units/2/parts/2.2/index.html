@@ -23,7 +23,7 @@
     @media(max-width:640px){.ruler-photo-stage{border-radius:9px}}
   </style>
   <link rel="stylesheet" href="assets/sound-propagation.css?v=3">
-  <link rel="stylesheet" href="assets/vacuum-lab.css?v=4">
+  <link rel="stylesheet" href="assets/vacuum-lab.css?v=5">
 </head>
 <body>
   <header class="shell masthead">
@@ -133,34 +133,32 @@
             <div id="vacuum-lab" class="vacuum-lab" role="group" aria-label="可操作的真空鐘罩實驗" aria-describedby="vacuum-model-note">
               <figure class="vacuum-figure">
                 <div class="vacuum-scene">
-                  <img class="vacuum-photo" src="assets/vacuum-apparatus.png" width="1817" height="866" alt="完整玻璃鐘罩內有通電電鈴，底座透過透明管線連接抽氣幫浦與空氣量指示表，進氣閥位於底座旁。">
-                  <svg class="vacuum-overlay" viewBox="0 0 1817 866" aria-hidden="true">
+                  <img class="vacuum-photo" src="assets/vacuum-tabletop-lab.png" width="1918" height="820" alt="同一張實驗桌上，由左至右排列桌上型分貝儀、內有電鈴的完整玻璃鐘罩、抽氣幫浦及空氣量指示表；分貝儀與鐘罩間保留留白，底座旁有進氣閥。">
+                  <svg class="vacuum-overlay" viewBox="0 0 1918 820" aria-hidden="true">
                     <defs>
                       <radialGradient id="vacuum-metal" cx="30%" cy="20%"><stop stop-color="#fffefa"/><stop offset=".4" stop-color="#b6ad92"/><stop offset=".7" stop-color="#6e6a62"/><stop offset="1" stop-color="#282c28"/></radialGradient>
                       <linearGradient id="vacuum-rod"><stop stop-color="#6f706b"/><stop offset=".45" stop-color="#fff7de"/><stop offset="1" stop-color="#7a756a"/></linearGradient>
-                      <clipPath id="vacuum-air-region"><path d="M329 617V289C329 207 411 156 525 155C640 156 721 210 721 289V617Z"/></clipPath>
+                      <clipPath id="vacuum-air-region"><path d="M536 596V338C536 285 602 245 694 245C786 245 851 285 851 338V596Z"/></clipPath>
                     </defs>
                     <g id="vacuum-particles" clip-path="url(#vacuum-air-region)"></g>
-                    <g id="vacuum-hammer"><path d="M635 607L630 495L617 455" fill="none" stroke="#403c31" stroke-width="8" stroke-linecap="round"/><path d="M635 606L630 495L617 455" fill="none" stroke="url(#vacuum-rod)" stroke-width="5" stroke-linecap="round"/><circle cx="617" cy="455" r="12" fill="url(#vacuum-metal)" stroke="#655f50" stroke-width="1.5"/></g>
-                    <g id="vacuum-vibration" fill="none" stroke="#eaa634" stroke-width="4.5" stroke-linecap="round" opacity="0"><path d="M655 431Q674 454 655 477"/><path d="M674 419Q704 454 674 489"/></g>
-                    <g id="vacuum-needle" transform="translate(1665 535) rotate(60)"><path d="M-5 7L0-68L5 7Z" fill="#21483b"/><circle r="10" fill="#343e36" stroke="#9ba49a" stroke-width="3"/></g>
+                    <g id="vacuum-hammer"><path d="M783 594L778 485L761 451" fill="none" stroke="#403c31" stroke-width="8" stroke-linecap="round"/><path d="M635 606L630 495L617 455" fill="none" stroke="url(#vacuum-rod)" stroke-width="5" stroke-linecap="round"/><circle cx="761" cy="451" r="10" fill="url(#vacuum-metal)" stroke="#655f50" stroke-width="1.5"/></g>
+                    <g id="vacuum-vibration" fill="none" stroke="#eaa634" stroke-width="4.5" stroke-linecap="round" opacity="0"><path d="M785 430Q801 450 785 470"/><path d="M805 418Q829 450 805 482"/></g>
+                    <g id="vacuum-needle" transform="translate(1770 534) rotate(60)"><path d="M-5 7L0-68L5 7Z" fill="#21483b"/><circle r="10" fill="#343e36" stroke="#9ba49a" stroke-width="3"/></g>
                   </svg>
+                  <div class="vacuum-spl-meter" role="group" aria-label="桌上型分貝儀，罩外示意音量" aria-describedby="vacuum-model-note">
+                    <svg class="vacuum-meter-display" viewBox="0 0 320 140" aria-hidden="true">
+                      <text class="vacuum-meter-title" x="160" y="34" text-anchor="middle">分貝儀</text>
+                      <g id="vacuum-led-digits" transform="translate(64 44)"></g>
+                      <text class="vacuum-meter-unit" x="215" y="122">dB</text>
+                    </svg>
+                    <output id="vacuum-db-value" class="vacuum-meter-accessible" aria-live="off" aria-label="目前罩外示意音量，單位分貝，非現場實測">—</output>
+                  </div>
                   <span class="vacuum-chip" id="vacuum-mode">等待啟動</span>
                   <div class="vacuum-air-readout"><span>罩內空氣</span><strong id="vacuum-air-label">充足</strong></div>
                   <button class="vacuum-hotspot vacuum-pump-hit" id="vacuum-pump" type="button" aria-label="點按幫浦抽氣" aria-pressed="false"></button>
                   <button class="vacuum-hotspot vacuum-valve-hit" id="vacuum-valve" type="button" aria-label="打開進氣閥，放入空氣" aria-pressed="false" disabled></button>
                 </div>
-                <aside class="vacuum-meter-bay" aria-label="罩外音量觀察區">
-                  <div class="vacuum-spl-meter" role="group" aria-label="罩外示意分貝儀" aria-describedby="vacuum-model-note">
-                    <span class="vacuum-meter-title">罩外音量</span>
-                    <svg class="vacuum-meter-body" viewBox="220 20 590 1490" aria-hidden="true"><image href="assets/sound-level-meter.png" width="1024" height="1536"/></svg>
-                    <div class="vacuum-meter-screen">
-                      <div class="vacuum-meter-reading"><output id="vacuum-db-value" aria-live="off" aria-label="罩外示意音量，非現場實測">—</output><span>dB</span></div>
-                      <div class="vacuum-meter-bar" aria-hidden="true"><i id="vacuum-db-bar"></i></div>
-                    </div>
-                    <span class="vacuum-meter-note">示意分貝儀</span>
-                  </div>
-                </aside>
+
               </figure>
               <div class="controls vacuum-controls">
                 <button class="vacuum-switch" id="vacuum-power" type="button" role="switch" aria-checked="false"><span>電鈴開關</span><span class="vacuum-switch-track" aria-hidden="true"><b id="vacuum-switch-word">OFF</b><i></i></span></button>
@@ -299,6 +297,6 @@
     })();
   </script>
   <script type="module" src="assets/sound-propagation.js?v=4"></script>
-  <script type="module" src="assets/vacuum-lab.js?v=3"></script>
+  <script type="module" src="assets/vacuum-lab.js?v=4"></script>
 </body>
 </html>

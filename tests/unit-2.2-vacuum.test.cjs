@@ -40,16 +40,24 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
   const waitAudio = () => page.waitForFunction(() => document.querySelector('#vacuum-lab').dataset.audio === 'playing');
   const realWait = ms => new Promise(r => setTimeout(r, ms));
   let fullDb = null, lowDb = null;
+  const checkDisplay = async () => {
+    const output = await page.locator('#vacuum-db-value').textContent();
+    assert.equal(await page.locator('#vacuum-led-digits').getAttribute('data-reading'), output);
+    const painted = await page.locator('#vacuum-led-digits > g').evaluateAll(nodes => nodes.map(n => [...n.querySelectorAll('.is-lit')].map(p => p.dataset.segment).join('')));
+    const patterns = { '0':'abcdef', '1':'bc', '2':'abdeg', '3':'abcdg', '4':'bcfg', '5':'acdfg', '6':'acdefg', '7':'abc', '8':'abcdefg', '9':'abcdfg', '-':'g' };
+    const expected = (output === '—' ? '--' : output.padStart(2, ' ')).split('').map(c => patterns[c] || '');
+    assert.deepEqual(painted, expected, 'visible LED strokes must show the current output');
+  };
   const meter = async () => {
     await realWait(650); await page.clock.runFor(100);
     const value = await page.locator('#vacuum-db-value').getAttribute('data-value');
     assert.notEqual(value, null, 'meter must receive actual audio samples');
-    return Number(value);
+    await checkDisplay(); return Number(value);
   };
   const visibleParticles = () => page.locator('#vacuum-particles circle').evaluateAll(nodes => nodes.filter(n => Number(n.getAttribute('opacity')) > .2).map(n => ({ x: Number(n.getAttribute('cx')), y: Number(n.getAttribute('cy')) })));
   const uniform = particles => {
-    assert.ok(particles.some(p => p.y < 310) && particles.some(p => p.y > 500), 'remaining air must occupy top and bottom of the jar');
-    assert.ok(particles.some(p => p.x < 450) && particles.some(p => p.x > 610), 'remaining air must occupy both sides');
+    assert.ok(particles.some(p => p.y < 350) && particles.some(p => p.y > 530), 'remaining air must occupy top and bottom of the jar');
+    assert.ok(particles.some(p => p.x < 650) && particles.some(p => p.x > 740), 'remaining air must occupy both sides');
   };
 
   await t.test('full jar begins silent with no autoplay and a valid sustained recording', async () => {
@@ -70,6 +78,26 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     assert.ok(signal.duration > 2.8 && signal.duration < 3);
     assert.ok(signal.rms > .05 && signal.peak > .2 && signal.peak < .95);
     assert.equal((await visibleParticles()).length, 84); uniform(await visibleParticles());
+  });
+
+  await t.test('tabletop meter follows the approved scene with live segmented digits and aligned controls', async () => {
+    assert.equal(await page.locator('.vacuum-meter-bay, .vacuum-meter-body').count(), 0);
+    assert.equal(await page.locator('.vacuum-scene > .vacuum-spl-meter').count(), 1);
+    assert.equal(await page.locator('.vacuum-meter-title').textContent(), '分貝儀');
+    assert.equal(await page.locator('.vacuum-meter-unit').textContent(), 'dB');
+    const picture = page.locator('.vacuum-photo');
+    assert.deepEqual(await picture.evaluate(n => [n.naturalWidth, n.naturalHeight]), [1918, 820]);
+    await checkDisplay();
+    await picture.scrollIntoViewIfNeeded();
+    const targets = await page.locator('.vacuum-scene').evaluate(scene => {
+      const box = scene.getBoundingClientRect();
+      return [[1390, 525], [915, 557]].map(([x, y]) => document.elementFromPoint(box.x + box.width * x / 1918, box.y + box.height * y / 820)?.id);
+    });
+    assert.deepEqual(targets, ['vacuum-pump', 'vacuum-valve']);
+    assert.equal(await page.locator('#vacuum-particles circle').evaluateAll(nodes => nodes.every(n => {
+      const x = Number(n.getAttribute('cx')), y = Number(n.getAttribute('cy'));
+      return x > 536 && x < 851 && y > 245 && y < 596 && ((x - 684) / 88) ** 2 + ((y - 450) / 86) ** 2 >= 1 && !(x > 619 && x < 760 && y > 491);
+    })), true, 'particles stay inside the new jar and outside the solid bell');
   });
 
   await t.test('power starts actual audio and a visible hammer without changing the air', async () => {
@@ -141,7 +169,7 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     assert.ok(await meter() > 64);
     await power.click();
     assert.equal(await page.locator('#vacuum-db-value').textContent(), '—');
-    assert.equal(await page.locator('#vacuum-db-bar').evaluate(n => n.style.width), '0%');
+    await checkDisplay();
     await power.click(); await waitAudio();
   });
 
@@ -190,8 +218,10 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
       assert.equal(await mobile.locator('.vacuum-photo').evaluate(n => Math.abs(n.getBoundingClientRect().width / n.getBoundingClientRect().height - n.naturalWidth / n.naturalHeight) < .01), true, 'the dome must not be cropped');
       const meterBox = await mobile.locator('.vacuum-spl-meter').boundingBox();
       const photoBox = await mobile.locator('.vacuum-photo').boundingBox();
-      assert.ok(meterBox.x >= photoBox.x + photoBox.width + 6 || meterBox.y >= photoBox.y + photoBox.height + 6, 'meter must have its own space outside the apparatus photo');
-      assert.equal(await mobile.locator('.vacuum-meter-screen').evaluate(n => n.scrollWidth <= n.clientWidth && n.scrollHeight <= n.clientHeight), true, 'LCD readout must fit its screen');
+      assert.ok(meterBox.x > photoBox.x && meterBox.x + meterBox.width < photoBox.x + photoBox.width * .21, 'meter stays on the left of the same scene');
+      assert.ok(meterBox.y > photoBox.y && meterBox.y + meterBox.height < photoBox.y + photoBox.height);
+      assert.ok(photoBox.x + photoBox.width * .257 - (meterBox.x + meterBox.width) > photoBox.width * .05, 'keep visible space before the jar base');
+      assert.equal(await mobile.locator('.vacuum-meter-display').evaluate(n => n.scrollWidth <= n.clientWidth && n.scrollHeight <= n.clientHeight), true, 'LED readout fits inside the meter');
       assert.equal(await mobile.locator('#vacuum-air-label').evaluate(n => n.scrollWidth <= n.clientWidth && n.getBoundingClientRect().height <= parseFloat(getComputedStyle(n).lineHeight) + 1), true, 'air label must fit on one line');
     }
     await mobile.locator('#vacuum-power').tap(); assert.equal(await mobile.locator('#vacuum-audio').evaluate(a => a.paused), true);
