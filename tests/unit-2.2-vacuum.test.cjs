@@ -54,11 +54,7 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     assert.notEqual(value, null, 'meter must receive actual audio samples');
     await checkDisplay(); return Number(value);
   };
-  const visibleParticles = () => page.locator('#vacuum-particles circle').evaluateAll(nodes => nodes.filter(n => Number(n.getAttribute('opacity')) > .2).map(n => ({ x: Number(n.getAttribute('cx')), y: Number(n.getAttribute('cy')) })));
-  const uniform = particles => {
-    assert.ok(particles.some(p => p.y < 350) && particles.some(p => p.y > 530), 'remaining air must occupy top and bottom of the jar');
-    assert.ok(particles.some(p => p.x < 650) && particles.some(p => p.x > 740), 'remaining air must occupy both sides');
-  };
+  const checkClearJar = async (target = page) => assert.equal(await target.locator('#card-03 #vacuum-particles, #card-03 #vacuum-air-region, #card-03 .vacuum-overlay circle[fill="#64abb0"]').count(), 0, 'air stays invisible at every experiment stage');
 
   await t.test('full jar begins silent with no autoplay and a valid sustained recording', async () => {
     assert.equal(await air(), 1); assert.equal((await data()).power, 'off');
@@ -77,7 +73,7 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     });
     assert.ok(signal.duration > 2.8 && signal.duration < 3);
     assert.ok(signal.rms > .05 && signal.peak > .2 && signal.peak < .95);
-    assert.equal((await visibleParticles()).length, 84); uniform(await visibleParticles());
+    await checkClearJar();
   });
 
   await t.test('tabletop meter follows the approved scene with live segmented digits and aligned controls', async () => {
@@ -94,10 +90,9 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
       return [[1390, 525], [915, 557]].map(([x, y]) => document.elementFromPoint(box.x + box.width * x / 1918, box.y + box.height * y / 820)?.id);
     });
     assert.deepEqual(targets, ['vacuum-pump', 'vacuum-valve']);
-    assert.equal(await page.locator('#vacuum-particles circle').evaluateAll(nodes => nodes.every(n => {
-      const x = Number(n.getAttribute('cx')), y = Number(n.getAttribute('cy'));
-      return x > 536 && x < 851 && y > 245 && y < 596 && ((x - 684) / 88) ** 2 + ((y - 450) / 86) ** 2 >= 1 && !(x > 619 && x < 760 && y > 491);
-    })), true, 'particles stay inside the new jar and outside the solid bell');
+    const hammerPaths = await page.locator('#vacuum-hammer path').evaluateAll(nodes => nodes.map(n => n.getAttribute('d')));
+    assert.equal(hammerPaths[0], hammerPaths[1], 'metal highlight must follow the hammer rod');
+    await checkClearJar();
   });
 
   await t.test('power starts actual audio and a visible hammer without changing the air', async () => {
@@ -117,7 +112,7 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     assert.equal((await data()).mode, 'pump'); assert.ok(await air() > .45 && await air() < .56);
     assert.equal(await pump.getAttribute('aria-pressed'), 'true');
     assert.equal((await data()).power, 'on');
-    uniform(await visibleParticles()); assert.ok((await visibleParticles()).length < 55);
+    await checkClearJar();
     await pump.click(); const stopped = await air(), gauge = await page.locator('#vacuum-needle').getAttribute('transform');
     const a = await hammer(); await page.clock.runFor(137);
     assert.notEqual(await hammer(), a); await page.clock.runFor(1000);
@@ -133,7 +128,7 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     assert.equal(await pump.isDisabled(), true); assert.equal(await page.locator('#vacuum-pump').isDisabled(), true);
     assert.equal(await page.locator('#vacuum-air-label').textContent(), '接近真空');
     assert.equal((await data()).power, 'on');
-    uniform(await visibleParticles()); assert.ok((await visibleParticles()).length <= 6);
+    await checkClearJar();
     const a = await hammer(); await page.clock.runFor(107); assert.notEqual(await hammer(), a);
     await realWait(250);
     assert.ok(await page.evaluate(() => window.testGain.gain.value) < .04, 'actual audio gain must drop, not just the label');
@@ -152,7 +147,7 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     await inlet.click(); await page.clock.runFor(5000);
     assert.equal(await air(), 1); assert.equal((await data()).mode, 'idle');
     assert.equal(await inlet.isDisabled(), true); assert.equal(await page.locator('#vacuum-valve').isDisabled(), true);
-    assert.equal((await visibleParticles()).length, 84);
+    await checkClearJar();
     assert.ok(await meter() > lowDb + 25, 'admitting air must restore the measured sound level');
     await realWait(250); assert.ok(await page.evaluate(() => window.testGain.gain.value) > .95);
     assert.equal(await page.evaluate(() => window.playEvents), 0, 'pumping must not restart or repitch the sound');
@@ -211,6 +206,7 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     await mobile.waitForFunction(() => document.querySelector('#vacuum-db-value').hasAttribute('data-value'), null, { polling: 50 });
     for (const width of [320, 390, 768, 1024]) {
       await mobile.setViewportSize({ width, height: 844 });
+      await checkClearJar(mobile);
       assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       for (const id of ['vacuum-power', 'vacuum-extract', 'vacuum-admit', 'vacuum-pump', 'vacuum-valve']) {
         const b = await mobile.locator('#' + id).boundingBox(); assert.ok(b.width >= 44 && b.height >= 44);

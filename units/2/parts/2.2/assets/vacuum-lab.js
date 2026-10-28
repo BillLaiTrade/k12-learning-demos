@@ -52,34 +52,6 @@ function showMeter(value, measured = null) {
   });
 }
 
-// 先建立均勻候選位置，再以最遠點順序選取：空氣變少時仍分布在整個自由空間。
-const halton = (index, base) => {
-  let value = 0, fraction = 1 / base;
-  while (index > 0) { value += fraction * (index % base); index = Math.floor(index / base); fraction /= base; }
-  return value;
-};
-const pool = [];
-for (let i = 1; i < 600; i++) {
-  const x = 546 + 294 * halton(i, 2), y = 266 + 321 * halton(i, 3);
-  const inDome = y > 340 || ((x - 694) / 148) ** 2 + ((y - 340) / 80) ** 2 < 1;
-  const inBell = ((x - 684) / 88) ** 2 + ((y - 450) / 86) ** 2 < 1;
-  const inStand = x > 619 && x < 760 && y > 491;
-  if (inDome && !inBell && !inStand) pool.push({ x, y });
-}
-const particles = [], chosen = [];
-for (let i = 0; i < 84; i++) {
-  let best = 0, distance = -1;
-  for (let j = 0; j < pool.length; j++) {
-    const p = pool[j];
-    const d = chosen.length ? Math.min(...chosen.map(q => (q.x - p.x) ** 2 + (q.y - p.y) ** 2)) : -((p.x - 600) ** 2 + (p.y - 285) ** 2);
-    if (d > distance || j === 0) { best = j; distance = d; }
-  }
-  const position = pool.splice(best, 1)[0]; chosen.push(position);
-  const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  dot.setAttribute('cx', position.x.toFixed(2)); dot.setAttribute('cy', position.y.toFixed(2));
-  dot.setAttribute('r', '4.3'); dot.setAttribute('fill', '#64abb0');
-  document.querySelector('#vacuum-particles').append(dot); particles.push(dot);
-}
 function soundLevel() { return power ? .012 + .988 * air ** 1.7 : 0; }
 function setGain() {
   const target = soundLevel();
@@ -126,8 +98,6 @@ function render() {
   pumpButtons[0].setAttribute('aria-label', mode === 'pump' ? '停止抽氣' : '點按幫浦抽氣');
   inletButtons[0].setAttribute('aria-label', mode === 'inlet' ? '關閉進氣閥' : '打開進氣閥，放入空氣');
   needle.setAttribute('transform', `translate(1770 534) rotate(${(-60 + air * 120).toFixed(3)})`);
-  const count = 3 + 81 * air;
-  particles.forEach((dot, index) => dot.setAttribute('opacity', (clamp(count - index) * .75).toFixed(3)));
   const sentence = audioError || (!power && mode === 'idle' && air === 1
     ? '先開啟電鈴，再抽氣比較聽到的鈴聲。'
     : `${modeLabel}，罩內空氣${airLabel}；${power ? `電鈴持續運作，聽到的鈴聲${heard}。` : '電鈴已關閉，可開啟電鈴比較鈴聲。'}`);

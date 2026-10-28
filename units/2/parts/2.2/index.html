@@ -138,10 +138,8 @@
                     <defs>
                       <radialGradient id="vacuum-metal" cx="30%" cy="20%"><stop stop-color="#fffefa"/><stop offset=".4" stop-color="#b6ad92"/><stop offset=".7" stop-color="#6e6a62"/><stop offset="1" stop-color="#282c28"/></radialGradient>
                       <linearGradient id="vacuum-rod"><stop stop-color="#6f706b"/><stop offset=".45" stop-color="#fff7de"/><stop offset="1" stop-color="#7a756a"/></linearGradient>
-                      <clipPath id="vacuum-air-region"><path d="M536 596V338C536 285 602 245 694 245C786 245 851 285 851 338V596Z"/></clipPath>
                     </defs>
-                    <g id="vacuum-particles" clip-path="url(#vacuum-air-region)"></g>
-                    <g id="vacuum-hammer"><path d="M783 594L778 485L761 451" fill="none" stroke="#403c31" stroke-width="8" stroke-linecap="round"/><path d="M635 606L630 495L617 455" fill="none" stroke="url(#vacuum-rod)" stroke-width="5" stroke-linecap="round"/><circle cx="761" cy="451" r="10" fill="url(#vacuum-metal)" stroke="#655f50" stroke-width="1.5"/></g>
+                    <g id="vacuum-hammer"><path d="M783 594L778 485L761 451" fill="none" stroke="#403c31" stroke-width="8" stroke-linecap="round"/><path d="M783 594L778 485L761 451" fill="none" stroke="url(#vacuum-rod)" stroke-width="5" stroke-linecap="round"/><circle cx="761" cy="451" r="10" fill="url(#vacuum-metal)" stroke="#655f50" stroke-width="1.5"/></g>
                     <g id="vacuum-vibration" fill="none" stroke="#eaa634" stroke-width="4.5" stroke-linecap="round" opacity="0"><path d="M785 430Q801 450 785 470"/><path d="M805 418Q829 450 805 482"/></g>
                     <g id="vacuum-needle" transform="translate(1770 534) rotate(60)"><path d="M-5 7L0-68L5 7Z" fill="#21483b"/><circle r="10" fill="#343e36" stroke="#9ba49a" stroke-width="3"/></g>
                   </svg>
@@ -170,7 +168,7 @@
               <audio id="vacuum-audio" src="assets/electric-bell-loop.wav?v=1" preload="auto" loop></audio>
             </div>
             <div class="fact"><p><strong>重點：</strong>聲音需要介質傳播。抽氣後電鈴仍在振動，傳到罩外的鈴聲會變弱；理想真空中沒有介質，聲音無法傳播。</p></div>
-            <p class="vacuum-model-note" id="vacuum-model-note">粒子與振動放大示意；分貝值非現場實測。實際鐘罩僅能接近真空。</p>
+            <p class="vacuum-model-note" id="vacuum-model-note">振動放大示意；分貝值非現場實測。實際鐘罩僅能接近真空。</p>
           </div>
         </section>
         <section class="lesson-card" id="card-04">
@@ -297,6 +295,6 @@
     })();
   </script>
   <script type="module" src="assets/sound-propagation.js?v=4"></script>
-  <script type="module" src="assets/vacuum-lab.js?v=4"></script>
+  <script type="module" src="assets/vacuum-lab.js?v=5"></script>
 </body>
 </html>
