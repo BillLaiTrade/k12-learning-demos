@@ -37,3 +37,16 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.1-dual-scale.test.cjs t
 - [平板第二區](card-02-768.webp)／[手機第三區](card-03-390.webp)／[窄手機測量](measurement-320.webp)
 
 區塊截圖僅隱藏截圖中會遮住內容的導覽，實際頁面保留導覽。本輪仍待使用者檢視，不代表整個單元最終核可。
+
+
+## 後續修正：補齊標題解說
+
+使用者指出 3.2 標題下方還有一段概念說明，上一輪未補齊。本輪在五個標題列補上 `.card-intro`，以前段已核可內容作簡短摘要；第四、五區保留原有「放入、觀察、平視、記錄」與「先對齊，再估讀」，整合進完整說明。字級 .94rem、8px 上間距及灰綠色對齊 3.2。
+
+程式核對 HTML 除五個標題導言與樣式版本外完全一致，原正文、圖片、對話及互動未修改。先前的完整文字雜湊紀錄對應最初僅移動版面的版本；本輪另新增五段摘要。
+
+20 項第三區及測量／估讀／小測檢查通過，另確認五段導言於 1440／390／320px 皆可見、無重疊及整頁水平溢出，並人工檢視桌機及手機換行。
+
+- [第一區](intro-card-01.webp)／[第二區](intro-card-02.webp)／[第三區](intro-card-03.webp)
+- [第四區](intro-measurement.webp)／[第五區](intro-card-04.webp)
+- [手機第三區](intro-card-03-mobile.webp)／[手機第四區](intro-measurement-mobile.webp)

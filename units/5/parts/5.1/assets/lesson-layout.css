@@ -99,3 +99,6 @@ body{line-height:1.72}
 }
 
 @container lesson-page (max-width:700px){.hero{grid-template-columns:minmax(0,1fr);gap:16px;padding:30px 0}}
+
+.card-heading .card-intro{margin:8px 0 0;color:var(--muted);font-size:.94rem;font-weight:400;line-height:1.72}
+.card-intro .card-role{display:inline;margin:0;font:inherit;color:inherit}
