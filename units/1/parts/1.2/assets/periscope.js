@@ -179,13 +179,13 @@ if(root) {
     $$('.periscope-chip').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.chip)===state.chip)));
     $$('[data-diagnosis]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.diagnosis)===state.diagnosis)));
     $$('[data-prediction]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.prediction===state.prediction)));
-    $('#periscope-fine').hidden=state.stage===2;updatePulseControls();
+    updatePulseControls();
     $('#periscope-signal').hidden=state.stage!==2;$('#periscope-signal').disabled=!state.prediction;$('#periscope-signal').setAttribute('aria-pressed',String(state.signal));$('#periscope-signal').textContent=state.signal?'關閉訊號光':'發送訊號光';
     $('#periscope-reset-stage').textContent=['↻ 重新組裝','↻ 重現故障','↻ 重做預測'][state.stage];
     $('#periscope-check').textContent=['檢查我的設計','檢查修復結果','確認我的預測'][state.stage];
     $('#periscope-next').hidden=!state.done[state.stage]||state.stage===2;$('#periscope-next').textContent=state.stage===0?'前往修復光路 →':'前往反向傳訊 →';
     $('#periscope-complete').hidden=!state.done[2];
-    $('#periscope-drag-help').textContent=state.stage===2?'這一關固定鏡面。先預測，再比較黃色原路線與藍色訊號光。':'抓住鏡片端點旋轉；也可點選鏡片後，用 ← → 微調，Shift 加快。';
+    $('#periscope-drag-help').textContent=state.stage===2?'這一關固定鏡面。先預測，再比較黃色原路線與藍色訊號光。':'抓住鏡片端點，直接拖曳旋轉。';
     $('.periscope-model-note').textContent=state.stage===2?'黃色是原本進入眼睛的光路，藍色訊號光從原眼睛位置反向發出；剖面與景物為示意比例。':'黃色輔助線從小葵的眼睛位置反向追蹤視線。實際看見物體時，是外界的光進入眼睛；剖面與景物為示意比例。';
     drawOptics();renderView();
   }
@@ -223,7 +223,6 @@ if(root) {
     g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end);g.addEventListener('lostpointercapture',()=>{dragging=null;});
     g.addEventListener('keydown',e=>{if(state.stage===2)return;let n=state.angles[i],step=e.shiftKey?2:.5;if(e.key==='ArrowLeft'||e.key==='ArrowDown')n-=step;else if(e.key==='ArrowRight'||e.key==='ArrowUp')n+=step;else if(e.key==='Home')n=OPTICS.minAngle;else if(e.key==='End')n=OPTICS.maxAngle;else return;e.preventDefault();setAngle(i,n);});
   });
-  $$('[data-fine]').forEach(b=>b.addEventListener('click',()=>{const [i,step]=b.dataset.fine.split(',').map(Number);setAngle(i,state.angles[i]+step);}));
   function putChip(slot,chip) {
     if(chip!==0&&chip!==1)return;
     invalidate();const other=1-slot,old=state.order[slot];if(state.order[other]===chip)state.order[other]=old;
@@ -289,7 +288,7 @@ if(root) {
       if(state.diagnosis===null){feedback('先判斷哪片鏡子被轉動，再檢查修復結果。','try');return;}
       if(state.diagnosis!==0){feedback('這次被轉動的鏡片與你的判斷不同。比較光從哪一處開始偏離，再試一次。','try');return;}
       if(!info.target){feedback('已找出故障鏡片，還要把船的駕駛艙調回觀察窗中央。','try');return;}
-      if(!returnSignal(state.angles).receiver){feedback('船已進入視野，再微調到駕駛艙中央，讓接下來的訊號也能回到船上。','try');return;}
+      if(!returnSignal(state.angles).receiver){feedback('船已進入視野，再拖動鏡片讓駕駛艙回到中央，讓接下來的訊號也能回到船上。','try');return;}
       state.saved=[...state.angles];state.done[1]=true;feedback('修復成功！上方鏡片偏轉，會把視線帶向天空或海面；偏得太多也會被管壁擋住。','good');
     } else {
       if(!state.prediction){feedback('先選擇一個預測，再發送訊號驗證。','try');return;}

@@ -175,8 +175,10 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await quiz.screenshot({path:'/tmp/periscope-review/completed-desktop.png'});
     await page.locator('#periscope-restart').click();assert.deepEqual(await angles(),[38,51]);await expect(quiz).toHaveAttribute('data-phase','0');await expect(quiz).toHaveAttribute('data-completed','false,false,false');await expect(page.locator('[data-stage="1"]')).toBeDisabled();
   });
-  await t.test('微調按鈕與拖曳共用角度，沒有滑桿',async()=>{
-    await setAngle(0,45);await page.locator('[data-fine="0,0.5"]').click();await expect.poll(async()=>(await angles())[0]).toBe(45.5);await page.locator('[data-fine="0,-0.5"]').click();await expect.poll(async()=>(await angles())[0]).toBe(45);
+  await t.test('只保留畫面拖曳操作，沒有獨立微調列或按鈕',async()=>{
+    assert.equal(await page.locator('#periscope-fine,[data-fine]').count(),0);
+    await expect(page.locator('#periscope-drag-help')).toHaveText('抓住鏡片端點，直接拖曳旋轉。');
+    await setAngle(0,45);await drag(0,47);await drag(0,45);
   });
   await t.test('五種實際角度：提示都從觀察口開始，錯誤時不跳接到船或上方鏡片',async()=>{
     const button=page.locator('#periscope-pulse');
@@ -209,11 +211,11 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('#periscope-light')).toBeEmpty();await expect(page.locator('#periscope-normal')).toBeEmpty();
     await expect(button).toBeDisabled();await expect(button).toBeEnabled();await expect(quiz).toHaveAttribute('data-pulse-status','idle');
   });
-  await t.test('拖動或微調立即收起提示光，後續重繪不留下舊路線',async()=>{
+  await t.test('拖動或鏡片方向鍵操作立即收起提示光，後續重繪不留下舊路線',async()=>{
     const button=page.locator('#periscope-pulse');await button.click();await expect(quiz).toHaveAttribute('data-pulse-status','running');
     await drag(0,44);await expect(page.locator('#periscope-light')).toBeEmpty();await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');
     await page.waitForTimeout(350);await expect(page.locator('#periscope-light')).toBeEmpty();
-    await expect(button).toBeEnabled();await button.click();await page.locator('[data-fine="0,0.5"]').click();await expect(page.locator('#periscope-light')).toBeEmpty();
+    await expect(button).toBeEnabled();await button.click();await page.locator('#periscope-mirror-0').press('ArrowRight');await expect(page.locator('#periscope-light')).toBeEmpty();
     await expect(button).toBeEnabled();
   });
   await t.test('給我提示同樣短暫亮起；撞壁只有光斑，法線與光斑隨光熄滅',async()=>{

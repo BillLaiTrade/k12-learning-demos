@@ -103,7 +103,7 @@
   </style>
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
   <link rel="stylesheet" href="assets/reversible-light.css?v=3">
-  <link rel="stylesheet" href="assets/periscope.css?v=2">
+  <link rel="stylesheet" href="assets/periscope.css?v=3">
 </head>
 <body>
   <header class="shell masthead">
@@ -433,9 +433,8 @@
                 <aside class="periscope-view" aria-label="從潛望鏡看到的景象"><h3>小葵的觀察窗</h3><div class="periscope-lens-frame"><canvas id="periscope-view" width="240" height="240" role="img" aria-label="觀察窗載入中"></canvas></div><div id="periscope-view-state" class="periscope-view-state" role="status">正在準備觀察窗…</div><p id="periscope-view-copy">景象隨鏡片轉動；管壁擋住的區域會變暗。</p><div class="periscope-view-meter">轉錯時，可能看見天空、海面，或被管壁遮住。</div></aside>
               </div>
               <div class="periscope-controls"><button type="button" id="periscope-pulse" aria-describedby="periscope-pulse-note">✦ 追蹤目前視線</button><button type="button" id="periscope-hint">♧ 給我提示</button><button type="button" id="periscope-reset-stage">↻ 重新組裝</button><button type="button" id="periscope-signal" class="periscope-signal" aria-pressed="false" hidden disabled>發送訊號光</button></div>
-              <div class="periscope-fine" id="periscope-fine" role="group" aria-label="鏡片精細調整"><span>微調鏡片</span><div><span>鏡面一</span><button type="button" data-fine="0,-0.5" aria-label="鏡面一逆時針微調半度">↶</button><button type="button" data-fine="0,0.5" aria-label="鏡面一順時針微調半度">↷</button></div><div><span>鏡面二</span><button type="button" data-fine="1,-0.5" aria-label="鏡面二逆時針微調半度">↶</button><button type="button" data-fine="1,0.5" aria-label="鏡面二順時針微調半度">↷</button></div></div>
               <p class="periscope-pulse-note" id="periscope-pulse-note" role="status">從眼睛的位置反向追蹤目前視線；短暫顯示後消失。</p>
-              <p class="periscope-keyboard" id="periscope-drag-help">抓住鏡片端點旋轉；也可點選鏡片後，用 ← → 微調，Shift 加快。</p>
+              <p class="periscope-keyboard" id="periscope-drag-help">抓住鏡片端點，直接拖曳旋轉。</p>
               <p class="periscope-hint" id="periscope-hint-copy" role="status" hidden></p>
               <p class="periscope-model-note">黃色輔助線從小葵的眼睛位置反向追蹤視線。實際看見物體時，是外界的光進入眼睛；剖面與景物為示意比例。</p>
               <div class="periscope-question" id="periscope-question-0"><h3>船反射的光，依序經過哪些位置才進入眼睛？</h3><p>依外界光進入眼睛的方向排列。點選標籤再點空格，或直接拖曳標籤。</p><div class="periscope-order"><span class="path-end">船</span><span aria-hidden="true">→</span><button type="button" class="periscope-slot" data-slot="0" aria-label="第一個反射位置，尚未填入">第一個位置</button><span aria-hidden="true">→</span><button type="button" class="periscope-slot" data-slot="1" aria-label="第二個反射位置，尚未填入">第二個位置</button><span aria-hidden="true">→</span><span class="path-end">眼睛</span></div><div class="periscope-chips"><small>可放入的標籤</small><button type="button" draggable="true" class="periscope-chip" data-chip="0" aria-pressed="false">鏡面一</button><button type="button" draggable="true" class="periscope-chip" data-chip="1" aria-pressed="false">鏡面二</button><button type="button" id="periscope-clear-order" class="secondary">清空順序</button></div></div>
@@ -474,6 +473,6 @@
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
   <script type="module" src="assets/reversible-light.js?v=3"></script>
-  <script type="module" src="assets/periscope.js?v=6"></script>
+  <script type="module" src="assets/periscope.js?v=7"></script>
 </body>
 </html>
