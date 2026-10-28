@@ -478,18 +478,19 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.deepEqual(await temperatureLab.locator('[data-temperature-target]').allTextContents(),['加熱到 30°C','冷卻到 0°C','回到 20°C']);
     const layouts=await temperatureLab.locator('.medium-row').evaluateAll(rows=>rows.map(row=>[...row.querySelectorAll('.particle')].map(n=>[n.dataset.originX,n.dataset.originY])));
     assert.deepEqual(layouts[0],layouts[1]);
-    const oldY=Number(await temperatureLab.locator('.rig-fluid-column').getAttribute('y'));
+    const oldReading=Number((await temperatureData()).temperature);
     await temperatureLab.locator('[data-temperature-target="0"]').click();await page.clock.runFor(600);
     const changing=await temperatureData();assert.equal(changing.conditioning,'true');
     assert.ok(Number(changing.temperature)>0&&Number(changing.temperature)<30);
-    assert.ok(Number(await temperatureLab.locator('.rig-fluid-column').getAttribute('y'))>oldY);
+    assert.ok(Number((await temperatureData()).temperature)<oldReading);
+    assert.equal(await temperatureLab.locator('.rig-controller,.rig-thermometer,image').count(),0,'no detached device/thermometer photograph');
     assert.ok(Math.abs(Number(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'))-(331+.6*Number(changing.temperature)))<.001);
     assert.equal(await temperatureLab.locator('.rig-heat-light').getAttribute('opacity'),'0');
     assert.equal(await temperatureLab.locator('.rig-cold-light').getAttribute('opacity'),'1');
     await page.clock.runFor(2100);
     assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'0°C');
     assert.equal(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'),'331');
-    assert.equal(await temperatureLab.locator('.rig-fluid-column').getAttribute('y'),'208.000');
+    assert.equal(await temperatureLab.locator('.air-chamber[data-adjustable=true]').getAttribute('data-temperature'),'0.0000');
     await temperatureLab.locator('[data-temperature-target="20"]').focus();await page.keyboard.press('Enter');await page.clock.runFor(1800);
     assert.equal(await temperatureLab.locator('#temp-temperature-value').textContent(),'20°C');
     assert.equal(await temperatureLab.locator('.rig-heat-light').getAttribute('opacity'),'0');assert.equal(await temperatureLab.locator('.rig-cold-light').getAttribute('opacity'),'0');
@@ -498,6 +499,35 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await temperatureLab.locator('[data-group=reference]').getAttribute('data-speed'),'343');
     assert.equal(await temperatureLab.locator('[data-group=adjustable]').getAttribute('data-speed'),'349');
     assert.equal(await temperatureLab.locator('[aria-pressed=true][data-temperature-target]').count(),1);
+  });
+
+  await t.test('thermal jacket, chamber sensor and live meter form one connected scene with the fourth-block fork', async () => {
+    await fresh();
+    const {AIR_CHAMBER,PROBE_TIP}=await import(pathToFileURL(path.resolve(__dirname,'../units/2/parts/2.2/assets/temperature-chamber.mjs')).href);
+    assert.ok(PROBE_TIP.x>AIR_CHAMBER.x&&PROBE_TIP.x<AIR_CHAMBER.x+AIR_CHAMBER.width);
+    assert.ok(PROBE_TIP.y>AIR_CHAMBER.y&&PROBE_TIP.y<AIR_CHAMBER.y+AIR_CHAMBER.height);
+    const scene=temperatureLab.locator('[data-group=adjustable] .air-chamber');
+    assert.equal(await scene.locator('.chamber-thermal-link,.chamber-probe-port,.chamber-probe-tip,.chamber-sensor-cable,.chamber-meter').count(),5);
+    assert.equal(await scene.locator('.chamber-probe-tip').evaluate(n=>Number(n.getAttribute('cx'))===424&&Number(n.getAttribute('cy'))===82),true);
+    assert.equal(await scene.locator('.chamber-thermal-link').getAttribute('data-contact-y'),'118');
+    const meter=temperatureLab.locator('#temp-temperature-value');
+    assert.equal(await meter.evaluate(n=>n.parentElement.classList.contains('field')),true);
+    assert.match(await meter.getAttribute('aria-describedby'),/sensor-help/);
+    const shapes=where=>page.locator(where).evaluateAll(ns=>ns.map(n=>({d:n.getAttribute('d'),strokeWidth:n.getAttribute('stroke-width')})));
+    assert.deepEqual(await shapes('#card-04 [data-group=air] .fork-tine'),await shapes('#card-05 [data-group=adjustable] .fork-tine'));
+    assert.deepEqual(await shapes('#card-04 [data-group=air] .fork-fixed path'),await shapes('#card-05 [data-group=adjustable] .fork-fixed path'));
+    assert.equal(await page.evaluate(()=>performance.getEntriesByType('resource').some(r=>r.name.includes('temperature-control-unit.png'))),false);
+    for(const width of[320,390,640,768,850,1024,1440]){
+      await page.setViewportSize({width,height:1600});await page.clock.runFor(32);
+      const geometry=await temperatureLab.locator('[data-group=adjustable] .field').evaluate(field=>{
+        const svg=field.querySelector('svg'),screen=svg.querySelector('.chamber-meter'),read=field.querySelector('.chamber-temperature-value');
+        const a=screen.getBoundingClientRect(),b=read.getBoundingClientRect();
+        return{read:{x:b.x,right:b.right,y:b.y,bottom:b.bottom},screen:{x:a.x,right:a.right,y:a.y,bottom:a.bottom}};
+      });
+      assert.ok(geometry.read.x>=geometry.screen.x&&geometry.read.right<=geometry.screen.right);
+      assert.ok(geometry.read.y>=geometry.screen.y&&geometry.read.bottom<=geometry.screen.bottom+1);
+    }
+    await page.setViewportSize({width:1440,height:1500});await page.clock.runFor(32);
   });
 
   await t.test('rapid thermal changes keep one preparation animation and never start sound', async () => {

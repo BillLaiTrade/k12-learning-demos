@@ -2,9 +2,10 @@ import {
   DISTANCE, START_X, END_X,
   appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=rig-17';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=rig-17';
-import { createTemperatureRig, temperatureAt, temperatureTransition, temperatureText } from './temperature-rig.mjs?v=rig-17';
+} from './sound-speed-model.mjs?v=chamber-18';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=chamber-18';
+import { createTemperatureRig, temperatureAt, temperatureTransition, temperatureText } from './temperature-rig.mjs?v=chamber-18';
+import { airChamberScene } from './temperature-chamber.mjs?v=chamber-18';
 
 export function initSoundSpeed(root) {
 // 兩個獨立區塊共用控制器，原生標籤及 SVG 定義各自使用唯一 ID。
@@ -92,8 +93,16 @@ function buildModel(group) {
   $('#models').append(row);
   row.querySelector('.source-hit').addEventListener('click', () => startSingle(group.id));
   const field = row.querySelector('.field svg'), fill = addMaterials(field, `${idPrefix}${group.id}-field`);
-  const scene = mediumScene(field, group.kind, `${idPrefix}${group.id}-scene`);
-  const source = tuningForkSource(field, group.kind, fill, { stand: state.mode === 'temperature' });
+  const temperatureMode = state.mode === 'temperature';
+  const adjustable = group.id === 'adjustable';
+  if (temperatureMode) {
+    const height = adjustable?250:170;
+    field.setAttribute('viewBox', `0 0 456 ${height}`);
+    Object.assign(row.querySelector('.source-hit').style, { top: `${22/height*100}%`, height: `${100/height*100}%`, bottom: 'auto' });
+  }
+  const scene = temperatureMode ? airChamberScene(field, `${idPrefix}${group.id}-scene`, adjustable) : mediumScene(field, group.kind, `${idPrefix}${group.id}-scene`);
+  if (temperatureMode) scene.setTemperature(group.temperature, group.temperature);
+  const source = tuningForkSource(scene.sourceLayer || field, group.kind, fill, { labelY: temperatureMode ? 160 : 139 });
   const bonds = svg('g', { fill: 'none', stroke: '#8a9e9c', 'stroke-width': .8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, scene.interior);
   const dots = svg('g', { 'aria-hidden': 'true' }, scene.interior);
   const points = positions(group.kind).map((point, index) => {
@@ -110,20 +119,21 @@ function buildModel(group) {
       links.push({ point, other, node: svg('path', { class: 'elastic-link', 'data-first': index, 'data-second': index + offset, d: springPath(point.x, point.y, other.x, other.y) }, bonds) });
     }
   }
-  svg('path', { class: 'distance-track', d: `M${START_X} 125H${END_X}`, stroke: '#c6d5cd', 'stroke-width': 2.2 }, field);
-  const reachedTrack = svg('path', { class: 'distance-reached', d: `M${START_X} 125H${START_X}`, stroke: '#176b53', 'stroke-width': 2.6 }, field);
+  const trackY = temperatureMode ? 146 : 125;
+  svg('path', { class: 'distance-track', d: `M${START_X} ${trackY}H${END_X}`, stroke: '#c6d5cd', 'stroke-width': 2.2 }, field);
+  const reachedTrack = svg('path', { class: 'distance-reached', d: `M${START_X} ${trackY}H${START_X}`, stroke: '#176b53', 'stroke-width': 2.6 }, field);
   for (let i = 0; i <= 4; i++) {
     const x = START_X + (END_X - START_X) * i / 4;
-    svg('path', { d: `M${x} 123V130`, stroke: '#91aa9b', 'stroke-width': 1 }, field);
+    svg('path', { d: `M${x} ${trackY-2}V${trackY+5}`, stroke: '#91aa9b', 'stroke-width': 1 }, field);
   }
   const front = svg('g', { class: 'propagation-front', transform: `translate(${START_X} 0)`, visibility: 'hidden', 'aria-hidden': 'true' }, field);
-  svg('path', { d: 'M0 123V131', stroke: '#176b53', 'stroke-width': 1.8, 'vector-effect': 'non-scaling-stroke' }, front);
-  svg('path', { d: 'M-4 116H4L0 122Z', fill: '#176b53' }, front);
-  text(svg('text', { x: START_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '0 m');
-  text(svg('text', { x: END_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), `${number.format(DISTANCE)} m`);
-  if (state.mode === 'temperature' && group.id === 'adjustable') temperatureRig = createTemperatureRig(row, { prefix: idPrefix, onSelect: conditionTo });
+  svg('path', { d: `M0 ${trackY-2}V${trackY+6}`, stroke: '#176b53', 'stroke-width': 1.8, 'vector-effect': 'non-scaling-stroke' }, front);
+  svg('path', { d: `M-4 ${trackY-9}H4L0 ${trackY-3}Z`, fill: '#176b53' }, front);
+  text(svg('text', { x: START_X, y: trackY+14, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '0 m');
+  text(svg('text', { x: END_X, y: trackY+14, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), `${number.format(DISTANCE)} m`);
+  if (temperatureMode && adjustable) temperatureRig = createTemperatureRig(row, { prefix: idPrefix, onSelect: conditionTo, chamber: scene });
   return {
-    ...group, startedAt: null, row, points, links, source, scene, front, reachedTrack,
+    ...group, trackY, startedAt: null, row, points, links, source, scene, front, reachedTrack,
     timeWrap: row.querySelector('.individual-time'), timeCaption: row.querySelector('.individual-time span'), timeOutput: row.querySelector('.individual-time output'),
     distanceOutput: row.querySelector('.propagation-readout output'),
     arrivalCaption: row.querySelector('.arrival-readout span'), arrivalOutput: row.querySelector('.arrival-readout output')
@@ -187,7 +197,7 @@ function paint(audible = false) {
     model.row.dataset.reachedDistance = distance.toFixed(4);
     attr(model.front, 'transform', `translate(${frontX.toFixed(4)} 0)`);
     attr(model.front, 'visibility', elapsed > 0 ? 'visible' : 'hidden');
-    attr(model.reachedTrack, 'd', `M${START_X} 125H${frontX.toFixed(4)}`);
+    attr(model.reachedTrack, 'd', `M${START_X} ${model.trackY}H${frontX.toFixed(4)}`);
     text(model.distanceOutput, `${number.format(Math.floor(distance + 1e-8))} 公尺${arrived ? ' · 已到終點' : ''}`);
     for (const point of model.points) {
       const next = sample(point, model.speed, elapsed); point.position = next.x;

@@ -47,4 +47,6 @@
 
 ## 第五區溫控裝置
 
-`temperature-control-unit.png` 依使用者核可的示意圖以影像工具產生，1743×902 RGBA 透明底，原圖未裁切或修改像素。照片只包含中性的金屬裝置、未發光的加熱／冷卻面、旋鈕及探棒。溫控文字、兩面發光、LED、溫度計液柱／讀值及按鈕由 `temperature-rig.mjs` 實際繪製並連到狀態，不把結果烘焙在圖中。核可圖存於 `docs/reviews/unit-2.2-card05/approved-concept.png`，角色仍沿用共用正式頭像。
+目前由 `temperature-chamber.mjs` 以同一套 SVG 座標繪製透明空氣腔體、直接接觸腔壁的導熱夾套、連接控溫底座的金屬支架、穿過密封口的測溫探棒及連到讀值窗的電纜。音叉沿用第四區同一繪圖函式、叉臂與金屬材質。底座上的原生 output 隨器材等比例定位，與腔內溫度及聲速同步；三個調溫按鈕仍由 `temperature-rig.mjs` 管理。器材為配置示意，五公里距離依下方尺規解讀，並非實物腔體尺寸。
+
+`temperature-control-unit.png` 為上一版依核可示意產生的 1743×902 RGBA 透明底素材，保留原圖及歷史核可圖 `docs/reviews/unit-2.2-card05/approved-concept.png`。依使用者後續要求，現行頁面已撤下分離的器材照片和獨立溫度計，不再載入此圖；角色維持共用正式頭像。

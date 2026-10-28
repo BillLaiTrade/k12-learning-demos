@@ -1,5 +1,5 @@
 // 介質場景、分子／原子與表面取樣共用同一波動模型。
-import { positions, sample, PULSE_DURATION } from './sound-speed-model.mjs?v=rig-17';
+import { positions, sample, PULSE_DURATION } from './sound-speed-model.mjs?v=chamber-18';
 // 敲擊動作保留 0.6 秒；接觸即起振，不延後傳播時計。
 const STRIKE_DURATION = .6;
 const CONTACT_DURATION = .06;
@@ -158,7 +158,7 @@ export function mediumScene(root, kind, prefix) {
 
 // 叉臂幾何固定，只作水平微幅反向位移，不逐影格變形、旋轉或扭曲。
 // 鋼材由右叉臂經薄接觸層傳振，另一臂自由；不把兩臂夾死。
-export function tuningForkSource(root, kind, fill, { stand = false } = {}) {
+export function tuningForkSource(root, kind, fill, { labelY = 139 } = {}) {
   const group = svgNode('g', { class:'sound-source tuning-fork', 'data-medium':kind, 'data-vibrating':'false', 'aria-hidden':'true' }, root);
   const body = svgNode('g', { class:'fork-fixed' }, group);
   const metal = (parent, d, cls='') => {
@@ -183,12 +183,6 @@ export function tuningForkSource(root, kind, fill, { stand = false } = {}) {
   } else {
     metal(body,'M42 79C42 104 74 104 74 79');
     metal(body,'M58 98V113');
-    if (stand) {
-      metal(body,'M58 113V119');
-      svgNode('ellipse',{cx:58,cy:123,rx:16,ry:4,fill:fill('source'),stroke:'#596c73','stroke-width':.8},body);
-      svgNode('path',{d:'M42 119V123M74 119V123',stroke:'#596c73','stroke-width':.8},body);
-      svgNode('ellipse',{cx:58,cy:119,rx:16,ry:4,fill:fill('source'),stroke:'#596c73','stroke-width':.8},body);
-    }
     paths = ['M42 79V33','M74 79V33'];
     hit = { x:30, y:33, handle:'M36 39L16 62', dx:-24, dy:3 };
   }
@@ -202,7 +196,7 @@ export function tuningForkSource(root, kind, fill, { stand = false } = {}) {
   svgNode('path',{d:hit.handle,stroke:'#956b43','stroke-width':4.5,'stroke-linecap':'round'},mallet);
   svgNode('rect',{x:hit.x,y:hit.y,width:12,height:12,rx:4,fill:'#3a4649',stroke:'#1e3034','stroke-width':.8},mallet);
   svgNode('path',{d:`M${hit.x+3} ${hit.y+2}h6`,stroke:'#899497','stroke-width':1.3,'stroke-linecap':'round'},mallet);
-  const label=svgNode('text',{x:kind==='water'?78:55,y:139,'text-anchor':'middle',fill:'#526f5c','font-size':12},group);
+  const label=svgNode('text',{x:kind==='water'?78:55,y:labelY,'text-anchor':'middle',fill:'#526f5c','font-size':12},group);
   label.textContent='音叉';
   return { paint(time,phase) {
     const value=forkVibration(time);
