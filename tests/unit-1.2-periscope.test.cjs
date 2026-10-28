@@ -159,9 +159,9 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await drag(0,45);await page.locator('[data-diagnosis="1"]').click();await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,false,false');
     await page.locator('[data-diagnosis="0"]').click();await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,true,false');
   });
-  await t.test('反向訊號、原路重合、先預測後驗證；三階段與重設',async()=>{
+  await t.test('反向訊號、原路重合、先預測後驗證；三階段完成',async()=>{
     await page.locator('#periscope-pulse').click();await expect(quiz).toHaveAttribute('data-pulse-status','running');
-    await page.locator('#periscope-next').click();await expect(quiz).toHaveAttribute('data-pulse-status','idle');await expect(quiz).toHaveAttribute('data-phase','2');await expect(page.locator('#periscope-signal')).toBeDisabled();await expect(page.locator('#periscope-signal-source')).toBeVisible();
+    await page.locator('#periscope-next').click();await expect(quiz).toHaveAttribute('data-pulse-status','idle');await expect(quiz).toHaveAttribute('data-phase','2');await expect(page.locator('#periscope-signal')).toBeDisabled();await expect(page.locator('#periscope-signal-source')).toBeVisible();await expect(page.locator('.periscope-footer #periscope-check')).toBeVisible();
     const before=await angles();await page.locator('#periscope-mirror-0').dispatchEvent('keydown',{key:'ArrowRight'});assert.deepEqual(await angles(),before);
     await page.locator('[data-prediction="inside"]').click();await page.locator('#periscope-signal').click();await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,true,false');
     await page.locator('[data-prediction="same"]').click();await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,true,false');
@@ -173,7 +173,9 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     const points=d=>d.slice(1).split('L').map(s=>s.split(',').map(Number));assert.deepEqual(points(paths.forward),points(paths.back).reverse());
     await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,true,true');await expect(page.locator('#periscope-complete')).toBeVisible();
     await quiz.screenshot({path:'/tmp/periscope-review/completed-desktop.png'});
-    await page.locator('#periscope-restart').click();assert.deepEqual(await angles(),[38,51]);await expect(quiz).toHaveAttribute('data-phase','0');await expect(quiz).toHaveAttribute('data-completed','false,false,false');await expect(page.locator('[data-stage="1"]')).toBeDisabled();
+    assert.equal(await page.locator('#periscope-restart').count(),0);
+    // 重新載入只用於隔離後續測試；產品不提供整份重來控制。
+    await page.reload({waitUntil:'networkidle'});await expect(quiz).toHaveAttribute('data-ready','true');assert.deepEqual(await angles(),[38,51]);await expect(quiz).toHaveAttribute('data-phase','0');await expect(quiz).toHaveAttribute('data-completed','false,false,false');await expect(page.locator('[data-stage="1"]')).toBeDisabled();
   });
   await t.test('只保留畫面拖曳操作，沒有獨立微調列或按鈕',async()=>{
     assert.equal(await page.locator('#periscope-fine,[data-fine]').count(),0);
@@ -219,7 +221,7 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await expect(button).toBeEnabled();
   });
   await t.test('移除額外提示與分關重設；視線追蹤撞壁仍有短暫光斑',async()=>{
-    assert.equal(await page.locator('#periscope-hint,#periscope-hint-copy,#periscope-reset-stage,#periscope-normal').count(),0);
+    assert.equal(await page.locator('#periscope-hint,#periscope-hint-copy,#periscope-reset-stage,#periscope-normal,#periscope-restart').count(),0);
     const button=page.locator('#periscope-pulse');await expect(button).toBeEnabled();
     await expect(page.locator('.periscope-view #periscope-pulse')).toBeVisible();await expect(page.locator('#periscope-signal-controls')).toBeHidden();
     await setAngle(0,38);await setAngle(1,51);await button.click();
@@ -229,13 +231,13 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     assert.equal(await page.locator('#periscope-light .light-arrow').count(),0);assert.equal(await page.locator('#periscope-block-marker').count(),0);
     await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('.periscope-wall-spot')).toHaveCount(0);await expect(button).toBeEnabled();
   });
-  await t.test('減少動態以短暫靜態全光路呈現；重設取消舊淡出與計時器',async()=>{
+  await t.test('減少動態以短暫靜態全光路呈現；換關取消舊淡出與計時器',async()=>{
     await page.emulateMedia({reducedMotion:'reduce'});await setAngle(0,45);await setAngle(1,45);
     const button=page.locator('#periscope-pulse');await button.click();await expect(page.locator('#periscope-light')).toHaveAttribute('data-opacity','1');
     const d=await page.locator('#periscope-light .light-line').getAttribute('d');await page.waitForTimeout(150);assert.equal(await page.locator('#periscope-light .light-line').getAttribute('d'),d);
     await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('#periscope-light')).toBeEmpty();await expect(button).toBeEnabled();
-    await page.emulateMedia({reducedMotion:'no-preference'});await button.click();await page.locator('#periscope-restart').click();await expect(quiz).toHaveAttribute('data-pulse-status','idle');await expect(page.locator('#periscope-light')).toBeEmpty();
-    await button.click();await page.waitForTimeout(250);await expect(quiz).toHaveAttribute('data-pulse-status','running');await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(button).toBeEnabled();
+    await page.emulateMedia({reducedMotion:'no-preference'});await firstPass();await button.click();await page.locator('#periscope-next').click();await expect(quiz).toHaveAttribute('data-pulse-status','idle');await expect(page.locator('#periscope-light')).toBeEmpty();
+    await page.locator('[data-stage="0"]').click();await button.click();await page.waitForTimeout(250);await expect(quiz).toHaveAttribute('data-pulse-status','running');await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(button).toBeEnabled();
   });
   await t.test('鍵盤邊界與取消拖曳不會留下卡住狀態',async()=>{
     await setAngle(0,30);await page.locator('#periscope-mirror-0').press('ArrowLeft');assert.equal((await angles())[0],30);await page.locator('#periscope-mirror-0').press('End');await expect.poll(async()=>(await angles())[0]).toBe(65);await page.locator('#periscope-mirror-0').press('ArrowRight');assert.equal((await angles())[0],65);
@@ -252,7 +254,10 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
       assert.ok(Math.abs(cutaway.height-scene.height)<=2.1,'scene must not stretch into empty background');
       const button=await page.locator('#periscope-pulse').boundingBox(),copy=await page.locator('#periscope-view-copy').boundingBox();
       assert.ok(button.x>=panel.x&&button.x+button.width<=panel.x+panel.width+1&&button.y>=copy.y+copy.height&&button.y+button.height<=panel.y+panel.height,`${width} button must be inside observation panel below copy`);
-      assert.ok(button.height>=72&&button.width>=130);
+      assert.ok(button.height>=60&&button.height<=80&&button.width>=130);
+      assert.equal(await page.locator('#periscope-pulse svg,.periscope-pulse-icon').count(),0);
+      const check=await page.locator('#periscope-design-action #periscope-check').boundingBox();
+      assert.ok(check.y>button.y+button.height&&check.x>=panel.x&&check.x+check.width<=panel.x+panel.width+1&&check.y+check.height<=panel.y+panel.height,`${width} check button must sit below trace inside observation panel`);
       assert.equal(await page.locator('.periscope-pulse-button').evaluate(e=>getComputedStyle(e).cursor),'pointer');
       const hide=await page.addStyleTag({content:'.route{visibility:hidden!important}'});
       if(width===1440)await quiz.screenshot({path:'/tmp/periscope-review/desktop.png'});

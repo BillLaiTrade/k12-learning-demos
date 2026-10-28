@@ -174,6 +174,9 @@ if(root) {
     $$('[data-prediction]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.prediction===state.prediction)));
     updatePulseControls();
     $('#periscope-signal').hidden=state.stage!==2;$('#periscope-signal').disabled=!state.prediction;$('#periscope-signal').setAttribute('aria-pressed',String(state.signal));$('#periscope-signal').textContent=state.signal?'關閉訊號光':'發送訊號光';
+    const check=$('#periscope-check'),checkHost=state.stage===2?$('.periscope-footer'):$('#periscope-design-action');
+    if(check.parentElement!==checkHost)checkHost.prepend(check);
+    $('.periscope-footer').hidden=state.stage!==2&&!state.done[state.stage];
     $('#periscope-check').textContent=['檢查我的設計','檢查修復結果','確認我的預測'][state.stage];
     $('#periscope-next').hidden=!state.done[state.stage]||state.stage===2;$('#periscope-next').textContent=state.stage===0?'前往修復光路 →':'前往反向傳訊 →';
     $('#periscope-complete').hidden=!state.done[2];
@@ -219,7 +222,7 @@ if(root) {
   $$('[data-prediction]').forEach(b=>b.addEventListener('click',()=>{invalidate();state.prediction=b.dataset.prediction;state.verified=false;state.signal=false;render();}));
   $('#periscope-pulse').addEventListener('click',emitPulse);
   $('#periscope-signal').addEventListener('click',()=>{if(!state.prediction)return;state.signal=!state.signal;if(state.signal)state.verified=true;render();});
-  function enterStage(stage,reset=false) {
+  function enterStage(stage) {
     if(stage>0&&!state.done[stage-1])return;
     cancelPulse(true);state.stage=stage;state.signal=false;state.verified=false;
     const content=[
@@ -229,7 +232,6 @@ if(root) {
     ][stage];
     ['#periscope-student','#periscope-grandpa','#periscope-task-title','#periscope-task-copy'].forEach((id,i)=>$(id).textContent=content[i]);
     if(stage===0) {
-      if(reset){state.angles=[38,51];state.done=[false,false,false];}
       feedback('調整兩片鏡子，讓船的駕駛艙出現在觀察窗中央。');
     } else if(stage===1) {
       state.angles=[Math.min(65,state.saved[0]+9),state.saved[1]];state.diagnosis=null;state.done[1]=false;state.done[2]=false;
@@ -242,7 +244,6 @@ if(root) {
     b.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const available=$$('.periscope-steps button').filter(x=>!x.disabled),at=available.indexOf(b),next=e.key==='Home'?0:e.key==='End'?available.length-1:(at+(e.key==='ArrowRight'?1:-1)+available.length)%available.length;available[next].click();available[next].focus();});
   });
   $('#periscope-next').addEventListener('click',()=>{enterStage(state.stage+1);$('#periscope-panel').scrollIntoView({block:'start',behavior:'smooth'});});
-  $('#periscope-restart').addEventListener('click',()=>enterStage(0,true));
   $('#periscope-check').addEventListener('click',()=>{
     const info=observe(state.angles);
     if(state.stage===0) {
