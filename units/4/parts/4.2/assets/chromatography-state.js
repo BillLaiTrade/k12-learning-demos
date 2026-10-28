@@ -1,6 +1,6 @@
 // Qualitative teaching model, not measured dye identity or retention data.
-export const DURATION = 24;
-export const CONTACT_TIME = 4;
+export const DURATION = 16;
+export const CONTACT_TIME = DURATION / 6;
 export const LIQUID = 0.674;
 export const PAPER_HEIGHT = 0.435;
 export const BASELINE = 0.88;
@@ -35,10 +35,10 @@ export function chromatographyState(seconds, top = MOUNT.top, sample = 'green') 
     }
   } else if (kind === 'spilled') front = start - Math.sqrt(progress) * Math.max(0, start - (top + 0.055));
   const travel = Math.max(0, baseline - front);
-  const spread = kind === 'valid' ? smooth(CONTACT_TIME, 9, elapsed) : 0;
-  const separation = kind === 'valid' ? smooth(8, 20, elapsed) : 0;
-  const originOpacity = kind === 'valid' ? 1 - 0.86 * smooth(CONTACT_TIME, 14, elapsed) : 1;
+  const spread = kind === 'valid' ? smooth(CONTACT_TIME, DURATION * 3 / 8, elapsed) : 0;
+  const separation = kind === 'valid' ? smooth(DURATION / 3, DURATION * 5 / 6, elapsed) : 0;
+  const originOpacity = kind === 'valid' ? 1 - 0.86 * smooth(CONTACT_TIME, DURATION * 7 / 12, elapsed) : 1;
   const bands = kind === 'valid' && travel > 0 ? SAMPLES[sample].bands.map(b => ({ ...b, y: baseline - travel * b.travel })) : [];
-  const phase = !contact ? 'approaching' : elapsed < 9 ? 'wicking' : elapsed < DURATION ? 'separating' : 'complete';
+  const phase = !contact ? 'approaching' : elapsed < DURATION * 3 / 8 ? 'wicking' : elapsed < DURATION ? 'separating' : 'complete';
   return { progress, bottom, baseline, front, kind, bands, contact, spread, separation, originOpacity, phase };
 }

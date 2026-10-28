@@ -40,11 +40,12 @@ test('4.2 hands-on chromatography: science, controls and approved layout', { tim
   };
   await t.test('qualitative model preserves solvent/spot/band relationships for both samples',async()=>{
     const results=await page.evaluate(async()=>{
-      const m=await import('./assets/chromatography-state.js?v=wicking-2');
+      const m=await import('./assets/chromatography-state.js?v=sixteen-1');
       const states=[];
-      for(const ink of ['green','dark'])for(const top of [.24,.258,.27])for(let tick=0;tick<=240;tick++)states.push(m.chromatographyState(tick/10,top,ink));
-      return {states,dry:m.placement(.15),valid:m.placement(.258),spill:m.placement(.34),initial:m.chromatographyState(0)};
+      for(const ink of ['green','dark'])for(const top of [.24,.258,.27])for(let tick=0;tick<=160;tick++)states.push(m.chromatographyState(tick/10,top,ink));
+      return {duration:m.DURATION,contactTime:m.CONTACT_TIME,states,dry:m.placement(.15),valid:m.placement(.258),spill:m.placement(.34),initial:m.chromatographyState(0)};
     });
+    assert.equal(results.duration,16);assert.ok(Math.abs(results.contactTime-8/3)<1e-10);
     assert.equal(results.dry.kind,'dry');assert.equal(results.valid.kind,'valid');assert.equal(results.spill.kind,'spilled');
     assert.equal(results.initial.separation,0,'no separation before solvent reaches the ink');
     for(const s of results.states) {
@@ -76,23 +77,24 @@ test('4.2 hands-on chromatography: science, controls and approved layout', { tim
   });
   await t.test('front contact, mixed plume, and resolving bands remain visible for distinct observation intervals',async()=>{
     await choose('green');
-    await advance(3000);let s=await data();
+    await advance(2000);let s=await data();
     assert.equal(s.contact,'false');assert.equal(s.phase,'approaching');assert.equal(s.bands.length,0);
     assert.equal(Number(s.originOpacity),1);
-    await lab.screenshot({path:'/tmp/chrom-slow-03-approach.png'});
-    await advance(2000);s=await data();
+    await lab.screenshot({path:'/tmp/chrom-16-02-approach.png'});
+    await advance(1333);s=await data();
     assert.equal(s.contact,'true');assert.equal(s.phase,'wicking');assert.ok(Number(s.spread)>0);
     assert.equal(Number(s.separation),0);assert.ok(Number(s.originOpacity)>.9);
-    await lab.screenshot({path:'/tmp/chrom-slow-05-contact.png'});
-    await advance(2500);s=await data();assert.equal(s.phase,'wicking');assert.ok(Number(s.spread)>.7);
+    await lab.screenshot({path:'/tmp/chrom-16-033-contact.png'});
+    await advance(1667);s=await data();assert.equal(s.phase,'wicking');assert.ok(Number(s.spread)>.7);
     assert.equal(Number(s.separation),0);
-    const plume=await lab.screenshot({path:'/tmp/chrom-slow-075-plume.png'});
-    await advance(6500);s=await data();assert.equal(s.phase,'separating');
+    const plume=await lab.screenshot({path:'/tmp/chrom-16-05-plume.png'});
+    await advance(4333);s=await data();assert.equal(s.phase,'separating');
     assert.ok(Number(s.separation)>.4 && Number(s.separation)<1);
-    const resolving=await lab.screenshot({path:'/tmp/chrom-slow-14-separate.png'});
+    const resolving=await lab.screenshot({path:'/tmp/chrom-16-093-separate.png'});
     assert.notDeepEqual(plume,resolving);
-    await advance(10500);s=await data();assert.equal(s.mode,'complete');assert.equal(Number(s.originOpacity),.14);
-    await lab.screenshot({path:'/tmp/chrom-slow-24-result.png'});
+    await advance(6300);assert.equal((await data()).mode,'running','must not stop before 16 seconds');
+    await advance(400);s=await data();assert.equal(s.mode,'complete');assert.equal(Number(s.originOpacity),.14);
+    await lab.screenshot({path:'/tmp/chrom-16-16-result.png'});
     const color=await page.locator('#chrom-canvas').evaluate(canvas=>{
       const c=canvas.getContext('2d'),base=.6408*1024,x=.682*1536;
       const chroma=(cx,cy)=>{const d=c.getImageData(Math.round(cx)-3,Math.round(cy)-2,7,5).data;let n=0;for(let i=0;i<d.length;i+=4)n+=d[i+1]-d[i];return n/(d.length/4);};
@@ -104,11 +106,11 @@ test('4.2 hands-on chromatography: science, controls and approved layout', { tim
   });
   await t.test('switching/repeating ink samples cancels the previous run',async()=>{
     await choose('green');await advance(5000);await choose('dark');
-    assert.equal((await data()).progress,0);assert.equal((await data()).ink,'dark');await advance(5500);assert.equal((await data()).bands.length,3);
+    assert.equal((await data()).progress,0);assert.equal((await data()).ink,'dark');await advance(3500);assert.equal((await data()).bands.length,3);
     assert.equal(await page.locator('.ink-choice[data-ink="dark"]').getAttribute('aria-pressed'),'true');
     await advance(1000);assert.ok((await data()).progress<.30);
     await choose('dark');assert.equal((await data()).progress,0);
-    await advance(24500);assert.equal((await data()).mode,'complete');
+    await advance(16500);assert.equal((await data()).mode,'complete');
     await lab.screenshot({path:'/tmp/unit42-chrom-dark-result.png'});
   });
   await t.test('click then click, keyboard, and touch all support manual placement',async()=>{

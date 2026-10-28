@@ -1,4 +1,4 @@
-import { DURATION, LIQUID, PAPER_HEIGHT, BASELINE, HOME, MOUNT, SAMPLES, placement, chromatographyState } from './chromatography-state.js?v=wicking-2';
+import { DURATION, LIQUID, PAPER_HEIGHT, BASELINE, HOME, MOUNT, SAMPLES, placement, chromatographyState } from './chromatography-state.js?v=sixteen-1';
 const lab = document.getElementById('chrom-lab');
 const canvas = document.getElementById('chrom-canvas');
 const paper = document.getElementById('chrom-paper');
