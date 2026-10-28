@@ -29,7 +29,7 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
   page.on('requestfailed', request => failures.push(request.url()));
   page.on('response', response => { if (response.status() >= 400) failures.push(`${response.status()} ${response.url()}`); });
   const base = `http://127.0.0.1:${port}`;
-  await page.goto(`${base}/units/5/parts/5.1/index.html`);
+  await page.goto(process.env.TEMPERATURE_LESSON_URL || `${base}/units/5/parts/5.1/index.html`);
   const text = selector => page.locator(selector).textContent();
   const order = () => page.locator('#measure-sequence li').evaluateAll(items => items.map(item => item.dataset.step));
   const inputTemperature = value => page.locator('#thermo-control').evaluate((input, value) => {

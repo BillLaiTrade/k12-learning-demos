@@ -1,0 +1,32 @@
+{
+  "text": {
+    "before": "1ab9f9d77edaa34493c306172d99642fa8dd4f2fcd87b1c575c3d0489083e916",
+    "after": "1ab9f9d77edaa34493c306172d99642fa8dd4f2fcd87b1c575c3d0489083e916",
+    "count": 2129,
+    "identical": true
+  },
+  "sections": {
+    "before": "5d2aab2ca720ed513682fb2f8555abe0aa0c367103b5845d0518fecfee436217",
+    "after": "5d2aab2ca720ed513682fb2f8555abe0aa0c367103b5845d0518fecfee436217",
+    "count": 6,
+    "identical": true
+  },
+  "images": {
+    "before": "8b9be422fdad3b459cf47aa840e06ca4c181d8033cb063e00f77109d898e516f",
+    "after": "8b9be422fdad3b459cf47aa840e06ca4c181d8033cb063e00f77109d898e516f",
+    "count": 4,
+    "identical": true
+  },
+  "controls": {
+    "before": "a34f5c27d144bcd53853650d229eaa2175b5d73df840549070b4718bd863b58c",
+    "after": "a34f5c27d144bcd53853650d229eaa2175b5d73df840549070b4718bd863b58c",
+    "count": 35,
+    "identical": true
+  },
+  "svgs": {
+    "before": "a4f1b7fc15be00aa09689bd0b4af0ea7ac47abb1b3503b6b8dbe48ef6e4c63af",
+    "after": "a4f1b7fc15be00aa09689bd0b4af0ea7ac47abb1b3503b6b8dbe48ef6e4c63af",
+    "count": 17,
+    "identical": true
+  }
+}

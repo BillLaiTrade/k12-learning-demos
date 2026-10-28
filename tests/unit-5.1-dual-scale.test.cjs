@@ -147,7 +147,8 @@ test('dual-scale temperature lesson in Chromium',{timeout:45000},async t=>{
       }
       for(const selector of ['#dual-rule','#dual-entry','#dual-cool','#dual-warm'])assert.ok(await page.locator(selector).evaluate(n=>n.scrollWidth<=n.clientWidth+1),`${selector} overflow at ${width}`);
       const [instrument,consoleBox]=await Promise.all([page.locator('.dual-instrument').boundingBox(),page.locator('.dual-console').boundingBox()]);
-      assert.ok(width>640?instrument.x+instrument.width<=consoleBox.x+1:instrument.y+instrument.height<=consoleBox.y+1);
+      const available=await page.locator('#card-03 .card-main').evaluate(n=>n.clientWidth-parseFloat(getComputedStyle(n).paddingLeft)-parseFloat(getComputedStyle(n).paddingRight));
+      assert.ok(available>620?instrument.x+instrument.width<=consoleBox.x+1:instrument.y+instrument.height<=consoleBox.y+1);
     }
     assert.deepEqual(errors,[]);
   });
