@@ -100,12 +100,12 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     await fresh();
     assert.equal((await data()).phase, 'idle'); assert.equal(await time(), 0);
     assert.equal(await page.locator('.medium-row').count(), 3);
-    assert.equal(await page.locator('.particle').count(), 304);
+    assert.equal(await page.locator('.particle').count(), 208);
     assert.equal(await page.locator('[name=prediction], .prediction, #prediction-feedback').count(), 0);
     assert.equal(await page.locator('#result').isHidden(), true);
     assert.equal(await page.evaluate(() => window.__audioContext), undefined);
     assert.equal(await page.locator('.speaker').first().evaluate(n => getComputedStyle(n, '::before').backgroundImage.includes('/shared-assets/characters/dialogue-character-avatars.png')), true);
-    assert.equal(await page.locator('.particle').evaluateAll(nodes => nodes.every(n => Number(n.getAttribute('opacity')) === .34 && Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
+    assert.equal(await page.locator('.particle').evaluateAll(nodes => nodes.every(n => Number(n.getAttribute('opacity')) === .64 && Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
     assert.equal(await page.locator('.field [stroke-dasharray], .field path[stroke="#be773a"]').count(), 0);
     const before = await particleXs(); await page.clock.runFor(1000); assert.deepEqual(await particleXs(), before);
   });
@@ -121,9 +121,26 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
       return Math.acos((h[0][0] * h[1][0] + h[0][1] * h[1][1]) / Math.hypot(...h[0]) / Math.hypot(...h[1])) * 180 / Math.PI;
     });
     assert.ok(Math.abs(waterAngle - 104.5) < .0001);
-    assert.ok(await page.locator('[data-group=steel] .elastic-link').count() > 150);
+    assert.ok(await page.locator('[data-group=steel] .elastic-link').count() > 120);
     assert.equal(await page.locator('.particle .atom').evaluateAll(nodes => nodes.every(n => n.getAttribute('fill').startsWith('url(#'))), true, 'visible atoms have material shading');
     assert.equal(await page.locator('#experiment-panel').evaluate(n => /預測|先猜|對錯/.test(n.textContent)), false);
+  });
+
+  await t.test('one compact panel aligns materials, larger models and connected end observations', async () => {
+    assert.equal(await page.locator('.comparison-board').count(), 1);
+    const rows = await page.locator('.medium-row').evaluateAll(nodes => nodes.map(row => {
+      const box = selector => { const b = row.querySelector(selector).getBoundingClientRect(); return { x: b.x, y: b.y, width: b.width, height: b.height, right: b.right, bottom: b.bottom }; };
+      return { photo: box('.specimen-button'), field: box('.field'), end: box('.end-observation'), body: box('.row-body'), row: { y: row.getBoundingClientRect().y, bottom: row.getBoundingClientRect().bottom } };
+    }));
+    assert.ok(rows.at(-1).row.bottom - rows[0].row.y < 470, 'all three media fit in a compact comparison');
+    for (const row of rows) {
+      assert.ok(row.photo.right < row.field.x, 'material sits beside the model');
+      assert.ok(row.field.width >= row.photo.width * 3.5 && row.field.height >= 100, 'vibration is the main visual');
+      assert.ok(Math.abs(row.field.right - row.end.x) < 1.1, 'end observation directly joins the field');
+      assert.ok(Math.abs(row.end.bottom - row.body.bottom) < 1.1);
+    }
+    assert.equal(await page.locator('.end-connection').count(), 3);
+    assert.equal(await page.locator('.end-observation .arrival-readout').count(), 3);
   });
 
   await t.test('vibration begins locally and steel reaches the end while water and air remain still there', async () => {

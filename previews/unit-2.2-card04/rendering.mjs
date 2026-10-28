@@ -55,7 +55,7 @@ function atom(parent, x, y, radius, material, fill) {
 
 export function particleGlyph(parent, { kind, index, className, x, y, fill, scale = 1 }) {
   const species = speciesFor(kind, index);
-  const group = svgNode('g', { class: className, transform: `translate(${x} ${y})`, 'data-species': species, opacity: .34 }, parent);
+  const group = svgNode('g', { class: className, transform: `translate(${x} ${y})`, 'data-species': species, opacity: .64 }, parent);
   const angle = kind === 'steel' ? 0 : ((index * 73.17) % 160) - 80;
   const body = svgNode('g', { transform: `rotate(${angle}) scale(${scale})` }, group);
   if (species === 'water') {

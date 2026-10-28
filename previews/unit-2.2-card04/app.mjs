@@ -2,8 +2,8 @@ import {
   DISTANCE, START_X, END_X, STEP, ZOOM, PULSE_DURATION,
   appearance, arrivalTime, clamp, conditions, displacement,
   positions, runEnd, sample, winners
-} from './model.mjs?v=materials-2';
-import { addMaterials, particleGlyph, springPath, specimenSvg, materialInfo, SPECIMEN_URL } from './rendering.mjs?v=materials-2';
+} from './model.mjs?v=layout-3';
+import { addMaterials, particleGlyph, springPath, specimenSvg, materialInfo, SPECIMEN_URL } from './rendering.mjs?v=layout-3';
 
 const $ = selector => document.querySelector(selector);
 const svgNS = 'http://www.w3.org/2000/svg';
@@ -73,22 +73,20 @@ function buildModel(group) {
     <header class="medium-header">
       <button class="specimen-button" type="button" aria-label="放大觀察${group.name}的${material.name}材質">${specimenSvg(group.kind)}<span class="specimen-status">近照載入中</span><span class="enlarge-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><circle cx="8" cy="8" r="5"/><path d="M12 12L17 17"/></svg></span></button>
       <div class="medium-heading"><h2>${group.name}</h2><p>${state.mode === 'temperature' ? group.description : material.phase}</p></div>
-      <div class="arrival-readout"><span>最右端到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的模型時間">—</output></div>
     </header>
     <div class="row-body">
       <div class="field">
-        <svg viewBox="0 0 660 158" role="img" aria-label="${group.name}的微觀放大模型，分子或原子在原位附近沿水平方向振動。"></svg>
+        <svg viewBox="0 0 456 146" role="img" aria-label="${group.name}的微觀放大模型，分子或原子在原位附近沿水平方向振動。"></svg>
         <button class="source-hit" type="button" aria-label="點按${group.name}振動源，重新同時啟動所有組別"></button>
       </div>
-      <div class="end-observation"><p class="zoom-title">最右端放大</p><svg class="zoom" viewBox="0 0 150 120" role="img" aria-label="${group.name}最右端的粒子，尚未開始振動"></svg><p class="end-state">尚未開始振動</p></div>
+      <div class="end-observation"><p class="zoom-title sr-only">最右端放大</p><svg class="zoom" viewBox="0 0 150 120" role="img" aria-label="${group.name}最右端的粒子，尚未開始振動"></svg><p class="end-state">尚未開始振動</p><div class="arrival-readout"><span class="sr-only">最右端到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的模型時間">—</output></div></div>
     </div>`;
   $('#models').append(row);
   row.querySelector('.source-hit').addEventListener('click', startFresh);
   row.querySelector('.specimen-button').addEventListener('click', () => openMaterial(group.kind));
   if (document.documentElement.dataset.materials === 'error') text(row.querySelector('.specimen-status'), '近照暫時無法載入');
   const field = row.querySelector('.field svg'), fill = addMaterials(field, `${group.id}-field`);
-  svg('rect', { x: 50, y: 22, width: 578, height: 99, rx: 11, fill: '#fafbf7', stroke: '#d6e1d8' }, field);
-  text(svg('text', { x: 59, y: 13, fill: '#788a7c', 'font-size': 10.5 }, field), group.kind === 'steel' ? '微觀放大 · 原子與彈性作用' : '微觀放大 · 分子整體往返');
+  svg('path', { class: 'end-connection', d: `M${END_X + 13} 41V101M${END_X + 13} 71H456`, fill: 'none', stroke: '#94aaa0', 'stroke-width': 1.2 }, field);
   svg('rect', { x: 10, y: 43, width: 26, height: 59, rx: 4, fill: fill('source'), stroke: '#7f9495', 'stroke-width': .8 }, field);
   svg('path', { d: 'M15 48V96M31 48V96', stroke: '#dce4df', 'stroke-width': .8, opacity: .7 }, field);
   const sourceRod = svg('path', { d: 'M30 71H49', stroke: '#728b8b', 'stroke-width': 4 }, field);
@@ -96,7 +94,7 @@ function buildModel(group) {
   const bonds = svg('g', { fill: 'none', stroke: '#8a9e9c', 'stroke-width': .8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, field);
   const dots = svg('g', { 'aria-hidden': 'true' }, field);
   const points = positions(group.kind).map((point, index) => {
-    const node = particleGlyph(dots, { kind: group.kind, index, className: 'particle', x: point.x, y: point.y, fill, scale: group.kind === 'steel' ? 1.2 : 1.15 });
+    const node = particleGlyph(dots, { kind: group.kind, index, className: 'particle', x: point.x, y: point.y, fill, scale: group.kind === 'steel' ? 1.35 : 1.5 });
     attr(node, 'data-origin-x', point.x); attr(node, 'data-origin-y', point.y); attr(node, 'data-distance', point.distance);
     return { ...point, node };
   });
@@ -110,8 +108,8 @@ function buildModel(group) {
     }
   }
   for (const x of [START_X, END_X]) svg('path', { d: `M${x} 124V133`, stroke: '#a0b1a3', 'stroke-width': 1.2 }, field);
-  text(svg('text', { x: START_X, y: 148, 'text-anchor': 'middle', fill: '#718573', 'font-size': 10.5 }, field), '0 m');
-  text(svg('text', { x: END_X, y: 148, 'text-anchor': 'middle', fill: '#718573', 'font-size': 10.5 }, field), '100 m');
+  text(svg('text', { x: START_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '0 m');
+  text(svg('text', { x: END_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '100 m');
   const zoom = row.querySelector('.zoom'), zoomFill = addMaterials(zoom, `${group.id}-zoom`);
   const endPoints = [30, 60, 90].map((y, index) => particleGlyph(zoom, { kind: group.kind, index: Math.round(index * (settings.rows - 1) / 2) * settings.columns + settings.columns - 1, className: 'end-particle', x: 75, y, fill: zoomFill, scale: 1.8 }));
   return {
@@ -167,7 +165,7 @@ function paint(audible = false, overrideCaption = '') {
     for (const point of model.points) {
       const next = sample(point, model.speed, state.time); point.position = next.x;
       attr(point.node, 'transform', `translate(${next.x.toFixed(4)} ${point.y.toFixed(4)})`);
-      attr(point.node, 'opacity', next.reached ? 1 : .34);
+      attr(point.node, 'opacity', next.reached ? 1 : .64);
       attr(point.node, 'data-reached', next.reached);
     }
     for (const link of model.links) {
@@ -180,7 +178,7 @@ function paint(audible = false, overrideCaption = '') {
     const offset = displacement(localTime) * ZOOM;
     model.endPoints.forEach((dot, index) => {
       attr(dot, 'transform', `translate(${(75 + offset).toFixed(4)} ${30 + index * 30})`);
-      attr(dot, 'opacity', arrived ? 1 : .34);
+      attr(dot, 'opacity', arrived ? 1 : .64);
     });
     const endState = !arrived ? '尚未開始振動' : localTime < PULSE_DURATION ? '正在往返振動' : '已回復靜止';
     text(model.endState, endState);

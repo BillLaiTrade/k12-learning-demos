@@ -1,7 +1,7 @@
 // 所有組別使用同一振動脈衝；只改變傳播延遲。
 export const DISTANCE = 100;
 export const START_X = 64;
-export const END_X = 604;
+export const END_X = 420;
 export const FREQUENCY = 25;
 export const PULSE_DURATION = .16;
 export const AMPLITUDE = 4.2;
@@ -30,9 +30,9 @@ export function conditions(mode, temperature = 30) {
 }
 
 export const appearance = {
-  air: { columns: 24, rows: 3 },
-  water: { columns: 24, rows: 5 },
-  steel: { columns: 28, rows: 4 }
+  air: { columns: 16, rows: 3 },
+  water: { columns: 16, rows: 5 },
+  steel: { columns: 20, rows: 4 }
 };
 
 export function positions(kind) {

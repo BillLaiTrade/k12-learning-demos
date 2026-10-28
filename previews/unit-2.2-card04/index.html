@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex">
   <title>第四學習區塊｜完整互動預覽</title>
-  <link rel="stylesheet" href="style.css?v=materials-2">
+  <link rel="stylesheet" href="style.css?v=layout-3">
 </head>
 <body>
   <header class="preview-header shell">
@@ -47,8 +47,8 @@
             <span class="model-time-wrap">模型時間 <output id="model-time" aria-label="模型經過時間" aria-live="off">0.0 毫秒</output></span>
           </div>
           <p class="observation-caption" id="observation-caption" role="status" aria-live="polite">同時啟動左側振動源，觀察不同介質的振動傳遞。</p>
-          <div id="models" class="models" role="group" aria-label="同步的粒子振動模型"></div>
-          <p class="color-key">下方為微觀放大模型。粒子變清楚的位置，表示振動已傳到。</p>
+          <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>介質</span><span>微觀振動 · 放大示意</span><span>最右端放大</span></div><div id="models" class="models" role="group" aria-label="同步的粒子振動模型"></div></div>
+          <p class="color-key">粒子在原位附近往返；較清晰的區域表示振動已傳到。</p>
 
           <div class="controls">
             <button class="action" id="primary-action" type="button">同時啟動振動</button>
@@ -81,6 +81,6 @@
   <dialog id="material-dialog" aria-labelledby="material-dialog-title">
     <div class="material-dialog-content"><header><h2 id="material-dialog-title">觀察材質</h2><button class="secondary" id="close-material" type="button" aria-label="關閉材質近照">關閉</button></header><div id="material-dialog-photo"></div><p id="material-dialog-description"></p></div>
   </dialog>
-  <script type="module" src="app.mjs?v=materials-2"></script>
+  <script type="module" src="app.mjs?v=layout-3"></script>
 </body>
 </html>
