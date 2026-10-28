@@ -2,8 +2,8 @@ import {
   DISTANCE, START_X, END_X, STEP, ZOOM, PULSE_DURATION,
   appearance, arrivalTime, clamp, conditions, displacement,
   positions, runEnd, sample, winners
-} from './model.mjs?v=layout-3';
-import { addMaterials, particleGlyph, springPath, specimenSvg, materialInfo, SPECIMEN_URL } from './rendering.mjs?v=layout-3';
+} from './model.mjs?v=medium-4';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene } from './rendering.mjs?v=medium-4';
 
 const $ = selector => document.querySelector(selector);
 const svgNS = 'http://www.w3.org/2000/svg';
@@ -71,28 +71,26 @@ function buildModel(group) {
   row.dataset.speed = String(group.speed);
   row.innerHTML = `
     <header class="medium-header">
-      <button class="specimen-button" type="button" aria-label="放大觀察${group.name}的${material.name}材質">${specimenSvg(group.kind)}<span class="specimen-status">近照載入中</span><span class="enlarge-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><circle cx="8" cy="8" r="5"/><path d="M12 12L17 17"/></svg></span></button>
       <div class="medium-heading"><h2>${group.name}</h2><p>${state.mode === 'temperature' ? group.description : material.phase}</p></div>
     </header>
     <div class="row-body">
       <div class="field">
-        <svg viewBox="0 0 456 146" role="img" aria-label="${group.name}的微觀放大模型，分子或原子在原位附近沿水平方向振動。"></svg>
+        <svg viewBox="0 0 456 146" role="img" aria-label="${group.name}的內部放大模型，${group.kind === 'water' ? '水槽中的水分子' : group.kind === 'steel' ? '金屬剖面中的原子' : '透明空氣中的分子'}在原位附近沿水平方向振動。"></svg>
         <button class="source-hit" type="button" aria-label="點按${group.name}振動源，重新同時啟動所有組別"></button>
       </div>
       <div class="end-observation"><p class="zoom-title sr-only">最右端放大</p><svg class="zoom" viewBox="0 0 150 120" role="img" aria-label="${group.name}最右端的粒子，尚未開始振動"></svg><p class="end-state">尚未開始振動</p><div class="arrival-readout"><span class="sr-only">最右端到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的模型時間">—</output></div></div>
     </div>`;
   $('#models').append(row);
   row.querySelector('.source-hit').addEventListener('click', startFresh);
-  row.querySelector('.specimen-button').addEventListener('click', () => openMaterial(group.kind));
-  if (document.documentElement.dataset.materials === 'error') text(row.querySelector('.specimen-status'), '近照暫時無法載入');
   const field = row.querySelector('.field svg'), fill = addMaterials(field, `${group.id}-field`);
-  svg('path', { class: 'end-connection', d: `M${END_X + 13} 41V101M${END_X + 13} 71H456`, fill: 'none', stroke: '#94aaa0', 'stroke-width': 1.2 }, field);
+  const scene = mediumScene(field, group.kind, `${group.id}-scene`);
+  svg('path', { class: 'end-connection', d: 'M447 41V101M447 71H456', fill: 'none', stroke: '#94aaa0', 'stroke-width': 1.2 }, field);
   svg('rect', { x: 10, y: 43, width: 26, height: 59, rx: 4, fill: fill('source'), stroke: '#7f9495', 'stroke-width': .8 }, field);
   svg('path', { d: 'M15 48V96M31 48V96', stroke: '#dce4df', 'stroke-width': .8, opacity: .7 }, field);
   const sourceRod = svg('path', { d: 'M30 71H49', stroke: '#728b8b', 'stroke-width': 4 }, field);
   const piston = svg('rect', { x: 45, y: 35, width: 8, height: 72, rx: 2, fill: fill('source'), stroke: '#718a8d', 'stroke-width': .8 }, field);
-  const bonds = svg('g', { fill: 'none', stroke: '#8a9e9c', 'stroke-width': .8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, field);
-  const dots = svg('g', { 'aria-hidden': 'true' }, field);
+  const bonds = svg('g', { fill: 'none', stroke: '#8a9e9c', 'stroke-width': .8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, scene.interior);
+  const dots = svg('g', { 'aria-hidden': 'true' }, scene.interior);
   const points = positions(group.kind).map((point, index) => {
     const node = particleGlyph(dots, { kind: group.kind, index, className: 'particle', x: point.x, y: point.y, fill, scale: group.kind === 'steel' ? 1.35 : 1.5 });
     attr(node, 'data-origin-x', point.x); attr(node, 'data-origin-y', point.y); attr(node, 'data-distance', point.distance);
@@ -111,9 +109,10 @@ function buildModel(group) {
   text(svg('text', { x: START_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '0 m');
   text(svg('text', { x: END_X, y: 139, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '100 m');
   const zoom = row.querySelector('.zoom'), zoomFill = addMaterials(zoom, `${group.id}-zoom`);
-  const endPoints = [30, 60, 90].map((y, index) => particleGlyph(zoom, { kind: group.kind, index: Math.round(index * (settings.rows - 1) / 2) * settings.columns + settings.columns - 1, className: 'end-particle', x: 75, y, fill: zoomFill, scale: 1.8 }));
+  const zoomScene = mediumScene(zoom, group.kind, `${group.id}-zoom-scene`, true);
+  const endPoints = [30, 60, 90].map((y, index) => particleGlyph(zoomScene.interior, { kind: group.kind, index: Math.round(index * (settings.rows - 1) / 2) * settings.columns + settings.columns - 1, className: 'end-particle', x: 75, y, fill: zoomFill, scale: 1.8 }));
   return {
-    ...group, row, points, links, piston, sourceRod, endPoints, zoom,
+    ...group, row, points, links, piston, sourceRod, endPoints, zoom, scene,
     arrivalCaption: row.querySelector('.arrival-readout span'), arrivalOutput: row.querySelector('.arrival-readout output'),
     endState: row.querySelector('.end-state')
   };
@@ -168,6 +167,7 @@ function paint(audible = false, overrideCaption = '') {
       attr(point.node, 'opacity', next.reached ? 1 : .64);
       attr(point.node, 'data-reached', next.reached);
     }
+    model.scene.paint(state.time, model.speed);
     for (const link of model.links) {
       attr(link.node, 'd', springPath(link.point.position, link.point.y, link.other.position, link.other.y));
     }
@@ -263,16 +263,6 @@ function rebuild(message = '') {
   paint(false, message);
 }
 
-function openMaterial(kind) {
-  const wasRunning = state.phase === 'running';
-  pause();
-  const material = materialInfo[kind];
-  text($('#material-dialog-title'), `${material.name} · ${material.phase}`);
-  text($('#material-dialog-description'), material.description + (wasRunning ? ' 比較已暫停，關閉近照後可繼續。' : ''));
-  $('#material-dialog-photo').innerHTML = `${specimenSvg(kind, 'specimen-dialog-photo')}<p class="specimen-status">${document.documentElement.dataset.materials === 'error' ? '近照暫時無法載入' : '近照載入中'}</p>`;
-  $('#material-dialog').showModal();
-}
-
 function setMode(mode) {
   if (mode === state.mode) return;
   state.mode = mode; rebuild();
@@ -328,15 +318,5 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) pause('頁面已暫停，返回後可繼續觀察。');
 });
 window.addEventListener('pagehide', () => { pause(); stopTones(); });
-$('#close-material').addEventListener('click', () => $('#material-dialog').close());
-$('#material-dialog').addEventListener('click', event => { if (event.target === $('#material-dialog')) $('#material-dialog').close(); });
-document.documentElement.dataset.materials = 'loading';
-const specimenLoader = new Image();
-specimenLoader.onload = () => { document.documentElement.dataset.materials = 'ready'; };
-specimenLoader.onerror = () => {
-  document.documentElement.dataset.materials = 'error';
-  for (const node of document.querySelectorAll('.specimen-status')) text(node, '近照暫時無法載入');
-};
-specimenLoader.src = SPECIMEN_URL;
 attr($('#temperature'), 'aria-valuetext', '設定組 30 攝氏度');
 rebuild();

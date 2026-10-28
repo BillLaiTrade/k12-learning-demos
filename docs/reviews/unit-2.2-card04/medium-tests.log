@@ -1,0 +1,31 @@
+▶ sound comparison uses one signal and physical travel delays
+  ✔ the same distance produces the material arrival times and ranking (1.139834ms)
+  ✔ temperature changes only the air speed, including a real tie at 20°C (0.322347ms)
+  ✔ every medium uses the same frequency, bounded local motion and exact rest (0.896855ms)
+  ✔ particles remain ordered, stay at fixed y and settle in every medium (18.049677ms)
+✔ sound comparison uses one signal and physical travel delays (21.860349ms)
+▶ complete fourth-card preview works as one consistent experiment
+  ✔ initial scene uses the official characters, no orange tracking particle and no autoplay (701.38961ms)
+  ✔ material volumes and distinct molecules are embedded inside the animation (56.94299ms)
+  ✔ one compact panel gives the embedded scenes the main space and connects end observations (7.890903ms)
+  ✔ vibration begins locally and steel reaches the end while water and air remain still there (395.610271ms)
+  ✔ pause, resume, exact stepping and a shared speed change keep one timeline (856.072963ms)
+  ✔ source clicks and keyboard restart all groups without overlapping animations (1187.85919ms)
+  ✔ teaching results retain actual times and rest positions without prediction or grading (3949.07483ms)
+  ✔ temperature controls are synchronized, bounded and use identical air layouts (226.575467ms)
+  ✔ warmer, colder and equal-temperature experiments produce correct outcomes (7872.980772ms)
+  ✔ changing conditions clears running results and a tie has identical live motion (262.272442ms)
+  ✔ medium surface detail follows the same travel delay and stops on pause (1383.246183ms)
+  ✔ molecules stay within the material cross sections throughout the pulse (3571.126221ms)
+  ✔ optional arrival cues use real audio nodes and stop when muted or paused (2211.625665ms)
+  ✔ backgrounding pauses at the same model time and never resumes automatically (1772.589702ms)
+  ✔ touch, both modes and seven viewport widths keep the layout usable (1910.047843ms)
+✔ complete fourth-card preview works as one consistent experiment (26786.056889ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27105.953676

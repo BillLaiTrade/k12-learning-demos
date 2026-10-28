@@ -110,9 +110,16 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     const before = await particleXs(); await page.clock.runFor(1000); assert.deepEqual(await particleXs(), before);
   });
 
-  await t.test('material photos and distinct molecules replace flat color-only rows', async () => {
-    await page.waitForFunction(() => document.documentElement.dataset.materials === 'ready');
-    assert.deepEqual(await page.locator('.specimen-photo').evaluateAll(nodes => nodes.map(n => n.getAttribute('viewBox'))), ['0 0 1024 512','0 512 1024 512','0 1024 1024 512']);
+  await t.test('material volumes and distinct molecules are embedded inside the animation', async () => {
+    assert.equal(await page.locator('.specimen-button, .specimen-photo, #material-dialog').count(), 0);
+    assert.equal(await page.locator('.field image, .zoom image').count(), 0);
+    assert.equal(await page.evaluate(() => performance.getEntriesByType('resource').some(r => r.name.includes('material-specimens.png'))), false);
+    assert.deepEqual(await page.locator('.field .medium-scene').evaluateAll(nodes => nodes.map(n => n.dataset.material)), ['air','water','steel']);
+    assert.equal(await page.locator('[data-group=air] .liquid-volume, [data-group=air] .steel-shell').count(), 0);
+    for (const cls of ['liquid-volume','liquid-surface','water-side','glass-front','liquid-reflection']) assert.equal(await page.locator(`[data-group=water] .field .${cls}`).count(), 1);
+    for (const cls of ['steel-shell','steel-top','steel-end','steel-cutaway']) assert.equal(await page.locator(`[data-group=steel] .field .${cls}`).count(), 1);
+    assert.equal(await page.locator('.medium-interior > g .particle').count(), 208);
+    assert.equal(await page.locator('.end-particle').evaluateAll(nodes => nodes.every(n => n.closest('.medium-scene') && n.parentElement.classList.contains('medium-interior'))), true);
     assert.equal(await page.locator('[data-group=air] .particle[data-species=nitrogen]').first().locator('.atom').count(), 2);
     assert.equal(await page.locator('[data-group=water] .particle').first().locator('.atom').count(), 3);
     assert.equal(await page.locator('[data-group=steel] .particle').first().locator('.atom').count(), 1);
@@ -126,16 +133,16 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     assert.equal(await page.locator('#experiment-panel').evaluate(n => /預測|先猜|對錯/.test(n.textContent)), false);
   });
 
-  await t.test('one compact panel aligns materials, larger models and connected end observations', async () => {
+  await t.test('one compact panel gives the embedded scenes the main space and connects end observations', async () => {
     assert.equal(await page.locator('.comparison-board').count(), 1);
     const rows = await page.locator('.medium-row').evaluateAll(nodes => nodes.map(row => {
       const box = selector => { const b = row.querySelector(selector).getBoundingClientRect(); return { x: b.x, y: b.y, width: b.width, height: b.height, right: b.right, bottom: b.bottom }; };
-      return { photo: box('.specimen-button'), field: box('.field'), end: box('.end-observation'), body: box('.row-body'), row: { y: row.getBoundingClientRect().y, bottom: row.getBoundingClientRect().bottom } };
+      return { label: box('.medium-header'), field: box('.field'), end: box('.end-observation'), body: box('.row-body'), row: { y: row.getBoundingClientRect().y, bottom: row.getBoundingClientRect().bottom } };
     }));
     assert.ok(rows.at(-1).row.bottom - rows[0].row.y < 470, 'all three media fit in a compact comparison');
     for (const row of rows) {
-      assert.ok(row.photo.right < row.field.x, 'material sits beside the model');
-      assert.ok(row.field.width >= row.photo.width * 3.5 && row.field.height >= 100, 'vibration is the main visual');
+      assert.ok(row.label.right < row.field.x, 'material label sits beside the model');
+      assert.ok(row.field.width >= row.label.width * 4.5 && row.field.height >= 100, 'vibration is the main visual');
       assert.ok(Math.abs(row.field.right - row.end.x) < 1.1, 'end observation directly joins the field');
       assert.ok(Math.abs(row.end.bottom - row.body.bottom) < 1.1);
     }
@@ -243,30 +250,39 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     assert.equal(await page.locator('#temperature-settings').isHidden(), true);
   });
 
-  await t.test('material closeups pause the experiment, preserve time and support keyboard dismissal', async () => {
-    await fresh(); await primary.click(); await page.clock.runFor(2000);
-    await page.locator('[data-group=water] .specimen-button').click();
-    assert.equal(await page.locator('#material-dialog').evaluate(n => n.open), true);
-    assert.match(await page.locator('#material-dialog-title').textContent(), /水.*液體/);
-    assert.equal((await data()).phase, 'paused'); const saved = await time(), snapshot = await particleXs();
-    await page.clock.runFor(1000); assert.equal(await time(), saved); assert.deepEqual(await particleXs(), snapshot);
-    await page.keyboard.press('Escape'); assert.equal(await page.locator('#material-dialog').evaluate(n => n.open), false);
-    assert.equal((await data()).phase, 'paused');
-    await primary.click(); await page.clock.runFor(1000); assert.ok(await time() > saved);
-    await page.locator('[data-group=steel] .specimen-button').click();
-    assert.match(await page.locator('#material-dialog-title').textContent(), /鋼.*固體/);
-    await page.locator('#close-material').click(); assert.equal(await page.locator('#material-dialog').evaluate(n => n.open), false);
+  await t.test('medium surface detail follows the same travel delay and stops on pause', async () => {
+    await fresh(); await primary.click(); await page.clock.runFor(2000); await primary.click();
+    const t0 = await time(), m = await model;
+    const surfaces = await page.locator('.surface-sample').evaluateAll(nodes => nodes.map(n => ({
+      x: n.transform.baseVal.consolidate().matrix.e, origin: Number(n.dataset.originX),
+      distance: Number(n.dataset.distance), speed: Number(n.closest('.medium-row').dataset.speed)
+    })));
+    assert.equal(surfaces.length, 36);
+    assert.ok(surfaces.some(p => Math.abs(p.x - p.origin) > .01));
+    for (const p of surfaces) assert.ok(Math.abs(p.x - m.sample({ x:p.origin, distance:p.distance },p.speed,t0).x) < .00011);
+    const before = await page.locator('.surface-sample').evaluateAll(nodes => nodes.map(n => n.getAttribute('transform')));
+    await page.clock.runFor(1000);
+    assert.deepEqual(await page.locator('.surface-sample').evaluateAll(nodes => nodes.map(n => n.getAttribute('transform'))), before);
+    await page.locator('#reset-action').click();
+    assert.equal(await page.locator('.surface-sample').evaluateAll(nodes => nodes.every(n => Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
   });
 
-  await t.test('an unavailable photo has a readable fallback and does not break the simulation', async () => {
-    const fallback = await browser.newPage(); await fallback.route('**/material-specimens.png', route => route.abort('failed'));
-    await fallback.goto(url, { waitUntil:'networkidle' });
-    await fallback.waitForFunction(() => document.documentElement.dataset.materials === 'error');
-    assert.equal(await fallback.locator('.specimen-status').first().isVisible(), true);
-    assert.match(await fallback.locator('.specimen-status').first().textContent(), /暫時無法載入/);
-    await fallback.locator('#primary-action').click();
-    assert.equal(await fallback.locator('#experiment-panel').getAttribute('data-phase'), 'running');
-    await fallback.close();
+  await t.test('molecules stay within the material cross sections throughout the pulse', async () => {
+    await fresh();
+    await page.locator('#slowdown').selectOption('20'); await primary.click();
+    for (let i = 0; i < 12; i++) {
+      await page.clock.runFor(800);
+      const escaped = await page.locator('.field .particle').evaluateAll(nodes => nodes.flatMap(n => {
+        const interior = n.closest('.medium-interior'), id = interior.getAttribute('clip-path').slice(5,-1);
+        const clip = document.getElementById(id).querySelector('rect');
+        const x = Number(clip.getAttribute('x')), y = Number(clip.getAttribute('y'));
+        const right = x + Number(clip.getAttribute('width')), bottom = y + Number(clip.getAttribute('height'));
+        const b = n.getBBox(), transform = n.transform.baseVal.consolidate().matrix;
+        const out = b.x + transform.e < x - .1 || b.x + b.width + transform.e > right + .1 || b.y + transform.f < y - .1 || b.y + b.height + transform.f > bottom + .1;
+        return out ? [n.closest('.medium-row').dataset.group + ':' + n.dataset.originX + ':' + n.dataset.originY] : [];
+      }));
+      assert.deepEqual(escaped, []);
+    }
   });
 
   await t.test('optional arrival cues use real audio nodes and stop when muted or paused', async () => {
