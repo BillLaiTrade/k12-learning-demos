@@ -26,7 +26,7 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
   assert.equal(await page.locator('.route-inner a[href="#unit-quiz"]').count(),1);assert.equal(await page.locator('#unit-quiz input[type=range]').count(),0);await capture('initial-desktop');
   assert.equal(await page.locator('#unit-quiz>.quiz-head .quiz-kicker').innerText(),'單元小測');assert.equal(await page.locator('#unit-quiz>.card-side').count(),0);assert.equal(await page.locator('#unit-quiz').evaluate(e=>e.classList.contains('unit-quiz')&&!e.classList.contains('lesson-card')),true);
   const residue=await page.evaluate(async()=>{
-   const renderer=await import('./assets/investigation-renderer.js?v=layout-2'),model=await import('./assets/investigation-state.js?v=lab-1');
+   const renderer=await import('./assets/investigation-renderer.js?v=pour-3'),model=await import('./assets/investigation-state.js?v=lab-1');
    const [table,atlas,glass]=await Promise.all(['investigation-table.webp','investigation-apparatus.webp','concentration-beaker.webp'].map(file=>renderer.loadPicture(new URL('./assets/'+file,location.href))));
    const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),fill=ctx.fill.bind(ctx);let white=0;
    ctx.fill=(...args)=>{if(['#fffef8','#e6e2d5','#fbfaf5','#d7d1c1'].includes(ctx.fillStyle))white++;return fill(...args);};
@@ -52,6 +52,53 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
  await t.test('mass is conserved across filtration; evaporation removes only water',async()=>{
   const model=await page.evaluate(async()=>{const m=await import('./assets/investigation-state.js?v=lab-1');const raw=m.newSample(1),settled=m.finishTest(raw,'settle').sample,filtered=m.finishTest(raw,'filter').sample,again=m.finishTest(filtered,'filter').sample,dry=m.finishTest(filtered,'heat').sample,direct=m.finishTest(raw,'heat').sample;return {raw,settled,filtered,again,dry,direct,masses:[raw,settled,filtered,dry,direct].map(m.totalMass),blocked:m.canTest(direct,'filter')};});
   assert.deepEqual(model.masses,[102,102,100,5,7]);assert.equal(model.filtered.salt,5);assert.equal(model.filtered.water,95);assert.deepEqual(model.filtered.residues,[2]);assert.deepEqual(model.again.residues,[2,0]);assert.equal(model.dry.water,0);assert.equal(model.direct.sand,2);assert.match(model.blocked,/乾燥/);assert.equal(model.raw.events.length,0);
+ });
+ await t.test('sampling joins the moving bottle lip to the cup and conserves liquid including flight time',async()=>{
+  const issues=await page.evaluate(async()=>{
+   const m=await import('./assets/investigation-transfer.js?v=pour-3'),errors=[];
+   const area=points=>Math.abs(points.reduce((a,p,i)=>{const q=points[(i+1)%points.length];return a+p.x*q.y-q.x*p.y;},0))/2;
+   for(const reduced of [false,true])for(let stock=0;stock<6;stock++){
+    let previousSource=stock+1,previousCup=0;
+    for(let i=0;i<=200;i++){
+     const t=i/200,f=m.samplingFrame(t,stock,reduced),pose=f.pose,c=Math.cos(pose.angle),s=Math.sin(pose.angle),mouth={x:pose.x+73*c+218*s,y:pose.y+73*s-218*c};
+     const check=(ok,text)=>{if(!ok)errors.push(`${stock}/${reduced}/${t}: ${text}`);};
+     check(Math.abs(f.sourcePortions+f.received+f.inTransit-stock-1)<1e-10,'conservation');
+     check(f.inTransit>=-1e-12&&f.received<=f.emitted+1e-12,'no spontaneous liquid');
+     check(f.sourcePortions<=previousSource+1e-12&&f.received>=previousCup-1e-12,'monotone transfer');
+     if(t<=.28)check(f.emitted===0&&f.received===0&&!f.stream,'no flow before tilting');
+     if(t>=.735)check(!f.stream&&f.received===1,'flow ends before bottle returns');
+     if(f.stream){
+      check(pose.angle>Math.PI/4,'source must actually tilt, including reduced motion');
+      check(Math.hypot(f.stream.mouth.x-mouth.x,f.stream.mouth.y-mouth.y)<1e-8,'lip is transformed from glass');
+      check(Math.abs(mouth.x-714)<1e-6&&Math.abs(mouth.y-(450+34*Math.max(0,1-f.sourcePortions)))<1e-6,'pour point stays over the cup');
+      check(f.stream.target.x>650&&f.stream.target.x<820&&f.stream.target.y>520&&f.stream.target.y<750,'stream ends in cup');
+      const line=m.bottleLiquid(pose,f.sourcePortions);
+      if(f.sourcePortions>1e-5)check(Math.abs(line.line-mouth.y)<.02,'liquid reaches the real lip');
+     }
+     const liquid=m.bottleLiquid(pose,f.sourcePortions);
+     check(Math.abs(area(liquid.filled)/area(liquid.shape)-f.sourcePortions/6*.67)<1e-6,'horizontal liquid area');
+     for(const x of [-160,160])for(const y of [-250,250]){const px=pose.x+x*c-y*s,py=pose.y+x*s+y*c;check(px>=0&&px<=1536&&py>=0&&py<=1024,'bottle stays inside scene');}
+     previousSource=f.sourcePortions;previousCup=f.received;
+    }
+   }return errors.slice(0,15);
+  });assert.deepEqual(issues,[]);
+ });
+ await t.test('actual canvas strokes start at the same photographic bottle lip in normal and reduced motion',async()=>{
+  const problems=await page.evaluate(async()=>{
+   const r=await import('./assets/investigation-renderer.js?v=pour-3'),m=await import('./assets/investigation-state.js?v=lab-1');
+   const [table,atlas,glass]=await Promise.all(['investigation-table.webp','investigation-apparatus.webp','concentration-beaker.webp'].map(file=>r.loadPicture(new URL('./assets/'+file,location.href))));
+   const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),strokes=[],poses=[],errors=[];
+   const image=ctx.drawImage.bind(ctx),begin=ctx.beginPath.bind(ctx),move=ctx.moveTo.bind(ctx),line=ctx.lineTo.bind(ctx),stroke=ctx.stroke.bind(ctx);let path=[];
+   ctx.drawImage=(...args)=>{if(args[0]===atlas&&args[1]===260&&args[2]===20){const p=new DOMPoint(73,-218).matrixTransform(ctx.getTransform());poses.push({x:p.x,y:p.y});}return image(...args);};
+   ctx.beginPath=()=>{path=[];return begin();};ctx.moveTo=(x,y)=>{path.push({x,y});return move(x,y);};ctx.lineTo=(x,y)=>{path.push({x,y});return line(x,y);};ctx.stroke=(...args)=>{if(ctx.lineWidth===8)strokes.push([...path]);return stroke(...args);};
+   const renderer=r.createRenderer(canvas,{table,atlas,glass});
+   for(const reduced of [false,true])for(const stock of [0,3,5])for(const t of [0,.12,.27,.30,.36,.5,.65,.70,.75,.9,1]){
+    strokes.length=0;poses.length=0;const f=renderer.render({sample:m.newSample(1),stock,animation:{kind:'sample',start:0,duration:2800,reduced}},t*2800);
+    if(poses.length!==2||Math.hypot(poses[0].x-poses[1].x,poses[0].y-poses[1].y)>.0001)errors.push('duplicate glass poses');
+    if(f.stream){if(strokes.length!==1)errors.push('missing jet');if(f.stream.tail===0&&Math.hypot(strokes[0][0].x-poses[0].x,strokes[0][0].y-poses[0].y)>.0001)errors.push(`disconnected jet ${stock}/${reduced}/${t}`);}
+    else if(strokes.length)errors.push(`phantom jet ${stock}/${reduced}/${t}`);
+   }return errors;
+  });assert.deepEqual(problems,[]);
  });
  let rawHeatRecord,filterRecord,saltRecord,validSample;
  await t.test('students can heat the raw sample first, keep mixed residue and measure seven grams',async()=>{

@@ -1,3 +1,4 @@
+import {SAMPLE_BOTTLE,SAMPLE_CUP,samplingFrame,streamPoint,bottleLiquid} from './investigation-transfer.js?v=pour-3';
 const W=1536,H=1024;
 const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
 const mix=(a,b,t)=>a+(b-a)*t;
@@ -26,27 +27,40 @@ export function createRenderer(canvas,{table,atlas,glass}) {
     ctx.save();ctx.beginPath();ctx.moveTo(left,y+h*.13);ctx.lineTo(right,y+h*.13);ctx.lineTo(right-7,base);ctx.quadraticCurveTo(x+w*.5,base+14,left+7,base);ctx.closePath();ctx.clip();
     const g=ctx.createLinearGradient(left,level,right,base);g.addColorStop(0,sand>0?`rgba(202,181,145,${.33-.15*settled})`:'rgba(228,238,231,.2)');g.addColorStop(.6,sand>0?`rgba(188,162,117,${.42-.17*settled})`:'rgba(205,222,216,.28)');g.addColorStop(1,sand>0?'rgba(160,132,91,.44)':'rgba(160,187,176,.32)');ctx.fillStyle=g;ctx.fillRect(left,level,right-left,base-level+20);
     ctx.fillStyle=sand>0?'#eadcc39c':'#eff8f47a';ctx.beginPath();ctx.ellipse(x+w*.51,level,w*.38,h*.035,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#fafff6ac';ctx.lineWidth=2;ctx.stroke();
-    if(sand>0){grains(x+w*.5,base-3,w*.31,h*.018,80);if(settled<1){for(let i=0;i<40;i++){const px=left+random(i,1)*(right-left),py=mix(level+random(i,2)*(base-level),base,settled);ctx.fillStyle='#92734c90';ctx.fillRect(px,py,2,2);}}}
+    if(sand>0){const portion=Math.min(1,amount/100);grains(x+w*.5,base-3,w*.31,h*.018,Math.round(80*portion));if(settled<1){for(let i=0;i<Math.round(40*portion);i++){const px=left+random(i,1)*(right-left),py=mix(level+random(i,2)*(base-level),base,settled);ctx.fillStyle='#92734c90';ctx.fillRect(px,py,2,2);}}}
     ctx.restore();
   }
-  function beaker(x,y,w,h,sample,fill=1,settled=0){
+  function beaker(x,y,w,h,sample,fill=1,settled=0,incoming=null){
     shadow(x+w*.5,y+h*.96,w*.42,h*.035);
     ctx.drawImage(glass,805,195,430,530,x,y,w,h);
     fluid(x,y,w,h,sample.water>0?(sample.water+sample.salt)*fill:0,sample.sand,settled);
+    if(incoming)sampleStream(incoming);
     // A light second glass layer preserves reflections without hiding contents.
     ctx.save();ctx.globalAlpha=.18;ctx.drawImage(glass,805,195,430,530,x,y,w,h);ctx.restore();
     if(sample.water===0&&sample.salt>0){grains(x+w*.5,y+h*.85,w*.25,h*.02,95,true);if(sample.sand>0)grains(x+w*.5,y+h*.87,w*.28,h*.022,60);}
   }
-  function source(stock,animation,t){
-    const move=animation?.kind==='sample'&&!animation.reduced?smooth(Math.min(t/.24,(1-t)/.2)):0;
-    const x=mix(410,492,move),y=mix(458,457,move),angle=move*1.03;
-    shadow(410,704,140,15);
+  function source(stock,transfer){
+    const {x,y,angle}=transfer?.pose||SAMPLE_BOTTLE.home,portions=transfer?.sourcePortions??stock;
+    const liquid=bottleLiquid({x,y,angle},portions);
+    shadow(x,704,140,15);
     ctx.save();ctx.translate(x,y);ctx.rotate(angle);
     sprite('bottle',-160,-250,320,500);
-    ctx.save();ctx.beginPath();ctx.moveTo(-123,-110);ctx.quadraticCurveTo(-145,-72,-140,12);ctx.lineTo(-135,211);ctx.quadraticCurveTo(0,235,137,211);ctx.lineTo(140,-50);ctx.quadraticCurveTo(145,-105,120,-110);ctx.closePath();ctx.clip();
-    const level=210-230*(stock/6),g=ctx.createLinearGradient(0,level,0,225);g.addColorStop(0,'#e7dbc2b8');g.addColorStop(1,'#b99c6bbd');ctx.fillStyle=g;ctx.fillRect(-145,level,290,250-level);ctx.fillStyle='#eee4caab';ctx.beginPath();ctx.ellipse(0,level,138,13,0,0,Math.PI*2);ctx.fill();if(stock>0)grains(0,210,115,12,110);
+    ctx.save();ctx.beginPath();SAMPLE_BOTTLE.interior.forEach(([px,py],i)=>{if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);});ctx.closePath();ctx.clip();
+    // The clip follows the turning glass, while gravity keeps the surface level.
+    ctx.setTransform(1,0,0,1,0,0);
+    if(portions>0){
+      const g=ctx.createLinearGradient(0,liquid.line,0,liquid.line+300);g.addColorStop(0,'#e7dbc2b8');g.addColorStop(1,'#b99c6bbd');ctx.fillStyle=g;ctx.fillRect(0,liquid.line,W,H-liquid.line);
+      ctx.fillStyle='#eee4caab';ctx.beginPath();ctx.ellipse((liquid.left+liquid.right)/2,liquid.line,(liquid.right-liquid.left)/2,7,0,0,Math.PI*2);ctx.fill();
+      const base=Math.max(...liquid.shape.map(p=>p.y));grains(x,base-9,120,11,Math.round(110*portions/6));
+    }
     ctx.restore();ctx.save();ctx.globalAlpha=.2;sprite('bottle',-160,-250,320,500);ctx.restore();
     ctx.fillStyle='#fffdf2ee';ctx.beginPath();ctx.roundRect(-118,28,236,63,6);ctx.fill();ctx.fillStyle='#293e33';ctx.font='600 29px system-ui,sans-serif';ctx.textAlign='center';ctx.fillText('未知樣本 X',0,69);ctx.restore();
+  }
+  function sampleStream(stream){
+    const first=streamPoint(stream,stream.tail);ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.beginPath();ctx.moveTo(first.x,first.y);
+    for(let i=1;i<=32;i++){const point=streamPoint(stream,mix(stream.tail,stream.head,i/32));ctx.lineTo(point.x,point.y);}
+    ctx.strokeStyle='#c7b28bbe';ctx.lineWidth=8;ctx.stroke();ctx.strokeStyle='#fff9e8ae';ctx.lineWidth=2;ctx.stroke();ctx.restore();
   }
   function flow(x1,y1,x2,y2,t,brown=false){ctx.save();ctx.strokeStyle=brown?'#c7b28bbe':'#e4f2ead9';ctx.lineWidth=9;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(x2-9,(y1+y2)/2,x2,y2);ctx.stroke();ctx.strokeStyle='#fffcf4a8';ctx.lineWidth=2;ctx.stroke();for(let i=0;i<4;i++){const p=(t*2+i*.25)%1;ctx.fillStyle='#e9f8eedc';ctx.beginPath();ctx.ellipse(mix(x1,x2,p),mix(y1,y2,p),3,5,0,0,Math.PI*2);ctx.fill();}ctx.restore();}
   function filter(sample,animation,t){
@@ -88,21 +102,22 @@ export function createRenderer(canvas,{table,atlas,glass}) {
     render(view,now=0){
       ctx.clearRect(0,0,W,H);ctx.drawImage(table,0,0,W,H);
       const {animation,sample,stock}=view,t=animation?Math.min(1,Math.max(0,(now-animation.start)/animation.duration)):0;
-      source(stock,animation,t);
+      const transfer=animation?.kind==='sample'?samplingFrame(t,stock,animation.reduced):null;
+      source(stock,transfer);
       const display=animation?.kind==='sample'?'beaker':animation?.kind==='settle'?'beaker':animation?.kind||sample?.display||'beaker';
       inventory(display);
-      if(!sample)beaker(620,491,228,281,{water:0,salt:0,sand:0});
+      if(!sample)beaker(SAMPLE_CUP.x,SAMPLE_CUP.y,SAMPLE_CUP.w,SAMPLE_CUP.h,{water:0,salt:0,sand:0});
       else if(display==='filter')filter(sample,animation,t);
       else if(display==='heat')heat(sample,animation,t,now);
       else if(display==='weigh')weigh(sample,animation?.kind==='weigh');
       else {
-        const fill=animation?.kind==='sample'?smooth((t-.25)/.5):1,settled=animation?.kind==='settle'?smooth(t):sample.phase==='settled'?1:0;
-        beaker(620,491,228,281,sample,fill,settled);
-        if(animation?.kind==='sample'&&t>.25&&t<.75)flow(704,373,735,551,t,true);
+        const fill=transfer?transfer.received:1,settled=animation?.kind==='settle'?smooth(t):sample.phase==='settled'?1:0;
+        beaker(SAMPLE_CUP.x,SAMPLE_CUP.y,SAMPLE_CUP.w,SAMPLE_CUP.h,sample,fill,settled,transfer?.stream);
       }
       if(sample&&sample.residues.some(n=>n>0)&&display!=='filter'){
         ctx.fillStyle='#faf6eb';ctx.beginPath();ctx.moveTo(973,735);ctx.lineTo(1105,735);ctx.lineTo(1079,797);ctx.lineTo(991,793);ctx.closePath();ctx.fill();grains(1038,762,40,9,65);pill('濾紙留存',1040,831,165);
       }
+      return transfer;
     }
   };
 }

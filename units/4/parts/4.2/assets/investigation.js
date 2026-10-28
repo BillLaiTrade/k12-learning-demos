@@ -1,5 +1,5 @@
 import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessReport,concentrationEvidence} from './investigation-state.js?v=lab-1';
-import {loadPicture,createRenderer} from './investigation-renderer.js?v=layout-2';
+import {loadPicture,createRenderer} from './investigation-renderer.js?v=pour-3';
 
 const root=document.getElementById('invest-lab');
 const $=id=>document.getElementById(`invest-${id}`);
