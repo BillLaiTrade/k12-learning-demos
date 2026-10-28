@@ -65,6 +65,14 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.2-sound-propagation.tes
 
 鐘聲採用使用者選定的 BELL 8B，檢查含餘音約 6 秒的實際 WAV 解碼後的強度與峰值、沒有自動播放、固定 100% 音量且無滑桿、按鈕與直接點鐘可播放、連續敲擊重新起音、播放時間確實前進、自然結束不循環，以及手機真實觸控播放。檢查無法取代使用者裝置上的實際聽感評估。
 
+## 2.2 第三區塊：真空鐘罩實驗
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.2-vacuum.test.cjs tests/unit-2.2-sound-propagation.test.cjs tests/unit-2.2.test.cjs
+```
+
+鐘罩檢查包括預設靜音、實錄解碼、實際 AudioContext／媒體播放、圖上及下方控制一致、抽氣中途停止、進氣反向操作、上下限、粒子全罩分布、敲錘在低空氣量時持續動作，以及直接量測 GainNode 隨抽氣降低、進氣恢復，確認不是僅更新文字。另涵蓋開關／快速切換／鍵盤、離開區塊停止聲音且保留空氣量、手機觸控、320／390／768／1024 px 無溢出、點擊區尺寸與完整器材顯示。截圖與核可示意另保存於 `docs/reviews/unit-2.2-card03/`，操作通過不代替人工畫面對照。
+
 ## 1.2 第六區光路可逆與第二區共用場景
 
 ```sh

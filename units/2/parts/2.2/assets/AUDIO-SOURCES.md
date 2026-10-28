@@ -46,3 +46,23 @@ ffmpeg -ss 3.72 -i source.mp3 -af 'atrim=duration=6,asetpts=PTS-STARTPTS,highpas
 - 衍生 WAV SHA-256：`c0646533782aa772483c9432f7bed9fc7b50cc71aa7739ec530e133a29e3a2e2`
 
 舊版 `brass-bell-strike.wav` 為 Joshua_van_Zyl 的 [黃銅手鐘錄音](https://freesound.org/people/Joshua_van_Zyl/sounds/764907/)（CC0）衍生檔，保留於素材目錄，現行頁面不再載入。
+
+
+## 第三學習區塊：持續運作的電鈴
+
+- 作品：School Bell；作者：civvy。
+- 作品頁：https://freesound.org/people/civvy/sounds/620392/
+- 公開預聽 MP3：https://cdn.freesound.org/previews/620/620392_13730662-hq.mp3
+- 授權：CC0 1.0，https://creativecommons.org/publicdomain/zero/1.0/；無須在頁面上署名。
+- 查閱日期：2026-10-28。作者說明為實際校園電鈴的錄音衍生作品。
+- `electric-bell-loop.wav`：截取 0.55～3.45 秒的持續響鈴部分，保持原速／原音高，整理低頻、做 12 ms 起尾淡化以降低循環接點突變，並正規化響度。48 kHz、PCM16、雙聲道，2.9 秒，量測約 −16.00 LUFS、真峰值 −9.94 dBTP。
+- 使用者開啟電鈴後才播放並循環；由 Web Audio 增益隨罩內空氣狀態連續變化，沒有把音高變低來表示抽氣。空氣量與音量為定性示意，不是實驗量測的對應曲線。
+
+重製命令：
+
+```sh
+ffmpeg -ss 0.55 -i source.mp3 -af 'atrim=duration=2.9,asetpts=PTS-STARTPTS,highpass=f=80,afade=t=in:d=0.012,afade=t=out:st=2.888:d=0.012,loudnorm=I=-16:TP=-1.5:LRA=7' -ar 48000 -c:a pcm_s16le electric-bell-loop.wav
+```
+
+- 原預聽檔 SHA-256：`a2aee75fe70baae59ec9a7877b03693c1e354b3bf47943f74c23d58c84c1d9f4`
+- 衍生 WAV SHA-256：`bb66f54c77671aa222a2a1d8068cd80bc15cc0672ee92c0c593622bf3cda2436`

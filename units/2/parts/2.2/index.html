@@ -23,6 +23,7 @@
     @media(max-width:640px){.ruler-photo-stage{border-radius:9px}}
   </style>
   <link rel="stylesheet" href="assets/sound-propagation.css?v=2">
+  <link rel="stylesheet" href="assets/vacuum-lab.css?v=1">
 </head>
 <body>
   <header class="shell masthead">
@@ -123,19 +124,50 @@
           </div>
         </section>
         <section class="lesson-card" id="card-03">
-          <div class="card-side"><span class="card-number">03</span><h3>聲音需要介質</h3><span class="card-role">觀察抽氣時聲音的變化</span></div>
-          <div class="card-main"><h2>如果把鐘罩裡的空氣抽掉，聲音還傳得出來嗎？</h2><p>讓小葵比較鐘罩裡的空氣量，同時觀察聲源是否仍在振動。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>空氣粒子會幫忙傳遞擾動；如果空氣越來越少，鐘聲會怎麼變？</p></div>
-            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>我們可以逐步抽走鐘罩裡的空氣來觀察。空氣越少，傳到外面的聲音越弱；理想真空中沒有介質，聲音無法傳播。</p></div>
-            <figure class="visual"><svg viewBox="0 0 760 335" role="img" aria-label="透明鐘罩內有持續振動的蜂鳴器，罩內空氣粒子數量會隨抽氣減少。">
-              <path class="bell-jar" d="M180 256V116a200 174 0 0 1 400 0v140"/><path d="M162 257h436" stroke="#718c84" stroke-width="7" stroke-linecap="round"/><path d="M350 244v-59q0-16 16-16h28q16 0 16 16v59" fill="#d79854" stroke="#9b693c" stroke-width="3"/><path d="M360 169v-12h51v12" fill="#7d8e84"/><path d="M375 169l6-16 8 16" fill="#db8764"/><g id="bell-air-dots" fill="#70aeb3" opacity=".76"></g>
-              <g id="bell-sound-rings" fill="none" stroke="#bc612b" stroke-width="3"><path d="M428 189q20 15 0 30"/><path d="M442 177q39 29 0 54"/><path d="M458 165q57 42 0 78"/></g>
-              <path d="M598 215h56v40h-56" fill="#a8b9b2" stroke="#72867d" stroke-width="3"/><path d="M654 235h30" stroke="#72867d" stroke-width="4"/><text x="378" y="40" text-anchor="middle">鐘罩內：空氣逐漸減少，蜂鳴器仍在振動</text><text id="jar-label" x="378" y="300" text-anchor="middle" class="muted-label">空氣充足｜聲音清楚</text>
-            </svg><figcaption>示意實驗：抽氣時聲音會逐漸變弱；實際鐘罩不能達到絕對真空。</figcaption></figure>
-            <div class="range-row"><label for="air-amount">罩內空氣量</label><input id="air-amount" type="range" min="0" max="100" step="1" value="100" aria-describedby="air-amount-value"><output id="air-amount-value">充足</output></div>
-            <div class="vacuum-level" aria-hidden="true"><span id="vacuum-bar"></span></div>
-            <div class="controls"><button class="secondary" id="air-reset" type="button">恢復空氣</button><span class="live-note" id="jar-status" aria-live="polite">蜂鳴器正在振動，鐘罩內有足夠空氣傳聲。</span></div>
-            <div class="fact"><p><strong>重點：</strong>聲音需要介質傳播。氣體、液體和固體都能傳聲；真空中沒有介質，聲音不能傳播。</p></div>
+          <div class="card-side"><span class="card-number">03</span><h3>聲音需要介質</h3></div>
+          <div class="card-main"><h2>動手抽氣，鈴聲會怎麼變？</h2><p class="vacuum-intro">操作幫浦與進氣閥，比較空氣量改變時的鈴聲。</p>
+            <div id="vacuum-lab" class="vacuum-lab" role="group" aria-label="可操作的真空鐘罩實驗" aria-describedby="vacuum-model-note">
+              <figure class="vacuum-figure">
+                <div class="vacuum-scene">
+                  <img class="vacuum-photo" src="assets/vacuum-apparatus.png" width="1817" height="866" alt="完整玻璃鐘罩內有通電電鈴，底座透過透明管線連接抽氣幫浦與空氣量指示表，進氣閥位於底座旁。">
+                  <svg class="vacuum-overlay" viewBox="0 0 1817 866" aria-hidden="true">
+                    <defs>
+                      <radialGradient id="vacuum-metal" cx="30%" cy="20%"><stop stop-color="#fffefa"/><stop offset=".4" stop-color="#b6ad92"/><stop offset=".7" stop-color="#6e6a62"/><stop offset="1" stop-color="#282c28"/></radialGradient>
+                      <linearGradient id="vacuum-rod"><stop stop-color="#6f706b"/><stop offset=".45" stop-color="#fff7de"/><stop offset="1" stop-color="#7a756a"/></linearGradient>
+                      <clipPath id="vacuum-air-region"><path d="M329 617V289C329 207 411 156 525 155C640 156 721 210 721 289V617Z"/></clipPath>
+                    </defs>
+                    <g id="vacuum-particles" clip-path="url(#vacuum-air-region)"></g>
+                    <g id="vacuum-hammer"><path d="M635 607L630 495L617 455" fill="none" stroke="#403c31" stroke-width="8" stroke-linecap="round"/><path d="M635 606L630 495L617 455" fill="none" stroke="url(#vacuum-rod)" stroke-width="5" stroke-linecap="round"/><circle cx="617" cy="455" r="12" fill="url(#vacuum-metal)" stroke="#655f50" stroke-width="1.5"/></g>
+                    <g id="vacuum-vibration" fill="none" stroke="#eaa634" stroke-width="4.5" stroke-linecap="round" opacity="0"><path d="M655 431Q674 454 655 477"/><path d="M674 419Q704 454 674 489"/></g>
+                    <path class="vacuum-leader" d="M690 328L624 429"/><circle class="vacuum-leader-dot" cx="624" cy="429" r="6"/>
+                    <path class="vacuum-leader" d="M1268 284L1285 350"/><circle class="vacuum-leader-dot" cx="1285" cy="350" r="6"/>
+                    <path class="vacuum-leader" d="M866 510L809 559"/><circle class="vacuum-leader-dot" cx="809" cy="559" r="6"/>
+                    <g id="vacuum-needle" transform="translate(1665 535) rotate(60)"><path d="M-5 7L0-68L5 7Z" fill="#21483b"/><circle r="10" fill="#343e36" stroke="#9ba49a" stroke-width="3"/></g>
+                  </svg>
+                  <span class="vacuum-chip" id="vacuum-mode">等待啟動</span>
+                  <span class="vacuum-callout vacuum-source-tag" id="vacuum-source-tag">電鈴已關閉</span>
+                  <span class="vacuum-callout vacuum-pump-tag" aria-hidden="true">點按幫浦抽氣</span>
+                  <span class="vacuum-callout vacuum-valve-tag" aria-hidden="true">進氣閥</span>
+                  <div class="vacuum-air-readout"><span>罩內空氣</span><strong id="vacuum-air-label">充足</strong></div>
+                  <button class="vacuum-hotspot vacuum-pump-hit" id="vacuum-pump" type="button" aria-label="點按幫浦抽氣" aria-pressed="false"></button>
+                  <button class="vacuum-hotspot vacuum-valve-hit" id="vacuum-valve" type="button" aria-label="打開進氣閥，放入空氣" aria-pressed="false" disabled></button>
+                </div>
+                <figcaption class="vacuum-evidence">
+                  <span><i class="vacuum-power-light" aria-hidden="true"></i><span>電鈴：<strong id="vacuum-source-state">尚未啟動</strong></span></span>
+                  <span><svg class="vacuum-speaker" viewBox="0 0 32 32" aria-hidden="true"><path d="M3 11H9L18 4V28L9 21H3Z" fill="currentColor"/><path d="M22 10Q29 16 22 22M25 6Q36 16 25 26" fill="none" stroke="currentColor" stroke-width="2.5"/></svg><span class="vacuum-bars" aria-hidden="true"><i></i><i></i><i></i></span><span>聽到的鈴聲：<strong id="vacuum-sound-state">未發聲</strong></span></span>
+                </figcaption>
+              </figure>
+              <div class="vacuum-controls">
+                <button class="vacuum-switch" id="vacuum-power" type="button" role="switch" aria-checked="false"><span>電鈴開關</span><span class="vacuum-switch-track" aria-hidden="true"><b id="vacuum-switch-word">OFF</b><i></i></span></button>
+                <button class="action vacuum-control" id="vacuum-extract" type="button" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4H20M16 4V12M8 28V16Q8 12 12 12H20Q24 12 24 16V28M5 28H27"/></svg><span id="vacuum-extract-label">抽氣</span></button>
+                <button class="secondary vacuum-control" id="vacuum-admit" type="button" aria-pressed="false" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 7H26M16 3V14M7 17H25V26H7ZM3 21H7M25 21H29M12 26V29M20 26V29"/></svg><span id="vacuum-admit-label">放入空氣</span></button>
+              </div>
+              <p class="vacuum-instruction">點按幫浦抽氣，或打開進氣閥讓空氣回來；再次點按可停在當下觀察。</p>
+              <p id="vacuum-status" class="vacuum-status" aria-live="polite">先開啟電鈴，再抽氣比較聽到的鈴聲。</p>
+              <audio id="vacuum-audio" src="assets/electric-bell-loop.wav?v=1" preload="auto" loop></audio>
+            </div>
+            <div class="vacuum-takeaway"><strong>聲音需要介質傳播。</strong></div>
+            <p class="vacuum-model-note" id="vacuum-model-note">粒子與振動放大示意；實際鐘罩僅能接近真空，底座仍可能傳出微弱振動。</p>
           </div>
         </section>
         <section class="lesson-card" id="card-04">
@@ -247,17 +279,6 @@
       rulerPluck.addEventListener("click",startRuler);
       rulerPluck.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();if(!event.repeat)startRuler();}});
 
-      const ns="http://www.w3.org/2000/svg";
-
-      const airRange=document.querySelector("#air-amount"),airValue=document.querySelector("#air-amount-value"),vacuumBar=document.querySelector("#vacuum-bar"),airDots=document.querySelector("#bell-air-dots"),soundRings=document.querySelector("#bell-sound-rings"),jarLabel=document.querySelector("#jar-label"),jarStatus=document.querySelector("#jar-status");
-      for(let i=0;i<48;i++){const dot=document.createElementNS(ns,"circle"),x=218+(i%8)*43,y=88+Math.floor(i/8)*28;dot.setAttribute("cx",x);dot.setAttribute("cy",y);dot.setAttribute("r",3);airDots.append(dot);}
-      const updateAir=()=>{const amount=Number(airRange.value),count=Math.round(48*amount/100);[...airDots.children].forEach((dot,index)=>dot.style.opacity=index<count?".76":"0");vacuumBar.style.width=`${amount}%`;airRange.setAttribute("aria-valuetext",amount>65?"空氣充足":amount>25?"空氣逐漸減少":"接近真空");
-        if(amount>65){airValue.textContent="充足";jarLabel.textContent="空氣充足｜聲音清楚";jarStatus.textContent="蜂鳴器正在振動，鐘罩內有足夠空氣傳聲。";soundRings.style.opacity="1";}
-        else if(amount>25){airValue.textContent="逐漸減少";jarLabel.textContent="空氣減少｜聲音變弱";jarStatus.textContent="抽走部分空氣後，傳到鐘罩外的聲音變弱；蜂鳴器仍在振動。";soundRings.style.opacity=".48";}
-        else{airValue.textContent="接近真空";jarLabel.textContent="介質很少｜聲音幾乎聽不見";jarStatus.textContent="鐘罩內接近真空，聲音幾乎無法傳出；蜂鳴器本身仍在振動。";soundRings.style.opacity=".12";}
-      };
-      airRange.addEventListener("input",updateAir);document.querySelector("#air-reset").addEventListener("click",()=>{airRange.value="100";updateAir();});updateAir();
-
       const temperature=document.querySelector("#air-temperature"),tempValue=document.querySelector("#temperature-value"),tempSpeed=document.querySelector("#temperature-speed"),tempDistance=document.querySelector("#temperature-distance"),tempDot=document.querySelector("#temp-dot");
       const updateTemperature=()=>{const c=Number(temperature.value),speed=331+.6*c;tempValue.textContent=`${c}°C`;tempSpeed.textContent=`${Math.round(speed)} m/s`;tempDistance.textContent=`${Math.round(speed)} m`;tempDot.setAttribute("cx",String(92+(c/30)*584));tempDot.setAttribute("cy",String(140-(c/30)*106));temperature.setAttribute("aria-valuetext",`${c}攝氏度，聲速約${Math.round(speed)}公尺每秒`);};
       temperature.addEventListener("input",updateTemperature);updateTemperature();
@@ -273,5 +294,6 @@
     })();
   </script>
   <script type="module" src="assets/sound-propagation.js?v=4"></script>
+  <script type="module" src="assets/vacuum-lab.js?v=1"></script>
 </body>
 </html>
