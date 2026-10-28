@@ -174,7 +174,15 @@ test('water lab functional and visual checks in Chromium',{timeout:150000},async
       await page.setViewportSize({width,height:1000});
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`overflow at ${width}`);
       for(const button of [ice,heat,reset])assert.equal(await button.isVisible(),true);
-      const lens=await page.locator('.water-lab-lens').boundingBox(),status=await page.locator('.water-lab-heater-status').boundingBox();
+      // A viewport change can move the document between two protocol reads.
+      // Measure both rectangles in the same settled frame, preserving the same
+      // no-overlap assertion against the actual responsive layout.
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      const {lens,status}=await page.evaluate(()=>{
+        const a=document.querySelector('.water-lab-lens').getBoundingClientRect();
+        const b=document.querySelector('.water-lab-heater-status').getBoundingClientRect();
+        return {lens:{y:a.y,height:a.height},status:{y:b.y,height:b.height}};
+      });
       assert.ok(lens.y+lens.height<=status.y+1,`inset overlaps status at ${width}`);
     }
     assert.deepEqual(errors,[]);

@@ -33,6 +33,7 @@
     @media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{grid-template-columns:1fr;padding:32px 0 25px}.lesson{padding-top:20px}.lesson-card{grid-template-columns:1fr;padding:18px;gap:14px}.card-side{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:0 7px;border:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0;font-size:.95rem}.card-role{grid-column:2;font-size:.79rem}.card-number{grid-row:1/3}.visual{padding:8px}.quiz-head{padding:18px}.quiz-body{padding:19px 17px 22px}.quiz-actions{align-items:stretch;flex-direction:column}.thermo-wrap{grid-template-columns:1fr}.thermo-svg{max-height:340px}.range-row{align-items:center;flex-direction:row}.sequence-step{grid-template-columns:22px minmax(0,1fr)}.sequence-controls{grid-column:2}.range-row input{width:100%}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
+  <link rel="stylesheet" href="assets/thermometer-quiz.css?v=quiz-1">
   <link rel="stylesheet" href="assets/measurement-scene.css?v=observation-only-4">
   <link rel="stylesheet" href="assets/touch-story.css">
   <link rel="stylesheet" href="assets/water-lab.css?v=engraved-glass-1">
@@ -293,35 +294,63 @@
             <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「記下數字和單位，才能把測量結果說清楚。」</p></div>
           </div>
         </section>
-        <section class="quiz" id="unit-quiz" aria-labelledby="quiz-title">
-          <header class="quiz-head"><span class="quiz-mark" aria-hidden="true">?</span><div><p class="quiz-kicker">單元小測</p><h2 id="quiz-title">幫小葵完成水溫測量紀錄</h2><p>把測量程序、液柱變化的原因和實際讀值連起來。</p></div></header>
-          <div class="quiz-body">
-            <p class="quiz-lead">小葵把原本較冷的溫度計放入較暖的水中。請整理操作步驟，說明液柱變化，最後讀出穩定後的水溫。</p>
-            <div class="sequence-task">
-              <h3>1. 排列測量步驟</h3><p>使用上下按鈕調整順序；按 Tab 選取按鈕，再按 Enter 或空白鍵操作。</p>
-              <ol class="sequence-list" id="measure-sequence">
-                <li class="sequence-step" data-step="read"><span class="sequence-number">1</span><span>讀取液面對應的刻度，記下數值和 °C。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="讀取刻度：往上移">↑</button><button type="button" data-move="down" aria-label="讀取刻度：往下移">↓</button></span></li>
-                <li class="sequence-step" data-step="immerse"><span class="sequence-number">2</span><span>依工具標示浸入水中，液泡不碰杯壁或杯底。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="放入水中：往上移">↑</button><button type="button" data-move="down" aria-label="放入水中：往下移">↓</button></span></li>
-                <li class="sequence-step" data-step="level"><span class="sequence-number">3</span><span>溫度計留在水中，讓視線與液面同高。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="平視液面：往上移">↑</button><button type="button" data-move="down" aria-label="平視液面：往下移">↓</button></span></li>
-                <li class="sequence-step" data-step="wait"><span class="sequence-number">4</span><span>等待液柱穩定，再準備讀值。</span><span class="sequence-controls"><button type="button" data-move="up" aria-label="等待穩定：往上移">↑</button><button type="button" data-move="down" aria-label="等待穩定：往下移">↓</button></span></li>
-              </ol>
-              <p class="quiz-feedback" id="sequence-feedback" role="status"></p>
+        <section class="quiz thermometer-quiz" id="unit-quiz" aria-labelledby="quiz-title">
+          <div class="tq-heading">
+            <header><p class="tq-kicker"><svg viewBox="0 0 24 26" aria-hidden="true"><path d="M8 2h8m-6 0v8L4 22q-1 2 2 2h12q3 0 2-2l-6-12V2M7 17h10"/></svg> 單元小測</p><h2 id="quiz-title">幫兩支溫度計找回單位</h2><p>拿起一支、放入水中，量完放回，再換另一支。</p></header>
+            <div class="tq-dialogues">
+              <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>「我要先拿哪一支來量呢？」</p></div>
+              <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「先選一支放入水中，量完放回，再換另一支。」</p></div>
             </div>
-            <fieldset class="quiz-question"><legend>2. 放入較暖的水後，液柱為什麼上升？</legend>
-              <label class="quiz-option"><input type="radio" name="principle" value="volume">測溫液體溫度升高、體積增大，液柱上升，再依刻度讀取溫度。</label>
-              <label class="quiz-option"><input type="radio" name="principle" value="water">杯裡的水流進溫度計，液柱就被水推高了。</label>
-              <label class="quiz-option"><input type="radio" name="principle" value="touch">只要手感覺比較熱，液柱就會上升，不需要觀察刻度。</label>
-              <p class="quiz-feedback" id="principle-feedback" aria-live="polite"></p>
-            </fieldset>
-            <div class="quiz-question">
-              <h3>3. 請記錄穩定後的水溫</h3><p>這支溫度計每 1°C 一小格。仔細看液面頂端，估讀刻線之間的位置。</p>
-              <div class="thermo-wrap">
-                <svg id="quiz-thermometer" class="thermo-svg" viewBox="0 0 260 410" role="img" aria-label="攝氏溫度計"></svg>
-                <div><svg id="quiz-lens" class="temperature-lens" viewBox="0 0 380 290" role="img" aria-label="估讀題液面附近的刻線放大"></svg><label for="quiz-reading">水溫讀值（°C）</label><div class="controls"><input class="read-input" id="quiz-reading" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="輸入估讀值" aria-describedby="reading-feedback"><span aria-hidden="true">°C</span></div><p class="quiz-feedback" id="reading-feedback" aria-live="polite"></p></div>
+          </div>
+          <div class="tq-body">
+            <ol class="tq-flow" aria-label="操作流程"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V4a2 2 0 0 1 4 0v7l2-1 5 3v5l-4 4h-5l-6-7a2 2 0 0 1 3-3l1 1"/></svg>拿取溫度計</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3v17h14V3M3 3h4m10 0h4M6 12h12M12 1v14m-3-3 3 3 3-3"/></svg>放入量測</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h12l-3-3m3 3-3 3M19 18H7l3 3m-3-3 3-3"/></svg>放回換另一支</li></ol>
+            <div class="tq-workspace">
+              <div class="tq-bench">
+                <h3 id="tq-scene-title">從旁邊拿取一支溫度計</h3>
+                <svg id="tq-scene" viewBox="0 0 1000 1000" role="group" aria-labelledby="tq-scene-title tq-scene-description">
+                  <desc id="tq-scene-description">同一杯水旁的托盤放有 A、B 兩支溫度計。拖曳任一支到杯口夾具量測，量完拖回托盤，再換另一支。</desc>
+                  <defs>
+                    <linearGradient id="tq-glass"><stop stop-color="#526d78" stop-opacity=".7"/><stop offset=".08" stop-color="#e9f4f5"/><stop offset=".19" stop-color="#fff"/><stop offset=".26" stop-color="#b4cbd0" stop-opacity=".8"/><stop offset=".45" stop-color="#eef7f0" stop-opacity=".9"/><stop offset=".75" stop-color="#f8fff7" stop-opacity=".8"/><stop offset=".86" stop-color="#fff"/><stop offset="1" stop-color="#637f8b" stop-opacity=".85"/></linearGradient>
+                    <linearGradient id="tq-bore"><stop stop-color="#627e87"/><stop offset=".3" stop-color="#fff"/><stop offset=".7" stop-color="#ecf8f6"/><stop offset="1" stop-color="#78979c"/></linearGradient>
+                    <linearGradient id="tq-red"><stop stop-color="#9d0720"/><stop offset=".23" stop-color="#e51b35"/><stop offset=".48" stop-color="#ff7b6d"/><stop offset=".73" stop-color="#f62b3b"/><stop offset="1" stop-color="#a90a29"/></linearGradient>
+                    <radialGradient id="tq-bulb"><stop offset="0" stop-color="#ff7b67"/><stop offset=".65" stop-color="#f02736"/><stop offset="1" stop-color="#a50929"/></radialGradient>
+                    <filter id="tq-shadow" x="-100%" y="-10%" width="300%" height="130%"><feDropShadow dy="3" stdDeviation="3" flood-color="#173d30" flood-opacity=".22"/></filter>
+                    <clipPath id="tq-front-clip"><rect x="349" y="225" width="72" height="55"/><rect x="437" y="225" width="48" height="55"/></clipPath>
+                  </defs>
+                  <image id="tq-scene-art" href="assets/thermometer-quiz-bench.webp" width="1000" height="1000"/>
+                  <g id="tq-drop-target" tabindex="0" role="button" aria-label="杯口夾具：放入選取的溫度計"><rect x="377" y="133" width="106" height="635" rx="45" fill="#f6fff6" fill-opacity=".18" stroke="#247c60" stroke-width="3" stroke-dasharray="10 8"/><path d="M430 145V708" fill="none" stroke="#f6fff3" stroke-width="2" opacity=".8"/></g>
+                  <g id="tq-drag-guide" pointer-events="none"><path d="M771 490Q735 273 495 235" fill="none" stroke="#fffcf1" stroke-width="10"/><path d="M771 490Q735 273 495 235" fill="none" stroke="#247c60" stroke-width="4" stroke-dasharray="10 9"/><path d="m512 223-20 11 15 18" fill="none" stroke="#247c60" stroke-width="4" stroke-linecap="round"/><rect x="576" y="261" width="354" height="53" rx="22" fill="#fffef6" fill-opacity=".94"/><text x="753" y="296" text-anchor="middle">拖到這裡，放入量測</text></g>
+                  <g id="tq-tray-target" tabindex="0" role="button" aria-label="溫度計放置區：把目前的溫度計放回"><rect x="609" y="479" width="385" height="426" rx="30" fill="transparent"/><rect x="736" y="852" width="196" height="36" rx="8" fill="#e2b87d" stroke="#947049"/><text x="834" y="878" text-anchor="middle">溫度計放置區</text></g>
+                  <g class="tq-slot-label" data-slot-label="A" transform="translate(685,805)"><rect x="-29" y="0" width="58" height="32" rx="7"/><text y="25" text-anchor="middle">A</text></g>
+                  <g class="tq-slot-label" data-slot-label="B" transform="translate(850,805)"><rect x="-29" y="0" width="58" height="32" rx="7"/><text y="25" text-anchor="middle">B</text></g>
+                  <g id="tq-instrument-A" class="tq-instrument" data-instrument="A" tabindex="0" role="button" aria-label="溫度計 A，拖到杯口量測；也可點選或按 Enter 後選擇夾具"></g>
+                  <g id="tq-instrument-B" class="tq-instrument" data-instrument="B" tabindex="0" role="button" aria-label="溫度計 B，拖到杯口量測；也可點選或按 Enter 後選擇夾具"></g>
+                  <image id="tq-clamp-front" href="assets/thermometer-quiz-bench.webp" width="1000" height="1000" clip-path="url(#tq-front-clip)" pointer-events="none" hidden/>
+                  <g id="tq-sight" hidden><path id="tq-sight-ray" fill="none" stroke="#187b60" stroke-width="2.5" stroke-dasharray="7 6"/><g id="tq-eye" tabindex="0" role="slider" aria-label="觀看高度" aria-orientation="vertical" aria-valuemin="-100" aria-valuemax="100" aria-valuenow="0" transform="translate(588,345)"><rect x="-40" y="-34" width="80" height="68" rx="28" fill="#fffefa" stroke="#347a62" stroke-width="2"/><path d="M-28 0Q0-31 28 0Q0 31-28 0" fill="#ecf4ec" stroke="#48665b" stroke-width="2"/><circle r="14" fill="#709487"/><circle r="8" fill="#213d35"/><circle cx="-5" cy="-5" r="4" fill="#fff"/></g></g>
+                </svg>
+                <p class="tq-scene-tip" id="tq-scene-tip">量完拖回原位，再拿另一支。</p>
+              </div>
+              <div class="tq-console">
+                <h3 id="tq-lens-title">刻度放大</h3>
+                <div class="tq-lens-wrap">
+                  <div id="tq-lens-empty" class="tq-lens-empty"><svg viewBox="0 0 90 90" aria-hidden="true"><circle cx="37" cy="37" r="26"/><path d="m56 56 23 23M37 21v23m0 0a7 7 0 1 0 .1 0"/></svg><p>放入溫度計後，顯示這支的刻度</p></div>
+                  <svg id="tq-lens" viewBox="0 0 400 280" role="img" aria-label="目前溫度計的刻度放大" hidden><defs><linearGradient id="tq-lens-glass"><stop stop-color="#78949d"/><stop offset=".04" stop-color="#d9ebec"/><stop offset=".1" stop-color="#fff"/><stop offset=".16" stop-color="#abc4c9"/><stop offset=".26" stop-color="#f0f7f1"/><stop offset=".72" stop-color="#e5f0e8"/><stop offset=".88" stop-color="#fff"/><stop offset=".96" stop-color="#bdd2d4"/><stop offset="1" stop-color="#66828b"/></linearGradient></defs><g id="tq-lens-content"></g></svg>
+                </div>
+                <div class="tq-observation-controls"><p id="tq-observation-note" class="tq-observation-note" role="status">目前尚未放入溫度計</p><button id="tq-level" type="button" hidden>回到平視</button></div>
+                <form id="tq-answer-form" novalidate>
+                  <label for="tq-reading" id="tq-answer-label">填寫這支的觀察結果</label>
+                  <div class="tq-answer-field"><input id="tq-reading" type="number" inputmode="decimal" step="0.1" min="0" max="250" placeholder="輸入讀值" disabled aria-describedby="tq-save-note"><select id="tq-unit" aria-label="判斷目前溫度計的單位" disabled><option value="">選擇單位</option><option value="C">攝氏 °C</option><option value="F">華氏 °F</option></select></div>
+                </form>
+                <div class="tq-answer-meta"><p id="tq-save-note">每支的作答會各自保留。</p><button type="button" id="tq-hint-toggle" aria-expanded="false" aria-controls="tq-hint">查看換算提示 <span aria-hidden="true">›</span></button></div>
+                <div id="tq-hint" class="tq-hint" hidden><p>同一杯水的兩種讀值，可用下式對照：</p><div role="math" aria-label="華氏等於攝氏乘以九除以五，再加三十二">°F ＝ °C × <span class="dual-fraction"><span>9</span><span>5</span></span> ＋ 32</div><p>先找最小刻度，再估讀液面位置。</p></div>
+                <div class="tq-records" aria-label="兩支溫度計的作答紀錄"><div class="tq-record tq-record-a"><b>A</b><span id="tq-record-A">尚未完成</span></div><div class="tq-record tq-record-b"><b>B</b><span id="tq-record-B">尚未完成</span></div></div>
+                <button class="tq-check" id="tq-check" type="button"><span aria-hidden="true">✓</span> 核對兩支結果</button>
+                <div class="tq-bottom-actions"><p class="tq-check-tip">完成兩支量測後，再一起檢查。</p><button id="tq-reset" class="tq-reset" type="button"><span aria-hidden="true">↻</span> 重新挑戰</button></div>
+                <div id="tq-result" class="tq-result" role="status" hidden></div>
               </div>
             </div>
-            <div class="quiz-actions"><button class="action" id="quiz-check" type="button">檢查測量紀錄</button><button class="secondary" id="quiz-reset" type="button">重新作答</button></div>
-            <div class="quiz-result" id="quiz-result" aria-live="polite" hidden></div>
+            <p id="tq-message" class="tq-message" role="status">A、B 可自由選擇先後順序。杯中一次放一支。</p>
+            <p class="tq-input-help">可拖曳器材，也可先點選溫度計、再點虛線夾具；量完點選杯中器材、再點托盤放回。鍵盤 Enter 選取，Escape 取消。</p>
           </div>
         </section>
         <a class="end-link" href="../../index.html">回到溫度與熱單元總覽</a>
@@ -329,7 +358,8 @@
     </div>
   </main>
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
-  <script src="assets/temperature-lesson.js?v=merged-reading-1" defer></script>
+  <script src="assets/temperature-lesson.js?v=quiz-navigation-2" defer></script>
+  <script type="module" src="assets/thermometer-quiz.js?v=quiz-1"></script>
   <script type="module" src="assets/water-lab.js?v=engraved-glass-1"></script>
   <script type="module" src="assets/parallax-reading.js?v=observation-only-4"></script>
   <script src="assets/dual-scale.js?v=dual-scale-4" defer></script>

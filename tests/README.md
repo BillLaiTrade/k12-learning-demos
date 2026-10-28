@@ -186,3 +186,11 @@ node --test --test-concurrency=1 tests/unit-4.2-ppm.test.cjs tests/unit-4.2-conc
 ppm 深色糖碟修訂：增加主場景兩個碟面的實際像素亮度，以及放大畫面深底／白糖的亮度對比檢查；既有體積、尺度與操作檢查一併重跑。
 
 ppm 器皿與糖堆質感修訂：新增封閉削角晶體、錯層位移與安全自然旋轉檢查，非重疊界限包含位置微擾；加入新碟面素材失敗情境。本輪 ppm 11 項全部通過。
+
+## 5.1 單元小測：拿取、量測與溫標判斷
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.1-thermometer-quiz.test.cjs tests/unit-5.1.test.cjs tests/unit-5.1-dual-scale.test.cjs tests/unit-5.1-water-lab.test.cjs
+```
+
+全套目前 39 項（含 runner 外層），新小測涵蓋純模型校準與估讀界限、真實滑鼠與手機觸控拿取／放入／放回、B 可先量、同杯單支限制、取消與無效放置、鍵盤、等待穩定／斜視／單位／讀值回饋、紀錄保留、新挑戰中斷動畫、真實頭像、公式上下分數、7 種視窗與資源載入。`THERMOMETER_QUIZ_URL` 可指定待檢查的公開頁面；未設定時使用自動啟停的本機伺服器。整頁測試已撤下舊排序及原理單選題，保留教學區回歸與導覽。核可圖、實作截圖與對照見 `docs/reviews/unit-5.1-quiz/`。

@@ -31,7 +31,6 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
   const base = `http://127.0.0.1:${port}`;
   await page.goto(process.env.TEMPERATURE_LESSON_URL || `${base}/units/5/parts/5.1/index.html`);
   const text = selector => page.locator(selector).textContent();
-  const order = () => page.locator('#measure-sequence li').evaluateAll(items => items.map(item => item.dataset.step));
   await t.test('loads the complete lesson, images, and navigation', async () => {
     assert.equal(await page.locator('.lesson-card').count(), 4);
     assert.equal(await page.locator('.quiz').count(), 1);
@@ -159,70 +158,11 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
     } finally { await context.close(); }
   });
 
-  await t.test('incomplete and incorrect measurement records receive specific feedback', async () => {
-    await page.locator('#quiz-check').click();
-    assert.match(await text('#quiz-result'), /尚未完整/);
-    assert.match(await text('#principle-feedback'), /請選擇/);
-    assert.match(await text('#reading-feedback'), /請輸入/);
-    await page.locator('input[name=principle][value=water]').check();
-    await page.locator('#quiz-reading').fill('10');
-    await page.locator('#quiz-check').click();
-    assert.match(await text('#quiz-result'), /0 \/ 3/);
-    assert.match(await text('#principle-feedback'), /杯水沒有流進/);
-    assert.match(await text('#reading-feedback'), /42.5°C/);
-    assert.equal(await page.locator('#quiz-thermometer path').count(), 1);
-    await page.locator('#quiz-reading').fill('101');
-    assert.equal(await page.locator('#quiz-result').isVisible(), false);
-    assert.equal(await page.locator('#quiz-thermometer path').count(), 0);
-    await page.locator('#quiz-check').click();
-    assert.match(await text('#reading-feedback'), /0 到 100/);
-  });
-
-  await t.test('requires a correct procedure and principle as well as a real scale reading', async () => {
-    for (const [index, step] of ['immerse', 'wait', 'level', 'read'].entries()) {
-      while ((await order()).indexOf(step) > index) {
-        await page.locator(`[data-step="${step}"] [data-move=up]`).click();
-      }
-    }
-    assert.deepEqual(await order(), ['immerse', 'wait', 'level', 'read']);
-    await page.locator('input[name=principle][value=volume]').check();
-    await page.locator('#quiz-reading').fill('42.5');
-    await page.locator('#quiz-check').click();
-    assert.match(await text('#quiz-result'), /三項紀錄都完成/);
-    assert.match(await text('#sequence-feedback'), /程序正確/);
-    for (const [value, accepted] of [['42.2', true], ['42.8', true], ['42.1', false], ['42.9', false]]) {
-      await page.locator('#quiz-reading').fill(value);
-      await page.locator('#quiz-check').click();
-      assert.equal((await text('#reading-feedback')).startsWith('估讀合理'), accepted);
-    }
-  });
-
-  await t.test('reset restores every quiz task without changing teaching controls', async () => {
-    await page.locator('button[data-view=low]').click();
-    await page.locator('#quiz-reset').click();
-    assert.deepEqual(await order(), ['read', 'immerse', 'level', 'wait']);
-    assert.equal(await page.locator('input[name=principle]:checked').count(), 0);
-    assert.equal(await page.locator('#quiz-reading').inputValue(), '');
-    assert.equal(await page.locator('#quiz-result').isVisible(), false);
-    assert.equal(await page.locator('#quiz-thermometer path').count(), 0);
-    assert.equal(await text('#sequence-feedback'), '');
-    assert.equal(await text('#principle-feedback'), '');
-    assert.equal(await text('#reading-feedback'), '');
-    assert.equal(await page.locator('#parallax-eye').getAttribute('aria-valuenow'), '-100');
-  });
-
-  await t.test('supports keyboard sorting, controls and reduced motion', async () => {
-    await page.locator('[data-step=immerse] [data-move=up]').focus();
-    await page.keyboard.press('Enter');
-    assert.equal((await order())[0], 'immerse');
-    assert.equal(await page.locator('[data-step=immerse] [data-move=down]').evaluate(node => node === document.activeElement), true);
-    await page.keyboard.press('Space');
-    assert.equal((await order())[1], 'immerse');
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.locator('button[data-view=level]').focus();
-    await page.keyboard.press('Enter');
-    assert.equal(await page.locator('#parallax-eye').getAttribute('aria-valuenow'),'0');
-
+  await t.test('assessment uses physical instruments and the real shared character portraits', async () => {
+    assert.equal(await page.locator('#tq-instrument-A, #tq-instrument-B').count(),2);
+    assert.equal(await page.locator('#tq-reading').isDisabled(),true);
+    for(const speaker of await page.locator('#unit-quiz .speaker').all()) assert.equal(await speaker.evaluate(n=>getComputedStyle(n,'::before').backgroundImage.includes('dialogue-character-avatars.png')),true);
+    assert.equal(await page.locator('#measure-sequence').count(),0);
   });
 
   await t.test('fits desktop and narrow windows and links back to the unit', async () => {
