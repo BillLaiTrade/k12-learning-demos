@@ -1,26 +1,49 @@
 import * as THREE from 'three';
 import {RoomEnvironment} from '../../../../../parts/3.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
-import {DENSITY_MG_MM3,GRAIN_VOLUME_MM3,WORLD_WIDTH_MM,WATER,SAMPLES,sampleState,grainPositions,grainPose,scaleBarPixels,magnification} from './ppm-scale-state.js?v=realism-3';
+import {DENSITY_MG_MM3,GRAIN_VOLUME_MM3,WORLD_WIDTH_MM,LENS_FIELD_MM,WATER,SAMPLES,sampleState,grainPositions,grainPose,scaleBarPixels,magnification} from './ppm-scale-state.js?v=magnifier-4';
 import {sugarCrystalTriangles} from './ppm-crystal.js?v=realism-3';
 const root=document.getElementById('ppm-lab'),stage=document.getElementById('ppm-scale-scene'),canvas=document.getElementById('ppm-scale-canvas');
 const lens=document.getElementById('ppm-lens'),lensCanvas=document.getElementById('ppm-lens-canvas'),live=document.getElementById('ppm-status');
 const selects=[...document.querySelectorAll('[data-ppm-sample]')];
-let key='milligram',opened=false,view=null,disposed=false,cleanupFailed=()=>{};
+let key='milligram',opened=false,view=null,disposed=false,cleanupFailed=()=>{},drag=null,pendingFrame=0;
+const handle=document.getElementById('ppm-lens-handle');
+const position={x:.79,y:.33},anchors={};
 const formatted=n=>n.toLocaleString('en-US',{maximumFractionDigits:4});
+function place(x,y){
+  const w=stage.clientWidth,h=stage.clientHeight,d=lens.offsetWidth||w*.24;
+  position.x=Math.max(d*.66+4,Math.min(w-d/2-4,x*w))/w;
+  position.y=Math.max(d/2+4,Math.min(h-d*.60-2,y*h))/h;
+  lens.style.left=`${position.x*100}%`;lens.style.top=`${position.y*100}%`;
+  root.dataset.lensX=String(position.x);root.dataset.lensY=String(position.y);
+}
 function update(){
   const s=sampleState(key);root.dataset.sample=key;root.dataset.ppm=String(s.ppm);root.dataset.totalMg=String(s.totalMg);root.dataset.solventMg=String(s.solventMg);
   root.dataset.solidVolumeMm3=String(s.solidVolumeMm3);root.dataset.grainCount=String(s.grainCount);root.dataset.density=String(DENSITY_MG_MM3);
-  root.dataset.lensOpen=String(opened);lens.hidden=!opened;
-  for(const b of selects){b.setAttribute('aria-pressed',String(b.dataset.ppmSample===key));if(b.classList.contains('ppm-dish'))b.setAttribute('aria-expanded',String(opened&&b.dataset.ppmSample===key));}
-  const fields={mass:s.label,numerator:`${formatted(s.massMg)} 毫克`,ppm:`${formatted(s.ppm)} ppm`,percent:`＝ ${formatted(s.percent)}%`,'lens-title':`${s.label}糖・放大觀察`};
+  root.dataset.lensOpen=String(opened);lens.hidden=root.dataset.ready!=='true';lens.classList.toggle('is-observing',opened);
+  for(const b of selects){b.setAttribute('aria-pressed',String(b.dataset.ppmSample===key));}
+  const fields={mass:s.label,numerator:`${formatted(s.massMg)} 毫克`,ppm:`${formatted(s.ppm)} ppm`,percent:`＝ ${formatted(s.percent)}%`,'lens-title':opened?`${s.label}糖`:'放大鏡'};
   for(const node of document.querySelectorAll('[data-ppm]'))if(node.dataset.ppm in fields)node.textContent=fields[node.dataset.ppm];
-  view?.draw(key,opened);
+  place(position.x,position.y);view?.draw(key,opened,position);
 }
-function choose(next,zoom=true){if(!SAMPLES[next])return;key=next;opened=zoom&&root.dataset.ready==='true';update();live.textContent=`觀察${SAMPLES[key].label}糖。每1公斤溶液含此糖量，濃度為${formatted(sampleState(key).ppm)} ppm。${zoom?'已展開放大觀察。':''}`;}
+function choose(next){if(!SAMPLES[next])return;key=next;opened=root.dataset.ready==='true';if(opened&&anchors[key])place(anchors[key].x,anchors[key].y);update();live.textContent=`放大鏡移到${SAMPLES[key].label}糖。每1公斤溶液含此糖量，濃度為${formatted(sampleState(key).ppm)} ppm。`;}
 selects.forEach(b=>b.addEventListener('click',()=>choose(b.dataset.ppmSample)));
-document.getElementById('ppm-close-lens').addEventListener('click',()=>{opened=false;update();document.getElementById(key==='gram'?'ppm-gram':'ppm-milligram').focus();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&opened){opened=false;update();}});
-document.getElementById('mix-reset').addEventListener('click',()=>{key='milligram';opened=false;update();});
+function park(){opened=false;place(.79,.33);update();}
+function inspectPosition(){
+  const nearest=Object.keys(anchors).sort((a,b)=>Math.hypot((position.x-anchors[a].x)*stage.clientWidth,(position.y-anchors[a].y)*stage.clientHeight)-Math.hypot((position.x-anchors[b].x)*stage.clientWidth,(position.y-anchors[b].y)*stage.clientHeight))[0];
+  if(!nearest)return;
+  const distance=Math.hypot((position.x-anchors[nearest].x)*stage.clientWidth,(position.y-anchors[nearest].y)*stage.clientHeight);
+  opened=distance<stage.clientWidth*28/WORLD_WIDTH_MM;if(opened)key=nearest;
+  update();
+}
+lens.addEventListener('pointerdown',e=>{if(e.button!==0||root.dataset.ready!=='true')return;e.preventDefault();handle.focus({preventScroll:true});drag={id:e.pointerId,x:e.clientX,y:e.clientY,startX:position.x,startY:position.y};lens.setPointerCapture(e.pointerId);lens.classList.add('is-dragging');});
+lens.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;place(drag.startX+(e.clientX-drag.x)/stage.clientWidth,drag.startY+(e.clientY-drag.y)/stage.clientHeight);if(!pendingFrame)pendingFrame=requestAnimationFrame(()=>{pendingFrame=0;inspectPosition();});});
+function endDrag(e){if(!drag||e.pointerId!==drag.id)return;drag=null;lens.classList.remove('is-dragging');if(pendingFrame){cancelAnimationFrame(pendingFrame);pendingFrame=0;}inspectPosition();if(opened)choose(key);}
+lens.addEventListener('pointerup',endDrag);
+lens.addEventListener('lostpointercapture',endDrag);
+lens.addEventListener('pointercancel',()=>{drag=null;lens.classList.remove('is-dragging');if(pendingFrame){cancelAnimationFrame(pendingFrame);pendingFrame=0;}park();});
+handle.addEventListener('keydown',e=>{const moves={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};if(e.key==='Home'){e.preventDefault();park();}else if(e.key in moves){e.preventDefault();const [x,y]=moves[e.key],step=e.shiftKey?1:12;place(position.x+x*step/stage.clientWidth,position.y+y*step/stage.clientHeight);inspectPosition();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){drag=null;if(pendingFrame){cancelAnimationFrame(pendingFrame);pendingFrame=0;}lens.classList.remove('is-dragging');park();}});
+document.getElementById('mix-reset').addEventListener('click',()=>{key='milligram';drag=null;if(pendingFrame){cancelAnimationFrame(pendingFrame);pendingFrame=0;}lens.classList.remove('is-dragging');park();});
 update();
 
 function signedVolume(geo){const p=geo.attributes.position;let sum=0;const a=new THREE.Vector3(),b=new THREE.Vector3(),c=new THREE.Vector3();for(let i=0;i<p.count;i+=3){a.fromBufferAttribute(p,i);b.fromBufferAttribute(p,i+1);c.fromBufferAttribute(p,i+2);sum+=a.dot(b.cross(c))/6;}return Math.abs(sum);}
@@ -68,21 +91,22 @@ async function initialize(){
   const anchor=(x,y,z)=>{const a=new THREE.Vector3(x,y,z).project(camera);return{x:(a.x+1)*50,y:(1-a.y)*50};};
   for(const [id,s] of Object.entries(SAMPLES)){const b=document.getElementById(id==='gram'?'ppm-gram':'ppm-milligram'),pos=anchor(s.x,1.8,0);b.style.left=`${pos.x}%`;b.style.top=`${pos.y-7}%`;}
   const waterAnchor=anchor(-96,0,0);document.getElementById('ppm-water-label').style.left=`${waterAnchor.x}%`;document.getElementById('ppm-water-label').style.top=`${waterAnchor.y+6}%`;
+  for(const [id,s] of Object.entries(SAMPLES)){const focusY=1.8+(models[id].height-1.8)/2,pos=anchor(s.x,focusY,0);anchors[id]={x:pos.x/100,y:pos.y/100};}
   root.dataset.waterVolumeMm3=String(Math.PI*WATER.radiusMm**2*WATER.heightMm);root.dataset.grainGeometryVolume=String(signedVolume(grainGeo));root.dataset.waterDiameterMm=String(WATER.radiusMm*2);
-  let previous=null;
-  function draw(next,isOpen){
+  let previous=null,lastWidth=0;
+  function draw(next,isOpen,position){
     if(disposed)return;
-    const width=stage.clientWidth;renderer.setSize(width,width*2/3,false);renderer.render(scene,camera);
+    const width=stage.clientWidth;if(lastWidth!==width){renderer.setSize(width,width*2/3,false);renderer.render(scene,camera);lastWidth=width;}
     if(!isOpen)return;
     if(previous!==next){if(previous)macro.remove(models[previous].macro);macro.add(models[next].macro);previous=next;}
-    const s=SAMPLES[next],size=lensCanvas.parentElement.clientWidth,field=s.fieldMm,focusY=1.8+(models[next].height-1.8)/2;
-    macroCamera.left=macroCamera.bottom=-field/2;macroCamera.right=macroCamera.top=field/2;macroCamera.updateProjectionMatrix();macroCamera.position.set(0,focusY+190,700);macroCamera.lookAt(0,focusY,0);macroCamera.updateMatrixWorld();zoomRenderer.setSize(size,size,false);zoomRenderer.render(macro,macroCamera);
-    const barMm=next==='gram'?10:1,bar=scaleBarPixels(barMm,field,size);document.getElementById('ppm-scale-bar').style.width=`${bar}px`;document.getElementById('ppm-scale-bar-label').textContent=`${barMm} mm`;
+    const size=lensCanvas.parentElement.clientWidth,field=LENS_FIELD_MM,focusY=1.8+(models[next].height-1.8)/2;
+    macroCamera.left=macroCamera.bottom=-field/2;macroCamera.right=macroCamera.top=field/2;macroCamera.updateProjectionMatrix();const dx=(position.x-anchors[next].x)*WORLD_WIDTH_MM,dy=-(position.y-anchors[next].y)*WORLD_WIDTH_MM*2/3,up=new THREE.Vector3(0,1,0).applyQuaternion(camera.quaternion),target=new THREE.Vector3(dx,focusY,0).addScaledVector(up,dy);macroCamera.position.copy(target).add(new THREE.Vector3(0,190,700));macroCamera.lookAt(target);macroCamera.updateMatrixWorld();root.dataset.inspectionOffsetX=String(dx);root.dataset.inspectionOffsetY=String(dy);zoomRenderer.setSize(size,size,false);zoomRenderer.render(macro,macroCamera);
+    const barMm=1,bar=scaleBarPixels(barMm,field,size);document.getElementById('ppm-scale-bar').style.width=`${bar}px`;document.getElementById('ppm-scale-bar-label').textContent=`${barMm} mm`;
     const zoom=magnification(size,field,width);document.getElementById('ppm-zoom-factor').textContent=`畫面放大 ${formatted(Math.round(zoom*10)/10)} 倍`;
     root.dataset.lensFieldMm=String(field);root.dataset.scaleBarMm=String(barMm);root.dataset.scaleBarPixels=String(bar);root.dataset.zoom=String(zoom);
   }
   view={draw};const observer=new ResizeObserver(()=>update());observer.observe(stage);root.dataset.ready='true';selects.forEach(b=>b.disabled=false);update();
-  const lose=event=>{event.preventDefault();root.dataset.ready='error';view=null;opened=false;update();live.classList.add('error');live.textContent='比例畫面暫時無法顯示，請重新整理頁面。下方公式與數值仍可對照。';};canvas.addEventListener('webglcontextlost',lose);
+  const lose=event=>{event.preventDefault();root.dataset.ready='error';view=null;opened=false;update();live.classList.add('error');live.textContent='比例畫面暫時無法顯示，請重新整理頁面。下方公式與數值仍可對照。';};canvas.addEventListener('webglcontextlost',lose);lensCanvas.addEventListener('webglcontextlost',lose);
   window.addEventListener('pagehide',event=>{if(event.persisted)return;disposed=true;observer.disconnect();const geos=new Set(),mats=new Set();for(const s of [scene,macro])s.traverse(o=>{if(o.geometry)geos.add(o.geometry);if(o.material)mats.add(o.material);});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());background.dispose();cupTexture.dispose();dishTexture.dispose();ceramicBump.dispose();shadowTexture.dispose();environment.dispose();macroEnvironment.dispose();renderer.dispose();zoomRenderer.dispose();});
 }
 initialize().catch(()=>{cleanupFailed();view=null;root.dataset.ready='error';live.classList.add('error');live.textContent='比例畫面無法載入，請重新整理頁面。下方公式與數值仍可對照。';selects.forEach(b=>b.disabled=false);});

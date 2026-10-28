@@ -150,7 +150,7 @@
   </style>
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=polish-6">
-  <link rel="stylesheet" href="assets/ppm-scale.css?v=dark-trays-2">
+  <link rel="stylesheet" href="assets/ppm-scale.css?v=magnifier-4">
 </head>
 <body>
   <header class="shell masthead">
@@ -310,10 +310,10 @@
 <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這麼一大杯水，旁邊的糖卻只有這一點點！</p></div>
 <div class="ppm-scale-scene" id="ppm-scale-scene" aria-label="同一比例的一公升水、一克糖與一毫克糖"><canvas id="ppm-scale-canvas" aria-hidden="true"></canvas><span class="ppm-scene-tag">同一比例觀察</span>
 <span class="ppm-water-label" id="ppm-water-label">水 <b>1 公升</b></span>
-<button type="button" id="ppm-gram" class="ppm-dish" data-ppm-sample="gram" aria-label="放大觀察1克糖" aria-controls="ppm-lens" aria-expanded="false" disabled><span>糖 <b>1 克</b><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5"/><path d="m12 12 5 5"/></svg></span></button>
-<button type="button" id="ppm-milligram" class="ppm-dish" data-ppm-sample="milligram" aria-label="放大觀察1毫克糖" aria-controls="ppm-lens" aria-expanded="false" disabled><span>糖 <b>1 毫克</b><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5"/><path d="m12 12 5 5"/></svg></span></button>
-<div class="ppm-lens" id="ppm-lens" role="group" aria-label="糖的局部放大" hidden><button type="button" id="ppm-close-lens" aria-label="收起放大觀察">×</button><div class="ppm-lens-glass"><canvas id="ppm-lens-canvas" aria-hidden="true"></canvas><div class="ppm-scale-bar" id="ppm-scale-bar"><span id="ppm-scale-bar-label">1 mm</span></div></div><strong data-ppm="lens-title">1 毫克糖・放大觀察</strong><span id="ppm-zoom-factor"></span></div>
-<span class="ppm-scene-caption">點糖的秤量皿，放大看看</span></div>
+<button type="button" id="ppm-gram" class="ppm-dish" data-ppm-sample="gram" aria-label="將放大鏡移到1克糖" aria-controls="ppm-lens" disabled><span>糖 <b>1 克</b><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5"/><path d="m12 12 5 5"/></svg></span></button>
+<button type="button" id="ppm-milligram" class="ppm-dish" data-ppm-sample="milligram" aria-label="將放大鏡移到1毫克糖" aria-controls="ppm-lens" disabled><span>糖 <b>1 毫克</b><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5"/><path d="m12 12 5 5"/></svg></span></button>
+<div class="ppm-lens" id="ppm-lens" role="group" aria-label="可拖曳的放大鏡" hidden><div class="ppm-lens-glass"><canvas id="ppm-lens-canvas" aria-hidden="true"></canvas><div class="ppm-scale-bar" id="ppm-scale-bar"><span id="ppm-scale-bar-label">1 mm</span></div></div><button type="button" id="ppm-lens-handle" class="ppm-lens-handle" aria-label="拖動放大鏡；方向鍵移動，Home鍵歸位" title="拖動放大鏡"></button><span class="ppm-lens-name" data-ppm="lens-title">放大鏡</span><span id="ppm-zoom-factor"></span></div>
+<span class="ppm-scene-caption">拖動放大鏡，觀察糖粒</span></div>
 <p class="ppm-reference-note">糖粒依質量與密度計算體積，形狀為模型。1 公升水作大小參照，濃度以溶液總質量 1 公斤計算。</p>
 <div class="ppm-definition">每 <b>1 公斤溶液</b>含有 <b>1 毫克溶質</b>，就是 <b>1 ppm</b>。</div>
 <div class="ppm-formal"><p class="formula-caption">計算公式</p><div class="ppm-equation" role="math" aria-label="ppm等於溶質質量除以溶液總質量，再乘以一百萬"><span>ppm ＝</span><span class="fraction"><span class="num">溶質質量</span><span class="den">溶液總質量</span></span><span>× 1,000,000</span></div><p class="ppm-unit-note">分子與分母使用相同的質量單位。</p></div>
@@ -364,6 +364,6 @@
   <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
-  <script type="module" src="assets/ppm-scale.js?v=realism-3"></script>
+  <script type="module" src="assets/ppm-scale.js?v=magnifier-4"></script>
 </body>
 </html>
