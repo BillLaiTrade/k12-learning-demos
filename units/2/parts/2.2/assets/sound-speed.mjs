@@ -2,8 +2,8 @@ import {
   DISTANCE, START_X, END_X, ZOOM, PULSE_DURATION,
   appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=fork-contact-10';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=fork-contact-10';
+} from './sound-speed-model.mjs?v=individual-11';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=individual-11';
 
 export function initSoundSpeed(root) {
 const $ = selector => root.querySelector(selector);
@@ -22,7 +22,7 @@ const svg = (tag, attributes, parent) => {
   return node;
 };
 
-const state = { mode: 'material', temperature: 30, phase: 'idle', time: 0 };
+const state = { mode: 'material', temperature: 30, phase: 'idle', time: 0, scope: 'together' };
 let models = [], groups = [], frame = 0, runStartWall = null, runStartTime = 0;
 let noticed = new Set(), context = null, audioFailed = false;
 const tones = new Set();
@@ -72,18 +72,18 @@ function buildModel(group) {
   row.dataset.speed = String(group.speed);
   row.innerHTML = `
     <header class="medium-header">
-      <div class="medium-heading"><h3>${group.name}</h3><p>${state.mode === 'temperature' ? group.description : material.phase}</p></div>
+      <div class="medium-heading"><h3>${group.name}</h3><p>${state.mode === 'temperature' ? group.description : material.phase}</p><p class="individual-time" hidden><span></span><output></output></p></div>
     </header>
     <div class="row-body">
       <div class="field">
         <p class="propagation-readout"><span>振動已傳到</span><output aria-live="off" aria-label="${group.name}振動目前傳到的位置">0 公尺</output></p>
         <svg viewBox="0 0 456 146" role="img" aria-label="${group.name}的內部放大模型，${group.kind === 'water' ? '水槽中的水分子' : group.kind === 'steel' ? '金屬剖面中的原子' : '透明空氣中的分子'}在原位附近沿水平方向振動。"></svg>
-        <button class="source-hit" type="button" aria-label="敲擊${group.name}組音叉，重新同時啟動所有組別"></button>
+        <button class="source-hit" type="button" aria-label="單獨敲擊${group.name}組音叉"></button>
       </div>
       <div class="end-observation"><p class="zoom-title sr-only">末端相鄰粒子</p><svg class="zoom" viewBox="0 0 150 120" role="img" aria-label="${group.name}末端三個相鄰粒子依序受振，最右邊為終點"></svg><p class="end-state">終點尚未受振</p><div class="arrival-readout"><span>到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的實際經過時間">—</output></div></div>
     </div>`;
   $('#models').append(row);
-  row.querySelector('.source-hit').addEventListener('click', startFresh);
+  row.querySelector('.source-hit').addEventListener('click', () => startSingle(group.id));
   const field = row.querySelector('.field svg'), fill = addMaterials(field, `${group.id}-field`);
   const scene = mediumScene(field, group.kind, `${group.id}-scene`);
   svg('path', { class: 'end-connection', d: 'M447 41V101M447 71H456', fill: 'none', stroke: '#94aaa0', 'stroke-width': 1.2 }, field);
@@ -132,7 +132,8 @@ function buildModel(group) {
   }) : [];
   text(svg('text', { x:112, y:96, 'text-anchor':'middle', fill:'#526f5c', 'font-size':12 }, zoom), '終點');
   return {
-    ...group, row, points, links, source, endPoints, zoomLinks, zoom, scene, front, reachedTrack,
+    ...group, startedAt: null, row, points, links, source, endPoints, zoomLinks, zoom, scene, front, reachedTrack,
+    timeWrap: row.querySelector('.individual-time'), timeCaption: row.querySelector('.individual-time span'), timeOutput: row.querySelector('.individual-time output'),
     distanceOutput: row.querySelector('.propagation-readout output'),
     arrivalCaption: row.querySelector('.arrival-readout span'), arrivalOutput: row.querySelector('.arrival-readout output'),
     endState: row.querySelector('.end-state')
@@ -141,6 +142,9 @@ function buildModel(group) {
 
 function caption() {
   if (state.phase === 'idle') return '敲擊後音叉來回振動，帶動附近粒子，再將擾動逐段傳開。';
+  if (state.scope === 'individual') return state.phase === 'complete'
+    ? '已敲擊的組別都已回復靜止，可再點音叉，或同時敲擊比較。'
+    : '個別敲擊：各組從自己的敲擊時刻計時；可再點其他音叉。';
   const arrived = groups.filter(group => state.time >= arrivalTime(group.speed));
   if (!arrived.length) return state.mode === 'material' ? '粒子在原位附近往返，擾動由相鄰粒子逐段傳遞。' : '兩組一起開始，觀察哪一組先傳到最右端。';
   if (arrived.length === groups.length) return state.phase === 'complete' ? '本輪比較完成，粒子都已回復原位。' : '各組都已傳到最右端，繼續觀察粒子回復原位。';
@@ -149,7 +153,7 @@ function caption() {
 }
 
 function drawResult() {
-  const finished = groups.length > 0 && groups.every(group => state.time >= arrivalTime(group.speed));
+  const finished = state.scope === 'together' && groups.length > 0 && groups.every(group => state.time >= arrivalTime(group.speed));
   $('#result').hidden = !finished;
   if (!finished) return;
   const first = winners(groups);
@@ -178,31 +182,39 @@ function drawResult() {
 
 function paint(audible = false, overrideCaption = '') {
   panel.dataset.mode = state.mode; panel.dataset.phase = state.phase;
+  panel.dataset.scope = state.scope;
   panel.dataset.time = state.time.toFixed(8); panel.dataset.playbackRate = '1';
   let newArrival = false;
   for (const model of models) {
-    const arrived = state.time >= arrivalTime(model.speed);
-    const distance = reachedDistance(model.speed, state.time);
+    const elapsed = model.startedAt === null ? 0 : Math.min(runEnd([model]), Math.max(0, state.time - model.startedAt));
+    const phase = model.startedAt === null ? 'idle' : elapsed >= runEnd([model]) ? 'complete' : state.phase;
+    const arrived = elapsed >= arrivalTime(model.speed);
+    const distance = reachedDistance(model.speed, elapsed);
+    model.row.dataset.time = elapsed.toFixed(8); model.row.dataset.phase = phase;
+    model.timeWrap.hidden = state.scope !== 'individual';
+    text(model.timeCaption, model.startedAt === null ? '尚未敲擊' : '敲擊後');
+    model.timeOutput.hidden = model.startedAt === null;
+    text(model.timeOutput, secondsText(elapsed));
     const frontX = START_X + distance / DISTANCE * (END_X - START_X);
     model.row.dataset.reachedDistance = distance.toFixed(4);
     attr(model.front, 'transform', `translate(${frontX.toFixed(4)} 0)`);
-    attr(model.front, 'visibility', state.time > 0 ? 'visible' : 'hidden');
+    attr(model.front, 'visibility', elapsed > 0 ? 'visible' : 'hidden');
     attr(model.reachedTrack, 'd', `M${START_X} 125H${frontX.toFixed(4)}`);
     text(model.distanceOutput, `${number.format(Math.floor(distance + 1e-8))} 公尺${arrived ? ' · 已到終點' : ''}`);
     for (const point of model.points) {
-      const next = sample(point, model.speed, state.time); point.position = next.x;
+      const next = sample(point, model.speed, elapsed); point.position = next.x;
       attr(point.node, 'transform', `translate(${next.x.toFixed(4)} ${point.y.toFixed(4)})`);
       attr(point.node, 'data-moving', next.moving);
       attr(point.node, 'data-reached', next.reached);
     }
-    model.scene.paint(state.time, model.speed);
+    model.scene.paint(elapsed, model.speed);
     for (const link of model.links) {
       attr(link.node, 'd', springPath(link.point.position, link.point.y, link.other.position, link.other.y));
     }
-    model.source.paint(state.time, state.phase);
-    const localTime = state.time - arrivalTime(model.speed);
+    model.source.paint(elapsed, phase);
+    const localTime = elapsed - arrivalTime(model.speed);
     for (const dot of model.endPoints) {
-      const next = sample(dot.point, model.speed, state.time);
+      const next = sample(dot.point, model.speed, elapsed);
       dot.position = dot.x + (next.x - dot.point.x) * ZOOM;
       attr(dot.node, 'transform', `translate(${dot.position.toFixed(4)} 60)`);
       attr(dot.node, 'data-moving', next.moving);
@@ -219,10 +231,13 @@ function paint(audible = false, overrideCaption = '') {
   }
   if (audible && newArrival) arrivalTone();
   text($('#model-time'), secondsText(state.time));
+  text($('#clock-caption'), state.scope === 'individual' ? '操作經過時間' : '經過時間');
   text($('#observation-caption'), overrideCaption || caption());
-  const actionLabel = { idle: '同時敲擊音叉', running: '暫停觀察', paused: '繼續觀察', complete: '再次敲擊音叉' }[state.phase];
+  const actionLabel = state.scope === 'individual' ? '同時敲擊音叉' : { idle: '同時敲擊音叉', running: '暫停觀察', paused: '繼續觀察', complete: '再次敲擊音叉' }[state.phase];
   text($('#primary-action'), actionLabel);
-  text($('#playback-state'), state.phase === 'running' ? '實時播放，暫停期間不計時。' : state.phase === 'paused' ? '已暫停，繼續後接續計時。' : state.phase === 'complete' ? '可再次比較，或切換另一種條件。' : '也可以直接點按各列左側的音叉。');
+  $('#pause-action').hidden = state.scope !== 'individual' || !['running','paused'].includes(state.phase);
+  text($('#pause-action'), state.phase === 'paused' ? '繼續觀察' : '暫停觀察');
+  text($('#playback-state'), state.phase === 'running' ? '實時播放，暫停期間不計時。' : state.phase === 'paused' ? '已暫停，繼續後接續計時。' : state.phase === 'complete' ? '可再次比較，或切換另一種條件。' : '點按音叉可單獨敲擊該組。');
   drawResult();
 }
 
@@ -233,14 +248,16 @@ function stopFrame() {
 
 function resetRun() {
   stopFrame(); stopTones();
-  state.phase = 'idle'; state.time = 0; noticed = new Set();
+  state.phase = 'idle'; state.time = 0; state.scope = 'together'; noticed = new Set();
+  for (const model of models) model.startedAt = null;
   paint();
 }
 
 function commitTime(now) {
   if (runStartWall === null) return;
-  state.time = Math.min(runEnd(groups), runStartTime + Math.max(0, now - runStartWall) / 1000);
-  if (state.time >= runEnd(groups)) state.phase = 'complete';
+  const end = Math.max(0, ...models.filter(model => model.startedAt !== null).map(model => model.startedAt + runEnd([model])));
+  state.time = Math.min(end, runStartTime + Math.max(0, now - runStartWall) / 1000);
+  if (state.time >= end) state.phase = 'complete';
 }
 
 function tick() {
@@ -260,7 +277,20 @@ function resume() {
   paint(); frame = requestAnimationFrame(tick);
 }
 
-function startFresh() { resetRun(); resume(); }
+function startFresh() {
+  resetRun();
+  for (const model of models) model.startedAt = 0;
+  resume();
+}
+
+function startSingle(id) {
+  if (state.phase === 'running') commitTime(performance.now());
+  stopFrame();
+  state.scope = 'individual';
+  models.find(model => model.id === id).startedAt = state.time;
+  noticed.delete(id);
+  resume();
+}
 
 function pause(message = '') {
   if (state.phase !== 'running') return;
@@ -305,10 +335,12 @@ function setTemperature(value) {
 }
 
 $('#primary-action').addEventListener('click', () => {
-  if (state.phase === 'running') pause();
+  if (state.scope === 'individual') startFresh();
+  else if (state.phase === 'running') pause();
   else if (state.phase === 'paused') resume();
   else startFresh();
 });
+$('#pause-action').addEventListener('click', () => state.phase === 'running' ? pause() : resume());
 $('#reset-action').addEventListener('click', () => resetRun());
 $('#temperature').addEventListener('input', event => setTemperature(event.target.value));
 $('#temperature-down').addEventListener('click', () => setTemperature(state.temperature - 1));

@@ -261,14 +261,56 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.ok(Math.abs(await time() - first - 5) < .02, 'missed frames catch up to the monotonic elapsed time');
   });
 
-  await t.test('source clicks and keyboard restart all groups without overlapping animations', async () => {
-    await page.locator('[data-sound-speed-lab]').locator('[data-group=water] .source-hit').click(); await page.clock.runFor(1000);
-    assert.ok(await time() > .98 && await time() < 1.02);
-    await page.locator('[data-sound-speed-lab]').locator('[data-group=air] .source-hit').focus(); await page.keyboard.press('Enter'); await page.clock.runFor(1000);
-    assert.ok(await time() > .98 && await time() < 1.02);
-    await page.locator('[data-sound-speed-lab]').locator('[data-group=steel] .source-hit').click();
-    await page.locator('[data-sound-speed-lab]').locator('[data-group=steel] .source-hit').click(); await page.clock.runFor(1000);
-    assert.ok(await time() > .98 && await time() < 1.02);
+  await t.test('individual source clicks and keyboard strikes keep independent clocks and do not start untouched groups', async () => {
+    await fresh();
+    const rowTime=kind=>page.locator(`[data-group=${kind}]`).getAttribute('data-time').then(Number);
+    const hit=kind=>page.locator(`[data-group=${kind}] .source-hit`);
+    await hit('water').click();await page.clock.runFor(1000);
+    assert.ok(Math.abs(await rowTime('water')-1)<.02);
+    assert.equal(await rowTime('air'),0);assert.equal(await rowTime('steel'),0);
+    assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),0);
+    assert.equal(await page.locator('[data-group=air]').getAttribute('data-phase'),'idle');
+    await hit('air').focus();await page.keyboard.press('Enter');await page.clock.runFor(1000);
+    assert.ok(Math.abs(await rowTime('water')-2)<.03);
+    assert.ok(Math.abs(await rowTime('air')-1)<.02);assert.equal(await rowTime('steel'),0);
+    await hit('steel').focus();await page.keyboard.press('Space');
+    await hit('steel').click();await page.clock.runFor(1000);
+    assert.ok(Math.abs(await rowTime('steel')-1)<.02);
+    assert.ok(Math.abs(await rowTime('water')-3)<.04);
+    assert.ok(Math.abs(await rowTime('air')-2)<.03);
+    assert.equal(await page.locator('#experiment-panel').getAttribute('data-scope'),'individual');
+    assert.equal(await page.locator('#result').isHidden(),true);
+    assert.match(await primary.textContent(),/同時敲擊/);
+    assert.match(await page.locator('[data-group=water] .individual-time').textContent(),/敲擊後/);
+    await page.locator('#pause-action').click();const saved=await particleXs(),clock=await time();
+    await page.clock.runFor(2000);assert.deepEqual(await particleXs(),saved);assert.equal(await time(),clock);
+    await page.locator('#pause-action').click();await page.clock.runFor(500);
+    assert.ok(Math.abs(await rowTime('air')-2.5)<.04);
+    await primary.click();await page.clock.runFor(500);
+    for(const kind of ['air','water','steel'])assert.ok(Math.abs(await rowTime(kind)-.5)<.02);
+    assert.equal(await page.locator('#experiment-panel').getAttribute('data-scope'),'together');
+    assert.equal(await page.locator('#pause-action').isHidden(),true);
+    await hit('air').click();await page.clock.runFor(200);
+    assert.ok(Math.abs(await rowTime('air')-.2)<.02);
+    assert.ok(Math.abs(await rowTime('water')-.7)<.03,'individual strike during comparison preserves the other rows');
+  });
+
+  await t.test('a completed individual group can be struck again and temperature groups are independent', async () => {
+    await fresh();await page.locator('[data-group=steel] .source-hit').click();await page.clock.runFor(5200);
+    assert.equal((await data()).phase,'complete');
+    assert.equal(await page.locator('[data-group=water]').getAttribute('data-phase'),'idle');
+    await page.locator('[data-group=water] .source-hit').click();await page.clock.runFor(200);
+    assert.equal(await page.locator('[data-group=steel]').getAttribute('data-phase'),'complete');
+    assert.equal(await page.locator('[data-group=air]').getAttribute('data-phase'),'idle');
+    await page.locator('[data-group=steel] .source-hit').click();
+    assert.equal(await page.locator('[data-group=steel] .fork-striker[visibility=visible]').count(),1);
+    assert.ok(Number(await page.locator('[data-group=water]').getAttribute('data-time'))>.18);
+    await page.locator('#tab-temperature').click();
+    await page.locator('[data-group=adjustable] .source-hit').click();await page.clock.runFor(1000);
+    assert.equal(await page.locator('[data-group=reference]').getAttribute('data-phase'),'idle');
+    assert.ok(Number(await page.locator('[data-group=adjustable]').getAttribute('data-time'))>.98);
+    await page.locator('#reset-action').click();
+    assert.deepEqual(await page.locator('.medium-row').evaluateAll(ns=>ns.map(n=>n.dataset.phase)),['idle','idle']);
   });
 
   await t.test('a short strike withdraws while opposite fork arms ring around a stationary base', async () => {
@@ -304,7 +346,8 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
       const target=await field.evaluate((svg,{x,y})=>{const p=svg.createSVGPoint();p.x=x;p.y=y;const screen=p.matrixTransform(svg.getScreenCTM());return{x:screen.x,y:screen.y,hit:document.elementFromPoint(screen.x,screen.y)?.classList.contains('source-hit')};},{x,y});
       assert.equal(target.hit,true);
       await page.mouse.click(target.x,target.y);assert.equal((await data()).phase,'running');
-      assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),3);
+      assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),1);
+      assert.equal(await page.locator(`[data-group=${kind}] .fork-striker[visibility=visible]`).count(),1);
       await page.locator('#reset-action').click();
     }
   });
@@ -470,8 +513,8 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.evaluate(() => window.__oscillators[0].__ended), true);
     await page.locator('[data-sound-speed-lab]').locator('#arrival-sound').check();
     await page.locator('[data-sound-speed-lab]').locator('[data-group=steel] .source-hit').click(); await page.clock.runFor(1000);
-    assert.equal(await page.evaluate(() => window.__oscillators.length), 2);
-    await primary.click(); await realWait(150); assert.equal(await page.evaluate(() => window.__oscillators[1].__ended), true);
+    assert.equal(await page.evaluate(() => window.__oscillators.length), 3, 'water continues to arrive while the independently restruck steel arrives again');
+    await page.locator('#pause-action').click(); await realWait(150); assert.equal(await page.evaluate(() => window.__oscillators.every(n=>n.__ended)), true);
     assert.equal(await page.locator('[data-sound-speed-lab]').locator('#audio-error').isHidden(), true);
   });
 
@@ -529,6 +572,8 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     await mobile.goto(url, { waitUntil: 'networkidle' });
     await mobile.locator('[data-sound-speed-lab]').locator('[data-group=steel] .source-hit').tap(); await mobile.clock.runFor(1000);
     assert.equal(await mobile.locator('[data-sound-speed-lab]').locator('#experiment-panel').getAttribute('data-phase'), 'running');
+    assert.equal(await mobile.locator('[data-group=air]').getAttribute('data-time'),'0.00000000');
+    assert.equal(await mobile.locator('[data-group=water]').getAttribute('data-time'),'0.00000000');
     const comparison = await mobile.locator('[data-sound-speed-lab]').locator('#models').boundingBox();
     assert.ok(comparison.y >= -1 && comparison.y + comparison.height <= 845, 'starting brings all three rows into view together');
     await mobile.locator('[data-sound-speed-lab]').locator('#primary-action').tap();

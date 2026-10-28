@@ -24,7 +24,7 @@
   </style>
   <link rel="stylesheet" href="assets/sound-propagation.css?v=3">
   <link rel="stylesheet" href="assets/vacuum-lab.css?v=5">
-  <link rel="stylesheet" href="assets/sound-speed.css?v=fork-contact-10">
+  <link rel="stylesheet" href="assets/sound-speed.css?v=individual-11">
 </head>
 <body>
   <header class="shell masthead">
@@ -199,17 +199,18 @@
               <div class="model-information">
                 <span>共同傳播距離 <strong>5,000 公尺</strong></span>
                 <span class="realtime-badge">1 倍實時播放</span>
-                <span class="model-time-wrap">經過時間 <output id="model-time" aria-label="實際播放經過時間，不含暫停" aria-live="off">0.000 秒</output></span>
+                <span class="model-time-wrap"><span id="clock-caption">經過時間</span> <output id="model-time" aria-label="實際播放經過時間，不含暫停" aria-live="off">0.000 秒</output></span>
               </div>
               <p class="observation-caption" id="observation-caption" role="status" aria-live="polite">敲擊音叉後，觀察音叉的來回振動如何帶動相鄰粒子。</p>
-              <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>介質</span><span>粒子振動 · 逐段傳遞</span><span>末端相鄰粒子</span></div><div id="models" class="models" role="group" aria-label="同步的粒子振動模型"></div></div>
+              <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>介質</span><span>粒子振動 · 逐段傳遞</span><span>末端相鄰粒子</span></div><div id="models" class="models" role="group" aria-label="可個別敲擊或同步比較的粒子振動模型"></div></div>
               <p class="color-key">相鄰粒子依序往返，傳遞擾動；下方綠色刻度只記錄已傳到的位置。</p>
 
               <div class="controls">
                 <button class="action" id="primary-action" type="button">同時敲擊音叉</button>
+                <button class="text-button" id="pause-action" type="button" hidden>暫停觀察</button>
                 <button class="text-button" id="reset-action" type="button">回到起點</button>
               </div>
-              <div class="observation-options"><label class="sound-option"><input type="checkbox" id="arrival-sound">到達提示音</label><span id="playback-state">也可以直接點按各列左側的音叉。</span></div>
+              <div class="observation-options"><label class="sound-option"><input type="checkbox" id="arrival-sound">到達提示音</label><span id="playback-state">點按音叉可單獨敲擊該組。</span></div>
               <p id="audio-error" class="audio-error" role="status" hidden></p>
 
               <section class="result" id="result" aria-labelledby="result-title" hidden>
@@ -223,7 +224,7 @@
               <li>空氣以透明空間、水以有液面及折射的水槽、鋼以金屬剖面呈現。介質內的分子／原子是放大透視示意，實際肉眼看不到；器材外形不代表真實 5,000 公尺裝置。</li>
               <li>音叉的叉臂來回振動，敲槌只短暫敲擊；水中叉臂浸入水體，鋼材由右叉臂經薄接觸層連接端面，另一支叉臂保留振動空間。聲源與介質的耦合為放大示意。</li>
           <li>微觀模型以常見氣體分子、彎折水分子及鋼中原子呈現。配色、球棒外形、排列、間距、振幅與往返節奏為便於觀察的示意；往返節奏不代表聲音的音高，省略熱運動；鋼中的連結表示彈性作用。</li>
-              <li>各組共用持續 4 秒的往返示意訊號、5,000 公尺距離及同一個實時計時。1 秒播放對應 1 秒經過，暫停與背景頁面期間不計時。到達時間以「距離 ÷ 聲速」計算。</li>
+              <li>各組共用持續 4 秒的往返示意訊號、5,000 公尺距離；各組由自己的敲擊時刻開始實時計時。1 秒播放對應 1 秒經過，暫停與背景頁面期間不計時。到達時間以「距離 ÷ 聲速」計算。</li>
               <li>本例取約 20°C 的空氣 343 m/s、水 1,480 m/s，以及鋼中縱波約 5,900 m/s。實際數值會隨材料及環境而變，不能只靠粒子疏密判斷聲速。</li>
               <li>空氣在 0～30°C 採近似關係：聲速 ≈ 331 ＋ 0.6 × 溫度。此設定只用於空氣。</li>
               <li>下方刻度依「聲速 × 經過時間」記錄擾動前緣，不控制粒子起振。粒子完成訊號後回復原位。右側顯示末端三個相鄰位置，各自依所在位置的傳播延遲受振；最右邊才是終點。</li>
@@ -333,6 +334,6 @@
   </script>
   <script type="module" src="assets/sound-propagation.js?v=4"></script>
   <script type="module" src="assets/vacuum-lab.js?v=6"></script>
-  <script type="module" src="assets/sound-speed.mjs?v=fork-contact-10"></script>
+  <script type="module" src="assets/sound-speed.mjs?v=individual-11"></script>
 </body>
 </html>

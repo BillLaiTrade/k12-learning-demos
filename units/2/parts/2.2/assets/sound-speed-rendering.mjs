@@ -1,5 +1,5 @@
 // 介質場景、分子／原子與表面取樣共用同一波動模型。
-import { positions, sample, displacement, PULSE_DURATION } from './sound-speed-model.mjs?v=fork-contact-10';
+import { positions, sample, displacement, PULSE_DURATION } from './sound-speed-model.mjs?v=individual-11';
 export const materialInfo = {
   air: {
     name: '空氣', phase: '氣體',

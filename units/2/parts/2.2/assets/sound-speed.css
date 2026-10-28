@@ -111,3 +111,7 @@
 :where(.sound-speed-lab) .propagation-readout{flex-wrap:wrap;justify-content:flex-start;gap:0 6px;min-height:25px;margin:4px 5px 0;font-size:.59rem}
 :where(.sound-speed-lab) .propagation-readout output{font-size:.65rem}
 }
+
+:where(.sound-speed-lab) .medium-heading .individual-time{font-size:.65rem;line-height:1.5;font-variant-numeric:tabular-nums;color:#315e3d}
+:where(.sound-speed-lab) .individual-time output{display:block;white-space:nowrap}
+@container (max-width:460px){:where(.sound-speed-lab) .medium-heading{flex-wrap:wrap}:where(.sound-speed-lab) .individual-time output{display:inline;margin-left:4px}}
