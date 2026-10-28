@@ -88,3 +88,14 @@ node --test --test-concurrency=1 tests/unit-4.2-concentration.test.cjs tests/uni
 測試改為要求公式與結果面板同層、緊鄰且位於前方，並在 320／390／768／1440px 檢查兩者的實際上下順序。公式內容與計算模型不變。最新畫面：[桌面順序](formula-first-desktop.webp)、[手機順序](formula-first-mobile.webp)。
 
 本輪重新執行 `node --test tests/unit-4.2-concentration.test.cjs`，20 項通過、0 失敗。已檢視實際桌面與手機完整區塊截圖，確認公式在整個結果面板前方，互動及計算仍正常。
+
+
+## 2026-10-28：公式與配方結果的視覺細修
+
+依使用者要求只改善呈現。正式公式採淡綠漸層、細邊框與標題籤，調整分式字重；完整結果面板改為暖白底，糖、水、糖水以三個淺色質量格呈現，增加段落分隔與留白。濃度結果以深綠大字及淡綠底凸顯，比例條、標示與註記調整為較輕的視覺層次。手機保留三個質量格，代入式下方完整呈現結果。
+
+本輪僅修改第五區公式／結果的 CSS；HTML 與前版逐字比較，除樣式快取版本外完全相同，沒有新增、刪除或改寫內容，JavaScript 亦未變更。已檢視桌面、手機截圖；320–1440px 及最大配方排版由既有第五區檢查涵蓋。
+
+最新畫面：[桌面](polished-desktop.webp)、[手機](polished-mobile.webp)。
+
+重新執行 `node --test tests/unit-4.2-concentration.test.cjs`，20 項全部通過，涵蓋公式順序、內容與數字同步、各器材互動、ppm、載入失敗及響應式排版。

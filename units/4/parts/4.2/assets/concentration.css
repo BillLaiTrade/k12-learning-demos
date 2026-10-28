@@ -56,10 +56,54 @@
 
 #s5 .mix-scene[data-cup-lifted="true"] .water-cup .scene-action,#s5 .mix-scene[data-cup-lifted="true"] .role-tag.water {visibility:hidden;}
 
-#s5 .formula-reference {margin-top:16px;padding:13px 10px 15px;border:1px solid #cbdacf;border-radius:9px;background:#fffffff0;scroll-margin-top:24px;}
-#s5 .formula-caption {margin:0!important;color:#63776a;font-size:.75rem;font-weight:700;}
-#s5 .formula-equation {display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 5px;margin-top:10px;color:#315b46;font-size:.95rem;}
+/* Formula reference and worked example: shared spacing, distinct reading levels. */
+#s5 .formula-reference {position:relative;margin-top:18px;padding:20px 24px 24px;border:1px solid #c8dcd1;border-radius:15px;background:linear-gradient(115deg,#f0f7f2,#fcfdf9 75%);box-shadow:0 3px 12px #294d3c06;scroll-margin-top:24px;}
+#s5 .formula-reference::before {content:"";position:absolute;top:22px;bottom:22px;left:0;width:3px;border-radius:0 3px 3px 0;background:#408166;}
+#s5 .formula-caption {margin:0!important;color:#5b7164;font-size:.75rem;font-weight:700;letter-spacing:.04em;}
+#s5 .formula-reference>.formula-caption {display:inline-block;padding:4px 9px;border:1px solid #d2e2d7;border-radius:6px;background:#ffffffb3;color:#426b55;}
+#s5 .formula-equation {display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px 8px;margin-top:17px;color:#284e3b;font-size:1.05rem;}
 #s5 .formula-name,#s5 .formula-ratio {white-space:nowrap;}
-#s5 .formula-ratio {display:inline-flex;align-items:center;gap:5px;}
-#s5 .substitution-caption {padding-top:14px;}
-@media(max-width:680px) {#s5 .formula-equation {font-size:.85rem;}#s5 .formula-reference {padding-inline:7px;}}
+#s5 .formula-ratio {display:inline-flex;align-items:center;gap:8px;}
+#s5 .formula-reference .num {font-weight:750;color:#176b53;padding-bottom:5px;border-color:#86a793;}
+#s5 .formula-reference .den {padding-top:5px;color:#4c6758;}
+#s5 .live-result {margin-top:14px;padding:22px 24px 19px;border:1px solid #d3ded6;border-radius:15px;background:#fffefa;box-shadow:0 5px 18px #294d3c08;}
+#s5 .live-result>strong {display:flex;align-items:center;gap:8px;font-size:.9rem;letter-spacing:.02em;color:#315543;}
+#s5 .live-result>strong::before {content:"";width:4px;height:15px;border-radius:3px;background:#69957a;}
+#s5 .live-result .mass-equation {display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1.15fr);gap:10px;align-items:center;margin:19px 0 20px;}
+#s5 .live-result .item {min-width:0;padding:13px 7px 14px;border:1px solid #dce5dd;border-radius:10px;background:#f2f5ef;color:#65766b;font-size:.73rem;line-height:1.5;}
+#s5 .live-result .item.solute {border-color:#d2e4d7;background:#edf6ee;}
+#s5 .live-result .item.solvent {border-color:#dbe7e9;background:#f0f6f7;}
+#s5 .live-result .item b {margin-top:5px;font-size:1.05rem;line-height:1.4;font-weight:750;font-variant-numeric:tabular-nums;}
+#s5 .live-result .item.solvent b {color:#4c7481;}
+#s5 .live-result .op {font-size:1.15rem;color:#8c9f91;text-align:center;}
+#s5 .substitution-caption {padding-top:17px;border-top:1px solid #e4e9e1;}
+#s5 .live-result .concentration {gap:8px;padding:18px 0 20px;color:#48634f;font-size:.92rem;flex-wrap:wrap;}
+#s5 .live-result .concentration .fraction {margin-inline:3px;font-variant-numeric:tabular-nums;}
+#s5 .live-result .concentration .value {display:inline-block;margin-left:3px;padding:13px 16px;border:1px solid #d0e3d3;border-radius:12px;background:#eaf4e9;color:#176449;font-size:2.25rem;font-weight:800;line-height:1.1;letter-spacing:-.03em;white-space:nowrap;font-variant-numeric:tabular-nums;}
+#s5 .live-result .mass-bar {height:10px;border:0;border-radius:5px;background:#e6eee9;box-shadow:inset 0 1px 2px #254b3210;}
+#s5 .live-result .mass-bar i {border-radius:5px;background:linear-gradient(90deg,#176b53,#4d9875);}
+#s5 .live-result .mass-legend {margin-top:7px;color:#6a7d6e;font-size:.73rem;font-variant-numeric:tabular-nums;}
+#s5 .live-result .mass-legend>span:first-child {color:#276c4d;font-weight:700;}
+#s5 .live-result .meaning {margin-top:16px!important;padding-top:13px;border-color:#e4e9e1;color:#6d7b6f;font-size:.76rem;line-height:1.8;}
+@media(max-width:680px) {
+ #s5 .formula-reference {padding:17px 14px 20px;}
+ #s5 .formula-equation {font-size:.88rem;gap:10px 4px;margin-top:15px;}
+ #s5 .formula-ratio {gap:5px;}
+ #s5 .live-result {padding:18px 14px 16px;}
+ #s5 .live-result .mass-equation {gap:6px;margin:17px 0;}
+ #s5 .live-result .item {padding:11px 3px;font-size:.69rem;border-radius:8px;}
+ #s5 .live-result .item b {font-size:.82rem;}
+ #s5 .live-result .op {font-size:1rem;}
+ #s5 .live-result .concentration {display:grid;grid-template-columns:repeat(5,auto);justify-content:center;gap:11px 4px;font-size:.76rem;}
+ #s5 .live-result .concentration .fraction {margin:0;}
+ #s5 .live-result .concentration .value {grid-column:1/-1;justify-self:center;min-width:130px;box-sizing:border-box;margin:3px 0 0;padding:11px 18px;font-size:2.1rem;text-align:center;}
+}
+@media(max-width:360px) {
+ #s5 .formula-reference {padding-inline:10px;}
+ #s5 .formula-equation {font-size:.82rem;}
+ #s5 .live-result {padding-inline:11px;}
+ #s5 .live-result .mass-equation {gap:4px;}
+ #s5 .live-result .item {font-size:.65rem;}
+ #s5 .live-result .item b {font-size:.7rem;}
+ #s5 .live-result .concentration {font-size:.7rem;gap:10px 3px;}
+}
