@@ -83,7 +83,7 @@
 
 
   </style>
-  <link rel="stylesheet" href="assets/mirror-image.css?v=1">
+  <link rel="stylesheet" href="assets/mirror-image.css?v=2">
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
   <link rel="stylesheet" href="assets/reversible-light.css?v=3">
   <link rel="stylesheet" href="assets/periscope.css?v=8">
@@ -195,53 +195,62 @@
           <div class="card-side"><span class="card-number">03</span><h3>平面鏡裡的像在哪裡？</h3></div>
           <div class="card-main">
             <h2>鏡中的像，為什麼看起來在鏡後？</h2>
-            <p>觀察同一隻小熊，看看實物、鏡面與鏡中像的關係。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我看見鏡中也有一隻小熊，它真的在鏡子後面嗎？</p></div>
+            <p>讓小葵換個位置，觀察兩次光路指向哪裡。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我換個位置看，鼻尖的像還在同一個地方嗎？</p></div>
             <div class="mirror-views" aria-label="同一小熊的側面光路與鏡前景象">
               <figure class="mirror-view mirror-side-panel">
-                <h3>側面光路示意</h3>
-                <svg id="image-side-view" viewBox="0 0 900 500" role="img" aria-labelledby="image-side-title image-side-desc" data-mirror-x="540" data-object-point="345,300" data-image-point="735,300" data-eye-point="173,121">
+                <h3>換個位置，追蹤同一個鼻尖</h3>
+                <svg id="image-side-view" viewBox="0 0 900 700" role="img" aria-labelledby="image-side-title image-side-desc" data-mirror-x="540" data-object-point="345,440" data-image-point="735,440" data-eye-point="150,108">
                   <title id="image-side-title">鏡前小熊與鏡後虛像位置的側面示意</title>
-                  <desc id="image-side-desc">小熊朝右面向鏡子，鏡後以淡色顯示同大、等高、位置對稱的虛像。按看光怎麼走，可追蹤鼻尖的光經鏡面反射進入小葵眼睛，再將反射光反向延長到虛像鼻尖；虛線只是定位用的輔助線。</desc>
+                  <desc id="image-side-desc">實物與虛像沿同一鏡面對稱，同大、等高且等距。拖動小葵可改變觀察位置；藍色是目前光路，橘色是上一次位置的觀察紀錄。實線從同一鼻尖經鏡面反射進入眼睛，虛線反向延長到固定的同一鼻尖像點。</desc>
                   <defs>
-                    <marker id="ray-arrow-side" markerWidth="7" markerHeight="7" refX="5.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#a75d16"/></marker>
+                    <marker id="ray-arrow-current" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0L6 3L0 6Z" fill="#246fa5"/></marker>
+                    <marker id="ray-arrow-record" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0L6 3L0 6Z" fill="#b86116"/></marker>
+                    <image id="image-bear-sprite" href="assets/mirror/teddy-side.webp" x="199.4" y="374.2" width="203" height="203"/>
+                    <g id="image-observer-sprite"><image id="image-observer-profile" href="assets/mirror/xiaokui-profile.webp" x="-111.2727272727" y="-73.4545454545" width="160" height="160"/></g>
                     <linearGradient id="ray-room" x2="0" y2="1"><stop stop-color="#fbfaf5"/><stop offset="1" stop-color="#ede8dd"/></linearGradient>
                     <linearGradient id="ray-wood" x2="0" y2="1"><stop stop-color="#cfad85"/><stop offset="1" stop-color="#ad8158"/></linearGradient>
                     <linearGradient id="ray-mirror" x2="1" y2="1"><stop stop-color="#b7cfd2"/><stop offset=".48" stop-color="#f7fcfb"/><stop offset="1" stop-color="#9eb8bd"/></linearGradient>
                     <pattern id="mirror-backing" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 10L10 0" stroke="#9da9a5" stroke-width="1.5"/></pattern>
                   </defs>
-                  <rect width="900" height="430" fill="url(#ray-room)"/><rect y="430" width="900" height="70" fill="url(#ray-wood)"/>
-                  <g id="image-virtual-region"><rect x="550" y="68" width="350" height="362" fill="#e6f2f6" fill-opacity=".7"/></g>
-                  <g id="image-observer"><image id="image-observer-profile" href="assets/mirror/xiaokui-profile.webp" x="20" y="20" width="220" height="220"/><text x="130" y="259" text-anchor="middle" fill="#315a46" font-size="26" font-weight="700">小葵從鏡前看</text></g>
-                  <g id="image-side-object"><image href="assets/mirror/teddy-side.webp" x="199.4" y="234.2" width="203" height="203"/><rect x="196" y="449" width="212" height="36" rx="14" fill="#fffdf8"/><text x="302" y="475" text-anchor="middle" fill="#315a46" font-size="28" font-weight="700">鏡前實物</text><circle id="image-object-point" cx="345" cy="300" r="6" fill="#f6d36c" stroke="#9e6b16" stroke-width="2"/></g>
-                  <rect x="540" y="68" width="9" height="362" rx="3" fill="url(#ray-mirror)" stroke="#617c7d" stroke-width="2"/><rect x="551" y="70" width="12" height="358" fill="url(#mirror-backing)"/><rect x="521" y="425" width="48" height="7" rx="3" fill="#82938d"/>
+                  <rect width="900" height="570" fill="url(#ray-room)"/><rect y="570" width="900" height="130" fill="url(#ray-wood)"/>
+                  <g id="image-virtual-region"><rect x="550" y="68" width="350" height="502" fill="#e6f2f6" fill-opacity=".7"/></g>
+                  <g id="image-observer-record" style="display:none" opacity=".3" aria-label="小葵上一次的觀察位置紀錄"><use href="#image-observer-sprite"/></g>
+                  <g id="image-observer" role="slider" tabindex="0" aria-label="拖動小葵上下移動，或使用方向鍵改變觀察位置" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="91" transform="translate(150 108)"><rect id="image-observer-hit" x="-119" y="-81" width="176" height="176" rx="12" fill="transparent"/><use href="#image-observer-sprite"/></g>
+                  <g id="image-record-label" style="display:none"><rect width="208" height="32" rx="12" fill="#f7e1ca"/><text x="104" y="23" text-anchor="middle" fill="#8c4e1b" font-size="22" font-weight="700">A 上次位置（紀錄）</text></g>
+                  <g id="image-current-label"><rect width="200" height="32" rx="12" fill="#e0f0fc"/><text id="image-current-label-text" x="100" y="23" text-anchor="middle" fill="#245f88" font-size="23" font-weight="700">小葵目前的位置</text></g>
+                  <g id="image-drag-hint" fill="#315a46" pointer-events="none"><path d="M0 0V38M-6 7L0 0L6 7M-6 31L0 38L6 31" fill="none" stroke="#315a46" stroke-width="2.5"/><text x="12" y="24" font-size="22">拖動小葵</text></g>
+                  <g id="image-side-object"><use id="image-side-object-shape" href="#image-bear-sprite"/><rect x="196" y="592" width="212" height="36" rx="14" fill="#fffdf8"/><text x="302" y="618" text-anchor="middle" fill="#315a46" font-size="28" font-weight="700">鏡前實物</text><circle id="image-object-point" cx="345" cy="440" r="6" fill="#f6d36c" stroke="#9e6b16" stroke-width="2"/></g>
+                  <rect x="540" y="68" width="9" height="502" rx="3" fill="url(#ray-mirror)" stroke="#617c7d" stroke-width="2"/><rect x="551" y="70" width="12" height="498" fill="url(#mirror-backing)"/><rect x="521" y="565" width="48" height="7" rx="3" fill="#82938d"/>
                   <text x="540" y="42" text-anchor="middle" fill="#315a46" font-size="29" font-weight="700">平面鏡</text>
-                  <g id="image-side-virtual"><image href="assets/mirror/teddy-side.webp" x="199.4" y="234.2" width="203" height="203" transform="translate(1080 0) scale(-1 1)" opacity=".55"/><rect x="647" y="449" width="246" height="36" rx="14" fill="#fffdf8"/><text x="770" y="475" text-anchor="middle" fill="#266c85" font-size="26" font-weight="700">虛像位置（示意）</text><circle id="image-virtual-point" cx="735" cy="300" r="6" fill="#f6d36c" stroke="#9e6b16" stroke-width="2"/></g>
-                  <g id="image-side-rays" style="display:none" fill="none" stroke="#a75d16" stroke-width="3.5" stroke-linejoin="round"><path id="image-ray-a-in" d="M345,300L442.5,268.94572953736656L540,237.8914590747331" marker-mid="url(#ray-arrow-side)"/><path id="image-ray-a-out" d="M540,237.8914590747331L356.5,179.44572953736656L173,121" marker-mid="url(#ray-arrow-side)"/></g>
-                  <g id="image-side-extensions" style="display:none" fill="none" stroke="#397f98" stroke-width="3.5" stroke-dasharray="10 7"><path id="image-extension-a" d="M540,237.8914590747331L735,300"/></g>
-                  <g id="image-mirror-guides" style="display:none"><circle cx="540" cy="237.8914590747331" r="6" fill="#f6d36c" stroke="#9e6b16" stroke-width="2"/><circle cx="173" cy="121" r="4" fill="#f6d36c" stroke="#9e6b16" stroke-width="1.5"/></g>
+                  <g id="image-side-virtual"><use id="image-side-virtual-shape" href="#image-bear-sprite" transform="translate(1080 0) scale(-1 1)" opacity=".55"/><rect x="647" y="592" width="246" height="36" rx="14" fill="#fffdf8"/><text x="770" y="618" text-anchor="middle" fill="#266c85" font-size="26" font-weight="700">虛像位置（示意）</text><circle id="image-virtual-point" cx="735" cy="440" r="6" fill="#f6d36c" stroke="#9e6b16" stroke-width="2"/></g>
+                  <g id="image-side-rays" fill="none" stroke-width="3" stroke-linejoin="round"><g id="image-record-rays" stroke="#b86116" opacity=".75" style="display:none"><path id="image-ray-record-in" marker-mid="url(#ray-arrow-record)"/><path id="image-ray-record-out" marker-mid="url(#ray-arrow-record)"/></g><g stroke="#246fa5"><path id="image-ray-current-in" marker-mid="url(#ray-arrow-current)"/><path id="image-ray-current-out" marker-mid="url(#ray-arrow-current)"/></g></g>
+                  <g id="image-side-extensions" fill="none" stroke-width="3" stroke-dasharray="9 6"><path id="image-extension-record" stroke="#b86116" opacity=".75" style="display:none"/><path id="image-extension-current" stroke="#246fa5"/></g>
+                  <g id="image-mirror-guides"><circle id="image-hit-record" r="5" fill="#ffe1be" stroke="#b86116" stroke-width="2" style="display:none"/><circle id="image-hit-current" r="5" fill="#d9efff" stroke="#246fa5" stroke-width="2"/></g>
+                  <g id="image-point-callout" style="display:none" pointer-events="none"><path d="M775 355L735 431" stroke="#5f7778" stroke-width="1.5"/><rect x="677" y="320" width="213" height="36" rx="11" fill="#fffdf8" stroke="#b6caca"/><text x="783.5" y="345" text-anchor="middle" fill="#315a46" font-size="24" font-weight="700">同一個鼻尖像點</text></g>
+                  <g id="image-symmetry-guide" pointer-events="none"><path id="image-distance-guide" d="M345 650H540H735M345 643V657M540 643V657M735 643V657" fill="none" stroke="#e9e4d4" stroke-width="2"/><text x="540" y="684" text-anchor="middle" fill="#fffdf8" font-size="22" font-weight="650">對應點到鏡面的距離相等</text></g>
                 </svg>
-                <figcaption class="mirror-ray-legend" id="image-ray-legend"><span><i class="mirror-ray-solid"></i>實線：實際光路</span><span><i class="mirror-ray-dashed"></i>虛線：反向延長輔助線</span></figcaption>
+                <figcaption class="mirror-ray-legend" id="image-ray-legend"><span><i class="mirror-ray-record"></i>橘：上一次觀察（紀錄）</span><span><i class="mirror-ray-current"></i>藍：目前光路</span><span><i class="mirror-ray-solid"></i>實線＝實際光路</span><span><i class="mirror-ray-dashed"></i>虛線＝反向延長</span></figcaption>
               </figure>
               <figure class="mirror-view mirror-front-panel">
-                <h3>從鏡前看到的景象</h3>
-                <svg id="image-front-view" viewBox="0 0 400 460" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="image-front-title image-front-desc">
-                  <title id="image-front-title">鏡前小熊面向鏡子，鏡中看見它的正面</title><desc id="image-front-desc">與左側示意相同的小熊，金色鼻尖標記對應同一個位置。鏡前看見實物背面，鏡中像正常清晰；移除小熊時，兩圖中的物體與像一起消失。</desc>
+                <h3>鏡前景象對照</h3>
+                <svg id="image-front-view" viewBox="0 0 400 700" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="image-front-title image-front-desc">
+                  <title id="image-front-title">鏡前小熊面向鏡子，鏡中看見它的正面</title><desc id="image-front-desc">此圖對照同一小熊的實物背面與鏡中正面，金色鼻尖標記對應左圖的同一物點；光路與觀察位置由左側示意表示。移除小熊時，兩圖中的物體與像一起消失。</desc>
                   <defs><linearGradient id="front-glass" x2="1" y2="1"><stop stop-color="#d8edf1"/><stop offset=".52" stop-color="#f8fcfa"/><stop offset="1" stop-color="#c8e0e4"/></linearGradient></defs>
-                  <image href="assets/mirror/mirror-room-bg.webp" width="400" height="460" preserveAspectRatio="xMidYMid slice"/><rect x="100" y="43" width="240" height="256" rx="8" fill="#647d7a"/><rect x="109" y="52" width="222" height="238" rx="3" fill="url(#front-glass)"/><path d="M120 61H194L118 279Z" fill="#fff" fill-opacity=".22"/>
-                  <g id="image-front-reflection"><image href="assets/mirror/teddy-front.webp" x="150" y="118" width="145" height="150" preserveAspectRatio="xMidYMax meet"/><rect x="260" y="78" width="77" height="32" rx="10" fill="#fffdf8"/><text x="298.5" y="101" text-anchor="middle" fill="#315a46" font-size="20" font-weight="700">鏡中像</text><circle id="image-front-point" cx="225" cy="177" r="4.5" fill="#f6d36c" stroke="#9e6b16" stroke-width="1.5"/></g>
-                  <g id="image-front-object"><image href="assets/mirror/teddy-rear.webp" x="138" y="264" width="166" height="169" preserveAspectRatio="xMidYMax meet"/><rect x="85" y="421" width="273" height="32" rx="11" fill="#fffdf8"/><text x="221.5" y="444" text-anchor="middle" fill="#315a46" font-size="20" font-weight="700">鏡前實物（背面）</text></g>
+                  <image href="assets/mirror/mirror-room-bg.webp" width="400" height="700" preserveAspectRatio="xMidYMid slice"/><rect x="65" y="65" width="280" height="340" rx="9" fill="#647d7a"/><rect x="75" y="75" width="260" height="320" rx="4" fill="url(#front-glass)"/><path d="M86 86H173L85 381Z" fill="#fff" fill-opacity=".22"/>
+                  <g id="image-front-reflection"><image href="assets/mirror/teddy-front.webp" x="140" y="173" width="155" height="160" preserveAspectRatio="xMidYMax meet"/><rect x="260" y="109" width="77" height="32" rx="10" fill="#fffdf8"/><text x="298.5" y="132" text-anchor="middle" fill="#315a46" font-size="20" font-weight="700">鏡中像</text><circle id="image-front-point" cx="220" cy="235" r="4.5" fill="#f6d36c" stroke="#9e6b16" stroke-width="1.5"/></g>
+                  <g id="image-front-object"><image href="assets/mirror/teddy-rear.webp" x="120" y="405" width="185" height="195" preserveAspectRatio="xMidYMax meet"/><rect x="65" y="622" width="280" height="36" rx="11" fill="#fffdf8"/><text x="205" y="647" text-anchor="middle" fill="#315a46" font-size="20" font-weight="700">鏡前實物（背面）</text></g>
                 </svg>
               </figure>
             </div>
             <div class="mirror-controls mirror-stable-controls" role="group" aria-label="觀察小熊與光路">
-              <button class="control-button mirror-btn mirror-primary" id="toggle-image-rays" type="button" aria-pressed="false" aria-controls="image-side-rays image-side-extensions image-mirror-guides">看光怎麼走</button>
+              <button class="control-button mirror-btn mirror-primary" id="change-image-observer" type="button" aria-controls="image-observer image-observer-record image-side-rays image-side-extensions">換個位置看看</button>
               <button class="control-button mirror-btn" id="toggle-image-object" type="button" aria-controls="image-side-object image-side-virtual image-front-object image-front-reflection">移除小熊</button>
             </div>
             <div class="mirror-explanation" id="image-explanation" aria-live="polite">
-              <strong>為什麼像看起來在鏡後？</strong>
-              <p id="image-object-status">小熊反射的光經鏡面進入眼睛。</p>
-              <p id="image-final-explanation">把入眼光線反向延長，會指向鏡後的虛像位置；鏡後沒有光真的通過。</p>
+              <strong>兩次觀察，指向同一個像點</strong>
+              <p id="image-object-status">先沿藍色實線看光怎麼進入眼睛，再拖動小葵或按「換個位置看看」。</p>
+              <p id="image-final-explanation">小熊各點都能這樣找像，合起來就是完整的虛像；虛線只是輔助線，鏡後沒有光真的通過。</p>
             </div>
           </div>
         </section>
@@ -447,7 +456,7 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent=index===6?"正在進行單元小測":"正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/curved-mirrors.js?v=1"></script>
-  <script type="module" src="assets/mirror-image.js?v=3"></script>
+  <script type="module" src="assets/mirror-image.js?v=4"></script>
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
   <script type="module" src="assets/reversible-light.js?v=3"></script>
