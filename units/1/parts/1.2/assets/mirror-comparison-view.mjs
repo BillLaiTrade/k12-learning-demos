@@ -1,10 +1,10 @@
-import {COMPARISON,comparisonCamera,project,quad,planePoint,VIEW_PLANES,clipNear} from './mirror-comparison.mjs?v=2';
+import {COMPARISON,comparisonCamera,project,quad,planePoint,VIEW_PLANES,clipNear} from './mirror-comparison.mjs?v=3';
 const polygon=points=>'M'+points.map(p=>p.slice(0,2).join(',')).join('L')+'Z';
 
-export function createComparisonView(svg) {
+export function createComparisonView(svg,mode) {
   const find=role=>svg.querySelector(`[data-view="${role}"]`),camera=comparisonCamera();
   const textures={},contexts=Object.fromEntries(['front','rear'].map(name=>[name,find(name).getContext('2d',{willReadFrequently:true})]));
-  let mode='mirror',failed=false;
+  let failed=false;
   function triangle(context,image,source,target) {
     const [p,q,r]=source,[a,b,c]=target;
     const det=(q[0]-p[0])*(r[1]-p[1])-(r[0]-p[0])*(q[1]-p[1]);
@@ -25,8 +25,10 @@ export function createComparisonView(svg) {
   }
   function paint(name) {
     const context=contexts[name],image=textures[name],plane=VIEW_PLANES[name];
-    context.clearRect(0,0,900,400);if(!image)return;
-    context.save();context.beginPath();quad(camera,plane).forEach(([x,y],i)=>i?context.lineTo(x,y):context.moveTo(x,y));context.closePath();context.clip();
+    context.clearRect(0,0,900,550);if(!image)return;
+    const corners=quad(camera,plane);
+    if(corners.every(p=>p[1]>550)||corners.every(p=>p[1]<0))return;
+    context.save();context.beginPath();corners.forEach(([x,y],i)=>i?context.lineTo(x,y):context.moveTo(x,y));context.closePath();context.clip();
     const n=16;
     for(let row=0;row<n;row++)for(let col=0;col<n;col++) {
       const uv=[[col/n,row/n],[(col+1)/n,row/n],[(col+1)/n,(row+1)/n],[col/n,(row+1)/n]];
@@ -50,24 +52,25 @@ export function createComparisonView(svg) {
     return d;
   }
   const shadow=x=>polygon(Array.from({length:40},(_,i)=>project(camera,[x+Math.sin(i*Math.PI/20)*28,570,Math.cos(i*Math.PI/20)*80])));
-  find('table').setAttribute('d',table(170,1400));find('grain').setAttribute('d',grain(170,1400));
+  find('table').setAttribute('d',table(170,1000));find('grain').setAttribute('d',grain(170,1000));
   find('frame').setAttribute('d',polygon(quad(camera,VIEW_PLANES.frame)));
   find('glass').setAttribute('d',polygon(quad(camera,VIEW_PLANES.glass)));
   find('clip').setAttribute('d',polygon(quad(camera,VIEW_PLANES.glass)));
-  find('reflected-table').setAttribute('d',table(540,1400));find('reflected-grain').setAttribute('d',grain(540,1400));
+  find('reflected-table').setAttribute('d',table(540,910));find('reflected-grain').setAttribute('d',grain(540,910));
   find('near-shadow').setAttribute('d',shadow(COMPARISON.source[0]));find('far-shadow').setAttribute('d',shadow(COMPARISON.image[0]));
-  const nose=project(camera,COMPARISON.image);find('nose').setAttribute('cx',nose[0]);find('nose').setAttribute('cy',nose[1]);
-  svg.dataset.eye=COMPARISON.eye.join(',');svg.dataset.nose=nose.slice(0,2).join(',');
+  const target=project(camera,COMPARISON.image);
+  svg.dataset.eye=COMPARISON.eye.join(',');svg.dataset.target=target.slice(0,2).join(',');
   svg.dataset.farQuad=JSON.stringify(quad(camera,VIEW_PLANES.front));
-  function render(next) {
-    mode=next;svg.dataset.mode=mode;
+  svg.dataset.nearQuad=JSON.stringify(quad(camera,VIEW_PLANES.rear));
+  function render() {
+    svg.dataset.mode=mode;
     const mirror=mode==='mirror';find('mirror').style.display=mirror?'inline':'none';
     find('far').setAttribute('clip-path',mirror?`url(#${find('clip').parentElement.id})`:'none');
     svg.dataset.ready=failed?'error':textures.front&&textures.rear?'true':'loading';
   }
   for(const [name,file] of [['front','teddy-front'],['rear','teddy-rear']]) {
-    const image=new Image();image.onload=()=>{textures[name]=image;paint(name);render(mode);};
-    image.onerror=()=>{failed=true;render(mode);};image.src=new URL(`mirror/${file}.webp`,import.meta.url).href;
+    const image=new Image();image.onload=()=>{textures[name]=image;paint(name);render();};
+    image.onerror=()=>{failed=true;render();};image.src=new URL(`mirror/${file}.webp`,import.meta.url).href;
   }
-  render(mode);return render;
+  render();
 }

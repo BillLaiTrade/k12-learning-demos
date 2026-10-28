@@ -4,9 +4,9 @@ export const COMPARISON = Object.freeze({
   mirrorX: base.mirrorX, top: base.mirrorTop, floor: base.mirrorBottom,
   source: Object.freeze([...base.source, 0]),
   image: Object.freeze([...mirrorPoint(base.source), 0]),
-  eye: Object.freeze([base.eyeX, 180, 160]), pupilRadius: 2,
+  eye: Object.freeze([247.5, 180, 0]), pupilRadius: 2, unitsPerMetre: 110.5,
   sideBear: Object.freeze(spriteAt(base.source, base.bearNose, base.bearSize)),
-  observer: Object.freeze(spriteAt([base.eyeX, 180], base.observerEye, base.observerSize)),
+  observer: Object.freeze(spriteAt([247.5, 180], base.observerEye, base.observerSize)),
 });
 const add=(a,b)=>a.map((v,i)=>v+b[i]);
 const sub=(a,b)=>a.map((v,i)=>v-b[i]);
@@ -22,6 +22,11 @@ export function comparisonRay(eye=COMPARISON.eye) {
   return {eye:[...eye],source:[...source],image:[...image],hit,incoming,outgoing,
     reflected:[source,hit,eye],direct:[image,eye],extension:[hit,image]};
 }
+export function opticalDistances() {
+  const ray=comparisonRay(),metres=(a,b)=>Math.hypot(...sub(a,b))/COMPARISON.unitsPerMetre;
+  return {incoming:metres(ray.source,ray.hit),outgoing:metres(ray.hit,ray.eye),
+    extension:metres(ray.hit,ray.image),direct:metres(ray.image,ray.eye)};
+}
 export function pupilBundle() {
   return [-2,0,2].map(y=>comparisonRay(add(COMPARISON.eye,[0,y,0])));
 }
@@ -29,12 +34,12 @@ export function sidePath(points,arrows=false) {
   const p=arrows&&points.length===2?[points[0],points[0].map((v,i)=>(v+points[1][i])/2),points[1]]:points;
   return 'M'+p.map(point=>point.slice(0,2).join(',')).join('L');
 }
-// Both eye views use this same camera. z provides the foreground parallax that
-// is absent from the side projection; the pupil rays above use the same 3D eye.
+// Both simultaneous views use this same fixed camera. The field of view shows
+// the complete comparison toy; the near original toy naturally lies below it.
 export function comparisonCamera() {
   const eye=[...COMPARISON.eye],forward=unit(sub(COMPARISON.image,eye));
   const right=unit(cross([0,1,0],forward).map(v=>-v)),down=cross(right,forward);
-  return {eye,forward,right,down,focal:420,center:[450,145],width:900,height:400};
+  return {eye,forward,right,down,focal:1300,center:[450,250],width:900,height:550};
 }
 export function project(camera,point) {
   const v=sub(point,camera.eye),depth=dot(v,camera.forward);
@@ -44,8 +49,8 @@ export function project(camera,point) {
 export const VIEW_PLANES=Object.freeze({
   front:Object.freeze({x:COMPARISON.image[0],top:440-203*132/385,height:203,left:-205*209/400,width:205}),
   rear:Object.freeze({x:COMPARISON.source[0],top:367,height:203,left:-102.5,width:205}),
-  frame:Object.freeze({x:COMPARISON.mirrorX,top:COMPARISON.top,height:COMPARISON.floor-COMPARISON.top,left:-180,width:360}),
-  glass:Object.freeze({x:COMPARISON.mirrorX,top:COMPARISON.top+10,height:COMPARISON.floor-COMPARISON.top-20,left:-170,width:340}),
+  frame:Object.freeze({x:COMPARISON.mirrorX,top:COMPARISON.top,height:COMPARISON.floor-COMPARISON.top,left:-68,width:136}),
+  glass:Object.freeze({x:COMPARISON.mirrorX,top:COMPARISON.top+10,height:COMPARISON.floor-COMPARISON.top-20,left:-61,width:122}),
 });
 export function planePoint(plane,u,v) {return [plane.x,plane.top+plane.height*v,plane.left+plane.width*u];}
 export function quad(camera,plane) {return [[0,0],[1,0],[1,1],[0,1]].map(([u,v])=>project(camera,planePoint(plane,u,v)));}

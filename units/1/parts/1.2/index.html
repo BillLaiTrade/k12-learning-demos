@@ -83,7 +83,7 @@
 
 
   </style>
-  <link rel="stylesheet" href="assets/mirror-image.css?v=5">
+  <link rel="stylesheet" href="assets/mirror-image.css?v=6">
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
   <link rel="stylesheet" href="assets/reversible-light.css?v=3">
   <link rel="stylesheet" href="assets/periscope.css?v=8">
@@ -191,16 +191,14 @@
             </div>
           </div>
         </section>
-        <section class="lesson-card" id="card-03" data-comparison-mode="mirror">
+        <section class="lesson-card" id="card-03" data-presentation="simultaneous">
           <div class="card-side"><span class="card-number">03</span><h3>平面鏡裡的像在哪裡？</h3></div>
           <div class="card-main">
-            <h2>撤掉鏡子，放上一隻真小熊，會看起來一樣嗎？</h2>
-            <p>固定小葵的位置，比較鏡中虛像與同位置的真實小熊。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>如果真的有一隻小熊放在像的位置，我看到的會一樣嗎？</p></div>
-            <p class="comparison-intro">左邊保留有鏡子的基準；按下按鈕，切換右邊的情境。</p>
-            <div class="mirror-comparison-grid" aria-label="有鏡子的基準與可切換的對照情境"><article class="comparison-state" id="comparison-reference" data-mode="mirror" aria-labelledby="reference-heading">
-<figure class="mirror-view comparison-diagram"><h3 id="reference-heading"><span class="comparison-step">①</span><span data-role="heading">有鏡子：看見鏡後的虛像</span></h3><svg class="comparison-side" id="reference-side" viewBox="0 0 900 650" role="img" aria-labelledby="reference-side-title reference-side-desc">
-<title id="reference-side-title">有鏡子時的反射光路</title><desc id="reference-side-desc">小葵位置固定。鼻尖的光經鏡面反射進入瞳孔；虛線表示反射光的反向延長，鏡後的小熊只是虛像位置示意。</desc>
+            <h2>上下看，熊玩偶看起來一樣嗎？</h2>
+            <div class="comparison-column-headings" aria-hidden="true"><span>光的路徑</span><span>小葵看到的熊</span></div>
+            <div class="mirror-comparison-grid" aria-label="上排有鏡子，下排撤鏡並放入真熊；兩個情境同時比較"><article class="comparison-state" id="comparison-reference" data-mode="mirror" aria-labelledby="reference-heading">
+ <figure class="comparison-diagram"><h3 class="comparison-row-title" id="reference-heading"><span>②</span>有鏡子</h3><svg class="comparison-side" id="reference-side" viewBox="0 0 900 650" role="img" aria-labelledby="reference-side-title reference-side-desc">
+<title id="reference-side-title">小熊的光經鏡面反射進入眼睛，鏡後以虛線標示像的位置</title><desc id="reference-side-desc">固定眼位，比較整隻熊玩偶。有鏡子時，實線代表實際反射光、鏡後虛線為反向延長；下排撤鏡後，另放入同位置、同大小與對應朝向的真熊。2與3公尺沿中央代表光路量取。</desc>
 <defs>
  <linearGradient id="reference-room" x2="0" y2="1"><stop stop-color="#fbfaf5"/><stop offset="1" stop-color="#eee9df"/></linearGradient>
  <linearGradient id="reference-wood" x2="0" y2="1"><stop stop-color="#d5b38c"/><stop offset="1" stop-color="#b98e64"/></linearGradient>
@@ -212,28 +210,28 @@
 <rect width="900" height="570" fill="url(#reference-room)"/>
 <rect data-side="virtual-region" x="550" y="68" width="350" height="502" fill="#e6f1f4"/>
 <rect y="570" width="900" height="80" fill="url(#reference-wood)"/>
-<g data-side="observer"><image data-side="profile" href="assets/mirror/xiaokui-profile.webp" x="38.7272727" y="106.5454545" width="160" height="160"/><rect x="20" y="283" width="248" height="35" rx="12" fill="#e1f1fa"/><text x="144" y="308" text-anchor="middle" font-size="25" font-weight="700" fill="#265e7e">小葵的位置保持固定</text></g>
-<g data-side="near"><use data-side="near-shape" href="#reference-bear-sprite"/><rect x="172" y="597" width="260" height="35" rx="12" fill="#fffdf8"/><text data-side="near-label" x="302" y="622" text-anchor="middle" font-size="25" font-weight="700" fill="#315a46">鏡前實物</text></g>
-<g data-side="mirror"><rect x="540" y="68" width="9" height="502" rx="3" fill="url(#reference-silver)" stroke="#607e7f" stroke-width="2"/><rect x="552" y="70" width="12" height="498" fill="url(#reference-backing)"/><rect x="522" y="565" width="46" height="7" rx="3" fill="#81948b"/><text x="540" y="44" text-anchor="middle" font-size="28" font-weight="700" fill="#315a46">平面鏡</text></g>
-<g data-side="mirror-tick" style="display:none"><path d="M540 566V578" stroke="#829694" stroke-width="2"/><circle cx="540" cy="570" r="4" fill="#fffdf8" stroke="#829694"/><text x="540" y="622" text-anchor="middle" font-size="22" fill="#fffdf8">原鏡面位置</text></g>
-<g data-side="far"><use data-side="far-shape" href="#reference-bear-sprite" transform="translate(1080 0) scale(-1 1)" opacity=".48"/><rect x="616" y="597" width="272" height="35" rx="12" fill="#fffdf8"/><text data-side="far-label" x="752" y="622" text-anchor="middle" font-size="25" font-weight="700" fill="#286580">虛像位置（示意）</text></g>
+<g data-side="observer"><image data-side="profile" href="assets/mirror/xiaokui-profile.webp" x="136.2272727" y="106.5454545" width="160" height="160"/></g>
+<g data-side="near"><use data-side="near-shape" href="#reference-bear-sprite" opacity="1"/></g>
+<g data-side="mirror"><rect x="540" y="68" width="9" height="502" rx="3" fill="url(#reference-silver)" stroke="#607e7f" stroke-width="2"/><rect x="552" y="70" width="12" height="498" fill="url(#reference-backing)"/><rect x="522" y="565" width="46" height="7" rx="3" fill="#81948b"/></g>
+<g data-side="mirror-tick" style="display:none"><path d="M540 565V589" stroke="#829694" stroke-width="6"/></g>
+<g data-side="far"><use data-side="far-shape" href="#reference-bear-sprite" transform="translate(1080 0) scale(-1 1)" opacity=".48"/><rect x="720" y="592" width="110" height="48" rx="14" fill="#fffdf8"/><text data-side="far-label" x="775" y="626" text-anchor="middle" font-size="34" font-weight="700" fill="#286580">虛像</text></g>
 <g data-side="extensions" fill="none" stroke="#397d9f" stroke-dasharray="8 6" stroke-width="2"></g>
 <g data-side="rays" fill="none" stroke="#236f9f" stroke-linejoin="round"></g>
 <g data-side="hits" fill="#dceff8" stroke="#236f9f" stroke-width="1.8"></g>
-<circle data-side="source-point" cx="345" cy="440" r="6" fill="#f5d477" stroke="#9d701b" stroke-width="1.5"/><circle data-side="image-point" cx="735" cy="440" r="6" fill="#f5d477" stroke="#9d701b" stroke-width="1.5"/>
-</svg><figcaption id="reference-caption">鏡前小熊的光經鏡面反射，沿藍色光路進入眼睛。</figcaption></figure>
-<figure class="mirror-view comparison-observation"><h3>小葵眼中看到的小熊</h3><svg class="comparison-eye" id="reference-eye" viewBox="0 0 900 400" role="img" aria-labelledby="reference-eye-title reference-eye-desc">
-<title id="reference-eye-title">小葵透過鏡面看到的小熊</title><desc id="reference-eye-desc">與側面圖共用同一眼位；金色鼻尖標記對應同一物點。切換後對照熊的位置、朝向與視大小保持相同，鏡框和背景可不同。</desc>
+
+<g data-side="distance-three" aria-label="眼睛到反射點的光路為3公尺"></g><g data-side="distance-two" aria-label="反射點到對照位置的光路為2公尺"></g></svg></figure>
+ <figure class="comparison-observation"><svg class="comparison-eye" id="reference-eye" viewBox="175 0 550 550" role="img" aria-labelledby="reference-eye-title reference-eye-desc">
+<title id="reference-eye-title">小葵從鏡中看見的完整熊玩偶</title><desc id="reference-eye-desc">上下兩個觀察窗使用同一眼位、相同比例與取景，完整顯示熊玩偶，比較位置、大小與外觀。鏡框與背景可以不同。</desc>
 <defs><linearGradient id="reference-eye-wall" x2="1" y2="1"><stop stop-color="#f5f0e5"/><stop offset="1" stop-color="#dfd5c5"/></linearGradient><linearGradient id="reference-eye-wood" x2="0" y2="1"><stop stop-color="#d5b38b"/><stop offset="1" stop-color="#ad8054"/></linearGradient><linearGradient id="reference-glass" x2="1" y2="1"><stop stop-color="#e5f3f3"/><stop offset="1" stop-color="#cfe3e5"/></linearGradient><clipPath id="reference-eye-clip"><path data-view="clip"/></clipPath></defs>
-<rect width="900" height="400" fill="url(#reference-eye-wall)"/>
+<rect width="900" height="550" fill="url(#reference-eye-wall)"/>
 <path data-view="table" fill="url(#reference-eye-wood)"/><path data-view="grain" fill="none" stroke="#95643c" stroke-width="1" opacity=".24"/>
 <g data-view="mirror"><path data-view="frame" fill="#647f7a" stroke="#526d68" stroke-width="2"/><path data-view="glass" fill="url(#reference-glass)"/><g clip-path="url(#reference-eye-clip)"><path data-view="reflected-table" fill="url(#reference-eye-wood)"/><path data-view="reflected-grain" fill="none" stroke="#95643c" stroke-width="1" opacity=".2"/></g></g>
-<g data-view="far" clip-path="url(#reference-eye-clip)"><path data-view="far-shadow" fill="#493725" opacity=".16"/><foreignObject width="900" height="400"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="front" width="900" height="400" style="width:900px;height:400px" aria-hidden="true"></canvas></foreignObject><circle data-view="nose" r="5" fill="#f5d477" stroke="#9d701b" stroke-width="1.5"/></g>
-<g data-view="near"><path data-view="near-shadow" fill="#493725" opacity=".2"/><foreignObject width="900" height="400"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="rear" width="900" height="400" style="width:900px;height:400px" aria-hidden="true"></canvas></foreignObject></g>
+<g data-view="far" clip-path="url(#reference-eye-clip)"><path data-view="far-shadow" fill="#493725" opacity=".16"/><foreignObject width="900" height="550"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="front" width="900" height="550" style="width:900px;height:550px" aria-hidden="true"></canvas></foreignObject></g>
+<g data-view="near"><path data-view="near-shadow" fill="#493725" opacity=".2"/><foreignObject width="900" height="550"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="rear" width="900" height="550" style="width:900px;height:550px" aria-hidden="true"></canvas></foreignObject></g>
 </svg></figure>
-</article><article class="comparison-state" id="comparison-trial" data-mode="mirror" aria-labelledby="trial-heading">
-<figure class="mirror-view comparison-diagram"><h3 id="trial-heading"><span class="comparison-step">②</span><span data-role="heading">操作比較：目前有鏡子</span></h3><svg class="comparison-side" id="trial-side" viewBox="0 0 900 650" role="img" aria-labelledby="trial-side-title trial-side-desc">
-<title id="trial-side-title">有鏡子時的反射光路</title><desc id="trial-side-desc">小葵位置固定。鼻尖的光經鏡面反射進入瞳孔；虛線表示反射光的反向延長，鏡後的小熊只是虛像位置示意。</desc>
+</article><article class="comparison-state" id="comparison-trial" data-mode="direct" aria-labelledby="trial-heading">
+ <figure class="comparison-diagram"><h3 class="comparison-row-title" id="trial-heading"><span>③</span>撤鏡，放入真熊</h3><svg class="comparison-side" id="trial-side" viewBox="0 0 900 650" role="img" aria-labelledby="trial-side-title trial-side-desc">
+<title id="trial-side-title">撤鏡並在原虛像位置另放真熊，光沿直線進入同一眼位</title><desc id="trial-side-desc">固定眼位，比較整隻熊玩偶。有鏡子時，實線代表實際反射光、鏡後虛線為反向延長；下排撤鏡後，另放入同位置、同大小與對應朝向的真熊。2與3公尺沿中央代表光路量取。</desc>
 <defs>
  <linearGradient id="trial-room" x2="0" y2="1"><stop stop-color="#fbfaf5"/><stop offset="1" stop-color="#eee9df"/></linearGradient>
  <linearGradient id="trial-wood" x2="0" y2="1"><stop stop-color="#d5b38c"/><stop offset="1" stop-color="#b98e64"/></linearGradient>
@@ -243,39 +241,36 @@
  <image id="trial-bear-sprite" href="assets/mirror/teddy-side.webp" x="199.4" y="374.2" width="203" height="203"/>
 </defs>
 <rect width="900" height="570" fill="url(#trial-room)"/>
-<rect data-side="virtual-region" x="550" y="68" width="350" height="502" fill="#e6f1f4"/>
+<rect style="display:none" data-side="virtual-region" x="550" y="68" width="350" height="502" fill="#e6f1f4"/>
 <rect y="570" width="900" height="80" fill="url(#trial-wood)"/>
-<g data-side="observer"><image data-side="profile" href="assets/mirror/xiaokui-profile.webp" x="38.7272727" y="106.5454545" width="160" height="160"/><rect x="20" y="283" width="248" height="35" rx="12" fill="#e1f1fa"/><text x="144" y="308" text-anchor="middle" font-size="25" font-weight="700" fill="#265e7e">小葵的位置保持固定</text></g>
-<g data-side="near"><use data-side="near-shape" href="#trial-bear-sprite"/><rect x="172" y="597" width="260" height="35" rx="12" fill="#fffdf8"/><text data-side="near-label" x="302" y="622" text-anchor="middle" font-size="25" font-weight="700" fill="#315a46">鏡前實物</text></g>
-<g data-side="mirror"><rect x="540" y="68" width="9" height="502" rx="3" fill="url(#trial-silver)" stroke="#607e7f" stroke-width="2"/><rect x="552" y="70" width="12" height="498" fill="url(#trial-backing)"/><rect x="522" y="565" width="46" height="7" rx="3" fill="#81948b"/><text x="540" y="44" text-anchor="middle" font-size="28" font-weight="700" fill="#315a46">平面鏡</text></g>
-<g data-side="mirror-tick" style="display:none"><path d="M540 566V578" stroke="#829694" stroke-width="2"/><circle cx="540" cy="570" r="4" fill="#fffdf8" stroke="#829694"/><text x="540" y="622" text-anchor="middle" font-size="22" fill="#fffdf8">原鏡面位置</text></g>
-<g data-side="far"><use data-side="far-shape" href="#trial-bear-sprite" transform="translate(1080 0) scale(-1 1)" opacity=".48"/><rect x="616" y="597" width="272" height="35" rx="12" fill="#fffdf8"/><text data-side="far-label" x="752" y="622" text-anchor="middle" font-size="25" font-weight="700" fill="#286580">虛像位置（示意）</text></g>
+<g data-side="observer"><image data-side="profile" href="assets/mirror/xiaokui-profile.webp" x="136.2272727" y="106.5454545" width="160" height="160"/></g>
+<g data-side="near"><use data-side="near-shape" href="#trial-bear-sprite" opacity=".4"/></g>
+<g data-side="mirror" style="display:none"><rect x="540" y="68" width="9" height="502" rx="3" fill="url(#trial-silver)" stroke="#607e7f" stroke-width="2"/><rect x="552" y="70" width="12" height="498" fill="url(#trial-backing)"/><rect x="522" y="565" width="46" height="7" rx="3" fill="#81948b"/></g>
+<g data-side="mirror-tick"><path d="M540 565V589" stroke="#829694" stroke-width="6"/></g>
+<g data-side="far"><use data-side="far-shape" href="#trial-bear-sprite" transform="translate(1080 0) scale(-1 1)" opacity="1"/><rect x="720" y="592" width="110" height="48" rx="14" fill="#fffdf8"/><text data-side="far-label" x="775" y="626" text-anchor="middle" font-size="34" font-weight="700" fill="#286580">真熊</text></g>
 <g data-side="extensions" fill="none" stroke="#397d9f" stroke-dasharray="8 6" stroke-width="2"></g>
 <g data-side="rays" fill="none" stroke="#236f9f" stroke-linejoin="round"></g>
 <g data-side="hits" fill="#dceff8" stroke="#236f9f" stroke-width="1.8"></g>
-<circle data-side="source-point" cx="345" cy="440" r="6" fill="#f5d477" stroke="#9d701b" stroke-width="1.5"/><circle data-side="image-point" cx="735" cy="440" r="6" fill="#f5d477" stroke="#9d701b" stroke-width="1.5"/>
-</svg><figcaption id="trial-caption">鏡前小熊的光經鏡面反射，沿藍色光路進入眼睛。</figcaption></figure>
-<figure class="mirror-view comparison-observation"><h3>小葵眼中看到的小熊</h3><svg class="comparison-eye" id="trial-eye" viewBox="0 0 900 400" role="img" aria-labelledby="trial-eye-title trial-eye-desc">
-<title id="trial-eye-title">小葵透過鏡面看到的小熊</title><desc id="trial-eye-desc">與側面圖共用同一眼位；金色鼻尖標記對應同一物點。切換後對照熊的位置、朝向與視大小保持相同，鏡框和背景可不同。</desc>
+
+<g data-side="distance-three" aria-label="眼睛到反射點的光路為3公尺"></g><g data-side="distance-two" aria-label="反射點到對照位置的光路為2公尺"></g></svg></figure>
+ <figure class="comparison-observation"><svg class="comparison-eye" id="trial-eye" viewBox="175 0 550 550" role="img" aria-labelledby="trial-eye-title trial-eye-desc">
+<title id="trial-eye-title">小葵直接看見放在原像位置的完整真熊</title><desc id="trial-eye-desc">上下兩個觀察窗使用同一眼位、相同比例與取景，完整顯示熊玩偶，比較位置、大小與外觀。鏡框與背景可以不同。</desc>
 <defs><linearGradient id="trial-eye-wall" x2="1" y2="1"><stop stop-color="#f5f0e5"/><stop offset="1" stop-color="#dfd5c5"/></linearGradient><linearGradient id="trial-eye-wood" x2="0" y2="1"><stop stop-color="#d5b38b"/><stop offset="1" stop-color="#ad8054"/></linearGradient><linearGradient id="trial-glass" x2="1" y2="1"><stop stop-color="#e5f3f3"/><stop offset="1" stop-color="#cfe3e5"/></linearGradient><clipPath id="trial-eye-clip"><path data-view="clip"/></clipPath></defs>
-<rect width="900" height="400" fill="url(#trial-eye-wall)"/>
+<rect width="900" height="550" fill="url(#trial-eye-wall)"/>
 <path data-view="table" fill="url(#trial-eye-wood)"/><path data-view="grain" fill="none" stroke="#95643c" stroke-width="1" opacity=".24"/>
-<g data-view="mirror"><path data-view="frame" fill="#647f7a" stroke="#526d68" stroke-width="2"/><path data-view="glass" fill="url(#trial-glass)"/><g clip-path="url(#trial-eye-clip)"><path data-view="reflected-table" fill="url(#trial-eye-wood)"/><path data-view="reflected-grain" fill="none" stroke="#95643c" stroke-width="1" opacity=".2"/></g></g>
-<g data-view="far" clip-path="url(#trial-eye-clip)"><path data-view="far-shadow" fill="#493725" opacity=".16"/><foreignObject width="900" height="400"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="front" width="900" height="400" style="width:900px;height:400px" aria-hidden="true"></canvas></foreignObject><circle data-view="nose" r="5" fill="#f5d477" stroke="#9d701b" stroke-width="1.5"/></g>
-<g data-view="near"><path data-view="near-shadow" fill="#493725" opacity=".2"/><foreignObject width="900" height="400"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="rear" width="900" height="400" style="width:900px;height:400px" aria-hidden="true"></canvas></foreignObject></g>
+<g data-view="mirror" style="display:none"><path data-view="frame" fill="#647f7a" stroke="#526d68" stroke-width="2"/><path data-view="glass" fill="url(#trial-glass)"/><g clip-path="url(#trial-eye-clip)"><path data-view="reflected-table" fill="url(#trial-eye-wood)"/><path data-view="reflected-grain" fill="none" stroke="#95643c" stroke-width="1" opacity=".2"/></g></g>
+<g data-view="far" clip-path="none"><path data-view="far-shadow" fill="#493725" opacity=".16"/><foreignObject width="900" height="550"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="front" width="900" height="550" style="width:900px;height:550px" aria-hidden="true"></canvas></foreignObject></g>
+<g data-view="near"><path data-view="near-shadow" fill="#493725" opacity=".2"/><foreignObject width="900" height="550"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="rear" width="900" height="550" style="width:900px;height:550px" aria-hidden="true"></canvas></foreignObject></g>
 </svg></figure>
 </article></div>
-            <p class="comparison-view-note">比較小熊的位置與視大小；鏡框與背景可以不同。</p>
-            <div class="comparison-controls">
-              <button class="control-button mirror-btn mirror-primary" id="toggle-comparison-mirror" type="button" aria-pressed="false" aria-controls="comparison-trial comparison-status">撤鏡，放入對照熊</button>
-              <p id="comparison-button-hint">點一下，切換比較；小葵與原小熊的位置保持不變。</p>
-            </div>
-            <div class="comparison-status" id="comparison-status" role="status" aria-live="polite" aria-atomic="true">先看左圖：鏡前小熊的光經鏡面反射進入眼睛。再切換右邊，看看直接來自對照熊的光，會不會沿同一方向進入眼睛。</div>
-            <div class="comparison-legend" aria-label="光路圖例"><span><i class="comparison-real"></i>藍實線：實際光路</span><span><i class="comparison-extension"></i>藍虛線：反向延長輔助線</span></div>
+            <div class="comparison-result"><p class="comparison-equation" aria-label="3公尺加2公尺等於5公尺">3＋2＝5<span>公尺</span></p><p>路線不同，看到的熊在同一個位置。</p></div>
             <div class="mirror-explanation">
-              <strong>光的實際來處不同，進入眼睛的情形相同</strong>
-              <p>鏡前實物的反射光，與對照熊的直達光，具有相同的入眼方向與發散情形。因此，鏡中像看起來就在對照熊的位置。</p>
-              <p class="comparison-clarification">有鏡子時，藍色虛線只標示光看起來的來向，沒有光真的沿虛線通過鏡後。</p>
+              <h3>為什麼像看起來在鏡後？</h3>
+              <p>鏡前熊的光先走2公尺到鏡面，再反射3公尺進入眼睛。沿入眼光線的來向回看，過了反射點再延長2公尺，就到虛像的位置；眼睛到像的位置因此對應3＋2＝5公尺。</p>
+              <p>在原虛像位置另放一隻大小、朝向對應的真熊，撤掉鏡子後，直達光與原反射光進入眼睛的方向及發散情形相同，所以看到的熊位置與視大小相同。原本鏡前的熊仍留在原位。</p>
+              <p class="comparison-clarification">本例距離沿圖示光路量取；虛線只是輔助線。有鏡子時，光沒有真的沿虛線通過鏡後。鏡框與背景可以不同。</p>
+              <a class="comparison-next" id="mirror-next-activity" href="#card-04">下一區：移動熊，觀察像的位置 <span aria-hidden="true">→</span></a>
+              <p class="comparison-bridge">接著用垂直鏡面的距離，比較物距與像距如何一起改變。</p>
             </div>
           </div>
         </section>
@@ -481,7 +476,7 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent=index===6?"正在進行單元小測":"正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/curved-mirrors.js?v=1"></script>
-  <script type="module" src="assets/mirror-image.js?v=7"></script>
+  <script type="module" src="assets/mirror-image.js?v=8"></script>
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
   <script type="module" src="assets/reversible-light.js?v=3"></script>
