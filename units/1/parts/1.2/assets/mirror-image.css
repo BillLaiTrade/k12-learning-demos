@@ -1,0 +1,17 @@
+#card-03 .mirror-views{grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);gap:14px;margin:15px 0 12px;align-items:stretch}
+#card-03 .mirror-view{display:flex;flex-direction:column;background:#fbfaf6}
+#card-03 .mirror-view h3{flex:0 0 auto;min-height:43px;padding:10px 13px;font-size:1rem;line-height:1.4}
+#card-03 #image-side-view{flex:0 0 auto}
+#card-03 #image-front-view{flex:1;min-height:0;height:100%}
+#card-03 .mirror-ray-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px 18px;min-height:42px;margin:0;padding:9px 13px;background:#fffdf8;color:#405851;font-size:.74rem;line-height:1.5}
+#card-03 .mirror-ray-legend span{display:inline-flex;align-items:center;gap:7px}
+#card-03 .mirror-ray-legend i{display:inline-block;width:27px;border-top:3px solid #a75d16}
+#card-03 .mirror-ray-legend .mirror-ray-dashed{border-top:3px dashed #397f98}
+#card-03 .mirror-stable-controls{flex-wrap:nowrap;gap:11px;min-height:46px;margin:13px 0}
+#card-03 #toggle-image-rays{min-width:156px;text-align:center;font-weight:800}
+#card-03 #toggle-image-object{min-width:112px;text-align:center}
+#card-03 .mirror-explanation{min-height:116px;margin-top:12px;padding:14px 16px;border-left:4px solid #397f98;border-radius:0 12px 12px 0;background:#edf5f7;color:#23465a}
+#card-03 .mirror-explanation strong{font-size:1.05rem}
+#card-03 .mirror-explanation p{margin:6px 0 0;font-size:.9rem;line-height:1.65}
+@media(max-width:1050px){#card-03 .mirror-views{grid-template-columns:minmax(0,1fr)}#card-03 #image-front-view{flex:0 0 auto;width:min(100%,380px);height:auto;align-self:center;aspect-ratio:400/460}}
+@media(max-width:600px){#card-03{padding:16px}#card-03 .card-side{gap:8px}#card-03 .card-side h3{font-size:1rem}#card-03 .mirror-view h3{font-size:.94rem}#card-03 .mirror-ray-legend{gap:5px 12px;padding:9px 10px;font-size:.72rem}#card-03 .mirror-explanation{min-height:148px;padding:12px}#card-03 .mirror-explanation p{font-size:.83rem}#card-03 .mirror-stable-controls{display:grid;grid-template-columns:1.25fr 1fr}#card-03 #toggle-image-rays,#card-03 #toggle-image-object{min-width:0;min-height:48px;padding-inline:8px;font-size:.9rem}}
