@@ -33,10 +33,6 @@
     .route-inner a { display:grid; grid-template-columns:27px 1fr; gap:8px; align-items:start; padding:8px; border-radius:9px; color:var(--ink); text-decoration:none; font-size:.81rem; line-height:1.4; }
     .route-inner a b { color:var(--green); font-size:.72rem; font-weight:750; }
     .route-inner a[aria-current="step"] { background:#e8efe9; color:#164e3f; font-weight:700; }
-    .route-hint { margin:10px 0 0; padding-top:10px; border-top:1px solid var(--line); color:var(--muted); font-size:.78rem; }
-    .record-panel { margin-top:12px; padding:12px; border-radius:11px; background:#edf4ee; }
-    .record-panel h2 { margin:0 0 6px; font-size:.9rem; }
-    .record-panel p { margin:0; color:var(--muted); font-size:.8rem; }
     .cards { min-width:0; }
     .section-top { display:flex; justify-content:space-between; gap:12px; align-items:baseline; padding:4px 0 12px; }
     .section-top h2 { margin:0; font-size:1.05rem; }
@@ -138,7 +134,7 @@
     .feedback { min-height:2em; font-weight:700; }
     .next-hint { margin:14px 0 0; padding-top:12px; border-top:1px solid var(--line); color:#587365; font-size:.86rem; }
     footer { padding:16px 0 28px; color:#718078; font-size:.82rem; }
-    @media(max-width:850px) { .lesson-layout { grid-template-columns:1fr; gap:12px; } .route { position:relative; top:auto; max-height:none; } .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); } .record-panel { display:none; } }
+    @media(max-width:850px) { .lesson-layout { grid-template-columns:1fr; gap:12px; } .route { position:relative; top:auto; max-height:none; } .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); } }
     @media(max-width:850px) { .filter-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
     @media(max-width:760px) { .evap-stage { grid-template-columns:1fr; gap:10px; padding:38px 12px 13px; } .evap-visual { max-width:560px; } .evap-observation { min-height:104px; } .evap-observation strong { margin-bottom:3px; } }
     @media(max-width:560px) { .evap-stepper { grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr); gap:5px; } .evap-step { min-height:49px; padding:6px 3px; font-size:.75rem; line-height:1.35; } .evap-arrow { font-size:.95rem; } }
@@ -174,8 +170,6 @@
         <a href="#s5"><b>05</b><span>自己配糖水，濃度是多少？</span></a>
         <a href="#unit-quiz" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
       </div>
-      <p class="route-hint">先帶著問題看操作，再用結果找答案。</p>
-      <section class="record-panel"><h2>本段目標</h2><p>選擇混合物分離方法，並用重量百分濃度與 ppm 表示溶質含量。</p></section>
     </nav>
     <div class="cards">
       <div class="section-top"><h2>先分離混合物，再比較溶液含量</h2><span class="progress-copy">提出問題 → 觀察證據 → 表示含量</span></div>
