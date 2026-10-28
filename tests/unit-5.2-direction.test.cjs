@@ -4,7 +4,7 @@ const {spawn}=require('node:child_process');
 const path=require('node:path');
 const {chromium}=require('playwright');
 
-test('5.2 first block: three environments and fixed observation bar',{timeout:180000},async t=>{
+test('5.2 first block: three environments and in-water thermometers',{timeout:180000},async t=>{
   const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','pipe']});
   t.after(()=>server.kill());
   const port=await new Promise((resolve,reject)=>{let out='';const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{out+=d;const m=out.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject);});
@@ -29,7 +29,34 @@ test('5.2 first block: three environments and fixed observation bar',{timeout:18
     for(const name of ['fridge','room','hot']){const response=await page.request.get(new URL(`assets/direction-${name}.webp`,url).href);assert.equal(response.status(),200);}
     assert.equal(await page.locator('#card-01 .speaker').count(),4);
     assert.match(await page.locator('#card-01 .speaker').first().evaluate(n=>getComputedStyle(n,'::before').backgroundImage),/dialogue-character-avatars\.png/);
-    assert.equal(await page.locator('#direction-lab .direction-photo .direction-reading').count(),0);
+    assert.equal(await page.locator('#direction-lab .direction-reading').count(),0);
+    assert.equal(await page.locator('.direction-thermometer').count(),2);
+    assert.equal(await page.locator('.direction-rim-clip').count(),2);
+    for(const key of ['hot','cold']){
+      assert.equal(await page.locator(`#direction-thermometer-${key} .direction-degree`).count(),81);
+      assert.deepEqual(await page.locator(`#direction-thermometer-${key} .direction-degree-number`).allTextContents(),['0','20','40','60','80']);
+    }
+  });
+  await t.test('matching scales, immersed bulbs and synchronized liquid/readout levels',async()=>{
+    for(const key of ['hot','cold']){
+      const geometry=await page.locator(`#direction-thermometer-${key}`).evaluate(n=>({
+        bulb:{y:Number(n.querySelector('.direction-bulb-glass').getAttribute('cy')),r:Number(n.querySelector('.direction-bulb-glass').getAttribute('r'))},
+        ticks:[...n.querySelectorAll('.direction-degree')].map(t=>({degree:Number(t.dataset.degree),y:Number(t.getAttribute('d').match(/^M3 ([\d.]+)/)[1])}))
+      }));
+      assert.ok(geometry.bulb.y-geometry.bulb.r>215,'bulb below water surface');
+      assert.ok(geometry.bulb.y+geometry.bulb.r<350,'bulb above cup floor');
+      for(const tick of geometry.ticks)assert.equal(tick.y,298-tick.degree*3.25);
+    }
+    for(const environment of [5,25,70]){
+      await select(environment);await play.click();await page.clock.runFor(700);await pause();const s=await state();
+      for(const [key,raw]of [['hot',s.temperatureA],['cold',s.temperatureB]]){
+        const y=298-Number(raw)*3.25;
+        assert.ok(Math.abs(Number((await page.locator(`#direction-liquid-${key}`).getAttribute('d')).match(/^M-9 ([\d.]+)/)[1])-y)<1e-6);
+        assert.equal(await page.locator(`#direction-live-reading-${key}`).getAttribute('transform'),`translate(0,${y})`);
+        assert.equal(await page.locator(`#direction-${key}`).textContent(),`${Math.round(Number(raw))}°C`);
+      }
+    }
+    await select(25);
   });
   await t.test('25°C: A releases heat and B absorbs heat; pause freezes readouts',async()=>{
     await select(25);await play.click();await page.clock.runFor(3200);await pause();
@@ -73,15 +100,24 @@ test('5.2 first block: three environments and fixed observation bar',{timeout:18
     await page.locator('#direction-reset').focus();await page.keyboard.press('Enter');assert.deepEqual(await values(),{a:60,b:10});
     assert.equal(await page.locator('.direction-flow-streak').first().evaluate(n=>getComputedStyle(n).animationName),'none');await page.emulateMedia({reducedMotion:'no-preference'});
   });
-  await t.test('observation bars stay outside the scene at desktop, tablet and phone widths',async()=>{
-    for(const width of [1440,1024,768,600,390,320]){
+  await t.test('in-scene instruments and controls fit desktop, tablet and phone widths',async()=>{
+    for(const width of [1440,1280,1024,768,600,390,320]){
       await page.setViewportSize({width,height:1300});await root.scrollIntoViewIfNeeded();
       const result=await root.evaluate(n=>({
         overflow:document.documentElement.scrollWidth>innerWidth,
-        pairs:[...n.querySelectorAll('.direction-cup-view')].map(card=>{const p=card.querySelector('.direction-photo').getBoundingClientRect(),r=card.querySelector('.direction-reading'),b=r.getBoundingClientRect(),style=getComputedStyle(r);return{photoBottom:p.bottom,readingTop:b.top,shadow:style.boxShadow,position:style.position};})
+        height:n.closest('.lesson-card').getBoundingClientRect().height,
+        pairs:[...n.querySelectorAll('.direction-cup-view')].map(card=>{
+          const p=card.querySelector('.direction-photo').getBoundingClientRect();
+          const items=[...card.querySelectorAll('.direction-thermometer,.direction-live-reading')].map(el=>{
+            const b=el.getBoundingClientRect();return{left:b.left-p.left,top:b.top-p.top,right:b.right-p.right,bottom:b.bottom-p.bottom};
+          });return{items};
+        }),
+        buttons:[...n.querySelectorAll('button')].map(b=>b.getBoundingClientRect().height)
       }));
       assert.equal(result.overflow,false,`${width}px horizontal overflow`);
-      for(const pair of result.pairs){assert.ok(pair.readingTop>=pair.photoBottom-1);assert.equal(pair.shadow,'none');assert.equal(pair.position,'static');}
+      for(const pair of result.pairs)for(const b of pair.items){assert.ok(b.left>=-1&&b.top>=-1&&b.right<=1&&b.bottom<=1,`${width}px instrument clipped`);}
+      assert.ok(result.buttons.every(height=>height>=44),`${width}px touch targets`);
+      if(width===1440||width===1280)assert.ok(result.height<1200,'compact card remains below 1200px');
       if(width===390||width===1440)await capture(`width-${width}`);
     }
     await page.setViewportSize({width:1440,height:1300});

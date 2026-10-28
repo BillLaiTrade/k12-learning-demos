@@ -249,4 +249,4 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.2-investigation.test.cj
 CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-direction.test.cjs
 ```
 
-11 項（含外層）檢查初溫 60°C／10°C、5／25／70°C 三種場景、升降溫與淨熱傳方向、暫停／繼續／重來、播放中切換、同溫箭頭消失、鍵盤、減少動態、320–1440px 六種寬度、真實手機觸控、其他區塊獨立運作及小測。`DIRECTION_LAB_URL` 可指定公開版本；未設定則自動啟停本機伺服器。`DIRECTION_CAPTURE_DIR` 可保存實際瀏覽器視窗截圖。核可圖及正式畫面見 `docs/reviews/unit-5.2-card01/`。
+12 項（含外層）檢查杯內雙溫度計、初溫 60°C／10°C、每支 81 條共同校準的 0–80°C 刻度、液泡浸水與離底、液柱／即時讀值同步、5／25／70°C 三種場景、升降溫與淨熱傳方向、暫停／繼續／重來、播放中切換、同溫箭頭消失、鍵盤、減少動態、320–1440px 七種寬度、真實手機觸控、其他區塊獨立運作及小測。`DIRECTION_LAB_URL` 可指定公開版本；未設定則自動啟停本機伺服器。`DIRECTION_CAPTURE_DIR` 可保存實際瀏覽器視窗截圖。核可圖及正式畫面見 `docs/reviews/unit-5.2-card01/`。

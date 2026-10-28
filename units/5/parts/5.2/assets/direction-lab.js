@@ -21,6 +21,12 @@
     const value=valueFor(initial),difference=value-state.environment,hasFlow=difference!==0,visible=state.observed&&hasFlow;
     const outward=difference>0,scale=side==='left'?(outward?-1:1):(outward?1:-1);
     text(`direction-${key}`,`${Math.round(value)}°C`);
+    // Both instruments share an actual 0–80°C scale: 3.25 SVG units per °C.
+    const level=298-Math.max(0,Math.min(80,value))*3.25;
+    const surface=`M-9 ${level}Q-5 ${level+2}-1 ${level}`;
+    $(`direction-liquid-${key}`).setAttribute('d',`${surface}V320H-9Z`);
+    $(`direction-meniscus-${key}`).setAttribute('d',surface);
+    $(`direction-live-reading-${key}`).setAttribute('transform',`translate(0,${level})`);
     text(`direction-${key}-flow`,!state.observed?'等待觀察':!hasFlow?'同溫・沒有淨熱傳遞':outward?'放熱・降溫':'吸熱・升溫');
     text(`direction-caption-${key}`,outward?'水 → 環境':'環境 → 水');
     $(`direction-flow-${key}`).toggleAttribute('hidden',!visible);
