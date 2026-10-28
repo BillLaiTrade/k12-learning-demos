@@ -69,9 +69,12 @@ if(root) {
     root.dataset.pulseStatus=busy?'running':waiting?'cooldown':'idle';
     const button=$('#periscope-pulse');
     button.hidden=state.stage===2;button.disabled=busy||waiting;
-    button.textContent=busy?'✦ 視線追蹤中':waiting?'✦ 稍後可再試':'✦ 追蹤目前視線';
+    $('.periscope-pulse-label').textContent=busy?'視線追蹤中':waiting?'稍後可再試':'追蹤目前視線';
+    $('.periscope-pulse-invite').textContent=busy?'看看光在哪裡轉彎或停下':waiting?'調整鏡片，再試一次':'點一下，看看光走到哪裡';
+    $('#periscope-trace-action').hidden=state.stage===2;
+    $('#periscope-signal-controls').hidden=state.stage!==2;
     $('#periscope-pulse-note').hidden=state.stage===2;
-    $('#periscope-pulse-note').textContent=busy?'從小葵的觀察口出發，看看這次視線通往哪裡。':waiting?'追蹤已結束。先調整鏡片，再追蹤一次。':'從眼睛的位置反向追蹤目前視線；短暫顯示後消失。';
+    $('#periscope-pulse-note').textContent=busy?'從小葵的觀察口出發，看看這次視線通往哪裡。':waiting?'追蹤已結束。先調整鏡片，再追蹤一次。':'光線短暫亮起後會自動消失。';
   }
   function cancelPulse(reset=false) {
     cancelAnimationFrame(pulseFrame);clearTimeout(pulseEndTimer);pulse=null;

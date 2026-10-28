@@ -103,7 +103,7 @@
   </style>
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
   <link rel="stylesheet" href="assets/reversible-light.css?v=3">
-  <link rel="stylesheet" href="assets/periscope.css?v=5">
+  <link rel="stylesheet" href="assets/periscope.css?v=6">
 </head>
 <body>
   <header class="shell masthead">
@@ -430,10 +430,12 @@
                     <g id="periscope-signal-source" hidden pointer-events="none" role="img" aria-label="訊號光源位於原眼睛位置"><rect x="755" y="578" width="38" height="24" rx="6" fill="#254b69" stroke="#b3d8f2" stroke-width="2"/><path d="M780 581V599M786 581V599" stroke="#739dbb" stroke-width="2"/><circle cx="755" cy="590" r="6" fill="#89cfff" stroke="#e6f7ff" stroke-width="2"/></g>
                   </svg>
                 </div>
-                <aside class="periscope-view" aria-label="從潛望鏡看到的景象"><h3>小葵的觀察窗</h3><div class="periscope-lens-frame"><canvas id="periscope-view" width="240" height="240" role="img" aria-label="觀察窗載入中"></canvas></div><div id="periscope-view-state" class="periscope-view-state" role="status">正在準備觀察窗…</div><p id="periscope-view-copy">景象隨鏡片轉動；管壁擋住的區域會變暗。</p><div class="periscope-view-meter">轉錯時，可能看見天空、海面，或被管壁遮住。</div></aside>
+                <aside class="periscope-view" aria-label="從潛望鏡看到的景象"><h3>小葵的觀察窗</h3><div class="periscope-lens-frame"><canvas id="periscope-view" width="240" height="240" role="img" aria-label="觀察窗載入中"></canvas></div><div id="periscope-view-state" class="periscope-view-state" role="status">正在準備觀察窗…</div><p id="periscope-view-copy">景象隨鏡片轉動；管壁擋住的區域會變暗。</p><div class="periscope-trace-action" id="periscope-trace-action">
+                    <button type="button" id="periscope-pulse" class="periscope-pulse-button" aria-describedby="periscope-pulse-note"><span class="periscope-pulse-icon" aria-hidden="true"><svg viewBox="0 0 32 32" width="28" height="28" fill="none"><path d="M5 25H15L23 9H28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5" cy="25" r="3" fill="currentColor"/><path d="M22 4L25 8L20 10M10 10L12 7M5 15L8 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="periscope-pulse-label">追蹤目前視線</span><span class="periscope-pulse-invite" aria-hidden="true">點一下，看看光走到哪裡</span></button>
+                    <p class="periscope-pulse-note" id="periscope-pulse-note" role="status">光線短暫亮起後會自動消失。</p>
+                  </div><div class="periscope-view-meter">轉錯時，可能看見天空、海面，或被管壁遮住。</div></aside>
               </div>
-              <div class="periscope-controls"><button type="button" id="periscope-pulse" aria-describedby="periscope-pulse-note">✦ 追蹤目前視線</button><button type="button" id="periscope-signal" class="periscope-signal" aria-pressed="false" hidden disabled>發送訊號光</button></div>
-              <p class="periscope-pulse-note" id="periscope-pulse-note" role="status">從眼睛的位置反向追蹤目前視線；短暫顯示後消失。</p>
+              <div class="periscope-controls" id="periscope-signal-controls" hidden><button type="button" id="periscope-signal" class="periscope-signal" aria-pressed="false" hidden disabled>發送訊號光</button></div>
               <p class="periscope-keyboard" id="periscope-drag-help">抓住鏡片端點，直接拖曳旋轉。</p>
               <p class="periscope-model-note">黃色輔助線從小葵的眼睛位置反向追蹤視線。實際看見物體時，是外界的光進入眼睛；剖面與景物為示意比例。</p>
               <div class="periscope-question" id="periscope-question-1" hidden><h3>哪一片鏡子被轉動了？</h3><p>比較原本的路線，先作判斷，再試著修復。</p><div class="periscope-choice-row"><button class="periscope-answer" type="button" data-diagnosis="0" aria-pressed="false">鏡面一</button><button class="periscope-answer" type="button" data-diagnosis="1" aria-pressed="false">鏡面二</button></div></div>
@@ -471,6 +473,6 @@
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
   <script type="module" src="assets/reversible-light.js?v=3"></script>
-  <script type="module" src="assets/periscope.js?v=9"></script>
+  <script type="module" src="assets/periscope.js?v=10"></script>
 </body>
 </html>

@@ -182,7 +182,7 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
   });
   await t.test('五種實際角度：提示都從觀察口開始，錯誤時不跳接到船或上方鏡片',async()=>{
     const button=page.locator('#periscope-pulse');
-    await expect(button).toHaveText('✦ 追蹤目前視線');
+    await expect(button.locator('.periscope-pulse-label')).toHaveText('追蹤目前視線');
     for(const [a,b] of [[38,51],[45,45],[39,45],[51,45],[45,55]]){
       await setAngle(0,a);await setAngle(1,b);await expect(button).toBeEnabled();await button.click();
       await expect.poll(async()=>Number(await page.locator('#periscope-light').getAttribute('data-opacity'))>.95).toBe(true);
@@ -221,7 +221,7 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
   await t.test('移除額外提示與分關重設；視線追蹤撞壁仍有短暫光斑',async()=>{
     assert.equal(await page.locator('#periscope-hint,#periscope-hint-copy,#periscope-reset-stage,#periscope-normal').count(),0);
     const button=page.locator('#periscope-pulse');await expect(button).toBeEnabled();
-    assert.deepEqual(await page.locator('.periscope-controls button:visible').allTextContents(),['✦ 追蹤目前視線']);
+    await expect(page.locator('.periscope-view #periscope-pulse')).toBeVisible();await expect(page.locator('#periscope-signal-controls')).toBeHidden();
     await setAngle(0,38);await setAngle(1,51);await button.click();
     await expect.poll(async()=>Number(await page.locator('#periscope-light').getAttribute('data-opacity'))>.95).toBe(true);await expect(page.locator('.periscope-wall-spot')).toBeVisible();
     const at=await page.locator('.periscope-wall-spot circle').last().evaluate(e=>[+e.getAttribute('cx'),+e.getAttribute('cy')]);
@@ -243,7 +243,22 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
   });
   await t.test('1440／1280／1024／768／390 px 版面、素材與鄰區操作',async()=>{
     await setAngle(0,45);await setAngle(1,45);await expect(page.locator('#periscope-light')).toBeEmpty();
-    for(const width of [1440,1280,1024,768,390]){await page.setViewportSize({width,height:1000});await quiz.scrollIntoViewIfNeeded();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${width} overflow`);const s=await page.locator('#periscope-scene').boundingBox(),v=await page.locator('.periscope-view').boundingBox();assert.ok(s.width>240&&v.width>100);const hide=await page.addStyleTag({content:'.route{visibility:hidden!important}'});if(width===1440)await quiz.screenshot({path:'/tmp/periscope-review/desktop.png'});if(width===390)await quiz.screenshot({path:'/tmp/periscope-review/mobile.png'});await hide.evaluate(el=>el.remove());}
+    for(const width of [1440,1280,1024,768,390]){
+      await page.setViewportSize({width,height:1000});await quiz.scrollIntoViewIfNeeded();
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${width} overflow`);
+      const scene=await page.locator('#periscope-scene').boundingBox(),panel=await page.locator('.periscope-view').boundingBox();
+      const cutaway=await page.locator('.periscope-cutaway').boundingBox();
+      assert.ok(scene.width>240&&panel.width>100);
+      assert.ok(Math.abs(cutaway.height-scene.height)<=2.1,'scene must not stretch into empty background');
+      const button=await page.locator('#periscope-pulse').boundingBox(),copy=await page.locator('#periscope-view-copy').boundingBox();
+      assert.ok(button.x>=panel.x&&button.x+button.width<=panel.x+panel.width+1&&button.y>=copy.y+copy.height&&button.y+button.height<=panel.y+panel.height,`${width} button must be inside observation panel below copy`);
+      assert.ok(button.height>=72&&button.width>=130);
+      assert.equal(await page.locator('.periscope-pulse-button').evaluate(e=>getComputedStyle(e).cursor),'pointer');
+      const hide=await page.addStyleTag({content:'.route{visibility:hidden!important}'});
+      if(width===1440)await quiz.screenshot({path:'/tmp/periscope-review/desktop.png'});
+      if(width===390)await quiz.screenshot({path:'/tmp/periscope-review/mobile.png'});
+      await hide.evaluate(el=>el.remove());
+    }
     await page.setViewportSize({width:1440,height:1100});await page.locator('#reverse-toggle-a').click();await expect(page.locator('#card-06')).toHaveAttribute('data-light-a','on');
     await page.locator('#reverse-toggle-a').click();
   });
