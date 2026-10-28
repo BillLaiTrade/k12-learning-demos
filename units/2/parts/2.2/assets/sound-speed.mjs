@@ -1,9 +1,9 @@
 import {
   DISTANCE, START_X, END_X, ZOOM, PULSE_DURATION,
-  appearance, arrivalTime, reachedDistance, clamp, conditions, displacement,
+  appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=causal-8';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene } from './sound-speed-rendering.mjs?v=causal-8';
+} from './sound-speed-model.mjs?v=fork-9';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=fork-9';
 
 export function initSoundSpeed(root) {
 const $ = selector => root.querySelector(selector);
@@ -78,7 +78,7 @@ function buildModel(group) {
       <div class="field">
         <p class="propagation-readout"><span>振動已傳到</span><output aria-live="off" aria-label="${group.name}振動目前傳到的位置">0 公尺</output></p>
         <svg viewBox="0 0 456 146" role="img" aria-label="${group.name}的內部放大模型，${group.kind === 'water' ? '水槽中的水分子' : group.kind === 'steel' ? '金屬剖面中的原子' : '透明空氣中的分子'}在原位附近沿水平方向振動。"></svg>
-        <button class="source-hit" type="button" aria-label="點按${group.name}振動源，重新同時啟動所有組別"></button>
+        <button class="source-hit" type="button" aria-label="敲擊${group.name}組音叉，重新同時啟動所有組別"></button>
       </div>
       <div class="end-observation"><p class="zoom-title sr-only">末端相鄰粒子</p><svg class="zoom" viewBox="0 0 150 120" role="img" aria-label="${group.name}末端三個相鄰粒子依序受振，最右邊為終點"></svg><p class="end-state">終點尚未受振</p><div class="arrival-readout"><span>到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的實際經過時間">—</output></div></div>
     </div>`;
@@ -87,10 +87,7 @@ function buildModel(group) {
   const field = row.querySelector('.field svg'), fill = addMaterials(field, `${group.id}-field`);
   const scene = mediumScene(field, group.kind, `${group.id}-scene`);
   svg('path', { class: 'end-connection', d: 'M447 41V101M447 71H456', fill: 'none', stroke: '#94aaa0', 'stroke-width': 1.2 }, field);
-  svg('rect', { x: 10, y: 43, width: 26, height: 59, rx: 4, fill: fill('source'), stroke: '#7f9495', 'stroke-width': .8 }, field);
-  svg('path', { d: 'M15 48V96M31 48V96', stroke: '#dce4df', 'stroke-width': .8, opacity: .7 }, field);
-  const sourceRod = svg('path', { d: 'M30 71H49', stroke: '#728b8b', 'stroke-width': 4 }, field);
-  const piston = svg('rect', { x: 45, y: 35, width: 8, height: 72, rx: 2, fill: fill('source'), stroke: '#718a8d', 'stroke-width': .8 }, field);
+  const source = tuningForkSource(field, group.kind, fill);
   const bonds = svg('g', { fill: 'none', stroke: '#8a9e9c', 'stroke-width': .8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, scene.interior);
   const dots = svg('g', { 'aria-hidden': 'true' }, scene.interior);
   const points = positions(group.kind).map((point, index) => {
@@ -135,7 +132,7 @@ function buildModel(group) {
   }) : [];
   text(svg('text', { x:112, y:96, 'text-anchor':'middle', fill:'#526f5c', 'font-size':12 }, zoom), '終點');
   return {
-    ...group, row, points, links, piston, sourceRod, endPoints, zoomLinks, zoom, scene, front, reachedTrack,
+    ...group, row, points, links, source, endPoints, zoomLinks, zoom, scene, front, reachedTrack,
     distanceOutput: row.querySelector('.propagation-readout output'),
     arrivalCaption: row.querySelector('.arrival-readout span'), arrivalOutput: row.querySelector('.arrival-readout output'),
     endState: row.querySelector('.end-state')
@@ -143,7 +140,7 @@ function buildModel(group) {
 }
 
 function caption() {
-  if (state.phase === 'idle') return '啟動後，觀察左邊粒子先往返，再帶動鄰近粒子。';
+  if (state.phase === 'idle') return '敲擊後音叉來回振動，帶動附近粒子，再將擾動逐段傳開。';
   const arrived = groups.filter(group => state.time >= arrivalTime(group.speed));
   if (!arrived.length) return state.mode === 'material' ? '粒子在原位附近往返，擾動由相鄰粒子逐段傳遞。' : '兩組一起開始，觀察哪一組先傳到最右端。';
   if (arrived.length === groups.length) return state.phase === 'complete' ? '本輪比較完成，粒子都已回復原位。' : '各組都已傳到最右端，繼續觀察粒子回復原位。';
@@ -202,9 +199,7 @@ function paint(audible = false, overrideCaption = '') {
     for (const link of model.links) {
       attr(link.node, 'd', springPath(link.point.position, link.point.y, link.other.position, link.other.y));
     }
-    const sourcePosition = 45 + displacement(state.time);
-    attr(model.piston, 'x', sourcePosition.toFixed(4));
-    attr(model.sourceRod, 'd', `M30 71H${sourcePosition + 4}`);
+    model.source.paint(state.time, state.phase);
     const localTime = state.time - arrivalTime(model.speed);
     for (const dot of model.endPoints) {
       const next = sample(dot.point, model.speed, state.time);
@@ -225,9 +220,9 @@ function paint(audible = false, overrideCaption = '') {
   if (audible && newArrival) arrivalTone();
   text($('#model-time'), secondsText(state.time));
   text($('#observation-caption'), overrideCaption || caption());
-  const actionLabel = { idle: '同時啟動振動', running: '暫停觀察', paused: '繼續觀察', complete: '再次比較' }[state.phase];
+  const actionLabel = { idle: '同時敲擊音叉', running: '暫停觀察', paused: '繼續觀察', complete: '再次敲擊音叉' }[state.phase];
   text($('#primary-action'), actionLabel);
-  text($('#playback-state'), state.phase === 'running' ? '實時播放，暫停期間不計時。' : state.phase === 'paused' ? '已暫停，繼續後接續計時。' : state.phase === 'complete' ? '可再次比較，或切換另一種條件。' : '也可以直接點按各列左側的振動源。');
+  text($('#playback-state'), state.phase === 'running' ? '實時播放，暫停期間不計時。' : state.phase === 'paused' ? '已暫停，繼續後接續計時。' : state.phase === 'complete' ? '可再次比較，或切換另一種條件。' : '也可以直接點按各列左側的音叉。');
   drawResult();
 }
 
@@ -288,7 +283,7 @@ function rebuild(message = '') {
   text($('#lesson-title'), temperatureMode ? '都是空氣，升溫後會早一點傳到嗎？' : '聲音在不同介質中，傳得多快？');
   text($('#lesson-intro'), temperatureMode ? '固定參考組，只改變設定組的空氣溫度。' : '觀察相鄰粒子如何逐段受振，再比較終點的到達時間。');
   text($('#girl-line'), temperatureMode ? '溫度不同時，空氣裡的振動傳遞會怎麼改變？' : '空氣、水和鋼，裡面的粒子是怎麼把振動傳開的？');
-  text($('#grandpa-line'), temperatureMode ? '參考組維持 20°C。只改另一組溫度，再用相同條件一起比較。' : '先看靠近聲源的粒子往返，再看它帶動鄰近粒子；下方刻度只記錄擾動傳到的位置。');
+  text($('#grandpa-line'), temperatureMode ? '參考組維持 20°C。只改另一組溫度，再用相同條件一起比較。' : '音叉被敲一下後來回振動，帶動附近粒子；再看相鄰粒子如何依序受振。');
   $('#takeaway').innerHTML = temperatureMode
     ? '<strong>觀察重點：</strong>只改變空氣溫度，振動頻率維持相同；同溫時，振動會同時傳到最右端。'
     : '<strong>觀察重點：</strong>粒子在原位附近往返；同一聲源頻率相同，三種介質傳遞振動的速度不同。';

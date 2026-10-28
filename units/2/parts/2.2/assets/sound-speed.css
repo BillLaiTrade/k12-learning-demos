@@ -22,7 +22,7 @@
 :where(.sound-speed-lab) .row-body{display:grid;grid-template-columns:minmax(0,1fr) 100px;align-items:center;min-width:0;border:1px solid #dce6d9;border-radius:11px;background:#fafbf7}
 :where(.sound-speed-lab) .field{min-width:0;position:relative}
 :where(.sound-speed-lab) .field svg{display:block;width:100%;height:auto;overflow:visible;pointer-events:none;shape-rendering:geometricPrecision}
-:where(.sound-speed-lab) .source-hit{position:absolute;left:0;top:calc(50% + 12px);transform:translateY(-50%);width:max(12%,44px);height:max(58%,44px);padding:0;border:0;border-radius:9px;background:transparent;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+:where(.sound-speed-lab) .source-hit{position:absolute;left:0;top:28px;bottom:0;transform:none;width:max(23%,44px);height:auto;min-height:44px;padding:0;border:0;border-radius:9px;background:transparent;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 :where(.sound-speed-lab) .source-hit:hover{background:#5d83680a}
 :where(.sound-speed-lab) .source-hit:focus-visible{outline:2px solid #bd903d;outline-offset:0}
 :where(.sound-speed-lab) .end-observation{position:relative;align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;padding:31px 3px 7px;border-left:1px dashed #b6c9b9;text-align:center}

@@ -271,6 +271,44 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.ok(await time() > .98 && await time() < 1.02);
   });
 
+  await t.test('a short strike withdraws while opposite fork arms ring around a stationary base', async () => {
+    await fresh();
+    assert.equal(await page.locator('.tuning-fork').count(),3);
+    assert.equal(await page.locator('.fork-striker[visibility=hidden]').count(),3);
+    const fixed=await page.locator('.fork-fixed').evaluateAll(nodes=>nodes.map(n=>n.innerHTML));
+    const arms=()=>page.locator('.fork-tine').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('d')));
+    const tips=()=>page.locator('.tuning-fork').evaluateAll(nodes=>nodes.map(n=>[n.querySelectorAll('.fork-tine')[0],n.querySelectorAll('.fork-tine')[3]].map(path=>{const p=path.getPointAtLength(path.getTotalLength());return n.dataset.medium==='steel'?p.y:p.x;})));
+    const initialArms=await arms(),initialTips=await tips();
+    await primary.click();assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),3);
+    await page.clock.runFor(150);
+    assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),3);
+    assert.notDeepEqual(await arms(),initialArms);
+    await page.clock.runFor(250);
+    assert.equal(await page.locator('.fork-striker[visibility=hidden]').count(),3);
+    const movingTips=await tips();
+    movingTips.forEach((pair,i)=>{const a=pair[0]-initialTips[i][0],b=pair[1]-initialTips[i][1];assert.ok(a*b<0);assert.ok(Math.abs(a+b)<.001);});
+    assert.deepEqual(await page.locator('.fork-fixed').evaluateAll(nodes=>nodes.map(n=>n.innerHTML)),fixed);
+    assert.equal(await page.locator('.sound-source').evaluateAll(nodes=>nodes.every(n=>!n.hasAttribute('transform'))),true,'the sound source is not translated as a pushing block');
+    assert.equal(await page.locator('[data-group=steel] .source-contact').count(),1);
+    const waterTips=movingTips[1];assert.ok(Math.min(...waterTips)>55&&Math.max(...waterTips)<110);
+    await primary.click();const paused=await arms();await page.clock.runFor(1000);assert.deepEqual(await arms(),paused);
+    await page.locator('#reset-action').click();assert.deepEqual(await arms(),initialArms);
+    assert.equal(await page.locator('.fork-striker[visibility=hidden]').count(),3);
+  });
+
+  await t.test('visible forks are directly clickable at their real picture positions', async () => {
+    await fresh();
+    for(const [kind,x,y]of[['air',74,55],['water',92,70],['steel',45,43]]){
+      const field=page.locator(`[data-group=${kind}] .field svg`);
+      await page.locator(`[data-group=${kind}] .source-hit`).scrollIntoViewIfNeeded();
+      const target=await field.evaluate((svg,{x,y})=>{const p=svg.createSVGPoint();p.x=x;p.y=y;const screen=p.matrixTransform(svg.getScreenCTM());return{x:screen.x,y:screen.y,hit:document.elementFromPoint(screen.x,screen.y)?.classList.contains('source-hit')};},{x,y});
+      assert.equal(target.hit,true);
+      await page.mouse.click(target.x,target.y);assert.equal((await data()).phase,'running');
+      assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),3);
+      await page.locator('#reset-action').click();
+    }
+  });
+
   await t.test('vibrating neighbours carry the disturbance while the position pointer stays below the medium', async () => {
     await fresh(); await primary.click(); await page.clock.runFor(100);
     const pair = kind => page.locator(`[data-group=${kind}] .particle`).evaluateAll(nodes => nodes.slice(0,3).map(n => ({ moved:n.transform.baseVal.consolidate().matrix.e-Number(n.dataset.originX), moving:n.dataset.moving })));
@@ -477,12 +515,14 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
       await mobile.locator('[data-sound-speed-lab]').locator(`#tab-${mode}`).tap();
       for (const width of [320, 390, 640, 768, 850, 1024, 1440]) {
         await mobile.setViewportSize({ width, height: 844 });
+        await mobile.clock.runFor(32);
         assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${mode} must fit ${width}px`);
-        const main = await mobile.locator('[data-sound-speed-lab]').boundingBox();
         for (const selector of ['.medium-row', '.controls', '.model-information']) {
-          for (const box of await mobile.locator('[data-sound-speed-lab]').locator(selector).evaluateAll(nodes => nodes.map(n => ({ x: n.getBoundingClientRect().x, right: n.getBoundingClientRect().right })))) {
-            assert.ok(box.x >= main.x - 1 && box.right <= main.x + main.width + 1, 'all content stays in the main column');
-          }
+          const geometry=await mobile.locator('[data-sound-speed-lab]').evaluate((root,selector)=>{
+            const main=root.getBoundingClientRect();
+            return { main:{x:main.x,right:main.right},boxes:[...root.querySelectorAll(selector)].map(n=>{const b=n.getBoundingClientRect();return {x:b.x,right:b.right};}) };
+          },selector);
+          for (const box of geometry.boxes) assert.ok(box.x>=geometry.main.x-1&&box.right<=geometry.main.right+1, `${mode} ${width}px ${selector} stays in the main column`);
         }
         const selectors = ['button', '.sound-option'];
         if (mode === 'temperature') selectors.push('#temperature');

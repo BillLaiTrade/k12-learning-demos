@@ -1,5 +1,5 @@
 // 介質場景、分子／原子與表面取樣共用同一波動模型。
-import { positions, sample } from './sound-speed-model.mjs?v=causal-8';
+import { positions, sample, displacement, PULSE_DURATION } from './sound-speed-model.mjs?v=fork-9';
 export const materialInfo = {
   air: {
     name: '空氣', phase: '氣體',
@@ -102,7 +102,7 @@ export function mediumScene(root, kind, prefix, zoom = false) {
   const face = gradient('face', [[0,'#52656d'],[.5,'#c3ced0'],[1,'#6e8289']], true);
   const group = svgNode('g', { class: 'medium-scene', 'data-material': kind, 'data-view': zoom ? 'end' : 'field', 'aria-hidden': 'true' }, root);
   const back = svgNode('g', { class: 'medium-body' }, group);
-  const x = zoom ? 16 : 53, y = zoom ? 20 : kind === 'water' ? 30 : 25, width = zoom ? 118 : 375, height = zoom ? 84 : kind === 'water' ? 83 : 88;
+  const x = zoom ? 16 : kind === 'steel' ? 94 : 53, y = zoom ? 20 : kind === 'water' ? 30 : 25, width = zoom ? 118 : kind === 'steel' ? 334 : 375, height = zoom ? 84 : kind === 'water' ? 83 : 88;
   if (kind !== 'air') {
     svgNode('ellipse', { cx: x + width / 2 + 4, cy: y + height + 6, rx: width / 2, ry: zoom ? 4 : 5, fill: '#35575a', opacity: .1 }, back);
   }
@@ -142,5 +142,55 @@ export function mediumScene(root, kind, prefix, zoom = false) {
   }
   return { interior, paint(time, speed) {
     for (const { point, node } of samples) node.setAttribute('transform', `translate(${sample(point, speed, time).x.toFixed(4)} 0)`);
+  } };
+}
+
+// 音叉的柄與基座保持固定，僅叉臂反向彎曲；敲槌接觸一次即退開。
+export function tuningForkSource(root, kind, fill) {
+  const group = svgNode('g', { class:'sound-source tuning-fork', 'data-medium':kind, 'data-vibrating':'false', 'aria-hidden':'true' }, root);
+  const body = svgNode('g', { class:'fork-fixed' }, group);
+  const metal = (parent, d, cls='') => {
+    const outer = svgNode('path', { class:cls, d, fill:'none', stroke:'#4f6670', 'stroke-width':7.5, 'stroke-linecap':'round', 'stroke-linejoin':'round' }, parent);
+    const inner = svgNode('path', { class:cls, d, fill:'none', stroke:fill('source'), 'stroke-width':5.6, 'stroke-linecap':'round', 'stroke-linejoin':'round' }, parent);
+    const shine = svgNode('path', { class:cls, d, fill:'none', stroke:'#f7fbf8', 'stroke-width':1, opacity:.65, 'stroke-linecap':'round' }, parent);
+    return [outer,inner,shine];
+  };
+  let paths, hit;
+  if (kind === 'water') {
+    metal(body,'M80 7V25');
+    metal(body,'M68 44C68 19 92 19 92 44');
+    paths = value => [`M68 44C68 61 ${68-value} 82 ${68-value} 99`,`M92 44C92 61 ${92+value} 82 ${92+value} 99`];
+    hit = { x:68, y:9, handle:'M73 14L53 1', dx:-20, dy:4 };
+    svgNode('path',{class:'fork-waterline',d:'M61 30H73M86 30H98',stroke:'#eaf9f7','stroke-width':1.5,opacity:.9},group);
+  } else if (kind === 'steel') {
+    metal(body,'M64 43C84 43 84 95 64 95');
+    metal(body,'M79 69H94');
+    svgNode('rect',{class:'source-contact',x:92,y:62,width:4,height:14,rx:1,fill:fill('source'),stroke:'#70858c','stroke-width':.6},body);
+    paths = value => [`M64 43C51 43 39 ${43-value} 24 ${43-value}`,`M64 95C51 95 39 ${95+value} 24 ${95+value}`];
+    hit = { x:24, y:29, handle:'M31 34L18 14', dx:-14, dy:-10 };
+  } else {
+    metal(body,'M42 79C42 104 74 104 74 79');
+    metal(body,'M58 98V113');
+    paths = value => [`M42 79C42 63 ${42-value} 47 ${42-value} 33`,`M74 79C74 63 ${74+value} 47 ${74+value} 33`];
+    hit = { x:30, y:33, handle:'M36 39L16 62', dx:-24, dy:3 };
+  }
+  const arms = paths(0).map(d => metal(group,d,'fork-tine'));
+  const mallet = svgNode('g',{class:'fork-striker',visibility:'hidden','data-strike':'idle'},group);
+  svgNode('path',{d:hit.handle,stroke:'#956b43','stroke-width':4.5,'stroke-linecap':'round'},mallet);
+  svgNode('rect',{x:hit.x,y:hit.y,width:12,height:12,rx:4,fill:'#3a4649',stroke:'#1e3034','stroke-width':.8},mallet);
+  svgNode('path',{d:`M${hit.x+3} ${hit.y+2}h6`,stroke:'#899497','stroke-width':1.3,'stroke-linecap':'round'},mallet);
+  const label=svgNode('text',{x:kind==='water'?78:55,y:139,'text-anchor':'middle',fill:'#526f5c','font-size':12},group);
+  label.textContent='音叉';
+  return { paint(time,phase) {
+    const value=displacement(time);
+    const active=time>0&&time<PULSE_DURATION;
+    group.setAttribute('data-vibrating',String(active));
+    paths(value).forEach((d,i)=>arms[i].forEach(node=>node.setAttribute('d',d)));
+    const striking=phase!=='idle'&&time>=0&&time<.3;
+    const progress=Math.min(1,Math.max(0,time/.3));
+    mallet.setAttribute('visibility',striking?'visible':'hidden');
+    mallet.setAttribute('data-strike',striking?'withdrawing':'idle');
+    mallet.setAttribute('transform',`translate(${(hit.dx*progress).toFixed(3)} ${(hit.dy*progress).toFixed(3)})`);
+    mallet.setAttribute('opacity',String(1-progress*.6));
   } };
 }

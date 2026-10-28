@@ -6,3 +6,5 @@
 - 人物沿用 `shared-assets/characters/dialogue-character-avatars.png` 正式角色。
 
 正式課程與獨立入口共用 `assets/sound-speed*` 的模型、控制、材質與區塊樣式。此目錄僅保留前輪相片來源紀錄。
+
+聲源採敲擊音叉：敲槌退開後只讓叉臂反向彎曲，柄與基座固定。水中叉臂浸入水體，鋼中音叉柄接觸端面；圖形為耦合放大示意，往返節奏不代表音高。

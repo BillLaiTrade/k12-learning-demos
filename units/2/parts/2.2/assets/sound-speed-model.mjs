@@ -1,7 +1,7 @@
 // 所有組別使用同一個便於觀察的往返訊號；傳播延遲依真實聲速計算。
 // 往返節奏與振幅是微觀放大示意，不用來模擬可聽聲音的音高。
 export const DISTANCE = 5000;
-export const START_X = 72;
+export const START_X = 110;
 export const END_X = 410;
 export const FREQUENCY = .4;
 export const PULSE_DURATION = 4;
