@@ -122,10 +122,13 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     assert.ok(await meter() < fullDb - 5, 'partial evacuation must lower the displayed measured audio level');
   });
 
-  await t.test('near vacuum attenuates the real audio, retains source motion and bounds the controls', async () => {
+  await t.test('near vacuum keeps the stop-pumping controls enabled while air and audio stay bounded', async () => {
     await pump.click(); await page.clock.runFor(6000);
-    assert.ok(Math.abs(await air() - .02) < .00001); assert.equal((await data()).mode, 'idle');
-    assert.equal(await pump.isDisabled(), true); assert.equal(await page.locator('#vacuum-pump').isDisabled(), true);
+    assert.ok(Math.abs(await air() - .02) < .00001); assert.equal((await data()).mode, 'pump');
+    assert.equal(await pump.isDisabled(), false); assert.equal(await page.locator('#vacuum-pump').isDisabled(), false);
+    assert.equal(await page.locator('#vacuum-extract-label').textContent(), '停止抽氣');
+    assert.equal(await pump.getAttribute('aria-pressed'), 'true');
+    assert.equal(await pump.evaluate(n => getComputedStyle(n).opacity), '1');
     assert.equal(await page.locator('#vacuum-air-label').textContent(), '接近真空');
     assert.equal((await data()).power, 'on');
     await checkClearJar();
@@ -138,6 +141,15 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     const expectedDrop = -20 * Math.log10(await page.evaluate(() => window.testGain.gain.value));
     assert.ok(Math.abs(fullDb - lowDb - expectedDrop) < 5, 'readout must reflect post-gain RMS in decibels');
     assert.ok(lowDb > 25 && lowDb < 43);
+    await pump.focus(); await page.keyboard.press('Enter');
+    assert.equal((await data()).mode, 'idle'); assert.equal(await pump.isDisabled(), false);
+    assert.equal(await page.locator('#vacuum-extract-label').textContent(), '抽氣');
+    await page.keyboard.press('Space'); await page.clock.runFor(1500);
+    assert.equal((await data()).mode, 'pump'); assert.equal(await air(), .02);
+    await page.locator('#vacuum-pump').click();
+    assert.equal((await data()).mode, 'idle');
+    await page.locator('#vacuum-pump').click(); await page.clock.runFor(1000);
+    assert.equal((await data()).mode, 'pump'); assert.equal(await air(), .02);
   });
 
   await t.test('inlet picture restores air and audio; changing direction cancels the previous action', async () => {
@@ -201,6 +213,15 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     await mobile.waitForFunction(() => document.querySelector('#vacuum-lab').dataset.audio === 'playing');
     await mobile.locator('#vacuum-pump').tap(); await mobile.clock.runFor(3300);
     assert.ok(Number(await mobile.locator('#vacuum-lab').getAttribute('data-air')) < .55);
+    await mobile.clock.runFor(4000);
+    assert.equal(await mobile.locator('#vacuum-lab').getAttribute('data-air'), '0.02000');
+    assert.equal(await mobile.locator('#vacuum-extract').isDisabled(), false);
+    assert.equal(await mobile.locator('#vacuum-extract-label').textContent(), '停止抽氣');
+    await mobile.locator('#vacuum-extract').tap();
+    assert.equal(await mobile.locator('#vacuum-lab').getAttribute('data-mode'), 'idle');
+    await mobile.locator('#vacuum-pump').tap(); await mobile.clock.runFor(1000);
+    assert.equal(await mobile.locator('#vacuum-lab').getAttribute('data-mode'), 'pump');
+    assert.equal(await mobile.locator('#vacuum-lab').getAttribute('data-air'), '0.02000');
     await mobile.locator('#vacuum-valve').tap(); await mobile.clock.runFor(5000);
     assert.equal(await mobile.locator('#vacuum-lab').getAttribute('data-air'), '1.00000');
     await mobile.waitForFunction(() => document.querySelector('#vacuum-db-value').hasAttribute('data-value'), null, { polling: 50 });

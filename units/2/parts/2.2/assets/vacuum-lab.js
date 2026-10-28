@@ -85,7 +85,7 @@ function updateMeter() {
 function render() {
   const airLabel = air > .67 ? '充足' : air > .15 ? '逐漸減少' : '接近真空';
   const heard = !power ? '未發聲' : air > .67 ? '清楚' : air > .15 ? '變弱' : '幾乎聽不見';
-  const modeLabel = mode === 'pump' ? '抽氣中' : mode === 'inlet' ? '進氣中' : air <= MIN_AIR + .0001 ? '接近真空' : power ? '觀察中' : '等待啟動';
+  const modeLabel = mode === 'pump' && air > MIN_AIR ? '抽氣中' : mode === 'inlet' ? '進氣中' : air <= MIN_AIR + .0001 ? '接近真空' : power ? '觀察中' : '等待啟動';
   lab.dataset.air = air.toFixed(5); lab.dataset.power = power ? 'on' : 'off';
   lab.dataset.mode = mode; lab.dataset.audio = audioState;
   powerButton.setAttribute('aria-checked', String(power));
@@ -93,7 +93,7 @@ function render() {
   text('vacuum-mode', modeLabel); text('vacuum-air-label', airLabel);
   text('vacuum-extract-label', mode === 'pump' ? '停止抽氣' : '抽氣');
   text('vacuum-admit-label', mode === 'inlet' ? '關閉進氣' : '放入空氣');
-  for (const button of pumpButtons) { button.disabled = air <= MIN_AIR + .0001; button.setAttribute('aria-pressed', String(mode === 'pump')); }
+  for (const button of pumpButtons) { button.disabled = false; button.setAttribute('aria-pressed', String(mode === 'pump')); }
   for (const button of inletButtons) { button.disabled = air >= .99999; button.setAttribute('aria-pressed', String(mode === 'inlet')); }
   pumpButtons[0].setAttribute('aria-label', mode === 'pump' ? '停止抽氣' : '點按幫浦抽氣');
   inletButtons[0].setAttribute('aria-label', mode === 'inlet' ? '關閉進氣閥' : '打開進氣閥，放入空氣');
@@ -114,13 +114,13 @@ function tick(now) {
   frame = 0;
   const delta = lastTime === null ? 0 : Math.min(.05, (now - lastTime) / 1000);
   lastTime = now; phase += delta;
-  if (mode === 'pump') { air = Math.max(MIN_AIR, air - delta * .16); if (air <= MIN_AIR) mode = 'idle'; }
+  if (mode === 'pump') air = Math.max(MIN_AIR, air - delta * .16);
   else if (mode === 'inlet') { air = Math.min(1, air + delta * .245); if (air >= 1) mode = 'idle'; }
   drawHammer(); render();
-  if (power || mode !== 'idle') frame = requestAnimationFrame(tick);
+  if (power || mode === 'inlet' || mode === 'pump' && air > MIN_AIR) frame = requestAnimationFrame(tick);
   else lastTime = null;
 }
-function ensureFrame() { if (!frame && (power || mode !== 'idle')) { lastTime = null; frame = requestAnimationFrame(tick); } }
+function ensureFrame() { if (!frame && (power || mode === 'inlet' || mode === 'pump' && air > MIN_AIR)) { lastTime = null; frame = requestAnimationFrame(tick); } }
 function setPower(enabled) {
   const request = ++soundRequest;
   power = enabled; audioError = '';
@@ -161,7 +161,7 @@ function fail(request) {
   drawHammer(); render();
 }
 function toggleMode(next) {
-  if (next === 'pump' && air <= MIN_AIR + .0001 || next === 'inlet' && air >= .99999) return;
+  if (next === 'inlet' && air >= .99999) return;
   mode = mode === next ? 'idle' : next;
   render(); ensureFrame();
 }
