@@ -156,7 +156,7 @@ window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);cancelDrag()
 async function initialize(){
   root.dataset.ready='loading';$('loading').hidden=false;$('loading').textContent='準備實驗桌……';$('retry').hidden=true;update();
   try{
-    const [table,atlas,glass]=await Promise.all([loadPicture(new URL('./investigation-table.webp',import.meta.url)),loadPicture(new URL('./investigation-apparatus.webp',import.meta.url)),loadPicture(new URL('./concentration-beaker.webp',import.meta.url))]);
+    const [table,atlas,glass]=await Promise.all([loadPicture(new URL('./investigation-table.webp?v=clear-4',import.meta.url)),loadPicture(new URL('./investigation-apparatus.webp',import.meta.url)),loadPicture(new URL('./concentration-beaker.webp',import.meta.url))]);
     renderer=createRenderer($('canvas'),{table,atlas,glass});root.dataset.ready='true';$('loading').hidden=true;update();redraw();
   }catch(error){root.dataset.ready='error';$('loading').textContent='器材圖片暫時無法載入，請重新載入器材。';$('retry').hidden=false;announce('實驗桌尚未就緒，其他學習區塊仍可使用。');update();}
 }
