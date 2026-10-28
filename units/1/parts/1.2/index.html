@@ -402,7 +402,7 @@
                 <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p id="periscope-student">我在潛水艇裡，怎麼看見海上的船？</p></div>
                 <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p id="periscope-grandpa">先轉動鏡片，再從觀察窗找找船在哪裡。</p></div>
               </div>
-              <div class="periscope-task"><div><strong id="periscope-task-title">任務一｜把船的駕駛艙調到觀察窗中央</strong><p id="periscope-task-copy">拖曳鏡片端點旋轉。先試著觀察，需要時發出一束提示光，觀察後再調整。</p></div></div>
+              <div class="periscope-task"><div><strong id="periscope-task-title">任務一｜把船的駕駛艙調到觀察窗中央</strong><p id="periscope-task-copy">拖曳鏡片端點旋轉。先試著觀察，需要時從觀察口追蹤視線，再修正鏡片。</p></div></div>
               <div class="periscope-workspace">
                 <div class="periscope-cutaway">
                   <svg id="periscope-scene" viewBox="0 0 900 760" role="group" aria-labelledby="periscope-scene-title periscope-scene-desc">
@@ -432,13 +432,13 @@
                 </div>
                 <aside class="periscope-view" aria-label="從潛望鏡看到的景象"><h3>小葵的觀察窗</h3><div class="periscope-lens-frame"><canvas id="periscope-view" width="240" height="240" role="img" aria-label="觀察窗載入中"></canvas></div><div id="periscope-view-state" class="periscope-view-state" role="status">正在準備觀察窗…</div><p id="periscope-view-copy">景象隨鏡片轉動；管壁擋住的區域會變暗。</p><div class="periscope-view-meter">轉錯時，可能看見天空、海面，或被管壁遮住。</div></aside>
               </div>
-              <div class="periscope-controls"><button type="button" id="periscope-pulse" aria-describedby="periscope-pulse-note">✦ 發出提示光</button><button type="button" id="periscope-hint">♧ 給我提示</button><button type="button" id="periscope-reset-stage">↻ 重新組裝</button><button type="button" id="periscope-signal" class="periscope-signal" aria-pressed="false" hidden disabled>發送訊號光</button></div>
+              <div class="periscope-controls"><button type="button" id="periscope-pulse" aria-describedby="periscope-pulse-note">✦ 追蹤目前視線</button><button type="button" id="periscope-hint">♧ 給我提示</button><button type="button" id="periscope-reset-stage">↻ 重新組裝</button><button type="button" id="periscope-signal" class="periscope-signal" aria-pressed="false" hidden disabled>發送訊號光</button></div>
               <div class="periscope-fine" id="periscope-fine" role="group" aria-label="鏡片精細調整"><span>微調鏡片</span><div><span>鏡面一</span><button type="button" data-fine="0,-0.5" aria-label="鏡面一逆時針微調半度">↶</button><button type="button" data-fine="0,0.5" aria-label="鏡面一順時針微調半度">↷</button></div><div><span>鏡面二</span><button type="button" data-fine="1,-0.5" aria-label="鏡面二逆時針微調半度">↶</button><button type="button" data-fine="1,0.5" aria-label="鏡面二順時針微調半度">↷</button></div></div>
-              <p class="periscope-pulse-note" id="periscope-pulse-note" role="status">按一下短暫照亮目前光路，觀察後再調整。</p>
+              <p class="periscope-pulse-note" id="periscope-pulse-note" role="status">從眼睛的位置反向追蹤目前視線；短暫顯示後消失。</p>
               <p class="periscope-keyboard" id="periscope-drag-help">抓住鏡片端點旋轉；也可點選鏡片後，用 ← → 微調，Shift 加快。</p>
               <p class="periscope-hint" id="periscope-hint-copy" role="status" hidden></p>
-              <p class="periscope-model-note">剖面與景物為示意比例；觀察窗依有限鏡面、入口與管壁追蹤視線。亮線為短暫光路示意，清澈空氣中的完整光路通常不可見。</p>
-              <div class="periscope-question" id="periscope-question-0"><h3>船反射的光，依序經過哪些位置才進入眼睛？</h3><p>點選鏡面標籤，再點空格放入；也可以直接拖曳標籤。</p><div class="periscope-order"><span class="path-end">船</span><span aria-hidden="true">→</span><button type="button" class="periscope-slot" data-slot="0" aria-label="第一個反射位置，尚未填入">第一個位置</button><span aria-hidden="true">→</span><button type="button" class="periscope-slot" data-slot="1" aria-label="第二個反射位置，尚未填入">第二個位置</button><span aria-hidden="true">→</span><span class="path-end">眼睛</span></div><div class="periscope-chips"><small>可放入的標籤</small><button type="button" draggable="true" class="periscope-chip" data-chip="0" aria-pressed="false">鏡面一</button><button type="button" draggable="true" class="periscope-chip" data-chip="1" aria-pressed="false">鏡面二</button><button type="button" id="periscope-clear-order" class="secondary">清空順序</button></div></div>
+              <p class="periscope-model-note">黃色輔助線從小葵的眼睛位置反向追蹤視線。實際看見物體時，是外界的光進入眼睛；剖面與景物為示意比例。</p>
+              <div class="periscope-question" id="periscope-question-0"><h3>船反射的光，依序經過哪些位置才進入眼睛？</h3><p>依外界光進入眼睛的方向排列。點選標籤再點空格，或直接拖曳標籤。</p><div class="periscope-order"><span class="path-end">船</span><span aria-hidden="true">→</span><button type="button" class="periscope-slot" data-slot="0" aria-label="第一個反射位置，尚未填入">第一個位置</button><span aria-hidden="true">→</span><button type="button" class="periscope-slot" data-slot="1" aria-label="第二個反射位置，尚未填入">第二個位置</button><span aria-hidden="true">→</span><span class="path-end">眼睛</span></div><div class="periscope-chips"><small>可放入的標籤</small><button type="button" draggable="true" class="periscope-chip" data-chip="0" aria-pressed="false">鏡面一</button><button type="button" draggable="true" class="periscope-chip" data-chip="1" aria-pressed="false">鏡面二</button><button type="button" id="periscope-clear-order" class="secondary">清空順序</button></div></div>
               <div class="periscope-question" id="periscope-question-1" hidden><h3>哪一片鏡子被轉動了？</h3><p>比較原本的路線，先作判斷，再試著修復。</p><div class="periscope-choice-row"><button class="periscope-answer" type="button" data-diagnosis="0" aria-pressed="false">鏡面一</button><button class="periscope-answer" type="button" data-diagnosis="1" aria-pressed="false">鏡面二</button></div></div>
               <div class="periscope-question" id="periscope-question-2" hidden><h3>鏡子不動，從眼睛的位置沿原光路反向發出訊號，會怎麼走？</h3><p>先預測，再按「發送訊號光」比較藍光與原本的路線。</p><div class="periscope-answer-list"><button class="periscope-answer" type="button" data-prediction="same" aria-pressed="false">沿完整的原路徑返回，從上方入口照向船。</button><button class="periscope-answer" type="button" data-prediction="inside" aria-pressed="false">只有管內的路徑重合，離開入口後方向會不同。</button><button class="periscope-answer" type="button" data-prediction="turn" aria-pressed="false">兩次反射後會換一條路，需要再調鏡子才能照向船。</button></div></div>
               <div class="periscope-footer"><button type="button" id="periscope-check" class="action">檢查我的設計</button><button type="button" id="periscope-next" class="action" hidden>前往修復光路 →</button><button type="button" id="periscope-restart" class="secondary">全部重新挑戰</button></div>
@@ -474,6 +474,6 @@
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
   <script type="module" src="assets/reversible-light.js?v=3"></script>
-  <script type="module" src="assets/periscope.js?v=5"></script>
+  <script type="module" src="assets/periscope.js?v=6"></script>
 </body>
 </html>

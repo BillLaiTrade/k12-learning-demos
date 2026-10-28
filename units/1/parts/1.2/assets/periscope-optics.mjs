@@ -74,6 +74,30 @@ export function viewRay(horizontal, vertical, angles) {
   // Pinhole eye looking left: retinal field, no extra lens or magnification.
   return traceRay(OPTICS.eye,[-1,Math.tan(radians(vertical)),Math.tan(radians(horizontal))],angles);
 }
+// The hint starts at exactly the same eye and direction as the central view.
+// Outside the tube, clip its straight continuation to the illustrated scene.
+// This coarse silhouette is a display boundary, not a second reflection model.
+const BOAT_OUTLINE = [
+  [80,226],[119,220],[121,178],[144,174],[146,164],[190,165],
+  [199,179],[204,212],[243,208],[236,242],[86,245],
+];
+export function traceSightline(angles) {
+  const ray=viewRay(0,0,angles);
+  if(ray.kind!=='outside' || ray.direction[0]>=0)return {...ray,destination:'wall'};
+  const p=ray.points.at(-1),d=ray.direction;
+  const edges=BOAT_OUTLINE.map((a,i)=>[a,BOAT_OUTLINE[(i+1)%BOAT_OUTLINE.length],'boat']);
+  edges.push([[0,250],[508,250],'sea'],[[0,0],[508,0],'sky'],[[0,0],[0,250],'sky']);
+  let nearest=null;
+  for(const [a,b,destination] of edges) {
+    const edge=[b[0]-a[0],b[1]-a[1]],den=cross(d,edge);
+    if(Math.abs(den)<1e-10)continue;
+    const q=[a[0]-p[0],a[1]-p[1]],t=cross(q,edge)/den,u=cross(q,d)/den;
+    if(t>1e-6 && u>=-1e-8 && u<=1+1e-8 && (!nearest||t<nearest.t))nearest={t,destination};
+  }
+  if(!nearest)return {...ray,destination:'outside'};
+  const endpoint=p.map((n,i)=>n+nearest.t*d[i]);
+  return {...ray,destination:nearest.destination,points:[...ray.points,endpoint]};
+}
 export function exteriorSample(ray) {
   if(ray.kind!=='outside' || ray.direction[0]>=0) return null;
   const p=ray.points.at(-1), t=(OPTICS.exteriorPlane-p[0])/ray.direction[0];

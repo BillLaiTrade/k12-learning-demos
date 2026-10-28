@@ -1,4 +1,4 @@
-import {OPTICS, mirror, viewRay, exteriorSample, observe, traceRay, returnSignal} from './periscope-optics.mjs';
+import {OPTICS, mirror, viewRay, exteriorSample, observe, traceSightline, returnSignal} from './periscope-optics.mjs?v=2';
 import {FLASH_MS,STATIC_FLASH_MS,REST_MS,pulseOpacity} from './periscope-pulse.mjs?v=2';
 
 const root=document.querySelector('#unit-quiz');
@@ -35,10 +35,6 @@ if(root) {
       add(`M${x-dx*13-dy*7},${y-dy*13+dx*7}L${x},${y}L${x-dx*13+dy*7},${y-dy*13-dx*7}`,'light-arrow',color);
     }
   }
-  function forwardRay() {
-    const ray=traceRay([508.0001,190,0],[1,0,0],state.angles);
-    return {...ray,points:[[170,190,0],...ray.points]};
-  }
   function signalPoints(result) {
     const points=result.ray.points.map(p=>[...p]);
     if(result.endpoint)points.push(result.endpoint);
@@ -74,10 +70,10 @@ if(root) {
     root.dataset.pulseStatus=busy?'running':waiting?'cooldown':'idle';
     const button=$('#periscope-pulse');
     button.hidden=state.stage===2;button.disabled=busy||waiting;
-    button.textContent=busy?'✦ 提示光亮起':waiting?'✦ 稍後可再試':'✦ 發出提示光';
+    button.textContent=busy?'✦ 視線追蹤中':waiting?'✦ 稍後可再試':'✦ 追蹤目前視線';
     $('#periscope-hint').disabled=state.stage!==2&&(busy||waiting);
     $('#periscope-pulse-note').hidden=state.stage===2;
-    $('#periscope-pulse-note').textContent=busy?'這次光路短暫亮起，看看光在哪裡反射或被擋住。':waiting?'提示光已熄滅。先調整鏡片，再試一次。':'按一下短暫照亮目前光路，觀察後再調整。';
+    $('#periscope-pulse-note').textContent=busy?'從小葵的觀察口出發，看看這次視線通往哪裡。':waiting?'追蹤已結束。先調整鏡片，再追蹤一次。':'從眼睛的位置反向追蹤目前視線；短暫顯示後消失。';
   }
   function cancelPulse(reset=false) {
     cancelAnimationFrame(pulseFrame);clearTimeout(pulseEndTimer);pulse=null;
@@ -114,7 +110,7 @@ if(root) {
     const now=performance.now();
     if(state.stage===2 || pulse || dragging || document.hidden || now<nextPulseAt)return;
     const duration=reducedMotion.matches?STATIC_FLASH_MS:FLASH_MS;
-    const shot={ray:forwardRay(),opacity:reducedMotion.matches?1:0,showNormal:state.hint>=2};
+    const shot={ray:traceSightline(state.angles),opacity:reducedMotion.matches?1:0,showNormal:state.hint>=2};
     pulse=shot;nextPulseAt=now+duration+REST_MS;root.dataset.pulseId=String(++pulseCount);
     render();
     const animate=time=>{
@@ -190,6 +186,7 @@ if(root) {
     $('#periscope-next').hidden=!state.done[state.stage]||state.stage===2;$('#periscope-next').textContent=state.stage===0?'前往修復光路 →':'前往反向傳訊 →';
     $('#periscope-complete').hidden=!state.done[2];
     $('#periscope-drag-help').textContent=state.stage===2?'這一關固定鏡面。先預測，再比較黃色原路線與藍色訊號光。':'抓住鏡片端點旋轉；也可點選鏡片後，用 ← → 微調，Shift 加快。';
+    $('.periscope-model-note').textContent=state.stage===2?'黃色是原本進入眼睛的光路，藍色訊號光從原眼睛位置反向發出；剖面與景物為示意比例。':'黃色輔助線從小葵的眼睛位置反向追蹤視線。實際看見物體時，是外界的光進入眼睛；剖面與景物為示意比例。';
     drawOptics();renderView();
   }
   function schedule(){if(!pending)pending=requestAnimationFrame(render);}
@@ -247,7 +244,7 @@ if(root) {
   $$('[data-prediction]').forEach(b=>b.addEventListener('click',()=>{invalidate();state.prediction=b.dataset.prediction;state.verified=false;state.signal=false;render();}));
   $('#periscope-pulse').addEventListener('click',emitPulse);
   const hints=[
-    ['先讓眼睛收到下方鏡片反射的光，再觀察上方鏡片把視線帶向哪裡。','看天空或海面時，外界光路仍接通；全暗則先檢查視線有沒有撞上管壁。','沿法線比較入射與反射方向。若出現光斑，表示這條光在那裡被擋住。'],
+    ['先確認視線能到下方鏡片，再觀察上方鏡片把視線帶向哪裡。','看天空或海面時，外界光路仍接通；全暗則先檢查視線有沒有撞上管壁。','沿法線比較入射與反射方向。若出現光斑，表示這條光在那裡被擋住。'],
     ['故障前，下方鏡片已把光送進眼睛。先比較光路從哪一處開始偏離。','法線與鏡面垂直。每一處反射都要讓入射角等於反射角。','只剩天空不代表光消失了，而是看向了另一個方向。'],
     ['將傳播方向反過來，入射線與反射線的角色會交換。','鏡子固定時，同一反射點兩側的角度仍相等。','藍光由原本眼睛的位置出發；比較它和黃色原路線是否完整重合。']
   ];
@@ -258,8 +255,8 @@ if(root) {
     cancelPulse(true);state.stage=stage;state.hint=0;state.signal=false;state.verified=false;
     $('#periscope-hint-copy').hidden=true;
     const content=[
-      ['我在潛水艇裡，怎麼看見海上的船？','先轉動鏡片，再從觀察窗找找船在哪裡。','任務一｜把船的駕駛艙調到觀察窗中央','拖曳鏡片端點旋轉。先試著觀察，需要時發出一束提示光，觀察後再調整。'],
-      ['剛才明明看見船，怎麼現在偏向天空了？','先判斷哪片鏡子被轉動，再把景象修回來。','任務二｜找出故障，讓船重新回到中央','先選擇你的判斷，再拖動鏡片修復；需要時可發出一束提示光。'],
+      ['我在潛水艇裡，怎麼看見海上的船？','先轉動鏡片，再從觀察窗找找船在哪裡。','任務一｜把船的駕駛艙調到觀察窗中央','拖曳鏡片端點旋轉。先試著觀察，需要時從觀察口追蹤視線，再修正鏡片。'],
+      ['剛才明明看見船，怎麼現在偏向天空了？','先判斷哪片鏡子被轉動，再把景象修回來。','任務二｜找出故障，讓船重新回到中央','先選擇你的判斷，再拖動鏡片修復；需要時從觀察口反向追蹤視線。'],
       ['我能沿同一條路，把訊號送回船上嗎？','鏡片保持不動，先預測，再發送藍色訊號光。','任務三｜讓訊號沿原光路返回','暫以訊號光源替換眼睛；黃色是原入眼光線，藍光從同一位置反向發出。']
     ][stage];
     ['#periscope-student','#periscope-grandpa','#periscope-task-title','#periscope-task-copy'].forEach((id,i)=>$(id).textContent=content[i]);

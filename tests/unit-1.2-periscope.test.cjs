@@ -10,7 +10,7 @@ const asset=path.join(root,'units/1/parts/1.2/assets');
 const close=(a,b,e=1e-7)=>assert.ok(Math.abs(a-b)<e,`${a} != ${b}`);
 
 test('潛望鏡有限鏡面、管壁與反向傳播',async t=>{
-  const {OPTICS,mirror,traceRay,viewRay,exteriorSample,observe,returnSignal}=await import(pathToFileURL(path.join(asset,'periscope-optics.mjs')));
+  const {OPTICS,mirror,traceRay,viewRay,exteriorSample,observe,returnSignal,traceSightline}=await import(pathToFileURL(path.join(asset,'periscope-optics.mjs')));
   const dot=(a,b)=>a.reduce((s,n,i)=>s+n*b[i],0);
   await t.test('36×36 組鏡面角度：反射分量、有限尺寸及閉合管道',()=>{
     let walls=0,outside=0;
@@ -42,6 +42,23 @@ test('潛望鏡有限鏡面、管壁與反向傳播',async t=>{
     assert.equal(viewRay(0,0,[45,45]).kind,'outside');assert.equal(viewRay(20,0,[45,45]).kind,'blocked');
     close(exteriorSample(viewRay(0,0,[45,45])).y,190);
     assert.equal(returnSignal([45,45]).receiver,true);assert.equal(returnSignal([39,45]).receiver,false);
+  });
+  await t.test('1296 組角度的提示一律從眼睛出發，內部與觀察窗中央視線重合',()=>{
+    for(let a=30;a<=65;a++)for(let b=30;b<=65;b++){
+      const r=traceSightline([a,b]),v=traceRay(OPTICS.eye,[-1,0,0],[a,b]);
+      assert.deepEqual(r.points[0],OPTICS.eye);assert.deepEqual(r.points.slice(0,v.points.length),v.points);assert.deepEqual(r.hits,v.hits);
+      if(v.kind==='blocked'){assert.equal(r.points.length,v.points.length);assert.equal(r.destination,'wall');}
+      if(v.kind==='outside'){
+        const p=v.points.at(-1),e=r.points.at(-1),d=v.direction;
+        close((e[0]-p[0])*d[1]-(e[1]-p[1])*d[0],0);
+        assert.ok(e[0]>=-1e-7&&e[0]<=508+1e-7&&e[1]>=-1e-7&&e[1]<=250+1e-7);
+        assert.ok(e[0]<p[0]);assert.equal(r.points.length,v.points.length+1);
+      }
+    }
+    const blocked=traceSightline([38,51]);assert.deepEqual(blocked.hits.map(h=>h.index),[1]);assert.equal(blocked.destination,'wall');
+    const good=traceSightline([45,45]);assert.deepEqual(good.hits.map(h=>h.index),[1,0]);assert.equal(good.destination,'boat');close(good.points.at(-1)[1],190);
+    assert.equal(traceSightline([39,45]).destination,'sea');close(traceSightline([39,45]).points.at(-1)[1],250);
+    assert.equal(traceSightline([51,45]).destination,'sky');
   });
   await t.test('整束提示只短暫亮起與淡出，沒有循環或移動光段',async()=>{
     const {FLASH_MS,STATIC_FLASH_MS,REST_MS,pulseOpacity}=await import(pathToFileURL(path.join(asset,'periscope-pulse.mjs')));
@@ -157,6 +174,20 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
   await t.test('微調按鈕與拖曳共用角度，沒有滑桿',async()=>{
     await setAngle(0,45);await page.locator('[data-fine="0,0.5"]').click();await expect.poll(async()=>(await angles())[0]).toBe(45.5);await page.locator('[data-fine="0,-0.5"]').click();await expect.poll(async()=>(await angles())[0]).toBe(45);
   });
+  await t.test('五種實際角度：提示都從觀察口開始，錯誤時不跳接到船或上方鏡片',async()=>{
+    const button=page.locator('#periscope-pulse');
+    await expect(button).toHaveText('✦ 追蹤目前視線');
+    for(const [a,b] of [[38,51],[45,45],[39,45],[51,45],[45,55]]){
+      await setAngle(0,a);await setAngle(1,b);await expect(button).toBeEnabled();await button.click();
+      await expect.poll(async()=>Number(await page.locator('#periscope-light').getAttribute('data-opacity'))>.95).toBe(true);
+      const d=await page.locator('#periscope-light .light-line').getAttribute('d'),points=d.slice(1).split('L').map(p=>p.split(',').map(Number));
+      assert.deepEqual(points[0],[755,590]);assert.deepEqual(points[1],[565,590]);
+      if(b!==45){assert.equal(points.length,3);assert.ok(points.at(-1)[1]>250);}
+      if(a===39&&b===45)close(points.at(-1)[1],250);
+      if(a===51&&b===45)close(points.at(-1)[0],0);
+      await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('#periscope-light')).toBeEmpty();await expect(button).toBeEnabled();
+    }
+  });
   await t.test('整條實際光路短暫亮起再熄滅，沒有箭頭、移動光點或常駐路線',async()=>{
     await setAngle(0,45);await setAngle(1,45);
     const button=page.locator('#periscope-pulse');await expect(button).toBeEnabled();await button.click();
@@ -167,7 +198,8 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await expect.poll(async()=>Number(await page.locator('#periscope-light').getAttribute('data-opacity'))>.95).toBe(true);
     const first=await page.locator('#periscope-light .light-line').getAttribute('d');
     const length=await page.locator('#periscope-light .light-line').evaluate(el=>el.getTotalLength());assert.ok(length>900);
-    const expected=await page.evaluate(async()=>{const {traceRay}=await import('./assets/periscope-optics.mjs');const angles=document.querySelector('#unit-quiz').dataset.angles.split(',').map(Number),r=traceRay([508.0001,190,0],[1,0,0],angles);return 'M'+[[170,190,0],...r.points].map(p=>p.slice(0,2).map(n=>n.toFixed(2)).join(',')).join('L');});
+    const expected=await page.evaluate(async()=>{const {traceSightline}=await import('./assets/periscope-optics.mjs?v=2');const r=traceSightline(document.querySelector('#unit-quiz').dataset.angles.split(',').map(Number));return 'M'+r.points.map(p=>p.slice(0,2).map(n=>n.toFixed(2)).join(',')).join('L');});
+    assert.ok(first.startsWith('M755.00,590.00L'));assert.ok(first.endsWith('200.67,190.00'));
     assert.equal(first,expected);assert.equal(await page.locator('#periscope-light .light-arrow').count(),0);assert.equal(await page.locator('#periscope-light circle').count(),0);assert.equal(await page.locator('#periscope-block-marker').count(),0);
     await page.waitForTimeout(180);assert.equal(await page.locator('#periscope-light .light-line').getAttribute('d'),first);
     await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('#periscope-light')).toBeEmpty();await expect(page.locator('#periscope-normal')).toBeEmpty();
@@ -189,7 +221,7 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await page.locator('#periscope-reset-stage').click();await expect(quiz).toHaveAttribute('data-pulse-status','idle');
     await page.locator('#periscope-pulse').click();await expect.poll(async()=>Number(await page.locator('#periscope-light').getAttribute('data-opacity'))>.95).toBe(true);await expect(page.locator('.periscope-wall-spot')).toBeVisible();
     const at=await page.locator('.periscope-wall-spot circle').last().evaluate(e=>[+e.getAttribute('cx'),+e.getAttribute('cy')]);
-    const hit=await page.evaluate(async()=>{const {traceRay}=await import('./assets/periscope-optics.mjs');return traceRay([508.0001,190,0],[1,0,0],document.querySelector('#unit-quiz').dataset.angles.split(',').map(Number)).points.at(-1).slice(0,2);});at.forEach((n,i)=>close(n,hit[i]));
+    const hit=await page.evaluate(async()=>{const {traceRay,OPTICS}=await import('./assets/periscope-optics.mjs?v=2');return traceRay(OPTICS.eye,[-1,0,0],document.querySelector('#unit-quiz').dataset.angles.split(',').map(Number)).points.at(-1).slice(0,2);});at.forEach((n,i)=>close(n,hit[i]));
     assert.equal(await page.locator('#periscope-light .light-arrow').count(),0);assert.equal(await page.locator('#periscope-block-marker').count(),0);
     await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('.periscope-wall-spot')).toHaveCount(0);await expect(hint).toBeEnabled();
   });
