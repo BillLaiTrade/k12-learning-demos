@@ -92,6 +92,8 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
     return {hash:hash>>>0,opaque,bounds};
   }));}
   await t.test('初始上下兩排同時呈現；移除切換、鼻尖標記與散光',async()=>{
+    await expect(section.locator('.comparison-row-title')).toHaveText(['有鏡子','撤鏡，放入真熊']);
+    await expect(section.locator('.comparison-row-title span')).toHaveCount(0);
     await expect(page.locator('#comparison-reference')).toHaveAttribute('data-mode','mirror');await expect(page.locator('#comparison-trial')).toHaveAttribute('data-mode','direct');
     await expect(page.locator('#reference-side [data-side=mirror]')).toBeVisible();await expect(page.locator('#trial-side [data-side=mirror]')).toBeHidden();
     assert.equal(await section.locator('button,input,[role=slider],[data-side=source-point],[data-side=image-point],[data-view=nose],[data-side=scatter],[data-side=other-reflections],.comparison-controls').count(),0);
