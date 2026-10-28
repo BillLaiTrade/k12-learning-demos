@@ -149,6 +149,7 @@
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
+  <link rel="stylesheet" href="assets/concentration.css?v=lab-1">
 </head>
 <body>
   <header class="shell masthead">
@@ -296,46 +297,21 @@
         </div>
       </section>
 
-      <section class="lesson-card" id="s5">
-        <div class="card-side"><span class="card-number">05</span><h3>水溶液裡的溶質有多少？</h3><span class="card-role">用濃度表示含量</span></div>
-        <div class="card-main">
-          <h2>兩杯不同大小的糖水，哪一杯比較濃？</h2>
-          <p>兩杯不同大小的糖水裡，糖都均勻溶在水裡；光看杯中總量，還不能比較糖水的濃淡。</p>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>要比較哪一杯比較濃，是不是得把裡面的糖都分離出來，再秤一秤？</p></div>
-          <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>不必把糖分離出來。比較糖的質量占整杯糖水質量的比例，就能用重量百分濃度比較濃度。</p></div>
+<section class="lesson-card" id="s5"><div class="card-side"><span class="card-number">05</span><h3>水溶液裡的溶質有多少？</h3><span class="card-role">用濃度表示含量</span></div><div class="card-main">
+<h2>自己配糖水，濃度是多少？</h2><p>舀糖、倒水，看看濃度跟著怎麼變。</p>
+<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>糖和水都讓我自己決定，配出來會是幾％？</p></div><div class="dialogue "><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先量出兩者的質量，再看糖占整杯糖水多少。</p></div>
+<div class="mix-scene" id="mix-lab" data-ready="loading" aria-label="分別稱量溶質與溶劑的實驗桌"><canvas id="mix-canvas" width="1536" height="1024" aria-hidden="true"></canvas><button class="mix-tool" id="mix-spoon" type="button" aria-label="舀入1克糖；向下鍵取回1克，也可拖到糖盤或糖碗" disabled></button><button class="mix-tool" id="mix-pitcher" type="button" aria-label="倒入水；按住持續倒水，點一下加1克，向下鍵取回1克" disabled></button><button class="mix-return" id="mix-return" type="button" aria-label="用糖匙取回1克糖" disabled></button><span class="role-tag sugar">溶質｜糖</span><span class="role-tag water">溶劑｜水</span><button class="lcd sugar" id="mix-sugar-input" type="button" aria-label="輸入糖的克數" disabled><span data-mix="sugar-read">5.0 g</span><svg viewBox="0 0 20 20"><path d="m5 12 8-8 3 3-8 8-4 1zM11 6l3 3"/></svg></button><button class="lcd water" id="mix-water-input" type="button" aria-label="輸入水的克數" disabled><span data-mix="water-read">95.0 g</span><svg viewBox="0 0 20 20"><path d="m5 12 8-8 3 3-8 8-4 1zM11 6l3 3"/></svg></button><span class="tare">兩台秤皆已扣除容器質量</span><button class="restart" id="mix-reset" type="button" aria-label="重新配製" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></button></div>
 
-          <h3>先認識溶液裡有哪些成分</h3>
-          <p>糖溶解在水中後形成均勻的糖水。這種均勻混合物稱為溶液。糖是溶質，水是溶劑；糖沒有消失，而是分散在水中。不同糖水的溶質含量可以不同。</p>
-          <div class="compare-grid solution-compare" aria-label="兩杯糖水的質量組成比較">
-            <article class="compare-card"><h3>甲杯｜5% 糖水</h3><p>5 克糖＋95 克水，共 100 克溶液</p></article>
-            <article class="compare-card"><h3>乙杯｜10% 糖水</h3><p>20 克糖＋180 克水，共 200 克溶液</p></article>
-            <article class="compare-card"><h3>比較結果</h3><p>乙杯的總量較多，糖占整杯糖水的比例也較高。</p></article>
-          </div>
-
-          <h3>用重量百分濃度表示含量</h3>
-          <div class="filter-principle"><strong>重量百分濃度（P%）</strong>溶質質量 ÷ 溶液質量 × 100%。溶液質量是溶質與溶劑質量的總和。</div>
-          <p>甲杯的重量百分濃度是 5 克 ÷ 100 克 × 100%＝5%；乙杯是 20 克 ÷ 200 克 × 100%＝10%。</p>
-          <div class="quiz-grid" aria-label="重量百分濃度練習">
-            <div class="quiz-row"><div><label for="solution-q1">3 克糖溶於 97 克水，重量百分濃度是多少？</label><p>先算溶液總質量，再用溶質質量除以溶液質量。</p></div><select id="solution-q1"><option value="">選擇答案</option><option value="3">3%</option><option value="about3">約 3.1%</option><option value="97">97%</option></select></div>
-          </div>
-          <div class="control-row"><button class="control-button" type="button" id="check-concentration">檢查答案</button><button class="control-button" type="button" id="reset-concentration">重新選擇</button></div>
-          <p class="feedback" id="concentration-feedback" aria-live="polite">選出答案後檢查計算結果。</p>
-
-          <h3>含量非常少時，可以用 ppm 表示</h3>
-          <p>有些物質在空氣或水中的含量非常少，使用百分比不容易閱讀。ppm 是「百萬分點」的表示法，表示每一百萬份樣本中所含的份數；例如 3 ppm 表示每一百萬份樣本中有 3 份該物質。</p>
-          <div class="filter-principle"><strong>以質量比表示的 3 ppm 為例</strong>每 1,000,000 克溶液含有 3 克溶質，也就是每 1 公斤溶液含有 3 毫克溶質。分子和分母必須使用相同的比較基準；此例比較的是質量，總量指整份溶液。</div>
-          <div class="compare-grid solution-compare">
-            <article class="compare-card"><h3>含量較多時</h3><p>可用重量百分濃度表示，例如糖水中的糖。</p></article>
-            <article class="compare-card"><h3>含量很少時</h3><p>可用 ppm 表示，例如空氣或水污染物的含量。</p></article>
-            <article class="compare-card"><h3>讀數時要看清楚</h3><p>除了數值，也要看比較基準。例如這裡的重量百分濃度和質量比 ppm，都比較溶質質量與溶液總質量。</p></article>
-          </div>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>原來分離方法告訴我們成分怎麼分開，濃度則能表示溶液裡的溶質含量。</p></div>
-          <div class="note-box">本區依課綱介紹溶液、重量百分濃度與 ppm，著重理解表示法和簡單判讀；不進行溶液混合或稀釋後的濃度變化計算。</div>
-        </div>
-      </section>
+<div class="live-result"><strong>配成糖水後</strong><div class="mass-equation"><span class="item solute">溶質<b data-mix="sugar">糖 5 克</b></span><span class="op">＋</span><span class="item solvent">溶劑<b data-mix="water">水 95 克</b></span><span class="op">＝</span><span class="item">溶液<b data-mix="total">糖水 100 克</b></span></div><div class="concentration"><span>重量百分濃度</span><span>＝</span><span class="fraction"><span class="num" data-mix="formula-sugar">5 克</span><span class="den" data-mix="formula-total">100 克</span></span><span>× 100%</span><span>＝</span><span class="value" data-mix="percent">5%</span></div><div class="mass-bar" role="img" id="mix-bar" aria-label="糖占質量5%，水占95%"><i id="mix-bar-fill"></i></div><div class="mass-legend"><span data-mix="sugar-share">糖占 5%</span><span data-mix="water-share">水占 95%</span></div><p class="meaning" data-mix="meaning">每 100 克這樣的糖水，含有 5 克糖。比例條表示質量組成。</p></div>
+<div class="concept-line">溶液總質量＝溶質質量＋溶劑質量。糖溶解後仍包含在總質量中。</div>
+<h3 class="minor-title">含量很少時，用 ppm 表示</h3><div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>一公斤溶液裡只有幾毫克，也能表示嗎？</p></div>
+<div class="ppm-panel" id="ppm-lab" aria-label="每公斤溶液的微量溶質份量"><div class="ppm-top"><strong>拿取微量溶質</strong><span class="fixed">溶液總質量固定為 1 公斤</span></div><div class="ppm-mass"><span>溶質質量</span><strong data-mix="ppm-mass">3 毫克</strong></div><div class="micro-workspace"><div class="micro-supply" id="ppm-supply"><span class="micro-label">溶質份量</span><div class="supply-tokens"><button type="button" class="micro-token lift ppm-source" aria-label="加入1毫克溶質">1 mg</button><button type="button" class="micro-token ppm-source" aria-label="加入1毫克溶質">1 mg</button></div><span class="micro-note">每張代表 1 毫克</span></div><div class="micro-recipe" id="ppm-recipe"><div class="micro-label">這份樣本的溶質</div><div class="placed-tokens" id="ppm-tokens" role="group" aria-label="已選取的溶質份量"></div><span class="micro-note" data-mix="ppm-sum">合計 3 毫克</span></div></div><div class="micro-caption">質量份量示意</div><div class="ppm-formula"><span class="fraction"><span class="num" data-mix="ppm-numerator">3 毫克</span><span class="den">1,000,000 毫克</span></span><span>× 1,000,000</span><span>＝</span><span class="ppm-value" data-mix="ppm">3 ppm</span></div><div class="ppm-equivalent" data-mix="micro-percent">同一個質量比例，也就是 0.0003%。</div></div>
+<p class="ppm-foot">1 公斤＝1,000,000 毫克；這裡的總質量包含溶質與溶劑。</p>
+<p class="mix-status" id="mix-status" role="status" aria-live="polite"></p></div></section>
     </div>
   </main>
   <footer class="shell">國二上・自然科學</footer>
+  <dialog class="mass-dialog" id="mass-dialog" aria-labelledby="mass-dialog-title"><form id="mass-form" novalidate><h3 id="mass-dialog-title">設定質量</h3><div class="mass-input-row"><input id="mass-input" type="number" inputmode="decimal" step="0.1" required aria-describedby="mass-range mass-error"><span>克</span></div><p class="mass-range" id="mass-range"></p><p class="mass-error" id="mass-error" role="alert"></p><div class="mass-actions"><button type="button" id="mass-cancel">取消</button><button type="submit">套用</button></div></form></dialog>
   <script>
     const routeLinks=[...document.querySelectorAll('.route-inner a')];
     const cards=routeLinks.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean);
@@ -367,14 +343,11 @@
     if(!reduceFilterMotion){setInterval(()=>{filterStage=(filterStage+1)%4;filterAnimation.dataset.stage=String(filterStage);},2200);}
 
     document.getElementById('check-answers').addEventListener('click',()=>{const ids=['q-filter','q-crystal','q-paper'];const values=ids.map(id=>document.getElementById(id).value);const feedback=document.getElementById('quiz-feedback');if(values.some(value=>!value)){feedback.textContent='請先完成三個分離目標的配對，再查看結果。';feedback.style.color='#48634f';return;}const correct=values[0]==='filter'&&values[1]==='crystal'&&values[2]==='paper';feedback.textContent=correct?'三個方法都選對了！過濾分開泥沙和水、結晶讓鹽從鹽水中分離、濾紙層析讓混合色素分出不同色帶。':'還有方法和目標沒有對上。回頭想想：要分開泥沙和水、把鹽從鹽水中分離，還是觀察墨水裡有幾種色素？';feedback.style.color=correct?'#176b53':'#48634f';});
-    const concentrationAnswer=document.getElementById('solution-q1');
-    const concentrationFeedback=document.getElementById('concentration-feedback');
-    document.getElementById('check-concentration').addEventListener('click',()=>{if(!concentrationAnswer.value){concentrationFeedback.textContent='請先選擇一個答案。';concentrationFeedback.style.color='#48634f';return;}const correct=concentrationAnswer.value==='3';concentrationFeedback.textContent=correct?'答對了。溶液總質量是 3＋97＝100 克，3÷100×100%＝3%。':'再算一次：溶液總質量是溶質加溶劑，也就是 3＋97 克。';concentrationFeedback.style.color=correct?'#176b53':'#48634f';});
-    document.getElementById('reset-concentration').addEventListener('click',()=>{concentrationAnswer.value='';concentrationFeedback.textContent='選出答案後檢查計算結果。';concentrationFeedback.style.color='';});
     document.getElementById('reset-answers').addEventListener('click',()=>{['q-filter','q-crystal','q-paper'].forEach(id=>document.getElementById(id).value='');const feedback=document.getElementById('quiz-feedback');feedback.textContent='完成三個配對後，查看回饋。';feedback.style.color='';});
   </script>
   <script type="importmap">{"imports":{"three":"../../../1/parts/1.1/assets/vendor/three/build/three.module.js"}}</script>
   <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
+  <script type="module" src="assets/concentration.js?v=lab-1"></script>
 </body>
 </html>

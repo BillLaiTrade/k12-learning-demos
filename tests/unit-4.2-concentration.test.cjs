@@ -1,0 +1,97 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const {spawn}=require('node:child_process');const path=require('node:path');const {chromium}=require('playwright');
+test('4.2 direct weighing and ppm: science, interactions and approved layout',{timeout:180000},async t=>{
+ const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','pipe']});t.after(()=>server.kill());
+ const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Server startup timeout')),5000);server.stdout.on('data',s=>{const m=String(s).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.on('error',reject);});
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});t.after(()=>browser.close());
+ const page=await browser.newPage({viewport:{width:1440,height:1100},hasTouch:true});const failures=[];
+ page.on('pageerror',e=>failures.push(String(e)));page.on('requestfailed',r=>failures.push(r.url()));page.on('response',r=>{if(r.status()>=400)failures.push(r.url());});
+ const url=`http://127.0.0.1:${port}/units/4/parts/4.2/`;
+ await page.clock.install({time:new Date('2026-10-28T00:00:00Z')});await page.goto(url+'#s5');await page.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='true');await page.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));
+ const lab=page.locator('#mix-lab'),spoon=page.locator('#mix-spoon'),pitcher=page.locator('#mix-pitcher');
+ const state=()=>lab.evaluate(e=>({sugar:Number(e.dataset.sugar),water:Number(e.dataset.water),total:Number(e.dataset.total),percent:Number(e.dataset.percent),activity:e.dataset.activity}));
+ const ppm=()=>page.locator('#ppm-lab').evaluate(e=>({ppm:Number(e.dataset.ppm),total:Number(e.dataset.totalMg),solvent:Number(e.dataset.solventMg),tokens:e.querySelectorAll('.placed').length}));
+ const advance=async ms=>{await page.clock.runFor(20);await page.clock.fastForward(ms);};
+ const fresh=()=>page.locator('#mix-reset').click();
+ const enter=async(kind,value)=>{await page.locator(`#mix-${kind}-input`).click();await page.locator('#mass-input').fill(value);await page.locator('#mass-form button[type=submit]').click();};
+ const local=async(x,y)=>{await lab.scrollIntoViewIfNeeded();const r=await lab.boundingBox();return{x:r.x+r.width*x,y:r.y+r.height*y};};
+ const dragTool=async(button,x,y)=>{await button.scrollIntoViewIfNeeded();const b=await button.boundingBox(),p=await local(x,y);await page.mouse.move(b.x+b.width*.5,b.y+b.height*.5);await page.mouse.down();await page.mouse.move(p.x,p.y,{steps:10});await page.mouse.up();};
+ await t.test('independent ratio cases and input validation use solution mass as denominator',async()=>{
+  const result=await page.evaluate(async()=>{const m=await import('./assets/concentration-state.js?v=lab-1');return{cases:[[5,95],[3,97],[0,50],[20,50],[.1,149.9]].map(([s,w])=>m.concentrationState(s,w,3)),invalid:[m.massValue('sugar',''),m.massValue('water',0),m.massValue('sugar',21),m.massValue('water',Infinity)],micro:Array.from({length:11},(_,n)=>m.concentrationState(5,95,n))};});
+  const expected=[[100,5],[100,3],[50,0],[70,20/70*100],[150,.1/150*100]];
+  result.cases.forEach((v,i)=>{assert.equal(v.total,expected[i][0]);assert.ok(Math.abs(v.percent-expected[i][1])<1e-12);});assert.deepEqual(result.invalid,[null,null,null,null]);
+  result.micro.forEach((v,n)=>{assert.equal(v.totalMg,1000000);assert.equal(v.solventMg+n,1000000);assert.equal(v.ppm,n);assert.equal(v.microPercent,n/10000);});
+ });
+ await t.test('initial approved scene has no sliders or old quiz, and uses official avatars',async()=>{
+  assert.deepEqual(await state(),{sugar:5,water:95,total:100,percent:5,activity:'idle'});assert.deepEqual(await ppm(),{ppm:3,total:1000000,solvent:999997,tokens:3});
+  assert.equal(await page.locator('#s5 input[type=range],#solution-q1,#check-concentration,#reset-concentration').count(),0);
+  assert.equal(await page.locator('#mix-canvas').count(),1);assert.match(await page.locator('#s5 .speaker').first().evaluate(e=>getComputedStyle(e,'::before').backgroundImage),/shared-assets\/characters\/dialogue-character-avatars/);
+  await advance(2000);assert.equal((await state()).sugar,5);
+ });
+ await t.test('spoon click adds mass with real changing pixels; bowl and keyboard can take it back',async()=>{
+  const before=await lab.screenshot();await spoon.click();await advance(350);const moving=await lab.screenshot();assert.notDeepEqual(before,moving);
+  await advance(500);assert.equal((await state()).sugar,6);assert.equal((await state()).total,101);assert.match(await page.locator('[data-mix=percent]').innerText(),/^5\.941%$/);
+  await page.locator('#mix-return').click();await advance(800);assert.equal((await state()).sugar,5);
+  await spoon.focus();await page.keyboard.press('ArrowDown');await advance(800);assert.equal((await state()).sugar,4);
+ });
+ await t.test('rapid clicks do not lose or duplicate aliquots; reset cancels pending transfers',async()=>{
+  await fresh();for(let i=0;i<3;i++)await spoon.click();await advance(800);assert.equal((await state()).sugar,8);
+  await spoon.click();await fresh();await advance(2000);assert.equal((await state()).sugar,5);assert.equal((await state()).activity,'idle');
+ });
+ await t.test('spoon drag deposits in the boat or returns to the sugar bowl; outside drops cancel',async()=>{
+  await fresh();await dragTool(spoon,.36,.55);await advance(800);assert.equal((await state()).sugar,6);
+  await dragTool(spoon,.10,.58);await advance(800);assert.equal((await state()).sugar,5);
+  await dragTool(spoon,.70,.80);await advance(800);assert.equal((await state()).sugar,5);
+ });
+ await t.test('pitcher tap, press-hold and release change water mass then stop without an extra click',async()=>{
+  await fresh();await pitcher.click();await advance(800);assert.equal((await state()).water,96);
+  await pitcher.hover();await page.mouse.down();await advance(1200);const held=await state();assert.ok(held.water>105&&held.water<110);assert.equal(held.activity,'pouring-water');await page.mouse.up();
+  const stopped=await state();await advance(1000);assert.deepEqual(await state(),stopped);
+  await enter('water','149');await pitcher.hover();await page.mouse.down();await advance(2000);assert.equal((await state()).water,150);await page.mouse.up();await advance(1000);assert.equal((await state()).water,150);
+ });
+ await t.test('pitcher drag and keyboard fine adjustment work; canceled gestures never transfer mass',async()=>{
+  await fresh();await dragTool(pitcher,.65,.42);await advance(800);assert.equal((await state()).water,96);
+  await pitcher.focus();await page.keyboard.press('ArrowDown');await advance(800);assert.equal((await state()).water,95);
+  const p=await spoon.boundingBox(),target=await local(.36,.55);await page.mouse.move(p.x+p.width/2,p.y+p.height/2);await page.mouse.down();await page.mouse.move(target.x,target.y,{steps:8});await page.keyboard.press('Escape');await page.mouse.up();await advance(800);assert.equal((await state()).sugar,5);
+ });
+ await t.test('scale inputs accept decimals, synchronize formula, reject bad values and support cancel',async()=>{
+  await fresh();await enter('sugar','3');await enter('water','97');assert.equal((await state()).percent,3);assert.match(await page.locator('[data-mix=formula-total]').innerText(),/^100 克$/);
+  await enter('sugar','0');assert.equal((await state()).percent,0);assert.match(await page.locator('[data-mix=total]').innerText(),/^水 /);
+  await enter('sugar','2.5');assert.equal((await state()).sugar,2.5);
+  await enter('water','0');assert.equal(await page.locator('#mass-dialog').isVisible(),true);assert.match(await page.locator('#mass-error').innerText(),/50–150/);assert.equal((await state()).water,97);await page.keyboard.press('Escape');
+  await page.locator('#mix-sugar-input').click();await page.locator('#mass-input').fill('9');await page.locator('#mass-cancel').click();assert.equal((await state()).sugar,2.5);
+  await enter('sugar','');assert.equal(await page.locator('#mass-dialog').isVisible(),true);await page.locator('#mass-cancel').click();
+ });
+ await t.test('ppm click/keyboard changes count and fixed total mass, and respects zero and ten limits',async()=>{
+  await fresh();const source=page.locator('.ppm-source').first();await source.click();await source.click();assert.equal((await ppm()).ppm,5);assert.match(await page.locator('[data-mix=micro-percent]').innerText(),/0\.0005%/);
+  await page.locator('#ppm-tokens button').first().click();assert.equal((await ppm()).ppm,4);
+  await source.focus();await page.keyboard.press('Enter');assert.equal((await ppm()).ppm,5);
+  for(let i=0;i<5;i++)await source.click();assert.equal((await ppm()).ppm,10);assert.equal(await source.isDisabled(),true);
+  for(let i=0;i<10;i++)await page.locator('#ppm-tokens button').first().click();assert.deepEqual(await ppm(),{ppm:0,total:1000000,solvent:1000000,tokens:0});assert.equal(await source.isEnabled(),true);
+ });
+ await t.test('ppm drag adds/returns one token; cancel and outside drop do not change the recipe',async()=>{
+  await fresh();const source=page.locator('.ppm-source').first();
+  const drag=async(el,dest,cancel=false)=>{await el.scrollIntoViewIfNeeded();const a=await el.boundingBox(),d=await dest.boundingBox();await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();await page.mouse.move(d.x+d.width/2,d.y+d.height/2,{steps:10});if(cancel)await page.keyboard.press('Escape');await page.mouse.up();};
+  await drag(source,page.locator('#ppm-recipe'));assert.equal((await ppm()).ppm,4);
+  await drag(page.locator('#ppm-tokens button').first(),page.locator('#ppm-supply'));assert.equal((await ppm()).ppm,3);
+  await drag(source,page.locator('#ppm-recipe'),true);assert.equal((await ppm()).ppm,3);
+  await source.click();assert.equal((await ppm()).ppm,4);assert.equal(await page.locator('#micro-ghost').count(),0);
+ });
+ await t.test('native controls also operate by real touch',async()=>{
+  await fresh();await spoon.tap();await advance(800);assert.equal((await state()).sugar,6);
+  await page.locator('.ppm-source').first().tap();assert.equal((await ppm()).ppm,4);
+  await page.locator('#mix-water-input').tap();assert.equal(await page.locator('#mass-dialog').isVisible(),true);await page.locator('#mass-cancel').tap();
+ });
+ await t.test('all content remains inside its column on desktop, tablet and mobile, including ten tokens',async()=>{
+  for(const width of [1440,1024,850,768,680,390,320]){
+   await page.setViewportSize({width,height:1100});await fresh();for(let i=0;i<7;i++)await page.locator('.ppm-source').first().click();
+   const v=await page.locator('#s5').evaluate(card=>{const m=card.querySelector('.card-main').getBoundingClientRect();return{overflow:document.documentElement.scrollWidth>innerWidth,out:[...card.querySelector('.card-main').children].filter(e=>!e.classList.contains('mix-status')).some(e=>{const r=e.getBoundingClientRect();return r.left<m.left-.5||r.right>m.right+.5;})};});assert.equal(v.overflow,false,`viewport ${width}`);assert.equal(v.out,false,`content ${width}`);
+   await enter('sugar','20');await enter('water','150');
+   const row=await page.locator('#s5 .mass-equation').evaluate(el=>({width:el.clientWidth,scroll:el.scrollWidth}));assert.ok(row.scroll<=row.width+1,`maximum recipe fits mass row at ${width}`);
+   if(width===390)await page.locator('#s5').screenshot({path:'/tmp/concentration-phone.png'});
+  }
+  await page.setViewportSize({width:1440,height:1100});await fresh();await page.locator('#s5').screenshot({path:'/tmp/concentration-desktop.png'});assert.deepEqual(failures,[]);
+ });
+ await t.test('loading failure reports an error but ppm and other lesson blocks remain usable',async()=>{
+  const failed=await browser.newPage();try{await failed.route('**/concentration-tools.webp',r=>r.abort());await failed.goto(url);await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);await failed.locator('.ppm-source').first().click();assert.equal(await failed.locator('#ppm-lab').getAttribute('data-ppm'),'4');assert.equal(await failed.locator('#check-answers').isEnabled(),true);}finally{await failed.close();}
+ });
+});

@@ -128,3 +128,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-1.2-
 ## 5.1 統一為 3.2 頁面版型
 
 同時執行 `unit-5.1.test.cjs`、`unit-5.1-water-lab.test.cjs`、`unit-5.1-dual-scale.test.cjs`，共 30 項檢查。響應式面板依實際內容欄寬判定橫向／直向配置。`TEMPERATURE_LESSON_URL`、`WATER_LAB_URL`、`DUAL_SCALE_URL` 可分別指定整頁、第二區與第三區待測網址，未設定時仍使用自動啟停的本機伺服器。文字／圖像／控制項保留核對與版型截圖另見 `docs/reviews/unit-5.1-layout/`。
+
+## 4.2 第五區塊：直接稱量與 ppm
+
+```sh
+node --test --test-concurrency=1 tests/unit-4.2-concentration.test.cjs tests/unit-4.2-chromatography.test.cjs tests/unit-4.2.test.cjs
+```
+
+新第五區檢查溶質／溶劑淨質量、分母包含兩者、0 溶質、非整數質量、質量比 ppm 的固定總量與溶劑補足；並以真實 DOM 和 Canvas 驗證糖匙點擊／拖曳、快速連點、取回、倒水按住放手、取消、數字輸入與拒絕無效值、份量卡加入／取回／上下限、重設、鍵盤、真實觸控、載入失敗與 320–1440px 排版。第五區 14 項、層析 13 項、蒸發 9 項，共 36 項通過。另須檢視實際畫面與核可示意圖，詳見 `docs/reviews/unit-4.2-card05/review.md`。
