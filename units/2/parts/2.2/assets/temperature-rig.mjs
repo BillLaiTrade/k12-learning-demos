@@ -12,7 +12,7 @@ export function createTemperatureRig(parent, { prefix, onSelect, chamber }) {
   rig.setAttribute('aria-label', '可調溫組的溫控裝置');
   rig.innerHTML = `
     <div class="thermal-actions">
-      ${[[30,'heat','加熱到 30°C',heatIcon],[0,'cool','冷卻到 0°C',coldIcon],[20,'room','回到 20°C',roomIcon]].map(([target,kind,label,icon])=>`<button type="button" class="thermal-button ${kind}" data-temperature-target="${target}" aria-pressed="false"><svg viewBox="0 0 36 36" aria-hidden="true">${icon}</svg><span>${label}</span></button>`).join('')}
+      ${[[80,'heat','加熱到 80°C',heatIcon],[0,'cool','冷卻到 0°C',coldIcon],[20,'room','回到 20°C',roomIcon]].map(([target,kind,label,icon])=>`<button type="button" class="thermal-button ${kind}" data-temperature-target="${target}" aria-pressed="false"><svg viewBox="0 0 36 36" aria-hidden="true">${icon}</svg><span>${label}</span></button>`).join('')}
     </div>
     <p class="sr-only" id="${prefix}sensor-help">溫度探棒穿過腔體密封口，感測端位於同一可調溫空氣腔內。</p><p class="sr-only rig-announcement" role="status" aria-live="polite"></p>`;
   parent.append(rig);

@@ -100,6 +100,9 @@
 .temperature-sound-lab .temperature-heading span:first-child{font-size:1.35rem;color:var(--group-temperature-color,#176b53)}
 .temperature-sound-lab [data-group=adjustable]{--group-temperature-color:#dd7034}
 .temperature-sound-lab .row-body{grid-template-columns:minmax(0,1fr) 94px;border:0;border-radius:0;background:transparent}
+.temperature-sound-lab .row-body{grid-template-areas:"field arrival" "race arrival";gap:0;align-items:start}
+.temperature-sound-lab .field{grid-area:field}
+.temperature-sound-lab .arrival-readout{grid-area:arrival}
 .temperature-sound-lab .arrival-readout{align-self:start;min-height:115px;padding:12px 3px;background:transparent}
 .temperature-sound-lab .arrival-readout output{font-size:1.05rem;font-weight:800}
 .temperature-sound-lab .propagation-readout{position:absolute;width:1px;height:1px;min-height:0;margin:0;padding:0;overflow:hidden;clip-path:inset(50%)}
@@ -108,6 +111,30 @@
 .temperature-sound-lab .result p{margin:0;color:#176b53;font-size:1.16rem;font-weight:800}
 .temperature-sound-lab .controls{margin-top:16px}
 .temperature-sound-lab .model-notes{margin-top:12px}
+.progress-legend{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px 18px;margin:0 2px 12px;color:#526f5c;font-size:.75rem;line-height:1.6}
+.progress-legend>span{display:flex;align-items:center;gap:6px}
+.progress-legend i{display:inline-block;width:18px;height:0;border-top:2px solid #176b53}
+.progress-legend .legend-other{border-top-style:dashed}
+.race-progress{grid-area:race;position:relative;height:116px;min-width:0;--own-color:#176b53;--other-color:#bc5722}
+.race-scale{position:absolute;top:0;height:100%}
+.race-line,.race-filled{position:absolute;left:0;top:52px;height:3px;border-radius:2px}
+.race-line{width:100%;background:#c8d8cd}
+.race-filled{width:0;background:var(--own-color)}
+.race-marker{position:absolute;top:30px;width:20px;height:24px;transform:translateX(-50%);color:var(--own-color);z-index:2}
+.race-marker svg{display:block;width:20px;height:16px;overflow:visible}
+.race-marker path{fill:currentColor;stroke:currentColor;stroke-width:1.4;stroke-linejoin:round}
+.race-marker i{position:absolute;left:50%;top:12px;bottom:0;border-left:2px solid currentColor;transform:translateX(-50%)}
+.race-other{color:var(--other-color);z-index:1}
+.race-other path{fill:#fffefa;stroke-dasharray:3 2}
+.race-other i{border-left-style:dashed}
+.race-tick{position:absolute;top:51px;width:1px;height:8px;background:#92ad9a}
+.race-midpoint{display:none}
+.race-tick>span{position:absolute;top:12px;left:0;transform:translateX(-50%);white-space:nowrap;font-size:clamp(9px,1.7cqi,11px);line-height:1;color:#5d7565;font-variant-numeric:tabular-nums}
+.race-label{--label-width:min(132px,100%);position:absolute;top:0;left:clamp(0px,calc(var(--position,0)*1% - 66px),calc(100% - var(--label-width)));width:var(--label-width);box-sizing:border-box;padding:3px 5px;border:1px solid currentColor;border-radius:6px;background:#fffefa;color:var(--own-color);font-size:clamp(10px,2.1cqi,13px);font-weight:750;line-height:1.6;text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums}
+.race-other-label{top:84px;border-style:dashed;color:var(--other-color)}
+.temperature-sound-lab .progress-gap{margin:12px 0 0;padding:7px 4px;border-radius:10px;background:#eef3ec;color:#426b53;font-size:.73rem;font-weight:750;line-height:1.6;white-space:nowrap}
+.temperature-sound-lab .progress-gap[data-relation=ahead]{background:#ffead6;color:#a64f1e}
+.temperature-sound-lab .progress-gap[data-relation=behind]{background:#eaf4fa;color:#28749a}
 .temperature-rig{grid-column:1/-1;min-width:0;margin-top:0}
 /* 讀值窗定位在同一個 SVG 底座的螢幕上，與腔內探棒使用相同縮放。 */
 .chamber-temperature-value{position:absolute;left:68.86%;top:76.4%;width:22.81%;height:8.8%;display:grid;place-items:center;color:#23463c;font:750 clamp(11px,3cqi,18px)/1 ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums;pointer-events:none;white-space:nowrap}
@@ -143,8 +170,16 @@
 }
 
 @container(max-width:400px){
- .temperature-sound-lab .row-body{grid-template-columns:1fr}
+ .temperature-sound-lab .row-body{grid-template-columns:1fr;grid-template-areas:"field" "race" "arrival"}
  .temperature-sound-lab .arrival-readout{flex-direction:row;gap:10px;min-height:0;padding:5px 0 0;border:0;justify-content:flex-end}
  .temperature-sound-lab .arrival-readout output{font-size:.86rem}
  .temperature-sound-lab .chamber-temperature-value{font-size:clamp(11px,4cqi,15px)}
+ .temperature-sound-lab .progress-gap{margin:0;font-size:.72rem}
+ .progress-legend{justify-content:flex-start;font-size:.68rem;gap:6px 12px}
+}
+
+@container(max-width:500px){
+ .race-tick[data-distance]>span{display:none}
+ .race-tick[data-distance="0"]>span,.race-tick[data-distance="5000"]>span{display:block}
+ .race-midpoint{display:block}
 }

@@ -1,0 +1,81 @@
+▶ 2.2 sound travels through air while particles stay near their origins
+  ✔ actual bell recording is audible with headroom and no autoplay or volume slider (28.295093ms)
+  ✔ starts at rest and the disturbance reaches nearby particles before distant ones (1349.126218ms)
+  ✔ direct bell and button strikes restart one animation without stacking (608.341599ms)
+  ✔ a strike launches compression right while particles oscillate locally (1413.681684ms)
+  ✔ labels follow the same bands and fade once without jumping back or reappearing (6654.72281ms)
+  ✔ ear responds only after arrival; completion and keyboard restart leave no stale animation (4946.036863ms)
+  ✔ bell playback advances, restarts from zero, and ends without looping (6402.701435ms)
+  ✔ touch controls, enlarged mobile observation, small screens and reduced motion (6784.098693ms)
+✔ 2.2 sound travels through air while particles stay near their origins (29479.130501ms)
+▶ sound comparison uses one signal and physical travel delays
+  ✔ the same distance produces the material arrival times and ranking (0.988812ms)
+  ✔ five kilometres and clamped travel positions use actual speed and elapsed seconds (0.188508ms)
+  ✔ temperature changes only the air speed, including a real tie at 20°C (10.573244ms)
+  ✔ every medium uses the same frequency, bounded local motion and exact rest (0.917496ms)
+  ✔ each neighbour receives a delayed copy of the preceding vibration and never starts first (1.186022ms)
+  ✔ particles remain ordered, stay at fixed y and settle in every medium (21.042525ms)
+✔ sound comparison uses one signal and physical travel delays (36.371135ms)
+✔ fork appearance uses rapid bounded translation without affecting the propagation signal (1.815162ms)
+▶ fourth learning block works within the complete lesson
+  ✔ initial scene uses the official characters, no orange tracking particle and no autoplay (872.283871ms)
+  ✔ formal integration retains five learning blocks, navigation and working quiz controls (335.205778ms)
+  ✔ material volumes and distinct molecules are embedded inside the animation (89.518092ms)
+  ✔ one compact panel gives the embedded scenes the main space and shows only arrival times at the right (33.028406ms)
+  ✔ vibration begins locally and steel reaches the end while water and air remain still there (398.820328ms)
+  ✔ distance markers, reached rails and readable metre values follow speed times time (10.726922ms)
+  ✔ pause freezes all observations and resume keeps one second equal to one second (564.536924ms)
+  ✔ individual source clicks and keyboard strikes keep independent clocks and do not start untouched groups (2514.188391ms)
+  ✔ a completed individual group can be struck again and temperature groups are independent (3447.619448ms)
+  ✔ a strike stays visible for at least half a second and withdraws while the fork rings (1038.644047ms)
+  ✔ visible forks are directly clickable at their real picture positions (860.276339ms)
+  ✔ small repeated tine motion stays connected to steel without a handle pushing the block (2003.697107ms)
+  ✔ vibrating neighbours carry the disturbance while the position pointer stays below the medium (1062.582263ms)
+  ✔ teaching results retain actual times and rest positions without prediction or grading (840.898353ms)
+  ✔ temperature actions immediately update the chamber reading, heading and sound speed (865.422744ms)
+  ✔ thermal jacket, chamber sensor and live meter form one connected scene with the fourth-block fork (1132.960648ms)
+  ✔ both temperature rails mirror the same live positions and stay aligned across seven widths (5668.514464ms)
+  ✔ race comparison handles first arrival, finished tracks, ties, reset and separate starts honestly (18710.958093ms)
+  ✔ rapid temperature selections stay fixed at each target and never start sound (876.32921ms)
+  ✔ striking immediately after selecting temperature starts the real propagation clock (1189.893059ms)
+  ✔ backgrounding preserves the selected temperature without starting sound and pauses propagation (964.41364ms)
+  ✔ warmer, colder and equal-temperature experiments produce correct fifth-block outcomes (318.92764ms)
+  ✔ changing temperature clears only the fifth block while both blocks retain independent controls (1799.893341ms)
+  ✔ medium surface detail follows the same travel delay and stops on pause (1515.140917ms)
+  ✔ molecules stay within the material cross sections throughout the pulse (756.835059ms)
+  ✔ optional arrival cues use real audio nodes and stop when muted or paused (2879.309754ms)
+  ✔ backgrounding pauses at the same model time and never resumes automatically (2082.066557ms)
+  ✔ fifth-block arrival audio and independent strike do not activate fourth-block controls (994.933148ms)
+real stopwatch: {"started":763,"arrivals":{"steel":{"elapsed":0.863,"displayed":"0.847 秒"},"water":{"elapsed":3.3963999999910595,"displayed":"3.378 秒"},"air":{"elapsed":14.596199999988078,"displayed":"14.577 秒"}},"checks":[{"elapsed":1.0127999999970199,"clock":1.0097,"distances":[346.3271,1494.356,5000]},{"elapsed":5.012599999994039,"clock":5.0098,"distances":[1718.3614,5000,5000]},{"elapsed":10.012,"clock":10.0093,"distances":[3433.1899,5000,5000]}],"strikes":{"air":0.6126999999880791,"water":0.6126999999880791,"steel":0.6126999999880791}}
+fifth-block real stopwatch: {"started":823.5,"arrivals":{"adjustable":{"elapsed":13.285599999994039,"displayed":"13.281 秒"},"reference":{"elapsed":14.58589999999106,"displayed":"14.577 秒"}},"checks":[{"elapsed":1.0030999999940395,"clock":1.0015,"distances":[343.5145,377.0333]},{"elapsed":5.00229999999702,"clock":5.0008,"distances":[1715.2744,1882.6442]},{"elapsed":10.00229999999702,"clock":10.0006,"distances":[3430.2058,3764.912]}]}
+  ✔ a real stopwatch confirms displayed seconds, positions and all three arrivals (15550.021986ms)
+  ✔ touch and seven viewport widths keep both independent blocks usable (4524.048854ms)
+✔ fourth learning block works within the complete lesson (74348.14026ms)
+▶ vacuum jar: manipulate air while the bell keeps working
+  ✔ full jar begins silent with no autoplay and a valid sustained recording (116.274275ms)
+  ✔ tabletop meter follows the approved scene with live segmented digits and aligned controls (69.601441ms)
+  ✔ power starts actual audio and a visible hammer without changing the air (958.843096ms)
+  ✔ pump picture and button share controls; stop preserves pressure while the source keeps moving (2068.456747ms)
+  ✔ near vacuum keeps the stop-pumping controls enabled while air and audio stay bounded (3630.872313ms)
+  ✔ inlet picture restores air and audio; changing direction cancels the previous action (2943.391212ms)
+  ✔ meter observes the audio signal independently of the air state and clears on silence (1169.905353ms)
+  ✔ switch, keyboard and rapid toggles stop audio and preserve the chosen air amount (846.212692ms)
+  ✔ leaving the experiment stops ringing and pumping without resetting air or autoplaying on return (421.56706ms)
+  ✔ touch targets, full apparatus, qualitative readings and layout work at narrow widths (6530.748689ms)
+  ✔ second and third learning cards share the first card layout and teaching sequence (160.418406ms)
+✔ vacuum jar: manipulate air while the bell keeps working (20112.481216ms)
+▶ 2.2 ruler can be plucked directly
+  ✔ recording is audible without clipping at full volume with no volume slider (23.591128ms)
+  ✔ ruler long edges are parallel with no rest deformation at the clamp (74.748785ms)
+  ✔ pointer pluck bends only the free segment and can be stopped (305.451131ms)
+  ✔ repeated plucks, keyboard, fallback button and natural decay (3067.191921ms)
+  ✔ touch pluck on a narrow screen and inactive background (1054.433327ms)
+✔ 2.2 ruler can be plucked directly (5737.592803ms)
+ℹ tests 66
+ℹ suites 0
+ℹ pass 66
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 130821.359578

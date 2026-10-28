@@ -1,4 +1,4 @@
-import { svgNode } from './sound-speed-rendering.mjs?v=instant-19';
+import { svgNode } from './sound-speed-rendering.mjs?v=race-20';
 
 export const AIR_CHAMBER = { x: 27, y: 27, width: 412, height: 91 };
 export const PROBE_TIP = { x: 424, y: 82 };
@@ -61,7 +61,7 @@ export function airChamberScene(root, prefix, adjustable) {
     paint() {},
     setTemperature(value, target) {
       chamber.dataset.temperature = value.toFixed(4);
-      hot?.setAttribute('opacity', target===30 ? '1' : '0');
+      hot?.setAttribute('opacity', target===80 ? '1' : '0');
       cold?.setAttribute('opacity', target===0 ? '1' : '0');
       chamber.setAttribute('aria-label', `${adjustable?'可調溫':'參考'}空氣腔體，${value.toFixed(1)} 攝氏度${adjustable?'，控溫底座以導熱夾套連接腔體，溫度探棒位於腔內':''}`);
     }

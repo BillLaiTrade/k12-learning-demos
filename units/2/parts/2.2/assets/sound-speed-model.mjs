@@ -7,7 +7,8 @@ export const FREQUENCY = .6;
 export const PULSE_DURATION = 4;
 export const AMPLITUDE = 4;
 export const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-export const airSpeed = temperature => 331 + .6 * temperature;
+// 乾燥空氣、組成固定：聲速與絕對溫度的平方根成正比，以 20°C 約 343 m/s 校準。
+export const airSpeed = temperature => 343 * Math.sqrt((temperature + 273.15) / 293.15);
 export const arrivalTime = speed => DISTANCE / speed;
 export const reachedDistance = (speed, time) => clamp(speed * time, 0, DISTANCE);
 
@@ -18,7 +19,7 @@ export function displacement(localTime) {
     * Math.sin(Math.PI / 2 * clamp((PULSE_DURATION - localTime) / .25, 0, 1)) ** 2;
 }
 
-export function conditions(mode, temperature = 30) {
+export function conditions(mode, temperature = 80) {
   if (mode === 'temperature') return [
     { id: 'reference', kind: 'air', name: '20°C 參考組', description: '溫度固定', speed: airSpeed(20), temperature: 20 },
     { id: 'adjustable', kind: 'air', name: `${new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 1 }).format(temperature)}°C 可調溫組`, description: '溫度可調整', speed: airSpeed(temperature), temperature }

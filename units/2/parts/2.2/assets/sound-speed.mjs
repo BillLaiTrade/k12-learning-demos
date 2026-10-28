@@ -2,10 +2,11 @@ import {
   DISTANCE, START_X, END_X,
   appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=instant-19';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=instant-19';
-import { createTemperatureRig, temperatureText } from './temperature-rig.mjs?v=instant-19';
-import { airChamberScene } from './temperature-chamber.mjs?v=instant-19';
+} from './sound-speed-model.mjs?v=race-20';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=race-20';
+import { createTemperatureRig, temperatureText } from './temperature-rig.mjs?v=race-20';
+import { createTemperatureProgress } from './temperature-progress.mjs?v=race-20';
+import { airChamberScene } from './temperature-chamber.mjs?v=race-20';
 
 export function initSoundSpeed(root) {
 // 兩個獨立區塊共用控制器，原生標籤及 SVG 定義各自使用唯一 ID。
@@ -26,7 +27,7 @@ const svg = (tag, attributes, parent) => {
   return node;
 };
 
-const state = { mode: root.dataset.soundSpeedMode === 'temperature' ? 'temperature' : 'material', temperature: 30, temperatureTarget: 30, phase: 'idle', time: 0, scope: 'together' };
+const state = { mode: root.dataset.soundSpeedMode === 'temperature' ? 'temperature' : 'material', temperature: 80, temperatureTarget: 80, phase: 'idle', time: 0, scope: 'together' };
 let models = [], groups = [], frame = 0, runStartWall = null, runStartTime = 0;
 let temperatureRig = null;
 let noticed = new Set(), context = null, audioFailed = false;
@@ -119,21 +120,25 @@ function buildModel(group) {
       links.push({ point, other, node: svg('path', { class: 'elastic-link', 'data-first': index, 'data-second': index + offset, d: springPath(point.x, point.y, other.x, other.y) }, bonds) });
     }
   }
-  const trackY = temperatureMode ? 146 : 125;
-  svg('path', { class: 'distance-track', d: `M${START_X} ${trackY}H${END_X}`, stroke: '#c6d5cd', 'stroke-width': 2.2 }, field);
-  const reachedTrack = svg('path', { class: 'distance-reached', d: `M${START_X} ${trackY}H${START_X}`, stroke: '#176b53', 'stroke-width': 2.6 }, field);
-  for (let i = 0; i <= 4; i++) {
-    const x = START_X + (END_X - START_X) * i / 4;
-    svg('path', { d: `M${x} ${trackY-2}V${trackY+5}`, stroke: '#91aa9b', 'stroke-width': 1 }, field);
+  let front = null, reachedTrack = null;
+  const trackY = 125;
+  const progress = temperatureMode ? createTemperatureProgress(row, group.id) : null;
+  if (!temperatureMode) {
+    svg('path', { class: 'distance-track', d: `M${START_X} ${trackY}H${END_X}`, stroke: '#c6d5cd', 'stroke-width': 2.2 }, field);
+    reachedTrack = svg('path', { class: 'distance-reached', d: `M${START_X} ${trackY}H${START_X}`, stroke: '#176b53', 'stroke-width': 2.6 }, field);
+    for (let i = 0; i <= 4; i++) {
+      const x = START_X + (END_X - START_X) * i / 4;
+      svg('path', { d: `M${x} ${trackY-2}V${trackY+5}`, stroke: '#91aa9b', 'stroke-width': 1 }, field);
+    }
+    front = svg('g', { class: 'propagation-front', transform: `translate(${START_X} 0)`, visibility: 'hidden', 'aria-hidden': 'true' }, field);
+    svg('path', { d: `M0 ${trackY-2}V${trackY+6}`, stroke: '#176b53', 'stroke-width': 1.8, 'vector-effect': 'non-scaling-stroke' }, front);
+    svg('path', { d: `M-4 ${trackY-9}H4L0 ${trackY-3}Z`, fill: '#176b53' }, front);
+    text(svg('text', { x: START_X, y: trackY+14, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '0 m');
+    text(svg('text', { x: END_X, y: trackY+14, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), `${number.format(DISTANCE)} m`);
   }
-  const front = svg('g', { class: 'propagation-front', transform: `translate(${START_X} 0)`, visibility: 'hidden', 'aria-hidden': 'true' }, field);
-  svg('path', { d: `M0 ${trackY-2}V${trackY+6}`, stroke: '#176b53', 'stroke-width': 1.8, 'vector-effect': 'non-scaling-stroke' }, front);
-  svg('path', { d: `M-4 ${trackY-9}H4L0 ${trackY-3}Z`, fill: '#176b53' }, front);
-  text(svg('text', { x: START_X, y: trackY+14, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), '0 m');
-  text(svg('text', { x: END_X, y: trackY+14, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), `${number.format(DISTANCE)} m`);
   if (temperatureMode && adjustable) temperatureRig = createTemperatureRig(row, { prefix: idPrefix, onSelect: conditionTo, chamber: scene });
   return {
-    ...group, trackY, startedAt: null, row, points, links, source, scene, front, reachedTrack,
+    ...group, trackY, progress, startedAt: null, row, points, links, source, scene, front, reachedTrack,
     timeWrap: row.querySelector('.individual-time'), timeCaption: row.querySelector('.individual-time span'), timeOutput: row.querySelector('.individual-time output'),
     distanceOutput: row.querySelector('.propagation-readout output'),
     arrivalCaption: row.querySelector('.arrival-readout span'), arrivalOutput: row.querySelector('.arrival-readout output')
@@ -195,9 +200,11 @@ function paint(audible = false) {
     text(model.timeOutput, secondsText(elapsed));
     const frontX = START_X + distance / DISTANCE * (END_X - START_X);
     model.row.dataset.reachedDistance = distance.toFixed(4);
-    attr(model.front, 'transform', `translate(${frontX.toFixed(4)} 0)`);
-    attr(model.front, 'visibility', elapsed > 0 ? 'visible' : 'hidden');
-    attr(model.reachedTrack, 'd', `M${START_X} ${model.trackY}H${frontX.toFixed(4)}`);
+    if (model.front) {
+      attr(model.front, 'transform', `translate(${frontX.toFixed(4)} 0)`);
+      attr(model.front, 'visibility', elapsed > 0 ? 'visible' : 'hidden');
+      attr(model.reachedTrack, 'd', `M${START_X} ${model.trackY}H${frontX.toFixed(4)}`);
+    }
     text(model.distanceOutput, `${number.format(Math.floor(distance + 1e-8))} 公尺${arrived ? ' · 已到終點' : ''}`);
     for (const point of model.points) {
       const next = sample(point, model.speed, elapsed); point.position = next.x;
@@ -215,6 +222,12 @@ function paint(audible = false) {
     if (arrived) attr(model.arrivalOutput, 'data-arrival', arrivalTime(model.speed));
     else model.arrivalOutput.removeAttribute('data-arrival');
     if (arrived && !noticed.has(model.id)) { noticed.add(model.id); newArrival = true; }
+  }
+  if (state.mode === 'temperature' && models.length === 2) {
+    const observations = models.map(model => ({
+      ...model, distance: Number(model.row.dataset.reachedDistance), active: model.startedAt !== null
+    }));
+    models.forEach((model, index) => model.progress.render(observations[index], observations[1-index], state.scope === 'together'));
   }
   if (audible && newArrival) arrivalTone();
   const actionLabel = state.scope === 'individual' ? '同時敲擊音叉' : { idle: '同時敲擊音叉', running: '暫停觀察', paused: '繼續觀察', complete: state.mode === 'temperature' ? '同時敲擊音叉' : '再次敲擊音叉' }[state.phase];
@@ -289,13 +302,19 @@ function rebuild() {
   $('#models').replaceChildren();
   models = groups.map(buildModel);
   const temperatureMode = state.mode === 'temperature';
-  text($('#lesson-title'), temperatureMode ? '空氣變熱，聲音會傳得更快嗎？' : '聲音在不同介質中，傳得多快？');
-  text($('#lesson-intro'), temperatureMode ? '固定參考組，觀察加熱或冷卻後的差異。' : '觀察相鄰粒子如何逐段受振，再比較終點的到達時間。');
+  text($('#lesson-title'), temperatureMode ? '溫度不同，聲音傳到哪裡了？' : '聲音在不同介質中，傳得多快？');
+  text($('#lesson-intro'), temperatureMode ? '固定 20°C 參考組，同時敲擊，比較兩組的傳播進度。' : '觀察相鄰粒子如何逐段受振，再比較終點的到達時間。');
   text($('#girl-line'), temperatureMode ? '我們把空氣加熱，再敲一次音叉看看！' : '空氣、水和鋼，裡面的粒子是怎麼把振動傳開的？');
   text($('#grandpa-line'), temperatureMode ? '參考組維持 20°C，用相同距離來比較。' : '音叉被敲一下後來回振動，帶動附近粒子；再看相鄰粒子如何依序受振。');
   $('#takeaway').innerHTML = temperatureMode
     ? '<strong>觀察重點：</strong>只改變空氣溫度，振動頻率維持相同；同溫時，振動會同時傳到最右端。'
     : '<strong>觀察重點：</strong>粒子在原位附近往返；同一聲源頻率相同，三種介質傳遞振動的速度不同。';
+  if (temperatureMode && !root.querySelector('.progress-legend')) {
+    const legend = document.createElement('p');
+    legend.className = 'progress-legend';
+    legend.innerHTML = '<span><i class="legend-own" aria-hidden="true"></i>實線：本組進度</span><span><i class="legend-other" aria-hidden="true"></i>虛線：另一組進度</span>';
+    root.querySelector('.comparison-board').prepend(legend);
+  }
   paint();
 }
 
@@ -315,7 +334,7 @@ function updateTemperature(value) {
 }
 
 function conditionTo(target) {
-  state.temperatureTarget = clamp(target, 0, 30);
+  state.temperatureTarget = clamp(target, 0, 80);
   resetRun();
   updateTemperature(state.temperatureTarget);
   paint();
