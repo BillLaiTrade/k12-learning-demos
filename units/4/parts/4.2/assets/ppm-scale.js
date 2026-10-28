@@ -1,17 +1,17 @@
 import * as THREE from 'three';
 import {RoomEnvironment} from '../../../../../parts/3.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
-import {DENSITY_MG_MM3,GRAIN_VOLUME_MM3,WORLD_WIDTH_MM,LENS_FIELD_MM,WATER,SAMPLES,sampleState,grainPositions,grainPose,scaleBarPixels,magnification} from './ppm-scale-state.js?v=one-mg-6';
+import {DENSITY_MG_MM3,GRAIN_VOLUME_MM3,WORLD_WIDTH_MM,LENS_FIELD_MM,WATER,SAMPLES,sampleState,grainPositions,grainPose,scaleBarPixels,magnification} from './ppm-scale-state.js?v=approved-8';
 import {sugarCrystalTriangles} from './ppm-crystal.js?v=realism-3';
 const root=document.getElementById('ppm-lab'),stage=document.getElementById('ppm-scale-scene'),canvas=document.getElementById('ppm-scale-canvas');
 const lens=document.getElementById('ppm-lens'),lensCanvas=document.getElementById('ppm-lens-canvas'),live=document.getElementById('ppm-status');
 const selects=[...document.querySelectorAll('[data-ppm-sample]')];
 let key='milligram',opened=false,view=null,disposed=false,cleanupFailed=()=>{},drag=null,pendingFrame=0;
 const handle=document.getElementById('ppm-lens-handle');
-const dock={x:.79,y:.38},position={...dock},anchors={},guide=document.getElementById('ppm-origin-guide');
+const dock={x:.77,y:.43},position={...dock},anchors={},guide=document.getElementById('ppm-origin-guide');
 const formatted=n=>n.toLocaleString('en-US',{maximumFractionDigits:4});
 function place(x,y){
-  const w=stage.clientWidth,h=stage.clientHeight,d=lens.offsetWidth||w*.31;
-  position.x=Math.max(d*.66+4,Math.min(w-d/2-4,x*w))/w;
+  const w=stage.clientWidth,h=stage.clientHeight,d=lens.offsetWidth||w*.26;
+  position.x=Math.max(d/2+4,Math.min(w-d*.82-4,x*w))/w;
   position.y=Math.max(d/2+4,Math.min(h-d*.60-2,y*h))/h;
   lens.style.left=`${position.x*100}%`;lens.style.top=`${position.y*100}%`;
   root.dataset.lensX=String(position.x);root.dataset.lensY=String(position.y);
@@ -21,7 +21,7 @@ function update(){
   root.dataset.solidVolumeMm3=String(s.solidVolumeMm3);root.dataset.grainCount=String(s.grainCount);root.dataset.density=String(DENSITY_MG_MM3);
   root.dataset.lensOpen=String(opened);lens.hidden=root.dataset.ready!=='true';lens.classList.toggle('is-observing',opened);guide.toggleAttribute('hidden',!opened||root.dataset.ready!=='true');
   for(const b of selects){b.setAttribute('aria-pressed',String(b.dataset.ppmSample===key));}
-  const fields={mass:s.label,numerator:`${formatted(s.massMg)} 毫克`,ppm:`${formatted(s.ppm)} ppm`,percent:`＝ ${formatted(s.percent)}%`,'lens-title':opened?`${s.label}糖・整份`:'放大看份量'};
+  const fields={mass:s.label,numerator:`${formatted(s.massMg)} 毫克`,ppm:`${formatted(s.ppm)} ppm`,percent:`${formatted(s.percent)}%`,'lens-title':opened?'放大看這一小點':'拖到糖碟上','lens-caption':opened?`糖量仍是 ${s.label}`:'看清整份糖量'};
   for(const node of document.querySelectorAll('[data-ppm]'))if(node.dataset.ppm in fields)node.textContent=fields[node.dataset.ppm];
   place(position.x,position.y);view?.draw(key,opened,position);
 }
@@ -106,7 +106,7 @@ async function initialize(){
     const h=stage.clientHeight,source=anchors[next],cx=position.x*width,cy=position.y*h,sx=source.x*width,sy=source.y*h,r=lens.offsetWidth/2,dist=Math.hypot(sx-cx,sy-cy)||1;
     guide.setAttribute('viewBox',`0 0 ${width} ${h}`);const line=guide.querySelector('line'),circle=guide.querySelector('circle');for(const [attr,value] of Object.entries({x1:sx,y1:sy,x2:cx+(sx-cx)/dist*r,y2:cy+(sy-cy)/dist*r}))line.setAttribute(attr,String(value));circle.setAttribute('cx',String(sx));circle.setAttribute('cy',String(sy));
     root.dataset.wholePortion='true';
-    const barMm=10,bar=scaleBarPixels(barMm,field,size);document.getElementById('ppm-scale-bar').style.width=`${bar}px`;document.getElementById('ppm-scale-bar-label').textContent='1 cm';
+    const barMm=5,bar=scaleBarPixels(barMm,field,size);document.getElementById('ppm-scale-bar').style.width=`${bar}px`;document.getElementById('ppm-scale-bar-label').textContent='5 mm';
     const zoom=magnification(size,field,width);document.getElementById('ppm-zoom-factor').textContent=`畫面放大 ${formatted(Math.round(zoom*10)/10)} 倍`;
     root.dataset.lensFieldMm=String(field);root.dataset.scaleBarMm=String(barMm);root.dataset.scaleBarPixels=String(bar);root.dataset.zoom=String(zoom);
   }

@@ -21,10 +21,10 @@ export function grainPose(i){
 }
 export const WORLD_WIDTH_MM = 360;
 // Show the complete 1 mg portion, with the water and original amount in view.
-export const LENS_FIELD_MM = 36;
+export const LENS_FIELD_MM = 18;
 export const WATER = { radiusMm:55, volumeMm3:1000000, heightMm:1000000/(Math.PI*55**2) };
 export const SAMPLES = {
-  milligram:{massMg:1,x:90,label:'1 毫克'}
+  milligram:{massMg:1,x:60,label:'1 毫克'}
 };
 export function sampleState(key) {
   const sample=SAMPLES[key];if(!sample)return null;

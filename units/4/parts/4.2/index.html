@@ -150,7 +150,7 @@
   </style>
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=polish-6">
-  <link rel="stylesheet" href="assets/ppm-scale.css?v=percent-bridge-7">
+  <link rel="stylesheet" href="assets/ppm-scale.css?v=approved-8">
 </head>
 <body>
   <header class="shell masthead">
@@ -306,27 +306,25 @@
 <div class="live-result"><strong>配成糖水後</strong><div class="mass-equation"><span class="item solute">溶質<b data-mix="sugar">糖 5 克</b></span><span class="op">＋</span><span class="item solvent">溶劑<b data-mix="water">水 95 克</b></span><span class="op">＝</span><span class="item">溶液<b data-mix="total">糖水 100 克</b></span></div><p class="formula-caption substitution-caption">代入這次配方</p><div class="concentration"><span>重量百分濃度</span><span>＝</span><span class="fraction"><span class="num" data-mix="formula-sugar">5 克</span><span class="den" data-mix="formula-total">100 克</span></span><span>× 100%</span><span>＝</span><span class="value" data-mix="percent">5%</span></div><div class="mass-bar" role="img" id="mix-bar" aria-label="糖占質量5%，水占95%"><i id="mix-bar-fill"></i></div><div class="mass-legend"><span data-mix="sugar-share">糖占 5%</span><span data-mix="water-share">水占 95%</span></div><p class="meaning" data-mix="meaning">每 100 克這樣的糖水，含有 5 克糖。比例條表示質量組成。</p></div>
 <div class="concept-line">溶液總質量＝溶質質量＋溶劑質量。糖溶解後仍包含在總質量中。</div>
 <div class="ppm-observation" id="ppm-lab" data-ready="loading" aria-labelledby="ppm-heading">
-<h3 class="minor-title" id="ppm-heading">含量很少時，用 ppm 表示</h3>
-<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這麼一大杯水，旁邊這一點糖卻只有 1 毫克！</p></div>
-<div class="ppm-scale-scene" id="ppm-scale-scene" aria-label="同一比例的一公升水與一毫克糖"><canvas id="ppm-scale-canvas" aria-hidden="true"></canvas><span class="ppm-scene-tag">同一比例觀察</span>
+<p class="ppm-kicker">含量很少時，用 ppm 表示</p>
+<h3 id="ppm-heading">一大杯水，糖只有這一點點。</h3><p class="ppm-observe-intro">先看份量有多小</p>
+<div class="ppm-scale-scene" id="ppm-scale-scene" aria-label="同一比例的一公升水與一毫克糖"><canvas id="ppm-scale-canvas" aria-hidden="true"></canvas>
 <span class="ppm-water-label" id="ppm-water-label">水 <b>1 公升</b></span>
-<button type="button" id="ppm-milligram" class="ppm-dish" data-ppm-sample="milligram" aria-label="將放大鏡移到1毫克糖" aria-controls="ppm-lens" disabled><span>糖 <b>1 毫克</b><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5"/><path d="m12 12 5 5"/></svg></span></button>
+<button type="button" id="ppm-milligram" class="ppm-dish" data-ppm-sample="milligram" aria-label="點糖碟，放大看完整1毫克糖" aria-controls="ppm-lens" disabled><span class="ppm-dish-label">糖 <b>1 毫克</b></span><span class="ppm-dish-hint"><svg viewBox="0 0 36 40" fill="none" aria-hidden="true"><path d="m12 22-7-7c-3-3-6 1-3 4l11 14c3 4 7 5 11 2l8-6c3-3 2-6 0-8l-7-7c-2-2-4 0-3 2l-3-4c-2-2-5 0-3 3L10 6C8 3 4 5 6 8l10 15" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="#fffef7"/></svg><span><span class="ppm-hint-wide">點糖碟，</span>放大看</span></span></button>
 <svg class="ppm-origin-guide" id="ppm-origin-guide" aria-hidden="true" hidden><line/><circle r="7"/></svg>
-<div class="ppm-lens" id="ppm-lens" role="group" aria-label="可拖曳的放大鏡" hidden><div class="ppm-lens-glass"><canvas id="ppm-lens-canvas" aria-hidden="true"></canvas><div class="ppm-scale-bar" id="ppm-scale-bar"><span id="ppm-scale-bar-label">1 cm</span></div></div><button type="button" id="ppm-lens-handle" class="ppm-lens-handle" aria-label="拖動放大鏡；方向鍵移動，Home鍵歸位" title="拖動放大鏡"></button><span class="ppm-lens-name" data-ppm="lens-title">放大鏡</span><span id="ppm-zoom-factor"></span></div>
-<span class="ppm-scene-caption">拖到糖碟，看清整份糖有多少</span></div>
-<p class="ppm-reference-note">同一比例的份量示意，1 公升水作大小參照。</p>
-<p class="ppm-intro">我們仍在表示<strong>溶質質量占溶液總質量的比例</strong>。當溶質含量特別少時，改用 <strong>ppm</strong> 可以讓數字更容易閱讀。</p>
-<div class="ppm-definition"><p><b>1 ppm</b>，就是<b>百萬分之一</b>。</p><p>每 <b>1 公斤溶液</b>含有 <b>1 毫克溶質</b>，就是 <b>1 ppm</b>。</p></div>
-<section class="ppm-bridge" id="ppm-percent-bridge" aria-labelledby="ppm-bridge-title">
-<h4 id="ppm-bridge-title">同一個濃度，換一種表示方式</h4>
-<p>ppm 並不是新的濃度概念。它和上面的重量百分濃度，都先算同一個質量比：<strong>溶質質量 ÷ 溶液總質量</strong>。</p>
-<dl class="ppm-notations"><div><dt>重量百分濃度</dt><dd>質量比 × 100%</dd></div><div><dt>ppm</dt><dd>質量比 × 1,000,000</dd></div></dl>
-<p>含量很少時，百分濃度的小數位數較多。這個例子的 <strong class="ppm-equivalence">0.0001%＝1 ppm</strong>，表示同樣的濃度，用 ppm 更容易閱讀。</p>
-</section>
-<div class="ppm-formal"><p class="formula-caption">計算公式</p><div class="ppm-equation" role="math" aria-label="ppm等於溶質質量除以溶液總質量，再乘以一百萬"><span>ppm ＝</span><span class="fraction"><span class="num">溶質質量</span><span class="den">溶液總質量</span></span><span>× 1,000,000</span></div><p class="ppm-unit-note">分子與分母使用相同的質量單位。</p></div>
-<div class="ppm-example"><h4>若 1 公斤溶液中含有這 1 毫克糖</h4><div class="ppm-recipe"><span>溶質：糖 <b>1 毫克</b></span><span>溶液總質量 <b>1 公斤</b></span></div>
-<p class="ppm-substitution-caption">1 公斤＝1,000,000 毫克，代入公式</p><div class="ppm-worked"><span class="fraction"><span class="num" data-ppm="numerator">1 毫克</span><span class="den">1,000,000 毫克</span></span><span>× 1,000,000 ＝</span><b data-ppm="ppm">1 ppm</b></div><p class="ppm-current-percent" data-ppm="percent">＝ 0.0001%</p></div>
-<p class="ppm-closing">用 1 ppm，就能清楚表示這樣微小的含量。</p><p class="ppm-status" id="ppm-status" role="status" aria-live="polite"></p></div>
+<div class="ppm-lens" id="ppm-lens" role="group" aria-label="可拖曳的放大鏡" hidden><div class="ppm-lens-glass"><canvas id="ppm-lens-canvas" aria-hidden="true"></canvas><div class="ppm-scale-bar" id="ppm-scale-bar"><span id="ppm-scale-bar-label">5 mm</span></div></div><button type="button" id="ppm-lens-handle" class="ppm-lens-handle" aria-label="拖動放大鏡；方向鍵移動，Home鍵歸位" title="拖動放大鏡"></button><div class="ppm-lens-caption"><strong data-ppm="lens-title">放大看這一小點</strong><span data-ppm="lens-caption">糖量仍是 1 毫克</span></div><span class="ppm-sr-only" id="ppm-zoom-factor"></span></div>
+</div><p class="ppm-reference-note">1 公升水作大小參照。</p>
+<div class="ppm-question"><span aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M10 20c-7-7-3-17 6-17s13 10 6 17l-2 3h-8zM12 27h8M14 30h4M16 8c-4 0-6 3-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><strong>溶質這麼少，比例要怎麼寫才好讀？</strong></div>
+<section class="ppm-explanation" id="ppm-percent-bridge" aria-labelledby="ppm-bridge-title">
+<h4 id="ppm-bridge-title">微量時，ppm 更好讀</h4><p class="ppm-explain-subtitle">沿用同一個濃度概念，換一種表示方式。</p>
+<div class="ppm-shared"><p>兩者都先算同一個比例</p><div class="ppm-ratio" role="math" aria-label="共同的質量比：溶質質量除以溶液總質量"><span class="fraction"><span class="num">溶質質量</span><span class="den">溶液總質量</span></span></div>
+<dl class="ppm-notations"><div><dt>重量百分濃度</dt><dd><span class="ppm-basis">每 100 份中的份量</span><b class="ppm-factor">× 100%</b></dd></div><div class="ppm-notation-active"><dt>ppm</dt><dd><span class="ppm-basis">每 100 萬份中的份量</span><b class="ppm-factor">× 1,000,000</b></dd></div></dl></div>
+<div class="ppm-example"><h4>同一份溶液：1 公斤中含 1 毫克糖</h4><div class="ppm-equivalence" role="math" aria-label="0.0001%等於1ppm"><span data-ppm="percent">0.0001%</span><span class="ppm-equals">＝</span><b data-ppm="ppm">1 ppm</b></div>
+<div class="ppm-takeaway"><span aria-hidden="true">✓</span><strong>濃度沒有變，微量時用 ppm 更容易閱讀。</strong></div>
+<div class="ppm-worked" role="math" aria-label="一毫克除以一百萬毫克再乘以一百萬，等於1ppm"><span class="fraction"><span class="num" data-ppm="numerator">1 毫克</span><span class="den">1,000,000 毫克</span></span><span>× 1,000,000 ＝ 1 ppm</span></div>
+<p class="ppm-definition"><b>1 ppm</b> 就是百萬分之一：每 <b>1 公斤溶液</b>含有 <b>1 毫克溶質</b>。</p>
+<p class="ppm-unit-note">溶液總質量包含溶質；計算時分子與分母用相同質量單位。</p></div></section>
+<p class="ppm-status" id="ppm-status" role="status" aria-live="polite"></p></div>
 <p class="mix-status" id="mix-status" role="status" aria-live="polite"></p></div></section>
     </div>
   </main>
@@ -369,6 +367,6 @@
   <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
-  <script type="module" src="assets/ppm-scale.js?v=one-mg-6"></script>
+  <script type="module" src="assets/ppm-scale.js?v=approved-8"></script>
 </body>
 </html>
