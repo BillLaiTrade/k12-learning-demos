@@ -1,5 +1,5 @@
-import {COMPARISON,comparisonRay,opticalDistances,sidePath} from './mirror-comparison.mjs?v=3';
-import {createComparisonView} from './mirror-comparison-view.mjs?v=3';
+import {COMPARISON,comparisonRay,opticalDistances,sidePath} from './mirror-comparison.mjs?v=4';
+import {createComparisonView} from './mirror-comparison-view.mjs?v=4';
 
 const section=document.getElementById('card-03');
 if(section) {

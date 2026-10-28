@@ -1,4 +1,4 @@
-import {COMPARISON,comparisonCamera,project,quad,planePoint,VIEW_PLANES,clipNear} from './mirror-comparison.mjs?v=3';
+import {COMPARISON,comparisonCamera,project,quad,planePoint,VIEW_PLANES,clipNear} from './mirror-comparison.mjs?v=4';
 const polygon=points=>'M'+points.map(p=>p.slice(0,2).join(',')).join('L')+'Z';
 
 export function createComparisonView(svg,mode) {
@@ -32,7 +32,7 @@ export function createComparisonView(svg,mode) {
     const n=16;
     for(let row=0;row<n;row++)for(let col=0;col<n;col++) {
       const uv=[[col/n,row/n],[(col+1)/n,row/n],[(col+1)/n,(row+1)/n],[col/n,(row+1)/n]];
-      const target=uv.map(([u,v])=>project(camera,planePoint(plane,u,v)));
+      const target=uv.map(([u,v])=>project(camera,planePoint(plane,u,v,camera)));
       const source=uv.map(([u,v])=>[u*image.width,v*image.height]);
       for(const indices of [[0,1,2],[0,2,3]])triangle(context,image,indices.map(i=>source[i]),indices.map(i=>target[i]));
     }

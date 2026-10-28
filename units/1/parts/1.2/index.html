@@ -221,7 +221,7 @@
 
 <g data-side="distance-three" aria-label="眼睛到反射點的光路為3公尺"></g><g data-side="distance-two" aria-label="反射點到對照位置的光路為2公尺"></g></svg></figure>
  <figure class="comparison-observation"><svg class="comparison-eye" id="reference-eye" viewBox="175 0 550 550" role="img" aria-labelledby="reference-eye-title reference-eye-desc">
-<title id="reference-eye-title">小葵從鏡中看見的完整熊玩偶</title><desc id="reference-eye-desc">上下兩個觀察窗使用同一眼位、相同比例與取景，完整顯示熊玩偶，比較位置、大小與外觀。鏡框與背景可以不同。</desc>
+<title id="reference-eye-title">小葵同時看見鏡前實體熊的背面與遠處鏡中像</title><desc id="reference-eye-desc">上下兩個觀察窗使用同一眼位與較寬取景。下方前景是面向鏡子的原熊背面，上方遠處是鏡中像或撤鏡後放入的真熊；兩排遠處熊的位置、視大小相同，原熊都保留在鏡前位置。</desc>
 <defs><linearGradient id="reference-eye-wall" x2="1" y2="1"><stop stop-color="#f5f0e5"/><stop offset="1" stop-color="#dfd5c5"/></linearGradient><linearGradient id="reference-eye-wood" x2="0" y2="1"><stop stop-color="#d5b38b"/><stop offset="1" stop-color="#ad8054"/></linearGradient><linearGradient id="reference-glass" x2="1" y2="1"><stop stop-color="#e5f3f3"/><stop offset="1" stop-color="#cfe3e5"/></linearGradient><clipPath id="reference-eye-clip"><path data-view="clip"/></clipPath></defs>
 <rect width="900" height="550" fill="url(#reference-eye-wall)"/>
 <path data-view="table" fill="url(#reference-eye-wood)"/><path data-view="grain" fill="none" stroke="#95643c" stroke-width="1" opacity=".24"/>
@@ -254,7 +254,7 @@
 
 <g data-side="distance-three" aria-label="眼睛到反射點的光路為3公尺"></g><g data-side="distance-two" aria-label="反射點到對照位置的光路為2公尺"></g></svg></figure>
  <figure class="comparison-observation"><svg class="comparison-eye" id="trial-eye" viewBox="175 0 550 550" role="img" aria-labelledby="trial-eye-title trial-eye-desc">
-<title id="trial-eye-title">小葵直接看見放在原像位置的完整真熊</title><desc id="trial-eye-desc">上下兩個觀察窗使用同一眼位、相同比例與取景，完整顯示熊玩偶，比較位置、大小與外觀。鏡框與背景可以不同。</desc>
+<title id="trial-eye-title">小葵同時看見近處原熊的背面與遠處對照真熊</title><desc id="trial-eye-desc">上下兩個觀察窗使用同一眼位與較寬取景。下方前景是面向鏡子的原熊背面，上方遠處是鏡中像或撤鏡後放入的真熊；兩排遠處熊的位置、視大小相同，原熊都保留在鏡前位置。</desc>
 <defs><linearGradient id="trial-eye-wall" x2="1" y2="1"><stop stop-color="#f5f0e5"/><stop offset="1" stop-color="#dfd5c5"/></linearGradient><linearGradient id="trial-eye-wood" x2="0" y2="1"><stop stop-color="#d5b38b"/><stop offset="1" stop-color="#ad8054"/></linearGradient><linearGradient id="trial-glass" x2="1" y2="1"><stop stop-color="#e5f3f3"/><stop offset="1" stop-color="#cfe3e5"/></linearGradient><clipPath id="trial-eye-clip"><path data-view="clip"/></clipPath></defs>
 <rect width="900" height="550" fill="url(#trial-eye-wall)"/>
 <path data-view="table" fill="url(#trial-eye-wood)"/><path data-view="grain" fill="none" stroke="#95643c" stroke-width="1" opacity=".24"/>
@@ -474,7 +474,7 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent=index===6?"正在進行單元小測":"正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/curved-mirrors.js?v=1"></script>
-  <script type="module" src="assets/mirror-image.js?v=9"></script>
+  <script type="module" src="assets/mirror-image.js?v=10"></script>
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
   <script type="module" src="assets/reversible-light.js?v=4"></script>

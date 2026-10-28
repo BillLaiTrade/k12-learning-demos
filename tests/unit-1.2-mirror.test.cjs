@@ -34,11 +34,20 @@ test('第三區距離模型：2公尺反射＋3公尺入眼，對應5公尺直�
     }
     const rays=pupilBundle();assert.notDeepEqual(rays[0].eye,rays[2].eye);assert.notDeepEqual(rays[0].hit,rays[2].hit);
   });
-  await t.test('同一攝影機顯示整隻熊，近處原熊自然在取景範圍下方',()=>{
+  await t.test('同一寬取景顯示近處實體熊與遠處對照熊，遠近及落地位置合理',()=>{
     const c=comparisonCamera();for(const axis of [c.forward,c.right,c.down])near(Math.hypot(...axis),1);near(dot(c.forward,c.right),0);near(dot(c.forward,c.down),0);
-    const target=project(c,s.image),hit=project(c,comparisonRay().hit);near(target[0],450);near(target[1],250);near(hit[0],target[0]);near(hit[1],target[1]);
+    const target=project(c,s.image),hit=project(c,comparisonRay().hit);near(target[0],450);assert.ok(target[1]>100&&target[1]<125);near(hit[0],target[0]);near(hit[1],target[1]);
     for(const p of quad(c,VIEW_PLANES.front)){assert.ok(p[0]>175&&p[0]<725&&p[1]>0&&p[1]<550);}
-    assert.ok(quad(c,VIEW_PLANES.rear).every(p=>p[1]>550));
+    const far=quad(c,VIEW_PLANES.front),rear=quad(c,VIEW_PLANES.rear);
+    for(const p of rear)assert.ok(p[0]>175&&p[0]<725&&p[1]>0&&p[1]<550);
+    const height=q=>Math.max(...q.map(p=>p[1]))-Math.min(...q.map(p=>p[1]));
+    assert.ok(height(far)>130&&height(far)<170,'遠處熊約佔觀察窗四分之一高');
+    assert.ok(height(rear)>height(far)*1.6,'前景熊比遠處熊大');
+    assert.ok(Math.min(...rear.map(p=>p[1]))>Math.max(...far.map(p=>p[1]))+45,'前景不遮遠處熊');
+    const foot=project(c,[s.source[0],s.floor,0]);
+    const {planePoint}=model;const anchor=project(c,planePoint(VIEW_PLANES.rear,.5,VIEW_PLANES.rear.footV,c));
+    near(anchor[0],foot[0]);near(anchor[1],foot[1]);
+    near((rear[1][0]-rear[0][0])/(rear[3][1]-rear[0][1]),205/203);
     for(const p of Object.values(VIEW_PLANES))assert.ok(quad(c,p).every(v=>v.every(Number.isFinite)&&v[2]>0));
   });
   await t.test('桌面近裁切先於透視除法，來源與虛像的對應角色正確',()=>{
@@ -100,10 +109,17 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
     await expect(section).not.toContainText('鼻尖');await expect(section).not.toContainText('切換');await expect(section).not.toContainText('散光');
     await verify();await capture('desktop');
   });
-  await t.test('實際SVG光路、距離標籤與全熊畫布一致，完整玩偶沒有被裁掉',async()=>{
-    const data=await verify(),pixels=await raster();assert.deepEqual(pixels[0],pixels[1]);assert.ok(pixels[0].opaque>25000);
+  await t.test('實際SVG光路、距離標籤與全熊畫布一致，遠近兩隻玩偶完整且不互相遮擋',async()=>{
+    const data=await verify(),pixels=await raster();assert.deepEqual(pixels[0],pixels[1]);assert.ok(pixels[0].opaque>10000);
     for(const p of pixels){assert.ok(p.bounds[0]>175&&p.bounds[2]<725&&p.bounds[1]>0&&p.bounds[3]<550);}
-    assert.ok(JSON.parse(data.views[0].nearQuad).every(p=>p[1]>550));
+    for(const view of data.views){const near=JSON.parse(view.nearQuad);assert.ok(near.every(p=>p[0]>175&&p[0]<725&&p[1]>0&&p[1]<550));}
+    const rearPixels=await page.locator('.comparison-eye').evaluateAll(nodes=>nodes.map(svg=>{
+      const a=svg.querySelector('[data-view=rear]').getContext('2d').getImageData(0,0,900,550).data;let count=0,hash=2166136261;const b=[900,550,0,0];
+      for(let i=0;i<a.length;i++){hash=Math.imul(hash^a[i],16777619);if(i%4===3&&a[i]>180){count++;const n=(i-3)/4,x=n%900,y=Math.floor(n/900);b[0]=Math.min(b[0],x);b[1]=Math.min(b[1],y);b[2]=Math.max(b[2],x);b[3]=Math.max(b[3],y);}}
+      return {count,hash:hash>>>0,bounds:b,opacity:getComputedStyle(svg.querySelector('[data-view=near]')).opacity};
+    }));
+    assert.deepEqual(rearPixels[0],rearPixels[1]);assert.ok(rearPixels[0].count>20000);assert.equal(rearPixels[0].opacity,'1');near(rearPixels[0].bounds[3],520,4);
+    for(const r of rearPixels){assert.ok(r.bounds[0]>175&&r.bounds[2]<725&&r.bounds[3]<550);assert.ok(r.bounds[1]>pixels[0].bounds[3]+45);assert.ok(r.bounds[3]-r.bounds[1]>pixels[0].bounds[3]-pixels[0].bounds[1]);}
     const inside=await page.locator('#reference-eye').evaluate(svg=>{
       const parse=path=>path.getAttribute('d').match(/-?\d+(?:\.\d+)?/g).map(Number),a=parse(svg.querySelector('[data-view=clip]')),poly=Array.from({length:a.length/2},(_,i)=>a.slice(i*2,i*2+2));
       const inPolygon=(x,y)=>{const signs=poly.map((p,i)=>{const q=poly[(i+1)%poly.length];return(q[0]-p[0])*(y-p[1])-(q[1]-p[1])*(x-p[0]);});return signs.every(v=>v>=-.1)||signs.every(v=>v<=.1);};

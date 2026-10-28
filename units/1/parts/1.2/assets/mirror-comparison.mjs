@@ -35,11 +35,12 @@ export function sidePath(points,arrows=false) {
   return 'M'+p.map(point=>point.slice(0,2).join(',')).join('L');
 }
 // Both simultaneous views use this same fixed camera. The field of view shows
-// the complete comparison toy; the near original toy naturally lies below it.
+// the distant comparison toy and the near original toy together. Looking
+// between them widens the view without moving either toy or changing the optics.
 export function comparisonCamera() {
-  const eye=[...COMPARISON.eye],forward=unit(sub(COMPARISON.image,eye));
+  const eye=[...COMPARISON.eye],forward=unit([1,1,0]);
   const right=unit(cross([0,1,0],forward).map(v=>-v)),down=cross(right,forward);
-  return {eye,forward,right,down,focal:1300,center:[450,250],width:900,height:550};
+  return {eye,forward,right,down,focal:450,center:[450,250],width:900,height:550};
 }
 export function project(camera,point) {
   const v=sub(point,camera.eye),depth=dot(v,camera.forward);
@@ -48,12 +49,21 @@ export function project(camera,point) {
 }
 export const VIEW_PLANES=Object.freeze({
   front:Object.freeze({x:COMPARISON.image[0],top:440-203*132/385,height:203,left:-205*209/400,width:205}),
-  rear:Object.freeze({x:COMPARISON.source[0],top:367,height:203,left:-102.5,width:205}),
+  rear:Object.freeze({x:COMPARISON.source[0],top:367,height:203,left:-102.5,width:205,billboard:true,footV:381/400}),
   frame:Object.freeze({x:COMPARISON.mirrorX,top:COMPARISON.top,height:COMPARISON.floor-COMPARISON.top,left:-68,width:136}),
   glass:Object.freeze({x:COMPARISON.mirrorX,top:COMPARISON.top+10,height:COMPARISON.floor-COMPARISON.top-20,left:-61,width:122}),
 });
-export function planePoint(plane,u,v) {return [plane.x,plane.top+plane.height*v,plane.left+plane.width*u];}
-export function quad(camera,plane) {return [[0,0],[1,0],[1,1],[0,1]].map(([u,v])=>project(camera,planePoint(plane,u,v)));}
+export function planePoint(plane,u,v,camera=comparisonCamera()) {
+  if(plane.billboard) {
+    // The rear photograph is a camera-facing 2.5D proxy, anchored to its world
+    // foot point. Preserve its proportions instead of flattening the photograph
+    // against a vertical sheet when the observer looks down at the near toy.
+    const foot=[plane.x,plane.top+plane.height,0];
+    return foot.map((n,i)=>n+camera.right[i]*(plane.left+plane.width*u)+camera.down[i]*plane.height*(v-plane.footV));
+  }
+  return [plane.x,plane.top+plane.height*v,plane.left+plane.width*u];
+}
+export function quad(camera,plane) {return [[0,0],[1,0],[1,1],[0,1]].map(([u,v])=>project(camera,planePoint(plane,u,v,camera)));}
 
 // Clip world geometry before perspective division. A tabletop may cross behind
 // the camera; projecting those vertices directly would invert its visible part.
