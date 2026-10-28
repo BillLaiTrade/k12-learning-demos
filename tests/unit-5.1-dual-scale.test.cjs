@@ -32,8 +32,8 @@ test('dual-scale temperature lesson in Chromium',{timeout:45000},async t=>{
   await t.test('starts with a general formula, number and unit controls, existing avatars and no slider',async()=>{
     await checkReading(25,77);
     assert.equal(await page.locator('#card-03 input[type=range]').count(),0);
-    assert.equal(await page.locator('#dual-rule').textContent(),'°F ＝ °C × 9/5 ＋ 32');
-    assert.equal(await page.locator('#dual-formula').textContent(),'25 × 9/5 ＋ 32 ＝ 77');
+    assert.equal(await page.locator('#dual-rule').getAttribute('aria-label'),'°F ＝ °C × 9/5 ＋ 32');
+    assert.equal(await page.locator('#dual-formula').getAttribute('aria-label'),'25 × 9/5 ＋ 32 ＝ 77');
     const order=await page.locator('#card-03 .card-main').evaluate(n=>[...n.children].map(n=>n.className));
     assert.deepEqual(order,['dialogue dialogue--xiaokui','dialogue','dual-lab','dialogue dialogue--xiaokui','dialogue']);
     const shared=await page.locator('#card-02 .speaker').first().evaluate(n=>getComputedStyle(n,'::before').backgroundImage);
@@ -84,13 +84,13 @@ test('dual-scale temperature lesson in Chromium',{timeout:45000},async t=>{
     await input.fill('77');await unit.selectOption('F');assert.equal(await input.inputValue(),'77');
     await checkReading(99); // Editing never changes the applied temperature early.
     await input.press('Enter');await checkReading(25,77);
-    assert.equal(await page.locator('#dual-rule').textContent(),'°C ＝（°F − 32）× 5/9');
-    assert.equal(await page.locator('#dual-formula').textContent(),'（77 − 32）× 5/9 ＝ 25');
+    assert.equal(await page.locator('#dual-rule').getAttribute('aria-label'),'°C ＝（°F − 32）× 5/9');
+    assert.equal(await page.locator('#dual-formula').getAttribute('aria-label'),'（77 − 32）× 5/9 ＝ 25');
     for(const [value,selected,c,f] of [[-40,'F',-40,-40],[-40,'C',-40,-40],[32,'F',0,32],[212,'F',100,212],[37.5,'C',37.5,99.5],[100,'F',340/9,100]]){
       await apply(value,selected);await checkReading(c,f);
     }
     assert.equal(await page.locator('#dual-equality').textContent(),'≈');
-    assert.equal(await page.locator('#dual-formula').textContent(),'（100 − 32）× 5/9 ≈ 37.8');
+    assert.equal(await page.locator('#dual-formula').getAttribute('aria-label'),'（100 − 32）× 5/9 ≈ 37.8');
     await warm.click();await checkReading(340/9+1,101.8);
     assert.equal(await input.inputValue(),'101.8');
   });

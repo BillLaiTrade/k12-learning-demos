@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="assets/measurement-scene.css">
   <link rel="stylesheet" href="assets/touch-story.css">
   <link rel="stylesheet" href="assets/water-lab.css?v=engraved-glass-1">
-  <link rel="stylesheet" href="assets/dual-scale.css?v=dual-scale-3">
+  <link rel="stylesheet" href="assets/dual-scale.css?v=dual-scale-4">
 </head>
 <body>
   <header class="shell masthead">
@@ -182,9 +182,9 @@
               <div class="dual-console">
                 <h3>同一個溫度，兩種刻度</h3>
                 <div class="dual-result">
-                  <p id="dual-rule" class="dual-rule">°F ＝ °C × 9/5 ＋ 32</p>
+                  <p id="dual-rule" class="dual-rule" role="math" aria-label="°F ＝ °C × 9/5 ＋ 32">°F ＝ °C × <span class="dual-fraction"><span>9</span><span>5</span></span> ＋ 32</p>
                   <output id="dual-readout" for="dual-temperature dual-unit" aria-live="polite" aria-atomic="true"><span id="dual-celsius">25°C</span><span id="dual-equality" class="dual-equals">＝</span><span id="dual-fahrenheit">77°F</span></output>
-                  <p id="dual-formula">25 × 9/5 ＋ 32 ＝ 77</p>
+                  <p id="dual-formula" role="math" aria-label="25 × 9/5 ＋ 32 ＝ 77">25 × <span class="dual-fraction"><span>9</span><span>5</span></span> ＋ 32 ＝ 77</p>
                 </div>
                 <form id="dual-entry" class="dual-entry" novalidate>
                   <div class="dual-field"><label for="dual-temperature">輸入溫度</label><div class="dual-input-group"><input id="dual-temperature" type="number" min="-40" max="100" step="any" value="25" inputmode="decimal" aria-describedby="dual-input-range dual-input-error"><select id="dual-unit" aria-label="溫度單位"><option value="C">攝氏 °C</option><option value="F">華氏 °F</option></select></div></div>
@@ -305,6 +305,6 @@
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
   <script src="assets/temperature-lesson.js" defer></script>
   <script type="module" src="assets/water-lab.js?v=engraved-glass-1"></script>
-  <script src="assets/dual-scale.js?v=dual-scale-2" defer></script>
+  <script src="assets/dual-scale.js?v=dual-scale-3" defer></script>
 </body>
 </html>

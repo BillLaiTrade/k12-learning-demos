@@ -14,6 +14,9 @@
 #card-03 #dual-readout .dual-equals{font-size:.7em;font-weight:500;color:#657067}
 #card-03 #dual-formula{margin:14px 0 0;font-size:clamp(.85rem,1.5vw,1.08rem);line-height:1.6;color:#5e655d;font-variant-numeric:tabular-nums}
 #card-03 .dual-rule{margin:0 0 16px;color:#245339;font-size:clamp(.92rem,1.6vw,1.15rem);font-weight:650;line-height:1.6;white-space:nowrap}
+#card-03 .dual-fraction{display:inline-grid;grid-template-rows:auto auto;vertical-align:middle;min-width:1.15em;margin:0 .15em;line-height:1.12;text-align:center;font-variant-numeric:tabular-nums}
+#card-03 .dual-fraction>span{display:block;padding:.08em .22em}
+#card-03 .dual-fraction>span+span{border-top:1px solid currentColor}
 #card-03 .dual-adjust{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 #card-03 .dual-adjust button{min-height:48px;border:1px solid;border-radius:12px;font-weight:750;font-size:1.05rem;touch-action:none;user-select:none}
 #card-03 #dual-cool{color:#236990;border-color:#88b4c7;background:#edf6fa}

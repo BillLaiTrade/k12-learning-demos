@@ -34,6 +34,12 @@ function updateUnit(){
   $('dual-input-range').textContent=isC?'量程：−40～100°C':'量程：−40～212°F';
   clearError();
 }
+function showFormula(target,before,numerator,denominator,after){
+  const fraction=document.createElement('span');fraction.className='dual-fraction';
+  for(const value of [numerator,denominator]){const part=document.createElement('span');part.textContent=value;fraction.append(part);}
+  target.replaceChildren(document.createTextNode(before),fraction,document.createTextNode(after));
+  target.setAttribute('role','math');target.setAttribute('aria-label',`${before}${numerator}/${denominator}${after}`);
+}
 function render(){
   const c=temperature,f=c*9/5+32,y=celsiusY(c),isC=$('dual-unit').value==='C';
   const meniscus=`M124 ${y-1}Q130 ${y+1} 136 ${y-1}`;
@@ -43,9 +49,9 @@ function render(){
   const approx=Math.abs(rounded(c)-c)>1e-8||Math.abs(rounded(f)-f)>1e-8;
   $('dual-celsius').textContent=`${format(c)}°C`;$('dual-fahrenheit').textContent=`${format(f)}°F`;
   $('dual-equality').textContent=approx?'≈':'＝';
-  $('dual-rule').textContent=isC?'°F ＝ °C × 9/5 ＋ 32':'°C ＝（°F − 32）× 5/9';
+  showFormula($('dual-rule'),isC?'°F ＝ °C × ':'°C ＝（°F − 32）× ',isC?9:5,isC?5:9,isC?' ＋ 32':'');
   const target=isC?f:c,sign=Math.abs(rounded(target)-target)>1e-8?'≈':'＝';
-  $('dual-formula').textContent=isC?`${operand(c)} × 9/5 ＋ 32 ${sign} ${format(f)}`:`（${operand(f)} − 32）× 5/9 ${sign} ${format(c)}`;
+  showFormula($('dual-formula'),isC?`${operand(c)} × `:`（${operand(f)} − 32）× `,isC?9:5,isC?5:9,isC?` ＋ 32 ${sign} ${format(f)}`:` ${sign} ${format(c)}`);
   $('dual-temperature').value=Number((isC?c:f).toFixed(6));
   $('dual-thermometer').setAttribute('aria-label',`同一根液柱，攝氏 ${operand(c)} 度與華氏 ${operand(f)} 度位於同一液面高度。攝氏每 1 度的間距為華氏每 1 度的 1.8 倍。`);
   $('dual-cool').disabled=c<=MIN;$('dual-warm').disabled=c>=MAX;
