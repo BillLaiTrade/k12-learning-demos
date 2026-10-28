@@ -143,6 +143,9 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await page.locator('[data-observe=mineral]').focus(); await page.keyboard.press('Enter');
     assert.match(await text('#inquiry-feedback'), /岩石風化/);
     await page.locator('[data-classical=water]').click();
+    assert.match(await text('.water-record[data-focus=formation]'), /冷卻後，容器壁出現水滴/);
+    assert.match(await text('.water-record[data-focus=decomposition]'), /兩側收集的氣體，分別是氫與氧/);
+    assert.match(await page.locator('.water-record[data-focus=decomposition] svg').getAttribute('aria-label'), /負極收集氫氣、正極收集氧氣/);
     for (const value of ['formation','decomposition']) {
       await page.locator(`button[data-observation="${value}"]`).click();
       assert.equal(await page.locator('.water-record.focused').getAttribute('data-focus'), value);
@@ -187,7 +190,10 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       const detail = await page.locator('#classical-detail').boundingBox();
       assert.ok(detail.y > rects[3].y + rects[3].height);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
-      if (width === 390) await capture('#s1', 'comparison-water-mobile');
+      if (width === 390) {
+        await capture('#s1', 'comparison-water-mobile');
+        await capture('.water-investigation', 'water-apparatus-mobile');
+      }
       await page.locator('#classical-close').click();
     }
     await page.setViewportSize({width:1440,height:1000});

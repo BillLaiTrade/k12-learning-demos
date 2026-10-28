@@ -11,12 +11,12 @@
       feedback: { mineral: '礦物：來自岩石風化等過程，是土壤固體顆粒的一部分。', organic: '有機物：可包括植物殘體及其分解形成的物質。', water: '水：存在於土壤顆粒之間的孔隙中。', air: '空氣：存在於未被水填滿的孔隙中，不是另一種石粒。' }
     },
     water: {
-      past: '水曾被列為構成物質的基本元素。', title: '從兩個方向認識水', instruction: '兩份結果一起看，點選突出其中一份。',
+      past: '水曾被列為構成物質的基本元素。', title: '從兩個方向認識水', instruction: '看研究者做了什麼，以及哪些觀察改變了看法。',
       conclusion: '水是化合物', result: '水由氫、氧兩種元素組成，可以經化學分解得到其他物質。',
       brief: '卡文迪西、拉瓦節與拉普拉斯等人的水組成研究，配合後來的水分解證據，逐步改變人們對水的理解。',
-      note: '既有研究結果示意；不是操作指引，也未表示氣體體積比例。',
+      note: '不同研究的概念示意，非歷史裝置復原；分解以電解水為例，省略電解質及氣體檢驗細節，未表示氣體體積比例。',
       choices: [['formation','看生成水'],['decomposition','看分解水']], initial: 'decomposition',
-      feedback: { formation: '生成水：氫與氧反應，可以生成水；這是研究水組成的重要線索。', decomposition: '分解水：水經化學分解，可得到已確認的氫與氧。兩個方向的證據共同支持水的組成判斷。' }
+      feedback: { formation: '生成水：氫與氧反應產生水蒸氣，冷卻後可凝結成水滴。水不是憑空出現，而是反應的產物。', decomposition: '分解水：適當條件下通電，水發生化學分解；兩側收集的氣體經檢驗，是已確認的氫與氧。不是水沸騰變成水蒸氣。' }
     },
     air: {
       past: '「氣」曾被視為物質的基本成分之一。', title: '看似相近，性質卻不同', instruction: '比較已知的蠟燭燃燒表現，再看空氣組成。',
@@ -36,15 +36,66 @@
     }
   };
   const svg = (content, label, height = 360) => `<svg class="inquiry-svg" viewBox="0 0 600 ${height}" role="img" aria-label="${label}">${content}</svg>`;
-  const cup = (x,y) => `<g transform="translate(${x} ${y})"><path d="M-38 0L-32 75Q0 88 32 75L38 0" fill="#e4f6fc" stroke="#6294a8" stroke-width="2"/><path d="M-35 28Q0 40 35 28L30 72Q0 82-30 72Z" fill="#a7dcef"/><ellipse cy="0" rx="38" ry="8" fill="#f7fcfe" stroke="#6294a8" stroke-width="2"/><path d="M-24 14L-20 66" stroke="white" stroke-width="4"/><text y="111" text-anchor="middle">水</text></g>`;
-  const bottle = (x,y,label) => `<g transform="translate(${x} ${y})"><path d="M-15 0V17Q-35 25-35 42V85Q-35 98-23 98H23Q35 98 35 85V42Q35 25 15 17V0Z" fill="#f3f9fc" stroke="#7895a2" stroke-width="2"/><rect x="-18" y="-9" width="36" height="14" rx="4" fill="#dce6eb" stroke="#7895a2"/><path d="M-24 40V80" stroke="white" stroke-width="4"/><text y="128" text-anchor="middle">${label}</text></g>`;
   const arrow = (x,y,width=100) => `<path d="M${x} ${y-8}h${width-22}v-12l22 20-22 20v-12H${x}Z" fill="#86b9c7"/>`;
   function soil() {
     const points = [['mineral',310,290,'1'],['organic',760,330,'2'],['water',340,600,'3'],['air',680,720,'4']];
     return `<div class="soil-observer"><svg viewBox="0 0 1000 1000" role="group" aria-label="土壤組成觀察圖，選擇標記查看成分"><image href="assets/soil-composition.png" width="1000" height="1000"/><g>${points.map(([key,x,y,n])=>`<g data-observe="${key}" class="soil-target" role="button" tabindex="0" aria-label="查看${book.earth.choices.find(c=>c[0]===key)[1]}位置" aria-pressed="false"><circle class="soil-ring" cx="${x}" cy="${y}" r="53"/><circle cx="${x}" cy="${y}" r="20" fill="white" stroke="#366956" stroke-width="3"/><text x="${x}" y="${y+8}" text-anchor="middle" font-size="25" font-weight="800" fill="#214e3e">${n}</text></g>`).join('')}</g></svg></div><div class="soil-legend"><span>1 礦物顆粒</span><span>2 有機物</span><span>3 水</span><span>4 空氣孔隙</span></div>`;
   }
   function water() {
-    return svg(`<g class="water-record" data-focus="formation"><rect x="5" y="5" width="590" height="190" rx="16"/><text x="22" y="33" class="diagram-heading">生成水的研究紀錄</text>${bottle(78,58,'氫')}${bottle(190,58,'氧')}<text x="132" y="110" text-anchor="middle">＋</text>${arrow(275,111,110)}${cup(489,72)}</g><g class="water-record" data-focus="decomposition"><rect x="5" y="205" width="590" height="190" rx="16"/><text x="22" y="234" class="diagram-heading">分解水的研究紀錄</text>${cup(100,267)}${arrow(208,310,110)}${bottle(406,258,'氫')}${bottle(518,258,'氧')}</g>`, '氫與氧能生成水；水也可化學分解為氫與氧。兩份紀錄同時顯示。', 402);
+    const drop = (x,y,size=1) => `<path transform="translate(${x} ${y}) scale(${size})" d="M0-15C-4-7-12 0-12 8C-12 24 12 24 12 8C12 0 4-7 0-15Z" fill="#77c9e4" stroke="#4c9bb8" stroke-width="2"/>`;
+    const formation = svg(`
+      <g class="water-apparatus">
+        <rect x="15" y="45" width="105" height="52" rx="13" fill="#fffaf0" stroke="#cdbd95"/>
+        <text x="67" y="79" text-anchor="middle">氫氣</text>
+        <rect x="15" y="151" width="105" height="52" rx="13" fill="#fffaf0" stroke="#cdbd95"/>
+        <text x="67" y="185" text-anchor="middle">氧氣</text>
+        <path d="M120 71H198V113H226M120 177H198V156H226" fill="none" stroke="#91a8a8" stroke-width="7"/>
+        <path d="M175 71l-12-7v14ZM175 177l-12-7v14Z" fill="#507c75"/>
+        <path d="M240 82Q220 82 220 104V206Q220 230 247 230H369Q397 230 397 206V104Q397 82 375 82Z" fill="#f6fbfd" stroke="#7e9fa8" stroke-width="3"/>
+        <path d="M235 101V206Q235 215 248 215" fill="none" stroke="white" stroke-width="5"/>
+        ${flame(273,194,.82)}
+        <path d="M303 167q18-17 4-34m30 30q18-17 4-34" fill="none" stroke="#b1cbd4" stroke-width="4" stroke-linecap="round"/>
+        <text x="310" y="58" text-anchor="middle" class="water-label">發生反應</text>
+        ${drop(373,118,.6)}${drop(369,159,.7)}${drop(374,200,.5)}
+        <path d="M402 95H460M450 89l10 6-10 6" fill="none" stroke="#7e9fa8" stroke-width="2"/>
+        <circle cx="516" cy="144" r="64" fill="#edf8fc" stroke="#7eacba" stroke-width="3"/>
+        ${drop(495,128,.8)}${drop(528,166,1.1)}
+        <text x="516" y="55" text-anchor="middle" class="water-label">冷卻後</text>
+        <text x="516" y="238" text-anchor="middle" class="water-label">凝結的水滴</text>
+        <text x="308" y="262" text-anchor="middle" class="water-small">水蒸氣 → 冷卻 → 液態水</text>
+      </g>`, '生成水的研究情境：氫與氧反應生成水蒸氣，冷卻後在容器壁凝結成水滴；右側放大水滴。', 280);
+    const decomposition = svg(`
+      <g class="water-apparatus">
+        <path d="M155 133V247Q155 260 170 260H527Q540 260 540 247V133" fill="#f6fbfd" stroke="#7e9fa8" stroke-width="3"/>
+        <path d="M158 160Q349 170 537 160V246Q537 257 523 257H173Q158 257 158 246Z" fill="#c4e9f3"/>
+        <path d="M242 202V72Q242 52 264 52H282Q304 52 304 72V202" fill="#f9fdfe" stroke="#7e9fa8" stroke-width="3"/>
+        <path d="M394 202V72Q394 52 416 52H434Q456 52 456 72V202" fill="#f9fdfe" stroke="#7e9fa8" stroke-width="3"/>
+        <path d="M245 136Q273 145 301 136V202H245Z" fill="#c4e9f3"/>
+        <path d="M397 105Q425 114 453 105V202H397Z" fill="#c4e9f3"/>
+        <text x="273" y="32" text-anchor="middle" class="water-label">氫氣</text>
+        <text x="425" y="32" text-anchor="middle" class="water-label">氧氣</text>
+        <path d="M273 194V223M425 194V223" stroke="#6f7b75" stroke-width="10"/>
+        <path d="M273 223V308H142M425 223V330H142" stroke="#6f8983" stroke-width="3" fill="none"/>
+        <g fill="#fff" stroke="#6fa9ba" stroke-width="2"><circle cx="264" cy="172" r="5"/><circle cx="281" cy="153" r="4"/><circle cx="417" cy="172" r="5"/><circle cx="432" cy="145" r="4"/><circle cx="420" cy="123" r="3"/></g>
+        <rect x="19" y="280" width="123" height="64" rx="12" fill="#f3e7c9" stroke="#b8a77f" stroke-width="2"/>
+        <text x="80" y="306" text-anchor="middle" class="water-label">電源</text>
+        <text x="80" y="332" text-anchor="middle" class="water-small">直流電</text><text x="153" y="305" class="water-small">－</text><text x="153" y="355" class="water-small">＋</text>
+        <text x="62" y="123" class="water-label">水溶液</text>
+        <path d="M100 137L180 182" fill="none" stroke="#7e9fa8" stroke-width="2"/>
+        <text x="349" y="287" text-anchor="middle" class="water-small">電極附近冒出氣泡，分別收集</text>
+        <text x="349" y="385" text-anchor="middle" class="water-small">氣體無色，身分需經檢驗確認</text>
+      </g>`, '電解水的概念裝置：電源連接兩支電極，水溶液中的氣泡分別進入倒置的收集管；負極收集氫氣、正極收集氧氣，氣體經檢驗確認。', 405);
+    return `<div class="water-investigation">
+      <section class="water-record" data-focus="formation" aria-label="生成水的研究紀錄">
+        <header><span class="water-direction">生成</span><strong>讓氫與氧反應，出現了什麼？</strong></header>
+        ${formation}<p class="water-finding"><span>觀察</span>冷卻後，容器壁出現水滴。</p>
+      </section>
+      <div class="water-evidence-link">合起來看：水與氫、氧有什麼關係？</div>
+      <section class="water-record" data-focus="decomposition" aria-label="分解水的研究紀錄">
+        <header><span class="water-direction">分解</span><strong>水經化學分解，得到什麼？</strong></header>
+        ${decomposition}<p class="water-finding"><span>檢驗</span>兩側收集的氣體，分別是氫與氧。</p>
+      </section>
+    </div>`;
   }
   function flame(x,y,size) {
     if (!size) return `<path d="M${x} ${y}q-15-12-4-26q10-12 0-23" fill="none" stroke="#9ca99f" stroke-width="3"/><text x="${x}" y="${y-56}" class="smoke-label" text-anchor="middle">熄滅</text>`;
