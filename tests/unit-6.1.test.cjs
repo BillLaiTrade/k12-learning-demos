@@ -179,7 +179,8 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await page.locator('[data-observe=mineral]').focus();
     await page.keyboard.press('Enter');
     assert.equal(await page.locator('.soil-legend button[data-observation=mineral]').getAttribute('aria-pressed'), 'true');
-    for (const label of await page.locator('.inquiry-path p').allTextContents()) assert.ok(label.length <= 20);
+    for (const label of await page.locator('[data-stage=past] p,[data-stage=modern] p').allTextContents()) assert.ok(label.length <= 20);
+    assert.ok((await text('#inquiry-evidence-summary')).length <= 45);
     await page.locator('[data-classical=air]').click();
     const initial = await page.locator('.gas-thumbnail small').allTextContents();
     assert.deepEqual(initial, ['較旺','燃燒','熄滅']);
@@ -200,7 +201,8 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     }
     await page.locator('[data-classical=fire]').click();
     assert.equal(await page.locator('.inquiry-main-figure button').count(), 0);
-    for (const label of await page.locator('.inquiry-path p').allTextContents()) assert.ok(label.length <= 20);
+    for (const label of await page.locator('[data-stage=past] p,[data-stage=modern] p').allTextContents()) assert.ok(label.length <= 20);
+    assert.ok((await text('#inquiry-evidence-summary')).length <= 45);
     await page.locator('#classical-close').click();
   });
 
