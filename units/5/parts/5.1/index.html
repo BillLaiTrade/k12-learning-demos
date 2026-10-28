@@ -33,7 +33,7 @@
     @media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{grid-template-columns:1fr;padding:32px 0 25px}.lesson{padding-top:20px}.lesson-card{grid-template-columns:1fr;padding:18px;gap:14px}.card-side{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:0 7px;border:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0;font-size:.95rem}.card-role{grid-column:2;font-size:.79rem}.card-number{grid-row:1/3}.visual{padding:8px}.quiz-head{padding:18px}.quiz-body{padding:19px 17px 22px}.quiz-actions{align-items:stretch;flex-direction:column}.thermo-wrap{grid-template-columns:1fr}.thermo-svg{max-height:340px}.range-row{align-items:center;flex-direction:row}.sequence-step{grid-template-columns:22px minmax(0,1fr)}.sequence-controls{grid-column:2}.range-row input{width:100%}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
-  <link rel="stylesheet" href="assets/thermometer-quiz.css?v=quiz-1">
+  <link rel="stylesheet" href="assets/thermometer-quiz.css?v=quiz-layout-2">
   <link rel="stylesheet" href="assets/measurement-scene.css?v=observation-only-4">
   <link rel="stylesheet" href="assets/touch-story.css">
   <link rel="stylesheet" href="assets/water-lab.css?v=engraved-glass-1">
@@ -303,8 +303,10 @@
             </div>
           </div>
           <div class="tq-body">
-            <ol class="tq-flow" aria-label="操作流程"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V4a2 2 0 0 1 4 0v7l2-1 5 3v5l-4 4h-5l-6-7a2 2 0 0 1 3-3l1 1"/></svg>拿取溫度計</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3v17h14V3M3 3h4m10 0h4M6 12h12M12 1v14m-3-3 3 3 3-3"/></svg>放入量測</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h12l-3-3m3 3-3 3M19 18H7l3 3m-3-3 3-3"/></svg>放回換另一支</li></ol>
+
             <div class="tq-workspace">
+              <div class="tq-left">
+            <ol class="tq-flow" aria-label="操作流程"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V4a2 2 0 0 1 4 0v7l2-1 5 3v5l-4 4h-5l-6-7a2 2 0 0 1 3-3l1 1"/></svg>拿取溫度計</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3v17h14V3M3 3h4m10 0h4M6 12h12M12 1v14m-3-3 3 3 3-3"/></svg>放入量測</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h12l-3-3m3 3-3 3M19 18H7l3 3m-3-3 3-3"/></svg>放回換另一支</li></ol>
               <div class="tq-bench">
                 <h3 id="tq-scene-title">從旁邊拿取一支溫度計</h3>
                 <svg id="tq-scene" viewBox="0 0 1000 1000" role="group" aria-labelledby="tq-scene-title tq-scene-description">
@@ -329,6 +331,7 @@
                   <g id="tq-sight" hidden><path id="tq-sight-ray" fill="none" stroke="#187b60" stroke-width="2.5" stroke-dasharray="7 6"/><g id="tq-eye" tabindex="0" role="slider" aria-label="觀看高度" aria-orientation="vertical" aria-valuemin="-100" aria-valuemax="100" aria-valuenow="0" transform="translate(588,345)"><rect x="-40" y="-34" width="80" height="68" rx="28" fill="#fffefa" stroke="#347a62" stroke-width="2"/><path d="M-28 0Q0-31 28 0Q0 31-28 0" fill="#ecf4ec" stroke="#48665b" stroke-width="2"/><circle r="14" fill="#709487"/><circle r="8" fill="#213d35"/><circle cx="-5" cy="-5" r="4" fill="#fff"/></g></g>
                 </svg>
                 <p class="tq-scene-tip" id="tq-scene-tip">量完拖回原位，再拿另一支。</p>
+              </div>
               </div>
               <div class="tq-console">
                 <h3 id="tq-lens-title">刻度放大</h3>
