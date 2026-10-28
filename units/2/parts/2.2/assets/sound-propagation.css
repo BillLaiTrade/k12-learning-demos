@@ -1,9 +1,6 @@
-/* 第二學習區塊：與核可示意圖對應的聲音傳播示範。 */
-#card-02{grid-template-columns:1fr;gap:12px}
-#card-02 .card-side{display:flex;align-items:baseline;gap:12px;border:0;padding:0}
-#card-02 .card-side h3{margin:0;color:var(--green)}
-#card-02 .card-role{margin-left:auto}
-#card-02 .card-main>h2{font-size:clamp(1.65rem,3.2vw,2.5rem);color:#123f30;letter-spacing:-.035em}
+/* 第二學習區塊：聲音傳播示範。 */
+/* 區塊外框、側欄、標題與重點沿用第一區塊的共用版型。 */
+#card-02 .card-main{container-type:inline-size}
 .sound-visual{padding:8px 8px 0;background:linear-gradient(115deg,#f6f9ef,#fffefa 60%);border-color:#acbfa8}
 .sound-visual svg{overflow:visible}
 .sound-visual text{font-size:22px;fill:#174a37;font-weight:650}
@@ -15,23 +12,21 @@
 .sound-bell-hit{pointer-events:all;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .sound-bell-hit:focus-visible{stroke:#b27823;stroke-width:3}
 .sound-focus-ring{fill:transparent;stroke:transparent}
-.sound-controls{justify-content:center;margin:16px 0 8px}
-.sound-controls button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-width:140px;border-radius:999px;font-size:1rem}
-#air-status{display:block;flex-basis:100%;text-align:center;font-size:.86rem;min-height:1.7em}
-#card-02 .sound-takeaway{padding:14px 18px;text-align:center;border:1px solid #b8cda9;border-radius:12px;background:#eff4e8;color:#183e2f;font-size:clamp(1rem,1.7vw,1.2rem)}
-.sound-note{margin:8px 0 0!important;text-align:center;font-size:.8rem;color:var(--muted)}
+.sound-note{margin:8px 0 0!important;font-size:.8rem;color:var(--muted)}
 .sound-mobile-zoom,.sound-mobile-labels{display:none}
 @media(max-width:640px){
- #card-02 .card-side{gap:9px;flex-wrap:wrap}
- #card-02 .card-role{display:none}
- #card-02 .card-main>h2{font-size:1.65rem}
  .sound-visual{padding:5px}
  .sound-scene .sound-scene-words{display:none}
  .sound-mobile-labels{display:flex;justify-content:space-between;gap:8px;margin:-5px 7px 14px;color:#174a37;font-size:.8rem;font-weight:700}
  .sound-mobile-zoom{display:block;border-top:1px solid #d7e1dd;padding:12px 2px 0}
  .sound-mobile-zoom>p{margin:0;color:var(--muted);font-size:.8rem}
  .sound-mobile-zoom svg{margin-top:4px}
- .sound-controls{gap:8px}
- .sound-controls button{min-width:125px;padding:9px 12px}
- #card-02 .sound-takeaway{padding:12px 10px;font-size:1rem}
+}
+
+@container(max-width:550px){
+ .sound-scene .sound-scene-words{display:none}
+ .sound-mobile-labels{display:flex;justify-content:space-between;gap:8px;margin:-5px 7px 14px;color:#174a37;font-size:.8rem;font-weight:700}
+ .sound-mobile-zoom{display:block;border-top:1px solid #d7e1dd;padding:12px 2px 0}
+ .sound-mobile-zoom>p{margin:0;color:var(--muted);font-size:.8rem}
+ .sound-mobile-zoom svg{margin-top:4px}
 }

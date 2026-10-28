@@ -22,8 +22,8 @@
     .ruler-photo-stage:focus-visible{outline:3px solid #176b53;outline-offset:3px}
     @media(max-width:640px){.ruler-photo-stage{border-radius:9px}}
   </style>
-  <link rel="stylesheet" href="assets/sound-propagation.css?v=2">
-  <link rel="stylesheet" href="assets/vacuum-lab.css?v=3">
+  <link rel="stylesheet" href="assets/sound-propagation.css?v=3">
+  <link rel="stylesheet" href="assets/vacuum-lab.css?v=4">
 </head>
 <body>
   <header class="shell masthead">
@@ -74,6 +74,8 @@
         <section class="lesson-card" id="card-02">
           <div class="card-side"><span class="card-number">02</span><h3>聲音如何傳播</h3><span class="card-role">從聲源到耳膜</span></div>
           <div class="card-main"><h2>鐘聲是怎麼傳到耳朵的？</h2><p>觀察空氣的疏密變化，如何從鐘傳到耳膜。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>空氣沒有整團跑過來，遠處的鐘聲怎麼會傳到我的耳朵？</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>鐘的振動會讓附近空氣產生疏密變化。觀察橘色粒子，看看它怎麼動，以及疏密變化往哪裡傳。</p></div>
             <figure class="visual sound-visual">
               <svg id="air-wave" class="sound-scene" viewBox="0 0 1080 440" role="group" aria-label="鐘、空氣粒子與耳膜的聲音傳播示範" aria-describedby="sound-model-note">
                 <defs>
@@ -119,13 +121,15 @@
             </figure>
             <audio id="bell-audio" src="assets/handbell-strike.wav?v=868396" preload="auto"></audio>
             <div class="controls sound-controls"><button class="action" id="air-strike" type="button">敲擊鐘</button><span class="live-note" id="air-status" aria-live="polite">點擊鐘或下方按鈕，敲擊鐘並觀察聲音傳播。</span></div>
-            <div class="sound-takeaway"><strong>粒子在原位附近來回振動，疏密變化向前傳播。</strong></div>
+            <div class="fact"><p><strong>重點：</strong>粒子在原位附近來回振動，疏密變化向前傳播；粒子的振動方向與聲音傳播方向平行。</p></div>
             <p class="sound-note" id="sound-model-note">粒子位移放大、過程放慢呈現；空氣中的聲音是縱波。</p>
           </div>
         </section>
         <section class="lesson-card" id="card-03">
-          <div class="card-side"><span class="card-number">03</span><h3>聲音需要介質</h3></div>
+          <div class="card-side"><span class="card-number">03</span><h3>聲音需要介質</h3><span class="card-role">觀察抽氣時聲音的變化</span></div>
           <div class="card-main"><h2>動手抽氣，鈴聲會怎麼變？</h2><p class="vacuum-intro">操作幫浦與進氣閥，比較空氣量改變時的鈴聲。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>把空氣抽走，裡面的電鈴也會跟著停止振動嗎？</p></div>
+            <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>試著抽氣，邊聽鈴聲、邊看敲錘，再放入空氣比較。留意電鈴的動作，以及聲音傳到罩外時的變化。</p></div>
             <div id="vacuum-lab" class="vacuum-lab" role="group" aria-label="可操作的真空鐘罩實驗" aria-describedby="vacuum-model-note">
               <figure class="vacuum-figure">
                 <div class="vacuum-scene">
@@ -158,7 +162,7 @@
                   </div>
                 </aside>
               </figure>
-              <div class="vacuum-controls">
+              <div class="controls vacuum-controls">
                 <button class="vacuum-switch" id="vacuum-power" type="button" role="switch" aria-checked="false"><span>電鈴開關</span><span class="vacuum-switch-track" aria-hidden="true"><b id="vacuum-switch-word">OFF</b><i></i></span></button>
                 <button class="action vacuum-control" id="vacuum-extract" type="button" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4H20M16 4V12M8 28V16Q8 12 12 12H20Q24 12 24 16V28M5 28H27"/></svg><span id="vacuum-extract-label">抽氣</span></button>
                 <button class="secondary vacuum-control" id="vacuum-admit" type="button" aria-pressed="false" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 7H26M16 3V14M7 17H25V26H7ZM3 21H7M25 21H29M12 26V29M20 26V29"/></svg><span id="vacuum-admit-label">放入空氣</span></button>
@@ -167,7 +171,7 @@
               <p id="vacuum-status" class="vacuum-status" aria-live="polite">先開啟電鈴，再抽氣比較聽到的鈴聲。</p>
               <audio id="vacuum-audio" src="assets/electric-bell-loop.wav?v=1" preload="auto" loop></audio>
             </div>
-            <div class="vacuum-takeaway"><strong>聲音需要介質傳播。</strong></div>
+            <div class="fact"><p><strong>重點：</strong>聲音需要介質傳播。抽氣後電鈴仍在振動，傳到罩外的鈴聲會變弱；理想真空中沒有介質，聲音無法傳播。</p></div>
             <p class="vacuum-model-note" id="vacuum-model-note">粒子與振動放大示意；分貝值非現場實測。實際鐘罩僅能接近真空。</p>
           </div>
         </section>

@@ -197,5 +197,32 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     await mobile.locator('#vacuum-power').tap(); assert.equal(await mobile.locator('#vacuum-audio').evaluate(a => a.paused), true);
     await context.close();
   });
+  await t.test('second and third learning cards share the first card layout and teaching sequence', async () => {
+    for (const width of [1440, 1024, 768, 390]) {
+      await page.setViewportSize({ width, height: 1200 });
+      const cards = await page.evaluate(() => [1, 2, 3].map(index => {
+        const card = document.querySelector(`#card-0${index}`), side = card.querySelector('.card-side'), main = card.querySelector('.card-main');
+        const title = main.querySelector('h2'), intro = main.querySelector(':scope > p'), fact = main.querySelector(':scope > .fact');
+        const cs = n => getComputedStyle(n), box = n => n.getBoundingClientRect();
+        const children = [...main.children];
+        return {
+          grid: cs(card).gridTemplateColumns, padding: cs(card).padding,
+          mainX: box(main).x - box(card).x, mainWidth: box(main).width, sideWidth: box(side).width,
+          sideBorder: cs(side).borderRightWidth, sideBottom: cs(side).borderBottomWidth,
+          titleSize: cs(title).fontSize, titleAlign: cs(title).textAlign,
+          introSize: cs(intro).fontSize, introAlign: cs(intro).textAlign,
+          factBorder: cs(fact).borderLeftWidth, factBackground: cs(fact).backgroundColor,
+          dialogueBeforeDemo: children[2].classList.contains('dialogue--xiaokui') && children[3].classList.contains('dialogue'),
+          role: Boolean(side.querySelector('.card-role'))
+        };
+      }));
+      for (const card of cards.slice(1)) {
+        for (const key of ['grid','padding','sideBorder','sideBottom','titleSize','titleAlign','introSize','introAlign','factBorder','factBackground']) assert.equal(card[key], cards[0][key], `${key} should follow card 1 at ${width}px`);
+        for (const key of ['mainX','mainWidth','sideWidth']) assert.ok(Math.abs(card[key] - cards[0][key]) < 1, `${key} should align at ${width}px`);
+        assert.ok(card.dialogueBeforeDemo && card.role);
+      }
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    }
+  });
   assert.deepEqual(errors, []);
 });

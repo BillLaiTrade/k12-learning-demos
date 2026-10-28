@@ -1,17 +1,13 @@
-#card-03{grid-template-columns:1fr;gap:16px}
-#card-03 .card-side{display:flex;justify-content:center;align-items:center;gap:10px;justify-self:center;padding:5px 20px;border:1px solid #aab784;border-radius:999px;background:#edf1df;color:#244831}
-#card-03 .card-side h3{margin:0;font-size:.95rem}
-#card-03 .card-number{font-size:1rem}
-#card-03 .card-main>h2{text-align:center;font-size:clamp(1.65rem,3.5vw,2.65rem);color:#123f30;letter-spacing:-.035em}
-#card-03 .vacuum-intro{text-align:center;margin-bottom:20px}
-.vacuum-figure{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,19%);gap:14px;align-items:center;margin:0;padding:8px;border:1px solid #9da86f;border-radius:18px;background:#f8f5e7;overflow:hidden}
-.vacuum-scene{position:relative;isolation:isolate;aspect-ratio:1817/866;overflow:hidden;border-radius:14px}
+/* 教學外框、側欄、標題與重點使用第一區塊的共用版型。 */
+#card-03 .card-main{container-type:inline-size}
+.vacuum-figure{display:grid;grid-template-columns:minmax(0,1fr) minmax(100px,18%);gap:14px;align-items:center;margin:0;padding:8px;border:1px solid #9da86f;border-radius:18px;background:#f8f5e7;overflow:hidden}
+.vacuum-scene{container-type:inline-size;position:relative;isolation:isolate;aspect-ratio:1817/866;overflow:hidden;border-radius:14px}
 .vacuum-photo{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
 .vacuum-overlay{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none}
 .vacuum-chip,.vacuum-air-readout{position:absolute;z-index:3;pointer-events:none;line-height:1.4}
 .vacuum-chip{right:2%;top:4%;padding:6px 14px;border:1px solid #caa34e;border-radius:999px;background:#fff0bd;color:#6c4910;font-size:.85rem;font-weight:750}
-.vacuum-air-readout{left:84%;top:29%;width:15%;padding:7px 5px;border:1px solid #a3b37f;border-radius:10px;background:#fffff2ed;text-align:center;color:#294936;font-size:clamp(.58rem,1.05vw,.8rem)}
-.vacuum-air-readout strong{display:block;margin-top:2px;font-size:clamp(.65rem,1.35vw,1rem);white-space:nowrap;color:#164836}
+.vacuum-air-readout{left:84%;top:29%;width:15%;padding:7px 5px;border:1px solid #a3b37f;border-radius:10px;background:#fffff2ed;text-align:center;color:#294936;font-size:clamp(.58rem,2cqw,.8rem)}
+.vacuum-air-readout strong{display:block;margin-top:2px;font-size:clamp(.65rem,2.4cqw,1rem);white-space:nowrap;color:#164836}
 .vacuum-hotspot{position:absolute;z-index:2;min-width:44px;min-height:44px;padding:0;border:2px solid transparent;border-radius:14px;background:transparent;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .vacuum-hotspot:hover:not(:disabled){background:#ffffe714}
 .vacuum-hotspot:focus-visible{outline:3px solid #bb861f;outline-offset:-3px;background:#fff8d41f}
@@ -19,8 +15,8 @@
 .vacuum-valve-hit{left:41.5%;top:62%;width:8.5%;height:20%}
 .vacuum-hotspot:disabled{cursor:default}
 /* 分貝儀位於鐘罩外，數字覆在器材的 LCD 上。 */
-.vacuum-meter-bay{display:flex;align-items:center;justify-content:center;min-width:0;padding:24px 6px}
-.vacuum-spl-meter{position:relative;width:clamp(76px,7.5vw,90px);aspect-ratio:590/1490;color:#173b2b}
+.vacuum-meter-bay{display:flex;align-items:center;justify-content:center;min-width:0;padding:24px 6px 12px}
+.vacuum-spl-meter{position:relative;width:72px;aspect-ratio:590/1490;color:#173b2b}
 .vacuum-meter-body{display:block;width:100%;height:100%;overflow:hidden;filter:drop-shadow(2px 5px 3px #36240e35)}
 .vacuum-meter-title{position:absolute;top:-21px;left:50%;transform:translateX(-50%);padding:0;white-space:nowrap;font-size:clamp(.6rem,1.05vw,.78rem);line-height:1.4}
 .vacuum-meter-screen{position:absolute;left:16%;top:47.8%;width:67%;height:14.6%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;overflow:hidden;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
@@ -30,27 +26,22 @@
 .vacuum-meter-bar{width:82%;height:3px;background:#27523b28;border-radius:1px;overflow:hidden}
 .vacuum-meter-bar i{display:block;width:0;height:100%;background:#17472e}
 .vacuum-meter-note{position:absolute;bottom:21.5%;left:50%;transform:translateX(-50%);font-size:clamp(5px,.65vw,8px);color:#d6e6d5;white-space:nowrap;line-height:1}
-.vacuum-controls{display:flex;align-items:stretch;justify-content:center;gap:12px;margin:18px 0 10px}
-.vacuum-switch{display:flex;align-items:center;justify-content:center;gap:14px;min-height:55px;padding:9px 15px;border:1px solid #dddccb;border-radius:15px;background:#faf9ed;color:#273d35;font-weight:650}
+.vacuum-controls{justify-content:flex-start;gap:9px}
+.vacuum-switch{display:flex;align-items:center;justify-content:center;gap:14px;min-height:44px;padding:4px 12px;border:1px solid #dddccb;border-radius:15px;background:#faf9ed;color:#273d35;font-weight:650}
 .vacuum-switch-track{display:flex;align-items:center;justify-content:flex-end;position:relative;width:72px;height:35px;border-radius:999px;background:#899789;color:#fff;padding:0 8px}
 .vacuum-switch-track b{font-size:.8rem;line-height:1}
 .vacuum-switch-track i{position:absolute;left:4px;top:4px;width:27px;height:27px;border-radius:50%;background:#fffef7;box-shadow:0 2px 4px #0003;transition:transform .15s}
 .vacuum-switch[aria-checked="true"] .vacuum-switch-track{justify-content:flex-start;background:#165d3f}
 .vacuum-switch[aria-checked="true"] .vacuum-switch-track i{transform:translateX(37px)}
-.vacuum-control{display:flex;align-items:center;justify-content:center;gap:12px;min-width:155px;min-height:55px;border-radius:14px;font-size:1.12rem;touch-action:manipulation}
+.vacuum-control{display:flex;align-items:center;justify-content:center;gap:12px;min-width:115px;min-height:44px;border-radius:13px;font-size:1rem;touch-action:manipulation}
 .vacuum-control svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .vacuum-control:disabled{opacity:.45;cursor:default}
 .vacuum-control[aria-pressed="true"]{box-shadow:0 0 0 3px #a5cba08c}
-.vacuum-instruction,.vacuum-status{margin:6px 0;text-align:center;font-size:.86rem;color:var(--muted)}
+.vacuum-instruction,.vacuum-status{margin:6px 0;font-size:.86rem;color:var(--muted)}
 .vacuum-status{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .vacuum-status.vacuum-status-error{position:static;width:auto;height:auto;overflow:visible;clip-path:none;white-space:normal;color:#8b4b1c}
-.vacuum-takeaway{margin-top:17px;padding:14px 18px;border-radius:14px;background:#eaf0d9;text-align:center;color:#163d26;font-size:clamp(1.15rem,2vw,1.65rem)}
-.vacuum-model-note{margin:9px 0 0;text-align:center;font-size:.79rem;color:#6e776e}
+.vacuum-model-note{margin:9px 0 0;font-size:.79rem;color:#6e776e}
 @media(max-width:640px){
- #card-03{padding:16px}
- #card-03 .card-main>h2{font-size:1.65rem}
- #card-03 .card-side{display:flex;grid-template-columns:none;gap:8px;padding:4px 12px}
- #card-03 .vacuum-intro{font-size:.9rem;margin-bottom:14px}
  .vacuum-figure{padding:5px;border-radius:13px}
  .vacuum-scene{border-radius:10px}
  .vacuum-chip{font-size:.62rem;padding:3px 7px;right:2%;top:3%}
@@ -62,14 +53,21 @@
  .vacuum-meter-bar{height:2px}
  .vacuum-meter-reading{gap:1px;font-size:18px}
  .vacuum-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
- .vacuum-switch{grid-column:1/-1;justify-self:center;padding:8px 18px;min-height:48px}
+ .vacuum-switch{grid-column:1/-1;justify-self:start;padding:4px 12px;min-height:48px}
  .vacuum-control{min-width:0;min-height:49px;font-size:1rem;padding:8px 10px;gap:8px}
  .vacuum-control svg{width:23px;height:23px}
  .vacuum-instruction,.vacuum-status{font-size:.8rem}
  .vacuum-model-note{font-size:.73rem}
 }
 
-@media(max-width:700px){
+@container(max-width:550px){
  .vacuum-figure{grid-template-columns:1fr;gap:6px}
  .vacuum-meter-bay{padding:22px 8px 8px}
+ .vacuum-spl-meter{width:64px}
+ .vacuum-meter-reading{font-size:18px;gap:1px}
+ .vacuum-meter-screen{gap:1px}
+ .vacuum-meter-bar{height:2px}
+ .vacuum-controls{display:grid;grid-template-columns:1fr 1fr}
+ .vacuum-switch{grid-column:1/-1;justify-self:start}
+ .vacuum-control{min-width:0}
 }
