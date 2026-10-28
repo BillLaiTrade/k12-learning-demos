@@ -258,3 +258,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-direction.test.cjs
 2.2 第五區調溫即時套用：既有測試改為點擊當下立即讀到 0／20／30°C，組名／聲速／腔內探棒同步且連續切換後穩定，可直接敲擊開始實時計時。移除已撤下的升降溫插值純函式測試；四組完整回歸 64 項通過、0 失敗，見第五區 review 的 instant-temperature-tests.log。
 
 2.2 第五區依核可示意加入雙向進度對照：實線為本組、虛線為另一組，以同一實時時鐘繪製。加熱改為80°C並採絕對溫度平方根聲速關係；檢查七種寬度的標記精確對齊、位置與秒數、標籤界限、暫停／重設、先到達／全部到達／同溫，以及分別起跑不作領先判斷。完整四組66項通過、0失敗，見第五區review的race-tests.log。
+
+### 4.2 檢視清單前五項
+
+```sh
+node --test --test-concurrency=1 tests/unit-4.2-filtration.test.cjs tests/unit-4.2-investigation.test.cjs tests/unit-4.2-concentration.test.cjs tests/unit-4.2-ppm.test.cjs tests/unit-4.2-chromatography.test.cjs tests/unit-4.2.test.cjs
+```
+
+新增過濾／加熱全時段份量守恆、實際杯子照片與水柱筆畫位置、空皿不提前出現液體或固體、第一區完成保留／鍵盤重播、命名標記與流程編號、9 種寬度標籤不重疊、減少動態與素材重試。雲端 Chromium 的 2D Canvas 使用軟體繪圖以避免加速環境干擾；仍保留 WebGL 與所有畫面／互動斷言。導航等待 DOM 後明確等待各區就緒，HTTP server 的請求紀錄使用 ignore，避免未讀取的 pipe 堵塞。

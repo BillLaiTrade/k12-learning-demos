@@ -5,14 +5,14 @@ const path = require('node:path');
 const { chromium } = require('playwright');
 
 test('4.2 hands-on chromatography: science, controls and approved layout', { timeout: 180000 }, async t => {
-  const server = spawn('python3', ['-u','-m','http.server','0','--bind','127.0.0.1'], { cwd:path.resolve(__dirname,'..'), stdio:['ignore','pipe','pipe'] });
+  const server = spawn('python3', ['-u','-m','http.server','0','--bind','127.0.0.1'], { cwd:path.resolve(__dirname,'..'), stdio:['ignore','pipe','ignore'] });
   t.after(()=>server.kill());
   const port = await new Promise((resolve,reject)=>{
     const timer=setTimeout(()=>reject(new Error('Server did not start')),5000);
     server.stdout.on('data',chunk=>{const match=String(chunk).match(/port (\d+)/);if(match){clearTimeout(timer);resolve(match[1]);}});
     server.on('error',reject);
   });
-  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});
+  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--disable-accelerated-2d-canvas']});
   t.after(()=>browser.close());
   const page=await browser.newPage({viewport:{width:1440,height:1100},hasTouch:true});
   const failures=[];
@@ -21,7 +21,7 @@ test('4.2 hands-on chromatography: science, controls and approved layout', { tim
   page.on('response',r=>{if(r.status()>=400)failures.push(r.url());});
   const url=`http://127.0.0.1:${port}/units/4/parts/4.2/`;
   await page.clock.install({time:new Date('2026-10-27T00:00:00Z')});
-  await page.goto(url+'#s3');
+  await page.goto(url+'#s3',{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.querySelector('#chrom-lab').dataset.ready==='true');
   await page.clock.pauseAt(new Date('2026-10-27T00:01:00Z'));
   const lab=page.locator('#chrom-lab'), paper=page.locator('#chrom-paper'), drop=page.locator('#chrom-drop');
@@ -170,7 +170,7 @@ test('4.2 hands-on chromatography: science, controls and approved layout', { tim
   await t.test('failed scene loading provides an error and leaves unrelated sections usable',async()=>{
     const failed=await browser.newPage();
     try {
-      await failed.route('**/chromatography-workbench.webp',r=>r.abort());await failed.goto(url);
+      await failed.route('**/chromatography-workbench.webp',r=>r.abort());await failed.goto(url,{waitUntil:'domcontentloaded'});
       await failed.waitForFunction(()=>document.querySelector('#chrom-lab').dataset.ready==='error');
       assert.match(await failed.locator('#chrom-status').innerText(),/無法載入/);
       assert.equal(await failed.locator('#chrom-paper').isDisabled(),true);

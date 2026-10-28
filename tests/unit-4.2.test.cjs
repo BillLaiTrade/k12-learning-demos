@@ -6,7 +6,7 @@ const { chromium } = require('playwright');
 
 test('4.2 evaporation plays from the chosen step through the final stage', { timeout: 150000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], {
-    cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'pipe']
+    cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'ignore']
   });
   t.after(() => server.kill());
   const port = await new Promise((resolve, reject) => {
@@ -19,7 +19,7 @@ test('4.2 evaporation plays from the chosen step through the final stage', { tim
     });
     server.once('error', error => { clearTimeout(timer); reject(error); });
   });
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox'] });
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox', '--disable-accelerated-2d-canvas'] });
   t.after(() => browser.close());
   const page = await browser.newPage({ viewport: { width: 1440, height: 1100 }, hasTouch: true });
   const failures = [];
@@ -31,7 +31,7 @@ test('4.2 evaporation plays from the chosen step through the final stage', { tim
   // Keep real DOM events and WebGL rendering. Control only the clock so a
   // short chapter cannot finish while software-GPU screenshots are captured.
   await page.clock.install({ time: new Date('2026-10-27T00:00:00Z') });
-  await page.goto(url);
+  await page.goto(url,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(() => document.querySelector('#evap-stage').dataset.ready === 'true', null, { timeout: 30000 });
   await page.clock.pauseAt(new Date('2026-10-27T00:01:00Z'));
   const state = () => page.locator('#evap-stage').evaluate(element => ({
@@ -203,7 +203,7 @@ test('4.2 evaporation plays from the chosen step through the final stage', { tim
           return original.call(this, kind, ...args);
         };
       });
-      await unsupported.goto(url);
+      await unsupported.goto(url,{waitUntil:'domcontentloaded'});
       await unsupported.waitForFunction(() => document.querySelector('#evap-stage').dataset.ready === 'error');
       assert.match(await unsupported.locator('#evap-caption').innerText(), /WebGL/);
       assert.equal(await unsupported.locator('#evap-visual').isDisabled(), true);

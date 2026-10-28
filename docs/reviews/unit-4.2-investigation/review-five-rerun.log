@@ -1,0 +1,31 @@
+▶ 4.2 hands-on chromatography: science, controls and approved layout
+  ✔ qualitative model preserves solvent/spot/band relationships for both samples (271.480294ms)
+  ✔ starts with a loose paper, two ink buttons, shared avatars and no help panel or old controls (122.549734ms)
+  ✔ sample button starts a real continuous separation and holds its final result (691.398005ms)
+  ✔ front contact, mixed plume, and resolving bands remain visible for distinct observation intervals (1754.500507ms)
+  ✔ switching/repeating ink samples cancels the previous run (690.010107ms)
+  ✔ click then click, keyboard, and touch all support manual placement (645.760026ms)
+  ✔ dragging to a valid position mounts the paper and begins chromatography (652.985047ms)
+  ✔ too high stays dry, too low diffuses into the bath without separated bands (1394.465202ms)
+  ✔ drop outside the cup and pointer cancellation safely return to the tray (1141.389448ms)
+  ✔ pause/resume freezes and continues progress; clip and reset take fresh paper (508.816496ms)
+  ✔ approved content column contains every child on desktop, tablet and phone (2876.994688ms)
+  ✔ failed scene loading provides an error and leaves unrelated sections usable (19115.380491ms)
+✔ 4.2 hands-on chromatography: science, controls and approved layout (57201.430796ms)
+▶ 4.2 first five review fixes: continuous filtration and physical pouring
+  ✔ filter and heat transfer conserve material and start each stream at the tilted photographic cup lip (58.732553ms)
+  ✔ actual renderer strokes follow the cup image and the evaporating dish stays empty before arrival (120.212293ms)
+  ✔ one completed run retains both residue and filtrate until deliberate replay (6413.341011ms)
+  ✔ named object labels do not compete with the numbered procedure; the opening matches the lesson (372.796063ms)
+  ✔ mobile ppm keeps quantity and hint apart, and both scenes stay inside the page (3883.477559ms)
+  ✔ reduced motion begins with a retained result and allows replay (17807.740792ms)
+  ✔ a missing filtration asset leaves the procedure usable and supports retry (15900.080095ms)
+✔ 4.2 first five review fixes: continuous filtration and physical pouring (66116.840307ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 125087.578088

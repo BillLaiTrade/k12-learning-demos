@@ -1,0 +1,99 @@
+✖ 4.2 hands-on chromatography: science, controls and approved layout (31465.589407ms)
+▶ 4.2 direct weighing and ppm: science, interactions and approved layout
+  ✔ independent ratio cases and input validation use solution mass as denominator (16.506497ms)
+  ✔ initial approved scene has no sliders or old quiz, and uses official avatars (156.949842ms)
+  ✔ spoon click adds mass with real changing pixels; weighed sugar and keyboard can take it back (902.293848ms)
+  ✔ rapid clicks do not lose or duplicate aliquots; reset cancels pending transfers (623.19258ms)
+  ✔ spoon drag deposits in the boat or returns to the sugar bowl; outside drops cancel (1743.337538ms)
+  ✔ pitcher tap, press-hold and release change water mass then stop without an extra click (822.175041ms)
+  ✔ pitcher drag and keyboard fine adjustment work; canceled gestures never transfer mass (1238.76125ms)
+  ✔ clicking the four real apparatus locations adds from supplies and removes from scales (979.431243ms)
+  ✔ single pours remain observable for 2.6 seconds; removing water uses its own animation (1649.563213ms)
+  ✔ apparatus actions stop at recipe bounds and reset cancels a slow pour (1310.974722ms)
+  ✔ the beaker visibly lifts and tips over the supply pitcher, then returns to the same scale (423.232093ms)
+  ✔ all four apparatus hitboxes are directly reachable by touch at narrow widths (3338.625379ms)
+  ✔ scale inputs accept decimals, synchronize formula, reject bad values and support cancel (1424.283038ms)
+  ✔ formal mass-percent formula stands before the entire worked example and remains constant when the recipe changes (3333.456755ms)
+  ✔ the one milligram observation works independently of the upper recipe (342.749978ms)
+  ✔ native controls also operate by real touch (481.351661ms)
+  ✔ all content remains inside its column on desktop, tablet and mobile, including the physical ppm scene (6466.483181ms)
+  ✔ loading failure reports an error but ppm and other lesson blocks remain usable (60648.339873ms)
+✔ 4.2 direct weighing and ppm: science, interactions and approved layout (108094.71108ms)
+▶ 4.2 first five review fixes: continuous filtration and physical pouring
+  ✔ filter and heat transfer conserve material and start each stream at the tilted photographic cup lip (36.110356ms)
+  ✔ actual renderer strokes follow the cup image and the evaporating dish stays empty before arrival (62.548425ms)
+  ✔ one completed run retains both residue and filtrate until deliberate replay (8162.783779ms)
+  ✔ named object labels do not compete with the numbered procedure; the opening matches the lesson (885.032794ms)
+  ✔ mobile ppm keeps quantity and hint apart, and both scenes stay inside the page (9841.424335ms)
+  ✔ reduced motion begins with a retained result and allows replay (20396.799591ms)
+  ✔ a missing filtration asset leaves the procedure usable and supports retry (18568.292972ms)
+✔ 4.2 first five review fixes: continuous filtration and physical pouring (78463.66151ms)
+▶ 4.2 unknown mixture investigation: open experimentation, evidence and layout
+  ✔ initial view has a clear sample action, stored tools and a closed notebook (518.102668ms)
+  ✔ navigation matches the four learning sections after the redundant methods quiz is removed (636.399969ms)
+  ✔ mass is conserved across filtration; evaporation removes only water (13.166993ms)
+  ✔ sampling joins the moving bottle lip to the cup and conserves liquid including flight time (161.841001ms)
+  ✔ actual canvas strokes start at the same photographic bottle lip in normal and reduced motion (37.664914ms)
+  ✔ students can heat the raw sample first, keep mixed residue and measure seven grams (3001.25685ms)
+  ✔ separate aliquots retain their own results and can be revisited in any order (938.686332ms)
+  ✔ filtration retains particles and dissolved material passes into the filtrate (2839.747046ms)
+  ✔ evaporating that filtrate leaves white solid; its dry net mass is five grams (814.611415ms)
+  ✔ notes store real observations and editable student text without duplicate event records (1091.251203ms)
+  ✔ report checks evidence, not a guessed list of ingredients (582.729325ms)
+  ✔ optional concentration uses the same aliquot, excludes sand and accepts both units (2925.992362ms)
+  ✔ editing or removing a note withdraws an old result and updates evidence choices (2304.292166ms)
+  ✔ dragging apparatus to the active sample works, and outside or canceled drops do nothing (3404.699752ms)
+  ✔ keyboard and real touch can start experiments without dragging (2069.836613ms)
+  ✔ reset confirmation preserves work on cancel and cancels unfinished work on reset (1436.068128ms)
+  ✔ depleted stock can be explicitly replenished without deleting samples or notes (2906.270791ms)
+  ✔ experiments pause while the page is hidden and resume without jumping to the result (853.309835ms)
+  ✔ initial and expanded layouts fit seven viewports and use the existing content column (5323.260778ms)
+  ✔ asset failures keep controls safe and retry recovers without breaking other lessons (19377.456827ms)
+  ✔ reduced motion and pointer cancellation leave a usable, clean activity (22263.163746ms)
+✔ 4.2 unknown mixture investigation: open experimentation, evidence and layout (95367.24713ms)
+▶ 4.2 ppm: one milligram beside one liter introduces parts per million
+  ✔ the approved observation layout foregrounds a single milligram and its real interaction (570.892233ms)
+  ✔ the common ratio branches into formal expressions before the large equivalent values (222.801561ms)
+  ✔ the illustrated entry actually reopens the same complete portion (1158.018382ms)
+  ✔ the only rendered sugar portion is one milligram and the water volume is one liter (41.672387ms)
+  ✔ crystal solids fit their lattice cells without overlapping or counting air as sugar (18.755752ms)
+  ✔ crystals form closed solids and the pile has staggered, irregular layers (10.517792ms)
+  ✔ the whole portion, source guide and measured lens scale remain consistent (535.829032ms)
+  ✔ the dark dish contrasts with a genuinely tiny full portion in the lens (634.070422ms)
+  ✔ mouse and actual touch dragging observe the same one milligram portion (1049.206395ms)
+  ✔ keyboard, cancellation and shared reset preserve the single recipe and upper experiment (731.75ms)
+  ✔ water, original sugar, lens and formula remain visible at all viewport widths (3412.318948ms)
+  ✔ unavailable WebGL keeps the ppm definition and single worked example usable (1499.489856ms)
+  ✔ failed scene assets leave the definition and upper experiment available (28249.409015ms)
+✔ 4.2 ppm: one milligram beside one liter introduces parts per million (59317.324229ms)
+▶ 4.2 evaporation plays from the chosen step through the final stage
+  ✔ observation lasts 1.5 seconds and the remaining stages last three (10.144513ms)
+  ✔ only the step buttons and the picture control playback (423.122179ms)
+  ✔ selecting evaporation immediately animates boiling while the apparatus stays fixed (2182.517145ms)
+  ✔ playback advances the selected step, caption and picture label across boundaries (2063.545571ms)
+  ✔ every starting step reaches the dry endpoint and remains stopped (2190.643474ms)
+  ✔ clicking the picture replays the current step and switching steps cancels the old run (3148.060697ms)
+  ✔ native picture and step buttons support keyboard and touch (2484.960005ms)
+  ✔ unavailable WebGL disables only animation buttons and reports the error (1786.177264ms)
+✔ 4.2 evaporation plays from the chosen step through the final stage (33667.800945ms)
+ℹ tests 73
+ℹ suites 0
+ℹ pass 72
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 410986.621389
+
+✖ failing tests:
+
+test at tests/unit-4.2-chromatography.test.cjs:7:1
+✖ 4.2 hands-on chromatography: science, controls and approved layout (31465.589407ms)
+  page.goto: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - navigating to "http://127.0.0.1:37079/units/4/parts/4.2/#s3", waiting until "load"[22m
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.2-chromatography.test.cjs:24:14) {
+    name: 'TimeoutError',
+    log: [ '  - navigating to "http://127.0.0.1:37079/units/4/parts/4.2/#s3", waiting until "load"' ]
+  }

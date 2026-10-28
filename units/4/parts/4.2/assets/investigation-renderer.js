@@ -1,3 +1,4 @@
+import {cupTransfer,drawCup,drawJet} from './cup-transfer.js?v=review-5';
 import {SAMPLE_BOTTLE,SAMPLE_CUP,samplingFrame,streamPoint,bottleLiquid} from './investigation-transfer.js?v=pour-3';
 const W=1536,H=1024;
 const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
@@ -62,33 +63,32 @@ export function createRenderer(canvas,{table,atlas,glass}) {
     for(let i=1;i<=32;i++){const point=streamPoint(stream,mix(stream.tail,stream.head,i/32));ctx.lineTo(point.x,point.y);}
     ctx.strokeStyle='#c7b28bbe';ctx.lineWidth=8;ctx.stroke();ctx.strokeStyle='#fff9e8ae';ctx.lineWidth=2;ctx.stroke();ctx.restore();
   }
-  function flow(x1,y1,x2,y2,t,brown=false){ctx.save();ctx.strokeStyle=brown?'#c7b28bbe':'#e4f2ead9';ctx.lineWidth=9;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(x2-9,(y1+y2)/2,x2,y2);ctx.stroke();ctx.strokeStyle='#fffcf4a8';ctx.lineWidth=2;ctx.stroke();for(let i=0;i<4;i++){const p=(t*2+i*.25)%1;ctx.fillStyle='#e9f8eedc';ctx.beginPath();ctx.ellipse(mix(x1,x2,p),mix(y1,y2,p),3,5,0,0,Math.PI*2);ctx.fill();}ctx.restore();}
   function filter(sample,animation,t){
-    const before=animation?.kind==='filter'?animation.before:sample;
-    const f=animation?.kind==='filter'?smooth((t-.15)/.8):1;
-    // Receiving beaker is part of the empty photographic assembly.
+    const running=animation?.kind==='filter',before=running?animation.before:sample;
+    const f=running?cupTransfer(t,'filter'):null,received=f?.received??1;
     shadow(750,729,178,16);sprite('filter',545,222,398,514);
-    fluid(611,510,155,176,(sample.water+sample.salt)*f,0,1);
-    const retained=animation?.kind==='filter'?before.sand:sample.residues.at(-1);
-    if(retained>0)grains(682,385,58,13,Math.round(95*f));
-    if(animation?.kind==='filter'){
-      if(t<.83){ctx.save();ctx.translate(575,281);ctx.rotate(.8);beaker(-65,-60,130,155,before,Math.max(0,1-t/.8),0);ctx.restore();if(t>.1)flow(615,309,680,370,t,before.sand>0);}
-      if(t>.18&&t<.92)flow(681,514,681,570,t);
-    }
+    fluid(611,510,155,176,(sample.water+sample.salt)*received*.70,0,1);
+    const retained=running?before.sand:sample.residues.at(-1);
+    if(f?.held>0){ctx.save();ctx.beginPath();ctx.moveTo(594,325);ctx.lineTo(770,325);ctx.lineTo(682,425);ctx.closePath();ctx.clip();ctx.fillStyle='#c8b4918c';ctx.fillRect(590,400-60*Math.sqrt(f.held),190,110);ctx.restore();}
+    if(retained>0)grains(682,405,35,9,Math.round(95*(f?.arrived??1)));
+    if(f){drawCup(ctx,glass,f,before.sand);drawJet(ctx,f.stream,before.sand>0);drawJet(ctx,f.outlet);}
+    return f;
   }
   function heat(sample,animation,t,now){
-    const running=animation?.kind==='heat',remaining=running?1-smooth((t-.2)/.7):0;
+    const running=animation?.kind==='heat',f=running?cupTransfer(t,'heat'):null;
+    const evaporated=running?smooth((t-.30)/.60):1,remaining=running?f.received*(1-evaporated):0;
     shadow(755,768,195,16);sprite('heat',543,475,425,305);
     ctx.save();ctx.beginPath();ctx.ellipse(752,525,120,32,0,0,Math.PI*2);ctx.clip();
-    if(remaining>0){const g=ctx.createLinearGradient(0,500,0,560);g.addColorStop(0,'#d9e7db9c');g.addColorStop(1,'#a7beb1b0');ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(752,525+8*(1-remaining),120*Math.sqrt(remaining),32*Math.sqrt(remaining),0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#fffef2c4';ctx.lineWidth=2;ctx.stroke();}
-    const solid=running?smooth((t-.5)/.4):1;
+    if(remaining>0){const g=ctx.createLinearGradient(0,500,0,560);g.addColorStop(0,'#d9e7db9c');g.addColorStop(1,'#a7beb1b0');ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(752,533-8*remaining,120*Math.sqrt(remaining),32*Math.sqrt(remaining),0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#fffef2c4';ctx.lineWidth=2;ctx.stroke();}
+    const solid=running?smooth((evaporated-.40)/.60):1;
     grains(752,532,95,21,Math.round(170*solid),true);
-    if(sample.sand>0)grains(752,538,95,19,90);
-    if(running&&t>.24&&t<.88){for(let i=0;i<Math.ceil(24*remaining);i++){const p=(now/850+random(i,8))%1,x=752+(random(i,3)-.5)*175*Math.sqrt(remaining),y=528+(random(i,4)-.5)*26*Math.sqrt(remaining);ctx.strokeStyle=`rgba(250,255,247,${.8*(1-p)})`;ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(x,y,1+p*6,(1+p*6)*.5,0,0,Math.PI*2);ctx.stroke();}}
+    if(sample.sand>0)grains(752,538,95,19,Math.round(90*(f?.received??1)));
+    if(running&&t>.30&&t<.90){for(let i=0;i<Math.ceil(24*remaining);i++){const p=(now/850+random(i,8))%1,x=752+(random(i,3)-.5)*175*Math.sqrt(remaining),y=528+(random(i,4)-.5)*26*Math.sqrt(remaining);ctx.strokeStyle=`rgba(250,255,247,${.8*(1-p)})`;ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(x,y,1+p*6,(1+p*6)*.5,0,0,Math.PI*2);ctx.stroke();}}
     ctx.restore();
-    if(running&&t<.2){ctx.save();ctx.translate(645,373);ctx.rotate(.7);beaker(-60,-70,125,150,animation.before,1-t/.2,0);ctx.restore();flow(700,392,750,518,t,animation.before.sand>0);}
-    if(running&&t>.2&&t<.9){ctx.fillStyle='#ff7024';ctx.shadowColor='#ff6600';ctx.shadowBlur=12;ctx.beginPath();ctx.arc(635,700,8,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;}
-    pill(running?(t<.2?'倒入蒸發皿':t<.9?'加熱中':'冷卻中'):'已冷卻',750,857,155);
+    if(f&&t<.30){drawCup(ctx,glass,f,animation.before.sand);drawJet(ctx,f.stream,animation.before.sand>0);}
+    if(running&&t>.30&&t<.9){ctx.fillStyle='#ff7024';ctx.shadowColor='#ff6600';ctx.shadowBlur=12;ctx.beginPath();ctx.arc(635,700,8,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;}
+    pill(running?(t<.30?'倒入蒸發皿':t<.9?'加熱中':'冷卻中'):'已冷卻',750,857,155);
+    return f?{...f,remaining,evaporated,solid}:null;
   }
   function weigh(sample,running){
     shadow(755,749,170,15);sprite('weigh',565,480,380,276);
@@ -106,9 +106,10 @@ export function createRenderer(canvas,{table,atlas,glass}) {
       source(stock,transfer);
       const display=animation?.kind==='sample'?'beaker':animation?.kind==='settle'?'beaker':animation?.kind||sample?.display||'beaker';
       inventory(display);
+      let operation=null;
       if(!sample)beaker(SAMPLE_CUP.x,SAMPLE_CUP.y,SAMPLE_CUP.w,SAMPLE_CUP.h,{water:0,salt:0,sand:0});
-      else if(display==='filter')filter(sample,animation,t);
-      else if(display==='heat')heat(sample,animation,t,now);
+      else if(display==='filter')operation=filter(sample,animation,t);
+      else if(display==='heat')operation=heat(sample,animation,t,now);
       else if(display==='weigh')weigh(sample,animation?.kind==='weigh');
       else {
         const fill=transfer?transfer.received:1,settled=animation?.kind==='settle'?smooth(t):sample.phase==='settled'?1:0;
@@ -117,7 +118,7 @@ export function createRenderer(canvas,{table,atlas,glass}) {
       if(sample&&sample.residues.some(n=>n>0)&&display!=='filter'){
         ctx.fillStyle='#faf6eb';ctx.beginPath();ctx.moveTo(973,735);ctx.lineTo(1105,735);ctx.lineTo(1079,797);ctx.lineTo(991,793);ctx.closePath();ctx.fill();grains(1038,762,40,9,65);pill('濾紙留存',1040,831,165);
       }
-      return transfer;
+      return transfer||operation;
     }
   };
 }

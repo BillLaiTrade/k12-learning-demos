@@ -1,12 +1,12 @@
 const {test}=require('node:test');const assert=require('node:assert/strict');const {spawn}=require('node:child_process');const path=require('node:path');const {chromium}=require('playwright');
 test('4.2 direct weighing and ppm: science, interactions and approved layout',{timeout:180000},async t=>{
- const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','pipe']});t.after(()=>server.kill());
+ const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Server startup timeout')),5000);server.stdout.on('data',s=>{const m=String(s).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.on('error',reject);});
- const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});t.after(()=>browser.close());
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--disable-accelerated-2d-canvas']});t.after(()=>browser.close());
  const page=await browser.newPage({viewport:{width:1440,height:1100},hasTouch:true});const failures=[];
  page.on('pageerror',e=>failures.push(String(e)));page.on('requestfailed',r=>failures.push(r.url()));page.on('response',r=>{if(r.status()>=400)failures.push(r.url());});
  const url=`http://127.0.0.1:${port}/units/4/parts/4.2/`;
- await page.clock.install({time:new Date('2026-10-28T00:00:00Z')});await page.goto(url+'#s5');await page.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='true');await page.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));
+ await page.clock.install({time:new Date('2026-10-28T00:00:00Z')});await page.goto(url+'#s5',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='true');await page.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));
  const lab=page.locator('#mix-lab'),spoon=page.locator('#mix-spoon'),pitcher=page.locator('#mix-pitcher');
  const state=()=>lab.evaluate(e=>({sugar:Number(e.dataset.sugar),water:Number(e.dataset.water),total:Number(e.dataset.total),percent:Number(e.dataset.percent),activity:e.dataset.activity}));
  const ppm=()=>page.locator('#ppm-lab').evaluate(e=>({ppm:Number(e.dataset.ppm),total:Number(e.dataset.totalMg),solvent:Number(e.dataset.solventMg)}));
@@ -140,7 +140,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  });
  await t.test('loading failure reports an error but ppm and other lesson blocks remain usable',async()=>{
   for(const asset of ['concentration-tools.webp','concentration-workbench-empty.webp','concentration-beaker.webp']){
-   const failed=await browser.newPage();try{await failed.route('**/'+asset,r=>r.abort());await failed.goto(url);await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);assert.equal(await failed.locator('.mix-target:disabled').count(),3);await failed.locator('#ppm-milligram').click();assert.equal(await failed.locator('#ppm-lab').getAttribute('data-ppm'),'1');await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.ready==='true');assert.equal(await failed.locator('#evap-visual').isEnabled(),true);await failed.locator('[data-evap-step="2"]').click();await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.step==='2');}finally{await failed.close();}
+   const failed=await browser.newPage();try{await failed.route('**/'+asset,r=>r.abort());await failed.goto(url,{waitUntil:'domcontentloaded'});await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);assert.equal(await failed.locator('.mix-target:disabled').count(),3);await failed.locator('#ppm-milligram').click();assert.equal(await failed.locator('#ppm-lab').getAttribute('data-ppm'),'1');await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.ready==='true');assert.equal(await failed.locator('#evap-visual').isEnabled(),true);await failed.locator('[data-evap-step="2"]').click();await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.step==='2');}finally{await failed.close();}
   }
  });
 });

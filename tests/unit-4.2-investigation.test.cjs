@@ -5,13 +5,13 @@ const path=require('node:path');
 const {chromium}=require('playwright');
 
 test('4.2 unknown mixture investigation: open experimentation, evidence and layout',{timeout:240000},async t=>{
- const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','pipe']});t.after(()=>server.kill());
+ const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('Server timeout')),5000);server.stdout.on('data',data=>{const match=String(data).match(/port (\d+)/);if(match){clearTimeout(timeout);resolve(match[1]);}});server.on('error',reject);});
- const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});t.after(()=>browser.close());
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--disable-accelerated-2d-canvas']});t.after(()=>browser.close());
  const page=await browser.newPage({viewport:{width:1440,height:1100},hasTouch:true});
  const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
  const url=`http://127.0.0.1:${port}/units/4/parts/4.2/`;
- await page.clock.install({time:new Date('2026-10-28T00:00:00Z')});await page.goto(url+'#unit-quiz');await page.waitForFunction(()=>document.querySelector('#invest-lab').dataset.ready==='true');await page.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));
+ await page.clock.install({time:new Date('2026-10-28T00:00:00Z')});await page.goto(url+'#unit-quiz',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#invest-lab').dataset.ready==='true');await page.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));
  const $=id=>page.locator('#invest-'+id),tool=kind=>page.locator(`[data-invest-tool="${kind}"]`).last();
  const advance=async ms=>{await page.clock.runFor(30);await page.clock.fastForward(ms);await page.clock.runFor(30);};
  const state=()=>$('lab').evaluate(e=>({...e.dataset}));
@@ -166,10 +166,10 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
   for(const width of [1440,1024,850,768,680,390,320]){await page.setViewportSize({width,height:1100});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`expanded ${width}`);if(width===390)await capture('notebook-mobile');}
  });
  await t.test('asset failures keep controls safe and retry recovers without breaking other lessons',async()=>{
-  const p=await browser.newPage();const block=route=>route.abort();await p.route('**/investigation-apparatus.webp',block);await p.goto(url+'#unit-quiz');await p.waitForFunction(()=>document.querySelector('#invest-lab').dataset.ready==='error');assert.equal(await p.locator('#invest-take').isDisabled(),true);assert.equal(await p.locator('#invest-retry').isVisible(),true);assert.equal(await p.locator('#mix-reset').isEnabled(),true);await p.unroute('**/investigation-apparatus.webp',block);await p.locator('#invest-retry').click();await p.waitForFunction(()=>document.querySelector('#invest-lab').dataset.ready==='true');assert.equal(await p.locator('#invest-take').isEnabled(),true);await p.close();
+  const p=await browser.newPage();const block=route=>route.abort();await p.route('**/investigation-apparatus.webp',block);await p.goto(url+'#unit-quiz',{waitUntil:'domcontentloaded'});await p.waitForFunction(()=>document.querySelector('#invest-lab').dataset.ready==='error');assert.equal(await p.locator('#invest-take').isDisabled(),true);assert.equal(await p.locator('#invest-retry').isVisible(),true);assert.equal(await p.locator('#mix-reset').isEnabled(),true);await p.unroute('**/investigation-apparatus.webp',block);await p.locator('#invest-retry').click();await p.waitForFunction(()=>document.querySelector('#invest-lab').dataset.ready==='true');assert.equal(await p.locator('#invest-take').isEnabled(),true);await p.close();
  });
  await t.test('reduced motion and pointer cancellation leave a usable, clean activity',async()=>{
-  const p=await browser.newPage({reducedMotion:'reduce'});await p.clock.install({time:new Date('2026-10-28T00:00:00Z')});await p.goto(url+'#unit-quiz');await p.waitForFunction(()=>document.querySelector('#invest-lab').dataset.ready==='true');await p.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));await p.locator('#invest-take').click();await p.clock.fastForward(3500);await p.clock.runFor(40);assert.equal(await p.locator('#invest-lab').getAttribute('data-busy'),'false');
+  const p=await browser.newPage({reducedMotion:'reduce'});await p.clock.install({time:new Date('2026-10-28T00:00:00Z')});await p.goto(url+'#unit-quiz',{waitUntil:'domcontentloaded'});await p.waitForFunction(()=>document.querySelector('#invest-lab').dataset.ready==='true');await p.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));await p.locator('#invest-take').click();await p.clock.fastForward(3500);await p.clock.runFor(40);assert.equal(await p.locator('#invest-lab').getAttribute('data-busy'),'false');
   const reducedErrors=[];p.on('pageerror',error=>reducedErrors.push(String(error)));await p.locator('[data-invest-tool=filter]').hover();await p.mouse.down();await p.locator('[data-invest-tool=filter]').dispatchEvent('pointercancel',{pointerId:1});await p.mouse.up();assert.equal(await p.locator('#invest-lab').getAttribute('data-phase'),'raw');assert.equal(await p.locator('#invest-lab').getAttribute('data-busy'),'false');assert.deepEqual(reducedErrors,[]);await p.close();
   assert.deepEqual(errors,[]);
  });

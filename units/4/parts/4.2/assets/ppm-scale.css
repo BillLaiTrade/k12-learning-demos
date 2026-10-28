@@ -121,3 +121,9 @@
  #s5 .ppm-lens-caption strong {font-size:.56rem;}
  #s5 .ppm-lens-caption>span {font-size:.52rem;}
 }
+
+/* Keep the quantity and the action hint in separate spaces on narrow screens. */
+@media(max-width:1100px) {
+ #s5 .ppm-dish-hint {top:auto;bottom:0;left:calc(100% + 14px);gap:0;}
+ #s5 .ppm-dish-hint>svg,#s5 .ppm-hint-wide {display:none;}
+}
