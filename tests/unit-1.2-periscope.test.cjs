@@ -152,12 +152,18 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await expect(page.locator('[data-stage="1"]')).toBeEnabled();
     await setAngle(0,46);await expect(quiz).toHaveAttribute('data-completed','false,false,false');await expect(page.locator('[data-stage="1"]')).toBeDisabled();await firstPass();
   });
-  await t.test('故障任務要判斷鏡片並修復；不能只選答案通關',async()=>{
+  await t.test('修復任務只靠實際旋轉鏡片通關，沒有選擇題或延伸問題',async()=>{
     await page.locator('#periscope-pulse').click();await expect(quiz).toHaveAttribute('data-pulse-status','running');
     await page.locator('#periscope-next').click();await expect(quiz).toHaveAttribute('data-pulse-status','idle');await expect(page.locator('#periscope-light')).toBeEmpty();await expect(quiz).toHaveAttribute('data-phase','1');await expect(quiz).toHaveAttribute('data-view','sky');
-    await page.locator('[data-diagnosis="0"]').click();await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,false,false');
-    await drag(0,45);await page.locator('[data-diagnosis="1"]').click();await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,false,false');
-    await page.locator('[data-diagnosis="0"]').click();await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,true,false');
+    assert.equal(await page.locator('#periscope-question-1,[data-diagnosis],.periscope-next-lesson').count(),0);
+    await expect(page.locator('#periscope-task-copy')).not.toContainText('判斷');
+    await expect(page.locator('#periscope-feedback')).not.toContainText('判斷');
+    await quiz.screenshot({path:'/tmp/periscope-review/repair-desktop.png'});
+    await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,false,false');
+    await drag(0,39);await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,false,false');
+    await drag(0,45);await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,true,false');
+    await drag(0,46);await expect(quiz).toHaveAttribute('data-completed','true,false,false');await expect(page.locator('[data-stage="2"]')).toBeDisabled();
+    await drag(0,45);await page.locator('#periscope-check').click();await expect(quiz).toHaveAttribute('data-completed','true,true,false');
   });
   await t.test('反向訊號、原路重合、先預測後驗證；三階段完成',async()=>{
     await page.locator('#periscope-pulse').click();await expect(quiz).toHaveAttribute('data-pulse-status','running');

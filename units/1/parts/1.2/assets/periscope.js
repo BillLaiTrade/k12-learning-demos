@@ -6,7 +6,7 @@ if(root) {
   const $=s=>root.querySelector(s), $$=s=>[...root.querySelectorAll(s)];
   const svg=$('#periscope-scene'), canvas=$('#periscope-view'), ctx=canvas.getContext('2d',{alpha:false});
   const groups=[$('#periscope-mirror-0'),$('#periscope-mirror-1')];
-  const state={stage:0,angles:[38,51],done:[false,false,false],diagnosis:null,prediction:null,signal:false,verified:false,saved:[45,45]};
+  const state={stage:0,angles:[38,51],done:[false,false,false],prediction:null,signal:false,verified:false,saved:[45,45]};
   let scenePixels=null, lastViewKey='', pending=0, dragging=null;
   const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
   let pulse=null,pulseFrame=0,pulseEndTimer=0,pulseUnlockTimer=0,nextPulseAt=0,pulseCount=0;
@@ -169,8 +169,7 @@ if(root) {
     $('#periscope-view-copy').textContent=state.stage===2?'鏡片固定，保留剛才看見的景象作對照。':info.kind==='blocked'?'鏡子未把外界的光送進眼睛。看看光在哪裡被擋住。':info.blocked/(info.clear+info.blocked)>.3?'邊緣的暗區是管壁或有限鏡片造成的遮擋。':'試著微轉鏡片，觀察船、天空與海面如何移動。';
     $$('.periscope-steps button').forEach((b,i)=>{b.disabled=i>0&&!state.done[i-1];b.setAttribute('aria-selected',String(i===state.stage));b.tabIndex=i===state.stage?0:-1;b.dataset.complete=String(state.done[i]);});
     $('#periscope-panel').setAttribute('aria-labelledby',`periscope-tab-${state.stage}`);
-    for(let i=1;i<3;i++)$(`#periscope-question-${i}`).hidden=i!==state.stage;
-    $$('[data-diagnosis]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.diagnosis)===state.diagnosis)));
+    $('#periscope-question-2').hidden=state.stage!==2;
     $$('[data-prediction]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.prediction===state.prediction)));
     updatePulseControls();
     $('#periscope-signal').hidden=state.stage!==2;$('#periscope-signal').disabled=!state.prediction;$('#periscope-signal').setAttribute('aria-pressed',String(state.signal));$('#periscope-signal').textContent=state.signal?'關閉訊號光':'發送訊號光';
@@ -218,7 +217,6 @@ if(root) {
     g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end);g.addEventListener('lostpointercapture',()=>{dragging=null;});
     g.addEventListener('keydown',e=>{if(state.stage===2)return;let n=state.angles[i],step=e.shiftKey?2:.5;if(e.key==='ArrowLeft'||e.key==='ArrowDown')n-=step;else if(e.key==='ArrowRight'||e.key==='ArrowUp')n+=step;else if(e.key==='Home')n=OPTICS.minAngle;else if(e.key==='End')n=OPTICS.maxAngle;else return;e.preventDefault();setAngle(i,n);});
   });
-  $$('[data-diagnosis]').forEach(b=>b.addEventListener('click',()=>{invalidate();state.diagnosis=Number(b.dataset.diagnosis);render();}));
   $$('[data-prediction]').forEach(b=>b.addEventListener('click',()=>{invalidate();state.prediction=b.dataset.prediction;state.verified=false;state.signal=false;render();}));
   $('#periscope-pulse').addEventListener('click',emitPulse);
   $('#periscope-signal').addEventListener('click',()=>{if(!state.prediction)return;state.signal=!state.signal;if(state.signal)state.verified=true;render();});
@@ -227,15 +225,15 @@ if(root) {
     cancelPulse(true);state.stage=stage;state.signal=false;state.verified=false;
     const content=[
       ['我在潛水艇裡，怎麼看見海上的船？','先轉動鏡片，再從觀察窗找找船在哪裡。','任務一｜把船的駕駛艙調到觀察窗中央','拖曳鏡片端點旋轉。先試著觀察，需要時從觀察口追蹤視線，再修正鏡片。'],
-      ['剛才明明看見船，怎麼現在偏向天空了？','先判斷哪片鏡子被轉動，再把景象修回來。','任務二｜找出故障，讓船重新回到中央','先選擇你的判斷，再拖動鏡片修復；需要時從觀察口反向追蹤視線。'],
+      ['剛才明明看見船，怎麼現在偏向天空了？','轉動鏡片，試著把船重新找回來。','任務二｜把船重新調回觀察窗中央','拖曳鏡片端點，觀察景象怎麼移動；需要時追蹤目前視線，再調整鏡片。'],
       ['我能沿同一條路，把訊號送回船上嗎？','鏡片保持不動，先預測，再發送藍色訊號光。','任務三｜讓訊號沿原光路返回','暫以訊號光源替換眼睛；黃色是原入眼光線，藍光從同一位置反向發出。']
     ][stage];
     ['#periscope-student','#periscope-grandpa','#periscope-task-title','#periscope-task-copy'].forEach((id,i)=>$(id).textContent=content[i]);
     if(stage===0) {
       feedback('調整兩片鏡子，讓船的駕駛艙出現在觀察窗中央。');
     } else if(stage===1) {
-      state.angles=[Math.min(65,state.saved[0]+9),state.saved[1]];state.diagnosis=null;state.done[1]=false;state.done[2]=false;
-      feedback('先判斷哪片鏡子偏了，再修復；只碰巧看到船還不算完成。');
+      state.angles=[Math.min(65,state.saved[0]+9),state.saved[1]];state.done[1]=false;state.done[2]=false;
+      feedback('調整鏡片，讓船的駕駛艙重新回到觀察窗中央。');
     } else {state.angles=[...state.saved];state.prediction=null;state.done[2]=false;feedback('先選擇預測，再發送訊號，最後確認你的判斷。');}
     lastViewKey='';render();
   }
@@ -250,11 +248,9 @@ if(root) {
       if(!info.target){feedback('還沒對準船的駕駛艙。看看觀察窗：目前是天空、海面，還是被管壁擋住？','try');return;}
       state.saved=[...state.angles];state.done[0]=true;feedback('設計完成！小葵已看見船的駕駛艙。接著試著排除故障。','good');
     } else if(state.stage===1) {
-      if(state.diagnosis===null){feedback('先判斷哪片鏡子被轉動，再檢查修復結果。','try');return;}
-      if(state.diagnosis!==0){feedback('這次被轉動的鏡片與你的判斷不同。比較光從哪一處開始偏離，再試一次。','try');return;}
-      if(!info.target){feedback('已找出故障鏡片，還要把船的駕駛艙調回觀察窗中央。','try');return;}
+      if(!info.target){feedback('還沒對準，再調整鏡片，讓船的駕駛艙回到觀察窗中央。','try');return;}
       if(!returnSignal(state.angles).receiver){feedback('船已進入視野，再拖動鏡片讓駕駛艙回到中央，讓接下來的訊號也能回到船上。','try');return;}
-      state.saved=[...state.angles];state.done[1]=true;feedback('修復成功！上方鏡片偏轉，會把視線帶向天空或海面；偏得太多也會被管壁擋住。','good');
+      state.saved=[...state.angles];state.done[1]=true;feedback('修復成功！船已回到中央。鏡面角度改變，視線也會跟著改變。','good');
     } else {
       if(!state.prediction){feedback('先選擇一個預測，再發送訊號驗證。','try');return;}
       if(!state.verified){feedback('按「發送訊號光」，實際比較藍光與黃色原路線。','try');return;}
