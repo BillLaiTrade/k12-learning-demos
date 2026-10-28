@@ -38,6 +38,16 @@
 #s5 .ppm-reference-note {margin:8px 1px 18px;font-size:.71rem;color:#748072;line-height:1.75;}
 #s5 .ppm-definition {margin:18px 0;padding:14px 17px;border-left:3px solid #8bad8c;border-radius:0 9px 9px 0;background:#eef5eb;color:#416449;font-size:.9rem;}
 #s5 .ppm-definition b {color:#176b53;white-space:nowrap;}
+#s5 .ppm-bridge {margin:18px 0;padding:18px 20px;border:1px solid #dce4d4;border-radius:12px;background:#fcfbf6;color:#52684c;}
+#s5 .ppm-bridge h4 {margin:0 0 10px;color:#355d43;font-size:.9rem;line-height:1.6;}
+#s5 .ppm-bridge p {margin:9px 0;font-size:.82rem;line-height:1.85;}
+#s5 .ppm-bridge p:last-child {margin-bottom:0;}
+#s5 .ppm-bridge strong {color:#306346;font-weight:600;}
+#s5 .ppm-equivalence {white-space:nowrap;}
+#s5 .ppm-notations {margin:13px 0;border-top:1px solid #e3e8dc;font-size:.8rem;}
+#s5 .ppm-notations>div {display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 14px;padding:9px 2px;border-bottom:1px solid #e3e8dc;}
+#s5 .ppm-notations dt {color:#6e8068;}
+#s5 .ppm-notations dd {margin:0;color:#316348;font-weight:600;white-space:nowrap;}
 #s5 .ppm-formal {padding:17px 20px 15px;border:1px solid #cbddd0;border-radius:14px;background:linear-gradient(110deg,#f0f7ef,#fbfcf8);}
 #s5 .ppm-equation {display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:9px;margin-top:14px;font-size:.95rem;color:#375c43;}
 #s5 .ppm-equation .num {font-weight:700;padding-bottom:4px;}
@@ -74,6 +84,8 @@
  #s5 .ppm-scale-bar::after {content:"";position:absolute;inset:0;border:1px solid #e2efdb;border-top:0;}
 #s5 .ppm-scale-bar>span {font-size:8px;}
  #s5 .ppm-scale-bar {bottom:23%;}
+ #s5 .ppm-bridge {padding:14px 12px;}
+ #s5 .ppm-bridge p,#s5 .ppm-notations {font-size:.77rem;}
  #s5 .ppm-formal {padding:14px 10px;}
  #s5 .ppm-equation {font-size:.77rem;gap:3px;}
  #s5 .ppm-example {padding:14px;}
