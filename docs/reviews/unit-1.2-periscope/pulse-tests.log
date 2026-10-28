@@ -1,0 +1,57 @@
+▶ 1.2 three mirrors: scientific relationships, interaction and layout
+  ✔ surface normals and exact reflection agree at all three positions (1.324225ms)
+  ✔ appearance examples obey the stated object-position conditions (0.522938ms)
+  ✔ all three comparisons persist while every mirror and ray point is explored (8398.414194ms)
+  ✔ collapse, reopen, keyboard activation and repeated transitions recover correctly (645.607098ms)
+  ✔ approved layout hierarchy, ordering, geometry and assets remain readable at five widths (2365.432704ms)
+  ✔ touch, reduced-motion and adjacent activities work without script or HTTP errors (5558.372711ms)
+✔ 1.2 three mirrors: scientific relationships, interaction and layout (18335.543508ms)
+▶ 1.2 plane mirror observation and restoration
+  ✔ observations reveal the actual light path before the inferred image (5955.065152ms)
+  ✔ fixed pointer coordinates remove and restore repeatedly in every observation step (7729.549081ms)
+  ✔ keyboard operation and reset recover the complete object state (262.702644ms)
+  ✔ two reflected rays enter the observer and extend to the mirrored source point (30.23586ms)
+  ✔ touch restores at the same position and reduced motion retains explicit steps (5040.41363ms)
+  ✔ neighboring distance activity remains independent and assets load (180.969321ms)
+✔ 1.2 plane mirror observation and restoration (20602.768833ms)
+▶ 潛望鏡有限鏡面、管壁與反向傳播
+  ✔ 36×36 組鏡面角度：反射分量、有限尺寸及閉合管道 (33.72126ms)
+  ✔ 船、海面、天空、完全與局部遮擋；離軸視線不穿透管壁 (28.991055ms)
+  ✔ 提示光段逐段沿實際光路行進，長度不超過 110，沒有完整拖尾 (27.590095ms)
+  ✔ 441 條不同入眼方向的視線，各自獨立反向反射後回到眼睛 (11.963429ms)
+✔ 潛望鏡有限鏡面、管壁與反向傳播 (104.826787ms)
+▶ 潛望鏡實際操作、畫面與三階段評量
+  ✔ 初始狀態、未作答、未對準不通關；沒有角度滑桿 (2561.913867ms)
+  ✔ 兩片鏡子實際拖曳；天空／海面連續改變，偏太多會被擋 (8141.098963ms)
+  ✔ 觀察窗像素由獨立完整三維視線核對；暗邊確實來自遮擋 (772.294897ms)
+  ✔ 正確操作仍須光路順序正確；標籤拖放、點擊與修改會使通關失效 (2466.887129ms)
+  ✔ 故障任務要判斷鏡片並修復；不能只選答案通關 (3306.747133ms)
+  ✔ 反向訊號、原路重合、先預測後驗證；三階段與重設 (4848.150614ms)
+  ✔ 微調按鈕與拖曳共用角度，沒有滑桿 (629.098305ms)
+  ✔ 提示光只走一次，自動消失，快速連點不疊加、不延長 (3488.252991ms)
+  ✔ 拖動或微調立即收起提示光，後續重繪不留下舊路線 (6591.84211ms)
+  ✔ 給我提示同樣只發一次；輔助法線與遮擋標記也會收起 (9969.23323ms)
+  ✔ 減少動態只短暫呈現末端光段；重設取消舊動畫與計時器 (5538.62259ms)
+  ✔ 鍵盤邊界與取消拖曳不會留下卡住狀態 (1593.366092ms)
+  ✔ 1440／1280／1024／768／390 px 版面、素材與鄰區操作 (4115.247693ms)
+  ✔ 真實觸控端點拖曳與點擊填入，無頁面溢位 (5213.516862ms)
+  ✔ 離開頁面時先釋放 GPU 資源，再關閉繪圖器，不產生例外 (362.654276ms)
+✔ 潛望鏡實際操作、畫面與三階段評量 (65991.507558ms)
+▶ 1.2 reversible light reuses the reflection laboratory
+  ✔ independent reflection, front surface and reciprocal endpoint checks at every supported angle (2.19129ms)
+  ✔ section 02 keeps its actual drag and keyboard, with initial angle inherited (8291.244864ms)
+  ✔ actual device clicks independently traverse all four light states without a record step (4143.043418ms)
+  ✔ red, blue and simultaneous illumination all change the actual rendered scene (11580.501239ms)
+  ✔ dragging A changes angle without toggling either source; pointer cancellation and background clicks are inert (6160.440416ms)
+  ✔ keyboard switches, live angle controls and reset reflect the independent state (517.770494ms)
+  ✔ independent controls and device labels fit five widths (2751.971218ms)
+  ✔ real touch taps toggle the devices; fallback diagram and native switches remain usable (11690.173831ms)
+✔ 1.2 reversible light reuses the reflection laboratory (46591.69662ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 153064.219613

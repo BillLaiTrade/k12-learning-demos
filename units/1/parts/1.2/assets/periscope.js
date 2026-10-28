@@ -1,12 +1,16 @@
 import {OPTICS, mirror, viewRay, exteriorSample, observe, traceRay, returnSignal} from './periscope-optics.mjs';
+import {pathLength,pulseSegment} from './periscope-pulse.mjs';
 
 const root=document.querySelector('#unit-quiz');
 if(root) {
   const $=s=>root.querySelector(s), $$=s=>[...root.querySelectorAll(s)];
   const svg=$('#periscope-scene'), canvas=$('#periscope-view'), ctx=canvas.getContext('2d',{alpha:false});
   const groups=[$('#periscope-mirror-0'),$('#periscope-mirror-1')];
-  const state={stage:0,angles:[38,51],done:[false,false,false],order:[null,null],chip:null,diagnosis:null,prediction:null,path:false,hint:0,signal:false,verified:false,saved:[45,45]};
+  const state={stage:0,angles:[38,51],done:[false,false,false],order:[null,null],chip:null,diagnosis:null,prediction:null,hint:0,signal:false,verified:false,saved:[45,45]};
   let scenePixels=null, lastViewKey='', pending=0, dragging=null;
+  const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+  let pulse=null,pulseFrame=0,pulseEndTimer=0,pulseUnlockTimer=0,nextPulseAt=0,pulseCount=0;
+  const TRAVEL_MS=1400,HOLD_MS=300,FADE_MS=250,REST_MS=1050;
   const sceneImage=new Image();
   sceneImage.src=new URL('periscope/submarine-scene.webp?v=2',import.meta.url).href;
   sceneImage.onload=()=>{
@@ -52,7 +56,7 @@ if(root) {
       g.setAttribute('aria-valuenow',state.angles[i].toFixed(1));g.setAttribute('aria-valuetext',`鏡面方向 ${state.angles[i].toFixed(1)} 度，可用方向鍵微調`);
       g.setAttribute('aria-disabled',String(state.stage===2));g.setAttribute('tabindex',state.stage===2?'-1':'0');
     });
-    const ray=forwardRay(), marker=$('#periscope-block-marker');
+    const marker=$('#periscope-block-marker');
     marker.hidden=true;marker.setAttribute('hidden','');
     $('#periscope-normal').replaceChildren();
     $('#periscope-signal-source').toggleAttribute('hidden',state.stage!==2);
@@ -63,19 +67,71 @@ if(root) {
       else $('#periscope-light').replaceChildren();
     } else {
       $('#periscope-recorded').replaceChildren();
-      if(state.path) {
-        drawPath($('#periscope-light'),ray.points,'#ffe471');
-        if(ray.kind==='blocked') {marker.removeAttribute('hidden');marker.hidden=false;marker.setAttribute('transform',`translate(${point(ray.points.at(-1))})`);}
-      } else $('#periscope-light').replaceChildren();
-      if(state.hint>=2) {
-        const hit=ray.hits.at(-1);
-        if(hit) {
-          const n=document.createElementNS('http://www.w3.org/2000/svg','path'),p=hit.point,v=hit.normal;
-          n.setAttribute('d',`M${p[0]-v[0]*65},${p[1]-v[1]*65}L${p[0]+v[0]*65},${p[1]+v[1]*65}`);n.setAttribute('stroke','#eafff9');n.setAttribute('stroke-width','3');n.setAttribute('stroke-dasharray','8 6');$('#periscope-normal').append(n);
-        }
+      if(pulse)drawPulse();
+      else $('#periscope-light').replaceChildren();
+    }
+  }
+  function updatePulseControls() {
+    const busy=Boolean(pulse),waiting=performance.now()<nextPulseAt;
+    root.dataset.pulseStatus=busy?'running':waiting?'cooldown':'idle';
+    const button=$('#periscope-pulse');
+    button.hidden=state.stage===2;button.disabled=busy||waiting;
+    button.textContent=busy?'✦ 提示光行進中':waiting?'✦ 稍後可再試':'✦ 發出提示光';
+    $('#periscope-hint').disabled=state.stage!==2&&(busy||waiting);
+    $('#periscope-pulse-note').hidden=state.stage===2;
+    $('#periscope-pulse-note').textContent=busy?'這束光只走一次，看看它在哪裡轉彎或被擋住。':waiting?'提示光已結束。先調整鏡片，再試一次。':'發出一束提示光，觀察後再調整；光走完就消失。';
+  }
+  function cancelPulse(reset=false) {
+    cancelAnimationFrame(pulseFrame);clearTimeout(pulseEndTimer);pulse=null;
+    if(reset){clearTimeout(pulseUnlockTimer);nextPulseAt=0;}
+    if(state.stage!==2 || reset){
+      const light=$('#periscope-light');light.replaceChildren();light.style.opacity='1';delete light.dataset.progress;
+      $('#periscope-normal').replaceChildren();$('#periscope-block-marker').setAttribute('hidden','');
+    }
+    updatePulseControls();
+  }
+  function drawPulse() {
+    if(!pulse || state.stage===2)return;
+    const {ray,progress,opacity,showNormal}=pulse,light=$('#periscope-light');
+    const points=pulseSegment(ray.points,progress);
+    drawPath(light,points,'#ffe471');light.style.opacity=String(opacity);light.dataset.progress=String(progress);
+    const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    dot.setAttribute('cx',points.at(-1)[0]);dot.setAttribute('cy',points.at(-1)[1]);dot.setAttribute('r','5');dot.setAttribute('fill','#fff6c7');light.append(dot);
+    const marker=$('#periscope-block-marker');
+    marker.setAttribute('hidden','');
+    if(progress===1 && ray.kind==='blocked') {marker.removeAttribute('hidden');marker.style.opacity=String(opacity);marker.setAttribute('transform',`translate(${point(ray.points.at(-1))})`);}
+    $('#periscope-normal').replaceChildren();
+    const hit=ray.hits.at(-1);
+    if(showNormal && hit) {
+      const lastHitDistance=pathLength(ray.points.slice(0,ray.points.findIndex(p=>Math.hypot(p[0]-hit.point[0],p[1]-hit.point[1])<1e-5)+1));
+      if(progress*pathLength(ray.points)>=lastHitDistance) {
+        const n=document.createElementNS('http://www.w3.org/2000/svg','path'),p=hit.point,v=hit.normal;
+        n.setAttribute('d',`M${p[0]-v[0]*65},${p[1]-v[1]*65}L${p[0]+v[0]*65},${p[1]+v[1]*65}`);n.setAttribute('stroke','#eafff9');n.setAttribute('stroke-width','3');n.setAttribute('stroke-dasharray','8 6');n.setAttribute('opacity',opacity);$('#periscope-normal').append(n);
       }
     }
   }
+  function emitPulse() {
+    const now=performance.now();
+    if(state.stage===2 || pulse || dragging || document.hidden || now<nextPulseAt)return;
+    const duration=reducedMotion.matches?700:TRAVEL_MS+HOLD_MS+FADE_MS;
+    const shot={ray:forwardRay(),progress:reducedMotion.matches?1:0,opacity:1,showNormal:state.hint>=2};
+    pulse=shot;nextPulseAt=now+duration+REST_MS;root.dataset.pulseId=String(++pulseCount);
+    render();
+    const animate=time=>{
+      if(pulse!==shot)return;
+      const elapsed=Math.max(0,time-now);
+      shot.progress=Math.min(1,elapsed/TRAVEL_MS);
+      shot.opacity=Math.max(0,1-Math.max(0,elapsed-TRAVEL_MS-HOLD_MS)/FADE_MS);
+      drawPulse();
+      if(elapsed<duration)pulseFrame=requestAnimationFrame(animate);
+    };
+    if(!reducedMotion.matches)pulseFrame=requestAnimationFrame(animate);
+    pulseEndTimer=setTimeout(()=>{if(pulse===shot)cancelPulse();},duration);
+    pulseUnlockTimer=setTimeout(updatePulseControls,duration+REST_MS);
+  }
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelPulse();else updatePulseControls();});
+  reducedMotion.addEventListener('change',()=>{if(pulse)cancelPulse();});
+  window.addEventListener('pagehide',()=>cancelPulse(true));
   function renderView() {
     if(!scenePixels)return;
     const key=state.angles.join(',');if(key===lastViewKey)return;lastViewKey=key;
@@ -117,7 +173,7 @@ if(root) {
   function render() {
     pending=0;
     const info=observe(state.angles), messages={blocked:'視線被管壁或鏡背擋住',boat:info.target?'船的駕駛艙已在中央':'看見船了，再調整一下',sky:'目前主要看見天空',sea:'目前主要看見海面'};
-    root.dataset.phase=String(state.stage);root.dataset.angles=state.angles.join(',');root.dataset.view=info.kind;root.dataset.target=String(info.target);root.dataset.completed=state.done.join(',');root.dataset.path=String(state.path);root.dataset.signal=String(state.signal);
+    root.dataset.phase=String(state.stage);root.dataset.angles=state.angles.join(',');root.dataset.view=info.kind;root.dataset.target=String(info.target);root.dataset.completed=state.done.join(',');root.dataset.signal=String(state.signal);
     $('#periscope-view-state').textContent=messages[info.kind];$('#periscope-view-state').dataset.kind=info.kind;
     $('#periscope-view').setAttribute('aria-label',messages[info.kind]+'。'+(info.blocked?'部分視線受到遮擋。':''));
     $('#periscope-view-copy').textContent=state.stage===2?'鏡片固定，保留剛才看見的景象作對照。':info.kind==='blocked'?'鏡子未把外界的光送進眼睛。看看光在哪裡被擋住。':info.blocked/(info.clear+info.blocked)>.3?'邊緣的暗區是管壁或有限鏡片造成的遮擋。':'試著微轉鏡片，觀察船、天空與海面如何移動。';
@@ -128,7 +184,7 @@ if(root) {
     $$('.periscope-chip').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.chip)===state.chip)));
     $$('[data-diagnosis]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.diagnosis)===state.diagnosis)));
     $$('[data-prediction]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.prediction===state.prediction)));
-    $('#periscope-fine').hidden=state.stage===2;$('#periscope-toggle-path').hidden=state.stage===2;$('#periscope-toggle-path').setAttribute('aria-pressed',String(state.path));$('#periscope-toggle-path').textContent=state.path?'◎ 隱藏光路':'◎ 顯示光路';
+    $('#periscope-fine').hidden=state.stage===2;updatePulseControls();
     $('#periscope-signal').hidden=state.stage!==2;$('#periscope-signal').disabled=!state.prediction;$('#periscope-signal').setAttribute('aria-pressed',String(state.signal));$('#periscope-signal').textContent=state.signal?'關閉訊號光':'發送訊號光';
     $('#periscope-reset-stage').textContent=['↻ 重新組裝','↻ 重現故障','↻ 重做預測'][state.stage];
     $('#periscope-check').textContent=['檢查我的設計','檢查修復結果','確認我的預測'][state.stage];
@@ -149,14 +205,14 @@ if(root) {
     if(state.stage===2)return;
     const n=Math.round(Math.max(OPTICS.minAngle,Math.min(OPTICS.maxAngle,value))*10)/10;
     if(n===state.angles[i])return;
-    invalidate();state.angles[i]=n;state.verified=false;schedule();
+    cancelPulse();invalidate();state.angles[i]=n;state.verified=false;schedule();
   }
   function svgPoint(e) {
     const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse());return [p.x,p.y];
   }
   groups.forEach((g,i)=>{
     g.addEventListener('pointerdown',e=>{
-      if(state.stage===2||e.button>0)return;e.preventDefault();
+      if(state.stage===2||e.button>0)return;e.preventDefault();cancelPulse();
       const p=svgPoint(e),c=i===0?OPTICS.upper:OPTICS.lower;
       const initial=Math.atan2(p[1]-c[1],p[0]-c[0])*180/Math.PI;
       dragging={i,id:e.pointerId,start:initial,angle:state.angles[i]};g.setPointerCapture(e.pointerId);g.focus({preventScroll:true});
@@ -190,21 +246,21 @@ if(root) {
   $('#periscope-clear-order').addEventListener('click',()=>{invalidate();state.order=[null,null];state.chip=null;render();});
   $$('[data-diagnosis]').forEach(b=>b.addEventListener('click',()=>{invalidate();state.diagnosis=Number(b.dataset.diagnosis);render();}));
   $$('[data-prediction]').forEach(b=>b.addEventListener('click',()=>{invalidate();state.prediction=b.dataset.prediction;state.verified=false;state.signal=false;render();}));
-  $('#periscope-toggle-path').addEventListener('click',()=>{state.path=!state.path;render();});
+  $('#periscope-pulse').addEventListener('click',emitPulse);
   const hints=[
     ['先讓眼睛收到下方鏡片反射的光，再觀察上方鏡片把視線帶向哪裡。','看天空或海面時，外界光路仍接通；全暗則先檢查視線有沒有撞上管壁。','沿法線比較入射與反射方向。黃色叉號是這條示例光線被擋住的位置。'],
     ['故障前，下方鏡片已把光送進眼睛。先比較光路從哪一處開始偏離。','法線與鏡面垂直。每一處反射都要讓入射角等於反射角。','只剩天空不代表光消失了，而是看向了另一個方向。'],
     ['將傳播方向反過來，入射線與反射線的角色會交換。','鏡子固定時，同一反射點兩側的角度仍相等。','藍光由原本眼睛的位置出發；比較它和黃色原路線是否完整重合。']
   ];
-  $('#periscope-hint').addEventListener('click',()=>{state.hint=Math.min(3,state.hint+1);$('#periscope-hint-copy').hidden=false;$('#periscope-hint-copy').textContent=hints[state.stage][state.hint-1];if(state.stage!==2)state.path=true;render();});
+  $('#periscope-hint').addEventListener('click',()=>{state.hint=Math.min(3,state.hint+1);$('#periscope-hint-copy').hidden=false;$('#periscope-hint-copy').textContent=hints[state.stage][state.hint-1];if(state.stage!==2)emitPulse();render();});
   $('#periscope-signal').addEventListener('click',()=>{if(!state.prediction)return;state.signal=!state.signal;if(state.signal)state.verified=true;render();});
   function enterStage(stage,reset=false) {
     if(stage>0&&!state.done[stage-1])return;
-    state.stage=stage;state.path=false;state.hint=0;state.signal=false;state.verified=false;
+    cancelPulse(true);state.stage=stage;state.hint=0;state.signal=false;state.verified=false;
     $('#periscope-hint-copy').hidden=true;
     const content=[
-      ['我在潛水艇裡，怎麼看見海上的船？','先轉動鏡片，再從觀察窗找找船在哪裡。','任務一｜把船的駕駛艙調到觀察窗中央','拖曳鏡片端點旋轉。先試著觀察，需要時再顯示輔助光路。'],
-      ['剛才明明看見船，怎麼現在偏向天空了？','先判斷哪片鏡子被轉動，再把景象修回來。','任務二｜找出故障，讓船重新回到中央','先選擇你的判斷，再拖動鏡片修復；需要時可顯示光路。'],
+      ['我在潛水艇裡，怎麼看見海上的船？','先轉動鏡片，再從觀察窗找找船在哪裡。','任務一｜把船的駕駛艙調到觀察窗中央','拖曳鏡片端點旋轉。先試著觀察，需要時發出一束提示光，觀察後再調整。'],
+      ['剛才明明看見船，怎麼現在偏向天空了？','先判斷哪片鏡子被轉動，再把景象修回來。','任務二｜找出故障，讓船重新回到中央','先選擇你的判斷，再拖動鏡片修復；需要時可發出一束提示光。'],
       ['我能沿同一條路，把訊號送回船上嗎？','鏡片保持不動，先預測，再發送藍色訊號光。','任務三｜讓訊號沿原光路返回','暫以訊號光源替換眼睛；黃色是原入眼光線，藍光從同一位置反向發出。']
     ][stage];
     ['#periscope-student','#periscope-grandpa','#periscope-task-title','#periscope-task-copy'].forEach((id,i)=>$(id).textContent=content[i]);

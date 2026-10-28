@@ -18,3 +18,5 @@
 .periscope-steps button span{width:23px}
 .periscope-fine{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;margin-top:10px;color:var(--muted);font-size:.78rem}.periscope-fine>div{display:flex;align-items:center;gap:6px}.periscope-fine button{display:grid;place-items:center;min-width:40px;min-height:40px;border:1px solid #cbd8d2;border-radius:9px;background:#fff;color:#2d6551;font-size:1.15rem}
 @media(max-width:600px){.periscope-order{display:grid;grid-template-columns:30px 10px minmax(0,1fr) 10px minmax(0,1fr) 10px 38px;gap:3px}.periscope-order .path-end{min-width:0;padding:8px 3px}.periscope-slot{min-width:0;width:100%;padding:6px 2px;font-size:.73rem}.periscope-fine{gap:7px 11px}.periscope-fine>span{flex-basis:100%}}
+
+.periscope-controls button:disabled{cursor:default;background:#f1f4ef;color:#7b8d83;border-color:#d9e1d9}.periscope-pulse-note{margin:9px 0 0;color:#557465;font-size:.82rem}.periscope-path circle{pointer-events:none}
