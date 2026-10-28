@@ -20,7 +20,8 @@ export function grainPose(i){
   return poseCache[i]={sx,sy,rx:0,ry:0,rz:0};
 }
 export const WORLD_WIDTH_MM = 360;
-export const LENS_FIELD_MM = 3.6;
+// A common wide field preserves the whole portion and its difference in amount.
+export const LENS_FIELD_MM = 36;
 export const WATER = { radiusMm:55, volumeMm3:1000000, heightMm:1000000/(Math.PI*55**2) };
 export const SAMPLES = {
   gram:{massMg:1000,x:43,label:'1 克'},

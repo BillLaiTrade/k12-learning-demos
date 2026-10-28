@@ -1,16 +1,16 @@
 import * as THREE from 'three';
 import {RoomEnvironment} from '../../../../../parts/3.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
-import {DENSITY_MG_MM3,GRAIN_VOLUME_MM3,WORLD_WIDTH_MM,LENS_FIELD_MM,WATER,SAMPLES,sampleState,grainPositions,grainPose,scaleBarPixels,magnification} from './ppm-scale-state.js?v=magnifier-4';
+import {DENSITY_MG_MM3,GRAIN_VOLUME_MM3,WORLD_WIDTH_MM,LENS_FIELD_MM,WATER,SAMPLES,sampleState,grainPositions,grainPose,scaleBarPixels,magnification} from './ppm-scale-state.js?v=amount-5';
 import {sugarCrystalTriangles} from './ppm-crystal.js?v=realism-3';
 const root=document.getElementById('ppm-lab'),stage=document.getElementById('ppm-scale-scene'),canvas=document.getElementById('ppm-scale-canvas');
 const lens=document.getElementById('ppm-lens'),lensCanvas=document.getElementById('ppm-lens-canvas'),live=document.getElementById('ppm-status');
 const selects=[...document.querySelectorAll('[data-ppm-sample]')];
 let key='milligram',opened=false,view=null,disposed=false,cleanupFailed=()=>{},drag=null,pendingFrame=0;
 const handle=document.getElementById('ppm-lens-handle');
-const position={x:.79,y:.33},anchors={};
+const dock={x:.79,y:.38},position={...dock},anchors={},guide=document.getElementById('ppm-origin-guide');
 const formatted=n=>n.toLocaleString('en-US',{maximumFractionDigits:4});
 function place(x,y){
-  const w=stage.clientWidth,h=stage.clientHeight,d=lens.offsetWidth||w*.24;
+  const w=stage.clientWidth,h=stage.clientHeight,d=lens.offsetWidth||w*.31;
   position.x=Math.max(d*.66+4,Math.min(w-d/2-4,x*w))/w;
   position.y=Math.max(d/2+4,Math.min(h-d*.60-2,y*h))/h;
   lens.style.left=`${position.x*100}%`;lens.style.top=`${position.y*100}%`;
@@ -19,15 +19,15 @@ function place(x,y){
 function update(){
   const s=sampleState(key);root.dataset.sample=key;root.dataset.ppm=String(s.ppm);root.dataset.totalMg=String(s.totalMg);root.dataset.solventMg=String(s.solventMg);
   root.dataset.solidVolumeMm3=String(s.solidVolumeMm3);root.dataset.grainCount=String(s.grainCount);root.dataset.density=String(DENSITY_MG_MM3);
-  root.dataset.lensOpen=String(opened);lens.hidden=root.dataset.ready!=='true';lens.classList.toggle('is-observing',opened);
+  root.dataset.lensOpen=String(opened);lens.hidden=root.dataset.ready!=='true';lens.classList.toggle('is-observing',opened);guide.toggleAttribute('hidden',!opened||root.dataset.ready!=='true');
   for(const b of selects){b.setAttribute('aria-pressed',String(b.dataset.ppmSample===key));}
-  const fields={mass:s.label,numerator:`${formatted(s.massMg)} 毫克`,ppm:`${formatted(s.ppm)} ppm`,percent:`＝ ${formatted(s.percent)}%`,'lens-title':opened?`${s.label}糖`:'放大鏡'};
+  const fields={mass:s.label,numerator:`${formatted(s.massMg)} 毫克`,ppm:`${formatted(s.ppm)} ppm`,percent:`＝ ${formatted(s.percent)}%`,'lens-title':opened?`${s.label}糖・整份`:'放大看份量'};
   for(const node of document.querySelectorAll('[data-ppm]'))if(node.dataset.ppm in fields)node.textContent=fields[node.dataset.ppm];
   place(position.x,position.y);view?.draw(key,opened,position);
 }
-function choose(next){if(!SAMPLES[next])return;key=next;opened=root.dataset.ready==='true';if(opened&&anchors[key])place(anchors[key].x,anchors[key].y);update();live.textContent=`放大鏡移到${SAMPLES[key].label}糖。每1公斤溶液含此糖量，濃度為${formatted(sampleState(key).ppm)} ppm。`;}
+function choose(next){if(!SAMPLES[next])return;key=next;opened=root.dataset.ready==='true';if(opened)place(dock.x,dock.y);update();live.textContent=`放大鏡呈現整份${SAMPLES[key].label}糖，可對照原糖碟和整杯水。每1公斤溶液含此糖量，濃度為${formatted(sampleState(key).ppm)} ppm。`;}
 selects.forEach(b=>b.addEventListener('click',()=>choose(b.dataset.ppmSample)));
-function park(){opened=false;place(.79,.33);update();}
+function park(){opened=false;place(dock.x,dock.y);update();}
 function inspectPosition(){
   const nearest=Object.keys(anchors).sort((a,b)=>Math.hypot((position.x-anchors[a].x)*stage.clientWidth,(position.y-anchors[a].y)*stage.clientHeight)-Math.hypot((position.x-anchors[b].x)*stage.clientWidth,(position.y-anchors[b].y)*stage.clientHeight))[0];
   if(!nearest)return;
@@ -37,7 +37,7 @@ function inspectPosition(){
 }
 lens.addEventListener('pointerdown',e=>{if(e.button!==0||root.dataset.ready!=='true')return;e.preventDefault();handle.focus({preventScroll:true});drag={id:e.pointerId,x:e.clientX,y:e.clientY,startX:position.x,startY:position.y};lens.setPointerCapture(e.pointerId);lens.classList.add('is-dragging');});
 lens.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;place(drag.startX+(e.clientX-drag.x)/stage.clientWidth,drag.startY+(e.clientY-drag.y)/stage.clientHeight);if(!pendingFrame)pendingFrame=requestAnimationFrame(()=>{pendingFrame=0;inspectPosition();});});
-function endDrag(e){if(!drag||e.pointerId!==drag.id)return;drag=null;lens.classList.remove('is-dragging');if(pendingFrame){cancelAnimationFrame(pendingFrame);pendingFrame=0;}inspectPosition();if(opened)choose(key);}
+function endDrag(e){if(!drag||e.pointerId!==drag.id)return;drag=null;lens.classList.remove('is-dragging');if(pendingFrame){cancelAnimationFrame(pendingFrame);pendingFrame=0;}inspectPosition();if(opened)choose(key);else park();}
 lens.addEventListener('pointerup',endDrag);
 lens.addEventListener('lostpointercapture',endDrag);
 lens.addEventListener('pointercancel',()=>{drag=null;lens.classList.remove('is-dragging');if(pendingFrame){cancelAnimationFrame(pendingFrame);pendingFrame=0;}park();});
@@ -57,7 +57,7 @@ async function initialize(){
   for(const s of [scene,macro]){s.environmentIntensity=.65;s.add(new THREE.HemisphereLight(0xfffaed,0xb1a18d,.8));const light=new THREE.DirectionalLight(0xfff9ee,2);light.position.set(-120,300,220);light.castShadow=true;light.shadow.mapSize.set(1024,1024);const extent=s===macro?22:200;light.shadow.camera.left=light.shadow.camera.bottom=-extent;light.shadow.camera.right=light.shadow.camera.top=extent;light.shadow.camera.near=1;light.shadow.camera.far=1000;light.shadow.bias=-.00002;light.shadow.normalBias=.002;s.add(light);const fill=new THREE.DirectionalLight(0xeaf3ff,1);fill.position.set(200,160,-100);s.add(fill);}
   const background=await new THREE.TextureLoader().loadAsync(new URL('./ppm-table.webp',import.meta.url).href);background.colorSpace=THREE.SRGBColorSpace;scene.background=background;const releaseEarly=cleanupFailed;cleanupFailed=()=>{background.dispose();releaseEarly();};
   const camera=new THREE.OrthographicCamera(-180,180,120,-120,.1,2000);camera.position.set(0,258,700);camera.lookAt(0,68,0);camera.updateMatrixWorld();
-  const macroCamera=new THREE.OrthographicCamera(-1.8,1.8,1.8,-1.8,.1,2000);
+  const macroCamera=new THREE.OrthographicCamera(-18,18,18,-18,.1,2000);
   // Isolated photographic glass, mapped to the calibrated vessel dimensions.
   // The water itself remains the measured 3D cylinder, not image-generated pixels.
   const cupTexture=await new THREE.TextureLoader().loadAsync(new URL('./concentration-beaker.webp',import.meta.url).href);cupTexture.colorSpace=THREE.SRGBColorSpace;cupTexture.repeat.set(410/1536,504/1024);cupTexture.offset.set(807/1536,(1024-208-504)/1024);
@@ -91,7 +91,7 @@ async function initialize(){
   const anchor=(x,y,z)=>{const a=new THREE.Vector3(x,y,z).project(camera);return{x:(a.x+1)*50,y:(1-a.y)*50};};
   for(const [id,s] of Object.entries(SAMPLES)){const b=document.getElementById(id==='gram'?'ppm-gram':'ppm-milligram'),pos=anchor(s.x,1.8,0);b.style.left=`${pos.x}%`;b.style.top=`${pos.y-7}%`;}
   const waterAnchor=anchor(-96,0,0);document.getElementById('ppm-water-label').style.left=`${waterAnchor.x}%`;document.getElementById('ppm-water-label').style.top=`${waterAnchor.y+6}%`;
-  for(const [id,s] of Object.entries(SAMPLES)){const focusY=1.8+(models[id].height-1.8)/2,pos=anchor(s.x,focusY,0);anchors[id]={x:pos.x/100,y:pos.y/100};}
+  for(const [id,s] of Object.entries(SAMPLES)){const focusY=1.8+(models[id].height-1.8)/2,pos=anchor(s.x,focusY,0);anchors[id]={x:pos.x/100,y:pos.y/100};root.dataset[id+'AnchorX']=String(pos.x/100);root.dataset[id+'AnchorY']=String(pos.y/100);}
   root.dataset.waterVolumeMm3=String(Math.PI*WATER.radiusMm**2*WATER.heightMm);root.dataset.grainGeometryVolume=String(signedVolume(grainGeo));root.dataset.waterDiameterMm=String(WATER.radiusMm*2);
   let previous=null,lastWidth=0;
   function draw(next,isOpen,position){
@@ -100,8 +100,13 @@ async function initialize(){
     if(!isOpen)return;
     if(previous!==next){if(previous)macro.remove(models[previous].macro);macro.add(models[next].macro);previous=next;}
     const size=lensCanvas.parentElement.clientWidth,field=LENS_FIELD_MM,focusY=1.8+(models[next].height-1.8)/2;
-    macroCamera.left=macroCamera.bottom=-field/2;macroCamera.right=macroCamera.top=field/2;macroCamera.updateProjectionMatrix();const dx=(position.x-anchors[next].x)*WORLD_WIDTH_MM,dy=-(position.y-anchors[next].y)*WORLD_WIDTH_MM*2/3,up=new THREE.Vector3(0,1,0).applyQuaternion(camera.quaternion),target=new THREE.Vector3(dx,focusY,0).addScaledVector(up,dy);macroCamera.position.copy(target).add(new THREE.Vector3(0,190,700));macroCamera.lookAt(target);macroCamera.updateMatrixWorld();root.dataset.inspectionOffsetX=String(dx);root.dataset.inspectionOffsetY=String(dy);zoomRenderer.setSize(size,size,false);zoomRenderer.render(macro,macroCamera);
-    const barMm=1,bar=scaleBarPixels(barMm,field,size);document.getElementById('ppm-scale-bar').style.width=`${bar}px`;document.getElementById('ppm-scale-bar-label').textContent=`${barMm} mm`;
+    // The lens always frames the entire selected portion. Its location is a
+    // callout, linked to the unaltered original; it never crops into crystals.
+    macroCamera.left=macroCamera.bottom=-field/2;macroCamera.right=macroCamera.top=field/2;macroCamera.updateProjectionMatrix();macroCamera.position.set(0,focusY+190,700);macroCamera.lookAt(0,focusY,0);macroCamera.updateMatrixWorld();root.dataset.inspectionOffsetX='0';root.dataset.inspectionOffsetY='0';zoomRenderer.setSize(size,size,false);zoomRenderer.render(macro,macroCamera);
+    const h=stage.clientHeight,source=anchors[next],cx=position.x*width,cy=position.y*h,sx=source.x*width,sy=source.y*h,r=lens.offsetWidth/2,dist=Math.hypot(sx-cx,sy-cy)||1;
+    guide.setAttribute('viewBox',`0 0 ${width} ${h}`);const line=guide.querySelector('line'),circle=guide.querySelector('circle');for(const [attr,value] of Object.entries({x1:sx,y1:sy,x2:cx+(sx-cx)/dist*r,y2:cy+(sy-cy)/dist*r}))line.setAttribute(attr,String(value));circle.setAttribute('cx',String(sx));circle.setAttribute('cy',String(sy));
+    root.dataset.wholePortion='true';
+    const barMm=10,bar=scaleBarPixels(barMm,field,size);document.getElementById('ppm-scale-bar').style.width=`${bar}px`;document.getElementById('ppm-scale-bar-label').textContent='1 cm';
     const zoom=magnification(size,field,width);document.getElementById('ppm-zoom-factor').textContent=`畫面放大 ${formatted(Math.round(zoom*10)/10)} 倍`;
     root.dataset.lensFieldMm=String(field);root.dataset.scaleBarMm=String(barMm);root.dataset.scaleBarPixels=String(bar);root.dataset.zoom=String(zoom);
   }
