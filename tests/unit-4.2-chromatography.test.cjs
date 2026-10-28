@@ -40,9 +40,9 @@ test('4.2 hands-on chromatography: science, controls and approved layout', { tim
   };
   await t.test('qualitative model preserves solvent/spot/band relationships for both samples',async()=>{
     const results=await page.evaluate(async()=>{
-      const m=await import('./assets/chromatography-state.js?v=lab-1');
+      const m=await import('./assets/chromatography-state.js?v=wicking-2');
       const states=[];
-      for(const ink of ['green','dark'])for(const top of [.24,.258,.27])for(let tick=0;tick<=120;tick++)states.push(m.chromatographyState(tick/10,top,ink));
+      for(const ink of ['green','dark'])for(const top of [.24,.258,.27])for(let tick=0;tick<=240;tick++)states.push(m.chromatographyState(tick/10,top,ink));
       return {states,dry:m.placement(.15),valid:m.placement(.258),spill:m.placement(.34),initial:m.chromatographyState(0)};
     });
     assert.equal(results.dry.kind,'dry');assert.equal(results.valid.kind,'valid');assert.equal(results.spill.kind,'spilled');
@@ -65,21 +65,50 @@ test('4.2 hands-on chromatography: science, controls and approved layout', { tim
   await t.test('sample button starts a real continuous separation and holds its final result',async()=>{
     await choose('green');assert.equal((await data()).mode,'running');
     const first=await lab.screenshot();await advance(2500);const early=await data();const second=await lab.screenshot();
-    assert.notDeepEqual(first,second);assert.ok(early.progress>0);assert.ok(early.front<early.baseline);
-    await advance(4000);const middle=await data();assert.ok(middle.front<early.front);
-    for(let i=0;i<middle.bands.length;i++)assert.ok(middle.bands[i]<early.bands[i]);
-    await advance(6500);const end=await data();assert.equal(end.mode,'complete');assert.equal(end.progress,1);
+    assert.notDeepEqual(first,second);assert.ok(early.progress>0);assert.ok(early.front>early.baseline);assert.equal(early.bands.length,0,'solvent has not reached ink yet');
+    await advance(8000);const middle=await data();assert.ok(middle.front<early.front);
+    assert.equal(middle.contact,'true');assert.equal(middle.bands.length,2);
+    assert.ok(middle.bands.every(y=>y<middle.baseline));
+    await advance(15000);const end=await data();assert.equal(end.mode,'complete');assert.equal(end.progress,1);
     assert.equal(end.bands.length,2);assert.ok(end.baseline<end.liquid);assert.ok(end.bottom>end.liquid);
     for(const y of end.bands){assert.ok(y>end.front);assert.ok(y<end.baseline);}
     await advance(1000);assert.deepEqual(await data(),end);
   });
+  await t.test('front contact, mixed plume, and resolving bands remain visible for distinct observation intervals',async()=>{
+    await choose('green');
+    await advance(3000);let s=await data();
+    assert.equal(s.contact,'false');assert.equal(s.phase,'approaching');assert.equal(s.bands.length,0);
+    assert.equal(Number(s.originOpacity),1);
+    await lab.screenshot({path:'/tmp/chrom-slow-03-approach.png'});
+    await advance(2000);s=await data();
+    assert.equal(s.contact,'true');assert.equal(s.phase,'wicking');assert.ok(Number(s.spread)>0);
+    assert.equal(Number(s.separation),0);assert.ok(Number(s.originOpacity)>.9);
+    await lab.screenshot({path:'/tmp/chrom-slow-05-contact.png'});
+    await advance(2500);s=await data();assert.equal(s.phase,'wicking');assert.ok(Number(s.spread)>.7);
+    assert.equal(Number(s.separation),0);
+    const plume=await lab.screenshot({path:'/tmp/chrom-slow-075-plume.png'});
+    await advance(6500);s=await data();assert.equal(s.phase,'separating');
+    assert.ok(Number(s.separation)>.4 && Number(s.separation)<1);
+    const resolving=await lab.screenshot({path:'/tmp/chrom-slow-14-separate.png'});
+    assert.notDeepEqual(plume,resolving);
+    await advance(10500);s=await data();assert.equal(s.mode,'complete');assert.equal(Number(s.originOpacity),.14);
+    await lab.screenshot({path:'/tmp/chrom-slow-24-result.png'});
+    const color=await page.locator('#chrom-canvas').evaluate(canvas=>{
+      const c=canvas.getContext('2d'),base=.6408*1024,x=.682*1536;
+      const chroma=(cx,cy)=>{const d=c.getImageData(Math.round(cx)-3,Math.round(cy)-2,7,5).data;let n=0;for(let i=0;i<d.length;i+=4)n+=d[i+1]-d[i];return n/(d.length/4);};
+      return {origin:chroma(x,base+2)-chroma(x+44,base+2),tail:chroma(x,base-35)-chroma(x+44,base-35)};
+    });
+    assert.ok(color.origin>3,'rendered origin must retain green pigment, not merely a gray baseline');
+    assert.ok(color.tail>1,'rendered migration path must retain a faint colored trace');
+    await fresh();assert.equal((await data()).progress,0);assert.equal((await data()).originOpacity,'1.00000');
+  });
   await t.test('switching/repeating ink samples cancels the previous run',async()=>{
     await choose('green');await advance(5000);await choose('dark');
-    assert.equal((await data()).progress,0);assert.equal((await data()).ink,'dark');await advance(500);assert.equal((await data()).bands.length,3);
+    assert.equal((await data()).progress,0);assert.equal((await data()).ink,'dark');await advance(5500);assert.equal((await data()).bands.length,3);
     assert.equal(await page.locator('.ink-choice[data-ink="dark"]').getAttribute('aria-pressed'),'true');
-    await advance(3000);assert.ok((await data()).progress<.30);
+    await advance(1000);assert.ok((await data()).progress<.30);
     await choose('dark');assert.equal((await data()).progress,0);
-    await advance(12500);assert.equal((await data()).mode,'complete');
+    await advance(24500);assert.equal((await data()).mode,'complete');
     await lab.screenshot({path:'/tmp/unit42-chrom-dark-result.png'});
   });
   await t.test('click then click, keyboard, and touch all support manual placement',async()=>{
@@ -95,7 +124,7 @@ test('4.2 hands-on chromatography: science, controls and approved layout', { tim
   await t.test('dragging to a valid position mounts the paper and begins chromatography',async()=>{
     await fresh();await dragTo(.258);
     assert.equal((await data()).mode,'running');assert.ok((await data()).baseline<(await data()).liquid);
-    await advance(3000);assert.ok((await data()).progress>.20);
+    await advance(3000);assert.ok((await data()).progress>.10);
   });
   await t.test('too high stays dry, too low diffuses into the bath without separated bands',async()=>{
     await fresh();await dragTo(.16);assert.equal((await data()).mode,'dry');const dry=await data();

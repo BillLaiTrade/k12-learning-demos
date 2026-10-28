@@ -1,4 +1,4 @@
-import { DURATION, LIQUID, PAPER_HEIGHT, BASELINE, HOME, MOUNT, SAMPLES, placement, chromatographyState } from './chromatography-state.js?v=lab-1';
+import { DURATION, LIQUID, PAPER_HEIGHT, BASELINE, HOME, MOUNT, SAMPLES, placement, chromatographyState } from './chromatography-state.js?v=wicking-2';
 const lab = document.getElementById('chrom-lab');
 const canvas = document.getElementById('chrom-canvas');
 const paper = document.getElementById('chrom-paper');
@@ -26,11 +26,43 @@ for (let i = 0; i < 11500; i++) {
 }
 function stop() { if (raf !== null) cancelAnimationFrame(raf); raf = null; last = null; }
 function announce(message) { status.textContent = message; }
+// A deterministic, mottled pigment stamp gives fiber-like feathering instead
+// of identical geometric ellipses. It is cached and never changes with time.
+const pigmentCache = new Map();
+function pigment(color) {
+  if (pigmentCache.has(color)) return pigmentCache.get(color);
+  const stamp = document.createElement('canvas'); stamp.width = stamp.height = 128;
+  const brush = stamp.getContext('2d'), pixels = brush.createImageData(128, 128);
+  for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++) {
+    const nx = (x - 63.5) / 64, ny = (y - 63.5) / 64;
+    const angle = Math.atan2(ny, nx);
+    const edge = 1 + .065 * Math.sin(angle * 5) + .035 * Math.cos(angle * 11);
+    const r = Math.hypot(nx, ny) / edge;
+    const noise = (Math.sin(x * 127.1 + y * 311.7) * 43758.5453) % 1;
+    const density = Math.max(0, Math.exp(-3 * r * r) - Math.exp(-3));
+    const i = (y * 128 + x) * 4;
+    pixels.data[i] = pixels.data[i + 1] = pixels.data[i + 2] = 255;
+    pixels.data[i + 3] = Math.round(235 * density * (.75 + .20 * Math.abs(noise) + .05 * Math.sin(x * 2.8)));
+  }
+  brush.putImageData(pixels, 0, 0); brush.globalCompositeOperation = 'source-in';
+  brush.fillStyle = color; brush.fillRect(0, 0, 128, 128);
+  pigmentCache.set(color, stamp); return stamp;
+}
 function band(x, y, rx, ry, color, opacity = 1) {
-  ctx.save(); ctx.translate(x, y); ctx.scale(rx, ry);
-  const gradient = ctx.createRadialGradient(0, 0, .03, 0, 0, 1);
-  gradient.addColorStop(0, color + 'c4'); gradient.addColorStop(.35, color + '8c'); gradient.addColorStop(1, color + '00');
-  ctx.globalAlpha = opacity; ctx.fillStyle = gradient; ctx.fillRect(-1, -1, 2, 2); ctx.restore();
+  ctx.save(); ctx.globalAlpha = Math.max(0, Math.min(1, opacity));
+  ctx.drawImage(pigment(color), x - rx, y - ry, rx * 2, ry * 2); ctx.restore();
+}
+function pigmentTrail(baselineY, headY, color, opacity, width) {
+  const distance = Math.max(0, baselineY - headY);
+  if (distance < 1) return;
+  const count = Math.ceil(distance / 4);
+  for (let i = 0; i <= count; i++) {
+    const f = i / count;
+    // Taper the tail towards the origin. A slight fixed meander avoids a
+    // ruler-straight stripe; no pigment is painted ahead of the band.
+    const x = Math.sin(f * 8.3) * 2.2;
+    band(x, baselineY - distance * f, width * (.48 + .52 * f), 5, color, opacity * (.2 + .8 * f));
+  }
 }
 function draw() {
   const installed = !['ready', 'selected', 'dragging'].includes(mode);
@@ -51,9 +83,9 @@ function draw() {
   if (installed && state.kind !== 'dry') {
     const wetY = Math.max(0, (state.front - pos.top) * H);
     const wet = ctx.createLinearGradient(0, wetY, 0, wetY + 18);
-    wet.addColorStop(0, '#9f9d8500'); wet.addColorStop(1, '#9f9d852b');
+    wet.addColorStop(0, '#9f9d8500'); wet.addColorStop(1, '#918b7636');
     ctx.fillStyle = wet; ctx.fillRect(-PW / 2, wetY, PW, PH - wetY);
-    ctx.strokeStyle = '#8c917d55'; ctx.lineWidth = 1; ctx.beginPath();
+    ctx.strokeStyle = '#737c6780'; ctx.lineWidth = 1.4; ctx.beginPath();
     for (let x = -PW / 2; x <= PW / 2; x += 2) {
       const y = wetY + Math.sin(x * .13) * 1.6;
       if (x === -PW / 2) ctx.moveTo(x, y); else ctx.lineTo(x, y);
@@ -62,17 +94,28 @@ function draw() {
   }
   const baselineY = PH * BASELINE;
   ctx.strokeStyle = '#68665b94'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-PW/2, baselineY); ctx.lineTo(PW/2, baselineY + .6); ctx.stroke();
-  const separation = installed && state.kind === 'valid' ? state.separation : 0;
-  const dotOpacity = mode === 'spilled' ? 1 - state.progress : 1 - separation;
-  band(0, baselineY, 13, 7, SAMPLES[sample].ink, dotOpacity);
-  if (installed && state.kind === 'valid' && separation > 0) {
+  const active = installed && state.kind === 'valid';
+  const separation = active ? state.separation : 0;
+  const dotOpacity = mode === 'spilled' ? 1 - state.progress : active ? state.originOpacity : 1;
+  if (active && state.spread > 0) {
+    const travel = (state.baseline - state.front) * H;
+    const mixedHead = baselineY - travel * .68;
+    // The original mixed spot first elongates into a plume. Later it thins
+    // into a faint trace, while the individual component bands resolve.
+    pigmentTrail(baselineY, mixedHead, SAMPLES[sample].ink,
+      state.spread * (.42 - .35 * separation), 18 + 5 * state.spread);
+    band(0, baselineY - Math.min(12, travel * .3), 14 + 6 * state.spread,
+      7 + Math.min(13, travel * .24), SAMPLES[sample].ink, .28 * state.spread * (1 - separation));
+  }
+  band(0, baselineY, 13 + (active ? 3 * state.spread : 0), 7, SAMPLES[sample].ink, dotOpacity);
+  if (active && separation > 0) {
     for (const [i, b] of state.bands.entries()) {
       const y = (b.y - pos.top) * H;
-      // Keep even the diffuse upper edge below the solvent front.
       const room = (b.y - state.front) * H;
-      const ry = Math.min(8 + 14 * state.progress, Math.max(1, room * .7));
-      band(0, y, 28 + 18 * state.progress, ry, b.color, separation);
-      band(-12 + i * 7, y + 4, 17, ry * 1.5, b.color, .24 * separation);
+      const ry = Math.min(10 + 17 * state.progress, Math.max(1, room * .65));
+      pigmentTrail(baselineY, y + ry * .35, b.color, .18 * separation, 14 + i * 2);
+      band(0, y, 29 + 17 * state.progress, ry, b.color, separation);
+      band(-10 + i * 7, y + 4, 17, Math.min(ry * 1.35, room * .8), b.color, .22 * separation);
     }
     ctx.globalAlpha = .28; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(texture, -PW/2, 0); ctx.globalAlpha = 1;
   }
@@ -94,6 +137,11 @@ function draw() {
   clip.disabled = !installed;
   lab.dataset.mode = mode; lab.dataset.ink = sample;
   lab.dataset.progress = state.progress.toFixed(5);
+  lab.dataset.phase = state.phase;
+  lab.dataset.contact = String(state.contact);
+  lab.dataset.spread = state.spread.toFixed(5);
+  lab.dataset.separation = state.separation.toFixed(5);
+  lab.dataset.originOpacity = (installed ? dotOpacity : 1).toFixed(5);
   lab.dataset.front = state.front.toFixed(5); lab.dataset.baseline = state.baseline.toFixed(5);
   lab.dataset.bottom = state.bottom.toFixed(5); lab.dataset.liquid = String(LIQUID);
   lab.dataset.bandYs = JSON.stringify(installed ? state.bands.map(b => b.y) : []);
