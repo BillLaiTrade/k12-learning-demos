@@ -95,6 +95,7 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     assert.deepEqual(await page.locator('.modern-cell strong').allTextContents(), expected);
     const initial = await rows.allTextContents();
     await capture('#s1', 'comparison-initial-desktop');
+    await capture('.comparison-table', 'comparison-table-desktop');
     for (const key of ['earth','fire','air','water','earth','water']) {
       await page.locator(`[data-classical="${key}"]`).click();
       assert.equal(await page.locator('#classical-detail').isVisible(), true);
@@ -290,6 +291,7 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
       if (width === 390) {
         await capture('#s1', 'comparison-water-mobile');
+        await capture('.comparison-table', 'comparison-table-mobile');
         await capture('.inquiry-main-figure', 'water-main-mobile');
       }
       await page.locator('[data-classical=air]').click();
