@@ -95,3 +95,10 @@ node --test --test-concurrency=1 tests/unit-4.2-ppm.test.cjs tests/unit-4.2-conc
 本輪執行 `node --test tests/unit-4.2-ppm.test.cjs`，**13項全數通過、0失敗**（含外層）。新增獨立算術、相同分子／分母、兩係數、文字與等價數值、定義→銜接→正式公式的順序檢查；新區塊納入320–1440px的7種寬度，原放大鏡、觸控、鍵盤、重設與失敗處理一併回歸。未重跑上方稱量、蒸發及層析。
 
 已檢視完整ppm的[桌機畫面](percent-bridge-desktop.webp)與[手機畫面](percent-bridge-mobile.webp)。新增說明可由`#ppm-percent-bridge`直接檢視。
+
+
+## 2026-10-28：明說適用情境與既有濃度概念的延續
+
+依使用者最新要求，只調整介紹措辭：圖後先表明仍在表示溶質質量占溶液總質量的比例，當溶質含量特別少時改用ppm讓數字更容易閱讀；銜接標題改為「同一個濃度，換一種表示方式」，內文明說「ppm並不是新的濃度概念」。保留兩係數對照與0.0001%＝1ppm；沒有改動模型、互動、公式或CSS。
+
+執行 `node --test tests/unit-4.2-ppm.test.cjs`，本輪**13項通過、0失敗**（含外層）。新增措辭及適用情境檢查，原有算術、公式順序、放大鏡、鍵盤／觸控／重設、320–1440px版面與失敗處理一併通過。已檢視[桌機](same-concept-desktop.webp)與[手機](same-concept-mobile.webp)實際畫面；未重跑上方稱量、蒸發與層析。
