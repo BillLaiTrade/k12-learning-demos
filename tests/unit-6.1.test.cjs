@@ -181,6 +181,9 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       for (const record of await page.locator('.water-record').all()) assert.equal(await record.isVisible(), true);
     }
     await page.locator('[data-classical=air]').click();
+    await page.waitForFunction(() => [...document.querySelectorAll('#visual-inquiry img')].every(img => img.complete && img.naturalWidth > 1000));
+    assert.equal(await page.locator('.gas-record img').count(), 3);
+    assert.match(await text('#inquiry-diagram-note'), /氣體均無色/);
     for (const value of ['oxygen','carbon','ordinary']) {
       await page.locator(`button[data-observation="${value}"]`).click();
       assert.equal(await page.locator('.gas-record.focused').getAttribute('data-focus'), value);
@@ -191,6 +194,8 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     assert.match(await text('#inquiry-feedback'), /不足以證明空氣是混合物/);
     await page.locator('[data-classical=fire]').click();
     assert.match(await text('#inquiry-title'), /火.*燃燒時的現象/);
+    await page.waitForFunction(() => [...document.querySelectorAll('#visual-inquiry img')].every(img => img.complete && img.naturalWidth > 1000));
+    assert.equal(await page.locator('.fire-sequence img').count(), 2);
     assert.match(await text('.fire-burning'), /火焰發光、放熱/);
     assert.match(await text('.fire-after'), /水蒸氣、二氧化碳/);
     assert.match(await text('.fire-findings'), /火焰是燃燒時的現象/);
@@ -228,6 +233,12 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
       if (width === 390) {
         await capture('#s1', 'comparison-water-mobile');
         await capture('.water-investigation', 'water-apparatus-mobile');
+      }
+      await page.locator('[data-classical=air]').click();
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
+      for (const image of await page.locator('.gas-picture').all()) {
+        const rect = await image.boundingBox();
+        assert.ok(rect.x >= 0 && rect.x + rect.width <= width + 1);
       }
       await page.locator('[data-classical=fire]').click();
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);

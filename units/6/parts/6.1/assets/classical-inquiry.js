@@ -22,7 +22,7 @@
       past: '「氣」曾被視為物質的基本成分之一。', title: '看似相近，性質卻不同', instruction: '比較已知的蠟燭燃燒表現，再看空氣組成。',
       conclusion: '日常空氣是混合物', result: '空氣包含氮、氧及其他氣體，不能當成單一化學元素。',
       brief: '布萊克、普利斯特里等人研究不同氣體；拉瓦節將氧認識為大氣的一部分。性質比較還需配合組成研究。',
-      note: '性質比較示意，非實測影片；氣體均無色，不以火焰大小計算空氣組成。',
+      note: '氣體均無色；燭芯細煙不代表二氧化碳的顏色。插畫為定性示意，不以火焰大小計算空氣組成。',
       choices: [['oxygen','氧氣'],['ordinary','空氣'],['carbon','二氧化碳']], initial: 'ordinary',
       feedback: { oxygen: '氧氣：可使蠟燭燃燒更旺。氧氣是助燃氣體，並不是燃料。', ordinary: '空氣：能讓蠟燭燃燒；組成研究顯示，其中包含氮、氧及其他氣體。', carbon: '二氧化碳：不能維持這裡的蠟燭燃燒。這個比較本身還不足以證明空氣是混合物。' }
     },
@@ -100,29 +100,15 @@
     return `<g transform="translate(${x} ${y}) scale(${size})"><path d="M0 0C-30-3-30-29-17-45C-9-57-7-66-9-81C23-56 12-43 24-31C41-10 21 5 0 0Z" fill="#ef8b32"/><path d="M1-2C-14-4-14-18-5-31C1-38 3-43 1-51C22-29 22-12 1-2Z" fill="#ffe48a"/></g>`;
   }
   function air() {
-    const gases=[['oxygen','氧氣',1.05,'助燃較旺'],['ordinary','空氣',.64,'可維持燃燒'],['carbon','二氧化碳',0,'不能維持此蠟燭燃燒']];
-    const drawing=gases.map(([key,name,size,note],i)=>{const x=i*200;return `<g class="gas-record" data-focus="${key}"><rect x="${x+5}" y="5" width="190" height="285" rx="16"/><text x="${x+100}" y="40" text-anchor="middle" class="diagram-heading">${name}</text><path d="M${x+31} 254V76Q${x+100} 56 ${x+169} 76V254Z" fill="#f6fbfc" stroke="#9bb4b7" stroke-width="2"/><ellipse cx="${x+100}" cy="76" rx="69" ry="11" fill="#f9fcfd" stroke="#9bb4b7" stroke-width="2"/><rect x="${x+84}" y="190" width="32" height="62" rx="5" fill="#efdfb7" stroke="#b29d75"/><path d="M${x+100} 190v-13" stroke="#5e5a49" stroke-width="3"/>${flame(x+100,177,size)}<text x="${x+100}" y="278" text-anchor="middle" class="gas-result">${note}</text></g>`;}).join('');
-    return svg(drawing+'<g class="air-composition"><path d="M115 317H485" stroke="#a4bdaf" stroke-width="2"/><text x="300" y="342" text-anchor="middle" class="diagram-heading">空氣組成研究：氮 ＋ 氧 ＋ 其他氣體</text></g>','氧氣、空氣與二氧化碳中的蠟燭燃燒表現不同；下方另列空氣包含的氣體。',365);
+    const gases=[['oxygen','氧氣','助燃較旺','火焰較旺'],['ordinary','空氣','可維持燃燒','一般燃燒'],['carbon','二氧化碳','不能維持此蠟燭燃燒','火焰熄滅']];
+    return `<div class="air-study"><div class="gas-observations">${gases.map(([key,name,result,observation],i)=>`<article class="gas-record" data-focus="${key}"><h6>${name}</h6><div class="study-picture gas-picture" role="img" aria-label="${name}中的蠟燭：${observation}。氣體本身無色，插畫為已知性質的示意。"><img src="assets/air-candle-study.png?v=f539a640e9de" width="1774" height="887" alt="" decoding="async" style="left:${-100*i}%"></div><p><span>${observation}</span>${result}</p></article>`).join('')}</div><div class="air-composition"><span>另由組成研究得知</span><strong>空氣包含</strong><div><b>氮</b><span>＋</span><b>氧</b><span>＋</span><b>其他氣體</b></div></div></div>`;
   }
   function fire() {
-    const candle = lit => `<svg viewBox="0 0 180 205" role="img" aria-label="${lit?'蠟燭燃燒，燭芯上方有火焰，周圍發光放熱':'未點燃的蠟燭，包含蠟與燭芯'}">
-      ${lit?'<ellipse cx="90" cy="73" rx="50" ry="61" fill="#ffedbd" opacity=".65"/>':''}
-      <ellipse cx="90" cy="182" rx="48" ry="9" fill="#dce6e0"/>
-      <rect x="60" y="${lit?119:91}" width="60" height="${lit?63:91}" rx="7" fill="#eddfb4" stroke="#b7a581" stroke-width="2"/>
-      <ellipse cx="90" cy="${lit?119:91}" rx="30" ry="7" fill="#fff1cb" stroke="#b7a581" stroke-width="2"/>
-      <path d="M90 ${lit?119:91}v-15" stroke="#5b5849" stroke-width="4"/>
-      ${lit?flame(90,106,.95):''}</svg>`;
     return `<div class="fire-investigation">
       <div class="fire-sequence">
-        <article class="fire-before"><h6>燃燒前</h6>${candle(false)}<p>蠟燭與空氣</p></article>
-        <article class="fire-burning"><h6>燃燒時</h6>${candle(true)}<p>火焰發光、放熱</p></article>
-        <article class="fire-after"><h6>生成物</h6>
-          <svg viewBox="0 0 180 205" role="img" aria-label="燃燒生成的無色氣體需經實驗確認，圖示為氣體擴散與檢驗紀錄，不是可見的煙">
-            <path d="M42 105V41m-12 14 12-14 12 14M89 89V25m-12 14 12-14 12 14M136 105V41m-12 14 12-14 12 14" fill="none" stroke="#9ab4b8" stroke-width="3" stroke-linecap="round"/>
-            <rect x="31" y="111" width="118" height="75" rx="10" fill="#fdfefb" stroke="#a5bcb1" stroke-width="2"/>
-            <path d="M45 135l6 6 12-14m-18 33 6 6 12-14" fill="none" stroke="#6f9d80" stroke-width="3"/>
-            <path d="M76 135h57m-57 25h57" stroke="#b2c5ba" stroke-width="4"/>
-          </svg><p>水蒸氣、二氧化碳<br><small>由實驗確認</small></p></article>
+        <article class="fire-before"><h6><span>01</span> 燃燒前</h6><div class="study-picture candle-picture" role="img" aria-label="未點燃的蠟燭：可見蠟質、燭芯與陶盤，沒有火焰。"><img src="assets/candle-combustion-study.png?v=5088e35c57d3" width="1448" height="1086" alt="" decoding="async" style="left:0"></div><p>蠟燭與空氣</p></article>
+        <article class="fire-burning"><h6><span>02</span> 燃燒時</h6><div class="study-picture candle-picture" role="img" aria-label="蠟燭燃燒：燭芯上方可見火焰，蠟的表面有融化的蠟池，火焰發光放熱。"><img src="assets/candle-combustion-study.png?v=5088e35c57d3" width="1448" height="1086" alt="" decoding="async" style="left:-100%"></div><p>火焰發光、放熱</p></article>
+        <article class="fire-after"><h6><span>03</span> 生成物</h6><p>水蒸氣、二氧化碳<small>通常看不見，需由實驗確認</small></p></article>
       </div>
       <div class="candle-reaction"><span>蠟（燃料）＋ 空氣中的氧氣</span><b>↓ 充分燃燒</b><span>水蒸氣 ＋ 二氧化碳</span></div>
       <div class="fire-findings"><strong>火焰是燃燒時的現象</strong><span>蠟與氧反應形成新物質，<br>不是釋出一種叫「火」的元素。</span></div>
@@ -147,7 +133,7 @@
     const texts={ 'inquiry-past-summary':item.past, 'inquiry-title':item.title, 'inquiry-instruction':item.instruction, 'inquiry-conclusion-title':item.conclusion, 'inquiry-conclusion-text':item.result, 'inquiry-history-brief':item.brief, 'inquiry-diagram-note':item.note };
     Object.entries(texts).forEach(([id,value])=>{$(`#${id}`).textContent=value;});
     $('#inquiry-diagram').innerHTML=diagrams[key]();
-    $('#inquiry-conclusion-visual').innerHTML=key==='earth'?'<div class="result-chips"><span>礦物</span><span>有機物</span><span>水</span><span>空氣</span></div><span class="classical-icon icon-earth"></span>':key==='water'?'<div class="result-chips"><span>氫元素</span><span>氧元素</span></div><span class="classical-icon icon-water"></span>':key==='air'?'<div class="result-chips"><span>氮</span><span>氧</span><span>其他氣體</span></div><span class="classical-icon icon-air"></span>':'<span class="classical-icon icon-fire"></span><div class="result-chips"><span>物質反應</span><span>發熱、發光</span></div>';
+    $('#inquiry-conclusion-visual').innerHTML=key==='earth'?'<div class="result-chips"><span>礦物</span><span>有機物</span><span>水</span><span>空氣</span></div><span class="classical-icon icon-earth"></span>':key==='water'?'<div class="result-chips"><span>氫元素</span><span>氧元素</span></div><span class="classical-icon icon-water"></span>':key==='air'?'<div class="conclusion-study study-picture gas-picture"><img src="assets/air-candle-study.png?v=f539a640e9de" width="1774" height="887" alt="" decoding="async" style="left:-100%"></div><div class="result-chips"><span>氮</span><span>氧</span><span>其他氣體</span></div>':'<div class="conclusion-study study-picture candle-picture"><img src="assets/candle-combustion-study.png?v=5088e35c57d3" width="1448" height="1086" alt="" decoding="async" style="left:-100%"></div><div class="result-chips"><span>物質反應</span><span>發熱、發光</span></div>';
     const controls=$('#inquiry-controls');controls.replaceChildren();
     controls.hidden=item.choices.length===0;
     $('#inquiry-feedback').hidden=controls.hidden;
