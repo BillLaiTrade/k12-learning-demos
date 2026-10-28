@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {RoomEnvironment} from '../../../../../parts/3.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
-import {DENSITY_MG_MM3,GRAIN_VOLUME_MM3,WORLD_WIDTH_MM,WATER,SAMPLES,sampleState,grainPositions,scaleBarPixels,magnification} from './ppm-scale-state.js?v=physical-1';
+import {DENSITY_MG_MM3,GRAIN_VOLUME_MM3,WORLD_WIDTH_MM,WATER,SAMPLES,sampleState,grainPositions,grainPose,scaleBarPixels,magnification} from './ppm-scale-state.js?v=realism-3';
+import {sugarCrystalTriangles} from './ppm-crystal.js?v=realism-3';
 const root=document.getElementById('ppm-lab'),stage=document.getElementById('ppm-scale-scene'),canvas=document.getElementById('ppm-scale-canvas');
 const lens=document.getElementById('ppm-lens'),lensCanvas=document.getElementById('ppm-lens-canvas'),live=document.getElementById('ppm-status');
 const selects=[...document.querySelectorAll('[data-ppm-sample]')];
@@ -26,7 +27,7 @@ function signedVolume(geo){const p=geo.attributes.position;let sum=0;const a=new
 async function initialize(){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});let zoomRenderer;try{zoomRenderer=new THREE.WebGLRenderer({canvas:lensCanvas,antialias:true,alpha:false});}catch(error){renderer.dispose();throw error;}cleanupFailed=()=>{renderer.dispose();zoomRenderer.dispose();};
   for(const r of [renderer,zoomRenderer]){r.setPixelRatio(Math.min(devicePixelRatio||1,1.5));r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1;r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;}
-  const scene=new THREE.Scene(),macro=new THREE.Scene();macro.background=new THREE.Color('#26383b');
+  const scene=new THREE.Scene(),macro=new THREE.Scene();macro.background=new THREE.Color('#3e403c');
   const pmrem=new THREE.PMREMGenerator(renderer),room=new RoomEnvironment(),environment=pmrem.fromScene(room,.03);room.dispose();pmrem.dispose();
   const macroPmrem=new THREE.PMREMGenerator(zoomRenderer),macroRoom=new RoomEnvironment(),macroEnvironment=macroPmrem.fromScene(macroRoom,.03);macroRoom.dispose();macroPmrem.dispose();
   scene.environment=environment.texture;macro.environment=macroEnvironment.texture;cleanupFailed=()=>{environment.dispose();macroEnvironment.dispose();renderer.dispose();zoomRenderer.dispose();};
@@ -44,22 +45,25 @@ async function initialize(){
   // not extra volume in the one-liter mathematical cylinder.
   const surface=new THREE.Mesh(new THREE.CircleGeometry(WATER.radiusMm-.2,96),new THREE.MeshBasicMaterial({color:0xc9ded6,transparent:true,opacity:.24,side:THREE.DoubleSide,depthWrite:false}));surface.rotation.x=-Math.PI/2;surface.position.set(-96,4+WATER.heightMm+.02,0);surface.renderOrder=2;scene.add(surface);
   const meniscus=new THREE.Mesh(new THREE.TorusGeometry(WATER.radiusMm-.1,.25,8,96),new THREE.MeshBasicMaterial({color:0x7e9990,transparent:true,opacity:.7,depthWrite:false}));meniscus.renderOrder=3;meniscus.rotation.x=Math.PI/2;meniscus.position.set(-96,4+WATER.heightMm,0);scene.add(meniscus);
-  const porcelain=new THREE.MeshPhysicalMaterial({color:0x25393c,roughness:.86,clearcoat:.03,specularIntensity:.2});
-  const trayGeo=new THREE.LatheGeometry([[0,.8],[15,.8],[20,2],[22,5],[21.6,5.5],[19.5,2.7],[15,1.8],[0,1.8]].map(([x,y])=>new THREE.Vector2(x,y)),64);
-  for(const x of [43,126]){const tray=new THREE.Mesh(trayGeo,porcelain);tray.receiveShadow=true;tray.position.x=x;scene.add(tray);}
+  const porcelain=new THREE.MeshPhysicalMaterial({color:0x343735,roughness:.72,clearcoat:.12,clearcoatRoughness:.45,specularIntensity:.35});
+  const dishTexture=await new THREE.TextureLoader().loadAsync(new URL('./ppm-dish.webp',import.meta.url).href);dishTexture.colorSpace=THREE.SRGBColorSpace;dishTexture.repeat.set(1188/1254,490/1254);dishTexture.offset.set(36/1254,(1254-450-490)/1254);
+  const dishMaterial=new THREE.MeshBasicMaterial({map:dishTexture,toneMapped:false,depthWrite:false,blending:THREE.CustomBlending,blendSrc:THREE.SrcAlphaFactor,blendDst:THREE.OneMinusSrcAlphaFactor,blendEquation:THREE.AddEquation});
+  for(const x of [43,126]){const tray=new THREE.Mesh(new THREE.PlaneGeometry(46,19),dishMaterial);tray.quaternion.copy(camera.quaternion);tray.position.set(x,-.8,0);scene.add(tray);}
+  const grainNoise=document.createElement('canvas');grainNoise.width=grainNoise.height=128;const noiseCtx=grainNoise.getContext('2d'),noise=noiseCtx.createImageData(128,128);let seed=73;for(let i=0;i<noise.data.length;i+=4){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const value=105+(seed>>>25);noise.data[i]=noise.data[i+1]=noise.data[i+2]=value;noise.data[i+3]=255;}noiseCtx.putImageData(noise,0,0);const ceramicBump=new THREE.CanvasTexture(grainNoise);ceramicBump.wrapS=ceramicBump.wrapT=THREE.RepeatWrapping;ceramicBump.repeat.set(100,100);porcelain.bumpMap=ceramicBump;porcelain.bumpScale=.009;
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=128;const c=shadowCanvas.getContext('2d'),g=c.createRadialGradient(64,64,3,64,64,64);g.addColorStop(0,'#30291842');g.addColorStop(.55,'#30291815');g.addColorStop(1,'#30291800');c.fillStyle=g;c.fillRect(0,0,128,128);const shadowTexture=new THREE.CanvasTexture(shadowCanvas),shadowMat=new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false});
   for(const [x,radius] of [[-96,65],[43,28],[126,28]]){const shade=new THREE.Mesh(new THREE.PlaneGeometry(radius*2,radius*2),shadowMat);shade.rotation.x=-Math.PI/2;shade.position.set(x,-.1,0);scene.add(shade);}
   // Unit-volume faceted crystals. Geometry volume is integrated, then normalized
   // before applying the mass/density volume; image visibility never rescales it.
-  const grainGeo=new THREE.IcosahedronGeometry(1,0);const unitFactor=Math.cbrt(1/signedVolume(grainGeo));grainGeo.scale(unitFactor,unitFactor,unitFactor);grainGeo.computeVertexNormals();
-  const sugarMaterial=new THREE.MeshPhysicalMaterial({color:0xf3eee3,roughness:.4,transmission:.1,ior:1.56,thickness:.35,clearcoat:.15,flatShading:true});
+  const grainGeo=new THREE.BufferGeometry();grainGeo.setAttribute('position',new THREE.Float32BufferAttribute(sugarCrystalTriangles(),3));const unitFactor=Math.cbrt(1/signedVolume(grainGeo));grainGeo.scale(unitFactor,unitFactor,unitFactor);grainGeo.computeVertexNormals();
+  const sugarMaterial=new THREE.MeshPhysicalMaterial({color:0xf3eee3,roughness:.2,transmission:.65,ior:1.56,thickness:.25,clearcoat:.22,flatShading:true});
   const models={},matrix=new THREE.Matrix4(),q=new THREE.Quaternion(),euler=new THREE.Euler(),scale=new THREE.Vector3(),p=new THREE.Vector3(),edge=Math.cbrt(GRAIN_VOLUME_MM3);
   for(const [id,s] of Object.entries(SAMPLES)){
     const positions=grainPositions(s.massMg),mesh=new THREE.InstancedMesh(grainGeo,sugarMaterial,positions.length);let height=0;
-    positions.forEach((v,i)=>{const a=1+.06*Math.sin(i*2.17),b=1+.06*Math.cos(i*1.83),z=1/(a*b);scale.set(edge*a,edge*b,edge*z);euler.set(.04*Math.sin(i*3),.05*Math.cos(i*2),.04*Math.sin(i));q.setFromEuler(euler);p.set(v.x,v.y+1.8,v.z);matrix.compose(p,q,scale);mesh.setMatrixAt(i,matrix);height=Math.max(height,p.y+edge/2);});
+    positions.forEach((v,i)=>{const pose=grainPose(i),z=1/(pose.sx*pose.sy);scale.set(edge*pose.sx,edge*pose.sy,edge*z);euler.set(pose.rx,pose.ry,pose.rz);q.setFromEuler(euler);p.set(v.x,v.y+1.8,v.z);matrix.compose(p,q,scale);mesh.setMatrixAt(i,matrix);height=Math.max(height,p.y+edge/2);});
     mesh.castShadow=true;mesh.receiveShadow=true;mesh.instanceMatrix.needsUpdate=true;mesh.position.x=s.x;root.dataset[id+'RenderedVolumeMm3']=String(positions.length*GRAIN_VOLUME_MM3*signedVolume(grainGeo));scene.add(mesh);
     const enlarged=mesh.clone();enlarged.position.x=0;models[id]={main:mesh,macro:enlarged,height};
   }
+  for(const x of [43,126]){const contact=new THREE.Mesh(new THREE.CircleGeometry(15,48),new THREE.ShadowMaterial({opacity:.23,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.set(x,1.79,0);contact.receiveShadow=true;scene.add(contact);}
   const macroFloor=new THREE.Mesh(new THREE.PlaneGeometry(200,200),porcelain);macroFloor.rotation.x=-Math.PI/2;macroFloor.position.y=1.8;macroFloor.receiveShadow=true;macro.add(macroFloor);
   const anchor=(x,y,z)=>{const a=new THREE.Vector3(x,y,z).project(camera);return{x:(a.x+1)*50,y:(1-a.y)*50};};
   for(const [id,s] of Object.entries(SAMPLES)){const b=document.getElementById(id==='gram'?'ppm-gram':'ppm-milligram'),pos=anchor(s.x,1.8,0);b.style.left=`${pos.x}%`;b.style.top=`${pos.y-7}%`;}
@@ -79,6 +83,6 @@ async function initialize(){
   }
   view={draw};const observer=new ResizeObserver(()=>update());observer.observe(stage);root.dataset.ready='true';selects.forEach(b=>b.disabled=false);update();
   const lose=event=>{event.preventDefault();root.dataset.ready='error';view=null;opened=false;update();live.classList.add('error');live.textContent='比例畫面暫時無法顯示，請重新整理頁面。下方公式與數值仍可對照。';};canvas.addEventListener('webglcontextlost',lose);
-  window.addEventListener('pagehide',event=>{if(event.persisted)return;disposed=true;observer.disconnect();const geos=new Set(),mats=new Set();for(const s of [scene,macro])s.traverse(o=>{if(o.geometry)geos.add(o.geometry);if(o.material)mats.add(o.material);});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());background.dispose();cupTexture.dispose();shadowTexture.dispose();environment.dispose();macroEnvironment.dispose();renderer.dispose();zoomRenderer.dispose();});
+  window.addEventListener('pagehide',event=>{if(event.persisted)return;disposed=true;observer.disconnect();const geos=new Set(),mats=new Set();for(const s of [scene,macro])s.traverse(o=>{if(o.geometry)geos.add(o.geometry);if(o.material)mats.add(o.material);});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());background.dispose();cupTexture.dispose();dishTexture.dispose();ceramicBump.dispose();shadowTexture.dispose();environment.dispose();macroEnvironment.dispose();renderer.dispose();zoomRenderer.dispose();});
 }
 initialize().catch(()=>{cleanupFailed();view=null;root.dataset.ready='error';live.classList.add('error');live.textContent='比例畫面無法載入，請重新整理頁面。下方公式與數值仍可對照。';selects.forEach(b=>b.disabled=false);});
