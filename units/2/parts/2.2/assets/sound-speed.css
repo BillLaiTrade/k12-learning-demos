@@ -1,9 +1,6 @@
 /* 第四學習區塊共用互動樣式；不改動其餘區塊的版型。 */
 .sound-speed-lab{min-width:0;container-type:inline-size}
 .sound-speed-lab [hidden]{display:none!important}
-:where(.sound-speed-lab) .tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin:20px 0 16px;border-radius:14px;background:#eaf0e5}
-:where(.sound-speed-lab) .tabs button{min-height:46px;padding:9px 7px;border:0;border-radius:10px;background:transparent;color:#5c6e60;font-weight:750;font-size:.95rem}
-:where(.sound-speed-lab) .tabs button[aria-selected=true]{background:var(--green);color:white}
 :where(.sound-speed-lab) .comparison-board{overflow:hidden;border:1px solid #cfddd2;border-radius:16px;background:#fffefa}
 :where(.sound-speed-lab) .comparison-heading{display:grid;grid-template-columns:64px minmax(0,1fr) 88px;gap:12px;align-items:center;padding:10px 12px;background:#edf3e8;color:#526e5b;font-size:.72rem;font-weight:650}
 :where(.sound-speed-lab) .comparison-heading span:last-child{text-align:center}
@@ -12,6 +9,7 @@
 :where(.sound-speed-lab) .medium-row+.medium-row{border-top:1px solid #dce5da}
 :where(.sound-speed-lab) .medium-header{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0}
 :where(.sound-speed-lab) .medium-heading h3{margin:0;color:#203c30;font-size:1rem;line-height:1.4}
+:where(.sound-speed-lab) .temperature-heading span{display:inline-block;white-space:nowrap}
 :where(.sound-speed-lab) .medium-heading p{margin:2px 0 0;color:#62776a;font-size:.72rem;line-height:1.4}
 :where(.sound-speed-lab) .row-body{display:grid;grid-template-columns:minmax(0,1fr) 88px;align-items:center;min-width:0;border:1px solid #dce6d9;border-radius:11px;background:#fafbf7}
 :where(.sound-speed-lab) .field{min-width:0;position:relative}
@@ -70,7 +68,6 @@
 :where(.sound-speed-lab) .arrival-readout output{font-size:.69rem}
 }
 @media(max-width:640px){
-:where(.sound-speed-lab) .tabs button{font-size:.84rem}
 :where(.sound-speed-lab) .intro{font-size:.9rem}
 :where(.sound-speed-lab) .action,:where(.sound-speed-lab) .secondary,:where(.sound-speed-lab) .text-button{font-size:.86rem;padding:9px 10px}
 :where(.sound-speed-lab) .action{flex-basis:135px}

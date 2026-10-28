@@ -10,12 +10,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visi
 .review-badge{display:inline-block;padding:4px 12px;border:1px solid #d9d6af;border-radius:999px;background:#f7f1d9;color:#6c5e32;font-size:.85rem}
 .preview-header p{margin:9px 0 0;color:var(--muted);font-size:.9rem}
 .lesson-card{display:grid;grid-template-columns:176px minmax(0,1fr);gap:24px;padding:25px;border:1px solid var(--line);border-radius:24px;background:var(--card);box-shadow:0 14px 38px #152f260d}
+.lesson-card+.lesson-card{margin-top:24px}
 .card-side{border-right:1px solid var(--line);padding-right:18px}
 .card-number{color:var(--green);font-size:.84rem;font-weight:850;letter-spacing:.08em}
 .card-side h3{margin:10px 0 8px;font-size:1.05rem;line-height:1.45}
 .card-role{color:var(--muted);font-size:.85rem}
 .card-main{min-width:0;container-type:inline-size}
-h1{margin:0 0 8px;font-size:clamp(1.28rem,2.7vw,1.78rem);line-height:1.35}
+h1,.card-main h2{margin:0 0 8px;font-size:clamp(1.28rem,2.7vw,1.78rem);line-height:1.35}
 .intro{margin:0 0 17px;color:var(--muted)}
 .dialogue{display:flex;align-items:center;gap:11px;margin:12px 0;padding:10px 13px;border-left:4px solid #8cae91;border-radius:0 12px 12px 0;background:#f0f5eb}
 .dialogue p{margin:0}

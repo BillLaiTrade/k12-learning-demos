@@ -2,11 +2,13 @@ import {
   DISTANCE, START_X, END_X,
   appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=clean-15';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=clean-15';
+} from './sound-speed-model.mjs?v=split-16';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=split-16';
 
 export function initSoundSpeed(root) {
-const $ = selector => root.querySelector(selector);
+// 兩個獨立區塊共用控制器，原生標籤及 SVG 定義各自使用唯一 ID。
+const idPrefix = root.dataset.idPrefix || '';
+const $ = selector => root.querySelector(selector.replace(/#([\w-]+)/g, (_, id) => `#${idPrefix}${id}`));
 const svgNS = 'http://www.w3.org/2000/svg';
 const number = new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 1 });
 const secondsText = seconds => `${seconds.toFixed(3)} 秒`;
@@ -22,7 +24,7 @@ const svg = (tag, attributes, parent) => {
   return node;
 };
 
-const state = { mode: 'material', temperature: 30, phase: 'idle', time: 0, scope: 'together' };
+const state = { mode: root.dataset.soundSpeedMode === 'temperature' ? 'temperature' : 'material', temperature: 30, phase: 'idle', time: 0, scope: 'together' };
 let models = [], groups = [], frame = 0, runStartWall = null, runStartTime = 0;
 let noticed = new Set(), context = null, audioFailed = false;
 const tones = new Set();
@@ -67,12 +69,15 @@ function arrivalTone() {
 
 function buildModel(group) {
   const settings = appearance[group.kind], material = materialInfo[group.kind];
+  const heading = state.mode === 'temperature'
+    ? group.name.split(' ').map(part => `<span>${part}</span>`).join(' ')
+    : group.name;
   const row = document.createElement('figure');
   row.className = 'medium-row'; row.dataset.group = group.id; row.dataset.kind = group.kind;
   row.dataset.speed = String(group.speed);
   row.innerHTML = `
     <header class="medium-header">
-      <div class="medium-heading"><h3>${group.name}</h3><p>${state.mode === 'temperature' ? group.description : material.phase}</p><p class="individual-time" hidden><span></span><output></output></p></div>
+      <div class="medium-heading"><h3 class="${state.mode === 'temperature' ? 'temperature-heading' : ''}">${heading}</h3><p>${state.mode === 'temperature' ? group.description : material.phase}</p><p class="individual-time" hidden><span></span><output></output></p></div>
     </header>
     <div class="row-body">
       <div class="field">
@@ -84,8 +89,8 @@ function buildModel(group) {
     </div>`;
   $('#models').append(row);
   row.querySelector('.source-hit').addEventListener('click', () => startSingle(group.id));
-  const field = row.querySelector('.field svg'), fill = addMaterials(field, `${group.id}-field`);
-  const scene = mediumScene(field, group.kind, `${group.id}-scene`);
+  const field = row.querySelector('.field svg'), fill = addMaterials(field, `${idPrefix}${group.id}-field`);
+  const scene = mediumScene(field, group.kind, `${idPrefix}${group.id}-scene`);
   const source = tuningForkSource(field, group.kind, fill);
   const bonds = svg('g', { fill: 'none', stroke: '#8a9e9c', 'stroke-width': .8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, scene.interior);
   const dots = svg('g', { 'aria-hidden': 'true' }, scene.interior);
@@ -193,7 +198,7 @@ function paint(audible = false) {
   text($('#primary-action'), actionLabel);
   $('#pause-action').hidden = state.scope !== 'individual' || !['running','paused'].includes(state.phase);
   text($('#pause-action'), state.phase === 'paused' ? '繼續觀察' : '暫停觀察');
-  text($('#playback-state'), state.phase === 'running' ? '實時播放，暫停期間不計時。' : state.phase === 'paused' ? '已暫停，繼續後接續計時。' : state.phase === 'complete' ? '可再次比較，或切換另一種條件。' : '點按音叉可單獨敲擊該組。');
+  text($('#playback-state'), state.phase === 'running' ? '實時播放，暫停期間不計時。' : state.phase === 'paused' ? '已暫停，繼續後接續計時。' : state.phase === 'complete' ? '可再次敲擊音叉，重新比較。' : '點按音叉可單獨敲擊該組。');
   drawResult();
 }
 
@@ -260,12 +265,7 @@ function rebuild() {
   groups = conditions(state.mode, state.temperature);
   $('#models').replaceChildren();
   models = groups.map(buildModel);
-  $('#temperature-settings').hidden = state.mode !== 'temperature';
   const temperatureMode = state.mode === 'temperature';
-  for (const [mode, button] of [['material', $('#tab-material')], ['temperature', $('#tab-temperature')]]) {
-    attr(button, 'aria-selected', mode === state.mode); button.tabIndex = mode === state.mode ? 0 : -1;
-  }
-  attr(panel, 'aria-labelledby', temperatureMode ? 'tab-temperature' : 'tab-material');
   text($('#lesson-title'), temperatureMode ? '都是空氣，升溫後會早一點傳到嗎？' : '聲音在不同介質中，傳得多快？');
   text($('#lesson-intro'), temperatureMode ? '固定參考組，只改變設定組的空氣溫度。' : '觀察相鄰粒子如何逐段受振，再比較終點的到達時間。');
   text($('#girl-line'), temperatureMode ? '溫度不同時，空氣裡的振動傳遞會怎麼改變？' : '空氣、水和鋼，裡面的粒子是怎麼把振動傳開的？');
@@ -274,11 +274,6 @@ function rebuild() {
     ? '<strong>觀察重點：</strong>只改變空氣溫度，振動頻率維持相同；同溫時，振動會同時傳到最右端。'
     : '<strong>觀察重點：</strong>粒子在原位附近往返；同一聲源頻率相同，三種介質傳遞振動的速度不同。';
   paint();
-}
-
-function setMode(mode) {
-  if (mode === state.mode) return;
-  state.mode = mode; rebuild();
 }
 
 function setTemperature(value) {
@@ -298,28 +293,18 @@ $('#primary-action').addEventListener('click', () => {
 });
 $('#pause-action').addEventListener('click', () => state.phase === 'running' ? pause() : resume());
 $('#reset-action').addEventListener('click', () => resetRun());
-$('#temperature').addEventListener('input', event => setTemperature(event.target.value));
-$('#temperature-down').addEventListener('click', () => setTemperature(state.temperature - 1));
-$('#temperature-up').addEventListener('click', () => setTemperature(state.temperature + 1));
+$('#temperature')?.addEventListener('input', event => setTemperature(event.target.value));
+$('#temperature-down')?.addEventListener('click', () => setTemperature(state.temperature - 1));
+$('#temperature-up')?.addEventListener('click', () => setTemperature(state.temperature + 1));
 $('#arrival-sound').addEventListener('change', () => {
   if ($('#arrival-sound').checked) { audioFailed = false; $('#audio-error').hidden = true; unlockAudio(); }
   else { stopTones(); $('#audio-error').hidden = true; }
-});
-const tabs = [$('#tab-material'), $('#tab-temperature')];
-tabs.forEach((button, index) => {
-  button.addEventListener('click', () => setMode(index === 0 ? 'material' : 'temperature'));
-  button.addEventListener('keydown', event => {
-    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-    event.preventDefault();
-    const next = event.key === 'Home' ? 0 : event.key === 'End' ? 1 : 1 - index;
-    setMode(next === 0 ? 'material' : 'temperature'); tabs[next].focus();
-  });
 });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) pause();
 });
 window.addEventListener('pagehide', () => { pause(); stopTones(); });
-attr($('#temperature'), 'aria-valuetext', '設定組 30 攝氏度');
+if ($('#temperature')) attr($('#temperature'), 'aria-valuetext', '設定組 30 攝氏度');
 rebuild();
 
 }

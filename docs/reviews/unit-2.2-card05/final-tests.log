@@ -1,0 +1,45 @@
+▶ sound comparison uses one signal and physical travel delays
+  ✔ the same distance produces the material arrival times and ranking (0.988271ms)
+  ✔ five kilometres and clamped travel positions use actual speed and elapsed seconds (0.187958ms)
+  ✔ temperature changes only the air speed, including a real tie at 20°C (0.198884ms)
+  ✔ every medium uses the same frequency, bounded local motion and exact rest (0.928783ms)
+  ✔ each neighbour receives a delayed copy of the preceding vibration and never starts first (1.303737ms)
+  ✔ particles remain ordered, stay at fixed y and settle in every medium (19.53702ms)
+✔ sound comparison uses one signal and physical travel delays (24.54462ms)
+✔ fork appearance uses rapid bounded translation without affecting the propagation signal (2.03723ms)
+▶ fourth learning block works within the complete lesson
+  ✔ initial scene uses the official characters, no orange tracking particle and no autoplay (874.290782ms)
+  ✔ formal integration retains five learning blocks, navigation and working quiz controls (366.9823ms)
+  ✔ material volumes and distinct molecules are embedded inside the animation (194.910654ms)
+  ✔ one compact panel gives the embedded scenes the main space and shows only arrival times at the right (48.889664ms)
+  ✔ vibration begins locally and steel reaches the end while water and air remain still there (514.966812ms)
+  ✔ distance markers, reached rails and readable metre values follow speed times time (21.128856ms)
+  ✔ pause freezes all observations and resume keeps one second equal to one second (600.265099ms)
+  ✔ individual source clicks and keyboard strikes keep independent clocks and do not start untouched groups (2744.370696ms)
+  ✔ a completed individual group can be struck again and temperature groups are independent (3722.261734ms)
+  ✔ a strike stays visible for at least half a second and withdraws while the fork rings (1076.679926ms)
+  ✔ visible forks are directly clickable at their real picture positions (814.569836ms)
+  ✔ small repeated tine motion stays connected to steel without a handle pushing the block (2118.756943ms)
+  ✔ vibrating neighbours carry the disturbance while the position pointer stays below the medium (1099.517709ms)
+  ✔ teaching results retain actual times and rest positions without prediction or grading (793.246384ms)
+  ✔ fifth block has bounded temperature controls and two identical air layouts (809.98251ms)
+  ✔ warmer, colder and equal-temperature experiments produce correct fifth-block outcomes (248.502204ms)
+  ✔ changing temperature clears only the fifth block while both blocks retain independent controls (1750.659312ms)
+  ✔ medium surface detail follows the same travel delay and stops on pause (1568.354093ms)
+  ✔ molecules stay within the material cross sections throughout the pulse (764.067642ms)
+  ✔ optional arrival cues use real audio nodes and stop when muted or paused (2753.630045ms)
+  ✔ backgrounding pauses at the same model time and never resumes automatically (1983.680476ms)
+  ✔ fifth-block arrival audio and independent strike do not activate fourth-block controls (890.801682ms)
+real stopwatch: {"started":759.5,"arrivals":{"steel":{"elapsed":0.8626999999955296,"displayed":"0.847 秒"},"water":{"elapsed":3.3956999999955295,"displayed":"3.378 秒"},"air":{"elapsed":14.596,"displayed":"14.577 秒"}},"checks":[{"elapsed":1.0135,"clock":1.0093,"distances":[346.1899,1493.764,5000]},{"elapsed":5.01179999999702,"clock":5.0091,"distances":[1718.1213,5000,5000]},{"elapsed":10.01139999999851,"clock":10.0089,"distances":[3433.0527,5000,5000]}],"strikes":{"air":0.6123999999985099,"water":0.6123999999985099,"steel":0.6123999999985099}}
+fifth-block real stopwatch: {"started":818,"arrivals":{"adjustable":{"elapsed":14.33669999999553,"displayed":"14.327 秒"},"reference":{"elapsed":14.58679999999702,"displayed":"14.577 秒"}},"checks":[{"elapsed":1.0041000000014901,"clock":1.0035,"distances":[344.2005,350.2215]},{"elapsed":5.004,"clock":5.0034,"distances":[1716.1662,1746.1866]},{"elapsed":10.00339999999851,"clock":10.0028,"distances":[3430.9604,3490.9772]}]}
+  ✔ a real stopwatch confirms displayed seconds, positions and all three arrivals (15526.466484ms)
+  ✔ touch and seven viewport widths keep both independent blocks usable (4267.742739ms)
+✔ fourth learning block works within the complete lesson (45990.702326ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46300.200556

@@ -153,3 +153,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.2-
 ## 2026-10-28：刪除上方距離／播放／計時及觀察說明
 
 32 項第四區模型、互動、實際秒錶與版面檢查全部通過（含群組計數），輸出見 clean-tests.log。確認上方 model-information／realtime-badge／model-time／observation-caption 節點均已移除，設定區後直接接比較圖；同步、個別敲擊、暫停、重播、背景及條件切換均不因缺少節點報錯。五公里與實際到達時間持續以內部時鐘交叉核對，並涵蓋七種寬度及手機操作。桌面、390px 與 320px 畫面已檢視，主要及個別操作截圖已更新。
+
+## 2026-10-28：第四區專注介質，溫度獨立為第五區
+
+第四區側欄與學習路線改為「介質影響聲速」，只保留空氣／水／鋼比較；撤下模式分頁及溫度設定。第五區以完整課程卡呈現溫度比較。兩區互動互不重設、原生 ID 與 SVG 定義唯一，先前刪除的說明列繼續移除。全頁 60 項回歸通過，最終格式另跑聲速共用 33 項通過；完整紀錄及第五區截圖見 `../unit-2.2-card05/`。第四區 ready.png、material-desktop.png、material-mobile.png 已更新。
