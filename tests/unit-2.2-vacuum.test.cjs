@@ -54,7 +54,7 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
 
   await t.test('full jar begins silent with no autoplay and a valid sustained recording', async () => {
     assert.equal(await air(), 1); assert.equal((await data()).power, 'off');
-    assert.equal(await page.locator('.vacuum-evidence, .vacuum-bars, .vacuum-power-light').count(), 0);
+    assert.equal(await page.locator('.vacuum-evidence, .vacuum-bars, .vacuum-power-light, .vacuum-callout, .vacuum-leader, .vacuum-leader-dot').count(), 0);
     assert.equal(await page.locator('#vacuum-db-value').textContent(), '—');
     assert.equal(await page.locator('#vacuum-audio').evaluate(a => a.paused && a.volume === 1 && a.loop), true);
     assert.equal(await inlet.isDisabled(), true);
@@ -190,9 +190,9 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
       assert.equal(await mobile.locator('.vacuum-photo').evaluate(n => Math.abs(n.getBoundingClientRect().width / n.getBoundingClientRect().height - n.naturalWidth / n.naturalHeight) < .01), true, 'the dome must not be cropped');
       const meterBox = await mobile.locator('.vacuum-spl-meter').boundingBox();
       const photoBox = await mobile.locator('.vacuum-photo').boundingBox();
-      assert.ok(meterBox.x > photoBox.x + photoBox.width * .42 && meterBox.x + meterBox.width <= photoBox.x + photoBox.width);
+      assert.ok(meterBox.x >= photoBox.x + photoBox.width + 6 || meterBox.y >= photoBox.y + photoBox.height + 6, 'meter must have its own space outside the apparatus photo');
       assert.equal(await mobile.locator('.vacuum-meter-screen').evaluate(n => n.scrollWidth <= n.clientWidth && n.scrollHeight <= n.clientHeight), true, 'LCD readout must fit its screen');
-      assert.equal(await mobile.locator('#vacuum-air-label').evaluate(n => n.scrollWidth <= n.clientWidth), true, 'air label must fit');
+      assert.equal(await mobile.locator('#vacuum-air-label').evaluate(n => n.scrollWidth <= n.clientWidth && n.getBoundingClientRect().height <= parseFloat(getComputedStyle(n).lineHeight) + 1), true, 'air label must fit on one line');
     }
     await mobile.locator('#vacuum-power').tap(); assert.equal(await mobile.locator('#vacuum-audio').evaluate(a => a.paused), true);
     await context.close();

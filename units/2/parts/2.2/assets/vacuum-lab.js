@@ -91,7 +91,6 @@ function render() {
   powerButton.setAttribute('aria-checked', String(power));
   text('vacuum-switch-word', power ? 'ON' : 'OFF');
   text('vacuum-mode', modeLabel); text('vacuum-air-label', airLabel);
-  text('vacuum-source-tag', power ? '電鈴持續振動' : '電鈴已關閉');
   text('vacuum-extract-label', mode === 'pump' ? '停止抽氣' : '抽氣');
   text('vacuum-admit-label', mode === 'inlet' ? '關閉進氣' : '放入空氣');
   for (const button of pumpButtons) { button.disabled = air <= MIN_AIR + .0001; button.setAttribute('aria-pressed', String(mode === 'pump')); }

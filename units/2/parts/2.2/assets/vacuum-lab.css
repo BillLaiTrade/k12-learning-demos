@@ -4,20 +4,14 @@
 #card-03 .card-number{font-size:1rem}
 #card-03 .card-main>h2{text-align:center;font-size:clamp(1.65rem,3.5vw,2.65rem);color:#123f30;letter-spacing:-.035em}
 #card-03 .vacuum-intro{text-align:center;margin-bottom:20px}
-.vacuum-figure{margin:0;padding:3px;border:1px solid #9da86f;border-radius:18px;background:#f8f5e7;overflow:hidden}
+.vacuum-figure{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,19%);gap:14px;align-items:center;margin:0;padding:8px;border:1px solid #9da86f;border-radius:18px;background:#f8f5e7;overflow:hidden}
 .vacuum-scene{position:relative;isolation:isolate;aspect-ratio:1817/866;overflow:hidden;border-radius:14px}
 .vacuum-photo{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
 .vacuum-overlay{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none}
-.vacuum-leader{stroke:#1c6248;stroke-width:3;fill:none}
-.vacuum-leader-dot{fill:#1c6248;stroke:#fffefa;stroke-width:3}
-.vacuum-chip,.vacuum-callout,.vacuum-air-readout{position:absolute;z-index:3;pointer-events:none;line-height:1.4}
+.vacuum-chip,.vacuum-air-readout{position:absolute;z-index:3;pointer-events:none;line-height:1.4}
 .vacuum-chip{right:2%;top:4%;padding:6px 14px;border:1px solid #caa34e;border-radius:999px;background:#fff0bd;color:#6c4910;font-size:.85rem;font-weight:750}
-.vacuum-callout{padding:5px 9px;border:1px solid #568269;border-radius:6px;background:#176047;color:#fffefa;font-size:clamp(.62rem,1.1vw,.85rem);white-space:nowrap;font-weight:650}
-.vacuum-source-tag{left:28%;top:31%}
-.vacuum-pump-tag{left:63.5%;top:25%}
-.vacuum-valve-tag{left:44%;top:53%}
-.vacuum-air-readout{left:86%;top:29%;width:13%;padding:7px 5px;border:1px solid #a3b37f;border-radius:10px;background:#fffff2ed;text-align:center;color:#294936;font-size:clamp(.58rem,1.05vw,.8rem)}
-.vacuum-air-readout strong{display:block;margin-top:2px;font-size:clamp(.7rem,1.5vw,1.1rem);color:#164836}
+.vacuum-air-readout{left:84%;top:29%;width:15%;padding:7px 5px;border:1px solid #a3b37f;border-radius:10px;background:#fffff2ed;text-align:center;color:#294936;font-size:clamp(.58rem,1.05vw,.8rem)}
+.vacuum-air-readout strong{display:block;margin-top:2px;font-size:clamp(.65rem,1.35vw,1rem);white-space:nowrap;color:#164836}
 .vacuum-hotspot{position:absolute;z-index:2;min-width:44px;min-height:44px;padding:0;border:2px solid transparent;border-radius:14px;background:transparent;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .vacuum-hotspot:hover:not(:disabled){background:#ffffe714}
 .vacuum-hotspot:focus-visible{outline:3px solid #bb861f;outline-offset:-3px;background:#fff8d41f}
@@ -25,9 +19,10 @@
 .vacuum-valve-hit{left:41.5%;top:62%;width:8.5%;height:20%}
 .vacuum-hotspot:disabled{cursor:default}
 /* 分貝儀位於鐘罩外，數字覆在器材的 LCD 上。 */
-.vacuum-spl-meter{position:absolute;z-index:4;left:49%;top:39%;width:10%;aspect-ratio:590/1490;pointer-events:auto;color:#173b2b}
+.vacuum-meter-bay{display:flex;align-items:center;justify-content:center;min-width:0;padding:24px 6px}
+.vacuum-spl-meter{position:relative;width:clamp(76px,7.5vw,90px);aspect-ratio:590/1490;color:#173b2b}
 .vacuum-meter-body{display:block;width:100%;height:100%;overflow:hidden;filter:drop-shadow(2px 5px 3px #36240e35)}
-.vacuum-meter-title{position:absolute;top:-21px;left:50%;transform:translateX(-50%);padding:2px 7px;white-space:nowrap;border:1px solid #a3b37f;border-radius:5px;background:#f9fceced;font-size:clamp(.6rem,1.05vw,.78rem);line-height:1.4}
+.vacuum-meter-title{position:absolute;top:-21px;left:50%;transform:translateX(-50%);padding:0;white-space:nowrap;font-size:clamp(.6rem,1.05vw,.78rem);line-height:1.4}
 .vacuum-meter-screen{position:absolute;left:16%;top:47.8%;width:67%;height:14.6%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;overflow:hidden;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
 .vacuum-meter-reading{display:flex;align-items:baseline;justify-content:center;gap:2px;font-size:clamp(12px,2.1vw,21px);font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
 .vacuum-meter-reading output{display:block;min-width:1.2em}
@@ -56,25 +51,25 @@
  #card-03 .card-main>h2{font-size:1.65rem}
  #card-03 .card-side{display:flex;grid-template-columns:none;gap:8px;padding:4px 12px}
  #card-03 .vacuum-intro{font-size:.9rem;margin-bottom:14px}
- .vacuum-figure{padding:2px;border-radius:13px}
+ .vacuum-figure{padding:5px;border-radius:13px}
  .vacuum-scene{border-radius:10px}
  .vacuum-chip{font-size:.62rem;padding:3px 7px;right:2%;top:3%}
- .vacuum-callout{padding:3px 4px;border-radius:4px;font-size:.57rem}
- .vacuum-source-tag{left:26%;top:25%}
- .vacuum-pump-tag{left:60%;top:20%}
- .vacuum-valve-tag{left:43%;top:48%}
  .vacuum-air-readout{left:82%;width:17%;top:29%;padding:3px 2px;border-radius:5px}
  .vacuum-air-readout strong{font-size:clamp(.58rem,2.6vw,.68rem);white-space:nowrap}
- .vacuum-spl-meter{left:50%;top:21%;width:14.5%}
- .vacuum-meter-title{top:-14px;padding:1px 3px;font-size:.55rem}
+ .vacuum-spl-meter{width:64px}
+ .vacuum-meter-title{top:-20px;font-size:.75rem}
  .vacuum-meter-screen{gap:1px}
  .vacuum-meter-bar{height:2px}
- .vacuum-meter-reading{gap:1px}
- .vacuum-valve-tag{left:38%}
+ .vacuum-meter-reading{gap:1px;font-size:18px}
  .vacuum-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
  .vacuum-switch{grid-column:1/-1;justify-self:center;padding:8px 18px;min-height:48px}
  .vacuum-control{min-width:0;min-height:49px;font-size:1rem;padding:8px 10px;gap:8px}
  .vacuum-control svg{width:23px;height:23px}
  .vacuum-instruction,.vacuum-status{font-size:.8rem}
  .vacuum-model-note{font-size:.73rem}
+}
+
+@media(max-width:700px){
+ .vacuum-figure{grid-template-columns:1fr;gap:6px}
+ .vacuum-meter-bay{padding:22px 8px 8px}
 }

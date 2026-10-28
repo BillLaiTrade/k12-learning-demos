@@ -23,7 +23,7 @@
     @media(max-width:640px){.ruler-photo-stage{border-radius:9px}}
   </style>
   <link rel="stylesheet" href="assets/sound-propagation.css?v=2">
-  <link rel="stylesheet" href="assets/vacuum-lab.css?v=2">
+  <link rel="stylesheet" href="assets/vacuum-lab.css?v=3">
 </head>
 <body>
   <header class="shell masthead">
@@ -139,16 +139,14 @@
                     <g id="vacuum-particles" clip-path="url(#vacuum-air-region)"></g>
                     <g id="vacuum-hammer"><path d="M635 607L630 495L617 455" fill="none" stroke="#403c31" stroke-width="8" stroke-linecap="round"/><path d="M635 606L630 495L617 455" fill="none" stroke="url(#vacuum-rod)" stroke-width="5" stroke-linecap="round"/><circle cx="617" cy="455" r="12" fill="url(#vacuum-metal)" stroke="#655f50" stroke-width="1.5"/></g>
                     <g id="vacuum-vibration" fill="none" stroke="#eaa634" stroke-width="4.5" stroke-linecap="round" opacity="0"><path d="M655 431Q674 454 655 477"/><path d="M674 419Q704 454 674 489"/></g>
-                    <path class="vacuum-leader" d="M690 328L624 429"/><circle class="vacuum-leader-dot" cx="624" cy="429" r="6"/>
-                    <path class="vacuum-leader" d="M1268 284L1285 350"/><circle class="vacuum-leader-dot" cx="1285" cy="350" r="6"/>
-                    <path class="vacuum-leader" d="M866 510L809 559"/><circle class="vacuum-leader-dot" cx="809" cy="559" r="6"/>
                     <g id="vacuum-needle" transform="translate(1665 535) rotate(60)"><path d="M-5 7L0-68L5 7Z" fill="#21483b"/><circle r="10" fill="#343e36" stroke="#9ba49a" stroke-width="3"/></g>
                   </svg>
                   <span class="vacuum-chip" id="vacuum-mode">等待啟動</span>
-                  <span class="vacuum-callout vacuum-source-tag" id="vacuum-source-tag">電鈴已關閉</span>
-                  <span class="vacuum-callout vacuum-pump-tag" aria-hidden="true">點按幫浦抽氣</span>
-                  <span class="vacuum-callout vacuum-valve-tag" aria-hidden="true">進氣閥</span>
                   <div class="vacuum-air-readout"><span>罩內空氣</span><strong id="vacuum-air-label">充足</strong></div>
+                  <button class="vacuum-hotspot vacuum-pump-hit" id="vacuum-pump" type="button" aria-label="點按幫浦抽氣" aria-pressed="false"></button>
+                  <button class="vacuum-hotspot vacuum-valve-hit" id="vacuum-valve" type="button" aria-label="打開進氣閥，放入空氣" aria-pressed="false" disabled></button>
+                </div>
+                <aside class="vacuum-meter-bay" aria-label="罩外音量觀察區">
                   <div class="vacuum-spl-meter" role="group" aria-label="罩外示意分貝儀" aria-describedby="vacuum-model-note">
                     <span class="vacuum-meter-title">罩外音量</span>
                     <svg class="vacuum-meter-body" viewBox="220 20 590 1490" aria-hidden="true"><image href="assets/sound-level-meter.png" width="1024" height="1536"/></svg>
@@ -158,9 +156,7 @@
                     </div>
                     <span class="vacuum-meter-note">示意分貝儀</span>
                   </div>
-                  <button class="vacuum-hotspot vacuum-pump-hit" id="vacuum-pump" type="button" aria-label="點按幫浦抽氣" aria-pressed="false"></button>
-                  <button class="vacuum-hotspot vacuum-valve-hit" id="vacuum-valve" type="button" aria-label="打開進氣閥，放入空氣" aria-pressed="false" disabled></button>
-                </div>
+                </aside>
               </figure>
               <div class="vacuum-controls">
                 <button class="vacuum-switch" id="vacuum-power" type="button" role="switch" aria-checked="false"><span>電鈴開關</span><span class="vacuum-switch-track" aria-hidden="true"><b id="vacuum-switch-word">OFF</b><i></i></span></button>
@@ -299,6 +295,6 @@
     })();
   </script>
   <script type="module" src="assets/sound-propagation.js?v=4"></script>
-  <script type="module" src="assets/vacuum-lab.js?v=2"></script>
+  <script type="module" src="assets/vacuum-lab.js?v=3"></script>
 </body>
 </html>
