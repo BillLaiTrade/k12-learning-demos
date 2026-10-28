@@ -21,3 +21,14 @@
 使用者核可四列逐項左右對齊、主要結果預設全部可見，點選只在下方補充說明的示意。`classical-comparison.css` 為第一區塊樣式；`classical-elements.png` 為依核可圖生成的透明土、水、氣、火插畫素材，以 CSS 定位取用。插畫不是真實樣品照片或實驗證據；水分解紀錄為 inline SVG，兩瓶氣體沒有液面或氣體顏色，且註明未表示體積比例。共用角色頭像維持直接引用。
 
 新增查核來源（實際讀取）：[Soil Science Society of America 教師資源：Soil Basics](https://www.soils4teachers.org/soil-basics)、[OpenStax Chemistry 2e：Phases and Classification of Matter](https://openstax.org/books/chemistry-2e/pages/1-2-phases-and-classification-of-matter)、[Britannica：Air](https://www.britannica.com/science/air)、[Britannica：Flame](https://www.britannica.com/science/flame)，並重新讀取上述波以耳科學史。分別支持泥土為多成分混合物、水可分解、空氣為氣體混合物、火焰涉及燃燒與氣體發光；古代意涵與現代日常對應事物不直接等同。
+
+## 四項獨立科學史補充（2026-10-28）
+
+依使用者指示為每項加入三段歷程，來源在各補充面板中可直接查閱。新增實際讀取的依據：
+
+- [Britannica：道庫恰耶夫](https://www.britannica.com/biography/Vasily-Vasilyevich-Dokuchayev)、[土壤科學研究](https://www.britannica.com/science/pedology)，及前述 SSSA 土壤成分頁：支持多地土壤調查、成土條件及成分研究的敘述。
+- [Britannica：卡文迪西](https://www.britannica.com/biography/Henry-Cavendish)：支持氫與氧反應生成水的研究。
+- [Science History Institute：拉瓦節](https://www.sciencehistory.org/education/scientific-biographies/antoine-laurent-lavoisier/)：支持與拉普拉斯的水組成研究，以及鉛／錫燃燒後質量增加與氧結合的解釋。
+- [Science History Institute：普利斯特里](https://www.sciencehistory.org/education/scientific-biographies/joseph-priestley/)：支持布萊克的二氧化碳、不同氣體的製備與性質比較，以及氧氣研究。
+
+古代四元素概念與後來日常事物研究分開標示；不虛構每一項各有一場推翻四元素說的實驗，不把歷史人物的不同解釋全部說成今日觀點。

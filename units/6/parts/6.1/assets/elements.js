@@ -56,10 +56,77 @@
     air: ['氣', '日常空氣含有氮、氧等多種氣體。', '空氣是混合物，不是單一化學元素。', '這裡以日常空氣作對照；古代「氣」的意涵，不等於現代空氣的完整科學描述。'],
     fire: ['火', '火焰是燃燒過程中可見的現象，涉及高溫氣體等發光。', '火焰不是一種化學元素，不能和銅、鐵等元素並列。', '古代四元素曾是一套解釋物質的觀點；今天依物質組成及實驗證據使用不同的分類。']
   };
+  // Representative historical evidence, not four identical discovery stories.
+  const classicalHistories = {
+    earth: {
+      pastTitle: '「土」曾是基本成分之一',
+      past: '古希臘四元素觀點把「土」列為解釋物質的基本成分之一；當時的「土」並不是今天已確認的化學元素。',
+      evidenceTitle: '土壤調查與成分研究',
+      evidence: '19 世紀後期，道庫恰耶夫調查不同地區的土壤，研究岩石、氣候與生物如何影響土壤。後續土壤科學也以物理、化學等方法研究其成分。',
+      observation: '研究發現：不同土壤並不相同；日常土壤包含礦物、有機物、水、空氣等多種成分。',
+      modernTitle: '日常泥土通常是混合物',
+      modern: '泥土不是一種單一化學元素，而是包含多種物質的混合物；不同樣品的組成可以不同。',
+      scope: '這是後來認識日常土壤的代表性研究脈絡，不是某一次土壤實驗就推翻古代四元素說。古代「土」的意涵，也不直接等於現代泥土。',
+      sources: [['道庫恰耶夫的土壤調查','https://www.britannica.com/biography/Vasily-Vasilyevich-Dokuchayev'],['土壤科學的研究方法','https://www.britannica.com/science/pedology'],['SSSA：土壤成分','https://www.soils4teachers.org/soil-basics']]
+    },
+    water: {
+      pastTitle: '水曾被列為基本元素',
+      past: '在古希臘四元素觀點中，水是組成物質的基本成分之一。但這不等於水符合今天化學元素的判準。',
+      evidenceTitle: '生成水與分解水的證據',
+      evidence: '18 世紀後期，卡文迪西研究氫與氧反應生成水；拉瓦節與拉普拉斯等人也研究水的組成。後來，水電解等實驗又提供了把水分解成氫、氧的證據。',
+      observation: '證據連結：氫與氧能反應生成水，水也能化學分解成氫與氧，因此水不是單一化學元素。',
+      modernTitle: '水是化合物',
+      modern: '水由氫、氧兩種元素組成，可以經化學分解得到其他物質；下圖回顧已學過的分解結果。',
+      scope: '波以耳推動對傳統元素觀點的質疑與實驗研究；水的組成研究及後來的水電解，並不是波以耳完成的同一項實驗。',
+      sources: [['卡文迪西的氣體與水研究','https://www.britannica.com/biography/Henry-Cavendish'],['拉瓦節與水的組成','https://www.sciencehistory.org/education/scientific-biographies/antoine-laurent-lavoisier/'],['水的化學分解','https://openstax.org/books/chemistry-2e/pages/1-2-phases-and-classification-of-matter']]
+    },
+    air: {
+      pastTitle: '「氣」曾是基本成分之一',
+      past: '古希臘四元素觀點把「氣」視為基本成分之一；當時沒有今天對空氣中各種氣體的組成認識。',
+      evidenceTitle: '製備、收集並比較不同氣體',
+      evidence: '18 世紀，布萊克研究後來稱為二氧化碳的氣體，普利斯特里等人研究氧氣。研究者比較不同氣體的性質，拉瓦節進一步認識到氧是大氣的一部分。',
+      observation: '觀察差異：有些氣體能讓燃燒更旺，有些不能維持燃燒。外觀看似相近的氣體，性質可以不同。',
+      modernTitle: '日常空氣是混合物',
+      modern: '空氣包含氮、氧及其他氣體，不是一種單一化學元素。製得某種氣體的實驗，也不等於已把空氣的所有成分一次分開。',
+      scope: '這是不同研究者逐步認識氣體及大氣組成的例子。古代「氣」不直接等於現代空氣；這些發現也不是同一場空氣分解實驗。',
+      sources: [['普利斯特里與不同氣體的研究','https://www.sciencehistory.org/education/scientific-biographies/joseph-priestley/'],['拉瓦節對氧與大氣的解釋','https://www.sciencehistory.org/education/scientific-biographies/antoine-laurent-lavoisier/'],['現代空氣組成','https://www.britannica.com/science/air']]
+    },
+    fire: {
+      pastTitle: '火曾被當作基本元素',
+      past: '古希臘四元素觀點把火列為物質的基本成分之一，用這套觀點理解自然中的變化；今天對燃燒與火焰的解釋則不同。',
+      evidenceTitle: '燃燒的稱量與氣體研究',
+      evidence: '18 世紀，拉瓦節研究金屬燃燒前後的質量及參與反應的氣體。他指出，鉛、錫等金屬燃燒後質量增加，是因為氧與金屬結合。',
+      observation: '實驗發現：氧與金屬結合，造成可量測的質量增加。這些燃燒現象需要用物質反應來解釋。',
+      modernTitle: '火焰是燃燒時的現象',
+      modern: '火焰涉及燃燒中的高溫氣體等發光，不是一種化學元素。燃燒可以有火焰，但不是所有燃燒都會出現可見火焰。',
+      scope: '金屬燃燒的稱量是理解燃燒的代表性證據，不是從古代四元素觀點直接跳到今日全部燃燒理論的單一步驟。',
+      sources: [['拉瓦節的金屬燃燒稱量','https://www.sciencehistory.org/education/scientific-biographies/antoine-laurent-lavoisier/'],['火焰的現代理解','https://www.britannica.com/science/flame']]
+    }
+  };
+  function renderClassicalHistory(key) {
+    const item = classicalHistories[key];
+    const name = classicalDetails[key][0];
+    $('#classical-history-title').textContent = `${name}的觀念發展脈絡`;
+    const values = {
+      'history-past-title': item.pastTitle, 'history-past-text': item.past,
+      'history-evidence-title': item.evidenceTitle, 'history-evidence-text': item.evidence,
+      'history-observation': item.observation,
+      'history-modern-title': item.modernTitle, 'history-modern-text': item.modern,
+      'history-scope': item.scope
+    };
+    for (const [id, text] of Object.entries(values)) $(`#${id}`).textContent = text;
+    const sources = $('#history-sources');
+    sources.replaceChildren();
+    item.sources.forEach(([title, url], index) => {
+      if (index) sources.append(document.createTextNode(' ／ '));
+      const a = cell('a', title); a.href = url; sources.append(a);
+    });
+  }
   let classicalSelection = null;
   const detail = $('#classical-detail');
   function showClassicalDetail(key) {
     classicalSelection = key;
+    renderClassicalHistory(key);
     const [name, main, conclusion, note] = classicalDetails[key];
     $$('[data-classical]').forEach(button => {
       const selected = button.dataset.classical === key;

@@ -32,7 +32,7 @@
         <div class="lesson-body classical-lesson">
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵：</span></span><p>原來古人說的「元素」，和今天的意思不同！</p></div>
           <div class="dialogue"><span class="speaker"><span class="sr-only">阿公：</span></span><p>先把兩邊的資料一起看。想了解原因，再點圖示看下方說明。</p></div>
-          <div class="comparison-heading"><h3>說法與證據對照桌</h3><p>對照內容完整顯示；點選任一列，可在下方查看補充解釋。</p></div>
+          <div class="comparison-heading"><h3>說法與證據對照桌</h3><p>對照內容完整顯示；點選任一列，可在下方查看各自的觀念發展脈絡。</p></div>
           <div class="comparison-table" role="group" aria-label="古代四元素與今天對日常事物的理解，四列完整對照">
             <div class="comparison-head" aria-hidden="true"><strong>古代四元素觀點</strong><strong>今天對日常對應事物的理解</strong></div>
           <button class="comparison-row" type="button" data-classical="earth" aria-expanded="false" aria-controls="classical-detail"><span class="ancient-cell"><span class="classical-icon icon-earth" aria-hidden="true"></span><strong>土</strong></span><span class="compare-arrow" aria-hidden="true">→</span><span class="modern-cell"><span class="classical-icon icon-earth" aria-hidden="true"></span><span><strong>日常泥土通常是混合物</strong><small>含有多種物質。</small></span></span></button>
@@ -44,6 +44,18 @@
           <p class="sr-only" id="classical-announcement" role="status"></p>
           <section class="classical-detail" id="classical-detail" aria-labelledby="classical-detail-title" hidden>
             <div class="detail-head"><h4 id="classical-detail-title">補充說明</h4><button type="button" id="classical-close">收起說明 <span aria-hidden="true">⌃</span></button></div>
+            <div class="concept-history personal-history" aria-labelledby="classical-history-title">
+              <h4 id="classical-history-title">觀念發展脈絡</h4>
+              <div class="history-path personal-history-path">
+                <article class="concept-step"><div class="step-label"><span aria-hidden="true">Ⅰ</span><strong>古代看法</strong></div><h5 id="history-past-title"></h5><p id="history-past-text"></p></article>
+                <b class="history-arrow" aria-hidden="true">→</b>
+                <article class="concept-step evidence-step"><div class="step-label"><span aria-hidden="true">Ⅱ</span><strong>後來的研究與證據</strong></div><h5 id="history-evidence-title"></h5><p id="history-evidence-text"></p><p class="evidence-observation" id="history-observation"></p></article>
+                <b class="history-arrow" aria-hidden="true">→</b>
+                <article class="concept-step"><div class="step-label"><span aria-hidden="true">Ⅲ</span><strong>今天的理解</strong></div><h5 id="history-modern-title"></h5><p id="history-modern-text"></p></article>
+              </div>
+              <p class="history-scope" id="history-scope"></p>
+              <p class="history-sources">查核資料：<span id="history-sources"></span></p>
+            </div>
             <div class="detail-body">
               <figure class="water-evidence" id="water-evidence" hidden>
                 <svg viewBox="0 0 460 238" role="img" aria-labelledby="water-record-title water-record-desc">
@@ -66,7 +78,6 @@
               <div class="detail-copy"><div class="detail-symbol" id="classical-detail-icon" aria-hidden="true"></div><p id="classical-detail-main"></p><p id="classical-detail-conclusion"></p><p class="caption" id="classical-detail-note"></p><button type="button" id="boyle-toggle" aria-expanded="false" aria-controls="boyle-explanation" hidden>波以耳的質疑，和這項證據有什麼關係？ <span aria-hidden="true">›</span></button><p id="boyle-explanation" hidden>波以耳質疑傳統元素觀點，強調以實驗研究物質。水分解的證據是後來累積的成果，不能說波以耳完成了水電解，也不是只靠一項實驗就一次改寫整套觀點。</p></div>
             </div>
           </section>
-          <div class="concept-history"><h3>觀念發展脈絡</h3><div class="history-path"><div><span aria-hidden="true">Ⅰ</span><p><strong>古代四元素觀點</strong><small>用土、水、氣、火解釋物質。</small></p></div><b aria-hidden="true">→</b><div><span aria-hidden="true">Ⅱ</span><p><strong>波以耳：重視實驗檢查</strong><small>質疑傳統觀點，重視實驗研究。</small></p></div><b aria-hidden="true">→</b><div><span aria-hidden="true">Ⅲ</span><p><strong>後來：累積水分解證據</strong><small>逐漸建立對物質組成的認識。</small></p></div></div><p class="caption">波以耳的工作與後來的水分解證據，發生於不同時期。</p></div>
           <div class="classical-takeaway">科學上的解釋需要證據支持，也會隨新發現修正。</div>
         </div>
       </section>

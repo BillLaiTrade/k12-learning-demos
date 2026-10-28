@@ -86,6 +86,45 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     assert.deepEqual(await rows.allTextContents(), initial);
   });
 
+  await t.test('each classical item has its own past, evidence and modern explanation', async () => {
+    const expected = {
+      earth: ['土', /道庫恰耶夫/, /礦物、有機物/, /混合物/],
+      water: ['水', /卡文迪西/, /拉瓦節與拉普拉斯/, /化合物/],
+      air: ['氣', /布萊克/, /普利斯特里/, /混合物/],
+      fire: ['火', /拉瓦節/, /質量增加/, /燃燒/]
+    };
+    const explanations = new Set();
+    const original = await page.locator('[data-classical]').allTextContents();
+    for (const [key, [name, first, second, conclusion]] of Object.entries(expected)) {
+      await page.locator(`[data-classical="${key}"]`).click();
+      assert.equal(await text('#classical-history-title'), `${name}的觀念發展脈絡`);
+      assert.equal(await page.locator('.personal-history .concept-step').count(), 3);
+      assert.deepEqual(await page.locator('.step-label>strong').allTextContents(), ['古代看法','後來的研究與證據','今天的理解']);
+      assert.match(await text('#history-evidence-text'), first);
+      assert.match((await text('#history-evidence-text')) + (await text('#history-observation')), second);
+      assert.match(await text('#history-modern-title'), conclusion);
+      assert.ok((await text('#history-past-text')).length > 30);
+      assert.ok((await text('#history-scope')).length > 30);
+      assert.ok(await page.locator('#history-sources a').count() >= 2);
+      explanations.add(await text('#history-evidence-text'));
+      assert.deepEqual(await page.locator('[data-classical]').allTextContents(), original);
+      await capture('#classical-detail', `history-${key}-desktop`);
+    }
+    assert.equal(explanations.size, 4);
+    assert.equal(await page.locator('#s1 .concept-history').count(), 1);
+    await page.setViewportSize({width:390,height:1000});
+    await page.locator('[data-classical=air]').click();
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
+    const panels = await page.locator('.personal-history .concept-step').all();
+    for (let i=1;i<panels.length;i++) {
+      const a=await panels[i-1].boundingBox(), b=await panels[i].boundingBox();
+      assert.ok(b.y >= a.y + a.height);
+    }
+    await capture('#classical-detail', 'history-air-mobile');
+    await page.locator('#classical-close').click();
+    await page.setViewportSize({width:1440,height:1000});
+  });
+
   await t.test('comparison pairs share a row at every width, and details appear below all pairs', async () => {
     for (const width of [1440,1280,1024,768,390,320]) {
       await page.setViewportSize({width,height:1000});
