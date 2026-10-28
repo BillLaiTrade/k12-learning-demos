@@ -28,7 +28,7 @@ h1{margin:0 0 8px;font-size:clamp(1.28rem,2.7vw,1.78rem);line-height:1.35}
 .tabs button[aria-selected=true]{background:var(--green);color:white}
 .model-information{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding:10px 12px;border-radius:12px;background:#eff4e9;font-size:.8rem;color:#546b58}
 .model-information strong{color:#284f35}
-.model-information select{min-height:44px;max-width:100%;padding:3px 5px;border:1px solid #c6d7c6;border-radius:7px;background:var(--card);color:#305b3b}
+.realtime-badge{padding:4px 9px;border:1px solid #ccdbcc;border-radius:999px;background:#fffefa;color:#315f41;font-size:.74rem;font-weight:650}
 #model-time{font-variant-numeric:tabular-nums;white-space:nowrap}
 .model-time-wrap{white-space:nowrap}
 .observation-caption{display:flex;align-items:center;min-height:3.2em;margin:10px 0;padding:10px 12px;border-left:4px solid #b8cda9;border-radius:0 10px 10px 0;background:#f3f6ee;color:#345c40;font-size:.88rem;font-weight:650}

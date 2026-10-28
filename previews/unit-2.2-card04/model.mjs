@@ -1,11 +1,10 @@
 // 所有組別使用同一振動脈衝；只改變傳播延遲。
-export const DISTANCE = 1000;
+export const DISTANCE = 5000;
 export const START_X = 64;
 export const END_X = 410;
 export const FREQUENCY = 25;
-export const PULSE_DURATION = .16;
+export const PULSE_DURATION = 1;
 export const AMPLITUDE = 4.2;
-export const STEP = .02;
 export const ZOOM = 5;
 export const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 export const airSpeed = temperature => 331 + .6 * temperature;

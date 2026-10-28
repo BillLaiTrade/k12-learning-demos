@@ -11,16 +11,16 @@ test('sound comparison uses one signal and physical travel delays', async t => {
   await t.test('the same distance produces the material arrival times and ranking', () => {
     const groups = m.conditions('material');
     assert.deepEqual(groups.map(g => g.speed), [343, 1480, 5900]);
-    assert.deepEqual(groups.map(g => (1000 / g.speed).toFixed(3)), ['2.915', '0.676', '0.169']);
+    assert.deepEqual(groups.map(g => (5000 / g.speed).toFixed(3)), ['14.577', '3.378', '0.847']);
     assert.deepEqual(m.winners(groups), ['steel']);
   });
-  await t.test('one kilometre and clamped travel positions use actual speed and elapsed seconds', () => {
-    assert.equal(m.DISTANCE, 1000);
+  await t.test('five kilometres and clamped travel positions use actual speed and elapsed seconds', () => {
+    assert.equal(m.DISTANCE, 5000);
     assert.ok(Math.abs(m.reachedDistance(343,.3) - 102.9) < 1e-10);
     assert.equal(m.reachedDistance(1480,.3), 444);
-    assert.equal(m.reachedDistance(5900,.3), 1000);
+    assert.equal(m.reachedDistance(5900,.3), 1770);
     assert.equal(m.reachedDistance(343,-1), 0);
-    assert.equal(m.reachedDistance(343,100), 1000);
+    assert.equal(m.reachedDistance(343,100), 5000);
     assert.equal(m.reachedDistance(343,0), 0);
   });
   await t.test('temperature changes only the air speed, including a real tie at 20°C', () => {
@@ -28,7 +28,7 @@ test('sound comparison uses one signal and physical travel delays', async t => {
     assert.deepEqual(m.winners(m.conditions('temperature', 0)), ['reference']);
     assert.deepEqual(m.winners(m.conditions('temperature', 30)), ['adjustable']);
     assert.deepEqual(m.winners(m.conditions('temperature', 20)), ['reference', 'adjustable']);
-    assert.ok(Math.abs((m.arrivalTime(343) - m.arrivalTime(349)) * 1000 - 6000000 / (343 * 349)) < 1e-12);
+    assert.ok(Math.abs((m.arrivalTime(343) - m.arrivalTime(349)) * 1000 - 30000000 / (343 * 349)) < 1e-12);
   });
   await t.test('every medium uses the same frequency, bounded local motion and exact rest', () => {
     for (const speed of [331, 343, 349, 1480, 5900]) {
@@ -41,7 +41,7 @@ test('sound comparison uses one signal and physical travel delays', async t => {
       }
       assert.equal(m.sample(point, speed, 40 / speed + m.PULSE_DURATION + .01).x, point.x);
     }
-    const values = Array.from({ length: 1601 }, (_, i) => m.displacement(i / 10000));
+    const values = Array.from({ length: 1601 }, (_, i) => m.displacement(i / 1600 * m.PULSE_DURATION));
     assert.ok(Math.max(...values) > m.AMPLITUDE * .7 && Math.min(...values) < -m.AMPLITUDE * .7);
     assert.ok(values.every(v => Math.abs(v) <= m.AMPLITUDE));
     assert.equal(m.displacement(-.1), 0); assert.equal(m.displacement(m.PULSE_DURATION), 0);
@@ -49,7 +49,7 @@ test('sound comparison uses one signal and physical travel delays', async t => {
   await t.test('particles remain ordered, stay at fixed y and settle in every medium', () => {
     for (const group of m.conditions('material')) {
       const points = m.positions(group.kind), end = m.runEnd([group]);
-      assert.equal(points[0].distance, 0); assert.equal(points.at(-1).distance, 1000);
+      assert.equal(points[0].distance, 0); assert.equal(points.at(-1).distance, 5000);
       for (let step = 0; step <= 300; step++) {
         const time = end * step / 300;
         const samples = points.map(p => m.sample(p, group.speed, time));
@@ -109,6 +109,8 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     await fresh();
     assert.equal((await data()).phase, 'idle'); assert.equal(await time(), 0);
     assert.equal(await page.locator('.medium-row').count(), 3);
+    assert.equal((await data()).playbackRate, '1');
+    assert.equal(await page.locator('#slowdown, #step-action').count(), 0);
     assert.equal(await page.locator('.particle').count(), 208);
     assert.equal(await page.locator('[name=prediction], .prediction, #prediction-feedback').count(), 0);
     assert.equal(await page.locator('#result').isHidden(), true);
@@ -160,10 +162,10 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
   });
 
   await t.test('vibration begins locally and steel reaches the end while water and air remain still there', async () => {
-    await primary.click(); await page.clock.runFor(4000);
-    assert.ok(await time() > .199 && await time() < .201);
+    await primary.click(); await page.clock.runFor(900);
+    assert.ok(await time() > .88 && await time() < .92);
     const readings = await page.locator('.arrival-readout output').allTextContents();
-    assert.deepEqual(readings, ['—', '—', '0.169 秒']);
+    assert.deepEqual(readings, ['—', '—', '0.847 秒']);
     for (const id of ['air', 'water']) assert.equal(await page.locator(`[data-group=${id}] .end-particle`).first().evaluate(n => n.transform.baseVal.consolidate().matrix.e), 75);
     assert.notEqual(await page.locator('[data-group=steel] .end-particle').first().evaluate(n => n.transform.baseVal.consolidate().matrix.e), 75);
     const reached = await page.locator('.medium-row').evaluateAll(rows => rows.map(row => row.querySelectorAll('.particle[data-reached=true]').length / row.querySelectorAll('.particle').length));
@@ -182,7 +184,7 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
 
   await t.test('distance markers, reached rails and readable metre values follow speed times time', async () => {
     const saved = await time(), m = await model;
-    assert.ok(saved > .199 && saved < .201);
+    assert.ok(saved > .88 && saved < .92);
     const frontState = () => page.locator('.medium-row').evaluateAll(rows => rows.map(row => ({
       distance: Number(row.dataset.reachedDistance), speed: Number(row.dataset.speed),
       x: row.querySelector('.propagation-front').transform.baseVal.consolidate().matrix.e,
@@ -193,7 +195,7 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     const rows = await frontState();
     assert.ok(rows[0].distance < rows[1].distance && rows[1].distance < rows[2].distance);
     for (const row of rows) {
-      const distance = Math.min(1000, row.speed * saved), x = m.START_X + distance / 1000 * (m.END_X - m.START_X);
+      const distance = Math.min(5000, row.speed * saved), x = m.START_X + distance / 5000 * (m.END_X - m.START_X);
       assert.ok(Math.abs(row.distance - distance) < .00011);
       assert.ok(Math.abs(row.x - x) < .00011);
       assert.equal(row.rail, `M${m.START_X} 125H${x.toFixed(4)}`);
@@ -203,40 +205,39 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     assert.match(rows[2].text, /已到終點/);
   });
 
-  await t.test('pause, resume, exact stepping and a shared speed change keep one timeline', async () => {
+  await t.test('pause freezes all observations and resume keeps one second equal to one second', async () => {
     await primary.click(); const paused = await time(), snapshot = await particleXs();
     const markers = await page.locator('.propagation-front, .distance-reached').evaluateAll(nodes => nodes.map(n => [n.getAttribute('transform'),n.getAttribute('d')]));
     await page.clock.runFor(2000); assert.equal(await time(), paused); assert.deepEqual(await particleXs(), snapshot);
     assert.deepEqual(await page.locator('.propagation-front, .distance-reached').evaluateAll(nodes => nodes.map(n => [n.getAttribute('transform'),n.getAttribute('d')])), markers);
-    await page.locator('#step-action').click(); assert.ok(Math.abs(await time() - paused - .02) < 1e-7);
-    assert.equal((await data()).phase, 'paused');
-    await primary.click(); await page.clock.runFor(1000); const resumed = await time(); assert.ok(resumed > paused + .02);
-    await page.locator('#slowdown').selectOption('20'); const changed = await time();
-    assert.ok(changed - resumed < .002);
-    await page.clock.runFor(1000); assert.ok(Math.abs(await time() - changed - .05) < .001);
+    assert.equal(await page.locator('#slowdown, #step-action').count(), 0);
+    await primary.click(); await page.clock.runFor(1000);
+    assert.ok(Math.abs(await time() - paused - 1) < .02);
+    const first = await time();
+    await page.clock.fastForward(5000);
+    assert.ok(Math.abs(await time() - first - 5) < .02, 'missed frames catch up to the monotonic elapsed time');
   });
 
   await t.test('source clicks and keyboard restart all groups without overlapping animations', async () => {
     await page.locator('[data-group=water] .source-hit').click(); await page.clock.runFor(1000);
-    assert.ok(await time() > .049 && await time() < .051);
+    assert.ok(await time() > .98 && await time() < 1.02);
     await page.locator('[data-group=air] .source-hit').focus(); await page.keyboard.press('Enter'); await page.clock.runFor(1000);
-    assert.ok(await time() > .049 && await time() < .051);
+    assert.ok(await time() > .98 && await time() < 1.02);
     await page.locator('[data-group=steel] .source-hit').click();
     await page.locator('[data-group=steel] .source-hit').click(); await page.clock.runFor(1000);
-    assert.ok(await time() > .049 && await time() < .051);
+    assert.ok(await time() > .98 && await time() < 1.02);
   });
 
   await t.test('teaching results retain actual times and rest positions without prediction or grading', async () => {
     await fresh();
-    await page.locator('#slowdown').selectOption('20'); await primary.click(); await page.clock.fastForward(70000);
+    await primary.click(); await page.clock.fastForward(20000);
     assert.equal((await data()).phase, 'complete');
-    assert.deepEqual(await page.locator('.arrival-readout output').allTextContents(), ['2.915 秒', '0.676 秒', '0.169 秒']);
+    assert.deepEqual(await page.locator('.arrival-readout output').allTextContents(), ['14.577 秒', '3.378 秒', '0.847 秒']);
     assert.equal(await page.locator('#result-rows tr').count(), 3);
     assert.match(await page.locator('#result-summary').textContent(), /鋼最先、水其次、空氣最後/);
     assert.equal(await page.locator('#result-title').textContent(), '觀察結果');
     assert.equal(await page.locator('.particle').evaluateAll(nodes => nodes.every(n => Math.abs(n.transform.baseVal.consolidate().matrix.e - Number(n.dataset.originX)) < .0001)), true);
     assert.equal(await page.locator('.end-particle').evaluateAll(nodes => nodes.every(n => n.transform.baseVal.consolidate().matrix.e === 75)), true);
-    await page.locator('#step-action').click(); assert.equal((await data()).phase, 'paused'); assert.equal(await time(), .02);
     await page.locator('#reset-action').click(); assert.equal(await time(), 0); assert.equal(await page.locator('#result').isHidden(), true);
     assert.equal(await page.locator('[name=prediction]').count(), 0);
     assert.deepEqual(await page.locator('.propagation-readout output').allTextContents(), ['0 公尺','0 公尺','0 公尺']);
@@ -261,15 +262,14 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
   });
 
   await t.test('warmer, colder and equal-temperature experiments produce correct outcomes', async () => {
-    await page.locator('#slowdown').selectOption('20');
-    for (const [temperature, expected] of [[30, /早約 0\.050 秒/], [0, /早約 0\.106 秒/], [20, /振動同時傳到/]]) {
+    for (const [temperature, expected] of [[30, /早約 0\.251 秒/], [0, /早約 0\.528 秒/], [20, /振動同時傳到/]]) {
       await setTemperature(temperature);
-      await primary.click(); await page.clock.fastForward(70000);
+      await primary.click(); await page.clock.fastForward(20000);
       assert.equal((await data()).phase, 'complete');
       assert.match(await page.locator('#result-summary').textContent(), expected);
       assert.equal(await page.locator('#result-title').textContent(), '觀察結果');
       assert.equal(await page.locator('#result-rows tr').count(), 2);
-      if (temperature === 20) assert.deepEqual(await page.locator('.arrival-readout output').allTextContents(), ['2.915 秒', '2.915 秒']);
+      if (temperature === 20) assert.deepEqual(await page.locator('.arrival-readout output').allTextContents(), ['14.577 秒', '14.577 秒']);
     }
   });
 
@@ -307,9 +307,9 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
 
   await t.test('molecules stay within the material cross sections throughout the pulse', async () => {
     await fresh();
-    await page.locator('#slowdown').selectOption('20'); await primary.click();
+    await primary.click();
     for (let i = 0; i < 12; i++) {
-      await page.clock.fastForward(5500);
+      await page.clock.fastForward(1400);
       const escaped = await page.locator('.field .particle').evaluateAll(nodes => nodes.flatMap(n => {
         const interior = n.closest('.medium-interior'), id = interior.getAttribute('clip-path').slice(5,-1);
         const clip = document.getElementById(id).querySelector('rect');
@@ -327,7 +327,7 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     await fresh(); await page.locator('#arrival-sound').check();
     await page.waitForFunction(() => window.__audioContext?.state === 'running');
     assert.equal(await page.evaluate(() => window.__oscillators.length), 0);
-    await page.locator('#slowdown').selectOption('20'); await primary.click(); await page.clock.runFor(3500);
+    await primary.click(); await page.clock.runFor(1000);
     assert.equal(await page.evaluate(() => window.__oscillators.length), 1);
     assert.equal(await page.evaluate(() => window.__oscillators[0].frequency.value), 740);
     assert.equal(await page.evaluate(() => window.__oscillators[0].__started), true);
@@ -335,7 +335,7 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     assert.equal(await page.evaluate(() => window.__oscillators.length), 1);
     assert.equal(await page.evaluate(() => window.__oscillators[0].__ended), true);
     await page.locator('#arrival-sound').check();
-    await page.locator('[data-group=steel] .source-hit').click(); await page.clock.runFor(3500);
+    await page.locator('[data-group=steel] .source-hit').click(); await page.clock.runFor(1000);
     assert.equal(await page.evaluate(() => window.__oscillators.length), 2);
     await primary.click(); await realWait(150); assert.equal(await page.evaluate(() => window.__oscillators[1].__ended), true);
     assert.equal(await page.locator('#audio-error').isHidden(), true);
@@ -349,6 +349,42 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
     await page.evaluate(() => { Object.defineProperty(document, 'hidden', { configurable: true, value: false }); document.dispatchEvent(new Event('visibilitychange')); });
     await page.clock.runFor(1000); assert.equal(await time(), saved);
     await primary.click(); await page.clock.runFor(1000); assert.ok(await time() > saved);
+  });
+
+  await t.test('a real stopwatch confirms displayed seconds, positions and all three arrivals', { timeout: 25000 }, async () => {
+    const realPage = await browser.newPage({ viewport: { width:1440, height:1000 } });
+    try {
+      await realPage.goto(url, { waitUntil:'networkidle' });
+      await realPage.evaluate(() => {
+        const panel = document.querySelector('#experiment-panel');
+        window.__stopwatch = { started:null, arrivals:{}, checks:[] };
+        document.querySelector('#primary-action').addEventListener('click', () => { window.__stopwatch.started = performance.now(); }, { capture:true, once:true });
+        new MutationObserver(() => {
+          const record = window.__stopwatch;
+          if (record.started === null) return;
+          const elapsed = (performance.now() - record.started) / 1000;
+          for (const row of document.querySelectorAll('.medium-row')) {
+            const output = row.querySelector('.arrival-readout output');
+            if (output.hasAttribute('data-arrival') && !record.arrivals[row.dataset.group]) record.arrivals[row.dataset.group] = { elapsed, displayed:output.textContent };
+          }
+          const next = [1,5,10][record.checks.length];
+          if (next !== undefined && elapsed >= next) record.checks.push({ elapsed, clock:Number(panel.dataset.time), distances:[...document.querySelectorAll('.medium-row')].map(n => Number(n.dataset.reachedDistance)) });
+        }).observe(panel, { subtree:true, attributes:true });
+      });
+      await realPage.locator('#primary-action').click();
+      await realPage.waitForFunction(() => Object.keys(window.__stopwatch.arrivals).length === 3, { timeout:20000 });
+      const readings = await realPage.evaluate(() => window.__stopwatch);
+      for (const [id,speed] of [['air',343],['water',1480],['steel',5900]]) {
+        assert.ok(Math.abs(readings.arrivals[id].elapsed - 5000 / speed) < .12, `${id} reaches the end at its real elapsed time`);
+        assert.equal(readings.arrivals[id].displayed, `${(5000 / speed).toFixed(3)} 秒`);
+      }
+      assert.equal(readings.checks.length, 3);
+      for (const check of readings.checks) {
+        assert.ok(Math.abs(check.clock - check.elapsed) < .06, 'displayed seconds match independent real stopwatch');
+        [343,1480,5900].forEach((speed,i) => assert.ok(Math.abs(check.distances[i] - Math.min(5000,speed * check.clock)) < .001));
+      }
+      console.log('real stopwatch:', JSON.stringify(readings));
+    } finally { await realPage.close(); }
   });
 
   await t.test('touch, both modes and seven viewport widths keep the layout usable', async () => {
@@ -379,7 +415,7 @@ test('complete fourth-card preview works as one consistent experiment', { timeou
             assert.ok(box.x >= main.x - 1 && box.right <= main.x + main.width + 1, 'all content stays in the main column');
           }
         }
-        const selectors = ['button', '#slowdown', '.sound-option'];
+        const selectors = ['button', '.sound-option'];
         if (mode === 'temperature') selectors.push('#temperature');
         for (const selector of selectors) for (const box of await mobile.locator(selector).evaluateAll(nodes => nodes.filter(n => n.getClientRects().length).map(n => n.getBoundingClientRect()).map(b => ({ width: b.width, height: b.height })))) {
           assert.ok(box.width >= 43.9 && box.height >= 43.9, `${selector} has a full touch target at ${width}px`);

@@ -1,0 +1,35 @@
+▶ sound comparison uses one signal and physical travel delays
+  ✔ the same distance produces the material arrival times and ranking (0.991215ms)
+  ✔ five kilometres and clamped travel positions use actual speed and elapsed seconds (0.190582ms)
+  ✔ temperature changes only the air speed, including a real tie at 20°C (0.221958ms)
+  ✔ every medium uses the same frequency, bounded local motion and exact rest (0.898568ms)
+  ✔ particles remain ordered, stay at fixed y and settle in every medium (14.379112ms)
+✔ sound comparison uses one signal and physical travel delays (17.841619ms)
+▶ complete fourth-card preview works as one consistent experiment
+  ✔ initial scene uses the official characters, no orange tracking particle and no autoplay (715.505939ms)
+  ✔ material volumes and distinct molecules are embedded inside the animation (61.356192ms)
+  ✔ one compact panel gives the embedded scenes the main space and connects end observations (10.464566ms)
+  ✔ vibration begins locally and steel reaches the end while water and air remain still there (381.656405ms)
+  ✔ distance markers, reached rails and readable metre values follow speed times time (19.49305ms)
+  ✔ pause freezes all observations and resume keeps one second equal to one second (474.501261ms)
+  ✔ source clicks and keyboard restart all groups without overlapping animations (1222.730225ms)
+  ✔ teaching results retain actual times and rest positions without prediction or grading (689.247748ms)
+  ✔ temperature controls are synchronized, bounded and use identical air layouts (221.607046ms)
+  ✔ warmer, colder and equal-temperature experiments produce correct outcomes (203.001682ms)
+  ✔ changing conditions clears running results and a tie has identical live motion (262.057624ms)
+  ✔ medium surface detail follows the same travel delay and stops on pause (1414.522208ms)
+  ✔ molecules stay within the material cross sections throughout the pulse (716.795251ms)
+  ✔ optional arrival cues use real audio nodes and stop when muted or paused (2566.633601ms)
+  ✔ backgrounding pauses at the same model time and never resumes automatically (1681.527823ms)
+real stopwatch: {"started":639.1000000014901,"arrivals":{"steel":{"elapsed":0.8633999999985099,"displayed":"0.847 秒"},"water":{"elapsed":3.397,"displayed":"3.378 秒"},"air":{"elapsed":14.59559999999404,"displayed":"14.577 秒"}},"checks":[{"elapsed":1.0130999999940395,"clock":1.0104,"distances":[346.5672,1495.392,5000]},{"elapsed":5.01279999999702,"clock":5.0105,"distances":[1718.6015,5000,5000]},{"elapsed":10.012099999994039,"clock":10.01,"distances":[3433.43,5000,5000]}]}
+  ✔ a real stopwatch confirms displayed seconds, positions and all three arrivals (15327.370613ms)
+  ✔ touch, both modes and seven viewport widths keep the layout usable (1877.922635ms)
+✔ complete fourth-card preview works as one consistent experiment (28263.599959ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 28568.24853

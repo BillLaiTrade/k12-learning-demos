@@ -1,9 +1,9 @@
 import {
-  DISTANCE, START_X, END_X, STEP, ZOOM, PULSE_DURATION,
+  DISTANCE, START_X, END_X, ZOOM, PULSE_DURATION,
   appearance, arrivalTime, reachedDistance, clamp, conditions, displacement,
   positions, runEnd, sample, winners
-} from './model.mjs?v=distance-5';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene } from './rendering.mjs?v=distance-5';
+} from './model.mjs?v=realtime-6';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene } from './rendering.mjs?v=realtime-6';
 
 const $ = selector => document.querySelector(selector);
 const svgNS = 'http://www.w3.org/2000/svg';
@@ -21,8 +21,8 @@ const svg = (tag, attributes, parent) => {
   return node;
 };
 
-const state = { mode: 'material', temperature: 30, slowdown: 20, phase: 'idle', time: 0 };
-let models = [], groups = [], frame = 0, lastWallTime = null;
+const state = { mode: 'material', temperature: 30, phase: 'idle', time: 0 };
+let models = [], groups = [], frame = 0, runStartWall = null, runStartTime = 0;
 let noticed = new Set(), context = null, audioFailed = false;
 const tones = new Set();
 const panel = $('#experiment-panel');
@@ -79,7 +79,7 @@ function buildModel(group) {
         <svg viewBox="0 0 456 146" role="img" aria-label="${group.name}的內部放大模型，${group.kind === 'water' ? '水槽中的水分子' : group.kind === 'steel' ? '金屬剖面中的原子' : '透明空氣中的分子'}在原位附近沿水平方向振動。"></svg>
         <button class="source-hit" type="button" aria-label="點按${group.name}振動源，重新同時啟動所有組別"></button>
       </div>
-      <div class="end-observation"><p class="zoom-title sr-only">最右端放大</p><svg class="zoom" viewBox="0 0 150 120" role="img" aria-label="${group.name}最右端的粒子，尚未開始振動"></svg><p class="end-state">尚未開始振動</p><div class="arrival-readout"><span class="sr-only">最右端到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的模型時間">—</output></div></div>
+      <div class="end-observation"><p class="zoom-title sr-only">最右端放大</p><svg class="zoom" viewBox="0 0 150 120" role="img" aria-label="${group.name}最右端的粒子，尚未開始振動"></svg><p class="end-state">尚未開始振動</p><div class="arrival-readout"><span>到達時間</span><output aria-live="off" aria-label="${group.name}傳到最右端的實際經過時間">—</output></div></div>
     </div>`;
   $('#models').append(row);
   row.querySelector('.source-hit').addEventListener('click', startFresh);
@@ -167,7 +167,7 @@ function drawResult() {
 
 function paint(audible = false, overrideCaption = '') {
   panel.dataset.mode = state.mode; panel.dataset.phase = state.phase;
-  panel.dataset.time = state.time.toFixed(8); panel.dataset.slowdown = state.slowdown;
+  panel.dataset.time = state.time.toFixed(8); panel.dataset.playbackRate = '1';
   let newArrival = false;
   for (const model of models) {
     const arrived = state.time >= arrivalTime(model.speed);
@@ -200,7 +200,7 @@ function paint(audible = false, overrideCaption = '') {
     const endState = !arrived ? '尚未開始振動' : localTime < PULSE_DURATION ? '正在往返振動' : '已回復靜止';
     text(model.endState, endState);
     attr(model.zoom, 'aria-label', `${model.name}最右端粒子，${endState}，位移放大五倍`);
-    text(model.arrivalCaption, arrived ? '已傳到最右端' : '最右端到達時間');
+    text(model.arrivalCaption, '到達時間');
     text(model.arrivalOutput, arrived ? secondsText(arrivalTime(model.speed)) : '—');
     if (arrived) attr(model.arrivalOutput, 'data-arrival', arrivalTime(model.speed));
     else model.arrivalOutput.removeAttribute('data-arrival');
@@ -211,13 +211,13 @@ function paint(audible = false, overrideCaption = '') {
   text($('#observation-caption'), overrideCaption || caption());
   const actionLabel = { idle: '同時啟動振動', running: '暫停觀察', paused: '繼續觀察', complete: '再次比較' }[state.phase];
   text($('#primary-action'), actionLabel);
-  text($('#playback-state'), state.phase === 'running' ? '所有組別共用相同放慢倍率。' : state.phase === 'paused' ? '已暫停，可繼續或逐格觀察。' : state.phase === 'complete' ? '可再次比較，或切換另一種條件。' : '也可以直接點按各列左側的振動源。');
+  text($('#playback-state'), state.phase === 'running' ? '實時播放，暫停期間不計時。' : state.phase === 'paused' ? '已暫停，繼續後接續計時。' : state.phase === 'complete' ? '可再次比較，或切換另一種條件。' : '也可以直接點按各列左側的振動源。');
   drawResult();
 }
 
 function stopFrame() {
   if (frame) cancelAnimationFrame(frame);
-  frame = 0; lastWallTime = null;
+  frame = 0; runStartWall = null;
 }
 
 function resetRun() {
@@ -227,18 +227,17 @@ function resetRun() {
 }
 
 function commitTime(now) {
-  if (lastWallTime === null) { lastWallTime = now; return; }
-  state.time = Math.min(runEnd(groups), state.time + Math.max(0, now - lastWallTime) / 1000 / state.slowdown);
-  lastWallTime = now;
+  if (runStartWall === null) return;
+  state.time = Math.min(runEnd(groups), runStartTime + Math.max(0, now - runStartWall) / 1000);
   if (state.time >= runEnd(groups)) state.phase = 'complete';
 }
 
-function tick(now) {
+function tick() {
   frame = 0;
   if (state.phase !== 'running') return;
-  commitTime(now); paint(true);
+  commitTime(performance.now()); paint(true);
   if (state.phase === 'running') frame = requestAnimationFrame(tick);
-  else lastWallTime = null;
+  else runStartWall = null;
 }
 
 function resume() {
@@ -246,7 +245,7 @@ function resume() {
   if (bounds.height <= innerHeight - 24 && (bounds.top < 12 || bounds.bottom > innerHeight - 12)) {
     $('#models').scrollIntoView({ block: 'center', behavior: 'auto' });
   }
-  unlockAudio(); state.phase = 'running'; lastWallTime = performance.now();
+  unlockAudio(); state.phase = 'running'; runStartTime = state.time; runStartWall = performance.now();
   paint(); frame = requestAnimationFrame(tick);
 }
 
@@ -299,24 +298,10 @@ $('#primary-action').addEventListener('click', () => {
   else if (state.phase === 'paused') resume();
   else startFresh();
 });
-$('#step-action').addEventListener('click', () => {
-  unlockAudio();
-  if (state.phase === 'running') pause();
-  if (state.phase === 'complete') resetRun();
-  state.time = Math.min(runEnd(groups), state.time + STEP);
-  state.phase = state.time >= runEnd(groups) ? 'complete' : 'paused';
-  paint(true);
-});
 $('#reset-action').addEventListener('click', () => resetRun());
 $('#temperature').addEventListener('input', event => setTemperature(event.target.value));
 $('#temperature-down').addEventListener('click', () => setTemperature(state.temperature - 1));
 $('#temperature-up').addEventListener('click', () => setTemperature(state.temperature + 1));
-$('#slowdown').addEventListener('change', event => {
-  const value = Number(event.target.value);
-  if (![10, 20].includes(value)) return;
-  if (state.phase === 'running') commitTime(performance.now());
-  state.slowdown = value; paint();
-});
 $('#arrival-sound').addEventListener('change', () => {
   if ($('#arrival-sound').checked) { audioFailed = false; $('#audio-error').hidden = true; unlockAudio(); }
   else { stopTones(); $('#audio-error').hidden = true; }

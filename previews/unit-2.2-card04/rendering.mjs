@@ -1,5 +1,5 @@
 // 介質場景、分子／原子與表面取樣共用同一波動模型。
-import { positions, sample } from './model.mjs?v=distance-5';
+import { positions, sample } from './model.mjs?v=realtime-6';
 export const materialInfo = {
   air: {
     name: '空氣', phase: '氣體',
