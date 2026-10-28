@@ -1,5 +1,7 @@
 import {MIRROR_SCENE as scene, observation, spriteAt, opticalPath, clampEye, mirrorPoint} from './mirror-image-geometry.mjs?v=1';
 
+import {createEyeView} from './mirror-eye-view.mjs?v=1';
+
 const section = document.getElementById('card-03');
 if (section) {
   const find = id => section.querySelector(`#${id}`);
@@ -7,6 +9,7 @@ if (section) {
   const objectButton = find('toggle-image-object'), changeButton = find('change-image-observer');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const objects = ['image-side-object', 'image-side-virtual', 'image-front-object', 'image-front-reflection'].map(find);
+  const renderEyeView = createEyeView(section);
   const state = {present: true, eyeY: scene.initialEye, recordedY: null};
   let dragging = null, animation = 0;
   const show = (element, visible) => { element.style.display = visible ? 'inline' : 'none'; };
@@ -31,6 +34,7 @@ if (section) {
   }
   function render() {
     const current = observation(state.eyeY);
+    renderEyeView(state.eyeY, state.present);
     const compare = state.recordedY !== null && Math.abs(state.eyeY - state.recordedY) > .1;
     objects.forEach(group => show(group, state.present));
     show(find('image-side-rays'), state.present);
@@ -49,10 +53,10 @@ if (section) {
       drawRay('record', recorded);
       attrs(find('image-observer-record'), {transform: `translate(${recorded.eye.join(' ')})`});
       const above = recorded.eye[1] < current.eye[1];
-      attrs(find('image-record-label'), {transform: `translate(20 ${recorded.eye[1] + (above ? -100 : 90)})`});
+      attrs(find('image-record-label'), {transform: `translate(20 ${Math.max(4, recorded.eye[1] + (above ? -100 : 90))})`});
     }
     const currentBelow = !compare || state.eyeY > state.recordedY;
-    attrs(find('image-current-label'), {transform: `translate(20 ${state.eyeY + (currentBelow ? 90 : -100)})`});
+    attrs(find('image-current-label'), {transform: `translate(20 ${Math.max(4, state.eyeY + (currentBelow ? 90 : -100))})`});
     find('image-current-label-text').textContent = compare ? 'B 現在的位置' : '小葵目前的位置';
     const dragHintY = state.eyeY > 190 ? state.eyeY + 74 : state.eyeY + 45;
     attrs(find('image-drag-hint'), {transform: `translate(240 ${dragHintY})`});

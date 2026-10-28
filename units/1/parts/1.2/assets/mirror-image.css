@@ -21,3 +21,6 @@
 #image-side-rays,#image-side-extensions,#image-mirror-guides,#image-observer-record,#image-current-label,#image-record-label,#image-point-callout,#image-drag-hint,#image-symmetry-guide{pointer-events:none}
 #image-observer-hit{touch-action:none}
 #image-side-view{touch-action:none}
+
+#card-03 .mirror-eye-caption{flex:0 0 auto;margin:0;padding:10px 13px;background:#fffdf8;color:#405851;font-size:.76rem;line-height:1.6}
+#card-03 #image-front-view{width:100%;aspect-ratio:400/700;overflow:hidden}
