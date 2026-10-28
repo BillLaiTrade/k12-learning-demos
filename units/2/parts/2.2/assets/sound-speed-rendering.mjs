@@ -1,5 +1,8 @@
 // 介質場景、分子／原子與表面取樣共用同一波動模型。
-import { positions, sample, displacement, PULSE_DURATION } from './sound-speed-model.mjs?v=arrival-12';
+import { positions, sample, displacement, PULSE_DURATION } from './sound-speed-model.mjs?v=strike-13';
+// 敲擊動作保留 0.6 秒；接觸即起振，不延後傳播時計。
+const STRIKE_DURATION = .6;
+const CONTACT_DURATION = .06;
 export const materialInfo = {
   air: {
     name: '空氣', phase: '氣體',
@@ -194,11 +197,13 @@ export function tuningForkSource(root, kind, fill) {
       contact.setAttribute('data-arm-edge',String(edge));
       contact.setAttribute('data-steel-edge','94');
     }
-    const striking=phase!=='idle'&&time>=0&&time<.3;
-    const progress=Math.min(1,Math.max(0,time/.3));
+    const striking=phase!=='idle'&&time>=0&&time<STRIKE_DURATION;
+    const progress=Math.min(1,Math.max(0,(time-CONTACT_DURATION)/(STRIKE_DURATION-CONTACT_DURATION)));
+    const retreat=progress*progress*(3-2*progress);
     mallet.setAttribute('visibility',striking?'visible':'hidden');
-    mallet.setAttribute('data-strike',striking?'withdrawing':'idle');
-    mallet.setAttribute('transform',`translate(${(hit.dx*progress).toFixed(3)} ${(hit.dy*progress).toFixed(3)})`);
-    mallet.setAttribute('opacity',String(1-progress*.6));
+    mallet.setAttribute('data-strike',striking?(time<CONTACT_DURATION?'contact':'withdrawing'):'idle');
+    mallet.setAttribute('transform',`translate(${(hit.dx*retreat).toFixed(3)} ${(hit.dy*retreat).toFixed(3)})`);
+    // 前半秒維持完整可見，最後 0.1 秒才淡出。
+    mallet.setAttribute('opacity',String(Math.min(1,Math.max(0,(STRIKE_DURATION-time)/.1))));
   } };
 }

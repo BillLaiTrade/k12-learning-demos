@@ -1,0 +1,42 @@
+▶ sound comparison uses one signal and physical travel delays
+  ✔ the same distance produces the material arrival times and ranking (0.973689ms)
+  ✔ five kilometres and clamped travel positions use actual speed and elapsed seconds (0.249619ms)
+  ✔ temperature changes only the air speed, including a real tie at 20°C (0.221427ms)
+  ✔ every medium uses the same frequency, bounded local motion and exact rest (0.931597ms)
+  ✔ each neighbour receives a delayed copy of the preceding vibration and never starts first (1.545895ms)
+  ✔ particles remain ordered, stay at fixed y and settle in every medium (15.43174ms)
+✔ sound comparison uses one signal and physical travel delays (20.64926ms)
+▶ fourth learning block works within the complete lesson
+  ✔ initial scene uses the official characters, no orange tracking particle and no autoplay (857.697805ms)
+  ✔ formal integration retains four learning blocks, navigation and working quiz controls (288.115008ms)
+  ✔ material volumes and distinct molecules are embedded inside the animation (88.27636ms)
+  ✔ one compact panel gives the embedded scenes the main space and shows only arrival times at the right (16.108345ms)
+  ✔ vibration begins locally and steel reaches the end while water and air remain still there (403.656951ms)
+  ✔ distance markers, reached rails and readable metre values follow speed times time (18.993398ms)
+  ✔ pause freezes all observations and resume keeps one second equal to one second (476.240006ms)
+  ✔ individual source clicks and keyboard strikes keep independent clocks and do not start untouched groups (2394.884405ms)
+  ✔ a completed individual group can be struck again and temperature groups are independent (2996.361364ms)
+  ✔ a strike stays visible for at least half a second and withdraws while the fork rings (1020.598943ms)
+  ✔ visible forks are directly clickable at their real picture positions (843.668637ms)
+  ✔ small repeated tine motion stays connected to steel without a handle pushing the block (1805.618617ms)
+  ✔ vibrating neighbours carry the disturbance while the position pointer stays below the medium (1080.018541ms)
+  ✔ teaching results retain actual times and rest positions without prediction or grading (718.196202ms)
+  ✔ temperature controls are synchronized, bounded and use identical air layouts (198.669478ms)
+  ✔ warmer, colder and equal-temperature experiments produce correct outcomes (248.124584ms)
+  ✔ changing conditions clears running results and a tie has identical live motion (289.874378ms)
+  ✔ medium surface detail follows the same travel delay and stops on pause (1495.092516ms)
+  ✔ molecules stay within the material cross sections throughout the pulse (815.864323ms)
+  ✔ optional arrival cues use real audio nodes and stop when muted or paused (2788.406151ms)
+  ✔ backgrounding pauses at the same model time and never resumes automatically (1962.4702ms)
+real stopwatch: {"started":793.6000000014901,"arrivals":{"steel":{"elapsed":0.8621000000014901,"displayed":"0.847 秒"},"water":{"elapsed":3.3952000000029803,"displayed":"3.378 秒"},"air":{"elapsed":14.5945,"displayed":"14.577 秒"}},"checks":[{"elapsed":1.014,"clock":1.0088,"distances":[346.0184,1493.024,5000]},{"elapsed":5.01120000000298,"clock":5.0068,"distances":[1717.3324,5000,5000]},{"elapsed":10.010899999998509,"clock":10.0067,"distances":[3432.2981,5000,5000]}],"strikes":{"air":0.6117999999970197,"water":0.6117999999970197,"steel":0.6117999999970197}}
+  ✔ a real stopwatch confirms displayed seconds, positions and all three arrivals (15494.22569ms)
+  ✔ touch, both modes and seven viewport widths keep the layout usable (4149.96243ms)
+✔ fourth learning block works within the complete lesson (40933.679557ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41236.57816

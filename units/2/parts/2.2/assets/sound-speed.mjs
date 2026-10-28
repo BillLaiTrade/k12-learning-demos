@@ -2,8 +2,8 @@ import {
   DISTANCE, START_X, END_X,
   appearance, arrivalTime, reachedDistance, clamp, conditions,
   positions, runEnd, sample, winners
-} from './sound-speed-model.mjs?v=arrival-12';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=arrival-12';
+} from './sound-speed-model.mjs?v=strike-13';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=strike-13';
 
 export function initSoundSpeed(root) {
 const $ = selector => root.querySelector(selector);

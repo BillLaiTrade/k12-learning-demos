@@ -315,7 +315,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.deepEqual(await page.locator('.medium-row').evaluateAll(ns=>ns.map(n=>n.dataset.phase)),['idle','idle']);
   });
 
-  await t.test('a short strike withdraws while opposite fork arms ring around a stationary base', async () => {
+  await t.test('a strike stays visible for at least half a second and withdraws while the fork rings', async () => {
     await fresh();
     assert.equal(await page.locator('.tuning-fork').count(),3);
     assert.equal(await page.locator('.fork-striker[visibility=hidden]').count(),3);
@@ -328,6 +328,13 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),3);
     assert.notDeepEqual(await arms(),initialArms);
     await page.clock.runFor(250);
+    assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),3);
+    assert.equal(await page.locator('.fork-striker').evaluateAll(ns=>ns.every(n=>Number(n.getAttribute('opacity'))===1)),true);
+    await primary.click();const strikePaused=await page.locator('.fork-striker').evaluateAll(ns=>ns.map(n=>n.outerHTML));
+    await page.clock.runFor(1000);assert.deepEqual(await page.locator('.fork-striker').evaluateAll(ns=>ns.map(n=>n.outerHTML)),strikePaused);
+    await primary.click();await page.clock.runFor(120);
+    assert.equal(await page.locator('.fork-striker[visibility=visible]').count(),3,'the strike is still visible beyond 0.5 seconds');
+    await page.clock.runFor(120);
     assert.equal(await page.locator('.fork-striker[visibility=hidden]').count(),3);
     const movingTips=await tips();
     movingTips.forEach((pair,i)=>{const a=pair[0]-initialTips[i][0],b=pair[1]-initialTips[i][1];assert.ok(a*b<0);assert.ok(Math.abs(a+b)<.001);});
@@ -536,7 +543,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
       await realPage.goto(url, { waitUntil:'networkidle' });
       await realPage.evaluate(() => {
         const panel = document.querySelector('#experiment-panel');
-        window.__stopwatch = { started:null, arrivals:{}, checks:[] };
+        window.__stopwatch = { started:null, arrivals:{}, checks:[], strikes:{} };
         document.querySelector('#primary-action').addEventListener('click', () => { window.__stopwatch.started = performance.now(); }, { capture:true, once:true });
         new MutationObserver(() => {
           const record = window.__stopwatch;
@@ -544,6 +551,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
           const elapsed = (performance.now() - record.started) / 1000;
           for (const row of document.querySelectorAll('.medium-row')) {
             const output = row.querySelector('.arrival-readout output');
+            if(elapsed>.05 && !record.strikes[row.dataset.group] && row.querySelector('.fork-striker').getAttribute('visibility')==='hidden') record.strikes[row.dataset.group]=elapsed;
             if (output.hasAttribute('data-arrival') && !record.arrivals[row.dataset.group]) record.arrivals[row.dataset.group] = { elapsed, displayed:output.textContent };
           }
           const next = [1,5,10][record.checks.length];
@@ -557,6 +565,8 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
         assert.ok(Math.abs(readings.arrivals[id].elapsed - 5000 / speed) < .12, `${id} reaches the end at its real elapsed time`);
         assert.equal(readings.arrivals[id].displayed, `${(5000 / speed).toFixed(3)} 秒`);
       }
+      assert.equal(Object.keys(readings.strikes).length,3);
+      for(const duration of Object.values(readings.strikes))assert.ok(duration>=.6&&duration<.85,'real strike lasts at least half a second without extending propagation times');
       assert.equal(readings.checks.length, 3);
       for (const check of readings.checks) {
         assert.ok(Math.abs(check.clock - check.elapsed) < .06, 'displayed seconds match independent real stopwatch');
