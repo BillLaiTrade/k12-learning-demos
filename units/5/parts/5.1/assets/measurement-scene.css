@@ -1,13 +1,41 @@
-#measurement,#card-04{grid-template-columns:minmax(0,1fr);gap:16px}
-#measurement .card-side,#card-04 .card-side{display:flex;align-items:baseline;gap:12px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 12px}
-#measurement .card-side h3,#card-04 .card-side h3{margin:0}
-.measurement-lab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
-.lab-scene,.lab-observation{min-width:0;border:1px solid var(--line);border-radius:18px;padding:16px;background:linear-gradient(140deg,#edf5ee,#fffefa)}
-.lab-observation h3{margin:0 0 10px}.lab-scene>svg{display:block;width:100%;height:auto;background:#f8faf5;border-radius:12px}
-#measurement-diagram text{font-size:15px;fill:#344b42}#measurement-labels text{font-size:12px}
-#measurement-instrument{cursor:grab;touch-action:none}#measurement-instrument:active{cursor:grabbing}#measurement-instrument:focus-visible{outline:3px solid #bc612b}
+/* Quiz magnifier remains independent of the teaching scene. */
 .temperature-lens{display:block;width:100%;height:auto;max-height:330px;background:#fff;border:1px solid var(--line);border-radius:14px}
 .temperature-lens text{font-family:inherit;fill:#344b42;font-size:15px}
-.lab-observation [aria-pressed=true]{border-color:var(--green);background:var(--pale)}
-button:disabled{opacity:.5;cursor:default}.reading-observation{display:grid;grid-template-columns:minmax(140px,.65fr) minmax(0,1.35fr);gap:18px;align-items:center}
-@media(max-width:700px){.measurement-lab,.reading-observation{grid-template-columns:minmax(0,1fr)}#measurement .card-side,#card-04 .card-side{flex-wrap:wrap}.lab-scene,.lab-observation{padding:12px}}
+button:disabled{opacity:.5;cursor:default}
+#measurement #card-04{display:block;width:0;height:0;margin:0;padding:0;border:0;border-radius:0;box-shadow:none;overflow:visible;scroll-margin-top:24px}
+.parallax-preparation{display:flex;align-items:center;gap:10px;margin:20px 0 16px;padding:10px 14px;border-radius:10px;background:#eff3e9;color:#53654f;font-size:.86rem}
+.parallax-preparation>span{display:grid;place-items:center;width:23px;height:23px;flex:none;border-radius:50%;background:#dbe8d4;color:#456c39;font-weight:800}.parallax-preparation p{margin:0}
+.parallax-lab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.parallax-panel{min-width:0;overflow:hidden;border:1px solid #d9e0d0;border-radius:16px;background:linear-gradient(145deg,#f4f7ed,#fffdf6)}
+.parallax-panel header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 16px 10px}
+.parallax-panel h4{margin:0;font-size:1.04rem;color:#34553d}
+.parallax-panel header>span{font-size:.75rem;color:#6b7a65}
+.parallax-panel svg{display:block;width:100%;height:auto;overflow:hidden}
+.parallax-panel>p{margin:0;padding:8px 16px 14px;color:#6b7866;font-size:.76rem;text-align:center}
+#parallax-view{background:radial-gradient(ellipse at 48% 38%,#fffef8,#edf0e5 85%)}
+#parallax-view-badge{border:1px solid #bbceb0;border-radius:20px;padding:2px 12px;color:#41683c;background:#e9f1df;font-weight:700;white-space:nowrap}
+#parallax-eye{cursor:grab;touch-action:none;outline:none}
+#parallax-eye.is-dragging{cursor:grabbing}
+#parallax-eye:focus-visible>rect{stroke:#9d632a;stroke-width:3}
+.px-svg-label{fill:#50684f;font-size:15px;font-family:inherit}.px-svg-caption{fill:#6b7b68;font-size:13px;font-family:inherit}
+.parallax-presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:13px}
+.parallax-presets button{min-width:0;padding:10px 6px;border-radius:11px;font-size:.88rem;background:#fffef9}
+.parallax-presets button span{margin-right:4px;color:#6a8e58;font-size:1.15rem}
+.parallax-presets button[aria-pressed=true]{background:#e5efdd;border-color:#88a674;color:#335d36;box-shadow:inset 0 0 0 1px #88a674}
+.parallax-comparison{min-height:3.4em;margin:13px 0 17px!important;padding:11px 14px;border-radius:10px;background:#f0f4e9;color:#4f674a!important;font-size:.9rem}
+.parallax-record-form{display:flex;flex-wrap:wrap;align-items:end;gap:10px;padding-top:16px;border-top:1px solid var(--line)}
+.parallax-record-form label{display:block;flex:1 1 180px;max-width:260px;font-size:.86rem;font-weight:700;color:#466041}
+.parallax-reading-field{display:flex;align-items:center;overflow:hidden;margin-top:6px;border:1px solid #a8b8a0;border-radius:11px;background:#fff}
+.parallax-reading-field:focus-within{outline:2px solid #6d965a;outline-offset:2px}
+.parallax-reading-field input{width:100%;min-width:0;min-height:46px;padding:9px 12px;border:0;outline:0;background:transparent;color:#304b35}
+.parallax-reading-field>span{padding:0 14px;color:#526d4d;font-size:1rem}
+.parallax-reading-field:has([aria-invalid=true]){border-color:#a54b34}
+.parallax-record-form button{min-height:47px;padding-inline:14px;font-size:.9rem}
+.parallax-record{margin:10px 0 0!important;color:#586b53!important;font-size:.86rem}
+.parallax-model-note{margin:16px 0!important;color:#7b8376!important;font-size:.75rem}
+@container lesson-content (max-width:620px){
+ .parallax-lab{gap:8px}.parallax-panel header{padding:10px 9px 4px;align-items:start;flex-direction:column;gap:4px}.parallax-panel h4{font-size:.93rem}
+ .parallax-panel>p{padding:5px 9px 10px;font-size:.7rem}.parallax-presets{gap:5px}.parallax-presets button{font-size:.78rem;padding:9px 3px}.parallax-presets button span{display:none}
+ .parallax-record-form label{max-width:none;flex-basis:100%}.parallax-record-form button{flex:1}.parallax-comparison{font-size:.84rem}
+}
+@container lesson-content (max-width:360px){.parallax-lab{grid-template-columns:minmax(0,1fr)}.parallax-panel header{flex-direction:row;align-items:center}.parallax-panel svg{max-height:300px}.parallax-presets button{font-size:.74rem}}

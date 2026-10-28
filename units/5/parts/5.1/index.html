@@ -33,7 +33,7 @@
     @media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{grid-template-columns:1fr;padding:32px 0 25px}.lesson{padding-top:20px}.lesson-card{grid-template-columns:1fr;padding:18px;gap:14px}.card-side{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:0 7px;border:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0;font-size:.95rem}.card-role{grid-column:2;font-size:.79rem}.card-number{grid-row:1/3}.visual{padding:8px}.quiz-head{padding:18px}.quiz-body{padding:19px 17px 22px}.quiz-actions{align-items:stretch;flex-direction:column}.thermo-wrap{grid-template-columns:1fr}.thermo-svg{max-height:340px}.range-row{align-items:center;flex-direction:row}.sequence-step{grid-template-columns:22px minmax(0,1fr)}.sequence-controls{grid-column:2}.range-row input{width:100%}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
-  <link rel="stylesheet" href="assets/measurement-scene.css">
+  <link rel="stylesheet" href="assets/measurement-scene.css?v=parallax-1">
   <link rel="stylesheet" href="assets/touch-story.css">
   <link rel="stylesheet" href="assets/water-lab.css?v=engraved-glass-1">
   <link rel="stylesheet" href="assets/dual-scale.css?v=dual-scale-5">
@@ -46,7 +46,7 @@
   <main class="shell lesson">
     <div class="lesson-layout">
       <nav class="route" aria-label="學習區塊導覽"><p class="route-label">學習路線</p><div class="route-inner">
-        <a href="#card-01" aria-current="step"><b>01</b><span>手感能量出溫度嗎</span></a><a href="#card-02"><b>02</b><span>溫度計怎麼測量</span></a><a href="#card-03"><b>03</b><span>攝氏與華氏換算</span></a><a href="#measurement"><b>04</b><span>先取得穩定的讀值</span></a><a href="#card-04"><b>05</b><span>讀取與估讀刻度</span></a><a class="quiz-nav" href="#unit-quiz"><b aria-hidden="true">✦</b><span>單元小測</span></a>
+        <a href="#card-01" aria-current="step"><b>01</b><span>手感能量出溫度嗎</span></a><a href="#card-02"><b>02</b><span>溫度計怎麼測量</span></a><a href="#card-03"><b>03</b><span>攝氏與華氏換算</span></a><a href="#measurement"><b>04</b><span>平視、估讀與記錄</span></a><a class="quiz-nav" href="#unit-quiz"><b aria-hidden="true">✦</b><span>單元小測</span></a>
       </div></nav>
       <div class="cards">
     <div class="hero">
@@ -55,7 +55,7 @@
       </div>
       <figure class="hero-art"><img src="assets/temperature-story-opening.webp" alt="白髮、戴圓眼鏡的阿公和小葵在科學桌前觀察液體溫度計，桌上有三杯不同溫度的水與實驗紀錄本。"><figcaption class="hero-caption">小葵和阿公用溫度計比較不同水樣本</figcaption></figure>
     </div>
-        <div class="section-top"><h2>從手感開始，用刻度讀出溫度</h2><span class="progress-copy">五個學習區塊・一個單元小測</span></div>
+        <div class="section-top"><h2>從手感開始，用刻度讀出溫度</h2><span class="progress-copy">四個學習區塊・一個單元小測</span></div>
         <section class="lesson-card" id="card-01" aria-labelledby="touch-story-title">
           <div class="card-side"><span class="card-number">01</span><div class="card-heading"><h3 id="touch-story-title">手感能量出溫度嗎？</h3><p class="card-intro">先接觸的冷熱不同，對同一杯水的感覺也可能不同；要比較溫度，需要共同的測量工具。</p></div></div>
           <div class="card-main">
@@ -217,60 +217,82 @@
           </div>
         </section>
         <section class="lesson-card" id="measurement" aria-labelledby="measurement-title">
-          <div class="card-side"><span class="card-number">04</span><div class="card-heading"><h3>先取得穩定的讀值</h3><p class="card-intro"><span class="card-role">放入、觀察、平視、記錄</span>。等待液柱穩定，留在水中平視刻度，才能取得可記錄的讀值。</p></div></div>
+          <div class="card-side"><span class="card-number">04</span><div class="card-heading"><h3 id="measurement-title">同一支溫度計，怎樣讀得準？</h3><p class="card-intro"><span class="card-role">先平視，再估讀並記錄</span>。液柱不動，換個觀看位置，讀到的刻度可能不同。</p></div></div>
           <div class="card-main">
-            <h2 id="measurement-title">親手量一次這杯水的溫度</h2>
-            <p>把溫度計拖到杯口上方放入，觀察液柱逐漸穩定，再比較視線位置。液泡要浸在水中，不碰杯壁、杯底，並依工具標示的浸入深度使用。</p>
-            <div class="measurement-lab">
-              <div class="lab-scene">
-                <svg id="measurement-diagram" viewBox="0 0 640 480" aria-labelledby="measurement-description">
-                  <title id="measurement-description">可拖曳的溫度計與水杯</title>
-                  <defs><linearGradient id="water-fill" x2="0" y2="1"><stop stop-color="#d4eff0" stop-opacity=".6"/><stop offset="1" stop-color="#8ac5c9" stop-opacity=".8"/></linearGradient><linearGradient id="glass-fill"><stop stop-color="#fff"/><stop offset=".5" stop-color="#ecf3ef"/><stop offset="1" stop-color="#fff"/></linearGradient></defs>
-                  <path d="M105 235V424Q105 438 120 438H350Q365 438 365 424V235" fill="#fffefa" stroke="#60776d" stroke-width="3"/>
-                  <path d="M108 310H362V424Q362 435 350 435H120Q108 435 108 424Z" fill="url(#water-fill)"/>
-                  <path d="M110 310H360" stroke="#56959d" stroke-width="2"/>
-                  <text x="118" y="468">水杯・液泡與杯底保持距離</text>
-                  <rect x="140" y="212" width="190" height="35" rx="12" fill="none" stroke="#8cae91" stroke-dasharray="6 4"/><text x="145" y="200">液泡從杯口上方放入</text>
-                  <g id="measurement-instrument" tabindex="0" role="button" aria-label="溫度計，拖到杯口上方放入；也可按 Enter 放入" transform="translate(210,0)">
-                    <rect x="212" y="30" width="62" height="390" fill="transparent"/>
-                    <rect x="221" y="30" width="28" height="365" rx="14" fill="url(#glass-fill)" stroke="#60776d" stroke-width="3"/>
-                    <circle cx="235" cy="395" r="20" fill="url(#glass-fill)" stroke="#60776d" stroke-width="3"/>
-                    <rect id="measurement-liquid" x="228" y="272" width="14" height="123" fill="#d45e4e"/>
-                    <circle cx="235" cy="395" r="14" fill="#d45e4e"/>
-                    <g id="measurement-ticks" stroke="#344b42" stroke-width="1.5"></g><g id="measurement-labels"></g><text x="315" y="36">°C</text>
+            <span id="card-04" class="parallax-anchor" aria-hidden="true"></span>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>「溫度計沒變，為什麼我看到的數字不一樣？」</p></div>
+            <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「把視線移到和液面同高，再仔細看看刻度。」</p></div>
+            <div class="parallax-preparation"><span aria-hidden="true">✓</span><p>液泡依標示浸入水中，不碰杯底、杯壁。現在液柱已穩定，<strong>保持溫度計在水中讀值</strong>。</p></div>
+            <div class="parallax-lab">
+              <div class="parallax-panel parallax-position">
+                <header><h4>移動你的視線</h4><span>上下拖曳眼睛</span></header>
+                <svg id="parallax-side" viewBox="0 0 400 400" role="group" aria-label="溫度計側面與可上下拖曳的眼睛">
+                  <defs>
+                    <linearGradient id="px-glass"><stop stop-color="#758d91" stop-opacity=".5"/><stop offset=".2" stop-color="#fff" stop-opacity=".95"/><stop offset=".45" stop-color="#dce7e5" stop-opacity=".6"/><stop offset=".8" stop-color="#fff"/><stop offset="1" stop-color="#7f9797" stop-opacity=".7"/></linearGradient>
+                    <linearGradient id="px-water" x2="0" y2="1"><stop stop-color="#d3e9e6" stop-opacity=".5"/><stop offset="1" stop-color="#9bc9cd" stop-opacity=".7"/></linearGradient>
+                    <linearGradient id="px-red"><stop stop-color="#bb1726"/><stop offset=".4" stop-color="#ff5f57"/><stop offset="1" stop-color="#b80e23"/></linearGradient>
+                    <filter id="px-shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dy="3" stdDeviation="4" flood-color="#264d3f" flood-opacity=".15"/></filter>
+                  </defs>
+                  <ellipse cx="143" cy="369" rx="91" ry="9" fill="#536b60" opacity=".09"/>
+                  <path d="M67 279V350Q67 365 82 365H207Q222 365 222 350V279" fill="#fcfefd" fill-opacity=".6" stroke="#879fa1" stroke-width="2"/>
+                  <path d="M69 304H220V349Q220 362 207 362H82Q69 362 69 349Z" fill="url(#px-water)"/>
+                  <ellipse cx="144" cy="304" rx="75" ry="9" fill="#c4e0df" fill-opacity=".55" stroke="#9fbdbe"/>
+                  <ellipse cx="144" cy="279" rx="77" ry="10" fill="none" stroke="#8ea4a5" stroke-width="2"/>
+                  <rect x="121" y="39" width="34" height="294" rx="15" fill="url(#px-glass)" stroke="#8fa1a0"/>
+                  <circle cx="138" cy="336" r="15" fill="url(#px-glass)" stroke="#8fa1a0"/>
+                  <rect x="133" y="180" width="10" height="157" fill="url(#px-red)"/>
+                  <path d="M133 180Q138 183 143 180" fill="none" stroke="#b91628"/>
+                  <circle cx="138" cy="336" r="10" fill="url(#px-red)"/>
+                  <path d="M127 54V321" stroke="#fff" stroke-width="3" opacity=".8"/>
+                  <g id="parallax-side-ticks" stroke="#425955" stroke-width="1.2"></g>
+                  <path d="M79 289V347Q79 353 86 353" fill="none" stroke="#fff" stroke-width="4" opacity=".7"/>
+                  <text x="90" y="24" class="px-svg-label">側面示意</text>
+                  <circle cx="138" cy="180" r="23" fill="none" stroke="#7d9c7c" stroke-dasharray="4 4"/>
+                  <path d="M161 180H325" stroke="#97b19b" stroke-dasharray="4 5"/>
+                  <path id="parallax-ray" d="M138 180L314 180" fill="none" stroke="#387952" stroke-width="2"/>
+                  <circle cx="138" cy="180" r="3" fill="#387952"/>
+                  <path d="M337 62V298" stroke="#d1ded0" stroke-width="8" stroke-linecap="round"/>
+                  <path d="M337 70v220" stroke="#fff" stroke-width="2" stroke-dasharray="2 5"/>
+                  <path d="m331 68 6-8 6 8m-12 224 6 8 6-8" fill="none" stroke="#789471" stroke-width="2"/>
+                  <g id="parallax-eye" tabindex="0" role="slider" aria-label="眼睛高度" aria-orientation="vertical" aria-valuemin="-100" aria-valuemax="100" aria-valuenow="0" aria-valuetext="平視，與液面同高" aria-describedby="parallax-drag-hint" transform="translate(314,180)">
+                    <rect x="-31" y="-28" width="62" height="56" rx="24" fill="#fffdf8" stroke="#789471" stroke-width="1.5" filter="url(#px-shadow)"/>
+                    <path d="M-23 0Q0-25 23 0Q0 25-23 0" fill="#f4f7ef" stroke="#526851" stroke-width="2"/>
+                    <circle r="10" fill="#8a795d"/><circle r="5.5" fill="#263a31"/><circle cx="-3" cy="-3" r="2.5" fill="#fff"/>
                   </g>
-                  <g id="measurement-sight" hidden><path id="sight-ray" stroke="#176b53" stroke-width="2" stroke-dasharray="6 4"/><circle id="sight-hit" r="5" fill="#bc612b"/><g id="sight-eye"><path d="M-18 0Q0-20 18 0Q0 20-18 0" fill="#fff" stroke="#176b53" stroke-width="2"/><circle r="5" fill="#176b53"/></g></g>
+                  <text x="267" y="335" class="px-svg-label">↑ 上下拖曳 ↓</text>
+                  <text x="84" y="391" class="px-svg-caption">液柱保持不動，只移動眼睛</text>
                 </svg>
-                <div class="controls"><button class="action" id="measurement-insert" type="button">放入水中</button><button class="secondary" id="measurement-reset" type="button">取出並重設</button></div>
-                <p id="measurement-note" class="fact" role="status">溫度計還在杯外。先放入水中，看看液柱會如何改變。</p>
+                <p id="parallax-drag-hint">也可使用下方按鈕；鍵盤 ↑ ↓ 調整，Home 回到同高。</p>
               </div>
-              <div class="lab-observation">
-                <h3>液面附近放大看</h3><svg id="measurement-lens" class="temperature-lens" viewBox="0 0 380 290" role="img" aria-label="液面局部放大"></svg>
-                <div class="controls" role="group" aria-label="比較觀看位置"><button class="secondary" data-eye="-1" aria-pressed="false" disabled>視線較高</button><button class="secondary" data-eye="0" aria-pressed="true" disabled>與液面同高</button><button class="secondary" data-eye="1" aria-pressed="false" disabled>視線較低</button></div>
-                <p id="measurement-comparison" class="live-note">放入溫度計後，可以比較不同觀看位置。</p>
-                <button class="action" id="measurement-save" type="button" disabled>記錄水溫</button><p id="measurement-record" class="fact" role="status" hidden></p>
-              </div>
-            </div>
-            <p class="live-note">紅色液面與刻度分處不同位置，斜視時會出現視差。圖中間距為了觀察而放大，偏移幅度不代表真實儀器誤差；放大窗不增加刻線。等待時間也是示意。</p>
-          </div>
-        </section>
-        <section class="lesson-card" id="card-04">
-          <div class="card-side"><span class="card-number">05</span><div class="card-heading"><h3>讀取與估讀刻度</h3><p class="card-intro"><span class="card-role">先對齊，再估讀</span>。液面落在刻線之間時，依最小刻度間距合理估讀，並記下溫度與單位。</p></div></div>
-          <div class="card-main">
-            <h2>液面落在兩條刻度之間，該怎麼讀？</h2>
-            <p>液柱穩定後，先找液面頂端，再沿水平視線對齊刻度。每 1°C 一小格，每 10°C 標示數字；液面在刻線之間時，依間距合理估讀。</p>
-            <div class="visual reading-observation">
-              <svg id="observation-thermometer" class="thermo-svg" viewBox="0 0 260 410" role="img" aria-label="攝氏溫度計"></svg>
-              <div>
-                <svg id="observation-lens" class="temperature-lens" viewBox="0 0 380 290" role="img" aria-label="液面附近的刻線放大"></svg>
-                <label for="thermo-control"><strong>調整水溫並觀察液柱</strong></label>
-                <div class="range-row"><span>0°C</span><input id="thermo-control" type="range" min="0" max="100" step="0.5" value="37.5" aria-describedby="thermo-hint"><span>100°C</span></div>
-                <button class="secondary" id="thermo-guide" type="button" aria-pressed="false">顯示讀值對照</button>
-                <p id="thermo-detail" class="fact" hidden></p>
-                <p id="thermo-hint" class="live-note">拖動滑桿，看液面與刻度如何一起改變，再開啟對照觀察。</p>
+              <div class="parallax-panel parallax-observer">
+                <header><h4>眼睛看到的樣子</h4><span id="parallax-view-badge">平視</span></header>
+                <svg id="parallax-view" viewBox="0 0 400 400" role="img" aria-label="平視溫度計液面附近，最小刻度為 1°C">
+                  <defs>
+                    <linearGradient id="px-body"><stop stop-color="#849b9e"/><stop offset=".12" stop-color="#f5fbfa"/><stop offset=".25" stop-color="#cddad8" stop-opacity=".75"/><stop offset=".52" stop-color="#fafcf6" stop-opacity=".9"/><stop offset=".82" stop-color="#e8efe5"/><stop offset=".95" stop-color="#fff"/><stop offset="1" stop-color="#91a5a4"/></linearGradient>
+                    <linearGradient id="px-bore"><stop stop-color="#506b72" stop-opacity=".55"/><stop offset=".3" stop-color="#fbffff"/><stop offset=".75" stop-color="#edf4f2"/><stop offset="1" stop-color="#607a7e" stop-opacity=".6"/></linearGradient>
+                    <linearGradient id="px-liquid"><stop stop-color="#a30a21"/><stop offset=".25" stop-color="#e52636"/><stop offset=".55" stop-color="#ff625c"/><stop offset=".8" stop-color="#ef2436"/><stop offset="1" stop-color="#a60f27"/></linearGradient>
+                  </defs>
+                  <g id="parallax-projection"></g>
+                </svg>
+                <p>液面附近放大看・最小刻度 <strong>1°C</strong></p>
               </div>
             </div>
-            <div class="fact"><p><strong>觀察：</strong>37.5°C 位於 37°C 與 38°C 的正中央。對齊標線只是幫助觀看，不會讓溫度計多出更細的刻度。接下來請自己讀一次，並解釋液柱為什麼會升高。</p></div>
+            <div class="parallax-presets" role="group" aria-label="選擇觀看位置">
+              <button type="button" class="secondary" data-view="high" aria-pressed="false"><span aria-hidden="true">↘</span> 視線較高</button>
+              <button type="button" class="secondary" data-view="level" aria-pressed="true"><span aria-hidden="true">→</span> 與液面同高</button>
+              <button type="button" class="secondary" data-view="low" aria-pressed="false"><span aria-hidden="true">↗</span> 視線較低</button>
+            </div>
+            <p id="parallax-comparison" class="parallax-comparison" role="status">平視：視線與液面同高，沿液面頂端對照刻度。</p>
+            <form id="parallax-record-form" class="parallax-record-form" novalidate>
+              <label for="parallax-reading">我的估讀<span class="parallax-reading-field"><input id="parallax-reading" type="number" inputmode="decimal" step="0.1" min="0" max="100" placeholder="輸入讀值" aria-describedby="parallax-record"><span>°C</span></span></label>
+              <button class="action" type="submit">記錄讀數</button>
+              <button class="secondary" id="parallax-reference-button" type="button" aria-expanded="false" aria-controls="parallax-reference">顯示參考讀值</button>
+            </form>
+            <p id="parallax-record" class="parallax-record" role="status">先自己估讀，再開啟參考比較。</p>
+            <div id="parallax-reference" class="fact" hidden><p><strong>平視參考：約 37.5°C。</strong>液面在 37°C 和 38°C 的正中央。放大沒有增加刻線，仍依原本的 1°C 間距估讀。</p></div>
+            <p class="parallax-model-note">玻璃與刻線的透視隨視角改變；圖中前後間距與視角為教學放大，視差幅度不代表真實儀器的誤差規格。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>「先平視，再看液面落在兩條刻線的哪裡。」</p></div>
+            <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「記下數字和單位，才能把測量結果說清楚。」</p></div>
           </div>
         </section>
         <section class="quiz" id="unit-quiz" aria-labelledby="quiz-title">
@@ -309,8 +331,9 @@
     </div>
   </main>
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
-  <script src="assets/temperature-lesson.js" defer></script>
+  <script src="assets/temperature-lesson.js?v=merged-reading-1" defer></script>
   <script type="module" src="assets/water-lab.js?v=engraved-glass-1"></script>
+  <script type="module" src="assets/parallax-reading.js?v=parallax-1"></script>
   <script src="assets/dual-scale.js?v=dual-scale-4" defer></script>
 </body>
 </html>
