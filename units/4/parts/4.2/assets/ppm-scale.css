@@ -19,8 +19,8 @@
 #s5 .ppm-lens>strong,#s5 #ppm-zoom-factor {display:block;width:max-content;max-width:100%;margin:8px auto 0;padding:2px 7px;background:#fffdf5ef;border-radius:5px;font-size:.67rem;font-weight:600;color:#5c6d4e;white-space:normal;line-height:1.5;}
 #s5 #ppm-zoom-factor {font-size:.6rem;margin-top:3px;font-weight:400;}
 #s5 #ppm-close-lens {position:absolute;z-index:2;right:0;top:0;width:28px;height:28px;border:1px solid #afbd9e;border-radius:50%;background:#fffffff5;color:#536b4c;font:inherit;font-size:1rem;cursor:pointer;line-height:1;}
-#s5 .ppm-scale-bar {position:absolute;left:50%;bottom:19%;transform:translateX(-50%);height:5px;border:1px solid #4c684c;border-top:0;pointer-events:none;}
-#s5 .ppm-scale-bar>span {position:absolute;left:50%;top:5px;transform:translateX(-50%);font-size:9px;color:#456046;white-space:nowrap;}
+#s5 .ppm-scale-bar {position:absolute;left:50%;bottom:19%;transform:translateX(-50%);height:5px;border:1px solid #e2efdb;border-top:0;pointer-events:none;}
+#s5 .ppm-scale-bar>span {position:absolute;left:50%;top:5px;transform:translateX(-50%);font-size:9px;color:#eff6e8;white-space:nowrap;}
 #s5 .ppm-reference-note {margin:8px 1px 18px;font-size:.71rem;color:#748072;line-height:1.75;}
 #s5 .ppm-definition {margin:18px 0;padding:14px 17px;border-left:3px solid #8bad8c;border-radius:0 9px 9px 0;background:#eef5eb;color:#416449;font-size:.9rem;}
 #s5 .ppm-definition b {color:#176b53;white-space:nowrap;}

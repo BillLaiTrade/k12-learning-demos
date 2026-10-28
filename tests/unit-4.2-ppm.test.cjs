@@ -1,4 +1,4 @@
-const{test}=require('node:test');const assert=require('node:assert/strict');const{spawn}=require('node:child_process');const path=require('node:path');const{chromium}=require('playwright');
+const{test}=require('node:test');const assert=require('node:assert/strict');const{spawn,spawnSync}=require('node:child_process');const path=require('node:path');const{chromium}=require('playwright');
 test('4.2 ppm: calibrated mass, same-scale observations and interaction',{timeout:180000},async t=>{
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','pipe']});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',s=>{const m=String(s).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.on('error',reject);});
@@ -26,6 +26,32 @@ test('4.2 ppm: calibrated mass, same-scale observations and interaction',{timeou
   let size=await page.locator('.ppm-lens-glass').evaluate(e=>e.clientWidth);assert.ok(Math.abs(Number(d.scaleBarPixels)-size/3.6)<1e-8);assert.ok(Math.abs(await page.locator('#ppm-scale-bar').evaluate(e=>e.getBoundingClientRect().width)-size/3.6)<.1);
   await root.screenshot({path:'/tmp/ppm-checked-milligram.png'});
   await page.locator('#ppm-gram').click();d=await data();assert.equal(d.ppm,'1000');assert.equal(d.grainCount,'10000');assert.equal(d.lensFieldMm,'36');assert.equal(d.scaleBarMm,'10');assert.equal(await page.locator('#ppm-scale-bar-label').innerText(),'10 mm');await root.screenshot({path:'/tmp/ppm-checked-gram.png'});
+ });
+ await t.test('both dishes render dark and the magnified white sugar has clear luminance contrast',async()=>{
+  await page.locator('#ppm-milligram').click();
+  const r=await page.locator('#ppm-scale-scene').boundingBox(),points=[];
+  for(const id of ['ppm-gram','ppm-milligram']){const b=await page.locator('#'+id).boundingBox();points.push([Math.round(b.x+b.width/2-r.x+r.width*18/360),Math.round(b.y-r.y+r.height*.07)]);}
+  const python=`from PIL import Image
+import io,sys,json
+im=Image.open(io.BytesIO(sys.stdin.buffer.read())).convert('RGB')
+points=json.loads(sys.argv[1])
+lumas=[]
+for x,y in points:
+ p=[im.getpixel((min(im.width-1,max(0,x+dx)),min(im.height-1,max(0,y+dy)))) for dx in range(-1,2) for dy in range(-1,2)]
+ lumas.append(sum(.2126*r+.7152*g+.0722*b for r,g,b in p)/len(p))
+print(json.dumps(lumas))`;
+  const sampled=spawnSync('python3',['-c',python,JSON.stringify(points)],{input:await page.locator('#ppm-scale-scene').screenshot()});assert.equal(sampled.status,0,sampled.stderr.toString());const lumas=JSON.parse(sampled.stdout);assert.ok(lumas.every(v=>v<150),`dish luminance ${lumas}`);
+  const lensPython=`from PIL import Image
+import io,sys,json
+im=Image.open(io.BytesIO(sys.stdin.buffer.read())).convert('RGB')
+p=[]
+for y in range(im.height):
+ for x in range(im.width):
+  if (x-im.width/2)**2+(y-im.height/2)**2<(min(im.width,im.height)*.36)**2:
+   r,g,b=im.getpixel((x,y));p.append(.2126*r+.7152*g+.0722*b)
+print(json.dumps({'dark':sum(v<130 for v in p),'light':sum(v>180 for v in p)}))`;
+  const sampledLens=spawnSync('python3',['-c',lensPython],{input:await page.locator('#ppm-lens-canvas').screenshot()});assert.equal(sampledLens.status,0,sampledLens.stderr.toString());const contrast=JSON.parse(sampledLens.stdout);assert.ok(contrast.dark>100&&contrast.light>50,JSON.stringify(contrast));
+  await page.locator('#ppm-gram').click();
  });
  await t.test('keyboard, close, escape and shared reset operate without changing the upper recipe',async()=>{
   await close();assert.equal(await page.locator('#ppm-gram').evaluate(e=>document.activeElement===e),true);await page.locator('#ppm-milligram').focus();await page.keyboard.press('Enter');assert.equal((await data()).sample,'milligram');assert.equal((await data()).lensOpen,'true');await page.keyboard.press('Escape');assert.equal((await data()).lensOpen,'false');

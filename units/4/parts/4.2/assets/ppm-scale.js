@@ -26,7 +26,7 @@ function signedVolume(geo){const p=geo.attributes.position;let sum=0;const a=new
 async function initialize(){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});let zoomRenderer;try{zoomRenderer=new THREE.WebGLRenderer({canvas:lensCanvas,antialias:true,alpha:false});}catch(error){renderer.dispose();throw error;}cleanupFailed=()=>{renderer.dispose();zoomRenderer.dispose();};
   for(const r of [renderer,zoomRenderer]){r.setPixelRatio(Math.min(devicePixelRatio||1,1.5));r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1;r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;}
-  const scene=new THREE.Scene(),macro=new THREE.Scene();macro.background=new THREE.Color('#f7f5ee');
+  const scene=new THREE.Scene(),macro=new THREE.Scene();macro.background=new THREE.Color('#26383b');
   const pmrem=new THREE.PMREMGenerator(renderer),room=new RoomEnvironment(),environment=pmrem.fromScene(room,.03);room.dispose();pmrem.dispose();
   const macroPmrem=new THREE.PMREMGenerator(zoomRenderer),macroRoom=new RoomEnvironment(),macroEnvironment=macroPmrem.fromScene(macroRoom,.03);macroRoom.dispose();macroPmrem.dispose();
   scene.environment=environment.texture;macro.environment=macroEnvironment.texture;cleanupFailed=()=>{environment.dispose();macroEnvironment.dispose();renderer.dispose();zoomRenderer.dispose();};
@@ -44,7 +44,7 @@ async function initialize(){
   // not extra volume in the one-liter mathematical cylinder.
   const surface=new THREE.Mesh(new THREE.CircleGeometry(WATER.radiusMm-.2,96),new THREE.MeshBasicMaterial({color:0xc9ded6,transparent:true,opacity:.24,side:THREE.DoubleSide,depthWrite:false}));surface.rotation.x=-Math.PI/2;surface.position.set(-96,4+WATER.heightMm+.02,0);surface.renderOrder=2;scene.add(surface);
   const meniscus=new THREE.Mesh(new THREE.TorusGeometry(WATER.radiusMm-.1,.25,8,96),new THREE.MeshBasicMaterial({color:0x7e9990,transparent:true,opacity:.7,depthWrite:false}));meniscus.renderOrder=3;meniscus.rotation.x=Math.PI/2;meniscus.position.set(-96,4+WATER.heightMm,0);scene.add(meniscus);
-  const porcelain=new THREE.MeshPhysicalMaterial({color:0xfffdf7,roughness:.26,clearcoat:.4});
+  const porcelain=new THREE.MeshPhysicalMaterial({color:0x25393c,roughness:.86,clearcoat:.03,specularIntensity:.2});
   const trayGeo=new THREE.LatheGeometry([[0,.8],[15,.8],[20,2],[22,5],[21.6,5.5],[19.5,2.7],[15,1.8],[0,1.8]].map(([x,y])=>new THREE.Vector2(x,y)),64);
   for(const x of [43,126]){const tray=new THREE.Mesh(trayGeo,porcelain);tray.receiveShadow=true;tray.position.x=x;scene.add(tray);}
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=128;const c=shadowCanvas.getContext('2d'),g=c.createRadialGradient(64,64,3,64,64,64);g.addColorStop(0,'#30291842');g.addColorStop(.55,'#30291815');g.addColorStop(1,'#30291800');c.fillStyle=g;c.fillRect(0,0,128,128);const shadowTexture=new THREE.CanvasTexture(shadowCanvas),shadowMat=new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false});
