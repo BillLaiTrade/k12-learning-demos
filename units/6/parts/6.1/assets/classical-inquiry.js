@@ -27,12 +27,12 @@
       feedback: { oxygen: '氧氣：可使蠟燭燃燒更旺。氧氣是助燃氣體，並不是燃料。', ordinary: '空氣：能讓蠟燭燃燒；組成研究顯示，其中包含氮、氧及其他氣體。', carbon: '二氧化碳：不能維持這裡的蠟燭燃燒。這個比較本身還不足以證明空氣是混合物。' }
     },
     fire: {
-      past: '火曾被列為構成物質的基本元素。', title: '增加的質量從哪裡來？', instruction: '比較金屬樣品，再追蹤參與反應的氧。',
+      past: '火曾被列為構成物質的基本元素。', title: '火是成分，還是燃燒時的現象？', instruction: '以鎂在氧氣中燃燒為例，觀察發光與生成物。',
       conclusion: '火焰是燃燒時的現象', result: '燃燒涉及物質反應；火焰不是一種化學元素。',
       brief: '拉瓦節以稱量及氣體研究，解釋鉛、錫等金屬燃燒後增重，來自氧與金屬結合。',
-      note: '比較的是樣品，不是密閉系統總質量；圖為定性示意，沒有虛構實測數值。',
-      choices: [['samples','看樣品前後'],['oxygen','追蹤氧的去向']], initial: 'samples',
-      feedback: { samples: '樣品比較：金屬與氧結合後，所得產物的質量大於原本金屬樣品的質量。', oxygen: '追蹤氧：增加的質量來自參與反應的氧。物質由周圍進入樣品，並不是火焰憑空帶來質量。' }
+      note: '鎂在氧氣中燃燒的概念示意，非拉瓦節歷史裝置復原。增重比較的是樣品，不是密閉系統總質量。',
+      choices: [['samples','看燃燒前後'],['oxygen','追蹤氧的去向']], initial: 'samples',
+      feedback: { samples: '燃燒前後：鎂帶發出耀眼白光並放熱，反應後得到氧化鎂。亮光是反應時的現象，不是多出一種叫「火」的成分。', oxygen: '追蹤氧：氧與鎂反應，成為氧化鎂的一部分。若鎂完全反應且產物完整收集，增加的質量來自結合的氧。' }
     }
   };
   const svg = (content, label, height = 360) => `<svg class="inquiry-svg" viewBox="0 0 600 ${height}" role="img" aria-label="${label}">${content}</svg>`;
@@ -107,7 +107,21 @@
     return svg(drawing+'<g class="air-composition"><path d="M115 317H485" stroke="#a4bdaf" stroke-width="2"/><text x="300" y="342" text-anchor="middle" class="diagram-heading">空氣組成研究：氮 ＋ 氧 ＋ 其他氣體</text></g>','氧氣、空氣與二氧化碳中的蠟燭燃燒表現不同；下方另列空氣包含的氣體。',365);
   }
   function fire() {
-    return svg(`<g class="metal-record" data-focus="samples"><rect x="5" y="92" width="190" height="218" rx="16"/><text x="100" y="125" text-anchor="middle" class="diagram-heading">反應前的金屬樣品</text><path d="M49 195l67-30 45 27-67 30Z" fill="#c7d1d2" stroke="#819597" stroke-width="2"/><path d="M49 195v22l45 28v-23M94 222v23l67-31v-22" fill="#9aabae" stroke="#819597" stroke-width="2"/><text x="100" y="284" text-anchor="middle">金屬樣品的質量</text><rect x="405" y="92" width="190" height="218" rx="16"/><text x="500" y="125" text-anchor="middle" class="diagram-heading">與氧結合後的產物</text><path d="M441 226l18-30 22 13 18-38 22 29 27-9 20 35Z" fill="#7a8179" stroke="#525f55" stroke-width="2"/><text x="500" y="284" text-anchor="middle">產物的質量較大</text></g><g class="oxygen-route" data-focus="oxygen"><rect x="204" y="6" width="192" height="69" rx="14" fill="#e6f0e8" stroke="#92b69e"/><text x="300" y="34" text-anchor="middle" class="diagram-heading">來自空氣的氧</text><text x="300" y="58" text-anchor="middle" class="diagram-caption">參與反應，進入產物</text><path d="M300 75Q308 140 430 173" fill="none" stroke="#6b9d7a" stroke-width="7"/><path d="M430 173l-24-17 1 25Z" fill="#6b9d7a"/></g>${arrow(220,221,155)}<text x="300" y="202" text-anchor="middle" class="diagram-caption">與氧結合</text><text x="300" y="350" text-anchor="middle" class="diagram-heading">產物的質量 ＝ 原本金屬的質量 ＋ 結合的氧的質量</text>`, '比較金屬樣品反應前及與氧結合後的產物。增加的質量來自氧。',375);
+    return `<div class="fire-investigation">
+      <div class="oxygen-route" data-focus="oxygen"><span>參與反應的氧氣</span><strong>↓ 與鎂反應</strong></div>
+      <div class="metal-record fire-sequence" data-focus="samples">
+        <article class="fire-before"><h6>燃燒前</h6>
+          <svg viewBox="0 0 180 205" role="img" aria-label="燃燒前的銀白色鎂帶"><path d="M34 118Q55 62 104 74Q139 84 120 108Q104 126 83 111Q66 101 68 89L56 133Q54 149 77 156" fill="none" stroke="#81999e" stroke-width="19"/><path d="M34 114Q55 58 104 70Q139 80 120 104Q104 122 83 107Q66 97 68 85L56 129Q54 145 77 152" fill="none" stroke="#cddadd" stroke-width="13"/></svg>
+          <p>銀白色鎂帶</p></article>
+        <article class="fire-burning"><h6>燃燒時</h6>
+          <svg viewBox="0 0 210 205" role="img" aria-label="鎂燃燒發出耀眼白光並放熱，圖為靜態示意"><circle cx="105" cy="104" r="73" fill="#f8e8b5" opacity=".6"/><circle cx="105" cy="104" r="52" fill="#fffbed"/><path d="M105 32l10 39 30-27-12 39 43 1-33 24 33 25-43 1 12 40-30-27-10 40-11-40-31 27 13-40-43-1 33-25-33-24 43-1-13-39 31 27Z" fill="white" stroke="#dab877" stroke-width="2"/><path d="M100 165l13-25 9 4-12 29Z" fill="#a9b9ba" stroke="#799192" stroke-width="2"/><circle cx="105" cy="105" r="19" fill="white"/></svg>
+          <p>耀眼白光、放熱</p></article>
+        <article class="fire-after"><h6>燃燒後</h6>
+          <svg viewBox="0 0 180 205" role="img" aria-label="燃燒後形成白色的氧化鎂粉末"><ellipse cx="90" cy="143" rx="69" ry="25" fill="#e6eeed" stroke="#9cb0ac" stroke-width="2"/><path d="M35 142l19-20 12 7 16-25 18 13 13-9 13 21 18 13Q91 161 35 142Z" fill="#fffef9" stroke="#afbbb5" stroke-width="2"/><path d="M65 137l10-4m25-4 8 5m-20 6 7 4" stroke="#d2d9d3" stroke-width="3"/></svg>
+          <p>白色氧化鎂</p></article>
+      </div>
+      <div class="fire-findings"><strong>亮光是燃燒時的現象</strong><span>鎂與氧反應，形成新物質「氧化鎂」。</span></div>
+    </div>`;
   }
   const diagrams = { earth:soil, water, air, fire };
   function select(key, observation) {

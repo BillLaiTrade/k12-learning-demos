@@ -161,6 +161,10 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
     await page.locator('button[data-observation=carbon]').click();
     assert.match(await text('#inquiry-feedback'), /不足以證明空氣是混合物/);
     await page.locator('[data-classical=fire]').click();
+    assert.match(await text('#inquiry-title'), /火.*燃燒時的現象/);
+    assert.match(await text('.fire-burning'), /耀眼白光、放熱/);
+    assert.match(await text('.fire-after'), /白色氧化鎂/);
+    assert.match(await text('.fire-findings'), /亮光是燃燒時的現象/);
     await page.locator('button[data-observation=oxygen]').click();
     assert.equal(await page.locator('.oxygen-route').evaluate(n => n.classList.contains('focused')), true);
     assert.match(await text('#inquiry-feedback'), /質量來自/);
@@ -194,6 +198,9 @@ test('6.1 element lesson in a real browser', { timeout: 60000 }, async t => {
         await capture('#s1', 'comparison-water-mobile');
         await capture('.water-investigation', 'water-apparatus-mobile');
       }
+      await page.locator('[data-classical=fire]').click();
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
+      if (width === 390) await capture('#classical-detail', 'history-fire-mobile');
       await page.locator('#classical-close').click();
     }
     await page.setViewportSize({width:1440,height:1000});

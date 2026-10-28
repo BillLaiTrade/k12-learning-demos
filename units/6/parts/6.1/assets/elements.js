@@ -100,7 +100,7 @@
       modernTitle: '火焰是燃燒時的現象',
       modern: '火焰涉及燃燒中的高溫氣體等發光，不是一種化學元素。燃燒可以有火焰，但不是所有燃燒都會出現可見火焰。',
       scope: '金屬燃燒的稱量是理解燃燒的代表性證據，不是從古代四元素觀點直接跳到今日全部燃燒理論的單一步驟。',
-      sources: [['拉瓦節的金屬燃燒稱量','https://www.sciencehistory.org/education/scientific-biographies/antoine-laurent-lavoisier/'],['火焰的現代理解','https://www.britannica.com/science/flame']]
+      sources: [['拉瓦節的金屬燃燒稱量','https://www.sciencehistory.org/education/scientific-biographies/antoine-laurent-lavoisier/'],['火焰的現代理解','https://www.britannica.com/science/flame'],['鎂燃燒的性質','https://periodic-table.rsc.org/element/12/magnesium']]
     }
   };
   function renderClassicalHistory(key) {
