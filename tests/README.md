@@ -295,4 +295,4 @@ node --test --test-concurrency=1 tests/unit-4.2-filtration.test.cjs tests/unit-4
 CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.1-states-table.test.cjs
 ```
 
-測試自行啟停 Python 靜態伺服器與 Chromium。檢查九格圖解預設可見、固體外形、液體等量、氣體粒子數與邊界、格內活塞的滑鼠／鍵盤／觸控、固體與液體拖曳位置不變而氣體可壓縮、其他教學區塊保留、五種螢幕寬度及減少動畫設定。8 組子測試，連同外層共 9 項；`STATES_CAPTURE_DIR` 可指定截圖目錄。審閱紀錄見 `docs/reviews/unit-2.1-states-table/review.md`。
+測試自行啟停 Python 靜態伺服器與 Chromium。檢查九格圖解預設可見、固體外形、液體等量與體積格等寬／同水位比較、氣體粒子數與邊界、格內活塞的滑鼠／鍵盤／觸控、固體與液體拖曳位置不變而氣體可壓縮、其他教學區塊保留、五種螢幕寬度及減少動畫設定。8 組子測試，連同外層共 9 項；`STATES_CAPTURE_DIR` 可指定截圖目錄。審閱紀錄見 `docs/reviews/unit-2.1-states-table/review.md`。

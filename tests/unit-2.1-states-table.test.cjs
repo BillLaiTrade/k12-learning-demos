@@ -46,6 +46,16 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
       const b=label.getBBox(); return b.x>=0 && b.y>=0 && b.x+b.width<=240 && b.y+b.height<=160;
     }));
     assert.equal(labelsFit,true);
+    const liquidVolume = await cell('liquid.volume').locator('svg').evaluate(svg => ({
+      vessels:[...svg.querySelectorAll('.sv-glass')].map(e=>({width:+e.getAttribute('width'),height:+e.getAttribute('height')})),
+      water:[...svg.querySelectorAll('.sv-water')].map(e=>({width:+e.getAttribute('width'),height:+e.getAttribute('height'),y:+e.getAttribute('y')})),
+      labels:[...svg.querySelectorAll('text')].map(e=>e.textContent)
+    }));
+    assert.equal(liquidVolume.vessels[0].width,liquidVolume.vessels[1].width);
+    assert.notEqual(liquidVolume.vessels[0].height,liquidVolume.vessels[1].height);
+    assert.deepEqual(liquidVolume.water[0],liquidVolume.water[1]);
+    assert.deepEqual(liquidVolume.labels,['100 mL','100 mL']);
+    assert.match(await cell('liquid.volume').innerText(), /容器變高，水量不變/);
     assert.match(await page.locator('#s2').innerText(), /物理性質/);
     assert.match(await page.locator('#s2 .sv-model-note').innerText(), /難壓縮不代表完全不能/);
   });
