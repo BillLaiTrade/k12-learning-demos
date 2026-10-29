@@ -599,7 +599,8 @@
     .particle-sample-photo--iron img { height:145px; object-fit:contain; background:#f5f6f2; }
     .particle-photo-model .particle-model { min-height:118px; }
     .particle-photo-model .particle-model--water { grid-template-columns:repeat(auto-fit,55px); gap:14px 10px; }
-    .particle-model--iron { grid-template-columns:repeat(5,22px); gap:12px 16px; }
+    .particle-card--element .particle-photo-model { grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+    .particle-model--iron { min-width:0; width:100%; max-width:137px; justify-self:center; grid-template-columns:repeat(auto-fit,21px); gap:12px 8px; }
     .particle-model--water { grid-template-columns:repeat(4,55px); gap:13px 9px; }
     .particle-ball { display:inline-block; flex:0 0 auto; width:21px; height:21px; border-radius:50%; background:radial-gradient(circle at 30% 25%,#d9e4e8,#85959a 60%,#4b5b60); box-shadow:0 2px 3px #39484a44; }
     .particle-ball--oxygen { background:radial-gradient(circle at 30% 25%,#ffd5c5,#de6850 65%,#a74734); }
@@ -607,6 +608,7 @@
     .particle-unit { display:inline-flex; align-items:center; gap:2px; }
     .particle-caption { margin:0!important; padding:7px 11px; background:#f7f8f2; color:#52645a!important; font-size:.83rem; text-align:center; }
     .particle-card-body { padding:10px; }
+    .particle-card--element .particle-card-body { container-type:inline-size; }
     #compound-example .particle-card-body { container-type:inline-size; }
     .particle-card .particle-color-note { margin:0 10px 9px!important; }
     .particle-decomposition { margin-top:10px; padding:10px; border-top:1px solid #e3e8dd; background:#f8f9f4; }
@@ -622,6 +624,7 @@
     @container (max-width:320px) { .decomposition-water-scene { flex-direction:column; gap:8px; padding:5px 0; } .decomposition-water-scene .decomposition-arrow { transform:rotate(90deg); } }
     @container (max-width:280px) { #compound-example .particle-photo-model { grid-template-columns:minmax(0,1fr); } #compound-example .particle-model--water { min-height:72px; } #compound-example .particle-sample-photo img { object-fit:contain; } }
     @container (max-width:155px) { .decomposition-products { display:grid; grid-template-columns:repeat(2,max-content); } }
+    @container (max-width:320px) { .particle-card--element .particle-photo-model { grid-template-columns:minmax(0,1fr); gap:20px; } .particle-card--element .particle-sample-photo { width:min(100%,145px); justify-self:center; } .particle-card--element .particle-model--iron { width:100%; justify-self:center; } }
     .decomposition-explanation { margin:6px 0 0!important; color:#627168!important; font-size:.78rem; text-align:center; }
     .particle-color-note { margin:0 0 8px!important; color:#68776e!important; font-size:.8rem; }
     .pure-summary { margin:8px 0 0; }
