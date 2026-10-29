@@ -18,25 +18,22 @@ if(section) {
     find('rays').before(incomingMatch);
     find('extensions').replaceChildren(...(mirror?[path(ray.extension,false)]:[]));
     find('hits').replaceChildren(...(mirror?[node('circle',{cx:ray.hit[0],cy:ray.hit[1],r:4})]:[]));
-    function distanceLabel(name,points,text,color,fraction=.5,position=null) {
+    function distanceLabel(name,points,text,color,fraction=.5,{compact=false,side=1,gap=20}={}) {
       const [a,b]=points,length=Math.hypot(b[0]-a[0],b[1]-a[1]);
-      const width=172,height=58,nx=(b[1]-a[1])/length,ny=-(b[0]-a[0])/length;
+      const width=compact?132:172,height=compact?48:58,nx=(b[1]-a[1])/length,ny=-(b[0]-a[0])/length;
       // Offset the WHOLE badge, not just its centre. Its projected half-extent
       // along the path normal needs to clear the line before adding a gap.
-      const offset=Math.abs(nx)*width/2+Math.abs(ny)*height/2+20;
-      const x=position?.[0]??a[0]+(b[0]-a[0])*fraction+nx*offset,y=position?.[1]??a[1]+(b[1]-a[1])*fraction+ny*offset;
+      const offset=(Math.abs(nx)*width/2+Math.abs(ny)*height/2+gap)*side;
+      const x=a[0]+(b[0]-a[0])*fraction+nx*offset,y=a[1]+(b[1]-a[1])*fraction+ny*offset;
       attrs(find(name),{transform:`translate(${x} ${y})`});
-      const label=node('text',{x:0,y:14,'text-anchor':'middle','font-size':42,'font-weight':700,fill:'#244e6b'});label.textContent=text;
-      find(name).replaceChildren(node('rect',{x:-width/2,y:-height/2,width,height,rx:12,fill:color}),label);
+      const label=node('text',{x:0,y:compact?13:14,'text-anchor':'middle','font-size':compact?38:42,'font-weight':700,fill:'#244e6b'});label.textContent=text;
+      find(name).replaceChildren(node('rect',{x:-width/2,y:-height/2,width,height,rx:compact?9:12,fill:color}),label);
     }
     distanceLabel('distance-three',[ray.eye,ray.hit],'3公尺','#c9e6fb',.43);
-    distanceLabel('distance-two',[ray.hit,ray.image],'2公尺','#fbd3ae');
+    distanceLabel('distance-two',[ray.image,ray.hit],'2公尺','#fbd3ae',.33,{compact:true,gap:10});
     if(mirror) {
-      // Use the open space between the two real rays, clear of the bear.
-      const position=[ray.source[0]-15,ray.hit[1]-12];
-      distanceLabel('distance-incoming',[ray.source,ray.hit],'2公尺','#fbd3ae',.45,position);
-      const anchor=ray.source.map((value,index)=>value+(ray.hit[index]-value)*.45);
-      find('distance-incoming').prepend(node('path',{d:`M86 29L${anchor[0]-position[0]} ${anchor[1]-position[1]}`,fill:'none',stroke:'#9a8977','stroke-width':2,'stroke-linecap':'round'}));
+      // Match the two compact labels below their own light-path segments.
+      distanceLabel('distance-incoming',[ray.source,ray.hit],'2公尺','#fbd3ae',.33,{compact:true,side:-1,gap:10});
     }
     svg.dataset.mode=mode;svg.dataset.eye=COMPARISON.eye.join(',');svg.dataset.source=COMPARISON.source.join(',');svg.dataset.image=COMPARISON.image.join(',');svg.dataset.hit=ray.hit.join(',');
     svg.dataset.distances=JSON.stringify(distances);
