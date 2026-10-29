@@ -175,6 +175,7 @@
     .phase-diagram-hint { margin:5px 1px 0; color:#758178; font-size:.75rem; }
     .phase-detail { display:grid; grid-template-columns:minmax(170px,.7fr) 1.3fr; gap:14px; align-items:center; margin-top:12px; padding:15px 16px; border:1px solid #d8e2da; border-radius:13px; background:#f5f8f2; }
     .phase-detail.is-solid-overview { display:block; padding:16px; }
+    .phase-detail[hidden] { display:none; }
     .phase-detail.is-solid-overview > #phase-detail-intro,.phase-detail.is-solid-overview > #phase-detail-body { display:none; }
     .phase-solid-overview[hidden] { display:none; }
     .phase-solid-overview.is-process-view .phase-solid-overview-intro,.phase-solid-overview.is-process-view .phase-solid-process,.phase-solid-overview.is-process-view .phase-solid-overview-hint { display:none; }
@@ -852,9 +853,9 @@
             </div>
             <div class="phase-transition-key" aria-label="箭頭顏色圖例"><span><i class="phase-heat-dot" aria-hidden="true"></i>紅色：吸熱</span><span><i class="phase-cool-dot" aria-hidden="true"></i>藍色：放熱</span></div>
             <p class="phase-diagram-hint">箭頭表示物態變化方向；點選狀態卡或箭頭／名稱查看詳細說明。</p>
-            <section class="phase-detail" id="phase-detail" aria-live="polite" aria-atomic="true" aria-label="物態轉變說明">
-              <div id="phase-detail-intro"><p class="phase-detail-kicker" id="phase-detail-kicker">三種狀態・粒子與轉變</p><h3 id="phase-detail-title">點選冰、水、水蒸氣或任一箭頭</h3></div>
-              <div id="phase-detail-body"><p class="phase-detail-copy" id="phase-detail-copy">選擇物態可查看它的粒子狀態和四種相關轉變；選擇箭頭則會說明轉變時粒子如何改變排列與運動。</p><div class="phase-detail-steps" id="phase-detail-steps" hidden></div></div>
+            <section class="phase-detail" id="phase-detail" aria-live="polite" aria-atomic="true" aria-label="物態轉變說明" hidden>
+              <div id="phase-detail-intro"><p class="phase-detail-kicker" id="phase-detail-kicker"></p><h3 id="phase-detail-title"></h3></div>
+              <div id="phase-detail-body"><p class="phase-detail-copy" id="phase-detail-copy"></p><div class="phase-detail-steps" id="phase-detail-steps" hidden></div></div>
               <div class="phase-solid-overview" id="phase-solid-overview" hidden>
                 <div class="phase-solid-overview-intro"><p class="phase-detail-kicker" id="phase-overview-kicker">固態・粒子排列與運動</p><h3 id="phase-overview-title">冰｜固態</h3><p id="phase-overview-copy">水分子緊密、有規律地排列，在固定位置附近微微振動，因此冰有固定形狀。</p></div>
                 <div class="phase-solid-stage">
@@ -1864,6 +1865,7 @@
     function resetPhaseSteps(){phaseSteps.replaceChildren();phaseSteps.hidden=true;}
     function selectPhaseState(key){
       const state=phaseStates[key];
+      phaseDetail.hidden=false;
       stopPhaseDemoMotion();stopFreezeDemo();
       phaseSolidFlowParticles.replaceChildren();
       freezeDemo.hidden=false;
@@ -1886,6 +1888,7 @@
     }
     function selectPhaseProcess(key,fromStateOverview=false){
       const process=phaseProcesses[key];
+      phaseDetail.hidden=false;
       if(!fromStateOverview){stopPhaseDemoMotion();stopFreezeDemo();}
       if(!fromStateOverview){phaseSolidFlowParticles.replaceChildren();document.querySelectorAll(".phase-solid-flow path,.phase-solid-flow-mobile path").forEach(path=>path.classList.remove("is-active"));}
       freezeDemo.hidden=false;
