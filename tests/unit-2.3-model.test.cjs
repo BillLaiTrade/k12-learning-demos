@@ -58,15 +58,39 @@ test('2.3: dry/humid proportions use one total and do not add CO2 twice', async 
   assert.deepEqual(airComposition(2, true), airComposition(0));
 });
 
-test('2.3: upright cup allows slight compression; tilt changes water entry', async () => {
+test('2.3: fully immersed cup keeps paper dry and respects the tank', async () => {
   const { cupGeometry } = await load();
-  const g = cupGeometry(6, 0);
-  assert.ok(g.water > -6 && g.water < -5.8);
-  assert.ok(Math.abs((1 - g.water / 1033) * 20 * (4 - g.water) - 200) < 1e-8);
-  assert.equal(cupGeometry(6, 100).water, 0);
-  const escaped = cupGeometry(6, 100).vent;
-  assert.ok(cupGeometry(6, 0, escaped).water > 0);
-  assert.equal(cupGeometry(-2, 100).vent, 0);
+  const g = cupGeometry(12, 0);
+  assert.equal(g.submerged, true); assert.equal(g.paperBelowOutside, true);
+  assert.equal(g.withinTank, true); assert.equal(g.paperTouchesWater, false);
+  assert.ok(g.water < 12 && g.water > 11.8); assert.equal(g.vent, 0);
+  assert.ok(Math.abs((1 + g.water / 1033) * g.airArea - 72) < 1e-7);
+  for (const depth of [11.5, 12, 13, 14]) for (let angle = 0; angle <= 125; angle += 5) {
+    const p = cupGeometry(depth, angle);
+    assert.equal(p.submerged, true); assert.equal(p.withinTank, true);
+    assert.ok(p.water <= p.outlet.y + 1e-7);
+    if (p.vent < .999999) assert.ok(Math.abs((1 + p.water / 1033) * p.airArea - 72 * (1 - p.vent)) < 1e-7);
+  }
+});
+
+test('2.3: escaping air and wet paper persist when cup is straightened', async () => {
+  const { freshCup, moveCup, cupGeometry } = await import('../units/2/parts/2.3/assets/cup-lab-model.mjs');
+  let s = moveCup(freshCup(), 12, 0), previous = 0;
+  for (const angle of [20, 40, 60, 80, 95, 125]) {
+    s = moveCup(s, 12, angle); assert.ok(s.escaped >= previous); previous = s.escaped;
+    if (s.wet) assert.equal(cupGeometry(s.depth, s.angle, s.escaped).paperTouchesWater, true);
+  }
+  assert.equal(s.wet, true); assert.equal(s.escaped, 1);
+  s = moveCup(s, 12, 0); assert.equal(s.wet, true); assert.equal(s.escaped, 1);
+  s = moveCup(s, -1, 0); assert.equal(s.escaped, 0); assert.equal(s.wet, true);
+  assert.equal(freshCup().wet, false);
+});
+
+test('2.3: rotation is only enabled with the entire cup underwater', async () => {
+  const { freshCup, moveCup } = await import('../units/2/parts/2.3/assets/cup-lab-model.mjs');
+  for (const depth of [-1, 0, 6, 10]) assert.equal(moveCup(freshCup(), depth, 125).angle, 0);
+  assert.equal(moveCup(freshCup(), 12, 125).angle, 125);
+  assert.equal(moveCup(freshCup(), 99, 999).depth, 13.5);
 });
 
 test('2.3: integrated report checks evidence instead of reusing main experiment', async () => {

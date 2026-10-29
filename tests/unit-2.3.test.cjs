@@ -24,7 +24,11 @@ test('2.3: eight-section learning flow and independent controls work in browser'
   await page.clock.install();
   const base = process.env.AIR_BASE_URL || `http://127.0.0.1:${port}/k12-learning-demos/`;
   await page.goto(base + 'units/2/parts/2.3/', { waitUntil: 'networkidle' });
-  const artifacts = path.resolve(__dirname, '../docs/reviews/unit-2.3-initial'); mkdirSync(artifacts, { recursive: true });
+  const artifacts = process.env.AIR_ARTIFACT_DIR ? path.resolve(process.env.AIR_ARTIFACT_DIR) : path.resolve(__dirname, '../docs/reviews/unit-2.3-initial'); mkdirSync(artifacts, { recursive: true });
+  const captureCup = async name => {
+    await page.evaluate(() => { document.activeElement?.blur(); const el = document.querySelector('#s1'); window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top, behavior: 'instant' }); });
+    await page.locator('#s1').screenshot({ path: path.join(artifacts, name) });
+  };
   const phase = () => page.locator('html').getAttribute('data-phase');
   const volume = () => page.locator('#reaction-scene').getAttribute('data-volume').then(Number);
 
@@ -39,23 +43,51 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     await page.screenshot({ path: path.join(artifacts, 'desktop.png') });
   });
 
-  await t.test('cup buttons, keyboard, drag, tilt and reset update observations', async () => {
-    await page.locator('#cup-down').click(); await page.locator('#cup-down').click();
-    assert.match(await page.locator('#cup-status').innerText(), /未填滿/);
-    await page.locator('#cup-tilt').click();
-    assert.match(await page.locator('#cup-status').innerText(), /空氣從杯口逸出/);
+  await t.test('guided cup immersion, pause, tilt and comparison follow the approved proposal', async () => {
+    assert.equal(await page.locator('#cup-comparison').isVisible(), false);
+    await page.locator('#cup-action').click(); await page.clock.runFor(2100);
+    assert.equal(await page.locator('#cup-scene').getAttribute('data-submerged'), 'true');
+    assert.equal(await page.locator('#cup-scene').getAttribute('data-paper-below'), 'true');
+    assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'false');
+    assert.equal(await page.locator('#cup-scene').getAttribute('data-within-tank'), 'true');
+    await captureCup('cup-immersed.png');
+    await page.locator('#cup-action').click(); await page.clock.runFor(650);
+    await page.locator('#cup-action').click();
+    const angle = await page.locator('#cup-scene').getAttribute('data-angle');
+    await page.clock.runFor(500); assert.equal(await page.locator('#cup-scene').getAttribute('data-angle'), angle);
+    await page.locator('#cup-action').click(); await page.clock.runFor(3700);
+    assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'true');
+    assert.equal(Number(await page.locator('#cup-scene').getAttribute('data-escaped')), 1);
+    assert.equal(await page.locator('#cup-comparison').isVisible(), true);
     assert.equal(await page.locator('#cup-conclusion').isVisible(), true);
-    await page.locator('#cup-straight').click();
+    await captureCup('cup-complete.png');
+    await page.locator('[data-cup-preview="before"]').click();
+    assert.match(await page.locator('#cup-status').innerText(), /回看直立入水/);
+    assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'true', 'preview does not dry the current paper');
+    await captureCup('cup-mock-comparison.png');
+    await page.locator('#cup-action').click(); await page.locator('#cup-action').click(); await page.clock.runFor(3500);
     assert.match(await page.locator('#cup-status').innerText(), /不會自動補回/);
-    await page.locator('#cup-tilt').click();
-    await page.locator('#cup-scene').focus(); await page.keyboard.press('ArrowLeft');
-    assert.equal(await page.locator('#cup-scene').getAttribute('data-angle'), '90');
-    const bounds = await page.locator('#cup-scene').boundingBox();
-    await page.mouse.move(bounds.x + bounds.width * .5, bounds.y + bounds.height * .5);
-    await page.mouse.down(); await page.mouse.move(bounds.x + bounds.width * .55, bounds.y + bounds.height * .6, { steps: 5 }); await page.mouse.up();
-    assert.ok(Number(await page.locator('#cup-scene').getAttribute('data-angle')) > 90);
+  });
+
+  await t.test('cup detail, manual controls, keyboard, drag and fresh paper work', async () => {
     await page.locator('#cup-reset').click();
-    assert.equal(await page.locator('#cup-scene').getAttribute('data-depth'), '-2');
+    assert.equal(await page.locator('#cup-scene').getAttribute('data-depth'), '-1');
+    assert.equal(await page.locator('#cup-comparison').isVisible(), false);
+    await page.locator('.cup-free summary').click();
+    await page.locator('#cup-depth').fill('12'); await page.locator('#cup-angle').fill('40');
+    await page.locator('#cup-zoom-toggle').click(); assert.equal(await page.locator('#cup-zoom').isVisible(), true);
+    assert.equal(await page.locator('#cup-zoom svg').count(), 1);
+    await page.locator('#cup-scene [data-cup-hint="paper"]').click();
+    assert.match(await page.locator('#cup-hint').innerText(), /水有沒有碰到/);
+    await page.locator('#cup-scene').focus(); await page.keyboard.press('ArrowRight');
+    assert.equal(Number(await page.locator('#cup-scene').getAttribute('data-angle')), 45);
+    const box = await page.locator('#cup-scene').boundingBox();
+    await page.mouse.move(box.x + box.width * .5, box.y + box.height * .6);
+    await page.mouse.down(); await page.mouse.move(box.x + box.width * .55, box.y + box.height * .6, { steps: 5 }); await page.mouse.up();
+    assert.ok(Number(await page.locator('#cup-scene').getAttribute('data-angle')) > 45);
+    await page.locator('#cup-reset').click();
+    assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'false');
+    assert.equal(await page.locator('#cup-zoom').isVisible(), false);
     assert.equal(await page.locator('#cup-conclusion').isVisible(), false);
   });
 
@@ -142,8 +174,18 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     }
     await page.evaluate(() => document.querySelector('#s7').scrollIntoView({ behavior: 'instant', block: 'start' }));
     await page.screenshot({ path: path.join(artifacts, 'mobile.png') });
-    const reduced = await browser.newPage({ reducedMotion: 'reduce' });
+    const reduced = await browser.newPage({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 } });
     await reduced.goto(base + 'units/2/parts/2.3/', { waitUntil: 'networkidle' });
+    await reduced.locator('#cup-action').click(); await reduced.locator('#cup-action').click();
+    assert.equal(await reduced.locator('#cup-comparison').isVisible(), true);
+    assert.equal(await reduced.locator('#cup-scene').getAttribute('data-wet'), 'true');
+    await reduced.locator('#cup-zoom-toggle').click(); assert.equal(await reduced.locator('#cup-zoom').isVisible(), true);
+    await reduced.locator('.cup-parts [data-cup-hint="paper"]').click(); assert.match(await reduced.locator('#cup-hint').innerText(), /水有沒有碰到/);
+    assert.equal(await reduced.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    await reduced.locator('#cup-zoom-toggle').click();
+    await reduced.locator('[data-cup-preview="before"]').click();
+    await reduced.evaluate(() => { document.activeElement?.blur(); const el = document.querySelector('#s1'); window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top, behavior: 'instant' }); });
+    await reduced.locator('#s1').screenshot({ path: path.join(artifacts, 'cup-mobile.png') });
     await reduced.locator('#record-before').click(); await reduced.locator('#experiment-start').click();
     assert.equal(await reduced.locator('html').getAttribute('data-phase'), 'settled');
     await reduced.locator('#experiment-wait').click(); await reduced.locator('#experiment-align').click(); await reduced.locator('#record-after').click();

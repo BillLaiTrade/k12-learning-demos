@@ -1,0 +1,42 @@
+✔ 2.3: reaction volume, water levels and calibrated geometry agree (7.059269ms)
+✔ 2.3: recording is gated by baseline, waiting, and equalisation (1.650114ms)
+✔ 2.3: dry/humid proportions use one total and do not add CO2 twice (0.481101ms)
+✔ 2.3: fully immersed cup keeps paper dry and respects the tank (7.028717ms)
+✔ 2.3: escaping air and wet paper persist when cup is straightened (0.884806ms)
+✔ 2.3: rotation is only enabled with the entire cup underwater (0.726122ms)
+✔ 2.3: integrated report checks evidence instead of reusing main experiment (0.576156ms)
+▶ 2.3: eight-section learning flow and independent controls work in browser
+  ✔ eight matching anchors, shared avatars, and unit entry (308.27484ms)
+  ✔ guided cup immersion, pause, tilt and comparison follow the approved proposal (9648.724255ms)
+  ✔ cup detail, manual controls, keyboard, drag and fresh paper work (3135.076649ms)
+  ✔ initial record gates reaction; pause retains state (5297.195854ms)
+  ✔ waiting and water-level alignment are required before final recording (4404.540716ms)
+  ✔ composition selection, splint samples and humid/dry basis (639.90535ms)
+  ✔ one integrated report has actionable feedback and independent reset (502.661875ms)
+  ✔ narrow viewport, keyboard focus, and reduced motion stay usable (3690.738615ms)
+✔ 2.3: eight-section learning flow and independent controls work in browser (30071.179712ms)
+▶ new unit numbers agree across home, overviews, and existing lesson URLs
+  ✔ homepage order, button numbers, and destination identities (1020.727672ms)
+  ✔ unit 1: overview uses the new number (635.704943ms)
+  ✔ unit 2: overview uses the new number (612.821764ms)
+  ✔ unit 3: overview uses the new number (654.301716ms)
+  ✔ unit 4: overview uses the new number (624.411704ms)
+  ✔ unit 5: overview uses the new number (644.420881ms)
+  ✔ unit 6: overview uses the new number (633.723888ms)
+  ✔ lesson 1.1: header and existing assets load (8841.020798ms)
+  ✔ lesson 1.2: header and existing assets load (3066.533197ms)
+  ✔ lesson 2.1: header and existing assets load (1440.079729ms)
+  ✔ lesson 2.2: header and existing assets load (16133.861104ms)
+  ✔ lesson 3.1: header and existing assets load (1322.900024ms)
+  ✔ lesson 3.2: header and existing assets load (840.255688ms)
+  ✔ lesson 4.1: header and existing assets load (13301.238016ms)
+  ✔ lesson 4.2: header and existing assets load (5724.86572ms)
+✔ new unit numbers agree across home, overviews, and existing lesson URLs (56460.15321ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 57363.471426

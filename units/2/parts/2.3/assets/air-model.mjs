@@ -61,20 +61,7 @@ export function airComposition(waterPercent = 0, dryOnly = false) {
   return { nitrogen: 78 * dry, oxygen: 21 * dry, other: dry, water };
 }
 
-export function cupGeometry(depth, angle, escaped = 0) {
-  const d = clamp(depth, -2, 6), tilt = clamp(angle, 0, 105);
-  const tiltFraction = clamp((tilt - 15) / 85, 0, 1);
-  const vent = d > 0 ? Math.max(clamp(escaped, 0, .8), .8 * tiltFraction) : 0;
-  const top = 10 - d;
-  let low = -Math.max(0, d), high = top;
-  for (let i = 0; i < 50; i++) {
-    const y = (low + high) / 2;
-    if ((1 - y / 1033) * 20 * (top - y) > 200 * (1 - vent)) low = y;
-    else high = y;
-  }
-  const upright = d <= 0 ? -d : (low + high) / 2;
-  return { depth: d, tilt, water: tiltFraction === 1 ? 0 : upright * (1 - tiltFraction), vent };
-}
+export { cupGeometry } from './cup-lab-model.mjs';
 
 export function checkReport({ loss, percent, composition, fuel }) {
   const missing = loss === '' || percent === '' || !composition || !fuel;

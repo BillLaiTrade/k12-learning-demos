@@ -1,4 +1,4 @@
-import { act, advance, freshExperiment, gasGeometry, cupGeometry, airComposition, checkReport, clamp } from './air-model.mjs';
+import { act, advance, freshExperiment, gasGeometry, airComposition, checkReport, clamp } from './air-model.mjs';
 
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -127,55 +127,6 @@ function frame(time) {
   requestAnimationFrame(frame);
 }
 renderExperiment(); requestAnimationFrame(frame);
-
-// A separate cup model: clipping keeps the water horizontal while the glass tilts.
-let cup = { depth: -2, angle: 0, wet: false, escaped: 0 }, cupDrag = null;
-function renderCup() {
-  const g = cupGeometry(cup.depth, cup.angle, cup.escaped), center = { x: 260, y: 290 - (5 - cup.depth) * 18 };
-  const escaping = g.vent > cup.escaped + .005;
-  cup.escaped = g.vent;
-  const rotate = (x, y) => {
-    const a = cup.angle * Math.PI / 180, dx = x - 260, dy = y - center.y;
-    return [260 + dx * Math.cos(a) - dy * Math.sin(a), center.y + dx * Math.sin(a) + dy * Math.cos(a)];
-  };
-  const points = [[215, center.y - 90], [305, center.y - 90], [305, center.y + 90], [215, center.y + 90]].map(([x, y]) => rotate(x, y));
-  const waterY = 290 - g.water * 18;
-  const paperCenter = rotate(260, center.y - 77);
-  if (cup.depth > 0 && cup.angle > 70 && paperCenter[1] > waterY) cup.wet = true;
-  const rim = rotate(305, center.y + 90);
-  const bubbles = escaping ? [0, 1, 2].map(i => `<circle class="bubble" cx="${rim[0] + i * 5}" cy="${Math.min(287, rim[1] - 8 - i * 12)}" r="${4 + i}" fill="#f6fffc" stroke="#6e9da5" style="animation-delay:${i * .15}s"/>`).join('') : '';
-  $('#cup-scene').innerHTML = svgStart('cup', 390) + `<defs><clipPath id="cup-interior"><polygon points="${points.map(p => p.join(',')).join(' ')}"/></clipPath></defs><rect x="85" y="290" width="350" height="88" fill="url(#water-cup)"/><path d="M85 260V375Q85 383 95 383H425Q435 383 435 375V260" fill="none" stroke="#91aaa0" stroke-width="3"/><path d="M88 290H432" stroke="#659ca8" stroke-width="2"/><g clip-path="url(#cup-interior)"><rect x="80" y="30" width="360" height="360" fill="#fafdf7"/><rect x="80" y="${waterY}" width="360" height="500" fill="url(#water-cup)"/><path d="M80 ${waterY}H440" stroke="#5899a7" stroke-width="2"/></g><g transform="rotate(${cup.angle} 260 ${center.y})"><path d="M215 ${center.y + 90}V${center.y - 78}Q215 ${center.y - 90}228 ${center.y - 90}H292Q305 ${center.y - 90}305 ${center.y - 78}V${center.y + 90}" fill="url(#glass-cup)" stroke="#88a491" stroke-width="3"/><rect x="236" y="${center.y - 84}" width="48" height="16" rx="3" fill="${cup.wet ? '#85b7c6' : '#eddfbb'}" stroke="#b7ac8c"/></g>${bubbles}<text x="32" y="32" class="diagram-label">抓住杯子：上下移動，左右拖曳使它傾斜</text><text x="340" y="280" class="diagram-label">槽內水面</text><text x="32" y="65" class="diagram-value">紙片${cup.wet ? '接觸到水' : '仍乾燥'}</text></svg>`;
-  $('#cup-depth').value = cup.depth; $('#cup-angle').value = cup.angle;
-  $('#cup-scene').dataset.depth = cup.depth; $('#cup-scene').dataset.angle = cup.angle;
-  $('#cup-scene').dataset.escaped = cup.escaped;
-  text('#cup-status', cup.depth <= 0 ? '杯口在水面上，可讓空氣進入；再把杯口朝下放進水裡。' : cup.angle > 15 ? '杯子傾斜，空氣從杯口逸出，水進入原本被空氣占據的空間。' : cup.escaped > 0 ? '空氣已逸出一部分；杯口仍在水下，轉回直立不會自動補回空氣。' : '空氣被困在杯裡；水未填滿杯子。空氣可稍微壓縮。');
-  shown('#cup-conclusion', cup.depth > 0 && cup.angle > 15);
-}
-const setCup = (depth, angle) => { cup.depth = clamp(depth, -2, 6); cup.angle = clamp(angle, 0, 105); renderCup(); };
-$('#cup-depth').addEventListener('input', e => setCup(e.target.value, cup.angle));
-$('#cup-angle').addEventListener('input', e => setCup(cup.depth, e.target.value));
-$('#cup-down').addEventListener('click', () => setCup(cup.depth + 2, cup.angle));
-$('#cup-up').addEventListener('click', () => setCup(cup.depth - 2, cup.angle));
-$('#cup-tilt').addEventListener('click', () => setCup(cup.depth, 100));
-$('#cup-straight').addEventListener('click', () => setCup(cup.depth, 0));
-$('#cup-reset').addEventListener('click', () => { cup = { depth: -2, angle: 0, wet: false, escaped: 0 }; renderCup(); });
-$('#cup-scene').tabIndex = 0;
-$('#cup-scene').addEventListener('keydown', e => {
-  if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
-  e.preventDefault(); setCup(cup.depth + (e.key === 'ArrowDown' ? .5 : e.key === 'ArrowUp' ? -.5 : 0), cup.angle + (e.key === 'ArrowRight' ? 10 : e.key === 'ArrowLeft' ? -10 : 0));
-});
-$('#cup-scene').addEventListener('pointerdown', e => {
-  if (e.button !== 0) return;
-  cupDrag = { id: e.pointerId, x: e.clientX, y: e.clientY, depth: cup.depth, angle: cup.angle };
-  e.currentTarget.setPointerCapture(e.pointerId);
-});
-$('#cup-scene').addEventListener('pointermove', e => {
-  if (!cupDrag || cupDrag.id !== e.pointerId) return;
-  const scale = 520 / e.currentTarget.getBoundingClientRect().width;
-  setCup(cupDrag.depth + (e.clientY - cupDrag.y) * scale / 18, cupDrag.angle + (e.clientX - cupDrag.x) * scale / 2);
-});
-for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) $('#cup-scene').addEventListener(event, () => { cupDrag = null; });
-renderCup();
 
 // Composition diagram: tiles represent volume shares, not individual molecules.
 $('#air-tiles').innerHTML = Array.from({ length: 100 }, (_, i) => `<span class="tile ${i < 78 ? 'nitrogen' : i < 99 ? 'oxygen' : 'other'}" data-kind="${i < 78 ? 'nitrogen' : i < 99 ? 'oxygen' : 'other'}"></span>`).join('');
