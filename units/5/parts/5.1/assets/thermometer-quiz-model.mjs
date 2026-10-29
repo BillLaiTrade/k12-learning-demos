@@ -19,7 +19,7 @@ export function assessInstrument(instrument, waterC) {
   const raw=instrument.value.trim(), value=Number(raw);
   const filled=raw!=='' && Number.isFinite(value) && value>=0 && value<=250 && ['C','F'].includes(instrument.answerUnit);
   if(!filled)return {ok:false,kind:'incomplete',message:'請完成量測、填入有效讀值並選擇單位。'};
-  if(!instrument.measured || !instrument.snapshot?.stable)return {ok:false,kind:'unstable',message:'這筆作答是在液柱尚未穩定時填寫的；重新放入，等穩定後再確認數字或單位。'};
+  if(!instrument.measured || !instrument.snapshot?.stable)return {ok:false,kind:'unstable',message:'液柱尚未穩定，請等穩定後，平視確認讀值，再次核對。'};
   if(Math.abs(instrument.snapshot.eye)>3)return {ok:false,kind:'view',message:'這筆作答採用了斜視；讓視線與液面同高，再確認讀值。'};
   const unitCorrect=instrument.answerUnit===instrument.unit;
   const readingCorrect=Math.abs(value-valueFor(instrument.unit,waterC))<=TOLERANCE+1e-9;

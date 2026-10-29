@@ -1,4 +1,4 @@
-import {makeRound,valueFor,celsiusFor,scaleY,scaleRange,assessInstrument} from './thermometer-quiz-model.mjs?v=oblique-start-4';
+import {makeRound,valueFor,celsiusFor,scaleY,scaleRange,assessInstrument} from './thermometer-quiz-model.mjs?v=reconfirm-reading-5';
 import {projectPoint} from './parallax-model.js';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const root=$('unit-quiz'), scene=$('tq-scene');
@@ -217,6 +217,9 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){endDrag(nu
 root.addEventListener('keydown',event=>{if(event.key==='Escape'){endDrag(null,true);stopEye();picked=null;renderUI();}});
 $('tq-hint-toggle').addEventListener('click',()=>{const show=$('tq-hint').hidden;$('tq-hint').hidden=!show;$('tq-hint-toggle').setAttribute('aria-expanded',String(show));$('tq-hint-toggle').firstChild.textContent=show?'收起換算提示 ':'查看換算提示 ';});
 $('tq-check').addEventListener('click',()=>{
+  // Checking confirms the current observation without retyping the saved answer.
+  // Instruments already returned to the tray retain their recorded conditions.
+  if(active)updateDraft();
   const results=['A','B'].map(id=>({id,...assessInstrument(round.instruments[id],round.waterC)}));
   const ok=results.every(r=>r.ok), result=$('tq-result');result.hidden=false;result.dataset.success=String(ok);result.replaceChildren();
   const add=text=>{const p=document.createElement('p');p.textContent=text;result.append(p);};
