@@ -1514,6 +1514,54 @@
       particle.setAttribute("class","freeze-demo-particle");particle.setAttribute("r","4.2");particle.style.setProperty("--vibration-delay",`${-(index%20)*19}ms`);freezeDemoParticles.append(particle);
       return {element:particle,row,column,x:0,y:0,vx:0,vy:0,endX,endY,frozen:false,isFreezing:false};
     });
+    const phaseOverviewMinimum=16,phaseOverviewMaximum=72,phaseOverviewInitial=48;
+    const phaseOverviewParticles=[...freezeParticles,...Array.from({length:phaseOverviewMaximum-freezeParticles.length},(_,index)=>{
+      const element=document.createElementNS("http://www.w3.org/2000/svg","circle");
+      element.setAttribute("class","freeze-demo-particle");element.setAttribute("r","4.2");
+      element.style.setProperty("--vibration-delay",`${-(index%20)*19}ms`);
+      return {element,x:0,y:0,vx:0,vy:0};
+    })];
+    let phaseOverviewCount=phaseOverviewInitial,phaseOverviewFlow=null;
+    function stopPhaseOverviewFlow(){
+      if(phaseOverviewFlow)phaseOverviewFlow.timers.forEach(clearTimeout);
+      phaseOverviewFlow=null;phaseSolidFlowParticles.replaceChildren();
+    }
+    function resetPhaseOverviewPopulation(){
+      phaseOverviewCount=phaseOverviewInitial;
+      phaseOverviewParticles.forEach((particle,index)=>{
+        particle.inOverview=index<phaseOverviewInitial;
+        if(particle.inOverview){if(particle.element.parentNode!==freezeDemoParticles)freezeDemoParticles.append(particle.element);}
+        else particle.element.remove();
+      });
+      phaseSolidOverview.dataset.particleCount=String(phaseOverviewCount);
+    }
+    function showPhaseOverviewCount(stateKey){
+      const limit=phaseOverviewCount===phaseOverviewMinimum?"（下限）":phaseOverviewCount===phaseOverviewMaximum?"（上限）":"";
+      freezeDemoStatus.textContent=phaseStates[stateKey].title;
+      freezeDemo.querySelector("svg").setAttribute("aria-label",`${phaseStates[stateKey].title}，${phaseOverviewCount} 顆示意粒子${limit}`);
+      phaseSolidOverview.dataset.particleCount=String(phaseOverviewCount);
+    }
+    function changePhaseOverviewPopulation(flow,delta){
+      if((delta>0&&phaseOverviewCount>=phaseOverviewMaximum)||(delta<0&&phaseOverviewCount<=phaseOverviewMinimum))return false;
+      const left=flow.slot.endsWith("left"),mobile=window.matchMedia("(max-width: 680px)").matches;
+      const x=10+340*(left ? (mobile ? .18 : .25) : (mobile ? .82 : .75)),y=delta>0?16:117;
+      let particle;
+      if(delta>0){
+        particle=phaseOverviewParticles.find(item=>!item.inOverview);
+        if(flow.stateKey==="solid"){particle.x=particle.overviewX;particle.y=particle.overviewY;}
+        else{
+          particle.x=x;particle.y=flow.stateKey==="liquid"?Math.max(40,117-Math.ceil((phaseOverviewCount+1)/16)*10)+3:y;
+          particle.vx=(Math.random()-.5)*(flow.stateKey==="gas"?90:36);particle.vy=flow.stateKey==="gas"?35+Math.random()*25:8;
+        }
+        particle.inOverview=true;particle.element.setAttribute("cx",particle.x.toFixed(2));particle.element.setAttribute("cy",particle.y.toFixed(2));
+        freezeDemoParticles.append(particle.element);
+      }else{
+        particle=phaseOverviewParticles.filter(item=>item.inOverview).reduce((nearest,item)=>Math.hypot(item.x-x,item.y-y)<Math.hypot(nearest.x-x,nearest.y-y)?item:nearest);
+        particle.inOverview=false;particle.element.remove();
+      }
+      phaseOverviewCount+=delta;showPhaseOverviewCount(flow.stateKey);
+      return true;
+    }
     const freezeTargets=[...freezeParticles].sort((a,b)=>(a.row*7+Math.abs(a.column-5.5)*.5)-(b.row*7+Math.abs(b.column-5.5)*.5));
     const freezeTimers=[],freezeDemoStatus=document.getElementById("freeze-demo-status");
     let freezeRunId=0,freezeLastFrame=0,freezeMotionFrame=0,freezeDone=0;
@@ -1599,13 +1647,15 @@
       return freezeParticles.map(()=>({x:20+Math.random()*320,y:39+Math.random()*77}));
     }
     function stopPhaseDemoMotion(){
+      stopPhaseOverviewFlow();resetPhaseOverviewPopulation();
       phaseDemoRun++;cancelAnimationFrame(phaseDemoFrame);phaseDemoFrame=0;phaseDemoLastFrame=0;
       phaseDemoTransition=null;phaseDemoMotionState="";
     }
     function startPhaseDemoMotion(state,runId,continueVelocity=false){
       if(runId!==phaseDemoRun)return;
       phaseDemoMotionState=state;
-      freezeParticles.forEach(p=>{
+      const overview=phaseDetail.classList.contains("is-solid-overview")&&!phaseSolidOverview.classList.contains("is-process-view");
+      (overview?phaseOverviewParticles:freezeParticles).forEach(p=>{
         if(state==="solid"){p.vx=0;p.vy=0;}
         else if(!continueVelocity){if(state==="gas"){const angle=Math.random()*Math.PI*2,speed=44+Math.random()*34;p.vx=Math.cos(angle)*speed;p.vy=Math.sin(angle)*speed;}else{p.vx=(Math.random()-.5)*44;p.vy=(Math.random()-.5)*38;}}
         p.element.setAttribute("class",`freeze-demo-particle is-${state}${state==="solid"?" is-vibrating":""}`);
@@ -1652,20 +1702,22 @@
       }
     }
     function playPhaseStateOverview(stateKey){
-      stopPhaseDemoMotion();stopFreezeDemo();const runId=phaseDemoRun,solid=stateKey==="solid",targets=freezeParticles.map((_,index)=>{
-        if(solid){const row=Math.floor(index/12),column=index%12;return{x:42+column*25,y:31+row*21};}
-        if(stateKey==="liquid"){const base=phaseDemoTargets("liquid")[index],row=Math.floor(index/16);return{x:base.x+(Math.random()-.5)*4,y:91+row*11+(Math.random()-.5)*4};}
+      stopPhaseDemoMotion();stopFreezeDemo();const runId=phaseDemoRun,solid=stateKey==="solid",targets=phaseOverviewParticles.map((_,index)=>{
+        if(solid){const row=Math.floor(index/12),column=index%12;return{x:42+column*25,y:105-row*16};}
+        if(stateKey==="liquid"){const row=Math.floor(index/16),column=index%16;return{x:27+column*20.2+(Math.random()-.5)*4,y:113-row*9+(Math.random()-.5)*2};}
         return{x:20+Math.random()*320,y:20+Math.random()*98};
       });
       activePhaseProcess=stateKey;phaseDetail.dataset.overviewState=stateKey;configurePhaseOverview(stateKey);
       freezeDemo.hidden=false;const demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox","0 0 360 132");demoSvg.setAttribute("aria-label",stateKey==="solid"?"容器中的固態水分子規則排列並在固定位置微微振動":stateKey==="liquid"?"液態水分子在容器底部附近流動":"水蒸氣分子在容器中分散移動");phaseDemoHeading.textContent=phaseStates[stateKey].title;phaseDemoSource.textContent="";phaseDemoArrows.setAttribute("d","");phaseSolidFlowParticles.replaceChildren();document.querySelectorAll(".phase-solid-flow path,.phase-solid-flow-mobile path").forEach(path=>path.classList.remove("is-active"));
-      freezeParticles.forEach((p,index)=>{p.x=targets[index].x;p.y=targets[index].y;p.element.style.transform="none";p.element.setAttribute("class",`freeze-demo-particle is-${stateKey}${solid?" is-vibrating":""}`);p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
-      phaseDemoIce.style.opacity="0";freezeDemoStatus.textContent=phaseStates[stateKey].title;phaseDemoCaption.textContent=phaseStates[stateKey].title;
+      phaseOverviewParticles.forEach((p,index)=>{p.x=targets[index].x;p.y=targets[index].y;p.overviewX=p.x;p.overviewY=p.y;p.element.style.transform="none";p.element.setAttribute("class",`freeze-demo-particle is-${stateKey}${solid?" is-vibrating":""}`);p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
+      phaseDemoIce.style.opacity="0";showPhaseOverviewCount(stateKey);phaseDemoCaption.textContent=phaseStates[stateKey].title;
       updatePhaseOverviewRoutes();
       startPhaseDemoMotion(stateKey,runId);
     }
     function playStateEdgeFlow(key,stateKey){
       const transition=phaseDemoMotion[key],button=document.querySelector(`.phase-solid-process[data-phase-process="${key}"]`),slot=button.dataset.overviewSlot,mobile=window.matchMedia("(max-width: 680px)").matches,routeId=`phase-flow-${mobile?"mobile-":""}route-${slot}`,route=document.getElementById(routeId),colors=phaseParticleColors;
+      stopPhaseOverviewFlow();
+      const flow={key,stateKey,slot,incoming:transition.to===stateKey,pending:0,timers:[]};phaseOverviewFlow=flow;
       activePhaseProcess=key;
       document.querySelectorAll(".phase-solid-flow path,.phase-solid-flow-mobile path").forEach(path=>path.classList.toggle("is-active",path===route));
       phaseSolidFlowParticles.replaceChildren();
@@ -1674,15 +1726,33 @@
         for(let waveIndex=0;waveIndex<2;waveIndex++){
           const wave=document.createElementNS("http://www.w3.org/2000/svg","circle"),radius=document.createElementNS("http://www.w3.org/2000/svg","animate"),opacity=document.createElementNS("http://www.w3.org/2000/svg","animate");
           wave.setAttribute("class","phase-demo-heat-wave is-active");wave.setAttribute("r",absorbing?"25":"6");wave.setAttribute("stroke-width","1.8");
-          radius.setAttribute("attributeName","r");radius.setAttribute("values",absorbing?"25;6":"6;25");radius.setAttribute("dur","1.35s");radius.setAttribute("begin",`${delay+waveIndex*.34}s`);radius.setAttribute("repeatCount","indefinite");
-          opacity.setAttribute("attributeName","opacity");opacity.setAttribute("values","0.08;0.78;0.08");opacity.setAttribute("dur","1.35s");opacity.setAttribute("begin",`${delay+waveIndex*.34}s`);opacity.setAttribute("repeatCount","indefinite");
+          radius.setAttribute("attributeName","r");radius.setAttribute("values",absorbing?"25;6":"6;25");radius.setAttribute("dur","1.35s");radius.setAttribute("begin","indefinite");radius.setAttribute("repeatCount","indefinite");
+          opacity.setAttribute("attributeName","opacity");opacity.setAttribute("values","0.08;0.78;0.08");opacity.setAttribute("dur","1.35s");opacity.setAttribute("begin","indefinite");opacity.setAttribute("repeatCount","indefinite");
           wave.append(radius,opacity);traveler.append(wave);
         }
         const particle=document.createElementNS("http://www.w3.org/2000/svg","circle"),color=document.createElementNS("http://www.w3.org/2000/svg","animate");
         particle.setAttribute("class",`phase-solid-flow-particle is-${transition.from}-to-${transition.to}`);particle.setAttribute("r","7");particle.setAttribute("fill",colors[transition.from]);
-        motion.setAttribute("dur","3.2s");motion.setAttribute("begin",`${delay}s`);motion.setAttribute("repeatCount","indefinite");pathRef.setAttribute("href",`#${routeId}`);motion.append(pathRef);
-        color.setAttribute("attributeName","fill");color.setAttribute("values",`${colors[transition.from]};${colors[transition.to]}`);color.setAttribute("dur","3.2s");color.setAttribute("begin",`${delay}s`);color.setAttribute("repeatCount","indefinite");
-        particle.append(color);traveler.append(particle,motion);phaseSolidFlowParticles.append(traveler);
+        motion.setAttribute("dur","3.2s");motion.setAttribute("begin","indefinite");motion.setAttribute("repeatCount","indefinite");pathRef.setAttribute("href",`#${routeId}`);motion.append(pathRef);
+        color.setAttribute("attributeName","fill");color.setAttribute("values",`${colors[transition.from]};${colors[transition.to]}`);color.setAttribute("dur","3.2s");color.setAttribute("begin","indefinite");color.setAttribute("repeatCount","indefinite");
+        particle.append(color);traveler.append(particle,motion);traveler.style.display="none";phaseSolidFlowParticles.append(traveler);
+        const depart=()=>{
+          if(phaseOverviewFlow!==flow)return false;
+          if(flow.incoming){
+            if(phaseOverviewCount+flow.pending>=phaseOverviewMaximum)return false;
+            flow.pending++;return true;
+          }
+          return changePhaseOverviewPopulation(flow,-1);
+        };
+        motion.addEventListener("repeatEvent",()=>{
+          if(phaseOverviewFlow!==flow)return;
+          if(flow.incoming){flow.pending--;changePhaseOverviewPopulation(flow,1);}
+          if(!depart())traveler.remove();
+        });
+        flow.timers.push(setTimeout(()=>{
+          if(!depart()){traveler.remove();return;}
+          traveler.style.display="";motion.beginElement();color.beginElement();
+          traveler.querySelectorAll(".phase-demo-heat-wave").forEach((wave,waveIndex)=>wave.querySelectorAll("animate").forEach(animation=>animation.beginElementAt(waveIndex*.34)));
+        },delay*1000));
       }
     }
     function updatePhaseDemoIce(){
@@ -1817,10 +1887,11 @@
       if(runId!==phaseDemoRun||freezeDemo.hidden)return;
       const dt=phaseDemoLastFrame?Math.min((now-phaseDemoLastFrame)/1000,.04):0;phaseDemoLastFrame=now;
       if(phaseDemoMotionState!=="solid"){
-        const liquid=phaseDemoMotionState==="liquid",overviewLiquid=liquid&&phaseDetail.dataset.overviewState==="liquid",moving=freezeParticles;
+        const overview=phaseDetail.classList.contains("is-solid-overview")&&!phaseSolidOverview.classList.contains("is-process-view");
+        const liquid=phaseDemoMotionState==="liquid",overviewLiquid=liquid&&overview,moving=overview?phaseOverviewParticles.filter(p=>p.inOverview):freezeParticles;
         for(const p of moving){
           p.x+=p.vx*dt;p.y+=p.vy*dt;
-          const minY=liquid?(overviewLiquid?86:69):phaseDemoMotionState==="gas"?16:38;
+          const minY=liquid?(overviewLiquid?Math.max(40,117-Math.ceil(phaseOverviewCount/16)*10):69):phaseDemoMotionState==="gas"?16:38;
           if(p.x<17){p.x=17;p.vx=Math.abs(p.vx);}if(p.x>343){p.x=343;p.vx=-Math.abs(p.vx);}
           if(p.y<minY){p.y=minY;p.vy=Math.abs(p.vy);}if(p.y>117){p.y=117;p.vy=-Math.abs(p.vy);}
         }
@@ -1832,7 +1903,13 @@
           const relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
           if(relative<0){a.vx+=relative*nx;a.vy+=relative*ny;b.vx-=relative*nx;b.vy-=relative*ny;}
         }
-        moving.forEach(p=>{p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
+        moving.forEach(p=>{
+          if(overview){
+            const minY=overviewLiquid?Math.max(40,117-Math.ceil(phaseOverviewCount/16)*10):16;
+            p.x=Math.max(17,Math.min(343,p.x));p.y=Math.max(minY,Math.min(117,p.y));
+          }
+          p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));
+        });
       }
       phaseDemoFrame=requestAnimationFrame(next=>animatePhaseDemoMotion(next,runId));
     }
