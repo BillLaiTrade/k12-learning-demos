@@ -41,18 +41,12 @@
 .conduction-handle span{pointer-events:none}
 .conduction-materials p{font-size:12px;text-align:center;line-height:1.55;color:#54604c;margin:8px 0 0}
 .conduction-materials small{font-size:10px;color:#69735f}
-.conduction-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#edf3e3;border-radius:14px;padding:12px 14px;margin-top:12px}
-.conduction-bottom p{font-size:15px;font-weight:700;line-height:1.6;margin:0;color:#284a32}
-.conduction-controls{display:flex;gap:7px;flex-shrink:0}
-#conduction-lab .conduction-controls button{padding:9px 15px;min-height:40px;border-radius:22px;font-size:13px;white-space:nowrap}
-.conduction-status{margin:9px 4px 0;font-size:12px;min-height:1.6em;line-height:1.6;color:#5d7050}
-.conduction-footnote{font-size:10px;line-height:1.6;color:#78816e;margin:4px 4px 0}
 .conduction-drag-ghost{position:fixed;z-index:100;pointer-events:none;opacity:.95;transform:translate(-50%,-50%);width:180px;border-radius:12px;background:#fffff5;box-shadow:0 7px 24px #17372144;padding:6px;border:2px solid #66864b}
 .conduction-drag-ghost svg{display:block;width:100%;height:62px;border-radius:6px}
 .conduction-drag-ghost span{display:none}
 #conduction-lab button:focus-visible{outline:3px solid #87a963;outline-offset:3px}
-@media(max-width:1100px){.conduction-layout{grid-template-columns:minmax(0,1.7fr) minmax(205px,1fr)}.conduction-bottom{flex-wrap:wrap}.conduction-detail{padding:10px}.conduction-steps{gap:8px;margin:10px 0}.conduction-steps b{font-size:14px}.conduction-steps span{font-size:11px}}
-@media(max-width:640px){.conduction-layout{grid-template-columns:1fr}.conduction-detail{display:grid;grid-template-columns:1fr 1fr;gap:10px}.conduction-detail>h4{grid-column:1}.conduction-joint{grid-column:1;grid-row:2}.conduction-steps{grid-column:2;grid-row:1/3;margin:0}.conduction-materials{grid-column:1/-1;margin:0}.conduction-materials>div{grid-template-columns:1fr 1fr}.conduction-bottom{padding:10px}.conduction-bottom p{font-size:14px}.conduction-heading p{font-size:12px}#conduction-lab{padding:10px}#conduction-lab h3{font-size:19px}}
+@media(max-width:1100px){.conduction-layout{grid-template-columns:minmax(0,1.7fr) minmax(205px,1fr)}.conduction-detail{padding:10px}.conduction-steps{gap:8px;margin:10px 0}.conduction-steps b{font-size:14px}.conduction-steps span{font-size:11px}}
+@media(max-width:640px){.conduction-layout{grid-template-columns:1fr}.conduction-detail{display:grid;grid-template-columns:1fr 1fr;gap:10px}.conduction-detail>h4{grid-column:1}.conduction-joint{grid-column:1;grid-row:2}.conduction-steps{grid-column:2;grid-row:1/3;margin:0}.conduction-materials{grid-column:1/-1;margin:0}.conduction-materials>div{grid-template-columns:1fr 1fr}.conduction-heading p{font-size:12px}#conduction-lab{padding:10px}#conduction-lab h3{font-size:19px}}
 
 /* Keep the apparatus legible inside the narrower main column of the 1.1 card format. */
 @container lesson-page (max-width:800px){
@@ -68,7 +62,13 @@
 .conduction-lamp-lens{fill:url(#conduction-lamp-off)}
 #conduction-lab[data-started="true"] .conduction-lamp-lens{fill:url(#conduction-lamp-on)}
 
-/* Anchor the primary action to the hotplate knob, in the clear counter area. */
-#conduction-lab .conduction-heater-control{position:absolute;left:40.2%;top:80.5%;transform:translateX(-50%);z-index:1;min-width:106px;min-height:42px;padding:9px 14px;border:2px solid #fffdf0;border-radius:24px;background:#205e43;color:#fff;box-shadow:0 3px 10px #1c302e40;font-size:13px;line-height:1.4;white-space:nowrap}
+/* Keep the heater action centered under its knob; place reset immediately beside it. */
+.conduction-scene-controls{position:absolute;left:40.2%;top:80.5%;transform:translateX(-53px);z-index:1;display:flex;align-items:center;gap:8px}
+#conduction-lab .conduction-heater-control{min-width:106px;min-height:42px;padding:9px 14px;border:2px solid #fffdf0;border-radius:24px;background:#205e43;color:#fff;box-shadow:0 3px 10px #1c302e40;font-size:13px;line-height:1.4;white-space:nowrap}
 #conduction-lab .conduction-heater-control:hover{background:#124e35;box-shadow:0 4px 12px #1c302e55}
 #conduction-lab .conduction-heater-control:focus-visible{outline-color:#fffdf0;box-shadow:0 0 0 5px #4e794f}
+
+#conduction-lab .conduction-reset-control{min-width:64px;min-height:42px;padding:9px 13px;border:2px solid #fffdf0;border-radius:24px;background:#fffdf5;color:#284b39;box-shadow:0 3px 10px #1c302e30;font-size:13px;line-height:1.4;white-space:nowrap}
+#conduction-lab .conduction-reset-control:hover{background:#eef5e8;border-color:#aec8a1}
+/* Retain announcements for screen readers without a visible description block. */
+.conduction-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0}
