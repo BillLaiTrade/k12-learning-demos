@@ -259,3 +259,34 @@
  #s6 .pool-salt-scale {left:5px;bottom:17px;}
  #s6 .pool-salt-scale small,#s6 .pool-salt-zoom {font-size:.48rem;}
 }
+
+/* Refined material study: pool model, measured callouts and whole-portion window. */
+#s6 .pool-geometry-scene {border-color:#d5dfd8;border-radius:15px;background:#edf0ec;box-shadow:inset 0 0 0 1px #ffffff80;}
+#s6 .pool-water-quantity {top:14px;left:14px;padding:11px 14px;border-color:#ffffffd9;border-radius:11px;background:#fffef9ed;box-shadow:0 5px 18px #30473912;gap:3px;}
+#s6 .pool-water-quantity>span {font-size:.67rem;letter-spacing:.06em;color:#657a6d;}
+#s6 .pool-water-quantity strong {font-size:1.38rem;font-weight:700;letter-spacing:-.025em;}
+#s6 .pool-water-quantity strong small {font-size:.67rem;margin-left:3px;letter-spacing:0;}
+#s6 .pool-dimension-label {padding:3px 6px;border:1px solid #d5e2ddaa;border-radius:5px;background:#ffffffed;font-size:.65rem;box-shadow:0 2px 5px #294e4a08;color:#305e5c;}
+#s6 .pool-quantity-guide [data-dimension-line] {stroke:#5a7e7a;stroke-width:.8;}
+#s6 .pool-quantity-guide [data-salt-guide] {stroke:#557d6a;stroke-width:.9;stroke-dasharray:2 4;opacity:.8;}
+#s6 .pool-quantity-guide [data-salt-source] {stroke:#537b65;stroke-width:1.2;fill:#fff9;}
+#s6 .pool-salt-source-label {padding:3px 6px;border:1px solid #c8dacdbb;border-radius:5px;font-size:.6rem;background:#fffffff2;box-shadow:0 2px 5px #294e4a08;}
+#s6 .pool-salt-inset {top:7%;right:2%;width:31%;border:1px solid #fff;border-radius:12px;box-shadow:0 9px 25px #293f3021,0 0 0 1px #bfcbc280;overflow:hidden;}
+#s6 .pool-salt-title {display:flex;align-items:center;justify-content:space-between;gap:6px;left:0;right:0;top:0;transform:none;width:auto;max-width:none;padding:7px 10px;border-radius:0;border-bottom:1px solid #d9dfd3;background:#fffef9ed;font-size:.64rem;letter-spacing:.03em;}
+#s6 .pool-salt-title b {padding:1px 6px;border-radius:4px;background:#e8eee3;color:#255640;font-size:.67rem;letter-spacing:0;}
+#s6 .pool-salt-scale {left:10px;bottom:22px;border-color:#4b6358;}
+#s6 .pool-salt-scale small {padding:0 2px;border-radius:2px;background:#fdfaf0d9;color:#4c6357;}
+#s6 .pool-salt-zoom {right:8px;bottom:6px;padding:1px 4px;background:#fffdf4bd;color:#677a6c;}
+@media(max-width:680px){
+ #s6 .pool-water-quantity {top:7px;left:7px;padding:6px 8px;gap:1px;border-radius:7px;}
+ #s6 .pool-water-quantity>span {font-size:.54rem;}
+ #s6 .pool-water-quantity strong {font-size:1rem;}
+ #s6 .pool-water-quantity strong small {font-size:.55rem;}
+ #s6 .pool-salt-inset {width:32%;border-radius:7px;}
+ #s6 .pool-salt-title {padding:3px 4px;font-size:.49rem;gap:2px;}
+ #s6 .pool-salt-title b {font-size:.5rem;padding:0 3px;}
+ #s6 .pool-dimension-label {font-size:.52rem;padding:1px 3px;}
+ #s6 .pool-salt-source-label {font-size:.48rem;padding:1px 3px;}
+ #s6 .pool-salt-scale {left:6px;bottom:17px;}
+ #s6 .pool-salt-zoom {right:3px;bottom:2px;}
+}

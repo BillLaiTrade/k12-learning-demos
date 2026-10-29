@@ -1,5 +1,5 @@
-import {poolLiters} from './ppm-quantity-model.js?v=scale-1';
-import {createQuantityView} from './ppm-quantity-view.js?v=scale-1';
+import {poolLiters} from './ppm-quantity-model.js?v=polish-1';
+import {createQuantityView} from './ppm-quantity-view.js?v=polish-1';
 const root=document.getElementById('ppm-lab');
 const buttons=[...root.querySelectorAll('[data-pool-dose]')];
 const waterVolumeL=poolLiters();

@@ -17,7 +17,7 @@ export function saltPortion(massG){
   }
   // Fixed sub-cell variation avoids a repeated grid without enlarging the grains.
   const jitter=n=>(Math.sin(n*127.1+311.7)*43758.5453%1)*.00012;
-  const positions=candidates.slice(0,count).map((p,i)=>({x:p.x*SALT.cellM+jitter(i),y:.006+edgeM/2+p.y*SALT.cellM,z:p.z*SALT.cellM+jitter(i+count)}));
+  const positions=candidates.slice(0,count).map((p,i)=>({x:p.x*SALT.cellM+Math.sin(p.y*2.4)*.0005+jitter(i),y:.006+edgeM/2+p.y*SALT.cellM,z:p.z*SALT.cellM+Math.cos(p.y*1.8)*.0005+jitter(i+count)}));
   const radiusM=Math.max(...positions.map(p=>Math.hypot(p.x,p.z)))+edgeM*Math.sqrt(2)/2;
   const heightM=Math.max(...positions.map(p=>p.y))+.5*edgeM-.006;
   return {massG,count,edgeM,positions,radiusM,heightM,solidVolumeCm3:massG/SALT.densityGPerCm3,solidVolumeM3:count*edgeM**3};
