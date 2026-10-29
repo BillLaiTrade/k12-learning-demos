@@ -18,11 +18,11 @@ if (section) {
     const x = mirrorX + cm * unitsPerCm;
     const major = cm % 10 === 0;
     const tick = document.createElementNS(ns, 'line');
-    for (const [name, value] of Object.entries({ x1: x, x2: x, y1: 260, y2: major ? 274 : 267, class: 'ruler-tick' })) tick.setAttribute(name, value);
+    for (const [name, value] of Object.entries({ x1: x, x2: x, y1: 260, y2: major ? 274 : 267, class: `ruler-tick${major ? ' is-major' : ''}${cm === 0 ? ' is-zero' : ''}` })) tick.setAttribute(name, value);
     ticks.append(tick);
     if (major) {
       const label = document.createElementNS(ns, 'text');
-      for (const [name, value] of Object.entries({ x, y: 292, class: 'ruler-label' })) label.setAttribute(name, value);
+      for (const [name, value] of Object.entries({ x, y: 292, class: `ruler-label${cm === 0 ? ' is-zero' : ''}` })) label.setAttribute(name, value);
       label.textContent = String(Math.abs(cm));
       values.append(label);
     }
@@ -34,11 +34,11 @@ if (section) {
     const imageX = mirrorX + distance * unitsPerCm;
     object.setAttribute('transform', `translate(${objectX - 182} 0)`);
     image.setAttribute('transform', `translate(${imageX - 438} 0)`);
-    section.querySelector('#distance-object-measure').setAttribute('d', `M${objectX} 88H${mirrorX}`);
-    section.querySelector('#distance-image-measure').setAttribute('d', `M${mirrorX} 88H${imageX}`);
+    section.querySelector('#distance-object-measure').setAttribute('d', `M${objectX} 116H${mirrorX}`);
+    section.querySelector('#distance-image-measure').setAttribute('d', `M${mirrorX} 116H${imageX}`);
     for (const [id, x, text] of [
-      ['distance-object-measure-label', 225, `物距 ${distance} cm`],
-      ['distance-image-measure-label', 395, `像距 ${distance} cm`]
+      ['distance-object-measure-label', Math.min(245, (objectX + mirrorX) / 2), `物距 ${distance} cm`],
+      ['distance-image-measure-label', Math.max(375, (imageX + mirrorX) / 2), `像距 ${distance} cm`]
     ]) {
       const label = section.querySelector(`#${id}`);
       label.setAttribute('x', x);
@@ -49,12 +49,9 @@ if (section) {
       marker.setAttribute('x1', x);
       marker.setAttribute('x2', x);
     }
-    section.querySelector('#object-distance-value').textContent = `${distance} cm`;
-    section.querySelector('#image-distance-value').textContent = `${distance} cm`;
     object.setAttribute('aria-valuenow', distance);
     object.setAttribute('aria-valuetext', `物距 ${distance} 公分，像距 ${distance} 公分`);
     section.querySelector('#distance-front-status').textContent = `物體離鏡面 ${distance} cm｜虛像在鏡後 ${distance} cm`;
-    section.querySelector('#distance-observation').textContent = `目前物距與像距都是 ${distance} cm。物體靠近或遠離鏡面時，鏡後的虛像也以相同距離移動。尺上的鏡面位置是 0；虛像位置為畫面參考刻度。`;
     frontObject.setAttribute('transform', `translate(0 ${(distance - 40) * .65})`);
     frontReflection.setAttribute('transform', `translate(0 ${(40 - distance) * .65})`);
   };

@@ -1,0 +1,18 @@
+#card-04 .mirror-views{gap:14px}
+#card-04 .mirror-view{border-color:#d2dfd6;border-radius:16px;background:#fcfdf9;box-shadow:0 4px 14px #304c3f0a}
+#card-04 .mirror-view h3{padding:10px 12px;background:#edf4ef;color:#34594d;font-size:.87rem;font-weight:700;line-height:1.45}
+#card-04 .mirror-view h3 small{padding:3px 7px;border:1px solid #d7e4db;background:#ffffffb8;color:#527766;font-size:.67rem;font-weight:600;letter-spacing:.02em}
+#card-04 .measure-line{stroke:#668b97;stroke-width:1.7;stroke-dasharray:3 3}
+#card-04 .measure-text{fill:#426e7d;font-size:15px;font-weight:650;font-variant-numeric:tabular-nums}
+#card-04 .ruler-line{stroke:#91a69a;stroke-width:1.1}
+#card-04 .ruler-tick{stroke:#b2c2b7;stroke-width:.9}
+#card-04 .ruler-tick.is-major{stroke:#718e7e;stroke-width:1.3}
+#card-04 .ruler-tick.is-zero{stroke:#3d6b57;stroke-width:1.8}
+#card-04 .ruler-label{fill:#718579;font-size:15px;font-weight:500;font-variant-numeric:tabular-nums}
+#card-04 .ruler-label.is-zero{fill:#2f604c;font-weight:750}
+#card-04 #distance-ruler-object-marker{stroke:#b2844f;stroke-width:2.2}
+#card-04 #distance-ruler-image-marker{stroke:#73949c;stroke-width:2;stroke-dasharray:3 3}
+#card-04 .distance-side-tag{font-size:11.5px;font-weight:650;letter-spacing:.02em}
+#card-04 .distance-front-tag{font-size:11.5px;font-weight:650;letter-spacing:.01em}
+#card-04 #distance-front-status{font-size:12px;font-weight:600;letter-spacing:.01em}
+@media(max-width:650px){#card-04{padding:16px}#card-04 .mirror-views{gap:12px}#card-04 .mirror-view h3{padding:9px 10px;font-size:.82rem}#card-04 .mirror-view h3 small{font-size:.64rem;padding:3px 6px}}
