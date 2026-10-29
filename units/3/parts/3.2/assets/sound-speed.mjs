@@ -4,7 +4,7 @@ import {
   positions, runEnd, sample
 } from './sound-speed-model.mjs?v=fixed-22';
 import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=fixed-22';
-import { createTemperatureProgress } from './temperature-progress.mjs?v=fixed-23';
+import { createTemperatureProgress } from './temperature-progress.mjs?v=displayed-distance-20261029';
 import { airChamberScene } from './temperature-chamber.mjs?v=fixed-22';
 
 export function initSoundSpeed(root) {
