@@ -407,9 +407,20 @@ if (canvas) {
 
     let blocked = false;
     let animation = null;
+    let hasEnteredLightPath = false;
     const duration = 920;
     const ease = (value) => value < 0.5 ? 4 * value ** 3 : 1 - ((-2 * value + 2) ** 3) / 2;
     const setObservation = (message) => { xiaokuiObservation.textContent = message; };
+    const updateObservationForPosition = () => {
+      if (blocker.position.x <= parkedX - 0.35) hasEnteredLightPath = true;
+      setObservation(blocker.position.x < 0.55
+        ? '球擋住光的位置，屏幕上出現影子了！'
+        : blocker.position.x > parkedX - 0.35
+          ? hasEnteredLightPath
+            ? '球移開後，原來的暗區又被照亮了。'
+            : '球在光路旁，屏幕上還沒有球的影子。'
+          : '球移動時，屏幕上的影子也跟著改變。');
+    };
     const setToggleState = (value) => {
       blocked = value;
       toggle.setAttribute('aria-pressed', String(value));
@@ -460,11 +471,7 @@ if (canvas) {
       if (!raycaster.ray.intersectPlane(blockerDragPlane, dragIntersection)) return;
       blocker.position.x = THREE.MathUtils.clamp(dragIntersection.x, targetX, parkedX);
       setToggleState(blocker.position.x < (targetX + parkedX) / 2);
-      setObservation(blocker.position.x < 0.55
-        ? '原來球擋住光的地方，屏幕上就留下了影子。'
-        : blocker.position.x > parkedX - 0.35
-          ? '原來不透明的球擋住光線後，光照不到的地方就在屏幕上形成影子。'
-          : '球移動時，屏幕上的影子也跟著改變。');
+      updateObservationForPosition();
       status.textContent = blocker.position.x < 0.55
         ? '球體已移至光路中央，屏幕形成影子。'
         : blocker.position.x > parkedX - 0.35
@@ -518,6 +525,7 @@ if (canvas) {
       if (blockerPointerId === event.pointerId) {
         blockerPointerId = null;
         canvas.classList.remove('dragging-blocker');
+        updateObservationForPosition();
       }
       pointers.delete(event.pointerId);
       previousPoint = pointers.size === 1 ? [...pointers.values()][0] : null;
@@ -536,10 +544,11 @@ if (canvas) {
       if (animation) {
         const progress = THREE.MathUtils.clamp((performance.now() - animation.started) / animation.duration, 0, 1);
         blocker.position.x = THREE.MathUtils.lerp(animation.from, animation.to, ease(progress));
+        if (blocker.position.x <= parkedX - 0.35) hasEnteredLightPath = true;
         if (progress >= 1) {
           animation = null;
           status.textContent = blocked ? '球體擋住部分光，屏幕相應位置形成影子。' : '球體停在光路旁，屏幕均勻受光。';
-          setObservation(blocked ? '原來球擋住光的地方，屏幕上就留下了影子。' : '原來不透明的球擋住光線後，光照不到的地方就在屏幕上形成影子。');
+          updateObservationForPosition();
         }
       }
       renderer.render(scene, camera);
