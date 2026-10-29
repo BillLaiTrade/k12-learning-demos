@@ -2384,6 +2384,7 @@
     const workbenchFeedback=document.getElementById("workbench-feedback");
     const sampleStatus=new Map();
     const sampleLocations=new Map();
+    const sampleSlots=new Map();
     const incorrectLocations=new Map();
     let selectedSpecimen=null;
     const selectSpecimen=(button,openManual=false)=>{
@@ -2402,7 +2403,7 @@
     const returnSpecimen=button=>{
       const key=button.dataset.sample;
       if(!sampleLocations.has(key))return;
-      sampleStatus.delete(key);sampleLocations.delete(key);incorrectLocations.delete(key);button.classList.remove("is-placed","is-incorrect");button.style.left="";button.style.top="";
+      sampleStatus.delete(key);sampleLocations.delete(key);sampleSlots.delete(key);incorrectLocations.delete(key);button.classList.remove("is-placed","is-incorrect");button.style.left="";button.style.top="";
       button.querySelector(".sample-tag").textContent=specimenRules[key].label;
       button.setAttribute("aria-label",specimenRules[key].label+"已放回桌面，點選查看觀察資料");
       selectSpecimen(button);
@@ -2415,11 +2416,22 @@
       const targetCategory=typeof target==="string"?target:target.dataset.target;
       const key=button.dataset.sample;const data=specimenRules[key];
       const isCorrect=targetCategory===data.category;
+      // Keep occupied positions stable; returning or moving a sample releases its slot.
+      let slot=sampleLocations.get(key)===targetCategory?sampleSlots.get(key):undefined;
+      if(slot===undefined){
+        const occupied=new Set([...sampleLocations.entries()].filter(([other,category])=>other!==key&&category===targetCategory).map(([other])=>sampleSlots.get(other)));
+        slot=[0,1,2].find(position=>!occupied.has(position));
+        if(slot===undefined){
+          workbenchFeedback.dataset.kind="";
+          workbenchFeedback.textContent="這一層目前沒有空位，請先取回一份樣本，再放入新樣本。";
+          return false;
+        }
+      }
       sampleLocations.set(key,targetCategory);
-      const count=[...sampleLocations.entries()].filter(([,category])=>category===targetCategory).findIndex(([sample])=>sample===key);
+      sampleSlots.set(key,slot);
       const placement={element:{left:9,top:9},compound:{left:9,top:31},mixture:{left:59,top:9}}[targetCategory];
       button.classList.remove("is-selected");button.classList.add("is-placed");returnSampleButton.hidden=selectedSpecimen!==button;
-      button.style.left=(placement.left+(count%3)*12)+"%";button.style.top=(placement.top+Math.floor(count/3)*5.5)+"%";
+      button.style.left=(placement.left+slot*12)+"%";button.style.top=placement.top+"%";
       if(!isCorrect){
         sampleStatus.delete(key);incorrectLocations.set(key,targetCategory);button.classList.add("is-incorrect");button.querySelector(".sample-tag").textContent=data.label;
         button.setAttribute("aria-label",data.label+"目前放在不符的位置，請重新分類");button.setAttribute("aria-pressed","false");
@@ -2464,7 +2476,7 @@
         const scene=document.getElementById("classification-workbench").getBoundingClientRect();
         const x=(event.clientX-scene.left)/scene.width*100;const y=(event.clientY-scene.top)/scene.height*100;
         const dropCategory=targetLabel?.dataset.target||(x>=1&&x<=50&&y>=0&&y<=55?(y<27?"element":"compound"):x>50&&x<=100&&y>=0&&y<=55?"mixture":null);
-        if(dropCategory){selectSpecimen(button);placeSpecimen(button,dropCategory);}
+        if(dropCategory){selectSpecimen(button);if(!placeSpecimen(button,dropCategory)){button.style.left=state.startLeft+"%";button.style.top=state.startTop+"%";}}
         else if(state.wasPlaced&&y>55)returnSpecimen(button);
         else{button.style.left=state.startLeft+"%";button.style.top=state.startTop+"%";workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="把樣本拖進展示櫃對應層，或點選樣本後再點選層板標籤。";}
       });
@@ -2513,7 +2525,7 @@
     document.getElementById("reader-next").addEventListener("click",()=>showReaderPage(bookPage+1));
     document.getElementById("book-reader-close").addEventListener("click",()=>bookReader.close());
     document.getElementById("reset-samples").addEventListener("click",()=>{
-      sampleStatus.clear();sampleLocations.clear();incorrectLocations.clear();selectedSpecimen=null;sampleInfo.hidden=true;specimenButtons.forEach(button=>{button.classList.remove("is-selected","is-placed","is-incorrect");button.setAttribute("aria-pressed","false");button.removeAttribute("aria-label");button.style.left="";button.style.top="";button.querySelector(".sample-tag").textContent=specimenRules[button.dataset.sample].label;});
+      sampleStatus.clear();sampleLocations.clear();sampleSlots.clear();incorrectLocations.clear();selectedSpecimen=null;sampleInfo.hidden=true;specimenButtons.forEach(button=>{button.classList.remove("is-selected","is-placed","is-incorrect");button.setAttribute("aria-pressed","false");button.removeAttribute("aria-label");button.style.left="";button.style.top="";button.querySelector(".sample-tag").textContent=specimenRules[button.dataset.sample].label;});
       specimenButtons.forEach((button,index)=>button.setAttribute("aria-label","選取桌上的樣本"+(index+1)+"，查看資料卡"));
       workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="樣本已回到桌面，重新開始分類。";document.getElementById("sort-progress").textContent="已分類 0 / "+specimenRulesCount+" 份樣本";
     });
