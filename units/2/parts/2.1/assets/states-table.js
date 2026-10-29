@@ -35,6 +35,16 @@
         group.querySelector('.sv-seal').setAttribute('d', `M${x} ${y}h${width}`);
         layoutGasShape(group.querySelector('[data-shape-particles]'));
       }
+      const rim = group.querySelector('.sv-rim');
+      rim.setAttribute('cx',178); rim.setAttribute('cy',y); rim.setAttribute('rx',width / 2);
+      const floor = group.querySelector('.sv-floor-line');
+      floor.setAttribute('cx',178); floor.setAttribute('rx',width / 2 - 1);
+      const meniscus = group.querySelector('.sv-meniscus');
+      if (meniscus) {
+        const water = group.querySelector('.sv-water');
+        meniscus.setAttribute('cx',178); meniscus.setAttribute('cy',water.getAttribute('y'));
+        meniscus.setAttribute('rx',(width - 8) / 2);
+      }
       group.dataset.form = String(current);
       button.setAttribute('aria-label', `換個容器；目前${['細高', '寬淺', '方形'][current]}容器`);
     });
@@ -77,6 +87,7 @@
     handle.addEventListener('pointerdown', event => {
       if (event.button !== 0 || pointer !== null) return;
       pointer = event.pointerId;
+      handle.classList.add('is-dragging');
       startY = event.clientY;
       startCompression = compression;
       handle.focus({ preventScroll:true });
@@ -92,10 +103,11 @@
       if (event.pointerId !== pointer) return;
       if (handle.hasPointerCapture(pointer)) handle.releasePointerCapture(pointer);
       pointer = null;
+      handle.classList.remove('is-dragging');
     }
     handle.addEventListener('pointerup', stop);
     handle.addEventListener('pointercancel', stop);
-    handle.addEventListener('lostpointercapture', () => { pointer = null; });
+    handle.addEventListener('lostpointercapture', () => { pointer = null; handle.classList.remove('is-dragging'); });
     handle.addEventListener('keydown', event => {
       const actions = { ArrowDown:compression + 10, ArrowUp:compression - 10, ArrowRight:compression + 10, ArrowLeft:compression - 10, Home:0, End:100 };
       if (!(event.key in actions)) return;

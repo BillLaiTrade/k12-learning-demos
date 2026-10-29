@@ -73,6 +73,13 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
       const after = await dimensions();
       assert.ok(Math.abs(after.area - before.area) < .001);
       assert.equal(after.bottom, 119);
+      const trimAligned = await cell('liquid.shape').locator('[data-vessel-changing]').evaluate(g => {
+        const glass=g.querySelector('.sv-glass'),rim=g.querySelector('.sv-rim');
+        const water=g.querySelector('.sv-water'),surface=g.querySelector('.sv-meniscus');
+        return +rim.getAttribute('cy')===+glass.getAttribute('y') && +rim.getAttribute('rx')===+glass.getAttribute('width')/2 && +surface.getAttribute('cy')===+water.getAttribute('y') && +surface.getAttribute('rx')===+water.getAttribute('width')/2;
+      });
+      assert.equal(trimAligned,true);
+
     }
     assert.equal(await cell('liquid.shape').locator('svg text').allTextContents().then(a => a.join(',')), '100 mL,100 mL');
   });
@@ -85,9 +92,11 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
         const x = Number(box.getAttribute('x')), y = Number(box.getAttribute('y'));
         const w = Number(box.getAttribute('width')), h = Number(box.getAttribute('height'));
         const dots = [...g.querySelectorAll('.sv-particle')];
-        return { count:dots.length, inside:dots.every(d => +d.getAttribute('cx') > x && +d.getAttribute('cx') < x+w && +d.getAttribute('cy') > y && +d.getAttribute('cy') < y+h) };
+        const rim=g.querySelector('.sv-rim');
+        const aligned=+rim.getAttribute('cy')===y && +rim.getAttribute('rx')===w/2;
+        return { count:dots.length, aligned, inside:dots.every(d => +d.getAttribute('cx') > x && +d.getAttribute('cx') < x+w && +d.getAttribute('cy') > y && +d.getAttribute('cy') < y+h) };
       });
-      assert.deepEqual(state, { count:24, inside:true });
+      assert.deepEqual(state, { count:24, aligned:true, inside:true });
     }
   });
 
