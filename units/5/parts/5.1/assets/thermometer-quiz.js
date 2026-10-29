@@ -1,4 +1,4 @@
-import {makeRound,valueFor,celsiusFor,scaleY,scaleRange,assessInstrument} from './thermometer-quiz-model.mjs?v=reconfirm-reading-5';
+import {makeRound,valueFor,celsiusFor,scaleY,scaleRange,assessInstrument,ROOM_C} from './thermometer-quiz-model.mjs?v=reconfirm-reading-5';
 import {projectPoint} from './parallax-model.js';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const root=$('unit-quiz'), scene=$('tq-scene');
@@ -8,6 +8,8 @@ const create=(tag,attrs={},text)=>{const n=document.createElementNS(ns,tag);for(
 const REST={A:{x:681,y:532,sx:.58,sy:.40,angle:-1.8},B:{x:829,y:530,sx:.58,sy:.40,angle:-6.5}};
 const MOUNT={x:430,y:160,sx:1,sy:1,angle:0};
 let round=makeRound(0,Math.random()<.5), active=null,picked=null,eye=0,drag=null,eyeDrag=null,frame=0,stable=false;
+const trayCooling=new Map(), TRAY_RETURN_MS=10000;
+let trayFrame=0;
 const builtUnits={};
 // Chromium's SVG text can start native touch scrolling despite the group's
 // touch-action rule. Cancel it only on physical handles, leaving the bench
@@ -128,8 +130,35 @@ function loadDraft(){
   $('tq-reading').removeAttribute('aria-invalid');
 }
 function stopAnimation(){cancelAnimationFrame(frame);frame=0;}
+// Returned instruments approach room temperature independently of the one in water.
+// Only the live liquid changes; saved observations remain a record of measurement.
+function updateTrayCooling(now){
+  for(const [id, cooling] of trayCooling){
+    const progress=Math.min(1,Math.max(0,(now-cooling.start)/TRAY_RETURN_MS));
+    round.instruments[id].c=ROOM_C+(cooling.startC-ROOM_C)*(1-progress)**3;
+    if(progress===1)trayCooling.delete(id);
+    renderInstrument(id);
+  }
+}
+function animateTrayCooling(now){
+  trayFrame=0;updateTrayCooling(now);
+  if(trayCooling.size)trayFrame=requestAnimationFrame(animateTrayCooling);
+}
+function startTrayCooling(id){
+  trayCooling.set(id,{start:performance.now(),startC:round.instruments[id].c});
+  if(!trayFrame)trayFrame=requestAnimationFrame(animateTrayCooling);
+}
+function stopTrayCooling(id){
+  // Capture the current temperature before remounting; avoid a jump to either endpoint.
+  updateTrayCooling(performance.now());trayCooling.delete(id);
+  if(!trayCooling.size){cancelAnimationFrame(trayFrame);trayFrame=0;}
+}
+function clearTrayCooling(){
+  cancelAnimationFrame(trayFrame);trayFrame=0;trayCooling.clear();
+}
 function mount(id){
   if(active){announce(`先將杯中的 ${active} 放回托盤，再放入另一支。`);picked=null;renderUI();return;}
+  stopTrayCooling(id);
   stopAnimation();active=id;picked=null;const i=round.instruments[id],startC=i.c;eye=i.initialEye;
   stable=Math.abs(startC-round.waterC)<.001;
   if(stable)i.measured=true;
@@ -150,6 +179,7 @@ function mount(id){
 function returnToTray(id){
   if(active!==id){picked=null;renderUI();return;}
   stopAnimation();active=null;picked=null;stable=false;eye=0;loadDraft();renderUI();invalidate();
+  startTrayCooling(id);
   announce(`${id} 已放回，作答會保留。可拿起另一支量測。`);
 }
 function choose(id,keyboard=false){
@@ -229,7 +259,7 @@ $('tq-check').addEventListener('click',()=>{
   else{add('再確認一下，完成的作答會保留。');for(const r of results)add(`${r.id}：${r.message}`);}
 });
 $('tq-reset').addEventListener('click',()=>{
-  endDrag(null,true);stopEye();stopAnimation();round=makeRound(round.index+1,!round.aIsF);active=null;picked=null;eye=0;stable=false;invalidate();loadDraft();
+  endDrag(null,true);stopEye();stopAnimation();clearTrayCooling();round=makeRound(round.index+1,!round.aIsF);active=null;picked=null;eye=0;stable=false;invalidate();loadDraft();
   $('tq-hint').hidden=true;$('tq-hint-toggle').setAttribute('aria-expanded','false');$('tq-hint-toggle').firstChild.textContent='查看換算提示 ';
   renderUI();announce('新一回合已準備好。A、B 的位置與刻度需重新觀察，作答已清空。');
 });
