@@ -136,9 +136,11 @@ function mount(id){
   loadDraft();renderUI();invalidate();
   announce(`已放入 ${id}。液泡浸在水中，沒有碰杯壁或杯底；觀察液柱，穩定後再讀值。`);
   if(stable)return;
-  const start=performance.now(), duration=matchMedia('(prefers-reduced-motion: reduce)').matches?0:1800;
+  // The smooth liquid change is the phenomenon students need to observe.
+  // Keep it visible with reduced motion, using the same three-second duration.
+  const start=performance.now(), duration=3000;
   function tick(now){
-    const progress=duration===0?1:Math.min(1,(now-start)/duration);
+    const progress=Math.min(1,(now-start)/duration);
     i.c=startC+(round.waterC-startC)*(1-(1-progress)**3);
     if(progress===1){i.c=round.waterC;i.measured=true;stable=true;frame=0;}
     renderUI();if(progress<1)frame=requestAnimationFrame(tick);
