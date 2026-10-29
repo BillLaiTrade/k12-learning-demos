@@ -6,7 +6,7 @@ export const MIRRORS = {
   concave: { name: '凹面鏡', result: '向內會聚' },
   convex: { name: '凸面鏡', result: '向外發散' },
 };
-export const OPTICS = { vertex: 270, centerY: 110, radius: 340, offsets: [-38, 0, 38], aperture: 76 };
+export const OPTICS = { vertex: 270, centerY: 110, radius: 220, offsets: [-28, 0, 28], aperture: 85, reasonOffset: -50 };
 
 export function reflectionAt(mode, offset) {
   if (!Object.hasOwn(MIRRORS, mode)) throw new RangeError('Unknown mirror');
@@ -31,12 +31,22 @@ export function mirrorOutline(mode) {
   return points;
 }
 
+// Shorten a displayed ray at the diagram boundary without changing direction.
+export function visibleRayEnd(ray, bounds = { left: 20, top: 18, bottom: 202 }) {
+  const [x, y] = ray.point, [dx, dy] = ray.direction;
+  const times = [(bounds.left - x) / dx];
+  if (dy < 0) times.push((bounds.top - y) / dy);
+  if (dy > 0) times.push((bounds.bottom - y) / dy);
+  const t = Math.min(...times.filter(value => value >= 0));
+  return [x + dx * t, y + dy * t];
+}
+
 // Normalized examples: f=1 for concave, f=-1 for convex. These are NOT
-// distances in the ray diagram; arrow illustrations compare appearance only.
+// distances in the ray diagram; the toy illustrations compare appearance only.
 export function imageExample(mode, position = 'near') {
   if (mode === 'plane') return { objectDistance: 1.5, imageDistance: -1.5, magnification: 1 };
   const f = mode === 'convex' ? -1 : 1;
-  const objectDistance = mode === 'convex' ? 1.5 : position === 'near' ? 0.5 : 3;
+  const objectDistance = mode === 'convex' ? 0.5 : position === 'near' ? 1 / 3 : 3;
   const imageDistance = f * objectDistance / (objectDistance - f);
   return { objectDistance, imageDistance, magnification: -imageDistance / objectDistance };
 }

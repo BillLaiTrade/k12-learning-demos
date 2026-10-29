@@ -68,7 +68,7 @@
   </style>
   <link rel="stylesheet" href="assets/mirror-image.css?v=12">
   <link rel="stylesheet" href="assets/mirror-distance.css?v=visual-polish-20261029">
-  <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
+  <link rel="stylesheet" href="assets/curved-mirrors.css?v=three-steps-20261029">
   <link rel="stylesheet" href="assets/reversible-light.css?v=3">
   <link rel="stylesheet" href="assets/periscope.css?v=8">
 </head>
@@ -316,48 +316,40 @@
             <p class="visual-caption" id="distance-observation" aria-live="polite">尺以鏡面為 0；物體與像分居鏡面兩側。移動小熊，觀察兩個標記是否保持等距。虛像位置是畫面參考刻度，不能用實體尺直接量取。</p>
           </div>
         </section>
-        <section class="lesson-card" id="card-05" data-mirror-mode="concave" data-mirror-point="0">
-          <div class="card-side"><span class="card-number">05</span><h3>曲面鏡會怎樣改變反射光？</h3><span class="card-role">由平面延伸到曲面</span></div>
+        <section class="lesson-card" id="card-05" data-normals="true" data-concave-position="near">
+          <div class="card-side"><span class="card-number">05</span><h3>三種鏡子有什麼不同？</h3><span class="card-role mirror-reading-order">觀察 →<br>找原因 →<br>看成像</span></div>
           <div class="card-main">
-            <h2>鏡面形狀不同，光路與像有什麼不同？</h2>
-            <p>平面鏡的反射面平直，凹面鏡向內凹，凸面鏡向外凸。反射面的形狀不同，也會影響光的方向與像的樣子。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>化妝鏡會把臉放大，路口鏡卻把車子照小了？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先比較相同平行光的反射方向，再看看像有什麼不同。</p></div>
-            <h3 class="mirror-heading">保持入射光相同，比較三種鏡面</h3>
-            <div class="mirror-grid" role="group" aria-label="三種鏡面同時比較；點選查看反射原因">
-              <button class="mirror-option" type="button" data-mirror="plane" aria-expanded="false" aria-controls="mirror-detail"><strong>平面鏡</strong><svg viewBox="0 0 320 220" role="img" aria-label="平面鏡的平行光反射示意"></svg><span class="mirror-result">仍互相平行</span><span class="mirror-open-label">查看反射原因</span></button>
-              <button class="mirror-option" type="button" data-mirror="concave" aria-expanded="true" aria-controls="mirror-detail"><strong>凹面鏡</strong><svg viewBox="0 0 320 220" role="img" aria-label="凹面鏡的平行光反射示意"></svg><span class="mirror-result">向內會聚</span><span class="mirror-open-label">查看反射原因</span></button>
-              <button class="mirror-option" type="button" data-mirror="convex" aria-expanded="false" aria-controls="mirror-detail"><strong>凸面鏡</strong><svg viewBox="0 0 320 220" role="img" aria-label="凸面鏡的平行光反射示意"></svg><span class="mirror-result">向外發散</span><span class="mirror-open-label">查看反射原因</span></button>
-            </div>
-            <div class="mirror-legend" aria-label="光路圖例"><span><i></i>入射光</span><span><i class="mirror-reflected"></i>反射光</span><span><i class="mirror-normal"></i>法線</span></div>
-            <div class="mirror-detail" id="mirror-detail" role="region" aria-labelledby="mirror-detail-title">
-              <div class="mirror-detail-head"><h4 id="mirror-detail-title">凹面鏡｜查看反射原因</h4><button type="button" class="mirror-detail-close" id="mirror-detail-close">收起詳解 ↑</button></div>
-              <div class="mirror-detail-body">
-                <figure class="mirror-detail-figure"><svg id="mirror-detail-svg" viewBox="0 0 320 220" role="group" aria-label="可點選鏡面上方、中央、下方反射點的光路圖"></svg>
-                  <div class="mirror-point-controls" role="group" aria-label="選擇反射位置"><button class="mirror-point-button" type="button" data-mirror-point="0" aria-pressed="true">上方</button><button class="mirror-point-button" type="button" data-mirror-point="1" aria-pressed="false">中央</button><button class="mirror-point-button" type="button" data-mirror-point="2" aria-pressed="false">下方</button></div>
-                  <figcaption>點選圖中反射點或位置按鈕，查看法線。</figcaption>
-                </figure>
-                <div class="mirror-detail-copy"><span class="mirror-point-label" id="mirror-point-label">上方反射點</span><p id="mirror-point-explanation"></p><strong>入射角＝反射角</strong><p class="mirror-angles" id="mirror-angle-readout" aria-live="polite"></p><svg class="mirror-local" id="mirror-local-svg" viewBox="0 0 270 165" role="img" aria-label="兩個角都從法線量起的局部光路"></svg></div>
+            <h2>鏡面不同，反射光與像怎麼變？</h2>
+            <section class="mirror-step" aria-labelledby="mirror-step-1">
+              <header class="mirror-step-head"><h3 id="mirror-step-1"><span>1</span>先看差異</h3><p>同樣的平行光，反射後往哪裡走？</p></header>
+              <div class="mirror-columns mirror-overviews">
+                <figure class="mirror-column mirror-plane"><figcaption class="mirror-column-title">平面鏡</figcaption><svg data-overview="plane" viewBox="0 0 320 220" role="img" aria-label="平面鏡：平行入射光反射後仍然平行"></svg><p class="mirror-result">仍然平行</p></figure>
+                <figure class="mirror-column mirror-concave"><figcaption class="mirror-column-title">凹面鏡</figcaption><svg data-overview="concave" viewBox="0 0 320 220" role="img" aria-label="凹面鏡：平行入射光反射後向內會聚"></svg><p class="mirror-result">向內會聚</p></figure>
+                <figure class="mirror-column mirror-convex"><figcaption class="mirror-column-title">凸面鏡</figcaption><svg data-overview="convex" viewBox="0 0 320 220" role="img" aria-label="凸面鏡：平行入射光反射後向外發散"></svg><p class="mirror-result">向外發散</p></figure>
               </div>
-            </div>
-            <p class="mirror-model-note">俯視光路示意：平行光沿鏡面中央的對稱線（主軸）入射。球面鏡只取中央小範圍，凹面鏡反射光會聚在焦點附近。重疊的入射、反射光以雙色和相反箭頭區分；清澈空氣中的光路本身不可見。</p>
-            <h3 class="mirror-heading">鏡中的像有什麼不同？</h3>
-            <p class="mirror-arrow-legend"><span class="object-color">紅色：物體</span>　<span class="image-color">藍色：像</span>。只比較外觀，箭頭的位置不代表物距或像距。</p>
-            <div class="mirror-appearance-grid">
-              <div class="mirror-appearance"><h4>平面鏡</h4><div data-appearance="plane"></div><p class="appearance-result">正立、同大</p></div>
-              <div class="mirror-appearance concave"><h4>凹面鏡</h4><div class="mirror-concave-examples"><div><p class="appearance-condition">焦點內</p><div data-appearance="concave" data-position="near"></div><p class="appearance-result">正立、放大</p></div><div><p class="appearance-condition">曲率中心外</p><div data-appearance="concave" data-position="far"></div><p class="appearance-result">倒立、縮小</p></div></div><p class="appearance-extra">隨物體位置改變</p></div>
-              <div class="mirror-appearance"><h4>凸面鏡</h4><div data-appearance="convex"></div><p class="appearance-result">正立、縮小</p></div>
-            </div>
-            <p class="mirror-model-note">凹面鏡的焦點，是近軸平行光反射後的會聚位置；曲率中心是鏡面所屬球面的圓心。上圖選兩個位置作比較；焦點外也可能成倒立放大或同大的像，並非都縮小。</p>
-            <h3 class="mirror-heading">生活中的應用例子</h3>
-            <div class="mirror-uses">
-              <figure class="mirror-use"><h4>平面鏡：穿衣鏡</h4><img src="assets/mirror/dressing-mirror.webp" width="480" height="480" alt="房間裡的平面穿衣鏡" loading="lazy"><figcaption><strong>正立、同大的像</strong>方便整理服裝與儀容。</figcaption></figure>
-              <figure class="mirror-use"><h4>凹面鏡：化妝鏡</h4><img src="assets/mirror/makeup-mirror.webp" width="480" height="480" alt="桌上的圓形放大化妝鏡，作為凹面鏡的生活例子" loading="lazy"><figcaption><strong>在焦點內正立放大</strong>近距離看清臉部細節。</figcaption></figure>
-              <figure class="mirror-use"><h4>凸面鏡：路口鏡</h4><img src="assets/mirror/traffic-mirror.webp" width="480" height="480" alt="路口橘色邊框的凸面廣角鏡" loading="lazy"><figcaption><strong>視野較廣，像較小</strong>幫助觀察轉角來車。</figcaption></figure>
-            </div>
-            <p class="mirror-model-note">生活圖片為器材情境示意，成像比較採近軸模型，未按實際比例繪製。</p>
-            <div class="fact mirror-fact"><p><strong>重點：</strong>每一處都遵守反射定律；鏡面形狀改變法線方向，整束反射光的分布也跟著改變。像的大小與方向也和鏡面種類、物體位置有關。</p></div>
-            <noscript><p>請啟用 JavaScript 查看可操作光路。平面鏡使平行光仍互相平行，凹面鏡使近軸平行光會聚，凸面鏡使反射光發散；每一處都遵守反射定律。</p></noscript>
+            </section>
+            <section class="mirror-step" aria-labelledby="mirror-step-2">
+              <header class="mirror-step-head"><h3 id="mirror-step-2"><span>2</span>再看原因</h3><button type="button" id="mirror-normal-toggle" class="mirror-normal-toggle" aria-pressed="true" aria-controls="mirror-normal-comparison">顯示法線<span aria-hidden="true">✓</span></button></header>
+              <div class="mirror-columns mirror-reasons" id="mirror-normal-comparison">
+                <figure class="mirror-column mirror-plane"><figcaption class="mirror-column-title">平面鏡</figcaption><svg data-reason="plane" viewBox="0 0 320 220" role="img" aria-label="平面鏡上方反射點的入射光、反射光與法線"></svg></figure>
+                <figure class="mirror-column mirror-concave"><figcaption class="mirror-column-title">凹面鏡</figcaption><svg data-reason="concave" viewBox="0 0 320 220" role="img" aria-label="凹面鏡上方反射點的入射光、反射光與法線"></svg></figure>
+                <figure class="mirror-column mirror-convex"><figcaption class="mirror-column-title">凸面鏡</figcaption><svg data-reason="convex" viewBox="0 0 320 220" role="img" aria-label="凸面鏡上方反射點的入射光、反射光與法線"></svg></figure>
+              </div>
+              <p class="visually-hidden" id="mirror-normal-status" role="status">已顯示三種鏡面的法線。</p>
+              <div class="mirror-cause-chain" aria-label="鏡面形狀不同，造成法線方向不同，反射方向也不同"><strong>鏡面形狀不同</strong><span aria-hidden="true">→</span><strong>法線方向不同</strong><span aria-hidden="true">→</span><strong>反射方向不同</strong></div>
+              <p class="mirror-law">每一道光，都遵守入射角＝反射角。</p>
+            </section>
+            <section class="mirror-step" aria-labelledby="mirror-step-3">
+              <header class="mirror-step-head"><h3 id="mirror-step-3"><span>3</span>最後看成像</h3><p>同一隻小熊，照起來有什麼不同？</p></header>
+              <div class="mirror-columns mirror-portraits">
+                <article class="mirror-column mirror-plane"><h4 class="mirror-column-title">平面鏡</h4><p class="mirror-portrait-condition" aria-hidden="true"></p><svg id="mirror-plane-appearance" data-appearance="plane" viewBox="0 0 340 300" role="img" aria-label="平面鏡的實物與鏡中像外觀比較"></svg><p class="mirror-result">正立・同大</p><div class="mirror-portrait-controls"></div><figure class="mirror-application"><svg data-application="plane" viewBox="0 0 100 120" aria-hidden="true" focusable="false"></svg><figcaption>穿衣鏡</figcaption></figure></article>
+                <article class="mirror-column mirror-concave"><h4 class="mirror-column-title">凹面鏡</h4><p class="mirror-portrait-condition" id="mirror-concave-condition">靠近鏡面・焦點內</p><svg id="mirror-concave-appearance" data-appearance="concave" viewBox="0 0 340 300" role="img" aria-label="凹面鏡的實物與鏡中像外觀比較"></svg><p class="mirror-result" id="mirror-concave-result" role="status">正立・放大</p><div class="mirror-portrait-controls"><button type="button" class="mirror-bear-toggle" id="mirror-bear-toggle" aria-controls="mirror-concave-appearance mirror-concave-condition mirror-concave-result">把小熊移遠 →</button></div><figure class="mirror-application"><svg data-application="concave" viewBox="0 0 100 120" aria-hidden="true" focusable="false"></svg><figcaption>近距離化妝鏡</figcaption></figure></article>
+                <article class="mirror-column mirror-convex"><h4 class="mirror-column-title">凸面鏡</h4><p class="mirror-portrait-condition" aria-hidden="true"></p><svg id="mirror-convex-appearance" data-appearance="convex" viewBox="0 0 340 300" role="img" aria-label="凸面鏡的實物與鏡中像外觀比較"></svg><p class="mirror-result">正立・縮小</p><div class="mirror-portrait-controls"></div><figure class="mirror-application"><svg data-application="convex" viewBox="0 0 100 120" aria-hidden="true" focusable="false"></svg><figcaption>路口鏡</figcaption></figure></article>
+              </div>
+              <p id="mirror-concave-status" class="visually-hidden" role="status">凹面鏡：小熊在焦點內，像正立、放大。</p>
+            </section>
+            <details class="mirror-model-notes"><summary>光路與成像示意說明</summary><p>綠色是入射光、橙色是反射光，藍色虛線是法線。法線垂直反射點當地的鏡面；球面鏡的法線沿著反射點與圓心的連線。光路本身在清澈空氣中不可見。</p><p>會聚比較採球面鏡中央附近的平行光，反射後交會在焦點附近。成像圖只比較外觀，不表示物距與像距；大小與方向採近軸面鏡模型。</p><p>凹面鏡靠近時的例子在焦點內，成正立放大虛像；移遠後的例子在曲率中心外，成倒立縮小實像。焦點外也可能成倒立放大或同大的像，並非都縮小。凸面鏡成正立縮小虛像，路口使用它也能取得較廣視野。</p></details>
+            <noscript><p>請啟用 JavaScript 查看光路與小熊。平面鏡使平行光反射後仍平行，凹面鏡使近軸平行光會聚，凸面鏡使其發散；每一道光都遵守反射定律。</p></noscript>
           </div>
         </section>
         <section class="lesson-card" id="card-06" data-light-a="off" data-light-b="off">
@@ -458,7 +450,7 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent=index===6?"正在進行單元小測":"正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/mirror-distance.js?v=visual-polish-20261029"></script>
-  <script type="module" src="assets/curved-mirrors.js?v=1"></script>
+  <script type="module" src="assets/curved-mirrors.js?v=three-steps-20261029"></script>
   <script type="module" src="assets/mirror-image.js?v=14"></script>
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
