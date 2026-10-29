@@ -485,7 +485,8 @@
     .rust-lab-intro { margin:0 0 10px!important; color:#68776e; font-size:.84rem; }
     .rust-magnifier-scene { position:relative; width:min(100%,390px); aspect-ratio:1; margin:0 auto; overflow:hidden; border-radius:12px; background:#e9e8df; cursor:crosshair; touch-action:none; }
     .rust-magnifier-scene>img { display:block; width:100%; height:100%; object-fit:cover; }
-    .rust-magnifier-lens { position:absolute; top:52%; left:50%; width:98px; aspect-ratio:1; border:3px solid #fff; border-radius:50%; background-image:url("assets/rust-rusted-bucket.webp"); background-repeat:no-repeat; box-shadow:0 2px 12px #1f302a55,0 0 0 1px #315f4966; pointer-events:none; transform:translate(-50%,-50%); }
+    .rust-magnifier-scene>.rust-grip-overlay { position:absolute; inset:0; pointer-events:none; }
+    .rust-magnifier-lens { position:absolute; top:52%; left:50%; width:98px; aspect-ratio:1; border:3px solid #fff; border-radius:50%; background-image:url("assets/rust-red-plastic-grip.png"),url("assets/rust-rusted-bucket.webp"); background-repeat:no-repeat; box-shadow:0 2px 12px #1f302a55,0 0 0 1px #315f4966; pointer-events:none; transform:translate(-50%,-50%); }
     .rust-magnifier-hint { min-height:22px; margin:7px 0 0!important; color:#53665b; font-size:.82rem; }
     .rust-material-comparison { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
     .rust-sample { min-width:0; margin:0; padding:9px; border:1px solid #dfe4da; border-radius:11px; background:#fffefa; }
@@ -1062,8 +1063,8 @@
               <div class="rust-timeline" id="rust-timeline" data-stage="1">
                 <div class="rust-timeline-head"><span class="rust-timeline-icon" aria-hidden="true">⚗</span><div><h3>觀察鐵桶生鏽的過程</h3><p>拖動時間軸，觀察同一個鐵桶在不同時間的變化。</p></div><button class="rust-play" type="button" id="rust-play"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3.5v13l11-6.5z" fill="currentColor"/></svg>播放變化</button></div>
                 <div class="rust-single-scene" id="rust-bucket-scene" role="img" aria-label="同一只鐵桶隨時間逐漸形成鏽層" style="--rust-growth:0">
-                  <img class="rust-single-bucket" src="assets/rust-rusted-bucket.webp" alt="一只表面形成鏽層的鐵桶">
-                  <div class="rust-single-corrosion" aria-hidden="true"><svg class="rust-clean-overlay" viewBox="0 0 1254 1254" role="presentation"><defs><mask id="rust-erosion-mask" x="0" y="0" width="1254" height="1254" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse"><rect width="1254" height="1254" fill="#fff"/><g id="rust-reveal-paths" fill="#000"></g><rect id="rust-finish-reveal" width="1254" height="1254" fill="#000" opacity="0"/></mask></defs><image href="assets/rust-clean-matched.webp" width="1254" height="1254" mask="url(#rust-erosion-mask)"/></svg></div>
+                  <img class="rust-single-bucket" src="assets/rust-rusted-bucket.webp" alt="同一只保留紅色塑膠握把、桶身逐漸形成鏽層的鐵桶">
+                  <div class="rust-single-corrosion" aria-hidden="true"><svg class="rust-clean-overlay" viewBox="0 0 1254 1254" role="presentation"><defs><mask id="rust-erosion-mask" x="0" y="0" width="1254" height="1254" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse"><rect width="1254" height="1254" fill="#fff"/><g id="rust-reveal-paths" fill="#000"></g><rect id="rust-finish-reveal" width="1254" height="1254" fill="#000" opacity="0"/></mask></defs><image href="assets/rust-clean-matched.webp" width="1254" height="1254" mask="url(#rust-erosion-mask)"/><image href="assets/rust-red-plastic-grip.png" width="1254" height="1254"/></svg></div>
                 </div>
                 <div class="rust-stage-controls"><div class="rust-stage-labels" aria-hidden="true"><span>剛開始</span><span>一段時間後</span><span>形成鏽層</span></div><input type="range" id="rust-progress" min="0" max="100" step="1" value="0" aria-label="拖曳查看同一只鐵桶逐漸生鏽" aria-valuetext="剛開始：桶身尚未出現鏽層"></div>
                 <p class="rust-stage-status" id="rust-stage-status" aria-live="polite">桶身尚未出現鏽層。</p>
@@ -1075,7 +1076,8 @@
                   <h3>拖動放大鏡觀察桶身</h3>
                   <p class="rust-lab-intro">看看鏽層和金屬表面交錯的地方。</p>
                   <div class="rust-magnifier-scene" id="rust-magnifier-scene" tabindex="0" role="group" aria-label="拖動放大鏡觀察鏽層；也可使用方向鍵移動放大鏡">
-                    <img src="assets/rust-rusted-bucket.webp" alt="同一個鐵桶表面有鏽層和銀灰色金屬交錯">
+                    <img src="assets/rust-rusted-bucket.webp" alt="同一個保留紅色塑膠握把的鐵桶，表面有鏽層和銀灰色金屬交錯">
+                    <img class="rust-grip-overlay" src="assets/rust-red-plastic-grip.png" alt="" aria-hidden="true">
                     <span class="rust-magnifier-lens" id="rust-magnifier-lens" aria-hidden="true"></span>
                   </div>
                   <p class="rust-magnifier-hint" id="rust-magnifier-hint" aria-live="polite">拖動放大鏡，查看桶身不同位置的鏽蝕。</p>
