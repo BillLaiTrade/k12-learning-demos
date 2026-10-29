@@ -86,11 +86,41 @@ test('2.3: escaping air and wet paper persist when cup is straightened', async (
   assert.equal(freshCup().wet, false);
 });
 
-test('2.3: rotation is only enabled with the entire cup underwater', async () => {
+test('2.3: cup model clamps depth and angle without forcing an orientation', async () => {
   const { freshCup, moveCup } = await import('../units/2/parts/2.3/assets/cup-lab-model.mjs');
-  for (const depth of [-1, 0, 6, 10]) assert.equal(moveCup(freshCup(), depth, 125).angle, 0);
+  for (const depth of [-1, 0, 6, 10]) assert.equal(moveCup(freshCup(), depth, 125).angle, 125);
   assert.equal(moveCup(freshCup(), 12, 125).angle, 125);
   assert.equal(moveCup(freshCup(), 99, 999).depth, 13.5);
+  assert.equal(moveCup(freshCup(), 99, 999).angle, 125);
+  assert.equal(moveCup(freshCup(), -99, -999).depth, -1);
+  assert.equal(moveCup(freshCup(), -99, -999).angle, -125);
+});
+
+test('2.3: lifting a tilted cup preserves its angle across the old depth threshold', async () => {
+  const { freshCup, moveCup } = await import('../units/2/parts/2.3/assets/cup-lab-model.mjs');
+  for (const angle of [-125, -45, 45, 125]) {
+    let state = moveCup(freshCup(), 12, 0);
+    state = moveCup(state, 12, angle);
+    const wet = state.wet;
+    for (const depth of [11.6, 11.5, 11.49, 10, 6, 0, -1, 6, 12]) {
+      state = moveCup(state, depth, state.angle);
+      assert.equal(state.angle, angle);
+      assert.equal(state.wet, wet);
+      assert.ok(Number.isFinite(state.escaped) && state.escaped >= 0 && state.escaped <= 1);
+    }
+  }
+});
+
+test('2.3: an exposed rim connects to ambient air and water stays at the outside level', async () => {
+  const { freshCup, moveCup, cupGeometry } = await import('../units/2/parts/2.3/assets/cup-lab-model.mjs');
+  for (const angle of [-125, -45, 45, 125]) {
+    const state = moveCup(moveCup(freshCup(), 12, 125), 4, angle);
+    const g = cupGeometry(state.depth, state.angle, state.escaped);
+    assert.ok(g.outlet.y < 0);
+    assert.equal(g.water, 0);
+    assert.equal(state.wet, true);
+    assert.ok(g.vent >= 0 && g.vent <= 1);
+  }
 });
 
 test('2.3: enlarged paper fits inside the cup and left/right rotation is symmetric', async () => {

@@ -26,9 +26,10 @@ export function cupGeometry(depth, angle, escaped = 0) {
   const mouth = [polygon[2], polygon[3]], outlet = mouth.reduce((a, b) => a.y < b.y ? a : b);
   const minY = Math.min(...polygon.map(p => p.y)), maxY = Math.max(...polygon.map(p => p.y));
   let vent = limit(escaped, 0, 1), water;
-  if (Math.max(...mouth.map(p => p.y)) <= 0) {
-    // Once the opening is out of water the cup can refill with air; wet paper stays wet in state.
-    vent = 0; water = 0;
+  if (outlet.y <= 0) {
+    // An exposed part of the mouth connects to ambient air. Water drains to
+    // the outside level; the wet-paper history is retained in state.
+    vent = limit(1 - polygonArea(aboveWater(polygon, 0)) / originalArea, 0, 1); water = 0;
   } else {
     const capacity = polygonArea(aboveWater(polygon, outlet.y)) * (1 + outlet.y / 1033);
     vent = Math.max(vent, 1 - limit(capacity / originalArea, 0, 1));
@@ -51,8 +52,9 @@ export function cupGeometry(depth, angle, escaped = 0) {
 export const freshCup = () => ({ depth: -1, angle: 0, escaped: 0, wet: false });
 export function moveCup(state, depth, angle) {
   const d = limit(depth, CUP.minDepth, CUP.maxDepth);
-  // Keep the guided experiment completely under water during rotation.
-  const a = d < 11.5 ? 0 : limit(angle, -CUP.maxAngle, CUP.maxAngle);
+  // Translation preserves the requested orientation at every depth. The UI
+  // separately locks rotation until the first upright immersion is completed.
+  const a = limit(angle, -CUP.maxAngle, CUP.maxAngle);
   const g = cupGeometry(d, a, state.escaped);
   return { depth: d, angle: a, escaped: g.vent, wet: state.wet || g.paperTouchesWater };
 }
