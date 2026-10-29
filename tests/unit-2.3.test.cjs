@@ -44,6 +44,16 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     for (let i = 1; i <= 8; i++) { const a = start - delta * Math.PI / 180 * i / 8; await page.mouse.move(center.x + Math.cos(a) * radius, center.y + Math.sin(a) * radius); }
     await page.mouse.up();
   };
+  const dragCupVertically = async delta => {
+    await page.clock.runFor(100);
+    await page.locator('#cup-scene').scrollIntoViewIfNeeded();
+    const body = await pointOnCup(0, -10);
+    const scale = await page.evaluate(() => { const m = document.querySelector('#cup-scene svg').getScreenCTM(); return Math.hypot(m.c, m.d) * 24; });
+    await page.mouse.move(body.x, body.y); await page.mouse.down();
+    assert.equal(await page.locator('#cup-scene').getAttribute('data-drag-mode'), 'vertical');
+    for (let i = 1; i <= 8; i++) await page.mouse.move(body.x, body.y + delta * scale * i / 8);
+    await page.mouse.up();
+  };
   const phase = () => page.locator('html').getAttribute('data-phase');
   const volume = () => page.locator('#reaction-scene').getAttribute('data-volume').then(Number);
 
@@ -52,6 +62,7 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     assert.equal(await page.locator('.route a').count(), 8);
     assert.match(await page.title(), /2\.3/);
     assert.equal(await page.locator('#s8 form').count(), 1);
+    assert.equal(await page.locator('#s1 .cup-free, #cup-depth, #cup-angle, #cup-straight, #cup-up').count(), 0);
     assert.equal(await page.locator('#s1 .avatar').first().evaluate(el => getComputedStyle(el).backgroundImage.includes('shared-assets/characters')), true);
     const overview = await page.request.get(base + 'units/2/');
     assert.match(await overview.text(), /href="parts\/2\.3\/index.html"/);
@@ -196,10 +207,11 @@ test('2.3: eight-section learning flow and independent controls work in browser'
       await page.locator('#cup-reset').click();
       await page.locator('#cup-scene').focus(); await page.keyboard.press('ArrowRight');
       assert.equal(Number(await page.locator('#cup-scene').getAttribute('data-angle')), 0, 'first immersion remains locked');
-      assert.equal(await page.locator('#cup-angle').isDisabled(), true);
+      assert.equal(await page.locator('#cup-scene').getAttribute('data-rotation-unlocked'), 'false');
       await page.locator('#cup-action').click(); await page.clock.runFor(2100);
-      if (!(await page.locator('#cup-angle').isVisible())) await page.locator('.cup-free summary').click();
-      await page.locator('#cup-angle').fill(String(sign * 125));
+      await rotateRim(sign * 125);
+      const angleBeforeLift = Number(await page.locator('#cup-scene').getAttribute('data-angle'));
+      assert.ok(Math.abs(angleBeforeLift - sign * 125) < .01);
       await page.locator('#cup-scene').scrollIntoViewIfNeeded();
       const body = await pointOnCup(0, -10);
       const scale = await page.evaluate(() => { const m = document.querySelector('#cup-scene svg').getScreenCTM(); return Math.hypot(m.c, m.d) * 24; });
@@ -207,7 +219,7 @@ test('2.3: eight-section learning flow and independent controls work in browser'
       assert.equal(await page.locator('#cup-scene').getAttribute('data-drag-mode'), 'vertical');
       for (let step = 1; step <= 12; step++) {
         await page.mouse.move(body.x, body.y - 6 * scale * step / 12);
-        assert.equal(Number(await page.locator('#cup-scene').getAttribute('data-angle')), sign * 125, 'orientation retained throughout lift');
+        assert.equal(Number(await page.locator('#cup-scene').getAttribute('data-angle')), angleBeforeLift, 'orientation retained throughout lift');
       }
       await page.mouse.up();
       assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-depth')) - 6) < .05,
@@ -218,29 +230,30 @@ test('2.3: eight-section learning flow and independent controls work in browser'
       await rotateRim(-sign * 20);
       assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-angle')) - sign * 105) < 1);
       await page.locator('#cup-scene').focus(); await page.keyboard.press('ArrowUp');
-      await page.locator('#cup-depth').fill('4');
-      await page.locator('#cup-up').click();
+      await dragCupVertically(-2);
       assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-angle')) - sign * 105) < 1);
       assert.match(await page.locator('#cup-action').innerText(), /放回水中/);
       await page.locator('#cup-action').click(); await page.clock.runFor(2100);
       assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-angle')) - sign * 105) < 1);
-      await page.locator('#cup-straight').click();
-      assert.equal(Number(await page.locator('#cup-scene').getAttribute('data-angle')), 0, 'explicit straighten still works');
+      await rotateRim(-sign * 105);
+      assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-angle'))) < 1, 'dragging the rim back straightens the cup');
     }
     await page.locator('#cup-reset').click();
     assert.equal(await page.locator('#cup-scene').getAttribute('data-rotation-unlocked'), 'false');
   });
 
-  await t.test('cup manual controls, keyboard, drag and fresh paper work', async () => {
+  await t.test('cup uses direct dragging without a control panel; keyboard and fresh paper work', async () => {
     await page.locator('#cup-reset').click();
     assert.equal(await page.locator('#cup-scene').getAttribute('data-depth'), '-1');
     assert.equal(await page.locator('#cup-comparison').isVisible(), false);
-    if (!(await page.locator('#cup-depth').isVisible())) await page.locator('.cup-free summary').click();
-    await page.locator('#cup-depth').fill('12'); await page.locator('#cup-angle').fill('40');
+    assert.equal(await page.locator('#s1 details, #cup-depth, #cup-angle, #cup-straight, #cup-up').count(), 0);
+    await dragCupVertically(13);
+    assert.equal(await page.locator('#cup-scene').getAttribute('data-rotation-unlocked'), 'true');
+    await rotateRim(40);
     assert.equal(await page.locator('#cup-zoom-toggle, #cup-zoom').count(), 0);
     assert.equal(await page.locator('#s1 [data-cup-hint]').count(), 0);
     await page.locator('#cup-scene').focus(); await page.keyboard.press('ArrowRight');
-    assert.equal(Number(await page.locator('#cup-scene').getAttribute('data-angle')), 45);
+    assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-angle')) - 45) < 1);
     await rotateRim(25);
     assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-angle')) - 70) < 1);
     await page.locator('#cup-reset').click();

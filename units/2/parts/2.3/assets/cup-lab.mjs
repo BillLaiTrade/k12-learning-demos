@@ -56,9 +56,6 @@ function render() {
   action.disabled = !!drag;
   const instruction = preview ? '回看時保留當時的狀態；返回目前觀察後可繼續拖曳。' : canRotate ? '抓住杯口繞著杯身轉動，可向左或向右傾斜；拖杯身可上下移動。' : '先抓住杯子直直往下拖；完全浸入後放開，再抓杯口旋轉。';
   if ($('#cup-instruction').textContent !== instruction) $('#cup-instruction').textContent = instruction;
-  $('#cup-depth').value = cup.depth; $('#cup-angle').value = cup.angle;
-  $('#cup-angle').disabled = !canRotate || !!animation || !!preview || !!drag;
-  $('#cup-depth').disabled = !!animation || !!preview;
   const showComparison = !!(before && after && !animation && !drag);
   $('#cup-comparison').hidden = !showComparison;
   $('#cup-conclusion').hidden = !showComparison;
@@ -114,10 +111,6 @@ document.querySelectorAll('[data-cup-preview]').forEach(button => button.addEven
   preview = preview === button.dataset.cupPreview ? null : button.dataset.cupPreview; render();
 }));
 function manual(depth, angle) { cancelAnimation(); preview = null; update(depth, angle); render(); if (bubbles.length && !reduced.matches) frame = requestAnimationFrame(tick); }
-$('#cup-depth').addEventListener('input', e => manual(e.target.value, cup.angle));
-$('#cup-angle').addEventListener('input', e => manual(cup.depth, e.target.value));
-$('#cup-straight').addEventListener('click', () => manual(cup.depth, 0));
-$('#cup-up').addEventListener('click', () => manual(cup.depth - 2, cup.angle));
 scene.addEventListener('keydown', e => {
   if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key) || preview) return;
   e.preventDefault();
