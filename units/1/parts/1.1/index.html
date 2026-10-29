@@ -236,12 +236,29 @@
     .booklet-stage-badge { position: absolute; right: 11px; bottom: 10px; display: flex; align-items: center; gap: 8px; max-width: 76%; padding: 8px 11px; border: 1px solid #e5d6a9; border-radius: 11px; background: rgb(255 251 238 / 94%); color: #344d42; font-size: .8rem; font-weight: 750; box-shadow: 0 3px 10px #05101830; }
     .booklet-live-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #d69f35; box-shadow: 0 0 0 4px #e8c66d55; }
     .booklet-stage-help { margin: 7px 3px 8px; color: var(--muted); font-size: .79rem; }
-    .booklet-depth-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 8px; padding: 6px 8px; border: 1px solid #e1dac9; border-radius: 11px; background: #fffdf8; }
+    .booklet-depth-controls { margin: 10px 0 8px; padding: 6px 10px; border: 1px solid #dfd2b4; border-radius: 13px; background: #fffdf8; }
     .booklet-depth-controls[hidden] { display: none; }
-    .booklet-depth-controls > span { margin: 0 3px; color: var(--muted); font-size: .72rem; font-weight: 750; }
-    .booklet-depth-controls button { min-height: 34px; padding: 4px 9px; border: 1px solid #d8cda9; border-radius: 9px; background: #faf4e4; color: #675128; font-size: .75rem; font-weight: 800; }
-    .booklet-depth-controls button:hover, .booklet-depth-controls button:focus-visible { border-color: #b9872e; outline: 2px solid #d8bd7655; }
-    .booklet-depth-controls output { margin-left: auto; color: #886a2e; font-size: .7rem; }
+    .booklet-depth-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 18px; line-height: 18px; }
+    .booklet-depth-header label { color: #2b4b40; font-size: .77rem; font-weight: 800; }
+    .booklet-depth-meta { display: inline-flex; gap: 12px; align-items: center; white-space: nowrap; color: #6c7c73; font-size: .7rem; }
+    .booklet-depth-meta output { color: #31594b; font-variant-numeric: tabular-nums; }
+    .booklet-depth-row { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 8px; margin-top: 2px; }
+    .booklet-depth-end { display: inline-flex; align-items: center; gap: 4px; color: #315548; font-size: .75rem; font-weight: 750; white-space: nowrap; }
+    .booklet-depth-end svg { width: 20px; height: 22px; flex: none; }
+    .booklet-depth-ruler { position: relative; min-width: 0; height: 44px; border-radius: 5px; }
+    .booklet-depth-ruler:focus-within { outline: 2px solid #176b5366; outline-offset: 2px; }
+    .booklet-depth-scale { position: absolute; left: 13px; right: 13px; top: 0; height: 44px; pointer-events: none; }
+    .booklet-depth-ticks { position: absolute; top: 23px; left: 0; right: 0; height: 8px; border-top: 1px solid #d8c59a; background: #f6efd9; }
+    .booklet-depth-ticks i { position: absolute; top: 0; height: 4px; border-left: 1px solid #a3ad95; transform: translateX(-.5px); }
+    .booklet-depth-ticks i.is-mid { height: 6px; border-color: #687e6c; }
+    .booklet-depth-ticks i.is-major { height: 8px; border-color: #315548; }
+    .booklet-depth-numbers { position: absolute; left: 0; right: 0; top: 32px; height: 12px; color: #315548; font-size: .65rem; line-height: 12px; font-variant-numeric: tabular-nums; }
+    .booklet-depth-numbers span { position: absolute; transform: translateX(-50%); }
+    #shadow-theatre-depth { appearance: none; -webkit-appearance: none; position: absolute; inset: 0; z-index: 1; display: block; width: 100%; height: 44px; margin: 0; padding: 0; border: 0; outline: 0; border-radius: 0; background: transparent; cursor: ew-resize; touch-action: none; }
+    #shadow-theatre-depth::-webkit-slider-runnable-track { height: 2px; border: 0; background: transparent; }
+    #shadow-theatre-depth::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 26px; height: 28px; margin-top: -26px; border: 1px solid #164d3e; border-radius: 6px; background: repeating-linear-gradient(90deg,#205e4d 0 4px,#347962 4px 5px); clip-path: polygon(0 0,100% 0,100% 76%,50% 100%,0 76%); }
+    #shadow-theatre-depth::-moz-range-track { height: 2px; border: 0; background: transparent; }
+    #shadow-theatre-depth::-moz-range-thumb { width: 24px; height: 26px; border: 1px solid #164d3e; border-radius: 6px; background: repeating-linear-gradient(90deg,#205e4d 0 4px,#347962 4px 5px); clip-path: polygon(0 0,100% 0,100% 76%,50% 100%,0 76%); transform: translateY(-13px); }
     .booklet-prop-tray { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
     .booklet-prop-token { display: grid; grid-template-columns: 34px minmax(0,1fr); grid-template-rows: auto auto; align-items: center; column-gap: 8px; min-width: 0; min-height: 60px; padding: 7px 9px; border: 1px solid #ded5bf; border-radius: 13px; background: #fffdf8; color: var(--ink); text-align: left; cursor: pointer; }
     .booklet-prop-token:hover, .booklet-prop-token:focus-visible { border-color: #bd9c53; outline: 2px solid #d8bd7655; }
@@ -276,7 +293,7 @@
     .booklet-finish-note[data-done="true"] { color: #176b53 !important; font-weight: 750; }
     @media (max-width: 900px) { .booklet-game-layout { grid-template-columns: minmax(0, 1fr) 195px; gap: 9px; } .booklet-mission-panel { padding: 13px 11px; } }
     @media (max-width: 700px) { .booklet-game-layout { grid-template-columns: 1fr; } .booklet-stage-frame { height: clamp(310px, 72vw, 420px); } .booklet-mission-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; } .booklet-mission-top, .booklet-mission-panel h3, .booklet-mission-panel > p, .booklet-target-card, .booklet-progress-track, .booklet-slot-list, .booklet-finish-button, .booklet-finish-note { grid-column: 1 / -1; } .booklet-mission-panel h3 { margin-top: 7px; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 150px; align-items: center; justify-items: start; } .booklet-target-card svg { grid-column: 2; grid-row: 1 / span 2; height: 84px; } .booklet-target-status { align-self: start; } .booklet-slot-list { grid-template-columns: repeat(3,1fr); gap: 3px; } .booklet-slot-list span { justify-content: center; font-size: .73rem; } }
-    @media (max-width: 460px) { .unit-booklet { padding: 15px; border-radius: 19px; } .booklet-stamp { width: 49px; height: 49px; font-size: .82rem; } .booklet-stage-frame { height: 300px; } .booklet-stage-button { min-height: 38px; padding: 5px 9px; font-size: .76rem; } .booklet-stage-badge { font-size: .72rem; } .booklet-prop-token { grid-template-columns: 28px minmax(0,1fr); padding: 6px; column-gap: 6px; } .booklet-prop-icon { width: 28px; height: 28px; font-size: 1.1rem; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 120px; } .booklet-depth-controls { gap: 4px; padding: 5px; } .booklet-depth-controls > span { width: 100%; } .booklet-depth-controls button { flex: 1; padding-inline: 5px; font-size: .7rem; } .booklet-depth-controls output { width: 100%; margin: 0; text-align: right; } }
+    @media (max-width: 460px) { .unit-booklet { padding: 15px; border-radius: 19px; } .booklet-stamp { width: 49px; height: 49px; font-size: .82rem; } .booklet-stage-frame { height: 300px; } .booklet-stage-button { min-height: 38px; padding: 5px 9px; font-size: .76rem; } .booklet-stage-badge { font-size: .72rem; } .booklet-prop-token { grid-template-columns: 28px minmax(0,1fr); padding: 6px; column-gap: 6px; } .booklet-prop-icon { width: 28px; height: 28px; font-size: 1.1rem; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 120px; } .booklet-depth-controls { padding-inline: 7px; } .booklet-depth-row { gap: 5px; } .booklet-depth-end { gap: 2px; font-size: .7rem; } .booklet-depth-end svg { width: 17px; } .booklet-depth-header label { font-size: .73rem; } .booklet-depth-meta { gap: 7px; font-size: .66rem; } }
     @media (max-width: 520px) {
       #aperture-3d-scene { height: 300px; }
       .aperture-scene-with-height { grid-template-columns: minmax(0, 1fr) 52px; gap: 7px; }
@@ -565,7 +582,7 @@
             <span class="booklet-stamp" aria-hidden="true">光<br>影</span>
           </header>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我想讓月亮兔出現在幕上！可是道具要放在哪裡，影子才會剛好對上呢？</p></div>
-          <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先調前後距離，讓影子大小接近描邊，再拖動道具對準位置。舞台只會幫忙微調上下、左右。</p></div>
+          <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先選道具，拖尺軌調整影子大小，再拖動道具對準位置。舞台只會微調上下、左右。</p></div>
           <div class="booklet-game-layout">
             <div class="booklet-stage-column">
               <div class="booklet-stage-frame">
@@ -573,8 +590,16 @@
                 <div class="booklet-stage-actions"><button class="booklet-stage-button" id="shadow-theatre-reset" type="button">重設舞台</button><button class="booklet-stage-button" id="shadow-theatre-view" type="button">轉動舞台</button></div>
                 <div class="booklet-stage-badge"><span class="booklet-live-dot"></span><span id="shadow-theatre-status" aria-live="polite">月亮、兔子、樹影，等你上場</span></div>
               </div>
-              <p class="booklet-stage-help" id="shadow-theatre-help">選取道具調整前後距離，再拖動對齊描邊；大小與位置都接近才會吸附，前後距離會保留。拖曳空白處轉動舞台。</p>
-              <div class="booklet-depth-controls" id="shadow-theatre-depth-controls" hidden><span>調整前後距離</span><button type="button" data-depth-step="-1">靠近屏幕</button><button type="button" data-depth-step="1">靠近光源</button><output id="shadow-theatre-depth-readout">選一個道具</output></div>
+              <p class="sr-only" id="shadow-theatre-help">選取道具後拖動尺軌調整前後距離，再拖動舞台道具對齊描邊。影子大小與位置都接近才會吸附。拖曳空白處轉動舞台，方向鍵移動選中道具。</p>
+              <div class="booklet-depth-controls" id="shadow-theatre-depth-controls" hidden>
+                <div class="booklet-depth-header"><label id="shadow-theatre-depth-label" for="shadow-theatre-depth">前後位置</label><span class="booklet-depth-meta"><output id="shadow-theatre-depth-readout" for="shadow-theatre-depth">位置 0.0</output><span aria-hidden="true">左右拖動</span></span></div>
+                <div class="booklet-depth-row">
+                  <span class="booklet-depth-end" data-depth-end="light"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6V18L14 16V8Z" fill="#365d50" stroke="#28483c"/><ellipse cx="14" cy="12" rx="3" ry="5" fill="#fff0b6" stroke="#bd9041"/><path d="M5 18V21M18 7L21 5M19 12H23M18 17L21 19" fill="none" stroke="#bd9041" stroke-width="1.5" stroke-linecap="round"/></svg>光源</span>
+                  <div class="booklet-depth-ruler"><div class="booklet-depth-scale" aria-hidden="true"><div class="booklet-depth-ticks" id="shadow-theatre-depth-ticks"></div><div class="booklet-depth-numbers" id="shadow-theatre-depth-numbers"></div></div><input id="shadow-theatre-depth" type="range" min="0" max="10" step="0.01" value="5" aria-describedby="shadow-theatre-depth-hint"></div>
+                  <span class="booklet-depth-end" data-depth-end="screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3H19V19H5Z" fill="#faf8eb" stroke="#315548" stroke-width="1.5"/><path d="M12 19V22M8 22H16" fill="none" stroke="#315548" stroke-width="1.5" stroke-linecap="round"/></svg>屏幕</span>
+                </div>
+                <span class="sr-only" id="shadow-theatre-depth-hint">向左靠近光源，向右靠近屏幕。刻度代表相對位置，不是公分或公尺。</span>
+              </div>
               <div class="booklet-prop-tray" role="group" aria-label="舞台上的可移動道具">
                 <button type="button" class="booklet-prop-token" data-prop-select="moon" aria-pressed="false"><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M16 8c-1 15 8 26 23 27-9 10-25 8-31-3C2 21 7 11 16 8Z"/></svg></span><span>月亮</span><span class="booklet-prop-state" data-prop-state="moon">待定位</span></button>
                 <button type="button" class="booklet-prop-token" data-prop-select="rabbit" aria-pressed="false"><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M13 38c-5-7 0-14 8-16-4-8-3-17 1-17 5 0 3 12 6 17 2-8 8-15 11-12 3 3-5 12-6 17 7 4 8 11 2 15-6 4-17 2-22-4Z"/></svg></span><span>兔子</span><span class="booklet-prop-state" data-prop-state="rabbit">待定位</span></button>
@@ -690,6 +715,6 @@
   <script type="module" src="assets/shadow-3d.js?v=mid-webgl-scenes-caefa-435879-natural-shadow-no-halo-20261025"></script>
   <script type="module" src="assets/shadow-size-3d.js?v=mid-webgl-scenes-caefa-435879-balanced-light-20261025"></script>
   <script type="module" src="assets/light-speed-timer.js?v=light-speed-orbit-dot-after-result-20261025"></script>
-  <script type="module" src="assets/shadow-theatre.js?v=keep-student-depth-20261029"></script>
+  <script type="module" src="assets/shadow-theatre.js?v=flat-depth-ruler-20261029"></script>
 </body>
 </html>

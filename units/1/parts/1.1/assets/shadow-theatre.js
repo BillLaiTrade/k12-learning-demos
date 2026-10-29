@@ -1,5 +1,5 @@
 import * as THREE from './vendor/three/build/three.module.js?v=known-good-three-20261025';
-import {THEATRE_OPTICS, shadowScaleAt, positionForShadow, assessShadow} from './shadow-theatre-optics.mjs?v=1';
+import {THEATRE_OPTICS, shadowScaleAt, positionForShadow, assessShadow, DEPTH_LIMITS, DEPTH_RULER_MAX, depthToRuler, rulerToDepth} from './shadow-theatre-optics.mjs?v=2';
 
 const waitUntilCanvasIsNearViewport = (canvas) => new Promise((resolve) => {
   if (!('IntersectionObserver' in window)) {
@@ -306,6 +306,29 @@ if (canvas) {
   const selectionButtons = [...document.querySelectorAll('[data-prop-select]')];
   const depthControls = document.querySelector('#shadow-theatre-depth-controls');
   const depthReadout = document.querySelector('#shadow-theatre-depth-readout');
+  const depthInput = document.querySelector('#shadow-theatre-depth');
+  const depthLabel = document.querySelector('#shadow-theatre-depth-label');
+  const depthTicks = document.querySelector('#shadow-theatre-depth-ticks');
+  const depthNumbers = document.querySelector('#shadow-theatre-depth-numbers');
+  for (let i = 0; i <= 50; i += 1) {
+    const tick = document.createElement('i');
+    tick.style.left = `${i * 2}%`;
+    tick.className = i % 10 === 0 ? 'is-major' : i % 5 === 0 ? 'is-mid' : '';
+    depthTicks.append(tick);
+  }
+  for (let i = 0; i <= DEPTH_RULER_MAX; i += 2) {
+    const number = document.createElement('span');
+    number.style.left = `${i / DEPTH_RULER_MAX * 100}%`;
+    number.textContent = String(i);
+    depthNumbers.append(number);
+  }
+  const syncDepthControls = (prop) => {
+    const value = depthToRuler(prop.mesh.position.z);
+    depthInput.value = String(value);
+    depthReadout.textContent = `位置 ${value.toFixed(1)}`;
+    depthLabel.textContent = `${prop.label}・前後位置`;
+    depthInput.setAttribute('aria-valuetext', `${prop.label}，位置 ${value.toFixed(1)}；左端光源，右端屏幕`);
+  };
 
   const resize = () => {
     const width = canvas.clientWidth;
@@ -327,7 +350,7 @@ if (canvas) {
       prop.mesh.material.emissiveIntensity = focused ? 0.35 : 0;
     }
     if (id && props.has(id) && !props.get(id).placed) {
-      depthReadout.textContent = `前後位置 ${props.get(id).mesh.position.z.toFixed(1)}`;
+      syncDepthControls(props.get(id));
       status.textContent = `拖動「${props.get(id).label}」剪影，讓投影對上描邊`;
     }
   };
@@ -358,7 +381,7 @@ if (canvas) {
   };
 
   const syncPropRim = (prop) => prop.rim.position.copy(prop.mesh.position);
-  const checkPlacement = (prop) => {
+  const checkPlacement = (prop, allowSnap = true) => {
     if (prop.placed) return;
     const assessment = assessShadow(prop.mesh.position, prop.target);
     if (!assessment.matches) {
@@ -366,6 +389,10 @@ if (canvas) {
       status.textContent = !assessment.sizeMatches
         ? `「${prop.label}」的影子偏${assessment.sizeError > 0 ? '大' : '小'}，再調整前後距離`
         : `「${prop.label}」的影子大小接近了，位置還沒對齊`;
+      return;
+    }
+    if (!allowSnap) {
+      status.textContent = `「${prop.label}」的影子大小與位置接近了`;
       return;
     }
     const aligned = positionForShadow(prop.target, prop.mesh.position.z);
@@ -465,18 +492,19 @@ if (canvas) {
     setSelected(selectedProp === id ? null : id);
   }));
 
-  const moveDepth = (prop, direction) => {
+  const setDepth = (prop, z, allowSnap = true) => {
     if (!prop || prop.placed) return;
-    prop.mesh.position.z = THREE.MathUtils.clamp(prop.mesh.position.z + direction * 0.16, screenZ + 0.35, lightSource.z - 0.55);
+    prop.mesh.position.z = THREE.MathUtils.clamp(z, DEPTH_LIMITS.min, DEPTH_LIMITS.max);
     syncPropRim(prop);
-    depthReadout.textContent = `前後位置 ${prop.mesh.position.z.toFixed(1)}`;
-    const towardLight = direction > 0;
-    status.textContent = towardLight ? '道具靠近光源，屏幕上的影子變大。' : '道具靠近屏幕，屏幕上的影子變小。';
-    checkPlacement(prop);
+    syncDepthControls(prop);
+    checkPlacement(prop, allowSnap);
   };
-  document.querySelectorAll('[data-depth-step]').forEach((button) => button.addEventListener('click', () => {
-    moveDepth(props.get(selectedProp), Number(button.dataset.depthStep));
-  }));
+  const moveDepth = (prop, direction) => { if (prop) setDepth(prop, prop.mesh.position.z + direction * 0.16); };
+  depthInput.addEventListener('input', () => setDepth(props.get(selectedProp), rulerToDepth(Number(depthInput.value)), false));
+  depthInput.addEventListener('change', () => {
+    const prop = props.get(selectedProp);
+    if (prop && !prop.placed) checkPlacement(prop);
+  });
   canvas.addEventListener('wheel', (event) => {
     const prop = props.get(selectedProp);
     if (!prop || prop.placed) return;
@@ -532,8 +560,8 @@ if (canvas) {
     if (!prop || prop.placed) return;
     event.preventDefault();
     const step = event.shiftKey ? 0.12 : 0.035;
-    if (event.ctrlKey && event.key === 'ArrowUp') prop.mesh.position.z = Math.min(lightSource.z - 0.55, prop.mesh.position.z + step);
-    else if (event.ctrlKey && event.key === 'ArrowDown') prop.mesh.position.z = Math.max(screenZ + 0.35, prop.mesh.position.z - step);
+    if (event.ctrlKey && event.key === 'ArrowUp') prop.mesh.position.z = Math.min(DEPTH_LIMITS.max, prop.mesh.position.z + step);
+    else if (event.ctrlKey && event.key === 'ArrowDown') prop.mesh.position.z = Math.max(DEPTH_LIMITS.min, prop.mesh.position.z - step);
     else if (event.key === 'ArrowLeft') prop.mesh.position.x -= step;
     else if (event.key === 'ArrowRight') prop.mesh.position.x += step;
     else if (event.key === 'ArrowUp') prop.mesh.position.y += step;
@@ -541,7 +569,7 @@ if (canvas) {
     prop.mesh.position.x = THREE.MathUtils.clamp(prop.mesh.position.x, -2.3, 2.3);
     prop.mesh.position.y = THREE.MathUtils.clamp(prop.mesh.position.y, 0.48, 2.65);
     syncPropRim(prop);
-    depthReadout.textContent = `前後位置 ${prop.mesh.position.z.toFixed(1)}`;
+    syncDepthControls(prop);
     checkPlacement(prop);
   });
 

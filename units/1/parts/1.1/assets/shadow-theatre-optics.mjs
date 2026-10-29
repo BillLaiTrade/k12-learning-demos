@@ -6,6 +6,18 @@ export const THEATRE_OPTICS = Object.freeze({
   sizeTolerance: 0.04, positionTolerance: 0.12,
 });
 
+export const DEPTH_RULER_MAX = 10;
+export const DEPTH_LIMITS = Object.freeze({min: THEATRE_OPTICS.screenZ + 0.35, max: THEATRE_OPTICS.light.z - 0.55});
+export function depthToRuler(z) {
+  return Math.max(0, Math.min(DEPTH_RULER_MAX, (DEPTH_LIMITS.max - z) / (DEPTH_LIMITS.max - DEPTH_LIMITS.min) * DEPTH_RULER_MAX));
+}
+export function rulerToDepth(value) {
+  const bounded = Math.max(0, Math.min(DEPTH_RULER_MAX, value));
+  if (bounded === 0) return DEPTH_LIMITS.max;
+  if (bounded === DEPTH_RULER_MAX) return DEPTH_LIMITS.min;
+  return DEPTH_LIMITS.max - bounded / DEPTH_RULER_MAX * (DEPTH_LIMITS.max - DEPTH_LIMITS.min);
+}
+
 export function shadowScaleAt(z) {
   const {light, screenZ} = THEATRE_OPTICS;
   if (!Number.isFinite(z) || z <= screenZ || z >= light.z) throw new RangeError('The cutout must lie between the light and screen.');
