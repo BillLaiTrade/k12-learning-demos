@@ -158,6 +158,11 @@
     .speed-bar.selected { background: linear-gradient(90deg, #f3c56a, #d58a2b); }
     .speed-value { color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
     .aperture-lab { margin-top: 16px; }
+    .scene-load-failure { position: absolute; inset: 0; z-index: 3; display: grid; place-content: center; margin: 0; padding: 24px; background: #f5f3eb; color: #405851; font-size: 1rem; font-weight: 750; line-height: 1.8; text-align: center; overflow-wrap: anywhere; }
+    .scene-load-failure[hidden] { display: none; }
+    [data-scene-failed="true"] canvas { visibility: hidden; pointer-events: none; }
+    [data-scene-failed="true"] button:disabled, [data-scene-failed="true"] input:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+    [data-scene-failed="true"] .booklet-stage-badge { display: none; }
     .aperture-scene-with-height { display: grid; grid-template-columns: minmax(0, 1fr) 70px; align-items: stretch; gap: 10px; }
     .aperture-scene-frame { position: relative; overflow: hidden; border: 1px solid #dbe2d8; border-radius: 17px; background: linear-gradient(#eaf0ea, #f6f1e6); box-shadow: 0 5px 18px #243a3514; }
     #aperture-3d-scene { display: block; width: 100%; height: clamp(300px, 44vw, 440px); cursor: grab; touch-action: none; }
@@ -472,6 +477,7 @@
               <div class="aperture-scene-with-height">
                 <div class="aperture-scene-frame">
                   <canvas id="aperture-3d-scene" tabindex="0" aria-label="3D 小孔實驗台"></canvas>
+                  <p class="scene-load-failure" id="aperture-load-failure" role="alert" tabindex="-1" hidden></p>
                   <div class="aperture-scene-actions">
                     <button class="aperture-scene-action" type="button" id="aperture-reset">重設位置</button>
                     <button class="aperture-scene-action" type="button" id="aperture-view-reset">重設視角</button>
@@ -587,6 +593,7 @@
             <div class="booklet-stage-column">
               <div class="booklet-stage-frame">
                 <canvas id="shadow-theatre-scene" tabindex="0" aria-label="可旋轉的 3D 月光影子劇場。拖動月亮、兔子和樹影道具，將它們投出的影子移到屏幕上的描邊位置；拖動空白處可旋轉舞台。" aria-describedby="shadow-theatre-help"></canvas>
+                <p class="scene-load-failure" id="shadow-theatre-load-failure" role="alert" tabindex="-1" hidden></p>
                 <div class="booklet-stage-actions"><button class="booklet-stage-button" id="shadow-theatre-reset" type="button">重設舞台</button><button class="booklet-stage-button" id="shadow-theatre-view" type="button">轉動舞台</button></div>
                 <div class="booklet-stage-badge"><span class="booklet-live-dot"></span><span id="shadow-theatre-status" aria-live="polite">月亮、兔子、樹影，等你上場</span></div>
               </div>
@@ -711,10 +718,9 @@
       }
     })();
   </script>
-  <script type="module" src="assets/aperture-3d.js?v=straight-ray-apertures-20261029"></script>
+  <script type="module" src="assets/scene-loader.js?v=scene-failure-message-20261029"></script>
   <script type="module" src="assets/shadow-3d.js?v=paired-shadow-dialogue-20261029"></script>
   <script type="module" src="assets/shadow-size-3d.js?v=mid-webgl-scenes-caefa-435879-balanced-light-20261025"></script>
   <script type="module" src="assets/light-speed-timer.js?v=clear-results-on-start-20261029"></script>
-  <script type="module" src="assets/shadow-theatre.js?v=finish-state-retry-note-20261029"></script>
 </body>
 </html>
