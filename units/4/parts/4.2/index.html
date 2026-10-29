@@ -83,7 +83,7 @@
 
 
   </style>
-  <link rel="stylesheet" href="assets/mirror-image.css?v=10">
+  <link rel="stylesheet" href="assets/mirror-image.css?v=11">
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
   <link rel="stylesheet" href="assets/reversible-light.css?v=3">
   <link rel="stylesheet" href="assets/periscope.css?v=8">
@@ -195,6 +195,7 @@
           <div class="card-side"><span class="card-number">03</span><h3>平面鏡裡的像在哪裡？</h3></div>
           <div class="card-main">
             <h2>為什麼鏡前的熊，看起來在鏡後？</h2>
+            <p class="comparison-intro">熊在鏡前，光經鏡面反射後進入眼睛。</p>
             <div class="comparison-column-headings" aria-hidden="true"><span>光怎麼進入眼睛</span><span>小葵看到的熊</span></div>
             <div class="mirror-comparison-grid" aria-label="上排有鏡子，下排撤鏡並放入真熊；兩個情境同時比較"><article class="comparison-state" id="comparison-reference" data-mode="mirror" aria-labelledby="reference-heading">
  <figure class="comparison-diagram"><h3 class="comparison-row-title" id="reference-heading">鏡前的熊，經反射看見</h3><svg class="comparison-side" id="reference-side" viewBox="0 0 900 650" role="img" aria-labelledby="reference-side-title reference-side-desc">
@@ -219,7 +220,7 @@
 <g data-side="rays" fill="none" stroke="#236f9f" stroke-linejoin="round"></g>
 <g data-side="hits" fill="#dceff8" stroke="#236f9f" stroke-width="1.8"></g>
 
-<g data-side="distance-three" aria-label="眼睛到反射點的光路為3公尺"></g><g data-side="distance-two" aria-label="反射點到對照位置的光路為2公尺"></g></svg></figure>
+<g data-side="distance-incoming" aria-label="實物熊到鏡面反射點的光路為2公尺"></g><g data-side="distance-three" aria-label="眼睛到反射點的光路為3公尺"></g><g data-side="distance-two" aria-label="反射點到虛像位置的延長線為2公尺"></g></svg></figure>
  <figure class="comparison-observation"><svg class="comparison-eye" id="reference-eye" viewBox="175 0 550 550" role="img" aria-labelledby="reference-eye-title reference-eye-desc">
 <title id="reference-eye-title">小葵同時看見鏡前實體熊的背面與遠處鏡中像</title><desc id="reference-eye-desc">上下兩個觀察窗使用同一眼位與較寬取景。下方前景是面向鏡子的原熊背面，上方遠處是鏡中像或撤鏡後放入的真熊；兩排遠處熊的位置、視大小相同，原熊都保留在鏡前位置。</desc>
 <defs><linearGradient id="reference-eye-wall" x2="1" y2="1"><stop stop-color="#f5f0e5"/><stop offset="1" stop-color="#dfd5c5"/></linearGradient><linearGradient id="reference-eye-wood" x2="0" y2="1"><stop stop-color="#d5b38b"/><stop offset="1" stop-color="#ad8054"/></linearGradient><linearGradient id="reference-glass" x2="1" y2="1"><stop stop-color="#e5f3f3"/><stop offset="1" stop-color="#cfe3e5"/></linearGradient><clipPath id="reference-eye-clip"><path data-view="clip"/></clipPath></defs>
@@ -230,7 +231,8 @@
 <g data-view="near"><path data-view="near-shadow" fill="#493725" opacity=".2"/><foreignObject width="900" height="550"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="rear" width="900" height="550" style="width:900px;height:550px" aria-hidden="true"></canvas></foreignObject></g>
 </svg></figure>
 </article>
-<p class="comparison-transition"><span class="comparison-transition-arrow" aria-hidden="true">↓</span><span>做個對照：撤掉鏡子，在<strong>原本像的位置</strong>放一隻同樣大小的真熊。</span></p>
+<p class="comparison-backtrace">沿著入眼光的來向<strong>往回延長</strong>，會指向鏡後，所以熊看起來在那裡。</p>
+<p class="comparison-transition"><span class="comparison-transition-arrow" aria-hidden="true">↓</span><span>驗證這個位置：撤掉鏡子，在<strong>虛線指向的位置</strong>放一隻同樣大小的真熊。</span></p>
 <article class="comparison-state" id="comparison-trial" data-mode="direct" aria-labelledby="trial-heading">
  <figure class="comparison-diagram"><h3 class="comparison-row-title" id="trial-heading">對照的熊，直接看見</h3><svg class="comparison-side" id="trial-side" viewBox="0 0 900 650" role="img" aria-labelledby="trial-side-title trial-side-desc">
 <title id="trial-side-title">撤鏡並在原虛像位置另放真熊，光沿直線進入同一眼位</title><desc id="trial-side-desc">固定眼位，比較整隻熊玩偶。有鏡子時，實線代表實際反射光、鏡後虛線為反向延長；下排撤鏡後，另放入同位置、同大小與對應朝向的真熊。2與3公尺沿中央代表光路量取。</desc>
@@ -265,10 +267,10 @@
 <g data-view="near"><path data-view="near-shadow" fill="#493725" opacity=".2"/><foreignObject width="900" height="550"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="rear" width="900" height="550" style="width:900px;height:550px" aria-hidden="true"></canvas></foreignObject></g>
 </svg></figure>
 </article></div>
-            <div class="comparison-result"><p class="comparison-takeaway">光路不同，遠處的熊看起來位置、大小都相同。</p><p class="comparison-equation" aria-label="沿圖中光路，3公尺加2公尺等於5公尺">沿圖中光路：3＋2＝5<span>公尺</span></p></div>
+            <div class="comparison-result"><p class="comparison-takeaway">反射光仍帶著熊的外觀資訊；它的來向如同從鏡後傳來，因此像看起來在鏡後。</p><p class="comparison-equation" aria-label="沿圖中光路，3公尺加2公尺等於5公尺">沿圖中光路：3＋2＝5<span>公尺</span></p></div>
             <div class="mirror-explanation">
-              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光走的路不同，看到的熊卻在同一個位置！</p></div>
-              <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>鏡子把光轉向，反射光仍帶著熊的外觀資訊。它<strong>進入眼睛的方向</strong>，就像從鏡後真熊傳來，所以熊看起來在鏡後。</p></div>
+              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>在虛線指向的位置放真熊，看到的位置真的一樣！</p></div>
+              <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>上排是鏡前熊的反射光，下排是真熊直接傳來的光。兩者<strong>進入眼睛的方向對得上</strong>，所以都像是從鏡後那個位置傳來。</p></div>
               <p class="comparison-clarification">本例距離沿圖示光路量取；虛線是輔助線，不代表光真的通過鏡後。</p>
             </div>
           </div>
@@ -475,7 +477,7 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent=index===6?"正在進行單元小測":"正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/curved-mirrors.js?v=1"></script>
-  <script type="module" src="assets/mirror-image.js?v=12"></script>
+  <script type="module" src="assets/mirror-image.js?v=13"></script>
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
   <script type="module" src="assets/reversible-light.js?v=4"></script>
