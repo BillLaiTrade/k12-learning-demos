@@ -56,8 +56,8 @@ export function createTemperatureProgress(row, id) {
     const relation = !synchronized ? 'individual' : own.distance>=DISTANCE&&other.distance>=DISTANCE ? 'arrived' : difference===0 ? 'even' : difference>0 ? 'ahead' : 'behind';
     gap.dataset.relation = relation;
     gap.dataset.difference = String(difference);
-    const message = {individual:'分別敲擊',arrived:'均已到達',even:'進度相同',ahead:`領先 ${metres.format(difference)} 公尺`,behind:`落後 ${metres.format(-difference)} 公尺`}[relation];
+    const message = {individual:'起跑時間不同',arrived:'均已到達',even:'進度相同',ahead:`領先 ${metres.format(difference)} 公尺`,behind:`落後 ${metres.format(-difference)} 公尺`}[relation];
     setText(gap, message);
-    gap.setAttribute('aria-label', !synchronized ? '兩組分別敲擊，位置不作聲速快慢判斷' : message);
+    gap.setAttribute('aria-label', !synchronized ? '兩組起跑時間不同，位置不作聲速快慢判斷' : message);
   } };
 }
