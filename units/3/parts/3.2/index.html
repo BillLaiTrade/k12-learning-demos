@@ -127,7 +127,7 @@
             <audio id="bell-audio" src="assets/handbell-strike.wav?v=868396" preload="auto"></audio>
             <div class="controls sound-controls"><button class="action" id="air-strike" type="button">敲擊鐘</button><span class="live-note" id="air-status" aria-live="polite">點擊鐘或下方按鈕，敲擊鐘並觀察聲音傳播。</span></div>
             <div class="fact"><p><strong>重點：</strong>粒子在原位附近來回振動，疏密變化向前傳播；粒子的振動方向與聲音傳播方向平行。</p></div>
-            <p class="sound-note" id="sound-model-note">粒子位移放大、過程放慢呈現；空氣中的聲音是縱波。</p>
+            <p class="sound-note" id="sound-model-note">粒子位移放大、過程放慢呈現；鐘聲對應右側耳朵收到聲音的時刻。空氣中的聲音是縱波。</p>
           </div>
         </section>
         <section class="lesson-card" id="card-03">
@@ -385,7 +385,7 @@
       if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)activate(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});targets.forEach(target=>observer.observe(target));}
     })();
   </script>
-  <script type="module" src="assets/sound-propagation.js?v=4"></script>
+  <script type="module" src="assets/sound-propagation.js?v=5"></script>
   <script type="module" src="assets/vacuum-lab.js?v=6"></script>
   <script type="module" src="assets/sound-speed.mjs?v=fixed-23"></script>
   <script type="module" src="assets/fireworks-quiz.mjs?v=4"></script>

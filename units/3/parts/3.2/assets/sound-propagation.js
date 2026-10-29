@@ -1,9 +1,12 @@
+import { BellReceptionAudio } from './bell-reception-audio.mjs?v=1';
+
 // 慢速的一維縱波示意。q 是粒子的平衡位置，不隨波向右漂移。
 const scene = document.querySelector('#air-wave');
 const group = document.querySelector('#air-particles');
 const strikeButton = document.querySelector('#air-strike');
 const bellAudio = document.querySelector('#bell-audio');
 bellAudio.volume = 1;
+const reception = new BellReceptionAudio(bellAudio.currentSrc || bellAudio.src);
 let soundRequest = 0;
 const bell = document.querySelector('#sound-bell');
 const bellBody = document.querySelector('#sound-bell-body');
@@ -11,16 +14,17 @@ const eardrum = document.querySelector('#sound-eardrum');
 const status = document.querySelector('#air-status');
 const denseLabel = document.querySelector('#sound-dense-label');
 const sparseLabel = document.querySelector('#sound-sparse-label');
-const LEFT = 210, RIGHT = 840, SPEED = 80, WAVELENGTH = 200;
-const PERIOD = WAVELENGTH / SPEED, AMPLITUDE = 22, TRAIN = 9;
-const ARRIVAL = (RIGHT - LEFT) / SPEED, END = ARRIVAL + TRAIN;
+const LEFT = 210, RIGHT = 840, SPEED = 315, WAVELENGTH = 240;
+const PERIOD = WAVELENGTH / SPEED, AMPLITUDE = 22;
+const ARRIVAL = (RIGHT - LEFT) / SPEED;
+let train = 6, end = ARRIVAL + train;
 const TAU = Math.PI * 2;
 const mobileLabels = [[document.querySelector('#sound-mobile-dense'), denseLabel], [document.querySelector('#sound-mobile-sparse'), sparseLabel]];
 
 function envelope(localTime) {
-  if (localTime <= 0 || localTime >= TRAIN) return 0;
-  const ramp = Math.min(1, localTime / .5, (TRAIN - localTime) / .5);
-  return Math.sin(ramp * Math.PI / 2) ** 2;
+  if (localTime <= 0 || localTime >= train) return 0;
+  const ramp = Math.min(1, localTime / .1, (train - localTime) / .35);
+  return Math.sin(ramp * Math.PI / 2) ** 2 * reception.levelAt(localTime);
 }
 function displacement(q, time) {
   const localTime = time - (q - LEFT) / SPEED;
@@ -41,14 +45,14 @@ for (let row = 0; row < 3; row++) for (let col = 0; col < 43; col++) {
   dots.push({ node: dot, q });
 }
 
-let elapsed = 0, playing = false, frame = 0, lastTime = null, phase = '';
+let elapsed = 0, playing = false, frame = 0, startAt = null, startElapsed = 0, phase = '';
 function labelBand(node, offset) {
   // 始終追蹤同一個相位區域，接近耳朵時淡出，不切換到後面的區域。
   const q = LEFT + SPEED * elapsed - offset;
   const edge = RIGHT - 42;
   const opacity = Math.max(0, Math.min(1, (edge - q) / 70));
   const local = elapsed - (q - LEFT) / SPEED;
-  const visible = q >= LEFT + 42 && q < edge && local > .5 && local < TRAIN - .5;
+  const visible = q >= LEFT + 42 && q < edge && local > .06 && local < train - .35;
   node.setAttribute('visibility', visible ? 'visible' : 'hidden');
   node.setAttribute('opacity', opacity.toFixed(4));
   node.setAttribute('transform', `translate(${q.toFixed(3)} 0)`);
@@ -67,44 +71,72 @@ function draw() {
     mobile.setAttribute('transform', original.getAttribute('transform'));
   }
   scene.dataset.elapsed = elapsed.toFixed(4);
+  scene.dataset.audio = elapsed >= end ? 'ended' : elapsed >= ARRIVAL ? 'playing' : playing ? 'scheduled' : 'idle';
 }
 function announce() {
   const next = elapsed >= ARRIVAL ? 'received' : 'travelling';
   if (next === phase) return;
   phase = next;
   status.textContent = next === 'received'
-    ? '疏密變化抵達耳朵，耳膜隨之振動；橘色粒子仍在原位附近往返。'
-    : '鐘受到敲擊開始振動，疏密變化逐步向右傳播。';
+    ? '疏密變化抵達右側耳朵，現在聽到鐘聲，耳膜隨之振動。'
+    : '鐘開始振動，疏密變化正向右傳播；傳到右側耳朵時才會聽到鐘聲。';
 }
-function animate(now) {
+function animate() {
   if (!playing) return;
-  if (lastTime !== null) elapsed = Math.min(END, elapsed + (now - lastTime) / 1000);
-  lastTime = now;
+  elapsed = Math.min(end, startElapsed + Math.max(0, reception.now() - startAt));
   draw(); announce();
-  if (elapsed >= END) {
-    playing = false; frame = 0; lastTime = null;
+  if (elapsed >= end) {
+    playing = false; frame = 0; startAt = null;
     scene.dataset.state = 'ended';
-    status.textContent = '疏密變化已通過，粒子回到原位附近。再敲一次鐘，可重新觀察。';
+    status.textContent = '鐘聲已結束，耳膜停止振動，粒子回到原位附近。再敲一次鐘，可重新觀察。';
     return;
   }
   frame = requestAnimationFrame(animate);
 }
-function playBell() {
-  const request = ++soundRequest;
-  bellAudio.pause();
-  bellAudio.currentTime = 0;
-  // 在真實點擊／按鍵事件內呼叫 play，符合行動瀏覽器的播放限制。
-  bellAudio.play().catch(() => {
+async function startTimeline(request) {
+  try {
+    // resume 在敲鐘事件中提出；解碼後才建立共用時間軸，避免載入延誤聲畫對應。
+    await reception.prepare();
+    if (request !== soundRequest || document.hidden || !playing) return;
+    train = reception.buffer.duration; end = ARRIVAL + train;
+    reception.context.onstatechange = () => {
+      if (reception.context.state !== 'running' && playing && !document.hidden) {
+        freeze();
+        playing = false; scene.dataset.state = 'interrupted'; scene.dataset.audio = 'idle';
+        status.textContent = '聲音播放已中斷，請再敲一次鐘重新觀察。';
+      }
+    };
+    frame = requestAnimationFrame(() => {
+      if (request !== soundRequest || !playing || document.hidden) return;
+      const now = reception.now();
+      startAt = elapsed > 0 ? Math.max(now, reception.context.currentTime + .015) : now;
+      startElapsed = elapsed;
+      reception.playAt(startAt + Math.max(0, ARRIVAL - elapsed), Math.max(0, elapsed - ARRIVAL));
+      scene.dataset.state = 'playing'; phase = ''; animate();
+    });
+  } catch {
     if (request !== soundRequest) return;
-    status.textContent = '鐘的振動示範已開始，但鐘聲暫時無法播放，請再敲一次鐘。';
-  });
+    reception.stop(); playing = false; frame = 0; startAt = null;
+    scene.dataset.state = 'error'; scene.dataset.audio = 'error';
+    status.textContent = '鐘聲暫時無法播放，請再敲一次鐘。';
+  }
 }
 function strike() {
+  const request = ++soundRequest;
   cancelAnimationFrame(frame);
-  elapsed = 0; lastTime = null; phase = ''; playing = true;
-  draw(); scene.dataset.state = 'playing'; announce();
-  frame = requestAnimationFrame(animate);
-  playBell();
+  reception.stop(); frame = 0; startAt = null;
+  elapsed = 0; phase = ''; playing = true;
+  draw(); scene.dataset.state = 'preparing'; scene.dataset.audio = 'idle';
+  status.textContent = '正在準備鐘聲…';
+  startTimeline(request);
+}
+
+function freeze() {
+  ++soundRequest;
+  if (startAt !== null) elapsed = Math.min(end, startElapsed + Math.max(0, reception.now() - startAt));
+  cancelAnimationFrame(frame); frame = 0; startAt = null; reception.stop(); draw();
+  scene.dataset.state = playing ? 'paused' : scene.dataset.state;
+  scene.dataset.audio = 'paused';
 }
 strikeButton.addEventListener('click', strike);
 bell.addEventListener('click', strike);
@@ -114,11 +146,10 @@ bell.addEventListener('keydown', event => {
     if (!event.repeat) strike();
   }
 });
-// 背景分頁凍結時間；返回時接續，不額外觸發一次敲擊。
+// 背景分頁凍結時間並取消音效；返回時從同一傳播位置與錄音段落接續。
 document.addEventListener('visibilitychange', () => {
-  cancelAnimationFrame(frame); frame = 0; lastTime = null;
-  if (document.hidden) {
-    ++soundRequest; bellAudio.pause(); bellAudio.currentTime = 0;
-  } else if (playing) frame = requestAnimationFrame(animate);
+  if (document.hidden) { if (playing) freeze(); }
+  else if (playing) startTimeline(++soundRequest);
 });
+window.addEventListener('pagehide', () => { freeze(); playing = false; });
 draw(); scene.dataset.state = 'ready';
