@@ -112,7 +112,7 @@
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=desktop-compact-7">
   <link rel="stylesheet" href="assets/ppm-scale.css?v=conversion-trimmed-1">
-  <link rel="stylesheet" href="assets/investigation.css?v=crystal-mission-1">
+  <link rel="stylesheet" href="assets/investigation.css?v=calculation-notebook-1">
 </head>
 <body>
   <header class="shell masthead">
@@ -300,31 +300,27 @@
             <div class="invest-current" id="invest-current" hidden><strong id="invest-current-label"></strong><button type="button" id="invest-settle">靜置觀察</button></div>
             <p class="invest-status" id="invest-status" role="status" aria-live="polite">點未知樣本 X 取樣，再自由選用器材測試。</p>
             <p class="invest-hint" id="invest-hint" role="status" hidden></p>
-            <div class="invest-record-action" id="invest-record-action" hidden><label for="invest-event">這份取樣的觀察</label><select id="invest-event"></select><button type="button" id="invest-record">記一筆</button></div>
             <button type="button" class="invest-retry" id="invest-retry" hidden>重新載入器材</button>
           </div>
-          <form class="invest-mission-result" id="invest-report" aria-labelledby="invest-answer-title" hidden novalidate>
-            <div class="invest-answer-head"><h3 id="invest-answer-title">我的濃度答案</h3><span>稱量時已自動扣除容器質量</span></div>
-            <div class="invest-masses"><div id="invest-liquid-measurement"><span>蒸發前的濾液淨質量</span><b id="invest-solution-mass">尚未稱量</b><small id="invest-solution-note"></small></div><div id="invest-solid-measurement"><span>蒸乾後的晶體淨質量</span><b id="invest-solute-mass">尚未稱量</b><small id="invest-solute-note"></small></div></div>
-            <div class="invest-answer"><label for="invest-concentration-value">重量百分濃度</label><div class="invest-percent-input"><input id="invest-concentration-value" type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="填入計算結果" aria-describedby="invest-answer-title"><span aria-hidden="true">%</span></div><button type="submit" id="invest-check">檢查答案</button></div>
-            <div class="invest-feedback" id="invest-feedback" role="status" aria-live="polite" hidden></div>
-          </form>
-          <details class="invest-notebook" id="invest-notebook">
-            <summary><span class="invest-notebook-icon" aria-hidden="true">▤</span><span><strong>實驗筆記 <small id="invest-note-count">尚無紀錄</small></strong><span class="invest-summary-copy">需要時，補上你的觀察與想法。</span></span><span class="invest-chevron" aria-hidden="true">⌄</span></summary>
-            <div class="invest-notebook-body">
-              <p class="invest-empty" id="invest-empty">做過測試後，點「記一筆」收進筆記；也可以回到先前的取樣繼續研究。</p>
-              <div id="invest-records"></div>
-              <p class="invest-note-foot">這是可重做的教學模擬；動畫時間與器材大小不代表真實實驗尺度。筆記保留於本次頁面，重新開始會清除。</p>
-            </div>
-          </details>
-          <noscript><p>請啟用 JavaScript，才能取樣、操作器材與填寫實驗筆記。</p></noscript>
+          <section class="invest-calculation-notebook" id="invest-notebook" aria-labelledby="invest-answer-title">
+            <header class="invest-notebook-heading"><span class="invest-notebook-symbol" aria-hidden="true">▤</span><div><h3 id="invest-answer-title">濃度實驗紀錄本</h3><p>電子秤會自動扣除容器質量，並記下淨重。</p></div><span class="invest-notebook-sample" id="invest-notebook-sample">尚未取樣</span></header>
+            <form class="invest-mission-result invest-notebook-page" id="invest-report" aria-labelledby="invest-answer-title" novalidate>
+              <div class="invest-notebook-entry" id="invest-liquid-measurement"><span class="invest-entry-number" aria-hidden="true">01</span><div class="invest-entry-label">記下蒸發前的濾液淨質量<small id="invest-solution-note">這筆重量需要包含泥沙嗎？</small></div><b class="invest-entry-value" id="invest-solution-mass">尚未稱量</b></div>
+              <div class="invest-notebook-entry" id="invest-solid-measurement"><span class="invest-entry-number" aria-hidden="true">02</span><div class="invest-entry-label">記下蒸乾後的晶體淨質量<small id="invest-solute-note">稱到的是乾燥晶體，還是混著泥沙的固體？</small></div><b class="invest-entry-value" id="invest-solute-mass">尚未稱量</b></div>
+              <div class="invest-notebook-calculation"><h4><span class="invest-entry-number" aria-hidden="true">03</span>把重量代入，算出濃度</h4><div class="invest-worked-calculation"><span class="invest-equation-name">重量百分濃度 ＝</span><span class="invest-calculation-fraction"><span><small>晶體淨質量</small><b id="invest-calculation-numerator">—</b></span><span><small>濾液淨質量</small><b id="invest-calculation-denominator">—</b></span></span><span class="invest-equation-factor">× 100% ＝</span><div class="invest-notebook-answer"><input id="invest-concentration-value" disabled type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="填答案" aria-label="重量百分濃度計算結果" aria-describedby="invest-answer-title"><span aria-hidden="true">%</span></div></div></div>
+              <div class="invest-notebook-actions"><button type="submit" id="invest-check" disabled>核對我的計算</button></div>
+              <div class="invest-feedback" id="invest-feedback" role="status" aria-live="polite" hidden></div>
+              <p class="invest-note-foot">每份取樣的紀錄分開保存；重新開始會清除本次紀錄。</p>
+            </form>
+          </section>
+          <noscript><p>請啟用 JavaScript，才能取樣、操作器材與填寫計算紀錄。</p></noscript>
         </div>
       </section>
     </div>
   </main>
   <footer class="shell">國二上・自然科學</footer>
   <dialog class="mass-dialog" id="mass-dialog" aria-labelledby="mass-dialog-title"><form id="mass-form" novalidate><h3 id="mass-dialog-title">設定質量</h3><div class="mass-input-row"><input id="mass-input" type="number" inputmode="decimal" step="0.1" required aria-describedby="mass-range mass-error"><span>克</span></div><p class="mass-range" id="mass-range"></p><p class="mass-error" id="mass-error" role="alert"></p><div class="mass-actions"><button type="button" id="mass-cancel">取消</button><button type="submit">套用</button></div></form></dialog>
-  <dialog id="invest-reset-dialog" class="invest-reset-dialog" aria-labelledby="invest-reset-title"><form method="dialog"><h3 id="invest-reset-title">重新開始調查？</h3><p>這會清除桌上的取樣與本次實驗筆記。</p><div><button value="cancel" autofocus>保留實驗</button><button value="reset">重新開始</button></div></form></dialog>
+  <dialog id="invest-reset-dialog" class="invest-reset-dialog" aria-labelledby="invest-reset-title"><form method="dialog"><h3 id="invest-reset-title">重新開始調查？</h3><p>這會清除取樣、稱量紀錄與計算答案。</p><div><button value="cancel" autofocus>保留實驗</button><button value="reset">重新開始</button></div></form></dialog>
   <script>
     const routeLinks=[...document.querySelectorAll('.route-inner a')];
     const cards=routeLinks.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean);
@@ -360,6 +356,6 @@
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
   <script type="module" src="assets/ppm-pool.js?v=vertical-calculation-1"></script>
-  <script type="module" src="assets/investigation.js?v=crystal-mission-1"></script>
+  <script type="module" src="assets/investigation.js?v=calculation-notebook-1"></script>
 </body>
 </html>

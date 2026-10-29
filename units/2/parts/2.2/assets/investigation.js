@@ -6,31 +6,26 @@ const $=id=>document.getElementById(`invest-${id}`);
 const controls=[...root.querySelectorAll('[data-invest-tool]')];
 const answers=new Map();
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
-let samples=[],records=[],active=null,stock=6,nextId=1,animation=null,renderer=null,frame=0,pausedAt=null,drag=null,suppressClickUntil=0;
+let samples=[],active=null,stock=6,nextId=1,animation=null,renderer=null,frame=0,pausedAt=null,drag=null,suppressClickUntil=0;
 const selected=()=>samples.find(s=>s.id===active);
 const label=id=>id<=26?String.fromCharCode(64+id):String(id);
 function announce(text,observation=false){$('status').textContent=text;$('status').dataset.observation=String(observation);}
 function invalidateReport(){const feedback=$('feedback');feedback.hidden=true;feedback.replaceChildren();delete feedback.dataset.result;}
 function redraw(now=performance.now()){renderer?.render({sample:selected(),stock,animation},now);}
-function fillOptions(select,items,placeholder=''){
-  const previous=select.value;select.replaceChildren();
-  if(placeholder)select.add(new Option(placeholder,''));
-  for(const [value,text] of items)select.add(new Option(text,value));
-  if([...select.options].some(o=>o.value===previous))select.value=previous;
-}
 function updateConcentration(){
   const sample=selected(),{liquid,solid}=measuredMasses(sample);
-  $('report').hidden=!sample;
-  $('answer-title').textContent=sample?`取樣 ${label(sample.id)} 的濃度答案`:'我的濃度答案';
+  $('notebook-sample').textContent=sample?`取樣 ${label(sample.id)}`:'尚未取樣';
   $('solution-mass').textContent=liquid?`${liquid.mass} 克`:'尚未稱量';
   $('solute-mass').textContent=solid?`${solid.mass} 克`:'尚未稱量';
-  $('solution-note').textContent=liquid?(liquid.phase==='filtered'?'已稱量濾液':'這筆重量包含泥沙'):'';
-  $('solute-note').textContent=solid?(solid.phase==='dry-filtered'?'已稱量乾燥晶體':'這筆重量包含泥沙'):'';
+  $('solution-note').textContent=liquid?(liquid.phase==='filtered'?'這是計算濃度時的溶液總質量。':'這筆重量包含泥沙，泥沙應算進溶液質量嗎？'):'這筆重量需要包含泥沙嗎？';
+  $('solute-note').textContent=solid?(solid.phase==='dry-filtered'?'這是原本溶在濾液中的溶質質量。':'固體還混有泥沙，能直接當作晶體質量嗎？'):'稱到的是乾燥晶體，還是混著泥沙的固體？';
   $('liquid-measurement').dataset.valid=liquid?String(liquid.phase==='filtered'):'';
   $('solid-measurement').dataset.valid=solid?String(solid.phase==='dry-filtered'):'';
+  $('calculation-numerator').textContent=solid?`${solid.mass} 克`:'—';
+  $('calculation-denominator').textContent=liquid?`${liquid.mass} 克`:'—';
   $('concentration-value').value=answers.get(active)||'';
   const hint=measurementHint(sample);$('hint').hidden=!hint||!!animation;$('hint').textContent=hint;
-  const disabled=root.dataset.ready!=='true'||!!animation;
+  const disabled=root.dataset.ready!=='true'||!!animation||!sample;
   $('concentration-value').disabled=disabled;$('check').disabled=disabled;
 }
 
@@ -40,7 +35,7 @@ function update(){
   for(const button of controls)button.disabled=!ready||busy;
   for(const button of root.querySelectorAll('.invest-tool'))button.setAttribute('aria-pressed',String(button.dataset.investTool===(animation?.kind||sample?.display)));
   $('reset').disabled=!ready;$('take').textContent=stock===0?'補充同批樣本':sample?'＋ 再取一份':'取一份';
-  const sampleLabel=stock===0?'未知樣本 X 已取完：補充同批樣本，保留既有取樣與筆記':'未知樣本 X：點瓶身取一份到燒杯，也可拖到燒杯';
+  const sampleLabel=stock===0?'未知樣本 X 已取完：補充同批樣本，保留既有取樣與紀錄':'未知樣本 X：點瓶身取一份到燒杯，也可拖到燒杯';
   for(const id of ['bottle','take'])$(id).setAttribute('aria-label',sampleLabel);
   $('current').hidden=!sample;$('samples').hidden=samples.length<2;
   $('current-label').textContent=sample?`取樣 ${label(sample.id)} · ${phaseName(sample)}`:'';
@@ -49,15 +44,9 @@ function update(){
   $('samples').replaceChildren();
   for(const s of samples){const button=document.createElement('button');button.type='button';button.dataset.sample=s.id;button.setAttribute('aria-pressed',String(s.id===active));button.disabled=busy;const name=document.createElement('strong');name.textContent=`取樣 ${label(s.id)}`;const phase=document.createElement('span');phase.textContent=phaseName(s);button.append(name,phase);button.addEventListener('click',()=>selectSample(s.id));$('samples').append(button);}
   if(focusId)$('samples').querySelector(`[data-sample="${focusId}"]`)?.focus({preventScroll:true});
-  const events=sample?.events||[],old=$('event').value;
-  $('record-action').hidden=events.length===0;
-  fillOptions($('event'),events.map(e=>[e.id,`${actionName(e.action)}：${e.observation}`]));
-  if(!events.some(e=>e.id===old)&&events.length)$('event').value=events.at(-1).id;
-  updateRecordButton();
   updateConcentration();
   $('canvas').setAttribute('aria-label',sample?`未知樣本 X 與取樣 ${label(sample.id)}，目前為${phaseName(sample)}。${busy?`${actionName(animation.kind)}進行中。`:sample.events.at(-1)?.observation||''}`:'未知樣本 X 樣本瓶、空燒杯與收好的器材盤。點瓶身取樣。');
 }
-function updateRecordButton(){const exists=records.some(r=>r.event.id===$('event').value);$('record').disabled=!!animation||exists||!$('event').value;$('event').disabled=!!animation;$('record').textContent=exists?'已記錄':'記一筆';}
 function selectSample(id){
   if(animation)return;active=id;invalidateReport();const sample=selected();update();redraw();announce(sample.events.at(-1)?.observation||`已選取取樣 ${label(id)}，可以選用器材測試。`,!!sample.events.length);
 }
@@ -73,7 +62,6 @@ function animate(kind,before){
       const result=finishTest(selected(),kind);result.sample.display=kind==='settle'?'beaker':kind;
       samples=samples.map(s=>s.id===active?result.sample:s);
       root.dataset.lastEvent=result.event.id;
-      $('event').value='';
       announce(result.event.observation,true);
     }else announce(`取樣 ${label(active)} 已放上實驗桌。可以選用器材，也可以再取一份。`);
     animation=null;frame=0;update();redraw();
@@ -90,21 +78,6 @@ function perform(action){
   if(reason){announce(reason);return;}
   animate(action,{...selected()});
 }
-function addRecord(){
-  const event=selected()?.events.find(e=>e.id===$('event').value);
-  if(!event||animation||records.some(r=>r.event.id===event.id))return;
-  const record={id:`note-${event.id}`,event:structuredClone(event),note:''};records.push(record);renderNotes();updateRecordButton();
-  announce(`已把取樣 ${label(event.sampleId)} 的${actionName(event.action)}觀察放進實驗筆記。`);
-}
-function renderNotes(){
-  $('records').replaceChildren();$('note-count').textContent=records.length?`${records.length} 筆紀錄`:'尚無紀錄';$('empty').hidden=records.length>0;
-  for(const [index,record] of records.entries()){
-    const article=document.createElement('article');article.className='invest-note';article.dataset.record=record.id;
-    const header=document.createElement('header'),title=document.createElement('strong'),remove=document.createElement('button');title.textContent=`紀錄 ${index+1} · 取樣 ${label(record.event.sampleId)} · ${actionName(record.event.action)}`;remove.type='button';remove.textContent='移除';remove.setAttribute('aria-label',`移除紀錄 ${index+1}`);remove.addEventListener('click',()=>{records=records.filter(r=>r.id!==record.id);renderNotes();updateRecordButton();});header.append(title,remove);
-    const fact=document.createElement('p');fact.textContent=record.event.observation;
-    const noteLabel=document.createElement('label'),input=document.createElement('textarea');input.id=`invest-${record.id}`;input.value=record.note;input.maxLength=600;input.placeholder='補上你的觀察或想法……';noteLabel.htmlFor=input.id;noteLabel.textContent='我的補充';input.addEventListener('input',()=>{record.note=input.value;});article.append(header,fact,noteLabel,input);$('records').append(article);
-  }
-}
 function submitReport(event){
   event.preventDefault();if(animation)return;
   const result=assessReport(selected(),$('concentration-value').value),feedback=$('feedback');
@@ -116,9 +89,9 @@ function submitReport(event){
 }
 
 function clear(){
-  cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];records=[];answers.clear();active=null;stock=6;nextId=1;
-  $('report').reset();invalidateReport();$('notebook').open=false;root.querySelectorAll('[data-sample]').forEach(b=>b.remove());delete root.dataset.lastEvent;
-  $('concentration-value').value='';renderNotes();update();redraw();announce('點未知樣本 X 取樣，再自由選用器材測試。');$('bottle').focus({preventScroll:true});
+  cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];answers.clear();active=null;stock=6;nextId=1;
+  $('report').reset();invalidateReport();root.querySelectorAll('[data-sample]').forEach(b=>b.remove());delete root.dataset.lastEvent;
+  $('concentration-value').value='';update();redraw();announce('點未知樣本 X 取樣，再自由選用器材測試。');$('bottle').focus({preventScroll:true});
 }
 function cancelDrag(){if(!drag)return;drag.ghost?.remove();$('picture').classList.remove('is-drop-ready');drag=null;}
 function isTarget(x,y,kind){
@@ -143,14 +116,13 @@ for(const button of controls){
     const {kind,moved}=drag,target=isTarget(event.clientX,event.clientY,kind);cancelDrag();
     if(moved){suppressClickUntil=performance.now()+500;if(target)perform(kind);else announce('器材已放回，可以重新選用。');}
   });
-  button.addEventListener('pointercancel',()=>{if(drag){suppressClickUntil=performance.now()+500;cancelDrag();announce('已取消拿取，樣本與筆記保留。');}});
+  button.addEventListener('pointercancel',()=>{if(drag){suppressClickUntil=performance.now()+500;cancelDrag();announce('已取消拿取，樣本與稱量紀錄保留。');}});
   button.addEventListener('lostpointercapture',()=>{if(drag?.button===button)cancelDrag();});
 }
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&drag){suppressClickUntil=performance.now()+500;cancelDrag();announce('已放回器材。');}});
 $('settle').addEventListener('click',()=>perform('settle'));
-$('record').addEventListener('click',addRecord);$('event').addEventListener('change',updateRecordButton);
 $('report').addEventListener('submit',submitReport);$('concentration-value').addEventListener('input',()=>{answers.set(active,$('concentration-value').value);invalidateReport();});
-$('reset').addEventListener('click',()=>{if(samples.length||records.length)$('reset-dialog').showModal();else clear();});
+$('reset').addEventListener('click',()=>{if(samples.length)$('reset-dialog').showModal();else clear();});
 $('reset-dialog').addEventListener('close',()=>{if($('reset-dialog').returnValue==='reset')clear();});
 document.addEventListener('visibilitychange',()=>{
   if(!animation)return;

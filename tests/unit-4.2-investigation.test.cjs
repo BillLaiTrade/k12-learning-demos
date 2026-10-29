@@ -17,11 +17,10 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
  const state=()=>$('lab').evaluate(e=>({...e.dataset}));
  const act=async(kind)=>{await (kind==='sample'?$('bottle'):kind==='settle'?$('settle'):tool(kind)).click();await advance(kind==='sample'?3000:kind==='settle'?5800:kind==='filter'?6800:kind==='heat'?11000:2100);assert.equal((await state()).busy,'false');};
  const reset=async()=>{await $('reset').click();if(await $('reset-dialog').isVisible())await page.locator('#invest-reset-dialog button[value=reset]').click();};
- const record=async()=>{await $('record').click();return page.locator('.invest-note').last().getAttribute('data-record');};
  const capture=async name=>{await page.locator('#unit-quiz').screenshot({path:`/tmp/investigation-${name}.png`});};
 
- await t.test('initial view has a clear sample action, stored tools and a closed notebook',async()=>{
-  assert.equal((await state()).sampleCount,'0');assert.equal(await $('bottle').isVisible(),true);assert.equal(await $('notebook').getAttribute('open'),null);assert.equal(await $('report').isVisible(),false);
+ await t.test('initial view has a clear sample action and a visible calculation notebook',async()=>{
+  assert.equal((await state()).sampleCount,'0');assert.equal(await $('bottle').isVisible(),true);assert.equal(await $('notebook').getAttribute('open'),null);assert.equal(await $('report').isVisible(),true);assert.equal(await $('check').isDisabled(),true);
   assert.match(await $('take').innerText(),/取一份/);assert.match(await page.locator('#unit-quiz .speaker').evaluate(e=>getComputedStyle(e,'::before').backgroundImage),/shared-assets\/characters\/dialogue-character-avatars/);
   assert.equal(await page.locator('.route-inner a[href="#unit-quiz"]').count(),1);assert.equal(await page.locator('#unit-quiz input[type=range]').count(),0);await capture('initial-desktop');
   assert.equal(await page.locator('#unit-quiz>.quiz-head .quiz-kicker').innerText(),'單元小測');assert.equal(await page.locator('#unit-quiz>.card-side').count(),0);assert.equal(await page.locator('#unit-quiz').evaluate(e=>e.classList.contains('unit-quiz')&&!e.classList.contains('lesson-card')),true);
@@ -102,24 +101,24 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
    }return errors;
   });assert.deepEqual(problems,[]);
  });
- let rawHeatRecord,filterRecord,saltRecord,validSample;
+ let validSample;
  await t.test('students can heat the raw sample first, keep mixed residue and measure seven grams',async()=>{
   await act('sample');await tool('heat').click();await advance(4300);const early=await $('canvas').screenshot();assert.equal((await state()).busy,'true');await advance(3000);assert.notDeepEqual(await $('canvas').screenshot(),early);await advance(4000);
-  assert.equal((await state()).phase,'dry-raw');assert.match(await $('status').innerText(),/白色固體與褐色顆粒/);rawHeatRecord=await record();await act('weigh');assert.match(await $('status').innerText(),/7 克/);
+  assert.equal((await state()).phase,'dry-raw');assert.match(await $('status').innerText(),/白色固體與褐色顆粒/);await act('weigh');assert.match(await $('status').innerText(),/7 克/);
   await tool('filter').click();assert.equal((await state()).busy,'false');assert.match(await $('status').innerText(),/無法直接倒入濾紙/);
  });
  await t.test('separate aliquots retain their own results and can be revisited in any order',async()=>{
-  await act('sample');assert.equal((await state()).active,'2');await act('settle');assert.equal((await state()).phase,'settled');await record();await page.locator('[data-sample="1"]').click();assert.equal((await state()).phase,'dry-raw');await page.locator('[data-sample="2"]').click();assert.equal((await state()).phase,'settled');
+  await act('sample');assert.equal((await state()).active,'2');await act('settle');assert.equal((await state()).phase,'settled');await page.locator('[data-sample="1"]').click();assert.equal((await state()).phase,'dry-raw');await page.locator('[data-sample="2"]').click();assert.equal((await state()).phase,'settled');
  });
  await t.test('filtration retains particles and dissolved material passes into the filtrate',async()=>{
-  await act('sample');validSample=(await state()).active;await act('filter');assert.equal((await state()).phase,'filtered');assert.match(await $('status').innerText(),/褐色顆粒留在濾紙/);filterRecord=await record();await act('weigh');assert.match(await $('status').innerText(),/100 克/);await record();await capture('filtered-desktop');
+  await act('sample');validSample=(await state()).active;await act('filter');assert.equal((await state()).phase,'filtered');assert.match(await $('status').innerText(),/褐色顆粒留在濾紙/);await act('weigh');assert.match(await $('status').innerText(),/100 克/);await capture('filtered-desktop');
  });
  await t.test('evaporating that filtrate leaves white solid; its dry net mass is five grams',async()=>{
-  await act('heat');assert.equal((await state()).phase,'dry-filtered');assert.match(await $('status').innerText(),/蒸乾後留下白色固體/);saltRecord=await record();await act('weigh');assert.match(await $('status').innerText(),/5 克/);await record();
+  await act('heat');assert.equal((await state()).phase,'dry-filtered');assert.match(await $('status').innerText(),/蒸乾後留下白色固體/);await act('weigh');assert.match(await $('status').innerText(),/5 克/);
  });
- await t.test('notes store real observations and editable student text without duplicate event records',async()=>{
-  assert.equal(await $('record').isDisabled(),true);const count=await page.locator('.invest-note').count();await $('notebook').evaluate(e=>e.open=true);await page.locator('.invest-note textarea').first().fill('直接加熱後兩種固體仍混在一起。');assert.equal(await page.locator('.invest-note').count(),count);
-  await page.locator('[data-sample="1"]').click();await $('event').selectOption('1-1');assert.equal(await $('record').isDisabled(),true);await page.locator('[data-sample="'+validSample+'"]').click();await $('event').selectOption(`${validSample}-1`);assert.equal(await $('record').isDisabled(),true);
+ await t.test('the notebook automatically records the two weights and puts them in the fraction',async()=>{
+  assert.equal(await page.locator('#invest-record,#invest-event,.invest-note textarea').count(),0);assert.equal(await $('notebook').isVisible(),true);
+  assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');assert.equal(await $('calculation-numerator').innerText(),'5 克');assert.equal(await $('calculation-denominator').innerText(),'100 克');
  });
  await t.test('the mission checks actual separation and net measurements before accepting an answer',async()=>{
   await page.locator('[data-sample="1"]').click();await $('concentration-value').fill('5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'revise');assert.match(await $('feedback').innerText(),/泥沙.*濾掉/);
@@ -128,13 +127,13 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
   await $('concentration-value').fill('5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');assert.match(await $('feedback').innerText(),/任務完成/);assert.match(await $('feedback').innerText(),/5 克 ÷ 100 克/);
  });
  await t.test('the concentration answer uses automatic tare and the active aliquot only',async()=>{
-  assert.match(await page.locator('.invest-answer-head').innerText(),/自動扣除容器質量/);assert.equal(await page.locator('#invest-include-concentration,#invest-concentration-unit,[name=component]').count(),0);
+  assert.match(await page.locator('.invest-notebook-heading').innerText(),/自動扣除容器質量/);assert.equal(await page.locator('#invest-include-concentration,#invest-concentration-unit,[name=component]').count(),0);
   await page.locator('[data-sample="1"]').click();assert.equal(await $('feedback').isVisible(),false);assert.equal(await $('solute-mass').innerText(),'7 克');assert.match(await $('solute-note').innerText(),/泥沙/);
   await page.locator('[data-sample="'+validSample+'"]').click();assert.equal(await $('concentration-value').inputValue(),'5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');
  });
- await t.test('optional notes can be edited and removed without changing measured masses',async()=>{
-  await $('notebook').evaluate(e=>e.open=true);await page.locator('.invest-note textarea').first().fill('補充：白色固體和褐色顆粒仍混合。');assert.equal(await $('feedback').getAttribute('data-result'),'correct');
-  const count=await page.locator('.invest-note').count();await page.locator('.invest-note').first().locator('button').click();assert.equal(await page.locator('.invest-note').count(),count-1);assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');
+ await t.test('editing an answer withdraws completion without changing the recorded weights',async()=>{
+  await $('concentration-value').fill('4');assert.equal(await $('feedback').isVisible(),false);assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');
+  await $('concentration-value').fill('5');await $('check').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');
  });
  await t.test('dragging apparatus to the active sample works, and outside or canceled drops do nothing',async()=>{
   await reset();await act('sample');const drag=async(cancel=false,outside=false)=>{await tool('filter').scrollIntoViewIfNeeded();const b=await tool('filter').boundingBox(),r=await $('picture').boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(outside?r.x+10:r.x+r.width*.48,outside?r.y+10:r.y+r.height*.5,{steps:10});if(cancel)await page.keyboard.press('Escape');await page.mouse.up();};
@@ -148,8 +147,8 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
  await t.test('reset confirmation preserves work on cancel and cancels unfinished work on reset',async()=>{
   await reset();await $('take').click();await advance(700);assert.equal((await state()).busy,'true');await $('reset').click();await page.locator('#invest-reset-dialog button[value=cancel]').click();assert.equal((await state()).sampleCount,'1');await $('reset').click();await page.locator('#invest-reset-dialog button[value=reset]').click();await advance(15000);assert.equal((await state()).sampleCount,'0');assert.equal((await state()).busy,'false');assert.equal(await $('notebook').getAttribute('open'),null);assert.equal(await page.locator('.invest-note').count(),0);
  });
- await t.test('depleted stock can be explicitly replenished without deleting samples or notes',async()=>{
-  for(let i=0;i<6;i++)await act('sample');assert.equal((await state()).stock,'0');assert.equal((await state()).sampleCount,'6');assert.match(await $('take').innerText(),/補充同批/);await $('take').click();assert.equal((await state()).stock,'6');assert.equal((await state()).sampleCount,'6');await act('sample');assert.equal((await state()).sampleCount,'7');await act('settle');await record();
+ await t.test('depleted stock can be explicitly replenished without deleting samples or measured records',async()=>{
+  for(let i=0;i<6;i++)await act('sample');assert.equal((await state()).stock,'0');assert.equal((await state()).sampleCount,'6');assert.match(await $('take').innerText(),/補充同批/);await $('take').click();assert.equal((await state()).stock,'6');assert.equal((await state()).sampleCount,'6');await act('sample');assert.equal((await state()).sampleCount,'7');await act('settle');
  });
  await t.test('experiments pause while the page is hidden and resume without jumping to the result',async()=>{
   await tool('filter').click();await advance(1000);await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});await advance(30000);assert.equal((await state()).busy,'true');await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));});await advance(6500);assert.equal((await state()).busy,'false');assert.equal((await state()).phase,'filtered');
@@ -160,7 +159,7 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
    await page.setViewportSize({width,height:1100});const result=await page.locator('#unit-quiz').evaluate(card=>{const main=card.querySelector('.card-main').getBoundingClientRect();return{overflow:document.documentElement.scrollWidth>innerWidth,escaped:[...card.querySelector('.card-main').children].some(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.left<main.left-.5||r.right>main.right+.5);}),buttons:[...card.querySelectorAll('.invest-tools button,#invest-take')].map(b=>{const r=b.getBoundingClientRect();return{width:r.width,height:r.height};})};});assert.equal(result.overflow,false,`overflow ${width}`);assert.equal(result.escaped,false,`column ${width}`);assert.ok(result.buttons.every(b=>b.width>=40&&b.height>=35),`targets ${width}`);
    if(width===390)await capture('initial-mobile');
   }
-  await act('sample');await act('filter');await record();await $('notebook').evaluate(e=>e.open=true);
+  await act('sample');await act('filter');
   for(const width of [1440,1024,850,768,680,390,320]){await page.setViewportSize({width,height:1100});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`expanded ${width}`);if(width===390)await capture('notebook-mobile');}
  });
  await t.test('asset failures keep controls safe and retry recovers without breaking other lessons',async()=>{
