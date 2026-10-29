@@ -184,13 +184,7 @@
 #s6 .pool-water-quantity strong small {font-size:.76rem;font-weight:500;}
 #s6 .pool-solute-quantity>small {font-size:.67rem;color:#738177;}
 #s6 .pool-volume-figure figcaption {margin:7px 0 0;color:#5e7468;font-size:.77rem;line-height:1.65;}
-#s6 .pool-dose-controls {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin:13px 0;}
-#s6 .pool-dose-controls>span {font-size:.84rem;color:#4b6557;}
-#s6 .pool-dose-controls>div {display:flex;gap:6px;}
-#s6 [data-pool-dose] {padding:6px 14px;border:1px solid #bdcfc2;border-radius:8px;background:#fff;color:#345a46;font:inherit;font-size:.84rem;cursor:pointer;}
-#s6 [data-pool-dose][aria-pressed="true"] {border-color:#176b53;background:#176b53;color:#fff;}
-#s6 [data-pool-dose]:hover {box-shadow:0 0 0 2px #176b5317;}
-#s6 .pool-mass-comparison {display:grid;grid-template-columns:minmax(0,1.5fr) auto minmax(0,1fr);align-items:center;gap:10px;}
+#s6 .pool-mass-comparison {margin-top:14px;display:grid;grid-template-columns:minmax(0,1.5fr) auto minmax(0,1fr);align-items:center;gap:10px;}
 #s6 .pool-mass-comparison>div {display:grid;gap:5px;min-width:0;padding:12px;border:1px solid #d7e3df;border-radius:10px;background:#f0f6f6;}
 #s6 .pool-mass-comparison>.pool-added-mass {border-color:#dce3d0;background:#f6f8ed;}
 #s6 .pool-mass-comparison>div>span {font-size:.77rem;color:#5d7366;}
