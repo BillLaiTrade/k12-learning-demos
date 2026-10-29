@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="assets/sound-propagation.css?v=3">
   <link rel="stylesheet" href="assets/vacuum-lab.css?v=5">
   <link rel="stylesheet" href="assets/sound-speed.css?v=fixed-22">
+  <link rel="stylesheet" href="assets/fireworks-quiz.css?v=1">
 </head>
 <body>
   <header class="shell masthead">
@@ -246,15 +247,56 @@
             </ul></details>
           </div>
         </section>
-        <section class="quiz" id="unit-quiz" aria-labelledby="quiz-title">
-          <header class="quiz-head"><span class="quiz-mark" aria-hidden="true">✦</span><div><h2 id="quiz-title">單元小測｜幫小葵檢查聲音展示</h2><p>選出最合適的說法，看看你是否掌握聲音的產生與傳播。</p></div></header>
-          <div class="quiz-body">
-            <div class="quiz-question" data-question="q1"><h3>1. 鋼尺發出聲音時，最直接的原因是什麼？</h3><label class="quiz-option"><input type="radio" name="q1" value="a">鋼尺正在振動</label><label class="quiz-option"><input type="radio" name="q1" value="b">鋼尺周圍的空氣自己發出聲音</label><label class="quiz-option"><input type="radio" name="q1" value="c">聲音讓鋼尺開始振動</label><p class="quiz-feedback" aria-live="polite"></p></div>
-            <div class="quiz-question" data-question="q2"><h3>2. 聲音從聲源傳到耳朵時，空氣粒子如何運動？</h3><label class="quiz-option"><input type="radio" name="q2" value="a">一路從聲源移動到耳朵</label><label class="quiz-option"><input type="radio" name="q2" value="b">在原位附近振動，把擾動傳給鄰近粒子</label><label class="quiz-option"><input type="radio" name="q2" value="c">完全不動，只有聲音移動</label><p class="quiz-feedback" aria-live="polite"></p></div>
-            <div class="quiz-question" data-question="q3"><h3>3. 聲音能不能在真空中傳播？</h3><label class="quiz-option"><input type="radio" name="q3" value="a">可以，因為聲音不需要介質</label><label class="quiz-option"><input type="radio" name="q3" value="b">不可以，真空中沒有介質傳遞聲音</label><label class="quiz-option"><input type="radio" name="q3" value="c">只有很大的聲音可以</label><p class="quiz-feedback" aria-live="polite"></p></div>
-            <div class="quiz-question" data-question="q4"><h3>4. 其他條件相同時，空氣溫度升高，聲速通常會怎樣？</h3><label class="quiz-option"><input type="radio" name="q4" value="a">增加</label><label class="quiz-option"><input type="radio" name="q4" value="b">降低</label><label class="quiz-option"><input type="radio" name="q4" value="c">保持完全不變</label><p class="quiz-feedback" aria-live="polite"></p></div>
-            <div class="quiz-actions"><button class="action" id="quiz-check" type="button">檢查答案</button><button class="secondary" id="quiz-reset" type="button">重新作答</button><span class="quiz-helper">每題答對後會顯示簡短說明。</span></div><div class="quiz-result" id="quiz-result" aria-live="polite" hidden></div>
+        <section class="quiz fireworks-quiz" id="unit-quiz" aria-labelledby="quiz-title">
+          <header class="quiz-head">
+            <span class="quiz-mark" aria-hidden="true">?</span>
+            <div class="fireworks-head-copy"><p class="fireworks-kicker">單元小測</p><h2 id="quiz-title">煙火離你多遠？</h2><p>觀察煙火的亮光與聲音時間差，估算爆炸點到你的距離。</p></div>
+          </header>
+          <div class="fireworks-body">
+            <div class="fireworks-view">
+              <div class="fireworks-scene">
+                <img src="assets/fireworks-night.webp?v=1" width="1586" height="991" alt="夜間河岸觀景台，隔著湖水望向遠處城市與山景。" loading="lazy" decoding="async">
+                <canvas aria-hidden="true"></canvas>
+                <span class="fireworks-scene-caption"></span>
+                <span class="fireworks-location"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg>觀察位置</span>
+              </div>
+              <div class="fireworks-timeline">
+                <div class="fireworks-event" id="fireworks-light" data-reached="false"><span class="fireworks-event-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3M4.2 4.2l2.1 2.1m11.4 11.4 2.1 2.1M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span>看到亮光</span></div>
+                <div class="fireworks-timer"><span class="fireworks-timer-label">時間差</span><span class="fireworks-timer-value"><output id="fireworks-timer">—</output><small> 秒</small></span><div class="fireworks-line" role="progressbar" aria-label="等待爆炸聲的進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>
+                <div class="fireworks-event" id="fireworks-sound" data-reached="false"><span class="fireworks-event-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3V9Zm13-2a7 7 0 0 1 0 10m3-13a11 11 0 0 1 0 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>聽到爆炸聲</span></div>
+              </div>
+              <div class="fireworks-controls">
+                <button class="action" id="fireworks-observe" type="button"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 7v6h-6M20 13a8 8 0 1 0-2.3 5.7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>觀察煙火</span></button>
+                <button class="fireworks-text-button" id="fireworks-new" type="button">重新挑戰</button>
+              </div>
+            </div>
+            <div class="fireworks-sidebar">
+              <section class="fireworks-panel" aria-labelledby="fireworks-conditions-title">
+                <h3 id="fireworks-conditions-title">現場條件</h3>
+                <div class="fireworks-conditions">
+                  <div class="fireworks-temperature"><svg class="fireworks-thermometer" id="fireworks-thermometer" viewBox="0 0 30 80" role="img" aria-label="現場氣溫"><rect x="5" y="1" width="20" height="78" rx="9" fill="#eef1f2" stroke="#a8b4bb"/><path d="M15 13v47" stroke="#bac5cb" stroke-width="7" stroke-linecap="round"/><rect id="fireworks-thermometer-fill" x="12.5" y="27" width="5" height="35" rx="2.5" fill="#e67f52"/><circle cx="15" cy="65" r="5" fill="#e67f52"/><path d="M20 20h3m-3 9h2m-2 9h3m-3 9h2" stroke="#9eabb3" stroke-width=".8"/></svg><output class="fireworks-temperature-value" id="fireworks-temperature">—°C</output></div>
+                  <p class="fireworks-speed">空氣聲速　<strong>約 <span id="fireworks-speed">—</span> 公尺／秒</strong></p>
+                </div>
+              </section>
+              <section class="fireworks-panel" aria-labelledby="fireworks-record-title">
+                <h3 id="fireworks-record-title">觀察紀錄</h3>
+                <div class="fireworks-record"><p id="fireworks-record-label">亮光與聲音的時間差</p><output><span id="fireworks-delay">—</span><small> 秒</small></output></div>
+              </section>
+              <section class="fireworks-panel" aria-labelledby="fireworks-estimate-title">
+                <h3 id="fireworks-estimate-title">你的估算</h3>
+                <form class="fireworks-estimate" id="fireworks-answer-form" novalidate>
+                  <p class="fireworks-formula">距離 ＝ 聲速 × 時間差</p>
+                  <label class="fireworks-input"><input id="fireworks-answer" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入距離" aria-label="估算煙火爆炸點到觀察位置的距離，單位公尺" aria-describedby="fireworks-feedback" disabled><span>公尺</span></label>
+                  <button class="action" id="fireworks-check" type="submit" disabled>核對距離</button>
+                  <details class="fireworks-hint" id="fireworks-hint"><summary>需要計算提示？</summary><p id="fireworks-hint-calculation">先觀察一發煙火，再把聲速乘以亮光與聲音的時間差。</p></details>
+                  <p class="fireworks-feedback" id="fireworks-feedback" role="status" aria-live="polite" hidden></p>
+                </form>
+              </section>
+            </div>
+            <p class="fireworks-status" id="fireworks-status" role="status" aria-live="polite"></p>
           </div>
+          <p class="fireworks-footnote">此處可忽略光的傳播時間；估算的是煙火爆炸點到觀察者的直線距離。</p>
+          <noscript><p class="fireworks-footnote">請啟用 JavaScript，才能觀察煙火、聆聽爆炸聲並核對距離。</p></noscript>
         </section>
         <a class="end-link" href="../../index.html">回到波動與聲音單元總覽</a>
       </div>
@@ -336,11 +378,6 @@
       rulerPluck.addEventListener("click",startRuler);
       rulerPluck.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();if(!event.repeat)startRuler();}});
 
-      const explanations={q1:["正確。鋼尺振動時發出聲音。","鋼尺旁的空氣不是聲音的來源；發聲的是正在振動的鋼尺。","是鋼尺的振動產生聲音，不是聲音先讓鋼尺振動。"],q2:["空氣粒子在原位附近振動，並把擾動傳給鄰近粒子。","粒子不會一路從聲源跑到耳朵。","粒子會在原位附近振動，聲音的擾動向前傳播。"],q3:["正確。聲音需要介質，真空中沒有介質傳播聲音。","聲音必須透過介質傳播。","聲音大小不會改變真空中缺少介質這件事。"],q4:["正確。在一般空氣條件下，溫度升高，聲速通常增加。","空氣溫度升高時，聲速通常增加。","空氣溫度會影響聲速。"]};
-      const answers={q1:"a",q2:"b",q3:"b",q4:"a"},quizResult=document.querySelector("#quiz-result");
-      document.querySelector("#quiz-check").addEventListener("click",()=>{let score=0,answered=0;Object.entries(answers).forEach(([name,correct])=>{const selected=document.querySelector(`input[name="${name}"]:checked`),feedback=document.querySelector(`[data-question="${name}"] .quiz-feedback`);if(!selected){feedback.textContent="請選一個答案。";return;}answered++;const right=selected.value===correct;if(right)score++;feedback.textContent=explanations[name][selected.value===correct?0:selected.value==="b"?1:selected.value==="c"?2:0];feedback.style.color=right?"#176b53":"#755a2d";});quizResult.hidden=false;quizResult.textContent=answered<4?`已作答 ${answered} 題，答對 ${score} 題。完成所有題目後再檢查一次。`:`答對 ${score} / 4 題。${score===4?"太好了，你已掌握聲音產生、傳播與聲速的重點。":"可以回到對應區塊，再看一次相關示範後重答。"}`;});
-      document.querySelector("#quiz-reset").addEventListener("click",()=>{document.querySelectorAll(".quiz-question input").forEach(input=>input.checked=false);document.querySelectorAll(".quiz-feedback").forEach(node=>{node.textContent="";node.style.color="";});quizResult.hidden=true;});
-
       const links=[...document.querySelectorAll(".route a[href^='#card-'],.route a[href='#unit-quiz']")],targets=links.map(link=>document.querySelector(link.getAttribute("href"))).filter(Boolean);
       const activate=id=>links.forEach(link=>{if(link.hash===`#${id}`){link.setAttribute("aria-current","step");link.scrollIntoView({block:"nearest",inline:"nearest"});}else link.removeAttribute("aria-current");});
       if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)activate(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});targets.forEach(target=>observer.observe(target));}
@@ -349,5 +386,6 @@
   <script type="module" src="assets/sound-propagation.js?v=4"></script>
   <script type="module" src="assets/vacuum-lab.js?v=6"></script>
   <script type="module" src="assets/sound-speed.mjs?v=fixed-22"></script>
+  <script type="module" src="assets/fireworks-quiz.mjs?v=1"></script>
 </body>
 </html>

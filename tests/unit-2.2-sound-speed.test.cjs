@@ -175,11 +175,10 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('#air-temperature, #temp-dot, #temperature-speed').count(), 0);
     const duplicates = await page.locator('[id]').evaluateAll(nodes => nodes.map(n => n.id).filter(id => document.querySelectorAll(`[id="${id}"]`).length !== 1));
     assert.deepEqual(duplicates, []);
-    await page.locator('#quiz-check').click();
-    assert.match(await page.locator('#quiz-result').textContent(), /已作答 0 題/);
-    for (const [name,value] of [['q1','a'],['q2','b'],['q3','b'],['q4','a']]) await page.locator(`[name=${name}][value=${value}]`).check();
-    await page.locator('#quiz-check').click(); assert.match(await page.locator('#quiz-result').textContent(), /答對 4 \/ 4 題/);
-    await page.locator('#quiz-reset').click(); assert.equal(await page.locator('#quiz-result').isHidden(), true);
+    assert.equal(await page.locator('#quiz-title').textContent(), '煙火離你多遠？');
+    assert.equal(await page.locator('#fireworks-observe').isEnabled(), true);
+    assert.equal(await page.locator('#fireworks-check').isDisabled(), true);
+    assert.equal(await page.locator('#unit-quiz .quiz-question, #quiz-check, #quiz-reset').count(), 0);
     await page.locator('.route a[href="#card-04"]').click(); assert.equal(new URL(page.url()).hash, '#card-04');
   });
 

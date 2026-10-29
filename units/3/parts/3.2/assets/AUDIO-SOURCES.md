@@ -1,5 +1,24 @@
 # 聲音來源與處理
 
+## 單元小測：單發煙火爆炸聲
+
+- 作品：FRWKRec_Single Firework With City Reverb_Jaku5.wav。
+- 作者：jakubp.jp（Freesound）。
+- 作品頁：https://freesound.org/people/jakubp.jp/sounds/552699/
+- 公開高品質預聽檔：https://cdn.freesound.org/previews/552/552699_3921235-hq.mp3
+- 授權：CC0 1.0，http://creativecommons.org/publicdomain/zero/1.0/；可免署名使用。
+- 查閱日期：2026-10-29（Asia/Taipei）。作品為單次煙火與城市回響的實錄。
+- 本地 firework-burst.wav：取原預聽檔 0.061–3.261 秒，移除爆炸前的低聲背景，保留單次爆炸及衰減回響。48 kHz、PCM16、雙聲道，3.2 秒。整理極低頻與高頻、適度壓縮及正規化響度，起音 1 ms／結尾 350 ms 淡化。
+- 解碼檢查：RMS 約 0.0638、峰值約 0.5813，起音 20 ms 內峰值約 0.2764；聲音清楚、無削波。播放直接輸出至 Web Audio 目的端，無額外音量滑桿。
+- 爆炸聲依觀察開始後的隨機時間差預約播放；原錄音不含額外等待段，避免把音檔前導空白算成未顯示的延遲。
+
+重製命令：
+
+    ffmpeg -i source.mp3 -af 'atrim=start=0.061:end=3.261,asetpts=PTS-STARTPTS,highpass=f=45,lowpass=f=8500,acompressor=threshold=0.12:ratio=2.5:attack=1:release=130,loudnorm=I=-17:TP=-1.5:LRA=7,afade=t=in:d=0.001,afade=t=out:st=2.85:d=0.35' -ar 48000 -ac 2 -c:a pcm_s16le firework-burst.wav
+
+- 原預聽 MP3 SHA-256：750405aee4544a7deb850f07f8eb005b8cc3aeb72c119963634c99b13878c6fb
+- 衍生 WAV SHA-256：74ff4e7b8ef39d2610ccb49aa69fcb0e4a304c6c7b2a4266e9f8a0d0c46b113f
+
 ## 鋼尺
 
 - 作品：ruler twanging.wav
