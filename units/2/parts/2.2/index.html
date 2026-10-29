@@ -111,7 +111,7 @@
   </style>
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=desktop-compact-7">
-  <link rel="stylesheet" href="assets/ppm-scale.css?v=pool-8">
+  <link rel="stylesheet" href="assets/ppm-scale.css?v=ratio-9">
   <link rel="stylesheet" href="assets/investigation.css?v=layout-2">
 </head>
 <body>
@@ -135,7 +135,7 @@
         <a href="#s2"><b>02</b><span>鹽溶在水裡，要怎麼分離出來？</span></a>
         <a href="#s3"><b>03</b><span>一滴綠色墨水，會分出不同色帶嗎？</span></a>
         <a href="#s5"><b>04</b><span>自己配糖水，濃度是多少？</span></a>
-        <a href="#s6"><b>05</b><span>泳池水中的餘氯有多少？</span></a>
+        <a href="#s6"><b>05</b><span>一整池水，只加這一點，是多少 ppm？</span></a>
         <a href="#unit-quiz" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
       </div>
     </nav>
@@ -227,31 +227,29 @@
 <p class="mix-status" id="mix-status" role="status" aria-live="polite"></p></div></section>
 
 <section class="lesson-card" id="s6">
-<div class="card-side"><span class="card-number">05</span><h3>生活中的 ppm</h3><span class="card-role">從餘氯檢測認識微量濃度</span></div>
+<div class="card-side"><span class="card-number">05</span><h3>微量比例與 ppm</h3><span class="card-role">看整池水與少量溶質的質量差距</span></div>
 <div class="card-main">
-<h2>泳池水中的餘氯有多少？</h2>
-<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>泳池水看起來很清澈，裡面還有多少消毒用的氯呢？</p></div>
-<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>水中殘留的氯叫作餘氯。取一點水樣，加 DPD 試劑再比色，就能估讀含量；這種微量含量常用 ppm 表示。</p></div>
-<div class="ppm-observation" id="ppm-lab" data-ready="loading" data-phase="fresh" aria-labelledby="ppm-heading">
-<h3 id="ppm-heading">看起來一樣清澈，讀值也一樣嗎？</h3>
-<div class="pool-toolbar"><div class="pool-samples" role="group" aria-label="選擇新取的泳池水樣"><button type="button" data-pool-sample="A" aria-pressed="true">水樣 A</button><button type="button" data-pool-sample="B" aria-pressed="false">水樣 B</button><button type="button" data-pool-sample="C" aria-pressed="false">水樣 C</button></div><button type="button" id="pool-reset" disabled>重新取樣</button></div>
-<div class="pool-workbench">
-<div class="pool-photo"><canvas id="pool-canvas" width="1536" height="1024" role="img" aria-label="池邊取回的清澈水樣與DPD試劑包"></canvas><span class="pool-sample-label" id="pool-sample-label">池水樣本 A</span><button class="pool-reagent" id="pool-reagent" type="button" aria-label="向水樣加入DPD試劑並混合顯色" disabled><span>＋ 加入 DPD 試劑</span></button></div>
-<aside class="pool-reference" aria-label="餘氯教學比色卡"><h4>餘氯比色卡</h4><p>mg/L</p><ol><li data-pool-level="0"><i style="--swatch:#fff9fb"></i><span>0</span></li><li data-pool-level="0.5"><i style="--swatch:#fae0eb"></i><span>0.5</span></li><li data-pool-level="1"><i style="--swatch:#f4b5d0"></i><span>1</span></li><li data-pool-level="2"><i style="--swatch:#eb86b4"></i><span>2</span></li><li data-pool-level="3"><i style="--swatch:#df5a96"></i><span>3</span></li></ol></aside>
-</div>
-<div class="pool-readout"><span>檢測讀值</span><strong id="pool-reading">加入試劑後，讀取餘氯含量</strong></div>
-<p class="pool-reaction-note">粉紅色來自餘氯與 DPD 試劑的顯色反應。色階與顯色速度為教學示意。</p>
-<p id="ppm-status" class="pool-status" role="status" aria-live="polite"></p><button id="pool-retry" type="button" hidden>重新載入</button>
-<div class="pool-unit-note"><strong>mg/L 和 ppm 怎麼接起來？</strong><p>水質檢測常用 mg/L（每公升含多少毫克）。稀水溶液的密度約為 1 公斤／公升，因此 mg/L 的數值近似質量比 ppm。下方以總質量 1 公斤的水樣示範換算。</p></div>
+<h2>一整池水，只加這一點，是多少 ppm？</h2>
+<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這麼大一池水，只加入這一點溶質，濃度要怎麼表示？</p></div>
+<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先把池水和溶質都換成克，算出溶質占溶液總質量的比例，再乘上一百萬，就是 ppm。</p></div>
+<div class="ppm-observation" id="ppm-lab" data-ready="loading" aria-label="整池水與微量溶質的ppm計算">
+<figure class="pool-volume-figure">
+<div class="pool-volume-scene"><img id="pool-volume-image" src="assets/ppm-whole-pool.webp" width="1672" height="941" alt="一座長10公尺、寬5公尺、水深2公尺的長方形泳池示意，池水量100000公升。"><div class="pool-volume-fallback" id="pool-volume-fallback" hidden><p>泳池圖片暫時無法載入，容量與計算仍可閱讀。</p><button id="pool-image-retry" type="button">重新載入圖片</button></div><div class="pool-water-quantity"><span>整池水量</span><strong>100,000 <small>公升</small></strong></div><div class="pool-solute-quantity"><span>加入的溶質</span><strong data-pool="solute">100 克</strong><small>可完全溶解的示意溶質</small></div></div>
+<figcaption>長 10 公尺 × 寬 5 公尺 × 水深 2 公尺 ＝ 100 立方公尺 ＝ 100,000 公升</figcaption>
+</figure>
+<div class="pool-dose-controls"><span>改變加入的溶質</span><div role="group" aria-label="選擇加入的溶質質量"><button type="button" data-pool-dose="50" aria-pressed="false">50 克</button><button type="button" data-pool-dose="100" aria-pressed="true">100 克</button><button type="button" data-pool-dose="200" aria-pressed="false">200 克</button></div></div>
+<div class="pool-mass-comparison"><div class="pool-water-mass"><span>池水質量</span><strong>100,000,000 <small>克</small></strong><small>100,000 公升 ≈ 100,000 公斤</small></div><span class="pool-mass-plus" aria-hidden="true">＋</span><div class="pool-added-mass"><span>溶質質量</span><strong data-pool="solute">100 克</strong><small>與池水使用相同單位</small></div></div>
+<p class="pool-total-line">溶液總質量 ＝ 池水 ＋ 溶質 ＝ <strong data-pool="total">100,000,100 克</strong></p>
+<p class="pool-volume-note">水的密度以 1 公斤／公升估算；本例假設溶質完全溶解、沒有損失，圖片為情境示意。</p>
 <section class="ppm-explanation" id="ppm-percent-bridge" aria-labelledby="ppm-bridge-title">
-<h4 id="ppm-bridge-title">微量時，ppm 更好讀</h4><p class="ppm-explain-subtitle">沿用同一個濃度概念，換一種表示方式。</p>
-<div class="ppm-shared"><p>兩者都先算同一個比例</p><div class="ppm-ratio" role="math" aria-label="共同的質量比：溶質質量除以溶液總質量"><span class="fraction"><span class="num">溶質質量</span><span class="den">溶液總質量</span></span></div>
-<dl class="ppm-notations"><div><dt>重量百分濃度</dt><dd><span class="ppm-basis">每 100 份中的份量</span><b class="ppm-factor">× 100%</b></dd></div><div class="ppm-notation-active"><dt>ppm</dt><dd><span class="ppm-basis">每 100 萬份中的份量</span><b class="ppm-factor">× 1,000,000</b></dd></div></dl></div>
-<div class="ppm-example"><h4>質量比示例：1 公斤水樣含<span data-pool-example-mass>1 毫克</span>餘氯</h4><div class="ppm-equivalence" role="math" aria-label="0.0001%等於1ppm"><span data-ppm="percent">0.0001%</span><span class="ppm-equals">＝</span><b data-ppm="ppm">1 ppm</b></div>
-<div class="ppm-takeaway"><span aria-hidden="true">✓</span><strong>濃度沒有變，微量時用 ppm 更容易閱讀。</strong></div>
-<div class="ppm-worked" role="math" aria-label="一毫克除以一百萬毫克再乘以一百萬，等於1ppm"><span class="fraction"><span class="num" data-ppm="numerator">1 毫克</span><span class="den">1,000,000 毫克</span></span><span class="ppm-worked-result">× 1,000,000 ＝ 1 ppm</span></div>
-<p class="ppm-definition"><b>1 ppm</b> 就是百萬分之一：每 <b>1 公斤溶液</b>含有 <b>1 毫克溶質</b>。</p>
-<p class="ppm-unit-note">溶液總質量包含溶質；計算時分子與分母用相同質量單位。</p></div></section>
+<h3 id="ppm-bridge-title">先算質量比，再換成每一百萬份</h3>
+<p class="ppm-explain-subtitle">分子、分母都用克；分母包含整池水與加入的溶質。</p>
+<div class="ppm-shared"><p>ppm 計算公式</p><div class="pool-ppm-formula" role="math" aria-label="ppm等於溶質質量除以溶液總質量，再乘以一百萬"><span>ppm ＝</span><span class="fraction"><span class="num">溶質質量</span><span class="den">溶液總質量</span></span><span>× 1,000,000</span></div><p class="pool-formula-meaning">1 ppm 表示溶質占總質量的百萬分之一。</p></div>
+<div class="ppm-example"><h4>代入這座泳池的數值</h4><div class="pool-worked-formula" role="math" id="pool-worked-formula" aria-label="100克除以100000100克，再乘以一百萬，約為1ppm"><span class="fraction"><span class="num" data-ppm="numerator">100 克</span><span class="den" data-ppm="denominator">100,000,100 克</span></span><span>× 1,000,000</span></div><strong class="pool-ppm-result" data-ppm="ppm">≈ 1 ppm</strong><p class="pool-million-meaning" data-pool="meaning">每 100 萬份溶液中，約 1 份是溶質。</p></div>
+<div class="pool-notation-comparison"><p>同一個質量比例，換一種表示方式</p><div><span>重量百分濃度</span><strong data-ppm="percent">≈ 0.0001%</strong></div><div><span>ppm</span><strong data-pool="ppm-short">≈ 1 ppm</strong></div></div>
+<p class="pool-ppm-takeaway">當溶質占總質量的比例很小時，用 ppm 表示更容易閱讀。計算仍是同一個質量比，結果已四捨五入。</p>
+</section>
+<p id="ppm-status" class="ppm-status" role="status" aria-live="polite"></p>
 </div>
 </div></section>
       <section class="unit-quiz investigation-card" id="unit-quiz" aria-labelledby="invest-title">
@@ -340,7 +338,7 @@
   <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
-  <script type="module" src="assets/ppm-pool.js?v=pool-1"></script>
+  <script type="module" src="assets/ppm-pool.js?v=ratio-2"></script>
   <script type="module" src="assets/investigation.js?v=review-5"></script>
 </body>
 </html>

@@ -9,7 +9,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  await page.clock.install({time:new Date('2026-10-28T00:00:00Z')});await page.goto(url+'#s5',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='true');await page.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));
  const lab=page.locator('#mix-lab'),spoon=page.locator('#mix-spoon'),pitcher=page.locator('#mix-pitcher');
  const state=()=>lab.evaluate(e=>({sugar:Number(e.dataset.sugar),water:Number(e.dataset.water),total:Number(e.dataset.total),percent:Number(e.dataset.percent),activity:e.dataset.activity}));
- const ppm=()=>page.locator('#ppm-lab').evaluate(e=>({ppm:Number(e.dataset.ppm),total:Number(e.dataset.totalMg)}));
+ const ppm=()=>page.locator('#ppm-lab').evaluate(e=>({solute:Number(e.dataset.soluteG),total:Number(e.dataset.totalG),ppm:Number(e.dataset.ppm)}));
  const advance=async ms=>{await page.clock.runFor(20);await page.clock.fastForward(ms);};
  const fresh=()=>page.locator('#mix-reset').click();
  const enter=async(kind,value)=>{await page.locator(`#mix-${kind}-input`).click();await page.locator('#mass-input').fill(value);await page.locator('#mass-form button[type=submit]').click();};
@@ -23,7 +23,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   result.micro.forEach((v,n)=>{assert.equal(v.totalMg,1000000);assert.equal(v.solventMg+n,1000000);assert.equal(v.ppm,n);assert.equal(v.microPercent,n/10000);});
  });
  await t.test('initial approved scene has no sliders or old quiz, and uses official avatars',async()=>{
-  assert.deepEqual(await state(),{sugar:5,water:95,total:100,percent:5,activity:'idle'});assert.deepEqual(await ppm(),{ppm:1,total:1000000});
+  assert.deepEqual(await state(),{sugar:5,water:95,total:100,percent:5,activity:'idle'});assert.deepEqual(await ppm(),{solute:100,total:100000100,ppm:100/100000100*1000000});
   assert.equal(await page.locator('#s5 input[type=range],#solution-q1,#check-concentration,#reset-concentration').count(),0);
   assert.equal(await page.locator('#mix-canvas').count(),1);assert.match(await page.locator('#s5 .speaker').first().evaluate(e=>getComputedStyle(e,'::before').backgroundImage),/shared-assets\/characters\/dialogue-character-avatars/);
   await advance(2000);assert.equal((await state()).sugar,5);
@@ -118,13 +118,13 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   }
   await page.setViewportSize({width:1440,height:1100});await fresh();
  });
- await t.test('the pool-water ppm activity works independently of the upper recipe',async()=>{
-  await fresh();await page.locator('#pool-reset').click();await page.locator('#pool-reagent').click();assert.deepEqual(await ppm(),{ppm:1,total:1000000});assert.equal((await state()).sugar,5);assert.equal((await state()).water,95);
-  await fresh();assert.deepEqual(await ppm(),{ppm:1,total:1000000});
+ await t.test('the whole-pool mass ratio works independently of the upper recipe',async()=>{
+  await fresh();await page.locator('[data-pool-dose=100]').click();assert.deepEqual(await ppm(),{solute:100,total:100000100,ppm:100/100000100*1000000});assert.equal((await state()).sugar,5);assert.equal((await state()).water,95);
+  await fresh();assert.deepEqual(await ppm(),{solute:100,total:100000100,ppm:100/100000100*1000000});
  });
  await t.test('native controls also operate by real touch',async()=>{
   await fresh();await spoon.tap();await advance(3000);assert.equal((await state()).sugar,6);
-  await page.locator('#pool-reset').click();await page.locator('#pool-reagent').tap();assert.equal((await ppm()).ppm,1);
+  await page.locator('[data-pool-dose=100]').tap();assert.ok(Math.abs((await ppm()).ppm-1)<.00001);
   await page.locator('#mix-water-input').tap();assert.equal(await page.locator('#mass-dialog').isVisible(),true);await page.locator('#mass-cancel').tap();
  });
  await t.test('all content remains inside its column on desktop, tablet and mobile, including the physical ppm scene',async()=>{
@@ -140,7 +140,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  });
  await t.test('loading failure reports an error but ppm and other lesson blocks remain usable',async()=>{
   for(const asset of ['concentration-tools.webp','concentration-workbench-empty.webp','concentration-beaker.webp']){
-   const failed=await browser.newPage();try{await failed.route('**/'+asset,r=>r.abort());await failed.goto(url,{waitUntil:'domcontentloaded'});await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);assert.equal(await failed.locator('.mix-target:disabled').count(),3);await failed.locator('#pool-reagent').click();assert.equal(await failed.locator('#ppm-lab').getAttribute('data-ppm'),'1');await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.ready==='true');assert.equal(await failed.locator('#evap-visual').isEnabled(),true);await failed.locator('[data-evap-step="2"]').click();await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.step==='2');}finally{await failed.close();}
+   const failed=await browser.newPage();try{await failed.route('**/'+asset,r=>r.abort());await failed.goto(url,{waitUntil:'domcontentloaded'});await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);assert.equal(await failed.locator('.mix-target:disabled').count(),3);await failed.locator('[data-pool-dose=100]').click();assert.ok(Math.abs(Number(await failed.locator('#ppm-lab').getAttribute('data-ppm'))-1)<.00001);await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.ready==='true');assert.equal(await failed.locator('#evap-visual').isEnabled(),true);await failed.locator('[data-evap-step="2"]').click();await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.step==='2');}finally{await failed.close();}
   }
  });
 });

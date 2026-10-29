@@ -172,47 +172,61 @@
  #s6 .ppm-unit-note {margin-top:10px;padding-top:8px;font-size:.75rem;line-height:1.6;color:#64736d;}
 }
 
-/* Pool-water DPD comparison activity. */
-#s6 .pool-toolbar {display:flex;justify-content:space-between;gap:10px;align-items:center;margin:12px 0;}
-#s6 .pool-samples {display:flex;gap:6px;}
-#s6 .pool-toolbar button,#s6 #pool-retry {padding:6px 11px;border:1px solid #cbdacf;border-radius:8px;background:#fff;color:#3e6050;font:inherit;font-size:.82rem;cursor:pointer;}
-#s6 .pool-samples button[aria-pressed="true"] {background:#176b53;border-color:#176b53;color:#fff;}
-#s6 .pool-toolbar button:hover {border-color:#69977c;}
-#s6 .pool-toolbar button:disabled {opacity:.5;cursor:wait;}
-#s6 .pool-workbench {display:grid;grid-template-columns:minmax(0,1fr) 106px;gap:12px;align-items:center;}
-#s6 .pool-photo {position:relative;min-width:0;overflow:hidden;border:1px solid #d6dfd5;border-radius:13px;background:#eee8db;aspect-ratio:3/2;}
-#s6 #pool-canvas {display:block;width:100%;height:100%;}
-#s6 .pool-sample-label {position:absolute;left:40%;top:7%;transform:translateX(-50%);padding:3px 8px;border:1px solid #d4dfd5;border-radius:6px;background:#fffdf6ed;color:#365d49;font-size:.74rem;white-space:nowrap;}
-#s6 .pool-reagent {position:absolute;left:65%;top:68%;width:29%;height:28%;border:0;border-radius:12px;background:transparent;cursor:pointer;color:#176b53;}
-#s6 .pool-reagent span {position:absolute;left:50%;bottom:0;transform:translateX(-50%);padding:4px 8px;border:1px solid #9db6a5;border-radius:7px;background:#fffffff2;white-space:nowrap;font-size:.75rem;font-weight:700;}
-#s6 .pool-reagent:hover:not(:disabled) {outline:1px solid #69977c;background:#d4e8da25;}
-#s6 .pool-reagent:disabled {cursor:default;}
-#s6 .pool-reagent:disabled span {color:#64736d;}
-#s6 .pool-reference {min-width:0;padding:12px 7px;border:1px solid #d6e0d5;border-radius:11px;background:#fffefa;}
-#s6 .pool-reference h4 {margin:0;font-size:.8rem;line-height:1.5;text-align:center;color:#355344;}
-#s6 .pool-reference>p {margin:2px 0 9px;text-align:center;color:#6d7f73;font-size:.75rem;}
-#s6 .pool-reference ol {display:grid;gap:5px;margin:0;padding:0;list-style:none;}
-#s6 .pool-reference li {display:flex;align-items:center;gap:7px;padding:4px;border:1px solid transparent;border-radius:6px;font-size:.8rem;}
-#s6 .pool-reference i {display:block;width:38px;height:27px;flex:none;border:1px solid #d9cdd2;border-radius:4px;background:var(--swatch);}
-#s6 .pool-reference li.is-match {border-color:#4e8966;background:#eef6ed;color:#176b53;font-weight:750;}
-#s6 .pool-readout {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;margin-top:12px;padding:10px 13px;border:1px solid #d1dfd5;border-radius:9px;background:#f1f7ef;}
-#s6 .pool-readout>span {font-size:.78rem;color:#61776a;}
-#s6 .pool-readout strong {font-size:1rem;color:#176b53;font-variant-numeric:tabular-nums;}
-#s6 .pool-reaction-note {margin:7px 0 0;font-size:.73rem;line-height:1.65;color:#6b7a70;}
-#s6 .pool-status {min-height:1.6em;margin:7px 0 0;font-size:.78rem;line-height:1.65;color:#4c6757;}
-#s6 .pool-status.error {color:#934d35;}
-#s6 .pool-unit-note {margin-top:14px;padding:11px 13px;border-left:3px solid #87ab94;border-radius:0 8px 8px 0;background:#f2f6ef;}
-#s6 .pool-unit-note strong {font-size:.84rem;color:#325b44;}
-#s6 .pool-unit-note p {margin:4px 0 0;font-size:.8rem;line-height:1.7;color:#5a7061;}
-@media(max-width:760px) {
- #s6 .pool-workbench {grid-template-columns:1fr;gap:9px;}
- #s6 .pool-reference ol {grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;}
- #s6 .pool-reference li {flex-direction:column;gap:3px;}
- #s6 .pool-reference h4,#s6 .pool-reference>p {display:inline;font-size:.76rem;}
- #s6 .pool-reference>p {margin-left:8px;}
- #s6 .pool-reference ol {margin-top:8px;}
- #s6 .pool-toolbar button {padding:6px 8px;font-size:.76rem;}
- #s6 .pool-samples {gap:4px;}
- #s6 .pool-reagent span {font-size:.68rem;padding:4px 6px;}
- #s6 .pool-readout strong {font-size:.9rem;}
+/* Whole-pool mass comparison and ppm calculation. */
+#s6 .pool-volume-figure {margin:0;}
+#s6 .pool-volume-scene {position:relative;overflow:hidden;border:1px solid #d3dfd9;border-radius:12px;aspect-ratio:16/9;background:#d5ecec;}
+#s6 .pool-volume-scene>img {display:block;width:100%;height:100%;object-fit:cover;}
+#s6 .pool-water-quantity,#s6 .pool-solute-quantity {position:absolute;display:grid;gap:2px;padding:8px 11px;border:1px solid #d4dfd5;border-radius:8px;background:#fffef6f2;color:#466253;box-shadow:0 2px 8px #1f3d3010;}
+#s6 .pool-water-quantity {top:12px;left:12px;}
+#s6 .pool-solute-quantity {right:12px;bottom:12px;}
+#s6 .pool-water-quantity>span,#s6 .pool-solute-quantity>span {font-size:.74rem;}
+#s6 .pool-water-quantity strong,#s6 .pool-solute-quantity strong {font-size:1.2rem;line-height:1.4;font-variant-numeric:tabular-nums;color:#1e654e;}
+#s6 .pool-water-quantity strong small {font-size:.76rem;font-weight:500;}
+#s6 .pool-solute-quantity>small {font-size:.67rem;color:#738177;}
+#s6 .pool-volume-figure figcaption {margin:7px 0 0;color:#5e7468;font-size:.77rem;line-height:1.65;}
+#s6 .pool-dose-controls {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin:13px 0;}
+#s6 .pool-dose-controls>span {font-size:.84rem;color:#4b6557;}
+#s6 .pool-dose-controls>div {display:flex;gap:6px;}
+#s6 [data-pool-dose] {padding:6px 14px;border:1px solid #bdcfc2;border-radius:8px;background:#fff;color:#345a46;font:inherit;font-size:.84rem;cursor:pointer;}
+#s6 [data-pool-dose][aria-pressed="true"] {border-color:#176b53;background:#176b53;color:#fff;}
+#s6 [data-pool-dose]:hover {box-shadow:0 0 0 2px #176b5317;}
+#s6 .pool-mass-comparison {display:grid;grid-template-columns:minmax(0,1.5fr) auto minmax(0,1fr);align-items:center;gap:10px;}
+#s6 .pool-mass-comparison>div {display:grid;gap:5px;min-width:0;padding:12px;border:1px solid #d7e3df;border-radius:10px;background:#f0f6f6;}
+#s6 .pool-mass-comparison>.pool-added-mass {border-color:#dce3d0;background:#f6f8ed;}
+#s6 .pool-mass-comparison>div>span {font-size:.77rem;color:#5d7366;}
+#s6 .pool-mass-comparison strong {font-size:1.4rem;line-height:1.4;font-variant-numeric:tabular-nums;color:#215a47;overflow-wrap:anywhere;}
+#s6 .pool-mass-comparison strong small {font-size:.82rem;font-weight:500;}
+#s6 .pool-mass-comparison>div>small {font-size:.71rem;color:#728277;}
+#s6 .pool-mass-plus {font-size:1.25rem;color:#8c9f91;}
+#s6 .pool-total-line {margin:10px 0 0;padding:9px 11px;border-radius:8px;background:#edf4ee;color:#4d6857;font-size:.83rem;line-height:1.7;}
+#s6 .pool-total-line strong {color:#176b53;white-space:nowrap;font-variant-numeric:tabular-nums;}
+#s6 .pool-volume-note {margin:6px 0 0;color:#6c7c72;font-size:.73rem;line-height:1.65;}
+#s6 .pool-ppm-formula,#s6 .pool-worked-formula {display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 5px;font-size:.84rem;line-height:1.6;color:#325842;}
+#s6 .pool-ppm-formula>.fraction,#s6 .pool-worked-formula>.fraction {margin:0;}
+#s6 .ppm-shared>.pool-formula-meaning {margin:14px 0 0;color:#617565;font-size:.79rem;font-weight:500;line-height:1.65;}
+#s6 .pool-worked-formula {margin-top:12px;}
+#s6 .pool-ppm-result {display:block;margin-top:12px;color:#176b53;font-size:1.75rem;line-height:1.25;font-variant-numeric:tabular-nums;}
+#s6 .pool-million-meaning {margin:9px 0 0;color:#5e7465;font-size:.78rem;line-height:1.65;}
+#s6 .pool-notation-comparison {grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;}
+#s6 .pool-notation-comparison>p {grid-column:1/-1;margin:0;color:#526d5d;font-size:.82rem;}
+#s6 .pool-notation-comparison>div {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:5px;padding:10px 12px;border:1px solid #dce5da;border-radius:9px;background:#f6f8f2;}
+#s6 .pool-notation-comparison span {font-size:.78rem;color:#65796d;}
+#s6 .pool-notation-comparison strong {font-size:1.1rem;color:#176b53;font-variant-numeric:tabular-nums;}
+#s6 .pool-ppm-takeaway {grid-column:1/-1;margin:0;padding:10px 12px;border-left:3px solid #87ab94;border-radius:0 8px 8px 0;background:#edf4eb;color:#4f6a59;font-size:.8rem;line-height:1.7;}
+@media(max-width:680px) {
+ #s6 .pool-water-quantity,#s6 .pool-solute-quantity {padding:5px 7px;}
+ #s6 .pool-water-quantity {top:7px;left:7px;}
+ #s6 .pool-solute-quantity {right:7px;bottom:7px;}
+ #s6 .pool-water-quantity strong,#s6 .pool-solute-quantity strong {font-size:1rem;}
+ #s6 .pool-solute-quantity>small {font-size:.6rem;}
+ #s6 .pool-mass-comparison {grid-template-columns:minmax(0,1.4fr) auto minmax(0,1fr);gap:5px;}
+ #s6 .pool-mass-comparison>div {padding:9px 7px;}
+ #s6 .pool-mass-comparison strong {font-size:1rem;}
+ #s6 .pool-mass-comparison>div>small {font-size:.64rem;}
+ #s6 .pool-notation-comparison>div {padding:8px;}
+ #s6 .pool-notation-comparison strong {font-size:.95rem;}
 }
+#s6 .pool-volume-fallback {position:absolute;inset:28% 12%;display:grid;align-content:center;justify-items:center;text-align:center;color:#456459;font-size:.84rem;}
+#s6 .pool-volume-fallback[hidden],#s6 .pool-volume-scene>img[hidden] {display:none;}
+#s6 .pool-volume-fallback p {margin:0 0 8px;}
+#s6 #pool-image-retry {padding:6px 10px;border:1px solid #9bb9a9;border-radius:7px;background:#fff;color:#176b53;font:inherit;cursor:pointer;}
