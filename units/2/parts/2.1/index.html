@@ -275,11 +275,12 @@
     .speed-run-status output { color:var(--ink); font-weight:750; font-variant-numeric:tabular-nums; }
     .speed-progress { height:6px; margin-top:7px; overflow:hidden; border-radius:999px; background:#e3e9e2; }
     .speed-progress span { display:block; width:0; height:100%; border-radius:inherit; background:var(--orange); transition:width .08s linear; }
-    .speed-model-note { margin:12px 0 0; padding:10px 12px; border:1px solid #d7e1dd; border-radius:10px; background:#f1f5ef; color:#4b6058; }
-    .speed-model-note h4 { margin:0 0 5px; font-size:.94rem; font-weight:400; line-height:1.65; }
-    .speed-model-note p { margin:0; font-size:.9rem; line-height:1.7; }
-    .speed-model-note strong { color:#315a46; font-weight:750; }
-    .speed-model-note .speed-model-reality { margin-top:6px; }
+    .speed-model-note { margin:10px 0 0; padding:8px 12px; border:1px solid #c58c31; border-left:4px solid #b7791f; border-radius:10px; background:#fff5d9; color:#593d17; }
+    .speed-model-note h4 { display:flex; align-items:center; gap:6px; margin:0 0 3px; color:#70440b; font-size:.94rem; font-weight:750; line-height:1.5; }
+    .speed-model-note h4 svg { flex:0 0 17px; width:17px; height:17px; }
+    .speed-model-note p { margin:0; font-size:.9rem; line-height:1.55; }
+    .speed-model-note strong { color:#70440b; font-weight:750; }
+    .speed-model-note .speed-model-reality { margin-top:3px; }
     @container (max-width:520px) { .speed-control-grid { grid-template-columns:1fr; gap:0; } .speed-control { display:grid; grid-template-columns:minmax(56px,.45fr) minmax(0,1fr); align-items:center; gap:3px 10px; padding:7px 0; border-right:0; border-bottom:1px solid var(--line); } .speed-control:last-child { border-bottom:0; } .speed-control-title { grid-row:1 / span 2; } .speed-stepper { margin:0; } .speed-step-note { grid-column:2; margin:0; text-align:center; } }
     @media (max-width:760px) { .speed-run-controls { grid-template-columns:1fr; } .speed-run-controls .action { width:100%; } }
     @media (max-width:520px) { #card-08 .speed-visual { padding:7px 5px; } #card-08 .speed-visual text { font-size:22px; } }
@@ -1102,9 +1103,9 @@
                 </svg>
               </figure>
               <aside class="speed-model-note" aria-labelledby="speed-model-note-title">
-                <h4 id="speed-model-note-title"><strong>理想化模型</strong>：頻率與波長可分開設定</h4>
-                <p>此處用來探索 v＝f × λ 的關係。繩子變色，表示切換到不同的波速條件。</p>
-                <p class="speed-model-reality">真實繩子若拉緊程度等條件不變：改變頻率時，波長會跟著改變，<strong>波速維持不變</strong>。</p>
+                <h4 id="speed-model-note-title"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 22 21H2L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.5" r="1" fill="currentColor"/></svg>理想化模型</h4>
+                <p>頻率、波長可分開設定；變色代表不同波速條件。</p>
+                <p class="speed-model-reality">真實繩子拉緊程度等條件不變時，頻率改變會使波長改變，<strong>波速不變</strong>。</p>
               </aside>
               <div class="speed-run-controls">
                 <button class="action" id="speed-send-wave" type="button">讓波源振動一次</button>
