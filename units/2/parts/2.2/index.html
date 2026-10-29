@@ -112,7 +112,7 @@
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=desktop-compact-7">
   <link rel="stylesheet" href="assets/ppm-scale.css?v=conversion-trimmed-1">
-  <link rel="stylesheet" href="assets/investigation.css?v=layout-2">
+  <link rel="stylesheet" href="assets/investigation.css?v=bottle-sampling-1">
 </head>
 <body>
   <header class="shell masthead">
@@ -284,11 +284,11 @@
           <div class="invest-lab" id="invest-lab" data-ready="loading" data-busy="false">
             <div class="invest-stage">
               <div class="invest-picture" id="invest-picture">
-                <canvas id="invest-canvas" width="1536" height="1024" role="img" aria-label="未知混合物樣本瓶、空燒杯與收好的器材盤"></canvas>
+                <canvas id="invest-canvas" width="1536" height="1024" role="img" aria-label="未知樣本 X 樣本瓶、空燒杯與收好的器材盤；點瓶身取樣"></canvas>
                 <span class="invest-stage-title">實驗桌</span>
                 <button type="button" class="invest-reset" id="invest-reset" aria-label="重新開始未知樣本調查" disabled>↻ <span>重新開始</span></button>
-                <button type="button" class="invest-cup" id="invest-cup" data-invest-tool="sample" aria-label="拿空燒杯從樣本瓶取一份；也可拖到樣本瓶" disabled></button>
-                <button type="button" class="invest-take" id="invest-take" data-invest-tool="sample" disabled>取一份試試 <span aria-hidden="true">›</span></button>
+                <button type="button" class="invest-bottle" id="invest-bottle" data-invest-tool="sample" aria-label="未知樣本 X：點瓶身取一份到燒杯，也可拖到燒杯" disabled></button>
+                <button type="button" class="invest-take" id="invest-take" data-invest-tool="sample" disabled>取一份</button>
                 <span class="invest-loading" id="invest-loading" role="status">準備實驗桌……</span>
               </div>
               <div class="invest-tools" aria-label="自由選用的器材盤">
@@ -299,7 +299,7 @@
             </div>
             <div class="invest-samples" id="invest-samples" aria-label="已取樣的容器，選擇一份繼續測試" hidden></div>
             <div class="invest-current" id="invest-current" hidden><strong id="invest-current-label"></strong><button type="button" id="invest-settle">靜置觀察</button></div>
-            <p class="invest-status" id="invest-status" role="status" aria-live="polite">可重複取樣，自由選用器材測試。</p>
+            <p class="invest-status" id="invest-status" role="status" aria-live="polite">點未知樣本 X 取樣，再自由選用器材測試。</p>
             <div class="invest-record-action" id="invest-record-action" hidden><label for="invest-event">這份取樣的觀察</label><select id="invest-event"></select><button type="button" id="invest-record">記一筆</button></div>
             <button type="button" class="invest-retry" id="invest-retry" hidden>重新載入器材</button>
           </div>
@@ -364,6 +364,6 @@
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
   <script type="module" src="assets/ppm-pool.js?v=vertical-calculation-1"></script>
-  <script type="module" src="assets/investigation.js?v=review-5"></script>
+  <script type="module" src="assets/investigation.js?v=bottle-sampling-1"></script>
 </body>
 </html>

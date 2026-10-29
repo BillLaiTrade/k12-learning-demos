@@ -22,9 +22,9 @@
 .invest-stage-title,.invest-reset { position:absolute; top:12px; padding:5px 10px; border:1px solid #dbe3d7; border-radius:9px; background:#fffff4f2; color:#28513f; font-size:.78rem; font-weight:700; }
 .invest-stage-title { left:12px; pointer-events:none; }
 .invest-reset { right:12px; min-height:36px; cursor:pointer; }
-.invest-cup { position:absolute; left:39%; top:46%; width:17%; height:30%; padding:0; border:2px dashed #458e70; border-radius:14px 14px 25px 25px; background:transparent; cursor:grab; touch-action:none; }
-.invest-cup::after { content:'☝'; position:absolute; right:-14px; bottom:2px; font-size:29px; color:#176b53; text-shadow:0 2px 2px #fff; }
-.invest-take { position:absolute; left:47.8%; top:77%; transform:translate(-50%,-50%); min-height:42px; padding:7px 19px; border:2px solid #fffef5; border-radius:30px; background:#176b53; color:white; font-size:.86rem; font-weight:750; white-space:nowrap; box-shadow:0 3px 10px #163f3325; cursor:pointer; }
+.invest-bottle { position:absolute; left:16.28%; top:20.31%; width:20.83%; height:48.83%; padding:0; border:2px solid transparent; border-radius:38% 38% 15% 15%; background:transparent; cursor:grab; touch-action:none; }
+.invest-bottle::after { content:'☝'; position:absolute; right:2px; bottom:22%; font-size:29px; color:#176b53; text-shadow:0 2px 2px #fff; }
+.invest-take { position:absolute; left:26.7%; top:76%; transform:translate(-50%,-50%); min-height:42px; padding:7px 19px; border:2px solid #fffef5; border-radius:30px; background:#176b53; color:white; font-size:.86rem; font-weight:750; white-space:nowrap; box-shadow:0 3px 10px #163f3325; cursor:pointer; }
 .invest-take span { margin-left:10px; }
 .invest-tools { position:absolute; left:62.2%; top:45%; width:35%; height:27%; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px; }
 .invest-tool { min-width:0; display:flex; justify-content:center; align-items:end; padding:0 0 5px; background:transparent; border:2px solid transparent; border-radius:12px; cursor:grab; touch-action:none; }
@@ -36,8 +36,9 @@
 .invest-lab [hidden],.invest-notebook [hidden] { display:none!important; }
 .invest-lab button:disabled { cursor:wait; }
 .invest-lab[data-ready="error"] .invest-loading { color:#8d4c34; }
-.invest-lab[data-has-sample="true"] .invest-cup { display:none; }
-.invest-lab[data-has-sample="true"] .invest-take { left:26.7%; top:76%; background:#fffdf0ed; border-color:#c4d7be; color:#23583f; box-shadow:none; font-size:.75rem; padding:5px 12px; }
+.invest-bottle:not(:disabled):hover,.invest-bottle:focus-visible { border-color:#458e70; background:#fffdf51a; outline:2px solid #ffffffa8; outline-offset:2px; }
+.invest-lab[data-busy="true"] .invest-bottle { opacity:0; }
+.invest-lab[data-has-sample="true"] .invest-take { background:#fffdf0ed; border-color:#c4d7be; color:#23583f; box-shadow:none; font-size:.75rem; padding:5px 12px; }
 .invest-lab[data-busy="true"] .invest-take,.invest-lab[data-busy="true"] .invest-tools { opacity:.55; }
 .invest-picture.is-drop-ready { box-shadow:inset 0 0 0 5px #4f9477; }
 .invest-drag-ghost { position:fixed; z-index:1000; pointer-events:none; transform:translate(-50%,-50%); border:1px solid #4b8b6b; border-radius:10px; background:#fffef3e6; color:#176b53; padding:10px 16px; font-weight:700; box-shadow:0 4px 15px #163f3340; }
@@ -107,7 +108,7 @@
   .invest-tools { position:static; width:auto; height:auto; padding:9px; gap:7px; background:#f4f3e6; border-top:1px solid #dedfcd; }
   .invest-tool { min-height:51px; align-items:center; flex-direction:column; gap:4px; padding:5px 2px; border:1px solid #cbd8bf; background:#fffdf5; border-radius:9px; }
   .invest-tool svg { display:block; }.invest-tool span { border:0; background:none; font-size:.7rem; padding:0; }
-  .invest-cup { border-radius:8px; }.invest-cup::after { font-size:22px; right:-10px; }
+  .invest-bottle::after { font-size:22px; right:0; }
   .invest-picture .invest-reset { min-height:32px; }.invest-lab[data-has-sample="true"] .invest-take { font-size:.68rem; min-height:36px; padding:3px 9px; }
   .invest-take { min-height:39px; font-size:.74rem; }.invest-take span { margin-left:3px; }
   .invest-notebook>summary { padding:13px; gap:9px; }.invest-notebook summary strong { font-size:1rem; }.invest-notebook summary small { font-size:.64rem; }.invest-summary-copy { font-size:.73rem; }

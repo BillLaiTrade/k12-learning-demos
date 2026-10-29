@@ -30,12 +30,12 @@ function update(){
   root.dataset.busy=String(busy);root.dataset.hasSample=String(!!sample);root.dataset.sampleCount=String(samples.length);root.dataset.stock=String(stock);root.dataset.active=active??'';root.dataset.phase=sample?.phase||'';
   for(const button of controls)button.disabled=!ready||busy;
   for(const button of root.querySelectorAll('.invest-tool'))button.setAttribute('aria-pressed',String(button.dataset.investTool===(animation?.kind||sample?.display)));
-  $('reset').disabled=!ready;$('take').textContent=stock===0?'補充同批樣本':sample?'＋ 再取一份':'取一份試試 ›';
-  $('take').setAttribute('aria-label',stock===0?'補充同一批教學樣本，保留既有取樣與筆記':'從搖勻後的未知樣本取一份到空燒杯');
+  $('reset').disabled=!ready;$('take').textContent=stock===0?'補充同批樣本':sample?'＋ 再取一份':'取一份';
+  const sampleLabel=stock===0?'未知樣本 X 已取完：補充同批樣本，保留既有取樣與筆記':'未知樣本 X：點瓶身取一份到燒杯，也可拖到燒杯';
+  for(const id of ['bottle','take'])$(id).setAttribute('aria-label',sampleLabel);
   $('current').hidden=!sample;$('samples').hidden=samples.length<2;
   $('current-label').textContent=sample?`取樣 ${label(sample.id)} · ${phaseName(sample)}`:'';
   $('settle').hidden=!sample||sample.water===0||sample.sand===0;$('settle').disabled=!ready||busy;
-  $('cup').setAttribute('aria-hidden',String(!!sample));
   const focusId=document.activeElement?.dataset?.sample;
   $('samples').replaceChildren();
   for(const s of samples){const button=document.createElement('button');button.type='button';button.dataset.sample=s.id;button.setAttribute('aria-pressed',String(s.id===active));button.disabled=busy;const name=document.createElement('strong');name.textContent=`取樣 ${label(s.id)}`;const phase=document.createElement('span');phase.textContent=phaseName(s);button.append(name,phase);button.addEventListener('click',()=>selectSample(s.id));$('samples').append(button);}
@@ -46,7 +46,7 @@ function update(){
   if(!events.some(e=>e.id===old)&&events.length)$('event').value=events.at(-1).id;
   updateRecordButton();
   fillOptions($('concentration-sample'),samples.map(s=>[String(s.id),`取樣 ${label(s.id)}`]));updateConcentration();
-  $('canvas').setAttribute('aria-label',sample?`未知樣本 X 與取樣 ${label(sample.id)}，目前為${phaseName(sample)}。${busy?`${actionName(animation.kind)}進行中。`:sample.events.at(-1)?.observation||''}`:'未知混合物樣本瓶、空燒杯與收好的器材盤。點空燒杯取樣。');
+  $('canvas').setAttribute('aria-label',sample?`未知樣本 X 與取樣 ${label(sample.id)}，目前為${phaseName(sample)}。${busy?`${actionName(animation.kind)}進行中。`:sample.events.at(-1)?.observation||''}`:'未知樣本 X 樣本瓶、空燒杯與收好的器材盤。點瓶身取樣。');
 }
 function updateRecordButton(){const exists=records.some(r=>r.event.id===$('event').value);$('record').disabled=!!animation||exists||!$('event').value;$('event').disabled=!!animation;$('record').textContent=exists?'已記錄':'記一筆';}
 function selectSample(id){
@@ -112,12 +112,12 @@ function submitReport(event){
 function clear(){
   cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];records=[];active=null;stock=6;nextId=1;
   $('report').reset();$('notebook').open=false;root.querySelectorAll('[data-sample]').forEach(b=>b.remove());delete root.dataset.lastEvent;
-  $('concentration-value').value='';$('report').querySelectorAll('details').forEach(d=>d.open=false);renderNotes();update();redraw();announce('可重複取樣，自由選用器材測試。');$('take').focus({preventScroll:true});
+  $('concentration-value').value='';$('report').querySelectorAll('details').forEach(d=>d.open=false);renderNotes();update();redraw();announce('點未知樣本 X 取樣，再自由選用器材測試。');$('bottle').focus({preventScroll:true});
 }
 function cancelDrag(){if(!drag)return;drag.ghost?.remove();$('picture').classList.remove('is-drop-ready');drag=null;}
 function isTarget(x,y,kind){
   const r=$('picture').getBoundingClientRect(),px=(x-r.left)/r.width,py=(y-r.top)/r.height;
-  return kind==='sample'?px>.12&&px<.58&&py>.2&&py<.8:px>.32&&px<.65&&py>.15&&py<.85;
+  return kind==='sample'?px>.39&&px<.56&&py>.46&&py<.77:px>.32&&px<.65&&py>.15&&py<.85;
 }
 for(const button of controls){
   button.addEventListener('click',()=>{if(performance.now()<suppressClickUntil)return;perform(button.dataset.investTool);});
@@ -128,7 +128,7 @@ for(const button of controls){
   button.addEventListener('pointermove',event=>{
     if(!drag||drag.button!==button||drag.pointerId!==event.pointerId)return;
     if(!drag.moved&&Math.hypot(event.clientX-drag.x,event.clientY-drag.y)<9)return;
-    drag.moved=true;if(!drag.ghost){drag.ghost=document.createElement('div');drag.ghost.className='invest-drag-ghost';drag.ghost.setAttribute('aria-hidden','true');drag.ghost.textContent=actionName(drag.kind);document.body.append(drag.ghost);}
+    drag.moved=true;if(!drag.ghost){drag.ghost=document.createElement('div');drag.ghost.className='invest-drag-ghost';drag.ghost.setAttribute('aria-hidden','true');drag.ghost.textContent=drag.kind==='sample'?'未知樣本 X':actionName(drag.kind);document.body.append(drag.ghost);}
     drag.ghost.style.left=`${event.clientX}px`;drag.ghost.style.top=`${event.clientY}px`;
     $('picture').classList.toggle('is-drop-ready',isTarget(event.clientX,event.clientY,drag.kind));
   });
@@ -144,7 +144,7 @@ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&drag){suppr
 $('settle').addEventListener('click',()=>perform('settle'));
 $('record').addEventListener('click',addRecord);$('event').addEventListener('change',updateRecordButton);
 $('report').addEventListener('submit',submitReport);$('report').addEventListener('input',invalidateReport);$('report').addEventListener('change',()=>{invalidateReport();updateConcentration();});
-$('continue').addEventListener('click',()=>{$('notebook').open=false;$('take').focus({preventScroll:true});root.scrollIntoView({block:'start',behavior:motion.matches?'instant':'smooth'});});
+$('continue').addEventListener('click',()=>{$('notebook').open=false;$('bottle').focus({preventScroll:true});root.scrollIntoView({block:'start',behavior:motion.matches?'instant':'smooth'});});
 $('reset').addEventListener('click',()=>{if(samples.length||records.length)$('reset-dialog').showModal();else clear();});
 $('reset-dialog').addEventListener('close',()=>{if($('reset-dialog').returnValue==='reset')clear();});
 document.addEventListener('visibilitychange',()=>{
