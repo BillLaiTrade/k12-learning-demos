@@ -23,7 +23,9 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
   page.on('response', r => { if(r.status() >= 400) failures.push(`${r.status()} ${r.url()}`); });
   const url = `http://127.0.0.1:${port}/units/2/parts/2.1/`;
   await page.goto(url);
+  await page.bringToFront();
   await page.locator('#s2').scrollIntoViewIfNeeded();
+  await page.waitForFunction(()=>!document.hidden && document.querySelector('#s2').dataset.gasMotion==='running');
   const captureDir = process.env.STATES_CAPTURE_DIR || '/tmp/states-table-review';
   mkdirSync(captureDir,{recursive:true});
   await page.locator('#s2').screenshot({path:path.join(captureDir,'desktop-initial.png')});
@@ -58,9 +60,21 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     assert.match(await cell('liquid.volume').innerText(), /容器變高，水量不變/);
     assert.match(await page.locator('#s2').innerText(), /物理性質/);
     assert.match(await page.locator('#s2 .sv-model-note').innerText(), /難壓縮不代表完全不能/);
+    const summary=page.locator('#state-physical-summary');
+    assert.equal(await summary.locator('.speaker').count(),1);
+    assert.match(await summary.innerText(),/形狀、體積和可壓縮性/);
+    assert.match(await summary.innerText(),/物理性質/);
+    assert.match(await summary.innerText(),/物質還是原來的物質/);
+    assert.doesNotMatch(await summary.innerText(),/點選|按鈕|表格/);
+    assert.equal(await page.locator('#s2 .sv-note, #s2 .sv-motion-tools').count(),0);
+    assert.equal(await page.getByRole('button',{name:/暫停粒子運動|繼續粒子運動/}).count(),0);
+    assert.equal(await page.locator('#s2 .sv-model-note').count(),1);
+
   });
 
-  await t.test('all four gas diagrams move independently, stay bounded, pause and resume', async () => {
+  await t.test('all four gas diagrams move independently, stay bounded and resume on return', async () => {
+    await page.bringToFront();
+    await page.waitForFunction(()=>!document.hidden && document.querySelector('#s2').dataset.gasMotion==='running');
     const positions = () => page.locator('#s2 [data-shape-particles], #s2 [data-volume-particles], #s2 [data-piston-particles]').evaluateAll(groups=>groups.map(g=>[...g.querySelectorAll('.sv-particle')].map(d=>[+d.getAttribute('cx'),+d.getAttribute('cy')])));
     const before=await positions();
     assert.equal(before.length,4); assert.ok(before.every(group=>group.length===24));
@@ -68,7 +82,17 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
       const groups=[...document.querySelectorAll('#s2 [data-shape-particles], #s2 [data-volume-particles], #s2 [data-piston-particles]')];
       return groups.every((group,j)=>[...group.querySelectorAll('.sv-particle')].filter((dot,i)=>Math.hypot(+dot.getAttribute('cx')-previous[j][i][0],+dot.getAttribute('cy')-previous[j][i][1])>.5).length>=12);
     },previous,{timeout:5000});
-    await movement(before);
+    try { await movement(before); } catch (error) {
+      console.error('Gas motion diagnostic', await page.evaluate(() => ({
+        hidden:document.hidden,state:document.querySelector('#s2').dataset.gasMotion,
+        sectionTop:document.querySelector('#s2').getBoundingClientRect().top,
+        sectionBottom:document.querySelector('#s2').getBoundingClientRect().bottom,
+        viewport:innerHeight,
+        positions:[...document.querySelectorAll('#s2 [data-shape-particles], #s2 [data-volume-particles], #s2 [data-piston-particles]')].map(g=>[...g.querySelectorAll('.sv-particle')].map(d=>[+d.getAttribute('cx'),+d.getAttribute('cy')]))
+      })));
+      console.error('Initial gas positions',before);
+      throw error;
+    }
     const bounded = await page.evaluate(() => new Promise(resolve=>{
       let frames=0;
       function sample(){
@@ -97,14 +121,11 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
       requestAnimationFrame(sample);
     }));
     assert.equal(bounded,true);
-    const toggle=page.locator('[data-gas-motion-toggle]');
-    await toggle.click();assert.equal(await toggle.getAttribute('aria-pressed'),'true');
-    const stopped=await positions();await page.waitForTimeout(250);
-    assert.deepEqual(await positions(),stopped);
-    await toggle.click();await movement(stopped);
-    assert.equal(await toggle.getAttribute('aria-pressed'),'false');
+    assert.equal(await page.locator('[data-gas-motion-toggle]').count(),0);
     await page.locator('#s6').scrollIntoViewIfNeeded();
     await page.waitForFunction(()=>document.querySelector('#s2').dataset.gasMotion==='paused');
+    const stopped=await positions();await page.waitForTimeout(250);
+    assert.deepEqual(await positions(),stopped);
     await page.locator('#s2').scrollIntoViewIfNeeded();
     await page.waitForFunction(()=>document.querySelector('#s2').dataset.gasMotion==='running');
     await movement(await positions());

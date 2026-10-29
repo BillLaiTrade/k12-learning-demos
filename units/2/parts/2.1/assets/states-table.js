@@ -208,8 +208,7 @@
   });
   // Only animate while this section is on screen and the document is visible.
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const toggle = section.querySelector('[data-gas-motion-toggle]');
-  let visible = true, paused = false, frame = null, previous = 0;
+  let visible = true, frame = null, previous = 0;
   function tick(now) {
     frame = null;
     const dt = previous ? Math.min(.035,(now - previous) / 1000) : 0;
@@ -218,17 +217,11 @@
     frame = requestAnimationFrame(tick);
   }
   function syncMotion() {
-    const running = visible && !document.hidden && !paused;
+    const running = visible && !document.hidden;
     section.dataset.gasMotion = running ? 'running' : 'paused';
     if (running && frame === null) { previous = 0; frame = requestAnimationFrame(tick); }
     else if (!running && frame !== null) { cancelAnimationFrame(frame); frame = null; previous = 0; }
   }
-  toggle.addEventListener('click', () => {
-    paused = !paused;
-    toggle.setAttribute('aria-pressed', String(paused));
-    toggle.textContent = paused ? '繼續粒子運動' : '暫停粒子運動';
-    syncMotion();
-  });
   document.addEventListener('visibilitychange', syncMotion);
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => {

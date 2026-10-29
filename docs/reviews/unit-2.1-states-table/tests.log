@@ -1,15 +1,15 @@
 ▶ 2.1: three-state diagrams are visible and interact inside the table
-  ✔ nine diagrams and conclusions exist without selecting a table cell (689.222756ms)
-  ✔ all four gas diagrams move independently, stay bounded, pause and resume (2584.229018ms)
-  ✔ gas volume increases and decreases within limits independently of compression (6820.510654ms)
-  ✔ container changes preserve solid geometry and liquid quantity (2306.039453ms)
-  ✔ gas shape changes keep all particles inside the sealed container (870.466896ms)
-  ✔ solid and liquid accept direct dragging while piston position and volume stay fixed (6035.485518ms)
-  ✔ gas compression responds to mouse drag and keyboard with constant particles (1681.327008ms)
-  ✔ all other lesson sections are preserved and still initialize (337.315502ms)
-  ✔ responsive table stays inside the page; narrow screens scroll internally (3454.794429ms)
-  ✔ touch dragging and reduced-motion keyboard operation work (5432.38735ms)
-✔ 2.1: three-state diagrams are visible and interact inside the table (32548.18934ms)
+  ✔ nine diagrams and conclusions exist without selecting a table cell (927.019399ms)
+  ✔ all four gas diagrams move independently, stay bounded and resume on return (1890.241443ms)
+  ✔ gas volume increases and decreases within limits independently of compression (5895.778478ms)
+  ✔ container changes preserve solid geometry and liquid quantity (2635.208986ms)
+  ✔ gas shape changes keep all particles inside the sealed container (1030.481569ms)
+  ✔ solid and liquid accept direct dragging while piston position and volume stay fixed (7664.100167ms)
+  ✔ gas compression responds to mouse drag and keyboard with constant particles (1852.401214ms)
+  ✔ all other lesson sections are preserved and still initialize (290.402419ms)
+  ✔ responsive table stays inside the page; narrow screens scroll internally (3720.741024ms)
+  ✔ touch dragging and reduced-motion keyboard operation work (5487.313218ms)
+✔ 2.1: three-state diagrams are visible and interact inside the table (33514.003104ms)
 ℹ tests 11
 ℹ suites 0
 ℹ pass 11
@@ -17,4 +17,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 33081.378196
+ℹ duration_ms 33888.765866
