@@ -368,7 +368,7 @@ if (canvas) {
       state.textContent = prop.placed ? '已對準' : '待定位';
       slot.classList.toggle('is-placed', prop.placed);
     }
-    finishButton.disabled = count < props.size;
+    finishButton.disabled = completed || count < props.size;
     if (count === props.size) status.textContent = '三道影子拼在一起了！可以開始演出。';
     return count;
   };
@@ -546,8 +546,9 @@ if (canvas) {
   finishButton.addEventListener('click', () => {
     if (finishButton.disabled) return;
     completed = true;
-    finishButton.textContent = '再演一次';
-    finishNote.textContent = '完成！不透明道具擋住光，幕上留下月亮兔的影子。';
+    finishButton.textContent = '演出完成';
+    finishButton.disabled = true;
+    finishNote.textContent = '想重新挑戰，請按上方「重設舞台」。';
     finishNote.dataset.done = 'true';
     status.textContent = '演出完成！你的影子戲登上月光舞台。';
     warmFill.intensity = 43;

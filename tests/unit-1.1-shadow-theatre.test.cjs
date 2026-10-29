@@ -6,7 +6,7 @@ const path=require('node:path');
 const {pathToFileURL}=require('node:url');
 const {chromium}=require('playwright');
 const {expect}=require('playwright/test');
-const root=path.resolve(__dirname,'..'),captures='/tmp/unit11-theatre-ruler';
+const root=path.resolve(__dirname,'..'),captures='/tmp/unit11-theatre-finish';
 const targets={moon:{x:-1.47,y:1.79},rabbit:{x:-.02,y:1.31},tree:{x:1.47,y:1.53}};
 let optics;
 const near=(a,b,e=1e-10)=>assert.ok(Math.abs(a-b)<e,`${a} != ${b}`);
@@ -88,11 +88,16 @@ test('影子劇場實際操作：學生調大小與位置後才小幅吸附',{ti
   }
   await expect(p.locator('#shadow-theatre-finish')).toBeEnabled();await p.waitForTimeout(500);await shot('placed');
  });
- await t.test('完成、既有重設與五種寬度正常，重設還原原本前後位置',async()=>{
-  await p.locator('#shadow-theatre-finish').click();await expect(p.locator('#shadow-theatre-finish-note')).toHaveAttribute('data-done','true');
+ await t.test('完成後停用並提示重設；重新挑戰與五種寬度正常',async()=>{
+  const finish=p.locator('#shadow-theatre-finish'),note=p.locator('#shadow-theatre-finish-note');
+  await finish.click();await expect(note).toHaveAttribute('data-done','true');await expect(finish).toHaveText('演出完成');await expect(finish).toBeDisabled();await expect(note).toHaveText('想重新挑戰，請按上方「重設舞台」。');await shot('finish-desktop');
+  await finish.evaluate(e=>e.click());await expect(finish).toBeDisabled();await expect(note).toHaveText('想重新挑戰，請按上方「重設舞台」。');
+  await p.setViewportSize({width:390,height:1050});await shot('finish-mobile');
   await p.locator('#shadow-theatre-reset').click();await select('tree');
   for(const width of [320,390,768,1024,1440]){await p.setViewportSize({width,height:1050});assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));const box=await p.locator('#shadow-theatre-depth-controls').boundingBox();assert.ok(box.height>=70&&box.height<=85);if(width===390)await shot('mobile');if(width===1440)await shot('ruler-desktop');}
-  await p.locator('#shadow-theatre-reset').click();const reset=await read();for(const [id,z] of [['moon',.92],['rabbit',.7],['tree',.02]]){assert.equal(reset[id].z,z);assert.ok(!reset[id].placed);}await expect(p.locator('#shadow-theatre-finish')).toBeDisabled();await shot('initial');
+  await p.locator('#shadow-theatre-reset').click();const reset=await read();for(const [id,z] of [['moon',.92],['rabbit',.7],['tree',.02]]){assert.equal(reset[id].z,z);assert.ok(!reset[id].placed);assert.equal(reset[id].guideOpacity,.88);}await expect(finish).toBeDisabled();await expect(finish).toHaveText('完成演出');await expect(note).toHaveAttribute('data-done','false');await expect(note).toHaveText('道具就位後，描邊會全部消失。');await expect(p.locator('.booklet-progress-track')).toHaveAttribute('aria-valuenow','0');await expect(p.locator('#shadow-theatre-depth-controls')).toBeHidden();await shot('initial');
+  for(const id of ['moon','rabbit','tree']){await select(id);const input=p.locator('#shadow-theatre-depth');await input.fill(String(Math.round(optics.depthToRuler(.42)*100)/100));await input.dispatchEvent('input');await input.dispatchEvent('change');await alignXY(id);assert.ok((await read())[id].placed);}
+  await expect(finish).toBeEnabled();await finish.click();await expect(finish).toHaveText('演出完成');await expect(finish).toBeDisabled();await p.locator('#shadow-theatre-reset').click();
  });
  async function screenPoint(page,id,dx=0,dy=0){return page.locator('#shadow-theatre-scene').evaluate((el,{id,dx,dy})=>{const a=window.__theatreTest,v=a.props.get(id).mesh.position.clone();v.x+=dx;v.y+=dy;v.project(a.camera);const r=el.getBoundingClientRect();return{x:r.x+(v.x+1)*r.width/2,y:r.y+(1-v.y)*r.height/2};},{id,dx,dy});}
  await t.test('滑鼠拖曳及滾輪只改學生操作的方向，鏡頭轉動不改判定',async()=>{
