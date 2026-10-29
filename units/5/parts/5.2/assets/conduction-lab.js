@@ -55,7 +55,7 @@ if (root) {
   function selectMaterial(material) {
     if (material === state.material) return;
     state.material = material;
-    const path = `assets/conduction-${material}.webp`;
+    const path = `assets/conduction-${material}.webp?v=wide-meter-7`;
     $('conduction-scene').src = path;
     $('conduction-scene').alt = `電熱板上的鍋具，${material === 'wood' ? '木製' : '金屬'}握柄伸在加熱區外；三個接觸式探頭連到讀數器。`;
     root.querySelector('.conduction-detail-image').setAttribute('href', path);
@@ -103,6 +103,6 @@ if (root) {
   $('conduction-reset').addEventListener('click', reset);
   document.addEventListener('visibilitychange', () => { if (document.hidden) { if (drag?.moved) suppressClickUntil = performance.now() + 450; clearDrag(); state.playing = false; stop(); render(); } });
   // Warm the alternative texture before the first material change.
-  const preload = new Image(); preload.src = 'assets/conduction-wood.webp';
+  const preload = new Image(); preload.src = 'assets/conduction-wood.webp?v=wide-meter-7';
   render();
 }

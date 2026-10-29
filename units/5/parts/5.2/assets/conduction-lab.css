@@ -10,14 +10,8 @@
 .conduction-photo{position:relative;align-self:start;overflow:hidden;border-radius:13px;background:#e5dfcf;isolation:isolate}
 .conduction-photo>img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover}
 .conduction-overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.conduction-leaders{stroke:#fffdf5;stroke-width:3;filter:drop-shadow(0 1px 2px #36250d88)}
-.conduction-sensor-label rect{fill:#fffffff2;stroke:#e1e6d7;stroke-width:1}
-.conduction-sensor-label circle{fill:#224d3c}
-.conduction-sensor-label text{fill:#19372b;font-size:24px;font-weight:700;font-family:system-ui,sans-serif}
-.conduction-sensor-label .conduction-label-number{fill:#fff;text-anchor:middle;font-size:23px}
-.conduction-channel-numbers circle{fill:#f0f5e5}
-.conduction-channel-numbers text{fill:#203a2b;text-anchor:middle;font-size:20px;font-weight:700}
-.conduction-digital text{font-family:'Courier New',monospace;font-size:25px;font-weight:700;fill:#203a30;text-anchor:middle;font-variant-numeric:tabular-nums;letter-spacing:-1.5px}
+.conduction-meter-labels text{font-family:system-ui,sans-serif;font-size:28px;font-weight:650;fill:#213e32;dominant-baseline:central}
+.conduction-digital text{font-family:'Courier New',monospace;font-size:31px;font-weight:700;fill:#203a30;text-anchor:end;dominant-baseline:central;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
 #conduction-drop-zone{fill:#e5f3d130;stroke:#effbdc;stroke-width:4;stroke-dasharray:9 6;opacity:0}
 #conduction-lab[data-dragging="true"] #conduction-drop-zone{opacity:1}
 #conduction-lab[data-drop-valid="true"] #conduction-drop-zone{fill:#d8efb97a;stroke:#2e673d;stroke-dasharray:none}
