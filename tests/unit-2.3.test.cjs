@@ -58,6 +58,41 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     await page.screenshot({ path: path.join(artifacts, 'desktop.png') });
   });
 
+  await t.test('seven teaching sections follow 1.1 side titles and main headings across screen sizes', async () => {
+    for (const width of [1440, 1024, 820, 760, 390, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.clock.runFor(100);
+      const layout = await page.evaluate(() => [...document.querySelectorAll('.lesson:not(.unit-quiz)')].map(el => {
+        const side = el.querySelector(':scope > .lesson-side');
+        const main = el.querySelector(':scope > .lesson-body');
+        const box = node => { const r = node.getBoundingClientRect(); return { x: r.x, y: r.y, right: r.right, bottom: r.bottom }; };
+        return { id: el.id, side: box(side), main: box(main), title: side.querySelector('h3').textContent,
+          number: side.querySelector('.lesson-number').textContent, role: !!side.querySelector('.lesson-role').textContent,
+          mainHeading: main.firstElementChild.tagName, fontSmall: parseFloat(getComputedStyle(side.querySelector('h3')).fontSize),
+          fontLarge: parseFloat(getComputedStyle(main.querySelector('h2')).fontSize),
+          line: getComputedStyle(side)[innerWidth > 760 ? 'borderRightWidth' : 'borderBottomWidth'] };
+      }));
+      assert.equal(layout.length, 7);
+      layout.forEach((el, i) => {
+        assert.equal(el.number, String(i + 1).padStart(2, '0'));
+        assert.ok(el.title && el.role);
+        assert.equal(el.mainHeading, 'H2');
+        assert.ok(el.fontLarge > el.fontSmall, `${width} ${el.id}: title hierarchy`);
+        assert.equal(el.line, '1px');
+        if (width > 760) {
+          assert.ok(el.side.right < el.main.x, `${width} ${el.id}: left / right columns`);
+          assert.ok(Math.abs(el.side.y - el.main.y) < 1, `${width} ${el.id}: aligned tops`);
+        } else {
+          assert.ok(el.side.bottom < el.main.y, `${width} ${el.id}: stacked columns`);
+        }
+      });
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${width}: no horizontal overflow`);
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.clock.runFor(100);
+    await captureCup('columns-desktop.png');
+  });
+
   await t.test('cup first drag stays vertical until release; dragging the rim then rotates both ways', async () => {
     await page.locator('#cup-reset').click(); await page.locator('#cup-scene').scrollIntoViewIfNeeded();
     assert.equal(await page.locator('#s1 .cup-callout, #s1 .cup-parts, #cup-hint').count(), 0);
