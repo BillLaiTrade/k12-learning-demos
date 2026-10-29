@@ -14,6 +14,8 @@ if(section) {
     const path=(points,arrows)=>node('path',{d:sidePath(points,arrows),...(arrows?{'marker-mid':`url(#${prefix}-blue-arrow)`}:{})});
     find('rays').replaceChildren(...(mirror?[[ray.source,ray.hit],[ray.hit,ray.eye]]:[[ray.image,ray.eye]]).map(points=>path(points,true)));
     find('rays').setAttribute('stroke-width','4');
+    const incomingMatch=node('path',{'data-side':'incoming-match',d:sidePath([ray.hit,ray.eye]),fill:'none',stroke:'#236f9f','stroke-width':10,'stroke-linecap':'round',opacity:.18});
+    find('rays').before(incomingMatch);
     find('extensions').replaceChildren(...(mirror?[path(ray.extension,false)]:[]));
     find('hits').replaceChildren(...(mirror?[node('circle',{cx:ray.hit[0],cy:ray.hit[1],r:4})]:[]));
     function distanceLabel(name,points,text,color,fraction=.5) {
