@@ -32,9 +32,11 @@
 #card-05 .mirror-bear-toggle{min-height:38px;padding:5px 10px;border:1px solid #7db2ca;border-radius:999px;background:#fffef9;color:#265f7d;font-size:.74rem;font-weight:750;line-height:1.4}
 #card-05 .mirror-normal-toggle:hover,#card-05 .mirror-bear-toggle:hover{background:#e2f1f7}
 #card-05 button:focus-visible,#card-05 summary:focus-visible{outline:3px solid #428eae;outline-offset:3px}
-#card-05 .mirror-application{display:flex;align-items:center;justify-content:center;gap:7px;min-height:76px;margin:4px 0 0}
-#card-05 .mirror-application svg{flex:0 0 48px;width:48px;height:62px}
-#card-05 .mirror-application figcaption{color:#284a40;font-size:.81rem;line-height:1.5;font-weight:650}
+#card-05 .mirror-application{display:flex;align-items:center;justify-content:center;gap:9px;min-height:96px;margin:7px 0 0}
+#card-05 .mirror-application svg{flex:0 0 64px;width:64px;height:80px}
+#card-05 .mirror-application figcaption{min-width:0;text-align:left;color:#284a40;line-height:1.5}
+#card-05 .mirror-application figcaption strong{display:block;font-size:.8rem;font-weight:650}
+#card-05 .mirror-application figcaption small{display:block;margin-top:3px;color:#78857b;font-size:.67rem;font-weight:450}
 #card-05 .mirror-model-notes{margin-top:13px;color:#65766d;font-size:.76rem;line-height:1.7}
 #card-05 .mirror-model-notes summary{width:fit-content;cursor:pointer;border-radius:5px}
 #card-05 .mirror-model-notes p{margin:8px 0}
@@ -53,9 +55,11 @@
   #card-05 .mirror-portrait-condition{font-size:.6rem;min-height:34px;display:flex;align-items:center;justify-content:center;padding:3px 4px}
   #card-05 .mirror-bear-toggle{font-size:.68rem;padding:5px 6px;min-height:44px}
   #card-05 .mirror-portrait-controls{min-height:48px}
-  #card-05 .mirror-application{flex-direction:column;gap:1px;min-height:100px}
-  #card-05 .mirror-application svg{flex-basis:auto;height:57px;width:43px}
-  #card-05 .mirror-application figcaption{font-size:.74rem}
+  #card-05 .mirror-application{flex-direction:column;gap:4px;min-height:134px}
+  #card-05 .mirror-application svg{flex-basis:auto;height:80px;width:64px}
+  #card-05 .mirror-application figcaption{text-align:center}
+  #card-05 .mirror-application figcaption strong{font-size:.73rem}
+  #card-05 .mirror-application figcaption small{font-size:.63rem}
   #card-05 .mirror-law{font-size:.76rem}
 }
 @container mirror-lesson (max-width:300px){

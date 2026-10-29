@@ -68,7 +68,7 @@
   </style>
   <link rel="stylesheet" href="assets/mirror-image.css?v=12">
   <link rel="stylesheet" href="assets/mirror-distance.css?v=visual-polish-20261029">
-  <link rel="stylesheet" href="assets/curved-mirrors.css?v=three-steps-20261029">
+  <link rel="stylesheet" href="assets/curved-mirrors.css?v=application-polish-20261029">
   <link rel="stylesheet" href="assets/reversible-light.css?v=3">
   <link rel="stylesheet" href="assets/periscope.css?v=8">
   <style>
@@ -348,9 +348,9 @@
             <section class="mirror-step" aria-labelledby="mirror-step-3">
               <header class="mirror-step-head"><h3 id="mirror-step-3"><span>3</span>最後看成像</h3><p>同一隻小熊，照起來有什麼不同？</p></header>
               <div class="mirror-columns mirror-portraits">
-                <article class="mirror-column mirror-plane"><h4 class="mirror-column-title">平面鏡</h4><p class="mirror-portrait-condition" aria-hidden="true"></p><svg id="mirror-plane-appearance" data-appearance="plane" viewBox="0 0 340 300" role="img" aria-label="平面鏡的實物與鏡中像外觀比較"></svg><p class="mirror-result">正立・同大</p><div class="mirror-portrait-controls"></div><figure class="mirror-application"><svg data-application="plane" viewBox="0 0 100 120" aria-hidden="true" focusable="false"></svg><figcaption>穿衣鏡</figcaption></figure></article>
-                <article class="mirror-column mirror-concave"><h4 class="mirror-column-title">凹面鏡</h4><p class="mirror-portrait-condition" id="mirror-concave-condition">靠近鏡面・焦點內</p><svg id="mirror-concave-appearance" data-appearance="concave" viewBox="0 0 340 300" role="img" aria-label="凹面鏡的實物與鏡中像外觀比較"></svg><p class="mirror-result" id="mirror-concave-result" role="status">正立・放大</p><div class="mirror-portrait-controls"><button type="button" class="mirror-bear-toggle" id="mirror-bear-toggle" aria-controls="mirror-concave-appearance mirror-concave-condition mirror-concave-result">把小熊移遠 →</button></div><figure class="mirror-application"><svg data-application="concave" viewBox="0 0 100 120" aria-hidden="true" focusable="false"></svg><figcaption>近距離化妝鏡</figcaption></figure></article>
-                <article class="mirror-column mirror-convex"><h4 class="mirror-column-title">凸面鏡</h4><p class="mirror-portrait-condition" aria-hidden="true"></p><svg id="mirror-convex-appearance" data-appearance="convex" viewBox="0 0 340 300" role="img" aria-label="凸面鏡的實物與鏡中像外觀比較"></svg><p class="mirror-result">正立・縮小</p><div class="mirror-portrait-controls"></div><figure class="mirror-application"><svg data-application="convex" viewBox="0 0 100 120" aria-hidden="true" focusable="false"></svg><figcaption>路口鏡</figcaption></figure></article>
+                <article class="mirror-column mirror-plane"><h4 class="mirror-column-title">平面鏡</h4><p class="mirror-portrait-condition" aria-hidden="true"></p><svg id="mirror-plane-appearance" data-appearance="plane" viewBox="0 0 340 300" role="img" aria-label="平面鏡的實物與鏡中像外觀比較"></svg><p class="mirror-result">正立・同大</p><div class="mirror-portrait-controls"></div><figure class="mirror-application"><svg data-application="plane" viewBox="0 0 100 120" aria-hidden="true" focusable="false"></svg><figcaption><strong>穿衣鏡</strong><small>看清穿著</small></figcaption></figure></article>
+                <article class="mirror-column mirror-concave"><h4 class="mirror-column-title">凹面鏡</h4><p class="mirror-portrait-condition" id="mirror-concave-condition">靠近鏡面・焦點內</p><svg id="mirror-concave-appearance" data-appearance="concave" viewBox="0 0 340 300" role="img" aria-label="凹面鏡的實物與鏡中像外觀比較"></svg><p class="mirror-result" id="mirror-concave-result" role="status">正立・放大</p><div class="mirror-portrait-controls"><button type="button" class="mirror-bear-toggle" id="mirror-bear-toggle" aria-controls="mirror-concave-appearance mirror-concave-condition mirror-concave-result">把小熊移遠 →</button></div><figure class="mirror-application"><svg data-application="concave" viewBox="0 0 100 120" aria-hidden="true" focusable="false"></svg><figcaption><strong>近距離化妝鏡</strong><small>放大臉部細節</small></figcaption></figure></article>
+                <article class="mirror-column mirror-convex"><h4 class="mirror-column-title">凸面鏡</h4><p class="mirror-portrait-condition" aria-hidden="true"></p><svg id="mirror-convex-appearance" data-appearance="convex" viewBox="0 0 340 300" role="img" aria-label="凸面鏡的實物與鏡中像外觀比較"></svg><p class="mirror-result">正立・縮小</p><div class="mirror-portrait-controls"></div><figure class="mirror-application"><svg data-application="convex" viewBox="0 0 100 120" aria-hidden="true" focusable="false"></svg><figcaption><strong>路口鏡</strong><small>觀察轉角來車</small></figcaption></figure></article>
               </div>
               <p id="mirror-concave-status" class="visually-hidden" role="status">凹面鏡：小熊在焦點內，像正立、放大。</p>
             </section>
@@ -456,7 +456,7 @@
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent=index===6?"正在進行單元小測":"正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
   <script type="module" src="assets/mirror-distance.js?v=visual-polish-20261029"></script>
-  <script type="module" src="assets/curved-mirrors.js?v=three-steps-20261029"></script>
+  <script type="module" src="assets/curved-mirrors.js?v=application-polish-20261029"></script>
   <script type="module" src="assets/mirror-image.js?v=14"></script>
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
