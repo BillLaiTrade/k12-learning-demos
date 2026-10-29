@@ -34,25 +34,25 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     if (!matrix) throw new Error('Cup is not rendered');
     const p = new DOMPoint(x, y).matrixTransform(matrix); return { x: p.x, y: p.y };
   }, { x, y });
-  const rotateRim = async delta => {
-    await page.clock.runFor(100);
-    await page.locator('#cup-scene').scrollIntoViewIfNeeded();
-    const center = await pointOnCup(0, 0), rim = await pointOnCup(0, 90);
+  const rotateRim = async (delta, target = page) => {
+    await target.clock.runFor(100);
+    await target.locator('#cup-scene').scrollIntoViewIfNeeded();
+    const center = await pointOnCup(0, 0, target), rim = await pointOnCup(0, 90, target);
     const radius = Math.hypot(rim.x - center.x, rim.y - center.y), start = Math.atan2(rim.y - center.y, rim.x - center.x);
-    await page.mouse.move(rim.x, rim.y); await page.mouse.down();
-    assert.equal(await page.locator('#cup-scene').getAttribute('data-drag-mode'), 'rotate', 'rim receives rotation gesture');
-    for (let i = 1; i <= 8; i++) { const a = start - delta * Math.PI / 180 * i / 8; await page.mouse.move(center.x + Math.cos(a) * radius, center.y + Math.sin(a) * radius); }
-    await page.mouse.up();
+    await target.mouse.move(rim.x, rim.y); await target.mouse.down();
+    assert.equal(await target.locator('#cup-scene').getAttribute('data-drag-mode'), 'rotate', 'rim receives rotation gesture');
+    for (let i = 1; i <= 8; i++) { const a = start - delta * Math.PI / 180 * i / 8; await target.mouse.move(center.x + Math.cos(a) * radius, center.y + Math.sin(a) * radius); }
+    await target.mouse.up();
   };
-  const dragCupVertically = async delta => {
-    await page.clock.runFor(100);
-    await page.locator('#cup-scene').scrollIntoViewIfNeeded();
-    const body = await pointOnCup(0, -10);
-    const scale = await page.evaluate(() => { const m = document.querySelector('#cup-scene svg').getScreenCTM(); return Math.hypot(m.c, m.d) * 24; });
-    await page.mouse.move(body.x, body.y); await page.mouse.down();
-    assert.equal(await page.locator('#cup-scene').getAttribute('data-drag-mode'), 'vertical');
-    for (let i = 1; i <= 8; i++) await page.mouse.move(body.x, body.y + delta * scale * i / 8);
-    await page.mouse.up();
+  const dragCupVertically = async (delta, target = page) => {
+    await target.clock.runFor(100);
+    await target.locator('#cup-scene').scrollIntoViewIfNeeded();
+    const body = await pointOnCup(0, -10, target);
+    const scale = await target.evaluate(() => { const m = document.querySelector('#cup-scene svg').getScreenCTM(); return Math.hypot(m.c, m.d) * 24; });
+    await target.mouse.move(body.x, body.y); await target.mouse.down();
+    assert.equal(await target.locator('#cup-scene').getAttribute('data-drag-mode'), 'vertical');
+    for (let i = 1; i <= 8; i++) await target.mouse.move(body.x, body.y + delta * scale * i / 8);
+    await target.mouse.up();
   };
   const phase = () => page.locator('html').getAttribute('data-phase');
   const volume = () => page.locator('#reaction-scene').getAttribute('data-volume').then(Number);
@@ -198,6 +198,49 @@ test('2.3: eight-section learning flow and independent controls work in browser'
         assert.equal(await probe.locator('#cup-comparison').isVisible(), true);
         await probe.evaluate(() => { document.activeElement?.blur(); document.querySelector('#s1').scrollIntoView({ behavior: 'instant', block: 'start' }); });
         await probe.locator('#s1').screenshot({ path: path.join(artifacts, `slow-tilt-${mode}-complete.png`) });
+      } finally { await probe.close(); await page.bringToFront(); }
+    }
+  });
+
+  await t.test('a filled cup retains visible water above the tank, then drains gradually when the mouth emerges', async () => {
+    for (const mode of ['no-preference', 'reduce']) {
+      const probe = await browser.newPage({ reducedMotion: mode, viewport: { width: mode === 'reduce' ? 390 : 1440, height: 1000 } });
+      try {
+        const start = new Date('2026-10-29T00:00:00Z');
+        await probe.clock.install({ time: start }); await probe.clock.pauseAt(start);
+        await probe.goto(base + 'units/2/parts/2.3/', { waitUntil: 'networkidle' });
+        await probe.locator('#cup-action').click(); await probe.clock.runFor(2100);
+        await probe.locator('#cup-action').click(); await probe.clock.runFor(6500);
+        await probe.locator('#cup-action').click(); await probe.clock.runFor(6500);
+        await dragCupVertically(-9, probe);
+        assert.equal(await probe.locator('#cup-scene').getAttribute('data-mouth-exposed'), 'false');
+        assert.ok(Math.abs(Number(await probe.locator('#cup-scene').getAttribute('data-water-area')) - 72) < 1e-6);
+        assert.ok(Number(await probe.locator('#cup-scene').getAttribute('data-min-y')) < 0);
+        const waterTop = Number(await probe.locator('#cup-scene').getAttribute('data-water')) * 24 + 210;
+        assert.ok(waterTop < 130, 'retained water extends above the old drawing cutoff');
+        assert.ok(Number(await probe.locator('.cup-water-fill').first().getAttribute('y')) < waterTop);
+        assert.match(await probe.locator('#cup-status').innerText(), /水仍留在杯內/);
+        await probe.locator('#cup-scene').screenshot({ path: path.join(artifacts, `retained-${mode}.png`) });
+        await rotateRim(15, probe);
+        await dragCupVertically(-3.9, probe);
+        assert.equal(await probe.locator('#cup-scene').getAttribute('data-draining'), 'true');
+        assert.ok(Number(await probe.locator('#cup-scene').getAttribute('data-water-area')) > 70, 'exposure does not instantly remove water');
+        assert.equal(await probe.locator('#cup-scene .cup-drain-stream').count(), 1);
+        await probe.clock.runFor(700);
+        const remaining = Number(await probe.locator('#cup-scene').getAttribute('data-water-area'));
+        assert.ok(remaining > 30 && remaining < 60, `${mode}: intermediate retained water ${remaining}`);
+        assert.equal(await probe.locator('#cup-scene').getAttribute('data-wet'), 'true');
+        await probe.locator('#cup-scene').screenshot({ path: path.join(artifacts, `draining-${mode}.png`) });
+        await probe.clock.runFor(3500);
+        assert.equal(await probe.locator('#cup-scene').getAttribute('data-draining'), 'false');
+        assert.ok(Number(await probe.locator('#cup-scene').getAttribute('data-water-area')) < 1e-6);
+        assert.equal(await probe.locator('#cup-scene .cup-drain-stream').count(), 0);
+        assert.equal(await probe.locator('#cup-scene').getAttribute('data-wet'), 'true');
+        assert.ok(Math.abs(Number(await probe.locator('#cup-scene').getAttribute('data-angle')) - 15) < .01);
+        await probe.locator('#cup-scene').screenshot({ path: path.join(artifacts, `drained-${mode}.png`) });
+        await probe.locator('#cup-reset').click();
+        assert.equal(await probe.locator('#cup-scene').getAttribute('data-wet'), 'false');
+        assert.equal(Number(await probe.locator('#cup-scene').getAttribute('data-water-area')), 0);
       } finally { await probe.close(); await page.bringToFront(); }
     }
   });

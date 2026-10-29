@@ -1,5 +1,5 @@
-import { CUP, freshCup, moveCup, cupGeometry } from './cup-lab-model.mjs?v=cup-lab-3';
-import { cupSVG } from './cup-lab-view.mjs?v=cup-lab-4';
+import { CUP, freshCup, moveCup, advanceCup, cupGeometry } from './cup-lab-model.mjs?v=cup-lab-6';
+import { cupSVG } from './cup-lab-view.mjs?v=cup-lab-6';
 const $ = s => document.querySelector(s);
 const scene = $('#cup-scene'), action = $('#cup-action'), reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let cup = freshCup(), before = null, after = null, preview = null, animation = null, bubbles = [], drag = null;
@@ -7,22 +7,28 @@ let rotationUnlocked = false;
 let frame = 0, previousTime = 0, lastPaint = 0, lastBubble = 0, hiddenPaused = false;
 const snapshot = () => ({ ...cup, bubbles: bubbles.map(b => ({ ...b })) });
 const displayed = () => preview === 'before' ? before : preview === 'after' ? after : cup;
+const geometry = (state = cup) => cupGeometry(state.depth, state.angle, state.escaped, state.waterArea);
+const needsFrame = () => !!animation || geometry().draining || (bubbles.length && !reduced.matches);
+const ensureTick = () => { if (!frame && needsFrame()) frame = requestAnimationFrame(tick); };
 const cancelAnimation = () => { animation = null; if (frame) cancelAnimationFrame(frame); frame = 0; previousTime = 0; };
 function staticTrace(g) {
+  if (g.mouthExposed) return [];
   return [1, 2, 3].map(i => ({ x: 500 + g.outlet.x * 24 + Math.sin(i) * 3, y: 210 + g.outlet.y * 24 * i / 4, r: 2 + i, age: 0 }));
 }
 function emit(oldVent, g) {
-  if (g.vent - oldVent < .001 || reduced.matches) return;
+  if (g.vent - oldVent < .001 || reduced.matches || g.mouthExposed) return;
   const now = performance.now();
   if (now - lastBubble < 85) return;
   lastBubble = now;
   bubbles.push({ x: 500 + g.outlet.x * 24, y: 210 + g.outlet.y * 24, r: 4 + (bubbles.length % 3) * 1.5, age: 0 });
   if (bubbles.length > 16) bubbles.shift();
 }
-function update(depth, angle, { capture = true } = {}) {
+function update(depth, angle, { capture = true, elapsed = 0 } = {}) {
   const old = cup.escaped;
   cup = moveCup(cup, depth, rotationUnlocked ? angle : 0);
-  const g = cupGeometry(cup.depth, cup.angle, cup.escaped);
+  if (elapsed) cup = advanceCup(cup, elapsed);
+  const g = geometry();
+  if (g.mouthExposed) bubbles = [];
   emit(old, g);
   if (capture && !drag && cup.depth >= 11.5 && !before && !cup.wet && g.submerged && g.paperBelowOutside && Math.abs(cup.angle) < .5 && (!animation || animation.kind !== 'lower' || cup.depth >= animation.toDepth - .05)) before = snapshot();
   if (capture && !drag && before && cup.wet && (Math.abs(cup.angle) >= 95 || !animation) && !after) {
@@ -35,7 +41,9 @@ function status(g) {
   if (preview) return preview === 'before' ? '回看直立入水：紙團低於外側水面，仍保持乾燥。' : '回看傾斜之後：空氣從杯口逸出，水進入並接觸紙團。';
   if (animation?.paused) return '觀察已暫停。按「繼續觀察」，接著看杯子、水面和氣泡的變化。';
   if (animation?.kind === 'lower') return rotationUnlocked ? '保持目前角度，將杯子放回水中。' : '保持杯口朝下，讓杯子和紙團的位置都低於外側水面。';
-  if (rotationUnlocked && g.outlet.y <= 0) return cup.wet ? '杯口已接通外界空氣，水可流出；紙團仍然是濕的。' : '杯口已接通外界空氣；上下移動仍會保留你設定的角度。';
+  if (g.draining) return '杯口露出水面，空氣進入，杯內的水正從杯口流出；紙團仍然是濕的。';
+  if (cup.wet && !g.mouthExposed && g.minY < 0 && g.waterArea > 71) return '杯口還在水中，水仍留在杯內；紙團已經沾濕。';
+  if (rotationUnlocked && g.mouthExposed) return cup.wet ? g.waterArea > .01 ? '能流出的水已流出，仍有水留在杯內較低處；紙團仍然是濕的。' : '杯內的水已流回水槽；紙團仍然是濕的。' : '杯口已接通外界空氣；上下移動仍會保留你設定的角度。';
   if (cup.wet) return Math.abs(cup.angle) < 2 ? '紙團已經沾水；回正杯子，不會自動補回空氣或讓紙團變乾。' : '空氣從杯口逸出，水進入杯內；水碰到紙團，紙團才變濕。';
   if (g.vent > .005) return '空氣從杯口逸出，水逐漸進入；繼續觀察水是否碰到紙團。';
   if (g.submerged && g.paperBelowOutside && cup.depth < 11.5) return '紙團已低於外側水面，仍保持乾燥。再往下放一些，放開後即可拖動杯口。';
@@ -43,13 +51,15 @@ function status(g) {
   return '紙團目前還在外側水面以上。先把整只杯子垂直放入水中。';
 }
 function render() {
-  const state = displayed(), g = cupGeometry(state.depth, state.angle, state.escaped);
+  const state = displayed(), g = geometry(state);
   if (!drag && !animation && cup.depth >= 11.5 && g.submerged && g.paperBelowOutside) rotationUnlocked = true;
   const canRotate = rotationUnlocked;
   scene.innerHTML = cupSVG(state, { id: 'cup-main', bubbles: preview ? state.bubbles || [] : bubbles });
   Object.assign(scene.dataset, { depth: cup.depth, angle: cup.angle, escaped: cup.escaped, wet: cup.wet, preview: preview || '',
     submerged: g.submerged, paperBelow: g.paperBelowOutside, withinTank: g.withinTank, water: g.water,
-    paperY: g.paper.y, rotationUnlocked: canRotate, dragMode: drag?.mode || '', paused: animation?.paused || false, animating: !!animation });
+    paperY: g.paper.y, waterArea: g.waterArea, targetWaterArea: g.equilibriumWaterArea,
+    mouthExposed: g.mouthExposed, draining: g.draining, minY: g.minY,
+    rotationUnlocked: canRotate, dragMode: drag?.mode || '', paused: animation?.paused || false, animating: !!animation });
   const message = status(g);
   if ($('#cup-status').textContent !== message) $('#cup-status').textContent = message;
   action.innerHTML = `${preview ? '回到目前觀察' : animation ? animation.paused ? '繼續觀察' : '暫停觀察' : cup.depth < 11.5 ? rotationUnlocked ? '放回水中' : '垂直放入水中' : Math.abs(cup.angle) > 90 ? '杯口轉回朝下' : '慢慢傾斜'} <span aria-hidden="true">›</span>`;
@@ -73,11 +83,13 @@ function tick(now) {
     if (animation) {
       animation.elapsed += dt;
       const t = Math.min(1, animation.elapsed / animation.duration), ease = animation.kind === 'tilt' ? t : t * t * (3 - 2 * t);
-      update(animation.fromDepth + (animation.toDepth - animation.fromDepth) * ease, animation.fromAngle + (animation.toAngle - animation.fromAngle) * ease);
+      update(animation.fromDepth + (animation.toDepth - animation.fromDepth) * ease, animation.fromAngle + (animation.toAngle - animation.fromAngle) * ease, { elapsed: dt });
       if (t === 1) {
         animation = null;
-        if (reduced.matches) { const g = cupGeometry(cup.depth, cup.angle, cup.escaped); bubbles = g.vent > .01 ? staticTrace(g) : []; }
+        if (reduced.matches) { const g = geometry(); bubbles = g.vent > .01 ? staticTrace(g) : []; }
       }
+    } else if (geometry().draining) {
+      update(cup.depth, cup.angle, { elapsed: dt });
     }
     if (!reduced.matches) {
       for (const bubble of bubbles) { bubble.age += dt; bubble.y -= dt * 95; bubble.x += Math.sin(bubble.age * 8) * dt * 6; }
@@ -85,7 +97,7 @@ function tick(now) {
     }
   }
   if (now - lastPaint > 45 || !animation) { render(); lastPaint = now; }
-  if (animation || (bubbles.length && !reduced.matches)) frame = requestAnimationFrame(tick);
+  if (needsFrame()) frame = requestAnimationFrame(tick);
   else previousTime = 0;
 }
 function run(depth, angle, kind) {
@@ -110,7 +122,7 @@ document.querySelectorAll('[data-cup-preview]').forEach(button => button.addEven
   if (animation) return;
   preview = preview === button.dataset.cupPreview ? null : button.dataset.cupPreview; render();
 }));
-function manual(depth, angle) { cancelAnimation(); preview = null; update(depth, angle); render(); if (bubbles.length && !reduced.matches) frame = requestAnimationFrame(tick); }
+function manual(depth, angle) { cancelAnimation(); preview = null; update(depth, angle); render(); ensureTick(); }
 scene.addEventListener('keydown', e => {
   if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key) || preview) return;
   e.preventDefault();
@@ -131,7 +143,7 @@ scene.addEventListener('pointerdown', e => {
     y: e.clientY, depth: cup.depth, angle: cup.angle, escaped: cup.escaped,
     pixelsPerCm: 24 * Math.hypot(matrix.c, matrix.d),
     polar: Math.atan2(point.y - (210 + (cup.depth - 5) * 24), point.x - 500), rotation: cup.angle };
-  scene.setPointerCapture(e.pointerId); render();
+  scene.setPointerCapture(e.pointerId); render(); ensureTick();
 });
 scene.addEventListener('pointermove', e => {
   if (!drag || drag.id !== e.pointerId) return;
@@ -146,7 +158,7 @@ scene.addEventListener('pointermove', e => {
     update(drag.depth, drag.rotation);
   }
   render();
-  if (!frame && bubbles.length && !reduced.matches) frame = requestAnimationFrame(tick);
+  ensureTick();
 });
 function finishDrag(e) {
   if (!drag || drag.id !== e.pointerId) return;
@@ -154,9 +166,9 @@ function finishDrag(e) {
   drag = null;
   if (scene.hasPointerCapture(e.pointerId)) scene.releasePointerCapture(e.pointerId);
   update(cup.depth, cup.angle);
-  if (reduced.matches && cup.escaped > escaped + .001) bubbles = staticTrace(cupGeometry(cup.depth, cup.angle, cup.escaped));
+  if (reduced.matches && cup.escaped > escaped + .001) bubbles = staticTrace(geometry());
   render();
-  if (!frame && bubbles.length && !reduced.matches) frame = requestAnimationFrame(tick);
+  ensureTick();
 }
 for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) scene.addEventListener(event, finishDrag);
 document.addEventListener('visibilitychange', () => {
