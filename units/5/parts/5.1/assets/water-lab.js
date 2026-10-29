@@ -33,7 +33,7 @@ function render(){
   $('water-lab-zoom-meniscus').setAttribute('d',zoomMeniscus);
   $('water-lab-source').setAttribute('cy',y);
   $('water-lab-connector').setAttribute('d',`M594 ${y}L1030 220`);
-  const cooling=state.mode==='cooling';
+  const cooling=state.mode==='cooling', coolingStable=cooling&&!isMoving(state);
   const direction=$('water-lab-direction');direction.toggleAttribute('hidden',!isMoving(state));
   direction.setAttribute('fill',cooling?'#2381c8':'#e95825');
   direction.setAttribute('transform',cooling?`translate(0,${y})`:`translate(1278,${y}) rotate(180)`);
@@ -59,9 +59,9 @@ function render(){
   $('water-lab-heat').querySelector('span').textContent=state.heating?'停止加熱':'加熱水';
   const heaterText=state.heating?'電熱板加熱水中':'電熱板已關閉';
   if($('water-lab-heater-status').querySelector('span').textContent!==heaterText)$('water-lab-heater-status').querySelector('span').textContent=heaterText;
-  const feedback=state.atUpperLimit?'已到觀察上限，電熱板關閉':cooling?'加冰塊後，液柱下降':state.mode==='heating'?'加熱水後，液柱上升':state.mode==='stopped'?'加熱已停止，觀察液柱穩定':'觀察同一支溫度計的液面';
+  const feedback=state.atUpperLimit?'已到觀察上限，電熱板關閉':cooling?(coolingStable?'液柱已穩定，可以對照刻度讀值。':'水正在冷卻，液柱逐漸下降。'):state.mode==='heating'?'加熱水後，液柱上升':state.mode==='stopped'?'加熱已停止，觀察液柱穩定':'觀察同一支溫度計的液面';
   if($('water-lab-feedback').textContent!==feedback)$('water-lab-feedback').textContent=feedback;
-  $('water-lab-zoom').setAttribute('aria-label',`液面局部放大：${cooling?'冷卻時下降':state.mode==='heating'?'升溫時上升':'與主圖同步'}，目前測溫液體約 ${state.probe.toFixed(1)} 攝氏度。`);
+  $('water-lab-zoom').setAttribute('aria-label',`液面局部放大：${coolingStable?'液柱已穩定':cooling?'冷卻時下降':state.mode==='heating'?'升溫時上升':'與主圖同步'}，目前測溫液體約 ${state.probe.toFixed(1)} 攝氏度。`);
 }
 function frame(now){
   const dt=previous===null?0:Math.min(.1,(now-previous)/1000);previous=now;
