@@ -1101,7 +1101,7 @@
               <div class="speed-run-controls">
                 <button class="action" id="speed-send-wave" type="button">讓波源振動一次</button>
                 <div>
-                  <p class="speed-run-status"><span id="speed-run-message" aria-live="polite">調整參數後，按下按鈕讓橘色波源振動一次。</span><output id="speed-run-time">0.00 / 3.00 s</output></p>
+                  <p class="speed-run-status"><span id="speed-run-message" aria-live="polite">調整參數後，按下按鈕讓橘色波源振動一次。</span><output id="speed-run-time">0.00 / 2.50 s</output></p>
                   <div class="speed-progress" id="speed-progress" role="progressbar" aria-label="波形前端抵達 30 公尺處的進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="speed-progress-bar"></span></div>
                 </div>
               </div>
@@ -1750,7 +1750,7 @@
       const progressBar=document.querySelector("#speed-progress-bar");
       const progressTrack=document.querySelector("#speed-progress");
       if(speedWave&&speedWavePath&&speedWaveGuides&&speedWavelengthArrow&&speedLambdaLabel&&speedSourceMarker&&speedFrequencyValue&&speedPeriodValue&&speedWavelengthValue&&speedEquation&&speedColorScale&&speedColorMarker&&sendWaveButton&&runMessage&&runTime&&progressBar&&progressTrack){
-        const routeLength=30,routeStartX=30,routeEndX=690,routeWidth=routeEndX-routeStartX,waveMidY=90,waveAmplitude=48,playbackScale=2.5;
+        const routeLength=30,routeStartX=30,routeEndX=690,routeWidth=routeEndX-routeStartX,waveMidY=90,waveAmplitude=48;
         const frequencyDown=document.querySelector("#speed-frequency-down"),frequencyUp=document.querySelector("#speed-frequency-up");
         const periodDown=document.querySelector("#speed-period-down"),periodUp=document.querySelector("#speed-period-up");
         const wavelengthDown=document.querySelector("#speed-wavelength-down"),wavelengthUp=document.querySelector("#speed-wavelength-up");
@@ -1838,7 +1838,7 @@
         };
         const animateSingleWave=time=>{
           if(runStartedAt===null)runStartedAt=time;
-          const arrivalTime=getArrivalTime(),fullPassageTime=getFullPassageTime(),elapsed=clamp((time-runStartedAt)/(1000*playbackScale),0,fullPassageTime);
+          const arrivalTime=getArrivalTime(),fullPassageTime=getFullPassageTime(),elapsed=clamp((time-runStartedAt)/1000,0,fullPassageTime);
           drawGeneratedWave(elapsed);drawProgress(Math.min(elapsed,arrivalTime)/arrivalTime);
           runTime.textContent=`${format(Math.min(elapsed,arrivalTime),2)} / ${format(arrivalTime,2)} s`;
           if(elapsed<fullPassageTime)animationFrame=window.requestAnimationFrame(animateSingleWave);else finishSingleWave();
