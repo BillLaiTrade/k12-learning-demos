@@ -111,7 +111,7 @@
   </style>
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=desktop-compact-7">
-  <link rel="stylesheet" href="assets/ppm-scale.css?v=ratio-9">
+  <link rel="stylesheet" href="assets/ppm-scale.css?v=scale-10">
   <link rel="stylesheet" href="assets/investigation.css?v=layout-2">
 </head>
 <body>
@@ -230,17 +230,26 @@
 <div class="card-side"><span class="card-number">05</span><h3>微量比例與 ppm</h3><span class="card-role">看整池水與少量溶質的質量差距</span></div>
 <div class="card-main">
 <h2>一整池水，只加這一點，是多少 ppm？</h2>
-<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這麼大一池水，只加入這一點溶質，濃度要怎麼表示？</p></div>
+<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這麼大一池水，只加入這一點食鹽，濃度要怎麼表示？</p></div>
 <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先把池水和溶質都換成克，算出溶質占溶液總質量的比例，再乘上一百萬，就是 ppm。</p></div>
 <div class="ppm-observation" id="ppm-lab" data-ready="loading" aria-label="整池水與微量溶質的ppm計算">
 <figure class="pool-volume-figure">
-<div class="pool-volume-scene"><img id="pool-volume-image" src="assets/ppm-whole-pool.webp" width="1672" height="941" alt="一座長10公尺、寬5公尺、水深2公尺的長方形泳池示意，池水量100000公升。"><div class="pool-volume-fallback" id="pool-volume-fallback" hidden><p>泳池圖片暫時無法載入，容量與計算仍可閱讀。</p><button id="pool-image-retry" type="button">重新載入圖片</button></div><div class="pool-water-quantity"><span>整池水量</span><strong>100,000 <small>公升</small></strong></div><div class="pool-solute-quantity"><span>加入的溶質</span><strong data-pool="solute">100 克</strong><small>可完全溶解的示意溶質</small></div></div>
-<figcaption>長 10 公尺 × 寬 5 公尺 × 水深 2 公尺 ＝ 100 立方公尺 ＝ 100,000 公升</figcaption>
+<div class="pool-volume-scene pool-geometry-scene">
+<canvas id="pool-geometry-canvas" width="1280" height="800" role="img" aria-label="按同一尺度建立的泳池與池邊食鹽模型；泳池內部水體長10公尺、寬5公尺、水深2公尺，池水100000公升。右上放大呈現整份食鹽。"></canvas>
+<div class="pool-water-quantity"><span>池水容積模型</span><strong>100,000 <small>公升</small></strong></div>
+<svg class="pool-quantity-guide" aria-hidden="true"><defs><marker id="pool-dimension-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#456c6b"/></marker></defs><line data-dimension-line="length"/><line data-dimension-line="width"/><line data-dimension-line="depth"/><line data-salt-guide/><circle data-salt-source r="7"/></svg>
+<span class="pool-dimension-label" data-dimension-label="length">10 公尺</span><span class="pool-dimension-label" data-dimension-label="width">5 公尺</span><span class="pool-dimension-label" data-dimension-label="depth">水深 2 公尺</span>
+<span class="pool-salt-source-label">池邊食鹽・同一比例</span>
+<div class="pool-salt-inset" aria-label="整份食鹽的局部放大圖"><span class="pool-salt-title">整份食鹽 <b data-pool="solute">100 克</b></span><span class="pool-salt-scale"><i></i><small>5 公分</small></span><span class="pool-salt-zoom">局部放大</span></div>
+</div>
+<figcaption>內部水體：長 10 公尺 × 寬 5 公尺 × 水深 2 公尺 ＝ 100 立方公尺 ＝ 100,000 公升。</figcaption>
+<p class="pool-scale-caption">主畫面採同一尺度；右上放大整份食鹽，秤量皿直徑 16 公分。</p>
+<details class="pool-scale-details"><summary>容量與份量如何核對？</summary><p>水體依上述內部尺寸建立，池壁與池緣不計入水量。食鹽以氯化鈉晶體密度約 2.17 克／立方公分計算實體體積；鹽堆含顆粒間空隙，外形為估算。<span data-pool-salt-volume>100 克食鹽的晶體實體體積約 46.1 立方公分。</span></p></details>
 </figure>
-<div class="pool-dose-controls"><span>改變加入的溶質</span><div role="group" aria-label="選擇加入的溶質質量"><button type="button" data-pool-dose="50" aria-pressed="false">50 克</button><button type="button" data-pool-dose="100" aria-pressed="true">100 克</button><button type="button" data-pool-dose="200" aria-pressed="false">200 克</button></div></div>
-<div class="pool-mass-comparison"><div class="pool-water-mass"><span>池水質量</span><strong>100,000,000 <small>克</small></strong><small>100,000 公升 ≈ 100,000 公斤</small></div><span class="pool-mass-plus" aria-hidden="true">＋</span><div class="pool-added-mass"><span>溶質質量</span><strong data-pool="solute">100 克</strong><small>與池水使用相同單位</small></div></div>
+<div class="pool-dose-controls"><span>改變食鹽份量</span><div role="group" aria-label="選擇加入的溶質質量"><button type="button" data-pool-dose="50" aria-pressed="false">50 克</button><button type="button" data-pool-dose="100" aria-pressed="true">100 克</button><button type="button" data-pool-dose="200" aria-pressed="false">200 克</button></div></div>
+<div class="pool-mass-comparison"><div class="pool-water-mass"><span>池水質量</span><strong>100,000,000 <small>克</small></strong><small>100,000 公升 ≈ 100,000 公斤</small></div><span class="pool-mass-plus" aria-hidden="true">＋</span><div class="pool-added-mass"><span>溶質｜食鹽</span><strong data-pool="solute">100 克</strong><small>與池水使用相同單位</small></div></div>
 <p class="pool-total-line">溶液總質量 ＝ 池水 ＋ 溶質 ＝ <strong data-pool="total">100,000,100 克</strong></p>
-<p class="pool-volume-note">水的密度以 1 公斤／公升估算；本例假設溶質完全溶解、沒有損失，圖片為情境示意。</p>
+<p class="pool-volume-note">水的密度以 1 公斤／公升估算；本例假設溶質完全溶解、沒有損失，主畫面採同一尺度，局部放大只方便觀察份量。</p>
 <section class="ppm-explanation" id="ppm-percent-bridge" aria-labelledby="ppm-bridge-title">
 <h3 id="ppm-bridge-title">先算質量比，再換成每一百萬份</h3>
 <p class="ppm-explain-subtitle">分子、分母都用克；分母包含整池水與加入的溶質。</p>
@@ -338,7 +347,7 @@
   <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
-  <script type="module" src="assets/ppm-pool.js?v=ratio-2"></script>
+  <script type="module" src="assets/ppm-pool.js?v=scale-3"></script>
   <script type="module" src="assets/investigation.js?v=review-5"></script>
 </body>
 </html>
