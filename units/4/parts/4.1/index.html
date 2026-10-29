@@ -1340,18 +1340,19 @@
       rustFinishReveal.setAttribute("opacity",String(Math.max(0,(growth-.94)/.06)));rustStatus.textContent=rustStages[stage];rustProgress.setAttribute("aria-valuetext",`${["剛開始","一段時間後","形成鏽層"][stage]}：${rustStages[stage]}`);
     }
     setRustStage(rustProgress.value);
-    function stopRustPlayback(label="播放變化"){
+    function stopRustPlayback(){
       if(rustPlayTimer){clearInterval(rustPlayTimer);rustPlayTimer=null;}
-      rustPlay.textContent=label;
+      const progress=Number(rustProgress.value);
+      rustPlay.textContent=progress>=100?"重新播放":progress>0?"繼續播放":"播放變化";
     }
     rustProgress.addEventListener("input",()=>{stopRustPlayback();setRustStage(rustProgress.value);});
     rustPlay.addEventListener("click",()=>{
       if(rustPlayTimer){stopRustPlayback();return;}
-      if(Number(rustProgress.value)>0)setRustStage(0);
+      if(Number(rustProgress.value)>=100)setRustStage(0);
       rustPlay.textContent="暫停變化";
       rustPlayTimer=setInterval(()=>{
         const next=Number(rustProgress.value)+4;setRustStage(next);
-        if(next>=100)stopRustPlayback("重播變化");
+        if(next>=100)stopRustPlayback();
       },100);
     });
     function moveRustMagnifier(event){
