@@ -1613,15 +1613,28 @@
       phaseDemoIce.style.opacity="0";
       phaseDemoLastFrame=0;phaseDemoFrame=requestAnimationFrame(now=>animatePhaseDemoMotion(now,runId));
     }
-    function updatePhaseOverviewMobileRoutes(){
-      const flow=document.querySelector(".phase-solid-flow-mobile"),rect=flow.getBoundingClientRect();
+    function updatePhaseOverviewRoutes(){
+      if(phaseSolidOverview.hidden||phaseSolidOverview.classList.contains("is-process-view"))return;
+      const mobile=window.matchMedia("(max-width: 680px)").matches;
+      const flow=document.querySelector(mobile?".phase-solid-flow-mobile":".phase-solid-flow"),rect=flow.getBoundingClientRect();
       if(!rect.width||!rect.height)return;
       const vessel=document.getElementById("freeze-demo-vessel").getBoundingClientRect();
-      const endY=(vessel.top-rect.top-10)/rect.height*470,controlY=(105+endY)/2;
-      document.getElementById("phase-flow-mobile-route-top-left").setAttribute("d",`M470 105 Q440 ${controlY} 430 ${endY}`);
-      document.getElementById("phase-flow-mobile-route-top-right").setAttribute("d",`M530 105 Q560 ${controlY} 570 ${endY}`);
+      const point=(x,y)=>({x:(x-rect.left)/rect.width*1000,y:(y-rect.top)/rect.height*470});
+      const prefix=mobile?"phase-flow-mobile-route-":"phase-flow-route-";
+      for(const slot of ["top-left","top-right","bottom-left","bottom-right"]){
+        const upper=slot.startsWith("top"),left=slot.endsWith("left");
+        const button=document.querySelector(`.phase-solid-process[data-overview-slot="${slot}"]`).getBoundingClientRect();
+        const edge=point(vessel.left+vessel.width*(left ? (mobile ? .18 : .25) : (mobile ? .82 : .75)),upper?vessel.top-1.5:vessel.bottom+1.5);
+        const card=mobile?point(button.left+button.width/2,upper?button.bottom+1:button.top-1):point(left?button.right+1:button.left-1,button.top+button.height/2);
+        const from=upper?card:edge,to=upper?edge:card;
+        const path=document.getElementById(prefix+slot);
+        path.setAttribute("d",`M${from.x} ${from.y} Q${(from.x+to.x)/2} ${from.y+(to.y-from.y)*.4} ${to.x} ${to.y}`);
+        // End on a dot, so the final gap in the dash pattern cannot detach the line.
+        const period=mobile?15:12;
+        path.setAttribute("pathLength",String(Math.max(period+1,Math.round(path.getTotalLength()/period)*period+1)));
+      }
     }
-    new ResizeObserver(updatePhaseOverviewMobileRoutes).observe(document.querySelector(".phase-solid-stage"));
+    new ResizeObserver(updatePhaseOverviewRoutes).observe(document.querySelector(".phase-solid-stage"));
     function configurePhaseOverview(stateKey){
       const state=phaseStates[stateKey],layout=phaseOverviewLayouts[stateKey],stateNames=phaseStateNames;
       document.getElementById("phase-overview-kicker").textContent=state.kicker;
@@ -1648,6 +1661,7 @@
       freezeDemo.hidden=false;const demoSvg=freezeDemo.querySelector("svg");demoSvg.setAttribute("viewBox","0 0 360 132");demoSvg.setAttribute("aria-label",stateKey==="solid"?"容器中的固態水分子規則排列並在固定位置微微振動":stateKey==="liquid"?"液態水分子在容器底部附近流動":"水蒸氣分子在容器中分散移動");phaseDemoHeading.textContent=phaseStates[stateKey].title;phaseDemoSource.textContent="";phaseDemoArrows.setAttribute("d","");phaseSolidFlowParticles.replaceChildren();document.querySelectorAll(".phase-solid-flow path,.phase-solid-flow-mobile path").forEach(path=>path.classList.remove("is-active"));
       freezeParticles.forEach((p,index)=>{p.x=targets[index].x;p.y=targets[index].y;p.element.style.transform="none";p.element.setAttribute("class",`freeze-demo-particle is-${stateKey}${solid?" is-vibrating":""}`);p.element.setAttribute("cx",p.x.toFixed(2));p.element.setAttribute("cy",p.y.toFixed(2));});
       phaseDemoIce.style.opacity="0";freezeDemoStatus.textContent=phaseStates[stateKey].title;phaseDemoCaption.textContent=phaseStates[stateKey].title;
+      updatePhaseOverviewRoutes();
       startPhaseDemoMotion(stateKey,runId);
     }
     function playStateEdgeFlow(key,stateKey){
