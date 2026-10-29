@@ -38,6 +38,14 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
       assert.equal(await box.locator('svg').isVisible(), true);
       assert.ok((await box.locator('.sv-label').innerText()).length > 0);
     }
+
+    assert.deepEqual(await cell('solid.volume').locator('svg text').allTextContents(), ['3 cm','3 cm','3 cm']);
+    assert.equal(await cell('solid.volume').locator('[data-dimension="depth"]').count(),1);
+    assert.match(await cell('solid.volume').innerText(), /3 × 3 × 3＝27 cm³/);
+    const labelsFit = await cell('solid.volume').locator('svg text').evaluateAll(labels => labels.every(label => {
+      const b=label.getBBox(); return b.x>=0 && b.y>=0 && b.x+b.width<=240 && b.y+b.height<=160;
+    }));
+    assert.equal(labelsFit,true);
     assert.match(await page.locator('#s2').innerText(), /物理性質/);
     assert.match(await page.locator('#s2 .sv-model-note').innerText(), /難壓縮不代表完全不能/);
   });
