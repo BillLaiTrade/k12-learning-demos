@@ -2,7 +2,6 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const states = {
-    conduction: {time:0, playing:false, metal:Array(13).fill(20), wood:Array(13).fill(20)},
     convection: {time:0, playing:false, medium:'water'},
     radiation: {time:0, playing:false, shield:false},
     insulation: {time:0, playing:false}
@@ -13,23 +12,6 @@
     return Math.abs(value-ambient)<.05?ambient:value;
   };
   const degrees = t => `${t.toFixed(1)}°C`;
-  const color = t => {
-    const f=Math.max(0,Math.min(1,(t-20)/40));
-    return `rgb(${Math.round(167+62*f)},${Math.round(201-31*f)},${Math.round(213-97*f)})`;
-  };
-  function diffuse(values, rate, dt) {
-    const next=values.slice();next[0]=60;
-    for(let i=1;i<values.length;i++){
-      const right=i===values.length-1?values[i]:values[i+1];
-      next[i]=values[i]+rate*dt*(values[i-1]+right-2*values[i]);
-    }
-    return next;
-  }
-  function renderConduction() {
-    const s=states.conduction;
-    document.querySelectorAll('[data-conduction]').forEach(n=>n.setAttribute('fill',color(s[n.dataset.conduction][Number(n.dataset.index)])));
-    $('conduction-metal-tip').textContent=degrees(s.metal[12]);$('conduction-wood-tip').textContent=degrees(s.wood[12]);
-  }
   function renderConvection() {
     const s=states.convection;
     $('convection-fluid').setAttribute('fill',s.medium==='water'?'#e0eef2':'#f1f1e5');
@@ -60,7 +42,7 @@
     $('insulation-coat').toggleAttribute('hidden',!wall);$('insulation-silver').toggleAttribute('hidden',!reflect);
     $('insulation-conduction').textContent=wall?'減少':'原先';$('insulation-convection').textContent=air?'減少':'原先';$('insulation-radiation').textContent=reflect?'減少':'原先';
   }
-  const renderers={conduction:renderConduction,convection:renderConvection,radiation:renderRadiation,insulation:renderInsulation};
+  const renderers={convection:renderConvection,radiation:renderRadiation,insulation:renderInsulation};
   function renderOne(id) {
     renderers[id]();
     const button=$(`${id}-play`), label=states[id].playing?'暫停觀察':states[id].time>0?'繼續觀察':'開始觀察';
@@ -73,10 +55,6 @@
     Object.entries(states).forEach(([id,s])=>{
       if(!s.playing)return;
       s.time+=dt;
-      if(id==='conduction'){
-        s.metal=diffuse(s.metal,7,dt);
-        s.wood=diffuse(s.wood,.6,dt);
-      }
       renderOne(id);
     });
     if(Object.values(states).some(s=>s.playing))frame=requestAnimationFrame(tick);else{frame=0;last=null;}
@@ -84,7 +62,6 @@
   function start(){if(!frame){last=null;frame=requestAnimationFrame(tick);}}
   function reset(id) {
     const s=states[id];s.time=0;s.playing=false;
-    if(id==='conduction'){s.metal=Array(13).fill(20);s.wood=Array(13).fill(20);}
     if(id==='radiation')s.shield=false;
     renderOne(id);
   }

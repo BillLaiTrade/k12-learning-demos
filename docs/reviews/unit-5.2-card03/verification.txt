@@ -1,0 +1,63 @@
+✔ the single hot/cold scenario starts at 60°C and 20°C in a 25°C room (1.476257ms)
+✔ separated blocks still slowly exchange heat with their surroundings (0.47253ms)
+✔ direct contact reduces the temperature difference much faster (0.158776ms)
+✔ the pair mean cools according to its room exchange rather than staying at 40°C (1.13434ms)
+✔ matching block temperatures above room temperature keep cooling together (0.194288ms)
+✔ all blocks eventually settle at room temperature in either geometry (0.170973ms)
+✔ separation and recontact are continuous and never reset readings (0.14857ms)
+✔ analytic steps are partition-independent and do not overshoot (0.309078ms)
+✔ either block snaps into contact without overlap and stays within the chamber (0.281587ms)
+▶ 5.2 equilibrium: ambient exchange, faster contact and dragging
+  ✔ observation waits until the block is seen, with a visible room temperature (290.968445ms)
+  ✔ separated blocks drift towards the room and can be paused (1672.566701ms)
+  ✔ contact is faster than room exchange and does not restart the readings (1685.293585ms)
+  ✔ separating still changes temperatures; recontact continues rather than resets (3110.657239ms)
+  ✔ near equal block temperatures are not full room equilibrium (7728.756244ms)
+  ✔ only room equilibrium stops the model at 25°C and survives recontact (37738.846838ms)
+  ✔ drags, collision limits, instrument labels and overlay hit areas still work (1787.082584ms)
+  ✔ pause, backgrounding and reset keep the physical state continuous (562.818193ms)
+  ✔ desktop and laptop retain readable drag controls and other blocks stay independent (2900.012514ms)
+  ✔ real touch input and real-time flow work with both motion preferences (4937.759846ms)
+✔ 5.2 equilibrium: ambient exchange, faster contact and dragging (64292.61147ms)
+✔ three probes and all segments start at the same room temperature (1.179758ms)
+✔ heat enters only the pan; other nodes receive heat through their neighbours (0.272344ms)
+✔ both materials warm in order from pan to joint to distal grip without overshoot (40.403805ms)
+✔ metal transfers heat to the grip faster; wood is a conductor with a small nonzero distal rise (1.665187ms)
+✔ energy balance includes the heater and loss to the room, with internal transfers cancelling (0.392551ms)
+✔ continuing heating approaches a gradient, while heat still flows and escapes to the room (24.717205ms)
+✔ small frame steps agree with larger stable integrations and do not mutate input (4.272209ms)
+▶ 5.2 conduction: cookware scene, material drag and live readings
+  ✔ starts only when visible and uses the existing real avatars (338.5894ms)
+  ✔ pan, joint and distal LCDs follow the same model and correct heating order (2691.748953ms)
+  ✔ pause freezes actual readouts and flow, then resume continues (355.35741ms)
+  ✔ valid dragging swaps the whole photo and joint inset and restarts fair comparison (5204.730449ms)
+  ✔ invalid or cancelled drag does not switch material or leave a ghost (508.912408ms)
+  ✔ click and keyboard are usable alternatives; reset keeps chosen material (516.091937ms)
+  ✔ steady temperatures retain a gradient and continuous transfer, never labelled equilibrium (12717.90144ms)
+  ✔ background pauses without resetting, and other learning blocks stay independent (750.761078ms)
+  ✔ desktop and laptop layout, sensor labels and assets fit the scene (1072.256545ms)
+  ✔ real-time movement and real touch work under both motion preferences (7930.972156ms)
+✔ 5.2 conduction: cookware scene, material drag and live readings (33886.840424ms)
+▶ 5.2 first block: three environments and in-water thermometers
+  ✔ starts with three clean scenes, pending observations and authentic portraits (216.802797ms)
+  ✔ matching scales, immersed bulbs and synchronized liquid/readout levels (1419.791258ms)
+  ✔ 25°C: A releases heat and B absorbs heat; pause freezes readouts (1362.922527ms)
+  ✔ 5°C: both release heat and scene/captions change together (1381.569447ms)
+  ✔ 70°C: even the initially hot cup absorbs heat; both arrows point inward (1301.940209ms)
+  ✔ copper paths cross cup boundaries and pulses move, pause and resume with the model (6562.960451ms)
+  ✔ reset and switching environment during playback cancel old observations (693.956037ms)
+  ✔ same displayed temperature removes heat flow and replay starts cleanly (9606.552717ms)
+  ✔ keyboard and reduced motion preserve all basic controls (784.470445ms)
+  ✔ in-scene instruments and controls fit desktop, tablet and phone widths (1712.635633ms)
+  ✔ real rendered flow keeps moving with either motion preference and freezes only when paused (4990.452541ms)
+  ✔ real mobile taps change scene, play, pause and restart (1094.746329ms)
+  ✔ remaining learning blocks and quiz still operate independently (970.030602ms)
+✔ 5.2 first block: three environments and in-water thermometers (34085.588511ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 52
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 64733.929764
