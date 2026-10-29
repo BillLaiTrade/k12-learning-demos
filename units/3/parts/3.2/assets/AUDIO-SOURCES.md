@@ -1,6 +1,6 @@
 # 聲音來源與處理
 
-## 單元小測：單發煙火爆炸聲
+## 單元小測：煙火爆響、碎裂火花及回音（第二版）
 
 - 作品：FRWKRec_Single Firework With City Reverb_Jaku5.wav。
 - 作者：jakubp.jp（Freesound）。
@@ -8,16 +8,30 @@
 - 公開高品質預聽檔：https://cdn.freesound.org/previews/552/552699_3921235-hq.mp3
 - 授權：CC0 1.0，http://creativecommons.org/publicdomain/zero/1.0/；可免署名使用。
 - 查閱日期：2026-10-29（Asia/Taipei）。作品為單次煙火與城市回響的實錄。
-- 本地 firework-burst.wav：取原預聽檔 0.061–3.261 秒，移除爆炸前的低聲背景，保留單次爆炸及衰減回響。48 kHz、PCM16、雙聲道，3.2 秒。整理極低頻與高頻、適度壓縮及正規化響度，起音 1 ms／結尾 350 ms 淡化。
-- 解碼檢查：RMS 約 0.0638、峰值約 0.5813，起音 20 ms 內峰值約 0.2764；聲音清楚、無削波。播放直接輸出至 Web Audio 目的端，無額外音量滑桿。
+- 使用者反映第一版過於接近單純爆炸，因此第二版以兩份真實煙火錄音組合「單次爆響 → 火花劈啪 → 城市回音」，不是其他爆炸素材或合成白噪音。這是聲音設計，不宣稱為同一發煙火的一鏡實錄。
+- 新增作品：**Firework Crackle**；作者：**LukaCafuka**。
+- 新增作品頁：https://freesound.org/people/LukaCafuka/sounds/750682/
+- 新增公開高品質預聽：https://cdn.freesound.org/previews/750/750682_16236894-hq.mp3
+- 授權同為 CC0 1.0。作者說明為 2019 年跨年前錄下的煙火劈啪聲；原錄音 1.674 秒，48 kHz、雙聲道。查閱日期：2026-10-29（Asia/Taipei）。
+- 本地 firework-burst.wav：爆響取第一份錄音 0.061–3.261 秒；火花取新增錄音 0.113–1.674 秒，接在爆響後 0.700 秒。不變更錄音速度及音高，不循環火花，不插入其他次主要爆炸，不加入預先的升空哨聲干擾光聲計時。成品 48 kHz、PCM16、雙聲道、3.2 秒。
+- 解碼檢查：RMS 約 0.05559、峰值約 0.84183，起音 20 ms 內峰值約 0.61725；火花區段（0.7–1.25 秒）RMS 約 0.10780，有明顯的瞬態碎裂聲訊號。無削波，直接輸出至 Web Audio 目的端，無額外音量滑桿。
 - 爆炸聲依觀察開始後的隨機時間差預約播放；原錄音不含額外等待段，避免把音檔前導空白算成未顯示的延遲。
 
 重製命令：
 
-    ffmpeg -i source.mp3 -af 'atrim=start=0.061:end=3.261,asetpts=PTS-STARTPTS,highpass=f=45,lowpass=f=8500,acompressor=threshold=0.12:ratio=2.5:attack=1:release=130,loudnorm=I=-17:TP=-1.5:LRA=7,afade=t=in:d=0.001,afade=t=out:st=2.85:d=0.35' -ar 48000 -ac 2 -c:a pcm_s16le firework-burst.wav
+    ffmpeg -i source-burst.mp3 -i source-crackle.mp3 -filter_complex '[0:a]atrim=start=0.061:end=3.261,asetpts=PTS-STARTPTS,highpass=f=45,lowpass=f=7500,acompressor=threshold=0.12:ratio=2.5:attack=1:release=130,volume=0.9[burst];[1:a]atrim=start=0.113:end=1.674,asetpts=PTS-STARTPTS,highpass=f=140,lowpass=f=8500,volume=0.8,afade=t=in:d=0.003,afade=t=out:st=1.37:d=0.19,adelay=700:all=1[crackle];[burst][crackle]amix=inputs=2:duration=longest:normalize=0,loudnorm=I=-16:TP=-1.5:LRA=9,afade=t=in:d=0.001,afade=t=out:st=2.95:d=0.25[out]' -map '[out]' -ar 48000 -ac 2 -c:a pcm_s16le firework-burst.wav
 
 - 原預聽 MP3 SHA-256：750405aee4544a7deb850f07f8eb005b8cc3aeb72c119963634c99b13878c6fb
-- 衍生 WAV SHA-256：74ff4e7b8ef39d2610ccb49aa69fcb0e4a304c6c7b2a4266e9f8a0d0c46b113f
+- 新增火花預聽 MP3 SHA-256：5027ae8addea281a1894b25da93b3c0ba19030447c569128484af6e004f3c91d
+- 第二版衍生 WAV SHA-256：c3bda0b8883d9eaba5e9288060c065596f39e8d47d7c1edc720e78cbf4109742
+
+### 搜尋與選用紀錄
+
+- 搜尋 Freesound「single firework crackle」「firework crackling」，比對作品描述、授權、錄音長度及可下載的音訊。
+- [Fireworks Crackle／16FThumaF](https://freesound.org/people/16FThumaF/sounds/505264/)：實錄但長達 69 秒、有多次爆炸，未使用，避免測距起點不明。
+- [Fireworks - Pop Pop Crackle／el_boss](https://freesound.org/people/el_boss/sounds/588198/)：作品描述是 7 月 4 日煙火現場錄音；公開預聽回應 403，未取得音訊、未使用。
+- [firework_single.wav／zihengc](https://freesound.org/people/zihengc/sounds/335983/)：作者說明是組合其他作者作品，原始授權鏈未在本次確認，未採用。
+- [starburst_firework_mkh3040_061105.wav／ermine](https://freesound.org/people/ermine/sounds/25779/)：單發後有碎裂聲，但為 CC BY-NC，未使用。
 
 ## 鋼尺
 

@@ -1,6 +1,6 @@
 import { createChallenge, checkEstimate } from './fireworks-model.mjs?v=1';
-import { FireworkRenderer } from './fireworks-renderer.mjs?v=1';
-import { FireworkAudio } from './fireworks-audio.mjs?v=1';
+import { FireworkRenderer, FIREWORK_DURATION } from './fireworks-renderer.mjs?v=2';
+import { FireworkAudio } from './fireworks-audio.mjs?v=2';
 
 const root = document.querySelector('#unit-quiz.fireworks-quiz');
 if (root) {
@@ -98,7 +98,7 @@ if (root) {
           + challenge.delay.toFixed(2) + ' 秒，算出距離；以公尺作答，可四捨五入至整數。';
       }
     }
-    if (elapsed < Math.max(5.1, challenge.delay + audio.buffer.duration)) {
+    if (elapsed < Math.max(FIREWORK_DURATION, challenge.delay + audio.buffer.duration)) {
       frame = requestAnimationFrame(drawFrame);
     } else {
       frame = 0; renderer.draw(-1); root.dataset.audio = 'ended';

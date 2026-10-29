@@ -124,22 +124,27 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
   await t.test('real firework recording has prompt onset and audible, unclipped signal', async () => {
     const signal = await page.evaluate(async () => {
       const context = new OfflineAudioContext(2, 128, 48000);
-      const bytes = await (await fetch('assets/firework-burst.wav?v=1')).arrayBuffer();
+      const bytes = await (await fetch('assets/firework-burst.wav?v=2')).arrayBuffer();
       const buffer = await context.decodeAudioData(bytes);
-      let sum = 0, peak = 0, onset = 0, count = 0;
+      let sum = 0, peak = 0, onset = 0, count = 0, crackleSum = 0, crackleCount = 0;
       for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
         const samples = buffer.getChannelData(channel);
         for (let i = 0; i < samples.length; i++) {
           const sample = samples[i]; sum += sample * sample; count++;
           peak = Math.max(peak, Math.abs(sample));
           if (i < buffer.sampleRate * .02) onset = Math.max(onset, Math.abs(sample));
+          if (i >= buffer.sampleRate * .7 && i < buffer.sampleRate * 1.25) {
+            crackleSum += sample * sample; crackleCount++;
+          }
         }
       }
-      return { duration: buffer.duration, rms: Math.sqrt(sum / count), peak, onset };
+      return { duration: buffer.duration, rms: Math.sqrt(sum / count), peak, onset,
+        crackleRms: Math.sqrt(crackleSum / crackleCount) };
     });
     assert.equal(signal.duration, 3.2);
     assert.ok(signal.rms > .025 && signal.peak > .3 && signal.peak < .96, JSON.stringify(signal));
     assert.ok(signal.onset > .1, 'the delayed audio must not contain more leading silence');
+    assert.ok(signal.crackleRms > .04, 'real firework crackles must remain audible after the initial boom');
     t.diagnostic('decoded sound ' + JSON.stringify(signal));
   });
 
@@ -223,6 +228,41 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal((await data()).state, 'ready');
     assert.equal(await page.evaluate(() => window.fwSignals.at(-1).stopped), true);
     assert.match(await page.locator('#fireworks-status').textContent(), /中斷/);
+  });
+
+  await t.test('firework depth, fragments, falling trails and clearing are deterministic', async () => {
+    const visual = await page.evaluate(async () => {
+      const { FireworkRenderer, FIREWORK_DURATION } = await import('./assets/fireworks-renderer.mjs?v=2');
+      const canvas = document.createElement('canvas');
+      canvas.style.cssText = 'position:fixed;width:518px;height:324px;left:0;top:0';
+      document.body.append(canvas);
+      const renderer = new FireworkRenderer(canvas); renderer.prepare(34789);
+      const pixels = time => {
+        renderer.draw(time);
+        const bytes = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+        let lit = 0, near = 0, hash = 2166136261;
+        for (let i = 3; i < bytes.length; i += 4) {
+          hash = Math.imul(hash ^ bytes[i], 16777619);
+          if (bytes[i] > 30) { lit++; if (i / 4 / canvas.width > canvas.height * .81) near++; }
+        }
+        return { lit, near, hash: hash >>> 0 };
+      };
+      const before = pixels(-1), burst = pixels(.85), scatter = pixels(1.35), fallen = pixels(2.4);
+      const replay = pixels(.85), after = pixels(FIREWORK_DURATION + .1);
+      const parent = renderer.stars[0], first = renderer.position(parent, 0), later = renderer.position(parent, 1.5);
+      const result = { before, burst, scatter, fallen, replay, after,
+        velocityCount: new Set(renderer.stars.map(s => s.vx.toFixed(3))).size,
+        lifeCount: new Set(renderer.stars.map(s => s.life.toFixed(1))).size,
+        fragments: renderer.fragments.length, moved: Math.hypot(first.x - later.x, first.y - later.y) };
+      renderer.resizeObserver.disconnect(); canvas.remove(); return result;
+    });
+    assert.equal(visual.before.lit, 0); assert.equal(visual.after.lit, 0);
+    assert.ok(visual.burst.lit > 1000);
+    assert.equal(visual.burst.hash, visual.replay.hash);
+    assert.notEqual(visual.burst.hash, visual.scatter.hash);
+    assert.notEqual(visual.scatter.hash, visual.fallen.hash);
+    assert.equal(visual.scatter.near, 0, 'distant firework stars must not fall onto the foreground railing');
+    assert.ok(visual.velocityCount > 90 && visual.lifeCount > 10 && visual.fragments > 100 && visual.moved > 10);
   });
 
   await t.test('desktop and laptop layout stays readable without horizontal overflow', async () => {

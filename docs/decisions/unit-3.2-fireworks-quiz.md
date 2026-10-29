@@ -24,3 +24,14 @@
     CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.2.test.cjs tests/unit-2.2-sound-propagation.test.cjs tests/unit-2.2-vacuum.test.cjs tests/unit-2.2-sound-speed.test.cjs
 
 音效來源與重製方式見 units/3/parts/3.2/assets/AUDIO-SOURCES.md。
+
+## 第二版：煙火質感與真實火花尾聲
+
+使用者檢視後認為動畫不夠真實、音效太像單純爆炸，要求重新搜尋煙火專用錄音。
+
+- 重新搜尋並比較單發煙火、煙火劈啪和完整煙火秀錄音。採用 LukaCafuka 的 CC0 現場錄音 Firework Crackle，與原本單發煙火實錄組合；來源、未選理由與完整重製命令均記錄於 AUDIO-SOURCES.md。
+- 第一聲爆響起點不變，0.7 秒後加入原速、原音高的真實火花碎裂聲，再自然消退。所有聲音都在亮光之後依題目延遲一起抵達，不加入會混淆計時的升空聲或多發連續爆炸。
+- 動畫改以三維球殼投影安排火星，使用不均勻的速度、壽命、粗細及亮度，包含金銀色光點、冷卻微光尾跡、小碎星、受重力影響的垂落與擴散煙霧。
+- 倒影來自同一煙火的即時圖層，經水紋切碎；火星在遠處岸線前漸隱，不穿過湖水或近景欄杆。
+- 純時間函數繪圖保留相同題目的重播一致性。共用既有真實音訊／畫面時鐘，沒有把動畫速度因子帶入測距延遲。
+- 不變更版面、題目模型與前面五個學習區塊。

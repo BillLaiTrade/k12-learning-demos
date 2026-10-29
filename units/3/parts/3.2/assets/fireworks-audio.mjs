@@ -8,7 +8,7 @@ export class FireworkAudio {
     await this.context.resume();
     if (this.context.state !== 'running') throw new Error('audio-suspended');
     if (!this.buffer) {
-      const response = await fetch(new URL('./firework-burst.wav?v=1', import.meta.url));
+      const response = await fetch(new URL('./firework-burst.wav?v=2', import.meta.url));
       if (!response.ok) throw new Error('audio-download');
       this.buffer = await this.context.decodeAudioData(await response.arrayBuffer());
     }
