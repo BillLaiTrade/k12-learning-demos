@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="assets/sound-propagation.css?v=3">
   <link rel="stylesheet" href="assets/vacuum-lab.css?v=5">
   <link rel="stylesheet" href="assets/sound-speed.css?v=fixed-22">
-  <link rel="stylesheet" href="assets/fireworks-quiz.css?v=3">
+  <link rel="stylesheet" href="assets/fireworks-quiz.css?v=4">
 </head>
 <body>
   <header class="shell masthead">
@@ -288,7 +288,6 @@
                   <p class="fireworks-formula">距離 ＝ 聲速 × 時間差</p>
                   <label class="fireworks-input"><input id="fireworks-answer" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入距離" aria-label="估算煙火爆炸點到觀察位置的距離，單位公尺" aria-describedby="fireworks-feedback" disabled><span>公尺</span></label>
                   <button class="action" id="fireworks-check" type="submit" disabled>核對距離</button>
-                  <details class="fireworks-hint" id="fireworks-hint"><summary>需要計算提示？</summary><p id="fireworks-hint-calculation">先將現場氣溫代入聲速公式，再把算出的聲速乘以亮光與聲音的時間差。</p></details>
                   <p class="fireworks-feedback" id="fireworks-feedback" role="status" aria-live="polite" hidden></p>
                 </form>
               </section>
@@ -386,6 +385,6 @@
   <script type="module" src="assets/sound-propagation.js?v=4"></script>
   <script type="module" src="assets/vacuum-lab.js?v=6"></script>
   <script type="module" src="assets/sound-speed.mjs?v=fixed-22"></script>
-  <script type="module" src="assets/fireworks-quiz.mjs?v=3"></script>
+  <script type="module" src="assets/fireworks-quiz.mjs?v=4"></script>
 </body>
 </html>

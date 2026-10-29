@@ -118,7 +118,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await page.locator('#unit-quiz .quiz-question, #quiz-check, #quiz-reset').count(), 0);
     assert.equal(await page.evaluate(() => window.fwSignals.length), 0);
     assert.equal(await page.locator('.lesson-card').count(), 5);
-    assert.ok((await page.locator('#fireworks-hint-calculation').textContent()).length > 0);
+    assert.equal(await page.locator('#fireworks-hint, #fireworks-hint-calculation').count(), 0);
   });
 
   await t.test('real firework recording has prompt onset and audible, unclipped signal', async () => {
@@ -182,7 +182,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     t.diagnostic('wall clock and audio ' + JSON.stringify(times));
   });
 
-  await t.test('answer, rounding, keyboard, hint and feedback follow the displayed numbers', async () => {
+  await t.test('answer, rounding, keyboard and feedback follow the displayed numbers', async () => {
     const answer = page.locator('#fireworks-answer'), submit = page.locator('#fireworks-check');
     await submit.click();
     assert.equal(await page.locator('#fireworks-feedback').getAttribute('data-state'), 'invalid');
@@ -190,8 +190,6 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await answer.getAttribute('aria-invalid'), 'true');
     await answer.fill('1'); await submit.click();
     assert.equal(await page.locator('#fireworks-feedback').getAttribute('data-state'), 'incorrect');
-    await page.locator('#fireworks-hint summary').click();
-    assert.match(await page.locator('#fireworks-hint-calculation').textContent(), /代入聲速公式.*3\.00/);
     await answer.fill('1011'); await answer.press('Enter');
     assert.equal(await page.locator('#fireworks-feedback').getAttribute('data-state'), 'correct');
     assert.match(await page.locator('#fireworks-feedback').textContent(), /1,011.*1\.01/);
@@ -210,7 +208,6 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal((await data()).state, 'ready');
     assert.equal(await page.locator('#fireworks-answer').inputValue(), '');
     assert.equal(await page.locator('#fireworks-timer').textContent(), '—');
-    assert.equal(await page.locator('#fireworks-hint').getAttribute('open'), null);
     assert.equal(await page.evaluate(() => window.fwSignals[1].stopped), true);
     await page.locator('#fireworks-observe').focus(); await page.keyboard.press('Enter');
     await page.waitForFunction(() => document.querySelector('#unit-quiz').dataset.state === 'complete');
