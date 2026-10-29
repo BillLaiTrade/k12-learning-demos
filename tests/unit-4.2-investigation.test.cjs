@@ -118,25 +118,23 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
   await act('heat');assert.equal((await state()).phase,'dry-filtered');assert.match(await $('status').innerText(),/蒸乾後留下白色固體/);saltRecord=await record();await act('weigh');assert.match(await $('status').innerText(),/5 克/);await record();
  });
  await t.test('notes store real observations and editable student text without duplicate event records',async()=>{
-  assert.equal(await $('record').isDisabled(),true);const count=await page.locator('.invest-note').count();await page.locator('.invest-note textarea').first().fill('直接加熱後兩種固體仍混在一起。');assert.equal(await page.locator('.invest-note').count(),count);
+  assert.equal(await $('record').isDisabled(),true);const count=await page.locator('.invest-note').count();await $('notebook').evaluate(e=>e.open=true);await page.locator('.invest-note textarea').first().fill('直接加熱後兩種固體仍混在一起。');assert.equal(await page.locator('.invest-note').count(),count);
   await page.locator('[data-sample="1"]').click();await $('event').selectOption('1-1');assert.equal(await $('record').isDisabled(),true);await page.locator('[data-sample="'+validSample+'"]').click();await $('event').selectOption(`${validSample}-1`);assert.equal(await $('record').isDisabled(),true);
  });
- await t.test('report checks evidence, not a guessed list of ingredients',async()=>{
-  await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'revise');
-  for(const key of ['sand','salt','water']){await page.locator(`[name=component][value=${key}]`).check();await $(`evidence-${key}`).selectOption(rawHeatRecord);}
-  await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'revise');assert.match(await $('feedback').innerText(),/混合殘渣還不能分辨/);
-  await $('evidence-sand').selectOption(filterRecord);await $('evidence-salt').selectOption(saltRecord);await $('evidence-water').selectOption(rawHeatRecord);await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');assert.match(await $('feedback').innerText(),/候選成分範圍/);assert.match(await $('feedback').innerText(),/不能.*直接鑑定食鹽/);
- });
- await t.test('optional concentration uses the same aliquot, excludes sand and accepts both units',async()=>{
-  await page.locator('.invest-concentration>summary').click();await $('include-concentration').check();await $('concentration-sample').selectOption(validSample);assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');
+ await t.test('the mission checks actual separation and net measurements before accepting an answer',async()=>{
+  await page.locator('[data-sample="1"]').click();await $('concentration-value').fill('5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'revise');assert.match(await $('feedback').innerText(),/泥沙.*濾掉/);
+  await page.locator('[data-sample="'+validSample+'"]').click();assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');
   await $('concentration-value').fill('4.901960784');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'revise');
-  await $('concentration-value').fill('5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');assert.match(await $('feedback').innerText(),/50,000 ppm/);
-  await $('concentration-unit').selectOption('ppm');assert.equal(await $('feedback').isVisible(),false);await $('concentration-value').fill('50000');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');
-  await $('concentration-sample').selectOption('1');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'revise');assert.match(await $('feedback').innerText(),/含泥沙/);await $('include-concentration').uncheck();await capture('notebook-desktop');
+  await $('concentration-value').fill('5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');assert.match(await $('feedback').innerText(),/任務完成/);assert.match(await $('feedback').innerText(),/5 克 ÷ 100 克/);
  });
- await t.test('editing or removing a note withdraws an old result and updates evidence choices',async()=>{
-  await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').isVisible(),true);await page.locator('.invest-note textarea').first().fill('補充：白色固體和褐色顆粒仍混合。');assert.equal(await $('feedback').isVisible(),false);
-  const count=await page.locator('.invest-note').count();await page.locator('.invest-note').first().locator('button').click();assert.equal(await page.locator('.invest-note').count(),count-1);assert.equal(await $('evidence-water').inputValue(),'');
+ await t.test('the concentration answer uses automatic tare and the active aliquot only',async()=>{
+  assert.match(await page.locator('.invest-answer-head').innerText(),/自動扣除容器質量/);assert.equal(await page.locator('#invest-include-concentration,#invest-concentration-unit,[name=component]').count(),0);
+  await page.locator('[data-sample="1"]').click();assert.equal(await $('feedback').isVisible(),false);assert.equal(await $('solute-mass').innerText(),'7 克');assert.match(await $('solute-note').innerText(),/泥沙/);
+  await page.locator('[data-sample="'+validSample+'"]').click();assert.equal(await $('concentration-value').inputValue(),'5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');
+ });
+ await t.test('optional notes can be edited and removed without changing measured masses',async()=>{
+  await $('notebook').evaluate(e=>e.open=true);await page.locator('.invest-note textarea').first().fill('補充：白色固體和褐色顆粒仍混合。');assert.equal(await $('feedback').getAttribute('data-result'),'correct');
+  const count=await page.locator('.invest-note').count();await page.locator('.invest-note').first().locator('button').click();assert.equal(await page.locator('.invest-note').count(),count-1);assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');
  });
  await t.test('dragging apparatus to the active sample works, and outside or canceled drops do nothing',async()=>{
   await reset();await act('sample');const drag=async(cancel=false,outside=false)=>{await tool('filter').scrollIntoViewIfNeeded();const b=await tool('filter').boundingBox(),r=await $('picture').boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(outside?r.x+10:r.x+r.width*.48,outside?r.y+10:r.y+r.height*.5,{steps:10});if(cancel)await page.keyboard.press('Escape');await page.mouse.up();};
@@ -162,7 +160,7 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
    await page.setViewportSize({width,height:1100});const result=await page.locator('#unit-quiz').evaluate(card=>{const main=card.querySelector('.card-main').getBoundingClientRect();return{overflow:document.documentElement.scrollWidth>innerWidth,escaped:[...card.querySelector('.card-main').children].some(e=>{const r=e.getBoundingClientRect();return r.width>0&&(r.left<main.left-.5||r.right>main.right+.5);}),buttons:[...card.querySelectorAll('.invest-tools button,#invest-take')].map(b=>{const r=b.getBoundingClientRect();return{width:r.width,height:r.height};})};});assert.equal(result.overflow,false,`overflow ${width}`);assert.equal(result.escaped,false,`column ${width}`);assert.ok(result.buttons.every(b=>b.width>=40&&b.height>=35),`targets ${width}`);
    if(width===390)await capture('initial-mobile');
   }
-  await act('sample');await act('filter');await record();await $('notebook').evaluate(e=>e.open=true);await page.locator('.invest-concentration>summary').click();
+  await act('sample');await act('filter');await record();await $('notebook').evaluate(e=>e.open=true);
   for(const width of [1440,1024,850,768,680,390,320]){await page.setViewportSize({width,height:1100});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`expanded ${width}`);if(width===390)await capture('notebook-mobile');}
  });
  await t.test('asset failures keep controls safe and retry recovers without breaking other lessons',async()=>{

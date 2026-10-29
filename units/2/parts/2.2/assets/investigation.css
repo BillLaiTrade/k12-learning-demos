@@ -115,3 +115,33 @@
   .invest-answer { grid-template-columns:minmax(0,1fr) 70px; }.invest-answer label { grid-column:1/-1; }.invest-masses { gap:5px; }.invest-masses span { padding:7px; font-size:.67rem; }
   .invest-report-actions button { padding:9px 10px; font-size:.78rem; }.invest-record-action { padding:9px 10px; }.invest-record-action select { font-size:.7rem; }
 }
+
+/* One mission: dry crystals and mass-percent concentration, with automatic tare. */
+.invest-hint {margin:0;padding:10px 14px;border-left:3px solid #c79c53;background:#fff6e7;color:#806135;font-size:.8rem;line-height:1.65;}
+.invest-mission-result {margin-top:15px;padding:16px;border:1px solid #cbdcc5;border-radius:13px;background:#f5f9f0;}
+.invest-mission-result[hidden],.invest-mission-result [hidden] {display:none!important;}
+.invest-answer-head {display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:5px 12px;margin-bottom:12px;}
+.invest-answer-head h3 {margin:0;color:#2c563e;font-size:1rem;}
+.invest-answer-head>span {font-size:.72rem;color:#75836b;}
+.invest-mission-result .invest-masses {margin:0;gap:10px;}
+.invest-mission-result .invest-masses>div {min-width:0;padding:12px;border:1px solid #d9e4d1;border-radius:9px;background:#fffefa;}
+.invest-mission-result .invest-masses>div>span {display:block;padding:0;border-radius:0;background:none;font-size:.76rem;color:#6b7c62;}
+.invest-mission-result .invest-masses b {display:block;margin-top:4px;font-size:1.35rem;line-height:1.4;color:#2c6243;font-variant-numeric:tabular-nums;}
+.invest-mission-result .invest-masses small {display:block;min-height:1.5em;margin-top:3px;font-size:.69rem;color:#849077;}
+.invest-mission-result .invest-masses>div[data-valid="false"] {border-color:#dbbb7f;background:#fff8eb;}
+.invest-mission-result .invest-masses>div[data-valid="false"] small {color:#997339;}
+.invest-mission-result .invest-answer {display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:14px;font-size:.86rem;color:#3a5d42;}
+.invest-percent-input {display:flex;align-items:center;gap:7px;flex:1 1 135px;max-width:230px;}
+.invest-percent-input input {min-width:0;width:100%;padding:8px 10px;border:1px solid #c1d3b8;border-radius:7px;background:white;color:#24553b;font:inherit;font-size:.86rem;}
+.invest-mission-result button[type="submit"] {margin-left:auto;padding:9px 15px;border:1px solid #176b53;border-radius:8px;background:#176b53;color:#fff;font:inherit;font-size:.82rem;font-weight:700;cursor:pointer;}
+.invest-mission-result button:disabled {opacity:.5;cursor:wait;}
+@media(max-width:680px){
+ .invest-mission-result {padding:12px;}
+ .invest-mission-result .invest-masses {gap:7px;}
+ .invest-mission-result .invest-masses>div {padding:9px 8px;}
+ .invest-mission-result .invest-masses>div>span {font-size:.69rem;}
+ .invest-mission-result .invest-masses b {font-size:1.15rem;}
+ .invest-mission-result .invest-answer {gap:8px;}
+ .invest-mission-result .invest-answer>label {flex-basis:100%;}
+ .invest-percent-input {max-width:none;}
+}

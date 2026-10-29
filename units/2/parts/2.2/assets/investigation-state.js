@@ -36,33 +36,40 @@ export function finishTest(sample,action) {
 }
 export const phaseName=sample=>sample.water===0?(sample.sand>0?'混合殘渣':'白色固體'):sample.phase==='filtered'?'濾液':sample.phase==='settled'?'已沉降':'原樣本';
 export const actionName=action=>({sample:'取樣',settle:'靜置觀察',filter:'過濾',heat:'蒸發',weigh:'稱量'})[action];
-export function evidenceSupports(event,component) {
-  if(!event)return false;
-  if(component==='sand')return event.before.sand>0&&(event.action==='filter'||event.action==='settle');
-  if(component==='salt')return event.action==='heat'&&event.before.sand===0&&event.before.salt>0&&event.before.water>0;
-  if(component==='water')return event.action==='heat'&&event.before.water>0&&event.after.water===0;
-  return false;
+// Display actual measurements, including contaminated attempts, rather than
+// silently substituting the prepared sample's correct solution mass.
+export function measuredMasses(sample) {
+  const measurements=sample?.measurements||[];
+  const last=predicate=>measurements.slice().reverse().find(predicate)||null;
+  const liquid=last(m=>m.phase==='filtered')||last(m=>['raw','settled'].includes(m.phase));
+  const solid=last(m=>m.phase==='dry-filtered')||last(m=>m.phase==='dry-raw');
+  return {liquid,solid};
 }
 export function concentrationEvidence(sample) {
-  if(!sample)return null;
-  const liquid=sample.measurements.find(m=>m.phase==='filtered');
-  const solid=sample.measurements.find(m=>m.phase==='dry-filtered');
-  if(!liquid||!solid)return null;
+  const {liquid,solid}=measuredMasses(sample);
+  if(!liquid||!solid||liquid.phase!=='filtered'||solid.phase!=='dry-filtered')return null;
   return {solution:liquid.mass,solute:solid.mass,percent:solid.mass/liquid.mass*100,ppm:solid.mass/liquid.mass*1e6};
 }
-export function assessReport(records,components,evidence,concentration=null) {
-  const issues=[];
-  if(!records.length)return {ok:false,issues:['先把你做過的測試記進實驗筆記，再用觀察支持推論。']};
-  const hints={sand:'泥沙：可用靜置或過濾留下顆粒的紀錄支持。',salt:'食鹽：混合殘渣還不能分辨；找找沒有泥沙的液體蒸乾後，是否仍留下白色固體。',water:'水：可用液體在蒸發過程中逐漸減少的紀錄支持。'};
-  for(const component of ['sand','salt','water']){
-    if(!components.includes(component)){issues.push(`還有一種成分未列入推論。${hints[component]}`);continue;}
-    const record=records.find(r=>r.id===evidence[component]);
-    if(!evidenceSupports(record?.event,component))issues.push(hints[component]);
+export function measurementHint(sample) {
+  if(!sample)return '';
+  const {liquid,solid}=measuredMasses(sample);
+  if(sample.phase==='dry-raw'||solid?.phase==='dry-raw')return '留下的固體還混著泥沙。蒸發之前，你有把泥沙濾掉嗎？';
+  if(liquid&&liquid.phase!=='filtered'){
+    if(sample.water===0)return '蒸發前那筆稱量包含泥沙。你有在過濾後重新稱量濾液嗎？這份已蒸乾，可以另取一份再試。';
+    return sample.phase==='filtered'?'過濾後，液體的重量還一樣嗎？你有重新稱量這份濾液嗎？':'這筆重量包含泥沙嗎？計算溶液濃度前，想想是否要先把泥沙分開。';
   }
-  if(concentration){
-    const {basis,value,unit}=concentration;
-    if(!basis)issues.push('濃度紀錄還缺同一份取樣在「過濾後、蒸發前」與「完全乾燥後」的兩次淨質量。含泥沙的總質量不能直接當成溶液質量。');
-    else if(value===''||!Number.isFinite(Number(value))||Math.abs(Number(value)-basis[unit])>1e-6)issues.push('請以乾燥白色固體質量 ÷ 蒸發前濾液總質量，依所選單位乘以 100% 或 1,000,000。');
-  }
-  return {ok:issues.length===0,issues};
+  return '';
+}
+export function assessReport(sample,value) {
+  const fail=message=>({ok:false,issues:[message],basis:null});
+  if(!sample)return fail('先從未知樣本 X 取一份，試著分離出乾燥晶體。');
+  const {liquid,solid}=measuredMasses(sample),hint=measurementHint(sample);
+  if(hint)return fail(hint);
+  if(!liquid)return fail(sample.water===0?'少了一筆蒸發前濾液的淨質量。這份已經蒸乾，可以另取一份再試試。':'還沒有蒸發前濾液的淨質量。想想該稱量哪一份液體？');
+  if(sample.water>0)return fail('這份液體還沒蒸乾。把晶體分離出來後，它的淨質量是多少？');
+  if(!solid)return fail('乾燥晶體還沒有稱量。用電子秤量量看，它的淨質量是多少？');
+  const basis=concentrationEvidence(sample),answer=String(value??'').trim();
+  if(!answer||!Number.isFinite(Number(answer))||Number(answer)<0||Number(answer)>100)return fail('請填寫重量百分濃度的數值，百分號已經替你放好了。');
+  if(Math.abs(Number(answer)-basis.percent)>1e-6)return fail('用乾燥晶體的淨質量，除以蒸發前濾液的淨質量，再乘以 100%，試著算一次。');
+  return {ok:true,issues:[],basis};
 }
