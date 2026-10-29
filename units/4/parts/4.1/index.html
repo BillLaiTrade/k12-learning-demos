@@ -584,6 +584,10 @@
     .microscope-model-disclaimer { margin:0!important; padding:9px 12px; border-radius:9px; background:#f2f1e8; color:#59665e; font-size:.76rem; text-align:center; }
     @media(max-width:780px) { .change-definitions,.change-comparison-grid { grid-template-columns:1fr; } }
     @media(max-width:680px) { .microscope-source-row .microscope-source { width:min(100%,300px); } .microscope-source { padding:0; } .microscope-source img { height:300px; } .change-example-card--water .microscope-source-row { grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; } .change-example-card--water .microscope-source-row .microscope-source { width:100%; padding:3px; } .change-example-card--water .microscope-source img { height:auto; } .rust-photo-comparison { gap:8px; } .rust-photo-comparison .microscope-source { padding:4px; } .rust-photo-comparison .microscope-glass,.change-example-card--water .microscope-glass { width:clamp(30px,24%,44px); } .rust-photo-comparison .microscope-glass::after,.change-example-card--water .microscope-glass::after { width:16px; height:4px; right:-12px; bottom:-4px; } }
+    .change-example-card--water { container-type:inline-size; }
+    .change-example-card--water .microscope-glass { width:min(20%,64px); }
+    .change-example-card--water .microscope-glass::before { content:""; position:absolute; inset:-8px; border-radius:50%; }
+    @container (max-width:620px) { .change-example-card--water .microscope-source-row { grid-template-columns:1fr; gap:14px; } .change-example-card--water .microscope-source-row .microscope-source { width:min(100%,300px); } }
     .pure-particle-comparison { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; align-items:stretch; }
     .particle-card { overflow:hidden; border:2px solid #c6d6c5; border-radius:13px; background:#fffefa; }
     .particle-card--element { border-color:#99b79b; }
@@ -1112,17 +1116,17 @@
               <article class="change-example-card change-example-card--water">
                 <h3>水的三態｜物理變化</h3>
                 <div class="microscope-source-row" aria-label="水的固態、液態和氣態樣本；聚焦樣本可查看放大的粒子模型">
-                  <figure class="microscope-source" data-microscope-phase="ice" data-microscope="冰中的水分子：分子彼此靠近，排列較整齊。"><img src="assets/microscope-ice.webp" alt="白色瓷盤上的透明冰塊寫實照片"><span class="microscope-glass" role="slider" tabindex="0" aria-label="拖曳放大鏡觀察冰中的水分子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>固態・冰</figcaption></figure>
-                  <figure class="microscope-source microscope-source--liquid" data-microscope-phase="liquid" data-microscope="液態水中的水分子：仍然彼此靠近，排列較不規則。"><img src="assets/microscope-water.webp" alt="透明玻璃杯中的清水寫實照片"><span class="microscope-glass" role="slider" tabindex="0" aria-label="拖曳放大鏡觀察液態水分子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>液態・水</figcaption></figure>
-                  <figure class="microscope-source microscope-source--boiling" data-microscope-phase="vapor" data-microscope="水蒸氣是看不見的氣體；透明鍋中的水維持原樣，鍋底實景氣泡持續翻湧上升。鏡片中顯示氣態分子的模型。">
+                  <figure class="microscope-source" data-microscope-phase="ice" data-microscope="冰塊內的水分子：彼此靠近，排列較整齊，持續在固定位置附近振動。"><img src="assets/microscope-ice.webp" alt="白色瓷盤上的透明冰塊寫實照片"><span class="microscope-glass" role="slider" tabindex="0" aria-label="在冰塊內拖曳放大鏡觀察水分子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>固態・冰</figcaption></figure>
+                  <figure class="microscope-source microscope-source--liquid" data-microscope-phase="liquid" data-microscope="水面下的水分子：彼此靠近，排列較不規則，可以互相移動。"><img src="assets/microscope-water.webp" alt="透明玻璃杯中的清水寫實照片"><span class="microscope-glass" role="slider" tabindex="0" aria-label="在水面下拖曳放大鏡觀察液態水分子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>液態・水</figcaption></figure>
+                  <figure class="microscope-source microscope-source--boiling" data-microscope-phase="vapor" data-microscope="鍋口上方：水蒸氣本身看不見；鏡片示意逸出水蒸氣的分子，省略周圍空氣。">
                     <div class="boiling-media-stage">
                       <img src="assets/microscope-vapor.webp" alt="透明鍋中的水持續沸騰；實景氣泡在水中翻湧上升，水蒸氣本身不可見">
                       <video class="boiling-real-video" data-boiling-video autoplay loop muted playsinline preload="metadata" aria-label="真實沸水中氣泡生成並向上翻湧的實景片段"><source src="assets/boiling-water-loop.webm" type="video/webm"><source src="assets/boiling-water-loop.mp4" type="video/mp4"></video>
                     </div>
-                    <span class="microscope-glass" role="slider" tabindex="0" aria-label="拖曳放大鏡觀察水蒸氣分子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>氣態・水蒸氣</figcaption>
+                    <span class="microscope-glass" role="slider" tabindex="0" aria-label="在鍋口上方拖曳放大鏡觀察水蒸氣分子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>氣態・水蒸氣</figcaption>
                   </figure>
                 </div>
-                <p class="microscope-instruction">照片呈現生活中的水；拖曳鏡片可看粒子模型（分子本身無法用肉眼看見）。</p>
+                <p class="microscope-instruction">鏡片分別在冰塊內、水面下與鍋口上方移動，顯示對應的粒子模型（分子本身無法用肉眼看見）。</p>
 
                 <p class="microscope-note" aria-live="polite">三態都是 H₂O；冰只微微振動，水會流動，水蒸氣則快速隨機移動。</p>
               </article>
@@ -1412,13 +1416,43 @@
       if(boilingClip.readyState>=2)startBoiling();else boilingClip.addEventListener("canplay",startBoiling,{once:true});
       document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")startBoiling();});
     }
+    // Observation areas follow the visible material in each square source photo.
+    const microscopeRegions={
+      ice:[[.35,.525],[.53,.465],[.68,.555],[.665,.705],[.535,.795],[.355,.725]],
+      liquid:[[.23,.38],[.77,.38],[.77,.69],[.23,.69]],
+      vapor:[[.20,.02],[.80,.02],[.80,.29],[.20,.29]]
+    };
+    function microscopeCenterRegion(outline,radius){
+      let polygon=outline;
+      for(let i=0;i<outline.length&&polygon.length;i++){
+        const a=outline[i],b=outline[(i+1)%outline.length],dx=b.x-a.x,dy=b.y-a.y,length=Math.hypot(dx,dy);
+        const distance=p=>(dx*(p.y-a.y)-dy*(p.x-a.x))/length-radius,next=[];
+        for(let j=0;j<polygon.length;j++){
+          const p=polygon[(j+polygon.length-1)%polygon.length],q=polygon[j],dp=distance(p),dq=distance(q);
+          if((dp>=0)!==(dq>=0)){const t=dp/(dp-dq);next.push({x:p.x+(q.x-p.x)*t,y:p.y+(q.y-p.y)*t});}
+          if(dq>=0)next.push(q);
+        }
+        polygon=next;
+      }
+      return polygon;
+    }
+    function microscopeNearestCenter(point,polygon){
+      if(polygon.every((a,i)=>{const b=polygon[(i+1)%polygon.length];return(b.x-a.x)*(point.y-a.y)-(b.y-a.y)*(point.x-a.x)>=-.001;}))return point;
+      let nearest=polygon[0],distance=Infinity;
+      polygon.forEach((a,i)=>{
+        const b=polygon[(i+1)%polygon.length],dx=b.x-a.x,dy=b.y-a.y,t=Math.max(0,Math.min(1,((point.x-a.x)*dx+(point.y-a.y)*dy)/(dx*dx+dy*dy||1))),candidate={x:a.x+t*dx,y:a.y+t*dy},d=(candidate.x-point.x)**2+(candidate.y-point.y)**2;
+        if(d<distance){distance=d;nearest=candidate;}
+      });
+      return nearest;
+    }
     document.querySelectorAll("#s7 [data-microscope]").forEach((source,index)=>{
       const card=source.closest(".change-example-card"),note=card.querySelector(".microscope-note"),lens=source.querySelector(".microscope-glass"),sample=source.querySelector("img"),glass=source.querySelector(".microscope-lens-content"),phase=source.dataset.microscopePhase;
+      const observationRegion=microscopeRegions[phase];
       let rustPixels=phase==="rust"?readRustPixels(sample):null;
       const reveal=document.createElement("div");reveal.className="microscope-reveal";reveal.setAttribute("aria-hidden","true");source.prepend(reveal);glass.replaceChildren();let revealSvg;const magnification=1.3;
       const renderReveal=()=>{if(phase==="rust"&&!rustPixels)rustPixels=readRustPixels(sample);reveal.innerHTML=microscopeSvg(phase,index,rustPixels);revealSvg=reveal.querySelector("svg");};
       renderReveal();
-      let dragging=false,position={x:.5,y:.5},cachedLensLimits=null,pendingPointer=null,moveFrame=0;
+      let dragging=false,position={x:.5,y:phase==="vapor" ? .9 : .5},cachedLensLimits=null,pendingPointer=null,moveFrame=0;
       const inspect=()=>{
         card.querySelectorAll(".microscope-source").forEach(item=>item.classList.toggle("is-active",item===source));
         if(note){
@@ -1427,17 +1461,23 @@
         }
       };
       const measureLensLimits=()=>{
-        const bounds=source.getBoundingClientRect(),inset=source.clientTop+parseFloat(getComputedStyle(source).paddingTop)||0,radius=lens.offsetWidth/2;
+        const bounds=source.getBoundingClientRect(),inset=source.clientTop+parseFloat(getComputedStyle(source).paddingTop)||0,radius=(observationRegion?lens.getBoundingClientRect().width:lens.offsetWidth)/2;
+        if(observationRegion){
+          const image=sample.getBoundingClientRect(),outline=observationRegion.map(([x,y])=>({x:image.left-bounds.left+x*image.width,y:image.top-bounds.top+y*image.height})),allowedCenters=microscopeCenterRegion(outline,radius);
+          return {bounds,inset:image.left-bounds.left,imageWidth:image.width,imageHeight:image.height,radius,allowedCenters,minX:Math.min(...allowedCenters.map(p=>p.x)),maxX:Math.max(...allowedCenters.map(p=>p.x)),minY:Math.min(...allowedCenters.map(p=>p.y)),maxY:Math.max(...allowedCenters.map(p=>p.y))};
+        }
         return {bounds,inset,radius,minX:inset+radius,maxX:inset+sample.offsetWidth-radius,minY:inset+radius,maxY:inset+sample.offsetHeight-radius};
       };
-      const refreshLensLayout=()=>{cachedLensLimits=measureLensLimits();const inset=cachedLensLimits.inset-1;reveal.style.left=`${inset}px`;reveal.style.top=`${inset}px`;reveal.style.right="auto";reveal.style.width=`${sample.offsetWidth}px`;reveal.style.height=`${sample.offsetHeight}px`;};
+      const refreshLensLayout=()=>{
+        cachedLensLimits=measureLensLimits();const inset=cachedLensLimits.inset-1;reveal.style.left=`${inset}px`;reveal.style.top=`${inset}px`;reveal.style.right="auto";reveal.style.width=`${cachedLensLimits.imageWidth||sample.offsetWidth}px`;reveal.style.height=`${cachedLensLimits.imageHeight||sample.offsetHeight}px`;
+        if(observationRegion){const {bounds,minX,maxX,minY,maxY}=cachedLensLimits;moveLens(bounds.left+minX+position.x*(maxX-minX),bounds.top+minY+position.y*(maxY-minY),false);}
+      };
       const moveLens=(clientX,clientY,updateCard=true)=>{
         if(phase==="rust"&&!rustPixels){rustPixels=readRustPixels(sample);if(rustPixels)renderReveal();}
-        const {bounds,inset,minX,maxX,minY,maxY,radius}=cachedLensLimits||measureLensLimits();
-        const x=Math.max(minX,Math.min(maxX,clientX-bounds.left));
-        const y=Math.max(minY,Math.min(maxY,clientY-bounds.top));
+        const {bounds,inset,minX,maxX,minY,maxY,radius,allowedCenters}=cachedLensLimits||measureLensLimits();
+        const requested={x:clientX-bounds.left,y:clientY-bounds.top},center=observationRegion?microscopeNearestCenter(requested,allowedCenters):{x:Math.max(minX,Math.min(maxX,requested.x)),y:Math.max(minY,Math.min(maxY,requested.y))},{x,y}=center;
         position={x:(x-minX)/Math.max(1,maxX-minX),y:(y-minY)/Math.max(1,maxY-minY)};
-        lens.style.left=`${x}px`;lens.style.top=`${y}px`;
+        lens.style.left=`${x-(observationRegion?source.clientLeft:0)}px`;lens.style.top=`${y-(observationRegion?source.clientTop:0)}px`;
         const revealX=x-inset,revealY=y-inset;reveal.style.setProperty("--lens-x",`${revealX}px`);reveal.style.setProperty("--lens-y",`${revealY}px`);reveal.style.setProperty("--lens-radius",`${Math.max(4,radius-5)}px`);
         revealSvg.style.transform=`translate(${(1-magnification)*revealX}px,${(1-magnification)*revealY}px) scale(${magnification})`;
         lens.setAttribute("aria-valuenow",String(Math.round(position.x*100)));
@@ -1456,13 +1496,14 @@
       lens.addEventListener("pointerup",stopDrag);lens.addEventListener("pointercancel",stopDrag);
       lens.addEventListener("focus",inspect);
       window.addEventListener("resize",refreshLensLayout,{passive:true});window.addEventListener("scroll",refreshLensLayout,{passive:true});
+      if(observationRegion){sample.addEventListener("load",refreshLensLayout);if("ResizeObserver" in window)new ResizeObserver(refreshLensLayout).observe(sample);}
       if(phase==="rust"&&!rustPixels)sample.addEventListener("load",()=>{rustPixels=readRustPixels(sample);if(rustPixels)renderReveal();inspect();},{once:true});
       lens.addEventListener("keydown",event=>{
         const step=event.shiftKey?14:7;let {x,y}=position;refreshLensLayout();const {bounds,minX,maxX,minY,maxY}=cachedLensLimits;
         if(event.key==="ArrowLeft")x-=step/Math.max(1,maxX-minX);else if(event.key==="ArrowRight")x+=step/Math.max(1,maxX-minX);else if(event.key==="ArrowUp")y-=step/Math.max(1,maxY-minY);else if(event.key==="ArrowDown")y+=step/Math.max(1,maxY-minY);else return;
         event.preventDefault();moveLens(bounds.left+minX+Math.max(0,Math.min(1,x))*(maxX-minX),bounds.top+minY+Math.max(0,Math.min(1,y))*(maxY-minY));
       });
-      requestAnimationFrame(()=>{refreshLensLayout();const {bounds,minX,maxX,minY,maxY}=cachedLensLimits;moveLens(bounds.left+(minX+maxX)/2,bounds.top+(minY+maxY)/2);});
+      requestAnimationFrame(()=>{refreshLensLayout();const {bounds,minX,maxX,minY,maxY}=cachedLensLimits;moveLens(bounds.left+minX+position.x*(maxX-minX),bounds.top+minY+position.y*(maxY-minY));});
     });
 
     const stateNames={solid:"固體・金屬物體",liquid:"液體・水",gas:"氣體・空氣"};
