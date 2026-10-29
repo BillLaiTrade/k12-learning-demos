@@ -110,8 +110,6 @@
                   <path d="M493 299H557" stroke="#cf701a" stroke-width="2.5" marker-start="url(#sound-orange-arrow)" marker-end="url(#sound-orange-arrow)"/>
                 </g>
                 <g class="sound-scene-words" aria-hidden="true">
-                  <g id="sound-dense-label" visibility="hidden"><path d="M-34 149V141H34V149" fill="none" stroke="#2f7154" stroke-width="1.5"/><text x="0" y="129" text-anchor="middle">密部</text></g>
-                  <g id="sound-sparse-label" visibility="hidden"><path d="M-34 149V141H34V149" fill="none" stroke="#2f7154" stroke-width="1.5"/><text x="0" y="129" text-anchor="middle">疏部</text></g>
                   <text class="sound-orange" x="525" y="337" text-anchor="middle">空氣粒子來回振動</text>
                 </g>
                 <text class="sound-small sound-scene-words" x="525" y="376" text-anchor="middle">空氣放大示意</text>
@@ -119,8 +117,6 @@
               </svg>
               <div class="sound-mobile-labels" aria-hidden="true"><span>鐘振動</span><span>疏密變化 →</span><span>耳膜振動</span></div>
               <div class="sound-mobile-zoom" aria-hidden="true"><p>放大觀察空氣</p><svg viewBox="195 105 670 255"><use href="#air-observation"/>
-                <g id="sound-mobile-dense" visibility="hidden"><path d="M-34 149V141H34V149" fill="none" stroke="#2f7154" stroke-width="1.5"/><text x="0" y="129" text-anchor="middle" style="font-size:28px">密部</text></g>
-                <g id="sound-mobile-sparse" visibility="hidden"><path d="M-34 149V141H34V149" fill="none" stroke="#2f7154" stroke-width="1.5"/><text x="0" y="129" text-anchor="middle" style="font-size:28px">疏部</text></g>
                 <text class="sound-orange" x="525" y="337" text-anchor="middle" style="font-size:28px">空氣粒子來回振動</text>
               </svg></div>
             </figure>
@@ -385,7 +381,7 @@
       if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)activate(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});targets.forEach(target=>observer.observe(target));}
     })();
   </script>
-  <script type="module" src="assets/sound-propagation.js?v=5"></script>
+  <script type="module" src="assets/sound-propagation.js?v=6"></script>
   <script type="module" src="assets/vacuum-lab.js?v=6"></script>
   <script type="module" src="assets/sound-speed.mjs?v=fixed-23"></script>
   <script type="module" src="assets/fireworks-quiz.mjs?v=4"></script>

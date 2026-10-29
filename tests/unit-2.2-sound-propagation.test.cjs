@@ -72,6 +72,7 @@ test('3.2 sound travels through air while particles stay near their origins', { 
 
   await t.test('starts at rest and the disturbance reaches nearby particles before distant ones', async () => {
     assert.equal(await state(), 'ready');
+    assert.equal(await page.locator('#sound-dense-label, #sound-sparse-label, #sound-mobile-dense, #sound-mobile-sparse').count(), 0);
     await page.waitForTimeout(1000);
     assert.deepEqual(await positions(), still);
     await strike.click(); await page.waitForTimeout(500);
@@ -104,13 +105,9 @@ test('3.2 sound travels through air while particles stay near their origins', { 
     assert.ok(await elapsed() > 1 && await elapsed() < 1.2, 'rapid strikes must not stack animation frames');
   });
 
-  await t.test('a strike launches compression right while particles oscillate locally', async () => {
+  await t.test('particles oscillate locally and preserve dense and sparse spacing', async () => {
     await page.locator('#air-strike').click();
-    await page.waitForTimeout(650);
-    const a = Number(await page.locator('#sound-dense-label').evaluate(n => n.transform.baseVal.consolidate().matrix.e));
-    await page.waitForTimeout(200);
-    const b = Number(await page.locator('#sound-dense-label').evaluate(n => n.transform.baseVal.consolidate().matrix.e));
-    assert.ok(b > a + 50 && b < a + 80, 'a dense band should advance, rather than remain attached to one particle');
+    await page.waitForTimeout(850);
     const seen = [];
     for (let i = 0; i < 12; i++) {
       await page.waitForTimeout(120);
@@ -127,51 +124,6 @@ test('3.2 sound travels through air while particles stay near their origins', { 
     assert.ok(Math.max(...gaps) / Math.min(...gaps) > 1.5, 'dense and sparse regions should remain distinct as the recording decays');
   });
 
-  await t.test('labels follow the same bands and fade once without jumping back or reappearing', async () => {
-    await strike.click();
-    await page.evaluate(() => {
-      window.bandFrames = [];
-      const scene = document.querySelector('#air-wave');
-      const read = id => {
-        const node = document.getElementById(id);
-        return { x: node.transform.baseVal.consolidate().matrix.e, opacity: Number(node.getAttribute('opacity')), visible: node.getAttribute('visibility') === 'visible' };
-      };
-      window.bandObserver = new MutationObserver(() => {
-        window.bandFrames.push({
-          dense: read('sound-dense-label'), sparse: read('sound-sparse-label'),
-          mobileDense: read('sound-mobile-dense'), mobileSparse: read('sound-mobile-sparse')
-        });
-      });
-      window.bandObserver.observe(scene, { subtree: true, attributes: true });
-    });
-    await page.waitForFunction(() => document.querySelector('#air-wave').dataset.state === 'ended');
-    const frames = await page.evaluate(() => { window.bandObserver.disconnect(); return window.bandFrames; });
-    assert.ok(frames.length > 100);
-    for (const key of ['dense', 'sparse']) {
-      let lastX = -Infinity, hasAppeared = false, hasLeft = false, lastOpacity = 1;
-      for (const frame of frames) {
-        const band = frame[key];
-        assert.ok(band.x >= lastX - .001, `${key} must never jump left, including after the old wrap boundaries`);
-        lastX = band.x;
-        assert.deepEqual(frame[key === 'dense' ? 'mobileDense' : 'mobileSparse'], band, 'mobile labels must share position, fade and visibility');
-        if (band.visible) {
-          assert.equal(hasLeft, false, 'a label must not reappear on a different band');
-          hasAppeared = true;
-          assert.ok(band.opacity <= lastOpacity + .0001);
-          lastOpacity = band.opacity;
-        } else if (hasAppeared) hasLeft = true;
-      }
-      assert.ok(hasAppeared && hasLeft);
-      assert.ok(frames.some(f => f[key].visible && f[key].opacity > 0 && f[key].opacity < 1), 'label should fade gradually before disappearing');
-      assert.equal(frames.at(-1)[key].visible, false);
-      assert.equal(frames.at(-1)[key].opacity, 0);
-    }
-    await strike.click(); await page.waitForTimeout(1100);
-    for (const id of ['sound-dense-label', 'sound-sparse-label']) {
-      assert.equal(await page.locator('#' + id).getAttribute('visibility'), 'visible');
-      assert.equal(Number(await page.locator('#' + id).getAttribute('opacity')), 1, 'new strike must reset fading');
-    }
-  });
 
   await t.test('ear responds only after arrival; completion and keyboard restart leave no stale animation', async () => {
     await page.locator('#air-strike').click(); await page.waitForTimeout(1750);
@@ -214,11 +166,6 @@ test('3.2 sound travels through air while particles stay near their origins', { 
     await mobile.locator('#sound-bell').tap(); await mobile.waitForTimeout(1500);
     assert.equal(await mobile.locator('#air-wave').getAttribute('data-state'), 'playing');
     await mobile.waitForFunction(() => window.bellPlayback && window.bellPlayback.context.currentTime >= window.bellPlayback.when + .06);
-    await mobile.waitForTimeout(90);
-    const fading = Number(await mobile.locator('#sound-mobile-dense').getAttribute('opacity'));
-    assert.ok(fading > 0 && fading < 1);
-    await mobile.waitForTimeout(1000);
-    for (const id of ['sound-mobile-dense', 'sound-mobile-sparse']) assert.equal(await mobile.locator('#' + id).getAttribute('visibility'), 'hidden');
     await mobile.locator('#air-strike').tap(); await mobile.waitForTimeout(100);
     assert.ok(Number(await mobile.locator('#air-wave').getAttribute('data-elapsed')) < .2);
     await mobile.waitForFunction(() => window.bellPlayback && window.bellPlayback.context.currentTime >= window.bellPlayback.when + .06);

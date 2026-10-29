@@ -12,14 +12,11 @@ const bell = document.querySelector('#sound-bell');
 const bellBody = document.querySelector('#sound-bell-body');
 const eardrum = document.querySelector('#sound-eardrum');
 const status = document.querySelector('#air-status');
-const denseLabel = document.querySelector('#sound-dense-label');
-const sparseLabel = document.querySelector('#sound-sparse-label');
 const LEFT = 210, RIGHT = 840, SPEED = 315, WAVELENGTH = 240;
 const PERIOD = WAVELENGTH / SPEED, AMPLITUDE = 22;
 const ARRIVAL = (RIGHT - LEFT) / SPEED;
 let train = 6, end = ARRIVAL + train;
 const TAU = Math.PI * 2;
-const mobileLabels = [[document.querySelector('#sound-mobile-dense'), denseLabel], [document.querySelector('#sound-mobile-sparse'), sparseLabel]];
 
 function envelope(localTime) {
   if (localTime <= 0 || localTime >= train) return 0;
@@ -46,30 +43,12 @@ for (let row = 0; row < 3; row++) for (let col = 0; col < 43; col++) {
 }
 
 let elapsed = 0, playing = false, frame = 0, startAt = null, startElapsed = 0, phase = '';
-function labelBand(node, offset) {
-  // 始終追蹤同一個相位區域，接近耳朵時淡出，不切換到後面的區域。
-  const q = LEFT + SPEED * elapsed - offset;
-  const edge = RIGHT - 42;
-  const opacity = Math.max(0, Math.min(1, (edge - q) / 70));
-  const local = elapsed - (q - LEFT) / SPEED;
-  const visible = q >= LEFT + 42 && q < edge && local > .06 && local < train - .35;
-  node.setAttribute('visibility', visible ? 'visible' : 'hidden');
-  node.setAttribute('opacity', opacity.toFixed(4));
-  node.setAttribute('transform', `translate(${q.toFixed(3)} 0)`);
-}
 function draw() {
   for (const { node, q } of dots) node.setAttribute('cx', (q + displacement(q, elapsed)).toFixed(4));
   const source = displacement(LEFT, elapsed) / AMPLITUDE;
   const received = displacement(RIGHT, elapsed) / AMPLITUDE;
   bellBody.setAttribute('transform', `rotate(${(source * 1.8).toFixed(4)} 440 200)`);
   eardrum.setAttribute('transform', `translate(${(received * 3.5).toFixed(4)} 0)`);
-  labelBand(denseLabel, WAVELENGTH / 2);
-  labelBand(sparseLabel, WAVELENGTH);
-  for (const [mobile, original] of mobileLabels) {
-    mobile.setAttribute('visibility', original.getAttribute('visibility'));
-    mobile.setAttribute('opacity', original.getAttribute('opacity'));
-    mobile.setAttribute('transform', original.getAttribute('transform'));
-  }
   scene.dataset.elapsed = elapsed.toFixed(4);
   scene.dataset.audio = elapsed >= end ? 'ended' : elapsed >= ARRIVAL ? 'playing' : playing ? 'scheduled' : 'idle';
 }
