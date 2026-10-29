@@ -61,7 +61,6 @@
     .mirror-controls{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:12px 0}
     .mirror-controls .mirror-primary{border-color:#176b53;background:#176b53;color:#fff;font-weight:800}
     .mirror-controls .mirror-secondary{border-color:#8cb4c5;background:#f1f8fb;color:#23465a;font-weight:800}
-    .mirror-sync-note{flex:1 1 220px;margin:0;padding:10px 12px;border-radius:11px;background:#e8f3f8;color:#23465a;font-size:.9rem;font-weight:700}
     .mirror-btn:disabled{cursor:default;opacity:.55}
     .mirror-live{min-height:1.5em;margin:7px 0 0;color:var(--green);font-size:.88rem;font-weight:700}
     .distance-metrics{display:flex;flex-wrap:wrap;gap:8px}
@@ -322,7 +321,7 @@
               </figure>
             </div>
             <p class="visually-hidden" id="distance-drag-instructions">拖動小熊向鏡面靠近或遠離。聚焦小熊後，可用左右方向鍵每次移動1公分，按住Shift每次移動10公分；Home移到最靠近鏡面，End移到最遠。</p>
-            <div class="distance-metrics" aria-live="polite"><div class="distance-metric"><small>物距</small><strong id="object-distance-value">40 cm</strong></div><div class="distance-metric"><small>像距</small><strong id="image-distance-value">40 cm</strong></div><p class="mirror-sync-note">左側操作，右側同步更新</p></div>
+            <div class="distance-metrics" aria-live="polite"><div class="distance-metric"><small>物距</small><strong id="object-distance-value">40 cm</strong></div><div class="distance-metric"><small>像距</small><strong id="image-distance-value">40 cm</strong></div></div>
             <p class="visual-caption" id="distance-observation" aria-live="polite">尺以鏡面為 0；物體與像分居鏡面兩側。移動小熊，觀察兩個標記是否保持等距。虛像位置是畫面參考刻度，不能用實體尺直接量取。</p>
           </div>
         </section>
