@@ -1623,6 +1623,7 @@
         button.dataset.phaseProcess=key;button.dataset.energy=energy;
         button.setAttribute("aria-label",`觀察${processName}：${stateNames[motion.from]}變成${stateNames[motion.to]}，${energy==="heat"?"吸熱":"放熱"}`);
         button.querySelector("strong").textContent=processName;
+        button.querySelector(".phase-solid-open").textContent="點擊觀察 ›";
         button.querySelector(".phase-solid-direction").textContent=`${stateNames[motion.from]} → ${stateNames[motion.to]}`;
         button.querySelector(".phase-solid-energy").textContent=energy==="heat"?"吸熱":"放熱";
         document.querySelectorAll(`[data-overview-slot="${slot}"].phase-flow-route`).forEach(path=>{path.classList.remove("is-heat","is-cool","is-active");path.classList.add(`is-${energy}`);path.dataset.phaseProcess=key;});
@@ -1643,6 +1644,8 @@
     function playStateEdgeFlow(key,stateKey){
       const transition=phaseDemoMotion[key],button=document.querySelector(`.phase-solid-process[data-phase-process="${key}"]`),slot=button.dataset.overviewSlot,mobile=window.matchMedia("(max-width: 680px)").matches,routeId=`phase-flow-${mobile?"mobile-":""}route-${slot}`,route=document.getElementById(routeId),colors=phaseParticleColors;
       activePhaseProcess=key;
+      document.querySelectorAll(".phase-solid-process .phase-solid-open").forEach(label=>label.textContent="點擊觀察 ›");
+      button.querySelector(".phase-solid-open").textContent="再點停止";
       document.querySelectorAll(".phase-solid-flow path,.phase-solid-flow-mobile path").forEach(path=>path.classList.toggle("is-active",path===route));
       phaseSolidFlowParticles.replaceChildren();
       for(let index=0;index<6;index++){
@@ -1878,6 +1881,10 @@
       playPhaseStateOverview(key);
     }
     function selectPhaseProcess(key,fromStateOverview=false){
+      if(fromStateOverview&&phaseDetail.classList.contains("is-solid-overview")&&activePhaseProcess===key){
+        selectPhaseState(phaseDetail.dataset.overviewState);
+        return;
+      }
       const process=phaseProcesses[key];
       phaseDetail.hidden=false;
       if(!fromStateOverview){stopPhaseDemoMotion();stopFreezeDemo();}
@@ -1895,7 +1902,7 @@
       resetPhaseSteps();
       process.steps.forEach((step,index)=>{const item=document.createElement("span");item.textContent=step;phaseSteps.append(item);if(index===1){const arrow=document.createElement("b");arrow.setAttribute("aria-hidden","true");arrow.textContent="→";phaseSteps.append(arrow);}});
       phaseSteps.hidden=false;
-      if(fromStateOverview){playStateEdgeFlow(key,phaseDetail.dataset.overviewState);requestAnimationFrame(()=>freezeDemo.scrollIntoView({behavior:"smooth",block:"center"}));return;}
+      if(fromStateOverview){playStateEdgeFlow(key,phaseDetail.dataset.overviewState);return;}
       if(key==="freeze")playFreezeDemo();else playPhaseTransition(key);
       requestAnimationFrame(()=>freezeDemo.scrollIntoView({behavior:"smooth",block:"center"}));
     }
