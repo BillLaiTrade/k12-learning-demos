@@ -4,6 +4,7 @@ const canvas = document.querySelector('#shadow-3d-scene');
 if (canvas) {
   const status = document.querySelector('#shadow-scene-status');
   const xiaokuiObservation = document.querySelector('#shadow-xiaokui-observation');
+  const grandpaExplanation = document.querySelector('#shadow-grandpa-explanation');
   const toggle = document.querySelector('#shadow-block-toggle');
   const toggleLabel = document.querySelector('#shadow-toggle-label');
   const resetButton = document.querySelector('#shadow-view-reset');
@@ -420,6 +421,13 @@ if (canvas) {
             ? '球移開後，原來的暗區又被照亮了。'
             : '球在光路旁，屏幕上還沒有球的影子。'
           : '球移動時，屏幕上的影子也跟著改變。');
+      grandpaExplanation.textContent = blocker.position.x < 0.55
+        ? '光沿直線傳播。球擋住部分光，屏幕上相應的位置就形成暗區。'
+        : blocker.position.x > parkedX - 0.35
+          ? hasEnteredLightPath
+            ? '球移開後，光又能到達原本被擋住的位置，影子就消失了。'
+            : '試著把球移進光路，看看屏幕哪裡會變暗。'
+          : '一邊移動球，一邊比較屏幕哪些位置變暗或變亮。';
     };
     const setToggleState = (value) => {
       blocked = value;
@@ -435,6 +443,7 @@ if (canvas) {
       animation = { from, to, started: performance.now(), duration: duration * Math.max(0.25, Math.abs(to - from) / (parkedX - targetX)) };
       status.textContent = nextState ? '球體沿導軌滑入光路，屏幕上的影子逐漸形成。' : '球體沿導軌退出光路，屏幕逐漸恢復受光。';
       setObservation(nextState ? '球正滑進光路，屏幕上的影子慢慢出現了。' : '球正離開光路，屏幕上的影子慢慢淡去了。');
+      grandpaExplanation.textContent = '一邊移動球，一邊比較屏幕哪些位置變暗或變亮。';
     });
 
     const resetView = () => {
@@ -490,6 +499,7 @@ if (canvas) {
         blockerPointerId = event.pointerId;
         canvas.classList.add('dragging-blocker');
         setObservation('我拖動球體時，屏幕上的影子也跟著變了。');
+        grandpaExplanation.textContent = '一邊移動球，一邊比較屏幕哪些位置變暗或變亮。';
         status.textContent = '拖曳球體，讓它沿導軌移動。';
       } else if (pointers.size > 0) {
         blockerPointerId = null;
