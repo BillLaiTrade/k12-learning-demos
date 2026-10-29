@@ -288,3 +288,11 @@ node --test --test-concurrency=1 tests/unit-4.2-filtration.test.cjs tests/unit-4
 2.2 第五區高度精簡：器材、探棒與重複讀值撤下，溫度output改放在組名旁，兩組同用緊湊腔體；只保留下方一條本組／參考組位置對照。既有檢查同步改為單一軌道與七種寬度的比例、標籤界限及組名讀值，完整四組66項通過，見第五區review的compact-tests.log。
 
 2.2 第五區改成固定0°C與80°C兩組，沒有調溫控制。既有測試更新固定條件、無切換、重播／重設不變、同一時鐘的位置與到達時間、分別敲擊及兩區獨立；撤下舊切換專用檢查。完整四組65項通過、0失敗，見第五區review的fixed-tests.log。
+
+## 2.1 第二區：三態圖解比較表
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.1-states-table.test.cjs
+```
+
+測試自行啟停 Python 靜態伺服器與 Chromium。檢查九格圖解預設可見、固體外形、液體等量、氣體粒子數與邊界、格內活塞的滑鼠／鍵盤／觸控、按壓與放開、其他教學區塊保留、五種螢幕寬度及減少動畫設定。8 組子測試，連同外層共 9 項；`STATES_CAPTURE_DIR` 可指定截圖目錄。審閱紀錄見 `docs/reviews/unit-2.1-states-table/review.md`。
