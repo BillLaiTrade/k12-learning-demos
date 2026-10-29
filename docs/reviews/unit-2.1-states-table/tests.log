@@ -1,18 +1,19 @@
 ▶ 2.1: three-state diagrams are visible and interact inside the table
-  ✔ nine diagrams and conclusions exist without selecting a table cell (741.158114ms)
-  ✔ container changes preserve solid geometry and liquid quantity (1917.633032ms)
-  ✔ gas shape changes keep all particles inside the sealed container (603.023864ms)
-  ✔ solid and liquid accept direct dragging while piston position and volume stay fixed (4718.60232ms)
-  ✔ gas compression responds to mouse drag and keyboard with constant particles (1766.618351ms)
-  ✔ all other lesson sections are preserved and still initialize (322.498111ms)
-  ✔ responsive table stays inside the page; narrow screens scroll internally (2905.378649ms)
-  ✔ touch dragging and reduced-motion keyboard operation work (2512.722895ms)
-✔ 2.1: three-state diagrams are visible and interact inside the table (17971.942181ms)
-ℹ tests 9
+  ✔ nine diagrams and conclusions exist without selecting a table cell (705.75015ms)
+  ✔ all four gas diagrams move independently, stay bounded, pause and resume (2115.140497ms)
+  ✔ container changes preserve solid geometry and liquid quantity (2213.469687ms)
+  ✔ gas shape changes keep all particles inside the sealed container (915.74845ms)
+  ✔ solid and liquid accept direct dragging while piston position and volume stay fixed (6179.139735ms)
+  ✔ gas compression responds to mouse drag and keyboard with constant particles (1802.803901ms)
+  ✔ all other lesson sections are preserved and still initialize (273.363929ms)
+  ✔ responsive table stays inside the page; narrow screens scroll internally (2977.616486ms)
+  ✔ touch dragging and reduced-motion keyboard operation work (3366.485778ms)
+✔ 2.1: three-state diagrams are visible and interact inside the table (22845.047178ms)
+ℹ tests 10
 ℹ suites 0
-ℹ pass 9
+ℹ pass 10
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 18330.502352
+ℹ duration_ms 23237.189129

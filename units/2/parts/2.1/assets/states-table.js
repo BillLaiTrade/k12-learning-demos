@@ -4,16 +4,83 @@
   const section = document.getElementById('s2');
   if (!section) return;
   const forms = [{ width:58, height:106 }, { width:98, height:64 }, { width:78, height:80 }];
-  // Fixed, irregular model positions avoid suggesting a crystal lattice for gas.
+  // Initial irregular positions; each particle then follows its own free-motion path.
   const gasPositions = [[0.6307, 0.6772], [0.9022, 0.2328], [0.1175, 0.7853], [0.3531, 0.3877], [0.8605, 0.4922], [0.5642, 0.1293], [0.7979, 0.7418], [0.9336, 0.0707], [0.9175, 0.6256], [0.2826, 0.599], [0.6797, 0.5213], [0.1469, 0.4049], [0.6826, 0.2933], [0.5652, 0.4259], [0.3776, 0.7477], [0.3578, 0.1103], [0.5755, 0.8581], [0.1454, 0.5547], [0.8344, 0.3635], [0.7855, 0.1502], [0.3275, 0.2391], [0.6896, 0.9361], [0.8883, 0.8693], [0.2553, 0.8784]];
+  const gasFields = [];
+  const fieldByGroup = new WeakMap();
+  function gasFieldFor(group, bounds) {
+    const existing = fieldByGroup.get(group);
+    if (existing) { existing.resize(bounds); return existing; }
+    let box = bounds;
+    const fieldIndex = gasFields.length;
+    const particles = [...group.querySelectorAll('.sv-particle')].map((node, i) => {
+      const radius = +node.getAttribute('r');
+      const angle = i * 2.39996323 + fieldIndex * .83;
+      const speed = 28 + (i * 7 % 13);
+      return { node, radius,
+        x:box.left + radius + gasPositions[i][0] * (box.right - box.left - radius * 2),
+        y:box.top + radius + gasPositions[i][1] * (box.bottom - box.top - radius * 2),
+        vx:Math.cos(angle) * speed, vy:Math.sin(angle) * speed };
+    });
+    function keepInside(p) {
+      const minX = box.left + p.radius, maxX = box.right - p.radius;
+      const minY = box.top + p.radius, maxY = box.bottom - p.radius;
+      if (p.x < minX) { p.x = minX; p.vx = Math.abs(p.vx); }
+      if (p.x > maxX) { p.x = maxX; p.vx = -Math.abs(p.vx); }
+      if (p.y < minY) { p.y = minY; p.vy = Math.abs(p.vy); }
+      if (p.y > maxY) { p.y = maxY; p.vy = -Math.abs(p.vy); }
+    }
+    function separateCollisions() {
+      for (let i = 0; i < particles.length; i++) for (let j = i + 1; j < particles.length; j++) {
+        const a = particles[i], b = particles[j];
+        const dx = b.x - a.x, dy = b.y - a.y, radius = a.radius + b.radius;
+        const distanceSquared = dx * dx + dy * dy;
+        if (distanceSquared >= radius * radius) continue;
+        const distance = Math.sqrt(distanceSquared);
+        const nx = distance > .0001 ? dx / distance : Math.cos(i + j);
+        const ny = distance > .0001 ? dy / distance : Math.sin(i + j);
+        const overlap = (radius - distance) / 2 + .005;
+        a.x -= nx * overlap; a.y -= ny * overlap;
+        b.x += nx * overlap; b.y += ny * overlap;
+        // Equal-mass elastic scattering changes direction without regenerating particles.
+        const relative = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+        if (relative < 0) {
+          a.vx += relative * nx; a.vy += relative * ny;
+          b.vx -= relative * nx; b.vy -= relative * ny;
+        }
+        keepInside(a); keepInside(b);
+      }
+    }
+    function render() {
+      particles.forEach(p => { p.node.setAttribute('cx',p.x.toFixed(3)); p.node.setAttribute('cy',p.y.toFixed(3)); });
+    }
+    const field = {
+      resize(next) {
+        if (['left','right','top','bottom'].every(key => box[key] === next[key])) return;
+        // Preserve each particle's current position within the changing space, not its seed.
+        for (const p of particles) {
+          const u = (p.x - box.left - p.radius) / (box.right - box.left - p.radius * 2);
+          const v = (p.y - box.top - p.radius) / (box.bottom - box.top - p.radius * 2);
+          p.x = next.left + p.radius + u * (next.right - next.left - p.radius * 2);
+          p.y = next.top + p.radius + v * (next.bottom - next.top - p.radius * 2);
+        }
+        box = next;
+        particles.forEach(keepInside); separateCollisions(); render();
+      },
+      step(dt) {
+        particles.forEach(p => { p.x += p.vx * dt; p.y += p.vy * dt; keepInside(p); });
+        separateCollisions(); render();
+      }
+    };
+    separateCollisions(); render();
+    fieldByGroup.set(group,field); gasFields.push(field);
+    return field;
+  }
   function layoutGasShape(group) {
     const box = group.parentElement.querySelector('.sv-glass');
     const x = +box.getAttribute('x'), y = +box.getAttribute('y');
     const width = +box.getAttribute('width'), height = +box.getAttribute('height');
-    group.querySelectorAll('.sv-particle').forEach((dot, i) => {
-      dot.setAttribute('cx', x + 7 + gasPositions[i][0] * (width - 14));
-      dot.setAttribute('cy', y + 7 + gasPositions[i][1] * (height - 14));
-    });
+    gasFieldFor(group,{ left:x + 4, top:y + 4, right:x + width - 4, bottom:y + height - 4 });
   }
   section.querySelectorAll('[data-shape-particles]').forEach(layoutGasShape);
   section.querySelectorAll('[data-change-vessel]').forEach(button => {
@@ -57,6 +124,7 @@
     const output = section.querySelector(`[data-piston-readout="${svg.dataset.piston}"]`);
     const dots = [...svg.querySelectorAll('.sv-particle')];
     dots.forEach(dot => dot.setAttribute('r', '2.1'));
+    const gasField = kind === 'gas' ? gasFieldFor(svg.querySelector('[data-piston-particles]'),{ left:76, top:84, right:164, bottom:138 }) : null;
     let compression = mode === 'volume' ? 100 / 3 : 0;
     function update(value) {
       compression = Math.max(0, Math.min(100, value));
@@ -69,10 +137,7 @@
       svg.dataset.volume = String(volume);
       svg.dataset.compression = String(kind === 'gas' ? compression : 0);
       if (kind === 'gas') {
-        dots.forEach((dot, i) => {
-          dot.setAttribute('cx', 78 + gasPositions[i][0] * 84);
-          dot.setAttribute('cy', y + 4 + gasPositions[i][1] * (140 - y - 8));
-        });
+        gasField.resize({ left:76, top:y + 4, right:164, bottom:138 });
         output.textContent = mode === 'volume' ? `可用空間：約 ${Math.round(volume)} mL` : `約 ${Math.round(volume)} mL・粒子數不變`;
       } else {
         const fill = svg.querySelector('[data-piston-fill]');
@@ -115,4 +180,35 @@
     });
 
   });
+  // Only animate while this section is on screen and the document is visible.
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const toggle = section.querySelector('[data-gas-motion-toggle]');
+  let visible = true, paused = false, frame = null, previous = 0;
+  function tick(now) {
+    frame = null;
+    const dt = previous ? Math.min(.035,(now - previous) / 1000) : 0;
+    previous = now;
+    if (dt > 0) gasFields.forEach(field => field.step(dt * (reducedMotion.matches ? .4 : 1)));
+    frame = requestAnimationFrame(tick);
+  }
+  function syncMotion() {
+    const running = visible && !document.hidden && !paused;
+    section.dataset.gasMotion = running ? 'running' : 'paused';
+    if (running && frame === null) { previous = 0; frame = requestAnimationFrame(tick); }
+    else if (!running && frame !== null) { cancelAnimationFrame(frame); frame = null; previous = 0; }
+  }
+  toggle.addEventListener('click', () => {
+    paused = !paused;
+    toggle.setAttribute('aria-pressed', String(paused));
+    toggle.textContent = paused ? '繼續粒子運動' : '暫停粒子運動';
+    syncMotion();
+  });
+  document.addEventListener('visibilitychange', syncMotion);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => {
+      visible = entries[0].isIntersecting; syncMotion();
+    },{ rootMargin:'120px' }).observe(section);
+  }
+  syncMotion();
+
 })();

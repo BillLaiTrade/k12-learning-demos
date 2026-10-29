@@ -60,6 +60,56 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     assert.match(await page.locator('#s2 .sv-model-note').innerText(), /難壓縮不代表完全不能/);
   });
 
+  await t.test('all four gas diagrams move independently, stay bounded, pause and resume', async () => {
+    const positions = () => page.locator('#s2 [data-shape-particles], #s2 [data-piston-particles]').evaluateAll(groups=>groups.map(g=>[...g.querySelectorAll('.sv-particle')].map(d=>[+d.getAttribute('cx'),+d.getAttribute('cy')])));
+    const before=await positions();
+    assert.equal(before.length,4); assert.ok(before.every(group=>group.length===24));
+    const movement = previous => page.waitForFunction(previous => {
+      const groups=[...document.querySelectorAll('#s2 [data-shape-particles], #s2 [data-piston-particles]')];
+      return groups.every((group,j)=>[...group.querySelectorAll('.sv-particle')].filter((dot,i)=>Math.hypot(+dot.getAttribute('cx')-previous[j][i][0],+dot.getAttribute('cy')-previous[j][i][1])>.5).length>=12);
+    },previous,{timeout:5000});
+    await movement(before);
+    const bounded = await page.evaluate(() => new Promise(resolve=>{
+      let frames=0;
+      function sample(){
+        const groups=[...document.querySelectorAll('#s2 [data-shape-particles], #s2 [data-piston-particles]')];
+        const valid=groups.every(g=>{
+          let left,right,top,bottom;
+          const piston=g.closest('[data-piston]');
+          if(piston){
+            const y=+piston.querySelector('[data-piston-handle]').getAttribute('transform').match(/translate\(0 ([\d.]+)\)/)[1];
+            left=76;right=164;top=y+4;bottom=138;
+          }else{
+            const box=g.parentElement.querySelector('.sv-glass');
+            left=+box.getAttribute('x')+4;top=+box.getAttribute('y')+4;
+            right=+box.getAttribute('x') + +box.getAttribute('width')-4;
+            bottom=+box.getAttribute('y') + +box.getAttribute('height')-4;
+          }
+          return [...g.querySelectorAll('.sv-particle')].every(d=>{
+            const x=+d.getAttribute('cx'),y=+d.getAttribute('cy'),r=+d.getAttribute('r');
+            return Number.isFinite(x+y) && x-r>=left-.002 && x+r<=right+.002 && y-r>=top-.002 && y+r<=bottom+.002;
+          });
+        });
+        if(!valid)return resolve(false);
+        if(++frames>=45)return resolve(true);
+        requestAnimationFrame(sample);
+      }
+      requestAnimationFrame(sample);
+    }));
+    assert.equal(bounded,true);
+    const toggle=page.locator('[data-gas-motion-toggle]');
+    await toggle.click();assert.equal(await toggle.getAttribute('aria-pressed'),'true');
+    const stopped=await positions();await page.waitForTimeout(250);
+    assert.deepEqual(await positions(),stopped);
+    await toggle.click();await movement(stopped);
+    assert.equal(await toggle.getAttribute('aria-pressed'),'false');
+    await page.locator('#s6').scrollIntoViewIfNeeded();
+    await page.waitForFunction(()=>document.querySelector('#s2').dataset.gasMotion==='paused');
+    await page.locator('#s2').scrollIntoViewIfNeeded();
+    await page.waitForFunction(()=>document.querySelector('#s2').dataset.gasMotion==='running');
+    await movement(await positions());
+  });
+
   await t.test('container changes preserve solid geometry and liquid quantity', async () => {
     const cube = await cell('solid.shape').locator('.sv-cube').last().innerHTML();
     const firstWidth = await cell('solid.shape').locator('[data-vessel-changing] .sv-glass').getAttribute('width');
@@ -144,6 +194,9 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
       return [...s.querySelectorAll('.sv-particle')].every(d => +d.getAttribute('cy') > y+4 && +d.getAttribute('cy') < 140);
     });
     assert.equal(bounds,true);
+    const movingBefore=await piston('gas-compress').locator('.sv-particle').evaluateAll(dots=>dots.map(d=>[+d.getAttribute('cx'),+d.getAttribute('cy')]));
+    await page.waitForFunction(before=>[...document.querySelectorAll('[data-piston="gas-compress"] .sv-particle')].filter((d,i)=>Math.hypot(+d.getAttribute('cx')-before[i][0],+d.getAttribute('cy')-before[i][1])>.4).length>=8,movingBefore,{timeout:5000});
+
     await page.keyboard.press('Home');
     const v = piston('gas-volume').locator('[data-piston-handle]');
     await v.focus(); await page.keyboard.press('End'); assert.ok(await volume('gas-volume') < 41);
@@ -206,6 +259,8 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
       await handle.focus();await touch.keyboard.press('Home');
       assert.equal(Number(await model.getAttribute('data-volume')),100);
     }
+    const movingBefore=await touch.locator('[data-piston="gas-compress"] .sv-particle').evaluateAll(dots=>dots.map(d=>[+d.getAttribute('cx'),+d.getAttribute('cy')]));
+    await touch.waitForFunction(before=>[...document.querySelectorAll('[data-piston="gas-compress"] .sv-particle')].filter((d,i)=>Math.hypot(+d.getAttribute('cx')-before[i][0],+d.getAttribute('cy')-before[i][1])>.3).length>=8,movingBefore,{timeout:5000});
     assert.equal(await touch.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),true);
   });
 });

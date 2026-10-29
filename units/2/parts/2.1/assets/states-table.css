@@ -68,3 +68,8 @@
  #s2 .sv-scroll-hint { display:block; margin:8px 0 -7px; color:#697d6c; font-size:.74rem; }
 }
 @media(prefers-reduced-motion:reduce) { .states-visual-table .sv-action,.states-visual-table .sv-grip { transition:none; } }
+#s2 .sv-motion-tools { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px 14px; margin:12px 0; color:#64766c; font-size:.74rem; line-height:1.65; }
+#s2 .sv-motion-toggle { padding:6px 12px; border:1px solid #c9d5c5; border-radius:15px; background:#f8faf4; color:#49634f; font:inherit; cursor:pointer; }
+#s2 .sv-motion-toggle:hover { background:#eef4e8; }
+#s2 .sv-motion-toggle[aria-pressed="true"] { background:#e7f0e2; border-color:#91ac88; }
+#s2 .sv-motion-toggle:focus-visible { outline:3px solid #ac8038; outline-offset:3px; }
