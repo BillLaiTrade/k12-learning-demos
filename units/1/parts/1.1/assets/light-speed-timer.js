@@ -86,6 +86,9 @@ if (tapButton) {
   tapButton.addEventListener('click', (event) => {
     if (phase !== 'measuring') {
       clearOrbit();
+      timeOutput.textContent = '— 秒';
+      distanceOutput.textContent = '— 公里';
+      lapOutput.textContent = '停止計時後顯示圈數';
       startTime = event.timeStamp;
       phase = 'measuring';
       tapButton.dataset.phase = phase;
