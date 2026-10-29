@@ -34,17 +34,17 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
    const dry=model.finishTest(model.finishTest(model.newSample(1),'filter').sample,'heat').sample;view.render({sample:dry,stock:0,animation:null});return{empty,dry:white};
   });assert.equal(residue.empty,0,'the initial empty beaker contains no drawn crystals');assert.ok(residue.dry>0,'dry material remains visible after an actual experiment');
  });
- await t.test('navigation matches the four learning sections after the redundant methods quiz is removed',async()=>{
+ await t.test('navigation matches the five learning sections with a separate ppm section',async()=>{
   const links=await page.locator('.route-inner a:not(.quiz-nav)').evaluateAll(anchors=>anchors.map(a=>({href:a.getAttribute('href'),label:a.querySelector('span').textContent,title:document.querySelector(a.getAttribute('href')).querySelector('.card-main>h2').textContent})));
-  assert.equal(links.length,4);assert.deepEqual(links.map(link=>link.href),['#s1','#s2','#s3','#s5']);for(const link of links)assert.equal(link.label,link.title,link.href);
-  assert.deepEqual(await page.locator('.lesson-card .card-number').allTextContents(),['01','02','03','04']);
+  assert.equal(links.length,5);assert.deepEqual(links.map(link=>link.href),['#s1','#s2','#s3','#s5','#s6']);for(const link of links)assert.equal(link.label,link.title,link.href);
+  assert.deepEqual(await page.locator('.lesson-card .card-number').allTextContents(),['01','02','03','04','05']);
   assert.equal(await page.locator('#s4,#q-filter,#q-crystal,#q-paper,#check-answers,#reset-answers,#quiz-feedback').count(),0);
   assert.equal(await page.locator('.route-inner a.quiz-nav span').innerText(),'單元小測');assert.equal(await page.locator('.route-inner a.quiz-nav').evaluate(e=>parseFloat(getComputedStyle(e).borderTopWidth)>0),true);
   await page.evaluate(()=>document.documentElement.style.scrollBehavior='auto');
   for(const [i,link] of links.entries()){
    await page.locator(`.route-inner a[href="${link.href}"]`).click();await page.clock.runFor(200);
    assert.equal(await page.locator('.route-inner a[aria-current=step]').getAttribute('href'),link.href);
-   assert.equal(await page.locator('#route-progress').innerText(),`目前位置：第 ${String(i+1).padStart(2,'0')}／04 個學習區塊`);
+   assert.equal(await page.locator('#route-progress').innerText(),`目前位置：第 ${String(i+1).padStart(2,'0')}／05 個學習區塊`);
    const top=await page.locator(link.href).evaluate(e=>e.getBoundingClientRect().top);assert.ok(top>=0&&top<100,`anchor ${link.href} at ${top}`);
   }
   await page.locator('.route-inner a.quiz-nav').focus();await page.keyboard.press('Enter');await page.clock.runFor(200);
