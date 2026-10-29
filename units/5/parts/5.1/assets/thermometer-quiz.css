@@ -1,15 +1,12 @@
 /* Only the final assessment; the four teaching blocks retain their layouts. */
 .thermometer-quiz{padding:0;overflow:hidden;background:#fffefa;color:#203c33}
 .thermometer-quiz [hidden]{display:none!important}
-.tq-heading{display:grid;grid-template-columns:1.2fr 1fr;gap:22px;align-items:center;padding:25px 26px 18px;container:tq-heading / inline-size}
-.tq-kicker{display:inline-flex;gap:8px;align-items:center;margin:0 0 12px;padding:5px 15px;border-radius:30px;background:#ffe2aa;color:#79501c;font-size:.86rem;font-weight:800}
-.tq-kicker span{font-size:1.2rem;line-height:1}
-.tq-heading h2{margin:0 0 8px;font-size:clamp(1.5rem,2.3vw,2.2rem);line-height:1.3;color:#163e30;letter-spacing:-.035em}
-.tq-heading header>p:last-child{margin:0;color:#526e62;font-size:.95rem}
-.tq-dialogues .dialogue{margin:0 0 8px;padding:8px 10px;gap:9px;font-size:.8rem;line-height:1.7}
+.thermometer-quiz .quiz-head{color:var(--ink)}
+.thermometer-quiz .quiz-head .quiz-kicker{margin:8px 0 0;color:var(--muted);font-size:.94rem}
+.tq-dialogues{margin:0 0 18px}
+.tq-dialogues .dialogue:first-child{margin-top:0}
 .tq-dialogues .dialogue:last-child{margin-bottom:0}
-.tq-dialogues .speaker::before{width:38px;height:38px}
-.tq-body{padding:0 20px 23px;container:tq-content / inline-size}
+.tq-body{padding:23px 28px 28px;container:tq-content / inline-size}
 .tq-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:0 0 16px;padding:10px 8px;list-style:none;border:1px solid #c2d9d0;border-radius:12px;background:linear-gradient(100deg,#fcfffb,#f6fbf6);color:#385e4e;font-size:.86rem;font-weight:750}
 .tq-flow li{display:flex;align-items:center;justify-content:center;gap:8px;position:relative}.tq-flow li:not(:last-child)::after{content:'→';position:absolute;right:-8px;color:#6b8c7b}
 .tq-flow svg{width:26px;height:26px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -57,12 +54,9 @@
 .tq-reset{display:block;margin:11px auto 0;padding:4px 8px;border:0;background:transparent;color:#647c61;text-decoration:underline;font:inherit;font-size:.76rem}.tq-reset span{display:inline-block;margin-right:4px;font-size:1rem;text-decoration:none}
 .tq-message{margin:12px 0 0;padding:9px 12px;border-radius:10px;background:#f0f5e9;color:#58724e;font-size:.82rem}
 .tq-input-help{margin:7px 0 0;color:#84907e;font-size:.68rem;line-height:1.6}
-@container lesson-page (max-width:850px){.tq-heading{grid-template-columns:minmax(0,1fr);gap:15px;padding:22px 20px 17px}.tq-heading h2{font-size:1.65rem}.tq-dialogues .dialogue{font-size:.86rem}.tq-heading header>p:last-child{font-size:.88rem}}
 @container tq-content (max-width:760px){.tq-workspace{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:10px}.tq-console{padding:13px 10px}.tq-console h3{font-size:1.02rem}.tq-lens-empty{min-height:200px;padding:16px 8px}.tq-lens-empty p{font-size:.75rem}.tq-bench h3{font-size:.96rem;top:9px;left:9px}.tq-answer-field input{padding-inline:8px;font-size:.78rem}.tq-answer-field select{font-size:.75rem;padding-inline:4px}.tq-answer-meta{font-size:.68rem}.tq-record{padding:7px 9px;gap:8px;font-size:.76rem}.tq-flow{font-size:.77rem}.tq-flow svg{width:23px;height:23px}}
 @container tq-content (max-width:590px){.tq-workspace{grid-template-columns:minmax(0,1fr)}.tq-console{padding:16px}.tq-lens-wrap{max-width:390px;margin-inline:auto}.tq-console h3{font-size:1.1rem}.tq-lens-empty{min-height:220px}.tq-lens-empty p{font-size:.86rem}.tq-answer-field input{font-size:.9rem}.tq-answer-field select{font-size:.86rem}.tq-records{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.tq-record{padding:8px;gap:7px}.tq-record b{width:25px;height:25px;font-size:.86rem}.tq-flow{gap:3px;padding:9px 3px;font-size:.7rem}.tq-flow li{gap:4px}.tq-flow li:not(:last-child)::after{right:-5px;font-size:.76rem}.tq-flow svg{width:19px;height:19px}.tq-bench h3{font-size:1rem;top:10px;left:10px}}
-@media(max-width:700px){.tq-heading{padding:19px 17px 15px}.tq-body{padding:0 14px 19px}.tq-heading h2{font-size:1.55rem}.tq-dialogues .dialogue{padding:9px 10px;font-size:.82rem}.tq-dialogues .speaker::before{width:38px;height:38px}.tq-kicker{font-size:.78rem;margin-bottom:10px}.tq-heading header>p:last-child{font-size:.87rem}.tq-console{border-radius:14px}.tq-input-help{font-size:.67rem}}
-
-.tq-kicker svg{width:19px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:700px){.tq-body{padding:20px 17px 23px}.tq-console{border-radius:14px}.tq-input-help{font-size:.67rem}}
 .tq-bottom-actions{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}.tq-bottom-actions .tq-reset{margin:0;padding:2px 0;font-size:.68rem}.tq-bottom-actions .tq-check-tip{margin:0;font-size:.66rem}
 .thermometer-quiz .dual-fraction{display:inline-grid;grid-template-rows:auto auto;vertical-align:middle;min-width:1.15em;margin:0 .15em;line-height:1.12;text-align:center;font-variant-numeric:tabular-nums}.thermometer-quiz .dual-fraction>span{display:block;padding:.08em .22em}.thermometer-quiz .dual-fraction>span+span{border-top:1px solid currentColor}
 /* SVG text and marks must not hand a drag gesture to browser scrolling. */
