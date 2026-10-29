@@ -143,35 +143,35 @@
     button.addEventListener('click',()=>selectGasVolume(currentGasVolume + +button.dataset.gasVolumeStep * gasVolumeStep));
   });
   section.querySelectorAll('[data-piston]').forEach(svg => {
-    // The fixed barrel has its bottom at y=140. Gas space = bottom minus piston.
+    // Shared barrel ends at y=150; sample-contact position is y=90.
     const kind = svg.dataset.kind;
     const handle = svg.querySelector('[data-piston-handle]');
     svg.setAttribute('role', 'group');
     const output = section.querySelector(`[data-piston-readout="${svg.dataset.piston}"]`);
     const dots = [...svg.querySelectorAll('.sv-particle')];
     dots.forEach(dot => dot.setAttribute('r', '2.1'));
-    const gasField = kind === 'gas' ? gasFieldFor(svg.querySelector('[data-piston-particles]'),{ left:76, top:84, right:164, bottom:138 }) : null;
+    const gasField = kind === 'gas' ? gasFieldFor(svg.querySelector('[data-piston-particles]'),{ left:76, top:94, right:164, bottom:148 }) : null;
     let compression = 0;
     function update(value) {
-      compression = Math.max(0, Math.min(100, value));
-      // Ordinary pressure: solid/liquid movement is too small to show at this scale.
-      const y = 80 + compression / 100 * (kind === 'gas' ? 36 : 0);
-      const volume = (140 - y) / 60 * 100;
+      // Solid/liquid: lift freely within the barrel, stop downward at the sample.
+      // The vent admits/releases air above the sample; its volume stays unchanged.
+      compression = Math.max(kind === 'gas' ? 0 : -100,Math.min(kind === 'gas' ? 100 : 0,value));
+      const lift = kind === 'gas' ? 0 : -compression * .18;
+      const y = kind === 'gas' ? 90 + compression * .36 : 90 - lift;
+      const volume = kind === 'gas' ? (150 - y) / 60 * 100 : 100;
       handle.setAttribute('transform', `translate(0 ${y})`);
-      handle.setAttribute('aria-valuenow', String(kind === 'gas' ? Math.round(compression) : 0));
-      handle.setAttribute('aria-valuetext', kind === 'gas' ? `可用空間約 ${Math.round(volume)} 毫升` : '施力時體積幾乎不變');
+      handle.setAttribute('aria-valuenow',String(Math.round(kind === 'gas' ? compression : -compression)));
+      handle.setAttribute('aria-valuetext',kind === 'gas' ? `可用空間約 ${Math.round(volume)} 毫升` : lift > 0 ? `活塞上拉，樣本仍約100毫升，上方空間通氣` : '活塞接觸樣本，體積約100毫升，向下不易壓縮');
       svg.dataset.volume = String(volume);
       svg.dataset.compression = String(kind === 'gas' ? compression : 0);
-      if (kind === 'gas') {
-        gasField.resize({ left:76, top:y + 4, right:164, bottom:138 });
-        output.textContent = `約 ${Math.round(volume)} mL・粒子數不變`;
-      } else {
-        const fill = svg.querySelector('[data-piston-fill]');
-        fill.setAttribute('y', y + 4.5);
-        fill.setAttribute('height', 138 - y - 4.5);
-        output.textContent = compression > 0 ? '約 100 mL・幾乎不變' : '約 100 mL';
+      svg.dataset.pistonLift = String(lift);
+      if(kind === 'gas') {
+        gasField.resize({left:76,top:y+4,right:164,bottom:148});
+        output.textContent=`約 ${Math.round(volume)} mL・粒子數不變`;
+      }else{
+        svg.querySelector('[data-sample-vent]').style.display=lift>0?'':'none';
+        output.textContent=lift>0?'樣本約 100 mL・上方通氣':value>0?'約 100 mL・幾乎不變':'約 100 mL';
       }
-
     }
     update(compression);
     let pointer = null, startY = 0, startCompression = 0;
@@ -188,7 +188,7 @@
     handle.addEventListener('pointermove', event => {
       if (pointer !== event.pointerId) return;
       const scale = svg.getBoundingClientRect().height / 160;
-      update(startCompression + (event.clientY - startY) / (36 * scale) * 100);
+      update(startCompression + (event.clientY - startY) / ((kind === 'gas' ? 36 : 18) * scale) * 100);
     });
     function stop(event) {
       if (event.pointerId !== pointer) return;
@@ -200,7 +200,9 @@
     handle.addEventListener('pointercancel', stop);
     handle.addEventListener('lostpointercapture', () => { pointer = null; handle.classList.remove('is-dragging'); });
     handle.addEventListener('keydown', event => {
-      const actions = { ArrowDown:compression + 10, ArrowUp:compression - 10, ArrowRight:compression + 10, ArrowLeft:compression - 10, Home:0, End:100 };
+      const actions = kind === 'gas'
+        ? {ArrowDown:compression+10,ArrowUp:compression-10,ArrowRight:compression+10,ArrowLeft:compression-10,Home:0,End:100}
+        : {ArrowDown:compression+10,ArrowUp:compression-10,ArrowRight:compression-10,ArrowLeft:compression+10,Home:0,End:-100};
       if (!(event.key in actions)) return;
       event.preventDefault(); update(actions[event.key]);
     });

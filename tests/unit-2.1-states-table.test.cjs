@@ -102,7 +102,7 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
           const piston=g.closest('[data-piston]');
           if(piston){
             const y=+piston.querySelector('[data-piston-handle]').getAttribute('transform').match(/translate\(0 ([\d.]+)\)/)[1];
-            left=76;right=164;top=y+4;bottom=138;
+            left=76;right=164;top=y+4;bottom=148;
           }else{
             const box=g.parentElement.querySelector('.sv-glass');
             left=+box.getAttribute('x')+4;top=+box.getAttribute('y')+4;
@@ -229,7 +229,7 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     }
   });
 
-  await t.test('solid and liquid accept direct dragging while piston position and volume stay fixed', async () => {
+  await t.test('solid and liquid lift above unchanged samples and stop when lowered to contact', async () => {
     assert.equal(await page.locator('[data-press]').count(),0);
     for(const kind of ['solid', 'liquid']) {
       const model=piston(`${kind}-compress`),handle=model.locator('[data-piston-handle]');
@@ -246,11 +246,19 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
         assert.equal(await volume(`${kind}-compress`),100);
         assert.match(await cell(`${kind}.compress`).innerText(), /幾乎不變/);
         await page.mouse.move(x,y-25,{steps:6});await page.mouse.up();
+        const lifted=await geometry();
+        assert.notEqual(lifted.transform,before.transform);
+        assert.equal(lifted.fillY,before.fillY);
+        assert.equal(lifted.fillHeight,before.fillHeight);
+        assert.equal(await volume(`${kind}-compress`),100);
+        assert.equal(await model.locator('[data-sample-vent]').isVisible(),true);
+        await handle.focus();await page.keyboard.press('Home');
         assert.deepEqual(await geometry(),before);
       }
       await handle.focus();await page.keyboard.press('End');
-      assert.equal(await handle.getAttribute('aria-valuenow'),'0');
-      assert.deepEqual(await geometry(),before);
+      assert.equal(await handle.getAttribute('aria-valuenow'),'100');
+      assert.equal(await model.getAttribute('data-piston-lift'),'18');
+      assert.equal((await geometry()).fillHeight,before.fillHeight);
       await page.keyboard.press('Home');
       assert.equal(await volume(`${kind}-compress`),100);
     }
@@ -270,7 +278,7 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     await page.locator('#s2').screenshot({path:path.join(captureDir,'gas-compressed.png')});
     const bounds = await piston('gas-compress').evaluate(s => {
       const y=+s.querySelector('[data-piston-handle]').getAttribute('transform').match(/translate\(0 ([\d.]+)\)/)[1];
-      return [...s.querySelectorAll('.sv-particle')].every(d => +d.getAttribute('cy') > y+4 && +d.getAttribute('cy') < 140);
+      return [...s.querySelectorAll('.sv-particle')].every(d => +d.getAttribute('cy') > y+4 && +d.getAttribute('cy') < 150);
     });
     assert.equal(bounds,true);
     const movingBefore=await piston('gas-compress').locator('.sv-particle').evaluateAll(dots=>dots.map(d=>[+d.getAttribute('cx'),+d.getAttribute('cy')]));
@@ -331,6 +339,11 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
         assert.equal(Number(await model.getAttribute('data-volume')),100);
         assert.equal(await handle.getAttribute('transform'),before);
         assert.match(await model.locator('..').innerText(),/幾乎不變/);
+        await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
+        await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y-25}]});
+        await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+        assert.notEqual(await handle.getAttribute('transform'),before);
+        assert.equal(Number(await model.getAttribute('data-volume')),100);
       }
       await handle.focus();await touch.keyboard.press('Home');
       assert.equal(Number(await model.getAttribute('data-volume')),100);

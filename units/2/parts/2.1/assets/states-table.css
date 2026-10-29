@@ -78,3 +78,6 @@
 
 #s2 .sv-summary-dialogue { margin:17px 0 8px; scroll-margin-top:28px; }
 #s2 .sv-model-note > svg { flex:0 0 13px; width:13px; height:13px; margin-top:4px; fill:none; stroke:currentColor; stroke-width:1.25; stroke-linecap:round; }
+.states-visual-table .sv-sample-vent { fill:#91aaa5; stroke:#79958e; stroke-width:1; pointer-events:none; }
+.states-visual-table .sv-sample-vent path { fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.states-visual-table .sv-sample-vent text { fill:#637b72; stroke:none; font-size:11px; }
