@@ -111,7 +111,7 @@
   </style>
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=desktop-compact-7">
-  <link rel="stylesheet" href="assets/ppm-scale.css?v=fixed-100g-1">
+  <link rel="stylesheet" href="assets/ppm-scale.css?v=vertical-calculation-1">
   <link rel="stylesheet" href="assets/investigation.css?v=layout-2">
 </head>
 <body>
@@ -248,15 +248,33 @@
 <div class="pool-mass-comparison"><div class="pool-water-mass"><span>池水質量</span><strong>100,000,000 <small>克</small></strong><small>100,000 公升 ≈ 100,000 公斤</small></div><span class="pool-mass-plus" aria-hidden="true">＋</span><div class="pool-added-mass"><span>溶質｜食鹽</span><strong data-pool="solute">100 克</strong><small>與池水使用相同單位</small></div></div>
 <p class="pool-total-line">溶液總質量 ＝ 池水 ＋ 溶質 ＝ <strong data-pool="total">100,000,100 克</strong></p>
 <p class="pool-volume-note">水的密度以 1 公斤／公升估算；本例假設溶質完全溶解、沒有損失，主畫面採同一尺度，局部放大只方便觀察份量。</p>
-<section class="ppm-explanation" id="ppm-percent-bridge" aria-labelledby="ppm-bridge-title">
-<h3 id="ppm-bridge-title">先算質量比，再換成每一百萬份</h3>
-<p class="ppm-explain-subtitle">分子、分母都用克；分母包含整池水與加入的溶質。</p>
-<div class="ppm-shared"><p>ppm 計算公式</p><div class="pool-ppm-formula" role="math" aria-label="ppm等於溶質質量除以溶液總質量，再乘以一百萬"><span>ppm ＝</span><span class="fraction"><span class="num">溶質質量</span><span class="den">溶液總質量</span></span><span>× 1,000,000</span></div><p class="pool-formula-meaning">1 ppm 表示溶質占總質量的百萬分之一。</p></div>
-<div class="ppm-example"><h4>代入這座泳池的數值</h4><div class="pool-worked-formula" role="math" id="pool-worked-formula" aria-label="100克除以100000100克，再乘以一百萬，約為1ppm"><span class="fraction"><span class="num" data-ppm="numerator">100 克</span><span class="den" data-ppm="denominator">100,000,100 克</span></span><span>× 1,000,000</span></div><strong class="pool-ppm-result" data-ppm="ppm">≈ 1 ppm</strong><p class="pool-million-meaning" data-pool="meaning">每 100 萬份溶液中，約 1 份是溶質。</p></div>
-<div class="pool-notation-comparison"><p>同一個質量比例，換一種表示方式</p><div><span>重量百分濃度</span><strong data-ppm="percent">≈ 0.0001%</strong></div><div><span>ppm</span><strong data-pool="ppm-short">≈ 1 ppm</strong></div></div>
+<section class="ppm-explanation pool-calculation" id="ppm-percent-bridge" aria-labelledby="ppm-bridge-title">
+<header class="pool-calculation-head">
+<h3 id="ppm-bridge-title">這一池水的濃度是多少？</h3>
+<p>100,000 公升池水，加入 100 克食鹽。</p>
+</header>
+<div class="ppm-shared pool-calculation-section">
+<h4 class="pool-section-title"><span aria-hidden="true">01</span>計算公式</h4>
+<div class="pool-ppm-formula" role="math" aria-label="ppm等於溶質質量除以溶液總質量，再乘以一百萬"><span>ppm ＝</span><span class="fraction"><span class="num">溶質質量</span><span class="den">溶液總質量</span></span><span>× 1,000,000</span></div>
+<p class="pool-formula-unit">分子、分母使用相同的質量單位。</p>
+</div>
+<div class="ppm-example pool-calculation-section">
+<h4 class="pool-section-title"><span aria-hidden="true">02</span>代入這個例子</h4>
+<p class="pool-example-masses"><span>池水 100,000,000 克</span><span aria-hidden="true">＋</span><span>食鹽 <span data-pool="solute">100 克</span></span><span aria-hidden="true">＝</span><span>溶液 <span data-pool="total">100,000,100 克</span></span></p>
+<div class="pool-worked-formula" role="math" id="pool-worked-formula" aria-label="100克除以100000100克，再乘以一百萬，約為1ppm"><span>ppm ＝</span><span class="fraction"><span class="num" data-ppm="numerator">100 克</span><span class="den" data-ppm="denominator">100,000,100 克</span></span><span>× 1,000,000</span></div>
+<div class="pool-result-arrow" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M12 2v23M4 17l8 8 8-8"/></svg></div>
+<strong class="pool-ppm-result" data-ppm="ppm">≈ 1 ppm</strong>
+<p class="pool-million-meaning" data-pool="meaning">每 100 萬份溶液中，約有 <strong data-pool="meaning-part">1 份</strong>是溶質。</p>
+</div>
+<div class="pool-calculation-section pool-percentage-bridge">
+<h4 class="pool-section-title"><span aria-hidden="true">03</span>接回百分濃度</h4>
+<div class="pool-notation-comparison" aria-label="同一濃度的重量百分濃度與ppm對照"><div><span>重量百分濃度</span><strong data-ppm="percent">≈ 0.0001%</strong></div><span class="pool-comparison-arrow" aria-hidden="true">↔</span><div><span>ppm</span><strong data-pool="ppm-short">≈ 1 ppm</strong></div></div>
+<p class="pool-comparison-caption">同一個濃度，換一種表示方式。</p>
+<p class="pool-comparison-reason">含量很少時，用 ppm 表示更容易閱讀。</p>
+<p class="pool-calculation-note">本例水的密度取 1 公斤／公升，計算結果已四捨五入。</p>
+</div>
 </section>
 <div class="dialogue pool-ppm-closing"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>它們表示的是同一個濃度。含量很少時，用 ppm 寫起來更簡潔，也容易閱讀。</p></div>
-<p class="pool-rounding-note">本例計算結果已四捨五入。</p>
 <p id="ppm-status" class="ppm-status" role="status" aria-live="polite"></p>
 </div>
 </div></section>
@@ -346,7 +364,7 @@
   <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
-  <script type="module" src="assets/ppm-pool.js?v=fixed-100g-1"></script>
+  <script type="module" src="assets/ppm-pool.js?v=vertical-calculation-1"></script>
   <script type="module" src="assets/investigation.js?v=review-5"></script>
 </body>
 </html>

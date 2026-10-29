@@ -44,7 +44,7 @@ test('2.2 ppm: whole-pool water and tiny solute masses show the ppm calculation'
  });
  await t.test('percentage and ppm are two displays of the same tiny mass ratio',async()=>{
   assert.equal(await page.locator('[data-ppm=percent]').innerText(),'≈ 0.0001%');assert.equal(await page.locator('[data-pool=ppm-short]').innerText(),'≈ 1 ppm');
-  assert.match(await page.locator('.pool-million-meaning').innerText(),/100 萬份.*約 1 份/);assert.match(await page.locator('.pool-ppm-closing').innerText(),/同一個濃度.*ppm.*容易閱讀/);
+  assert.match(await page.locator('.pool-million-meaning').innerText(),/100 萬份.*約有 1 份/);assert.match(await page.locator('.pool-ppm-closing').innerText(),/同一個濃度.*ppm.*容易閱讀/);
  });
  await t.test('the fixed example has no mass controls and stays separate from the sugar-water recipe',async()=>{
   assert.equal(await page.locator('[data-pool-dose],.pool-dose-controls').count(),0);assert.equal((await data()).soluteG,'100');

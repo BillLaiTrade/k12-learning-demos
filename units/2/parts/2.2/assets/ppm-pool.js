@@ -10,7 +10,7 @@ function renderExample(){
   const totalG=waterMassG+soluteG,ratio=soluteG/totalG;
   const ppm=ratio*1000000,percent=ratio*100;
   const roundedPpm=number(ppm,3),roundedPercent=number(percent,6);
-  const fields={solute:`${number(soluteG)} 克`,total:`${number(totalG)} 克`,'ppm-short':`≈ ${roundedPpm} ppm`,meaning:`每 100 萬份溶液中，約 ${roundedPpm} 份是溶質。`};
+  const fields={solute:`${number(soluteG)} 克`,total:`${number(totalG)} 克`,'ppm-short':`≈ ${roundedPpm} ppm`,'meaning-part':`${roundedPpm} 份`};
   for(const [key,text] of Object.entries(fields))for(const node of root.querySelectorAll(`[data-pool="${key}"]`))node.textContent=text;
   for(const [key,text] of Object.entries({numerator:fields.solute,denominator:fields.total,ppm:fields['ppm-short'],percent:`≈ ${roundedPercent}%`}))for(const node of root.querySelectorAll(`[data-ppm="${key}"]`))node.textContent=text;
   view.setSalt(soluteG);
