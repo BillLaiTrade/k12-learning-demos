@@ -9,7 +9,7 @@
 
 - 皇家化學學會元素資料：[銅](https://periodic-table.rsc.org/element/29/copper)、[鋁](https://periodic-table.rsc.org/element/13/aluminium)、[鐵](https://periodic-table.rsc.org/element/26/iron)、[硫](https://periodic-table.rsc.org/element/16/sulfur)、[碳](https://periodic-table.rsc.org/element/6/carbon)、[汞](https://periodic-table.rsc.org/element/80/mercury)。用於名稱、符號、外觀、狀態與用途及碳不同形態的資料查核。
 - 科學史研究所：[Robert Boyle](https://www.sciencehistory.org/education/scientific-biographies/robert-boyle/)。用於四元素傳統、波以耳對元素觀點及實驗研究的歷史背景。教材未採用原典引文或複製外部圖像。
-- 水的化學分解承接 4.1 及教育部自然領綱 Aa-Ⅳ-3，與波以耳的工作分開呈現。
+- 水的化學分解承接 2.1 及教育部自然領綱 Aa-Ⅳ-3，與波以耳的工作分開呈現。
 - 課綱、公開教材計畫與已核可範圍另見 `BillLaiTrade/k12` 的單元 6 規劃。來源支持內容查核，不代表指定出版社已逐頁驗收。
 
 ## 製作原則
@@ -48,7 +48,7 @@
 
 原本的瓶子／水杯箭頭圖改為兩份研究情境：生成水以反應、蒸氣、冷卻後凝結的水滴呈現；分解以電源、電極、氣泡與兩側收集管呈現，搭配已檢驗為氫與氧的結果。兩份觀察與檢驗結果直接可見，點選只突出重點。
 
-分解圖承接第四單元，以適當條件下電解水為例；氣體無色，身分來自檢驗。負極對應氫氣、正極對應氧氣，未表示氣體體積比例。明示省略電解質及檢驗細節；不是特定科學家的裝置復原。重新讀取前述 OpenStax Chemistry 2e 1.2（含圖 1.15），核對電源、水分解及產物。SVG 為原生教材圖解，未引用外部實驗圖片。
+分解圖承接第二單元，以適當條件下電解水為例；氣體無色，身分來自檢驗。負極對應氫氣、正極對應氧氣，未表示氣體體積比例。明示省略電解質及檢驗細節；不是特定科學家的裝置復原。重新讀取前述 OpenStax Chemistry 2e 1.2（含圖 1.15），核對電源、水分解及產物。SVG 為原生教材圖解，未引用外部實驗圖片。
 
 ## 火與燃燒的連結補強（2026-10-28）
 

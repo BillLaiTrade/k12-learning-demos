@@ -1,4 +1,4 @@
-# 2.2 聲音示範素材
+# 3.2 聲音示範素材
 
 - `sound-story-opening.png` 為開場情境圖。
 - `ruler-suspended-background.png` 是依原教室素材調整的背景圖：只有左側一張桌子，右側為桌外空間，避免把尺的懸空段誤看成搭在另一張桌面上。
