@@ -311,7 +311,6 @@
 #s6 .pool-calculation .pool-notation-comparison strong {font-size:1.33rem;font-weight:700;color:#1b5d3d;line-height:1.35;font-variant-numeric:tabular-nums;white-space:nowrap;}
 #s6 .pool-calculation .pool-comparison-arrow {font-size:1.6rem;line-height:1;color:#7b9574;}
 #s6 .pool-comparison-caption {margin:11px 0 0;text-align:center;color:#426149;font-size:.86rem;font-weight:600;line-height:1.6;}
-#s6 .pool-comparison-reason {margin:3px 0 0;text-align:center;color:#6b7c67;font-size:.76rem;line-height:1.6;}
 #s6 .pool-calculation-note {margin:12px 0 0;padding-top:10px;border-top:1px solid #d0ddc9;text-align:center;color:#72816e;font-size:.69rem;line-height:1.65;}
 @media(max-width:680px){
  #s6 .pool-calculation-head {padding:14px 12px;}
@@ -327,4 +326,18 @@
  #s6 .pool-calculation .pool-notation-comparison>div>span {font-size:.7rem;}
  #s6 .pool-calculation .pool-notation-comparison strong {font-size:1.1rem;}
  #s6 .pool-calculation .pool-comparison-arrow {font-size:1.3rem;}
+}
+
+/* Convert the displayed mass-percent number to the ppm number. */
+#s6 .pool-percentage-bridge {scroll-margin-top:24px;}
+#s6 .pool-percent-conversion {display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:3px 7px;margin:0 0 12px;color:#43634b;font-size:.86rem;line-height:1.65;text-align:center;}
+#s6 .pool-percent-conversion>span {white-space:nowrap;}
+#s6 .pool-percent-conversion strong {color:#176b47;font-size:1.02rem;font-weight:750;white-space:nowrap;}
+#s6 .pool-conversion-example {margin:11px 0 0;text-align:center;color:#6b7c67;font-size:.83rem;line-height:1.65;}
+#s6 .pool-conversion-example strong {color:#285d3d;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap;}
+#s6 .pool-conversion-note {margin:5px 0 0;text-align:center;color:#75816f;font-size:.72rem;line-height:1.65;}
+@media(max-width:680px){
+ #s6 .pool-percent-conversion {font-size:.76rem;gap:2px 5px;}
+ #s6 .pool-percent-conversion strong {font-size:.9rem;}
+ #s6 .pool-conversion-example {font-size:.78rem;}
 }
