@@ -947,7 +947,7 @@
             <figure class="visual frequency-period-figure">
               <div class="frequency-graph-heading">
                 <strong>繩上波形：位移隨位置的變化</strong>
-                <span class="frequency-graph-hint">波形隨頻率、週期同步變化</span>
+                <span class="frequency-graph-hint">新的振動變化由波源向右傳播</span>
               </div>
               <svg id="frequency-period-graph" viewBox="0 0 760 310" role="img" aria-label="繩上的波形持續向右傳播；雙向箭頭標示一個波長；目前頻率一赫茲，週期一秒">
                 <defs>
@@ -1678,28 +1678,48 @@
       const frequencyPeriodGraph=document.querySelector("#frequency-period-graph");
       if(frequencyStepDown&&frequencyStepUp&&frequencyControlValue&&periodRange&&periodControlValue&&frequencyPeriodWave&&frequencyPeriodCursor&&frequencyWavelengthArrow&&frequencyWavelengthGuides&&frequencyWavelengthLabel&&frequencyPeriodGraph){
         const graphStartX=80,graphWidth=540,graphMidY=170,graphAmplitude=70,waveSpeed=3;
-        let frequency=1,waveAnimationFrame=0,waveStartTime=null,currentWavePhase=0;
-        const visibleDistance=4.5;
-        let wavelength=waveSpeed/frequency;
+        let frequency=1,waveAnimationFrame=0;
+        const visibleDistance=4.5,waveStartTime=performance.now();
+        // 保存波源的連續相位；每個位置只讀取傳播延遲之前已送出的振動。
+        const frequencyHistory=[{start:0,phase:0,frequency:1,initial:true}];
+        const waveElapsed=(time=performance.now())=>Math.max(0,(time-waveStartTime)/1000);
+        const sourcePhaseAt=sourceTime=>{
+          let low=0,high=frequencyHistory.length-1;
+          while(low<high){
+            const middle=Math.ceil((low+high)/2);
+            if(frequencyHistory[middle].start<=sourceTime)low=middle;else high=middle-1;
+          }
+          const segment=frequencyHistory[low];
+          return segment.phase+2*Math.PI*segment.frequency*(sourceTime-segment.start);
+        };
         const formatFrequency=value=>String(Number(value.toFixed(2)));
         const formatPeriod=value=>{const rounded=Number(value.toFixed(4));return Number.isInteger(rounded)?rounded.toFixed(2):String(rounded);};
-        const drawFrequencyPeriodWave=phase=>{
+        const drawFrequencyPeriodWave=elapsed=>{
+          const phase=sourcePhaseAt(elapsed);
           let path=`M${graphStartX} ${graphMidY-graphAmplitude*Math.sin(phase)}`;
           const samples=240;
           for(let index=1;index<=samples;index++){
             const x=graphStartX+graphWidth*index/samples;
             const position=visibleDistance*index/samples;
-            const y=graphMidY-graphAmplitude*Math.sin(phase-2*Math.PI*position/wavelength);
+            const y=graphMidY-graphAmplitude*Math.sin(sourcePhaseAt(elapsed-position/waveSpeed));
             path+=` L${x.toFixed(2)} ${y.toFixed(2)}`;
           }
           frequencyPeriodWave.setAttribute("d",path);
           frequencyPeriodCursor.setAttribute("cx",String(graphStartX));
           frequencyPeriodCursor.setAttribute("cy",String(graphMidY-graphAmplitude*Math.sin(phase)));
+          const latest=frequencyHistory[frequencyHistory.length-1],period=1/frequency;
+          const completeCycle=latest.initial||elapsed-latest.start>=period;
+          const wavelengthEndX=graphStartX+graphWidth*((waveSpeed/frequency)/visibleDistance);
+          frequencyWavelengthArrow.setAttribute("d",completeCycle?`M${graphStartX} 65H${wavelengthEndX.toFixed(2)}`:"");
+          frequencyWavelengthGuides.setAttribute("d",completeCycle?`M${graphStartX} 67V260M${wavelengthEndX.toFixed(2)} 67V260`:"");
+          frequencyWavelengthLabel.setAttribute("x",String((graphStartX+wavelengthEndX)/2));
+          frequencyWavelengthLabel.textContent=completeCycle?"一個波長 λ":"新波形形成中";
+          // 可見範圍之外的舊歷史可移除；保留邊界之前一段以維持相位。
+          const earliest=elapsed-visibleDistance/waveSpeed;
+          while(frequencyHistory.length>1&&frequencyHistory[1].start<=earliest)frequencyHistory.shift();
         };
         const animateFrequencyPeriodWave=time=>{
-          if(waveStartTime===null)waveStartTime=time;
-          currentWavePhase=2*Math.PI*frequency*((time-waveStartTime)/1000);
-          drawFrequencyPeriodWave(currentWavePhase);
+          drawFrequencyPeriodWave(waveElapsed(time));
           waveAnimationFrame=window.requestAnimationFrame(animateFrequencyPeriodWave);
         };
         const updateFrequencyPeriod=({syncPeriod=true}={})=>{
@@ -1710,17 +1730,22 @@
           frequencyControlValue.textContent=frequencyText;periodControlValue.textContent=periodText;
           frequencyStepDown.disabled=frequency<=1;frequencyStepUp.disabled=frequency>=4;
           periodRange.setAttribute("aria-valuetext",periodText);
-          wavelength=waveSpeed/frequency;
-          frequencyPeriodGraph.setAttribute("aria-label",`繩上的波形持續向右傳播；雙向箭頭標示一個波長；目前頻率 ${frequencyText}，週期 ${periodText}`);
-          drawFrequencyPeriodWave(currentWavePhase);
-          const wavelengthEndX=graphStartX+graphWidth*(wavelength/visibleDistance);
-          frequencyWavelengthArrow.setAttribute("d",`M${graphStartX} 65H${wavelengthEndX.toFixed(2)}`);
-          frequencyWavelengthGuides.setAttribute("d",`M${graphStartX} 67V260M${wavelengthEndX.toFixed(2)} 67V260`);
-          frequencyWavelengthLabel.setAttribute("x",String((graphStartX+wavelengthEndX)/2));
+          frequencyPeriodGraph.setAttribute("aria-label",`繩上的波形持續向右傳播；波源目前頻率 ${frequencyText}，週期 ${periodText}；新的頻率變化從左端逐步向右傳遞，形成一個完整新波形後標示波長。`);
+          drawFrequencyPeriodWave(waveElapsed());
         };
-        frequencyStepDown.addEventListener("click",()=>{frequency=Math.max(1,frequency-1);updateFrequencyPeriod();});
-        frequencyStepUp.addEventListener("click",()=>{frequency=Math.min(4,frequency+1);updateFrequencyPeriod();});
-        periodRange.addEventListener("input",()=>{frequency=1/Number(periodRange.value);updateFrequencyPeriod({syncPeriod:false});});
+        const changeFrequency=(next,options={})=>{
+          const elapsed=waveElapsed();
+          if(next!==frequency){
+            const phase=sourcePhaseAt(elapsed),latest=frequencyHistory[frequencyHistory.length-1];
+            if(!latest.initial&&latest.start===elapsed)latest.frequency=next;
+            else frequencyHistory.push({start:elapsed,phase,frequency:next,initial:false});
+            frequency=next;
+          }
+          updateFrequencyPeriod(options);
+        };
+        frequencyStepDown.addEventListener("click",()=>changeFrequency(Math.max(1,frequency-1)));
+        frequencyStepUp.addEventListener("click",()=>changeFrequency(Math.min(4,frequency+1)));
+        periodRange.addEventListener("input",()=>changeFrequency(1/Number(periodRange.value),{syncPeriod:false}));
         updateFrequencyPeriod();
         waveAnimationFrame=window.requestAnimationFrame(animateFrequencyPeriodWave);
       }
