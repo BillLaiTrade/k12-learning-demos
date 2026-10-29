@@ -116,16 +116,38 @@
       button.setAttribute('aria-label', `換個容器；目前${['細高', '寬淺', '方形'][current]}容器`);
     });
   });
+  const volumeContainer = section.querySelector('[data-gas-volume]');
+  const volumeParticles = volumeContainer.querySelector('[data-volume-particles]');
+  function selectGasVolume(value) {
+    if (![100,200,300].includes(value)) return;
+    // Different sealed containers, not an inward-moving piston. Fixed cross-section.
+    const height = 8 + value / 100 * 36, y = 138 - height;
+    const glass = volumeContainer.querySelector('.sv-glass');
+    glass.setAttribute('y',y); glass.setAttribute('height',height);
+    volumeContainer.querySelector('.sv-rim').setAttribute('cy',y);
+    volumeContainer.querySelector('.sv-highlight').setAttribute('d',`M78 ${y+8}v${height-18}`);
+    volumeContainer.dataset.volume = String(value);
+    volumeContainer.setAttribute('aria-label',`${value}毫升密閉容器，同一批氣體粒子分布於全部可用空間`);
+    gasFieldFor(volumeParticles,{left:76,top:y+4,right:164,bottom:134});
+    section.querySelector('[data-gas-volume-readout]').textContent = `容器體積：${value} mL`;
+    section.querySelectorAll('[data-gas-volume-choice]').forEach(button => {
+      button.setAttribute('aria-pressed',String(+button.dataset.gasVolumeChoice===value));
+    });
+  }
+  selectGasVolume(200);
+  section.querySelectorAll('[data-gas-volume-choice]').forEach(button => {
+    button.addEventListener('click',()=>selectGasVolume(+button.dataset.gasVolumeChoice));
+  });
   section.querySelectorAll('[data-piston]').forEach(svg => {
     // The fixed barrel has its bottom at y=140. Gas space = bottom minus piston.
-    const kind = svg.dataset.kind, mode = svg.dataset.mode;
+    const kind = svg.dataset.kind;
     const handle = svg.querySelector('[data-piston-handle]');
     svg.setAttribute('role', 'group');
     const output = section.querySelector(`[data-piston-readout="${svg.dataset.piston}"]`);
     const dots = [...svg.querySelectorAll('.sv-particle')];
     dots.forEach(dot => dot.setAttribute('r', '2.1'));
     const gasField = kind === 'gas' ? gasFieldFor(svg.querySelector('[data-piston-particles]'),{ left:76, top:84, right:164, bottom:138 }) : null;
-    let compression = mode === 'volume' ? 100 / 3 : 0;
+    let compression = 0;
     function update(value) {
       compression = Math.max(0, Math.min(100, value));
       // Ordinary pressure: solid/liquid movement is too small to show at this scale.
@@ -138,7 +160,7 @@
       svg.dataset.compression = String(kind === 'gas' ? compression : 0);
       if (kind === 'gas') {
         gasField.resize({ left:76, top:y + 4, right:164, bottom:138 });
-        output.textContent = mode === 'volume' ? `可用空間：約 ${Math.round(volume)} mL` : `約 ${Math.round(volume)} mL・粒子數不變`;
+        output.textContent = `約 ${Math.round(volume)} mL・粒子數不變`;
       } else {
         const fill = svg.querySelector('[data-piston-fill]');
         fill.setAttribute('y', y + 4.5);

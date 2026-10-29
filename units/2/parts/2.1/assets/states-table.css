@@ -73,3 +73,9 @@
 #s2 .sv-motion-toggle:hover { background:#eef4e8; }
 #s2 .sv-motion-toggle[aria-pressed="true"] { background:#e7f0e2; border-color:#91ac88; }
 #s2 .sv-motion-toggle:focus-visible { outline:3px solid #ac8038; outline-offset:3px; }
+.states-visual-table .sv-volume-options { display:flex; justify-content:center; width:100%; max-width:185px; gap:4px; }
+.states-visual-table .sv-volume-options button { flex:1; min-width:0; min-height:34px; padding:5px 3px; border:1px solid #d0c4dd; border-radius:10px; background:#fffdfd; color:#6d5581; font:inherit; font-size:.68rem; cursor:pointer; white-space:nowrap; }
+.states-visual-table .sv-volume-options button:hover { border-color:#997fb1; background:#f4eff9; }
+.states-visual-table .sv-volume-options button[aria-pressed="true"] { background:#795e92; border-color:#795e92; color:#fff; }
+.states-visual-table .sv-volume-options button:focus-visible { outline:3px solid #ac8038; outline-offset:2px; }
+.states-visual-table .sv-vessel-caption { font-size:12px; fill:#748078; letter-spacing:.04em; }

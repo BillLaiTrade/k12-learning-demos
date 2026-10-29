@@ -1,19 +1,20 @@
 ▶ 2.1: three-state diagrams are visible and interact inside the table
-  ✔ nine diagrams and conclusions exist without selecting a table cell (705.75015ms)
-  ✔ all four gas diagrams move independently, stay bounded, pause and resume (2115.140497ms)
-  ✔ container changes preserve solid geometry and liquid quantity (2213.469687ms)
-  ✔ gas shape changes keep all particles inside the sealed container (915.74845ms)
-  ✔ solid and liquid accept direct dragging while piston position and volume stay fixed (6179.139735ms)
-  ✔ gas compression responds to mouse drag and keyboard with constant particles (1802.803901ms)
-  ✔ all other lesson sections are preserved and still initialize (273.363929ms)
-  ✔ responsive table stays inside the page; narrow screens scroll internally (2977.616486ms)
-  ✔ touch dragging and reduced-motion keyboard operation work (3366.485778ms)
-✔ 2.1: three-state diagrams are visible and interact inside the table (22845.047178ms)
-ℹ tests 10
+  ✔ nine diagrams and conclusions exist without selecting a table cell (708.349871ms)
+  ✔ all four gas diagrams move independently, stay bounded, pause and resume (2188.167055ms)
+  ✔ gas volume switches sealed containers independently of compression (3496.621904ms)
+  ✔ container changes preserve solid geometry and liquid quantity (1971.047796ms)
+  ✔ gas shape changes keep all particles inside the sealed container (873.557525ms)
+  ✔ solid and liquid accept direct dragging while piston position and volume stay fixed (5520.54206ms)
+  ✔ gas compression responds to mouse drag and keyboard with constant particles (1499.512322ms)
+  ✔ all other lesson sections are preserved and still initialize (298.174013ms)
+  ✔ responsive table stays inside the page; narrow screens scroll internally (3236.422878ms)
+  ✔ touch dragging and reduced-motion keyboard operation work (4295.856406ms)
+✔ 2.1: three-state diagrams are visible and interact inside the table (26606.544243ms)
+ℹ tests 11
 ℹ suites 0
-ℹ pass 10
+ℹ pass 11
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 23237.189129
+ℹ duration_ms 27024.642286

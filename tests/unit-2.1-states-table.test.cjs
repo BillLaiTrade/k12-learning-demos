@@ -61,18 +61,18 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
   });
 
   await t.test('all four gas diagrams move independently, stay bounded, pause and resume', async () => {
-    const positions = () => page.locator('#s2 [data-shape-particles], #s2 [data-piston-particles]').evaluateAll(groups=>groups.map(g=>[...g.querySelectorAll('.sv-particle')].map(d=>[+d.getAttribute('cx'),+d.getAttribute('cy')])));
+    const positions = () => page.locator('#s2 [data-shape-particles], #s2 [data-volume-particles], #s2 [data-piston-particles]').evaluateAll(groups=>groups.map(g=>[...g.querySelectorAll('.sv-particle')].map(d=>[+d.getAttribute('cx'),+d.getAttribute('cy')])));
     const before=await positions();
     assert.equal(before.length,4); assert.ok(before.every(group=>group.length===24));
     const movement = previous => page.waitForFunction(previous => {
-      const groups=[...document.querySelectorAll('#s2 [data-shape-particles], #s2 [data-piston-particles]')];
+      const groups=[...document.querySelectorAll('#s2 [data-shape-particles], #s2 [data-volume-particles], #s2 [data-piston-particles]')];
       return groups.every((group,j)=>[...group.querySelectorAll('.sv-particle')].filter((dot,i)=>Math.hypot(+dot.getAttribute('cx')-previous[j][i][0],+dot.getAttribute('cy')-previous[j][i][1])>.5).length>=12);
     },previous,{timeout:5000});
     await movement(before);
     const bounded = await page.evaluate(() => new Promise(resolve=>{
       let frames=0;
       function sample(){
-        const groups=[...document.querySelectorAll('#s2 [data-shape-particles], #s2 [data-piston-particles]')];
+        const groups=[...document.querySelectorAll('#s2 [data-shape-particles], #s2 [data-volume-particles], #s2 [data-piston-particles]')];
         const valid=groups.every(g=>{
           let left,right,top,bottom;
           const piston=g.closest('[data-piston]');
@@ -108,6 +108,47 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     await page.locator('#s2').scrollIntoViewIfNeeded();
     await page.waitForFunction(()=>document.querySelector('#s2').dataset.gasMotion==='running');
     await movement(await positions());
+  });
+
+  await t.test('gas volume switches sealed containers independently of compression', async () => {
+    const container=cell('gas.volume').locator('[data-gas-volume]');
+    const group=container.locator('[data-volume-particles]');
+    assert.equal(await container.getAttribute('data-volume'),'200');
+    assert.equal(await cell('gas.volume').locator('[data-piston], [data-piston-handle], .sv-rod').count(),0);
+    assert.equal(await cell('gas.volume').locator('[data-gas-volume-choice]').count(),3);
+    assert.equal(await page.locator('[data-piston]').count(),3);
+    const handles=await group.evaluateHandle(g=>[...g.querySelectorAll('.sv-particle')]);
+    const compressionBefore=await piston('gas-compress').getAttribute('data-volume');
+    const heights=new Map();
+    for(const value of [100,300,200,100]) {
+      await cell('gas.volume').locator(`[data-gas-volume-choice="${value}"]`).click();
+      assert.equal(await container.getAttribute('data-volume'),String(value));
+      assert.match(await cell('gas.volume').innerText(),new RegExp(`容器體積：${value} mL`));
+      assert.equal(await cell('gas.volume').locator('[aria-pressed="true"]').count(),1);
+      assert.equal(await cell('gas.volume').locator(`[data-gas-volume-choice="${value}"]`).getAttribute('aria-pressed'),'true');
+      const data=await container.evaluate(svg=>{
+        const glass=svg.querySelector('.sv-glass'),rim=svg.querySelector('.sv-rim');
+        const x=+glass.getAttribute('x'),y=+glass.getAttribute('y'),w=+glass.getAttribute('width'),h=+glass.getAttribute('height');
+        const dots=[...svg.querySelectorAll('.sv-particle')];
+        return {count:dots.length,height:h,rimAligned:+rim.getAttribute('cy')===y,inside:dots.every(d=>{
+          const r=+d.getAttribute('r'),cx=+d.getAttribute('cx'),cy=+d.getAttribute('cy');
+          return cx-r>=x+3.998 && cx+r<=x+w-3.998 && cy-r>=y+3.998 && cy+r<=y+h-3.998;
+        })};
+      });
+      assert.equal(data.count,24);assert.equal(data.rimAligned,true);assert.equal(data.inside,true);
+      heights.set(value,data.height);
+      assert.equal(await handles.evaluate(nodes=>nodes.length===24 && nodes.every(n=>n.isConnected && n.parentElement.hasAttribute('data-volume-particles'))),true);
+      assert.equal(await piston('gas-compress').getAttribute('data-volume'),compressionBefore);
+      const before=await group.locator('.sv-particle').evaluateAll(dots=>dots.map(d=>[+d.getAttribute('cx'),+d.getAttribute('cy')]));
+      await page.waitForFunction(before=>[...document.querySelectorAll('[data-volume-particles] .sv-particle')].filter((d,i)=>Math.hypot(+d.getAttribute('cx')-before[i][0],+d.getAttribute('cy')-before[i][1])>.4).length>=8,before,{timeout:5000});
+      if(value===100 || value===300) await cell('gas.volume').screenshot({path:path.join(captureDir,`gas-volume-${value}.png`)});
+    }
+    assert.ok(heights.get(100)<heights.get(200) && heights.get(200)<heights.get(300));
+    assert.ok(Math.abs((heights.get(300)-8)/(heights.get(100)-8)-3)<.001);
+    const button=cell('gas.volume').locator('[data-gas-volume-choice="200"]');
+    await button.focus();await page.keyboard.press('Space');
+    assert.equal(await container.getAttribute('data-volume'),'200');
+    await handles.dispose();
   });
 
   await t.test('container changes preserve solid geometry and liquid quantity', async () => {
@@ -198,9 +239,6 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     await page.waitForFunction(before=>[...document.querySelectorAll('[data-piston="gas-compress"] .sv-particle')].filter((d,i)=>Math.hypot(+d.getAttribute('cx')-before[i][0],+d.getAttribute('cy')-before[i][1])>.4).length>=8,movingBefore,{timeout:5000});
 
     await page.keyboard.press('Home');
-    const v = piston('gas-volume').locator('[data-piston-handle]');
-    await v.focus(); await page.keyboard.press('End'); assert.ok(await volume('gas-volume') < 41);
-    await page.keyboard.press('Home'); assert.equal(await volume('gas-volume'),100);
   });
 
   await t.test('all other lesson sections are preserved and still initialize', async () => {
@@ -259,6 +297,9 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
       await handle.focus();await touch.keyboard.press('Home');
       assert.equal(Number(await model.getAttribute('data-volume')),100);
     }
+    await touch.locator('[data-gas-volume-choice="300"]').tap();
+    assert.equal(await touch.locator('[data-gas-volume]').getAttribute('data-volume'),'300');
+    assert.equal(await touch.locator('[data-volume-particles] .sv-particle').count(),24);
     const movingBefore=await touch.locator('[data-piston="gas-compress"] .sv-particle').evaluateAll(dots=>dots.map(d=>[+d.getAttribute('cx'),+d.getAttribute('cy')]));
     await touch.waitForFunction(before=>[...document.querySelectorAll('[data-piston="gas-compress"] .sv-particle')].filter((d,i)=>Math.hypot(+d.getAttribute('cx')-before[i][0],+d.getAttribute('cy')-before[i][1])>.3).length>=8,movingBefore,{timeout:5000});
     assert.equal(await touch.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),true);
