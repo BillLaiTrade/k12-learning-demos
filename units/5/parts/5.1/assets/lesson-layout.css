@@ -84,8 +84,6 @@ body{line-height:1.72}
  #card-03 #dual-readout{font-size:clamp(1.55rem,7.1cqw,2.3rem)}
  #card-03 .dual-result{padding:17px 5px 13px}
  #card-03 .dual-presets{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:14px}
- #card-03 .dual-entry{grid-template-columns:minmax(0,1fr)}
- #card-03 .dual-apply{grid-column:1/-1}
  #card-03 .dual-preset{min-height:88px}
  #card-03 .dual-preset svg{width:29px;height:29px}
  #card-03 .dual-preset span{font-size:.69rem}
