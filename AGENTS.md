@@ -8,5 +8,5 @@
 - 使用者每次要求修改時，已授權完成必要檢查後提交並推送當次需求相關的變更，不另行詢問是否 commit 或 push。若該次明確要求暫不推送，依使用者指示辦理。
 - 推送前同步遠端 `main`，保留其他人的提交，不使用 force push 覆蓋遠端。
 - 展示頁推送至 `main` 後，確認 GitHub Pages 部署成功，並以公開網址確認本次內容已上線。
-- 完成回報提供相關的公開頁面及區塊錨點連結，例如 `https://billlaitrade.github.io/k12-learning-demos/units/4/parts/4.2/#s2`，讓使用者直接檢視。
+- 完成回報提供相關的公開頁面及區塊錨點連結，例如 `https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.2/#s2`，讓使用者直接檢視。
 - 推送或部署未成功時，明確回報阻礙；不得將舊公開版本描述為已包含本次修改。

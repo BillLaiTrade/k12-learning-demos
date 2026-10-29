@@ -1,4 +1,4 @@
-import * as THREE from '../../3.1/assets/vendor/three/build/three.module.js';
+import * as THREE from '../../1.1/assets/vendor/three/build/three.module.js';
 import { makeMeteoriteMesh, makeStone } from './stone-observer.js?v=meteorite-20261023-6';
 
 const MASS_G = 910;

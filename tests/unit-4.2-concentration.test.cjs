@@ -5,7 +5,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--disable-accelerated-2d-canvas']});t.after(()=>browser.close());
  const page=await browser.newPage({viewport:{width:1440,height:1100},hasTouch:true});const failures=[];
  page.on('pageerror',e=>failures.push(String(e)));page.on('requestfailed',r=>failures.push(r.url()));page.on('response',r=>{if(r.status()>=400)failures.push(r.url());});
- const url=`http://127.0.0.1:${port}/units/4/parts/4.2/`;
+ const url=`http://127.0.0.1:${port}/units/2/parts/2.2/`;
  await page.clock.install({time:new Date('2026-10-28T00:00:00Z')});await page.goto(url+'#s5',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='true');await page.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));
  const lab=page.locator('#mix-lab'),spoon=page.locator('#mix-spoon'),pitcher=page.locator('#mix-pitcher');
  const state=()=>lab.evaluate(e=>({sugar:Number(e.dataset.sugar),water:Number(e.dataset.water),total:Number(e.dataset.total),percent:Number(e.dataset.percent),activity:e.dataset.activity}));

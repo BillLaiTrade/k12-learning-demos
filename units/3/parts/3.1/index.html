@@ -1,0 +1,1898 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="沿著繩波追蹤介質如何振動與波形如何傳播，認識橫波、縱波、波的特徵與速度關係。">
+  <title>波的傳播｜波動與聲音</title>
+  <style>
+    :root { color-scheme:light; --ink:#182326; --muted:#59696b; --line:#d7e1dd; --paper:#f4f7f1; --card:#fffefa; --green:#176b53; --green-pale:#e5f2e9; --orange:#bc612b; --orange-pale:#fff0e3; --shadow:0 14px 38px rgb(21 47 38 / 8%); font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); line-height:1.7; }
+    button,input,select { font:inherit; }
+    button { cursor:pointer; }
+    a { color:var(--green); }
+    .shell { width:min(1120px,calc(100% - 40px)); margin:0 auto; }
+    .masthead { padding:26px 0 18px; }
+    .brand-row,.section-top,.caption-row,.readout,.assessment-row { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .brand { color:var(--ink); font-size:.9rem; font-weight:800; letter-spacing:.04em; text-decoration:none; }
+    .crumb { color:var(--muted); font-size:.9rem; }
+    .hero { display:grid; grid-template-columns:minmax(0,.9fr) minmax(320px,1.1fr); gap:32px; align-items:center; padding:44px 0 38px; }
+    .eyebrow { color:var(--green); font-size:.82rem; font-weight:800; letter-spacing:.12em; }
+    h1 { margin:8px 0 14px; font-size:clamp(2rem,4.4vw,3.7rem); line-height:1.18; letter-spacing:-.04em; }
+    .hero p { max-width:670px; color:var(--muted); font-size:1.08rem; }
+    .story-opening-figure { margin:0; overflow:hidden; border:1px solid var(--line); border-radius:22px; background:var(--card); box-shadow:var(--shadow); }
+    .story-opening-figure img { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; }
+    .story-opening-figure figcaption { padding:9px 13px; color:var(--muted); font-size:.84rem; }
+    .lesson { padding:34px 0 80px; }
+    .lesson-layout { display:grid; grid-template-columns:minmax(205px,250px) minmax(0,1fr); gap:34px; align-items:start; }
+    .route { position:sticky; top:24px; align-self:start; max-height:calc(100svh - 48px); overflow-y:auto; padding:8px 12px 12px 0; scrollbar-width:thin; }
+    .route-label { margin:0 0 10px; color:var(--muted); font-size:.74rem; letter-spacing:.08em; }
+    .route-inner { display:grid; gap:4px; }
+    .route a { display:grid; grid-template-columns:28px minmax(0,1fr); align-items:start; gap:8px; padding:10px 11px; border:1px solid transparent; border-left:3px solid transparent; border-radius:0 10px 10px 0; color:var(--muted); font-size:.86rem; line-height:1.45; text-decoration:none; }
+    .route a:hover,.route a:focus-visible { border-color:var(--line); outline:2px solid transparent; }
+    .route a[aria-current="step"] { border-left-color:var(--green); background:#e7eee0; color:#315a46; font-weight:750; }
+    .route b { color:var(--green); font-size:.76rem; font-weight:650; }
+    .route a.quiz-nav { margin-top:12px; border-top:1px solid var(--line); padding-top:17px; color:#8a6726; font-weight:750; }
+    .route a.quiz-nav b { color:#946f2d; }
+    .route a.quiz-nav[aria-current="step"] { border-left-color:#d9a74f; background:#faf3e4; color:#795b25; box-shadow:inset 3px 0 #d9a74f; }
+    .route-note,.next-hint { color:var(--muted); font-size:.88rem; }
+    .cards { display:grid; gap:20px; }
+    .section-top { align-items:end; margin:0 0 18px; }
+    .section-top h2 { margin:0; font-size:1.35rem; }
+    .progress-copy { color:var(--muted); font-size:.9rem; }
+    .lesson-card { position:relative; scroll-margin-top:100px; display:grid; grid-template-columns:190px minmax(0,1fr); gap:28px; padding:26px; border:1px solid var(--line); border-radius:24px; background:var(--card); box-shadow:var(--shadow); }
+    .card-side { border-right:1px solid var(--line); padding-right:20px; }
+    .card-number { color:var(--green); font-size:.84rem; font-weight:850; letter-spacing:.08em; }
+    .card-side h3 { margin:10px 0 8px; font-size:1.08rem; line-height:1.45; }
+    .card-role { color:var(--muted); font-size:.87rem; }
+    .card-main h2 { margin:0 0 8px; font-size:clamp(1.32rem,2.8vw,1.85rem); line-height:1.35; }
+    .card-main>p { color:var(--muted); margin:0 0 18px; }
+    figure { margin:16px 0; }
+    figcaption,.caption-row { color:var(--muted); font-size:.88rem; }
+    .visual { overflow:hidden; padding:14px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(135deg,#f2f8f1,#fffefa 68%); }
+    .visual svg { display:block; width:100%; height:auto; }
+    .visual text { fill:#314640; font-family:inherit; font-size:15px; }
+    .visual .wave-vocabulary text { font-size:22px; }
+    .visual .small-label { fill:#59696b; font-size:12px; }
+    .visual .wave-line { fill:none; stroke:#176b53; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
+    .visual .amplitude-diagram text { font-size:19px; }
+    .visual .amplitude-diagram #amplitude-label { font-size:21px; font-weight:700; }
+    .visual .rope-underlay { fill:none; stroke:#176b53; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+    #fixed-point-slider { cursor:ew-resize; touch-action:none; }
+    #fixed-point-slider:focus-visible:not(.is-dragging) .slider-handle-bg { stroke:#176b53; stroke-width:3; }
+    .slider-horizontal-icon { fill:none; stroke:#176b53; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; pointer-events:none; }
+    .slider-hitarea { fill:transparent; pointer-events:all; }
+    .visual .equilibrium { stroke:#9aaca1; stroke-width:1.5; stroke-dasharray:7 7; }
+    .visual .motion-arrow { fill:none; stroke:#176b53; stroke-width:2.5; stroke-linecap:round; }
+    .visual .measure { fill:none; stroke:#bc612b; stroke-width:2; stroke-linecap:round; }
+    .visual .marker { fill:#df8b41; stroke:#fff; stroke-width:3; }
+    .visual .particle { fill:#74a98e; stroke:#fff; stroke-width:2; }
+    .definition-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:12px 0 16px; }
+    .definition-card { padding:13px 15px; border:1px solid var(--line); border-radius:14px; background:#fffefa; }
+    .definition-card--plain { background:#eef5ec; border-color:#d6e4d5; }
+    .definition-label { display:block; margin-bottom:6px; color:#176b53; font-size:.82rem; font-weight:800; letter-spacing:.04em; }
+    .definition-card p { margin:0; color:var(--ink); }
+    .definition-examples { margin:8px 0 0; padding-left:20px; color:var(--ink); }
+    .definition-examples li+li { margin-top:4px; }
+    #lambda-ruler-control { cursor:ew-resize; touch-action:none; user-select:none; -webkit-user-select:none; outline:none; }
+    #lambda-ruler-control.is-dragging { cursor:grabbing; }
+    #lambda-ruler-control:focus-visible #lambda-measure { stroke-width:4; }
+    .definition-equation { margin-top:9px!important; color:#176b53!important; font-size:1.08rem; font-weight:800; font-variant-numeric:tabular-nums; }
+    .legend { display:flex; flex-wrap:wrap; gap:8px 18px; margin:10px 0 0; color:var(--muted); font-size:.84rem; }
+    .legend span { display:inline-flex; align-items:center; gap:7px; }
+    .legend i { display:inline-block; width:11px; height:11px; border-radius:50%; background:#176b53; }
+    .legend i.marker-key { background:#df8b41; }
+    .fact { margin-top:16px; padding:14px 16px; border-left:4px solid #b8cda9; border-radius:0 12px 12px 0; background:#f0f5eb; }
+    .fact p { margin:0; }
+    .dialogue { display:flex; align-items:center; gap:11px; margin:12px 0; padding:10px 13px; border-left:4px solid #8cae91; border-radius:0 12px 12px 0; background:#f0f5eb; }
+    .dialogue p { margin:0; color:var(--ink); }
+    .dialogue .speaker { display:inline-flex; flex:0 0 auto; align-items:center; font-weight:800; }
+    .dialogue .speaker::before { content:""; display:block; width:42px; height:42px; border:2px solid #8cae91; border-radius:50%; background-image:url("../../../../shared-assets/characters/dialogue-character-avatars.png?v=clean-shaven-grandpa"); background-repeat:no-repeat; background-position:100% 50%; background-size:200% 100%; box-shadow:0 2px 6px rgb(21 47 38 / 12%); }
+    .dialogue--xiaokui { border-left-color:#d39765; background:#fff4e8; }
+    .dialogue--xiaokui .speaker::before { border-color:#d39765; background-position:0 50%; }
+    .control-panel { margin-top:14px; padding:14px 16px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
+    .controls { display:flex; flex-wrap:wrap; align-items:center; gap:9px; }
+    .secondary,.action { min-height:44px; padding:9px 15px; border-radius:13px; font-weight:750; }
+    .secondary { border:1px solid var(--line); background:#fff; color:var(--ink); }
+    .secondary:hover { border-color:var(--green); }
+    .action { border:0; background:var(--green); color:white; }
+    .action:hover { background:#105640; }
+    .live-note { min-height:1.6em; margin:9px 0 0; color:var(--muted); font-size:.9rem; }
+    .diagram-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .diagram-panel { padding:14px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
+    .diagram-panel h3 { margin:0 0 5px; font-size:1rem; }
+    .diagram-panel p { margin:6px 0 0; color:var(--muted); font-size:.88rem; }
+    .wave-type-diagrams { grid-template-columns:1fr; gap:14px; }
+    .water-wave-demo { margin-top:14px; padding:14px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(135deg,#f2f8f1,#fffefa 68%); }
+    .water-wave-demo-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .water-wave-demo-head p { margin:0; color:var(--muted); font-size:.9rem; }
+    .water-wave-view { margin:10px 0 0; overflow:hidden; border:1px solid var(--line); border-radius:14px; background:#fbfcf8; }
+    .water-wave-view figcaption { padding:8px 12px 0; color:var(--green); font-size:.88rem; font-weight:800; }
+    .water-wave-stage { position:relative; width:100%; aspect-ratio:640/240; touch-action:none; }
+    .water-wave-stage--section { aspect-ratio:640/160; }
+    .water-wave-stage svg { display:block; width:100%; height:100%; }
+    .water-wave-stage .water-surface { fill:url(#water-surface-gradient); stroke:#77aeb0; stroke-width:1.6; }
+    .water-tray-shadow { filter:drop-shadow(0 5px 6px rgb(46 72 68 / 18%)); }
+    .water-tray-inner-rim { fill:none; stroke:rgb(255 255 255 / 72%); stroke-width:2; }
+    .water-glint { fill:none; stroke:#fff; stroke-linecap:round; opacity:.34; }
+    .water-ripple { fill:none; stroke:#4d929a; stroke-width:2.8; }
+    .water-impact { fill:#df8b41; stroke:#fff; stroke-width:2; }
+    .water-pebble { position:absolute; z-index:2; left:7%; top:50%; display:grid; place-items:center; width:46px; height:40px; padding:0; transform:translate(-50%,-50%); border:0; border-radius:50%; background:transparent; color:transparent; font-size:0; cursor:grab; touch-action:none; user-select:none; }
+    .water-pebble-art { display:block; width:44px; height:36px; overflow:visible; filter:drop-shadow(0 3px 2px rgb(45 59 55 / 28%)); transition:filter .18s ease,transform .18s ease; }
+    .water-pebble[hidden] { display:none; }
+    .water-pebble:hover .water-pebble-art { filter:drop-shadow(0 5px 3px rgb(45 59 55 / 32%)); transform:translateY(-2px) rotate(-5deg); }
+    .water-pebble.is-dragging .water-pebble-art { filter:drop-shadow(0 8px 5px rgb(45 59 55 / 34%)); transform:translateY(-5px) rotate(-8deg); }
+    .water-pebble:active,.water-pebble.is-dragging { cursor:grabbing; }
+    .water-pebble:focus-visible { outline:3px solid #df8b41; outline-offset:3px; }
+    .water-side-fill { fill:#d7edef; }
+    .water-side-level { fill:none; stroke:#78abad; stroke-width:3; stroke-linecap:round; }
+    .water-side-baseline { fill:none; stroke:#a3bcb8; stroke-width:1.2; stroke-dasharray:5 6; }
+    .water-side-particle { fill:#56858a; stroke:#eaf5f3; stroke-width:1; }
+    .water-side-particle.is-highlighted { fill:#df8b41; stroke:#fff; stroke-width:2; }
+    .water-particle-trace { fill:none; stroke:#c47a43; stroke-width:1.4; opacity:.5; }
+    .water-wave-direction { fill:none; stroke:#176b53; stroke-width:2; stroke-linecap:round; }
+    .water-wave-direction-head { fill:#176b53; }
+    .measurement-subheading { margin:22px 0 6px; color:var(--green); font-size:1.08rem; }
+    .measurement-subheading--next { margin-top:28px; padding-top:18px; border-top:1px solid var(--line); }
+    .spring-coil { fill:none; stroke:url(#spring-metal-gradient); stroke-width:3; }
+    .spring-coil.is-selected { stroke:#c66d35; stroke-width:3.8; }
+    .stacked-fraction { display:inline-flex; flex-direction:column; align-items:center; justify-content:center; vertical-align:middle; margin:0 .16em; font-size:.78em; line-height:1.05; font-weight:750; }
+    .stacked-fraction>span:not(.fraction-rule) { padding:0 .16em; white-space:nowrap; }
+    .stacked-fraction .fraction-rule { align-self:stretch; height:1px; min-width:1.15em; margin:2px 0; padding:0; background:currentColor; }
+    .frequency-formula { display:grid; justify-items:center; gap:2px; line-height:1.15; }
+    .frequency-equation { display:flex; align-items:center; justify-content:center; gap:.22em; min-height:1.5em; }
+    .frequency-plain { margin:12px 0; }
+    .frequency-worked-example { display:grid; gap:8px; }
+    .frequency-worked-example strong { display:flex; align-items:center; justify-content:center; gap:.15em; font-size:1.25rem; }
+    .frequency-period-intro { margin:0 0 14px; color:var(--muted); }
+    .frequency-period-definitions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:12px 0; }
+    .frequency-period-panel { display:grid; grid-template-rows:auto repeat(2,minmax(72px,1fr)); gap:8px; min-width:0; padding:14px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
+    .frequency-period-panel h3 { margin:0; color:var(--green); font-size:1.08rem; }
+    .frequency-definition,.frequency-plain-definition { min-height:72px; margin:0; padding:10px 12px; border-radius:12px; }
+    .frequency-definition { background:#edf4ea; }
+    .frequency-plain-definition { background:#e8f2e8; }
+    .frequency-definition-label,.frequency-plain-label { display:block; margin-bottom:5px; color:var(--green); font-size:.84rem; font-weight:750; }
+    .frequency-definition p,.frequency-plain-definition p { margin:0; color:var(--ink); font-size:.96rem; font-weight:500; line-height:1.45; }
+    .frequency-plain-definition p { color:var(--green); font-weight:750; }
+    .frequency-wave-controls { margin-top:12px; padding:13px 14px 12px; border:1px solid var(--line); border-radius:14px; background:#f1f5ef; }
+    .frequency-wave-controls-title { display:block; margin:0 0 10px; color:var(--green); font-size:.95rem; }
+    .frequency-wave-control-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+    .frequency-wave-control { min-width:0; }
+    .frequency-wave-control>label,.frequency-wave-control-title { display:block; margin-bottom:5px; color:var(--muted); font-size:.84rem; font-weight:700; }
+    .frequency-stepper { display:grid; grid-template-columns:42px minmax(58px,1fr) 42px; align-items:center; gap:7px; margin:12px 0 6px; }
+    .frequency-wave-control .frequency-stepper { margin:4px 0; }
+    .frequency-stepper button { min-width:0; min-height:42px; padding:4px; font-size:1.25rem; }
+    .frequency-control-value { display:block; padding:7px 5px; border-radius:10px; background:#e5f2e9; text-align:center; font-size:1.12rem; font-weight:800; white-space:nowrap; }
+    .frequency-range-note { display:block; margin-bottom:8px; color:var(--muted); text-align:center; font-size:.8rem; }
+    .period-range { display:block; width:100%!important; margin:12px 0 2px; }
+    .frequency-wave-control .period-range { margin:4px 0 2px; }
+    .period-range-values { display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--muted); font-size:.78rem; }
+    .period-range-values output { color:var(--ink); font-size:1.08rem; font-weight:800; }
+    .frequency-period-figure { margin:12px 0; }
+    .frequency-period-figure svg text { font-size:18px; }
+    .frequency-period-figure .small-label { font-size:15px; }
+    .frequency-period-figure .frequency-graph-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px; }
+    .frequency-period-figure .frequency-graph-heading strong { font-size:1.05rem; }
+    .frequency-graph-hint { color:var(--muted); font-size:.84rem; }
+    .frequency-graph-values { display:flex; flex-wrap:wrap; gap:8px; }
+    .frequency-graph-values span { padding:3px 8px; border-radius:8px; background:#e5f2e9; color:#315a46; font-size:.84rem; font-weight:750; }
+    .frequency-relation { display:grid; gap:10px; margin:14px 0 0; padding:14px; border:1px solid #efcfaa; border-radius:14px; background:#fff8ef; }
+    .frequency-relation-title { color:var(--orange); font-weight:800; }
+    .frequency-relation-formulas { display:grid; gap:7px; }
+    .frequency-relation-formula { display:grid; grid-template-columns:minmax(100px,.3fr) minmax(0,1fr); align-items:center; gap:10px; padding:8px 10px; border-radius:10px; background:#fffefa; }
+    .frequency-relation-formula .frequency-equation { justify-content:flex-start; min-height:48px; color:var(--green); font-size:1.5rem; font-weight:800; }
+    .frequency-meaning-formula { display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-size:.88rem; line-height:1.4; }
+    .frequency-meaning-fraction { display:inline-grid; grid-template-rows:auto 1px auto; justify-items:center; max-width:100%; text-align:center; line-height:1.35; }
+    .frequency-meaning-fraction>span:not(.fraction-rule) { padding:0 4px; }
+    .frequency-meaning-fraction .fraction-rule { display:block; align-self:stretch; width:100%; min-width:2.5em; height:2px; margin:2px 0; padding:0; background:#314640; }
+    .frequency-relation-copy { display:grid; gap:5px; align-content:center; }
+    .frequency-relation-copy p { margin:0; text-align:center; }
+    .frequency-relation-copy p:first-child { color:var(--ink); font-weight:650; }
+    .frequency-relation-copy p:last-child { color:var(--muted); font-size:.9rem; }
+    .frequency-calculation-example { margin-top:10px; padding:12px 14px; border:1px solid var(--line); border-radius:14px; background:#f8f9f4; }
+    .frequency-calculation-example p { margin:0; }
+    .frequency-calculation-example .frequency-equation { justify-content:center; flex-wrap:wrap; margin-top:8px; }
+    @media (max-width:700px) { .frequency-wave-control-grid { grid-template-columns:1fr; gap:12px; } }
+    @media (max-width:520px) { .frequency-period-definitions { grid-template-columns:1fr; } .frequency-definition,.frequency-plain-definition { min-height:0; } .frequency-period-figure svg text { font-size:26px; } .frequency-period-figure .small-label { font-size:20px; } .frequency-relation-formula { grid-template-columns:1fr; justify-items:center; text-align:center; } .frequency-relation-formula .frequency-equation { justify-content:center; } .frequency-relation-copy { text-align:center; } }
+    #card-06 .visual svg text { font-size:18px; }
+    #card-06 .visual svg .small-label { font-size:14px; }
+    #cycle-wave-path { fill:none; }
+    .cycle-wave-control { margin-top:8px; padding-top:10px; border-top:1px solid var(--line); }
+    .cycle-wave-control .controls { flex-direction:column; align-items:flex-start; gap:8px; }
+    .cycle-wave-control .live-note { width:100%; margin:0; padding:8px 11px; border-radius:10px; background:#f8f9f4; }
+    .cycle-wave-figure { container-type:inline-size; }
+    .cycle-wave-figure figcaption { margin-top:10px; padding-top:9px; border-top:1px solid var(--line); }
+    .cycle-wave-summary { margin:10px 0 0; padding:12px; border-radius:12px; background:#edf4ea; color:var(--green); font-size:1.05rem; font-weight:750; text-align:center; }
+    .cycle-amplitude-sequence { margin:0 0 12px; }
+    .cycle-amplitude-sequence>p { margin:0 0 8px; font-weight:700; }
+    .cycle-amplitude-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; }
+    .cycle-amplitude-step { min-width:0; padding:9px 7px; border:1px solid var(--line); border-radius:10px; background:#f8f9f4; text-align:center; transition:background-color .18s,border-color .18s; }
+    .cycle-amplitude-step strong,.cycle-amplitude-step small { display:block; }
+    .cycle-amplitude-step small { margin-top:3px; color:var(--muted); }
+    .cycle-amplitude-step.is-active { border-color:#d98a44; background:#fff2e5; }
+    .cycle-amplitude-step.is-complete { border-color:#9bbba7; background:#eef5ef; }
+    @container (max-width:520px) { .cycle-amplitude-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media (max-width:520px) { #card-06 .visual svg text { font-size:25px; } #card-06 .visual svg .small-label { font-size:21px; } }
+    .longitudinal-wavelength-panel svg text { font-size:18px; }
+    .longitudinal-wavelength-panel svg .lambda-symbol { font-size:25px; font-weight:800; }
+    .data-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
+    .data-cell { padding:13px 15px; border:1px solid var(--line); border-radius:14px; background:#f8f9f4; }
+    .data-cell small { display:block; color:var(--muted); }
+    .data-cell strong { display:block; font-size:1.26rem; }
+    .formula { margin:14px 0; padding:16px; border-radius:16px; background:#eaf3e9; text-align:center; color:#183c31; font-size:clamp(1.25rem,3vw,1.8rem); font-weight:800; letter-spacing:.02em; }
+    .speed-formula-panel { margin:14px 0 18px; padding:10px 16px 12px; border:1px solid #d6e4d5; border-radius:16px; background:#eaf3e9; }
+    .speed-formula { display:flex; align-items:center; justify-content:center; gap:.28em; margin:0 0 5px; padding:8px 12px; background:transparent; font-size:clamp(1.5rem,4vw,2.15rem); }
+    .speed-formula-choice,.speed-formula-meaning-choice { border:0; border-radius:8px; background:transparent; color:inherit; font:inherit; cursor:pointer; transition:background-color .15s ease,box-shadow .15s ease; }
+    .speed-formula-choice { padding:0 .08em; line-height:1.2; }
+    .speed-formula-meaning-choice { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px; max-width:100%; padding:3px 7px; line-height:inherit; text-align:center; }
+    .speed-formula-choice:hover,.speed-formula-meaning-choice:hover,.speed-formula-choice[aria-pressed="true"],.speed-formula-meaning-choice[aria-pressed="true"] { background:#fff4e9; box-shadow:0 0 0 2px #cf7040; }
+    .speed-formula-choice:focus-visible,.speed-formula-meaning-choice:focus-visible { outline:3px solid #cf7040; outline-offset:3px; }
+    .speed-formula-meaning { display:grid; justify-items:center; gap:6px; margin:0; padding:12px 4px; border-block:1px solid #d6e4d5; color:var(--ink); text-align:center; font-size:.9rem; line-height:1.5; }
+    .speed-formula-meaning-title { margin:0; color:var(--green); font-size:.88rem; font-weight:800; }
+    .speed-formula-explanations { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .speed-formula-explanation { min-width:0; padding:12px 14px; border:1px solid #d6e4d5; border-radius:12px; background:#f7faf6; transition:background-color .15s ease,box-shadow .15s ease,border-color .15s ease; }
+    .speed-formula-panel [data-formula-target].is-formula-related { border-color:#cf7040; background:#fff4e9; box-shadow:0 0 0 2px #cf7040; }
+    .speed-formula-explanation h4 { margin:0 0 5px; color:var(--green); font-size:.86rem; }
+    .speed-formula-explanation p { margin:0; color:var(--ink); font-size:.88rem; line-height:1.5; }
+    .speed-quantity-map { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:12px; padding-top:12px; border-top:1px solid #d6e4d5; }
+    .speed-quantity-map div { min-width:0; padding:8px 6px; border-radius:10px; background:#f7faf6; text-align:center; }
+    .speed-quantity-map span,.speed-quantity-map strong { display:block; }
+    .speed-quantity-map span { color:var(--muted); font-size:.78rem; }
+    .speed-quantity-map strong { color:var(--green); font-size:.85rem; }
+    .speed-interactive { margin-top:18px; padding:18px; border:1px solid var(--line); border-radius:18px; background:#fbfcf8; container-type:inline-size; }
+    .speed-interactive-heading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:4px 14px; }
+    .speed-interactive-heading h3 { margin:0; font-size:1.08rem; }
+    .speed-condition { color:var(--muted); font-size:.9rem; }
+    #card-08 .speed-visual { margin:12px 0; padding:12px 14px 9px; }
+    #card-08 .speed-visual text { font-size:15px; }
+    #card-08 .speed-visual figcaption { margin-top:2px; }
+    #speed-lambda-label { fill:#a94d20; paint-order:stroke; stroke:#fffefa; stroke-width:4px; stroke-linejoin:round; }
+    .speed-axis { stroke:#84988a; stroke-width:1.5; }
+    .speed-axis-tick { stroke:#84988a; stroke-width:1.5; }
+    .speed-wave-path { fill:none; stroke:#176b53; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; transition:stroke .22s ease; }
+    .speed-color-legend { margin:2px 2px 0; }
+    .speed-color-legend-title { display:block; margin-bottom:5px; color:var(--muted); font-size:.78rem; font-weight:750; }
+    .speed-color-scale { position:relative; height:9px; margin:0 7px; border-radius:999px; background:linear-gradient(90deg,#176b53 0%,#d3a23c 50%,#c44842 100%); }
+    .speed-color-marker { position:absolute; top:50%; left:28.57%; width:15px; height:15px; transform:translate(-50%,-50%); border:2px solid #fffefa; border-radius:50%; background:#176b53; box-shadow:0 0 0 1px rgb(24 35 38 / 30%),0 1px 3px rgb(24 35 38 / 20%); transition:left .22s ease,background-color .22s ease; }
+    .speed-color-range { display:flex; justify-content:space-between; gap:10px; margin-top:5px; color:var(--muted); font-size:.72rem; font-variant-numeric:tabular-nums; }
+    .speed-color-range span:last-child { text-align:right; }
+    .speed-control-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--line); }
+    .speed-control { min-width:0; padding:2px 12px; border-right:1px solid var(--line); }
+    .speed-control:last-child { border-right:0; }
+    .speed-control-title { display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--ink); font-weight:750; }
+    .speed-control-title output { color:var(--green); font-size:1.08rem; font-weight:850; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .speed-stepper { display:grid; grid-template-columns:36px minmax(48px,1fr) 36px; align-items:center; gap:5px; margin-top:6px; }
+    .speed-stepper button { min-width:0; min-height:36px; padding:3px; font-size:1.15rem; }
+    .speed-stepper button:disabled { cursor:not-allowed; opacity:.48; }
+    .speed-step-value { overflow:hidden; padding:7px 4px; border-radius:9px; background:#e5f2e9; text-align:center; font-size:1rem; font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .speed-step-note { display:block; margin-top:5px; color:var(--muted); text-align:center; font-size:.76rem; }
+    .speed-equation-live { margin:12px 0 0; padding:10px 12px; border-radius:11px; background:#edf4ea; color:#315a46; text-align:center; font-weight:750; font-variant-numeric:tabular-nums; }
+    .speed-equation-note { margin:5px 0 0; color:var(--muted); font-size:.8rem; text-align:center; }
+    .speed-run-controls { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:12px; margin-top:12px; padding-top:12px; border-top:1px solid var(--line); }
+    .speed-run-controls .action { min-width:190px; }
+    .speed-run-status { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:3px 12px; margin:0; color:var(--muted); font-size:.88rem; }
+    .speed-run-status output { color:var(--ink); font-weight:750; font-variant-numeric:tabular-nums; }
+    .speed-progress { height:6px; margin-top:7px; overflow:hidden; border-radius:999px; background:#e3e9e2; }
+    .speed-progress span { display:block; width:0; height:100%; border-radius:inherit; background:var(--orange); transition:width .08s linear; }
+    .speed-model-note { margin:10px 0 0; padding:8px 12px; border:1px solid #c58c31; border-left:4px solid #b7791f; border-radius:10px; background:#fff5d9; color:#593d17; }
+    .speed-model-note h4 { display:flex; align-items:center; gap:6px; margin:0 0 3px; color:#70440b; font-size:.94rem; font-weight:750; line-height:1.5; }
+    .speed-model-note h4 svg { flex:0 0 17px; width:17px; height:17px; }
+    .speed-model-note p { margin:0; font-size:.9rem; line-height:1.55; }
+    .speed-model-note strong { color:#70440b; font-weight:750; }
+    .speed-model-note .speed-model-reality { margin-top:3px; }
+    @container (max-width:520px) { .speed-control-grid { grid-template-columns:1fr; gap:0; } .speed-control { display:grid; grid-template-columns:minmax(56px,.45fr) minmax(0,1fr); align-items:center; gap:3px 10px; padding:7px 0; border-right:0; border-bottom:1px solid var(--line); } .speed-control:last-child { border-bottom:0; } .speed-control-title { grid-row:1 / span 2; } .speed-stepper { margin:0; } .speed-step-note { grid-column:2; margin:0; text-align:center; } }
+    @media (max-width:760px) { .speed-run-controls { grid-template-columns:1fr; } .speed-run-controls .action { width:100%; } }
+    @media (max-width:520px) { #card-08 .speed-visual { padding:7px 5px; } #card-08 .speed-visual text { font-size:22px; } }
+    .example-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
+    .example { padding:14px 16px; border:1px solid var(--line); border-radius:15px; background:#f9faf5; }
+    .example small { display:block; color:var(--muted); }
+    .example strong { font-size:1.16rem; }
+    input[type="range"] { width:min(430px,100%); accent-color:var(--green); }
+    .field { display:grid; gap:4px; font-size:.9rem; font-weight:750; }
+    output.value { display:inline-block; min-width:76px; padding:5px 9px; border-radius:9px; background:var(--green-pale); text-align:center; font-weight:800; }
+    .assessment-label { display:inline-block; margin-bottom:12px; padding:4px 10px; border-radius:999px; background:var(--green-pale); color:var(--green); font-size:.83rem; font-weight:750; }
+    .assessment-box { margin:14px 0; padding:16px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
+    .assessment-box p { margin:0 0 12px; }
+    .assessment-row { justify-content:flex-start; flex-wrap:wrap; }
+    .assessment-row label { display:grid; gap:4px; font-size:.88rem; font-weight:750; }
+    select,input[type="number"] { min-height:44px; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:#fff; color:var(--ink); }
+    .feedback { min-height:1.6em; margin:10px 0 0; color:var(--muted); }
+    .feedback[data-state="good"] { color:var(--green); }
+    .feedback[data-state="try"] { color:var(--orange); }
+    .unit-quiz { margin:20px 0 28px; overflow:hidden; border:1px solid var(--line); border-radius:20px; background:var(--card); box-shadow:var(--shadow); scroll-margin-top:100px; }
+    .quiz-head { display:flex; align-items:flex-start; gap:18px; padding:25px 28px 21px; border-bottom:1px solid #e7ece5; background:linear-gradient(105deg,#fffdf6,#fdfbf3); }
+    .quiz-mark { display:grid; width:50px; height:50px; flex:none; place-items:center; border-radius:15px; background:#f5ead0; color:#8b6725; font-size:1.45rem; font-weight:800; }
+    .quiz-kicker { margin:0 0 4px; color:#946f2d; font-size:.82rem; font-weight:800; letter-spacing:.06em; }
+    .quiz-head h2 { margin:0; font-size:clamp(1.22rem,2vw,1.65rem); line-height:1.35; }
+    .quiz-head p { margin:8px 0 0; color:var(--muted); font-size:.94rem; }
+    .quiz-body { padding:23px 28px 28px; }
+    .quiz-lead { margin:0 0 18px; color:#46574e; }
+    .quiz-measurement-figure { margin:0 0 22px; padding:12px 16px 8px; border:1px solid var(--line); border-radius:14px; background:#f7f8f3; }
+    .quiz-measurement-figure svg { display:block; width:100%; height:auto; }
+    .quiz-measurement-figure figcaption { margin-top:3px; color:var(--muted); font-size:.84rem; text-align:center; }
+    .quiz-question { margin-top:24px; padding-top:20px; border-top:1px solid #e7e9e2; }
+    .quiz-prompt { margin:0 0 12px; color:var(--green); font-size:.9rem; font-weight:750; }
+    .quiz-question h3 { margin:0 0 12px; font-size:1.2rem; line-height:1.45; }
+    .quiz-actions { display:flex; align-items:center; gap:16px; margin-top:17px; }
+    .quiz-actions .action { min-width:120px; }
+    .quiz-helper { color:var(--muted); font-size:.87rem; }
+    .quiz-feedback[hidden] { display:none; }
+    .quiz-feedback { margin-top:12px; padding:11px 13px; border-radius:10px; background:#f1f5ee; color:#40574b; font-size:.92rem; }
+    .quiz-feedback[data-state="good"] { background:#e8f3e8; color:var(--green); }
+    .quiz-feedback[data-state="try"] { background:#faf3e4; color:#755a2d; }
+    .field-task { margin:20px 0; overflow:hidden; border:1px solid var(--line); border-radius:20px; background:var(--card); box-shadow:var(--shadow); container-type:inline-size; scroll-margin-top:100px; }
+    .field-task-head { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; padding:25px 28px 21px; border-bottom:1px solid #e7ece5; background:linear-gradient(105deg,#fffdf6,#fdfbf3); }
+    .field-task-kicker { margin:0 0 5px; color:#946f2d; font-size:.82rem; font-weight:800; letter-spacing:.06em; }
+    .field-task-head h2 { margin:0; font-size:clamp(1.2rem,2vw,1.65rem); line-height:1.35; }
+    .field-task-subtitle { margin:7px 0 0; color:var(--muted); }
+    .drill-badge { flex:none; padding:6px 10px; border:1px solid #e7d7b4; border-radius:999px; background:#faf3e4; color:#795b25; font-size:.82rem; font-weight:750; }
+    .field-task-grid { display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr); gap:14px; padding:0 20px; }
+    .field-panel { min-width:0; overflow:hidden; border:1px solid var(--line); border-radius:15px; }
+    .field-map-panel { display:flex; flex-direction:column; align-self:start; }
+    .field-panel-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0; padding:11px 14px; background:#fffaf0; color:var(--ink); font-weight:800; }
+    .map-panel-tag { padding:3px 7px; border-radius:999px; background:rgb(255 255 255 / 72%); color:var(--muted); font-size:.72rem; font-weight:650; }
+    .field-map-wrap { display:flex; flex:0 0 auto; flex-direction:column; min-height:0; padding:0; background:#163f38; }
+    .field-map-scene { position:relative; flex:0 0 auto; width:100%; aspect-ratio:720 / 828; overflow:hidden; background:#143d36; }
+    .field-map-art { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; }
+    .field-map { position:absolute; inset:0; display:block; width:100%; height:100%; pointer-events:none; }
+    .field-map text { fill:#fff; font-family:inherit; font-size:18px; font-weight:750; paint-order:stroke; stroke:rgb(8 32 28 / 78%); stroke-width:4px; stroke-linejoin:round; }
+    .field-map .map-route { fill:none; stroke:#f6c66d; stroke-width:6px; stroke-dasharray:14 10; }
+    .field-map .station-halo { fill:#176b53; stroke:#fff; stroke-width:5px; }
+    .field-map .quake-halo { fill:#df8840; stroke:#fff; stroke-width:5px; }
+    .field-map .quake-ring { fill:none; stroke:#f3aa59; stroke-width:3px; opacity:.9; }
+    .field-map .map-label-bg { fill:rgb(9 39 34 / 88%); stroke:rgb(255 255 255 / 60%); stroke-width:2px; }
+    .field-map .map-scale path { fill:none; stroke:#fff; stroke-width:4px; stroke-linecap:round; filter:drop-shadow(0 1px 2px rgb(0 0 0 / 80%)); }
+    .field-map .map-scale text { font-size:18px; font-weight:750; text-anchor:middle; }
+    .field-map-credit { margin:0; padding:4px 8px; color:var(--muted); background:#fbfaf5; font-size:.66rem; line-height:1.35; text-align:right; }
+    .field-distance { margin:0; padding:9px 12px; background:#fff3df; color:#745027; text-align:center; font-size:.88rem; font-weight:800; }
+    .field-signal-panel { padding-bottom:8px; background:#fffefa; color:var(--ink); }
+    .field-signal-panel .field-panel-heading { background:#fffaf0; color:var(--ink); border-bottom:1px solid #eee5d2; }
+    .signal-row { margin:10px 12px; padding:10px 12px 8px; border:1px solid #cbded0; border-left:4px solid #538c69; border-radius:11px; background:#f5f8f2; }
+    .signal-row-s { border-color:#e7d7b4; border-left-color:#d69b2d; background:#fffaf0; }
+    .signal-meta { display:flex; flex-wrap:wrap; align-items:center; gap:6px 9px; margin-bottom:4px; }
+    .signal-type { min-width:76px; padding:4px 8px; border-radius:7px; background:#e3eee5; color:#315a46; font-weight:800; }
+    .signal-row-s .signal-type { background:#f5ead0; color:#795b25; }
+    .signal-value { padding:4px 8px; border:1px solid #d6e0d7; border-radius:7px; color:#40574b; font-size:.86rem; }
+    .signal-row-s .signal-value { border-color:#e7d7b4; }
+    .signal-direction { margin-left:auto; color:var(--muted); font-size:.75rem; text-align:right; }
+    .signal-svg { display:block; width:100%; height:auto; }
+    .signal-svg text { fill:#46574e; font-family:inherit; font-size:12px; }
+    .signal-svg .signal-note { fill:#66776d; font-size:11px; }
+    .signal-axis,.signal-tick { stroke:#8c9a8f; stroke-width:1.2; }
+    .signal-particle { fill:#528a74; }
+    .signal-pulse { fill:none; stroke:#528a74; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+    .signal-row-p .signal-particle { fill:#43866f; }
+    .signal-row-s .signal-pulse { stroke:#c2872e; }
+    .signal-row-s .signal-baseline { stroke:#bba981; }
+    .signal-baseline { stroke:#98a69a; stroke-width:1; stroke-dasharray:5 5; }
+    .signal-hint { margin:0; padding:7px 13px 5px; color:#52665d; font-size:.83rem; }
+    .signal-hint strong { color:#946f2d; }
+    .signal-source-note { margin:0; padding:2px 13px 8px; color:#718076; font-size:.72rem; line-height:1.45; }
+    .signal-source-note a { color:#8a6726; }
+    .field-response { margin:16px 20px 20px; padding:15px 16px; border-top:1px solid var(--line); background:#fffefa; }
+    .field-response-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px 15px; margin-bottom:10px; }
+    .field-response h3 { margin:0; color:var(--ink); font-size:1.08rem; }
+    .field-response-head p { margin:0; color:var(--muted); font-size:.86rem; }
+    .field-parameter-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .field-parameter-card { min-width:0; padding:10px; border:1px solid var(--line); border-radius:11px; background:#fffefa; }
+    .field-parameter-card h4 { margin:0 0 8px; color:var(--green); font-size:.9rem; }
+    .field-parameter-card.is-p h4 { color:#19715b; }
+    .field-parameter-card.is-s h4 { color:#95601e; }
+    .field-time-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+    .field-time-note { margin:0 0 7px; color:var(--muted); font-size:.74rem; }
+    .field-wavelength-input { margin-top:9px; }
+    .field-answer { min-width:0; }
+    .field-answer label { display:block; margin-bottom:4px; color:var(--ink); font-size:.84rem; font-weight:750; }
+    .field-answer input { width:100%; min-width:0; }
+    .field-answer input[data-answer-state="correct"] { border-color:#538c69; background:#f2f8f1; }
+    .field-answer input[data-answer-state="incorrect"] { border-color:#bf714f; background:#fff7f1; }
+    .field-answer small { display:block; min-height:2.6em; margin-top:5px; color:var(--muted); font-size:.75rem; line-height:1.45; }
+    .field-response > .action { min-height:44px; margin-top:11px; white-space:nowrap; }
+    .field-feedback { margin:11px 0 0; padding:10px 12px; border-radius:10px; background:#f1f5ee; color:#40574b; font-size:.9rem; }
+    .field-feedback[hidden] { display:none; }
+    .field-feedback[data-state="good"] { background:#e8f3e8; color:var(--green); }
+    .field-feedback[data-state="try"] { background:#faf3e4; color:#755a2d; }
+    .field-results { margin-top:13px; padding:13px; border:1px solid #e7d7b4; border-radius:12px; background:#fffaf0; }
+    .field-results[hidden] { display:none; }
+    .field-results h4 { margin:0 0 9px; color:var(--green); font-size:.96rem; }
+    .field-result-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+    .field-result { padding:9px 10px; border-radius:9px; background:#fffefa; color:var(--muted); font-size:.8rem; }
+    .field-result strong { display:block; margin-top:2px; color:var(--ink); font-size:1.15rem; }
+    .field-calculation { margin:9px 0 0; color:#52665d; font-size:.78rem; line-height:1.55; }
+    .route a.task-nav { margin:0 0 0 4px; border-top:0; border-left:1px solid var(--line); padding-top:7px; }
+    .route a.task-nav[aria-current="step"] { border-color:var(--green); }
+    @container (max-width:760px) { .field-task-grid { grid-template-columns:1fr; } }
+    @container (max-width:620px) { .field-task-head { padding:20px 18px; } .field-task-grid { padding:0 14px; } .field-response { margin:14px; padding:13px 2px 2px; } .field-response-head { align-items:flex-start; flex-direction:column; gap:4px; } .field-answer small { min-height:0; } .field-result-grid { grid-template-columns:1fr; } }
+    @container (max-width:420px) { .field-task-head { flex-direction:column; gap:8px; } .field-parameter-grid { grid-template-columns:1fr; } .signal-row { padding-inline:8px; } .signal-direction { font-size:.68rem; } }
+    .answer { margin-top:14px; padding:13px 15px; border:1px solid #cbded0; border-radius:14px; background:#eef5ec; }
+    .answer summary { color:#315a46; font-weight:800; cursor:pointer; }
+    .answer p { margin:8px 0 0; }
+    .end-card { border-color:#bfd1be; background:#eef4e9; }
+    footer { padding:28px 0 44px; border-top:1px solid var(--line); color:var(--muted); font-size:.86rem; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    @media (max-width:760px) {
+      .shell { width:min(100% - 24px,620px); }
+      .hero { grid-template-columns:1fr; gap:16px; padding:30px 0; }
+      .lesson-layout { grid-template-columns:minmax(0,1fr); gap:12px; }
+      .route { top:0; z-index:5; max-height:none; margin:0 -12px; padding:10px 12px; border-block:1px solid var(--line); background:rgb(244 247 241 / 96%); backdrop-filter:blur(12px); }
+      .route-label { margin-bottom:6px; }
+      .route-inner { display:flex; gap:6px; overflow-x:auto; padding-bottom:3px; scrollbar-width:thin; }
+      .route a { display:inline-flex; flex:0 0 auto; align-items:center; gap:6px; padding:7px 10px; border:1px solid var(--line); border-radius:999px; background:var(--card); white-space:nowrap; }
+      .route a[aria-current="step"] { border-color:var(--green); }
+      .route a.quiz-nav { margin:0 0 0 4px; border-top:0; border-left:1px solid var(--line); padding-top:7px; }
+      .route a.quiz-nav[aria-current="step"] { border-color:#d9a74f; }
+      .lesson-card { grid-template-columns:1fr; gap:14px; padding:18px; border-radius:19px; }
+      .card-side { display:flex; align-items:baseline; gap:10px; border-right:0; border-bottom:1px solid var(--line); padding:0 0 10px; }
+      .card-side h3 { margin:0; }
+      .card-role { display:none; }
+      .quiz-head { gap:12px; padding:20px 18px; }
+      .quiz-mark { width:43px; height:43px; border-radius:12px; }
+      .quiz-body { padding:20px 17px 23px; }
+      .quiz-lead { margin-bottom:14px; }
+      .quiz-question { margin-top:19px; padding-top:17px; }
+      .quiz-question h3 { font-size:1.1rem; }
+      .quiz-actions { align-items:stretch; flex-direction:column; gap:8px; }
+      .quiz-actions .action { width:100%; }
+      .quiz-helper { font-size:.82rem; }
+      .speed-formula-explanations { grid-template-columns:1fr; gap:8px; }
+      .definition-pair { grid-template-columns:1fr; }
+      .section-top { align-items:start; flex-direction:column; gap:3px; }
+      .visual .amplitude-diagram text { font-size:25px; }
+      .visual .amplitude-diagram #amplitude-label { font-size:28px; }
+    }
+    @media (min-width:761px) and (max-width:900px) {
+      .lesson-layout { grid-template-columns:minmax(0,1fr); gap:12px; }
+      .route { top:0; z-index:5; max-height:none; margin:0 -12px; padding:10px 12px; border-block:1px solid var(--line); background:rgb(244 247 241 / 96%); backdrop-filter:blur(12px); }
+      .route-label { margin-bottom:6px; }
+      .route-inner { display:flex; gap:6px; overflow-x:auto; padding-bottom:3px; scrollbar-width:thin; }
+      .route a { display:inline-flex; flex:0 0 auto; align-items:center; gap:6px; padding:7px 10px; border:1px solid var(--line); border-radius:999px; background:var(--card); white-space:nowrap; }
+      .route a[aria-current="step"] { border-color:var(--green); }
+      .route a.quiz-nav { margin:0 0 0 4px; border-top:0; border-left:1px solid var(--line); padding-top:7px; }
+      .route a.quiz-nav[aria-current="step"] { border-color:#d9a74f; }
+      .lesson-card { grid-template-columns:1fr; gap:14px; padding:18px; border-radius:19px; }
+      .card-side { display:flex; align-items:baseline; gap:10px; border-right:0; border-bottom:1px solid var(--line); padding:0 0 10px; }
+      .card-side h3 { margin:0; }
+      .card-role { display:none; }
+    }
+    @media (max-width:520px) { .diagram-grid,.data-grid,.example-grid { grid-template-columns:1fr; } .lesson-card { padding:16px; } .visual { padding:8px; } .speed-quantity-map { grid-template-columns:1fr; gap:5px; } .speed-quantity-map div { display:flex; align-items:baseline; justify-content:center; gap:8px; } .longitudinal-wavelength-panel svg text { font-size:26px; } .longitudinal-wavelength-panel svg .lambda-symbol { font-size:32px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <header class="shell masthead">
+    <div class="brand-row"><a class="brand" href="../../index.html">← 波動與聲音</a><span class="crumb">國二上・波的傳播</span></div>
+    <div class="hero">
+      <div class="hero-copy"><div class="eyebrow">學習內容 3.1｜波動與聲音｜波的傳播</div><h1>繩子一端被抖動，<br>變化怎麼傳到另一端？</h1><p>校園科學活動中，阿公和小葵各拉住繩子一端。阿公輕輕一抖，起伏便傳到小葵手邊；旁邊的桌上，還準備了彈簧和水盤。</p>
+      </div>
+      <figure class="story-opening-figure"><img src="assets/wave-story-opening-outdoor.png?v=source-on-left" alt="戶外科學活動中，左側阿公和右側小葵各拉住繩子一端；桌上有彈簧和水盤。"><figcaption>小葵和阿公用繩子觀察波的傳遞，旁邊也準備了彈簧和水盤</figcaption></figure>
+    </div>
+  </header>
+  <main class="shell lesson">
+    <div class="lesson-layout">
+      <nav class="route" aria-label="本段學習路徑">
+        <p class="route-label">本單元的探索路線</p>
+        <div class="route-inner">
+          <a href="#card-01" aria-current="step"><b>01</b><span>起伏怎麼沿著繩子傳開？</span></a>
+          <a href="#card-02"><b>02</b><span>波形向前傳，繩上的點會跟著走嗎？</span></a>
+          <a href="#card-03"><b>03</b><span>繩波有些地方凸起、有些地方凹下，圖上怎麼讀？</span></a>
+          <a href="#card-04"><b>04</b><span>波形的高低和重複間隔，怎麼量？</span></a>
+          <a href="#card-05"><b>05</b><span>橫波和縱波，差別在振動方向？</span></a>
+          <a href="#card-06"><b>06</b><span>一個完整的波形，是怎麼形成的？</span></a>
+          <a href="#card-07"><b>07</b><span>頻率和週期，如何互相影響？</span></a>
+          <a href="#card-08"><b>08</b><span>波速、頻率和波長，怎麼連在一起？</span></a>
+          <a href="#unit-quiz" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
+        </div>
+      </nav>
+      <div class="cards">
+        <div class="section-top"><h2>從認識波形，走到波速關係</h2><span class="progress-copy">完整說明直接呈現在每張卡片</span></div>
+
+        <section class="lesson-card" id="card-01">
+          <div class="card-side"><span class="card-number">01</span><h3>認識波</h3><span class="card-role">變化如何傳開</span></div>
+          <div class="card-main">
+            <h2>阿公輕輕一抖，起伏怎麼就傳到另一端？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，你剛剛抖了一下繩子，這個起伏怎麼跑到我這邊了？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>繩子上的起伏沿著繩子傳到另一端；這種變化的傳遞，就叫做波。</p></div>
+            <p>波是振動或擾動的傳播，能把能量由一處傳到另一處。繩子一端振動後，變化沿著繩子傳開。</p><figure class="visual">
+              <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="繩波由左側波源向右傳播；可播放單次起伏，或切換連續波">
+                <defs>
+                  <marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
+                  <marker id="arrow-source-motion" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#748b7e"/></marker>
+                </defs>
+                <path class="pulse-path rope-underlay" d="M38 142H722"/>
+                <path d="M24 98V186" fill="none" stroke="#748b7e" stroke-width="1.8" marker-start="url(#arrow-source-motion)" marker-end="url(#arrow-source-motion)"/>
+                <circle id="wave-source-marker-1" cx="38" cy="142" r="6.5" fill="#df8b41" stroke="#fffefa" stroke-width="2.5"/>
+                <text x="84" y="45">波源上下振動</text>
+                <path d="M130 228H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
+                <text x="345" y="253" text-anchor="middle">波形傳播方向</text>
+              </svg>
+              <figcaption data-wave-caption>單次波：波源完成一次上下振動，形成一個起伏向右傳播。</figcaption>
+            </figure>
+            <div class="control-panel"><div class="controls" role="group" aria-label="繩波播放控制"><button class="secondary" type="button" data-wave-single>單次波</button><button class="secondary" type="button" data-wave-continuous aria-pressed="false">連續波</button><span class="live-note" data-pulse-status aria-live="polite">初始狀態：繩子維持平衡。可播放一次波形，或持續振動。</span></div></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-02">
+          <div class="card-side"><span class="card-number">02</span><h3>追蹤固定繩點</h3><span class="card-role">繩點在原處振動，波形向前傳</span></div>
+          <div class="card-main">
+            <h2>波形向前傳，繩上的點會跟著走嗎？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩子一抖，起伏往右跑；那這個點也會跟著跑嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>不會。繩上的點只在原來的位置附近上下動；各處依序動起來，讓起伏和能量往右傳。</p></div>
+            <p>觀察動畫，起伏向右傳時，橘點只在原來的水平位置附近上下振動。繩上的振動把能量傳到遠處，但繩子本身沒有整段跟著波形往前移動。</p><figure class="visual">
+              <svg class="rope-wave" data-fixed-point-wave viewBox="0 0 760 280" role="group" aria-label="互動繩波示意：可拖曳下方左右箭頭選擇繩上的位置，觀察繩點上下振動">
+                <defs><marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
+                <path d="M46 142H714" stroke="#b7c7bc" stroke-width="1.5" stroke-linecap="round"/>
+                <path class="pulse-path rope-underlay" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/>
+                <path d="M118 244H565" class="motion-arrow" marker-end="url(#arrow-rope-2)"/>
+                <text x="341" y="270" text-anchor="middle">波形與能量向右傳</text>
+                <path id="fixed-rope-guide" d="M350 90V214" stroke="#df8b41" stroke-width="2" stroke-dasharray="5 5"/>
+                <circle class="rope-marker" id="fixed-rope-marker" cx="350" cy="142" r="10" fill="#df8b41" stroke="#fff" stroke-width="3" pointer-events="none" aria-hidden="true"/>
+                <path id="fixed-point-track" d="M46 214H714" stroke="#b7c7bc" stroke-width="2" stroke-linecap="round"/>
+                <g id="fixed-point-slider" transform="translate(350 214)" tabindex="0" role="slider" aria-label="拖曳左右箭頭選擇繩上的位置" aria-orientation="horizontal" aria-valuemin="46" aria-valuemax="714" aria-valuenow="350" aria-valuetext="繩上位置 350">
+                  <rect class="slider-handle-bg" x="-27" y="-12" width="54" height="24" rx="12" fill="#fffefa" stroke="#82978a" stroke-width="1.5"/>
+                  <path class="slider-horizontal-icon" d="M-10 0H10M-6-4L-10 0L-6 4M6-4L10 0L6 4"/>
+                  <rect class="slider-hitarea" x="-30" y="-18" width="60" height="36"/>
+                </g>
+              </svg>
+              <figcaption>拖曳波形下方的左右箭頭控制鈕，可選擇繩上的不同位置；上方橘點會貼著繩子上下振動。也可聚焦控制鈕後按左右鍵移動。</figcaption>
+            </figure>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>明明繩上的點只是在原處上下動，波形卻一路往右傳，真的好神奇！</p></div>
+            <div class="fact"><p><strong>介質：</strong>機械波傳播所經過、並參與振動的物質。這個例子裡，繩子就是介質；繩上的點在原位置附近振動，波的擾動和能量則沿著繩子傳開。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-03">
+          <div class="card-side"><span class="card-number">03</span><h3>讀懂波形</h3><span class="card-role">建立共同的圖像詞彙</span></div>
+          <div class="card-main">
+            <h2>繩波有些地方凸起、有些地方凹下，圖上怎麼讀？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩子有些地方凸起來，有些地方凹下去，跟還沒抖動時的位置不一樣了。</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>沒錯。繩子原本靜止的位置叫平衡位置；凸起的最高處叫波峰，凹下的最低處叫波谷。</p></div>
+            <figure class="visual">
+              <svg class="rope-wave wave-vocabulary" data-static-rope viewBox="0 0 720 270" role="img" aria-label="波形圖完整呈現兩個波峰、兩個波谷和平衡位置">
+                <path d="M48 140H672" class="equilibrium"/>
+                <path class="wave-line" d="M48 140.00 L50 136.28 L52 132.57 L54 128.88 L56 125.22 L58 121.60 L60 118.02 L62 114.50 L64 111.04 L66 107.65 L68 104.35 L70 101.14 L72 98.02 L74 95.01 L76 92.12 L78 89.34 L80 86.70 L82 84.19 L84 81.81 L86 79.59 L88 77.52 L90 75.61 L92 73.86 L94 72.27 L96 70.86 L98 69.62 L100 68.56 L102 67.68 L104 66.99 L106 66.47 L108 66.15 L110 66.01 L112 66.05 L114 66.29 L116 66.71 L118 67.31 L120 68.10 L122 69.07 L124 70.22 L126 71.54 L128 73.04 L130 74.71 L132 76.54 L134 78.54 L136 80.68 L138 82.98 L140 85.42 L142 88.00 L144 90.72 L146 93.55 L148 96.50 L150 99.57 L152 102.73 L154 105.99 L156 109.34 L158 112.76 L160 116.25 L162 119.80 L164 123.40 L166 127.05 L168 130.73 L170 134.43 L172 138.14 L174 141.86 L176 145.57 L178 149.27 L180 152.95 L182 156.60 L184 160.20 L186 163.75 L188 167.24 L190 170.66 L192 174.01 L194 177.27 L196 180.43 L198 183.50 L200 186.45 L202 189.28 L204 192.00 L206 194.58 L208 197.02 L210 199.32 L212 201.46 L214 203.46 L216 205.29 L218 206.96 L220 208.46 L222 209.78 L224 210.93 L226 211.90 L228 212.69 L230 213.29 L232 213.71 L234 213.95 L236 213.99 L238 213.85 L240 213.53 L242 213.01 L244 212.32 L246 211.44 L248 210.38 L250 209.14 L252 207.73 L254 206.14 L256 204.39 L258 202.48 L260 200.41 L262 198.19 L264 195.81 L266 193.30 L268 190.66 L270 187.88 L272 184.99 L274 181.98 L276 178.86 L278 175.65 L280 172.35 L282 168.96 L284 165.50 L286 161.98 L288 158.40 L290 154.78 L292 151.12 L294 147.43 L296 143.72 L298 140.00 L300 136.28 L302 132.57 L304 128.88 L306 125.22 L308 121.60 L310 118.02 L312 114.50 L314 111.04 L316 107.65 L318 104.35 L320 101.14 L322 98.02 L324 95.01 L326 92.12 L328 89.34 L330 86.70 L332 84.19 L334 81.81 L336 79.59 L338 77.52 L340 75.61 L342 73.86 L344 72.27 L346 70.86 L348 69.62 L350 68.56 L352 67.68 L354 66.99 L356 66.47 L358 66.15 L360 66.01 L362 66.05 L364 66.29 L366 66.71 L368 67.31 L370 68.10 L372 69.07 L374 70.22 L376 71.54 L378 73.04 L380 74.71 L382 76.54 L384 78.54 L386 80.68 L388 82.98 L390 85.42 L392 88.00 L394 90.72 L396 93.55 L398 96.50 L400 99.57 L402 102.73 L404 105.99 L406 109.34 L408 112.76 L410 116.25 L412 119.80 L414 123.40 L416 127.05 L418 130.73 L420 134.43 L422 138.14 L424 141.86 L426 145.57 L428 149.27 L430 152.95 L432 156.60 L434 160.20 L436 163.75 L438 167.24 L440 170.66 L442 174.01 L444 177.27 L446 180.43 L448 183.50 L450 186.45 L452 189.28 L454 192.00 L456 194.58 L458 197.02 L460 199.32 L462 201.46 L464 203.46 L466 205.29 L468 206.96 L470 208.46 L472 209.78 L474 210.93 L476 211.90 L478 212.69 L480 213.29 L482 213.71 L484 213.95 L486 213.99 L488 213.85 L490 213.53 L492 213.01 L494 212.32 L496 211.44 L498 210.38 L500 209.14 L502 207.73 L504 206.14 L506 204.39 L508 202.48 L510 200.41 L512 198.19 L514 195.81 L516 193.30 L518 190.66 L520 187.88 L522 184.99 L524 181.98 L526 178.86 L528 175.65 L530 172.35 L532 168.96 L534 165.50 L536 161.98 L538 158.40 L540 154.78 L542 151.12 L544 147.43 L546 143.72 L548 140.00"/>
+                <g aria-hidden="true" fill="#176b53" stroke="#fffefa" stroke-width="2.5"><circle cx="110.5" cy="66" r="6"/><circle cx="360.5" cy="66" r="6"/><circle cx="235.5" cy="214" r="6"/><circle cx="485.5" cy="214" r="6"/></g>
+                <text x="110.5" y="38" text-anchor="middle">波峰</text><text x="360.5" y="38" text-anchor="middle">波峰</text>
+                <text x="235.5" y="252" text-anchor="middle">波谷</text><text x="485.5" y="252" text-anchor="middle">波谷</text>
+                <rect x="555" y="125" width="105" height="30" rx="8" fill="#fffefa" stroke="#d7e1dd"/><text x="607.5" y="147" text-anchor="middle">平衡位置</text>
+              </svg>
+            </figure>
+            <div class="fact"><p><strong>讀圖提示：</strong>先找平衡位置，再辨認波峰和波谷。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-04">
+          <div class="card-side"><span class="card-number">04</span><h3>測量波形</h3><span class="card-role">認識振幅與波長</span></div>
+          <div class="card-main">
+            <h2>波形的高低和重複間隔，怎麼量？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，我想知道這個波有多大，是不是量波峰到波谷這一段？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>量波峰到波谷會得到整段高度；振幅是從平衡位置量到波峰（或波谷）的距離。</p></div>
+            <h3 class="measurement-subheading">先量垂直距離：振幅 A</h3>
+            <div class="definition-pair" aria-label="振幅的正式定義與白話理解">
+              <div class="definition-card"><span class="definition-label">正式定義</span><p>振幅 <em>A</em> 是介質振動時，相對平衡位置的最大位移。</p></div>
+              <div class="definition-card definition-card--plain"><span class="definition-label">白話理解</span><p>這張圖的虛線剛好在最高點和最低點中間。量波峰到波谷的總高度，再除以 2，就得到振幅。</p><p class="definition-equation"><span id="amplitude-height-output">1.0 m</span> ÷ 2 = <span id="amplitude-half-output">0.5 m</span></p></div>
+            </div><figure class="visual">
+              <svg class="amplitude-diagram" viewBox="0 0 720 280" role="img" aria-label="橫波圖標示平衡位置、波峰、波谷和振幅 A">
+                <defs><marker id="arrow-a" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" refX="0" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
+                <path d="M40 140H680" class="equilibrium"/>
+                <path id="amplitude-wave" d="M40 140 C57.3 140 74.7 80 92 80 S161.3 200 196 200 S265.3 80 300 80 S369.3 200 404 200 S473.3 80 508 80 S542.7 140 560 140" class="wave-line"/>
+                <circle id="amplitude-peak" cx="92" cy="80" r="6" fill="#176b53"/><circle id="amplitude-trough" cx="196" cy="200" r="6" fill="#176b53"/>
+                <rect x="575" y="125" width="105" height="30" rx="8" fill="#fffefa" stroke="#d7e1dd"/><text x="627.5" y="147" text-anchor="middle">平衡位置</text><text x="92" y="25" text-anchor="middle">波峰</text><text x="196" y="260" text-anchor="middle">波谷</text>
+                <path id="amplitude-measure" d="M115 140V80" class="measure" marker-start="url(#arrow-a)" marker-end="url(#arrow-a)"/><text id="amplitude-label" x="130" y="72">A = 0.5 m</text>
+              </svg>
+
+            </figure>
+            <div class="control-panel">
+              <label class="field" for="amplitude-slider">調整波源振幅；波形離平衡位置的最大距離會跟著改變
+                <input id="amplitude-slider" type="range" min="0.3" max="0.8" step="0.1" value="0.5" aria-describedby="amplitude-model-note">
+              </label>
+              <div class="readout" aria-live="polite"><div class="data-cell"><small>振幅 A</small><strong id="amplitude-output">0.5 m</strong></div></div>
+              <p class="live-note" id="amplitude-model-note">拖曳滑桿，觀察振幅變大或變小。</p>
+            </div>
+
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>剛剛量的是波的高低。那如果要比較波的長短，該沿著哪個方向量呢？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>沿著波前進的方向，找兩個相鄰、相同的位置來量；像波峰到下一個波峰，這段距離就是波長。</p></div>
+
+            <h3 class="measurement-subheading measurement-subheading--next">再量水平距離：波長 λ</h3>
+
+            <div class="definition-pair" aria-label="波長的正式定義與白話理解">
+              <div class="definition-card"><span class="definition-label">正式定義</span><p>波長 <em>λ</em> 是波形沿傳播方向，相鄰兩個相同位置之間的距離。</p></div>
+              <div class="definition-card definition-card--plain"><span class="definition-label">白話理解</span><p>把波形往前移一個 λ，兩端會對到下一個相同位置：</p><ul class="definition-examples"><li>最高點 → 下一個最高點</li><li>最低點 → 下一個最低點</li><li>虛線上同方向通過的位置 → 下一個同方向位置</li></ul></div>
+            </div><figure class="visual">
+              <svg viewBox="0 0 720 310" role="img" aria-label="平移固定一個波長長度的標尺，觀察波峰、波谷和平衡位置如何相隔一個波長">
+                <defs>
+                  <marker id="arrow-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
+                </defs>
+                <path d="M40 125H680" class="equilibrium"/>
+                <path id="lambda-wave" class="wave-line" d="M40 175.91 L42 173.18 L44 170.31 L46 167.32 L48 164.21 L50 161.00 L52 157.69 L54 154.29 L56 150.80 L58 147.25 L60 143.63 L62 139.97 L64 136.26 L66 132.53 L68 128.77 L70 125.00 L72 121.23 L74 117.47 L76 113.74 L78 110.03 L80 106.37 L82 102.75 L84 99.20 L86 95.71 L88 92.31 L90 89.00 L92 85.79 L94 82.68 L96 79.69 L98 76.82 L100 74.09 L102 71.49 L104 69.05 L106 66.75 L108 64.62 L110 62.65 L112 60.85 L114 59.22 L116 57.78 L118 56.52 L120 55.45 L122 54.57 L124 53.89 L126 53.39 L128 53.10 L130 53.00 L132 53.10 L134 53.39 L136 53.89 L138 54.57 L140 55.45 L142 56.52 L144 57.78 L146 59.22 L148 60.85 L150 62.65 L152 64.62 L154 66.75 L156 69.05 L158 71.49 L160 74.09 L162 76.82 L164 79.69 L166 82.68 L168 85.79 L170 89.00 L172 92.31 L174 95.71 L176 99.20 L178 102.75 L180 106.37 L182 110.03 L184 113.74 L186 117.47 L188 121.23 L190 125.00 L192 128.77 L194 132.53 L196 136.26 L198 139.97 L200 143.63 L202 147.25 L204 150.80 L206 154.29 L208 157.69 L210 161.00 L212 164.21 L214 167.32 L216 170.31 L218 173.18 L220 175.91 L222 178.51 L224 180.95 L226 183.25 L228 185.38 L230 187.35 L232 189.15 L234 190.78 L236 192.22 L238 193.48 L240 194.55 L242 195.43 L244 196.11 L246 196.61 L248 196.90 L250 197.00 L252 196.90 L254 196.61 L256 196.11 L258 195.43 L260 194.55 L262 193.48 L264 192.22 L266 190.78 L268 189.15 L270 187.35 L272 185.38 L274 183.25 L276 180.95 L278 178.51 L280 175.91 L282 173.18 L284 170.31 L286 167.32 L288 164.21 L290 161.00 L292 157.69 L294 154.29 L296 150.80 L298 147.25 L300 143.63 L302 139.97 L304 136.26 L306 132.53 L308 128.77 L310 125.00 L312 121.23 L314 117.47 L316 113.74 L318 110.03 L320 106.37 L322 102.75 L324 99.20 L326 95.71 L328 92.31 L330 89.00 L332 85.79 L334 82.68 L336 79.69 L338 76.82 L340 74.09 L342 71.49 L344 69.05 L346 66.75 L348 64.62 L350 62.65 L352 60.85 L354 59.22 L356 57.78 L358 56.52 L360 55.45 L362 54.57 L364 53.89 L366 53.39 L368 53.10 L370 53.00 L372 53.10 L374 53.39 L376 53.89 L378 54.57 L380 55.45 L382 56.52 L384 57.78 L386 59.22 L388 60.85 L390 62.65 L392 64.62 L394 66.75 L396 69.05 L398 71.49 L400 74.09 L402 76.82 L404 79.69 L406 82.68 L408 85.79 L410 89.00 L412 92.31 L414 95.71 L416 99.20 L418 102.75 L420 106.37 L422 110.03 L424 113.74 L426 117.47 L428 121.23 L430 125.00 L432 128.77 L434 132.53 L436 136.26 L438 139.97 L440 143.63 L442 147.25 L444 150.80 L446 154.29 L448 157.69 L450 161.00 L452 164.21 L454 167.32 L456 170.31 L458 173.18 L460 175.91 L462 178.51 L464 180.95 L466 183.25 L468 185.38 L470 187.35 L472 189.15 L474 190.78 L476 192.22 L478 193.48 L480 194.55 L482 195.43 L484 196.11 L486 196.61 L488 196.90 L490 197.00 L492 196.90 L494 196.61 L496 196.11 L498 195.43 L500 194.55 L502 193.48 L504 192.22 L506 190.78 L508 189.15 L510 187.35 L512 185.38 L514 183.25 L516 180.95 L518 178.51 L520 175.91 L522 173.18 L524 170.31 L526 167.32 L528 164.21 L530 161.00 L532 157.69 L534 154.29 L536 150.80 L538 147.25 L540 143.63 L542 139.97 L544 136.26 L546 132.53 L548 128.77 L550 125.00 L552 121.23 L554 117.47 L556 113.74 L558 110.03 L560 106.37 L562 102.75 L564 99.20 L566 95.71 L568 92.31 L570 89.00 L572 85.79 L574 82.68 L576 79.69 L578 76.82 L580 74.09 L582 71.49 L584 69.05 L586 66.75 L588 64.62 L590 62.65 L592 60.85 L594 59.22 L596 57.78 L598 56.52 L600 55.45 L602 54.57 L604 53.89 L606 53.39 L608 53.10 L610 53.00 L612 53.10 L614 53.39 L616 53.89 L618 54.57 L620 55.45 L622 56.52 L624 57.78 L626 59.22 L628 60.85 L630 62.65 L632 64.62 L634 66.75 L636 69.05 L638 71.49 L640 74.09 L642 76.82 L644 79.69 L646 82.68 L648 85.79 L650 89.00 L652 92.31 L654 95.71 L656 99.20 L658 102.75 L660 106.37 L662 110.03 L664 113.74 L666 117.47 L668 121.23 L670 125.00 L672 128.77 L674 132.53 L676 136.26 L678 139.97 L680 143.63"/>
+                <text class="small-label" x="45" y="15">橫波圖示</text>
+                <g id="lambda-ruler-control" tabindex="0" role="slider" aria-label="拖曳一個波長的標尺，或使用左右方向鍵移動" aria-orientation="horizontal" aria-valuemin="130" aria-valuemax="370" aria-valuenow="130" aria-valuetext="最高點對到下一個最高點；兩端相隔一個波長 λ">
+                  <path id="lambda-left-guide" d="M130 62V254" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
+                  <path id="lambda-right-guide" d="M370 62V254" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
+                  <path id="lambda-ruler-hitarea" d="M134 254H366" fill="none" stroke="transparent" stroke-width="28" pointer-events="stroke"/>
+                  <path id="lambda-measure" d="M134 254H366" class="measure" marker-start="url(#arrow-lambda)" marker-end="url(#arrow-lambda)"/>
+                  <circle id="lambda-left-point" cx="130" cy="53" r="7" fill="#df8b41" stroke="#fffefa" stroke-width="2.5"/>
+                  <circle id="lambda-right-point" cx="370" cy="53" r="7" fill="#df8b41" stroke="#fffefa" stroke-width="2.5"/>
+                  <text id="lambda-label" x="250" y="286" text-anchor="middle">一個波長 λ</text>
+                </g>
+              </svg>
+              <figcaption>直接拖曳橘色雙向箭頭，整段標尺會左右移動；它的長度固定為一個波長。</figcaption>
+            </figure>
+            <div class="control-panel">
+              <p><strong>直接拖曳橘色標尺</strong></p>
+              <p class="live-note" id="lambda-explanation" aria-live="polite">波峰對到下一個波峰。標尺平移後，也能對準波谷、或平衡線上同方向通過的位置；兩端始終相隔一個 λ。</p>
+            </div>
+            <div class="fact"><p><strong>對照：</strong>振幅 <em>A</em> 是介質偏離平衡位置的最大位移；波長 <em>λ</em> 是波形沿傳播方向的重複間隔。</p></div>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-05">
+          <div class="card-side"><span class="card-number">05</span><h3>比較兩個方向</h3><span class="card-role">認識橫波與縱波</span></div>
+          <div class="card-main">
+            <h2>橫波和縱波，差別在振動方向？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，如果不用繩子，波也能傳出去嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>可以啊，彈簧也能傳波。繩上的點上下動，和波前進方向垂直，是橫波；彈簧圈前後擠動，和波前進方向平行，是縱波。</p></div>
+            <p>判斷波型時，比較介質振動方向和波前進方向。兩個方向互相垂直是橫波，互相平行是縱波。下面兩種波都向右傳，差別在介質如何振動。</p>
+            <div class="diagram-grid wave-type-diagrams">
+              <figure class="visual diagram-panel">
+                <h3>橫波｜繩點上下振動，波形向右傳</h3>
+                <svg id="transverse-wave-diagram" viewBox="0 0 760 270" role="img" aria-label="繩波持續向右傳播；繩上的固定點沿垂直方向上下振動">
+                  <defs>
+                    <marker id="arrow-transverse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
+                    <marker id="arrow-particle-v" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
+                  </defs>
+                  <path d="M46 116H714" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
+                  <path id="transverse-wave-rope" class="rope-underlay" d="M46 116 C94 116 108 68 156 68 S218 164 276 164 S334 68 392 68 S450 164 508 164 S566 68 624 68 S674 116 714 116"/>
+                  <path id="transverse-point-guide" d="M350 66V166" stroke="#df8b41" stroke-width="1.5" stroke-dasharray="5 5"/>
+                  <circle id="transverse-fixed-point" cx="350" cy="116" r="7" fill="#df8b41" stroke="#fff" stroke-width="2.5"/>
+                  <path d="M326 87V145" class="measure" marker-start="url(#arrow-particle-v)" marker-end="url(#arrow-particle-v)"/>
+                  <path d="M118 207H650" class="motion-arrow" marker-end="url(#arrow-transverse)"/>
+                  <text x="384" y="236" text-anchor="middle">波前進方向</text>
+                </svg>
+                <p>橘點固定在同一水平位置，隨繩子上下振動；波形沿繩子向右傳。兩個方向互相垂直。</p>
+              </figure>
+              <figure class="visual diagram-panel">
+                <h3>縱波｜線圈前後振動，疏密變化向右傳</h3>
+                <svg id="longitudinal-wave-diagram" viewBox="0 0 760 280" role="img" aria-label="彈簧線圈沿水平方向前後振動；壓縮和疏鬆區向右傳播">
+                  <defs>
+                    <linearGradient id="spring-metal-gradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#64717a"/><stop offset=".2" stop-color="#d8dfe2"/><stop offset=".45" stop-color="#fff"/><stop offset=".7" stop-color="#87939a"/><stop offset="1" stop-color="#e8edef"/></linearGradient>
+                    <marker id="arrow-longitudinal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
+                    <marker id="arrow-particle-h" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
+                  </defs>
+                  <path d="M46 126H714" stroke="#9aaca1" stroke-width="1.5" stroke-dasharray="7 7"/>
+                  <g id="longitudinal-spring-coils"></g>
+                  <path id="longitudinal-point-guide" d="M380 76V176" stroke="#df8b41" stroke-width="1.5" stroke-dasharray="5 5"/>
+                  <path d="M352 64H408" class="measure" marker-start="url(#arrow-particle-h)" marker-end="url(#arrow-particle-h)"/>
+                  <path d="M118 218H650" class="motion-arrow" marker-end="url(#arrow-longitudinal)"/>
+                  <text x="384" y="248" text-anchor="middle">疏密波形前進方向</text>
+                </svg>
+                <p>橘色線圈在原位置附近前後往返；線圈密集與疏開的區域一起向右傳。兩個方向互相平行。</p>
+              </figure>
+            </div>
+            <div class="diagram-panel longitudinal-wavelength-panel">
+              <h3>縱波也有波長</h3>
+              <svg viewBox="0 0 720 246" role="img" aria-label="彈簧縱波中，兩個相鄰壓縮區中心以橘點標示，中心間距為一個波長 λ；波沿水平方向傳播">
+                <defs>
+                  <linearGradient id="lambda-spring-metal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#64717a"/><stop offset=".22" stop-color="#d8dfe2"/><stop offset=".48" stop-color="#fff"/><stop offset=".72" stop-color="#87939a"/><stop offset="1" stop-color="#e8edef"/></linearGradient>
+                  <marker id="arrow-long-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
+                  <marker id="arrow-long-lambda-direction" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
+                </defs>
+                <text x="205" y="22" text-anchor="middle">壓縮區中心</text>
+                <text x="485" y="25" text-anchor="middle">下一個壓縮區中心</text>
+                <path d="M38 100H682" stroke="#c1cec6" stroke-width="1.5" stroke-dasharray="5 7"/>
+                <g fill="none" stroke="#586d70" stroke-width="2.7" opacity=".92">
+                <ellipse cx="36.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="53.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="71.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="89.7" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="107.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="123.4" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="138.5" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="152.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="163.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="174.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="182.4" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="189.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="194.5" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="198.7" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="202.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="205.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="208.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="211.7" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="215.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="221.4" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="228.3" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="236.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="247.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="259.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="272.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="288.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="304.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="322.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="339.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="357.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="375.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="392.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="408.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="423.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="436.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="447.5" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="457.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="464.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="471.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="476.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="479.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="483.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="486.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="489.3" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="493.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="497.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="503.5" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="511.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="520.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="531.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="543.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="557.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="573.5" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="590.3" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="607.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="625.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="643.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="661.3" cy="100" rx="5.2" ry="38"/>
+                </g>
+                <g fill="none" stroke="url(#lambda-spring-metal)" stroke-width="1.2">
+                <ellipse cx="36.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="53.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="71.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="89.7" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="107.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="123.4" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="138.5" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="152.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="163.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="174.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="182.4" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="189.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="194.5" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="198.7" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="202.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="205.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="208.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="211.7" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="215.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="221.4" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="228.3" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="236.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="247.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="259.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="272.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="288.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="304.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="322.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="339.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="357.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="375.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="392.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="408.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="423.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="436.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="447.5" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="457.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="464.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="471.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="476.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="479.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="483.2" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="486.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="489.3" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="493.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="497.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="503.5" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="511.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="520.1" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="531.0" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="543.6" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="557.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="573.5" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="590.3" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="607.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="625.9" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="643.8" cy="100" rx="5.2" ry="38"/>
+                <ellipse cx="661.3" cy="100" rx="5.2" ry="38"/>
+                </g>
+                <circle cx="205" cy="100" r="6.5" fill="#df8b41" stroke="#fff" stroke-width="2.5"/>
+                <circle cx="485" cy="100" r="6.5" fill="#df8b41" stroke="#fff" stroke-width="2.5"/>
+                <path d="M205 112V153M485 112V153" stroke="#84988a" stroke-width="1.5" stroke-dasharray="4 4"/>
+                <path d="M214 151H476" class="measure" marker-start="url(#arrow-long-lambda)" marker-end="url(#arrow-long-lambda)"/>
+                <rect x="325" y="132" width="70" height="37" rx="17" fill="#fffefa" stroke="#eaded1"/>
+                <text class="lambda-symbol" x="360" y="157" text-anchor="middle" fill="#a94d20">λ</text>
+                <path d="M230 199H490" class="motion-arrow" marker-end="url(#arrow-long-lambda-direction)"/>
+                <text x="360" y="228" text-anchor="middle">波的傳播方向</text>
+              </svg>
+              <p>找相鄰兩團最擠的線圈，各取中間；兩個中心之間的距離，就是一個波長 λ。</p>
+            </div>
+            <div class="fact"><p><strong>共同的量測方式：</strong>不論橫波或縱波，波長都沿著波前進方向，量相鄰重複位置的距離。</p></div>
+            <h3 class="measurement-subheading">補充：水面波</h3>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>那水面上的波，是橫波還是縱波？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>它叫表面波，因為波沿著水面傳開；水面附近的水粒子不只上下動，也會前後動，所以不能簡單說它是單純的橫波或縱波</p></div>
+            <div class="water-wave-demo" data-water-wave-demo>
+              <div class="water-wave-demo-head">
+                <p>把小石子拖進水盤；按一下石子也能投入水中</p>
+              </div>
+              <figure class="water-wave-view">
+                <figcaption>俯視：波紋向外擴散</figcaption>
+                <div class="water-wave-stage" data-water-top-stage>
+                  <svg viewBox="0 0 640 240" role="img" aria-label="俯視水盤。投入小石子後，圓形波紋從落點向四周擴散">
+                    <defs>
+                      <radialGradient id="water-surface-gradient" cx="38%" cy="25%" r="92%"><stop offset="0" stop-color="#edf8f4"/><stop offset=".58" stop-color="#cce8e6"/><stop offset="1" stop-color="#b3d5da"/></radialGradient>
+                      <linearGradient id="water-tray-rim-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#faf9f0"/><stop offset=".38" stop-color="#b7c5be"/><stop offset=".72" stop-color="#879b95"/><stop offset="1" stop-color="#e9eee7"/></linearGradient>
+                      <linearGradient id="water-tray-lip-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffefa"/><stop offset="1" stop-color="#d6e0da"/></linearGradient>
+                      <linearGradient id="river-stone-gradient" x1=".12" y1=".08" x2=".88" y2=".92"><stop offset="0" stop-color="#a9b2a8"/><stop offset=".36" stop-color="#77847b"/><stop offset=".72" stop-color="#59655f"/><stop offset="1" stop-color="#3e4b47"/></linearGradient>
+                      <radialGradient id="river-stone-sheen" cx="32%" cy="22%" r="80%"><stop offset="0" stop-color="#f0e6cd" stop-opacity=".82"/><stop offset=".38" stop-color="#d4d0bd" stop-opacity=".3"/><stop offset="1" stop-color="#bbc8bf" stop-opacity="0"/></radialGradient>
+                      <clipPath id="water-surface-clip"><rect x="34" y="22" width="572" height="196" rx="20"/></clipPath>
+                    </defs>
+                    <rect class="water-tray-shadow" x="25" y="13" width="590" height="214" rx="25" fill="url(#water-tray-rim-gradient)" stroke="#81938c" stroke-width="2"/>
+                    <rect x="29" y="17" width="582" height="206" rx="23" fill="url(#water-tray-lip-gradient)" stroke="#fffefa" stroke-width="1.5"/>
+                    <rect class="water-tray-inner-rim" x="32" y="20" width="576" height="200" rx="21"/>
+                    <rect x="34" y="22" width="572" height="196" rx="20" class="water-surface"/>
+                    <g clip-path="url(#water-surface-clip)" aria-hidden="true">
+                      <path class="water-glint" stroke-width="2" d="M55 37H172M475 38H581"/>
+                      <path class="water-glint" stroke-width="1.2" d="M52 42H116M519 44H586" opacity=".2"/>
+                    </g>
+                    <g id="water-ripple-group" clip-path="url(#water-surface-clip)"></g>
+                    <circle id="water-impact-dot" class="water-impact" cx="320" cy="120" r="6" opacity="0"/>
+                  </svg>
+                  <button class="water-pebble" type="button" data-water-pebble aria-label="拖曳小石子到水盤，或按一下投入水中">
+                    <svg class="water-pebble-art" viewBox="0 0 64 48" aria-hidden="true">
+                      <path d="M7 28Q8 20 15 16L21 9Q27 4 35 7L45 6Q52 7 55 15L60 25Q60 33 52 38L42 42L26 40Q17 42 11 36Q6 33 7 28Z" fill="url(#river-stone-gradient)" stroke="#46534d" stroke-width="1.4"/>
+                      <path d="M11 26Q14 18 23 15L28 9Q34 7 40 10L49 10Q54 14 55 21Q49 26 44 27Q34 31 25 29Q17 31 11 26Z" fill="url(#river-stone-sheen)"/>
+                      <path d="M13 31Q24 35 35 32Q47 34 56 28Q54 36 45 39L34 40Q22 39 15 36Z" fill="#37443f" opacity=".32"/>
+                      <ellipse cx="24" cy="15" rx="6.5" ry="2.2" fill="#fff8e9" opacity=".42" transform="rotate(-24 24 15)"/>
+                      <circle cx="47" cy="18" r="1" fill="#e4e1d4" opacity=".7"/><circle cx="18" cy="29" r=".9" fill="#d9ddd0" opacity=".6"/><circle cx="43" cy="34" r="1.1" fill="#aeb8ac" opacity=".62"/>
+                    </svg>
+                    <span class="sr-only">小石子</span>
+                  </button>
+                </div>
+              </figure>
+              <figure class="water-wave-view">
+                <figcaption>剖面：近水面的粒子沿橢圓軌跡運動，越深位移越小</figcaption>
+                <div class="water-wave-stage water-wave-stage--section">
+                  <svg id="water-side-svg" viewBox="0 0 640 160" role="img" aria-label="水盤剖面。水面波形從石子落點向兩側傳播，水中粒子在原位置附近移動">
+                    <defs>
+                      <clipPath id="water-side-clip"><rect x="24" y="48" width="592" height="78" rx="10"/></clipPath>
+                      <marker id="water-direction-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" class="water-wave-direction-head"/></marker>
+                    </defs>
+                    <rect x="24" y="48" width="592" height="78" rx="10" class="water-side-fill"/>
+                    <path id="water-side-baseline" class="water-side-baseline" d="M24 52H616"/>
+                    <path id="water-side-surface" class="water-side-level" d="M24 52H616"/>
+                    <g id="water-side-particles" clip-path="url(#water-side-clip)"></g>
+                    <ellipse id="water-particle-trace" class="water-particle-trace" cx="400" cy="54" rx="8" ry="8"/>
+                    <circle id="water-highlight-particle" class="water-side-particle is-highlighted" cx="400" cy="54" r="4.5"/>
+                    <path id="water-left-direction" class="water-wave-direction" d="M300 31H246" marker-end="url(#water-direction-arrow)" opacity="0"/>
+                    <path id="water-right-direction" class="water-wave-direction" d="M340 31H394" marker-end="url(#water-direction-arrow)" opacity="0"/>
+                  </svg>
+                </div>
+              </figure>
+            </div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-06">
+          <div class="card-side"><span class="card-number">06</span><h3>描出完整波形</h3><span class="card-role">繩點上下振動，逐步描出波形</span></div>
+          <div class="card-main">
+            <h2>一個完整的波形，是怎麼形成的？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，繩子上的起伏都連在一起，要怎麼看出一個完整的波？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>繩子一端完成一次完整振動，傳出去的波形就剛好是一個完整的波。</p></div>
+            <figure class="visual cycle-wave-figure">
+              <div class="cycle-amplitude-sequence" aria-label="一個完整振動的四段位移">
+                <p>一次完整振動：走完四段位移，回到原位且方向相同</p>
+                <div class="cycle-amplitude-steps">
+                  <div class="cycle-amplitude-step" data-cycle-step><strong>平衡位置到 +A</strong><small>上行一個振幅 A</small></div>
+                  <div class="cycle-amplitude-step" data-cycle-step><strong>+A 到平衡位置</strong><small>下行一個振幅 A</small></div>
+                  <div class="cycle-amplitude-step" data-cycle-step><strong>平衡位置到 −A</strong><small>再下行一個振幅 A</small></div>
+                  <div class="cycle-amplitude-step" data-cycle-step><strong>−A 到平衡位置</strong><small>上行一個振幅 A</small></div>
+                </div>
+              </div>
+              <svg viewBox="0 0 700 300" role="img" aria-label="動畫中橘色粒子從平衡位置上行到 +A 輔助線，再下行到 −A 輔助線，最後上行回到平衡位置；綠色波形從粒子所在左端向右形成">
+                <defs>
+                  <marker id="arrow-cycle-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
+                </defs>
+                <text x="90" y="68" text-anchor="middle">繩端上下移動</text>
+                <text x="45" y="120" text-anchor="end" class="small-label">+A</text>
+                <text x="45" y="175" text-anchor="end" class="small-label">平衡</text>
+                <text x="45" y="230" text-anchor="end" class="small-label">−A</text>
+                <text x="412" y="68" text-anchor="middle">繩點上下移動，波形向右形成</text>
+                <path d="M50 115H645 M50 225H645" fill="none" stroke="#c4d0c7" stroke-width="1.3" stroke-dasharray="4 6"/>
+                <path d="M50 170H645" class="equilibrium"/>
+                <path id="cycle-wave-path" class="wave-line cycle-wave-path" d="M90 170"/>
+                <circle id="cycle-source-marker" cx="90" cy="170" r="10" class="marker"/>
+                <g id="cycle-wave-length-annotation" visibility="hidden" aria-label="完整波形的長度是一個波長 λ">
+                  <text x="345" y="253" text-anchor="middle" fill="#bc612b">λ（一個波長）</text>
+                  <path d="M90 269H600" stroke="#bc612b" stroke-width="2" marker-start="url(#arrow-cycle-lambda)" marker-end="url(#arrow-cycle-lambda)"/>
+                </g>
+              </svg>
+              <div class="cycle-wave-control">
+                <div class="controls"><button class="secondary" type="button" id="cycle-wave-replay">產生完整波形</button><span class="live-note">按下按鈕，觀察橘色繩點上下來回，右邊的波形逐步出現。</span></div>
+              </div>
+              <p class="cycle-wave-summary">橘色繩點上下來回，右側逐步描出完整波形。</p>
+            </figure>
+          </div>
+        </section>
+
+        <section class="lesson-card" id="card-07">
+          <div class="card-side"><span class="card-number">07</span><h3>頻率與週期</h3><span class="card-role">描述振動的時間尺度</span></div>
+          <div class="card-main">
+            <h2>頻率和週期，如何互相影響？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>為什麼有些波看起來變化很快，有些看起來比較慢？要怎麼描述這種差異？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>可以數一秒送出幾個波，也可以看送出一個波要等多久；前者叫頻率，後者叫週期。</p></div>
+            <p class="frequency-period-intro">剛才看了繩點怎麼上下移動，現在加上時間，比較波變化的快慢。</p>
+            <div class="frequency-period-definitions" aria-label="頻率和週期的正式定義與白話說明">
+              <section class="frequency-period-panel" aria-labelledby="frequency-panel-title">
+                <h3 id="frequency-panel-title">頻率 f</h3>
+                <div class="frequency-definition">
+                  <small class="frequency-definition-label">正式定義</small>
+                  <p>波源每秒完成的完整振動次數。</p>
+                </div>
+                <div class="frequency-plain-definition">
+                  <small class="frequency-plain-label">白話版本</small>
+                  <p>一秒鐘可以產出幾個完整的波？</p>
+                </div>
+              </section>
+              <section class="frequency-period-panel" aria-labelledby="period-panel-title">
+                <h3 id="period-panel-title">週期 T</h3>
+                <div class="frequency-definition">
+                  <small class="frequency-definition-label">正式定義</small>
+                  <p>波源完成一次完整振動所需的時間。</p>
+                </div>
+                <div class="frequency-plain-definition">
+                  <small class="frequency-plain-label">白話版本</small>
+                  <p>產出一個完整的波，需要多少時間？</p>
+                </div>
+              </section>
+            </div>
+            <figure class="visual frequency-period-figure">
+              <div class="frequency-graph-heading">
+                <strong>繩上波形：位移隨位置的變化</strong>
+                <span class="frequency-graph-hint">新的振動變化由波源向右傳播</span>
+              </div>
+              <svg id="frequency-period-graph" viewBox="0 0 760 310" role="img" aria-label="繩上的波形持續向右傳播；雙向箭頭標示一個波長；目前頻率一赫茲，週期一秒">
+                <defs>
+                  <marker id="frequency-displacement-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#314640"/></marker>
+                  <marker id="frequency-wavelength-marker" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#bc612b"/></marker>
+                </defs>
+                <text x="38" y="103" text-anchor="end" class="small-label">+A</text>
+                <text x="38" y="176" text-anchor="end" class="small-label">平衡</text>
+                <text x="38" y="248" text-anchor="end" class="small-label">−A</text>
+                <path d="M52 100H642 M52 240H642" fill="none" stroke="#c4d0c7" stroke-width="1.3" stroke-dasharray="5 6"/>
+                <path d="M52 170H642" class="equilibrium"/>
+                <path d="M80 252V78" fill="none" stroke="#84988a" stroke-width="1.6" marker-end="url(#frequency-displacement-arrow)"/>
+                <path id="frequency-period-wave" class="wave-line" d="M80 170"/>
+                <path id="frequency-wavelength-arrow" d="M80 65H440" fill="none" stroke="#bc612b" stroke-width="2" marker-start="url(#frequency-wavelength-marker)" marker-end="url(#frequency-wavelength-marker)"/>
+                <path id="frequency-wavelength-guides" d="M80 67V260M440 67V260" fill="none" stroke="#d98a66" stroke-width="1.2" stroke-dasharray="4 5"/>
+                <text id="frequency-wavelength-label" x="260" y="55" text-anchor="middle" fill="#bc612b">一個波長 λ</text>
+                <circle id="frequency-period-cursor" cx="80" cy="170" r="7" class="marker"/>
+                <text x="80" y="286" text-anchor="middle" class="small-label">0</text>
+                <text x="33" y="75" class="small-label">位移</text>
+              </svg>
+              <div class="frequency-wave-controls" aria-label="調整頻率和週期，觀察繩波變化">
+                <strong class="frequency-wave-controls-title">調整後即時觀察波形</strong>
+                <div class="frequency-wave-control-grid">
+                  <div class="frequency-wave-control">
+                    <span class="frequency-wave-control-title">頻率 f</span>
+                    <div class="frequency-stepper" role="group" aria-label="調整頻率">
+                      <button class="secondary" type="button" id="frequency-step-down" aria-label="降低頻率">−</button>
+                      <output class="frequency-control-value" id="card07-frequency-value" aria-live="polite">1 Hz</output>
+                      <button class="secondary" type="button" id="frequency-step-up" aria-label="提高頻率">+</button>
+                    </div>
+                    <small class="frequency-range-note">範圍 1–4 Hz；每次增減 1 Hz</small>
+                  </div>
+                  <div class="frequency-wave-control">
+                    <label class="frequency-wave-control-title" for="card07-period-range">週期 T</label>
+                    <input class="period-range" id="card07-period-range" type="range" min="0.25" max="1" step="0.0001" value="1" aria-label="調整週期；頻率會同步改變">
+                    <div class="period-range-values"><span>0.25 s</span><output id="card07-period-value">1.00 s</output><span>1.00 s</span></div>
+                  </div>
+                </div>
+              </div>
+            </figure>
+            <div class="frequency-relation" aria-label="頻率和週期的公式與白話解釋">
+              <span class="frequency-relation-title">公式與關係</span>
+              <div class="frequency-relation-formulas">
+                <div class="frequency-relation-formula">
+                  <div class="frequency-equation" role="math" aria-label="頻率等於一除以週期"><em>f</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>T</em></span></span></div>
+                  <div class="frequency-meaning-formula" aria-label="每秒完成的完整振動次數等於一除以一次完整振動所需的秒數">
+                    <span>每秒完成的完整振動次數 =</span>
+                    <span class="frequency-meaning-fraction"><span>1</span><span class="fraction-rule"></span><span>一次完整振動所需的秒數</span></span>
+                  </div>
+                </div>
+                <div class="frequency-relation-formula">
+                  <div class="frequency-equation" role="math" aria-label="週期等於一除以頻率"><em>T</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>f</em></span></span></div>
+                  <div class="frequency-meaning-formula" aria-label="一次完整振動所需的秒數等於一除以每秒完成的完整振動次數">
+                    <span>一次完整振動所需的秒數 =</span>
+                    <span class="frequency-meaning-fraction"><span>1</span><span class="fraction-rule"></span><span>每秒完成的完整振動次數</span></span>
+                  </div>
+                </div>
+              </div>
+              <div class="frequency-relation-copy">
+                <p>頻率越高，週期越短；兩者互為倒數。</p>
+                <p><strong>白話：</strong>一秒內完成的完整振動越多，每次完整振動所需的時間越短。</p>
+              </div>
+            </div>
+            <div class="frequency-calculation-example">
+              <p><strong>例題：</strong>頻率 <em>f</em> = 4 Hz，求週期 <em>T</em>。</p>
+              <div class="frequency-equation"><em>T</em> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span><em>f</em></span></span> = <span class="stacked-fraction" aria-hidden="true"><span>1</span><span class="fraction-rule"></span><span>4</span></span> s = 0.25 s</div>
+            </div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>繩子振得越快，每次來回的時間就越短。也就是頻率越高，週期越短。</p></div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-08">
+          <div class="card-side"><span class="card-number">08</span><h3>連結時間和距離</h3><span class="card-role">得到波速關係</span></div>
+          <div class="card-main">
+            <h2>波速、頻率和波長，怎麼連在一起？</h2>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>如果一秒內送出更多個波，波就一定比較快到另一端嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>不一定。還得看每個波有多長；每秒傳幾個波、每個波多長，合起來才知道波一秒能往前走多遠。</p></div>
+            <div class="speed-formula-panel" id="speed-formula-panel">
+                <div class="formula speed-formula" role="group" aria-label="可點選公式，查看各部分對應的中文與白話解釋"><em>v</em> = <button class="speed-formula-choice" type="button" data-formula-focus="frequency" aria-pressed="false" aria-label="查看頻率乘以波長的解釋" aria-controls="speed-chinese-frequency speed-explanation-frequency speed-map-frequency speed-map-wavelength"><em>f</em> × <em>λ</em></button> = <button class="speed-formula-choice" type="button" data-formula-focus="period" aria-pressed="false" aria-label="查看波長除以週期的解釋" aria-controls="speed-chinese-period speed-explanation-period speed-map-wavelength speed-map-period"><span class="stacked-fraction" aria-hidden="true"><span><em>λ</em></span><span class="fraction-rule"></span><span><em>T</em></span></span></button></div>
+              <div class="speed-formula-meaning">
+                <p class="speed-formula-meaning-title">中文公式</p>
+                <button id="speed-chinese-frequency" class="speed-formula-meaning-choice" type="button" data-formula-focus="frequency" aria-pressed="false" aria-label="查看每秒波數乘以波長的解釋" aria-controls="speed-explanation-frequency speed-map-frequency speed-map-wavelength">波速 = 每秒產生的完整波數 × 每個完整波的長度</button>
+                <button id="speed-chinese-period" class="speed-formula-meaning-choice" type="button" data-formula-focus="period" aria-pressed="false" aria-label="查看波長除以週期的解釋" aria-controls="speed-explanation-period speed-map-wavelength speed-map-period">= <span class="frequency-meaning-fraction"><span>一個完整波的長度</span><span class="fraction-rule"></span><span>波形前進一個完整波長所需的時間</span></span></button>
+              </div>
+              <div class="speed-formula-explanations">
+                <section class="speed-formula-explanation" id="speed-explanation-frequency" data-formula-target="frequency" aria-labelledby="speed-plain-frequency">
+                  <h4 id="speed-plain-frequency">白話一・看每秒的步數</h4>
+                  <p>每秒能走多遠，取決於每秒走幾步，以及每一步有多大。</p>
+                </section>
+                <section class="speed-formula-explanation" id="speed-explanation-period" data-formula-target="period" aria-labelledby="speed-plain-period">
+                  <h4 id="speed-plain-period">白話二・看每一步花多久</h4>
+                  <p>你走多快，取決於每一步走多遠，以及走完這一步要花多少時間；每一步花的時間越短，你走得就越快。</p>
+                </section>
+              </div>
+              <div class="speed-quantity-map" aria-label="比喻和波的物理量對照">
+                <div id="speed-map-frequency" data-formula-target="frequency"><span>每秒步數</span><strong>頻率 f</strong></div>
+                <div id="speed-map-wavelength" data-formula-target="both"><span>每步距離</span><strong>波長 λ</strong></div>
+                <div id="speed-map-period" data-formula-target="period"><span>一步所需時間</span><strong>週期 T</strong></div>
+              </div>
+            </div>
+            <section class="speed-interactive" aria-labelledby="speed-interactive-title">
+              <div class="speed-interactive-heading"><h3 id="speed-interactive-title">波源振動一次，讓波形向右傳</h3><span class="speed-condition">理想化參數實驗｜固定路徑 30 m</span></div>
+              <figure class="visual speed-visual">
+                <div class="speed-control-grid" aria-label="調整波的參數">
+                  <div class="speed-control">
+                    <div class="speed-control-title"><span>頻率 f</span></div>
+                    <div class="speed-stepper" role="group" aria-label="調整頻率">
+                      <button class="secondary" id="speed-frequency-down" type="button" aria-label="降低頻率">−</button>
+                      <span class="speed-step-value" id="speed-frequency-value">2 Hz</span>
+                      <button class="secondary" id="speed-frequency-up" type="button" aria-label="提高頻率">＋</button>
+                    </div>
+                    <small class="speed-step-note">每次調整 0.5 Hz；週期同步更新</small>
+                  </div>
+                  <div class="speed-control">
+                    <div class="speed-control-title"><span>週期 T</span></div>
+                    <div class="speed-stepper" role="group" aria-label="調整週期">
+                      <button class="secondary" id="speed-period-down" type="button" aria-label="縮短週期">−</button>
+                      <span class="speed-step-value" id="speed-period-value">0.50 s</span>
+                      <button class="secondary" id="speed-period-up" type="button" aria-label="延長週期">＋</button>
+                    </div>
+                    <small class="speed-step-note">每次調整 0.05 s；頻率同步更新</small>
+                  </div>
+                  <div class="speed-control">
+                    <div class="speed-control-title"><span>波長 λ</span></div>
+                    <div class="speed-stepper" role="group" aria-label="調整波長">
+                      <button class="secondary" id="speed-wavelength-down" type="button" aria-label="縮短波長">−</button>
+                      <span class="speed-step-value" id="speed-wavelength-value">6 m</span>
+                      <button class="secondary" id="speed-wavelength-up" type="button" aria-label="增加波長">＋</button>
+                    </div>
+                    <small class="speed-step-note">每次調整 1 m</small>
+                  </div>
+                </div>
+                <svg id="speed-wave" viewBox="0 0 720 225" role="img" aria-label="30 公尺路徑上準備送出一個完整波形；頻率二赫茲、週期零點五秒、波長六公尺、波速每秒十二公尺">
+                  <defs><marker id="speed-measure" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker></defs>
+                  <path d="M30 90H690" class="equilibrium"/>
+                  <path d="M30 36V144" fill="none" stroke="#d9b28e" stroke-width="1.5" stroke-dasharray="4 5"/>
+                  <text x="38" y="28" text-anchor="start" fill="#bc612b">波源</text>
+                  <path id="speed-wave-path" class="speed-wave-path" d=""/>
+                  <path id="speed-wave-guides" d="" fill="none" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
+                  <path id="speed-wavelength-arrow" d="" class="measure" marker-start="url(#speed-measure)" marker-end="url(#speed-measure)"/>
+                  <text id="speed-lambda-label" x="96" y="171" text-anchor="middle" visibility="hidden">λ = 6 m</text>
+                  <circle id="speed-source-marker" cx="30" cy="90" r="10" class="marker"/>
+                  <path d="M30 180H690" class="speed-axis"/>
+                  <g class="small-label" text-anchor="middle">
+                    <path d="M30 175V185M250 175V185M470 175V185M690 175V185" class="speed-axis-tick"/>
+                    <text x="30" y="207">0 m</text><text x="250" y="207">10 m</text><text x="470" y="207">20 m</text><text x="690" y="207">30 m</text>
+                  </g>
+                </svg>
+              </figure>
+              <aside class="speed-model-note" aria-labelledby="speed-model-note-title">
+                <h4 id="speed-model-note-title"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 22 21H2L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.5" r="1" fill="currentColor"/></svg>理想化模型</h4>
+                <p>頻率、波長可分開設定；繩子變色代表不同波速條件。</p>
+                <p class="speed-model-reality">真實繩子拉緊程度等條件不變時，頻率改變會使波長改變，<strong>波速不變</strong>。</p>
+              </aside>
+              <div class="speed-run-controls">
+                <button class="action" id="speed-send-wave" type="button">讓波源振動一次</button>
+                <div>
+                  <p class="speed-run-status"><span id="speed-run-message" aria-live="polite">調整參數後，按下按鈕讓橘色波源振動一次。</span><output id="speed-run-time">0.00 / 2.50 s</output></p>
+                  <div class="speed-progress" id="speed-progress" role="progressbar" aria-label="波形前端抵達 30 公尺處的進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="speed-progress-bar"></span></div>
+                </div>
+              </div>
+              <div class="speed-color-legend">
+                <span class="speed-color-legend-title">繩子的顏色代表目前波速</span>
+                <div class="speed-color-scale" id="speed-color-scale" role="meter" aria-label="繩子顏色對應波速，綠色較慢、紅色較快" aria-valuemin="4" aria-valuemax="32" aria-valuenow="12" aria-valuetext="12 公尺每秒">
+                  <span class="speed-color-marker" id="speed-color-marker" aria-hidden="true"></span>
+                </div>
+                <div class="speed-color-range" aria-hidden="true"><span>較慢｜4 m/s</span><span>較快｜32 m/s</span></div>
+              </div>
+              <p class="speed-equation-live" id="speed-equation-live">波速 = v = f × λ = 2 Hz × 6 m = 12 m/s</p>
+            </section>
+          </div>
+        </section>
+        <section class="field-task" id="unit-quiz" aria-labelledby="unit-quiz-title">
+          <header class="field-task-head">
+            <div><p class="field-task-kicker">單元小測｜防災演練</p><h2 id="unit-quiz-title">南投埔里觀測點還要多久會感受到震動？</h2><p class="field-task-subtitle">從波形和刻度判讀資料，估算 P 波與 S 波抵達的時間。</p></div>
+            <span class="drill-badge">情境題</span>
+          </header>
+          <div class="field-task-grid">
+            <section class="field-panel field-map-panel" aria-labelledby="field-map-title">
+              <h3 class="field-panel-heading" id="field-map-title">震央與觀測站位置<span class="map-panel-tag">位置示意</span></h3>
+              <div class="field-map-wrap">
+                <div class="field-map-scene">
+                  <img class="field-map-art" src="assets/taiwan-satellite-map-3857.png" alt="" aria-hidden="true">
+                  <svg class="field-map" viewBox="0 0 720 828" preserveAspectRatio="none" role="img" aria-label="依真實地理座標繪製的臺灣衛星地圖。南投埔里設定觀測點位於北緯23.9666667度、東經120.9691462度；東部外海震央情境點位於北緯23.91度、東經122.15度，直線距離約120公里。">
+                    <path class="map-route" d="M345.04 332.97 L563.58 344.45"/>
+                    <circle class="quake-ring" cx="563.58" cy="344.45" r="25"/><circle class="quake-ring" cx="563.58" cy="344.45" r="43"/>
+                    <circle class="station-halo" cx="345.04" cy="332.97" r="10"/>
+                    <circle class="quake-halo" cx="563.58" cy="344.45" r="10"/>
+                    <rect class="map-label-bg" x="250" y="260" width="190" height="38" rx="10"/><text x="345" y="286" text-anchor="middle">南投・埔里觀測點</text>
+                    <rect class="map-label-bg" x="453" y="244" width="222" height="38" rx="10"/><text x="564" y="270" text-anchor="middle">震央・東部外海</text>
+                    <text x="28" y="43" font-size="26px">N ↑</text>
+                    <g class="map-scale" aria-hidden="true">
+                      <path d="M24 790 H202.93 M24 782 V798 M202.93 782 V798"/>
+                      <text x="113.47" y="775">100 km</text>
+                    </g>
+                  </svg>
+                </div>
+                <p class="field-map-credit">衛星影像來源：Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community</p>
+                <p class="field-distance" data-distance-km="120">震央至南投埔里設定點：約 120 km</p>
+              </div>
+            </section>
+            <section class="field-panel field-signal-panel" aria-labelledby="field-signal-title">
+              <h3 class="field-panel-heading" id="field-signal-title">地震波形監測</h3>
+              <div class="signal-row signal-row-p" data-frequency-hz="1.22" data-wavelength-km="5">
+                <div class="signal-meta"><span class="signal-type">P 波｜縱波</span><span class="signal-value">頻率 f = 1.22 Hz</span><span class="signal-direction">介質振動方向與波傳方向平行</span></div>
+                <svg class="signal-svg" viewBox="0 0 460 126" role="img" aria-label="P波縱波的空間示意；距離刻度由0到10公里，密集與疏散位置重複出現">
+                  <g id="field-p-wave-particles" aria-hidden="true"></g>
+                  <g aria-hidden="true"><text class="signal-note" x="130" y="15" text-anchor="middle">疏散</text><text class="signal-note" x="230" y="15" text-anchor="middle">壓縮</text><text class="signal-note" x="330" y="15" text-anchor="middle">疏散</text></g>
+                  <path class="signal-axis" d="M30 91H430"/>
+                  <g class="signal-tick"><path d="M30 87V97M70 87V97M110 87V97M150 87V97M190 87V97M230 87V97M270 87V97M310 87V97M350 87V97M390 87V97M430 87V97"/></g>
+                  <g><text x="30" y="116" text-anchor="middle">0 km</text><text x="70" y="116" text-anchor="middle">1 km</text><text x="110" y="116" text-anchor="middle">2 km</text><text x="150" y="116" text-anchor="middle">3 km</text><text x="190" y="116" text-anchor="middle">4 km</text><text x="230" y="116" text-anchor="middle">5 km</text><text x="270" y="116" text-anchor="middle">6 km</text><text x="310" y="116" text-anchor="middle">7 km</text><text x="350" y="116" text-anchor="middle">8 km</text><text x="390" y="116" text-anchor="middle">9 km</text><text x="430" y="116" text-anchor="middle">10 km</text></g>
+                </svg>
+              </div>
+              <div class="signal-row signal-row-s" data-period-s="0.84" data-wavelength-km="3">
+                <div class="signal-meta"><span class="signal-type">S 波｜橫波</span><span class="signal-value">週期 T = 0.84 s</span><span class="signal-direction">介質振動方向與波傳方向垂直</span></div>
+                <svg class="signal-svg" viewBox="0 0 460 150" role="img" aria-label="S波橫波的空間示意；距離刻度由0到6公里，曲線重複起伏">
+                  <path class="signal-baseline" d="M30 56H430"/>
+                  <path class="signal-pulse" d="M30 56 C44 42 65 31 80 31 S116 42 130 56 S166 81 180 81 S216 70 230 56 S266 31 280 31 S316 42 330 56 S366 81 380 81 S416 70 430 56"/>
+                  <path class="signal-axis" d="M30 108H430"/>
+                  <path class="signal-tick" d="M30 103V113M96.67 103V113M163.33 103V113M230 103V113M296.67 103V113M363.33 103V113M430 103V113"/>
+                  <g><text x="30" y="136" text-anchor="middle">0 km</text><text x="96.67" y="136" text-anchor="middle">1 km</text><text x="163.33" y="136" text-anchor="middle">2 km</text><text x="230" y="136" text-anchor="middle">3 km</text><text x="296.67" y="136" text-anchor="middle">4 km</text><text x="363.33" y="136" text-anchor="middle">5 km</text><text x="430" y="136" text-anchor="middle">6 km</text></g>
+                </svg>
+              </div>
+              <p class="signal-hint"><strong>判讀提示：</strong>相同波形再次出現的位置間距，就是一個波長 λ。</p>
+              <p class="signal-source-note">頻率／週期參考 2024 花蓮地震南投雙龍站紀錄；波長與 120 km 為教學模型。<a href="https://earthquake.usgs.gov/earthquakes/eventpage/us7000m9g4/executive" target="_blank" rel="noopener">地震紀錄</a> · <a href="https://service.earthscope.org/fdsnws/dataselect/1/query?net=TW&amp;sta=SSLB&amp;loc=%2A&amp;cha=BH%3F&amp;starttime=2024-04-02T23%3A58%3A00&amp;endtime=2024-04-03T00%3A01%3A00" target="_blank" rel="noopener">測站波形</a></p>
+            </section>
+          </div>
+          <form class="field-response" id="field-response-form" novalidate>
+            <div class="field-response-head"><h3>作答區</h3><p>從波形標示與刻度讀取參數；讀值正確後，系統計算抵達時間。</p></div>
+            <div class="field-parameter-grid">
+              <section class="field-parameter-card is-p" aria-labelledby="field-p-data-title">
+                <h4 id="field-p-data-title">P 波資料</h4>
+                <p class="field-time-note">輸入頻率或週期，另一欄會自動換算。</p>
+                <div class="field-time-fields">
+                  <div class="field-answer"><label for="field-p-frequency">頻率 f（Hz）</label><input id="field-p-frequency" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入頻率" required></div>
+                  <div class="field-answer"><label for="field-p-period">週期 T（s）</label><input id="field-p-period" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入週期" required></div>
+                </div>
+                <div class="field-answer field-wavelength-input"><label for="field-p-wavelength">波長 λ（km）</label><input id="field-p-wavelength" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入波長" required><small>資料來源：粒子圖相鄰密集區的刻度間距。</small></div>
+              </section>
+              <section class="field-parameter-card is-s" aria-labelledby="field-s-data-title">
+                <h4 id="field-s-data-title">S 波資料</h4>
+                <p class="field-time-note">輸入頻率或週期，另一欄會自動換算。</p>
+                <div class="field-time-fields">
+                  <div class="field-answer"><label for="field-s-frequency">頻率 f（Hz）</label><input id="field-s-frequency" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入頻率" required></div>
+                  <div class="field-answer"><label for="field-s-period">週期 T（s）</label><input id="field-s-period" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入週期" required></div>
+                </div>
+                <div class="field-answer field-wavelength-input"><label for="field-s-wavelength">波長 λ（km）</label><input id="field-s-wavelength" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入波長" required><small>資料來源：波形圖相鄰波峰的刻度間距。</small></div>
+              </section>
+            </div>
+            <button class="action" id="field-submit" type="submit">計算抵達時間</button>
+            <div class="field-feedback" id="field-feedback" role="status" aria-live="polite" hidden></div>
+            <section class="field-results" id="field-results" aria-labelledby="field-results-title" aria-live="polite" hidden>
+              <h4 id="field-results-title">系統計算結果</h4>
+              <div class="field-result-grid">
+                <div class="field-result">P 波抵達時間<strong id="field-p-result">—</strong></div>
+                <div class="field-result">S 波抵達時間<strong id="field-s-result">—</strong></div>
+                <div class="field-result">兩波抵達時間差<strong id="field-warning-result">—</strong></div>
+              </div>
+              <p class="field-calculation" id="field-calculation"></p>
+            </section>
+          </form>
+        </section>
+
+
+
+
+      </div>
+    </div>
+  </main>
+  <footer><div class="shell">本頁繩波與彈簧波為概念示意模型；動畫時間與振幅用來呈現運動方向及量值關係，不代表特定實際繩長或真實介質尺度。</div></footer>
+  <script>
+    (() => {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const formulaChoices=[...document.querySelectorAll("#card-08 [data-formula-focus]")];
+      const formulaTargets=[...document.querySelectorAll("#card-08 [data-formula-target]")];
+      let activeFormula=null;
+      const selectFormula=key=>{
+        activeFormula=activeFormula===key?null:key;
+        formulaChoices.forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.formulaFocus===activeFormula)));
+        formulaTargets.forEach(target=>target.classList.toggle("is-formula-related",activeFormula!==null&&(target.dataset.formulaTarget===activeFormula||target.dataset.formulaTarget==="both")));
+      };
+      formulaChoices.forEach(button=>button.addEventListener("click",()=>selectFormula(button.dataset.formulaFocus)));
+      const waterWaveDemo=document.querySelector("[data-water-wave-demo]");
+      if(waterWaveDemo){
+        const waterNs="http://www.w3.org/2000/svg",topStage=waterWaveDemo.querySelector("[data-water-top-stage]"),pebble=waterWaveDemo.querySelector("[data-water-pebble]"),rippleGroup=waterWaveDemo.querySelector("#water-ripple-group"),impactDot=waterWaveDemo.querySelector("#water-impact-dot"),sideSurface=waterWaveDemo.querySelector("#water-side-surface"),sideParticles=waterWaveDemo.querySelector("#water-side-particles"),particleTrace=waterWaveDemo.querySelector("#water-particle-trace"),highlightParticle=waterWaveDemo.querySelector("#water-highlight-particle"),leftDirection=waterWaveDemo.querySelector("#water-left-direction"),rightDirection=waterWaveDemo.querySelector("#water-right-direction");
+        const waveSpeed=reducedMotion?85:110,wavePeriod=reducedMotion ? 0.5 : 0.45,waveTrainDuration=wavePeriod*4,waveAmplitude=10,baseSurfaceY=52,wavelength=waveSpeed*wavePeriod;
+        const rippleNodes=[];for(let i=0;i<7;i++){const ring=document.createElementNS(waterNs,"circle");ring.setAttribute("class","water-ripple");ring.setAttribute("opacity","0");rippleGroup.append(ring);rippleNodes.push(ring);}
+        const particleNodes=[];let selectedBase={x:400,y:54};
+        for(let y=58;y<=106;y+=24)for(let x=44;x<=596;x+=28){
+          if(y===58&&x===400)continue;
+          const particle=document.createElementNS(waterNs,"circle");particle.setAttribute("class","water-side-particle");particle.setAttribute("r",y===58?"2.3":"2");particle.dataset.baseX=String(x);particle.dataset.baseY=String(y);sideParticles.append(particle);particleNodes.push(particle);
+        }
+        let impact=null,waterStart=null,waterFrame=0,waterRunning=false,drag=null,suppressClick=false;
+        // SVG 的 y 軸向下；水面、一般粒子與追蹤粒子共用同一個向上為負的位移。
+        const waterMotionAt=(x,y,elapsed)=>{
+          const sourceX=impact?impact.x:320,depth=Math.max(0,y-baseSurfaceY);
+          const radius=waveAmplitude*Math.exp(-2*Math.PI*depth/wavelength);
+          const localTime=elapsed-Math.abs(x-sourceX)/waveSpeed;
+          if(!impact||localTime<0||localTime>waveTrainDuration)return {dx:0,dy:0,radius};
+          const phase=2*Math.PI*localTime/wavePeriod,envelope=Math.sin(Math.PI*localTime/waveTrainDuration),side=x<sourceX?-1:1;
+          // 波峰通過時粒子沿波的傳播方向移動，波谷通過時反向，並在原位附近往返。
+          return {dx:-side*radius*envelope*Math.cos(phase),dy:-radius*envelope*Math.sin(phase),radius};
+        };
+        const updateSideWave=(elapsed=0)=>{
+          let path=`M24 ${baseSurfaceY}`;
+          for(let x=26;x<=616;x+=3){
+            const {dy}=waterMotionAt(x,baseSurfaceY,elapsed);
+            path+=` L${x} ${(baseSurfaceY+dy).toFixed(2)}`;
+          }
+          sideSurface.setAttribute("d",path);
+          particleNodes.forEach(particle=>{
+            const x=Number(particle.dataset.baseX),y=Number(particle.dataset.baseY),{dx,dy}=waterMotionAt(x,y,elapsed);
+            particle.setAttribute("cx",(x+dx).toFixed(2));particle.setAttribute("cy",(y+dy).toFixed(2));
+          });
+          const selected=waterMotionAt(selectedBase.x,selectedBase.y,elapsed);
+          particleTrace.setAttribute("cx",String(selectedBase.x));particleTrace.setAttribute("cy",String(selectedBase.y));particleTrace.setAttribute("rx",selected.radius.toFixed(2));particleTrace.setAttribute("ry",selected.radius.toFixed(2));
+          highlightParticle.setAttribute("cx",(selectedBase.x+selected.dx).toFixed(2));highlightParticle.setAttribute("cy",(selectedBase.y+selected.dy).toFixed(2));
+        };
+        const drawWater=(elapsed)=>{
+          const x=impact.x,y=impact.y;
+          rippleNodes.forEach((ring,index)=>{
+            const age=elapsed-index*wavePeriod,radius=age*waveSpeed;
+            const maxRadius=Math.hypot(Math.max(x-34,606-x),Math.max(y-22,218-y));
+            const visible=age>=0&&radius<=maxRadius+10;
+            ring.setAttribute("cx",String(x));ring.setAttribute("cy",String(y));ring.setAttribute("r",String(Math.max(0,radius)));
+            ring.style.opacity=visible?String(Math.max(.08,.68*(1-radius/(maxRadius+30)))):"0";
+          });
+          impactDot.setAttribute("cx",String(x));impactDot.setAttribute("cy",String(y));impactDot.style.opacity=String(Math.max(0,1-elapsed/.28));
+          const sideX=Math.max(48,Math.min(592,x));
+          leftDirection.setAttribute("d",`M${sideX-15} 30H${Math.max(30,sideX-66)}`);rightDirection.setAttribute("d",`M${sideX+15} 30H${Math.min(610,sideX+66)}`);
+          leftDirection.setAttribute("opacity",sideX>48?".9":"0");rightDirection.setAttribute("opacity",sideX<592?".9":"0");
+          updateSideWave(elapsed);
+        };
+        const settleWater=()=>{
+          impact=null;waterStart=null;
+          rippleNodes.forEach(ring=>{ring.setAttribute("opacity","0");ring.style.opacity="0";});
+          impactDot.setAttribute("opacity","0");impactDot.style.opacity="0";
+          leftDirection.setAttribute("opacity","0");rightDirection.setAttribute("opacity","0");
+          sideSurface.setAttribute("d",`M24 ${baseSurfaceY}H616`);
+          selectedBase={x:400,y:54};
+          pebble.hidden=false;pebble.style.left="7%";pebble.style.top="50%";pebble.classList.remove("is-dragging");
+          updateSideWave(0);
+        };
+        const animateWater=time=>{
+          if(!waterRunning||waterStart===null)return;
+          const elapsed=(time-waterStart)/1000;
+          const farthestCorner=Math.hypot(Math.max(impact.x-34,606-impact.x),Math.max(impact.y-22,218-impact.y));
+          const duration=Math.min(5.5,farthestCorner/waveSpeed+.12);
+          drawWater(Math.min(elapsed,duration));
+          if(elapsed<duration){waterFrame=window.requestAnimationFrame(animateWater);return;}
+          waterRunning=false;waterFrame=0;settleWater();
+        };
+        const launchWaterWave=(x,y)=>{
+          if(waterFrame)window.cancelAnimationFrame(waterFrame);
+          impact={x:Math.max(42,Math.min(598,x)),y:Math.max(28,Math.min(212,y))};waterStart=null;waterRunning=true;
+          const selectedX=impact.x<480?impact.x+78:impact.x-78;
+          selectedBase={x:Math.max(45,Math.min(595,selectedX)),y:54};
+          particleTrace.setAttribute("cx",String(selectedBase.x));particleTrace.setAttribute("cy",String(selectedBase.y));
+          pebble.hidden=true;
+          const animate=time=>{if(waterStart===null)waterStart=time;animateWater(time);};
+          waterFrame=window.requestAnimationFrame(animate);
+        };
+        const returnPebble=()=>{pebble.style.left="7%";pebble.style.top="50%";pebble.classList.remove("is-dragging");};
+        pebble.addEventListener("pointerdown",event=>{
+          drag={pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,left:pebble.offsetLeft,top:pebble.offsetTop,moved:false};
+          pebble.setPointerCapture(event.pointerId);
+        });
+        pebble.addEventListener("pointermove",event=>{
+          if(!drag||drag.pointerId!==event.pointerId)return;
+          const dx=event.clientX-drag.startX,dy=event.clientY-drag.startY;
+          if(Math.hypot(dx,dy)>6){drag.moved=true;pebble.classList.add("is-dragging");}
+          if(drag.moved){const bounds=topStage.getBoundingClientRect();pebble.style.left=`${Math.max(0,Math.min(100,(drag.left+dx)/bounds.width*100))}%`;pebble.style.top=`${Math.max(0,Math.min(100,(drag.top+dy)/bounds.height*100))}%`;event.preventDefault();}
+        });
+        pebble.addEventListener("pointerup",event=>{
+          if(!drag||drag.pointerId!==event.pointerId)return;
+          const wasDragged=drag.moved,point={x:event.clientX,y:event.clientY};drag=null;
+          if(wasDragged){
+            suppressClick=true;const rect=topStage.getBoundingClientRect(),x=(point.x-rect.left)/rect.width*640,y=(point.y-rect.top)/rect.height*240;
+            if(x>=34&&x<=606&&y>=22&&y<=218)launchWaterWave(x,y);else returnPebble();
+            window.setTimeout(()=>{suppressClick=false;},0);
+          }
+        });
+        pebble.addEventListener("pointercancel",()=>{drag=null;returnPebble();});
+        pebble.addEventListener("click",event=>{if(suppressClick){event.preventDefault();return;}launchWaterWave(320,120);});
+        updateSideWave(0);
+      }
+      const fieldParticles=document.querySelector("#field-p-wave-particles");
+      if(fieldParticles){
+        const fieldNs="http://www.w3.org/2000/svg",rows=[25,36,47,58],count=63;
+        for(const y of rows)for(let i=0;i<count;i++){
+          const equilibrium=i/(count-1)*400;
+          const x=30+equilibrium-44*Math.sin(2*Math.PI*equilibrium/200);
+          const particle=document.createElementNS(fieldNs,"circle");
+          particle.setAttribute("cx",x.toFixed(2));particle.setAttribute("cy",String(y));particle.setAttribute("r","2.25");particle.setAttribute("class","signal-particle");
+          fieldParticles.append(particle);
+        }
+      }
+      const fieldResponseForm=document.querySelector("#field-response-form");
+      if(fieldResponseForm){
+        const fieldDistance=Number(document.querySelector("[data-distance-km]").dataset.distanceKm),fieldPRow=document.querySelector(".signal-row-p"),fieldSRow=document.querySelector(".signal-row-s"),fieldPFrequency=document.querySelector("#field-p-frequency"),fieldPPeriod=document.querySelector("#field-p-period"),fieldPWavelength=document.querySelector("#field-p-wavelength"),fieldSFrequency=document.querySelector("#field-s-frequency"),fieldSPeriod=document.querySelector("#field-s-period"),fieldSWavelength=document.querySelector("#field-s-wavelength"),fieldFeedback=document.querySelector("#field-feedback"),fieldResults=document.querySelector("#field-results");
+        const fieldPResult=document.querySelector("#field-p-result"),fieldSResult=document.querySelector("#field-s-result"),fieldWarningResult=document.querySelector("#field-warning-result"),fieldCalculation=document.querySelector("#field-calculation");
+        const fieldFormat=value=>Number(value.toFixed(2)).toLocaleString("zh-TW");
+        let fieldPInputMode="frequency",fieldSInputMode="frequency";
+        const allFieldInputs=[fieldPFrequency,fieldPPeriod,fieldPWavelength,fieldSFrequency,fieldSPeriod,fieldSWavelength];
+        const clearFieldAnswerStates=()=>allFieldInputs.forEach(input=>{delete input.dataset.answerState;input.removeAttribute("aria-invalid");});
+        const invalidateFieldResults=()=>{fieldResults.hidden=true;fieldFeedback.hidden=true;clearFieldAnswerStates();};
+        const connectReciprocalInputs=(frequencyInput,periodInput,setInputMode)=>{
+          const sync=(source,target,mode)=>{
+            const value=Number(source.value);
+            target.value=source.value&&Number.isFinite(value)&&value>0?String(Number((1/value).toPrecision(7))):"";
+            setInputMode(mode);invalidateFieldResults();
+          };
+          frequencyInput.addEventListener("input",()=>sync(frequencyInput,periodInput,"frequency"));
+          periodInput.addEventListener("input",()=>sync(periodInput,frequencyInput,"period"));
+        };
+        connectReciprocalInputs(fieldPFrequency,fieldPPeriod,mode=>{fieldPInputMode=mode;});
+        connectReciprocalInputs(fieldSFrequency,fieldSPeriod,mode=>{fieldSInputMode=mode;});
+        fieldResponseForm.addEventListener("submit",event=>{
+          event.preventDefault();
+          const inputs=[fieldPFrequency,fieldPPeriod,fieldPWavelength,fieldSFrequency,fieldSPeriod,fieldSWavelength],values=inputs.map(input=>Number(input.value));
+          fieldFeedback.hidden=false;
+          if(values.some(value=>!Number.isFinite(value)||value<=0)){
+            fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent="請在 P 波和 S 波各輸入頻率或週期，並填入波長；另一個時間參數會自動換算。";
+            inputs.find(input=>!input.value||!Number.isFinite(Number(input.value))||Number(input.value)<=0)?.focus();return;
+          }
+          const [pFrequency,pPeriod,pWavelength,sFrequency,sPeriod,sWavelength]=values;
+          const closeTo=(actual,expected,tolerance)=>Math.abs(actual-expected)<=tolerance;
+          const pExpectedFrequency=Number(fieldPRow.dataset.frequencyHz),pExpectedPeriod=1/pExpectedFrequency,pExpectedWavelength=Number(fieldPRow.dataset.wavelengthKm),sExpectedPeriod=Number(fieldSRow.dataset.periodS),sExpectedFrequency=1/sExpectedPeriod,sExpectedWavelength=Number(fieldSRow.dataset.wavelengthKm);
+          const pTimeCorrect=fieldPInputMode==="frequency"?closeTo(pFrequency,pExpectedFrequency,.015):closeTo(pPeriod,pExpectedPeriod,.012);
+          const sTimeCorrect=fieldSInputMode==="frequency"?closeTo(sFrequency,sExpectedFrequency,.02):closeTo(sPeriod,sExpectedPeriod,.012);
+          const pWavelengthCorrect=closeTo(pWavelength,pExpectedWavelength,.15),sWavelengthCorrect=closeTo(sWavelength,sExpectedWavelength,.15);
+          [[fieldPFrequency,fieldPPeriod,pTimeCorrect],[fieldPWavelength,null,pWavelengthCorrect],[fieldSFrequency,fieldSPeriod,sTimeCorrect],[fieldSWavelength,null,sWavelengthCorrect]].forEach(([first,second,correct])=>[first,second].filter(Boolean).forEach(input=>{input.dataset.answerState=correct?"correct":"incorrect";input.setAttribute("aria-invalid",String(!correct));}));
+          const incorrectItems=[];
+          if(!pTimeCorrect)incorrectItems.push("P 波頻率／週期");if(!pWavelengthCorrect)incorrectItems.push("P 波波長");if(!sTimeCorrect)incorrectItems.push("S 波頻率／週期");if(!sWavelengthCorrect)incorrectItems.push("S 波波長");
+          if(incorrectItems.length){fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent=`這些讀值還不正確：${incorrectItems.join("、")}。請重新對照波形標示與距離刻度。`;return;}
+          const pSpeed=fieldPInputMode==="frequency"?pFrequency*pWavelength:pWavelength/pPeriod,sSpeed=fieldSInputMode==="frequency"?sFrequency*sWavelength:sWavelength/sPeriod,pArrival=fieldDistance/pSpeed,sArrival=fieldDistance/sSpeed,warningTime=Math.max(0,sArrival-pArrival);
+          fieldPResult.textContent=`${fieldFormat(pArrival)} 秒`;fieldSResult.textContent=`${fieldFormat(sArrival)} 秒`;
+          fieldWarningResult.textContent=pArrival<sArrival?`${fieldFormat(warningTime)} 秒`:"P 波未先到";
+          const pSpeedLine=fieldPInputMode==="frequency"?`${fieldFormat(pFrequency)} Hz × ${fieldFormat(pWavelength)} km`:`${fieldFormat(pWavelength)} km ÷ ${fieldFormat(pPeriod)} s`,sSpeedLine=fieldSInputMode==="frequency"?`${fieldFormat(sFrequency)} Hz × ${fieldFormat(sWavelength)} km`:`${fieldFormat(sWavelength)} km ÷ ${fieldFormat(sPeriod)} s`;
+          fieldCalculation.textContent=`P 波：${pSpeedLine} = ${fieldFormat(pSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(pSpeed)} km/s = ${fieldFormat(pArrival)} 秒。S 波：${sSpeedLine} = ${fieldFormat(sSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(sSpeed)} km/s = ${fieldFormat(sArrival)} 秒。`;
+          fieldResults.hidden=false;fieldFeedback.dataset.state="good";fieldFeedback.textContent="讀值正確，以下是兩種波抵達觀測站的計算結果。";
+        });
+        allFieldInputs.forEach(input=>input.addEventListener("input",invalidateFieldResults));
+      }
+      const pulseSvgs = [...document.querySelectorAll(".rope-wave:not([data-static-rope]):not([data-fixed-point-wave])")];
+      const staticRopeSvgs = [...document.querySelectorAll(".rope-wave[data-static-rope]")];
+      const pulseStatuses = [...document.querySelectorAll("[data-pulse-status]")];
+      const singleButton = document.querySelector("[data-wave-single]");
+      const continuousButton = document.querySelector("[data-wave-continuous]");
+      const waveCaption = document.querySelector("[data-wave-caption]");
+      let pulsePlaying = false;
+      let pulseMode = "idle";
+      let pulseTime = 0;
+      let previousTime = 0;
+      let pulseFrame = null;
+      let queuedState = false;
+      const ns="http://www.w3.org/2000/svg";
+      const waveAt = (x,offset,amplitude=74) => amplitude * Math.sin((x-offset-92)*2*Math.PI/232);
+      const singleEvents = [];
+      const singlePulseDuration=4/3;
+      const singlePulseSpeed=150;
+      const singlePulseAmplitude=48;
+      const singlePulseSource=38;
+      const singlePulseAt=(x,eventStart,time)=>{
+        if(x<singlePulseSource)return 0;
+        const phase=(time-eventStart-(x-singlePulseSource)/singlePulseSpeed)/singlePulseDuration;
+        if(phase<=0||phase>=1)return 0;
+        return singlePulseAmplitude*Math.sin(2*Math.PI*phase);
+      };
+      const continuousWaveAt=(x,time)=>{
+        const sourceTime=time-(x-singlePulseSource)/singlePulseSpeed;
+        if(sourceTime<0)return 0;
+        return singlePulseAmplitude*Math.sin(2*Math.PI*sourceTime/singlePulseDuration);
+      };
+      const renderPulse = (svg,time) => {
+        const baseline = 142;
+        const firstCard = Boolean(svg.closest("#card-01"));
+        const single = pulseMode === "single" && firstCard;
+        const initial = pulseMode === "idle" && firstCard;
+        const continuous=pulseMode==="continuous"&&firstCard;
+        const shapeAt = x => initial ? 0 : single ? singleEvents.reduce((sum,eventStart)=>sum+singlePulseAt(x,eventStart,time),0) : continuous ? continuousWaveAt(x,time) : waveAt(x,(time*132)%232);
+        const end = svg.viewBox.baseVal.width - 38;
+        const firstY=baseline-shapeAt(38);
+        const sourceMarker=svg.querySelector("#wave-source-marker-1");
+        if(sourceMarker)sourceMarker.setAttribute("cy",String(firstY));
+        let path = `M 38 ${firstY}`;
+        for (let x=41;x<=end;x+=3){const y=baseline-shapeAt(x);path+=` L ${x} ${y}`;}
+        svg.querySelectorAll(".rope-underlay").forEach(rope=>rope.setAttribute("d",path));
+      };
+      const updatePulseControls = () => {
+        continuousButton.textContent=pulseMode==="continuous"&&pulsePlaying?"暫停":"連續波";
+        continuousButton.setAttribute("aria-pressed",String(pulseMode==="continuous"&&pulsePlaying));
+        queuedState=pulseMode==="single"&&singleEvents.some(start=>start>pulseTime);
+        if(waveCaption) waveCaption.textContent=pulseMode==="continuous"?"連續波：波源持續振動，繩上的起伏持續向右傳播。":"單次波：波源完成一次上下振動，繩上各處依序被帶動，形成一個向右傳播的起伏。";
+        pulseStatuses.forEach(note=>{note.textContent=pulseMode==="idle"?"初始狀態：繩子維持平衡。可播放一次波形，或持續振動。":pulseMode==="single"?(pulsePlaying?(queuedState?"下一輪已排入；波源完成目前這次上下振動後，會接著送出。已發出的波仍繼續傳播。":"單次波正從波源形成並向右傳播；再按「單次波」可排入下一輪。"):("單次波已傳過；按「單次波」可再看一次。")):(pulsePlaying?"連續波播放中；再按「暫停」即可停止。":"連續波已暫停；按「連續波」可繼續。");});
+      };
+      const schedulePulse = () => { if(pulsePlaying&&pulseFrame===null) pulseFrame=window.requestAnimationFrame(animatePulse); };
+      singleButton.addEventListener("click",()=>{if(pulseMode!=="single"){pulseMode="single";pulseTime=0;singleEvents.length=0;}const lastStart=singleEvents[singleEvents.length-1];const nextStart=lastStart===undefined?pulseTime:Math.max(pulseTime,lastStart+singlePulseDuration);singleEvents.push(nextStart);pulsePlaying=true;previousTime=0;pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));updatePulseControls();schedulePulse();});
+      continuousButton.addEventListener("click",()=>{if(pulseMode==="continuous"&&pulsePlaying){pulsePlaying=false;}else{if(pulseMode!=="continuous"){pulseMode="continuous";pulseTime=0;singleEvents.length=0;}pulsePlaying=true;}previousTime=0;updatePulseControls();schedulePulse();});
+      const animatePulse = time => {
+        if (previousTime) {
+          const delta=Math.min((time-previousTime)/1000,.05);
+          if(pulsePlaying&&(pulseMode==="continuous"||pulseMode==="single"))pulseTime+=delta;
+          if(pulsePlaying&&pulseMode==="single"){
+            const pulseLifetime=singlePulseDuration+(722-singlePulseSource)/singlePulseSpeed;
+            for(let i=singleEvents.length-1;i>=0;i--)if(pulseTime-singleEvents[i]>pulseLifetime)singleEvents.splice(i,1);
+            if(!singleEvents.length){pulsePlaying=false;updatePulseControls();}
+            else if(queuedState&&!singleEvents.some(start=>start>pulseTime))updatePulseControls();
+          }
+        }
+        previousTime=time;
+        pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));
+        pulseFrame=pulsePlaying?window.requestAnimationFrame(animatePulse):null;
+      };
+      staticRopeSvgs.forEach(svg=>renderPulse(svg,0));
+      pulseSvgs.forEach(svg=>renderPulse(svg,pulseTime));
+      updatePulseControls(); schedulePulse();
+
+      const fixedPointSvg=document.querySelector("[data-fixed-point-wave]");
+      const fixedPointMarker=document.querySelector("#fixed-rope-marker");
+      const fixedPointSlider=document.querySelector("#fixed-point-slider");
+      const fixedPointGuide=document.querySelector("#fixed-rope-guide");
+      if(fixedPointSvg&&fixedPointMarker&&fixedPointSlider&&fixedPointGuide){
+        const fixedPointRope=fixedPointSvg.querySelector(".rope-underlay");
+        let fixedPointX=350;
+        const fixedPointMin=46, fixedPointMax=714, fixedPointBaseline=142, fixedPointAmplitude=46, fixedPointSliderY=214;
+        let fixedPointStart=0, fixedPointOffset=0;
+        const setFixedPointX=x=>{
+          fixedPointX=Math.max(fixedPointMin,Math.min(fixedPointMax,Math.round(x)));
+          fixedPointMarker.setAttribute("cx",String(fixedPointX));
+          fixedPointMarker.setAttribute("cy",String(fixedPointBaseline-waveAt(fixedPointX,fixedPointOffset,fixedPointAmplitude)));
+          fixedPointSlider.setAttribute("transform",`translate(${fixedPointX} ${fixedPointSliderY})`);
+          fixedPointSlider.setAttribute("aria-valuenow",String(fixedPointX));
+          fixedPointSlider.setAttribute("aria-valuetext",`繩上位置 ${fixedPointX}`);
+          fixedPointGuide.setAttribute("d",`M${fixedPointX} 90V${fixedPointSliderY}`);
+        };
+        const pointerSvgX=event=>{
+          const point=fixedPointSvg.createSVGPoint();
+          point.x=event.clientX;point.y=event.clientY;
+          return point.matrixTransform(fixedPointSvg.getScreenCTM().inverse()).x;
+        };
+        fixedPointSlider.addEventListener("pointerdown",event=>{
+          event.preventDefault();fixedPointSlider.classList.add("is-dragging");
+          fixedPointSlider.setPointerCapture(event.pointerId);setFixedPointX(pointerSvgX(event));
+        });
+        fixedPointSlider.addEventListener("pointermove",event=>{
+          if(fixedPointSlider.hasPointerCapture(event.pointerId))setFixedPointX(pointerSvgX(event));
+        });
+        ["pointerup","pointercancel","lostpointercapture"].forEach(type=>fixedPointSlider.addEventListener(type,()=>fixedPointSlider.classList.remove("is-dragging")));
+        fixedPointSlider.addEventListener("keydown",event=>{
+          const step=event.shiftKey?1:8;
+          if(event.key==="ArrowLeft"){event.preventDefault();setFixedPointX(fixedPointX-step);}
+          else if(event.key==="ArrowRight"){event.preventDefault();setFixedPointX(fixedPointX+step);}
+          else if(event.key==="Home"){event.preventDefault();setFixedPointX(fixedPointMin);}
+          else if(event.key==="End"){event.preventDefault();setFixedPointX(fixedPointMax);}
+        });
+        const renderFixedPointWave=time=>{
+          if(!fixedPointStart)fixedPointStart=time;
+          const elapsed=(time-fixedPointStart)/1000;
+          fixedPointOffset=(elapsed*132)%232;
+          const firstY=fixedPointBaseline-waveAt(46,fixedPointOffset,fixedPointAmplitude);
+          let path=`M 46 ${firstY}`;
+          for(let x=49;x<=714;x+=3){const y=fixedPointBaseline-waveAt(x,fixedPointOffset,fixedPointAmplitude);path+=` L ${x} ${y}`;}
+          fixedPointRope.setAttribute("d",path);
+          fixedPointMarker.setAttribute("cy",String(fixedPointBaseline-waveAt(fixedPointX,fixedPointOffset,fixedPointAmplitude)));
+          window.requestAnimationFrame(renderFixedPointWave);
+        };
+        window.requestAnimationFrame(renderFixedPointWave);
+      }
+
+      const transverseWaveRope=document.querySelector("#transverse-wave-rope");
+      const transverseFixedPoint=document.querySelector("#transverse-fixed-point");
+      const longitudinalCoilGroup=document.querySelector("#longitudinal-spring-coils");
+      const springCoils=[];
+      const springCoilCount=47, springFirstX=74, springSpacing=13.3, springSelectedIndex=23;
+      if(longitudinalCoilGroup){
+        for(let i=0;i<springCoilCount;i++){
+          const coil=document.createElementNS(ns,"ellipse");
+          coil.setAttribute("class",i===springSelectedIndex?"spring-coil is-selected":"spring-coil");
+          coil.setAttribute("cy","126");coil.setAttribute("rx","6.2");coil.setAttribute("ry","44");
+          longitudinalCoilGroup.append(coil);springCoils.push(coil);
+        }
+      }
+      const transversePointX=350, transverseBaseline=116, transverseAmplitude=48, transverseWavelength=232;
+      const springAmplitude=28, springWavelength=220, springSpeed=100;
+      let waveTypeStart=0;
+      const animateWaveTypes=time=>{
+        if(!waveTypeStart)waveTypeStart=time;
+        const elapsed=(time-waveTypeStart)/1000;
+        const transverseOffset=(elapsed*100)%transverseWavelength;
+        const firstY=transverseBaseline-waveAt(46,transverseOffset,transverseAmplitude);
+        let ropePath=`M 46 ${firstY}`;
+        for(let x=49;x<=714;x+=3){const y=transverseBaseline-waveAt(x,transverseOffset,transverseAmplitude);ropePath+=` L ${x} ${y}`;}
+        transverseWaveRope.setAttribute("d",ropePath);
+        transverseFixedPoint.setAttribute("cy",String(transverseBaseline-waveAt(transversePointX,transverseOffset,transverseAmplitude)));
+        springCoils.forEach((coil,i)=>{
+          const restX=springFirstX+i*springSpacing;
+          const phase=2*Math.PI*(restX-springSpeed*elapsed)/springWavelength;
+          coil.setAttribute("cx",String(restX+springAmplitude*Math.sin(phase)));
+        });
+        window.requestAnimationFrame(animateWaveTypes);
+      };
+      window.requestAnimationFrame(time=>{waveTypeStart=time;animateWaveTypes(time);});
+
+      const amplitudeSlider=document.querySelector("#amplitude-slider");
+      const amplitudeWave=document.querySelector("#amplitude-wave");
+      const amplitudePeak=document.querySelector("#amplitude-peak");
+      const amplitudeTrough=document.querySelector("#amplitude-trough");
+      const amplitudeMeasure=document.querySelector("#amplitude-measure");
+      const amplitudeLabel=document.querySelector("#amplitude-label");
+      const amplitudeOutput=document.querySelector("#amplitude-output");
+      const amplitudeHeightOutput=document.querySelector("#amplitude-height-output");
+      const amplitudeHalfOutput=document.querySelector("#amplitude-half-output");
+      const updateAmplitudeModel=()=>{
+        const amplitude=Number(amplitudeSlider.value);const pixels=amplitude*120;const top=140-pixels;const bottom=140+pixels;const waveY=x=>140-pixels*Math.sin((2*Math.PI*(x-40))/208);let d="M 40 140";
+        for(let x=44;x<=560;x+=4){const y=waveY(x);d+=` L ${x} ${y.toFixed(2)}`;}
+        amplitudeWave.setAttribute("d",d);amplitudePeak.setAttribute("cy",String(top));amplitudeTrough.setAttribute("cy",String(bottom));
+        amplitudeMeasure.setAttribute("d",`M115 140V${top}`);
+        amplitudeLabel.textContent=`A = ${amplitude.toFixed(1)} m`;amplitudeLabel.setAttribute("y",String(top-8));
+        amplitudeOutput.textContent=`${amplitude.toFixed(1)} m`;amplitudeHeightOutput.textContent=`${(amplitude*2).toFixed(1)} m`;amplitudeHalfOutput.textContent=`${amplitude.toFixed(1)} m`;
+      };
+      amplitudeSlider.addEventListener("input",updateAmplitudeModel);updateAmplitudeModel();
+
+      const lambdaWave=document.querySelector("#lambda-wave");
+      const lambdaRulerControl=document.querySelector("#lambda-ruler-control");
+      const lambdaLeftGuide=document.querySelector("#lambda-left-guide");
+      const lambdaRightGuide=document.querySelector("#lambda-right-guide");
+      const lambdaMeasure=document.querySelector("#lambda-measure");
+      const lambdaLabel=document.querySelector("#lambda-label");
+      const lambdaExplanation=document.querySelector("#lambda-explanation");
+      const lambdaLeftPoint=document.querySelector("#lambda-left-point");
+      const lambdaRightPoint=document.querySelector("#lambda-right-point");
+      const lambdaPathLength=lambdaWave.getTotalLength();
+      let lambdaStart=130,lambdaDragOffset=0;
+      const lambdaPointAtX=x=>{
+        let low=0,high=lambdaPathLength;
+        for(let i=0;i<22;i++){
+          const middle=(low+high)/2,point=lambdaWave.getPointAtLength(middle);
+          if(point.x<x)low=middle;else high=middle;
+        }
+        return lambdaWave.getPointAtLength((low+high)/2);
+      };
+      const updateLambdaMeasure=()=>{
+        const left=lambdaStart,right=left+240;
+        const leftPoint=lambdaPointAtX(left),rightPoint=lambdaPointAtX(right);
+        lambdaLeftPoint.setAttribute("cx",String(leftPoint.x));lambdaLeftPoint.setAttribute("cy",String(leftPoint.y));
+        lambdaRightPoint.setAttribute("cx",String(rightPoint.x));lambdaRightPoint.setAttribute("cy",String(rightPoint.y));
+        lambdaLeftGuide.setAttribute("d",`M${leftPoint.x} ${leftPoint.y+9}V254`);lambdaRightGuide.setAttribute("d",`M${rightPoint.x} ${rightPoint.y+9}V254`);
+        lambdaMeasure.setAttribute("d",`M${left+4} 254H${right-4}`);lambdaLabel.setAttribute("x",String((left+right)/2));
+        const near=(value,target)=>Math.abs(value-target)<3;
+        let description="起點和終點落在相同的波形位置；兩端固定相隔一個波長 λ。";
+        if(near(left,130)||near(left,370))description="最高點對到下一個最高點；兩端相隔一個波長 λ。";
+        else if(near(left,250))description="最低點對到下一個最低點；兩端相隔一個波長 λ。";
+        else if(near(left,190))description="平衡線上往下通過的位置，對到下一個同方向的位置；兩端相隔一個波長 λ。";
+        else if(near(left,310))description="平衡線上往上通過的位置，對到下一個同方向的位置；兩端相隔一個波長 λ。";
+        lambdaExplanation.textContent=description;lambdaRulerControl.setAttribute("aria-valuenow",String(Math.round(left)));lambdaRulerControl.setAttribute("aria-valuetext",description);
+      };
+      const lambdaPointerX=event=>{
+        const point=lambdaWave.ownerSVGElement.createSVGPoint();point.x=event.clientX;point.y=event.clientY;
+        return point.matrixTransform(lambdaWave.ownerSVGElement.getScreenCTM().inverse()).x;
+      };
+      lambdaRulerControl.addEventListener("pointerdown",event=>{
+        if(event.pointerType==="mouse"&&event.button!==0)return;
+        event.preventDefault();lambdaDragOffset=lambdaPointerX(event)-lambdaStart;
+        lambdaRulerControl.focus({preventScroll:true});lambdaRulerControl.setPointerCapture(event.pointerId);lambdaRulerControl.classList.add("is-dragging");
+      });
+      lambdaRulerControl.addEventListener("pointermove",event=>{
+        if(!lambdaRulerControl.hasPointerCapture(event.pointerId))return;
+        lambdaStart=Math.max(130,Math.min(370,Math.round(lambdaPointerX(event)-lambdaDragOffset)));updateLambdaMeasure();
+      });
+      ["pointerup","pointercancel","lostpointercapture"].forEach(type=>lambdaRulerControl.addEventListener(type,()=>lambdaRulerControl.classList.remove("is-dragging")));
+      lambdaRulerControl.addEventListener("keydown",event=>{
+        if(event.key==="ArrowLeft"){event.preventDefault();lambdaStart=Math.max(130,lambdaStart-(event.shiftKey?20:2));updateLambdaMeasure();}
+        else if(event.key==="ArrowRight"){event.preventDefault();lambdaStart=Math.min(370,lambdaStart+(event.shiftKey?20:2));updateLambdaMeasure();}
+        else if(event.key==="Home"){event.preventDefault();lambdaStart=130;updateLambdaMeasure();}
+        else if(event.key==="End"){event.preventDefault();lambdaStart=370;updateLambdaMeasure();}
+      });
+      updateLambdaMeasure();
+
+      const cycleWavePath=document.querySelector("#cycle-wave-path");
+      const cycleSourceMarker=document.querySelector("#cycle-source-marker");
+      const cycleWaveLengthAnnotation=document.querySelector("#cycle-wave-length-annotation");
+      const cycleWaveReplay=document.querySelector("#cycle-wave-replay");
+      const cycleAmplitudeSteps=[...document.querySelectorAll("#card-06 [data-cycle-step]")];
+      if(cycleWavePath&&cycleSourceMarker&&cycleWaveLengthAnnotation&&cycleWaveReplay&&cycleAmplitudeSteps.length===4){
+        const cycleStartX=90,cycleWidth=510,cycleMidY=170,cycleAmplitude=55,cycleSteps=120;
+        let cycleAnimationFrame=0;
+        const updateCycleAmplitudeSteps=progress=>{
+          const activeStep=progress<1?Math.min(3,Math.floor(progress*4)):-1;
+          cycleAmplitudeSteps.forEach((step,index)=>{
+            step.classList.toggle("is-active",index===activeStep);
+            step.classList.toggle("is-complete",progress>=(index+1)/4);
+            if(index===activeStep)step.setAttribute("aria-current","step");else step.removeAttribute("aria-current");
+          });
+        };
+        const showCycleProgress=progress=>{
+          const step=Math.floor(cycleSteps*progress);
+          const phaseAtSource=progress*Math.PI*2;
+          const sourceY=cycleMidY-cycleAmplitude*Math.sin(phaseAtSource);
+          let path=`M${cycleStartX} ${sourceY.toFixed(2)}`;
+          for(let i=1;i<=step;i++){
+            const distance=i/cycleSteps;
+            const phase=progress-distance;
+            const x=cycleStartX+cycleWidth*distance;
+            const y=cycleMidY-cycleAmplitude*Math.sin(phase*Math.PI*2);
+            path+=` L${x.toFixed(2)} ${y.toFixed(2)}`;
+          }
+          cycleWavePath.setAttribute("d",path);
+          cycleWaveLengthAnnotation.setAttribute("visibility",progress>=1?"visible":"hidden");
+          cycleSourceMarker.setAttribute("cy",String(sourceY));
+        };
+        const playCompleteCycle=()=>{
+          cancelAnimationFrame(cycleAnimationFrame);showCycleProgress(0);updateCycleAmplitudeSteps(0);cycleWaveReplay.disabled=true;
+          let startTime=null;
+          const draw=time=>{if(startTime===null)startTime=time;const progress=Math.min(1,(time-startTime)/3200);showCycleProgress(progress);updateCycleAmplitudeSteps(progress);if(progress<1){cycleAnimationFrame=requestAnimationFrame(draw);}else{cycleWaveReplay.disabled=false;}};
+          cycleAnimationFrame=requestAnimationFrame(draw);
+        };
+        showCycleProgress(0);
+        cycleWaveReplay.addEventListener("click",playCompleteCycle);
+      }
+
+      const frequencyStepDown=document.querySelector("#frequency-step-down");
+      const frequencyStepUp=document.querySelector("#frequency-step-up");
+      const frequencyControlValue=document.querySelector("#card07-frequency-value");
+      const periodRange=document.querySelector("#card07-period-range");
+      const periodControlValue=document.querySelector("#card07-period-value");
+      const frequencyPeriodWave=document.querySelector("#frequency-period-wave");
+      const frequencyPeriodCursor=document.querySelector("#frequency-period-cursor");
+      const frequencyWavelengthArrow=document.querySelector("#frequency-wavelength-arrow");
+      const frequencyWavelengthGuides=document.querySelector("#frequency-wavelength-guides");
+      const frequencyWavelengthLabel=document.querySelector("#frequency-wavelength-label");
+      const frequencyPeriodGraph=document.querySelector("#frequency-period-graph");
+      if(frequencyStepDown&&frequencyStepUp&&frequencyControlValue&&periodRange&&periodControlValue&&frequencyPeriodWave&&frequencyPeriodCursor&&frequencyWavelengthArrow&&frequencyWavelengthGuides&&frequencyWavelengthLabel&&frequencyPeriodGraph){
+        const graphStartX=80,graphWidth=540,graphMidY=170,graphAmplitude=70,waveSpeed=3;
+        let frequency=1,waveAnimationFrame=0;
+        const visibleDistance=4.5,waveStartTime=performance.now();
+        // 保存波源的連續相位；每個位置只讀取傳播延遲之前已送出的振動。
+        const frequencyHistory=[{start:0,phase:0,frequency:1,initial:true}];
+        const waveElapsed=(time=performance.now())=>Math.max(0,(time-waveStartTime)/1000);
+        const sourcePhaseAt=sourceTime=>{
+          let low=0,high=frequencyHistory.length-1;
+          while(low<high){
+            const middle=Math.ceil((low+high)/2);
+            if(frequencyHistory[middle].start<=sourceTime)low=middle;else high=middle-1;
+          }
+          const segment=frequencyHistory[low];
+          return segment.phase+2*Math.PI*segment.frequency*(sourceTime-segment.start);
+        };
+        const formatFrequency=value=>String(Number(value.toFixed(2)));
+        const formatPeriod=value=>{const rounded=Number(value.toFixed(4));return Number.isInteger(rounded)?rounded.toFixed(2):String(rounded);};
+        const drawFrequencyPeriodWave=elapsed=>{
+          const phase=sourcePhaseAt(elapsed);
+          let path=`M${graphStartX} ${graphMidY-graphAmplitude*Math.sin(phase)}`;
+          const samples=240;
+          for(let index=1;index<=samples;index++){
+            const x=graphStartX+graphWidth*index/samples;
+            const position=visibleDistance*index/samples;
+            const y=graphMidY-graphAmplitude*Math.sin(sourcePhaseAt(elapsed-position/waveSpeed));
+            path+=` L${x.toFixed(2)} ${y.toFixed(2)}`;
+          }
+          frequencyPeriodWave.setAttribute("d",path);
+          frequencyPeriodCursor.setAttribute("cx",String(graphStartX));
+          frequencyPeriodCursor.setAttribute("cy",String(graphMidY-graphAmplitude*Math.sin(phase)));
+          const latest=frequencyHistory[frequencyHistory.length-1],period=1/frequency;
+          const completeCycle=latest.initial||elapsed-latest.start>=period;
+          const wavelengthEndX=graphStartX+graphWidth*((waveSpeed/frequency)/visibleDistance);
+          frequencyWavelengthArrow.setAttribute("d",completeCycle?`M${graphStartX} 65H${wavelengthEndX.toFixed(2)}`:"");
+          frequencyWavelengthGuides.setAttribute("d",completeCycle?`M${graphStartX} 67V260M${wavelengthEndX.toFixed(2)} 67V260`:"");
+          frequencyWavelengthLabel.setAttribute("x",String((graphStartX+wavelengthEndX)/2));
+          frequencyWavelengthLabel.textContent=completeCycle?"一個波長 λ":"新波形形成中";
+          // 可見範圍之外的舊歷史可移除；保留邊界之前一段以維持相位。
+          const earliest=elapsed-visibleDistance/waveSpeed;
+          while(frequencyHistory.length>1&&frequencyHistory[1].start<=earliest)frequencyHistory.shift();
+        };
+        const animateFrequencyPeriodWave=time=>{
+          drawFrequencyPeriodWave(waveElapsed(time));
+          waveAnimationFrame=window.requestAnimationFrame(animateFrequencyPeriodWave);
+        };
+        const updateFrequencyPeriod=({syncPeriod=true}={})=>{
+          const period=1/frequency;
+          if(syncPeriod)periodRange.value=String(period);
+          const frequencyText=`${formatFrequency(frequency)} Hz`;
+          const periodText=`${formatPeriod(period)} s`;
+          frequencyControlValue.textContent=frequencyText;periodControlValue.textContent=periodText;
+          frequencyStepDown.disabled=frequency<=1;frequencyStepUp.disabled=frequency>=4;
+          periodRange.setAttribute("aria-valuetext",periodText);
+          frequencyPeriodGraph.setAttribute("aria-label",`繩上的波形持續向右傳播；波源目前頻率 ${frequencyText}，週期 ${periodText}；新的頻率變化從左端逐步向右傳遞，形成一個完整新波形後標示波長。`);
+          drawFrequencyPeriodWave(waveElapsed());
+        };
+        const changeFrequency=(next,options={})=>{
+          const elapsed=waveElapsed();
+          if(next!==frequency){
+            const phase=sourcePhaseAt(elapsed),latest=frequencyHistory[frequencyHistory.length-1];
+            if(!latest.initial&&latest.start===elapsed)latest.frequency=next;
+            else frequencyHistory.push({start:elapsed,phase,frequency:next,initial:false});
+            frequency=next;
+          }
+          updateFrequencyPeriod(options);
+        };
+        frequencyStepDown.addEventListener("click",()=>changeFrequency(Math.max(1,frequency-1)));
+        frequencyStepUp.addEventListener("click",()=>changeFrequency(Math.min(4,frequency+1)));
+        periodRange.addEventListener("input",()=>changeFrequency(1/Number(periodRange.value),{syncPeriod:false}));
+        updateFrequencyPeriod();
+        waveAnimationFrame=window.requestAnimationFrame(animateFrequencyPeriodWave);
+      }
+
+      const speedWave=document.querySelector("#speed-wave");
+      const speedWavePath=document.querySelector("#speed-wave-path");
+      const speedWaveGuides=document.querySelector("#speed-wave-guides");
+      const speedWavelengthArrow=document.querySelector("#speed-wavelength-arrow");
+      const speedLambdaLabel=document.querySelector("#speed-lambda-label");
+      const speedSourceMarker=document.querySelector("#speed-source-marker");
+      const speedFrequencyValue=document.querySelector("#speed-frequency-value");
+      const speedPeriodValue=document.querySelector("#speed-period-value");
+      const speedWavelengthValue=document.querySelector("#speed-wavelength-value");
+      const speedEquation=document.querySelector("#speed-equation-live");
+      const speedColorScale=document.querySelector("#speed-color-scale");
+      const speedColorMarker=document.querySelector("#speed-color-marker");
+      const sendWaveButton=document.querySelector("#speed-send-wave");
+      const runMessage=document.querySelector("#speed-run-message");
+      const runTime=document.querySelector("#speed-run-time");
+      const progressBar=document.querySelector("#speed-progress-bar");
+      const progressTrack=document.querySelector("#speed-progress");
+      if(speedWave&&speedWavePath&&speedWaveGuides&&speedWavelengthArrow&&speedLambdaLabel&&speedSourceMarker&&speedFrequencyValue&&speedPeriodValue&&speedWavelengthValue&&speedEquation&&speedColorScale&&speedColorMarker&&sendWaveButton&&runMessage&&runTime&&progressBar&&progressTrack){
+        const routeLength=30,routeStartX=30,routeEndX=690,routeWidth=routeEndX-routeStartX,waveMidY=90,waveAmplitude=48;
+        const frequencyDown=document.querySelector("#speed-frequency-down"),frequencyUp=document.querySelector("#speed-frequency-up");
+        const periodDown=document.querySelector("#speed-period-down"),periodUp=document.querySelector("#speed-period-up");
+        const wavelengthDown=document.querySelector("#speed-wavelength-down"),wavelengthUp=document.querySelector("#speed-wavelength-up");
+        const stepButtons=[frequencyDown,frequencyUp,periodDown,periodUp,wavelengthDown,wavelengthUp];
+        let frequency=2,period=.5,wavelength=6,animationFrame=0,runStartedAt=null,isRunning=false;
+        const clamp=(value,min,max)=>Math.min(max,Math.max(min,value));
+        const round=(value,digits=6)=>Number(value.toFixed(digits));
+        const format=(value,digits=3)=>Number(value.toFixed(digits)).toString();
+        const getWaveSpeed=()=>frequency*wavelength;
+        const speedColorAt=speed=>{
+          const ratio=clamp((speed-4)/(32-4),0,1),stops=[{at:0,color:[23,107,83]},{at:.5,color:[211,162,60]},{at:1,color:[196,72,66]}];
+          const left=ratio<=.5?stops[0]:stops[1],right=ratio<=.5?stops[1]:stops[2],local=(ratio-left.at)/(right.at-left.at);
+          return `rgb(${left.color.map((channel,index)=>Math.round(channel+(right.color[index]-channel)*local)).join(",")})`;
+        };
+        const getArrivalTime=()=>routeLength/getWaveSpeed();
+        const getFullPassageTime=()=>((routeLength+wavelength)/getWaveSpeed());
+        const getArrivalMessage=()=>`波形前端到達 ${routeLength} 公尺處需時 ${format(getArrivalTime(),2)} 秒。`;
+        const drawGeneratedWave=simulationTime=>{
+          const speed=getWaveSpeed(),frontDistance=speed*simulationTime,front=clamp(frontDistance,0,routeLength);
+          const sourcePhase=simulationTime/period;
+          const sourceY=sourcePhase>0&&sourcePhase<1?waveMidY-waveAmplitude*Math.sin(2*Math.PI*sourcePhase):waveMidY;
+          speedSourceMarker.setAttribute("cy",String(sourceY));
+          let path=`M${routeStartX} ${sourceY}`;
+          const samples=220;
+          for(let index=1;index<=samples;index++){
+            const x=routeStartX+routeWidth*index/samples;
+            const distance=routeLength*index/samples;
+            const phase=(simulationTime-distance/speed)/period;
+            const y=phase>0&&phase<1?waveMidY-waveAmplitude*Math.sin(2*Math.PI*phase):waveMidY;
+            path+=` L${x.toFixed(2)} ${y.toFixed(2)}`;
+          }
+          speedWavePath.setAttribute("d",path);
+          const tail=Math.max(0,front-wavelength);
+          if(simulationTime>=period&&front>=wavelength&&frontDistance<=routeLength&&simulationTime<getFullPassageTime()){
+            const startX=routeStartX+routeWidth*tail/routeLength,endX=routeStartX+routeWidth*front/routeLength;
+            speedWaveGuides.setAttribute("d",`M${startX.toFixed(2)} ${waveMidY}V150M${endX.toFixed(2)} ${waveMidY}V150`);
+            speedWavelengthArrow.setAttribute("d",`M${startX.toFixed(2)} 151H${endX.toFixed(2)}`);
+            speedLambdaLabel.setAttribute("x",String((startX+endX)/2));
+            speedLambdaLabel.textContent=`λ = ${format(wavelength,1)} m`;
+            speedLambdaLabel.setAttribute("visibility","visible");
+          }else{
+            speedWaveGuides.setAttribute("d","");speedWavelengthArrow.setAttribute("d","");speedLambdaLabel.setAttribute("visibility","hidden");
+          }
+        };
+        const setControlsDisabled=disabled=>stepButtons.forEach(button=>{if(button)button.disabled=disabled;});
+        const drawProgress=progressValue=>{
+          const progress=clamp(progressValue,0,1);
+          progressBar.style.width=`${(progress*100).toFixed(2)}%`;
+          progressTrack.setAttribute("aria-valuenow",String(round(progress*100,1)));
+          progressTrack.setAttribute("aria-valuetext",`${round(progress*100,1)}%`);
+        };
+        const updateControls=()=>{
+          frequencyDown.disabled=isRunning||frequency<=1;
+          frequencyUp.disabled=isRunning||frequency>=4;
+          periodDown.disabled=isRunning||period<=.25;
+          periodUp.disabled=isRunning||period>=1;
+          wavelengthDown.disabled=isRunning||wavelength<=4;
+          wavelengthUp.disabled=isRunning||wavelength>=8;
+        };
+        const updateReadouts=()=>{
+          const speed=getWaveSpeed(),arrivalTime=getArrivalTime();
+          const frequencyText=`${format(frequency,3)} Hz`,periodText=`${format(period,3)} s`,wavelengthText=`${format(wavelength,1)} m`;
+          const color=speedColorAt(speed),colorPosition=clamp((speed-4)/(32-4),0,1)*100;
+          speedFrequencyValue.textContent=frequencyText;speedPeriodValue.textContent=periodText;speedWavelengthValue.textContent=wavelengthText;
+          speedWavePath.style.stroke=color;speedColorMarker.style.left=`${colorPosition.toFixed(2)}%`;speedColorMarker.style.backgroundColor=color;
+          speedColorScale.setAttribute("aria-valuenow",format(speed,2));speedColorScale.setAttribute("aria-valuetext",`${format(speed,2)} 公尺每秒，色階位置 ${format(colorPosition,1)}%`);
+          speedEquation.textContent=`波速 = v = f × λ = ${format(frequency,3)} Hz × ${format(wavelength,1)} m = ${format(speed,2)} m/s`;
+          speedWave.setAttribute("aria-label",`橘色波源上下振動一次，產生一個完整波形並向右傳播；頻率 ${frequencyText}，週期 ${periodText}，波長 ${wavelengthText}，波速 ${format(speed,2)} 公尺每秒，波形前端到達30公尺處需 ${format(arrivalTime,2)} 秒`);
+          runTime.textContent=`0.00 / ${format(arrivalTime,2)} s`;
+          updateControls();
+        };
+        const resetSingleWave=()=>{
+          if(animationFrame)window.cancelAnimationFrame(animationFrame);
+          animationFrame=0;runStartedAt=null;isRunning=false;sendWaveButton.disabled=false;sendWaveButton.textContent="讓波源振動一次";
+          setControlsDisabled(false);drawGeneratedWave(0);drawProgress(0);updateReadouts();
+          runMessage.textContent="參數已更新；按下按鈕讓橘色波源振動一次。";
+        };
+        const finishSingleWave=()=>{
+          isRunning=false;animationFrame=0;runStartedAt=null;sendWaveButton.disabled=false;sendWaveButton.textContent="再產生一個完整波";
+          const arrivalTime=getArrivalTime(),fullPassageTime=getFullPassageTime();
+          setControlsDisabled(false);drawGeneratedWave(fullPassageTime);drawProgress(1);
+          runTime.textContent=`${format(arrivalTime,2)} / ${format(arrivalTime,2)} s`;
+          runMessage.textContent=getArrivalMessage();
+          updateControls();
+        };
+        const animateSingleWave=time=>{
+          if(runStartedAt===null)runStartedAt=time;
+          const arrivalTime=getArrivalTime(),fullPassageTime=getFullPassageTime(),elapsed=clamp((time-runStartedAt)/1000,0,fullPassageTime);
+          drawGeneratedWave(elapsed);drawProgress(Math.min(elapsed,arrivalTime)/arrivalTime);
+          runTime.textContent=`${format(Math.min(elapsed,arrivalTime),2)} / ${format(arrivalTime,2)} s`;
+          if(elapsed<fullPassageTime)animationFrame=window.requestAnimationFrame(animateSingleWave);else finishSingleWave();
+        };
+        const launchSingleWave=()=>{
+          if(isRunning){resetSingleWave();runMessage.textContent="傳播已取消，波形已回到起始狀態。";return;}
+          if(animationFrame)window.cancelAnimationFrame(animationFrame);
+          isRunning=true;runStartedAt=null;sendWaveButton.disabled=false;sendWaveButton.textContent="取消並重設";
+          setControlsDisabled(true);drawGeneratedWave(0);drawProgress(0);updateControls();
+          runMessage.textContent=getArrivalMessage();
+          animationFrame=window.requestAnimationFrame(animateSingleWave);
+        };
+        const changeFrequency=delta=>{frequency=round(clamp(frequency+delta,1,4),3);period=round(1/frequency,6);resetSingleWave();};
+        const changePeriod=delta=>{period=round(clamp(period+delta,.25,1),6);frequency=round(1/period,6);resetSingleWave();};
+        const changeWavelength=delta=>{wavelength=clamp(wavelength+delta,4,8);resetSingleWave();};
+        frequencyDown.addEventListener("click",()=>changeFrequency(-.5));frequencyUp.addEventListener("click",()=>changeFrequency(.5));
+        periodDown.addEventListener("click",()=>changePeriod(-.05));periodUp.addEventListener("click",()=>changePeriod(.05));
+        wavelengthDown.addEventListener("click",()=>changeWavelength(-1));wavelengthUp.addEventListener("click",()=>changeWavelength(1));
+        sendWaveButton.addEventListener("click",launchSingleWave);
+        drawGeneratedWave(0);drawProgress(0);updateReadouts();
+      }
+
+      const routeLinks=[...document.querySelectorAll(".route a[href^='#card-'], .route a[href='#unit-quiz']")];
+      const cards=routeLinks.map(link=>document.querySelector(link.getAttribute("href"))).filter(Boolean);
+      const markActive=id=>routeLinks.forEach(link=>{if(link.hash===`#${id}`){link.setAttribute("aria-current","step");link.scrollIntoView({block:"nearest",inline:"nearest"});}else link.removeAttribute("aria-current");});
+      if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)markActive(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});cards.forEach(card=>observer.observe(card));}
+      else {const sync=()=>{const current=[...cards].reverse().find(card=>card.getBoundingClientRect().top<=window.innerHeight*.35);if(current)markActive(current.id);};window.addEventListener("scroll",sync,{passive:true});sync();}
+    })();
+  </script>
+</body>
+</html>

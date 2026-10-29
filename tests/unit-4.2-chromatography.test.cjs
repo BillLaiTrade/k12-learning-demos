@@ -19,7 +19,7 @@ test('4.2 hands-on chromatography: science, controls and approved layout', { tim
   page.on('pageerror',e=>failures.push(String(e)));
   page.on('requestfailed',r=>failures.push(r.url()));
   page.on('response',r=>{if(r.status()>=400)failures.push(r.url());});
-  const url=`http://127.0.0.1:${port}/units/4/parts/4.2/`;
+  const url=`http://127.0.0.1:${port}/units/2/parts/2.2/`;
   await page.clock.install({time:new Date('2026-10-27T00:00:00Z')});
   await page.goto(url+'#s3',{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.querySelector('#chrom-lab').dataset.ready==='true');

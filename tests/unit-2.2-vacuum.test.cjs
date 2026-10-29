@@ -28,7 +28,7 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     };
   });
   await page.clock.install();
-  const url = `http://127.0.0.1:${port}/units/2/parts/2.2/`;
+  const url = `http://127.0.0.1:${port}/units/3/parts/3.2/`;
   await page.goto(url, { waitUntil: 'networkidle' });
   const lab = page.locator('#vacuum-lab');
   const data = () => lab.evaluate(n => ({ ...n.dataset }));

@@ -10,7 +10,7 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--disable-accelerated-2d-canvas']});t.after(()=>browser.close());
  const page=await browser.newPage({viewport:{width:1440,height:1100},hasTouch:true});
  const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
- const url=`http://127.0.0.1:${port}/units/4/parts/4.2/`;
+ const url=`http://127.0.0.1:${port}/units/2/parts/2.2/`;
  await page.clock.install({time:new Date('2026-10-28T00:00:00Z')});await page.goto(url+'#unit-quiz',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#invest-lab').dataset.ready==='true');await page.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));
  const $=id=>page.locator('#invest-'+id),tool=kind=>page.locator(`[data-invest-tool="${kind}"]`).last();
  const advance=async ms=>{await page.clock.runFor(30);await page.clock.fastForward(ms);await page.clock.runFor(30);};

@@ -2,7 +2,7 @@
 
 日期：2026-10-28（Asia/Taipei）。狀態：依使用者指示，已整合至正式 2.2 第四學習區塊。
 
-[開啟正式第四學習區塊](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.2/#card-04)。
+[開啟正式第四學習區塊](https://billlaitrade.github.io/k12-learning-demos/units/3/parts/3.2/#card-04)。
 
 ## 回饋落實
 

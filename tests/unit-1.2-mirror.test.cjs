@@ -15,7 +15,7 @@ const artifacts='/tmp/unit1-card3-stacked';
 let model;
 
 test('第三區距離模型：2公尺反射＋3公尺入眼，對應5公尺直達光',async t=>{
-  model=await import(pathToFileURL(path.join(dir,'units/1/parts/1.2/assets/mirror-comparison.mjs')));
+  model=await import(pathToFileURL(path.join(dir,'units/4/parts/4.2/assets/mirror-comparison.mjs')));
   const {COMPARISON:s,comparisonRay,opticalDistances,pupilBundle,comparisonCamera,project,quad,VIEW_PLANES,clipNear}=model;
   await t.test('中央光路精確為2、3、2、5公尺，物像等距且共線',()=>{
     assert.deepEqual(opticalDistances(),{incoming:2,outgoing:3,extension:2,direct:5});
@@ -62,7 +62,7 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
   const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:dir,stdio:['ignore','pipe','pipe']});t.after(()=>server.kill());
   const port=await new Promise((resolve,reject)=>{let out='';const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{out+=d;const m=out.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject);});
   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});t.after(()=>browser.close());
-  const url=`http://127.0.0.1:${port}/units/1/parts/1.2/#card-03`,errors=[];
+  const url=`http://127.0.0.1:${port}/units/4/parts/4.2/#card-03`,errors=[];
   const monitor=p=>{p.on('pageerror',e=>errors.push(e.message));p.on('requestfailed',r=>errors.push(r.url()));p.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});};
   const page=await browser.newPage({viewport:{width:1440,height:1200}});monitor(page);
   async function open(p){await p.goto(url,{waitUntil:'networkidle'});await p.locator('#reference-eye[data-ready=true]').waitFor();await p.locator('#trial-eye[data-ready=true]').waitFor();}

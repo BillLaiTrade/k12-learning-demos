@@ -8,7 +8,7 @@ const { expect } = require('playwright/test');
 
 test('1.2 three mirrors: scientific relationships, interaction and layout', { timeout: 90000 }, async t => {
   const root = path.resolve(__dirname, '..');
-  const geometry = await import(pathToFileURL(path.join(root, 'units/1/parts/1.2/assets/curved-mirrors-geometry.mjs')));
+  const geometry = await import(pathToFileURL(path.join(root, 'units/4/parts/4.2/assets/curved-mirrors-geometry.mjs')));
   const { reflectionAt, mirrorOutline, OPTICS, imageExample } = geometry;
   const near = (a, b, tolerance = 1e-8) => assert.ok(Math.abs(a - b) < tolerance, `${a} must equal ${b}`);
 
@@ -74,7 +74,7 @@ test('1.2 three mirrors: scientific relationships, interaction and layout', { ti
   page.on('pageerror', error => failures.push(error.message));
   page.on('requestfailed', request => failures.push(request.url()));
   page.on('response', response => { if (response.status() >= 400) failures.push(response.url()); });
-  const url = `http://127.0.0.1:${port}/units/1/parts/1.2/#card-05`;
+  const url = `http://127.0.0.1:${port}/units/4/parts/4.2/#card-05`;
   await page.goto(url, { waitUntil: 'networkidle' });
   const section = page.locator('#card-05');
 

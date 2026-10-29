@@ -4,7 +4,7 @@ const { spawn } = require('node:child_process');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright');
-const model = import(pathToFileURL(path.resolve(__dirname, '../units/2/parts/2.2/assets/sound-speed-model.mjs')).href);
+const model = import(pathToFileURL(path.resolve(__dirname, '../units/3/parts/3.2/assets/sound-speed-model.mjs')).href);
 
 test('sound comparison uses one signal and physical travel delays', async t => {
   const m = await model;
@@ -89,7 +89,7 @@ test('sound comparison uses one signal and physical travel delays', async t => {
 });
 
 test('fork appearance uses rapid bounded translation without affecting the propagation signal', async () => {
-  const {forkVibration}=await import(pathToFileURL(path.resolve(__dirname,'../units/2/parts/2.2/assets/sound-speed-rendering.mjs')).href);
+  const {forkVibration}=await import(pathToFileURL(path.resolve(__dirname,'../units/3/parts/3.2/assets/sound-speed-rendering.mjs')).href);
   const values=Array.from({length:1001},(_,i)=>forkVibration(.251+i/1000));
   assert.ok(values.every(v=>Math.abs(v)<=1.5));
   const signs=values.map(Math.sign);assert.equal(signs.slice(1).filter((v,i)=>v!==signs[i]).length,16);
@@ -129,7 +129,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
   });
   await page.clock.install({ time: new Date('2026-10-28T00:00:00Z') });
   await page.clock.pauseAt(new Date('2026-10-28T00:00:01Z'));
-  const url = process.env.SOUND_SPEED_LESSON_URL || `http://127.0.0.1:${port}/units/2/parts/2.2/#card-04`;
+  const url = process.env.SOUND_SPEED_LESSON_URL || `http://127.0.0.1:${port}/units/3/parts/3.2/#card-04`;
   let freshSequence = 0;
   const fresh = () => {
     const target = new URL(url);
@@ -162,7 +162,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
   });
 
   await t.test('formal integration retains five learning blocks, navigation and working quiz controls', async () => {
-    if (!url.includes('/units/2/parts/2.2/')) return;
+    if (!url.includes('/units/3/parts/3.2/')) return;
     assert.equal(await page.locator('.lesson-card').count(), 5);
     assert.equal(await page.locator('#card-04 [data-sound-speed-lab]').count(), 1);
     assert.equal(await page.locator('#card-04 iframe, #card-05 iframe').count(), 0);

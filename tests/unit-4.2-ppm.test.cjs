@@ -3,7 +3,7 @@ test('4.2 ppm: one milligram beside one liter introduces parts per million',{tim
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',s=>{const m=String(s).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.on('error',reject);});
  const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox','--disable-accelerated-2d-canvas']});t.after(()=>browser.close());const page=await browser.newPage({viewport:{width:1440,height:1100},hasTouch:true});const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('requestfailed',r=>errors.push(r.url()));
- const url=`http://127.0.0.1:${port}/units/4/parts/4.2/`;await page.goto(url+'#ppm-lab',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.ready==='true');const root=page.locator('#ppm-lab'),data=()=>root.evaluate(e=>({...e.dataset}));
+ const url=`http://127.0.0.1:${port}/units/2/parts/2.2/`;await page.goto(url+'#ppm-lab',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.ready==='true');const root=page.locator('#ppm-lab'),data=()=>root.evaluate(e=>({...e.dataset}));
  const park=async()=>{await page.locator('#ppm-lens-handle').focus();await page.keyboard.press('Home');};
  const observe=async()=>{await page.locator('#ppm-milligram').click();await page.mouse.move(0,0);};
  await t.test('the approved observation layout foregrounds a single milligram and its real interaction',async()=>{

@@ -6,7 +6,7 @@ const {pathToFileURL}=require('node:url');
 const {chromium}=require('playwright');
 const {expect}=require('playwright/test');
 const root=path.resolve(__dirname,'..');
-const asset=path.join(root,'units/1/parts/1.2/assets');
+const asset=path.join(root,'units/4/parts/4.2/assets');
 const close=(a,b,e=1e-7)=>assert.ok(Math.abs(a-b)<e,`${a} != ${b}`);
 
 test('潛望鏡有限鏡面、管壁與反向傳播',async t=>{
@@ -92,7 +92,7 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});t.after(()=>browser.close());
   const page=await browser.newPage({viewport:{width:1440,height:1100}}),errors=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>errors.push(r.url()));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
-  const url=`http://127.0.0.1:${port}/units/1/parts/1.2/#unit-quiz`;
+  const url=`http://127.0.0.1:${port}/units/4/parts/4.2/#unit-quiz`;
   await page.goto(url,{waitUntil:'networkidle'});const quiz=page.locator('#unit-quiz');await expect(quiz).toHaveAttribute('data-ready','true');
   const angles=async()=>JSON.parse('['+await quiz.getAttribute('data-angles')+']');
   async function setAngle(i,n){

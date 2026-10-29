@@ -9,7 +9,7 @@ const { expect } = require('playwright/test');
 
 test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 }, async t => {
   const root = path.resolve(__dirname, '..');
-  const asset = path.join(root, 'units/1/parts/1.2/assets');
+  const asset = path.join(root, 'units/4/parts/4.2/assets');
   const { reciprocalPath, laserPath, MIRROR_FACE_X } = await import(pathToFileURL(path.join(asset, 'planar-reflection.mjs')));
   const close = (a, b, e = 1e-9) => assert.ok(Math.abs(a - b) < e, `${a} should equal ${b}`);
   const vectorClose = (a, b) => a.forEach((n, i) => close(n, b[i]));
@@ -64,7 +64,7 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
     assert.ok(source.includes('bench = createLaserBench(canvas);'));
     await route.fulfill({ response, body: source.replace('bench = createLaserBench(canvas);', 'bench = createLaserBench(canvas); window.__testReverseBench = bench;') });
   });
-  const url = `http://127.0.0.1:${port}/units/1/parts/1.2/#card-06`;
+  const url = `http://127.0.0.1:${port}/units/4/parts/4.2/#card-06`;
   await page.goto(url, { waitUntil: 'networkidle' });
   const section = page.locator('#card-06');
   const canvas = page.locator('#reverse-scene');

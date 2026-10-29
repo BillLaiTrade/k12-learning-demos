@@ -1,5 +1,5 @@
-import * as THREE from '../../3.1/assets/vendor/three/build/three.module.js';
-import {GLTFLoader} from '../../3.1/assets/vendor/three/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from '../../1.1/assets/vendor/three/build/three.module.js';
+import {GLTFLoader} from '../../1.1/assets/vendor/three/examples/jsm/loaders/GLTFLoader.js';
 
 const clamp=(value,min,max)=>Math.min(max,Math.max(min,value));
 

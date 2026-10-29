@@ -10,7 +10,7 @@ const root=path.resolve(__dirname,'..'),capture='/tmp/unit11-aperture-fix';
 const make=values=>values.map((v,i)=>({x:[-2.35,0,2.35][i],height:v*.0062}));
 let optics;
 test('三孔板：直線光束與有限孔口的幾何計算',async t=>{
-  optics=await import(pathToFileURL(path.join(root,'units/1/parts/1.1/assets/aperture-optics.mjs')));
+  optics=await import(pathToFileURL(path.join(root,'units/4/parts/4.1/assets/aperture-optics.mjs')));
   const {traceApertures:trace,circularStripFraction:strip,APERTURE_OPTICS:g}=optics;
   await t.test('全通、部分、全擋及既有高低高錯誤案例',()=>{
     assert.equal(trace(make([0,0,0])).power,1);assert.equal(trace(make([0,50,0])).power,0);
@@ -59,7 +59,7 @@ test('第三區實際器材、亮點、燈號與既有操作',{timeout:240000},a
   const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:root,stdio:['ignore','pipe','pipe']});t.after(()=>server.kill());
   const port=await new Promise((resolve,reject)=>{let s='';const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{s+=d;const m=s.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});});
   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});t.after(()=>browser.close());
-  const url=`http://127.0.0.1:${port}/units/1/parts/1.1/#card-03`,errors=[];
+  const url=`http://127.0.0.1:${port}/units/4/parts/4.1/#card-03`,errors=[];
   async function open(context){const p=await context.newPage();p.on('pageerror',e=>{errors.push(e.message);console.error('Browser error:',e.message);});p.on('requestfailed',r=>errors.push(r.url()));p.on('response',r=>{if(r.status()>=400)errors.push(r.url());});
     await p.route('**/assets/aperture-3d.js*',async route=>{const response=await route.fetch(),body=await response.text();assert.ok(body.includes('const updateExperiment = () => {'));
       await route.fulfill({response,body:body.replace('const updateExperiment = () => {','window.__apertureTest={plateStates,plates,spot,spotGlow,mats,camera,scene}; const updateExperiment = () => {')});});

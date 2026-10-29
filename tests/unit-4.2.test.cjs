@@ -27,7 +27,7 @@ test('4.2 evaporation plays from the chosen step through the final stage', { tim
   page.on('console', message => { if (message.type() === 'error') failures.push(message.text()); });
   page.on('requestfailed', request => failures.push(request.url()));
   page.on('response', response => { if (response.status() >= 400) failures.push(response.status() + ' ' + response.url()); });
-  const url = 'http://127.0.0.1:' + port + '/units/4/parts/4.2/';
+  const url = 'http://127.0.0.1:' + port + '/units/2/parts/2.2/';
   // Keep real DOM events and WebGL rendering. Control only the clock so a
   // short chapter cannot finish while software-GPU screenshots are captured.
   await page.clock.install({ time: new Date('2026-10-27T00:00:00Z') });

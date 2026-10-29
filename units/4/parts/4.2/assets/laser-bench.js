@@ -1,4 +1,4 @@
-import * as THREE from '../../1.1/assets/vendor/three/build/three.module.js';
+import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import { MIRROR_FACE_X, LASER_HEIGHT } from './planar-reflection.mjs';
 
 // Shared unchanged apparatus/materials from the approved section 02 laboratory.

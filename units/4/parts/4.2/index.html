@@ -3,334 +3,481 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f3f7f2">
+  <meta name="theme-color" content="#f4f1e8">
+  <meta name="description" content="跟著小葵和阿公觀察光的反射、平面鏡成像，以及曲面鏡如何改變反射方向。">
   <link rel="icon" href="data:,">
-  <title>混在一起的東西，怎麼分開？</title>
+  <title>光的反射與面鏡｜光學單元</title>
   <style>
-    :root { color-scheme:light; --ink:#243a35; --muted:#64736d; --paper:#f3f7f2; --card:#fff; --line:#d8e2da; --green:#176b53; --gold:#82a98c; --blue:#dce9e5; --rust:#a85c3d; }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; scroll-padding-top:18px; }
-    body { margin:0; color:var(--ink); background:var(--paper); font-family:ui-sans-serif,system-ui,-apple-system,"Noto Sans TC",sans-serif; line-height:1.7; }
-    button,select { font:inherit; }
-    button { color:inherit; }
-    .shell { width:min(1160px,calc(100% - 36px)); margin-inline:auto; }
-    .masthead { padding:28px 0 22px; }
-    .brand-row { margin-bottom:20px; display:flex; justify-content:space-between; gap:12px; align-items:center; }
-    .brand { color:var(--green); font-size:.9rem; font-weight:750; text-decoration:none; }
-    .crumb { color:var(--muted); font-size:.83rem; }
-    .hero { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:28px; align-items:center; padding:26px 0 14px; }
-    .eyebrow { color:var(--green); font-size:.78rem; font-weight:800; letter-spacing:.1em; }
-    h1,h2,h3,p { margin-top:0; }
-    h1 { max-width:800px; margin:6px 0 12px; font-size:clamp(2rem,5vw,3.25rem); line-height:1.2; letter-spacing:-.035em; }
-    .hero-copy { max-width:740px; color:#52635d; font-size:1.06rem; }
-    .hero-cover { margin:0; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:var(--card); box-shadow:0 8px 24px #243a3512; }
-    .hero-cover img { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; }
-    .lesson-layout { display:grid; grid-template-columns:260px minmax(0,1fr); gap:28px; align-items:start; }
-    .route { position:sticky; top:12px; max-height:calc(100vh - 24px); overflow:auto; padding:14px; border:1px solid var(--line); border-radius:16px; background:#fff; }
-    .route-label { margin:0; color:var(--green); font-weight:800; font-size:.9rem; }
-    .route-progress { margin:3px 0 10px; color:var(--muted); font-size:.78rem; }
-    .route-inner { display:grid; gap:4px; }
-    .route-inner a { display:grid; grid-template-columns:27px 1fr; gap:8px; align-items:start; padding:8px; border-radius:9px; color:var(--ink); text-decoration:none; font-size:.81rem; line-height:1.4; }
-    .route-inner a b { color:var(--green); font-size:.72rem; font-weight:750; }
-    .route-inner a[aria-current="step"] { background:#e8efe9; color:#164e3f; font-weight:700; }
-    .cards { min-width:0; }
-    .section-top { display:flex; justify-content:space-between; gap:12px; align-items:baseline; padding:4px 0 12px; }
-    .section-top h2 { margin:0; font-size:1.05rem; }
-    .progress-copy { color:var(--muted); font-size:.78rem; }
-    .lesson-card { display:grid; grid-template-columns:150px minmax(0,1fr); gap:22px; margin:0 0 18px; padding:22px; border:1px solid var(--line); border-radius:18px; background:var(--card); box-shadow:0 7px 20px #243a3508; }
-    .card-side { padding-right:14px; border-right:1px solid var(--line); }
-    .card-number { display:inline-grid; place-items:center; width:34px; height:34px; border-radius:50%; background:#e5f2e9; color:var(--green); font-size:.78rem; font-weight:850; }
-    .card-side h3 { margin:10px 0 4px; font-size:.98rem; line-height:1.4; }
-    .card-role { color:var(--muted); font-size:.78rem; }
-    .card-main h2 { margin:0 0 8px; font-size:clamp(1.17rem,2.4vw,1.55rem); line-height:1.4; }
-    .card-main>p { color:#53645d; }
-    .dialogue { display:flex; gap:10px; align-items:center; margin:12px 0; padding:11px 15px; border-left:4px solid #8cae91; border-radius:0 13px 13px 0; background:#f0f5eb; }
-    .dialogue p { margin:0; }
-    .dialogue .speaker { display:inline-flex; flex:0 0 auto; align-items:center; color:#315a46; font-weight:800; }
-    .dialogue .speaker::before { content:""; display:block; width:44px; height:44px; border:2px solid #8cae91; border-radius:50%; background-image:url("../../../../shared-assets/characters/dialogue-character-avatars.png?v=clean-shaven-grandpa"); background-repeat:no-repeat; background-position:100% 50%; background-size:200% 100%; box-shadow:0 2px 6px rgb(21 47 38 / 12%); }
-    .dialogue--xiaokui { border-left-color:#d39765; background:#fff4e8; }
-    .dialogue--xiaokui .speaker { color:#945523; }
-    .dialogue--xiaokui .speaker::before { border-color:#d39765; background-position:0 50%; }
-    .dialogue .visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-    .evidence-box,.note-box { margin:12px 0; padding:12px 14px; border-left:4px solid #82a98c; border-radius:7px; background:#f0f6f0; }
-    .evidence-box strong { display:block; margin-bottom:3px; }
-    .filter-animation { position:relative; margin:16px 0 10px; overflow:hidden; border:1px solid #d8e2da; border-radius:18px; background:#f1f6f1; box-shadow:0 12px 30px #243a350d; }
-    .filter-play {display:block;width:100%;padding:0;border:0;background:transparent;cursor:pointer;}
-    .filter-play canvas {display:block;width:100%;height:auto;aspect-ratio:1672/941;}
-    .filter-play:focus-visible {outline:4px solid #176b53;outline-offset:-4px;}
-    .filter-animation .filter-hotspot {position:absolute;z-index:2;min-width:46px;min-height:36px;padding:5px 9px;border:2px solid #fff;border-radius:9px;background:#176b53;color:white;box-shadow:0 2px 10px #243a3540;font-size:clamp(.65rem,1.2vw,.8rem);font-weight:750;cursor:pointer;transform:translate(-50%,-50%);}
-    .filter-hotspot:hover,.filter-hotspot[aria-pressed="true"] {background:#0f4e3b;}
-    .filter-hotspot.sample {left:22%;top:52%;}
-    .filter-hotspot.filter {left:65%;top:36%;}
-    .filter-hotspot.pour {left:36%;top:18%;}
-    .filter-hotspot.result {left:64%;top:78%;}
-    #filter-status {display:block;min-height:0;text-align:center;color:#52635d;font-size:.8rem;}
-    #filter-status:empty {display:none;}
-    .filter-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; margin:0 0 12px; padding:0; list-style:none; }
-    .filter-steps li { min-width:0; padding:12px; border:1px solid var(--line); border-radius:12px; background:#fff; }
-    .filter-steps b { display:block; margin-bottom:4px; color:var(--green); font-size:.84rem; }
-    .filter-steps span { display:block; color:#53645d; font-size:.82rem; line-height:1.5; }
-    .filter-principle { margin:12px 0; padding:14px 16px; border:1px solid #d8e2da; border-radius:12px; background:#edf4ee; color:#40564b; }
-    .filter-principle strong { display:block; margin-bottom:3px; color:var(--green); }
-    .filter-details { min-height:116px; margin:12px 0; padding:16px 18px; border:1px solid #cddfd2; border-radius:14px; background:#fff; box-shadow:0 5px 16px #243a3508; }
-    .filter-details h3 { margin:0 0 8px; color:var(--green); font-size:1rem; }
-    .filter-details p { margin:5px 0 0; color:#53645d; }
-    .filter-details p strong { color:var(--ink); }
-    .note-box { border-left-color:var(--green); background:#edf3ee; font-size:.88rem; }
-    .choice-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
-    .choice-button { border:1px solid #bdc8bf; border-radius:9px; padding:8px 12px; background:#fff; cursor:pointer; font-weight:700; }
-    .choice-button:hover { border-color:var(--green); }
-    .choice-button[aria-pressed="true"] { color:#fff; border-color:var(--green); background:var(--green); }
-    button:focus-visible,a:focus-visible,select:focus-visible { outline:3px solid #79ad8d; outline-offset:2px; }
-    .live-note { min-height:1.6em; color:#315e4e; font-size:.9rem; font-weight:650; }
-    .scene { position:relative; min-height:190px; margin:12px 0; overflow:hidden; border:1px solid #cdd8d2; border-radius:13px; background:linear-gradient(#f6faf7,#eef3ef); }
-    .scene-label { position:absolute; top:10px; left:12px; color:var(--muted); font-size:.78rem; font-weight:700; }
-    .evap-stepper { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:7px; margin:18px 0 14px; padding:0; list-style:none; }
-    .evap-step { min-width:0; min-height:54px; padding:9px 8px; border:1px solid #d8e2da; border-radius:12px; background:#fff; color:#53645d; font-weight:750; cursor:pointer; transition:background-color .25s,border-color .25s,color .25s,box-shadow .25s,transform .25s; }
-    .evap-step:hover { border-color:#8cae91; transform:translateY(-1px); }
-    .evap-step[aria-pressed="true"] { border-color:#176b53; background:#eaf3ec; color:#145540; box-shadow:0 0 0 2px #176b5314; }
-    .evap-step:focus-visible { outline:3px solid #82a98c; outline-offset:3px; }
-    .evap-arrow { color:#a4b5a8; font-size:1.2rem; font-weight:800; text-align:center; }
-    .evap-stage { min-height:0; display:grid; grid-template-columns:minmax(0,1fr) 210px; gap:14px; align-items:center; padding:38px 18px 14px; background:radial-gradient(ellipse at 48% 68%,#fff8eb 0,#faf5ea 49%,#f0f4ef 100%); }
-    .evap-visual { position:relative; display:block; width:100%; max-width:620px; margin:0 auto; padding:0; border:0; aspect-ratio:1586/992; overflow:hidden; border-radius:10px; background:#e7e0d4; cursor:pointer; touch-action:manipulation; }
-    .evap-visual:disabled { cursor:not-allowed; }
-    .evap-visual canvas { display:block; width:100%; height:100%; }
-    .evap-observation { align-self:stretch; display:flex; flex-direction:column; justify-content:center; padding:16px; border:1px solid #e2ddcc; border-radius:14px; background:#fffdf8e8; box-shadow:0 5px 16px #243a3508; }
-    .evap-observation strong { margin-bottom:8px; color:#8b6b32; font-size:.82rem; letter-spacing:.04em; }
-    .evap-observation p { margin:0; color:#4c5d55; font-size:.94rem; line-height:1.7; }
-    .evap-observation .live-note { min-height:0; }
-    select { width:100%; padding:8px; border:1px solid #bdc8bf; border-radius:8px; background:#fff; }
-    .next-hint { margin:14px 0 0; padding-top:12px; border-top:1px solid var(--line); color:#587365; font-size:.86rem; }
-    footer { padding:16px 0 28px; color:#718078; font-size:.82rem; }
-    @media(max-width:850px) { .lesson-layout { grid-template-columns:1fr; gap:12px; } .route { position:relative; top:auto; max-height:none; } .route-inner { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-    @media(max-width:850px) { .filter-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-    @media(max-width:760px) { .evap-stage { grid-template-columns:1fr; gap:10px; padding:38px 12px 13px; } .evap-visual { max-width:560px; } .evap-observation { min-height:104px; } .evap-observation strong { margin-bottom:3px; } }
-    @media(max-width:560px) { .evap-stepper { grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr); gap:5px; } .evap-step { min-height:49px; padding:6px 3px; font-size:.75rem; line-height:1.35; } .evap-arrow { font-size:.95rem; } }
-    @media(max-width:680px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:16px; padding-top:20px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .filter-details { padding:13px; } .goal-choice { min-width:100%; } }
-    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
+    :root{color-scheme:light;--ink:#243a35;--muted:#64736d;--line:#d9d3c4;--paper:#f4f1e8;--card:#fffdf8;--green:#176b53;--green-pale:#e5f2e9;--orange:#bc612b;--orange-pale:#fff0e3;--shadow:0 7px 20px #243a3508;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);line-height:1.7}button,input{font:inherit}button{cursor:pointer}.shell{width:min(1160px,calc(100% - 40px));margin-inline:auto}.masthead{padding:22px 0 20px}.brand-row,.section-top,.card-head{display:flex;align-items:center;justify-content:space-between;gap:16px}.brand-row{font-size:.9rem;font-weight:750}.back-link{color:var(--green);text-decoration:none}.crumb{color:var(--muted);font-weight:500}.hero{display:grid;grid-template-columns:minmax(280px,.84fr) minmax(0,1.16fr);gap:34px;align-items:center;padding:28px 0 24px}.eyebrow{color:var(--green);font-size:.82rem;font-weight:800;letter-spacing:.1em}.hero h1{margin:8px 0 12px;font-size:clamp(2rem,4.4vw,3.4rem);line-height:1.2;letter-spacing:-.04em}.hero-copy p{margin:0;color:var(--muted);font-size:1.05rem}.hero-figure{margin:0;overflow:hidden;border:1px solid var(--line);border-radius:22px;background:#182436;box-shadow:var(--shadow)}.hero-figure img{display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:cover}.hero-figure figcaption{padding:8px 12px;background:#fffdf8;color:var(--muted);font-size:.8rem}
+    main{padding:0 0 76px}.section-top{align-items:end;margin:0 0 18px}.section-top h2{margin:0;font-size:1.32rem}.progress-copy{color:var(--muted);font-size:.9rem;white-space:nowrap}progress{display:block;width:100%;height:8px;margin:12px 0 0;border:0;border-radius:99px;overflow:hidden}progress::-webkit-progress-bar{background:#dfe7df}progress::-webkit-progress-value{background:var(--green);border-radius:99px}progress::-moz-progress-bar{background:var(--green);border-radius:99px}
+    .lesson-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px;align-items:start}.route{position:sticky;top:18px;max-height:calc(100svh - 36px);overflow-y:auto;padding:8px 10px 12px 0;scrollbar-width:thin}.route-label{margin:0 0 8px;color:var(--muted);font-size:.76rem;letter-spacing:.08em}.route-inner{display:grid;gap:4px}.route a{display:grid;grid-template-columns:28px minmax(0,1fr);align-items:start;gap:8px;padding:10px 11px;border:1px solid transparent;border-left:3px solid transparent;border-radius:0 10px 10px 0;color:var(--muted);font-size:.88rem;line-height:1.45;text-decoration:none}.route a:hover,.route a:focus-visible{border-color:var(--line);outline:2px solid transparent}.route a[aria-current=step]{border-left-color:var(--green);background:#e7eee0;color:#315a46;font-weight:800}.route-number{font-size:.75rem;font-weight:850;font-variant-numeric:tabular-nums}.lesson-list{display:grid;gap:22px}.lesson-card{position:relative;scroll-margin-top:22px;display:grid;grid-template-columns:175px minmax(0,1fr);gap:26px;padding:26px;border:1px solid var(--line);border-radius:24px;background:var(--card);box-shadow:var(--shadow)}.card-side{padding-right:16px;border-right:1px solid var(--line)}.card-side h3{margin:0 0 8px;font-size:1.25rem;line-height:1.4}.card-number{display:block;margin-bottom:10px;color:var(--green);font-size:.82rem;font-weight:850;letter-spacing:.08em}.card-role{color:var(--muted);font-size:.83rem}.card-main h2{margin:0 0 10px;font-size:clamp(1.3rem,2.6vw,1.75rem);line-height:1.38}.card-main>p{margin:0 0 16px;color:var(--muted)}.prompt{margin:14px 0 8px;font-weight:750}.visual{margin:20px 0;padding:20px;border:1px solid var(--line);border-radius:20px;background:#f6f8f3}.visual svg{display:block;width:100%;height:auto}.visual-caption{margin:8px 2px 0;color:var(--muted);font-size:.84rem}.dialogue{display:flex;align-items:center;gap:10px;margin:14px 0;padding:11px 15px;border-left:4px solid #8cae91;border-radius:0 13px 13px 0;background:#f0f5eb}.dialogue p{margin:0}.dialogue .speaker{display:inline-flex;flex:0 0 auto;align-items:center;gap:0;color:#315a46;font-weight:800}.dialogue .speaker:before{content:"";display:block;width:44px;height:44px;border:2px solid #8cae91;border-radius:50%;background-image:url("../../../../shared-assets/characters/dialogue-character-avatars.png?v=clean-shaven-grandpa");background-repeat:no-repeat;background-position:100% 50%;background-size:200% 100%;box-shadow:0 2px 6px #152f261f}.dialogue--xiaokui{border-left-color:#d39765;background:#fff4e8}.dialogue--xiaokui .speaker{color:#945523}.dialogue--xiaokui .speaker:before{border-color:#d39765;background-position:0 50%}
+    .controls,.toggle-row,.choices{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}.control-button,.choice{min-height:44px;border:1px solid var(--line);border-radius:13px;padding:9px 13px;background:#fff;color:var(--ink);text-align:left}.control-button:hover,.choice:hover,.control-button:focus-visible,.choice:focus-visible{border-color:var(--green);outline:2px solid #176b531f}.control-button[aria-pressed=true],.choice[aria-pressed=true]{border-color:var(--green);background:var(--green-pale);box-shadow:inset 0 0 0 1px var(--green)}.range-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;margin-top:15px}.range-row input{width:100%;accent-color:var(--green)}output,.strong-readout{color:var(--green);font-weight:850;white-space:nowrap}.readout-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.readout{flex:1 1 150px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}.readout small,.readout strong{display:block}.readout small{color:var(--muted)}.readout strong{color:var(--green);font-size:1.05rem}.fact,.feedback{margin-top:13px;padding:13px 15px;border-radius:13px;background:#f0f5eb;color:#405851}.fact p{margin:0}.feedback{min-height:50px;border-left:4px solid #b8cda9;border-radius:0 12px 12px 0}.feedback[data-state=good]{border-left-color:var(--green)}.feedback[data-state=try]{border-left-color:var(--orange);background:var(--orange-pale);color:#6b4028}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}th,td{padding:9px 12px;border-bottom:1px solid #e8e8df;text-align:center}th{background:#eaf1e8;color:#315a46}tbody tr:last-child td{border-bottom:0}.end-card{border-color:#bfd1be;background:#f4f8ef}.check-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}.action,.secondary{min-height:44px;border-radius:13px;padding:9px 16px;font-weight:750}.action{border:0;background:var(--green);color:#fff}.action:hover{background:#105640}.secondary{border:1px solid var(--line);background:#fff;color:var(--ink)}.choice.correct[aria-pressed=true]{border-color:var(--green);background:var(--green-pale)}.choice.incorrect[aria-pressed=true]{border-color:var(--orange);background:var(--orange-pale)}footer{padding:22px 0 36px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+    .reflection-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 10px}.reflection-fire{display:grid;align-content:center;gap:2px;width:100%;min-height:52px;padding:8px 7px;border:0;border-radius:13px;background:var(--green);color:#fff;font-weight:800;line-height:1.25;box-shadow:0 3px 8px #176b5326}.reflection-fire small{font-size:.76rem;font-weight:650;opacity:.92}.reflection-fire:hover{background:#105640}.reflection-fire:focus-visible{outline:3px solid #176b5340;outline-offset:2px}.reflection-hint{grid-column:1/-1;margin:0;color:var(--muted);font-size:.9rem}.reflection-stage{position:relative;overflow:hidden;margin:12px 0 0;border:1px solid #455852;border-radius:18px;background:#202b2a;box-shadow:inset 0 0 40px #0c171640}.reflection-stage canvas{display:block;width:100%;height:clamp(330px,42vw,480px);cursor:grab;touch-action:none}.reflection-stage canvas.is-pointing-source{cursor:pointer}.reflection-stage canvas.is-dragging{cursor:grabbing}.reflection-stage canvas:focus-visible{outline:3px solid #a5cdbc;outline-offset:-5px}.reflection-stage-labels{display:flex;flex-wrap:wrap;gap:8px;padding:10px 14px;background:#fffdf8}.reflection-stage-labels span{display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);font-size:.84rem;font-weight:750}.reflection-stage-labels i{width:10px;height:10px;border-radius:50%;background:#c9d6d0}.reflection-stage-labels .reflection-dot-smooth{background:#f1d886}.reflection-stage-labels .reflection-dot-rough{background:#9ca89e}.reflection-stage .reflection-controls{margin:0;padding:8px 14px 4px;background:#fffdf8}.reflection-stage .visual-caption{margin:0;padding:8px 14px;background:#fffdf8;color:var(--muted)}.reflection-status{min-height:28px;margin:8px 2px 0;color:var(--green);font-size:.9rem;font-weight:700}.reflection-note{margin:4px 2px 0;color:var(--muted);font-size:.82rem}.reflection-fallback{margin:0;padding:38px 20px;background:#263432;color:#fff;text-align:center}.reflection-fallback[hidden]{display:none}
+    .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:780px){.shell{width:min(100% - 24px,680px)}.hero{grid-template-columns:1fr;gap:16px;padding:24px 0 20px}.hero-figure{order:-1}.lesson-layout{grid-template-columns:minmax(0,1fr);gap:8px;min-width:0}.route{z-index:5;top:0;width:100%;min-width:0;max-width:100%;max-height:none;margin:0 -12px;padding:6px 12px 10px;overflow-x:auto;overflow-y:hidden;background:var(--paper)}.route-label{margin:0 0 6px}.route-inner{display:flex;width:max-content;gap:6px}.route a{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);white-space:nowrap}.route a[aria-current=step]{border-color:var(--green)}.lesson-list,.lesson-card,.card-side,.card-main{min-width:0}.lesson-card{grid-template-columns:minmax(0,1fr);gap:13px;padding:19px;border-radius:19px}.card-side{display:flex;align-items:baseline;gap:10px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0}.card-number{margin:0}.card-role{display:none}.laser-lesson{min-width:0;max-width:100%}}
+    @media(max-width:460px){.shell{width:calc(100% - 20px)}.route{margin-inline:-10px}.brand-row,.section-top{align-items:flex-start}.section-top h2{font-size:1.15rem}.progress-copy{font-size:.82rem}.visual{padding:9px}.range-row{grid-template-columns:1fr;gap:4px}.range-row output{text-align:right}.dialogue{align-items:flex-start;padding:10px}.dialogue .speaker:before{width:38px;height:38px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
   </style>
-  <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
-  <link rel="stylesheet" href="assets/concentration.css?v=polish-6">
-  <link rel="stylesheet" href="assets/ppm-scale.css?v=review-5">
-  <link rel="stylesheet" href="assets/investigation.css?v=layout-2">
+  <style>
+    #card-02{grid-template-columns:minmax(0,1fr);gap:13px}
+    #card-02 .card-side{display:flex;align-items:baseline;gap:10px;padding:0 0 12px;border-right:0;border-bottom:1px solid var(--line)}
+    #card-02 .card-side h3,#card-02 .card-number{margin:0}
+    .laser-lesson{width:100%;margin-top:20px;border:1px solid #d8dfdf;border-radius:18px;overflow:hidden;background:#fff}
+    .laser-concept{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:8px;padding:14px 22px;background:linear-gradient(135deg,#f8fcff,#fff)}
+    .laser-concept-copy{display:grid;width:100%;grid-template-columns:minmax(0,1fr);justify-items:center;gap:10px;padding:14px 16px;border-radius:16px;background:#e6f4ff;text-align:center}
+    .laser-concept-copy h3{margin:0;font-size:clamp(1.2rem,2.1vw,1.48rem);line-height:1.25;color:#102c54}
+    .laser-law{width:min(100%,560px);margin:0;padding:10px 16px;border-radius:12px;background:#fff2d2;color:#c51d17;text-align:center;font-size:clamp(1.4rem,3.2vw,2.25rem);font-weight:900;white-space:nowrap}
+    .laser-rule{margin:0;color:#1e3550;text-align:center;font-size:1rem;font-weight:750}
+    .laser-diagram{display:block;width:min(100%,660px);height:auto;justify-self:center}
+    .laser-lab{overflow:hidden;border:1px solid #d8dfdf;border-radius:16px;background:#b8895f}
+    #laser-reflection-scene{display:block;width:100%;height:clamp(320px,38vw,430px);touch-action:pan-y;cursor:default}
+    #laser-reflection-scene:focus-visible{outline:3px solid #176b53;outline-offset:-4px}
+    .laser-lab-ui{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,auto);align-items:center;gap:12px 16px;padding:12px 18px;background:#fffdf8}
+    .laser-view-current{margin:0;color:#47645a;font-size:.82rem;font-weight:800}
+    .laser-angle-readout{display:grid;grid-template-columns:1fr 1fr;gap:8px;color:#1459af;font-size:.88rem;font-weight:850}
+    .laser-angle-readout span{padding:7px 10px;border-radius:10px;background:#edf4fb;white-space:nowrap}
+    .laser-angle-readout span:last-child{background:#eef5eb;color:#24783a}
+    .laser-angle-readout strong{padding-left:4px;font-variant-numeric:tabular-nums}
+    .laser-observation{margin:0;padding:13px 18px;background:#f0f5eb;color:#315a46;font-weight:750}
+    @media(max-width:960px){.laser-lab-ui{grid-template-columns:minmax(0,1fr) minmax(175px,auto);gap:12px}}
+    @media(max-width:780px){.laser-lesson{width:auto;margin-left:0}}
+    @media(max-width:760px){.laser-concept{padding:16px}.laser-concept-copy{gap:8px}.laser-law{font-size:clamp(1.2rem,5vw,1.55rem)}.laser-diagram #law-angle-name-in,.laser-diagram #law-angle-name-out{font-size:15px}.laser-diagram #law-angle-in,.laser-diagram #law-angle-out{font-size:17px}#laser-reflection-scene{height:clamp(140px,70vw,280px)}.laser-lab-ui{grid-template-columns:1fr;padding:14px}}
+    @media(max-width:440px){.laser-angle-readout{gap:6px;font-size:.8rem}.laser-angle-readout span{padding:7px 8px}}
+    @media(max-width:360px){.laser-concept-copy{grid-template-columns:minmax(0,1fr)}.laser-law{white-space:normal}}
+  </style>
+  <style>
+    #card-03,#card-04{grid-template-columns:minmax(0,1fr);gap:16px;padding:24px}
+    #card-03 .card-side,#card-04 .card-side{display:flex;align-items:baseline;gap:12px;padding:0 0 12px;border-right:0;border-bottom:1px solid var(--line)}
+    #card-03 .card-side h3,#card-04 .card-side h3,#card-03 .card-number,#card-04 .card-number{margin:0}
+    #card-03 .mirror-views,#card-04 .mirror-views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+    .mirror-view{min-width:0;margin:0;overflow:hidden;border:1px solid var(--line);border-radius:13px;background:#fff}
+    .mirror-view h3{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0;padding:9px 12px;background:#e8f3f8;color:#23465a;font-size:.95rem;line-height:1.35}
+    .mirror-view h3 small{flex:0 0 auto;padding:3px 8px;border-radius:999px;background:#fff;color:#176b53;font-size:.74rem;font-weight:800}
+    .mirror-view svg{display:block;width:100%;height:auto;background:linear-gradient(#fbfcfa,#f3f5ef)}
+    .mirror-task{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px;margin:12px 0;padding:12px 14px;border:1px solid #c8d8c7;border-radius:13px;background:#f0f5eb}
+    .mirror-task strong{color:#176b53;white-space:nowrap}
+    .mirror-task p{margin:0;color:#405851}
+    .mirror-controls{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:12px 0}
+    .mirror-controls .mirror-primary{border-color:#176b53;background:#176b53;color:#fff;font-weight:800}
+    .mirror-controls .mirror-secondary{border-color:#8cb4c5;background:#f1f8fb;color:#23465a;font-weight:800}
+    .mirror-sync-note{flex:1 1 220px;margin:0;padding:10px 12px;border-radius:11px;background:#e8f3f8;color:#23465a;font-size:.9rem;font-weight:700}
+    .mirror-btn:disabled{cursor:default;opacity:.55}
+    .mirror-live{min-height:1.5em;margin:7px 0 0;color:var(--green);font-size:.88rem;font-weight:700}
+    .distance-controls{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:12px;margin:12px 0;padding:12px 14px;border:1px solid #d9d3c4;border-radius:13px;background:#fffdf8}
+    .distance-controls label{font-weight:800;color:#23465a}
+    .distance-controls input{width:100%;accent-color:var(--green)}
+    .distance-controls input[type=range]{height:28px;cursor:ew-resize}
+    .distance-controls output{min-width:70px;color:#176b53;font-size:1.05rem;text-align:center}
+    .distance-metrics{display:flex;flex-wrap:wrap;gap:8px}
+    .distance-metric{flex:1 1 110px;padding:8px 11px;border:1px solid var(--line);border-radius:11px;background:#fff}
+    .distance-metric small,.distance-metric strong{display:block}
+    .distance-metric small{color:var(--muted);font-size:.78rem}
+    .distance-metric strong{color:var(--green);font-size:1rem;font-variant-numeric:tabular-nums}
+    .ruler-line{stroke:#516b65;stroke-width:1.5}.ruler-tick{stroke:#516b65;stroke-width:1}.ruler-label{fill:#405851;font-size:17px;text-anchor:middle}.measure-line{stroke:#286ac2;stroke-width:2;stroke-dasharray:4 3}.measure-text{font-size:17px;font-weight:800;text-anchor:middle}
+    .drag-object{cursor:grab;touch-action:none;filter:drop-shadow(0 2px 2px #243a3530)}.drag-object:active{cursor:grabbing}.drag-object:focus-visible{outline:3px solid #176b5380}
+    #distance-side-view .ruler-active-band{fill:#e1eee3;fill-opacity:.8}
+    #distance-front-object,#distance-front-reflection{transition:transform .2s ease-out}
+    @media(max-width:1050px){#card-03 .mirror-views,#card-04 .mirror-views{grid-template-columns:minmax(0,1fr)}}
+    @media(max-width:780px){.distance-controls{grid-template-columns:1fr auto}.distance-controls label{grid-column:1/-1}.mirror-task{grid-template-columns:1fr;gap:4px}}
+
+
+  </style>
+  <link rel="stylesheet" href="assets/mirror-image.css?v=8">
+  <link rel="stylesheet" href="assets/curved-mirrors.css?v=1">
+  <link rel="stylesheet" href="assets/reversible-light.css?v=3">
+  <link rel="stylesheet" href="assets/periscope.css?v=8">
 </head>
 <body>
   <header class="shell masthead">
-    <div class="brand-row"><a class="brand" href="../../index.html">← 物質、分離與水溶液</a><span class="crumb">國二上・自然科學</span></div>
+    <div class="brand-row"><a class="back-link" href="../../index.html">← 返回光學單元</a><span class="crumb">國二上・理化</span></div>
     <div class="hero">
-      <div>
-        <div class="eyebrow">學習內容 2.2｜混合物分離與溶液濃度｜從分離成分到表示含量</div>
-        <h1>混在一起的東西，怎麼分開？</h1>
-        <p class="hero-copy">雨後，小葵從院子裡的水桶取了一杯混濁的水，帶到阿公的工作桌。她看得見水裡有泥沙，卻不知道怎麼把它們分開。阿公準備了泥沙水、鹽水和墨水，讓她觀察沒有溶解的泥沙、溶在水裡的鹽，以及混在墨水中的色素，可以怎麼分離。接著，她也會自由調整糖和水的用量，配成糖水，再用濃度表示溶質所占的質量比例。</p>
+      <div class="hero-copy">
+        <div class="eyebrow">學習內容 4.2｜一起走進光學實驗室</div>
+        <h1>光遇到表面會怎樣？</h1>
+        <p>阿公把鏡子立在實驗桌上，遞給小葵一支手電筒：「照照看，光會跑去哪裡？」光束轉向後落在白紙上，小葵又在鏡中看見自己。她追問：「鏡中的我在哪裡？」</p>
       </div>
-      <figure class="hero-cover"><img src="assets/unit-opening-cover.png" alt="阿公和小葵在工作桌前觀察泥沙水；桌上有過濾器材、不同份量的液體樣本、色帶分離的濾紙和一盤晶體。"></figure>
+      <figure class="hero-figure">
+        <img src="assets/optics-lab-opening.png?v=clean-shaven-grandpa" alt="夜晚的光學實驗室裡，小葵和阿公一起觀察光源、鏡面、屏幕與光路器材。" width="1672" height="941" fetchpriority="high">
+              <figcaption>小葵和阿公準備探索平面鏡與曲面鏡的反射。</figcaption>
+      </figure>
     </div>
   </header>
-  <main class="shell lesson-layout">
-    <nav class="route" aria-label="學習路徑">
-      <p class="route-label">本單元的探索路線</p>
-      <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／04 個學習區塊</p>
-      <div class="route-inner">
-        <a href="#s1" aria-current="step"><b>01</b><span>把泥沙水倒進漏斗，會發生什麼？</span></a>
-        <a href="#s2"><b>02</b><span>鹽溶在水裡，要怎麼分離出來？</span></a>
-        <a href="#s3"><b>03</b><span>一滴綠色墨水，會分出不同色帶嗎？</span></a>
-        <a href="#s5"><b>04</b><span>自己配糖水，濃度是多少？</span></a>
-        <a href="#unit-quiz" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
+  <main class="shell">
+    <div class="section-top">
+      <div><h2>沿著探索路線，一步步認識光的反射</h2><progress id="lesson-progress" max="7" value="1" aria-label="學習路線閱讀進度"></progress></div>
+      <span class="progress-copy" id="progress-copy">正在探索第 1 段</span>
+    </div>
+    <div class="lesson-layout">
+      <nav class="route" aria-label="探索路線">
+        <p class="route-label">本段探索路線</p>
+        <div class="route-inner">
+          <a href="#card-01" aria-current="step"><span class="route-number">01</span><span>同一束光照到不同表面，反射方向一樣嗎？</span></a>
+          <a href="#card-02"><span class="route-number">02</span><span>光路與反射定律</span></a>
+          <a href="#card-03"><span class="route-number">03</span><span>鏡中的像看起來在哪一側？</span></a>
+          <a href="#card-04"><span class="route-number">04</span><span>只移動物體，像的位置怎麼變？</span></a>
+          <a href="#card-05"><span class="route-number">05</span><span>鏡面彎起來，反射方向還會一樣嗎？</span></a>
+          <a href="#card-06"><span class="route-number">06</span><span>把光線方向倒過來，路徑會改變嗎？</span></a>
+          <a href="#unit-quiz"><span class="route-number">✦</span><span>單元小測｜幫小葵完成潛望鏡</span></a>
+        </div>
+      </nav>
+      <div class="lesson-list">
+        <section class="lesson-card" id="card-01">
+          <div class="card-side"><span class="card-number">01</span><h3>光遇到表面會怎樣？</h3><span class="card-role">先觀察反射</span></div>
+          <div class="card-main">
+            <h2>同一束光照到不同表面，反射方向一樣嗎？</h2>
+            <p>小葵把光照向鏡面，再換成一般表面。留意反射光的方向如何呈現。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光落在白紙上了；換成一般表面，反射方向也一樣嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>好，先固定光源和照射位置，再看看反射光落在哪些方向。</p></div>
+            <p class="prompt">分別開啟左右手電筒，從目前視角比較鏡面與霧面紙的反光。</p>
+            <figure class="reflection-stage">
+              <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="左右分開的兩座 3D 反射實驗台：左邊是平面鏡，右邊是霧面白紙，兩個表面前方各有對應標籤；各有一支手電筒以相同角度照射。開啟後觀察兩種表面的反光。" aria-describedby="reflection-status"></canvas>
+              <p class="reflection-fallback" id="reflection-fallback" hidden>這個 3D 實驗場景無法在目前裝置顯示；你仍可閱讀下方的觀察說明。</p>
+              <div class="reflection-stage-labels" aria-hidden="true"><span><i class="reflection-dot-smooth"></i>平面鏡・鏡面反射</span><span><i class="reflection-dot-rough"></i>霧面紙・漫反射</span></div>
+              <div class="reflection-controls">
+                <button class="reflection-fire" id="reflection-fire-mirror" type="button" aria-pressed="false"><span>左側手電筒</span><small>開啟手電筒</small></button>
+                <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false"><span>右側手電筒</span><small>開啟手電筒</small></button>
+              </div>
+            </figure>
+              <p class="reflection-status visually-hidden" id="reflection-status" aria-live="polite">左右手電筒目前都已關閉。</p>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>鏡面反光集中；霧面紙把光散向多處。兩者都遵守反射定律。</p></div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-02">
+          <div class="card-side"><span class="card-number">02</span><h3>光路與反射定律</h3><span class="card-role">認識・操作・驗證</span></div>
+          <div class="card-main">
+            <h2>怎麼用光路和雷射實驗看懂反射定律？</h2>
+            <p>先找出入射線、反射線和法線，再轉動雷射觀察兩側角度；最後用多組量測檢查它們的關係。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光在鏡面轉了方向，要怎麼把光路和角度說清楚？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先從入射點畫出垂直鏡面的法線，再沿著光的方向標出入射線和反射線。</p></div>
+            <div class="laser-lesson" aria-label="平面鏡反射定律說明與雷射實驗">
+              <section class="laser-concept" aria-labelledby="laser-concept-title">
+                <div class="laser-concept-copy">
+                  <h3 id="laser-concept-title">平面鏡的反射定律</h3>
+                  <p class="laser-law">入射角 ＝ 反射角</p>
+                  <p class="laser-rule">角度從法線量起。</p>
+                </div>
+                <svg class="laser-diagram" viewBox="0 0 600 340" role="img" aria-labelledby="law-title law-desc">
+                  <title id="law-title">鏡面朝上的平面鏡反射定律</title><desc id="law-desc">平面鏡位於下方，法線垂直鏡面向上。紅色入射線從右側入射，反射線往左；兩線相對法線對稱，角度會隨下方實驗更新。</desc>
+                  <defs><marker id="law-arrow" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto"><path d="M0 0L6 3L0 6Z" fill="#e1261c"/></marker></defs>
+                  <path d="M90 280H510" stroke="#71889b" stroke-width="15"/><path d="M90 273H510" stroke="#c6d8e8" stroke-width="4"/>
+                  <path d="M110 287l-10 16M150 287l-10 16M190 287l-10 16M230 287l-10 16M270 287l-10 16M310 287l-10 16M350 287l-10 16M390 287l-10 16M430 287l-10 16M470 287l-10 16" stroke="#40566c" stroke-width="2"/>
+                  <path d="M300 36V280" stroke="#7b7d78" stroke-width="2" stroke-dasharray="9 8"/><text x="313" y="55" fill="#253747" font-size="16" font-weight="700">法線</text>
+                  <path id="law-wedge-incident" d="M300 280L300 114A166 166 0 0 1 357 166Z" fill="#1463c5" fill-opacity=".09"/>
+                  <path id="law-wedge-reflected" d="M300 280L300 114A166 166 0 0 0 243 166Z" fill="#27833d" fill-opacity=".09"/>
+                  <path id="law-incident" d="M395 115L307 268" stroke="#e1261c" stroke-width="4" stroke-linecap="round" marker-end="url(#law-arrow)"/>
+                  <path id="law-arc-incident" d="M300 202A78 78 0 0 1 339 212" fill="none" stroke="#1463c5" stroke-width="5" stroke-linecap="round"/>
+                  <path id="law-arc-reflected" d="M300 202A78 78 0 0 0 261 212" fill="none" stroke="#27833d" stroke-width="5" stroke-linecap="round"/>
+                  <path id="law-reflected" d="M293 268L205 115" stroke="#e1261c" stroke-width="4" stroke-linecap="round" marker-end="url(#law-arrow)"/>
+                  <circle cx="300" cy="280" r="10" fill="#fff"/><circle cx="300" cy="280" r="6" fill="#ed2b20"/>
+                  <text id="law-angle-name-in" x="320" y="176" fill="#165fc2" font-size="12" font-weight="850" text-anchor="middle">入射角</text>
+                  <text id="law-angle-name-out" x="280" y="176" fill="#24783a" font-size="12" font-weight="850" text-anchor="middle">反射角</text>
+                  <text id="law-angle-in" x="323" y="204" fill="#165fc2" font-size="14" font-weight="850" text-anchor="middle">30°</text>
+                  <text id="law-angle-out" x="277" y="204" fill="#24783a" font-size="14" font-weight="850" text-anchor="middle">30°</text>
+                  <g id="law-line-name-in" transform="translate(440 100)"><rect x="-38" y="-14" width="76" height="28" rx="9" fill="#fffdf7" fill-opacity=".96" stroke="#e8b3ae"/><text y="5" fill="#cf261c" font-size="14" font-weight="800" text-anchor="middle">入射線</text></g>
+                  <g id="law-line-name-out" transform="translate(160 100)"><rect x="-38" y="-14" width="76" height="28" rx="9" fill="#fffdf7" fill-opacity=".96" stroke="#e8b3ae"/><text y="5" fill="#cf261c" font-size="14" font-weight="800" text-anchor="middle">反射線</text></g>
+                  <path d="M334 257L309 275" fill="none" stroke="#cf261c" stroke-width="1.5"/><rect x="334" y="242" width="68" height="24" rx="8" fill="#fff" stroke="#e8b3ae"/><text x="368" y="258" fill="#cf261c" font-size="13" font-weight="800" text-anchor="middle">入射點</text>
+                  <text x="300" y="330" fill="#172635" font-size="18" font-weight="800" text-anchor="middle">平面鏡（反射面朝上）</text>
+                </svg>
+              </section>
+              <section class="laser-lab" aria-label="可調整入射角的雷射反射實驗">
+                <canvas id="laser-reflection-scene" tabindex="0" role="slider" aria-label="調整入射角。使用方向鍵每次調整一度，Home 和 End 可快速調整至 20 度或 90 度。" aria-valuemin="20" aria-valuemax="90" aria-valuenow="30" aria-valuetext="入射角 30 度，反射角 30 度" aria-describedby="laser-drag-instruction"></canvas>
+                <div class="laser-lab-ui" aria-label="雷射角度操作與讀數">
+                  <p class="laser-view-current" id="laser-drag-instruction">反射板角度視角・拖動雷射即可調整入射角；也可聚焦畫面後使用方向鍵微調</p>
+                  <div class="laser-angle-readout"><span>入射角 <strong id="lab-angle-in">30°</strong></span><span>反射角 <strong id="lab-angle-out">30°</strong></span></div>
+                </div>
+              </section>
+              <p class="laser-observation" id="angle-observation" aria-live="polite">入射角和反射角都是 30°。拖動雷射，觀察反射光方向如何改變。</p>
+            </div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-03" data-presentation="simultaneous">
+          <div class="card-side"><span class="card-number">03</span><h3>平面鏡裡的像在哪裡？</h3></div>
+          <div class="card-main">
+            <h2>上下看，熊玩偶看起來一樣嗎？</h2>
+            <div class="comparison-column-headings" aria-hidden="true"><span>光的路徑</span><span>小葵看到的熊</span></div>
+            <div class="mirror-comparison-grid" aria-label="上排有鏡子，下排撤鏡並放入真熊；兩個情境同時比較"><article class="comparison-state" id="comparison-reference" data-mode="mirror" aria-labelledby="reference-heading">
+ <figure class="comparison-diagram"><h3 class="comparison-row-title" id="reference-heading">有鏡子</h3><svg class="comparison-side" id="reference-side" viewBox="0 0 900 650" role="img" aria-labelledby="reference-side-title reference-side-desc">
+<title id="reference-side-title">小熊的光經鏡面反射進入眼睛，鏡後以虛線標示像的位置</title><desc id="reference-side-desc">固定眼位，比較整隻熊玩偶。有鏡子時，實線代表實際反射光、鏡後虛線為反向延長；下排撤鏡後，另放入同位置、同大小與對應朝向的真熊。2與3公尺沿中央代表光路量取。</desc>
+<defs>
+ <linearGradient id="reference-room" x2="0" y2="1"><stop stop-color="#fbfaf5"/><stop offset="1" stop-color="#eee9df"/></linearGradient>
+ <linearGradient id="reference-wood" x2="0" y2="1"><stop stop-color="#d5b38c"/><stop offset="1" stop-color="#b98e64"/></linearGradient>
+ <linearGradient id="reference-silver" x2="1" y2="0"><stop stop-color="#91afb3"/><stop offset=".5" stop-color="#f3faf9"/><stop offset="1" stop-color="#a1bdc0"/></linearGradient>
+ <pattern id="reference-backing" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 10L10 0" stroke="#a7b2ad" stroke-width="1.2"/></pattern>
+ <marker id="reference-blue-arrow" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto"><path d="M0 0L6 3L0 6Z" fill="#236f9f"/></marker>
+ <image id="reference-bear-sprite" href="assets/mirror/teddy-side.webp" x="199.4" y="374.2" width="203" height="203"/>
+</defs>
+<rect width="900" height="570" fill="url(#reference-room)"/>
+<rect data-side="virtual-region" x="550" y="68" width="350" height="502" fill="#e6f1f4"/>
+<rect y="570" width="900" height="80" fill="url(#reference-wood)"/>
+<g data-side="observer"><image data-side="profile" href="assets/mirror/xiaokui-profile.webp" x="136.2272727" y="106.5454545" width="160" height="160"/></g>
+<g data-side="near"><use data-side="near-shape" href="#reference-bear-sprite" opacity="1"/></g>
+<g data-side="mirror"><rect x="540" y="68" width="9" height="502" rx="3" fill="url(#reference-silver)" stroke="#607e7f" stroke-width="2"/><rect x="552" y="70" width="12" height="498" fill="url(#reference-backing)"/><rect x="522" y="565" width="46" height="7" rx="3" fill="#81948b"/></g>
+<g data-side="mirror-tick" style="display:none"><path d="M540 565V589" stroke="#829694" stroke-width="6"/></g>
+<g data-side="far"><use data-side="far-shape" href="#reference-bear-sprite" transform="translate(1080 0) scale(-1 1)" opacity=".48"/><rect x="720" y="592" width="110" height="48" rx="14" fill="#fffdf8"/><text data-side="far-label" x="775" y="626" text-anchor="middle" font-size="34" font-weight="700" fill="#286580">虛像</text></g>
+<g data-side="extensions" fill="none" stroke="#397d9f" stroke-dasharray="8 6" stroke-width="2"></g>
+<g data-side="rays" fill="none" stroke="#236f9f" stroke-linejoin="round"></g>
+<g data-side="hits" fill="#dceff8" stroke="#236f9f" stroke-width="1.8"></g>
+
+<g data-side="distance-three" aria-label="眼睛到反射點的光路為3公尺"></g><g data-side="distance-two" aria-label="反射點到對照位置的光路為2公尺"></g></svg></figure>
+ <figure class="comparison-observation"><svg class="comparison-eye" id="reference-eye" viewBox="175 0 550 550" role="img" aria-labelledby="reference-eye-title reference-eye-desc">
+<title id="reference-eye-title">小葵同時看見鏡前實體熊的背面與遠處鏡中像</title><desc id="reference-eye-desc">上下兩個觀察窗使用同一眼位與較寬取景。下方前景是面向鏡子的原熊背面，上方遠處是鏡中像或撤鏡後放入的真熊；兩排遠處熊的位置、視大小相同，原熊都保留在鏡前位置。</desc>
+<defs><linearGradient id="reference-eye-wall" x2="1" y2="1"><stop stop-color="#f5f0e5"/><stop offset="1" stop-color="#dfd5c5"/></linearGradient><linearGradient id="reference-eye-wood" x2="0" y2="1"><stop stop-color="#d5b38b"/><stop offset="1" stop-color="#ad8054"/></linearGradient><linearGradient id="reference-glass" x2="1" y2="1"><stop stop-color="#e5f3f3"/><stop offset="1" stop-color="#cfe3e5"/></linearGradient><clipPath id="reference-eye-clip"><path data-view="clip"/></clipPath></defs>
+<rect width="900" height="550" fill="url(#reference-eye-wall)"/>
+<path data-view="table" fill="url(#reference-eye-wood)"/><path data-view="grain" fill="none" stroke="#95643c" stroke-width="1" opacity=".24"/>
+<g data-view="mirror"><path data-view="frame" fill="#647f7a" stroke="#526d68" stroke-width="2"/><path data-view="glass" fill="url(#reference-glass)"/><g clip-path="url(#reference-eye-clip)"><path data-view="reflected-table" fill="url(#reference-eye-wood)"/><path data-view="reflected-grain" fill="none" stroke="#95643c" stroke-width="1" opacity=".2"/></g></g>
+<g data-view="far" clip-path="url(#reference-eye-clip)"><path data-view="far-shadow" fill="#493725" opacity=".16"/><foreignObject width="900" height="550"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="front" width="900" height="550" style="width:900px;height:550px" aria-hidden="true"></canvas></foreignObject></g>
+<g data-view="near"><path data-view="near-shadow" fill="#493725" opacity=".2"/><foreignObject width="900" height="550"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="rear" width="900" height="550" style="width:900px;height:550px" aria-hidden="true"></canvas></foreignObject></g>
+</svg></figure>
+</article><article class="comparison-state" id="comparison-trial" data-mode="direct" aria-labelledby="trial-heading">
+ <figure class="comparison-diagram"><h3 class="comparison-row-title" id="trial-heading">撤鏡，放入真熊</h3><svg class="comparison-side" id="trial-side" viewBox="0 0 900 650" role="img" aria-labelledby="trial-side-title trial-side-desc">
+<title id="trial-side-title">撤鏡並在原虛像位置另放真熊，光沿直線進入同一眼位</title><desc id="trial-side-desc">固定眼位，比較整隻熊玩偶。有鏡子時，實線代表實際反射光、鏡後虛線為反向延長；下排撤鏡後，另放入同位置、同大小與對應朝向的真熊。2與3公尺沿中央代表光路量取。</desc>
+<defs>
+ <linearGradient id="trial-room" x2="0" y2="1"><stop stop-color="#fbfaf5"/><stop offset="1" stop-color="#eee9df"/></linearGradient>
+ <linearGradient id="trial-wood" x2="0" y2="1"><stop stop-color="#d5b38c"/><stop offset="1" stop-color="#b98e64"/></linearGradient>
+ <linearGradient id="trial-silver" x2="1" y2="0"><stop stop-color="#91afb3"/><stop offset=".5" stop-color="#f3faf9"/><stop offset="1" stop-color="#a1bdc0"/></linearGradient>
+ <pattern id="trial-backing" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 10L10 0" stroke="#a7b2ad" stroke-width="1.2"/></pattern>
+ <marker id="trial-blue-arrow" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto"><path d="M0 0L6 3L0 6Z" fill="#236f9f"/></marker>
+ <image id="trial-bear-sprite" href="assets/mirror/teddy-side.webp" x="199.4" y="374.2" width="203" height="203"/>
+</defs>
+<rect width="900" height="570" fill="url(#trial-room)"/>
+<rect style="display:none" data-side="virtual-region" x="550" y="68" width="350" height="502" fill="#e6f1f4"/>
+<rect y="570" width="900" height="80" fill="url(#trial-wood)"/>
+<g data-side="observer"><image data-side="profile" href="assets/mirror/xiaokui-profile.webp" x="136.2272727" y="106.5454545" width="160" height="160"/></g>
+<g data-side="near"><use data-side="near-shape" href="#trial-bear-sprite" opacity=".4"/></g>
+<g data-side="mirror" style="display:none"><rect x="540" y="68" width="9" height="502" rx="3" fill="url(#trial-silver)" stroke="#607e7f" stroke-width="2"/><rect x="552" y="70" width="12" height="498" fill="url(#trial-backing)"/><rect x="522" y="565" width="46" height="7" rx="3" fill="#81948b"/></g>
+<g data-side="mirror-tick"><path d="M540 565V589" stroke="#829694" stroke-width="6"/></g>
+<g data-side="far"><use data-side="far-shape" href="#trial-bear-sprite" transform="translate(1080 0) scale(-1 1)" opacity="1"/><rect x="720" y="592" width="110" height="48" rx="14" fill="#fffdf8"/><text data-side="far-label" x="775" y="626" text-anchor="middle" font-size="34" font-weight="700" fill="#286580">真熊</text></g>
+<g data-side="extensions" fill="none" stroke="#397d9f" stroke-dasharray="8 6" stroke-width="2"></g>
+<g data-side="rays" fill="none" stroke="#236f9f" stroke-linejoin="round"></g>
+<g data-side="hits" fill="#dceff8" stroke="#236f9f" stroke-width="1.8"></g>
+
+<g data-side="distance-three" aria-label="眼睛到反射點的光路為3公尺"></g><g data-side="distance-two" aria-label="反射點到對照位置的光路為2公尺"></g></svg></figure>
+ <figure class="comparison-observation"><svg class="comparison-eye" id="trial-eye" viewBox="175 0 550 550" role="img" aria-labelledby="trial-eye-title trial-eye-desc">
+<title id="trial-eye-title">小葵同時看見近處原熊的背面與遠處對照真熊</title><desc id="trial-eye-desc">上下兩個觀察窗使用同一眼位與較寬取景。下方前景是面向鏡子的原熊背面，上方遠處是鏡中像或撤鏡後放入的真熊；兩排遠處熊的位置、視大小相同，原熊都保留在鏡前位置。</desc>
+<defs><linearGradient id="trial-eye-wall" x2="1" y2="1"><stop stop-color="#f5f0e5"/><stop offset="1" stop-color="#dfd5c5"/></linearGradient><linearGradient id="trial-eye-wood" x2="0" y2="1"><stop stop-color="#d5b38b"/><stop offset="1" stop-color="#ad8054"/></linearGradient><linearGradient id="trial-glass" x2="1" y2="1"><stop stop-color="#e5f3f3"/><stop offset="1" stop-color="#cfe3e5"/></linearGradient><clipPath id="trial-eye-clip"><path data-view="clip"/></clipPath></defs>
+<rect width="900" height="550" fill="url(#trial-eye-wall)"/>
+<path data-view="table" fill="url(#trial-eye-wood)"/><path data-view="grain" fill="none" stroke="#95643c" stroke-width="1" opacity=".24"/>
+<g data-view="mirror" style="display:none"><path data-view="frame" fill="#647f7a" stroke="#526d68" stroke-width="2"/><path data-view="glass" fill="url(#trial-glass)"/><g clip-path="url(#trial-eye-clip)"><path data-view="reflected-table" fill="url(#trial-eye-wood)"/><path data-view="reflected-grain" fill="none" stroke="#95643c" stroke-width="1" opacity=".2"/></g></g>
+<g data-view="far" clip-path="none"><path data-view="far-shadow" fill="#493725" opacity=".16"/><foreignObject width="900" height="550"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="front" width="900" height="550" style="width:900px;height:550px" aria-hidden="true"></canvas></foreignObject></g>
+<g data-view="near"><path data-view="near-shadow" fill="#493725" opacity=".2"/><foreignObject width="900" height="550"><canvas xmlns="http://www.w3.org/1999/xhtml" data-view="rear" width="900" height="550" style="width:900px;height:550px" aria-hidden="true"></canvas></foreignObject></g>
+</svg></figure>
+</article></div>
+            <div class="comparison-result"><p class="comparison-equation" aria-label="3公尺加2公尺等於5公尺">3＋2＝5<span>公尺</span></p><p>路線不同，看到的熊在同一個位置。</p></div>
+            <div class="mirror-explanation">
+              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>為什麼熊看起來在鏡後，而不是鏡面上？</p></div>
+              <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>熊到鏡面還有2公尺。沿入眼光的來向，從反射點再<strong>往鏡後延長2公尺</strong>，就是像的位置，和下排真熊一樣在5公尺外。</p></div>
+              <p class="comparison-clarification">本例距離沿圖示光路量取；虛線是輔助線，不代表光真的通過鏡後。</p>
+              <a class="comparison-next" id="mirror-next-activity" href="#card-04">下一區：移動熊，比較物距與像距 <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-04">
+          <div class="card-side"><span class="card-number">04</span><h3>物體靠近鏡子，像也會怎樣？</h3><span class="card-role">拖曳・讀尺・比較</span></div>
+          <div class="card-main">
+            <h2>物體移近鏡子，像的位置怎麼變？</h2>
+            <p>固定鏡面，只改變物體到鏡面的距離。拖動左側物體或調整滑桿，右側成像與距離刻度會同步更新。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我把物體往鏡子移，像會留在原地嗎？</p></div>
+            <div class="mirror-task"><strong>先預測，再測量</strong><p>預測物體靠近時，鏡後的像會怎麼移；拖曳左側小熊後，比較鏡面兩側的刻度。</p></div>
+            <div class="mirror-views" aria-label="調整物體距離並同步查看成像">
+              <figure class="mirror-view">
+                <h3>鏡子側面｜拖動物體 <small>↔ 抓住小熊移動</small></h3>
+                <svg id="distance-side-view" viewBox="0 0 620 350" role="img" aria-labelledby="distance-side-title distance-side-desc">
+                  <title id="distance-side-title">側面觀察物距和像距</title><desc id="distance-side-desc">拖動物體改變物距，鏡後虛像位於鏡面另一側相同距離；刻度尺以鏡面為零點。</desc>
+                  <defs><marker id="dim-arrow" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0 0L7 3.5L0 7Z" fill="#286ac2"/></marker></defs>
+                  <defs><linearGradient id="measure-wood" x2="0" y2="1"><stop stop-color="#d0b08d"/><stop offset="1" stop-color="#b78c64"/></linearGradient><linearGradient id="measure-mirror" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a8c4c8"/><stop offset=".48" stop-color="#f7fcfb"/><stop offset="1" stop-color="#9eb8bd"/></linearGradient></defs>
+                  <rect x="0" y="0" width="620" height="222" fill="#f8f7f1"/><rect x="0" y="222" width="620" height="20" fill="url(#measure-wood)"/><path d="M0 224H620" stroke="#ead0ad" stroke-width="3"/>
+                  <rect x="294" y="214" width="32" height="9" rx="3" fill="#82938d"/><rect x="302" y="35" width="16" height="188" rx="4" fill="#617c7d"/><rect x="305" y="38" width="10" height="181" rx="2" fill="url(#measure-mirror)"/><path d="M307 40V215" stroke="#fff" stroke-opacity=".68" stroke-width="2"/><text x="310" y="26" text-anchor="middle" fill="#315a46" font-size="14">平面鏡</text>
+                  <g id="distance-side-object" class="drag-object" tabindex="0" role="slider" aria-label="拖動物體調整物距" aria-valuemin="10" aria-valuemax="60" aria-valuenow="40">
+                    <image href="assets/mirror/teddy-front.webp" x="146" y="126" width="72" height="82" preserveAspectRatio="xMidYMax meet"/><text id="distance-side-object-label" x="182" y="219" text-anchor="middle" fill="#315a46" font-size="14" font-weight="700">物體</text>
+                  </g>
+                  <g id="distance-side-image" opacity=".48"><image href="assets/mirror/teddy-front.webp" x="402" y="126" width="72" height="82" preserveAspectRatio="xMidYMax meet"/><text id="distance-side-image-label" x="438" y="219" text-anchor="middle" fill="#64736d" font-size="14" font-weight="700">虛像</text></g>
+                  <path id="distance-object-measure" d="M182 88H310" class="measure-line" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><path id="distance-image-measure" d="M310 88H438" class="measure-line" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/>
+                  <text id="distance-object-measure-label" x="246" y="78" class="measure-text" fill="#286ac2">物距 40 cm</text><text id="distance-image-measure-label" x="374" y="78" class="measure-text" fill="#286ac2">像距 40 cm</text>
+                  <line x1="70" y1="260" x2="550" y2="260" class="ruler-line"/><g id="distance-ruler-ticks"></g><g id="distance-ruler-values"></g><text x="310" y="339" text-anchor="middle" fill="#64736d" font-size="13">鏡面為 0（畫面參考刻度）</text>
+                  <line id="distance-ruler-object-marker" x1="182" y1="236" x2="182" y2="290" stroke="#bc612b" stroke-width="3"/><line id="distance-ruler-image-marker" x1="438" y1="236" x2="438" y2="290" stroke="#7d8f85" stroke-width="3" stroke-dasharray="4 3"/>
+                </svg>
+              </figure>
+              <figure class="mirror-view">
+                <h3>鏡子正面｜同步看成像 <small>觀察像跟著移動</small></h3>
+                <svg id="distance-front-view" viewBox="0 0 620 350" role="img" aria-labelledby="distance-front-title distance-front-desc">
+                  <title id="distance-front-title">正面看物體移動後的鏡中像</title><desc id="distance-front-desc">鏡前物體與鏡面中的像保持同高同大小，側面物距改變時，本視角同步更新狀態。</desc>
+                  <defs><linearGradient id="distance-front-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d6e8e8"/><stop offset=".5" stop-color="#fffdf7"/><stop offset="1" stop-color="#c5d8d7"/></linearGradient><linearGradient id="distance-front-wood" x2="0" y2="1"><stop stop-color="#c9a77f"/><stop offset="1" stop-color="#a77e56"/></linearGradient><filter id="distance-mirror-shadow" x="-.2" y="-.2" width="1.4" height="1.5"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#243a35" flood-opacity=".2"/></filter></defs>
+                  <image href="assets/mirror/mirror-room-bg.webp" x="0" y="0" width="620" height="350" preserveAspectRatio="xMidYMid slice"/><rect x="170" y="38" width="280" height="220" rx="9" fill="#647d7a" filter="url(#distance-mirror-shadow)"/><rect x="179" y="47" width="262" height="202" fill="url(#distance-front-glass)"/><path d="M193 56H295L184 236Z" fill="#fff" fill-opacity=".22"/><path d="M0 260H620" stroke="#e4c9a4" stroke-width="4"/>
+                  <g id="distance-front-reflection" opacity=".92"><image href="assets/mirror/teddy-front.webp" x="260" y="45" width="100" height="104" preserveAspectRatio="xMidYMax meet"/><rect x="350" y="57" width="67" height="22" rx="8" fill="#fffdf8" fill-opacity=".94"/><text x="383" y="72" text-anchor="middle" fill="#315a46" font-size="12" font-weight="700">鏡中像</text></g>
+                  <g id="distance-front-object"><image href="assets/mirror/teddy-rear.webp" x="260" y="180" width="100" height="104" preserveAspectRatio="xMidYMax meet"/></g><text x="374" y="286" text-anchor="middle" fill="#315a46" font-size="13" font-weight="700">鏡前實物</text>
+                  <rect x="115" y="300" width="390" height="30" rx="10" fill="#f0f5eb"/><text id="distance-front-status" x="310" y="320" text-anchor="middle" fill="#315a46" font-size="14" font-weight="700">目前物距 40 cm｜像距 40 cm</text>
+                </svg>
+              </figure>
+            </div>
+            <div class="distance-controls">
+              <label for="object-distance">小熊靠近　←</label>
+              <input id="object-distance" type="range" min="10" max="60" step="10" value="40" aria-label="調整物體到鏡面的距離" aria-valuetext="物距 40 公分，像距 40 公分">
+              <output id="distance-slider-value" for="object-distance">40 cm</output><span aria-hidden="true">→　移遠</span>
+            </div>
+            <div class="distance-metrics" aria-live="polite"><div class="distance-metric"><small>物距</small><strong id="object-distance-value">40 cm</strong></div><div class="distance-metric"><small>像距</small><strong id="image-distance-value">40 cm</strong></div><p class="mirror-sync-note">左側操作，右側同步更新</p></div>
+            <p class="visual-caption" id="distance-observation" aria-live="polite">尺以鏡面為 0；物體與像分居鏡面兩側。移動小熊，觀察兩個標記是否保持等距。虛像位置是畫面參考刻度，不能用實體尺直接量取。</p>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-05" data-mirror-mode="concave" data-mirror-point="0">
+          <div class="card-side"><span class="card-number">05</span><h3>曲面鏡會怎樣改變反射光？</h3><span class="card-role">由平面延伸到曲面</span></div>
+          <div class="card-main">
+            <h2>鏡面形狀不同，光路與像有什麼不同？</h2>
+            <p>平面鏡的反射面平直，凹面鏡向內凹，凸面鏡向外凸。反射面的形狀不同，也會影響光的方向與像的樣子。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>化妝鏡會把臉放大，路口鏡卻把車子照小了？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先比較相同平行光的反射方向，再看看像有什麼不同。</p></div>
+            <h3 class="mirror-heading">保持入射光相同，比較三種鏡面</h3>
+            <div class="mirror-grid" role="group" aria-label="三種鏡面同時比較；點選查看反射原因">
+              <button class="mirror-option" type="button" data-mirror="plane" aria-expanded="false" aria-controls="mirror-detail"><strong>平面鏡</strong><svg viewBox="0 0 320 220" role="img" aria-label="平面鏡的平行光反射示意"></svg><span class="mirror-result">仍互相平行</span><span class="mirror-open-label">查看反射原因</span></button>
+              <button class="mirror-option" type="button" data-mirror="concave" aria-expanded="true" aria-controls="mirror-detail"><strong>凹面鏡</strong><svg viewBox="0 0 320 220" role="img" aria-label="凹面鏡的平行光反射示意"></svg><span class="mirror-result">向內會聚</span><span class="mirror-open-label">查看反射原因</span></button>
+              <button class="mirror-option" type="button" data-mirror="convex" aria-expanded="false" aria-controls="mirror-detail"><strong>凸面鏡</strong><svg viewBox="0 0 320 220" role="img" aria-label="凸面鏡的平行光反射示意"></svg><span class="mirror-result">向外發散</span><span class="mirror-open-label">查看反射原因</span></button>
+            </div>
+            <div class="mirror-legend" aria-label="光路圖例"><span><i></i>入射光</span><span><i class="mirror-reflected"></i>反射光</span><span><i class="mirror-normal"></i>法線</span></div>
+            <div class="mirror-detail" id="mirror-detail" role="region" aria-labelledby="mirror-detail-title">
+              <div class="mirror-detail-head"><h4 id="mirror-detail-title">凹面鏡｜查看反射原因</h4><button type="button" class="mirror-detail-close" id="mirror-detail-close">收起詳解 ↑</button></div>
+              <div class="mirror-detail-body">
+                <figure class="mirror-detail-figure"><svg id="mirror-detail-svg" viewBox="0 0 320 220" role="group" aria-label="可點選鏡面上方、中央、下方反射點的光路圖"></svg>
+                  <div class="mirror-point-controls" role="group" aria-label="選擇反射位置"><button class="mirror-point-button" type="button" data-mirror-point="0" aria-pressed="true">上方</button><button class="mirror-point-button" type="button" data-mirror-point="1" aria-pressed="false">中央</button><button class="mirror-point-button" type="button" data-mirror-point="2" aria-pressed="false">下方</button></div>
+                  <figcaption>點選圖中反射點或位置按鈕，查看法線。</figcaption>
+                </figure>
+                <div class="mirror-detail-copy"><span class="mirror-point-label" id="mirror-point-label">上方反射點</span><p id="mirror-point-explanation"></p><strong>入射角＝反射角</strong><p class="mirror-angles" id="mirror-angle-readout" aria-live="polite"></p><svg class="mirror-local" id="mirror-local-svg" viewBox="0 0 270 165" role="img" aria-label="兩個角都從法線量起的局部光路"></svg></div>
+              </div>
+            </div>
+            <p class="mirror-model-note">俯視光路示意：平行光沿鏡面中央的對稱線（主軸）入射。球面鏡只取中央小範圍，凹面鏡反射光會聚在焦點附近。重疊的入射、反射光以雙色和相反箭頭區分；清澈空氣中的光路本身不可見。</p>
+            <h3 class="mirror-heading">鏡中的像有什麼不同？</h3>
+            <p class="mirror-arrow-legend"><span class="object-color">紅色：物體</span>　<span class="image-color">藍色：像</span>。只比較外觀，箭頭的位置不代表物距或像距。</p>
+            <div class="mirror-appearance-grid">
+              <div class="mirror-appearance"><h4>平面鏡</h4><div data-appearance="plane"></div><p class="appearance-result">正立、同大</p></div>
+              <div class="mirror-appearance concave"><h4>凹面鏡</h4><div class="mirror-concave-examples"><div><p class="appearance-condition">焦點內</p><div data-appearance="concave" data-position="near"></div><p class="appearance-result">正立、放大</p></div><div><p class="appearance-condition">曲率中心外</p><div data-appearance="concave" data-position="far"></div><p class="appearance-result">倒立、縮小</p></div></div><p class="appearance-extra">隨物體位置改變</p></div>
+              <div class="mirror-appearance"><h4>凸面鏡</h4><div data-appearance="convex"></div><p class="appearance-result">正立、縮小</p></div>
+            </div>
+            <p class="mirror-model-note">凹面鏡的焦點，是近軸平行光反射後的會聚位置；曲率中心是鏡面所屬球面的圓心。上圖選兩個位置作比較；焦點外也可能成倒立放大或同大的像，並非都縮小。</p>
+            <h3 class="mirror-heading">生活中的應用例子</h3>
+            <div class="mirror-uses">
+              <figure class="mirror-use"><h4>平面鏡：穿衣鏡</h4><img src="assets/mirror/dressing-mirror.webp" width="480" height="480" alt="房間裡的平面穿衣鏡" loading="lazy"><figcaption><strong>正立、同大的像</strong>方便整理服裝與儀容。</figcaption></figure>
+              <figure class="mirror-use"><h4>凹面鏡：化妝鏡</h4><img src="assets/mirror/makeup-mirror.webp" width="480" height="480" alt="桌上的圓形放大化妝鏡，作為凹面鏡的生活例子" loading="lazy"><figcaption><strong>在焦點內正立放大</strong>近距離看清臉部細節。</figcaption></figure>
+              <figure class="mirror-use"><h4>凸面鏡：路口鏡</h4><img src="assets/mirror/traffic-mirror.webp" width="480" height="480" alt="路口橘色邊框的凸面廣角鏡" loading="lazy"><figcaption><strong>視野較廣，像較小</strong>幫助觀察轉角來車。</figcaption></figure>
+            </div>
+            <p class="mirror-model-note">生活圖片為器材情境示意，成像比較採近軸模型，未按實際比例繪製。</p>
+            <div class="fact mirror-fact"><p><strong>重點：</strong>每一處都遵守反射定律；鏡面形狀改變法線方向，整束反射光的分布也跟著改變。像的大小與方向也和鏡面種類、物體位置有關。</p></div>
+            <noscript><p>請啟用 JavaScript 查看可操作光路。平面鏡使平行光仍互相平行，凹面鏡使近軸平行光會聚，凸面鏡使反射光發散；每一處都遵守反射定律。</p></noscript>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-06" data-light-a="off" data-light-b="off">
+          <div class="card-side"><span class="card-number">06</span><h3>光路能倒著走回去嗎？</h3><span class="card-role">反向追蹤路徑</span></div>
+          <div class="card-main">
+            <h2>從另一端照回，光路會重合嗎？</h2>
+            <p>點擊 A、B 發射器，分別開關紅光與藍光，比較兩個方向的反射路徑。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我可以分別開啟紅光和藍光，看看它們走的路一不一樣嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>可以。點擊哪一支，就開關那一支；兩支一起開啟時，觀察光路是否重合。</p></div>
+            <div class="reverse-switches" role="group" aria-label="獨立開關兩支發射器">
+              <button type="button" class="reverse-switch reverse-switch-a" id="reverse-toggle-a" aria-pressed="false">開啟 A 紅光</button>
+              <button type="button" class="reverse-switch reverse-switch-b" id="reverse-toggle-b" aria-pressed="false">開啟 B 藍光</button>
+            </div>
+            <div class="reverse-lab">
+              <div class="reverse-stage">
+                <canvas id="reverse-scene" role="slider" tabindex="0" aria-label="點擊 A 或 B 發射器開關紅光與藍光；拖動 A 或用方向鍵調角，A 與 B 鍵可開關對應光源" aria-valuemin="20" aria-valuemax="60" aria-valuenow="30" aria-describedby="reverse-lock-note"></canvas>
+                <div class="reverse-device-label" id="reverse-label-a"><strong>A 紅光發射器</strong><small id="reverse-status-a">已關閉</small></div>
+                <div class="reverse-device-label" id="reverse-label-b"><strong>B 藍光發射器</strong><small id="reverse-status-b">已關閉</small></div>
+                <div class="reverse-device-label reverse-m-label" id="reverse-label-m"><strong>M 反射點</strong></div>
+                <div class="reverse-overlap" id="reverse-overlap" hidden>紅藍光路重合</div>
+                <div class="reverse-fallback" id="reverse-fallback" hidden><p id="reverse-fallback-message"></p><svg id="reverse-fallback-svg" viewBox="0 0 400 325" role="img" aria-label="光路可逆的替代俯視圖"></svg></div>
+              </div>
+              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><span class="reverse-angle-readout">入射角 <output id="reverse-angle-value" aria-label="目前入射角">30°</output></span><button type="button" id="reverse-reset">↻ 重新設定</button></div>
+            </div>
+            <div class="reverse-legend"><span><i class="reverse-red"></i>A：紅光</span><span><i class="reverse-blue"></i>B：藍光</span></div>
+            <div class="reverse-paths"><div><small>A 紅光路徑</small><strong>A → M → B</strong><span id="reverse-path-a-status">已關閉</span></div><div><small>B 藍光路徑</small><strong>B → M → A</strong><span id="reverse-path-b-status">已關閉</span></div></div>
+            <p class="reverse-state" id="reverse-state" aria-live="polite">點擊任一發射器，開啟對應顏色的光；再點一次即可關閉。</p>
+            <details class="reverse-reason"><summary>查看原因：入射角與反射角交換後，仍然相等</summary><p>從 B 朝 M 照射時，原本的反射線成了入射線；原本的入射線則成為返回 A 的反射線。鏡面與法線固定，交換後兩個角仍相等，所以光會沿原路返回。</p><p id="reverse-reason-angles">兩次的入射角與反射角都是 30°。</p></details>
+            <p class="reverse-note">紅光由 A 出發，藍光由 B 出發；可單獨或同時開啟。重合處以紅色外緣與藍色細線區分，兩條中心路徑相同。圖中光路為傳播方向示意。</p>
+            <div class="fact reverse-fact"><p><strong>重點：</strong>鏡面固定，從 B 沿原光路反向照射，光會經同一反射點回到 A，稱為光路可逆。後續學習折射時，再觀察這個性質。</p></div>
+            <noscript><p>請啟用 JavaScript 點選 A、B 發射器。紅光沿 A→M→B，藍光沿 B→M→A，各自遵守反射定律。</p></noscript>
+          </div>
+        </section>
+        <section class="lesson-card" id="unit-quiz" aria-labelledby="periscope-title">
+          <span id="card-07" aria-hidden="true"></span>
+          <header class="periscope-heading"><span class="quiz-icon" aria-hidden="true">?</span><div><small>單元小測</small><h2 id="periscope-title">幫小葵完成潛望鏡</h2><p>讓海面上的光，經過兩面鏡子進入眼睛。</p></div></header>
+          <div class="periscope-body">
+            <div class="periscope-steps" role="tablist" aria-label="潛望鏡任務">
+              <button id="periscope-tab-0" role="tab" aria-selected="true" aria-controls="periscope-panel" type="button" data-stage="0"><span>1</span>組裝潛望鏡</button>
+              <button id="periscope-tab-1" role="tab" aria-selected="false" aria-controls="periscope-panel" type="button" data-stage="1" disabled><span>2</span>修復光路</button>
+              <button id="periscope-tab-2" role="tab" aria-selected="false" aria-controls="periscope-panel" type="button" data-stage="2" disabled><span>3</span>反向傳訊</button>
+            </div>
+            <div id="periscope-panel" role="tabpanel" aria-labelledby="periscope-tab-0">
+              <div class="periscope-talks">
+                <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p id="periscope-student">我在潛水艇裡，怎麼看見海上的船？</p></div>
+                <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p id="periscope-grandpa">先轉動鏡片，再從觀察窗找找船在哪裡。</p></div>
+              </div>
+              <div class="periscope-task"><div><strong id="periscope-task-title">任務一｜把船的駕駛艙調到觀察窗中央</strong><p id="periscope-task-copy">拖曳鏡片端點旋轉。先試著觀察，需要時從觀察口追蹤視線，再修正鏡片。</p></div></div>
+              <div class="periscope-workspace">
+                <div class="periscope-cutaway">
+                  <svg id="periscope-scene" viewBox="0 0 900 760" role="group" aria-label="潛望鏡剖面與可旋轉平面鏡" aria-describedby="periscope-scene-desc">
+                    <desc id="periscope-scene-desc">上方入口在海面之上，密封管內與潛水艇艙內都是空氣。拖曳鏡面一或鏡面二的端點旋轉，觀察右側景象。鏡片也可用方向鍵微調。</desc>
+                    <defs>
+                      <linearGradient id="scope-steel" x1="0" x2="1"><stop stop-color="#374a50"/><stop offset=".16" stop-color="#a8b7b5"/><stop offset=".48" stop-color="#596d70"/><stop offset=".8" stop-color="#c0cac4"/><stop offset="1" stop-color="#30454c"/></linearGradient>
+                      <linearGradient id="scope-air" x1="0" x2="1"><stop stop-color="#1f333b"/><stop offset=".24" stop-color="#738783"/><stop offset=".5" stop-color="#bdc6ad"/><stop offset=".8" stop-color="#8b9c8d"/><stop offset="1" stop-color="#263c41"/></linearGradient>
+                      <linearGradient id="scope-mirror" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".3" stop-color="#d8f1f3"/><stop offset=".75" stop-color="#91b3b7"/><stop offset="1" stop-color="#4e717c"/></linearGradient>
+                      <filter id="scope-glow"><feGaussianBlur stdDeviation="4"/></filter>
+                      <filter id="scope-shadow" x="-30%" y="-20%" width="160%" height="140%"><feDropShadow dx="3" dy="5" stdDeviation="5" flood-opacity=".3"/></filter>
+                    </defs>
+                    <image href="assets/periscope/submarine-scene.webp?v=2" width="900" height="760" preserveAspectRatio="none"/>
+                    <g filter="url(#scope-shadow)">
+                      <path d="M491 113H639V539H767V641H639V668H491Z" fill="url(#scope-steel)" stroke="#263d43" stroke-width="5"/>
+                      <path d="M508 128H622V555H765V625H622V652H508Z" fill="url(#scope-air)" stroke="#334a50" stroke-width="3"/>
+                      <path d="M491 155H509V225H491" fill="#a5c9d4" fill-opacity=".28" stroke="#d6f7fb" stroke-width="3"/>
+                      <path d="M491 128V150M491 230V650M639 130V535M639 648V658" stroke="#d6dfcd" stroke-opacity=".5" stroke-width="3"/>
+                      <rect x="739" y="553" width="26" height="74" rx="9" fill="#26373f" stroke="#61767c" stroke-width="3"/><rect x="755" y="564" width="12" height="52" rx="5" fill="#17262e"/>
+                      <g fill="#334b50" stroke="#becbc3" stroke-width="2"><circle cx="502" cy="126" r="4"/><circle cx="628" cy="126" r="4"/><circle cx="502" cy="655" r="4"/><circle cx="628" cy="655" r="4"/><circle cx="628" cy="335" r="4"/><circle cx="502" cy="335" r="4"/></g>
+                    </g>
+                    <g id="periscope-recorded" class="periscope-path"></g><g id="periscope-light" class="periscope-path"></g>
+                    <g id="periscope-mirror-0" class="mirror-drag" role="slider" tabindex="0" aria-label="鏡面一，拖曳端點旋轉，或使用方向鍵" aria-valuemin="30" aria-valuemax="65" aria-valuenow="38" aria-orientation="horizontal"><circle class="scope-mirror-focus" cx="565" cy="190" r="79"/><line class="scope-mirror-hit"/><line class="mirror-back" stroke="#354f58" stroke-width="15" stroke-linecap="round"/><line class="mirror-glass" stroke="url(#scope-mirror)" stroke-width="9" stroke-linecap="round"/><line class="mirror-highlight" stroke="#f0ffff" stroke-width="2"/><circle class="scope-mirror-handle" r="11"/><circle class="scope-mirror-handle" r="11"/></g>
+                    <g id="periscope-mirror-1" class="mirror-drag" role="slider" tabindex="0" aria-label="鏡面二，拖曳端點旋轉，或使用方向鍵" aria-valuemin="30" aria-valuemax="65" aria-valuenow="51" aria-orientation="horizontal"><circle class="scope-mirror-focus" cx="565" cy="590" r="79"/><line class="scope-mirror-hit"/><line class="mirror-back" stroke="#354f58" stroke-width="15" stroke-linecap="round"/><line class="mirror-glass" stroke="url(#scope-mirror)" stroke-width="9" stroke-linecap="round"/><line class="mirror-highlight" stroke="#f0ffff" stroke-width="2"/><circle class="scope-mirror-handle" r="11"/><circle class="scope-mirror-handle" r="11"/></g>
+                    <g class="scene-label"><rect x="650" y="153" width="92" height="36" rx="8"/><text x="696" y="178" text-anchor="middle">鏡面一</text><rect x="648" y="637" width="92" height="36" rx="8"/><text x="694" y="662" text-anchor="middle">鏡面二</text></g>
+                    <g id="periscope-signal-source" hidden pointer-events="none" role="img" aria-label="訊號光源位於原眼睛位置"><rect x="755" y="578" width="38" height="24" rx="6" fill="#254b69" stroke="#b3d8f2" stroke-width="2"/><path d="M780 581V599M786 581V599" stroke="#739dbb" stroke-width="2"/><circle cx="755" cy="590" r="6" fill="#89cfff" stroke="#e6f7ff" stroke-width="2"/></g>
+                  </svg>
+                </div>
+                <aside class="periscope-view" aria-label="從潛望鏡看到的景象"><h3>小葵的觀察窗</h3><div class="periscope-lens-frame"><canvas id="periscope-view" width="240" height="240" role="img" aria-label="觀察窗載入中"></canvas></div><div id="periscope-view-state" class="periscope-view-state" role="status">正在準備觀察窗…</div><p id="periscope-view-copy">景象隨鏡片轉動；管壁擋住的區域會變暗。</p><div class="periscope-trace-action" id="periscope-trace-action">
+                    <button type="button" id="periscope-pulse" class="periscope-pulse-button" aria-describedby="periscope-pulse-note"><span class="periscope-pulse-label">追蹤目前視線</span><span class="periscope-pulse-invite" aria-hidden="true">點一下，看看光走到哪裡</span></button>
+                    <p class="periscope-pulse-note" id="periscope-pulse-note" role="status">光線短暫亮起後會自動消失。</p>
+                    <div class="periscope-design-action" id="periscope-design-action"><button type="button" id="periscope-check" class="action">檢查我的設計</button></div>
+                  </div><div class="periscope-view-meter">轉錯時，可能看見天空、海面，或被管壁遮住。</div></aside>
+              </div>
+              <div class="periscope-controls" id="periscope-signal-controls" hidden><button type="button" id="periscope-signal" class="periscope-signal" aria-pressed="false" hidden disabled>發送訊號光</button></div>
+              <p class="periscope-keyboard" id="periscope-drag-help">抓住鏡片端點，直接拖曳旋轉。</p>
+              <p class="periscope-model-note">黃色輔助線從小葵的眼睛位置反向追蹤視線。實際看見物體時，是外界的光進入眼睛；剖面與景物為示意比例。</p>
+              <div class="periscope-question" id="periscope-question-2" hidden><h3>鏡子不動，從眼睛的位置沿原光路反向發出訊號，會怎麼走？</h3><p>先預測，再按「發送訊號光」比較藍光與原本的路線。</p><div class="periscope-answer-list"><button class="periscope-answer" type="button" data-prediction="same" aria-pressed="false">沿完整的原路徑返回，從上方入口照向船。</button><button class="periscope-answer" type="button" data-prediction="inside" aria-pressed="false">只有管內的路徑重合，離開入口後方向會不同。</button><button class="periscope-answer" type="button" data-prediction="turn" aria-pressed="false">兩次反射後會換一條路，需要再調鏡子才能照向船。</button></div></div>
+              <div class="periscope-footer" hidden><button type="button" id="periscope-next" class="action" hidden>前往修復光路 →</button></div>
+              <div id="periscope-feedback" class="periscope-feedback" role="status">調整兩片鏡子，讓船的駕駛艙出現在觀察窗中央。</div>
+              <div id="periscope-complete" class="periscope-complete" hidden><h3>任務完成！小葵看見船，也把訊號送回去了。</h3><p>每一次反射都遵守入射角等於反射角。鏡面固定時，光也能沿原路徑反向傳播。</p></div>
+            </div>
+            <noscript><p>這個小測需要 JavaScript。船反射的光經上方、下方兩片平面鏡進入眼睛；鏡片偏轉可能讓視線改向天空、海面或被管壁遮擋。</p></noscript>
+          </div>
+        </section>
       </div>
-    </nav>
-    <div class="cards">
-      <div class="section-top"><h2>先分離成分，再用濃度表示含量</h2><span class="progress-copy">提出問題 → 觀察證據 → 表示含量</span></div>
-
-      <section class="lesson-card" id="s1">
-        <div class="card-side"><span class="card-number">01</span><h3>如何把泥沙從水裡分開？</h3><span class="card-role">讓固體和液體分開</span></div>
-        <div class="card-main">
-          <h2>把泥沙水倒進漏斗，會發生什麼？</h2>
-          <p>這杯混濁的雨水裡有泥沙顆粒。泥沙沒有溶解在水裡，仍是水中的固體成分。</p>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>泥沙混在水裡，要怎麼把它們分開？</p></div>
-          <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們用濾紙試試看，觀察泥沙和水各自去了哪裡。</p></div>
-          <div class="filter-animation" id="filter-animation" role="group" aria-label="泥沙水經過濾紙的連續動畫；可點選畫面標記查看深入解說">
-            <button class="filter-play" id="filter-play" type="button" aria-label="播放過濾動畫" disabled><canvas id="filter-canvas" width="1672" height="941" role="img" aria-label="泥沙水逐漸倒入濾紙，泥沙留在紙上，濾液收集在下方杯中；點擊重播。"></canvas></button>
-            <button class="filter-hotspot sample" type="button" data-filter-detail="sample" aria-label="泥沙水樣：查看樣本與分離目標的詳細說明" aria-pressed="false">樣本</button>
-            <button class="filter-hotspot filter" type="button" data-filter-detail="filter" aria-label="濾紙與漏斗：查看攔住泥沙的原理" aria-pressed="false">濾紙</button>
-            <button class="filter-hotspot pour" type="button" data-filter-detail="pour" aria-label="倒入樣本：查看倒入與過濾如何進行" aria-pressed="false">倒入</button>
-            <button class="filter-hotspot result" type="button" data-filter-detail="result" aria-label="接液杯與分離結果：查看濾渣和濾液的說明" aria-pressed="false">濾液</button>
-          </div>
-          <span id="filter-status" role="status"></span>
-          <section class="filter-details" id="filter-details" aria-live="polite" aria-atomic="true">
-            <h3 id="filter-detail-title">想深入了解？</h3>
-            <p><strong>點選畫面上的物件名稱</strong>，看看該物件在過濾時做什麼，以及它如何幫助分開泥沙和水。完整流程與過濾原理已列在下方，不必點選也能讀懂。</p>
-          </section>
-          <ol class="filter-steps" aria-label="過濾的四個步驟">
-            <li><b>① 架好器材</b><span>將濾紙放入漏斗，並在漏斗下方放好接液杯。</span></li>
-            <li><b>② 倒入泥沙水</b><span>將樣本慢慢倒進濾紙中，避免液體溢出。</span></li>
-            <li><b>③ 讓混合物分開</b><span>水穿過濾紙，泥沙顆粒留在濾紙上。</span></li>
-            <li><b>④ 觀察結果</b><span>濾紙上留下固體；下方接液杯收集流下的液體。</span></li>
-          </ol>
-          <div class="filter-principle"><strong>過濾原理</strong>泥沙不溶於水。這個樣本中的泥沙顆粒被濾紙攔住，水則穿過濾紙流入接液杯；留在濾紙上的固體叫「濾渣」，收集到的液體叫「濾液」。</div>
-        </div>
-      </section>
-
-      <section class="lesson-card" id="s2">
-        <div class="card-side"><span class="card-number">02</span><h3>鹽水裡的鹽，怎麼分離出來？</h3><span class="card-role">水分蒸發後，鹽形成固體</span></div>
-        <div class="card-main">
-          <h2>鹽溶在水裡，要怎麼分離出來？</h2>
-          <p>泥沙沒有溶在水裡；鹽則能均勻溶解在水中，形成看起來透明的鹽水，肉眼看不見鹽的固體顆粒。</p>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>如果東西已經溶在水裡，例如鹽，要怎麼把它分離出來呢？</p></div>
-          <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們讓水慢慢蒸發，再觀察容器裡最後留下什麼。</p></div>
-          <ol class="evap-stepper" aria-label="鹽水蒸發與結晶的四個步驟">
-            <li><button class="evap-step" type="button" data-evap-step="1" aria-pressed="true" disabled>① 觀察鹽水</button></li><span class="evap-arrow" aria-hidden="true">→</span>
-            <li><button class="evap-step" type="button" data-evap-step="2" aria-pressed="false" disabled>② 水分蒸發</button></li><span class="evap-arrow" aria-hidden="true">→</span>
-            <li><button class="evap-step" type="button" data-evap-step="3" aria-pressed="false" disabled>③ 晶體析出</button></li><span class="evap-arrow" aria-hidden="true">→</span>
-            <li><button class="evap-step" type="button" data-evap-step="4" aria-pressed="false" disabled>④ 留下鹽晶體</button></li>
-          </ol>
-          <div class="scene evap-stage" id="evap-stage" data-step="1" aria-label="鹽水蒸發與鹽晶體留下的示意">
-            <button class="evap-visual" id="evap-visual" type="button" aria-label="從「① 觀察鹽水」播放至結束" aria-describedby="evap-caption" disabled></button>
-            <aside class="evap-observation"><strong id="evap-phase">受熱升溫</strong><p id="evap-caption" class="live-note" aria-live="polite">鹽水正在受熱，水面仍較平靜；水在還沒沸騰時也會蒸發。</p></aside>
-          </div>
-          <div class="filter-principle"><strong>分離後，水和鹽各去了哪裡？</strong>水分蒸發後離開容器；原本溶在水中的鹽形成晶體，留在容器裡。這個過程利用水能蒸發、鹽不隨水一起蒸發的差異來分離成分，沒有生成新物質。</div>
-          <div class="note-box">點選上方步驟，會從該步驟連續播放至第四步結束；點擊畫面，則從目前步驟重新播放至結束。本例呈現加熱至沸騰的過程；水在未沸騰時也會蒸發，水蒸氣本身看不見。</div>
-        </div>
-      </section>
-
-      <section class="lesson-card" id="s3">
-        <div class="card-side"><span class="card-number">03</span><h3>墨水裡可能混有幾種色素？</h3><span class="card-role">觀察色帶是否分開</span></div>
-        <div class="card-main">
-          <h2>一滴綠色墨水，會分出不同色帶嗎？</h2>
-          <p>綠色水性筆墨水看起來均勻呈綠色，單看外觀不容易判斷裡面是否含有不同色素。</p>
-          <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>看起來都是綠色的，也能分離出不同顏色嗎？</p></div>
-          <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們用濾紙層析觀察，看看墨水裡的色素會不會分成不同色帶。</p></div>
-          <div class="choice-row" role="group" aria-label="選擇彩色筆墨水">
-            <button class="choice-button ink-choice" type="button" data-ink="green" aria-pressed="true" disabled>綠色筆</button>
-            <button class="choice-button ink-choice" type="button" data-ink="dark" aria-pressed="false" disabled>深色筆</button>
-          </div>
-          <div class="chrom-lab" id="chrom-lab" data-mode="ready" data-ink="green" aria-label="濾紙層析互動實驗">
-            <canvas id="chrom-canvas" width="1536" height="1024" aria-hidden="true"></canvas>
-            <button class="chrom-drop" id="chrom-drop" type="button" aria-label="將選取的濾紙放入燒杯；實驗中可暫停或繼續" disabled></button>
-            <button class="chrom-paper" id="chrom-paper" type="button" aria-label="拿起濾紙，放入燒杯" aria-pressed="false" disabled></button>
-            <button class="chrom-clip" id="chrom-clip" type="button" aria-label="鬆開夾具，取新濾紙重新放置" disabled></button>
-            <button class="chrom-reset" id="chrom-reset" type="button" aria-label="重新實驗" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></button>
-          </div>
-          <p class="chrom-status" id="chrom-status" role="status" aria-live="polite">可選擇墨水觀看，或拿起濾紙放入燒杯。</p>
-          <div class="filter-principle"><strong>一種顏色，也可能含有不同色素</strong>若觀察到不同色帶，表示這份墨水樣本含有可分離的不同色素。</div>
-          <div class="note-box">不同墨水的分離結果可能不同；本例的色帶顏色、數量與位置為特定樣本的示意。</div>
-        </div>
-      </section>
-
-<section class="lesson-card" id="s5"><div class="card-side"><span class="card-number">04</span><h3>水溶液裡的溶質有多少？</h3><span class="card-role">用濃度表示含量</span></div><div class="card-main">
-<h2>自己配糖水，濃度是多少？</h2><p>舀糖、倒水，看看濃度跟著怎麼變。</p>
-<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>糖和水都讓我自己決定，配出來會是幾％？</p></div><div class="dialogue "><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先量出兩者的質量，再看糖占整杯糖水多少。</p></div>
-<div class="mix-scene" id="mix-lab" data-ready="loading" aria-label="分別稱量溶質與溶劑的實驗桌"><canvas id="mix-canvas" width="1536" height="1024" aria-hidden="true"></canvas><button class="mix-tool" id="mix-spoon" type="button" aria-label="舀入1克糖；向下鍵取回1克，也可拖到糖盤或糖碗" disabled></button><button class="mix-tool" id="mix-pitcher" type="button" aria-label="點水壺倒入1克水；按住持續倒水" disabled><span class="scene-action">＋ 水</span></button><button class="mix-target scene-control sugar-source" id="mix-sugar-source" type="button" data-mass-kind="sugar" data-mass-delta="1" aria-label="點糖罐舀入1克糖" disabled><span class="scene-action">＋ 糖</span></button><button class="mix-target scene-control sugar-pan" id="mix-sugar-pan" type="button" data-mass-kind="sugar" data-mass-delta="-1" aria-label="點秤上的糖舀出1克糖" disabled><span class="scene-action">− 糖</span></button><button class="mix-target scene-control water-cup" id="mix-water-cup" type="button" data-mass-kind="water" data-mass-delta="-1" aria-label="點秤上的量杯倒出1克水" disabled><span class="scene-action">− 水</span></button><span class="role-tag sugar">溶質｜糖</span><span class="role-tag water">溶劑｜水</span><button class="lcd sugar" id="mix-sugar-input" type="button" aria-label="輸入糖的克數" disabled><span data-mix="sugar-read">5.0 g</span><svg viewBox="0 0 20 20"><path d="m5 12 8-8 3 3-8 8-4 1zM11 6l3 3"/></svg></button><button class="lcd water" id="mix-water-input" type="button" aria-label="輸入水的克數" disabled><span data-mix="water-read">95.0 g</span><svg viewBox="0 0 20 20"><path d="m5 12 8-8 3 3-8 8-4 1zM11 6l3 3"/></svg></button><span class="tare">兩台秤皆已扣除容器質量</span><button class="restart" id="mix-reset" type="button" aria-label="重新配製" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></button></div>
-<div class="formula-reference" id="mass-percent-formula"><p class="formula-caption">計算公式</p><div class="formula-equation" role="math" aria-label="重量百分濃度等於溶質質量除以溶液總質量，再乘以百分之百"><span class="formula-name">重量百分濃度 ＝</span><span class="formula-ratio"><span class="fraction"><span class="num">溶質質量</span><span class="den">溶液總質量</span></span><span>× 100%</span></span></div></div>
-<div class="live-result"><strong>配成糖水後</strong><div class="mass-equation"><span class="item solute">溶質<b data-mix="sugar">糖 5 克</b></span><span class="op">＋</span><span class="item solvent">溶劑<b data-mix="water">水 95 克</b></span><span class="op">＝</span><span class="item">溶液<b data-mix="total">糖水 100 克</b></span></div><p class="formula-caption substitution-caption">代入這次配方</p><div class="concentration"><span>重量百分濃度</span><span>＝</span><span class="fraction"><span class="num" data-mix="formula-sugar">5 克</span><span class="den" data-mix="formula-total">100 克</span></span><span>× 100%</span><span>＝</span><span class="value" data-mix="percent">5%</span></div><div class="mass-bar" role="img" id="mix-bar" aria-label="糖占質量5%，水占95%"><i id="mix-bar-fill"></i></div><div class="mass-legend"><span data-mix="sugar-share">糖占 5%</span><span data-mix="water-share">水占 95%</span></div><p class="meaning" data-mix="meaning">每 100 克這樣的糖水，含有 5 克糖。比例條表示質量組成。</p></div>
-<div class="concept-line">溶液總質量＝溶質質量＋溶劑質量。糖溶解後仍包含在總質量中。</div>
-<div class="ppm-observation" id="ppm-lab" data-ready="loading" aria-labelledby="ppm-heading">
-<p class="ppm-kicker">含量很少時，用 ppm 表示</p>
-<h3 id="ppm-heading">一大杯水，糖只有這一點點。</h3><p class="ppm-observe-intro">先看份量有多小</p>
-<div class="ppm-scale-scene" id="ppm-scale-scene" aria-label="同一比例的一公升水與一毫克糖"><canvas id="ppm-scale-canvas" aria-hidden="true"></canvas>
-<span class="ppm-water-label" id="ppm-water-label">水 <b>1 公升</b></span>
-<button type="button" id="ppm-milligram" class="ppm-dish" data-ppm-sample="milligram" aria-label="點糖碟，放大看完整1毫克糖" aria-controls="ppm-lens" disabled><span class="ppm-dish-label">糖 <b>1 毫克</b></span><span class="ppm-dish-hint"><svg viewBox="0 0 36 40" fill="none" aria-hidden="true"><path d="m12 22-7-7c-3-3-6 1-3 4l11 14c3 4 7 5 11 2l8-6c3-3 2-6 0-8l-7-7c-2-2-4 0-3 2l-3-4c-2-2-5 0-3 3L10 6C8 3 4 5 6 8l10 15" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="#fffef7"/></svg><span><span class="ppm-hint-wide">點糖碟，</span>放大看</span></span></button>
-<svg class="ppm-origin-guide" id="ppm-origin-guide" aria-hidden="true" hidden><line/><circle r="7"/></svg>
-<div class="ppm-lens" id="ppm-lens" role="group" aria-label="可拖曳的放大鏡" hidden><div class="ppm-lens-glass"><canvas id="ppm-lens-canvas" aria-hidden="true"></canvas><div class="ppm-scale-bar" id="ppm-scale-bar"><span id="ppm-scale-bar-label">5 mm</span></div></div><button type="button" id="ppm-lens-handle" class="ppm-lens-handle" aria-label="拖動放大鏡；方向鍵移動，Home鍵歸位" title="拖動放大鏡"></button><div class="ppm-lens-caption"><strong data-ppm="lens-title">放大看這一小點</strong><span data-ppm="lens-caption">糖量仍是 1 毫克</span></div><span class="ppm-sr-only" id="ppm-zoom-factor"></span></div>
-</div><p class="ppm-reference-note">1 公升水作大小參照。</p>
-<div class="ppm-question"><span aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M10 20c-7-7-3-17 6-17s13 10 6 17l-2 3h-8zM12 27h8M14 30h4M16 8c-4 0-6 3-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><strong>溶質這麼少，比例要怎麼寫才好讀？</strong></div>
-<section class="ppm-explanation" id="ppm-percent-bridge" aria-labelledby="ppm-bridge-title">
-<h4 id="ppm-bridge-title">微量時，ppm 更好讀</h4><p class="ppm-explain-subtitle">沿用同一個濃度概念，換一種表示方式。</p>
-<div class="ppm-shared"><p>兩者都先算同一個比例</p><div class="ppm-ratio" role="math" aria-label="共同的質量比：溶質質量除以溶液總質量"><span class="fraction"><span class="num">溶質質量</span><span class="den">溶液總質量</span></span></div>
-<dl class="ppm-notations"><div><dt>重量百分濃度</dt><dd><span class="ppm-basis">每 100 份中的份量</span><b class="ppm-factor">× 100%</b></dd></div><div class="ppm-notation-active"><dt>ppm</dt><dd><span class="ppm-basis">每 100 萬份中的份量</span><b class="ppm-factor">× 1,000,000</b></dd></div></dl></div>
-<div class="ppm-example"><h4>同一份溶液：1 公斤中含 1 毫克糖</h4><div class="ppm-equivalence" role="math" aria-label="0.0001%等於1ppm"><span data-ppm="percent">0.0001%</span><span class="ppm-equals">＝</span><b data-ppm="ppm">1 ppm</b></div>
-<div class="ppm-takeaway"><span aria-hidden="true">✓</span><strong>濃度沒有變，微量時用 ppm 更容易閱讀。</strong></div>
-<div class="ppm-worked" role="math" aria-label="一毫克除以一百萬毫克再乘以一百萬，等於1ppm"><span class="fraction"><span class="num" data-ppm="numerator">1 毫克</span><span class="den">1,000,000 毫克</span></span><span>× 1,000,000 ＝ 1 ppm</span></div>
-<p class="ppm-definition"><b>1 ppm</b> 就是百萬分之一：每 <b>1 公斤溶液</b>含有 <b>1 毫克溶質</b>。</p>
-<p class="ppm-unit-note">溶液總質量包含溶質；計算時分子與分母用相同質量單位。</p></div></section>
-<p class="ppm-status" id="ppm-status" role="status" aria-live="polite"></p></div>
-<p class="mix-status" id="mix-status" role="status" aria-live="polite"></p></div></section>
-      <section class="unit-quiz investigation-card" id="unit-quiz" aria-labelledby="invest-title">
-        <header class="quiz-head"><div class="quiz-mark" aria-hidden="true">?</div><div><p class="quiz-kicker">單元小測</p><h2 id="invest-title">這杯樣本，裡面藏了什麼？</h2><p>未知樣本調查｜取一份試試，接著由你決定怎麼研究。</p></div></header>
-        <div class="card-main quiz-body">
-          <div class="invest-intro"><div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我想先取一點，看看裡面有什麼。</p></div></div>
-          <div class="invest-lab" id="invest-lab" data-ready="loading" data-busy="false">
-            <div class="invest-stage">
-              <div class="invest-picture" id="invest-picture">
-                <canvas id="invest-canvas" width="1536" height="1024" role="img" aria-label="未知混合物樣本瓶、空燒杯與收好的器材盤"></canvas>
-                <span class="invest-stage-title">實驗桌</span>
-                <button type="button" class="invest-reset" id="invest-reset" aria-label="重新開始未知樣本調查" disabled>↻ <span>重新開始</span></button>
-                <button type="button" class="invest-cup" id="invest-cup" data-invest-tool="sample" aria-label="拿空燒杯從樣本瓶取一份；也可拖到樣本瓶" disabled></button>
-                <button type="button" class="invest-take" id="invest-take" data-invest-tool="sample" disabled>取一份試試 <span aria-hidden="true">›</span></button>
-                <span class="invest-loading" id="invest-loading" role="status">準備實驗桌……</span>
-              </div>
-              <div class="invest-tools" aria-label="自由選用的器材盤">
-                <button type="button" data-invest-tool="filter" class="invest-tool" aria-label="使用漏斗與濾紙測試目前取樣；也可拖到燒杯" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 5h26L18 18v10l-4-2v-8z"/></svg><span>過濾器材</span></button>
-                <button type="button" data-invest-tool="heat" class="invest-tool" aria-label="使用蒸發皿與電熱板測試目前取樣；也可拖到燒杯" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 11h24c0 9-4 12-12 12S4 20 4 11zM5 27h22M10 3v4M16 2v5M22 3v4"/></svg><span>加熱器材</span></button>
-                <button type="button" data-invest-tool="weigh" class="invest-tool" aria-label="用電子秤稱量目前取樣；也可拖到燒杯" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 5h20v7H6zM5 16h22l2 12H3zM11 21h10v4H11z"/></svg><span>電子秤</span></button>
-              </div>
-            </div>
-            <div class="invest-samples" id="invest-samples" aria-label="已取樣的容器，選擇一份繼續測試" hidden></div>
-            <div class="invest-current" id="invest-current" hidden><strong id="invest-current-label"></strong><button type="button" id="invest-settle">靜置觀察</button></div>
-            <p class="invest-status" id="invest-status" role="status" aria-live="polite">可重複取樣，自由選用器材測試。</p>
-            <div class="invest-record-action" id="invest-record-action" hidden><label for="invest-event">這份取樣的觀察</label><select id="invest-event"></select><button type="button" id="invest-record">記一筆</button></div>
-            <button type="button" class="invest-retry" id="invest-retry" hidden>重新載入器材</button>
-          </div>
-          <details class="invest-notebook" id="invest-notebook">
-            <summary><span class="invest-notebook-icon" aria-hidden="true">▤</span><span><strong>實驗筆記 <small id="invest-note-count">尚無紀錄</small></strong><span class="invest-summary-copy">記下觀察，也整理你的推論。</span></span><span class="invest-chevron" aria-hidden="true">⌄</span></summary>
-            <div class="invest-notebook-body">
-              <p class="invest-empty" id="invest-empty">做過測試後，點「記一筆」收進筆記；也可以回到先前的取樣繼續研究。</p>
-              <div id="invest-records"></div>
-              <form id="invest-report" hidden novalidate>
-                <fieldset class="invest-inference"><legend>我的成分推論</legend><p>這份教學樣本可能由水、泥沙與食鹽調製，實際組合未知。用紀錄支持你的推論。</p>
-                  <div class="invest-evidence-row"><label><input type="checkbox" name="component" value="sand"> 泥沙</label><label class="invest-evidence-label" for="invest-evidence-sand">支持泥沙推論的紀錄</label><select id="invest-evidence-sand"><option value="">選擇支持的紀錄</option></select></div>
-                  <div class="invest-evidence-row"><label><input type="checkbox" name="component" value="salt"> 食鹽</label><label class="invest-evidence-label" for="invest-evidence-salt">支持食鹽推論的紀錄</label><select id="invest-evidence-salt"><option value="">選擇支持的紀錄</option></select></div>
-                  <div class="invest-evidence-row"><label><input type="checkbox" name="component" value="water"> 水</label><label class="invest-evidence-label" for="invest-evidence-water">支持水推論的紀錄</label><select id="invest-evidence-water"><option value="">選擇支持的紀錄</option></select></div>
-                </fieldset>
-                <details class="invest-concentration"><summary>濃度紀錄 <span>選填</span></summary><label class="invest-include"><input type="checkbox" id="invest-include-concentration"> 把濃度計算一起放進報告</label><label for="invest-concentration-sample">使用哪一份取樣的稱量結果？</label><select id="invest-concentration-sample"></select><div class="invest-masses"><span>蒸發前的濾液 <b id="invest-solution-mass">—</b></span><span>乾燥白色固體 <b id="invest-solute-mass">—</b></span></div><p>分別稱量同一份濾液與蒸乾後的固體；兩次皆扣除容器質量，泥沙不列入溶液質量。</p><div class="invest-answer"><label for="invest-concentration-value">原本濾液的濃度</label><input id="invest-concentration-value" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入數值"><select id="invest-concentration-unit" aria-label="濃度單位"><option value="percent">%</option><option value="ppm">ppm</option></select></div></details>
-                <div class="invest-report-actions"><button type="button" id="invest-continue">繼續測試</button><button type="submit">提交調查報告</button></div>
-                <div class="invest-feedback" id="invest-feedback" role="status" aria-live="polite" hidden></div>
-              </form>
-              <p class="invest-note-foot">這是可重做的教學模擬；動畫時間與器材大小不代表真實實驗尺度。筆記保留於本次頁面，重新開始會清除。</p>
-            </div>
-          </details>
-          <noscript><p>請啟用 JavaScript，才能取樣、操作器材與填寫實驗筆記。</p></noscript>
-        </div>
-      </section>
     </div>
   </main>
-  <footer class="shell">國二上・自然科學</footer>
-  <dialog class="mass-dialog" id="mass-dialog" aria-labelledby="mass-dialog-title"><form id="mass-form" novalidate><h3 id="mass-dialog-title">設定質量</h3><div class="mass-input-row"><input id="mass-input" type="number" inputmode="decimal" step="0.1" required aria-describedby="mass-range mass-error"><span>克</span></div><p class="mass-range" id="mass-range"></p><p class="mass-error" id="mass-error" role="alert"></p><div class="mass-actions"><button type="button" id="mass-cancel">取消</button><button type="submit">套用</button></div></form></dialog>
-  <dialog id="invest-reset-dialog" class="invest-reset-dialog" aria-labelledby="invest-reset-title"><form method="dialog"><h3 id="invest-reset-title">重新開始調查？</h3><p>這會清除桌上的取樣與本次實驗筆記。</p><div><button value="cancel" autofocus>保留實驗</button><button value="reset">重新開始</button></div></form></dialog>
+  <footer class="shell"><a href="../../index.html">回到光學單元學習路線</a>　·　接下來：光進入不同介質會怎樣？</footer>
   <script>
-    const routeLinks=[...document.querySelectorAll('.route-inner a')];
-    const cards=routeLinks.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean);
-    const learningCards=cards.filter(card=>card.id!=='unit-quiz');
-    const routeProgress=document.getElementById('route-progress');
-    function setCurrentCard(card){const index=cards.indexOf(card);if(index<0)return;routeLinks.forEach((link,i)=>{if(i===index)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');});routeProgress.textContent=card.id==='unit-quiz'?'目前位置：單元小測':`目前位置：第 ${String(learningCards.indexOf(card)+1).padStart(2,'0')}／${String(learningCards.length).padStart(2,'0')} 個學習區塊`;}
-    setCurrentCard(cards.find(card=>location.hash===`#${card.id}`)||cards[0]);
-    if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible[0])setCurrentCard(visible[0].target);},{rootMargin:'-15% 0px -65% 0px'});cards.forEach(card=>observer.observe(card));}
-
-    const filterDetails={
-      sample:{title:'泥沙水樣｜要分開的是什麼？',purpose:'這杯樣本裡，泥沙顆粒分散在水中。這次要把固體泥沙和液態水分開。',principle:'泥沙沒有溶解在水裡，仍以顆粒存在，因此可以利用固體和液體通過濾紙的差異來分離。'},
-      filter:{title:'濾紙與漏斗｜它們怎麼幫上忙？',purpose:'濾紙放進漏斗中，接液杯放在漏斗下方。漏斗托住濾紙，也把流下的液體導入接液杯。',principle:'濾紙有細小孔隙。水可以穿過孔隙；這份樣本中的泥沙顆粒被攔在濾紙上，於是固體和液體分開。'},
-      pour:{title:'倒入樣本｜過濾如何開始？',purpose:'將泥沙水慢慢倒入濾紙，讓樣本接觸濾紙並流經漏斗。',principle:'倒得慢一些可避免液體溢出。水穿過濾紙後沿漏斗流下，泥沙顆粒則留在濾紙上；這就是過濾正在發生的過程。'},
-      result:{title:'接液杯與結果｜分離後得到什麼？',purpose:'泥沙留在濾紙上，穿過濾紙的液體被下方接液杯收集。',principle:'留在濾紙上的固體叫「濾渣」，收集到的液體叫「濾液」。過濾能分開這份樣本中的泥沙和水；濾液看起來較清澈，不代表一定能飲用。'}
-    };
-    document.querySelectorAll('[data-filter-detail]').forEach(hotspot=>hotspot.addEventListener('click',()=>{
-      const detail=filterDetails[hotspot.dataset.filterDetail];
-      if(!detail)return;
-      document.querySelectorAll('[data-filter-detail]').forEach(item=>item.setAttribute('aria-pressed',String(item===hotspot)));
-      document.getElementById('filter-detail-title').textContent=detail.title;
-      const panel=document.getElementById('filter-details');
-      panel.querySelectorAll('p').forEach(paragraph=>paragraph.remove());
-      const purpose=document.createElement('p');const purposeLabel=document.createElement('strong');purposeLabel.textContent='這裡在做什麼：';purpose.append(purposeLabel,document.createTextNode(detail.purpose));
-      const principle=document.createElement('p');const principleLabel=document.createElement('strong');principleLabel.textContent='原理與作用：';principle.append(principleLabel,document.createTextNode(detail.principle));
-      panel.append(purpose,principle);
-    }));
-
-
+    const distanceInput=document.querySelector("#object-distance"),distanceSideObject=document.querySelector("#distance-side-object"),distanceSideImage=document.querySelector("#distance-side-image"),distanceFrontObject=document.querySelector("#distance-front-object"),distanceFrontReflection=document.querySelector("#distance-front-reflection"),rulerTicks=document.querySelector("#distance-ruler-ticks"),rulerValues=document.querySelector("#distance-ruler-values");
+    for(let cm=-60;cm<=60;cm+=5){const x=310+cm*4,longTick=cm%10===0;const tick=document.createElementNS("http://www.w3.org/2000/svg","line");tick.setAttribute("x1",x);tick.setAttribute("x2",x);tick.setAttribute("y1",260);tick.setAttribute("y2",longTick?274:267);tick.setAttribute("class","ruler-tick");rulerTicks.appendChild(tick);if(longTick){const label=document.createElementNS("http://www.w3.org/2000/svg","text");label.setAttribute("x",x);label.setAttribute("y",292);label.setAttribute("class","ruler-label");label.textContent=cm===0?"0":String(Math.abs(cm));rulerValues.appendChild(label)}}
+    function updateDistance(){const value=Number(distanceInput.value),offset=value*4,objectX=310-offset,imageX=310+offset;
+      distanceSideObject.setAttribute("transform","translate("+(objectX-182)+" 0)");distanceSideImage.setAttribute("transform","translate("+(imageX-438)+" 0)");
+      document.querySelector("#distance-object-measure").setAttribute("d","M"+objectX+" 88H310");document.querySelector("#distance-image-measure").setAttribute("d","M310 88H"+imageX);
+      document.querySelector("#distance-object-measure-label").setAttribute("x",225);document.querySelector("#distance-image-measure-label").setAttribute("x",395);
+      document.querySelector("#distance-object-measure-label").textContent="物距 "+value+" cm";document.querySelector("#distance-image-measure-label").textContent="像距 "+value+" cm";
+      document.querySelector("#distance-ruler-object-marker").setAttribute("x1",objectX);document.querySelector("#distance-ruler-object-marker").setAttribute("x2",objectX);document.querySelector("#distance-ruler-image-marker").setAttribute("x1",imageX);document.querySelector("#distance-ruler-image-marker").setAttribute("x2",imageX);
+      document.querySelector("#object-distance-value").textContent=value+" cm";document.querySelector("#image-distance-value").textContent=value+" cm";document.querySelector("#distance-slider-value").textContent=value+" cm";distanceInput.setAttribute("aria-valuetext","物距 "+value+" 公分，像距 "+value+" 公分");distanceSideObject.setAttribute("aria-valuenow",value);distanceSideObject.setAttribute("aria-valuetext","物距 "+value+" 公分，像距 "+value+" 公分");document.querySelector("#distance-front-status").textContent="物體離鏡面 "+value+" cm｜虛像在鏡後 "+value+" cm";document.querySelector("#distance-observation").textContent="目前物距與像距都是 "+value+" cm。物體靠近或遠離鏡面時，鏡後的虛像也以相同距離移動。尺上的鏡面位置是 0；虛像位置為畫面參考刻度。";distanceFrontObject.setAttribute("transform","translate(0 "+((value-40)*.65)+")");distanceFrontReflection.setAttribute("transform","translate(0 "+((40-value)*.65)+")");
+    }
+    distanceInput.addEventListener("input",updateDistance);updateDistance();
+    let distanceDragging=false;function distanceFromPointer(event){const rect=document.querySelector("#distance-side-view").getBoundingClientRect(),svgX=(event.clientX-rect.left)*620/rect.width;const cm=Math.round(Math.max(10,Math.min(60,(310-svgX)/4))/10)*10;distanceInput.value=String(cm);updateDistance()}
+    distanceSideObject.addEventListener("pointerdown",function(event){distanceDragging=true;distanceSideObject.setPointerCapture(event.pointerId);distanceFromPointer(event)});distanceSideObject.addEventListener("pointermove",function(event){if(distanceDragging)distanceFromPointer(event)});distanceSideObject.addEventListener("pointerup",function(){distanceDragging=false});distanceSideObject.addEventListener("pointercancel",function(){distanceDragging=false});distanceSideObject.addEventListener("keydown",function(event){let value=Number(distanceInput.value);if(event.key==="ArrowLeft"||event.key==="ArrowDown")value=Math.max(10,value-10);else if(event.key==="ArrowRight"||event.key==="ArrowUp")value=Math.min(60,value+10);else return;event.preventDefault();distanceInput.value=String(value);updateDistance()});
+    const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent=index===6?"正在進行單元小測":"正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
-  <script type="importmap">{"imports":{"three":"../../../1/parts/1.1/assets/vendor/three/build/three.module.js"}}</script>
-  <script type="module" src="assets/filtration.js?v=review-5"></script>
-  <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
-  <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
-  <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
-  <script type="module" src="assets/ppm-scale.js?v=approved-8"></script>
-  <script type="module" src="assets/investigation.js?v=review-5"></script>
+  <script type="module" src="assets/curved-mirrors.js?v=1"></script>
+  <script type="module" src="assets/mirror-image.js?v=10"></script>
+  <script type="module" src="assets/reflection-3d.js?v=46"></script>
+  <script type="module" src="assets/laser-reflection.js?v=36"></script>
+  <script type="module" src="assets/reversible-light.js?v=4"></script>
+  <script type="module" src="assets/periscope.js?v=14"></script>
 </body>
 </html>

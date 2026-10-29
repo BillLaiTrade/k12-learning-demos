@@ -22,7 +22,7 @@ test('2.2 sound travels through air while particles stay near their origins', { 
   page.on('requestfailed', r => errors.push(r.url()));
   page.on('response', r => { if (r.status() >= 400) errors.push(r.url()); });
   await page.clock.install();
-  const url = `http://127.0.0.1:${port}/units/2/parts/2.2/`;
+  const url = `http://127.0.0.1:${port}/units/3/parts/3.2/`;
   await page.goto(url, { waitUntil: 'networkidle' });
   const strike = page.locator('#air-strike');
   const scene = page.locator('#air-wave');

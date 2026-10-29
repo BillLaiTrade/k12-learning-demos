@@ -43,7 +43,7 @@
 
 人工檢視 `desktop.webp`、`mobile.webp` 與 `completed-desktop.webp`，對照核可圖確認標頭、三階段、角色對話、剖面與觀察窗、順序題及操作按鈕層級；手機觀察窗改在剖面下方。另檢視四種實際觀察窗 `view-boat.webp`、`view-sky.webp`、`view-sea.webp`、`view-blocked.webp`，確認不是只有狀態文字改變。手機完整順序列不換到下一行，微調鍵可實際操作。
 
-公開交付檢查另以 GitHub Pages HTTPS 頁面實際完成拖曳、四種景象、三階段作答、反向訊號、重設及手機觸控；不以本機測試代替部署檢查。入口為 [單元小測](https://billlaitrade.github.io/k12-learning-demos/units/1/parts/1.2/#unit-quiz)。
+公開交付檢查另以 GitHub Pages HTTPS 頁面實際完成拖曳、四種景象、三階段作答、反向訊號、重設及手機觸控；不以本機測試代替部署檢查。入口為 [單元小測](https://billlaitrade.github.io/k12-learning-demos/units/4/parts/4.2/#unit-quiz)。
 
 公開操作另抓到原第一區塊的離頁例外：先 `renderer.dispose()` 使快取清空，接著釋放 cube render target 時讀到已清空屬性。已調整為先釋放貼圖與 render target、最後關閉 renderer，並加入實際離頁檢查。修正後上述 39 項全數通過。
 

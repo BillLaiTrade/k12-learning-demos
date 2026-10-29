@@ -30,10 +30,10 @@ test('new unit numbers agree across home, overviews, and existing lesson URLs', 
     if (response.url().startsWith(base) && response.status() >= 400) failures.push(response.url());
   });
   const units = [
-    ['1', '密度與測量', 'units/3/'],
-    ['2', '物質、分離與水溶液', 'units/4/'],
-    ['3', '波動與聲音', 'units/2/'],
-    ['4', '光的反射、折射與成像', 'units/1/'],
+    ['1', '密度與測量', 'units/1/'],
+    ['2', '物質、分離與水溶液', 'units/2/'],
+    ['3', '波動與聲音', 'units/3/'],
+    ['4', '光的反射、折射與成像', 'units/4/'],
     ['5', '溫度與熱', 'units/5/'],
     ['6', '探索物質的組成', 'units/6/']
   ];
@@ -60,10 +60,10 @@ test('new unit numbers agree across home, overviews, and existing lesson URLs', 
     });
   }
   for (const [number, href] of [
-    ['1.1', 'parts/3.1/'], ['1.2', 'parts/3.2/'],
-    ['2.1', 'units/4/parts/4.1/'], ['2.2', 'units/4/parts/4.2/'],
-    ['3.1', 'units/2/parts/2.1/'], ['3.2', 'units/2/parts/2.2/'],
-    ['4.1', 'units/1/parts/1.1/'], ['4.2', 'units/1/parts/1.2/']
+    ['1.1', 'units/1/parts/1.1/'], ['1.2', 'units/1/parts/1.2/'],
+    ['2.1', 'units/2/parts/2.1/'], ['2.2', 'units/2/parts/2.2/'],
+    ['3.1', 'units/3/parts/3.1/'], ['3.2', 'units/3/parts/3.2/'],
+    ['4.1', 'units/4/parts/4.1/'], ['4.2', 'units/4/parts/4.2/']
   ]) {
     await t.test(`lesson ${number}: header and existing assets load`, async () => {
       await page.goto(new URL(href, base).href, { waitUntil: 'networkidle' });

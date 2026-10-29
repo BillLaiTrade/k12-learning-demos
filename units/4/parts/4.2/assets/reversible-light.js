@@ -1,4 +1,4 @@
-import * as THREE from '../../1.1/assets/vendor/three/build/three.module.js';
+import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import { createLaserBench } from './laser-bench.js';
 import { reciprocalPath } from './planar-reflection.mjs';
 

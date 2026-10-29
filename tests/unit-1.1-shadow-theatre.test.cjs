@@ -10,7 +10,7 @@ const root=path.resolve(__dirname,'..'),captures='/tmp/unit11-theatre-finish';
 const targets={moon:{x:-1.47,y:1.79},rabbit:{x:-.02,y:1.31},tree:{x:1.47,y:1.53}};
 let optics;
 const near=(a,b,e=1e-10)=>assert.ok(Math.abs(a-b)<e,`${a} != ${b}`);
-const load=async()=>optics||=await import(pathToFileURL(path.join(root,'units/1/parts/1.1/assets/shadow-theatre-optics.mjs')));
+const load=async()=>optics||=await import(pathToFileURL(path.join(root,'units/4/parts/4.1/assets/shadow-theatre-optics.mjs')));
 test('影子劇場：投影大小、位置及保留深度的吸附',async t=>{
  const {THEATRE_OPTICS:g,shadowScaleAt,projectShadow,positionForShadow,assessShadow}=await load();
  await t.test('初始前後位置即使影子中心完全對齊，大小仍不合格',()=>{
@@ -52,7 +52,7 @@ test('影子劇場實際操作：學生調大小與位置後才小幅吸附',{ti
  await load();fs.mkdirSync(captures,{recursive:true});
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:root,stdio:['ignore','pipe','pipe']});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{let text='';const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{text+=d;const m=text.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});});
- const url=`http://127.0.0.1:${port}/units/1/parts/1.1/#unit-booklet`,errors=[];
+ const url=`http://127.0.0.1:${port}/units/4/parts/4.1/#unit-booklet`,errors=[];
  const launch=()=>chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const browser=await launch();t.after(()=>browser.close());
  async function open(context){const p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));p.on('requestfailed',r=>errors.push(r.url()));p.on('response',r=>{if(r.status()>=400)errors.push(r.url());});

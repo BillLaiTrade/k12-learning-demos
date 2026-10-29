@@ -27,7 +27,7 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
   page.on('requestfailed', request => failures.push(request.url()));
   page.on('response', response => { if (response.status() >= 400) failures.push(response.url()); });
   await page.clock.install();
-  await page.goto(`http://127.0.0.1:${port}/units/2/parts/2.2/`, { waitUntil: 'networkidle' });
+  await page.goto(`http://127.0.0.1:${port}/units/3/parts/3.2/`, { waitUntil: 'networkidle' });
   const hit = page.locator('#ruler-pluck');
   const shape = () => hit.getAttribute('d');
   const rest = await shape();

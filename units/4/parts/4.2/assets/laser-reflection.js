@@ -1,4 +1,4 @@
-import * as THREE from '../../1.1/assets/vendor/three/build/three.module.js';
+import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 
 const canvas = document.querySelector('#laser-reflection-scene');
 if (!canvas) throw new Error('Laser reflection scene is missing.');

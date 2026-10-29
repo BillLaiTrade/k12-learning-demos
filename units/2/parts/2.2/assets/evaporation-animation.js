@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { RoomEnvironment } from '../../../../../parts/3.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
+import { RoomEnvironment } from '../../../../1/parts/1.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
 import { CHECKPOINTS, DURATION, evaporationState } from './evaporation-state.js?v=continuous-playback-1';
 
 const host = document.getElementById('evap-visual');

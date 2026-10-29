@@ -4,59 +4,73 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f1e8">
+  <meta name="description" content="從認識光開始，探索光的傳播、反射、折射、成像與顏色。">
   <link rel="icon" href="data:,">
-  <title>物質、分離與水溶液</title>
+  <title>光的反射、折射與成像｜國二上理化</title>
   <style>
     :root { color-scheme: light; --ink:#243a35; --muted:#64736d; --paper:#f4f1e8; --card:#fffdf8; --line:#d9d3c4; --green:#176b53; --gold:#d7a94a; }
-    * { box-sizing:border-box; }
-    body { margin:0; color:var(--ink); background:var(--paper); font-family:ui-sans-serif,system-ui,-apple-system,"Noto Sans TC",sans-serif; line-height:1.7; }
-    .shell { width:min(1080px,calc(100% - 36px)); margin-inline:auto; }
-    .masthead { padding:34px 0 28px; }
-    .brand-row { margin-bottom:24px; }
-    .brand { color:var(--green); font-size:.9rem; font-weight:750; text-decoration:none; }
-    .eyebrow { color:var(--green); font-size:.78rem; font-weight:800; letter-spacing:.12em; }
-    h1,h2,h3,p { margin-top:0; }
-    h1 { max-width:760px; margin:8px 0 14px; font-size:clamp(2rem,5vw,3.4rem); line-height:1.22; letter-spacing:-.04em; }
-    .intro { max-width:730px; color:#52635d; font-size:1.08rem; }
-    .part-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; padding:10px 0 48px; }
-    .part-card { min-height:230px; padding:22px; display:flex; flex-direction:column; background:var(--card); border:1px solid var(--line); border-radius:18px; box-shadow:0 7px 20px #243a3508; }
-    .part-card.active { border:2px solid #9b7c37; }
-    .part-number { width:max-content; padding:2px 10px; border-radius:999px; background:#efe6cd; color:#594a28; font-size:.78rem; font-weight:800; }
-    .part-card h2 { margin:16px 0 8px; font-size:1.25rem; line-height:1.45; }
-    .part-card p { color:var(--muted); font-size:.93rem; }
-    .part-card a { margin-top:auto; width:max-content; color:#fff; background:var(--green); padding:9px 15px; border-radius:10px; font-weight:750; text-decoration:none; }
-    .planned { margin-top:auto; color:#77827c; font-size:.82rem; }
-    footer { padding:18px 0 28px; color:#718078; font-size:.82rem; }
-    @media(max-width:720px) { .part-list { grid-template-columns:1fr; } .part-card { min-height:190px; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", sans-serif; line-height: 1.7; }
+    .shell { width: min(1080px, calc(100% - 36px)); margin-inline: auto; }
+    .masthead { padding: 34px 0 28px; }
+    .brand-row { margin-bottom: 24px; }
+    .brand { color: var(--green); font-size: .9rem; font-weight: 750; text-decoration: none; }
+    .eyebrow { color: var(--green); font-size: .78rem; font-weight: 800; letter-spacing: .12em; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 760px; margin: 8px 0 14px; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.22; letter-spacing: -.04em; }
+    .intro { max-width: 730px; color: #52635d; font-size: 1.08rem; }
+    .part-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 10px 0 48px; }
+    .part-card { min-height: 230px; padding: 22px; display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 7px 20px #243a3508; }
+    .part-card.active { border: 2px solid #9b7c37; }
+    .part-number { width: max-content; padding: 2px 10px; border-radius: 999px; background: #efe6cd; color: #594a28; font-size: .78rem; font-weight: 800; }
+    .part-card h2 { margin: 16px 0 8px; font-size: 1.25rem; line-height: 1.45; }
+    .part-card p { color: var(--muted); font-size: .93rem; }
+    .part-card a { margin-top: auto; width: max-content; color: #fff; background: var(--green); padding: 9px 15px; border-radius: 10px; font-weight: 750; text-decoration: none; }
+    .part-card a:hover, .part-card a:focus-visible { outline: 3px solid #d6a83d; outline-offset: 3px; }
+    .planned { margin-top: auto; color: #77827c; font-size: .82rem; }
+    footer { padding: 18px 0 28px; color: #718078; font-size: .82rem; }
+    @media (max-width: 720px) { .part-list { grid-template-columns: 1fr; } .part-card { min-height: 190px; } }
   </style>
 </head>
 <body>
   <header class="shell masthead">
     <div class="brand-row"><a class="brand" href="../../index.html">← 所有單元</a></div>
-    <div class="eyebrow">國二上・自然科學　／　學習單元 2</div>
-    <h1>物質、分離與水溶液</h1>
-    <p class="intro">從辨認材料與混合物開始，接著學習如何分離混合物，最後認識水溶液中的溶質含量。</p>
+    <div class="eyebrow">國二上・自然科學　／　學習單元 4</div>
+    <h1>光的反射、折射與成像</h1>
+  <p class="intro">從光與看見、光的直進和影子開始，再逐步探索反射、折射、透鏡成像與顏色。</p>
   </header>
   <main class="shell">
     <div class="eyebrow">從這裡開始</div>
-    <section class="part-list" aria-label="學習內容">
+    <section class="part-list" aria-label="光學單元學習內容">
       <article class="part-card active">
         <span class="part-number">第一段</span>
-        <h2>水桶、提把支架和桶裡的水，是一樣的東西嗎？</h2>
-        <p>從水桶的材料與水的三態開始，觀察水的狀態變化和鐵桶生鏽，再認識物理、化學變化與純物質、混合物。</p>
+        <h2>光與看見：光如何傳播？</h2>
+        <p>從看見物體和光源開始，觀察光的直進與影子，最後感受光速。</p>
         <a href="parts/4.1/index.html">開始探索</a>
       </article>
-      <article class="part-card active">
+      <article class="part-card">
         <span class="part-number">第二段</span>
-        <h2>混合物裡的成分，怎麼分開？水溶液裡又有多少？</h2>
-        <p>接續雨水中的泥沙問題，操作過濾、結晶與簡易濾紙層析，再學習用重量百分濃度和 ppm 表示溶質含量。</p>
+        <h2>光遇到表面會怎樣？</h2>
+        <p>探索反射規律，以及平面鏡如何形成影像。</p>
         <a href="parts/4.2/index.html">開始探索</a>
       </article>
       <article class="part-card">
         <span class="part-number">第三段</span>
-        <h2>空氣裡有哪些氣體？氧氣大約占多少？</h2>
-        <p>認識空氣的組成與氣體特性，並透過實驗觀察氧氣約占空氣體積的五分之一。</p>
-        <span class="planned">規劃中</span>
+        <h2>光進入不同介質會怎樣？</h2>
+        <p>比較介質中的光速與折射方向，解釋水中物體看起來的位置。</p>
+        <span class="planned">尚未開放</span>
+      </article>
+      <article class="part-card">
+        <span class="part-number">第四段</span>
+        <h2>透鏡如何形成影像？</h2>
+        <p>從針孔成像延伸到透鏡、眼睛與生活中的光學儀器。</p>
+        <span class="planned">尚未開放</span>
+      </article>
+      <article class="part-card">
+        <span class="part-number">第五段</span>
+        <h2>白光與物體顏色從哪裡來？</h2>
+        <p>從色散和光與物體的作用，理解看到的顏色。</p>
+        <span class="planned">尚未開放</span>
       </article>
     </section>
   </main>

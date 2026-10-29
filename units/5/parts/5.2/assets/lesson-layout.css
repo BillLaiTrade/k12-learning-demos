@@ -1,4 +1,4 @@
-/* Page format aligned with parts/3.2. Teaching panels keep their own artwork. */
+/* Page format aligned with units/1/parts/1.2. Teaching panels keep their own artwork. */
 :root{--ink:#1c2927;--muted:#5b6a65;--line:#d8e2da;--paper:#f3f6f0;--shadow:0 10px 28px rgb(24 52 40 / 7%)}
 body{line-height:1.72}
 .shell{width:min(1380px,calc(100% - 44px));margin-inline:auto}
