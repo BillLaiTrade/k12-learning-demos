@@ -403,7 +403,7 @@
           <a href="#card-04"><b>04</b><span>影子怎麼形成？</span></a>
           <a href="#card-05"><b>05</b><span>影子的大小如何改變？</span></a>
           <a href="#card-06"><b>06</b><span>光傳得有多快？</span></a>
-          <a class="booklet-route-link" href="#unit-booklet"><b aria-hidden="true">✦</b><span>單元小冊・月光影子劇場</span></a>
+          <a class="booklet-route-link" href="#unit-booklet"><b aria-hidden="true">✦</b><span>單元小測・月光影子劇場</span></a>
         </div>
       </nav>
       <div class="cards">
@@ -584,7 +584,7 @@
 
         <section class="unit-booklet" id="unit-booklet" aria-labelledby="unit-booklet-title">
           <header class="booklet-heading">
-            <div><p class="booklet-kicker">第一段學習・單元小冊</p><h2 id="unit-booklet-title">月光影子劇場</h2><p>替小葵和阿公完成一幕影子戲。把舞台道具移到合適的位置，讓實際投影和目標描邊重合。</p></div>
+            <div><p class="booklet-kicker">第一段學習・單元小測</p><h2 id="unit-booklet-title">月光影子劇場</h2><p>替小葵和阿公完成一幕影子戲。把舞台道具移到合適的位置，讓實際投影和目標描邊重合。</p></div>
             <span class="booklet-stamp" aria-hidden="true">光<br>影</span>
           </header>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我想讓月亮兔出現在幕上！可是道具要放在哪裡，影子才會剛好對上呢？</p></div>
@@ -695,7 +695,7 @@
           routeLinks.forEach((link) => link.removeAttribute('aria-current'));
           bookletLink.setAttribute('aria-current', 'step');
           progress.value = cards.length;
-          progressCopy.textContent = '六段學習完成・單元小冊';
+          progressCopy.textContent = '六段學習完成・單元小測';
           return;
         }
         const index = cards.findIndex((card) => card.id === id);
