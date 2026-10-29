@@ -1,4 +1,5 @@
 import * as THREE from './vendor/three/build/three.module.js?v=known-good-three-20261025';
+import {THEATRE_OPTICS, shadowScaleAt, positionForShadow, assessShadow} from './shadow-theatre-optics.mjs?v=1';
 
 const waitUntilCanvasIsNearViewport = (canvas) => new Promise((resolve) => {
   if (!('IntersectionObserver' in window)) {
@@ -91,11 +92,11 @@ if (canvas) {
   frontFill.position.set(3.7, 3.7, 3.5);
   scene.add(frontFill);
 
-  const screenZ = -1.25;
+  const screenZ = THEATRE_OPTICS.screenZ;
   const screenY = 1.63;
   const screenWidth = 4.55;
   const screenHeight = 2.65;
-  const lightSource = new THREE.Vector3(-0.8, 3.05, 3.5);
+  const lightSource = new THREE.Vector3(THEATRE_OPTICS.light.x, THEATRE_OPTICS.light.y, THEATRE_OPTICS.light.z);
   const shadowLight = new THREE.SpotLight('#ffe2a4', 140, 13, 0.95, 0.28, 2);
   shadowLight.position.copy(lightSource);
   shadowLight.target.position.set(0, screenY, screenZ);
@@ -248,11 +249,7 @@ if (canvas) {
     rabbit: { label: '兔子', shape: makeRabbit(), color: '#293a37', target: new THREE.Vector2(-0.02, 1.31), start: new THREE.Vector2(0, 0.64), startZ: 0.7, size: 0.61 },
     tree: { label: '樹影', shape: makeTree(), color: '#334743', target: new THREE.Vector2(1.47, 1.53), start: new THREE.Vector2(1.67, 0.66), startZ: 0.02, size: 0.62 }
   };
-  const shadowScale = (lightSource.z - screenZ) / (lightSource.z - 0.42);
-  const targetObjectPosition = (shadowTarget) => new THREE.Vector2(
-    lightSource.x + (shadowTarget.x - lightSource.x) / shadowScale,
-    lightSource.y + (shadowTarget.y - lightSource.y) / shadowScale
-  );
+  const shadowScale = shadowScaleAt(THEATRE_OPTICS.targetDepth);
   const targetGuideGroup = new THREE.Group();
   targetGuideGroup.renderOrder = 3;
   stage.add(targetGuideGroup);
@@ -286,12 +283,12 @@ if (canvas) {
     guide.userData.fadeStart = null;
     guide.renderOrder = 4;
     targetGuideGroup.add(guide);
-    props.set(id, { id, ...definition, mesh, rim, guide, placed: false, startPosition: mesh.position.clone(), targetPosition: new THREE.Vector3(...targetObjectPosition(definition.target).toArray(), 0.42) });
+    props.set(id, { id, ...definition, mesh, rim, guide, placed: false, startPosition: mesh.position.clone() });
   }
 
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
-  const dragPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), -0.42);
+  const dragPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), -THEATRE_OPTICS.targetDepth);
   const intersection = new THREE.Vector3();
   let activeDrag = null;
   let pointerDown = null;
@@ -361,16 +358,19 @@ if (canvas) {
   };
 
   const syncPropRim = (prop) => prop.rim.position.copy(prop.mesh.position);
-  const placementSnapDistance = 0.52;
   const checkPlacement = (prop) => {
     if (prop.placed) return;
-    const d = prop.mesh.position.distanceTo(prop.targetPosition);
-    if (d > placementSnapDistance) {
+    const assessment = assessShadow(prop.mesh.position, prop.target);
+    if (!assessment.matches) {
       setSelected(prop.id);
-      status.textContent = `影子還沒對上「${prop.label}」描邊，再調整一下位置`;
+      status.textContent = !assessment.sizeMatches
+        ? `「${prop.label}」的影子偏${assessment.sizeError > 0 ? '大' : '小'}，再調整前後距離`
+        : `「${prop.label}」的影子大小接近了，位置還沒對齊`;
       return;
     }
-    prop.mesh.position.set(prop.targetPosition.x, prop.targetPosition.y, 0.42);
+    const aligned = positionForShadow(prop.target, prop.mesh.position.z);
+    prop.mesh.position.x = aligned.x;
+    prop.mesh.position.y = aligned.y;
     syncPropRim(prop);
     prop.placed = true;
     prop.guide.userData.fadeStart = performance.now();
@@ -398,7 +398,7 @@ if (canvas) {
       return;
     }
     const selected = props.get(selectedProp);
-    dragPlane.constant = selected && !selected.placed ? -selected.mesh.position.z : -0.42;
+    dragPlane.constant = selected && !selected.placed ? -selected.mesh.position.z : -THEATRE_OPTICS.targetDepth;
     if (raycaster.ray.intersectPlane(dragPlane, intersection)) {
       const nearest = [...props.values()].filter((prop) => !prop.placed)
         .map((prop) => ({ prop, distance: Math.hypot(prop.mesh.position.x - intersection.x, prop.mesh.position.y - intersection.y) }))
@@ -472,6 +472,7 @@ if (canvas) {
     depthReadout.textContent = `前後位置 ${prop.mesh.position.z.toFixed(1)}`;
     const towardLight = direction > 0;
     status.textContent = towardLight ? '道具靠近光源，屏幕上的影子變大。' : '道具靠近屏幕，屏幕上的影子變小。';
+    checkPlacement(prop);
   };
   document.querySelectorAll('[data-depth-step]').forEach((button) => button.addEventListener('click', () => {
     moveDepth(props.get(selectedProp), Number(button.dataset.depthStep));

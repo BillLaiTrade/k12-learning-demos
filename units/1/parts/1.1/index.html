@@ -565,7 +565,7 @@
             <span class="booklet-stamp" aria-hidden="true">光<br>影</span>
           </header>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我想讓月亮兔出現在幕上！可是道具要放在哪裡，影子才會剛好對上呢？</p></div>
-          <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>把月亮、兔子和樹影移到幕前，讓影子靠近各自的輪廓。差不多就好，舞台會幫你對準。</p></div>
+          <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先調前後距離，讓影子大小接近描邊，再拖動道具對準位置。舞台只會幫忙微調上下、左右。</p></div>
           <div class="booklet-game-layout">
             <div class="booklet-stage-column">
               <div class="booklet-stage-frame">
@@ -573,7 +573,7 @@
                 <div class="booklet-stage-actions"><button class="booklet-stage-button" id="shadow-theatre-reset" type="button">重設舞台</button><button class="booklet-stage-button" id="shadow-theatre-view" type="button">轉動舞台</button></div>
                 <div class="booklet-stage-badge"><span class="booklet-live-dot"></span><span id="shadow-theatre-status" aria-live="polite">月亮、兔子、樹影，等你上場</span></div>
               </div>
-              <p class="booklet-stage-help" id="shadow-theatre-help">拖動道具接近淡金描邊即可對準；拖曳空白處轉動舞台。選取道具後，也可調整前後距離。</p>
+              <p class="booklet-stage-help" id="shadow-theatre-help">選取道具調整前後距離，再拖動對齊描邊；大小與位置都接近才會吸附，前後距離會保留。拖曳空白處轉動舞台。</p>
               <div class="booklet-depth-controls" id="shadow-theatre-depth-controls" hidden><span>調整前後距離</span><button type="button" data-depth-step="-1">靠近屏幕</button><button type="button" data-depth-step="1">靠近光源</button><output id="shadow-theatre-depth-readout">選一個道具</output></div>
               <div class="booklet-prop-tray" role="group" aria-label="舞台上的可移動道具">
                 <button type="button" class="booklet-prop-token" data-prop-select="moon" aria-pressed="false"><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M16 8c-1 15 8 26 23 27-9 10-25 8-31-3C2 21 7 11 16 8Z"/></svg></span><span>月亮</span><span class="booklet-prop-state" data-prop-state="moon">待定位</span></button>
@@ -690,6 +690,6 @@
   <script type="module" src="assets/shadow-3d.js?v=mid-webgl-scenes-caefa-435879-natural-shadow-no-halo-20261025"></script>
   <script type="module" src="assets/shadow-size-3d.js?v=mid-webgl-scenes-caefa-435879-balanced-light-20261025"></script>
   <script type="module" src="assets/light-speed-timer.js?v=light-speed-orbit-dot-after-result-20261025"></script>
-  <script type="module" src="assets/shadow-theatre.js?v=known-good-three-20261025"></script>
+  <script type="module" src="assets/shadow-theatre.js?v=keep-student-depth-20261029"></script>
 </body>
 </html>
