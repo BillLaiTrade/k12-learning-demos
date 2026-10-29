@@ -60,7 +60,6 @@ if (root) {
     $('conduction-scene').src = path;
     $('conduction-scene').alt = `鍋底在電熱板上受熱，${material === 'wood' ? '木製' : '金屬'}握柄伸在加熱區外；三個接觸式探頭連到讀數器。`;
     root.querySelector('.conduction-detail-image').setAttribute('href', path);
-    setText('conduction-material-label', material === 'wood' ? '木柄・金屬接頭' : '金屬柄');
     setText('conduction-tip-note', material === 'wood' ? '木材也傳熱，遠端變化比金屬柄慢。' : '熱再沿把手向外傳遞。');
     handles.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.handle === material)));
     reset();

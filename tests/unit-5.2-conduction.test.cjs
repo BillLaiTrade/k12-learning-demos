@@ -38,7 +38,7 @@ test('5.2 conduction: cookware scene, material drag and live readings',{timeout:
  await t.test('valid dragging swaps the whole photo and joint inset and restarts fair comparison',async()=>{
   await drag('wood');assert.equal((await state()).material,'wood');assert.deepEqual(await temperatures(),[25,25,25]);
   assert.match(await page.locator('#conduction-scene').getAttribute('src'),/wood.webp/);assert.match(await page.locator('.conduction-detail-image').getAttribute('href'),/wood.webp/);assert.equal(await page.locator('[data-handle="wood"]').getAttribute('aria-pressed'),'true');
-  for(const id of ['conduction-material-label','conduction-temp-body','conduction-temp-joint','conduction-temp-tip','conduction-play','conduction-tip-note']){const box=await page.locator('#'+id).boundingBox();assert.ok(box.width>30&&box.height>5,id+' must have visible text layout');}
+  for(const id of ['conduction-temp-body','conduction-temp-joint','conduction-temp-tip','conduction-play','conduction-tip-note']){const box=await page.locator('#'+id).boundingBox();assert.ok(box.width>30&&box.height>5,id+' must have visible text layout');}
   assert.equal(await page.locator('[data-handle="wood"]').evaluate(n=>getComputedStyle(n).borderColor),'rgb(87, 127, 58)');
   await page.clock.runFor(6500);const wood=await temperatures();assert.ok(wood[1]>45&&wood[2]<26);await capture('wood-running');
   await drag('metal');await page.clock.runFor(6500);const metal=await temperatures();assert.ok(metal[2]>wood[2]+2);
