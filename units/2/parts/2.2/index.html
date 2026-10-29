@@ -111,7 +111,7 @@
   </style>
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=desktop-compact-7">
-  <link rel="stylesheet" href="assets/ppm-scale.css?v=polish-1">
+  <link rel="stylesheet" href="assets/ppm-scale.css?v=dialogue-1">
   <link rel="stylesheet" href="assets/investigation.css?v=layout-2">
 </head>
 <body>
@@ -230,8 +230,8 @@
 <div class="card-side"><span class="card-number">05</span><h3>微量比例與 ppm</h3><span class="card-role">看整池水與少量溶質的質量差距</span></div>
 <div class="card-main">
 <h2>一整池水，只加這一點，是多少 ppm？</h2>
-<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這麼大一池水，只加入這一點食鹽，濃度要怎麼表示？</p></div>
-<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先把池水和溶質都換成克，算出溶質占溶液總質量的比例，再乘上一百萬，就是 ppm。</p></div>
+<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，除了百分濃度，還有其他表示濃度的方法嗎？</p></div>
+<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>有啊！當溶質占的比例非常小時，常用 ppm 表示。我們拿一座泳池來舉例。</p></div>
 <div class="ppm-observation" id="ppm-lab" data-ready="loading" aria-label="整池水與微量溶質的ppm計算">
 <figure class="pool-volume-figure">
 <div class="pool-volume-scene pool-geometry-scene">
@@ -256,8 +256,9 @@
 <div class="ppm-shared"><p>ppm 計算公式</p><div class="pool-ppm-formula" role="math" aria-label="ppm等於溶質質量除以溶液總質量，再乘以一百萬"><span>ppm ＝</span><span class="fraction"><span class="num">溶質質量</span><span class="den">溶液總質量</span></span><span>× 1,000,000</span></div><p class="pool-formula-meaning">1 ppm 表示溶質占總質量的百萬分之一。</p></div>
 <div class="ppm-example"><h4>代入這座泳池的數值</h4><div class="pool-worked-formula" role="math" id="pool-worked-formula" aria-label="100克除以100000100克，再乘以一百萬，約為1ppm"><span class="fraction"><span class="num" data-ppm="numerator">100 克</span><span class="den" data-ppm="denominator">100,000,100 克</span></span><span>× 1,000,000</span></div><strong class="pool-ppm-result" data-ppm="ppm">≈ 1 ppm</strong><p class="pool-million-meaning" data-pool="meaning">每 100 萬份溶液中，約 1 份是溶質。</p></div>
 <div class="pool-notation-comparison"><p>同一個質量比例，換一種表示方式</p><div><span>重量百分濃度</span><strong data-ppm="percent">≈ 0.0001%</strong></div><div><span>ppm</span><strong data-pool="ppm-short">≈ 1 ppm</strong></div></div>
-<p class="pool-ppm-takeaway">當溶質占總質量的比例很小時，用 ppm 表示更容易閱讀。計算仍是同一個質量比，結果已四捨五入。</p>
 </section>
+<div class="dialogue pool-ppm-closing"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>它們表示的是同一個濃度。含量很少時，用 ppm 寫起來更簡潔，也容易閱讀。</p></div>
+<p class="pool-rounding-note">本例計算結果已四捨五入。</p>
 <p id="ppm-status" class="ppm-status" role="status" aria-live="polite"></p>
 </div>
 </div></section>

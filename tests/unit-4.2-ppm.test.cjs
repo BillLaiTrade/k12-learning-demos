@@ -12,7 +12,7 @@ test('2.2 ppm: whole-pool water and tiny solute masses show the ppm calculation'
  const url=`http://127.0.0.1:${port}/units/2/parts/2.2/`;await page.goto(url+'#s6',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.ready==='true');
  const root=page.locator('#ppm-lab'),data=()=>root.evaluate(e=>({...e.dataset}));
  await t.test('the whole pool has a specified volume and estimated mass, with no DPD workflow',async()=>{
-  assert.match(await page.locator('#s6 h2').innerText(),/一整池水/);assert.equal(await page.locator('#s6 .dialogue').count(),2);
+  assert.match(await page.locator('#s6 h2').innerText(),/一整池水/);assert.equal(await page.locator('#s6 .dialogue').count(),3);
   assert.equal((await data()).waterVolumeL,'100000');assert.equal((await data()).waterMassG,'100000000');
   assert.match(await page.locator('.pool-volume-figure figcaption').innerText(),/10 公尺.*5 公尺.*2 公尺.*100,000 公升/);
   assert.match(await page.locator('.pool-volume-note').innerText(),/密度以 1 公斤／公升估算/);
@@ -44,7 +44,7 @@ test('2.2 ppm: whole-pool water and tiny solute masses show the ppm calculation'
  });
  await t.test('percentage and ppm are two displays of the same tiny mass ratio',async()=>{
   await page.locator('[data-pool-dose="100"]').click();assert.equal(await page.locator('[data-ppm=percent]').innerText(),'≈ 0.0001%');assert.equal(await page.locator('[data-pool=ppm-short]').innerText(),'≈ 1 ppm');
-  assert.match(await page.locator('.pool-million-meaning').innerText(),/100 萬份.*約 1 份/);assert.match(await page.locator('.pool-ppm-takeaway').innerText(),/同一個質量比.*四捨五入/);
+  assert.match(await page.locator('.pool-million-meaning').innerText(),/100 萬份.*約 1 份/);assert.match(await page.locator('.pool-ppm-closing').innerText(),/同一個濃度.*ppm.*容易閱讀/);
  });
  await t.test('keyboard and touch choices stay separate from the sugar-water recipe',async()=>{
   await page.locator('[data-pool-dose="200"]').focus();await page.keyboard.press('Enter');assert.equal((await data()).soluteG,'200');await page.locator('[data-pool-dose="50"]').tap();assert.equal((await data()).soluteG,'50');

@@ -290,3 +290,6 @@
  #s6 .pool-salt-scale {left:6px;bottom:17px;}
  #s6 .pool-salt-zoom {right:3px;bottom:2px;}
 }
+
+#s6 .pool-ppm-closing {margin:14px 0 0;}
+#s6 .pool-rounding-note {margin:6px 0 0;color:#6c7c72;font-size:.73rem;line-height:1.65;}
