@@ -1,68 +1,47 @@
-const{test}=require('node:test');const assert=require('node:assert/strict');const{spawn,spawnSync}=require('node:child_process');const path=require('node:path');const{chromium}=require('playwright');
-test('4.2 ppm: one milligram beside one liter introduces parts per million',{timeout:240000},async t=>{
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const {spawn}=require('node:child_process');
+const path=require('node:path');
+const {chromium}=require('playwright');
+
+test('2.2 ppm: pool-water DPD readings connect to the same mass ratio',{timeout:180000},async t=>{
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',s=>{const m=String(s).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.on('error',reject);});
- const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox','--disable-accelerated-2d-canvas']});t.after(()=>browser.close());const page=await browser.newPage({viewport:{width:1440,height:1100},hasTouch:true});const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('requestfailed',r=>errors.push(r.url()));
- const url=`http://127.0.0.1:${port}/units/2/parts/2.2/`;await page.goto(url+'#ppm-lab',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.ready==='true');const root=page.locator('#ppm-lab'),data=()=>root.evaluate(e=>({...e.dataset}));
- const park=async()=>{await page.locator('#ppm-lens-handle').focus();await page.keyboard.press('Home');};
- const observe=async()=>{await page.locator('#ppm-milligram').click();await page.mouse.move(0,0);};
- await t.test('the approved observation layout foregrounds a single milligram and its real interaction',async()=>{
-  assert.equal(await page.locator('#ppm-gram,.ppm-example-card,.ppm-comparison,[data-ppm-sample=gram]').count(),0);assert.equal(await page.locator('.ppm-dish').count(),1);assert.doesNotMatch(await root.innerText(),/1 克|1,000 ppm|晶體結構/);assert.equal(await page.locator('#ppm-heading').innerText(),'一大杯水，糖只有這一點點。');assert.match(await page.locator('#ppm-scale-scene').getAttribute('aria-label'),/一公升水與一毫克糖/);assert.match(await page.locator('.ppm-dish-label').innerText(),/1 毫克/);assert.match(await page.locator('.ppm-dish-hint').innerText(),/放大看/);assert.equal(await page.locator('.ppm-dish-hint svg').count(),1);assert.equal(await page.locator('.ppm-question strong').innerText(),'溶質這麼少，比例要怎麼寫才好讀？');
-  const d=await data();assert.equal(d.ppm,'1');assert.equal(d.totalMg,'1000000');assert.equal(d.solventMg,'999999');assert.equal(d.lensOpen,'true');assert.equal(await page.locator('[data-ppm=numerator]').innerText(),'1 毫克');assert.equal(await page.locator('[data-ppm=ppm]').innerText(),'1 ppm');assert.equal(await page.locator('[data-ppm=percent]').innerText(),'0.0001%');await root.screenshot({path:'/tmp/ppm-approved-desktop.png'});
+ const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});t.after(()=>browser.close());
+ const page=await browser.newPage({viewport:{width:1440,height:1000},hasTouch:true});const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+ const url=`http://127.0.0.1:${port}/units/2/parts/2.2/`;await page.goto(url+'#s6',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.ready==='true');
+ const root=page.locator('#ppm-lab'),data=()=>root.evaluate(e=>({...e.dataset}));
+ const choose=key=>page.locator(`[data-pool-sample="${key}"]`).click();
+ const react=async()=>{await page.locator('#pool-reagent').click();await page.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.phase==='read');};
+ const pixel=()=>page.locator('#pool-canvas').evaluate(c=>{const d=c.getContext('2d').getImageData(Math.round(c.width*616/1536),Math.round(c.height*600/1024),1,1).data;return[...d];});
+ await t.test('the fifth section uses the official dialogues and distinguishes mg/L from mass ppm',async()=>{
+  assert.match(await page.locator('#s6 h2').innerText(),/泳池水.*餘氯/);assert.equal(await page.locator('#s6 .dialogue').count(),2);
+  assert.match(await page.locator('#s6 .pool-unit-note').innerText(),/稀水溶液.*密度約.*1 公斤／公升.*近似/);
+  assert.match(await root.innerText(),/同一個濃度概念/);assert.match(await page.locator('.ppm-definition').innerText(),/1 公斤溶液.*1 毫克溶質/);
+  assert.equal(await page.locator('#ppm-milligram,#ppm-lens,#ppm-scale-canvas').count(),0);assert.equal(await page.locator('#s5 #mix-lab').count(),1);
  });
- await t.test('the common ratio branches into formal expressions before the large equivalent values',async()=>{
-  const bridge=page.locator('#ppm-percent-bridge');assert.equal(await page.locator('#ppm-bridge-title').innerText(),'微量時，ppm 更好讀');assert.match(await bridge.locator('.ppm-explain-subtitle').innerText(),/沿用同一個濃度概念/);assert.equal(await bridge.locator('.ppm-ratio .num').innerText(),'溶質質量');assert.equal(await bridge.locator('.ppm-ratio .den').innerText(),'溶液總質量');assert.deepEqual(await bridge.locator('dt').allTextContents(),['重量百分濃度','ppm']);assert.deepEqual(await bridge.locator('.ppm-factor').allTextContents(),['× 100%','× 1,000,000']);assert.deepEqual(await bridge.locator('.ppm-basis').allTextContents(),['每 100 份中的份量','每 100 萬份中的份量']);assert.equal(await page.locator('.ppm-formal').count(),0);
-  assert.ok(await bridge.locator('.ppm-shared').evaluate(e=>!!(e.compareDocumentPosition(document.querySelector('.ppm-example'))&Node.DOCUMENT_POSITION_FOLLOWING)));assert.ok(await bridge.locator('.ppm-ratio').evaluate(e=>!!(e.compareDocumentPosition(document.querySelector('.ppm-notations'))&Node.DOCUMENT_POSITION_FOLLOWING)));
-  assert.match(await bridge.locator('.ppm-example h4').innerText(),/1 公斤中含 1 毫克糖/);assert.match(await bridge.locator('.ppm-takeaway').innerText(),/濃度沒有變/);assert.match(await bridge.locator('.ppm-definition').innerText(),/百萬分之一/);assert.match(await bridge.locator('.ppm-unit-note').innerText(),/溶液總質量包含溶質/);const sizes=await bridge.locator('.ppm-equivalence').evaluate(e=>[getComputedStyle(e.querySelector('b')).fontSize,getComputedStyle(e.querySelector('[data-ppm=percent]')).fontSize].map(parseFloat));assert.ok(sizes[0]>sizes[1]);
-  const fraction=1/1000000;assert.ok(Math.abs(fraction*100-.0001)<1e-12);assert.equal(fraction*1000000,1);await bridge.screenshot({path:'/tmp/ppm-approved-explanation.png'});
+ await t.test('clear samples develop progressively; all three readings and mass examples agree',async()=>{
+  for(const [key,value] of [['A',1],['B',2],['C',3]]){
+   await choose(key);assert.equal((await data()).phase,'fresh');assert.equal((await data()).measured,'');const before=await pixel();
+   await page.locator('#pool-reagent').click();assert.equal((await data()).phase,'reacting');assert.equal(await page.locator('#pool-reagent').isDisabled(),true);
+   await page.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.phase==='read');const after=await pixel();assert.ok(after[0]-after[1]>before[0]-before[1]+20);
+   assert.equal((await data()).measured,String(value));assert.equal((await data()).ppm,String(value));assert.equal((await data()).totalMg,'1000000');
+   assert.equal(await page.locator('#pool-reading').innerText(),`${value} mg/L ≈ ${value} ppm`);
+   assert.equal(await page.locator('[data-pool-level].is-match').getAttribute('data-pool-level'),String(value));
+   assert.equal(await page.locator('[data-ppm=percent]').innerText(),`${value/10000}%`);assert.equal(await page.locator('[data-ppm=ppm]').innerText(),`${value} ppm`);
+  }
  });
- await t.test('the illustrated entry actually reopens the same complete portion',async()=>{await park();await page.locator('.ppm-dish-hint').click();assert.equal((await data()).lensOpen,'true');assert.equal((await data()).ppm,'1');assert.match(await page.locator('[data-ppm=lens-caption]').innerText(),/糖量仍是 1 毫克/);});
- await t.test('the only rendered sugar portion is one milligram and the water volume is one liter',async()=>{
-  const m=await page.evaluate(async()=>{const m=await import('./assets/ppm-scale-state.js?v=approved-8');return{water:m.WATER,density:m.DENSITY_MG_MM3,grain:m.GRAIN_VOLUME_MM3,grainMass:m.GRAIN_MASS_MG,keys:Object.keys(m.SAMPLES),micro:m.sampleState('milligram'),removed:m.sampleState('gram'),count:m.grainPositions(1).length};});
-  assert.deepEqual(m.keys,['milligram']);assert.equal(m.removed,null);assert.equal(m.density,1.59);assert.ok(Math.abs(Math.PI*m.water.radiusMm**2*m.water.heightMm-1000000)<1e-8);assert.equal(m.count,10);assert.ok(Math.abs(m.micro.solidVolumeMm3*1.59-1)<1e-12);assert.equal(m.grain*m.density,m.grainMass);
-  const d=await data();assert.equal(d.gramRenderedVolumeMm3,undefined);assert.ok(Math.abs(Number(d.milligramRenderedVolumeMm3)*1.59-1)<1e-6);assert.ok(Math.abs(Number(d.grainGeometryVolume)-1)<1e-6);assert.equal(d.waterVolumeMm3,'1000000');
+ await t.test('switching or retaking a sample cancels the previous reaction and preserves the sugar recipe',async()=>{
+  await choose('A');await page.locator('#pool-reagent').click();await choose('B');await page.waitForTimeout(1800);assert.equal((await data()).phase,'fresh');assert.equal((await data()).measured,'');
+  await react();await page.locator('#pool-reset').click();assert.equal((await data()).phase,'fresh');assert.equal(await page.locator('[data-pool-level].is-match').count(),0);
+  await page.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='true');assert.equal(await page.locator('#mix-lab').getAttribute('data-sugar'),'5');assert.equal(await page.locator('#mix-lab').getAttribute('data-water'),'95');
  });
- await t.test('crystal solids fit their lattice cells without overlapping or counting air as sugar',async()=>{
-  const result=await page.evaluate(async()=>{const T=await import('three'),m=await import('./assets/ppm-scale-state.js?v=approved-8');const shape=await import('./assets/ppm-crystal.js?v=realism-3'),geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(shape.sugarCrystalTriangles(),3));const v=geo.attributes.position;let volume=0;const a=new T.Vector3(),b=new T.Vector3(),c=new T.Vector3();for(let i=0;i<v.count;i+=3){a.fromBufferAttribute(v,i);b.fromBufferAttribute(v,i+1);c.fromBufferAttribute(v,i+2);volume+=a.dot(b.cross(c))/6;}const norm=Math.cbrt(m.GRAIN_VOLUME_MM3/Math.abs(volume));let bound=0;for(let i=0;i<10;i++){const pose=m.grainPose(i),sx=pose.sx,sy=pose.sy,sz=1/(sx*sy),q=new T.Quaternion().setFromEuler(new T.Euler(pose.rx,pose.ry,pose.rz));for(let j=0;j<v.count;j++){a.fromBufferAttribute(v,j).multiply(new T.Vector3(sx*norm,sy*norm,sz*norm)).applyQuaternion(q);bound=Math.max(bound,Math.abs(a.x),Math.abs(a.y),Math.abs(a.z));}}return{bound:bound+m.POSITION_JITTER_MM,half:m.GRAIN_CELL_MM/2};});assert.ok(result.bound<result.half,JSON.stringify(result));
+ await t.test('keyboard, touch and responsive layouts retain the full measurement and formula',async()=>{
+  await page.locator('[data-pool-sample=C]').focus();await page.keyboard.press('Enter');await page.locator('#pool-reagent').tap();await page.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.phase==='read');
+  for(const width of [1440,1280,1024,850,390,320]){await page.setViewportSize({width,height:1000});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);assert.equal(await page.locator('#pool-reading').isVisible(),true);assert.equal(await page.locator('[data-pool-level]').count(),5);}
  });
- await t.test('crystals form closed solids and the pile has staggered, irregular layers',async()=>{
-  const check=await page.evaluate(async()=>{const shape=await import('./assets/ppm-crystal.js?v=realism-3'),m=await import('./assets/ppm-scale-state.js?v=approved-8'),p=shape.sugarCrystalTriangles(),edges=new Map();for(let i=0;i<p.length;i+=9){const v=[p.slice(i,i+3),p.slice(i+3,i+6),p.slice(i+6,i+9)].map(a=>a.map(n=>n.toFixed(8)).join(','));for(let k=0;k<3;k++){const key=[v[k],v[(k+1)%3]].sort().join('/');edges.set(key,(edges.get(key)||0)+1);}}const points=m.grainPositions(1);return{closed:[...edges.values()].every(n=>n===2),radius:Math.max(...points.map(p=>Math.hypot(p.x,p.z))),offsets:new Set(points.slice(0,100).map(p=>(p.x/m.GRAIN_CELL_MM-Math.round(p.x/m.GRAIN_CELL_MM)).toFixed(3))).size,tilts:Array.from({length:10},(_,i)=>m.grainPose(i)).filter(p=>Math.abs(Math.sin(p.rx))>.25).length};});assert.equal(check.closed,true);assert.ok(check.radius<22);assert.ok(check.offsets>5);assert.ok(check.tilts>0);
+ await t.test('a failed scene can be retried without hiding the concentration explanation',async()=>{
+  const failed=await browser.newPage();try{await failed.route('**/ppm-pool-water.webp',r=>r.abort());await failed.goto(url+'#s6',{waitUntil:'domcontentloaded'});await failed.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.ready==='error');assert.match(await failed.locator('#ppm-status').innerText(),/無法載入/);assert.equal(await failed.locator('#pool-reagent').isDisabled(),true);assert.equal(await failed.locator('.ppm-definition').isVisible(),true);await failed.unroute('**/ppm-pool-water.webp');await failed.locator('#pool-retry').click();await failed.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.ready==='true');}finally{await failed.close();}
  });
- await t.test('the whole portion, source guide and measured lens scale remain consistent',async()=>{
-  await park();assert.equal((await data()).lensOpen,'false');await observe();const d=await data(),size=await page.locator('.ppm-lens-glass').evaluate(e=>e.clientWidth);assert.equal(d.wholePortion,'true');assert.equal(d.lensFieldMm,'18');assert.equal(d.scaleBarMm,'5');assert.ok(Math.abs(Number(d.scaleBarPixels)-size*5/18)<1e-8);assert.equal(await page.locator('#ppm-scale-bar-label').innerText(),'5 mm');assert.equal(await page.locator('#ppm-origin-guide').isVisible(),true);assert.equal(await page.locator('[data-ppm=lens-title]').innerText(),'放大看這一小點');
-  const point=await page.locator('#ppm-scale-scene').evaluate(e=>{const d=document.querySelector('#ppm-lab').dataset,line=e.querySelector('#ppm-origin-guide line');return{x:Number(line.getAttribute('x1'))-Number(d.milligramAnchorX)*e.clientWidth,y:Number(line.getAttribute('y1'))-Number(d.milligramAnchorY)*e.clientHeight};});assert.ok(Math.abs(point.x)<1e-8&&Math.abs(point.y)<1e-8);
- });
- await t.test('the dark dish contrasts with a genuinely tiny full portion in the lens',async()=>{
-  await observe();const python=`from PIL import Image
-import io,sys,json
-im=Image.open(io.BytesIO(sys.stdin.buffer.read())).convert('RGB')
-p=[]
-for y in range(im.height):
- for x in range(im.width):
-  if (x-im.width/2)**2+(y-im.height/2)**2<(min(im.width,im.height)*.36)**2 and im.height*.25<y<im.height*.70:
-   r,g,b=im.getpixel((x,y));p.append(.2126*r+.7152*g+.0722*b)
-print(json.dumps({'count':len(p),'dark':sum(v<130 for v in p),'light':sum(v>180 for v in p)}))`;
-  const sample=spawnSync('python3',['-c',python],{input:await page.locator('#ppm-lens-canvas').screenshot()});assert.equal(sample.status,0,sample.stderr.toString());const pixels=JSON.parse(sample.stdout);assert.ok(pixels.dark>100&&pixels.light>0&&pixels.light/pixels.count<.02,JSON.stringify(pixels));
- });
- async function dragToSugar(touch=false){
-  await park();await page.locator('#ppm-scale-scene').scrollIntoViewIfNeeded();const d=await data(),s=await page.locator('#ppm-scale-scene').boundingBox(),h=await page.locator('#ppm-lens-handle').boundingBox(),start={x:h.x+h.width/2,y:h.y+h.height/2},dx=(Number(d.milligramAnchorX)-Number(d.lensX))*s.width,dy=(Number(d.milligramAnchorY)-Number(d.lensY))*s.height;
-  if(touch){const cdp=await page.context().newCDPSession(page);await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[start]});for(let i=1;i<=4;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:start.x+dx*i/4,y:start.y+dy*i/4}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await cdp.detach();}
-  else{await page.mouse.move(start.x,start.y);await page.mouse.down();await page.mouse.move(start.x+dx,start.y+dy,{steps:5});await page.mouse.up();}
-  const end=await data();assert.equal(end.sample,'milligram');assert.equal(end.ppm,'1');assert.equal(end.lensOpen,'true');assert.ok(Math.abs(Number(end.lensX)-.77)<1e-8&&Math.abs(Number(end.lensY)-.43)<1e-8);
- }
- await t.test('mouse and actual touch dragging observe the same one milligram portion',async()=>{await dragToSugar();await page.setViewportSize({width:390,height:1100});await dragToSugar(true);await page.setViewportSize({width:1440,height:1100});});
- await t.test('keyboard, cancellation and shared reset preserve the single recipe and upper experiment',async()=>{
-  await park();const initial=await data();await page.keyboard.press('ArrowLeft');assert.ok(Number((await data()).lensX)<Number(initial.lensX));await page.keyboard.press('Shift+ArrowRight');assert.ok(Number((await data()).lensX)<Number(initial.lensX));await page.locator('#ppm-milligram').focus();await page.keyboard.press('Enter');assert.equal((await data()).lensOpen,'true');await page.keyboard.press('Escape');assert.equal((await data()).lensOpen,'false');await page.locator('#ppm-lens').dispatchEvent('pointercancel',{pointerId:1});await page.locator('#mix-reset').click();assert.equal((await data()).lensOpen,'true');assert.equal((await data()).ppm,'1');assert.equal(await page.locator('#mix-lab').getAttribute('data-sugar'),'5');assert.equal(await page.locator('#mix-lab').getAttribute('data-water'),'95');
- });
- await t.test('water, original sugar, lens and formula remain visible at all viewport widths',async()=>{
-  for(const width of [1440,1024,850,768,680,390,320]){await page.setViewportSize({width,height:1100});await observe();const d=await data(),size=await page.locator('.ppm-lens-glass').evaluate(e=>e.clientWidth),w=await page.locator('#ppm-scale-scene').evaluate(e=>e.clientWidth);assert.ok(Math.abs(Number(d.zoom)-size/18/(w/360))<1e-8);
-   const bounds=await root.evaluate(e=>{const r=e.getBoundingClientRect(),scene=e.querySelector('#ppm-scale-scene').getBoundingClientRect(),lens=e.querySelector('#ppm-lens').getBoundingClientRect(),dish=e.querySelector('.ppm-dish').getBoundingClientRect();return{overflow:document.documentElement.scrollWidth>innerWidth,out:[...e.querySelectorAll('.ppm-question,.ppm-shared,.ppm-ratio,.ppm-example,.ppm-worked,.ppm-explanation,.ppm-notations,.ppm-notations>div,.ppm-factor,.ppm-equivalence')].some(n=>{const b=n.getBoundingClientRect();return b.left<r.left-.5||b.right>r.right+.5||n.scrollWidth>n.clientWidth+1;}),scene:[...e.querySelectorAll('.ppm-lens-glass,.ppm-lens-handle,.ppm-lens-caption,.ppm-dish-label,.ppm-dish-hint,.ppm-water-label')].every(n=>{const b=n.getBoundingClientRect();return b.left>=scene.left&&b.right<=scene.right&&b.top>=scene.top&&b.bottom<=scene.bottom;}),originals:lens.left>scene.left+scene.width*.43&&lens.bottom<dish.top};});assert.deepEqual(bounds,{overflow:false,out:false,scene:true,originals:true},`viewport ${width}`);if(width===390)await root.screenshot({path:'/tmp/ppm-approved-mobile.png'});
-  }await page.setViewportSize({width:1440,height:1100});assert.deepEqual(errors,[]);
- });
- await t.test('unavailable WebGL keeps the ppm definition and single worked example usable',async()=>{
-  const p=await browser.newPage();try{await p.addInitScript(()=>{const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){if(/webgl/i.test(type))return null;return original.call(this,type,...args);};});await p.goto(url,{waitUntil:'domcontentloaded'});await p.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.ready==='error');assert.match(await p.locator('#ppm-status').innerText(),/無法載入/);assert.equal(await p.locator('[data-ppm=ppm]').innerText(),'1 ppm');assert.equal(await p.locator('#ppm-lens').isVisible(),false);assert.equal(await p.locator('#mix-lab').getAttribute('data-ready'),'true');}finally{await p.close();}
- });
- await t.test('failed scene assets leave the definition and upper experiment available',async()=>{
-  for(const asset of ['ppm-table.webp','ppm-dish.webp']){const p=await browser.newPage();try{await p.route('**/'+asset,r=>r.abort());await p.goto(url,{waitUntil:'domcontentloaded'});await p.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.ready==='error');assert.equal(await p.locator('[data-ppm=ppm]').innerText(),'1 ppm');assert.equal(await p.locator('#ppm-gram').count(),0);assert.equal(await p.locator('#mix-lab').getAttribute('data-ready'),'true');}finally{await p.close();}}
- });
+ assert.deepEqual(errors,[]);
 });
