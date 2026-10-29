@@ -19,8 +19,7 @@
 .invest-stage { position:relative; }
 .invest-picture { position:relative; aspect-ratio:3/2; overflow:hidden; background:#e8e5d9; }
 #invest-canvas { display:block; width:100%; height:100%; }
-.invest-stage-title,.invest-reset { position:absolute; top:12px; padding:5px 10px; border:1px solid #dbe3d7; border-radius:9px; background:#fffff4f2; color:#28513f; font-size:.78rem; font-weight:700; }
-.invest-stage-title { left:12px; pointer-events:none; }
+.invest-reset { position:absolute; top:12px; padding:5px 10px; border:1px solid #dbe3d7; border-radius:9px; background:#fffff4f2; color:#28513f; font-size:.78rem; font-weight:700; }
 .invest-reset { right:12px; min-height:36px; cursor:pointer; }
 .invest-bottle { position:absolute; left:16.28%; top:20.31%; width:20.83%; height:48.83%; padding:0; border:2px solid transparent; border-radius:38% 38% 15% 15%; background:transparent; cursor:grab; touch-action:none; }
 .invest-bottle::after { content:'☝'; position:absolute; right:2px; bottom:22%; font-size:29px; color:#176b53; text-shadow:0 2px 2px #fff; }
@@ -103,7 +102,7 @@
 .invest-reset-dialog h3 { margin:0 0 8px; }
 .invest-reset-dialog p { font-size:.9rem; }
 .invest-reset-dialog form>div { display:flex; justify-content:flex-end; gap:8px; }
-@media(max-width:680px) { .investigation-card .quiz-head { padding:20px 17px 17px; gap:12px; }.investigation-card .quiz-mark { width:40px; height:40px; border-radius:12px; }.investigation-card .quiz-body { padding:17px; }.investigation-card .quiz-head p { font-size:.82rem; }.invest-stage-title,.invest-reset { top:8px; font-size:.7rem; padding:4px 7px; }.invest-stage-title { left:8px; }.invest-reset { right:8px; }.invest-take { font-size:.79rem; padding:5px 12px; min-height:40px; }.invest-status { font-size:.75rem; padding:10px; } }
+@media(max-width:680px) { .investigation-card .quiz-head { padding:20px 17px 17px; gap:12px; }.investigation-card .quiz-mark { width:40px; height:40px; border-radius:12px; }.investigation-card .quiz-body { padding:17px; }.investigation-card .quiz-head p { font-size:.82rem; }.invest-reset { top:8px; font-size:.7rem; padding:4px 7px; }.invest-reset { right:8px; }.invest-take { font-size:.79rem; padding:5px 12px; min-height:40px; }.invest-status { font-size:.75rem; padding:10px; } }
 @media(max-width:560px) {
   .invest-tools { position:static; width:auto; height:auto; padding:9px; gap:7px; background:#f4f3e6; border-top:1px solid #dedfcd; }
   .invest-tool { min-height:51px; align-items:center; flex-direction:column; gap:4px; padding:5px 2px; border:1px solid #cbd8bf; background:#fffdf5; border-radius:9px; }
