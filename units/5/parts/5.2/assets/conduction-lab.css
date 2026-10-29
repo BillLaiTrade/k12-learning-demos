@@ -67,3 +67,8 @@
 
 .conduction-lamp-lens{fill:url(#conduction-lamp-off)}
 #conduction-lab[data-started="true"] .conduction-lamp-lens{fill:url(#conduction-lamp-on)}
+
+/* Anchor the primary action to the hotplate knob, in the clear counter area. */
+#conduction-lab .conduction-heater-control{position:absolute;left:40.2%;top:80.5%;transform:translateX(-50%);z-index:1;min-width:106px;min-height:42px;padding:9px 14px;border:2px solid #fffdf0;border-radius:24px;background:#205e43;color:#fff;box-shadow:0 3px 10px #1c302e40;font-size:13px;line-height:1.4;white-space:nowrap}
+#conduction-lab .conduction-heater-control:hover{background:#124e35;box-shadow:0 4px 12px #1c302e55}
+#conduction-lab .conduction-heater-control:focus-visible{outline-color:#fffdf0;box-shadow:0 0 0 5px #4e794f}
