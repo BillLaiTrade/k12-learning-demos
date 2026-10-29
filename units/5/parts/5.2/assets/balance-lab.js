@@ -1,11 +1,11 @@
-import { balanceState, moveBlock, EQUILIBRIUM_SECONDS, MIN_OFFSET, MAX_OFFSET } from './balance-model.mjs?v=direct-drag-2';
+import { balanceState, advanceBalance, initialTemperatures, moveBlock, ROOM_C, MIN_OFFSET, MAX_OFFSET } from './balance-model.mjs?v=ambient-exchange-3';
 
 const root = document.getElementById('balance-lab');
 if (root) {
   const $ = id => document.getElementById(id);
   const pause = $('balance-pause');
   const svg = $('balance-apparatus');
-  const state = { mode: 'different', elapsed: 0, started: false, playing: false, paused: false, positions: { a: -28, b: 28 } };
+  const state = { mode: 'different', temperatures: initialTemperatures(), elapsed: 0, started: false, playing: false, paused: false, positions: { a: -28, b: 28 } };
   const blocks = { a: $('balance-block-a'), b: $('balance-block-b') };
   const modes = [...root.querySelectorAll('[data-balance]')];
   const pulses = [...root.querySelectorAll('.balance-pulse')];
@@ -13,6 +13,12 @@ if (root) {
   let frame = 0;
   let previous = null;
   let drag = null;
+  let hasViewed = false;
+  let lastPaint = null;
+
+  function text(id, value) {
+    if ($(id).textContent !== value) $(id).textContent = value;
+  }
 
   const outlines = {
     a: 'M3 0H14L16 2L14 4H3L1 2Z', b: 'M15 3L17 5V13L15 15L13 13V5Z',
@@ -43,15 +49,18 @@ if (root) {
   }
 
   function render() {
-    const sample = balanceState(state.mode, state.elapsed);
     const gap = state.positions.b - state.positions.a;
+    const sample = balanceState(state.temperatures, gap);
     const touching = gap === 0;
-    if (sample.complete || !touching) state.playing = false;
-    const phase = !state.started ? 'ready' : !touching ? 'separated' : sample.complete ? 'complete' : state.paused ? 'paused' : 'running';
+    if (sample.complete) state.playing = false;
+    const phase = !state.started ? 'ready' : sample.complete ? 'complete' : state.paused ? 'paused' : !touching ? 'separated' : sample.pairClose ? 'ambient' : 'running';
     root.dataset.phase = phase;
     root.dataset.playing = String(state.playing);
     root.dataset.mode = state.mode;
     root.dataset.elapsed = String(state.elapsed);
+    root.dataset.started = String(state.started);
+    root.dataset.environment = String(ROOM_C);
+    root.dataset.pairClose = String(sample.pairClose);
     root.dataset.temperatureA = String(sample.a);
     root.dataset.temperatureB = String(sample.b);
     root.dataset.touching = String(touching);
@@ -72,16 +81,24 @@ if (root) {
     $('balance-probe-dot').setAttribute('cx', String(352 + state.positions.a));
     digits('balance-digits-a', sample.a);
     digits('balance-digits-b', sample.b);
-    $('balance-temp-a').textContent = `${sample.a.toFixed(1)}°C`;
-    $('balance-temp-b').textContent = `${sample.b.toFixed(1)}°C`;
-    svg.setAttribute('aria-label', `隔熱盒剖面。左右拖曳兩塊鋁塊，讓它們接觸或分開。鋁塊 A ${sample.a.toFixed(1)} 攝氏度，鋁塊 B ${sample.b.toFixed(1)} 攝氏度。${touching ? '兩塊直接接觸。' : '兩塊已分開。'}`);
-    for (const glaze of root.querySelectorAll('.balance-glaze')) glaze.style.opacity = sample.complete || state.mode === 'same' ? '0' : '';
+    text('balance-temp-a', `${sample.a.toFixed(1)}°C`);
+    text('balance-temp-b', `${sample.b.toFixed(1)}°C`);
+    svg.setAttribute('aria-label', `室溫 ${ROOM_C} 攝氏度的隔熱盒剖面。左右拖曳兩塊鋁塊，讓它們接觸或分開。鋁塊 A ${sample.a.toFixed(1)} 攝氏度，鋁塊 B ${sample.b.toFixed(1)} 攝氏度。${touching ? '兩塊直接接觸。' : '兩塊已分開，仍與環境交換熱。'}`);
+    for (const side of ['a', 'b']) {
+      for (const glaze of blocks[side].querySelectorAll('.balance-glaze')) {
+        glaze.setAttribute('fill', `url(#eq-${sample[side] >= ROOM_C ? 'warm' : 'cool'}-glaze)`);
+        glaze.style.opacity = String(Math.min(1, Math.abs(sample[side] - ROOM_C) / 35));
+      }
+    }
     for (const tint of root.querySelectorAll('[data-temperature-tint]')) {
-      tint.setAttribute('fill', sample.complete || state.mode === 'same' ? '#d1d9d7' : tint.dataset.temperatureTint === 'a' ? '#e2cfb9' : '#b7d3d9');
+      const value = sample[tint.dataset.temperatureTint];
+      const neutral = [209, 217, 215], target = value >= ROOM_C ? [226, 207, 185] : [183, 211, 217];
+      const strength = Math.min(1, Math.abs(value - ROOM_C) / 35);
+      tint.setAttribute('fill', `rgb(${neutral.map((v, i) => Math.round(v + (target[i] - v) * strength)).join(',')})`);
     }
 
     const flow = $('balance-flow');
-    flow.toggleAttribute('hidden', !touching || sample.complete);
+    flow.toggleAttribute('hidden', !touching || sample.pairClose);
     flow.setAttribute('transform', `translate(${state.positions.a},0)`);
     flow.style.opacity = String(sample.flowStrength);
     // Animate only short traces: no drawn rail, bridge or connecting rod.
@@ -96,40 +113,48 @@ if (root) {
     let badge, note;
     if (phase === 'ready') {
       badge = '尚未接觸';
-      note = '兩塊金屬尚未接觸，讀數維持初始溫度。';
+      note = '室溫 25°C；兩塊金屬分開時，也會和周圍交換熱。';
     } else if (phase === 'separated') {
-      badge = '兩塊已分開';
-      note = '金屬已分開，保留目前溫度；再次貼合就接續觀察。';
+      badge = '與環境交換熱';
+      note = '兩塊已分開，溫度仍緩慢變化，逐漸接近 25°C 室溫。';
     } else if (phase === 'paused') {
       badge = '觀察已暫停';
       note = '觀察已暫停；可繼續觀察，或直接拖曳金屬。';
     } else if (phase === 'complete') {
-      badge = state.mode === 'same' ? '原本就同溫' : '同溫・熱平衡';
-      note = state.mode === 'same' ? '原本就同溫，接觸後沒有淨熱傳遞。' : '同溫・熱平衡，兩者之間沒有淨熱傳遞。';
+      badge = '整體熱平衡';
+      note = '兩塊皆為 25.0°C，與室溫相同，達到整體熱平衡。';
+    } else if (phase === 'ambient') {
+      badge = '持續接近室溫';
+      note = '兩塊溫度已接近，仍會和 25°C 的室內環境交換熱。';
     } else {
-      badge = '傳熱中';
-      note = '兩塊金屬直接接觸，熱由 A 傳向 B，溫差逐漸縮小。';
+      badge = '接觸傳熱中';
+      note = '直接接觸使彼此傳熱較快，同時也持續和室內環境交換熱。';
     }
     if ($('balance-status-label').textContent !== badge) $('balance-status-label').textContent = badge;
     if ($('balance-note').textContent !== note) $('balance-note').textContent = note;
     $('balance-status-dot').setAttribute('fill', phase === 'complete' ? '#648858' : '#c38d42');
-    for (const [key, trend] of [['a', '降溫中'], ['b', '升溫中']]) {
-      const text = phase === 'ready' ? '初始溫度' : phase === 'paused' || phase === 'separated' ? '讀數維持' : phase === 'complete' ? state.mode === 'same' ? '溫度維持' : '溫度穩定' : trend;
-      $('balance-trend-' + key).textContent = text;
+    for (const [key, rate] of [['a', sample.rateA], ['b', sample.rateB]]) {
+      const trend = phase === 'ready' ? '初始溫度' : phase === 'paused' ? '讀數暫停' : phase === 'complete' ? '溫度穩定' : Math.abs(rate) < 0.003 ? '變化緩慢' : rate > 0 ? '升溫中' : '降溫中';
+      text('balance-trend-' + key, trend);
     }
-    pause.hidden = !state.started || !touching || sample.complete;
+    pause.hidden = !state.started || sample.complete;
     pause.textContent = state.paused ? '繼續觀察' : '暫停觀察';
     pause.setAttribute('aria-pressed', String(state.paused));
     for (const button of modes) button.setAttribute('aria-pressed', String(button.dataset.balance === state.mode));
-    $('balance-initial-note').textContent = state.mode === 'same' ? '初溫 A、B 都是 40°C。僅比較接觸傳熱，流光與時間為教學示意。' : '初溫 A 60°C、B 20°C。僅比較接觸傳熱，流光與時間為教學示意。';
-    $('balance-observation-dialogue').textContent = state.mode === 'same' ? '兩塊原本就一樣暖，接觸後讀數也沒有改變！' : '熱的那塊降溫，冷的那塊升溫，最後兩邊的讀數一樣了！';
+    text('balance-initial-note', state.mode === 'same' ? '初溫 A、B 都是 40°C，室溫 25°C。時間與傳熱速度為教學示意。' : '初溫 A 60°C、B 20°C，室溫 25°C。時間與傳熱速度為教學示意。');
+    text('balance-observation-dialogue', state.mode === 'same' ? '它們原本都是 40°C，雖然一樣暖，還是一起慢慢變涼了！' : '原來拉開後溫度還會慢慢變；貼合時，兩塊就更快變得一樣暖！');
   }
 
   function tick(now) {
     const dt = previous === null ? 0 : Math.max(0, Math.min(0.05, (now - previous) / 1000));
     previous = now;
-    state.elapsed = Math.min(EQUILIBRIUM_SECONDS, state.elapsed + dt);
-    render();
+    state.elapsed += dt;
+    state.temperatures = advanceBalance(state.temperatures, state.positions.b - state.positions.a, dt);
+    // Continuous environmental drift needs only 30 visual updates per second.
+    if (lastPaint === null || now - lastPaint >= 32 || balanceState(state.temperatures, state.positions.b - state.positions.a).complete) {
+      render();
+      lastPaint = now;
+    }
     if (state.playing) frame = requestAnimationFrame(tick);
     else { frame = 0; previous = null; }
   }
@@ -138,6 +163,7 @@ if (root) {
     cancelAnimationFrame(frame);
     frame = 0;
     previous = null;
+    lastPaint = null;
     state.playing = false;
   }
 
@@ -145,14 +171,15 @@ if (root) {
     releaseDrag();
     stop();
     state.elapsed = 0;
-    state.started = false;
+    state.temperatures = initialTemperatures(state.mode);
+    state.started = hasViewed;
     state.paused = false;
     state.positions = { a: -28, b: 28 };
-    render();
+    syncPlayback();
   }
 
   function syncPlayback() {
-    const canPlay = state.positions.a === state.positions.b && !state.paused && !balanceState(state.mode, state.elapsed).complete;
+    const canPlay = state.started && !state.paused && !balanceState(state.temperatures, state.positions.b - state.positions.a).complete;
     if (!canPlay) stop();
     else if (!state.playing) {
       state.playing = true;
@@ -164,6 +191,7 @@ if (root) {
 
   function move(side, offset) {
     state.positions = moveBlock(state.positions, side, offset);
+    hasViewed = true;
     state.started = true;
     state.paused = false;
     syncPlayback();
@@ -245,4 +273,12 @@ if (root) {
     }
   });
   render();
+  const observer = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.2)) return;
+    hasViewed = true;
+    state.started = true;
+    syncPlayback();
+    observer.disconnect();
+  }, { threshold: 0.2 });
+  observer.observe(root);
 }

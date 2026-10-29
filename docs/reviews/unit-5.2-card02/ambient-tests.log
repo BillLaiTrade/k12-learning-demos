@@ -1,0 +1,30 @@
+✔ both scenarios retain their initial temperatures and use a 25°C room (1.338313ms)
+✔ separated blocks still slowly exchange heat with their surroundings (0.252464ms)
+✔ direct contact reduces the temperature difference much faster (0.164964ms)
+✔ the pair mean cools according to its room exchange rather than staying at 40°C (1.179177ms)
+✔ matching block temperatures above room temperature keep cooling together (0.216801ms)
+✔ all blocks eventually settle at room temperature in either geometry (0.230031ms)
+✔ separation and recontact are continuous and never reset readings (0.153207ms)
+✔ analytic steps are partition-independent and do not overshoot (0.268078ms)
+✔ either block snaps into contact without overlap and stays within the chamber (0.227296ms)
+▶ 5.2 equilibrium: ambient exchange, faster contact and dragging
+  ✔ observation waits until the block is seen, with a visible room temperature (203.320607ms)
+  ✔ separated blocks drift towards the room and can be paused (1888.44955ms)
+  ✔ contact is faster than room exchange and does not restart the readings (1839.36126ms)
+  ✔ separating still changes temperatures; recontact continues rather than resets (3073.767448ms)
+  ✔ near equal block temperatures are not full room equilibrium (7245.810031ms)
+  ✔ only room equilibrium stops the model at 25°C and survives recontact (35691.40969ms)
+  ✔ the initially equal 40°C scenario cools together, separated or touching (2076.290031ms)
+  ✔ drags, collision limits, instrument labels and overlay hit areas still work (1755.312332ms)
+  ✔ pause, backgrounding and mode reset keep the physical state continuous (631.537072ms)
+  ✔ desktop and laptop retain readable drag controls and other blocks stay independent (2828.768623ms)
+  ✔ real touch input and real-time flow work with both motion preferences (4793.503829ms)
+✔ 5.2 equilibrium: ambient exchange, faster contact and dragging (62843.169749ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 63165.01474
