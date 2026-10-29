@@ -1,0 +1,23 @@
+▶ 5.2 first block: three environments and in-water thermometers
+  ✔ starts with three clean scenes, pending observations and authentic portraits (160.835655ms)
+  ✔ matching scales, immersed bulbs and synchronized liquid/readout levels (1256.821385ms)
+  ✔ 25°C: A releases heat and B absorbs heat; pause freezes readouts (1263.816518ms)
+  ✔ 5°C: both release heat and scene/captions change together (1240.956445ms)
+  ✔ 70°C: even the initially hot cup absorbs heat; both arrows point inward (1211.050776ms)
+  ✔ copper paths cross cup boundaries and pulses move, pause and resume with the model (6415.742584ms)
+  ✔ reset and switching environment during playback cancel old observations (735.601545ms)
+  ✔ same displayed temperature removes heat flow and replay starts cleanly (9408.79594ms)
+  ✔ keyboard and reduced motion preserve all basic controls (589.976996ms)
+  ✔ in-scene instruments and controls fit desktop, tablet and phone widths (1242.35599ms)
+  ✔ real rendered flow keeps moving with either motion preference and freezes only when paused (3948.320214ms)
+  ✔ real mobile taps change scene, play, pause and restart (772.618057ms)
+  ✔ remaining learning blocks and quiz still operate independently (729.564157ms)
+✔ 5.2 first block: three environments and in-water thermometers (30109.270726ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30476.605248

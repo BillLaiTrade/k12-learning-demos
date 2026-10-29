@@ -1,0 +1,27 @@
+✔ zero contact time keeps the initial temperatures (1.150325ms)
+✔ same masses converge monotonically without overshoot, conserving the temperature sum (1.467175ms)
+✔ equilibrium and initially same temperatures have identical readings (0.174799ms)
+✔ either block snaps into contact and cannot pass through the other (0.981385ms)
+✔ pulling apart and chamber bounds work for both blocks (0.224253ms)
+✔ position changes do not mutate inputs or reset accumulated temperature state (0.194889ms)
+▶ 5.2 second block: dragging, contact and retained temperatures
+  ✔ primary action is dragging, with genuine portraits and no contact button (471.678618ms)
+  ✔ dragging A starts heat only when the faces touch (1204.962855ms)
+  ✔ separating B retains readings and stops flow; recontact resumes without resetting (920.273578ms)
+  ✔ B can initiate contact and A can separate; collision prevents overlap (1036.717452ms)
+  ✔ independently moved instruments, sensor labels, digits and flow stay aligned (1573.719867ms)
+  ✔ secondary pause freezes; dragging can resume; equilibrium survives recontact (8241.195446ms)
+  ✔ same temperatures, resetting and switching modes while dragging remain safe (692.726358ms)
+  ✔ keyboard, chamber bounds and reduced motion preserve direct manipulation (584.362217ms)
+  ✔ pointer cancellation and backgrounding release capture without losing temperatures (1052.771407ms)
+  ✔ drag coordinates fit multiple widths and other activities remain independent (2778.624409ms)
+  ✔ real touch drag and real-time movement work under both motion preferences (4638.007786ms)
+✔ 5.2 second block: dragging, contact and retained temperatures (24087.086001ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24462.814601

@@ -172,7 +172,7 @@ test('5.2 first block: three environments and in-water thermometers',{timeout:18
     await mobile.locator('#direction-reset').tap();assert.equal(await mobile.locator('#direction-hot').textContent(),'60°C');assert.equal(await mobile.locator('#direction-cold').textContent(),'10°C');
   });
   await t.test('remaining learning blocks and quiz still operate independently',async()=>{
-    await page.locator('#balance-play').click();await page.clock.runFor(800);const a=Number((await page.locator('#balance-temp-a').textContent()).replace('°C',''));await select(70);await page.clock.runFor(800);const b=Number((await page.locator('#balance-temp-a').textContent()).replace('°C',''));assert.ok(b<a);await page.locator('#balance-play').click();
+    await page.locator('#balance-block-a').focus();await page.keyboard.press('End');await page.clock.runFor(800);const a=Number((await page.locator('#balance-temp-a').textContent()).replace('°C',''));await select(70);await page.clock.runFor(800);const b=Number((await page.locator('#balance-temp-a').textContent()).replace('°C',''));assert.ok(b<a);await page.locator('#balance-reset').click();
     await page.locator('#radiation-shield-toggle').click();assert.equal(await page.locator('#radiation-shield-toggle').getAttribute('aria-pressed'),'true');
     await page.locator('input[value="outside"]').check();for(const [name,value]of [['metal','conduction'],['air','convection'],['sun','radiation']])await page.locator(`select[name="${name}"]`).selectOption(value);
     await page.locator('#heat-quiz button[type="submit"]').click();assert.match(await page.locator('#heat-quiz-result').textContent(),/判斷都合理/);

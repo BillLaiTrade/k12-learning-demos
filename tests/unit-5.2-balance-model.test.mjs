@@ -1,40 +1,27 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { balanceState, CONTACT_SECONDS, EQUILIBRIUM_SECONDS } from '../units/5/parts/5.2/assets/balance-model.mjs';
+import { balanceState, moveBlock, EQUILIBRIUM_SECONDS, MIN_OFFSET, MAX_OFFSET } from '../units/5/parts/5.2/assets/balance-model.mjs';
 
-test('temperatures remain at their initial values before direct contact', () => {
-  for (const elapsed of [0, 0.1, 0.4, CONTACT_SECONDS - 0.001]) {
-    const s = balanceState('different', elapsed);
-    assert.equal(s.a, 60); assert.equal(s.b, 20);
-    assert.equal(s.touching, false); assert.equal(s.flow, false);
-    assert.ok(s.gap > 0);
-  }
+test('zero contact time keeps the initial temperatures', () => {
+  const s=balanceState('different',0);assert.equal(s.a,60);assert.equal(s.b,20);assert.equal(s.complete,false);
 });
-
-test('equal aluminum masses approach 40°C monotonically without overshoot', () => {
-  let previous = balanceState('different', CONTACT_SECONDS);
-  for (let elapsed = CONTACT_SECONDS; elapsed <= EQUILIBRIUM_SECONDS + 1; elapsed += 0.1) {
-    const s = balanceState('different', elapsed);
-    assert.equal(s.a + s.b, 80);
-    assert.ok(s.a <= previous.a && s.b >= previous.b);
-    assert.ok(s.a >= 40 && s.b <= 40);
-    assert.equal(s.gap, 0); assert.equal(s.touching, true);
-    if (!s.complete) assert.equal(s.flow, true);
-    previous = s;
-  }
+test('same masses converge monotonically without overshoot, conserving the temperature sum', () => {
+  let previous=balanceState('different',0);
+  for(let t=0;t<EQUILIBRIUM_SECONDS+1;t+=.1){const s=balanceState('different',t);assert.equal(s.a+s.b,80);assert.ok(s.a<=previous.a&&s.b>=previous.b);assert.ok(s.a>=40&&s.b<=40);previous=s;}
 });
-
-test('the two displayed readings agree exactly when net flow ends', () => {
-  const s = balanceState('different', EQUILIBRIUM_SECONDS);
-  assert.equal(s.a, 40); assert.equal(s.b, 40);
-  assert.equal(s.complete, true); assert.equal(s.flow, false);
+test('equilibrium and initially same temperatures have identical readings', () => {
+  const s=balanceState('different',EQUILIBRIUM_SECONDS);assert.equal(s.a,40);assert.equal(s.b,40);assert.equal(s.complete,true);
+  for(const t of [0,.3,10,100]){const same=balanceState('same',t);assert.equal(same.a,40);assert.equal(same.b,40);assert.equal(same.complete,true);}
 });
-
-test('initially identical temperatures never exchange net heat', () => {
-  for (const elapsed of [0, 0.3, CONTACT_SECONDS, 10, 100]) {
-    const s = balanceState('same', elapsed);
-    assert.equal(s.a, 40); assert.equal(s.b, 40);
-    assert.equal(s.flow, false);
-    assert.equal(s.complete, elapsed >= CONTACT_SECONDS);
-  }
+test('either block snaps into contact and cannot pass through the other', () => {
+  for(const target of [25,80])assert.deepEqual(moveBlock({a:-28,b:28},'a',target),{a:28,b:28});
+  for(const target of [-25,-80])assert.deepEqual(moveBlock({a:-28,b:28},'b',target),{a:-28,b:-28});
+});
+test('pulling apart and chamber bounds work for both blocks', () => {
+  assert.deepEqual(moveBlock({a:28,b:28},'a',15),{a:15,b:28});assert.deepEqual(moveBlock({a:28,b:28},'b',40),{a:28,b:40});
+  assert.equal(moveBlock({a:-28,b:28},'a',-999).a,MIN_OFFSET);assert.equal(moveBlock({a:-28,b:28},'b',999).b,MAX_OFFSET);
+});
+test('position changes do not mutate inputs or reset accumulated temperature state', () => {
+  const positions={a:-28,b:28},held=balanceState('different',3.2);moveBlock(positions,'a',28);moveBlock({a:28,b:28},'b',85);
+  assert.deepEqual(positions,{a:-28,b:28});assert.deepEqual(balanceState('different',3.2),held);assert.ok(balanceState('different',4).a<held.a);
 });

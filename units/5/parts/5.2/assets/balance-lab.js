@@ -1,15 +1,18 @@
-import { balanceState, EQUILIBRIUM_SECONDS } from './balance-model.mjs?v=contact-face-1';
+import { balanceState, moveBlock, EQUILIBRIUM_SECONDS, MIN_OFFSET, MAX_OFFSET } from './balance-model.mjs?v=direct-drag-2';
 
 const root = document.getElementById('balance-lab');
 if (root) {
   const $ = id => document.getElementById(id);
-  const play = $('balance-play');
-  const state = { mode: 'different', elapsed: 0, started: false, playing: false };
+  const pause = $('balance-pause');
+  const svg = $('balance-apparatus');
+  const state = { mode: 'different', elapsed: 0, started: false, playing: false, paused: false, positions: { a: -28, b: 28 } };
+  const blocks = { a: $('balance-block-a'), b: $('balance-block-b') };
   const modes = [...root.querySelectorAll('[data-balance]')];
   const pulses = [...root.querySelectorAll('.balance-pulse')];
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   let frame = 0;
   let previous = null;
+  let drag = null;
 
   const outlines = {
     a: 'M3 0H14L16 2L14 4H3L1 2Z', b: 'M15 3L17 5V13L15 15L13 13V5Z',
@@ -41,33 +44,45 @@ if (root) {
 
   function render() {
     const sample = balanceState(state.mode, state.elapsed);
-    if (sample.complete) state.playing = false;
-    const phase = !state.started ? 'ready' : sample.complete ? 'complete' : !state.playing ? 'paused' : sample.touching ? 'running' : 'contacting';
+    const gap = state.positions.b - state.positions.a;
+    const touching = gap === 0;
+    if (sample.complete || !touching) state.playing = false;
+    const phase = !state.started ? 'ready' : !touching ? 'separated' : sample.complete ? 'complete' : state.paused ? 'paused' : 'running';
     root.dataset.phase = phase;
     root.dataset.playing = String(state.playing);
     root.dataset.mode = state.mode;
     root.dataset.elapsed = String(state.elapsed);
     root.dataset.temperatureA = String(sample.a);
     root.dataset.temperatureB = String(sample.b);
-    root.dataset.touching = String(sample.touching);
-    root.dataset.gap = String(sample.gap);
+    root.dataset.touching = String(touching);
+    root.dataset.gap = String(gap);
+    root.dataset.offsetA = String(state.positions.a);
+    root.dataset.offsetB = String(state.positions.b);
+    root.dataset.dragging = drag?.side || '';
 
-    $('balance-block-a').setAttribute('transform', `translate(${-sample.gap},0)`);
-    $('balance-block-b').setAttribute('transform', `translate(${sample.gap},0)`);
-    $('balance-probe-leader').setAttribute('d', `M${352 - sample.gap} 221L${345 - sample.gap} 205H216`);
-    $('balance-probe-dot').setAttribute('cx', String(352 - sample.gap));
+    for (const side of ['a', 'b']) {
+      const block = blocks[side];
+      block.setAttribute('transform', `translate(${state.positions[side]},0)`);
+      block.setAttribute('aria-valuemin', String(side === 'a' ? MIN_OFFSET : state.positions.a));
+      block.setAttribute('aria-valuemax', String(side === 'a' ? state.positions.b : MAX_OFFSET));
+      block.setAttribute('aria-valuenow', String(state.positions[side]));
+      block.setAttribute('aria-valuetext', `${sample[side].toFixed(1)}°C，${touching ? '與另一塊貼合' : '與另一塊分開'}`);
+    }
+    $('balance-probe-leader').setAttribute('d', `M${352 + state.positions.a} 221L${345 + state.positions.a} 205H216`);
+    $('balance-probe-dot').setAttribute('cx', String(352 + state.positions.a));
     digits('balance-digits-a', sample.a);
     digits('balance-digits-b', sample.b);
     $('balance-temp-a').textContent = `${sample.a.toFixed(1)}°C`;
     $('balance-temp-b').textContent = `${sample.b.toFixed(1)}°C`;
-    $('balance-apparatus').setAttribute('aria-label', `隔熱盒剖面。相同材質、相同質量的鋁塊 A ${sample.a.toFixed(1)} 攝氏度，鋁塊 B ${sample.b.toFixed(1)} 攝氏度。${sample.touching ? '兩塊直接接觸。' : '兩塊尚未接觸。'}`);
+    svg.setAttribute('aria-label', `隔熱盒剖面。左右拖曳兩塊鋁塊，讓它們接觸或分開。鋁塊 A ${sample.a.toFixed(1)} 攝氏度，鋁塊 B ${sample.b.toFixed(1)} 攝氏度。${touching ? '兩塊直接接觸。' : '兩塊已分開。'}`);
     for (const glaze of root.querySelectorAll('.balance-glaze')) glaze.style.opacity = sample.complete || state.mode === 'same' ? '0' : '';
     for (const tint of root.querySelectorAll('[data-temperature-tint]')) {
       tint.setAttribute('fill', sample.complete || state.mode === 'same' ? '#d1d9d7' : tint.dataset.temperatureTint === 'a' ? '#e2cfb9' : '#b7d3d9');
     }
 
     const flow = $('balance-flow');
-    flow.toggleAttribute('hidden', !sample.flow);
+    flow.toggleAttribute('hidden', !touching || sample.complete);
+    flow.setAttribute('transform', `translate(${state.positions.a},0)`);
     flow.style.opacity = String(sample.flowStrength);
     // Animate only short traces: no drawn rail, bridge or connecting rod.
     // Both preferences retain slow, essential direction movement; no flashing.
@@ -80,14 +95,14 @@ if (root) {
 
     let badge, note;
     if (phase === 'ready') {
-      badge = '準備接觸';
-      note = '兩塊金屬尚未接觸，準備開始觀察。';
-    } else if (phase === 'contacting') {
-      badge = '正在接觸';
-      note = '兩塊金屬正在靠攏，接觸後開始觀察熱傳遞。';
+      badge = '尚未接觸';
+      note = '兩塊金屬尚未接觸，讀數維持初始溫度。';
+    } else if (phase === 'separated') {
+      badge = '兩塊已分開';
+      note = '金屬已分開，保留目前溫度；再次貼合就接續觀察。';
     } else if (phase === 'paused') {
       badge = '觀察已暫停';
-      note = sample.touching ? '觀察已暫停，兩塊金屬仍保持接觸。' : '觀察已暫停，兩塊金屬尚未接觸。';
+      note = '觀察已暫停；可繼續觀察，或直接拖曳金屬。';
     } else if (phase === 'complete') {
       badge = state.mode === 'same' ? '原本就同溫' : '同溫・熱平衡';
       note = state.mode === 'same' ? '原本就同溫，接觸後沒有淨熱傳遞。' : '同溫・熱平衡，兩者之間沒有淨熱傳遞。';
@@ -99,13 +114,14 @@ if (root) {
     if ($('balance-note').textContent !== note) $('balance-note').textContent = note;
     $('balance-status-dot').setAttribute('fill', phase === 'complete' ? '#648858' : '#c38d42');
     for (const [key, trend] of [['a', '降溫中'], ['b', '升溫中']]) {
-      const text = phase === 'ready' || phase === 'contacting' ? '初始溫度' : phase === 'paused' ? '目前讀數' : phase === 'complete' ? state.mode === 'same' ? '溫度維持' : '溫度穩定' : trend;
+      const text = phase === 'ready' ? '初始溫度' : phase === 'paused' || phase === 'separated' ? '讀數維持' : phase === 'complete' ? state.mode === 'same' ? '溫度維持' : '溫度穩定' : trend;
       $('balance-trend-' + key).textContent = text;
     }
-    play.textContent = !state.started ? '讓它們接觸' : sample.complete ? '重新觀察' : state.playing ? 'Ⅱ　暫停觀察' : '繼續觀察';
-    play.setAttribute('aria-pressed', String(state.playing));
+    pause.hidden = !state.started || !touching || sample.complete;
+    pause.textContent = state.paused ? '繼續觀察' : '暫停觀察';
+    pause.setAttribute('aria-pressed', String(state.paused));
     for (const button of modes) button.setAttribute('aria-pressed', String(button.dataset.balance === state.mode));
-    $('balance-initial-note').textContent = state.mode === 'same' ? '初溫 A、B 都是 40°C。流光與時間為教學示意。' : '初溫 A 60°C、B 20°C。流光與時間為教學示意。';
+    $('balance-initial-note').textContent = state.mode === 'same' ? '初溫 A、B 都是 40°C。僅比較接觸傳熱，流光與時間為教學示意。' : '初溫 A 60°C、B 20°C。僅比較接觸傳熱，流光與時間為教學示意。';
     $('balance-observation-dialogue').textContent = state.mode === 'same' ? '兩塊原本就一樣暖，接觸後讀數也沒有改變！' : '熱的那塊降溫，冷的那塊升溫，最後兩邊的讀數一樣了！';
   }
 
@@ -126,20 +142,95 @@ if (root) {
   }
 
   function reset() {
+    releaseDrag();
     stop();
     state.elapsed = 0;
     state.started = false;
+    state.paused = false;
+    state.positions = { a: -28, b: 28 };
     render();
   }
 
-  play.addEventListener('click', () => {
-    if (state.playing) { stop(); render(); return; }
-    if (balanceState(state.mode, state.elapsed).complete) reset();
-    state.started = true;
-    state.playing = true;
+  function syncPlayback() {
+    const canPlay = state.positions.a === state.positions.b && !state.paused && !balanceState(state.mode, state.elapsed).complete;
+    if (!canPlay) stop();
+    else if (!state.playing) {
+      state.playing = true;
+      previous = null;
+      frame = requestAnimationFrame(tick);
+    }
     render();
-    previous = null;
-    frame = requestAnimationFrame(tick);
+  }
+
+  function move(side, offset) {
+    state.positions = moveBlock(state.positions, side, offset);
+    state.started = true;
+    state.paused = false;
+    syncPlayback();
+  }
+
+  function pointerX(event) {
+    const matrix = svg.getScreenCTM();
+    if (!matrix) return null;
+    return new DOMPoint(event.clientX, event.clientY).matrixTransform(matrix.inverse()).x;
+  }
+
+  function releaseDrag() {
+    if (!drag) return;
+    const active = drag;
+    drag = null;
+    if (blocks[active.side].hasPointerCapture(active.id)) blocks[active.side].releasePointerCapture(active.id);
+  }
+
+  for (const side of ['a', 'b']) {
+    const block = blocks[side];
+    block.addEventListener('pointerdown', event => {
+      if (event.button !== 0 || !event.isPrimary || drag) return;
+      const x = pointerX(event);
+      if (x === null) return;
+      event.preventDefault();
+      block.focus({ preventScroll: true });
+      drag = { side, id: event.pointerId, startX: x, startOffset: state.positions[side] };
+      block.setPointerCapture(event.pointerId);
+      render();
+    });
+    block.addEventListener('pointermove', event => {
+      if (!drag || drag.side !== side || drag.id !== event.pointerId) return;
+      const x = pointerX(event);
+      if (x === null) return;
+      event.preventDefault();
+      const requested = drag.startOffset + x - drag.startX;
+      move(side, requested);
+      // Re-anchor at a hard boundary so reversing a held drag responds immediately.
+      const collision = side === 'a' ? requested > state.positions.b : requested < state.positions.a;
+      if (collision || requested < MIN_OFFSET || requested > MAX_OFFSET) {
+        drag.startOffset = state.positions[side];
+        drag.startX = x;
+      }
+    });
+    const finish = event => {
+      if (!drag || drag.side !== side || drag.id !== event.pointerId) return;
+      releaseDrag();
+      render();
+    };
+    block.addEventListener('pointerup', finish);
+    block.addEventListener('pointercancel', finish);
+    block.addEventListener('lostpointercapture', finish);
+    block.addEventListener('keydown', event => {
+      let offset;
+      if (event.key === 'ArrowLeft') offset = state.positions[side] - (event.shiftKey ? 20 : 8);
+      else if (event.key === 'ArrowRight') offset = state.positions[side] + (event.shiftKey ? 20 : 8);
+      else if (event.key === 'Home') offset = side === 'a' ? MIN_OFFSET : MAX_OFFSET;
+      else if (event.key === 'End') offset = state.positions[side === 'a' ? 'b' : 'a'];
+      else return;
+      event.preventDefault();
+      move(side, offset);
+    });
+  }
+
+  pause.addEventListener('click', () => {
+    state.paused = !state.paused;
+    syncPlayback();
   });
   $('balance-reset').addEventListener('click', reset);
   for (const button of modes) button.addEventListener('click', () => {
@@ -147,7 +238,11 @@ if (root) {
     reset();
   });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden && state.playing) { stop(); render(); }
+    if (document.hidden) {
+      releaseDrag();
+      if (state.playing) { state.paused = true; stop(); }
+      render();
+    }
   });
   render();
 }
