@@ -1237,37 +1237,30 @@
           const particle=document.createElementNS(waterNs,"circle");particle.setAttribute("class","water-side-particle");particle.setAttribute("r",y===58?"2.3":"2");particle.dataset.baseX=String(x);particle.dataset.baseY=String(y);sideParticles.append(particle);particleNodes.push(particle);
         }
         let impact=null,waterStart=null,waterFrame=0,waterRunning=false,drag=null,suppressClick=false;
+        // SVG 的 y 軸向下；水面、一般粒子與追蹤粒子共用同一個向上為負的位移。
+        const waterMotionAt=(x,y,elapsed)=>{
+          const sourceX=impact?impact.x:320,depth=Math.max(0,y-baseSurfaceY);
+          const radius=waveAmplitude*Math.exp(-2*Math.PI*depth/wavelength);
+          const localTime=elapsed-Math.abs(x-sourceX)/waveSpeed;
+          if(!impact||localTime<0||localTime>waveTrainDuration)return {dx:0,dy:0,radius};
+          const phase=2*Math.PI*localTime/wavePeriod,envelope=Math.sin(Math.PI*localTime/waveTrainDuration),side=x<sourceX?-1:1;
+          // 波峰通過時粒子沿波的傳播方向移動，波谷通過時反向，並在原位附近往返。
+          return {dx:-side*radius*envelope*Math.cos(phase),dy:-radius*envelope*Math.sin(phase),radius};
+        };
         const updateSideWave=(elapsed=0)=>{
-          const sourceX=impact?impact.x:320;
           let path=`M24 ${baseSurfaceY}`;
           for(let x=26;x<=616;x+=3){
-            const distance=Math.abs(x-sourceX),localTime=elapsed-distance/waveSpeed;
-            let elevation=0;
-            if(impact&&localTime>=0&&localTime<=waveTrainDuration){
-              const envelope=Math.sin(Math.PI*localTime/waveTrainDuration);
-              elevation=waveAmplitude*Math.sin(2*Math.PI*localTime/wavePeriod)*envelope;
-            }
-            path+=` L${x} ${(baseSurfaceY-elevation).toFixed(2)}`;
+            const {dy}=waterMotionAt(x,baseSurfaceY,elapsed);
+            path+=` L${x} ${(baseSurfaceY+dy).toFixed(2)}`;
           }
           sideSurface.setAttribute("d",path);
           particleNodes.forEach(particle=>{
-            const x=Number(particle.dataset.baseX),y=Number(particle.dataset.baseY),distance=Math.abs(x-sourceX),localTime=elapsed-distance/waveSpeed;
-            let dx=0,dy=0;
-            if(impact&&localTime>=0&&localTime<=waveTrainDuration){
-              const depth=Math.max(0,y-baseSurfaceY),orbitRadius=waveAmplitude*Math.exp(-2*Math.PI*depth/wavelength),phase=2*Math.PI*localTime/wavePeriod,envelope=Math.sin(Math.PI*localTime/waveTrainDuration),side=x<sourceX?-1:1;
-              dx=side*orbitRadius*envelope*Math.cos(phase);dy=orbitRadius*envelope*Math.sin(phase);
-            }
+            const x=Number(particle.dataset.baseX),y=Number(particle.dataset.baseY),{dx,dy}=waterMotionAt(x,y,elapsed);
             particle.setAttribute("cx",(x+dx).toFixed(2));particle.setAttribute("cy",(y+dy).toFixed(2));
           });
-          const selectedDistance=Math.abs(selectedBase.x-sourceX),selectedTime=elapsed-selectedDistance/waveSpeed;
-          let selectedDx=0,selectedDy=0;
-          const selectedDepth=Math.max(0,selectedBase.y-baseSurfaceY),selectedOrbitRadius=waveAmplitude*Math.exp(-2*Math.PI*selectedDepth/wavelength);
-          if(impact&&selectedTime>=0&&selectedTime<=waveTrainDuration){
-            const phase=2*Math.PI*selectedTime/wavePeriod,envelope=Math.sin(Math.PI*selectedTime/waveTrainDuration),side=selectedBase.x<sourceX?-1:1;
-            selectedDx=side*selectedOrbitRadius*envelope*Math.cos(phase);selectedDy=selectedOrbitRadius*envelope*Math.sin(phase);
-          }
-          particleTrace.setAttribute("cx",String(selectedBase.x));particleTrace.setAttribute("cy",String(selectedBase.y));particleTrace.setAttribute("rx",selectedOrbitRadius.toFixed(2));particleTrace.setAttribute("ry",selectedOrbitRadius.toFixed(2));
-          highlightParticle.setAttribute("cx",(selectedBase.x+selectedDx).toFixed(2));highlightParticle.setAttribute("cy",(selectedBase.y+selectedDy).toFixed(2));
+          const selected=waterMotionAt(selectedBase.x,selectedBase.y,elapsed);
+          particleTrace.setAttribute("cx",String(selectedBase.x));particleTrace.setAttribute("cy",String(selectedBase.y));particleTrace.setAttribute("rx",selected.radius.toFixed(2));particleTrace.setAttribute("ry",selected.radius.toFixed(2));
+          highlightParticle.setAttribute("cx",(selectedBase.x+selected.dx).toFixed(2));highlightParticle.setAttribute("cy",(selectedBase.y+selected.dy).toFixed(2));
         };
         const drawWater=(elapsed)=>{
           const x=impact.x,y=impact.y;
