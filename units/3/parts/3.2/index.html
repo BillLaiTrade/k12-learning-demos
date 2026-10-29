@@ -134,7 +134,7 @@
             <div id="vacuum-lab" class="vacuum-lab" role="group" aria-label="可操作的真空鐘罩實驗" aria-describedby="vacuum-model-note">
               <figure class="vacuum-figure">
                 <div class="vacuum-scene">
-                  <img class="vacuum-photo" src="assets/vacuum-tabletop-lab.png" width="1918" height="820" alt="同一張實驗桌上，由左至右排列桌上型分貝儀、內有電鈴的完整玻璃鐘罩、抽氣幫浦及空氣量指示表；分貝儀與鐘罩間保留留白，底座旁有進氣閥。">
+                  <img class="vacuum-photo" src="assets/vacuum-tabletop-lab.png" width="1918" height="820" alt="同一張實驗桌上，由左至右排列桌上型分貝儀、內有電鈴的完整玻璃鐘罩、抽氣幫浦及罩內氣壓表；分貝儀與鐘罩間保留留白，底座旁有進氣閥。">
                   <svg class="vacuum-overlay" viewBox="0 0 1918 820" aria-hidden="true">
                     <defs>
                       <radialGradient id="vacuum-metal" cx="30%" cy="20%"><stop stop-color="#fffefa"/><stop offset=".4" stop-color="#b6ad92"/><stop offset=".7" stop-color="#6e6a62"/><stop offset="1" stop-color="#282c28"/></radialGradient>
@@ -142,7 +142,14 @@
                     </defs>
                     <g id="vacuum-hammer"><path d="M783 594L785 485L774 451" fill="none" stroke="#25322d" stroke-width="10.5" stroke-linecap="round"/><path d="M783 594L785 485L774 451" fill="none" stroke="url(#vacuum-rod)" stroke-width="7" stroke-linecap="round"/><circle cx="774" cy="451" r="13.5" fill="url(#vacuum-metal)" stroke="#24332d" stroke-width="2.5"/><path d="M765 447A10 10 0 0 1 776 441" fill="none" stroke="#fff7de" stroke-width="2.5" stroke-linecap="round" opacity=".85"/></g>
                     <g id="vacuum-vibration" fill="none" stroke="#eaa634" stroke-width="4.5" stroke-linecap="round" opacity="0"><path d="M785 430Q801 450 785 470"/><path d="M805 418Q829 450 805 482"/></g>
-                    <g id="vacuum-needle" transform="translate(1770 534) rotate(60)"><path d="M-5 7L0-68L5 7Z" fill="#21483b"/><circle r="10" fill="#343e36" stroke="#9ba49a" stroke-width="3"/></g>
+                    <g id="vacuum-pressure-gauge">
+                      <circle cx="1770" cy="534" r="68" fill="#f3eee3"/>
+                      <g id="vacuum-pressure-scale" transform="translate(1770 534)"></g>
+                      <text x="1770" y="572" text-anchor="middle" fill="#39483d" font-size="23" font-weight="700">氣壓</text>
+                      <text x="1725" y="582" text-anchor="middle" fill="#6a756b" font-size="22">低</text>
+                      <text x="1815" y="582" text-anchor="middle" fill="#6a756b" font-size="22">高</text>
+                      <g id="vacuum-needle" transform="translate(1770 534) rotate(120)"><path d="M-4 13L-3-48L0-61L3-48L4 13Z" fill="#b85a29" stroke="#6d351d" stroke-width="1.5"/><circle r="9" fill="url(#vacuum-metal)" stroke="#343e36" stroke-width="2.5"/></g>
+                    </g>
                   </svg>
                   <div class="vacuum-spl-meter" role="group" aria-label="桌上型分貝儀，罩外示意音量" aria-describedby="vacuum-model-note">
                     <svg class="vacuum-meter-display" viewBox="0 0 320 140" aria-hidden="true">
@@ -153,7 +160,7 @@
                     <output id="vacuum-db-value" class="vacuum-meter-accessible" aria-live="off" aria-label="目前罩外示意音量，單位分貝，非現場實測">—</output>
                   </div>
                   <span class="vacuum-chip" id="vacuum-mode">等待啟動</span>
-                  <div class="vacuum-air-readout"><span>罩內空氣</span><strong id="vacuum-air-label">充足</strong></div>
+                  <div class="vacuum-air-readout"><span>罩內氣壓</span><strong id="vacuum-air-label">大氣壓</strong></div>
                   <button class="vacuum-hotspot vacuum-pump-hit" id="vacuum-pump" type="button" aria-label="點按幫浦抽氣" aria-pressed="false"></button>
                   <button class="vacuum-hotspot vacuum-valve-hit" id="vacuum-valve" type="button" aria-label="打開進氣閥，放入空氣" aria-pressed="false" disabled></button>
                 </div>
@@ -382,7 +389,7 @@
     })();
   </script>
   <script type="module" src="assets/sound-propagation.js?v=6"></script>
-  <script type="module" src="assets/vacuum-lab.js?v=7"></script>
+  <script type="module" src="assets/vacuum-lab.js?v=8"></script>
   <script type="module" src="assets/sound-speed.mjs?v=fixed-24"></script>
   <script type="module" src="assets/fireworks-quiz.mjs?v=4"></script>
 </body>

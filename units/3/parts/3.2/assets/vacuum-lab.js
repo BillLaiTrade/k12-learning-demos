@@ -18,6 +18,19 @@ audio.volume = 1;
 const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
 const text = (id, value) => { const node = document.getElementById(id); if (node.textContent !== value) node.textContent = value; };
 
+// 與實景表殼共用中心點，240° 刻度讓抽氣／進氣的方向容易辨認。
+const pressureScale = document.querySelector('#vacuum-pressure-scale');
+for (let index = 0; index <= 16; index++) {
+  const tick = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const major = index % 4 === 0;
+  tick.setAttribute('d', `M0 ${major ? -49 : -54}V-62`);
+  tick.setAttribute('transform', `rotate(${-120 + index * 15})`);
+  tick.setAttribute('fill', 'none');
+  tick.setAttribute('stroke', '#657065');
+  tick.setAttribute('stroke-width', major ? '3.5' : '2');
+  pressureScale.append(tick);
+}
+
 // 七段顯示器的可見筆畫與無障礙讀值共用相同資料，未烘焙在照片內。
 const meterDigits = document.querySelector('#vacuum-led-digits');
 const segmentPaths = [
@@ -90,14 +103,15 @@ function render() {
   lab.dataset.mode = mode; lab.dataset.audio = audioState;
   powerButton.setAttribute('aria-checked', String(power));
   text('vacuum-switch-word', power ? 'ON' : 'OFF');
-  text('vacuum-mode', modeLabel); text('vacuum-air-label', airLabel);
+  const pressureLabel = air >= .99999 ? '大氣壓' : air > .15 ? '較低' : '接近真空';
+  text('vacuum-mode', modeLabel); text('vacuum-air-label', pressureLabel);
   text('vacuum-extract-label', mode === 'pump' ? '停止抽氣' : '抽氣');
   text('vacuum-admit-label', mode === 'inlet' ? '關閉進氣' : '放入空氣');
   for (const button of pumpButtons) { button.disabled = false; button.setAttribute('aria-pressed', String(mode === 'pump')); }
   for (const button of inletButtons) { button.disabled = air >= .99999; button.setAttribute('aria-pressed', String(mode === 'inlet')); }
   pumpButtons[0].setAttribute('aria-label', mode === 'pump' ? '停止抽氣' : '點按幫浦抽氣');
   inletButtons[0].setAttribute('aria-label', mode === 'inlet' ? '關閉進氣閥' : '打開進氣閥，放入空氣');
-  needle.setAttribute('transform', `translate(1770 534) rotate(${(-60 + air * 120).toFixed(3)})`);
+  needle.setAttribute('transform', `translate(1770 534) rotate(${(-120 + air * 240).toFixed(3)})`);
   const sentence = audioError || (!power && mode === 'idle' && air === 1
     ? '先開啟電鈴，再抽氣比較聽到的鈴聲。'
     : `${modeLabel}，罩內空氣${airLabel}；${power ? `電鈴持續運作，聽到的鈴聲${heard}。` : '電鈴已關閉，可開啟電鈴比較鈴聲。'}`);
