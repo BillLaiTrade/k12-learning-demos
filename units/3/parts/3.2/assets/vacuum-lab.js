@@ -106,7 +106,8 @@ function render() {
   setGain(); updateMeter();
 }
 function drawHammer() {
-  const angle = power ? -5 * Math.sin(phase * Math.PI * 2 * 3.5) ** 2 : 0;
+  // 從鐘面向外退開再返回敲擊；固定底部樞軸，振幅不隨抽氣量改變。
+  const angle = power ? 7.5 * Math.sin(phase * Math.PI * 2 * 3.5) ** 2 : 0;
   hammer.setAttribute('transform', `rotate(${angle.toFixed(3)} 783 594)`);
   vibration.setAttribute('opacity', power ? '.85' : '0');
 }
