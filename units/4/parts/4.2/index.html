@@ -55,9 +55,6 @@
     .mirror-view h3{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0;padding:9px 12px;background:#e8f3f8;color:#23465a;font-size:.95rem;line-height:1.35}
     .mirror-view h3 small{flex:0 0 auto;padding:3px 8px;border-radius:999px;background:#fff;color:#176b53;font-size:.74rem;font-weight:800}
     .mirror-view svg{display:block;width:100%;height:auto;background:linear-gradient(#fbfcfa,#f3f5ef)}
-    .mirror-task{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px;margin:12px 0;padding:12px 14px;border:1px solid #c8d8c7;border-radius:13px;background:#f0f5eb}
-    .mirror-task strong{color:#176b53;white-space:nowrap}
-    .mirror-task p{margin:0;color:#405851}
     .mirror-controls{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:12px 0}
     .mirror-controls .mirror-primary{border-color:#176b53;background:#176b53;color:#fff;font-weight:800}
     .mirror-controls .mirror-secondary{border-color:#8cb4c5;background:#f1f8fb;color:#23465a;font-weight:800}
@@ -72,7 +69,6 @@
     #distance-front-object,#distance-front-reflection{transition:transform .2s ease-out}
     #card-04.is-distance-dragging #distance-front-object,#card-04.is-distance-dragging #distance-front-reflection{transition:none}
     @media(max-width:1050px){#card-03 .mirror-views,#card-04 .mirror-views{grid-template-columns:minmax(0,1fr)}}
-    @media(max-width:780px){.mirror-task{grid-template-columns:1fr;gap:4px}}
 
 
   </style>
@@ -283,7 +279,7 @@
             <h2>物體移近鏡子，像的位置怎麼變？</h2>
             <p>固定鏡面，直接拖動左圖面向鏡子的小熊，調整它的遠近。右側成像與兩側距離刻度會同步更新。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我把物體往鏡子移，像會留在原地嗎？</p></div>
-            <div class="mirror-task"><strong>先預測，再測量</strong><p>預測物體靠近時，鏡後的像會怎麼移；拖曳左側小熊後，比較鏡面兩側的刻度。</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>把鏡面當作0，拖動小熊，看看物體與像離鏡面的距離有什麼關係。</p></div>
             <div class="mirror-views" aria-label="調整物體距離並同步查看成像">
               <figure class="mirror-view">
                 <h3>側面｜物距與像距 <small>拖動小熊</small></h3>
