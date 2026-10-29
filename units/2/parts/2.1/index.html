@@ -186,7 +186,7 @@
     .phase-solid-overview-intro { margin-bottom:12px; }
     .phase-solid-overview-intro h3 { margin:0 0 4px; color:#244b3d; font-size:1.03rem; }
     .phase-solid-overview-intro p { margin:0; color:#52635a; font-size:.84rem; }
-    .phase-solid-stage { position:relative; display:grid; grid-template-columns:minmax(120px,1fr) minmax(220px,1.2fr) minmax(120px,1fr); grid-template-rows:1fr 1fr; gap:12px; align-items:center; min-height:430px; padding:16px; border:1px solid #d7e2d7; border-radius:16px; background:linear-gradient(145deg,#f7f8f1,#edf3eb); }
+    .phase-solid-stage { position:relative; display:grid; grid-template-columns:minmax(120px,1fr) minmax(220px,1.2fr) minmax(120px,1fr); grid-template-rows:1fr 1fr; gap:12px; align-items:center; min-height:320px; padding:14px; border:1px solid #d7e2d7; border-radius:16px; background:linear-gradient(145deg,#f7f8f1,#edf3eb); }
     .phase-solid-flow { position:absolute; z-index:0; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
     .phase-solid-flow-mobile { display:none; }
     .phase-solid-flow path { fill:none; stroke-width:2.4; stroke-dasharray:1 11; stroke-linecap:round; opacity:.72; }
@@ -199,15 +199,15 @@
     .phase-solid-flow-mobile path.is-active { stroke-width:4.5; opacity:1; }
     .phase-solid-flow-particles { position:absolute; z-index:2; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
     .phase-solid-flow-particle { stroke:#fff; stroke-width:1.6; }
-    .phase-solid-process { position:relative; z-index:1; min-height:120px; width:100%; padding:14px 16px; border:1px solid #b9d0c2; border-radius:14px; background:#fffefa; color:#253e38; text-align:left; cursor:pointer; box-shadow:0 3px 9px #263b3014; transition:transform .16s,box-shadow .16s; }
+    .phase-solid-process { position:relative; z-index:1; min-height:78px; width:100%; padding:10px 12px; border:1px solid #b9d0c2; border-radius:14px; background:#fffefa; color:#253e38; text-align:left; cursor:pointer; box-shadow:0 3px 9px #263b3014; transition:transform .16s,box-shadow .16s; }
     .phase-solid-process:hover,.phase-solid-process:focus-visible { transform:translateY(-2px); box-shadow:0 6px 14px #263b3022; outline:3px solid #176b5330; }
     .phase-solid-process[aria-pressed="true"] { box-shadow:0 0 0 2px #176b5340; }
     .phase-solid-process[data-energy="heat"] { border-color:#d46b50; border-left:6px solid #cf684f; }
     .phase-solid-process[data-energy="cool"] { border-color:#438bb8; border-left:6px solid #438bb8; }
-    .phase-solid-process strong { display:block; margin-bottom:4px; font-size:1.08rem; }
-    .phase-solid-process .phase-solid-direction { display:block; color:#536b62; font-size:.86rem; }
-    .phase-solid-process .phase-solid-energy { display:inline-block; margin-top:8px; padding:3px 10px; border-radius:999px; background:#eaf2f4; color:#39788f; font-size:.76rem; }
-    .phase-solid-process .phase-solid-open { position:absolute; top:13px; right:13px; color:#6b7b71; font-size:.74rem; }
+    .phase-solid-process-heading { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+    .phase-solid-process strong { margin:0; font-size:1.08rem; line-height:1.3; }
+    .phase-solid-process .phase-solid-direction { display:block; color:#536b62; font-size:.86rem; line-height:1.45; white-space:nowrap; }
+    .phase-solid-process .phase-solid-energy { display:inline-block; flex-shrink:0; padding:2px 8px; border-radius:999px; background:#eaf2f4; color:#39788f; font-size:.76rem; line-height:1.4; }
     .phase-solid-process[data-energy="heat"] .phase-solid-energy { background:#faeee9; color:#b4543c; }
     .phase-solid-process[data-overview-slot="top-left"] { grid-column:1; grid-row:1; }
     .phase-solid-process[data-overview-slot="top-right"] { grid-column:3; grid-row:1; }
@@ -235,9 +235,10 @@
       .phase-solid-process[data-overview-slot="bottom-left"] { grid-column:1; grid-row:3; }
       .phase-solid-process[data-overview-slot="bottom-right"] { grid-column:2; grid-row:3; }
       .phase-solid-stage .freeze-demo { grid-column:1/span 2; grid-row:2; max-width:460px; justify-self:center; }
-      .phase-solid-process { min-height:92px; padding:9px; }
+      .phase-solid-process { min-height:68px; padding:9px; }
+      .phase-solid-process-heading { gap:6px; margin-bottom:5px; }
+      .phase-solid-process .phase-solid-energy { padding:2px 6px; font-size:.67rem; }
       .phase-solid-process strong { font-size:.88rem; }
-      .phase-solid-process .phase-solid-open { top:9px; right:8px; font-size:.61rem; }
       .phase-solid-process .phase-solid-direction { font-size:.7rem; }
       .phase-solid-overview-intro p { font-size:.78rem; }
     }
@@ -850,13 +851,13 @@
               <div class="phase-solid-overview" id="phase-solid-overview" hidden>
                 <div class="phase-solid-overview-intro"><p class="phase-detail-kicker" id="phase-overview-kicker">固態・粒子排列與運動</p><h3 id="phase-overview-title">冰｜固態</h3><p id="phase-overview-copy">水分子緊密、有規律地排列，在固定位置附近微微振動，因此冰有固定形狀。</p></div>
                 <div class="phase-solid-stage">
-                  <svg class="phase-solid-flow" viewBox="0 0 1000 470" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="phase-flow-blue-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#438bb8"/></marker><marker id="phase-flow-red-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#cf684f"/></marker></defs><path id="phase-flow-route-top-left" data-overview-slot="top-left" class="phase-flow-route is-cool" d="M280 105 Q345 135 410 170"/><path id="phase-flow-route-top-right" data-overview-slot="top-right" class="phase-flow-route is-cool" d="M720 105 Q655 135 590 170"/><path id="phase-flow-route-bottom-left" data-overview-slot="bottom-left" class="phase-flow-route is-heat" d="M410 260 Q345 338 280 368"/><path id="phase-flow-route-bottom-right" data-overview-slot="bottom-right" class="phase-flow-route is-heat" d="M590 260 Q655 338 720 368"/></svg>
-                  <svg class="phase-solid-flow-mobile" viewBox="0 0 1000 470" preserveAspectRatio="none" aria-hidden="true"><path id="phase-flow-mobile-route-top-left" data-overview-slot="top-left" class="phase-flow-route is-cool" d="M470 145 Q440 145 430 150"/><path id="phase-flow-mobile-route-top-right" data-overview-slot="top-right" class="phase-flow-route is-cool" d="M530 145 Q560 145 570 150"/><path id="phase-flow-mobile-route-bottom-left" data-overview-slot="bottom-left" class="phase-flow-route is-heat" d="M430 255 Q450 305 500 345"/><path id="phase-flow-mobile-route-bottom-right" data-overview-slot="bottom-right" class="phase-flow-route is-heat" d="M570 255 Q550 305 500 345"/></svg>
+                  <svg class="phase-solid-flow" viewBox="0 0 1000 470" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="phase-flow-blue-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#438bb8"/></marker><marker id="phase-flow-red-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#cf684f"/></marker></defs><path id="phase-flow-route-top-left" data-overview-slot="top-left" class="phase-flow-route is-cool" d="M280 105 Q345 125 410 140"/><path id="phase-flow-route-top-right" data-overview-slot="top-right" class="phase-flow-route is-cool" d="M720 105 Q655 125 590 140"/><path id="phase-flow-route-bottom-left" data-overview-slot="bottom-left" class="phase-flow-route is-heat" d="M410 310 Q345 338 280 368"/><path id="phase-flow-route-bottom-right" data-overview-slot="bottom-right" class="phase-flow-route is-heat" d="M590 310 Q655 338 720 368"/></svg>
+                  <svg class="phase-solid-flow-mobile" viewBox="0 0 1000 470" preserveAspectRatio="none" aria-hidden="true"><path id="phase-flow-mobile-route-top-left" data-overview-slot="top-left" class="phase-flow-route is-cool" d="M470 105 Q440 110 430 115"/><path id="phase-flow-mobile-route-top-right" data-overview-slot="top-right" class="phase-flow-route is-cool" d="M530 105 Q560 110 570 115"/><path id="phase-flow-mobile-route-bottom-left" data-overview-slot="bottom-left" class="phase-flow-route is-heat" d="M430 350 Q450 365 500 385"/><path id="phase-flow-mobile-route-bottom-right" data-overview-slot="bottom-right" class="phase-flow-route is-heat" d="M570 350 Q550 365 500 385"/></svg>
                   <svg class="phase-solid-flow-particles" id="phase-solid-flow-particles" viewBox="0 0 1000 470" preserveAspectRatio="none" aria-hidden="true"></svg>
-                  <button type="button" class="phase-solid-process" id="phase-overview-top-left" data-overview-slot="top-left" data-phase-process="freeze" data-energy="cool"><strong>凝固</strong><span class="phase-solid-open">點擊觀察 ›</span><span class="phase-solid-direction">水 → 冰</span><span class="phase-solid-energy">放熱</span></button>
-                  <button type="button" class="phase-solid-process" id="phase-overview-top-right" data-overview-slot="top-right" data-phase-process="deposition" data-energy="cool"><strong>凝華</strong><span class="phase-solid-open">點擊觀察 ›</span><span class="phase-solid-direction">水蒸氣 → 冰</span><span class="phase-solid-energy">放熱</span></button>
-                  <button type="button" class="phase-solid-process" id="phase-overview-bottom-left" data-overview-slot="bottom-left" data-phase-process="melt" data-energy="heat"><strong>融化</strong><span class="phase-solid-open">點擊觀察 ›</span><span class="phase-solid-direction">冰 → 水</span><span class="phase-solid-energy">吸熱</span></button>
-                  <button type="button" class="phase-solid-process" id="phase-overview-bottom-right" data-overview-slot="bottom-right" data-phase-process="sublimation" data-energy="heat"><strong>昇華</strong><span class="phase-solid-open">點擊觀察 ›</span><span class="phase-solid-direction">冰 → 水蒸氣</span><span class="phase-solid-energy">吸熱</span></button>
+                  <button type="button" class="phase-solid-process" id="phase-overview-top-left" data-overview-slot="top-left" data-phase-process="freeze" data-energy="cool"><span class="phase-solid-process-heading"><strong>凝固</strong><span class="phase-solid-energy">放熱</span></span><span class="phase-solid-direction">水 → 冰</span></button>
+                  <button type="button" class="phase-solid-process" id="phase-overview-top-right" data-overview-slot="top-right" data-phase-process="deposition" data-energy="cool"><span class="phase-solid-process-heading"><strong>凝華</strong><span class="phase-solid-energy">放熱</span></span><span class="phase-solid-direction">水蒸氣 → 冰</span></button>
+                  <button type="button" class="phase-solid-process" id="phase-overview-bottom-left" data-overview-slot="bottom-left" data-phase-process="melt" data-energy="heat"><span class="phase-solid-process-heading"><strong>融化</strong><span class="phase-solid-energy">吸熱</span></span><span class="phase-solid-direction">冰 → 水</span></button>
+                  <button type="button" class="phase-solid-process" id="phase-overview-bottom-right" data-overview-slot="bottom-right" data-phase-process="sublimation" data-energy="heat"><span class="phase-solid-process-heading"><strong>昇華</strong><span class="phase-solid-energy">吸熱</span></span><span class="phase-solid-direction">冰 → 水蒸氣</span></button>
                   <div class="freeze-demo" id="freeze-demo" hidden>
                     <div class="freeze-demo-head"><span id="phase-demo-heading">冰中的粒子</span><button type="button" class="freeze-demo-replay" id="freeze-demo-replay">重播</button></div>
                     <svg class="freeze-demo-scene" viewBox="0 0 360 150" role="img" aria-label="容器中的水分子排列與物態變化"><defs><linearGradient id="phase-demo-ice-top" x2="1" y2="1"><stop stop-color="#e0fbff"/><stop offset="1" stop-color="#89d8ee"/></linearGradient><linearGradient id="phase-demo-ice-front" x2="1" y2="1"><stop stop-color="#a6e5f4"/><stop offset="1" stop-color="#67c5e5"/></linearGradient><linearGradient id="phase-demo-ice-side" x2="1" y2="1"><stop stop-color="#77cce8"/><stop offset="1" stop-color="#48a9d4"/></linearGradient><clipPath id="freeze-demo-clip"><rect x="12" y="12" width="336" height="136" rx="2"/></clipPath><clipPath id="phase-demo-ice-clip"><path d="M178 12 248 34V91L182 118 112 91V34Z"/></clipPath></defs><rect id="freeze-demo-vessel" x="10" y="8" width="340" height="114" rx="11" fill="#fffefa" stroke="#9cb7aa" stroke-width="2"/><g id="phase-demo-ice"><path d="M112 34 178 12 248 34 182 58Z" fill="url(#phase-demo-ice-top)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M112 34 182 58V118L112 91Z" fill="url(#phase-demo-ice-front)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="M182 58 248 34V91L182 118Z" fill="url(#phase-demo-ice-side)" stroke="#1683ae" stroke-width="2.5" stroke-linejoin="round"/><path d="m124 39 46 16m-45 2 48 16m-48 3 48 17m20-32 41-16m-41 38 42-17" fill="none" stroke="#e6fbff" stroke-width="3.5" opacity=".75"/></g><g id="freeze-demo-particles" clip-path="url(#freeze-demo-clip)"></g><text id="phase-demo-source" x="20" y="25" fill="#43839a" font-size="10" font-weight="700">冷端</text><path id="phase-demo-arrows" d="M110 21v8m0 0-3-4m3 4 3-4M180 21v8m0 0-3-4m3 4 3-4M303 21v8m0 0-3-4m3 4 3-4" fill="none" stroke="#43839a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1612,6 +1613,15 @@
       phaseDemoIce.style.opacity="0";
       phaseDemoLastFrame=0;phaseDemoFrame=requestAnimationFrame(now=>animatePhaseDemoMotion(now,runId));
     }
+    function updatePhaseOverviewMobileRoutes(){
+      const flow=document.querySelector(".phase-solid-flow-mobile"),rect=flow.getBoundingClientRect();
+      if(!rect.width||!rect.height)return;
+      const vessel=document.getElementById("freeze-demo-vessel").getBoundingClientRect();
+      const endY=(vessel.top-rect.top-10)/rect.height*470,controlY=(105+endY)/2;
+      document.getElementById("phase-flow-mobile-route-top-left").setAttribute("d",`M470 105 Q440 ${controlY} 430 ${endY}`);
+      document.getElementById("phase-flow-mobile-route-top-right").setAttribute("d",`M530 105 Q560 ${controlY} 570 ${endY}`);
+    }
+    new ResizeObserver(updatePhaseOverviewMobileRoutes).observe(document.querySelector(".phase-solid-stage"));
     function configurePhaseOverview(stateKey){
       const state=phaseStates[stateKey],layout=phaseOverviewLayouts[stateKey],stateNames=phaseStateNames;
       document.getElementById("phase-overview-kicker").textContent=state.kicker;
@@ -1623,7 +1633,6 @@
         button.dataset.phaseProcess=key;button.dataset.energy=energy;
         button.setAttribute("aria-label",`觀察${processName}：${stateNames[motion.from]}變成${stateNames[motion.to]}，${energy==="heat"?"吸熱":"放熱"}`);
         button.querySelector("strong").textContent=processName;
-        button.querySelector(".phase-solid-open").textContent="點擊觀察 ›";
         button.querySelector(".phase-solid-direction").textContent=`${stateNames[motion.from]} → ${stateNames[motion.to]}`;
         button.querySelector(".phase-solid-energy").textContent=energy==="heat"?"吸熱":"放熱";
         document.querySelectorAll(`[data-overview-slot="${slot}"].phase-flow-route`).forEach(path=>{path.classList.remove("is-heat","is-cool","is-active");path.classList.add(`is-${energy}`);path.dataset.phaseProcess=key;});
@@ -1644,8 +1653,6 @@
     function playStateEdgeFlow(key,stateKey){
       const transition=phaseDemoMotion[key],button=document.querySelector(`.phase-solid-process[data-phase-process="${key}"]`),slot=button.dataset.overviewSlot,mobile=window.matchMedia("(max-width: 680px)").matches,routeId=`phase-flow-${mobile?"mobile-":""}route-${slot}`,route=document.getElementById(routeId),colors=phaseParticleColors;
       activePhaseProcess=key;
-      document.querySelectorAll(".phase-solid-process .phase-solid-open").forEach(label=>label.textContent="點擊觀察 ›");
-      button.querySelector(".phase-solid-open").textContent="再點停止";
       document.querySelectorAll(".phase-solid-flow path,.phase-solid-flow-mobile path").forEach(path=>path.classList.toggle("is-active",path===route));
       phaseSolidFlowParticles.replaceChildren();
       for(let index=0;index<6;index++){
