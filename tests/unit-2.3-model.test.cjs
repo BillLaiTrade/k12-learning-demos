@@ -65,7 +65,7 @@ test('2.3: fully immersed cup keeps paper dry and respects the tank', async () =
   assert.equal(g.withinTank, true); assert.equal(g.paperTouchesWater, false);
   assert.ok(g.water < 12 && g.water > 11.8); assert.equal(g.vent, 0);
   assert.ok(Math.abs((1 + g.water / 1033) * g.airArea - 72) < 1e-7);
-  for (const depth of [11.5, 12, 13, 14]) for (let angle = 0; angle <= 125; angle += 5) {
+  for (const depth of [11.5, 12, 13, 14]) for (let angle = -125; angle <= 125; angle += 5) {
     const p = cupGeometry(depth, angle);
     assert.equal(p.submerged, true); assert.equal(p.withinTank, true);
     assert.ok(p.water <= p.outlet.y + 1e-7);
@@ -91,6 +91,19 @@ test('2.3: rotation is only enabled with the entire cup underwater', async () =>
   for (const depth of [-1, 0, 6, 10]) assert.equal(moveCup(freshCup(), depth, 125).angle, 0);
   assert.equal(moveCup(freshCup(), 12, 125).angle, 125);
   assert.equal(moveCup(freshCup(), 99, 999).depth, 13.5);
+});
+
+test('2.3: enlarged paper fits inside the cup and left/right rotation is symmetric', async () => {
+  const { CUP, cupGeometry, moveCup, freshCup } = await import('../units/2/parts/2.3/assets/cup-lab-model.mjs');
+  assert.ok(CUP.paperRadius > 1.5);
+  assert.ok(CUP.paperCenter - CUP.paperRadius > -CUP.height / 2);
+  for (const angle of [0, 20, 45, 80, 125]) {
+    const a = cupGeometry(12, angle), b = cupGeometry(12, -angle);
+    assert.ok(Math.abs(a.vent - b.vent) < 1e-8);
+    assert.ok(Math.abs(a.water - b.water) < 1e-8);
+    assert.equal(a.paperTouchesWater, b.paperTouchesWater);
+  }
+  assert.equal(moveCup(freshCup(), 12, -125).angle, -125);
 });
 
 test('2.3: integrated report checks evidence instead of reusing main experiment', async () => {

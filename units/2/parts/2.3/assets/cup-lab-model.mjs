@@ -1,6 +1,6 @@
 // Coordinates are centimetres in a side section; y=0 is the outside water level.
 // The model is qualitative, isothermal, and omits surface tension / dissolution.
-export const CUP = Object.freeze({ height: 10, tankDepth: 15.2, minDepth: -1, maxDepth: 13.5, immersedDepth: 12, maxAngle: 125 });
+export const CUP = Object.freeze({ height: 10, tankDepth: 15.2, minDepth: -1, maxDepth: 13.5, immersedDepth: 12, maxAngle: 125, paperCenter: -3.2, paperRadius: 1.7 });
 const limit = (v, a, b) => Math.max(a, Math.min(b, Number(v) || 0));
 const local = [{ x: -3.2, y: -5 }, { x: 3.2, y: -5 }, { x: 4, y: 5 }, { x: -4, y: 5 }];
 export function rotateCup(point, depth, angle) {
@@ -21,7 +21,7 @@ export function aboveWater(points, level) {
 }
 const originalArea = polygonArea(local);
 export function cupGeometry(depth, angle, escaped = 0) {
-  const d = limit(depth, CUP.minDepth, CUP.maxDepth), tilt = limit(angle, 0, CUP.maxAngle);
+  const d = limit(depth, CUP.minDepth, CUP.maxDepth), tilt = limit(angle, -CUP.maxAngle, CUP.maxAngle);
   const polygon = local.map(p => rotateCup(p, d, tilt));
   const mouth = [polygon[2], polygon[3]], outlet = mouth.reduce((a, b) => a.y < b.y ? a : b);
   const minY = Math.min(...polygon.map(p => p.y)), maxY = Math.max(...polygon.map(p => p.y));
@@ -41,18 +41,18 @@ export function cupGeometry(depth, angle, escaped = 0) {
     }
     water = mass < 1e-8 ? minY - .01 : (low + high) / 2;
   }
-  const paper = rotateCup({ x: 0, y: -4.1 }, d, tilt);
+  const paper = rotateCup({ x: 0, y: CUP.paperCenter }, d, tilt);
   return { depth: d, tilt, polygon, mouth, outlet, minY, maxY, paper, water, vent,
     airArea: polygonArea(aboveWater(polygon, water)),
-    paperBelowOutside: paper.y - .78 > 0,
-    paperTouchesWater: paper.y + .78 >= water && paper.y + .78 > 0,
+    paperBelowOutside: paper.y - CUP.paperRadius > 0,
+    paperTouchesWater: paper.y + CUP.paperRadius >= water && paper.y + CUP.paperRadius > 0,
     submerged: minY > 0, withinTank: maxY < CUP.tankDepth };
 }
 export const freshCup = () => ({ depth: -1, angle: 0, escaped: 0, wet: false });
 export function moveCup(state, depth, angle) {
   const d = limit(depth, CUP.minDepth, CUP.maxDepth);
   // Keep the guided experiment completely under water during rotation.
-  const a = d < 11.5 ? 0 : limit(angle, 0, CUP.maxAngle);
+  const a = d < 11.5 ? 0 : limit(angle, -CUP.maxAngle, CUP.maxAngle);
   const g = cupGeometry(d, a, state.escaped);
   return { depth: d, angle: a, escaped: g.vent, wet: state.wet || g.paperTouchesWater };
 }

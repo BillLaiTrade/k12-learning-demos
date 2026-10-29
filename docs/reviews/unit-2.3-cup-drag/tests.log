@@ -1,0 +1,44 @@
+✔ 2.3: reaction volume, water levels and calibrated geometry agree (11.409695ms)
+✔ 2.3: recording is gated by baseline, waiting, and equalisation (1.687336ms)
+✔ 2.3: dry/humid proportions use one total and do not add CO2 twice (0.723113ms)
+✔ 2.3: fully immersed cup keeps paper dry and respects the tank (12.752524ms)
+✔ 2.3: escaping air and wet paper persist when cup is straightened (1.381425ms)
+✔ 2.3: rotation is only enabled with the entire cup underwater (0.650107ms)
+✔ 2.3: enlarged paper fits inside the cup and left/right rotation is symmetric (1.897336ms)
+✔ 2.3: integrated report checks evidence instead of reusing main experiment (0.640347ms)
+▶ 2.3: eight-section learning flow and independent controls work in browser
+  ✔ eight matching anchors, shared avatars, and unit entry (250.27819ms)
+  ✔ cup first drag stays vertical until release; dragging the rim then rotates both ways (1068.36784ms)
+  ✔ guided cup immersion, pause, tilt and comparison follow the approved proposal (8779.139906ms)
+  ✔ cup detail, manual controls, keyboard, drag and fresh paper work (1295.749428ms)
+  ✔ initial record gates reaction; pause retains state (5495.597709ms)
+  ✔ waiting and water-level alignment are required before final recording (5124.953892ms)
+  ✔ composition selection, splint samples and humid/dry basis (758.833912ms)
+  ✔ one integrated report has actionable feedback and independent reset (948.976167ms)
+  ✔ narrow viewport, keyboard focus, and reduced motion stay usable (4341.740046ms)
+✔ 2.3: eight-section learning flow and independent controls work in browser (30318.392327ms)
+▶ new unit numbers agree across home, overviews, and existing lesson URLs
+  ✔ homepage order, button numbers, and destination identities (885.212638ms)
+  ✔ unit 1: overview uses the new number (659.543393ms)
+  ✔ unit 2: overview uses the new number (626.153885ms)
+  ✔ unit 3: overview uses the new number (619.378051ms)
+  ✔ unit 4: overview uses the new number (598.165167ms)
+  ✔ unit 5: overview uses the new number (589.740241ms)
+  ✔ unit 6: overview uses the new number (606.530837ms)
+  ✔ lesson 1.1: header and existing assets load (6995.95971ms)
+  ✔ lesson 1.2: header and existing assets load (2909.601417ms)
+  ✔ lesson 2.1: header and existing assets load (1250.734229ms)
+  ✔ lesson 2.2: header and existing assets load (19728.671311ms)
+  ✔ lesson 3.1: header and existing assets load (1860.733584ms)
+  ✔ lesson 3.2: header and existing assets load (827.501923ms)
+  ✔ lesson 4.1: header and existing assets load (14306.267107ms)
+  ✔ lesson 4.2: header and existing assets load (5577.574848ms)
+✔ new unit numbers agree across home, overviews, and existing lesson URLs (59042.669304ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 59627.179724
