@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="assets/sound-propagation.css?v=3">
   <link rel="stylesheet" href="assets/vacuum-lab.css?v=5">
   <link rel="stylesheet" href="assets/sound-speed.css?v=fixed-22">
-  <link rel="stylesheet" href="assets/fireworks-quiz.css?v=1">
+  <link rel="stylesheet" href="assets/fireworks-quiz.css?v=3">
 </head>
 <body>
   <header class="shell masthead">
@@ -275,7 +275,7 @@
                 <h3 id="fireworks-conditions-title">現場條件</h3>
                 <div class="fireworks-conditions">
                   <div class="fireworks-temperature"><svg class="fireworks-thermometer" id="fireworks-thermometer" viewBox="0 0 30 80" role="img" aria-label="現場氣溫"><rect x="5" y="1" width="20" height="78" rx="9" fill="#eef1f2" stroke="#a8b4bb"/><path d="M15 13v47" stroke="#bac5cb" stroke-width="7" stroke-linecap="round"/><rect id="fireworks-thermometer-fill" x="12.5" y="27" width="5" height="35" rx="2.5" fill="#e67f52"/><circle cx="15" cy="65" r="5" fill="#e67f52"/><path d="M20 20h3m-3 9h2m-2 9h3m-3 9h2" stroke="#9eabb3" stroke-width=".8"/></svg><output class="fireworks-temperature-value" id="fireworks-temperature">—°C</output></div>
-                  <p class="fireworks-speed">空氣聲速　<strong>約 <span id="fireworks-speed">—</span> 公尺／秒</strong></p>
+                  <p class="fireworks-speed">空氣聲速近似公式<strong><var>v</var> ＝ 331 ＋ 0.6 × <var>T</var></strong><small><var>T</var> 為氣溫（°C）<br><var>v</var> 的單位為公尺／秒</small></p>
                 </div>
               </section>
               <section class="fireworks-panel" aria-labelledby="fireworks-record-title">
@@ -288,7 +288,7 @@
                   <p class="fireworks-formula">距離 ＝ 聲速 × 時間差</p>
                   <label class="fireworks-input"><input id="fireworks-answer" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入距離" aria-label="估算煙火爆炸點到觀察位置的距離，單位公尺" aria-describedby="fireworks-feedback" disabled><span>公尺</span></label>
                   <button class="action" id="fireworks-check" type="submit" disabled>核對距離</button>
-                  <details class="fireworks-hint" id="fireworks-hint"><summary>需要計算提示？</summary><p id="fireworks-hint-calculation">先觀察一發煙火，再把聲速乘以亮光與聲音的時間差。</p></details>
+                  <details class="fireworks-hint" id="fireworks-hint"><summary>需要計算提示？</summary><p id="fireworks-hint-calculation">先將現場氣溫代入聲速公式，再把算出的聲速乘以亮光與聲音的時間差。</p></details>
                   <p class="fireworks-feedback" id="fireworks-feedback" role="status" aria-live="polite" hidden></p>
                 </form>
               </section>
@@ -386,6 +386,6 @@
   <script type="module" src="assets/sound-propagation.js?v=4"></script>
   <script type="module" src="assets/vacuum-lab.js?v=6"></script>
   <script type="module" src="assets/sound-speed.mjs?v=fixed-22"></script>
-  <script type="module" src="assets/fireworks-quiz.mjs?v=2"></script>
+  <script type="module" src="assets/fireworks-quiz.mjs?v=3"></script>
 </body>
 </html>

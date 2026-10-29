@@ -111,7 +111,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal((await data()).state, 'ready');
     assert.equal(await page.locator('#quiz-title').textContent(), '煙火離你多遠？');
     assert.equal(await page.locator('#fireworks-temperature').textContent(), '10°C');
-    assert.equal(await page.locator('#fireworks-speed').textContent(), '337');
+    assert.equal(await page.locator('#fireworks-speed').count(), 0);
     assert.equal(await page.locator('#fireworks-timer').textContent(), '—');
     assert.equal(await page.locator('#fireworks-check').isDisabled(), true);
     assert.equal(await page.locator('#fireworks-answer').isDisabled(), true);
@@ -191,7 +191,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     await answer.fill('1'); await submit.click();
     assert.equal(await page.locator('#fireworks-feedback').getAttribute('data-state'), 'incorrect');
     await page.locator('#fireworks-hint summary').click();
-    assert.match(await page.locator('#fireworks-hint-calculation').textContent(), /337.*3\.00/);
+    assert.match(await page.locator('#fireworks-hint-calculation').textContent(), /代入聲速公式.*3\.00/);
     await answer.fill('1011'); await answer.press('Enter');
     assert.equal(await page.locator('#fireworks-feedback').getAttribute('data-state'), 'correct');
     assert.match(await page.locator('#fireworks-feedback').textContent(), /1,011.*1\.01/);
@@ -204,7 +204,6 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     await page.locator('#fireworks-observe').click();
     await page.waitForFunction(() => document.querySelector('#unit-quiz').dataset.state === 'observing');
     assert.equal((await data()).temperature, previous.temperature);
-    assert.equal((await data()).speed, previous.speed);
     assert.equal(await page.locator('#fireworks-answer').inputValue(), '1012');
     assert.equal(await page.evaluate(() => window.fwSignals[1].when - window.fwSignals[0].when > 0), true);
     await page.locator('#fireworks-new').click();

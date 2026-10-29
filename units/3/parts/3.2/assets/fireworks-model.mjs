@@ -1,11 +1,9 @@
-import { airSpeed } from './sound-speed-model.mjs?v=fixed-22';
-
 export const TEMPERATURES = Object.freeze([0, 10, 20, 30]);
 export const MIN_DELAY = 2;
 export const MAX_DELAY = 6;
 
-// 作答依畫面顯示的約略聲速與百分之一秒計算，避免隱藏精度造成答案不符。
-export const referenceSpeed = temperature => Math.round(airSpeed(temperature));
+// 核對答案採用題目提供的近似公式；聲速由學生自行代入氣溫計算。
+export const referenceSpeed = temperature => 331 + .6 * temperature;
 export const distanceFor = (speed, delay) => Math.round(speed * delay * 100) / 100;
 
 export function createChallenge({ random = Math.random, previous = null } = {}) {
