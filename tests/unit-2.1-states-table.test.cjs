@@ -110,22 +110,37 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     await movement(await positions());
   });
 
-  await t.test('gas volume switches sealed containers independently of compression', async () => {
+  await t.test('gas volume increases and decreases within limits independently of compression', async () => {
     const container=cell('gas.volume').locator('[data-gas-volume]');
     const group=container.locator('[data-volume-particles]');
     assert.equal(await container.getAttribute('data-volume'),'200');
     assert.equal(await cell('gas.volume').locator('[data-piston], [data-piston-handle], .sv-rod').count(),0);
-    assert.equal(await cell('gas.volume').locator('[data-gas-volume-choice]').count(),3);
+    assert.equal(await cell('gas.volume').locator('[data-gas-volume-choice]').count(),0);
+    assert.equal(await cell('gas.volume').locator('[data-gas-volume-step]').count(),2);
     assert.equal(await page.locator('[data-piston]').count(),3);
     const handles=await group.evaluateHandle(g=>[...g.querySelectorAll('.sv-particle')]);
     const compressionBefore=await piston('gas-compress').getAttribute('data-volume');
     const heights=new Map();
-    for(const value of [100,300,200,100]) {
-      await cell('gas.volume').locator(`[data-gas-volume-choice="${value}"]`).click();
+    const minus=cell('gas.volume').locator('[data-gas-volume-step="-1"]');
+    const plus=cell('gas.volume').locator('[data-gas-volume-step="1"]');
+    async function goToVolume(value) {
+      let count=0;
+      while(+await container.getAttribute('data-volume')!==value) {
+        assert.ok(++count<=8,'volume steps must converge');
+        const current=+await container.getAttribute('data-volume');
+        await (current<value?plus:minus).click();
+      }
+    }
+    for(const value of [100,150,200,250,300,100]) {
+      await goToVolume(value);
       assert.equal(await container.getAttribute('data-volume'),String(value));
-      assert.match(await cell('gas.volume').innerText(),new RegExp(`容器體積：${value} mL`));
-      assert.equal(await cell('gas.volume').locator('[aria-pressed="true"]').count(),1);
-      assert.equal(await cell('gas.volume').locator(`[data-gas-volume-choice="${value}"]`).getAttribute('aria-pressed'),'true');
+      assert.equal(await cell('gas.volume').locator('[data-gas-volume-readout]').innerText(),`${value} mL`);
+      assert.equal(await minus.isDisabled(),value===100);
+      assert.equal(await plus.isDisabled(),value===300);
+      if(value===100 || value===300) {
+        await (value===100?minus:plus).dispatchEvent('click');
+        assert.equal(await container.getAttribute('data-volume'),String(value));
+      }
       const data=await container.evaluate(svg=>{
         const glass=svg.querySelector('.sv-glass'),rim=svg.querySelector('.sv-rim');
         const x=+glass.getAttribute('x'),y=+glass.getAttribute('y'),w=+glass.getAttribute('width'),h=+glass.getAttribute('height');
@@ -145,9 +160,11 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     }
     assert.ok(heights.get(100)<heights.get(200) && heights.get(200)<heights.get(300));
     assert.ok(Math.abs((heights.get(300)-8)/(heights.get(100)-8)-3)<.001);
-    const button=cell('gas.volume').locator('[data-gas-volume-choice="200"]');
-    await button.focus();await page.keyboard.press('Space');
+    await plus.focus();await page.keyboard.press('Space');
+    assert.equal(await container.getAttribute('data-volume'),'150');
+    await page.keyboard.press('Enter');
     assert.equal(await container.getAttribute('data-volume'),'200');
+    assert.match(await cell('gas.volume').locator('.sv-volume-limit').innerText(),/100–300 mL/);
     await handles.dispose();
   });
 
@@ -297,8 +314,13 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
       await handle.focus();await touch.keyboard.press('Home');
       assert.equal(Number(await model.getAttribute('data-volume')),100);
     }
-    await touch.locator('[data-gas-volume-choice="300"]').tap();
+    await touch.locator('[data-gas-volume-step="1"]').tap();
+    assert.equal(await touch.locator('[data-gas-volume]').getAttribute('data-volume'),'250');
+    await touch.locator('[data-gas-volume-step="1"]').tap();
     assert.equal(await touch.locator('[data-gas-volume]').getAttribute('data-volume'),'300');
+    assert.equal(await touch.locator('[data-gas-volume-step="1"]').isDisabled(),true);
+    await touch.locator('[data-gas-volume-step="-1"]').tap();
+    assert.equal(await touch.locator('[data-gas-volume]').getAttribute('data-volume'),'250');
     assert.equal(await touch.locator('[data-volume-particles] .sv-particle').count(),24);
     const movingBefore=await touch.locator('[data-piston="gas-compress"] .sv-particle').evaluateAll(dots=>dots.map(d=>[+d.getAttribute('cx'),+d.getAttribute('cy')]));
     await touch.waitForFunction(before=>[...document.querySelectorAll('[data-piston="gas-compress"] .sv-particle')].filter((d,i)=>Math.hypot(+d.getAttribute('cx')-before[i][0],+d.getAttribute('cy')-before[i][1])>.3).length>=8,movingBefore,{timeout:5000});

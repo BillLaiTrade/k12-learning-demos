@@ -118,9 +118,13 @@
   });
   const volumeContainer = section.querySelector('[data-gas-volume]');
   const volumeParticles = volumeContainer.querySelector('[data-volume-particles]');
-  function selectGasVolume(value) {
-    if (![100,200,300].includes(value)) return;
-    // Different sealed containers, not an inward-moving piston. Fixed cross-section.
+  const gasVolumeMin = 100, gasVolumeMax = 300, gasVolumeStep = 50;
+  let currentGasVolume = 200;
+  function selectGasVolume(requested) {
+    if (!Number.isFinite(requested)) return;
+    const value = Math.max(gasVolumeMin,Math.min(gasVolumeMax,Math.round(requested / gasVolumeStep) * gasVolumeStep));
+    currentGasVolume = value;
+    // Adjustable sealed container with a fixed cross-section; no piston.
     const height = 8 + value / 100 * 36, y = 138 - height;
     const glass = volumeContainer.querySelector('.sv-glass');
     glass.setAttribute('y',y); glass.setAttribute('height',height);
@@ -129,14 +133,14 @@
     volumeContainer.dataset.volume = String(value);
     volumeContainer.setAttribute('aria-label',`${value}毫升密閉容器，同一批氣體粒子分布於全部可用空間`);
     gasFieldFor(volumeParticles,{left:76,top:y+4,right:164,bottom:134});
-    section.querySelector('[data-gas-volume-readout]').textContent = `容器體積：${value} mL`;
-    section.querySelectorAll('[data-gas-volume-choice]').forEach(button => {
-      button.setAttribute('aria-pressed',String(+button.dataset.gasVolumeChoice===value));
+    section.querySelector('[data-gas-volume-readout]').textContent = `${value} mL`;
+    section.querySelectorAll('[data-gas-volume-step]').forEach(button => {
+      button.disabled = +button.dataset.gasVolumeStep < 0 ? value <= gasVolumeMin : value >= gasVolumeMax;
     });
   }
   selectGasVolume(200);
-  section.querySelectorAll('[data-gas-volume-choice]').forEach(button => {
-    button.addEventListener('click',()=>selectGasVolume(+button.dataset.gasVolumeChoice));
+  section.querySelectorAll('[data-gas-volume-step]').forEach(button => {
+    button.addEventListener('click',()=>selectGasVolume(currentGasVolume + +button.dataset.gasVolumeStep * gasVolumeStep));
   });
   section.querySelectorAll('[data-piston]').forEach(svg => {
     // The fixed barrel has its bottom at y=140. Gas space = bottom minus piston.
