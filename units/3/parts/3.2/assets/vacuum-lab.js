@@ -1,3 +1,5 @@
+import { stopOnLeave } from './lesson-playback.mjs?v=1';
+
 // 定性鐘罩實驗：控制空氣量，聲源振動與空氣量分開處理。
 const lab = document.querySelector('#vacuum-lab');
 const audio = document.querySelector('#vacuum-audio');
@@ -186,10 +188,7 @@ for (const button of inletButtons) button.addEventListener('click', () => toggle
 function stopWhenAway() {
   mode = 'idle'; setPower(false); cancelAnimationFrame(frame); frame = 0; lastTime = null;
 }
-document.addEventListener('visibilitychange', () => { if (document.hidden) stopWhenAway(); });
-if ('IntersectionObserver' in window) {
-  new IntersectionObserver(entries => {
-    if (!entries[0].isIntersecting && (power || mode !== 'idle')) stopWhenAway();
-  }).observe(document.querySelector('#card-03'));
-}
+stopOnLeave(document.querySelector('#card-03'), () => {
+  if (power || mode !== 'idle') stopWhenAway();
+});
 render(); drawHammer();

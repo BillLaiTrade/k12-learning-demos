@@ -1,4 +1,5 @@
 import { BellReceptionAudio } from './bell-reception-audio.mjs?v=1';
+import { stopOnLeave } from './lesson-playback.mjs?v=1';
 
 // 慢速的一維縱波示意。q 是粒子的平衡位置，不隨波向右漂移。
 const scene = document.querySelector('#air-wave');
@@ -125,10 +126,10 @@ bell.addEventListener('keydown', event => {
     if (!event.repeat) strike();
   }
 });
-// 背景分頁凍結時間並取消音效；返回時從同一傳播位置與錄音段落接續。
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { if (playing) freeze(); }
-  else if (playing) startTimeline(++soundRequest);
+stopOnLeave(document.querySelector('#card-02'), () => {
+  if (!playing && !frame) return;
+  freeze(); playing = false; elapsed = 0; phase = ''; startElapsed = 0;
+  draw(); scene.dataset.state = 'ready'; scene.dataset.audio = 'idle';
+  status.textContent = '播放已停止，再敲一次鐘可重新觀察。';
 });
-window.addEventListener('pagehide', () => { freeze(); playing = false; });
 draw(); scene.dataset.state = 'ready';

@@ -1,6 +1,7 @@
 import { createChallenge, checkEstimate } from './fireworks-model.mjs?v=3';
 import { FireworkRenderer, FIREWORK_DURATION } from './fireworks-renderer.mjs?v=2';
 import { FireworkAudio } from './fireworks-audio.mjs?v=2';
+import { stopOnLeave } from './lesson-playback.mjs?v=1';
 
 const root = document.querySelector('#unit-quiz.fireworks-quiz');
 if (root) {
@@ -59,7 +60,11 @@ if (root) {
   }
 
   function interrupt() {
-    if (state !== 'preparing' && state !== 'observing') { audio.stop(); return; }
+    if (state !== 'preparing' && state !== 'observing') {
+      cancelAnimationFrame(frame); frame = 0; audio.stop(); renderer.draw(-1);
+      if (root.dataset.audio === 'playing') root.dataset.audio = 'stopped';
+      return;
+    }
     resetObservation();
     status.textContent = '觀察已中斷，請重新觀察同一發煙火。';
   }
@@ -140,7 +145,6 @@ if (root) {
         + (challenge.distance / 1000).toFixed(2) + ' 公里。這是爆炸點到觀察位置的直線距離。';
     }
   });
-  document.addEventListener('visibilitychange', () => { if (document.hidden) interrupt(); });
-  window.addEventListener('pagehide', () => { interrupt(); cancelAnimationFrame(frame); });
+  stopOnLeave(root, interrupt);
   newChallenge();
 }
