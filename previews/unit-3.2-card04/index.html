@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex">
   <title>第四、第五學習區塊｜完整互動預覽</title>
   <link rel="stylesheet" href="style.css?v=fixed-22">
-  <link rel="stylesheet" href="../../units/3/parts/3.2/assets/sound-speed.css?v=fixed-22">
+  <link rel="stylesheet" href="../../units/3/parts/3.2/assets/sound-speed.css?v=silent-arrival-20261029">
 </head>
 <body>
   <header class="preview-header shell">
@@ -31,8 +31,7 @@
                 <button class="text-button" id="pause-action" type="button" hidden>暫停觀察</button>
                 <button class="text-button" id="reset-action" type="button">回到起點</button>
               </div>
-              <div class="observation-options"><label class="sound-option"><input type="checkbox" id="arrival-sound">到達提示音</label><span id="playback-state">點按音叉可單獨敲擊該組。</span></div>
-              <p id="audio-error" class="audio-error" role="status" hidden></p>
+              <div class="observation-options"><span id="playback-state">點按音叉可單獨敲擊該組。</span></div>
 
               <section class="result" id="result" aria-labelledby="result-title" hidden>
                 <h3 id="result-title">觀察結果</h3><p id="result-summary"></p>
@@ -48,7 +47,6 @@
               <li>各組共用持續 4 秒的往返示意訊號、5,000 公尺距離；各組由自己的敲擊時刻開始實時計時。1 秒播放對應 1 秒經過，暫停與背景頁面期間不計時。到達時間以「距離 ÷ 聲速」計算。</li>
               <li>本例取約 20°C 的空氣 343 m/s、水 1,480 m/s，以及鋼中縱波約 5,900 m/s。實際數值會隨材料及環境而變，不能只靠粒子疏密判斷聲速。</li>
               <li>下方刻度依「聲速 × 經過時間」記錄擾動前緣，不控制粒子起振。粒子完成訊號後回復原位。右側只顯示振動首次傳到 5,000 公尺的到達時間，尚未到達時顯示「—」。</li>
-              <li>提示音只表示振動抵達最右端，不模擬各介質內的實際音色。</li>
             </ul></details>
           </div>
         </section>
@@ -68,7 +66,6 @@
                 <button class="text-button" id="temp-pause-action" type="button" hidden>暫停觀察</button>
                 <button class="text-button" id="temp-reset-action" type="button">回到起點</button>
               </div>
-              <p id="temp-audio-error" class="audio-error" role="status" hidden></p>
 
               <section class="result" id="temp-result" aria-labelledby="temp-result-title" hidden>
                 <h3 class="sr-only" id="temp-result-title">觀察結果</h3><p id="temp-result-summary"></p>
@@ -77,19 +74,18 @@
 
             <p class="sr-only" id="temp-takeaway"><strong>觀察重點：</strong>其他條件相同時，空氣溫度較高，聲速通常較快。</p>
             <details class="model-notes"><summary>模型說明與近似值</summary>
-              <div class="observation-options"><label class="sound-option"><input type="checkbox" id="temp-arrival-sound">到達提示音</label><span id="temp-playback-state">點按音叉可單獨敲擊該組。</span></div>
+              <div class="observation-options"><span id="temp-playback-state">點按音叉可單獨敲擊該組。</span></div>
 <ul>
               <li>兩組皆為空氣，分別固定在 0°C 與 80°C，其他條件相同；兩組傳播距離皆為 5,000 公尺，敲擊時才開始計算聲音傳播時間。</li>
               <li>空氣本身透明，腔體與器材為配置示意，傳播距離以尺規為準；圖中的分子、排列、間距與位移為微觀放大示意，省略熱運動。音叉外觀與微觀粒子的振動節奏分別為便於辨識、追蹤的示意，不作頻率量測或音高比較，亦不改變實際傳播時間。</li>
               <li>各組共用持續 4 秒的往返示意訊號，各自從敲擊時刻開始實時計時。1 秒播放對應 1 秒經過，暫停與背景頁面期間不計時。</li>
               <li>溫度較高時，空氣分子的熱運動平均較快，聲速通常也較快；這與音叉的振動頻率或聲音大小不同。本例以組成固定的乾燥空氣近似，聲速與絕對溫度的平方根成正比：聲速 ≈ 343 × √[(攝氏溫度 ＋ 273.15) ÷ 293.15]（m/s）。0°C 約為 331.1 m/s，80°C 約為 376.5 m/s；實際聲速也會隨空氣組成等條件改變。</li>
               <li>下方刻度依「聲速 × 經過時間」記錄擾動前緣，粒子依各位置的傳播延遲受振。下方單一刻度的實線表示 80°C 組進度，虛線同步對照 0°C 組的位置；同步敲擊時顯示領先／落後距離。個別敲擊的起跑時刻不同，位置不作聲速快慢判斷。右側到達時間為首次傳到 5,000 公尺的實際經過時間，尚未到達顯示「—」。</li>
-              <li>到達提示音只表示振動抵達最右端，不模擬實際音色。</li>
             </ul></details>
           </div>
         </section>
   </main>
   <footer class="shell preview-footer"><a href="../../units/3/parts/3.2/#card-04">前往正式 3.2 課程的第四學習區塊</a></footer>
-  <script type="module" src="app.mjs?v=fixed-22"></script>
+  <script type="module" src="app.mjs?v=silent-arrival-20261029"></script>
 </body>
 </html>

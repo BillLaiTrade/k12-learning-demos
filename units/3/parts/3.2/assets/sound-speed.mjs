@@ -28,46 +28,7 @@ const svg = (tag, attributes, parent) => {
 
 const state = { mode: root.dataset.soundSpeedMode === 'temperature' ? 'temperature' : 'material', phase: 'idle', time: 0, scope: 'together' };
 let models = [], groups = [], frame = 0, runStartWall = null, runStartTime = 0;
-let noticed = new Set(), context = null, audioFailed = false;
-const tones = new Set();
 const panel = $('#experiment-panel');
-
-function stopTones() {
-  for (const oscillator of tones) { try { oscillator.stop(); } catch {} }
-  tones.clear();
-}
-
-function audioFailure() {
-  audioFailed = true;
-  $('#audio-error').hidden = false;
-  text($('#audio-error'), '到達提示音暫時無法播放，振動比較仍可繼續操作。');
-}
-
-function unlockAudio() {
-  if (!$('#arrival-sound').checked || audioFailed) return;
-  try {
-    if (!context) {
-      const Constructor = window.AudioContext || window.webkitAudioContext;
-      context = new Constructor();
-    }
-    context.resume().catch(audioFailure);
-  } catch { audioFailure(); }
-}
-
-function arrivalTone() {
-  if (!$('#arrival-sound').checked || !context || context.state !== 'running' || audioFailed) return;
-  const oscillator = context.createOscillator(), gain = context.createGain();
-  const now = context.currentTime;
-  oscillator.type = 'sine'; oscillator.frequency.value = 740;
-  gain.gain.setValueAtTime(0, now);
-  gain.gain.linearRampToValueAtTime(.045, now + .008);
-  gain.gain.setValueAtTime(.045, now + .045);
-  gain.gain.linearRampToValueAtTime(0, now + .09);
-  oscillator.connect(gain); gain.connect(context.destination);
-  tones.add(oscillator);
-  oscillator.onended = () => { tones.delete(oscillator); oscillator.disconnect(); gain.disconnect(); };
-  oscillator.start(now); oscillator.stop(now + .1);
-}
 
 function buildModel(group) {
   const settings = appearance[group.kind], material = materialInfo[group.kind];
@@ -169,13 +130,12 @@ function drawResult() {
   }
 }
 
-function paint(audible = false) {
+function paint() {
   panel.dataset.mode = state.mode; panel.dataset.phase = state.phase;
   panel.dataset.scope = state.scope;
   panel.dataset.time = state.time.toFixed(8); panel.dataset.playbackRate = '1';
   if (state.mode === 'temperature') panel.dataset.temperatures = groups.map(group => group.temperature).join(',');
 
-  let newArrival = false;
   for (const model of models) {
     const elapsed = model.startedAt === null ? 0 : Math.min(runEnd([model]), Math.max(0, state.time - model.startedAt));
     const phase = model.startedAt === null ? 'idle' : elapsed >= runEnd([model]) ? 'complete' : state.phase;
@@ -209,7 +169,6 @@ function paint(audible = false) {
     text(model.arrivalOutput, arrived ? secondsText(arrivalTime(model.speed)) : '—');
     if (arrived) attr(model.arrivalOutput, 'data-arrival', arrivalTime(model.speed));
     else model.arrivalOutput.removeAttribute('data-arrival');
-    if (arrived && !noticed.has(model.id)) { noticed.add(model.id); newArrival = true; }
   }
   if (state.mode === 'temperature' && models.length === 2) {
     const observations = models.map(model => ({
@@ -217,7 +176,6 @@ function paint(audible = false) {
     }));
     models.forEach((model, index) => model.progress?.render(observations[index], observations[1-index], state.scope === 'together'));
   }
-  if (audible && newArrival) arrivalTone();
   const actionLabel = state.scope === 'individual' ? '同時敲擊音叉' : { idle: '同時敲擊音叉', running: '暫停觀察', paused: '繼續觀察', complete: state.mode === 'temperature' ? '同時敲擊音叉' : '再次敲擊音叉' }[state.phase];
   text($('#primary-action'), actionLabel);
   $('#pause-action').hidden = state.scope !== 'individual' || !['running','paused'].includes(state.phase);
@@ -232,8 +190,8 @@ function stopFrame() {
 }
 
 function resetRun() {
-  stopFrame(); stopTones();
-  state.phase = 'idle'; state.time = 0; state.scope = 'together'; noticed = new Set();
+  stopFrame();
+  state.phase = 'idle'; state.time = 0; state.scope = 'together';
   for (const model of models) model.startedAt = null;
   paint();
 }
@@ -248,7 +206,7 @@ function commitTime(now) {
 function tick() {
   frame = 0;
   if (state.phase !== 'running') return;
-  commitTime(performance.now()); paint(true);
+  commitTime(performance.now()); paint();
   if (state.phase === 'running') frame = requestAnimationFrame(tick);
   else runStartWall = null;
 }
@@ -258,7 +216,7 @@ function resume() {
   if (bounds.height <= innerHeight - 24 && (bounds.top < 12 || bounds.bottom > innerHeight - 12)) {
     $('#models').scrollIntoView({ block: 'center', behavior: 'auto' });
   }
-  unlockAudio(); state.phase = 'running'; runStartTime = state.time; runStartWall = performance.now();
+  state.phase = 'running'; runStartTime = state.time; runStartWall = performance.now();
   paint(); frame = requestAnimationFrame(tick);
 }
 
@@ -273,7 +231,6 @@ function startSingle(id) {
   stopFrame();
   state.scope = 'individual';
   models.find(model => model.id === id).startedAt = state.time;
-  noticed.delete(id);
   resume();
 }
 
@@ -281,7 +238,7 @@ function pause() {
   if (state.phase !== 'running') return;
   commitTime(performance.now());
   if (state.phase !== 'complete') state.phase = 'paused';
-  stopFrame(); stopTones(); paint();
+  stopFrame(); paint();
 }
 
 function rebuild() {
@@ -308,14 +265,10 @@ $('#primary-action').addEventListener('click', () => {
 });
 $('#pause-action').addEventListener('click', () => state.phase === 'running' ? pause() : resume());
 $('#reset-action').addEventListener('click', resetRun);
-$('#arrival-sound').addEventListener('change', () => {
-  if ($('#arrival-sound').checked) { audioFailed = false; $('#audio-error').hidden = true; unlockAudio(); }
-  else { stopTones(); $('#audio-error').hidden = true; }
-});
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) pause();
 });
-window.addEventListener('pagehide', () => { pause(); stopTones(); });
+window.addEventListener('pagehide', pause);
 rebuild();
 
 }

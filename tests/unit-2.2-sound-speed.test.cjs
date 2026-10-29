@@ -635,24 +635,6 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     }
   });
 
-  await t.test('optional arrival cues use real audio nodes and stop when muted or paused', async () => {
-    await fresh(); await page.locator('#card-04 [data-sound-speed-lab]').locator('#arrival-sound').check();
-    await page.waitForFunction(() => window.__audioContext?.state === 'running');
-    assert.equal(await page.evaluate(() => window.__oscillators.length), 0);
-    await primary.click(); await page.clock.runFor(1000);
-    assert.equal(await page.evaluate(() => window.__oscillators.length), 1);
-    assert.equal(await page.evaluate(() => window.__oscillators[0].frequency.value), 740);
-    assert.equal(await page.evaluate(() => window.__oscillators[0].__started), true);
-    await page.locator('#card-04 [data-sound-speed-lab]').locator('#arrival-sound').uncheck(); await realWait(150); await page.clock.runFor(2000);
-    assert.equal(await page.evaluate(() => window.__oscillators.length), 1);
-    assert.equal(await page.evaluate(() => window.__oscillators[0].__ended), true);
-    await page.locator('#card-04 [data-sound-speed-lab]').locator('#arrival-sound').check();
-    await page.locator('#card-04 [data-sound-speed-lab]').locator('[data-group=steel] .source-hit').click(); await page.clock.runFor(1000);
-    assert.equal(await page.evaluate(() => window.__oscillators.length), 3, 'water continues to arrive while the independently restruck steel arrives again');
-    await page.locator('#pause-action').click(); await realWait(150); assert.equal(await page.evaluate(() => window.__oscillators.every(n=>n.__ended)), true);
-    assert.equal(await page.locator('#card-04 [data-sound-speed-lab]').locator('#audio-error').isHidden(), true);
-  });
-
   await t.test('backgrounding pauses at the same model time and never resumes automatically', async () => {
     await fresh(); await primary.click(); await page.clock.runFor(2000);
     await page.evaluate(() => { Object.defineProperty(document, 'hidden', { configurable: true, value: true }); document.dispatchEvent(new Event('visibilitychange')); });
@@ -663,16 +645,11 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     await primary.click(); await page.clock.runFor(1000); assert.ok(await time() > saved);
   });
 
-  await t.test('fifth-block arrival audio and independent strike do not activate fourth-block controls', async () => {
-    await fresh();await temperatureLab.locator('details.model-notes summary').click();await temperatureLab.locator('#temp-arrival-sound').check();
-    await page.waitForFunction(()=>window.__audioContext?.state==='running');
-    assert.equal(await page.locator('#arrival-sound').isChecked(),false);
+  await t.test('fifth-block independent strike does not activate fourth-block controls', async () => {
+    await fresh();
     await temperatureLab.locator('[data-group=cold] .source-hit').click();await page.clock.fastForward(16000);
-    assert.equal(await page.evaluate(()=>window.__oscillators.length),1);
     assert.deepEqual(await temperatureLab.locator('.arrival-readout output').allTextContents(),['15.102 秒','—']);
     assert.equal((await data()).phase,'idle');assert.equal(await time(),0);
-    await temperatureLab.locator('#temp-arrival-sound').uncheck();await realWait(150);
-    assert.equal(await page.evaluate(()=>window.__oscillators.every(n=>n.__ended)),true);
   });
 
   await t.test('a real stopwatch confirms displayed seconds, positions and all three arrivals', { timeout: 25000 }, async () => {
