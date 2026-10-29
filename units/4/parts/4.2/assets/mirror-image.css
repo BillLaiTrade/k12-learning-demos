@@ -4,6 +4,8 @@
 #card-03 .comparison-column-headings span{padding:5px 10px;border-radius:12px;background:#e2f1f8;color:#224b64;text-align:center;font-size:1.12rem;font-weight:800}
 #card-03 .mirror-comparison-grid{display:grid;gap:12px}
 #card-03 .comparison-backtrace{margin:0;padding:0 3px;color:#405b52;font-size:.9rem;line-height:1.7}
+#card-03 .comparison-backtrace p{margin:0}
+#card-03 .comparison-backtrace .comparison-locations{margin-top:6px}
 #card-03 .comparison-backtrace strong{color:#245e4e;font-weight:700}
 #card-03 .comparison-transition{display:grid;grid-template-columns:22px minmax(0,1fr);align-items:center;gap:8px;margin:0;padding:8px 12px;border-left:3px solid #b6cec5;border-radius:0 9px 9px 0;background:#f0f5f0;color:#405b52;font-size:.87rem;line-height:1.6}
 #card-03 .comparison-transition-arrow{color:#52796a;font-size:1.3rem;text-align:center}
@@ -12,9 +14,16 @@
 #card-03 .comparison-state figure{position:relative;min-width:0;margin:0;overflow:hidden;border:1px solid #d3dfdf;border-radius:15px;background:#f7f4ec}
 #card-03 .comparison-row-title{position:absolute;z-index:1;top:9px;left:12px;display:flex;align-items:center;gap:8px;margin:0;color:#155649;font-size:1.15rem;font-weight:800;line-height:1.35;pointer-events:none}
 #card-03 .comparison-side,#card-03 .comparison-eye{display:block;width:100%;height:clamp(205px,24vw,320px)}
+#card-03 .comparison-path-summary{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:18px;padding:10px 14px;border-radius:10px;background:#f1f6f8;color:#355762}
+#card-03 .comparison-path-caption{margin:0;font-size:.85rem;line-height:1.5}
+#card-03 .comparison-path-equation{display:flex;align-items:flex-end;justify-content:center;gap:12px;margin:0;white-space:nowrap}
+#card-03 .comparison-path-term{display:flex;flex-direction:column;align-items:center;gap:1px}
+#card-03 .comparison-path-term>span{font-size:.76rem;color:#5b7278}
+#card-03 .comparison-path-term strong{font-size:1rem;font-weight:700}
+#card-03 .comparison-path-operator{font-size:.95rem;color:#728a8d}
+#card-03 .comparison-path-total{font-size:1.15rem;font-weight:750;color:#155454}
 #card-03 .comparison-result{margin:12px 0 0;text-align:center;color:#164f52}
-#card-03 .comparison-result .comparison-equation{display:inline-block;margin:8px 0 0;padding:2px 12px;border-radius:8px;background:#edf5f8;color:#40616a;font-size:clamp(.85rem,1.2vw,.95rem);line-height:1.5;font-weight:500}
-#card-03 .comparison-equation span{font-size:1em}
+#card-03 .comparison-result .comparison-view-result{max-width:38em;margin:7px auto 0;color:#405b52;font-size:.9rem;line-height:1.65;font-weight:500}
 #card-03 .comparison-result .comparison-takeaway{max-width:36em;margin:0 auto;font-size:clamp(.98rem,1.65vw,1.18rem);line-height:1.65;font-weight:700;text-wrap:pretty}
 #card-03 .mirror-explanation{margin:24px 0 0;color:#3d5750}
 #card-03 .mirror-explanation .dialogue{margin:12px 0}
@@ -23,4 +32,4 @@
 #card-03 .comparison-next{display:inline-flex;align-items:center;gap:12px;min-height:44px;margin-top:8px;color:#176b53;font-size:.94rem;font-weight:750;text-decoration:underline;text-underline-offset:4px}
 #card-03 .comparison-next:focus-visible{outline:3px solid #176b5366;outline-offset:4px;border-radius:4px}
 @media(max-width:1050px){#card-03 .comparison-row-title{font-size:1rem;top:6px;left:8px}}
-@media(max-width:650px){#card-03{padding:16px}#card-03 .card-side{gap:8px}#card-03 .card-side h3{font-size:1rem}#card-03 h2{font-size:1.35rem;margin-bottom:11px}#card-03 .comparison-column-headings,#card-03 .comparison-state{gap:6px}#card-03 .comparison-column-headings{margin-bottom:6px}#card-03 .comparison-column-headings span{padding:5px 3px;font-size:.8rem;border-radius:9px}#card-03 .comparison-state figure{border-radius:10px}#card-03 .comparison-row-title{top:4px;left:5px;gap:4px;font-size:.72rem}#card-03 .comparison-side,#card-03 .comparison-eye{height:clamp(112px,34vw,215px)}#card-03 .mirror-comparison-grid{gap:8px}#card-03 .comparison-result{margin-top:10px}#card-03 .comparison-result .comparison-equation{font-size:.85rem}#card-03 .comparison-result .comparison-takeaway{font-size:.93rem}#card-03 .mirror-explanation{margin-top:20px}#card-03 .mirror-explanation .dialogue{padding:10px;gap:9px}#card-03 .mirror-explanation .dialogue p{font-size:.9rem}#card-03 .comparison-next{font-size:.87rem}}
+@media(max-width:650px){#card-03{padding:16px}#card-03 .card-side{gap:8px}#card-03 .card-side h3{font-size:1rem}#card-03 h2{font-size:1.35rem;margin-bottom:11px}#card-03 .comparison-column-headings,#card-03 .comparison-state{gap:6px}#card-03 .comparison-column-headings{margin-bottom:6px}#card-03 .comparison-column-headings span{padding:5px 3px;font-size:.8rem;border-radius:9px}#card-03 .comparison-state figure{border-radius:10px}#card-03 .comparison-row-title{top:4px;left:5px;gap:4px;font-size:.72rem}#card-03 .comparison-side,#card-03 .comparison-eye{height:clamp(112px,34vw,215px)}#card-03 .mirror-comparison-grid{gap:8px}#card-03 .comparison-result{margin-top:10px}#card-03 .comparison-path-summary{flex-direction:column;gap:5px;padding:9px 7px}#card-03 .comparison-path-equation{gap:9px}#card-03 .comparison-path-caption{font-size:.82rem}#card-03 .comparison-path-term>span{font-size:.73rem}#card-03 .comparison-result .comparison-takeaway{font-size:.93rem}#card-03 .mirror-explanation{margin-top:20px}#card-03 .mirror-explanation .dialogue{padding:10px;gap:9px}#card-03 .mirror-explanation .dialogue p{font-size:.9rem}#card-03 .comparison-next{font-size:.87rem}}
