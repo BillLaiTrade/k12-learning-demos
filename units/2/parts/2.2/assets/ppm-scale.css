@@ -247,10 +247,6 @@
 #s6 .pool-salt-scale small {position:absolute;left:50%;top:7px;transform:translateX(-50%);font-size:.56rem;white-space:nowrap;color:#355348;background:#fff9;}
 #s6 .pool-salt-zoom {position:absolute;bottom:3px;right:5px;font-size:.56rem;color:#586f5f;background:#fff9;border-radius:3px;padding:0 3px;}
 #s6 .pool-scale-caption {margin:5px 0;color:#64776a;font-size:.75rem;line-height:1.6;}
-#s6 .pool-scale-details {margin:5px 0 0;color:#607466;font-size:.75rem;line-height:1.7;}
-#s6 .pool-scale-details summary {cursor:pointer;color:#476b54;}
-#s6 .pool-scale-details p {margin:6px 0 0;padding:9px 11px;border-radius:7px;background:#f2f6ee;}
-#s6 .pool-scale-details [data-pool-salt-volume] {display:block;margin-top:3px;}
 @media(max-width:680px) {
  #s6 .pool-salt-inset {width:32%;top:10%;}
  #s6 .pool-salt-title {font-size:.52rem;padding:1px 2px;}
