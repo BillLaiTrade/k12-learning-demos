@@ -1,5 +1,5 @@
 import { CUP, freshCup, moveCup, cupGeometry } from './cup-lab-model.mjs?v=cup-lab-3';
-import { cupSVG } from './cup-lab-view.mjs?v=cup-lab-3';
+import { cupSVG } from './cup-lab-view.mjs?v=cup-lab-4';
 const $ = s => document.querySelector(s);
 const scene = $('#cup-scene'), action = $('#cup-action'), reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let cup = freshCup(), before = null, after = null, preview = null, animation = null, bubbles = [], drag = null;
@@ -33,7 +33,7 @@ function update(depth, angle, { capture = true } = {}) {
 }
 function status(g) {
   if (preview) return preview === 'before' ? '回看直立入水：紙團低於外側水面，仍保持乾燥。' : '回看傾斜之後：空氣從杯口逸出，水進入並接觸紙團。';
-  if (animation?.paused) return '觀察已暫停。可繼續播放，或放大杯口看看。';
+  if (animation?.paused) return '觀察已暫停。按「繼續觀察」，接著看杯子、水面和氣泡的變化。';
   if (animation?.kind === 'lower') return rotationUnlocked ? '保持目前角度，將杯子放回水中。' : '保持杯口朝下，讓杯子和紙團的位置都低於外側水面。';
   if (rotationUnlocked && g.outlet.y <= 0) return cup.wet ? '杯口已接通外界空氣，水可流出；紙團仍然是濕的。' : '杯口已接通外界空氣；上下移動仍會保留你設定的角度。';
   if (cup.wet) return Math.abs(cup.angle) < 2 ? '紙團已經沾水；回正杯子，不會自動補回空氣或讓紙團變乾。' : '空氣從杯口逸出，水進入杯內；水碰到紙團，紙團才變濕。';
@@ -67,7 +67,6 @@ function render() {
     $('#cup-after-scene').innerHTML = cupSVG(after, { id: 'cup-after', mini: true, bubbles: after.bubbles || [] });
     document.querySelectorAll('[data-cup-preview]').forEach(b => b.setAttribute('aria-pressed', String(preview === b.dataset.cupPreview)));
   }
-  if (!$('#cup-zoom').hidden) $('#cup-zoom-scene').innerHTML = cupSVG(state, { id: 'cup-detail', zoom: true, bubbles: preview ? state.bubbles || [] : bubbles });
 }
 function tick(now) {
   frame = 0;
@@ -76,21 +75,28 @@ function tick(now) {
   if (!animation?.paused) {
     if (animation) {
       animation.elapsed += dt;
-      const t = Math.min(1, animation.elapsed / animation.duration), ease = t * t * (3 - 2 * t);
+      const t = Math.min(1, animation.elapsed / animation.duration), ease = animation.kind === 'tilt' ? t : t * t * (3 - 2 * t);
       update(animation.fromDepth + (animation.toDepth - animation.fromDepth) * ease, animation.fromAngle + (animation.toAngle - animation.fromAngle) * ease);
-      if (t === 1) animation = null;
+      if (t === 1) {
+        animation = null;
+        if (reduced.matches) { const g = cupGeometry(cup.depth, cup.angle, cup.escaped); bubbles = g.vent > .01 ? staticTrace(g) : []; }
+      }
     }
-    for (const bubble of bubbles) { bubble.age += dt; bubble.y -= dt * 95; bubble.x += Math.sin(bubble.age * 8) * dt * 6; }
-    bubbles = bubbles.filter(b => b.y > 211 && b.age < 4);
+    if (!reduced.matches) {
+      for (const bubble of bubbles) { bubble.age += dt; bubble.y -= dt * 95; bubble.x += Math.sin(bubble.age * 8) * dt * 6; }
+      bubbles = bubbles.filter(b => b.y > 211 && b.age < 4);
+    }
   }
   if (now - lastPaint > 45 || !animation) { render(); lastPaint = now; }
-  if (animation || bubbles.length) frame = requestAnimationFrame(tick);
+  if (animation || (bubbles.length && !reduced.matches)) frame = requestAnimationFrame(tick);
   else previousTime = 0;
 }
 function run(depth, angle, kind) {
   cancelAnimation(); preview = null;
-  if (reduced.matches) { update(depth, angle); const g = cupGeometry(cup.depth, cup.angle, cup.escaped); bubbles = g.vent > .01 ? staticTrace(g) : []; render(); return; }
-  animation = { fromDepth: cup.depth, fromAngle: cup.angle, toDepth: depth, toAngle: angle, elapsed: 0, duration: kind === 'lower' ? 1.8 : 3.2, kind, paused: false };
+  // The requested cup movement is the observation itself, including in reduced
+  // motion mode. Only decorative moving bubbles are suppressed in that mode.
+  if (reduced.matches) bubbles = [];
+  animation = { fromDepth: cup.depth, fromAngle: cup.angle, toDepth: depth, toAngle: angle, elapsed: 0, duration: kind === 'lower' ? 1.8 : 6, kind, paused: false };
   frame = requestAnimationFrame(tick); render();
 }
 action.addEventListener('click', () => {
@@ -101,12 +107,7 @@ action.addEventListener('click', () => {
 });
 $('#cup-reset').addEventListener('click', () => {
   cancelAnimation(); drag = null; rotationUnlocked = false; cup = freshCup(); before = after = preview = null; bubbles = []; lastBubble = 0;
-  $('#cup-zoom').hidden = true;
-  $('#cup-zoom-toggle').setAttribute('aria-expanded', 'false'); render();
-});
-$('#cup-zoom-toggle').addEventListener('click', () => {
-  $('#cup-zoom').hidden = !$('#cup-zoom').hidden;
-  $('#cup-zoom-toggle').setAttribute('aria-expanded', String(!$('#cup-zoom').hidden)); render();
+  render();
 });
 document.querySelectorAll('[data-cup-preview]').forEach(button => button.addEventListener('click', () => {
   if (animation) return;
@@ -170,6 +171,7 @@ document.addEventListener('visibilitychange', () => {
   else { previousTime = 0; if (hiddenPaused && animation) animation.paused = false; hiddenPaused = false; }
 });
 reduced.addEventListener('change', () => {
-  if (reduced.matches && animation) { const { toDepth, toAngle } = animation; cancelAnimation(); update(toDepth, toAngle); bubbles = []; render(); }
+  if (reduced.matches) bubbles = [];
+  render();
 });
 render();

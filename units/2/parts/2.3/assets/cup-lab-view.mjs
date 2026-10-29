@@ -1,12 +1,12 @@
 import { cupGeometry } from './cup-lab-model.mjs?v=cup-lab-3';
 const X = x => 500 + x * 24, Y = y => 210 + y * 24;
 const f = n => Number(n).toFixed(2);
-export function cupSVG(state, { id = 'cup', mini = false, zoom = false, bubbles = [] } = {}) {
+export function cupSVG(state, { id = 'cup', mini = false, bubbles = [] } = {}) {
   const g = cupGeometry(state.depth, state.angle, state.escaped), centerY = Y(state.depth - 5);
   const points = g.polygon.map(p => `${f(X(p.x))},${f(Y(p.y))}`).join(' ');
   const level = Y(g.water);
   const camera = Math.max(0, Math.min(1, (state.depth + 1) / 13));
-  const view = zoom ? `${X(g.outlet.x) - 180} ${Y(g.outlet.y) - 190} 360 280` : `0 ${-80 + 210 * camera} 1000 ${720 - 220 * camera}`;
+  const view = `0 ${-80 + 210 * camera} 1000 ${720 - 220 * camera}`;
   const foldedPaper = `<image href="assets/cup-paper.webp" x="-32" y="-89.6" width="64" height="64" ${state.wet ? `filter="url(#wet-paper-${id})"` : ''}/>`;
   return `<svg viewBox="${view}" role="img" aria-label="${state.angle ? '傾斜的透明杯' : '杯口朝下的透明杯'}；紙團${state.wet ? '已沾水' : '保持乾燥'}" xmlns="http://www.w3.org/2000/svg"><defs>
   <linearGradient id="room-${id}" x2="0" y2="1"><stop stop-color="#f6f8ed"/><stop offset="1" stop-color="#f4e9d5"/></linearGradient>

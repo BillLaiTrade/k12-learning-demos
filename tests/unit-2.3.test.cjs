@@ -131,7 +131,7 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     await page.locator('#cup-action').click();
     const angle = await page.locator('#cup-scene').getAttribute('data-angle');
     await page.clock.runFor(500); assert.equal(await page.locator('#cup-scene').getAttribute('data-angle'), angle);
-    await page.locator('#cup-action').click(); await page.clock.runFor(3700);
+    await page.locator('#cup-action').click(); await page.clock.runFor(6200);
     assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'true');
     assert.equal(Number(await page.locator('#cup-scene').getAttribute('data-escaped')), 1);
     assert.equal(await page.locator('#cup-comparison').isVisible(), true);
@@ -141,8 +141,54 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     assert.match(await page.locator('#cup-status').innerText(), /回看直立入水/);
     assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'true', 'preview does not dry the current paper');
     await captureCup('cup-mock-comparison.png');
-    await page.locator('#cup-action').click(); await page.locator('#cup-action').click(); await page.clock.runFor(3500);
+    await page.locator('#cup-action').click(); await page.locator('#cup-action').click(); await page.clock.runFor(6500);
     assert.match(await page.locator('#cup-status').innerText(), /不會自動補回/);
+  });
+
+  await t.test('slow tilt is continuous in both motion modes and the magnifier is fully removed', async () => {
+    for (const mode of ['no-preference', 'reduce']) {
+      const probe = await browser.newPage({ reducedMotion: mode, viewport: { width: mode === 'reduce' ? 390 : 1440, height: 1000 } });
+      try {
+        const start = new Date('2026-10-29T00:00:00Z');
+        await probe.clock.install({ time: start });
+        await probe.clock.pauseAt(start);
+        await probe.goto(base + 'units/2/parts/2.3/', { waitUntil: 'networkidle' });
+        assert.equal(await probe.locator('#cup-zoom-toggle, #cup-zoom, #cup-zoom-scene').count(), 0);
+        assert.equal(await probe.locator('.cup-actions button').count(), 2);
+        await probe.locator('#cup-action').click(); await probe.clock.runFor(2100);
+        await probe.locator('#cup-action').click();
+        const angles = [];
+        await probe.clock.runFor(100);
+        angles.push(Number(await probe.locator('#cup-scene').getAttribute('data-angle')));
+        assert.ok(angles[0] > 0 && angles[0] < 10, `${mode}: no initial jump`);
+        await probe.clock.runFor(1000);
+        angles.push(Number(await probe.locator('#cup-scene').getAttribute('data-angle')));
+        assert.ok(angles[1] > 15 && angles[1] < 30, `${mode}: slow after one second`);
+        await probe.locator('#cup-action').click();
+        const paused = await probe.locator('#cup-scene').getAttribute('data-angle');
+        await probe.clock.runFor(1000);
+        assert.equal(await probe.locator('#cup-scene').getAttribute('data-angle'), paused);
+        await probe.emulateMedia({ reducedMotion: mode === 'reduce' ? 'no-preference' : 'reduce' });
+        assert.equal(await probe.locator('#cup-scene').getAttribute('data-angle'), paused, 'preference change must not skip to the end');
+        await probe.emulateMedia({ reducedMotion: mode });
+        await probe.locator('#cup-action').click();
+        for (let i = 0; i < 4; i++) {
+          await probe.clock.runFor(1000);
+          const angle = Number(await probe.locator('#cup-scene').getAttribute('data-angle'));
+          assert.ok(angle > angles.at(-1) && angle < 125, `${mode}: intermediate angle ${angle}`);
+          assert.ok(angle - angles.at(-1) < 25, `${mode}: steady speed ${angles.at(-1)} -> ${angle}`);
+          angles.push(angle);
+          if (i === 1) await probe.locator('#cup-scene').screenshot({ path: path.join(artifacts, `slow-tilt-${mode}-middle.png`) });
+        }
+        assert.equal(await probe.locator('#cup-comparison').isVisible(), false);
+        await probe.clock.runFor(1500);
+        assert.equal(Number(await probe.locator('#cup-scene').getAttribute('data-angle')), 125);
+        assert.equal(await probe.locator('#cup-scene').getAttribute('data-animating'), 'false');
+        assert.equal(await probe.locator('#cup-comparison').isVisible(), true);
+        await probe.evaluate(() => { document.activeElement?.blur(); document.querySelector('#s1').scrollIntoView({ behavior: 'instant', block: 'start' }); });
+        await probe.locator('#s1').screenshot({ path: path.join(artifacts, `slow-tilt-${mode}-complete.png`) });
+      } finally { await probe.close(); await page.bringToFront(); }
+    }
   });
 
   await t.test('lifting a tilted cup never snaps upright and rotation remains available after lifting', async () => {
@@ -185,14 +231,13 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     assert.equal(await page.locator('#cup-scene').getAttribute('data-rotation-unlocked'), 'false');
   });
 
-  await t.test('cup detail, manual controls, keyboard, drag and fresh paper work', async () => {
+  await t.test('cup manual controls, keyboard, drag and fresh paper work', async () => {
     await page.locator('#cup-reset').click();
     assert.equal(await page.locator('#cup-scene').getAttribute('data-depth'), '-1');
     assert.equal(await page.locator('#cup-comparison').isVisible(), false);
     if (!(await page.locator('#cup-depth').isVisible())) await page.locator('.cup-free summary').click();
     await page.locator('#cup-depth').fill('12'); await page.locator('#cup-angle').fill('40');
-    await page.locator('#cup-zoom-toggle').click(); assert.equal(await page.locator('#cup-zoom').isVisible(), true);
-    assert.equal(await page.locator('#cup-zoom svg').count(), 1);
+    assert.equal(await page.locator('#cup-zoom-toggle, #cup-zoom').count(), 0);
     assert.equal(await page.locator('#s1 [data-cup-hint]').count(), 0);
     await page.locator('#cup-scene').focus(); await page.keyboard.press('ArrowRight');
     assert.equal(Number(await page.locator('#cup-scene').getAttribute('data-angle')), 45);
@@ -200,7 +245,6 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-angle')) - 70) < 1);
     await page.locator('#cup-reset').click();
     assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'false');
-    assert.equal(await page.locator('#cup-zoom').isVisible(), false);
     assert.equal(await page.locator('#cup-conclusion').isVisible(), false);
   });
 
@@ -282,6 +326,7 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     await page.clock.runFor(300);
     await page.evaluate(() => document.querySelector('#s7').scrollIntoView({ behavior: 'instant', block: 'start' }));
     await page.clock.runFor(100);
+    await page.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s7');
     assert.equal(await page.locator('.route a[aria-current]').getAttribute('href'), '#s7');
     for (let i = 1; i <= 8; i++) {
       await page.evaluate(n => document.querySelector('#s' + n).scrollIntoView({ behavior: 'instant', block: 'start' }), i);
@@ -290,14 +335,15 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     await page.evaluate(() => document.querySelector('#s7').scrollIntoView({ behavior: 'instant', block: 'start' }));
     await page.screenshot({ path: path.join(artifacts, 'mobile.png') });
     const reduced = await browser.newPage({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 }, hasTouch: true });
+    await reduced.clock.install();
     await reduced.goto(base + 'units/2/parts/2.3/', { waitUntil: 'networkidle' });
-    await reduced.locator('#cup-action').click(); await reduced.locator('#cup-action').click();
+    await reduced.locator('#cup-action').click(); await reduced.clock.runFor(2100);
+    await reduced.locator('#cup-action').click(); await reduced.clock.runFor(6500);
     assert.equal(await reduced.locator('#cup-comparison').isVisible(), true);
     assert.equal(await reduced.locator('#cup-scene').getAttribute('data-wet'), 'true');
-    await reduced.locator('#cup-zoom-toggle').click(); assert.equal(await reduced.locator('#cup-zoom').isVisible(), true);
+    assert.equal(await reduced.locator('#cup-zoom-toggle, #cup-zoom').count(), 0);
     assert.equal(await reduced.locator('#s1 [data-cup-hint]').count(), 0);
     assert.equal(await reduced.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-    await reduced.locator('#cup-zoom-toggle').click();
     await reduced.locator('[data-cup-preview="before"]').click();
     await reduced.evaluate(() => { document.activeElement?.blur(); const el = document.querySelector('#s1'); window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top, behavior: 'instant' }); });
     await reduced.locator('#s1').screenshot({ path: path.join(artifacts, 'cup-mobile.png') });

@@ -1,0 +1,246 @@
+TAP version 13
+# Subtest: 2.3: reaction volume, water levels and calibrated geometry agree
+ok 1 - 2.3: reaction volume, water levels and calibrated geometry agree
+  ---
+  duration_ms: 8.143018
+  type: 'test'
+  ...
+# Subtest: 2.3: recording is gated by baseline, waiting, and equalisation
+ok 2 - 2.3: recording is gated by baseline, waiting, and equalisation
+  ---
+  duration_ms: 1.754723
+  type: 'test'
+  ...
+# Subtest: 2.3: dry/humid proportions use one total and do not add CO2 twice
+ok 3 - 2.3: dry/humid proportions use one total and do not add CO2 twice
+  ---
+  duration_ms: 0.64182
+  type: 'test'
+  ...
+# Subtest: 2.3: fully immersed cup keeps paper dry and respects the tank
+ok 4 - 2.3: fully immersed cup keeps paper dry and respects the tank
+  ---
+  duration_ms: 13.160019
+  type: 'test'
+  ...
+# Subtest: 2.3: escaping air and wet paper persist when cup is straightened
+ok 5 - 2.3: escaping air and wet paper persist when cup is straightened
+  ---
+  duration_ms: 2.090906
+  type: 'test'
+  ...
+# Subtest: 2.3: cup model clamps depth and angle without forcing an orientation
+ok 6 - 2.3: cup model clamps depth and angle without forcing an orientation
+  ---
+  duration_ms: 1.868465
+  type: 'test'
+  ...
+# Subtest: 2.3: lifting a tilted cup preserves its angle across the old depth threshold
+ok 7 - 2.3: lifting a tilted cup preserves its angle across the old depth threshold
+  ---
+  duration_ms: 1.804346
+  type: 'test'
+  ...
+# Subtest: 2.3: an exposed rim connects to ambient air and water stays at the outside level
+ok 8 - 2.3: an exposed rim connects to ambient air and water stays at the outside level
+  ---
+  duration_ms: 1.067111
+  type: 'test'
+  ...
+# Subtest: 2.3: enlarged paper fits inside the cup and left/right rotation is symmetric
+ok 9 - 2.3: enlarged paper fits inside the cup and left/right rotation is symmetric
+  ---
+  duration_ms: 1.753045
+  type: 'test'
+  ...
+# Subtest: 2.3: integrated report checks evidence instead of reusing main experiment
+ok 10 - 2.3: integrated report checks evidence instead of reusing main experiment
+  ---
+  duration_ms: 0.989716
+  type: 'test'
+  ...
+# Subtest: 2.3: eight-section learning flow and independent controls work in browser
+    # Subtest: eight matching anchors, shared avatars, and unit entry
+    ok 1 - eight matching anchors, shared avatars, and unit entry
+      ---
+      duration_ms: 328.108231
+      type: 'test'
+      ...
+    # Subtest: seven teaching sections follow 1.1 side titles and main headings across screen sizes
+    ok 2 - seven teaching sections follow 1.1 side titles and main headings across screen sizes
+      ---
+      duration_ms: 528.481746
+      type: 'test'
+      ...
+    # Subtest: cup first drag stays vertical until release; dragging the rim then rotates both ways
+    ok 3 - cup first drag stays vertical until release; dragging the rim then rotates both ways
+      ---
+      duration_ms: 980.563834
+      type: 'test'
+      ...
+    # Subtest: guided cup immersion, pause, tilt and comparison follow the approved proposal
+    ok 4 - guided cup immersion, pause, tilt and comparison follow the approved proposal
+      ---
+      duration_ms: 11478.396186
+      type: 'test'
+      ...
+    # Subtest: slow tilt is continuous in both motion modes and the magnifier is fully removed
+    ok 5 - slow tilt is continuous in both motion modes and the magnifier is fully removed
+      ---
+      duration_ms: 18004.001396
+      type: 'test'
+      ...
+    # Subtest: lifting a tilted cup never snaps upright and rotation remains available after lifting
+    ok 6 - lifting a tilted cup never snaps upright and rotation remains available after lifting
+      ---
+      duration_ms: 7200.38997
+      type: 'test'
+      ...
+    # Subtest: cup manual controls, keyboard, drag and fresh paper work
+    ok 7 - cup manual controls, keyboard, drag and fresh paper work
+      ---
+      duration_ms: 471.085857
+      type: 'test'
+      ...
+    # Subtest: initial record gates reaction; pause retains state
+    ok 8 - initial record gates reaction; pause retains state
+      ---
+      duration_ms: 6489.993168
+      type: 'test'
+      ...
+    # Subtest: waiting and water-level alignment are required before final recording
+    ok 9 - waiting and water-level alignment are required before final recording
+      ---
+      duration_ms: 5194.505608
+      type: 'test'
+      ...
+    # Subtest: composition selection, splint samples and humid/dry basis
+    ok 10 - composition selection, splint samples and humid/dry basis
+      ---
+      duration_ms: 712.656002
+      type: 'test'
+      ...
+    # Subtest: one integrated report has actionable feedback and independent reset
+    ok 11 - one integrated report has actionable feedback and independent reset
+      ---
+      duration_ms: 737.965796
+      type: 'test'
+      ...
+    # Subtest: narrow viewport, keyboard focus, and reduced motion stay usable
+    ok 12 - narrow viewport, keyboard focus, and reduced motion stay usable
+      ---
+      duration_ms: 10190.075915
+      type: 'test'
+      ...
+    1..12
+ok 11 - 2.3: eight-section learning flow and independent controls work in browser
+  ---
+  duration_ms: 64831.411221
+  type: 'test'
+  ...
+# Subtest: new unit numbers agree across home, overviews, and existing lesson URLs
+    # Subtest: homepage order, button numbers, and destination identities
+    ok 1 - homepage order, button numbers, and destination identities
+      ---
+      duration_ms: 960.448363
+      type: 'test'
+      ...
+    # Subtest: unit 1: overview uses the new number
+    ok 2 - unit 1: overview uses the new number
+      ---
+      duration_ms: 661.052839
+      type: 'test'
+      ...
+    # Subtest: unit 2: overview uses the new number
+    ok 3 - unit 2: overview uses the new number
+      ---
+      duration_ms: 662.954351
+      type: 'test'
+      ...
+    # Subtest: unit 3: overview uses the new number
+    ok 4 - unit 3: overview uses the new number
+      ---
+      duration_ms: 633.230974
+      type: 'test'
+      ...
+    # Subtest: unit 4: overview uses the new number
+    ok 5 - unit 4: overview uses the new number
+      ---
+      duration_ms: 602.499105
+      type: 'test'
+      ...
+    # Subtest: unit 5: overview uses the new number
+    ok 6 - unit 5: overview uses the new number
+      ---
+      duration_ms: 617.100748
+      type: 'test'
+      ...
+    # Subtest: unit 6: overview uses the new number
+    ok 7 - unit 6: overview uses the new number
+      ---
+      duration_ms: 597.058971
+      type: 'test'
+      ...
+    # Subtest: lesson 1.1: header and existing assets load
+    ok 8 - lesson 1.1: header and existing assets load
+      ---
+      duration_ms: 7666.615058
+      type: 'test'
+      ...
+    # Subtest: lesson 1.2: header and existing assets load
+    ok 9 - lesson 1.2: header and existing assets load
+      ---
+      duration_ms: 3420.740173
+      type: 'test'
+      ...
+    # Subtest: lesson 2.1: header and existing assets load
+    ok 10 - lesson 2.1: header and existing assets load
+      ---
+      duration_ms: 1239.764815
+      type: 'test'
+      ...
+    # Subtest: lesson 2.2: header and existing assets load
+    ok 11 - lesson 2.2: header and existing assets load
+      ---
+      duration_ms: 19453.272043
+      type: 'test'
+      ...
+    # Subtest: lesson 3.1: header and existing assets load
+    ok 12 - lesson 3.1: header and existing assets load
+      ---
+      duration_ms: 2217.73455
+      type: 'test'
+      ...
+    # Subtest: lesson 3.2: header and existing assets load
+    ok 13 - lesson 3.2: header and existing assets load
+      ---
+      duration_ms: 865.848478
+      type: 'test'
+      ...
+    # Subtest: lesson 4.1: header and existing assets load
+    ok 14 - lesson 4.1: header and existing assets load
+      ---
+      duration_ms: 16643.570784
+      type: 'test'
+      ...
+    # Subtest: lesson 4.2: header and existing assets load
+    ok 15 - lesson 4.2: header and existing assets load
+      ---
+      duration_ms: 7108.957997
+      type: 'test'
+      ...
+    1..15
+ok 12 - new unit numbers agree across home, overviews, and existing lesson URLs
+  ---
+  duration_ms: 64587.412332
+  type: 'test'
+  ...
+1..12
+# tests 39
+# suites 0
+# pass 39
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 65493.181008
