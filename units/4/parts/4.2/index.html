@@ -64,11 +64,6 @@
     .mirror-sync-note{flex:1 1 220px;margin:0;padding:10px 12px;border-radius:11px;background:#e8f3f8;color:#23465a;font-size:.9rem;font-weight:700}
     .mirror-btn:disabled{cursor:default;opacity:.55}
     .mirror-live{min-height:1.5em;margin:7px 0 0;color:var(--green);font-size:.88rem;font-weight:700}
-    .distance-controls{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:12px;margin:12px 0;padding:12px 14px;border:1px solid #d9d3c4;border-radius:13px;background:#fffdf8}
-    .distance-controls label{font-weight:800;color:#23465a}
-    .distance-controls input{width:100%;accent-color:var(--green)}
-    .distance-controls input[type=range]{height:28px;cursor:ew-resize}
-    .distance-controls output{min-width:70px;color:#176b53;font-size:1.05rem;text-align:center}
     .distance-metrics{display:flex;flex-wrap:wrap;gap:8px}
     .distance-metric{flex:1 1 110px;padding:8px 11px;border:1px solid var(--line);border-radius:11px;background:#fff}
     .distance-metric small,.distance-metric strong{display:block}
@@ -76,10 +71,14 @@
     .distance-metric strong{color:var(--green);font-size:1rem;font-variant-numeric:tabular-nums}
     .ruler-line{stroke:#516b65;stroke-width:1.5}.ruler-tick{stroke:#516b65;stroke-width:1}.ruler-label{fill:#405851;font-size:17px;text-anchor:middle}.measure-line{stroke:#286ac2;stroke-width:2;stroke-dasharray:4 3}.measure-text{font-size:17px;font-weight:800;text-anchor:middle}
     .drag-object{cursor:grab;touch-action:none;filter:drop-shadow(0 2px 2px #243a3530)}.drag-object:active{cursor:grabbing}.drag-object:focus-visible{outline:3px solid #176b5380}
+    #distance-side-view{touch-action:pan-y}
+    #distance-side-object image,#distance-side-object rect{touch-action:none}
+    #distance-side-object[data-input="pointer"]:focus-visible{outline:none}
     #distance-side-view .ruler-active-band{fill:#e1eee3;fill-opacity:.8}
     #distance-front-object,#distance-front-reflection{transition:transform .2s ease-out}
+    #card-04.is-distance-dragging #distance-front-object,#card-04.is-distance-dragging #distance-front-reflection{transition:none}
     @media(max-width:1050px){#card-03 .mirror-views,#card-04 .mirror-views{grid-template-columns:minmax(0,1fr)}}
-    @media(max-width:780px){.distance-controls{grid-template-columns:1fr auto}.distance-controls label{grid-column:1/-1}.mirror-task{grid-template-columns:1fr;gap:4px}}
+    @media(max-width:780px){.mirror-task{grid-template-columns:1fr;gap:4px}}
 
 
   </style>
@@ -287,22 +286,23 @@
           <div class="card-side"><span class="card-number">04</span><h3>物體靠近鏡子，像也會怎樣？</h3><span class="card-role">拖曳・讀尺・比較</span></div>
           <div class="card-main">
             <h2>物體移近鏡子，像的位置怎麼變？</h2>
-            <p>固定鏡面，只改變物體到鏡面的距離。拖動左側物體或調整滑桿，右側成像與距離刻度會同步更新。</p>
+            <p>固定鏡面，直接拖動左圖面向鏡子的小熊，調整它的遠近。右側成像與兩側距離刻度會同步更新。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我把物體往鏡子移，像會留在原地嗎？</p></div>
             <div class="mirror-task"><strong>先預測，再測量</strong><p>預測物體靠近時，鏡後的像會怎麼移；拖曳左側小熊後，比較鏡面兩側的刻度。</p></div>
             <div class="mirror-views" aria-label="調整物體距離並同步查看成像">
               <figure class="mirror-view">
                 <h3>鏡子側面｜拖動物體 <small>↔ 抓住小熊移動</small></h3>
-                <svg id="distance-side-view" viewBox="0 0 620 350" role="img" aria-labelledby="distance-side-title distance-side-desc">
+                <svg id="distance-side-view" viewBox="0 0 620 350" role="group" aria-labelledby="distance-side-title distance-side-desc">
                   <title id="distance-side-title">側面觀察物距和像距</title><desc id="distance-side-desc">拖動物體改變物距，鏡後虛像位於鏡面另一側相同距離；刻度尺以鏡面為零點。</desc>
                   <defs><marker id="dim-arrow" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0 0L7 3.5L0 7Z" fill="#286ac2"/></marker></defs>
                   <defs><linearGradient id="measure-wood" x2="0" y2="1"><stop stop-color="#d0b08d"/><stop offset="1" stop-color="#b78c64"/></linearGradient><linearGradient id="measure-mirror" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a8c4c8"/><stop offset=".48" stop-color="#f7fcfb"/><stop offset="1" stop-color="#9eb8bd"/></linearGradient></defs>
                   <rect x="0" y="0" width="620" height="222" fill="#f8f7f1"/><rect x="0" y="222" width="620" height="20" fill="url(#measure-wood)"/><path d="M0 224H620" stroke="#ead0ad" stroke-width="3"/>
                   <rect x="294" y="214" width="32" height="9" rx="3" fill="#82938d"/><rect x="302" y="35" width="16" height="188" rx="4" fill="#617c7d"/><rect x="305" y="38" width="10" height="181" rx="2" fill="url(#measure-mirror)"/><path d="M307 40V215" stroke="#fff" stroke-opacity=".68" stroke-width="2"/><text x="310" y="26" text-anchor="middle" fill="#315a46" font-size="14">平面鏡</text>
-                  <g id="distance-side-object" class="drag-object" tabindex="0" role="slider" aria-label="拖動物體調整物距" aria-valuemin="10" aria-valuemax="60" aria-valuenow="40">
-                    <image href="assets/mirror/teddy-front.webp" x="146" y="126" width="72" height="82" preserveAspectRatio="xMidYMax meet"/><text id="distance-side-object-label" x="182" y="219" text-anchor="middle" fill="#315a46" font-size="14" font-weight="700">物體</text>
+                  <g id="distance-side-object" class="drag-object" tabindex="0" role="slider" aria-label="拖動面向鏡子的小熊調整物距" aria-orientation="horizontal" aria-describedby="distance-drag-instructions" aria-valuemin="10" aria-valuemax="60" aria-valuenow="40">
+                    <rect x="126" y="124" width="112" height="112" fill="transparent"/>
+                    <image href="assets/mirror/teddy-side.webp" x="150" y="143.2" width="64" height="82" preserveAspectRatio="xMidYMax meet"/><text id="distance-side-object-label" x="182" y="150" text-anchor="middle" fill="#315a46" font-size="14" font-weight="700">物體</text>
                   </g>
-                  <g id="distance-side-image" opacity=".48"><image href="assets/mirror/teddy-front.webp" x="402" y="126" width="72" height="82" preserveAspectRatio="xMidYMax meet"/><text id="distance-side-image-label" x="438" y="219" text-anchor="middle" fill="#64736d" font-size="14" font-weight="700">虛像</text></g>
+                  <g id="distance-side-image" opacity=".48"><image href="assets/mirror/teddy-side.webp" x="406" y="143.2" width="64" height="82" preserveAspectRatio="xMidYMax meet" transform="translate(876 0) scale(-1 1)"/><text id="distance-side-image-label" x="438" y="150" text-anchor="middle" fill="#64736d" font-size="14" font-weight="700">虛像</text></g>
                   <path id="distance-object-measure" d="M182 88H310" class="measure-line" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><path id="distance-image-measure" d="M310 88H438" class="measure-line" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/>
                   <text id="distance-object-measure-label" x="246" y="78" class="measure-text" fill="#286ac2">物距 40 cm</text><text id="distance-image-measure-label" x="374" y="78" class="measure-text" fill="#286ac2">像距 40 cm</text>
                   <line x1="70" y1="260" x2="550" y2="260" class="ruler-line"/><g id="distance-ruler-ticks"></g><g id="distance-ruler-values"></g><text x="310" y="339" text-anchor="middle" fill="#64736d" font-size="13">鏡面為 0（畫面參考刻度）</text>
@@ -321,11 +321,7 @@
                 </svg>
               </figure>
             </div>
-            <div class="distance-controls">
-              <label for="object-distance">小熊靠近　←</label>
-              <input id="object-distance" type="range" min="10" max="60" step="10" value="40" aria-label="調整物體到鏡面的距離" aria-valuetext="物距 40 公分，像距 40 公分">
-              <output id="distance-slider-value" for="object-distance">40 cm</output><span aria-hidden="true">→　移遠</span>
-            </div>
+            <p class="visually-hidden" id="distance-drag-instructions">拖動小熊向鏡面靠近或遠離。聚焦小熊後，可用左右方向鍵每次移動1公分，按住Shift每次移動10公分；Home移到最靠近鏡面，End移到最遠。</p>
             <div class="distance-metrics" aria-live="polite"><div class="distance-metric"><small>物距</small><strong id="object-distance-value">40 cm</strong></div><div class="distance-metric"><small>像距</small><strong id="image-distance-value">40 cm</strong></div><p class="mirror-sync-note">左側操作，右側同步更新</p></div>
             <p class="visual-caption" id="distance-observation" aria-live="polite">尺以鏡面為 0；物體與像分居鏡面兩側。移動小熊，觀察兩個標記是否保持等距。虛像位置是畫面參考刻度，不能用實體尺直接量取。</p>
           </div>
@@ -469,21 +465,9 @@
   </main>
   <footer class="shell"><a href="../../index.html">回到光學單元學習路線</a>　·　接下來：光進入不同介質會怎樣？</footer>
   <script>
-    const distanceInput=document.querySelector("#object-distance"),distanceSideObject=document.querySelector("#distance-side-object"),distanceSideImage=document.querySelector("#distance-side-image"),distanceFrontObject=document.querySelector("#distance-front-object"),distanceFrontReflection=document.querySelector("#distance-front-reflection"),rulerTicks=document.querySelector("#distance-ruler-ticks"),rulerValues=document.querySelector("#distance-ruler-values");
-    for(let cm=-60;cm<=60;cm+=5){const x=310+cm*4,longTick=cm%10===0;const tick=document.createElementNS("http://www.w3.org/2000/svg","line");tick.setAttribute("x1",x);tick.setAttribute("x2",x);tick.setAttribute("y1",260);tick.setAttribute("y2",longTick?274:267);tick.setAttribute("class","ruler-tick");rulerTicks.appendChild(tick);if(longTick){const label=document.createElementNS("http://www.w3.org/2000/svg","text");label.setAttribute("x",x);label.setAttribute("y",292);label.setAttribute("class","ruler-label");label.textContent=cm===0?"0":String(Math.abs(cm));rulerValues.appendChild(label)}}
-    function updateDistance(){const value=Number(distanceInput.value),offset=value*4,objectX=310-offset,imageX=310+offset;
-      distanceSideObject.setAttribute("transform","translate("+(objectX-182)+" 0)");distanceSideImage.setAttribute("transform","translate("+(imageX-438)+" 0)");
-      document.querySelector("#distance-object-measure").setAttribute("d","M"+objectX+" 88H310");document.querySelector("#distance-image-measure").setAttribute("d","M310 88H"+imageX);
-      document.querySelector("#distance-object-measure-label").setAttribute("x",225);document.querySelector("#distance-image-measure-label").setAttribute("x",395);
-      document.querySelector("#distance-object-measure-label").textContent="物距 "+value+" cm";document.querySelector("#distance-image-measure-label").textContent="像距 "+value+" cm";
-      document.querySelector("#distance-ruler-object-marker").setAttribute("x1",objectX);document.querySelector("#distance-ruler-object-marker").setAttribute("x2",objectX);document.querySelector("#distance-ruler-image-marker").setAttribute("x1",imageX);document.querySelector("#distance-ruler-image-marker").setAttribute("x2",imageX);
-      document.querySelector("#object-distance-value").textContent=value+" cm";document.querySelector("#image-distance-value").textContent=value+" cm";document.querySelector("#distance-slider-value").textContent=value+" cm";distanceInput.setAttribute("aria-valuetext","物距 "+value+" 公分，像距 "+value+" 公分");distanceSideObject.setAttribute("aria-valuenow",value);distanceSideObject.setAttribute("aria-valuetext","物距 "+value+" 公分，像距 "+value+" 公分");document.querySelector("#distance-front-status").textContent="物體離鏡面 "+value+" cm｜虛像在鏡後 "+value+" cm";document.querySelector("#distance-observation").textContent="目前物距與像距都是 "+value+" cm。物體靠近或遠離鏡面時，鏡後的虛像也以相同距離移動。尺上的鏡面位置是 0；虛像位置為畫面參考刻度。";distanceFrontObject.setAttribute("transform","translate(0 "+((value-40)*.65)+")");distanceFrontReflection.setAttribute("transform","translate(0 "+((40-value)*.65)+")");
-    }
-    distanceInput.addEventListener("input",updateDistance);updateDistance();
-    let distanceDragging=false;function distanceFromPointer(event){const rect=document.querySelector("#distance-side-view").getBoundingClientRect(),svgX=(event.clientX-rect.left)*620/rect.width;const cm=Math.round(Math.max(10,Math.min(60,(310-svgX)/4))/10)*10;distanceInput.value=String(cm);updateDistance()}
-    distanceSideObject.addEventListener("pointerdown",function(event){distanceDragging=true;distanceSideObject.setPointerCapture(event.pointerId);distanceFromPointer(event)});distanceSideObject.addEventListener("pointermove",function(event){if(distanceDragging)distanceFromPointer(event)});distanceSideObject.addEventListener("pointerup",function(){distanceDragging=false});distanceSideObject.addEventListener("pointercancel",function(){distanceDragging=false});distanceSideObject.addEventListener("keydown",function(event){let value=Number(distanceInput.value);if(event.key==="ArrowLeft"||event.key==="ArrowDown")value=Math.max(10,value-10);else if(event.key==="ArrowRight"||event.key==="ArrowUp")value=Math.min(60,value+10);else return;event.preventDefault();distanceInput.value=String(value);updateDistance()});
     const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent=index===6?"正在進行單元小測":"正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
   </script>
+  <script type="module" src="assets/mirror-distance.js?v=direct-drag-20261029"></script>
   <script type="module" src="assets/curved-mirrors.js?v=1"></script>
   <script type="module" src="assets/mirror-image.js?v=14"></script>
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
