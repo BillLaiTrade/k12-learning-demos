@@ -99,7 +99,7 @@ if (tapButton) {
     const displayedSeconds = Math.max(0.01, Math.round(elapsed * 100) / 100);
     phase = 'result';
     tapButton.dataset.phase = phase;
-    tapButton.textContent = '再測一次';
+    tapButton.textContent = '快速點擊兩下';
     showMeasurement(displayedSeconds);
     feedback.textContent = `約 ${displayedSeconds.toFixed(2)} 秒；光已走過 ${Math.round(displayedSeconds * LIGHT_SPEED_KM_PER_SECOND).toLocaleString('zh-TW')} 公里。`;
     feedback.dataset.state = 'complete';
