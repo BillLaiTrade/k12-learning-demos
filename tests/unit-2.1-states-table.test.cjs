@@ -73,21 +73,30 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     }
   });
 
-  await t.test('pressing solid and liquid barely changes volume, and releases repeatably', async () => {
+  await t.test('solid and liquid accept direct dragging while piston position and volume stay fixed', async () => {
+    assert.equal(await page.locator('[data-press]').count(),0);
     for(const kind of ['solid', 'liquid']) {
-      const button = cell(`${kind}.compress`).getByRole('button');
+      const model=piston(`${kind}-compress`),handle=model.locator('[data-piston-handle]');
+      assert.equal(await cell(`${kind}.compress`).getByRole('button').count(),0);
+      assert.match(await cell(`${kind}.compress`).innerText(), /拖動活塞把手/);
+      const geometry=()=>model.evaluate(s=>({ transform:s.querySelector('[data-piston-handle]').getAttribute('transform'),fillY:s.querySelector('[data-piston-fill]').getAttribute('y'),fillHeight:s.querySelector('[data-piston-fill]').getAttribute('height') }));
+      const before=await geometry();
       for(let i=0;i<2;i++) {
-        await button.click();
-        assert.equal(await button.getAttribute('aria-pressed'), 'true');
-        assert.ok(await volume(`${kind}-compress`) > 98);
+        await handle.scrollIntoViewIfNeeded();
+        const box=await handle.boundingBox(),x=box.x+box.width/2,y=box.y+10;
+        await page.mouse.move(x,y);await page.mouse.down();
+        await page.mouse.move(x,y+55,{steps:8});
+        assert.deepEqual(await geometry(),before);
+        assert.equal(await volume(`${kind}-compress`),100);
         assert.match(await cell(`${kind}.compress`).innerText(), /幾乎不變/);
-        await button.click();
-        assert.equal(await volume(`${kind}-compress`), 100);
+        await page.mouse.move(x,y-25,{steps:6});await page.mouse.up();
+        assert.deepEqual(await geometry(),before);
       }
-      const geometry = await piston(`${kind}-compress`).evaluate(s => {
-        const rect=s.querySelector('[data-piston-fill]'); return +rect.getAttribute('y') + +rect.getAttribute('height');
-      });
-      assert.equal(geometry, 138);
+      await handle.focus();await page.keyboard.press('End');
+      assert.equal(await handle.getAttribute('aria-valuenow'),'0');
+      assert.deepEqual(await geometry(),before);
+      await page.keyboard.press('Home');
+      assert.equal(await volume(`${kind}-compress`),100);
     }
   });
 
@@ -151,16 +160,25 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     const touch = await context.newPage();
     await touch.goto(url);
     await touch.locator('.states-table-scroll').evaluate(e=>e.scrollLeft=e.scrollWidth);
-    const handle=touch.locator('[data-piston="gas-compress"] [data-piston-handle]');
-    await handle.scrollIntoViewIfNeeded();
-    const box=await handle.boundingBox(),client=await context.newCDPSession(touch);
-    const x=box.x+box.width/2,y=box.y+10;
-    await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
-    await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y+55}]});
-    await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
-    assert.ok(Number(await touch.locator('[data-piston="gas-compress"]').getAttribute('data-volume'))<60);
-    await handle.focus(); await touch.keyboard.press('Home');
-    assert.equal(Number(await touch.locator('[data-piston="gas-compress"]').getAttribute('data-volume')),100);
+    const client=await context.newCDPSession(touch);
+    for(const kind of ['solid','liquid','gas']) {
+      const model=touch.locator(`[data-piston="${kind}-compress"]`);
+      const handle=model.locator('[data-piston-handle]');
+      await handle.scrollIntoViewIfNeeded();
+      const before=await handle.getAttribute('transform');
+      const box=await handle.boundingBox(),x=box.x+box.width/2,y=box.y+10;
+      await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
+      await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y+55}]});
+      await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+      if(kind==='gas') assert.ok(Number(await model.getAttribute('data-volume'))<60);
+      else {
+        assert.equal(Number(await model.getAttribute('data-volume')),100);
+        assert.equal(await handle.getAttribute('transform'),before);
+        assert.match(await model.locator('..').innerText(),/幾乎不變/);
+      }
+      await handle.focus();await touch.keyboard.press('Home');
+      assert.equal(Number(await model.getAttribute('data-volume')),100);
+    }
     assert.equal(await touch.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),true);
   });
 });

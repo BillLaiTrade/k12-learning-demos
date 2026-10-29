@@ -50,14 +50,14 @@
     let compression = mode === 'volume' ? 100 / 3 : 0;
     function update(value) {
       compression = Math.max(0, Math.min(100, value));
-      // Solid/liquid displacement is exaggerated slightly to be visible, and stays <2%.
-      const y = 80 + compression / 100 * (kind === 'gas' ? 36 : .7);
+      // Ordinary pressure: solid/liquid movement is too small to show at this scale.
+      const y = 80 + compression / 100 * (kind === 'gas' ? 36 : 0);
       const volume = (140 - y) / 60 * 100;
       handle.setAttribute('transform', `translate(0 ${y})`);
-      handle.setAttribute('aria-valuenow', String(Math.round(compression)));
+      handle.setAttribute('aria-valuenow', String(kind === 'gas' ? Math.round(compression) : 0));
       handle.setAttribute('aria-valuetext', kind === 'gas' ? `可用空間約 ${Math.round(volume)} 毫升` : '施力時體積幾乎不變');
       svg.dataset.volume = String(volume);
-      svg.dataset.compression = String(compression);
+      svg.dataset.compression = String(kind === 'gas' ? compression : 0);
       if (kind === 'gas') {
         dots.forEach((dot, i) => {
           dot.setAttribute('cx', 78 + gasPositions[i][0] * 84);
@@ -70,16 +70,12 @@
         fill.setAttribute('height', 138 - y - 4.5);
         output.textContent = compression > 0 ? '約 100 mL・幾乎不變' : '約 100 mL';
       }
-      const button = section.querySelector(`[data-press="${kind}"]`);
-      if (mode === 'compress' && button) {
-        button.setAttribute('aria-pressed', String(compression > 0));
-        button.textContent = compression > 0 ? '放開活塞 ↑' : '按壓活塞 ↓';
-      }
+
     }
     update(compression);
     let pointer = null, startY = 0, startCompression = 0;
     handle.addEventListener('pointerdown', event => {
-      if (event.button !== 0) return;
+      if (event.button !== 0 || pointer !== null) return;
       pointer = event.pointerId;
       startY = event.clientY;
       startCompression = compression;
@@ -105,8 +101,6 @@
       if (!(event.key in actions)) return;
       event.preventDefault(); update(actions[event.key]);
     });
-    if (mode === 'compress' && kind !== 'gas') {
-      section.querySelector(`[data-press="${kind}"]`).addEventListener('click', () => update(compression > 0 ? 0 : 100));
-    }
+
   });
 })();
