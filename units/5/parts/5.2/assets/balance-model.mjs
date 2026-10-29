@@ -8,8 +8,8 @@ export const MIN_OFFSET = -90;
 export const MAX_OFFSET = 110;
 export const SNAP_DISTANCE = 5;
 
-export function initialTemperatures(mode = 'different') {
-  return mode === 'same' ? { a: 40, b: 40 } : { a: 60, b: 20 };
+export function initialTemperatures() {
+  return { a: 60, b: 20 };
 }
 
 function exchangeRate(gap) {

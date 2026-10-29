@@ -4,8 +4,8 @@
 #card-02 .dialogue:last-child{margin-bottom:0}
 .balance-panel{max-width:780px;margin:22px auto;border:1px solid #bfceb9;border-radius:18px;overflow:hidden;background:#fffef7}
 .balance-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 17px;background:#eef3e7;border-bottom:1px solid #d6e0cf}
-.balance-toolbar strong{font-size:14px;color:#456243}.balance-modes{display:flex;gap:6px}.balance-modes button{padding:7px 14px;border:1px solid #bdcdb5;border-radius:10px;color:#52684b;font-size:14px;background:#fffef8}.balance-modes button[aria-pressed=true]{background:#607f54;border-color:#607f54;color:#fff}
-.balance-conditions{display:flex;align-items:center;flex-wrap:wrap;gap:8px 13px}
+.balance-toolbar strong{font-size:14px;color:#456243}
+.balance-conditions{display:flex;flex:1;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 13px}
 .balance-room{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid #cbd9c3;border-radius:9px;background:#fffef6;color:#59704d;font-size:13px;white-space:nowrap}
 .balance-room b{color:#365b3c;font-size:14px;font-variant-numeric:tabular-nums}
 .balance-apparatus{display:block;width:100%;height:auto}.balance-apparatus text{font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;fill:#3b574b}.balance-apparatus .digits{font:700 29px "DejaVu Sans Mono",monospace;letter-spacing:-2px;fill:#2b4739}.balance-apparatus .unit{font-size:12px;font-weight:600;fill:#2b4739}.balance-apparatus .meter-label{font:700 10px sans-serif;fill:#52624e}.balance-apparatus .block-name{font:600 22px Georgia,serif;fill:#3c5550}.balance-apparatus .trend{font-size:14px;fill:#425c54}.balance-apparatus .annotation{font-size:16px;fill:#536c5a}.balance-apparatus .box-label{font-size:14px;fill:#6b7e65;letter-spacing:3px}.balance-apparatus .scene-foot{font-size:15px;fill:#59705a}.balance-apparatus .status{font-size:14px;font-weight:650;fill:#496343}
@@ -13,7 +13,6 @@
 .balance-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 18px 9px}.balance-controls button{min-width:96px;min-height:42px;padding:8px 14px;border:1px solid #becdb8;border-radius:11px;background:#fffef9;color:#375640}
 .balance-note{margin:0;padding:0 15px 12px;text-align:center;color:#7b8770;font-size:11px}
 
-.balance-modes button{font:inherit;font-size:14px;cursor:pointer}
 .balance-controls button{font:inherit;font-size:14px;cursor:pointer}
 .balance-drag-hint{flex:1;margin:0;color:#426343;font-size:14px;font-weight:650}
 .balance-drag-hint span{margin-right:6px;color:#618759;font-size:20px;vertical-align:-1px}
@@ -27,14 +26,13 @@
 .balance-block:hover .balance-grip,.balance-block:focus-visible .balance-grip{opacity:.65}
 .balance-panel[data-dragging=a] #balance-block-a,.balance-panel[data-dragging=b] #balance-block-b{cursor:grabbing}
 .balance-panel[data-dragging=a] #balance-block-a .balance-block-outline,.balance-panel[data-dragging=b] #balance-block-b .balance-block-outline{opacity:.85}
-.balance-controls button:hover,.balance-modes button:hover{filter:brightness(.97)}
+.balance-controls button:hover{filter:brightness(.97)}
 .balance-panel button:focus-visible{outline:3px solid #bc612b;outline-offset:3px}
 .balance-readings{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .balance-panel [hidden]{display:none!important}
 @media(max-width:700px){
  .balance-toolbar{justify-content:center;flex-wrap:wrap;padding:12px;gap:9px}
  .balance-conditions{justify-content:center}
- .balance-modes button{min-height:44px;padding:8px 12px}
  .balance-controls{gap:8px;padding-inline:10px;flex-wrap:wrap}
  .balance-drag-hint{flex-basis:100%;text-align:center}
  .balance-controls button{min-width:0;flex:1;min-height:44px;padding-inline:9px;font-size:14px}

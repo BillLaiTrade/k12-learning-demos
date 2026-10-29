@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { initialTemperatures, advanceBalance, balanceState, moveBlock, ROOM_C, ROOM_RATE, MIN_OFFSET, MAX_OFFSET } from '../units/5/parts/5.2/assets/balance-model.mjs';
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-10,`${a} != ${b}`);
 
-test('both scenarios retain their initial temperatures and use a 25°C room',()=>{
- assert.equal(ROOM_C,25);assert.deepEqual(initialTemperatures(),{a:60,b:20});assert.deepEqual(initialTemperatures('same'),{a:40,b:40});
+test('the single hot/cold scenario starts at 60°C and 20°C in a 25°C room',()=>{
+ assert.equal(ROOM_C,25);assert.deepEqual(initialTemperatures(),{a:60,b:20});
 });
 test('separated blocks still slowly exchange heat with their surroundings',()=>{
  const s=advanceBalance(initialTemperatures(),56,4);assert.ok(s.a<60&&s.a>25);assert.ok(s.b>20&&s.b<25);
@@ -18,11 +18,11 @@ test('the pair mean cools according to its room exchange rather than staying at 
  for(const gap of [0,10,56,200]){const s=advanceBalance(initialTemperatures(),gap,10);near((s.a+s.b)/2,25+15*Math.exp(-ROOM_RATE*10));}
 });
 test('matching block temperatures above room temperature keep cooling together',()=>{
- const s=advanceBalance(initialTemperatures('same'),56,8);assert.ok(s.a<40&&s.a>25);near(s.a,s.b);assert.equal(balanceState(s,56).pairClose,true);assert.equal(balanceState(s,56).complete,false);
+ const s=advanceBalance({a:40,b:40},56,8);assert.ok(s.a<40&&s.a>25);near(s.a,s.b);assert.equal(balanceState(s,56).pairClose,true);assert.equal(balanceState(s,56).complete,false);
  const state=balanceState(s,0);assert.ok(state.rateA<0&&state.rateB<0);
 });
 test('all blocks eventually settle at room temperature in either geometry',()=>{
- for(const gap of [0,56,200])for(const mode of ['different','same']){const s=advanceBalance(initialTemperatures(mode),gap,300);assert.deepEqual(s,{a:25,b:25});assert.equal(balanceState(s,gap).complete,true);}
+ for(const gap of [0,56,200]){const s=advanceBalance(initialTemperatures(),gap,300);assert.deepEqual(s,{a:25,b:25});assert.equal(balanceState(s,gap).complete,true);}
  assert.deepEqual(advanceBalance({a:25,b:25},0,100),{a:25,b:25});
 });
 test('separation and recontact are continuous and never reset readings',()=>{

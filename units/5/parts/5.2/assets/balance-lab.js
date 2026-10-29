@@ -1,13 +1,12 @@
-import { balanceState, advanceBalance, initialTemperatures, moveBlock, ROOM_C, MIN_OFFSET, MAX_OFFSET } from './balance-model.mjs?v=ambient-exchange-3';
+import { balanceState, advanceBalance, initialTemperatures, moveBlock, ROOM_C, MIN_OFFSET, MAX_OFFSET } from './balance-model.mjs?v=single-scenario-4';
 
 const root = document.getElementById('balance-lab');
 if (root) {
   const $ = id => document.getElementById(id);
   const pause = $('balance-pause');
   const svg = $('balance-apparatus');
-  const state = { mode: 'different', temperatures: initialTemperatures(), elapsed: 0, started: false, playing: false, paused: false, positions: { a: -28, b: 28 } };
+  const state = { temperatures: initialTemperatures(), elapsed: 0, started: false, playing: false, paused: false, positions: { a: -28, b: 28 } };
   const blocks = { a: $('balance-block-a'), b: $('balance-block-b') };
-  const modes = [...root.querySelectorAll('[data-balance]')];
   const pulses = [...root.querySelectorAll('.balance-pulse')];
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   let frame = 0;
@@ -56,7 +55,6 @@ if (root) {
     const phase = !state.started ? 'ready' : sample.complete ? 'complete' : state.paused ? 'paused' : !touching ? 'separated' : sample.pairClose ? 'ambient' : 'running';
     root.dataset.phase = phase;
     root.dataset.playing = String(state.playing);
-    root.dataset.mode = state.mode;
     root.dataset.elapsed = String(state.elapsed);
     root.dataset.started = String(state.started);
     root.dataset.environment = String(ROOM_C);
@@ -140,9 +138,6 @@ if (root) {
     pause.hidden = !state.started || sample.complete;
     pause.textContent = state.paused ? '繼續觀察' : '暫停觀察';
     pause.setAttribute('aria-pressed', String(state.paused));
-    for (const button of modes) button.setAttribute('aria-pressed', String(button.dataset.balance === state.mode));
-    text('balance-initial-note', state.mode === 'same' ? '初溫 A、B 都是 40°C，室溫 25°C。時間與傳熱速度為教學示意。' : '初溫 A 60°C、B 20°C，室溫 25°C。時間與傳熱速度為教學示意。');
-    text('balance-observation-dialogue', state.mode === 'same' ? '它們原本都是 40°C，雖然一樣暖，還是一起慢慢變涼了！' : '原來拉開後溫度還會慢慢變；貼合時，兩塊就更快變得一樣暖！');
   }
 
   function tick(now) {
@@ -171,7 +166,7 @@ if (root) {
     releaseDrag();
     stop();
     state.elapsed = 0;
-    state.temperatures = initialTemperatures(state.mode);
+    state.temperatures = initialTemperatures();
     state.started = hasViewed;
     state.paused = false;
     state.positions = { a: -28, b: 28 };
@@ -261,10 +256,6 @@ if (root) {
     syncPlayback();
   });
   $('balance-reset').addEventListener('click', reset);
-  for (const button of modes) button.addEventListener('click', () => {
-    state.mode = button.dataset.balance;
-    reset();
-  });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       releaseDrag();

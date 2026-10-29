@@ -1,0 +1,29 @@
+✔ the single hot/cold scenario starts at 60°C and 20°C in a 25°C room (1.679068ms)
+✔ separated blocks still slowly exchange heat with their surroundings (0.310039ms)
+✔ direct contact reduces the temperature difference much faster (0.178304ms)
+✔ the pair mean cools according to its room exchange rather than staying at 40°C (1.66071ms)
+✔ matching block temperatures above room temperature keep cooling together (0.232695ms)
+✔ all blocks eventually settle at room temperature in either geometry (0.255929ms)
+✔ separation and recontact are continuous and never reset readings (0.204483ms)
+✔ analytic steps are partition-independent and do not overshoot (0.422245ms)
+✔ either block snaps into contact without overlap and stays within the chamber (0.372412ms)
+▶ 5.2 equilibrium: ambient exchange, faster contact and dragging
+  ✔ observation waits until the block is seen, with a visible room temperature (168.997169ms)
+  ✔ separated blocks drift towards the room and can be paused (1722.446364ms)
+  ✔ contact is faster than room exchange and does not restart the readings (1810.634331ms)
+  ✔ separating still changes temperatures; recontact continues rather than resets (2990.447795ms)
+  ✔ near equal block temperatures are not full room equilibrium (7235.584817ms)
+  ✔ only room equilibrium stops the model at 25°C and survives recontact (37346.313999ms)
+  ✔ drags, collision limits, instrument labels and overlay hit areas still work (1781.49139ms)
+  ✔ pause, backgrounding and reset keep the physical state continuous (615.21181ms)
+  ✔ desktop and laptop retain readable drag controls and other blocks stay independent (2785.091798ms)
+  ✔ real touch input and real-time flow work with both motion preferences (5092.817463ms)
+✔ 5.2 equilibrium: ambient exchange, faster contact and dragging (62552.523978ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 62933.058197

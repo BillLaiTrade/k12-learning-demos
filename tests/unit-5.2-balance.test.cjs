@@ -12,7 +12,7 @@ test('5.2 equilibrium: ambient exchange, faster contact and dragging',{timeout:2
  const readings=()=>page.evaluate(()=>({a:Number(document.getElementById('balance-temp-a').textContent.replace('°C','')),b:Number(document.getElementById('balance-temp-b').textContent.replace('°C',''))}));
  const raw=async()=>{const s=await state();return{a:Number(s.temperatureA),b:Number(s.temperatureB)};};
  const pulses=()=>page.locator('.balance-pulse').evaluateAll(ns=>ns.map(n=>n.getAttribute('transform')));
- const reset=()=>page.locator('#balance-reset').click(),mode=v=>page.locator(`[data-balance="${v}"]`).click();
+ const reset=()=>page.locator('#balance-reset').click();
  async function drag(side,delta,anchor={}){
   await root.scrollIntoViewIfNeeded();const s=await state(),box=await page.locator('#balance-apparatus').boundingBox();
   const x=box.x+((anchor.x??(side==='a'?340:555))+Number(s[side==='a'?'offsetA':'offsetB']))/1000*box.width,y=box.y+(anchor.y??298)/440*box.height;
@@ -24,6 +24,7 @@ test('5.2 equilibrium: ambient exchange, faster contact and dragging',{timeout:2
  await t.test('observation waits until the block is seen, with a visible room temperature',async()=>{
   assert.equal((await state()).started,'false');await page.clock.runFor(3000);assert.deepEqual(await readings(),{a:60,b:20});
   assert.equal(await page.locator('#balance-play').count(),0);assert.equal(await root.locator('[role=slider]').count(),2);assert.match(await page.locator('.balance-room').textContent(),/25°C/);
+  assert.equal(await root.locator('[data-balance],.balance-modes').count(),0,'no scenario switcher');
   await root.scrollIntoViewIfNeeded();
   // IntersectionObserver delivery is a browser rendering task, outside the mocked clock.
   for(let i=0;i<20&&(await state()).started!=='true';i++){await page.clock.runFor(32);await new Promise(resolve=>setTimeout(resolve,15));}
@@ -53,22 +54,18 @@ test('5.2 equilibrium: ambient exchange, faster contact and dragging',{timeout:2
   await page.clock.runFor(150000);assert.deepEqual(await readings(),{a:25,b:25});assert.equal((await state()).phase,'complete');assert.equal((await state()).playing,'false');assert.match(await page.locator('#balance-note').textContent(),/與室溫相同/);await capture('ambient-complete');
   await drag('a',-25);await contact();await page.clock.runFor(1200);assert.deepEqual(await readings(),{a:25,b:25});assert.equal(await page.locator('#balance-flow').isVisible(),false);
  });
- await t.test('the initially equal 40°C scenario cools together, separated or touching',async()=>{
-  await mode('same');assert.deepEqual(await readings(),{a:40,b:40});await page.clock.runFor(3000);const s=await readings();assert.equal(s.a,s.b);assert.ok(s.a<40&&s.a>25);assert.equal((await state()).playing,'true');assert.equal(await page.locator('#balance-flow').isVisible(),false);
-  await contact('b');assert.deepEqual(await readings(),s);await page.clock.runFor(2000);const later=await readings();assert.equal(later.a,later.b);assert.ok(later.a<s.a);assert.equal((await state()).phase,'ambient');assert.match(await page.locator('#balance-observation-dialogue').textContent(),/一起慢慢變涼/);await capture('ambient-same');
- });
  await t.test('drags, collision limits, instrument labels and overlay hit areas still work',async()=>{
-  await mode('different');await drag('b',60);await contact('a');await page.clock.runFor(900);const s=await state(),r=await readings();assert.equal(await page.locator('#balance-probe-dot').getAttribute('cx'),String(352+Number(s.offsetA)));
+  await reset();await drag('b',60);await contact('a');await page.clock.runFor(900);const s=await state(),r=await readings();assert.equal(await page.locator('#balance-probe-dot').getAttribute('cx'),String(352+Number(s.offsetA)));
   for(const side of ['a','b'])assert.equal(await page.locator('#balance-digits-'+side).getAttribute('data-value'),r[side].toFixed(1));
   await drag('a',-20,{x:440,y:303});assert.equal((await state()).touching,'false');await contact();await drag('a',-20,{x:352,y:221});assert.equal((await state()).touching,'false');await contact();
   await drag('a',500);assert.equal((await state()).offsetA,(await state()).offsetB);
   await page.locator('#balance-block-a').focus();await page.keyboard.press('Home');assert.equal((await state()).offsetA,'-90');assert.equal((await state()).playing,'true');await page.keyboard.press('End');assert.equal((await state()).touching,'true');
  });
- await t.test('pause, backgrounding and mode reset keep the physical state continuous',async()=>{
+ await t.test('pause, backgrounding and reset keep the physical state continuous',async()=>{
   await page.locator('#balance-pause').click();const held=await readings(),positions=await pulses();await page.clock.runFor(800);assert.deepEqual(await readings(),held);assert.deepEqual(await pulses(),positions);
   await drag('a',-25);await page.clock.runFor(1000);assert.notDeepEqual(await readings(),held);
   await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});assert.equal((await state()).phase,'paused');const frozen=await readings();await page.clock.runFor(800);assert.deepEqual(await readings(),frozen);await page.evaluate(()=>{delete document.hidden;document.dispatchEvent(new Event('visibilitychange'));});
-  await mode('same');assert.deepEqual(await readings(),{a:40,b:40});assert.equal((await state()).gap,'56');await mode('different');assert.deepEqual(await readings(),{a:60,b:20});
+  await reset();assert.deepEqual(await readings(),{a:60,b:20});assert.equal((await state()).gap,'56');
  });
  await t.test('desktop and laptop retain readable drag controls and other blocks stay independent',async()=>{
   for(const width of [1440,1280,1024,768,390,320]){await page.setViewportSize({width,height:1300});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,width+'px overflow');await contact();assert.equal((await state()).touching,'true');await reset();if(width===1280)await capture('ambient-laptop');}
