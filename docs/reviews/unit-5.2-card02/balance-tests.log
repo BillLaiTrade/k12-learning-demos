@@ -1,0 +1,25 @@
+✔ temperatures remain at their initial values before direct contact (1.287948ms)
+✔ equal aluminum masses approach 40°C monotonically without overshoot (1.569305ms)
+✔ the two displayed readings agree exactly when net flow ends (0.133498ms)
+✔ initially identical temperatures never exchange net heat (0.121009ms)
+▶ 5.2 second block: direct contact and thermal equilibrium
+  ✔ approved format, actual portraits, contact sensors and separated initial blocks (419.383915ms)
+  ✔ joining can pause and resume; heat starts only after contact (402.436335ms)
+  ✔ matching readings, converging temperatures and moving short traces (1980.106058ms)
+  ✔ same readings end flow, then replay and reset are clean (6621.740333ms)
+  ✔ initially equal temperatures stay equal, without heat flow or warming claims (663.889204ms)
+  ✔ switching modes during approach and heat exchange cancels previous state (1049.726438ms)
+  ✔ keyboard and reduced motion retain essential movement (689.674533ms)
+  ✔ backgrounding pauses without resetting readings and resumes explicitly (742.752817ms)
+  ✔ desktop matches the approved card proportions; smaller widths do not overflow (570.95714ms)
+  ✔ first block and later activities remain independent (2078.273356ms)
+  ✔ ordinary and reduced preferences produce real movement and pause freezes pixels (5689.270312ms)
+✔ 5.2 second block: direct contact and thermal equilibrium (21809.613303ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22143.579658
