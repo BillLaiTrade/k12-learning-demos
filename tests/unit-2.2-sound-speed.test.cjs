@@ -492,7 +492,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
 
   await t.test('one lower rail compares both live positions at the same scale across seven widths', async () => {
     await fresh();const m=await model;
-    assert.equal(await temperatureLab.locator('.progress-legend').count(),1);
+    assert.equal(await temperatureLab.locator('.progress-legend').count(),0);
     assert.equal(await temperatureLab.locator('.field .race-marker,.field .propagation-front').count(),0);
     await temperaturePrimary.click();await page.clock.runFor(12000);await temperaturePrimary.click();
     const elapsed=Number((await temperatureData()).time),speed=m.airSpeed(80);
@@ -502,8 +502,8 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.ok(Math.abs(Number(rails[0].otherDistance)-m.airSpeed(0)*elapsed)<.001);
     const gap=Math.round((speed-m.airSpeed(0))*elapsed);
     assert.deepEqual(await temperatureLab.locator('.progress-gap').allTextContents(),[`領先 ${gap} 公尺`]);
-    assert.deepEqual(await temperatureLab.locator('.race-own-label').allTextContents(),['80°C 組 4,518 m']);
-    assert.deepEqual(await temperatureLab.locator('.race-other-label').allTextContents(),['0°C 組 3,973 m']);
+    assert.deepEqual(await temperatureLab.locator('.race-own-label output').allTextContents(),['4,518']);
+    assert.deepEqual(await temperatureLab.locator('.race-other-label output').allTextContents(),['3,973']);
     for(const width of[320,390,640,768,850,1024,1440]){
       await page.setViewportSize({width,height:1600});await page.clock.runFor(32);
       const geometry=await temperatureLab.locator('.race-progress').evaluateAll(ns=>ns.map(n=>{

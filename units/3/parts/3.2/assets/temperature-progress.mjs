@@ -9,16 +9,18 @@ export function createTemperatureProgress(row, id) {
   const progress = document.createElement('div');
   progress.className = 'race-progress';
   progress.setAttribute('role', 'group');
-  progress.setAttribute('aria-label', '本組與另一組的聲音傳播進度');
+  progress.setAttribute('aria-label', '0 攝氏度與 80 攝氏度的聲音傳播進度');
   progress.innerHTML = `
     <div class="race-scale">
       <div class="race-line"></div><div class="race-filled"></div>
       ${Array.from({ length: 6 }, (_, i) => `<span class="race-tick" data-distance="${i*1000}" style="left:${i*20}%"><span>${metres.format(i*1000)}${i===0||i===5?' m':''}</span></span>`).join('')}
       <span class="race-tick race-midpoint" style="left:50%"><span>2,500</span></span>
-      <div class="race-marker race-other" hidden aria-hidden="true"><svg viewBox="0 0 20 16"><path d="M2 2H18L10 14Z"/></svg><i></i></div>
-      <div class="race-marker race-own" hidden aria-hidden="true"><svg viewBox="0 0 20 16"><path d="M4 3H16L10 13Z"/></svg><i></i></div>
-      <output class="race-label race-own-label" aria-live="off"></output>
-      <output class="race-label race-other-label" aria-live="off"></output>
+      <div class="race-marker race-other" hidden aria-hidden="true"><svg viewBox="0 0 20 16"><circle cx="10" cy="6" r="4"/></svg><i></i></div>
+      <div class="race-marker race-own" hidden aria-hidden="true"><svg viewBox="0 0 20 16"><circle cx="10" cy="6" r="4"/></svg><i></i></div>
+      <div class="race-readouts">
+        <div class="race-label race-other-label"><i aria-hidden="true"></i><span>0°C</span><span class="race-distance"><output aria-live="off">0</output> m</span></div>
+        <div class="race-label race-own-label"><i aria-hidden="true"></i><span>80°C</span><span class="race-distance"><output aria-live="off">0</output> m</span></div>
+      </div>
     </div>`;
   // 與上方實際粒子區的 0～5,000 m 共用同一比例。
   const scale = progress.querySelector('.race-scale');
@@ -31,6 +33,7 @@ export function createTemperatureProgress(row, id) {
   row.querySelector('.arrival-readout').append(gap);
   const ownMarker = progress.querySelector('.race-own'), otherMarker = progress.querySelector('.race-other');
   const ownLabel = progress.querySelector('.race-own-label'), otherLabel = progress.querySelector('.race-other-label');
+  const ownValue = ownLabel.querySelector('output'), otherValue = otherLabel.querySelector('output');
   const fill = progress.querySelector('.race-filled');
   progress.dataset.ownerGroup = id;
   return { render(own, other, synchronized) {
@@ -42,13 +45,11 @@ export function createTemperatureProgress(row, id) {
     progress.dataset.otherGroup = other.id;
     ownMarker.style.left = `${ownPosition}%`; otherMarker.style.left = `${otherPosition}%`;
     ownMarker.hidden = !own.active; otherMarker.hidden = !other.active;
-    ownLabel.style.setProperty('--position', ownPosition);
-    otherLabel.style.setProperty('--position', otherPosition);
     fill.style.width = `${ownPosition}%`;
-    setText(ownLabel, `${own.temperature}°C 組 ${metres.format(own.distance)} m`);
-    setText(otherLabel, `${other.temperature}°C 組 ${other.active?`${metres.format(other.distance)} m`:'—'}`);
-    ownLabel.setAttribute('aria-label', `本組振動已傳到 ${metres.format(own.distance)} 公尺`);
-    otherLabel.setAttribute('aria-label', `${other.temperature} 攝氏度組${other.active?`振動已傳到 ${metres.format(other.distance)} 公尺`:'尚未敲擊'}`);
+    setText(ownValue, metres.format(own.distance));
+    setText(otherValue, metres.format(other.distance));
+    ownValue.setAttribute('aria-label', `${own.temperature} 攝氏度組${own.active?`振動已傳到 ${metres.format(own.distance)} 公尺`:'尚未敲擊'}`);
+    otherValue.setAttribute('aria-label', `${other.temperature} 攝氏度組${other.active?`振動已傳到 ${metres.format(other.distance)} 公尺`:'尚未敲擊'}`);
     gap.hidden = !own.active && !other.active;
     const difference = own.distance-other.distance;
     const relation = !synchronized ? 'individual' : own.distance>=DISTANCE&&other.distance>=DISTANCE ? 'arrived' : Math.abs(difference)<.5 ? 'even' : difference>0 ? 'ahead' : 'behind';

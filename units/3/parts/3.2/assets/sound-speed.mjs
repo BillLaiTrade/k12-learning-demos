@@ -4,7 +4,7 @@ import {
   positions, runEnd, sample
 } from './sound-speed-model.mjs?v=fixed-22';
 import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=fixed-22';
-import { createTemperatureProgress } from './temperature-progress.mjs?v=fixed-22';
+import { createTemperatureProgress } from './temperature-progress.mjs?v=fixed-23';
 import { airChamberScene } from './temperature-chamber.mjs?v=fixed-22';
 
 export function initSoundSpeed(root) {
@@ -297,12 +297,6 @@ function rebuild() {
   $('#takeaway').innerHTML = temperatureMode
     ? '<strong>觀察重點：</strong>其他條件相同時，空氣溫度較高，聲速通常較快。'
     : '<strong>觀察重點：</strong>粒子在原位附近往返；同一聲源頻率相同，三種介質傳遞振動的速度不同。';
-  if (temperatureMode && !root.querySelector('.progress-legend')) {
-    const legend = document.createElement('p');
-    legend.className = 'progress-legend';
-    legend.innerHTML = '<span><i class="legend-own" aria-hidden="true"></i>實線：80°C 組</span><span><i class="legend-other" aria-hidden="true"></i>虛線：0°C 組</span>';
-    root.querySelector('.comparison-board').prepend(legend);
-  }
   paint();
 }
 
