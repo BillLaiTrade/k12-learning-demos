@@ -64,3 +64,6 @@
  .conduction-materials{grid-column:1/-1;margin:0}
  .conduction-materials>div{grid-template-columns:1fr 1fr}
 }
+
+.conduction-lamp-lens{fill:url(#conduction-lamp-off)}
+#conduction-lab[data-started="true"] .conduction-lamp-lens{fill:url(#conduction-lamp-on)}
