@@ -107,3 +107,20 @@
  #s5 .live-result .item b {font-size:.7rem;}
  #s5 .live-result .concentration {font-size:.7rem;gap:10px 3px;}
 }
+
+/* Keep the desktop calculation readable without stretching it over a full screen. */
+@media(min-width:681px) {
+ #s5 .formula-reference {margin-top:14px;padding:14px 18px 16px;}
+ #s5 .formula-reference::before {top:16px;bottom:16px;}
+ #s5 .formula-reference>.formula-caption {padding:2px 7px;}
+ #s5 .formula-equation {margin-top:10px;font-size:.95rem;}
+ #s5 .live-result {margin-top:12px;padding:16px 18px;}
+ #s5 .live-result .mass-equation {margin:12px 0;gap:8px;}
+ #s5 .live-result .item {padding:8px 6px;}
+ #s5 .live-result .item b {margin-top:3px;font-size:.95rem;}
+ #s5 .substitution-caption {padding-top:11px;}
+ #s5 .live-result .concentration {padding:10px 0 12px;font-size:.88rem;gap:6px;}
+ #s5 .live-result .concentration .value {padding:7px 11px;font-size:1.65rem;border-radius:9px;}
+ #s5 .live-result .meaning {margin-top:10px!important;padding-top:8px;line-height:1.65;}
+ #s5 .concept-line {margin:10px 0 16px;padding:8px 11px;}
+}
