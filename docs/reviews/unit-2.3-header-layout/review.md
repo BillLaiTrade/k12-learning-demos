@@ -26,3 +26,7 @@
 `git diff --check` 無格式問題。本次沒有新增或執行自動化測試；初稿29項測試紀錄不算本輪重跑結果。推送後的Pages與公開版本結果另記於k12的2.3主紀錄及進度表，仍屬第4階段。
 
 公開入口：<https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/>；第一區：<https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/#s1>。
+
+## 續修：移除開場標籤（2026-10-29）
+
+依使用者截圖，移除開場下方「從眼前的現象出發」「用量測與資料說明」「七段探索・單元小測」三個標籤及對應 `.hero-foot` 樣式，CSS版本參數更新為 `opening-layout-4`。仍採獨立開場頁首，其下方才開始探索路線與教學內容；上方四張截圖及座標表保留為移除標籤前的歷史畫面。本次僅移除標籤與其樣式，`git diff --check`無格式問題，未新增或執行自動化測試。公開版本核對結果另記於k12的2.3主紀錄與進度表。
