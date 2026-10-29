@@ -71,6 +71,12 @@
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=three-steps-20261029">
   <link rel="stylesheet" href="assets/reversible-light.css?v=3">
   <link rel="stylesheet" href="assets/periscope.css?v=8">
+  <style>
+    .route a.quiz-nav{margin-top:12px;border-top:1px solid var(--line);padding-top:17px;color:#8a6726;font-size:.86rem;font-weight:750}
+    .route a.quiz-nav .route-number{color:#946f2d;font-size:.76rem;font-weight:650}
+    .route a.quiz-nav[aria-current=step]{border-left-color:#d9a74f;background:#faf3e4;color:#795b25;box-shadow:inset 3px 0 #d9a74f}
+    @media(max-width:780px){.route a.quiz-nav{margin:0 0 0 4px;border-top:1px solid var(--line);padding:7px 10px}.route a.quiz-nav[aria-current=step]{border-color:#d9a74f}}
+  </style>
 </head>
 <body>
   <header class="shell masthead">
@@ -102,7 +108,7 @@
           <a href="#card-04"><span class="route-number">04</span><span>只移動物體，像的位置怎麼變？</span></a>
           <a href="#card-05"><span class="route-number">05</span><span>鏡面彎起來，反射方向還會一樣嗎？</span></a>
           <a href="#card-06"><span class="route-number">06</span><span>把光線方向倒過來，路徑會改變嗎？</span></a>
-          <a href="#unit-quiz"><span class="route-number">✦</span><span>單元小測｜幫小葵完成潛望鏡</span></a>
+          <a class="quiz-nav" href="#unit-quiz"><span class="route-number" aria-hidden="true">✦</span><span>單元小測</span></a>
         </div>
       </nav>
       <div class="lesson-list">
