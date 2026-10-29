@@ -1118,15 +1118,15 @@
                 <div class="microscope-source-row" aria-label="水的固態、液態和氣態樣本；聚焦樣本可查看放大的粒子模型">
                   <figure class="microscope-source" data-microscope-phase="ice" data-microscope="冰塊內的水分子：彼此靠近，排列較整齊，持續在固定位置附近振動。"><img src="assets/microscope-ice.webp" alt="白色瓷盤上的透明冰塊寫實照片"><span class="microscope-glass" role="slider" tabindex="0" aria-label="在冰塊內拖曳放大鏡觀察水分子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>固態・冰</figcaption></figure>
                   <figure class="microscope-source microscope-source--liquid" data-microscope-phase="liquid" data-microscope="水面下的水分子：彼此靠近，排列較不規則，可以互相移動。"><img src="assets/microscope-water.webp" alt="透明玻璃杯中的清水寫實照片"><span class="microscope-glass" role="slider" tabindex="0" aria-label="在水面下拖曳放大鏡觀察液態水分子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>液態・水</figcaption></figure>
-                  <figure class="microscope-source microscope-source--boiling" data-microscope-phase="vapor" data-microscope="鍋口上方：水蒸氣本身看不見；鏡片示意逸出水蒸氣的分子，省略周圍空氣。">
+                  <figure class="microscope-source microscope-source--boiling" data-microscope-phase="vapor" data-microscope="水面上方：水蒸氣本身看不見；鏡片示意水蒸氣的分子，省略周圍空氣。">
                     <div class="boiling-media-stage">
                       <img src="assets/microscope-vapor.webp" alt="透明鍋中的水持續沸騰；實景氣泡在水中翻湧上升，水蒸氣本身不可見">
                       <video class="boiling-real-video" data-boiling-video autoplay loop muted playsinline preload="metadata" aria-label="真實沸水中氣泡生成並向上翻湧的實景片段"><source src="assets/boiling-water-loop.webm" type="video/webm"><source src="assets/boiling-water-loop.mp4" type="video/mp4"></video>
                     </div>
-                    <span class="microscope-glass" role="slider" tabindex="0" aria-label="在鍋口上方拖曳放大鏡觀察水蒸氣分子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>氣態・水蒸氣</figcaption>
+                    <span class="microscope-glass" role="slider" tabindex="0" aria-label="在水面上方拖曳放大鏡觀察水蒸氣分子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>氣態・水蒸氣</figcaption>
                   </figure>
                 </div>
-                <p class="microscope-instruction">鏡片分別在冰塊內、水面下與鍋口上方移動，顯示對應的粒子模型（分子本身無法用肉眼看見）。</p>
+                <p class="microscope-instruction">鏡片分別在冰塊內、水面下與水面上方移動，顯示對應的粒子模型（分子本身無法用肉眼看見）。</p>
 
                 <p class="microscope-note" aria-live="polite">三態都是 H₂O；冰只微微振動，水會流動，水蒸氣則快速隨機移動。</p>
               </article>
@@ -1420,7 +1420,7 @@
     const microscopeRegions={
       ice:[[.35,.525],[.53,.465],[.68,.555],[.665,.705],[.535,.795],[.355,.725]],
       liquid:[[.23,.38],[.77,.38],[.77,.69],[.23,.69]],
-      vapor:[[.20,.02],[.80,.02],[.80,.29],[.20,.29]]
+      vapor:[[.20,.02],[.80,.02],[.80,.63],[.20,.63]]
     };
     function microscopeCenterRegion(outline,radius){
       let polygon=outline;
