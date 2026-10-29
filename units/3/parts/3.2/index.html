@@ -230,15 +230,6 @@
             </section>
 
             <div class="dialogue dialogue--xiaokui" role="note" aria-label="小葵的總結"><span class="speaker" aria-hidden="true"></span><p id="temp-takeaway">原來同樣是空氣，溫度較高時，聲音傳得比較快。</p></div>
-            <details class="model-notes"><summary>模型說明與近似值</summary>
-              <div class="observation-options"><span id="temp-playback-state">點按音叉可單獨敲擊該組。</span></div>
-<ul>
-              <li>兩組皆為空氣，分別固定在 0°C 與 80°C，其他條件相同；兩組傳播距離皆為 5,000 公尺，敲擊時才開始計算聲音傳播時間。</li>
-              <li>空氣本身透明，腔體與器材為配置示意，傳播距離以尺規為準；圖中的分子、排列、間距與位移為微觀放大示意，省略熱運動。音叉外觀與微觀粒子的振動節奏分別為便於辨識、追蹤的示意，不作頻率量測或音高比較，亦不改變實際傳播時間。</li>
-              <li>各組共用持續 4 秒的往返示意訊號，各自從敲擊時刻開始實時計時。1 秒播放對應 1 秒經過，暫停與背景頁面期間不計時。</li>
-              <li>溫度較高時，空氣分子的熱運動平均較快，聲速通常也較快；這與音叉的振動頻率或聲音大小不同。本例以組成固定的乾燥空氣近似，聲速與絕對溫度的平方根成正比：聲速 ≈ 343 × √[(攝氏溫度 ＋ 273.15) ÷ 293.15]（m/s）。0°C 約為 331.1 m/s，80°C 約為 376.5 m/s；實際聲速也會隨空氣組成等條件改變。</li>
-              <li>下方刻度依「聲速 × 經過時間」記錄擾動前緣，粒子依各位置的傳播延遲受振。藍色圓點表示 0°C 組、橘色圓點表示 80°C 組；刻度下方固定左列 0°C、右列 80°C，數字顯示各組目前傳播距離。同步敲擊時顯示領先／落後距離。個別敲擊的起跑時刻不同，位置不作聲速快慢判斷。右側到達時間為首次傳到 5,000 公尺的實際經過時間，尚未到達顯示「—」。</li>
-            </ul></details>
           </div>
         </section>
         <section class="quiz fireworks-quiz" id="unit-quiz" aria-labelledby="quiz-title">
@@ -378,7 +369,7 @@
   </script>
   <script type="module" src="assets/sound-propagation.js?v=6"></script>
   <script type="module" src="assets/vacuum-lab.js?v=8"></script>
-  <script type="module" src="assets/sound-speed.mjs?v=temperature-conclusion-2-20261029"></script>
+  <script type="module" src="assets/sound-speed.mjs?v=model-notes-removed-20261029"></script>
   <script type="module" src="assets/fireworks-quiz.mjs?v=4"></script>
 </body>
 </html>

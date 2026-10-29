@@ -180,7 +180,8 @@ function paint() {
   text($('#primary-action'), actionLabel);
   $('#pause-action').hidden = state.scope !== 'individual' || !['running','paused'].includes(state.phase);
   text($('#pause-action'), state.phase === 'paused' ? '繼續觀察' : '暫停觀察');
-  text($('#playback-state'), state.phase === 'running' ? '實時播放，暫停期間不計時。' : state.phase === 'paused' ? '已暫停，繼續後接續計時。' : state.phase === 'complete' ? '可再次敲擊音叉，重新比較。' : '點按音叉可單獨敲擊該組。');
+  const playbackState = $('#playback-state');
+  if (playbackState) text(playbackState, state.phase === 'running' ? '實時播放，暫停期間不計時。' : state.phase === 'paused' ? '已暫停，繼續後接續計時。' : state.phase === 'complete' ? '可再次敲擊音叉，重新比較。' : '點按音叉可單獨敲擊該組。');
   drawResult();
 }
 
