@@ -1,4 +1,5 @@
 import * as THREE from './vendor/three/build/three.module.js';
+import {APERTURE_OPTICS, traceApertures} from './aperture-optics.mjs?v=1';
 
 const canvas = document.querySelector('#aperture-3d-scene');
 if (canvas) {
@@ -196,8 +197,8 @@ if (canvas) {
   }
   addBox(scene, [0.22, 0.11, 0.22], [4.4, 0.18, 0], mats.carriage);
   addBox(scene, [0.11, 0.96, 0.11], [4.42, 0.67, 0], mats.railDark);
-  const spot = new THREE.Mesh(new THREE.SphereGeometry(0.15, 24, 16), mats.spot);
-  spot.position.set(4.265, 1.28, 0);
+  const spot = new THREE.Mesh(new THREE.SphereGeometry(APERTURE_OPTICS.screenRadius, 24, 16), mats.spot);
+  spot.position.set(APERTURE_OPTICS.screenX, APERTURE_OPTICS.axisY, 0);
   scene.add(spot);
   const spotGlow = new THREE.Mesh(new THREE.SphereGeometry(0.27, 24, 16), mats.spotGlow);
   spotGlow.position.copy(spot.position);
@@ -221,11 +222,13 @@ if (canvas) {
     carriage.add(plate);
     const plateBars = [];
     const bar = (size, position) => { const mesh = addBox(plate, size, position, mats.plate); plateBars.push(mesh); return mesh; };
-    // Four opaque bars leave a real, open square aperture in the centre.
-    bar([0.12, 0.92, 1.62], [0, 0.64, 0]);
-    bar([0.12, 0.92, 1.62], [0, -0.64, 0]);
-    bar([0.12, 0.36, 0.56], [0, 0, -0.49]);
-    bar([0.12, 0.36, 0.56], [0, 0, 0.49]);
+    // Four opaque bars leave a real, open rectangular aperture in the centre.
+    const thickness = APERTURE_OPTICS.halfThickness * 2;
+    const holeHeight = APERTURE_OPTICS.halfHeight * 2;
+    bar([thickness, 0.92, 1.62], [0, APERTURE_OPTICS.halfHeight + 0.46, 0]);
+    bar([thickness, 0.92, 1.62], [0, -APERTURE_OPTICS.halfHeight - 0.46, 0]);
+    bar([thickness, holeHeight, 0.56], [0, 0, -APERTURE_OPTICS.halfWidth - 0.28]);
+    bar([thickness, holeHeight, 0.56], [0, 0, APERTURE_OPTICS.halfWidth + 0.28]);
     const pickSurface = new THREE.Mesh(new THREE.BoxGeometry(0.012, 2.2, 1.62), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, colorWrite: false, depthWrite: false, side: THREE.DoubleSide }));
     pickSurface.position.x = -0.067;
     plate.add(pickSurface);
@@ -265,12 +268,6 @@ if (canvas) {
   const xiaokuiObservation = document.querySelector('#aperture-xiaokui-observation');
   let selectedIndex = 1;
   const standardHeightTolerance = 0.02;
-  const fullBlockOffset = 0.36;
-  const visibleLightThreshold = 0.2;
-  const lightRemainingAtOffset = (deviation) => {
-    const remaining = THREE.MathUtils.clamp(1 - deviation / fullBlockOffset, 0, 1);
-    return remaining <= visibleLightThreshold ? 0 : remaining;
-  };
   const selectableSurfaces = plates.map(({ pickSurface }) => pickSurface);
 
   const updateExperiment = () => {
@@ -288,27 +285,31 @@ if (canvas) {
     const heightPercent = Number(heightInput.value);
     const selectedDeviation = Math.abs(selected.height);
     const isStandardHeight = selectedDeviation <= standardHeightTolerance;
-    const isFullyBlocked = lightRemainingAtOffset(selectedDeviation) === 0;
+    const isFullyBlocked = traceApertures([selected]).power === 0;
     heightOutput.textContent = isStandardHeight ? '標準高度' : isFullyBlocked ? (heightPercent > 0 ? '偏高' : '偏低') : (heightPercent > 0 ? '略微偏高' : '略微偏低');
     heightOutput.classList.toggle('is-standard', isStandardHeight);
     const plateNames = ['小孔板 1', '中間板', '小孔板 3'];
+    const optics = traceApertures(plateStates);
     plateButtons.forEach((button, index) => {
-      const letsLightThrough = lightRemainingAtOffset(Math.abs(plateStates[index].height)) > 0;
+      const stage = optics.stages[index], letsLightThrough = stage.power > 0;
+      const message = stage.received === 0 ? '前方孔板已擋光，沒有光到達這片板'
+        : !letsLightThrough ? '光被這片孔板擋住'
+        : stage.power < 1 ? '仍有部分光線通過' : '光線可以通過';
       button.classList.toggle('is-transmitting', letsLightThrough);
-      button.setAttribute('aria-label', `${plateNames[index]}，${letsLightThrough ? '仍有光通過' : '偏移過大，光被擋住'}`);
-      button.title = letsLightThrough ? '仍有光通過這片小孔板' : '偏移過大，光被這片小孔板擋住';
+      button.setAttribute('aria-label', `${plateNames[index]}，${message}`);
+      button.title = message;
     });
-    const maxDeviation = Math.max(...plateStates.map((state) => Math.abs(state.height)));
-    const transmission = lightRemainingAtOffset(maxDeviation);
+    const transmission = optics.power;
+    spot.visible = spotGlow.visible = transmission > 0;
     mats.spot.opacity = transmission;
     mats.spotGlow.opacity = transmission * 0.38;
     spot.scale.setScalar(0.72 + transmission * 0.28);
     spotGlow.scale.setScalar(0.6 + transmission * 0.4);
     result.classList.toggle('is-blocked', transmission <= 0);
-    if (maxDeviation <= standardHeightTolerance) resultText.textContent = '三個小孔排成一直線，屏幕上出現清楚亮點。';
-    else if (transmission > 0) resultText.textContent = '小孔略有偏移，仍有部分光線通過，屏幕亮點變暗。';
-    else resultText.textContent = '光被偏移過大的小孔板擋住，屏幕亮點消失。';
-    if (maxDeviation <= standardHeightTolerance) xiaokuiObservation.textContent = '所以小孔排成一直線，光才能一路通過。';
+    if (transmission >= 1 - 1e-12) resultText.textContent = '光束能完整通過三片孔板，屏幕上出現清楚亮點。';
+    else if (transmission > 0) resultText.textContent = '只有部分光線能連續通過三個小孔，屏幕亮點變暗。';
+    else resultText.textContent = '光被孔板擋住，無法到達屏幕，亮點消失。';
+    if (transmission >= 1 - 1e-12) xiaokuiObservation.textContent = '光沿直線通過三個小孔，屏幕就出現亮點了。';
     else if (transmission > 0) xiaokuiObservation.textContent = '亮點變暗了，表示還有一些光穿過小孔。';
     else xiaokuiObservation.textContent = '原來光沒有繞過孔板，得讓小孔對齊才能通過。';
   };
