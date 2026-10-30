@@ -7,6 +7,7 @@ import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tun
 import { createTemperatureProgress } from './temperature-progress.mjs?v=start-time-20261029';
 import { airChamberScene } from './temperature-chamber.mjs?v=fixed-22';
 import { stopOnLeave } from './lesson-playback.mjs?v=2';
+import { createMicroMotion } from './medium-micro-motion.mjs?v=1';
 
 export function initSoundSpeed(root) {
 // 兩個獨立區塊共用控制器，原生標籤及 SVG 定義各自使用唯一 ID。
@@ -30,6 +31,13 @@ const svg = (tag, attributes, parent) => {
 const state = { mode: root.dataset.soundSpeedMode === 'temperature' ? 'temperature' : 'material', phase: 'idle', time: 0, scope: 'together' };
 let models = [], groups = [], frame = 0, runStartWall = null, runStartTime = 0;
 const panel = $('#experiment-panel');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let microAnimations = [];
+function stopMicroMotion() { microAnimations.forEach(animation => animation.pause()); }
+function startMicroMotion() {
+  if (!document.hidden && !reducedMotion.matches) microAnimations.forEach(animation => animation.play());
+}
+reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) stopMicroMotion(); });
 
 function buildModel(group) {
   const settings = appearance[group.kind], material = materialInfo[group.kind];
@@ -72,6 +80,7 @@ function buildModel(group) {
     return { ...point, node };
   });
   const links = [];
+  if (!temperatureMode) microAnimations.push(...createMicroMotion(points, group.kind));
   if (group.kind === 'steel') for (const point of points) {
     const index = point.row * settings.columns + point.column;
     for (const offset of [point.column < settings.columns - 1 ? 1 : 0, point.row < settings.rows - 1 ? settings.columns : 0]) {
@@ -214,6 +223,7 @@ function tick() {
 }
 
 function resume() {
+  startMicroMotion();
   const bounds = $('#models').getBoundingClientRect();
   if (bounds.height <= innerHeight - 24 && (bounds.top < 12 || bounds.bottom > innerHeight - 12)) {
     $('#models').scrollIntoView({ block: 'center', behavior: 'auto' });
@@ -237,6 +247,7 @@ function startSingle(id) {
 }
 
 function pause() {
+  stopMicroMotion();
   if (state.phase !== 'running') return;
   commitTime(performance.now());
   if (state.phase !== 'complete') state.phase = 'paused';
@@ -244,6 +255,8 @@ function pause() {
 }
 
 function rebuild() {
+  microAnimations.forEach(animation => animation.cancel());
+  microAnimations = [];
   resetRun();
   groups = conditions(state.mode);
   $('#models').replaceChildren();
@@ -266,9 +279,18 @@ $('#primary-action').addEventListener('click', () => {
   else startFresh();
 });
 $('#pause-action').addEventListener('click', () => state.phase === 'running' ? pause() : resume());
-$('#reset-action').addEventListener('click', resetRun);
+$('#reset-action').addEventListener('click', () => { resetRun(); startMicroMotion(); });
 stopOnLeave(root.closest('.lesson-card'), pause);
 rebuild();
+// 首次進入可觀察平時的粒子微動；離開後返回不自行恢復。
+if (state.mode === 'material' && 'IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(entries => {
+    if (entries.some(entry => entry.isIntersecting)) {
+      startMicroMotion(); observer.disconnect();
+    }
+  });
+  observer.observe($('#models'));
+}
 
 }
 

@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.2 空氣與水的微動
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.2-micro-motion.test.cjs tests/unit-3.2-playback.test.cjs
+```
+
+驗證第四區空氣的分散微移、水的較小晃動、鋼與第五區維持原樣，並檢查聲波外層仍符合物理傳播延遲、實時計時、暫停與跨區停止、返回不自動播放、減少動畫偏好及四種桌機寬度。兩檔合計 14 項（含外層），測試自行啟停本機伺服器與 Chromium；當次畫面存於 `/tmp/unit32-micro-motion-desktop.png`。不代表完整歷史測試皆已通過。
+
 ## 6.1 元素的探索
 
 ```sh
