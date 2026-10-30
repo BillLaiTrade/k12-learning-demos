@@ -104,4 +104,71 @@ test('2.1 solid overview grows and recedes along an intact surface', { timeout: 
     assert.equal(await page.locator('#phase-solid-flow-particles > g').count(), 0);
     assert.deepEqual(errors, []);
   });
+
+  await t.test('three state overviews keep every card, label and model inside the laptop content column', async () => {
+    const layouts = [];
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 1000 });
+      for (const state of ['solid', 'liquid', 'gas']) {
+        await page.locator(`[data-phase-state="${state}"]`).click();
+        const layout = await page.evaluate(() => {
+          const rect = ({ left, right, top, bottom, width }) => ({ left, right, top, bottom, width });
+          const box = element => rect(element.getBoundingClientRect());
+          return {
+            pageWidth: document.documentElement.scrollWidth,
+            detail: box(document.querySelector('#phase-detail')),
+            stage: box(document.querySelector('.phase-solid-stage')),
+            model: box(document.querySelector('.phase-solid-stage .freeze-demo')),
+            cards: [...document.querySelectorAll('.phase-solid-process')].map(card => ({
+              box: box(card), slot: card.dataset.overviewSlot,
+              text: [...card.querySelectorAll('strong, .phase-solid-energy, .phase-solid-direction')].map(element => {
+                const range = document.createRange();
+                range.selectNodeContents(element);
+                return [...range.getClientRects()].map(rect);
+              }).flat()
+            }))
+          };
+        });
+        layouts.push({ width, state, ...layout });
+        assert.equal(layout.pageWidth, width, `${width}px ${state}: no page overflow`);
+        const inside = (inner, outer) => {
+          assert.ok(inner.left >= outer.left - 1 && inner.right <= outer.right + 1);
+          assert.ok(inner.top >= outer.top - 1 && inner.bottom <= outer.bottom + 1);
+        };
+        inside(layout.stage, layout.detail);
+        inside(layout.model, layout.stage);
+        assert.ok(layout.model.width >= 100, 'central model retains visible space');
+        for (const card of layout.cards) {
+          inside(card.box, layout.stage);
+          for (const text of card.text) inside(text, card.box);
+          if (card.slot.endsWith('left')) assert.ok(card.box.right < layout.model.left);
+          else assert.ok(card.box.left > layout.model.right);
+        }
+        if (width === 1024) {
+          for (const slot of ['top-left', 'top-right', 'bottom-left', 'bottom-right']) {
+            const card = page.locator(`#phase-overview-${slot}`);
+            await card.click();
+            assert.equal(await card.getAttribute('aria-pressed'), 'true');
+            assert.ok(await page.locator('#phase-solid-flow-particles > g').count() > 0);
+            assert.equal(await page.evaluate(() => window.scrollX), 0, 'click does not pan the page');
+            await card.click();
+            assert.equal(await card.getAttribute('aria-pressed'), 'false');
+            assert.equal(await page.locator('#phase-solid-flow-particles > g').count(), 0);
+          }
+        }
+        if (process.env.SOLID_OVERVIEW_CAPTURE_DIR && width !== 1280) {
+          await page.locator('#phase-solid-overview').screenshot({
+            path: path.join(process.env.SOLID_OVERVIEW_CAPTURE_DIR, `${width}-${state}.png`)
+          });
+          if (width === 1024 && state === 'gas') await page.screenshot({
+            path: path.join(process.env.SOLID_OVERVIEW_CAPTURE_DIR, '1024-viewport.png')
+          });
+        }
+      }
+    }
+    if (process.env.SOLID_OVERVIEW_CAPTURE_DIR) await fs.writeFile(
+      path.join(process.env.SOLID_OVERVIEW_CAPTURE_DIR, 'layout.json'), JSON.stringify(layouts, null, 2) + '\n'
+    );
+    assert.deepEqual(errors, []);
+  });
 });
