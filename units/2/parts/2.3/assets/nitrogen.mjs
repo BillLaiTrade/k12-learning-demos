@@ -14,7 +14,9 @@ function render() {
   const phase = elapsed < 900 ? 'air' : elapsed < 4200 ? 'flushing' : elapsed < duration ? 'sealing' : 'sealed';
   panel.dataset.nitrogenState = state;
   panel.dataset.nitrogenPhase = phase;
-  const progress = Math.min(1, Math.max(0, (elapsed - 900) / 3300));
+  const progress = reduced.matches
+    ? (phase === 'air' ? 0 : phase === 'flushing' ? 0.5 : 1)
+    : Math.min(1, Math.max(0, (elapsed - 900) / 3300));
   // Only the air reference is quantitative. The final short fill is a qualitative drawing,
   // not a claimed residual-oxygen percentage, process rate or measured preservation result.
   fill.style.width = `${21 - 15 * progress}%`;
@@ -43,22 +45,20 @@ function pause() {
 }
 button.addEventListener('click', () => {
   cancel();
-  if (reduced.matches) { elapsed = duration; state = 'complete'; lastPhase = ''; render(); return; }
   if (state !== 'paused') elapsed = 0;
   state = 'playing'; startedAt = performance.now() - elapsed; lastPhase = ''; render();
   frame = requestAnimationFrame(tick);
 });
 button.addEventListener('keydown', event => { if (event.key === 'Escape') pause(); });
-new IntersectionObserver(entries => { if (!entries[0].isIntersecting) pause(); }).observe(button);
-document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
-reduced.addEventListener('change', () => {
-  if (reduced.matches && state !== 'complete') { cancel(); elapsed = duration; state = 'complete'; lastPhase = ''; render(); }
-});
-try {
-  await Promise.all(['nitrogen-pack-sprite.webp', 'nitrogen-workbench.webp'].map(async path => {
-    const image = new Image(); image.src = new URL(path, import.meta.url).href; await image.decode();
-  }));
-  button.disabled = false;
-} catch {
-  status.textContent = '包裝圖片暫時無法載入。';
+if ('IntersectionObserver' in window) {
+  new IntersectionObserver(entries => { if (!entries[0].isIntersecting) pause(); }).observe(button);
 }
+document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+// A deliberate replay still shows distinct stages with reduced motion; only smooth
+// interpolation and decorative motion are suppressed, so clicking has visible feedback.
+const motionChanged = () => render();
+if (reduced.addEventListener) reduced.addEventListener('change', motionChanged);
+else if (reduced.addListener) reduced.addListener(motionChanged);
+// CSS loads the visual assets independently. Image.decode support or a transient decode
+// failure must not leave this otherwise functional interaction permanently disabled.
+button.disabled = false;

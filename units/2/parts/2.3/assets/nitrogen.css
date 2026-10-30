@@ -41,7 +41,6 @@ button.nitrogen-pack-view:hover:not(:disabled){background:transparent;box-shadow
 .nitrogen-facts svg{flex:0 0 34px;width:34px;height:34px;fill:none;stroke:#39785c;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .nitrogen-facts>div:last-child svg{stroke:#bc4d3d}
 .nitrogen-facts p{margin:0;font-size:.78rem;font-weight:650;line-height:1.7;color:#385246;min-width:0}
-.nitrogen-preservation-note{margin:23px 0 0;border-top:1px solid var(--line);padding:13px 0 0;color:var(--muted);font-size:.78rem;line-height:1.8;text-align:center}
 @container(max-width:520px){.nitrogen-facts{grid-template-columns:1fr}.nitrogen-facts>div{padding:10px 13px}.nitrogen-facts p{font-size:.85rem}.nitrogen-facts p br{display:none}}
 @container(max-width:460px){.nitrogen-compare{grid-template-columns:1fr;padding:12px;gap:14px;background:#e6c59d}.nitrogen-example{padding:12px 8px;border-radius:11px;background:#d6ad79 url('nitrogen-workbench.webp') center/cover}.nitrogen-scene-tag{font-size:.68rem}.nitrogen-pack-view{max-width:260px;align-self:center}.nitrogen-readout{padding:13px}.nitrogen-example>h3{font-size:.95rem}.nitrogen-flow-label{font-size:.73rem}.nitrogen-compare .nitrogen-control{border-bottom:1px solid #fffefa70}}
 @media(prefers-reduced-motion:reduce){.nitrogen-pack{transition:none}.nitrogen-flow>path{animation:none}}

@@ -1,0 +1,2 @@
+Reduced-motion before: { state: 'complete', phase: 'sealed', heading: '氧氣較少', fill: '6%' } after: { state: 'playing', phase: 'air', heading: '氧氣約21%', fill: '21%' }
+If image.decode fails, replay disabled: false

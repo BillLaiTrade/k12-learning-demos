@@ -23,6 +23,7 @@ test('2.3 nitrogen packaging: approved comparison, replay and content boundaries
   page.on('requestfailed', r => errors.push(r.url()));
   page.on('response', r => { if (r.status() >= 400) errors.push(r.url()); });
   await page.clock.install(); await page.goto(url, { waitUntil: 'networkidle' });
+  await page.clock.pauseAt(new Date(await page.evaluate(() => Date.now() + 100)));
   const section = page.locator('#s3'), panel = section.locator('.nitrogen-compare'), button = section.locator('.nitrogen-replay');
   const state = () => panel.getAttribute('data-nitrogen-state');
   const phase = () => panel.getAttribute('data-nitrogen-phase');
@@ -36,7 +37,8 @@ test('2.3 nitrogen packaging: approved comparison, replay and content boundaries
     assert.match(await section.locator('.nitrogen-control').innerText(), /氧氣約21%/);
     assert.match(await section.locator('.nitrogen-treated').innerText(), /氧氣較少[\s\S]*以氮氣為主/);
     assert.doesNotMatch(await section.locator('.nitrogen-treated').innerText(), /\d+(?:\.\d+)?%/);
-    assert.match(await section.locator('.nitrogen-preservation-note').innerText(), /密封、水分及溫度/);
+    assert.equal(await section.locator('.nitrogen-preservation-note').count(), 0);
+    assert.doesNotMatch(await section.innerText(), /保存效果仍與密封/);
     assert.equal(await section.locator('.nitrogen-facts>div').count(), 3);
     assert.match(await section.innerText(), /無色、無臭/); assert.match(await section.innerText(), /一般條件下[\s\S]*相對不易反應/);
     assert.match(await section.innerText(), /不支持一般燃燒/);
@@ -92,7 +94,7 @@ test('2.3 nitrogen packaging: approved comparison, replay and content boundaries
         if (playing) { await button.click(); await page.clock.runFor(1600); }
         const boxes = await section.evaluate(root => {
           const boundary = root.querySelector('.lesson-body').getBoundingClientRect();
-          const nodes = root.querySelectorAll('h2,.dialogue,.nitrogen-compare,.nitrogen-example,.nitrogen-pack-view,.nitrogen-readout,.nitrogen-properties,.nitrogen-facts>div,.nitrogen-preservation-note,.nitrogen-flow-label');
+          const nodes = root.querySelectorAll('h2,.dialogue,.nitrogen-compare,.nitrogen-example,.nitrogen-pack-view,.nitrogen-readout,.nitrogen-properties,.nitrogen-facts>div,.nitrogen-flow-label');
           return { boundary: { left: boundary.left, right: boundary.right, width: boundary.width }, children: [...nodes].map(el => { const r = el.getBoundingClientRect(); return { className: el.className, left: r.left, right: r.right, width: r.width }; }) };
         });
         assert.ok(boxes.children.every(b => b.width > 0 && b.left >= boxes.boundary.left - 1 && b.right <= boxes.boundary.right + 1), `${screenWidth}: content stays in its column`);
@@ -111,18 +113,43 @@ test('2.3 nitrogen packaging: approved comparison, replay and content boundaries
     await touch.locator('.nitrogen-replay').tap(); await touch.clock.runFor(1700);
     assert.equal(await touch.locator('.nitrogen-compare').getAttribute('data-nitrogen-phase'), 'flushing');
     await touch.locator('.nitrogen-replay').tap(); assert.equal(await touch.locator('.nitrogen-compare').getAttribute('data-nitrogen-phase'), 'air');
-    await touch.emulateMedia({ reducedMotion: 'reduce' });
-    await touch.clock.runFor(100);
-    await touch.waitForFunction(() => document.querySelector('.nitrogen-compare').dataset.nitrogenState === 'complete');
+    await touch.emulateMedia({ reducedMotion: 'reduce' }); await touch.clock.runFor(100);
+    assert.equal(await touch.locator('.nitrogen-compare').getAttribute('data-nitrogen-state'), 'playing');
+    await touch.locator('.nitrogen-replay').tap();
+    assert.equal(await touch.locator('.nitrogen-compare').getAttribute('data-nitrogen-phase'), 'air');
+    await touch.clock.runFor(1500);
+    assert.equal(await touch.locator('.nitrogen-compare').getAttribute('data-nitrogen-phase'), 'flushing');
+    const still = await touch.locator('#nitrogen-oxygen-fill').evaluate(el => el.style.width);
+    await touch.clock.runFor(1000);
+    assert.equal(await touch.locator('#nitrogen-oxygen-fill').evaluate(el => el.style.width), still, 'reduced motion keeps a still image per stage');
+    assert.equal(await touch.locator('.nitrogen-flow>path').first().evaluate(el => getComputedStyle(el).animationName), 'none');
+    await touch.clock.runFor(4000);
     assert.equal(await touch.locator('.nitrogen-compare').getAttribute('data-nitrogen-state'), 'complete');
-    await touch.locator('.nitrogen-replay').tap(); assert.equal(await touch.locator('.nitrogen-compare').getAttribute('data-nitrogen-state'), 'complete');
     await touch.close();
+  });
+  await t.test('initial reduced motion and unavailable Image.decode still allow a visible replay', async () => {
+    const reducedPage = await browser.newPage({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 } });
+    await reducedPage.clock.install();
+    await reducedPage.addInitScript(() => { HTMLImageElement.prototype.decode = () => Promise.reject(new Error('decode unavailable')); });
+    await reducedPage.goto(url, { waitUntil: 'networkidle' });
+    const replay = reducedPage.locator('.nitrogen-replay');
+    assert.equal(await replay.isEnabled(), true, 'image decode does not disable playback');
+    await replay.click();
+    assert.equal(await reducedPage.locator('.nitrogen-compare').getAttribute('data-nitrogen-phase'), 'air');
+    assert.match(await reducedPage.locator('#nitrogen-oxygen-heading').innerText(), /21%/);
+    await reducedPage.clock.runFor(1600);
+    assert.equal(await reducedPage.locator('.nitrogen-compare').getAttribute('data-nitrogen-phase'), 'flushing');
+    assert.equal(await reducedPage.locator('.nitrogen-pack-open').evaluate(el => getComputedStyle(el).opacity), '1');
+    await reducedPage.locator('#s3').screenshot({ path: path.join(artifacts, 'reduced-motion-flushing.webp'), type: 'webp', quality: 85 });
+    await reducedPage.clock.runFor(5000);
+    assert.equal(await reducedPage.locator('.nitrogen-compare').getAttribute('data-nitrogen-phase'), 'sealed');
+    await reducedPage.close();
   });
   await t.test('static no-JavaScript presentation keeps both bags, comparison and properties', async () => {
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 320, height: 900 } });
     const staticPage = await context.newPage(); await staticPage.goto(url, { waitUntil: 'networkidle' });
     assert.equal(await staticPage.locator('#s3 .nitrogen-example').count(), 2);
-    for (const selector of ['.nitrogen-control', '.nitrogen-treated', '.nitrogen-facts', '.nitrogen-preservation-note']) assert.equal(await staticPage.locator('#s3 ' + selector).isVisible(), true);
+    for (const selector of ['.nitrogen-control', '.nitrogen-treated', '.nitrogen-facts']) assert.equal(await staticPage.locator('#s3 ' + selector).isVisible(), true);
     assert.equal(await staticPage.locator('.nitrogen-replay').isDisabled(), true);
     assert.equal(await staticPage.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
     await context.close();
