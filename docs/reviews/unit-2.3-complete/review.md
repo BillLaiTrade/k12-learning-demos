@@ -35,4 +35,12 @@
 - [二氧化碳桌機](section-6-1440.webp)／[手機](section-6-390.webp)
 - [小測桌機](section-7-1440.webp)／[手機](section-7-390.webp)
 
-部署與公開版本比對於推送後補記。完整初稿等待使用者逐區修訂，未新增第五至第七階段核可。
+## 公開部署與確認
+
+完整初稿提交`b5ff97caddf0a6df4a4460104d2f740a921032ef`的[Pages41041279265](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41041279265)及[Deploy41041278968](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41041278968)皆成功。公開HTML、兩組樣式、組成／杯子／製氣／小測腳本及單元入口共8檔HTTP200，SHA-256與本次提交一致，見[版本比對](public-hashes.json)。
+
+公開網址重跑完整頁瀏覽器檢查：**9項通過，0失敗／0跳過（含外層）**，見[公開檢查輸出](public-tests.log)。涵蓋七區與唯一小測、第一區預設比較及重設、兩種製氣重播／暫停／繼續／回全覽、離區停止、作答缺漏／錯誤／修改／正確／局部重設、五種寬度、停用JavaScript、觸控、減少動態及末區錨點。沒有把公開9項當成重新執行全部57項。
+
+[完整學習頁](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/)；[第一區](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/#s1)、[氮氣](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/#s3)、[氧氣](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/#s4)、[氬氣](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/#s5)、[二氧化碳](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/#s6)、[統整小測](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/#s7)。
+
+完整初稿等待使用者逐區修訂，未新增第五至第七階段核可。

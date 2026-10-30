@@ -1,0 +1,18 @@
+▶ 2.3 complete page: six teaching sections and one evidence-based quiz
+  ✔ all seven sections and routes exist, with natural dialogue and no retired experiment (121.736502ms)
+  ✔ default cup comparisons remain after preview and reset (110.14933ms)
+  ✔ both preparations replay, pause, resume and reset without hiding results (478.050602ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (193.264029ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (453.912947ms)
+  ✔ five widths show every diagram and section without horizontal overflow (2450.383913ms)
+  ✔ all teaching evidence is available without JavaScript (1081.97656ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (1327.682703ms)
+✔ 2.3 complete page: six teaching sections and one evidence-based quiz (7946.141169ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8304.594794
