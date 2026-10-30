@@ -2107,6 +2107,17 @@
       granite:{label:"樣本 5",realName:"花崗岩",property:"可見黑、白、粉紅等不同顆粒，外觀並不均一。",particles:"由多種礦物混合，各種礦物的組成固定，但種類和比例會因樣本不同而變。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"},
       alloy:{label:"樣本 7",realName:"合金",property:"金黃色並帶有金屬光澤，整體外觀均勻。",particles:"兩種金屬小粒子混合排列；不同合金的種類和比例不同。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"mixture",dest:"混合物展示櫃"}
     };
+    const specimenRetryHints={
+      copper:"比較圖中的小粒子，看看它們是否都屬於同一種類，還是由不同種類的小粒子結合而成。",
+      aluminum:"先看粒子組成，別只看金屬光澤或重量。圖中的小粒子有幾種類型？",
+      silver:"比較圖中的小粒子，看看它們是否都屬於同一種類。外觀相似或有光澤，都不是分類的唯一依據。",
+      sugar:"比較各組粒子的組成，看看它們是否相同。再想想，樣本裡是一種物質，還是不同物質混在一起？",
+      salt:"觀察晶體中兩種小粒子的排列，看看它們的數量比例是否固定，再比較這和不同物質混在一起有什麼不同。",
+      chalk:"比較每組小粒子的種類與數量，看看各組是否相同；不要只憑白色粉末的外觀判斷。",
+      air:"比較不同氣體粒子的組成，看看樣本中是否同時有不同種類的物質；看起來均勻不代表只有一種物質。",
+      granite:"觀察不同礦物的組成，看看各組小粒子的種類與數量是否相同，還是有不同成分混在一起。",
+      alloy:"別只看外觀是否均勻。觀察兩種金屬小粒子是混合排列，還是按固定比例形成相同的組成單位？"
+    };
     const specimenButtons=[...document.querySelectorAll(".scene-sample")];
     const sampleInfo=document.getElementById("sample-info");
     const sampleInfoTitle=document.getElementById("sample-info-title");
@@ -2124,11 +2135,12 @@
       specimenButtons.forEach(item=>{item.classList.toggle("is-selected",item===button);item.setAttribute("aria-pressed",String(item===button));});
       const data=specimenRules[button.dataset.sample];
       const key=button.dataset.sample;
+      const needsRetry=incorrectLocations.has(key);
       sampleInfo.hidden=false;sampleInfoTitle.textContent=sampleStatus.has(key)?data.realName:"已選取"+data.label;
       sampleClue.textContent=sampleStatus.has(key)?"":incorrectLocations.has(key)?"位置不符，請在手冊中查看線索後調整。":data.clue;
       sampleState.textContent=sampleStatus.has(key)?"目前位置："+data.dest:incorrectLocations.has(key)?"目前位置不符，請再參考手冊線索。":"先翻閱手冊，再選擇展示位置。";
       returnSampleButton.hidden=!sampleLocations.has(key);
-      workbenchFeedback.dataset.kind="";workbenchFeedback.textContent="讀完線索後，再選擇展示櫃中的分類位置。";
+      workbenchFeedback.dataset.kind=needsRetry?"wrong":"";workbenchFeedback.textContent=needsRetry?"位置不符。"+specimenRetryHints[key]:"讀完線索後，再選擇展示櫃中的分類位置。";
       const linkedPage=specimenButtons.indexOf(button);
       if(linkedPage>=0){showReaderPage(linkedPage);if(openManual&&!bookReader.open)bookReader.showModal();}
     };
@@ -2169,7 +2181,7 @@
         button.setAttribute("aria-label",data.label+"目前放在不符的位置，請重新分類");button.setAttribute("aria-pressed","false");
         if(selectedSpecimen===button){sampleInfoTitle.textContent="已選取"+data.label;sampleClue.textContent="位置不符，請在手冊中查看線索後調整。";}
         sampleState.textContent="位置不符，請再參考手冊線索。";workbenchFeedback.dataset.kind="wrong";
-        workbenchFeedback.textContent="這個位置和樣本資料不符，請再看看線索並重新分類。";
+        workbenchFeedback.textContent="位置不符。"+specimenRetryHints[key];
         document.getElementById("sort-progress").textContent="已分類 "+sampleStatus.size+" / "+specimenRulesCount+" 份樣本";
         return true;
       }
