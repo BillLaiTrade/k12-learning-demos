@@ -309,6 +309,8 @@ node --test --test-concurrency=1 tests/unit-4.2-filtration.test.cjs tests/unit-4
 
 ## 2.1 第二區：三態圖解比較表
 
+第四區固態總覽的表面順序另以 `CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.1-solid-overview.test.cjs` 檢查。由實際 SVG 座標核對 16–72 顆之間每步增減的下層完整、頂層連續、左右表面移除及既有粒子不跳位；另操作凝固、融化、昇華切換與取消，確認抵達才加入、切換延續數量及取消後 48 顆不受舊動畫影響。兩組子測試含外層共 3 項；`SOLID_OVERVIEW_CAPTURE_DIR` 可保存當次畫面。
+
 ```sh
 CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.1-states-table.test.cjs
 ```

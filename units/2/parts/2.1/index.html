@@ -1569,13 +1569,24 @@
       freezeDemo.querySelector("svg").setAttribute("aria-label",`${phaseStates[stateKey].title}，${phaseOverviewCount} 顆示意粒子${limit}`);
       phaseSolidOverview.dataset.particleCount=String(phaseOverviewCount);
     }
+    function selectSolidOverviewParticle(flow,delta){
+      // Keep the lower layers full and the exposed top layer contiguous.
+      const columns=12,row=Math.floor((phaseOverviewCount-(delta<0?1:0))/columns);
+      const layer=phaseOverviewParticles.slice(row*columns,(row+1)*columns);
+      const occupied=layer.some(particle=>particle.inOverview);
+      const candidates=layer.filter((particle,column)=>delta<0?particle.inOverview:
+        !particle.inOverview&&(!occupied||layer[column-1]?.inOverview||layer[column+1]?.inOverview));
+      const left=flow.slot.endsWith("left");
+      candidates.sort((a,b)=>left?a.overviewX-b.overviewX:b.overviewX-a.overviewX);
+      return candidates[0];
+    }
     function changePhaseOverviewPopulation(flow,delta){
       if((delta>0&&phaseOverviewCount>=phaseOverviewMaximum)||(delta<0&&phaseOverviewCount<=phaseOverviewMinimum))return false;
       const left=flow.slot.endsWith("left"),mobile=window.matchMedia("(max-width: 680px)").matches;
       const x=10+340*(left ? (mobile ? .18 : .25) : (mobile ? .82 : .75)),y=delta>0?16:117;
       let particle;
       if(delta>0){
-        particle=phaseOverviewParticles.find(item=>!item.inOverview);
+        particle=flow.stateKey==="solid"?selectSolidOverviewParticle(flow,delta):phaseOverviewParticles.find(item=>!item.inOverview);
         if(flow.stateKey==="solid"){particle.x=particle.overviewX;particle.y=particle.overviewY;}
         else{
           particle.x=x;particle.y=flow.stateKey==="liquid"?Math.max(40,117-Math.ceil((phaseOverviewCount+1)/16)*10)+3:y;
@@ -1584,7 +1595,7 @@
         particle.inOverview=true;particle.element.setAttribute("cx",particle.x.toFixed(2));particle.element.setAttribute("cy",particle.y.toFixed(2));
         freezeDemoParticles.append(particle.element);
       }else{
-        particle=phaseOverviewParticles.filter(item=>item.inOverview).reduce((nearest,item)=>Math.hypot(item.x-x,item.y-y)<Math.hypot(nearest.x-x,nearest.y-y)?item:nearest);
+        particle=flow.stateKey==="solid"?selectSolidOverviewParticle(flow,delta):phaseOverviewParticles.filter(item=>item.inOverview).reduce((nearest,item)=>Math.hypot(item.x-x,item.y-y)<Math.hypot(nearest.x-x,nearest.y-y)?item:nearest);
         particle.inOverview=false;particle.element.remove();
       }
       phaseOverviewCount+=delta;showPhaseOverviewCount(flow.stateKey);

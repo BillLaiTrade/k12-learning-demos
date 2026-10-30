@@ -1,0 +1,29 @@
+TAP version 13
+# Subtest: 2.1 solid overview grows and recedes along an intact surface
+    # Subtest: every intermediate count has full lower layers and a contiguous top surface
+    ok 1 - every intermediate count has full lower layers and a contiguous top surface
+      ---
+      duration_ms: 905.934035
+      type: 'test'
+      ...
+    # Subtest: UI arrivals, direction changes and cancellation preserve the population contract
+    ok 2 - UI arrivals, direction changes and cancellation preserve the population contract
+      ---
+      duration_ms: 10820.218008
+      type: 'test'
+      ...
+    1..2
+ok 1 - 2.1 solid overview grows and recedes along an intact surface
+  ---
+  duration_ms: 12957.118276
+  type: 'test'
+  ...
+1..1
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13369.971412
