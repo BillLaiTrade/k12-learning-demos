@@ -309,6 +309,21 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
           readable };
       });
       assert.deepEqual(order, {between:true,aligned:true,border:'0px',readable:true});
+      const estimate = await page.locator('.fireworks-body').evaluate(body => {
+        const view = body.querySelector('.fireworks-view').getBoundingClientRect();
+        const side = body.querySelector('.fireworks-sidebar').getBoundingClientRect();
+        const panel = body.querySelector('.fireworks-estimate-panel'), r = panel.getBoundingClientRect();
+        const items = [...panel.querySelectorAll('.fireworks-formula, .fireworks-input, #fireworks-check')].map(n => n.getBoundingClientRect());
+        const center = n => (n.top+n.bottom)/2;
+        return { direct: panel.parentElement === body, sidePanels: body.querySelectorAll('.fireworks-sidebar>.fireworks-panel').length,
+          full: Math.abs(r.left-Math.min(view.left,side.left)) < 1 && Math.abs(r.right-Math.max(view.right,side.right)) < 1,
+          below: r.top >= Math.max(view.bottom,side.bottom),
+          horizontal: Math.abs(center(items[0])-center(items[1])) < 1 && Math.abs(center(items[1])-center(items[2])) < 1,
+          vertical: items[0].bottom <= items[1].top && items[1].bottom <= items[2].top };
+      });
+      assert.equal(estimate.direct, true); assert.equal(estimate.sidePanels, 2);
+      assert.equal(estimate.full, true); assert.equal(estimate.below, true);
+      assert.equal(width === 390 ? estimate.vertical : estimate.horizontal, true, 'estimate form uses the available width');
       await page.locator('#unit-quiz').screenshot({path:`/tmp/unit32-stopwatch-${width}.png`});
     }
   });

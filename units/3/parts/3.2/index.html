@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="assets/sound-propagation.css?v=3">
   <link rel="stylesheet" href="assets/vacuum-lab.css?v=5">
   <link rel="stylesheet" href="assets/sound-speed.css?v=silent-arrival-20261029">
-  <link rel="stylesheet" href="assets/fireworks-quiz.css?v=between-events-20261030">
+  <link rel="stylesheet" href="assets/fireworks-quiz.css?v=full-width-estimate-20261030">
 </head>
 <body>
   <header class="shell masthead">
@@ -269,7 +269,8 @@
                   <div class="fireworks-event" id="fireworks-sound" data-reached="false"><span class="fireworks-event-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3V9Zm13-2a7 7 0 0 1 0 10m3-13a11 11 0 0 1 0 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>聽到爆炸聲</span></div>
                 </div>
               </section>
-              <section class="fireworks-panel" aria-labelledby="fireworks-estimate-title">
+            </div>
+            <section class="fireworks-panel fireworks-estimate-panel" aria-labelledby="fireworks-estimate-title">
                 <h3 id="fireworks-estimate-title">你的估算</h3>
                 <form class="fireworks-estimate" id="fireworks-answer-form" novalidate>
                   <p class="fireworks-formula">距離 ＝ 聲速 × 時間差</p>
@@ -277,8 +278,7 @@
                   <button class="action" id="fireworks-check" type="submit" disabled>核對距離</button>
                   <p class="fireworks-feedback" id="fireworks-feedback" role="status" aria-live="polite" hidden></p>
                 </form>
-              </section>
-            </div>
+            </section>
             <p class="fireworks-status" id="fireworks-status" role="status" aria-live="polite"></p>
           </div>
           <p class="fireworks-footnote">此處可忽略光的傳播時間；估算的是煙火爆炸點到觀察者的直線距離。</p>

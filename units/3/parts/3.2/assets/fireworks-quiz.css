@@ -41,8 +41,9 @@
 .fireworks-record .fireworks-event{min-width:0;font-size:.74rem;line-height:1.4;white-space:normal}
 .fireworks-time-arrow{color:#7a8f80;font-size:.8rem}
 .fireworks-record p{margin:0 0 4px;color:#64736b;font-size:.7rem;white-space:nowrap}
-.fireworks-estimate{padding:10px 12px}
-.fireworks-formula{margin:0 0 8px;padding:6px 5px;border-radius:8px;background:#fff5de;color:#3c594c;font-size:.85rem;font-weight:750;line-height:1.4;text-align:center;white-space:nowrap}
+.fireworks-estimate-panel{grid-column:1/-1;min-width:0}
+.fireworks-estimate{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,1.2fr) 120px;align-items:center;gap:12px;padding:14px}
+.fireworks-formula{margin:0;padding:10px 8px;border-radius:8px;background:#fff5de;color:#3c594c;font-size:.85rem;font-weight:750;line-height:1.4;text-align:center;white-space:nowrap}
 .fireworks-input{display:flex;align-items:center;gap:8px;padding:0 10px;border:1px solid #bfcfc5;border-radius:9px;background:#fff}
 .fireworks-input:focus-within{border-color:#176b53}
 .fireworks-input input{min-width:0;width:100%;height:43px;padding:6px 0;border:0;background:transparent;color:#203d32;font-size:.92rem}
@@ -51,8 +52,8 @@
 .fireworks-input input:disabled{background:transparent;opacity:.65}
 .fireworks-input input::placeholder{color:#8c9991}
 .fireworks-input span{flex:0 0 auto;color:#5e6d65;font-size:.85rem}
-.fireworks-estimate>.action{width:100%;margin-top:9px;min-height:42px;font-size:.9rem}
-.fireworks-feedback{margin:10px 0 0;padding:9px 10px;border-radius:8px;background:#fff3df;color:#80511e;font-size:.84rem;line-height:1.65}
+.fireworks-estimate>.action{width:100%;margin:0;min-height:42px;font-size:.9rem}
+.fireworks-feedback{grid-column:1/-1;margin:0;padding:9px 10px;border-radius:8px;background:#fff3df;color:#80511e;font-size:.84rem;line-height:1.65}
 .fireworks-feedback[data-state=correct]{background:#edf5e9;color:#245b40}
 .fireworks-feedback[hidden]{display:none}
 .fireworks-status{grid-column:1/-1;margin:0;color:#66786e;font-size:.82rem}
@@ -63,7 +64,7 @@
 @container fireworks (max-width:650px){
   .fireworks-body{grid-template-columns:minmax(0,1fr);padding:14px;gap:12px}
   .fireworks-sidebar{grid-template-columns:minmax(0,1fr);gap:10px}
-  .fireworks-sidebar>.fireworks-panel:last-child{grid-column:1/-1}
+  .fireworks-estimate{grid-template-columns:minmax(0,1fr)}
   .fireworks-quiz .quiz-head{padding:16px;gap:10px}
   .fireworks-quiz .quiz-head h2{font-size:1.4rem}
   .fireworks-controls .action{min-width:145px}
