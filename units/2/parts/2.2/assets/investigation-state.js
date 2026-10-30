@@ -55,7 +55,7 @@ export function concentrationEvidence(sample) {
 export function measurementHint(sample) {
   if(!sample)return '';
   const {liquid,solid}=measuredMasses(sample);
-  if(sample.phase==='dry-raw'||solid?.phase==='dry-raw')return '留下的固體還混著泥沙。蒸發之前，你有把泥沙濾掉嗎？';
+  if(sample.phase==='dry-raw'||solid?.phase==='dry-raw')return '留下的固體還混著泥沙。蒸發之前，你有把泥沙濾掉嗎？這份已蒸乾，可以另取一份再試。';
   if(liquid&&liquid.phase!=='filtered'){
     if(sample.water===0)return '蒸發前那筆稱量包含泥沙。你有在過濾後重新稱量濾液嗎？這份已蒸乾，可以另取一份再試。';
     return sample.phase==='filtered'?'過濾後，液體的重量還一樣嗎？你有重新稱量這份濾液嗎？':'這筆重量包含泥沙嗎？計算溶液濃度前，想想是否要先把泥沙分開。';
