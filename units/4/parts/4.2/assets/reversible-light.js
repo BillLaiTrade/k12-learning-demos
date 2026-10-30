@@ -36,8 +36,10 @@ function directionArrow(color) {
   [[points, '#202622'], [inset, color]].forEach(([vertices, fill], index) => {
     const geometry = new THREE.ShapeGeometry(new THREE.Shape(vertices));
     geometry.rotateX(Math.PI / 2);
+    // Beam tubes render in the transparent pass. Keep both arrow layers in
+    // that pass too, so their higher renderOrder closes the tip over the beam.
     const layer = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-      color: fill, side: THREE.DoubleSide, depthTest: false, depthWrite: false
+      color: fill, side: THREE.DoubleSide, transparent: true, opacity: 1, depthTest: false, depthWrite: false
     }));
     layer.renderOrder = 15 + index; layer.frustumCulled = false; arrow.add(layer);
   });
