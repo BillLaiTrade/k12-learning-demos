@@ -1,0 +1,37 @@
+[
+  {
+    "file": "units/2/parts/2.3/index.html",
+    "status": 200,
+    "sha256": "f425200df6dd4e913ca42f238b165080989e744062b2a8c1802c33a6061dc9af",
+    "expected": "f425200df6dd4e913ca42f238b165080989e744062b2a8c1802c33a6061dc9af",
+    "match": true
+  },
+  {
+    "file": "units/2/parts/2.3/assets/nitrogen.css",
+    "status": 200,
+    "sha256": "b851bc3e75bbff7afe081e0a16ed77a9644347dd3896604c928744bb00166520",
+    "expected": "b851bc3e75bbff7afe081e0a16ed77a9644347dd3896604c928744bb00166520",
+    "match": true
+  },
+  {
+    "file": "units/2/parts/2.3/assets/nitrogen.mjs",
+    "status": 200,
+    "sha256": "c7330d63603de74e534487ee9024a52596349c5cc47798d74090933348f82a1c",
+    "expected": "c7330d63603de74e534487ee9024a52596349c5cc47798d74090933348f82a1c",
+    "match": true
+  },
+  {
+    "file": "units/2/parts/2.3/assets/nitrogen-workbench.webp",
+    "status": 200,
+    "sha256": "df17e4c5d37d68c38b9f080286561a6c4cf2704d1d5ea5331694215146e919bc",
+    "expected": "df17e4c5d37d68c38b9f080286561a6c4cf2704d1d5ea5331694215146e919bc",
+    "match": true
+  },
+  {
+    "file": "units/2/parts/2.3/assets/nitrogen-pack-sprite.webp",
+    "status": 200,
+    "sha256": "1b7771f52b9c46668ae4968ade34a26efd5c30758933feed23e99659c536eceb",
+    "expected": "1b7771f52b9c46668ae4968ade34a26efd5c30758933feed23e99659c536eceb",
+    "match": true
+  }
+]

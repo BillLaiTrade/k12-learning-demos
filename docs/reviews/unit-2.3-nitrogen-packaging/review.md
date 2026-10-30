@@ -29,3 +29,13 @@
 [最終本機輸出](browser-tests.log)：第三區8項與完整頁9項，共17項通過（含外層），0失敗／0跳過。涵蓋初始比較、透明氣流與氧氣降低／封口、左側影像不變、重點不疊播、Escape／背景／離區暫停、觸控與減少動態、七種寬度內容欄邊界、無JavaScript，以及原杯子、氧／二氧化碳重播與唯一小測回歸。語法與`git diff --check`通過。
 
 另核對s1／s2／s4／s5／s6／s7原始區塊與本次修改前相同，只有第三區、載入入口與來源說明更新。維持第4階段逐區修訂，非整份教材外部驗收。
+
+## 公開確認
+
+實作`26c9e222d169038c7f1d427823dea85d4430ecfc`已推送main。[Pages41066320124](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41066320124)與[Deploy41066320793](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41066320793)皆成功。
+
+部署切換期間曾收到目錄頁舊快取及一次503，未將其當作本次成果；待公開HTML／CSS／JS／兩張素材共五檔HTTP200、SHA-256與實作一致後，以明確index.html網址完成驗證，見[版本比對](public-hashes.json)。
+
+[公開第三區8項通過](public-tests.log)（含外層），0失敗／0跳過。包含兩袋初始比較、直接點包重播、原有空氣排出、氧氣降低及封口、左側影像固定、重播不疊時序、背景／離區／Escape暫停、手機／鍵盤／減少動態、七種寬度內容欄邊界與無JavaScript閱讀。已目視檢視[公開桌機](public-desktop.webp)與[公開手機](public-mobile.webp)。
+
+[直接檢視第三區](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/index.html?v=26c9e222#s3)。
