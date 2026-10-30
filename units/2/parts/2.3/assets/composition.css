@@ -18,7 +18,6 @@ button.air-share:hover:not(:disabled),button.air-share[aria-pressed=true]{backgr
 .air-share:disabled{opacity:1;cursor:default}
 .air-share:focus-visible{outline:2px solid #b98737;outline-offset:1px;z-index:2}
 [data-arrangement=mixed] .air-share{transform:translate(calc(var(--mix-x) * (100% + var(--air-gap))),calc(var(--mix-y) * (100% + var(--air-gap))))}
-.air-grid-figure figcaption{margin-top:12px;color:var(--muted);font-size:.69rem;line-height:1.7;text-align:center}
 .air-legend{display:grid;gap:8px;min-width:0}
 .air-legend button:not(.air-show-all){display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:2px 7px;padding:10px 11px;text-align:left;border-color:#d3ddcc;background:#fffefa;color:var(--ink);font-size:.84rem}
 .air-legend button[aria-pressed=true]:not(.air-show-all){background:#e8efdf;border-color:#648a70;box-shadow:inset 0 0 0 1px #648a70}
