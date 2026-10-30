@@ -15,6 +15,8 @@ const SOURCE_PAPERS = {
   dark: { x: 431 / W, top: 495 / H, angle: .173, sx: .85, sy: .68 }
 };
 const MOUNT_MS = matchMedia('(prefers-reduced-motion: reduce)').matches ? 200 : 900;
+const START_HINT = '點選紙張或名稱，觀察色帶分離。';
+const PAUSE_HINT = '已暫停，點濾紙繼續觀察。';
 let sample = 'green', mode = 'ready', pos = { ...MOUNT }, seconds = 0, mountProgress = 0;
 let raf = null, last = null;
 const background = new Image();
@@ -32,6 +34,11 @@ for (let i = 0; i < 11500; i++) {
 }
 function stop() { if (raf !== null) cancelAnimationFrame(raf); raf = null; last = null; }
 function announce(message) { status.textContent = message; }
+function updateGuidance() {
+  const message = mode === 'ready' ? START_HINT : mode === 'paused' ? PAUSE_HINT : '';
+  status.classList.toggle('is-visible', !!message);
+  if (message && status.textContent !== message) status.textContent = message;
+}
 // A deterministic, mottled pigment stamp gives fiber-like feathering instead
 // of identical geometric ellipses. It is cached and never changes with time.
 const pigmentCache = new Map();
@@ -169,6 +176,7 @@ function draw() {
   lab.dataset.front = state.front.toFixed(5); lab.dataset.baseline = state.baseline.toFixed(5);
   lab.dataset.bottom = state.bottom.toFixed(5); lab.dataset.liquid = String(LIQUID);
   lab.dataset.bandYs = JSON.stringify(installed ? state.bands.map(b => b.y) : []);
+  updateGuidance();
 }
 function tick(timestamp) {
   if (mode === 'mounting') {
@@ -205,7 +213,7 @@ function begin(top = MOUNT.top) {
 }
 function fresh() {
   stop(); pos = { ...MOUNT }; seconds = 0; mountProgress = 0; mode = 'ready'; draw();
-  announce('點選盤中已點墨的濾紙，掛上夾具觀察。');
+  announce(START_HINT);
 }
 function selectPaper(key) {
   stop();sample = key;seconds = 0;mountProgress = 0;pos = { ...SOURCE_PAPERS[key] };mode = 'mounting';
@@ -213,7 +221,7 @@ function selectPaper(key) {
   draw();raf = requestAnimationFrame(tick);
 }
 function activatePaper() {
-  if (mode === 'running') { stop(); mode = 'paused'; announce('已暫停實驗。'); }
+  if (mode === 'running') { stop(); mode = 'paused'; announce(PAUSE_HINT); }
   else if (mode === 'paused') { mode = 'running'; raf = requestAnimationFrame(tick); announce('繼續觀察。'); }
   else if (mode === 'complete') { selectPaper(sample); return; }
   draw();

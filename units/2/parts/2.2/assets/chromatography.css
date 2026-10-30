@@ -23,5 +23,6 @@
 .chrom-reset svg { width:23px; height:23px; }
 .chrom-lab button:disabled { pointer-events:none; }
 .chrom-status { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.chrom-status.is-visible { position:static; width:auto; height:auto; margin:0 1px 12px; overflow:visible; clip-path:none; white-space:normal; color:#62796b; font-size:.78rem; line-height:1.6; }
 .chrom-status.chrom-error { position:static; width:auto; height:auto; padding:12px; margin:0; overflow:visible; clip-path:none; white-space:normal; }
 @media(max-width:680px) { .chrom-paper { min-width:28px; } .chrom-reset { right:8px; bottom:8px; width:34px; height:34px; } }

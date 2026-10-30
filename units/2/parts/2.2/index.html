@@ -126,7 +126,7 @@
     @media(max-width:680px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:16px; padding-top:20px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .goal-choice { min-width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
-  <link rel="stylesheet" href="assets/chromatography.css?v=source-label-click-1">
+  <link rel="stylesheet" href="assets/chromatography.css?v=state-guidance-1">
   <link rel="stylesheet" href="assets/concentration.css?v=boundary-feedback-1">
   <link rel="stylesheet" href="assets/ppm-scale.css?v=camera-toggle-1">
   <link rel="stylesheet" href="assets/investigation.css?v=manual-records-1">
@@ -229,7 +229,7 @@
             <button class="chrom-clip" id="chrom-clip" type="button" aria-label="鬆開夾具，重新選擇已點墨的濾紙" disabled></button>
             <button class="chrom-reset" id="chrom-reset" type="button" aria-label="重新實驗" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></button>
           </div>
-          <p class="chrom-status" id="chrom-status" role="status" aria-live="polite">點選盤中已點墨的濾紙，掛上夾具觀察。</p>
+          <p class="chrom-status is-visible" id="chrom-status" role="status" aria-live="polite">點選紙張或名稱，觀察色帶分離。</p>
           <div class="filter-principle"><strong>一種顏色，也可能含有不同色素</strong>溶劑沿著濾紙上升時，會帶動墨水中的色素。不同色素移動的速度不同，因此逐漸分成不同色帶。</div>
           <div class="note-box">不同墨水的分離結果可能不同；本例的色帶顏色、數量與位置為特定樣本的示意。</div>
         </div>
@@ -355,7 +355,7 @@
   <script type="importmap">{"imports":{"three":"../../../4/parts/4.1/assets/vendor/three/build/three.module.js"}}</script>
   <script type="module" src="assets/filtration.js?v=result-observation-3"></script>
   <script type="module" src="assets/evaporation-animation.js?v=full-replay-1"></script>
-  <script type="module" src="assets/chromatography.js?v=source-label-click-1"></script>
+  <script type="module" src="assets/chromatography.js?v=state-guidance-1"></script>
   <script type="module" src="assets/concentration.js?v=boundary-feedback-1"></script>
   <script type="module" src="assets/ppm-pool.js?v=camera-toggle-1"></script>
   <script type="module" src="assets/investigation.js?v=dish-to-scale-1"></script>
