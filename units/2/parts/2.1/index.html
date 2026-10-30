@@ -264,13 +264,6 @@
     .phase-detail-kicker { margin:0 0 3px; color:#176b53; font-size:.73rem; font-weight:800; letter-spacing:.04em; }
     .phase-detail h3 { margin:0; color:#244b3d; font-size:1.08rem; }
     .phase-detail-copy { margin:0; color:#52635a; font-size:.87rem; }
-    .phase-detail-steps { display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-top:8px; }
-    .phase-detail-steps span { padding:5px 8px; border:1px solid #d5e0d7; border-radius:8px; background:#fff; color:#41574c; font-size:.76rem; }
-    .phase-detail-steps button { padding:6px 9px; border:1px solid var(--phase-route-color); border-radius:8px; background:#fffefa; color:var(--phase-route-color); cursor:pointer; font:inherit; font-size:.76rem; text-align:left; }
-    .phase-detail-steps button:hover,.phase-detail-steps button:focus-visible { outline:3px solid #176b5330; }
-    .phase-detail-steps button[data-energy="heat"] { --phase-route-color:#bd634b; }
-    .phase-detail-steps button[data-energy="cool"] { --phase-route-color:#43839a; }
-    .phase-detail-steps b { color:#176b53; font-size:1rem; }
     .freeze-demo { margin-top:10px; padding:10px 12px; border:1px solid #cbded9; border-radius:11px; background:#fffefa; }
     .freeze-demo[hidden] { display:none; }
     .freeze-demo-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:7px; color:#31594b; font-size:.8rem; font-weight:800; }
@@ -901,7 +894,7 @@
             <p class="phase-diagram-hint">箭頭表示物態變化方向；點選狀態卡或箭頭／名稱查看詳細說明。</p>
             <section class="phase-detail" id="phase-detail" aria-live="polite" aria-atomic="true" aria-label="物態轉變說明" hidden>
               <div id="phase-detail-intro"><p class="phase-detail-kicker" id="phase-detail-kicker"></p><h3 id="phase-detail-title"></h3></div>
-              <div id="phase-detail-body"><p class="phase-detail-copy" id="phase-detail-copy"></p><div class="phase-detail-steps" id="phase-detail-steps" hidden></div></div>
+              <div id="phase-detail-body"><p class="phase-detail-copy" id="phase-detail-copy"></p></div>
               <div class="phase-solid-overview" id="phase-solid-overview" hidden>
                 <div class="phase-solid-overview-intro"><p class="phase-detail-kicker" id="phase-overview-kicker">固態・粒子排列與運動</p><h3 id="phase-overview-title">冰｜固態</h3><p id="phase-overview-copy">水分子緊密、有規律地排列，在固定位置附近微微振動，因此冰有固定形狀。</p></div>
                 <div class="phase-solid-stage">
@@ -1536,12 +1529,12 @@
     }),{passive:true});
 
     const phaseProcesses={
-      melt:{title:"融化｜冰變成水",energy:"吸熱｜固態變液態",copy:"冰吸收熱量時，水分子的振動會增強；原本在固定位置附近振動的分子逐漸能互相移動。融化後，分子仍彼此靠近，但可以滑動，因此水能流動。",steps:["冰（固態）","吸收熱量","水（液態）"]},
-      freeze:{title:"凝固｜水變成冰",energy:"放熱｜液態變固態",copy:"水冷卻時，粒子仍在移動；靠近冷端的小區域先形成有序晶核，之後冰晶逐步向周圍生長。凝固後，粒子仍會在固定位置附近微微振動。水仍是水，這是物態變化。",steps:["水（液態）","放出熱量","冰（固態）"]},
-      vaporization:{title:"汽化｜水變成水蒸氣",energy:"吸熱｜液態變氣態",copy:"水吸收熱量後，分子運動加快；部分分子離開液面，或液體內形成氣泡，成為水蒸氣。氣態分子彼此距離較遠，能在空間中移動。汽化包含蒸發與沸騰。",steps:["水（液態）","吸收熱量","水蒸氣（氣態）"]},
-      condensation:{title:"凝結｜水蒸氣變成水",energy:"放熱｜氣態變液態",copy:"水蒸氣放出熱量後，分子運動減慢並靠近，形成液態水。水蒸氣遇到較冷表面形成小水滴，就是凝結。",steps:["水蒸氣（氣態）","放出熱量","水滴（液態）"]},
-      sublimation:{title:"昇華｜冰直接變成水蒸氣",energy:"吸熱｜固態直接變氣態",copy:"冰吸收熱量後，部分水分子直接脫離固態排列，成為彼此距離較遠、可自由移動的水蒸氣分子，中間不經過液態。",steps:["冰（固態）","吸收熱量","水蒸氣（氣態）"]},
-      deposition:{title:"凝華｜水蒸氣直接變成冰",energy:"放熱｜氣態直接變固態",copy:"水蒸氣放出熱量後，分子運動減慢並直接排列成固態結構，中間不經過液態。寒冷表面形成霜，是常見例子。",steps:["水蒸氣（氣態）","放出熱量","霜（固態）"]}
+      melt:{title:"融化｜冰變成水",energy:"吸熱｜固態變液態",copy:"冰吸收熱量時，水分子的振動會增強；原本在固定位置附近振動的分子逐漸能互相移動。融化後，分子仍彼此靠近，但可以滑動，因此水能流動。"},
+      freeze:{title:"凝固｜水變成冰",energy:"放熱｜液態變固態",copy:"水冷卻時，粒子仍在移動；靠近冷端的小區域先形成有序晶核，之後冰晶逐步向周圍生長。凝固後，粒子仍會在固定位置附近微微振動。水仍是水，這是物態變化。"},
+      vaporization:{title:"汽化｜水變成水蒸氣",energy:"吸熱｜液態變氣態",copy:"水吸收熱量後，分子運動加快；部分分子離開液面，或液體內形成氣泡，成為水蒸氣。氣態分子彼此距離較遠，能在空間中移動。汽化包含蒸發與沸騰。"},
+      condensation:{title:"凝結｜水蒸氣變成水",energy:"放熱｜氣態變液態",copy:"水蒸氣放出熱量後，分子運動減慢並靠近，形成液態水。水蒸氣遇到較冷表面形成小水滴，就是凝結。"},
+      sublimation:{title:"昇華｜冰直接變成水蒸氣",energy:"吸熱｜固態直接變氣態",copy:"冰吸收熱量後，部分水分子直接脫離固態排列，成為彼此距離較遠、可自由移動的水蒸氣分子，中間不經過液態。"},
+      deposition:{title:"凝華｜水蒸氣直接變成冰",energy:"放熱｜氣態直接變固態",copy:"水蒸氣放出熱量後，分子運動減慢並直接排列成固態結構，中間不經過液態。寒冷表面形成霜，是常見例子。"}
     };
     const phaseStates={
       solid:{title:"冰｜固態",kicker:"固態・粒子排列與運動",copy:"冰中的水分子彼此靠近，排列較有規律；每個分子在固定位置附近持續小幅振動。吸熱時，冰會融化成水或直接昇華成水蒸氣；放熱時，水會凝固成冰，水蒸氣也能直接凝華成冰。",paths:[["melt","融化：冰 → 水｜吸熱"],["freeze","凝固：水 → 冰｜放熱"],["sublimation","昇華：冰 → 水蒸氣｜吸熱"],["deposition","凝華：水蒸氣 → 冰｜放熱"]]},
@@ -1609,7 +1602,7 @@
       });
     }
     addContinuousPhaseTravelers();
-    const phaseSteps=document.getElementById("phase-detail-steps"),phaseDetail=document.getElementById("phase-detail"),phaseSolidOverview=document.getElementById("phase-solid-overview"),phaseDemoIce=document.getElementById("phase-demo-ice"),phaseDemoIceClip=document.querySelector("#phase-demo-ice-clip path");
+    const phaseDetail=document.getElementById("phase-detail"),phaseSolidOverview=document.getElementById("phase-solid-overview"),phaseDemoIce=document.getElementById("phase-demo-ice"),phaseDemoIceClip=document.querySelector("#phase-demo-ice-clip path");
     const phaseSolidFlowParticles=document.getElementById("phase-solid-flow-particles");
     const freezeDemo=document.getElementById("freeze-demo"),freezeDemoParticles=document.getElementById("freeze-demo-particles"),freezeParticleAnimations=[];
     const freezeParticleLayout=Array.from({length:48},(_,index)=>{
@@ -2072,7 +2065,6 @@
       phaseDemoFrame=requestAnimationFrame(now=>animatePhaseTransition(now,runId));
     }
     document.getElementById("freeze-demo-replay").addEventListener("click",()=>["solid","liquid","gas"].includes(activePhaseProcess)?playPhaseStateOverview(phaseDetail.dataset.overviewState||"solid"):activePhaseProcess==="freeze"?playFreezeDemo():playPhaseTransition(activePhaseProcess));
-    function resetPhaseSteps(){phaseSteps.replaceChildren();phaseSteps.hidden=true;}
     function selectPhaseState(key){
       const state=phaseStates[key];
       phaseDetail.hidden=false;
@@ -2093,7 +2085,6 @@
       document.getElementById("phase-detail-kicker").textContent=state.kicker;
       document.getElementById("phase-detail-title").textContent=state.title;
       document.getElementById("phase-detail-copy").textContent=state.copy;
-      resetPhaseSteps();
       playPhaseStateOverview(key);
     }
     function selectPhaseProcess(key,fromStateOverview=false){
@@ -2115,9 +2106,6 @@
       document.getElementById("phase-detail-kicker").textContent=process.energy;
       document.getElementById("phase-detail-title").textContent=process.title;
       document.getElementById("phase-detail-copy").textContent=process.copy;
-      resetPhaseSteps();
-      process.steps.forEach((step,index)=>{const item=document.createElement("span");item.textContent=step;phaseSteps.append(item);if(index===1){const arrow=document.createElement("b");arrow.setAttribute("aria-hidden","true");arrow.textContent="→";phaseSteps.append(arrow);}});
-      phaseSteps.hidden=false;
       if(fromStateOverview){playStateEdgeFlow(key,phaseDetail.dataset.overviewState);return;}
       if(key==="freeze")playFreezeDemo();else playPhaseTransition(key);
       requestAnimationFrame(()=>freezeDemo.scrollIntoView({behavior:"smooth",block:"center"}));
