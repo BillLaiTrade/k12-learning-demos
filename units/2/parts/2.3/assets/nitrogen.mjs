@@ -6,7 +6,6 @@ const note = panel.querySelector('#nitrogen-oxygen-note');
 const fill = panel.querySelector('#nitrogen-oxygen-fill');
 const track = panel.querySelector('.nitrogen-oxygen-qualitative');
 const status = panel.querySelector('.nitrogen-playback-status');
-const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const duration = 5100;
 let state = 'complete', elapsed = duration, startedAt = 0, frame = 0, lastPhase = 'sealed';
 function cancel() { cancelAnimationFrame(frame); frame = 0; }
@@ -14,9 +13,9 @@ function render() {
   const phase = elapsed < 900 ? 'air' : elapsed < 4200 ? 'flushing' : elapsed < duration ? 'sealing' : 'sealed';
   panel.dataset.nitrogenState = state;
   panel.dataset.nitrogenPhase = phase;
-  const progress = reduced.matches
-    ? (phase === 'air' ? 0 : phase === 'flushing' ? 0.5 : 1)
-    : Math.min(1, Math.max(0, (elapsed - 900) / 3300));
+  // This essential comparison changes continuously during an explicit replay,
+  // including reduced motion; CSS suppresses decorative arrows and image fades.
+  const progress = Math.min(1, Math.max(0, (elapsed - 900) / 3300));
   // Only the air reference is quantitative. The final short fill is a qualitative drawing,
   // not a claimed residual-oxygen percentage, process rate or measured preservation result.
   fill.style.width = `${21 - 15 * progress}%`;
@@ -54,11 +53,6 @@ if ('IntersectionObserver' in window) {
   new IntersectionObserver(entries => { if (!entries[0].isIntersecting) pause(); }).observe(button);
 }
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
-// A deliberate replay still shows distinct stages with reduced motion; only smooth
-// interpolation and decorative motion are suppressed, so clicking has visible feedback.
-const motionChanged = () => render();
-if (reduced.addEventListener) reduced.addEventListener('change', motionChanged);
-else if (reduced.addListener) reduced.addListener(motionChanged);
 // CSS loads the visual assets independently. Image.decode support or a transient decode
 // failure must not leave this otherwise functional interaction permanently disabled.
 button.disabled = false;

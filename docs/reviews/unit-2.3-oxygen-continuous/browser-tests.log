@@ -1,0 +1,19 @@
+▶ 2.3 nitrogen packaging: approved comparison, replay and content boundaries
+  ✔ both comparison results and properties are visible before interaction (391.72728ms)
+  ✔ direct replay shows mixed-air exit, declining oxygen and resealing with a fixed reference (2419.326205ms)
+  ✔ oxygen visibly shrinks throughout flushing in both motion preferences (2901.184067ms)
+  ✔ repeated clicks replace playback instead of stacking timelines (2466.748722ms)
+  ✔ escape, background and leaving the scene pause without automatic resumption (1702.255509ms)
+  ✔ all elements stay inside the content column at seven widths, in both replay states (13522.456337ms)
+  ✔ mobile touch and reduced motion retain default knowledge and direct replay (3208.666246ms)
+  ✔ initial reduced motion and unavailable Image.decode still allow a visible replay (2525.302511ms)
+  ✔ static no-JavaScript presentation keeps both bags, comparison and properties (938.397988ms)
+✔ 2.3 nitrogen packaging: approved comparison, replay and content boundaries (31666.668073ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 32052.320008

@@ -389,7 +389,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 NITROGEN_ARTIFACT_DIR=/tmp/unit23-nitrogen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-full node --test --test-reporter=spec tests/unit-2.3-nitrogen.test.cjs tests/unit-2.3-full.test.cjs
 ```
 
-第三區8項（含主項）：預設兩袋比較與性質、直接點右包重播充氮排氣與封口、氧氣短條與透明流向、左側影像SHA-256固定、重播不疊時序、Escape／背景／離區暫停、鍵盤／觸控／減少動態、無JavaScript，以及七種寬度初始／播放中的右側內容欄邊界。`NITROGEN_URL`可指定公開網址，公開Chromium使用繼承的HTTPS代理；`NITROGEN_ARTIFACT_DIR`指定截圖目錄，預設`/tmp/unit23-nitrogen`避免覆寫歷史證據。
+第三區10項（含主項）：預設兩袋比較與性質、直接點右包重播充氮排氣與封口、氧氣短條與透明流向、左側影像SHA-256固定、重播不疊時序、Escape／背景／離區暫停、鍵盤／觸控／減少動態、無JavaScript，以及七種寬度初始／播放中的右側內容欄邊界。`NITROGEN_URL`可指定公開網址，公開Chromium使用繼承的HTTPS代理；`NITROGEN_ARTIFACT_DIR`指定截圖目錄，預設`/tmp/unit23-nitrogen`避免覆寫歷史證據。另以一般／減少動態兩種偏好，每200ms檢查氧氣條的實際像素寬度連續下降，封口時不再跳短；數據存`oxygen-progression.json`。
 
 ### 3.3第二區雙喇叭比較
 

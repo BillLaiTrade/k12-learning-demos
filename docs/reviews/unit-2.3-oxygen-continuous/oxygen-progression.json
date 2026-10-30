@@ -1,0 +1,166 @@
+{
+  "no-preference": [
+    {
+      "percent": 21,
+      "pixels": 54.796875,
+      "track": 261
+    },
+    {
+      "percent": 20.1364,
+      "pixels": 52.546875,
+      "track": 261
+    },
+    {
+      "percent": 19.1909,
+      "pixels": 50.078125,
+      "track": 261
+    },
+    {
+      "percent": 18.3182,
+      "pixels": 47.796875,
+      "track": 261
+    },
+    {
+      "percent": 17.3727,
+      "pixels": 45.328125,
+      "track": 261
+    },
+    {
+      "percent": 16.5,
+      "pixels": 43.0625,
+      "track": 261
+    },
+    {
+      "percent": 15.5545,
+      "pixels": 40.59375,
+      "track": 261
+    },
+    {
+      "percent": 14.6818,
+      "pixels": 38.3125,
+      "track": 261
+    },
+    {
+      "percent": 13.7364,
+      "pixels": 35.84375,
+      "track": 261
+    },
+    {
+      "percent": 12.8636,
+      "pixels": 33.5625,
+      "track": 261
+    },
+    {
+      "percent": 11.9182,
+      "pixels": 31.09375,
+      "track": 261
+    },
+    {
+      "percent": 11.0455,
+      "pixels": 28.828125,
+      "track": 261
+    },
+    {
+      "percent": 10.1,
+      "pixels": 26.359375,
+      "track": 261
+    },
+    {
+      "percent": 9.22727,
+      "pixels": 24.078125,
+      "track": 261
+    },
+    {
+      "percent": 8.28182,
+      "pixels": 21.609375,
+      "track": 261
+    },
+    {
+      "percent": 7.40909,
+      "pixels": 19.328125,
+      "track": 261
+    }
+  ],
+  "reduce": [
+    {
+      "percent": 21,
+      "pixels": 54.796875,
+      "track": 261
+    },
+    {
+      "percent": 20.1455,
+      "pixels": 52.578125,
+      "track": 261
+    },
+    {
+      "percent": 19.2,
+      "pixels": 50.109375,
+      "track": 261
+    },
+    {
+      "percent": 18.3273,
+      "pixels": 47.828125,
+      "track": 261
+    },
+    {
+      "percent": 17.3818,
+      "pixels": 45.359375,
+      "track": 261
+    },
+    {
+      "percent": 16.5091,
+      "pixels": 43.078125,
+      "track": 261
+    },
+    {
+      "percent": 15.5636,
+      "pixels": 40.609375,
+      "track": 261
+    },
+    {
+      "percent": 14.6909,
+      "pixels": 38.328125,
+      "track": 261
+    },
+    {
+      "percent": 13.7455,
+      "pixels": 35.875,
+      "track": 261
+    },
+    {
+      "percent": 12.8727,
+      "pixels": 33.59375,
+      "track": 261
+    },
+    {
+      "percent": 11.9273,
+      "pixels": 31.125,
+      "track": 261
+    },
+    {
+      "percent": 11.0545,
+      "pixels": 28.84375,
+      "track": 261
+    },
+    {
+      "percent": 10.1091,
+      "pixels": 26.375,
+      "track": 261
+    },
+    {
+      "percent": 9.23636,
+      "pixels": 24.09375,
+      "track": 261
+    },
+    {
+      "percent": 8.29091,
+      "pixels": 21.625,
+      "track": 261
+    },
+    {
+      "percent": 7.41818,
+      "pixels": 19.359375,
+      "track": 261
+    }
+  ]
+}

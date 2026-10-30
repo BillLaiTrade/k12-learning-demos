@@ -1,7 +1,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { spawn } = require('node:child_process');
-const { mkdirSync } = require('node:fs');
+const { mkdirSync, writeFileSync } = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
 const { chromium } = require('playwright');
@@ -64,6 +64,36 @@ test('2.3 nitrogen packaging: approved comparison, replay and content boundaries
     assert.match(await section.locator('#nitrogen-oxygen-note').innerText(), /比例因製程而異/);
     const finalWidth = await width(); await page.clock.runFor(8000); assert.equal(await width(), finalWidth, 'no running animation after completion');
   });
+  await t.test('oxygen visibly shrinks throughout flushing in both motion preferences', async () => {
+    const traces = {};
+    const measure = () => section.locator('#nitrogen-oxygen-fill').evaluate(el => ({
+      percent: parseFloat(el.style.width), pixels: el.getBoundingClientRect().width,
+      track: el.parentElement.getBoundingClientRect().width
+    }));
+    for (const preference of ['no-preference', 'reduce']) {
+      await page.emulateMedia({ reducedMotion: preference });
+      await button.click(); await page.clock.runFor(900);
+      const samples = [await measure()];
+      for (let step = 0; step < 15; step++) {
+        await page.clock.runFor(200); samples.push(await measure());
+      }
+      traces[preference] = samples;
+      for (let i = 1; i < samples.length; i++) {
+        const before = samples[i - 1], after = samples[i];
+        assert.ok(after.percent < before.percent, `${preference}: every interval decreases`);
+        assert.ok(before.percent - after.percent < 1.1, `${preference}: no jump to a fixed short bar`);
+        assert.ok(after.pixels < before.pixels, `${preference}: rendered length decreases`);
+        assert.ok(Math.abs(after.pixels / after.track * 100 - after.percent) < 0.1, 'rendered width matches progression');
+      }
+      await page.clock.runFor(350);
+      assert.equal(await phase(), 'sealing');
+      assert.equal(await width(), 6);
+      const final = await measure(); await page.clock.runFor(1000);
+      assert.equal((await measure()).pixels, final.pixels, 'sealing does not jump to another length');
+    }
+    writeFileSync(path.join(artifacts, 'oxygen-progression.json'), JSON.stringify(traces, null, 2));
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+  });
   await t.test('repeated clicks replace playback instead of stacking timelines', async () => {
     await button.click(); await page.clock.runFor(3000); const later = await width();
     await button.click(); assert.equal(await phase(), 'air'); assert.equal(await width(), 21);
@@ -119,9 +149,9 @@ test('2.3 nitrogen packaging: approved comparison, replay and content boundaries
     assert.equal(await touch.locator('.nitrogen-compare').getAttribute('data-nitrogen-phase'), 'air');
     await touch.clock.runFor(1500);
     assert.equal(await touch.locator('.nitrogen-compare').getAttribute('data-nitrogen-phase'), 'flushing');
-    const still = await touch.locator('#nitrogen-oxygen-fill').evaluate(el => el.style.width);
+    const earlier = await touch.locator('#nitrogen-oxygen-fill').evaluate(el => parseFloat(el.style.width));
     await touch.clock.runFor(1000);
-    assert.equal(await touch.locator('#nitrogen-oxygen-fill').evaluate(el => el.style.width), still, 'reduced motion keeps a still image per stage');
+    assert.ok(await touch.locator('#nitrogen-oxygen-fill').evaluate(el => parseFloat(el.style.width)) < earlier, 'manual replay retains continuous oxygen change with reduced motion');
     assert.equal(await touch.locator('.nitrogen-flow>path').first().evaluate(el => getComputedStyle(el).animationName), 'none');
     await touch.clock.runFor(4000);
     assert.equal(await touch.locator('.nitrogen-compare').getAttribute('data-nitrogen-state'), 'complete');
