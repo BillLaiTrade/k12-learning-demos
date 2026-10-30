@@ -1,4 +1,4 @@
-import { stopOnLeave } from './lesson-playback.mjs?v=1';
+import { stopOnLeave } from './lesson-playback.mjs?v=2';
 
 // 定性鐘罩實驗：控制空氣量，聲源振動與空氣量分開處理。
 const lab = document.querySelector('#vacuum-lab');

@@ -1,7 +1,7 @@
 import { createChallenge, checkEstimate } from './fireworks-model.mjs?v=3';
 import { FireworkRenderer, FIREWORK_DURATION } from './fireworks-renderer.mjs?v=2';
 import { FireworkAudio } from './fireworks-audio.mjs?v=2';
-import { stopOnLeave } from './lesson-playback.mjs?v=1';
+import { stopOnLeave } from './lesson-playback.mjs?v=2';
 
 const root = document.querySelector('#unit-quiz.fireworks-quiz');
 if (root) {

@@ -287,7 +287,7 @@
   </main>
   <footer class="shell foot">國二上理化・波動與聲音｜學習單元 3.2</footer>
   <script type="module">
-    import { stopOnLeave } from './assets/lesson-playback.mjs?v=1';
+    import { stopOnLeave } from './assets/lesson-playback.mjs?v=2';
     (()=>{
       const ruler=document.querySelector("#ruler-demo"),movingBlade=document.querySelector("#ruler-moving-blade"),rulerStart=document.querySelector("#ruler-start"),rulerStop=document.querySelector("#ruler-stop"),rulerStatus=document.querySelector("#ruler-status");
       // The entire ruler is one flat plane, parallel to the front table edge.
@@ -372,9 +372,9 @@
       if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible.length)activate(visible[0].target.id);},{rootMargin:"-18% 0px -68% 0px",threshold:0});targets.forEach(target=>observer.observe(target));}
     })();
   </script>
-  <script type="module" src="assets/sound-propagation.js?v=stop-on-leave-20261029"></script>
-  <script type="module" src="assets/vacuum-lab.js?v=stop-on-leave-20261029"></script>
-  <script type="module" src="assets/sound-speed.mjs?v=temperature-dialogue-20261030"></script>
-  <script type="module" src="assets/fireworks-quiz.mjs?v=stop-on-leave-20261029"></script>
+  <script type="module" src="assets/sound-propagation.js?v=exclusive-playback-20261030"></script>
+  <script type="module" src="assets/vacuum-lab.js?v=exclusive-playback-20261030"></script>
+  <script type="module" src="assets/sound-speed.mjs?v=exclusive-playback-20261030"></script>
+  <script type="module" src="assets/fireworks-quiz.mjs?v=exclusive-playback-20261030"></script>
 </body>
 </html>

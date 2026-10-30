@@ -1,5 +1,5 @@
 import { BellReceptionAudio } from './bell-reception-audio.mjs?v=1';
-import { stopOnLeave } from './lesson-playback.mjs?v=1';
+import { stopOnLeave } from './lesson-playback.mjs?v=2';
 
 // 慢速的一維縱波示意。q 是粒子的平衡位置，不隨波向右漂移。
 const scene = document.querySelector('#air-wave');
