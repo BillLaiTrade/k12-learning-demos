@@ -14,4 +14,12 @@
 
 已目視檢視[1440px](composition-1440.webp)與[390px](composition-390.webp)，另保存[1024px](composition-1024.webp)。320／390／800／1024／1440px無水平溢出；分類卡在窄欄按永久→變動順序上下排列。腳本語法及`git diff --check`通過。
 
-公開部署及版本比對結果於推送後補記。本輪是第二區可檢視初稿，不代表第五階段完整教材檢查、外部驗收或最終核可。
+## 公開確認
+
+實作提交`445f0679be2b43152b10aa65a886588647851679`的[Pages41038796444](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41038796444)及[Deploy demo page41038796369](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41038796369)皆成功。公開HTML、第二區CSS／JS及單元入口四檔HTTP200，SHA-256與實作提交一致，見[版本比對](public-hashes.json)。
+
+以公開網址重跑第二區瀏覽器檢查：6項通過（含外層），0失敗／0跳過，涵蓋資料直接可見、比例與分類、滑鼠／鍵盤／觸控突出、停用JavaScript、減少動態及320–1440px版面，見[公開檢查輸出](public-tests.log)。公開檢查不冒充重新執行全部杯子回歸。
+
+直接檢視[第二區](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/#s2)。後續依核可順序製作氮氣區。
+
+本輪是第二區可檢視初稿，不代表第五階段完整教材檢查、外部驗收或最終核可。

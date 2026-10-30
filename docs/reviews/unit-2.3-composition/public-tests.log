@@ -1,0 +1,15 @@
+▶ 2.3 composition: proportions, classification and optional emphasis
+  ✔ all proportions and both classes are visible before any action (103.555027ms)
+  ✔ mouse, keyboard and hover emphasis never hide teaching content (245.36724ms)
+  ✔ desktop, laptop and narrow screens preserve order without overflow (576.356612ms)
+  ✔ static content remains complete without JavaScript (1060.628043ms)
+  ✔ touch, reduced motion and route anchor stay usable (1366.945582ms)
+✔ 2.3 composition: proportions, classification and optional emphasis (5080.17383ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5459.444485

@@ -1,0 +1,30 @@
+[
+  {
+    "path": "units/2/parts/2.3/index.html",
+    "status": 200,
+    "bytes": 17139,
+    "sha256": "aff4f0e1ba9bdd4931d514ea51a288227a9ea6b24fe39aa47dc2b3eb53b8e76e",
+    "matches": true
+  },
+  {
+    "path": "units/2/parts/2.3/assets/composition.css",
+    "status": 200,
+    "bytes": 5266,
+    "sha256": "d09e40fe0c9eebe1ac162d5a8ebdb650d2fc722157d9ca3d95bd5aee8438b3ba",
+    "matches": true
+  },
+  {
+    "path": "units/2/parts/2.3/assets/composition.mjs",
+    "status": 200,
+    "bytes": 1975,
+    "sha256": "10b050f543b8c55b252ad0797c895ec8e1a9de1eb61200d24b9294e32cdbdd9c",
+    "matches": true
+  },
+  {
+    "path": "units/2/index.html",
+    "status": 200,
+    "bytes": 4049,
+    "sha256": "e63247df0b4c696d5d2e3da910c049ecd0860c2cdce8d5e6cfd67389f3167298",
+    "matches": true
+  }
+]
