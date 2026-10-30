@@ -59,7 +59,13 @@
     .filter-play canvas {display:block;width:100%;height:auto;aspect-ratio:1672/941;}
     .filter-play:focus-visible {outline:4px solid #176b53;outline-offset:-4px;}
     .filter-animation .filter-hotspot {position:absolute;z-index:2;min-width:46px;min-height:36px;padding:5px 9px;border:2px solid #fff;border-radius:9px;background:#176b53;color:white;box-shadow:0 2px 10px #243a3540;font-size:clamp(.65rem,1.2vw,.8rem);font-weight:750;pointer-events:none;transform:translate(-50%,-50%);}
-    .filter-hotspot.sample {left:22%;top:52%;}
+    .filter-play-cue {position:absolute;right:12px;bottom:12px;display:none;place-items:center;width:38px;height:38px;padding:6px;border:1px solid #bdc8bf;border-radius:10px;background:#ffffffeb;color:#176b53;pointer-events:none;}
+    .filter-play-cue svg {width:23px;height:23px;}
+    .filter-animation:is([data-state="ready"],[data-state="complete"]) .filter-play-cue {display:grid;}
+    .filter-play-cue .filter-replay-icon {display:none;}
+    .filter-animation[data-state="complete"] .filter-start-icon {display:none;}
+    .filter-animation[data-state="complete"] .filter-replay-icon {display:block;}
+    .filter-hotspot.sample {left:22%;top:93.5%;}
     .filter-hotspot.filter {left:65%;top:36%;}
     .filter-hotspot.result {left:64%;top:78%;}
     #filter-status {display:block;min-height:0;text-align:center;color:#52635d;font-size:.8rem;}
@@ -143,11 +149,12 @@
           <p>這杯混濁的雨水裡有泥沙顆粒。泥沙沒有溶解在水裡，仍是水中的固體成分。</p>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>泥沙混在水裡，要怎麼把它們分開？</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們用濾紙試試看，觀察泥沙和水各自去了哪裡。</p></div>
-          <div class="filter-animation" id="filter-animation" role="group" aria-label="泥沙水經過濾紙的連續動畫；點擊畫面可重播">
-            <button class="filter-play" id="filter-play" type="button" aria-label="播放過濾動畫" disabled><canvas id="filter-canvas" width="1672" height="941" role="img" aria-label="泥沙水逐漸倒入濾紙，泥沙留在紙上，濾液收集在下方杯中；點擊重播。"></canvas></button>
+          <div class="filter-animation" id="filter-animation" role="group" aria-label="泥沙水經過濾紙的連續動畫；點擊畫面開始或重播">
+            <button class="filter-play" id="filter-play" type="button" aria-label="播放過濾動畫" disabled><canvas id="filter-canvas" width="1672" height="941" role="img" aria-label="桌上的泥沙水杯、乾淨濾紙與空接液杯；點擊開始過濾。"></canvas></button>
             <span class="filter-hotspot sample" data-filter-label="sample">樣本</span>
             <span class="filter-hotspot filter" data-filter-label="filter">濾紙</span>
-            <span class="filter-hotspot result" data-filter-label="result">濾液</span>
+            <span class="filter-hotspot result" data-filter-label="result">接液杯</span>
+            <span class="filter-play-cue" aria-hidden="true"><svg class="filter-start-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg><svg class="filter-replay-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></span>
           </div>
           <span id="filter-status" role="status"></span>
           <ol class="filter-steps" aria-label="過濾的四個步驟">
@@ -322,7 +329,7 @@
 
   </script>
   <script type="importmap">{"imports":{"three":"../../../4/parts/4.1/assets/vendor/three/build/three.module.js"}}</script>
-  <script type="module" src="assets/filtration.js?v=labels-only-1"></script>
+  <script type="module" src="assets/filtration.js?v=click-to-start-1"></script>
   <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
