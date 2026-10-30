@@ -394,6 +394,7 @@
     .change-comparison-grid { grid-template-columns:1fr; align-items:stretch; gap:16px; }
     .change-example-card { display:flex; flex-direction:column; gap:9px; }
     .change-example-card h3 { margin:0; }
+    .chemical-property-note { margin:0; color:#52645a; font-size:.88rem; }
     .change-example-fact { min-height:0; margin:0!important; }
     .microscope-source-row { display:grid; grid-template-columns:1fr; gap:12px; align-items:start; }
     .microscope-source-row .microscope-source { width:min(100%,370px); justify-self:center; padding:0; }
@@ -975,14 +976,10 @@
                   <figure class="microscope-source rust-microscope-source" data-microscope-phase="iron" data-microscope="生鏽前：放大鏡中的粒子都是鐵，排列緊密。"><img src="assets/rust-iron-sample.webp" alt="生鏽前的鐵桶表面，呈灰銀色並帶有金屬光澤"><span class="microscope-glass" role="slider" tabindex="0" aria-label="拖曳放大鏡觀察生鏽前的鐵粒子；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>生鏽前</figcaption></figure>
                   <figure class="microscope-source rust-microscope-source" data-microscope-phase="rust" data-microscope="鏽層分布不均；鏽色較深處顯示較多含鐵、氧的粒子，灰銀色金屬處則較多鐵粒子。此為簡化模型，不呈現真實分子結構。"><img src="assets/rust-layer-sample.webp" alt="生鏽後的鐵桶表面，紅褐色鏽層與灰銀色金屬交錯"><span class="microscope-glass" role="slider" tabindex="0" aria-label="拖曳放大鏡觀察生鏽後的局部鐵與氧粒子模型；也可使用方向鍵移動" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="microscope-lens-content"></span></span><figcaption>生鏽後</figcaption></figure>
                 </div>
+                <p class="chemical-property-note" id="chemical-property-note">鐵在氧氣和水參與下會生鏽，這種反應能力就是鐵的<strong>化學性質</strong>。</p>
               </article>
             </div>
             <p class="microscope-model-disclaimer">放大鏡中的粒子、顏色與排列皆為示意，不代表原子和分子的真實外觀或比例。</p>
-            <h3 class="change-subheading" id="property-types-summary">整理：什麼是物理性質和化學性質？</h3>
-            <div class="change-definitions" aria-label="物理性質和化學性質比較">
-              <article class="change-definition"><h3>物理性質</h3><p>不生成新物質就能觀察或測量的特徵，例如鐵的銀灰色、金屬光澤，以及水的沸點。</p></article>
-              <article class="change-definition change-definition--chemical"><h3>化學性質</h3><p>物質與其他物質反應、生成新物質的能力，例如鐵在氧氣和水參與下會生鏽，木材能燃燒。</p></article>
-            </div>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>所以冰融化只是狀態改變，仍然是水；鐵生鏽卻生成了鐵鏽，是另一種物質。</p></div>
           </div>
         </section>
