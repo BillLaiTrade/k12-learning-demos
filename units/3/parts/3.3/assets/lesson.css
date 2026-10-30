@@ -36,13 +36,8 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .cards{display:grid;gap:20px;min-width:0}
 .section-top{display:flex;align-items:end;margin:0 0 18px}
 .section-top h2{margin:0;font-size:1.35rem}
-.lesson-card{position:relative;min-width:0;scroll-margin-top:24px;display:grid;grid-template-columns:190px minmax(0,1fr);gap:28px;padding:26px;border:1px solid var(--line);border-radius:24px;background:var(--card);box-shadow:var(--shadow)}
-.card-side{border-right:1px solid var(--line);padding-right:20px}
-.card-number{color:var(--green);font-weight:850;font-size:.84rem;letter-spacing:.08em}
-.card-side h3{margin:10px 0 8px;font-size:1.08rem;line-height:1.45}
-.card-role{color:var(--muted);font-size:.87rem}
+.lesson-card{position:relative;min-width:0;display:block;margin:0;padding:0;overflow:hidden;border:1px solid #d8e2da;border-radius:20px;background:#fffefa;color:#1c2927;line-height:1.72;box-shadow:0 10px 28px rgb(24 52 40 / 7%);scroll-margin-top:100px}
 .card-main{min-width:0}
-.card-main>h2{margin:0 0 8px;font-size:clamp(1.32rem,2.8vw,1.85rem);line-height:1.35}
 .card-main h3{font-size:1rem;margin:0 0 5px}
 .card-main>p{color:var(--muted);margin:0 0 18px}
 .dialogue{display:flex;gap:10px;align-items:center;margin:12px 0;padding:11px 15px;border-left:4px solid #8cae91;border-radius:0 13px 13px 0;background:#f0f5eb}
@@ -125,8 +120,7 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 
 @media(max-width:1100px) and (min-width:761px){
 .lesson-layout{grid-template-columns:205px minmax(0,1fr);gap:24px}
-.lesson-card{grid-template-columns:150px minmax(0,1fr);padding:22px;gap:20px}
-.card-side{padding-right:16px}
+.lesson-card{scroll-margin-top:160px}
 .hero{gap:24px}
 .compare-grid,.instrument-controls{grid-template-columns:1fr}
 .instrument-controls{gap:0}
@@ -151,10 +145,7 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .route a.quiz-nav{margin-top:0;padding-top:7px}
 .route a.quiz-nav[aria-current=step]{border-color:#d9a74f}
 .next-hint{display:none}
-.lesson-card{grid-template-columns:1fr;gap:14px;padding:18px;border-radius:19px;scroll-margin-top:116px}
-.card-side{display:flex;align-items:baseline;gap:10px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 10px}
-.card-side h3{margin:0}
-.card-role{display:none}
+.lesson-card{scroll-margin-top:160px}
 .section-top{align-items:start;margin-top:8px}
 .quiz{scroll-margin-top:116px}
 .timbre-grid,.compare-grid,.instrument-controls,.explanation-grid,.quiz-selects{grid-template-columns:1fr}
@@ -173,7 +164,6 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 }
 
 /* 第一區：同一支音叉；配置依已核可示意圖。 */
-.fork-card-role>span{display:inline-block}
 .fork-lab{margin:16px 0 12px;padding:7px;border:1px solid #cbdcd4;border-radius:15px;background:#fffefa}
 .fork-scene{position:relative;overflow:hidden;aspect-ratio:2.35;border-radius:10px;background:#e4c89f url('fork-tabletop-background.png') center/cover no-repeat}
 .fork-fixed-label{position:absolute;z-index:2;top:10px;left:10px;padding:3px 11px;border:1px solid #e8ddc9;border-radius:999px;background:#fffaf0ef;color:#34433d;font-size:.83rem;font-weight:650}
@@ -266,3 +256,12 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 /* 正面只讓振膜起伏，不搖晃木箱或金屬外框。 */
 .pitch-speaker.play{position:relative}
 .pitch-front{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none;overflow:visible}
+
+/* 與2.1一致：上方編號／問題標頭，下方完整寬度內容。 */
+.lesson-head{display:grid;grid-template-columns:74px minmax(0,1fr);gap:16px;align-items:start;padding:25px 28px 21px;border-bottom:1px solid #e7ece5}
+.lesson-number{display:grid;place-items:center;width:50px;height:50px;border-radius:15px;background:#e9f0e3;color:#416c39;font-weight:850;font-size:1.1rem}
+.lesson-head h2{margin:0;font-size:clamp(1.22rem,2vw,1.65rem);line-height:1.35}
+.lesson-head p{margin:8px 0 0;color:#5b6a65;font-size:.94rem}
+.lesson-body{padding:23px 28px 28px;min-width:0}
+@media(max-width:900px){.lesson-head,.lesson-body{padding-left:21px;padding-right:21px}}
+@media(max-width:700px){.lesson-head{grid-template-columns:48px minmax(0,1fr);gap:10px;padding:18px}.lesson-number{width:40px;height:40px;border-radius:12px}.lesson-body{padding:18px}}

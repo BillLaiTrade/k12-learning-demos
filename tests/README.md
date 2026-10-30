@@ -400,3 +400,7 @@ NITROGEN_ARTIFACT_DIR=/tmp/unit23-nitrogen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-ful
 ### 3.3主喇叭振動回歸
 
 第二區專項新增主喇叭實際畫面6幀差異、固定箱體位置／尺寸、與側面同相位、自然結束及調頻歸位，200Hz與800Hz均在減少動態偏好下驗證。現第二區8項、加整頁及第一區共28項通過（含外層），不再僅以側面放大窗或data-playing旗標判定主喇叭有振動。證據見docs/reviews/unit-3.3-card02-front-motion/。
+
+### 3.3全寬卡片版型（2026-10-31）
+
+依使用者最新要求，格式基準由1.1概念側欄改為2.1橫向標頭及全寬內容。整頁回歸直接載入2.1比對標頭、編號、字級、內距與圓角；逐區檢查七區內容寬度與上下排列。整頁、音叉及雙喇叭專項合計28項通過；證據在docs/reviews/unit-3.3-fullwidth-cards/。
