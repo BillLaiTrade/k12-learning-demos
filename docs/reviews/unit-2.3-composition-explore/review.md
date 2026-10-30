@@ -18,4 +18,10 @@
 
 目視檢視[桌機預設](composition-1440.webp)、[筆電](composition-1024.webp)、[手機](composition-390.webp)、[混合](mixed-all.webp)、[混合氮](mixed-nitrogen.webp)、[氧](proportion-oxygen.webp)、[氬](proportion-argon.webp)與[混合其餘](mixed-other.webp)，與核可圖的操作方向一致。另保存兩種排列的氬／其餘狀態截圖。關鍵資訊預設可見，沒有橫向溢出。
 
-公開部署與版本確認待本次推送後補記；本機通過不等同整份教材外部驗收。
+## 公開確認
+
+實作提交`430e54b03f4da0ce72bc6176a7b8739e6067a950`已推送main。其部署被後續main更新取代（原兩項工作cancelled）；已確認接續提交`08f84640`包含本次修改、且未改動2.3檔案。[Pages41049988208](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41049988208)與[Deploy41049988955](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41049988955)皆成功。
+
+公開HTML／CSS／JS為HTTP200，SHA-256與實作版本一致，見[版本比對](public-hashes.json)。以公開頁重跑第二區8項通過（含外層），0失敗／0跳過，見[公開輸出](public-tests.log)；已目視檢視[公開桌機](public-1440.webp)與[公開手機](public-390.webp)。本次屬第4階段逐區修訂，不等同整份教材外部驗收。
+
+[直接檢視第二區](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/?v=430e54b0#s2)。
