@@ -1,0 +1,4 @@
+PASS: five unique 1672×941 PNGs and all full-resolution image links.
+PASS: B01–B05 anchors, 1440/1024/390px layouts, no horizontal overflow.
+PASS: first-round gallery retained and its link opens round two.
+PASS: no browser errors or failed HTTP resources.
