@@ -22,6 +22,24 @@ const vec = (a, b, t) => a.map((v, i) => v + t * (b[i] - v));
 const colors = { a: '#ed2924', b: '#205df5', off: '#435058' };
 let sourceB, bodyB, lensB, stemB, footB, pivotB, blue, arrows, hitDot;
 
+// Layered heads retain a clear silhouette against wood and overlapping beams.
+function directionArrow(color) {
+  const group = new THREE.Group();
+  const layers = [
+    [0.34, 0.90, '#48524e'],
+    [0.30, 0.80, '#fffdf3'],
+    [0.25, 0.68, color]
+  ];
+  layers.forEach(([radius, height, layerColor], index) => {
+    const mesh = new THREE.Mesh(
+      new THREE.ConeGeometry(radius, height, 20),
+      new THREE.MeshBasicMaterial({ color: layerColor, depthTest: false, depthWrite: false })
+    );
+    mesh.renderOrder = 15 + index; mesh.frustumCulled = false; group.add(mesh);
+  });
+  return group;
+}
+
 if (bench) {
   const { scene, emitterBody, emitterStem, emitterFoot, pivot } = bench;
   sourceB = new THREE.Group(); scene.add(sourceB);
@@ -40,8 +58,8 @@ if (bench) {
     mesh.renderOrder = 13; mesh.frustumCulled = false; scene.add(mesh); return mesh;
   });
   arrows = Object.fromEntries(['a', 'b'].map(key => [key, [0, 1].map(() => {
-    const mesh = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.42, 16), new THREE.MeshBasicMaterial({ color: colors[key], transparent: true, opacity: 1, depthTest: false }));
-    mesh.renderOrder = 15; scene.add(mesh); return mesh;
+    const arrow = directionArrow(colors[key]);
+    scene.add(arrow); return arrow;
   })]));
   hitDot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 12), new THREE.MeshBasicMaterial({ color: '#f34230', depthTest: false }));
   hitDot.name = 'reverse-hit-dot';
@@ -80,8 +98,8 @@ function draw() {
   for (const [key, path] of [['a', f], ['b', r]]) {
     [[path.source, path.hit], [path.hit, path.end]].forEach(([from, to], index) => {
       const arrow = arrows[key][index]; arrow.visible = lights[key];
-      // Different positions along the same line keep opposite arrows legible.
-      arrow.position.copy(V(vec(from, to, 0.4)));
+      // Separate heads stay inside the numbered rim and outside the angle arcs.
+      arrow.position.copy(V(vec(from, to, index === 0 ? 0.49 : 0.35)));
       arrow.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), V(to).sub(V(from)).normalize());
     });
   }
@@ -109,7 +127,17 @@ function drawFallback() {
   const map = p => [200 - p[2] * 20, 280 + (p[0] - f.hit[0]) * 30];
   const coords = p => map(p).map(v => v.toFixed(2)).join(',');
   const toggle = (key, p) => { const [x, y] = map(p); return `<g data-source="${key}" role="button" tabindex="0" aria-label="開關 ${key.toUpperCase()} ${key === 'a' ? '紅' : '藍'}光" aria-pressed="${lights[key]}"><rect x="${x - 24}" y="${y - 26}" width="48" height="38" rx="8" fill="${lights[key] ? colors[key] : '#dfe5df'}"/><text x="${x}" y="${y - 2}" text-anchor="middle" fill="${lights[key] ? 'white' : '#304b40'}">${key.toUpperCase()}</text></g>`; };
-  const beam = (key, ray) => lights[key] ? `<path data-ray="${key}" d="M${[ray.source, ray.hit, ray.end].map(coords).join('L')}" fill="none" stroke="${colors[key]}" stroke-width="${key === 'a' ? 6 : 2.5}"/>` : '';
+  const beam = (key, ray) => {
+    if (!lights[key]) return '';
+    const heads = [[ray.source, ray.hit], [ray.hit, ray.end]].map(([from, to], index) => {
+      const [x, y] = map(vec(from, to, index === 0 ? 0.49 : 0.35)), a = map(from), b = map(to);
+      const length = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      const dx = (b[0] - a[0]) / length, dy = (b[1] - a[1]) / length;
+      const point = (along, across) => `${(x + dx * along - dy * across).toFixed(2)},${(y + dy * along + dx * across).toFixed(2)}`;
+      return `<path data-direction="${key}" d="M${point(10, 0)}L${point(-8, 7)}L${point(-8, -7)}Z" fill="${colors[key]}" stroke="#fffdf3" stroke-width="3" stroke-linejoin="round" paint-order="stroke fill"/>`;
+    }).join('');
+    return `<path data-ray="${key}" d="M${[ray.source, ray.hit, ray.end].map(coords).join('L')}" fill="none" stroke="${colors[key]}" stroke-width="${key === 'a' ? 6 : 2.5}"/>${heads}`;
+  };
   section.querySelector('#reverse-fallback-svg').innerHTML = `<title>A 紅光與 B 藍光各自開關</title><path d="M50 280H350" stroke="#82988e" stroke-width="8"/><path d="M200 40V280" stroke="#60756c" stroke-dasharray="5 5"/>${beam('a', f)}${beam('b', r)}${toggle('a', f.source)}${toggle('b', f.end)}<text x="200" y="306">M</text>`;
 }
 function updateUI() {
