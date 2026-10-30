@@ -7,7 +7,7 @@ import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tun
 import { createTemperatureProgress } from './temperature-progress.mjs?v=start-time-20261029';
 import { airChamberScene } from './temperature-chamber.mjs?v=fixed-22';
 import { stopOnLeave } from './lesson-playback.mjs?v=2';
-import { createMicroMotion } from './medium-micro-motion.mjs?v=1';
+import { createMicroMotion } from './medium-micro-motion.mjs?v=2';
 
 export function initSoundSpeed(root) {
 // 兩個獨立區塊共用控制器，原生標籤及 SVG 定義各自使用唯一 ID。

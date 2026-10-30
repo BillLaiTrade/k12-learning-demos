@@ -37,16 +37,46 @@ test('3.2 material micro motion stays separate from sound propagation', { timeou
       return { kind: row.dataset.kind, samples };
     }));
     for (const { kind, samples } of ranges.filter(r => r.kind !== 'steel')) {
-      const limit = kind === 'air' ? [1.6, 1.1] : [.45, .3];
+      const limit = kind === 'air' ? [4, 2.8] : [2, 1.4];
       assert.ok(samples.every(([x,y]) => Math.abs(x) <= limit[0] + .001 && Math.abs(y) <= limit[1] + .001));
       assert.ok(new Set(samples.map(s => s.join(','))).size > 20, 'molecules do not sway as one block');
     }
     const mean = samples => samples.reduce((sum,[x,y]) => sum + Math.hypot(x,y),0) / samples.length;
-    assert.ok(mean(ranges[0].samples) > mean(ranges[1].samples) * 2);
+    assert.ok(mean(ranges[0].samples) > mean(ranges[1].samples) * 1.5);
     assert.equal(ranges[2].samples.length, 0);
     assert.equal(await page.locator('#card-05 .particle-micro-motion').count(), 0);
     assert.equal(await lab.locator('#experiment-panel').getAttribute('data-time'), '0.00000000');
     assert.equal(await lab.locator('.particle[data-reached=true]').count(), 0);
+  });
+
+  await t.test('both fluids visibly move in screen pixels at desktop widths', async () => {
+    for (const width of [1024,1280,1440,1920]) {
+      await page.setViewportSize({width,height:1100});
+      await lab.locator('#models').scrollIntoViewIfNeeded();
+      const frames = [];
+      for (let frame = 0; frame < 12; frame++) {
+        frames.push(await lab.locator('.particle-micro-motion').evaluateAll(nodes => nodes.map(n => {
+          const r = n.getBoundingClientRect(); return [r.x+r.width/2,r.y+r.height/2];
+        })));
+        await page.waitForTimeout(150);
+      }
+      const excursion = (start,end) => {
+        const ranges = frames[0].slice(start,end).map((_,i) => {
+          const xs = frames.map(f => f[start+i][0]), ys = frames.map(f => f[start+i][1]);
+          return Math.hypot(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys));
+        });
+        return ranges.reduce((sum,r) => sum+r,0)/ranges.length;
+      };
+      const air = excursion(0,66), water = excursion(66,146);
+      console.log(`${width}px screen excursion: air=${air.toFixed(2)}px, water=${water.toFixed(2)}px`);
+      assert.ok(air > 1.8, 'air motion must be visible after page scaling');
+      assert.ok(water > .9, 'water motion must be visible after page scaling');
+      assert.ok(air > water*1.5, 'air remains freer than water');
+    }
+    await page.setViewportSize({width:1440,height:1100});
+    await lab.screenshot({path:'/tmp/unit32-visible-motion-a.png'});
+    await page.waitForTimeout(300);
+    await lab.screenshot({path:'/tmp/unit32-visible-motion-b.png'});
   });
 
   await t.test('sound still uses the physical delay and horizontal displacement, with a real-time clock', async () => {

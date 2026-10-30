@@ -2,7 +2,7 @@
 // 內層只作小幅游移；外層仍由聲波模型控制縱向位移。
 export function createMicroMotion(points, kind) {
   if (!['air', 'water'].includes(kind)) return [];
-  const extent = kind === 'air' ? { x: 1.6, y: 1.1 } : { x: .45, y: .3 };
+  const extent = kind === 'air' ? { x: 4, y: 2.8 } : { x: 2, y: 1.4 };
   return points.map(({ node }, index) => {
     const layer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     layer.classList.add('particle-micro-motion');
@@ -16,8 +16,8 @@ export function createMicroMotion(points, kind) {
       transform: `translate(${(noise(step) * extent.x).toFixed(4)}px, ${(noise(step + 9) * extent.y).toFixed(4)}px)`
     }));
     frames.push(frames[0]);
-    const duration = 2600 + (noise(21) + 1) * 900;
-    const animation = layer.animate(frames, { duration, iterations: Infinity, easing: 'ease-in-out' });
+    const duration = 1400 + (noise(21) + 1) * 500;
+    const animation = layer.animate(frames, { duration, iterations: Infinity, easing: 'linear' });
     animation.pause();
     animation.currentTime = (noise(29) + 1) / 2 * duration;
     return animation;
