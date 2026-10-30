@@ -29,7 +29,7 @@ function surface(mode, prefix) {
 function drawing(mode, reason = false) {
   const prefix = `mirror-${reason ? 'reason' : 'overview'}-${mode}`;
   let svg = `<title>${MIRRORS[mode].name}：${reason ? '上方反射點的法線垂直當地鏡面' : MIRRORS[mode].result}</title>`;
-  svg += `<desc>綠色為向右的入射光，橙色為向左的反射光。${reason ? '藍色虛線為法線，由球面圓心與反射點的連線計算。' : '相同方向的平行光射向三種鏡面。'}</desc>`;
+  svg += `<desc>綠色為向右的入射光，橙色為向左的反射光。${reason ? '藍色虛線為法線，垂直於反射點當地的鏡面。' : '相同方向的平行光射向三種鏡面。'}</desc>`;
   svg += surface(mode, prefix);
   for (const offset of reason ? [OPTICS.reasonOffset] : OPTICS.offsets) {
     const ray = reflectionAt(mode, offset), p = ray.point, end = visibleRayEnd(ray);
@@ -63,7 +63,7 @@ function appearance(mode, where = 'near') {
   const plane = mode === 'plane';
   const shape = plane ? '<path d="M155 47L320 25V264L155 270Z"/>' : '<ellipse cx="233" cy="150" rx="96" ry="120"/>';
   const outline = plane ? 'M155 47L320 25V264L155 270Z' : 'M233 30A96 120 0 1 1 233 270A96 120 0 1 1 233 30Z';
-  const label = mode === 'concave' ? where === 'near' ? '焦點內，像正立放大' : '曲率中心外，像倒立縮小' : mode === 'plane' ? '像正立同大' : '像正立縮小';
+  const label = mode === 'concave' ? where === 'near' ? '靠近鏡面，像正立放大' : '這個較遠位置，像倒立縮小' : mode === 'plane' ? '像正立同大' : '像正立縮小';
   return `<title>${MIRRORS[mode].name}：${label}</title><desc>左邊是同樣大小的實物，右邊只比較像的外觀，不表示物距與像距。</desc>
     <defs><linearGradient id="${prefix}-glass" x2=".8" y2="1"><stop stop-color="#e6f3f5"/><stop offset=".55" stop-color="#f6faf6"/><stop offset="1" stop-color="#d4e7ea"/></linearGradient><clipPath id="${prefix}-clip">${shape}</clipPath></defs>
     <ellipse cx="62" cy="255" rx="41" ry="6" fill="#cfc3a1" opacity=".25"/>
@@ -152,9 +152,9 @@ bearToggle.addEventListener('click', () => {
   const near = position === 'near';
   section.dataset.concavePosition = position;
   section.querySelector('#mirror-concave-appearance').innerHTML = appearance('concave', position);
-  section.querySelector('#mirror-concave-appearance').setAttribute('aria-label', `凹面鏡：${near ? '焦點內，像正立放大' : '曲率中心外，像倒立縮小'}`);
-  section.querySelector('#mirror-concave-condition').textContent = near ? '靠近鏡面・焦點內' : '移遠・曲率中心外';
+  section.querySelector('#mirror-concave-appearance').setAttribute('aria-label', `凹面鏡：${near ? '靠近鏡面，像正立放大' : '這個較遠位置，像倒立縮小'}`);
+  section.querySelector('#mirror-concave-condition').textContent = near ? '小熊靠近鏡面' : '小熊移到較遠處';
   section.querySelector('#mirror-concave-result').textContent = near ? '正立・放大' : '倒立・縮小';
   bearToggle.textContent = near ? '把小熊移遠 →' : '把小熊移近 ←';
-  section.querySelector('#mirror-concave-status').textContent = near ? '凹面鏡：小熊在焦點內，像正立、放大。' : '凹面鏡：小熊移到曲率中心外，像倒立、縮小。這是其中一個遠處位置的例子。';
+  section.querySelector('#mirror-concave-status').textContent = near ? '凹面鏡：小熊靠近鏡面，在這個位置的像正立、放大。' : '凹面鏡：小熊移到本活動示範的較遠位置，像倒立、縮小。像的大小與正倒立會隨位置改變。';
 });

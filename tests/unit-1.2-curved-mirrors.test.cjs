@@ -128,7 +128,7 @@ test('4.2 fifth activity: approved three-step comparison, exact optics and inter
     for (let i = 0; i < 4; i++) {
       await button.click();
       await expect(section).toHaveAttribute('data-concave-position', 'far');
-      await expect(section.locator('#mirror-concave-condition')).toHaveText('移遠・曲率中心外');
+      await expect(section.locator('#mirror-concave-condition')).toHaveText('小熊移到較遠處');
       await expect(section.locator('#mirror-concave-result')).toHaveText('倒立・縮小');
       await expect(section.locator('#mirror-concave-appearance .mirror-bear-image')).toHaveAttribute('transform', /rotate\(180/);
       await expect(button).toHaveText('把小熊移近 ←');
