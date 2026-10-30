@@ -1,0 +1,6 @@
+PASS 1440px: height 622 -> 486px (22% shorter); all text and font sizes unchanged; within content column; correct hierarchy; no text/page overflow or JavaScript errors.
+PASS 1280px: height 622 -> 486px (22% shorter); all text and font sizes unchanged; within content column; correct hierarchy; no text/page overflow or JavaScript errors.
+PASS 1024px: height 710 -> 628px (12% shorter); all text and font sizes unchanged; within content column; correct hierarchy; no text/page overflow or JavaScript errors.
+PASS 768px: height 1557 -> 1263px (19% shorter); all text and font sizes unchanged; within content column; correct hierarchy; no text/page overflow or JavaScript errors.
+PASS 760px: height 622 -> 486px (22% shorter); all text and font sizes unchanged; within content column; correct hierarchy; no text/page overflow or JavaScript errors.
+PASS 390px: height 909 -> 799px (12% shorter); all text and font sizes unchanged; within content column; correct hierarchy; no text/page overflow or JavaScript errors.
