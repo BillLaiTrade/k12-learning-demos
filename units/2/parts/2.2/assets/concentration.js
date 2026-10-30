@@ -5,12 +5,33 @@ const lab=$('mix-lab'),canvas=$('mix-canvas'),ctx=canvas.getContext('2d');
 const pitcher=$('mix-pitcher'),cup=$('mix-water-cup'),reset=$('mix-reset'),status=$('mix-status');
 let state={...INITIAL},ready=false,animation=null,queue=[],raf=null,gesture=null,ignoreClick=false,dialogKind=null,lastKey='';
 const massButtons=[...document.querySelectorAll('[data-mass-kind]')];
+const massActions=[...massButtons.map(button=>({button,kind:button.dataset.massKind,delta:Number(button.dataset.massDelta)})),{button:pitcher,kind:'water',delta:1}];
 const images={},reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
-function announce(s){status.textContent=s;}
+function boundaryMessage(){
+  const edges=[];
+  for(const kind of ['sugar','water']){
+    const [min,max]=LIMITS[kind],side=state[kind]<=min?'下限':state[kind]>=max?'上限':'';
+    if(side)edges.push({name:kind==='sugar'?'糖量':'水量',side,value:state[kind]});
+  }
+  if(!edges.length)return '';
+  if(edges.length===1){const edge=edges[0];return `本次配方的${edge.name}已達${edge.side}：${format(edge.value,1)} 克。`;}
+  return `本次配方已達邊界：${edges.map(edge=>`${edge.name}${edge.side} ${format(edge.value,1)} 克`).join('、')}。`;
+}
+function announce(s){
+  const notice=boundaryMessage(),message=notice||s;
+  status.classList.toggle('boundary',!!notice);
+  if(status.textContent!==message)status.textContent=message;
+}
 function values(){return concentrationState(state.sugar,state.water,state.ppm);}
 function update(){
-  for(const button of massButtons){const kind=button.dataset.massKind,delta=Number(button.dataset.massDelta);button.disabled=!ready||(delta>0?state[kind]>=LIMITS[kind][1]:state[kind]<=LIMITS[kind][0]);}
+  for(const {button,kind,delta} of massActions){
+    const limited=delta>0?state[kind]>=LIMITS[kind][1]:state[kind]<=LIMITS[kind][0];
+    // Keep pointer capture until the held pitcher is released so it can return smoothly.
+    const captured=button===pitcher&&gesture?.kind==='water';
+    button.disabled=!ready||(limited&&!captured);
+    button.setAttribute('aria-disabled',String(!ready||limited));
+  }
   const v=values(),key=[state.sugar,state.water,state.ppm].join('/');
   if(key!==lastKey){
     // Integer tenths of a gram identify rounding to three decimal places exactly.
@@ -27,6 +48,7 @@ function update(){
     document.querySelector('[data-mix="percent-sign"]').setAttribute('aria-label',approximate?'約等於':'等於');
     $('mix-bar-fill').style.width=`${v.percent}%`;$('mix-bar').setAttribute('aria-label',`糖占質量${format(v.percent)}%，水占${format(100-v.percent)}%`);
     lab.dataset.sugar=String(v.sugar);lab.dataset.water=String(v.water);lab.dataset.total=String(v.total);lab.dataset.percent=String(v.percent);
+    if(boundaryMessage()||status.classList.contains('boundary'))announce('');
     lastKey=key;
   }
 
@@ -76,6 +98,7 @@ function frame(now){
 }
 function act(kind,delta){
   if(!ready)return;
+  if((delta>0&&state[kind]>=LIMITS[kind][1])||(delta<0&&state[kind]<=LIMITS[kind][0])){announce('');return;}
   if(animation?.hold){animation=null;gesture=null;}
   if(queue.length<20)queue.push({kind,delta});startNext(performance.now());paint();schedule();
 }
