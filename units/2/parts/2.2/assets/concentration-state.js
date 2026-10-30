@@ -1,7 +1,7 @@
 // Fresh, fully dissolved sugar-water recipes. Bounds avoid saturation teaching.
 export const LIMITS = { sugar: [0, 20], water: [50, 150], ppm: [0, 10] };
 export const ACTION_MS = { sugar: 3200, water: 2600 };
-export const WATER_ADD_MS = 4000;
+export const WATER_ADD_MS = 2000;
 export const POUR_DELAY = 1100;
 export const POUR_RATE = 4;
 export const INITIAL = { sugar: 5, water: 95, ppm: 3 };

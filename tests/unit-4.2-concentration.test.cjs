@@ -17,7 +17,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  const dragTool=async(button,x,y)=>{await button.scrollIntoViewIfNeeded();const b=await button.boundingBox(),p=await local(x,y);await page.mouse.move(b.x+b.width*.5,b.y+b.height*.5);await page.mouse.down();await page.mouse.move(p.x,p.y,{steps:10});await page.mouse.up();};
  await t.test('independent ratio cases and input validation use solution mass as denominator',async()=>{
   const result=await page.evaluate(async()=>{const m=await import('./assets/concentration-state.js?v=apparatus-3');return{timing:[m.ACTION_MS.sugar,m.ACTION_MS.water,m.WATER_ADD_MS,m.POUR_DELAY,m.POUR_RATE],cases:[[5,95],[3,97],[0,50],[20,50],[.1,149.9]].map(([s,w])=>m.concentrationState(s,w,3)),invalid:[m.massValue('sugar',''),m.massValue('water',0),m.massValue('sugar',21),m.massValue('water',Infinity)],micro:Array.from({length:11},(_,n)=>m.concentrationState(5,95,n))};});
-  assert.deepEqual(result.timing,[3200,2600,4000,1100,4]);
+  assert.deepEqual(result.timing,[3200,2600,2000,1100,4]);
   const expected=[[100,5],[100,3],[50,0],[70,20/70*100],[150,.1/150*100]];
   result.cases.forEach((v,i)=>{assert.equal(v.total,expected[i][0]);assert.ok(Math.abs(v.percent-expected[i][1])<1e-12);});assert.deepEqual(result.invalid,[null,null,null,null]);
   result.micro.forEach((v,n)=>{assert.equal(v.totalMg,1000000);assert.equal(v.solventMg+n,1000000);assert.equal(v.ppm,n);assert.equal(v.microPercent,n/10000);});
@@ -65,12 +65,12 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   await page.locator('#mix-sugar-pan').tap();await advance(3500);assert.equal((await state()).sugar,5);
   await page.locator('#mix-water-cup').tap();await advance(3000);assert.equal((await state()).water,94);
  });
- await t.test('single additions remain observable for four seconds; removing water keeps its own timing',async()=>{
+ await t.test('single additions complete in two seconds; removing water keeps its own timing',async()=>{
   await fresh();await pitcher.click();
-  await advance(1400);const first=await state();assert.equal(first.activity,'pouring-water');assert.ok(first.water>95&&first.water<96);
-  const early=await lab.screenshot();await advance(1000);const later=await state();assert.equal(later.activity,'pouring-water');assert.ok(later.water>first.water);
+  await advance(700);const first=await state();assert.equal(first.activity,'pouring-water');assert.ok(first.water>95&&first.water<96);
+  const early=await lab.screenshot();await advance(500);const later=await state();assert.equal(later.activity,'pouring-water');assert.ok(later.water>first.water);
   assert.notDeepEqual(early,await lab.screenshot());await lab.screenshot({path:'/tmp/concentration-slow-pour.png'});
-  await advance(1800);assert.equal((await state()).water,96);assert.equal((await state()).activity,'idle');
+  await advance(900);assert.equal((await state()).water,96);assert.equal((await state()).activity,'idle');
   await page.locator('#mix-water-cup').click();await advance(1300);
   assert.equal((await state()).activity,'removing-water');assert.ok((await state()).water<96);await lab.screenshot({path:'/tmp/concentration-remove-water.png'});
   assert.equal(await lab.getAttribute('data-cup-lifted'),'true');assert.equal(await page.locator('[data-mix=water-read]').innerText(),'—');

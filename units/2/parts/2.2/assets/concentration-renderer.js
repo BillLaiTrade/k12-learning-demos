@@ -1,4 +1,4 @@
-import { POUR_DELAY, sugarActionState, waterAdditionState } from './concentration-state.js?v=water-motion-1';
+import { POUR_DELAY, sugarActionState, waterAdditionState } from './concentration-state.js?v=water-motion-2';
 // Apparatus positions follow the approved 1536 x 1024 photograph.
 export const TOOL = {
   sugar: { x: 407, y: 392, w: 335, h: 147, angle: 0 },

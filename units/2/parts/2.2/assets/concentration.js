@@ -1,5 +1,5 @@
-import { LIMITS, INITIAL, ACTION_MS, WATER_ADD_MS, POUR_DELAY, POUR_RATE, massValue, concentrationState, format, sugarActionState, waterAdditionState } from './concentration-state.js?v=water-motion-1';
-import { TOOL, renderMix } from './concentration-renderer.js?v=water-motion-1';
+import { LIMITS, INITIAL, ACTION_MS, WATER_ADD_MS, POUR_DELAY, POUR_RATE, massValue, concentrationState, format, sugarActionState, waterAdditionState } from './concentration-state.js?v=water-motion-2';
+import { TOOL, renderMix } from './concentration-renderer.js?v=water-motion-2';
 const $=id=>document.getElementById(id);
 const lab=$('mix-lab'),canvas=$('mix-canvas'),ctx=canvas.getContext('2d');
 const pitcher=$('mix-pitcher'),cup=$('mix-water-cup'),reset=$('mix-reset'),status=$('mix-status');
@@ -46,7 +46,7 @@ function startNext(now){
   const action=queue.shift(),startMass=state[action.kind],target=clamp(startMass+action.delta,...LIMITS[action.kind]);
   if(target===startMass){startNext(now);return;}
   const addingWater=action.kind==='water'&&action.delta>0;
-  animation={...action,start:now,startMass,target,duration:reduceMotion?(addingWater?2400:1800):addingWater?WATER_ADD_MS:ACTION_MS[action.kind]};
+  animation={...action,start:now,startMass,target,duration:addingWater?WATER_ADD_MS:reduceMotion?1800:ACTION_MS[action.kind]};
 }
 function returnPitcher(now){
   if(!animation||animation.returnOnly)return;
@@ -102,7 +102,7 @@ function wireTool(button,kind){
       const now=performance.now();
       if(state.water===g.startWater&&animation?.hold){
         // Continue the existing lift when a short hold ends before water flows.
-        const lead=clamp((now-animation.start)/POUR_DELAY,0,1),duration=reduceMotion?2400:WATER_ADD_MS;
+        const lead=clamp((now-animation.start)/POUR_DELAY,0,1),duration=WATER_ADD_MS;
         animation={kind:'water',delta:1,start:now-lead*.24*duration,startMass:state.water,target:clamp(state.water+1,...LIMITS.water),duration};
       }else{
         returnPitcher(now);announce(`水已量得 ${format(state.water,1)} 克，濃度 ${format(values().percent)}%。`);
