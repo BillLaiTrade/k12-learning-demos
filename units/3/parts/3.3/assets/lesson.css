@@ -220,3 +220,5 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .fork-actions{grid-template-columns:1fr 1fr}
 .fork-comparisons{grid-template-columns:1fr}
 }
+
+.card-main .fork-trace-note{margin:0 0 10px;color:var(--muted);font-size:.78rem;line-height:1.6}

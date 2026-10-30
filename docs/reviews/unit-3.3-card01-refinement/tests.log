@@ -1,0 +1,30 @@
+✔ fork sound preserves frequency and decay while strength changes amplitude (11.506261ms)
+▶ fork experiment: actual sound, synchronized motion, recording and layout
+  ✔ idle state shows the approved apparatus, accessible actions and unfilled records (93.452449ms)
+  ✔ both strikes have the same real frequency; heavy has larger audio and visible displacement (1239.506927ms)
+  ✔ wave traces grow rightward after contact, freeze on stop and restart from the left (4481.829207ms)
+  ✔ stop retains observations; reset clears them; natural completion and keyboard work (2837.400252ms)
+  ✔ rapid repeat, navigation, offscreen, hidden tab and pagehide stop sound and motion (1272.621879ms)
+  ✔ cancelled async audio preparation never starts later; playback failure can retry (871.998139ms)
+  ✔ desktop/laptop visual hierarchy matches the approved mockup and mobile stays usable (1623.525634ms)
+✔ fork experiment: actual sound, synchronized motion, recording and layout (13279.80997ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (114.507023ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (81.742111ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (895.028824ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (1702.86368ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (462.456968ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (284.420033ms)
+  ✔ hearing range and dBA examples change observations without producing test tones (167.32982ms)
+  ✔ one final task supports incomplete, incorrect, correct, editing, replay, clear and new requirements (425.404065ms)
+  ✔ lesson format follows unit 1.1 and navigation tracks ordinary reading (5692.515423ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (3053.543336ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (13789.514025ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27498.984013

@@ -379,3 +379,6 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 `tests/unit-3.3-fork.test.cjs`共8項（含外層）：同頻率／衰減與振幅比例、初始與紀錄狀態、真實音訊緩衝區、兩種敲擊的實際螢幕位移與兩叉股反向、單側振幅、停止／重設／自然結束、Enter／空白鍵、快速重敲及跨區／畫面外／分頁隱藏／pagehide停止、非同步取消／聲音失敗重試、減少動態偏好及七種尺寸。配合既有3.3回歸11項，共19項通過；畫面位於`/tmp/unit33-fork-review`，核可圖與實際結果見`docs/reviews/unit-3.3-card01-fork/review.md`。
 
 3.4第一區音效補查：`tests/unit-3.4-reflection.test.cjs`量測最末增益後的真實Web Audio訊號，檢查頁面沒有音量滑桿、行動觸控啟音、失敗／逾時提示及webkit前綴相容入口；可用`REFLECTION_URL`指定公開頁。此檢查不代表已確認使用者裝置的實體喇叭或靜音設定。
+### 3.3第一區逐步紀錄修訂
+
+音叉專項新增音槌接觸後波形向右延伸、停止保留部分波形、重敲從左重畫、另一欄保留及重設清空。現行音叉使用連續向量叉股，位移由實際叉端螢幕座標核對。專項與整頁回歸合計20項通過（含外層）；見 docs/reviews/unit-3.3-card01-refinement/review.md。本輪尚未發布，不沿用舊公開版作為本次驗證。

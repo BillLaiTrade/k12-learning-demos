@@ -18,3 +18,7 @@
 - [OpenStax 17.3 Sound Intensity and Sound Level](https://openstax.org/books/college-physics-2e/pages/17-3-sound-intensity-and-sound-level)：聲級、參考基準與分貝非線性關係。
 - [NIDCD Noise-Induced Hearing Loss](https://www.nidcd.nih.gov/health/noise-induced-hearing-loss)：生活情境的平均聲級參考，一般交談60～70dBA、電影院74～104dBA、音樂會94～110dBA。本頁僅引用資料，沒有新增噪音／聽力保護課程。
 - 更完整教材核對及資料限制見規劃儲存庫的[3.3第二階段報告](https://github.com/BillLaiTrade/k12/blob/main/docs/product/units/2-wave-and-sound/2.3-curriculum-materials-review.md)。
+
+## 2026-10-30第一區後續修訂
+
+現行音叉改以fork-experiment.mjs產生的連續SVG曲線、金屬漸層與木座細節呈現，不再載入fork-apparatus.png的照片切片；照片與生成紀錄保留作歷史來源。兩叉股相反彎曲且根部固定，音訊與放慢振動模型維持。下方四週期比較圖在2.4秒內沿時間軸逐步繪製，停止保留進度、重敲重畫、重設清空；不可將橫軸解讀成聲波在空氣中的傳播距離。

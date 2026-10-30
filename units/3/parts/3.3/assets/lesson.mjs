@@ -1,10 +1,10 @@
 import {signal,stringFrequency,tubeFrequency,hearingBand,soundSamples,challenge,checkSettings} from './model.mjs?v=1';
 import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
-import {createForkExperiment} from './fork-experiment.mjs?v=1';
+import {createForkExperiment} from './fork-experiment.mjs?v=2';
 import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const state={frequency:440,length:60,tension:1,tube:60,index:0};
-const forkView=createForkExperiment($('card-01'));
+let forkView;
 const names={pure:'純音',string:'弦音示意',pipe:'管音示意'};
 let target=challenge(), audioContext, source=null, activeRoot=null, animation=0, request=0;
 function svg(tag,attributes,parent){const n=document.createElementNS(ns,tag);for(const[k,v]of Object.entries(attributes))n.setAttribute(k,v);parent.append(n);return n;}
@@ -32,7 +32,7 @@ function stop(root=activeRoot){
  if(source){source.onended=null;try{source.stop();}catch{}source.disconnect();source=null;}
  cancelAnimationFrame(animation);animation=0;
  if(activeRoot){activeRoot.dataset.playing='false';activeRoot.querySelectorAll('.stop').forEach(b=>b.disabled=true);activeRoot.querySelector('.play-state').textContent='已停止，點擊可重新播放';}
- activeRoot=null;forkView.stop();restInstrument();
+ activeRoot=null;forkView?.stop();restInstrument();
 }
 function config(key){
  const answer=answers();
@@ -60,7 +60,7 @@ async function play(button){
   root.querySelectorAll('.stop').forEach(b=>b.disabled=false);root.querySelector('.play-state').textContent=forkKey?`${forkKey==='soft'?'輕敲':'較重敲'}，觀察振幅與聲音`:`播放中・${settings.frequency.toFixed(1)} Hz`;
   const start=performance.now(),currentSource=source,forkStart=audioContext.currentTime+(forkKey?STRIKE_DELAY:0);
   if(forkKey)forkView.start(forkKey);
-  source.onended=()=>{if(source===currentSource){stop(root);root.querySelector('.play-state').textContent='播放完畢，可再次比較';}};
+  source.onended=()=>{if(source===currentSource){if(forkKey)forkView.finish();stop(root);root.querySelector('.play-state').textContent='播放完畢，可再次比較';}};
   source.start(forkStart);
   function animate(now){
    if(source!==currentSource)return;
@@ -79,7 +79,7 @@ async function play(button){
  }
 }
 function render(){
- wave('amplitude-reference',FORK_FREQUENCY,.3,'pure',true);wave('amplitude-live',FORK_FREQUENCY,.7,'pure',true);
+
  wave('pitch-reference',220,.5);wave('pitch-live',state.frequency,.5);$('pitch-reading').textContent=`${state.frequency} Hz・每秒振動${state.frequency}次`;
  $('string-length-reading').textContent=state.length+' cm';$('string-tension-reading').textContent=state.tension.toFixed(2)+' 倍';$('string-frequency').textContent=stringFrequency(state.length,state.tension).toFixed(1)+' Hz';
  $('tube-length-reading').textContent=state.tube+' cm';$('tube-frequency').textContent=tubeFrequency(state.tube).toFixed(1)+' Hz';
@@ -154,4 +154,6 @@ function syncRoute(){
 }
 window.addEventListener('scroll',syncRoute,{passive:true});
 window.addEventListener('resize',syncRoute);
+wave('amplitude-reference',FORK_FREQUENCY,.3,'pure',true);wave('amplitude-live',FORK_FREQUENCY,.7,'pure',true);
+forkView=createForkExperiment($('card-01'));
 render();hearing(440);level('conversation');newChallenge();activeLink(location.hash||'#card-01');

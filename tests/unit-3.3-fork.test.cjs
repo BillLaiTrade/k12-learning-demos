@@ -29,12 +29,12 @@ test('fork experiment: actual sound, synchronized motion, recording and layout',
  const root=page.locator('#card-01'),strike=async key=>{await page.locator(`[data-fork-strike="${key}"]`).click();await page.waitForFunction(()=>document.querySelector('#card-01').dataset.forkState==='vibrating');};
  const reset=async()=>root.locator('.reset').click();
  const sample=()=>page.evaluate(async()=>{
-  const rows=[];for(let i=0;i<22;i++){await new Promise(requestAnimationFrame);const photo=document.querySelector('[data-prong="right"]');rows.push({x:photo.getScreenCTM().e,left:document.querySelector('[data-prong="left"]').transform.baseVal.consolidate().matrix.e,right:photo.transform.baseVal.consolidate().matrix.e,displacement:Number(document.querySelector('#fork-detail').dataset.displacement),main:Number(document.querySelector('#fork-apparatus').dataset.displacement),extent:Number(document.querySelector('#fork-detail').dataset.extent),arrow:document.querySelector('#fork-amplitude-arrow').getAttribute('d')});}return rows;
+  const rows=[];for(let i=0;i<22;i++){await new Promise(requestAnimationFrame);const photo=document.querySelector('[data-prong="right"]');rows.push({x:photo.querySelector("[data-tip-cap]").getBoundingClientRect().x,left:Number(document.querySelector('[data-prong="left"]').dataset.displacement),right:Number(photo.dataset.displacement),displacement:Number(document.querySelector('#fork-detail').dataset.displacement),main:Number(document.querySelector('#fork-apparatus').dataset.displacement),extent:Number(document.querySelector('#fork-detail').dataset.extent),arrow:document.querySelector('#fork-amplitude-arrow').getAttribute('d')});}return rows;
  });
  await t.test('idle state shows the approved apparatus, accessible actions and unfilled records',async()=>{
   assert.equal(await root.getAttribute('data-playing'),'false');assert.equal(await root.locator('.stop').isDisabled(),true);assert.equal(await root.locator('.fork-conclusion').isHidden(),true);assert.equal(await page.evaluate(()=>window.forkSounds.length),0);
   assert.equal(await root.locator('[data-fork-strike]').count(),2);assert.equal(await root.locator('#amplitude').count(),0);assert.match(await root.locator('.fork-scene').evaluate(n=>getComputedStyle(n).backgroundImage),/fork-tabletop-background/);
-  assert.match(await root.locator('#fork-photo image').first().getAttribute('href'),/fork-apparatus\.png/);assert.match(await root.locator('#fork-detail').getAttribute('aria-label'),/平衡位置.*單側最大位移/);
+  assert.equal(await root.locator('#fork-photo [data-prong]').count(),2);assert.equal(await root.locator('#fork-photo image').count(),0);assert.match(await root.locator('#fork-detail').getAttribute('aria-label'),/平衡位置.*單側最大位移/);
  });
  await t.test('both strikes have the same real frequency; heavy has larger audio and visible displacement',async()=>{
   await strike('soft');const soft=await sample();await strike('strong');const strong=await sample();
@@ -43,6 +43,29 @@ test('fork experiment: actual sound, synchronized motion, recording and layout',
   for(const row of [...soft,...strong]){assert.ok(Math.abs(row.left+row.right)<1e-8,'prongs move in opposite directions');assert.equal(row.main,row.displacement);assert.ok(row.extent>=Math.abs(row.displacement));assert.ok(Number(row.arrow.split('H')[1])>=80,'amplitude is one side of equilibrium');}
   assert.equal(await root.locator('.fork-conclusion').isVisible(),true);assert.equal(await root.locator('.fork-same-pitch').isVisible(),true);
   assert.equal(await page.locator('#amplitude-reference').getAttribute('data-frequency'),await page.locator('#amplitude-live').getAttribute('data-frequency'));
+ });
+ await t.test('wave traces grow rightward after contact, freeze on stop and restart from the left',async()=>{
+  await reset();
+  const trace=page.locator('#amplitude-reference');
+  assert.equal(await trace.getAttribute('data-progress'),'0');
+  await strike('soft');await page.waitForTimeout(250);
+  const early=Number(await trace.getAttribute('data-progress'));
+  const earlyPath=await trace.locator('.signal').getAttribute('d');
+  assert.ok(early>0&&early<.6);
+  await page.waitForTimeout(400);
+  const later=Number(await trace.getAttribute('data-progress'));
+  assert.ok(later>early&&later<1);
+  assert.ok((await trace.locator('.signal').getAttribute('d')).startsWith(earlyPath));
+  await root.locator('.stop').click();
+  const frozen=await trace.locator('.signal').getAttribute('d');
+  await page.waitForTimeout(120);assert.equal(await trace.locator('.signal').getAttribute('d'),frozen);
+  await strike('soft');assert.ok(Number(await trace.getAttribute('data-progress'))<early);
+  await page.waitForFunction(()=>document.querySelector('#card-01').dataset.playing==='false');
+  assert.equal(await trace.getAttribute('data-progress'),'1');
+  await strike('strong');assert.equal(await trace.getAttribute('data-progress'),'1');
+  await reset();assert.equal(await trace.locator('.signal').getAttribute('d'),'');
+  assert.equal(await page.locator('#amplitude-live').getAttribute('data-progress'),'0');
+  await strike('soft');await strike('strong');
  });
  await t.test('stop retains observations; reset clears them; natural completion and keyboard work',async()=>{
   await root.locator('.stop').click();assert.equal(await root.getAttribute('data-fork-state'),'idle');assert.equal(await page.locator('#fork-apparatus').getAttribute('data-displacement'),'0');assert.equal(await root.locator('.fork-conclusion').isVisible(),true);
