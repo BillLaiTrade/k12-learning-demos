@@ -1,13 +1,13 @@
 import {CUP,cupTransfer,drawCup,drawJet} from './cup-transfer.js?v=review-5';
 import {loadPicture} from './investigation-renderer.js?v=review-5';
 const root=document.getElementById('filter-animation'),button=document.getElementById('filter-play'),canvas=document.getElementById('filter-canvas'),status=document.getElementById('filter-status');
-const ctx=canvas.getContext('2d'),duration=10000,scale=1.6;
+const ctx=canvas.getContext('2d'),duration=2000,scale=1.6;
 const sampleMarker=root.querySelector('[data-filter-label=sample]'),filterMarker=root.querySelector('[data-filter-label=filter]'),resultMarker=root.querySelector('[data-filter-label=result]');
 const observation=document.getElementById('filter-observation'),observationCanvas=document.getElementById('filter-observation-canvas');
 const observationTitle=document.getElementById('filter-observation-title'),observationCopy=document.getElementById('filter-observation-copy');
 const observations={
  filter:{title:'濾紙上的泥沙',copy:'泥沙留在濾紙上，形成濾渣。',crop:[650,210,380,280]},
- result:{title:'杯中的濾液',copy:'泥沙被濾掉了；溶在水裡的鹽不會被濾紙攔住。',crop:[630,565,420,310]}
+ result:{title:'杯中的濾液',copy:'泥沙被濾掉了；溶在水裡的鹽不會被濾紙攔住。',crop:[600,515,480,370]}
 };
 const home={x:365/scale,y:700/scale,angle:0};
 let markerPose=null;
@@ -49,7 +49,8 @@ function play(){if(!background||!glass)return;if(observation.open)observation.cl
 function observe(kind){
  if(root.dataset.state!=='complete')return;
  const detail=observations[kind];observationTitle.textContent=detail.title;observationCopy.textContent=detail.copy;
- const view=observationCanvas.getContext('2d');view.clearRect(0,0,760,560);view.drawImage(canvas,...detail.crop,0,0,760,560);
+ observationCanvas.height=Math.round(observationCanvas.width*detail.crop[3]/detail.crop[2]);
+ const view=observationCanvas.getContext('2d');view.drawImage(canvas,...detail.crop,0,0,observationCanvas.width,observationCanvas.height);
  observationCanvas.setAttribute('aria-label',kind==='filter'?'放大觀察：白色濾紙上留有褐色泥沙。':'放大觀察：接液杯中是清澈的濾液，未見泥沙。');
  observation.showModal();
 }
