@@ -5,7 +5,7 @@ const root=document.getElementById('invest-lab');
 const $=id=>document.getElementById(`invest-${id}`);
 const controls=[...root.querySelectorAll('[data-invest-tool]')];
 const answers=new Map();
-const answerFields=['calculation-numerator','calculation-denominator','concentration-value'];
+const answerFields=['raw-mass','solution-mass','solute-mass','calculation-numerator','calculation-denominator','concentration-value'];
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
 let samples=[],active=null,stock=6,nextId=1,animation=null,renderer=null,frame=0,pausedAt=null,drag=null,suppressClickUntil=0;
 const selected=()=>samples.find(s=>s.id===active);
@@ -14,11 +14,8 @@ function announce(text,observation=false){$('status').textContent=text;$('status
 function invalidateReport(){const feedback=$('feedback');feedback.hidden=true;feedback.replaceChildren();delete feedback.dataset.result;}
 function redraw(now=performance.now()){renderer?.render({sample:selected(),stock,animation},now);}
 function updateConcentration(){
-  const sample=selected(),{raw,filtered,solid}=measuredMasses(sample);
-  $('raw-mass').textContent=raw?`${raw.mass} 克`:'尚未稱量';
+  const sample=selected(),{filtered,solid}=measuredMasses(sample);
   $('notebook-sample').textContent=sample?`取樣 ${label(sample.id)}`:'尚未取樣';
-  $('solution-mass').textContent=filtered?`${filtered.mass} 克`:'尚未稱量';
-  $('solute-mass').textContent=solid?`${solid.mass} 克`:'尚未稱量';
   $('solution-note').textContent=filtered?'這是計算濃度時的溶液總質量。':'這筆重量需要包含泥沙嗎？';
   $('solute-note').textContent=solid?(solid.phase==='dry-filtered'?'這是原本溶在濾液中的溶質質量。':'固體還混有泥沙，能直接當作晶體質量嗎？'):'稱到的是乾燥晶體，還是混著泥沙的固體？';
   $('liquid-measurement').dataset.valid=filtered?'true':'';
@@ -85,6 +82,14 @@ function submitReport(event){
   let result=assessReport(selected(),$('concentration-value').value);
   const basis=concentrationEvidence(selected()),issues=[];
   if(basis){
+    const measurements=measuredMasses(selected());
+    for(const [field,title,key,optional] of [['raw-mass','過濾前取樣','raw',true],['solution-mass','蒸發前濾液','filtered',false],['solute-mass','乾燥晶體','solid',false]]){
+      const value=$(field).value.trim(),measurement=measurements[key];
+      if(!value&&optional)continue;
+      if(!value||!Number.isFinite(Number(value))||Number(value)<0)issues.push(`請自行讀取電子秤，填寫${title}的淨質量紀錄（克）。`);
+      else if(!measurement)issues.push(`${title}尚未稱量，請確認這筆紀錄來自電子秤讀值。`);
+      else if(Math.abs(Number(value)-measurement.mass)>1e-6)issues.push(`紀錄的${title}淨質量與這份取樣的電子秤讀值不同，請重新核對。`);
+    }
     for(const [field,title,expected] of [['calculation-numerator','晶體淨質量',basis.solute],['calculation-denominator','濾液淨質量',basis.solution]]){
       const value=$(field).value.trim();
       if(!value||!Number.isFinite(Number(value))||Number(value)<0)issues.push(`請在公式中填入${title}（克）。`);

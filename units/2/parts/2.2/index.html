@@ -112,7 +112,7 @@
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=desktop-compact-7">
   <link rel="stylesheet" href="assets/ppm-scale.css?v=conversion-trimmed-1">
-  <link rel="stylesheet" href="assets/investigation.css?v=notebook-records-1">
+  <link rel="stylesheet" href="assets/investigation.css?v=manual-records-1">
 </head>
 <body>
   <header class="shell masthead">
@@ -303,11 +303,11 @@
             <button type="button" class="invest-retry" id="invest-retry" hidden>重新載入器材</button>
           </div>
           <section class="invest-calculation-notebook" id="invest-notebook" aria-labelledby="invest-answer-title">
-            <header class="invest-notebook-heading"><span class="invest-notebook-symbol" aria-hidden="true">▤</span><div><h3 id="invest-answer-title">濃度實驗紀錄本</h3><p>電子秤會自動扣除容器質量，並記下淨重。</p></div><span class="invest-notebook-sample" id="invest-notebook-sample">尚未取樣</span></header>
+            <header class="invest-notebook-heading"><span class="invest-notebook-symbol" aria-hidden="true">▤</span><div><h3 id="invest-answer-title">濃度實驗紀錄本</h3><p>電子秤已扣除容器質量，請自行讀值填寫。</p></div><span class="invest-notebook-sample" id="invest-notebook-sample">尚未取樣</span></header>
             <form class="invest-mission-result invest-notebook-page" id="invest-report" aria-labelledby="invest-answer-title" novalidate>
-              <div class="invest-notebook-entry" id="invest-raw-measurement"><span class="invest-entry-number" aria-hidden="true">01</span><div class="invest-entry-label">記下過濾前的取樣淨質量<small>泥沙也在這份取樣裡，總共多重？</small></div><b class="invest-entry-value" id="invest-raw-mass">尚未稱量</b></div>
-              <div class="invest-notebook-entry" id="invest-liquid-measurement"><span class="invest-entry-number" aria-hidden="true">02</span><div class="invest-entry-label">記下蒸發前的濾液淨質量<small id="invest-solution-note">這筆重量需要包含泥沙嗎？</small></div><b class="invest-entry-value" id="invest-solution-mass">尚未稱量</b></div>
-              <div class="invest-notebook-entry" id="invest-solid-measurement"><span class="invest-entry-number" aria-hidden="true">03</span><div class="invest-entry-label">記下蒸乾後的晶體淨質量<small id="invest-solute-note">稱到的是乾燥晶體，還是混著泥沙的固體？</small></div><b class="invest-entry-value" id="invest-solute-mass">尚未稱量</b></div>
+              <div class="invest-notebook-entry" id="invest-raw-measurement"><span class="invest-entry-number" aria-hidden="true">01</span><div class="invest-entry-label">記下過濾前的取樣淨質量<small>泥沙也在這份取樣裡，總共多重？</small></div><span class="invest-entry-value"><input id="invest-raw-mass" disabled type="number" min="0" step="any" inputmode="decimal" placeholder="填重量" aria-label="紀錄過濾前的取樣淨質量（克）"><span aria-hidden="true">克</span></span></div>
+              <div class="invest-notebook-entry" id="invest-liquid-measurement"><span class="invest-entry-number" aria-hidden="true">02</span><div class="invest-entry-label">記下蒸發前的濾液淨質量<small id="invest-solution-note">這筆重量需要包含泥沙嗎？</small></div><span class="invest-entry-value"><input id="invest-solution-mass" disabled type="number" min="0" step="any" inputmode="decimal" placeholder="填重量" aria-label="紀錄蒸發前的濾液淨質量（克）"><span aria-hidden="true">克</span></span></div>
+              <div class="invest-notebook-entry" id="invest-solid-measurement"><span class="invest-entry-number" aria-hidden="true">03</span><div class="invest-entry-label">記下蒸乾後的晶體淨質量<small id="invest-solute-note">稱到的是乾燥晶體，還是混著泥沙的固體？</small></div><span class="invest-entry-value"><input id="invest-solute-mass" disabled type="number" min="0" step="any" inputmode="decimal" placeholder="填重量" aria-label="紀錄蒸乾後的晶體淨質量（克）"><span aria-hidden="true">克</span></span></div>
               <div class="invest-notebook-calculation"><h4><span class="invest-entry-number" aria-hidden="true">04</span>把重量代入，算出濃度</h4><div class="invest-worked-calculation"><span class="invest-equation-name">重量百分濃度 ＝</span><span class="invest-calculation-fraction"><span><small>晶體淨質量</small><span class="invest-mass-input"><input id="invest-calculation-numerator" disabled type="number" min="0" step="any" inputmode="decimal" placeholder="填重量" aria-label="代入計算的晶體淨質量"><span aria-hidden="true">克</span></span></span><span><small>濾液淨質量</small><span class="invest-mass-input"><input id="invest-calculation-denominator" disabled type="number" min="0" step="any" inputmode="decimal" placeholder="填重量" aria-label="代入計算的濾液淨質量"><span aria-hidden="true">克</span></span></span></span><span class="invest-equation-factor">× 100% ＝</span><div class="invest-notebook-answer"><input id="invest-concentration-value" disabled type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="填答案" aria-label="重量百分濃度計算結果" aria-describedby="invest-answer-title"><span aria-hidden="true">%</span></div></div></div>
               <div class="invest-notebook-actions"><button type="submit" id="invest-check" disabled>核對我的計算</button></div>
               <div class="invest-feedback" id="invest-feedback" role="status" aria-live="polite" hidden></div>
@@ -357,6 +357,6 @@
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
   <script type="module" src="assets/ppm-pool.js?v=vertical-calculation-1"></script>
-  <script type="module" src="assets/investigation.js?v=notebook-records-1"></script>
+  <script type="module" src="assets/investigation.js?v=manual-records-1"></script>
 </body>
 </html>

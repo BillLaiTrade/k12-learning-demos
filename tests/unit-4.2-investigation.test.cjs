@@ -116,24 +116,25 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
  await t.test('evaporating that filtrate leaves white solid; its dry net mass is five grams',async()=>{
   await act('heat');assert.equal((await state()).phase,'dry-filtered');assert.match(await $('status').innerText(),/蒸乾後留下白色固體/);await act('weigh');assert.match(await $('status').innerText(),/5 克/);
  });
- await t.test('the notebook records measurements while leaving the fraction for the student',async()=>{
+ await t.test('the notebook leaves weight records and the fraction for the student',async()=>{
   assert.equal(await page.locator('#invest-record,#invest-event,.invest-note textarea').count(),0);assert.equal(await $('notebook').isVisible(),true);
-  assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');assert.equal(await $('calculation-numerator').inputValue(),'');assert.equal(await $('calculation-denominator').inputValue(),'');
+  assert.equal(await $('solution-mass').inputValue(),'');assert.equal(await $('solute-mass').inputValue(),'');assert.equal(await $('calculation-numerator').inputValue(),'');assert.equal(await $('calculation-denominator').inputValue(),'');
  });
  await t.test('the mission checks actual separation and net measurements before accepting an answer',async()=>{
   await page.locator('[data-sample="1"]').click();await $('concentration-value').fill('5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'revise');assert.match(await $('feedback').innerText(),/泥沙.*濾掉/);
-  await page.locator('[data-sample="'+validSample+'"]').click();assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');
+  await page.locator('[data-sample="'+validSample+'"]').click();assert.equal(await $('solution-mass').inputValue(),'');assert.equal(await $('solute-mass').inputValue(),'');
+  await $('solution-mass').fill('100');await $('solute-mass').fill('5');
   await $('calculation-numerator').fill('5');await $('calculation-denominator').fill('100');
   await $('concentration-value').fill('4.901960784');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'revise');
   await $('concentration-value').fill('5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');assert.match(await $('feedback').innerText(),/任務完成/);assert.match(await $('feedback').innerText(),/5 克 ÷ 100 克/);
  });
  await t.test('the concentration answer uses automatic tare and the active aliquot only',async()=>{
-  assert.match(await page.locator('.invest-notebook-heading').innerText(),/自動扣除容器質量/);assert.equal(await page.locator('#invest-include-concentration,#invest-concentration-unit,[name=component]').count(),0);
-  await page.locator('[data-sample="1"]').click();assert.equal(await $('feedback').isVisible(),false);assert.equal(await $('solute-mass').innerText(),'7 克');assert.match(await $('solute-note').innerText(),/泥沙/);
+  assert.match(await page.locator('.invest-notebook-heading').innerText(),/已扣除容器質量/);assert.equal(await page.locator('#invest-include-concentration,#invest-concentration-unit,[name=component]').count(),0);
+  await page.locator('[data-sample="1"]').click();assert.equal(await $('feedback').isVisible(),false);assert.equal(await $('solute-mass').inputValue(),'');assert.match(await $('solute-note').innerText(),/泥沙/);
   await page.locator('[data-sample="'+validSample+'"]').click();assert.equal(await $('concentration-value').inputValue(),'5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');
  });
  await t.test('editing an answer withdraws completion without changing the recorded weights',async()=>{
-  await $('concentration-value').fill('4');assert.equal(await $('feedback').isVisible(),false);assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');
+  await $('concentration-value').fill('4');assert.equal(await $('feedback').isVisible(),false);assert.equal(await $('solution-mass').inputValue(),'100');assert.equal(await $('solute-mass').inputValue(),'5');
   await $('concentration-value').fill('5');await $('check').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');
  });
  await t.test('dragging apparatus to the active sample works, and outside or canceled drops do nothing',async()=>{
