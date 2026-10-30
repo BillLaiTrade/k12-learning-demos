@@ -8,4 +8,12 @@
 
 [本機輸出](browser-tests.log)：第二區11項與完整頁9項共20項通過（含外層），0失敗／0跳過。檢查兩種排列、主圖三種色格／右側獨立氬及其餘選取後點空白、點面板外、全部配色及圖例狀態恢復、原排列保留、手機觸控，以及原有互動回歸；語法與`git diff --check`通過。
 
-已目視對照[選取前](before-dismiss.webp)與[點旁邊後](proportion-after-dismiss.webp)，另保存[混合恢復](mixed-after-dismiss.webp)。維持第4階段逐區修訂，非整份教材驗收。
+已目視對照[取消前](before-dismiss.webp)與[點旁邊後](proportion-after-dismiss.webp)，另保存[混合恢復](mixed-after-dismiss.webp)。維持第4階段逐區修訂，非整份教材驗收。
+
+## 公開確認
+
+實作`967bf313af2fa37eaa877a3532dea3c01d4a79e8`已推送。原部署被後續main更新接續，已確認`2492afed`包含本次提交且未改2.3檔案；[Pages41052278667](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41052278667)與[Deploy41052279132](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41052279132)皆成功。
+
+公開HTML／JS兩檔HTTP200，SHA-256與實作一致，見[比對](public-hashes.json)。公開第二區11項通過（含外層），0失敗／0跳過，包含兩種排列點空白恢復及手機觸控，見[公開輸出](public-tests.log)。
+
+[直接檢視第二區](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/?v=967bf313#s2)。

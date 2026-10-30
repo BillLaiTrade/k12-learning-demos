@@ -1,0 +1,16 @@
+[
+  {
+    "file": "units/2/parts/2.3/index.html",
+    "status": 200,
+    "sha256": "3d52eb7ecfdfe83b912be71ae26d46eb3dc1a001dbe167259ff5b2765b4604d1",
+    "expected": "3d52eb7ecfdfe83b912be71ae26d46eb3dc1a001dbe167259ff5b2765b4604d1",
+    "match": true
+  },
+  {
+    "file": "units/2/parts/2.3/assets/composition.mjs",
+    "status": 200,
+    "sha256": "e71df84121558d096b8d907dca0f51f37014608c87cc1a69cf4bde8a3f53771c",
+    "expected": "e71df84121558d096b8d907dca0f51f37014608c87cc1a69cf4bde8a3f53771c",
+    "match": true
+  }
+]
