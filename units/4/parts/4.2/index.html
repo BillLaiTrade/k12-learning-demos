@@ -69,7 +69,7 @@
   <link rel="stylesheet" href="assets/mirror-image.css?v=12">
   <link rel="stylesheet" href="assets/mirror-distance.css?v=visual-polish-20261029">
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=application-polish-20261029">
-  <link rel="stylesheet" href="assets/reversible-light.css?v=angle-equality-20261030">
+  <link rel="stylesheet" href="assets/reversible-light.css?v=trim-notes-20261030">
   <link rel="stylesheet" href="assets/periscope.css?v=8">
   <style>
     .route a.quiz-nav{margin-top:12px;border-top:1px solid var(--line);padding-top:17px;color:#8a6726;font-size:.86rem;font-weight:750}
@@ -383,11 +383,7 @@
               </div>
               <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><span class="reverse-angle-readout"><span class="reverse-incident-angle">入射角</span>＝<span class="reverse-reflected-angle">反射角</span>＝<output id="reverse-angle-value" aria-label="目前入射角與反射角">30°</output></span><button type="button" id="reverse-reset">↻ 重新設定</button></div>
             </div>
-            <div class="reverse-legend"><span><i class="reverse-red"></i>A：紅光</span><span><i class="reverse-blue"></i>B：藍光</span></div>
             <div class="reverse-paths"><div><small>A 紅光路徑</small><strong>A → M → B</strong><span id="reverse-path-a-status">已關閉</span></div><div><small>B 藍光路徑</small><strong>B → M → A</strong><span id="reverse-path-b-status">已關閉</span></div></div>
-            <p class="reverse-state" id="reverse-state" aria-live="polite">點擊任一發射器，開啟對應顏色的光；再點一次即可關閉。</p>
-            <details class="reverse-reason"><summary>查看原因：入射角與反射角交換後，仍然相等</summary><p>從 B 朝 M 照射時，原本的反射線成了入射線；原本的入射線則成為返回 A 的反射線。鏡面與法線固定，交換後兩個角仍相等，所以光會沿原路返回。</p><p id="reverse-reason-angles">兩次的入射角與反射角都是 30°。</p></details>
-            <p class="reverse-note">紅光由 A 出發，藍光由 B 出發；可單獨或同時開啟。重合處以紅色外緣與藍色細線區分，兩條中心路徑相同。圖中光路為傳播方向示意。</p>
             <div class="fact reverse-fact"><p><strong>重點：</strong>鏡面固定，從 B 沿原光路反向照射，光會經同一反射點回到 A，稱為光路可逆。後續學習折射時，再觀察這個性質。</p></div>
             <noscript><p>請啟用 JavaScript 點選 A、B 發射器。紅光沿 A→M→B，藍光沿 B→M→A，各自遵守反射定律。</p></noscript>
           </div>
@@ -463,7 +459,7 @@
   <script type="module" src="assets/mirror-image.js?v=14"></script>
   <script type="module" src="assets/reflection-3d.js?v=46"></script>
   <script type="module" src="assets/laser-reflection.js?v=36"></script>
-  <script type="module" src="assets/reversible-light.js?v=closed-arrow-tips-20261030"></script>
+  <script type="module" src="assets/reversible-light.js?v=trim-notes-20261030"></script>
   <script type="module" src="assets/periscope.js?v=14"></script>
 </body>
 </html>

@@ -216,8 +216,8 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
     await page.keyboard.press('b'); await status(false, false);
     await page.keyboard.press('Home'); await expect(section).toHaveAttribute('data-reverse-angle', '20');
     await page.keyboard.press('End'); await expect(section).toHaveAttribute('data-reverse-angle', '60');
-    await page.locator('.reverse-reason summary').click();
-    await expect(page.locator('#reverse-reason-angles')).toContainText('60°');
+    await expect(page.locator('#reverse-angle-value')).toHaveText('60°');
+    await expect(section.locator('.reverse-legend, #reverse-state, .reverse-reason, .reverse-note')).toHaveCount(0);
   });
 
   await t.test('independent controls and device labels fit five widths', async () => {

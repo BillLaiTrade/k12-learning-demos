@@ -162,8 +162,6 @@ function updateUI() {
     section.querySelector(`#reverse-path-${key}-status`).textContent = lights[key] ? '開啟' : '關閉';
   }
   section.querySelector('#reverse-overlap').hidden = !(lights.a && lights.b);
-  section.querySelector('#reverse-state').textContent = lights.a && lights.b ? '紅光與藍光的路徑重合，傳播方向相反。' : lights.a ? 'A 紅光沿 A → M → B；再點 A 可關閉，點 B 可加入藍光。' : lights.b ? 'B 藍光沿 B → M → A；再點 B 可關閉，點 A 可加入紅光。' : '點擊任一發射器，開啟對應顏色的光；再點一次即可關閉。';
-  section.querySelector('#reverse-reason-angles').textContent = `兩個方向的入射角與反射角都是 ${degrees}°。`;
 }
 function refresh() { updateUI(); reframe(); draw(); }
 function toggle(key) { lights[key] = !lights[key]; started = true; refresh(); }

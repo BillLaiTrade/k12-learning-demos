@@ -185,7 +185,7 @@ test('4.2 fifth activity: approved three-step comparison, exact optics and inter
     await expect(page.locator('#distance-side-object')).toHaveAttribute('aria-valuenow', '60');
     await page.locator('#reverse-toggle-b').click();
     await expect(page.locator('#reverse-toggle-b')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('#reverse-state')).toContainText('B 藍光');
+    await expect(page.locator('#reverse-state')).toHaveCount(0);
     assert.deepEqual(failures, []);
   });
 });
