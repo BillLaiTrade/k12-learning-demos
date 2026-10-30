@@ -30,6 +30,8 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
 
   await t.test('all proportions and both classes are visible before any action', async () => {
     assert.equal(await section.locator('.air-share').count(), 100);
+    assert.equal(await section.locator('#air-highlight-status').textContent(), '');
+    assert.equal(await section.locator('#air-highlight-status').evaluate(el => el.getBoundingClientRect().height), 0);
     assert.equal(await section.locator('[data-air-gas]').count(), 4);
     assert.equal(await section.locator('[data-air-gas=all], .air-show-all').count(), 0);
     for (const [gas, count] of [['nitrogen', 78], ['oxygen', 21], ['minor', 1]]) {
@@ -200,6 +202,7 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
         await page.waitForTimeout(200);
         assert.equal(await section.getAttribute('data-emphasis'), 'all');
         assert.equal(await section.getAttribute('data-arrangement'), view);
+        assert.equal(await section.locator('#air-highlight-status').textContent(), '', 'dismiss does not restore the removed ranking sentence');
         assert.deepEqual(await section.locator('[data-air-gas][aria-pressed=true]').evaluateAll(nodes => nodes.map(n => n.dataset.airGas)), []);
         assert.equal(await section.locator('.air-share[aria-pressed=true]').count(), 0);
         for (const piece of await section.locator('.air-share, .air-zoom-piece').all()) assert.equal(await piece.evaluate(el => getComputedStyle(el).opacity), '1');

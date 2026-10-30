@@ -9,7 +9,7 @@ const detail = section.querySelector('.air-other-detail');
 const connector = section.querySelector('.air-zoom-link path');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const descriptions = {
-  all: '氮最多，其次是氧，再來是氬；其餘氣體只占少量。',
+  all: '',
   nitrogen: '100份乾燥空氣中，約78份是氮氣（約78%）。',
   oxygen: '100份乾燥空氣中，約21份是氧氣（約21%）。',
   argon: '氬氣占全部乾燥空氣約0.93%。斜紋格合併氬氣與其餘少量；放大圖突出的是氬氣。',
@@ -24,7 +24,7 @@ function emphasize() {
   section.dataset.emphasis = hovered || focused || selected;
 }
 function describe() {
-  status.textContent = descriptions[selected] + (section.dataset.arrangement === 'mixed' ? ' 排列改變，比例不變；氣體混合在一起。' : ' 集中排列，方便比較比例。');
+  status.textContent = selected === 'all' ? '' : descriptions[selected] + (section.dataset.arrangement === 'mixed' ? ' 排列改變，比例不變；氣體混合在一起。' : ' 集中排列，方便比較比例。');
 }
 // A fixed permutation of all 100 positions: every tile moves, no share is added or removed.
 // The coarse minor tile stays on the bottom row so its connector does not cross the chart.

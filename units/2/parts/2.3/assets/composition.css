@@ -31,6 +31,7 @@ button.air-share:hover:not(:disabled),button.air-share[aria-pressed=true]{backgr
 .air-legend strong>span{font-size:.75rem;margin-left:2px}
 .air-legend small{grid-column:1/-1;color:var(--muted);font-size:.68rem;font-weight:400;margin-top:2px}
 .air-legend strong.air-small-value{font-size:1.05rem;letter-spacing:0}
+.air-highlight-status:empty{margin:0;min-height:0}
 .air-highlight-status{color:#47634e;font-size:.81rem;line-height:1.8;margin:14px 0 0;min-height:2.9em}
 [data-emphasis=nitrogen] .air-share:not([data-component=nitrogen]),[data-emphasis=oxygen] .air-share:not([data-component=oxygen]),[data-emphasis=argon] .air-share:not([data-component=minor]),[data-emphasis=other] .air-share:not([data-component=minor]),[data-emphasis=minor] .air-share:not([data-component=minor]){opacity:.2}
 [data-emphasis=argon] .air-share[data-component=minor],[data-emphasis=other] .air-share[data-component=minor],[data-emphasis=minor] .air-share[data-component=minor]{outline:2px solid #827ba5;outline-offset:2px}
