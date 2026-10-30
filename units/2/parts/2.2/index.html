@@ -59,6 +59,16 @@
     .filter-play canvas {display:block;width:100%;height:auto;aspect-ratio:1672/941;}
     .filter-play:focus-visible {outline:4px solid #176b53;outline-offset:-4px;}
     .filter-animation .filter-hotspot {position:absolute;z-index:2;min-width:46px;min-height:36px;padding:5px 9px;border:2px solid #fff;border-radius:9px;background:#176b53;color:white;box-shadow:0 2px 10px #243a3540;font-size:clamp(.65rem,1.2vw,.8rem);font-weight:750;pointer-events:none;transform:translate(-50%,-50%);}
+    .filter-animation button.filter-hotspot:enabled {pointer-events:auto;cursor:zoom-in;}
+    .filter-animation button.filter-hotspot:enabled:hover {background:#10533f;}
+    .filter-animation button.filter-hotspot:disabled {opacity:1;}
+    .filter-observation {width:min(540px,calc(100vw - 32px));max-height:90vh;box-sizing:border-box;padding:20px;border:1px solid #cddbd1;border-radius:18px;background:#fbfdf9;color:#315345;box-shadow:0 20px 70px #163e3438;}
+    .filter-observation::backdrop {background:#18362d66;}
+    .filter-observation header {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px;}
+    .filter-observation h3 {margin:0;font-size:1.1rem;}
+    .filter-observation-close {display:grid;place-items:center;flex:none;width:36px;height:36px;border:1px solid #cddbd1;border-radius:50%;background:#fff;color:#315345;font-size:1.3rem;cursor:pointer;}
+    .filter-observation canvas {display:block;width:100%;height:auto;max-height:55vh;object-fit:contain;border-radius:12px;background:#edf4ee;}
+    .filter-observation p {margin:12px 0 0;font-size:.9rem;line-height:1.7;}
     .filter-play-cue {position:absolute;right:12px;bottom:12px;display:none;place-items:center;width:38px;height:38px;padding:6px;border:1px solid #bdc8bf;border-radius:10px;background:#ffffffeb;color:#176b53;pointer-events:none;}
     .filter-play-cue svg {width:23px;height:23px;}
     .filter-animation:is([data-state="ready"],[data-state="complete"]) .filter-play-cue {display:grid;}
@@ -153,14 +163,19 @@
           <p>這杯混濁的雨水裡有泥沙顆粒。泥沙沒有溶解在水裡，仍是水中的固體成分。</p>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>泥沙混在水裡，要怎麼把它們分開？</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們用濾紙試試看，觀察泥沙和水各自去了哪裡。</p></div>
-          <div class="filter-animation" id="filter-animation" role="group" aria-label="泥沙水經過濾紙的連續動畫；點擊畫面開始或重播">
+          <div class="filter-animation" id="filter-animation" role="group" aria-label="泥沙水經過濾紙的連續動畫；點擊畫面開始，完成後可點濾紙或濾液放大觀察">
             <button class="filter-play" id="filter-play" type="button" aria-label="播放過濾動畫" disabled><canvas id="filter-canvas" width="1672" height="941" role="img" aria-label="桌上的泥沙水杯、乾淨濾紙與空接液杯；點擊開始過濾。"></canvas></button>
             <span class="filter-hotspot sample" data-filter-label="sample">樣本</span>
-            <span class="filter-hotspot filter" data-filter-label="filter">濾紙</span>
-            <span class="filter-hotspot result" data-filter-label="result">接液杯</span>
+            <button class="filter-hotspot filter" data-filter-label="filter" type="button" aria-label="放大觀察濾紙上的泥沙" aria-haspopup="dialog" aria-controls="filter-observation" disabled>濾紙</button>
+            <button class="filter-hotspot result" data-filter-label="result" type="button" aria-label="放大觀察濾液" aria-haspopup="dialog" aria-controls="filter-observation" disabled>接液杯</button>
             <span class="filter-play-cue" aria-hidden="true"><svg class="filter-start-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg><svg class="filter-replay-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></span>
           </div>
           <span id="filter-status" role="status"></span>
+          <dialog class="filter-observation" id="filter-observation" aria-labelledby="filter-observation-title" aria-describedby="filter-observation-copy">
+            <header><h3 id="filter-observation-title">放大觀察</h3><button class="filter-observation-close" id="filter-observation-close" type="button" aria-label="關閉觀察" autofocus>×</button></header>
+            <canvas id="filter-observation-canvas" width="760" height="560" role="img"></canvas>
+            <p id="filter-observation-copy"></p>
+          </dialog>
           <ol class="filter-steps" aria-label="過濾的四個步驟">
             <li><b>① 架好器材</b><span>將濾紙放入漏斗，並在漏斗下方放好接液杯。</span></li>
             <li><b>② 倒入泥沙水</b><span>將樣本慢慢倒進濾紙中，避免液體溢出。</span></li>
@@ -333,7 +348,7 @@
 
   </script>
   <script type="importmap">{"imports":{"three":"../../../4/parts/4.1/assets/vendor/three/build/three.module.js"}}</script>
-  <script type="module" src="assets/filtration.js?v=click-to-start-1"></script>
+  <script type="module" src="assets/filtration.js?v=result-observation-1"></script>
   <script type="module" src="assets/evaporation-animation.js?v=click-cue-2"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=water-motion-2"></script>
