@@ -353,3 +353,11 @@ AIR_COMPOSITION_ARTIFACT_DIR=/tmp/unit23-composition node --test --test-reporter
 新增完整頁檢查：七個路線錨點、六區角色對話、第一區示例在操作前／重設後可見、兩種製氣重播／暫停／繼續／全覽、離區暫停與不自動恢復、氧氣／二氧化碳性質比較、唯一小測未答／錯誤／改答／正確／局部重設、320–1440px無溢出、停用JavaScript仍能閱讀全部教學證據、觸控及減少動態。另以純函式逐項驗證小測的概念判讀；歷史氣體模型僅作保留模組回歸，不是現行耗氧教學。
 
 `AIR_FULL_URL`可指定公開2.3網址；`AIR_FULL_ARTIFACT_DIR`可指定完整頁畫面路徑。本輪畫面與輸出存`docs/reviews/unit-2.3-complete/`，既有第二區局部交付畫面保留。
+
+## 2.3 第二區排列與放大圖優化
+
+```sh
+AIR_COMPOSITION_ARTIFACT_DIR=/tmp/unit23-explore AIR_FULL_ARTIFACT_DIR=/tmp/unit23-full node --test --test-reporter=spec tests/unit-2.3-composition.test.cjs tests/unit-2.3-full.test.cjs
+```
+
+第二區測試涵蓋看比例／看混合保留100格與78／21／1組成、兩種排列的四項選取、氬／其餘放大圖不同突出、切換保留選取、顯示全部保留排列、游標／鍵盤／觸控、減少動態、五種寬度與無JavaScript完整閱讀。`AIR_COMPOSITION_URL`可指定公開網址；新版預設截圖目錄為`docs/reviews/unit-2.3-composition-explore/`，公開檢查請另設暫存截圖目錄以保留本機證據。
