@@ -5,7 +5,7 @@
 .fireworks-quiz .fireworks-kicker{display:inline-block;margin:0 10px 0 0;color:#88652a;font-size:.78rem;font-weight:800;letter-spacing:.05em}
 .fireworks-quiz .quiz-head h2{display:inline;font-size:1.65rem;color:#143f34;line-height:1.35}
 .fireworks-quiz .quiz-head p:last-child{margin-top:5px;font-size:.88rem}
-.fireworks-body{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(225px,1fr);gap:16px;padding:20px 20px 12px}
+.fireworks-body{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(275px,1fr);gap:16px;padding:20px 20px 12px}
 .fireworks-view{min-width:0;overflow:hidden;align-self:start;border:1px solid #d7e1dd;border-radius:15px;background:#fffefa}
 .fireworks-scene{position:relative;aspect-ratio:16/10;overflow:hidden;background:#071b32}
 .fireworks-scene>img,.fireworks-scene>canvas{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
@@ -13,15 +13,14 @@
 .fireworks-location svg{width:15px;height:15px}
 .fireworks-scene-caption{position:absolute;top:12px;left:12px;max-width:calc(100% - 24px);padding:5px 10px;border-radius:7px;background:rgb(5 19 34 / 68%);color:#f8f7ee;font-size:.78rem}
 .fireworks-scene-caption:empty{display:none}
-.fireworks-events{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px}
 .fireworks-event{display:grid;justify-items:center;gap:3px;color:#3a5048;font-size:.76rem;white-space:nowrap}
 .fireworks-event-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#f5f0e3;color:#a58240;transition:background-color .15s,color .15s}
 .fireworks-event-icon svg{width:22px;height:22px}
 .fireworks-event[data-reached=true] .fireworks-event-icon{background:#e8f2e2;color:#176b53}
 .fireworks-event:first-child[data-reached=true] .fireworks-event-icon{background:#ffedc5;color:#9e6e1e}
-.fireworks-timer{min-width:0;padding:10px 4px 4px;border-top:1px solid #e0e8e1;text-align:center}
-.fireworks-timer-value{color:#165641;font-size:2.25rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.3;white-space:nowrap}
-.fireworks-timer-value small{font-size:.9rem;font-weight:700}
+.fireworks-timer{min-width:0;text-align:center}
+.fireworks-timer-value{color:#165641;font-size:clamp(1.4rem,10cqi,1.8rem);font-weight:800;font-variant-numeric:tabular-nums;line-height:1.3;white-space:nowrap}
+.fireworks-timer-value small{font-size:.65rem;font-weight:700}
 .fireworks-controls{display:flex;align-items:center;justify-content:center;gap:14px;padding:13px 14px 16px}
 .fireworks-controls .action{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-width:160px;min-height:43px;padding:8px 12px;font-size:.88rem}
 .fireworks-controls .action svg{width:18px;height:18px}
@@ -38,8 +37,10 @@
 .fireworks-speed{margin:8px 0 0;padding-top:7px;border-top:1px solid #d7e1dd;color:#496057;font-size:.82rem;text-align:center;line-height:1.6}
 .fireworks-speed strong{display:block;margin:3px 0;color:#224e40;font-size:.95rem;white-space:nowrap}
 .fireworks-speed small{display:block;font-size:.74rem;line-height:1.5}
-.fireworks-record{padding:10px 12px;text-align:center}
-.fireworks-record p{margin:0;color:#64736b;font-size:.77rem}
+.fireworks-record{container-type:inline-size;display:grid;grid-template-columns:minmax(0,1fr) 12px minmax(0,1.25fr) 12px minmax(0,1fr);align-items:center;gap:3px;padding:16px 12px;text-align:center}
+.fireworks-record .fireworks-event{min-width:0;font-size:.74rem;line-height:1.4;white-space:normal}
+.fireworks-time-arrow{color:#7a8f80;font-size:.8rem}
+.fireworks-record p{margin:0 0 4px;color:#64736b;font-size:.7rem;white-space:nowrap}
 .fireworks-estimate{padding:10px 12px}
 .fireworks-formula{margin:0 0 8px;padding:6px 5px;border-radius:8px;background:#fff5de;color:#3c594c;font-size:.85rem;font-weight:750;line-height:1.4;text-align:center;white-space:nowrap}
 .fireworks-input{display:flex;align-items:center;gap:8px;padding:0 10px;border:1px solid #bfcfc5;border-radius:9px;background:#fff}
@@ -61,11 +62,10 @@
 .fireworks-footnote{margin:0;padding:0 20px 16px;color:#78837c;font-size:.75rem;line-height:1.6}
 @container fireworks (max-width:650px){
   .fireworks-body{grid-template-columns:minmax(0,1fr);padding:14px;gap:12px}
-  .fireworks-sidebar{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .fireworks-sidebar{grid-template-columns:minmax(0,1fr);gap:10px}
   .fireworks-sidebar>.fireworks-panel:last-child{grid-column:1/-1}
   .fireworks-quiz .quiz-head{padding:16px;gap:10px}
   .fireworks-quiz .quiz-head h2{font-size:1.4rem}
-  .fireworks-timer-value{font-size:1.8rem}
   .fireworks-controls .action{min-width:145px}
 }
 @media(prefers-reduced-motion:reduce){

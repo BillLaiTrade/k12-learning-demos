@@ -190,7 +190,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await page.locator('#fireworks-check').isEnabled(), true);
     await page.waitForTimeout(250);
     assert.equal(await page.locator('#fireworks-timer').textContent(), '3.00', 'stopwatch stops at sound arrival');
-    assert.equal(await page.locator('#fireworks-record-label').textContent(), '亮光與聲音的時間差');
+    assert.equal(await page.locator('#fireworks-record-label').textContent(), '時間差');
     t.diagnostic('wall clock and audio ' + JSON.stringify(times));
   });
 
@@ -281,11 +281,11 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
   });
 
   await t.test('desktop and laptop layout stays readable without horizontal overflow', async () => {
-    for (const width of [1440, 1280, 1024, 1920]) {
+    for (const width of [1440, 1280, 1024, 1920, 390]) {
       await page.setViewportSize({ width, height: 1000 });
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       const columns = await page.locator('.fireworks-body').evaluate(element => getComputedStyle(element).gridTemplateColumns.split(' ').length);
-      assert.equal(columns, 2);
+      assert.equal(columns, width === 390 ? 1 : 2);
       const boxes = await page.locator('.fireworks-record').evaluate(record => {
         const outer = record.getBoundingClientRect();
         return [...record.querySelectorAll('.fireworks-event, .fireworks-timer')].every(n => {
@@ -293,6 +293,22 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
         });
       });
       assert.equal(boxes, true, 'event markers and stopwatch fit the observation record');
+      const order = await page.locator('.fireworks-record').evaluate(record => {
+        const light = record.querySelector('#fireworks-light').getBoundingClientRect();
+        const timer = record.querySelector('.fireworks-timer').getBoundingClientRect();
+        const sound = record.querySelector('#fireworks-sound').getBoundingClientRect();
+        const middle = r => (r.top+r.bottom)/2;
+        const digits = record.querySelector('#fireworks-timer'), saved = digits.textContent;
+        digits.textContent = '6.00';
+        const value = record.querySelector('.fireworks-timer-value');
+        const readable = value.scrollWidth <= value.clientWidth;
+        digits.textContent = saved;
+        return { between: light.right <= timer.left && timer.right <= sound.left,
+          aligned: Math.abs(middle(light)-middle(timer)) < 1 && Math.abs(middle(timer)-middle(sound)) < 1,
+          border: getComputedStyle(record.querySelector('.fireworks-timer')).borderTopWidth,
+          readable };
+      });
+      assert.deepEqual(order, {between:true,aligned:true,border:'0px',readable:true});
       await page.locator('#unit-quiz').screenshot({path:`/tmp/unit32-stopwatch-${width}.png`});
     }
   });

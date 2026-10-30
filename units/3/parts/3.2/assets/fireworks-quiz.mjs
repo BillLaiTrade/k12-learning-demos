@@ -39,7 +39,7 @@ if (root) {
     root.dataset.audio = 'idle'; root.dataset.elapsed = '0';
     delete root.dataset.delay;
     timer.textContent = '—';
-    recordLabel.textContent = '亮光與聲音的時間差';
+    recordLabel.textContent = '時間差';
     lightEvent.dataset.reached = 'false'; soundEvent.dataset.reached = 'false';
     caption.textContent = ''; status.textContent = ''; delete status.dataset.error;
     renderer.draw(-1); clearFeedback(); setState('ready');
@@ -88,7 +88,7 @@ if (root) {
         root.dataset.audio = 'playing'; root.dataset.delay = challenge.delay.toFixed(2);
         soundEvent.dataset.reached = 'true';
         timer.textContent = challenge.delay.toFixed(2);
-        recordLabel.textContent = '亮光與聲音的時間差';
+        recordLabel.textContent = '時間差';
         caption.textContent = '聽到爆炸聲了';
         status.textContent = '已記下時間差，現在可以估算距離；再觀察一次會重播同一題。';
       }

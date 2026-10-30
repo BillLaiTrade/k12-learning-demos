@@ -14,7 +14,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.2-
 CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.2-fireworks.test.cjs tests/unit-3.2-playback.test.cjs
 ```
 
-煙火動畫不因「減少動態」定格。檢查兩種偏好設定的逐時畫面一致、擴散下墜及清除、真實音訊延遲、2～6秒實時計時、作答及重播與跨區停止；兩檔合計 20 項（含外層）。觀察紀錄只保留一個累加計時器與亮光／聲音圖示，驗證無進度條或預告總時間、計時持續增加、聲音抵達後停止，以及四種桌機寬度的元件範圍；當次畫面存於 `/tmp/unit32-stopwatch-{width}.png`。
+煙火動畫不因「減少動態」定格。檢查兩種偏好設定的逐時畫面一致、擴散下墜及清除、真實音訊延遲、2～6秒實時計時、作答及重播與跨區停止；兩檔合計 20 項（含外層）。觀察紀錄維持「亮光 → 計時 → 聲音」同列，驗證計時位於兩事件之間且置中、無分隔線或進度條、不預告總時間、計時持續增加、聲音抵達後停止，以及四種桌機寬度與390px的元件範圍和完整6.00秒讀值可讀性；當次畫面存於 `/tmp/unit32-stopwatch-{width}.png`。
 
 ## 6.1 元素的探索
 
