@@ -45,3 +45,13 @@
  .lesson-side h3{margin:0 0 3px}
  .lesson-role{grid-column:2}
 }
+
+/* 單元小測導覽依 1.1／2.2 的星號與金色識別。 */
+.route a.quiz-nav{margin-top:12px;border-top:1px solid var(--line);padding-top:17px;color:#8a6726;font-weight:750}
+.route a.quiz-nav b{color:#946f2d;opacity:1}
+.route a.quiz-nav[aria-current="step"]{border-left-color:#d9a74f;background:#faf3e4;color:#795b25;box-shadow:inset 3px 0 #d9a74f}
+@media(max-width:760px){
+ .route a.quiz-nav{margin:0 0 0 4px;border:1px solid #ddd6c4;border-radius:999px;padding:0 11px;gap:6px;width:auto;background:var(--card);white-space:nowrap}
+ .route a.quiz-nav span{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;white-space:nowrap}
+ .route a.quiz-nav[aria-current="step"]{border-color:#d9a74f;border-radius:999px;background:#faf3e4}
+}
