@@ -7,7 +7,10 @@
 .chrom-source--dark {left:20.4%;width:11.3%;clip-path:polygon(42% 0,95% 0,68% 100%,0 100%);}
 .chrom-source:hover,.chrom-source:focus-visible {background:#176b531c;outline:0;}
 .chrom-source:focus-visible {background:#176b5338;}
-.chrom-source-label {position:absolute;z-index:2;top:85.8%;transform:translateX(-50%);padding:2px 7px;border:1px solid #c5d2c4;border-radius:5px;background:#fffdf3ed;color:#315b46;font-size:clamp(10px,1.05vw,13px);line-height:1.6;white-space:nowrap;pointer-events:none;}
+.chrom-source-label {position:absolute;z-index:2;top:85.8%;transform:translateX(-50%);padding:2px 7px;border:1px solid #c5d2c4;border-radius:5px;background:#fffdf3ed;color:#315b46;font-family:inherit;font-size:clamp(10px,1.05vw,13px);line-height:1.6;white-space:nowrap;cursor:pointer;}
+.chrom-source-label:not(:disabled):hover {border-color:#4d8866;background:#f0f6e9;}
+.chrom-source-label:focus-visible {outline:2px solid #176b53;outline-offset:3px;}
+.chrom-source-label:disabled {cursor:default;}
 .chrom-source-label--green {left:14.5%;}
 .chrom-source-label--dark {left:25.3%;}
 .chrom-paper,.chrom-drop,.chrom-clip { position:absolute; margin:0; padding:0; border:0; background:transparent; touch-action:none; }

@@ -7,6 +7,7 @@ const clip = document.getElementById('chrom-clip');
 const reset = document.getElementById('chrom-reset');
 const status = document.getElementById('chrom-status');
 const choices = [...document.querySelectorAll('.ink-choice')];
+const sourceLabels = [...lab.querySelectorAll('[data-chrom-source-label]')];
 const ctx = canvas.getContext('2d');
 const W = 1536, H = 1024, PW = 109, PH = PAPER_HEIGHT * H;
 const SOURCE_PAPERS = {
@@ -85,6 +86,7 @@ function draw() {
     choice.hidden = !available;choice.setAttribute('aria-pressed', String(!available));
     const label = lab.querySelector(`[data-chrom-source-label="${key}"]`);
     label.hidden = !available && !installed;
+    label.disabled = !available;
     label.style.left = available ? '' : `${MOUNT.x * 100}%`;
     label.style.top = available ? '' : '89%';
     if (available) drawPreparedInk(key);
@@ -177,7 +179,7 @@ function tick(timestamp) {
     draw();
     if (mountProgress >= 1) {
       begin();
-      if (document.activeElement === document.body || choices.includes(document.activeElement)) paper.focus({preventScroll:true});
+      if (document.activeElement === document.body || [...choices,...sourceLabels].includes(document.activeElement)) paper.focus({preventScroll:true});
     } else raf = requestAnimationFrame(tick);
     return;
   }
@@ -221,13 +223,14 @@ drop.addEventListener('click', activatePaper);
 reset.addEventListener('click', () => { fresh(); choices[0].focus({preventScroll:true}); });
 clip.addEventListener('click', () => { fresh(); choices[0].focus({preventScroll:true}); });
 choices.forEach(button => button.addEventListener('click', () => selectPaper(button.dataset.ink)));
+sourceLabels.forEach(button => button.addEventListener('click', () => selectPaper(button.dataset.chromSourceLabel)));
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && ['running', 'mounting'].includes(mode)) { stop(); if (mode === 'running') mode = 'paused'; draw(); }
   else if (document.hidden && mode === 'spilled') stop();
   else if (!document.hidden && (mode === 'mounting' || mode === 'spilled' && seconds < DURATION)) raf = requestAnimationFrame(tick);
 });
 background.onload = () => {
-  lab.dataset.ready = 'true'; [paper,drop,reset,...choices].forEach(b => { b.disabled = false; }); draw();
+  lab.dataset.ready = 'true'; [paper,drop,reset,...choices,...sourceLabels].forEach(b => { b.disabled = false; }); draw();
 };
 background.onerror = () => {
   lab.dataset.ready = 'error'; status.classList.add('chrom-error');

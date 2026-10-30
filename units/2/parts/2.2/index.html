@@ -126,7 +126,7 @@
     @media(max-width:680px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:16px; padding-top:20px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .goal-choice { min-width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
-  <link rel="stylesheet" href="assets/chromatography.css?v=prepared-papers-1">
+  <link rel="stylesheet" href="assets/chromatography.css?v=source-label-click-1">
   <link rel="stylesheet" href="assets/concentration.css?v=boundary-feedback-1">
   <link rel="stylesheet" href="assets/ppm-scale.css?v=camera-toggle-1">
   <link rel="stylesheet" href="assets/investigation.css?v=manual-records-1">
@@ -221,9 +221,9 @@
           <div class="chrom-lab" id="chrom-lab" data-mode="ready" data-ink="green" aria-label="濾紙層析互動實驗">
             <canvas id="chrom-canvas" width="1536" height="1024" aria-hidden="true"></canvas>
             <button class="chrom-source chrom-source--green ink-choice" type="button" data-ink="green" aria-label="選擇已點好綠色筆墨點的濾紙，掛上夾具觀察" aria-pressed="false" disabled></button>
-            <span class="chrom-source-label chrom-source-label--green" data-chrom-source-label="green" aria-hidden="true">綠色筆</span>
+            <button class="chrom-source-label chrom-source-label--green" data-chrom-source-label="green" type="button" aria-label="選擇已點好綠色筆墨點的濾紙，掛上夾具觀察" disabled>綠色筆</button>
             <button class="chrom-source chrom-source--dark ink-choice" type="button" data-ink="dark" aria-label="選擇已點好深色筆墨點的濾紙，掛上夾具觀察" aria-pressed="false" disabled></button>
-            <span class="chrom-source-label chrom-source-label--dark" data-chrom-source-label="dark" aria-hidden="true">深色筆</span>
+            <button class="chrom-source-label chrom-source-label--dark" data-chrom-source-label="dark" type="button" aria-label="選擇已點好深色筆墨點的濾紙，掛上夾具觀察" disabled>深色筆</button>
             <button class="chrom-drop" id="chrom-drop" type="button" aria-label="暫停或繼續層析實驗" disabled></button>
             <button class="chrom-paper" id="chrom-paper" type="button" aria-label="暫停層析實驗" hidden disabled></button>
             <button class="chrom-clip" id="chrom-clip" type="button" aria-label="鬆開夾具，重新選擇已點墨的濾紙" disabled></button>
@@ -355,7 +355,7 @@
   <script type="importmap">{"imports":{"three":"../../../4/parts/4.1/assets/vendor/three/build/three.module.js"}}</script>
   <script type="module" src="assets/filtration.js?v=result-observation-3"></script>
   <script type="module" src="assets/evaporation-animation.js?v=full-replay-1"></script>
-  <script type="module" src="assets/chromatography.js?v=prepared-papers-1"></script>
+  <script type="module" src="assets/chromatography.js?v=source-label-click-1"></script>
   <script type="module" src="assets/concentration.js?v=boundary-feedback-1"></script>
   <script type="module" src="assets/ppm-pool.js?v=camera-toggle-1"></script>
   <script type="module" src="assets/investigation.js?v=dish-to-scale-1"></script>
