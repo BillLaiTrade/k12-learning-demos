@@ -1,0 +1,47 @@
+TAP version 13
+# Subtest: 2.1 quiz feedback explains correct placement and guides retries
+    # Subtest: all nine specimens retain useful hints after either wrong placement and reselection
+    ok 1 - all nine specimens retain useful hints after either wrong placement and reselection
+      ---
+      duration_ms: 75974.424345
+      type: 'test'
+      ...
+    # Subtest: dragging to a wrong cabinet shows the same hint and can be corrected
+    ok 2 - dragging to a wrong cabinet shows the same hint and can be corrected
+      ---
+      duration_ms: 1485.895137
+      type: 'test'
+      ...
+    # Subtest: correct completion, returning a specimen and reset clear retry feedback
+    ok 3 - correct completion, returning a specimen and reset clear retry feedback
+      ---
+      duration_ms: 8145.458616
+      type: 'test'
+      ...
+    # Subtest: retry and correct feedback fit the 1440px layout
+    ok 4 - retry and correct feedback fit the 1440px layout
+      ---
+      duration_ms: 1477.000267
+      type: 'test'
+      ...
+    # Subtest: retry and correct feedback fit the 1024px layout
+    ok 5 - retry and correct feedback fit the 1024px layout
+      ---
+      duration_ms: 1619.888989
+      type: 'test'
+      ...
+    1..5
+ok 1 - 2.1 quiz feedback explains correct placement and guides retries
+  ---
+  duration_ms: 90030.220418
+  type: 'test'
+  ...
+1..1
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 90453.288375

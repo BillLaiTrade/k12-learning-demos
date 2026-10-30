@@ -522,6 +522,10 @@
     .quiz-subtitle { margin:8px 0 0; color:var(--muted); font-size:.94rem; }
     .quiz-body { padding:23px 28px 28px; }
     .workbench-intro { margin:0 0 12px; color:#516159; }
+    .workbench-pan-controls { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; margin:0 0 10px; }
+    .workbench-pan-controls[hidden] { display:none; }
+    .workbench-pan-controls button { display:inline-flex; align-items:center; gap:6px; }
+    .workbench-pan-controls button:disabled { color:var(--muted); background:#f1f3ee; opacity:.6; cursor:default; }
     .workbench-viewport { overflow-x:auto; border:1px solid #b5c2b4; border-radius:15px; background:#d7c09d; scrollbar-color:#829b89 #eee8dc; }
     .workbench-scene { position:relative; width:100%; min-width:760px; aspect-ratio:1672 / 941; overflow:hidden; background:#9a7550 url("assets/specimen-workbench-equal-cabinets.png") center / 100% 100% no-repeat; }
     .book-open-hotspot { position:absolute; z-index:3; left:0%; top:63%; width:34%; height:18%; padding:0; border:0; border-radius:10px; background:transparent; cursor:zoom-in; }
@@ -1164,7 +1168,11 @@
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>好，先看看每個樣本的組成，再判斷是元素、化合物，還是混合物。</p></div>
             <p class="workbench-intro">點選樣本可查看對應手冊頁，再把它拖進展示櫃；放錯了可拖回桌面，或選取後按「放回桌面」。</p>
             <p class="scene-pan-hint">左右滑動桌面，查看所有樣本和展示櫃。</p>
-            <div class="workbench-viewport" aria-label="可左右滑動查看桌面上的分類工作區">
+            <div class="workbench-pan-controls" id="workbench-pan-controls" role="group" aria-label="工作桌檢視方向" hidden>
+              <button class="action-button" type="button" id="workbench-pan-left" aria-controls="workbench-viewport" disabled><span aria-hidden="true">←</span>向左查看</button>
+              <button class="action-button" type="button" id="workbench-pan-right" aria-controls="workbench-viewport" disabled>向右查看<span aria-hidden="true">→</span></button>
+            </div>
+            <div class="workbench-viewport" id="workbench-viewport" aria-label="可左右滑動查看桌面上的分類工作區">
               <div class="workbench-scene" id="classification-workbench" aria-label="木桌上有待分類的樣本，旁邊有物質分類手冊，後方是玻璃展示櫃">
                 <button class="book-open-hotspot" type="button" id="book-open" aria-label="打開桌上的物質分類手冊並放大閱讀" aria-haspopup="dialog"></button>
                 <span class="case-heading case-heading--pure">純物質</span>
@@ -2095,6 +2103,31 @@
       selectPhaseState(window.location.hash==="#liquid-overview"?"liquid":window.location.hash==="#gas-overview"?"gas":"solid");
       requestAnimationFrame(()=>phaseSolidOverview.scrollIntoView({block:"center"}));
     }
+
+    const workbenchViewport=document.getElementById("workbench-viewport");
+    const workbenchPanControls=document.getElementById("workbench-pan-controls");
+    const workbenchPanLeft=document.getElementById("workbench-pan-left");
+    const workbenchPanRight=document.getElementById("workbench-pan-right");
+    function updateWorkbenchPanControls(){
+      const maxScroll=Math.max(0,workbenchViewport.scrollWidth-workbenchViewport.clientWidth);
+      workbenchPanControls.hidden=maxScroll<=1;
+      workbenchPanLeft.disabled=workbenchViewport.scrollLeft<=1;
+      workbenchPanRight.disabled=workbenchViewport.scrollLeft>=maxScroll-1;
+    }
+    function panWorkbench(direction){
+      const distance=Math.max(120,workbenchViewport.clientWidth*.8);
+      workbenchViewport.scrollBy({left:direction*distance,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+    }
+    workbenchPanLeft.addEventListener("click",()=>panWorkbench(-1));
+    workbenchPanRight.addEventListener("click",()=>panWorkbench(1));
+    workbenchViewport.addEventListener("scroll",updateWorkbenchPanControls,{passive:true});
+    window.addEventListener("resize",updateWorkbenchPanControls,{passive:true});
+    if("ResizeObserver" in window){
+      const workbenchResizeObserver=new ResizeObserver(updateWorkbenchPanControls);
+      workbenchResizeObserver.observe(workbenchViewport);
+      workbenchResizeObserver.observe(document.getElementById("classification-workbench"));
+    }
+    updateWorkbenchPanControls();
 
     const specimenRules={
       copper:{label:"樣本 1",realName:"銅片",property:"紅棕色薄片，表面可見明亮的金屬光澤。",particles:"放大後，視野中的微粒都呈現相同的樣式。",clue:"點選手冊中的相同編號，閱讀樣本圖案、性質和粒子組成線索。",category:"element",dest:"元素展示層"},

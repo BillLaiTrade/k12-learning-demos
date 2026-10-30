@@ -1,0 +1,47 @@
+TAP version 13
+# Subtest: 2.1 workbench navigation reveals overflow without changing classification
+    # Subtest: full desktop view hides the controls
+    ok 1 - full desktop view hides the controls
+      ---
+      duration_ms: 1081.208285
+      type: 'test'
+      ...
+    # Subtest: laptop view supports mouse and keyboard navigation and native-scroll boundaries
+    ok 2 - laptop view supports mouse and keyboard navigation and native-scroll boundaries
+      ---
+      duration_ms: 1512.111599
+      type: 'test'
+      ...
+    # Subtest: panning preserves selection and supports click and drag classification
+    ok 3 - panning preserves selection and supports click and drag classification
+      ---
+      duration_ms: 2028.910932
+      type: 'test'
+      ...
+    # Subtest: controls update after resizing the container and hide when the scene fits again
+    ok 4 - controls update after resizing the container and hide when the scene fits again
+      ---
+      duration_ms: 1662.766998
+      type: 'test'
+      ...
+    # Subtest: narrow view allows multiple steps without overscrolling
+    ok 5 - narrow view allows multiple steps without overscrolling
+      ---
+      duration_ms: 2845.240321
+      type: 'test'
+      ...
+    1..5
+ok 1 - 2.1 workbench navigation reveals overflow without changing classification
+  ---
+  duration_ms: 11146.489637
+  type: 'test'
+  ...
+1..1
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11816.35677
