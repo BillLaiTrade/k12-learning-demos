@@ -1,4 +1,4 @@
-import { POUR_DELAY, sugarActionState } from './concentration-state.js?v=sugar-motion-1';
+import { POUR_DELAY, sugarActionState, waterAdditionState } from './concentration-state.js?v=water-motion-1';
 // Apparatus positions follow the approved 1536 x 1024 photograph.
 export const TOOL = {
   sugar: { x: 407, y: 392, w: 335, h: 147, angle: 0 },
@@ -12,7 +12,7 @@ export function toolPose(kind, animation, drag, now) {
   if(drag?.kind===kind&&drag.moved) return {...home,x:drag.x,y:drag.y};
   if(!animation||animation.kind!==kind||kind==='water'&&animation.delta<0)return home;
   const t=Math.max(0,Math.min(1,(now-animation.start)/animation.duration));
-  const strength=animation.hold?ease((now-animation.start)/POUR_DELAY):ease(Math.min(t/.3,(1-t)/.25));
+  const strength=animation.returnOnly?animation.fromStrength*(1-ease(t)):animation.hold?ease((now-animation.start)/POUR_DELAY):waterAdditionState(t).tilt;
   if(kind==='sugar'){
     const stops=animation.delta<0?[
       {t:0,...home},{t:.20,x:430,y:520,angle:.05},{t:.30,x:430,y:520,angle:.05},
@@ -95,7 +95,7 @@ export function renderMix(ctx,images,state,animation,drag,now) {
   ctx.clearRect(0,0,1536,1024);ctx.drawImage(images.background,0,0,1536,1024);
   const sugarPose=toolPose('sugar',animation,drag,now),waterPose=toolPose('water',animation,drag,now),cupPose=beakerPose(animation,now);
   const t=animation?Math.max(0,Math.min(1,(now-animation.start)/animation.duration)):0;
-  const flowing=animation?.kind==='water'&&animation.delta>0&&(animation.hold?now-animation.start>POUR_DELAY:t>.25&&t<.8);
+  const flowing=animation?.kind==='water'&&animation.delta>0&&!animation.returnOnly&&(animation.hold?now-animation.start>POUR_DELAY:waterAdditionState(t).pouring);
   const surface=drawBeaker(ctx,images.beaker,state.water,cupPose,now,flowing);sugarPile(ctx,state.sugar);
   ctx.save();ctx.beginPath();ctx.ellipse(1382,661,110,16,0,0,Math.PI*2);ctx.fillStyle='#4e46331a';ctx.fill();ctx.restore();
   drawTool(ctx,images.tools,'water',waterPose);drawTool(ctx,images.tools,'sugar',sugarPose);

@@ -1,7 +1,8 @@
 // Fresh, fully dissolved sugar-water recipes. Bounds avoid saturation teaching.
 export const LIMITS = { sugar: [0, 20], water: [50, 150], ppm: [0, 10] };
 export const ACTION_MS = { sugar: 3200, water: 2600 };
-export const POUR_DELAY = 650;
+export const WATER_ADD_MS = 4000;
+export const POUR_DELAY = 1100;
 export const POUR_RATE = 4;
 export const INITIAL = { sugar: 5, water: 95, ppm: 3 };
 export function massValue(kind, value) {
@@ -25,4 +26,10 @@ export function sugarActionState(progress, delta) {
   const clamp = value => Math.max(0, Math.min(1, value));
   const t = clamp(progress), start = delta < 0 ? .22 : .66, end = delta < 0 ? .40 : .82;
   return { transfer: clamp((t - start) / (end - start)), pouring: t >= .60 && t < .82, pourProgress: clamp((t - .60) / .22) };
+}
+
+export function waterAdditionState(progress) {
+  const clamp = value => Math.max(0, Math.min(1, value));
+  const t = clamp(progress), lead = clamp(Math.min(t / .24, (1 - t) / .16));
+  return { transfer: clamp((t - .26) / .56), pouring: t >= .26 && t < .82, tilt: lead * lead * (3 - 2 * lead) };
 }

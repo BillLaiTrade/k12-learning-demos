@@ -1,5 +1,5 @@
-import { LIMITS, INITIAL, ACTION_MS, POUR_DELAY, POUR_RATE, massValue, concentrationState, format, sugarActionState } from './concentration-state.js?v=sugar-motion-1';
-import { TOOL, renderMix } from './concentration-renderer.js?v=sugar-motion-1';
+import { LIMITS, INITIAL, ACTION_MS, WATER_ADD_MS, POUR_DELAY, POUR_RATE, massValue, concentrationState, format, sugarActionState, waterAdditionState } from './concentration-state.js?v=water-motion-1';
+import { TOOL, renderMix } from './concentration-renderer.js?v=water-motion-1';
 const $=id=>document.getElementById(id);
 const lab=$('mix-lab'),canvas=$('mix-canvas'),ctx=canvas.getContext('2d');
 const pitcher=$('mix-pitcher'),cup=$('mix-water-cup'),reset=$('mix-reset'),status=$('mix-status');
@@ -45,19 +45,25 @@ function startNext(now){
   if(animation||!queue.length)return;
   const action=queue.shift(),startMass=state[action.kind],target=clamp(startMass+action.delta,...LIMITS[action.kind]);
   if(target===startMass){startNext(now);return;}
-  animation={...action,start:now,startMass,target,duration:reduceMotion?(action.kind==='sugar'?1800:80):ACTION_MS[action.kind]};
+  const addingWater=action.kind==='water'&&action.delta>0;
+  animation={...action,start:now,startMass,target,duration:reduceMotion?(addingWater?2400:1800):addingWater?WATER_ADD_MS:ACTION_MS[action.kind]};
+}
+function returnPitcher(now){
+  if(!animation||animation.returnOnly)return;
+  const lead=clamp((now-animation.start)/POUR_DELAY,0,1),fromStrength=lead*lead*(3-2*lead);
+  animation={kind:'water',delta:1,start:now,startMass:state.water,target:state.water,duration:800,returnOnly:true,fromStrength};
 }
 function frame(now){
   raf=null;
   if(gesture?.kind==='water'&&!gesture.moved&&!gesture.capped&&now-gesture.start>=220){
-    if(!animation?.hold)animation={kind:'water',delta:1,hold:true,start:gesture.start,startMass:state.water,duration:ACTION_MS.water};
+    if(!animation?.hold)animation={kind:'water',delta:1,hold:true,start:gesture.start,startMass:state.water,duration:WATER_ADD_MS};
     const amount=clamp(animation.startMass+Math.max(0,now-animation.start-POUR_DELAY)/1000*POUR_RATE,...LIMITS.water);
     setMass('water',amount);gesture.held=true;
-    if(amount>=LIMITS.water[1]){gesture.capped=true;animation=null;announce('已量得水150克，停止倒水。');}
+    if(amount>=LIMITS.water[1]){gesture.capped=true;returnPitcher(now);announce('已量得水150克，停止倒水。');}
   }
   if(animation&&!animation.hold){
     const p=clamp((now-animation.start)/animation.duration,0,1);
-    const flow=animation.kind==='water'?clamp((p-.25)/.55,0,1):sugarActionState(p,animation.delta).transfer;
+    const flow=animation.kind==='water'?(animation.delta>0?waterAdditionState(p).transfer:clamp((p-.25)/.55,0,1)):sugarActionState(p,animation.delta).transfer;
     setMass(animation.kind,animation.startMass+(animation.target-animation.startMass)*flow);
     if(p>=1){const kind=animation.kind;setMass(kind,animation.target);animation=null;announce(`${kind==='sugar'?'糖':'水'}已量得 ${format(state[kind],1)} 克，濃度 ${format(values().percent)}%。`);}
   }
@@ -91,7 +97,18 @@ function wireTool(button,kind){
     if(g.moved){
       ignoreClick=true;
       if(p.x>830&&p.x<1130&&p.y>270&&p.y<590)act('water',1);
-    }else if(g.held){ignoreClick=true;animation=null;if(state.water===g.startWater)act('water',1);else announce(`水已量得 ${format(state.water,1)} 克，濃度 ${format(values().percent)}%。`);}
+    }else if(g.held){
+      ignoreClick=true;
+      const now=performance.now();
+      if(state.water===g.startWater&&animation?.hold){
+        // Continue the existing lift when a short hold ends before water flows.
+        const lead=clamp((now-animation.start)/POUR_DELAY,0,1),duration=reduceMotion?2400:WATER_ADD_MS;
+        animation={kind:'water',delta:1,start:now-lead*.24*duration,startMass:state.water,target:clamp(state.water+1,...LIMITS.water),duration};
+      }else{
+        returnPitcher(now);announce(`水已量得 ${format(state.water,1)} 克，濃度 ${format(values().percent)}%。`);
+      }
+      schedule();
+    }
     paint();
   });
   const cancel=()=>{if(gesture?.kind===kind){gesture=null;animation=null;ignoreClick=true;paint();}};
