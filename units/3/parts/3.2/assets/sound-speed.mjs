@@ -31,13 +31,12 @@ const svg = (tag, attributes, parent) => {
 const state = { mode: root.dataset.soundSpeedMode === 'temperature' ? 'temperature' : 'material', phase: 'idle', time: 0, scope: 'together' };
 let models = [], groups = [], frame = 0, runStartWall = null, runStartTime = 0;
 const panel = $('#experiment-panel');
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let microAnimations = [];
 function stopMicroMotion() { microAnimations.forEach(animation => animation.pause()); }
 function startMicroMotion() {
-  if (!document.hidden && !reducedMotion.matches) microAnimations.forEach(animation => animation.play());
+  // 依核可設定，教學微動不受系統「減少動態」影響；背景與手動暫停仍有效。
+  if (!document.hidden) microAnimations.forEach(animation => animation.play());
 }
-reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) stopMicroMotion(); });
 
 function buildModel(group) {
   const settings = appearance[group.kind], material = materialInfo[group.kind];

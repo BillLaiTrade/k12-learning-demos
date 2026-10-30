@@ -6,7 +6,7 @@ const { chromium } = require('playwright');
 
 test('3.2 switches activities without overlapping playback', { timeout: 90000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], {
-    cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'pipe']
+    cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'ignore']
   });
   t.after(() => server.kill());
   const port = await new Promise((resolve, reject) => {
@@ -41,7 +41,9 @@ test('3.2 switches activities without overlapping playback', { timeout: 90000 },
         return source;
       };
     });
-    await page.goto(`http://127.0.0.1:${port}/units/3/parts/3.2/#${hash}`, { waitUntil: 'networkidle' });
+    await page.goto(`http://127.0.0.1:${port}/units/3/parts/3.2/#${hash}`, { waitUntil: 'domcontentloaded' });
+    await page.locator('#air-wave[data-state="ready"]').waitFor({ state: 'attached' });
+    await page.locator('#experiment-panel[data-phase="idle"]').waitFor({ state: 'attached' });
     return page;
   };
   const waitBell = page => page.waitForFunction(() => document.querySelector('#air-wave').dataset.state === 'playing');

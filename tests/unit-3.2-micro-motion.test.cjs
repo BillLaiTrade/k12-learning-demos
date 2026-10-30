@@ -131,15 +131,33 @@ test('3.2 material micro motion stays separate from sound propagation', { timeou
     await lab.screenshot({path:'/tmp/unit32-micro-motion-desktop.png'});
   });
 
-  await t.test('reduced motion never starts incidental movement, even after a strike', async () => {
+  await t.test('reduced motion does not disable micro motion or override the pause controls', async () => {
     const context = await browser.newContext({reducedMotion:'reduce',viewport:{width:1280,height:1000}});
     try {
-      const p = await context.newPage(); await p.goto(url+'#card-04');
+      const p = await context.newPage(); await p.bringToFront(); await p.goto(url+'#card-04');
       const reduced = p.locator('#card-04 [data-sound-speed-lab]');
       await reduced.locator('#models').scrollIntoViewIfNeeded();
-      await p.waitForTimeout(100);
+      await p.waitForFunction(() => matchMedia('(prefers-reduced-motion: reduce)').matches && document.querySelector('#card-04 .particle-micro-motion')?.getAnimations()[0]?.playState === 'running');
+      const positions = () => reduced.locator('.particle-micro-motion').evaluateAll(ns => ns.map(n => getComputedStyle(n).transform));
+      const before = await positions(); await p.waitForTimeout(350);
+      const after = await positions();
+      assert.notDeepEqual(after.slice(0,66), before.slice(0,66), 'air visibly moves with reduced motion enabled');
+      assert.notDeepEqual(after.slice(66), before.slice(66), 'water visibly moves with reduced motion enabled');
       await reduced.locator('#primary-action').click();
       await p.waitForTimeout(150);
+      assert.equal(await reduced.locator('.particle-micro-motion').evaluateAll(ns => ns.every(n => n.getAnimations()[0].playState === 'running')),true);
+      await p.emulateMedia({reducedMotion:'no-preference'});
+      await p.emulateMedia({reducedMotion:'reduce'});
+      await p.waitForTimeout(100);
+      assert.equal(await reduced.locator('.particle-micro-motion').evaluateAll(ns => ns.every(n => n.getAnimations()[0].playState === 'running')),true, 'changing the preference cannot stop movement');
+      await reduced.locator('#primary-action').click();
+      await p.waitForTimeout(60);
+      assert.equal(await reduced.locator('.particle-micro-motion').evaluateAll(ns => ns.every(n => n.getAnimations()[0].playState === 'paused')),true);
+      const frozen = await positions(); await p.waitForTimeout(200); assert.deepEqual(await positions(), frozen);
+      await reduced.locator('#reset-action').click();
+      assert.equal(await reduced.locator('.particle-micro-motion').evaluateAll(ns => ns.every(n => n.getAnimations()[0].playState === 'running')),true);
+      await p.locator('.route a[href="#card-05"]').click();
+      await p.waitForTimeout(60);
       assert.equal(await reduced.locator('.particle-micro-motion').evaluateAll(ns => ns.every(n => n.getAnimations()[0].playState === 'paused')),true);
     } finally { await context.close(); }
   });

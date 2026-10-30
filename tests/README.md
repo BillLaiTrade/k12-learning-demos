@@ -6,7 +6,7 @@
 CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.2-micro-motion.test.cjs tests/unit-3.2-playback.test.cjs
 ```
 
-驗證第四區空氣的分散微移、水的較小晃動、鋼與第五區維持原樣，並檢查聲波外層仍符合物理傳播延遲、實時計時、暫停與跨區停止、返回不自動播放、減少動畫偏好及四種桌機寬度。另以實際螢幕座標取樣，檢查縮放後兩種介質皆有可見的移動範圍。兩檔合計 15 項（含外層），循序執行以避免併行瀏覽器載入競爭；測試自行啟停本機伺服器與 Chromium。當次畫面存於 `/tmp/unit32-micro-motion-desktop.png` 及 `/tmp/unit32-visible-motion-a.png`、`/tmp/unit32-visible-motion-b.png`。不代表完整歷史測試皆已通過。
+驗證第四區空氣的分散微移、水的較小晃動、鋼與第五區維持原樣，並檢查聲波外層仍符合物理傳播延遲、實時計時、暫停與跨區停止、返回不自動播放，以及四種桌機寬度。另驗證開啟或切換「減少動態」設定都不影響微動，手動暫停及跨區停止仍有效。以實際螢幕座標取樣，檢查縮放後兩種介質皆有可見的移動範圍。兩檔合計 15 項（含外層），循序執行以避免併行瀏覽器載入競爭；測試自行啟停本機伺服器與 Chromium。當次畫面存於 `/tmp/unit32-micro-motion-desktop.png` 及 `/tmp/unit32-visible-motion-a.png`、`/tmp/unit32-visible-motion-b.png`。不代表完整歷史測試皆已通過。
 
 ## 6.1 元素的探索
 
