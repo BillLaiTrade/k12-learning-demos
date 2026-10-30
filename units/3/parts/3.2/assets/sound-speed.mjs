@@ -251,7 +251,7 @@ function rebuild() {
   const temperatureMode = state.mode === 'temperature';
   text($('#lesson-title'), temperatureMode ? '溫度不同，聲音傳到哪裡了？' : '聲音在不同介質中，傳得多快？');
   text($('#lesson-intro'), temperatureMode ? '同時敲擊，比較 0°C 與 80°C 空氣中的傳播進度。' : '觀察相鄰粒子如何逐段受振，再比較終點的到達時間。');
-  text($('#girl-line'), temperatureMode ? '一組 0°C，一組 80°C，我們同時敲音叉看看！' : '阿公，除了空氣，還有其他介質能傳聲音嗎？');
+  text($('#girl-line'), temperatureMode ? '同樣都是空氣，如果溫度不同，聲音傳得會一樣快嗎？' : '阿公，除了空氣，還有其他介質能傳聲音嗎？');
   text($('#grandpa-line'), temperatureMode ? '兩組都是空氣、距離也相同，只比較溫度的差異。' : '有，水和鋼也能傳聲音。我們可以讓聲音傳過相同的距離，看看在不同介質裡，到達的時間有什麼不同。');
   $('#takeaway').innerHTML = temperatureMode
     ? '原來同樣是空氣，溫度較高時，聲音傳得比較快。'
