@@ -3,9 +3,10 @@ import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './r
 const $ = id => document.getElementById(id), fmt = (n, digits = 2) => Number(n.toFixed(digits)).toString();
 const panels = new Map();
 let active = null, context = null, phrasePromise = null, sources = [], audioEpoch = 0, outputGain = null;
-function audioStatus(panel, message) {
-  $('audio-status').textContent = message;
-  if (panel.id === 'reflection') $('reflection-audio-status').textContent = message;
+function audioError(panel, message = '') {
+  if (panel.id === 'reflection') {
+    const error = $('reflection-error'); error.textContent = message; error.hidden = !message;
+  } else if (message) $(`${panel.id}-status`).textContent = message;
 }
 // Keep the verified output level; learners adjust loudness on their own device.
 const outputLevel = panel => panel.id === 'reflection' ? .32 : .0448;
@@ -32,10 +33,10 @@ function stopSound() {
 function stopActive() { if (active) active.pause(); stopSound(); }
 async function sound(panel, elapsed = 0) {
   stopSound();
-  if (!panel.sound.checked) {audioStatus(panel, '聲音已關閉；勾選「聲音」後，再點喇叭或播放按鈕。'); return;}
+  audioError(panel);
+  if (panel.sound && !panel.sound.checked) return;
   const epoch = audioEpoch;
   try {
-    audioStatus(panel, '正在啟用聲音…');
     await resumeAudio();
     let buffer;
     if (panel.id === 'treatment') {
@@ -62,10 +63,9 @@ async function sound(panel, elapsed = 0) {
       source.onended = () => { sources = sources.filter(s => s !== source); if (!sources.length) document.body.dataset.audioPlaying = 'false'; };
     }
     document.body.dataset.audioPlaying = sources.length ? 'true' : 'false';
-    audioStatus(panel, '示範音已啟用；先發出短音，返回時再播放較弱的反射聲。');
   } catch {
     if (epoch !== audioEpoch) return;
-    audioStatus(panel, '聲音未能啟用。請再次點擊播放；若仍無聲，請用瀏覽器開啟本頁，並確認裝置與分頁未靜音。');
+    audioError(panel, '聲音未能啟用。請再次點擊播放；若仍無聲，請用瀏覽器開啟本頁，並確認裝置與分頁未靜音。');
   }
 }
 function player(id, render, duration, {room = false, mode = () => '', restartOnPlay = false, taps = null} = {}) {
@@ -108,7 +108,7 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
   });
   pauseButton?.addEventListener('click', () => p.phase === 'playing' ? p.pause() : p.play());
   reset?.addEventListener('click', p.reset);
-  soundBox.addEventListener('change', () => {if (p.phase === 'playing') sound(p, p.elapsed);});
+  soundBox?.addEventListener('change', () => {if (p.phase === 'playing') sound(p, p.elapsed);});
   panels.set(id, p); p.draw(); return p;
 }
 function line(x1, y1, x2, y2, color, dash = '') { return `<path d="M${x1} ${y1}L${x2} ${y2}" stroke="${color}" stroke-width="4" fill="none" ${dash ? 'stroke-dasharray="8 6"' : ''}/>`; }

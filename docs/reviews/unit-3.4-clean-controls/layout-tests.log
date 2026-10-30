@@ -1,0 +1,24 @@
+▶ 3.4 first lesson matches approved apparatus layout and has two synchronized playback entrances
+  ✔ complete scene and Traditional Chinese text load, with no automatic animation or sound (237.045428ms)
+  ✔ clicking the pictured speaker emits exactly one original and its weaker delayed copy (136.619019ms)
+Measured final Web Audio output: {"state":"running","gain":0.3199999928474426,"direct":0.31965693831443787,"echo":0.14384561777114868}
+  ✔ final output contains both audible-strength pulses after all gain stages (4644.667526ms)
+  ✔ the page has no web volume controls and keeps device-based volume adjustment (9.592584ms)
+  ✔ both entrances restart the same timeline and cancel earlier scheduled echoes (616.166789ms)
+  ✔ pause freezes waves and audio; resume preserves the emission count (476.194753ms)
+  ✔ surface contact precedes return; receiver lights only when the returning sound arrives (4833.559386ms)
+  ✔ pause and changing sections/background stop playback without a separate sound switch (200.570648ms)
+  ✔ keyboard Enter and Space activate the real speaker hit area once each (49.002647ms)
+  ✔ the scene, phase strip, controls and explanation all remain within the right content column (588.49791ms)
+  ✔ touch and reduced-motion still allow explicit speaker playback and pause (751.882012ms)
+  ✔ blocked or stalled audio shows a visible retry message rather than a false playback success (2637.846298ms)
+  ✔ prefixed Web Audio fallback can also emit from an explicit click (454.980336ms)
+✔ 3.4 first lesson matches approved apparatus layout and has two synchronized playback entrances (16406.884456ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16745.396488
