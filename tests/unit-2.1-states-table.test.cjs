@@ -313,10 +313,13 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
         const layout=await page.locator('#s2').evaluate(section=>{
           const rect=element=>{const {left,right,top,bottom}=element.getBoundingClientRect();return{left,right,top,bottom};};
           const region=section.querySelector('.states-table-scroll');
-          const side=section.querySelector('.card-side');
-          const title=section.querySelector('.card-main h2');
+          const head=section.querySelector('.sv-lesson-head');
+          const title=head.querySelector('h2');
+          const number=head.querySelector('.sv-lesson-number');
+          const opening=section.querySelector('.sv-lesson-body .dialogue');
           return {
-            region:rect(region),side:rect(side),title:rect(title),
+            region:rect(region),head:rect(head),title:rect(title),number:rect(number),
+            opening:rect(opening),outro:rect(section.querySelector('.sv-outro')),
             scrollWidth:region.scrollWidth,clientWidth:region.clientWidth,
             cells:[...region.querySelectorAll('[data-visual-cell]')].map(rect),
             numberFont:[...region.querySelectorAll('[data-visual-cell="solid.volume"] svg text, [data-visual-cell="liquid.volume"] svg text')].map(text=>{
@@ -325,8 +328,10 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
           };
         });
         assert.ok(layout.scrollWidth<=layout.clientWidth+1,'all three columns fit without panning');
-        assert.ok(Math.abs(layout.region.left-layout.side.left)<1,'table spans beneath the left label');
-        assert.ok(layout.title.left>layout.side.right,'title remains in the right content column');
+        assert.ok(layout.title.left>layout.number.right,'number and title share a horizontal header');
+        assert.ok(layout.head.bottom<=layout.opening.top,'dialogue follows the separated header');
+        assert.ok(Math.abs(layout.region.left-layout.opening.left)<1,'opening and table share the full content width');
+        assert.ok(Math.abs(layout.outro.left-layout.region.left)<1,'closing dialogue uses the same content width');
         for(const box of layout.cells) assert.ok(box.left>=layout.region.left && box.right<=layout.region.right);
         assert.ok(layout.numberFont.every(size=>size>=14),'dimensions and volumes render at least 14px');
       }
