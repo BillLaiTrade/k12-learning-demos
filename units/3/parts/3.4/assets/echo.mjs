@@ -2,21 +2,40 @@ import {echo, distanceFromEcho, wavePosition, arrivals, judge} from './echo-mode
 import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
 const $ = id => document.getElementById(id), fmt = (n, digits = 2) => Number(n.toFixed(digits)).toString();
 const panels = new Map();
-let active = null, context = null, phrasePromise = null, sources = [], audioEpoch = 0;
+let active = null, context = null, phrasePromise = null, sources = [], audioEpoch = 0, outputGain = null;
+function audioStatus(panel, message) {
+  $('audio-status').textContent = message;
+  if (panel.id === 'reflection') $('reflection-audio-status').textContent = message;
+}
+const outputLevel = panel => Number($('volume').value) * (panel.id === 'reflection' ? 2 : .28);
+async function resumeAudio() {
+  // On supported iOS browsers, use the playback session rather than the silent-mode session.
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch {}
+  const Audio = window.AudioContext || window.webkitAudioContext;
+  context ||= new Audio();
+  let timer;
+  try {
+    await Promise.race([context.resume(), new Promise((_, reject) => {
+      timer = setTimeout(() => reject(Error('audio resume timed out')), 1800);
+    })]);
+    if (context.state !== 'running') throw Error('audio output is not running');
+  } finally { clearTimeout(timer); }
+}
 function stopSound() {
   audioEpoch++;
   for (const source of sources) { try { source.stop(); } catch {} }
   sources = [];
+  outputGain?.disconnect(); outputGain = null;
   document.body.dataset.audioPlaying = 'false';
 }
 function stopActive() { if (active) active.pause(); stopSound(); }
 async function sound(panel, elapsed = 0) {
   stopSound();
-  if (!panel.sound.checked) return;
+  if (!panel.sound.checked) {audioStatus(panel, '聲音已關閉；勾選「聲音」後，再點喇叭或播放按鈕。'); return;}
   const epoch = audioEpoch;
   try {
-    context ||= new AudioContext();
-    await context.resume();
+    audioStatus(panel, '正在啟用聲音…');
+    await resumeAudio();
     let buffer;
     if (panel.id === 'treatment') {
       phrasePromise ||= fetch(new URL('./room-phrase.wav', import.meta.url)).then(r => { if (!r.ok) throw Error('audio unavailable'); return r.arrayBuffer(); }).then(b => context.decodeAudioData(b));
@@ -28,7 +47,7 @@ async function sound(panel, elapsed = 0) {
     }
     if (epoch !== audioEpoch || panel.phase !== 'playing') return;
     const master = context.createGain();
-    master.gain.value = Number($('volume').value) * .28;
+    master.gain.value = outputLevel(panel); outputGain = master;
     master.connect(context.destination);
     const taps = panel.taps ? panel.taps() : panel.room ? arrivals(panel.mode(), panel.id === 'treatment' && panel.mode() === 'after') : [{delay: 0, gain: 1}, {delay: panel.duration() - .1, gain: .45}];
     for (const tap of taps) {
@@ -37,15 +56,15 @@ async function sound(panel, elapsed = 0) {
       const source = context.createBufferSource(), gain = context.createGain();
       source.buffer = buffer; gain.gain.value = tap.gain;
       source.connect(gain); gain.connect(master);
-      source.start(context.currentTime + Math.max(0, tap.delay - elapsed), offset);
+      source.start(context.currentTime + (panel.id === 'reflection' ? .04 : 0) + Math.max(0, tap.delay - elapsed), offset);
       sources.push(source);
       source.onended = () => { sources = sources.filter(s => s !== source); if (!sources.length) document.body.dataset.audioPlaying = 'false'; };
     }
     document.body.dataset.audioPlaying = sources.length ? 'true' : 'false';
-    $('audio-status').textContent = '合成示範音播放中；可關閉聲音或降低音量。';
+    audioStatus(panel, master.gain.value === 0 ? '目前音量為 0；請調高示範音量，再發出一次短音。' : '示範音已啟用；先發出短音，返回時再播放較弱的反射聲。');
   } catch {
     if (epoch !== audioEpoch) return;
-    $('audio-status').textContent = '目前無法播放示範音；可繼續用聲路與時間圖觀察。';
+    audioStatus(panel, '聲音未能啟用。請再次點擊播放；若仍無聲，請用瀏覽器開啟本頁，並確認裝置與分頁未靜音。');
   }
 }
 function player(id, render, duration, {room = false, mode = () => '', restartOnPlay = false, taps = null} = {}) {
@@ -143,7 +162,12 @@ for (const [id, panel] of [['wall-distance', 'distance'], ['echo-time', 'calcula
 for (const name of ['room-mode', 'treatment-mode']) document.querySelectorAll(`[name="${name}"]`).forEach(el => el.addEventListener('change', () => panels.get(name.split('-')[0]).reset()));
 $('hide-depth').addEventListener('change', () => { $('reveal-depth').hidden = !$('hide-depth').checked; $('reveal-depth').setAttribute('aria-expanded', 'false'); panels.get('sonar').reset(); });
 $('reveal-depth').addEventListener('click', () => { $('reveal-depth').setAttribute('aria-expanded', 'true'); panels.get('sonar').draw(); });
-$('volume').addEventListener('input', () => {if (active) sound(active, active.elapsed);});
+for (const input of [$('volume'), $('reflection-volume')]) input.addEventListener('input', () => {
+  $('volume').value = input.value; $('reflection-volume').value = input.value;
+  $('reflection-volume-value').value = Math.round(Number(input.value) / .4 * 100) + '%';
+  if (active && outputGain) outputGain.gain.setValueAtTime(outputLevel(active), context.currentTime);
+  if (active) audioStatus(active, Number(input.value) === 0 ? '目前音量為 0；請調高示範音量，再發出一次短音。' : '音量已調整；可再發出一次短音，確認原音與較弱的返回聲。');
+});
 trace('quiz-before'); trace('quiz-after', 'dense', true);
 const form = $('echo-quiz'), feedback = $('quiz-feedback');
 form.addEventListener('submit', event => {
