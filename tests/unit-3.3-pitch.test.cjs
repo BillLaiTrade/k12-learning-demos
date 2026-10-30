@@ -49,6 +49,28 @@ test('pitch comparison: independent speakers, controlled frequency and synchroni
   const previous=await left.locator('.signal').getAttribute('d');await play('right');await page.waitForTimeout(300);assert.equal(await left.locator('.signal').getAttribute('d'),previous);
   await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='false');assert.equal((await inspect(right)).progress,1);
  });
+ await t.test('front speaker visibly pumps in phase while its wooden cabinet stays fixed, including reduced motion',async()=>{
+  await fs.mkdir('/tmp/unit33-pitch-review',{recursive:true});
+  for(const [side,hz] of [['left',200],['right',800]]){
+   if(side==='right')await change(hz);
+   const col=side==='left'?left:right,button=col.locator('.pitch-speaker'),box=await button.locator('img').boundingBox();
+   await play(side);const frames=[],scales=[];
+   for(let i=0;i<6;i++){
+    await page.waitForTimeout(100);
+    const sample=await col.evaluate(n=>({front:Number(n.querySelector('.pitch-front-cone').dataset.displacement),side:Number(n.querySelector('.pitch-diaphragm').dataset.displacement),scale:n.querySelector('.pitch-front-cone').transform.baseVal.consolidate().matrix.a}));
+    assert.ok(Math.abs(sample.front-sample.side)<1e-8);scales.push(sample.scale);
+    frames.push(await button.screenshot());
+    assert.deepEqual(await button.locator('img').boundingBox(),box,'cabinet image never translates or scales');
+   }
+   assert.ok(Math.max(...scales)-Math.min(...scales)>.09,'front membrane has clearly visible excursion');
+   assert.ok(new Set(frames.map(frame=>frame.toString('base64'))).size>=4,'actual rendered pixels change, not only an animation flag');
+   await fs.writeFile(`/tmp/unit33-pitch-review/front-${side}.png`,frames[2]);
+   await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='false');
+   assert.equal(await col.locator('.pitch-front-cone').getAttribute('data-displacement'),'0');
+   assert.equal(await col.locator('.pitch-front-cone').evaluate(n=>n.transform.baseVal.consolidate().matrix.a),1);
+  }
+  await play('right');await root.locator('[data-pitch-step="-100"]').click();assert.equal(await right.locator('.pitch-front-cone').getAttribute('data-displacement'),'0');await change(400);
+ });
  await t.test('keyboard, rapid changes, section navigation and page visibility cancel playback',async()=>{
   await left.locator('.pitch-speaker').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='true');
   await root.locator('[data-pitch-step="100"]').click();assert.equal(await root.getAttribute('data-playing'),'false');

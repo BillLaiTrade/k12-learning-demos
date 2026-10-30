@@ -21,6 +21,12 @@ export function createPitchExperiment(root){
   const time=element('text',{x:177,y:193,'text-anchor':'middle'},svg);time.textContent='時間（ms）';
  }
  function position(column,displacement){
+  // 正面以軸向位移的透視投影呈現起伏；只移動紙盆，箱體及外框固定。
+  const phase=displacement/14,scale=1+.1*phase;
+  const front=column.querySelector('.pitch-front-cone');
+  front.setAttribute('transform',`translate(${740+18*phase} 625) scale(${scale}) translate(-740 -625)`);
+  front.dataset.displacement=String(displacement);
+
   column.querySelector('.pitch-cone').setAttribute('transform',`translate(${displacement} 0)`);
   column.querySelector('.pitch-diaphragm').dataset.displacement=String(displacement);
   column.querySelector('.pitch-surround-top').setAttribute('d',`M146 24C155 24 151 34 ${128+displacement} 32`);

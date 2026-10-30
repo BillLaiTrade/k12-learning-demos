@@ -396,3 +396,7 @@ NITROGEN_ARTIFACT_DIR=/tmp/unit23-nitrogen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-ful
 `CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.3-pitch.test.cjs`：7項（含外層），檢查200～800Hz每100Hz步進、界限、相同振幅與波形週期、真實音訊、左右自由重播、點喇叭、鍵盤、波形與振膜同步、切區／離屏／隱藏停止及桌機／筆電對稱配置。`SOUND33_BASE_URL`可指定公開課程網址，瀏覽器使用繼承的HTTPS代理；截圖寫至/tmp/unit33-pitch-review。與既有整頁及第一區音叉合計27項通過，證據見docs/reviews/unit-3.3-card02-speakers/。
 
 3.4第二區同步比較：`node --test tests/unit-3.4-distance-model.test.mjs tests/unit-3.4-distance.test.cjs`。涵蓋0.20秒近牆接收／遠牆到壁、共同尺度、兩組返回音最末訊號、鼠標／鍵盤／真實觸控拖牆、重播與暫停、同距重合、跨區／背景停止及1440–320px版面。以`DISTANCE_URL`指定公開網址，可重跑同一套UI檢查；測試需既有Playwright與Chromium。
+
+### 3.3主喇叭振動回歸
+
+第二區專項新增主喇叭實際畫面6幀差異、固定箱體位置／尺寸、與側面同相位、自然結束及調頻歸位，200Hz與800Hz均在減少動態偏好下驗證。現第二區8項、加整頁及第一區共28項通過（含外層），不再僅以側面放大窗或data-playing旗標判定主喇叭有振動。證據見docs/reviews/unit-3.3-card02-front-motion/。
