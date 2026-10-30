@@ -1,0 +1,25 @@
+▶ 2.3 composition: proportions, classification and optional emphasis
+  ✔ all proportions and both classes are visible before any action (134.539832ms)
+  ✔ mouse, keyboard and hover emphasis never hide teaching content (380.095659ms)
+  ✔ desktop, laptop and narrow screens preserve order without overflow (969.293294ms)
+  ✔ static content remains complete without JavaScript (1058.694647ms)
+  ✔ touch, reduced motion and route anchor stay usable (1231.076169ms)
+✔ 2.3 composition: proportions, classification and optional emphasis (5689.987427ms)
+▶ 2.3 complete page: six teaching sections and one evidence-based quiz
+  ✔ all seven sections and routes exist, with natural dialogue and no retired experiment (152.148447ms)
+  ✔ default cup comparisons remain after preview and reset (127.28004ms)
+  ✔ both preparations replay, pause, resume and reset without hiding results (504.158099ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (271.410127ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (624.807487ms)
+  ✔ five widths show every diagram and section without horizontal overflow (2875.073268ms)
+  ✔ all teaching evidence is available without JavaScript (888.568597ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (1100.859974ms)
+✔ 2.3 complete page: six teaching sections and one evidence-based quiz (8540.039255ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9034.678511

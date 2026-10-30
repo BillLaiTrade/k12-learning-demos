@@ -30,11 +30,14 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
 
   await t.test('all proportions and both classes are visible before any action', async () => {
     assert.equal(await section.locator('.air-share').count(), 100);
-    for (const [gas, count] of [['nitrogen', 78], ['oxygen', 21], ['other', 1]]) {
+    for (const [gas, count] of [['nitrogen', 78], ['oxygen', 21], ['minor', 1]]) {
       assert.equal(await section.locator(`.air-share[data-component="${gas}"]`).count(), count);
-      assert.equal(await section.locator(`[data-air-gas="${gas}"]`).isVisible(), true);
+      if (gas !== 'minor') assert.equal(await section.locator(`[data-air-gas="${gas}"]`).isVisible(), true);
     }
     for (const selector of ['.air-other-detail', '.permanent', '.variable', '.air-basis-note']) assert.equal(await section.locator(selector).isVisible(), true);
+    assert.match(await section.locator('[data-air-gas="argon"]').innerText(), /氬氣[\s\S]*0\.93%/);
+    assert.match(await section.locator('[data-air-gas="other"]').innerText(), /其餘氣體[\s\S]*少量/);
+    assert.doesNotMatch(await section.locator('[data-air-gas="other"]').innerText(), /1%/);
     assert.match(await section.locator('.air-other-detail').innerText(), /0\.93%/);
     assert.match(await section.locator('.air-other-detail').innerText(), /沒有改變比例/);
     assert.deepEqual(await section.locator('.permanent li').allTextContents(), ['氮氣', '氧氣', '氬氣', '等']);
@@ -52,14 +55,19 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
     await section.locator('[data-air-gas="other"]').focus();
     await page.keyboard.press('Enter');
     assert.equal(await section.getAttribute('data-emphasis'), 'other');
-    assert.match(await page.locator('#air-highlight-status').innerText(), /不是只有一種/);
+    assert.match(await page.locator('#air-highlight-status').innerText(), /不再包含已單獨列出的氬氣/);
+    await section.locator('[data-air-gas="argon"]').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await section.getAttribute('data-emphasis'), 'argon');
+    assert.match(await page.locator('#air-highlight-status').innerText(), /0\.93%/);
+    assert.equal(await section.locator('.air-share[data-component="minor"]').first().evaluate(el => getComputedStyle(el).opacity), '1');
     await section.locator('[data-air-gas="all"]').click();
     assert.equal(await section.getAttribute('data-emphasis'), 'all');
     await section.locator('[data-air-gas="nitrogen"]').hover();
     assert.equal(await section.getAttribute('data-emphasis'), 'nitrogen');
     await section.locator('h2').hover();
     assert.equal(await section.getAttribute('data-emphasis'), 'all');
-    for (const gas of ['nitrogen', 'oxygen', 'other']) assert.equal(await section.locator(`[data-air-gas="${gas}"] strong`).isVisible(), true);
+    for (const gas of ['nitrogen', 'oxygen', 'argon', 'other']) assert.equal(await section.locator(`[data-air-gas="${gas}"] strong`).isVisible(), true);
     assert.equal(await section.locator('.air-other-detail').isVisible(), true);
     assert.equal(await section.locator('.variable').isVisible(), true);
   });

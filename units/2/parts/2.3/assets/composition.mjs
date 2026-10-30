@@ -2,10 +2,11 @@ const section = document.querySelector('#s2');
 const controls = [...section.querySelectorAll('[data-air-gas]')];
 const status = section.querySelector('#air-highlight-status');
 const descriptions = {
-  all: '氮氣最多，氧氣次之；其他氣體合計約 1%。',
+  all: '含量依序是氮氣、氧氣、氬氣；其餘氣體只占少量。',
   nitrogen: '氮氣約占 78%：100 份乾燥空氣中，約有 78 份是氮氣。',
   oxygen: '氧氣約占 21%：100 份乾燥空氣中，約有 21 份是氧氣。',
-  other: '其他氣體合計約占 1%，包含氬氣、二氧化碳等；不是只有一種氣體。'
+  argon: '氬氣約占全部乾燥空氣的 0.93%，含量第三。斜紋末格合併呈現氬氣與其餘少量氣體。',
+  other: '其餘氣體包含二氧化碳等少量成分，不再包含已單獨列出的氬氣；在斜紋末格合併呈現。'
 };
 let selected = 'all';
 const emphasize = gas => { section.dataset.emphasis = gas; };
