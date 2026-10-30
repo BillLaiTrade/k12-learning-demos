@@ -1,4 +1,4 @@
-import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessReport,measuredMasses,measurementHint} from './investigation-state.js?v=crystal-mission-1';
+import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessReport,concentrationEvidence,measuredMasses,measurementHint} from './investigation-state.js?v=crystal-mission-1';
 import {loadPicture,createRenderer} from './investigation-renderer.js?v=review-5';
 
 const root=document.getElementById('invest-lab');
@@ -21,12 +21,12 @@ function updateConcentration(){
   $('solute-note').textContent=solid?(solid.phase==='dry-filtered'?'這是原本溶在濾液中的溶質質量。':'固體還混有泥沙，能直接當作晶體質量嗎？'):'稱到的是乾燥晶體，還是混著泥沙的固體？';
   $('liquid-measurement').dataset.valid=liquid?String(liquid.phase==='filtered'):'';
   $('solid-measurement').dataset.valid=solid?String(solid.phase==='dry-filtered'):'';
-  $('calculation-numerator').textContent=solid?`${solid.mass} 克`:'—';
-  $('calculation-denominator').textContent=liquid?`${liquid.mass} 克`:'—';
-  $('concentration-value').value=answers.get(active)||'';
+  const draft=answers.get(active)||{};
+  for(const field of ['calculation-numerator','calculation-denominator','concentration-value'])$(field).value=draft[field]??'';
   const hint=measurementHint(sample);$('hint').hidden=!hint||!!animation;$('hint').textContent=hint;
   const disabled=root.dataset.ready!=='true'||!!animation||!sample;
-  $('concentration-value').disabled=disabled;$('check').disabled=disabled;
+  for(const field of ['calculation-numerator','calculation-denominator','concentration-value'])$(field).disabled=disabled;
+  $('check').disabled=disabled;
 }
 
 function update(){
@@ -80,7 +80,17 @@ function perform(action){
 }
 function submitReport(event){
   event.preventDefault();if(animation)return;
-  const result=assessReport(selected(),$('concentration-value').value),feedback=$('feedback');
+  let result=assessReport(selected(),$('concentration-value').value);
+  const basis=concentrationEvidence(selected()),issues=[];
+  if(basis){
+    for(const [field,title,expected] of [['calculation-numerator','晶體淨質量',basis.solute],['calculation-denominator','濾液淨質量',basis.solution]]){
+      const value=$(field).value.trim();
+      if(!value||!Number.isFinite(Number(value))||Number(value)<0)issues.push(`請在公式中填入${title}（克）。`);
+      else if(Math.abs(Number(value)-expected)>1e-6)issues.push(`公式中的${title}與這份取樣的稱量紀錄不同，請核對上方紀錄。`);
+    }
+    if(issues.length)result={ok:false,issues,basis:null};
+  }
+  const feedback=$('feedback');
   feedback.hidden=false;feedback.dataset.result=result.ok?'correct':'revise';feedback.replaceChildren();
   const title=document.createElement('strong');title.textContent=result.ok?'任務完成：晶體已分離，濃度也算對了。':'再檢查一下這份紀錄。';feedback.append(title);
   const message=document.createElement('p');
@@ -121,7 +131,10 @@ for(const button of controls){
 }
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&drag){suppressClickUntil=performance.now()+500;cancelDrag();announce('已放回器材。');}});
 $('settle').addEventListener('click',()=>perform('settle'));
-$('report').addEventListener('submit',submitReport);$('concentration-value').addEventListener('input',()=>{answers.set(active,$('concentration-value').value);invalidateReport();});
+$('report').addEventListener('submit',submitReport);
+for(const field of ['calculation-numerator','calculation-denominator','concentration-value']){
+  $(field).addEventListener('input',()=>{answers.set(active,{...answers.get(active),[field]:$(field).value});invalidateReport();});
+}
 $('reset').addEventListener('click',()=>{if(samples.length)$('reset-dialog').showModal();else clear();});
 $('reset-dialog').addEventListener('close',()=>{if($('reset-dialog').returnValue==='reset')clear();});
 document.addEventListener('visibilitychange',()=>{

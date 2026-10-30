@@ -116,13 +116,14 @@ test('4.2 unknown mixture investigation: open experimentation, evidence and layo
  await t.test('evaporating that filtrate leaves white solid; its dry net mass is five grams',async()=>{
   await act('heat');assert.equal((await state()).phase,'dry-filtered');assert.match(await $('status').innerText(),/蒸乾後留下白色固體/);await act('weigh');assert.match(await $('status').innerText(),/5 克/);
  });
- await t.test('the notebook automatically records the two weights and puts them in the fraction',async()=>{
+ await t.test('the notebook records measurements while leaving the fraction for the student',async()=>{
   assert.equal(await page.locator('#invest-record,#invest-event,.invest-note textarea').count(),0);assert.equal(await $('notebook').isVisible(),true);
-  assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');assert.equal(await $('calculation-numerator').innerText(),'5 克');assert.equal(await $('calculation-denominator').innerText(),'100 克');
+  assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');assert.equal(await $('calculation-numerator').inputValue(),'');assert.equal(await $('calculation-denominator').inputValue(),'');
  });
  await t.test('the mission checks actual separation and net measurements before accepting an answer',async()=>{
   await page.locator('[data-sample="1"]').click();await $('concentration-value').fill('5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'revise');assert.match(await $('feedback').innerText(),/泥沙.*濾掉/);
   await page.locator('[data-sample="'+validSample+'"]').click();assert.equal(await $('solution-mass').innerText(),'100 克');assert.equal(await $('solute-mass').innerText(),'5 克');
+  await $('calculation-numerator').fill('5');await $('calculation-denominator').fill('100');
   await $('concentration-value').fill('4.901960784');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'revise');
   await $('concentration-value').fill('5');await $('report').locator('button[type=submit]').click();assert.equal(await $('feedback').getAttribute('data-result'),'correct');assert.match(await $('feedback').innerText(),/任務完成/);assert.match(await $('feedback').innerText(),/5 克 ÷ 100 克/);
  });

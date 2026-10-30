@@ -112,7 +112,7 @@
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
   <link rel="stylesheet" href="assets/concentration.css?v=desktop-compact-7">
   <link rel="stylesheet" href="assets/ppm-scale.css?v=conversion-trimmed-1">
-  <link rel="stylesheet" href="assets/investigation.css?v=calculation-notebook-1">
+  <link rel="stylesheet" href="assets/investigation.css?v=calculation-notebook-2">
 </head>
 <body>
   <header class="shell masthead">
@@ -307,7 +307,7 @@
             <form class="invest-mission-result invest-notebook-page" id="invest-report" aria-labelledby="invest-answer-title" novalidate>
               <div class="invest-notebook-entry" id="invest-liquid-measurement"><span class="invest-entry-number" aria-hidden="true">01</span><div class="invest-entry-label">記下蒸發前的濾液淨質量<small id="invest-solution-note">這筆重量需要包含泥沙嗎？</small></div><b class="invest-entry-value" id="invest-solution-mass">尚未稱量</b></div>
               <div class="invest-notebook-entry" id="invest-solid-measurement"><span class="invest-entry-number" aria-hidden="true">02</span><div class="invest-entry-label">記下蒸乾後的晶體淨質量<small id="invest-solute-note">稱到的是乾燥晶體，還是混著泥沙的固體？</small></div><b class="invest-entry-value" id="invest-solute-mass">尚未稱量</b></div>
-              <div class="invest-notebook-calculation"><h4><span class="invest-entry-number" aria-hidden="true">03</span>把重量代入，算出濃度</h4><div class="invest-worked-calculation"><span class="invest-equation-name">重量百分濃度 ＝</span><span class="invest-calculation-fraction"><span><small>晶體淨質量</small><b id="invest-calculation-numerator">—</b></span><span><small>濾液淨質量</small><b id="invest-calculation-denominator">—</b></span></span><span class="invest-equation-factor">× 100% ＝</span><div class="invest-notebook-answer"><input id="invest-concentration-value" disabled type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="填答案" aria-label="重量百分濃度計算結果" aria-describedby="invest-answer-title"><span aria-hidden="true">%</span></div></div></div>
+              <div class="invest-notebook-calculation"><h4><span class="invest-entry-number" aria-hidden="true">03</span>把重量代入，算出濃度</h4><div class="invest-worked-calculation"><span class="invest-equation-name">重量百分濃度 ＝</span><span class="invest-calculation-fraction"><span><small>晶體淨質量</small><span class="invest-mass-input"><input id="invest-calculation-numerator" disabled type="number" min="0" step="any" inputmode="decimal" placeholder="填重量" aria-label="代入計算的晶體淨質量"><span aria-hidden="true">克</span></span></span><span><small>濾液淨質量</small><span class="invest-mass-input"><input id="invest-calculation-denominator" disabled type="number" min="0" step="any" inputmode="decimal" placeholder="填重量" aria-label="代入計算的濾液淨質量"><span aria-hidden="true">克</span></span></span></span><span class="invest-equation-factor">× 100% ＝</span><div class="invest-notebook-answer"><input id="invest-concentration-value" disabled type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="填答案" aria-label="重量百分濃度計算結果" aria-describedby="invest-answer-title"><span aria-hidden="true">%</span></div></div></div>
               <div class="invest-notebook-actions"><button type="submit" id="invest-check" disabled>核對我的計算</button></div>
               <div class="invest-feedback" id="invest-feedback" role="status" aria-live="polite" hidden></div>
               <p class="invest-note-foot">每份取樣的紀錄分開保存；重新開始會清除本次紀錄。</p>
@@ -356,6 +356,6 @@
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
   <script type="module" src="assets/ppm-pool.js?v=vertical-calculation-1"></script>
-  <script type="module" src="assets/investigation.js?v=calculation-notebook-1"></script>
+  <script type="module" src="assets/investigation.js?v=calculation-notebook-2"></script>
 </body>
 </html>
