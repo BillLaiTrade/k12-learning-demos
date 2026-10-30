@@ -16,4 +16,10 @@
 
 已目視檢視[1440px](composition-1440.webp)與[390px](composition-390.webp)，另保存[1024px](composition-1024.webp)。手機圖例採兩欄，前三大氣體與其餘少量均完整可見；未覆寫先前交付畫面。
 
-公開部署與版本確認於推送後補記。維持第4階段逐區修訂，未新增整份教材驗收紀錄。
+## 公開確認
+
+實作提交`ec7e721a30daf5ac1314e9e67356a15c7a3c229e`的[Pages41044069502](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41044069502)與[Deploy41044068478](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41044068478)皆成功。公開HTML／CSS／JS三檔HTTP200，SHA-256與提交一致，見[版本比對](public-hashes.json)。公開第二區重跑6項通過，0失敗／0跳過（含外層），見[公開輸出](public-tests.log)。
+
+[直接檢視第二區](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/?v=ec7e721a#s2)。
+
+維持第4階段逐區修訂，未新增整份教材驗收紀錄。
