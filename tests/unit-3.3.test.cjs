@@ -67,9 +67,42 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
   assert.equal(await page.locator('#quiz-feedback').isHidden(),true);await play('quiz-choice');assert.equal(await page.locator('#unit-quiz').getAttribute('data-frequency'),'660');await page.locator('button[type=submit]').click();assert.equal(await page.locator('#quiz-feedback').getAttribute('data-state'),'correct');
   await page.locator('#quiz-clear').click();assert.equal(await page.locator('#answer-tone').inputValue(),'');assert.equal(await page.locator('[data-play="quiz-choice"]').isDisabled(),true);const task=await page.locator('#quiz-task').textContent();await page.locator('#quiz-new').click();assert.notEqual(await page.locator('#quiz-task').textContent(),task);
  });
+ await t.test('lesson format follows unit 1.1 and navigation tracks ordinary reading',async()=>{
+  const reference=await browser.newPage({viewport:{width:1440,height:1100}});
+  await reference.goto(`http://127.0.0.1:${port}/units/1/parts/1.1/`,{waitUntil:'domcontentloaded'});
+  const format=p=>p.evaluate(()=>{
+   const css=selector=>getComputedStyle(document.querySelector(selector));
+   return {font:css('body').fontFamily,paper:css('body').backgroundColor,ink:css('body').color,shell:document.querySelector('.shell').getBoundingClientRect().width,sidebar:document.querySelector('.route').getBoundingClientRect().width,side:document.querySelector('.card-side').getBoundingClientRect().width,gap:css('.lesson-card').columnGap,padding:css('.lesson-card').padding,border:css('.lesson-card').borderRadius,title:css('.card-main>h2').fontSize,concept:css('.card-side h3').fontSize};
+  });
+  assert.deepEqual(await format(page),await format(reference));await reference.close();
+  assert.equal(await page.locator('.card-side h3').count(),7);assert.equal(await page.locator('.card-role').count(),7);
+  for(const card of await page.locator('.lesson-card').all()){
+   assert.ok(await card.locator('.card-role').textContent());
+   const heading=await card.locator('.card-main>h2').textContent(),id=await card.getAttribute('id');
+   assert.equal(await page.locator(`.route a[href="#${id}"] span`).textContent(),heading);
+  }
+  await page.locator('#card-04').evaluate(n=>n.scrollIntoView({block:'start'}));
+  await page.waitForFunction(()=>document.querySelector('.route a[aria-current="step"]').hash==='#card-04');
+  await page.locator('.route a[href="#unit-quiz"]').click();
+  assert.notEqual(await page.locator('.quiz-nav').evaluate(n=>getComputedStyle(n).backgroundColor),await page.locator('.route a[href="#card-01"]').evaluate(n=>getComputedStyle(n).backgroundColor));
+ });
  await t.test('desktop, laptop and narrow layouts retain controls and anchors',async()=>{
   const fs=require('node:fs/promises');await fs.mkdir('/tmp/unit33-review',{recursive:true});
-  for(const width of [1024,1280,1440,1920,390]){await page.setViewportSize({width,height:1000});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await page.locator('#card-03').screenshot({path:`/tmp/unit33-review/string-${width}.png`});}
+  for(const width of [1024,1280,1440,1920,820,760,390,320]){
+   await page.setViewportSize({width,height:1000});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+   const issues=await page.locator('.lesson-card').evaluateAll(cards=>cards.flatMap(card=>{
+    const side=card.querySelector('.card-side'),main=card.querySelector('.card-main'),box=card.getBoundingClientRect(),a=side.getBoundingClientRect(),b=main.getBoundingClientRect(),css=getComputedStyle(side);
+    const inside=b.right<=box.right&&b.left>=box.left;
+    const aligned=innerWidth>760?a.right<b.left&&Math.abs(a.top-b.top)<1&&parseFloat(css.borderRightWidth)>0:a.bottom<=b.top&&parseFloat(css.borderBottomWidth)>0;
+    const clipped=[...card.querySelectorAll('button,input,select,.dialogue')].some(n=>{const r=n.getBoundingClientRect();return r.width&& (r.left<box.left||r.right>box.right+1||n.scrollWidth>n.clientWidth+1);});
+    return inside&&aligned&&!clipped?[]:[card.id];
+   }));assert.deepEqual(issues,[],`all seven sections keep their content inside the card at ${width}px`);
+   assert.equal(await page.locator('.wave-label').first().evaluate(n=>parseFloat(getComputedStyle(n).fontSize)>=12),true);
+   await page.locator('.route a[href="#card-03"]').click();
+   const anchored=await page.locator('#card-03').evaluate(n=>({top:n.getBoundingClientRect().top,navBottom:document.querySelector('.route').getBoundingClientRect().bottom}));
+   if(width<=760)assert.ok(anchored.top>=anchored.navBottom,'sticky mobile navigation does not cover the section title');
+   await page.locator('#card-03').screenshot({path:`/tmp/unit33-review/string-${width}.png`});
+  }
   await page.setViewportSize({width:1440,height:1100});await page.locator('#card-01').screenshot({path:'/tmp/unit33-review/amplitude.png'});await page.locator('#unit-quiz').screenshot({path:'/tmp/unit33-review/quiz.png'});for(const n of ['04','05','06','07'])await page.locator('#card-'+n).screenshot({path:'/tmp/unit33-review/section-'+n+'.png'});await page.locator('.hero').screenshot({path:'/tmp/unit33-review/hero.png'});await page.screenshot({path:'/tmp/unit33-review/full.png',fullPage:true});
  });
  assert.deepEqual(errors,[]);

@@ -323,7 +323,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.1-states-table.test.cjs
 CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.3.test.cjs
 ```
 
-驗證七區模型與實際聲音緩衝訊號、琴弦／空氣柱、音色近似RMS匹配、無極端頻率測試音、自然結束、跨區停止、唯一綜合小測與五種寬度。合計10項（含外層），測試自行啟停伺服器與Chromium；臨時畫面位於 `/tmp/unit33-review/`。核心內容與檢視紀錄見 `docs/decisions/unit-3.3-initial-production.md` 及 `docs/reviews/unit-3.3-initial/review.md`。
+驗證七區模型與實際聲音緩衝訊號、琴弦／空氣柱、音色近似RMS匹配、無極端頻率測試音、自然結束、跨區停止、唯一綜合小測、與1.1的格式對照、捲動側欄標示，以及八種寬度的七區欄位／控制項邊界與手機錨點遮擋檢查。合計11項（含外層），測試自行啟停伺服器與Chromium；臨時畫面位於 `/tmp/unit33-review/`。核心內容與檢視紀錄見 `docs/decisions/unit-3.3-initial-production.md` 、`docs/reviews/unit-3.3-initial/review.md` 及 `docs/reviews/unit-3.3-format/review.md`。
 
 ## 2.3 新版第二區：空氣組成與分類
 

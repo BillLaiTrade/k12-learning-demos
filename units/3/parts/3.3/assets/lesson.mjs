@@ -11,8 +11,6 @@ function wave(id,frequency,amplitude,tone='pure'){
  svg('path',{d:'M50 25V145H550M50 85H550',class:'axis'},root);
  const points=Array.from({length:501},(_,i)=>`${i?'L':'M'}${50+i} ${(85-58*amplitude*signal(i/500*.01,frequency,tone)).toFixed(3)}`).join(' ');
  svg('path',{d:points,class:'signal'},root);
- for(const[x,text]of [[50,'0'],[300,'5'],[550,'10 ms']])svg('text',{x,y:173,'text-anchor':'middle'},root).textContent=text;
- svg('text',{x:55,y:18},root).textContent='相對振幅';
  root.dataset.frequency=frequency;root.dataset.amplitude=amplitude;root.dataset.tone=tone;
  root.setAttribute('aria-label',`10毫秒內的聲音訊號，頻率${frequency.toFixed(1)}Hz，相對振幅${amplitude.toFixed(2)}，${names[tone]}`);
 }
@@ -137,4 +135,17 @@ const links=[...document.querySelectorAll('.route a')];
 function activeLink(hash){for(const link of links)if(link.hash===hash)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');}
 for(const link of links)link.addEventListener('click',()=>activeLink(link.hash));
 window.addEventListener('hashchange',()=>activeLink(location.hash));
+const routeSections=links.map(link=>document.querySelector(link.hash));
+let routeFrame=0;
+function syncRoute(){
+ if(routeFrame)return;
+ routeFrame=requestAnimationFrame(()=>{
+  routeFrame=0;
+  const pageEnd=scrollY+innerHeight>=document.documentElement.scrollHeight-2;
+  const current=pageEnd?routeSections.at(-1):[...routeSections].reverse().find(root=>root.getBoundingClientRect().top<=innerHeight*.35)||routeSections[0];
+  activeLink('#'+current.id);
+ });
+}
+window.addEventListener('scroll',syncRoute,{passive:true});
+window.addEventListener('resize',syncRoute);
 render();hearing(440);level('conversation');newChallenge();activeLink(location.hash||'#card-01');
