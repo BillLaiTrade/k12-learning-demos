@@ -30,6 +30,8 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
 
   await t.test('all proportions and both classes are visible before any action', async () => {
     assert.equal(await section.locator('.air-share').count(), 100);
+    assert.equal(await section.locator('[data-air-gas]').count(), 4);
+    assert.equal(await section.locator('[data-air-gas=all], .air-show-all').count(), 0);
     for (const [gas, count] of [['nitrogen', 78], ['oxygen', 21], ['minor', 1]]) {
       assert.equal(await section.locator(`.air-share[data-component="${gas}"]`).count(), count);
       if (gas !== 'minor') assert.equal(await section.locator(`[data-air-gas="${gas}"]`).isVisible(), true);
@@ -64,7 +66,7 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
     assert.equal(await section.getAttribute('data-emphasis'), 'argon');
     assert.match(await page.locator('#air-highlight-status').innerText(), /0\.93%/);
     assert.equal(await section.locator('.air-share[data-component="minor"]').first().evaluate(el => getComputedStyle(el).opacity), '1');
-    await section.locator('[data-air-gas="all"]').click();
+    await section.locator('.air-composition-panel').click({ position: { x: 8, y: 8 } });
     assert.equal(await section.getAttribute('data-emphasis'), 'all');
     await section.locator('[data-air-gas="nitrogen"]').hover();
     assert.equal(await section.getAttribute('data-emphasis'), 'nitrogen');
@@ -94,9 +96,9 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
     assert.equal(await section.locator('.air-share[data-component=oxygen]').count(), 21);
     assert.equal(await section.locator('.air-share[data-component=minor]').count(), 1);
     assert.ok((await section.locator('.air-zoom-link path').getAttribute('d')).startsWith('M '));
-    await section.locator('[data-air-gas=all]').click();
+    await section.locator('.air-composition-panel').click({ position: { x: 8, y: 8 } });
     assert.equal(await section.getAttribute('data-emphasis'), 'all');
-    assert.equal(await section.getAttribute('data-arrangement'), 'mixed', 'show all preserves layout');
+    assert.equal(await section.getAttribute('data-arrangement'), 'mixed', 'clicking blank preserves layout');
     assert.equal(await section.locator('[data-air-view=mixed]').getAttribute('aria-pressed'), 'true');
     await section.screenshot({ path: path.join(artifacts, 'mixed-all.webp'), type: 'webp', quality: 85 });
     await section.locator('[data-air-gas=nitrogen]').click();
@@ -107,7 +109,7 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
     assert.equal(await section.getAttribute('data-emphasis'), 'nitrogen');
     await section.locator('[data-air-gas=oxygen]').click();
     await section.screenshot({ path: path.join(artifacts, 'proportion-oxygen.webp'), type: 'webp', quality: 85 });
-    await section.locator('[data-air-gas=all]').click();
+    await section.locator('.air-composition-panel').click({ position: { x: 8, y: 8 } });
   });
 
   await t.test('argon and other select different parts of the enlarged minor share', async () => {
@@ -123,7 +125,7 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
         assert.match(await section.locator('.air-share[data-component=minor]').evaluate(el => getComputedStyle(el).outlineStyle), /solid/);
         await section.screenshot({ path: path.join(artifacts, `${view}-${gas}.webp`), type: 'webp', quality: 85 });
       }
-      await section.locator('[data-air-gas=all]').click(); await page.waitForTimeout(200);
+      await section.locator('.air-composition-panel').click({ position: { x: 8, y: 8 } }); await page.waitForTimeout(200);
       assert.equal(await opacity('argon'), '1'); assert.equal(await opacity('other'), '1');
     }
     await section.locator('[data-air-view=proportion]').click(); await page.waitForTimeout(450);
@@ -153,8 +155,8 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
       await section.screenshot({ path: path.join(artifacts, `${view}-clicked-minor.webp`), type: 'webp', quality: 85 });
       await section.locator('[data-air-gas=argon]').click();
       assert.deepEqual(await pressed(), ['argon']);
-      await section.locator('[data-air-gas=all]').click();
-      assert.deepEqual(await pressed(), ['all']);
+      await section.locator('.air-composition-panel').click({ position: { x: 8, y: 8 } });
+      assert.deepEqual(await pressed(), []);
       assert.equal(await section.locator('.air-share[aria-pressed=true]').count(), 0);
     }
     await section.locator('[data-air-view=proportion]').click(); await page.waitForTimeout(450);
@@ -177,7 +179,7 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
       await page.keyboard.press('Tab');
       assert.equal(await section.locator('[data-air-gas=nitrogen]').evaluate(el => el === document.activeElement), true, 'Tab exits chart instead of visiting 100 tiles');
     }
-    await section.locator('[data-air-gas=all]').click();
+    await section.locator('.air-composition-panel').click({ position: { x: 8, y: 8 } });
     await section.locator('[data-air-view=proportion]').click(); await page.waitForTimeout(450);
   });
 
@@ -198,7 +200,7 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
         await page.waitForTimeout(200);
         assert.equal(await section.getAttribute('data-emphasis'), 'all');
         assert.equal(await section.getAttribute('data-arrangement'), view);
-        assert.deepEqual(await section.locator('[data-air-gas][aria-pressed=true]').evaluateAll(nodes => nodes.map(n => n.dataset.airGas)), ['all']);
+        assert.deepEqual(await section.locator('[data-air-gas][aria-pressed=true]').evaluateAll(nodes => nodes.map(n => n.dataset.airGas)), []);
         assert.equal(await section.locator('.air-share[aria-pressed=true]').count(), 0);
         for (const piece of await section.locator('.air-share, .air-zoom-piece').all()) assert.equal(await piece.evaluate(el => getComputedStyle(el).opacity), '1');
       }
@@ -249,7 +251,7 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
     await touch.locator('#s2 [data-air-view=mixed]').tap();
     assert.equal(await touch.locator('#s2').getAttribute('data-emphasis'), 'other');
     assert.equal(await touch.locator('#s2').getAttribute('data-arrangement'), 'mixed');
-    await touch.locator('#s2 [data-air-gas="all"]').tap();
+    await touch.locator('#s2 .air-composition-panel').tap({ position: { x: 8, y: 8 } });
     assert.equal(await touch.locator('#s2').getAttribute('data-emphasis'), 'all');
     assert.equal(await touch.locator('#s2').getAttribute('data-arrangement'), 'mixed');
     for (const view of ['proportion', 'mixed']) {
