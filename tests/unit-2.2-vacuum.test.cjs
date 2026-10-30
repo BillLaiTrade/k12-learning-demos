@@ -19,7 +19,12 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
   const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('requestfailed', r => errors.push(r.url()));
+  // Native media preload can cancel after enough data arrives; HTTP errors and
+  // failed fetch/decode/playback are still checked independently.
+  page.on('requestfailed', request => {
+    if (request.resourceType() === 'media' && request.failure()?.errorText === 'net::ERR_ABORTED') return;
+    errors.push({url:request.url(),type:request.resourceType(),reason:request.failure()?.errorText});
+  });
   page.on('response', r => { if (r.status() >= 400) errors.push(r.url()); });
   await page.addInitScript(() => {
     const original = AudioContext.prototype.createGain;
@@ -248,31 +253,26 @@ test('vacuum jar: manipulate air while the bell keeps working', { timeout: 60000
     await mobile.locator('#vacuum-power').tap(); assert.equal(await mobile.locator('#vacuum-audio').evaluate(a => a.paused), true);
     await context.close();
   });
-  await t.test('second and third learning cards share the first card layout and teaching sequence', async () => {
-    for (const width of [1440, 1024, 768, 390]) {
+  await t.test('all five learning cards use the same full-width body and retain their teaching sequence', async () => {
+    for (const width of [1440, 1280, 1024, 768, 390, 320]) {
       await page.setViewportSize({ width, height: 1200 });
-      const cards = await page.evaluate(() => [1, 2, 3].map(index => {
-        const card = document.querySelector(`#card-0${index}`), side = card.querySelector('.card-side'), main = card.querySelector('.card-main');
-        const title = main.querySelector('h2'), intro = main.querySelector(':scope > p'), fact = main.querySelector(':scope > .fact');
-        const cs = n => getComputedStyle(n), box = n => n.getBoundingClientRect();
-        const children = [...main.children];
-        return {
-          grid: cs(card).gridTemplateColumns, padding: cs(card).padding,
-          mainX: box(main).x - box(card).x, mainWidth: box(main).width, sideWidth: box(side).width,
-          sideBorder: cs(side).borderRightWidth, sideBottom: cs(side).borderBottomWidth,
-          titleSize: cs(title).fontSize, titleAlign: cs(title).textAlign,
-          introSize: cs(intro).fontSize, introAlign: cs(intro).textAlign,
-          factBorder: cs(fact).borderLeftWidth, factBackground: cs(fact).backgroundColor,
-          dialogueBeforeDemo: children[2].classList.contains('dialogue--xiaokui') && children[3].classList.contains('dialogue'),
-          role: Boolean(side.querySelector('.card-role'))
-        };
+      const cards = await page.evaluate(() => [1, 2, 3, 4, 5].map(index => {
+        const card = document.querySelector(`#card-0${index}`), head=card.querySelector('.lesson-head'), body=card.querySelector('.lesson-body'), main=card.querySelector('.card-main');
+        const title=head.querySelector('h2'), intro=main.querySelector(':scope > p'), fact=main.querySelector(':scope > .fact');
+        const cs=n=>getComputedStyle(n), box=n=>n.getBoundingClientRect(), children=[...main.children];
+        return {display:cs(card).display,padding:cs(card).padding,mainX:box(main).x-box(card).x,mainWidth:box(main).width,cardWidth:box(card).width,
+          oldSide:Boolean(card.querySelector('.card-side')),number:head.querySelector('.lesson-number').textContent,subtitle:head.querySelector('p').textContent,
+          headBottom:box(head).bottom,bodyTop:box(body).top,titleSize:cs(title).fontSize,titleAlign:cs(title).textAlign,
+          introSize:cs(intro).fontSize,introAlign:cs(intro).textAlign,factBorder:fact?cs(fact).borderLeftWidth:null,factBackground:fact?cs(fact).backgroundColor:null,
+          dialogueBeforeDemo:children[1].classList.contains('dialogue--xiaokui')&&children[2].classList.contains('dialogue')};
       }));
-      for (const card of cards.slice(1)) {
-        for (const key of ['grid','padding','sideBorder','sideBottom','titleSize','titleAlign','introSize','introAlign','factBorder','factBackground']) assert.equal(card[key], cards[0][key], `${key} should follow card 1 at ${width}px`);
-        for (const key of ['mainX','mainWidth','sideWidth']) assert.ok(Math.abs(card[key] - cards[0][key]) < 1, `${key} should align at ${width}px`);
-        assert.ok(card.dialogueBeforeDemo && card.role);
+      for(let i=0;i<cards.length;i++){
+        const card=cards[i];assert.equal(card.display,'block');assert.equal(card.oldSide,false);assert.equal(card.number,String(i+1).padStart(2,'0'));assert.ok(card.subtitle);assert.ok(card.bodyTop>=card.headBottom-1);assert.ok(card.mainX<35);assert.ok(card.mainWidth>=card.cardWidth-70);
+        for(const key of ['padding','titleSize','titleAlign'])assert.equal(card[key],cards[0][key],`${key} aligns at ${width}px`);
+        for(const key of ['mainX','mainWidth'])assert.ok(Math.abs(card[key]-cards[0][key])<1,`${key} aligns at ${width}px`);
+        if(i>0&&i<3){for(const key of ['introSize','introAlign'])assert.equal(card[key],cards[0][key]);assert.ok(card.dialogueBeforeDemo);}
       }
-      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     }
   });
   assert.deepEqual(errors, []);

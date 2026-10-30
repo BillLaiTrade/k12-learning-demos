@@ -1,0 +1,108 @@
+▶ 3.2 sound travels through air while particles stay near their origins
+  ✔ actual bell recording is audible with headroom and no autoplay or volume slider (27.83007ms)
+  ✔ starts at rest and the disturbance reaches nearby particles before distant ones (2605.836978ms)
+  ✔ direct bell and button strikes restart one animation without stacking (1544.709529ms)
+  ✔ particles oscillate locally and preserve dense and sparse spacing (2436.587715ms)
+  ✔ ear responds only after arrival; completion and keyboard restart leave no stale animation (9563.703163ms)
+  ✔ bell playback advances, restarts from zero, and ends without looping (10293.56483ms)
+  ✔ touch controls, enlarged mobile observation, small screens and reduced motion (5517.106496ms)
+✔ 3.2 sound travels through air while particles stay near their origins (33878.672748ms)
+▶ sound comparison uses one signal and physical travel delays
+  ✔ the same distance produces the material arrival times and ranking (1.008123ms)
+  ✔ five kilometres and clamped travel positions use actual speed and elapsed seconds (0.19385ms)
+  ✔ temperature comparison is fixed at 0°C and 80°C with square-root air speeds (0.270619ms)
+  ✔ every medium uses the same frequency, bounded local motion and exact rest (1.299431ms)
+  ✔ each neighbour receives a delayed copy of the preceding vibration and never starts first (1.562139ms)
+  ✔ particles remain ordered, stay at fixed y and settle in every medium (22.65304ms)
+✔ sound comparison uses one signal and physical travel delays (28.524143ms)
+✔ fork appearance uses rapid bounded translation without affecting the propagation signal (2.647011ms)
+▶ fourth learning block works within the complete lesson
+  ✔ initial scene uses the official characters, no orange tracking particle and no autoplay (1048.217411ms)
+  ✔ formal integration retains five learning blocks, navigation and working quiz controls (82.192083ms)
+  ✔ material volumes and distinct molecules are embedded inside the animation (97.226807ms)
+  ✔ one compact panel gives the embedded scenes the main space and shows only arrival times at the right (59.740407ms)
+  ✔ vibration begins locally and steel reaches the end while water and air remain still there (480.058829ms)
+  ✔ distance markers, reached rails and readable metre values follow speed times time (23.322056ms)
+  ✔ pause freezes all observations and resume keeps one second equal to one second (639.773818ms)
+  ✔ individual source clicks and keyboard strikes keep independent clocks and do not start untouched groups (2964.597468ms)
+  ✔ a completed individual group can be struck again and temperature groups are independent (3171.913087ms)
+  ✔ a strike stays visible for at least half a second and withdraws while the fork rings (1144.332597ms)
+  ✔ visible forks are directly clickable at their real picture positions (909.003134ms)
+  ✔ small repeated tine motion stays connected to steel without a handle pushing the block (2392.988635ms)
+  ✔ vibrating neighbours carry the disturbance while the position pointer stays below the medium (1296.916357ms)
+  ✔ teaching results retain actual times and rest positions without prediction or grading (778.384969ms)
+  ✔ fixed cold and hot groups have no temperature switching controls or apparatus (722.980067ms)
+  ✔ compact chambers omit the apparatus and retain one comparison below the hot group (1046.759437ms)
+  ✔ one lower rail compares both live positions at the same scale across seven widths (5162.434068ms)
+  ✔ fixed race handles first arrival, completion, reset and separate starts honestly (6593.838735ms)
+  ✔ direct fixed-temperature strikes start immediately and reset preserves both temperatures (1080.169135ms)
+  ✔ backgrounding preserves fixed temperatures without autoplay and pauses propagation (965.510974ms)
+  ✔ fixed 0°C and 80°C experiments reproduce the same correct arrival times (864.725595ms)
+  ✔ fifth-block pause and reset stay independent of the fourth-block controls (2083.65674ms)
+  ✔ medium surface detail follows the same travel delay and stops on pause (1763.639573ms)
+  ✔ molecules stay within the material cross sections throughout the pulse (854.657405ms)
+  ✔ backgrounding pauses at the same model time and never resumes automatically (2323.648489ms)
+  ✔ fifth-block independent strike does not activate fourth-block controls (722.576094ms)
+real stopwatch: {"started":921.6999999992549,"arrivals":{"steel":{"elapsed":0.8635,"displayed":"0.847 秒"},"water":{"elapsed":3.395300000000745,"displayed":"3.378 秒"},"air":{"elapsed":14.594699999999255,"displayed":"14.577 秒"}},"checks":[{"elapsed":1.0118999999985099,"clock":1.009,"distances":[346.087,1493.32,5000]},{"elapsed":5.01189999999851,"clock":5.0093,"distances":[1718.1899,5000,5000]},{"elapsed":10.011,"clock":10.0087,"distances":[3432.9841,5000,5000]}],"strikes":{"air":0.612699999999255,"water":0.612699999999255,"steel":0.612699999999255}}
+fifth-block real stopwatch: {"started":15575.5,"arrivals":{"hot":{"elapsed":13.2895,"displayed":"13.281 秒"},"cold":{"elapsed":15.106300000000745,"displayed":"15.102 秒"}},"checks":[{"elapsed":1.0065,"clock":1.0047,"distances":[332.649,378.238]},{"elapsed":5.007699999999255,"clock":5.0058,"distances":[1657.3845,1884.5266]},{"elapsed":10.006300000000746,"clock":10.0043,"distances":[3312.352,3766.305]}]}
+  ✔ a real stopwatch confirms each activity in sequence without overlapping playback (30809.197594ms)
+  ✔ touch and seven viewport widths keep both independent blocks usable (4200.50739ms)
+✔ fourth learning block works within the complete lesson (74807.882203ms)
+▶ vacuum jar: manipulate air while the bell keeps working
+  ✔ full jar begins silent with no autoplay and a valid sustained recording (143.522263ms)
+  ✔ tabletop meter follows the approved scene with live segmented digits and aligned controls (83.430675ms)
+  ✔ power starts actual audio and a visible hammer without changing the air (961.915671ms)
+  ✔ pump picture and button share controls; stop preserves pressure while the source keeps moving (2094.596122ms)
+  ✔ near vacuum keeps the stop-pumping controls enabled while air and audio stay bounded (3625.875317ms)
+  ✔ inlet picture restores air and audio; changing direction cancels the previous action (2992.755601ms)
+  ✔ meter observes the audio signal independently of the air state and clears on silence (1175.008169ms)
+  ✔ switch, keyboard and rapid toggles stop audio and preserve the chosen air amount (869.365229ms)
+  ✔ leaving the experiment stops ringing and pumping without resetting air or autoplaying on return (408.658457ms)
+  ✔ touch targets, full apparatus, qualitative readings and layout work at narrow widths (6752.61367ms)
+  ✔ all five learning cards use the same full-width body and retain their teaching sequence (212.905272ms)
+✔ vacuum jar: manipulate air while the bell keeps working (20738.449197ms)
+▶ 2.2 ruler can be plucked directly
+  ✔ recording is audible without clipping at full volume with no volume slider (31.480484ms)
+  ✔ ruler long edges are parallel with no rest deformation at the clamp (67.031789ms)
+  ✔ pointer pluck bends only the free segment and can be stopped (331.212962ms)
+  ✔ repeated plucks, keyboard, fallback button and natural decay (3129.906279ms)
+  ✔ touch pluck on a narrow screen and inactive background (1226.418346ms)
+✔ 2.2 ruler can be plucked directly (6240.502606ms)
+✔ fireworks model: weather, random delay, displayed arithmetic and estimates (7.871288ms)
+▶ fireworks quiz: real audio clock, observation, replay, answers and reset
+  ✔ initial scene matches the compact mockup and has no autoplay or old questions (106.068603ms)
+  ✔ real firework recording has prompt onset and audible, unclipped signal (26.167125ms)
+  ✔ three displayed seconds take three real seconds and the audio waits for the arrival (3353.978968ms)
+  ✔ answer, rounding, keyboard and feedback follow the displayed numbers (255.50571ms)
+  ✔ replay preserves the question, while a new challenge cancels pending sound and resets answers (3171.753749ms)
+  ✔ background interruption stops the scheduled sound and leaves a replayable question (74.353887ms)
+  ✔ firework motion and clearing remain identical with reduced motion enabled (175.870264ms)
+  ✔ desktop and laptop layout stays readable without horizontal overflow (932.612591ms)
+  ✔ minimum and maximum random delays also use real elapsed time (10367.076141ms)
+  ✔ failed audio load provides a retry and never reports an observation as completed (1357.813741ms)
+✔ fireworks quiz: real audio clock, observation, replay, answers and reset (36307.990779ms)
+ℹ decoded sound {"duration":3.2,"rms":0.055593051747108865,"peak":0.8418530821800232,"onset":0.617267370223999,"crackleRms":0.10780387184250378}
+ℹ wall clock and audio {"elapsed":3.016599999997765,"signalDelay":2.98039999999851,"peak":0.5776489973068237,"latency":0.032}
+ℹ boundary delay 2 seconds: observed 2.019199999999255
+ℹ boundary delay 6 seconds: observed 6.014599999997765
+▶ 3.2 particles stay still until the tuning fork is struck
+  ✔ idle, strike, pause and reset with no-preference (3570.479051ms)
+  ✔ idle, strike, pause and reset with reduce (3716.757444ms)
+✔ 3.2 particles stay still until the tuning fork is struck (7603.926715ms)
+▶ 3.2 switches activities without overlapping playback
+  ✔ navigation stops a ringing bell even with the old card partly visible at 1024px (3201.502547ms)
+  ✔ navigation stops a ringing bell even with the old card partly visible at 1280px (3134.021831ms)
+  ✔ navigation stops a ringing bell even with the old card partly visible at 1440px (3124.090189ms)
+  ✔ keyboard interaction in another visible card cancels pending sound before starting the new source (794.73731ms)
+  ✔ sources in one activity remain independent while navigation to another activity pauses the old clock (1539.49452ms)
+  ✔ hash navigation and return never resume old playback automatically (1051.984132ms)
+  ✔ leaving the fireworks through navigation cancels the scheduled sound and allows replay (948.806619ms)
+✔ 3.2 switches activities without overlapping playback (14117.246977ms)
+ℹ tests 86
+ℹ suites 0
+ℹ pass 86
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 195887.647836

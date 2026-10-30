@@ -11,7 +11,11 @@ import { stopOnLeave } from './lesson-playback.mjs?v=2';
 export function initSoundSpeed(root) {
 // 兩個獨立區塊共用控制器，原生標籤及 SVG 定義各自使用唯一 ID。
 const idPrefix = root.dataset.idPrefix || '';
-const $ = selector => root.querySelector(selector.replace(/#([\w-]+)/g, (_, id) => `#${idPrefix}${id}`));
+const $ = selector => {
+  const scoped = selector.replace(/#([\w-]+)/g, (_, id) => `#${idPrefix}${id}`);
+  // The top heading lives outside the lab body; stay within its own lesson card.
+  return root.querySelector(scoped) || root.closest('.lesson-card')?.querySelector(scoped);
+};
 const svgNS = 'http://www.w3.org/2000/svg';
 const number = new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 1 });
 const secondsText = seconds => `${seconds.toFixed(3)} 秒`;

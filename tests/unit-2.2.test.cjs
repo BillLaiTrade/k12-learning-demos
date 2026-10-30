@@ -24,7 +24,12 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   const failures = [];
   page.on('pageerror', error => failures.push(error.message));
-  page.on('requestfailed', request => failures.push(request.url()));
+  // Native media preload can cancel after enough data arrives; HTTP errors and
+  // failed fetch/decode/playback are still checked independently.
+  page.on('requestfailed', request => {
+    if (request.resourceType() === 'media' && request.failure()?.errorText === 'net::ERR_ABORTED') return;
+    failures.push({url:request.url(),type:request.resourceType(),reason:request.failure()?.errorText});
+  });
   page.on('response', response => { if (response.status() >= 400) failures.push(response.url()); });
   await page.clock.install();
   await page.goto(`http://127.0.0.1:${port}/units/3/parts/3.2/`, { waitUntil: 'networkidle' });

@@ -19,7 +19,12 @@ test('3.2 sound travels through air while particles stay near their origins', { 
   const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('requestfailed', r => errors.push(r.url()));
+  // Native media preload can cancel after enough data arrives; HTTP errors and
+  // failed fetch/decode/playback are still checked independently.
+  page.on('requestfailed', request => {
+    if (request.resourceType() === 'media' && request.failure()?.errorText === 'net::ERR_ABORTED') return;
+    errors.push({url:request.url(),type:request.resourceType(),reason:request.failure()?.errorText});
+  });
   page.on('response', r => { if (r.status() >= 400) errors.push(r.url()); });
   const observePlayback = () => {
     const create = AudioContext.prototype.createBufferSource;

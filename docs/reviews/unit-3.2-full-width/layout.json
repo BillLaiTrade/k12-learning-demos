@@ -1,0 +1,396 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "cards": [
+        {
+          "id": "card-01",
+          "display": "block",
+          "number": "01",
+          "title": "撥動鋼尺時，聲音是怎麼出現的？",
+          "left": 29,
+          "right": 29,
+          "width": 792,
+          "cardWidth": 850,
+          "headBottom": 745.015625,
+          "bodyTop": 745.015625
+        },
+        {
+          "id": "card-02",
+          "display": "block",
+          "number": "02",
+          "title": "鐘聲是怎麼傳到耳朵的？",
+          "left": 29,
+          "right": 29,
+          "width": 792,
+          "cardWidth": 850,
+          "headBottom": 1760.21875,
+          "bodyTop": 1760.21875
+        },
+        {
+          "id": "card-03",
+          "display": "block",
+          "number": "03",
+          "title": "動手抽氣，鈴聲會怎麼變？",
+          "left": 29,
+          "right": 29,
+          "width": 792,
+          "cardWidth": 850,
+          "headBottom": 2617.640625,
+          "bodyTop": 2617.640625
+        },
+        {
+          "id": "card-04",
+          "display": "block",
+          "number": "04",
+          "title": "聲音在不同介質中，傳得多快？",
+          "left": 29,
+          "right": 29,
+          "width": 792,
+          "cardWidth": 850,
+          "headBottom": 3554.859375,
+          "bodyTop": 3554.859375
+        },
+        {
+          "id": "card-05",
+          "display": "block",
+          "number": "05",
+          "title": "溫度不同，聲音傳到哪裡了？",
+          "left": 29,
+          "right": 29,
+          "width": 792,
+          "cardWidth": 850,
+          "headBottom": 4946.3125,
+          "bodyTop": 4946.3125
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "cards": [
+        {
+          "id": "card-01",
+          "display": "block",
+          "number": "01",
+          "title": "撥動鋼尺時，聲音是怎麼出現的？",
+          "left": 29,
+          "right": 29,
+          "width": 792,
+          "cardWidth": 850,
+          "headBottom": -4014.078125,
+          "bodyTop": -4014.078125
+        },
+        {
+          "id": "card-02",
+          "display": "block",
+          "number": "02",
+          "title": "鐘聲是怎麼傳到耳朵的？",
+          "left": 29,
+          "right": 29,
+          "width": 792,
+          "cardWidth": 850,
+          "headBottom": -2999.96875,
+          "bodyTop": -2999.96875
+        },
+        {
+          "id": "card-03",
+          "display": "block",
+          "number": "03",
+          "title": "動手抽氣，鈴聲會怎麼變？",
+          "left": 29,
+          "right": 29,
+          "width": 792,
+          "cardWidth": 850,
+          "headBottom": -2143.640625,
+          "bodyTop": -2143.640625
+        },
+        {
+          "id": "card-04",
+          "display": "block",
+          "number": "04",
+          "title": "聲音在不同介質中，傳得多快？",
+          "left": 29,
+          "right": 29,
+          "width": 792,
+          "cardWidth": 850,
+          "headBottom": -1207.515625,
+          "bodyTop": -1207.515625
+        },
+        {
+          "id": "card-05",
+          "display": "block",
+          "number": "05",
+          "title": "溫度不同，聲音傳到哪裡了？",
+          "left": 29,
+          "right": 29,
+          "width": 792,
+          "cardWidth": 850,
+          "headBottom": 182.84375,
+          "bodyTop": 182.84375
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "cards": [
+        {
+          "id": "card-01",
+          "display": "block",
+          "number": "01",
+          "title": "撥動鋼尺時，聲音是怎麼出現的？",
+          "left": 29,
+          "right": 29,
+          "width": 656,
+          "cardWidth": 714,
+          "headBottom": -3710.0625,
+          "bodyTop": -3710.0625
+        },
+        {
+          "id": "card-02",
+          "display": "block",
+          "number": "02",
+          "title": "鐘聲是怎麼傳到耳朵的？",
+          "left": 29,
+          "right": 29,
+          "width": 656,
+          "cardWidth": 714,
+          "headBottom": -2779.359375,
+          "bodyTop": -2779.359375
+        },
+        {
+          "id": "card-03",
+          "display": "block",
+          "number": "03",
+          "title": "動手抽氣，鈴聲會怎麼變？",
+          "left": 29,
+          "right": 29,
+          "width": 656,
+          "cardWidth": 714,
+          "headBottom": -1957.828125,
+          "bodyTop": -1957.828125
+        },
+        {
+          "id": "card-04",
+          "display": "block",
+          "number": "04",
+          "title": "聲音在不同介質中，傳得多快？",
+          "left": 29,
+          "right": 29,
+          "width": 656,
+          "cardWidth": 714,
+          "headBottom": -1077.734375,
+          "bodyTop": -1077.734375
+        },
+        {
+          "id": "card-05",
+          "display": "block",
+          "number": "05",
+          "title": "溫度不同，聲音傳到哪裡了？",
+          "left": 29,
+          "right": 29,
+          "width": 656,
+          "cardWidth": 714,
+          "headBottom": 184.109375,
+          "bodyTop": 184.109375
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "cards": [
+        {
+          "id": "card-01",
+          "display": "block",
+          "number": "01",
+          "title": "撥動鋼尺時，聲音是怎麼出現的？",
+          "left": 22,
+          "right": 22,
+          "width": 684,
+          "cardWidth": 728,
+          "headBottom": -3584.234375,
+          "bodyTop": -3584.234375
+        },
+        {
+          "id": "card-02",
+          "display": "block",
+          "number": "02",
+          "title": "鐘聲是怎麼傳到耳朵的？",
+          "left": 22,
+          "right": 22,
+          "width": 684,
+          "cardWidth": 728,
+          "headBottom": -2639.078125,
+          "bodyTop": -2639.078125
+        },
+        {
+          "id": "card-03",
+          "display": "block",
+          "number": "03",
+          "title": "動手抽氣，鈴聲會怎麼變？",
+          "left": 22,
+          "right": 22,
+          "width": 684,
+          "cardWidth": 728,
+          "headBottom": -1807.4375,
+          "bodyTop": -1807.4375
+        },
+        {
+          "id": "card-04",
+          "display": "block",
+          "number": "04",
+          "title": "聲音在不同介質中，傳得多快？",
+          "left": 22,
+          "right": 22,
+          "width": 684,
+          "cardWidth": 728,
+          "headBottom": -916.671875,
+          "bodyTop": -916.671875
+        },
+        {
+          "id": "card-05",
+          "display": "block",
+          "number": "05",
+          "title": "溫度不同，聲音傳到哪裡了？",
+          "left": 22,
+          "right": 22,
+          "width": 684,
+          "cardWidth": 728,
+          "headBottom": 370.78125,
+          "bodyTop": 370.78125
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "cards": [
+        {
+          "id": "card-01",
+          "display": "block",
+          "number": "01",
+          "title": "撥動鋼尺時，聲音是怎麼出現的？",
+          "left": 19,
+          "right": 19,
+          "width": 328,
+          "cardWidth": 366,
+          "headBottom": -3308.71875,
+          "bodyTop": -3308.71875
+        },
+        {
+          "id": "card-02",
+          "display": "block",
+          "number": "02",
+          "title": "鐘聲是怎麼傳到耳朵的？",
+          "left": 19,
+          "right": 19,
+          "width": 328,
+          "cardWidth": 366,
+          "headBottom": -2459.6875,
+          "bodyTop": -2459.6875
+        },
+        {
+          "id": "card-03",
+          "display": "block",
+          "number": "03",
+          "title": "動手抽氣，鈴聲會怎麼變？",
+          "left": 19,
+          "right": 19,
+          "width": 328,
+          "cardWidth": 366,
+          "headBottom": -1507.078125,
+          "bodyTop": -1507.078125
+        },
+        {
+          "id": "card-04",
+          "display": "block",
+          "number": "04",
+          "title": "聲音在不同介質中，傳得多快？",
+          "left": 19,
+          "right": 19,
+          "width": 328,
+          "cardWidth": 366,
+          "headBottom": -567.140625,
+          "bodyTop": -567.140625
+        },
+        {
+          "id": "card-05",
+          "display": "block",
+          "number": "05",
+          "title": "溫度不同，聲音傳到哪裡了？",
+          "left": 19,
+          "right": 19,
+          "width": 328,
+          "cardWidth": 366,
+          "headBottom": 651.4375,
+          "bodyTop": 651.4375
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "cards": [
+        {
+          "id": "card-01",
+          "display": "block",
+          "number": "01",
+          "title": "撥動鋼尺時，聲音是怎麼出現的？",
+          "left": 19,
+          "right": 19,
+          "width": 258,
+          "cardWidth": 296,
+          "headBottom": -1779.03125,
+          "bodyTop": -1779.03125
+        },
+        {
+          "id": "card-02",
+          "display": "block",
+          "number": "02",
+          "title": "鐘聲是怎麼傳到耳朵的？",
+          "left": 19,
+          "right": 19,
+          "width": 258,
+          "cardWidth": 296,
+          "headBottom": -753.6875,
+          "bodyTop": -753.6875
+        },
+        {
+          "id": "card-03",
+          "display": "block",
+          "number": "03",
+          "title": "動手抽氣，鈴聲會怎麼變？",
+          "left": 19,
+          "right": 19,
+          "width": 258,
+          "cardWidth": 296,
+          "headBottom": 303.296875,
+          "bodyTop": 303.296875
+        },
+        {
+          "id": "card-04",
+          "display": "block",
+          "number": "04",
+          "title": "聲音在不同介質中，傳得多快？",
+          "left": 19,
+          "right": 19,
+          "width": 258,
+          "cardWidth": 296,
+          "headBottom": 1396.859375,
+          "bodyTop": 1396.859375
+        },
+        {
+          "id": "card-05",
+          "display": "block",
+          "number": "05",
+          "title": "溫度不同，聲音傳到哪裡了？",
+          "left": 19,
+          "right": 19,
+          "width": 258,
+          "cardWidth": 296,
+          "headBottom": 2682.984375,
+          "bodyTop": 2682.984375
+        }
+      ]
+    }
+  ],
+  "links": 6,
+  "errors": []
+}

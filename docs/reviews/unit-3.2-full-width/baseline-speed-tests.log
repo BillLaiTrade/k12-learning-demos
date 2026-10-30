@@ -1,0 +1,114 @@
+▶ sound comparison uses one signal and physical travel delays
+  ✔ the same distance produces the material arrival times and ranking (1.72983ms)
+  ✔ five kilometres and clamped travel positions use actual speed and elapsed seconds (0.194631ms)
+  ✔ temperature comparison is fixed at 0°C and 80°C with square-root air speeds (0.212749ms)
+  ✔ every medium uses the same frequency, bounded local motion and exact rest (1.266522ms)
+  ✔ each neighbour receives a delayed copy of the preceding vibration and never starts first (2.483166ms)
+  ✔ particles remain ordered, stay at fixed y and settle in every medium (19.05604ms)
+✔ sound comparison uses one signal and physical travel delays (26.559531ms)
+✔ fork appearance uses rapid bounded translation without affecting the propagation signal (2.4141ms)
+▶ fourth learning block works within the complete lesson
+  ✔ initial scene uses the official characters, no orange tracking particle and no autoplay (1186.839771ms)
+  ✔ formal integration retains five learning blocks, navigation and working quiz controls (96.637457ms)
+  ✔ material volumes and distinct molecules are embedded inside the animation (133.69236ms)
+  ✔ one compact panel gives the embedded scenes the main space and shows only arrival times at the right (76.534508ms)
+  ✔ vibration begins locally and steel reaches the end while water and air remain still there (619.068828ms)
+  ✔ distance markers, reached rails and readable metre values follow speed times time (25.285015ms)
+  ✔ pause freezes all observations and resume keeps one second equal to one second (990.928625ms)
+  ✔ individual source clicks and keyboard strikes keep independent clocks and do not start untouched groups (3265.39845ms)
+  ✖ a completed individual group can be struck again and temperature groups are independent (3130.016869ms)
+  ✔ a strike stays visible for at least half a second and withdraws while the fork rings (1225.636792ms)
+  ✔ visible forks are directly clickable at their real picture positions (908.380647ms)
+  ✔ small repeated tine motion stays connected to steel without a handle pushing the block (2207.87855ms)
+  ✔ vibrating neighbours carry the disturbance while the position pointer stays below the medium (1294.939728ms)
+  ✔ teaching results retain actual times and rest positions without prediction or grading (793.591799ms)
+  ✔ fixed cold and hot groups have no temperature switching controls or apparatus (699.912127ms)
+  ✔ compact chambers omit the apparatus and retain one comparison below the hot group (1076.856271ms)
+  ✔ one lower rail compares both live positions at the same scale across seven widths (5288.743093ms)
+  ✖ fixed race handles first arrival, completion, reset and separate starts honestly (6206.870083ms)
+  ✔ direct fixed-temperature strikes start immediately and reset preserves both temperatures (1096.844515ms)
+  ✔ backgrounding preserves fixed temperatures without autoplay and pauses propagation (929.100576ms)
+  ✔ fixed 0°C and 80°C experiments reproduce the same correct arrival times (840.853596ms)
+  ✖ fifth-block pause and reset stay independent of the fourth-block controls (1279.649807ms)
+  ✔ medium surface detail follows the same travel delay and stops on pause (1703.652596ms)
+  ✔ molecules stay within the material cross sections throughout the pulse (883.691676ms)
+  ✔ backgrounding pauses at the same model time and never resumes automatically (2336.672408ms)
+  ✔ fifth-block independent strike does not activate fourth-block controls (785.69252ms)
+  ✖ a real stopwatch confirms displayed seconds, positions and all three arrivals (25010.19608ms)
+  ✔ touch and seven viewport widths keep both independent blocks usable (4688.571868ms)
+✖ fourth learning block works within the complete lesson (69396.872681ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 32
+ℹ fail 4
+ℹ cancelled 1
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 69773.103868
+
+✖ failing tests:
+
+test at ../../tmp/k12-32-baseline/tests/unit-2.2-sound-speed.test.cjs:320:11
+✖ a completed individual group can be struck again and temperature groups are independent (3130.016869ms)
+  AssertionError [ERR_ASSERTION]: fifth block reset does not reset fourth block
+  + actual - expected
+  
+  + 'paused'
+  - 'running'
+  
+      at TestContext.<anonymous> (/tmp/k12-32-baseline/tests/unit-2.2-sound-speed.test.cjs:335:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/tmp/k12-32-baseline/tests/unit-2.2-sound-speed.test.cjs:320:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'paused',
+    expected: 'running',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../../tmp/k12-32-baseline/tests/unit-2.2-sound-speed.test.cjs:525:11
+✖ fixed race handles first arrival, completion, reset and separate starts honestly (6206.870083ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '起跑時間不同' !== '分別敲擊'
+  
+      at TestContext.<anonymous> (/tmp/k12-32-baseline/tests/unit-2.2-sound-speed.test.cjs:541:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/tmp/k12-32-baseline/tests/unit-2.2-sound-speed.test.cjs:525:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '起跑時間不同',
+    expected: '分別敲擊',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../../tmp/k12-32-baseline/tests/unit-2.2-sound-speed.test.cjs:586:11
+✖ fifth-block pause and reset stay independent of the fourth-block controls (1279.649807ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Number((await data()).time)>1.48)
+  
+      at TestContext.<anonymous> (/tmp/k12-32-baseline/tests/unit-2.2-sound-speed.test.cjs:588:12)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at process.processImmediate (node:internal/timers:502:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/tmp/k12-32-baseline/tests/unit-2.2-sound-speed.test.cjs:586:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at ../../tmp/k12-32-baseline/tests/unit-2.2-sound-speed.test.cjs:655:11
+✖ a real stopwatch confirms displayed seconds, positions and all three arrivals (25010.19608ms)
+  'test timed out after 25000ms'

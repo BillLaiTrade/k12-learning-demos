@@ -107,12 +107,17 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     server.stdout.on('data', data => { const match = String(data).match(/port (\d+)/); if (match) { clearTimeout(timer); resolve(match[1]); } });
     server.once('error', reject);
   });
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', ...(process.env.SOUND_SPEED_LESSON_URL ? {proxy:{server:process.env.HTTPS_PROXY||process.env.HTTP_PROXY}} : {}) });
   t.after(() => browser.close());
   const page = await browser.newPage({ viewport: { width: 1440, height: 1500 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('requestfailed', r => errors.push(r.url()));
+  // Native media preload can cancel after enough data arrives; HTTP errors and
+  // failed fetch/decode/playback are still checked independently.
+  page.on('requestfailed', request => {
+    if (request.resourceType() === 'media' && request.failure()?.errorText === 'net::ERR_ABORTED') return;
+    errors.push({url:request.url(),type:request.resourceType(),reason:request.failure()?.errorText});
+  });
   page.on('response', r => { if (r.status() >= 400) errors.push(`${r.status()} ${r.url()}`); });
   await page.addInitScript(() => {
     const Original = window.AudioContext;
@@ -213,7 +218,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
       const box = selector => { const b = row.querySelector(selector).getBoundingClientRect(); return { x: b.x, y: b.y, width: b.width, height: b.height, right: b.right, bottom: b.bottom }; };
       return { label: box('.medium-header'), field: box('.field'), end: box('.arrival-readout'), body: box('.row-body'), row: { y: row.getBoundingClientRect().y, bottom: row.getBoundingClientRect().bottom } };
     }));
-    assert.ok(rows.at(-1).row.bottom - rows[0].row.y < 560, 'all three media fit in a compact comparison');
+    assert.ok(rows.at(-1).row.bottom-rows[0].row.y-rows.reduce((sum,row)=>sum+row.field.height,0)<100, 'full-width scenes retain compact spacing without a large blank area');
     for (const row of rows) {
       assert.ok(row.label.right < row.field.x, 'material label sits beside the model');
       assert.ok(row.field.width >= row.label.width * 4.5 && row.field.height >= 100, 'vibration is the main visual');
@@ -327,12 +332,12 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     await page.locator('#card-04 [data-group=steel] .source-hit').click();
     assert.equal(await page.locator('#card-04 [data-group=steel] .fork-striker[visibility=visible]').count(),1);
     assert.ok(Number(await page.locator('#card-04 [data-group=water]').getAttribute('data-time'))>.18);
-    await temperatureLab.locator('[data-group=hot] .source-hit').click();await page.clock.runFor(1000);
+    await temperatureLab.locator('[data-group=hot] .source-hit').click();const savedMaterial=await time();await page.clock.runFor(1000);
     assert.equal(await temperatureLab.locator('[data-group=cold]').getAttribute('data-phase'),'idle');
     assert.ok(Number(await temperatureLab.locator('[data-group=hot]').getAttribute('data-time'))>.98);
     await temperatureLab.locator('#temp-reset-action').click();
     assert.deepEqual(await temperatureLab.locator('.medium-row').evaluateAll(ns=>ns.map(n=>n.dataset.phase)),['idle','idle']);
-    assert.equal((await data()).phase,'running','fifth block reset does not reset fourth block');
+    assert.equal((await data()).phase,'paused','entering the fifth block pauses the fourth');assert.equal(await time(),savedMaterial,'fifth-block reset preserves fourth-block progress');
 
   });
 
@@ -538,7 +543,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await temperatureLab.locator('[data-group=hot] .race-other').isHidden(),true);
     assert.equal(await temperatureLab.locator('[data-group=cold] .race-own').count(),0);
     await temperatureLab.locator('[data-group=cold] .source-hit').click();await page.clock.runFor(1000);
-    assert.equal(await temperatureLab.locator('.progress-gap').textContent(),'分別敲擊');
+    assert.equal(await temperatureLab.locator('.progress-gap').textContent(),'起跑時間不同');
     const separate=await temperatureLab.locator('.race-progress').evaluate(n=>({...n.dataset}));
     assert.equal(separate.ownDistance,String(Number(await temperatureLab.locator('[data-group=hot]').getAttribute('data-reached-distance'))));
     assert.equal(separate.otherDistance,String(Number(await temperatureLab.locator('[data-group=cold]').getAttribute('data-reached-distance'))));
@@ -584,18 +589,17 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
   });
 
   await t.test('fifth-block pause and reset stay independent of the fourth-block controls', async () => {
-    await fresh();await primary.click();await page.clock.runFor(1000);await temperaturePrimary.click();await page.clock.runFor(500);
-    assert.ok(Number((await data()).time)>1.48);assert.ok(Number((await temperatureData()).time)>.48);
-    await temperatureLab.locator('#temp-reset-action').click();
-    assert.equal((await temperatureData()).phase,'idle');const materialTime=await time();
-    await page.clock.runFor(500);assert.ok(Math.abs(await time()-materialTime-.5)<.03);
-    await primary.click();const saved=await particleXs();
-    await temperaturePrimary.click();await page.clock.runFor(500);assert.deepEqual(await particleXs(),saved);
+    await fresh();await primary.click();await page.clock.runFor(1000);await temperaturePrimary.click();const materialTime=await time();await page.clock.runFor(500);
+    assert.equal((await data()).phase,'paused');assert.equal(await time(),materialTime);assert.ok(Number((await temperatureData()).time)>.48);
+    await temperatureLab.locator('#temp-reset-action').click();assert.equal((await temperatureData()).phase,'idle');
+    await page.clock.runFor(500);assert.equal(await time(),materialTime);
+    await primary.click();await page.clock.runFor(500);assert.ok(Math.abs(await time()-materialTime-.5)<.03);
+    await temperaturePrimary.click();const saved=await particleXs();await page.clock.runFor(500);assert.deepEqual(await particleXs(),saved);
     await temperatureLab.locator('#temp-reset-action').click();assert.equal((await data()).phase,'paused');
     await page.locator('#reset-action').click();
     const layout=await page.locator('#card-04,#card-05').evaluateAll(ns=>ns.map(n=>{
-      const main=n.querySelector('.card-main').getBoundingClientRect(),side=n.querySelector('.card-side').getBoundingClientRect();
-      return{mainX:main.x,mainWidth:main.width,sideX:side.x,titleSize:getComputedStyle(n.querySelector('h2')).fontSize,padding:getComputedStyle(n).padding};
+      const main=n.querySelector('.card-main').getBoundingClientRect(),head=n.querySelector('.lesson-head').getBoundingClientRect();
+      return{mainX:main.x,mainWidth:main.width,headX:head.x,titleSize:getComputedStyle(n.querySelector('h2')).fontSize,padding:getComputedStyle(n).padding};
     }));assert.deepEqual(layout[0],layout[1]);
     await page.locator('.route a[href="#card-05"]').click();assert.equal(new URL(page.url()).hash,'#card-05');
   });
@@ -652,7 +656,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal((await data()).phase,'idle');assert.equal(await time(),0);
   });
 
-  await t.test('a real stopwatch confirms displayed seconds, positions and all three arrivals', { timeout: 25000 }, async () => {
+  await t.test('a real stopwatch confirms each activity in sequence without overlapping playback', { timeout: 45000 }, async () => {
     const realPage = await browser.newPage({ viewport: { width:1440, height:1000 } });
     try {
       await realPage.goto(url, { waitUntil:'networkidle' });
@@ -687,10 +691,10 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
         }).observe(fifth,{subtree:true,attributes:true});
       });
       await realPage.locator('#primary-action').click();
-      await realPage.locator('#temp-primary-action').click();
-      await realPage.waitForFunction(() => Object.keys(window.__stopwatch.arrivals).length === 3, { timeout:20000 });
-      await realPage.waitForFunction(()=>Object.keys(window.__temperatureWatch.arrivals).length===2,{timeout:20000});
+      await realPage.waitForFunction(() => Object.keys(window.__stopwatch.arrivals).length === 3, null, { timeout:20000 });
       const readings = await realPage.evaluate(() => window.__stopwatch);
+      await realPage.locator('#temp-primary-action').click();
+      await realPage.waitForFunction(()=>Object.keys(window.__temperatureWatch.arrivals).length===2,null,{timeout:20000});
       for (const [id,speed] of [['air',343],['water',1480],['steel',5900]]) {
         assert.ok(Math.abs(readings.arrivals[id].elapsed - 5000 / speed) < .12, `${id} reaches the end at its real elapsed time`);
         assert.equal(readings.arrivals[id].displayed, `${(5000 / speed).toFixed(3)} 秒`);
