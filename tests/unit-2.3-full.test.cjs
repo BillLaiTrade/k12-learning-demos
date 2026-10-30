@@ -102,13 +102,23 @@ test('2.3 complete page: six teaching sections and one evidence-based quiz', { t
     assert.equal(await page.locator('#gas-report-form select[name="sample_a"]').inputValue(), '');
     assert.equal(await page.locator('#cup-comparison').isVisible(), true);
   });
-  await t.test('five widths show every diagram and section without horizontal overflow', async () => {
-    for (const width of [1440,1024,800,390,320]) {
+  await t.test('seven widths keep full-width teaching bodies below their headers without overflow', async () => {
+    for (const width of [1440,1280,1024,800,768,390,320]) {
       await page.setViewportSize({ width, height: width < 760 ? 844 : 1000 });
       for (let i = 1; i <= 7; i++) {
         await page.locator('#s'+i).evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
         await page.clock.runFor(20);
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${width}: s${i} overflow`);
+      }
+      const layouts = await page.locator('.lesson:not(.unit-quiz)').evaluateAll(nodes => nodes.map(el => {
+        const card = el.getBoundingClientRect(), body = el.querySelector('.lesson-body').getBoundingClientRect();
+        const head = el.querySelector('.lesson-head').getBoundingClientRect();
+        return { id:el.id, left:body.left-card.left, right:card.right-body.right, gap:body.top-head.bottom, headerTitle:!!el.querySelector('.lesson-head h2') };
+      }));
+      assert.equal(layouts.length, 6);
+      for (const layout of layouts) {
+        assert.ok(layout.headerTitle && layout.gap >= -1, `${width}: ${layout.id} title stays above content`);
+        assert.ok(layout.left <= 2 && layout.right <= 2, `${width}: ${layout.id} body spans card width without a side gutter`);
       }
       const boxes = await page.locator('.gas-feature svg, .sequence-grid, .observation-grid, #gas-report-form').evaluateAll(nodes => nodes.map(el => { const r = el.getBoundingClientRect(); return {left:r.left,right:r.right,width:r.width}; }));
       assert.ok(boxes.every(r => r.width > 0 && r.left >= -1 && r.right <= width+1), `${width}: diagrams fit`);

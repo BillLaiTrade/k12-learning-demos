@@ -33,26 +33,24 @@
 @media(max-width:680px){.shell{width:calc(100% - 24px)}.hero{grid-template-columns:1fr;gap:16px;padding-top:20px}.hero-copy h1{font-size:2.3rem}}
 @media(max-width:760px){.story-opening-figure{border-radius:16px}.unit-quiz .quiz-head{padding:20px 16px;gap:12px}.unit-quiz .quiz-mark{flex-basis:42px;width:42px;height:42px;border-radius:13px}.quiz-intro{font-size:.85rem}}
 
-/* 教學區塊依 1.1：左欄概念與任務，右欄大標題及學習內容。 */
-.lesson:not(.unit-quiz){display:grid;grid-template-columns:190px minmax(0,1fr);gap:28px;padding:26px;border-radius:24px}
-.lesson-side{min-width:0;border-right:1px solid var(--line);padding-right:20px}
-.lesson-number{color:var(--green);font-weight:850;font-size:.84rem;letter-spacing:.08em}
-.lesson-side h3{margin:10px 0 8px;font-size:1.08rem;line-height:1.45}
-.lesson-role{margin:0;color:var(--muted);font-size:.87rem}
-.lesson:not(.unit-quiz)>.lesson-body{min-width:0;padding:0}
-.lesson:not(.unit-quiz)>.lesson-body>h2{margin:0 0 12px;font-size:clamp(1.32rem,2.8vw,1.85rem);line-height:1.35}
-.lesson:not(.unit-quiz)>.lesson-body>h2+p{margin:0 0 22px;color:var(--muted)}
-.lesson:not(.unit-quiz)>.lesson-body>h2+.dialogue{margin-top:18px}
+/* 教學區塊依 2.1：橫向標頭、內容滿寬，編號不占整區左欄。 */
+.lesson:not(.unit-quiz){display:block;padding:0;border-radius:20px}
+.lesson-head{display:grid;grid-template-columns:74px minmax(0,1fr);gap:16px;align-items:start;padding:25px 28px 21px;border-bottom:1px solid #e7ece5}
+.lesson-head>div{min-width:0}
+.lesson-number{display:grid;place-items:center;width:50px;height:50px;border-radius:15px;background:#e9f0e3;color:#416c39;font-weight:850;font-size:1.1rem}
+.lesson-head h2{margin:0;font-size:clamp(1.22rem,2vw,1.65rem);line-height:1.35}
+.lesson-head .lesson-role{margin:8px 0 0;color:#5b6a65;font-size:.94rem}
+.lesson:not(.unit-quiz)>.lesson-body{min-width:0;padding:23px 28px 28px}
+@media(max-width:900px){
+ .lesson-head,.lesson:not(.unit-quiz)>.lesson-body{padding-left:21px;padding-right:21px}
+}
 @media(min-width:761px) and (max-width:1100px){
- .lesson:not(.unit-quiz){grid-template-columns:150px minmax(0,1fr);gap:20px;padding:22px}
- .lesson-side{padding-right:16px}
  .cup-lesson .cup-actions{grid-template-columns:1fr}
 }
-@media(max-width:760px){
- .lesson:not(.unit-quiz){grid-template-columns:1fr;gap:18px;padding:18px 16px;border-radius:19px}
- .lesson-side{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;align-items:baseline;border-right:0;border-bottom:1px solid var(--line);padding:0 0 12px}
- .lesson-side h3{margin:0 0 3px}
- .lesson-role{grid-column:2}
+@media(max-width:680px){
+ .lesson-head{grid-template-columns:48px minmax(0,1fr);gap:10px;padding:18px}
+ .lesson-number{width:40px;height:40px;border-radius:12px}
+ .lesson:not(.unit-quiz)>.lesson-body{padding:18px}
 }
 
 /* 單元小測導覽依 1.1／2.2 的星號與金色識別。 */

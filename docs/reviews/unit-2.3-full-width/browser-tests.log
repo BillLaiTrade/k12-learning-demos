@@ -1,0 +1,42 @@
+▶ 2.3 composition: proportions, classification and optional emphasis
+  ✔ all proportions and both classes are visible before any action (653.264594ms)
+  ✔ mouse, keyboard and hover emphasis never hide teaching content (565.138953ms)
+  ✔ local inset opens only on a minor-component selection and closes without losing the chart (4570.277705ms)
+  ✔ both arrangements preserve all shares, selection and a visible connector (2571.0342ms)
+  ✔ argon and other select different parts of the enlarged minor share (4329.624224ms)
+  ✔ clicking shares in both layouts synchronizes legend, explanation and inset (4066.994442ms)
+  ✔ the chart is one Tab stop with spatial arrow navigation and native selection (1815.416428ms)
+  ✔ clicking beside the diagram dismisses all selections while preserving layout (14982.49684ms)
+  ✔ desktop and mobile keep the optional inset next to its source without overflow (7378.742938ms)
+  ✔ static content remains complete without JavaScript (1137.647798ms)
+  ✔ touch, reduced motion and route anchor stay usable (2395.14179ms)
+✔ 2.3 composition: proportions, classification and optional emphasis (46259.452507ms)
+▶ 2.3 complete page: six teaching sections and one evidence-based quiz
+  ✔ all seven sections and routes exist, with natural dialogue and no retired experiment (169.303458ms)
+  ✔ default cup comparisons remain after preview and reset (192.823509ms)
+  ✔ both preparations replay, pause, resume and reset without hiding results (701.564843ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (228.118242ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (715.534948ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (3830.918676ms)
+  ✔ all teaching evidence is available without JavaScript (1252.777604ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (1464.503307ms)
+✔ 2.3 complete page: six teaching sections and one evidence-based quiz (11132.573533ms)
+▶ 2.3 nitrogen packaging: approved comparison, replay and content boundaries
+  ✔ both comparison results and properties are visible before interaction (619.3894ms)
+  ✔ direct replay shows mixed-air exit, declining oxygen and resealing with a fixed reference (2829.755743ms)
+  ✔ oxygen visibly shrinks throughout flushing in both motion preferences (3105.544317ms)
+  ✔ repeated clicks replace playback instead of stacking timelines (2701.690734ms)
+  ✔ escape, background and leaving the scene pause without automatic resumption (1712.275847ms)
+  ✔ all elements stay inside the content column at seven widths, in both replay states (13704.746206ms)
+  ✔ mobile touch and reduced motion retain default knowledge and direct replay (3228.850193ms)
+  ✔ initial reduced motion and unavailable Image.decode still allow a visible replay (2980.601205ms)
+  ✔ static no-JavaScript presentation keeps both bags, comparison and properties (1091.169429ms)
+✔ 2.3 nitrogen packaging: approved comparison, replay and content boundaries (34723.605795ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46719.332055
