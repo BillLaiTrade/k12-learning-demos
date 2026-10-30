@@ -1,14 +1,15 @@
 import * as THREE from 'three';
 import {RoomEnvironment} from '../../../../1/parts/1.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
 import {POOL,SALT,saltPortion} from './ppm-quantity-model.js?v=polish-1';
+import {createPoolNavigation,overviewPose} from './ppm-pool-camera.js?v=orbit-1';
 
 export function createQuantityView(root){
   const stage=root.querySelector('.pool-volume-scene'),canvas=root.querySelector('#pool-geometry-canvas');
   const inset=root.querySelector('.pool-salt-inset'),guide=root.querySelector('.pool-quantity-guide');
   const scene=new THREE.Scene();scene.background=new THREE.Color('#edf0ec');
   const macro=new THREE.Scene();macro.background=new THREE.Color('#eee9df');
-  const camera=new THREE.OrthographicCamera(-8,8,5,-5,.01,100);
-  camera.position.set(11,14,17);camera.lookAt(.25,1,0);camera.updateMatrixWorld();
+  const camera=new THREE.PerspectiveCamera(38,stage.clientWidth/stage.clientHeight,.004,150);
+  const overview=overviewPose(camera,camera.aspect);camera.position.copy(overview.position);camera.lookAt(overview.target);camera.updateMatrixWorld();
   const macroCamera=new THREE.OrthographicCamera(-.12,.12,.09,-.09,.001,10);
   macroCamera.position.set(.025,.15,.27);macroCamera.lookAt(0,.016,0);macroCamera.updateMatrixWorld();
   let renderer;
@@ -16,7 +17,7 @@ export function createQuantityView(root){
   catch{return createFallback(root,canvas,stage,inset,guide,camera);}
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
   renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.92;
-  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.shadowMap.autoUpdate=false;
   const pmrem=new THREE.PMREMGenerator(renderer),room=new RoomEnvironment();
   const environment=pmrem.fromScene(room,.04);room.dispose();pmrem.dispose();
   for(const s of [scene,macro]){
@@ -39,12 +40,14 @@ export function createQuantityView(root){
   };
   const {lengthM:l,widthM:w,waterDepthM:h,wallM:t,freeboardM:f}=POOL,deckY=h+f;
   addBox(l+2*t,.15,w+2*t,0,-.075,0,tileMat);
-  addBox(t,h+f,w+2*t,-(l+t)/2,(h+f)/2,0,tileMat);
-  addBox(t,h+f,w+2*t,(l+t)/2,(h+f)/2,0,tileMat);
-  addBox(l,h+f,t,0,(h+f)/2,-(w+t)/2,tileMat);
-  // The front wall is a cutaway; the water geometry below retains its full volume.
-  const cutaway=new THREE.MeshBasicMaterial({color:'#8fbfc3',transparent:true,opacity:.12,depthWrite:false});
-  addBox(l,h+f,t,0,(h+f)/2,(w+t)/2,cutaway).castShadow=false;
+  // The nearest walls become cutaways as the viewer turns around the pool.
+  const walls=[];
+  for(const sign of [-1,1]){
+    const side=tileMat.clone();side.transparent=true;
+    const front=tileMat.clone();front.transparent=true;
+    walls.push({mesh:addBox(t,h+f,w+2*t,sign*(l+t)/2,(h+f)/2,0,side),normal:new THREE.Vector3(sign,0,0)});
+    walls.push({mesh:addBox(l,h+f,t,0,(h+f)/2,sign*(w+t)/2,front),normal:new THREE.Vector3(0,0,sign)});
+  }
   addBox(l+2.6,.16,1.15,0,deckY-.08,w/2+.725,deckMat);
   addBox(l+2.6,.16,1.15,0,deckY-.08,-w/2-.725,deckMat);
   addBox(1.15,.16,w+.3,-l/2-.725,deckY-.08,0,deckMat);
@@ -88,7 +91,8 @@ export function createQuantityView(root){
   macroFloor.rotation.x=-Math.PI/2;macroFloor.receiveShadow=true;macroFloor.position.y=-.001;macro.add(macroFloor);
   const grainGeometry=makeSaltCrystal();
   const saltMaterial=new THREE.MeshPhysicalMaterial({color:'#fffdf4',roughness:.39,ior:1.54,transmission:.045,thickness:.001,clearcoat:.12});
-  let meshes=[],portion;
+  let meshes=[],portion,shadowsDirty=true;
+  const navigation=createPoolNavigation(root,camera,canvas,source.position,draw);
   function setSalt(massG){
     portion=saltPortion(massG);
     meshes.forEach((m,i)=>{[source,closeup][i].remove(m);m.dispose?.();});meshes=[];
@@ -104,23 +108,37 @@ export function createQuantityView(root){
       grains.instanceMatrix.needsUpdate=true;grains.castShadow=grains.receiveShadow=true;group.add(grains);meshes.push(grains);
     }
     root.dataset.sourceScale=String(source.scale.x);root.dataset.insetScale=String(closeup.scale.x);
-    metrics(root,portion);root.dataset.saltRenderedVolumeM3=String(meshes[0].count*scale.x*scale.y*scale.z);draw();
+    metrics(root,portion);root.dataset.saltRenderedVolumeM3=String(meshes[0].count*scale.x*scale.y*scale.z);shadowsDirty=true;draw();
   }
   function draw(){
     if(!portion)return;
     const width=stage.clientWidth,height=stage.clientHeight;if(!width||!height)return;
+    camera.aspect=width/height;camera.updateProjectionMatrix();camera.updateMatrixWorld();
+    const distance=camera.position.distanceTo(navigation.controls.target),direction=camera.position.clone().sub(navigation.controls.target).normalize();
+    for(const {mesh,normal} of walls){
+      const cutaway=THREE.MathUtils.smoothstep(normal.dot(camera.position.clone().sub(mesh.position)),0,1.2);
+      mesh.material.opacity=THREE.MathUtils.lerp(1,.16,cutaway);mesh.material.depthWrite=cutaway<.01;
+    }
+    inset.hidden=distance<2;
     renderer.setScissorTest(false);renderer.setSize(width,height,false);
-    camera.left=-8;camera.right=8;camera.top=8*height/width;camera.bottom=-camera.top;camera.updateProjectionMatrix();
-    renderer.setViewport(0,0,width,height);renderer.clear();renderer.render(scene,camera);
-    const box=inset.getBoundingClientRect(),bounds=stage.getBoundingClientRect(),x=box.left-bounds.left,y=height-(box.top-bounds.top)-box.height;
-    macroCamera.left=-SALT.fieldWidthM/2;macroCamera.right=SALT.fieldWidthM/2;
-    macroCamera.top=SALT.fieldWidthM*box.height/box.width/2;macroCamera.bottom=-macroCamera.top;macroCamera.updateProjectionMatrix();
-    renderer.setScissorTest(true);renderer.setScissor(x,y,box.width,box.height);renderer.setViewport(x,y,box.width,box.height);
-    renderer.clear();renderer.render(macro,macroCamera);renderer.setScissorTest(false);
-    annotations(root,camera,source.position,width,height,box,bounds,guide);
+    renderer.setViewport(0,0,width,height);renderer.clear();renderer.shadowMap.needsUpdate=shadowsDirty;renderer.render(scene,camera);
+    const box=inset.getBoundingClientRect(),bounds=stage.getBoundingClientRect();
+    if(!inset.hidden){
+      const x=box.left-bounds.left,y=height-(box.top-bounds.top)-box.height;
+      const target=new THREE.Vector3(0,.016,0);macroCamera.position.copy(target).addScaledVector(direction,.32);macroCamera.lookAt(target);macroCamera.updateMatrixWorld();
+      macroCamera.left=-SALT.fieldWidthM/2;macroCamera.right=SALT.fieldWidthM/2;
+      macroCamera.top=SALT.fieldWidthM*box.height/box.width/2;macroCamera.bottom=-macroCamera.top;macroCamera.updateProjectionMatrix();
+      renderer.setScissorTest(true);renderer.setScissor(x,y,box.width,box.height);renderer.setViewport(x,y,box.width,box.height);
+      renderer.clear();renderer.shadowMap.needsUpdate=shadowsDirty;renderer.render(macro,macroCamera);renderer.setScissorTest(false);
+    }
+    shadowsDirty=false;
+    annotations(root,camera,source.position,width,height,box,bounds,guide,distance);
+    root.dataset.cameraPosition=JSON.stringify(camera.position.toArray().map(v=>Number(v.toFixed(5))));
+    root.dataset.cameraTarget=JSON.stringify(navigation.controls.target.toArray().map(v=>Number(v.toFixed(5))));
+    root.dataset.cameraDistance=distance.toFixed(5);root.dataset.cameraProjection='perspective';
   }
-  const observer=new ResizeObserver(draw);observer.observe(stage);root.dataset.renderer='webgl';
-  return{setSalt,dispose(){observer.disconnect();renderer.dispose();environment.dispose();}};
+  const observer=new ResizeObserver(()=>navigation.scheduleDraw());observer.observe(stage);root.dataset.renderer='webgl';
+  return{setSalt,dispose(){observer.disconnect();navigation.dispose();renderer.dispose();environment.dispose();}};
 }
 
 // Small, closed corner bevels catch the light. Normalize the integrated volume
@@ -208,23 +226,42 @@ function makeTile(){
   const texture=new THREE.CanvasTexture(canvas);texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;return texture;
 }
 function metrics(root,p){
+  root.querySelector('.pool-salt-source-label').textContent=`食鹽 ${p.massG.toLocaleString('en-US')} 克・實際比例`;
   root.dataset.saltDensityGPerCm3=String(SALT.densityGPerCm3);root.dataset.saltGrainCount=String(p.count);root.dataset.saltGrainEdgeM=String(p.edgeM);root.dataset.saltSolidVolumeCm3=String(p.solidVolumeCm3);root.dataset.saltRenderedVolumeM3=String(p.solidVolumeM3);root.dataset.saltPileDiameterCm=String(p.radiusM*200);root.dataset.saltPileHeightCm=String(p.heightM*100);root.dataset.saltDishDiameterCm='16';
 }
-function annotations(root,camera,source,width,height,box,bounds,guide){
-  const project=(x,y,z)=>{const v=new THREE.Vector3(x,y,z).project(camera);return{x:(v.x+1)*width/2,y:(1-v.y)*height/2};};
-  const lines=[['length',[-5,2,2.65],[5,2,2.65]],['width',[5.2,2,-2.5],[5.2,2,2.5]],['depth',[-5.18,0,2.65],[-5.18,2,2.65]]];
-  guide.setAttribute('viewBox',`0 0 ${width} ${height}`);
-  lines.forEach(([id,a,b])=>{const p=project(...a),q=project(...b),line=guide.querySelector(`[data-dimension-line="${id}"]`);for(const[k,v]of Object.entries({x1:p.x,y1:p.y,x2:q.x,y2:q.y}))line.setAttribute(k,String(v));const label=root.querySelector(`[data-dimension-label="${id}"]`);label.style.left=`${(p.x+q.x)/2}px`;label.style.top=`${(p.y+q.y)/2}px`;});
-  const p=project(source.x,source.y+.02,source.z),circle=guide.querySelector('[data-salt-source]'),line=guide.querySelector('[data-salt-guide]');circle.setAttribute('cx',p.x);circle.setAttribute('cy',p.y);for(const[k,v]of Object.entries({x1:p.x,y1:p.y,x2:box.left-bounds.left+box.width*.5,y2:box.bottom-bounds.top}))line.setAttribute(k,String(v));
-  const label=root.querySelector('.pool-salt-source-label');label.style.left=`${p.x}px`;label.style.top=`${p.y+11}px`;
-  root.querySelector('.pool-salt-scale').style.width=`${.05/SALT.fieldWidthM*box.width}px`;
+function annotations(root,camera,source,width,height,box,bounds,guide,distance=20){
+  const project=(x,y,z)=>{const v=new THREE.Vector3(x,y,z).project(camera);return{x:(v.x+1)*width/2,y:(1-v.y)*height/2,visible:v.z>=-1&&v.z<=1&&Math.abs(v.x)<.96&&Math.abs(v.y)<.94};};
+  const nearX=(camera.position.x<0?-1:1)*(POOL.lengthM/2+.32),nearZ=(camera.position.z<0?-1:1)*(POOL.widthM/2+.32);
+  const lines=[['length',[-5,2,nearZ],[5,2,nearZ]],['width',[nearX,2,-2.5],[nearX,2,2.5]],['depth',[nearX,0,nearZ],[nearX,2,nearZ]]];
+  const center=project(0,1,0);guide.setAttribute('viewBox',`0 0 ${width} ${height}`);
+  for(const [id,a,b] of lines){
+    const p=project(...a),q=project(...b),line=guide.querySelector(`[data-dimension-line="${id}"]`),label=root.querySelector(`[data-dimension-label="${id}"]`);
+    const visible=distance>5&&p.visible&&q.visible;line.style.display=visible?'':'none';label.hidden=!visible;
+    if(!visible)continue;
+    for(const[k,v]of Object.entries({x1:p.x,y1:p.y,x2:q.x,y2:q.y}))line.setAttribute(k,String(v));
+    const x=(p.x+q.x)/2,y=(p.y+q.y)/2,dx=x-center.x,dy=y-center.y,length=Math.hypot(dx,dy)||1;
+    label.style.left=`${Math.max(35,Math.min(width-35,x+dx/length*13))}px`;label.style.top=`${Math.max(14,Math.min(height-14,y+dy/length*13))}px`;
+  }
+  const p=project(source.x,source.y+.02,source.z),circle=guide.querySelector('[data-salt-source]'),line=guide.querySelector('[data-salt-guide]');
+  const insetVisible=box.width>0,showGuide=p.visible&&insetVisible;
+  circle.style.display=line.style.display=showGuide?'':'none';
+  circle.setAttribute('cx',p.x);circle.setAttribute('cy',p.y);
+  if(showGuide)for(const[k,v]of Object.entries({x1:p.x,y1:p.y,x2:box.left-bounds.left+box.width*.5,y2:box.bottom-bounds.top}))line.setAttribute(k,String(v));
+  const label=root.querySelector('.pool-salt-source-label');label.hidden=!p.visible;
+  if(p.visible){
+    const rim=Array.from({length:16},(_,i)=>project(source.x+.08*Math.cos(i*Math.PI/8),source.y,source.z+.08*Math.sin(i*Math.PI/8)));
+    label.style.left=`${Math.max(70,Math.min(width-70,p.x))}px`;label.style.top=`${Math.min(height-28,Math.max(...rim.map(point=>point.y))+10)}px`;
+  }
+  if(insetVisible)root.querySelector('.pool-salt-scale').style.width=`${.05/SALT.fieldWidthM*box.width}px`;
 }
 function createFallback(root,oldCanvas,stage,inset,guide,camera){
   const canvas=oldCanvas.cloneNode();oldCanvas.replaceWith(canvas);const ctx=canvas.getContext('2d');let portion;
+  canvas.removeAttribute('tabindex');canvas.setAttribute('aria-label','泳池與100克食鹽的固定視角比例示意圖');
+  root.dataset.interactive='false';root.querySelector('#pool-model-hint').textContent='目前瀏覽器無法顯示可旋轉的 3D 模型，已顯示固定視角示意圖。';
   root.dataset.sourceScale='1';root.dataset.insetScale='1';root.dataset.renderer='canvas';root.dataset.geometryWaterLiters=String(POOL.lengthM*POOL.widthM*POOL.waterDepthM*1000);root.dataset.poolInnerLengthM='10';root.dataset.poolInnerWidthM='5';root.dataset.poolWaterDepthM='2';
   function draw(){
     if(!portion)return;const w=stage.clientWidth,h=stage.clientHeight,dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#edf1ec';ctx.fillRect(0,0,w,h);
-    camera.top=8*h/w;camera.bottom=-camera.top;camera.updateProjectionMatrix();
+    camera.aspect=w/h;camera.updateProjectionMatrix();camera.updateMatrixWorld();
     const project=(x,y,z)=>{const v=new THREE.Vector3(x,y,z).project(camera);return[(v.x+1)*w/2,(1-v.y)*h/2];};
     const polygon=(points,color)=>{ctx.beginPath();points.forEach((p,i)=>{const q=project(...p);if(i)ctx.lineTo(...q);else ctx.moveTo(...q);});ctx.closePath();ctx.fillStyle=color;ctx.fill();ctx.strokeStyle='#88aeb1';ctx.stroke();};
     polygon([[-5,0,2.5],[5,0,2.5],[5,2,2.5],[-5,2,2.5]],'#acd5da');polygon([[5,0,-2.5],[5,0,2.5],[5,2,2.5],[5,2,-2.5]],'#8cbec9');polygon([[-5,2,-2.5],[5,2,-2.5],[5,2,2.5],[-5,2,2.5]],'#83cdd6');

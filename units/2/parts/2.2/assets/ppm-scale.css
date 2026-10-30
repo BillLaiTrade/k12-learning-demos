@@ -336,3 +336,20 @@
  #s6 .pool-percent-conversion {font-size:.76rem;gap:2px 5px;}
  #s6 .pool-percent-conversion strong {font-size:.9rem;}
 }
+
+/* Orbit the real-scale geometry; presets move the camera, never resize the salt. */
+#s6 .pool-geometry-scene [hidden] {display:none!important;}
+#s6 #pool-geometry-canvas {cursor:grab;touch-action:none;}
+#s6 #pool-geometry-canvas.is-orbiting {cursor:grabbing;}
+#s6 #pool-geometry-canvas:focus-visible {outline:2px solid #59886d;outline-offset:-3px;}
+#s6 .pool-salt-inset {padding:0;background:transparent;pointer-events:auto;cursor:zoom-in;}
+#s6 .pool-salt-inset:focus-visible {outline:3px solid #59886d;outline-offset:2px;}
+#s6 .pool-salt-source-label {pointer-events:none;}
+#s6 .pool-model-toolbar {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:7px 12px;margin:8px 1px 0;}
+#s6 .pool-model-toolbar>p {margin:0;color:#62796b;font-size:.72rem;line-height:1.6;}
+#s6 .pool-model-toolbar>div {display:flex;gap:6px;}
+#s6 .pool-model-toolbar button {padding:5px 9px;border:1px solid #bacebf;border-radius:7px;background:#fffefa;color:#315e47;font:inherit;font-size:.73rem;line-height:1.5;cursor:pointer;}
+#s6 .pool-model-toolbar button:hover:not(:disabled) {border-color:#689478;background:#eef5eb;}
+#s6 .pool-model-toolbar button:disabled {opacity:.45;cursor:default;}
+#s6 .pool-salt-inset:disabled {cursor:default;}
+@media(max-width:680px){#s6 .pool-model-toolbar {gap:6px;}#s6 .pool-model-toolbar>p {font-size:.65rem;}#s6 .pool-model-toolbar button {font-size:.65rem;padding:4px 7px;}}
