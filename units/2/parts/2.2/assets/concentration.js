@@ -13,14 +13,18 @@ function update(){
   for(const button of massButtons){const kind=button.dataset.massKind,delta=Number(button.dataset.massDelta);button.disabled=!ready||(delta>0?state[kind]>=LIMITS[kind][1]:state[kind]<=LIMITS[kind][0]);}
   const v=values(),key=[state.sugar,state.water,state.ppm].join('/');
   if(key!==lastKey){
+    // Integer tenths of a gram identify rounding to three decimal places exactly.
+    const sugarTenths=Math.round(v.sugar*10),totalTenths=Math.round(v.total*10);
+    const approximate=(sugarTenths*100*1000)%totalTenths!==0;
     const fields={
       'sugar-read':`${v.sugar.toFixed(1)} g`,'water-read':`${v.water.toFixed(1)} g`,
       sugar:`糖 ${format(v.sugar,1)} 克`,water:`水 ${format(v.water,1)} 克`,total:`${v.sugar?'糖水':'水'} ${format(v.total,1)} 克`,
-      'formula-sugar':`${format(v.sugar,1)} 克`,'formula-total':`${format(v.total,1)} 克`,percent:`${format(v.percent)}%`,
+      'formula-sugar':`${format(v.sugar,1)} 克`,'formula-total':`${format(v.total,1)} 克`,'percent-sign':approximate?'≈':'＝',percent:`${format(v.percent)}%`,
       'sugar-share':`糖占 ${format(v.percent)}%`,'water-share':`水占 ${format(100-v.percent)}%`,
       meaning:`每 100 克這樣的${v.sugar?'糖水':'水'}，含有 ${format(v.percent)} 克糖。比例條表示質量組成。`,
     };
     for(const node of document.querySelectorAll('[data-mix]'))node.textContent=fields[node.dataset.mix];
+    document.querySelector('[data-mix="percent-sign"]').setAttribute('aria-label',approximate?'約等於':'等於');
     $('mix-bar-fill').style.width=`${v.percent}%`;$('mix-bar').setAttribute('aria-label',`糖占質量${format(v.percent)}%，水占${format(100-v.percent)}%`);
     lab.dataset.sugar=String(v.sugar);lab.dataset.water=String(v.water);lab.dataset.total=String(v.total);lab.dataset.percent=String(v.percent);
     lastKey=key;
