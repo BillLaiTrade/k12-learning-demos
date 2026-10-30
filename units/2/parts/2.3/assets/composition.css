@@ -11,9 +11,12 @@
 .air-overview{display:grid;grid-template-columns:minmax(0,1fr) minmax(152px,.8fr);gap:20px;align-items:start}
 .air-grid-figure{margin:0;min-width:0}
 .air-share-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:var(--air-gap);width:100%;max-width:310px;aspect-ratio:1;margin:0 auto}
-.air-share{aspect-ratio:1;border-radius:3px;background:#66917c;border:1px solid #00000006;transition:opacity .15s ease,transform .38s ease;transform:translate(0,0)}
-.air-share[data-component=oxygen]{background:#d8a154}
-.air-share[data-component=minor]{background:repeating-linear-gradient(135deg,#9894b4 0 4px,#dce2dd 4px 6px);position:relative;z-index:1}
+.air-share{appearance:none;display:block;padding:0;min-width:0;min-height:0;width:100%;box-shadow:none;--share-fill:#66917c;aspect-ratio:1;border-radius:3px;background:var(--share-fill);border:1px solid #00000006;transition:opacity .15s ease,transform .38s ease;transform:translate(0,0)}
+button.air-share:hover:not(:disabled),button.air-share[aria-pressed=true]{background:var(--share-fill);border-color:#00000006;box-shadow:none}
+.air-share[data-component=oxygen]{--share-fill:#d8a154}
+.air-share[data-component=minor]{--share-fill:repeating-linear-gradient(135deg,#9894b4 0 4px,#dce2dd 4px 6px);position:relative;z-index:1}
+.air-share:disabled{opacity:1;cursor:default}
+.air-share:focus-visible{outline:2px solid #b98737;outline-offset:1px;z-index:2}
 [data-arrangement=mixed] .air-share{transform:translate(calc(var(--mix-x) * (100% + var(--air-gap))),calc(var(--mix-y) * (100% + var(--air-gap))))}
 .air-grid-figure figcaption{margin-top:12px;color:var(--muted);font-size:.69rem;line-height:1.7;text-align:center}
 .air-legend{display:grid;gap:8px;min-width:0}
@@ -31,8 +34,8 @@
 .air-legend strong.air-small-value{font-size:1.05rem;letter-spacing:0}
 .air-legend .air-show-all{justify-self:end;padding:4px 8px;border:0;font-size:.74rem;min-height:32px;background:transparent;text-decoration:underline;text-underline-offset:4px;box-shadow:none}
 .air-highlight-status{color:#47634e;font-size:.81rem;line-height:1.8;margin:14px 0 0;min-height:2.9em}
-[data-emphasis=nitrogen] .air-share:not([data-component=nitrogen]),[data-emphasis=oxygen] .air-share:not([data-component=oxygen]),[data-emphasis=argon] .air-share:not([data-component=minor]),[data-emphasis=other] .air-share:not([data-component=minor]){opacity:.2}
-[data-emphasis=argon] .air-share[data-component=minor],[data-emphasis=other] .air-share[data-component=minor]{outline:2px solid #827ba5;outline-offset:2px}
+[data-emphasis=nitrogen] .air-share:not([data-component=nitrogen]),[data-emphasis=oxygen] .air-share:not([data-component=oxygen]),[data-emphasis=argon] .air-share:not([data-component=minor]),[data-emphasis=other] .air-share:not([data-component=minor]),[data-emphasis=minor] .air-share:not([data-component=minor]){opacity:.2}
+[data-emphasis=argon] .air-share[data-component=minor],[data-emphasis=other] .air-share[data-component=minor],[data-emphasis=minor] .air-share[data-component=minor]{outline:2px solid #827ba5;outline-offset:2px}
 .air-other-detail{position:relative;margin-top:22px;padding:16px;background:#f3f1f9;border:1px solid #d9d4e6;border-radius:11px}
 .air-other-heading{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:5px}
 .air-other-heading h3{font-size:.94rem;margin:0;color:#514b72}
@@ -45,7 +48,7 @@
 .air-zoom-labels p{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:0;color:#5f6172;font-size:.77rem;line-height:1.8}
 .air-zoom-labels b{color:#56516d;font-weight:750}
 [data-emphasis=argon] [data-zoom=other],[data-emphasis=other] [data-zoom=argon]{opacity:.2}
-[data-emphasis=argon] [data-zoom=argon],[data-emphasis=other] [data-zoom=other]{box-shadow:0 0 0 2px #fffefa,0 0 0 4px #71688e}
+[data-emphasis=argon] [data-zoom=argon],[data-emphasis=other] [data-zoom=other],[data-emphasis=minor] .air-zoom-piece{box-shadow:0 0 0 2px #fffefa,0 0 0 4px #71688e}
 .air-detail-note{margin:11px 0 0;font-size:.68rem;color:#777185;line-height:1.8}
 .air-zoom-link{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .air-zoom-link path{fill:none;stroke:#9894b4;stroke-width:1.3;stroke-dasharray:3 4}

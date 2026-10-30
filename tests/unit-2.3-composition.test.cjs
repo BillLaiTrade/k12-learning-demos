@@ -25,7 +25,7 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
   page.on('response', r => { if (r.status() >= 400) failures.push(r.url()); });
   await page.goto(url, { waitUntil: 'networkidle' });
   const section = page.locator('#s2');
-  const artifacts = path.resolve(process.env.AIR_COMPOSITION_ARTIFACT_DIR || 'docs/reviews/unit-2.3-composition-explore');
+  const artifacts = path.resolve(process.env.AIR_COMPOSITION_ARTIFACT_DIR || 'docs/reviews/unit-2.3-composition-click');
   mkdirSync(artifacts, { recursive: true });
 
   await t.test('all proportions and both classes are visible before any action', async () => {
@@ -129,6 +129,58 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
     await section.locator('[data-air-view=proportion]').click(); await page.waitForTimeout(450);
   });
 
+  await t.test('clicking shares in both layouts synchronizes legend, explanation and inset', async () => {
+    const pressed = () => section.locator('[data-air-gas][aria-pressed=true]').evaluateAll(nodes => nodes.map(n => n.dataset.airGas));
+    const fill = gas => section.locator(`.air-share[data-component="${gas}"]`).first().evaluate(el => getComputedStyle(el).backgroundColor);
+    const originalFills = [await fill('nitrogen'), await fill('oxygen')];
+    for (const view of ['proportion', 'mixed']) {
+      await section.locator(`[data-air-view="${view}"]`).click(); await page.waitForTimeout(450);
+      for (const [gas, legend] of [['nitrogen', ['nitrogen']], ['oxygen', ['oxygen']], ['minor', ['argon', 'other']]]) {
+        const share = section.locator(`.air-share[data-component="${gas}"]`).last();
+        const before = await share.boundingBox();
+        await share.click(); await page.waitForTimeout(200);
+        assert.equal(await section.getAttribute('data-emphasis'), gas);
+        assert.deepEqual(await pressed(), legend);
+        assert.equal(await share.getAttribute('aria-pressed'), 'true');
+        const after = await share.boundingBox();
+        assert.ok(Math.abs(before.x - after.x) < 1, 'click and hover do not move a mixed tile');
+        assert.deepEqual([await fill('nitrogen'), await fill('oxygen')], originalFills, 'native button hover/pressed styles preserve gas colors');
+        if (gas === 'minor') {
+          assert.match(await page.locator('#air-highlight-status').innerText(), /合併氬氣.*合計約1%.*0\.93%/);
+          for (const part of ['argon', 'other']) assert.equal(await section.locator(`[data-zoom="${part}"]`).evaluate(el => getComputedStyle(el).opacity), '1');
+        }
+      }
+      await section.screenshot({ path: path.join(artifacts, `${view}-clicked-minor.webp`), type: 'webp', quality: 85 });
+      await section.locator('[data-air-gas=argon]').click();
+      assert.deepEqual(await pressed(), ['argon']);
+      await section.locator('[data-air-gas=all]').click();
+      assert.deepEqual(await pressed(), ['all']);
+      assert.equal(await section.locator('.air-share[aria-pressed=true]').count(), 0);
+    }
+    await section.locator('[data-air-view=proportion]').click(); await page.waitForTimeout(450);
+  });
+
+  await t.test('the chart is one Tab stop with spatial arrow navigation and native selection', async () => {
+    const grid = section.locator('.air-share-grid');
+    for (const view of ['proportion', 'mixed']) {
+      await section.locator(`[data-air-view="${view}"]`).click(); await page.waitForTimeout(450);
+      const oxygen = grid.locator('[data-component=oxygen]').last(); await oxygen.click();
+      assert.equal(await grid.locator('[tabindex="0"]').count(), 1);
+      const before = await oxygen.boundingBox();
+      await page.keyboard.press('ArrowLeft');
+      const focused = grid.locator('button:focus'); const after = await focused.boundingBox();
+      assert.ok(after.x < before.x && Math.abs(after.y - before.y) < 1, 'left arrow follows visible positions in each layout');
+      const gas = await focused.getAttribute('data-component');
+      await page.keyboard.press('Space');
+      assert.equal(await section.getAttribute('data-emphasis'), gas);
+      assert.equal(await focused.getAttribute('aria-pressed'), 'true');
+      await page.keyboard.press('Tab');
+      assert.equal(await section.locator('[data-air-gas=nitrogen]').evaluate(el => el === document.activeElement), true, 'Tab exits chart instead of visiting 100 tiles');
+    }
+    await section.locator('[data-air-gas=all]').click();
+    await section.locator('[data-air-view=proportion]').click(); await page.waitForTimeout(450);
+  });
+
   await t.test('desktop, laptop and narrow screens preserve order without overflow', async () => {
     for (const width of [1440, 1024, 800, 390, 320]) {
       await page.setViewportSize({ width, height: width < 760 ? 844 : 1000 });
@@ -153,6 +205,7 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
     for (const selector of ['.air-share-grid', '.air-legend', '.air-other-detail', '.permanent', '.variable', '.air-basis-note']) assert.equal(await staticPage.locator('#s2 ' + selector).isVisible(), true);
     assert.equal(await staticPage.locator('#s2 [data-air-view]:disabled').count(), 2);
     assert.equal(await staticPage.locator('#s2 .air-zoom-bar').isVisible(), true);
+    assert.equal(await staticPage.locator('#s2 .air-share:disabled').count(), 100);
     await context.close();
   });
 
@@ -170,6 +223,13 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
     await touch.locator('#s2 [data-air-gas="all"]').tap();
     assert.equal(await touch.locator('#s2').getAttribute('data-emphasis'), 'all');
     assert.equal(await touch.locator('#s2').getAttribute('data-arrangement'), 'mixed');
+    for (const view of ['proportion', 'mixed']) {
+      await touch.locator(`[data-air-view="${view}"]`).tap();
+      for (const gas of ['nitrogen', 'oxygen', 'minor']) {
+        await touch.locator(`#s2 .air-share[data-component="${gas}"]`).last().tap();
+        assert.equal(await touch.locator('#s2').getAttribute('data-emphasis'), gas);
+      }
+    }
     await touch.close();
   });
   assert.deepEqual(failures, [], 'no broken assets or page errors');

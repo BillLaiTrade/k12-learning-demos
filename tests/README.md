@@ -362,6 +362,8 @@ AIR_COMPOSITION_ARTIFACT_DIR=/tmp/unit23-explore AIR_FULL_ARTIFACT_DIR=/tmp/unit
 
 第二區測試涵蓋看比例／看混合保留100格與78／21／1組成、兩種排列的四項選取、氬／其餘放大圖不同突出、切換保留選取、顯示全部保留排列、游標／鍵盤／觸控、減少動態、五種寬度與無JavaScript完整閱讀。`AIR_COMPOSITION_URL`可指定公開網址；新版預設截圖目錄為`docs/reviews/unit-2.3-composition-explore/`，公開檢查請另設暫存截圖目錄以保留本機證據。
 
+2.3第二區另涵蓋主圖直接點選：比例／混合排列的綠／黃／斜紋格，與圖例、放大圖及說明同步；合併格同時標示氬／其餘。檢查原生按鈕不改氣體配色或混合位置、手機直接點格、單一Tab入口與依畫面位置的方向鍵操作。新版預設證據目錄為`docs/reviews/unit-2.3-composition-click/`。
+
 ## 3.4 第一區：依核可示意圖直接操作喇叭
 
 ```sh

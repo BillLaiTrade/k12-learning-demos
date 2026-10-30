@@ -13,6 +13,7 @@ const descriptions = {
   nitrogen: '100份乾燥空氣中，約78份是氮氣（約78%）。',
   oxygen: '100份乾燥空氣中，約21份是氧氣（約21%）。',
   argon: '氬氣占全部乾燥空氣約0.93%。斜紋格合併氬氣與其餘少量；放大圖突出的是氬氣。',
+  minor: '斜紋格合併氬氣與其餘少量氣體，合計約1%；氬氣占全部約0.93%。右側兩項與放大圖一併標示，可再選名稱分別查看。',
   other: '其餘氣體包含二氧化碳等，不再包含已單獨列出的氬氣；放大圖突出的是其餘少量成分。'
 };
 let selected = 'all';
@@ -27,6 +28,7 @@ function describe() {
 }
 // A fixed permutation of all 100 positions: every tile moves, no share is added or removed.
 // The coarse minor tile stays on the bottom row so its connector does not cross the chart.
+const positionOf = index => section.dataset.arrangement === 'mixed' ? (index * 37 + 31) % 100 : index;
 shares.forEach((share, index) => {
   const position = (index * 37 + 31) % 100;
   share.style.setProperty('--mix-x', position % 10 - index % 10);
@@ -57,16 +59,25 @@ function followConnector() {
   };
   connectorFrame = requestAnimationFrame(step);
 }
+function choose(gas, sourceShare) {
+  selected = gas;
+  hovered = null;
+  focused = gas;
+  for (const control of controls) {
+    const active = control.dataset.airGas === gas || (gas === 'minor' && ['argon', 'other'].includes(control.dataset.airGas));
+    control.setAttribute('aria-pressed', String(active));
+  }
+  for (const share of shares) {
+    const active = share.dataset.component === gas || (share.dataset.component === 'minor' && ['argon', 'other'].includes(gas));
+    share.setAttribute('aria-pressed', String(active));
+  }
+  const target = sourceShare || shares.find(share => share.dataset.component === (['argon', 'other'].includes(gas) ? 'minor' : gas));
+  if (target) for (const share of shares) share.tabIndex = share === target ? 0 : -1;
+  describe(); emphasize();
+}
 for (const button of controls) {
   button.disabled = false;
-  button.addEventListener('click', () => {
-    selected = button.dataset.airGas;
-    focused = selected;
-    hovered = null;
-    for (const control of controls) control.setAttribute('aria-pressed', String(control === button));
-    describe();
-    emphasize();
-  });
+  button.addEventListener('click', () => choose(button.dataset.airGas));
   button.addEventListener('pointerenter', event => {
     if (event.pointerType === 'touch') return;
     hovered = button.dataset.airGas; emphasize();
@@ -74,6 +85,29 @@ for (const button of controls) {
   button.addEventListener('pointerleave', () => { hovered = null; emphasize(); });
   button.addEventListener('focus', () => { focused = button.dataset.airGas; emphasize(); });
   button.addEventListener('blur', () => { focused = null; emphasize(); });
+}
+for (const [index, share] of shares.entries()) {
+  share.disabled = false;
+  share.addEventListener('click', () => choose(share.dataset.component, share));
+  share.addEventListener('focus', () => { focused = share.dataset.component; emphasize(); });
+  share.addEventListener('blur', () => { focused = null; emphasize(); });
+  share.addEventListener('keydown', event => {
+    const position = positionOf(index);
+    const row = Math.floor(position / 10), column = position % 10;
+    const targets = {
+      ArrowLeft: row * 10 + Math.max(0, column - 1),
+      ArrowRight: row * 10 + Math.min(9, column + 1),
+      ArrowUp: Math.max(0, row - 1) * 10 + column,
+      ArrowDown: Math.min(9, row + 1) * 10 + column,
+      Home: row * 10,
+      End: row * 10 + 9
+    };
+    if (!(event.key in targets)) return;
+    event.preventDefault();
+    const target = shares.find((_, i) => positionOf(i) === targets[event.key]);
+    for (const candidate of shares) candidate.tabIndex = candidate === target ? 0 : -1;
+    target.focus({ preventScroll: true });
+  });
 }
 for (const button of viewControls) {
   button.disabled = false;
