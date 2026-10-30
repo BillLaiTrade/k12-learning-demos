@@ -34,7 +34,7 @@ test('fireworks model: weather, random delay, displayed arithmetic and estimates
 
 test('fireworks quiz: real audio clock, observation, replay, answers and reset', { timeout: 90000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], {
-    cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'pipe']
+    cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'ignore']
   });
   t.after(() => server.kill());
   const port = await new Promise((resolve, reject) => {
@@ -113,6 +113,10 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await page.locator('#fireworks-temperature').textContent(), '10°C');
     assert.equal(await page.locator('#fireworks-speed').count(), 0);
     assert.equal(await page.locator('#fireworks-timer').textContent(), '—');
+    assert.equal(await page.locator('#unit-quiz [role=progressbar], #unit-quiz .fireworks-line, #unit-quiz .fireworks-timeline').count(), 0);
+    assert.equal(await page.locator('.fireworks-record #fireworks-timer, .fireworks-record #fireworks-light, .fireworks-record #fireworks-sound').count(), 3);
+    assert.equal(await page.locator('.fireworks-view #fireworks-timer, #fireworks-delay').count(), 0);
+    assert.equal(await page.locator('#unit-quiz [role=timer]').count(), 1);
     assert.equal(await page.locator('#fireworks-check').isDisabled(), true);
     assert.equal(await page.locator('#fireworks-answer').isDisabled(), true);
     assert.equal(await page.locator('#unit-quiz .quiz-question, #quiz-check, #quiz-reset').count(), 0);
@@ -157,12 +161,18 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await page.locator('#fireworks-check').isDisabled(), true);
     assert.ok(Number(await page.locator('#fireworks-timer').textContent()) >= .9);
     assert.equal(await page.evaluate(() => window.fwSignals[0].firstSignal), null);
+    assert.equal(await page.locator('#fireworks-record-label').textContent(), '計時中');
+    assert.equal(await page.locator('#fireworks-light').getAttribute('data-reached'), 'true');
+    assert.equal(await page.locator('#unit-quiz [aria-valuemax], #unit-quiz progress').count(), 0);
     const pixels = await page.locator('#unit-quiz canvas').evaluate(canvas => {
       const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
       let lit = 0; for (let i = 3; i < data.length; i += 4) if (data[i] > 40) lit++;
       return lit;
     });
     assert.ok(pixels > 1500, 'a substantial luminous burst and trails must be rendered');
+    const ticking = Number(await page.locator('#fireworks-timer').textContent());
+    await page.waitForTimeout(250);
+    assert.ok(Number(await page.locator('#fireworks-timer').textContent()) > ticking + .15);
     await page.waitForFunction(() => document.querySelector('#unit-quiz').dataset.state === 'complete');
     await page.waitForFunction(() => window.fwSignals[0].firstSignal !== null);
     const times = await page.evaluate(() => {
@@ -176,9 +186,11 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.ok(Math.abs(times.signalDelay + times.latency - 3) < .18, JSON.stringify(times));
     assert.ok(times.peak > .1);
     assert.equal(await page.locator('#fireworks-timer').textContent(), '3.00');
-    assert.equal(await page.locator('#fireworks-delay').textContent(), '3.00');
     assert.equal(await page.locator('#fireworks-sound').getAttribute('data-reached'), 'true');
     assert.equal(await page.locator('#fireworks-check').isEnabled(), true);
+    await page.waitForTimeout(250);
+    assert.equal(await page.locator('#fireworks-timer').textContent(), '3.00', 'stopwatch stops at sound arrival');
+    assert.equal(await page.locator('#fireworks-record-label').textContent(), '亮光與聲音的時間差');
     t.diagnostic('wall clock and audio ' + JSON.stringify(times));
   });
 
@@ -269,11 +281,19 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
   });
 
   await t.test('desktop and laptop layout stays readable without horizontal overflow', async () => {
-    for (const width of [1440, 1280, 1024]) {
+    for (const width of [1440, 1280, 1024, 1920]) {
       await page.setViewportSize({ width, height: 1000 });
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       const columns = await page.locator('.fireworks-body').evaluate(element => getComputedStyle(element).gridTemplateColumns.split(' ').length);
       assert.equal(columns, 2);
+      const boxes = await page.locator('.fireworks-record').evaluate(record => {
+        const outer = record.getBoundingClientRect();
+        return [...record.querySelectorAll('.fireworks-event, .fireworks-timer')].every(n => {
+          const r = n.getBoundingClientRect(); return r.left >= outer.left && r.right <= outer.right;
+        });
+      });
+      assert.equal(boxes, true, 'event markers and stopwatch fit the observation record');
+      await page.locator('#unit-quiz').screenshot({path:`/tmp/unit32-stopwatch-${width}.png`});
     }
   });
 
@@ -293,7 +313,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
       await boundary.locator('#fireworks-observe').click();
       await boundary.waitForFunction(() => document.querySelector('#unit-quiz').dataset.state === 'complete');
       const elapsed = await boundary.evaluate(() => (window.observationTimes.end - window.observationTimes.start) / 1000);
-      assert.equal(await boundary.locator('#fireworks-delay').textContent(), expected.toFixed(2));
+      assert.equal(await boundary.locator('#fireworks-timer').textContent(), expected.toFixed(2));
       assert.ok(Math.abs(elapsed - expected) < .18, 'expected ' + expected + ', observed ' + elapsed);
       t.diagnostic('boundary delay ' + expected + ' seconds: observed ' + elapsed);
       await boundary.close();

@@ -9,8 +9,8 @@ if (root) {
   const observe = find('#fireworks-observe'), observeText = observe.querySelector('span');
   const challengeButton = find('#fireworks-new'), canvas = find('canvas');
   const picture = find('.fireworks-scene>img'), caption = find('.fireworks-scene-caption');
-  const timer = find('#fireworks-timer'), record = find('#fireworks-delay');
-  const recordLabel = find('#fireworks-record-label'), progress = find('.fireworks-line');
+  const timer = find('#fireworks-timer');
+  const recordLabel = find('#fireworks-record-label');
   const lightEvent = find('#fireworks-light'), soundEvent = find('#fireworks-sound');
   const form = find('#fireworks-answer-form'), answer = find('#fireworks-answer');
   const check = find('#fireworks-check'), feedback = find('#fireworks-feedback');
@@ -38,10 +38,8 @@ if (root) {
     cancelAnimationFrame(frame); frame = 0; audio.stop(); startAt = null; arrived = false;
     root.dataset.audio = 'idle'; root.dataset.elapsed = '0';
     delete root.dataset.delay;
-    timer.textContent = '—'; record.textContent = '—';
+    timer.textContent = '—';
     recordLabel.textContent = '亮光與聲音的時間差';
-    progress.style.setProperty('--progress', '0%');
-    progress.setAttribute('aria-valuenow', '0');
     lightEvent.dataset.reached = 'false'; soundEvent.dataset.reached = 'false';
     caption.textContent = ''; status.textContent = ''; delete status.dataset.error;
     renderer.draw(-1); clearFeedback(); setState('ready');
@@ -77,22 +75,19 @@ if (root) {
       setState('observing');
       root.dataset.audio = 'scheduled'; lightEvent.dataset.reached = 'true';
       caption.textContent = '煙火亮起了，留意聲音何時到達';
-      recordLabel.textContent = '正在等待爆炸聲';
+      recordLabel.textContent = '計時中';
     }
     const elapsed = Math.max(0, audio.now() - startAt);
     root.dataset.elapsed = elapsed.toFixed(4);
     renderer.draw(elapsed);
     if (!arrived) {
       const shown = Math.min(challenge.delay, elapsed);
-      timer.textContent = shown.toFixed(2); record.textContent = shown.toFixed(2);
-      const percent = Math.min(100, elapsed / challenge.delay * 100);
-      progress.style.setProperty('--progress', percent.toFixed(2) + '%');
-      progress.setAttribute('aria-valuenow', String(Math.round(percent)));
+      timer.textContent = shown.toFixed(2);
       if (elapsed >= challenge.delay) {
         arrived = true; setState('complete');
         root.dataset.audio = 'playing'; root.dataset.delay = challenge.delay.toFixed(2);
         soundEvent.dataset.reached = 'true';
-        timer.textContent = challenge.delay.toFixed(2); record.textContent = challenge.delay.toFixed(2);
+        timer.textContent = challenge.delay.toFixed(2);
         recordLabel.textContent = '亮光與聲音的時間差';
         caption.textContent = '聽到爆炸聲了';
         status.textContent = '已記下時間差，現在可以估算距離；再觀察一次會重播同一題。';

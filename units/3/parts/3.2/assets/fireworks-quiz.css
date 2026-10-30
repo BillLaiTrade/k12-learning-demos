@@ -13,19 +13,15 @@
 .fireworks-location svg{width:15px;height:15px}
 .fireworks-scene-caption{position:absolute;top:12px;left:12px;max-width:calc(100% - 24px);padding:5px 10px;border-radius:7px;background:rgb(5 19 34 / 68%);color:#f8f7ee;font-size:.78rem}
 .fireworks-scene-caption:empty{display:none}
-.fireworks-timeline{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:10px;padding:16px 14px 5px}
+.fireworks-events{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px}
 .fireworks-event{display:grid;justify-items:center;gap:3px;color:#3a5048;font-size:.76rem;white-space:nowrap}
 .fireworks-event-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#f5f0e3;color:#a58240;transition:background-color .15s,color .15s}
 .fireworks-event-icon svg{width:22px;height:22px}
 .fireworks-event[data-reached=true] .fireworks-event-icon{background:#e8f2e2;color:#176b53}
 .fireworks-event:first-child[data-reached=true] .fireworks-event-icon{background:#ffedc5;color:#9e6e1e}
-.fireworks-timer{min-width:0;text-align:center}
-.fireworks-timer-label{display:block;color:#4c6259;font-size:.74rem;line-height:1.3}
-.fireworks-timer-value{color:#165641;font-size:1.25rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.5;white-space:nowrap}
-.fireworks-timer-value small{font-size:.78rem}
-.fireworks-line{position:relative;height:2px;margin:7px 0 0;background:#d5e0d6}
-.fireworks-line::before{position:absolute;inset:0 auto 0 0;width:var(--progress,0%);background:#176b53;content:""}
-.fireworks-line::after{position:absolute;left:var(--progress,0%);top:50%;width:8px;height:8px;transform:translate(-50%,-50%);border-radius:50%;background:#176b53;content:""}
+.fireworks-timer{min-width:0;padding:10px 4px 4px;border-top:1px solid #e0e8e1;text-align:center}
+.fireworks-timer-value{color:#165641;font-size:2.25rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.3;white-space:nowrap}
+.fireworks-timer-value small{font-size:.9rem;font-weight:700}
 .fireworks-controls{display:flex;align-items:center;justify-content:center;gap:14px;padding:13px 14px 16px}
 .fireworks-controls .action{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-width:160px;min-height:43px;padding:8px 12px;font-size:.88rem}
 .fireworks-controls .action svg{width:18px;height:18px}
@@ -44,8 +40,6 @@
 .fireworks-speed small{display:block;font-size:.74rem;line-height:1.5}
 .fireworks-record{padding:10px 12px;text-align:center}
 .fireworks-record p{margin:0;color:#64736b;font-size:.77rem}
-.fireworks-record output{display:inline-block;margin-top:2px;color:#176b53;font-size:2.25rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.3}
-.fireworks-record output small{font-size:.9rem;font-weight:700}
 .fireworks-estimate{padding:10px 12px}
 .fireworks-formula{margin:0 0 8px;padding:6px 5px;border-radius:8px;background:#fff5de;color:#3c594c;font-size:.85rem;font-weight:750;line-height:1.4;text-align:center;white-space:nowrap}
 .fireworks-input{display:flex;align-items:center;gap:8px;padding:0 10px;border:1px solid #bfcfc5;border-radius:9px;background:#fff}
@@ -71,7 +65,7 @@
   .fireworks-sidebar>.fireworks-panel:last-child{grid-column:1/-1}
   .fireworks-quiz .quiz-head{padding:16px;gap:10px}
   .fireworks-quiz .quiz-head h2{font-size:1.4rem}
-  .fireworks-record output{font-size:1.8rem}
+  .fireworks-timer-value{font-size:1.8rem}
   .fireworks-controls .action{min-width:145px}
 }
 @media(prefers-reduced-motion:reduce){
