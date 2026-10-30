@@ -86,7 +86,7 @@ function submitReport(event){
     for(const [field,title,key,optional] of [['raw-mass','過濾前取樣','raw',true],['solution-mass','蒸發前濾液','filtered',false],['solute-mass','乾燥晶體','solid',false]]){
       const value=$(field).value.trim(),measurement=measurements[key];
       if(!value&&optional)continue;
-      if(!value||!Number.isFinite(Number(value))||Number(value)<0)issues.push(`請自行讀取電子秤，填寫${title}的淨質量紀錄（克）。`);
+      if(!value||!Number.isFinite(Number(value))||Number(value)<0)issues.push(field==='solution-mass'?'這份濾液已蒸乾，無法再從秤面讀取原本的重量。請補上先前讀值；若忘記讀值，請另取一份重新實驗。':`請自行讀取電子秤，填寫${title}的淨質量紀錄（克）。`);
       else if(!measurement)issues.push(`${title}尚未稱量，請確認這筆紀錄來自電子秤讀值。`);
       else if(Math.abs(Number(value)-measurement.mass)>1e-6)issues.push(`紀錄的${title}淨質量與這份取樣的電子秤讀值不同，請重新核對。`);
     }
