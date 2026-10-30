@@ -7,7 +7,7 @@ const controls=[...root.querySelectorAll('[data-invest-tool]')];
 const answers=new Map();
 const answerFields=['raw-mass','solution-mass','solute-mass','calculation-numerator','calculation-denominator','concentration-value'];
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
-let samples=[],active=null,stock=6,nextId=1,animation=null,renderer=null,frame=0,pausedAt=null,drag=null,suppressClickUntil=0;
+let samples=[],active=null,stock=6,nextId=1,animation=null,renderer=null,frame=0,pausedAt=null,drag=null,suppressClickUntil=0,feedbackRevealFrame=0;
 const selected=()=>samples.find(s=>s.id===active);
 const label=id=>id<=26?String.fromCharCode(64+id):String(id);
 function announce(text,observation=false){$('status').textContent=text;$('status').dataset.observation=String(observation);}
@@ -17,7 +17,21 @@ function clearReportTarget(){
     field.closest('.invest-notebook-entry')?.classList.remove('is-review-target');
   }
 }
-function invalidateReport(){clearReportTarget();const feedback=$('feedback');feedback.hidden=true;feedback.replaceChildren();delete feedback.dataset.result;}
+function cancelFeedbackReveal(){cancelAnimationFrame(feedbackRevealFrame);feedbackRevealFrame=0;}
+function revealCompletion(){
+  cancelFeedbackReveal();
+  // Wait for the inserted card to finish layout before positioning the page.
+  feedbackRevealFrame=requestAnimationFrame(()=>{
+    feedbackRevealFrame=requestAnimationFrame(()=>{
+      feedbackRevealFrame=0;const feedback=$('feedback');
+      if(feedback.hidden||feedback.dataset.result!=='correct')return;
+      feedback.focus({preventScroll:true});
+      const rect=feedback.getBoundingClientRect(),gap=Math.max(24,(window.innerHeight-rect.height)/2);
+      window.scrollTo({top:Math.max(0,window.scrollY+rect.top-gap),behavior:motion.matches?'instant':'smooth'});
+    });
+  });
+}
+function invalidateReport(){cancelFeedbackReveal();clearReportTarget();const feedback=$('feedback');feedback.hidden=true;feedback.replaceChildren();delete feedback.dataset.result;}
 function redraw(now=performance.now()){renderer?.render({sample:selected(),stock,animation},now);}
 function updateConcentration(){
   const sample=selected(),{filtered,solid}=measuredMasses(sample);
@@ -84,7 +98,7 @@ function perform(action){
   animate(action,{...selected()});
 }
 function submitReport(event){
-  event.preventDefault();if(animation)return;clearReportTarget();
+  event.preventDefault();if(animation)return;cancelFeedbackReveal();clearReportTarget();
   let result=assessReport(selected(),$('concentration-value').value);
   const basis=concentrationEvidence(selected()),issues=[];let problemField=null;
   if(basis){
@@ -117,7 +131,8 @@ function submitReport(event){
     target.setAttribute('aria-invalid','true');target.setAttribute('aria-errormessage','invest-feedback');
     target.closest('.invest-notebook-entry')?.classList.add('is-review-target');
     target.focus({preventScroll:true});target.scrollIntoView({block:'center',behavior:motion.matches?'instant':'smooth'});
-  }else feedback.scrollIntoView({block:'nearest',behavior:motion.matches?'instant':'smooth'});
+  }else if(result.ok)revealCompletion();
+  else feedback.scrollIntoView({block:'nearest',behavior:motion.matches?'instant':'smooth'});
 }
 
 function clear(){
@@ -167,7 +182,7 @@ document.addEventListener('visibilitychange',()=>{
   if(document.hidden){pausedAt=performance.now();cancelAnimationFrame(frame);}
   else if(pausedAt!==null){animation.start+=performance.now()-pausedAt;pausedAt=null;frame=requestAnimationFrame(animation.tick);}
 });
-window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);cancelDrag();});
+window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);cancelFeedbackReveal();cancelDrag();});
 async function initialize(){
   root.dataset.ready='loading';$('loading').hidden=false;$('loading').textContent='準備實驗桌……';$('retry').hidden=true;update();
   try{
