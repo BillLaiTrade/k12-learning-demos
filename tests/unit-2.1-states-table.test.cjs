@@ -44,8 +44,9 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     assert.deepEqual(await cell('solid.volume').locator('svg text').allTextContents(), ['3 cm','3 cm','3 cm']);
     assert.equal(await cell('solid.volume').locator('[data-dimension="depth"]').count(),1);
     assert.match(await cell('solid.volume').innerText(), /3 × 3 × 3＝27 cm³/);
-    const labelsFit = await cell('solid.volume').locator('svg text').evaluateAll(labels => labels.every(label => {
-      const b=label.getBBox(); return b.x>=0 && b.y>=0 && b.x+b.width<=240 && b.y+b.height<=160;
+    const labelsFit = await page.locator('[data-visual-cell] svg text').evaluateAll(labels => labels.every(label => {
+      const b=label.getBBox(), frame=label.ownerSVGElement.viewBox.baseVal;
+      return b.x>=frame.x && b.y>=frame.y && b.x+b.width<=frame.x+frame.width && b.y+b.height<=frame.y+frame.height;
     }));
     assert.equal(labelsFit,true);
     const liquidVolume = await cell('liquid.volume').locator('svg').evaluate(svg => ({
@@ -304,17 +305,38 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
 
   await t.test('responsive table stays inside the page; narrow screens scroll internally', async () => {
     const dir = process.env.STATES_CAPTURE_DIR || '/tmp/states-table-review'; mkdirSync(dir,{recursive:true});
-    for(const width of [1440,1024,768,390,320]) {
+    for(const width of [1440,1280,1024,768,390,320]) {
       await page.setViewportSize({width,height:1000});
       await page.locator('#s2').scrollIntoViewIfNeeded();
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),true,`page overflow at ${width}`);
+      if(width>=1024) {
+        const layout=await page.locator('#s2').evaluate(section=>{
+          const rect=element=>{const {left,right,top,bottom}=element.getBoundingClientRect();return{left,right,top,bottom};};
+          const region=section.querySelector('.states-table-scroll');
+          const side=section.querySelector('.card-side');
+          const title=section.querySelector('.card-main h2');
+          return {
+            region:rect(region),side:rect(side),title:rect(title),
+            scrollWidth:region.scrollWidth,clientWidth:region.clientWidth,
+            cells:[...region.querySelectorAll('[data-visual-cell]')].map(rect),
+            numberFont:[...region.querySelectorAll('[data-visual-cell="solid.volume"] svg text, [data-visual-cell="liquid.volume"] svg text')].map(text=>{
+              const m=text.getScreenCTM();return parseFloat(getComputedStyle(text).fontSize)*Math.hypot(m.a,m.b);
+            })
+          };
+        });
+        assert.ok(layout.scrollWidth<=layout.clientWidth+1,'all three columns fit without panning');
+        assert.ok(Math.abs(layout.region.left-layout.side.left)<1,'table spans beneath the left label');
+        assert.ok(layout.title.left>layout.side.right,'title remains in the right content column');
+        for(const box of layout.cells) assert.ok(box.left>=layout.region.left && box.right<=layout.region.right);
+        assert.ok(layout.numberFont.every(size=>size>=14),'dimensions and volumes render at least 14px');
+      }
       if(width < 680) {
         assert.equal(await page.locator('.states-table-scroll').evaluate(e=>e.scrollWidth>e.clientWidth),true);
         await page.locator('.states-table-scroll').evaluate(e=>e.scrollLeft=e.scrollWidth);
         assert.ok(await page.locator('.states-table-scroll').evaluate(e=>e.scrollLeft)>0);
         await page.locator('.states-table-scroll').evaluate(e=>e.scrollLeft=0);
       }
-      if(width===1440 || width===390) await page.locator('#s2').screenshot({path:path.join(dir,`${width}.png`)});
+      if(width===1440 || width===1280 || width===1024 || width===390) await page.locator('#s2').screenshot({path:path.join(dir,`${width}.png`)});
     }
   });
 
