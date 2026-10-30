@@ -8,6 +8,14 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.2-
 
 第四區已移除空氣與水的背景微動。測試分別在開啟及關閉「減少動態」時，驗證敲擊前靜止、音叉敲擊後三種介質仍有傳播振動、實時計時、暫停凍結、重設後持續靜止及四種桌機寬度；另保留跨區播放停止回歸。兩檔合計 11 項（含外層），測試自行啟停本機伺服器與 Chromium。不代表完整歷史測試皆已通過。
 
+## 3.2 煙火動畫與測距
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.2-fireworks.test.cjs tests/unit-3.2-playback.test.cjs
+```
+
+煙火動畫不因「減少動態」定格。檢查兩種偏好設定的逐時畫面一致、擴散下墜及清除、真實音訊延遲、2～6秒實時計時、作答及重播與跨區停止；兩檔合計 20 項（含外層）。
+
 ## 6.1 元素的探索
 
 ```sh

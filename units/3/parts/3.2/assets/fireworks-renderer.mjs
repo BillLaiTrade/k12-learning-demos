@@ -9,7 +9,6 @@ export class FireworkRenderer {
     this.context = canvas.getContext('2d');
     this.bloom = document.createElement('canvas');
     this.layer = this.bloom.getContext('2d');
-    this.reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
     this.stars = []; this.fragments = []; this.smoke = [];
     this.glows = [[255, 208, 129], [255, 151, 60], [221, 237, 255]].map(rgb => {
       const sprite = document.createElement('canvas'); sprite.width = sprite.height = 32;
@@ -145,8 +144,6 @@ export class FireworkRenderer {
     if (!ctx || !layer || !w || !h) return;
     ctx.clearRect(0, 0, w, h); layer.clearRect(0, 0, w, h);
     if (elapsed < 0 || elapsed > FIREWORK_DURATION || !this.stars.length) return;
-    const time = this.reducedMotion.matches ? .85 : elapsed;
-    const opacity = this.reducedMotion.matches ? Math.min(1, Math.max(0, (4.7 - elapsed) / 1.7)) : 1;
     const x = this.origin.x * w, y = this.origin.y * h;
 
     // 煙團先於光點繪出，隨風擴散；不以單一圓環代替煙火。
@@ -158,7 +155,7 @@ export class FireworkRenderer {
       smoke.addColorStop(1, 'rgba(130,130,145,0)');
       ctx.fillStyle = smoke; ctx.fillRect(px - radius, py - radius, radius * 2, radius * 2);
     }
-    this.drawStars(layer, time, opacity);
+    this.drawStars(layer, elapsed, 1);
     // 遠處火星在山脊、岸線前漸隱，避免越過湖面與近景欄杆。
     const skyline = layer.createLinearGradient(0, h * .47, 0, h * .57);
     skyline.addColorStop(0, '#fff'); skyline.addColorStop(1, 'rgba(255,255,255,0)');
@@ -178,7 +175,7 @@ export class FireworkRenderer {
     ctx.save(); ctx.beginPath();
     for (let row = h * .59; row < h * .80; row += 3.5) ctx.rect(0, row, w, 1.6);
     ctx.clip(); ctx.globalAlpha = .20;
-    ctx.translate(Math.sin(time * 2.2) * 1.2, h * .60); ctx.scale(1, -.36); ctx.translate(0, -h * .53);
+    ctx.translate(Math.sin(elapsed * 2.2) * 1.2, h * .60); ctx.scale(1, -.36); ctx.translate(0, -h * .53);
     ctx.drawImage(this.bloom, 0, 0, w, h); ctx.restore();
     ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
   }

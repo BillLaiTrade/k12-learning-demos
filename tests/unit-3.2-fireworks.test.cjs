@@ -226,9 +226,9 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.match(await page.locator('#fireworks-status').textContent(), /中斷/);
   });
 
-  await t.test('firework depth, fragments, falling trails and clearing are deterministic', async () => {
-    const visual = await page.evaluate(async () => {
-      const { FireworkRenderer, FIREWORK_DURATION } = await import('./assets/fireworks-renderer.mjs?v=2');
+  await t.test('firework motion and clearing remain identical with reduced motion enabled', async () => {
+    const inspect = () => page.evaluate(async () => {
+      const { FireworkRenderer, FIREWORK_DURATION } = await import('./assets/fireworks-renderer.mjs?v=3');
       const canvas = document.createElement('canvas');
       canvas.style.cssText = 'position:fixed;width:518px;height:324px;left:0;top:0';
       document.body.append(canvas);
@@ -252,6 +252,13 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
         fragments: renderer.fragments.length, moved: Math.hypot(first.x - later.x, first.y - later.y) };
       renderer.resizeObserver.disconnect(); canvas.remove(); return result;
     });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    const visual = await inspect();
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    try {
+      assert.equal(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches), true);
+      assert.deepEqual(await inspect(), visual, 'preference cannot freeze firework expansion or falling trails');
+    } finally { await page.emulateMedia({ reducedMotion: 'no-preference' }); }
     assert.equal(visual.before.lit, 0); assert.equal(visual.after.lit, 0);
     assert.ok(visual.burst.lit > 1000);
     assert.equal(visual.burst.hash, visual.replay.hash);
