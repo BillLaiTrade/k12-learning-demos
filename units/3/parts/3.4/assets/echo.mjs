@@ -7,7 +7,8 @@ function audioStatus(panel, message) {
   $('audio-status').textContent = message;
   if (panel.id === 'reflection') $('reflection-audio-status').textContent = message;
 }
-const outputLevel = panel => Number($('volume').value) * (panel.id === 'reflection' ? 2 : .28);
+// Keep the verified output level; learners adjust loudness on their own device.
+const outputLevel = panel => panel.id === 'reflection' ? .32 : .0448;
 async function resumeAudio() {
   // On supported iOS browsers, use the playback session rather than the silent-mode session.
   try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch {}
@@ -61,7 +62,7 @@ async function sound(panel, elapsed = 0) {
       source.onended = () => { sources = sources.filter(s => s !== source); if (!sources.length) document.body.dataset.audioPlaying = 'false'; };
     }
     document.body.dataset.audioPlaying = sources.length ? 'true' : 'false';
-    audioStatus(panel, master.gain.value === 0 ? '目前音量為 0；請調高示範音量，再發出一次短音。' : '示範音已啟用；先發出短音，返回時再播放較弱的反射聲。');
+    audioStatus(panel, '示範音已啟用；先發出短音，返回時再播放較弱的反射聲。');
   } catch {
     if (epoch !== audioEpoch) return;
     audioStatus(panel, '聲音未能啟用。請再次點擊播放；若仍無聲，請用瀏覽器開啟本頁，並確認裝置與分頁未靜音。');
@@ -162,12 +163,6 @@ for (const [id, panel] of [['wall-distance', 'distance'], ['echo-time', 'calcula
 for (const name of ['room-mode', 'treatment-mode']) document.querySelectorAll(`[name="${name}"]`).forEach(el => el.addEventListener('change', () => panels.get(name.split('-')[0]).reset()));
 $('hide-depth').addEventListener('change', () => { $('reveal-depth').hidden = !$('hide-depth').checked; $('reveal-depth').setAttribute('aria-expanded', 'false'); panels.get('sonar').reset(); });
 $('reveal-depth').addEventListener('click', () => { $('reveal-depth').setAttribute('aria-expanded', 'true'); panels.get('sonar').draw(); });
-for (const input of [$('volume'), $('reflection-volume')]) input.addEventListener('input', () => {
-  $('volume').value = input.value; $('reflection-volume').value = input.value;
-  $('reflection-volume-value').value = Math.round(Number(input.value) / .4 * 100) + '%';
-  if (active && outputGain) outputGain.gain.setValueAtTime(outputLevel(active), context.currentTime);
-  if (active) audioStatus(active, Number(input.value) === 0 ? '目前音量為 0；請調高示範音量，再發出一次短音。' : '音量已調整；可再發出一次短音，確認原音與較弱的返回聲。');
-});
 trace('quiz-before'); trace('quiz-after', 'dense', true);
 const form = $('echo-quiz'), feedback = $('quiz-feedback');
 form.addEventListener('submit', event => {
