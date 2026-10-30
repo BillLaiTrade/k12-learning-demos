@@ -124,9 +124,7 @@
     .particle-box[data-motion-state="liquid"] .particle-molecule,
     .particle-box[data-motion-state="gas"] .particle-molecule { z-index:2; left:0; top:0; transform:translate3d(var(--particle-x,0px),var(--particle-y,0px),0) translate(-50%,-50%); animation:none; transition:none; will-change:transform; }
     .particle-molecule svg { display:block; width:100%; height:100%; overflow:visible; }
-    #particle-box-solid .particle-molecule { --particle-phase-color:#2346bd; --particle-phase-stroke:#152e86; }
-    #particle-box-liquid .particle-molecule { --particle-phase-color:#438bb8; --particle-phase-stroke:#2b6e96; }
-    #particle-box-gas .particle-molecule { --particle-phase-color:#94c8da; --particle-phase-stroke:#5b9bb4; }
+    #s3 .particle-molecule { --particle-phase-color:#438bb8; --particle-phase-stroke:#2b6e96; }
     .water-state-color-key { grid-column:1 / -1; margin-top:12px; padding:10px 12px; border:1px solid #d8e2da; border-radius:10px; background:#f5f8f2; color:#52635a; font-size:.82rem; }
     .water-state-color-legend { display:flex; flex-wrap:wrap; gap:8px 18px; margin-bottom:7px; }
     .water-state-color-legend span { display:inline-flex; align-items:center; gap:6px; }
@@ -805,10 +803,6 @@
               <article class="particle-state-card"><h3>固態：冰</h3><div class="particle-box" id="particle-box-solid" data-motion-state="solid" role="img" aria-label="水分子在容器底部排列整齊、彼此留有間距並微微振動"></div></article>
               <article class="particle-state-card"><h3>液態水分子</h3><div class="particle-box" id="particle-box-liquid" data-motion-state="liquid" role="img" aria-label="水分子集中在容器底部，持續流動、碰撞和換位"></div></article>
               <article class="particle-state-card"><h3>氣態：水蒸氣</h3><div class="particle-box" id="particle-box-gas" data-motion-state="gas" role="img" aria-label="水分子在容器中移動，碰到其他分子或杯壁後反彈"></div></article>
-            </div>
-            <div class="water-state-color-key" id="water-state-color-key" role="note" aria-label="水分子的狀態配色說明">
-              <div class="water-state-color-legend"><span><i class="water-state-color-dot water-state-color-dot--solid" aria-hidden="true"></i>深藍：固態中的水分子</span><span><i class="water-state-color-dot water-state-color-dot--liquid" aria-hidden="true"></i>藍色：液態中的水分子</span><span><i class="water-state-color-dot water-state-color-dot--gas" aria-hidden="true"></i>淺藍：氣態中的水分子</span></div>
-              <p>圖中的顏色用來區分水分子所處的狀態，方便觀察轉變過程。狀態改變時，水分子仍然是水分子，並不會像圖中一樣變色。</p>
             </div>
             <div class="particle-comparison" aria-label="三種狀態的粒子特徵">
               <article><h3>固態</h3><p>分子靠近、排列較整齊，在原位附近振動。</p></article>
