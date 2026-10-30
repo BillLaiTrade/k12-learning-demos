@@ -1,0 +1,276 @@
+TAP version 13
+# Subtest: 2.3: reaction volume, water levels and calibrated geometry agree
+ok 1 - 2.3: reaction volume, water levels and calibrated geometry agree
+  ---
+  duration_ms: 6.083826
+  type: 'test'
+  ...
+# Subtest: 2.3: recording is gated by baseline, waiting, and equalisation
+ok 2 - 2.3: recording is gated by baseline, waiting, and equalisation
+  ---
+  duration_ms: 1.44199
+  type: 'test'
+  ...
+# Subtest: 2.3: dry/humid proportions use one total and do not add CO2 twice
+ok 3 - 2.3: dry/humid proportions use one total and do not add CO2 twice
+  ---
+  duration_ms: 0.421405
+  type: 'test'
+  ...
+# Subtest: 2.3: fully immersed cup keeps paper dry and respects the tank
+ok 4 - 2.3: fully immersed cup keeps paper dry and respects the tank
+  ---
+  duration_ms: 14.049566
+  type: 'test'
+  ...
+# Subtest: 2.3: escaping air and wet paper persist when cup is straightened
+ok 5 - 2.3: escaping air and wet paper persist when cup is straightened
+  ---
+  duration_ms: 1.052735
+  type: 'test'
+  ...
+# Subtest: 2.3: cup model clamps depth and angle without forcing an orientation
+ok 6 - 2.3: cup model clamps depth and angle without forcing an orientation
+  ---
+  duration_ms: 0.483788
+  type: 'test'
+  ...
+# Subtest: 2.3: lifting a tilted cup preserves its angle across the old depth threshold
+ok 7 - 2.3: lifting a tilted cup preserves its angle across the old depth threshold
+  ---
+  duration_ms: 1.353377
+  type: 'test'
+  ...
+# Subtest: 2.3: an exposed rim drains to the outside level after a visible transition
+ok 8 - 2.3: an exposed rim drains to the outside level after a visible transition
+  ---
+  duration_ms: 1.032614
+  type: 'test'
+  ...
+# Subtest: 2.3: a filled inverted cup retains water above the tank while its mouth is submerged
+ok 9 - 2.3: a filled inverted cup retains water above the tank while its mouth is submerged
+  ---
+  duration_ms: 0.847275
+  type: 'test'
+  ...
+# Subtest: 2.3: exposure starts gradual drainage and wet paper cannot become dry
+ok 10 - 2.3: exposure starts gradual drainage and wet paper cannot become dry
+  ---
+  duration_ms: 1.227998
+  type: 'test'
+  ...
+# Subtest: 2.3: a raised cup tilted mouth-up retains water below its lower lip
+ok 11 - 2.3: a raised cup tilted mouth-up retains water below its lower lip
+  ---
+  duration_ms: 0.57133
+  type: 'test'
+  ...
+# Subtest: 2.3: enlarged paper fits inside the cup and left/right rotation is symmetric
+ok 12 - 2.3: enlarged paper fits inside the cup and left/right rotation is symmetric
+  ---
+  duration_ms: 0.614234
+  type: 'test'
+  ...
+# Subtest: 2.3: integrated report checks evidence instead of reusing main experiment
+ok 13 - 2.3: integrated report checks evidence instead of reusing main experiment
+  ---
+  duration_ms: 0.451219
+  type: 'test'
+  ...
+# Subtest: 2.3: eight-section learning flow and independent controls work in browser
+    # Subtest: eight matching anchors, shared avatars, and unit entry
+    ok 1 - eight matching anchors, shared avatars, and unit entry
+      ---
+      duration_ms: 197.595699
+      type: 'test'
+      ...
+    # Subtest: seven teaching sections follow 1.1 side titles and main headings across screen sizes
+    ok 2 - seven teaching sections follow 1.1 side titles and main headings across screen sizes
+      ---
+      duration_ms: 390.115903
+      type: 'test'
+      ...
+    # Subtest: cup first drag stays vertical until release; dragging the rim then rotates both ways
+    ok 3 - cup first drag stays vertical until release; dragging the rim then rotates both ways
+      ---
+      duration_ms: 1003.377838
+      type: 'test'
+      ...
+    # Subtest: guided cup immersion, pause, tilt and comparison follow the approved proposal
+    ok 4 - guided cup immersion, pause, tilt and comparison follow the approved proposal
+      ---
+      duration_ms: 10372.129102
+      type: 'test'
+      ...
+    # Subtest: slow tilt is continuous in both motion modes and the magnifier is fully removed
+    ok 5 - slow tilt is continuous in both motion modes and the magnifier is fully removed
+      ---
+      duration_ms: 15496.979744
+      type: 'test'
+      ...
+    # Subtest: a filled cup retains visible water above the tank, then drains gradually when the mouth emerges
+    ok 6 - a filled cup retains visible water above the tank, then drains gradually when the mouth emerges
+      ---
+      duration_ms: 26542.332952
+      type: 'test'
+      ...
+    # Subtest: mouth-up cup keeps painted water after direct lifting on both sides and fits inside the scene
+    ok 7 - mouth-up cup keeps painted water after direct lifting on both sides and fits inside the scene
+      ---
+      duration_ms: 15894.851945
+      type: 'test'
+      ...
+    # Subtest: lifting a tilted cup never snaps upright and rotation remains available after lifting
+    ok 8 - lifting a tilted cup never snaps upright and rotation remains available after lifting
+      ---
+      duration_ms: 7040.541017
+      type: 'test'
+      ...
+    # Subtest: cup uses direct dragging without a control panel; keyboard and fresh paper work
+    ok 9 - cup uses direct dragging without a control panel; keyboard and fresh paper work
+      ---
+      duration_ms: 756.302905
+      type: 'test'
+      ...
+    # Subtest: initial record gates reaction; pause retains state
+    ok 10 - initial record gates reaction; pause retains state
+      ---
+      duration_ms: 4118.018741
+      type: 'test'
+      ...
+    # Subtest: waiting and water-level alignment are required before final recording
+    ok 11 - waiting and water-level alignment are required before final recording
+      ---
+      duration_ms: 2886.150595
+      type: 'test'
+      ...
+    # Subtest: composition selection, splint samples and humid/dry basis
+    ok 12 - composition selection, splint samples and humid/dry basis
+      ---
+      duration_ms: 352.390617
+      type: 'test'
+      ...
+    # Subtest: one integrated report has actionable feedback and independent reset
+    ok 13 - one integrated report has actionable feedback and independent reset
+      ---
+      duration_ms: 288.927527
+      type: 'test'
+      ...
+    # Subtest: narrow viewport, keyboard focus, and reduced motion stay usable
+    ok 14 - narrow viewport, keyboard focus, and reduced motion stay usable
+      ---
+      duration_ms: 7037.188438
+      type: 'test'
+      ...
+    1..14
+ok 14 - 2.3: eight-section learning flow and independent controls work in browser
+  ---
+  duration_ms: 94285.285937
+  type: 'test'
+  ...
+# Subtest: new unit numbers agree across home, overviews, and existing lesson URLs
+    # Subtest: homepage order, button numbers, and destination identities
+    ok 1 - homepage order, button numbers, and destination identities
+      ---
+      duration_ms: 683.241619
+      type: 'test'
+      ...
+    # Subtest: unit 1: overview uses the new number
+    ok 2 - unit 1: overview uses the new number
+      ---
+      duration_ms: 608.344908
+      type: 'test'
+      ...
+    # Subtest: unit 2: overview uses the new number
+    ok 3 - unit 2: overview uses the new number
+      ---
+      duration_ms: 603.777524
+      type: 'test'
+      ...
+    # Subtest: unit 3: overview uses the new number
+    ok 4 - unit 3: overview uses the new number
+      ---
+      duration_ms: 603.587442
+      type: 'test'
+      ...
+    # Subtest: unit 4: overview uses the new number
+    ok 5 - unit 4: overview uses the new number
+      ---
+      duration_ms: 603.22387
+      type: 'test'
+      ...
+    # Subtest: unit 5: overview uses the new number
+    ok 6 - unit 5: overview uses the new number
+      ---
+      duration_ms: 596.873618
+      type: 'test'
+      ...
+    # Subtest: unit 6: overview uses the new number
+    ok 7 - unit 6: overview uses the new number
+      ---
+      duration_ms: 566.899076
+      type: 'test'
+      ...
+    # Subtest: lesson 1.1: header and existing assets load
+    ok 8 - lesson 1.1: header and existing assets load
+      ---
+      duration_ms: 4690.080702
+      type: 'test'
+      ...
+    # Subtest: lesson 1.2: header and existing assets load
+    ok 9 - lesson 1.2: header and existing assets load
+      ---
+      duration_ms: 1912.019667
+      type: 'test'
+      ...
+    # Subtest: lesson 2.1: header and existing assets load
+    ok 10 - lesson 2.1: header and existing assets load
+      ---
+      duration_ms: 1088.254311
+      type: 'test'
+      ...
+    # Subtest: lesson 2.2: header and existing assets load
+    ok 11 - lesson 2.2: header and existing assets load
+      ---
+      duration_ms: 12416.990744
+      type: 'test'
+      ...
+    # Subtest: lesson 3.1: header and existing assets load
+    ok 12 - lesson 3.1: header and existing assets load
+      ---
+      duration_ms: 1583.723625
+      type: 'test'
+      ...
+    # Subtest: lesson 3.2: header and existing assets load
+    ok 13 - lesson 3.2: header and existing assets load
+      ---
+      duration_ms: 774.198217
+      type: 'test'
+      ...
+    # Subtest: lesson 4.1: header and existing assets load
+    ok 14 - lesson 4.1: header and existing assets load
+      ---
+      duration_ms: 9594.113787
+      type: 'test'
+      ...
+    # Subtest: lesson 4.2: header and existing assets load
+    ok 15 - lesson 4.2: header and existing assets load
+      ---
+      duration_ms: 4680.918592
+      type: 'test'
+      ...
+    1..15
+ok 15 - new unit numbers agree across home, overviews, and existing lesson URLs
+  ---
+  duration_ms: 41908.210877
+  type: 'test'
+  ...
+1..15
+# tests 44
+# suites 0
+# pass 44
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 94742.234928

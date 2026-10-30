@@ -245,6 +245,53 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     }
   });
 
+  await t.test('mouth-up cup keeps painted water after direct lifting on both sides and fits inside the scene', async () => {
+    for (const width of [1440, 390]) {
+      const probe = await browser.newPage({ reducedMotion: 'reduce', viewport: { width, height: 1000 } });
+      try {
+        const start = new Date('2026-10-30T00:00:00Z');
+        await probe.clock.install({ time: start }); await probe.clock.pauseAt(start);
+        await probe.goto(base + 'units/2/parts/2.3/', { waitUntil: 'networkidle' });
+        for (const angle of [-125, 125]) {
+          await probe.locator('#cup-reset').click();
+          await dragCupVertically(13, probe);
+          await rotateRim(angle, probe);
+          await dragCupVertically(-13, probe);
+          await probe.clock.runFor(3500);
+          const amount = Number(await probe.locator('#cup-scene').getAttribute('data-water-area'));
+          assert.ok(amount > 30 && amount < 32, `${width}px ${angle} degrees retains water: ${amount}`);
+          assert.equal(await probe.locator('#cup-scene').getAttribute('data-draining'), 'false');
+          assert.equal(await probe.locator('#cup-scene').getAttribute('data-wet'), 'true');
+          const bounds = await probe.locator('#cup-scene svg').evaluate(el => {
+            const view = el.viewBox.baseVal;
+            const points = [...el.querySelector('clipPath polygon').points].map(p => p.y);
+            return { top: view.y, cupTop: Math.min(...points) };
+          });
+          assert.ok(bounds.cupTop - bounds.top >= 23, 'raised cup is not cropped');
+          assert.match(await probe.locator('#cup-scene svg').getAttribute('aria-label'), /杯內有水/);
+          const sample = await pointOnCup(-Math.sign(angle) * 1.5, -1, probe);
+          const box = await probe.locator('#cup-scene').boundingBox();
+          const shot = await probe.locator('#cup-scene').screenshot({ path: path.join(artifacts, `mouth-up-${width}-${angle}.png`) });
+          const paint = await probe.evaluate(({ png, x, y }) => new Promise((resolve, reject) => {
+            const img = new Image(); img.onerror = reject;
+            img.onload = () => {
+              const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+              const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0);
+              const pixels = ctx.getImageData(Math.round(x) - 3, Math.round(y) - 3, 7, 7).data;
+              let red = 0, blue = 0;
+              for (let i = 0; i < pixels.length; i += 4) { red += pixels[i]; blue += pixels[i + 2]; }
+              resolve({ red: red / 49, blue: blue / 49 });
+            };
+            img.src = 'data:image/png;base64,' + png;
+          }), { png: shot.toString('base64'), x: sample.x - box.x, y: sample.y - box.y });
+          assert.ok(paint.blue - paint.red > 12, `${width}px ${angle} degrees visibly paints water: ${JSON.stringify(paint)}`);
+          await probe.clock.runFor(5000);
+          assert.ok(Math.abs(Number(await probe.locator('#cup-scene').getAttribute('data-water-area')) - amount) < 1e-6, 'carried water does not drain away later');
+        }
+      } finally { await probe.close(); await page.bringToFront(); }
+    }
+  });
+
   await t.test('lifting a tilted cup never snaps upright and rotation remains available after lifting', async () => {
     for (const sign of [-1, 1]) {
       await page.locator('#cup-reset').click();
