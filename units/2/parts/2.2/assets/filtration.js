@@ -7,7 +7,7 @@ const observation=document.getElementById('filter-observation'),observationCanva
 const observationTitle=document.getElementById('filter-observation-title'),observationCopy=document.getElementById('filter-observation-copy');
 const observations={
  filter:{title:'濾紙上的泥沙',copy:'泥沙留在濾紙上，形成濾渣。',crop:[650,210,380,280]},
- result:{title:'杯中的濾液',copy:'泥沙被濾掉了；溶在水裡的鹽不會被濾紙攔住。',crop:[600,515,480,370]}
+ result:{title:'杯中的濾液',copy:'泥沙留在濾紙上，流下來的液體看起來清澈了。',crop:[600,515,480,370]}
 };
 const home={x:365/scale,y:700/scale,angle:0};
 let markerPose=null;
