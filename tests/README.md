@@ -316,3 +316,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.1-states-table.test.cjs
 ```
 
 測試自行啟停 Python 靜態伺服器與 Chromium。檢查阿公收尾對話與單一模型附註、九格圖解預設可見、固體外形、液體等量與體積格等寬／同水位比較、換容器後杯口與水面對齊、氣體體積格的100–300mL上下限、每次50mL增減與獨立壓縮、四個氣體模型持續運動、粒子數與連續邊界、移除暫停按鈕、前景運動與離區停止／返回續播、格內活塞的滑鼠／鍵盤／觸控、固體與液體可上拉、下壓到樣本表面即停止且樣本體積不變，氣體可壓縮、其他教學區塊保留、五種螢幕寬度及減少動畫設定。10 組子測試，連同外層共 11 項；`STATES_CAPTURE_DIR` 可指定截圖目錄。審閱紀錄見 `docs/reviews/unit-2.1-states-table/review.md`。
+
+## 3.3 聲音的特性
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.3.test.cjs
+```
+
+驗證七區模型與實際聲音緩衝訊號、琴弦／空氣柱、音色近似RMS匹配、無極端頻率測試音、自然結束、跨區停止、唯一綜合小測與五種寬度。合計10項（含外層），測試自行啟停伺服器與Chromium；臨時畫面位於 `/tmp/unit33-review/`。核心內容與檢視紀錄見 `docs/decisions/unit-3.3-initial-production.md` 及 `docs/reviews/unit-3.3-initial/review.md`。

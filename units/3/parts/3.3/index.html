@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="比較振幅、頻率與波形，探索琴弦、空氣柱、音色及聽覺範圍，認識分貝的基本讀法。">
+<title>不同的聲音，差別在哪裡？｜3.3 聲音的特性</title>
+<link rel="stylesheet" href="assets/lesson.css?v=1">
+<script type="module" src="assets/lesson.mjs?v=1">
+</script>
+</head>
+<body>
+<header class="shell masthead">
+<div class="brand-row">
+<a href="../../index.html">← 波動與聲音</a>
+<span>國二上・理化</span>
+</div>
+<div class="hero">
+<div>
+<p class="eyebrow">波動與聲音｜學習單元 3.3</p>
+<h1>不同的聲音，<br>差別在哪裡？</h1>
+<p>小葵和阿公正在準備校園的聲音展示。有的聲音比較大，有的比較尖；即使音高相近，不同樂器聽起來也不一樣。我們一起聽、一起看，把這些差別說清楚。</p>
+</div>
+<figure class="hero-art">
+<svg viewBox="0 0 600 360" role="img" aria-label="三組聲音觀察：不同振幅、不同頻率與不同波形">
+<defs>
+<linearGradient id="hero-bg" x2="1" y2="1">
+<stop stop-color="#e3eee2"/>
+<stop offset="1" stop-color="#f5ecd8"/>
+</linearGradient>
+</defs>
+<rect width="600" height="360" rx="24" fill="url(#hero-bg)"/>
+<rect x="28" y="27" width="544" height="306" rx="18" fill="#fffefa" stroke="#c5d7ca"/>
+<text x="55" y="64" fill="#315c48" font-size="20" font-weight="700">聲音觀察台</text>
+<text x="55" y="123" fill="#486353" font-size="17">大小聲</text>
+<path d="M170 118H535" stroke="#d9e3da"/>
+<path d="M180.00,118.00 L181.40,116.51 L182.80,115.03 L184.20,113.56 L185.60,112.13 L187.00,110.73 L188.40,109.37 L189.80,108.07 L191.20,106.83 L192.60,105.66 L194.00,104.56 L195.40,103.55 L196.80,102.63 L198.20,101.80 L199.60,101.07 L201.00,100.45 L202.40,99.93 L203.80,99.52 L205.20,99.23 L206.60,99.06 L208.00,99.00 L209.40,99.06 L210.80,99.23 L212.20,99.52 L213.60,99.93 L215.00,100.45 L216.40,101.07 L217.80,101.80 L219.20,102.63 L220.60,103.55 L222.00,104.56 L223.40,105.66 L224.80,106.83 L226.20,108.07 L227.60,109.37 L229.00,110.73 L230.40,112.13 L231.80,113.56 L233.20,115.03 L234.60,116.51 L236.00,118.00 L237.40,119.49 L238.80,120.97 L240.20,122.44 L241.60,123.87 L243.00,125.27 L244.40,126.63 L245.80,127.93 L247.20,129.17 L248.60,130.34 L250.00,131.44 L251.40,132.45 L252.80,133.37 L254.20,134.20 L255.60,134.93 L257.00,135.55 L258.40,136.07 L259.80,136.48 L261.20,136.77 L262.60,136.94 L264.00,137.00 L265.40,136.94 L266.80,136.77 L268.20,136.48 L269.60,136.07 L271.00,135.55 L272.40,134.93 L273.80,134.20 L275.20,133.37 L276.60,132.45 L278.00,131.44 L279.40,130.34 L280.80,129.17 L282.20,127.93 L283.60,126.63 L285.00,125.27 L286.40,123.87 L287.80,122.44 L289.20,120.97 L290.60,119.49 L292.00,118.00 L293.40,116.51 L294.80,115.03 L296.20,113.56 L297.60,112.13 L299.00,110.73 L300.40,109.37 L301.80,108.07 L303.20,106.83 L304.60,105.66 L306.00,104.56 L307.40,103.55 L308.80,102.63 L310.20,101.80 L311.60,101.07 L313.00,100.45 L314.40,99.93 L315.80,99.52 L317.20,99.23 L318.60,99.06 L320.00,99.00 L321.40,99.06 L322.80,99.23 L324.20,99.52 L325.60,99.93 L327.00,100.45 L328.40,101.07 L329.80,101.80 L331.20,102.63 L332.60,103.55 L334.00,104.56 L335.40,105.66 L336.80,106.83 L338.20,108.07 L339.60,109.37 L341.00,110.73 L342.40,112.13 L343.80,113.56 L345.20,115.03 L346.60,116.51 L348.00,118.00 L349.40,119.49 L350.80,120.97 L352.20,122.44 L353.60,123.87 L355.00,125.27 L356.40,126.63 L357.80,127.93 L359.20,129.17 L360.60,130.34 L362.00,131.44 L363.40,132.45 L364.80,133.37 L366.20,134.20 L367.60,134.93 L369.00,135.55 L370.40,136.07 L371.80,136.48 L373.20,136.77 L374.60,136.94 L376.00,137.00 L377.40,136.94 L378.80,136.77 L380.20,136.48 L381.60,136.07 L383.00,135.55 L384.40,134.93 L385.80,134.20 L387.20,133.37 L388.60,132.45 L390.00,131.44 L391.40,130.34 L392.80,129.17 L394.20,127.93 L395.60,126.63 L397.00,125.27 L398.40,123.87 L399.80,122.44 L401.20,120.97 L402.60,119.49 L404.00,118.00 L405.40,116.51 L406.80,115.03 L408.20,113.56 L409.60,112.13 L411.00,110.73 L412.40,109.37 L413.80,108.07 L415.20,106.83 L416.60,105.66 L418.00,104.56 L419.40,103.55 L420.80,102.63 L422.20,101.80 L423.60,101.07 L425.00,100.45 L426.40,99.93 L427.80,99.52 L429.20,99.23 L430.60,99.06 L432.00,99.00 L433.40,99.06 L434.80,99.23 L436.20,99.52 L437.60,99.93 L439.00,100.45 L440.40,101.07 L441.80,101.80 L443.20,102.63 L444.60,103.55 L446.00,104.56 L447.40,105.66 L448.80,106.83 L450.20,108.07 L451.60,109.37 L453.00,110.73 L454.40,112.13 L455.80,113.56 L457.20,115.03 L458.60,116.51 L460.00,118.00 L461.40,119.49 L462.80,120.97 L464.20,122.44 L465.60,123.87 L467.00,125.27 L468.40,126.63 L469.80,127.93 L471.20,129.17 L472.60,130.34 L474.00,131.44 L475.40,132.45 L476.80,133.37 L478.20,134.20 L479.60,134.93 L481.00,135.55 L482.40,136.07 L483.80,136.48 L485.20,136.77 L486.60,136.94 L488.00,137.00 L489.40,136.94 L490.80,136.77 L492.20,136.48 L493.60,136.07 L495.00,135.55 L496.40,134.93 L497.80,134.20 L499.20,133.37 L500.60,132.45 L502.00,131.44 L503.40,130.34 L504.80,129.17 L506.20,127.93 L507.60,126.63 L509.00,125.27 L510.40,123.87 L511.80,122.44 L513.20,120.97 L514.60,119.49 L516.00,118.00" fill="none" stroke="#b67b3c" stroke-width="3"/>
+<text x="55" y="208" fill="#486353" font-size="17">高低音</text>
+<path d="M170 203H535" stroke="#d9e3da"/>
+<path d="M180.00,203.00 L181.40,200.03 L182.80,197.13 L184.20,194.37 L185.60,191.83 L187.00,189.56 L188.40,187.63 L189.80,186.07 L191.20,184.93 L192.60,184.23 L194.00,184.00 L195.40,184.23 L196.80,184.93 L198.20,186.07 L199.60,187.63 L201.00,189.56 L202.40,191.83 L203.80,194.37 L205.20,197.13 L206.60,200.03 L208.00,203.00 L209.40,205.97 L210.80,208.87 L212.20,211.63 L213.60,214.17 L215.00,216.44 L216.40,218.37 L217.80,219.93 L219.20,221.07 L220.60,221.77 L222.00,222.00 L223.40,221.77 L224.80,221.07 L226.20,219.93 L227.60,218.37 L229.00,216.44 L230.40,214.17 L231.80,211.63 L233.20,208.87 L234.60,205.97 L236.00,203.00 L237.40,200.03 L238.80,197.13 L240.20,194.37 L241.60,191.83 L243.00,189.56 L244.40,187.63 L245.80,186.07 L247.20,184.93 L248.60,184.23 L250.00,184.00 L251.40,184.23 L252.80,184.93 L254.20,186.07 L255.60,187.63 L257.00,189.56 L258.40,191.83 L259.80,194.37 L261.20,197.13 L262.60,200.03 L264.00,203.00 L265.40,205.97 L266.80,208.87 L268.20,211.63 L269.60,214.17 L271.00,216.44 L272.40,218.37 L273.80,219.93 L275.20,221.07 L276.60,221.77 L278.00,222.00 L279.40,221.77 L280.80,221.07 L282.20,219.93 L283.60,218.37 L285.00,216.44 L286.40,214.17 L287.80,211.63 L289.20,208.87 L290.60,205.97 L292.00,203.00 L293.40,200.03 L294.80,197.13 L296.20,194.37 L297.60,191.83 L299.00,189.56 L300.40,187.63 L301.80,186.07 L303.20,184.93 L304.60,184.23 L306.00,184.00 L307.40,184.23 L308.80,184.93 L310.20,186.07 L311.60,187.63 L313.00,189.56 L314.40,191.83 L315.80,194.37 L317.20,197.13 L318.60,200.03 L320.00,203.00 L321.40,205.97 L322.80,208.87 L324.20,211.63 L325.60,214.17 L327.00,216.44 L328.40,218.37 L329.80,219.93 L331.20,221.07 L332.60,221.77 L334.00,222.00 L335.40,221.77 L336.80,221.07 L338.20,219.93 L339.60,218.37 L341.00,216.44 L342.40,214.17 L343.80,211.63 L345.20,208.87 L346.60,205.97 L348.00,203.00 L349.40,200.03 L350.80,197.13 L352.20,194.37 L353.60,191.83 L355.00,189.56 L356.40,187.63 L357.80,186.07 L359.20,184.93 L360.60,184.23 L362.00,184.00 L363.40,184.23 L364.80,184.93 L366.20,186.07 L367.60,187.63 L369.00,189.56 L370.40,191.83 L371.80,194.37 L373.20,197.13 L374.60,200.03 L376.00,203.00 L377.40,205.97 L378.80,208.87 L380.20,211.63 L381.60,214.17 L383.00,216.44 L384.40,218.37 L385.80,219.93 L387.20,221.07 L388.60,221.77 L390.00,222.00 L391.40,221.77 L392.80,221.07 L394.20,219.93 L395.60,218.37 L397.00,216.44 L398.40,214.17 L399.80,211.63 L401.20,208.87 L402.60,205.97 L404.00,203.00 L405.40,200.03 L406.80,197.13 L408.20,194.37 L409.60,191.83 L411.00,189.56 L412.40,187.63 L413.80,186.07 L415.20,184.93 L416.60,184.23 L418.00,184.00 L419.40,184.23 L420.80,184.93 L422.20,186.07 L423.60,187.63 L425.00,189.56 L426.40,191.83 L427.80,194.37 L429.20,197.13 L430.60,200.03 L432.00,203.00 L433.40,205.97 L434.80,208.87 L436.20,211.63 L437.60,214.17 L439.00,216.44 L440.40,218.37 L441.80,219.93 L443.20,221.07 L444.60,221.77 L446.00,222.00 L447.40,221.77 L448.80,221.07 L450.20,219.93 L451.60,218.37 L453.00,216.44 L454.40,214.17 L455.80,211.63 L457.20,208.87 L458.60,205.97 L460.00,203.00 L461.40,200.03 L462.80,197.13 L464.20,194.37 L465.60,191.83 L467.00,189.56 L468.40,187.63 L469.80,186.07 L471.20,184.93 L472.60,184.23 L474.00,184.00 L475.40,184.23 L476.80,184.93 L478.20,186.07 L479.60,187.63 L481.00,189.56 L482.40,191.83 L483.80,194.37 L485.20,197.13 L486.60,200.03 L488.00,203.00 L489.40,205.97 L490.80,208.87 L492.20,211.63 L493.60,214.17 L495.00,216.44 L496.40,218.37 L497.80,219.93 L499.20,221.07 L500.60,221.77 L502.00,222.00 L503.40,221.77 L504.80,221.07 L506.20,219.93 L507.60,218.37 L509.00,216.44 L510.40,214.17 L511.80,211.63 L513.20,208.87 L514.60,205.97 L516.00,203.00" fill="none" stroke="#267c7b" stroke-width="3"/>
+<text x="55" y="293" fill="#486353" font-size="17">聲音特色</text>
+<path d="M170 288H535" stroke="#d9e3da"/>
+<path d="M180.00,288.00 L181.40,285.67 L182.80,283.41 L184.20,281.31 L185.60,279.41 L187.00,277.79 L188.40,276.48 L189.80,275.50 L191.20,274.86 L192.60,274.56 L194.00,274.56 L195.40,274.84 L196.80,275.34 L198.20,276.00 L199.60,276.76 L201.00,277.54 L202.40,278.28 L203.80,278.93 L205.20,279.43 L206.60,279.75 L208.00,279.86 L209.40,279.75 L210.80,279.43 L212.20,278.93 L213.60,278.28 L215.00,277.54 L216.40,276.76 L217.80,276.00 L219.20,275.34 L220.60,274.84 L222.00,274.56 L223.40,274.56 L224.80,274.86 L226.20,275.50 L227.60,276.48 L229.00,277.79 L230.40,279.41 L231.80,281.31 L233.20,283.41 L234.60,285.67 L236.00,288.00 L237.40,290.33 L238.80,292.59 L240.20,294.69 L241.60,296.59 L243.00,298.21 L244.40,299.52 L245.80,300.50 L247.20,301.14 L248.60,301.44 L250.00,301.44 L251.40,301.16 L252.80,300.66 L254.20,300.00 L255.60,299.24 L257.00,298.46 L258.40,297.72 L259.80,297.07 L261.20,296.57 L262.60,296.25 L264.00,296.14 L265.40,296.25 L266.80,296.57 L268.20,297.07 L269.60,297.72 L271.00,298.46 L272.40,299.24 L273.80,300.00 L275.20,300.66 L276.60,301.16 L278.00,301.44 L279.40,301.44 L280.80,301.14 L282.20,300.50 L283.60,299.52 L285.00,298.21 L286.40,296.59 L287.80,294.69 L289.20,292.59 L290.60,290.33 L292.00,288.00 L293.40,285.67 L294.80,283.41 L296.20,281.31 L297.60,279.41 L299.00,277.79 L300.40,276.48 L301.80,275.50 L303.20,274.86 L304.60,274.56 L306.00,274.56 L307.40,274.84 L308.80,275.34 L310.20,276.00 L311.60,276.76 L313.00,277.54 L314.40,278.28 L315.80,278.93 L317.20,279.43 L318.60,279.75 L320.00,279.86 L321.40,279.75 L322.80,279.43 L324.20,278.93 L325.60,278.28 L327.00,277.54 L328.40,276.76 L329.80,276.00 L331.20,275.34 L332.60,274.84 L334.00,274.56 L335.40,274.56 L336.80,274.86 L338.20,275.50 L339.60,276.48 L341.00,277.79 L342.40,279.41 L343.80,281.31 L345.20,283.41 L346.60,285.67 L348.00,288.00 L349.40,290.33 L350.80,292.59 L352.20,294.69 L353.60,296.59 L355.00,298.21 L356.40,299.52 L357.80,300.50 L359.20,301.14 L360.60,301.44 L362.00,301.44 L363.40,301.16 L364.80,300.66 L366.20,300.00 L367.60,299.24 L369.00,298.46 L370.40,297.72 L371.80,297.07 L373.20,296.57 L374.60,296.25 L376.00,296.14 L377.40,296.25 L378.80,296.57 L380.20,297.07 L381.60,297.72 L383.00,298.46 L384.40,299.24 L385.80,300.00 L387.20,300.66 L388.60,301.16 L390.00,301.44 L391.40,301.44 L392.80,301.14 L394.20,300.50 L395.60,299.52 L397.00,298.21 L398.40,296.59 L399.80,294.69 L401.20,292.59 L402.60,290.33 L404.00,288.00 L405.40,285.67 L406.80,283.41 L408.20,281.31 L409.60,279.41 L411.00,277.79 L412.40,276.48 L413.80,275.50 L415.20,274.86 L416.60,274.56 L418.00,274.56 L419.40,274.84 L420.80,275.34 L422.20,276.00 L423.60,276.76 L425.00,277.54 L426.40,278.28 L427.80,278.93 L429.20,279.43 L430.60,279.75 L432.00,279.86 L433.40,279.75 L434.80,279.43 L436.20,278.93 L437.60,278.28 L439.00,277.54 L440.40,276.76 L441.80,276.00 L443.20,275.34 L444.60,274.84 L446.00,274.56 L447.40,274.56 L448.80,274.86 L450.20,275.50 L451.60,276.48 L453.00,277.79 L454.40,279.41 L455.80,281.31 L457.20,283.41 L458.60,285.67 L460.00,288.00 L461.40,290.33 L462.80,292.59 L464.20,294.69 L465.60,296.59 L467.00,298.21 L468.40,299.52 L469.80,300.50 L471.20,301.14 L472.60,301.44 L474.00,301.44 L475.40,301.16 L476.80,300.66 L478.20,300.00 L479.60,299.24 L481.00,298.46 L482.40,297.72 L483.80,297.07 L485.20,296.57 L486.60,296.25 L488.00,296.14 L489.40,296.25 L490.80,296.57 L492.20,297.07 L493.60,297.72 L495.00,298.46 L496.40,299.24 L497.80,300.00 L499.20,300.66 L500.60,301.16 L502.00,301.44 L503.40,301.44 L504.80,301.14 L506.20,300.50 L507.60,299.52 L509.00,298.21 L510.40,296.59 L511.80,294.69 L513.20,292.59 L514.60,290.33 L516.00,288.00" fill="none" stroke="#617fa5" stroke-width="3"/>
+</svg>
+</figure>
+</div>
+</header>
+<main class="shell lesson-layout">
+<nav class="route" aria-label="學習內容導覽">
+<p>學習路線</p>
+<div class="route-inner">
+<a href="#card-01">
+<b>01</b>響度與振幅</a>
+<a href="#card-02">
+<b>02</b>音調與頻率</a>
+<a href="#card-03">
+<b>03</b>琴弦的音調</a>
+<a href="#card-04">
+<b>04</b>空氣柱的音調</a>
+<a href="#card-05">
+<b>05</b>音色與波形</a>
+<a href="#card-06">
+<b>06</b>聽覺範圍</a>
+<a href="#card-07">
+<b>07</b>分貝的辨讀</a>
+<a href="#unit-quiz" class="quiz-nav">
+<b>?</b>單元小測</a>
+</div>
+</nav>
+<div class="cards">
+<section class="lesson-card" id="card-01" data-core="響度與振幅">
+<div class="card-side">
+<span class="card-number">01</span>
+<h2>響度與振幅</h2>
+</div>
+<div class="card-main">
+<h2>同一個聲音，為什麼有時大聲、有時小聲？</h2>
+<div class="dialogue xiaokui">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>小葵：</b>這兩段聲音高低相同，為什麼一段比較大聲？</p>
+</div>
+<p>先比較同一個音高的兩段聲音，再改變右邊的振幅。</p>
+<div class="compare-grid">
+<div class="compare-card">
+<h3>較小的振幅</h3>
+<p class="minor">440 Hz・相對振幅 0.30</p>
+<svg class="wave" id="amplitude-reference" viewBox="0 0 600 190" role="img" aria-label="聲音訊號隨時間的變化">
+</svg>
+<button class="play" type="button" data-play="amplitude-reference">
+<span aria-hidden="true">▶</span> 播放聲音</button>
+</div>
+<div class="compare-card">
+<h3>改變振幅</h3>
+<p class="minor">
+<output id="amplitude-reading">440 Hz・相對振幅 0.70</output>
+</p>
+<svg class="wave" id="amplitude-live" viewBox="0 0 600 190" role="img" aria-label="聲音訊號隨時間的變化">
+</svg>
+<button class="play" type="button" data-play="amplitude-live">
+<span aria-hidden="true">▶</span> 播放聲音</button>
+</div>
+</div>
+<label class="slider">右側相對振幅 <input id="amplitude" type="range" min="0.2" max="0.9" step="0.05" value="0.7">
+</label>
+<p class="model-note">兩圖皆為10毫秒的訊號；上下是相對振幅，不是空氣粒子移動的路線。</p>
+<div class="lab-tools">
+<button class="stop secondary" type="button" disabled>停止播放</button>
+<button class="reset secondary" data-reset="1" type="button">回到起點</button>
+<span class="play-state" role="status">等待操作</span>
+</div>
+<div class="dialogue grandpa">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>阿公：</b>在頻率與其他條件相近時，振幅較大，通常聽起來比較大聲。大小聲叫作響度，和聲音高低不同。</p>
+</div>
+</div>
+</section>
+<section class="lesson-card" id="card-02" data-core="音調與頻率">
+<div class="card-side">
+<span class="card-number">02</span>
+<h2>音調與頻率</h2>
+</div>
+<div class="card-main">
+<h2>聲音變高，是因為振動得更快嗎？</h2>
+<div class="dialogue xiaokui">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>小葵：</b>如果不是更用力，而是讓聲音變得更尖，要改變什麼？</p>
+</div>
+<p>兩個圖的時間範圍與振幅相同，觀察哪一邊在同樣時間內振動更多次。</p>
+<div class="compare-grid">
+<div class="compare-card">
+<h3>固定參照</h3>
+<p class="minor">220 Hz・相對振幅 0.50</p>
+<svg class="wave" id="pitch-reference" viewBox="0 0 600 190" role="img" aria-label="聲音訊號隨時間的變化">
+</svg>
+<button class="play" type="button" data-play="pitch-reference">
+<span aria-hidden="true">▶</span> 播放聲音</button>
+</div>
+<div class="compare-card">
+<h3>調整頻率</h3>
+<p class="minor">
+<output id="pitch-reading">440 Hz・每秒振動440次</output>
+</p>
+<svg class="wave" id="pitch-live" viewBox="0 0 600 190" role="img" aria-label="聲音訊號隨時間的變化">
+</svg>
+<button class="play" type="button" data-play="pitch-live">
+<span aria-hidden="true">▶</span> 播放聲音</button>
+</div>
+</div>
+<label class="slider">右側頻率 <input id="frequency" type="range" min="110" max="880" step="110" value="440">
+</label>
+<p class="model-note">Hz表示每秒振動次數。相同圖上振幅下，不同頻率的主觀大小聲仍可能有差別。</p>
+<div class="lab-tools">
+<button class="stop secondary" type="button" disabled>停止播放</button>
+<button class="reset secondary" data-reset="2" type="button">回到起點</button>
+<span class="play-state" role="status">等待操作</span>
+</div>
+<div class="dialogue grandpa">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>阿公：</b>每秒振動次數越多，頻率越高，通常音調也越高。高音不代表比較大聲，也不代表聲音傳得比較快。</p>
+</div>
+</div>
+</section>
+<section class="lesson-card" id="card-03" data-core="琴弦的音調">
+<div class="card-side">
+<span class="card-number">03</span>
+<h2>琴弦的音調</h2>
+</div>
+<div class="card-main">
+<h2>同一條琴弦，怎麼彈出不同高低的聲音？</h2>
+<div class="dialogue xiaokui">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>小葵：</b>同一條弦，按在不同位置，或拉得更緊，聲音會有什麼差別？</p>
+</div>
+<p>同一條弦，先一次只改變一個條件：縮短有效弦長，或把弦拉緊。</p>
+<div class="instrument-panel">
+<svg id="string-scene" class="apparatus" viewBox="0 0 600 160" role="img" aria-label="兩端固定的琴弦與有效振動長度">
+<rect x="10" y="28" width="580" height="110" rx="18" fill="#e8d4aa"/>
+<rect x="24" y="38" width="552" height="85" rx="12" fill="#f7edd9"/>
+<circle cx="75" cy="80" r="16" fill="#5d7369"/>
+<circle id="string-bridge" cx="500" cy="80" r="13" fill="#5d7369"/>
+<path id="string-wire" d="M75 80H500" fill="none" stroke="#73562e" stroke-width="4"/>
+<path id="string-length-line" d="M75 124H500" stroke="#176b53" stroke-width="2"/>
+<text x="300" y="151" text-anchor="middle" fill="#31594a">有效振動的弦長</text>
+</svg>
+<div class="instrument-controls">
+<label class="slider">有效弦長 <output id="string-length-reading">60 cm</output>
+<input id="string-length" type="range" min="30" max="90" step="5" value="60">
+</label>
+<label class="slider">相對張力 <output id="string-tension-reading">1.00 倍</output>
+<input id="string-tension" type="range" min="0.5" max="2" step="0.25" value="1">
+</label>
+</div>
+<p class="result-readout">現在的頻率：<output id="string-frequency">220.0 Hz</output>
+</p>
+<div class="button-row">
+<button class="play" type="button" data-play="string-reference">
+<span aria-hidden="true">▶</span> 聽原來的弦音（220 Hz）</button>
+<button class="play" type="button" data-play="string-live">
+<span aria-hidden="true">▶</span> 撥動現在的琴弦</button>
+</div>
+</div>
+<p class="model-note">弦振動放慢、位移放大呈現；聲音以原音高播放。弦的材質與粗細固定，弦音為示意音。</p>
+<div class="lab-tools">
+<button class="stop secondary" type="button" disabled>停止播放</button>
+<button class="reset secondary" data-reset="3" type="button">回到起點</button>
+<span class="play-state" role="status">等待操作</span>
+</div>
+<div class="dialogue grandpa">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>阿公：</b>其他條件相同時，較短或較緊的弦，振動頻率通常較高。比較時一次改一個條件，才能看清楚是哪個變化影響音調。</p>
+</div>
+</div>
+</section>
+<section class="lesson-card" id="card-04" data-core="空氣柱的音調">
+<div class="card-side">
+<span class="card-number">04</span>
+<h2>空氣柱的音調</h2>
+</div>
+<div class="card-main">
+<h2>空氣柱長短不同，聲音會怎麼變？</h2>
+<div class="dialogue xiaokui">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>小葵：</b>除了琴弦，管子裡的空氣也能振動。長短不同會怎麼樣？</p>
+</div>
+<p>比較兩端開口、構造相同的發聲管，吹奏方式與發聲模式保持相同。</p>
+<div class="instrument-panel">
+<svg id="tube-scene" class="apparatus" viewBox="0 0 600 160" role="img" aria-label="兩端開口的同類發聲管，標示有效空氣柱長度">
+<defs>
+<linearGradient id="tube-glass" x2="0" y2="1">
+<stop stop-color="#edfafa"/>
+<stop offset=".5" stop-color="#a7d1d5"/>
+<stop offset="1" stop-color="#f6ffff"/>
+</linearGradient>
+</defs>
+<rect id="tube-body" x="65" y="38" width="360" height="65" rx="4" fill="url(#tube-glass)" stroke="#749c9b"/>
+<path id="tube-rims" d="M65 32V110M425 32V110" stroke="#3d7876" stroke-width="5"/>
+<g id="tube-air">
+</g>
+<path id="tube-length-line" d="M65 130H425" stroke="#176b53" stroke-width="2"/>
+<text x="300" y="154" text-anchor="middle" fill="#31594a">有效振動的空氣柱</text>
+</svg>
+<label class="slider">有效空氣柱長度 <output id="tube-length-reading">60 cm</output>
+<input id="tube-length" type="range" min="20" max="80" step="5" value="60">
+</label>
+<p class="result-readout">現在的頻率：<output id="tube-frequency">285.8 Hz</output>
+</p>
+<div class="button-row">
+<button class="play" type="button" data-play="tube-reference">
+<span aria-hidden="true">▶</span> 聽60 cm的管音</button>
+<button class="play" type="button" data-play="tube-live">
+<span aria-hidden="true">▶</span> 吹奏現在的發聲管</button>
+</div>
+</div>
+<p class="model-note">這是同類兩端開口管的簡化示意，不包含改變吹奏方式產生的高音。空氣微動只在吹奏時出現，管音為示意音。</p>
+<div class="lab-tools">
+<button class="stop secondary" type="button" disabled>停止播放</button>
+<button class="reset secondary" data-reset="4" type="button">回到起點</button>
+<span class="play-state" role="status">等待操作</span>
+</div>
+<div class="dialogue grandpa">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>阿公：</b>同類管子、相同發聲模式下，有效空氣柱較長，主要振動頻率通常較低；較短則較高。這裡比較的是空氣柱，不是敲擊裝水瓶子的聲音。</p>
+</div>
+</div>
+</section>
+<section class="lesson-card" id="card-05" data-core="音色與波形">
+<div class="card-side">
+<span class="card-number">05</span>
+<h2>音色與波形</h2>
+</div>
+<div class="card-main">
+<h2>同樣的音高，為什麼聽得出不同樂器？</h2>
+<div class="dialogue xiaokui">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>小葵：</b>它們的音高很接近，為什麼還是聽起來不一樣？</p>
+</div>
+<p>三個聲音都以440 Hz作為音高基準。比較各自的特色，並看同一時間窗內的波形。</p>
+<div class="timbre-grid">
+<div class="compare-card">
+<h3>純音</h3>
+<p class="minor">440 Hz・音色比較示意</p>
+<svg class="wave" id="tone-pure" viewBox="0 0 600 190" role="img" aria-label="聲音訊號隨時間的變化">
+</svg>
+<button class="play" type="button" data-play="tone-pure">
+<span aria-hidden="true">▶</span> 播放聲音</button>
+</div>
+<div class="compare-card">
+<h3>弦音示意</h3>
+<p class="minor">440 Hz・音色比較示意</p>
+<svg class="wave" id="tone-string" viewBox="0 0 600 190" role="img" aria-label="聲音訊號隨時間的變化">
+</svg>
+<button class="play" type="button" data-play="tone-string">
+<span aria-hidden="true">▶</span> 播放聲音</button>
+</div>
+<div class="compare-card">
+<h3>管音示意</h3>
+<p class="minor">440 Hz・音色比較示意</p>
+<svg class="wave" id="tone-pipe" viewBox="0 0 600 190" role="img" aria-label="聲音訊號隨時間的變化">
+</svg>
+<button class="play" type="button" data-play="tone-pipe">
+<span aria-hidden="true">▶</span> 播放聲音</button>
+</div>
+</div>
+<p class="model-note">示範音用來分開比較波形，並非真實樂器錄音；波形以相同相對高度呈現，試聽經近似大小聲匹配；聽感仍會受播放設備影響。</p>
+<div class="lab-tools">
+<button class="stop secondary" type="button" disabled>停止播放</button>
+<button class="reset secondary" data-reset="5" type="button">回到起點</button>
+<span class="play-state" role="status">等待操作</span>
+</div>
+<div class="dialogue grandpa">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>阿公：</b>除了高低與大小聲，聲音還有不同特色，稱為音色。不同的聲音組成會呈現不同波形；同一樂器換一種演奏方式，音色也可能改變。</p>
+</div>
+</div>
+</section>
+<section class="lesson-card" id="card-06" data-core="聽覺範圍">
+<div class="card-side">
+<span class="card-number">06</span>
+<h2>聽覺範圍</h2>
+</div>
+<div class="card-main">
+<h2>有些聲音，我們為什麼聽不到？</h2>
+<div class="dialogue xiaokui">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>小葵：</b>如果有振動，卻聽不到，就代表沒有聲音嗎？</p>
+</div>
+<div class="hearing-overview">
+<div class="hearing-main">
+<span>人耳概略可聽範圍</span>
+<strong>20～20,000 <small>Hz</small>
+</strong>
+<p>實際範圍因年齡、個體與聲級而異。</p>
+</div>
+<div class="hearing-band">
+<span>低於20 Hz<br>次聲波</span>
+<span>約20～20,000 Hz<br>人耳可聽範圍</span>
+<span>高於20,000 Hz<br>超聲波</span>
+</div>
+</div>
+<div class="button-row frequency-options" role="group" aria-label="選擇要觀察的頻率">
+<button class="secondary" type="button" data-hearing="18" aria-pressed="false">18 Hz</button>
+<button class="secondary" type="button" data-hearing="440" aria-pressed="true">440 Hz</button>
+<button class="secondary" type="button" data-hearing="18000" aria-pressed="false">18,000 Hz</button>
+<button class="secondary" type="button" data-hearing="25000" aria-pressed="false">25,000 Hz</button>
+</div>
+<p id="hearing-result" class="observation" aria-live="polite">
+</p>
+<h3>高頻聽覺上限的例子</h3>
+<div class="animal-grid">
+<p>
+<strong>人耳</strong>約20,000 Hz</p>
+<p>
+<strong>狗</strong>約30,000 Hz</p>
+<p>
+<strong>部分蝙蝠</strong>可達100,000 Hz</p>
+</div>
+<p class="model-note">這裡比較的是高頻上限，不代表從0 Hz起都能聽見；動物種類與個體也有差異。本區只看頻率資料，不播放極高、極低頻聲音，也不作個人聽力測試。來源：OpenStax《College Physics 2e》17.6。</p>
+<div class="dialogue grandpa">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>阿公：</b>人耳能聽到的頻率有範圍。超過人耳可聽範圍的聲波仍然存在；有些動物能聽見人耳聽不到的高頻聲音。</p>
+</div>
+</div>
+</section>
+<section class="lesson-card" id="card-07" data-core="分貝的辨讀">
+<div class="card-side">
+<span class="card-number">07</span>
+<h2>分貝的辨讀</h2>
+</div>
+<div class="card-main">
+<h2>分貝數字，怎麼幫我們比較聲音大小？</h2>
+<div class="dialogue xiaokui">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>小葵：</b>平常說大聲、小聲，和分貝數字有什麼關係？</p>
+</div>
+<p>分貝數字幫助我們描述聲音大小；下面是有情境的參考資料，不是現在裝置的量測結果。</p>
+<div class="level-grid">
+<button type="button" class="level-card" data-level="conversation" aria-pressed="true">
+<span>一般交談</span>
+<strong>60～70<small> dBA</small>
+</strong>
+</button>
+<button type="button" class="level-card" data-level="cinema" aria-pressed="false">
+<span>電影院</span>
+<strong>74～104<small> dBA</small>
+</strong>
+</button>
+<button type="button" class="level-card" data-level="concert" aria-pressed="false">
+<span>音樂會</span>
+<strong>94～110<small> dBA</small>
+</strong>
+</button>
+</div>
+<p id="level-result" class="observation" aria-live="polite">
+</p>
+<div class="explanation-grid">
+<p>
+<strong>0 dB不是沒有聲音</strong>分貝是和參考基準比較的聲級表示，0不等於沒有振動。</p>
+<p>
+<strong>數字不是聽感倍數</strong>不能因為60是30的兩倍，就說聽起來一定兩倍大聲。</p>
+</div>
+<p class="model-note">dBA是依人耳對不同頻率的敏感度加權的聲級，與未加權dB有別。情境數值會隨距離、場地與設備改變；本區不實際重現這些聲級。資料來源：NIDCD；分貝基準說明：OpenStax 17.3。</p>
+<div class="dialogue grandpa">
+<span class="speaker" aria-hidden="true">
+</span>
+<p>
+<b>阿公：</b>在比較條件與量測方式相近時，分貝數值較大，通常代表聲級較高。它不是聽感的線性刻度，也不能只看網頁音量就知道耳邊的真實分貝。</p>
+</div>
+</div>
+</section>
+<section class="quiz" id="unit-quiz" aria-labelledby="quiz-title">
+<header class="quiz-head">
+<span class="quiz-mark" aria-hidden="true">?</span>
+<div>
+<p class="eyebrow">單元小測</p>
+<h2 id="quiz-title">幫聲音展示台調整聲音</h2>
+<p>依照要求設定聲音，再用頻率、振幅與音色說明你的選擇。</p>
+</div>
+</header>
+<div class="quiz-body">
+<div class="quiz-brief">
+<h3>展示需求</h3>
+<p id="quiz-task">
+</p>
+<div class="compare-grid">
+<div class="compare-card">
+<h3>原來的聲音</h3>
+<p id="quiz-original">
+</p>
+<svg class="wave" id="quiz-base" viewBox="0 0 600 190" role="img" aria-label="聲音訊號隨時間的變化">
+</svg>
+<button class="play" type="button" data-play="quiz-base">
+<span aria-hidden="true">▶</span> 聽原來的聲音</button>
+</div>
+<div class="compare-card">
+<h3>你的設定</h3>
+<p id="quiz-choice-description">請完成下方設定。</p>
+<svg class="wave" id="quiz-choice" viewBox="0 0 600 190" role="img" aria-label="聲音訊號隨時間的變化">
+</svg>
+<button class="play" type="button" data-play="quiz-choice">
+<span aria-hidden="true">▶</span> 聽你的設定</button>
+</div>
+</div>
+</div>
+<form id="settings-form" novalidate>
+<div class="quiz-selects">
+<label>頻率<select id="answer-frequency">
+<option value="">選擇頻率</option>
+<option value="220">220 Hz</option>
+<option value="330">330 Hz</option>
+<option value="440">440 Hz</option>
+<option value="660">660 Hz</option>
+<option value="880">880 Hz</option>
+</select>
+</label>
+<label>相對振幅<select id="answer-amplitude">
+<option value="">選擇振幅</option>
+<option value=".2">0.20</option>
+<option value=".35">0.35</option>
+<option value=".6">0.60</option>
+</select>
+</label>
+<label>聲音特色<select id="answer-tone">
+<option value="">選擇音色</option>
+<option value="pure">純音</option>
+<option value="string">弦音示意</option>
+<option value="pipe">管音示意</option>
+</select>
+</label>
+</div>
+<div class="button-row">
+<button class="play" type="submit">檢查設定</button>
+<button class="secondary" id="quiz-clear" type="button">全部重填</button>
+<button class="secondary" id="quiz-new" type="button">換一個要求</button>
+<button class="stop secondary" type="button" disabled>停止播放</button>
+</div>
+<p id="quiz-feedback" role="status" hidden>
+</p>
+<p class="play-state" role="status">等待操作</p>
+</form>
+</div>
+</section>
+</div>
+</main>
+<footer class="shell foot">
+<p>波動與聲音・聲音的特性</p>
+<details>
+<summary>資料與示意說明</summary>
+<p>依教育部自然科學領綱Ka-Ⅳ-5及已核對的國二教材範圍編排。聲音觀察台與樂器示範用於比較，並非真實樂器錄音或聲級量測。</p>
+<p>
+<a href="https://openstax.org/books/college-physics-2e/pages/17-6-hearing">聽覺範圍來源：OpenStax 17.6</a> · <a href="https://openstax.org/books/college-physics-2e/pages/17-3-sound-intensity-and-sound-level">分貝基準：OpenStax 17.3</a> · <a href="https://www.nidcd.nih.gov/health/noise-induced-hearing-loss">生活聲級資料：NIDCD</a>
+</p>
+</details>
+</footer>
+<noscript>請啟用JavaScript以操作模型與播放聲音；頁面文字與比較說明仍可閱讀。</noscript>
+</body>
+</html>
