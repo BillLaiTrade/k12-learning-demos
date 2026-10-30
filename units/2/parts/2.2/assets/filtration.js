@@ -2,7 +2,7 @@ import {CUP,cupTransfer,drawCup,drawJet} from './cup-transfer.js?v=review-5';
 import {loadPicture} from './investigation-renderer.js?v=review-5';
 const root=document.getElementById('filter-animation'),button=document.getElementById('filter-play'),canvas=document.getElementById('filter-canvas'),status=document.getElementById('filter-status');
 const ctx=canvas.getContext('2d'),duration=10000,scale=1.6;
-const sampleMarker=root.querySelector('[data-filter-detail=sample]');
+const sampleMarker=root.querySelector('[data-filter-label=sample]');
 let markerPose=null;
 let background,glass,started=0,elapsed=0,frame=0,playing=false,visible=false;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');

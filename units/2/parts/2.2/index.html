@@ -58,8 +58,7 @@
     .filter-play {display:block;width:100%;padding:0;border:0;background:transparent;cursor:pointer;}
     .filter-play canvas {display:block;width:100%;height:auto;aspect-ratio:1672/941;}
     .filter-play:focus-visible {outline:4px solid #176b53;outline-offset:-4px;}
-    .filter-animation .filter-hotspot {position:absolute;z-index:2;min-width:46px;min-height:36px;padding:5px 9px;border:2px solid #fff;border-radius:9px;background:#176b53;color:white;box-shadow:0 2px 10px #243a3540;font-size:clamp(.65rem,1.2vw,.8rem);font-weight:750;cursor:pointer;transform:translate(-50%,-50%);}
-    .filter-hotspot:hover,.filter-hotspot[aria-pressed="true"] {background:#0f4e3b;}
+    .filter-animation .filter-hotspot {position:absolute;z-index:2;min-width:46px;min-height:36px;padding:5px 9px;border:2px solid #fff;border-radius:9px;background:#176b53;color:white;box-shadow:0 2px 10px #243a3540;font-size:clamp(.65rem,1.2vw,.8rem);font-weight:750;pointer-events:none;transform:translate(-50%,-50%);}
     .filter-hotspot.sample {left:22%;top:52%;}
     .filter-hotspot.filter {left:65%;top:36%;}
     .filter-hotspot.result {left:64%;top:78%;}
@@ -71,10 +70,6 @@
     .filter-steps span { display:block; color:#53645d; font-size:.82rem; line-height:1.5; }
     .filter-principle { margin:12px 0; padding:14px 16px; border:1px solid #d8e2da; border-radius:12px; background:#edf4ee; color:#40564b; }
     .filter-principle strong { display:block; margin-bottom:3px; color:var(--green); }
-    .filter-details { min-height:116px; margin:12px 0; padding:16px 18px; border:1px solid #cddfd2; border-radius:14px; background:#fff; box-shadow:0 5px 16px #243a3508; }
-    .filter-details h3 { margin:0 0 8px; color:var(--green); font-size:1rem; }
-    .filter-details p { margin:5px 0 0; color:#53645d; }
-    .filter-details p strong { color:var(--ink); }
     .note-box { border-left-color:var(--green); background:#edf3ee; font-size:.88rem; }
     .choice-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
     .choice-button { border:1px solid #bdc8bf; border-radius:9px; padding:8px 12px; background:#fff; cursor:pointer; font-weight:700; }
@@ -105,7 +100,7 @@
     @media(max-width:850px) { .filter-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
     @media(max-width:760px) { .evap-stage { grid-template-columns:1fr; gap:10px; padding:38px 12px 13px; } .evap-visual { max-width:560px; } .evap-observation { min-height:104px; } .evap-observation strong { margin-bottom:3px; } }
     @media(max-width:560px) { .evap-stepper { grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr); gap:5px; } .evap-step { min-height:49px; padding:6px 3px; font-size:.75rem; line-height:1.35; } .evap-arrow { font-size:.95rem; } }
-    @media(max-width:680px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:16px; padding-top:20px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .filter-details { padding:13px; } .goal-choice { min-width:100%; } }
+    @media(max-width:680px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:16px; padding-top:20px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .goal-choice { min-width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
   <link rel="stylesheet" href="assets/chromatography.css?v=lab-1">
@@ -148,17 +143,13 @@
           <p>這杯混濁的雨水裡有泥沙顆粒。泥沙沒有溶解在水裡，仍是水中的固體成分。</p>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>泥沙混在水裡，要怎麼把它們分開？</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們用濾紙試試看，觀察泥沙和水各自去了哪裡。</p></div>
-          <div class="filter-animation" id="filter-animation" role="group" aria-label="泥沙水經過濾紙的連續動畫；可點選畫面標記查看深入解說">
+          <div class="filter-animation" id="filter-animation" role="group" aria-label="泥沙水經過濾紙的連續動畫；點擊畫面可重播">
             <button class="filter-play" id="filter-play" type="button" aria-label="播放過濾動畫" disabled><canvas id="filter-canvas" width="1672" height="941" role="img" aria-label="泥沙水逐漸倒入濾紙，泥沙留在紙上，濾液收集在下方杯中；點擊重播。"></canvas></button>
-            <button class="filter-hotspot sample" type="button" data-filter-detail="sample" aria-label="泥沙水樣：查看樣本與分離目標的詳細說明" aria-pressed="false">樣本</button>
-            <button class="filter-hotspot filter" type="button" data-filter-detail="filter" aria-label="濾紙與漏斗：查看攔住泥沙的原理" aria-pressed="false">濾紙</button>
-            <button class="filter-hotspot result" type="button" data-filter-detail="result" aria-label="接液杯與分離結果：查看濾渣和濾液的說明" aria-pressed="false">濾液</button>
+            <span class="filter-hotspot sample" data-filter-label="sample">樣本</span>
+            <span class="filter-hotspot filter" data-filter-label="filter">濾紙</span>
+            <span class="filter-hotspot result" data-filter-label="result">濾液</span>
           </div>
           <span id="filter-status" role="status"></span>
-          <section class="filter-details" id="filter-details" aria-live="polite" aria-atomic="true">
-            <h3 id="filter-detail-title">想深入了解？</h3>
-            <p><strong>點選畫面上的物件名稱</strong>，看看該物件在過濾時做什麼，以及它如何幫助分開泥沙和水。完整流程與過濾原理已列在下方，不必點選也能讀懂。</p>
-          </section>
           <ol class="filter-steps" aria-label="過濾的四個步驟">
             <li><b>① 架好器材</b><span>將濾紙放入漏斗，並在漏斗下方放好接液杯。</span></li>
             <li><b>② 倒入泥沙水</b><span>將樣本慢慢倒進濾紙中，避免液體溢出。</span></li>
@@ -329,27 +320,9 @@
     setCurrentCard(cards.find(card=>location.hash===`#${card.id}`)||cards[0]);
     if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);if(visible[0])setCurrentCard(visible[0].target);},{rootMargin:'-15% 0px -65% 0px'});cards.forEach(card=>observer.observe(card));}
 
-    const filterDetails={
-      sample:{title:'泥沙水樣｜要分開的是什麼？',purpose:'這杯樣本裡，泥沙顆粒分散在水中。這次要把固體泥沙和液態水分開。',principle:'泥沙沒有溶解在水裡，仍以顆粒存在，因此可以利用固體和液體通過濾紙的差異來分離。'},
-      filter:{title:'濾紙與漏斗｜它們怎麼幫上忙？',purpose:'濾紙放進漏斗中，接液杯放在漏斗下方。漏斗托住濾紙，也把流下的液體導入接液杯。',principle:'濾紙有細小孔隙。水可以穿過孔隙；這份樣本中的泥沙顆粒被攔在濾紙上，於是固體和液體分開。'},
-      result:{title:'接液杯與結果｜分離後得到什麼？',purpose:'泥沙留在濾紙上，穿過濾紙的液體被下方接液杯收集。',principle:'留在濾紙上的固體叫「濾渣」，收集到的液體叫「濾液」。過濾能分開這份樣本中的泥沙和水；濾液看起來較清澈，不代表一定能飲用。'}
-    };
-    document.querySelectorAll('[data-filter-detail]').forEach(hotspot=>hotspot.addEventListener('click',()=>{
-      const detail=filterDetails[hotspot.dataset.filterDetail];
-      if(!detail)return;
-      document.querySelectorAll('[data-filter-detail]').forEach(item=>item.setAttribute('aria-pressed',String(item===hotspot)));
-      document.getElementById('filter-detail-title').textContent=detail.title;
-      const panel=document.getElementById('filter-details');
-      panel.querySelectorAll('p').forEach(paragraph=>paragraph.remove());
-      const purpose=document.createElement('p');const purposeLabel=document.createElement('strong');purposeLabel.textContent='這裡在做什麼：';purpose.append(purposeLabel,document.createTextNode(detail.purpose));
-      const principle=document.createElement('p');const principleLabel=document.createElement('strong');principleLabel.textContent='原理與作用：';principle.append(principleLabel,document.createTextNode(detail.principle));
-      panel.append(purpose,principle);
-    }));
-
-
   </script>
   <script type="importmap">{"imports":{"three":"../../../4/parts/4.1/assets/vendor/three/build/three.module.js"}}</script>
-  <script type="module" src="assets/filtration.js?v=labels-trimmed-1"></script>
+  <script type="module" src="assets/filtration.js?v=labels-only-1"></script>
   <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
