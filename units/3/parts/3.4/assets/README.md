@@ -33,3 +33,9 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 ```
 
 瀏覽器測試自行啟停Python server與Chromium。檢查模型、播放／暫停／重設、跨區／背景停止、鍵盤與觸控、聲納收合、語音解碼及音效停止、單一小測各狀態、1440–320px溢出與入口素材載入。截圖暫存於 `/tmp/k12-34-review`，聲音量測不代替使用者裝置上的聽感檢視。
+
+## 開場圖片：使用者選定候選2（2026-10-30）
+
+`echo-story-opening.webp`取自本輪五張生成候選中的第2張。參考單元1.1、1.2開場圖及共用人物設定，主題為同一張實驗桌：反射板、喇叭／接收器、計時器、捲尺、水槽船模與吸音材料呼應本課六區。屬情境插畫，非定量器材裝配圖；正式科學路徑仍由下方模型說明。
+
+原檔`/workspace/generated_images/exec-8d3c41bf-3020-4e9c-abbe-956366b3915d.png`，編號副本`/workspace/shared/unit-3.4-opening-candidates/candidate-02.png`；僅以FFmpeg轉WebP quality90，1672×941，未裁切或修改內容。頁首保留自然比例，使用替代文字與更新圖說。實際畫面與本輪檢查見`docs/reviews/unit-3.4-opening-choice/`。
