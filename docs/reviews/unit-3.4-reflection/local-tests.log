@@ -1,0 +1,56 @@
+✔ echo uses two equal legs and the specified air or water speed (1.293685ms)
+✔ invalid physical inputs are rejected (0.36027ms)
+✔ wave reaches wall halfway and then returns to receiver (0.156179ms)
+✔ absorption preserves direct sound and path delays while reducing reflection energy (0.347372ms)
+✔ assessment identifies omissions, wrong reasoning and correct understanding (1.092584ms)
+▶ 3.4 first lesson matches approved apparatus layout and has two synchronized playback entrances
+  ✔ complete scene and Traditional Chinese text load, with no automatic animation or sound (57.634921ms)
+  ✔ clicking the pictured speaker emits exactly one original and its weaker delayed copy (174.205246ms)
+  ✔ both entrances restart the same timeline and cancel earlier scheduled echoes (628.30723ms)
+  ✔ pause freezes waves and audio; resume preserves the emission count (489.615565ms)
+  ✔ surface contact precedes return; receiver lights only when the returning sound arrives (4894.986365ms)
+  ✔ sound can be disabled, repeated emissions never stack, and changing sections/background stops playback (186.299898ms)
+  ✔ keyboard Enter and Space activate the real speaker hit area once each (46.000243ms)
+  ✔ the scene, phase strip, controls and explanation all remain within the right content column (591.4611ms)
+  ✔ touch and reduced-motion still allow explicit speaker playback and pause (683.814698ms)
+✔ 3.4 first lesson matches approved apparatus layout and has two synchronized playback entrances (8549.052965ms)
+▶ 3.4 reflection, ranging, sonar, absorption and assessment
+  ✔ six lessons, one quiz, shared avatars and an overview link (89.53853ms)
+  ✔ ranges produce correct leg lengths and accept native keyboard input (62.438378ms)
+  ✔ wave pause freezes, resume advances, reset preserves chosen conditions (816.706057ms)
+  ✔ cross-section playback, input changes and backgrounding stop old playback (215.411356ms)
+  ✔ sonar uses water speed, conceals distance and reveals it from the return time (144.43224ms)
+  ✔ room and treatment modes redraw weaker reflections with the same direct path (152.092064ms)
+  ✔ synthesized phrase decodes; opt-in audio stops on pause and cross-section playback (263.218815ms)
+  ✔ the absorption comparison plays the same phrase and stops when its condition changes (206.793104ms)
+  ✔ a full room observation completes and can restart from zero (2278.001455ms)
+  ✔ quiz distinguishes missing, wrong, correct, edited and reset answers (299.529848ms)
+  ✔ anchors and 1440 through 320px layouts work without page overflow (461.870405ms)
+  ✔ touch playback moves under reduced motion and pauses both animation and audio (792.76032ms)
+✔ 3.4 reflection, ranging, sonar, absorption and assessment (6485.9681ms)
+▶ new unit numbers agree across home, overviews, and existing lesson URLs
+  ✔ homepage order, button numbers, and destination identities (628.062863ms)
+  ✔ unit 1: overview uses the new number (578.263097ms)
+  ✔ unit 2: overview uses the new number (561.49685ms)
+  ✔ unit 3: overview uses the new number (566.090444ms)
+  ✔ unit 4: overview uses the new number (561.174454ms)
+  ✔ unit 5: overview uses the new number (562.912357ms)
+  ✔ unit 6: overview uses the new number (562.106756ms)
+  ✔ lesson 1.1: header and existing assets load (4125.258817ms)
+  ✔ lesson 1.2: header and existing assets load (1653.725497ms)
+  ✔ lesson 2.1: header and existing assets load (840.197843ms)
+  ✔ lesson 2.2: header and existing assets load (10864.058633ms)
+  ✔ lesson 3.1: header and existing assets load (1376.355893ms)
+  ✔ lesson 3.2: header and existing assets load (721.094614ms)
+  ✔ lesson 3.4: header and existing assets load (612.447947ms)
+  ✔ lesson 4.1: header and existing assets load (8946.003447ms)
+  ✔ lesson 4.2: header and existing assets load (3948.764003ms)
+✔ new unit numbers agree across home, overviews, and existing lesson URLs (37616.007181ms)
+ℹ tests 45
+ℹ suites 0
+ℹ pass 45
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 53624.202774

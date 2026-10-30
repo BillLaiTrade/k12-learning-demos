@@ -1,4 +1,5 @@
 import {echo, distanceFromEcho, wavePosition, arrivals, judge} from './echo-model.mjs';
+import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
 const $ = id => document.getElementById(id), fmt = (n, digits = 2) => Number(n.toFixed(digits)).toString();
 const panels = new Map();
 let active = null, context = null, phrasePromise = null, sources = [], audioEpoch = 0;
@@ -29,7 +30,7 @@ async function sound(panel, elapsed = 0) {
     const master = context.createGain();
     master.gain.value = Number($('volume').value) * .28;
     master.connect(context.destination);
-    const taps = panel.room ? arrivals(panel.mode(), panel.id === 'treatment' && panel.mode() === 'after') : [{delay: 0, gain: 1}, {delay: panel.duration() - .1, gain: .45}];
+    const taps = panel.taps ? panel.taps() : panel.room ? arrivals(panel.mode(), panel.id === 'treatment' && panel.mode() === 'after') : [{delay: 0, gain: 1}, {delay: panel.duration() - .1, gain: .45}];
     for (const tap of taps) {
       const offset = Math.max(0, elapsed - tap.delay);
       if (offset >= buffer.duration) continue;
@@ -47,14 +48,22 @@ async function sound(panel, elapsed = 0) {
     $('audio-status').textContent = '目前無法播放示範音；可繼續用聲路與時間圖觀察。';
   }
 }
-function player(id, render, duration, {room = false, mode = () => ''} = {}) {
+function player(id, render, duration, {room = false, mode = () => '', restartOnPlay = false, taps = null} = {}) {
   const root = $(id), play = document.querySelector(`[data-play="${id}"]`), reset = document.querySelector(`[data-reset="${id}"]`), soundBox = document.querySelector(`[data-sound="${id}"]`);
-  const p = {id, root, phase: 'ready', elapsed: 0, start: 0, raf: 0, render, duration, room, mode, sound: soundBox};
+  const pauseButton = root.querySelector('[data-pause]');
+  const p = {id, root, phase: 'ready', elapsed: 0, start: 0, raf: 0, render, duration, room, mode, taps, sound: soundBox};
   p.draw = () => { root.dataset.progress = fmt(p.elapsed / p.duration(), 4); render(Math.min(1, p.elapsed / p.duration())); };
   function phase(value) {
     p.phase = value; root.dataset.phase = value;
-    play.setAttribute('aria-pressed', String(value === 'playing'));
-    play.textContent = value === 'playing' ? '暫停' : value === 'paused' ? '繼續' : value === 'complete' ? '再觀察一次' : '播放觀察';
+    if (!restartOnPlay) {
+      play.setAttribute('aria-pressed', String(value === 'playing'));
+      play.textContent = value === 'playing' ? '暫停' : value === 'paused' ? '繼續' : value === 'complete' ? '再觀察一次' : '播放觀察';
+    }
+    if (pauseButton) {
+      pauseButton.disabled = value === 'ready' || value === 'complete';
+      pauseButton.textContent = value === 'paused' ? '繼續' : '暫停';
+      pauseButton.setAttribute('aria-label', value === 'paused' ? '繼續聲波觀察' : '暫停聲波觀察');
+    }
     $(`${id}-status`).textContent = {ready: '準備好，可播放或直接比較；重來保留目前條件。', playing: '播放中，可暫停觀察。', paused: '已暫停，位置保留；繼續時接著播放。', complete: '本次觀察結束，可重看或改變條件。'}[value];
   }
   p.pause = () => { if (p.phase !== 'playing') return; p.elapsed = Math.min(p.duration(), (performance.now() - p.start) / 1000); cancelAnimationFrame(p.raf); phase('paused'); if (active === p) { active = null; stopSound(); } p.draw(); };
@@ -64,12 +73,21 @@ function player(id, render, duration, {room = false, mode = () => ''} = {}) {
     if (p.elapsed >= p.duration()) { phase('complete'); if (active === p) {active = null; stopSound();} }
     else p.raf = requestAnimationFrame(tick);
   }
+  p.play = (restart = false) => {
+    const newEmission = restart || p.phase === 'complete' || p.elapsed === 0;
+    stopActive();
+    if (newEmission) p.elapsed = 0;
+    if (id === 'reflection' && newEmission) root.dataset.emissions = String(Number(root.dataset.emissions) + 1);
+    active = p; p.start = performance.now() - p.elapsed * 1000;
+    phase('playing'); p.draw(); sound(p, p.elapsed); p.raf = requestAnimationFrame(tick);
+  };
   play.addEventListener('click', () => {
+    if (restartOnPlay) {p.play(true); return;}
     if (p.phase === 'playing') {p.pause(); return;}
-    stopActive(); if (p.phase === 'complete') p.elapsed = 0;
-    active = p; p.start = performance.now() - p.elapsed * 1000; phase('playing'); sound(p, p.elapsed); p.raf = requestAnimationFrame(tick);
+    p.play();
   });
-  reset.addEventListener('click', p.reset);
+  pauseButton?.addEventListener('click', () => p.phase === 'playing' ? p.pause() : p.play());
+  reset?.addEventListener('click', p.reset);
   soundBox.addEventListener('change', () => {if (p.phase === 'playing') sound(p, p.elapsed);});
   panels.set(id, p); p.draw(); return p;
 }
@@ -93,7 +111,11 @@ function trace(target, mode = 'dense', treated = false, progress = 0) {
 function roomView(id, treated = false) {
   $(id).innerHTML = `<rect x="55" y="30" width="610" height="180" rx="8" fill="#edf1e7" stroke="#9a886e" stroke-width="8"/>${treated ? '<path d="M250 34H470M250 206H470" stroke="#80aa97" stroke-width="18"/>' : ''}${line(120, 140, 600, 140, '#176b53') }<path d="M120 140L360 35L600 140M120 140L360 205L600 140" fill="none" stroke="#bc612b" stroke-width="4" stroke-dasharray="7 5" opacity="${treated ? '.25' : '.8'}"/><circle cx="120" cy="140" r="17" fill="#176b53"/><circle cx="600" cy="140" r="17" fill="#bc612b"/><text x="90" y="185">聲源</text><text x="575" y="185">聽者</text><text x="270" y="130">直接聲 →</text><text x="260" y="239">${treated ? '部分牆面吸音：反射減弱' : '反射走較長的路徑，較晚抵達'}</text>`;
 }
-player('reflection', progress => { wall('reflection-view', 100, progress, false); $('reflection-reading').textContent = progress === 0 ? '聲音先傳向牆面，再有一部分反射回來。' : progress < .5 ? '發出的聲音正在傳向牆面。' : progress < 1 ? '到達牆面後，一部分聲音反射傳回。' : '接收處收到同一次發聲的反射聲。'; }, () => 3.2);
+const reflection = player('reflection', renderReflection, () => REFLECTION_DURATION, {
+  restartOnPlay: true,
+  taps: () => [{delay: 0, gain: 1}, {delay: REFLECTION_RETURN_TIME, gain: .45}]
+});
+$('reflection-speaker').addEventListener('click', () => reflection.play(true));
 player('distance', progress => {
   const d = Number($('wall-distance').value), far = echo(d, 340), elapsed = progress * far.time;
   wall('distance-near', 34, Math.min(1, elapsed / .2)); wall('distance-far', d, progress);

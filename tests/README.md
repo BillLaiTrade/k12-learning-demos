@@ -361,3 +361,11 @@ AIR_COMPOSITION_ARTIFACT_DIR=/tmp/unit23-explore AIR_FULL_ARTIFACT_DIR=/tmp/unit
 ```
 
 第二區測試涵蓋看比例／看混合保留100格與78／21／1組成、兩種排列的四項選取、氬／其餘放大圖不同突出、切換保留選取、顯示全部保留排列、游標／鍵盤／觸控、減少動態、五種寬度與無JavaScript完整閱讀。`AIR_COMPOSITION_URL`可指定公開網址；新版預設截圖目錄為`docs/reviews/unit-2.3-composition-explore/`，公開檢查請另設暫存截圖目錄以保留本機證據。
+
+## 3.4 第一區：依核可示意圖直接操作喇叭
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-model.test.mjs tests/unit-3.4.test.cjs tests/unit-3.4-reflection.test.cjs tests/unit-numbering.test.cjs
+```
+
+第一區專項10項（含主項）：直接點喇叭與下方按鈕、重播時取消舊排程、暫停／續播、三階段與接收提示、同一緩衝區的原音與較弱延遲副本、關音效、跨區／背景停止、Enter／Space與觸控、減少動態，以及六種寬度內容欄邊界。`REFLECTION_URL`可指定公開3.4網址（以`/`結尾），會使用繼承的HTTPS代理。畫面暫存於`/tmp/k12-34-s1-verified`，不覆寫歷史審閱圖片。
