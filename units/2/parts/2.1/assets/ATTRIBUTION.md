@@ -1,5 +1,7 @@
 # Media attribution
 
+- **Image:** `rust-clean-initial.webp` — edited with OpenAI image generation on 2026-10-30 from the existing `rust-rusted-bucket.webp` teaching image. Removed rust from the metal body, rim, wire handle and attachment loops while retaining the square composition and bucket geometry. Encoded as a 1254 × 1254 WebP; the page applies the existing red plastic grip overlay separately. Used only for the timeline's clean initial layer. This is an educational illustration, not a record of an actual experiment.
+
 - **Video:** [Boiling water - 2025 jan 9.webm](https://commons.wikimedia.org/wiki/File:Boiling_water_-_2025_jan_9.webm)
 - **Creator:** Nesnad
 - **License:** [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)

@@ -331,7 +331,7 @@
     .rust-single-scene { position:relative; display:grid; place-items:center; min-height:370px; margin:3px 0 0; overflow:hidden; border-radius:12px; background:linear-gradient(180deg,#fffefa,#eef3ec); --rust-progress:0%; }
     .rust-single-bucket { display:block; width:min(100%,370px); height:auto; border-radius:10px; }
     .rust-single-corrosion { position:absolute; inset:0; pointer-events:none; }
-    .rust-clean-overlay { position:absolute; top:50%; left:50%; display:block; width:min(100%,370px); height:auto; transform:translate(-50%,-50%); overflow:visible; pointer-events:none; }
+    .rust-clean-overlay { position:absolute; top:50%; left:50%; display:block; width:min(100%,370px); height:auto; transform:translate(-50%,-50%); border-radius:10px; overflow:hidden; pointer-events:none; }
     .rust-stage-controls { display:grid; gap:4px; margin:9px 7px 0; }
     .rust-stage-labels { display:flex; justify-content:space-between; gap:8px; color:#66756d; font-size:.78rem; }
     .rust-stage-controls input { width:100%; margin:0; accent-color:#588366; cursor:pointer; }
@@ -908,7 +908,7 @@
                 <div class="rust-timeline-head"><span class="rust-timeline-icon" aria-hidden="true">⚗</span><div><h3>觀察鐵桶生鏽的過程</h3><p>拖動時間軸，觀察同一個鐵桶在不同時間的變化。</p></div><button class="rust-play" type="button" id="rust-play"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3.5v13l11-6.5z" fill="currentColor"/></svg>播放變化</button></div>
                 <div class="rust-single-scene" id="rust-bucket-scene" role="img" aria-label="同一只鐵桶隨時間逐漸形成鏽層" style="--rust-growth:0">
                   <img class="rust-single-bucket" src="assets/rust-rusted-bucket.webp" alt="同一只保留紅色塑膠握把、桶身逐漸形成鏽層的鐵桶">
-                  <div class="rust-single-corrosion" aria-hidden="true"><svg class="rust-clean-overlay" viewBox="0 0 1254 1254" role="presentation"><defs><mask id="rust-erosion-mask" x="0" y="0" width="1254" height="1254" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse"><rect width="1254" height="1254" fill="#fff"/><g id="rust-reveal-paths" fill="#000"></g><rect id="rust-finish-reveal" width="1254" height="1254" fill="#000" opacity="0"/></mask></defs><image href="assets/rust-clean-matched.webp" width="1254" height="1254" mask="url(#rust-erosion-mask)"/><image href="assets/rust-red-plastic-grip.png" width="1254" height="1254"/></svg></div>
+                  <div class="rust-single-corrosion" aria-hidden="true"><svg class="rust-clean-overlay" viewBox="0 0 1254 1254" role="presentation"><defs><mask id="rust-erosion-mask" x="0" y="0" width="1254" height="1254" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse"><rect width="1254" height="1254" fill="#fff"/><g id="rust-reveal-paths" fill="#000"></g><rect id="rust-finish-reveal" width="1254" height="1254" fill="#000" opacity="0"/></mask></defs><image href="assets/rust-clean-initial.webp" width="1254" height="1254" mask="url(#rust-erosion-mask)"/><image href="assets/rust-red-plastic-grip.png" width="1254" height="1254"/></svg></div>
                 </div>
                 <div class="rust-stage-controls"><div class="rust-stage-labels" aria-hidden="true"><span>剛開始</span><span>一段時間後</span><span>形成鏽層</span></div><input type="range" id="rust-progress" min="0" max="100" step="1" value="0" aria-label="拖曳查看同一只鐵桶逐漸生鏽" aria-valuetext="剛開始：桶身尚未出現鏽層"></div>
                 <p class="rust-stage-status" id="rust-stage-status" aria-live="polite">桶身尚未出現鏽層。</p>
