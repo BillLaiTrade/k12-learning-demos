@@ -5,8 +5,7 @@ const root=document.getElementById('invest-lab');
 const $=id=>document.getElementById(`invest-${id}`);
 const controls=[...root.querySelectorAll('[data-invest-tool]')];
 const answers=new Map();
-const comparisonFeedback=new Map();
-const answerFields=['mass-difference','calculation-numerator','calculation-denominator','concentration-value'];
+const answerFields=['calculation-numerator','calculation-denominator','concentration-value'];
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
 let samples=[],active=null,stock=6,nextId=1,animation=null,renderer=null,frame=0,pausedAt=null,drag=null,suppressClickUntil=0;
 const selected=()=>samples.find(s=>s.id===active);
@@ -30,11 +29,6 @@ function updateConcentration(){
   const disabled=root.dataset.ready!=='true'||!!animation||!sample;
   for(const field of answerFields)$(field).disabled=disabled;
   $('check').disabled=disabled;
-  $('mass-difference').disabled=disabled||!raw||!filtered;
-  $('check-difference').disabled=disabled||!raw||!filtered;
-  const comparison=comparisonFeedback.get(active),feedback=$('difference-feedback');
-  feedback.textContent=comparison?.text||(raw&&filtered?'用過濾前的重量減去過濾後的重量，填入差值。':'有兩筆稱量紀錄後，就能比較。');
-  feedback.dataset.result=comparison?.result||'';
 }
 
 function update(){
@@ -86,18 +80,6 @@ function perform(action){
   if(reason){announce(reason);return;}
   animate(action,{...selected()});
 }
-function checkDifference(){
-  if(animation)return;
-  const {raw,filtered}=measuredMasses(selected());if(!raw||!filtered)return;
-  const value=$('mass-difference').value.trim(),difference=raw.mass-filtered.mass;
-  const valid=value!==''&&Number.isFinite(Number(value))&&Number(value)>=0;
-  const correct=valid&&Math.abs(Number(value)-difference)<=1e-6;
-  comparisonFeedback.set(active,{
-    result:correct?'correct':'revise',
-    text:correct?`相差 ${difference} 克。本模型中，這是被濾紙攔下的泥沙，不算進溶液質量。`:valid?'再看看這份取樣過濾前後的兩筆重量，試著相減。':'請填寫過濾前後的質量差（克）。'
-  });
-  updateConcentration();
-}
 function submitReport(event){
   event.preventDefault();if(animation)return;
   let result=assessReport(selected(),$('concentration-value').value);
@@ -119,7 +101,7 @@ function submitReport(event){
 }
 
 function clear(){
-  cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];answers.clear();comparisonFeedback.clear();active=null;stock=6;nextId=1;
+  cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];answers.clear();active=null;stock=6;nextId=1;
   $('report').reset();invalidateReport();root.querySelectorAll('[data-sample]').forEach(b=>b.remove());delete root.dataset.lastEvent;
   $('concentration-value').value='';update();redraw();announce('點未知樣本 X 取樣，再自由選用器材測試。');$('bottle').focus({preventScroll:true});
 }
@@ -152,14 +134,10 @@ for(const button of controls){
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&drag){suppressClickUntil=performance.now()+500;cancelDrag();announce('已放回器材。');}});
 $('settle').addEventListener('click',()=>perform('settle'));
 $('report').addEventListener('submit',submitReport);
-$('check-difference').addEventListener('click',checkDifference);
-$('mass-difference').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();checkDifference();}});
 for(const field of answerFields){
   $(field).addEventListener('input',()=>{
     answers.set(active,{...answers.get(active),[field]:$(field).value});
-    if(field==='mass-difference'){
-      comparisonFeedback.delete(active);$('difference-feedback').textContent='';delete $('difference-feedback').dataset.result;
-    }else invalidateReport();
+    invalidateReport();
   });
 }
 $('reset').addEventListener('click',()=>{if(samples.length)$('reset-dialog').showModal();else clear();});

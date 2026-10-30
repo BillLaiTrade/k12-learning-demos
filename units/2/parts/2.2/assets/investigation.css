@@ -140,24 +140,3 @@
  .invest-notebook-answer input {width:100%;padding-inline:2px;font-size:.83rem;}
  .invest-notebook-answer {min-width:0;}
 }
-
-.invest-mass-comparison {margin:10px 0 0 36px;padding:11px 13px;border:1px solid #dce5d3;border-radius:7px;background:#f1f5ea;}
-.invest-comparison-heading {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;}
-.invest-comparison-heading h4 {margin:0;color:#3a5e42;font-size:.8rem;font-weight:650;}
-.invest-comparison-answer {display:flex;align-items:center;gap:9px;}
-.invest-mass-comparison #invest-check-difference {padding:6px 10px;border:1px solid #9eb491;border-radius:5px;background:#fbfdf7;color:#315f42;font:inherit;font-size:.72rem;cursor:pointer;}
-.invest-mass-comparison #invest-check-difference:hover:not(:disabled) {background:#e5eedc;}
-.invest-mass-comparison #invest-check-difference:focus-visible {outline:2px solid #86aa76;outline-offset:2px;}
-.invest-mass-comparison #invest-check-difference:disabled {opacity:.5;cursor:default;}
-.invest-mass-comparison p {margin:6px 0 0;font-size:.73rem;line-height:1.7;color:#65785b;}
-.invest-mass-comparison .invest-difference-feedback {color:#47643e;}
-.invest-difference-feedback[data-result="revise"] {color:#96632b;}
-.invest-difference-feedback[data-result="correct"] {color:#24633d;}
-.invest-mass-comparison small {display:block;margin-top:5px;color:#819078;font-size:.63rem;line-height:1.6;}
-@media(max-width:680px){
- .invest-mass-comparison {margin-left:29px;padding:10px;}
- .invest-comparison-answer .invest-mass-input {width:auto;}
- .invest-comparison-answer input {width:80px;}
- .invest-comparison-heading h4 {font-size:.75rem;}
- .invest-mass-comparison p {font-size:.68rem;}
-}
