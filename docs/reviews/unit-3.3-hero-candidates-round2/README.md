@@ -39,3 +39,8 @@
 - `git diff --exit-code -- units/3/parts/3.3/index.html units/3/parts/3.3/assets`通過；本輪未套用正式首圖、未改教學內容，未重跑其他歷史單元測試。
 
 比較頁畫面見[桌機截圖](gallery-desktop.png)，檢查輸出見[checks.log](checks.log)。目前仍等待使用者選圖或指定修改，不代表任何候選已核可採用。
+
+
+## 最新：第三輪候選
+
+使用者進一步要求每張盡可能涵蓋較多下方學習區塊的道具與情境，以代表整個單元。第三輪C01～C05在演奏／聆聽之外，增加多種聲源、動物聽覺、聲級及生活情境線索；本頁保留作為歷史候選。請看[第三輪比較頁](../unit-3.3-hero-candidates-round3/index.html)。
