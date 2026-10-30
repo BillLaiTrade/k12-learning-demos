@@ -95,9 +95,10 @@
     .evap-visual { position:relative; display:block; width:100%; max-width:620px; margin:0 auto; padding:0; border:0; aspect-ratio:1586/992; overflow:hidden; border-radius:10px; background:#e7e0d4; cursor:pointer; touch-action:manipulation; }
     .evap-visual:disabled { cursor:not-allowed; }
     .evap-visual canvas { display:block; width:100%; height:100%; }
-    .evap-click-cue {position:absolute;right:10px;bottom:10px;padding:5px 9px;border:1px solid #cdd8ca;border-radius:8px;background:#ffffffed;color:#315f42;font-size:.72rem;line-height:1.5;pointer-events:none;transition:opacity .2s ease;}
+    .evap-visual-wrap {min-width:0;}
+    .evap-click-cue {display:block;padding-top:5px;color:#536b5c;font-size:.72rem;line-height:1.5;text-align:center;pointer-events:none;transition:opacity .2s ease;}
     .evap-stage[data-playing="true"] .evap-click-cue {opacity:0;}
-    .evap-visual:disabled .evap-click-cue {display:none;}
+    .evap-visual:disabled+.evap-click-cue {visibility:hidden;}
     .evap-observation { align-self:stretch; display:flex; flex-direction:column; justify-content:center; padding:16px; border:1px solid #e2ddcc; border-radius:14px; background:#fffdf8e8; box-shadow:0 5px 16px #243a3508; }
     .evap-observation strong { margin-bottom:8px; color:#8b6b32; font-size:.82rem; letter-spacing:.04em; }
     .evap-observation p { margin:0; color:#4c5d55; font-size:.94rem; line-height:1.7; }
@@ -184,7 +185,7 @@
             <li><button class="evap-step" type="button" data-evap-step="4" aria-pressed="false" disabled>④ 留下鹽晶體</button></li>
           </ol>
           <div class="scene evap-stage" id="evap-stage" data-step="1" aria-label="鹽水蒸發與鹽晶體留下的示意">
-            <button class="evap-visual" id="evap-visual" type="button" aria-label="從「① 觀察鹽水」播放至結束" aria-describedby="evap-caption" disabled></button>
+            <div class="evap-visual-wrap"><button class="evap-visual" id="evap-visual" type="button" aria-label="從「① 觀察鹽水」播放至結束" aria-describedby="evap-caption" disabled></button><span class="evap-click-cue" aria-hidden="true">點圖片任意處觀察</span></div>
             <aside class="evap-observation"><strong id="evap-phase">受熱升溫</strong><p id="evap-caption" class="live-note" aria-live="polite">鹽水正在受熱，水面仍較平靜；水在還沒沸騰時也會蒸發。</p></aside>
           </div>
           <div class="filter-principle"><strong>分離後，水和鹽各去了哪裡？</strong>水分蒸發後離開容器；原本溶在水中的鹽形成晶體，留在容器裡。這個過程利用水能蒸發、鹽不隨水一起蒸發的差異來分離成分，沒有生成新物質。</div>
@@ -332,7 +333,7 @@
   </script>
   <script type="importmap">{"imports":{"three":"../../../4/parts/4.1/assets/vendor/three/build/three.module.js"}}</script>
   <script type="module" src="assets/filtration.js?v=click-to-start-1"></script>
-  <script type="module" src="assets/evaporation-animation.js?v=click-cue-1"></script>
+  <script type="module" src="assets/evaporation-animation.js?v=click-cue-2"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
   <script type="module" src="assets/ppm-pool.js?v=vertical-calculation-1"></script>

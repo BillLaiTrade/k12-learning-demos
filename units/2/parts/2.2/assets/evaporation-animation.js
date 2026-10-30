@@ -24,11 +24,7 @@ async function initialize() {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.domElement.setAttribute('aria-hidden', 'true');
-  const clickCue = document.createElement('span');
-  clickCue.className = 'evap-click-cue';
-  clickCue.textContent = '▶ 點圖觀察';
-  clickCue.setAttribute('aria-hidden', 'true');
-  host.replaceChildren(renderer.domElement, clickCue);
+  host.replaceChildren(renderer.domElement);
 
   const scene = new THREE.Scene();
   const camera = new THREE.OrthographicCamera(-2, 2, 1.251, -1.251, 0.1, 50);
