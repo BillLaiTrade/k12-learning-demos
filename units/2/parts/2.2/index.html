@@ -95,6 +95,9 @@
     .evap-visual { position:relative; display:block; width:100%; max-width:620px; margin:0 auto; padding:0; border:0; aspect-ratio:1586/992; overflow:hidden; border-radius:10px; background:#e7e0d4; cursor:pointer; touch-action:manipulation; }
     .evap-visual:disabled { cursor:not-allowed; }
     .evap-visual canvas { display:block; width:100%; height:100%; }
+    .evap-click-cue {position:absolute;right:10px;bottom:10px;padding:5px 9px;border:1px solid #cdd8ca;border-radius:8px;background:#ffffffed;color:#315f42;font-size:.72rem;line-height:1.5;pointer-events:none;transition:opacity .2s ease;}
+    .evap-stage[data-playing="true"] .evap-click-cue {opacity:0;}
+    .evap-visual:disabled .evap-click-cue {display:none;}
     .evap-observation { align-self:stretch; display:flex; flex-direction:column; justify-content:center; padding:16px; border:1px solid #e2ddcc; border-radius:14px; background:#fffdf8e8; box-shadow:0 5px 16px #243a3508; }
     .evap-observation strong { margin-bottom:8px; color:#8b6b32; font-size:.82rem; letter-spacing:.04em; }
     .evap-observation p { margin:0; color:#4c5d55; font-size:.94rem; line-height:1.7; }
@@ -329,7 +332,7 @@
   </script>
   <script type="importmap">{"imports":{"three":"../../../4/parts/4.1/assets/vendor/three/build/three.module.js"}}</script>
   <script type="module" src="assets/filtration.js?v=click-to-start-1"></script>
-  <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
+  <script type="module" src="assets/evaporation-animation.js?v=click-cue-1"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>
   <script type="module" src="assets/ppm-pool.js?v=vertical-calculation-1"></script>
