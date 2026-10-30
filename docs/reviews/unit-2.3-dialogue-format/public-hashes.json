@@ -1,0 +1,16 @@
+[
+  {
+    "file": "units/2/parts/2.3/index.html",
+    "status": 200,
+    "sha256": "fc57182a0acf28daba89cdcec8dfec0860f5277e382d6f1b332d753be57cd678",
+    "expected": "fc57182a0acf28daba89cdcec8dfec0860f5277e382d6f1b332d753be57cd678",
+    "match": true
+  },
+  {
+    "file": "units/2/parts/2.3/assets/air.css",
+    "status": 200,
+    "sha256": "02eafb6fb6de0912a891be883aad50da78993b75a63b2957712e3c2d98d90533",
+    "expected": "02eafb6fb6de0912a891be883aad50da78993b75a63b2957712e3c2d98d90533",
+    "match": true
+  }
+]

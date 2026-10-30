@@ -12,3 +12,11 @@
 以Chromium逐一比較19段與2.2對應人物的computed style，320／390／800／1024／1440px均一致，沒有橫向溢出，人名仍在輔助文字中，見[外觀比對](format-check.log)。已目視檢視[桌機](dialogue-1440.webp)及[手機](dialogue-390.webp)畫面。
 
 完整頁面9項檢查通過（含外層），涵蓋六教學與唯一小測、杯子預設比較／重設、製氣重播與離區暫停、作答回饋、五種寬度、無JavaScript及觸控，見[輸出](full-tests.log)。`git diff --check`通過。維持第4階段逐區修訂，未新增整份教材驗收。
+
+## 公開確認
+
+實作提交`1bb3147baed40113065520ce53cbc3d563da898c`已推送main；[Pages41047556211](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41047556211)與[Deploy41047556823](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41047556823)皆成功。
+
+公開HTML／CSS為HTTP200，SHA-256與實作版本一致，見[版本比對](public-hashes.json)。公開頁與公開2.2的19段對話computed style於五種寬度再次比對通過，無橫向溢出，人名保留於輔助文字，見[公開外觀比對](public-format-check.log)及[公開桌機](public-dialogue-1440.webp)／[公開手機](public-dialogue-390.webp)。
+
+[直接檢視第二區](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/?v=1bb3147b#s2)。
