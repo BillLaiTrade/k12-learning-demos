@@ -1,0 +1,3 @@
+PASS 1440px: three equal photos in one row; within content card; images loaded; keyboard and mouse drag work for all three lenses; no page overflow or JavaScript errors.
+PASS 1280px: three equal photos in one row; within content card; images loaded; keyboard and mouse drag work for all three lenses; no page overflow or JavaScript errors.
+PASS 1024px: three equal photos in one row; within content card; images loaded; keyboard and mouse drag work for all three lenses; no page overflow or JavaScript errors.
