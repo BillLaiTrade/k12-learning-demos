@@ -15,3 +15,11 @@
 已目視檢視[桌機收起](closed-desktop.webp)、[桌機展開](open-desktop.webp)與[手機展開](open-mobile.webp)，另存[手機收起](closed-mobile.webp)及[混合合併格](mixed-minor.webp)。確認小框與主圖距離小於25px，手機在圖例之前，沒有橫向溢出。
 
 維持第4階段逐區修訂，非整份教材驗收。
+
+## 公開確認
+
+實作`399f72bc337a0bf27fc602d8eefd9fea8339ab1d`已推送。其部署與接續65694b14被後續main更新取代；已確認最新`0a4c2350`包含本次修改、未改2.3檔案。[Pages41058341540](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41058341540)與[Deploy41058342226](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41058342226)皆成功。
+
+公開HTML／CSS／JS三檔HTTP200，SHA-256與實作一致，見[版本比對](public-hashes.json)。公開第二區12項通過（含外層），0失敗／0跳過，包含開框／收起、框內閱讀、Escape、切換保留狀態、兩種排列與手機主圖下方位置，見[公開輸出](public-tests.log)；已目視檢視[公開手機展開](public-mobile.webp)。
+
+[直接檢視第二區](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/?v=399f72bc#s2)。
