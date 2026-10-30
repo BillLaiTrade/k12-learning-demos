@@ -14,4 +14,12 @@
 
 已目視檢視[手機](composition-390.webp)及[混合點選合併格](mixed-clicked-minor.webp)，另保存[比例點選合併格](proportion-clicked-minor.webp)與桌機／筆電及其他操作畫面。
 
-維持第4階段逐區修訂，不新增整份教材驗收。公開部署與版本確認待推送後補記。
+維持第4階段逐區修訂，不新增整份教材驗收。
+
+## 公開確認
+
+實作提交`4d6ee9bf3c2720a79bb937e5bc4e60c0a32b936c`已推送main；[Pages41051434896](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41051434896)與[Deploy41051435440](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41051435440)皆成功。公開HTML／CSS／JS均HTTP200，SHA-256與實作版本一致，見[版本比對](public-hashes.json)。
+
+公開第二區10項檢查通過（含外層），0失敗／0跳過；涵蓋兩種排列點格、圖例／放大圖同步、合併選取、觸控與鍵盤及五種寬度，見[公開輸出](public-tests.log)。
+
+[直接檢視第二區](https://billlaitrade.github.io/k12-learning-demos/units/2/parts/2.3/?v=4d6ee9bf#s2)。

@@ -1,0 +1,19 @@
+▶ 2.3 composition: proportions, classification and optional emphasis
+  ✔ all proportions and both classes are visible before any action (112.693642ms)
+  ✔ mouse, keyboard and hover emphasis never hide teaching content (327.976886ms)
+  ✔ both arrangements preserve all shares, selection and a visible connector (1951.324169ms)
+  ✔ argon and other select different parts of the enlarged minor share (3990.439922ms)
+  ✔ clicking shares in both layouts synchronizes legend, explanation and inset (3741.227814ms)
+  ✔ the chart is one Tab stop with spatial arrow navigation and native selection (1720.51855ms)
+  ✔ desktop, laptop and narrow screens preserve order without overflow (5732.800822ms)
+  ✔ static content remains complete without JavaScript (1007.351201ms)
+  ✔ touch, reduced motion and route anchor stay usable (1781.336917ms)
+✔ 2.3 composition: proportions, classification and optional emphasis (21845.384567ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22174.963547
