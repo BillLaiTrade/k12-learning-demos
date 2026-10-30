@@ -45,11 +45,20 @@
     .section-top { display:flex; justify-content:space-between; align-items:end; gap:16px; margin:0 0 18px; }
     .section-top h2 { margin:0; font-size:1.35rem; }
     .progress-copy { color:#6b7971; font-size:.79rem; }
-    .lesson-card { position:relative; min-width:0; display:grid; grid-template-columns:190px minmax(0,1fr); gap:28px; margin:0; padding:26px; border:1px solid var(--line); border-radius:24px; background:var(--card); box-shadow:var(--shadow); scroll-margin-top:100px; }
-    .card-side { border-right:1px solid #d7e1dd; padding-right:20px; color:#182326; font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; line-height:1.7; }
-    .card-number { color:var(--green); font-weight:850; font-size:.84rem; letter-spacing:.08em; }
-    .card-side h3 { margin:10px 0 8px; font-size:1.08rem; line-height:1.45; }
-    .card-role { color:#59696b; font-size:.87rem; }
+    .lesson-card { position:relative; min-width:0; display:block; margin:0; padding:0; overflow:hidden; border:1px solid #d8e2da; border-radius:20px; background:#fffefa; color:#1c2927; line-height:1.72; box-shadow:0 10px 28px rgb(24 52 40 / 7%); scroll-margin-top:100px; }
+    .lesson-head { display:grid; grid-template-columns:74px minmax(0,1fr); gap:16px; align-items:start; padding:25px 28px 21px; border-bottom:1px solid #e7ece5; }
+    .lesson-number { display:grid; place-items:center; width:50px; height:50px; border-radius:15px; background:#e9f0e3; color:#416c39; font-weight:850; font-size:1.1rem; }
+    .lesson-head h2 { margin:0; font-size:clamp(1.22rem,2vw,1.65rem); line-height:1.35; }
+    .lesson-head p { margin:8px 0 0; color:#5b6a65; font-size:.94rem; }
+    .lesson-body { padding:23px 28px 28px; min-width:0; }
+    .lesson-body p { max-width:880px; }
+    .lesson-body > .matter-summary { margin-top:18px; }
+    @media(max-width:900px) { .lesson-head,.lesson-body,.unit-quiz .quiz-head,.unit-quiz .quiz-body { padding-left:21px; padding-right:21px; } }
+    @media(max-width:700px) {
+      .lesson-head,.unit-quiz .quiz-head { grid-template-columns:48px minmax(0,1fr); gap:10px; padding:18px; }
+      .lesson-number,.unit-quiz .quiz-mark { width:40px; height:40px; border-radius:12px; }
+      .lesson-body,.unit-quiz .quiz-body { padding:18px; }
+    }
     .card-main { min-width:0; }
     .card-main h2 { margin:0 0 8px; font-size:clamp(1.32rem,2.8vw,1.85rem); line-height:1.35; }
     .card-main>p { margin:0 0 18px; color:var(--muted); }
@@ -315,7 +324,7 @@
     .composition-result { display:flex; min-height:48px; align-items:center; justify-content:center; gap:7px; margin:0!important; padding:8px 5px; background:#f0f4e8; color:#315340; font-size:.86rem; font-weight:750; text-align:center; }
     .composition-result span+span::before { content:"｜"; padding-right:7px; color:#789078; }
     .composition-summary { margin:9px 0 10px; }
-    @media(max-width:1080px) { .composition-sample-grid { grid-template-columns:1fr; } .composition-sample-visual { height:190px; } }
+    @media(max-width:900px) { .composition-sample-grid { grid-template-columns:1fr; } .composition-sample-visual { height:190px; } }
     @media(max-width:680px) { .composition-sample-visual { height:170px; } .composition-sample-card h3 { font-size:.9rem; } .composition-result { min-height:42px; font-size:.82rem; } }
     .rust-investigation { display:grid; gap:14px; margin:14px 0; }
     .rust-timeline { padding:17px; border:1px solid #dbe3d8; border-radius:16px; background:#fbfcf8; }
@@ -480,14 +489,14 @@
     .decomposition-water-scene { position:relative; display:flex; min-height:38px; align-items:center; justify-content:center; gap:5px; overflow:hidden; color:#294b3c; font-size:.92rem; font-weight:800; white-space:nowrap; }
     .decomposition-reactants,.decomposition-products { display:inline-flex; flex:0 0 auto; max-width:100%; flex-wrap:wrap; align-items:center; justify-content:center; gap:5px; }
     .decomposition-products { gap:12px; }
-    @container (max-width:320px) { .decomposition-water-scene { flex-direction:column; gap:8px; padding:5px 0; } .decomposition-water-scene .decomposition-arrow { transform:rotate(90deg); } }
+    @container (max-width:400px) { .decomposition-water-scene { flex-direction:column; gap:8px; padding:5px 0; } .decomposition-water-scene .decomposition-arrow { transform:rotate(90deg); } }
     @container (max-width:280px) { #compound-example .particle-photo-model { grid-template-columns:minmax(0,1fr); } #compound-example .particle-model--water { min-height:72px; } #compound-example .particle-sample-photo img { object-fit:contain; } }
     @container (max-width:155px) { .decomposition-products { display:grid; grid-template-columns:repeat(2,max-content); } }
     @container (max-width:320px) { .particle-card--element .particle-photo-model { grid-template-columns:minmax(0,1fr); gap:20px; } .particle-card--element .particle-sample-photo { width:min(100%,145px); justify-self:center; } .particle-card--element .particle-model--iron { width:100%; justify-self:center; } }
     .decomposition-explanation { margin:6px 0 0!important; color:#627168!important; font-size:.78rem; text-align:center; }
     .particle-color-note { margin:0 0 8px!important; color:#68776e!important; font-size:.8rem; }
     .pure-summary { margin:8px 0 0; }
-    .matter-summary { grid-column:2; container-type:inline-size; min-width:0; width:100%; padding:16px; border:1px solid var(--line); border-radius:16px; background:#f7f8f3; font-size:1rem; line-height:1.7; }
+    .matter-summary { container-type:inline-size; min-width:0; width:100%; padding:16px; border:1px solid var(--line); border-radius:16px; background:#f7f8f3; font-size:1rem; line-height:1.7; }
     .matter-summary h3 { margin:0 0 24px; color:#294b3c; font-size:1.2rem; line-height:1.45; }
     .matter-family { position:relative; padding:22px 12px 12px; border:2px solid #8cae91; border-radius:14px; }
     .matter-root { position:absolute; top:-17px; left:14px; margin:0; padding:2px 18px; border-radius:9px; background:#315a46; color:#fff; font-size:1.125rem; font-weight:750; }
@@ -513,8 +522,8 @@
     @container (max-width:480px) { .matter-classes { grid-template-columns:minmax(0,1fr); } .matter-pure-types { grid-template-columns:repeat(2,minmax(0,1fr)); } .matter-type { grid-template-columns:minmax(0,1fr); } .matter-type .matter-example { grid-column:1; grid-row:3; } .matter-type .matter-model { grid-column:1; grid-row:4; justify-self:center; } }
     @container (max-width:360px) { .matter-pure-types { grid-template-columns:minmax(0,1fr); } }
     @media(max-width:680px) { .pure-particle-comparison { grid-template-columns:1fr; } .particle-photo-model { grid-template-columns:104px minmax(0,1fr); } .particle-sample-photo img { height:94px; } .particle-sample-photo--iron img { height:104px; } .particle-card h3 { flex-wrap:wrap; gap:6px; } .particle-tag { flex:0 0 auto; white-space:nowrap; } .particle-model--water { grid-template-columns:repeat(3,55px); } }
-    .unit-quiz { margin:20px 0 28px; border:1px solid var(--line); border-radius:20px; background:var(--card); box-shadow:var(--shadow); overflow:hidden; scroll-margin-top:18px; }
-    .quiz-head { display:flex; gap:18px; align-items:flex-start; padding:25px 28px 21px; border-bottom:1px solid #e7ece5; background:linear-gradient(105deg,#fffdf6,#fdfbf3); }
+    .unit-quiz { margin:20px 0 28px; border:1px solid #d8e2da; border-radius:20px; background:#fffefa; color:#1c2927; line-height:1.72; box-shadow:0 10px 28px rgb(24 52 40 / 7%); overflow:hidden; scroll-margin-top:18px; }
+    .quiz-head { display:grid; grid-template-columns:74px minmax(0,1fr); gap:16px; align-items:start; padding:25px 28px 21px; border-bottom:1px solid #e7ece5; background:#fffefa; }
     .quiz-mark { display:grid; place-items:center; width:50px; height:50px; flex:none; border-radius:15px; background:#f5ead0; color:#8b6725; font-size:1.45rem; font-weight:800; }
     .quiz-kicker { margin:0 0 4px; color:#946f2d; font-size:.82rem; font-weight:800; letter-spacing:.06em; }
     .quiz-head h2 { margin:0; font-size:clamp(1.22rem,2vw,1.65rem); line-height:1.35; }
@@ -632,15 +641,7 @@
       .route a { flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border:1px solid var(--line); border-radius:999px; background:var(--card); white-space:nowrap; }
       .route a[aria-current="step"] { border-color:var(--green); }
       .route a.quiz-nav[aria-current="step"] { border-color:#d9a74f; }
-      .quiz-head { gap:12px; padding:20px 18px; }
-      .quiz-mark { width:43px; height:43px; border-radius:12px; }
-      .quiz-body { padding:20px 17px 23px; }
-      .lesson-card { grid-template-columns:1fr; gap:14px; padding:18px; border-radius:19px; }
       .lesson-card,.unit-quiz { scroll-margin-top:160px; }
-      .matter-summary { grid-column:1; }
-      .card-side { display:flex; align-items:baseline; gap:10px; border-right:0; border-bottom:1px solid #d7e1dd; padding:0 0 10px; }
-      .card-side h3 { margin:0; }
-      .card-role { display:none; }
     }
     @media(max-width:680px) {
       .quiz-actions { align-items:stretch; flex-direction:column; }
@@ -666,7 +667,7 @@
     #s2 .next-hint { border-left-color:#88ae86; background:#f4f7f1; color:#4c6255!important; }
     #s2 button:focus-visible,#s2 a:focus-visible,#s2 input:focus-visible { outline-color:#79b89a; }
   </style>
-  <link rel="stylesheet" href="assets/states-table.css?v=20261030-section12">
+  <link rel="stylesheet" href="assets/states-table.css?v=20261030-all-format">
   <script src="assets/states-table.js?v=20261029-pull" defer></script>
 </head>
 <body>
@@ -704,9 +705,12 @@
         <div class="section-top"><h2>從一只水桶，開始認識物質</h2><span class="progress-copy">先看情境，再找線索、留下紀錄</span></div>
 
         <section class="lesson-card" id="s1">
-          <div class="card-side"><span class="card-number">01</span><h3>物體和物質</h3><span class="card-role">先分清楚正在研究什麼</span></div>
+          <header class="lesson-head">
+            <div class="lesson-number">01</div>
+            <div><h2>水桶是一個物體，桶身、提把支架和握把由什麼製成？</h2><p>物體和物質：先分清楚正在研究什麼</p></div>
+          </header>
+          <div class="lesson-body">
           <div class="card-main">
-            <h2>水桶是一個物體，桶身、提把支架和握把由什麼製成？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>這只水桶是整個物體；桶身、提把支架和握把都是同一種材料做的嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>不一定喔。像這只水桶，桶身是鐵做的，握把卻是塑膠做的。同一個物體，也可以用不同的材料組成。</p></div>
             <p>依序查看水桶的不同部位，找出製作各部位所用的材料。</p>
@@ -748,14 +752,15 @@
               <dt>觀察發現</dt><dd>同一物體的不同部位可使用不同材料</dd>
             </dl>
           </div>
+          </div>
         </section>
 
         <section class="lesson-card" id="s2">
-          <header class="sv-lesson-head">
-            <div class="sv-lesson-number">02</div>
+          <header class="lesson-head">
+            <div class="lesson-number">02</div>
             <div><h2>桶身、水和空氣，各有哪些不同？</h2><p>物質三態：比較形狀、體積與可壓縮性</p></div>
           </header>
-          <div class="sv-lesson-body">
+          <div class="lesson-body">
           <div class="card-main">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>桶身、水和空氣除了外觀看起來不同，還有哪些地方不一樣？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>先比較它們的形狀、體積和可壓縮性，再用粒子模型想想原因。</p></div>
@@ -787,9 +792,12 @@
           </div>
         </section>
         <section class="lesson-card" id="s3">
-          <div class="card-side"><span class="card-number">03</span><h3>粒子模型</h3><span class="card-role">用模型解釋三態</span></div>
+          <header class="lesson-head">
+            <div class="lesson-number">03</div>
+            <div><h2>以水為例：三種狀態的粒子有什麼不同？</h2><p>粒子模型：用模型解釋三態</p></div>
+          </header>
+          <div class="lesson-body">
           <div class="card-main">
-            <h2>以水為例：三種狀態的粒子有什麼不同？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>水結成冰就硬硬的，融化後卻會流，怎麼會差這麼多？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>結成冰時，水分子會在固定位置附近振動；融化成水後，就能互相換位置，所以水才會流動。</p></div>
             <p>圖中每個圓點代表一個水分子。比較同一批水分子在固態、液態和氣態中的排列、間距和運動；狀態改變時，水分子仍是同一批。</p>
@@ -808,12 +816,16 @@
               <article><h3>氣態</h3><p>分子在整個空間中沿直線移動，碰撞其他分子或杯壁後改變方向。</p></article>
             </div>
           </div>
+          </div>
         </section>
 
         <section class="lesson-card" id="s4">
-          <div class="card-side"><span class="card-number">04</span><h3>物態變化</h3><span class="card-role">沿三角箭頭觀察六種轉變</span></div>
+          <header class="lesson-head">
+            <div class="lesson-number">04</div>
+            <div><h2>冰、水和水蒸氣，如何互相轉變？</h2><p>物態變化：沿三角箭頭觀察六種轉變</p></div>
+          </header>
+          <div class="lesson-body">
           <div class="card-main">
-            <h2>冰、水和水蒸氣，如何互相轉變？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>粒子的排列和運動會改變，那水可以從一種狀態變成另一種嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>可以呀！冰塊在室溫下會融化成水，水放進冷凍庫又會結成冰。水也能蒸發成水蒸氣，水蒸氣遇冷則會凝結成水。</p></div>
             <p>點選冰、水或水蒸氣，查看它能轉變成哪些狀態；也可以直接點選六條箭頭，了解轉變過程與粒子變化。</p>
@@ -922,12 +934,16 @@
             <p class="phase-science-note">水蒸氣本身無色、看不見；淡藍流線是教材插畫符號，不是水蒸氣真實的顏色或形狀。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>原來水變成另一種狀態後，還可以再變回原來的狀態！</p></div>
           </div>
+          </div>
         </section>
 
         <section class="lesson-card" id="s6">
-          <div class="card-side"><span class="card-number">05</span><h3>物質的變化</h3><span class="card-role">觀察生鏽前後的性質</span></div>
+          <header class="lesson-head">
+            <div class="lesson-number">05</div>
+            <div><h2>鐵桶生鏽了，外觀有什麼變化？</h2><p>物質的變化：觀察生鏽前後的性質</p></div>
+          </header>
+          <div class="lesson-body">
           <div class="card-main">
-            <h2>鐵桶生鏽了，外觀有什麼變化？</h2>
             <p>沿著時間軸觀察同一個鐵桶，看看桶身表面如何改變。</p>
             <div class="rust-dialogue-row">
               <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，冰融化後還能再結成冰，那鐵桶生鏽後，也能變回原本的鐵嗎？</p></div>
@@ -968,12 +984,16 @@
             </div>
             <div class="dialogue dialogue--xiaokui" id="rust-observation-summary"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，桶身原本是灰銀色、亮亮的，現在多了紅褐色的斑塊，表面看起來也比較粗糙了。</p></div>
           </div>
+          </div>
         </section>
 
         <section class="lesson-card" id="s7">
-          <div class="card-side"><span class="card-number">06</span><h3>物理與化學變化</h3><span class="card-role">看有沒有生成新物質</span></div>
+          <header class="lesson-head">
+            <div class="lesson-number">06</div>
+            <div><h2>怎麼分辨物理變化和化學變化？</h2><p>物理與化學變化：看有沒有生成新物質</p></div>
+          </header>
+          <div class="lesson-body">
           <div class="card-main">
-            <h2>怎麼分辨物理變化和化學變化？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>冰、水和水蒸氣看起來不同，鐵桶生鏽也變了樣。它們的變化有什麼關鍵不同？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先看看變化後有沒有生成新物質，這是判斷的關鍵。</p></div>
             <h3 class="change-subheading">先看定義</h3>
@@ -1012,12 +1032,16 @@
             <p class="microscope-model-disclaimer">放大鏡中的粒子、顏色與排列皆為示意，不代表原子和分子的真實外觀或比例。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>所以冰融化只是狀態改變，仍然是水；鐵生鏽卻生成了鐵鏽，是另一種物質。</p></div>
           </div>
+          </div>
         </section>
 
         <section class="lesson-card" id="s8">
-          <div class="card-side"><span class="card-number">07</span><h3>純物質與混合物</h3><span class="card-role">看成分種類判斷</span></div>
+          <header class="lesson-head">
+            <div class="lesson-number">07</div>
+            <div><h2>判斷純物質和混合物，要看什麼？</h2><p>純物質與混合物：看成分種類判斷</p></div>
+          </header>
+          <div class="lesson-body">
           <div class="card-main">
-            <h2>判斷純物質和混合物，要看什麼？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，桶裡的水混進了土壤，那裡面就不只一種物質了吧？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>對，像這樣由兩種或兩種以上物質混合而成的，叫混合物；只含一種物質的，叫純物質。</p></div>
             <h3 class="composition-heading">觀察不同樣本的組成</h3>
@@ -1053,12 +1077,16 @@
             <div class="dialogue dialogue--xiaokui composition-summary"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，我可以用手把土壤裡的小石頭挑出來，和其他成分分開。</p></div>
             <div class="dialogue composition-summary"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>對呀！挑出小石頭時，沒有改變物質的種類，所以這是物理方法。這也說明土壤含有不同成分，是混合物。</p></div>
           </div>
+          </div>
         </section>
 
         <section class="lesson-card" id="s9">
-          <div class="card-side"><span class="card-number">08</span><h3>元素與化合物</h3><span class="card-role">純物質的兩種類型</span></div>
+          <header class="lesson-head">
+            <div class="lesson-number">08</div>
+            <div><h2>純鐵和蒸餾水，為什麼分類不同？</h2><p>元素與化合物：純物質的兩種類型</p></div>
+          </header>
+          <div class="lesson-body">
           <div class="card-main">
-            <h2>純鐵和蒸餾水，為什麼分類不同？</h2>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，土壤裡有不同成分，可以把它們分開。那蒸餾水是純物質，是不是就不能再分解了？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>純物質不能用物理方法分離成不同的物質，但有些能用化學方法分解。像水就能分解成氫和氧；純鐵則不能用化學方法再分解成更簡單的物質。</p></div>
 
@@ -1151,6 +1179,7 @@
               </ul>
             </div>
           </section>
+          </div>
         </section>
 
         <dialog class="book-reader" id="book-reader" aria-labelledby="book-reader-title">

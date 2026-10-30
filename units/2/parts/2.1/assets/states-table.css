@@ -1,20 +1,6 @@
 /* Shared materials and spacing for the directly visible comparison diagrams. */
-/* Only this learning block uses the horizontal header from unit 1.2. */
-#s2.lesson-card { display:block; padding:0; overflow:hidden; border-color:#d8e2da; border-radius:20px; background:#fffefa; color:#1c2927; line-height:1.72; box-shadow:0 10px 28px rgb(24 52 40 / 7%); }
-#s2 .sv-lesson-head { display:grid; grid-template-columns:74px minmax(0,1fr); gap:16px; align-items:start; padding:25px 28px 21px; border-bottom:1px solid #e7ece5; }
-#s2 .sv-lesson-number { display:grid; place-items:center; width:50px; height:50px; border-radius:15px; background:#e9f0e3; color:#416c39; font-weight:850; font-size:1.1rem; }
-#s2 .sv-lesson-head h2 { margin:0; font-size:clamp(1.22rem,2vw,1.65rem); line-height:1.35; }
-#s2 .sv-lesson-head p { margin:8px 0 0; color:#5b6a65; font-size:.94rem; }
-#s2 .sv-lesson-body { padding:23px 28px 28px; }
-#s2 .sv-lesson-body p { max-width:880px; }
 #s2 .sv-comparison { min-width:0; }
 #s2 .sv-outro { margin-top:18px; }
-@media(max-width:900px) { #s2 .sv-lesson-head,#s2 .sv-lesson-body { padding-left:21px; padding-right:21px; } }
-@media(max-width:700px) {
- #s2 .sv-lesson-head { grid-template-columns:48px minmax(0,1fr); gap:10px; padding:18px; }
- #s2 .sv-lesson-number { width:40px; height:40px; border-radius:12px; }
- #s2 .sv-lesson-body { padding:18px; }
-}
 #s2 .sv-intro { margin:18px 0 12px; color:#56685e; font-size:.94rem; line-height:1.8; }
 #s2 .sv-definitions { position:absolute; width:0; height:0; overflow:hidden; pointer-events:none; }
 .states-table-scroll { overflow-x:auto; margin:0; border:1px solid #c5d3c1; border-radius:18px; background:#fffefa; box-shadow:0 7px 24px #354e3610,0 1px 3px #354e3608; scrollbar-color:#a1b59d #f2f5ec; }

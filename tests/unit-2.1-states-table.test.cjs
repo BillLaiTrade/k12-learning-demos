@@ -288,13 +288,29 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
     await page.keyboard.press('Home');
   });
 
-  await t.test('all other lesson sections are preserved and still initialize', async () => {
+  await t.test('other lesson content is preserved under the shared header format and still initializes', async () => {
     const before = execFileSync('git', ['show', 'HEAD:units/2/parts/2.1/index.html'], { cwd:repo, encoding:'utf8' });
     const current = readFileSync(path.join(repo,'units/2/parts/2.1/index.html'),'utf8');
     const unchanged = await page.evaluate(({before,current}) => {
       const parse = s => new DOMParser().parseFromString(s,'text/html');
       const a=parse(before),b=parse(current);
-      return [...a.querySelectorAll('section.lesson-card')].filter(s=>s.id!=='s2').every(s=>s.outerHTML===b.getElementById(s.id)?.outerHTML);
+      const canonical = element => {
+        const copy=element.cloneNode(true);
+        const walker=document.createTreeWalker(copy,NodeFilter.SHOW_TEXT),empty=[];
+        while(walker.nextNode())if(!walker.currentNode.textContent.trim())empty.push(walker.currentNode);
+        empty.forEach(node=>node.remove());return copy.outerHTML;
+      };
+      const contentPreserved=[...a.querySelectorAll('section.lesson-card')].filter(s=>s.id!=='s2').every(section=>{
+        const oldMain=section.querySelector('.card-main').cloneNode(true),current=b.getElementById(section.id);
+        const oldTitle=oldMain.querySelector('h2');
+        const titleText=oldTitle?oldTitle.textContent:section.querySelector('.lesson-head h2').textContent;
+        if(titleText!==current.querySelector('.lesson-head h2').textContent)return false;
+        if(oldTitle)oldTitle.remove();
+        const summary=section.querySelector('.matter-summary');
+        return canonical(oldMain)===canonical(current.querySelector('.lesson-body > .card-main'))
+          &&(!summary||canonical(summary)===canonical(current.querySelector('.matter-summary')));
+      });
+      return contentPreserved&&canonical(a.getElementById('unit-quiz'))===canonical(b.getElementById('unit-quiz'));
     }, {before,current});
     assert.equal(unchanged,true);
     await page.getByRole('button', { name:'握把', exact:true }).click();
@@ -313,10 +329,10 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
         const layout=await page.locator('#s2').evaluate(section=>{
           const rect=element=>{const {left,right,top,bottom}=element.getBoundingClientRect();return{left,right,top,bottom};};
           const region=section.querySelector('.states-table-scroll');
-          const head=section.querySelector('.sv-lesson-head');
+          const head=section.querySelector('.lesson-head');
           const title=head.querySelector('h2');
-          const number=head.querySelector('.sv-lesson-number');
-          const opening=section.querySelector('.sv-lesson-body .dialogue');
+          const number=head.querySelector('.lesson-number');
+          const opening=section.querySelector('.lesson-body .dialogue');
           return {
             region:rect(region),head:rect(head),title:rect(title),number:rect(number),
             opening:rect(opening),outro:rect(section.querySelector('.sv-outro')),
