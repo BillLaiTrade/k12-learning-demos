@@ -1,4 +1,4 @@
-import { DURATION, LIQUID, PAPER_HEIGHT, BASELINE, HOME, MOUNT, SAMPLES, placement, chromatographyState } from './chromatography-state.js?v=sixteen-1';
+import { DURATION, LIQUID, PAPER_HEIGHT, BASELINE, MOUNT, SAMPLES, placement, chromatographyState } from './chromatography-state.js?v=sixteen-1';
 const lab = document.getElementById('chrom-lab');
 const canvas = document.getElementById('chrom-canvas');
 const paper = document.getElementById('chrom-paper');
@@ -9,8 +9,13 @@ const status = document.getElementById('chrom-status');
 const choices = [...document.querySelectorAll('.ink-choice')];
 const ctx = canvas.getContext('2d');
 const W = 1536, H = 1024, PW = 109, PH = PAPER_HEIGHT * H;
-let sample = 'green', mode = 'ready', pos = { ...HOME }, seconds = 0;
-let raf = null, last = null, drag = null, pointerHandled = false;
+const SOURCE_PAPERS = {
+  green: { x: 296 / W, top: 495 / H, angle: .27, sx: .85, sy: .69 },
+  dark: { x: 431 / W, top: 495 / H, angle: .173, sx: .85, sy: .68 }
+};
+const MOUNT_MS = matchMedia('(prefers-reduced-motion: reduce)').matches ? 200 : 900;
+let sample = 'green', mode = 'ready', pos = { ...MOUNT }, seconds = 0, mountProgress = 0;
+let raf = null, last = null;
 const background = new Image();
 // Seeded paper fibers stay fixed as the solvent and dyes move.
 const texture = document.createElement('canvas');
@@ -64,78 +69,95 @@ function pigmentTrail(baselineY, headY, color, opacity, width) {
     band(x, baselineY - distance * f, width * (.48 + .52 * f), 5, color, opacity * (.2 + .8 * f));
   }
 }
+function drawPreparedInk(key) {
+  const source = SOURCE_PAPERS[key];
+  ctx.save();ctx.translate(source.x * W, source.top * H);ctx.rotate(source.angle);ctx.scale(source.sx, source.sy);
+  ctx.strokeStyle = '#68665b94';ctx.lineWidth = 1.2;ctx.beginPath();ctx.moveTo(-PW / 2, PH * BASELINE);ctx.lineTo(PW / 2, PH * BASELINE);ctx.stroke();
+  band(0, PH * BASELINE, 19, 10, SAMPLES[key].ink);ctx.restore();
+}
 function draw() {
-  const installed = !['ready', 'selected', 'dragging'].includes(mode);
+  const installed = !['ready', 'mounting'].includes(mode);
   const state = chromatographyState(seconds, pos.top, sample);
+  const dotOpacity = mode === 'spilled' ? 1 - state.progress : installed && state.kind === 'valid' ? state.originOpacity : 1;
   ctx.clearRect(0, 0, W, H); ctx.drawImage(background, 0, 0, W, H);
+  for (const choice of choices) {
+    const key = choice.dataset.ink, available = mode === 'ready' || key !== sample;
+    choice.hidden = !available;choice.setAttribute('aria-pressed', String(!available));
+    const label = lab.querySelector(`[data-chrom-source-label="${key}"]`);
+    label.hidden = !available && !installed;
+    label.style.left = available ? '' : `${MOUNT.x * 100}%`;
+    label.style.top = available ? '' : '89%';
+    if (available) drawPreparedInk(key);
+  }
   // Ink entering the bath spreads, rather than producing separated bands.
   if (mode === 'spilled') {
     ctx.save(); ctx.beginPath(); ctx.ellipse(1048, 757, 191, 68, 0, 0, Math.PI * 2); ctx.clip();
     band(1048, 745, 45 + 155 * state.progress, 20 + 65 * state.progress, SAMPLES[sample].ink, .5 * state.progress);
     ctx.restore();
   }
-  ctx.save(); ctx.translate(pos.x * W, pos.top * H);
-  const angle = installed ? (mode === 'spilled' ? -.04 : 0) : .115;
-  ctx.rotate(angle);
-  ctx.shadowColor = '#27352e35'; ctx.shadowBlur = installed ? 4 : 13; ctx.shadowOffsetX = 4; ctx.shadowOffsetY = 6;
-  ctx.drawImage(texture, -PW / 2, 0, PW, PH); ctx.shadowColor = 'transparent';
-  ctx.save(); ctx.beginPath(); ctx.rect(-PW / 2, 0, PW, PH); ctx.clip();
-  if (installed && state.kind !== 'dry') {
-    const wetY = Math.max(0, (state.front - pos.top) * H);
-    const wet = ctx.createLinearGradient(0, wetY, 0, wetY + 18);
-    wet.addColorStop(0, '#9f9d8500'); wet.addColorStop(1, '#918b7636');
-    ctx.fillStyle = wet; ctx.fillRect(-PW / 2, wetY, PW, PH - wetY);
-    ctx.strokeStyle = '#737c6780'; ctx.lineWidth = 1.4; ctx.beginPath();
-    for (let x = -PW / 2; x <= PW / 2; x += 2) {
-      const y = wetY + Math.sin(x * .13) * 1.6;
-      if (x === -PW / 2) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  if (mode !== 'ready') {
+    ctx.save(); ctx.translate(pos.x * W, pos.top * H);
+    const angle = installed ? (mode === 'spilled' ? -.04 : 0) : pos.angle;
+    ctx.rotate(angle);ctx.scale(pos.sx ?? 1, pos.sy ?? 1);
+    ctx.shadowColor = '#27352e35'; ctx.shadowBlur = installed ? 4 : 13; ctx.shadowOffsetX = 4; ctx.shadowOffsetY = 6;
+    ctx.drawImage(texture, -PW / 2, 0, PW, PH); ctx.shadowColor = 'transparent';
+    ctx.save(); ctx.beginPath(); ctx.rect(-PW / 2, 0, PW, PH); ctx.clip();
+    if (installed && state.kind !== 'dry') {
+      const wetY = Math.max(0, (state.front - pos.top) * H);
+      const wet = ctx.createLinearGradient(0, wetY, 0, wetY + 18);
+      wet.addColorStop(0, '#9f9d8500'); wet.addColorStop(1, '#918b7636');
+      ctx.fillStyle = wet; ctx.fillRect(-PW / 2, wetY, PW, PH - wetY);
+      ctx.strokeStyle = '#737c6780'; ctx.lineWidth = 1.4; ctx.beginPath();
+      for (let x = -PW / 2; x <= PW / 2; x += 2) {
+        const y = wetY + Math.sin(x * .13) * 1.6;
+        if (x === -PW / 2) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
     }
-    ctx.stroke();
-  }
-  const baselineY = PH * BASELINE;
-  ctx.strokeStyle = '#68665b94'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-PW/2, baselineY); ctx.lineTo(PW/2, baselineY + .6); ctx.stroke();
-  const active = installed && state.kind === 'valid';
-  const separation = active ? state.separation : 0;
-  const dotOpacity = mode === 'spilled' ? 1 - state.progress : active ? state.originOpacity : 1;
-  if (active && state.spread > 0) {
-    const travel = (state.baseline - state.front) * H;
-    const mixedHead = baselineY - travel * .68;
-    // The original mixed spot first elongates into a plume. Later it thins
-    // into a faint trace, while the individual component bands resolve.
-    pigmentTrail(baselineY, mixedHead, SAMPLES[sample].ink,
-      state.spread * (.42 - .35 * separation), 18 + 5 * state.spread);
-    band(0, baselineY - Math.min(12, travel * .3), 14 + 6 * state.spread,
-      7 + Math.min(13, travel * .24), SAMPLES[sample].ink, .28 * state.spread * (1 - separation));
-  }
-  band(0, baselineY, 13 + (active ? 3 * state.spread : 0), 7, SAMPLES[sample].ink, dotOpacity);
-  if (active && separation > 0) {
-    for (const [i, b] of state.bands.entries()) {
-      const y = (b.y - pos.top) * H;
-      const room = (b.y - state.front) * H;
-      const ry = Math.min(10 + 17 * state.progress, Math.max(1, room * .65));
-      pigmentTrail(baselineY, y + ry * .35, b.color, .18 * separation, 14 + i * 2);
-      band(0, y, 29 + 17 * state.progress, ry, b.color, separation);
-      band(-10 + i * 7, y + 4, 17, Math.min(ry * 1.35, room * .8), b.color, .22 * separation);
+    const baselineY = PH * BASELINE;
+    ctx.strokeStyle = '#68665b94'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-PW/2, baselineY); ctx.lineTo(PW/2, baselineY + .6); ctx.stroke();
+    const active = installed && state.kind === 'valid';
+    const separation = active ? state.separation : 0;
+    if (active && state.spread > 0) {
+      const travel = (state.baseline - state.front) * H;
+      const mixedHead = baselineY - travel * .68;
+      // The original mixed spot first elongates into a plume. Later it thins
+      // into a faint trace, while the individual component bands resolve.
+      pigmentTrail(baselineY, mixedHead, SAMPLES[sample].ink,
+        state.spread * (.42 - .35 * separation), 18 + 5 * state.spread);
+      band(0, baselineY - Math.min(12, travel * .3), 14 + 6 * state.spread,
+        7 + Math.min(13, travel * .24), SAMPLES[sample].ink, .28 * state.spread * (1 - separation));
     }
-    ctx.globalAlpha = .28; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(texture, -PW/2, 0); ctx.globalAlpha = 1;
+    band(0, baselineY, 13 + (active ? 3 * state.spread : 0), 7, SAMPLES[sample].ink, dotOpacity);
+    if (active && separation > 0) {
+      for (const [i, b] of state.bands.entries()) {
+        const y = (b.y - pos.top) * H;
+        const room = (b.y - state.front) * H;
+        const ry = Math.min(10 + 17 * state.progress, Math.max(1, room * .65));
+        pigmentTrail(baselineY, y + ry * .35, b.color, .18 * separation, 14 + i * 2);
+        band(0, y, 29 + 17 * state.progress, ry, b.color, separation);
+        band(-10 + i * 7, y + 4, 17, Math.min(ry * 1.35, room * .8), b.color, .22 * separation);
+      }
+      ctx.globalAlpha = .28; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(texture, -PW/2, 0); ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+    ctx.strokeStyle = '#d5d2c8'; ctx.lineWidth = 1; ctx.strokeRect(-PW/2, 0, PW, PH);
+    if (installed && pos.top < LIQUID && state.bottom > LIQUID) {
+      ctx.fillStyle = '#ccd8d51c'; ctx.fillRect(-PW/2, (LIQUID-pos.top)*H, PW, (state.bottom-LIQUID)*H);
+    }
+    ctx.restore();
   }
-  ctx.restore();
-  ctx.strokeStyle = '#d5d2c8'; ctx.lineWidth = 1; ctx.strokeRect(-PW/2, 0, PW, PH);
-  if (installed && pos.top < LIQUID && state.bottom > LIQUID) {
-    ctx.fillStyle = '#ccd8d51c'; ctx.fillRect(-PW/2, (LIQUID-pos.top)*H, PW, (state.bottom-LIQUID)*H);
-  }
-  ctx.restore();
   if (installed && mode !== 'spilled') {
     // Restore the actual pencil/clip in front of the paper, never stretch it.
     ctx.drawImage(background, 1006, 145, 100, 133, 1006, 145, 100, 133);
   }
   paper.style.left = `${pos.x * 100}%`; paper.style.top = `${pos.top * 100}%`;
   paper.style.height = `${PAPER_HEIGHT * 100}%`;
-  paper.style.transform = `translateX(-50%) rotate(${installed ? 0 : 6.6}deg)`;
-  paper.setAttribute('aria-label', installed ? (mode === 'running' ? '暫停層析實驗' : mode === 'paused' ? '繼續層析實驗' : '重做這份墨水的層析實驗') : '拿起濾紙，放入燒杯');
-  paper.setAttribute('aria-pressed', String(mode === 'selected'));
-  clip.disabled = !installed;
-  lab.dataset.mode = mode; lab.dataset.ink = sample;
+  paper.style.transform = 'translateX(-50%)';
+  paper.hidden = !installed;
+  paper.setAttribute('aria-label', mode === 'running' ? '暫停層析實驗' : mode === 'paused' ? '繼續層析實驗' : '重做這份墨水的層析實驗');
+  clip.disabled = !installed;drop.disabled = !['running', 'paused'].includes(mode);
+  lab.dataset.mode = mode; lab.dataset.ink = sample;lab.dataset.mountProgress = mountProgress.toFixed(5);
   lab.dataset.progress = state.progress.toFixed(5);
   lab.dataset.phase = state.phase;
   lab.dataset.contact = String(state.contact);
@@ -147,6 +169,18 @@ function draw() {
   lab.dataset.bandYs = JSON.stringify(installed ? state.bands.map(b => b.y) : []);
 }
 function tick(timestamp) {
+  if (mode === 'mounting') {
+    if (last !== null) mountProgress = Math.min(1, mountProgress + Math.max(0, timestamp - last) / MOUNT_MS);
+    last = timestamp;
+    const from = SOURCE_PAPERS[sample], t = mountProgress * mountProgress * (3 - 2 * mountProgress);
+    pos = {x: from.x + (MOUNT.x - from.x) * t, top: from.top + (MOUNT.top - from.top) * t, angle: from.angle * (1 - t), sx: from.sx + (1 - from.sx) * t, sy: from.sy + (1 - from.sy) * t};
+    draw();
+    if (mountProgress >= 1) {
+      begin();
+      if (document.activeElement === document.body || choices.includes(document.activeElement)) paper.focus({preventScroll:true});
+    } else raf = requestAnimationFrame(tick);
+    return;
+  }
   if (!['running','spilled'].includes(mode)) return;
   if (last !== null) seconds = Math.min(DURATION, seconds + Math.max(0, timestamp-last)/1000);
   last = timestamp; draw();
@@ -167,55 +201,30 @@ function begin(top = MOUNT.top) {
   draw();
   if (mode !== 'dry') raf = requestAnimationFrame(tick);
 }
-function fresh() { stop(); pos = { ...HOME }; seconds = 0; mode = 'ready'; draw(); announce('已換上新的濾紙。'); }
+function fresh() {
+  stop(); pos = { ...MOUNT }; seconds = 0; mountProgress = 0; mode = 'ready'; draw();
+  announce('點選盤中已點墨的濾紙，掛上夾具觀察。');
+}
+function selectPaper(key) {
+  stop();sample = key;seconds = 0;mountProgress = 0;pos = { ...SOURCE_PAPERS[key] };mode = 'mounting';
+  announce(`已選擇${key === 'green' ? '綠色筆' : '深色筆'}墨點的濾紙，正在掛上夾具。`);
+  draw();raf = requestAnimationFrame(tick);
+}
 function activatePaper() {
   if (mode === 'running') { stop(); mode = 'paused'; announce('已暫停實驗。'); }
   else if (mode === 'paused') { mode = 'running'; raf = requestAnimationFrame(tick); announce('繼續觀察。'); }
-  else if (['complete','spilled','dry'].includes(mode)) { begin(); return; }
-  else { mode = mode === 'selected' ? 'ready' : 'selected'; announce(mode === 'selected' ? '已拿起濾紙，可點燒杯放入；Escape 可放回。' : '已放回濾紙。'); }
+  else if (mode === 'complete') { selectPaper(sample); return; }
   draw();
 }
-function point(event) { const r = lab.getBoundingClientRect(); return { x: (event.clientX-r.left)/r.width, y: (event.clientY-r.top)/r.height }; }
-paper.addEventListener('pointerdown', event => {
-  pointerHandled = false;
-  if (!['ready','selected'].includes(mode) || event.button !== 0) return;
-  const p = point(event); drag = { id: event.pointerId, start: p, offsetX: p.x-pos.x, offsetY:p.y-pos.top, moved: false };
-  paper.setPointerCapture(event.pointerId);
-});
-paper.addEventListener('pointermove', event => {
-  if (!drag || event.pointerId !== drag.id) return;
-  const p = point(event);
-  if (Math.hypot(p.x-drag.start.x,p.y-drag.start.y) > .012) drag.moved = true;
-  if (!drag.moved) return;
-  mode = 'dragging'; pos = { x: Math.max(.06,Math.min(.94,p.x-drag.offsetX)), top: Math.max(.12,Math.min(.40,p.y-drag.offsetY)) }; draw();
-});
-paper.addEventListener('pointerup', event => {
-  if (!drag || drag.id !== event.pointerId) return;
-  const moved = drag.moved; drag = null;
-  if (moved) {
-    pointerHandled = true;
-    if (pos.x >= .56 && pos.x <= .81) begin(pos.top); else fresh();
-  }
-});
-function cancelDrag() { if (drag) { drag = null; pointerHandled = true; fresh(); } }
-paper.addEventListener('pointercancel', cancelDrag);
-paper.addEventListener('lostpointercapture', cancelDrag);
-paper.addEventListener('click', event => { if (pointerHandled && event.detail > 0) { pointerHandled = false; return; } pointerHandled = false; activatePaper(); });
-drop.addEventListener('click', () => { if (mode === 'selected') begin(); else if (mode === 'running' || mode === 'paused') activatePaper(); });
-reset.addEventListener('click', () => { fresh(); paper.focus({preventScroll:true}); });
-clip.addEventListener('click', () => { fresh(); paper.focus({preventScroll:true}); });
-choices.forEach(button => button.addEventListener('click', () => {
-  drag = null; pointerHandled = false; sample = button.dataset.ink;
-  choices.forEach(b => b.setAttribute('aria-pressed', String(b === button)));
-  begin();
-}));
-lab.addEventListener('keydown', event => {
-  if (event.key === 'Escape') { cancelDrag(); if (mode === 'selected') fresh(); }
-});
+paper.addEventListener('click', activatePaper);
+drop.addEventListener('click', activatePaper);
+reset.addEventListener('click', () => { fresh(); choices[0].focus({preventScroll:true}); });
+clip.addEventListener('click', () => { fresh(); choices[0].focus({preventScroll:true}); });
+choices.forEach(button => button.addEventListener('click', () => selectPaper(button.dataset.ink)));
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden && mode === 'running') { stop(); mode = 'paused'; draw(); }
+  if (document.hidden && ['running', 'mounting'].includes(mode)) { stop(); if (mode === 'running') mode = 'paused'; draw(); }
   else if (document.hidden && mode === 'spilled') stop();
-  else if (!document.hidden && mode === 'spilled' && seconds < DURATION) raf = requestAnimationFrame(tick);
+  else if (!document.hidden && (mode === 'mounting' || mode === 'spilled' && seconds < DURATION)) raf = requestAnimationFrame(tick);
 });
 background.onload = () => {
   lab.dataset.ready = 'true'; [paper,drop,reset,...choices].forEach(b => { b.disabled = false; }); draw();

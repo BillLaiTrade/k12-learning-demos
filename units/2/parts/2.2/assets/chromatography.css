@@ -1,15 +1,19 @@
 .card-main { min-width:0; }
 .chrom-lab { position:relative; margin:12px 0; overflow:hidden; border:1px solid #cdd8d2; border-radius:13px; background:#ece6db; isolation:isolate; aspect-ratio:3/2; }
 .chrom-lab canvas { display:block; width:100%; height:100%; }
+.chrom-lab [hidden] {display:none!important;}
+.chrom-source {position:absolute;z-index:2;top:47.8%;height:30.5%;padding:0;border:0;background:transparent;cursor:pointer;}
+.chrom-source--green {left:10%;width:12.4%;clip-path:polygon(51% 0,100% 0,64% 100%,0 100%);}
+.chrom-source--dark {left:20.4%;width:11.3%;clip-path:polygon(42% 0,95% 0,68% 100%,0 100%);}
+.chrom-source:hover,.chrom-source:focus-visible {background:#176b531c;outline:0;}
+.chrom-source:focus-visible {background:#176b5338;}
+.chrom-source-label {position:absolute;z-index:2;top:85.8%;transform:translateX(-50%);padding:2px 7px;border:1px solid #c5d2c4;border-radius:5px;background:#fffdf3ed;color:#315b46;font-size:clamp(10px,1.05vw,13px);line-height:1.6;white-space:nowrap;pointer-events:none;}
+.chrom-source-label--green {left:14.5%;}
+.chrom-source-label--dark {left:25.3%;}
 .chrom-paper,.chrom-drop,.chrom-clip { position:absolute; margin:0; padding:0; border:0; background:transparent; touch-action:none; }
-.chrom-paper { z-index:2; left:36.7%; top:33%; width:7.1%; min-width:32px; height:43.5%; transform-origin:50% 0; transform:translateX(-50%) rotate(6.6deg); border-radius:2px; cursor:grab; }
-.chrom-paper:hover,.chrom-paper:focus-visible,.chrom-lab[data-mode="selected"] .chrom-paper,.chrom-lab[data-mode="dragging"] .chrom-paper { outline:1.5px solid #176b5380; outline-offset:1px; box-shadow:0 3px 12px #243a3522; }
-.chrom-lab[data-mode="dragging"] .chrom-paper { cursor:grabbing; }
-.chrom-lab:is([data-mode="running"],[data-mode="paused"],[data-mode="complete"],[data-mode="dry"],[data-mode="spilled"]) .chrom-paper { cursor:pointer; }
+.chrom-paper { z-index:2; left:36.7%; top:33%; width:7.1%; min-width:32px; height:43.5%; transform-origin:50% 0; transform:translateX(-50%) rotate(6.6deg); border-radius:2px; cursor:pointer; }
+.chrom-paper:hover,.chrom-paper:focus-visible { outline:1.5px solid #176b5380; outline-offset:1px; box-shadow:0 3px 12px #243a3522; }
 .chrom-drop { z-index:1; left:54%; top:24%; width:31%; height:61%; cursor:default; border-radius:15%; touch-action:pan-y; }
-.chrom-drop::before { content:""; position:absolute; top:0; left:0; right:0; height:7%; border-radius:50%; border:2px solid transparent; pointer-events:none; }
-.chrom-lab:is([data-mode="selected"],[data-mode="dragging"]) .chrom-drop { cursor:copy; }
-.chrom-lab:is([data-mode="selected"],[data-mode="dragging"]) .chrom-drop::before { border-color:#83b594b3; box-shadow:0 0 12px #c1dbb8b3; }
 .chrom-clip { z-index:3; left:65.2%; top:14%; width:7.5%; height:13.5%; cursor:pointer; }
 .chrom-clip:disabled { cursor:default; }
 .chrom-reset { position:absolute; z-index:4; right:12px; bottom:12px; display:grid; place-items:center; width:38px; height:38px; padding:6px; border:1px solid #bdc8bf; border-radius:10px; background:#ffffffeb; color:#176b53; cursor:pointer; }
