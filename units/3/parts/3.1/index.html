@@ -41,12 +41,12 @@
     .section-top { align-items:end; margin:0 0 18px; }
     .section-top h2 { margin:0; font-size:1.35rem; }
     .progress-copy { color:var(--muted); font-size:.9rem; }
-    .lesson-card { position:relative; scroll-margin-top:100px; display:grid; grid-template-columns:190px minmax(0,1fr); gap:28px; padding:26px; border:1px solid var(--line); border-radius:24px; background:var(--card); box-shadow:var(--shadow); }
-    .card-side { border-right:1px solid var(--line); padding-right:20px; }
-    .card-number { color:var(--green); font-size:.84rem; font-weight:850; letter-spacing:.08em; }
-    .card-side h3 { margin:10px 0 8px; font-size:1.08rem; line-height:1.45; }
-    .card-role { color:var(--muted); font-size:.87rem; }
-    .card-main h2 { margin:0 0 8px; font-size:clamp(1.32rem,2.8vw,1.85rem); line-height:1.35; }
+    .lesson-card { position:relative; min-width:0; display:block; margin:0; padding:0; overflow:hidden; border:1px solid #d8e2da; border-radius:20px; background:#fffefa; color:#1c2927; line-height:1.72; box-shadow:0 10px 28px rgb(24 52 40 / 7%); scroll-margin-top:100px; }
+
+
+
+
+
     .card-main>p { color:var(--muted); margin:0 0 18px; }
     figure { margin:16px 0; }
     figcaption,.caption-row { color:var(--muted); font-size:.88rem; }
@@ -422,10 +422,10 @@
       .route a[aria-current="step"] { border-color:var(--green); }
       .route a.quiz-nav { margin:0 0 0 4px; border-top:0; border-left:1px solid var(--line); padding-top:7px; }
       .route a.quiz-nav[aria-current="step"] { border-color:#d9a74f; }
-      .lesson-card { grid-template-columns:1fr; gap:14px; padding:18px; border-radius:19px; }
-      .card-side { display:flex; align-items:baseline; gap:10px; border-right:0; border-bottom:1px solid var(--line); padding:0 0 10px; }
-      .card-side h3 { margin:0; }
-      .card-role { display:none; }
+      .lesson-card { scroll-margin-top:160px; }
+
+
+
       .quiz-head { gap:12px; padding:20px 18px; }
       .quiz-mark { width:43px; height:43px; border-radius:12px; }
       .quiz-body { padding:20px 17px 23px; }
@@ -450,14 +450,23 @@
       .route a[aria-current="step"] { border-color:var(--green); }
       .route a.quiz-nav { margin:0 0 0 4px; border-top:0; border-left:1px solid var(--line); padding-top:7px; }
       .route a.quiz-nav[aria-current="step"] { border-color:#d9a74f; }
-      .lesson-card { grid-template-columns:1fr; gap:14px; padding:18px; border-radius:19px; }
-      .card-side { display:flex; align-items:baseline; gap:10px; border-right:0; border-bottom:1px solid var(--line); padding:0 0 10px; }
-      .card-side h3 { margin:0; }
-      .card-role { display:none; }
+      .lesson-card { scroll-margin-top:160px; }
+
+
+
     }
-    @media (max-width:520px) { .diagram-grid,.data-grid,.example-grid { grid-template-columns:1fr; } .lesson-card { padding:16px; } .visual { padding:8px; } .speed-quantity-map { grid-template-columns:1fr; gap:5px; } .speed-quantity-map div { display:flex; align-items:baseline; justify-content:center; gap:8px; } .longitudinal-wavelength-panel svg text { font-size:26px; } .longitudinal-wavelength-panel svg .lambda-symbol { font-size:32px; } }
+    @media (max-width:520px) { .diagram-grid,.data-grid,.example-grid { grid-template-columns:1fr; } .lesson-card { scroll-margin-top:160px; } .visual { padding:8px; } .speed-quantity-map { grid-template-columns:1fr; gap:5px; } .speed-quantity-map div { display:flex; align-items:baseline; justify-content:center; gap:8px; } .longitudinal-wavelength-panel svg text { font-size:26px; } .longitudinal-wavelength-panel svg .lambda-symbol { font-size:32px; } }
     @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
-  </style>
+
+    /* 依使用者指示沿用2.1：橫向標頭，下方完整寬度內容。 */
+    .lesson-head { display:grid; grid-template-columns:74px minmax(0,1fr); gap:16px; align-items:start; padding:25px 28px 21px; border-bottom:1px solid #e7ece5; }
+    .lesson-number { display:grid; place-items:center; width:50px; height:50px; border-radius:15px; background:#e9f0e3; color:#416c39; font-weight:850; font-size:1.1rem; }
+    .lesson-head h2 { margin:0; font-size:clamp(1.22rem,2vw,1.65rem); line-height:1.35; }
+    .lesson-head p { margin:8px 0 0; color:#5b6a65; font-size:.94rem; }
+    .lesson-body { padding:23px 28px 28px; min-width:0; }
+    @media(max-width:900px) { .lesson-head,.lesson-body { padding-left:21px; padding-right:21px; } }
+    @media(max-width:700px) { .lesson-head { grid-template-columns:48px minmax(0,1fr); gap:10px; padding:18px; } .lesson-number { width:40px; height:40px; border-radius:12px; } .lesson-body { padding:18px; } }
+</style>
 </head>
 <body>
   <header class="shell masthead">
@@ -488,9 +497,8 @@
         <div class="section-top"><h2>從認識波形，走到波速關係</h2><span class="progress-copy">完整說明直接呈現在每張卡片</span></div>
 
         <section class="lesson-card" id="card-01">
-          <div class="card-side"><span class="card-number">01</span><h3>認識波</h3><span class="card-role">變化如何傳開</span></div>
-          <div class="card-main">
-            <h2>阿公輕輕一抖，起伏怎麼就傳到另一端？</h2>
+          <header class="lesson-head"><span class="lesson-number">01</span><div><h2>阿公輕輕一抖，起伏怎麼就傳到另一端？</h2><p>認識波：變化如何傳開</p></div></header>
+          <div class="lesson-body card-main">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，你剛剛抖了一下繩子，這個起伏怎麼跑到我這邊了？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>繩子上的起伏沿著繩子傳到另一端；這種變化的傳遞，就叫做波。</p></div>
             <p>波是振動或擾動的傳播，能把能量由一處傳到另一處。繩子一端振動後，變化沿著繩子傳開。</p><figure class="visual">
@@ -513,9 +521,8 @@
         </section>
 
         <section class="lesson-card" id="card-02">
-          <div class="card-side"><span class="card-number">02</span><h3>追蹤固定繩點</h3><span class="card-role">繩點在原處振動，波形向前傳</span></div>
-          <div class="card-main">
-            <h2>波形向前傳，繩上的點會跟著走嗎？</h2>
+          <header class="lesson-head"><span class="lesson-number">02</span><div><h2>波形向前傳，繩上的點會跟著走嗎？</h2><p>追蹤固定繩點：繩點在原處振動，波形向前傳</p></div></header>
+          <div class="lesson-body card-main">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩子一抖，起伏往右跑；那這個點也會跟著跑嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>不會。繩上的點只在原來的位置附近上下動；各處依序動起來，讓起伏和能量往右傳。</p></div>
             <p>觀察動畫，起伏向右傳時，橘點只在原來的水平位置附近上下振動。繩上的振動把能量傳到遠處，但繩子本身沒有整段跟著波形往前移動。</p><figure class="visual">
@@ -542,9 +549,8 @@
         </section>
 
         <section class="lesson-card" id="card-03">
-          <div class="card-side"><span class="card-number">03</span><h3>讀懂波形</h3><span class="card-role">建立共同的圖像詞彙</span></div>
-          <div class="card-main">
-            <h2>繩波有些地方凸起、有些地方凹下，圖上怎麼讀？</h2>
+          <header class="lesson-head"><span class="lesson-number">03</span><div><h2>繩波有些地方凸起、有些地方凹下，圖上怎麼讀？</h2><p>讀懂波形：建立共同的圖像詞彙</p></div></header>
+          <div class="lesson-body card-main">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>繩子有些地方凸起來，有些地方凹下去，跟還沒抖動時的位置不一樣了。</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>沒錯。繩子原本靜止的位置叫平衡位置；凸起的最高處叫波峰，凹下的最低處叫波谷。</p></div>
             <figure class="visual">
@@ -562,9 +568,8 @@
         </section>
 
         <section class="lesson-card" id="card-04">
-          <div class="card-side"><span class="card-number">04</span><h3>測量波形</h3><span class="card-role">認識振幅與波長</span></div>
-          <div class="card-main">
-            <h2>波形的高低和重複間隔，怎麼量？</h2>
+          <header class="lesson-head"><span class="lesson-number">04</span><div><h2>波形的高低和重複間隔，怎麼量？</h2><p>測量波形：認識振幅與波長</p></div></header>
+          <div class="lesson-body card-main">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，我想知道這個波有多大，是不是量波峰到波谷這一段？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>量波峰到波谷會得到整段高度；振幅是從平衡位置量到波峰（或波谷）的距離。</p></div>
             <h3 class="measurement-subheading">先量垂直距離：振幅 A</h3>
@@ -627,9 +632,8 @@
         </section>
 
         <section class="lesson-card" id="card-05">
-          <div class="card-side"><span class="card-number">05</span><h3>比較兩個方向</h3><span class="card-role">認識橫波與縱波</span></div>
-          <div class="card-main">
-            <h2>橫波和縱波，差別在振動方向？</h2>
+          <header class="lesson-head"><span class="lesson-number">05</span><div><h2>橫波和縱波，差別在振動方向？</h2><p>比較兩個方向：認識橫波與縱波</p></div></header>
+          <div class="lesson-body card-main">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，如果不用繩子，波也能傳出去嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>可以啊，彈簧也能傳波。繩上的點上下動，和波前進方向垂直，是橫波；彈簧圈前後擠動，和波前進方向平行，是縱波。</p></div>
             <p>判斷波型時，比較介質振動方向和波前進方向。兩個方向互相垂直是橫波，互相平行是縱波。下面兩種波都向右傳，差別在介質如何振動。</p>
@@ -877,9 +881,8 @@
           </div>
         </section>
         <section class="lesson-card" id="card-06">
-          <div class="card-side"><span class="card-number">06</span><h3>描出完整波形</h3><span class="card-role">繩點上下振動，逐步描出波形</span></div>
-          <div class="card-main">
-            <h2>一個完整的波形，是怎麼形成的？</h2>
+          <header class="lesson-head"><span class="lesson-number">06</span><div><h2>一個完整的波形，是怎麼形成的？</h2><p>描出完整波形：繩點上下振動，逐步描出波形</p></div></header>
+          <div class="lesson-body card-main">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，繩子上的起伏都連在一起，要怎麼看出一個完整的波？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>繩子一端完成一次完整振動，傳出去的波形就剛好是一個完整的波。</p></div>
             <figure class="visual cycle-wave-figure">
@@ -919,9 +922,8 @@
         </section>
 
         <section class="lesson-card" id="card-07">
-          <div class="card-side"><span class="card-number">07</span><h3>頻率與週期</h3><span class="card-role">描述振動的時間尺度</span></div>
-          <div class="card-main">
-            <h2>頻率和週期，如何互相影響？</h2>
+          <header class="lesson-head"><span class="lesson-number">07</span><div><h2>頻率和週期，如何互相影響？</h2><p>頻率與週期：描述振動的時間尺度</p></div></header>
+          <div class="lesson-body card-main">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>為什麼有些波看起來變化很快，有些看起來比較慢？要怎麼描述這種差異？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>可以數一秒送出幾個波，也可以看送出一個波要等多久；前者叫頻率，後者叫週期。</p></div>
             <p class="frequency-period-intro">剛才看了繩點怎麼上下移動，現在加上時間，比較波變化的快慢。</p>
@@ -1024,9 +1026,8 @@
           </div>
         </section>
         <section class="lesson-card" id="card-08">
-          <div class="card-side"><span class="card-number">08</span><h3>連結時間和距離</h3><span class="card-role">得到波速關係</span></div>
-          <div class="card-main">
-            <h2>波速、頻率和波長，怎麼連在一起？</h2>
+          <header class="lesson-head"><span class="lesson-number">08</span><div><h2>波速、頻率和波長，怎麼連在一起？</h2><p>連結時間和距離：得到波速關係</p></div></header>
+          <div class="lesson-body card-main">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>如果一秒內送出更多個波，波就一定比較快到另一端嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>不一定。還得看每個波有多長；每秒傳幾個波、每個波多長，合起來才知道波一秒能往前走多遠。</p></div>
             <div class="speed-formula-panel" id="speed-formula-panel">

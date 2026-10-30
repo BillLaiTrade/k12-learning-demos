@@ -1,0 +1,12 @@
+{
+  "checksPassed": 7,
+  "checks": [
+    "eight cards and reference 2.1 computed header/body styles",
+    "all eight cards full-width at six viewport widths, no page overflow",
+    "single/continuous rope playback, pause and amplitude control",
+    "frequency and reciprocal period update",
+    "wave-speed parameter changes and propagation progress",
+    "final assessment incomplete/correct feedback, auto conversion and calculated result",
+    "no page errors or failing resources"
+  ]
+}
