@@ -1,0 +1,45 @@
+✔ echo uses two equal legs and the specified air or water speed (1.339117ms)
+✔ invalid physical inputs are rejected (0.477022ms)
+✔ wave reaches wall halfway and then returns to receiver (0.200854ms)
+✔ absorption preserves direct sound and path delays while reducing reflection energy (0.35721ms)
+✔ assessment identifies omissions, wrong reasoning and correct understanding (4.112789ms)
+▶ 3.4 reflection, ranging, sonar, absorption and assessment
+  ✔ six lessons, one quiz, shared avatars and an overview link (96.890477ms)
+  ✔ ranges produce correct leg lengths and accept native keyboard input (66.109635ms)
+  ✔ wave pause freezes, resume advances, reset preserves chosen conditions (791.420669ms)
+  ✔ cross-section playback, input changes and backgrounding stop old playback (131.592546ms)
+  ✔ sonar uses water speed, conceals distance and reveals it from the return time (129.562987ms)
+  ✔ room and treatment modes redraw weaker reflections with the same direct path (149.946822ms)
+  ✔ synthesized phrase decodes; opt-in audio stops on pause and cross-section playback (266.128896ms)
+  ✔ the absorption comparison plays the same phrase and stops when its condition changes (201.196987ms)
+  ✔ a full room observation completes and can restart from zero (2263.171184ms)
+  ✔ quiz distinguishes missing, wrong, correct, edited and reset answers (299.101783ms)
+  ✔ anchors and 1440 through 320px layouts work without page overflow (432.246758ms)
+  ✔ touch playback moves under reduced motion without auto-playing audio (726.359009ms)
+✔ 3.4 reflection, ranging, sonar, absorption and assessment (6557.345541ms)
+▶ new unit numbers agree across home, overviews, and existing lesson URLs
+  ✔ homepage order, button numbers, and destination identities (630.917047ms)
+  ✔ unit 1: overview uses the new number (583.118392ms)
+  ✔ unit 2: overview uses the new number (567.581858ms)
+  ✔ unit 3: overview uses the new number (578.007507ms)
+  ✔ unit 4: overview uses the new number (567.614703ms)
+  ✔ unit 5: overview uses the new number (564.35438ms)
+  ✔ unit 6: overview uses the new number (555.650406ms)
+  ✔ lesson 1.1: header and existing assets load (4336.039005ms)
+  ✔ lesson 1.2: header and existing assets load (1772.518667ms)
+  ✔ lesson 2.1: header and existing assets load (937.440642ms)
+  ✔ lesson 2.2: header and existing assets load (10720.921687ms)
+  ✔ lesson 3.1: header and existing assets load (1519.81794ms)
+  ✔ lesson 3.2: header and existing assets load (704.253173ms)
+  ✔ lesson 3.4: header and existing assets load (569.444955ms)
+  ✔ lesson 4.1: header and existing assets load (8441.458935ms)
+  ✔ lesson 4.2: header and existing assets load (3853.788963ms)
+✔ new unit numbers agree across home, overviews, and existing lesson URLs (37500.216362ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44792.755579
