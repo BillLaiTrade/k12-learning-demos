@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 import {RoomEnvironment} from '../../../../1/parts/1.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
 import {POOL,SALT,saltPortion} from './ppm-quantity-model.js?v=polish-1';
-import {createPoolNavigation,overviewPose} from './ppm-pool-camera.js?v=orbit-1';
+import {createPoolNavigation,overviewPose} from './ppm-pool-camera.js?v=camera-toggle-1';
 
 export function createQuantityView(root){
   const stage=root.querySelector('.pool-volume-scene'),canvas=root.querySelector('#pool-geometry-canvas');
   const guide=root.querySelector('.pool-quantity-guide');
   const scene=new THREE.Scene();scene.background=new THREE.Color('#edf0ec');
   const camera=new THREE.PerspectiveCamera(38,stage.clientWidth/stage.clientHeight,.004,150);
-  const overview=overviewPose(camera,camera.aspect);camera.position.copy(overview.position);camera.lookAt(overview.target);camera.updateMatrixWorld();
+  const overview=overviewPose(camera,camera.aspect,stage.clientHeight);camera.position.copy(overview.position);camera.lookAt(overview.target);camera.updateMatrixWorld();
   let renderer;
   try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});}
   catch{return createFallback(root,canvas,stage,guide,camera);}
@@ -114,7 +114,7 @@ export function createQuantityView(root){
     root.dataset.cameraTarget=JSON.stringify(navigation.controls.target.toArray().map(v=>Number(v.toFixed(5))));
     root.dataset.cameraDistance=distance.toFixed(5);root.dataset.cameraProjection='perspective';
   }
-  const observer=new ResizeObserver(()=>navigation.scheduleDraw());observer.observe(stage);root.dataset.renderer='webgl';
+  const observer=new ResizeObserver(()=>navigation.resize());observer.observe(stage);root.dataset.renderer='webgl';
   return{setSalt,dispose(){observer.disconnect();navigation.dispose();renderer.dispose();environment.dispose();}};
 }
 
@@ -203,7 +203,7 @@ function makeTile(){
   const texture=new THREE.CanvasTexture(canvas);texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;return texture;
 }
 function metrics(root,p){
-  root.querySelector('.pool-salt-source-label').textContent=`食鹽 ${p.massG.toLocaleString('en-US')} 克・實際比例`;
+  for(const label of root.querySelectorAll('[data-salt-mass-label]'))label.textContent=`食鹽 ${p.massG.toLocaleString('en-US')} 克`;
   root.dataset.saltDensityGPerCm3=String(SALT.densityGPerCm3);root.dataset.saltGrainCount=String(p.count);root.dataset.saltGrainEdgeM=String(p.edgeM);root.dataset.saltSolidVolumeCm3=String(p.solidVolumeCm3);root.dataset.saltRenderedVolumeM3=String(p.solidVolumeM3);root.dataset.saltPileDiameterCm=String(p.radiusM*200);root.dataset.saltPileHeightCm=String(p.heightM*100);root.dataset.saltDishDiameterCm='16';
 }
 function annotations(root,camera,source,width,height,guide,distance=20){
@@ -213,25 +213,32 @@ function annotations(root,camera,source,width,height,guide,distance=20){
   const center=project(0,1,0);guide.setAttribute('viewBox',`0 0 ${width} ${height}`);
   for(const [id,a,b] of lines){
     const p=project(...a),q=project(...b),line=guide.querySelector(`[data-dimension-line="${id}"]`),label=root.querySelector(`[data-dimension-label="${id}"]`);
-    const visible=distance>5&&p.visible&&q.visible;line.style.display=visible?'':'none';label.hidden=!visible;
+    const visible=root.dataset.cameraFraming!=='salt'&&distance>5&&p.visible&&q.visible;line.style.display=visible?'':'none';label.hidden=!visible;
     if(!visible)continue;
     for(const[k,v]of Object.entries({x1:p.x,y1:p.y,x2:q.x,y2:q.y}))line.setAttribute(k,String(v));
     const x=(p.x+q.x)/2,y=(p.y+q.y)/2,dx=x-center.x,dy=y-center.y,length=Math.hypot(dx,dy)||1;
     label.style.left=`${Math.max(35,Math.min(width-35,x+dx/length*13))}px`;label.style.top=`${Math.max(14,Math.min(height-14,y+dy/length*13))}px`;
   }
-  const p=project(source.x,source.y+.02,source.z),circle=guide.querySelector('[data-salt-source]');
-  circle.style.display=p.visible&&distance>5?'':'none';
-  circle.setAttribute('cx',p.x);circle.setAttribute('cy',p.y);
-  const label=root.querySelector('.pool-salt-source-label');label.hidden=!p.visible;
-  if(p.visible){
-    const rim=Array.from({length:16},(_,i)=>project(source.x+.08*Math.cos(i*Math.PI/8),source.y,source.z+.08*Math.sin(i*Math.PI/8)));
-    label.style.left=`${Math.max(70,Math.min(width-70,p.x))}px`;label.style.top=`${Math.min(height-28,Math.max(...rim.map(point=>point.y))+10)}px`;
+  const p=project(source.x,source.y+.02,source.z),marker=root.querySelector('.pool-salt-source');
+  const leader=guide.querySelector('[data-salt-leader]'),label=marker.querySelector('.pool-salt-source-label');
+  const near=root.dataset.cameraFraming==='salt',visible=p.visible&&distance>5&&!near;
+  marker.hidden=!visible;leader.style.display=visible?'':'none';
+  root.querySelector('.pool-salt-close-label').hidden=!near;
+  if(visible){
+    marker.style.left=`${p.x}px`;marker.style.top=`${p.y}px`;
+    // Reserve the upper right for the callout, away from the dimension labels.
+    const labelWidth=label.offsetWidth,labelHeight=label.offsetHeight;
+    const labelX=width-16-labelWidth/2,labelY=Math.max(28,height*.22);
+    label.style.left=`${22+labelX-p.x}px`;label.style.top=`${22+labelY-p.y}px`;
+    const end={x:labelX-labelWidth/2+12,y:labelY+labelHeight/2};
+    const dx=end.x-p.x,dy=end.y-p.y,length=Math.hypot(dx,dy)||1;
+    for(const[key,value]of Object.entries({x1:p.x+dx/length*16,y1:p.y+dy/length*16,x2:end.x,y2:end.y}))leader.setAttribute(key,String(value));
   }
 }
 function createFallback(root,oldCanvas,stage,guide,camera){
   const canvas=oldCanvas.cloneNode();oldCanvas.replaceWith(canvas);const ctx=canvas.getContext('2d');let portion;
   canvas.removeAttribute('tabindex');canvas.setAttribute('aria-label','泳池與100克食鹽的固定視角比例示意圖');
-  root.dataset.interactive='false';root.querySelector('#pool-model-hint').textContent='目前瀏覽器無法顯示可旋轉的 3D 模型，已顯示固定視角示意圖。';
+  root.dataset.interactive='false';root.dataset.cameraFraming='pool';root.querySelector('.pool-camera-toggle').hidden=true;root.querySelector('#pool-model-hint').textContent='目前瀏覽器無法顯示可旋轉的 3D 模型，已顯示固定視角示意圖。';
   root.dataset.sourceScale='1';root.dataset.renderer='canvas';root.dataset.geometryWaterLiters=String(POOL.lengthM*POOL.widthM*POOL.waterDepthM*1000);root.dataset.poolInnerLengthM='10';root.dataset.poolInnerWidthM='5';root.dataset.poolWaterDepthM='2';
   function draw(){
     if(!portion)return;const w=stage.clientWidth,h=stage.clientHeight,dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#edf1ec';ctx.fillRect(0,0,w,h);

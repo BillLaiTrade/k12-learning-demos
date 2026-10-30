@@ -128,7 +128,7 @@
   </style>
   <link rel="stylesheet" href="assets/chromatography.css?v=prepared-papers-1">
   <link rel="stylesheet" href="assets/concentration.css?v=boundary-feedback-1">
-  <link rel="stylesheet" href="assets/ppm-scale.css?v=unobstructed-model-1">
+  <link rel="stylesheet" href="assets/ppm-scale.css?v=camera-toggle-1">
   <link rel="stylesheet" href="assets/investigation.css?v=manual-records-1">
 </head>
 <body>
@@ -256,11 +256,13 @@
 <div class="pool-volume-scene pool-geometry-scene">
 <canvas id="pool-geometry-canvas" width="1280" height="800" role="img" tabindex="0" aria-describedby="pool-model-hint" aria-label="可旋轉、縮放的泳池與100克食鹽3D比例模型。方向鍵旋轉，加減鍵縮放，Home鍵回到全景。泳池長10公尺、寬5公尺、水深2公尺，共100000公升。"></canvas>
 <div class="pool-water-quantity"><span>池水容積模型</span><strong>100,000 <small>公升</small></strong></div>
-<svg class="pool-quantity-guide" aria-hidden="true"><defs><marker id="pool-dimension-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#456c6b"/></marker></defs><line data-dimension-line="length"/><line data-dimension-line="width"/><line data-dimension-line="depth"/><circle data-salt-source r="7"/></svg>
+<svg class="pool-quantity-guide" aria-hidden="true"><defs><marker id="pool-dimension-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#456c6b"/></marker></defs><line data-dimension-line="length"/><line data-dimension-line="width"/><line data-dimension-line="depth"/><line data-salt-leader/></svg>
 <span class="pool-dimension-label" data-dimension-label="length">10 公尺</span><span class="pool-dimension-label" data-dimension-label="width">5 公尺</span><span class="pool-dimension-label" data-dimension-label="depth">水深 2 公尺</span>
-<span class="pool-salt-source-label">食鹽 100 克・實際比例</span>
+<button type="button" class="pool-salt-source" data-pool-camera="salt" aria-label="靠近食鹽，觀察100克食鹽" hidden disabled><span class="pool-salt-source-label" data-salt-mass-label>食鹽 100 克</span></button>
+<span class="pool-salt-close-label" data-salt-mass-label hidden>食鹽 100 克</span>
+<button type="button" class="pool-camera-toggle" data-pool-camera="salt" disabled><svg data-pool-toggle-icon="salt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><svg data-pool-toggle-icon="pool" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="m9 5-6 6 6 6M3 11h11a6 6 0 0 1 6 6v3"/></svg><span data-pool-toggle-label>靠近食鹽</span></button>
 </div>
-<div class="pool-model-toolbar"><p id="pool-model-hint">拖曳旋轉・點選模型後滾輪縮放</p><div role="group" aria-label="選擇模型觀察位置"><button type="button" data-pool-camera="pool" disabled>看整座泳池</button><button type="button" data-pool-camera="salt" disabled>靠近食鹽</button></div></div>
+<div class="pool-model-toolbar"><p id="pool-model-hint">拖曳旋轉・點選模型後滾輪縮放</p></div>
 <p class="pool-scale-caption">模型依實際比例建立，池壁採剖面呈現；秤量皿直徑 16 公分。</p>
 </figure>
 <div class="pool-mass-comparison"><div class="pool-water-mass"><span>池水質量</span><strong>100,000,000 <small>克</small></strong><small>100,000 公升 ≈ 100,000 公斤</small></div><span class="pool-mass-plus" aria-hidden="true">＋</span><div class="pool-added-mass"><span>溶質｜食鹽</span><strong data-pool="solute">100 克</strong><small>與池水使用相同單位</small></div></div>
@@ -355,7 +357,7 @@
   <script type="module" src="assets/evaporation-animation.js?v=full-replay-1"></script>
   <script type="module" src="assets/chromatography.js?v=prepared-papers-1"></script>
   <script type="module" src="assets/concentration.js?v=boundary-feedback-1"></script>
-  <script type="module" src="assets/ppm-pool.js?v=unobstructed-model-1"></script>
+  <script type="module" src="assets/ppm-pool.js?v=camera-toggle-1"></script>
   <script type="module" src="assets/investigation.js?v=dish-to-scale-1"></script>
 </body>
 </html>
