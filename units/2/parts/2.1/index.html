@@ -2118,6 +2118,18 @@
       granite:"觀察不同礦物的組成，看看各組小粒子的種類與數量是否相同，還是有不同成分混在一起。",
       alloy:"別只看外觀是否均勻。觀察兩種金屬小粒子是混合排列，還是按固定比例形成相同的組成單位？"
     };
+    const specimenCorrectReasons={
+      copper:"只含銅這一種元素，屬於元素。",
+      aluminum:"只含鋁這一種元素，屬於元素。",
+      silver:"只含銀這一種元素，屬於元素。",
+      sugar:"由不同元素按固定比例結合而成，屬於化合物。",
+      salt:"由兩種元素按固定比例結合而成，屬於化合物。",
+      chalk:"由不同元素按固定比例結合而成，屬於化合物。",
+      air:"含有多種氣體，屬於混合物。",
+      granite:"由多種礦物混合而成，屬於混合物。",
+      alloy:"由不同金屬混合而成，屬於混合物。"
+    };
+    const correctSpecimenFeedback=key=>"分類正確。這是"+specimenRules[key].realName+"，"+specimenCorrectReasons[key];
     const specimenButtons=[...document.querySelectorAll(".scene-sample")];
     const sampleInfo=document.getElementById("sample-info");
     const sampleInfoTitle=document.getElementById("sample-info-title");
@@ -2136,11 +2148,12 @@
       const data=specimenRules[button.dataset.sample];
       const key=button.dataset.sample;
       const needsRetry=incorrectLocations.has(key);
+      const isCorrectlyPlaced=sampleStatus.has(key);
       sampleInfo.hidden=false;sampleInfoTitle.textContent=sampleStatus.has(key)?data.realName:"已選取"+data.label;
       sampleClue.textContent=sampleStatus.has(key)?"":incorrectLocations.has(key)?"位置不符，請在手冊中查看線索後調整。":data.clue;
       sampleState.textContent=sampleStatus.has(key)?"目前位置："+data.dest:incorrectLocations.has(key)?"目前位置不符，請再參考手冊線索。":"先翻閱手冊，再選擇展示位置。";
       returnSampleButton.hidden=!sampleLocations.has(key);
-      workbenchFeedback.dataset.kind=needsRetry?"wrong":"";workbenchFeedback.textContent=needsRetry?"位置不符。"+specimenRetryHints[key]:"讀完線索後，再選擇展示櫃中的分類位置。";
+      workbenchFeedback.dataset.kind=needsRetry?"wrong":isCorrectlyPlaced?"correct":"";workbenchFeedback.textContent=needsRetry?"位置不符。"+specimenRetryHints[key]:isCorrectlyPlaced?correctSpecimenFeedback(key):"讀完線索後，再選擇展示櫃中的分類位置。";
       const linkedPage=specimenButtons.indexOf(button);
       if(linkedPage>=0){showReaderPage(linkedPage);if(openManual&&!bookReader.open)bookReader.showModal();}
     };
@@ -2189,9 +2202,9 @@
       button.setAttribute("aria-label",data.realName+"已正確分類於"+data.dest+"，點選可重新分類");button.setAttribute("aria-pressed","false");
       if(selectedSpecimen===button){sampleInfoTitle.textContent=data.realName;sampleClue.textContent="";}
       sampleState.textContent="已放入："+data.dest;workbenchFeedback.dataset.kind="correct";
-      workbenchFeedback.textContent="分類正確。這份樣本是「"+data.realName+"」。";
+      workbenchFeedback.textContent=correctSpecimenFeedback(key);
       document.getElementById("sort-progress").textContent="已分類 "+sampleStatus.size+" / "+specimenRulesCount+" 份樣本";
-      if(sampleStatus.size===specimenRulesCount)workbenchFeedback.textContent="九份樣本都已完成分類。你是根據組成線索安排展品，不只看外觀。";
+      if(sampleStatus.size===specimenRulesCount)workbenchFeedback.textContent+=" 九份樣本都已完成分類。你是根據組成線索安排展品，不只看外觀。";
       return true;
     };
     let dragState=null;let suppressSampleClick=false;

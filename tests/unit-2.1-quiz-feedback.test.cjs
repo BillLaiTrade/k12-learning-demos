@@ -5,7 +5,7 @@ const path = require('node:path');
 const fs = require('node:fs/promises');
 const { chromium } = require('playwright');
 
-test('2.1 quiz feedback guides retries using specimen composition', { timeout: 180000 }, async t => {
+test('2.1 quiz feedback explains correct placement and guides retries', { timeout: 180000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], {
     cwd: path.resolve(__dirname, '..'), stdio: ['ignore', 'pipe', 'ignore']
   });
@@ -49,6 +49,11 @@ test('2.1 quiz feedback guides retries using specimen composition', { timeout: 1
     { key: 'granite', category: 'mixture', name: '花崗岩', clue: /不同礦物.*不同成分/ },
     { key: 'alloy', category: 'mixture', name: '合金', clue: /兩種金屬小粒子.*混合排列/ }
   ];
+  const reasons = {
+    element: /只含.+這一種元素，屬於元素。/,
+    compound: /由(?:不同|兩種)元素按固定比例結合而成，屬於化合物。/,
+    mixture: /(?:含有多種氣體|由多種礦物混合而成|由不同金屬混合而成)，屬於混合物。/
+  };
 
   await t.test('all nine specimens retain useful hints after either wrong placement and reselection', async () => {
     for (const item of cases) {
@@ -69,7 +74,16 @@ test('2.1 quiz feedback guides retries using specimen composition', { timeout: 1
         assert.equal(await feedback.getAttribute('data-kind'), 'wrong');
         await place(item.category);
         assert.equal(await feedback.getAttribute('data-kind'), 'correct');
-        assert.ok(!(await feedback.textContent()).includes(hint));
+        const correct = await feedback.textContent();
+        assert.ok(!correct.includes(hint));
+        assert.ok(correct.startsWith('分類正確。這是' + item.name + '，'));
+        assert.match(correct, reasons[item.category]);
+        assert.doesNotMatch(correct, /undefined/);
+        if (item.key === 'sugar') assert.equal(correct, '分類正確。這是糖晶，由不同元素按固定比例結合而成，屬於化合物。');
+        if (item.key === 'air') assert.equal(correct, '分類正確。這是空氣，含有多種氣體，屬於混合物。');
+        await select(item.key);
+        assert.equal(await feedback.textContent(), correct, 'reopening the manual preserves the explanation');
+        assert.equal(await feedback.getAttribute('data-kind'), 'correct');
         assert.equal(await sample(item.key).locator('.sample-tag').textContent(), item.name);
         assert.equal(await progress.textContent(), '已分類 1 / 9 份樣本');
       }
@@ -97,6 +111,11 @@ test('2.1 quiz feedback guides retries using specimen composition', { timeout: 1
     for (const item of cases) { await select(item.key); await place(item.category); }
     assert.equal(await progress.textContent(), '已分類 9 / 9 份樣本');
     assert.match(await feedback.textContent(), /九份樣本都已完成分類/);
+    assert.match(await feedback.textContent(), /^分類正確。這是合金，由不同金屬混合而成，屬於混合物。/);
+    for (const width of [1440, 1024]) {
+      await page.setViewportSize({ width, height: 1000 });
+      assert.ok(await feedback.evaluate(el => el.scrollWidth <= el.clientWidth && document.documentElement.scrollWidth <= innerWidth));
+    }
     await select('sugar');
     await page.locator('#return-sample').click();
     assert.equal(await progress.textContent(), '已分類 8 / 9 份樣本');
@@ -110,7 +129,7 @@ test('2.1 quiz feedback guides retries using specimen composition', { timeout: 1
   });
 
   for (const width of [1440, 1024]) {
-    await t.test(`long retry feedback fits the ${width}px layout`, async () => {
+    await t.test(`retry and correct feedback fit the ${width}px layout`, async () => {
       await page.setViewportSize({ width, height: 1000 });
       await reset();
       await select('salt');
@@ -120,6 +139,13 @@ test('2.1 quiz feedback guides retries using specimen composition', { timeout: 1
       if (process.env.REVIEW_DIR) {
         await fs.mkdir(process.env.REVIEW_DIR, { recursive: true });
         await page.locator('#unit-quiz').screenshot({ path: path.join(process.env.REVIEW_DIR, `${width}.png`) });
+      }
+      await place('compound');
+      assert.equal(await feedback.getAttribute('data-kind'), 'correct');
+      assert.match(await feedback.textContent(), /固定比例.*化合物/);
+      assert.ok(await feedback.evaluate(el => el.scrollWidth <= el.clientWidth && document.documentElement.scrollWidth <= innerWidth));
+      if (process.env.REVIEW_DIR) {
+        await page.locator('#unit-quiz').screenshot({ path: path.join(process.env.REVIEW_DIR, `correct-${width}.png`) });
       }
     });
   }
