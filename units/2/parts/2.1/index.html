@@ -144,7 +144,7 @@
     .phase-transition-key .phase-heat-dot { background:#b45c44; }
     .phase-transition-key .phase-cool-dot { background:#3c8097; }
     .phase-diagram-scroll { overflow-x:auto; padding:5px 2px 9px; border-radius:15px; scrollbar-color:#b8c9bd transparent; }
-    .phase-triangle { position:relative; width:100%; min-width:700px; height:460px; overflow:hidden; border:1px solid #e0e8df; border-radius:16px; background:linear-gradient(145deg,#f0f5ed,#f8f8f2 62%,#edf3ec); }
+    .phase-triangle { position:relative; width:100%; min-width:0; height:460px; overflow:hidden; border:1px solid #e0e8df; border-radius:16px; background:linear-gradient(145deg,#f0f5ed,#f8f8f2 62%,#edf3ec); }
     .phase-triangle-svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; z-index:0; }
     .phase-arrow { fill:none; stroke:#a8b9ae; stroke-width:3.5; stroke-linecap:round; marker-end:url(#phase-arrow-default); }
     .phase-arrow.phase-heat { stroke:#bd634b; marker-end:url(#phase-arrow-heat); }
@@ -810,7 +810,7 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>粒子的排列和運動會改變，那水可以從一種狀態變成另一種嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">爺爺</span></span><p>可以呀！冰塊在室溫下會融化成水，水放進冷凍庫又會結成冰。水也能蒸發成水蒸氣，水蒸氣遇冷則會凝結成水。</p></div>
             <p>點選冰、水或水蒸氣，查看它能轉變成哪些狀態；也可以直接點選六條箭頭，了解轉變過程與粒子變化。</p>
-            <div class="phase-diagram-scroll" role="region" aria-label="物質三態與六種轉變互動圖，可左右滑動查看" tabindex="0">
+            <div class="phase-diagram-scroll" role="region" aria-label="物質三態與六種轉變互動圖">
               <div class="phase-triangle" id="phase-triangle">
                 <svg class="phase-triangle-svg" viewBox="0 0 840 590" preserveAspectRatio="none" role="group" aria-label="六條可點選的物態變化箭頭">
                   <defs>
