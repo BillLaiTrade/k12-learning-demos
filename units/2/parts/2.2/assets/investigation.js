@@ -1,5 +1,5 @@
 import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessReport,concentrationEvidence,measuredMasses,measurementHint} from './investigation-state.js?v=sand-comparison-1';
-import {loadPicture,createRenderer} from './investigation-renderer.js?v=dish-to-scale-1';
+import {loadPicture,createRenderer} from './investigation-renderer.js?v=filtrate-to-scale-1';
 
 const root=document.getElementById('invest-lab');
 const $=id=>document.getElementById(`invest-${id}`);

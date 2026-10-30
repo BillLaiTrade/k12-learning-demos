@@ -7,6 +7,14 @@ const random=(i,seed=1)=>{const n=Math.sin(i*137.7+seed*43.13)*43758.5453;return
 const HEATER_WORK={x:543,y:475,w:425,h:305},HEATER_TRAY={x:1160,y:547,w:163,h:117};
 const SCALE_WORK={x:565,y:480,w:380,h:276},SCALE_TRAY={x:1340,y:551,w:143,h:104};
 const DISH_HEAT={x:752,y:532},DISH_SCALE={x:755,y:505};
+const FILTER_WORK={x:545,y:222,w:398,h:514};
+const FILTRATE_CUP={x:611,y:498,w:162,h:180},FILTRATE_SCALE={x:674,y:335,w:162,h:180};
+export function filtrateWeighingFrame(progress,reduced=false){
+  const t=Math.max(0,Math.min(1,progress)),slide=smooth(t/.18),lift=smooth((t-.18)/.18),lower=smooth((t-.60)/.25),exchange=smooth((t-.30)/.32);
+  const clear={x:770,y:FILTRATE_CUP.y},held={x:reduced?770:800,y:reduced?FILTRATE_SCALE.y:285};
+  const cup=t<.18?{...FILTRATE_CUP,x:mix(FILTRATE_CUP.x,clear.x,slide)}:t<.60?{...FILTRATE_CUP,x:mix(clear.x,held.x,lift),y:mix(clear.y,held.y,lift)}:{...FILTRATE_CUP,x:mix(held.x,FILTRATE_SCALE.x,lower),y:mix(held.y,FILTRATE_SCALE.y,lower)};
+  return{cup,exchange,settled:t>=.85};
+}
 export function dishWeighingFrame(progress,reduced=false){
   const t=Math.max(0,Math.min(1,progress)),exchange=smooth((t-.22)/.35),lower=smooth((t-.50)/.32);
   const rect=(a,b)=>Object.fromEntries(['x','y','w','h'].map(key=>[key,mix(a[key],b[key],exchange)]));
@@ -38,6 +46,22 @@ export function createRenderer(canvas,{table,atlas,glass}) {
   const heaterMask=new Path2D();heaterMask.rect(145,590,570,410);
   const clearedBowl=new Path2D();clearedBowl.ellipse(424,675,180,80,0,0,Math.PI*2);
   heaterMask.addPath(clearedBowl);
+  // Remove the baked-in receiver so one independent beaker can leave the funnel.
+  const filterMask=new Path2D();filterMask.rect(944,8,440,568);filterMask.rect(1010,306,205,210);
+  function filterStand(){
+    const rect=FILTER_WORK;
+    ctx.save();ctx.translate(rect.x,rect.y);ctx.scale(rect.w/440,rect.h/568);ctx.translate(-944,-8);
+    ctx.save();ctx.clip(filterMask,'evenodd');ctx.drawImage(atlas,944,8,440,568,944,8,440,568);ctx.restore();
+    ctx.save();ctx.beginPath();ctx.moveTo(958,465);ctx.lineTo(1317,453);ctx.lineTo(1351,511);ctx.lineTo(980,522);ctx.closePath();ctx.clip();
+    ctx.drawImage(atlas,1216,486,116,29,950,451,404,75);ctx.restore();
+    ctx.drawImage(atlas,1225,447,52,37,1225,447,52,37);ctx.restore();
+  }
+  function funnelOutlet(){
+    ctx.save();ctx.strokeStyle='#b9c4bd9c';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(685,493);ctx.lineTo(685,562);ctx.stroke();
+    ctx.strokeStyle='#fffef2cf';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(682,493);ctx.lineTo(682,560);ctx.moveTo(688,493);ctx.lineTo(688,560);ctx.stroke();
+    ctx.beginPath();ctx.ellipse(685,561,3,1.4,0,0,Math.PI*2);ctx.stroke();ctx.restore();
+  }
+  function filtrateCup(sample,pose,fill=1){beaker(pose.x,pose.y,pose.w,pose.h,sample,fill*.70,1);}
   function emptyHeater(rect){
     shadow(rect.x+rect.w*.5,rect.y+rect.h*.96,rect.w*.46,rect.h*.05);
     ctx.save();ctx.translate(rect.x,rect.y);ctx.scale(rect.w/570,rect.h/410);ctx.translate(-145,-590);
@@ -110,8 +134,12 @@ export function createRenderer(canvas,{table,atlas,glass}) {
   function filter(sample,animation,t){
     const running=animation?.kind==='filter',before=running?animation.before:sample;
     const f=running?cupTransfer(t,'filter'):null,received=f?.received??1;
-    shadow(750,729,178,16);sprite('filter',545,222,398,514);
-    fluid(611,510,155,176,(sample.water+sample.salt)*received*.70,0,1);
+    if(f?.outlet){
+      f.outlet.mouth={x:685,y:562};
+      f.outlet.target={x:FILTRATE_CUP.x+FILTRATE_CUP.w*.51,y:FILTRATE_CUP.y+FILTRATE_CUP.h*.89-FILTRATE_CUP.h*.67*Math.min(1,(sample.water+sample.salt)*received*.70/100)};
+    }
+    shadow(750,729,178,16);filterStand();
+    filtrateCup({...sample,sand:0},FILTRATE_CUP,received);funnelOutlet();
     const retained=running?before.sand:sample.residues.at(-1);
     if(f?.held>0){ctx.save();ctx.beginPath();ctx.moveTo(594,325);ctx.lineTo(770,325);ctx.lineTo(682,425);ctx.closePath();ctx.clip();ctx.fillStyle='#c8b4918c';ctx.fillRect(590,400-60*Math.sqrt(f.held),190,110);ctx.restore();}
     if(retained>0)grains(682,405,35,9,Math.round(95*(f?.arrived??1)));
@@ -140,9 +168,20 @@ export function createRenderer(canvas,{table,atlas,glass}) {
   }
   function weigh(sample,running){
     shadow(755,749,170,15);sprite('weigh',565,480,380,276);
-    if(sample.water>0)beaker(665,295,175,220,sample,1,sample.phase==='settled'?1:0);
+    if(sample.water>0){if(sample.phase==='filtered')filtrateCup(sample,FILTRATE_SCALE);else beaker(665,295,175,220,sample,1,sample.phase==='settled'?1:0);}
     else crystalDish(sample,DISH_SCALE);
     scaleDisplay(sample,running);
+  }
+  function moveFiltrateToScale(sample,animation,t){
+    const movement=filtrateWeighingFrame(t,animation.reduced),{cup,exchange}=movement;
+    ctx.save();ctx.globalAlpha=1-exchange;shadow(750,729,178,16);filterStand();
+    const retained=sample.residues.at(-1);if(retained>0)grains(682,405,35,9,95,false,1-exchange);ctx.restore();
+    ctx.save();ctx.globalAlpha=exchange;ctx.drawImage(atlas,982,85,238,219,1007,529,125,115);ctx.restore();
+    ctx.save();ctx.globalAlpha=1-exchange;sprite('weigh',SCALE_TRAY.x,SCALE_TRAY.y,SCALE_TRAY.w,SCALE_TRAY.h);ctx.restore();
+    ctx.save();ctx.globalAlpha=exchange;shadow(755,749,170,15);sprite('weigh',SCALE_WORK.x,SCALE_WORK.y,SCALE_WORK.w,SCALE_WORK.h);ctx.restore();
+    filtrateCup(sample,cup);ctx.save();ctx.globalAlpha=1-exchange;funnelOutlet();ctx.restore();
+    if(exchange>=1)scaleDisplay(sample,true);
+    return movement;
   }
   function moveDishToScale(sample,animation,t){
     const movement=dishWeighingFrame(t,animation.reduced);
@@ -160,8 +199,8 @@ export function createRenderer(canvas,{table,atlas,glass}) {
     if(exchange>=1)scaleDisplay(sample,true);
     return movement;
   }
-  function inventory(display,sample,transferring=false){
-    if(display!=='filter')ctx.drawImage(atlas,982,85,238,219,1007,529,125,115);
+  function inventory(display,sample,transferring=false,movingFiltrate=false){
+    if(display!=='filter'&&!movingFiltrate)ctx.drawImage(atlas,982,85,238,219,1007,529,125,115);
     if(display!=='heat'&&!transferring){
       if(sample?.water===0&&display==='weigh')emptyHeater(HEATER_TRAY);
       else sprite('heat',HEATER_TRAY.x,HEATER_TRAY.y,HEATER_TRAY.w,HEATER_TRAY.h);
@@ -176,17 +215,18 @@ export function createRenderer(canvas,{table,atlas,glass}) {
       source(stock,transfer);
       const display=animation?.kind==='sample'?'beaker':animation?.kind==='settle'?'beaker':animation?.kind||sample?.display||'beaker';
       const movingDish=animation?.kind==='weigh'&&sample?.water===0&&animation.before?.display==='heat';
-      inventory(display,sample,movingDish);
+      const movingFiltrate=animation?.kind==='weigh'&&sample?.water>0&&animation.before?.display==='filter';
+      inventory(display,sample,movingDish,movingFiltrate);
       let operation=null;
       if(!sample)beaker(SAMPLE_CUP.x,SAMPLE_CUP.y,SAMPLE_CUP.w,SAMPLE_CUP.h,{water:0,salt:0,sand:0});
       else if(display==='filter')operation=filter(sample,animation,t);
       else if(display==='heat')operation=heat(sample,animation,t,now);
-      else if(display==='weigh'){if(movingDish)operation=moveDishToScale(sample,animation,t);else weigh(sample,animation?.kind==='weigh');}
+      else if(display==='weigh'){if(movingDish)operation=moveDishToScale(sample,animation,t);else if(movingFiltrate)operation=moveFiltrateToScale(sample,animation,t);else weigh(sample,animation?.kind==='weigh');}
       else {
         const fill=transfer?transfer.received:1,settled=animation?.kind==='settle'?smooth(t):sample.phase==='settled'?1:0;
         beaker(SAMPLE_CUP.x,SAMPLE_CUP.y,SAMPLE_CUP.w,SAMPLE_CUP.h,sample,fill,settled,transfer?.stream);
       }
-      if(sample&&sample.residues.some(n=>n>0)&&display!=='filter'){
+      if(sample&&sample.residues.some(n=>n>0)&&display!=='filter'&&(!movingFiltrate||operation.exchange>=1)){
         ctx.fillStyle='#faf6eb';ctx.beginPath();ctx.moveTo(973,735);ctx.lineTo(1105,735);ctx.lineTo(1079,797);ctx.lineTo(991,793);ctx.closePath();ctx.fill();grains(1038,762,40,9,65);pill('濾紙留存',1040,831,165);
       }
       return transfer||operation;
