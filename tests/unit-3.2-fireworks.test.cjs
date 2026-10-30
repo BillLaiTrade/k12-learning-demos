@@ -113,6 +113,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await page.locator('#fireworks-temperature').textContent(), '10°C');
     assert.equal(await page.locator('#fireworks-speed').count(), 0);
     assert.equal(await page.locator('#fireworks-timer').textContent(), '—');
+    assert.equal(await page.locator('#fireworks-observe').innerText(), '施放煙火');
     assert.equal(await page.locator('#unit-quiz [role=progressbar], #unit-quiz .fireworks-line, #unit-quiz .fireworks-timeline').count(), 0);
     assert.equal(await page.locator('.fireworks-record #fireworks-timer, .fireworks-record #fireworks-light, .fireworks-record #fireworks-sound').count(), 3);
     assert.equal(await page.locator('.fireworks-view #fireworks-timer, #fireworks-delay').count(), 0);
@@ -190,6 +191,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await page.locator('#fireworks-check').isEnabled(), true);
     await page.waitForTimeout(250);
     assert.equal(await page.locator('#fireworks-timer').textContent(), '3.00', 'stopwatch stops at sound arrival');
+    assert.equal(await page.locator('#fireworks-observe').innerText(), '施放煙火', 'completed observation keeps the same launch label');
     assert.equal(await page.locator('#fireworks-record-label').textContent(), '時間差');
     t.diagnostic('wall clock and audio ' + JSON.stringify(times));
   });

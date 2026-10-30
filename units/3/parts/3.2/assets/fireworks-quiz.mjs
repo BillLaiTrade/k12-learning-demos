@@ -24,7 +24,7 @@ if (root) {
     const busy = next === 'preparing' || next === 'observing';
     observe.disabled = busy;
     observeText.textContent = next === 'preparing' ? '準備音效…'
-      : next === 'observing' ? '觀察中…' : next === 'complete' ? '再觀察一次' : '觀察煙火';
+      : next === 'observing' ? '觀察中…' : '施放煙火';
     answer.disabled = next !== 'complete'; check.disabled = next !== 'complete';
   }
 
@@ -90,7 +90,7 @@ if (root) {
         timer.textContent = challenge.delay.toFixed(2);
         recordLabel.textContent = '時間差';
         caption.textContent = '聽到爆炸聲了';
-        status.textContent = '已記下時間差，現在可以估算距離；再觀察一次會重播同一題。';
+        status.textContent = '已記下時間差，現在可以估算距離；再次施放煙火會重播同一題。';
       }
     }
     if (elapsed < Math.max(FIREWORK_DURATION, challenge.delay + audio.buffer.duration)) {
@@ -116,7 +116,7 @@ if (root) {
       if (activeRequest !== request) return;
       resetObservation();
       status.dataset.error = 'true';
-      status.textContent = '煙火或音效暫時無法載入，請點「觀察煙火」再試一次。';
+      status.textContent = '煙火或音效暫時無法載入，請點「施放煙火」再試一次。';
     }
   }
 

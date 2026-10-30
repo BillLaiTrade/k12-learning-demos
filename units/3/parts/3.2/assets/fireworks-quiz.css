@@ -21,7 +21,7 @@
 .fireworks-timer-value small{font-size:.65rem;font-weight:700}
 .fireworks-controls{display:flex;align-items:center;justify-content:center;gap:14px;padding:13px 14px 16px}
 .fireworks-controls .action{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-width:160px;min-height:43px;padding:8px 12px;font-size:.88rem}
-.fireworks-controls .action svg{width:18px;height:18px}
+.fireworks-controls .action svg{width:22px;height:22px}
 .fireworks-text-button{border:0;border-radius:3px;padding:4px 0;background:transparent;color:#176b53;font-size:.8rem;text-decoration:underline;text-underline-offset:3px}
 .fireworks-quiz button:focus-visible,.fireworks-quiz input:focus-visible{outline:3px solid #bc782d;outline-offset:3px}
 .fireworks-quiz button:disabled{cursor:wait;opacity:.55}
