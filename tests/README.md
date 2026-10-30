@@ -382,3 +382,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 ### 3.3第一區逐步紀錄修訂
 
 音叉專項新增音槌接觸後波形向右延伸、停止保留部分波形、重敲從左重畫、另一欄保留及重設清空。現行音叉使用連續向量叉股，位移由實際叉端螢幕座標核對。專項與整頁回歸合計20項通過（含外層）；見 docs/reviews/unit-3.3-card01-refinement/review.md。本輪尚未發布，不沿用舊公開版作為本次驗證。
+
+## 2.3 第三區：充氮薯片包裝
+
+```sh
+NITROGEN_ARTIFACT_DIR=/tmp/unit23-nitrogen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-full node --test --test-reporter=spec tests/unit-2.3-nitrogen.test.cjs tests/unit-2.3-full.test.cjs
+```
+
+第三區8項（含主項）：預設兩袋比較與性質、直接點右包重播充氮排氣與封口、氧氣短條與透明流向、左側影像SHA-256固定、重播不疊時序、Escape／背景／離區暫停、鍵盤／觸控／減少動態、無JavaScript，以及七種寬度初始／播放中的右側內容欄邊界。`NITROGEN_URL`可指定公開網址，公開Chromium使用繼承的HTTPS代理；`NITROGEN_ARTIFACT_DIR`指定截圖目錄，預設`/tmp/unit23-nitrogen`避免覆寫歷史證據。

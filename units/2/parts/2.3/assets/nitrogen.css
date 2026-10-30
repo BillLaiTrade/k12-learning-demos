@@ -1,0 +1,48 @@
+/* 核可第三區：圖片提供外觀，流程與氧氣變化由程式獨立控制。 */
+.nitrogen-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;position:relative;min-width:0;margin:24px 0;padding:14px;border:1px solid #d9e1d2;border-radius:15px;background:#d6ad79 url('nitrogen-workbench.webp') center/cover;isolation:isolate}
+.nitrogen-scene-tag{grid-column:1/-1;justify-self:end;margin:0;padding:4px 9px;border-radius:8px;background:#fffefaf0;color:#46594d;font-size:.7rem;font-weight:700;line-height:1.6}
+.nitrogen-example{position:relative;min-width:0;width:100%;margin:0;display:flex;flex-direction:column;align-items:stretch}
+.nitrogen-example>h3{align-self:center;padding:6px 18px;margin:0 0 5px;border:1px solid #fffefa80;border-radius:30px;background:#fffefae8;color:#304b3c;font-size:.95rem;line-height:1.5;text-align:center;max-width:100%}
+.nitrogen-treated>h3{background:#176b53ed;color:#fffefa}
+.nitrogen-pack-view{display:block;position:relative;isolation:isolate;width:100%;min-width:0;min-height:0;aspect-ratio:3/4;overflow:hidden;border:0;border-radius:0;padding:0;background:transparent;color:#fffefa;box-shadow:none;touch-action:manipulation}
+button.nitrogen-pack-view:hover:not(:disabled){background:transparent;box-shadow:none}
+.nitrogen-pack-view:disabled{opacity:1;cursor:default}
+.nitrogen-pack{position:absolute;inset:0;display:block;background-image:url('nitrogen-pack-sprite.webp');background-size:200% 100%;background-repeat:no-repeat;pointer-events:none;transition:opacity .45s ease}
+.nitrogen-pack-sealed{background-position:0 50%;opacity:1}
+.nitrogen-pack-open{background-position:100% 50%;opacity:0}
+[data-nitrogen-phase=air] .nitrogen-treated .nitrogen-pack-open,[data-nitrogen-phase=flushing] .nitrogen-treated .nitrogen-pack-open{opacity:1}
+[data-nitrogen-phase=air] .nitrogen-treated .nitrogen-pack-sealed,[data-nitrogen-phase=flushing] .nitrogen-treated .nitrogen-pack-sealed{opacity:0}
+.nitrogen-replay-mark{position:absolute;left:50%;top:59%;display:grid;place-items:center;transform:translate(-50%,-50%);width:49px;height:49px;padding:10px;border:1px solid #fffefa70;border-radius:50%;background:#1e4d3c55;box-shadow:0 2px 8px #21362d20;pointer-events:none}
+.nitrogen-replay-mark svg{display:block;width:100%;height:100%}
+[data-nitrogen-state=playing] .nitrogen-replay-mark{opacity:0}
+.nitrogen-replay:focus-visible{outline:3px solid #f2b64a;outline-offset:-4px}
+.nitrogen-flow{position:absolute;inset:0;width:100%;height:100%;opacity:0;pointer-events:none}
+.nitrogen-flow>path{fill:none;stroke-width:10;stroke-linecap:round;stroke-dasharray:18 12;animation:nitrogen-flow 1s linear infinite}
+.nitrogen-in-flow{stroke:#4c9a74}.nitrogen-out-flow{stroke:#fffefa;filter:drop-shadow(0 1px 2px #243d3555)}
+.nitrogen-flow-label{position:absolute;top:6%;z-index:2;padding:3px 5px;border-radius:5px;background:#fffefaed;color:#315f43;font-size:clamp(.63rem,1.1vw,.76rem);line-height:1.5;font-weight:700;opacity:0;pointer-events:none}
+.nitrogen-in-label{left:2%}.nitrogen-out-label{right:1%;top:11%;color:#43584b}
+[data-nitrogen-phase=flushing] .nitrogen-flow,[data-nitrogen-phase=flushing] .nitrogen-flow-label{opacity:1}
+[data-nitrogen-state=paused] .nitrogen-flow>path{animation-play-state:paused}
+.nitrogen-seal-light{position:absolute;left:12%;right:12%;top:17%;height:3px;background:#fff6b4;box-shadow:0 0 10px #fcefa7;opacity:0;pointer-events:none}
+[data-nitrogen-phase=sealing] .nitrogen-seal-light{opacity:.8}
+.nitrogen-readout{position:relative;min-width:0;width:100%;padding:13px 12px 12px;border:1px solid #fffefad0;border-radius:11px;background:#fffefaf5;text-align:center;color:#374c41;flex:1}
+.nitrogen-readout>strong{display:block;color:#ac581b;font-size:clamp(1.06rem,2vw,1.35rem);font-weight:800;line-height:1.4}
+.nitrogen-readout>span{display:block;font-size:.8rem;line-height:1.65;margin:3px 0 0}
+.nitrogen-readout>p{margin:9px 0 0;color:#5f6c62;font-size:.75rem;line-height:1.7}
+.nitrogen-oxygen-track{height:18px;display:block;overflow:hidden;margin-top:12px;background:#e1e5e7;border-radius:30px;text-align:left}
+.nitrogen-oxygen-track>span{display:block;height:100%;background:linear-gradient(90deg,#f3a427,#f6be4c);border-radius:30px 0 0 30px}
+.nitrogen-oxygen-qualitative>span{border-right:2px dotted #fffefa}
+.nitrogen-playback-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.nitrogen-playback-status:empty{display:none}
+.nitrogen-properties{margin:24px 0 21px;min-width:0}
+.nitrogen-properties>h3{font-size:1.02rem;margin:0 0 11px}
+.nitrogen-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.nitrogen-facts>div{display:flex;align-items:center;gap:8px;min-width:0;padding:12px 10px;border:1px solid #d8e1d5;border-radius:12px;background:#fffefa}
+.nitrogen-facts svg{flex:0 0 34px;width:34px;height:34px;fill:none;stroke:#39785c;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nitrogen-facts>div:last-child svg{stroke:#bc4d3d}
+.nitrogen-facts p{margin:0;font-size:.78rem;font-weight:650;line-height:1.7;color:#385246;min-width:0}
+.nitrogen-preservation-note{margin:23px 0 0;border-top:1px solid var(--line);padding:13px 0 0;color:var(--muted);font-size:.78rem;line-height:1.8;text-align:center}
+@container(max-width:520px){.nitrogen-facts{grid-template-columns:1fr}.nitrogen-facts>div{padding:10px 13px}.nitrogen-facts p{font-size:.85rem}.nitrogen-facts p br{display:none}}
+@container(max-width:460px){.nitrogen-compare{grid-template-columns:1fr;padding:12px;gap:14px;background:#e6c59d}.nitrogen-example{padding:12px 8px;border-radius:11px;background:#d6ad79 url('nitrogen-workbench.webp') center/cover}.nitrogen-scene-tag{font-size:.68rem}.nitrogen-pack-view{max-width:260px;align-self:center}.nitrogen-readout{padding:13px}.nitrogen-example>h3{font-size:.95rem}.nitrogen-flow-label{font-size:.73rem}.nitrogen-compare .nitrogen-control{border-bottom:1px solid #fffefa70}}
+@media(prefers-reduced-motion:reduce){.nitrogen-pack{transition:none}.nitrogen-flow>path{animation:none}}
+@keyframes nitrogen-flow{to{stroke-dashoffset:-60}}

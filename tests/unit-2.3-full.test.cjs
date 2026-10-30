@@ -39,7 +39,7 @@ test('2.3 complete page: six teaching sections and one evidence-based quiz', { t
     }
     const text = await page.locator('main').innerText();
     assert.doesNotMatch(text, /鋼絲絨|AQI|150 mL|100\.0|濕度計算/);
-    assert.match(await page.locator('#s3').innerText(), /充氮不能消除所有/);
+    assert.match(await page.locator('#s3').innerText(), /保存效果仍與密封/);
     assert.match(await page.locator('#s4').innerText(), /二氧化錳不是氧氣來源/);
     assert.match(await page.locator('#s5').innerText(), /相對不易反應/);
     assert.match(await page.locator('#s6').innerText(), /不能說它絕對不能用排水法/);
@@ -121,7 +121,7 @@ test('2.3 complete page: six teaching sections and one evidence-based quiz', { t
   await t.test('all teaching evidence is available without JavaScript', async () => {
     const context = await browser.newContext({ javaScriptEnabled:false, viewport:{width:390,height:844} });
     const staticPage = await context.newPage(); await staticPage.goto(url, {waitUntil:'networkidle'});
-    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#s3 .property-chain','#s4 .sequence-grid','#s4 .gas-observations','#s5 .gas-feature','#s6 .sequence-grid','#s6 .gas-observations','#s7 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
+    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#s3 .nitrogen-facts','#s4 .sequence-grid','#s4 .gas-observations','#s5 .gas-feature','#s6 .sequence-grid','#s6 .gas-observations','#s7 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
     assert.equal(await staticPage.locator('.sequence-step').count(),8);
     await context.close();
   });

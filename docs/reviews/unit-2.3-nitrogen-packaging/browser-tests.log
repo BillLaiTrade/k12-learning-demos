@@ -1,0 +1,27 @@
+▶ 2.3 complete page: six teaching sections and one evidence-based quiz
+  ✔ all seven sections and routes exist, with natural dialogue and no retired experiment (136.536134ms)
+  ✔ default cup comparisons remain after preview and reset (161.146369ms)
+  ✔ both preparations replay, pause, resume and reset without hiding results (566.466227ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (212.218875ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (606.105251ms)
+  ✔ five widths show every diagram and section without horizontal overflow (3386.592438ms)
+  ✔ all teaching evidence is available without JavaScript (1070.2806ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (1297.517882ms)
+✔ 2.3 complete page: six teaching sections and one evidence-based quiz (9322.415732ms)
+▶ 2.3 nitrogen packaging: approved comparison, replay and content boundaries
+  ✔ both comparison results and properties are visible before interaction (420.023825ms)
+  ✔ direct replay shows mixed-air exit, declining oxygen and resealing with a fixed reference (2299.901277ms)
+  ✔ repeated clicks replace playback instead of stacking timelines (2714.797452ms)
+  ✔ escape, background and leaving the scene pause without automatic resumption (1731.092547ms)
+  ✔ all elements stay inside the content column at seven widths, in both replay states (12316.058554ms)
+  ✔ mobile touch and reduced motion retain default knowledge and direct replay (1698.764057ms)
+  ✔ static no-JavaScript presentation keeps both bags, comparison and properties (1002.756716ms)
+✔ 2.3 nitrogen packaging: approved comparison, replay and content boundaries (24015.334469ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24450.053389
