@@ -20,9 +20,15 @@ export function createPitchExperiment(root){
   let note=column.querySelector('.pitch-period-note');if(!note){note=document.createElement('p');note.className='pitch-period-note';svg.after(note);}note.textContent=`一次完整振動：${(1000/hz).toLocaleString('zh-TW',{maximumFractionDigits:2})}毫秒`;
   const time=element('text',{x:177,y:193,'text-anchor':'middle'},svg);time.textContent='時間（ms）';
  }
+ function position(column,displacement){
+  column.querySelector('.pitch-cone').setAttribute('transform',`translate(${displacement} 0)`);
+  column.querySelector('.pitch-diaphragm').dataset.displacement=String(displacement);
+  column.querySelector('.pitch-surround-top').setAttribute('d',`M146 24C155 24 151 34 ${128+displacement} 32`);
+  column.querySelector('.pitch-surround-bottom').setAttribute('d',`M146 135C155 135 151 125 ${128+displacement} 127`);
+ }
  function stop(){
   active=null;root.querySelectorAll('[data-play^="pitch-"]').forEach(b=>b.setAttribute('aria-pressed','false'));
-  for(const col of columns){col.dataset.sounding='false';col.querySelector('.pitch-cone').setAttribute('transform','translate(0 0)');col.querySelector('.pitch-diaphragm').dataset.displacement='0';}
+  for(const col of columns){col.dataset.sounding='false';position(col,0);}
  }
  return {
   render(hz){frequency=hz;stop();for(const col of columns)if(col.dataset.pitchSide==='right'||!col.querySelector('.signal'))graph(col,col.dataset.pitchSide==='left'?200:frequency);
@@ -37,7 +43,7 @@ export function createPitchExperiment(root){
    svg.dataset.progress=String(progress);svg.querySelector('.signal').setAttribute('d',points(progress,hz));
    const x=38+278*progress;svg.querySelector('.pitch-cursor').setAttribute('d',`M${x} 20V147`);
    const displacement=14*Math.sin(2*Math.PI*hz*progress*.01);
-   active.querySelector('.pitch-cone').setAttribute('transform',`translate(${displacement} 0)`);active.querySelector('.pitch-diaphragm').dataset.displacement=String(displacement);
+   position(active,displacement);
   },
   finish(){this.update(PITCH_SECONDS);stop();},stop
  };

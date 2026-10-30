@@ -236,7 +236,7 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .pitch-speaker.play{display:block;min-height:0;width:100%;padding:0;border-radius:9px;background:transparent;line-height:0;align-self:end;touch-action:manipulation}
 .pitch-speaker img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 2px #3b291b24)}
 .pitch-speaker:hover{background:#e7f1e5}
-.pitch-closeup{position:relative;display:flex;flex-direction:column;align-items:center;padding:6px 2px 5px;min-width:0;border:1px solid #7d9fa3;border-radius:11px;background:linear-gradient(110deg,#fff,#f8faf5);box-shadow:0 2px 4px #31564a12}
+.pitch-closeup{position:relative;display:flex;flex-direction:column;align-items:center;padding:6px 2px 5px;min-width:0;border:1px solid #7d9fa3;border-radius:11px;background:radial-gradient(ellipse at 50% 45%,#fff 30%,#f0f4f1 100%);box-shadow:inset 0 0 0 2px #ffffff,0 3px 7px #31564a14}
 .pitch-closeup::before{content:"";position:absolute;right:100%;top:45%;width:20%;border-top:1px solid #4b8497;transform:rotate(-30deg);transform-origin:right center}
 .pitch-closeup>span{font-size:.75rem;line-height:1.4;font-weight:650;color:#355963;white-space:nowrap}
 .pitch-diaphragm{display:block;width:100%;height:auto;overflow:hidden}

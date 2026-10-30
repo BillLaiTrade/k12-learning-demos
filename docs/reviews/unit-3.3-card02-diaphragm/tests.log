@@ -1,0 +1,38 @@
+✔ fork sound preserves frequency and decay while strength changes amplitude (28.868405ms)
+▶ fork experiment: actual sound, synchronized motion, recording and layout
+  ✔ idle state shows the approved apparatus, accessible actions and unfilled records (66.613247ms)
+  ✔ both strikes have the same real frequency; heavy has larger audio and visible displacement (1260.006463ms)
+  ✔ wave traces grow rightward after contact, freeze on stop and restart from the left (4534.618055ms)
+  ✔ stop retains observations; reset clears them; natural completion and keyboard work (2882.680765ms)
+  ✔ rapid repeat, navigation, offscreen, hidden tab and pagehide stop sound and motion (1321.951565ms)
+  ✔ cancelled async audio preparation never starts later; playback failure can retry (887.885999ms)
+  ✔ desktop/laptop visual hierarchy matches the approved mockup and mobile stays usable (1809.413852ms)
+✔ fork experiment: actual sound, synchronized motion, recording and layout (14252.591571ms)
+▶ pitch comparison: independent speakers, controlled frequency and synchronized records
+  ✔ approved controls, matching speakers and actual shared characters render without autoplay (168.955595ms)
+  ✔ frequency changes do not play sound; bounds, cycles and amplitude stay correct at every step (913.771708ms)
+  ✔ left can repeat twice then right; actual audio has selected pitch and fixed signal amplitude (663.080868ms)
+  ✔ one side animates with its trace; natural finish rests the cone and keeps the full comparison (4153.978223ms)
+  ✔ keyboard, rapid changes, section navigation and page visibility cancel playback (514.232765ms)
+  ✔ desktop and laptop keep the mockup hierarchy, equal columns and frequency controls only on right (1440.687786ms)
+✔ pitch comparison: independent speakers, controlled frequency and synchronized records (9220.142092ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (167.409999ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (72.142486ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (815.743331ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (2299.193464ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (498.146836ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (299.108554ms)
+  ✔ hearing range and dBA examples change observations without producing test tones (158.170539ms)
+  ✔ one final task supports incomplete, incorrect, correct, editing, replay, clear and new requirements (507.606307ms)
+  ✔ lesson format follows unit 1.1 and navigation tracks ordinary reading (5006.454702ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (3048.346816ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (13676.434295ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37885.838014

@@ -16,7 +16,7 @@ test('pitch comparison: independent speakers, controlled frequency and synchroni
  const change=async target=>{let value=Number((await page.locator('#pitch-reading').innerText()).replace(/\D/g,''));while(value!==target){await root.locator(`[data-pitch-step="${target>value?100:-100}"]`).click();value+=target>value?100:-100;}};
  await t.test('approved controls, matching speakers and actual shared characters render without autoplay',async()=>{
   assert.equal(await root.locator('.pitch-step').count(),2);assert.equal(await left.locator('.pitch-step').count(),0);assert.equal(await right.locator('.pitch-step').count(),2);
-  assert.equal(await root.locator('input[type=range],.stop,.reset').count(),0);assert.equal(await root.locator('.pitch-play').count(),2);
+  assert.equal(await root.locator('input[type=range],.stop,.reset').count(),0);assert.equal(await root.locator('.pitch-play').count(),2);assert.equal(await root.locator('.pitch-fixed').count(),2);assert.equal(await root.locator('.pitch-surround-top,.pitch-surround-bottom').count(),4);
   assert.equal(await left.locator('img').getAttribute('src'),await right.locator('img').getAttribute('src'));
   assert.ok(await left.locator('img').evaluate(n=>n.complete&&n.naturalWidth>0));assert.equal(await page.evaluate(()=>window.pitchRuns.length),0);
   assert.match(await root.locator('.speaker').first().evaluate(n=>getComputedStyle(n).backgroundImage),/dialogue-character-avatars/);
@@ -42,9 +42,9 @@ test('pitch comparison: independent speakers, controlled frequency and synchroni
   assert.equal(await page.evaluate(()=>window.pitchRuns.at(-1).frequency),800);await change(400);
  });
  await t.test('one side animates with its trace; natural finish rests the cone and keeps the full comparison',async()=>{
-  await play('left');await page.waitForTimeout(350);
-  const inspect=async col=>col.evaluate(n=>({progress:Number(n.querySelector('.pitch-wave').dataset.progress),displacement:Number(n.querySelector('.pitch-diaphragm').dataset.displacement),hz:Number(n.querySelector('.pitch-wave').dataset.frequency)}));
-  const a=await inspect(left);assert.ok(a.progress>0&&a.progress<1);assert.ok(Math.abs(a.displacement-14*Math.sin(2*Math.PI*a.hz*.01*a.progress))<1e-8);assert.equal((await inspect(right)).displacement,0);
+  const fixed=await left.locator('.pitch-fixed').innerHTML();await play('left');await page.waitForTimeout(350);
+  const inspect=async col=>col.evaluate(n=>({progress:Number(n.querySelector('.pitch-wave').dataset.progress),displacement:Number(n.querySelector('.pitch-diaphragm').dataset.displacement),hz:Number(n.querySelector('.pitch-wave').dataset.frequency),surround:n.querySelector('.pitch-surround-top').getAttribute('d')}));
+  const a=await inspect(left);assert.ok(a.progress>0&&a.progress<1);assert.ok(Math.abs(a.displacement-14*Math.sin(2*Math.PI*a.hz*.01*a.progress))<1e-8);assert.equal((await inspect(right)).displacement,0);assert.equal(await left.locator('.pitch-fixed').innerHTML(),fixed);assert.ok(Math.abs(Number(a.surround.split(' ').at(-2))-(128+a.displacement))<1e-8,'rubber surround stays attached to moving diaphragm');
   await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='false');assert.equal((await inspect(left)).progress,1);assert.equal((await inspect(left)).displacement,0);
   const previous=await left.locator('.signal').getAttribute('d');await play('right');await page.waitForTimeout(300);assert.equal(await left.locator('.signal').getAttribute('d'),previous);
   await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='false');assert.equal((await inspect(right)).progress,1);
