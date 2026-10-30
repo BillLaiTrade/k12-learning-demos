@@ -118,6 +118,9 @@
 .invest-notebook-answer {display:flex;align-items:center;gap:5px;min-width:0;}
 .invest-notebook-answer input {min-width:0;width:100px;padding:8px 6px;border:0;border-bottom:1.5px solid #7c9f6e;border-radius:0;background:#f0f5e9;color:#245b3a;font:inherit;font-size:.95rem;text-align:center;font-variant-numeric:tabular-nums;}
 .invest-notebook-answer input:focus {outline:2px solid #86aa7666;outline-offset:2px;}
+.invest-notebook-entry.is-review-target {background:#fff7e8;}
+.invest-notebook-page input[aria-invalid="true"] {border-color:#bd832c;background:#fff6e7;outline:2px solid #c69b55;outline-offset:2px;scroll-margin-block:100px;}
+.invest-notebook-entry+.invest-feedback,.invest-notebook-calculation+.invest-feedback {margin:8px 0;}
 .invest-notebook-actions {display:flex;justify-content:flex-end;margin-top:13px;}
 .invest-notebook-page .invest-note-foot {margin:12px 0 0;padding-top:10px;border-top:1px solid #e0e7d9;}
 @media(max-width:680px){

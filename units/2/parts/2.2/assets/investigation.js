@@ -11,7 +11,13 @@ let samples=[],active=null,stock=6,nextId=1,animation=null,renderer=null,frame=0
 const selected=()=>samples.find(s=>s.id===active);
 const label=id=>id<=26?String.fromCharCode(64+id):String(id);
 function announce(text,observation=false){$('status').textContent=text;$('status').dataset.observation=String(observation);}
-function invalidateReport(){const feedback=$('feedback');feedback.hidden=true;feedback.replaceChildren();delete feedback.dataset.result;}
+function clearReportTarget(){
+  for(const field of $('report').querySelectorAll('[aria-invalid="true"]')){
+    field.removeAttribute('aria-invalid');field.removeAttribute('aria-errormessage');
+    field.closest('.invest-notebook-entry')?.classList.remove('is-review-target');
+  }
+}
+function invalidateReport(){clearReportTarget();const feedback=$('feedback');feedback.hidden=true;feedback.replaceChildren();delete feedback.dataset.result;}
 function redraw(now=performance.now()){renderer?.render({sample:selected(),stock,animation},now);}
 function updateConcentration(){
   const sample=selected(),{filtered,solid}=measuredMasses(sample);
@@ -78,31 +84,40 @@ function perform(action){
   animate(action,{...selected()});
 }
 function submitReport(event){
-  event.preventDefault();if(animation)return;
+  event.preventDefault();if(animation)return;clearReportTarget();
   let result=assessReport(selected(),$('concentration-value').value);
-  const basis=concentrationEvidence(selected()),issues=[];
+  const basis=concentrationEvidence(selected()),issues=[];let problemField=null;
   if(basis){
     const measurements=measuredMasses(selected());
     for(const [field,title,key,optional] of [['raw-mass','過濾前取樣','raw',true],['solution-mass','蒸發前濾液','filtered',false],['solute-mass','乾燥晶體','solid',false]]){
       const value=$(field).value.trim(),measurement=measurements[key];
       if(!value&&optional)continue;
-      if(!value||!Number.isFinite(Number(value))||Number(value)<0)issues.push(field==='solution-mass'?'這份濾液已蒸乾，無法再從秤面讀取原本的重量。請補上先前讀值；若忘記讀值，請另取一份重新實驗。':`請自行讀取電子秤，填寫${title}的淨質量紀錄（克）。`);
-      else if(!measurement)issues.push(`${title}尚未稱量，請確認這筆紀錄來自電子秤讀值。`);
-      else if(Math.abs(Number(value)-measurement.mass)>1e-6)issues.push(`紀錄的${title}淨質量與這份取樣的電子秤讀值不同，請重新核對。`);
+      if(!value||!Number.isFinite(Number(value))||Number(value)<0)issues.push({field,message:field==='solution-mass'?'請填寫蒸發前濾液的淨質量。若忘記先前讀值，可以另取一份重新實驗。':`請自行讀取電子秤，填寫${title}的淨質量紀錄（克）。`});
+      else if(!measurement)issues.push({field,message:`${title}尚未稱量，請確認這筆紀錄來自電子秤讀值。`});
+      else if(Math.abs(Number(value)-measurement.mass)>1e-6)issues.push({field,message:`紀錄的${title}淨質量與這份取樣的電子秤讀值不同，請重新核對。`});
     }
     for(const [field,title,expected] of [['calculation-numerator','晶體淨質量',basis.solute],['calculation-denominator','濾液淨質量',basis.solution]]){
       const value=$(field).value.trim();
-      if(!value||!Number.isFinite(Number(value))||Number(value)<0)issues.push(`請在公式中填入${title}（克）。`);
-      else if(Math.abs(Number(value)-expected)>1e-6)issues.push(`公式中的${title}與這份取樣的稱量紀錄不同，請核對上方紀錄。`);
+      if(!value||!Number.isFinite(Number(value))||Number(value)<0)issues.push({field,message:`請在公式中填入${title}（克）。`});
+      else if(Math.abs(Number(value)-expected)>1e-6)issues.push({field,message:`公式中的${title}與這份取樣的稱量紀錄不同，請核對上方紀錄。`});
     }
-    if(issues.length)result={ok:false,issues,basis:null};
+    if(issues.length){problemField=issues[0].field;result={ok:false,issues:[issues[0].message],basis:null};}
+    else if(!result.ok)problemField='concentration-value';
   }
   const feedback=$('feedback');
   feedback.hidden=false;feedback.dataset.result=result.ok?'correct':'revise';feedback.replaceChildren();
-  const title=document.createElement('strong');title.textContent=result.ok?'任務完成：晶體已分離，濃度也算對了。':'再檢查一下這份紀錄。';feedback.append(title);
+  const title=document.createElement('strong');title.textContent=result.ok?'任務完成：晶體已分離，濃度也算對了。':problemField?'先檢查這一筆紀錄。':'再檢查一下這份紀錄。';feedback.append(title);
   const message=document.createElement('p');
-  message.textContent=result.ok?`${result.basis.solute} 克 ÷ ${result.basis.solution} 克 × 100% ＝ ${result.basis.percent}%。分母使用蒸發前濾液的淨質量，泥沙已先分離。`:result.issues.join(' ');
-  feedback.append(message);feedback.scrollIntoView({block:'nearest',behavior:motion.matches?'instant':'smooth'});
+  message.textContent=result.ok?`${result.basis.solute} 克 ÷ ${result.basis.solution} 克 × 100% ＝ ${result.basis.percent}%。分母使用蒸發前濾液的淨質量，泥沙已先分離。`:result.issues[0];
+  feedback.append(message);
+  const target=problemField?$(problemField):null;
+  const anchor=target?.closest('.invest-notebook-entry,.invest-notebook-calculation')||$('report').querySelector('.invest-notebook-actions');
+  anchor.after(feedback);
+  if(target){
+    target.setAttribute('aria-invalid','true');target.setAttribute('aria-errormessage','invest-feedback');
+    target.closest('.invest-notebook-entry')?.classList.add('is-review-target');
+    target.focus({preventScroll:true});target.scrollIntoView({block:'center',behavior:motion.matches?'instant':'smooth'});
+  }else feedback.scrollIntoView({block:'nearest',behavior:motion.matches?'instant':'smooth'});
 }
 
 function clear(){
