@@ -461,6 +461,12 @@
     .particle-card-body { padding:10px; }
     .particle-card--element .particle-card-body { container-type:inline-size; }
     #compound-example .particle-card-body { container-type:inline-size; }
+    #compound-example .particle-ball--oxygen { width:32px; height:32px; }
+    #compound-example .particle-ball--hydrogen { width:22px; height:22px; }
+    #compound-example .particle-model--water { grid-template-columns:repeat(auto-fit,80px); gap:16px 12px; }
+    .water-particle-legend { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 28px; padding:10px 0 4px; color:#294b3c; font-size:.88rem; }
+    .water-particle-legend span { display:inline-flex; align-items:center; gap:8px; }
+    .water-particle-note { margin:0 0 8px; color:#68776e; font-size:.75rem; text-align:center; }
     .particle-card .particle-color-note { margin:0 10px 9px!important; }
     .particle-decomposition { margin-top:10px; padding:10px; border-top:1px solid #e3e8dd; background:#f8f9f4; }
     .particle-decomposition h4 { margin:0 0 7px; color:#294b3c; font-size:.92rem; }
@@ -1051,6 +1057,11 @@
                       <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
                     </div>
                   </div>
+                  <div class="water-particle-legend" role="group" aria-label="水分子與分解示意共用的粒子圖例">
+                    <span><i class="particle-ball particle-ball--hydrogen" aria-hidden="true"></i>氫</span>
+                    <span><i class="particle-ball particle-ball--oxygen" aria-hidden="true"></i>氧</span>
+                  </div>
+                  <p class="water-particle-note">粒子的顏色與大小僅為示意。</p>
                   <p class="particle-caption">每個水分子的組成都相同，所以純水是一種純物質；但水含有氫、氧兩種元素，因此屬於化合物。</p>
                   <div class="particle-decomposition">
                     <h4 class="decomposition-heading">用化學方法能不能再分解？</h4>
