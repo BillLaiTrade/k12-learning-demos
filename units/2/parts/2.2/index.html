@@ -43,7 +43,7 @@
     .hero-cover { margin:0; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:var(--card); box-shadow:0 8px 24px #243a3512; }
     .hero-cover img { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; }
     .lesson-layout { display:grid; grid-template-columns:minmax(205px,250px) minmax(0,1fr); gap:34px; align-items:start; }
-    .route,.card-side {font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;--ink:#182326;--muted:#59696b;--line:#d7e1dd;}
+    .route {font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;--ink:#182326;--muted:#59696b;--line:#d7e1dd;}
     .route { position:sticky; top:24px; align-self:start; max-height:calc(100svh - 48px); overflow-y:auto; padding:8px 12px 12px 0; scrollbar-width:thin; }
     .route-label { margin:0 0 10px; color:var(--muted); font-size:.74rem; letter-spacing:.08em; }
     .route-progress { margin:3px 0 10px; color:var(--muted); font-size:.78rem; }
@@ -57,11 +57,15 @@
     .section-top { display:flex; justify-content:space-between; gap:12px; align-items:baseline; padding:4px 0 12px; }
     .section-top h2 { margin:0; font-size:1.05rem; }
     .progress-copy { color:var(--muted); font-size:.78rem; }
-    .lesson-card { min-width:0; display:grid; grid-template-columns:190px minmax(0,1fr); gap:28px; margin:0 0 20px; padding:26px; border:1px solid var(--line); border-radius:24px; background:#fffefa; box-shadow:0 14px 38px rgb(21 47 38 / 8%); }
-    .card-side { padding-right:20px; border-right:1px solid var(--line); color:var(--ink); }
-    .card-number { color:var(--green); font-size:.84rem; font-weight:850; letter-spacing:.08em; }
-    .card-side h3 { margin:10px 0 8px; font-size:1.08rem; line-height:1.45; }
-    .card-role { color:var(--muted); font-size:.87rem; }
+    .lesson-card { position:relative; min-width:0; display:block; margin:0 0 20px; padding:0; overflow:hidden; border:1px solid #d8e2da; border-radius:20px; background:#fffefa; color:#1c2927; line-height:1.72; box-shadow:0 10px 28px rgb(24 52 40 / 7%); }
+    .lesson-head { display:grid; grid-template-columns:74px minmax(0,1fr); gap:16px; align-items:start; padding:25px 28px 21px; border-bottom:1px solid #e7ece5; }
+    .lesson-number { display:grid; place-items:center; width:50px; height:50px; border-radius:15px; background:#e9f0e3; color:#416c39; font-weight:850; font-size:1.1rem; }
+    .lesson-head h2 { margin:0; font-size:clamp(1.22rem,2vw,1.65rem); line-height:1.35; }
+    .lesson-head p { margin:8px 0 0; color:#5b6a65; font-size:.94rem; }
+    .lesson-body { padding:23px 28px 28px; min-width:0; }
+    .lesson-body p { max-width:880px; }
+    @media(max-width:900px) { .lesson-head,.lesson-body { padding-left:21px; padding-right:21px; } }
+    @media(max-width:700px) { .lesson-head { grid-template-columns:48px minmax(0,1fr); gap:10px; padding:18px; } .lesson-number { width:40px; height:40px; border-radius:12px; } .lesson-body { padding:18px; } }
     .card-main h2 { margin:0 0 8px; font-size:clamp(1.17rem,2.4vw,1.55rem); line-height:1.4; }
     .card-main>p { color:#53645d; }
     .dialogue { display:flex; gap:10px; align-items:center; margin:12px 0; padding:11px 15px; border-left:4px solid #8cae91; border-radius:0 13px 13px 0; background:#f0f5eb; }
@@ -140,7 +144,7 @@
     @media(max-width:850px) { .filter-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
     @media(max-width:760px) { .evap-stage { grid-template-columns:1fr; gap:10px; padding:38px 12px 13px; } .evap-visual { max-width:560px; } .evap-observation { min-height:104px; } .evap-observation strong { margin-bottom:3px; } }
     @media(max-width:560px) { .evap-stepper { grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr) 14px minmax(0,1fr); gap:5px; } .evap-step { min-height:49px; padding:6px 3px; font-size:.75rem; line-height:1.35; } .evap-arrow { font-size:.95rem; } }
-    @media(max-width:680px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:16px; padding-top:20px; } .lesson-card { grid-template-columns:1fr; gap:12px; padding:17px; } .card-side { display:grid; grid-template-columns:34px 1fr; column-gap:10px; align-items:center; padding:0 0 10px; border-right:0; border-bottom:1px solid var(--line); } .card-side h3 { margin:0; } .card-role { grid-column:2; } .section-top { display:block; } .progress-copy { display:block; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .goal-choice { min-width:100%; } }
+    @media(max-width:680px) { .shell { width:min(100% - 24px,1160px); } .hero { grid-template-columns:1fr; gap:16px; padding-top:20px; } .section-top { display:block; } .progress-copy { display:block; } .filter-steps li { padding:10px; } .filter-steps span { font-size:.76rem; } .goal-choice { min-width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
   <link rel="stylesheet" href="assets/chromatography.css?v=state-guidance-1">
@@ -176,10 +180,12 @@
     <div class="cards">
       <div class="section-top"><h2>先分離成分，再用濃度表示含量</h2><span class="progress-copy">提出問題 → 觀察證據 → 表示含量</span></div>
 
-      <section class="lesson-card" id="s1">
-        <div class="card-side"><span class="card-number">01</span><h3>如何把泥沙從水裡分開？</h3><span class="card-role">讓固體和液體分開</span></div>
-        <div class="card-main">
-          <h2>把泥沙水倒進漏斗，會發生什麼？</h2>
+      <section class="lesson-card" id="s1" aria-labelledby="s1-title">
+        <header class="lesson-head">
+          <span class="lesson-number">01</span>
+          <div><h2 id="s1-title">把泥沙水倒進漏斗，會發生什麼？</h2><p>讓固體和液體分開</p></div>
+        </header>
+        <div class="card-main lesson-body">
           <p>這杯混濁的雨水裡有泥沙顆粒。泥沙沒有溶解在水裡，仍是水中的固體成分。</p>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>泥沙混在水裡，要怎麼把它們分開？</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們用濾紙試試看，觀察泥沙和水各自去了哪裡。</p></div>
@@ -206,10 +212,12 @@
         </div>
       </section>
 
-      <section class="lesson-card" id="s2">
-        <div class="card-side"><span class="card-number">02</span><h3>鹽水裡的鹽，怎麼分離出來？</h3><span class="card-role">水分蒸發後，鹽形成固體</span></div>
-        <div class="card-main">
-          <h2>鹽溶在水裡，要怎麼分離出來？</h2>
+      <section class="lesson-card" id="s2" aria-labelledby="s2-title">
+        <header class="lesson-head">
+          <span class="lesson-number">02</span>
+          <div><h2 id="s2-title">鹽溶在水裡，要怎麼分離出來？</h2><p>水分蒸發後，鹽形成固體</p></div>
+        </header>
+        <div class="card-main lesson-body">
           <p>泥沙不溶於水，仍以顆粒的形式混在水中，能被濾紙攔下。鹽則能均勻溶於水，形成清澈的鹽水，會隨水穿過濾紙，因此無法用過濾將鹽分離出來。</p>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>如果東西已經溶在水裡，例如鹽，要怎麼把它分離出來呢？</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們讓水慢慢蒸發，再觀察容器裡最後留下什麼。</p></div>
@@ -228,10 +236,12 @@
         </div>
       </section>
 
-      <section class="lesson-card" id="s3">
-        <div class="card-side"><span class="card-number">03</span><h3>墨水裡可能混有幾種色素？</h3><span class="card-role">觀察色帶是否分開</span></div>
-        <div class="card-main">
-          <h2>一滴綠色墨水，會分出不同色帶嗎？</h2>
+      <section class="lesson-card" id="s3" aria-labelledby="s3-title">
+        <header class="lesson-head">
+          <span class="lesson-number">03</span>
+          <div><h2 id="s3-title">一滴綠色墨水，會分出不同色帶嗎？</h2><p>觀察色帶是否分開</p></div>
+        </header>
+        <div class="card-main lesson-body">
           <p>綠色水性筆墨水看起來均勻呈綠色，單看外觀不容易判斷裡面是否含有不同色素。</p>
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>看起來都是綠色的，也能分離出不同顏色嗎？</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們用濾紙層析觀察，看看墨水裡的色素會不會分成不同色帶。</p></div>
@@ -252,8 +262,12 @@
         </div>
       </section>
 
-<section class="lesson-card" id="s5"><div class="card-side"><span class="card-number">04</span><h3>重量百分濃度</h3><span class="card-role">用質量比例表示含量</span></div><div class="card-main">
-<h2>自己配糖水，濃度是多少？</h2><p>舀糖、倒水，看看濃度跟著怎麼變。</p>
+<section class="lesson-card" id="s5" aria-labelledby="s5-title">
+        <header class="lesson-head">
+          <span class="lesson-number">04</span>
+          <div><h2 id="s5-title">自己配糖水，濃度是多少？</h2><p>用質量比例表示含量</p></div>
+        </header>
+        <div class="card-main lesson-body"><p>舀糖、倒水，看看濃度跟著怎麼變。</p>
 <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>糖和水都讓我自己決定，配出來會是幾％？</p></div><div class="dialogue "><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先量出兩者的質量，再看糖占整杯糖水多少。</p></div>
 <div class="mix-scene" id="mix-lab" data-ready="loading" aria-label="分別稱量溶質與溶劑的實驗桌"><canvas id="mix-canvas" width="1536" height="1024" aria-hidden="true"></canvas><button class="mix-tool" id="mix-pitcher" type="button" aria-label="點水壺倒入1克水；按住持續倒水" disabled><span class="scene-action">＋ 水</span></button><button class="mix-target scene-control sugar-source" id="mix-sugar-source" type="button" data-mass-kind="sugar" data-mass-delta="1" aria-label="點糖罐舀入1克糖" disabled><span class="scene-action">＋ 糖</span></button><button class="mix-target scene-control sugar-pan" id="mix-sugar-pan" type="button" data-mass-kind="sugar" data-mass-delta="-1" aria-label="點秤上的糖舀出1克糖" disabled><span class="scene-action">− 糖</span></button><button class="mix-target scene-control water-cup" id="mix-water-cup" type="button" data-mass-kind="water" data-mass-delta="-1" aria-label="點秤上的量杯倒出1克水" disabled><span class="scene-action">− 水</span></button><span class="role-tag sugar">溶質｜糖</span><span class="role-tag water">溶劑｜水</span><button class="lcd sugar" id="mix-sugar-input" type="button" aria-label="輸入糖的克數" disabled><span data-mix="sugar-read">5.0 g</span><svg viewBox="0 0 20 20"><path d="m5 12 8-8 3 3-8 8-4 1zM11 6l3 3"/></svg></button><button class="lcd water" id="mix-water-input" type="button" aria-label="輸入水的克數" disabled><span data-mix="water-read">95.0 g</span><svg viewBox="0 0 20 20"><path d="m5 12 8-8 3 3-8 8-4 1zM11 6l3 3"/></svg></button><span class="tare">兩台秤皆已扣除容器質量</span><button class="restart" id="mix-reset" type="button" aria-label="重新配製" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></button></div>
 <p class="mix-status" id="mix-status" role="status" aria-live="polite"></p>
@@ -262,10 +276,12 @@
 <div class="concept-line">溶液總質量＝溶質質量＋溶劑質量。糖溶解後仍包含在總質量中。</div>
 </div></section>
 
-<section class="lesson-card" id="s6">
-<div class="card-side"><span class="card-number">05</span><h3>微量比例與 ppm</h3><span class="card-role">看整池水與少量溶質的質量差距</span></div>
-<div class="card-main">
-<h2>一整池水，只加這一點，是多少 ppm？</h2>
+<section class="lesson-card" id="s6" aria-labelledby="s6-title">
+        <header class="lesson-head">
+          <span class="lesson-number">05</span>
+          <div><h2 id="s6-title">一整池水，只加這一點，是多少 ppm？</h2><p>看整池水與少量溶質的質量差距</p></div>
+        </header>
+        <div class="card-main lesson-body">
 <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，除了百分濃度，還有其他表示濃度的方法嗎？</p></div>
 <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>有啊！當溶質占的比例非常小時，常用 ppm 表示。我們拿一座泳池來舉例。</p></div>
 <div class="ppm-observation" id="ppm-lab" data-ready="loading" aria-label="整池水與微量溶質的ppm計算">
