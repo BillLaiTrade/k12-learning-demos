@@ -1,0 +1,59 @@
+✔ at 0.20 model seconds the near receiver has received while the 68m wave reaches its wall (0.777023ms)
+✔ the shared spatial scale and clock preserve propagation speed and two equal legs (0.40408ms)
+✔ audio arrival times use the same slowed clock and equal-distance echoes coincide once (0.954898ms)
+▶ 3.4 distance comparison follows the approved two-lane mockup
+  ✔ two stacked scenes load with real separate apparatus, one distance input and no unsolicited audio controls (489.625172ms)
+Distance final audio: {"same":true,"delays":[0,1.6,3.2],"gains":[1,0.44999998807907104,0.44999998807907104],"master":0.3199999928474426,"peaks":[0.31965693831443787,0.14384561777114868,0.14384561777114868]}
+  ✔ direct speaker click emits once plus both correctly delayed weaker echoes at the final output (3458.516432ms)
+  ✔ at the comparison moment near has arrived while far just reaches the wall; pause freezes the shared record and waves (4094.609801ms)
+  ✔ each speaker and lower button restarts the same controller and cancels previous echoes (414.898932ms)
+  ✔ mouse wall dragging keeps the fixed lane unchanged, clamps distance and cancels the previous observation (194.257361ms)
+  ✔ wall and native distance input both support keyboard with bounds; equal distances share one echo (1912.803566ms)
+  ✔ cross-section playback and hidden pages stop this scene without autoplaying on return (142.383331ms)
+  ✔ all scene, records, controls and dialogues stay in the content column from 1440 to 320px (5974.796213ms)
+  ✔ real touch wall dragging and speaker tapping work under reduced motion (964.419888ms)
+  ✔ audio failure appears only on failure and a new explicit play clears the error (573.04646ms)
+✔ 3.4 distance comparison follows the approved two-lane mockup (19194.481926ms)
+✔ echo uses two equal legs and the specified air or water speed (1.244504ms)
+✔ invalid physical inputs are rejected (0.882687ms)
+✔ wave reaches wall halfway and then returns to receiver (0.177977ms)
+✔ absorption preserves direct sound and path delays while reducing reflection energy (0.330886ms)
+✔ assessment identifies omissions, wrong reasoning and correct understanding (1.110264ms)
+▶ 3.4 first lesson matches approved apparatus layout and has two synchronized playback entrances
+  ✔ complete scene and Traditional Chinese text load, with no automatic animation or sound (324.037207ms)
+  ✔ clicking the pictured speaker emits exactly one original and its weaker delayed copy (145.663953ms)
+Measured final Web Audio output: {"state":"running","gain":0.3199999928474426,"direct":0.31965693831443787,"echo":0.14384561777114868}
+  ✔ final output contains both audible-strength pulses after all gain stages (4658.348532ms)
+  ✔ the page has no web volume controls and keeps device-based volume adjustment (6.200375ms)
+  ✔ both entrances restart the same timeline and cancel earlier scheduled echoes (616.277605ms)
+  ✔ pause freezes waves and audio; resume preserves the emission count (481.111462ms)
+  ✔ surface contact precedes return; receiver lights only when the returning sound arrives (4916.483169ms)
+  ✔ pause and changing sections/background stop playback without a separate sound switch (230.639128ms)
+  ✔ keyboard Enter and Space activate the real speaker hit area once each (49.980444ms)
+  ✔ the scene, phase strip, controls and explanation all remain within the right content column (687.672175ms)
+  ✔ touch and reduced-motion still allow explicit speaker playback and pause (875.556577ms)
+  ✔ blocked or stalled audio shows a visible retry message rather than a false playback success (2749.571282ms)
+  ✔ prefixed Web Audio fallback can also emit from an explicit click (477.028737ms)
+✔ 3.4 first lesson matches approved apparatus layout and has two synchronized playback entrances (16985.866733ms)
+▶ 3.4 reflection, ranging, sonar, absorption and assessment
+  ✔ six lessons, one quiz, shared avatars and an overview link (66.576588ms)
+  ✔ ranges produce correct leg lengths and accept native keyboard input (102.384005ms)
+  ✔ wave pause freezes, resume advances, reset preserves chosen conditions (830.174437ms)
+  ✔ cross-section playback, input changes and backgrounding stop old playback (154.280754ms)
+  ✔ sonar uses water speed, conceals distance and reveals it from the return time (145.846335ms)
+  ✔ room and treatment modes redraw weaker reflections with the same direct path (155.554713ms)
+  ✔ synthesized phrase decodes; opt-in audio stops on pause and cross-section playback (226.659639ms)
+  ✔ the absorption comparison plays the same phrase and stops when its condition changes (212.926009ms)
+  ✔ a full room observation completes and can restart from zero (2270.840834ms)
+  ✔ quiz distinguishes missing, wrong, correct, edited and reset answers (299.621318ms)
+  ✔ anchors and 1440 through 320px layouts work without page overflow (2468.364277ms)
+  ✔ touch playback moves under reduced motion and pauses both animation and audio (802.670232ms)
+✔ 3.4 reflection, ranging, sonar, absorption and assessment (8524.708065ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 46
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45768.616211
