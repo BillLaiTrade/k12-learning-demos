@@ -69,7 +69,7 @@
   <link rel="stylesheet" href="assets/mirror-image.css?v=12">
   <link rel="stylesheet" href="assets/mirror-distance.css?v=visual-polish-20261029">
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=application-polish-20261029">
-  <link rel="stylesheet" href="assets/reversible-light.css?v=3">
+  <link rel="stylesheet" href="assets/reversible-light.css?v=angle-equality-20261030">
   <link rel="stylesheet" href="assets/periscope.css?v=8">
   <style>
     .route a.quiz-nav{margin-top:12px;border-top:1px solid var(--line);padding-top:17px;color:#8a6726;font-size:.86rem;font-weight:750}
@@ -381,7 +381,7 @@
                 <div class="reverse-overlap" id="reverse-overlap" hidden>紅藍光路重合</div>
                 <div class="reverse-fallback" id="reverse-fallback" hidden><p id="reverse-fallback-message"></p><svg id="reverse-fallback-svg" viewBox="0 0 400 325" role="img" aria-label="光路可逆的替代俯視圖"></svg></div>
               </div>
-              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><span class="reverse-angle-readout">入射角 <output id="reverse-angle-value" aria-label="目前入射角">30°</output></span><button type="button" id="reverse-reset">↻ 重新設定</button></div>
+              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><span class="reverse-angle-readout"><span class="reverse-incident-angle">入射角</span>＝<span class="reverse-reflected-angle">反射角</span>＝<output id="reverse-angle-value" aria-label="目前入射角與反射角">30°</output></span><button type="button" id="reverse-reset">↻ 重新設定</button></div>
             </div>
             <div class="reverse-legend"><span><i class="reverse-red"></i>A：紅光</span><span><i class="reverse-blue"></i>B：藍光</span></div>
             <div class="reverse-paths"><div><small>A 紅光路徑</small><strong>A → M → B</strong><span id="reverse-path-a-status">已關閉</span></div><div><small>B 藍光路徑</small><strong>B → M → A</strong><span id="reverse-path-b-status">已關閉</span></div></div>
