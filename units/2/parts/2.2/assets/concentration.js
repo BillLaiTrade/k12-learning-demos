@@ -1,5 +1,5 @@
-import { LIMITS, INITIAL, ACTION_MS, POUR_DELAY, POUR_RATE, massValue, concentrationState, format } from './concentration-state.js?v=apparatus-3';
-import { TOOL, renderMix } from './concentration-renderer.js?v=apparatus-3';
+import { LIMITS, INITIAL, ACTION_MS, POUR_DELAY, POUR_RATE, massValue, concentrationState, format, sugarActionState } from './concentration-state.js?v=sugar-motion-1';
+import { TOOL, renderMix } from './concentration-renderer.js?v=sugar-motion-1';
 const $=id=>document.getElementById(id);
 const lab=$('mix-lab'),canvas=$('mix-canvas'),ctx=canvas.getContext('2d');
 const spoon=$('mix-spoon'),pitcher=$('mix-pitcher'),cup=$('mix-water-cup'),reset=$('mix-reset'),status=$('mix-status');
@@ -45,7 +45,7 @@ function startNext(now){
   if(animation||!queue.length)return;
   const action=queue.shift(),startMass=state[action.kind],target=clamp(startMass+action.delta,...LIMITS[action.kind]);
   if(target===startMass){startNext(now);return;}
-  animation={...action,start:now,startMass,target,duration:reduceMotion?80:ACTION_MS[action.kind]};
+  animation={...action,start:now,startMass,target,duration:reduceMotion?(action.kind==='sugar'?1800:80):ACTION_MS[action.kind]};
 }
 function frame(now){
   raf=null;
@@ -57,7 +57,7 @@ function frame(now){
   }
   if(animation&&!animation.hold){
     const p=clamp((now-animation.start)/animation.duration,0,1);
-    const flow=animation.kind==='water'?clamp((p-.25)/.55,0,1):clamp((p-.2)/.6,0,1);
+    const flow=animation.kind==='water'?clamp((p-.25)/.55,0,1):sugarActionState(p,animation.delta).transfer;
     setMass(animation.kind,animation.startMass+(animation.target-animation.startMass)*flow);
     if(p>=1){const kind=animation.kind;setMass(kind,animation.target);animation=null;announce(`${kind==='sugar'?'糖':'水'}已量得 ${format(state[kind],1)} 克，濃度 ${format(values().percent)}%。`);}
   }
@@ -73,8 +73,8 @@ function point(event){const r=lab.getBoundingClientRect();return{x:(event.client
 function wireTool(button,kind){
   button.addEventListener('pointerdown',event=>{
     if(event.button!==0)return;ignoreClick=false;
-    if(animation&&!animation.hold)setMass(animation.kind,animation.target);
-    for(const action of queue)setMass(action.kind,clamp(state[action.kind]+action.delta,...LIMITS[action.kind]));
+    // Let queued spoonfuls finish visibly instead of jumping to their targets.
+    if(animation||queue.length)return;
     clearActions();const p=point(event);gesture={kind,id:event.pointerId,start:performance.now(),px:p.x,py:p.y,x:TOOL[kind].x,y:TOOL[kind].y,moved:false,held:false,startWater:state.water};button.setPointerCapture(event.pointerId);
     if(kind==='water')schedule();
   });

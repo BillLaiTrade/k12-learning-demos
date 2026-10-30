@@ -1,4 +1,4 @@
-import { POUR_DELAY } from './concentration-state.js?v=apparatus-3';
+import { POUR_DELAY, sugarActionState } from './concentration-state.js?v=sugar-motion-1';
 // Apparatus positions follow the approved 1536 x 1024 photograph.
 export const TOOL = {
   sugar: { x: 407, y: 392, w: 335, h: 147, angle: 0 },
@@ -13,14 +13,23 @@ export function toolPose(kind, animation, drag, now) {
   if(!animation||animation.kind!==kind||kind==='water'&&animation.delta<0)return home;
   const t=Math.max(0,Math.min(1,(now-animation.start)/animation.duration));
   const strength=animation.hold?ease((now-animation.start)/POUR_DELAY):ease(Math.min(t/.3,(1-t)/.25));
-  if(kind==='sugar'&&animation.delta<0){
-    // Reach into the weighed pile, lift one spoonful, then carry it back.
-    const stops=[{t:0,x:home.x,y:home.y},{t:.2,x:405,y:510},{t:.42,x:405,y:420},{t:.72,x:25,y:425},{t:1,x:home.x,y:home.y}];
-    const i=stops.findIndex((p,i)=>i<stops.length-1&&t>=p.t&&t<=stops[i+1].t),a=stops[Math.max(0,i)],b=stops[Math.max(0,i)+1],f=ease((t-a.t)/(b.t-a.t));
-    return {...home,x:lerp(a.x,b.x,f),y:lerp(a.y,b.y,f)};
+  if(kind==='sugar'){
+    const stops=animation.delta<0?[
+      {t:0,...home},{t:.20,x:430,y:520,angle:.05},{t:.30,x:430,y:520,angle:.05},
+      {t:.42,x:430,y:410,angle:0},{t:.60,x:45,y:405,angle:.15},
+      {t:.82,x:45,y:405,angle:.30},{t:.94,x:300,y:370,angle:0},{t:1,...home}
+    ]:[
+      {t:0,...home},{t:.14,x:90,y:455,angle:-.06},{t:.26,x:70,y:515,angle:.03},
+      {t:.34,x:70,y:515,angle:.03},{t:.48,x:405,y:400,angle:0},
+      {t:.60,x:405,y:455,angle:.12},{t:.70,x:405,y:455,angle:.32},
+      {t:.82,x:405,y:455,angle:.32},{t:.92,x:405,y:425,angle:.05},{t:1,...home}
+    ];
+    const i=stops.findIndex((p,i)=>i<stops.length-1&&t>=p.t&&t<=stops[i+1].t);
+    const a=stops[Math.max(0,i)],b=stops[Math.max(0,i)+1],f=ease((t-a.t)/(b.t-a.t));
+    return {...home,x:lerp(a.x,b.x,f),y:lerp(a.y,b.y,f),angle:lerp(a.angle,b.angle,f)};
   }
-  const target=kind==='water'?{x:1195,y:240,angle:-1.0}:animation.delta<0?{x:284,y:441,angle:-.08}:{x:405,y:398,angle:.12};
-  return {...home,x:lerp(home.x,target.x,strength),y:lerp(home.y,target.y,strength),angle:lerp(0,target.angle,strength),flip:kind==='sugar'&&animation.delta<0?-1:1};
+  const target={x:1195,y:240,angle:-1.0};
+  return {...home,x:lerp(home.x,target.x,strength),y:lerp(home.y,target.y,strength),angle:lerp(0,target.angle,strength)};
 }
 function drawTool(ctx,atlas,kind,pose) {
   if(kind==='water') {
@@ -100,10 +109,17 @@ export function renderMix(ctx,images,state,animation,drag,now) {
     const lip=world(cupPose,104,-130);
     ctx.beginPath();ctx.moveTo(lip.x,lip.y);ctx.quadraticCurveTo(lip.x+6,300,1320,345);ctx.strokeStyle='#c8dfd677';ctx.lineWidth=5;ctx.lineCap='round';ctx.stroke();ctx.strokeStyle='#f8ffffda';ctx.lineWidth=1.6;ctx.stroke();
   }
-  if(animation?.kind==='sugar'&&t>.18&&t<.8){
-    const back=animation.delta<0;if(back&&t<.57)return {sugar:sugarPose,water:waterPose,beaker:cupPose};
-    const tipX=back?sugarPose.x+140:552,tipY=back?sugarPose.y+45:450,destX=back?145:544,destY=back?558:577;
-    for(let i=0;i<32;i++){const f=((now/500+i*.057)%1);ctx.fillStyle=i%3?'#fffef4':'#e7e2d9';ctx.fillRect(lerp(tipX,destX,f)+Math.sin(i*3)*8*f,lerp(tipY,destY,f*f),1.6,2);}
+  const sugarAction=animation?.kind==='sugar'?sugarActionState(t,animation.delta):null;
+  if(sugarAction?.pouring){
+    const lip=world(sugarPose,140,45),back=animation.delta<0;
+    const destination=back?{x:145,y:558}:{x:544,y:577};
+    for(let i=0;i<32;i++){
+      const fall=(sugarAction.pourProgress-i/32*.72)/.28;
+      if(fall<0||fall>1)continue;
+      const x=lerp(lip.x,destination.x,fall)+Math.sin(i*3)*7*fall,y=lerp(lip.y,destination.y,fall*fall);
+      ctx.fillStyle=i%3?'#fffef4':'#e7e2d9';ctx.strokeStyle='#bcb4a866';ctx.lineWidth=.6;
+      ctx.beginPath();ctx.ellipse(x,y,2.2,1.7,i,0,Math.PI*2);ctx.fill();ctx.stroke();
+    }
   }
   return {sugar:sugarPose,water:waterPose,beaker:cupPose};
 }

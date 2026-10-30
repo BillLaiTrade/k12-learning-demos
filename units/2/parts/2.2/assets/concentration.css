@@ -124,3 +124,5 @@
  #s5 .live-result .meaning {margin-top:10px!important;padding-top:8px;line-height:1.65;}
  #s5 .concept-line {margin:10px 0 16px;padding:8px 11px;}
 }
+
+#s5 .mix-scene[data-activity="scooping"] .sugar-pan .scene-action {visibility:hidden;}
