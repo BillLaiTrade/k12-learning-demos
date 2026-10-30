@@ -1,0 +1,36 @@
+✔ 2.3: reaction volume, water levels and calibrated geometry agree (2.782282ms)
+✔ 2.3: recording is gated by baseline, waiting, and equalisation (0.597064ms)
+✔ 2.3: dry/humid proportions use one total and do not add CO2 twice (0.225394ms)
+✔ 2.3: fully immersed cup keeps paper dry and respects the tank (4.149878ms)
+✔ 2.3: escaping air and wet paper persist when cup is straightened (0.67499ms)
+✔ 2.3: cup model clamps depth and angle without forcing an orientation (0.316639ms)
+✔ 2.3: lifting a tilted cup preserves its angle across the old depth threshold (0.444278ms)
+✔ 2.3: an exposed rim drains to the outside level after a visible transition (0.515223ms)
+✔ 2.3: a filled inverted cup retains water above the tank while its mouth is submerged (0.296649ms)
+✔ 2.3: exposure starts gradual drainage and wet paper cannot become dry (0.527802ms)
+✔ 2.3: a raised cup tilted mouth-up retains water below its lower lip (0.233486ms)
+✔ 2.3: enlarged paper fits inside the cup and left/right rotation is symmetric (0.221158ms)
+✔ 2.3: integrated report checks evidence instead of reusing main experiment (0.240787ms)
+▶ 2.3: eight-section learning flow and independent controls work in browser
+  ✔ eight matching anchors, shared avatars, and unit entry (127.386814ms)
+  ✔ seven teaching sections follow 1.1 side titles and main headings across screen sizes (220.279201ms)
+  ✔ cup first drag stays vertical until release; dragging the rim then rotates both ways (735.706587ms)
+  ✔ dragging alone completes both observations; reset stays compact above the scene (3786.562815ms)
+  ✔ a filled cup retains visible water above the tank, then drains gradually when the mouth emerges (7972.772393ms)
+  ✔ mouth-up cup keeps painted water after direct lifting on both sides and fits inside the scene (14602.809977ms)
+  ✔ lifting a tilted cup never snaps upright and rotation remains available after lifting (3254.189031ms)
+  ✔ cup uses direct dragging without a control panel; keyboard and fresh paper work (701.027982ms)
+  ✔ initial record gates reaction; pause retains state (3855.006383ms)
+  ✔ waiting and water-level alignment are required before final recording (2686.556485ms)
+  ✔ composition selection, splint samples and humid/dry basis (238.860717ms)
+  ✔ one integrated report has actionable feedback and independent reset (234.264228ms)
+  ✔ narrow viewport, keyboard focus, and reduced motion stay usable (2287.672362ms)
+✔ 2.3: eight-section learning flow and independent controls work in browser (41687.180807ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41936.432385

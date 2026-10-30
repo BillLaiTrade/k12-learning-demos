@@ -129,77 +129,43 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     assert.equal(await page.locator('#cup-scene').getAttribute('data-rotation-unlocked'), 'false');
   });
 
-  await t.test('guided cup immersion, pause, tilt and comparison follow the approved proposal', async () => {
-    await page.locator('#cup-reset').click();
-    assert.equal(await page.locator('#cup-comparison').isVisible(), false);
-    await page.locator('#cup-action').click(); await page.clock.runFor(2100);
-    assert.equal(await page.locator('#cup-scene').getAttribute('data-submerged'), 'true');
-    assert.equal(await page.locator('#cup-scene').getAttribute('data-paper-below'), 'true');
-    assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'false');
-    assert.equal(await page.locator('#cup-scene').getAttribute('data-within-tank'), 'true');
-    await captureCup('cup-immersed.png');
-    await page.locator('#cup-action').click(); await page.clock.runFor(650);
-    await page.locator('#cup-action').click();
-    const angle = await page.locator('#cup-scene').getAttribute('data-angle');
-    await page.clock.runFor(500); assert.equal(await page.locator('#cup-scene').getAttribute('data-angle'), angle);
-    await page.locator('#cup-action').click(); await page.clock.runFor(6200);
-    assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'true');
-    assert.equal(Number(await page.locator('#cup-scene').getAttribute('data-escaped')), 1);
-    assert.equal(await page.locator('#cup-comparison').isVisible(), true);
-    assert.equal(await page.locator('#cup-conclusion').isVisible(), true);
-    await captureCup('cup-complete.png');
-    await page.locator('[data-cup-preview="before"]').click();
-    assert.match(await page.locator('#cup-status').innerText(), /回看直立入水/);
-    assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'true', 'preview does not dry the current paper');
-    await captureCup('cup-mock-comparison.png');
-    await page.locator('#cup-action').click(); await page.locator('#cup-action').click(); await page.clock.runFor(6500);
-    assert.match(await page.locator('#cup-status').innerText(), /不會自動補回/);
-  });
-
-  await t.test('slow tilt is continuous in both motion modes and the magnifier is fully removed', async () => {
-    for (const mode of ['no-preference', 'reduce']) {
-      const probe = await browser.newPage({ reducedMotion: mode, viewport: { width: mode === 'reduce' ? 390 : 1440, height: 1000 } });
-      try {
-        const start = new Date('2026-10-29T00:00:00Z');
-        await probe.clock.install({ time: start });
-        await probe.clock.pauseAt(start);
-        await probe.goto(base + 'units/2/parts/2.3/', { waitUntil: 'networkidle' });
-        assert.equal(await probe.locator('#cup-zoom-toggle, #cup-zoom, #cup-zoom-scene').count(), 0);
-        assert.equal(await probe.locator('.cup-actions button').count(), 2);
-        await probe.locator('#cup-action').click(); await probe.clock.runFor(2100);
-        await probe.locator('#cup-action').click();
-        const angles = [];
-        await probe.clock.runFor(100);
-        angles.push(Number(await probe.locator('#cup-scene').getAttribute('data-angle')));
-        assert.ok(angles[0] > 0 && angles[0] < 10, `${mode}: no initial jump`);
-        await probe.clock.runFor(1000);
-        angles.push(Number(await probe.locator('#cup-scene').getAttribute('data-angle')));
-        assert.ok(angles[1] > 15 && angles[1] < 30, `${mode}: slow after one second`);
-        await probe.locator('#cup-action').click();
-        const paused = await probe.locator('#cup-scene').getAttribute('data-angle');
-        await probe.clock.runFor(1000);
-        assert.equal(await probe.locator('#cup-scene').getAttribute('data-angle'), paused);
-        await probe.emulateMedia({ reducedMotion: mode === 'reduce' ? 'no-preference' : 'reduce' });
-        assert.equal(await probe.locator('#cup-scene').getAttribute('data-angle'), paused, 'preference change must not skip to the end');
-        await probe.emulateMedia({ reducedMotion: mode });
-        await probe.locator('#cup-action').click();
-        for (let i = 0; i < 4; i++) {
-          await probe.clock.runFor(1000);
-          const angle = Number(await probe.locator('#cup-scene').getAttribute('data-angle'));
-          assert.ok(angle > angles.at(-1) && angle < 125, `${mode}: intermediate angle ${angle}`);
-          assert.ok(angle - angles.at(-1) < 25, `${mode}: steady speed ${angles.at(-1)} -> ${angle}`);
-          angles.push(angle);
-          if (i === 1) await probe.locator('#cup-scene').screenshot({ path: path.join(artifacts, `slow-tilt-${mode}-middle.png`) });
-        }
-        assert.equal(await probe.locator('#cup-comparison').isVisible(), false);
-        await probe.clock.runFor(1500);
-        assert.equal(Number(await probe.locator('#cup-scene').getAttribute('data-angle')), 125);
-        assert.equal(await probe.locator('#cup-scene').getAttribute('data-animating'), 'false');
-        assert.equal(await probe.locator('#cup-comparison').isVisible(), true);
-        await probe.evaluate(() => { document.activeElement?.blur(); document.querySelector('#s1').scrollIntoView({ behavior: 'instant', block: 'start' }); });
-        await probe.locator('#s1').screenshot({ path: path.join(artifacts, `slow-tilt-${mode}-complete.png`) });
-      } finally { await probe.close(); await page.bringToFront(); }
+  await t.test('dragging alone completes both observations; reset stays compact above the scene', async () => {
+    for (const width of [1440, 820, 390, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.locator('#cup-reset').click();
+      assert.equal(await page.locator('#cup-action, .cup-actions').count(), 0);
+      assert.equal(await page.locator('.cup-toolbar button').count(), 1);
+      const reset = await page.locator('#cup-reset').boundingBox();
+      const scene = await page.locator('#cup-scene').boundingBox();
+      assert.ok(reset.height >= 32 && reset.height <= 40, 'compact reset remains usable');
+      assert.ok(reset.y + reset.height <= scene.y, 'reset does not cover the scene');
+      assert.ok(Math.abs(reset.x + reset.width - scene.x - scene.width) < 2, 'reset aligns right');
+      assert.ok(reset.width < scene.width * .6, 'reset is not a full-width action');
+      await dragCupVertically(13);
+      assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'false');
+      assert.equal(await page.locator('#cup-scene').getAttribute('data-submerged'), 'true');
+      assert.equal(await page.locator('#cup-scene').getAttribute('data-within-tank'), 'true');
+      await rotateRim(125);
+      assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'true');
+      assert.equal(await page.locator('#cup-comparison').isVisible(), true);
+      assert.equal(await page.locator('#cup-conclusion').isVisible(), true);
+      await captureCup(`drag-reset-${width}.png`);
+      await page.locator('[data-cup-preview="before"]').click();
+      assert.match(await page.locator('#cup-status').innerText(), /回看直立入水/);
+      assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'true');
+      await page.locator('[data-cup-preview="before"]').click();
+      await rotateRim(-125);
+      assert.match(await page.locator('#cup-status').innerText(), /不會自動補回/);
+      await page.locator('#cup-reset').focus(); await page.keyboard.press('Enter');
+      assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'false');
+      assert.equal(await page.locator('#cup-scene').getAttribute('data-depth'), '-1');
+      assert.equal(await page.locator('#cup-scene').getAttribute('data-angle'), '0');
+      assert.equal(await page.locator('#cup-scene').getAttribute('data-rotation-unlocked'), 'false');
+      assert.equal(await page.locator('#cup-comparison').isVisible(), false);
+      assert.equal(await page.locator('#cup-conclusion').isVisible(), false);
+      await captureCup(`reset-initial-${width}.png`);
     }
+    await page.setViewportSize({ width: 1440, height: 1000 });
   });
 
   await t.test('a filled cup retains visible water above the tank, then drains gradually when the mouth emerges', async () => {
@@ -209,9 +175,9 @@ test('2.3: eight-section learning flow and independent controls work in browser'
         const start = new Date('2026-10-29T00:00:00Z');
         await probe.clock.install({ time: start }); await probe.clock.pauseAt(start);
         await probe.goto(base + 'units/2/parts/2.3/', { waitUntil: 'networkidle' });
-        await probe.locator('#cup-action').click(); await probe.clock.runFor(2100);
-        await probe.locator('#cup-action').click(); await probe.clock.runFor(6500);
-        await probe.locator('#cup-action').click(); await probe.clock.runFor(6500);
+        await dragCupVertically(13, probe);
+        await rotateRim(125, probe);
+        await rotateRim(-125, probe);
         await dragCupVertically(-9, probe);
         assert.equal(await probe.locator('#cup-scene').getAttribute('data-mouth-exposed'), 'false');
         assert.ok(Math.abs(Number(await probe.locator('#cup-scene').getAttribute('data-water-area')) - 72) < 1e-6);
@@ -269,7 +235,10 @@ test('2.3: eight-section learning flow and independent controls work in browser'
           });
           assert.ok(bounds.cupTop - bounds.top >= 23, 'raised cup is not cropped');
           assert.match(await probe.locator('#cup-scene svg').getAttribute('aria-label'), /杯內有水/);
-          const sample = await pointOnCup(-Math.sign(angle) * 1.5, -1, probe);
+          // Screenshot capture scrolls the scene into view; settle that scroll before sampling coordinates.
+          await probe.locator('#cup-scene').scrollIntoViewIfNeeded();
+          // Local SVG coordinates: sample inside the retained water, away from its anti-aliased surface.
+          const sample = await pointOnCup(-Math.sign(angle) * 30, -10, probe);
           const box = await probe.locator('#cup-scene').boundingBox();
           const shot = await probe.locator('#cup-scene').screenshot({ path: path.join(artifacts, `mouth-up-${width}-${angle}.png`) });
           const paint = await probe.evaluate(({ png, x, y }) => new Promise((resolve, reject) => {
@@ -298,7 +267,7 @@ test('2.3: eight-section learning flow and independent controls work in browser'
       await page.locator('#cup-scene').focus(); await page.keyboard.press('ArrowRight');
       assert.equal(Number(await page.locator('#cup-scene').getAttribute('data-angle')), 0, 'first immersion remains locked');
       assert.equal(await page.locator('#cup-scene').getAttribute('data-rotation-unlocked'), 'false');
-      await page.locator('#cup-action').click(); await page.clock.runFor(2100);
+      await dragCupVertically(13);
       await rotateRim(sign * 125);
       const angleBeforeLift = Number(await page.locator('#cup-scene').getAttribute('data-angle'));
       assert.ok(Math.abs(angleBeforeLift - sign * 125) < .01);
@@ -322,8 +291,7 @@ test('2.3: eight-section learning flow and independent controls work in browser'
       await page.locator('#cup-scene').focus(); await page.keyboard.press('ArrowUp');
       await dragCupVertically(-2);
       assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-angle')) - sign * 105) < 1);
-      assert.match(await page.locator('#cup-action').innerText(), /放回水中/);
-      await page.locator('#cup-action').click(); await page.clock.runFor(2100);
+      await dragCupVertically(12 - Number(await page.locator('#cup-scene').getAttribute('data-depth')));
       assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-angle')) - sign * 105) < 1);
       await rotateRim(-sign * 105);
       assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-angle'))) < 1, 'dragging the rim back straightens the cup');
@@ -440,8 +408,8 @@ test('2.3: eight-section learning flow and independent controls work in browser'
     const reduced = await browser.newPage({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 }, hasTouch: true });
     await reduced.clock.install();
     await reduced.goto(base + 'units/2/parts/2.3/', { waitUntil: 'networkidle' });
-    await reduced.locator('#cup-action').click(); await reduced.clock.runFor(2100);
-    await reduced.locator('#cup-action').click(); await reduced.clock.runFor(6500);
+    await dragCupVertically(13, reduced);
+    await rotateRim(125, reduced);
     assert.equal(await reduced.locator('#cup-comparison').isVisible(), true);
     assert.equal(await reduced.locator('#cup-scene').getAttribute('data-wet'), 'true');
     assert.equal(await reduced.locator('#cup-zoom-toggle, #cup-zoom').count(), 0);
