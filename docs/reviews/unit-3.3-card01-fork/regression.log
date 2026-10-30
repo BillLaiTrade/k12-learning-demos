@@ -1,0 +1,20 @@
+✔ 3.3 sound relationships and bounded audio match the displayed model (92.565544ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (52.222962ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (792.740737ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (1695.952967ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (390.050021ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (246.290907ms)
+  ✔ hearing range and dBA examples change observations without producing test tones (121.978874ms)
+  ✔ one final task supports incomplete, incorrect, correct, editing, replay, clear and new requirements (366.307839ms)
+  ✔ lesson format follows unit 1.1 and navigation tracks ordinary reading (3596.932852ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (2452.825086ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (10394.887169ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10786.885288

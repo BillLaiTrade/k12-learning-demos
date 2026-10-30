@@ -1,18 +1,21 @@
 import {signal,stringFrequency,tubeFrequency,hearingBand,soundSamples,challenge,checkSettings} from './model.mjs?v=1';
+import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
+import {createForkExperiment} from './fork-experiment.mjs?v=1';
 import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
-const state={amplitude:.7,frequency:440,length:60,tension:1,tube:60,index:0};
+const state={frequency:440,length:60,tension:1,tube:60,index:0};
+const forkView=createForkExperiment($('card-01'));
 const names={pure:'純音',string:'弦音示意',pipe:'管音示意'};
 let target=challenge(), audioContext, source=null, activeRoot=null, animation=0, request=0;
 function svg(tag,attributes,parent){const n=document.createElementNS(ns,tag);for(const[k,v]of Object.entries(attributes))n.setAttribute(k,v);parent.append(n);return n;}
-function wave(id,frequency,amplitude,tone='pure'){
+function wave(id,frequency,amplitude,tone='pure',compact=false){
  const root=$(id);root.replaceChildren();
  for(const x of [50,300,550])svg('path',{d:`M${x} 25V145`,class:'grid'},root);
  svg('path',{d:'M50 25V145H550M50 85H550',class:'axis'},root);
- const points=Array.from({length:501},(_,i)=>`${i?'L':'M'}${50+i} ${(85-58*amplitude*signal(i/500*.01,frequency,tone)).toFixed(3)}`).join(' ');
+ const points=Array.from({length:501},(_,i)=>`${i?'L':'M'}${50+i} ${(85-58*amplitude*signal(i/500*(compact?4/frequency:.01),frequency,tone)).toFixed(3)}`).join(' ');
  svg('path',{d:points,class:'signal'},root);
  root.dataset.frequency=frequency;root.dataset.amplitude=amplitude;root.dataset.tone=tone;
- root.setAttribute('aria-label',`10毫秒內的聲音訊號，頻率${frequency.toFixed(1)}Hz，相對振幅${amplitude.toFixed(2)}，${names[tone]}`);
+ root.setAttribute('aria-label',`相同時間內（${(compact?4000/frequency:10).toFixed(2)}毫秒）的聲音訊號，頻率${frequency.toFixed(1)}Hz，相對振幅${amplitude.toFixed(2)}，${names[tone]}`);
 }
 function restInstrument(){
  const end=75+425*state.length/90;
@@ -29,12 +32,12 @@ function stop(root=activeRoot){
  if(source){source.onended=null;try{source.stop();}catch{}source.disconnect();source=null;}
  cancelAnimationFrame(animation);animation=0;
  if(activeRoot){activeRoot.dataset.playing='false';activeRoot.querySelectorAll('.stop').forEach(b=>b.disabled=true);activeRoot.querySelector('.play-state').textContent='已停止，點擊可重新播放';}
- activeRoot=null;restInstrument();
+ activeRoot=null;forkView.stop();restInstrument();
 }
 function config(key){
  const answer=answers();
  const map={
-  'amplitude-reference':{frequency:440,amplitude:.3},'amplitude-live':{frequency:440,amplitude:state.amplitude},
+  'amplitude-reference':{frequency:FORK_FREQUENCY,amplitude:.3},'amplitude-live':{frequency:FORK_FREQUENCY,amplitude:.7},
   'pitch-reference':{frequency:220,amplitude:.5},'pitch-live':{frequency:state.frequency,amplitude:.5},
   'string-reference':{frequency:220,amplitude:.55,tone:'string'},'string-live':{frequency:stringFrequency(state.length,state.tension),amplitude:.55,tone:'string'},
   'tube-reference':{frequency:tubeFrequency(60),amplitude:.55,tone:'pipe'},'tube-live':{frequency:tubeFrequency(state.tube),amplitude:.55,tone:'pipe'},
@@ -50,15 +53,18 @@ async function play(button){
   const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)throw Error('unsupported');
   audioContext??=new Audio();await audioContext.resume();
   if(ticket!==request||document.hidden)return;
-  const data=soundSamples(settings,audioContext.sampleRate),buffer=audioContext.createBuffer(1,data.length,audioContext.sampleRate);
+  const forkKey=button.dataset.forkStrike;
+  const data=forkKey?forkSamples(settings.amplitude,audioContext.sampleRate):soundSamples(settings,audioContext.sampleRate),buffer=audioContext.createBuffer(1,data.length,audioContext.sampleRate);
   buffer.copyToChannel(data,0);source=audioContext.createBufferSource();source.buffer=buffer;source.connect(audioContext.destination);
   root.dataset.playing='true';root.dataset.frequency=String(settings.frequency);root.dataset.amplitude=String(settings.amplitude);root.dataset.tone=settings.tone||'pure';
-  root.querySelectorAll('.stop').forEach(b=>b.disabled=false);root.querySelector('.play-state').textContent=`播放中・${settings.frequency.toFixed(1)} Hz`;
-  const start=performance.now(),currentSource=source;
+  root.querySelectorAll('.stop').forEach(b=>b.disabled=false);root.querySelector('.play-state').textContent=forkKey?`${forkKey==='soft'?'輕敲':'較重敲'}，觀察振幅與聲音`:`播放中・${settings.frequency.toFixed(1)} Hz`;
+  const start=performance.now(),currentSource=source,forkStart=audioContext.currentTime+(forkKey?STRIKE_DELAY:0);
+  if(forkKey)forkView.start(forkKey);
   source.onended=()=>{if(source===currentSource){stop(root);root.querySelector('.play-state').textContent='播放完畢，可再次比較';}};
-  source.start();
+  source.start(forkStart);
   function animate(now){
    if(source!==currentSource)return;
+   if(forkKey)forkView.update(audioContext.currentTime-forkStart);
    const t=(now-start)/1000,fade=Math.max(0,1-t/1.6);
    if(button.dataset.play==='string-live'){
     const end=75+425*state.length/90,displacement=12*Math.sin(t*2*Math.PI*settings.frequency/60)*fade;
@@ -73,8 +79,7 @@ async function play(button){
  }
 }
 function render(){
- wave('amplitude-reference',440,.3);wave('amplitude-live',440,state.amplitude);
- $('amplitude-reading').textContent=`440 Hz・相對振幅 ${state.amplitude.toFixed(2)}`;
+ wave('amplitude-reference',FORK_FREQUENCY,.3,'pure',true);wave('amplitude-live',FORK_FREQUENCY,.7,'pure',true);
  wave('pitch-reference',220,.5);wave('pitch-live',state.frequency,.5);$('pitch-reading').textContent=`${state.frequency} Hz・每秒振動${state.frequency}次`;
  $('string-length-reading').textContent=state.length+' cm';$('string-tension-reading').textContent=state.tension.toFixed(2)+' 倍';$('string-frequency').textContent=stringFrequency(state.length,state.tension).toFixed(1)+' Hz';
  $('tube-length-reading').textContent=state.tube+' cm';$('tube-frequency').textContent=tubeFrequency(state.tube).toFixed(1)+' Hz';
@@ -95,7 +100,7 @@ function newChallenge(){
  $('quiz-original').textContent=`${target.base} Hz・相對振幅0.35・純音`;
  wave('quiz-base',target.base,.35);$('settings-form').reset();renderChoice();
 }
-const binding={amplitude:'amplitude',frequency:'frequency','string-length':'length','string-tension':'tension','tube-length':'tube'};
+const binding={frequency:'frequency','string-length':'length','string-tension':'tension','tube-length':'tube'};
 for(const[id,key]of Object.entries(binding))$(id).addEventListener('input',()=>{stop();state[key]=Number($(id).value);render();});
 for(const root of document.querySelectorAll('.lesson-card,.quiz')){
  root.dataset.playing='false';
@@ -105,7 +110,8 @@ for(const root of document.querySelectorAll('.lesson-card,.quiz')){
 }
 for(const button of document.querySelectorAll('[data-reset]'))button.addEventListener('click',()=>{
  stop();const n=Number(button.dataset.reset);
- const defaults={1:{amplitude:.7},2:{frequency:440},3:{length:60,tension:1},4:{tube:60},5:{}};Object.assign(state,defaults[n]);
+ if(n===1)forkView.reset();
+ const defaults={1:{},2:{frequency:440},3:{length:60,tension:1},4:{tube:60},5:{}};Object.assign(state,defaults[n]);
  for(const[id,key]of Object.entries(binding))$(id).value=state[key];render();
  button.closest('section').querySelector('.play-state').textContent='等待操作';
 });

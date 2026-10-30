@@ -171,3 +171,52 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .brand-row{gap:10px}
 .brand,.crumb{font-size:.8rem}
 }
+
+/* 第一區：同一支音叉；配置依已核可示意圖。 */
+.fork-card-role>span{display:inline-block}
+.fork-lab{margin:16px 0 12px;padding:7px;border:1px solid #cbdcd4;border-radius:15px;background:#fffefa}
+.fork-scene{position:relative;overflow:hidden;aspect-ratio:2.35;border-radius:10px;background:#e4c89f url('fork-tabletop-background.png') center/cover no-repeat}
+.fork-fixed-label{position:absolute;z-index:2;top:10px;left:10px;padding:3px 11px;border:1px solid #e8ddc9;border-radius:999px;background:#fffaf0ef;color:#34433d;font-size:.83rem;font-weight:650}
+.fork-apparatus{position:absolute;left:0;bottom:0;display:block;width:65%;height:100%;overflow:visible}
+.fork-closeup{position:absolute;top:10px;bottom:10px;right:10px;width:34%;display:flex;min-width:0;flex-direction:column;overflow:hidden;border:4px solid #fffefa;border-radius:13px;background:#fffdf5}
+.card-main .fork-closeup h3{margin:0;padding:5px 9px;background:#e8efdf;color:#22382e;font-size:.88rem;white-space:nowrap}
+.fork-closeup svg{display:block;width:100%;min-height:0;flex:1;overflow:hidden}
+.fork-closeup text{font-family:inherit;font-size:24px;fill:#b75e2a;font-weight:750}
+.fork-closeup text.fork-equilibrium-label{fill:#667871;font-weight:600}
+.fork-closeup>p{margin:0;padding:0 3px 3px;text-align:center;font-size:.72rem;color:#637369}
+.fork-lab figcaption{margin-top:4px;color:var(--muted);font-size:.78rem;line-height:1.5}
+.fork-actions{display:grid;grid-template-columns:1fr 1fr auto auto;gap:8px;margin:10px 0 12px}
+.fork-actions button{min-width:0;padding:9px 10px;white-space:nowrap;font-size:.88rem}
+.fork-actions .play[aria-pressed=true]{background:#105640;box-shadow:inset 0 0 0 2px #d3e9d6}
+.fork-actions .stop:disabled{opacity:1;border-color:#d7dfd9;background:#e9eeeb;color:#8a9691;cursor:not-allowed}
+.card-main .fork-records>h3{margin:0 0 8px;font-size:1rem}
+.fork-comparisons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fork-record{min-width:0;padding:10px;border:1px solid #cadfd8;border-radius:12px;background:#fff}
+.card-main .fork-record>h3{margin:0 0 7px}
+.fork-record-body{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;min-height:82px}
+.fork-record .wave{height:80px}
+.fork-findings{display:grid;gap:6px;font-size:.78rem;color:#3d4841}
+.fork-findings span{padding:5px 7px;border-radius:7px;background:#faf5e9;white-space:nowrap}
+.fork-record-pending{display:grid;min-height:82px;align-content:center;margin:0;color:#718176;font-size:.82rem}
+.fork-same-pitch{display:flex;align-items:center;gap:12px;margin:8px 0 0;color:#667870;font-size:.84rem;text-align:center}
+.fork-same-pitch::before,.fork-same-pitch::after{height:1px;flex:1;background:#c7d8d0;content:""}
+.fork-conclusion{margin-bottom:0}
+@media(max-width:1000px) and (min-width:761px){
+.fork-scene{aspect-ratio:1.65}
+.fork-closeup{width:39%;right:7px;top:7px;bottom:7px}
+.fork-apparatus{width:63%}
+.fork-fixed-label{font-size:.7rem;left:6px;top:7px;padding:2px 6px}
+.fork-actions{grid-template-columns:1fr 1fr}
+.fork-comparisons{grid-template-columns:1fr}
+.fork-closeup>p{font-size:.62rem}
+}
+@media(max-width:760px){
+.fork-scene{aspect-ratio:1.65}
+.fork-closeup{width:39%;right:6px;top:7px;bottom:7px;border-width:3px}
+.fork-apparatus{width:63%}
+.card-main .fork-closeup h3{font-size:.75rem;padding:4px}
+.fork-fixed-label{font-size:.68rem;left:6px;top:7px;padding:2px 6px}
+.fork-closeup>p{font-size:.6rem}
+.fork-actions{grid-template-columns:1fr 1fr}
+.fork-comparisons{grid-template-columns:1fr}
+}

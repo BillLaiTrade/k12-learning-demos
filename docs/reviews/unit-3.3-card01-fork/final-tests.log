@@ -1,0 +1,29 @@
+✔ fork sound preserves frequency and decay while strength changes amplitude (11.531518ms)
+▶ fork experiment: actual sound, synchronized motion, recording and layout
+  ✔ idle state shows the approved apparatus, accessible actions and unfilled records (74.827118ms)
+  ✔ both strikes have the same real frequency; heavy has larger audio and visible displacement (1213.897423ms)
+  ✔ stop retains observations; reset clears them; natural completion and keyboard work (2782.121749ms)
+  ✔ rapid repeat, navigation, offscreen, hidden tab and pagehide stop sound and motion (1490.309212ms)
+  ✔ cancelled async audio preparation never starts later; playback failure can retry (1009.025071ms)
+  ✔ desktop/laptop visual hierarchy matches the approved mockup and mobile stays usable (1505.945901ms)
+✔ fork experiment: actual sound, synchronized motion, recording and layout (9103.513086ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (91.164196ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (58.006195ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (790.145035ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (1692.254608ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (391.483917ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (246.638044ms)
+  ✔ hearing range and dBA examples change observations without producing test tones (119.300169ms)
+  ✔ one final task supports incomplete, incorrect, correct, editing, replay, clear and new requirements (383.084816ms)
+  ✔ lesson format follows unit 1.1 and navigation tracks ordinary reading (3745.625429ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (2559.271183ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (11061.964836ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11441.871091

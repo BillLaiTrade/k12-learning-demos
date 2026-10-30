@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="比較振幅、頻率與波形，探索琴弦、空氣柱、音色及聽覺範圍，認識分貝的基本讀法。">
 <title>不同的聲音，差別在哪裡？｜3.3 聲音的特性</title>
-<link rel="stylesheet" href="assets/lesson.css?v=3">
-<script type="module" src="assets/lesson.mjs?v=2">
+<link rel="stylesheet" href="assets/lesson.css?v=4">
+<script type="module" src="assets/lesson.mjs?v=3">
 </script>
 </head>
 <body>
@@ -32,7 +32,7 @@
 <nav class="route" aria-label="本段學習路徑">
 <p class="route-label">本單元的探索路線</p>
 <div class="route-inner">
-<a href="#card-01" aria-current="step"><b>01</b><span>同一個聲音，為什麼有時大聲、有時小聲？</span></a>
+<a href="#card-01" aria-current="step"><b>01</b><span>同一支音叉，輕敲和重敲有什麼不同？</span></a>
 <a href="#card-02"><b>02</b><span>聲音變高，是因為振動得更快嗎？</span></a>
 <a href="#card-03"><b>03</b><span>同一條琴弦，怎麼彈出不同高低的聲音？</span></a>
 <a href="#card-04"><b>04</b><span>空氣柱長短不同，聲音會怎麼變？</span></a>
@@ -49,55 +49,85 @@
 <div class="card-side">
 <span class="card-number">01</span>
 <h3>響度與振幅</h3>
-<span class="card-role">固定頻率，比較振幅</span>
+<span class="card-role fork-card-role"><span>同一支音叉，</span><span>比較振幅</span></span>
 </div>
 <div class="card-main">
-<h2>同一個聲音，為什麼有時大聲、有時小聲？</h2>
-<p>先比較同一個音高的兩段聲音，再改變右邊的振幅。</p>
-<div class="dialogue dialogue--xiaokui">
-<span class="speaker"><span class="visually-hidden">小葵</span></span>
-<p>這兩段聲音高低相同，為什麼一段比較大聲？</p>
-</div>
-<div class="compare-grid">
-<div class="compare-card">
-<h3>較小的振幅</h3>
-<p class="minor">440 Hz・相對振幅 0.30</p>
-<div class="wave-panel">
-<span class="wave-label" aria-hidden="true">相對振幅</span>
-<svg class="wave" id="amplitude-reference" viewBox="0 15 600 140" preserveAspectRatio="none" role="img" aria-label="聲音訊號隨時間的變化">
+<h2>同一支音叉，輕敲和重敲有什麼不同？</h2>
+<p>保持音高相同，比較聲音大小與振動幅度。</p>
+<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>同一支音叉，為什麼這次比較大聲？</p></div>
+<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們輕敲、再較重敲一次，比較看看。</p></div>
+<figure class="fork-lab" aria-label="同一支音叉的敲擊與振幅觀察">
+<div class="fork-scene">
+<span class="fork-fixed-label">同一支音叉・音高固定</span>
+<svg id="fork-apparatus" class="fork-apparatus" viewBox="0 0 600 400" role="img" aria-label="同一支金屬音叉固定在木座上，兩叉股在敲擊後反向振動">
+<defs>
+<linearGradient id="fork-handle" x2="0" y2="1"><stop stop-color="#f2c87c"/><stop offset=".45" stop-color="#bd7e35"/><stop offset="1" stop-color="#805022"/></linearGradient>
+<radialGradient id="fork-rubber"><stop stop-color="#6b6559"/><stop offset=".65" stop-color="#37352e"/><stop offset="1" stop-color="#1e211f"/></radialGradient>
+</defs>
+<g id="fork-photo"></g>
+<g id="fork-mallet" transform="translate(404 330) rotate(24)">
+<ellipse cx="65" cy="13" rx="81" ry="8" fill="#473824" opacity=".12"/>
+<rect x="0" y="-8" width="130" height="16" rx="8" fill="url(#fork-handle)" stroke="#805727"/>
+<rect x="-5" y="-9" width="21" height="18" rx="3" fill="#bbb4a1" stroke="#767567"/>
+<circle r="27" fill="url(#fork-rubber)" stroke="#292d26"/>
+<path d="M-19-8Q-10-23 8-18" fill="none" stroke="#a6a08e" stroke-width="2" opacity=".45"/>
+</g>
 </svg>
-<div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div>
-</div>
-<button class="play" type="button" data-play="amplitude-reference">
-<span aria-hidden="true">▶</span> 播放聲音</button>
-</div>
-<div class="compare-card">
-<h3>改變振幅</h3>
-<p class="minor">
-<output id="amplitude-reading">440 Hz・相對振幅 0.70</output>
-</p>
-<div class="wave-panel">
-<span class="wave-label" aria-hidden="true">相對振幅</span>
-<svg class="wave" id="amplitude-live" viewBox="0 15 600 140" preserveAspectRatio="none" role="img" aria-label="聲音訊號隨時間的變化">
+<aside class="fork-closeup" aria-label="音叉其中一個叉股的放大觀察">
+<h3>振動放大觀察</h3>
+<svg id="fork-detail" viewBox="0 0 260 285" role="img" aria-label="振幅由平衡位置量到單側最大位移">
+<defs>
+<linearGradient id="fork-tip-metal"><stop stop-color="#716f67"/><stop offset=".16" stop-color="#e6e3db"/><stop offset=".38" stop-color="#b6b6b0"/><stop offset=".8" stop-color="#9b9c96"/><stop offset="1" stop-color="#565d58"/></linearGradient>
+<marker id="fork-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#b75e2a"/></marker>
+</defs>
+<text x="80" y="30" text-anchor="middle" class="fork-equilibrium-label">平衡位置</text>
+<rect x="59" y="115" width="42" height="170" rx="4" fill="none" stroke="#89978d" stroke-dasharray="4 5" opacity=".25"/>
+<path d="M80 47V275" stroke="#7d8981" stroke-width="2" stroke-dasharray="7 6"/>
+<g id="fork-amplitude-marker" visibility="hidden">
+<path id="fork-amplitude-arrow" d="M80 88H80" stroke="#b75e2a" stroke-width="2" marker-start="url(#fork-arrow)" marker-end="url(#fork-arrow)"/>
+<path id="fork-extreme-guide" d="M80 81V120" stroke="#b75e2a" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text id="fork-amplitude-label" x="100" y="73" text-anchor="middle">振幅</text>
+</g>
+<g id="fork-prong-tip" transform="translate(80 0)">
+<rect x="-21" y="115" width="42" height="180" rx="4" fill="url(#fork-tip-metal)" stroke="#6d756e"/>
+<path d="M-18 120H16M-18 120V285" fill="none" stroke="#f7f6ee" stroke-width="2"/>
+</g>
 </svg>
-<div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div>
+<p id="fork-detail-caption">等待敲擊</p>
+</aside>
 </div>
-<button class="play" type="button" data-play="amplitude-live">
-<span aria-hidden="true">▶</span> 播放聲音</button>
+<figcaption>振動放慢、位移放大呈現；聲音保持原音高。</figcaption>
+</figure>
+<div class="fork-actions">
+<button class="play" type="button" data-play="amplitude-reference" data-fork-strike="soft" aria-pressed="false"><span aria-hidden="true">▶</span> 輕敲一次</button>
+<button class="play" type="button" data-play="amplitude-live" data-fork-strike="strong" aria-pressed="false"><span aria-hidden="true">▶</span> 較重敲一次</button>
+<button class="stop secondary" type="button" disabled><span aria-hidden="true">■</span> 停止</button>
+<button class="reset secondary" data-reset="1" type="button"><span aria-hidden="true">⟳</span> 重設</button>
+</div>
+<span class="play-state visually-hidden" role="status">等待操作</span>
+<div class="fork-records" aria-labelledby="fork-record-title">
+<h3 id="fork-record-title">比較紀錄</h3>
+<div class="fork-comparisons">
+<div class="fork-record" data-fork-record="soft" data-observed="false">
+<h3>輕敲</h3>
+<div class="fork-record-body" hidden>
+<svg class="wave" id="amplitude-reference" viewBox="0 15 600 140" preserveAspectRatio="none" role="img" aria-label="輕敲的振幅比較圖"></svg>
+<div class="fork-findings"><span>振幅較小</span><span>聲音較小</span></div>
+</div>
+<p class="fork-record-pending">輕敲後，留下這次的比較紀錄。</p>
+</div>
+<div class="fork-record" data-fork-record="strong" data-observed="false">
+<h3>較重敲</h3>
+<div class="fork-record-body" hidden>
+<svg class="wave" id="amplitude-live" viewBox="0 15 600 140" preserveAspectRatio="none" role="img" aria-label="較重敲的振幅比較圖"></svg>
+<div class="fork-findings"><span>振幅較大</span><span>聲音較大</span></div>
+</div>
+<p class="fork-record-pending">較重敲後，留下這次的比較紀錄。</p>
 </div>
 </div>
-<label class="slider">右側相對振幅 <input id="amplitude" type="range" min="0.2" max="0.9" step="0.05" value="0.7">
-</label>
-<p class="model-note">兩圖皆為10毫秒的訊號；上下是相對振幅，不是空氣粒子移動的路線。</p>
-<div class="lab-tools">
-<button class="stop secondary" type="button" disabled>停止播放</button>
-<button class="reset secondary" data-reset="1" type="button">回到起點</button>
-<span class="play-state" role="status">等待操作</span>
+<p class="fork-same-pitch" hidden>兩次的音高相同</p>
 </div>
-<div class="dialogue">
-<span class="speaker"><span class="visually-hidden">阿公</span></span>
-<p>在頻率與其他條件相近時，振幅較大，通常聽起來比較大聲。大小聲叫作響度，和聲音高低不同。</p>
-</div>
+<div class="dialogue fork-conclusion" hidden><span class="speaker"><span class="visually-hidden">阿公</span></span><p>音高保持相同時，振幅越大，通常聽起來越大聲。</p></div>
 </div>
 </section>
 <section class="lesson-card" id="card-02" data-core="音調與頻率">

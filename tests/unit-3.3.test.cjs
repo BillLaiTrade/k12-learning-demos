@@ -17,24 +17,27 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium'});t.after(()=>browser.close());
  const page=await browser.newPage({viewport:{width:1440,height:1100}}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
- await page.addInitScript(()=>{window.audioRuns=[];const create=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=create.call(this),start=s.start.bind(s),stop=s.stop.bind(s);let entry;s.start=function(...args){const a=s.buffer.getChannelData(0),rate=s.buffer.sampleRate;let sum=0,crossings=0;for(let i=rate*.1|0;i<rate*.3;i++){sum+=a[i]**2;if(a[i-1]<0&&a[i]>=0)crossings++;}entry={rms:Math.sqrt(sum/(rate*.2)),frequency:crossings/.2,peak:Math.max(...a),stopped:false};window.audioRuns.push(entry);return start(...args);};s.stop=function(...args){if(entry)entry.stopped=true;return stop(...args);};return s;};});
+ await page.addInitScript(()=>{window.audioRuns=[];const create=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=create.call(this),start=s.start.bind(s),stop=s.stop.bind(s);let entry;s.start=function(...args){const a=s.buffer.getChannelData(0),rate=s.buffer.sampleRate;let sum=0,crossings=0;for(let i=rate*.1|0;i<rate*.3;i++){sum+=a[i]**2;if(a[i-1]<0&&a[i]>=0)crossings++;}entry={rms:Math.sqrt(sum/(rate*.2)),frequency:crossings/.2,peak:a.reduce((peak,v)=>Math.max(peak,Math.abs(v)),0),stopped:false};window.audioRuns.push(entry);return start(...args);};s.stop=function(...args){if(entry)entry.stopped=true;return stop(...args);};return s;};});
  const base=process.env.SOUND33_BASE_URL||`http://127.0.0.1:${port}/units/3/parts/3.3/`;
  await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('#tone-pipe .signal').waitFor({state:'attached'});
  const set=async(id,value)=>{await page.locator('#'+id).fill(String(value));};
  const play=async key=>{await page.locator(`[data-play="${key}"]`).click();await page.waitForFunction(()=>document.querySelector('[data-playing=true]'));};
- await t.test('all main comparisons are visible by default and no sound autoplays',async()=>{
+ await t.test('seven blocks and comparisons render without autoplay',async()=>{
   assert.equal(await page.locator('.lesson-card').count(),7);assert.equal(await page.locator('.quiz').count(),1);assert.equal(await page.locator('form').count(),1);assert.equal(await page.evaluate(()=>window.audioRuns.length),0);
   assert.equal(await page.locator('.wave .signal').count(),9);
   for(const href of await page.locator('.route a').evaluateAll(ns=>ns.map(n=>n.hash)))assert.equal(await page.locator(href).count(),1);
   assert.equal(await page.locator('#card-01 .speaker').first().evaluate(n=>getComputedStyle(n).backgroundImage.includes('dialogue-character-avatars')),true);
   assert.doesNotMatch(await page.locator('body').innerText(),/候選版|第八區|聽力保護|CARD 0/);
  });
- await t.test('amplitude changes real audio strength while keeping frequency fixed',async()=>{
-  await play('amplitude-reference');await play('amplitude-live');
+ await t.test('fork strikes change audio amplitude at the same pitch and leave resettable observations',async()=>{
+  assert.equal(await page.locator('#card-01 .fork-conclusion').isHidden(),true);
+  await play('amplitude-reference');await page.waitForFunction(()=>document.querySelector('[data-fork-record="soft"]').dataset.observed==='true');
+  await play('amplitude-live');await page.waitForFunction(()=>document.querySelector('[data-fork-record="strong"]').dataset.observed==='true');
   const runs=await page.evaluate(()=>window.audioRuns.slice(-2));assert.ok(Math.abs(runs[0].frequency-440)<10&&Math.abs(runs[1].frequency-440)<10);assert.ok(runs[1].rms/runs[0].rms>2.2);assert.equal(runs[0].stopped,true);
-  await set('amplitude',.9);assert.match(await page.locator('#amplitude-reading').textContent(),/0.90/);assert.equal(await page.locator('#amplitude-live').getAttribute('data-frequency'),'440');
-  await page.locator('#card-01 .reset').click();assert.equal(await page.locator('#amplitude').inputValue(),'0.7');
-  await page.locator('#amplitude').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#amplitude').inputValue(),'0.75');
+  assert.equal(await page.locator('#card-01 .fork-conclusion').isVisible(),true);
+  assert.equal(await page.locator('#amplitude-reference').getAttribute('data-frequency'),'440');assert.equal(await page.locator('#amplitude-live').getAttribute('data-frequency'),'440');
+  await page.locator('#card-01 .reset').click();assert.equal(await page.locator('#card-01 .fork-conclusion').isHidden(),true);assert.equal(await page.locator('[data-fork-record="soft"]').getAttribute('data-observed'),'false');assert.equal(await page.locator('#card-01 .stop').isDisabled(),true);
+  await page.locator('[data-fork-strike="soft"]').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelector('#card-01').dataset.forkState==='vibrating');await page.locator('#card-01 .stop').click();assert.equal(await page.locator('#fork-apparatus').getAttribute('data-displacement'),'0');
  });
  await t.test('frequency changes pitch and the plotted cycles with amplitude held fixed',async()=>{
   const before=await page.locator('#pitch-live .signal').getAttribute('d');await set('frequency',880);assert.match(await page.locator('#pitch-reading').textContent(),/880/);assert.notEqual(await page.locator('#pitch-live .signal').getAttribute('d'),before);assert.equal(await page.locator('#pitch-live').getAttribute('data-amplitude'),'0.5');

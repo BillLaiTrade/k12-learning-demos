@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-30",
+  "reference": "/workspace/generated_images/exec-1bea7fd2-da13-41b7-8417-5ee1a1fad62d.png",
+  "assets": [
+    {
+      "kind": "background",
+      "file": "fork-tabletop-background.png",
+      "generated_path": "/workspace/generated_images/exec-8d827a8f-affe-4484-a141-e709fbf1e8d9.png",
+      "transparent_background": false,
+      "prompt": "From the supplied approved lesson UI mockup, create ONLY the warm TABLETOP BACKGROUND used inside its main tuning-fork experiment panel. Reconstruct a clean wide landscape scene approximately 2.35:1: softly sunlit honey-colored wooden tabletop along the lower 45%, warm blurred classroom wall and green plant at left in upper background, softly diagonal window-light shadows, realistic painterly texture matching the reference's experiment photo. The tabletop is EMPTY: absolutely no tuning fork, wood block, mallet, instruments, hands, person, cards, text, labels, diagrams, frames, borders, inset, controls, UI, measurement marks. Clean space across middle-left for a separately animated apparatus and clean right third for an HTML observation inset. Front tabletop surface is flat and continuous. This is the background layer of an interactive webpage, not the whole UI. Render only the background scene, edge-to-edge, no margins. Landscape wide."
+    },
+    {
+      "kind": "apparatus",
+      "file": "fork-apparatus.png",
+      "generated_path": "/workspace/generated_images/exec-bd8a7355-ed50-4c1d-be5c-ac8226f4464e.png",
+      "transparent_background": true,
+      "prompt": "Extract and redraw ONLY the reference mockup's single silver TUNING FORK WITH ITS WOODEN SUPPORT BLOCK as a high quality transparent cutout, front-facing and centered. ONE physical fork: two parallel straight rectangular silver metal prongs with subtly rounded tips, a rounded U at bottom and ONE straight vertical central stem fixed into a modest honey-brown rectangular wooden block with realistic wood grain and a little perspective depth. Preserve the reference's polished brushed-metal highlights and realistic warm illumination. Vertical fork symmetrical, fully in frame, no perspective tilt of the two prongs; two well-separated prongs with sharp clean edges, identical length. The block rests horizontal, neither floating nor tilted. Aspect ratio about 2:3 portrait; fork fills most of height, block about 55% of canvas width, prongs around 20% of canvas width. The background must be genuinely transparent alpha, including the gap between prongs. NO mallet, NO tabletop, no floor/shadow plate, no labels/text/numbers, no UI, no plant, no hands, no extra instrument, no duplicated fork, no motion trails. Entire fork, stem and base intact, a discreet small contact shadow immediately under the base is acceptable. This layer will be composited over a separate tabletop and its prongs animated independently."
+    }
+  ]
+}

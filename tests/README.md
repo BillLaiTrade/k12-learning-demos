@@ -321,6 +321,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.1-states-table.test.cjs
 
 ```sh
 CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.3.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.3-fork.test.cjs
 ```
 
 驗證七區模型與實際聲音緩衝訊號、琴弦／空氣柱、音色近似RMS匹配、無極端頻率測試音、自然結束、跨區停止、唯一綜合小測、與1.1的格式對照、捲動側欄標示，以及八種寬度的七區欄位／控制項邊界與手機錨點遮擋檢查。合計11項（含外層），測試自行啟停伺服器與Chromium；臨時畫面位於 `/tmp/unit33-review/`。核心內容與檢視紀錄見 `docs/decisions/unit-3.3-initial-production.md` 、`docs/reviews/unit-3.3-initial/review.md` 及 `docs/reviews/unit-3.3-format/review.md`。
@@ -371,3 +372,8 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 ```
 
 第一區專項10項（含主項）：直接點喇叭與下方按鈕、重播時取消舊排程、暫停／續播、三階段與接收提示、同一緩衝區的原音與較弱延遲副本、關音效、跨區／背景停止、Enter／Space與觸控、減少動態，以及六種寬度內容欄邊界。`REFLECTION_URL`可指定公開3.4網址（以`/`結尾），會使用繼承的HTTPS代理。畫面暫存於`/tmp/k12-34-s1-verified`，不覆寫歷史審閱圖片。
+
+
+### 3.3第一區音叉專項
+
+`tests/unit-3.3-fork.test.cjs`共8項（含外層）：同頻率／衰減與振幅比例、初始與紀錄狀態、真實音訊緩衝區、兩種敲擊的實際螢幕位移與兩叉股反向、單側振幅、停止／重設／自然結束、Enter／空白鍵、快速重敲及跨區／畫面外／分頁隱藏／pagehide停止、非同步取消／聲音失敗重試、減少動態偏好及七種尺寸。配合既有3.3回歸11項，共19項通過；畫面位於`/tmp/unit33-fork-review`，核可圖與實際結果見`docs/reviews/unit-3.3-card01-fork/review.md`。

@@ -1,0 +1,17 @@
+✔ fork sound preserves frequency and decay while strength changes amplitude (18.426108ms)
+▶ fork experiment: actual sound, synchronized motion, recording and layout
+  ✔ idle state shows the approved apparatus, accessible actions and unfilled records (38.397505ms)
+  ✔ both strikes have the same real frequency; heavy has larger audio and visible displacement (1220.865766ms)
+  ✔ stop retains observations; reset clears them; natural completion and keyboard work (2761.664629ms)
+  ✔ rapid repeat, navigation, offscreen, hidden tab and pagehide stop sound and motion (1220.739808ms)
+  ✔ cancelled async audio preparation never starts later; playback failure can retry (815.162011ms)
+  ✔ desktop/laptop visual hierarchy matches the approved mockup and mobile stays usable (1399.010317ms)
+✔ fork experiment: actual sound, synchronized motion, recording and layout (8232.845474ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8551.190325
