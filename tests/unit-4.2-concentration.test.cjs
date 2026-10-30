@@ -7,7 +7,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  page.on('pageerror',e=>failures.push(String(e)));page.on('requestfailed',r=>failures.push(r.url()));page.on('response',r=>{if(r.status()>=400)failures.push(r.url());});
  const url=`http://127.0.0.1:${port}/units/2/parts/2.2/`;
  await page.clock.install({time:new Date('2026-10-28T00:00:00Z')});await page.goto(url+'#s5',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='true');await page.clock.pauseAt(new Date('2026-10-28T00:01:00Z'));
- const lab=page.locator('#mix-lab'),spoon=page.locator('#mix-spoon'),pitcher=page.locator('#mix-pitcher');
+ const lab=page.locator('#mix-lab'),sugarAdd=page.locator('#mix-sugar-source'),sugarRemove=page.locator('#mix-sugar-pan'),pitcher=page.locator('#mix-pitcher');
  const state=()=>lab.evaluate(e=>({sugar:Number(e.dataset.sugar),water:Number(e.dataset.water),total:Number(e.dataset.total),percent:Number(e.dataset.percent),activity:e.dataset.activity}));
  const ppm=()=>page.locator('#ppm-lab').evaluate(e=>({solute:Number(e.dataset.soluteG),total:Number(e.dataset.totalG),ppm:Number(e.dataset.ppm)}));
  const advance=async ms=>{await page.clock.runFor(20);await page.clock.fastForward(ms);};
@@ -28,20 +28,21 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   assert.equal(await page.locator('#mix-canvas').count(),1);assert.match(await page.locator('#s5 .speaker').first().evaluate(e=>getComputedStyle(e,'::before').backgroundImage),/shared-assets\/characters\/dialogue-character-avatars/);
   await advance(2000);assert.equal((await state()).sugar,5);
  });
- await t.test('spoon click adds mass with real changing pixels; weighed sugar and keyboard can take it back',async()=>{
-  const before=await lab.screenshot();await spoon.click();await advance(350);const moving=await lab.screenshot();assert.notDeepEqual(before,moving);
+ await t.test('sugar controls add and remove mass with changing animation pixels and native keyboard access',async()=>{
+  const before=await lab.screenshot();await sugarAdd.click();await advance(350);const moving=await lab.screenshot();assert.notDeepEqual(before,moving);
   await advance(3500);assert.equal((await state()).sugar,6);assert.equal((await state()).total,101);assert.match(await page.locator('[data-mix=percent]').innerText(),/^5\.941%$/);
   await page.locator('#mix-sugar-pan').click();await advance(3500);assert.equal((await state()).sugar,5);
-  await spoon.focus();await page.keyboard.press('ArrowDown');await advance(3500);assert.equal((await state()).sugar,4);
+  await sugarRemove.focus();await page.keyboard.press('Enter');await advance(3500);assert.equal((await state()).sugar,4);
  });
  await t.test('rapid clicks do not lose or duplicate aliquots; reset cancels pending transfers',async()=>{
-  await fresh();for(let i=0;i<3;i++)await spoon.click();for(let i=0;i<3;i++)await advance(3500);assert.equal((await state()).sugar,8);
-  await spoon.click();await fresh();await advance(2000);assert.equal((await state()).sugar,5);assert.equal((await state()).activity,'idle');
+  await fresh();for(let i=0;i<3;i++)await sugarAdd.click();for(let i=0;i<3;i++)await advance(3500);assert.equal((await state()).sugar,8);
+  await sugarAdd.click();await fresh();await advance(2000);assert.equal((await state()).sugar,5);assert.equal((await state()).activity,'idle');
  });
- await t.test('spoon drag deposits in the boat or returns to the sugar bowl; outside drops cancel',async()=>{
-  await fresh();await dragTool(spoon,.36,.55);await advance(3500);assert.equal((await state()).sugar,6);
-  await dragTool(spoon,.10,.58);await advance(3500);assert.equal((await state()).sugar,5);
-  await dragTool(spoon,.70,.80);await advance(3000);assert.equal((await state()).sugar,5);
+ await t.test('the drawn spoon has no click or drag control',async()=>{
+  await fresh();assert.equal(await page.locator('#mix-spoon').count(),0);
+  const source=await local(.35,.43),target=await local(.36,.55);
+  await page.mouse.click(source.x,source.y);await advance(3500);assert.equal((await state()).sugar,5);
+  await page.mouse.move(source.x,source.y);await page.mouse.down();await page.mouse.move(target.x,target.y,{steps:10});await page.mouse.up();await advance(3500);assert.equal((await state()).sugar,5);assert.equal((await state()).activity,'idle');
  });
  await t.test('pitcher tap, press-hold and release change water mass then stop without an extra click',async()=>{
   await fresh();await pitcher.click();await advance(3000);assert.equal((await state()).water,96);
@@ -52,7 +53,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  await t.test('pitcher drag and keyboard fine adjustment work; canceled gestures never transfer mass',async()=>{
   await fresh();await dragTool(pitcher,.65,.42);await advance(3000);assert.equal((await state()).water,96);
   await pitcher.focus();await page.keyboard.press('ArrowDown');await advance(3000);assert.equal((await state()).water,95);
-  const p=await spoon.boundingBox(),target=await local(.36,.55);await page.mouse.move(p.x+p.width/2,p.y+p.height/2);await page.mouse.down();await page.mouse.move(target.x,target.y,{steps:8});await page.keyboard.press('Escape');await page.mouse.up();await advance(3000);assert.equal((await state()).sugar,5);
+  const p=await pitcher.boundingBox(),target=await local(.65,.42);await page.mouse.move(p.x+p.width/2,p.y+p.height/2);await page.mouse.down();await page.mouse.move(target.x,target.y,{steps:8});await page.keyboard.press('Escape');await page.mouse.up();await advance(3000);assert.equal((await state()).water,95);
  });
  await t.test('clicking the four real apparatus locations adds from supplies and removes from scales',async()=>{
   await fresh();assert.equal(await page.locator('.mix-mass-controls,.mix-mass-action').count(),0);
@@ -123,7 +124,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
   await fresh();assert.deepEqual(await ppm(),{solute:100,total:100000100,ppm:100/100000100*1000000});
  });
  await t.test('native controls also operate by real touch',async()=>{
-  await fresh();await spoon.tap();await advance(3500);assert.equal((await state()).sugar,6);
+  await fresh();await sugarAdd.tap();await advance(3500);assert.equal((await state()).sugar,6);
   assert.ok(Math.abs((await ppm()).ppm-1)<.00001);
   await page.locator('#mix-water-input').tap();assert.equal(await page.locator('#mass-dialog').isVisible(),true);await page.locator('#mass-cancel').tap();
  });
@@ -140,7 +141,7 @@ test('4.2 direct weighing and ppm: science, interactions and approved layout',{t
  });
  await t.test('loading failure reports an error but ppm and other lesson blocks remain usable',async()=>{
   for(const asset of ['concentration-tools.webp','concentration-workbench-empty.webp','concentration-beaker.webp']){
-   const failed=await browser.newPage();try{await failed.route('**/'+asset,r=>r.abort());await failed.goto(url,{waitUntil:'domcontentloaded'});await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-spoon').isDisabled(),true);assert.equal(await failed.locator('.mix-target:disabled').count(),3);await failed.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.ready==='true');assert.ok(Math.abs(Number(await failed.locator('#ppm-lab').getAttribute('data-ppm'))-1)<.00001);await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.ready==='true');assert.equal(await failed.locator('#evap-visual').isEnabled(),true);await failed.locator('[data-evap-step="2"]').click();await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.step==='2');}finally{await failed.close();}
+   const failed=await browser.newPage();try{await failed.route('**/'+asset,r=>r.abort());await failed.goto(url,{waitUntil:'domcontentloaded'});await failed.waitForFunction(()=>document.querySelector('#mix-lab').dataset.ready==='error');assert.match(await failed.locator('#mix-status').innerText(),/無法載入/);assert.equal(await failed.locator('#mix-pitcher').isDisabled(),true);assert.equal(await failed.locator('.mix-target:disabled').count(),3);await failed.waitForFunction(()=>document.querySelector('#ppm-lab').dataset.ready==='true');assert.ok(Math.abs(Number(await failed.locator('#ppm-lab').getAttribute('data-ppm'))-1)<.00001);await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.ready==='true');assert.equal(await failed.locator('#evap-visual').isEnabled(),true);await failed.locator('[data-evap-step="2"]').click();await failed.waitForFunction(()=>document.querySelector('#evap-stage').dataset.step==='2');}finally{await failed.close();}
   }
  });
 });

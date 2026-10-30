@@ -2,7 +2,7 @@ import { LIMITS, INITIAL, ACTION_MS, POUR_DELAY, POUR_RATE, massValue, concentra
 import { TOOL, renderMix } from './concentration-renderer.js?v=sugar-motion-1';
 const $=id=>document.getElementById(id);
 const lab=$('mix-lab'),canvas=$('mix-canvas'),ctx=canvas.getContext('2d');
-const spoon=$('mix-spoon'),pitcher=$('mix-pitcher'),cup=$('mix-water-cup'),reset=$('mix-reset'),status=$('mix-status');
+const pitcher=$('mix-pitcher'),cup=$('mix-water-cup'),reset=$('mix-reset'),status=$('mix-status');
 let state={...INITIAL},ready=false,animation=null,queue=[],raf=null,gesture=null,ignoreClick=false,dialogKind=null,lastKey='';
 const massButtons=[...document.querySelectorAll('[data-mass-kind]')];
 const images={},reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -34,7 +34,7 @@ function paint(now=performance.now()){
   document.querySelector('[data-mix="water-read"]').textContent=lifted?'—':`${state.water.toFixed(1)} g`;
   if(!ready)return;
   const poses=renderMix(ctx,images,values(),animation,gesture?.moved?gesture:null,now);
-  for(const [kind,button] of [['sugar',spoon],['water',pitcher],['beaker',cup]]){
+  for(const [kind,button] of [['water',pitcher],['beaker',cup]]){
     const p=poses[kind];button.style.left=`${(p.x-p.w/2)/1536*100}%`;button.style.top=`${(p.y-p.h/2)/1024*100}%`;button.style.width=`${p.w/1536*100}%`;button.style.height=`${p.h/1024*100}%`;button.style.transform=`rotate(${p.angle}rad)`;
   }
 }
@@ -90,9 +90,7 @@ function wireTool(button,kind){
     const g=gesture,p=point(event);gesture=null;
     if(g.moved){
       ignoreClick=true;
-      if(kind==='sugar'&&p.x>330&&p.x<740&&p.y>450&&p.y<660)act('sugar',1);
-      else if(kind==='sugar'&&p.x<300&&p.y>450&&p.y<760)act('sugar',-1);
-      else if(kind==='water'&&p.x>830&&p.x<1130&&p.y>270&&p.y<590)act('water',1);
+      if(p.x>830&&p.x<1130&&p.y>270&&p.y<590)act('water',1);
     }else if(g.held){ignoreClick=true;animation=null;if(state.water===g.startWater)act('water',1);else announce(`水已量得 ${format(state.water,1)} 克，濃度 ${format(values().percent)}%。`);}
     paint();
   });
@@ -102,7 +100,7 @@ function wireTool(button,kind){
   button.addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown'].includes(event.key)){event.preventDefault();act(kind,event.key==='ArrowUp'?1:-1);}});
 }
 massButtons.forEach(button=>button.addEventListener('click',()=>act(button.dataset.massKind,Number(button.dataset.massDelta))));
-wireTool(spoon,'sugar');wireTool(pitcher,'water');
+wireTool(pitcher,'water');
 const dialog=$('mass-dialog'),input=$('mass-input');
 function openMass(kind){
   clearActions();paint();dialogKind=kind;const [min,max]=LIMITS[kind];
@@ -121,5 +119,5 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){ignoreClic
 function load(src){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error(src));img.src=new URL(src,import.meta.url).href;});}
 update();
 Promise.all([load('./concentration-workbench-empty.webp'),load('./concentration-tools.webp'),load('./concentration-beaker.webp')]).then(([background,tools,beaker])=>{
-  images.background=background;images.tools=tools;images.beaker=beaker;ready=true;lab.dataset.ready='true';[spoon,pitcher,reset,...massButtons,$('mix-sugar-input'),$('mix-water-input')].forEach(b=>b.disabled=false);paint();
-}).catch(()=>{ready=false;[spoon,pitcher,reset,...massButtons,$('mix-sugar-input'),$('mix-water-input')].forEach(b=>b.disabled=true);lab.dataset.ready='error';status.classList.add('error');status.textContent='無法載入配製場景，請重新整理頁面。下方 ppm 仍可操作。';});
+  images.background=background;images.tools=tools;images.beaker=beaker;ready=true;lab.dataset.ready='true';[pitcher,reset,...massButtons,$('mix-sugar-input'),$('mix-water-input')].forEach(b=>b.disabled=false);paint();
+}).catch(()=>{ready=false;[pitcher,reset,...massButtons,$('mix-sugar-input'),$('mix-water-input')].forEach(b=>b.disabled=true);lab.dataset.ready='error';status.classList.add('error');status.textContent='無法載入配製場景，請重新整理頁面。下方 ppm 仍可操作。';});
