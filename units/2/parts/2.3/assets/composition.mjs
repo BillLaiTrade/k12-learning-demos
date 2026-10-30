@@ -6,7 +6,9 @@ const status = section.querySelector('#air-highlight-status');
 const panel = section.querySelector('.air-composition-panel');
 const minor = section.querySelector('[data-component="minor"]');
 const detail = section.querySelector('.air-other-detail');
-const connector = section.querySelector('.air-zoom-link path');
+const connectorElement = section.querySelector('.air-zoom-link');
+const connector = connectorElement.querySelector('path');
+const detailTriggers = [...section.querySelectorAll('[aria-controls="air-minor-detail"]')];
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const descriptions = {
   all: '',
@@ -35,20 +37,13 @@ shares.forEach((share, index) => {
   share.style.setProperty('--mix-y', Math.floor(position / 10) - Math.floor(index / 10));
 });
 function updateConnector() {
+  if (detail.hidden) return;
   const p = panel.getBoundingClientRect();
   const m = minor.getBoundingClientRect();
   const d = detail.getBoundingClientRect();
-  const g = section.querySelector('.air-share-grid').getBoundingClientRect();
   const x = m.left + m.width / 2 - p.left;
   const y = m.bottom - p.top + 3;
-  const endY = d.top - p.top;
-  // When the legend stacks between the chart and inset, route through the panel gutter.
-  if (section.querySelector('.air-legend').getBoundingClientRect().top > g.bottom) {
-    const turnY = g.bottom - p.top + 7;
-    connector.setAttribute('d', `M ${x} ${y} V ${turnY} H 6 V ${endY - 9} H 25 V ${endY}`);
-  } else {
-    connector.setAttribute('d', `M ${x} ${y} V ${endY}`);
-  }
+  connector.setAttribute('d', `M ${x} ${y} V ${d.top - p.top}`);
 }
 function followConnector() {
   cancelAnimationFrame(connectorFrame);
@@ -73,7 +68,11 @@ function choose(gas, sourceShare) {
   }
   const target = sourceShare || shares.find(share => share.dataset.component === (['argon', 'other'].includes(gas) ? 'minor' : gas));
   if (target) for (const share of shares) share.tabIndex = share === target ? 0 : -1;
-  describe(); emphasize();
+  const expanded = ['minor', 'argon', 'other'].includes(gas);
+  detail.hidden = !expanded;
+  connectorElement.toggleAttribute('hidden', !expanded);
+  for (const trigger of detailTriggers) trigger.setAttribute('aria-expanded', String(expanded));
+  describe(); emphasize(); followConnector();
 }
 for (const button of controls) {
   button.disabled = false;
@@ -121,8 +120,14 @@ for (const button of viewControls) {
 // Clicking away dismisses the selection without consuming the other action.
 document.addEventListener('click', event => {
   const control = event.target.closest('.air-share, [data-air-gas], [data-air-view]');
-  if (control && section.contains(control)) return;
+  if ((control && section.contains(control)) || detail.contains(event.target)) return;
   if (selected !== 'all' || section.dataset.emphasis !== 'all') choose('all');
+});
+section.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !detail.hidden) {
+    event.preventDefault();
+    choose('all');
+  }
 });
 new ResizeObserver(followConnector).observe(panel);
 updateConnector();

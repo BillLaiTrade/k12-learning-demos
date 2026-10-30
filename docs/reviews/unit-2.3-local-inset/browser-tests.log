@@ -1,0 +1,31 @@
+▶ 2.3 composition: proportions, classification and optional emphasis
+  ✔ all proportions and both classes are visible before any action (226.638261ms)
+  ✔ mouse, keyboard and hover emphasis never hide teaching content (440.500463ms)
+  ✔ local inset opens only on a minor-component selection and closes without losing the chart (8853.415163ms)
+  ✔ both arrangements preserve all shares, selection and a visible connector (1984.30366ms)
+  ✔ argon and other select different parts of the enlarged minor share (4149.795736ms)
+  ✔ clicking shares in both layouts synchronizes legend, explanation and inset (4002.245204ms)
+  ✔ the chart is one Tab stop with spatial arrow navigation and native selection (1679.383969ms)
+  ✔ clicking beside the diagram dismisses all selections while preserving layout (10929.433565ms)
+  ✔ desktop and mobile keep the optional inset next to its source without overflow (6818.118422ms)
+  ✔ static content remains complete without JavaScript (912.513345ms)
+  ✔ touch, reduced motion and route anchor stay usable (2159.455273ms)
+✔ 2.3 composition: proportions, classification and optional emphasis (44037.627731ms)
+▶ 2.3 complete page: six teaching sections and one evidence-based quiz
+  ✔ all seven sections and routes exist, with natural dialogue and no retired experiment (175.258439ms)
+  ✔ default cup comparisons remain after preview and reset (170.847193ms)
+  ✔ both preparations replay, pause, resume and reset without hiding results (563.375424ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (235.466471ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (612.816044ms)
+  ✔ five widths show every diagram and section without horizontal overflow (2829.488081ms)
+  ✔ all teaching evidence is available without JavaScript (1017.415634ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (1313.811785ms)
+✔ 2.3 complete page: six teaching sections and one evidence-based quiz (8864.141891ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44490.319089
