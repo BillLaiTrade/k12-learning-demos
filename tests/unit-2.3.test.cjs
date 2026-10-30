@@ -5,7 +5,7 @@ const { existsSync, mkdirSync } = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
 
-test('2.3: composition entry preserves cup dragging, water retention and reset', { timeout: 180000 }, async t => {
+test('2.3: complete learning page preserves cup dragging, water retention and reset', { timeout: 180000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], { cwd: path.resolve(__dirname, '../..'), stdio: ['ignore', 'pipe', 'pipe'] });
   t.after(() => server.kill());
   const port = await new Promise((resolve, reject) => {
@@ -57,9 +57,9 @@ test('2.3: composition entry preserves cup dragging, water retention and reset',
   const phase = () => page.locator('html').getAttribute('data-phase');
   const volume = () => page.locator('#reaction-scene').getAttribute('data-volume').then(Number);
 
-  await t.test('two completed sections have matching anchors and shared avatars', async () => {
-    assert.equal(await page.locator('section.lesson').count(), 2);
-    assert.deepEqual(await page.locator('.route a').evaluateAll(nodes => nodes.map(n => n.getAttribute('href'))), ['#s1', '#s2']);
+  await t.test('seven completed sections have matching anchors and shared avatars', async () => {
+    assert.equal(await page.locator('section.lesson').count(), 7);
+    assert.deepEqual(await page.locator('.route a').evaluateAll(nodes => nodes.map(n => n.getAttribute('href'))), ['#s1', '#s2', '#s3', '#s4', '#s5', '#s6', '#s7']);
     assert.equal(await page.locator('#s2 .dialogue.xiaokui, #s2 .dialogue.grandpa').count(), 2);
     assert.equal(await page.locator('#s2 .air-share').count(), 100);
     assert.equal(await page.locator('#setup-scene, #reaction-scene, #humidity-chart, #report-form').count(), 0);
@@ -123,8 +123,8 @@ test('2.3: composition entry preserves cup dragging, water retention and reset',
       assert.equal(await page.locator('#cup-scene').getAttribute('data-depth'), '-1');
       assert.equal(await page.locator('#cup-scene').getAttribute('data-angle'), '0');
       assert.equal(await page.locator('#cup-scene').getAttribute('data-rotation-unlocked'), 'false');
-      assert.equal(await page.locator('#cup-comparison').isVisible(), false);
-      assert.equal(await page.locator('#cup-conclusion').isVisible(), false);
+      assert.equal(await page.locator('#cup-comparison').isVisible(), true);
+      assert.equal(await page.locator('#cup-conclusion').isVisible(), true);
       await captureCup(`reset-initial-${width}.png`);
     }
     await page.setViewportSize({ width: 1440, height: 1000 });
@@ -265,7 +265,7 @@ test('2.3: composition entry preserves cup dragging, water retention and reset',
   await t.test('cup uses direct dragging without a control panel; keyboard and fresh paper work', async () => {
     await page.locator('#cup-reset').click();
     assert.equal(await page.locator('#cup-scene').getAttribute('data-depth'), '-1');
-    assert.equal(await page.locator('#cup-comparison').isVisible(), false);
+    assert.equal(await page.locator('#cup-comparison').isVisible(), true);
     assert.equal(await page.locator('#s1 details, #cup-depth, #cup-angle, #cup-straight, #cup-up').count(), 0);
     await dragCupVertically(13);
     assert.equal(await page.locator('#cup-scene').getAttribute('data-rotation-unlocked'), 'true');
@@ -278,7 +278,7 @@ test('2.3: composition entry preserves cup dragging, water retention and reset',
     assert.ok(Math.abs(Number(await page.locator('#cup-scene').getAttribute('data-angle')) - 70) < 1);
     await page.locator('#cup-reset').click();
     assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'false');
-    assert.equal(await page.locator('#cup-conclusion').isVisible(), false);
+    assert.equal(await page.locator('#cup-conclusion').isVisible(), true);
   });
 
   await t.test('narrow viewport, keyboard focus, and reduced motion stay usable', async () => {
@@ -289,7 +289,7 @@ test('2.3: composition entry preserves cup dragging, water retention and reset',
     await page.clock.runFor(100);
     await page.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s2');
     assert.equal(await page.locator('.route a[aria-current]').getAttribute('href'), '#s2');
-    for (let i = 1; i <= 2; i++) {
+    for (let i = 1; i <= 7; i++) {
       await page.evaluate(n => document.querySelector('#s' + n).scrollIntoView({ behavior: 'instant', block: 'start' }), i);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'section ' + i);
     }

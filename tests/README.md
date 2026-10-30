@@ -332,7 +332,7 @@ node --test tests/unit-2.3-composition.test.cjs tests/unit-2.3.test.cjs tests/un
 node --test tests/unit-2.3-model.test.cjs
 ```
 
-第一組檢查本輪第二區全部資料預設可見、78／21／1份額、氬氣與其他1%的關係、永久／變動分類、可選成分突出、鍵盤／觸控、停用JavaScript、減少動態、320–1440px版面及路線錨點；並回歸既有杯子拖曳、保水、重設及全站編號連結。新版入口僅含目前完成的第一／二區，因此舊耗氧測量、乾濕切換及比例小測瀏覽器案例已隨被排除需求移出；杯子回歸案例保留。第二組保留歷史氣體／杯子模型檢查，不代表新版六區或小測已完成。
+第一組檢查本輪第二區全部資料預設可見、78／21／1份額、氬氣與其他1%的關係、永久／變動分類、可選成分突出、鍵盤／觸控、停用JavaScript、減少動態、320–1440px版面及路線錨點；並回歸既有杯子拖曳、保水、重設及全站編號連結。新版入口已完成六教學＋一小測；舊耗氧測量、乾濕切換及比例小測瀏覽器案例已隨被排除需求移出，杯子回歸案例保留並增加重設後固定比較仍可見的規則。第二組保留歷史氣體／杯子模型檢查，不代表新版六區或小測已完成。
 
 `AIR_COMPOSITION_URL`可指定公開2.3頁面，公開Chromium透過繼承的HTTPS代理；`AIR_COMPOSITION_ARTIFACT_DIR`可指定畫面路徑。本輪證據見`docs/reviews/unit-2.3-composition/`，舊杯子回歸截圖預設存`/tmp/unit23-cup-regression`，避免覆寫歷史交付證據。
 
@@ -343,3 +343,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 ```
 
 檢查六區與單一結尾小測、往返路程與空氣／水中聲速、反射動畫暫停／重來、跨區及背景停止、鍵盤／觸控、聲納深度與收合揭示、直接聲保留及反射減弱、離線合成語音解碼及音效停止、小測未完成／錯誤／正確／修改／重填，以及1440–320px版面與全站既有入口載入。截圖位於 `/tmp/k12-34-review`。這是第四階段初稿的功能檢查，不代表課程或完整第三單元已完成外部驗收；真實裝置上的聽感需另檢視。
+
+## 2.3 六教學＋一小測完整初稿
+
+```sh
+AIR_COMPOSITION_ARTIFACT_DIR=/tmp/unit23-composition node --test --test-reporter=spec tests/unit-2.3-full.test.cjs tests/unit-2.3-composition.test.cjs tests/unit-2.3.test.cjs tests/unit-2.3-report.test.cjs tests/unit-2.3-model.test.cjs tests/unit-numbering.test.cjs
+```
+
+新增完整頁檢查：七個路線錨點、六區角色對話、第一區示例在操作前／重設後可見、兩種製氣重播／暫停／繼續／全覽、離區暫停與不自動恢復、氧氣／二氧化碳性質比較、唯一小測未答／錯誤／改答／正確／局部重設、320–1440px無溢出、停用JavaScript仍能閱讀全部教學證據、觸控及減少動態。另以純函式逐項驗證小測的概念判讀；歷史氣體模型僅作保留模組回歸，不是現行耗氧教學。
+
+`AIR_FULL_URL`可指定公開2.3網址；`AIR_FULL_ARTIFACT_DIR`可指定完整頁畫面路徑。本輪畫面與輸出存`docs/reviews/unit-2.3-complete/`，既有第二區局部交付畫面保留。

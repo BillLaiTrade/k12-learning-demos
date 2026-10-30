@@ -3,10 +3,12 @@ import { cupSVG } from './cup-lab-view.mjs?v=cup-lab-7';
 const $ = s => document.querySelector(s);
 const scene = $('#cup-scene'), reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let cup = freshCup(), before = null, after = null, preview = null, bubbles = [], drag = null;
+const exampleBefore = moveCup(freshCup(), 12, 0);
+const exampleAfter = moveCup(exampleBefore, 12, 115);
 let rotationUnlocked = false;
 let frame = 0, previousTime = 0, lastPaint = 0, lastBubble = 0;
 const snapshot = () => ({ ...cup, bubbles: bubbles.map(b => ({ ...b })) });
-const displayed = () => preview === 'before' ? before : preview === 'after' ? after : cup;
+const displayed = () => preview === 'before' ? before || exampleBefore : preview === 'after' ? after || exampleAfter : cup;
 const geometry = (state = cup) => cupGeometry(state.depth, state.angle, state.escaped, state.waterArea);
 const needsFrame = () => geometry().draining || (bubbles.length && !reduced.matches);
 const ensureTick = () => { if (!frame && needsFrame()) frame = requestAnimationFrame(tick); };
@@ -62,12 +64,12 @@ function render() {
   if ($('#cup-status').textContent !== message) $('#cup-status').textContent = message;
   const instruction = preview ? '再點一次同一張觀察紀錄，即可返回目前狀態繼續拖曳。' : canRotate ? '抓住杯口繞著杯身轉動，可向左或向右傾斜；拖杯身可上下移動。' : '先抓住杯子直直往下拖；完全浸入後放開，再抓杯口旋轉。';
   if ($('#cup-instruction').textContent !== instruction) $('#cup-instruction').textContent = instruction;
-  const showComparison = !!(before && after && !drag);
+  const showComparison = true;
   $('#cup-comparison').hidden = !showComparison;
   $('#cup-conclusion').hidden = !showComparison;
   if (showComparison) {
-    $('#cup-before-scene').innerHTML = cupSVG(before, { id: 'cup-before', mini: true });
-    $('#cup-after-scene').innerHTML = cupSVG(after, { id: 'cup-after', mini: true, bubbles: after.bubbles || [] });
+    $('#cup-before-scene').innerHTML = cupSVG(before || exampleBefore, { id: 'cup-before', mini: true });
+    $('#cup-after-scene').innerHTML = cupSVG(after || exampleAfter, { id: 'cup-after', mini: true, bubbles: after?.bubbles || [] });
     document.querySelectorAll('[data-cup-preview]').forEach(b => b.setAttribute('aria-pressed', String(preview === b.dataset.cupPreview)));
   }
 }

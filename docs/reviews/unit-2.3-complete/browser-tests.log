@@ -1,0 +1,70 @@
+▶ 2.3 composition: proportions, classification and optional emphasis
+  ✔ all proportions and both classes are visible before any action (246.928758ms)
+  ✔ mouse, keyboard and hover emphasis never hide teaching content (330.667793ms)
+  ✔ desktop, laptop and narrow screens preserve order without overflow (1061.91469ms)
+  ✔ static content remains complete without JavaScript (1800.948203ms)
+  ✔ touch, reduced motion and route anchor stay usable (1516.850293ms)
+✔ 2.3 composition: proportions, classification and optional emphasis (7120.160116ms)
+▶ 2.3 complete page: six teaching sections and one evidence-based quiz
+  ✔ all seven sections and routes exist, with natural dialogue and no retired experiment (600.471742ms)
+  ✔ default cup comparisons remain after preview and reset (196.425195ms)
+  ✔ both preparations replay, pause, resume and reset without hiding results (641.695492ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (278.398213ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (1000.271999ms)
+  ✔ five widths show every diagram and section without horizontal overflow (4572.726455ms)
+  ✔ all teaching evidence is available without JavaScript (1026.073832ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (1281.593228ms)
+✔ 2.3 complete page: six teaching sections and one evidence-based quiz (11271.634ms)
+✔ 2.3: reaction volume, water levels and calibrated geometry agree (7.370131ms)
+✔ 2.3: recording is gated by baseline, waiting, and equalisation (1.065493ms)
+✔ 2.3: dry/humid proportions use one total and do not add CO2 twice (0.534044ms)
+✔ 2.3: fully immersed cup keeps paper dry and respects the tank (8.186644ms)
+✔ 2.3: escaping air and wet paper persist when cup is straightened (0.866107ms)
+✔ 2.3: cup model clamps depth and angle without forcing an orientation (0.619901ms)
+✔ 2.3: lifting a tilted cup preserves its angle across the old depth threshold (0.94226ms)
+✔ 2.3: an exposed rim drains to the outside level after a visible transition (0.664788ms)
+✔ 2.3: a filled inverted cup retains water above the tank while its mouth is submerged (0.628454ms)
+✔ 2.3: exposure starts gradual drainage and wet paper cannot become dry (0.963302ms)
+✔ 2.3: a raised cup tilted mouth-up retains water below its lower lip (0.362509ms)
+✔ 2.3: enlarged paper fits inside the cup and left/right rotation is symmetric (0.41736ms)
+✔ 2.3: integrated report checks evidence instead of reusing main experiment (0.382338ms)
+▶ 2.3 integrated report checks evidence, completeness and misconceptions
+  ✔ unanswered form names every missing item without claiming completion (1.02315ms)
+  ✔ fully supported report is accepted (0.162342ms)
+  ✔ each misconception identifies the relevant observation and destination (0.390681ms)
+✔ 2.3 integrated report checks evidence, completeness and misconceptions (4.137778ms)
+▶ 2.3: complete learning page preserves cup dragging, water retention and reset
+  ✔ seven completed sections have matching anchors and shared avatars (310.889274ms)
+  ✔ cup first drag stays vertical until release; dragging the rim then rotates both ways (1082.271903ms)
+  ✔ dragging alone completes both observations; reset stays compact above the scene (7320.858497ms)
+  ✔ a filled cup retains visible water above the tank, then drains gradually when the mouth emerges (7691.35821ms)
+  ✔ mouth-up cup keeps painted water after direct lifting on both sides and fits inside the scene (9240.38101ms)
+  ✔ lifting a tilted cup never snaps upright and rotation remains available after lifting (3851.584035ms)
+  ✔ cup uses direct dragging without a control panel; keyboard and fresh paper work (824.395254ms)
+  ✔ narrow viewport, keyboard focus, and reduced motion stay usable (3064.115448ms)
+✔ 2.3: complete learning page preserves cup dragging, water retention and reset (35282.328693ms)
+▶ new unit numbers agree across home, overviews, and existing lesson URLs
+  ✔ homepage order, button numbers, and destination identities (695.27401ms)
+  ✔ unit 1: overview uses the new number (617.121018ms)
+  ✔ unit 2: overview uses the new number (615.428584ms)
+  ✔ unit 3: overview uses the new number (600.918525ms)
+  ✔ unit 4: overview uses the new number (601.611495ms)
+  ✔ unit 5: overview uses the new number (586.759699ms)
+  ✔ unit 6: overview uses the new number (561.730736ms)
+  ✔ lesson 1.1: header and existing assets load (4702.881559ms)
+  ✔ lesson 1.2: header and existing assets load (2070.088507ms)
+  ✔ lesson 2.1: header and existing assets load (969.52278ms)
+  ✔ lesson 2.2: header and existing assets load (12173.290844ms)
+  ✔ lesson 3.1: header and existing assets load (1855.64386ms)
+  ✔ lesson 3.2: header and existing assets load (756.880088ms)
+  ✔ lesson 4.1: header and existing assets load (8816.049742ms)
+  ✔ lesson 4.2: header and existing assets load (3796.519655ms)
+✔ new unit numbers agree across home, overviews, and existing lesson URLs (40034.078736ms)
+ℹ tests 57
+ℹ suites 0
+ℹ pass 57
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 47969.4353
