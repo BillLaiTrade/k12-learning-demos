@@ -1,0 +1,30 @@
+▶ 2.3 composition: proportions, classification and optional emphasis
+  ✔ all proportions and both classes are visible before any action (148.945934ms)
+  ✔ mouse, keyboard and hover emphasis never hide teaching content (428.933431ms)
+  ✔ both arrangements preserve all shares, selection and a visible connector (2136.82265ms)
+  ✔ argon and other select different parts of the enlarged minor share (4305.553858ms)
+  ✔ clicking shares in both layouts synchronizes legend, explanation and inset (3848.903656ms)
+  ✔ the chart is one Tab stop with spatial arrow navigation and native selection (1783.69978ms)
+  ✔ clicking beside the diagram dismisses all selections while preserving layout (10632.476884ms)
+  ✔ desktop, laptop and narrow screens preserve order without overflow (5829.303812ms)
+  ✔ static content remains complete without JavaScript (900.277084ms)
+  ✔ touch, reduced motion and route anchor stay usable (1987.209442ms)
+✔ 2.3 composition: proportions, classification and optional emphasis (33618.57113ms)
+▶ 2.3 complete page: six teaching sections and one evidence-based quiz
+  ✔ all seven sections and routes exist, with natural dialogue and no retired experiment (172.770813ms)
+  ✔ default cup comparisons remain after preview and reset (120.830926ms)
+  ✔ both preparations replay, pause, resume and reset without hiding results (550.91169ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (225.97847ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (571.139526ms)
+  ✔ five widths show every diagram and section without horizontal overflow (2810.87316ms)
+  ✔ all teaching evidence is available without JavaScript (1018.702739ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (1136.110474ms)
+✔ 2.3 complete page: six teaching sections and one evidence-based quiz (8279.817305ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 33953.95427

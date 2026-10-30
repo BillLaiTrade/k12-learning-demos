@@ -118,6 +118,12 @@ for (const button of viewControls) {
     emphasize(); describe(); followConnector();
   });
 }
+// Clicking away dismisses the selection without consuming the other action.
+document.addEventListener('click', event => {
+  const control = event.target.closest('.air-share, [data-air-gas], [data-air-view]');
+  if (control && section.contains(control)) return;
+  if (selected !== 'all' || section.dataset.emphasis !== 'all') choose('all');
+});
 new ResizeObserver(followConnector).observe(panel);
 updateConnector();
 const links = [...document.querySelectorAll('.route a[href^="#"]')];
