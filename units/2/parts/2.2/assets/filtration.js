@@ -1,15 +1,32 @@
-import {cupTransfer,drawCup,drawJet} from './cup-transfer.js?v=review-5';
+import {CUP,cupTransfer,drawCup,drawJet} from './cup-transfer.js?v=review-5';
 import {loadPicture} from './investigation-renderer.js?v=review-5';
 const root=document.getElementById('filter-animation'),button=document.getElementById('filter-play'),canvas=document.getElementById('filter-canvas'),status=document.getElementById('filter-status');
 const ctx=canvas.getContext('2d'),duration=10000,scale=1.6;
+const sampleMarker=root.querySelector('[data-filter-detail=sample]'),pourMarker=root.querySelector('[data-filter-detail=pour]');
+let markerPose=null;
 let background,glass,started=0,elapsed=0,frame=0,playing=false,visible=false;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 export function filtrationFrame(t){
  const received=cupTransfer(t).received;
  return cupTransfer(t,'filter',{mouth:{x:720/scale,y:220/scale},home:{x:365/scale,y:320/scale,angle:0},target:{x:835/scale,y:335/scale},outlet:{x:839/scale,y:574/scale},receiver:{x:839/scale,y:(837-147*received)/scale}});
 }
+function positionSampleMarker(pose){
+ if(!pose)return;
+ const width=root.clientWidth,height=root.clientHeight;if(!width||!height)return;
+ // Anchor below the cup in its own coordinate system, then keep the text upright.
+ const offset=CUP.h/2+20;
+ let x=(pose.x-Math.sin(pose.angle)*offset)*scale/canvas.width*width;
+ let y=(pose.y+Math.cos(pose.angle)*offset)*scale/canvas.height*height;
+ const halfWidth=sampleMarker.offsetWidth/2,halfHeight=sampleMarker.offsetHeight/2;
+ const separationX=halfWidth+pourMarker.offsetWidth/2+6,separationY=halfHeight+pourMarker.offsetHeight/2+6;
+ if(Math.abs(x-pourMarker.offsetLeft)<separationX&&Math.abs(y-pourMarker.offsetTop)<separationY)x=pourMarker.offsetLeft-separationX;
+ x=Math.max(halfWidth+4,Math.min(width-halfWidth-4,x));
+ y=Math.max(halfHeight+4,Math.min(height-halfHeight-4,y));
+ sampleMarker.style.left=`${x/width*100}%`;sampleMarker.style.top=`${y/height*100}%`;
+}
+new ResizeObserver(()=>positionSampleMarker(markerPose)).observe(root);
 function draw(t){
- const f=filtrationFrame(t);ctx.clearRect(0,0,1672,941);ctx.drawImage(background,0,0,1672,941);
+ const f=filtrationFrame(t);markerPose=f.pose;positionSampleMarker(markerPose);ctx.clearRect(0,0,1672,941);ctx.drawImage(background,0,0,1672,941);
  // Only the receiving liquid rises; the paper and source retain their own amounts.
  if(f.received>0){const level=837-147*f.received;ctx.save();ctx.beginPath();ctx.moveTo(731,602);ctx.lineTo(955,602);ctx.lineTo(946,819);ctx.quadraticCurveTo(837,864,731,819);ctx.closePath();ctx.clip();const g=ctx.createLinearGradient(731,level,950,840);g.addColorStop(0,'#c9e6dd80');g.addColorStop(1,'#78b09c80');ctx.fillStyle=g;ctx.fillRect(720,level,250,170);ctx.fillStyle='#e6f4ef9c';ctx.beginPath();ctx.ellipse(838,level,111,13,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#ffffffb8';ctx.lineWidth=2;ctx.stroke();ctx.restore();}
  if(f.held>0){ctx.save();ctx.beginPath();ctx.moveTo(708,269);ctx.lineTo(978,269);ctx.lineTo(835,456);ctx.closePath();ctx.clip();ctx.fillStyle='#c7b08c80';ctx.fillRect(700,335-80*Math.sqrt(f.held),290,130);ctx.restore();}
