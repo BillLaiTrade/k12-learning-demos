@@ -4,6 +4,24 @@ const W=1536,H=1024;
 const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
 const mix=(a,b,t)=>a+(b-a)*t;
 const random=(i,seed=1)=>{const n=Math.sin(i*137.7+seed*43.13)*43758.5453;return n-Math.floor(n);};
+const HEATER_WORK={x:543,y:475,w:425,h:305},HEATER_TRAY={x:1160,y:547,w:163,h:117};
+const SCALE_WORK={x:565,y:480,w:380,h:276},SCALE_TRAY={x:1340,y:551,w:143,h:104};
+const DISH_HEAT={x:752,y:532},DISH_SCALE={x:755,y:505};
+export function dishWeighingFrame(progress,reduced=false){
+  const t=Math.max(0,Math.min(1,progress)),exchange=smooth((t-.22)/.35),lower=smooth((t-.50)/.32);
+  const rect=(a,b)=>Object.fromEntries(['x','y','w','h'].map(key=>[key,mix(a[key],b[key],exchange)]));
+  const heater=rect(HEATER_WORK,HEATER_TRAY),scale=rect(SCALE_TRAY,SCALE_WORK);
+  let dish;
+  if(reduced){
+    const moving=smooth((t-.20)/.62);dish={x:mix(DISH_HEAT.x,DISH_SCALE.x,moving),y:mix(DISH_HEAT.y,DISH_SCALE.y,moving)};
+  }else{
+    heater.y+=Math.sin(exchange*Math.PI)*90;scale.y-=Math.sin(exchange*Math.PI)*110;
+    const lift=smooth(t/.22),held={x:810,y:375};
+    dish=t<.50?{x:mix(DISH_HEAT.x,held.x,lift),y:mix(DISH_HEAT.y,held.y,lift)}:{x:mix(held.x,DISH_SCALE.x,lower),y:mix(held.y,DISH_SCALE.y,lower)};
+  }
+  return{dish,heater,scale,exchange,settled:t>=.82,reduced};
+}
+
 export function loadPicture(url){return new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(new Error(`無法載入實驗器材：${url}`));im.src=url;});}
 export function createRenderer(canvas,{table,atlas,glass}) {
   const ctx=canvas.getContext('2d');if(!ctx)throw new Error('這個瀏覽器無法顯示實驗桌。');
@@ -11,6 +29,32 @@ export function createRenderer(canvas,{table,atlas,glass}) {
   const crops={bottle:[260,20,350,550],filter:[944,8,440,568],heat:[145,590,570,410],weigh:[869,614,530,385]};
   function sprite(kind,x,y,w,h){ctx.drawImage(atlas,...crops[kind],x,y,w,h);}
   function shadow(x,y,rx,ry){ctx.save();ctx.filter='blur(7px)';ctx.fillStyle='#3c271c42';ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill();ctx.restore();}
+  // Reuse the photographed bowl as one object, separate from the hotplate.
+  const dishOutline=new Path2D();
+  dishOutline.moveTo(250,660);dishOutline.bezierCurveTo(263,629,332,607,424,607);
+  dishOutline.bezierCurveTo(512,607,578,625,594,648);dishOutline.bezierCurveTo(597,677,583,705,557,722);
+  dishOutline.bezierCurveTo(504,754,361,758,304,724);dishOutline.bezierCurveTo(276,708,265,688,259,673);
+  dishOutline.closePath();
+  const heaterMask=new Path2D();heaterMask.rect(145,590,570,410);
+  const clearedBowl=new Path2D();clearedBowl.ellipse(424,675,180,80,0,0,Math.PI*2);
+  heaterMask.addPath(clearedBowl);
+  function emptyHeater(rect){
+    shadow(rect.x+rect.w*.5,rect.y+rect.h*.96,rect.w*.46,rect.h*.05);
+    ctx.save();ctx.translate(rect.x,rect.y);ctx.scale(rect.w/570,rect.h/410);ctx.translate(-145,-590);
+    const metal=ctx.createLinearGradient(250,635,590,770);metal.addColorStop(0,'#30302d');metal.addColorStop(1,'#111412');
+    ctx.fillStyle=metal;ctx.beginPath();ctx.ellipse(428,710,216,88,0,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#77776d45';ctx.lineWidth=1;
+    for(let radius=30;radius<205;radius+=7){ctx.beginPath();ctx.ellipse(428,710,radius,radius*.407,0,0,Math.PI*2);ctx.stroke();}
+    ctx.clip(heaterMask,'evenodd');ctx.drawImage(atlas,145,590,570,410,145,590,570,410);ctx.restore();
+  }
+  function crystalDish(sample,pose){
+    ctx.save();ctx.translate(pose.x-DISH_HEAT.x,pose.y-DISH_HEAT.y);
+    ctx.save();ctx.translate(HEATER_WORK.x,HEATER_WORK.y);ctx.scale(HEATER_WORK.w/570,HEATER_WORK.h/410);ctx.translate(-145,-590);
+    ctx.clip(dishOutline);ctx.drawImage(atlas,145,590,570,410,145,590,570,410);ctx.restore();
+    ctx.save();ctx.beginPath();ctx.ellipse(752,525,120,32,0,0,Math.PI*2);ctx.clip();
+    grains(752,532,95,21,170,true);if(sample.sand>0)grains(752,538,95,19,90);ctx.restore();ctx.restore();
+  }
+
   function pill(text,x,y,w=190){ctx.save();ctx.fillStyle='#fffdf2f2';ctx.beginPath();ctx.roundRect(x-w/2,y-23,w,46,10);ctx.fill();ctx.fillStyle='#304d40';ctx.font='600 25px system-ui,sans-serif';ctx.textAlign='center';ctx.fillText(text,x,y+9);ctx.restore();}
   function grains(cx,cy,rx,ry,count=70,white=false,fade=1){
     ctx.save();ctx.globalAlpha=fade;
@@ -90,14 +134,40 @@ export function createRenderer(canvas,{table,atlas,glass}) {
     pill(running?(t<.30?'倒入蒸發皿':t<.9?'加熱中':'冷卻中'):'已冷卻',750,857,155);
     return f?{...f,remaining,evaporated,solid}:null;
   }
-  function weigh(sample,running){
-    shadow(755,749,170,15);sprite('weigh',565,480,380,276);
-    if(sample.water>0)beaker(665,295,175,220,sample,1,sample.phase==='settled'?1:0);
-    else {ctx.fillStyle='#fffdf4';ctx.beginPath();ctx.ellipse(753,535,88,21,0,0,Math.PI*2);ctx.fill();grains(753,530,60,10,130,true);if(sample.sand>0)grains(753,535,60,10,55);}
+  function scaleDisplay(sample,running){
     ctx.fillStyle='#cbd8b5';ctx.fillRect(642,638,170,49);ctx.fillStyle='#223b2d';ctx.font='600 36px monospace';ctx.textAlign='center';ctx.fillText(running?'—':`${sample.sand+sample.salt+sample.water} g`,727,674);
     pill('已扣除容器質量',755,805,260);
   }
-  function inventory(display){if(display!=='filter')ctx.drawImage(atlas,982,85,238,219,1007,529,125,115);if(display!=='heat')sprite('heat',1160,547,163,117);if(display!=='weigh')sprite('weigh',1340,551,143,104);}
+  function weigh(sample,running){
+    shadow(755,749,170,15);sprite('weigh',565,480,380,276);
+    if(sample.water>0)beaker(665,295,175,220,sample,1,sample.phase==='settled'?1:0);
+    else crystalDish(sample,DISH_SCALE);
+    scaleDisplay(sample,running);
+  }
+  function moveDishToScale(sample,animation,t){
+    const movement=dishWeighingFrame(t,animation.reduced);
+    const {scale,heater,dish,exchange}=movement;
+    if(animation.reduced){
+      ctx.save();ctx.globalAlpha=1-exchange;emptyHeater(HEATER_WORK);ctx.restore();
+      ctx.save();ctx.globalAlpha=1-exchange;sprite('weigh',SCALE_TRAY.x,SCALE_TRAY.y,SCALE_TRAY.w,SCALE_TRAY.h);ctx.restore();
+      ctx.save();ctx.globalAlpha=exchange;shadow(755,749,170,15);sprite('weigh',SCALE_WORK.x,SCALE_WORK.y,SCALE_WORK.w,SCALE_WORK.h);ctx.restore();
+      ctx.save();ctx.globalAlpha=exchange;emptyHeater(HEATER_TRAY);ctx.restore();
+    }else{
+      shadow(scale.x+scale.w*.5,scale.y+scale.h*.975,scale.w*.45,scale.h*.054);
+      sprite('weigh',scale.x,scale.y,scale.w,scale.h);emptyHeater(heater);
+    }
+    crystalDish(sample,dish);
+    if(exchange>=1)scaleDisplay(sample,true);
+    return movement;
+  }
+  function inventory(display,sample,transferring=false){
+    if(display!=='filter')ctx.drawImage(atlas,982,85,238,219,1007,529,125,115);
+    if(display!=='heat'&&!transferring){
+      if(sample?.water===0&&display==='weigh')emptyHeater(HEATER_TRAY);
+      else sprite('heat',HEATER_TRAY.x,HEATER_TRAY.y,HEATER_TRAY.w,HEATER_TRAY.h);
+    }
+    if(display!=='weigh')sprite('weigh',SCALE_TRAY.x,SCALE_TRAY.y,SCALE_TRAY.w,SCALE_TRAY.h);
+  }
   return {
     render(view,now=0){
       ctx.clearRect(0,0,W,H);ctx.drawImage(table,0,0,W,H);
@@ -105,12 +175,13 @@ export function createRenderer(canvas,{table,atlas,glass}) {
       const transfer=animation?.kind==='sample'?samplingFrame(t,stock,animation.reduced):null;
       source(stock,transfer);
       const display=animation?.kind==='sample'?'beaker':animation?.kind==='settle'?'beaker':animation?.kind||sample?.display||'beaker';
-      inventory(display);
+      const movingDish=animation?.kind==='weigh'&&sample?.water===0&&animation.before?.display==='heat';
+      inventory(display,sample,movingDish);
       let operation=null;
       if(!sample)beaker(SAMPLE_CUP.x,SAMPLE_CUP.y,SAMPLE_CUP.w,SAMPLE_CUP.h,{water:0,salt:0,sand:0});
       else if(display==='filter')operation=filter(sample,animation,t);
       else if(display==='heat')operation=heat(sample,animation,t,now);
-      else if(display==='weigh')weigh(sample,animation?.kind==='weigh');
+      else if(display==='weigh'){if(movingDish)operation=moveDishToScale(sample,animation,t);else weigh(sample,animation?.kind==='weigh');}
       else {
         const fill=transfer?transfer.received:1,settled=animation?.kind==='settle'?smooth(t):sample.phase==='settled'?1:0;
         beaker(SAMPLE_CUP.x,SAMPLE_CUP.y,SAMPLE_CUP.w,SAMPLE_CUP.h,sample,fill,settled,transfer?.stream);
