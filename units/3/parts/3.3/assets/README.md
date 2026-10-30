@@ -1,7 +1,8 @@
 # 3.3 示意素材與聲音模型
 
-- 人物：沿用儲存庫共用 `shared-assets/characters/dialogue-character-avatars.png`，未新增或改造角色圖片。
-- 開場、琴弦、空氣柱與訊號圖為本次繪製的SVG，無外部圖片授權依賴。
+- 對話頭像：沿用儲存庫共用 `shared-assets/characters/dialogue-character-avatars.png`。
+- 首頁插圖：`sound-fair-opening.png`為使用者於2026-10-30選定的第三輪C02「聲音體驗市集」。以image_gen依1.1／1.2及共用角色參考生成，來源為`docs/reviews/unit-3.3-hero-candidates-round3/candidate-c02.png`；1672×941原始PNG直接採用，未裁切、重畫或後製。生成紀錄見該輪`generation.json`。
+- 琴弦、空氣柱與訊號圖為本次繪製的SVG，無外部圖片授權依賴。
 - 示意音為本次以Web Audio產生的短音，不是錄音；學生頁已標明弦音／管音示意。沒有替換3.2已核可的真實音效。
 - `model.mjs`的固定泛音係數用於呈現不同波形；不宣稱精確重建特定樂器。音訊為1.6秒，20ms淡入、120ms淡出，依RMS作近似大小聲匹配；不是聲級校準，也不保證不同設備與頻率下主觀響度相等。
 - 畫面弦振動以基本頻率的1/60呈現；管內空氣位移以1/100放慢，使用兩端開口管基本模式的往返位移，聲音保持原音高。

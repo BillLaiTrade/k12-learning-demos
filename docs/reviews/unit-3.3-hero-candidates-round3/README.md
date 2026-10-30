@@ -67,3 +67,10 @@
 - `git diff --exit-code -- units/3/parts/3.3/index.html units/3/parts/3.3/assets`通過，正式首圖及七區操作未修改。本輪未重跑其他歷史單元測試。
 
 等待使用者選擇或指定修改，尚未將任一候選套用正式首頁。
+
+
+## 採用結果（2026-10-30）
+
+使用者明確採用C02「聲音體驗市集」。原圖已原樣用於正式3.3首頁，檔案為`units/3/parts/3.3/assets/sound-fair-opening.png`；沒有重新生成、裁切或後製，SHA256為`acfb11d11123dadbb8849d36f9c6b572d2070348acb021df2573da5cc07b9fdf`。前述「等待選擇」為候選交付當時狀態，本節為最新決定；其餘候選保留。
+
+採用後的版面及功能檢查見[首頁採用紀錄](../unit-3.3-opening-adoption/review.md)。

@@ -18,7 +18,7 @@ button:disabled{opacity:.48;cursor:default}
 h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-spacing:-.04em}
 .hero p:not(.eyebrow){max-width:660px;color:var(--muted);font-size:1.08rem}
 .story-opening-figure{margin:0;overflow:hidden;border:1px solid var(--line);border-radius:22px;background:var(--card);box-shadow:var(--shadow)}
-.story-opening-figure svg{display:block;width:100%;height:auto}
+.story-opening-figure img{display:block;width:100%;height:auto}
 .story-opening-figure figcaption{padding:9px 13px;color:var(--muted);font-size:.84rem}
 .lesson{padding:34px 0 80px}
 .lesson-layout{display:grid;grid-template-columns:minmax(205px,250px) minmax(0,1fr);gap:34px;align-items:start}

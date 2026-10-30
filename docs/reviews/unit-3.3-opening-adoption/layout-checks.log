@@ -1,0 +1,6 @@
+PASS: 1024px approved image fully visible, natural ratio, no horizontal overflow.
+PASS: 1280px approved image fully visible, natural ratio, no horizontal overflow.
+PASS: 1440px approved image fully visible, natural ratio, no horizontal overflow.
+PASS: 1920px approved image fully visible, natural ratio, no horizontal overflow.
+PASS: 390px approved image fully visible, natural ratio, no horizontal overflow.
+PASS: approved hero image loaded; old hero SVG removed; no browser errors.
