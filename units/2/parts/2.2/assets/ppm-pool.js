@@ -1,5 +1,5 @@
 import {poolLiters} from './ppm-quantity-model.js?v=polish-1';
-import {createQuantityView} from './ppm-quantity-view.js?v=orbit-model-1';
+import {createQuantityView} from './ppm-quantity-view.js?v=unobstructed-model-1';
 const root=document.getElementById('ppm-lab');
 const waterVolumeL=poolLiters();
 const waterMassG=waterVolumeL*1000; // Teaching estimate: water density = 1 kg/L.

@@ -128,7 +128,7 @@
   </style>
   <link rel="stylesheet" href="assets/chromatography.css?v=prepared-papers-1">
   <link rel="stylesheet" href="assets/concentration.css?v=boundary-feedback-1">
-  <link rel="stylesheet" href="assets/ppm-scale.css?v=orbit-model-1">
+  <link rel="stylesheet" href="assets/ppm-scale.css?v=unobstructed-model-1">
   <link rel="stylesheet" href="assets/investigation.css?v=manual-records-1">
 </head>
 <body>
@@ -256,18 +256,16 @@
 <div class="pool-volume-scene pool-geometry-scene">
 <canvas id="pool-geometry-canvas" width="1280" height="800" role="img" tabindex="0" aria-describedby="pool-model-hint" aria-label="可旋轉、縮放的泳池與100克食鹽3D比例模型。方向鍵旋轉，加減鍵縮放，Home鍵回到全景。泳池長10公尺、寬5公尺、水深2公尺，共100000公升。"></canvas>
 <div class="pool-water-quantity"><span>池水容積模型</span><strong>100,000 <small>公升</small></strong></div>
-<svg class="pool-quantity-guide" aria-hidden="true"><defs><marker id="pool-dimension-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#456c6b"/></marker></defs><line data-dimension-line="length"/><line data-dimension-line="width"/><line data-dimension-line="depth"/><line data-salt-guide/><circle data-salt-source r="7"/></svg>
+<svg class="pool-quantity-guide" aria-hidden="true"><defs><marker id="pool-dimension-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#456c6b"/></marker></defs><line data-dimension-line="length"/><line data-dimension-line="width"/><line data-dimension-line="depth"/><circle data-salt-source r="7"/></svg>
 <span class="pool-dimension-label" data-dimension-label="length">10 公尺</span><span class="pool-dimension-label" data-dimension-label="width">5 公尺</span><span class="pool-dimension-label" data-dimension-label="depth">水深 2 公尺</span>
 <span class="pool-salt-source-label">食鹽 100 克・實際比例</span>
-<button type="button" class="pool-salt-inset" data-pool-camera="salt" aria-label="靠近池邊的100克食鹽，觀察真實比例" disabled><span class="pool-salt-title"><span>整份食鹽</span><b data-pool="solute">100 克</b></span><span class="pool-salt-scale"><i></i><small>5 公分</small></span><span class="pool-salt-zoom">整份放大 ↗</span></button>
 </div>
 <div class="pool-model-toolbar"><p id="pool-model-hint">拖曳旋轉・點選模型後滾輪縮放</p><div role="group" aria-label="選擇模型觀察位置"><button type="button" data-pool-camera="pool" disabled>看整座泳池</button><button type="button" data-pool-camera="salt" disabled>靠近食鹽</button></div></div>
-<figcaption>內部水體：長 10 公尺 × 寬 5 公尺 × 水深 2 公尺 ＝ 100 立方公尺 ＝ 100,000 公升。</figcaption>
-<p class="pool-scale-caption">模型依實際尺寸建立，池壁以剖面呈現；右上為整份食鹽放大圖，秤量皿直徑 16 公分。</p>
+<p class="pool-scale-caption">模型依實際比例建立，池壁採剖面呈現；秤量皿直徑 16 公分。</p>
 </figure>
 <div class="pool-mass-comparison"><div class="pool-water-mass"><span>池水質量</span><strong>100,000,000 <small>克</small></strong><small>100,000 公升 ≈ 100,000 公斤</small></div><span class="pool-mass-plus" aria-hidden="true">＋</span><div class="pool-added-mass"><span>溶質｜食鹽</span><strong data-pool="solute">100 克</strong><small>與池水使用相同單位</small></div></div>
 <p class="pool-total-line">溶液總質量 ＝ 池水 ＋ 溶質 ＝ <strong data-pool="total">100,000,100 克</strong></p>
-<p class="pool-volume-note">水的密度以 1 公斤／公升估算；本例假設溶質完全溶解、沒有損失，主畫面採同一尺度，局部放大只方便觀察份量。</p>
+<p class="pool-volume-note">水的密度以 1 公斤／公升估算；本例假設溶質完全溶解、沒有損失。</p>
 <section class="ppm-explanation pool-calculation" id="ppm-percent-bridge" aria-labelledby="ppm-bridge-title">
 <header class="pool-calculation-head">
 <h3 id="ppm-bridge-title">這一池水的濃度是多少？</h3>
@@ -357,7 +355,7 @@
   <script type="module" src="assets/evaporation-animation.js?v=full-replay-1"></script>
   <script type="module" src="assets/chromatography.js?v=prepared-papers-1"></script>
   <script type="module" src="assets/concentration.js?v=boundary-feedback-1"></script>
-  <script type="module" src="assets/ppm-pool.js?v=orbit-model-1"></script>
+  <script type="module" src="assets/ppm-pool.js?v=unobstructed-model-1"></script>
   <script type="module" src="assets/investigation.js?v=missing-filtrate-record-1"></script>
 </body>
 </html>
