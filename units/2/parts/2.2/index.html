@@ -62,7 +62,6 @@
     .filter-hotspot:hover,.filter-hotspot[aria-pressed="true"] {background:#0f4e3b;}
     .filter-hotspot.sample {left:22%;top:52%;}
     .filter-hotspot.filter {left:65%;top:36%;}
-    .filter-hotspot.pour {left:36%;top:18%;}
     .filter-hotspot.result {left:64%;top:78%;}
     #filter-status {display:block;min-height:0;text-align:center;color:#52635d;font-size:.8rem;}
     #filter-status:empty {display:none;}
@@ -153,7 +152,6 @@
             <button class="filter-play" id="filter-play" type="button" aria-label="播放過濾動畫" disabled><canvas id="filter-canvas" width="1672" height="941" role="img" aria-label="泥沙水逐漸倒入濾紙，泥沙留在紙上，濾液收集在下方杯中；點擊重播。"></canvas></button>
             <button class="filter-hotspot sample" type="button" data-filter-detail="sample" aria-label="泥沙水樣：查看樣本與分離目標的詳細說明" aria-pressed="false">樣本</button>
             <button class="filter-hotspot filter" type="button" data-filter-detail="filter" aria-label="濾紙與漏斗：查看攔住泥沙的原理" aria-pressed="false">濾紙</button>
-            <button class="filter-hotspot pour" type="button" data-filter-detail="pour" aria-label="倒入樣本：查看倒入與過濾如何進行" aria-pressed="false">倒入</button>
             <button class="filter-hotspot result" type="button" data-filter-detail="result" aria-label="接液杯與分離結果：查看濾渣和濾液的說明" aria-pressed="false">濾液</button>
           </div>
           <span id="filter-status" role="status"></span>
@@ -334,7 +332,6 @@
     const filterDetails={
       sample:{title:'泥沙水樣｜要分開的是什麼？',purpose:'這杯樣本裡，泥沙顆粒分散在水中。這次要把固體泥沙和液態水分開。',principle:'泥沙沒有溶解在水裡，仍以顆粒存在，因此可以利用固體和液體通過濾紙的差異來分離。'},
       filter:{title:'濾紙與漏斗｜它們怎麼幫上忙？',purpose:'濾紙放進漏斗中，接液杯放在漏斗下方。漏斗托住濾紙，也把流下的液體導入接液杯。',principle:'濾紙有細小孔隙。水可以穿過孔隙；這份樣本中的泥沙顆粒被攔在濾紙上，於是固體和液體分開。'},
-      pour:{title:'倒入樣本｜過濾如何開始？',purpose:'將泥沙水慢慢倒入濾紙，讓樣本接觸濾紙並流經漏斗。',principle:'倒得慢一些可避免液體溢出。水穿過濾紙後沿漏斗流下，泥沙顆粒則留在濾紙上；這就是過濾正在發生的過程。'},
       result:{title:'接液杯與結果｜分離後得到什麼？',purpose:'泥沙留在濾紙上，穿過濾紙的液體被下方接液杯收集。',principle:'留在濾紙上的固體叫「濾渣」，收集到的液體叫「濾液」。過濾能分開這份樣本中的泥沙和水；濾液看起來較清澈，不代表一定能飲用。'}
     };
     document.querySelectorAll('[data-filter-detail]').forEach(hotspot=>hotspot.addEventListener('click',()=>{
@@ -352,7 +349,7 @@
 
   </script>
   <script type="importmap">{"imports":{"three":"../../../4/parts/4.1/assets/vendor/three/build/three.module.js"}}</script>
-  <script type="module" src="assets/filtration.js?v=follow-sample-1"></script>
+  <script type="module" src="assets/filtration.js?v=labels-trimmed-1"></script>
   <script type="module" src="assets/evaporation-animation.js?v=continuous-playback-1"></script>
   <script type="module" src="assets/chromatography.js?v=sixteen-1"></script>
   <script type="module" src="assets/concentration.js?v=ppm-separate-4"></script>

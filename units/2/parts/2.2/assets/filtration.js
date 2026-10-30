@@ -2,7 +2,7 @@ import {CUP,cupTransfer,drawCup,drawJet} from './cup-transfer.js?v=review-5';
 import {loadPicture} from './investigation-renderer.js?v=review-5';
 const root=document.getElementById('filter-animation'),button=document.getElementById('filter-play'),canvas=document.getElementById('filter-canvas'),status=document.getElementById('filter-status');
 const ctx=canvas.getContext('2d'),duration=10000,scale=1.6;
-const sampleMarker=root.querySelector('[data-filter-detail=sample]'),pourMarker=root.querySelector('[data-filter-detail=pour]');
+const sampleMarker=root.querySelector('[data-filter-detail=sample]');
 let markerPose=null;
 let background,glass,started=0,elapsed=0,frame=0,playing=false,visible=false;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
@@ -18,8 +18,6 @@ function positionSampleMarker(pose){
  let x=(pose.x-Math.sin(pose.angle)*offset)*scale/canvas.width*width;
  let y=(pose.y+Math.cos(pose.angle)*offset)*scale/canvas.height*height;
  const halfWidth=sampleMarker.offsetWidth/2,halfHeight=sampleMarker.offsetHeight/2;
- const separationX=halfWidth+pourMarker.offsetWidth/2+6,separationY=halfHeight+pourMarker.offsetHeight/2+6;
- if(Math.abs(x-pourMarker.offsetLeft)<separationX&&Math.abs(y-pourMarker.offsetTop)<separationY)x=pourMarker.offsetLeft-separationX;
  x=Math.max(halfWidth+4,Math.min(width-halfWidth-4,x));
  y=Math.max(halfHeight+4,Math.min(height-halfHeight-4,y));
  sampleMarker.style.left=`${x/width*100}%`;sampleMarker.style.top=`${y/height*100}%`;
