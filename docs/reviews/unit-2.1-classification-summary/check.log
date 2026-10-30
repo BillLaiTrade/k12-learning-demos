@@ -1,0 +1,6 @@
+PASS 1440px: live text at least 16px; pure/mixture siblings, elements/compounds nested only in pure; correct examples; within content column; no text/page overflow or JavaScript errors.
+PASS 1280px: live text at least 16px; pure/mixture siblings, elements/compounds nested only in pure; correct examples; within content column; no text/page overflow or JavaScript errors.
+PASS 1024px: live text at least 16px; pure/mixture siblings, elements/compounds nested only in pure; correct examples; within content column; no text/page overflow or JavaScript errors.
+PASS 768px: live text at least 16px; pure/mixture siblings, elements/compounds nested only in pure; correct examples; within content column; no text/page overflow or JavaScript errors.
+PASS 760px: live text at least 16px; pure/mixture siblings, elements/compounds nested only in pure; correct examples; within content column; no text/page overflow or JavaScript errors.
+PASS 390px: live text at least 16px; pure/mixture siblings, elements/compounds nested only in pure; correct examples; within content column; no text/page overflow or JavaScript errors.

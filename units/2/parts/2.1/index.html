@@ -487,8 +487,28 @@
     .decomposition-explanation { margin:6px 0 0!important; color:#627168!important; font-size:.78rem; text-align:center; }
     .particle-color-note { margin:0 0 8px!important; color:#68776e!important; font-size:.8rem; }
     .pure-summary { margin:8px 0 0; }
-    .matter-relationship-figure { grid-column:2; min-width:0; width:100%; margin:0; padding:10px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
-    .matter-relationship-figure img { display:block; width:100%; height:auto; border-radius:10px; }
+    .matter-summary { grid-column:2; container-type:inline-size; min-width:0; width:100%; padding:18px; border:1px solid var(--line); border-radius:16px; background:#f7f8f3; font-size:1rem; line-height:1.7; }
+    .matter-summary h3 { margin:0 0 28px; color:#294b3c; font-size:1.2rem; line-height:1.45; }
+    .matter-family { position:relative; padding:24px 14px 14px; border:2px solid #8cae91; border-radius:14px; }
+    .matter-root { position:absolute; top:-17px; left:14px; margin:0; padding:2px 18px; border-radius:9px; background:#315a46; color:#fff; font-size:1.125rem; font-weight:750; }
+    .matter-classes,.matter-pure-types { display:grid; min-width:0; margin:0; padding:0; list-style:none; gap:12px; }
+    .matter-classes { grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); align-items:stretch; }
+    .matter-class { min-width:0; padding:14px; border:1px solid #b9d0bd; border-radius:12px; background:#edf4ea; }
+    .matter-class--mixture { border-color:#e2caa9; background:#fff5e9; }
+    .matter-summary h4 { margin:0 0 4px; color:#294b3c; font-size:1.125rem; line-height:1.45; }
+    .matter-summary p:not(.matter-root) { margin:0; }
+    .matter-class-description { margin-bottom:14px!important; }
+    .matter-type { min-width:0; padding:12px; border:1px solid #d1dfd0; border-radius:10px; background:var(--card); }
+    .matter-summary h5 { margin:0 0 6px; color:#294b3c; font-size:1.125rem; line-height:1.45; }
+    .matter-example { margin-top:10px!important; font-weight:750; color:#315a46; }
+    .matter-model { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px; min-height:54px; margin-top:10px; }
+    .matter-model--element { display:grid; grid-template-columns:repeat(3,18px); gap:6px; }
+    .matter-model .particle-ball { width:18px; height:18px; }
+    .matter-model .particle-ball--hydrogen { width:12px; height:12px; }
+    .matter-model--mixture { margin:18px 0; padding:14px 8px; border:1px solid #ead7bc; border-radius:10px; background:var(--card); }
+    .matter-mixture-note { margin-top:16px!important; color:var(--muted); }
+    @container (max-width:480px) { .matter-classes { grid-template-columns:minmax(0,1fr); } .matter-pure-types { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @container (max-width:360px) { .matter-pure-types { grid-template-columns:minmax(0,1fr); } }
     @media(max-width:680px) { .pure-particle-comparison { grid-template-columns:1fr; } .particle-photo-model { grid-template-columns:104px minmax(0,1fr); } .particle-sample-photo img { height:94px; } .particle-sample-photo--iron img { height:104px; } .particle-card h3 { flex-wrap:wrap; gap:6px; } .particle-tag { flex:0 0 auto; white-space:nowrap; } .particle-model--water { grid-template-columns:repeat(3,55px); } }
     .unit-quiz { margin:20px 0 28px; border:1px solid var(--line); border-radius:20px; background:var(--card); box-shadow:var(--shadow); overflow:hidden; scroll-margin-top:18px; }
     .quiz-head { display:flex; gap:18px; align-items:flex-start; padding:25px 28px 21px; border-bottom:1px solid #e7ece5; background:linear-gradient(105deg,#fffdf6,#fdfbf3); }
@@ -610,7 +630,7 @@
       .quiz-body { padding:20px 17px 23px; }
       .lesson-card { grid-template-columns:1fr; gap:14px; padding:18px; border-radius:19px; }
       .lesson-card,.unit-quiz { scroll-margin-top:160px; }
-      .matter-relationship-figure { grid-column:1; }
+      .matter-summary { grid-column:1; }
       .card-side { display:flex; align-items:baseline; gap:10px; border-right:0; border-bottom:1px solid #d7e1dd; padding:0 0 10px; }
       .card-side h3 { margin:0; }
       .card-role { display:none; }
@@ -1084,9 +1104,39 @@
 
             <div class="dialogue dialogue--xiaokui pure-summary"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>所以蒸餾水和純鐵都是純物質，但蒸餾水是化合物，純鐵是元素。</p></div>
           </div>
-          <figure class="matter-relationship-figure">
-            <img src="assets/unit8-matter-containment-diagram.png" alt="物質包含純物質和混合物；純物質包含元素與化合物。混合物中的不同成分交錯混合，成分可以是元素、化合物或兩者都有。">
-          </figure>
+          <section class="matter-summary" id="matter-classification-summary" aria-labelledby="matter-classification-title">
+            <h3 id="matter-classification-title">整理：物質的分類</h3>
+            <div class="matter-family">
+              <p class="matter-root">物質</p>
+              <ul class="matter-classes">
+                <li class="matter-class matter-class--pure">
+                  <h4>純物質</h4>
+                  <p class="matter-class-description">只含一種物質</p>
+                  <ul class="matter-pure-types">
+                    <li class="matter-type">
+                      <h5>元素</h5>
+                      <p>只含一種元素</p>
+                      <div class="matter-model matter-model--element" aria-hidden="true"><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i></div>
+                      <p class="matter-example">例子：純鐵</p>
+                    </li>
+                    <li class="matter-type">
+                      <h5>化合物</h5>
+                      <p>不同元素按固定比例結合</p>
+                      <div class="matter-model" aria-hidden="true"><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span></div>
+                      <p class="matter-example">例子：蒸餾水</p>
+                    </li>
+                  </ul>
+                </li>
+                <li class="matter-class matter-class--mixture">
+                  <h4>混合物</h4>
+                  <p class="matter-class-description">兩種或兩種以上物質混合</p>
+                  <div class="matter-model matter-model--mixture" aria-hidden="true"><i class="particle-ball"></i><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><i class="particle-ball"></i><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span></div>
+                  <p class="matter-example">例子：空氣、土壤</p>
+                  <p class="matter-mixture-note">成分可以是元素、化合物，或兩者都有。</p>
+                </li>
+              </ul>
+            </div>
+          </section>
         </section>
 
         <dialog class="book-reader" id="book-reader" aria-labelledby="book-reader-title">
