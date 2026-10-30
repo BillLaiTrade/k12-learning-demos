@@ -212,7 +212,7 @@ async function initialize() {
       document.getElementById('evap-phase').textContent = phases[currentPhase][0];
       caption.textContent = phases[currentPhase][1];
     }
-    host.setAttribute('aria-label', `從「${steps[activeStep].textContent.trim()}」播放至結束`);
+    host.setAttribute('aria-label', progress >= 1 ? '重新播放完整蒸發過程' : `從「${steps[activeStep].textContent.trim()}」播放至結束`);
     renderer.render(scene, camera);
   }
   function pause(redraw = true) {
@@ -242,7 +242,7 @@ async function initialize() {
     draw(progress * DURATION);
     animationId = requestAnimationFrame(frame);
   }
-  host.addEventListener('click', () => playStep(activeStep));
+  host.addEventListener('click', () => playStep(progress >= 1 ? 0 : activeStep));
   steps.forEach((button, index) => button.addEventListener('click', () => playStep(index)));
   document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
   new ResizeObserver(() => {
