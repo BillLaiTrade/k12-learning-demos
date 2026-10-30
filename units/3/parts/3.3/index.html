@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="比較振幅、頻率與波形，探索琴弦、空氣柱、音色及聽覺範圍，認識分貝的基本讀法。">
 <title>不同的聲音，差別在哪裡？｜3.3 聲音的特性</title>
-<link rel="stylesheet" href="assets/lesson.css?v=5">
-<script type="module" src="assets/lesson.mjs?v=4">
+<link rel="stylesheet" href="assets/lesson.css?v=6">
+<script type="module" src="assets/lesson.mjs?v=5">
 </script>
 </head>
 <body>
@@ -132,60 +132,43 @@
 </div>
 </section>
 <section class="lesson-card" id="card-02" data-core="音調與頻率">
-<div class="card-side">
-<span class="card-number">02</span>
-<h3>音調與頻率</h3>
-<span class="card-role">同一段時間，數振動次數</span>
-</div>
-<div class="card-main">
-<h2>聲音變高，是因為振動得更快嗎？</h2>
-<p>兩個圖的時間範圍與振幅相同，觀察哪一邊在同樣時間內振動更多次。</p>
-<div class="dialogue dialogue--xiaokui">
-<span class="speaker"><span class="visually-hidden">小葵</span></span>
-<p>如果不是更用力，而是讓聲音變得更尖，要改變什麼？</p>
-</div>
-<div class="compare-grid">
-<div class="compare-card">
-<h3>固定參照</h3>
-<p class="minor">220 Hz・相對振幅 0.50</p>
-<div class="wave-panel">
-<span class="wave-label" aria-hidden="true">相對振幅</span>
-<svg class="wave" id="pitch-reference" viewBox="0 15 600 140" preserveAspectRatio="none" role="img" aria-label="聲音訊號隨時間的變化">
-</svg>
-<div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div>
-</div>
-<button class="play" type="button" data-play="pitch-reference">
-<span aria-hidden="true">▶</span> 播放聲音</button>
-</div>
-<div class="compare-card">
-<h3>調整頻率</h3>
-<p class="minor">
-<output id="pitch-reading">440 Hz・每秒振動440次</output>
-</p>
-<div class="wave-panel">
-<span class="wave-label" aria-hidden="true">相對振幅</span>
-<svg class="wave" id="pitch-live" viewBox="0 15 600 140" preserveAspectRatio="none" role="img" aria-label="聲音訊號隨時間的變化">
-</svg>
-<div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div>
-</div>
-<button class="play" type="button" data-play="pitch-live">
-<span aria-hidden="true">▶</span> 播放聲音</button>
-</div>
-</div>
-<label class="slider">右側頻率 <input id="frequency" type="range" min="110" max="880" step="110" value="440">
-</label>
-<p class="model-note">Hz表示每秒振動次數。相同圖上振幅下，不同頻率的主觀大小聲仍可能有差別。</p>
-<div class="lab-tools">
-<button class="stop secondary" type="button" disabled>停止播放</button>
-<button class="reset secondary" data-reset="2" type="button">回到起點</button>
-<span class="play-state" role="status">等待操作</span>
-</div>
-<div class="dialogue">
-<span class="speaker"><span class="visually-hidden">阿公</span></span>
-<p>每秒振動次數越多，頻率越高，通常音調也越高。高音不代表比較大聲，也不代表聲音傳得比較快。</p>
-</div>
-</div>
-</section>
+<div class="card-side"><span class="card-number">02</span><h3>音調與頻率</h3><span class="card-role">同樣時間，<br>比較振動次數</span></div>
+<div class="card-main"><h2>聲音變高，是因為振動得更快嗎？</h2><p>振幅保持相同，改變振動的快慢。</p>
+<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>不敲得更用力，也能讓聲音變高嗎？</p></div>
+<div class="pitch-bench"><div class="pitch-column" data-pitch-side="left">
+<h3>固定參照</h3><div class="pitch-frequency-row"><span class="pitch-frequency">200 Hz</span></div>
+<div class="pitch-apparatus">
+<button type="button" class="pitch-speaker play" data-play="pitch-reference" aria-label="點喇叭播放左邊聲音" aria-pressed="false"><img src="assets/pitch-speaker.png" width="1376" height="1152" alt="木殼喇叭，點擊可試聽" draggable="false"></button>
+<div class="pitch-closeup"><span>平衡位置</span>
+<svg viewBox="0 0 180 155" class="pitch-diaphragm" role="img" aria-label="喇叭振膜側面放大，沿水平方向前後振動">
+<defs><linearGradient id="pitch-metal-left"><stop stop-color="#252c31"/><stop offset=".35" stop-color="#a1a9af"/><stop offset=".65" stop-color="#4c565d"/><stop offset="1" stop-color="#20292d"/></linearGradient></defs>
+<path d="M130 8V140" stroke="#577880" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="27" y="58" width="27" height="42" rx="4" fill="url(#pitch-metal-left)" stroke="#4b5359"/>
+<g class="pitch-cone"><path d="M57 28Q87 64 130 79Q87 94 57 130Z" fill="url(#pitch-metal-left)" stroke="#4d565b" stroke-width="2"/><rect x="50" y="26" width="9" height="106" rx="4" fill="#3c454c" stroke="#a9afb3"/><path d="M60 33Q89 68 126 79" fill="none" stroke="#d9dddf" opacity=".7"/></g>
+<path d="M114 145H146M114 145l5-4m-5 4 5 4M146 145l-5-4m5 4-5 4" fill="none" stroke="#176b53" stroke-width="2"/>
+</svg><span>振幅相同</span></div></div>
+<button class="play pitch-play" type="button" data-play="pitch-reference" aria-pressed="false"><span aria-hidden="true">▶</span> 播放左邊</button>
+<div class="pitch-wave-card"><h4 id="pitch-count-left">10毫秒內振動2次</h4><span class="wave-label">相對位移</span><svg class="wave pitch-wave" id="pitch-reference" viewBox="0 0 340 200" role="img" aria-label="相同10毫秒時間內的振動紀錄"></svg></div>
+</div><div class="pitch-column" data-pitch-side="right">
+<h3>調整頻率</h3><div class="pitch-frequency-row"><button type="button" class="pitch-step" data-pitch-step="-100" aria-label="頻率減少100赫茲">−</button><output class="pitch-frequency" id="pitch-reading" aria-live="polite">400 Hz</output><button type="button" class="pitch-step" data-pitch-step="100" aria-label="頻率增加100赫茲">＋</button></div>
+<div class="pitch-apparatus">
+<button type="button" class="pitch-speaker play" data-play="pitch-live" aria-label="點喇叭播放右邊聲音" aria-pressed="false"><img src="assets/pitch-speaker.png" width="1376" height="1152" alt="木殼喇叭，點擊可試聽" draggable="false"></button>
+<div class="pitch-closeup"><span>平衡位置</span>
+<svg viewBox="0 0 180 155" class="pitch-diaphragm" role="img" aria-label="喇叭振膜側面放大，沿水平方向前後振動">
+<defs><linearGradient id="pitch-metal-right"><stop stop-color="#252c31"/><stop offset=".35" stop-color="#a1a9af"/><stop offset=".65" stop-color="#4c565d"/><stop offset="1" stop-color="#20292d"/></linearGradient></defs>
+<path d="M130 8V140" stroke="#577880" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="27" y="58" width="27" height="42" rx="4" fill="url(#pitch-metal-right)" stroke="#4b5359"/>
+<g class="pitch-cone"><path d="M57 28Q87 64 130 79Q87 94 57 130Z" fill="url(#pitch-metal-right)" stroke="#4d565b" stroke-width="2"/><rect x="50" y="26" width="9" height="106" rx="4" fill="#3c454c" stroke="#a9afb3"/><path d="M60 33Q89 68 126 79" fill="none" stroke="#d9dddf" opacity=".7"/></g>
+<path d="M114 145H146M114 145l5-4m-5 4 5 4M146 145l-5-4m5 4-5 4" fill="none" stroke="#176b53" stroke-width="2"/>
+</svg><span>振幅相同</span></div></div>
+<button class="play pitch-play" type="button" data-play="pitch-live" aria-pressed="false"><span aria-hidden="true">▶</span> 播放右邊</button>
+<div class="pitch-wave-card"><h4 id="pitch-count-right">10毫秒內振動4次</h4><span class="wave-label">相對位移</span><svg class="wave pitch-wave" id="pitch-live" viewBox="0 0 340 200" role="img" aria-label="相同10毫秒時間內的振動紀錄"></svg></div>
+</div></div>
+<p class="pitch-instruction">點喇叭或播放鍵即可試聽，每次只播放一邊。<br>振膜運動與紀錄時間放慢200倍；聲音保持原音高。</p>
+<p class="pitch-status play-state" role="status">左側固定200 Hz；右側每次加減100 Hz（200～800 Hz）。</p>
+<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>同樣時間內振動次數越多，頻率越高，音調也越高。</p></div>
+<p class="model-note">Hz表示每秒振動次數；圖的橫軸是時間，不是聲波傳播的距離。固定訊號振幅，不代表不同頻率聽起來一定同樣大聲；音調高也不代表聲音傳得較快。</p>
+</div></section>
 <section class="lesson-card" id="card-03" data-core="琴弦的音調">
 <div class="card-side">
 <span class="card-number">03</span>

@@ -390,3 +390,7 @@ NITROGEN_ARTIFACT_DIR=/tmp/unit23-nitrogen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-ful
 ```
 
 第三區8項（含主項）：預設兩袋比較與性質、直接點右包重播充氮排氣與封口、氧氣短條與透明流向、左側影像SHA-256固定、重播不疊時序、Escape／背景／離區暫停、鍵盤／觸控／減少動態、無JavaScript，以及七種寬度初始／播放中的右側內容欄邊界。`NITROGEN_URL`可指定公開網址，公開Chromium使用繼承的HTTPS代理；`NITROGEN_ARTIFACT_DIR`指定截圖目錄，預設`/tmp/unit23-nitrogen`避免覆寫歷史證據。
+
+### 3.3第二區雙喇叭比較
+
+`CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.3-pitch.test.cjs`：7項（含外層），檢查200～800Hz每100Hz步進、界限、相同振幅與波形週期、真實音訊、左右自由重播、點喇叭、鍵盤、波形與振膜同步、切區／離屏／隱藏停止及桌機／筆電對稱配置。`SOUND33_BASE_URL`可指定公開課程網址，瀏覽器使用繼承的HTTPS代理；截圖寫至/tmp/unit33-pitch-review。與既有整頁及第一區音叉合計27項通過，證據見docs/reviews/unit-3.3-card02-speakers/。

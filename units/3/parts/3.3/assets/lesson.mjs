@@ -1,10 +1,11 @@
 import {signal,stringFrequency,tubeFrequency,hearingBand,soundSamples,challenge,checkSettings} from './model.mjs?v=1';
 import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
 import {createForkExperiment} from './fork-experiment.mjs?v=2';
+import {createPitchExperiment,PITCH_SECONDS} from './pitch-experiment.mjs?v=1';
 import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
-const state={frequency:440,length:60,tension:1,tube:60,index:0};
-let forkView;
+const state={frequency:400,length:60,tension:1,tube:60,index:0};
+let forkView,pitchView;
 const names={pure:'純音',string:'弦音示意',pipe:'管音示意'};
 let target=challenge(), audioContext, source=null, activeRoot=null, animation=0, request=0;
 function svg(tag,attributes,parent){const n=document.createElementNS(ns,tag);for(const[k,v]of Object.entries(attributes))n.setAttribute(k,v);parent.append(n);return n;}
@@ -32,13 +33,13 @@ function stop(root=activeRoot){
  if(source){source.onended=null;try{source.stop();}catch{}source.disconnect();source=null;}
  cancelAnimationFrame(animation);animation=0;
  if(activeRoot){activeRoot.dataset.playing='false';activeRoot.querySelectorAll('.stop').forEach(b=>b.disabled=true);activeRoot.querySelector('.play-state').textContent='已停止，點擊可重新播放';}
- activeRoot=null;forkView?.stop();restInstrument();
+ activeRoot=null;forkView?.stop();pitchView?.stop();restInstrument();
 }
 function config(key){
  const answer=answers();
  const map={
   'amplitude-reference':{frequency:FORK_FREQUENCY,amplitude:.3},'amplitude-live':{frequency:FORK_FREQUENCY,amplitude:.7},
-  'pitch-reference':{frequency:220,amplitude:.5},'pitch-live':{frequency:state.frequency,amplitude:.5},
+  'pitch-reference':{frequency:200,amplitude:.5},'pitch-live':{frequency:state.frequency,amplitude:.5},
   'string-reference':{frequency:220,amplitude:.55,tone:'string'},'string-live':{frequency:stringFrequency(state.length,state.tension),amplitude:.55,tone:'string'},
   'tube-reference':{frequency:tubeFrequency(60),amplitude:.55,tone:'pipe'},'tube-live':{frequency:tubeFrequency(state.tube),amplitude:.55,tone:'pipe'},
   'quiz-base':{frequency:target.base,amplitude:target.amplitude},'quiz-choice':{frequency:Number(answer.frequency),amplitude:Number(answer.amplitude),tone:answer.tone}
@@ -53,18 +54,20 @@ async function play(button){
   const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)throw Error('unsupported');
   audioContext??=new Audio();await audioContext.resume();
   if(ticket!==request||document.hidden)return;
-  const forkKey=button.dataset.forkStrike;
-  const data=forkKey?forkSamples(settings.amplitude,audioContext.sampleRate):soundSamples(settings,audioContext.sampleRate),buffer=audioContext.createBuffer(1,data.length,audioContext.sampleRate);
+  const forkKey=button.dataset.forkStrike,pitchKey=button.dataset.play.startsWith('pitch-')?button.dataset.play:null;
+  const data=forkKey?forkSamples(settings.amplitude,audioContext.sampleRate):soundSamples(settings,audioContext.sampleRate,pitchKey?PITCH_SECONDS:1.6),buffer=audioContext.createBuffer(1,data.length,audioContext.sampleRate);
   buffer.copyToChannel(data,0);source=audioContext.createBufferSource();source.buffer=buffer;source.connect(audioContext.destination);
   root.dataset.playing='true';root.dataset.frequency=String(settings.frequency);root.dataset.amplitude=String(settings.amplitude);root.dataset.tone=settings.tone||'pure';
   root.querySelectorAll('.stop').forEach(b=>b.disabled=false);root.querySelector('.play-state').textContent=forkKey?`${forkKey==='soft'?'輕敲':'較重敲'}，觀察振幅與聲音`:`播放中・${settings.frequency.toFixed(1)} Hz`;
   const start=performance.now(),currentSource=source,forkStart=audioContext.currentTime+(forkKey?STRIKE_DELAY:0);
   if(forkKey)forkView.start(forkKey);
-  source.onended=()=>{if(source===currentSource){if(forkKey)forkView.finish();stop(root);root.querySelector('.play-state').textContent='播放完畢，可再次比較';}};
+  if(pitchKey){pitchView.start(pitchKey);root.querySelector('.play-state').textContent=`正在播放${pitchKey==='pitch-reference'?'左':'右'}邊：${settings.frequency} Hz`;}
+  source.onended=()=>{if(source===currentSource){if(forkKey)forkView.finish();if(pitchKey)pitchView.finish();stop(root);root.querySelector('.play-state').textContent='播放完畢，可再次比較';}};
   source.start(forkStart);
   function animate(now){
    if(source!==currentSource)return;
    if(forkKey)forkView.update(audioContext.currentTime-forkStart);
+   if(pitchKey)pitchView.update(audioContext.currentTime-forkStart);
    const t=(now-start)/1000,fade=Math.max(0,1-t/1.6);
    if(button.dataset.play==='string-live'){
     const end=75+425*state.length/90,displacement=12*Math.sin(t*2*Math.PI*settings.frequency/60)*fade;
@@ -79,8 +82,6 @@ async function play(button){
  }
 }
 function render(){
-
- wave('pitch-reference',220,.5);wave('pitch-live',state.frequency,.5);$('pitch-reading').textContent=`${state.frequency} Hz・每秒振動${state.frequency}次`;
  $('string-length-reading').textContent=state.length+' cm';$('string-tension-reading').textContent=state.tension.toFixed(2)+' 倍';$('string-frequency').textContent=stringFrequency(state.length,state.tension).toFixed(1)+' Hz';
  $('tube-length-reading').textContent=state.tube+' cm';$('tube-frequency').textContent=tubeFrequency(state.tube).toFixed(1)+' Hz';
  for(const tone of ['pure','string','pipe'])wave('tone-'+tone,440,.5,tone);
@@ -100,8 +101,11 @@ function newChallenge(){
  $('quiz-original').textContent=`${target.base} Hz・相對振幅0.35・純音`;
  wave('quiz-base',target.base,.35);$('settings-form').reset();renderChoice();
 }
-const binding={frequency:'frequency','string-length':'length','string-tension':'tension','tube-length':'tube'};
+const binding={'string-length':'length','string-tension':'tension','tube-length':'tube'};
 for(const[id,key]of Object.entries(binding))$(id).addEventListener('input',()=>{stop();state[key]=Number($(id).value);render();});
+for(const button of document.querySelectorAll('[data-pitch-step]'))button.addEventListener('click',()=>{
+ stop();state.frequency=Math.max(200,Math.min(800,state.frequency+Number(button.dataset.pitchStep)));pitchView.render(state.frequency);$('card-02').querySelector('.play-state').textContent=`右側${state.frequency} Hz：每秒振動${state.frequency}次。點喇叭或播放鍵試聽。`;
+});
 for(const root of document.querySelectorAll('.lesson-card,.quiz')){
  root.dataset.playing='false';
  root.querySelectorAll('.play[data-play]').forEach(button=>button.addEventListener('click',()=>play(button)));
@@ -156,4 +160,5 @@ window.addEventListener('scroll',syncRoute,{passive:true});
 window.addEventListener('resize',syncRoute);
 wave('amplitude-reference',FORK_FREQUENCY,.3,'pure',true);wave('amplitude-live',FORK_FREQUENCY,.7,'pure',true);
 forkView=createForkExperiment($('card-01'));
+pitchView=createPitchExperiment($('card-02'));pitchView.render(state.frequency);
 render();hearing(440);level('conversation');newChallenge();activeLink(location.hash||'#card-01');

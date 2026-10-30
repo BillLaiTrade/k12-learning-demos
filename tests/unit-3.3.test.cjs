@@ -21,7 +21,7 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
  const base=process.env.SOUND33_BASE_URL||`http://127.0.0.1:${port}/units/3/parts/3.3/`;
  await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('#tone-pipe .signal').waitFor({state:'attached'});
  const set=async(id,value)=>{await page.locator('#'+id).fill(String(value));};
- const play=async key=>{await page.locator(`[data-play="${key}"]`).click();await page.waitForFunction(()=>document.querySelector('[data-playing=true]'));};
+ const play=async key=>{await page.locator(`[data-play="${key}"]`).first().click();await page.waitForFunction(()=>document.querySelector('[data-playing=true]'));};
  await t.test('seven blocks and comparisons render without autoplay',async()=>{
   assert.equal(await page.locator('.lesson-card').count(),7);assert.equal(await page.locator('.quiz').count(),1);assert.equal(await page.locator('form').count(),1);assert.equal(await page.evaluate(()=>window.audioRuns.length),0);
   assert.equal(await page.locator('.wave .signal').count(),9);
@@ -40,9 +40,13 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
   await page.locator('[data-fork-strike="soft"]').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelector('#card-01').dataset.forkState==='vibrating');await page.locator('#card-01 .stop').click();assert.equal(await page.locator('#fork-apparatus').getAttribute('data-displacement'),'0');
  });
  await t.test('frequency changes pitch and the plotted cycles with amplitude held fixed',async()=>{
-  const before=await page.locator('#pitch-live .signal').getAttribute('d');await set('frequency',880);assert.match(await page.locator('#pitch-reading').textContent(),/880/);assert.notEqual(await page.locator('#pitch-live .signal').getAttribute('d'),before);assert.equal(await page.locator('#pitch-live').getAttribute('data-amplitude'),'0.5');
-  await play('pitch-live');assert.ok(Math.abs(await page.evaluate(()=>window.audioRuns.at(-1).frequency)-880)<10);
-  await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='false');assert.equal(await page.locator('#card-02 .stop').isDisabled(),true);
+  const before=await page.locator('#pitch-live .pitch-guide').getAttribute('d');
+  for(let i=0;i<4;i++)await page.locator('[data-pitch-step="100"]').click();
+  assert.match(await page.locator('#pitch-reading').textContent(),/800/);assert.notEqual(await page.locator('#pitch-live .pitch-guide').getAttribute('d'),before);assert.equal(await page.locator('#pitch-live').getAttribute('data-amplitude'),'.5');
+  await play('pitch-live');assert.ok(Math.abs(await page.evaluate(()=>window.audioRuns.at(-1).frequency)-800)<10);
+  await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='false');assert.equal(await page.locator('#pitch-live').getAttribute('data-progress'),'1');
+  assert.equal(await page.locator('#card-02 .stop').count(),0);
+
  });
  await t.test('string and pipe controls produce independent physical comparisons and reset',async()=>{
   await set('string-length',30);assert.equal(await page.locator('#string-frequency').textContent(),'440.0 Hz');await set('string-tension',2);assert.match(await page.locator('#string-frequency').textContent(),/622.3/);
