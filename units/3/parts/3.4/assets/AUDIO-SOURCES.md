@@ -1,0 +1,9 @@
+# 3.4 示範音效來源
+
+- 第1–4區提示音、第5區短音：由本課程式以650Hz正弦與短包絡自行合成，不使用既有歌曲、第三方錄音或真實超聲波。
+- `room-phrase.wav`：原創句子「聽聽看，這裡的聲音清楚嗎？」，用eSpeak NG的 `cmn` 聲音、語速145離線合成，再以FFmpeg存成22050Hz、單聲道PCM WAV。非真人錄音，未收集學生或其他人的語音。長度約4.03秒。
+- 製作命令：`espeak-ng -v cmn -s 145 -w phrase.wav '聽聽看，這裡的聲音清楚嗎？'`，接著 `ffmpeg -i phrase.wav -ar 22050 -ac 1 room-phrase.wav`。eSpeak NG只用於素材製作，頁面執行不需要安裝此工具或呼叫語音服務。
+- 工具取自Debian官方trixie套件索引，下載套件均核對索引所列SHA256，只解壓至暫存區，未修改系統或專案依賴宣告。[eSpeak NG專案](https://github.com/espeak-ng/espeak-ng)、[Debian套件頁](https://packages.debian.org/trixie/espeak-ng)。
+- 室內反射與吸音前後都在瀏覽器由同一乾音產生，直接聲相同，反射增益／延遲見README；不是現場錄音，也不宣稱任何材料的實測性能。語音音質為合成示範，聽感仍待使用者檢視。
+
+音檔SHA256：`4dc2275042df7c5b8a849fe0dc9aebef029a699830f49ce95f32adeb5a08bf81`。

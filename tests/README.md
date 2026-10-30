@@ -335,3 +335,11 @@ node --test tests/unit-2.3-model.test.cjs
 第一組檢查本輪第二區全部資料預設可見、78／21／1份額、氬氣與其他1%的關係、永久／變動分類、可選成分突出、鍵盤／觸控、停用JavaScript、減少動態、320–1440px版面及路線錨點；並回歸既有杯子拖曳、保水、重設及全站編號連結。新版入口僅含目前完成的第一／二區，因此舊耗氧測量、乾濕切換及比例小測瀏覽器案例已隨被排除需求移出；杯子回歸案例保留。第二組保留歷史氣體／杯子模型檢查，不代表新版六區或小測已完成。
 
 `AIR_COMPOSITION_URL`可指定公開2.3頁面，公開Chromium透過繼承的HTTPS代理；`AIR_COMPOSITION_ARTIFACT_DIR`可指定畫面路徑。本輪證據見`docs/reviews/unit-2.3-composition/`，舊杯子回歸截圖預設存`/tmp/unit23-cup-regression`，避免覆寫歷史交付證據。
+
+## 3.4 聲波反射與回聲
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-model.test.mjs tests/unit-3.4.test.cjs tests/unit-numbering.test.cjs
+```
+
+檢查六區與單一結尾小測、往返路程與空氣／水中聲速、反射動畫暫停／重來、跨區及背景停止、鍵盤／觸控、聲納深度與收合揭示、直接聲保留及反射減弱、離線合成語音解碼及音效停止、小測未完成／錯誤／正確／修改／重填，以及1440–320px版面與全站既有入口載入。截圖位於 `/tmp/k12-34-review`。這是第四階段初稿的功能檢查，不代表課程或完整第三單元已完成外部驗收；真實裝置上的聽感需另檢視。

@@ -63,6 +63,7 @@ test('new unit numbers agree across home, overviews, and existing lesson URLs', 
     ['1.1', 'units/1/parts/1.1/'], ['1.2', 'units/1/parts/1.2/'],
     ['2.1', 'units/2/parts/2.1/'], ['2.2', 'units/2/parts/2.2/'],
     ['3.1', 'units/3/parts/3.1/'], ['3.2', 'units/3/parts/3.2/'],
+    ['3.4', 'units/3/parts/3.4/'],
     ['4.1', 'units/4/parts/4.1/'], ['4.2', 'units/4/parts/4.2/']
   ]) {
     await t.test(`lesson ${number}: header and existing assets load`, async () => {
