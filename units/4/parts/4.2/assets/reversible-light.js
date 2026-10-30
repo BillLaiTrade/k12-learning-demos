@@ -22,20 +22,25 @@ const vec = (a, b, t) => a.map((v, i) => v + t * (b[i] - v));
 const colors = { a: '#ed2924', b: '#205df5', off: '#435058' };
 let sourceB, bodyB, lensB, stemB, footB, pivotB, blue, arrows, hitDot;
 
-// A compact flat head shares the beam color and lies in the optical plane.
+// Keep the compact silhouette; inset its color to leave a fine black edge.
 function directionArrow(color) {
-  const shape = new THREE.Shape();
-  shape.moveTo(0, 0.36);
-  shape.lineTo(-0.22, -0.23);
-  shape.lineTo(0, -0.10);
-  shape.lineTo(0.22, -0.23);
-  shape.closePath();
-  const geometry = new THREE.ShapeGeometry(shape);
-  geometry.rotateX(Math.PI / 2);
-  const arrow = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-    color, side: THREE.DoubleSide, depthTest: false, depthWrite: false
-  }));
-  arrow.renderOrder = 16; arrow.frustumCulled = false;
+  const points = [[0, 0.36], [-0.22, -0.23], [0, -0.10], [0.22, -0.23]].map(p => new THREE.Vector2(...p));
+  const width = 0.018;
+  const inset = points.map((point, index) => {
+    const incoming = point.clone().sub(points[(index + points.length - 1) % points.length]).normalize();
+    const outgoing = points[(index + 1) % points.length].clone().sub(point).normalize();
+    const a = new THREE.Vector2(-incoming.y, incoming.x), b = new THREE.Vector2(-outgoing.y, outgoing.x);
+    return point.clone().addScaledVector(a.clone().add(b), width / (1 + a.dot(b)));
+  });
+  const arrow = new THREE.Group();
+  [[points, '#202622'], [inset, color]].forEach(([vertices, fill], index) => {
+    const geometry = new THREE.ShapeGeometry(new THREE.Shape(vertices));
+    geometry.rotateX(Math.PI / 2);
+    const layer = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+      color: fill, side: THREE.DoubleSide, depthTest: false, depthWrite: false
+    }));
+    layer.renderOrder = 15 + index; layer.frustumCulled = false; arrow.add(layer);
+  });
   return arrow;
 }
 
@@ -133,7 +138,7 @@ function drawFallback() {
       const length = Math.hypot(b[0] - a[0], b[1] - a[1]);
       const dx = (b[0] - a[0]) / length, dy = (b[1] - a[1]) / length;
       const point = (along, across) => `${(x + dx * along - dy * across).toFixed(2)},${(y + dy * along + dx * across).toFixed(2)}`;
-      return `<path data-direction="${key}" d="M${point(9, 0)}L${point(-7, 6)}L${point(-2, 0)}L${point(-7, -6)}Z" fill="${colors[key]}"/>`;
+      return `<path data-direction="${key}" d="M${point(9, 0)}L${point(-7, 6)}L${point(-2, 0)}L${point(-7, -6)}Z" fill="${colors[key]}" stroke="#202622" stroke-width="1" stroke-linejoin="round" paint-order="stroke fill" vector-effect="non-scaling-stroke"/>`;
     }).join('');
     return `<path data-ray="${key}" d="M${[ray.source, ray.hit, ray.end].map(coords).join('L')}" fill="none" stroke="${colors[key]}" stroke-width="${key === 'a' ? 6 : 2.5}"/>${heads}`;
   };
