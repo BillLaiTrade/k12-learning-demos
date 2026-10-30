@@ -41,9 +41,11 @@ export const actionName=action=>({sample:'取樣',settle:'靜置觀察',filter:'
 export function measuredMasses(sample) {
   const measurements=sample?.measurements||[];
   const last=predicate=>measurements.slice().reverse().find(predicate)||null;
-  const liquid=last(m=>m.phase==='filtered')||last(m=>['raw','settled'].includes(m.phase));
+  const raw=last(m=>['raw','settled'].includes(m.phase));
+  const filtered=last(m=>m.phase==='filtered');
+  const liquid=filtered||raw;
   const solid=last(m=>m.phase==='dry-filtered')||last(m=>m.phase==='dry-raw');
-  return {liquid,solid};
+  return {raw,filtered,liquid,solid};
 }
 export function concentrationEvidence(sample) {
   const {liquid,solid}=measuredMasses(sample);

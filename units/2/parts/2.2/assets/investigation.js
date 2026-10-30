@@ -1,10 +1,12 @@
-import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessReport,concentrationEvidence,measuredMasses,measurementHint} from './investigation-state.js?v=crystal-mission-1';
+import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessReport,concentrationEvidence,measuredMasses,measurementHint} from './investigation-state.js?v=sand-comparison-1';
 import {loadPicture,createRenderer} from './investigation-renderer.js?v=review-5';
 
 const root=document.getElementById('invest-lab');
 const $=id=>document.getElementById(`invest-${id}`);
 const controls=[...root.querySelectorAll('[data-invest-tool]')];
 const answers=new Map();
+const comparisonFeedback=new Map();
+const answerFields=['mass-difference','calculation-numerator','calculation-denominator','concentration-value'];
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
 let samples=[],active=null,stock=6,nextId=1,animation=null,renderer=null,frame=0,pausedAt=null,drag=null,suppressClickUntil=0;
 const selected=()=>samples.find(s=>s.id===active);
@@ -13,20 +15,26 @@ function announce(text,observation=false){$('status').textContent=text;$('status
 function invalidateReport(){const feedback=$('feedback');feedback.hidden=true;feedback.replaceChildren();delete feedback.dataset.result;}
 function redraw(now=performance.now()){renderer?.render({sample:selected(),stock,animation},now);}
 function updateConcentration(){
-  const sample=selected(),{liquid,solid}=measuredMasses(sample);
+  const sample=selected(),{raw,filtered,solid}=measuredMasses(sample);
+  $('raw-mass').textContent=raw?`${raw.mass} 克`:'尚未稱量';
   $('notebook-sample').textContent=sample?`取樣 ${label(sample.id)}`:'尚未取樣';
-  $('solution-mass').textContent=liquid?`${liquid.mass} 克`:'尚未稱量';
+  $('solution-mass').textContent=filtered?`${filtered.mass} 克`:'尚未稱量';
   $('solute-mass').textContent=solid?`${solid.mass} 克`:'尚未稱量';
-  $('solution-note').textContent=liquid?(liquid.phase==='filtered'?'這是計算濃度時的溶液總質量。':'這筆重量包含泥沙，泥沙應算進溶液質量嗎？'):'這筆重量需要包含泥沙嗎？';
+  $('solution-note').textContent=filtered?'這是計算濃度時的溶液總質量。':'這筆重量需要包含泥沙嗎？';
   $('solute-note').textContent=solid?(solid.phase==='dry-filtered'?'這是原本溶在濾液中的溶質質量。':'固體還混有泥沙，能直接當作晶體質量嗎？'):'稱到的是乾燥晶體，還是混著泥沙的固體？';
-  $('liquid-measurement').dataset.valid=liquid?String(liquid.phase==='filtered'):'';
+  $('liquid-measurement').dataset.valid=filtered?'true':'';
   $('solid-measurement').dataset.valid=solid?String(solid.phase==='dry-filtered'):'';
   const draft=answers.get(active)||{};
-  for(const field of ['calculation-numerator','calculation-denominator','concentration-value'])$(field).value=draft[field]??'';
+  for(const field of answerFields)$(field).value=draft[field]??'';
   const hint=measurementHint(sample);$('hint').hidden=!hint||!!animation;$('hint').textContent=hint;
   const disabled=root.dataset.ready!=='true'||!!animation||!sample;
-  for(const field of ['calculation-numerator','calculation-denominator','concentration-value'])$(field).disabled=disabled;
+  for(const field of answerFields)$(field).disabled=disabled;
   $('check').disabled=disabled;
+  $('mass-difference').disabled=disabled||!raw||!filtered;
+  $('check-difference').disabled=disabled||!raw||!filtered;
+  const comparison=comparisonFeedback.get(active),feedback=$('difference-feedback');
+  feedback.textContent=comparison?.text||(raw&&filtered?'用過濾前的重量減去過濾後的重量，填入差值。':'有兩筆稱量紀錄後，就能比較。');
+  feedback.dataset.result=comparison?.result||'';
 }
 
 function update(){
@@ -78,6 +86,18 @@ function perform(action){
   if(reason){announce(reason);return;}
   animate(action,{...selected()});
 }
+function checkDifference(){
+  if(animation)return;
+  const {raw,filtered}=measuredMasses(selected());if(!raw||!filtered)return;
+  const value=$('mass-difference').value.trim(),difference=raw.mass-filtered.mass;
+  const valid=value!==''&&Number.isFinite(Number(value))&&Number(value)>=0;
+  const correct=valid&&Math.abs(Number(value)-difference)<=1e-6;
+  comparisonFeedback.set(active,{
+    result:correct?'correct':'revise',
+    text:correct?`相差 ${difference} 克。本模型中，這是被濾紙攔下的泥沙，不算進溶液質量。`:valid?'再看看這份取樣過濾前後的兩筆重量，試著相減。':'請填寫過濾前後的質量差（克）。'
+  });
+  updateConcentration();
+}
 function submitReport(event){
   event.preventDefault();if(animation)return;
   let result=assessReport(selected(),$('concentration-value').value);
@@ -99,7 +119,7 @@ function submitReport(event){
 }
 
 function clear(){
-  cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];answers.clear();active=null;stock=6;nextId=1;
+  cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];answers.clear();comparisonFeedback.clear();active=null;stock=6;nextId=1;
   $('report').reset();invalidateReport();root.querySelectorAll('[data-sample]').forEach(b=>b.remove());delete root.dataset.lastEvent;
   $('concentration-value').value='';update();redraw();announce('點未知樣本 X 取樣，再自由選用器材測試。');$('bottle').focus({preventScroll:true});
 }
@@ -132,8 +152,15 @@ for(const button of controls){
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&drag){suppressClickUntil=performance.now()+500;cancelDrag();announce('已放回器材。');}});
 $('settle').addEventListener('click',()=>perform('settle'));
 $('report').addEventListener('submit',submitReport);
-for(const field of ['calculation-numerator','calculation-denominator','concentration-value']){
-  $(field).addEventListener('input',()=>{answers.set(active,{...answers.get(active),[field]:$(field).value});invalidateReport();});
+$('check-difference').addEventListener('click',checkDifference);
+$('mass-difference').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();checkDifference();}});
+for(const field of answerFields){
+  $(field).addEventListener('input',()=>{
+    answers.set(active,{...answers.get(active),[field]:$(field).value});
+    if(field==='mass-difference'){
+      comparisonFeedback.delete(active);$('difference-feedback').textContent='';delete $('difference-feedback').dataset.result;
+    }else invalidateReport();
+  });
 }
 $('reset').addEventListener('click',()=>{if(samples.length)$('reset-dialog').showModal();else clear();});
 $('reset-dialog').addEventListener('close',()=>{if($('reset-dialog').returnValue==='reset')clear();});
