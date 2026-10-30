@@ -1,15 +1,16 @@
 import {echo, distanceFromEcho, wavePosition, arrivals, judge} from './echo-model.mjs';
 import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
+import {renderDistance, bindDistanceWall, bindDistanceSpeakers, distanceDuration, distanceTaps} from './distance-lab.mjs';
 const $ = id => document.getElementById(id), fmt = (n, digits = 2) => Number(n.toFixed(digits)).toString();
 const panels = new Map();
 let active = null, context = null, phrasePromise = null, sources = [], audioEpoch = 0, outputGain = null;
 function audioError(panel, message = '') {
-  if (panel.id === 'reflection') {
-    const error = $('reflection-error'); error.textContent = message; error.hidden = !message;
+  if (['reflection', 'distance'].includes(panel.id)) {
+    const error = $(`${panel.id}-error`); error.textContent = message; error.hidden = !message;
   } else if (message) $(`${panel.id}-status`).textContent = message;
 }
 // Keep the verified output level; learners adjust loudness on their own device.
-const outputLevel = panel => panel.id === 'reflection' ? .32 : .0448;
+const outputLevel = panel => ['reflection', 'distance'].includes(panel.id) ? .32 : .0448;
 async function resumeAudio() {
   // On supported iOS browsers, use the playback session rather than the silent-mode session.
   try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch {}
@@ -58,7 +59,7 @@ async function sound(panel, elapsed = 0) {
       const source = context.createBufferSource(), gain = context.createGain();
       source.buffer = buffer; gain.gain.value = tap.gain;
       source.connect(gain); gain.connect(master);
-      source.start(context.currentTime + (panel.id === 'reflection' ? .04 : 0) + Math.max(0, tap.delay - elapsed), offset);
+      source.start(context.currentTime + (['reflection', 'distance'].includes(panel.id) ? .04 : 0) + Math.max(0, tap.delay - elapsed), offset);
       sources.push(source);
       source.onended = () => { sources = sources.filter(s => s !== source); if (!sources.length) document.body.dataset.audioPlaying = 'false'; };
     }
@@ -97,7 +98,7 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
     const newEmission = restart || p.phase === 'complete' || p.elapsed === 0;
     stopActive();
     if (newEmission) p.elapsed = 0;
-    if (id === 'reflection' && newEmission) root.dataset.emissions = String(Number(root.dataset.emissions) + 1);
+    if (['reflection', 'distance'].includes(id) && newEmission) root.dataset.emissions = String(Number(root.dataset.emissions) + 1);
     active = p; p.start = performance.now() - p.elapsed * 1000;
     phase('playing'); p.draw(); sound(p, p.elapsed); p.raf = requestAnimationFrame(tick);
   };
@@ -136,13 +137,12 @@ const reflection = player('reflection', renderReflection, () => REFLECTION_DURAT
   taps: () => [{delay: 0, gain: 1}, {delay: REFLECTION_RETURN_TIME, gain: .45}]
 });
 $('reflection-speaker').addEventListener('click', () => reflection.play(true));
-player('distance', progress => {
-  const d = Number($('wall-distance').value), far = echo(d, 340), elapsed = progress * far.time;
-  wall('distance-near', 34, Math.min(1, elapsed / .2)); wall('distance-far', d, progress);
-  $('wall-distance-value').textContent = d + 'm';
-  $('distance-far-reading').textContent = `往返${fmt(far.total)}m，需要${fmt(far.time)}s。`;
-  $('distance-reading').textContent = `同樣聲速340m/s：近牆0.20s收到；這面牆${fmt(far.time)}s收到。${progress ? ' 目前模型經過' + fmt(elapsed) + 's。' : ''}`;
-}, () => echo(Number($('wall-distance').value), 340).time * 8);
+const distance = player('distance', renderDistance, () => distanceDuration(Number($('wall-distance').value)), {
+  restartOnPlay: true,
+  taps: () => distanceTaps(Number($('wall-distance').value))
+});
+bindDistanceSpeakers(() => distance.play(true));
+bindDistanceWall(distance.reset);
 player('calculation', progress => {
   const t = Number($('echo-time').value), e = distanceFromEcho(t, 340);
   wall('calculation-view', e.distance, progress);
