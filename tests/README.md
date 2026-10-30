@@ -324,3 +324,14 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.3.test.cjs
 ```
 
 驗證七區模型與實際聲音緩衝訊號、琴弦／空氣柱、音色近似RMS匹配、無極端頻率測試音、自然結束、跨區停止、唯一綜合小測與五種寬度。合計10項（含外層），測試自行啟停伺服器與Chromium；臨時畫面位於 `/tmp/unit33-review/`。核心內容與檢視紀錄見 `docs/decisions/unit-3.3-initial-production.md` 及 `docs/reviews/unit-3.3-initial/review.md`。
+
+## 2.3 新版第二區：空氣組成與分類
+
+```sh
+node --test tests/unit-2.3-composition.test.cjs tests/unit-2.3.test.cjs tests/unit-numbering.test.cjs
+node --test tests/unit-2.3-model.test.cjs
+```
+
+第一組檢查本輪第二區全部資料預設可見、78／21／1份額、氬氣與其他1%的關係、永久／變動分類、可選成分突出、鍵盤／觸控、停用JavaScript、減少動態、320–1440px版面及路線錨點；並回歸既有杯子拖曳、保水、重設及全站編號連結。新版入口僅含目前完成的第一／二區，因此舊耗氧測量、乾濕切換及比例小測瀏覽器案例已隨被排除需求移出；杯子回歸案例保留。第二組保留歷史氣體／杯子模型檢查，不代表新版六區或小測已完成。
+
+`AIR_COMPOSITION_URL`可指定公開2.3頁面，公開Chromium透過繼承的HTTPS代理；`AIR_COMPOSITION_ARTIFACT_DIR`可指定畫面路徑。本輪證據見`docs/reviews/unit-2.3-composition/`，舊杯子回歸截圖預設存`/tmp/unit23-cup-regression`，避免覆寫歷史交付證據。

@@ -1,0 +1,42 @@
+▶ 2.3 composition: proportions, classification and optional emphasis
+  ✔ all proportions and both classes are visible before any action (144.220354ms)
+  ✔ mouse, keyboard and hover emphasis never hide teaching content (325.50944ms)
+  ✔ desktop, laptop and narrow screens preserve order without overflow (767.467658ms)
+  ✔ static content remains complete without JavaScript (987.782556ms)
+  ✔ touch, reduced motion and route anchor stay usable (1144.760298ms)
+✔ 2.3 composition: proportions, classification and optional emphasis (5601.1162ms)
+▶ 2.3: composition entry preserves cup dragging, water retention and reset
+  ✔ two completed sections have matching anchors and shared avatars (92.563972ms)
+  ✔ cup first drag stays vertical until release; dragging the rim then rotates both ways (924.804924ms)
+  ✔ dragging alone completes both observations; reset stays compact above the scene (5658.704102ms)
+  ✔ a filled cup retains visible water above the tank, then drains gradually when the mouth emerges (7382.043036ms)
+  ✔ mouth-up cup keeps painted water after direct lifting on both sides and fits inside the scene (8362.833748ms)
+  ✔ lifting a tilted cup never snaps upright and rotation remains available after lifting (3585.911122ms)
+  ✔ cup uses direct dragging without a control panel; keyboard and fresh paper work (671.916416ms)
+  ✔ narrow viewport, keyboard focus, and reduced motion stay usable (2838.716112ms)
+✔ 2.3: composition entry preserves cup dragging, water retention and reset (31759.153609ms)
+▶ new unit numbers agree across home, overviews, and existing lesson URLs
+  ✔ homepage order, button numbers, and destination identities (815.431823ms)
+  ✔ unit 1: overview uses the new number (621.887134ms)
+  ✔ unit 2: overview uses the new number (621.05564ms)
+  ✔ unit 3: overview uses the new number (634.25664ms)
+  ✔ unit 4: overview uses the new number (632.543797ms)
+  ✔ unit 5: overview uses the new number (641.684792ms)
+  ✔ unit 6: overview uses the new number (595.042896ms)
+  ✔ lesson 1.1: header and existing assets load (5140.514144ms)
+  ✔ lesson 1.2: header and existing assets load (2330.218491ms)
+  ✔ lesson 2.1: header and existing assets load (919.157911ms)
+  ✔ lesson 2.2: header and existing assets load (12510.393179ms)
+  ✔ lesson 3.1: header and existing assets load (1651.68059ms)
+  ✔ lesson 3.2: header and existing assets load (686.572544ms)
+  ✔ lesson 4.1: header and existing assets load (7938.984015ms)
+  ✔ lesson 4.2: header and existing assets load (3544.64045ms)
+✔ new unit numbers agree across home, overviews, and existing lesson URLs (40337.142518ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40967.851797
