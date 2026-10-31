@@ -142,3 +142,22 @@
 }
 
 #s5 .mix-scene[data-activity="scooping"] .sugar-pan .scene-action {visibility:hidden;}
+
+#s5 .formula-card {display:inline-flex;flex-direction:column;align-items:center;justify-content:center;box-sizing:border-box;min-width:108px;gap:5px;padding:10px 14px;border:1px solid #d2e4d7;border-radius:10px;background:#edf6ee;line-height:1.5;vertical-align:middle;}
+#s5 .formula-card>span {color:#65766b;font-size:.73rem;font-weight:400;}
+#s5 .formula-card>b {font-size:.95rem;color:#176b53;font-weight:750;font-variant-numeric:tabular-nums;}
+#s5 .formula-card.solvent {background:#f0f6f7;border-color:#dbe7e9;}
+#s5 .formula-card.solvent>b {color:#4c7481;}
+#s5 .formula-card-sum {display:inline-flex;align-items:center;gap:8px;}
+#s5 .formula-card-equation .num {padding-bottom:9px;}
+#s5 .formula-card-equation .den {padding-top:9px;}
+#s5 .formula-card.is-highlighted {border-color:#a47a26;}
+@media(max-width:480px){
+ #s5 .formula-card {min-width:64px;padding:7px 4px;gap:3px;border-radius:7px;}
+ #s5 .formula-card>span {font-size:.65rem;}
+ #s5 .formula-card>b {font-size:.72rem;}
+ #s5 .formula-card-sum {gap:3px;}
+ #s5 .formula-card-equation .fraction .num,#s5 .formula-card-equation .fraction .den {padding-inline:3px;}
+}
+@media(max-width:360px){#s5 .formula-card-equation .formula-ratio {flex-direction:column;gap:7px;}}
+#s5 .formula-card[data-formula-part].is-highlighted {background:#fce3a4;box-shadow:0 0 0 3px #fce3a4;}
