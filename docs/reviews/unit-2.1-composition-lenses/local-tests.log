@@ -1,0 +1,14 @@
+▶ composition lenses show water, air and soil without changing the cards
+  ✔ 1440px: three accurate models fit in unchanged cards (3857.908352ms)
+  ✔ 1024px: three accurate models fit in unchanged cards (3931.885103ms)
+  ✔ 768px: three accurate models fit in unchanged cards (4112.856378ms)
+  ✔ 390px: three accurate models fit in unchanged cards (3562.078625ms)
+✔ composition lenses show water, air and soil without changing the cards (15808.945359ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16192.13464

@@ -1,0 +1,22 @@
+{
+  "source_type": "AI生成寫實示意",
+  "generator": "OpenAI image generation",
+  "source_artifact": "docs/reviews/unit-2.1-composition-lenses/approved-mockup.png",
+  "source_sha256": "d76729664bc9693f070e180dfc3c2a61f5e3f9a3ebb02e10e3f03fb19f55587e",
+  "crop": [
+    1103,
+    483,
+    1418,
+    798
+  ],
+  "output": "units/2/parts/2.1/assets/composition-soil-detail.webp",
+  "output_dimensions": [
+    378,
+    378
+  ],
+  "output_sha256": "b6f05631c4f05b9d634907660eef7229027d44fef2fc98f5db62a85e62ab3210",
+  "changes": "擷取使用者採用之示意圖土壤圓圈局部，等比例放大並轉存WebP，供原有圓形視窗裁切。",
+  "disclosure": "AI生成示意，非顯微鏡照片；藍色為水分的示意標色。",
+  "air_model": "16組氮氣、4組氧氣、1個代表其他氣體的符號；供視覺區分類型與多寡，非精確組成比例。",
+  "water_model": "六組相同的彎曲水組合，紅色代表氧、白色代表氫；顏色、大小及間距均為示意。"
+}
