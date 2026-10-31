@@ -1,0 +1,23 @@
+▶ free-position active sonar survey
+  ✔ full-width format, shared dialogue, layered scene and no old slider, sound checkbox or preset points (521.654382ms)
+  ✔ mouse dragging and buttons move only the ship without creating points (260.070755ms)
+Sonar final output {"gain":0.3199999928474426,"direct":0.31965693831443787,"back":0.14384561777114868}
+  ✔ a four-second real-time measurement locks the position, reflects halfway, then records 3000m with a weaker return (4712.970867ms)
+  ✔ new positions preserve old markers and map rows one-to-one, deeper places take longer (9961.932488ms)
+  ✔ pause freezes visual time, cancels old audio; resume preserves a single pending point (5549.989084ms)
+  ✔ clear cancels pending callbacks, retains terrain and restarts labels at A; cross-section and hidden page pause sonar (3387.484017ms)
+  ✔ seven widths keep controls beneath scene, headings, table and content inside full-width card (1172.163604ms)
+  ✔ real mobile touch drag and playback work with reduced motion, including clear during pause (1261.433154ms)
+  ✔ keyboard activation and audio failure recovery keep one record and cancel failed attempts (3119.467684ms)
+  ✔ delayed audio activation holds the clock at zero and clear invalidates the awaiting start (6032.624987ms)
+  ✔ rock material decodes, stays clipped to measured terrain and agrees with an intermediate survey point (6694.582823ms)
+  ✔ shelf and trench retain actual .2s and 11s travel times without an animation speed multiplier (12348.593469ms)
+✔ free-position active sonar survey (56360.082342ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 56960.208515

@@ -575,3 +575,10 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-assembly OXYGEN_
 現行為五步。共36項（含外層）：模型4、步驟／木條11、材質場景8、整頁9、小測模型4。新增檢查空瓶→雙氧水→加入催化劑→塞好送氣的實際可見狀態、同步內容標籤／四條操作說明、加入材料時未封口、催化劑接觸後反應、封口後才有導管氣流、集氣瓶仍滿水、重播重建空瓶、暫停像素一致；原七寬度與手機觸控／鍵盤／無JS／減少動態回歸更新為五步，其他實驗與小測維持。
 
 素材、各段桌機／手機影格及保存範圍見 `docs/reviews/unit-2.3-oxygen-assembly/`。沿用 `OXYGEN_URL`／`AIR_FULL_URL` 可驗證公開頁；`oxygen-three.test.cjs`測試的是現行材質圖＋SVG，不是歷史WebGL。
+## 3.4 第四區：點船發聲與拖曳區分
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.4-sonar-ship.test.cjs
+```
+
+專項6項（含外層），驗證滑鼠點船一次原音／一次返回／一筆紀錄、拖曳及拖回原位不發聲、小抖動不改船位、Enter／Space與方向鍵分工、下方按鈕保留，以及真實手機觸控去重、忙碌／取消觸控與拖船後再點船。可用`SONAR_URL`指向公開完整課程入口（以/結尾，可帶版本查詢參數），沿用HTTPS代理。原聲納13項瀏覽器回歸另跑，清楚區分本機及公開結果。

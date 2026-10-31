@@ -73,7 +73,33 @@ export function bindSonar(player) {
  $('sonar-clear').addEventListener('click',()=>{controller.pause();current=null;records=[];controller.reset();$('sonar-error').hidden=true;});
  const handle=$('sonar-ship');
  handle.addEventListener('keydown',e=>{const moves={ArrowLeft:shipX-20,ArrowRight:shipX+20,Home:100,End:900};if(e.key in moves){e.preventDefault();move(moves[e.key]);}});
- handle.addEventListener('pointerdown',e=>{if(handle.disabled||!e.isPrimary||e.button!==0)return;drag={id:e.pointerId,start:e.clientX,x:shipX};handle.setPointerCapture(e.pointerId);});
- handle.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;const box=$('sonar-view').getBoundingClientRect();move(drag.x+(e.clientX-drag.start)/box.width*1000);});
- const release=()=>{drag=null;};handle.addEventListener('pointerup',release);handle.addEventListener('pointercancel',release);handle.addEventListener('lostpointercapture',release);
+ let suppressClickUntil = 0;
+ const emitFromShip = () => { if (!handle.disabled) controller.play(true); };
+ handle.addEventListener('pointerdown', event => {
+   if (handle.disabled || !event.isPrimary || event.button !== 0) return;
+   drag = {id:event.pointerId,start:event.clientX,startY:event.clientY,x:shipX,moved:false};
+   handle.setPointerCapture(event.pointerId);
+ });
+ handle.addEventListener('pointermove', event => {
+   if (!drag || event.pointerId !== drag.id) return;
+   if (Math.hypot(event.clientX-drag.start,event.clientY-drag.startY)>7) drag.moved=true;
+   if (!drag.moved) return;
+   const box=$('sonar-view').getBoundingClientRect();
+   move(drag.x+(event.clientX-drag.start)/box.width*1000);
+ });
+ handle.addEventListener('pointerup', event => {
+   if (!drag || event.pointerId !== drag.id) return;
+   const gesture=drag; drag=null; suppressClickUntil=performance.now()+700;
+   const box=handle.getBoundingClientRect();
+   const inside=event.clientX>=box.left && event.clientX<=box.right && event.clientY>=box.top && event.clientY<=box.bottom;
+   if (!gesture.moved && inside) emitFromShip();
+ });
+ const cancelGesture = () => { if (drag) suppressClickUntil=performance.now()+700; drag=null; };
+ handle.addEventListener('pointercancel',cancelGesture);
+ handle.addEventListener('lostpointercapture',cancelGesture);
+ handle.addEventListener('click', event => {
+   // Pointer release already handles taps; keep native keyboard/assistive clicks.
+   if ((event.detail>0 || event.pointerType) && performance.now()<suppressClickUntil) return;
+   emitFromShip();
+ });
 }
