@@ -22,7 +22,7 @@ test('3.4 distance comparison follows the approved two-lane mockup',{timeout:180
  await t.test('two stacked scenes load with real separate apparatus, one distance input and no unsolicited audio controls',async()=>{
   assert.equal(await root.locator('.distance-lane').count(),2);assert.equal(await root.locator('input[type=range]').count(),1);assert.equal(await root.locator('[data-sound],input[type=checkbox],[data-reset]').count(),0);assert.equal(await slider.inputValue(),'68');assert.equal(await count(),'0');assert.equal(await phase(),'ready');assert.equal(await pause.isDisabled(),true);assert.equal(await page.evaluate(()=>window.__sources.length),0);
   for(const img of await root.locator('img').all())assert.equal(await img.evaluate(n=>n.complete&&n.naturalWidth>0),true);
-  const boxes=await root.locator('.distance-scene').evaluateAll(ns=>ns.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height};}));assert.equal(boxes[0].x,boxes[1].x);assert.equal(boxes[0].w,boxes[1].w);assert.ok(boxes[1].y>boxes[0].y+boxes[0].h);assert.equal(await page.locator('.distance-arrival:visible').count(),0);await page.locator('#s2').screenshot({path:'/tmp/k12-34-distance-verified/ready-1440.png'});
+  const boxes=await root.locator('.distance-scene').evaluateAll(ns=>ns.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height};}));assert.equal(boxes[0].x,boxes[1].x);assert.equal(boxes[0].w,boxes[1].w);assert.ok(boxes[1].y>boxes[0].y+boxes[0].h);assert.equal(await page.locator('.distance-arrival:visible').count(),0);assert.equal(await page.locator('.distance-records .distance-pending:visible').count(),0);assert.doesNotMatch(await page.locator('.distance-records').innerText(),/等待發聲/);await page.locator('#s2').screenshot({path:'/tmp/k12-34-distance-verified/ready-1440.png'});
  });
  await t.test('together button emits once plus both correctly delayed weaker echoes at the final output',async()=>{
   await emit.click();await page.waitForFunction(()=>window.__sources.length===3);assert.equal(await count(),'1');
@@ -44,7 +44,7 @@ test('3.4 distance comparison follows the approved two-lane mockup',{timeout:180
     for(const part of['waves','route','received'])assert.equal(await page.locator(`#distance-${other}-${part}`).evaluate(n=>n.childElementCount),0);
     const row=page.locator(`#distance-${other}-record`);
     assert.equal(await row.getAttribute('data-received'),'false');assert.equal(await row.locator('.distance-arrival').isVisible(),false);
-    assert.equal(await row.locator('.distance-pending').innerText(),'等待發聲');
+    assert.equal(await row.locator('.distance-pending').isVisible(),false);assert.doesNotMatch(await row.innerText(),/等待發聲/);
     assert.equal(await row.evaluate(n=>n.style.getPropertyValue('--trace-end')),'0%');
     assert.equal(await row.evaluate(n=>n.style.getPropertyValue('--playhead')),'0%');
    };

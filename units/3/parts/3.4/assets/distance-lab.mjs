@@ -63,8 +63,8 @@ export function renderDistance(progress) {
     row.style.setProperty('--arrival', frame.arrival / .6 * 100 + '%');
     const marker = row.querySelector('.distance-arrival'); marker.hidden = !received;
     marker.textContent = seconds(frame.arrival) + ' 秒'; marker.classList.toggle('at-end', frame.arrival > .5);
-    const pending = row.querySelector('.distance-pending'); pending.hidden = received;
-    pending.textContent = waiting ? '等待發聲' : '等待返回';
+    const pending = row.querySelector('.distance-pending'); pending.hidden = waiting || received;
+    pending.textContent = '等待返回';
   }
   $('distance-reading').textContent = ready ? `固定參照34公尺；下方牆距${distance}公尺，兩組以相同聲速比較。` : `經過${seconds(elapsed)}秒；上方${$('distance-near-state').textContent}，下方${$('distance-far-state').textContent}。`;
 }
