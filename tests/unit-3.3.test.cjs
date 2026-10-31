@@ -49,10 +49,14 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
 
  });
  await t.test('string and pipe controls produce independent physical comparisons and reset',async()=>{
-  await set('string-length',30);assert.equal(await page.locator('#string-frequency').textContent(),'440.0 Hz');await set('string-tension',2);assert.match(await page.locator('#string-frequency').textContent(),/622.3/);
-  await play('string-live');await page.waitForTimeout(100);assert.match(await page.locator('#string-wire').getAttribute('d'),/Q/);await page.locator('#card-03 .stop').click();assert.doesNotMatch(await page.locator('#string-wire').getAttribute('d'),/Q/);
-  await page.locator('#card-03 .reset').click();assert.equal(await page.locator('#string-frequency').textContent(),'220.0 Hz');
-  await set('tube-length',30);assert.equal(await page.locator('#tube-frequency').textContent(),'571.7 Hz');await play('tube-live');await page.locator('#card-04 .reset').click();assert.equal(await page.locator('#tube-frequency').textContent(),'285.8 Hz');assert.equal(await page.locator('#string-length').inputValue(),'60');
+  const guitar=page.locator('#card-03');
+  assert.equal(await guitar.locator('[data-guitar-side=right] .guitar-frequency').innerText(),'220 Hz');
+  await play('string-live');await page.waitForTimeout(100);assert.notEqual(await guitar.locator('[data-guitar-side=right] .guitar-scene').getAttribute('data-displacement'),'0');
+  await guitar.locator('[data-guitar-reset]').click();assert.equal(await guitar.locator('[data-guitar-side=right] .guitar-scene').getAttribute('data-displacement'),'0');
+  await guitar.locator('[data-guitar-mode=tension]').click();await guitar.locator('[data-guitar-tension=".25"]').click();assert.equal(await guitar.locator('[data-guitar-side=right] .guitar-scene').getAttribute('data-fret'),'0');
+  await guitar.locator('[data-guitar-reset]').click();assert.equal(await guitar.locator('[data-guitar-side=right] .guitar-frequency').innerText(),'110 Hz');
+  await set('tube-length',30);assert.equal(await page.locator('#tube-frequency').textContent(),'571.7 Hz');await play('tube-live');await page.locator('#card-04 .reset').click();assert.equal(await page.locator('#tube-frequency').textContent(),'285.8 Hz');assert.equal(await guitar.locator('[data-guitar-side=right] .guitar-scene').getAttribute('data-tension'),'1');
+  await guitar.locator('[data-guitar-mode=length]').click();
  });
  await t.test('timbre changes waveform at the same fundamental; navigating or hiding stops audio',async()=>{
   const paths=await page.locator('#card-05 .signal').evaluateAll(ns=>ns.map(n=>n.getAttribute('d')));assert.equal(new Set(paths).size,3);

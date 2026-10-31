@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-31",
+  "generator": "image_gen",
+  "approved_mockup": "exec-a6226aec-4f66-427b-8b41-73c82b8a7514.png",
+  "original_asset": "exec-18fb9893-3c71-40ba-9b19-6f8dbb7e320c.png",
+  "asset": "guitar-body.png",
+  "size": [
+    2167,
+    725
+  ],
+  "transparent_background": true,
+  "sha256": "e8f9de4c454a1631bcafe6685290052b58f4c429ad37530bd7a2d5e6db25f56a",
+  "description": "依核可木吉他圖製作透明俯視琴身、琴頸及琴頭，移除弦與品格；正式頁由SVG加上六條弦、等音律品格、按弦手指及長度標示。原始PNG直接採用，未裁切或修改像素。"
+}

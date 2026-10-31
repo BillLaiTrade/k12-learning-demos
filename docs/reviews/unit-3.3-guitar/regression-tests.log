@@ -1,0 +1,55 @@
+✔ fork sound preserves frequency and decay while strength changes amplitude (17.690075ms)
+▶ fork experiment: actual sound, synchronized motion, recording and layout
+  ✔ idle state shows the approved apparatus, accessible actions and unfilled records (61.874152ms)
+  ✔ both strikes have the same real frequency; heavy has larger audio and visible displacement (1298.534098ms)
+  ✔ wave traces grow rightward after contact, freeze on stop and restart from the left (4412.487609ms)
+  ✔ stop retains observations; reset clears them; natural completion and keyboard work (2812.39967ms)
+  ✔ rapid repeat, navigation, offscreen, hidden tab and pagehide stop sound and motion (1289.570237ms)
+  ✔ cancelled async audio preparation never starts later; playback failure can retry (824.305261ms)
+  ✔ desktop/laptop visual hierarchy matches the approved mockup and mobile stays usable (1733.459973ms)
+✔ fork experiment: actual sound, synchronized motion, recording and layout (13386.37399ms)
+▶ guitar lesson: real instrument, one variable at a time, synchronized plucks
+  ✔ approved guitar comparison, characters and independent controls render without autoplay (115.634544ms)
+  ✔ effective-length brackets touch the actual bridge and selected fret, with a half-length octave (6.760373ms)
+  ✔ real pointer dragging and fretboard selection snap to frets and keep tension fixed without sound (1041.950966ms)
+  ✔ tension mode fixes full length, turns the real tuning peg and follows square-root pitch (723.900918ms)
+  ✔ independent replay and direct plucking produce real 110/220Hz decaying buffers at audible matched levels (240.266889ms)
+  ✔ both guitar strings visibly vibrate while body, endpoints and inactive string stay fixed; finish returns to rest (4947.608293ms)
+  ✔ editing, mode/reset, navigation, offscreen and hidden tab stop sound and motion without restarting (689.72588ms)
+  ✔ cancelled async preparation stays cancelled and failed playback exposes a retryable message (311.144441ms)
+  ✔ seven widths retain both comparisons and readable controls in both investigation modes (3354.968968ms)
+  ✔ real touch dragging and direct plucking work on mobile (1736.118958ms)
+✔ guitar lesson: real instrument, one variable at a time, synchronized plucks (14533.6342ms)
+▶ pitch comparison: independent speakers, controlled frequency and synchronized records
+  ✔ approved controls, matching speakers and actual shared characters render without autoplay (152.809921ms)
+  ✔ frequency changes do not play sound; bounds, cycles and amplitude stay correct at every step (781.915501ms)
+  ✔ left can repeat twice then right; actual audio has selected pitch and fixed signal amplitude (614.181859ms)
+  ✔ one side animates with its trace; natural finish rests the cone and keeps the full comparison (4187.476721ms)
+  ✔ front speaker visibly pumps in phase while its wooden cabinet stays fixed, including reduced motion (4479.776717ms)
+  ✔ one shared switch shows exactly one view per speaker and preserves sound, frequency and progress (1285.894706ms)
+  ✔ both A dimensions connect to the same membrane edge at its symmetric extreme positions (9.284639ms)
+  ✔ rendered diaphragm transforms have equal positive and negative travel at every frequency, with correct cycle ratios (1083.098674ms)
+  ✔ keyboard, rapid changes, section navigation and page visibility cancel playback (491.029188ms)
+  ✔ desktop and laptop keep the mockup hierarchy, equal columns and frequency controls only on right (3479.514758ms)
+  ✔ touch view switching and side-speaker playback work on a narrow screen (1299.018694ms)
+✔ pitch comparison: independent speakers, controlled frequency and synchronized records (19301.077617ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (122.716948ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (64.925885ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (784.750341ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (2300.343465ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (563.407282ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (245.864628ms)
+  ✔ hearing range and dBA examples change observations without producing test tones (148.116163ms)
+  ✔ one final task supports incomplete, incorrect, correct, editing, replay, clear and new requirements (392.220255ms)
+  ✔ lesson format follows unit 2.1 with a header and full-width body; navigation tracks reading (857.263194ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (3521.299259ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (9943.708964ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 58752.832743

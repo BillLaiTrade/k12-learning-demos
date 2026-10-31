@@ -456,3 +456,13 @@ CHROMIUM_PATH=/usr/bin/chromium ARGON_ARTIFACT_DIR=/tmp/unit23-argon node --test
 模型與瀏覽器共9項（含外層），檢查原標題／副標保留、兩組同圖與預設結果、資料不重複、原人物頭像、唯一重播、真正SVG線條與箭頭尖端連續移動、快速重播、Escape／離場／背景暫停與恢復、暫停像素不變、七種寬度與手機上下排列、觸控／減少動態、無JS。圖片延遲載入，進入第五區後等待圖片實際就緒再核對素材尺寸。`ARGON_URL` 可指定公開頁面，截圖預設存 `/tmp/unit23-argon`。
 
 第五區金屬表面比較另增加1項瀏覽器檢查：對兩個實際渲染畫面的金屬區域取樣，確認像素差異，不以箭頭／標籤的不同代替表面效果；同時檢查氧化圖層初始結果、重播進度、重設與無JS。第五區模型／瀏覽器現在共10項，搭配整頁9項合計19項。
+
+## 3.3 第三區木吉他
+
+```sh
+node tests/unit-3.3-guitar-model.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-guitar.test.cjs tests/unit-3.3-fork.test.cjs tests/unit-3.3-pitch.test.cjs tests/unit-3.3.test.cjs
+```
+
+模型直接執行4項、瀏覽器整合43項，共47項（含外層）。吉他專項11項涵蓋實際拖曳／鍵盤／觸控、點品格、一次只改長短或張力、110／220Hz實際播放資料、音量與衰減、左右弦實際畫面幀差、固定兩端／琴身／非有效弦段、取消／重設／離場、失敗重試及兩模式七種寬度。手機第一次點弦以pointerup觸發，並驗證相容click不會再起音一次。`SOUND33_BASE_URL`可指向公開完整頁；`GUITAR_CAPTURE_DIR`指定畫面資料夾，預設`/tmp/unit33-guitar-review`。核可圖與實際畫面見`docs/reviews/unit-3.3-guitar/`。
+
