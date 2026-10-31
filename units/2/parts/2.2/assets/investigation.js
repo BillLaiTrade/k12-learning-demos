@@ -51,6 +51,7 @@ function updateConcentration(){
 
 function update(){
   const sample=selected(),ready=root.dataset.ready==='true',busy=!!animation;
+  root.dataset.nextStep=String(ready&&!!sample&&!busy);
   root.dataset.busy=String(busy);root.dataset.hasSample=String(!!sample);root.dataset.sampleCount=String(samples.length);root.dataset.stock=String(stock);root.dataset.active=active??'';root.dataset.phase=sample?.phase||'';
   for(const button of controls)button.disabled=!ready||busy;
   for(const button of root.querySelectorAll('.invest-tool'))button.setAttribute('aria-pressed',String(button.dataset.investTool===(animation?.kind||sample?.display)));
