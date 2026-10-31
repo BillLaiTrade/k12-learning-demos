@@ -1187,7 +1187,7 @@
             <div class="field-parameter-grid">
               <section class="field-parameter-card is-p" aria-labelledby="field-p-data-title">
                 <h4 id="field-p-data-title">P 波資料</h4>
-                <p class="field-time-note">輸入頻率或週期，另一欄會自動換算。</p>
+                <p class="field-time-note">輸入頻率或週期，另一欄自動換算，顯示到小數點後兩位。</p>
                 <div class="field-time-fields">
                   <div class="field-answer"><label for="field-p-frequency">頻率 f（Hz）</label><input id="field-p-frequency" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入頻率" required></div>
                   <div class="field-answer"><label for="field-p-period">週期 T（s）</label><input id="field-p-period" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入週期" required></div>
@@ -1196,7 +1196,7 @@
               </section>
               <section class="field-parameter-card is-s" aria-labelledby="field-s-data-title">
                 <h4 id="field-s-data-title">S 波資料</h4>
-                <p class="field-time-note">輸入頻率或週期，另一欄會自動換算。</p>
+                <p class="field-time-note">輸入頻率或週期，另一欄自動換算，顯示到小數點後兩位。</p>
                 <div class="field-time-fields">
                   <div class="field-answer"><label for="field-s-frequency">頻率 f（Hz）</label><input id="field-s-frequency" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入頻率" required></div>
                   <div class="field-answer"><label for="field-s-period">週期 T（s）</label><input id="field-s-period" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入週期" required></div>
@@ -1357,21 +1357,20 @@
         const fieldDistance=Number(document.querySelector("[data-distance-km]").dataset.distanceKm),fieldPRow=document.querySelector(".signal-row-p"),fieldSRow=document.querySelector(".signal-row-s"),fieldPFrequency=document.querySelector("#field-p-frequency"),fieldPPeriod=document.querySelector("#field-p-period"),fieldPWavelength=document.querySelector("#field-p-wavelength"),fieldSFrequency=document.querySelector("#field-s-frequency"),fieldSPeriod=document.querySelector("#field-s-period"),fieldSWavelength=document.querySelector("#field-s-wavelength"),fieldFeedback=document.querySelector("#field-feedback"),fieldResults=document.querySelector("#field-results");
         const fieldPResult=document.querySelector("#field-p-result"),fieldSResult=document.querySelector("#field-s-result"),fieldWarningResult=document.querySelector("#field-warning-result"),fieldCalculation=document.querySelector("#field-calculation");
         const fieldFormat=value=>Number(value.toFixed(2)).toLocaleString("zh-TW");
-        let fieldPInputMode="frequency",fieldSInputMode="frequency";
         const allFieldInputs=[fieldPFrequency,fieldPPeriod,fieldPWavelength,fieldSFrequency,fieldSPeriod,fieldSWavelength];
         const clearFieldAnswerStates=()=>allFieldInputs.forEach(input=>{delete input.dataset.answerState;input.removeAttribute("aria-invalid");});
         const invalidateFieldResults=()=>{fieldResults.hidden=true;fieldFeedback.hidden=true;clearFieldAnswerStates();};
-        const connectReciprocalInputs=(frequencyInput,periodInput,setInputMode)=>{
-          const sync=(source,target,mode)=>{
+        const connectReciprocalInputs=(frequencyInput,periodInput)=>{
+          const sync=(source,target)=>{
             const value=Number(source.value);
-            target.value=source.value&&Number.isFinite(value)&&value>0?String(Number((1/value).toPrecision(7))):"";
-            setInputMode(mode);invalidateFieldResults();
+            target.value=source.value&&Number.isFinite(value)&&value>0?(1/value).toFixed(2):"";
+            invalidateFieldResults();
           };
-          frequencyInput.addEventListener("input",()=>sync(frequencyInput,periodInput,"frequency"));
-          periodInput.addEventListener("input",()=>sync(periodInput,frequencyInput,"period"));
+          frequencyInput.addEventListener("input",()=>sync(frequencyInput,periodInput));
+          periodInput.addEventListener("input",()=>sync(periodInput,frequencyInput));
         };
-        connectReciprocalInputs(fieldPFrequency,fieldPPeriod,mode=>{fieldPInputMode=mode;});
-        connectReciprocalInputs(fieldSFrequency,fieldSPeriod,mode=>{fieldSInputMode=mode;});
+        connectReciprocalInputs(fieldPFrequency,fieldPPeriod);
+        connectReciprocalInputs(fieldSFrequency,fieldSPeriod);
         fieldResponseForm.addEventListener("submit",event=>{
           event.preventDefault();
           const inputs=[fieldPFrequency,fieldPPeriod,fieldPWavelength,fieldSFrequency,fieldSPeriod,fieldSWavelength],values=inputs.map(input=>Number(input.value));
@@ -1380,24 +1379,23 @@
             fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent="請在 P 波和 S 波各輸入頻率或週期，並填入波長；另一個時間參數會自動換算。";
             inputs.find(input=>!input.value||!Number.isFinite(Number(input.value))||Number(input.value)<=0)?.focus();return;
           }
-          const [pFrequency,pPeriod,pWavelength,sFrequency,sPeriod,sWavelength]=values;
-          const closeTo=(actual,expected,tolerance)=>Math.abs(actual-expected)<=tolerance;
+          const [pFrequency,,pWavelength,,sPeriod,sWavelength]=values;
           const pExpectedFrequency=Number(fieldPRow.dataset.frequencyHz),pExpectedWavelength=Number(fieldPRow.dataset.wavelengthKm),sExpectedPeriod=Number(fieldSRow.dataset.periodS),sExpectedWavelength=Number(fieldSRow.dataset.wavelengthKm);
-          // 題目直接給出 P 波頻率及 S 波週期；手動輸入這兩個數字時必須完全相符。
-          // 從另一欄取倒數時僅容許換算與浮點數的小數誤差。
-          const pTimeCorrect=fieldPInputMode==="frequency"?pFrequency===pExpectedFrequency:closeTo(pFrequency,pExpectedFrequency,.000001);
-          const sTimeCorrect=fieldSInputMode==="period"?sPeriod===sExpectedPeriod:closeTo(sPeriod,sExpectedPeriod,.000001);
+          // 題目給出的值必須一致；從另一欄換算時以上方顯示的兩位小數判讀。
+          const pTimeCorrect=pFrequency===pExpectedFrequency;
+          const sTimeCorrect=sPeriod===sExpectedPeriod;
           const pWavelengthCorrect=pWavelength===pExpectedWavelength,sWavelengthCorrect=sWavelength===sExpectedWavelength;
           [[fieldPFrequency,fieldPPeriod,pTimeCorrect],[fieldPWavelength,null,pWavelengthCorrect],[fieldSFrequency,fieldSPeriod,sTimeCorrect],[fieldSWavelength,null,sWavelengthCorrect]].forEach(([first,second,correct])=>[first,second].filter(Boolean).forEach(input=>{input.dataset.answerState=correct?"correct":"incorrect";input.setAttribute("aria-invalid",String(!correct));}));
           const incorrectItems=[];
           if(!pTimeCorrect)incorrectItems.push("P 波頻率／週期");if(!pWavelengthCorrect)incorrectItems.push("P 波波長");if(!sTimeCorrect)incorrectItems.push("S 波頻率／週期");if(!sWavelengthCorrect)incorrectItems.push("S 波波長");
           if(incorrectItems.length){fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent=`這些讀值還不正確：${incorrectItems.join("、")}。請重新對照波形標示與距離刻度。${!pTimeCorrect||!sTimeCorrect?"題目提供的頻率與週期須與標示一致。":""}`;return;}
-          const pSpeed=fieldPInputMode==="frequency"?pFrequency*pWavelength:pWavelength/pPeriod,sSpeed=fieldSInputMode==="frequency"?sFrequency*sWavelength:sWavelength/sPeriod,pArrival=fieldDistance/pSpeed,sArrival=fieldDistance/sSpeed,warningTime=Math.max(0,sArrival-pArrival);
+          // 計算使用題目提供的原始值，避免以顯示用的四捨五入倒數造成誤差。
+          const pSpeed=pExpectedFrequency*pWavelength,sSpeed=sWavelength/sExpectedPeriod,pArrival=fieldDistance/pSpeed,sArrival=fieldDistance/sSpeed,warningTime=Math.max(0,sArrival-pArrival);
           fieldPResult.textContent=`${fieldFormat(pArrival)} 秒`;fieldSResult.textContent=`${fieldFormat(sArrival)} 秒`;
           fieldWarningResult.textContent=pArrival<sArrival?`${fieldFormat(warningTime)} 秒`:"P 波未先到";
-          const pSpeedLine=fieldPInputMode==="frequency"?`${fieldFormat(pFrequency)} Hz × ${fieldFormat(pWavelength)} km`:`${fieldFormat(pWavelength)} km ÷ ${fieldFormat(pPeriod)} s`,sSpeedLine=fieldSInputMode==="frequency"?`${fieldFormat(sFrequency)} Hz × ${fieldFormat(sWavelength)} km`:`${fieldFormat(sWavelength)} km ÷ ${fieldFormat(sPeriod)} s`;
+          const pSpeedLine=`${fieldFormat(pExpectedFrequency)} Hz × ${fieldFormat(pWavelength)} km`,sSpeedLine=`${fieldFormat(sWavelength)} km ÷ ${fieldFormat(sExpectedPeriod)} s`;
           fieldCalculation.textContent=`P 波：${pSpeedLine} = ${fieldFormat(pSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(pSpeed)} km/s = ${fieldFormat(pArrival)} 秒。S 波：${sSpeedLine} = ${fieldFormat(sSpeed)} km/s；${fieldFormat(fieldDistance)} km ÷ ${fieldFormat(sSpeed)} km/s = ${fieldFormat(sArrival)} 秒。`;
-          fieldResults.hidden=false;fieldFeedback.dataset.state="good";fieldFeedback.textContent="讀值正確，以下是兩種波抵達觀測站的計算結果。";
+          fieldResults.hidden=false;fieldFeedback.dataset.state="good";fieldFeedback.textContent="讀值正確；以下以題目提供的數值計算兩種波的抵達時間。";
         });
         allFieldInputs.forEach(input=>input.addEventListener("input",invalidateFieldResults));
       }
