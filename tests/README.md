@@ -524,3 +524,13 @@ CHROMIUM_PATH=/usr/bin/chromium AIR_FULL_ARTIFACT_DIR=/tmp/unit23-refined-full O
 ```
 
 現行以材質圖片＋即時SVG取代舊WebGL；沿用 `oxygen-three.test.cjs` 測試入口，但內容改查實際現行渲染，沒有宣稱測試舊3D。共31項（含外層），檢查排氣瓶外、水滿初態、導管連續移動且到位才排水、氣泡不越過水面、先撤管後蓋片、暫停像素一致、兩支木條同步、火焰錨定尖端與狀態圖說、四步／下方無步驟、原頭像、七種寬度、手機同步放大、鍵盤／觸控、背景／離場、快速重播、減少動態、無JS及整頁／小測回歸。`OXYGEN_URL` 與 `AIR_FULL_URL` 可指向公開版本；截圖只反映實際測試瀏覽器，不保證各裝置固定幀率。
+
+## 3.4 第四區：自由選點主動聲納測深
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-sonar-model.test.mjs tests/unit-3.4-sonar.test.cjs
+```
+
+共12項（含外層）：固定起伏地形與1,500m/s、2／4／6秒模型；發聲才建立A、B、C…（Z後AA）且收到回波才填值；滑鼠／真實手機觸控拖船、按鈕及鍵盤、測量期間鎖船、舊標記不隨船移動、圖表逐筆對應、獨立暫停續播、清除取消與重新編號、跨區／背景停止、啟音失敗重試，以及1440–320px七種寬度。真實4秒與Web Audio最末輸出量測不凍結時鐘；返回副本較弱，暫停後SVG像素保持不變。手機拖曳後第一次觸控發聲須只新增一筆。
+
+測試自行啟停Python與Chromium。`SONAR_URL`可指定以`/`結尾的公開課程入口（可帶版本查詢參數）；公開瀏覽器沿用HTTPS代理。`SONAR_CAPTURE_DIR`指定截圖目錄，預設`/tmp/k12-34-sonar`。本機完整回歸沿用本課第一至三區與整頁指令，不把操作通過視為整單元外部驗收。舊深度滑桿／收合答案／八倍聲納檢查由本專項與整頁新聲納案例取代。
