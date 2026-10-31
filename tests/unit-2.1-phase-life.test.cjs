@@ -138,6 +138,16 @@ test('2.1 life scenes track the visible phase changes', {timeout:300000}, async 
       }
     }
   });
+  await t.test('shared query and original anchor links start without manual scrolling',async()=>{
+    await page.close();page=await browser.newPage({viewport:{width:1366,height:768}});
+    page.on('pageerror',e=>errors.push(e.message));
+    for(const suffix of ['?phase=vaporization#phase-detail','#phase-detail']){
+      await page.goto(`http://127.0.0.1:${port}/units/2/parts/2.1/${suffix}`);
+      await page.waitForFunction(()=>Number(document.querySelector('#phase-life').dataset.progress)>0,null,{timeout:15000});
+      const key=await page.locator('#phase-life').getAttribute('data-process');const s=await snapshot(key);
+      synchronized(s,key);assert.ok(s.layout.every(r=>r.top>=0&&r.bottom<=768));
+    }
+  });
   await t.test('no script or asset failures',()=>assert.deepEqual(errors,[]));
-  await fs.writeFile(path.join(captures,'result.json'),JSON.stringify({cases:24,extra:6,errors},null,2));
+  await fs.writeFile(path.join(captures,'result.json'),JSON.stringify({cases:24,extra:7,errors},null,2));
 });

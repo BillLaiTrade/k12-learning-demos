@@ -1871,7 +1871,7 @@
     }
     function animatePhaseTransition(now,runId){
       if(runId!==phaseDemoRun||freezeDemo.hidden||!phaseDemoTransition)return;
-      const transition=phaseDemoTransition,rect=freezeDemo.getBoundingClientRect(),lifeRect=document.getElementById("phase-life").getBoundingClientRect(),inView=!document.hidden&&window.PhaseLife.ready&&rect.top>=0&&lifeRect.bottom<=window.innerHeight;
+      const transition=phaseDemoTransition,rect=freezeDemo.getBoundingClientRect(),lifeRect=document.getElementById("phase-life").getBoundingClientRect(),fits=lifeRect.bottom-rect.top<=window.innerHeight,inView=!document.hidden&&window.PhaseLife.ready&&(fits?rect.top>=0&&lifeRect.bottom<=window.innerHeight:rect.bottom>0&&rect.top<window.innerHeight);
       if(!inView){if(transition.startedAt!==null&&transition.pausedAt===null)transition.pausedAt=now;phaseDemoFrame=requestAnimationFrame(next=>animatePhaseTransition(next,runId));return;}
       if(transition.startedAt===null)transition.startedAt=now;
       if(transition.pausedAt!==null){transition.startedAt+=now-transition.pausedAt;transition.pausedAt=null;}
@@ -2110,6 +2110,11 @@
       document.getElementById("phase-detail-copy").textContent=state.copy;
       playPhaseStateOverview(key);
     }
+    function centerPhaseComparison(behavior="smooth"){
+      if(document.getElementById("phase-life").hidden)return;
+      const top=freezeDemo.getBoundingClientRect().top,bottom=document.getElementById("phase-life").getBoundingClientRect().bottom;
+      window.scrollBy({top:(top+bottom-window.innerHeight)/2,behavior});
+    }
     function selectPhaseProcess(key,fromStateOverview=false){
       if(fromStateOverview&&phaseDetail.classList.contains("is-solid-overview")&&activePhaseProcess===key){
         selectPhaseState(phaseDetail.dataset.overviewState);
@@ -2131,10 +2136,7 @@
       document.getElementById("phase-detail-copy").textContent=process.copy;
       if(fromStateOverview){playStateEdgeFlow(key,phaseDetail.dataset.overviewState);return;}
       if(key==="freeze")playFreezeDemo();else playPhaseTransition(key);
-      requestAnimationFrame(()=>{
-        const top=freezeDemo.getBoundingClientRect().top,bottom=document.getElementById("phase-life").getBoundingClientRect().bottom;
-        window.scrollBy({top:(top+bottom-window.innerHeight)/2,behavior:"smooth"});
-      });
+      requestAnimationFrame(()=>centerPhaseComparison());
     }
     document.querySelectorAll("[data-phase-state]").forEach(button=>button.addEventListener("click",()=>selectPhaseState(button.dataset.phaseState)));
     document.addEventListener("click",event=>{const trigger=event.target.closest("[data-phase-process]");if(trigger)selectPhaseProcess(trigger.dataset.phaseProcess,Boolean(trigger.closest("#phase-solid-overview")));});
@@ -2144,10 +2146,15 @@
       selectPhaseProcess(phaseLink);
     }else if(window.location.hash==="#phase-detail"){
       selectPhaseProcess("freeze");
-      requestAnimationFrame(()=>document.getElementById("phase-detail").scrollIntoView({block:"start"}));
+      requestAnimationFrame(()=>centerPhaseComparison("instant"));
     }else if(window.location.hash==="#solid-overview"||window.location.hash==="#liquid-overview"||window.location.hash==="#gas-overview"){
       selectPhaseState(window.location.hash==="#liquid-overview"?"liquid":window.location.hash==="#gas-overview"?"gas":"solid");
       requestAnimationFrame(()=>phaseSolidOverview.scrollIntoView({block:"center"}));
+    }
+
+    if(Object.hasOwn(phaseProcesses,phaseLink)||window.location.hash==="#phase-detail"){
+      const centerLoadedPhase=()=>Promise.all([document.fonts.ready,window.PhaseLife.readyPromise]).then(()=>requestAnimationFrame(()=>centerPhaseComparison("instant")));
+      if(document.readyState==="complete")centerLoadedPhase();else window.addEventListener("load",centerLoadedPhase,{once:true});
     }
 
     const workbenchViewport=document.getElementById("workbench-viewport");
