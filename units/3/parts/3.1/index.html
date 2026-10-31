@@ -1387,7 +1387,7 @@
           // 從另一欄取倒數時僅容許換算與浮點數的小數誤差。
           const pTimeCorrect=fieldPInputMode==="frequency"?pFrequency===pExpectedFrequency:closeTo(pFrequency,pExpectedFrequency,.000001);
           const sTimeCorrect=fieldSInputMode==="period"?sPeriod===sExpectedPeriod:closeTo(sPeriod,sExpectedPeriod,.000001);
-          const pWavelengthCorrect=closeTo(pWavelength,pExpectedWavelength,.15),sWavelengthCorrect=closeTo(sWavelength,sExpectedWavelength,.15);
+          const pWavelengthCorrect=pWavelength===pExpectedWavelength,sWavelengthCorrect=sWavelength===sExpectedWavelength;
           [[fieldPFrequency,fieldPPeriod,pTimeCorrect],[fieldPWavelength,null,pWavelengthCorrect],[fieldSFrequency,fieldSPeriod,sTimeCorrect],[fieldSWavelength,null,sWavelengthCorrect]].forEach(([first,second,correct])=>[first,second].filter(Boolean).forEach(input=>{input.dataset.answerState=correct?"correct":"incorrect";input.setAttribute("aria-invalid",String(!correct));}));
           const incorrectItems=[];
           if(!pTimeCorrect)incorrectItems.push("P 波頻率／週期");if(!pWavelengthCorrect)incorrectItems.push("P 波波長");if(!sTimeCorrect)incorrectItems.push("S 波頻率／週期");if(!sWavelengthCorrect)incorrectItems.push("S 波波長");
