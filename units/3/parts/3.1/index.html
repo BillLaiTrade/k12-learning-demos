@@ -1344,9 +1344,9 @@
         const fieldNs="http://www.w3.org/2000/svg",rows=[25,36,47,58],count=63;
         for(const y of rows)for(let i=0;i<count;i++){
           const equilibrium=i/(count-1)*400;
-          const x=30+equilibrium-44*Math.sin(2*Math.PI*equilibrium/200);
+          const x=30+equilibrium-14.5*Math.sin(2*Math.PI*equilibrium/200);
           const particle=document.createElementNS(fieldNs,"circle");
-          particle.setAttribute("cx",x.toFixed(2));particle.setAttribute("cy",String(y));particle.setAttribute("r","2.25");particle.setAttribute("class","signal-particle");
+          particle.setAttribute("cx",x.toFixed(2));particle.setAttribute("cy",String(y));particle.setAttribute("r","1.7");particle.setAttribute("class","signal-particle");
           fieldParticles.append(particle);
         }
       }
