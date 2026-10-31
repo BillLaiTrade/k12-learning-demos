@@ -27,3 +27,5 @@ CHROMIUM_PATH=/usr/bin/chromium GAS_PROFILE_ARTIFACT_DIR=/tmp/unit23-knowledge A
 桌面／手機知識卡與整個第二區另經人工檢視；審閱擷取前將游標移離圖例，避免把滑過的暫時突出誤作知識選取。`composition-*`為整區，氣體名稱檔為知識卡；`composition-minor-*`保留合併格說明與選項畫面。
 
 公開部署與公開操作另存k12儲存庫本輪review。本輪仍為第四階段製作／修訂，未宣稱整單元外部驗收。
+
+公開補驗時，組成圖一項透明度檢查曾在150ms淡入動畫完成前讀到過渡值；測試改為等待最終透明度再比對，站點程式／樣式未改。初次公開結果與組成補驗分別保留於k12本輪公開review。

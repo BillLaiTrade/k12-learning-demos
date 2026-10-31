@@ -70,6 +70,7 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
     await page.keyboard.press('Enter');
     assert.equal(await section.getAttribute('data-emphasis'), 'argon');
     assert.match(await page.locator('#air-highlight-status').innerText(), /0\.93%/);
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('#s2 .air-share[data-component=minor]')).opacity === '1');
     assert.equal(await section.locator('.air-share[data-component="minor"]').first().evaluate(el => getComputedStyle(el).opacity), '1');
     await section.locator('.air-composition-panel').click({ position: { x: 8, y: 8 } });
     assert.equal(await section.getAttribute('data-emphasis'), 'all');

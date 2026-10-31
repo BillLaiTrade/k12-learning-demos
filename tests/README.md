@@ -480,6 +480,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 ```
 
 檢查預設4秒、0.1–60秒與小數輸入、未完成／超界數字的處理、每段數值連動、四步推導及不提前揭示單程答案；量測真實4秒返回與最末音訊強度、同緩衝區原音和較弱回波、雙發聲入口、暫停續播、取消舊排程、跨區／背景停止、Enter／Space、真實觸控與減少動態。另驗1440–320px三種數字長度的版面、標示及44px熱區，保留既有標題和角色對話。`CALCULATION_URL`可指定以`/`結尾的公開頁，`CALCULATION_CAPTURE_DIR`可指定證據目錄，預設`/tmp/k12-34-calculation-verified`。公開檢查透過繼承HTTPS代理；音訊量測不取代使用者裝置實體聽感。
+
 ## 2.3 第二區整合氣體知識與實驗重編（2026-10-31）
 
 ```sh
