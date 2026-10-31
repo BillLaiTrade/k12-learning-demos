@@ -142,3 +142,26 @@
 }
 
 #s5 .mix-scene[data-activity="scooping"] .sugar-pan .scene-action {visibility:hidden;}
+
+/* One continuous path from weighing to the prepared solution. */
+#s5 .mixture-workspace {position:relative;isolation:isolate;}
+#s5 #mixture-overlay {position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5;}
+#s5 .mixture-actions {display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:12px 0;min-height:42px;}
+#s5 #mixture-play {border:1px solid #176b53;border-radius:24px;background:#176b53;color:white;font:inherit;font-weight:700;font-size:.92rem;padding:10px 22px;cursor:pointer;}
+#s5 #mixture-play:disabled {opacity:.55;cursor:default;}
+#s5 #mixture-play:focus-visible {outline:3px solid #b38a35;outline-offset:3px;}
+#s5 #mixture-progress {font-size:.77rem;color:#486552;}
+#s5 .mixture-summary {padding:12px 16px;border:1px solid #d3e2d7;background:#f3f8ef;border-radius:13px;}
+#s5 .mixture-summary .mass-equation {display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1.15fr);gap:8px;align-items:center;margin:0;}
+#s5 .mixture-summary .item {min-width:0;padding:6px;border:1px solid transparent;border-radius:10px;background:transparent;font-family:inherit;line-height:1.5;}
+#s5 .mixture-summary .item b {font-size:1rem;}
+#s5 .mixture-icon,#s5 #mixture-destination {display:block;width:100%;height:100px;object-fit:contain;}
+#s5 #mixture-destination {background:center/60px 80px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 80'%3E%3Cpath d='M8 5h44l-3 65Q30 79 11 70Z' fill='%23dcebe344' stroke='%2399b9aa' stroke-dasharray='3 3'/%3E%3C/svg%3E");}
+#s5 [data-mixture='playing'] #mixture-destination,#s5 [data-mixture='complete'] #mixture-destination {background:none;}
+#s5 [data-mixture='playing'] .mix-scene .scene-action,#s5 [data-mixture='complete'] .mix-scene .scene-action {visibility:hidden;}
+#s5 [data-mixture='playing'] .mix-scene .role-tag,#s5 [data-mixture='complete'] .mix-scene .role-tag {visibility:hidden;}
+#s5 [data-mixture='playing'] .mix-scene .lcd,#s5 [data-mixture='complete'] .mix-scene .lcd {opacity:.65;}
+@media(max-width:680px){#s5 .mixture-summary{padding:8px 4px;}#s5 .mixture-summary .mass-equation{gap:2px;}#s5 .mixture-summary .item b{font-size:.78rem;}#s5 .mixture-icon,#s5 #mixture-destination{height:76px;}#s5 .mixture-summary .item{padding:4px 1px;}}
+#s5 .mixture-record-note {display:none;position:absolute;left:45%;top:72%;padding:2px 6px;border-radius:5px;background:#fffdf1e8;color:#486552;font-size:.7rem;}
+#s5 [data-mixture='playing'] .mixture-record-note,#s5 [data-mixture='complete'] .mixture-record-note {display:block;}
+#s5 .mixture-recipe-label {margin:0;text-align:center;font-size:.76rem;color:#5b7164;}

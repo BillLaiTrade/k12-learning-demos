@@ -91,12 +91,20 @@ function drawBeaker(ctx,asset,mass,pose,now,flowing) {
   ctx.save();ctx.translate(pose.x,pose.y);ctx.rotate(pose.angle);ctx.drawImage(asset,807,208,410,504,-130,-160,260,320);ctx.restore();
   return surface;
 }
-export function renderMix(ctx,images,state,animation,drag,now) {
+export function renderMix(ctx,images,state,animation,drag,now,presentation=false) {
   ctx.clearRect(0,0,1536,1024);ctx.drawImage(images.background,0,0,1536,1024);
+  if(presentation){
+    // The two scales share the same metal pan; keep its full outline intact.
+    ctx.drawImage(images.background,408,497,265,36,408,512,265,36);
+    ctx.save();ctx.beginPath();ctx.moveTo(347,534);ctx.lineTo(694,534);ctx.lineTo(730,635);ctx.lineTo(711,658);ctx.lineTo(329,658);ctx.lineTo(334,634);ctx.closePath();ctx.clip();
+    ctx.drawImage(images.background,793,530,423,134,329,530,401,134);ctx.restore();
+    ctx.save();ctx.beginPath();ctx.roundRect(418,831,800,36,18);ctx.clip();
+    ctx.drawImage(images.background,418,902,800,36,418,831,800,36);ctx.restore();
+  }
   const sugarPose=toolPose('sugar',animation,drag,now),waterPose=toolPose('water',animation,drag,now),cupPose=beakerPose(animation,now);
   const t=animation?Math.max(0,Math.min(1,(now-animation.start)/animation.duration)):0;
   const flowing=animation?.kind==='water'&&animation.delta>0&&!animation.returnOnly&&(animation.hold?now-animation.start>POUR_DELAY:waterAdditionState(t).pouring);
-  const surface=drawBeaker(ctx,images.beaker,state.water,cupPose,now,flowing);sugarPile(ctx,state.sugar);
+  const surface=presentation?0:drawBeaker(ctx,images.beaker,state.water,cupPose,now,flowing);if(!presentation)sugarPile(ctx,state.sugar);
   ctx.save();ctx.beginPath();ctx.ellipse(1382,661,110,16,0,0,Math.PI*2);ctx.fillStyle='#4e46331a';ctx.fill();ctx.restore();
   drawTool(ctx,images.tools,'water',waterPose);drawTool(ctx,images.tools,'sugar',sugarPose);
   if(flowing){
@@ -122,4 +130,24 @@ export function renderMix(ctx,images,state,animation,drag,now) {
     }
   }
   return {sugar:sugarPose,water:waterPose,beaker:cupPose};
+}
+
+export function drawMixtureCup(ctx,asset,water,x,y,scale,now,stir=0,residue=0){
+  ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+  const pose={...TOOL.beaker,x:0,y:0,angle:0};
+  ctx.save();ctx.translate(-980,-447);drawBeaker(ctx,asset,water,{...pose,x:980,y:447},now,stir>0);ctx.restore();
+  if(residue>0){
+    ctx.save();ctx.globalAlpha=residue;
+    for(let i=0;i<48;i++){ctx.fillStyle=i%3?'#fffdf3':'#c7c0aa';ctx.beginPath();ctx.ellipse(Math.sin(i*13)*65,93-Math.abs(Math.cos(i*7))*18,2,1.5,0,0,Math.PI*2);ctx.fill();}
+    ctx.restore();
+  }
+  if(stir>0){
+    const dx=Math.sin(now/135)*35;
+    ctx.beginPath();ctx.moveTo(dx-24,-205);ctx.lineTo(dx+12,72);ctx.strokeStyle='#799c9e99';ctx.lineWidth=7;ctx.stroke();ctx.strokeStyle='#f7ffffd9';ctx.lineWidth=2;ctx.stroke();
+  }
+  ctx.restore();
+}
+
+export function drawMixtureSugar(ctx,mass,x,y,scale=1){
+  ctx.save();ctx.translate(x-544*scale,y-570*scale);ctx.scale(scale,scale);sugarPile(ctx,mass);ctx.restore();
 }
