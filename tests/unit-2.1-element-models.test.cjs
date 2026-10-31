@@ -23,8 +23,13 @@ test('element and compound models show iron crystal and balanced bent water grou
    }
    const reaction=page.locator('.decomposition-water-scene');assert.equal(await reaction.locator('.decomposition-reactants .particle-ball--hydrogen').count(),4);assert.equal(await reaction.locator('.decomposition-reactants .particle-ball--oxygen').count(),2);assert.equal(await reaction.locator('.decomposition-products .particle-ball--hydrogen').count(),4);assert.equal(await reaction.locator('.decomposition-products .particle-ball--oxygen').count(),2);
    assert.match(await reaction.innerText(),/氫氣/);assert.match(await reaction.innerText(),/氧氣/);assert.match(await page.locator('#s9 .particle-color-note').innerText(),/模型/);
+   const summary=page.locator('.matter-summary');assert.equal(await summary.locator('.matter-iron-crystal circle').count(),9);assert.equal(await summary.locator('.water-unit').count(),4);
+   for(const group of await summary.locator('.water-unit').all()){
+    const pos=await group.locator('.particle-ball').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2}}));const [o,h1,h2]=pos;
+    assert.ok(h1.x<o.x&&h2.x>o.x&&h1.y>o.y&&h2.y>o.y,'summary water models use the same bent shape');
+   }
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);
-   if(process.env.MODEL_CAPTURE_DIR)await page.locator('.pure-particle-comparison').screenshot({path:path.join(process.env.MODEL_CAPTURE_DIR,`models-${width}.png`)});
+   if(process.env.MODEL_CAPTURE_DIR){await page.locator('.pure-particle-comparison').screenshot({path:path.join(process.env.MODEL_CAPTURE_DIR,`models-${width}.png`)});await summary.screenshot({path:path.join(process.env.MODEL_CAPTURE_DIR,`summary-${width}.png`)});}
   }finally{await page.close()}
  });
 });
