@@ -1,3 +1,4 @@
+import {surveyProfile} from './sonar-profile.mjs?v=20261031-survey-line';
 import {oceanEnvironment, surveyShip} from './sonar-scene.mjs?v=20261031-landforms-labels';
 import {depthAt, bottomY, returnTime, PROBE_Y as probeY} from './sonar-terrain.mjs?v=20261031-landforms';
 export {depthAt, returnTime, WATER_SPEED} from './sonar-terrain.mjs?v=20261031-landforms';
@@ -39,8 +40,10 @@ export function renderSonar(progress = 0) {
  const marks = records.map(r=>`<g class="sonar-point" data-point="${r.name}" data-x="${r.x}" data-done="${r.done}"><title>探測點 ${r.name}：${r.done?number(r.depth)+' 公尺':'探測中'}</title><circle cx="${r.x}" cy="${r.done?bottomY(r.x):probeY+35}" r="8" fill="${r.done?'#fff3c8':'#e9f4d5'}" stroke="#294e43" stroke-width="2"/><text x="${r.x}" y="${r.done ? bottomY(r.x)+(r.depth>=500?-16:30) : probeY+65}" text-anchor="middle" fill="#fffbe9" stroke="#294e43" stroke-width="4" paint-order="stroke" font-weight="700" font-size="23">${r.name}</text></g>`).join('');
  if (!background) {
    background = oceanEnvironment(bottomY);
-   $('sonar-view').innerHTML = background + '<g id="sonar-signal-layer"></g><g id="sonar-points-layer"></g><g id="sonar-vessel-layer"></g>';
+   $('sonar-view').innerHTML = background + '<g id="sonar-profile-layer"></g><g id="sonar-signal-layer"></g><g id="sonar-points-layer"></g><g id="sonar-vessel-layer"></g>';
  }
+ const profile = surveyProfile(records), linePoints = profile.map(p=>`${p.x},${p.y}`).join(' ');
+ $('sonar-profile-layer').innerHTML = profile.length < 2 ? '' : `<polyline points="${linePoints}" fill="none" stroke="#294d43" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/><polyline id="sonar-profile-line" points="${linePoints}" fill="none" stroke="#f2aa62" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"><title>已測海底輪廓：依左右位置連接 ${profile.map(p=>p.name).join('、')}，測點之間為直線估計。</title></polyline>`;
  $('sonar-signal-layer').innerHTML = signal;
  $('sonar-points-layer').innerHTML = marks;
  $('sonar-vessel-layer').innerHTML = surveyShip(shipX) + `<text class="sonar-probe-label" x="${shipX+(shipX>700?-24:24)}" y="168" text-anchor="${shipX>700?'end':'start'}" fill="#f4f8e2" stroke="#35685e" stroke-width="3" paint-order="stroke" font-size="20">船底探頭</text>`;

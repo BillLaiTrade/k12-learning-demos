@@ -1,0 +1,28 @@
+✔ water speed and round trips agree at shallow, middle and deep locations (11.264308ms)
+✔ student-created labels continue beyond Z without preassigned positions (1.043599ms)
+✔ composite terrain contains a shallow shelf, slope, broad plain, isolated seamount and deep narrow trench (0.646276ms)
+✔ profile uses only finished measurements, spatial order and latest duplicate, without changing the log (1.712646ms)
+✔ an added measurement resolves a missed seamount rather than pre-filling the real terrain (0.422464ms)
+▶ free-position active sonar survey
+  ✔ full-width format, shared dialogue, layered scene and no old slider, sound checkbox or preset points (447.036237ms)
+  ✔ mouse dragging and buttons move only the ship without creating points (258.511119ms)
+Sonar final output {"gain":0.3199999928474426,"direct":0.31965693831443787,"back":0.14384561777114868}
+  ✔ a four-second real-time measurement locks the position, reflects halfway, then records 3000m with a weaker return (4598.418986ms)
+  ✔ new positions preserve old markers and map rows one-to-one, deeper places take longer (9355.271406ms)
+  ✔ pause freezes visual time, cancels old audio; resume preserves a single pending point (5553.518369ms)
+  ✔ clear cancels pending callbacks, retains terrain and restarts labels at A; cross-section and hidden page pause sonar (3322.774219ms)
+  ✔ seven widths keep controls beneath scene, headings, table and content inside full-width card (1237.372381ms)
+  ✔ real mobile touch drag and playback work with reduced motion, including clear during pause (1285.911226ms)
+  ✔ keyboard activation and audio failure recovery keep one record and cancel failed attempts (3140.92835ms)
+  ✔ delayed audio activation holds the clock at zero and clear invalidates the awaiting start (5956.95486ms)
+  ✔ rock material decodes, stays clipped to measured terrain and agrees with an intermediate survey point (6759.58422ms)
+  ✔ shelf and trench retain actual .2s and 11s travel times without an animation speed multiplier (12421.085824ms)
+✔ free-position active sonar survey (55706.201595ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 56270.07856

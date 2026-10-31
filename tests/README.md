@@ -528,10 +528,10 @@ CHROMIUM_PATH=/usr/bin/chromium AIR_FULL_ARTIFACT_DIR=/tmp/unit23-refined-full O
 ## 3.4 第四區：自由選點主動聲納測深
 
 ```sh
-CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-sonar-model.test.mjs tests/unit-3.4-sonar.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-sonar-model.test.mjs tests/unit-3.4-sonar-profile.test.mjs tests/unit-3.4-sonar.test.cjs
 ```
 
-共16項（含外層）：固定起伏地形與1,500m/s、2／4／6秒模型；發聲才建立A、B、C…（Z後AA）且收到回波才填值；滑鼠／真實手機觸控拖船、按鈕及鍵盤、測量期間鎖船、舊標記不隨船移動、圖表逐筆對應、獨立暫停續播、清除取消與重新編號、跨區／背景停止、啟音失敗重試，以及1440–320px七種寬度。真實4秒與Web Audio最末輸出量測不凍結時鐘；返回副本較弱，暫停後SVG像素保持不變。手機拖曳後第一次觸控發聲須只新增一筆。
+共18項（含外層）：固定起伏地形與1,500m/s、2／4／6秒模型；發聲才建立A、B、C…（Z後AA）且收到回波才填值；滑鼠／真實手機觸控拖船、按鈕及鍵盤、測量期間鎖船、舊標記不隨船移動、圖表逐筆對應、獨立暫停續播、清除取消與重新編號、跨區／背景停止、啟音失敗重試，以及1440–320px七種寬度。真實4秒與Web Audio最末輸出量測不凍結時鐘；返回副本較弱，暫停後SVG像素保持不變。手機拖曳後第一次觸控發聲須只新增一筆。
 
 測試自行啟停Python與Chromium。`SONAR_URL`可指定以`/`結尾的公開課程入口（可帶版本查詢參數）；公開瀏覽器沿用HTTPS代理。`SONAR_CAPTURE_DIR`指定截圖目錄，預設`/tmp/k12-34-sonar`。本機完整回歸沿用本課第一至三區與整頁指令，不把操作通過視為整單元外部驗收。舊深度滑桿／收合答案／八倍聲納檢查由本專項與整頁新聲納案例取代。
 
@@ -563,3 +563,5 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-steps OXYGEN_THR
 現行上方改為四步獨立時鐘／內容，取代自動連播全程。共34項（含外層）：模型3、步驟與木條11、材質場景7、整頁9、小測模型4。驗證初始只呈現材料、每步圖／操作／原理一起切換、播完不自動前進、前後／直接選步重建初態、正確焦點與鍵盤、選取頁籤hover對比、單一重播／暫停／繼續、快速切換、背景／離區、第四步接木條、七寬度×四狀態、手機觸控／減少動態、無JS四步可讀、瓶外排氣滿水、氣泡只在液體中、導管到位才排水、撤管後才蓋片、暫停實際像素一致及原木條／整頁回歸。
 
 公開驗證可設 `OXYGEN_URL`／`AIR_FULL_URL`；`oxygen-three.test.cjs`仍是沿用入口，實際測試材質底圖＋SVG，不宣稱舊WebGL檢查。核可四格圖、各步桌機／手機及保存範圍見 `docs/reviews/unit-2.3-oxygen-steps/`。
+
+3.4聲納累積橘線：新增sonar-profile純資料測試，驗證未完成點排除、左右排序、重複位置最新值、原紀錄不變與加密後描出海山；瀏覽器驗證實際SVG頂點、原A/B/C表格順序、單點不畫線、重測與清除。
