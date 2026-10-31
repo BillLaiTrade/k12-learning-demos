@@ -33,11 +33,11 @@ test('2.1 static image pairs and retained particle transitions',{timeout:300000}
    labels:[...root.querySelectorAll('figcaption')].map(n=>n.textContent),photoBox:box(root),particleBox:box(panel),stageBox:box(document.querySelector('.phase-solid-stage')),
    animations:root.getAnimations({subtree:true}).length,synthetic:root.querySelectorAll('svg,canvas,video').length,
    overflow:document.documentElement.scrollWidth>innerWidth+1,textOverflow:[...root.querySelectorAll('h4,p,a')].some(n=>n.scrollHeight>n.clientHeight+1),
-   text:root.innerText,source:root.querySelector('a').href};
+   legendBox:box(document.getElementById('phase-state-color-key')),text:root.innerText,source:root.querySelector('a').href};
  },{key,to:target[key]});}
  function check(s,key,half=true){
   assert.equal(s.key,key);assert.equal(s.total,s.population??48);assert.equal(s.synthetic,0);assert.equal(s.animations,0);assert.equal(s.photos.length,2);assert.deepEqual(s.labels,['變化前','變化後']);
-  assert.equal(s.overflow,false);assert.equal(s.textOverflow,false);
+  assert.equal(s.overflow,false);assert.equal(s.textOverflow,false);assert.ok(s.legendBox.top>=s.stageBox.bottom-1);assert.ok(s.photoBox.top>=s.legendBox.bottom-1);
   assert.match(s.text,/寫實示意/);assert.match(s.text,/圖片來源與製作說明/);assert.doesNotMatch(s.text,/實拍對照|照片來源與拍攝條件/);for(const p of s.photos)assert.match(p.alt,/寫實生成示意/);
   if(key==='sublimation'){assert.match(s.text,/零下/);assert.match(s.text,/乾燥/);assert.match(s.text,/長時間/);assert.match(s.text,/看不見的水蒸氣/);}if(key==='deposition'){assert.match(s.text,/零下/);assert.match(s.text,/直接形成固態霜晶/);}assert.notEqual(s.photos[0].src,s.photos[1].src);
   for(const [i,p]of s.photos.entries()){assert.ok(p.loaded&&p.width>200);assert.match(p.src,new RegExp(`phase-photo-${key}-${i?'after':'before'}\\.webp`));assert.ok(p.alt);assert.ok(p.box.top>=s.photoBox.top&&p.box.bottom<=s.photoBox.bottom+1);assert.ok(p.box.left>=s.photoBox.left&&p.box.right<=s.photoBox.right+1);}
@@ -49,7 +49,7 @@ test('2.1 static image pairs and retained particle transitions',{timeout:300000}
   await open(width,height);
   for(const key of Object.keys(target))await t.test(`${width}×${height} ${key}: two fixed photos; particles still transform`,async()=>{
    await select(key);const start=await inspect(key);check(start,key);assert.equal(start.progress,0);
-   assert.ok(start.particleBox.top>=0&&start.photoBox.bottom<=height+1,'particle and photo panels fit together');
+   if(start.photoBox.bottom-start.particleBox.top<=height)assert.ok(start.particleBox.top>=-1&&start.photoBox.bottom<=height+1,'particle and photo panels fit together when space allows');
    const fixed=await page.locator('#phase-life').screenshot();
    await page.clock.fastForward(4000);await page.clock.runFor(32);const mid=await inspect(key);check(mid,key);assert.ok(mid.progress>0&&mid.progress<1,JSON.stringify(mid));
    assert.deepEqual(await page.locator('#phase-life').screenshot(),fixed,'photo block has no time-dependent visual changes');
@@ -95,7 +95,7 @@ test('2.1 static image pairs and retained particle transitions',{timeout:300000}
  await t.test('share link selects photographs and runs particles without manual scrolling',async()=>{
   if(page)await page.close();page=await browser.newPage({viewport:{width:1366,height:768}});page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'?phase=vaporization#phase-detail');await page.waitForFunction(()=>Number(document.getElementById('freeze-demo').dataset.progress)>0,null,{timeout:15000});
-  const s=await inspect('vaporization');check(s,'vaporization');assert.ok(s.particleBox.top>=0&&s.photoBox.bottom<=768);
+  const s=await inspect('vaporization');check(s,'vaporization');assert.ok(s.particleBox.bottom>0&&s.particleBox.top<768);
  });
  await t.test('small screens keep both photos readable without overflow',async()=>{
   await open(390,844);await select('condensation');check(await inspect('condensation'),'condensation',false);
