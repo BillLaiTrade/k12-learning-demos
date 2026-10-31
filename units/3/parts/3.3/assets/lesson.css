@@ -242,8 +242,6 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .pitch-wave .pitch-guide{stroke:#217663;stroke-width:2;opacity:.28;vector-effect:non-scaling-stroke}
 .pitch-cursor{stroke:#d48730;stroke-width:1.6;stroke-dasharray:5 4;vector-effect:non-scaling-stroke}
 .pitch-period{stroke:#687f83;stroke-width:1;fill:none}
-.card-main>.pitch-instruction{margin:8px 0 4px;text-align:center;font-size:.78rem;line-height:1.6}
-.card-main>.pitch-status{min-height:1.6em;margin:0 0 8px;text-align:center;font-size:.76rem}
 @media(min-width:761px) and (max-width:1100px){
 .pitch-bench{gap:8px}.pitch-column+ .pitch-column{padding-left:6px}.pitch-frequency-row{gap:4px;min-height:64px}.pitch-frequency{font-size:1.35rem}.pitch-step{width:30px;min-height:34px}.pitch-apparatus{min-height:125px}.pitch-closeup>span{font-size:.75rem}.pitch-play{width:100%;font-size:.86rem}.pitch-wave-card h4{font-size:.75rem}
 }

@@ -51,7 +51,7 @@ function config(key){
 }
 async function play(button){
  stop();const ticket=++request,root=button.closest('.lesson-card,.quiz'),settings=config(button.dataset.play);
- activeRoot=root;root.querySelector('.play-state').textContent='正在準備聲音…';
+ activeRoot=root;if(root.id==='card-02')root.querySelector('.play-state').classList.add('visually-hidden');root.querySelector('.play-state').textContent='正在準備聲音…';
  try{
   const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)throw Error('unsupported');
   audioContext??=new Audio();await audioContext.resume();
@@ -83,7 +83,7 @@ async function play(button){
   }
   animation=requestAnimationFrame(animate);
  }catch{
-  if(ticket!==request)return;stop(root);root.querySelector('.play-state').textContent='聲音暫時無法播放，請再點一次；仍可觀察圖形與數值。';
+  if(ticket!==request)return;stop(root);if(root.id==='card-02')root.querySelector('.play-state').classList.remove('visually-hidden');root.querySelector('.play-state').textContent='聲音暫時無法播放，請再點一次；仍可觀察圖形與數值。';
  }
 }
 function render(){
@@ -109,7 +109,7 @@ function newChallenge(){
 const binding={'string-length':'length','string-tension':'tension','tube-length':'tube'};
 for(const[id,key]of Object.entries(binding))$(id).addEventListener('input',()=>{stop();state[key]=Number($(id).value);render();});
 for(const button of document.querySelectorAll('[data-pitch-step]'))button.addEventListener('click',()=>{
- stop();state.frequency=Math.max(200,Math.min(800,state.frequency+Number(button.dataset.pitchStep)));pitchView.render(state.frequency);$('card-02').querySelector('.play-state').textContent=`右側${state.frequency} Hz：每秒振動${state.frequency}次。點喇叭或播放鍵試聽。`;
+ stop();$('card-02').querySelector('.play-state').classList.add('visually-hidden');state.frequency=Math.max(200,Math.min(800,state.frequency+Number(button.dataset.pitchStep)));pitchView.render(state.frequency);$('card-02').querySelector('.play-state').textContent=`右側${state.frequency} Hz：每秒振動${state.frequency}次。點喇叭或播放鍵試聽。`;
 });
 for(const root of document.querySelectorAll('.lesson-card,.quiz')){
  root.dataset.playing='false';
