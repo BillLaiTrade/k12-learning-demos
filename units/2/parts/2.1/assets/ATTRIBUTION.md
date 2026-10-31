@@ -13,4 +13,4 @@
 - **Photo:** [A simple close-up of a clear glass of water](https://www.pexels.com/photo/10965842/)
 - **Creator:** Engin Akyurt
 - **License:** [Pexels License](https://www.pexels.com/license/)
-- **Changes:** Cropped, resized, and converted to WebP for the distilled-water example.
+- **Changes:** Cropped, resized, and converted to WebP for the pure-water example.

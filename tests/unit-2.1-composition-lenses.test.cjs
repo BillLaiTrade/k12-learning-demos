@@ -11,7 +11,10 @@ test('composition lenses show water, air and soil without changing the cards',as
  for(const width of [1440,1024,768,390])await t.test(`${width}px: three accurate models fit in unchanged cards`,async()=>{
   const page=await browser.newPage({viewport:{width,height:900}});try{
    await page.goto(`http://127.0.0.1:${port}/units/2/parts/2.1/#s8`);const cards=page.locator('.composition-sample-card');assert.equal(await cards.count(),3);
-   assert.deepEqual(await cards.locator('h3').allTextContents(),['蒸餾水','空氣','土壤']);
+   assert.deepEqual(await cards.locator('h3').allTextContents(),['純水','空氣','土壤']);
+   assert.match(await page.locator('#s8 .dialogue').nth(1).innerText(),/純水只含水這一種物質/);
+   assert.match(await page.locator('#s9 .particle-card--compound .particle-caption').innerText(),/純水只含水這一種物質；水由氫、氧兩種元素組成/);
+   assert.doesNotMatch(await page.locator('body').innerText(),/蒸餾水|蒸馏水/);
    assert.deepEqual(await cards.locator('.composition-result').allTextContents(),['一種物質純物質','多種氣體混合物','多種成分混合物']);
    assert.equal(await cards.nth(0).locator('.composition-water-group').count(),6);
    for(const group of await cards.nth(0).locator('.composition-water-group').all()){
