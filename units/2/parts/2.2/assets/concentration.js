@@ -1,13 +1,11 @@
 import { LIMITS, INITIAL, ACTION_MS, WATER_ADD_MS, POUR_DELAY, POUR_RATE, massValue, concentrationState, format, sugarActionState, waterAdditionState } from './concentration-state.js?v=water-motion-2';
-import { TOOL, renderMix } from './concentration-renderer.js?v=mixture-1';
-import {createMixture} from './concentration-mixture.js?v=mixture-1';
+import { TOOL, renderMix } from './concentration-renderer.js?v=water-motion-2';
 const $=id=>document.getElementById(id);
 const lab=$('mix-lab'),canvas=$('mix-canvas'),ctx=canvas.getContext('2d');
 const pitcher=$('mix-pitcher'),cup=$('mix-water-cup'),reset=$('mix-reset'),status=$('mix-status');
 let state={...INITIAL},ready=false,animation=null,queue=[],raf=null,gesture=null,ignoreClick=false,dialogKind=null,lastKey='';
 const massButtons=[...document.querySelectorAll('[data-mass-kind]')];
 const massActions=[...massButtons.map(button=>({button,kind:button.dataset.massKind,delta:Number(button.dataset.massDelta)})),{button:pitcher,kind:'water',delta:1}];
-let mixture=null;
 const images={},reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const roleButtons=[...document.querySelectorAll('#s5 [data-mass-role]')];
 const formulaParts=[...document.querySelectorAll('#mass-percent-formula [data-formula-part]')];
@@ -48,11 +46,9 @@ function update(){
     const limited=delta>0?state[kind]>=LIMITS[kind][1]:state[kind]<=LIMITS[kind][0];
     // Keep pointer capture until the held pitcher is released so it can return smoothly.
     const captured=button===pitcher&&gesture?.kind==='water';
-    button.disabled=!ready||!!mixture?.active||(limited&&!captured);
-    button.setAttribute('aria-disabled',String(!ready||!!mixture?.active||limited));
+    button.disabled=!ready||(limited&&!captured);
+    button.setAttribute('aria-disabled',String(!ready||limited));
   }
-  for(const id of ['mix-sugar-input','mix-water-input'])$(id).disabled=!ready||!!mixture?.active;
-  mixture?.update();
   const v=values(),key=[state.sugar,state.water,state.ppm].join('/');
   if(key!==lastKey){
     // Integer tenths of a gram identify rounding to three decimal places exactly.
@@ -79,14 +75,14 @@ function paint(now=performance.now()){
   lab.dataset.cupLifted=String(!!lifted);
   document.querySelector('[data-mix="water-read"]').textContent=lifted?'—':`${state.water.toFixed(1)} g`;
   if(!ready)return;
-  const poses=renderMix(ctx,images,values(),animation,gesture?.moved?gesture:null,now,mixture?.active);
+  const poses=renderMix(ctx,images,values(),animation,gesture?.moved?gesture:null,now);
   for(const [kind,button] of [['water',pitcher],['beaker',cup]]){
     const p=poses[kind];button.style.left=`${(p.x-p.w/2)/1536*100}%`;button.style.top=`${(p.y-p.h/2)/1024*100}%`;button.style.width=`${p.w/1536*100}%`;button.style.height=`${p.h/1024*100}%`;button.style.transform=`rotate(${p.angle}rad)`;
   }
 }
 function setMass(kind,value){const n=massValue(kind,value);if(n===null)return false;state[kind]=n;update();return true;}
 function schedule(){if(raf===null)raf=requestAnimationFrame(frame);}
-function clearActions(){if(raf!==null)cancelAnimationFrame(raf);raf=null;animation=null;queue=[];gesture=null;mixture?.cancel();}
+function clearActions(){if(raf!==null)cancelAnimationFrame(raf);raf=null;animation=null;queue=[];gesture=null;}
 function startNext(now){
   if(animation||!queue.length)return;
   const action=queue.shift(),startMass=state[action.kind],target=clamp(startMass+action.delta,...LIMITS[action.kind]);
@@ -181,7 +177,6 @@ reset.addEventListener('click',()=>{clearActions();ignoreClick=true;state={...IN
 document.addEventListener('keydown',event=>{if(event.key==='Escape'){ignoreClick=true;clearActions();paint();}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){ignoreClick=true;clearActions();paint();}});
 function load(src){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error(src));img.src=new URL(src,import.meta.url).href;});}
-mixture=createMixture({images,values,ready:()=>ready,busy:()=>!!animation||!!gesture||queue.length>0,prepare:clearActions,repaint:paint,reduced:reduceMotion});
 update();
 Promise.all([load('./concentration-workbench-empty.webp'),load('./concentration-tools.webp'),load('./concentration-beaker.webp')]).then(([background,tools,beaker])=>{
   images.background=background;images.tools=tools;images.beaker=beaker;ready=true;lab.dataset.ready='true';[pitcher,reset,...massButtons,$('mix-sugar-input'),$('mix-water-input')].forEach(b=>b.disabled=false);paint();
