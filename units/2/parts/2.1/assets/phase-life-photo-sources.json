@@ -22,24 +22,54 @@
     ]
   },
   "freeze": {
-    "source_title": "Frozen drop.webm",
-    "source_page": "https://commons.wikimedia.org/wiki/File:Frozen_drop.webm",
-    "original_url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Frozen_drop.webm",
-    "original_sha256": "b423239475c52f75ea210d6c262fbb96e009af20b10d4323801f2c9aed58bf91",
-    "author": "Maxim Bilovitskiy",
-    "license": "CC BY 4.0",
-    "license_url": "https://creativecommons.org/licenses/by/4.0",
-    "changes": "從同一實拍影片擷取兩個指定時刻；等比例縮小並轉存 WebP，無重繪、生成或合成。",
+    "source_title": "Surfusion.ogv",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Surfusion.ogv",
+    "original_url": "https://upload.wikimedia.org/wikipedia/commons/2/21/Surfusion.ogv",
+    "original_sha256": "399de3055bc2417c980d89f19aba57f327bf8a3f0f7210b15d2575aef502b679",
+    "author": "Mehdi jmiai",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "changes": "擷取同一杯過冷水凝固前後的實拍影格；兩張均裁出杯子及周邊背景，去除黑邊與下方法文字幕，再轉存 WebP。沒有生成、重繪、補畫或合成。",
+    "conditions": "水已事先冷卻至0°C以下，仍呈液態，受擾動後開始形成冰晶；不表示常溫水因攪拌就能結冰，也不宣稱整杯水已完全凝固。",
+    "selection_status": "使用者暫時採用，尚非最終選圖。",
     "photos": [
       {
         "file": "phase-photo-freeze-before.webp",
-        "time_seconds": 4.8,
-        "sha256": "ba44270621b8ff04369aa1b25983649b823912210cdf688c04bb78200cf69f68"
+        "time_seconds": 0.2492,
+        "crop": [
+          330,
+          80,
+          900,
+          580
+        ],
+        "frame_dimensions": [
+          1280,
+          720
+        ],
+        "output_dimensions": [
+          570,
+          500
+        ],
+        "sha256": "c6b925c394e4dcd9092d61e9d55d1e828f0e5f3878ed961df709cfb5533730bd"
       },
       {
         "file": "phase-photo-freeze-after.webp",
-        "time_seconds": 15,
-        "sha256": "e5d622f40077e74565fd8ba3dafdc05b8c7e2b1821cbe9a257d0ff5a88160ed7"
+        "time_seconds": 24.4216,
+        "crop": [
+          330,
+          80,
+          900,
+          580
+        ],
+        "frame_dimensions": [
+          1280,
+          720
+        ],
+        "output_dimensions": [
+          570,
+          500
+        ],
+        "sha256": "e2b28928333357d0a2fb501a8cb8ebe0e0673518cddf4d6f4385165fe9394e2a"
       }
     ]
   },

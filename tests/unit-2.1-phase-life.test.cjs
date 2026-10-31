@@ -100,7 +100,7 @@ test('2.1 static documentary photo pairs and retained particle transitions',{tim
   await open(390,844);await select('condensation');check(await inspect('condensation'),'condensation',false);
  });
  await t.test('source page and every documentary photo are available',async()=>{
-  const r=await page.request.get(new URL('assets/phase-life-credits.html',base).href);assert.equal(r.status(),200);const credits=await r.text();assert.match(credits,/Maxim Bilovitskiy/);assert.match(credits,/CC BY-SA 4.0/);assert.match(credits,/NASA/);assert.match(credits,/Alberta Studios/);assert.match(credits,/Devyn Breslin/);assert.match(credits,/分別取材/);assert.doesNotMatch(credits,/Boreyko/);
+  const r=await page.request.get(new URL('assets/phase-life-credits.html',base).href);assert.equal(r.status(),200);const credits=await r.text();assert.match(credits,/Maxim Bilovitskiy/);assert.match(credits,/CC BY-SA 4.0/);assert.match(credits,/NASA/);assert.match(credits,/Alberta Studios/);assert.match(credits,/Devyn Breslin/);assert.match(credits,/分別取材/);assert.doesNotMatch(credits,/Boreyko/);const freezeCredits=credits.match(/<section id="freeze">[\s\S]*?<\/section>/)[0];assert.match(freezeCredits,/Mehdi jmiai/);assert.match(freezeCredits,/Surfusion/);assert.match(freezeCredits,/過冷水/);assert.doesNotMatch(freezeCredits,/−180°C|Maxim Bilovitskiy/);
  });
  await t.test('no script or asset failures',()=>assert.deepEqual(errors,[]));
  await fs.writeFile(path.join(captures,'result.json'),JSON.stringify({results,errors},null,2));
