@@ -68,7 +68,10 @@
 #s5 .formula-ratio {display:inline-flex;align-items:center;gap:8px;}
 #s5 .formula-reference .num {font-weight:750;color:#176b53;padding-bottom:5px;border-color:#86a793;}
 #s5 .formula-reference .den {padding-top:5px;color:#4c6758;}
-#s5 .formula-steps .formula-equation + .formula-equation {margin-top:8px;}
+#s5 .formula-steps {display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px 4px;margin-top:10px;}
+#s5 .formula-steps .formula-equation {flex:0 0 auto;flex-wrap:nowrap;gap:4px;margin:0;font-size:.88rem;}
+#s5 .formula-steps .formula-ratio {gap:4px;}
+#s5 .formula-steps .fraction {margin:0 3px;}
 #s5 [data-formula-part] {border-radius:4px;transition:background-color .2s,box-shadow .2s;}
 #s5 [data-formula-part].is-highlighted {background:#fce3a4;box-shadow:0 0 0 3px #fce3a4;color:#4e3b16;}
 #s5 .formula-link-hint {margin:10px 0 0;color:#5b7164;font-size:.75rem;}
