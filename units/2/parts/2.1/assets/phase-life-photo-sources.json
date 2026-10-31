@@ -207,36 +207,48 @@
     ]
   },
   "sublimation": {
-    "source_title": "Evaporating ice on Mars Phoenix lander image.jpg",
-    "source_page": "https://commons.wikimedia.org/wiki/File:Evaporating_ice_on_Mars_Phoenix_lander_image.jpg",
-    "original_url": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Evaporating_ice_on_Mars_Phoenix_lander_image.jpg",
-    "original_sha256": "52edb39deb0ba894dc2b4935e255ce814f190f2c0a6c4da5075df60dd741ea99",
-    "author": "NASA/JPL",
-    "license": "Public domain",
-    "license_url": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
-    "changes": "分別裁出 NASA 原始前後圖中同一處的實拍放大區，去除版面邊框；無生成、補畫或重建。",
+    "source_type": "ai_generated_photorealistic_illustration",
+    "source_title": "昇華：冷凍庫中的冰與乾燥空盤（寫實示意圖）",
+    "generator": "OpenAI image generation",
+    "generation_date": "2026-10-31",
+    "source_artifact": "docs/reviews/unit-2.1-sublimation-generated/approved-comparison.png",
+    "source_artifact_sha256": "5d127c98ff895c908391ea5e434f0b67fb0c3258b7f633f5c881a234bdfcd8ee",
+    "source_dimensions": [
+      1536,
+      1024
+    ],
+    "prompt_summary": "固定同一冷凍庫、層架、不鏽鋼淺盤、視角與光線。左圖乾燥盤內有一塊固態水冰，右圖冰經長時間直接昇華後留下乾燥空盤。情境須持續低於0°C、空氣乾燥，不畫融水、加熱、可見水蒸氣或白霧。",
+    "changes": "依使用者核可的雙欄生成原圖拆成前後兩張，僅去除中央留白並轉存WebP，沒有重繪核可內容。",
+    "disclosure": "AI生成的寫實示意，不是真實拍攝或同次實驗紀錄；圖片本身無法證明過程或溫度，零下、乾燥及長時間為本教學情境的明示條件。",
+    "selection_status": "使用者已確認冰可直接昇華並核可冷凍庫版；下一組凝華須先生成候選，待核可後才套用。",
     "photos": [
       {
         "file": "phase-photo-sublimation-before.webp",
         "crop": [
-          237,
-          175,
-          507,
-          480
+          0,
+          0,
+          764,
+          1024
         ],
-        "date": "2008-06-15",
-        "sha256": "2c711ef9aabd22f95f2323317f972c6d7397b3d831d1075b6a1610cb98687af9"
+        "output_dimensions": [
+          764,
+          1024
+        ],
+        "sha256": "ebd67c0fdea7c8345b4df6c37181ca49a690477dfffc1cc1c53515484beaa3f1"
       },
       {
         "file": "phase-photo-sublimation-after.webp",
         "crop": [
-          770,
-          175,
-          1040,
-          480
+          775,
+          0,
+          1536,
+          1024
         ],
-        "date": "2008-06-19",
-        "sha256": "6f711cf6358cf3ac698285482086ff463402adae3865884ea5f75cdf3ec0f487"
+        "output_dimensions": [
+          761,
+          1024
+        ],
+        "sha256": "35b7844d4a6b9505ff733a5680f5ce98bd1fe25b1623e374f8abc26977f47511"
       }
     ]
   }

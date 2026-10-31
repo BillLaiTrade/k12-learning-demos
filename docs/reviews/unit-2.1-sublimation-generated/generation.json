@@ -1,0 +1,46 @@
+{
+  "source_type": "ai_generated_photorealistic_illustration",
+  "source_title": "昇華：冷凍庫中的冰與乾燥空盤（寫實示意圖）",
+  "generator": "OpenAI image generation",
+  "generation_date": "2026-10-31",
+  "source_artifact": "docs/reviews/unit-2.1-sublimation-generated/approved-comparison.png",
+  "source_artifact_sha256": "5d127c98ff895c908391ea5e434f0b67fb0c3258b7f633f5c881a234bdfcd8ee",
+  "source_dimensions": [
+    1536,
+    1024
+  ],
+  "prompt_summary": "固定同一冷凍庫、層架、不鏽鋼淺盤、視角與光線。左圖乾燥盤內有一塊固態水冰，右圖冰經長時間直接昇華後留下乾燥空盤。情境須持續低於0°C、空氣乾燥，不畫融水、加熱、可見水蒸氣或白霧。",
+  "changes": "依使用者核可的雙欄生成原圖拆成前後兩張，僅去除中央留白並轉存WebP，沒有重繪核可內容。",
+  "disclosure": "AI生成的寫實示意，不是真實拍攝或同次實驗紀錄；圖片本身無法證明過程或溫度，零下、乾燥及長時間為本教學情境的明示條件。",
+  "selection_status": "使用者已確認冰可直接昇華並核可冷凍庫版；下一組凝華須先生成候選，待核可後才套用。",
+  "photos": [
+    {
+      "file": "phase-photo-sublimation-before.webp",
+      "crop": [
+        0,
+        0,
+        764,
+        1024
+      ],
+      "output_dimensions": [
+        764,
+        1024
+      ],
+      "sha256": "ebd67c0fdea7c8345b4df6c37181ca49a690477dfffc1cc1c53515484beaa3f1"
+    },
+    {
+      "file": "phase-photo-sublimation-after.webp",
+      "crop": [
+        775,
+        0,
+        1536,
+        1024
+      ],
+      "output_dimensions": [
+        761,
+        1024
+      ],
+      "sha256": "35b7844d4a6b9505ff733a5680f5ce98bd1fe25b1623e374f8abc26977f47511"
+    }
+  ]
+}
