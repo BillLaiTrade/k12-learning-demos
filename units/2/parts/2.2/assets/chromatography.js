@@ -6,6 +6,8 @@ const drop = document.getElementById('chrom-drop');
 const clip = document.getElementById('chrom-clip');
 const reset = document.getElementById('chrom-reset');
 const status = document.getElementById('chrom-status');
+const observation = document.getElementById('chrom-observation-dialogue');
+const observationText = document.getElementById('chrom-observation-text');
 const choices = [...document.querySelectorAll('.ink-choice')];
 const sourceLabels = [...lab.querySelectorAll('[data-chrom-source-label]')];
 const ctx = canvas.getContext('2d');
@@ -84,6 +86,14 @@ function drawPreparedInk(key) {
   band(0, PH * BASELINE, 19, 10, SAMPLES[key].ink);ctx.restore();
 }
 function draw() {
+  const completed = mode === 'complete';
+  if (completed) {
+    const message = sample === 'green'
+      ? '原來看起來是綠色的墨水，竟然分出了藍色和黃色的色帶！'
+      : '原來深色的墨水，竟然分出了藍色、紫色和粉紅色的色帶！';
+    if (observationText.textContent !== message) observationText.textContent = message;
+  }
+  observation.hidden = !completed;
   const installed = !['ready', 'mounting'].includes(mode);
   const state = chromatographyState(seconds, pos.top, sample);
   const dotOpacity = mode === 'spilled' ? 1 - state.progress : installed && state.kind === 'valid' ? state.originOpacity : 1;

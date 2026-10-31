@@ -76,6 +76,7 @@
     .dialogue--xiaokui .speaker { color:#945523; }
     .dialogue--xiaokui .speaker::before { border-color:#d39765; background-position:0 50%; }
     .dialogue .visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    #chrom-observation-dialogue[hidden] { display:none; }
     .evidence-box,.note-box { margin:12px 0; padding:12px 14px; border-left:4px solid #82a98c; border-radius:7px; background:#f0f6f0; }
     .evidence-box strong { display:block; margin-bottom:3px; }
     .filter-animation { position:relative; margin:16px 0 10px; overflow:hidden; border:1px solid #d8e2da; border-radius:18px; background:#f1f6f1; box-shadow:0 12px 30px #243a350d; }
@@ -258,6 +259,7 @@
           </div>
           <p class="chrom-status is-visible" id="chrom-status" role="status" aria-live="polite">點選紙張或名稱，觀察色帶分離。</p>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>看起來是一種顏色的墨水，也可能含有不同色素。溶劑沿著濾紙上升時，會帶動墨水中的色素；不同色素移動的速度不同，就會逐漸分成不同色帶。</p></div>
+          <div class="dialogue dialogue--xiaokui" id="chrom-observation-dialogue" hidden><span class="speaker"><span class="visually-hidden">小葵</span></span><p id="chrom-observation-text"></p></div>
           <div class="note-box">不同墨水的分離結果可能不同；本例的色帶顏色、數量與位置為特定樣本的示意。</div>
         </div>
       </section>
@@ -396,7 +398,7 @@
   <script type="importmap">{"imports":{"three":"../../../4/parts/4.1/assets/vendor/three/build/three.module.js"}}</script>
   <script type="module" src="assets/filtration.js?v=reset-state-1"></script>
   <script type="module" src="assets/evaporation-animation.js?v=full-replay-1"></script>
-  <script type="module" src="assets/chromatography.js?v=state-guidance-1"></script>
+  <script type="module" src="assets/chromatography.js?v=observation-dialogue-1"></script>
   <script type="module" src="assets/concentration.js?v=outside-clear-1"></script>
   <script type="module" src="assets/ppm-pool.js?v=camera-toggle-1"></script>
   <script type="module" src="assets/investigation.js?v=fresh-sample-1"></script>
