@@ -1,4 +1,4 @@
-import { evaluateGasReport } from './air-report.mjs?v=knowledge-3';
+import { evaluateGasReport } from './air-report.mjs?v=properties-7';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const players = [...document.querySelectorAll('[data-replay]:not(.oxygen-preparation)')].map(panel => {
   const steps = [...panel.querySelectorAll('[data-stage]')];
@@ -10,7 +10,7 @@ const players = [...document.querySelectorAll('[data-replay]:not(.oxygen-prepara
     steps.forEach((step, i) => step.classList.toggle('is-current', i === index));
     play.disabled = state === 'playing'; pause.disabled = state !== 'playing'; reset.disabled = state === 'overview';
     play.textContent = state === 'paused' ? '繼續重播' : '重播過程';
-    status.textContent = state === 'overview' ? '材料、產氣、收集與取樣四個階段。' : (state === 'paused' ? '已暫停：' : state === 'complete' ? '重播完成：' : '') + steps[index].querySelector('.step-label').textContent;
+    status.textContent = state === 'overview' ? '材料、產氣、收集與蓋好瓶口四個階段。' : (state === 'paused' ? '已暫停：' : state === 'complete' ? '重播完成：' : '') + steps[index].querySelector('.step-label').textContent;
   };
   const tick = () => {
     if (state !== 'playing') return;
@@ -19,6 +19,7 @@ const players = [...document.querySelectorAll('[data-replay]:not(.oxygen-prepara
   };
   const pausePlayback = () => { if (state === 'playing') { stop(); state = 'paused'; render(); } };
   play.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('air-experiment-play',{detail:'co2'}));
     stop();
     if (reduced.matches) { index = steps.length - 1; state = 'complete'; render(); return; }
     if (state !== 'paused') index = 0;
@@ -59,3 +60,5 @@ form.addEventListener('submit', event => {
     feedback.append(list);
   }
 });
+
+document.addEventListener('air-experiment-play',event=>{if(event.detail!=='co2')players.forEach(p=>p.pausePlayback());});

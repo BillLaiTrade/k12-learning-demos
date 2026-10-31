@@ -590,3 +590,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3.
 ```
 
 23項通過（含外層），0失敗／略過。整頁檢查改驗證第七區三個OSHA參考值20／60／100、三幅插圖實際解碼、無操作控制或發聲、兩則知識與來源；八種寬度核對共同刻度標記與讀值位置、圖卡不溢出，DECIBEL_CAPTURE_DIR保存1440／1024／390px完整畫面。整頁SOUND33_BASE_URL可指向公開頁，瀏覽器沿用代理並略過本機格式比較頁。無需新增測試依賴。
+
+## 2.3第三／四區集氣，第五區性質比較（2026-10-31）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium GAS_PROPERTIES_ARTIFACT_DIR=/tmp/unit23-properties OXYGEN_ARTIFACT_DIR=/tmp/unit23-properties-oxygen OXYGEN_THREE_ARTIFACT_DIR=/tmp/unit23-properties-material AIR_FULL_ARTIFACT_DIR=/tmp/unit23-properties-full GAS_PROFILE_ARTIFACT_DIR=/tmp/unit23-properties-knowledge node --test --test-concurrency=1 tests/unit-2.3-properties.test.cjs tests/unit-2.3-oxygen-model.test.mjs tests/unit-2.3-oxygen.test.cjs tests/unit-2.3-oxygen-three.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-report.test.cjs tests/unit-2.3-nitrogen.test.cjs tests/unit-2.3-argon.test.cjs tests/unit-2.3-oxygen-profile.test.cjs
+```
+
+共67項（含外層）：新增properties10、氧氣模型4、五步／木條11、材質場景8、整頁9、小測模型4、三種知識卡各7。新增檢查六區無重複ID、03／04只有製備收集、05集中兩種氣體與石灰水、來源／下一區／小測回看、同餘燼同步深度／時間、氧氣復燃／二氧化碳漸暗未復燃、暫停實際像素、跨播放器互相暫停、快速重播、鍵盤／背景／離區、七寬度兩瓶並列、觸控／減少動態／無JS及唯一小測。原杯子專項僅更新六區導覽預期，未重跑拖曳／保水全套；整頁已檢查杯子預設比較與重設，源碼保存證據見本輪review。
+
+`GAS_PROPERTIES_URL` 可指定公開2.3頁面，`GAS_PROPERTIES_ARTIFACT_DIR` 保存新區截圖；其餘URL／截圖變數沿用各測試。證據見 `docs/reviews/unit-2.3-properties-block/`。原第五區小測現在為第六區，舊#s5為性質比較。

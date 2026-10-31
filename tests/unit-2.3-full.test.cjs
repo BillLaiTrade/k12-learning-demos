@@ -4,7 +4,7 @@ const { spawn } = require('node:child_process');
 const { mkdirSync } = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
-test('2.3 complete page: four teaching sections and one evidence-based quiz', { timeout: 180000 }, async t => {
+test('2.3 complete page: five teaching sections and one evidence-based quiz', { timeout: 180000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], { cwd: path.resolve(__dirname, '../..'), stdio: ['ignore', 'pipe', 'pipe'] });
   t.after(() => server.kill());
   const port = await new Promise((resolve, reject) => {
@@ -29,11 +29,11 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
     if (await control.evaluate(el => el.tagName === 'SELECT')) await control.selectOption(value);
     else await page.locator(`#gas-report-form [name="${name}"][value="${value}"]`).check();
   };
-  await t.test('all five sections and routes exist, with gas profiles and no retired experiment', async () => {
-    assert.deepEqual(await page.locator('section.lesson').evaluateAll(nodes => nodes.map(n => n.id)), ['s1','s2','s3','s4','s5']);
+  await t.test('all six sections and routes exist, with gas profiles and no retired experiment', async () => {
+    assert.deepEqual(await page.locator('section.lesson').evaluateAll(nodes => nodes.map(n => n.id)), ['s1','s2','s3','s4','s5','s6']);
     assert.equal(await page.locator('form').count(), 1);
-    assert.equal(await page.locator('.route a.quiz-nav').getAttribute('href'), '#s5');
-    for (const i of [1,2,3,4]) {
+    assert.equal(await page.locator('.route a.quiz-nav').getAttribute('href'), '#s6');
+    for (const i of [1,2,3,4,5,6]) {
       assert.equal(await page.locator(`#s${i} .dialogue.xiaokui`).first().isVisible(), true);
       assert.equal(await page.locator(`#s${i} .dialogue.grandpa`).first().isVisible(), true);
     }
@@ -69,7 +69,7 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
     await panel.locator('[data-pause]').click();const stage=await panel.getAttribute('data-stage');await page.clock.runFor(3000);assert.equal(await panel.getAttribute('data-stage'),stage);
     await panel.locator('[data-play]').click();await page.clock.runFor(5000);assert.equal(await panel.getAttribute('data-state'),'complete');
     await panel.locator('[data-reset]').click();assert.equal(await panel.getAttribute('data-stage'),'-1');
-    assert.equal(await page.locator('#s3 .observation-grid figure').count(),2);assert.equal(await page.locator('#s4 .observation-grid figure').count(),6);
+    assert.equal(await page.locator('#s3 .gas-observations,#s4 .gas-observations').count(),0);assert.equal(await page.locator('#s5 .observation-grid figure').count(),4);assert.equal(await page.locator('#s5 .oxygen-comparison').count(),1);
   });
   await t.test('leaving a replay pauses it and returning does not autoplay', async () => {
     const panel = page.locator('[data-replay="oxygen"]'); await panel.scrollIntoViewIfNeeded();
@@ -91,7 +91,7 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
     assert.equal(await feedback.isVisible(), false);
     await page.locator('#gas-report-form button[type="submit"]').click();
     assert.match(await feedback.innerText(), /氧氣助燃/);
-    assert.equal(await feedback.locator('a').getAttribute('href'), '#s3');
+    assert.equal(await feedback.locator('a').getAttribute('href'), '#s5');
     await answer('fuel', 'wood'); assert.equal(await feedback.isVisible(), false);
     await page.locator('#gas-report-form button[type="submit"]').click();
     assert.equal(await feedback.getAttribute('data-result'), 'correct');
@@ -104,7 +104,7 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
   await t.test('seven widths keep full-width teaching bodies below their headers without overflow', async () => {
     for (const width of [1440,1280,1024,800,768,390,320]) {
       await page.setViewportSize({ width, height: width < 760 ? 844 : 1000 });
-      for (let i = 1; i <= 5; i++) {
+      for (let i = 1; i <= 6; i++) {
         await page.locator('#s'+i).evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
         await page.clock.runFor(20);
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${width}: s${i} overflow`);
@@ -114,7 +114,7 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
         const head = el.querySelector('.lesson-head').getBoundingClientRect();
         return { id:el.id, left:body.left-card.left, right:card.right-body.right, gap:body.top-head.bottom, headerTitle:!!el.querySelector('.lesson-head h2') };
       }));
-      assert.equal(layouts.length, 4);
+      assert.equal(layouts.length, 5);
       for (const layout of layouts) {
         assert.ok(layout.headerTitle && layout.gap >= -1, `${width}: ${layout.id} title stays above content`);
         assert.ok(layout.left <= 2 && layout.right <= 2, `${width}: ${layout.id} body spans card width without a side gutter`);
@@ -122,7 +122,7 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
       const boxes = await page.locator('.gas-feature svg, .sequence-grid, .observation-grid, #gas-report-form').evaluateAll(nodes => nodes.map(el => { const r = el.getBoundingClientRect(); return {left:r.left,right:r.right,width:r.width}; }));
       assert.ok(boxes.every(r => r.width > 0 && r.left >= -1 && r.right <= width+1), `${width}: diagrams fit`);
       await page.evaluate(() => document.activeElement?.blur());
-      if ([1440,390].includes(width)) for (const i of [1,2,3,4,5]) {
+      if ([1440,390].includes(width)) for (const i of [1,2,3,4,5,6]) {
         await page.locator('#s'+i).screenshot({ path: path.join(artifacts, `section-${i}-${width}.webp`), type:'webp', quality:82 });
       }
     }
@@ -130,7 +130,7 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
   await t.test('all teaching evidence is available without JavaScript', async () => {
     const context = await browser.newContext({ javaScriptEnabled:false, viewport:{width:390,height:844} });
     const staticPage = await context.newPage(); await staticPage.goto(url, {waitUntil:'networkidle'});
-    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#air-profile-nitrogen .gas-profile-properties','#air-profile-oxygen .gas-profile-properties','#air-profile-argon .gas-profile-properties','#s3 .sequence-grid','#s3 .gas-observations','#s4 .sequence-grid','#s4 .gas-observations','#s5 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
+    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#air-profile-nitrogen .gas-profile-properties','#air-profile-oxygen .gas-profile-properties','#air-profile-argon .gas-profile-properties','#s3 .sequence-grid','#s3 .properties-collected-note','#s4 .sequence-grid','#s4 .properties-collected-note','#s5 .oxygen-comparison','#s5 .properties-limewater','#s6 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
     assert.equal(await staticPage.locator('.sequence-step').count(),9);
     await context.close();
   });
@@ -141,8 +141,8 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
     await touch.waitForFunction(() => document.querySelector('[data-replay="oxygen"]').dataset.state === 'complete');
     assert.equal(await touch.locator('[data-replay="oxygen"]').getAttribute('data-stage'),'1');
     assert.equal(await touch.locator('[data-replay="oxygen"] .sequence-step:visible').count(),5);
-    await touch.locator('.route a[href="#s5"]').tap();
-    await touch.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s5');
+    await touch.locator('.route a[href="#s6"]').tap();
+    await touch.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s6');
     await touch.locator('#gas-report-form select[name="sample_a"]').focus();
     await touch.keyboard.press('o'); await touch.locator('#gas-report-form select[name="sample_a"]').selectOption('oxygen');
     assert.equal(await touch.locator('#gas-report-form select[name="sample_a"]').inputValue(),'oxygen');

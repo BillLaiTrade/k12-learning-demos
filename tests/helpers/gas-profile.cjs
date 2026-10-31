@@ -88,7 +88,7 @@ module.exports=function profileTest({gas,name,english,formula,percent,rank,examp
    try{
     await p.goto(url,{waitUntil:'networkidle'});await p.locator('.route a[href="#s2"]').tap();
     await p.locator(`#s2 [data-air-gas=${gas}]`).tap();assert.equal(await p.locator('#air-gas-knowledge').getAttribute('data-knowledge-current'),gas);
-    for(const [id,expected] of [['s3','雙氧水'],['s4','大理石'],['s5','氣體介紹']]){
+    for(const [id,expected] of [['s3','雙氧水'],['s4','大理石'],['s5','性質一樣'],['s6','氣體介紹']]){
      await p.locator(`.route a[href="#${id}"]`).tap();await p.waitForFunction(id=>document.querySelector('.route a[aria-current]')?.getAttribute('href')===`#${id}`,id);
      assert.match(await p.locator(`#${id} h2`).innerText(),new RegExp(expected));
     }
@@ -101,7 +101,7 @@ module.exports=function profileTest({gas,name,english,formula,percent,rank,examp
     const article=p.locator(`#air-profile-${gas}`);await article.scrollIntoViewIfNeeded();await article.locator('.gas-profile-example figure img').evaluate(n=>n.decode());
     assert.equal(await article.locator('.gas-profile-property:visible').count(),3);assert.equal(await article.locator('.gas-profile-example figure img').evaluate(n=>n.complete&&n.naturalWidth>0),true);
     assert.equal(await p.locator('.air-knowledge-hint').isVisible(),false);assert.equal(await p.locator('.air-knowledge-choices').isVisible(),false);
-    assert.equal(await p.locator('section.lesson').count(),5);
+    assert.equal(await p.locator('section.lesson').count(),6);
    }finally{await p.close()}
   });
   assert.deepEqual(errors,[]);

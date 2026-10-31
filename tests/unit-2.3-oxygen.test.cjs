@@ -6,7 +6,7 @@ test('2.3 oxygen: five learner-controlled steps and independent splint compariso
  if(!url){server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..')});t.after(()=>server.kill());const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',b=>{const m=String(b).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject)});url=`http://127.0.0.1:${port}/units/2/parts/2.3/`;}
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',...(process.env.OXYGEN_URL?{proxy:{server:process.env.HTTPS_PROXY||process.env.HTTP_PROXY}}:{})});t.after(()=>browser.close());
  const page=await browser.newPage({viewport:{width:1440,height:1100}});await page.clock.install();const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`)});
- await page.goto(url,{waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('.oxygen-preparation').dataset.ready==='true');await page.clock.pauseAt(await page.evaluate(()=>Date.now()+100));
+ await page.goto(url,{waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('.oxygen-preparation').dataset.ready==='true'&&document.querySelector('.oxygen-comparison').dataset.ready==='true');await page.clock.pauseAt(await page.evaluate(()=>Date.now()+100));
  const top=page.locator('.oxygen-preparation'),bottom=page.locator('.oxygen-comparison'),tabs=top.locator('[role=tab]'),play=top.locator('[data-play]'),next=top.locator('[data-next]'),previous=top.locator('[data-previous]');
  const active=()=>top.locator('.oxygen-step-panel:visible');
  const artifacts=process.env.OXYGEN_ARTIFACT_DIR||'/tmp/unit23-oxygen-steps';await fs.mkdir(artifacts,{recursive:true});
@@ -28,11 +28,11 @@ test('2.3 oxygen: five learner-controlled steps and independent splint compariso
   await next.click();await page.clock.fastForward(2600);assert.equal(await top.getAttribute('data-stage'),'3');assert.match(await active().locator('dd').last().innerText(),/不易溶於水/);
   const level=Number(await active().locator('[data-part=jar-water]').getAttribute('y'));assert.ok(level>280&&level<680);await top.screenshot({path:path.join(artifacts,'collection-1440.png')});
   await page.clock.fastForward(20000);assert.equal(await top.getAttribute('data-stage'),'3');assert.equal(await top.getAttribute('data-state'),'complete');assert.equal(await top.getAttribute('data-cover'),'0.0000');assert.equal(await top.getAttribute('data-tip-x'),'1035.000');
-  await next.click();await page.clock.fastForward(10000);assert.equal(await top.getAttribute('data-stage'),'4');assert.equal(await top.getAttribute('data-state'),'complete');assert.equal(await top.getAttribute('data-cover'),'1.0000');assert.match(await active().locator('dd').last().innerText(),/外界空氣混合/);assert.match(await next.innerText(),/觀察木條/);await top.screenshot({path:path.join(artifacts,'complete-1440.png')});
+  await next.click();await page.clock.fastForward(10000);assert.equal(await top.getAttribute('data-stage'),'4');assert.equal(await top.getAttribute('data-state'),'complete');assert.equal(await top.getAttribute('data-cover'),'1.0000');assert.match(await active().locator('dd').last().innerText(),/外界空氣混合/);assert.match(await next.innerText(),/製備二氧化碳/);await top.screenshot({path:path.join(artifacts,'complete-1440.png')});
  });
- await t.test('previous and direct selection restart that step; final next focuses the separate wood observation',async()=>{
+ await t.test('previous and direct selection restart that step; final next focuses the carbon dioxide collection lesson',async()=>{
   await previous.click();assert.equal(await top.getAttribute('data-stage'),'3');assert.equal(await top.getAttribute('data-collected'),'0.0000');assert.equal(await page.evaluate(()=>document.activeElement===document.querySelector('#oxygen-step-3 h3')),true);
-  await tabs.nth(4).click();await next.click();assert.equal(await page.evaluate(()=>document.activeElement===document.querySelector('.oxygen-comparison h3')),true);assert.notEqual(await top.getAttribute('data-state'),'playing');assert.equal(await bottom.getAttribute('data-ignition'),'1.0000');
+  await tabs.nth(4).click();await next.click();assert.equal(await page.evaluate(()=>document.activeElement===document.querySelector('#title-4')),true);assert.notEqual(await top.getAttribute('data-state'),'playing');assert.equal(await bottom.getAttribute('data-ignition'),'1.0000');
   await tabs.nth(0).click();assert.equal(await top.getAttribute('data-stage'),'0');assert.equal(await active().count(),1);assert.equal(await previous.isDisabled(),true);
  });
  await t.test('one replay control pauses and resumes the selected scene; rapid selection cancels old clocks',async()=>{
@@ -58,7 +58,7 @@ test('2.3 oxygen: five learner-controlled steps and independent splint compariso
  await t.test('two wooden splints keep identical entry timing and only oxygen develops a frozen or replayed flame',async()=>{
   await bottom.locator('[data-compare-reset]').click();await bottom.locator('[data-compare-play]').click();await page.clock.fastForward(600);
   const transforms=await bottom.locator('.oxygen-splint').evaluateAll(ns=>ns.map(n=>n.getAttribute('transform')));assert.equal(transforms[0],transforms[1]);assert.doesNotMatch(await bottom.locator('figcaption').last().innerText(),/復燃/);
-  await page.clock.fastForward(2000);assert.ok(Number(await bottom.locator('[data-sample=oxygen] .oxygen-flame').getAttribute('opacity'))>0);assert.equal(await bottom.locator('[data-sample=air] .oxygen-flame').getAttribute('opacity'),'0');
+  await page.clock.fastForward(2000);assert.ok(Number(await bottom.locator('[data-sample=oxygen] .oxygen-flame').getAttribute('opacity'))>0);assert.equal(await bottom.locator('[data-sample=co2] .oxygen-flame').getAttribute('opacity'),'0');
   await bottom.locator('[data-compare-pause]').click();const pixels=await bottom.locator('.oxygen-splints').screenshot();await page.clock.fastForward(500);assert.ok(pixels.equals(await bottom.locator('.oxygen-splints').screenshot()));
   await bottom.locator('[data-compare-play]').click();await page.clock.fastForward(5000);assert.equal(await bottom.getAttribute('data-state'),'complete');assert.equal(await bottom.locator('[data-sample=oxygen] .oxygen-flame').getAttribute('opacity'),'1');
  });
@@ -75,7 +75,7 @@ test('2.3 oxygen: five learner-controlled steps and independent splint compariso
   }
  });
  await t.test('touch and reduced motion keep manual navigation and bounded essential animation',async()=>{
-  const p=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});try{await p.clock.install();await p.goto(url,{waitUntil:'networkidle'});await p.waitForFunction(()=>document.querySelector('.oxygen-preparation').dataset.ready==='true');await p.clock.pauseAt(await p.evaluate(()=>Date.now()+100));
+  const p=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});try{await p.clock.install();await p.goto(url,{waitUntil:'networkidle'});await p.waitForFunction(()=>document.querySelector('.oxygen-preparation').dataset.ready==='true'&&document.querySelector('.oxygen-comparison').dataset.ready==='true');await p.clock.pauseAt(await p.evaluate(()=>Date.now()+100));
    const root=p.locator('.oxygen-preparation');assert.equal(await root.getAttribute('data-stage'),'0');await root.locator('[data-next]').tap();await p.clock.fastForward(20000);assert.equal(await root.getAttribute('data-stage'),'1');assert.equal(await root.getAttribute('data-state'),'complete');
    await root.locator('[data-next]').tap();await p.clock.fastForward(4000);assert.equal(await root.getAttribute('data-stage'),'2');await root.locator('[data-next]').tap();await p.clock.fastForward(1200);const first=Number(await root.locator('#oxygen-step-3 [data-part=jar-water]').getAttribute('y'));await p.clock.fastForward(700);assert.ok(Number(await root.locator('#oxygen-step-3 [data-part=jar-water]').getAttribute('y'))>first);
    await root.locator('[data-stage="0"]').tap();assert.equal(await root.locator('.oxygen-materials-view').isVisible(),true);
