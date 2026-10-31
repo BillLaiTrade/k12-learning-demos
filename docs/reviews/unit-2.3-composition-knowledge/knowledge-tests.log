@@ -1,0 +1,298 @@
+TAP version 13
+# Subtest: 2.3 Argon: knowledge selected inside composition
+    # Subtest: default nitrogen and explicit selection show one complete scientific introduction
+    ok 1 - default nitrogen and explicit selection show one complete scientific introduction
+      ---
+      duration_ms: 426.213394
+      type: 'test'
+      ...
+    # Subtest: chart, legend, keyboard confirmation and arrangements select the same knowledge without hover switching
+    ok 2 - chart, legend, keyboard confirmation and arrangements select the same knowledge without hover switching
+      ---
+      duration_ms: 1618.351778
+      type: 'test'
+      ...
+    # Subtest: small life photo follows the introduction and existing lesson format stays intact
+    ok 3 - small life photo follows the introduction and existing lesson format stays intact
+      ---
+      duration_ms: 103.259355
+      type: 'test'
+      ...
+    # Subtest: seven widths keep chart, knowledge, classification and all copy inside the shared content column
+    ok 4 - seven widths keep chart, knowledge, classification and all copy inside the shared content column
+      ---
+      duration_ms: 3447.270462
+      type: 'test'
+      ...
+    # Subtest: touch selection and renamed experimental and quiz routes work with reduced motion
+    ok 5 - touch selection and renamed experimental and quiz routes work with reduced motion
+      ---
+      duration_ms: 17216.163572
+      type: 'test'
+      ...
+    # Subtest: without JavaScript all three introductions remain readable inside section two
+    ok 6 - without JavaScript all three introductions remain readable inside section two
+      ---
+      duration_ms: 1948.462463
+      type: 'test'
+      ...
+    1..6
+ok 1 - 2.3 Argon: knowledge selected inside composition
+  ---
+  duration_ms: 37542.239703
+  type: 'test'
+  ...
+# Subtest: 2.3 composition: proportions, classification and optional emphasis
+    # Subtest: all proportions and both classes are visible before any action
+    ok 1 - all proportions and both classes are visible before any action
+      ---
+      duration_ms: 19354.414896
+      type: 'test'
+      ...
+    # Subtest: mouse, keyboard and hover emphasis never hide teaching content
+    ok 2 - mouse, keyboard and hover emphasis never hide teaching content
+      ---
+      duration_ms: 1149.855379
+      type: 'test'
+      ...
+    # Subtest: local inset opens only on a minor-component selection and closes without losing the chart
+    ok 3 - local inset opens only on a minor-component selection and closes without losing the chart
+      ---
+      duration_ms: 3481.438584
+      type: 'test'
+      ...
+    # Subtest: both arrangements preserve all shares, selection and a visible connector
+    ok 4 - both arrangements preserve all shares, selection and a visible connector
+      ---
+      duration_ms: 2966.667232
+      type: 'test'
+      ...
+    # Subtest: argon and other select different parts of the enlarged minor share
+    ok 5 - argon and other select different parts of the enlarged minor share
+      ---
+      duration_ms: 5094.711966
+      type: 'test'
+      ...
+    # Subtest: clicking shares in both layouts synchronizes legend, explanation and inset
+    ok 6 - clicking shares in both layouts synchronizes legend, explanation and inset
+      ---
+      duration_ms: 5249.218561
+      type: 'test'
+      ...
+    # Subtest: the chart is one Tab stop with spatial arrow navigation and native selection
+    ok 7 - the chart is one Tab stop with spatial arrow navigation and native selection
+      ---
+      duration_ms: 2255.67072
+      type: 'test'
+      ...
+    # Subtest: clicking beside the diagram dismisses all selections while preserving layout
+    ok 8 - clicking beside the diagram dismisses all selections while preserving layout
+      ---
+      duration_ms: 28211.461099
+      type: 'test'
+      ...
+    # Subtest: desktop and mobile keep the optional inset next to its source without overflow
+    ok 9 - desktop and mobile keep the optional inset next to its source without overflow
+      ---
+      duration_ms: 13012.976525
+      type: 'test'
+      ...
+    # Subtest: minor choices are explicit and reading or dismissing chart emphasis retains knowledge
+    ok 10 - minor choices are explicit and reading or dismissing chart emphasis retains knowledge
+      ---
+      duration_ms: 452.431217
+      type: 'test'
+      ...
+    # Subtest: static content remains complete without JavaScript
+    ok 11 - static content remains complete without JavaScript
+      ---
+      duration_ms: 1121.973529
+      type: 'test'
+      ...
+    # Subtest: touch, reduced motion and route anchor stay usable
+    ok 12 - touch, reduced motion and route anchor stay usable
+      ---
+      duration_ms: 20031.119313
+      type: 'test'
+      ...
+    1..12
+ok 2 - 2.3 composition: proportions, classification and optional emphasis
+  ---
+  duration_ms: 104886.102261
+  type: 'test'
+  ...
+# Subtest: 2.3 complete page: four teaching sections and one evidence-based quiz
+    # Subtest: all five sections and routes exist, with gas profiles and no retired experiment
+    ok 1 - all five sections and routes exist, with gas profiles and no retired experiment
+      ---
+      duration_ms: 200.615436
+      type: 'test'
+      ...
+    # Subtest: default cup comparisons remain after preview and reset
+    ok 2 - default cup comparisons remain after preview and reset
+      ---
+      duration_ms: 538.876202
+      type: 'test'
+      ...
+    # Subtest: both preparations replay, pause, resume and reset without hiding results
+    ok 3 - both preparations replay, pause, resume and reset without hiding results
+      ---
+      duration_ms: 4635.37276
+      type: 'test'
+      ...
+    # Subtest: leaving a replay pauses it and returning does not autoplay
+    ok 4 - leaving a replay pauses it and returning does not autoplay
+      ---
+      duration_ms: 1507.36331
+      type: 'test'
+      ...
+    # Subtest: single quiz gives missing, misconception, revised and correct feedback; reset is local
+    ok 5 - single quiz gives missing, misconception, revised and correct feedback; reset is local
+      ---
+      duration_ms: 1263.183686
+      type: 'test'
+      ...
+    # Subtest: seven widths keep full-width teaching bodies below their headers without overflow
+    ok 6 - seven widths keep full-width teaching bodies below their headers without overflow
+      ---
+      duration_ms: 13911.970216
+      type: 'test'
+      ...
+    # Subtest: all teaching evidence is available without JavaScript
+    ok 7 - all teaching evidence is available without JavaScript
+      ---
+      duration_ms: 1634.75507
+      type: 'test'
+      ...
+    # Subtest: touch, reduced motion, keyboard selects and last-section anchor work
+    ok 8 - touch, reduced motion, keyboard selects and last-section anchor work
+      ---
+      duration_ms: 27531.842058
+      type: 'test'
+      ...
+    1..8
+ok 3 - 2.3 complete page: four teaching sections and one evidence-based quiz
+  ---
+  duration_ms: 69637.893299
+  type: 'test'
+  ...
+# Subtest: 2.3 Nitrogen: knowledge selected inside composition
+    # Subtest: default nitrogen and explicit selection show one complete scientific introduction
+    ok 1 - default nitrogen and explicit selection show one complete scientific introduction
+      ---
+      duration_ms: 431.727978
+      type: 'test'
+      ...
+    # Subtest: chart, legend, keyboard confirmation and arrangements select the same knowledge without hover switching
+    ok 2 - chart, legend, keyboard confirmation and arrangements select the same knowledge without hover switching
+      ---
+      duration_ms: 1558.176173
+      type: 'test'
+      ...
+    # Subtest: small life photo follows the introduction and existing lesson format stays intact
+    ok 3 - small life photo follows the introduction and existing lesson format stays intact
+      ---
+      duration_ms: 123.757993
+      type: 'test'
+      ...
+    # Subtest: seven widths keep chart, knowledge, classification and all copy inside the shared content column
+    ok 4 - seven widths keep chart, knowledge, classification and all copy inside the shared content column
+      ---
+      duration_ms: 7517.323267
+      type: 'test'
+      ...
+    # Subtest: touch selection and renamed experimental and quiz routes work with reduced motion
+    ok 5 - touch selection and renamed experimental and quiz routes work with reduced motion
+      ---
+      duration_ms: 16119.637854
+      type: 'test'
+      ...
+    # Subtest: without JavaScript all three introductions remain readable inside section two
+    ok 6 - without JavaScript all three introductions remain readable inside section two
+      ---
+      duration_ms: 1508.176072
+      type: 'test'
+      ...
+    1..6
+ok 4 - 2.3 Nitrogen: knowledge selected inside composition
+  ---
+  duration_ms: 50236.560462
+  type: 'test'
+  ...
+# Subtest: 2.3 Oxygen: knowledge selected inside composition
+    # Subtest: default nitrogen and explicit selection show one complete scientific introduction
+    ok 1 - default nitrogen and explicit selection show one complete scientific introduction
+      ---
+      duration_ms: 336.751273
+      type: 'test'
+      ...
+    # Subtest: chart, legend, keyboard confirmation and arrangements select the same knowledge without hover switching
+    ok 2 - chart, legend, keyboard confirmation and arrangements select the same knowledge without hover switching
+      ---
+      duration_ms: 1458.71809
+      type: 'test'
+      ...
+    # Subtest: small life photo follows the introduction and existing lesson format stays intact
+    ok 3 - small life photo follows the introduction and existing lesson format stays intact
+      ---
+      duration_ms: 106.389048
+      type: 'test'
+      ...
+    # Subtest: seven widths keep chart, knowledge, classification and all copy inside the shared content column
+    ok 4 - seven widths keep chart, knowledge, classification and all copy inside the shared content column
+      ---
+      duration_ms: 3414.917931
+      type: 'test'
+      ...
+    # Subtest: touch selection and renamed experimental and quiz routes work with reduced motion
+    ok 5 - touch selection and renamed experimental and quiz routes work with reduced motion
+      ---
+      duration_ms: 11498.457253
+      type: 'test'
+      ...
+    # Subtest: without JavaScript all three introductions remain readable inside section two
+    ok 6 - without JavaScript all three introductions remain readable inside section two
+      ---
+      duration_ms: 1386.436258
+      type: 'test'
+      ...
+    1..6
+ok 5 - 2.3 Oxygen: knowledge selected inside composition
+  ---
+  duration_ms: 32151.19418
+  type: 'test'
+  ...
+# Subtest: 2.3 integrated report checks evidence, completeness and misconceptions
+    # Subtest: unanswered form names every missing item without claiming completion
+    ok 1 - unanswered form names every missing item without claiming completion
+      ---
+      duration_ms: 1.261348
+      type: 'test'
+      ...
+    # Subtest: fully supported report is accepted
+    ok 2 - fully supported report is accepted
+      ---
+      duration_ms: 0.295288
+      type: 'test'
+      ...
+    # Subtest: each misconception identifies the relevant observation and destination
+    ok 3 - each misconception identifies the relevant observation and destination
+      ---
+      duration_ms: 0.285289
+      type: 'test'
+      ...
+    1..3
+ok 6 - 2.3 integrated report checks evidence, completeness and misconceptions
+  ---
+  duration_ms: 4.589235
+  type: 'test'
+  ...
+1..6
+# tests 47
+# suites 0
+# pass 47
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 297004.323725

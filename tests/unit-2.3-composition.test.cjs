@@ -5,7 +5,7 @@ const { mkdirSync } = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
 
-test('2.3 composition: proportions, classification and optional emphasis', { timeout: 120000 }, async t => {
+test('2.3 composition: proportions, classification and optional emphasis', { timeout: 180000 }, async t => {
   const server = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1'], { cwd: path.resolve(__dirname, '../..'), stdio: ['ignore', 'pipe', 'pipe'] });
   t.after(() => server.kill());
   const port = await new Promise((resolve, reject) => {
@@ -30,8 +30,8 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
 
   await t.test('all proportions and both classes are visible before any action', async () => {
     assert.equal(await section.locator('.air-share').count(), 100);
-    assert.equal(await section.locator('#air-highlight-status').textContent(), '');
-    assert.equal(await section.locator('#air-highlight-status').evaluate(el => el.getBoundingClientRect().height), 0);
+    assert.match(await section.locator('#air-highlight-status').textContent(), /78%/);
+    assert.equal(await section.locator('[data-gas-profile]:visible').getAttribute('data-gas-profile'), 'nitrogen');
     assert.equal(await section.locator('[data-air-gas]').count(), 4);
     assert.equal(await section.locator('[data-air-gas=all], .air-show-all').count(), 0);
     for (const [gas, count] of [['nitrogen', 78], ['oxygen', 21], ['minor', 1]]) {
@@ -276,6 +276,24 @@ test('2.3 composition: proportions, classification and optional emphasis', { tim
       if ([1440, 1024, 390].includes(width)) await section.screenshot({ path: path.join(artifacts, `expanded-${width}.webp`), type: 'webp', quality: 85 });
       await section.locator('.air-composition-panel').click({ position: { x: 8, y: 8 } });
     }
+  });
+
+  await t.test('minor choices are explicit and reading or dismissing chart emphasis retains knowledge', async () => {
+    await section.locator('.air-share[data-component=minor]').click();
+    assert.equal(await section.locator('[data-gas-profile]:visible').getAttribute('data-gas-profile'),'minor');
+    assert.equal(await section.locator('.gas-profile:visible').count(),0,'combined share is not assigned to argon');
+    await section.locator('[data-knowledge-gas=argon]').click();
+    assert.equal(await section.locator('[data-gas-profile]:visible').getAttribute('data-gas-profile'),'argon');
+    assert.equal(await section.locator('[data-air-gas=argon]').evaluate(n=>n===document.activeElement),true,'focus leaves the hidden chooser');
+    await section.locator('#air-profile-argon h4').click();
+    assert.equal(await section.getAttribute('data-emphasis'),'argon');
+    await section.locator('.air-composition-panel').click({position:{x:8,y:8}});
+    assert.equal(await section.getAttribute('data-emphasis'),'all');
+    assert.equal(await section.locator('[data-gas-profile]:visible').getAttribute('data-gas-profile'),'argon');
+    await section.locator('[data-air-gas=other]').click();
+    assert.equal(await section.locator('[data-gas-profile]:visible').getAttribute('data-gas-profile'),'other');
+    assert.match(await section.locator('#air-profile-other').innerText(),/不能.*全部當成二氧化碳/);
+    assert.equal(await section.locator('#air-profile-other img').count(),0,'other remains a composition note');
   });
 
   await t.test('static content remains complete without JavaScript', async () => {

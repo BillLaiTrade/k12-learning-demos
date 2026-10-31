@@ -1,0 +1,32 @@
+{
+  "baseline": "2fc83da6b16a9b3ba92b0ed5003c175da79a4156",
+  "checks": [
+    {
+      "old": "s1",
+      "new": "s1",
+      "scope": "complete section",
+      "unchanged": true
+    },
+    {
+      "old": "s4",
+      "new": "s3",
+      "scope": "experiment from first apparatus onward",
+      "unchanged": true,
+      "sha256": "c964dc22b658534fb7f70318667cda0662c7dd89b991d0f08f51a4a613d21250"
+    },
+    {
+      "old": "s6",
+      "new": "s4",
+      "scope": "experiment from first apparatus onward",
+      "unchanged": true,
+      "sha256": "74c066e4a25da611d1f4bfc89cb4be5cd2cbcb3fb1dd70a41147441e316c1fae"
+    },
+    {
+      "old": "s7",
+      "new": "s5",
+      "scope": "complete quiz body",
+      "unchanged": true,
+      "sha256": "4bae19cad44e962e61a37ef83e4061113088a1cff2708dc0608e399e0604c4b5"
+    }
+  ]
+}

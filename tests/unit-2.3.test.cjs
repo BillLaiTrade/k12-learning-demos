@@ -57,9 +57,9 @@ test('2.3: complete learning page preserves cup dragging, water retention and re
   const phase = () => page.locator('html').getAttribute('data-phase');
   const volume = () => page.locator('#reaction-scene').getAttribute('data-volume').then(Number);
 
-  await t.test('seven completed sections have matching anchors and shared avatars', async () => {
-    assert.equal(await page.locator('section.lesson').count(), 7);
-    assert.deepEqual(await page.locator('.route a').evaluateAll(nodes => nodes.map(n => n.getAttribute('href'))), ['#s1', '#s2', '#s3', '#s4', '#s5', '#s6', '#s7']);
+  await t.test('four teaching sections and one quiz have matching anchors and shared avatars', async () => {
+    assert.equal(await page.locator('section.lesson').count(), 5);
+    assert.deepEqual(await page.locator('.route a').evaluateAll(nodes => nodes.map(n => n.getAttribute('href'))), ['#s1', '#s2', '#s3', '#s4', '#s5']);
     assert.equal(await page.locator('#s2 .dialogue.xiaokui, #s2 .dialogue.grandpa').count(), 2);
     assert.equal(await page.locator('#s2 .air-share').count(), 100);
     assert.equal(await page.locator('#setup-scene, #reaction-scene, #humidity-chart, #report-form').count(), 0);
@@ -289,7 +289,7 @@ test('2.3: complete learning page preserves cup dragging, water retention and re
     await page.clock.runFor(100);
     await page.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s2');
     assert.equal(await page.locator('.route a[aria-current]').getAttribute('href'), '#s2');
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= 5; i++) {
       await page.evaluate(n => document.querySelector('#s' + n).scrollIntoView({ behavior: 'instant', block: 'start' }), i);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'section ' + i);
     }

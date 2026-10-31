@@ -1,4 +1,4 @@
-import { evaluateGasReport } from './air-report.mjs?v=full-1';
+import { evaluateGasReport } from './air-report.mjs?v=knowledge-3';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const players = [...document.querySelectorAll('[data-replay]:not(.oxygen-preparation)')].map(panel => {
   const steps = [...panel.querySelectorAll('[data-stage]')];

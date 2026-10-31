@@ -1,5 +1,5 @@
 import { PREPARATION_DURATION, COMPARISON_DURATION, preparationFrame, comparisonFrame } from './oxygen-model.mjs?v=oxygen-three-3';
-const section = document.querySelector('#s4');
+const section = document.querySelector('.oxygen-preparation').closest('.lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const comparison = section.querySelector('.oxygen-comparison');
 const $ = id => section.querySelector(id);
@@ -123,7 +123,7 @@ async function initializeViews() {
     pairHost.parentElement.classList.add('has-webgl'); pairHost.dataset.ready = 'true';
   } catch (error) {
     // A lack of WebGL must not hide the lesson or disable the existing controls.
-    document.querySelector('#s4').dataset.renderer = 'svg-fallback';
+    document.querySelector('.oxygen-preparation').closest('.lesson').dataset.renderer = 'svg-fallback';
     console.warn('Oxygen 3D unavailable; retained the illustrated experiment.', error);
   }
 }

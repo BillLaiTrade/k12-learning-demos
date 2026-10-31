@@ -15,7 +15,7 @@ test('2.3 integrated report checks evidence, completeness and misconceptions', a
     for (const rule of reportRules) {
       const result = evaluateGasReport({ ...valid, [rule.name]: 'unsupported' });
       assert.equal(result.correct, false); assert.equal(result.complete, true); assert.equal(result.corrections.length, 1);
-      assert.equal(result.corrections[0].name, rule.name); assert.ok(result.corrections[0].hint); assert.match(result.corrections[0].target, /^s[2346]$/);
+      assert.equal(result.corrections[0].name, rule.name); assert.ok(result.corrections[0].hint); assert.equal(result.corrections[0].target, {composition:'s2',sample_a:'s3',sample_b:'s4',fuel:'s3',evidence:'s4',uses:'s2'}[rule.name]);
     }
   });
 });

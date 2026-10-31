@@ -1,0 +1,199 @@
+TAP version 13
+# Subtest: purge precedes water collection; completion covers a full gas jar
+ok 1 - purge precedes water collection; completion covers a full gas jar
+  ---
+  duration_ms: 1.315277
+  type: 'test'
+  ...
+# Subtest: wood enters before ignition; both samples use identical insertion and elapsed time
+ok 2 - wood enters before ignition; both samples use identical insertion and elapsed time
+  ---
+  duration_ms: 5.178312
+  type: 'test'
+  ...
+# Subtest: 2.3 oxygen: real 3D continuous apparatus and shared splint clock
+    # Subtest: both displays render WebGL rather than showing fallback drawings
+    ok 1 - both displays render WebGL rather than showing fallback drawings
+      ---
+      duration_ms: 86.168505
+      type: 'test'
+      ...
+    # Subtest: purge bubbles stay outside the full jar; the tube moves continuously before water drops
+    ok 2 - purge bubbles stay outside the full jar; the tube moves continuously before water drops
+      ---
+      duration_ms: 11828.182879
+      type: 'test'
+      ...
+    # Subtest: pausing freezes actual WebGL pixels and resuming changes the water surface
+    ok 3 - pausing freezes actual WebGL pixels and resuming changes the water surface
+      ---
+      duration_ms: 3293.126958
+      type: 'test'
+      ...
+    # Subtest: the tube withdraws before the glass plate slides under the jar; results persist
+    ok 4 - the tube withdraws before the glass plate slides under the jar; results persist
+      ---
+      duration_ms: 3953.368906
+      type: 'test'
+      ...
+    # Subtest: two 3D wooden splints share the movement and ignition clock, including frozen flame
+    ok 5 - two 3D wooden splints share the movement and ignition clock, including frozen flame
+      ---
+      duration_ms: 3074.619662
+      type: 'test'
+      ...
+    # Subtest: mobile and narrow canvases resize without losing labels, controls or side-by-side samples
+    ok 6 - mobile and narrow canvases resize without losing labels, controls or side-by-side samples
+      ---
+      duration_ms: 2310.250585
+      type: 'test'
+      ...
+    # Subtest: WebGL absence keeps the original visible results and functional replay
+    ok 7 - WebGL absence keeps the original visible results and functional replay
+      ---
+      duration_ms: 1295.040589
+      type: 'test'
+      ...
+    1..7
+ok 3 - 2.3 oxygen: real 3D continuous apparatus and shared splint clock
+  ---
+  duration_ms: 48234.238098
+  type: 'test'
+  ...
+# Subtest: 2.3 oxygen: continuous collection and simultaneous wood comparison
+    # Subtest: default results, full width, four upper stages, two lower samples and original characters
+    ok 1 - default results, full width, four upper stages, two lower samples and original characters
+      ---
+      duration_ms: 98.344115
+      type: 'test'
+      ...
+    # Subtest: four stages synchronize tube path, bubbles, continuous water displacement and cover
+    ok 2 - four stages synchronize tube path, bubbles, continuous water displacement and cover
+      ---
+      duration_ms: 13151.416865
+      type: 'test'
+      ...
+    # Subtest: pause freezes actual water and arrows, resumes and rapid replay cancels prior progress
+    ok 3 - pause freezes actual water and arrows, resumes and rapid replay cancels prior progress
+      ---
+      duration_ms: 5664.320276
+      type: 'test'
+      ...
+    # Subtest: both real wooden splints enter together; only oxygen develops a flame
+    ok 4 - both real wooden splints enter together; only oxygen develops a flame
+      ---
+      duration_ms: 2687.770256
+      type: 'test'
+      ...
+    # Subtest: keyboard, Escape, hidden pages and leaving the scene pause without automatic restart
+    ok 5 - keyboard, Escape, hidden pages and leaving the scene pause without automatic restart
+      ---
+      duration_ms: 4451.125809
+      type: 'test'
+      ...
+    # Subtest: seven widths contain diagrams, controls and text; screenshots cover both scenes
+    ok 6 - seven widths contain diagrams, controls and text; screenshots cover both scenes
+      ---
+      duration_ms: 5015.153491
+      type: 'test'
+      ...
+    # Subtest: touch under reduced motion still continuously collects water and retains results
+    ok 7 - touch under reduced motion still continuously collects water and retains results
+      ---
+      duration_ms: 18013.926391
+      type: 'test'
+      ...
+    # Subtest: without JavaScript all essential materials, collection and flame results remain visible
+    ok 8 - without JavaScript all essential materials, collection and flame results remain visible
+      ---
+      duration_ms: 1376.235111
+      type: 'test'
+      ...
+    1..8
+ok 4 - 2.3 oxygen: continuous collection and simultaneous wood comparison
+  ---
+  duration_ms: 65409.038556
+  type: 'test'
+  ...
+# Subtest: 2.3: complete learning page preserves cup dragging, water retention and reset
+    # Subtest: four teaching sections and one quiz have matching anchors and shared avatars
+    ok 1 - four teaching sections and one quiz have matching anchors and shared avatars
+      ---
+      duration_ms: 18319.83192
+      type: 'test'
+      ...
+    # Subtest: cup first drag stays vertical until release; dragging the rim then rotates both ways
+    ok 2 - cup first drag stays vertical until release; dragging the rim then rotates both ways
+      ---
+      duration_ms: 2760.645689
+      type: 'test'
+      ...
+    # Subtest: dragging alone completes both observations; reset stays compact above the scene
+    ok 3 - dragging alone completes both observations; reset stays compact above the scene
+      ---
+      duration_ms: 11246.687058
+      type: 'test'
+      ...
+    # Subtest: a filled cup retains visible water above the tank, then drains gradually when the mouth emerges
+    ok 4 - a filled cup retains visible water above the tank, then drains gradually when the mouth emerges
+      ---
+      duration_ms: 43624.525189
+      type: 'test'
+      ...
+    # Subtest: mouth-up cup keeps painted water after direct lifting on both sides and fits inside the scene
+    ok 5 - mouth-up cup keeps painted water after direct lifting on both sides and fits inside the scene
+      ---
+      duration_ms: 46093.987384
+      type: 'test'
+      ...
+    # Subtest: lifting a tilted cup never snaps upright and rotation remains available after lifting
+    ok 6 - lifting a tilted cup never snaps upright and rotation remains available after lifting
+      ---
+      duration_ms: 5236.8299
+      type: 'test'
+      ...
+    # Subtest: cup uses direct dragging without a control panel; keyboard and fresh paper work
+    ok 7 - cup uses direct dragging without a control panel; keyboard and fresh paper work
+      ---
+      duration_ms: 969.284064
+      type: 'test'
+      ...
+    # Subtest: narrow viewport, keyboard focus, and reduced motion stay usable
+    not ok 8 - narrow viewport, keyboard focus, and reduced motion stay usable
+      ---
+      duration_ms: 1040.305983
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-2.3.test.cjs:284:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        page.evaluate: TypeError: Cannot read properties of null (reading 'scrollIntoView')
+            at eval (eval at evaluate (:311:30), <anonymous>:1:38)
+            at UtilityScript.evaluate (<anonymous>:313:16)
+            at UtilityScript.<anonymous> (<anonymous>:1:44)
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        eval (eval at evaluate (:311:30), <anonymous>:1:38)
+        UtilityScript.evaluate (<anonymous>:313:16)
+        UtilityScript.<anonymous> (<anonymous>:1:44)
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3.test.cjs:293:18)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3.test.cjs:284:3)
+      ...
+    1..8
+not ok 5 - 2.3: complete learning page preserves cup dragging, water retention and reset
+  ---
+  duration_ms: 132507.974487
+  type: 'test'
+  location: '/workspace/k12-learning-demos/tests/unit-2.3.test.cjs:8:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..5
+# tests 28
+# suites 0
+# pass 26
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 248753.476484

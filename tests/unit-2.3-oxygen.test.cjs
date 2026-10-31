@@ -14,9 +14,9 @@ test('2.3 oxygen: continuous collection and simultaneous wood comparison',{timeo
   assert.deepEqual(await top.locator('.step-label').allTextContents(),['準備材料','先排空氣','排水集氣','收集完成']);
   assert.equal(await top.getAttribute('data-collected'),'1.0000');assert.equal(await bottom.getAttribute('data-ignition'),'1.0000');
   assert.equal(await bottom.locator('figure').count(),2);assert.equal(await bottom.locator('[data-stage],.sequence-grid,.step-label').count(),0);
-  assert.equal(await page.locator('#s4 .dialogue--xiaokui .speaker').first().evaluate(el=>getComputedStyle(el,'::before').backgroundImage.includes('dialogue-character-avatars.png')),true);
-  assert.equal(await page.locator('#s4 .grandpa .speaker').first().evaluate(el=>getComputedStyle(el,'::before').backgroundPosition),'100% 50%');
-  assert.match(await bottom.innerText(),/木條復燃/);assert.match(await page.locator('#s4').innerText(),/二氧化錳不是氧氣來源/);
+  assert.equal(await page.locator('#s3 .dialogue--xiaokui .speaker').first().evaluate(el=>getComputedStyle(el,'::before').backgroundImage.includes('dialogue-character-avatars.png')),true);
+  assert.equal(await page.locator('#s3 .grandpa .speaker').first().evaluate(el=>getComputedStyle(el,'::before').backgroundPosition),'100% 50%');
+  assert.match(await bottom.innerText(),/木條復燃/);assert.match(await page.locator('#s3').innerText(),/二氧化錳不是氧氣來源/);
  });
  await t.test('four stages synchronize tube path, bubbles, continuous water displacement and cover',async()=>{
   await top.scrollIntoViewIfNeeded();await play.click();await page.clock.fastForward(500);
@@ -61,7 +61,7 @@ test('2.3 oxygen: continuous collection and simultaneous wood comparison',{timeo
    await page.setViewportSize({width,height:1100});await top.scrollIntoViewIfNeeded();await page.clock.fastForward(100);
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${width} overflow`);
    const jars=await bottom.locator('figure').evaluateAll(ns=>ns.map(n=>{const r=n.getBoundingClientRect();return{top:r.top,left:r.left}}));assert.ok(Math.abs(jars[0].top-jars[1].top)<1&&jars[1].left>jars[0].left,`${width} simultaneous side-by-side comparison`);
-   const bounds=await page.locator('#s4').evaluate(el=>{const body=el.querySelector('.lesson-body').getBoundingClientRect();return[...el.querySelectorAll('.oxygen-apparatus,.oxygen-steps,.oxygen-splint-group,.sequence-controls')].map(n=>{const r=n.getBoundingClientRect();return{left:r.left-body.left,right:body.right-r.right,w:r.width}})});
+   const bounds=await page.locator('#s3').evaluate(el=>{const body=el.querySelector('.lesson-body').getBoundingClientRect();return[...el.querySelectorAll('.oxygen-apparatus,.oxygen-steps,.oxygen-splint-group,.sequence-controls')].map(n=>{const r=n.getBoundingClientRect();return{left:r.left-body.left,right:body.right-r.right,w:r.width}})});
    for(const b of bounds)assert.ok(b.left>=-1&&b.right>=-1&&b.w>0,`${width} diagram stays inside body`);
    if([1440,1024,390,320].includes(width)){await top.screenshot({path:path.join(artifacts,`preparation-${width}.png`)});await bottom.screenshot({path:path.join(artifacts,`comparison-${width}.png`)});}
   }
@@ -70,7 +70,7 @@ test('2.3 oxygen: continuous collection and simultaneous wood comparison',{timeo
   const p=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});try{await p.clock.install();await p.goto(url,{waitUntil:'networkidle'});await p.waitForFunction(()=>document.querySelector('.oxygen-3d-comparison').dataset.ready==='true');await p.clock.pauseAt(await p.evaluate(()=>Date.now()+100));await p.locator('.oxygen-preparation [data-stage="2"]').tap();await p.clock.fastForward(500);const first=Number(await p.locator('#oxygen-jar-water').getAttribute('y'));await p.clock.fastForward(500);assert.ok(Number(await p.locator('#oxygen-jar-water').getAttribute('y'))>first);await p.locator('.oxygen-preparation [data-reset]').tap();await p.locator('[data-compare-play]').tap();await p.clock.fastForward(5000);assert.equal(await p.locator('.oxygen-comparison').getAttribute('data-state'),'complete');}finally{await p.close()}
  });
  await t.test('without JavaScript all essential materials, collection and flame results remain visible',async()=>{
-  const p=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});try{await p.goto(url,{waitUntil:'networkidle'});assert.equal(await p.locator('.oxygen-apparatus').isVisible(),true);assert.equal(await p.locator('.oxygen-comparison [data-sample=oxygen] .oxygen-flame').getAttribute('opacity'),'1');assert.match(await p.locator('#s4').innerText(),/先排出裝置原有的空氣/);assert.equal(await p.locator('.oxygen-splint-group').count(),2);}finally{await p.close()}
+  const p=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});try{await p.goto(url,{waitUntil:'networkidle'});assert.equal(await p.locator('.oxygen-apparatus').isVisible(),true);assert.equal(await p.locator('.oxygen-comparison [data-sample=oxygen] .oxygen-flame').getAttribute('opacity'),'1');assert.match(await p.locator('#s3').innerText(),/先排出裝置原有的空氣/);assert.equal(await p.locator('.oxygen-splint-group').count(),2);}finally{await p.close()}
  });
  assert.deepEqual(errors,[]);
 });

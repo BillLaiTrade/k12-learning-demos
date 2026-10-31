@@ -8,7 +8,14 @@ const minor = section.querySelector('[data-component="minor"]');
 const detail = section.querySelector('.air-other-detail');
 const connectorElement = section.querySelector('.air-zoom-link');
 const connector = connectorElement.querySelector('path');
-const detailTriggers = [...section.querySelectorAll('[aria-controls="air-minor-detail"]')];
+const detailTriggers = [...section.querySelectorAll('[aria-controls~="air-minor-detail"]')];
+const knowledge = section.querySelector('#air-gas-knowledge');
+const profiles = [...knowledge.querySelectorAll('[data-gas-profile]')];
+function showKnowledge(gas) {
+  if (gas === 'all') return; // Dismissing chart emphasis keeps the article being read.
+  for (const profile of profiles) profile.hidden = profile.dataset.gasProfile !== gas;
+  knowledge.dataset.knowledgeCurrent = gas;
+}
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const descriptions = {
   all: '',
@@ -72,7 +79,7 @@ function choose(gas, sourceShare) {
   detail.hidden = !expanded;
   connectorElement.toggleAttribute('hidden', !expanded);
   for (const trigger of detailTriggers) trigger.setAttribute('aria-expanded', String(expanded));
-  describe(); emphasize(); followConnector();
+  showKnowledge(gas); describe(); emphasize(); followConnector();
 }
 for (const button of controls) {
   button.disabled = false;
@@ -84,6 +91,14 @@ for (const button of controls) {
   button.addEventListener('pointerleave', () => { hovered = null; emphasize(); });
   button.addEventListener('focus', () => { focused = button.dataset.airGas; emphasize(); });
   button.addEventListener('blur', () => { focused = null; emphasize(); });
+}
+for (const button of section.querySelectorAll('[data-knowledge-gas]')) {
+  button.disabled = false;
+  button.addEventListener('click', () => {
+    choose(button.dataset.knowledgeGas);
+    // The chooser article is now hidden; keep focus on the equivalent visible legend.
+    controls.find(control => control.dataset.airGas === button.dataset.knowledgeGas).focus({ preventScroll: true });
+  });
 }
 for (const [index, share] of shares.entries()) {
   share.disabled = false;
@@ -120,7 +135,7 @@ for (const button of viewControls) {
 // Clicking away dismisses the selection without consuming the other action.
 document.addEventListener('click', event => {
   const control = event.target.closest('.air-share, [data-air-gas], [data-air-view]');
-  if ((control && section.contains(control)) || detail.contains(event.target)) return;
+  if ((control && section.contains(control)) || detail.contains(event.target) || knowledge.contains(event.target)) return;
   if (selected !== 'all' || section.dataset.emphasis !== 'all') choose('all');
 });
 section.addEventListener('keydown', event => {
@@ -130,6 +145,8 @@ section.addEventListener('keydown', event => {
   }
 });
 new ResizeObserver(followConnector).observe(panel);
+choose('nitrogen');
+knowledge.querySelector('.air-knowledge-hint').hidden = false;
 updateConnector();
 const links = [...document.querySelectorAll('.route a[href^="#"]')];
 const sections = links.map(link => document.querySelector(link.getAttribute('href')));

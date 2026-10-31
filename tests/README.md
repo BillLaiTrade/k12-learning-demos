@@ -383,7 +383,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 
 音叉專項新增音槌接觸後波形向右延伸、停止保留部分波形、重敲從左重畫、另一欄保留及重設清空。現行音叉使用連續向量叉股，位移由實際叉端螢幕座標核對。專項與整頁回歸合計20項通過（含外層）；見 docs/reviews/unit-3.3-card01-refinement/review.md。本輪尚未發布，不沿用舊公開版作為本次驗證。
 
-## 2.3 第三／五區：氮氣與氬氣介紹版
+## 2.3 第三／五區：氮氣與氬氣介紹版（歷史，已整合第二區）
 
 ```sh
 CHROMIUM_PATH=/usr/bin/chromium GAS_PROFILE_ARTIFACT_DIR=/tmp/unit23-gas-profiles AIR_FULL_ARTIFACT_DIR=/tmp/unit23-gas-profiles-full node --test --test-concurrency=1 tests/unit-2.3-nitrogen.test.cjs tests/unit-2.3-argon.test.cjs tests/unit-2.3-full.test.cjs
@@ -480,3 +480,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 ```
 
 檢查預設4秒、0.1–60秒與小數輸入、未完成／超界數字的處理、每段數值連動、四步推導及不提前揭示單程答案；量測真實4秒返回與最末音訊強度、同緩衝區原音和較弱回波、雙發聲入口、暫停續播、取消舊排程、跨區／背景停止、Enter／Space、真實觸控與減少動態。另驗1440–320px三種數字長度的版面、標示及44px熱區，保留既有標題和角色對話。`CALCULATION_URL`可指定以`/`結尾的公開頁，`CALCULATION_CAPTURE_DIR`可指定證據目錄，預設`/tmp/k12-34-calculation-verified`。公開檢查透過繼承HTTPS代理；音訊量測不取代使用者裝置實體聽感。
+## 2.3 第二區整合氣體知識與實驗重編（2026-10-31）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium GAS_PROFILE_ARTIFACT_DIR=/tmp/unit23-knowledge AIR_COMPOSITION_ARTIFACT_DIR=/tmp/unit23-knowledge-composition AIR_FULL_ARTIFACT_DIR=/tmp/unit23-knowledge-full node --test --test-concurrency=1 tests/unit-2.3-nitrogen.test.cjs tests/unit-2.3-argon.test.cjs tests/unit-2.3-oxygen-profile.test.cjs tests/unit-2.3-composition.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-report.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-knowledge-oxygen OXYGEN_THREE_ARTIFACT_DIR=/tmp/unit23-knowledge-three AIR_ARTIFACT_DIR=/tmp/unit23-knowledge-cup node --test --test-concurrency=1 tests/unit-2.3-oxygen-model.test.mjs tests/unit-2.3-oxygen.test.cjs tests/unit-2.3-oxygen-three.test.cjs tests/unit-2.3.test.cjs
+```
+
+前三個入口共用 `helpers/gas-profile.cjs`，現驗證第二區內的氮／氬／氧介紹，不再驗獨立03／05。檢查預設氮氣、原生點選／鍵盤／觸控切換、滑過不換內容、換排列與點空白保留閱讀、斜紋格先明確拆分、其餘不等同二氧化碳、三種科學措辭與用途照片實際解碼、七種寬度與無JS三份完整資料。`GAS_PROFILE_URL` 指定共同公開頁，`GAS_PROFILE_ARTIFACT_DIR`指定截圖位置；組成與整頁可另以 `AIR_COMPOSITION_URL`／`AIR_FULL_URL` 指向公開頁。
+
+整頁現驗證四教學＋一小測、五個有效導覽、兩實驗及杯子／小測回歸；小測模型逐項核對新回看位置。第二組另驗氧氣3D／SVG後備、暫停／繼續、無JS、木條共用時鐘、窄欄並列及杯子真實滑鼠／觸控拖曳保水。未復用舊編號通過紀錄。證據見 `docs/reviews/unit-2.3-composition-knowledge/`。
