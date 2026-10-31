@@ -1,6 +1,6 @@
 import { evaluateGasReport } from './air-report.mjs?v=properties-7';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-const players = [...document.querySelectorAll('[data-replay]:not(.oxygen-preparation)')].map(panel => {
+const players = [...document.querySelectorAll('[data-replay]:not(.oxygen-preparation):not(.co2-preparation)')].map(panel => {
   const steps = [...panel.querySelectorAll('[data-stage]')];
   const play = panel.querySelector('[data-play]'), pause = panel.querySelector('[data-pause]'), reset = panel.querySelector('[data-reset]'), status = panel.querySelector('.sequence-status');
   let timer = null, index = -1, state = 'overview';

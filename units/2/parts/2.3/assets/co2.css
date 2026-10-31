@@ -1,0 +1,39 @@
+/* All styles are scoped to section four. Reuse the lesson's fonts and colors. */
+#s4 .co2-preparation{margin-top:26px}
+#s4 .co2-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:18px 0}
+#s4 .co2-steps button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:58px;padding:10px 5px;border:1px solid #d6e0cf;border-radius:10px;background:#f5f8ef;color:#45664d;font:inherit;font-size:.8rem;cursor:pointer}
+#s4 .co2-steps button span{border-radius:50%;background:#e7eddf;width:25px;height:25px;display:grid;place-items:center;flex-shrink:0;font-size:.7rem}
+#s4 .co2-steps [aria-selected=true]{background:#e5eedb;border-color:#79966b;box-shadow:inset 0 -2px #79966b}
+#s4 .co2-step h3{font-size:1.12rem;margin:22px 0 8px;color:var(--ink)}
+#s4 .co2-lead{font-size:.88rem;color:var(--muted);line-height:1.9;margin:0 0 14px}
+#s4 .co2-material-scene{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:15px;border:1px solid #d9e1d2;border-radius:15px;background:radial-gradient(ellipse at center,#fffef9,#eceee5)}
+#s4 .co2-material-scene button{display:flex;flex-direction:column;align-items:center;min-width:0;padding:6px;border:2px solid transparent;border-radius:12px;background:transparent;color:#41604c;font:inherit;cursor:pointer}
+#s4 .co2-material-scene img{width:100%;height:175px;object-fit:contain;display:block;pointer-events:none}
+#s4 .co2-material-scene button>span{display:block;min-height:44px;padding:10px 7px;font-size:.84rem;font-weight:700;line-height:1.5}
+#s4 .co2-material-scene [aria-pressed=true]{border-color:#648b58;background:#e8efdfb3}
+#s4 .co2-material-details{border:1px solid #d5dfcd;background:#f7f9f0;border-radius:12px;margin-top:14px;padding:18px 22px}
+#s4 .co2-material-details h4{margin:0 0 12px;font-size:1rem;color:#3e6248}
+#s4 .co2-material-details dl,#s4 .co2-explanation{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:0}
+#s4 .co2-material-details dt,#s4 .co2-explanation dt{font-size:.84rem;font-weight:750;color:#47694d;margin-bottom:7px}
+#s4 .co2-material-details dd,#s4 .co2-explanation dd{margin:0;color:var(--muted);font-size:.85rem;line-height:1.9}
+#s4 .co2-apparatus{margin:14px 0;border:1px solid #d3ddcf;border-radius:15px;overflow:hidden;background:linear-gradient(135deg,#f1f0e8,#fbfaf6 52%,#e7e8df);box-shadow:0 5px 18px #344a2908}
+#s4 .co2-apparatus svg{display:block;width:100%;height:auto}
+#s4 .co2-apparatus text{font-family:inherit;fill:#3d5e4e;font-size:22px;paint-order:stroke;stroke:#fffdf7;stroke-width:5px;stroke-linejoin:round}
+#s4 .co2-closeup{display:none}
+#s4 .co2-scene-note{border-top:1px solid #dbe2d5;padding:12px 16px;margin:0;background:#fcfdf8;color:#4a674f;font-size:.82rem;line-height:1.8}
+#s4 .co2-explanation{padding:17px 20px;border:1px solid #dce3d4;border-radius:12px;background:#fafbf6}
+#s4 .co2-reminder{font-size:.79rem;line-height:1.9;color:#706d54;background:#f8f5e9;border-left:3px solid #cabd8c;padding:10px 14px;margin:14px 0}
+#s4 .co2-assembly-phases{display:flex;gap:9px;flex-wrap:wrap;padding:0;list-style:none;margin:14px 0;font-size:.8rem;color:#6a7e63}
+#s4 .co2-assembly-phases li{padding:6px 10px;background:#f0f3e8;border-radius:7px}
+#s4 .co2-assembly-phases .is-current{color:#345b3f;background:#dfebd6;box-shadow:inset 0 -2px #79956a}
+#s4 .co2-controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;border-top:1px solid #dce3d5;padding-top:17px;margin-top:20px}
+#s4 .co2-controls button{min-height:44px;padding:9px 15px;border:1px solid #bdccb3;border-radius:9px;background:#fffef9;font:inherit;font-size:.82rem;color:#41674e;cursor:pointer}
+#s4 .co2-controls [data-play]{color:#fff;background:#426b50;border-color:#426b50}
+#s4 .co2-controls [data-co2-count]{font-size:.78rem;color:#71836a;margin-left:auto}
+#s4 .co2-status{font-size:.82rem;color:#53714f;line-height:1.8;min-height:1.8em;margin:12px 0}
+#s4 .co2-science-note{font-size:.77rem;color:var(--muted);line-height:1.9}
+#s4 .co2-preparation button:disabled{opacity:.45;cursor:default}
+#s4 .co2-preparation button:focus-visible{outline:3px solid #bf9137;outline-offset:3px}
+#s4 .co2-step[hidden],#s4 [data-co2-info][hidden]{display:none}
+@container(max-width:650px){#s4 .co2-steps{grid-template-columns:repeat(3,minmax(0,1fr))}#s4 .co2-steps button{font-size:.76rem}#s4 .co2-material-scene img{height:135px}}
+@container(max-width:510px){#s4 .co2-material-scene{grid-template-columns:repeat(2,minmax(0,1fr));padding:8px;gap:5px}#s4 .co2-material-scene img{height:115px}#s4 .co2-material-scene button>span{font-size:.79rem;padding:8px 3px}#s4 .co2-material-details{padding:15px}#s4 .co2-material-details dl,#s4 .co2-explanation{grid-template-columns:1fr;gap:14px}#s4 .co2-explanation{padding:15px}#s4 .co2-steps{gap:5px}#s4 .co2-steps button{flex-direction:column;gap:3px;padding:8px 3px;min-height:66px}#s4 .co2-closeup{display:block;border-top:1px solid #dce3d5;background:#f7f8f0}#s4 .co2-closeup>p{margin:9px 12px;font-size:.76rem;color:#54714e}#s4 .co2-controls{gap:7px}#s4 .co2-controls button{padding:8px 10px;font-size:.78rem}#s4 .co2-controls [data-co2-count]{width:100%;text-align:right}}

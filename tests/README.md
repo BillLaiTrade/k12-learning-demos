@@ -610,3 +610,12 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_MATERIALS_ARTIFACT_DIR=/tmp/unit23-materi
 本機48項全通過、零失敗／略過（含外層）：材料介紹10、五步／木條11、材質場景8、整頁9、性質比較10。材料專項驗證七個原生控制、照片本體座標實際命中、標籤／Enter／空白、兩段介紹與ARIA連結、點選停止可選導覽並保留選擇、離開後返回、七寬度最小44px目標／不溢出、真實觸控／減少動態、氧氣來源與催化劑／排氣／水下蓋片界線及無JS完整可讀。專項不取代其他教材的拖曳或氣體知識卡完整測試。
 
 `OXYGEN_MATERIALS_URL` 可指定公開完整網址，`OXYGEN_MATERIALS_ARTIFACT_DIR`保存七項在1440／390／320px的畫面。其餘URL沿用各測試；公開頁材料＋氧氣＋整頁可跑30項。紀錄見 `docs/reviews/unit-2.3-material-exploration/`。
+
+
+## 2.3 第四區：二氧化碳五步製備與收集
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.3-co2-model.test.mjs tests/unit-2.3-co2.test.cjs
+```
+
+17項（含外層）：六材料本體／標籤點選與持續介紹、組裝放石塊／倒酸／封塞、瓶外排氣、導管由瓶口上方移至底部、撤管先於蓋片及標示、獨立時鐘／暫停像素／快速切步、鍵盤焦點、跨實驗互停、七種寬度、共用SVG近景、觸控與減少動態、無JS。`CO2_URL`指定公開完整2.3頁（以/結尾）；`CO2_ARTIFACT_DIR`指定當次截圖位置，預設/tmp/unit23-co2。科學及製作紀錄見docs/reviews/unit-2.3-co2-steps/。第三區及第五區沿用各自專項；歷史四步重播已由五步取代，不代表整份歷史測試均已重跑。

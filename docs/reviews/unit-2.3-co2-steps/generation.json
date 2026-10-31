@@ -1,0 +1,17 @@
+{
+  "generator": "image_gen",
+  "source": "/workspace/generated_images/exec-9705ce6f-4bf9-45b3-b19a-740dcdcddd24.png",
+  "source_sha256": "f08a3458c1fe59204f49adb4bb9d5a5fded4464367bd3d3946ba761e526b2631",
+  "layout": "3 columns x 2 rows, 512px cells, transparent PNG",
+  "processing": "ImageMagick: crop each 512px cell, resize 440px, WebP quality 86",
+  "cells": [
+    "flask",
+    "jar",
+    "acid",
+    "marble",
+    "tube",
+    "plate"
+  ],
+  "purpose": "Generated teaching material textures, not laboratory photographs. Text remains HTML; effects remain SVG.",
+  "reused_open_bottle": "oxygen-peroxide-open.webp is an unlabelled open glass bottle texture; only its shape is reused for dilute hydrochloric acid, not its chemical identity."
+}

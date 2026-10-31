@@ -1,0 +1,26 @@
+✔ assembly orders marble, acid, sealing and gas delivery (1.263542ms)
+✔ purging keeps the outlet outside the collection jar (0.297316ms)
+✔ tube crosses above the mouth before entering; collecting begins only after reaching the base (1.421908ms)
+✔ withdrawal precedes the cover and sample label; the reaction outlet stays open (0.72721ms)
+▶ 2.3 carbon dioxide: materials, assembly, purging, upward air displacement and storage
+  ✔ initial state shows only preparation and one persistent introduction; no autoplay or property experiments (360.168906ms)
+  ✔ all six actual object images and labels select their own accessible identity and role (915.194845ms)
+  ✔ manual selection cancels the optional tour and survives leaving preparation (193.356981ms)
+  ✔ assembly really adds marble then acid, reacts before sealing, and only then directs gas through the tube (907.58527ms)
+  ✔ purging stays outside; collection moves tube into an open upright jar and never animates a water level (672.069863ms)
+  ✔ withdrawal finishes before the glass cover moves and the sample is labeled (969.79508ms)
+  ✔ one control pauses pixels, resumes time, replays; rapid step changes cancel the old frame clock (732.729301ms)
+  ✔ native keyboard controls, roving step tabs and panel focus remain accessible (1079.157005ms)
+  ✔ background, leaving the block and oxygen or properties playback pause without automatic restart (293.586339ms)
+  ✔ all five steps fit seven widths; mobile closeups share the same animated scene (5860.538693ms)
+  ✔ real touch and reduced motion retain selection and manually requested essential animation (1517.195108ms)
+  ✔ no JavaScript leaves all five representative scenes and all six material introductions readable (1023.457484ms)
+✔ 2.3 carbon dioxide: materials, assembly, purging, upward air displacement and storage (16067.223729ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16500.255409
