@@ -1,0 +1,49 @@
+▶ 2.1 static image pairs and retained particle transitions
+  ✔ 1920×1080 melt: two fixed photos; particles still transform (2656.7298ms)
+  ✔ 1920×1080 freeze: two fixed photos; particles still transform (3374.328161ms)
+  ✔ 1920×1080 vaporization: two fixed photos; particles still transform (3614.786146ms)
+  ✔ 1920×1080 condensation: two fixed photos; particles still transform (2896.379475ms)
+  ✔ 1920×1080 sublimation: two fixed photos; particles still transform (3627.546725ms)
+  ✔ 1920×1080 deposition: two fixed photos; particles still transform (3334.744225ms)
+  ✔ 1440×900 melt: two fixed photos; particles still transform (3186.927097ms)
+  ✔ 1440×900 freeze: two fixed photos; particles still transform (2890.330604ms)
+  ✔ 1440×900 vaporization: two fixed photos; particles still transform (3105.861349ms)
+  ✔ 1440×900 condensation: two fixed photos; particles still transform (3105.202762ms)
+  ✔ 1440×900 sublimation: two fixed photos; particles still transform (3309.259725ms)
+  ✔ 1440×900 deposition: two fixed photos; particles still transform (3418.024568ms)
+  ✔ 1366×768 melt: two fixed photos; particles still transform (3269.949798ms)
+  ✔ 1366×768 freeze: two fixed photos; particles still transform (3590.633906ms)
+  ✔ 1366×768 vaporization: two fixed photos; particles still transform (3284.355399ms)
+  ✔ 1366×768 condensation: two fixed photos; particles still transform (3695.073616ms)
+  ✔ 1366×768 sublimation: two fixed photos; particles still transform (3176.527989ms)
+  ✔ 1366×768 deposition: two fixed photos; particles still transform (3658.09282ms)
+  ✔ 1280×800 melt: two fixed photos; particles still transform (3073.483999ms)
+  ✔ 1280×800 freeze: two fixed photos; particles still transform (3106.815368ms)
+  ✔ 1280×800 vaporization: two fixed photos; particles still transform (3161.045543ms)
+  ✔ 1280×800 condensation: two fixed photos; particles still transform (3059.428345ms)
+  ✔ 1280×800 sublimation: two fixed photos; particles still transform (3243.802458ms)
+  ✔ 1280×800 deposition: two fixed photos; particles still transform (3362.143968ms)
+  ✔ 1024×768 melt: two fixed photos; particles still transform (3145.82915ms)
+  ✔ 1024×768 freeze: two fixed photos; particles still transform (3247.123904ms)
+  ✔ 1024×768 vaporization: two fixed photos; particles still transform (3035.477882ms)
+  ✔ 1024×768 condensation: two fixed photos; particles still transform (3179.343525ms)
+  ✔ 1024×768 sublimation: two fixed photos; particles still transform (3367.388575ms)
+  ✔ 1024×768 deposition: two fixed photos; particles still transform (3378.238419ms)
+  ✔ all six replay buttons restart only the particle transition (18832.837053ms)
+  ✔ rapid switching cancels the previous particle transition and selects the right pair (4258.862169ms)
+  ✔ leaving the lesson pauses particles; returning resumes without changing photos (2353.201472ms)
+  ✔ all twelve overview routes retain their particle flow and select static pairs (4916.566013ms)
+  ✔ reduced motion retains particle teaching animation and fixed photographs (11857.162046ms)
+  ✔ share link selects photographs and runs particles without manual scrolling (2858.323464ms)
+  ✔ small screens keep both photos readable without overflow (2153.877079ms)
+  ✔ source page and image production records are available (13.430143ms)
+  ✔ no script or asset failures (0.192139ms)
+✔ 2.1 static image pairs and retained particle transitions (149846.194334ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 150229.41793

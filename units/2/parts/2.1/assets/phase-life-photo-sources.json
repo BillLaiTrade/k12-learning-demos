@@ -139,57 +139,48 @@
     ]
   },
   "condensation": {
-    "source_title": "乾燥草葉與清晨露珠（分別取材）",
-    "source_type": "independent_photographs",
-    "license": "Pexels License",
-    "license_url": "https://www.pexels.com/license/",
-    "changes": "兩張分別取材的實拍照片作凝結前後示意，不是同一片草葉的連拍。僅等比例縮小及轉存 WebP，無生成、重繪或合成。",
+    "source_type": "ai_generated_photorealistic_illustration",
+    "source_title": "凝結：乾燥草葉與晨露（寫實示意圖）",
+    "generator": "OpenAI image generation",
+    "generation_date": "2026-10-31",
+    "source_artifact": "docs/reviews/unit-2.1-condensation-generated/approved-comparison.png",
+    "source_artifact_sha256": "70b684c42939d31a2bfb7980c2c60932a8b683e844a66525411e496ba8d9ef6d",
+    "source_dimensions": [
+      1536,
+      1024
+    ],
+    "prompt_summary": "固定同一片寬草葉的角度、葉脈、背景與光線。左圖葉面乾燥，右圖葉面分布透明液態露珠，呈現空氣中的不可見水蒸氣在較冷葉面凝結；不畫雨水、霜雪、可見氣體或只集中於葉尖的吐水。",
+    "changes": "依使用者核可的雙欄生成原圖拆成前後兩張，僅去除中央留白並轉存WebP，沒有重繪核可內容。",
+    "disclosure": "AI生成的寫實示意，不是真實拍攝或同次實驗紀錄。",
+    "selection_status": "使用者已核可草葉晨露版並依序套用；下一組昇華須先生成候選，待核可後才套用。",
     "photos": [
       {
         "file": "phase-photo-condensation-before.webp",
-        "source_title": "Green Grass in Close Up Photography",
-        "source_page": "https://www.pexels.com/photo/green-grass-in-close-up-photography-8967697/",
-        "author": "Alberta Studios",
-        "license": "Pexels License",
-        "license_url": "https://www.pexels.com/license/",
-        "image_url": "https://images.pexels.com/photos/8967697/pexels-photo-8967697.jpeg?auto=compress&cs=tinysrgb&w=1440",
-        "downloaded_sha256": "2ee086f2852e6ed93b0f99ab1630fe7cc8268c642237ce448cf7cc0470490f4b",
-        "source_dimensions": [
-          4164,
-          4000
-        ],
-        "input_dimensions": [
-          1440,
-          1383
+        "crop": [
+          0,
+          0,
+          762,
+          1024
         ],
         "output_dimensions": [
-          960,
-          922
+          762,
+          1024
         ],
-        "sha256": "7d05162ad4854d5284e96c3c0f8ec9c3a4f3060211942f6d20b86e75bcc5e935"
+        "sha256": "ba8c986ce64878c05743a10929857c3ac2f6934f742575fe2a4310ca3937d5a7"
       },
       {
         "file": "phase-photo-condensation-after.webp",
-        "source_title": "Grass in Dew",
-        "source_page": "https://www.pexels.com/photo/grass-in-dew-15149665/",
-        "author": "Devyn Breslin",
-        "license": "Pexels License",
-        "license_url": "https://www.pexels.com/license/",
-        "image_url": "https://images.pexels.com/photos/15149665/pexels-photo-15149665.jpeg?auto=compress&cs=tinysrgb&w=1440",
-        "downloaded_sha256": "5fd07c4ef29837a5e7681d024e43a23a8d697af119b502a4cc1a3568a112ca72",
-        "source_dimensions": [
-          4000,
-          6000
-        ],
-        "input_dimensions": [
-          1440,
-          2160
+        "crop": [
+          774,
+          0,
+          1536,
+          1024
         ],
         "output_dimensions": [
-          640,
-          960
+          762,
+          1024
         ],
-        "sha256": "71f47f128a616d21388fae8952b5e9f39c690f9c860df3b4999738977aa9cb41"
+        "sha256": "6d4fa3636f2ab744b273b424787ce870e92e94970d3e9158069b9731d90f3ada"
       }
     ]
   },

@@ -9,11 +9,11 @@
     melt: {illustration:true, title:'冰塊融化', copy:'冰塊吸熱融化，變成杯中的液態水。', alt:['寫實生成示意：透明短杯中放著一塊冰','寫實生成示意：同款透明短杯中，冰塊完全融成液態水']},
     freeze: {illustration:true, title:'杯中的水凝固', copy:'水放熱凝固，在杯中形成固態冰。', alt:['寫實生成示意：透明短杯中的液態水','寫實生成示意：水在同款短杯內凝固成符合杯形的冰']},
     vaporization: {illustration:true, title:'地磚積水蒸發', copy:'地磚表面的積水蒸發，變成看不見的水蒸氣。', alt:['寫實生成示意：不吸水的地磚表面有一灘水','寫實生成示意：同一處積水蒸發後，地磚表面變乾']},
-    condensation: {title:'清晨草葉上的露水', copy:'清晨草葉表面較冷，空氣中的水蒸氣遇冷凝結，形成小露珠。', alt:['表面乾燥、尚未出現明顯露珠的綠色草葉，凝結前示意','綠色草葉表面布滿透明露珠，凝結後示意']},
+    condensation: {illustration:true, title:'清晨草葉上的露水', copy:'清晨草葉表面較冷，空氣中的水蒸氣遇冷凝結，形成小露珠。', alt:['寫實生成示意：同一片綠色草葉的乾燥表面','寫實生成示意：空氣中的水蒸氣凝結後，草葉表面布滿透明露珠']},
     sublimation: {title:'水冰直接昇華', copy:'火星探測器實拍：同一位置的水冰小塊，四天後已昇華消失。', alt:['火星土壤中可見淺色水冰小塊，攝於2008年6月15日','同一位置的水冰小塊四天後已消失，攝於2008年6月19日']},
     deposition: {title:'冰面長出霜晶', copy:'低溫實驗中，水蒸氣在同一冰面形成新的霜晶。', alt:['冰珠表面尚未長出明顯霜晶','同一冰珠表面長出許多枝狀霜晶']}
   };
-  const photoVersions = {melt:'20261031-melt-generated1', freeze:'20261031-freeze-generated1', vaporization:'20261031-vaporization-generated1', condensation:'20261031-dew1'};
+  const photoVersions = {melt:'20261031-melt-generated1', freeze:'20261031-freeze-generated1', vaporization:'20261031-vaporization-generated1', condensation:'20261031-condensation-generated1'};
   const url = (key, side) => new URL(`phase-photo-${key}-${side}.webp${photoVersions[key] ? `?v=${photoVersions[key]}` : ''}`, base).href;
   let ready = false;
   const readyPromise = Promise.all(Object.keys(scenes).flatMap(key => ['before','after'].map(side => {
