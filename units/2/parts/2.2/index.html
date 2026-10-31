@@ -102,8 +102,9 @@
     .filter-hotspot.sample {left:22%;top:93.5%;}
     .filter-hotspot.filter {left:65%;top:36%;}
     .filter-hotspot.result {left:64%;top:78%;}
-    #filter-status {display:block;min-height:0;text-align:center;color:#52635d;font-size:.8rem;}
-    #filter-status:empty {display:none;}
+    #filter-status {display:flex;align-items:center;justify-content:center;gap:6px;margin:6px 0 12px;text-align:center;color:#176b53;font-size:.8rem;line-height:1.5;}
+    #filter-status[hidden] {display:none;}
+    #filter-status svg {width:17px;height:20px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round;}
     .filter-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; margin:0 0 12px; padding:0; list-style:none; }
     .filter-steps li { min-width:0; padding:12px; border:1px solid var(--line); border-radius:12px; background:#fff; }
     .filter-steps b { display:block; margin-bottom:4px; color:var(--green); font-size:.84rem; }
@@ -190,13 +191,13 @@
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>泥沙混在水裡，要怎麼把它們分開？</p></div>
           <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們用濾紙試試看，觀察泥沙和水各自去了哪裡。</p></div>
           <div class="filter-animation" id="filter-animation" role="group" aria-label="泥沙水經過濾紙的連續動畫；點擊畫面開始，完成後可點濾紙或濾液放大觀察">
-            <button class="filter-play" id="filter-play" type="button" aria-label="播放過濾動畫" disabled><canvas id="filter-canvas" width="1672" height="941" role="img" aria-label="桌上的泥沙水杯、乾淨濾紙與空接液杯；點擊開始過濾。"></canvas></button>
+            <button class="filter-play" id="filter-play" type="button" aria-label="播放過濾動畫" aria-describedby="filter-status" disabled><canvas id="filter-canvas" width="1672" height="941" role="img" aria-label="桌上的泥沙水杯、乾淨濾紙與空接液杯；點擊開始過濾。"></canvas></button>
             <span class="filter-hotspot sample" data-filter-label="sample">樣本</span>
             <button class="filter-hotspot filter" data-filter-label="filter" type="button" aria-label="放大觀察濾紙上的泥沙" aria-haspopup="dialog" aria-controls="filter-observation" disabled>濾紙</button>
             <button class="filter-hotspot result" data-filter-label="result" type="button" aria-label="放大觀察濾液" aria-haspopup="dialog" aria-controls="filter-observation" disabled>接液杯</button>
             <span class="filter-play-cue" aria-hidden="true"><svg class="filter-start-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg><svg class="filter-replay-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></span>
           </div>
-          <span id="filter-status" role="status"></span>
+          <span id="filter-status" role="status" hidden><svg viewBox="0 0 24 28" aria-hidden="true"><path d="M4 3v18l5-5 4 9 4-2-4-9h7Z"/></svg><span id="filter-instruction"></span></span>
           <dialog class="filter-observation" id="filter-observation" aria-labelledby="filter-observation-title" aria-describedby="filter-observation-copy">
             <header><h3 id="filter-observation-title">放大觀察</h3><button class="filter-observation-close" id="filter-observation-close" type="button" aria-label="關閉觀察" autofocus>×</button></header>
             <canvas id="filter-observation-canvas" width="760" height="560" role="img"></canvas>
@@ -394,7 +395,7 @@
 
   </script>
   <script type="importmap">{"imports":{"three":"../../../4/parts/4.1/assets/vendor/three/build/three.module.js"}}</script>
-  <script type="module" src="assets/filtration.js?v=result-observation-3"></script>
+  <script type="module" src="assets/filtration.js?v=click-guidance-1"></script>
   <script type="module" src="assets/evaporation-animation.js?v=full-replay-1"></script>
   <script type="module" src="assets/chromatography.js?v=state-guidance-1"></script>
   <script type="module" src="assets/concentration.js?v=outside-clear-1"></script>

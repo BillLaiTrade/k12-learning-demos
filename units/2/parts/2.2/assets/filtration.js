@@ -1,6 +1,8 @@
 import {CUP,cupTransfer,drawCup,drawJet} from './cup-transfer.js?v=review-5';
 import {loadPicture} from './investigation-renderer.js?v=review-5';
 const root=document.getElementById('filter-animation'),button=document.getElementById('filter-play'),canvas=document.getElementById('filter-canvas'),status=document.getElementById('filter-status');
+const instruction=document.getElementById('filter-instruction');
+function showInstruction(text){instruction.textContent=text;status.hidden=!text;}
 const ctx=canvas.getContext('2d'),duration=2000,scale=1.6;
 const sampleMarker=root.querySelector('[data-filter-label=sample]'),filterMarker=root.querySelector('[data-filter-label=filter]'),resultMarker=root.querySelector('[data-filter-label=result]');
 const observation=document.getElementById('filter-observation'),observationCanvas=document.getElementById('filter-observation-canvas');
@@ -44,8 +46,8 @@ function draw(t){
  ctx.save();ctx.scale(scale,scale);drawCup(ctx,glass,f,1);drawJet(ctx,f.stream,true,6);drawJet(ctx,f.outlet,false,4);ctx.restore();
  root.dataset.progress=t.toFixed(4);root.dataset.source=f.source.toFixed(6);root.dataset.received=f.received.toFixed(6);root.dataset.retained=f.arrived.toFixed(6);root.dataset.state=t>=1?'complete':playing?'playing':'ready';
 }
-function tick(now){if(!playing)return;elapsed=Math.max(0,Math.min(duration,now-started));draw(elapsed/duration);if(elapsed<duration)frame=requestAnimationFrame(tick);else{playing=false;button.setAttribute('aria-label','重新播放過濾動畫');status.textContent='點濾紙或濾液，放大觀察。';}}
-function play(){if(!background||!glass)return;if(observation.open)observation.close();cancelAnimationFrame(frame);delete root.dataset.paused;elapsed=0;playing=true;started=performance.now();status.textContent='';button.setAttribute('aria-label','從頭播放過濾動畫');draw(0);frame=requestAnimationFrame(tick);}
+function tick(now){if(!playing)return;elapsed=Math.max(0,Math.min(duration,now-started));draw(elapsed/duration);if(elapsed<duration)frame=requestAnimationFrame(tick);else{playing=false;button.setAttribute('aria-label','重新播放過濾動畫');showInstruction('點濾紙或濾液，放大觀察');}}
+function play(){if(!background||!glass)return;if(observation.open)observation.close();cancelAnimationFrame(frame);delete root.dataset.paused;elapsed=0;playing=true;started=performance.now();showInstruction('');button.setAttribute('aria-label','從頭播放過濾動畫');draw(0);frame=requestAnimationFrame(tick);}
 function observe(kind){
  if(root.dataset.state!=='complete')return;
  const detail=observations[kind];observationTitle.textContent=detail.title;observationCopy.textContent=detail.copy;
@@ -67,5 +69,5 @@ button.addEventListener('click',event=>{
  play();
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden){if(playing){cancelAnimationFrame(frame);playing=false;root.dataset.paused='true';}}else if(root.dataset.paused==='true'){delete root.dataset.paused;playing=true;started=performance.now()-elapsed;frame=requestAnimationFrame(tick);}});
-async function load(){try{button.disabled=true;[background,glass]=await Promise.all([loadPicture(new URL('filtration-empty.webp',import.meta.url)),loadPicture(new URL('concentration-beaker.webp',import.meta.url))]);root.dataset.ready='true';button.disabled=false;status.textContent='';elapsed=0;playing=false;button.setAttribute('aria-label','播放過濾動畫');draw(0);}catch{root.dataset.ready='error';status.textContent='過濾畫面無法載入，請點此重試。';status.onclick=load;}}
+async function load(){try{button.disabled=true;[background,glass]=await Promise.all([loadPicture(new URL('filtration-empty.webp',import.meta.url)),loadPicture(new URL('concentration-beaker.webp',import.meta.url))]);root.dataset.ready='true';button.disabled=false;status.onclick=null;showInstruction('點圖片任意處，觀察過濾過程');elapsed=0;playing=false;button.setAttribute('aria-label','播放過濾動畫');draw(0);}catch{root.dataset.ready='error';showInstruction('過濾畫面無法載入，請點此重試。');status.onclick=load;}}
 load();
