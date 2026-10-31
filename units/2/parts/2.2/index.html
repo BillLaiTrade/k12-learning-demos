@@ -294,27 +294,27 @@
         <div class="card-main lesson-body">
 <p>當溶質占溶液的比例很小時，可以用 ppm 表示。以質量計算時，1 ppm 表示每 100 萬克溶液中含有 1 克溶質。</p>
 <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，除了百分濃度，還有其他表示濃度的方法嗎？</p></div>
-<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>有啊！我們來想像，把少量的食鹽放進一整座泳池裡，看看可以怎麼用 ppm 表示。</p></div>
+<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>有啊！我們來想像，把少量的糖放進一整座泳池裡，看看可以怎麼用 ppm 表示。</p></div>
 <div class="ppm-observation" id="ppm-lab" data-ready="loading" aria-label="整池水與微量溶質的ppm計算">
 <figure class="pool-volume-figure">
 <div class="pool-volume-scene pool-geometry-scene">
-<canvas id="pool-geometry-canvas" width="1280" height="800" role="img" tabindex="0" aria-describedby="pool-model-hint" aria-label="可旋轉、縮放的泳池與100克食鹽3D比例模型。方向鍵旋轉，加減鍵縮放，Home鍵回到全景。泳池長10公尺、寬5公尺、水深2公尺，共100000公升。"></canvas>
+<canvas id="pool-geometry-canvas" width="1280" height="800" role="img" tabindex="0" aria-describedby="pool-model-hint" aria-label="可旋轉、縮放的泳池與100克糖3D比例模型。方向鍵旋轉，加減鍵縮放，Home鍵回到全景。泳池長10公尺、寬5公尺、水深2公尺，共100000公升。"></canvas>
 <div class="pool-water-quantity"><span>池水容積模型</span><strong>100,000 <small>公升</small></strong></div>
 <svg class="pool-quantity-guide" aria-hidden="true"><defs><marker id="pool-dimension-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#456c6b"/></marker></defs><line data-dimension-line="length"/><line data-dimension-line="width"/><line data-dimension-line="depth"/><line data-salt-leader/></svg>
 <span class="pool-dimension-label" data-dimension-label="length">10 公尺</span><span class="pool-dimension-label" data-dimension-label="width">5 公尺</span><span class="pool-dimension-label" data-dimension-label="depth">水深 2 公尺</span>
-<button type="button" class="pool-salt-source" data-pool-camera="salt" aria-label="靠近食鹽，觀察100克食鹽" hidden disabled><span class="pool-salt-source-label" data-salt-mass-label>食鹽 100 克</span></button>
-<span class="pool-salt-close-label" data-salt-mass-label hidden>食鹽 100 克</span>
-<button type="button" class="pool-camera-toggle" data-pool-camera="salt" disabled><svg data-pool-toggle-icon="salt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><svg data-pool-toggle-icon="pool" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="m9 5-6 6 6 6M3 11h11a6 6 0 0 1 6 6v3"/></svg><span data-pool-toggle-label>靠近食鹽</span></button>
+<button type="button" class="pool-salt-source" data-pool-camera="salt" aria-label="靠近糖，觀察100克糖" hidden disabled><span class="pool-salt-source-label" data-salt-mass-label>糖 100 克</span></button>
+<span class="pool-salt-close-label" data-salt-mass-label hidden>糖 100 克</span>
+<button type="button" class="pool-camera-toggle" data-pool-camera="salt" disabled><svg data-pool-toggle-icon="salt" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><svg data-pool-toggle-icon="pool" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="m9 5-6 6 6 6M3 11h11a6 6 0 0 1 6 6v3"/></svg><span data-pool-toggle-label>靠近糖</span></button>
 </div>
 <p class="visually-hidden" id="pool-model-hint">拖曳旋轉・點選模型後滾輪縮放</p>
 </figure>
-<div class="pool-mass-comparison"><div class="pool-water-mass"><span>池水質量</span><strong class="pool-water-units"><span>100,000,000 <small>克</small></span><span>＝ 100,000 <small>公斤</small></span><span>＝ 100 <small>公噸</small></span></strong><small>100,000 公升 ≈ 100,000 公斤</small></div><span class="pool-mass-plus" aria-hidden="true">＋</span><div class="pool-added-mass"><span>溶質｜食鹽</span><strong data-pool="solute">100 克</strong><small>與池水使用相同單位</small></div></div>
+<div class="pool-mass-comparison"><div class="pool-water-mass"><span>池水質量</span><strong class="pool-water-units"><span>100,000,000 <small>克</small></span><span>＝ 100,000 <small>公斤</small></span><span>＝ 100 <small>公噸</small></span></strong><small>100,000 公升 ≈ 100,000 公斤</small></div><span class="pool-mass-plus" aria-hidden="true">＋</span><div class="pool-added-mass"><span>溶質｜糖</span><strong data-pool="solute">100 克</strong><small>與池水使用相同單位</small></div></div>
 <p class="pool-total-line">溶液總質量 ＝ 池水 ＋ 溶質 ＝ <strong data-pool="total">100,000,100 克</strong></p>
 <p class="pool-volume-note">水的密度以 1 公斤／公升估算；本例假設溶質完全溶解、沒有損失。</p>
 <section class="ppm-explanation pool-calculation" id="ppm-percent-bridge" aria-labelledby="ppm-bridge-title">
 <header class="pool-calculation-head">
 <h3 id="ppm-bridge-title">這一池水的濃度是多少？</h3>
-<p>100,000 公升池水，加入 100 克食鹽。</p>
+<p>100,000 公升池水，加入 100 克糖。</p>
 </header>
 <div class="ppm-shared pool-calculation-section">
 <h4 class="pool-section-title"><span aria-hidden="true">01</span>計算公式</h4>
@@ -323,11 +323,11 @@
 </div>
 <div class="ppm-example pool-calculation-section">
 <h4 class="pool-section-title"><span aria-hidden="true">02</span>代入這個例子</h4>
-<p class="pool-example-masses"><span>池水 100,000,000 克</span><span aria-hidden="true">＋</span><span>食鹽 <span data-pool="solute">100 克</span></span><span aria-hidden="true">＝</span><span>溶液 <span data-pool="total">100,000,100 克</span></span></p>
+<p class="pool-example-masses"><span>池水 100,000,000 克</span><span aria-hidden="true">＋</span><span>糖 <span data-pool="solute">100 克</span></span><span aria-hidden="true">＝</span><span>溶液 <span data-pool="total">100,000,100 克</span></span></p>
 <div class="pool-worked-formula" role="math" id="pool-worked-formula" aria-label="100克除以100000100克，再乘以一百萬，約為1ppm"><span>ppm ＝</span><span class="fraction"><span class="num" data-ppm="numerator">100 克</span><span class="den" data-ppm="denominator">100,000,100 克</span></span><span>× 1,000,000</span></div>
 <div class="pool-result-arrow" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M12 2v23M4 17l8 8 8-8"/></svg></div>
 <strong class="pool-ppm-result" data-ppm="ppm">≈ 1 ppm</strong>
-<p class="pool-million-meaning" data-pool="meaning">每 100 萬克這樣的鹽水中，約含有 <strong data-pool="meaning-part">1 克</strong>食鹽。</p>
+<p class="pool-million-meaning" data-pool="meaning">每 100 萬克這樣的糖水中，約含有 <strong data-pool="meaning-part">1 克</strong>糖。</p>
 </div>
 <div class="pool-calculation-section pool-percentage-bridge" id="ppm-percentage-bridge">
 <h4 class="pool-section-title"><span aria-hidden="true">03</span>接回百分濃度</h4>
@@ -400,7 +400,7 @@
   <script type="module" src="assets/evaporation-animation.js?v=full-replay-1"></script>
   <script type="module" src="assets/chromatography.js?v=observation-dialogue-1"></script>
   <script type="module" src="assets/concentration.js?v=outside-clear-1"></script>
-  <script type="module" src="assets/ppm-pool.js?v=camera-toggle-1"></script>
+  <script type="module" src="assets/ppm-pool.js?v=sugar-pool-1"></script>
   <script type="module" src="assets/investigation.js?v=fresh-sample-1"></script>
 </body>
 </html>

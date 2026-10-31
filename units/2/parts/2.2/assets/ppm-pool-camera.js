@@ -36,7 +36,7 @@ export function createPoolNavigation(root,camera,canvas,source,redraw){
   function setFraming(name){
     root.dataset.cameraFraming=name;
     const next=name==='salt'?'pool':'salt';toggle.dataset.poolCamera=next;
-    toggle.querySelector('[data-pool-toggle-label]').textContent=next==='salt'?'靠近食鹽':'看整座泳池';
+    toggle.querySelector('[data-pool-toggle-label]').textContent=next==='salt'?'靠近糖':'看整座泳池';
     for(const icon of toggle.querySelectorAll('[data-pool-toggle-icon]'))icon.toggleAttribute('hidden',icon.dataset.poolToggleIcon!==next);
   }
   function updateFraming(){

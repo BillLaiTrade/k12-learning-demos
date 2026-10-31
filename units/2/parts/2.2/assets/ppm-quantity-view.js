@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {RoomEnvironment} from '../../../../1/parts/1.1/assets/vendor/three/examples/jsm/environments/RoomEnvironment.js';
-import {POOL,SALT,saltPortion} from './ppm-quantity-model.js?v=polish-1';
-import {createPoolNavigation,overviewPose} from './ppm-pool-camera.js?v=camera-toggle-1';
+import {POOL,SALT,saltPortion} from './ppm-quantity-model.js?v=sugar-pool-1';
+import {createPoolNavigation,overviewPose} from './ppm-pool-camera.js?v=sugar-pool-1';
 
 export function createQuantityView(root){
   const stage=root.querySelector('.pool-volume-scene'),canvas=root.querySelector('#pool-geometry-canvas');
@@ -203,7 +203,7 @@ function makeTile(){
   const texture=new THREE.CanvasTexture(canvas);texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;return texture;
 }
 function metrics(root,p){
-  for(const label of root.querySelectorAll('[data-salt-mass-label]'))label.textContent=`食鹽 ${p.massG.toLocaleString('en-US')} 克`;
+  for(const label of root.querySelectorAll('[data-salt-mass-label]'))label.textContent=`糖 ${p.massG.toLocaleString('en-US')} 克`;
   root.dataset.saltDensityGPerCm3=String(SALT.densityGPerCm3);root.dataset.saltGrainCount=String(p.count);root.dataset.saltGrainEdgeM=String(p.edgeM);root.dataset.saltSolidVolumeCm3=String(p.solidVolumeCm3);root.dataset.saltRenderedVolumeM3=String(p.solidVolumeM3);root.dataset.saltPileDiameterCm=String(p.radiusM*200);root.dataset.saltPileHeightCm=String(p.heightM*100);root.dataset.saltDishDiameterCm='16';
 }
 function annotations(root,camera,source,width,height,guide,distance=20){
@@ -237,7 +237,7 @@ function annotations(root,camera,source,width,height,guide,distance=20){
 }
 function createFallback(root,oldCanvas,stage,guide,camera){
   const canvas=oldCanvas.cloneNode();oldCanvas.replaceWith(canvas);const ctx=canvas.getContext('2d');let portion;
-  canvas.removeAttribute('tabindex');canvas.setAttribute('aria-label','泳池與100克食鹽的固定視角比例示意圖');
+  canvas.removeAttribute('tabindex');canvas.setAttribute('aria-label','泳池與100克糖的固定視角比例示意圖');
   root.dataset.interactive='false';root.dataset.cameraFraming='pool';root.querySelector('.pool-camera-toggle').hidden=true;root.querySelector('#pool-model-hint').textContent='目前瀏覽器無法顯示可旋轉的 3D 模型，已顯示固定視角示意圖。';
   root.dataset.sourceScale='1';root.dataset.renderer='canvas';root.dataset.geometryWaterLiters=String(POOL.lengthM*POOL.widthM*POOL.waterDepthM*1000);root.dataset.poolInnerLengthM='10';root.dataset.poolInnerWidthM='5';root.dataset.poolWaterDepthM='2';
   function draw(){

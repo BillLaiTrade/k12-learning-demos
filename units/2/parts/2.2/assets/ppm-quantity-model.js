@@ -1,9 +1,9 @@
 export const POOL=Object.freeze({lengthM:10,widthM:5,waterDepthM:2,wallM:.15,freeboardM:.15});
-export const SALT=Object.freeze({densityGPerCm3:2.17,nominalGrainM:.002,cellM:.0025,dishDiameterM:.16,fieldWidthM:.24});
+export const SALT=Object.freeze({densityGPerCm3:1.59,nominalGrainM:.002,cellM:.0025,dishDiameterM:.16,fieldWidthM:.24});
 export const poolLiters=()=>POOL.lengthM*POOL.widthM*POOL.waterDepthM*1000;
 let candidates;
 export function saltPortion(massG){
-  if(!Number.isFinite(massG)||massG<=0||massG>200)throw new RangeError('Salt mass must be above 0 and at most 200 g');
+  if(!Number.isFinite(massG)||massG<=0||massG>200)throw new RangeError('Sugar mass must be above 0 and at most 200 g');
   const densityGPerM3=SALT.densityGPerCm3*1000000;
   const count=Math.ceil(massG/(densityGPerM3*SALT.nominalGrainM**3));
   const edgeM=Math.cbrt(massG/densityGPerM3/count);
