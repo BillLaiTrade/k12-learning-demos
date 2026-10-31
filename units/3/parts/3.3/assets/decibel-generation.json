@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-31",
+  "tool": "image_gen",
+  "source": "/workspace/generated_images/exec-c0480ea5-ea68-492e-be1b-da8be546e4ee.png",
+  "asset": "decibel-scenes.png",
+  "dimensions": [
+    2172,
+    724
+  ],
+  "sha256": "b1c792b4e554fd82e57f8688d45f35098b114358e8932d92d11ec271e869ccf5",
+  "description": "安靜書房、兩位一般成人交談、施工現場三格情境插圖，非該聲級的量測照片；人物不是小葵或阿公。",
+  "processing": "原始PNG直接採用，未改像素；各卡以SVG viewBox與clipPath取景，數字與文字由HTML呈現。"
+}

@@ -16,7 +16,7 @@
 - [教育部自然科學課綱](https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001823)，Ka-Ⅳ-5與附錄。
 - [OpenStax 17.6 Hearing](https://openstax.org/books/college-physics-2e/pages/17-6-hearing)：人耳可聽範圍約20～20000Hz，狗高頻上限約30000Hz、蝙蝠可達100000Hz；物種與個體會有差異。頁面只作上限例子，不製造未查證的下限。
 - [OpenStax 17.3 Sound Intensity and Sound Level](https://openstax.org/books/college-physics-2e/pages/17-3-sound-intensity-and-sound-level)：聲級、參考基準與分貝非線性關係。
-- [NIDCD Noise-Induced Hearing Loss](https://www.nidcd.nih.gov/health/noise-induced-hearing-loss)：生活情境的平均聲級參考，一般交談60～70dBA、電影院74～104dBA、音樂會94～110dBA。本頁僅引用資料，沒有新增噪音／聽力保護課程。
+- [OSHA Technical Manual Section III, Chapter 5, Figure 3](https://www.osha.gov/otm/section-3-health-hazards/chapter-5#decibles)：現行第七區同來源典型讀值：安靜書房20dBA、相距3英呎交談60dBA、施工現場100dBA。僅作生活聲級辨讀，不新增噪音／聽力保護課程。
 - 更完整教材核對及資料限制見規劃儲存庫的[3.3第二階段報告](https://github.com/BillLaiTrade/k12/blob/main/docs/product/units/2-wave-and-sound/2.3-curriculum-materials-review.md)。
 
 ## 2026-10-30第一區後續修訂
@@ -99,3 +99,14 @@ hearing-audio.mjs使用Web Audio的sine OscillatorNode、共同固定增益0.06�
 
 
 第六區比較插圖（2026-10-31）：hearing-animal-illustrations.png為image_gen製作的外耳／棕白犬頭／展翅蝙蝠透明自然史插圖，原始2172×724 PNG直接採用，沒有修改像素。來源與SHA-256見hearing-animal-generation.json；各卡以SVG viewBox及對應clipPath顯示自己的圖，保留犬耳與蝙蝠翼尖、避免相鄰素材出現在取景留白。圖為辨認對象的示意，不是該個體／品種的聽力量測；頻率與既有OpenStax來源保持。桌機三卡並列、600px以下圖文同行直列。
+
+
+## 2026-10-31第七區靜態生活聲級比較（現行）
+
+使用者要求精美、一目了然的靜態呈現，選三個聲級差距大的例子，取代重疊多的電影院／音樂會組合。現行改為「安靜書房約20dBA／一般交談約60dBA／施工現場約100dBA」，全部取自OSHA Technical Manual Section III Chapter 5 Figure3「Decibel Scale」及網頁可讀的Typical Sound Levels(dBA)說明。交談原標3ft約0.9144m，頁面取約0.9m。來源查核與文字見docs/reviews/unit-3.3-decibel/source-evidence.json。不是同條件實驗、不將例子當作固定讀值。
+
+decibel-scenes.png為image_gen製作的2172×724三格生活情境插圖；原始PNG直接採用，未改像素，以SVG viewBox／clipPath分別顯示書房、普通成人交談、施工工地。插圖不是量測現場照片、圖中人物不是小葵／阿公；數字及文字由HTML顯示。來源與SHA-256見decibel-generation.json。
+
+三張圖卡下接0～120dBA共用刻度，20／60／100靜態標記與兩則短知識：0dB不代表無聲、分貝不等於聽感倍數。dBA加權、距離／環境／設備影響及來源以短註保留。不再點選資料、不新增播放或麥克風量測，原level()與資料切換碼移除；第一至六區與小測保持。手機採圖文同行直列卡，刻度始終共用。
+
+此節取代初版第七區NIDCD交談／電影院／音樂會資料與按鈕切換。頁尾生活數據來源同步為OSHA，並修正部分樂器已採授權實錄的總說明。

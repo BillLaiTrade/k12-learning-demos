@@ -14,7 +14,7 @@ test('3.3 sound relationships and bounded audio match the displayed model',async
 test('3.3 seven learning blocks, sound, instruments and one final assessment',{timeout:90000},async t=>{
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{const m=String(d).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject);});
- const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium'});t.after(()=>browser.close());
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',...(process.env.SOUND33_BASE_URL?{proxy:{server:process.env.HTTPS_PROXY,bypass:'127.0.0.1,localhost'}}:{})});t.after(()=>browser.close());
  const page=await browser.newPage({viewport:{width:1440,height:1100}}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
  await page.addInitScript(()=>{window.audioRuns=[];const create=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=create.call(this),start=s.start.bind(s),stop=s.stop.bind(s);let entry;s.start=function(...args){const a=s.buffer.getChannelData(0),rate=s.buffer.sampleRate;let sum=0,crossings=0;for(let i=rate*.1|0;i<rate*.3;i++){sum+=a[i]**2;if(a[i-1]<0&&a[i]>=0)crossings++;}entry={rms:Math.sqrt(sum/(rate*.2)),frequency:crossings/.2,peak:a.reduce((peak,v)=>Math.max(peak,Math.abs(v)),0),stopped:false};window.audioRuns.push(entry);return start(...args);};s.stop=function(...args){if(entry)entry.stopped=true;return stop(...args);};return s;};});
@@ -69,7 +69,11 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
   const before=await page.evaluate(()=>window.audioRuns.length);
   await page.locator('[data-hearing-band]').focus();await page.keyboard.press('End');assert.equal(await page.locator('#hearing-frequency').innerText(),'20,000 Hz');assert.equal(await page.locator('#card-06').getAttribute('data-playing'),'false');
   await page.locator('.hearing-animals summary').click();assert.match(await page.locator('.hearing-animals').innerText(),/次聲波[\s\S]*超聲波/);await page.locator('.hearing-animals summary').click();
-  await page.locator('[data-level="cinema"]').click();assert.match(await page.locator('#level-result').textContent(),/74～104/);assert.equal(await page.evaluate(()=>window.audioRuns.length),before);assert.equal(await page.locator('#card-07 [data-play]').count(),0);
+  await page.locator('.route a[href="#card-07"]').click();
+  assert.deepEqual(await page.locator('#card-07 [data-decibel]').evaluateAll(nodes=>nodes.map(n=>Number(n.dataset.decibel))),[20,60,100]);assert.equal(await page.locator('#card-07 button,#card-07 input').count(),0);
+  assert.equal(await page.locator('#card-07 .decibel-scene image').count(),3);const art=await page.evaluate(async()=>{const im=new Image();im.src=new URL('assets/decibel-scenes.png',location.href);await im.decode();return[im.naturalWidth,im.naturalHeight];});assert.deepEqual(art,[2172,724]);
+  assert.match(await page.locator('#card-07').innerText(),/0 dB，不代表沒有聲音/);assert.match(await page.locator('#card-07').innerText(),/不代表聽起來大聲 3 倍/);assert.match(await page.locator('#card-07 .decibel-sources a').first().getAttribute('href'),/osha\.gov/);
+  assert.equal(await page.evaluate(()=>window.audioRuns.length),before);assert.equal(await page.locator('#card-07 [data-play]').count(),0);
  });
  await t.test('one final task supports incomplete, incorrect, correct, editing, replay, clear and new requirements',async()=>{
   await page.locator('.route a[href="#unit-quiz"]').click();await page.locator('button[type=submit]').click();assert.equal(await page.locator('#quiz-feedback').getAttribute('data-state'),'incomplete');
@@ -99,7 +103,7 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
   assert.notEqual(await page.locator('.quiz-nav').evaluate(n=>getComputedStyle(n).backgroundColor),await page.locator('.route a[href="#card-01"]').evaluate(n=>getComputedStyle(n).backgroundColor));
  });
  await t.test('desktop, laptop and narrow layouts retain controls and anchors',async()=>{
-  const fs=require('node:fs/promises');await fs.mkdir('/tmp/unit33-review',{recursive:true});
+  const fs=require('node:fs/promises'),capture=process.env.DECIBEL_CAPTURE_DIR||'/tmp/unit33-decibel-review';await fs.mkdir('/tmp/unit33-review',{recursive:true});await fs.mkdir(capture,{recursive:true});
   for(const width of [1024,1280,1440,1920,820,760,390,320]){
    await page.setViewportSize({width,height:1000});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
    const issues=await page.locator('.lesson-card').evaluateAll(cards=>cards.flatMap(card=>{
@@ -109,6 +113,9 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
     const clipped=[...card.querySelectorAll('button,input,select,.dialogue')].some(n=>{const r=n.getBoundingClientRect();return r.width&& (r.left<box.left||r.right>box.right+1||n.scrollWidth>n.clientWidth+1);});
     return inside&&aligned&&!clipped?[]:[card.id];
    }));assert.deepEqual(issues,[],`all seven sections keep their content inside the card at ${width}px`);
+   const scaleErrors=await page.locator('#card-07').evaluate(root=>{const scale=root.querySelector('.decibel-scale').getBoundingClientRect();return [...root.querySelectorAll('[data-decibel-marker]')].map(n=>{const r=n.getBoundingClientRect();return Math.abs(r.left+r.width/2-(scale.left+Number(n.dataset.decibelMarker)/120*scale.width));});});assert.ok(scaleErrors.every(n=>n<1),'markers reflect 20 / 60 / 100 on the common scale');
+   assert.equal(await page.locator('#card-07 .decibel-card').evaluateAll(nodes=>nodes.some(n=>n.scrollWidth>n.clientWidth+1)),false);
+   if([1440,1024,390].includes(width)){await page.setViewportSize({width,height:1800});await page.locator('#card-07').screenshot({path:`${capture}/decibel-${width}.png`});await page.setViewportSize({width,height:1000});}
    assert.equal(await page.locator('.wave-label').first().evaluate(n=>parseFloat(getComputedStyle(n).fontSize)>=12),true);
    await page.locator('.route a[href="#card-03"]').click();
    const anchored=await page.locator('#card-03').evaluate(n=>({top:n.getBoundingClientRect().top,navBottom:document.querySelector('.route').getBoundingClientRect().bottom}));

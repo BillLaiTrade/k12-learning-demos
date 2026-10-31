@@ -582,3 +582,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.4-sonar-ship.test.cjs
 ```
 
 專項6項（含外層），驗證滑鼠點船一次原音／一次返回／一筆紀錄、拖曳及拖回原位不發聲、小抖動不改船位、Enter／Space與方向鍵分工、下方按鈕保留，以及真實手機觸控去重、忙碌／取消觸控與拖船後再點船。可用`SONAR_URL`指向公開完整課程入口（以/結尾，可帶版本查詢參數），沿用HTTPS代理。原聲納13項瀏覽器回歸另跑，清楚區分本機及公開結果。
+
+## 3.3 第七區：靜態生活聲級比較
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3.test.cjs tests/unit-3.3-hearing.test.cjs
+```
+
+23項通過（含外層），0失敗／略過。整頁檢查改驗證第七區三個OSHA參考值20／60／100、三幅插圖實際解碼、無操作控制或發聲、兩則知識與來源；八種寬度核對共同刻度標記與讀值位置、圖卡不溢出，DECIBEL_CAPTURE_DIR保存1440／1024／390px完整畫面。整頁SOUND33_BASE_URL可指向公開頁，瀏覽器沿用代理並略過本機格式比較頁。無需新增測試依賴。

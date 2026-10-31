@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="比較振幅、頻率與波形，探索琴弦、空氣柱、音色及聽覺範圍，認識分貝的基本讀法。">
 <title>不同的聲音，差別在哪裡？｜3.3 聲音的特性</title>
-<link rel="stylesheet" href="assets/lesson.css?v=24">
-<script type="module" src="assets/lesson.mjs?v=21">
+<link rel="stylesheet" href="assets/lesson.css?v=25">
+<script type="module" src="assets/lesson.mjs?v=22">
 </script>
 </head>
 <body>
@@ -38,7 +38,7 @@
 <a href="#card-04"><b>04</b><span>排笛的管子長短不同，吹出的聲音會怎麼變？</span></a>
 <a href="#card-05"><b>05</b><span>同樣的音高，為什麼聽得出不同樂器？</span></a>
 <a href="#card-06"><b>06</b><span>你聽得到哪些頻率的聲音？</span></a>
-<a href="#card-07"><b>07</b><span>分貝數字，怎麼幫我們比較聲音大小？</span></a>
+<a href="#card-07"><b>07</b><span>生活中的聲音，分貝差多少？</span></a>
 <a href="#unit-quiz" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
 </div>
 <p class="next-hint">沿著學習順序閱讀、操作與觀察。</p>
@@ -241,45 +241,16 @@
 <details class="hearing-animals"><summary>其他動物能聽到多高？</summary><div class="animal-grid"><div class="hearing-animal-card" data-animal="ear"><svg class="hearing-animal-art" viewBox="130 40 400 640" aria-hidden="true" focusable="false"><defs><clipPath id="hearing-ear-clip" clipPathUnits="userSpaceOnUse"><rect x="130" y="40" width="400" height="640"/></clipPath></defs><image href="assets/hearing-animal-illustrations.png" width="2172" height="724" clip-path="url(#hearing-ear-clip)"/></svg><p><strong>人耳</strong>約 20,000 Hz</p></div><div class="hearing-animal-card" data-animal="dog"><svg class="hearing-animal-art" viewBox="790 8 600 700" aria-hidden="true" focusable="false"><defs><clipPath id="hearing-dog-clip" clipPathUnits="userSpaceOnUse"><rect x="790" y="8" width="600" height="700"/></clipPath></defs><image href="assets/hearing-animal-illustrations.png" width="2172" height="724" clip-path="url(#hearing-dog-clip)"/></svg><p><strong>狗</strong>約 30,000 Hz</p></div><div class="hearing-animal-card" data-animal="bat"><svg class="hearing-animal-art" viewBox="1410 210 750 360" aria-hidden="true" focusable="false"><defs><clipPath id="hearing-bat-clip" clipPathUnits="userSpaceOnUse"><rect x="1410" y="210" width="750" height="360"/></clipPath></defs><image href="assets/hearing-animal-illustrations.png" width="2172" height="724" clip-path="url(#hearing-bat-clip)"/></svg><p><strong>部分蝙蝠</strong>可達 100,000 Hz</p></div></div><p>這裡比較的是高頻上限，不代表從 0 Hz 起都能聽見；物種與個體也有差異。人耳概略範圍以下（低於 20 Hz）稱為次聲波，高於 20,000 Hz 稱為超聲波。</p><p>聽不到不代表沒有聲波；裝置的輸出能力與環境也會影響這次的結果。網頁可確認產生的數位訊號頻率，不能據此保證喇叭實際發出的聲波強度。頻率帶的顏色只用來幫助操作，不代表聲音本身有顏色。<a href="https://openstax.org/books/college-physics-2e/pages/17-6-hearing" target="_blank" rel="noopener">資料來源：OpenStax 17.6</a></p></details>
 </div></section>
 <section class="lesson-card" id="card-07" data-core="分貝的辨讀">
-<header class="lesson-head"><span class="lesson-number">07</span><div><h2>分貝數字，怎麼幫我們比較聲音大小？</h2><p>分貝的辨讀：分貝數字幫助我們描述聲音大小；下面是有情境的參考資料，不是現在裝置的量測結果。</p></div></header>
+<header class="lesson-head"><span class="lesson-number">07</span><div><h2>生活中的聲音，分貝差多少？</h2><p>三個生活情境，從分貝讀值看聲級差異。</p></div></header>
 <div class="lesson-body card-main">
-
-<div class="dialogue dialogue--xiaokui">
-<span class="speaker"><span class="visually-hidden">小葵</span></span>
-<p>平常說大聲、小聲，和分貝數字有什麼關係？</p>
-</div>
-<div class="level-grid">
-<button type="button" class="level-card" data-level="conversation" aria-pressed="true">
-<span>一般交談</span>
-<strong>60～70<small> dBA</small>
-</strong>
-</button>
-<button type="button" class="level-card" data-level="cinema" aria-pressed="false">
-<span>電影院</span>
-<strong>74～104<small> dBA</small>
-</strong>
-</button>
-<button type="button" class="level-card" data-level="concert" aria-pressed="false">
-<span>音樂會</span>
-<strong>94～110<small> dBA</small>
-</strong>
-</button>
-</div>
-<p id="level-result" class="observation" aria-live="polite">
-</p>
-<div class="explanation-grid">
-<p>
-<strong>0 dB不是沒有聲音</strong>分貝是和參考基準比較的聲級表示，0不等於沒有振動。</p>
-<p>
-<strong>數字不是聽感倍數</strong>不能因為60是30的兩倍，就說聽起來一定兩倍大聲。</p>
-</div>
-<p class="model-note">dBA是依人耳對不同頻率的敏感度加權的聲級，與未加權dB有別。情境數值會隨距離、場地與設備改變；本區不實際重現這些聲級。資料來源：NIDCD；分貝基準說明：OpenStax 17.3。</p>
-<div class="dialogue">
-<span class="speaker"><span class="visually-hidden">阿公</span></span>
-<p>在比較條件與量測方式相近時，分貝數值較大，通常代表聲級較高。它不是聽感的線性刻度，也不能只看網頁音量就知道耳邊的真實分貝。</p>
-</div>
-</div>
-</section>
+<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>安靜書房、一般交談和施工現場，差別有多大？</p></div>
+<div class="decibel-cards"><figure class="decibel-card decibel-card--study" data-decibel="20"><svg class="decibel-scene" viewBox="0 0 724 724" aria-hidden="true" focusable="false"><defs><clipPath id="decibel-study-clip" clipPathUnits="userSpaceOnUse"><rect x="0" y="0" width="724" height="724"/></clipPath></defs><image href="assets/decibel-scenes.png" width="2172" height="724" clip-path="url(#decibel-study-clip)"/></svg><figcaption><h3>安靜書房</h3><div class="decibel-value"><span>約</span> <strong>20</strong> <span>dBA</span></div><p>安靜的閱讀環境</p></figcaption></figure><figure class="decibel-card decibel-card--conversation" data-decibel="60"><svg class="decibel-scene" viewBox="724 0 724 724" aria-hidden="true" focusable="false"><defs><clipPath id="decibel-conversation-clip" clipPathUnits="userSpaceOnUse"><rect x="724" y="0" width="724" height="724"/></clipPath></defs><image href="assets/decibel-scenes.png" width="2172" height="724" clip-path="url(#decibel-conversation-clip)"/></svg><figcaption><h3>一般交談</h3><div class="decibel-value"><span>約</span> <strong>60</strong> <span>dBA</span></div><p>相距約 0.9 公尺</p></figcaption></figure><figure class="decibel-card decibel-card--construction" data-decibel="100"><svg class="decibel-scene" viewBox="1448 0 724 724" aria-hidden="true" focusable="false"><defs><clipPath id="decibel-construction-clip" clipPathUnits="userSpaceOnUse"><rect x="1448" y="0" width="724" height="724"/></clipPath></defs><image href="assets/decibel-scenes.png" width="2172" height="724" clip-path="url(#decibel-construction-clip)"/></svg><figcaption><h3>施工現場</h3><div class="decibel-value"><span>約</span> <strong>100</strong> <span>dBA</span></div><p>施工中的工地</p></figcaption></figure></div>
+<div class="decibel-comparison"><div class="decibel-scale-heading"><h3>放到同一把分貝刻度上</h3><span>聲級（dBA）</span></div><div class="decibel-scale" role="img" aria-label="同一條0到120 dBA刻度：安靜書房約20、一般交談約60、施工現場約100。這是參考讀值的位置，不代表聽感倍數。"><div class="decibel-scale-track" aria-hidden="true"></div><div class="decibel-scale-marks" aria-hidden="true"><span class="decibel-marker decibel-marker--study" data-decibel-marker="20" style="left:16.666667%"><span>書房</span><i></i></span><span class="decibel-marker decibel-marker--conversation" data-decibel-marker="60" style="left:50.000000%"><span>交談</span><i></i></span><span class="decibel-marker decibel-marker--construction" data-decibel-marker="100" style="left:83.333333%"><span>施工</span><i></i></span><span class="decibel-tick" style="left:0.000000%">0</span><span class="decibel-tick" style="left:16.666667%">20</span><span class="decibel-tick" style="left:33.333333%">40</span><span class="decibel-tick" style="left:50.000000%">60</span><span class="decibel-tick" style="left:66.666667%">80</span><span class="decibel-tick" style="left:83.333333%">100</span><span class="decibel-tick" style="left:100.000000%">120</span></div></div></div>
+<div class="decibel-facts"><div><span class="decibel-fact-symbol" aria-hidden="true">0</span><div><h3>0 dB，不代表沒有聲音</h3><p>分貝有參考基準，讀值為 0 不等於沒有聲波。</p></div></div><div><span class="decibel-fact-symbol" aria-hidden="true">≠</span><div><h3>數字，不是聽感倍數</h3><p>60 是 20 的 3 倍，不代表聽起來大聲 3 倍。</p></div></div></div>
+<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>比較條件相近時，分貝讀值越大，通常代表聲級越高。</p></div>
+<p class="decibel-note">生活情境參考值，會隨距離、環境與設備改變；不是這台裝置的量測值。dBA 是依人耳對不同頻率的敏感度加權的聲級。</p>
+<p class="decibel-sources">數值來源：<a href="https://www.osha.gov/otm/section-3-health-hazards/chapter-5#decibles" target="_blank" rel="noopener">OSHA 典型聲級參考圖</a> · 分貝概念：<a href="https://openstax.org/books/college-physics-2e/pages/17-3-sound-intensity-and-sound-level" target="_blank" rel="noopener">OpenStax 17.3</a></p>
+</div></section>
 <section class="quiz" id="unit-quiz" aria-labelledby="quiz-title">
 <header class="quiz-head">
 <span class="quiz-mark" aria-hidden="true">?</span>
@@ -368,9 +339,9 @@
 <p>波動與聲音・聲音的特性</p>
 <details>
 <summary>資料與示意說明</summary>
-<p>依教育部自然科學領綱Ka-Ⅳ-5及已核對的國二教材範圍編排。聲音觀察台與樂器示範用於比較，並非真實樂器錄音或聲級量測。</p>
+<p>依教育部自然科學領綱Ka-Ⅳ-5及已核對的國二教材範圍編排。部分樂器音訊採授權實錄經剪輯調音，來源見各區；圖像與訊號用於教學比較，網頁未量測真實聲級。</p>
 <p>
-<a href="https://openstax.org/books/college-physics-2e/pages/17-6-hearing">聽覺範圍來源：OpenStax 17.6</a> · <a href="https://openstax.org/books/college-physics-2e/pages/17-3-sound-intensity-and-sound-level">分貝基準：OpenStax 17.3</a> · <a href="https://www.nidcd.nih.gov/health/noise-induced-hearing-loss">生活聲級資料：NIDCD</a>
+<a href="https://openstax.org/books/college-physics-2e/pages/17-6-hearing">聽覺範圍來源：OpenStax 17.6</a> · <a href="https://openstax.org/books/college-physics-2e/pages/17-3-sound-intensity-and-sound-level">分貝基準：OpenStax 17.3</a> · <a href="https://www.osha.gov/otm/section-3-health-hazards/chapter-5#decibles">生活聲級資料：OSHA</a>
 </p>
 </details>
 </div>

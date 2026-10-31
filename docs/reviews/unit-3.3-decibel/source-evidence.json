@@ -1,0 +1,27 @@
+{
+  "retrieved_date": "2026-10-31",
+  "source_url": "https://www.osha.gov/otm/section-3-health-hazards/chapter-5",
+  "source_title": "OSHA Technical Manual Section III, Chapter 5: Noise",
+  "source_excerpt": "Typical Sound Levels (dBA) - From bottom to top (blue to red in color): Noise, 0 - Threshold of Hearing (1000hz), 10, 20 - Silent Study Room, 30, North Rim of Grand Cayon, 40 - Soft Whisper (5 ft. away), 50 - Urban Residence, 60 - Conversation (3 ft. away), 70 - Classroom Chatter, 80 - Freight Train (100 ft. away), 90 - Boiler Room, 100 - Construction Site, 110 - Night Club (w/ music), 120 - Operating Heavy Equipment, 130 - Jet Taking Off (200 ft. away), 140 - Threshold of Pain. Decibels are measured on a logarithmic scale: a small change in the number of decibels indicates a huge change in the amount of sound pressure and correspondingly the",
+  "examples": [
+    {
+      "key": "study",
+      "source_label": "Silent Study Room",
+      "value_dba": 20
+    },
+    {
+      "key": "conversation",
+      "source_label": "Conversation (3 ft. away)",
+      "value_dba": 60,
+      "distance_m": 0.9144
+    },
+    {
+      "key": "construction",
+      "source_label": "Construction Site",
+      "value_dba": 100
+    }
+  ],
+  "interpretation": "同來源典型參考讀值，不是固定聲級、受控實驗或目前裝置量測；數字依來源dBA標示，僅作國中分貝基礎辨讀。",
+  "figure": "Figure 3. Decibel Scale",
+  "anchor": "decibles"
+}

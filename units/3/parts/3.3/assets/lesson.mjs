@@ -142,9 +142,6 @@ function tuneHearing(frequency){
  if(activeRoot&&activeRoot!==$('card-06'))stop();
  if(hearingVoice)try{hearingVoice.setFrequency(frequency);}catch{stop();hearingView.error('此裝置不支援目前頻率，請往低音調整後再播放。');}
 }
-const levels={conversation:'一般交談約60～70 dBA。這是生活參考範圍，距離與周圍環境改變，量測值也會不同。',cinema:'電影院約74～104 dBA。不同場景、座位與播放條件會造成很大差異，不能說每間電影院都固定是同一個分貝數。',concert:'音樂會約94～110 dBA。與其他資料比較時，也要看量測條件與加權方式；這裡不播放相當聲級的聲音。'};
-function level(key){$('level-result').textContent=levels[key];for(const b of document.querySelectorAll('[data-level]'))b.setAttribute('aria-pressed',String(b.dataset.level===key));}
-for(const b of document.querySelectorAll('[data-level]'))b.addEventListener('click',()=>level(b.dataset.level));
 $('settings-form').addEventListener('change',()=>{stop();renderChoice();});
 $('settings-form').addEventListener('submit',event=>{
  event.preventDefault();const a=answers(),result=checkSettings(a,target),feedback=$('quiz-feedback');
@@ -184,4 +181,4 @@ $('card-04').querySelector('[data-pan-reset]').addEventListener('click',()=>{sto
 timbreView=createTimbreExperiment($('card-05'));
 hearingView=createHearingExperiment($('card-06'),{onToggle:toggleHearing,onFrequency:tuneHearing,onReset:()=>stop($('card-06'))});
 $('card-06').addEventListener('pointerdown',()=>{if(activeRoot&&activeRoot!==$('card-06'))stop();},true);
-level('conversation');newChallenge();activeLink(location.hash||'#card-01');
+newChallenge();activeLink(location.hash||'#card-01');
