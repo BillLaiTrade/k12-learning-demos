@@ -21,6 +21,7 @@ function render(){
   }
   const panel=panels[stage],$=name=>panel.querySelector(`[data-co2-part="${name}"]`);
   const opacity=(name,value)=>$(name).setAttribute('opacity',String(value));
+  $('flask-label').textContent=f.marble===0?'錐形瓶（空）':f.acid===0?'錐形瓶：已加入大理石':'錐形瓶：大理石＋稀鹽酸';
   const tube=`M300 245V145Q300 120 325 120H${f.tipX-25}Q${f.tipX} 120 ${f.tipX} 145V${f.tipY}`;
   for(const name of ['tube','tube-shine','flow'])$(name).setAttribute('d',tube);
   // Assembly: the connected stopper and outlet are initially beside the open flask.
