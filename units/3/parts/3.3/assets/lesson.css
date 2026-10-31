@@ -529,3 +529,10 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .hearing-record .hearing-clear{min-height:32px;padding:2px 8px;border:0;background:transparent;color:#58735f;font-size:.68rem;font-weight:500}
 .hearing-record .hearing-clear:disabled{opacity:.4}
 @media(max-width:600px){.hearing-record-actions{width:100%}}
+
+.hearing-animals .animal-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.hearing-animal-card{min-width:0;padding:10px 12px 12px;border:1px solid #dce6d8;border-radius:12px;background:#eff4ed}
+.hearing-animal-art{display:block;width:100%;height:108px;overflow:hidden}
+.hearing-animal-card p{margin:0;padding:6px 0 0;background:transparent;color:#45614d;text-align:center;font-size:.82rem;line-height:1.65}
+.hearing-animal-card strong{font-size:.9rem;color:#385640}
+@media(max-width:600px){.hearing-animals .animal-grid{grid-template-columns:1fr;gap:8px}.hearing-animal-card{display:grid;grid-template-columns:92px minmax(0,1fr);align-items:center;gap:12px;padding:9px 12px}.hearing-animal-art{height:82px}.hearing-animal-card p{text-align:left;padding:0}}

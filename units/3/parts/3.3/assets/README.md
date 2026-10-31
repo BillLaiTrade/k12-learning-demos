@@ -96,3 +96,6 @@ hearing-audio.mjs使用Web Audio的sine OscillatorNode、共同固定增益0.06�
 
 
 第六區取消補充（2026-10-31）：每個端點可用「取消紀錄」單獨清除；另一端、目前頻率與試聽保持。沒有資料時取消鍵停用；「重新探索」仍清空兩端並停止、回1000Hz。
+
+
+第六區比較插圖（2026-10-31）：hearing-animal-illustrations.png為image_gen製作的外耳／棕白犬頭／展翅蝙蝠透明自然史插圖，原始2172×724 PNG直接採用，沒有修改像素。來源與SHA-256見hearing-animal-generation.json；各卡以SVG viewBox及對應clipPath顯示自己的圖，保留犬耳與蝙蝠翼尖、避免相鄰素材出現在取景留白。圖為辨認對象的示意，不是該個體／品種的聽力量測；頻率與既有OpenStax來源保持。桌機三卡並列、600px以下圖文同行直列。

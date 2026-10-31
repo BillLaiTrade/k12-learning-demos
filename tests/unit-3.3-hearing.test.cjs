@@ -82,7 +82,14 @@ test('hearing exploration: continuous sine, frequency ribbon and manual records'
   await page.evaluate(()=>AudioContext.prototype.resume=()=>Promise.reject(Error('test')));await toggle.click();await page.waitForFunction(()=>!document.querySelector('.hearing-feedback').hidden);assert.match(await root.locator('.hearing-feedback').innerText(),/無法播放/);await page.evaluate(()=>AudioContext.prototype.resume=window.savedHearingResume);await play();await toggle.click();
  });
  await t.test('knowledge retains hearing range, animal upper bounds and device/colour limitations',async()=>{
-  await root.locator('.hearing-animals summary').click();const text=await root.locator('.hearing-animals').innerText();assert.match(text,/次聲波[\s\S]*超聲波/);assert.match(text,/沒有聲波/);assert.match(text,/30,000[\s\S]*100,000/);assert.match(text,/顏色/);await root.locator('.hearing-animals summary').click();
+  await root.locator('.hearing-animals summary').click();const text=await root.locator('.hearing-animals').innerText();assert.match(text,/次聲波[\s\S]*超聲波/);assert.match(text,/沒有聲波/);assert.match(text,/30,000[\s\S]*100,000/);assert.match(text,/顏色/);
+  assert.equal(await root.locator('.hearing-animal-card svg image').count(),3);
+  const image=await page.evaluate(async()=>{const image=new Image();image.src=new URL('assets/hearing-animal-illustrations.png',location.href);await image.decode();return{width:image.naturalWidth,height:image.naturalHeight};});assert.deepEqual(image,{width:2172,height:724});
+  for(const width of [1440,1024,820,390,320]){
+   await page.setViewportSize({width,height:1700});const clipped=await root.locator('.hearing-animal-card').evaluateAll(cards=>cards.filter(card=>{const r=card.getBoundingClientRect(),s=card.querySelector('svg').getBoundingClientRect();return s.width<=0||s.height<80||s.left<r.left||s.right>r.right+1||card.scrollWidth>card.clientWidth+1;}).length);assert.equal(clipped,0,`${width}px animal illustrations fit their cards`);
+   if([1440,390].includes(width))await root.locator('.hearing-animals').screenshot({path:path.join(capture,`hearing-animals-${width}.png`)});
+  }
+  await root.locator('.hearing-animals summary').click();await page.setViewportSize({width:1440,height:1200});
  });
  await t.test('approved desktop hierarchy and mobile controls remain inside their panels at eight widths',async()=>{
   await select(80);await root.locator('[data-hearing-record=low]').click();await select(8000);await root.locator('[data-hearing-record=high]').click();

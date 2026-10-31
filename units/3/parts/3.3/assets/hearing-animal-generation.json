@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-31",
+  "tool": "image_gen",
+  "source": "/workspace/generated_images/exec-ee9c14f2-873f-4b23-8489-427be16dca74.png",
+  "asset": "hearing-animal-illustrations.png",
+  "sha256": "da24f0e37ee219ceff4fa5df4d08edca7c89185aea829341e5fe825944ff8208",
+  "dimensions": [
+    2172,
+    724
+  ],
+  "transparent": true,
+  "description": "人類外耳、棕白色犬頭、展翅棕色蝙蝠三格透明自然史插圖；為高頻聽覺上限比較配圖，不是聲學量測或特定品種聽力證據。",
+  "processing": "原始生成PNG直接採用，未裁切、重畫或改像素；網頁以三個SVG viewBox取景，保留完整外耳、犬耳及蝙蝠翼尖。"
+}
