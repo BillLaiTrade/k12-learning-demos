@@ -1382,14 +1382,16 @@
           }
           const [pFrequency,pPeriod,pWavelength,sFrequency,sPeriod,sWavelength]=values;
           const closeTo=(actual,expected,tolerance)=>Math.abs(actual-expected)<=tolerance;
-          const pExpectedFrequency=Number(fieldPRow.dataset.frequencyHz),pExpectedPeriod=1/pExpectedFrequency,pExpectedWavelength=Number(fieldPRow.dataset.wavelengthKm),sExpectedPeriod=Number(fieldSRow.dataset.periodS),sExpectedFrequency=1/sExpectedPeriod,sExpectedWavelength=Number(fieldSRow.dataset.wavelengthKm);
-          const pTimeCorrect=fieldPInputMode==="frequency"?closeTo(pFrequency,pExpectedFrequency,.015):closeTo(pPeriod,pExpectedPeriod,.012);
-          const sTimeCorrect=fieldSInputMode==="frequency"?closeTo(sFrequency,sExpectedFrequency,.02):closeTo(sPeriod,sExpectedPeriod,.012);
+          const pExpectedFrequency=Number(fieldPRow.dataset.frequencyHz),pExpectedWavelength=Number(fieldPRow.dataset.wavelengthKm),sExpectedPeriod=Number(fieldSRow.dataset.periodS),sExpectedWavelength=Number(fieldSRow.dataset.wavelengthKm);
+          // 題目直接給出 P 波頻率及 S 波週期；手動輸入這兩個數字時必須完全相符。
+          // 從另一欄取倒數時僅容許換算與浮點數的小數誤差。
+          const pTimeCorrect=fieldPInputMode==="frequency"?pFrequency===pExpectedFrequency:closeTo(pFrequency,pExpectedFrequency,.000001);
+          const sTimeCorrect=fieldSInputMode==="period"?sPeriod===sExpectedPeriod:closeTo(sPeriod,sExpectedPeriod,.000001);
           const pWavelengthCorrect=closeTo(pWavelength,pExpectedWavelength,.15),sWavelengthCorrect=closeTo(sWavelength,sExpectedWavelength,.15);
           [[fieldPFrequency,fieldPPeriod,pTimeCorrect],[fieldPWavelength,null,pWavelengthCorrect],[fieldSFrequency,fieldSPeriod,sTimeCorrect],[fieldSWavelength,null,sWavelengthCorrect]].forEach(([first,second,correct])=>[first,second].filter(Boolean).forEach(input=>{input.dataset.answerState=correct?"correct":"incorrect";input.setAttribute("aria-invalid",String(!correct));}));
           const incorrectItems=[];
           if(!pTimeCorrect)incorrectItems.push("P 波頻率／週期");if(!pWavelengthCorrect)incorrectItems.push("P 波波長");if(!sTimeCorrect)incorrectItems.push("S 波頻率／週期");if(!sWavelengthCorrect)incorrectItems.push("S 波波長");
-          if(incorrectItems.length){fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent=`這些讀值還不正確：${incorrectItems.join("、")}。請重新對照波形標示與距離刻度。`;return;}
+          if(incorrectItems.length){fieldResults.hidden=true;fieldFeedback.dataset.state="try";fieldFeedback.textContent=`這些讀值還不正確：${incorrectItems.join("、")}。請重新對照波形標示與距離刻度。${!pTimeCorrect||!sTimeCorrect?"題目提供的頻率與週期須與標示一致。":""}`;return;}
           const pSpeed=fieldPInputMode==="frequency"?pFrequency*pWavelength:pWavelength/pPeriod,sSpeed=fieldSInputMode==="frequency"?sFrequency*sWavelength:sWavelength/sPeriod,pArrival=fieldDistance/pSpeed,sArrival=fieldDistance/sSpeed,warningTime=Math.max(0,sArrival-pArrival);
           fieldPResult.textContent=`${fieldFormat(pArrival)} 秒`;fieldSResult.textContent=`${fieldFormat(sArrival)} 秒`;
           fieldWarningResult.textContent=pArrival<sArrival?`${fieldFormat(warningTime)} 秒`:"P 波未先到";
