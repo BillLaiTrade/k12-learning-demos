@@ -1,14 +1,16 @@
 import {echo} from './echo-model.mjs';
 
-export const FIXED_DISTANCE = 34, MIN_DISTANCE = 34, MAX_DISTANCE = 102;
-export const AIR_SPEED = 340, TIME_SCALE = 8, END_HOLD = .025;
+export const FIXED_DISTANCE = 340, MIN_DISTANCE = 340, MAX_DISTANCE = 1020;
+export const AIR_SPEED = 340, TIME_SCALE = 1, END_HOLD = .16;
+export const RECORD_DURATION = 2 * MAX_DISTANCE / AIR_SPEED;
+export const normaliseDistance = (value, fallback = MIN_DISTANCE) => Math.max(MIN_DISTANCE, Math.min(MAX_DISTANCE, Math.round(Number.isFinite(value) ? value : fallback)));
 export const SOURCE_X = 240, PIXELS_PER_METRE = 660 / MAX_DISTANCE;
 export const wallX = distance => SOURCE_X + distance * PIXELS_PER_METRE;
 export const distanceDuration = (distance, selection = 'both') => (echo(selection === 'near' ? FIXED_DISTANCE : distance, AIR_SPEED).time + END_HOLD) * TIME_SCALE;
 export function laneFrame(distance, elapsed) {
   const {time: arrival} = echo(distance, AIR_SPEED), half = arrival / 2;
   const time = Math.max(0, elapsed), received = time >= arrival;
-  const stage = received ? 'received' : time < half ? 'outbound' : time < half + .012 ? 'surface' : 'returning';
+  const stage = received ? 'received' : time < half ? 'outbound' : time < half + .08 ? 'surface' : 'returning';
   const travelled = time < half ? time * AIR_SPEED : Math.max(0, 2 * distance - time * AIR_SPEED);
   return {stage, received, arrival, x: SOURCE_X + travelled * PIXELS_PER_METRE};
 }
@@ -26,7 +28,7 @@ function wavefronts(frame, boundary) {
     const x = frame.x + (returning ? 1 : -1) * i * 15;
     if (x < SOURCE_X || x > boundary) continue;
     const radius = 26 + i * 7, bend = returning ? -18 : 18;
-    paths += `<path d="M${x} ${220-radius}Q${x+bend} 220 ${x} ${220+radius}" fill="none" stroke="${color}" stroke-width="9" opacity=".2"/><path d="M${x} ${220-radius}Q${x+bend} 220 ${x} ${220+radius}" fill="none" stroke="${color}" stroke-width="3" opacity="${.95-i*.12}"/>`;
+    paths += `<path d="M${x} ${208-radius}Q${x+bend} 208 ${x} ${208+radius}" fill="none" stroke="${color}" stroke-width="9" opacity=".2"/><path d="M${x} ${208-radius}Q${x+bend} 208 ${x} ${208+radius}" fill="none" stroke="${color}" stroke-width="3" opacity="${.95-i*.12}"/>`;
   }
   return paths;
 }
@@ -37,7 +39,8 @@ export function renderDistance(progress) {
   const elapsed = ready ? 0 : Math.min(arrival, progress * distanceDuration(distance, selection) / TIME_SCALE);
   root.dataset.elapsed = elapsed.toFixed(4);
   $('distance-elapsed').textContent = seconds(elapsed);
-  $('wall-distance-value').value = distance + ' 公尺';
+  const number = $('wall-distance-number');
+  if (document.activeElement !== number) number.value = String(distance);
   $('distance-far-title').textContent = `調整距離｜${distance} 公尺`;
   $('distance-far-record-label').textContent = `${distance === FIXED_DISTANCE ? '同距' : '遠牆'}（${distance} 公尺）`;
   const handle = $('distance-wall');
@@ -53,29 +56,43 @@ export function renderDistance(progress) {
     const state = $(`distance-${name}-state`);
     state.textContent = words[stage]; state.dataset.stage = stage;
     $(`distance-${name}-waves`).innerHTML = waiting ? '' : wavefronts(frame, boundary);
-    $(`distance-${name}-received`).innerHTML = !waiting && frame.received ? '<circle cx="205" cy="218" r="12" fill="#ffbd58" opacity=".35"/><circle cx="205" cy="218" r="5" fill="#ffe3a2" stroke="#ffb347" stroke-width="2"/>' : '';
-    $(`distance-${name}-route`).innerHTML = !waiting && frame.received ? `<path d="M${boundary-4} 220H${SOURCE_X+13}m10-7-10 7 10 7" fill="none" stroke="#ffb34d" stroke-width="2.5" stroke-dasharray="5 4" opacity=".75"/>` : '';
+    $(`distance-${name}-received`).innerHTML = !waiting && frame.received ? '<circle cx="220" cy="208" r="12" fill="#ffbd58" opacity=".35"/><circle cx="220" cy="208" r="5" fill="#ffe3a2" stroke="#ffb347" stroke-width="2"/>' : '';
+    $(`distance-${name}-route`).innerHTML = !waiting && frame.received ? `<path d="M${boundary-4} 208H${SOURCE_X+13}m10-7-10 7 10 7" fill="none" stroke="#ffb34d" stroke-width="2.5" stroke-dasharray="5 4" opacity=".75"/>` : '';
     $(`distance-${name}-dimension`).innerHTML = `<path d="M${SOURCE_X} 332v18m0-9H${boundary}m0-9v18" fill="none" stroke="white" stroke-width="2.5"/><text x="${(SOURCE_X+boundary)/2}" y="365" text-anchor="middle">${d} 公尺</text>`;
     const row = $(`distance-${name}-record`), received = !waiting && frame.received;
     row.dataset.received = String(received);
-    row.style.setProperty('--playhead', (waiting ? 0 : Math.min(100, elapsed / .6 * 100)) + '%');
-    row.style.setProperty('--trace-end', (waiting ? 0 : Math.min(elapsed, frame.arrival)) / .6 * 100 + '%');
-    row.style.setProperty('--arrival', frame.arrival / .6 * 100 + '%');
+    row.style.setProperty('--playhead', (waiting ? 0 : Math.min(100, elapsed / RECORD_DURATION * 100)) + '%');
+    row.style.setProperty('--trace-end', (waiting ? 0 : Math.min(elapsed, frame.arrival)) / RECORD_DURATION * 100 + '%');
+    row.style.setProperty('--arrival', frame.arrival / RECORD_DURATION * 100 + '%');
     const marker = row.querySelector('.distance-arrival'); marker.hidden = !received;
-    marker.textContent = seconds(frame.arrival) + ' 秒'; marker.classList.toggle('at-end', frame.arrival > .5);
+    marker.textContent = seconds(frame.arrival) + ' 秒'; marker.classList.toggle('at-end', frame.arrival > RECORD_DURATION * 5 / 6);
     const pending = row.querySelector('.distance-pending'); pending.hidden = waiting || received;
     pending.textContent = '等待返回';
   }
-  $('distance-reading').textContent = ready ? `固定參照34公尺；下方牆距${distance}公尺，兩組以相同聲速比較。` : `經過${seconds(elapsed)}秒；上方${$('distance-near-state').textContent}，下方${$('distance-far-state').textContent}。`;
+  $('distance-reading').textContent = ready ? `固定參照340公尺；下方牆距${distance}公尺，兩組以相同聲速比較。` : `經過${seconds(elapsed)}秒；上方${$('distance-near-state').textContent}，下方${$('distance-far-state').textContent}。`;
 }
 export function bindDistanceWall(reset) {
-  const wall = $('distance-wall'), input = $('wall-distance'), scene = $('distance-far-scene');
+  const wall = $('distance-wall'), input = $('wall-distance'), number = $('wall-distance-number'), scene = $('distance-far-scene');
   let drag = null;
   const setDistance = value => {
-    const next = Math.max(MIN_DISTANCE, Math.min(MAX_DISTANCE, Math.round(value)));
+    const next = normaliseDistance(value, Number(input.value));
     if (Number(input.value) === next) return;
     input.value = String(next); input.dispatchEvent(new Event('input', {bubbles: true}));
   };
+  number.addEventListener('input', () => {
+    const value = number.valueAsNumber, valid = number.validity.valid;
+    reset();
+    if (valid && Number.isFinite(value)) setDistance(value);
+  });
+  const commitNumber = () => {
+    const next = normaliseDistance(number.valueAsNumber, Number(input.value));
+    setDistance(next); number.value = String(next);
+  };
+  number.addEventListener('change', commitNumber);
+  number.addEventListener('blur', commitNumber);
+  number.addEventListener('keydown', event => {
+    if (event.key === 'Enter') { event.preventDefault(); commitNumber(); number.blur(); }
+  });
   wall.addEventListener('pointerdown', event => {
     if (event.button !== 0) return;
     reset(); drag = {id: event.pointerId, x: event.clientX, distance: Number(input.value)};

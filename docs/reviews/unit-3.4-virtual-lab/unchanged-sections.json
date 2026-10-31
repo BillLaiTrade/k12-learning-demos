@@ -1,0 +1,12 @@
+[
+  {
+    "section": "first-lesson",
+    "matches": true,
+    "sha256": "244b4395e486797c614bdcc8cb43d007fed894345d57ee93d795028d93a5f4a2"
+  },
+  {
+    "section": "third-lesson-through-footer",
+    "matches": true,
+    "sha256": "cc4738d0b1ece062d33cfac71c988757f99031641b3fa4e54f2dee94983adb9f"
+  }
+]

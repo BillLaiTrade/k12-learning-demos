@@ -1,0 +1,68 @@
+✔ at two real seconds the 340m receiver has received while the 680m wave reaches its board (1.425267ms)
+✔ both virtual scenes retain one linear distance scale and physical propagation speed (0.30086ms)
+✔ audio echoes use real two/four/six-second intervals and equal-distance echoes coincide once (0.712712ms)
+✔ single-lane playback schedules only its own return and stops at its own arrival (0.369376ms)
+✔ typed distances are finite whole metres with bounds and a stable fallback (0.198528ms)
+▶ 3.4 distance comparison follows the approved real-time virtual-lab mockup
+  ✔ two stacked scenes load with real separate apparatus, one distance input and no unsolicited audio controls (436.459743ms)
+Distance final audio: {"same":true,"delays":[0,1.9999999999999998,4],"gains":[1,0.44999998807907104,0.44999998807907104],"master":0.3199999928474426,"peaks":[0.31965693831443787,0.14384561777114868,0.14384561777114868]}
+  ✔ together button emits once plus both correctly delayed weaker echoes at the final output (4228.272248ms)
+Actual real-time receiver arrivals: {"near":2.0094000000059604,"far":4.00929999999702}
+  ✔ animation and reception records follow real elapsed time at one-times speed (4212.360913ms)
+Single lane final audio: near {"count":2,"same":true,"delays":[0,2],"gains":[1,0.44999998807907104],"peaks":[0.31965693831443787,0.14384561777114868]}
+Single lane final audio: far {"count":2,"same":true,"delays":[0,6],"gains":[1,0.44999998807907104],"peaks":[0.31965693831443787,0.14384561777114868]}
+  ✔ each speaker animates and records only its own lane and produces only its own audible echo (9015.940047ms)
+  ✔ pause and resume preserve the selected lane and switching lanes cancels the old return (730.841043ms)
+  ✔ at the comparison moment near has arrived while far just reaches the wall; pause freezes the shared record and waves (4768.62777ms)
+  ✔ each speaker and lower button restarts the same controller and cancels previous echoes (461.419978ms)
+  ✔ mouse wall dragging keeps the fixed lane unchanged, clamps distance and cancels the previous observation (196.831997ms)
+  ✔ number entry, range and dragged board share conditions; incomplete and out-of-range edits are safe (265.999349ms)
+  ✔ wall and native distance input both support keyboard with bounds; equal distances share one echo (2259.144647ms)
+  ✔ cross-section playback and hidden pages stop this scene without autoplaying on return (141.017975ms)
+  ✔ all scene, records, controls and dialogues stay in the content column from 1440 to 320px (7022.005852ms)
+  ✔ real touch wall dragging and speaker tapping work under reduced motion (1063.802565ms)
+  ✔ audio failure appears only on failure and a new explicit play clears the error (562.592138ms)
+✔ 3.4 distance comparison follows the approved real-time virtual-lab mockup (36464.471604ms)
+✔ echo uses two equal legs and the specified air or water speed (1.243951ms)
+✔ invalid physical inputs are rejected (0.494317ms)
+✔ wave reaches wall halfway and then returns to receiver (0.153793ms)
+✔ absorption preserves direct sound and path delays while reducing reflection energy (0.348089ms)
+✔ assessment identifies omissions, wrong reasoning and correct understanding (1.249165ms)
+▶ 3.4 first lesson matches approved apparatus layout and has two synchronized playback entrances
+  ✔ complete scene and Traditional Chinese text load, with no automatic animation or sound (311.088165ms)
+  ✔ clicking the pictured speaker emits exactly one original and its weaker delayed copy (160.591694ms)
+Measured final Web Audio output: {"state":"running","gain":0.3199999928474426,"direct":0.31965693831443787,"echo":0.14384561777114868}
+  ✔ final output contains both audible-strength pulses after all gain stages (4654.157936ms)
+  ✔ the page has no web volume controls and keeps device-based volume adjustment (5.70024ms)
+  ✔ both entrances restart the same timeline and cancel earlier scheduled echoes (599.414861ms)
+  ✔ pause freezes waves and audio; resume preserves the emission count (480.63764ms)
+  ✔ surface contact precedes return; receiver lights only when the returning sound arrives (4933.924854ms)
+  ✔ pause and changing sections/background stop playback without a separate sound switch (221.945313ms)
+  ✔ keyboard Enter and Space activate the real speaker hit area once each (59.280936ms)
+  ✔ the scene, phase strip, controls and explanation all remain within the right content column (737.945746ms)
+  ✔ touch and reduced-motion still allow explicit speaker playback and pause (977.730933ms)
+  ✔ blocked or stalled audio shows a visible retry message rather than a false playback success (2865.47441ms)
+  ✔ prefixed Web Audio fallback can also emit from an explicit click (487.167592ms)
+✔ 3.4 first lesson matches approved apparatus layout and has two synchronized playback entrances (17343.164731ms)
+▶ 3.4 reflection, ranging, sonar, absorption and assessment
+  ✔ six lessons, one quiz, shared avatars and an overview link (61.273173ms)
+  ✔ ranges produce correct leg lengths and accept native keyboard input (104.68856ms)
+  ✔ wave pause freezes, resume advances, reset preserves chosen conditions (851.314421ms)
+  ✔ cross-section playback, input changes and backgrounding stop old playback (137.411694ms)
+  ✔ sonar uses water speed, conceals distance and reveals it from the return time (161.495462ms)
+  ✔ room and treatment modes redraw weaker reflections with the same direct path (153.687708ms)
+  ✔ synthesized phrase decodes; opt-in audio stops on pause and cross-section playback (231.561814ms)
+  ✔ the absorption comparison plays the same phrase and stops when its condition changes (219.274191ms)
+  ✔ a full room observation completes and can restart from zero (2296.418895ms)
+  ✔ quiz distinguishes missing, wrong, correct, edited and reset answers (297.27922ms)
+  ✔ anchors and 1440 through 320px layouts work without page overflow (2605.407659ms)
+  ✔ touch playback moves under reduced motion and pauses both animation and audio (915.562612ms)
+✔ 3.4 reflection, ranging, sonar, absorption and assessment (8946.341848ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 52
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 63912.232707

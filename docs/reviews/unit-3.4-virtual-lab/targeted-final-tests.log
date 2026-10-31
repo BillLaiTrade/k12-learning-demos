@@ -1,0 +1,33 @@
+✔ at two real seconds the 340m receiver has received while the 680m wave reaches its board (0.913807ms)
+✔ both virtual scenes retain one linear distance scale and physical propagation speed (0.328068ms)
+✔ audio echoes use real two/four/six-second intervals and equal-distance echoes coincide once (0.790539ms)
+✔ single-lane playback schedules only its own return and stops at its own arrival (0.326189ms)
+✔ typed distances are finite whole metres with bounds and a stable fallback (0.257115ms)
+▶ 3.4 distance comparison follows the approved real-time virtual-lab mockup
+  ✔ two stacked scenes load with real separate apparatus, synchronized distance controls and no unsolicited audio controls (422.023045ms)
+Distance final audio: {"same":true,"delays":[0,1.9999999999999998,4],"gains":[1,0.44999998807907104,0.44999998807907104],"master":0.3199999928474426,"peaks":[0.31965693831443787,0.14384561777114868,0.14384561777114868]}
+  ✔ together button emits once plus both correctly delayed weaker echoes at the final output (4216.138144ms)
+Actual real-time receiver arrivals: {"near":2.0105,"far":4.01020000000298}
+  ✔ animation and reception records follow real elapsed time at one-times speed (4214.204003ms)
+Single lane final audio: near {"count":2,"same":true,"delays":[0,2],"gains":[1,0.44999998807907104],"peaks":[0.31965693831443787,0.14384561777114868]}
+Single lane final audio: far {"count":2,"same":true,"delays":[0,6.000000000000002],"gains":[1,0.44999998807907104],"peaks":[0.31965693831443787,0.14384561777114868]}
+  ✔ each speaker animates and records only its own lane and produces only its own audible echo (9034.107046ms)
+  ✔ pause and resume preserve the selected lane and switching lanes cancels the old return (746.625438ms)
+  ✔ at the comparison moment near has arrived while far just reaches the wall; pause freezes the shared record and waves (4699.64385ms)
+  ✔ each speaker and lower button restarts the same controller and cancels previous echoes (450.636826ms)
+  ✔ mouse wall dragging keeps the fixed lane unchanged, clamps distance and cancels the previous observation (195.709944ms)
+  ✔ number entry, range and dragged board share conditions; incomplete and out-of-range edits are safe (271.117539ms)
+  ✔ wall and native distance input both support keyboard with bounds; equal distances share one echo (2254.275706ms)
+  ✔ cross-section playback and hidden pages stop this scene without autoplaying on return (133.427979ms)
+  ✔ all scene, records, controls and dialogues stay in the content column from 1440 to 320px (7046.924789ms)
+  ✔ real touch wall dragging and speaker tapping work under reduced motion (1035.755029ms)
+  ✔ audio failure appears only on failure and a new explicit play clears the error (569.37866ms)
+✔ 3.4 distance comparison follows the approved real-time virtual-lab mockup (36126.919434ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36514.96228
