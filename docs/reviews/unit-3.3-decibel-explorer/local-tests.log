@@ -1,0 +1,36 @@
+✔ decibel reference mapping preserves source values and distances (5.079402ms)
+✔ decibel ribbon selects all scenes, handles pointer/touch/keys and never plays audio (8660.846952ms)
+✔ delayed or failed image loads cannot display an old scene under new metadata (2070.049534ms)
+▶ hearing exploration: continuous sine, frequency ribbon and manual records
+  ✔ approved composition has no autoplay, a logarithmic ribbon and empty manual endpoints (163.541489ms)
+  ✔ actual rendered tones have the chosen frequency, fixed low gain and smooth start/stop (31.353478ms)
+  ✔ play is continuous and retunes the existing real oscillator without restarting or boosting volume (1766.339752ms)
+  ✔ real dragging clamps both ends and keyboard works while paused without starting audio (625.215898ms)
+  ✔ manual endpoints can be recorded and overwritten, reject reversed bounds and survive pause/navigation (902.697193ms)
+  ✔ either endpoint can be cancelled independently without changing frequency, playback or the other record (742.537368ms)
+  ✔ speaker click toggles, other blocks replace sound and hiding/leaving/reset stop without autoplay (1025.818858ms)
+  ✔ pending resume can be cancelled and playback errors can retry (683.535951ms)
+  ✔ knowledge retains hearing range, animal upper bounds and device/colour limitations (853.970723ms)
+  ✔ approved desktop hierarchy and mobile controls remain inside their panels at eight widths (1779.887072ms)
+  ✔ real mobile touch drags while the same tone plays and taps toggle once (2031.871556ms)
+✔ hearing exploration: continuous sine, frequency ribbon and manual records (13068.11024ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (115.302895ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (102.485416ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (838.509198ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (2284.067577ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (724.73805ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (434.581805ms)
+  ✔ hearing exploration stays silent until played; knowledge and dBA remain readable (385.503793ms)
+  ✔ one final task supports incomplete, incorrect, correct, editing, replay, clear and new requirements (482.475401ms)
+  ✔ lesson format follows unit 2.1 with a header and full-width body; navigation tracks reading (1354.862681ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (5834.939628ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (14514.034612ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15028.202623

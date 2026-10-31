@@ -537,34 +537,45 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .hearing-animal-card strong{font-size:.9rem;color:#385640}
 @media(max-width:600px){.hearing-animals .animal-grid{grid-template-columns:1fr;gap:8px}.hearing-animal-card{display:grid;grid-template-columns:92px minmax(0,1fr);align-items:center;gap:12px;padding:9px 12px}.hearing-animal-art{height:82px}.hearing-animal-card p{text-align:left;padding:0}}
 
-/* 第七區：生活聲級的靜態圖像比較。 */
-.decibel-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 14px}
-.decibel-card{--scene-color:#527c55;min-width:0;margin:0;overflow:hidden;border:1px solid #d4e0ce;border-radius:14px;background:#f4f7ed}
-.decibel-card--conversation{--scene-color:#247c7c;border-color:#cddfdb;background:#f0f7f4}
-.decibel-card--construction{--scene-color:#a66f2b;border-color:#e3d6bd;background:#fbf6e9}
-.decibel-scene{display:block;width:100%;height:auto;aspect-ratio:1;overflow:hidden;background:#f4ecda}
-.decibel-card figcaption{padding:10px 8px 11px;text-align:center;border-top:3px solid var(--scene-color)}
-.card-main .decibel-card h3{margin:0 0 3px;color:#284936;font-size:1rem;font-weight:750}
-.decibel-value{display:flex;align-items:baseline;justify-content:center;gap:5px;color:var(--scene-color);font-variant-numeric:tabular-nums;white-space:nowrap;line-height:1.3}
-.decibel-value>span{font-size:.82rem;font-weight:650}
-.decibel-value>strong{font-size:clamp(1.8rem,3.1vw,2.6rem);font-weight:850;letter-spacing:-.025em}
-.decibel-card figcaption>p{margin:4px 0 0;font-size:.72rem;color:#6b7965}
-.decibel-comparison{padding:12px 17px 0;border:1px solid #dce5d7;border-radius:13px;background:#f9fbf5}
-.decibel-scale-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.card-main .decibel-scale-heading h3{margin:0;color:#365640;font-size:.9rem}
-.decibel-scale-heading>span{color:#6c7e6d;font-size:.73rem;white-space:nowrap}
-.decibel-scale{position:relative;margin:11px 8px 0;height:87px}
-.decibel-scale-track{position:absolute;top:41px;left:0;right:0;height:5px;border-radius:5px;background:#cbd9cb}
-.decibel-tick{position:absolute;top:55px;transform:translateX(-50%);font-size:.7rem;color:#647a66;font-variant-numeric:tabular-nums}
-.decibel-tick::before{content:"";position:absolute;top:-15px;left:50%;height:9px;width:1px;background:#93a591}
-.decibel-tick:first-of-type{transform:none}
-.decibel-tick:last-child{transform:translateX(-100%)}
-.decibel-marker{--scene-color:#527c55;position:absolute;top:0;transform:translateX(-50%);color:var(--scene-color);text-align:center;line-height:1.4}
-.decibel-marker--conversation{--scene-color:#247c7c}
-.decibel-marker--construction{--scene-color:#a66f2b}
-.decibel-marker>span{display:block;padding:3px 9px;border:1px solid currentColor;border-radius:7px;background:#fffefa;font-size:.72rem;font-weight:700;white-space:nowrap}
-.decibel-marker::after{content:"";position:absolute;left:50%;top:29px;height:10px;width:1px;background:currentColor}
-.decibel-marker>i{position:absolute;top:37px;left:50%;width:12px;height:12px;transform:translateX(-50%);border:2px solid #fffefa;border-radius:50%;background:var(--scene-color);box-shadow:0 0 0 1px var(--scene-color)}
+/* 第七區：十二個生活情境與分貝探索帶。 */
+.decibel-feature{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);margin:18px 0 12px;overflow:hidden;border:1px solid #cfdfcf;border-radius:16px;background:#fcfbf5}
+.decibel-photo{position:relative;min-width:0;min-height:285px;overflow:hidden;background:linear-gradient(120deg,#e7e9d7,#f7edd8)}
+.decibel-photo svg{position:absolute;inset:0;display:block;width:100%;height:100%;overflow:hidden}
+.decibel-photo>span{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;font-size:.85rem;color:#64745c;pointer-events:none}
+.decibel-photo[data-loading=false]>span{display:none}
+.decibel-photo:not([data-loading=false]) svg{visibility:hidden}
+.decibel-info{min-width:0;padding:20px 23px;background:radial-gradient(ellipse at top left,#fffef8,#faf9f2)}
+.decibel-info-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.decibel-info-head>span{flex:none;padding:4px 10px;border-radius:8px;background:#567f59;color:#fffef5;font-size:.8rem;font-weight:700}
+.decibel-info-head small{font-size:.64rem;color:#7a8873;white-space:nowrap}
+.card-main .decibel-info h3{margin:0;color:#173e32;font-size:clamp(1.35rem,2.5vw,2.1rem);line-height:1.4}
+.decibel-value{display:flex;align-items:baseline;gap:9px;line-height:1.2;color:#237f80;font-variant-numeric:tabular-nums;white-space:nowrap;margin:7px 0 10px}
+.decibel-value>span{font-size:clamp(1.1rem,2.2vw,1.8rem);font-weight:750}
+.decibel-value>strong{font-size:clamp(3.2rem,6vw,5rem);font-weight:850;letter-spacing:-.04em}
+.decibel-info>p{margin:5px 0 0;color:#535e54;font-size:.95rem;line-height:1.7}
+.decibel-info>[data-decibel-condition]{margin-top:13px;padding-top:11px;border-top:1px solid #d6dfd1;color:#778170;font-size:.76rem}
+.decibel-explorer{padding:12px 17px 9px;border:1px solid #d7e3d3;border-radius:15px;background:linear-gradient(110deg,#f3f8f0,#f8faf2)}
+.decibel-band-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.card-main .decibel-band-heading h3{margin:0;font-size:1.06rem;color:#244c39}
+.decibel-band-heading>span{font-size:.73rem;color:#7b8976}
+.decibel-band-control{position:relative;margin-top:6px;padding-top:30px;touch-action:none;cursor:crosshair;user-select:none;-webkit-user-select:none;border-radius:9px;outline-offset:4px}
+.decibel-band-control:focus-visible{outline:3px solid #ad8f40}
+.decibel-ribbon{position:relative;height:49px;border-radius:9px;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(2.272727% - 1px),#fff5 calc(2.272727% - 1px),#fff5 2.272727%),linear-gradient(90deg,#147a82,#67af91 23%,#c9da8c 41%,#ffe77d 58%,#f5aa4d 78%,#ae6732);box-shadow:inset 0 0 0 1px #64836b33}
+.decibel-cursor{position:absolute;top:-2px;bottom:-2px;left:var(--decibel-position);width:4px;transform:translateX(-50%);border-radius:3px;background:#fffef4;box-shadow:0 0 0 1px #e0b344,0 0 12px 4px #f8d04bc9;pointer-events:none}
+.decibel-band-control output{position:absolute;top:0;left:clamp(38px,var(--decibel-position),calc(100% - 38px));transform:translateX(-50%);padding:3px 10px;border-radius:7px;background:#254b3d;color:#fffef4;font-size:.85rem;font-weight:750;white-space:nowrap;line-height:1.5;pointer-events:none;box-shadow:0 2px 3px #284c3025}
+.decibel-band-control output::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#254b3d}
+.decibel-ticks{position:relative;height:29px;color:#6d826f;font-size:.73rem;line-height:1.5;font-variant-numeric:tabular-nums}
+.decibel-ticks>span{position:absolute;top:9px;transform:translateX(-50%);white-space:nowrap}
+.decibel-ticks>span::before{content:"";position:absolute;top:-8px;left:50%;height:6px;width:1px;background:#99ad98}
+.decibel-ticks>span:first-child{transform:none}.decibel-ticks>span:first-child::before{left:0}
+.decibel-ticks>span:last-child{transform:translateX(-100%)}.decibel-ticks>span:last-child::before{left:100%}
+.decibel-landmarks{position:relative;height:32px;font-size:.72rem;color:#49775c}
+.decibel-landmarks>i{position:absolute;top:-29px;width:3px;height:6px;border-radius:2px;background:#45684e88;transform:translateX(-50%)}
+.decibel-landmarks>span{position:absolute;top:1px;transform:translateX(-50%);padding:1px 12px;border:1px solid #8fab8e;border-radius:7px;background:#fffffa;font-weight:700}
+.decibel-landmarks>span:first-of-type{transform:none}
+.decibel-landmarks>span:nth-of-type(2){color:#247c7c;border-color:#76a5a0}
+.decibel-landmarks>span:nth-of-type(3){color:#a47533;border-color:#c4a166}
+.decibel-explorer>p{margin:3px 0 0;text-align:center;font-size:.71rem;line-height:1.6;color:#7a8773}
 .decibel-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
 .decibel-facts>div{display:flex;align-items:center;gap:11px;min-width:0;padding:12px;border:1px solid #e5deca;border-radius:12px;background:#faf6eb}
 .decibel-fact-symbol{display:grid;flex:none;width:36px;height:36px;place-items:center;border-radius:50%;background:#efe5c9;color:#8e753f;font-size:1.35rem;font-weight:800}
@@ -572,5 +583,14 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .decibel-facts p{margin:0;color:#6e7668;font-size:.74rem;line-height:1.6}
 .card-main>.decibel-note{margin:12px 1px 5px;color:#71806c;font-size:.7rem;line-height:1.65}
 .card-main>.decibel-sources{margin:0;color:#71806c;font-size:.68rem;line-height:1.6}
-@media(min-width:761px) and (max-width:1100px){.decibel-cards{gap:9px}.decibel-card figcaption{padding:9px 4px}.card-main .decibel-card h3{font-size:.9rem}.decibel-value{gap:4px}.decibel-value>span{font-size:.72rem}.decibel-card figcaption>p{font-size:.63rem}.decibel-facts>div{gap:7px;padding:10px}.decibel-fact-symbol{width:27px;height:27px;font-size:1.1rem}.card-main .decibel-facts h3{font-size:.77rem}.decibel-facts p{font-size:.67rem}}
-@media(max-width:600px){.decibel-cards{grid-template-columns:1fr;gap:10px;margin-top:14px}.decibel-card{display:grid;grid-template-columns:110px minmax(0,1fr);align-items:stretch}.decibel-scene{height:100%;min-height:118px;aspect-ratio:auto}.decibel-card figcaption{display:flex;flex-direction:column;justify-content:center;padding:8px;border-top:0;border-left:3px solid var(--scene-color)}.card-main .decibel-card h3{font-size:.92rem}.decibel-value>strong{font-size:2rem}.decibel-value>span{font-size:.77rem}.decibel-card figcaption>p{font-size:.65rem}.decibel-comparison{padding:11px 10px 0}.card-main .decibel-scale-heading h3{font-size:.77rem}.decibel-scale-heading>span{font-size:.62rem}.decibel-scale{margin-inline:3px}.decibel-marker>span{font-size:.65rem;padding:3px 7px}.decibel-tick{font-size:.62rem}.decibel-facts{grid-template-columns:1fr;gap:8px}.decibel-facts>div{padding:10px}.card-main .decibel-facts h3{font-size:.82rem}.decibel-facts p{font-size:.7rem}.card-main>.decibel-note,.card-main>.decibel-sources{font-size:.65rem}}
+@media(min-width:761px) and (max-width:1100px){.decibel-info{padding:17px}.decibel-info-head{flex-wrap:wrap;gap:5px}.decibel-info-head small{width:100%}.decibel-photo{min-height:310px}.decibel-info>p{font-size:.85rem}}
+@media(max-width:600px){
+.decibel-feature{grid-template-columns:1fr;margin-top:14px}.decibel-photo{min-height:0;aspect-ratio:2}.decibel-info{padding:13px 15px}
+.decibel-info-head{margin-bottom:7px}.decibel-info-head>span{font-size:.72rem;padding:3px 8px}.decibel-info-head small{font-size:.6rem}
+.card-main .decibel-info h3{font-size:1.3rem}.decibel-value{margin:4px 0;gap:7px}.decibel-value>strong{font-size:3.3rem}.decibel-value>span{font-size:1.2rem}
+.decibel-info>p{font-size:.83rem}.decibel-info>[data-decibel-condition]{font-size:.69rem;margin-top:8px;padding-top:7px}
+.decibel-explorer{padding:10px 12px 8px}.decibel-band-heading{align-items:flex-start;gap:5px}.card-main .decibel-band-heading h3{font-size:.87rem}.decibel-band-heading>span{font-size:.6rem;max-width:115px;text-align:right}
+.decibel-ribbon{height:47px}.decibel-ticks{font-size:.59rem;height:37px}.decibel-ticks>span:nth-last-child(2){top:22px}.decibel-ticks>span:nth-last-child(2)::before{top:-21px;height:18px}
+.decibel-landmarks{font-size:.65rem;height:28px}.decibel-landmarks>span{padding:1px 8px}.decibel-landmarks>i{top:-37px}
+.decibel-explorer>p{font-size:.63rem}.decibel-facts{grid-template-columns:1fr;gap:8px}.decibel-facts>div{padding:10px}.card-main .decibel-facts h3{font-size:.82rem}.decibel-facts p{font-size:.7rem}.card-main>.decibel-note,.card-main>.decibel-sources{font-size:.65rem}
+}

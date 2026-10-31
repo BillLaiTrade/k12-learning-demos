@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-31",
+  "illustrations_only": true,
+  "files": [
+    {
+      "file": "decibel-quiet.png",
+      "source": "/workspace/generated_images/exec-4825ca90-3eb2-4b24-91d2-7cb04999e166.png",
+      "generator": "image_gen",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "panels": "上中下各1024×512，以SVG視窗及clipPath顯示；未修改原圖像素",
+      "sha256": "48abb1c25378fac4a2c26b6d66ca0012b4781a23e58e899674b6ec28271eb440"
+    },
+    {
+      "file": "decibel-daily.png",
+      "source": "/workspace/generated_images/exec-2a68a48b-ac62-4305-8c0c-c4d7ffd01caa.png",
+      "generator": "image_gen",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "panels": "上中下各1024×512，以SVG視窗及clipPath顯示；未修改原圖像素",
+      "sha256": "2f98dca522aea1b05117a2d9e845c899e93bc49635eea648166beeaf6baba070"
+    },
+    {
+      "file": "decibel-work.png",
+      "source": "/workspace/generated_images/exec-19e5ecbb-db0d-41d6-92e9-0d6561277c92.png",
+      "generator": "image_gen",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "panels": "上中下各1024×512，以SVG視窗及clipPath顯示；未修改原圖像素",
+      "sha256": "1310eab6db9747f5fccdfb3590284e5d87cca44b3baa0f83bba33150e234bf3b"
+    },
+    {
+      "file": "decibel-loud.png",
+      "source": "/workspace/generated_images/exec-fa17a013-59f0-4774-9771-645ec17859eb.png",
+      "generator": "image_gen",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "panels": "上中下各1024×512，以SVG視窗及clipPath顯示；未修改原圖像素",
+      "sha256": "0b517155519e414b71bfc3fbd798e65a8f6b4b73eda440944180fdc1f67d9da9"
+    }
+  ]
+}

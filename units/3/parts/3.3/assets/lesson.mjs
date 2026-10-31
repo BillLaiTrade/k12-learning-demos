@@ -1,3 +1,4 @@
+import {createDecibelExplorer} from './decibel-experiment.mjs?v=1';
 import {signal,soundSamples,challenge,checkSettings} from './model.mjs?v=1';
 import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
 import {createForkExperiment} from './fork-experiment.mjs?v=2';
@@ -181,4 +182,5 @@ $('card-04').querySelector('[data-pan-reset]').addEventListener('click',()=>{sto
 timbreView=createTimbreExperiment($('card-05'));
 hearingView=createHearingExperiment($('card-06'),{onToggle:toggleHearing,onFrequency:tuneHearing,onReset:()=>stop($('card-06'))});
 $('card-06').addEventListener('pointerdown',()=>{if(activeRoot&&activeRoot!==$('card-06'))stop();},true);
+createDecibelExplorer($('card-07'),{onInteract:()=>stop()});
 newChallenge();activeLink(location.hash||'#card-01');

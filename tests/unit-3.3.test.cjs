@@ -70,8 +70,8 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
   await page.locator('[data-hearing-band]').focus();await page.keyboard.press('End');assert.equal(await page.locator('#hearing-frequency').innerText(),'20,000 Hz');assert.equal(await page.locator('#card-06').getAttribute('data-playing'),'false');
   await page.locator('.hearing-animals summary').click();assert.match(await page.locator('.hearing-animals').innerText(),/次聲波[\s\S]*超聲波/);await page.locator('.hearing-animals summary').click();
   await page.locator('.route a[href="#card-07"]').click();
-  assert.deepEqual(await page.locator('#card-07 [data-decibel]').evaluateAll(nodes=>nodes.map(n=>Number(n.dataset.decibel))),[20,60,100]);assert.equal(await page.locator('#card-07 button,#card-07 input').count(),0);
-  assert.equal(await page.locator('#card-07 .decibel-scene image').count(),3);const art=await page.evaluate(async()=>{const im=new Image();im.src=new URL('assets/decibel-scenes.png',location.href);await im.decode();return[im.naturalWidth,im.naturalHeight];});assert.deepEqual(art,[2172,724]);
+  assert.deepEqual(await page.locator('#card-07 [data-decibel-marker]').evaluateAll(nodes=>nodes.map(n=>Number(n.dataset.decibelMarker))),Array.from({length:12},(_,i)=>20+i*10));assert.equal(await page.locator('#card-07 [data-play]').count(),0);
+  assert.equal(await page.locator('#card-07 .decibel-photo image').count(),1);await page.waitForFunction(()=>document.querySelector('.decibel-photo').dataset.loading==='false');
   assert.match(await page.locator('#card-07').innerText(),/0 dB，不代表沒有聲音/);assert.match(await page.locator('#card-07').innerText(),/不代表聽起來大聲 3 倍/);assert.match(await page.locator('#card-07 .decibel-sources a').first().getAttribute('href'),/osha\.gov/);
   assert.equal(await page.evaluate(()=>window.audioRuns.length),before);assert.equal(await page.locator('#card-07 [data-play]').count(),0);
  });
@@ -113,8 +113,8 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
     const clipped=[...card.querySelectorAll('button,input,select,.dialogue')].some(n=>{const r=n.getBoundingClientRect();return r.width&& (r.left<box.left||r.right>box.right+1||n.scrollWidth>n.clientWidth+1);});
     return inside&&aligned&&!clipped?[]:[card.id];
    }));assert.deepEqual(issues,[],`all seven sections keep their content inside the card at ${width}px`);
-   const scaleErrors=await page.locator('#card-07').evaluate(root=>{const scale=root.querySelector('.decibel-scale').getBoundingClientRect();return [...root.querySelectorAll('[data-decibel-marker]')].map(n=>{const r=n.getBoundingClientRect();return Math.abs(r.left+r.width/2-(scale.left+Number(n.dataset.decibelMarker)/120*scale.width));});});assert.ok(scaleErrors.every(n=>n<1),'markers reflect 20 / 60 / 100 on the common scale');
-   assert.equal(await page.locator('#card-07 .decibel-card').evaluateAll(nodes=>nodes.some(n=>n.scrollWidth>n.clientWidth+1)),false);
+   const scaleErrors=await page.locator('#card-07').evaluate(root=>{const scale=root.querySelector('[data-decibel-band]').getBoundingClientRect();return [...root.querySelectorAll('[data-decibel-marker]')].map(n=>{const r=n.getBoundingClientRect();return Math.abs(r.left+r.width/2-(scale.left+(Number(n.dataset.decibelMarker)-20)/110*scale.width));});});assert.ok(scaleErrors.every(n=>n<1),'twelve reference positions match the 20–130 dBA ribbon');
+   assert.equal(await page.locator('#card-07 .decibel-info').evaluateAll(nodes=>nodes.some(n=>n.scrollWidth>n.clientWidth+1)),false);
    if([1440,1024,390].includes(width)){await page.setViewportSize({width,height:1800});await page.locator('#card-07').screenshot({path:`${capture}/decibel-${width}.png`});await page.setViewportSize({width,height:1000});}
    assert.equal(await page.locator('.wave-label').first().evaluate(n=>parseFloat(getComputedStyle(n).fontSize)>=12),true);
    await page.locator('.route a[href="#card-03"]').click();
