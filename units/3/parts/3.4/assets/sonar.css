@@ -5,4 +5,5 @@
 #s4 button{touch-action:manipulation}#s4 #sonar-ship{touch-action:none}@media(max-width:650px){.sonar-point text{font-size:42px}.sonar-probe-label{font-size:32px}}
 
 
-.sonar-profile-key{margin:10px 18px 8px;color:#546a5c;font-size:.84rem;line-height:1.7}.sonar-profile-key>span{display:inline-block;margin-right:8px;color:#c17935;font-size:1.2rem;font-weight:800;text-shadow:0 1px #fff2d4}.sonar-profile-key b{color:#32583e;font-weight:650}@media(max-width:650px){.sonar-profile-key{margin:10px 12px;font-size:.8rem}}
+
+.sonar-chart{margin:0 18px 16px;padding:16px 18px;border:1px solid #d1ddca;border-radius:12px;background:#fffdf6}.sonar-chart h3{margin:0 0 5px;color:#28543e;font-size:1rem}.sonar-chart p{margin:0 0 8px;color:#5b6f5e;font-size:.85rem}.sonar-chart svg{display:block;width:100%;height:auto;background:#f1f6ed;border-radius:9px}.sonar-chart-grid{fill:none;stroke:#c9d9c7;stroke-width:1.5}.sonar-chart-axis{fill:#52695b;font-size:17px}.sonar-chart-point text{fill:#234d3c;font-size:23px;font-weight:700;paint-order:stroke;stroke:#f1f6ed;stroke-width:4px}.sonar-chart .sonar-chart-empty{margin:8px 0 0;color:#6b796b}@media(max-width:650px){.sonar-chart{margin:0 10px 12px;padding:12px}.sonar-chart-axis{font-size:30px}.sonar-chart-point text{font-size:32px}.sonar-chart-point circle{r:12px}}
