@@ -75,3 +75,36 @@ export function assessReport(sample,value) {
   if(Math.abs(Number(answer)-basis.percent)>1e-6)return fail('用乾燥晶體的淨質量，除以蒸發前濾液的淨質量，再乘以 100%，試著算一次。');
   return {ok:true,issues:[],basis};
 }
+
+// All portions are equal, homogenized aliquots of PORTION. A replacement portion
+// may supply a missed measurement; each record must still cite real evidence.
+export function assessNotebook(samples,records){
+  const fail=(field,message)=>({ok:false,field,issues:[message],basis:null});
+  if(!samples.length)return fail(null,'先從未知樣本 X 取一份，試著分離出乾燥晶體。');
+  const evidence={};
+  for(const [field,title,key,optional] of [['raw-mass','過濾前取樣','raw',true],['solution-mass','蒸發前濾液','filtered',false],['solute-mass','乾燥晶體','solid',false]]){
+    const record=records[field]||{},value=String(record.value??'').trim();
+    if(!value&&optional)continue;
+    if(!value||!Number.isFinite(Number(value))||Number(value)<0)return fail(field,field==='solution-mass'?'請填寫蒸發前濾液的淨質量。若忘記先前讀值，可以另取一份補做稱量。':`請自行讀取電子秤，填寫${title}的淨質量紀錄（克）。`);
+    const sample=samples.find(s=>s.id===record.sampleId);
+    if(!sample)return fail(field,`請選擇${title}這筆紀錄的來源取樣。`);
+    const name=sample.id<=26?String.fromCharCode(64+sample.id):String(sample.id);
+    const measurements=measuredMasses(sample),measurement=measurements[key];
+    if(key==='filtered'&&!measurement)return fail(field,`取樣 ${name} 還沒有過濾後濾液的稱量紀錄。請過濾並稱量，或選擇已補做稱量的來源取樣。`);
+    if(key==='solid'&&measurement?.phase==='dry-raw')return fail(field,`取樣 ${name} 的固體還混著泥沙，不能當作晶體淨質量。請另取一份，先過濾再蒸乾、稱量。`);
+    if(!measurement)return fail(field,`取樣 ${name} 的${title}尚未稱量，請確認這筆紀錄來自電子秤讀值。`);
+    if(Math.abs(Number(value)-measurement.mass)>1e-6)return fail(field,`${title}紀錄與來源取樣 ${name} 的電子秤讀值不同，請重新核對。`);
+    evidence[key]=measurement;
+  }
+  const basis={solution:evidence.filtered.mass,solute:evidence.solid.mass};
+  basis.percent=basis.solute/basis.solution*100;
+  for(const [field,title,expected] of [['calculation-numerator','晶體淨質量',basis.solute],['calculation-denominator','濾液淨質量',basis.solution]]){
+    const value=String(records[field]?.value??'').trim();
+    if(!value||!Number.isFinite(Number(value))||Number(value)<0)return fail(field,`請在公式中填入${title}（克）。`);
+    if(Math.abs(Number(value)-expected)>1e-6)return fail(field,`公式中的${title}與上方紀錄不同，請重新核對。`);
+  }
+  const answer=String(records['concentration-value']?.value??'').trim();
+  if(!answer||!Number.isFinite(Number(answer))||Number(answer)<0||Number(answer)>100)return fail('concentration-value','請填寫重量百分濃度的數值，百分號已經替你放好了。');
+  if(Math.abs(Number(answer)-basis.percent)>1e-6)return fail('concentration-value','用乾燥晶體的淨質量，除以蒸發前濾液的淨質量，再乘以 100%，試著算一次。');
+  return {ok:true,issues:[],basis};
+}

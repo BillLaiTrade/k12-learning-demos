@@ -1,10 +1,11 @@
-import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessReport,concentrationEvidence,measuredMasses,measurementHint} from './investigation-state.js?v=dry-sample-retry-1';
+import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessNotebook,measuredMasses,measurementHint} from './investigation-state.js?v=shared-notebook-1';
 import {loadPicture,createRenderer} from './investigation-renderer.js?v=filtrate-to-scale-1';
 
 const root=document.getElementById('invest-lab');
 const $=id=>document.getElementById(`invest-${id}`);
 const controls=[...root.querySelectorAll('[data-invest-tool]')];
-const answers=new Map();
+const answers={},sources={};
+const massFields=['raw-mass','solution-mass','solute-mass'];
 const answerFields=['raw-mass','solution-mass','solute-mass','calculation-numerator','calculation-denominator','concentration-value'];
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
 let samples=[],active=null,stock=6,nextId=1,animation=null,renderer=null,frame=0,pausedAt=null,drag=null,suppressClickUntil=0,feedbackRevealFrame=0;
@@ -34,17 +35,23 @@ function revealCompletion(){
 function invalidateReport(){cancelFeedbackReveal();clearReportTarget();const feedback=$('feedback');feedback.hidden=true;feedback.replaceChildren();delete feedback.dataset.result;}
 function redraw(now=performance.now()){renderer?.render({sample:selected(),stock,animation},now);}
 function updateConcentration(){
-  const sample=selected(),{filtered,solid}=measuredMasses(sample);
-  $('notebook-sample').textContent=sample?`取樣 ${label(sample.id)}`:'尚未取樣';
+  const sample=selected();
+  const {filtered}=measuredMasses(samples.find(s=>s.id===sources['solution-mass']));
+  const {solid}=measuredMasses(samples.find(s=>s.id===sources['solute-mass']));
   $('solution-note').textContent=filtered?'這是計算濃度時的溶液總質量。':'這筆重量需要包含泥沙嗎？';
   $('solute-note').textContent=solid?(solid.phase==='dry-filtered'?'這是原本溶在濾液中的溶質質量。':'固體還混有泥沙，能直接當作晶體質量嗎？'):'稱到的是乾燥晶體，還是混著泥沙的固體？';
   $('liquid-measurement').dataset.valid=filtered?'true':'';
   $('solid-measurement').dataset.valid=solid?String(solid.phase==='dry-filtered'):'';
-  const draft=answers.get(active)||{};
-  for(const field of answerFields)$(field).value=draft[field]??'';
+  for(const field of answerFields)if($(field).value!==(answers[field]??''))$(field).value=answers[field]??'';
+  for(const field of massFields){
+    const select=$(`${field}-source`);select.replaceChildren(new Option('選取樣',''));
+    for(const s of samples)select.add(new Option(`取樣 ${label(s.id)}`,String(s.id)));
+    select.value=sources[field]??'';
+  }
   const hint=measurementHint(sample);$('hint').hidden=!hint||!!animation;$('hint').textContent=hint;
   const disabled=root.dataset.ready!=='true'||!!animation||!sample;
   for(const field of answerFields)$(field).disabled=disabled;
+  for(const field of massFields)$(`${field}-source`).disabled=disabled;
   $('check').disabled=disabled;
 }
 
@@ -99,25 +106,8 @@ function perform(action){
 }
 function submitReport(event){
   event.preventDefault();if(animation)return;cancelFeedbackReveal();clearReportTarget();
-  let result=assessReport(selected(),$('concentration-value').value);
-  const basis=concentrationEvidence(selected()),issues=[];let problemField=null;
-  if(basis){
-    const measurements=measuredMasses(selected());
-    for(const [field,title,key,optional] of [['raw-mass','過濾前取樣','raw',true],['solution-mass','蒸發前濾液','filtered',false],['solute-mass','乾燥晶體','solid',false]]){
-      const value=$(field).value.trim(),measurement=measurements[key];
-      if(!value&&optional)continue;
-      if(!value||!Number.isFinite(Number(value))||Number(value)<0)issues.push({field,message:field==='solution-mass'?'請填寫蒸發前濾液的淨質量。若忘記先前讀值，可以另取一份重新實驗。':`請自行讀取電子秤，填寫${title}的淨質量紀錄（克）。`});
-      else if(!measurement)issues.push({field,message:`${title}尚未稱量，請確認這筆紀錄來自電子秤讀值。`});
-      else if(Math.abs(Number(value)-measurement.mass)>1e-6)issues.push({field,message:`紀錄的${title}淨質量與這份取樣的電子秤讀值不同，請重新核對。`});
-    }
-    for(const [field,title,expected] of [['calculation-numerator','晶體淨質量',basis.solute],['calculation-denominator','濾液淨質量',basis.solution]]){
-      const value=$(field).value.trim();
-      if(!value||!Number.isFinite(Number(value))||Number(value)<0)issues.push({field,message:`請在公式中填入${title}（克）。`});
-      else if(Math.abs(Number(value)-expected)>1e-6)issues.push({field,message:`公式中的${title}與這份取樣的稱量紀錄不同，請核對上方紀錄。`});
-    }
-    if(issues.length){problemField=issues[0].field;result={ok:false,issues:[issues[0].message],basis:null};}
-    else if(!result.ok)problemField='concentration-value';
-  }
+  const records=Object.fromEntries(answerFields.map(field=>[field,{value:$(field).value,sampleId:sources[field]}]));
+  const result=assessNotebook(samples,records),problemField=result.field||null;
   const feedback=$('feedback');
   feedback.hidden=false;feedback.dataset.result=result.ok?'correct':'revise';feedback.replaceChildren();
   const title=document.createElement('strong');title.textContent=result.ok?'任務完成：晶體已分離，濃度也算對了。':problemField?'先檢查這一筆紀錄。':'再檢查一下這份紀錄。';feedback.append(title);
@@ -136,7 +126,7 @@ function submitReport(event){
 }
 
 function clear(){
-  cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];answers.clear();active=null;stock=6;nextId=1;
+  cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];for(const field of answerFields)delete answers[field];for(const field of massFields)delete sources[field];active=null;stock=6;nextId=1;
   $('report').reset();invalidateReport();root.querySelectorAll('[data-sample]').forEach(b=>b.remove());delete root.dataset.lastEvent;
   $('concentration-value').value='';update();redraw();announce('點未知樣本 X 取樣，再自由選用器材測試。');$('bottle').focus({preventScroll:true});
 }
@@ -171,10 +161,14 @@ $('settle').addEventListener('click',()=>perform('settle'));
 $('report').addEventListener('submit',submitReport);
 for(const field of answerFields){
   $(field).addEventListener('input',()=>{
-    answers.set(active,{...answers.get(active),[field]:$(field).value});
-    invalidateReport();
+    answers[field]=$(field).value;
+    if(massFields.includes(field)&&$(field).value.trim()&&!sources[field])sources[field]=active;
+    invalidateReport();updateConcentration();
   });
 }
+for(const field of massFields)$(`${field}-source`).addEventListener('change',event=>{
+  sources[field]=Number(event.target.value)||null;invalidateReport();updateConcentration();
+});
 $('reset').addEventListener('click',()=>{if(samples.length)$('reset-dialog').showModal();else clear();});
 $('reset-dialog').addEventListener('close',()=>{if($('reset-dialog').returnValue==='reset')clear();});
 document.addEventListener('visibilitychange',()=>{
