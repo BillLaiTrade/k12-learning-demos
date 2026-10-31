@@ -22,7 +22,10 @@ export function createTimbreExperiment(root){
  rows.get('pure').querySelector('.timbre-picture').innerHTML='<img src="assets/fork-apparatus.png" alt="" class="timbre-fork">';
  rows.get('string').querySelector('.timbre-picture').innerHTML=guitarPicture();
  rows.get('pipe').querySelector('.timbre-picture').innerHTML=pipePicture();
- for(const row of rows.values())row.querySelector('.wave').innerHTML=axes();
+ for(const row of rows.values()){
+  row.querySelector('.wave').innerHTML=axes();
+  row.querySelector('.timbre-image-play').addEventListener('click',()=>row.querySelector('.timbre-play').click());
+ }
  async function prepare(key){
   const row=rows.get(key),clip=await loadTimbreClip(key),plot=row.querySelector('.wave');
   let path=plot.querySelector('.signal');
@@ -38,8 +41,8 @@ export function createTimbreExperiment(root){
   const row=rows.get(key);row.dataset.ready='false';row.querySelector('.timbre-load').textContent='波形未載入，點播放重試';
  });
  return {prepare,start(key){
-  for(const [k,row]of rows){row.dataset.sounding=String(k===key);row.querySelector('.play').setAttribute('aria-pressed',String(k===key));}
+  for(const [k,row]of rows){row.dataset.sounding=String(k===key);row.querySelectorAll('.play,.timbre-image-play').forEach(button=>button.setAttribute('aria-pressed',String(k===key)));}
  },stop(){
-  for(const row of rows.values()){row.dataset.sounding='false';row.querySelector('.play').setAttribute('aria-pressed','false');}
+  for(const row of rows.values()){row.dataset.sounding='false';row.querySelectorAll('.play,.timbre-image-play').forEach(button=>button.setAttribute('aria-pressed','false'));}
  }};
 }

@@ -69,6 +69,19 @@ test('timbre rows use their actual playback PCM and independent controls',{timeo
   await page.locator('.route a[href="#card-06"]').click();assert.equal(await root.getAttribute('data-playing'),'false');
   await play('pure');await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));delete document.hidden;});assert.equal(await root.getAttribute('data-playing'),'false');
  });
+ await t.test('instrument pictures play the same PCM as their buttons and synchronize both controls',async()=>{
+  for(const key of ['pure','string','pipe']){
+   await play(key);const expected=await page.evaluate(()=>window.timbreRuns.at(-1).samples);
+   const n=await page.evaluate(()=>window.timbreRuns.length);await row(key).locator('.timbre-image-play').click();
+   await page.waitForFunction(n=>window.timbreRuns.length===n+1,n);
+   assert.deepEqual(await page.evaluate(()=>window.timbreRuns.at(-1).samples),expected);
+   assert.equal(await row(key).locator('[aria-pressed=true]').count(),2);
+   assert.equal(await page.evaluate(()=>window.timbreRuns.at(-2).stopped),true);
+  }
+  await row('pure').locator('.timbre-image-play').focus();const n=await page.evaluate(()=>window.timbreRuns.length);await page.keyboard.press('Enter');await page.waitForFunction(n=>window.timbreRuns.length===n+1,n);
+  assert.equal(await row('pipe').locator('[aria-pressed=true]').count(),0);
+  await page.locator('.route a[href="#card-06"]').click();assert.equal(await root.locator('[aria-pressed=true]').count(),0);
+ });
  await t.test('desktop, laptop and phone keep aligned charts, complete instruments and usable buttons',async()=>{
   for(const width of [1920,1440,1280,1024,820,760,390,320]){
    await page.setViewportSize({width,height:1100});await root.scrollIntoViewIfNeeded();
@@ -83,7 +96,8 @@ test('timbre rows use their actual playback PCM and independent controls',{timeo
  });
  await t.test('actual touch plays once and can independently replay another instrument',async()=>{
   const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const p=await mobile.newPage();let starts=0;await p.addInitScript(()=>{window.starts=0;const create=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=create.call(this),start=s.start.bind(s);s.start=(...args)=>{window.starts++;return start(...args);};return s;};});
-  await p.goto(url+'#card-05',{waitUntil:'networkidle'});for(const key of ['string','string','pipe']){await p.locator(`[data-play="tone-${key}"]`).tap();await p.waitForFunction(n=>window.starts===n,++starts);await p.waitForTimeout(70);assert.equal(await p.evaluate(()=>window.starts),starts);}await mobile.close();
+  await p.goto(url+'#card-05',{waitUntil:'networkidle'});for(const key of ['string','string','pipe']){await p.locator(`[data-play="tone-${key}"]`).tap();await p.waitForFunction(n=>window.starts===n,++starts);await p.waitForTimeout(70);assert.equal(await p.evaluate(()=>window.starts),starts);}
+  for(const key of ['pure','string','pipe','pipe']){await p.locator(`[data-timbre=${key}] .timbre-image-play`).tap();await p.waitForFunction(n=>window.starts===n,++starts);await p.waitForTimeout(70);assert.equal(await p.evaluate(()=>window.starts),starts);}await mobile.close();
  });
  await t.test('delayed clip cannot play after leaving; failed preload stays empty and playback retries',async()=>{
   const c=await browser.newContext(),p=await c.newPage();let release,seen;const pending=new Promise(r=>release=r),requested=new Promise(r=>seen=r);
