@@ -1,4 +1,4 @@
-import {PROBE_Y, MAX_DEPTH, DEPTH_HEIGHT} from './sonar-terrain.mjs?v=20261031-landforms';
+import {PROBE_Y, MAX_DEPTH, DEPTH_HEIGHT} from './sonar-terrain.mjs?v=20261031-shallow';
 // Only completed measurements are available to this reconstruction.
 // Do not sample the ground-truth terrain between measurements.
 export function surveyProfile(records) {

@@ -1,7 +1,7 @@
-import {surveyProfile} from './sonar-profile.mjs?v=20261031-survey-line';
+import {surveyProfile} from './sonar-profile.mjs?v=20261031-shallow';
 import {oceanEnvironment, surveyShip} from './sonar-scene.mjs?v=20261031-no-landform-labels';
-import {depthAt, bottomY, returnTime, PROBE_Y as probeY} from './sonar-terrain.mjs?v=20261031-landforms';
-export {depthAt, returnTime, WATER_SPEED} from './sonar-terrain.mjs?v=20261031-landforms';
+import {depthAt, bottomY, returnTime, PROBE_Y as probeY} from './sonar-terrain.mjs?v=20261031-shallow';
+export {depthAt, returnTime, WATER_SPEED} from './sonar-terrain.mjs?v=20261031-shallow';
 export function pointName(index) { let name = ''; for (let n = index + 1; n > 0; n = Math.floor((n - 1) / 26)) name = String.fromCharCode(65 + (n - 1) % 26) + name; return name; }
 const $ = id => document.getElementById(id);
 const number = value => value.toLocaleString('en-US', {maximumFractionDigits: 1});
