@@ -1,0 +1,24 @@
+✔ water speed and round trips agree at shallow, middle and deep locations (4.194889ms)
+✔ student-created labels continue beyond Z without preassigned positions (0.71894ms)
+▶ free-position active sonar survey
+  ✔ full-width format, shared dialogue, layered scene and no old slider, sound checkbox or preset points (429.694795ms)
+  ✔ mouse dragging and buttons move only the ship without creating points (264.662933ms)
+Sonar final output {"gain":0.3199999928474426,"direct":0.31965693831443787,"back":0.14384561777114868}
+  ✔ a four-second real-time measurement locks the position, reflects halfway, then records 3000m with a weaker return (4595.266355ms)
+  ✔ new positions preserve old markers and map rows one-to-one, deeper places take longer (9631.39584ms)
+  ✔ pause freezes visual time, cancels old audio; resume preserves a single pending point (5909.470613ms)
+  ✔ clear cancels pending callbacks, retains terrain and restarts labels at A; cross-section and hidden page pause sonar (3339.490877ms)
+  ✔ seven widths keep controls beneath scene, headings, table and content inside full-width card (1119.648152ms)
+  ✔ real mobile touch drag and playback work with reduced motion, including clear during pause (1240.872697ms)
+  ✔ keyboard activation and audio failure recovery keep one record and cancel failed attempts (3122.53232ms)
+  ✔ delayed audio activation holds the clock at zero and clear invalidates the awaiting start (5960.064033ms)
+  ✔ rock material decodes, stays clipped to measured terrain and agrees with an intermediate survey point (3689.95836ms)
+✔ free-position active sonar survey (40344.300802ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40779.729048
