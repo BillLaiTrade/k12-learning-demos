@@ -213,25 +213,29 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 
 .card-main .fork-trace-note{margin:0 0 10px;color:var(--muted);font-size:.78rem;line-height:1.6}
 
-/* 第二區：依核可圖維持左右對稱；頻率加減僅屬右側。 */
-.pitch-bench{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px -5px 8px}
-.pitch-column{min-width:0;text-align:center;padding:0 6px;border-left:1px solid transparent}
-.pitch-column+ .pitch-column{border-left-color:var(--line)}
-.card-main .pitch-column>h3{margin:0;padding:5px 0;border-radius:8px;background:#edf5e8;color:#153f32;font-size:1.05rem}
-.pitch-frequency-row{display:flex;justify-content:center;align-items:center;gap:7px;min-height:70px;white-space:nowrap}
-.pitch-frequency{font-size:clamp(1.35rem,2.6vw,2.1rem);font-weight:850;color:#154f3e;font-variant-numeric:tabular-nums;line-height:1.15}
-.pitch-step{width:36px;min-height:36px;flex:none;padding:0;border:1px solid #438774;border-radius:10px;background:linear-gradient(#2a8a70,#14624d);color:white;font-size:1.35rem;font-weight:750;box-shadow:inset 0 1px 2px #c2e4d2}
-.pitch-apparatus{position:relative;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:5px;isolation:isolate;padding:16px 10px 12px;min-height:152px;border:1px solid #e5d9c7;border-radius:13px 13px 7px 7px;background:#eee2cb url('pitch-room-background.png') center/cover no-repeat;box-shadow:inset 0 1px 0 #ffffffb0}
-.pitch-apparatus::after{content:"";position:absolute;z-index:-1;left:0;right:0;bottom:0;height:25px;border-radius:3px 3px 6px 6px;background:repeating-linear-gradient(2deg,#ffffff18 0 1px,transparent 2px 5px),linear-gradient(#e8b574 0 35%,#cb8a44 38%,#e6ae68 52%,#b97a39 95%);box-shadow:0 6px 8px #674a2520}
-.pitch-speaker.play{display:block;min-height:0;width:100%;padding:0;border-radius:9px;background:transparent;line-height:0;align-self:end;touch-action:manipulation}
-.pitch-speaker img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 2px #3b291b24)}
-.pitch-speaker:hover{background:transparent;filter:brightness(1.04)}
-.pitch-closeup{position:relative;display:flex;flex-direction:column;align-items:center;padding:6px 2px 5px;min-width:0;border:1px solid #7d9fa3;border-radius:11px;background:radial-gradient(ellipse at 50% 45%,#fff 30%,#f0f4f1 100%);box-shadow:inset 0 0 0 2px #ffffff,0 3px 7px #31564a14}
-.pitch-closeup::before{content:"";position:absolute;right:100%;top:45%;width:20%;border-top:1px solid #4b8497;transform:rotate(-30deg);transform-origin:right center}
-.pitch-closeup>span{font-size:.75rem;line-height:1.4;font-weight:650;color:#355963;white-space:nowrap}
-.pitch-diaphragm{display:block;width:100%;height:auto;overflow:hidden}
-.pitch-play{width:90%;margin:10px auto 12px;padding:8px 4px;font-size:.92rem;line-height:1.5}
-.pitch-column[data-sounding=true] .pitch-speaker{outline:2px solid #d6a348;outline-offset:1px;background:transparent}
+/* 第二區：一個喇叭視圖，共同切換正／側面；兩側使用同一尺度。 */
+.pitch-view-switch{display:flex;align-items:center;justify-content:center;gap:3px;width:max-content;max-width:100%;margin:20px auto 15px;padding:4px;border:1px solid #cedbcc;border-radius:999px;background:#eef3e9;box-shadow:0 2px 5px #254c3210}
+.pitch-view-switch>span{padding:0 15px;color:#365745;font-size:.86rem;font-weight:700}
+.pitch-view-switch button{min-width:90px;min-height:42px;padding:7px 20px;border:0;border-radius:999px;background:transparent;color:#315744;font-weight:750}
+.pitch-view-switch button[aria-pressed=true]{color:#fff;background:#176b53;box-shadow:0 2px 4px #163e2e20}
+.pitch-bench{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:16px 0 8px}
+.pitch-column{min-width:0;text-align:center}
+.card-main .pitch-column>h3{margin:0;padding:7px 0;border-radius:10px;background:#edf5e8;color:#153f32;font-size:1.05rem}
+.pitch-frequency-row{display:flex;justify-content:center;align-items:center;gap:8px;min-height:74px;white-space:nowrap}
+.pitch-frequency{font-size:clamp(1.6rem,2.6vw,2.1rem);font-weight:850;color:#154f3e;font-variant-numeric:tabular-nums;line-height:1.15}
+.pitch-step{width:38px;min-height:38px;flex:none;padding:0;border:1px solid #438774;border-radius:10px;background:linear-gradient(#2a8a70,#14624d);color:white;font-size:1.35rem;font-weight:750;box-shadow:inset 0 1px 2px #c2e4d2}
+.pitch-apparatus{position:relative;display:grid;place-items:center;isolation:isolate;aspect-ratio:1.16;padding:8px;border:1px solid #e5d9c7;border-radius:15px;background:#eee2cb url('pitch-room-background.png') center/cover no-repeat;box-shadow:inset 0 1px 0 #ffffffb0,0 3px 8px #674a2515}
+.pitch-apparatus::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:#fff8e7b3}
+.pitch-apparatus::after{content:"";position:absolute;z-index:-1;left:0;right:0;bottom:0;height:20%;border-radius:0 0 14px 14px;background:repeating-linear-gradient(2deg,#ffffff18 0 1px,transparent 2px 5px),linear-gradient(#e8bd87aa,#dba86baa);box-shadow:inset 0 1px #f9e4c1}
+.pitch-speaker.play{display:block;position:relative;min-height:0;width:72%;padding:0;border-radius:12px;background:transparent;line-height:0;align-self:end;margin-bottom:6%;touch-action:manipulation}
+.pitch-speaker img{display:block;width:100%;height:auto;filter:drop-shadow(0 6px 3px #3b291b24)}
+.pitch-speaker:hover,.pitch-side-view.play:hover{background:transparent;filter:brightness(1.035)}
+.pitch-side-view.play{display:block;width:100%;min-width:0;min-height:0;padding:0;background:transparent;line-height:0;touch-action:manipulation;border-radius:10px}
+.pitch-diaphragm{display:block;width:100%;height:auto;overflow:visible}
+.pitch-side-labels{font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;font-size:18px;font-weight:750}
+.pitch-in-label{fill:#287e85}.pitch-out-label{fill:#b97029}.pitch-zero-label{fill:#416f8b}
+.pitch-play{width:100%;margin:12px auto;padding:10px 6px;font-size:.95rem;line-height:1.5}
+.pitch-column[data-sounding=true] .pitch-apparatus{box-shadow:inset 0 0 0 2px #ca9b4e,0 3px 8px #674a2515}
 .pitch-column[data-sounding=true] .pitch-play{box-shadow:0 0 0 3px #d6a34866}
 .pitch-wave-card{border:1px solid var(--line);border-radius:11px;padding:9px 2px 4px;background:#fff}
 .pitch-wave-card h4{margin:0;font-size:.85rem;line-height:1.5;color:#223f49}
@@ -242,14 +246,13 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .pitch-wave .pitch-guide{stroke:#217663;stroke-width:2;opacity:.28;vector-effect:non-scaling-stroke}
 .pitch-cursor{stroke:#d48730;stroke-width:1.6;stroke-dasharray:5 4;vector-effect:non-scaling-stroke}
 .pitch-period{stroke:#687f83;stroke-width:1;fill:none}
-@media(min-width:761px) and (max-width:1100px){
-.pitch-bench{gap:8px}.pitch-column+ .pitch-column{padding-left:6px}.pitch-frequency-row{gap:4px;min-height:64px}.pitch-frequency{font-size:1.35rem}.pitch-step{width:30px;min-height:34px}.pitch-apparatus{min-height:125px}.pitch-closeup>span{font-size:.75rem}.pitch-play{width:100%;font-size:.86rem}.pitch-wave-card h4{font-size:.75rem}
-}
-@media(max-width:550px){
-.pitch-bench{gap:7px}.pitch-column+ .pitch-column{padding-left:6px}.pitch-frequency-row{gap:3px;min-height:57px}.pitch-frequency{font-size:1.05rem}.pitch-step{width:27px;min-height:36px;font-size:1.05rem}.pitch-apparatus{grid-template-columns:1fr;min-height:0;padding:0 5px 13px;gap:6px}.pitch-speaker.play{width:85%;margin:auto}.pitch-closeup{width:100%;padding:4px 2px}.pitch-closeup::before{display:none}.pitch-diaphragm{height:70px}.pitch-closeup>span{font-size:.75rem}.pitch-play{width:100%;font-size:.8rem}.pitch-wave-card h4{font-size:.72rem}.pitch-wave-card .wave-label{font-size:.75rem}.card-main .pitch-column>h3{font-size:.9rem}
-}
-
 .pitch-period-note{margin:0 0 3px;color:#526d70;font-size:.72rem;line-height:1.5}
+@media(min-width:761px) and (max-width:1100px){
+.pitch-bench{gap:12px}.pitch-frequency-row{gap:5px;min-height:64px}.pitch-frequency{font-size:1.6rem}.pitch-step{width:32px;min-height:36px}.pitch-apparatus{padding:3px}.pitch-wave-card h4{font-size:.75rem}
+}
+@media(max-width:600px){
+.pitch-bench{grid-template-columns:1fr;gap:24px}.pitch-column{padding:0}.pitch-frequency-row{min-height:67px}.pitch-frequency{font-size:1.8rem}.pitch-view-switch>span{padding:0 10px}.pitch-view-switch button{min-width:76px;padding:7px 15px}.pitch-apparatus{padding:4px}.pitch-wave-card h4{font-size:.85rem}
+}
 
 /* 正面只讓振膜起伏，不搖晃木箱或金屬外框。 */
 .pitch-speaker.play{position:relative}
@@ -263,10 +266,3 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .lesson-body{padding:23px 28px 28px;min-width:0}
 @media(max-width:900px){.lesson-head,.lesson-body{padding-left:21px;padding-right:21px}}
 @media(max-width:700px){.lesson-head{grid-template-columns:48px minmax(0,1fr);gap:10px;padding:18px}.lesson-number{width:40px;height:40px;border-radius:12px}.lesson-body{padding:18px}}
-
-.pitch-amplitude-scale{width:100%;padding:4px 2px 0;border-top:1px solid #dce5e0;text-align:center}
-.pitch-range{display:block;width:100%;height:auto;overflow:visible}
-.pitch-range text{font:13px "Noto Sans TC","Microsoft JhengHei",sans-serif;fill:#536f66}
-.pitch-range text.pitch-range-a{font-size:14px;font-weight:750;fill:#a45e28}
-.pitch-amplitude-value{display:block;font-size:.72rem;line-height:1.5;font-weight:700;color:#315e4c;white-space:nowrap}
-.pitch-closeup .pitch-diaphragm{max-height:150px}

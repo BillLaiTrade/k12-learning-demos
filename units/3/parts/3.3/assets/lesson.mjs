@@ -1,7 +1,7 @@
 import {signal,stringFrequency,tubeFrequency,hearingBand,soundSamples,challenge,checkSettings} from './model.mjs?v=1';
 import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
 import {createForkExperiment} from './fork-experiment.mjs?v=2';
-import {createPitchExperiment,PITCH_SECONDS} from './pitch-experiment.mjs?v=4';
+import {createPitchExperiment,PITCH_SECONDS} from './pitch-experiment.mjs?v=5';
 import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const state={frequency:400,length:60,tension:1,tube:60,index:0};

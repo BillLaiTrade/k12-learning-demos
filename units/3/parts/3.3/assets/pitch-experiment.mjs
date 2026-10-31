@@ -1,8 +1,17 @@
+import {sideSpeaker,SIDE_AMPLITUDE} from './pitch-speaker-view.mjs?v=1';
 export const PITCH_SECONDS=2;
 const NS='http://www.w3.org/2000/svg';
 function element(tag,attrs,parent){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,v);parent.append(n);return n;}
 export function createPitchExperiment(root){
  const columns=[...root.querySelectorAll('.pitch-column')];let active=null,frequency=400;
+ for(const col of columns)col.querySelector('.pitch-side-view').innerHTML=sideSpeaker(col.dataset.pitchSide);
+ function setView(view){
+  root.dataset.pitchView=view;
+  for(const button of root.querySelectorAll('button[data-pitch-view]'))button.setAttribute('aria-pressed',String(button.dataset.pitchView===view));
+  for(const col of columns){col.querySelector('.pitch-front-view').hidden=view!=='front';col.querySelector('.pitch-side-view').hidden=view!=='side';}
+ }
+ for(const button of root.querySelectorAll('button[data-pitch-view]'))button.addEventListener('click',()=>setView(button.dataset.pitchView));
+ setView('front');
  function points(fraction,hz){return Array.from({length:Math.floor(480*fraction)+1},(_,i)=>`${i?'L':'M'}${(38+278*i/480).toFixed(3)} ${(84-48*Math.sin(2*Math.PI*hz*.01*i/480)).toFixed(3)}`).join(' ');}
  function graph(column,hz){
   const svg=column.querySelector('.pitch-wave');svg.replaceChildren();svg.dataset.frequency=hz;svg.dataset.amplitude='.5';svg.dataset.progress='0';
@@ -21,17 +30,18 @@ export function createPitchExperiment(root){
   const time=element('text',{x:177,y:193,'text-anchor':'middle'},svg);time.textContent='時間（ms）';
  }
  function position(column,displacement){
-  column.querySelector('.pitch-position-dot').setAttribute('cx',String(90+64*displacement/14));
   // 正面以軸向位移的透視投影呈現起伏；只移動紙盆，箱體及外框固定。
   const phase=displacement/14,scale=1+.1*phase;
   const front=column.querySelector('.pitch-front-cone');
   front.setAttribute('transform',`translate(${740+18*phase} 625) scale(${scale}) translate(-740 -625)`);
   front.dataset.displacement=String(displacement);
 
-  column.querySelector('.pitch-cone').setAttribute('transform',`translate(${displacement} 0)`);
+  const sideDisplacement=SIDE_AMPLITUDE*phase;
+  column.querySelector('.pitch-cone').setAttribute('transform',`translate(${sideDisplacement} 0)`);
   column.querySelector('.pitch-diaphragm').dataset.displacement=String(displacement);
-  column.querySelector('.pitch-surround-top').setAttribute('d',`M146 24C155 24 151 34 ${128+displacement} 32`);
-  column.querySelector('.pitch-surround-bottom').setAttribute('d',`M146 135C155 135 151 125 ${128+displacement} 127`);
+  column.querySelector('.pitch-diaphragm').dataset.excursion=String(sideDisplacement);
+  column.querySelector('.pitch-surround-top').setAttribute('d',`M407 86C414 100 ${370+sideDisplacement*.5} 110 ${335+sideDisplacement} 105`);
+  column.querySelector('.pitch-surround-bottom').setAttribute('d',`M407 283C414 269 ${370+sideDisplacement*.5} 259 ${335+sideDisplacement} 264`);
  }
  function stop(){
   active=null;root.querySelectorAll('[data-play^="pitch-"]').forEach(b=>b.setAttribute('aria-pressed','false'));
@@ -43,7 +53,7 @@ export function createPitchExperiment(root){
    root.querySelector('#pitch-count-right').textContent=`10毫秒內振動${hz/100}次`;
    root.querySelector('[data-pitch-step="-100"]').disabled=hz<=200;
    root.querySelector('[data-pitch-step="100"]').disabled=hz>=800;
-   const btn=root.querySelector('.pitch-speaker[data-play="pitch-live"]');btn.setAttribute('aria-label',`點喇叭播放右邊${hz}赫茲聲音`);
+   for(const btn of root.querySelectorAll('.pitch-apparatus [data-play="pitch-live"]'))btn.setAttribute('aria-label',`點喇叭播放右邊${hz}赫茲聲音`);
   },
   start(key){stop();active=columns[key==='pitch-reference'?0:1];active.dataset.sounding='true';active.querySelectorAll('[data-play]').forEach(b=>b.setAttribute('aria-pressed','true'));const svg=active.querySelector('.pitch-wave');svg.dataset.progress='0';svg.querySelector('.signal').setAttribute('d','');svg.querySelector('.pitch-cursor').setAttribute('visibility','visible');},
   update(seconds){if(!active)return;const svg=active.querySelector('.pitch-wave'),hz=Number(svg.dataset.frequency),progress=Math.min(1,Math.max(0,seconds/PITCH_SECONDS));

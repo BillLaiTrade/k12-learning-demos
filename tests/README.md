@@ -430,3 +430,12 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-oxygen AIR_FULL_
 ```
 
 驗證四步與裝置同步、先排空氣才排水集氣、實際SVG水位連續降低、水下蓋片、兩支木條同時移動與只有氧氣復燃、暫停凍結／繼續、快速重播、鍵盤、Escape、背景／離區停止、七種寬度兩瓶並列且不超出滿寬內容區、手機觸控、減少動態、無JS必要結果。整頁及小測模型回歸仍檢查六教學＋一小測、二氧化碳舊重播、第一區與單元導覽。`OXYGEN_URL` 可指定公開2.3頁面，`OXYGEN_ARTIFACT_DIR` 保存本次畫面（預設 `/tmp/unit23-oxygen`）。新測試的本機伺服器只服務展示站checkout。共24項（含外層）；教學動畫不是反應時間／產率實測，也不代表整單元外部驗收。
+
+
+## 3.3 第二區正／側面切換
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-pitch.test.cjs tests/unit-3.3-fork.test.cjs tests/unit-3.3.test.cjs
+```
+
+第二區12項涵蓋共同視角、不中斷音訊／進度、±A端點連接同一膜緣點、生產renderer取樣200～800Hz的同幅及頻率比例、實際側面幀差、鍵盤／觸控與七種寬度；另保留聲音峰值／RMS、停止／調頻／跨區等檢查。三檔合計32項（含外層）。`SOUND33_BASE_URL`可將第二區12項指向完整公開網址；公開測試仍需Chromium與繼承的HTTPS proxy。截圖存至`/tmp/unit33-pitch-review/`，核可圖與交付證據在`docs/reviews/unit-3.3-speaker-view-switch/`。
