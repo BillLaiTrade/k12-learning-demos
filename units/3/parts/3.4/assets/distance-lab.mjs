@@ -28,7 +28,7 @@ function wavefronts(frame, boundary) {
     const x = frame.x + (returning ? 1 : -1) * i * 15;
     if (x < SOURCE_X || x > boundary) continue;
     const radius = 26 + i * 7, bend = returning ? -18 : 18;
-    paths += `<path d="M${x} ${208-radius}Q${x+bend} 208 ${x} ${208+radius}" fill="none" stroke="${color}" stroke-width="9" opacity=".2"/><path d="M${x} ${208-radius}Q${x+bend} 208 ${x} ${208+radius}" fill="none" stroke="${color}" stroke-width="3" opacity="${.95-i*.12}"/>`;
+    paths += `<path d="M${x} ${108-radius}Q${x+bend} 108 ${x} ${108+radius}" fill="none" stroke="${color}" stroke-width="9" opacity=".2"/><path d="M${x} ${108-radius}Q${x+bend} 108 ${x} ${108+radius}" fill="none" stroke="${color}" stroke-width="3" opacity="${.95-i*.12}"/>`;
   }
   return paths;
 }
@@ -56,9 +56,9 @@ export function renderDistance(progress) {
     const state = $(`distance-${name}-state`);
     state.textContent = words[stage]; state.dataset.stage = stage;
     $(`distance-${name}-waves`).innerHTML = waiting ? '' : wavefronts(frame, boundary);
-    $(`distance-${name}-received`).innerHTML = !waiting && frame.received ? '<circle cx="220" cy="208" r="12" fill="#ffbd58" opacity=".35"/><circle cx="220" cy="208" r="5" fill="#ffe3a2" stroke="#ffb347" stroke-width="2"/>' : '';
-    $(`distance-${name}-route`).innerHTML = !waiting && frame.received ? `<path d="M${boundary-4} 208H${SOURCE_X+13}m10-7-10 7 10 7" fill="none" stroke="#ffb34d" stroke-width="2.5" stroke-dasharray="5 4" opacity=".75"/>` : '';
-    $(`distance-${name}-dimension`).innerHTML = `<path d="M${SOURCE_X} 332v18m0-9H${boundary}m0-9v18" fill="none" stroke="white" stroke-width="2.5"/><text x="${(SOURCE_X+boundary)/2}" y="365" text-anchor="middle">${d} 公尺</text>`;
+    $(`distance-${name}-received`).innerHTML = !waiting && frame.received ? '<circle cx="220" cy="108" r="12" fill="#ffbd58" opacity=".35"/><circle cx="220" cy="108" r="5" fill="#ffe3a2" stroke="#ffb347" stroke-width="2"/>' : '';
+    $(`distance-${name}-route`).innerHTML = !waiting && frame.received ? `<path d="M${boundary-4} 108H${SOURCE_X+13}m10-7-10 7 10 7" fill="none" stroke="#ffb34d" stroke-width="2.5" stroke-dasharray="5 4" opacity=".75"/>` : '';
+    $(`distance-${name}-dimension`).innerHTML = `<path d="M${SOURCE_X} 182v18m0-9H${boundary}m0-9v18" fill="none" stroke="white" stroke-width="2.5"/><text x="${(SOURCE_X+boundary)/2}" y="211" text-anchor="middle">${d} 公尺</text>`;
     const row = $(`distance-${name}-record`), received = !waiting && frame.received;
     row.dataset.received = String(received);
     row.style.setProperty('--playhead', (waiting ? 0 : Math.min(100, elapsed / RECORD_DURATION * 100)) + '%');

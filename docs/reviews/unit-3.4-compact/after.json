@@ -1,0 +1,51 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "sceneHeight": 186.546875,
+    "labHeight": 698.109375,
+    "recordHeight": 177.609375
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "sceneHeight": 186.546875,
+    "labHeight": 698.109375,
+    "recordHeight": 177.609375
+  },
+  {
+    "width": 1280,
+    "height": 720,
+    "sceneHeight": 186.546875,
+    "labHeight": 698.109375,
+    "recordHeight": 177.609375
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "sceneHeight": 200.625,
+    "labHeight": 723.265625,
+    "recordHeight": 177.609375
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "sceneHeight": 147.390625,
+    "labHeight": 616.796875,
+    "recordHeight": 177.609375
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "sceneHeight": 69.078125,
+    "labHeight": 572.3125,
+    "recordHeight": 168.328125
+  },
+  {
+    "width": 320,
+    "height": 700,
+    "sceneHeight": 53.671875,
+    "labHeight": 537.578125,
+    "recordHeight": 168.328125
+  }
+]

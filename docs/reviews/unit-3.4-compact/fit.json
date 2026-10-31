@@ -1,0 +1,56 @@
+[
+  {
+    "width": 1440,
+    "viewportHeight": 900,
+    "headingTop": 12.234375,
+    "recordsBottom": 717.34375,
+    "actionsBottom": 710.34375,
+    "height": 705.109375,
+    "sceneHeight": 186.546875
+  },
+  {
+    "width": 1366,
+    "viewportHeight": 768,
+    "headingTop": 11.921875,
+    "recordsBottom": 717.03125,
+    "actionsBottom": 710.03125,
+    "height": 705.109375,
+    "sceneHeight": 186.546875
+  },
+  {
+    "width": 1280,
+    "viewportHeight": 720,
+    "headingTop": 12.171875,
+    "recordsBottom": 717.28125,
+    "actionsBottom": 710.28125,
+    "height": 705.109375,
+    "sceneHeight": 186.546875
+  },
+  {
+    "width": 1024,
+    "viewportHeight": 768,
+    "headingTop": 11.890625,
+    "recordsBottom": 742.15625,
+    "actionsBottom": 735.15625,
+    "height": 730.265625,
+    "sceneHeight": 200.625
+  },
+  {
+    "width": 390,
+    "viewportHeight": 844,
+    "headingTop": 12.328125,
+    "recordsBottom": 591.640625,
+    "actionsBottom": 584.640625,
+    "height": 579.3125,
+    "sceneHeight": 69.078125
+  },
+  {
+    "width": 320,
+    "viewportHeight": 700,
+    "headingTop": 12.09375,
+    "recordsBottom": 556.671875,
+    "actionsBottom": 549.671875,
+    "height": 544.578125,
+    "sceneHeight": 53.671875
+  }
+]
