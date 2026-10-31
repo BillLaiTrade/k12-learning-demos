@@ -37,9 +37,9 @@ test('pitch comparison: independent speakers, controlled frequency and synchroni
  await t.test('left can repeat twice then right; actual audio has selected pitch and fixed signal amplitude',async()=>{
   await play('left');await play('left');await play('right');
   const runs=await page.evaluate(()=>window.pitchRuns.slice(-3));assert.deepEqual(runs.map(r=>r.frequency),[200,200,400]);assert.ok(runs[0].stopped&&runs[1].stopped);
-  assert.ok(Math.abs(runs[2].rms/runs[0].rms-1)<.01);assert.ok(runs.every(r=>r.rms>.25&&r.rms<.3&&r.peak>.38&&r.peak<.4),'final buffers have the boosted level, fixed amplitude and clipping headroom');assert.equal(await left.getAttribute('data-sounding'),'false');assert.equal(await right.getAttribute('data-sounding'),'true');
+  assert.ok(Math.abs(runs[2].rms/runs[0].rms-1)<.01);assert.ok(runs.every(r=>r.rms>.62&&r.rms<.67&&r.peak>.90&&r.peak<.93),'final buffers have the boosted level, fixed amplitude and clipping headroom');assert.equal(await left.getAttribute('data-sounding'),'false');assert.equal(await right.getAttribute('data-sounding'),'true');
   const kept=await left.locator('.signal').getAttribute('d');await change(800);assert.equal(await left.locator('.signal').getAttribute('d'),kept);assert.equal(await root.getAttribute('data-playing'),'false');await right.locator('.pitch-speaker').click();await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='true');
-  assert.equal(await page.evaluate(()=>window.pitchRuns.at(-1).frequency),800);await change(400);
+  assert.equal(await page.evaluate(()=>window.pitchRuns.at(-1).frequency),800);assert.ok(await page.evaluate(()=>window.pitchRuns.at(-1).peak>.90&&window.pitchRuns.at(-1).peak<.93),'800Hz receives the same increased output without clipping');await change(400);
  });
  await t.test('one side animates with its trace; natural finish rests the cone and keeps the full comparison',async()=>{
   const fixed=await left.locator('.pitch-fixed').innerHTML();await play('left');await page.waitForTimeout(350);
