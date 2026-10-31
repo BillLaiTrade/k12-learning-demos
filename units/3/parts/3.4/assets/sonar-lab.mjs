@@ -1,4 +1,4 @@
-import {oceanEnvironment, surveyShip} from './sonar-scene.mjs?v=20261031-landforms';
+import {oceanEnvironment, surveyShip} from './sonar-scene.mjs?v=20261031-landforms-labels';
 import {depthAt, bottomY, returnTime, PROBE_Y as probeY} from './sonar-terrain.mjs?v=20261031-landforms';
 export {depthAt, returnTime, WATER_SPEED} from './sonar-terrain.mjs?v=20261031-landforms';
 export function pointName(index) { let name = ''; for (let n = index + 1; n > 0; n = Math.floor((n - 1) / 26)) name = String.fromCharCode(65 + (n - 1) % 26) + name; return name; }
@@ -36,7 +36,7 @@ export function renderSonar(progress = 0) {
  if(!received) signal+=`<g clip-path="url(#sonar-water-clip)" stroke="${back?'#ffd19a':'#dbf4a9'}" fill="none" stroke-width="3">${[0,9,18].map((d,i)=>`<path d="M${x-20-i*5} ${y+(back?d:-d)}Q${x} ${y+(back?d+8:-d-8)} ${x+20+i*5} ${y+(back?d:-d)}" opacity="${1-i*.22}"/>`).join('')}</g>`;
  else signal+=`<circle cx="${x}" cy="${probeY}" r="13" fill="#dff7bc" opacity=".75"/><circle cx="${x}" cy="${probeY}" r="6" fill="#fbffdc"/>`;
  }
- const marks = records.map(r=>`<g class="sonar-point" data-point="${r.name}" data-x="${r.x}" data-done="${r.done}"><title>探測點 ${r.name}：${r.done?number(r.depth)+' 公尺':'探測中'}</title><circle cx="${r.x}" cy="${r.done?bottomY(r.x):probeY+35}" r="8" fill="${r.done?'#fff3c8':'#e9f4d5'}" stroke="#294e43" stroke-width="2"/><text x="${r.x}" y="${(r.done?bottomY(r.x):probeY+35)+30}" text-anchor="middle" fill="#fffbe9" stroke="#294e43" stroke-width="4" paint-order="stroke" font-weight="700" font-size="23">${r.name}</text></g>`).join('');
+ const marks = records.map(r=>`<g class="sonar-point" data-point="${r.name}" data-x="${r.x}" data-done="${r.done}"><title>探測點 ${r.name}：${r.done?number(r.depth)+' 公尺':'探測中'}</title><circle cx="${r.x}" cy="${r.done?bottomY(r.x):probeY+35}" r="8" fill="${r.done?'#fff3c8':'#e9f4d5'}" stroke="#294e43" stroke-width="2"/><text x="${r.x}" y="${r.done ? bottomY(r.x)+(r.depth>=500?-16:30) : probeY+65}" text-anchor="middle" fill="#fffbe9" stroke="#294e43" stroke-width="4" paint-order="stroke" font-weight="700" font-size="23">${r.name}</text></g>`).join('');
  if (!background) {
    background = oceanEnvironment(bottomY);
    $('sonar-view').innerHTML = background + '<g id="sonar-signal-layer"></g><g id="sonar-points-layer"></g><g id="sonar-vessel-layer"></g>';
