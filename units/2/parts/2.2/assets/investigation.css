@@ -146,3 +146,8 @@
  .invest-notebook-answer input {width:100%;padding-inline:2px;font-size:.83rem;}
  .invest-notebook-answer {min-width:0;}
 }
+
+.invest-tools-hint {position:absolute;left:62.2%;top:39.5%;width:35%;box-sizing:border-box;margin:0;text-align:center;color:#315b46;font-size:clamp(11px,1vw,13px);font-weight:650;pointer-events:none;text-shadow:0 1px 3px #fff,0 0 6px #fff;}
+.invest-lab:not([data-has-sample="true"]) .invest-tools-hint {display:none;}
+.invest-lab[data-busy="true"] .invest-tools-hint {visibility:hidden;}
+@media(max-width:560px){.invest-tools-hint {position:static;width:auto;padding:9px 9px 0;background:#f4f3e6;font-size:.75rem;text-shadow:none;}}
