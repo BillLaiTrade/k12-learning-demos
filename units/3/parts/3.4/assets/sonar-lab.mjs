@@ -54,6 +54,8 @@ export function renderSonar(progress = 0) {
  const rows=records.map(r=>`<tr data-point="${r.name}"><th scope="row">${r.name}</th><td>${r.done?r.time.toFixed(2)+' 秒':'探測中'}</td><td>${r.done?number(r.depth)+' 公尺':'—'}</td></tr>`).join('');
  if(rows!==previousRows){$('sonar-records').innerHTML=rows;previousRows=rows;}
  $('sonar-empty').hidden = records.length>0;
+ $('sonar-current-point').hidden = !current;
+ $('sonar-current-point').textContent = current ? `探測點 ${current.name}` : '';
  $('sonar-answer').textContent = !current ? '選好船的位置，發出聲波，等回波帶回這裡的深度。' : !received ? `探測點 ${current.name}：探測中，尚未收到回波。` : `探測點 ${current.name}：1,500 × ${current.time.toFixed(2)} ÷ 2＝ ${number(current.depth)} 公尺。`;
 }
 export function bindSonar(player) {
