@@ -263,3 +263,10 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .lesson-body{padding:23px 28px 28px;min-width:0}
 @media(max-width:900px){.lesson-head,.lesson-body{padding-left:21px;padding-right:21px}}
 @media(max-width:700px){.lesson-head{grid-template-columns:48px minmax(0,1fr);gap:10px;padding:18px}.lesson-number{width:40px;height:40px;border-radius:12px}.lesson-body{padding:18px}}
+
+.pitch-amplitude-scale{width:100%;padding:4px 2px 0;border-top:1px solid #dce5e0;text-align:center}
+.pitch-range{display:block;width:100%;height:auto;overflow:visible}
+.pitch-range text{font:13px "Noto Sans TC","Microsoft JhengHei",sans-serif;fill:#536f66}
+.pitch-range text.pitch-range-a{font-size:14px;font-weight:750;fill:#a45e28}
+.pitch-amplitude-value{display:block;font-size:.72rem;line-height:1.5;font-weight:700;color:#315e4c;white-space:nowrap}
+.pitch-closeup .pitch-diaphragm{max-height:150px}

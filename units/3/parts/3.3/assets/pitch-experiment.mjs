@@ -21,6 +21,7 @@ export function createPitchExperiment(root){
   const time=element('text',{x:177,y:193,'text-anchor':'middle'},svg);time.textContent='時間（ms）';
  }
  function position(column,displacement){
+  column.querySelector('.pitch-position-dot').setAttribute('cx',String(90+64*displacement/14));
   // 正面以軸向位移的透視投影呈現起伏；只移動紙盆，箱體及外框固定。
   const phase=displacement/14,scale=1+.1*phase;
   const front=column.querySelector('.pitch-front-cone');

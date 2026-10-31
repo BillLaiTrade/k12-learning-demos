@@ -20,7 +20,7 @@ test('pitch comparison: independent speakers, controlled frequency and synchroni
   assert.equal(await left.locator('img').getAttribute('src'),await right.locator('img').getAttribute('src'));
   assert.ok(await left.locator('img').evaluate(n=>n.complete&&n.naturalWidth>0));assert.equal(await page.evaluate(()=>window.pitchRuns.length),0);
   assert.match(await root.locator('.speaker').first().evaluate(n=>getComputedStyle(n).backgroundImage),/dialogue-character-avatars/);
-  assert.equal(await left.locator('.pitch-wave').getAttribute('data-frequency'),'200');assert.equal(await right.locator('.pitch-wave').getAttribute('data-frequency'),'400');
+  assert.equal(await left.locator('.pitch-wave').getAttribute('data-frequency'),'200');assert.equal(await right.locator('.pitch-wave').getAttribute('data-frequency'),'400');assert.equal(await left.locator('.pitch-amplitude-value').innerText(),await right.locator('.pitch-amplitude-value').innerText());assert.match(await left.locator('.pitch-range').getAttribute('aria-label'),/振幅A是0到單側最遠/);
  });
  await t.test('frequency changes do not play sound; bounds, cycles and amplitude stay correct at every step',async()=>{
   const runs=await page.evaluate(()=>window.pitchRuns.length);
@@ -43,9 +43,9 @@ test('pitch comparison: independent speakers, controlled frequency and synchroni
  });
  await t.test('one side animates with its trace; natural finish rests the cone and keeps the full comparison',async()=>{
   const fixed=await left.locator('.pitch-fixed').innerHTML();await play('left');await page.waitForTimeout(350);
-  const inspect=async col=>col.evaluate(n=>({progress:Number(n.querySelector('.pitch-wave').dataset.progress),displacement:Number(n.querySelector('.pitch-diaphragm').dataset.displacement),hz:Number(n.querySelector('.pitch-wave').dataset.frequency),surround:n.querySelector('.pitch-surround-top').getAttribute('d')}));
-  const a=await inspect(left);assert.ok(a.progress>0&&a.progress<1);assert.ok(Math.abs(a.displacement-14*Math.sin(2*Math.PI*a.hz*.01*a.progress))<1e-8);assert.equal((await inspect(right)).displacement,0);assert.equal(await left.locator('.pitch-fixed').innerHTML(),fixed);assert.ok(Math.abs(Number(a.surround.split(' ').at(-2))-(128+a.displacement))<1e-8,'rubber surround stays attached to moving diaphragm');
-  await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='false');assert.equal((await inspect(left)).progress,1);assert.equal((await inspect(left)).displacement,0);
+  const inspect=async col=>col.evaluate(n=>({progress:Number(n.querySelector('.pitch-wave').dataset.progress),displacement:Number(n.querySelector('.pitch-diaphragm').dataset.displacement),hz:Number(n.querySelector('.pitch-wave').dataset.frequency),surround:n.querySelector('.pitch-surround-top').getAttribute('d'),dot:Number(n.querySelector('.pitch-position-dot').getAttribute('cx'))}));
+  const a=await inspect(left);assert.ok(a.progress>0&&a.progress<1);assert.ok(Math.abs(a.displacement-14*Math.sin(2*Math.PI*a.hz*.01*a.progress))<1e-8);assert.equal((await inspect(right)).displacement,0);assert.ok(Math.abs(a.dot-(90+64*a.displacement/14))<1e-8,'displacement marker follows the diaphragm on a common amplitude scale');assert.equal(await left.locator('.pitch-fixed').innerHTML(),fixed);assert.ok(Math.abs(Number(a.surround.split(' ').at(-2))-(128+a.displacement))<1e-8,'rubber surround stays attached to moving diaphragm');
+  await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='false');assert.equal((await inspect(left)).progress,1);assert.equal((await inspect(left)).displacement,0);assert.equal((await inspect(left)).dot,90);
   const previous=await left.locator('.signal').getAttribute('d');await play('right');await page.waitForTimeout(300);assert.equal(await left.locator('.signal').getAttribute('d'),previous);
   await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='false');assert.equal((await inspect(right)).progress,1);
  });

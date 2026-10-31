@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="比較振幅、頻率與波形，探索琴弦、空氣柱、音色及聽覺範圍，認識分貝的基本讀法。">
 <title>不同的聲音，差別在哪裡？｜3.3 聲音的特性</title>
-<link rel="stylesheet" href="assets/lesson.css?v=11">
-<script type="module" src="assets/lesson.mjs?v=10">
+<link rel="stylesheet" href="assets/lesson.css?v=12">
+<script type="module" src="assets/lesson.mjs?v=11">
 </script>
 </head>
 <body>
@@ -173,8 +173,18 @@
 </g>
 <path class="pitch-surround-top" d="M146 24C155 24 151 34 128 32" fill="none" stroke="#293940" stroke-width="5" stroke-linecap="round"/>
 <path class="pitch-surround-bottom" d="M146 135C155 135 151 125 128 127" fill="none" stroke="#293940" stroke-width="5" stroke-linecap="round"/>
-<path d="M82 154H110M82 154l4-3m-4 3 4 3M110 154l-4-3m4 3-4 3" fill="none" stroke="#176b53" stroke-width="1.8"/>
-</svg><span>振幅相同</span></div></div>
+</svg>
+<div class="pitch-amplitude-scale">
+<svg class="pitch-range" viewBox="0 0 180 66" role="img" aria-label="共同位移尺度：平衡位置0，左右最遠為負0.50及正0.50；振幅A是0到單側最遠的距離">
+<rect x="26" y="25" width="128" height="16" rx="8" fill="#e3eee5"/>
+<path d="M26 33H154" stroke="#a0b5a8" stroke-width="1.2"/>
+<path d="M26 22V44M90 20V44M154 22V44" stroke="#6e8e7f" stroke-width="1.2"/>
+<path d="M90 13H154M90 13l5-3m-5 3 5 3M154 13l-5-3m5 3-5 3" fill="none" stroke="#b26c32" stroke-width="2"/>
+<text x="122" y="8" text-anchor="middle" class="pitch-range-a">A</text>
+<circle class="pitch-position-dot" cx="90" cy="33" r="5" fill="#c57c36" stroke="#fff" stroke-width="1.5"/>
+<text x="26" y="60" text-anchor="middle">−0.50</text><text x="90" y="60" text-anchor="middle">0</text><text x="154" y="60" text-anchor="middle">+0.50</text>
+</svg><span class="pitch-amplitude-value">相對振幅 A = 0.50</span>
+</div></div></div>
 <button class="play pitch-play" type="button" data-play="pitch-reference" aria-pressed="false"><span aria-hidden="true">▶</span> 播放左邊</button>
 <div class="pitch-wave-card"><h4 id="pitch-count-left">10毫秒內振動2次</h4><span class="wave-label">相對位移</span><svg class="wave pitch-wave" id="pitch-reference" viewBox="0 0 340 200" role="img" aria-label="相同10毫秒時間內的振動紀錄"></svg></div>
 </div><div class="pitch-column" data-pitch-side="right">
@@ -219,8 +229,18 @@
 </g>
 <path class="pitch-surround-top" d="M146 24C155 24 151 34 128 32" fill="none" stroke="#293940" stroke-width="5" stroke-linecap="round"/>
 <path class="pitch-surround-bottom" d="M146 135C155 135 151 125 128 127" fill="none" stroke="#293940" stroke-width="5" stroke-linecap="round"/>
-<path d="M82 154H110M82 154l4-3m-4 3 4 3M110 154l-4-3m4 3-4 3" fill="none" stroke="#176b53" stroke-width="1.8"/>
-</svg><span>振幅相同</span></div></div>
+</svg>
+<div class="pitch-amplitude-scale">
+<svg class="pitch-range" viewBox="0 0 180 66" role="img" aria-label="共同位移尺度：平衡位置0，左右最遠為負0.50及正0.50；振幅A是0到單側最遠的距離">
+<rect x="26" y="25" width="128" height="16" rx="8" fill="#e3eee5"/>
+<path d="M26 33H154" stroke="#a0b5a8" stroke-width="1.2"/>
+<path d="M26 22V44M90 20V44M154 22V44" stroke="#6e8e7f" stroke-width="1.2"/>
+<path d="M90 13H154M90 13l5-3m-5 3 5 3M154 13l-5-3m5 3-5 3" fill="none" stroke="#b26c32" stroke-width="2"/>
+<text x="122" y="8" text-anchor="middle" class="pitch-range-a">A</text>
+<circle class="pitch-position-dot" cx="90" cy="33" r="5" fill="#c57c36" stroke="#fff" stroke-width="1.5"/>
+<text x="26" y="60" text-anchor="middle">−0.50</text><text x="90" y="60" text-anchor="middle">0</text><text x="154" y="60" text-anchor="middle">+0.50</text>
+</svg><span class="pitch-amplitude-value">相對振幅 A = 0.50</span>
+</div></div></div>
 <button class="play pitch-play" type="button" data-play="pitch-live" aria-pressed="false"><span aria-hidden="true">▶</span> 播放右邊</button>
 <div class="pitch-wave-card"><h4 id="pitch-count-right">10毫秒內振動4次</h4><span class="wave-label">相對位移</span><svg class="wave pitch-wave" id="pitch-live" viewBox="0 0 340 200" role="img" aria-label="相同10毫秒時間內的振動紀錄"></svg></div>
 </div></div>
