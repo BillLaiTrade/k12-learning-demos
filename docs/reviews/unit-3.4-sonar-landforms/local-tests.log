@@ -1,0 +1,26 @@
+✔ water speed and round trips agree at shallow, middle and deep locations (6.456691ms)
+✔ student-created labels continue beyond Z without preassigned positions (0.731995ms)
+✔ composite terrain contains a shallow shelf, slope, broad plain, isolated seamount and deep narrow trench (0.421656ms)
+▶ free-position active sonar survey
+  ✔ full-width format, shared dialogue, layered scene and no old slider, sound checkbox or preset points (399.102082ms)
+  ✔ mouse dragging and buttons move only the ship without creating points (265.04729ms)
+Sonar final output {"gain":0.3199999928474426,"direct":0.31965693831443787,"back":0.14384561777114868}
+  ✔ a four-second real-time measurement locks the position, reflects halfway, then records 3000m with a weaker return (4625.563224ms)
+  ✔ new positions preserve old markers and map rows one-to-one, deeper places take longer (9413.141647ms)
+  ✔ pause freezes visual time, cancels old audio; resume preserves a single pending point (5585.694867ms)
+  ✔ clear cancels pending callbacks, retains terrain and restarts labels at A; cross-section and hidden page pause sonar (3320.839431ms)
+  ✔ seven widths keep controls beneath scene, headings, table and content inside full-width card (1221.004871ms)
+  ✔ real mobile touch drag and playback work with reduced motion, including clear during pause (1272.884699ms)
+  ✔ keyboard activation and audio failure recovery keep one record and cancel failed attempts (3117.25149ms)
+  ✔ delayed audio activation holds the clock at zero and clear invalidates the awaiting start (6000.581467ms)
+  ✔ rock material decodes, stays clipped to measured terrain and agrees with an intermediate survey point (6720.879729ms)
+  ✔ shelf and trench retain actual .2s and 11s travel times without an animation speed multiplier (12384.749681ms)
+✔ free-position active sonar survey (55489.611539ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 55910.244297

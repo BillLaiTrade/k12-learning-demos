@@ -22,11 +22,12 @@ export function oceanEnvironment(bottomAt) {
  <linearGradient id="sonar-water" x2=".15" y2="1"><stop stop-color="#90c7bf"/><stop offset=".28" stop-color="#529c9a"/><stop offset=".7" stop-color="#285f68"/><stop offset="1" stop-color="#173d4b"/></linearGradient>
  <linearGradient id="sonar-earth" x2=".15" y2="1"><stop stop-color="#c7b88e"/><stop offset=".5" stop-color="#887f65"/><stop offset="1" stop-color="#343f3c"/></linearGradient>
  <linearGradient id="sonar-depth-fog" x2="0" y2="1"><stop stop-color="#8fc8b9" stop-opacity=".08"/><stop offset="1" stop-color="#153e47" stop-opacity=".6"/></linearGradient>
- <linearGradient id="sonar-light" x2=".4" y2="1"><stop stop-color="#eaf5d8" stop-opacity=".27"/><stop offset="1" stop-color="#d1f1dc" stop-opacity="0"/></linearGradient>
+ <linearGradient id="sonar-light" gradientUnits="userSpaceOnUse" x1="0" y1="137" x2="0" y2="190"><stop stop-color="#eaf5d8" stop-opacity=".27"/><stop offset="1" stop-color="#d1f1dc" stop-opacity="0"/></linearGradient>
  <linearGradient id="sonar-hull" x2=".2" y2="1"><stop stop-color="#5c8b79"/><stop offset=".45" stop-color="#285449"/><stop offset="1" stop-color="#102f30"/></linearGradient>
  <linearGradient id="sonar-cabin" x2="1" y2=".6"><stop stop-color="#fffdf1"/><stop offset=".55" stop-color="#dbe3d8"/><stop offset="1" stop-color="#92aea6"/></linearGradient>
  <linearGradient id="sonar-glass" x2=".5" y2="1"><stop stop-color="#254b56"/><stop offset=".5" stop-color="#75a7aa"/><stop offset="1" stop-color="#436f73"/></linearGradient>
  <filter id="sonar-soft-light"><feGaussianBlur stdDeviation="6"/></filter>
+ <clipPath id="sonar-water-clip"><polygon points="0,137 1000,137 ${points.split(' ').reverse().join(' ')}"/></clipPath>
  <clipPath id="sonar-bed-clip"><polygon points="${body}"/></clipPath>
  <clipPath id="sonar-sea-clip"><rect y="137" width="1000" height="423"/></clipPath>
  </defs>
@@ -43,9 +44,12 @@ export function oceanEnvironment(bottomAt) {
  </g>
  <g id="sonar-geology" clip-path="url(#sonar-bed-clip)">
  <rect width="1000" height="560" fill="url(#sonar-earth)"/>
- <image id="sonar-rock-material" href="${material}" x="0" y="225" width="1000" height="440" preserveAspectRatio="xMidYMid slice" opacity=".8"/>
- ${slopes}${strata}${gravel}
+ <image id="sonar-rock-material" href="${material}" x="0" y="145" width="1000" height="520" preserveAspectRatio="xMidYMid slice" opacity=".8"/>
+ ${slopes}${strata}<polyline points="${points}" fill="none" stroke="#c8c4ac" stroke-width="9" opacity=".4"/>${gravel}
  <rect y="200" width="1000" height="360" fill="url(#sonar-depth-fog)"/>
+ </g>
+ <g id="sonar-landform-labels" fill="#f4f3df" stroke="#294641" stroke-width="3" paint-order="stroke" font-size="21" font-weight="600" text-anchor="middle" aria-hidden="true">
+ <text x="155" y="195">大陸棚</text><text x="315" y="265">大陸坡</text><text x="500" y="306">海山</text><text x="625" y="370">深海平原</text><text x="650" y="500">海溝</text><path d="M680 494L747 482" fill="none" stroke="#e3e9d5" stroke-width="1"/>
  </g>
  <polyline id="sonar-seabed-edge" points="${points}" fill="none" stroke="#132f35" stroke-opacity=".5" stroke-width="5"/>
  <polyline points="${points}" fill="none" stroke="#d6c79f" stroke-opacity=".85" stroke-width="1.6"/>

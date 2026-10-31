@@ -1,16 +1,8 @@
-import {oceanEnvironment, surveyShip} from './sonar-scene.mjs?v=20261031-geology';
-// A fixed, continuous seabed. Vertical coordinates use metres from the probe.
-export const WATER_SPEED = 1500;
-export const depthAt = x => {
- const basin = 3000 + 1500 * Math.sin(2 * Math.PI * (x - 500) / 800);
- const envelope = Math.sin(Math.PI * (x - 300) / 200) ** 2;
- const relief = envelope * (110 * Math.sin(x * .033) + 70 * Math.sin(x * .077) + 30 * Math.sin(x * .15));
- return Math.round(Math.max(1500, Math.min(4500, basin + relief)) / 7.5) * 7.5;
-};
-export const returnTime = x => 2 * depthAt(x) / WATER_SPEED;
+import {oceanEnvironment, surveyShip} from './sonar-scene.mjs?v=20261031-landforms';
+import {depthAt, bottomY, returnTime, PROBE_Y as probeY} from './sonar-terrain.mjs?v=20261031-landforms';
+export {depthAt, returnTime, WATER_SPEED} from './sonar-terrain.mjs?v=20261031-landforms';
 export function pointName(index) { let name = ''; for (let n = index + 1; n > 0; n = Math.floor((n - 1) / 26)) name = String.fromCharCode(65 + (n - 1) % 26) + name; return name; }
-const $ = id => document.getElementById(id), probeY = 145;
-const bottomY = x => probeY + depthAt(x) / 4500 * 335;
+const $ = id => document.getElementById(id);
 const number = value => value.toLocaleString('en-US', {maximumFractionDigits: 1});
 let shipX = 500, records = [], current = null, controller, drag = null, previousRows = '';
 export const sonarDuration = () => (current?.time ?? returnTime(shipX)) + .16;
@@ -41,7 +33,7 @@ export function renderSonar(progress = 0) {
  const x=current.x, bottom=bottomY(x), fraction=Math.min(1,elapsed/current.time), back=fraction>=.5;
  const y=probeY+(bottom-probeY)*(back?2-2*fraction:2*fraction);
  signal=`<path d="M${x} ${probeY}V${bottom}" stroke="#ecf6d8" stroke-width="2" stroke-dasharray="5 7" opacity=".45"/>`;
- if(!received) signal+=`<g stroke="${back?'#ffd19a':'#dbf4a9'}" fill="none" stroke-width="3">${[0,9,18].map((d,i)=>`<path d="M${x-20-i*5} ${y+(back?d:-d)}Q${x} ${y+(back?d+8:-d-8)} ${x+20+i*5} ${y+(back?d:-d)}" opacity="${1-i*.22}"/>`).join('')}</g>`;
+ if(!received) signal+=`<g clip-path="url(#sonar-water-clip)" stroke="${back?'#ffd19a':'#dbf4a9'}" fill="none" stroke-width="3">${[0,9,18].map((d,i)=>`<path d="M${x-20-i*5} ${y+(back?d:-d)}Q${x} ${y+(back?d+8:-d-8)} ${x+20+i*5} ${y+(back?d:-d)}" opacity="${1-i*.22}"/>`).join('')}</g>`;
  else signal+=`<circle cx="${x}" cy="${probeY}" r="13" fill="#dff7bc" opacity=".75"/><circle cx="${x}" cy="${probeY}" r="6" fill="#fbffdc"/>`;
  }
  const marks = records.map(r=>`<g class="sonar-point" data-point="${r.name}" data-x="${r.x}" data-done="${r.done}"><title>探測點 ${r.name}：${r.done?number(r.depth)+' 公尺':'探測中'}</title><circle cx="${r.x}" cy="${r.done?bottomY(r.x):probeY+35}" r="8" fill="${r.done?'#fff3c8':'#e9f4d5'}" stroke="#294e43" stroke-width="2"/><text x="${r.x}" y="${(r.done?bottomY(r.x):probeY+35)+30}" text-anchor="middle" fill="#fffbe9" stroke="#294e43" stroke-width="4" paint-order="stroke" font-weight="700" font-size="23">${r.name}</text></g>`).join('');
