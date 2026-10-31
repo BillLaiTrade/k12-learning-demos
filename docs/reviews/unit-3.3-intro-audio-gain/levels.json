@@ -1,0 +1,37 @@
+[
+  {
+    "key": "amplitude-reference",
+    "peak": 0.2319788634777069,
+    "rms": 0.14549693753966453,
+    "frequency": 440,
+    "clipped": false
+  },
+  {
+    "key": "amplitude-live",
+    "peak": 0.5412840247154236,
+    "rms": 0.339492853803754,
+    "frequency": 440,
+    "clipped": false
+  },
+  {
+    "key": "pitch-reference",
+    "peak": 0.38999754190444946,
+    "rms": 0.27577164471275256,
+    "frequency": 200,
+    "clipped": false
+  },
+  {
+    "key": "pitch-live",
+    "peak": 0.38999754190444946,
+    "rms": 0.2757716447127527,
+    "frequency": 400,
+    "clipped": false
+  },
+  {
+    "key": "tone-pure",
+    "peak": 0.06499998271465302,
+    "rms": 0.04596194079434788,
+    "frequency": 440,
+    "clipped": false
+  }
+]

@@ -6,6 +6,7 @@ import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const state={frequency:400,length:60,tension:1,tube:60,index:0};
 let forkView,pitchView;
+const INTRO_OUTPUT_GAIN=6;
 const names={pure:'純音',string:'弦音示意',pipe:'管音示意'};
 let target=challenge(), audioContext, source=null, activeRoot=null, animation=0, request=0;
 function svg(tag,attributes,parent){const n=document.createElementNS(ns,tag);for(const[k,v]of Object.entries(attributes))n.setAttribute(k,v);parent.append(n);return n;}
@@ -55,7 +56,9 @@ async function play(button){
   audioContext??=new Audio();await audioContext.resume();
   if(ticket!==request||document.hidden)return;
   const forkKey=button.dataset.forkStrike,pitchKey=button.dataset.play.startsWith('pitch-')?button.dataset.play:null;
-  const data=forkKey?forkSamples(settings.amplitude,audioContext.sampleRate):soundSamples(settings,audioContext.sampleRate,pitchKey?PITCH_SECONDS:1.6),buffer=audioContext.createBuffer(1,data.length,audioContext.sampleRate);
+  const data=forkKey?forkSamples(settings.amplitude,audioContext.sampleRate):soundSamples(settings,audioContext.sampleRate,pitchKey?PITCH_SECONDS:1.6);
+  if(forkKey||pitchKey)for(let i=0;i<data.length;i++)data[i]*=INTRO_OUTPUT_GAIN;
+  const buffer=audioContext.createBuffer(1,data.length,audioContext.sampleRate);
   buffer.copyToChannel(data,0);source=audioContext.createBufferSource();source.buffer=buffer;source.connect(audioContext.destination);
   root.dataset.playing='true';root.dataset.frequency=String(settings.frequency);root.dataset.amplitude=String(settings.amplitude);root.dataset.tone=settings.tone||'pure';
   root.querySelectorAll('.stop').forEach(b=>b.disabled=false);root.querySelector('.play-state').textContent=forkKey?`${forkKey==='soft'?'輕敲':'較重敲'}，觀察振幅與聲音`:`播放中・${settings.frequency.toFixed(1)} Hz`;

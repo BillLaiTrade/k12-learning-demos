@@ -14,14 +14,14 @@ test('fork sound preserves frequency and decay while strength changes amplitude'
 test('fork experiment: actual sound, synchronized motion, recording and layout',{timeout:90000},async t=>{
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{const m=String(d).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject);});
- const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium'});t.after(()=>browser.close());
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',...(process.env.SOUND33_BASE_URL?{proxy:{server:process.env.HTTPS_PROXY}}:{})});t.after(()=>browser.close());
  const page=await browser.newPage({viewport:{width:1440,height:1100},reducedMotion:'reduce'}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
  await page.addInitScript(()=>{
   window.forkSounds=[];
   const make=AudioContext.prototype.createBufferSource;
   AudioContext.prototype.createBufferSource=function(){const s=make.call(this),start=s.start.bind(s),stop=s.stop.bind(s);let run;
-   s.start=function(...args){const a=s.buffer.getChannelData(0),rate=s.buffer.sampleRate;let sum=0,cross=0;for(let i=Math.floor(.1*rate);i<.3*rate;i++){sum+=a[i]**2;if(a[i-1]<0&&a[i]>=0)cross++;}run={frequency:cross/.2,rms:Math.sqrt(sum/(.2*rate)),stopped:false};window.forkSounds.push(run);return start(...args);};s.stop=function(...args){if(run)run.stopped=true;return stop(...args);};return s;
+   s.start=function(...args){const a=s.buffer.getChannelData(0),rate=s.buffer.sampleRate;let sum=0,cross=0;for(let i=Math.floor(.1*rate);i<.3*rate;i++){sum+=a[i]**2;if(a[i-1]<0&&a[i]>=0)cross++;}run={frequency:cross/.2,rms:Math.sqrt(sum/(.2*rate)),peak:a.reduce((peak,v)=>Math.max(peak,Math.abs(v)),0),stopped:false};window.forkSounds.push(run);return start(...args);};s.stop=function(...args){if(run)run.stopped=true;return stop(...args);};return s;
   };
  });
  const base=process.env.SOUND33_BASE_URL||`http://127.0.0.1:${port}/units/3/parts/3.3/`;
@@ -38,7 +38,7 @@ test('fork experiment: actual sound, synchronized motion, recording and layout',
  });
  await t.test('both strikes have the same real frequency; heavy has larger audio and visible displacement',async()=>{
   await strike('soft');const soft=await sample();await strike('strong');const strong=await sample();
-  const runs=await page.evaluate(()=>window.forkSounds.slice(-2));assert.ok(runs.every(r=>Math.abs(r.frequency-440)<10));assert.ok(Math.abs(runs[1].rms/runs[0].rms-7/3)<.01);assert.equal(runs[0].stopped,true);
+  const runs=await page.evaluate(()=>window.forkSounds.slice(-2));assert.ok(runs.every(r=>Math.abs(r.frequency-440)<10));assert.ok(Math.abs(runs[1].rms/runs[0].rms-7/3)<.01);assert.equal(runs[0].stopped,true);assert.ok(runs[0].rms>.12&&runs[1].rms>.28,'final playback buffer is audible at the intended boosted signal level');assert.ok(runs[0].peak>.2&&runs[1].peak>.5&&runs.every(r=>r.peak<.6),'boosted strikes retain headroom without clipping');
   const span=rows=>Math.max(...rows.map(r=>r.x))-Math.min(...rows.map(r=>r.x));assert.ok(span(soft)>.6,'light fork moves visibly');assert.ok(span(strong)>span(soft)*1.6,'stronger stroke visibly increases motion, including reduced-motion preference');
   for(const row of [...soft,...strong]){assert.ok(Math.abs(row.left+row.right)<1e-8,'prongs move in opposite directions');assert.equal(row.main,row.displacement);assert.ok(row.extent>=Math.abs(row.displacement));assert.ok(Number(row.arrow.split('H')[1])>=80,'amplitude is one side of equilibrium');}
   assert.equal(await root.locator('.fork-conclusion').isVisible(),true);assert.equal(await root.locator('.fork-same-pitch').isVisible(),true);

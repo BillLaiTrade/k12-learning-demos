@@ -7,7 +7,7 @@ test('pitch comparison: independent speakers, controlled frequency and synchroni
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
  await page.addInitScript(()=>{window.pitchRuns=[];const create=AudioContext.prototype.createBufferSource;
   AudioContext.prototype.createBufferSource=function(){const source=create.call(this),start=source.start.bind(source),stop=source.stop.bind(source);let record;
-   source.start=function(...args){const a=source.buffer.getChannelData(0),rate=source.buffer.sampleRate;let squares=0,crossings=0;for(let i=Math.floor(rate*.2);i<Math.floor(rate*.7);i++){squares+=a[i]**2;if(a[i-1]<0&&a[i]>=0)crossings++;}record={frequency:crossings/.5,rms:Math.sqrt(squares/(rate*.5)),stopped:false};window.pitchRuns.push(record);return start(...args);};source.stop=function(...args){if(record)record.stopped=true;return stop(...args);};return source;
+   source.start=function(...args){const a=source.buffer.getChannelData(0),rate=source.buffer.sampleRate;let squares=0,crossings=0;for(let i=Math.floor(rate*.2);i<Math.floor(rate*.7);i++){squares+=a[i]**2;if(a[i-1]<0&&a[i]>=0)crossings++;}record={frequency:crossings/.5,rms:Math.sqrt(squares/(rate*.5)),peak:a.reduce((peak,v)=>Math.max(peak,Math.abs(v)),0),stopped:false};window.pitchRuns.push(record);return start(...args);};source.stop=function(...args){if(record)record.stopped=true;return stop(...args);};return source;
   };
  });
  await page.goto(process.env.SOUND33_BASE_URL||`http://127.0.0.1:${port}/units/3/parts/3.3/#card-02`,{waitUntil:'networkidle'});
@@ -37,7 +37,7 @@ test('pitch comparison: independent speakers, controlled frequency and synchroni
  await t.test('left can repeat twice then right; actual audio has selected pitch and fixed signal amplitude',async()=>{
   await play('left');await play('left');await play('right');
   const runs=await page.evaluate(()=>window.pitchRuns.slice(-3));assert.deepEqual(runs.map(r=>r.frequency),[200,200,400]);assert.ok(runs[0].stopped&&runs[1].stopped);
-  assert.ok(Math.abs(runs[2].rms/runs[0].rms-1)<.01);assert.equal(await left.getAttribute('data-sounding'),'false');assert.equal(await right.getAttribute('data-sounding'),'true');
+  assert.ok(Math.abs(runs[2].rms/runs[0].rms-1)<.01);assert.ok(runs.every(r=>r.rms>.25&&r.rms<.3&&r.peak>.38&&r.peak<.4),'final buffers have the boosted level, fixed amplitude and clipping headroom');assert.equal(await left.getAttribute('data-sounding'),'false');assert.equal(await right.getAttribute('data-sounding'),'true');
   const kept=await left.locator('.signal').getAttribute('d');await change(800);assert.equal(await left.locator('.signal').getAttribute('d'),kept);assert.equal(await root.getAttribute('data-playing'),'false');await right.locator('.pitch-speaker').click();await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='true');
   assert.equal(await page.evaluate(()=>window.pitchRuns.at(-1).frequency),800);await change(400);
  });

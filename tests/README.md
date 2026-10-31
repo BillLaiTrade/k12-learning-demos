@@ -408,3 +408,7 @@ NITROGEN_ARTIFACT_DIR=/tmp/unit23-nitrogen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-ful
 ### 2.1 六種物態變化的生活場景同步
 
 `node --test tests/unit-2.1-phase-life.test.cjs`：檢查1440／1280／1024一般偏好及1024減少動態偏好的六種變化起點、中段、終點；以實際粒子種類核對生活畫面進度，並檢查水位、冰塊體積、凝固前緣、霜晶範圍、圖片載入、上下同時可見、六種重播、快速切換、離屏續播與12個四角入口。`PHASE_LIFE_CAPTURE_DIR`指定截圖目錄。生活場景沒有獨立計時器；蒸發保留一半液態粒子與一半水深。詳見 `docs/reviews/unit-2.1-phase-life/review.md`。
+
+### 3.3前兩區音量檢查
+
+音叉及音調喇叭專項直接量測最終AudioBufferSource資料的峰值／RMS，確認提高音量且未削波，輕重比例及固定振幅仍成立。模型原始資料測試保留。整頁及兩專項28項通過；詳見docs/reviews/unit-3.3-intro-audio-gain/。measure.cjs另可用SOUND33_BASE_URL量測公開頁，並以第五區純音確認其他區輸出不變。
