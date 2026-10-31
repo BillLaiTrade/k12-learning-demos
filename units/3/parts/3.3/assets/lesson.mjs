@@ -6,10 +6,12 @@ import {createGuitarExperiment} from './guitar-experiment.mjs?v=2';
 import {guitarSamples} from './guitar-model.mjs?v=1';
 import {createPanExperiment} from './pan-experiment.mjs?v=2';
 import {loadPanRecording,recordingLevel} from './pan-recordings.mjs?v=1';
+import {createTimbreExperiment} from './timbre-experiment.mjs?v=1';
+import {timbreBuffer} from './timbre-model.mjs?v=1';
 import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const state={frequency:400,index:0};
-let forkView,pitchView,guitarView,panView;
+let forkView,pitchView,guitarView,panView,timbreView;
 const FORK_OUTPUT_GAIN=6;
 const PITCH_OUTPUT_GAIN=14;
 const names={pure:'純音',string:'弦音示意',pipe:'管音示意'};
@@ -30,7 +32,7 @@ function stop(root=activeRoot){
  if(source){source.onended=null;try{source.stop();}catch{}source.disconnect();source=null;}
  cancelAnimationFrame(animation);animation=0;
  if(activeRoot){activeRoot.dataset.playing='false';activeRoot.querySelectorAll('.stop').forEach(b=>b.disabled=true);activeRoot.querySelector('.play-state').textContent='已停止，點擊可重新播放';}
- activeRoot=null;forkView?.stop();pitchView?.stop();guitarView?.stop();panView?.stop();
+ activeRoot=null;forkView?.stop();pitchView?.stop();guitarView?.stop();panView?.stop();timbreView?.stop();
 }
 function config(key){
  if(key.startsWith('pan-'))return panView.settings(Number(key.slice(4)));
@@ -46,14 +48,18 @@ function config(key){
 }
 async function play(button){
  stop();const ticket=++request,root=button.closest('.lesson-card,.quiz'),settings=config(button.dataset.play);
- activeRoot=root;if(['card-02','card-03','card-04'].includes(root.id))root.querySelector('.play-state').classList.add('visually-hidden');root.querySelector('.play-state').textContent='正在準備聲音…';
+ activeRoot=root;if(['card-02','card-03','card-04','card-05'].includes(root.id))root.querySelector('.play-state').classList.add('visually-hidden');root.querySelector('.play-state').textContent='正在準備聲音…';
  try{
   const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)throw Error('unsupported');
   audioContext??=new Audio();await audioContext.resume();
   if(ticket!==request||document.hidden)return;
-  const forkKey=button.dataset.forkStrike,pitchKey=button.dataset.play.startsWith('pitch-')?button.dataset.play:null,guitarKey=button.dataset.play.startsWith('string-')?button.dataset.play:null,panKey=button.dataset.play.startsWith('pan-');
+  const forkKey=button.dataset.forkStrike,pitchKey=button.dataset.play.startsWith('pitch-')?button.dataset.play:null,guitarKey=button.dataset.play.startsWith('string-')?button.dataset.play:null,panKey=button.dataset.play.startsWith('pan-'),timbreKey=button.dataset.play.startsWith('tone-')?button.dataset.play.slice(5):null;
   let buffer;
-  if(panKey){
+  if(timbreKey){
+   const clip=await timbreView.prepare(timbreKey);
+   if(ticket!==request||document.hidden)return;
+   buffer=timbreBuffer(clip,audioContext);
+  }else if(panKey){
    buffer=await loadPanRecording(Number(button.dataset.play.slice(4)),audioContext);
    if(ticket!==request||document.hidden)return;
   }else{
@@ -70,6 +76,7 @@ async function play(button){
   if(pitchKey){pitchView.start(pitchKey);root.querySelector('.play-state').textContent=`正在播放${pitchKey==='pitch-reference'?'左':'右'}邊：${settings.frequency} Hz`;}
   if(guitarKey)guitarView.start(guitarKey);
   if(panKey)panView.start();
+  if(timbreKey){timbreView.start(timbreKey);root.querySelector('.play-state').textContent=`正在播放${{pure:'音叉近似純音',string:'吉他',pipe:'排笛'}[timbreKey]}`;}
   source.onended=()=>{if(source===currentSource){if(forkKey)forkView.finish();if(pitchKey)pitchView.finish();stop(root);root.querySelector('.play-state').textContent='播放完畢，可再次比較';}};
   source.start(forkStart);
   function animate(now){
@@ -82,12 +89,10 @@ async function play(button){
   }
   animation=requestAnimationFrame(animate);
  }catch{
-  if(ticket!==request)return;stop(root);if(['card-02','card-03','card-04'].includes(root.id))root.querySelector('.play-state').classList.remove('visually-hidden');root.querySelector('.play-state').textContent='聲音暫時無法播放，請再點一次；仍可觀察圖形與數值。';
+  if(ticket!==request)return;stop(root);if(['card-02','card-03','card-04','card-05'].includes(root.id))root.querySelector('.play-state').classList.remove('visually-hidden');root.querySelector('.play-state').textContent='聲音暫時無法播放，請再點一次；仍可觀察圖形與數值。';
  }
 }
-function render(){
- for(const tone of ['pure','string','pipe'])wave('tone-'+tone,440,.5,tone);
-}
+
 function answers(){return{frequency:$('answer-frequency').value,amplitude:$('answer-amplitude').value,tone:$('answer-tone').value};}
 function renderChoice(){
  const a=answers(),complete=checkSettings(a,target)!=='incomplete';
@@ -115,7 +120,6 @@ for(const button of document.querySelectorAll('[data-reset]'))button.addEventLis
  stop();const n=Number(button.dataset.reset);
  if(n===1)forkView.reset();
  const defaults={1:{},2:{frequency:440},5:{}};Object.assign(state,defaults[n]);
- render();
  button.closest('section').querySelector('.play-state').textContent='等待操作';
 });
 function hearing(frequency){
@@ -163,4 +167,5 @@ pitchView=createPitchExperiment($('card-02'));pitchView.render(state.frequency);
 guitarView=createGuitarExperiment($('card-03'),{onChange:()=>{stop();$('card-03').querySelector('.play-state').classList.add('visually-hidden');},onPluck:key=>$('card-03').querySelector(`.guitar-play[data-play="${key}"]`).click()});
 panView=createPanExperiment($('card-04'));
 $('card-04').querySelector('[data-pan-reset]').addEventListener('click',()=>{stop();panView.reset();$('card-04').querySelector('.play-state').classList.add('visually-hidden');});
-render();hearing(440);level('conversation');newChallenge();activeLink(location.hash||'#card-01');
+timbreView=createTimbreExperiment($('card-05'));
+hearing(440);level('conversation');newChallenge();activeLink(location.hash||'#card-01');

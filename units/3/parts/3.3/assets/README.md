@@ -4,7 +4,7 @@
 - 首頁插圖：`sound-fair-opening.png`為使用者於2026-10-30選定的第三輪C02「聲音體驗市集」。以image_gen依1.1／1.2及共用角色參考生成，來源為`docs/reviews/unit-3.3-hero-candidates-round3/candidate-c02.png`；1672×941原始PNG直接採用，未裁切、重畫或後製。生成紀錄見該輪`generation.json`。
 - 第一區音叉：依核可示意圖，以image_gen製作`fork-tabletop-background.png`及透明`fork-apparatus.png`，生成紀錄見`fork-generation.json`。音叉照片的兩叉股分段彎曲，叉柄／木座固定；音槌及單叉股放大觀察使用SVG。
 - 現行琴弦採透明木吉他素材與獨立SVG弦／品格／手指；空氣柱與訊號圖為繪製SVG，無外部圖片授權依賴。
-- 第四區現採CC BY 4.0封底PVC排管實錄經剪輯調音；其他區仍為Web Audio合成示意，沒有替換3.2已核可音效。
+- 第四區現採CC BY 4.0封底PVC排管實錄經剪輯調音；第五區現採授權木吉他／排管實錄及音叉近似純音，詳見文末；其餘區仍為Web Audio合成示意，沒有替換3.2已核可音效。
 - 第一區`fork-model.mjs`為440Hz純音衰減示意，輕／較重敲相對振幅0.30／0.70，長2.4秒，並非音叉實錄。音槌接觸、聲音及叉股位移共用音訊時間；畫面5Hz放慢、位移放大，兩叉股反向；停止後放大圖明示此次最大振幅快照。比較紀錄採相同時間窗（4個週期，約9.09ms）及比例，振幅標記由平衡位置到單側最大位移，不是峰到峰值。
 - 其餘區`model.mjs`的固定泛音係數用於呈現不同波形；不宣稱精確重建特定樂器。音訊為1.6秒，20ms淡入、120ms淡出，依RMS作近似大小聲匹配；不是聲級校準，也不保證不同設備與頻率下主觀響度相等。
 - 現行木吉他畫面弦振動以基本頻率的1/100呈現；管內空氣位移以1/100放慢，使用兩端開口管基本模式的往返位移，聲音保持原音高。
@@ -67,3 +67,12 @@ pan-model.mjs取代初版兩端開口的第四區模型：上開下閉、基本�
 六管現使用pan-audio/pipe-0.wav～pipe-5.wav，來自mrshoes的Freesound 278175“panflute scale octave and a half”，CC BY 4.0。作者以封底PVC管與水位錄製音階，非竹排笛實錄。網站可見作者、來源、授權與剪輯調音告知；素材授權及每檔段落／調音／量測／SHA-256見pan-audio/LICENSE.md及recordings.json。原HQ MP3及來源證據在docs/reviews/unit-3.3-pan-recordings/source/，scripts/prepare-pan-recordings.py可重製。
 
 pan-recordings.mjs負責本地WAV下載、AudioContext解碼快取及錄音RMS取樣，取消請求不會稍後起音，失敗可重試。pan-model.mjs已移除合成聲音函式；管內位移使用實錄RMS振幅與共同100倍放慢頻率，封底節點保持。數字為調音後的理想目標，不將微小吹奏音高變化當作新物理條件。此節取代上節合成音與固定音訊包絡的描述。
+
+
+## 2026-10-31第五區實錄與同源波形（現行）
+
+使用者核可三列比較示意圖，並明確要求波形必須來自實際聲音。timbre-audio/內pure.wav為音叉近似純音合成，string.wav為allan764「31-A#4.flac」木吉他實錄（CC BY 3.0），pipe.wav沿用mrshoes封底PVC排管實錄（CC BY 4.0）。兩份實錄擷取單音並保時長調音至440Hz，三份皆1.2秒、全段共同RMS約0.1383、峰值小於0.9；不是校準主觀響度或聲壓。來源、修改、量測及雜湊見timbre-audio/LICENSE.md與recordings.json，scripts/prepare-timbre-recordings.py可重製。
+
+timbre-model.mjs直接解析最終單聲道PCM16 WAV成Float32Array；這份陣列不作再次變形，直接拷入AudioBuffer播放，也逐一畫出200–210ms的原始取樣點。所有圖共用10ms時間窗與±0.6數位相對振幅刻度，不逐樂器自動放大、不手畫、不重建重複週期、不用舊固定泛音係數代替錄音。保留實錄細微變化，音色也包含起音／衰減等整段特徵，不宣稱單一短窗已完整描述音色。
+
+timbre-experiment.mjs管理預載繪圖、各列獨立播放與選中提示；縮圖引用既有音叉照片、木吉他加六弦／品格、六竹管組合及室內背景，不修改圖片。檔案失敗留空圖與重試提示，不補假波形；下載中離開、換聲音、分頁隱藏均不會稍後起音。前三區、第四區及小測的音源和物理模型保持原設定。此節取代上方第五區仍為固定泛音合成的歷史敘述。

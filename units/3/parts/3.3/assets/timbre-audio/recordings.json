@@ -1,0 +1,60 @@
+{
+  "sample_rate": 22050,
+  "seconds": 1.2,
+  "target_hz": 440,
+  "rms_target": 0.1383110135793686,
+  "waveform_start_seconds": 0.2,
+  "waveform_window_seconds": 0.01,
+  "modifications": "吉他及排管：擷取單音、Rubber Band保時長調音至440Hz、混成單聲道、5ms淡入／80ms淡出、固定增益匹配全段RMS；無壓縮、無循環或週期重建。純音：440Hz正弦合成示意。圖形取自最終WAV的PCM資料。",
+  "pipe_description": "mrshoes以封底PVC管及水位錄製排管音階，非竹排笛實錄。",
+  "recordings": [
+    {
+      "key": "pure",
+      "title": "音叉近似純音（合成示意）",
+      "author": null,
+      "source_url": null,
+      "license_url": null,
+      "source_start_seconds": 0,
+      "source_measured_hz": 440,
+      "pitch_ratio": 1,
+      "source_sha256": null,
+      "file": "pure.wav",
+      "measured_hz": 439.99999986677375,
+      "rms": 0.13830712178467294,
+      "peak": 0.20037841796875,
+      "sha256": "39c5cde6aa07a98401853a08cdaa8f677ab50cfd6ae462e936972fb5559bd6b3"
+    },
+    {
+      "key": "string",
+      "title": "31-A#4.flac",
+      "author": "allan764",
+      "source_url": "https://freesound.org/people/allan764/sounds/467669/",
+      "license_url": "https://creativecommons.org/licenses/by/3.0/",
+      "source_start_seconds": 0,
+      "source_measured_hz": 468.91739607712145,
+      "pitch_ratio": 0.9383315775464097,
+      "source_sha256": "94b024b7f5a34b4e5f8103cbe365d8e904969a15d5b56259a7ffc1aa81cdc33b",
+      "file": "string.wav",
+      "measured_hz": 439.99876190663167,
+      "rms": 0.13830681228069705,
+      "peak": 0.879974365234375,
+      "sha256": "9046faf554313503ff8c287448441042271a3eda0782e24435a3fa0287f4b390"
+    },
+    {
+      "key": "pipe",
+      "title": "panflute scale octave and a half",
+      "author": "mrshoes",
+      "source_url": "https://freesound.org/people/mrshoes/sounds/278175/",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source_start_seconds": 16.95,
+      "source_measured_hz": 411.8790559042907,
+      "pitch_ratio": 1.0682747609828547,
+      "source_sha256": "66f02f813029e01ef2b56a6061f639cb3c3e0a6cc600bd4b825be2aa2b53c7c8",
+      "file": "pipe.wav",
+      "measured_hz": 440.07924029623376,
+      "rms": 0.1383067895805237,
+      "peak": 0.251068115234375,
+      "sha256": "c0b5b2782d3a948e4cb52097b1a8e365502d186c5c1712948b11839740d68571"
+    }
+  ]
+}

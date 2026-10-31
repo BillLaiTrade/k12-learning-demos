@@ -502,3 +502,11 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-knowledge-oxygen
 沿用第二區整合的三氣體＋組成圖與完整頁檢查；生命用途圖片選取改為 `.gas-profile-example figure img`，另核對每張卡三幅裝飾圖示實際解碼、256×256及空alt，避免把圖示誤算為用途照片。`GAS_PROFILE_ARTIFACT_DIR=/tmp/unit23-gas-detail`、`AIR_COMPOSITION_ARTIFACT_DIR=/tmp/unit23-gas-detail/composition` 與 `AIR_FULL_ARTIFACT_DIR=/tmp/unit23-gas-detail-full` 保存本輪畫面。範圍為知識卡排版與素材，未修改實驗／模型；保留先前回歸紀錄，不重跑無關模型。
 
 前後尺寸與畫面另存 `docs/reviews/unit-2.3-gas-detail/`，不是以主觀敘述宣稱留白改善：同寬卡片桌面約減28.4%、手機約減22.0%，文字內容逐項核對相同。
+
+## 3.3 第五區：實際音訊與波形
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-timbre.test.cjs tests/unit-3.3.test.cjs
+```
+
+共19項（含外層），包含音源授權／雜湊／PCM與餘裕、三列無自動播放、瀏覽器實際AudioBuffer逐值等於公開WAV、所有繪圖頂點與播放取樣逐點相符、440Hz基頻及RMS、連續獨立重播／鍵盤／觸控、自然結束／離開／隱藏停止、下載慢時取消不誤起音、下載失敗不補假波形且可重試，並回歸整頁與小測。桌機／筆電／手機八種寬度保留對齊的時間軸及可用控制。SOUND33_BASE_URL可指定公開完整頁URL（以/結尾），TIMBRE_CAPTURE_DIR指定截圖目錄。

@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="比較振幅、頻率與波形，探索琴弦、空氣柱、音色及聽覺範圍，認識分貝的基本讀法。">
 <title>不同的聲音，差別在哪裡？｜3.3 聲音的特性</title>
-<link rel="stylesheet" href="assets/lesson.css?v=18">
-<script type="module" src="assets/lesson.mjs?v=16">
+<link rel="stylesheet" href="assets/lesson.css?v=19">
+<script type="module" src="assets/lesson.mjs?v=17">
 </script>
 </head>
 <body>
@@ -190,63 +190,32 @@
 <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>同類管子、相同發聲模式下，空氣柱越短，振動頻率越高，音調也越高。</p></div>
 </div></section>
 <section class="lesson-card" id="card-05" data-core="音色與波形">
-<header class="lesson-head"><span class="lesson-number">05</span><div><h2>同樣的音高，為什麼聽得出不同樂器？</h2><p>音色與波形：三個聲音都以440 Hz作為音高基準。比較各自的特色，並看同一時間窗內的波形。</p></div></header>
+<header class="lesson-head"><span class="lesson-number">05</span><div><h2>同樣的音高，為什麼聽得出不同樂器？</h2><p>聽同一個音，看看聲音的形狀有什麼不同。</p></div></header>
 <div class="lesson-body card-main">
-
-<div class="dialogue dialogue--xiaokui">
-<span class="speaker"><span class="visually-hidden">小葵</span></span>
-<p>它們的音高很接近，為什麼還是聽起來不一樣？</p>
+<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>都一樣高，為什麼還聽得出吉他和排笛？</p></div>
+<div class="timbre-conditions"><span>音高皆以 <strong>440 Hz</strong> 為目標</span><span>相同時間範圍・近似音量匹配</span></div>
+<div class="timbre-bench">
+<div class="timbre-row" data-timbre="pure" data-sounding="false" data-ready="false">
+<div class="timbre-instrument"><div class="timbre-picture" aria-hidden="true"></div><div class="timbre-name"><h3>音叉</h3><span>近似純音示意</span></div></div>
+<div class="timbre-graph"><div class="wave-panel"><span class="wave-label" aria-hidden="true">相對振幅</span><svg class="wave" id="tone-pure" viewBox="0 0 600 160" preserveAspectRatio="none" role="img" aria-label="正在載入音叉的播放音訊波形"></svg><div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div><span class="timbre-load" role="status">正在載入波形…</span></div></div>
+<button class="play timbre-play" type="button" data-play="tone-pure" aria-pressed="false"><span aria-hidden="true">▶</span> 播放音叉</button>
 </div>
-<div class="timbre-grid">
-<div class="compare-card">
-<h3>純音</h3>
-<p class="minor">440 Hz・音色比較示意</p>
-<div class="wave-panel">
-<span class="wave-label" aria-hidden="true">相對振幅</span>
-<svg class="wave" id="tone-pure" viewBox="0 15 600 140" preserveAspectRatio="none" role="img" aria-label="聲音訊號隨時間的變化">
-</svg>
-<div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div>
+<div class="timbre-row" data-timbre="string" data-sounding="false" data-ready="false">
+<div class="timbre-instrument"><div class="timbre-picture" aria-hidden="true"></div><div class="timbre-name"><h3>吉他</h3><span>木吉他實錄</span></div></div>
+<div class="timbre-graph"><div class="wave-panel"><span class="wave-label" aria-hidden="true">相對振幅</span><svg class="wave" id="tone-string" viewBox="0 0 600 160" preserveAspectRatio="none" role="img" aria-label="正在載入吉他的播放音訊波形"></svg><div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div><span class="timbre-load" role="status">正在載入波形…</span></div></div>
+<button class="play timbre-play" type="button" data-play="tone-string" aria-pressed="false"><span aria-hidden="true">▶</span> 播放吉他</button>
 </div>
-<button class="play" type="button" data-play="tone-pure">
-<span aria-hidden="true">▶</span> 播放聲音</button>
-</div>
-<div class="compare-card">
-<h3>弦音示意</h3>
-<p class="minor">440 Hz・音色比較示意</p>
-<div class="wave-panel">
-<span class="wave-label" aria-hidden="true">相對振幅</span>
-<svg class="wave" id="tone-string" viewBox="0 15 600 140" preserveAspectRatio="none" role="img" aria-label="聲音訊號隨時間的變化">
-</svg>
-<div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div>
-</div>
-<button class="play" type="button" data-play="tone-string">
-<span aria-hidden="true">▶</span> 播放聲音</button>
-</div>
-<div class="compare-card">
-<h3>管音示意</h3>
-<p class="minor">440 Hz・音色比較示意</p>
-<div class="wave-panel">
-<span class="wave-label" aria-hidden="true">相對振幅</span>
-<svg class="wave" id="tone-pipe" viewBox="0 15 600 140" preserveAspectRatio="none" role="img" aria-label="聲音訊號隨時間的變化">
-</svg>
-<div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div>
-</div>
-<button class="play" type="button" data-play="tone-pipe">
-<span aria-hidden="true">▶</span> 播放聲音</button>
+<div class="timbre-row" data-timbre="pipe" data-sounding="false" data-ready="false">
+<div class="timbre-instrument"><div class="timbre-picture" aria-hidden="true"></div><div class="timbre-name"><h3>排笛</h3><span>封底排管實錄</span></div></div>
+<div class="timbre-graph"><div class="wave-panel"><span class="wave-label" aria-hidden="true">相對振幅</span><svg class="wave" id="tone-pipe" viewBox="0 0 600 160" preserveAspectRatio="none" role="img" aria-label="正在載入排笛的播放音訊波形"></svg><div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div><span class="timbre-load" role="status">正在載入波形…</span></div></div>
+<button class="play timbre-play" type="button" data-play="tone-pipe" aria-pressed="false"><span aria-hidden="true">▶</span> 播放排笛</button>
 </div>
 </div>
-<p class="model-note">示範音用來分開比較波形，並非真實樂器錄音；波形以相同相對高度呈現，試聽經近似大小聲匹配；聽感仍會受播放設備影響。</p>
-<div class="lab-tools">
-<button class="stop secondary" type="button" disabled>停止播放</button>
-<button class="reset secondary" data-reset="5" type="button">回到起點</button>
-<span class="play-state" role="status">等待操作</span>
-</div>
-<div class="dialogue">
-<span class="speaker"><span class="visually-hidden">阿公</span></span>
-<p>除了高低與大小聲，聲音還有不同特色，稱為音色。不同的聲音組成會呈現不同波形；同一樂器換一種演奏方式，音色也可能改變。</p>
-</div>
-</div>
-</section>
+<p class="timbre-caption">基本週期相近，每個週期的形狀不同。<br><small>波形取自播放音訊第 200–210 毫秒，三圖使用相同刻度。</small></p>
+<p class="play-state timbre-status visually-hidden" role="status">各自點播放，可自由重聽。</p>
+<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>音高相同，聲音仍有不同特色，這種特色就是音色。</p></div>
+<details class="timbre-sources"><summary>錄音來源與波形</summary><p>音叉為近似純音合成示意；吉他與排管實錄均經剪輯調音至共同音高，保留聲音本身的波形與起音／衰減。音量以全段訊號強度近似匹配，聽感仍會受設備影響。圖是該聲音的一小段，並非整段聲音的全部特徵。</p><p>吉他：<a href="https://freesound.org/people/allan764/sounds/467669/" target="_blank" rel="noopener">allan764「31-A#4.flac」</a> · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>。排管：<a href="https://freesound.org/people/mrshoes/sounds/278175/" target="_blank" rel="noopener">mrshoes「panflute scale octave and a half」</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>，錄音器材為封底 PVC 管，非竹製排笛。<a href="assets/timbre-audio/LICENSE.md">授權及修改紀錄</a></p></details>
+</div></section>
 <section class="lesson-card" id="card-06" data-core="聽覺範圍">
 <header class="lesson-head"><span class="lesson-number">06</span><div><h2>有些聲音，我們為什麼聽不到？</h2><p>聽覺範圍：分辨聽不到的聲波
 </p></div></header>
