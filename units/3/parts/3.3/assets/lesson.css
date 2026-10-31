@@ -275,8 +275,7 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .guitar-mode-switch button[aria-pressed=true]{background:#176b53;color:#fff;box-shadow:0 2px 4px #234c3520}
 .guitar-reset{position:absolute;right:0;min-height:44px;border:0;background:transparent;color:#176b53;font-size:.84rem;font-weight:750;padding:4px}
 .guitar-reset span{font-size:1.25rem;vertical-align:middle}
-.guitar-condition{width:max-content;max-width:100%;margin:12px auto 14px;padding:4px 14px;border-radius:999px;background:#eef3e9;color:#375d4a;text-align:center;font-size:.8rem;line-height:1.6}
-.guitar-bench{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.guitar-bench{margin-top:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .guitar-column{min-width:0;overflow:hidden;border:1px solid #e0e6dc;border-radius:14px;background:linear-gradient(#fffefa,#f7f9f3)}
 .card-main .guitar-column>h3{margin:0;padding:8px;text-align:center;background:#ecf2e5;color:#234e3a;font-size:1.05rem}
 .guitar-stage{position:relative;isolation:isolate;line-height:0;background:#e9ddc9 url('pitch-room-background.png') center/cover no-repeat}
@@ -306,4 +305,4 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .guitar-column[data-sounding=true] .guitar-play{box-shadow:0 0 0 2px #d6a34866}
 .guitar-note{text-align:center;margin:11px 0 16px;color:#6b7a70;font-size:.75rem;line-height:1.6}
 @media(min-width:761px) and (max-width:1100px){.guitar-bench{gap:10px}.guitar-play{font-size:.77rem}.guitar-tools{padding:0 92px 0 0}.guitar-mode-switch button{padding-inline:13px}.guitar-drag-hint{font-size:.68rem;top:7px;right:7px}.guitar-tension-tools button{padding:4px 5px;font-size:.7rem}.guitar-tension-tools output{min-width:55px;font-size:.7rem}}
-@media(max-width:600px){.guitar-bench{grid-template-columns:1fr;gap:18px}.guitar-tools{padding:0;justify-content:space-between;gap:6px}.guitar-reset{position:static;font-size:.76rem}.guitar-mode-switch button{padding:6px 12px;font-size:.84rem}.guitar-condition{font-size:.73rem;padding-inline:10px}.guitar-play{font-size:.86rem}.guitar-frequency{font-size:1.55rem}.guitar-drag-hint{font-size:.71rem}.guitar-readout{font-size:.85rem}}
+@media(max-width:600px){.guitar-bench{grid-template-columns:1fr;gap:18px}.guitar-tools{padding:0;justify-content:space-between;gap:6px}.guitar-reset{position:static;font-size:.76rem}.guitar-mode-switch button{padding:6px 12px;font-size:.84rem}.guitar-play{font-size:.86rem}.guitar-frequency{font-size:1.55rem}.guitar-drag-hint{font-size:.71rem}.guitar-readout{font-size:.85rem}}

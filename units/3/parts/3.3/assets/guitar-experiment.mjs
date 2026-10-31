@@ -16,7 +16,6 @@ export function createGuitarExperiment(root,{onChange,onPluck}){
  function render(){
   root.dataset.guitarMode=mode;
   for(const button of root.querySelectorAll('[data-guitar-mode]'))button.setAttribute('aria-pressed',String(button.dataset.guitarMode===mode));
-  root.querySelector('.guitar-condition').textContent=mode==='length'?'同一條第5弦・材質、粗細與鬆緊固定':'同一條第5弦・材質、粗細與弦長固定';
   root.querySelector('.guitar-question').textContent=mode==='length'?'按在不同位置，聲音會怎麼變？':'轉動調音旋鈕，聲音會怎麼變？';
   root.querySelector('.guitar-conclusion').textContent=mode==='length'?'其他條件相同時，振動的弦段越短，振動頻率越高，音調也越高。':'其他條件相同時，弦拉得越緊，振動頻率越高，音調也越高。';
   root.querySelector('.guitar-tension-tools').hidden=mode!=='tension';

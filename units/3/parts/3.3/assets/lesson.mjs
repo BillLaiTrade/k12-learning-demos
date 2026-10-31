@@ -2,7 +2,7 @@ import {signal,tubeFrequency,hearingBand,soundSamples,challenge,checkSettings} f
 import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
 import {createForkExperiment} from './fork-experiment.mjs?v=2';
 import {createPitchExperiment,PITCH_SECONDS} from './pitch-experiment.mjs?v=5';
-import {createGuitarExperiment} from './guitar-experiment.mjs?v=1';
+import {createGuitarExperiment} from './guitar-experiment.mjs?v=2';
 import {guitarSamples} from './guitar-model.mjs?v=1';
 import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
