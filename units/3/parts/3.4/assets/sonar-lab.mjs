@@ -28,6 +28,7 @@ export function renderSonar(progress = 0) {
  $('sonar-state').textContent = root.dataset.phase === 'paused' && busy ? '已暫停探測' : {ready:'等待發聲',outbound:'向海底傳播',returning:'回波返回中',received:'已收到回波'}[stage];
  for (const id of ['sonar-ship','sonar-left','sonar-right']) $(id).disabled = !!locked || (id==='sonar-left' && shipX<=100) || (id==='sonar-right' && shipX>=900);
  root.querySelector('[data-play]').disabled = !!locked;
+ const ocean = root.querySelector('.sonar-ocean'); ocean.style.setProperty('--ship-position', `${shipX/10}%`); ocean.classList.toggle('sonar-ocean--edge', shipX < 180 || shipX > 820);
  const handle = $('sonar-ship');handle.style.left = `${shipX/10}%`;handle.setAttribute('aria-valuenow',String(shipX));handle.setAttribute('aria-valuetext',`航線位置 ${Math.round((shipX-100)/8)}%`);
  let signal = '';
  if(current){
