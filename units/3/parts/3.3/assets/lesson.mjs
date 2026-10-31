@@ -6,7 +6,7 @@ import {createGuitarExperiment} from './guitar-experiment.mjs?v=2';
 import {guitarSamples} from './guitar-model.mjs?v=1';
 import {createPanExperiment} from './pan-experiment.mjs?v=2';
 import {loadPanRecording,recordingLevel} from './pan-recordings.mjs?v=1';
-import {createTimbreExperiment} from './timbre-experiment.mjs?v=2';
+import {createTimbreExperiment} from './timbre-experiment.mjs?v=3';
 import {timbreBuffer} from './timbre-model.mjs?v=1';
 import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
@@ -76,7 +76,7 @@ async function play(button){
   if(pitchKey){pitchView.start(pitchKey);root.querySelector('.play-state').textContent=`正在播放${pitchKey==='pitch-reference'?'左':'右'}邊：${settings.frequency} Hz`;}
   if(guitarKey)guitarView.start(guitarKey);
   if(panKey)panView.start();
-  if(timbreKey){timbreView.start(timbreKey);root.querySelector('.play-state').textContent=`正在播放${{pure:'音叉近似純音',string:'吉他',pipe:'排笛'}[timbreKey]}`;}
+  if(timbreKey){timbreView.start(timbreKey,buffer.duration);root.querySelector('.play-state').textContent=`正在播放${{pure:'音叉近似純音',string:'吉他',pipe:'排笛'}[timbreKey]}`;}
   source.onended=()=>{if(source===currentSource){if(forkKey)forkView.finish();if(pitchKey)pitchView.finish();stop(root);root.querySelector('.play-state').textContent='播放完畢，可再次比較';}};
   source.start(forkStart);
   function animate(now){
@@ -84,6 +84,7 @@ async function play(button){
    if(forkKey)forkView.update(audioContext.currentTime-forkStart);
    if(pitchKey)pitchView.update(audioContext.currentTime-forkStart);
    if(guitarKey)guitarView.update(audioContext.currentTime-forkStart);
+   if(timbreKey)timbreView.update(audioContext.currentTime-forkStart);
    if(panKey){const elapsed=audioContext.currentTime-forkStart;panView.update(elapsed,recordingLevel(buffer,elapsed));}
    animation=requestAnimationFrame(animate);
   }

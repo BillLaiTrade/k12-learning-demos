@@ -23,8 +23,8 @@ test('timbre rows use their actual playback PCM and independent controls',{timeo
  await context.addInitScript(()=>{
   window.timbreRuns=[];const create=AudioContext.prototype.createBufferSource;
   AudioContext.prototype.createBufferSource=function(){
-   const s=create.call(this),start=s.start.bind(s),stop=s.stop.bind(s);let run;
-   s.start=(...args)=>{run={samples:Array.from(s.buffer.getChannelData(0)),rate:s.buffer.sampleRate,stopped:false};window.timbreRuns.push(run);return start(...args);};
+   const context=this,s=create.call(this),start=s.start.bind(s),stop=s.stop.bind(s);let run;
+   s.start=(...args)=>{run={samples:Array.from(s.buffer.getChannelData(0)),rate:s.buffer.sampleRate,stopped:false,startedAt:args[0]??context.currentTime,duration:s.buffer.duration,clock:()=>context.currentTime};window.timbreRuns.push(run);return start(...args);};
    s.stop=(...args)=>{if(run)run.stopped=true;return stop(...args);};return s;
   };
  });
@@ -36,6 +36,7 @@ test('timbre rows use their actual playback PCM and independent controls',{timeo
  await t.test('three compact rows are visible with genuine PCM plots and no autoplay',async()=>{
   assert.equal(await root.locator('.timbre-row').count(),3);assert.equal(await root.locator('.play').count(),3);assert.equal(await root.locator('input,select,.stop,.reset').count(),0);
   assert.equal(await page.evaluate(()=>window.timbreRuns.length),0);
+  assert.equal(await root.locator('.timbre-cursor:not([hidden])').count(),0);
   await page.waitForFunction(()=>[...document.querySelectorAll('#card-05 .timbre-row')].every(n=>n.dataset.ready==='true'));
   assert.equal(new Set(await root.locator('.signal').evaluateAll(ns=>ns.map(n=>n.getAttribute('d')))).size,3);
   assert.match(await row('pure').innerText(),/近似純音示意/);assert.match(await root.locator('.timbre-sources').textContent(),/封底 PVC/);
@@ -81,6 +82,32 @@ test('timbre rows use their actual playback PCM and independent controls',{timeo
   await row('pure').locator('.timbre-image-play').focus();const n=await page.evaluate(()=>window.timbreRuns.length);await page.keyboard.press('Enter');await page.waitForFunction(n=>window.timbreRuns.length===n+1,n);
   assert.equal(await row('pipe').locator('[aria-pressed=true]').count(),0);
   await page.locator('.route a[href="#card-06"]').click();assert.equal(await root.locator('[aria-pressed=true]').count(),0);
+ });
+ await t.test('one reading dot follows the real polyline left to right using the audio clock, then clears',async()=>{
+  await page.setViewportSize({width:1440,height:1100});
+  for(const key of ['pure','string','pipe']){
+   const before=await row(key).locator('.signal').getAttribute('d');await play(key);
+   await page.waitForFunction(key=>Number(document.querySelector(`[data-timbre=${key}] .timbre-cursor`).dataset.progress)>.08,key);
+   const snapshots=[];
+   for(let i=0;i<3;i++){
+    snapshots.push(await page.evaluate(key=>{
+     const r=document.querySelector(`[data-timbre=${key}]`),cursor=r.querySelector('.timbre-cursor'),path=r.querySelector('.signal'),m=cursor.transform.baseVal.consolidate().matrix;
+     // 從實際SVG折線查找同x處的y；不複製製作端的PCM內插公式。
+     let low=0,high=path.getTotalLength();for(let i=0;i<30;i++){const mid=(low+high)/2;if(path.getPointAtLength(mid).x<m.e)low=mid;else high=mid;}
+     const point=path.getPointAtLength((low+high)/2),run=window.timbreRuns.at(-1);
+     return {x:m.e,y:m.f,lineError:Math.abs(point.y-m.f),progress:Number(cursor.dataset.progress),clockProgress:(run.clock()-run.startedAt)/run.duration,visible:document.querySelectorAll('#card-05 .timbre-cursor:not([hidden])').length};
+    },key));await page.waitForTimeout(130);
+   }
+   for(const snap of snapshots){assert.equal(snap.visible,1);assert.ok(snap.lineError<.004,`${key} stays on its actual waveform`);assert.ok(Math.abs(snap.progress-snap.clockProgress)<.07);}
+   assert.ok(snapshots[2].x>snapshots[0].x+60);assert.ok(Math.max(...snapshots.map(s=>s.y))-Math.min(...snapshots.map(s=>s.y))>1,'dot rises and falls');
+   assert.equal(await row(key).locator('.signal').getAttribute('d'),before,'waveform is unchanged');
+   if(key==='string')await root.screenshot({path:path.join(capture,'timbre-dot-playing.png')});
+  }
+  await page.waitForFunction(()=>document.querySelector('#card-05').dataset.playing==='false');assert.equal(await root.locator('.timbre-cursor:not([hidden])').count(),0);
+  await play('pure');await page.waitForFunction(()=>Number(document.querySelector('[data-timbre=pure] .timbre-cursor').dataset.progress)>.1);
+  await play('string');assert.equal(await row('pure').locator('.timbre-cursor').getAttribute('hidden'),'');assert.ok(Number(await row('string').locator('.timbre-cursor').getAttribute('data-progress'))<.2,'replay starts from left');
+  await page.locator('.route a[href="#card-06"]').click();assert.equal(await root.locator('.timbre-cursor:not([hidden])').count(),0);
+  await play('pipe');await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));delete document.hidden;});assert.equal(await root.locator('.timbre-cursor:not([hidden])').count(),0);
  });
  await t.test('desktop, laptop and phone keep aligned charts, complete instruments and usable buttons',async()=>{
   for(const width of [1920,1440,1280,1024,820,760,390,320]){
