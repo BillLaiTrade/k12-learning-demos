@@ -1,0 +1,290 @@
+[
+  {
+    "width": 920,
+    "value": 4,
+    "gutter": 29,
+    "speaker": {
+      "width": 167.1875,
+      "height": 104.5
+    },
+    "escaped": [],
+    "scene": {
+      "top": 149.828125,
+      "bottom": 358.828125
+    },
+    "speakerBottom": 327.46875,
+    "labelOverlaps": []
+  },
+  {
+    "width": 920,
+    "value": 60,
+    "gutter": 29,
+    "speaker": {
+      "width": 167.1875,
+      "height": 104.5
+    },
+    "escaped": [],
+    "scene": {
+      "top": 149.828125,
+      "bottom": 358.828125
+    },
+    "speakerBottom": 327.46875,
+    "labelOverlaps": []
+  },
+  {
+    "width": 920,
+    "value": 1.23456789,
+    "gutter": 29,
+    "speaker": {
+      "width": 167.1875,
+      "height": 104.5
+    },
+    "escaped": [],
+    "scene": {
+      "top": 149.828125,
+      "bottom": 358.828125
+    },
+    "speakerBottom": 327.46875,
+    "labelOverlaps": []
+  },
+  {
+    "width": 920,
+    "value": 4,
+    "gutter": 29,
+    "speaker": {
+      "width": 167.1875,
+      "height": 104.5
+    },
+    "escaped": [],
+    "scene": {
+      "top": 150.671875,
+      "bottom": 359.671875
+    },
+    "speakerBottom": 328.3125,
+    "labelOverlaps": []
+  },
+  {
+    "width": 920,
+    "value": 60,
+    "gutter": 29,
+    "speaker": {
+      "width": 167.1875,
+      "height": 104.5
+    },
+    "escaped": [],
+    "scene": {
+      "top": 150.671875,
+      "bottom": 359.671875
+    },
+    "speakerBottom": 328.3125,
+    "labelOverlaps": []
+  },
+  {
+    "width": 920,
+    "value": 1.23456789,
+    "gutter": 29,
+    "speaker": {
+      "width": 167.1875,
+      "height": 104.5
+    },
+    "escaped": [],
+    "scene": {
+      "top": 150.671875,
+      "bottom": 359.671875
+    },
+    "speakerBottom": 328.3125,
+    "labelOverlaps": []
+  },
+  {
+    "width": 984,
+    "value": 4,
+    "gutter": 29,
+    "speaker": {
+      "width": 180,
+      "height": 112.5
+    },
+    "escaped": [],
+    "scene": {
+      "top": 150.640625,
+      "bottom": 375.640625
+    },
+    "speakerBottom": 341.890625,
+    "labelOverlaps": []
+  },
+  {
+    "width": 984,
+    "value": 60,
+    "gutter": 29,
+    "speaker": {
+      "width": 180,
+      "height": 112.5
+    },
+    "escaped": [],
+    "scene": {
+      "top": 150.640625,
+      "bottom": 375.640625
+    },
+    "speakerBottom": 341.890625,
+    "labelOverlaps": []
+  },
+  {
+    "width": 984,
+    "value": 1.23456789,
+    "gutter": 29,
+    "speaker": {
+      "width": 180,
+      "height": 112.5
+    },
+    "escaped": [],
+    "scene": {
+      "top": 150.640625,
+      "bottom": 375.640625
+    },
+    "speakerBottom": 341.890625,
+    "labelOverlaps": []
+  },
+  {
+    "width": 728,
+    "value": 4,
+    "gutter": 22,
+    "speaker": {
+      "width": 131.59375,
+      "height": 82.25
+    },
+    "escaped": [],
+    "scene": {
+      "top": 150.75,
+      "bottom": 315.25
+    },
+    "speakerBottom": 290.5625,
+    "labelOverlaps": []
+  },
+  {
+    "width": 728,
+    "value": 60,
+    "gutter": 22,
+    "speaker": {
+      "width": 131.59375,
+      "height": 82.25
+    },
+    "escaped": [],
+    "scene": {
+      "top": 150.75,
+      "bottom": 315.25
+    },
+    "speakerBottom": 290.5625,
+    "labelOverlaps": []
+  },
+  {
+    "width": 728,
+    "value": 1.23456789,
+    "gutter": 22,
+    "speaker": {
+      "width": 131.59375,
+      "height": 82.25
+    },
+    "escaped": [],
+    "scene": {
+      "top": 150.75,
+      "bottom": 315.25
+    },
+    "speakerBottom": 290.5625,
+    "labelOverlaps": []
+  },
+  {
+    "width": 366,
+    "value": 4,
+    "gutter": 19,
+    "speaker": {
+      "width": 62,
+      "height": 58.125
+    },
+    "escaped": [],
+    "scene": {
+      "top": 126.921875,
+      "bottom": 204.421875
+    },
+    "speakerBottom": 200.546875,
+    "labelOverlaps": []
+  },
+  {
+    "width": 366,
+    "value": 60,
+    "gutter": 19,
+    "speaker": {
+      "width": 62,
+      "height": 58.125
+    },
+    "escaped": [],
+    "scene": {
+      "top": 126.921875,
+      "bottom": 204.421875
+    },
+    "speakerBottom": 200.546875,
+    "labelOverlaps": []
+  },
+  {
+    "width": 366,
+    "value": 1.23456789,
+    "gutter": 19,
+    "speaker": {
+      "width": 62,
+      "height": 58.125
+    },
+    "escaped": [],
+    "scene": {
+      "top": 126.921875,
+      "bottom": 204.421875
+    },
+    "speakerBottom": 200.546875,
+    "labelOverlaps": []
+  },
+  {
+    "width": 296,
+    "value": 4,
+    "gutter": 19,
+    "speaker": {
+      "width": 48,
+      "height": 45
+    },
+    "escaped": [],
+    "scene": {
+      "top": 161.5,
+      "bottom": 221.5
+    },
+    "speakerBottom": 218.5,
+    "labelOverlaps": []
+  },
+  {
+    "width": 296,
+    "value": 60,
+    "gutter": 19,
+    "speaker": {
+      "width": 48,
+      "height": 45
+    },
+    "escaped": [],
+    "scene": {
+      "top": 161.5,
+      "bottom": 221.5
+    },
+    "speakerBottom": 218.5,
+    "labelOverlaps": []
+  },
+  {
+    "width": 296,
+    "value": 1.23456789,
+    "gutter": 19,
+    "speaker": {
+      "width": 48,
+      "height": 45
+    },
+    "escaped": [],
+    "scene": {
+      "top": 181.15625,
+      "bottom": 241.15625
+    },
+    "speakerBottom": 238.15625,
+    "labelOverlaps": []
+  }
+]

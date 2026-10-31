@@ -1,0 +1,27 @@
+✔ round-trip time yields a total path and two equal one-way legs (0.693311ms)
+✔ free numeric time accepts decimals and values outside the old 2–6 second range (0.160385ms)
+✔ one original and one weaker return use the entered real seconds, with time for the last pulse to finish (0.930882ms)
+✔ outbound and return share endpoints and the receiver arrives at exactly the entered time (1.02553ms)
+▶ 3.4 third lesson follows the numeric-input mockup within the shared lesson format
+  ✔ shared full-width header and character dialogue surround the four-step scene, with no automatic audio or old controls (97.587646ms)
+  ✔ the default derivation multiplies once, splits equal paths, then divides by two without revealing the answer in the scene (219.196865ms)
+  ✔ editable decimal times and times above six seconds synchronize every derivation value (175.15969ms)
+  ✔ an empty or out-of-range edit stops the old observation and cannot send invalid values into playback (266.393527ms)
+Calculation real-time and audio: {"arrival":4.0115,"elapsed":"4.0000","same":true,"delay":4,"gains":[1,0.44999998807907104],"master":0.3199999928474426,"peaks":[0.31965693831443787,0.14384561777114868]}
+  ✔ a four-second run receives at four actual seconds with audible original and weaker matching echo (4219.498566ms)
+  ✔ pictured speaker and button restart one controller and cancel all previous echoes (412.097282ms)
+  ✔ pause and resume hold the return position and do not emit a second original (2599.188337ms)
+  ✔ editing a condition clears waves and stops sound; cross-section and background playback cancel old work (209.582764ms)
+  ✔ the pictured speaker supports Enter and Space, and both preserve the typed condition (87.780282ms)
+  ✔ actual touch starts one pulse under reduced motion and pauses both audio and animation (798.756441ms)
+  ✔ 1440–320px layouts retain equal legs, full-width lesson format, legible controls and contained labels (1278.024786ms)
+  ✔ audio activation errors have a visible retry explanation and successful retries clear it (600.253317ms)
+✔ 3.4 third lesson follows the numeric-input mockup within the shared lesson format (11920.677844ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12367.878975

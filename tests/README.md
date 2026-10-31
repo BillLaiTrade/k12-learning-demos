@@ -472,3 +472,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-
 ```
 
 排笛專項10項，整合53項、直接模型3項，共56項（含外層）。驗證六管頻率與實際AudioBuffer、音量、重聽／換管、切換不中斷、粒子封底不動與歸位、實際幀差、長度端點、取消／失敗重試、鍵盤／真實觸控及兩視角七種寬度。`SOUND33_BASE_URL`可指定公開頁，`PAN_CAPTURE_DIR`指定截圖目錄，預設/tmp/unit33-pan-review。核可圖、素材與本機證據見docs/reviews/unit-3.3-pan-flute/。
+
+## 3.4 第三區：可編輯時間與四段推導
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-calculation-model.test.mjs tests/unit-3.4-calculation.test.cjs
+```
+
+檢查預設4秒、0.1–60秒與小數輸入、未完成／超界數字的處理、每段數值連動、四步推導及不提前揭示單程答案；量測真實4秒返回與最末音訊強度、同緩衝區原音和較弱回波、雙發聲入口、暫停續播、取消舊排程、跨區／背景停止、Enter／Space、真實觸控與減少動態。另驗1440–320px三種數字長度的版面、標示及44px熱區，保留既有標題和角色對話。`CALCULATION_URL`可指定以`/`結尾的公開頁，`CALCULATION_CAPTURE_DIR`可指定證據目錄，預設`/tmp/k12-34-calculation-verified`。公開檢查透過繼承HTTPS代理；音訊量測不取代使用者裝置實體聽感。

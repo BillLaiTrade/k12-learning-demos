@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="從回聲理解聲波反射、往返測距與聲納，再比較室內反射與吸音處理。"><title>聲波反射與回聲｜波動與聲音</title><link rel="stylesheet" href="assets/lesson-base.css"><link rel="stylesheet" href="assets/echo.css?v=20261031-compact-lab"><script type="module" src="assets/echo.mjs?v=20261031-short-labels"></script></head>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="從回聲理解聲波反射、往返測距與聲納，再比較室內反射與吸音處理。"><title>聲波反射與回聲｜波動與聲音</title><link rel="stylesheet" href="assets/lesson-base.css"><link rel="stylesheet" href="assets/echo.css?v=20261031-calculation-lab"><link rel="stylesheet" href="assets/calculation.css?v=20261031-calculation-lab"><script type="module" src="assets/echo.mjs?v=20261031-calculation-lab"></script></head>
 <body><header class="shell masthead"><div class="brand-row"><a class="brand" href="../../index.html">← 波動與聲音</a><span class="crumb">國二上・理化</span></div><div class="hero"><div><div class="eyebrow">學習內容 3.4</div><h1>聲音反射後，<br>可以告訴我們什麼？</h1><p>小葵和阿公在實驗桌旁準備研究聲音。桌上的測距器材、水槽船模和吸音材料，能幫他們發現哪些聲音的線索？</p><div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>阿公，我明明只拍一次手，怎麼又聽到一聲？</p></div><div class="dialogue "><span class="speaker" aria-label="阿公"></span><p>我們先留意聲音從哪裡回來，再想想它走過了什麼地方。</p></div></div><figure class="hero-art"><img src="assets/echo-story-opening.webp" width="1672" height="941" fetchpriority="high" alt="小葵與阿公在實驗桌旁聆聽聲音；桌上有喇叭、接收器、計時器、捲尺與反射板，旁邊的水槽船模及吸音材料呼應後續探索。"><figcaption class="hero-caption">從反射板、測距器材到水槽船模，展開聲音的探索。</figcaption></figure></div></header><main class="shell lesson"><div class="lesson-layout"><nav class="route" aria-label="學習路線"><p class="route-label">探索路線</p><div class="route-inner"><a href="#s1"><b>01</b><span>聲音碰到反射板，會怎麼走？</span></a><a href="#s2"><b>02</b><span>牆越遠，返回的聲音就越晚嗎？</span></a><a href="#s3"><b>03</b><span>知道回來的時間，怎麼算牆有多遠？</span></a><a href="#s4"><b>04</b><span>看不到海底，聲納怎麼知道深度？</span></a><a href="#s5"><b>05</b><span>沒有聽見第二聲，就沒有反射嗎？</span></a><a href="#s6"><b>06</b><span>怎麼讓室內說話更清楚？</span></a><a class="quiz-nav" href="#quiz"><b>✓</b><span>單元小測</span></a></div></nav><div class="cards"><section class="lesson-card" id="s1" aria-labelledby="title-1">
 
   <header class="lesson-head"><div class="lesson-number">01</div><div><h2 id="title-1">聲音碰到反射板，會怎麼走？</h2><p>聲波反射：觀察一次發聲的返回</p></div></header>
@@ -80,8 +80,65 @@
     <div class="dialogue distance-conclusion"><span class="speaker" aria-label="阿公"></span><p>聲速相同，牆越遠，聲音去、回的路程都更長，所以回來得更晚。</p></div>
   </div>
 </div></section><section class="lesson-card" id="s3" aria-labelledby="title-3">
-  <header class="lesson-head"><div class="lesson-number">03</div><div><h2 id="title-3">知道回來的時間，怎麼算牆有多遠？</h2><p>往返測距</p></div></header>
-  <div class="lesson-body"><div class="card-main"><p>先看聲音走過的總路程，再取其中的一半。</p><div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>如果知道聲音回來花多久，是不是能算出牆有多遠？</p></div><div class="lab" id="calculation" data-phase="ready" data-progress="0"><svg id="calculation-view" viewBox="0 0 720 250" role="img" aria-label="總路程分為等長的去程與回程"></svg><label class="range-row" for="echo-time"><span>給定往返時間 <output id="echo-time-value">0.4s</output></span><input id="echo-time" type="range" min="0.2" max="0.8" step="0.1" value="0.4"></label><div class="readout"><div class="readout-card"><small>聲音的總路程</small><strong id="total-distance"></strong></div><div class="readout-card"><small>裝置到牆的單程距離</small><strong id="one-distance"></strong></div></div><p class="formula">距離＝聲速 × 往返時間 ÷ 2</p><p id="calculation-reading" class="observation"></p><div class="controls"><button class="action" data-play="calculation" aria-pressed="false">播放觀察</button><button class="secondary" data-reset="calculation">重來</button><label class="sound-switch"><input type="checkbox" data-sound="calculation"> 加入聲音</label></div><p class="live-note" id="calculation-status" role="status">準備好，可播放或直接比較；重來保留目前條件。</p></div><p class="model-note">題給聲速340m/s，固定牆面、同介質、近似同位置發射／接收。數值是教學條件，不是現場量測；動畫放慢8倍。</p><div class="dialogue "><span class="speaker" aria-label="阿公"></span><p>聲速乘上往返時間，得到的是去、回兩段加起來的路程。兩段一樣長，所以還要除以二，才是牆的距離。</p></div></div></div></section><section class="lesson-card" id="s4" aria-labelledby="title-4">
+  <header class="lesson-head"><div class="lesson-number">03</div><div><h2 id="title-3">知道回來的時間，怎麼算牆有多遠？</h2><p>往返測距：從聲音走過的路程推算距離。</p></div></header>
+  <div class="lesson-body"><div class="card-main">
+    <p>上一區由距離觀察返回時間；這次反過來，由往返時間推算距離。</p>
+    <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>如果只知道聲音回來花了幾秒，要怎麼算反射板有多遠？</p></div>
+    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>先算聲音這段時間總共走了多遠，再看看去程和回程各占多少。</p></div>
+    <div class="calculation-lab" id="calculation" data-phase="ready" data-progress="0" data-time="4" data-elapsed="0" data-emissions="0">
+      <div class="calculation-known">
+        <label for="echo-time" class="calculation-time-entry"><span>已知往返時間</span><span class="calculation-number"><input id="echo-time" type="number" min="0.1" max="60" step="any" value="4" inputmode="decimal" aria-controls="calculation-steps" aria-describedby="calculation-input-error"><span>秒</span></span></label>
+        <div class="calculation-speed"><span>題給聲速（空氣中）</span><strong>340 m/s</strong></div>
+      </div>
+      <p id="calculation-input-error" class="calculation-error" role="alert" hidden></p>
+      <ol class="calculation-steps" id="calculation-steps">
+        <li class="calculation-step">
+          <h3><span class="calculation-step-number" aria-hidden="true">1</span><span>去程和回程，總共走了 <span data-calculation-time>4</span> 秒。</span></h3>
+          <figure class="calculation-figure">
+            <figcaption>器材與路徑為示意，距離依設定值計算。</figcaption>
+            <div class="calculation-scene" id="calculation-scene" data-stage="ready">
+              <img class="calculation-background" src="assets/distance-virtual-lab.webp" width="2042" height="770" alt="虛擬聲波實驗室，左側喇叭與相鄰接收器面向右側反射板。" draggable="false">
+              <img class="calculation-wall" src="assets/distance-wall.webp" width="887" height="1774" alt="固定的反射板" draggable="false">
+              <svg class="calculation-overlay" id="calculation-view" viewBox="0 0 1000 250" aria-hidden="true">
+                <path id="calculation-outbound-route" d="M260 125H895m-13-8 13 8-13 8" fill="none" stroke="#19835c" stroke-width="3" stroke-dasharray="8 6"/>
+                <path id="calculation-return-route" d="M895 155H260m13-8-13 8 13 8" fill="none" stroke="#e78624" stroke-width="3" stroke-dasharray="8 6"/>
+                <g id="calculation-waves"></g><g id="calculation-received"></g>
+                <path d="M240 213v18m0-9H900m0-9v18" fill="none" stroke="white" stroke-width="3"/>
+              </svg>
+              <span class="calculation-device calculation-source-label" aria-hidden="true">喇叭</span><span class="calculation-device calculation-receiver-label" aria-hidden="true">接收器</span><span class="calculation-device calculation-wall-label" aria-hidden="true">反射板</span>
+              <span class="calculation-route-label calculation-outbound-label" aria-hidden="true">去程</span><span class="calculation-route-label calculation-return-label" aria-hidden="true">回程</span>
+              <span class="calculation-dimension" aria-hidden="true">要求的反射板距離</span>
+              <button type="button" class="calculation-speaker" id="calculation-speaker" aria-label="點喇叭，發出一次短音" title="發出一次短音"></button>
+            </div>
+          </figure>
+        </li>
+        <li class="calculation-step">
+          <h3><span class="calculation-step-number" aria-hidden="true">2</span><span>每秒走 340 公尺，<span data-calculation-time>4</span> 秒共走多遠？</span></h3>
+          <div class="calculation-total calculation-result"><span class="calculation-result-label">聲音走過的總路程</span><strong class="calculation-equation" id="total-distance"><span>340 × <span data-calculation-time>4</span></span><span>＝<span data-calculation-total>1,360</span> 公尺</span></strong></div>
+        </li>
+        <li class="calculation-step">
+          <h3><span class="calculation-step-number" aria-hidden="true">3</span><span>去程等於回程，總路程分成兩個等長部分。</span></h3>
+          <p class="calculation-step-note">同一路線往返，兩段一樣長。</p>
+          <div class="calculation-lengths" role="img" aria-label="去程與回程等長，合計總路程1,360公尺。" id="calculation-lengths">
+            <div class="calculation-length-bar"><span class="calculation-leg calculation-go">去程</span><span class="calculation-leg calculation-back">回程</span></div>
+            <div class="calculation-total-bracket"><span>總路程 <strong data-calculation-total>1,360</strong> 公尺</span></div>
+          </div>
+        </li>
+        <li class="calculation-step">
+          <h3><span class="calculation-step-number" aria-hidden="true">4</span><span>只看去程或回程，距離就是多少？</span></h3>
+          <p class="calculation-step-note">任一段都是總路程的一半。</p>
+          <div class="calculation-half calculation-result"><strong class="calculation-equation" id="one-distance"><span><span data-calculation-total>1,360</span> <em>÷ 2</em></span><span>＝<span data-calculation-leg>680</span> 公尺</span></strong><div class="calculation-answer"><p>去程 <span data-calculation-leg>680</span> 公尺＝回程 <span data-calculation-leg>680</span> 公尺</p><p>所以，裝置到反射板的距離是 <strong data-calculation-leg>680</strong> 公尺。</p></div></div>
+        </li>
+      </ol>
+      <p class="calculation-formula">距離＝聲速 × 往返時間 ÷ 2</p>
+      <div class="calculation-actions"><button class="action" type="button" data-play="calculation"><span aria-hidden="true">▶</span> 再發出一次短音</button><button class="secondary" type="button" data-pause="calculation" disabled>暫停</button></div>
+      <p id="calculation-error" class="calculation-error" role="alert" hidden></p>
+      <p id="calculation-reading" class="calculation-sr-only" role="status"></p><p id="calculation-status" class="calculation-sr-only" role="status">準備好，可點喇叭或按鈕觀察。</p>
+    </div>
+    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>聲速乘上往返時間，得到的是去、回兩段加起來的路程。喇叭和接收器靠在一起，去、回兩段一樣長，所以要除以二，才是裝置到反射板的距離。</p></div>
+    <p class="model-note">題給聲速 340 m/s；反射板固定、往返同介質，發射與接收近似同位置。這是虛擬模型的條件，並非現場量測。</p>
+  </div></div>
+</section><section class="lesson-card" id="s4" aria-labelledby="title-4">
   <header class="lesson-head"><div class="lesson-number">04</div><div><h2 id="title-4">看不到海底，聲納怎麼知道深度？</h2><p>聲納測深</p></div></header>
   <div class="lesson-body"><div class="card-main"><p>船底探頭向下發出聲脈衝，再接收海底反射回來的聲音。</p><div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>海底看不見，也能靠回來的聲音知道它有多深嗎？</p></div><div class="lab" id="sonar" data-phase="ready" data-progress="0"><svg id="sonar-view" viewBox="0 0 720 250" role="img" aria-label="船底探頭垂直發出聲波，海底反射後返回"></svg><label class="range-row" for="sea-depth"><span>探頭到海底 <output id="sea-depth-value">300m</output></span><input id="sea-depth" type="range" min="150" max="600" step="75" value="300"></label><label class="conceal"><input id="hide-depth" type="checkbox"> 只讀回波紀錄，暫時收起距離標示</label><div class="readout"><div class="readout-card"><small>題給水中聲速</small><strong>1500m/s</strong></div><div class="readout-card"><small>發射到接收</small><strong id="sonar-time"></strong></div></div><button class="secondary" id="reveal-depth" aria-expanded="false" aria-controls="sonar-answer" hidden>查看推得的深度</button><p class="observation" id="sonar-answer"></p><div class="controls"><button class="action" data-play="sonar" aria-pressed="false">播放觀察</button><button class="secondary" data-reset="sonar">重來</button><label class="sound-switch"><input type="checkbox" data-sound="sonar"> 加入聲音</label></div><p class="live-note" id="sonar-status" role="status">準備好，可播放或直接比較；重來保留目前條件。</p></div><p class="model-note">主動聲納、固定海底、垂直聲路；深度從探頭起算，忽略吃水差。1500m/s為題給近似，動畫放慢8倍。聲納可使用超聲波，但並非所有聲納都只能用超聲波；可聽聲音只是提示音。</p><div class="dialogue "><span class="speaker" aria-label="阿公"></span><p>把水中的聲速乘上往返時間，再除以二，就能估算探頭到海底的距離。聲路垂直時，這個距離才是我們量的深度。</p></div></div></div></section><section class="lesson-card" id="s5" aria-labelledby="title-5">
   <header class="lesson-head"><div class="lesson-number">05</div><div><h2 id="title-5">沒有聽見第二聲，就沒有反射嗎？</h2><p>室內反射</p></div></header>

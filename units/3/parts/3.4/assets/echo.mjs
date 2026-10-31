@@ -1,16 +1,17 @@
-import {echo, distanceFromEcho, wavePosition, arrivals, judge} from './echo-model.mjs';
+import {echo, wavePosition, arrivals, judge} from './echo-model.mjs';
 import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
 import {renderDistance, bindDistanceWall, bindDistanceSpeakers, distanceDuration, distanceTaps} from './distance-lab.mjs?v=20261031-short-labels';
+import {renderCalculation, bindCalculationInput, calculationTime, calculationDuration, calculationTaps} from './calculation-lab.mjs?v=20261031-calculation-lab';
 const $ = id => document.getElementById(id), fmt = (n, digits = 2) => Number(n.toFixed(digits)).toString();
 const panels = new Map();
 let active = null, context = null, phrasePromise = null, sources = [], audioEpoch = 0, outputGain = null;
 function audioError(panel, message = '') {
-  if (['reflection', 'distance'].includes(panel.id)) {
+  if (['reflection', 'distance', 'calculation'].includes(panel.id)) {
     const error = $(`${panel.id}-error`); error.textContent = message; error.hidden = !message;
   } else if (message) $(`${panel.id}-status`).textContent = message;
 }
 // Keep the verified output level; learners adjust loudness on their own device.
-const outputLevel = panel => ['reflection', 'distance'].includes(panel.id) ? .32 : .0448;
+const outputLevel = panel => ['reflection', 'distance', 'calculation'].includes(panel.id) ? .32 : .0448;
 async function resumeAudio() {
   // On supported iOS browsers, use the playback session rather than the silent-mode session.
   try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch {}
@@ -59,7 +60,7 @@ async function sound(panel, elapsed = 0) {
       const source = context.createBufferSource(), gain = context.createGain();
       source.buffer = buffer; gain.gain.value = tap.gain;
       source.connect(gain); gain.connect(master);
-      source.start(context.currentTime + (['reflection', 'distance'].includes(panel.id) ? .04 : 0) + Math.max(0, tap.delay - elapsed), offset);
+      source.start(context.currentTime + (['reflection', 'distance', 'calculation'].includes(panel.id) ? .04 : 0) + Math.max(0, tap.delay - elapsed), offset);
       sources.push(source);
       source.onended = () => { sources = sources.filter(s => s !== source); if (!sources.length) document.body.dataset.audioPlaying = 'false'; };
     }
@@ -98,7 +99,7 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
     const newEmission = restart || p.phase === 'complete' || p.elapsed === 0;
     stopActive();
     if (newEmission) { p.elapsed = 0; onRestart(selection); }
-    if (['reflection', 'distance'].includes(id) && newEmission) root.dataset.emissions = String(Number(root.dataset.emissions) + 1);
+    if (['reflection', 'distance', 'calculation'].includes(id) && newEmission) root.dataset.emissions = String(Number(root.dataset.emissions) + 1);
     active = p; p.start = performance.now() - p.elapsed * 1000;
     phase('playing'); p.draw(); sound(p, p.elapsed); p.raf = requestAnimationFrame(tick);
   };
@@ -113,10 +114,6 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
   panels.set(id, p); p.draw(); return p;
 }
 function line(x1, y1, x2, y2, color, dash = '') { return `<path d="M${x1} ${y1}L${x2} ${y2}" stroke="${color}" stroke-width="4" fill="none" ${dash ? 'stroke-dasharray="8 6"' : ''}/>`; }
-function wall(svgId, distance, progress, label = true) {
-  const svg = $(svgId), x = 110 + distance / 136 * 490, wave = wavePosition(progress), dot = 110 + (x - 110) * wave.fraction;
-  svg.innerHTML = `<rect x="15" y="25" width="690" height="200" rx="14" fill="#e9efe4"/><path d="M${x} 40V205" stroke="#9a886e" stroke-width="15"/><rect x="42" y="90" width="68" height="80" rx="12" fill="#176b53"/><text x="25" y="62">發射／接收</text><text x="${x - 18}" y="27">牆</text>${line(110, 110, x - 13, 110, '#176b53')}${line(x - 13, 160, 110, 160, '#bc612b', 'yes')}<text x="${(110 + x) / 2 - 38}" y="95">去程 →</text><text x="${(110 + x) / 2 - 38}" y="193">← 回程</text><circle cx="${dot}" cy="${wave.stage === 'outbound' ? 110 : 160}" r="9" fill="#d29130" stroke="white" stroke-width="3"/>${label ? `<text x="310" y="235">單程 ${fmt(distance)}m</text>` : ''}`;
-}
 function sonar(progress) {
   const depth = Number($('sea-depth').value), time = echo(depth, 1500).time, hidden = $('hide-depth').checked, w = wavePosition(progress), bottom = 100 + depth / 600 * 105;
   $('sea-depth-value').textContent = depth + 'm';
@@ -144,13 +141,12 @@ const distance = player('distance', renderDistance, () => distanceDuration(Numbe
 });
 bindDistanceSpeakers(selection => distance.play(true, selection));
 bindDistanceWall(distance.reset);
-player('calculation', progress => {
-  const t = Number($('echo-time').value), e = distanceFromEcho(t, 340);
-  wall('calculation-view', e.distance, progress);
-  $('echo-time-value').textContent = fmt(t) + 's'; $('total-distance').textContent = `340 × ${fmt(t)}＝${fmt(e.total)}m`;
-  $('one-distance').textContent = `${fmt(e.total)} ÷ 2＝${fmt(e.distance)}m`;
-  $('calculation-reading').textContent = `去程${fmt(e.distance)}m＋回程${fmt(e.distance)}m＝總共${fmt(e.total)}m。`;
-}, () => Number($('echo-time').value) * 8);
+const calculation = player('calculation', renderCalculation, () => calculationDuration(calculationTime()), {
+  restartOnPlay: true,
+  taps: () => calculationTaps(calculationTime())
+});
+$('calculation-speaker').addEventListener('click', () => calculation.play(true));
+bindCalculationInput(calculation.reset);
 player('sonar', sonar, () => echo(Number($('sea-depth').value), 1500).time * 8);
 player('room', progress => {
   trace('room-single', 'single', false, progress * 2 / 1.4); trace('room-dense', 'dense', false, progress * 2 / 1.4); roomView('room-view');
@@ -160,7 +156,7 @@ player('treatment', progress => {
   const treated = document.querySelector('[name=treatment-mode]:checked').value === 'after'; roomView('treatment-view', treated);
   $('treatment-reading').textContent = treated ? '目前比較：部分牆面吸音，直接聲保留，反射聲較弱。' : '目前比較：未處理牆面，反射聲較強。';
 }, () => 6.8, {room: true, mode: () => document.querySelector('[name=treatment-mode]:checked').value});
-for (const [id, panel] of [['wall-distance', 'distance'], ['echo-time', 'calculation'], ['sea-depth', 'sonar']]) $(id).addEventListener('input', () => {if (panel === 'sonar') $('reveal-depth').setAttribute('aria-expanded', 'false'); panels.get(panel).reset();});
+for (const [id, panel] of [['wall-distance', 'distance'], ['sea-depth', 'sonar']]) $(id).addEventListener('input', () => {if (panel === 'sonar') $('reveal-depth').setAttribute('aria-expanded', 'false'); panels.get(panel).reset();});
 for (const name of ['room-mode', 'treatment-mode']) document.querySelectorAll(`[name="${name}"]`).forEach(el => el.addEventListener('change', () => panels.get(name.split('-')[0]).reset()));
 $('hide-depth').addEventListener('change', () => { $('reveal-depth').hidden = !$('hide-depth').checked; $('reveal-depth').setAttribute('aria-expanded', 'false'); panels.get('sonar').reset(); });
 $('reveal-depth').addEventListener('click', () => { $('reveal-depth').setAttribute('aria-expanded', 'true'); panels.get('sonar').draw(); });
