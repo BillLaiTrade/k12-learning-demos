@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-31",
+  "generator": "image_gen",
+  "reference": "exec-f1650054-2887-4069-ada6-4a8948a8d011.png",
+  "original_asset": "exec-619e00e0-0a68-4ae1-a34f-c7db4b63e11a.png",
+  "asset": "pan-bamboo.png",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "transparent_background": true,
+  "sha256": "7859d58edde0fe413cc274b1e9203df7b9cd2ea66f42e37b6dc7de313eda75ec",
+  "usage": "原始PNG直接採用，SVG視窗布局管口、管身、封底；同管徑複用六根不同長度，切窗與粒子另由程式呈現。"
+}

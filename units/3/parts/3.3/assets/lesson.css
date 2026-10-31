@@ -316,3 +316,43 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .guitar-readout{grid-column:2;grid-row:2;align-self:end;margin-bottom:7px;flex-wrap:wrap}
 .guitar-play{grid-column:2;grid-row:3;align-self:start;margin-top:0;white-space:normal}
 }
+
+/* 第四區：一組排笛自由選管，管內觀察直接呈現在器材上。 */
+.pan-tools{display:flex;align-items:center;justify-content:center;position:relative;margin:18px 0 14px;gap:12px}
+.pan-view-switch{display:flex;gap:3px;padding:4px;border:1px solid #d3ddcf;border-radius:999px;background:#f1f4ec}
+.pan-view-switch button{min-width:90px;min-height:42px;padding:6px 17px;border:0;border-radius:999px;background:transparent;color:#526e5d;font-weight:750}
+.pan-view-switch button[aria-pressed=true]{background:#176b53;color:white}
+.pan-reset{position:absolute;right:0;min-height:42px;padding:4px;border:0;background:transparent;color:#176b53;font-size:.85rem;font-weight:750}
+.pan-stage{position:relative;isolation:isolate;border:1px solid #e1d5bc;border-radius:14px;overflow:hidden;background:#ead6b6 url('pitch-room-background.png') center/cover no-repeat}
+.pan-stage::before{content:"";position:absolute;inset:0;z-index:-1;background:#fff7dc35}
+.pan-hint{position:absolute;left:50%;top:12px;transform:translateX(-50%);padding:3px 12px;border-radius:8px;background:#fffbefeb;color:#405d48;font-size:.8rem;font-weight:700;white-space:nowrap}
+.pan-picture,.pan-scene{display:block;width:100%;height:auto}
+.pan-shell{filter:drop-shadow(2px 4px 2px #5a3e2a35)}
+.pan-window-cut{fill:white}
+.pan-glass,.pan-air,.pan-inside-labels{display:none}
+#card-04[data-pan-view=inside] .pan-pipe[data-selected=true] .pan-window-cut{fill:black}
+#card-04[data-pan-view=inside] .pan-pipe[data-selected=true] .pan-glass,#card-04[data-pan-view=inside] .pan-pipe[data-selected=true] .pan-air,#card-04[data-pan-view=inside] .pan-inside-labels{display:block}
+.pan-particle{fill:#ffdf83;stroke:#fff1c5;stroke-width:.6}
+.pan-selected-outline{fill:none;stroke:#ffcb79;stroke-width:3;opacity:0}
+.pan-pipe[data-selected=true] .pan-selected-outline{opacity:1}
+.pan-pipe[data-sounding=true] .pan-selected-outline{stroke:#ffb844;stroke-width:4}
+.pan-breath{display:none;fill:none;stroke:#b9edf2;stroke-width:3;stroke-linecap:round}
+.pan-pipe[data-sounding=true] .pan-breath{display:block}
+.pan-measure-line{fill:none;stroke:#ac6722;stroke-width:2}
+.pan-measure-label-bg{fill:#fff9e9}
+.pan-measure-label{font-size:23px;font-weight:750;fill:#9c5e22}
+.pan-selected-badge rect{fill:#bb7026;stroke:#ffe7a0;stroke-width:2}
+.pan-selected-badge text{font-size:20px;fill:white;font-weight:700}
+.pan-inside-labels text{font-size:17px;fill:#334e47;paint-order:stroke;stroke:#fff9e9;stroke-width:5;stroke-linejoin:round}
+.pan-callout-line{fill:none;stroke:#536e62;stroke-width:1.4}
+.pan-pipe-button.play{position:absolute;min-height:0;margin:0;padding:0;border:0;border-radius:20px;background:transparent;color:transparent;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.pan-pipe-button.play:hover{background:#ffda7b12}
+.pan-pipe-button.play:focus-visible{outline:3px solid #176b53;outline-offset:3px}
+.pan-reading{display:flex;align-items:center;justify-content:center;gap:32px;margin:12px 0;padding:10px 16px;border-left:5px solid #c18539;border-radius:11px;background:#eff3e9;color:#3e5c49;font-size:.9rem}
+.pan-reading span{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
+.pan-reading output{font-size:1.5rem;font-weight:800;color:#18553e;font-variant-numeric:tabular-nums}
+.pan-note{margin:8px 0 14px;text-align:center;color:#6b7a70;font-size:.75rem}
+@media(max-width:600px){.pan-tools{justify-content:space-between;gap:5px}.pan-view-switch button{min-width:69px;padding:6px 10px;font-size:.84rem}.pan-reset{position:static;font-size:.75rem}.pan-hint{top:7px;font-size:.65rem;padding:2px 7px}.pan-reading{gap:8px;padding:8px 6px;flex-wrap:wrap}.pan-reading span{gap:6px;font-size:.75rem}.pan-reading output{font-size:1.1rem}}
+
+.pan-direction{display:none;fill:none;stroke:#ffe5a2;stroke-width:1.5;stroke-linecap:round}
+.pan-pipe[data-sounding=true] .pan-direction{display:block}

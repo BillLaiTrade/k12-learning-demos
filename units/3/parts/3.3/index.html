@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="比較振幅、頻率與波形，探索琴弦、空氣柱、音色及聽覺範圍，認識分貝的基本讀法。">
 <title>不同的聲音，差別在哪裡？｜3.3 聲音的特性</title>
-<link rel="stylesheet" href="assets/lesson.css?v=17">
-<script type="module" src="assets/lesson.mjs?v=14">
+<link rel="stylesheet" href="assets/lesson.css?v=18">
+<script type="module" src="assets/lesson.mjs?v=15">
 </script>
 </head>
 <body>
@@ -35,7 +35,7 @@
 <a href="#card-01" aria-current="step"><b>01</b><span>同一支音叉，輕敲和重敲有什麼不同？</span></a>
 <a href="#card-02"><b>02</b><span>振動得更快，聲音會發生什麼變化？</span></a>
 <a href="#card-03"><b>03</b><span>同一條琴弦，怎麼彈出不同高低的聲音？</span></a>
-<a href="#card-04"><b>04</b><span>空氣柱長短不同，聲音會怎麼變？</span></a>
+<a href="#card-04"><b>04</b><span>排笛的管子長短不同，吹出的聲音會怎麼變？</span></a>
 <a href="#card-05"><b>05</b><span>同樣的音高，為什麼聽得出不同樂器？</span></a>
 <a href="#card-06"><b>06</b><span>有些聲音，我們為什麼聽不到？</span></a>
 <a href="#card-07"><b>07</b><span>分貝數字，怎麼幫我們比較聲音大小？</span></a>
@@ -179,53 +179,16 @@
 <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p class="guitar-conclusion">其他條件相同時，振動的弦段越短，振動頻率越高，音調也越高。</p></div>
 </div></section>
 <section class="lesson-card" id="card-04" data-core="空氣柱的音調">
-<header class="lesson-head"><span class="lesson-number">04</span><div><h2>空氣柱長短不同，聲音會怎麼變？</h2><p>空氣柱的音調：比較兩端開口、構造相同的發聲管，吹奏方式與發聲模式保持相同。</p></div></header>
+<header class="lesson-head"><span class="lesson-number">04</span><div><h2>排笛的管子長短不同，吹出的聲音會怎麼變？</h2><p>點選長短不同的管子，聽聲音，也看看管內的振動。</p></div></header>
 <div class="lesson-body card-main">
-
-<div class="dialogue dialogue--xiaokui">
-<span class="speaker"><span class="visually-hidden">小葵</span></span>
-<p>除了琴弦，管子裡的空氣也能振動。長短不同會怎麼樣？</p>
-</div>
-<div class="instrument-panel">
-<svg id="tube-scene" class="apparatus" viewBox="0 0 600 160" role="img" aria-label="兩端開口的同類發聲管，標示有效空氣柱長度">
-<defs>
-<linearGradient id="tube-glass" x2="0" y2="1">
-<stop stop-color="#edfafa"/>
-<stop offset=".5" stop-color="#a7d1d5"/>
-<stop offset="1" stop-color="#f6ffff"/>
-</linearGradient>
-</defs>
-<rect id="tube-body" x="65" y="38" width="360" height="65" rx="4" fill="url(#tube-glass)" stroke="#749c9b"/>
-<path id="tube-rims" d="M65 32V110M425 32V110" stroke="#3d7876" stroke-width="5"/>
-<g id="tube-air">
-</g>
-<path id="tube-length-line" d="M65 130H425" stroke="#176b53" stroke-width="2"/>
-</svg>
-<p class="apparatus-caption">有效振動的空氣柱</p>
-<label class="slider">有效空氣柱長度 <output id="tube-length-reading">60 cm</output>
-<input id="tube-length" type="range" min="20" max="80" step="5" value="60">
-</label>
-<p class="result-readout">現在的頻率：<output id="tube-frequency">285.8 Hz</output>
-</p>
-<div class="button-row">
-<button class="play" type="button" data-play="tube-reference">
-<span aria-hidden="true">▶</span> 聽60 cm的管音</button>
-<button class="play" type="button" data-play="tube-live">
-<span aria-hidden="true">▶</span> 吹奏現在的發聲管</button>
-</div>
-</div>
-<p class="model-note">這是同類兩端開口管的簡化示意，不包含改變吹奏方式產生的高音。空氣微動只在吹奏時出現，管音為示意音。</p>
-<div class="lab-tools">
-<button class="stop secondary" type="button" disabled>停止播放</button>
-<button class="reset secondary" data-reset="4" type="button">回到起點</button>
-<span class="play-state" role="status">等待操作</span>
-</div>
-<div class="dialogue">
-<span class="speaker"><span class="visually-hidden">阿公</span></span>
-<p>同類管子、相同發聲模式下，有效空氣柱較長，主要振動頻率通常較低；較短則較高。這裡比較的是空氣柱，不是敲擊裝水瓶子的聲音。</p>
-</div>
-</div>
-</section>
+<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>管子比較短，吹出的聲音會有什麼不同？</p></div>
+<div class="pan-tools"><div class="pan-view-switch" role="group" aria-label="排笛觀察視角"><button type="button" data-pan-view="outside" aria-pressed="true">外觀</button><button type="button" data-pan-view="inside" aria-pressed="false">看管內</button></div><button class="pan-reset" type="button" data-pan-reset>↻ 回到起點</button></div>
+<div class="pan-stage"><span class="pan-hint">點管子就能吹奏</span><div class="pan-picture"></div><button type="button" class="play pan-pipe-button" data-play="pan-0" aria-pressed="false"></button><button type="button" class="play pan-pipe-button" data-play="pan-1" aria-pressed="false"></button><button type="button" class="play pan-pipe-button" data-play="pan-2" aria-pressed="false"></button><button type="button" class="play pan-pipe-button" data-play="pan-3" aria-pressed="false"></button><button type="button" class="play pan-pipe-button" data-play="pan-4" aria-pressed="false"></button><button type="button" class="play pan-pipe-button" data-play="pan-5" aria-pressed="false"></button></div>
+<div class="pan-reading" aria-live="polite"><span>目前管長 <output id="pan-length">20 cm</output></span><span>頻率 <output id="pan-frequency">428.8 Hz</output></span></div>
+<p class="pan-note">振動放慢示意・合成管音保持原音高</p>
+<p class="play-state visually-hidden" role="status">點選任一根管子即可吹奏，再點可重聽。</p>
+<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>同類管子、相同發聲模式下，空氣柱越短，振動頻率越高，音調也越高。</p></div>
+</div></section>
 <section class="lesson-card" id="card-05" data-core="音色與波形">
 <header class="lesson-head"><span class="lesson-number">05</span><div><h2>同樣的音高，為什麼聽得出不同樂器？</h2><p>音色與波形：三個聲音都以440 Hz作為音高基準。比較各自的特色，並看同一時間窗內的波形。</p></div></header>
 <div class="lesson-body card-main">

@@ -1,0 +1,66 @@
+✔ fork sound preserves frequency and decay while strength changes amplitude (10.433628ms)
+▶ fork experiment: actual sound, synchronized motion, recording and layout
+  ✔ idle state shows the approved apparatus, accessible actions and unfilled records (47.658224ms)
+  ✔ both strikes have the same real frequency; heavy has larger audio and visible displacement (1227.191251ms)
+  ✔ wave traces grow rightward after contact, freeze on stop and restart from the left (4491.987184ms)
+  ✔ stop retains observations; reset clears them; natural completion and keyboard work (2791.699021ms)
+  ✔ rapid repeat, navigation, offscreen, hidden tab and pagehide stop sound and motion (1253.033042ms)
+  ✔ cancelled async audio preparation never starts later; playback failure can retry (830.262711ms)
+  ✔ desktop/laptop visual hierarchy matches the approved mockup and mobile stays usable (1701.848551ms)
+✔ fork experiment: actual sound, synchronized motion, recording and layout (13219.756985ms)
+▶ guitar lesson: real instrument, one variable at a time, synchronized plucks
+  ✔ approved guitar comparison, characters and independent controls render without autoplay (109.518046ms)
+  ✔ effective-length brackets touch the actual bridge and selected fret, with a half-length octave (9.112279ms)
+  ✔ real pointer dragging and fretboard selection snap to frets and keep tension fixed without sound (1052.553354ms)
+  ✔ tension mode fixes full length, turns the real tuning peg and follows square-root pitch (750.647673ms)
+  ✔ independent replay and direct plucking produce real 110/220Hz decaying buffers at audible matched levels (228.830822ms)
+  ✔ both guitar strings visibly vibrate while body, endpoints and inactive string stay fixed; finish returns to rest (4914.842135ms)
+  ✔ editing, mode/reset, navigation, offscreen and hidden tab stop sound and motion without restarting (646.282469ms)
+  ✔ cancelled async preparation stays cancelled and failed playback exposes a retryable message (321.32332ms)
+  ✔ seven widths retain both comparisons and readable controls in both investigation modes (3666.955048ms)
+  ✔ real touch dragging and direct plucking work on mobile (1653.459808ms)
+✔ guitar lesson: real instrument, one variable at a time, synchronized plucks (14675.508475ms)
+▶ pan flute: free pipes, interior observation and synchronized closed-end air motion
+  ✔ single instrument with six native pipe targets, one information row and no reference or autoplay (90.846512ms)
+  ✔ every pipe independently plays the closed-end frequency, repeats freely and replaces old audio (572.854057ms)
+  ✔ view changes preserve selection and current playback, with a window only on the selected pipe (199.580479ms)
+  ✔ air visibly oscillates near its origin, bottom node and other pipes stay fixed, then all return home (1931.141924ms)
+  ✔ length marker endpoints attach to selected mouth and closed bottom at a common physical scale (216.648184ms)
+  ✔ keyboard, reset, navigation, page hiding and leaving section cancel playback without autoplay on return (372.690312ms)
+  ✔ cancelled preparation cannot start later; failed audio offers visible retry feedback (276.311347ms)
+  ✔ desktop and mobile keep compact single-stage design in both views with targets attached to pipes (2995.601453ms)
+  ✔ real mobile taps play once per touch and can switch view during playback (1220.997804ms)
+✔ pan flute: free pipes, interior observation and synchronized closed-end air motion (9152.548219ms)
+▶ pitch comparison: independent speakers, controlled frequency and synchronized records
+  ✔ approved controls, matching speakers and actual shared characters render without autoplay (110.358622ms)
+  ✔ frequency changes do not play sound; bounds, cycles and amplitude stay correct at every step (732.114121ms)
+  ✔ left can repeat twice then right; actual audio has selected pitch and fixed signal amplitude (631.435192ms)
+  ✔ one side animates with its trace; natural finish rests the cone and keeps the full comparison (4185.920166ms)
+  ✔ front speaker visibly pumps in phase while its wooden cabinet stays fixed, including reduced motion (4551.956282ms)
+  ✔ one shared switch shows exactly one view per speaker and preserves sound, frequency and progress (1293.887715ms)
+  ✔ both A dimensions connect to the same membrane edge at its symmetric extreme positions (4.799441ms)
+  ✔ rendered diaphragm transforms have equal positive and negative travel at every frequency, with correct cycle ratios (982.74507ms)
+  ✔ keyboard, rapid changes, section navigation and page visibility cancel playback (447.491796ms)
+  ✔ desktop and laptop keep the mockup hierarchy, equal columns and frequency controls only on right (3097.798714ms)
+  ✔ touch view switching and side-speaker playback work on a narrow screen (1189.460563ms)
+✔ pitch comparison: independent speakers, controlled frequency and synchronized records (18548.257868ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (101.123988ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (58.260868ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (786.510819ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (2276.379902ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (537.131863ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (282.171873ms)
+  ✔ hearing range and dBA examples change observations without producing test tones (137.346624ms)
+  ✔ one final task supports incomplete, incorrect, correct, editing, replay, clear and new requirements (398.962634ms)
+  ✔ lesson format follows unit 2.1 with a header and full-width body; navigation tracks reading (839.345224ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (3737.304679ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (9881.428518ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 53
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67130.42246

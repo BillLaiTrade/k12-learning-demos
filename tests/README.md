@@ -462,3 +462,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-
 
 模型直接執行4項、瀏覽器整合43項，共47項（含外層）。吉他專項11項涵蓋實際拖曳／鍵盤／觸控、點品格、一次只改長短或張力、110／220Hz實際播放資料、音量與衰減、左右弦實際畫面幀差、固定兩端／琴身／非有效弦段、取消／重設／離場、失敗重試及兩模式七種寬度。手機第一次點弦以pointerup觸發，並驗證相容click不會再起音一次。`SOUND33_BASE_URL`可指向公開完整頁；`GUITAR_CAPTURE_DIR`指定畫面資料夾，預設`/tmp/unit33-guitar-review`。核可圖與實際畫面見`docs/reviews/unit-3.3-guitar/`。
 
+
+
+## 3.3 第四區排笛自由吹奏
+
+```sh
+node tests/unit-3.3-pan-model.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-pan.test.cjs tests/unit-3.3-fork.test.cjs tests/unit-3.3-pitch.test.cjs tests/unit-3.3-guitar.test.cjs tests/unit-3.3.test.cjs
+```
+
+排笛專項10項，整合53項、直接模型3項，共56項（含外層）。驗證六管頻率與實際AudioBuffer、音量、重聽／換管、切換不中斷、粒子封底不動與歸位、實際幀差、長度端點、取消／失敗重試、鍵盤／真實觸控及兩視角七種寬度。`SOUND33_BASE_URL`可指定公開頁，`PAN_CAPTURE_DIR`指定截圖目錄，預設/tmp/unit33-pan-review。核可圖、素材與本機證據見docs/reviews/unit-3.3-pan-flute/。
