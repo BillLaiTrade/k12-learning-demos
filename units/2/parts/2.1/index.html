@@ -447,6 +447,23 @@
     .change-example-card--water { container-type:inline-size; }
     .change-example-card--water .microscope-glass { width:min(20%,64px); }
     .change-example-card--water .microscope-glass::before { content:""; position:absolute; inset:-8px; border-radius:50%; }
+
+    /* 模型的線條僅協助看清空間排列，不代表實際可見的線。 */
+    .particle-card--element .particle-model--iron { display:flex; flex-direction:column; align-items:center; justify-content:center; max-width:none; gap:2px; }
+    .iron-crystal { width:min(100%,150px); height:128px; overflow:visible; }
+    .model-caption { margin:0!important; color:#68776e!important; font-size:.74rem; text-align:center; line-height:1.4; }
+    #compound-example .water-unit { position:relative; display:inline-block; flex:none; width:80px; height:52px; }
+    #compound-example .water-unit::before, #compound-example .water-unit::after { content:""; position:absolute; top:27px; width:30px; height:4px; background:#a7b7ac; z-index:0; }
+    #compound-example .water-unit::before { left:13px; transform:rotate(-37deg); }
+    #compound-example .water-unit::after { right:13px; transform:rotate(37deg); }
+    #compound-example .water-unit .particle-ball { position:absolute; z-index:1; }
+    #compound-example .water-unit .particle-ball--oxygen { left:24px; top:0; }
+    #compound-example .water-unit .particle-ball--hydrogen:nth-child(2) { left:4px; top:24px; }
+    #compound-example .water-unit .particle-ball--hydrogen:nth-child(3) { right:4px; top:24px; }
+    .product-group { display:inline-flex; flex-direction:column; align-items:center; gap:3px; }
+    .product-pairs { display:inline-flex; align-items:center; gap:8px; }
+    .product-label { font-size:.75rem; font-weight:500; }
+    .model-shared-note { margin:10px 0 0!important; color:#68776e!important; font-size:.78rem; text-align:center; }
     .pure-particle-comparison { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; align-items:stretch; }
     .particle-card { overflow:hidden; border:2px solid #c6d6c5; border-radius:13px; background:#fffefa; }
     .particle-card--element { border-color:#99b79b; }
@@ -1095,59 +1112,43 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，土壤裡有不同成分，可以把它們分開。那蒸餾水是純物質，是不是就不能再分解了？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>純物質不能用物理方法分離成不同的物質，但有些能用化學方法分解。像水就能分解成氫和氧；純鐵則不能用化學方法再分解成更簡單的物質。</p></div>
 
-            <p class="particle-color-note">圖中不同顏色代表不同種類的粒子；顏色是示意，不是物質實際的顏色。</p>
+            <p class="particle-color-note">下方的小球是模型符號，幫助我們理解組成與排列；顏色、大小和線條不是實際外觀。</p>
             <div class="pure-particle-comparison">
               <article class="particle-card particle-card--element">
                 <h3>元素 <span class="particle-tag">化學方法不能再分解</span></h3>
                 <div class="particle-card-body">
                   <p class="particle-example">例子：純鐵</p>
                   <div class="particle-photo-model">
-                    <figure class="particle-sample-photo particle-sample-photo--iron"><img src="assets/lesson-pure-iron-sample.webp" alt="純鐵方塊（1 立方公分）照片"></figure>
-                    <div class="particle-model particle-model--iron" role="img" aria-label="純鐵粒子模型中只有一種種類的粒子">
-                      <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
-                      <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
-                      <i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i><i class="particle-ball"></i>
-                    </div>
+                    <figure class="particle-sample-photo particle-sample-photo--iron"><img src="assets/lesson-pure-iron-sample.webp" alt="純鐵方塊照片"></figure>
+                    <div class="particle-model particle-model--iron"><svg class="iron-crystal" viewBox="0 0 160 120" role="img" aria-label="室溫下純鐵的立體排列模型：立方體八角及中心各有一個代表鐵的小球"><defs><radialGradient id="iron-model-shade" cx="30%" cy="25%"><stop stop-color="#dce8eb"/><stop offset="1" stop-color="#697d82"/></radialGradient></defs><g fill="none" stroke="#a5b3aa" stroke-width="2"><path d="M52 17H116L136 37H72Z M52 81H116L136 101H72Z M52 17V81 M116 17V81 M136 37V101 M72 37V101"/></g><circle cx="52" cy="17" r="8" fill="url(#iron-model-shade)"/><circle cx="116" cy="17" r="8" fill="url(#iron-model-shade)"/><circle cx="136" cy="37" r="8" fill="url(#iron-model-shade)"/><circle cx="72" cy="37" r="8" fill="url(#iron-model-shade)"/><circle cx="52" cy="81" r="8" fill="url(#iron-model-shade)"/><circle cx="116" cy="81" r="8" fill="url(#iron-model-shade)"/><circle cx="136" cy="101" r="8" fill="url(#iron-model-shade)"/><circle cx="72" cy="101" r="8" fill="url(#iron-model-shade)"/><circle cx="94" cy="59" r="8" fill="url(#iron-model-shade)"/></svg><p class="model-caption">室溫下鐵的排列模型<br>只畫出排列的一小部分</p></div>
                   </div>
                   <p class="particle-caption">純鐵只含鐵這一種元素。</p>
-                  <div class="particle-decomposition">
-                    <h4>用化學方法能不能再分解？</h4>
-                    <div class="decomposition-particles" role="img" aria-label="純鐵處理前後都是同一種類的粒子">
-                      <span class="particle-unit"><i class="particle-ball"></i><i class="particle-ball"></i></span><span aria-hidden="true">→</span><span class="particle-unit"><i class="particle-ball"></i><i class="particle-ball"></i></span>
-                    </div>
-                    <p class="decomposition-explanation">不能用化學方法再分解成更簡單的物質。</p>
-                  </div>
+                  <div class="particle-decomposition"><h4>用化學方法能不能再分解？</h4><p class="decomposition-explanation">不能用化學方法再分解成更簡單的物質。</p></div>
                 </div>
               </article>
               <article class="particle-card particle-card--compound" id="compound-example">
                 <h3>化合物 <span class="particle-tag">不同元素按固定比例結合</span></h3>
                 <div class="particle-card-body">
-                  <p class="particle-example">例子：蒸餾水</p>
+                  <p class="particle-example">例子：蒸餾水（接近純水）</p>
                   <div class="particle-photo-model">
                     <figure class="particle-sample-photo"><img src="assets/lesson-water-glass.webp" alt="玻璃杯中的清水照片"></figure>
-                    <div class="particle-model particle-model--water" role="img" aria-label="兩個相同的水分子，對應下方分解前的兩個水分子；每個由一個氧和兩個氫的小粒子組成">
-                      <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
-                      <span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span>
-                    </div>
+                    <div class="particle-model particle-model--water" role="img" aria-label="兩組水的組成模型，每組有一個代表氧的紅球和兩個代表氫的白球，排列成彎曲形狀"><span class="particle-unit water-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span class="particle-unit water-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span></div>
                   </div>
-                  <div class="water-particle-legend" role="group" aria-label="水分子與分解示意共用的粒子圖例">
-                    <span><i class="particle-ball particle-ball--hydrogen" aria-hidden="true"></i>氫</span>
-                    <span><i class="particle-ball particle-ball--oxygen" aria-hidden="true"></i>氧</span>
-                  </div>
-                  <p class="water-particle-note">粒子的顏色與大小僅為示意。</p>
-                  <p class="particle-caption">每個水分子的組成都相同，所以純水是一種純物質；但水含有氫、氧兩種元素，因此屬於化合物。</p>
+                  <p class="model-caption">水的組成模型</p>
+                  <div class="water-particle-legend" role="group" aria-label="水的組成模型圖例"><span><i class="particle-ball particle-ball--hydrogen" aria-hidden="true"></i>氫</span><span><i class="particle-ball particle-ball--oxygen" aria-hidden="true"></i>氧</span></div>
+                  <p class="particle-caption">純水只含水這一種物質；水由氫、氧兩種元素組成，屬於化合物。</p>
                   <div class="particle-decomposition">
                     <h4 class="decomposition-heading">用化學方法能不能再分解？</h4>
-                    <div class="decomposition-water-scene" role="img" aria-label="上方的兩個水分子分解並重新組成兩個氫分子和一個氧分子；前後都有四個氫和兩個氧的小粒子">
-                      <span class="decomposition-reactants"><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span></span>
-                      <span class="decomposition-arrow" aria-hidden="true">→</span>
-                      <span class="decomposition-products"><span class="particle-unit"><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span class="particle-unit"><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span>＋</span><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--oxygen"></i></span></span>
+                    <div class="decomposition-water-scene" role="img" aria-label="兩組水的模型分解並重新組成氫氣與氧氣；前後各有四個代表氫及兩個代表氧的小球">
+                      <span class="decomposition-reactants"><span class="particle-unit water-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span class="particle-unit water-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span></span><span class="decomposition-arrow" aria-hidden="true">→</span>
+                      <span class="decomposition-products"><span class="product-group"><span class="product-pairs"><span class="particle-unit"><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span><span class="particle-unit"><i class="particle-ball particle-ball--hydrogen"></i><i class="particle-ball particle-ball--hydrogen"></i></span></span><span class="product-label">氫氣</span></span><span>＋</span><span class="product-group"><span class="particle-unit"><i class="particle-ball particle-ball--oxygen"></i><i class="particle-ball particle-ball--oxygen"></i></span><span class="product-label">氧氣</span></span></span>
                     </div>
-                    <p class="decomposition-explanation">化合物由兩種以上元素按固定比例化學結合而成，可以用化學方法分解。水可分解成氫和氧（示意）。</p>
+                    <p class="decomposition-explanation">水可以用化學方法分解成氫氣和氧氣。</p>
                   </div>
                 </div>
               </article>
             </div>
+            <p class="model-shared-note">模型幫助理解組成與排列，並非實際拍攝的粒子照片。</p>
 
             <div class="dialogue dialogue--xiaokui pure-summary"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>所以蒸餾水和純鐵都是純物質，但蒸餾水是化合物，純鐵是元素。</p></div>
           </div>
