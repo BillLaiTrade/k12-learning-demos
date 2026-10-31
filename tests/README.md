@@ -383,13 +383,15 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 
 音叉專項新增音槌接觸後波形向右延伸、停止保留部分波形、重敲從左重畫、另一欄保留及重設清空。現行音叉使用連續向量叉股，位移由實際叉端螢幕座標核對。專項與整頁回歸合計20項通過（含外層）；見 docs/reviews/unit-3.3-card01-refinement/review.md。本輪尚未發布，不沿用舊公開版作為本次驗證。
 
-## 2.3 第三區：充氮薯片包裝
+## 2.3 第三／五區：氮氣與氬氣介紹版
 
 ```sh
-NITROGEN_ARTIFACT_DIR=/tmp/unit23-nitrogen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-full node --test --test-reporter=spec tests/unit-2.3-nitrogen.test.cjs tests/unit-2.3-full.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium GAS_PROFILE_ARTIFACT_DIR=/tmp/unit23-gas-profiles AIR_FULL_ARTIFACT_DIR=/tmp/unit23-gas-profiles-full node --test --test-concurrency=1 tests/unit-2.3-nitrogen.test.cjs tests/unit-2.3-argon.test.cjs tests/unit-2.3-full.test.cjs
 ```
 
-第三區10項（含主項）：預設兩袋比較與性質、直接點右包重播充氮排氣與封口、氧氣短條與透明流向、左側影像SHA-256固定、重播不疊時序、Escape／背景／離區暫停、鍵盤／觸控／減少動態、無JavaScript，以及七種寬度初始／播放中的右側內容欄邊界。`NITROGEN_URL`可指定公開網址，公開Chromium使用繼承的HTTPS代理；`NITROGEN_ARTIFACT_DIR`指定截圖目錄，預設`/tmp/unit23-nitrogen`避免覆寫歷史證據。另以一般／減少動態兩種偏好，每200ms檢查氧氣條的實際像素寬度連續下降，封口時不再跳短；數據存`oxygen-progression.json`。
+使用者核可兩張介紹版示意圖後，03與05改為氣體介紹為主、生活用途小圖在下的靜態版面。兩個既有測試入口現在共用 `helpers/gas-profile.cjs`；各6項（含外層），檢查名稱／化學式、約數與乾燥基準、三項限定性質、用途層次與圖片實際解碼、舊重播不載入、七種寬度320–1440px、觸控導覽及無JavaScript。整頁另9項回歸原杯子、氧氣、二氧化碳、小測及導覽。`GAS_PROFILE_URL` 可讓兩入口共同指定公開頁，或分別使用 `NITROGEN_URL`／`ARGON_URL`；`GAS_PROFILE_ARTIFACT_DIR` 指定截圖目錄。證據見 `docs/reviews/unit-2.3-gas-profiles/`。
+
+先前充氮包裝與焊接左右比較動畫已退出03／05主線；原腳本與模型檔保留歷史，不再由頁面載入。舊動畫測試結果不代表目前介紹版通過。
 
 ### 3.3第二區雙喇叭比較
 
@@ -447,15 +449,9 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-
 
 第二區12項涵蓋共同視角、不中斷音訊／進度、±A端點連接同一膜緣點、生產renderer取樣200～800Hz的同幅及頻率比例、實際側面幀差、鍵盤／觸控與七種寬度；另保留聲音峰值／RMS、停止／調頻／跨區等檢查。三檔合計32項（含外層）。`SOUND33_BASE_URL`可將第二區12項指向完整公開網址；公開測試仍需Chromium與繼承的HTTPS proxy。截圖存至`/tmp/unit33-pitch-review/`，核可圖與交付證據在`docs/reviews/unit-3.3-speaker-view-switch/`。
 
-## 2.3 第五區：氬氣保護比較
+## 2.3 第五區舊比較動畫（歷史）
 
-```sh
-CHROMIUM_PATH=/usr/bin/chromium ARGON_ARTIFACT_DIR=/tmp/unit23-argon node --test --test-concurrency=1 tests/unit-2.3-argon-model.test.mjs tests/unit-2.3-argon.test.cjs
-```
-
-模型與瀏覽器共9項（含外層），檢查原標題／副標保留、兩組同圖與預設結果、資料不重複、原人物頭像、唯一重播、真正SVG線條與箭頭尖端連續移動、快速重播、Escape／離場／背景暫停與恢復、暫停像素不變、七種寬度與手機上下排列、觸控／減少動態、無JS。圖片延遲載入，進入第五區後等待圖片實際就緒再核對素材尺寸。`ARGON_URL` 可指定公開頁面，截圖預設存 `/tmp/unit23-argon`。
-
-第五區金屬表面比較另增加1項瀏覽器檢查：對兩個實際渲染畫面的金屬區域取樣，確認像素差異，不以箭頭／標籤的不同代替表面效果；同時檢查氧化圖層初始結果、重播進度、重設與無JS。第五區模型／瀏覽器現在共10項，搭配整頁9項合計19項。
+舊氬氣氣流／表面差異模型及檢查紀錄保留於版本歷程與歷史review；目前第五區為上方「氮氣與氬氣介紹版」，`unit-2.3-argon.test.cjs` 已改驗新版，舊模型測試不能作新版版面驗證。
 
 ## 3.3 第三區木吉他
 

@@ -29,11 +29,11 @@ test('2.3 complete page: six teaching sections and one evidence-based quiz', { t
     if (await control.evaluate(el => el.tagName === 'SELECT')) await control.selectOption(value);
     else await page.locator(`#gas-report-form [name="${name}"][value="${value}"]`).check();
   };
-  await t.test('all seven sections and routes exist, with natural dialogue and no retired experiment', async () => {
+  await t.test('all seven sections and routes exist, with gas profiles and no retired experiment', async () => {
     assert.deepEqual(await page.locator('section.lesson').evaluateAll(nodes => nodes.map(n => n.id)), ['s1','s2','s3','s4','s5','s6','s7']);
     assert.equal(await page.locator('form').count(), 1);
     assert.equal(await page.locator('.route a.quiz-nav').getAttribute('href'), '#s7');
-    for (let i = 1; i <= 6; i++) {
+    for (const i of [1,2,4,6]) {
       assert.equal(await page.locator(`#s${i} .dialogue.xiaokui`).first().isVisible(), true);
       assert.equal(await page.locator(`#s${i} .dialogue.grandpa`).first().isVisible(), true);
     }
@@ -131,7 +131,7 @@ test('2.3 complete page: six teaching sections and one evidence-based quiz', { t
   await t.test('all teaching evidence is available without JavaScript', async () => {
     const context = await browser.newContext({ javaScriptEnabled:false, viewport:{width:390,height:844} });
     const staticPage = await context.newPage(); await staticPage.goto(url, {waitUntil:'networkidle'});
-    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#s3 .nitrogen-facts','#s4 .sequence-grid','#s4 .gas-observations','#s5 .argon-comparison','#s6 .sequence-grid','#s6 .gas-observations','#s7 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
+    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#s3 .gas-profile-properties','#s4 .sequence-grid','#s4 .gas-observations','#s5 .gas-profile-properties','#s6 .sequence-grid','#s6 .gas-observations','#s7 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
     assert.equal(await staticPage.locator('.sequence-step').count(),8);
     await context.close();
   });
