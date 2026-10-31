@@ -1,0 +1,25 @@
+▶ 3.4 distance comparison follows the approved two-lane mockup
+  ✔ two stacked scenes load with real separate apparatus, one distance input and no unsolicited audio controls (424.789963ms)
+Distance final audio: {"same":true,"delays":[0,1.6,3.2],"gains":[1,0.44999998807907104,0.44999998807907104],"master":0.3199999928474426,"peaks":[0.31965693831443787,0.14384561777114868,0.14384561777114868]}
+  ✔ together button emits once plus both correctly delayed weaker echoes at the final output (3451.457243ms)
+Single lane final audio: near {"count":2,"same":true,"delays":[0,1.6],"gains":[1,0.44999998807907104],"peaks":[0.31965693831443787,0.1402951180934906]}
+Single lane final audio: far {"count":2,"same":true,"delays":[0,4.8],"gains":[1,0.44999998807907104],"peaks":[0.31965693831443787,0.14384561777114868]}
+  ✔ each speaker animates and records only its own lane and produces only its own audible echo (7580.43007ms)
+  ✔ pause and resume preserve the selected lane and switching lanes cancels the old return (714.822199ms)
+  ✔ at the comparison moment near has arrived while far just reaches the wall; pause freezes the shared record and waves (3968.825142ms)
+  ✔ each speaker and lower button restarts the same controller and cancels previous echoes (432.165875ms)
+  ✔ mouse wall dragging keeps the fixed lane unchanged, clamps distance and cancels the previous observation (196.24882ms)
+  ✔ wall and native distance input both support keyboard with bounds; equal distances share one echo (1890.497213ms)
+  ✔ cross-section playback and hidden pages stop this scene without autoplaying on return (172.78839ms)
+  ✔ all scene, records, controls and dialogues stay in the content column from 1440 to 320px (5877.724571ms)
+  ✔ real touch wall dragging and speaker tapping work under reduced motion (988.858019ms)
+  ✔ audio failure appears only on failure and a new explicit play clears the error (532.250416ms)
+✔ 3.4 distance comparison follows the approved two-lane mockup (27219.123326ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27563.393693
