@@ -24,6 +24,7 @@ export function createHearingExperiment(root,{onToggle,onFrequency,onReset}){
   root.querySelector('#hearing-low').textContent=low===null?'尚未記錄':number(low)+' Hz';
   root.querySelector('#hearing-high').textContent=high===null?'尚未記錄':number(high)+' Hz';
   root.dataset.low=low===null?'':String(low);root.dataset.high=high===null?'':String(high);
+  root.querySelector('[data-hearing-clear=low]').disabled=low===null;root.querySelector('[data-hearing-clear=high]').disabled=high===null;
  }
  function select(value){frequency=Math.max(HEARING_MIN,Math.min(HEARING_MAX,Math.round(value)));feedback.hidden=true;render();onFrequency(frequency);}
  function fromPointer(event){const r=band.getBoundingClientRect();select(frequencyAt((event.clientX-r.left)/r.width));}
@@ -49,6 +50,11 @@ export function createHearingExperiment(root,{onToggle,onFrequency,onReset}){
   }
   if(side==='low')low=frequency;else high=frequency;render();
   feedback.textContent=`已將${number(frequency)} Hz記為${side==='low'?'低音端':'高音端'}。`;feedback.hidden=false;
+ });
+ for(const button of root.querySelectorAll('[data-hearing-clear]'))activate(button,()=>{
+  if(button.disabled)return;
+  const side=button.dataset.hearingClear;if(side==='low')low=null;else high=null;render();
+  feedback.textContent=`已取消${side==='low'?'低音端':'高音端'}紀錄。`;feedback.hidden=false;
  });
  activate(root.querySelector('[data-hearing-reset]'),()=>{onReset();frequency=HEARING_START;low=null;high=null;feedback.hidden=true;render();});
  function mode(value){

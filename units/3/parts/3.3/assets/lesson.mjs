@@ -8,7 +8,7 @@ import {createPanExperiment} from './pan-experiment.mjs?v=2';
 import {loadPanRecording,recordingLevel} from './pan-recordings.mjs?v=1';
 import {createTimbreExperiment} from './timbre-experiment.mjs?v=3';
 import {timbreBuffer} from './timbre-model.mjs?v=1';
-import {createHearingExperiment} from './hearing-experiment.mjs?v=1';
+import {createHearingExperiment} from './hearing-experiment.mjs?v=2';
 import {createHearingVoice} from './hearing-audio.mjs?v=1';
 import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';

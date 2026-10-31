@@ -524,3 +524,8 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .hearing-record button{width:100%;font-size:.63rem;padding:4px 2px;min-height:43px}
 .hearing-records .hearing-record-note,.hearing-records .hearing-limitation{font-size:.63rem}
 }
+
+.hearing-record-actions{display:flex;flex-direction:column;align-items:stretch;gap:2px}
+.hearing-record .hearing-clear{min-height:32px;padding:2px 8px;border:0;background:transparent;color:#58735f;font-size:.68rem;font-weight:500}
+.hearing-record .hearing-clear:disabled{opacity:.4}
+@media(max-width:600px){.hearing-record-actions{width:100%}}
