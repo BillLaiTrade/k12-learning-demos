@@ -1,0 +1,114 @@
+TAP version 13
+# Subtest: 2.3 oxygen: real 3D continuous apparatus and shared splint clock
+    # Subtest: both displays render WebGL rather than showing fallback drawings
+    ok 1 - both displays render WebGL rather than showing fallback drawings
+      ---
+      duration_ms: 281.059884
+      type: 'test'
+      ...
+    # Subtest: purge bubbles stay outside the full jar; the tube moves continuously before water drops
+    ok 2 - purge bubbles stay outside the full jar; the tube moves continuously before water drops
+      ---
+      duration_ms: 15929.003973
+      type: 'test'
+      ...
+    # Subtest: pausing freezes actual WebGL pixels and resuming changes the water surface
+    ok 3 - pausing freezes actual WebGL pixels and resuming changes the water surface
+      ---
+      duration_ms: 1964.069777
+      type: 'test'
+      ...
+    # Subtest: the tube withdraws before the glass plate slides under the jar; results persist
+    ok 4 - the tube withdraws before the glass plate slides under the jar; results persist
+      ---
+      duration_ms: 2902.986739
+      type: 'test'
+      ...
+    # Subtest: two 3D wooden splints share the movement and ignition clock, including frozen flame
+    ok 5 - two 3D wooden splints share the movement and ignition clock, including frozen flame
+      ---
+      duration_ms: 3772.388172
+      type: 'test'
+      ...
+    # Subtest: mobile and narrow canvases resize without losing labels, controls or side-by-side samples
+    ok 6 - mobile and narrow canvases resize without losing labels, controls or side-by-side samples
+      ---
+      duration_ms: 2592.774718
+      type: 'test'
+      ...
+    # Subtest: WebGL absence keeps the original visible results and functional replay
+    ok 7 - WebGL absence keeps the original visible results and functional replay
+      ---
+      duration_ms: 1596.099618
+      type: 'test'
+      ...
+    1..7
+ok 1 - 2.3 oxygen: real 3D continuous apparatus and shared splint clock
+  ---
+  duration_ms: 34233.682786
+  type: 'test'
+  ...
+# Subtest: 2.3 oxygen: continuous collection and simultaneous wood comparison
+    # Subtest: default results, full width, four upper stages, two lower samples and original characters
+    ok 1 - default results, full width, four upper stages, two lower samples and original characters
+      ---
+      duration_ms: 262.099762
+      type: 'test'
+      ...
+    # Subtest: four stages synchronize tube path, bubbles, continuous water displacement and cover
+    ok 2 - four stages synchronize tube path, bubbles, continuous water displacement and cover
+      ---
+      duration_ms: 16385.679476
+      type: 'test'
+      ...
+    # Subtest: pause freezes actual water and arrows, resumes and rapid replay cancels prior progress
+    ok 3 - pause freezes actual water and arrows, resumes and rapid replay cancels prior progress
+      ---
+      duration_ms: 4785.689493
+      type: 'test'
+      ...
+    # Subtest: both real wooden splints enter together; only oxygen develops a flame
+    ok 4 - both real wooden splints enter together; only oxygen develops a flame
+      ---
+      duration_ms: 2384.077851
+      type: 'test'
+      ...
+    # Subtest: keyboard, Escape, hidden pages and leaving the scene pause without automatic restart
+    ok 5 - keyboard, Escape, hidden pages and leaving the scene pause without automatic restart
+      ---
+      duration_ms: 4373.038138
+      type: 'test'
+      ...
+    # Subtest: seven widths contain diagrams, controls and text; screenshots cover both scenes
+    ok 6 - seven widths contain diagrams, controls and text; screenshots cover both scenes
+      ---
+      duration_ms: 3878.90298
+      type: 'test'
+      ...
+    # Subtest: touch under reduced motion still continuously collects water and retains results
+    ok 7 - touch under reduced motion still continuously collects water and retains results
+      ---
+      duration_ms: 12236.490237
+      type: 'test'
+      ...
+    # Subtest: without JavaScript all essential materials, collection and flame results remain visible
+    ok 8 - without JavaScript all essential materials, collection and flame results remain visible
+      ---
+      duration_ms: 1110.258203
+      type: 'test'
+      ...
+    1..8
+ok 2 - 2.3 oxygen: continuous collection and simultaneous wood comparison
+  ---
+  duration_ms: 52734.846424
+  type: 'test'
+  ...
+1..2
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 88116.998689

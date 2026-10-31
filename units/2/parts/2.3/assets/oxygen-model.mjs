@@ -5,7 +5,7 @@ const clamp = n => Math.min(1, Math.max(0, n));
 export function preparationFrame(elapsed) {
   const time = Math.max(0, Math.min(PREPARATION_DURATION, elapsed));
   const stage = time < 1400 ? 0 : time < 3400 ? 1 : time < 7000 ? 2 : 3;
-  return { stage, collected: clamp((time - 3400) / 3600), purging: stage === 1, collecting: stage === 2, covered: stage === 3 };
+  return { stage, collected: clamp((time - 3900) / 3100), purging: stage === 1, collecting: stage === 2, covered: stage === 3 };
 }
 export function comparisonFrame(elapsed) {
   const time = Math.max(0, Math.min(COMPARISON_DURATION, elapsed));

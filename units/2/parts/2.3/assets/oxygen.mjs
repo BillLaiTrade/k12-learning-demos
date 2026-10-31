@@ -1,12 +1,15 @@
-import { PREPARATION_DURATION, COMPARISON_DURATION, preparationFrame, comparisonFrame } from './oxygen-model.mjs?v=oxygen-1';
+import { PREPARATION_DURATION, COMPARISON_DURATION, preparationFrame, comparisonFrame } from './oxygen-model.mjs?v=oxygen-three-3';
 const section = document.querySelector('#s4');
 const panel = section.querySelector('.oxygen-preparation');
 const comparison = section.querySelector('.oxygen-comparison');
 const $ = id => section.querySelector(id);
+let preparationView = null, comparisonView = null;
+let preparationTime = PREPARATION_DURATION, comparisonTime = COMPARISON_DURATION;
 const steps = [...panel.querySelectorAll('[data-stage]')];
 const names = ['準備材料：雙氧水與二氧化錳。', '先排空氣：開始的混合氣不收集。', '排水集氣：氧氣進入，瓶內的水逐漸排出。', '收集完成：在水下蓋上玻璃片。'];
 const setVisible = (selector, shown) => $(selector).style.opacity = shown ? '1' : '0';
 function renderPreparation(time, state) {
+  preparationTime = time;
   const f = preparationFrame(time), overview = state === 'overview';
   panel.dataset.stage = overview ? '-1' : f.stage;
   panel.dataset.collected = f.collected.toFixed(4);
@@ -37,9 +40,11 @@ function renderPreparation(time, state) {
   $('#oxygen-collection-bubbles').setAttribute('transform', `translate(0 ${-((time % 1100) / 1100) * 35})`);
   $('#oxygen-flow').style.strokeDashoffset = String(-time / 50);
   $('#oxygen-scene-note').textContent = ['集氣瓶先裝滿水並倒置', '先排出裝置原有的空氣', '氧氣進入，水逐漸排出', '在水下蓋上玻璃片'][f.stage];
+  preparationView?.draw(time, f);
   return overview ? '已收集氧氣，集氣瓶在水下蓋好。' : names[f.stage];
 }
 function renderComparison(time) {
+  comparisonTime = time;
   const f = comparisonFrame(time);
   comparison.dataset.inserted = f.inserted.toFixed(4);
   comparison.dataset.ignition = f.ignition.toFixed(4);
@@ -48,6 +53,7 @@ function renderComparison(time) {
   air.querySelector('.oxygen-ember').setAttribute('fill', `rgb(${Math.round(222-115*f.fading)},${Math.round(114-16*f.fading)},${Math.round(55+28*f.fading)})`);
   oxygen.querySelector('.oxygen-flame').setAttribute('opacity', f.ignition);
   oxygen.querySelector('.oxygen-flame').setAttribute('transform', `translate(180 192) scale(${.6+.4*f.ignition}) translate(-180 -192)`);
+  comparisonView?.draw(time, f);
   return time < 1200 ? '兩支木條同時放入，起始都帶餘燼。' : time < 2400 ? '比較兩支木條的餘燼與火焰。' : '一般空氣中的木條未同樣復燃；氧氣中的木條復燃。';
 }
 const players = [];
@@ -101,3 +107,24 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) playe
 window.addEventListener('pagehide', () => players.forEach(p => p.pausePlayback()));
 // Explicitly requested animation keeps its essential water/wood comparison under
 // reduced motion. No looping decoration or automatic initial playback is used.
+
+// SVG remains the complete no-WebGL/no-JS fallback. The visible animation uses
+// physical 3D glass/water, with exactly the same paused/replayed clock.
+async function initializeViews() {
+  try {
+    const { createPreparationView, createComparisonView } = await import('./oxygen-three.mjs?v=oxygen-three-3');
+    const host = document.querySelector('.oxygen-3d-preparation');
+    preparationView = createPreparationView(host);
+    preparationView.draw(preparationTime, preparationFrame(preparationTime));
+    host.parentElement.classList.add('has-webgl'); host.dataset.ready = 'true';
+    const pairHost = document.querySelector('.oxygen-3d-comparison');
+    comparisonView = createComparisonView(pairHost, [...comparison.querySelectorAll('.oxygen-splint-group')]);
+    comparisonView.draw(comparisonTime, comparisonFrame(comparisonTime));
+    pairHost.parentElement.classList.add('has-webgl'); pairHost.dataset.ready = 'true';
+  } catch (error) {
+    // A lack of WebGL must not hide the lesson or disable the existing controls.
+    document.querySelector('#s4').dataset.renderer = 'svg-fallback';
+    console.warn('Oxygen 3D unavailable; retained the illustrated experiment.', error);
+  }
+}
+initializeViews();

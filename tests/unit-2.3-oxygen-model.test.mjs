@@ -6,7 +6,7 @@ test('purge precedes water collection; completion covers a full gas jar',()=>{
   assert.equal(preparationFrame(1400).purging,true);
   for(const time of [1400,2000,3399])assert.equal(preparationFrame(time).collected,0);
   assert.equal(preparationFrame(3400).collecting,true);
-  assert.equal(preparationFrame(5200).collected,.5);
+  assert.equal(preparationFrame(5450).collected,.5);
   assert.equal(preparationFrame(7000).covered,true);
   assert.equal(preparationFrame(PREPARATION_DURATION).collected,1);
   let previous=0;for(let time=0;time<=PREPARATION_DURATION;time+=20){const frame=preparationFrame(time);assert.ok(frame.collected>=previous);previous=frame.collected;}

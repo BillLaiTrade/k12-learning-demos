@@ -431,6 +431,13 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-oxygen AIR_FULL_
 
 驗證四步與裝置同步、先排空氣才排水集氣、實際SVG水位連續降低、水下蓋片、兩支木條同時移動與只有氧氣復燃、暫停凍結／繼續、快速重播、鍵盤、Escape、背景／離區停止、七種寬度兩瓶並列且不超出滿寬內容區、手機觸控、減少動態、無JS必要結果。整頁及小測模型回歸仍檢查六教學＋一小測、二氧化碳舊重播、第一區與單元導覽。`OXYGEN_URL` 可指定公開2.3頁面，`OXYGEN_ARTIFACT_DIR` 保存本次畫面（預設 `/tmp/unit23-oxygen`）。新測試的本機伺服器只服務展示站checkout。共24項（含外層）；教學動畫不是反應時間／產率實測，也不代表整單元外部驗收。
 
+### 2.3 氧氣3D場景與動作銜接
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_THREE_ARTIFACT_DIR=/tmp/unit23-oxygen-three node --test tests/unit-2.3-oxygen-three.test.cjs
+```
+
+新增8項（含外層）直接驗證WebGL：真正畫布初始化、導管連續位置、先移到瓶口再排水、氣泡／水面、先撤管才蓋片、同一時鐘的立體木條與火焰、暫停後畫布像素完全相同／恢復後改變、1024／390／320px尺寸，以及模擬無WebGL仍有可讀可操作的SVG。`OXYGEN_URL` 可指定公開頁面。軟體GPU截圖可能比動畫本身慢，測試先暫停瀏覽器時鐘，再受控推進及截圖，保留所有動作與像素斷言；不以機器執行時間冒充使用者裝置幀率。原有氧氣及整頁回歸繼續保留，氧氣集氣取樣在導管到位後才開始。
 
 ## 3.3 第二區正／側面切換
 
