@@ -1,0 +1,338 @@
+[
+  {
+    "key": "study",
+    "label": "安靜書房",
+    "title": "20121112 TU Delft Library, quiet study room - general ambience - SoundCloud - el mar.ogg",
+    "author": "el_mar",
+    "source_url": "https://commons.wikimedia.org/wiki/File:20121112_TU_Delft_Library,_quiet_study_room_-_general_ambience_-_SoundCloud_-_el_mar.ogg",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/f/fb/20121112_TU_Delft_Library%2C_quiet_study_room_-_general_ambience_-_SoundCloud_-_el_mar.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "CC BY 3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "derived_license": "CC BY 3.0",
+    "note": "荷蘭 TU Delft 圖書館安靜自習室，通風與細微鍵盤聲；非插圖書房實錄。",
+    "source_file": "study.ogg",
+    "start_seconds": 5,
+    "duration_seconds": 10,
+    "source_sha256": "047c704947a9a9d96486b0d32b13665edf8e781b9d12c886df042daf3f0cff91",
+    "baseline_measurement": {
+      "lufs": -23.0,
+      "true_peak_dbfs": -4.78
+    },
+    "target_lufs": -42.6,
+    "measurement": {
+      "lufs": -42.6,
+      "true_peak_dbfs": -24.38
+    },
+    "output_gain_db": -19.6,
+    "sha256": "64c540fe4f2e65deab3d2a4e4a19daa7dfc77962a15c3ef4f0528b510cc7e08a",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  },
+  {
+    "key": "nature",
+    "label": "安靜自然景點",
+    "title": "Forest ambience (Gravity Sound).wav",
+    "author": "Gravity Sound",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Forest_ambience_(Gravity_Sound).wav",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/b/be/Forest_ambience_%28Gravity_Sound%29.wav?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "derived_license": "CC BY 4.0",
+    "note": "森林環境聲；不是 OSHA 所舉大峽谷北緣現場。",
+    "source_file": "nature.wav",
+    "start_seconds": 2,
+    "duration_seconds": 10,
+    "source_sha256": "ee6a2377fd73ec9973c4be9b42549daee26249374b16d1994ab78266b6f7fed4",
+    "baseline_measurement": {
+      "lufs": -23.0,
+      "true_peak_dbfs": -12.76
+    },
+    "target_lufs": -40.6,
+    "measurement": {
+      "lufs": -40.6,
+      "true_peak_dbfs": -30.36
+    },
+    "output_gain_db": -17.6,
+    "sha256": "335819a5e69b774fdb6c88eed298a6a722af622765c28c122a82f1e89e9bc845",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  },
+  {
+    "key": "whisper",
+    "label": "輕聲耳語",
+    "title": "Whispering-example.ogg",
+    "author": "Mx. Granger",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Whispering-example.ogg",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Whispering-example.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "derived_license": "CC0",
+    "note": "英語單字 whispering 的實際輕聲耳語，保留短句自然時長。",
+    "source_file": "whisper.ogg",
+    "start_seconds": 0,
+    "duration_seconds": 2.565,
+    "source_sha256": "bbdbe95dfe4742e27845c03fba3a8caf9f0f5ad65e34e512fd5609d155e6304e",
+    "baseline_measurement": {
+      "lufs": -22.99,
+      "true_peak_dbfs": -6.54
+    },
+    "target_lufs": -38.6,
+    "measurement": {
+      "lufs": -38.6,
+      "true_peak_dbfs": -24.05
+    },
+    "output_gain_db": -17.51,
+    "sha256": "d26ee1db9e16a0df71c81885c7b98d26adaa60935612cc58f5c99180f1e85fb1",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  },
+  {
+    "key": "residence",
+    "label": "市區住宅環境",
+    "title": "Urban Street on a Rainy Afternoon.flac",
+    "author": "Extemporalist",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Urban_Street_on_a_Rainy_Afternoon.flac",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Urban_Street_on_a_Rainy_Afternoon.flac?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "derived_license": "CC0",
+    "note": "Kelowna 雨天都市街道，包含車流、雨滴及遠處鳥聲；非插圖住宅現場。",
+    "source_file": "residence.flac",
+    "start_seconds": 60,
+    "duration_seconds": 10,
+    "source_sha256": "ef0511593b1bb0ba47d5c5dafd83eb07ba854b5a65fd5d41b8c76a1b3ff2c22a",
+    "baseline_measurement": {
+      "lufs": -23.0,
+      "true_peak_dbfs": 1.11
+    },
+    "target_lufs": -36.6,
+    "measurement": {
+      "lufs": -36.6,
+      "true_peak_dbfs": -12.49
+    },
+    "output_gain_db": -13.6,
+    "sha256": "9c0f6f1e3ef5aa6a19afb518e293de34fededd6eb19556cf6d9931ca3f6bcdfa",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  },
+  {
+    "key": "conversation",
+    "label": "一般交談",
+    "title": "Kyoto women conversation in 1964.ogg",
+    "author": "国立国語研究所（上村幸雄、徳川宗賢）",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Kyoto_women_conversation_in_1964.ogg",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Kyoto_women_conversation_in_1964.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "derived_license": "CC BY 4.0",
+    "note": "1964 年京都兩位女性以京都方言交談，不是插圖人物的聲音。",
+    "source_file": "conversation.ogg",
+    "start_seconds": 3,
+    "duration_seconds": 10,
+    "source_sha256": "9f6a382ddeffc9e74d9a94954b66c6ed43ae3a3ae1d2fede03747845c2e10124",
+    "baseline_measurement": {
+      "lufs": -23.0,
+      "true_peak_dbfs": -6.31
+    },
+    "target_lufs": -34.6,
+    "measurement": {
+      "lufs": -34.6,
+      "true_peak_dbfs": -17.91
+    },
+    "output_gain_db": -11.6,
+    "sha256": "8bbc04cdcdc6fb7dcae3c2681509cb6e7cef54fe31fd6fbefca1c5a4576f136e",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  },
+  {
+    "key": "classroom",
+    "label": "教室多人交談",
+    "title": "Ambient classroom mono.ogg",
+    "author": "rcrossley",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Ambient_classroom_mono.ogg",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/1/10/Ambient_classroom_mono.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "Public domain",
+    "license_url": "https://commons.wikimedia.org/wiki/Template:PD-user",
+    "derived_license": "Public domain",
+    "note": "高中電腦教室的多人活動與交談背景聲。",
+    "source_file": "classroom.ogg",
+    "start_seconds": 15,
+    "duration_seconds": 10,
+    "source_sha256": "0eeb19b20d2b2f2e4590258378cef41943649315a0a1f4b5f1092a3476112594",
+    "baseline_measurement": {
+      "lufs": -23.01,
+      "true_peak_dbfs": 0.07
+    },
+    "target_lufs": -32.6,
+    "measurement": {
+      "lufs": -32.59,
+      "true_peak_dbfs": -9.52
+    },
+    "output_gain_db": -9.59,
+    "sha256": "375b4a5764db523d119e57d6d1b2014e25fd785a89ac57fbb39a21253ec4f5ad",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  },
+  {
+    "key": "train",
+    "label": "貨運列車經過",
+    "title": "Freight train passes Phelan, startles Canadian geese.flac",
+    "author": "Extemporalist",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Freight_train_passes_Phelan,_startles_Canadian_geese.flac",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/6/60/Freight_train_passes_Phelan%2C_startles_Canadian_geese.flac?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "derived_license": "CC0",
+    "note": "加拿大 Phelan 貨運列車經過，並有現場環境聲；非插圖現場。",
+    "source_file": "train.flac",
+    "start_seconds": 296,
+    "duration_seconds": 10,
+    "source_sha256": "f66cc6975f0cda9b3573b8cf788831e38d63082cb3531ff3f15fd6ec9d086f05",
+    "baseline_measurement": {
+      "lufs": -23.01,
+      "true_peak_dbfs": -7.18
+    },
+    "target_lufs": -30.6,
+    "measurement": {
+      "lufs": -30.59,
+      "true_peak_dbfs": -14.77
+    },
+    "output_gain_db": -7.59,
+    "sha256": "fa6334ef9d7a6abc13f60ae9cf553ad0960a95343c21a7c1511a34ac56fe0216",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  },
+  {
+    "key": "boiler",
+    "label": "鍋爐房設備運轉",
+    "title": "Boiler gas heater.ogg",
+    "author": "stephan",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Boiler_gas_heater.ogg",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/7/78/Boiler_gas_heater.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "Public domain",
+    "license_url": "https://commons.wikimedia.org/wiki/Template:PD-user",
+    "derived_license": "Public domain",
+    "note": "燃氣加熱鍋爐的燃燒運轉聲，非大型工業鍋爐房或插圖現場。",
+    "source_file": "boiler.ogg",
+    "start_seconds": 6,
+    "duration_seconds": 10,
+    "source_sha256": "1e1fa3b15b830c57756c1c4651641c0596f2c3265c90a670d9c770662c2762bc",
+    "baseline_measurement": {
+      "lufs": -23.0,
+      "true_peak_dbfs": -4.27
+    },
+    "target_lufs": -28.6,
+    "measurement": {
+      "lufs": -28.6,
+      "true_peak_dbfs": -9.87
+    },
+    "output_gain_db": -5.6,
+    "sha256": "5af520a06470e14def269dbee7f950d874cce1815c20ae1b074334e5aa6a51b7",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  },
+  {
+    "key": "construction",
+    "label": "施工現場",
+    "title": "Construction.ogg",
+    "author": "Dsw4",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Construction.ogg",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Construction.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "Public domain",
+    "license_url": "https://commons.wikimedia.org/wiki/Template:PD-user",
+    "derived_license": "Public domain",
+    "note": "以指向性麥克風錄製的實際工地聲，非插圖現場。",
+    "source_file": "construction.ogg",
+    "start_seconds": 40,
+    "duration_seconds": 10,
+    "source_sha256": "7b69cda9671d635bd20ed17f1f7db728fbca3ba6a67cc7ce2512777a8e02534a",
+    "baseline_measurement": {
+      "lufs": -23.0,
+      "true_peak_dbfs": 0.6
+    },
+    "target_lufs": -26.6,
+    "measurement": {
+      "lufs": -26.6,
+      "true_peak_dbfs": -3.0
+    },
+    "output_gain_db": -3.6,
+    "sha256": "e8d197b22172d3e2078c475918038c786ade47679d4263df2750a37b7626cee7",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  },
+  {
+    "key": "club",
+    "label": "舞廳播放音樂",
+    "title": "Sonatema - The Techno Funk Man.wav",
+    "author": "Lebrozu",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Sonatema_-_The_Techno_Funk_Man.wav",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/7/71/Sonatema_-_The_Techno_Funk_Man.wav?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "derived_license": "CC0",
+    "note": "Sonatema 的電子／放克舞曲錄音；非夜店現場收音。",
+    "source_file": "club.wav",
+    "start_seconds": 30,
+    "duration_seconds": 10,
+    "source_sha256": "5b816626455d93d205d4c81d81fc364bd2efd72d591685e10af15c18e21d59ba",
+    "baseline_measurement": {
+      "lufs": -22.99,
+      "true_peak_dbfs": -7.25
+    },
+    "target_lufs": -24.6,
+    "measurement": {
+      "lufs": -24.6,
+      "true_peak_dbfs": -8.86
+    },
+    "output_gain_db": -1.61,
+    "sha256": "7841f18bb6dd3b73cbecdb1a26e858a95bc280df305daeb68acdcb2a94595542",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  },
+  {
+    "key": "equipment",
+    "label": "重型機具運作",
+    "title": "Kleemann crushing plant Koskela depot.opus",
+    "author": "Antti Leppänen",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Kleemann_crushing_plant_Koskela_depot.opus",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/7/73/Kleemann_crushing_plant_Koskela_depot.opus?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "derived_license": "CC BY 4.0",
+    "note": "赫爾辛基 Koskela 工地 Kleemann Mobirex MR 130 Z Evo 2 大型碎石設備運作；非插圖挖土機現場。",
+    "source_file": "equipment.opus",
+    "start_seconds": 8,
+    "duration_seconds": 10,
+    "source_sha256": "ad9f832bdf5c0b183bda8778b11bd66aa06ab7011aa65f54dc2567114329a832",
+    "baseline_measurement": {
+      "lufs": -23.0,
+      "true_peak_dbfs": -8.48
+    },
+    "target_lufs": -22.6,
+    "measurement": {
+      "lufs": -22.6,
+      "true_peak_dbfs": -8.08
+    },
+    "output_gain_db": 0.4,
+    "sha256": "2522fb0621a74673b8ca4d647b4a1178f60ee9fb77a231fbe1179facdde6c4ff",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  },
+  {
+    "key": "jet",
+    "label": "噴射機起飛",
+    "title": "UPS 767-300F (N360UP) Takeoff Portland Airport (PDX).ogv",
+    "author": "PDX Aviation - HD(ish) Plane Spotting",
+    "source_url": "https://commons.wikimedia.org/wiki/File:UPS_767-300F_(N360UP)_Takeoff_Portland_Airport_(PDX).ogv",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/c/c6/UPS_767-300F_%28N360UP%29_Takeoff_Portland_Airport_%28PDX%29.ogv?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "CC BY 3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "derived_license": "CC BY 3.0",
+    "note": "PDX Aviation 錄製 UPS 波音 767-300F 於波特蘭機場跑道 28L 起飛；不是插圖現場或約 60 公尺的校準測量。",
+    "source_file": "jet.ogv",
+    "start_seconds": 25,
+    "duration_seconds": 10,
+    "source_sha256": "1e164a9f4e4da3830d5dec615f19de7d76d6c774ec217eb52fd835ca9d4b4a01",
+    "baseline_measurement": {
+      "lufs": -23.0,
+      "true_peak_dbfs": -12.32
+    },
+    "target_lufs": -20.6,
+    "measurement": {
+      "lufs": -20.6,
+      "true_peak_dbfs": -9.92
+    },
+    "output_gain_db": 2.4,
+    "sha256": "29ef9f2d0f1f6acfc68e53318e9be67e0eef52506f3e40049d8ee59023a6b908",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+  }
+]

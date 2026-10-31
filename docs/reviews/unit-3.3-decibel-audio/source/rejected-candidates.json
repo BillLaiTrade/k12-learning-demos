@@ -1,0 +1,29 @@
+[
+  {
+    "title": "SCA takeoff and landing.ogv",
+    "used": false,
+    "reason": "使用者交接已確認沒有音軌；本輪不採用、不冒稱再次下載驗證。"
+  },
+  {
+    "title": "British Airways Boeing 747.ogv",
+    "used": false,
+    "source_sha256": "9b0cc62b9fb2643864a4b96b95426d75ddb9faa9bdf452ef00aa8dbada4de174",
+    "reason": "音軌可解碼但全靜音",
+    "measurement": [
+      "[Parsed_volumedetect_0 @ 0x562582f27780] n_samples: 0",
+      "[Parsed_volumedetect_0 @ 0x7ff410002400] n_samples: 2506752",
+      "[Parsed_volumedetect_0 @ 0x7ff410002400] mean_volume: -91.0 dB",
+      "[Parsed_volumedetect_0 @ 0x7ff410002400] max_volume: -91.0 dB"
+    ]
+  },
+  {
+    "title": "Flight take off.webm",
+    "used": false,
+    "reason": "實際第20秒畫面為雙螺旋槳飛機，不能對應噴射機場景。"
+  },
+  {
+    "title": "A small orange excavator shoveling gravel.ogg",
+    "used": false,
+    "reason": "CC BY-SA 3.0 候選合法，但改選更貼近重型機具的大型碎石設備，不將小型挖土機冒稱大型設備。"
+  }
+]

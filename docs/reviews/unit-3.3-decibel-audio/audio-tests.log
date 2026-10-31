@@ -1,0 +1,12 @@
+✔ twelve licensed recordings have verified hashes, ordered measured LUFS and peak headroom (2464.628318ms)
+✔ all twelve scenes play their actual PCM, picture/button replay and live selection stay synchronized (6533.984602ms)
+✔ slow cancellation, rapid switching, failed retry, hidden/leave/other sources never start stale audio (3507.169534ms)
+✔ mobile touch, keyboard, desktop/mobile layout and original large artwork remain usable (3727.738433ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16612.423769

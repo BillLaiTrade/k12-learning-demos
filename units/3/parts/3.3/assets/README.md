@@ -118,3 +118,9 @@ decibel-scenes.png為image_gen製作的2172×724三格生活情境插圖；原�
 四張1024×1536原始生成PNG（decibel-quiet／daily／work／loud）各含三張上下排列的1024×512橫幅場景。未修改原像素，以同步的SVG viewBox及clipPath取景，插圖是示意而非量測照片；來源與SHA-256見decibel-explorer-generation.json。舊三格圖保留供歷史追溯。
 
 decibel-model.mjs存放十二例與線性刻度，decibel-experiment.mjs管理滑鼠點拖、實際觸控pointer capture、方向鍵±10／Shift±1／Page±20／Home／End。預設60dBA。任意整數讀值與最近的參考例明確分開：選73時提示73dBA，上方保留教室約70dBA，而不是宣稱教室固定73dBA。中點取較高參考。四圖預載／解碼快取、遲到請求票號隔離，錯誤隱藏舊圖並可重選重試。這是無聲資料探索，沒有麥克風、聲壓校準或對應分貝播放；操作會停止其他區的試聽。桌機左大圖右介紹，手機上下；保留兩則概念提醒及來源／條件。此節取代上節「靜態、三例、無操作」的現行規格。
+
+## 2026-10-31 第七區十二場景錄音（取代無聲探索規格）
+
+保留原十二場景大圖、介紹與情境帶，新增圖片點播及播放／停止。`decibel-audio.mjs` 管理解碼快取與短邊界增益，`lesson.mjs` 沿用同一活動來源與票號取消；準備中／播放中換場景跟隨最後選取，停止後切換不自動播放。離區、隱藏分頁、其他區及小測試聽停止舊錄音；失敗可重試且不回放錯誤情境。
+
+`decibel-audio/` 的十二成品為對應情境實錄或授權舞曲，不是插圖現場／OSHA 指定距離實測。來源差異、作者、網址、衍生授權與修改逐項列在頁面收合清單及 `LICENSE.md`，精確段落／SHA-256／實測響度在 `recordings.json`。`scripts/prepare-decibel-recordings.py` 核對原檔後，以共同 -23 LUFS 基準製作每級 2 LU 的相對音量階梯並檢查真峰值；無變調、變速或合成噪音。網頁音量不代表 20～130 dBA，也不是聽感等距校準。決策與查核證據見 `docs/decisions/unit-3.3-decibel-audio.md` 及本輪 review。

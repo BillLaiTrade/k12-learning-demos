@@ -9,7 +9,7 @@ test('decibel reference mapping preserves source values and distances',async()=>
  assert.equal(nearestScene(73).db,70);assert.equal(nearestScene(75).db,80);assert.equal(nearestScene(-20).db,20);assert.equal(decibelAt(2),130);
  for(const [key,distance]of [['whisper','1.5'],['conversation','0.9'],['train','30'],['jet','60']])assert.ok(scenes.find(s=>s.key===key).condition.includes(distance));
 });
-test('decibel ribbon selects all scenes, handles pointer/touch/keys and never plays audio',{timeout:90000},async t=>{
+test('decibel ribbon selects all scenes, handles pointer/touch/keys without autoplay while stopped',{timeout:90000},async t=>{
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});t.after(()=>server.kill());
  const port=await new Promise(resolve=>server.stdout.on('data',d=>{const m=String(d).match(/port (\d+)/);if(m)resolve(m[1]);}));
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',...(process.env.SOUND33_BASE_URL?{proxy:{server:process.env.HTTPS_PROXY,bypass:'127.0.0.1,localhost'}}:{})});t.after(()=>browser.close());

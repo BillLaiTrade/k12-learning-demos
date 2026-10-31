@@ -619,3 +619,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.3-
 ```
 
 17項（含外層）：六材料本體／標籤點選與持續介紹、組裝放石塊／倒酸／封塞、瓶外排氣、導管由瓶口上方移至底部、撤管先於蓋片及標示、獨立時鐘／暫停像素／快速切步、鍵盤焦點、跨實驗互停、七種寬度、共用SVG近景、觸控與減少動態、無JS。`CO2_URL`指定公開完整2.3頁（以/結尾）；`CO2_ARTIFACT_DIR`指定當次截圖位置，預設/tmp/unit23-co2。科學及製作紀錄見docs/reviews/unit-2.3-co2-steps/。第三區及第五區沿用各自專項；歷史四步重播已由五步取代，不代表整份歷史測試均已重跑。
+
+## 3.3 第七區：十二場景授權錄音
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-decibel-audio.test.cjs tests/unit-3.3-decibel.test.cjs tests/unit-3.3.test.cjs
+```
+
+音效專項需要系統 `ffmpeg`，獨立量測十二成品 LUFS、真峰值與 -23 LUFS 共同基準，核對來源及成品雜湊／衍生授權。瀏覽器將實際播放 AudioBuffer 與選定 WAV 經相同 AudioContext 解碼的全部 PCM 逐值比較，避免只依畫面標籤宣稱聲音正確。涵蓋圖片／按鈕／鍵盤／手機點播與重播、自然結束、播放中換場景、停止後切換不自動起音、慢下載取消／快速切換／503 重試、隱藏與離區／其他區及小測音源互斥、320–1440px 六種寬度。`SOUND33_BASE_URL` 可指向以 `/` 結尾的公開頁（故障注入也走該頁的本地音檔請求）；`DECIBEL_AUDIO_CAPTURE_DIR` 指定截圖目錄。
+
+前六區全套回歸沿用各專項及 `unit-3.3.test.cjs`，不把數位響度或操作檢查當作真實 dBA 重現／主觀聽感校準。來源差異、授權與重製方法見 `docs/reviews/unit-3.3-decibel-audio/source/`；成品及授權清單在 `assets/decibel-audio/`。

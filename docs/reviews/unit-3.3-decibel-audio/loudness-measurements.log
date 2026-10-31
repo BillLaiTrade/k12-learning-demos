@@ -1,0 +1,12 @@
+study {'lufs': -42.6, 'true_peak_dbfs': -24.38}
+nature {'lufs': -40.6, 'true_peak_dbfs': -30.36}
+whisper {'lufs': -38.6, 'true_peak_dbfs': -24.05}
+residence {'lufs': -36.6, 'true_peak_dbfs': -12.49}
+conversation {'lufs': -34.6, 'true_peak_dbfs': -17.91}
+classroom {'lufs': -32.59, 'true_peak_dbfs': -9.52}
+train {'lufs': -30.59, 'true_peak_dbfs': -14.77}
+boiler {'lufs': -28.6, 'true_peak_dbfs': -9.87}
+construction {'lufs': -26.6, 'true_peak_dbfs': -3.0}
+club {'lufs': -24.6, 'true_peak_dbfs': -8.86}
+equipment {'lufs': -22.6, 'true_peak_dbfs': -8.08}
+jet {'lufs': -20.6, 'true_peak_dbfs': -9.92}

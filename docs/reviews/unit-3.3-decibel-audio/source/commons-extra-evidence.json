@@ -1,0 +1,1000 @@
+[
+  {
+    "batchcomplete": "",
+    "query": {
+      "pages": {
+        "-1": {
+          "ns": 6,
+          "title": "File:Room ambience.ogg",
+          "missing": "",
+          "imagerepository": ""
+        },
+        "-2": {
+          "ns": 6,
+          "title": "File:Indoor ambience (Gravity Sound).wav",
+          "missing": "",
+          "imagerepository": ""
+        },
+        "-3": {
+          "ns": 6,
+          "title": "File:Room tone.wav",
+          "missing": "",
+          "imagerepository": ""
+        },
+        "11124729": {
+          "pageid": 11124729,
+          "ns": 6,
+          "title": "File:A small orange excavator shoveling gravel.ogg",
+          "imagerepository": "local",
+          "imageinfo": [
+            {
+              "size": 633924,
+              "width": 0,
+              "height": 0,
+              "duration": 25.914666666666665,
+              "url": "https://upload.wikimedia.org/wikipedia/commons/5/54/A_small_orange_excavator_shoveling_gravel.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+              "descriptionurl": "https://commons.wikimedia.org/wiki/File:A_small_orange_excavator_shoveling_gravel.ogg",
+              "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=11124729",
+              "extmetadata": {
+                "DateTime": {
+                  "value": "2010-08-08 19:48:49",
+                  "source": "mediawiki-metadata",
+                  "hidden": ""
+                },
+                "ObjectName": {
+                  "value": "A small orange excavator shoveling gravel",
+                  "source": "mediawiki-metadata"
+                },
+                "CommonsMetadataExtension": {
+                  "value": 1.2,
+                  "source": "extension",
+                  "hidden": ""
+                },
+                "Categories": {
+                  "value": "Excavators|Sounds of machinery",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "Assessments": {
+                  "value": "",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "ImageDescription": {
+                  "value": "A small orange excavator shoveling gravel.",
+                  "source": "commons-desc-page"
+                },
+                "DateTimeOriginal": {
+                  "value": "2007-10-20",
+                  "source": "commons-desc-page"
+                },
+                "Credit": {
+                  "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                  "source": "commons-desc-page"
+                },
+                "Artist": {
+                  "value": "<a href=\"//commons.wikimedia.org/wiki/User:Teacoolish\" title=\"User:Teacoolish\">T.Voekler</a>",
+                  "source": "commons-desc-page"
+                },
+                "LicenseShortName": {
+                  "value": "CC BY-SA 3.0",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "UsageTerms": {
+                  "value": "Creative Commons Attribution-Share Alike 3.0",
+                  "source": "commons-desc-page"
+                },
+                "AttributionRequired": {
+                  "value": "true",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseUrl": {
+                  "value": "https://creativecommons.org/licenses/by-sa/3.0",
+                  "source": "commons-desc-page"
+                },
+                "Copyrighted": {
+                  "value": "True",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Restrictions": {
+                  "value": "",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "License": {
+                  "value": "cc-by-sa-3.0",
+                  "source": "commons-templates",
+                  "hidden": ""
+                }
+              }
+            }
+          ]
+        },
+        "21962156": {
+          "pageid": 21962156,
+          "ns": 6,
+          "title": "File:British Airways Boeing 747.ogv",
+          "imagerepository": "local",
+          "imageinfo": [
+            {
+              "size": 4627158,
+              "width": 640,
+              "height": 480,
+              "duration": 26.112,
+              "url": "https://upload.wikimedia.org/wikipedia/commons/4/4d/British_Airways_Boeing_747.ogv?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+              "descriptionurl": "https://commons.wikimedia.org/wiki/File:British_Airways_Boeing_747.ogv",
+              "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=21962156",
+              "extmetadata": {
+                "DateTime": {
+                  "value": "2012-10-08 06:14:08",
+                  "source": "mediawiki-metadata",
+                  "hidden": ""
+                },
+                "ObjectName": {
+                  "value": "British Airways Boeing 747",
+                  "source": "mediawiki-metadata"
+                },
+                "CommonsMetadataExtension": {
+                  "value": 1.2,
+                  "source": "extension",
+                  "hidden": ""
+                },
+                "Categories": {
+                  "value": "Slow motion videos|Self-published work|Ogv videos|Video display resolution 640 x 480|Boeing 747-400 of British Airways|2012 at Logan International Airport|Videos of starts in aviation|Videos of Boeing 747|Boeing 747 of British Airways at Logan International Airport",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "Assessments": {
+                  "value": "",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "ImageDescription": {
+                  "value": "British Airways Boeing 747 takes off from Logan International Airport, Boston, Massachusetts USA. Filmed in slow motion.",
+                  "source": "commons-desc-page"
+                },
+                "DateTimeOriginal": {
+                  "value": "2012-06-09",
+                  "source": "commons-desc-page"
+                },
+                "Credit": {
+                  "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                  "source": "commons-desc-page"
+                },
+                "Artist": {
+                  "value": "<a href=\"//commons.wikimedia.org/wiki/User:Anthony92931\" title=\"User:Anthony92931\">Anthony92931</a>",
+                  "source": "commons-desc-page"
+                },
+                "LicenseShortName": {
+                  "value": "CC BY-SA 3.0",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "UsageTerms": {
+                  "value": "Creative Commons Attribution-Share Alike 3.0",
+                  "source": "commons-desc-page"
+                },
+                "AttributionRequired": {
+                  "value": "true",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseUrl": {
+                  "value": "https://creativecommons.org/licenses/by-sa/3.0",
+                  "source": "commons-desc-page"
+                },
+                "Copyrighted": {
+                  "value": "True",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Restrictions": {
+                  "value": "",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "License": {
+                  "value": "cc-by-sa-3.0",
+                  "source": "commons-templates",
+                  "hidden": ""
+                }
+              }
+            }
+          ]
+        },
+        "24783276": {
+          "pageid": 24783276,
+          "ns": 6,
+          "title": "File:Flight take off.webm",
+          "imagerepository": "local",
+          "imageinfo": [
+            {
+              "size": 19607729,
+              "width": 1280,
+              "height": 720,
+              "duration": 76.635,
+              "url": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Flight_take_off.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+              "descriptionurl": "https://commons.wikimedia.org/wiki/File:Flight_take_off.webm",
+              "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=24783276",
+              "extmetadata": {
+                "DateTime": {
+                  "value": "2013-02-21 18:38:47",
+                  "source": "mediawiki-metadata",
+                  "hidden": ""
+                },
+                "ObjectName": {
+                  "value": "Flight take off",
+                  "source": "mediawiki-metadata"
+                },
+                "CommonsMetadataExtension": {
+                  "value": 1.2,
+                  "source": "extension",
+                  "hidden": ""
+                },
+                "Categories": {
+                  "value": "WebM videos|Aircraft take offs|Pune Airport|Self-published work|Videos from Pune|Videos of 2013 from India|Aerial videos from Maharashtra|Video display resolution 1280 x 720|Video files uploaded by User:Psubhashish",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "Assessments": {
+                  "value": "",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "ImageDescription": {
+                  "value": "A flight taking off in <a href=\"https://en.wikipedia.org/wiki/Pune_Airport\" class=\"extiw\" title=\"w:Pune Airport\">Pune Airport</a>.",
+                  "source": "commons-desc-page"
+                },
+                "DateTimeOriginal": {
+                  "value": "2013-02-22 00:00:59",
+                  "source": "commons-desc-page"
+                },
+                "Credit": {
+                  "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                  "source": "commons-desc-page"
+                },
+                "Artist": {
+                  "value": "<a href=\"//commons.wikimedia.org/wiki/User:Psubhashish\" title=\"User:Psubhashish\">Subhashish Panigrahi</a>",
+                  "source": "commons-desc-page"
+                },
+                "LicenseShortName": {
+                  "value": "CC BY-SA 3.0",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "UsageTerms": {
+                  "value": "Creative Commons Attribution-Share Alike 3.0",
+                  "source": "commons-desc-page"
+                },
+                "AttributionRequired": {
+                  "value": "true",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseUrl": {
+                  "value": "https://creativecommons.org/licenses/by-sa/3.0",
+                  "source": "commons-desc-page"
+                },
+                "Copyrighted": {
+                  "value": "True",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Restrictions": {
+                  "value": "",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "License": {
+                  "value": "cc-by-sa-3.0",
+                  "source": "commons-templates",
+                  "hidden": ""
+                }
+              }
+            }
+          ]
+        },
+        "5532760": {
+          "pageid": 5532760,
+          "ns": 6,
+          "title": "File:Flight takeoff.ogv",
+          "imagerepository": "local",
+          "imageinfo": [
+            {
+              "size": 6695740,
+              "width": 640,
+              "height": 480,
+              "duration": 58,
+              "url": "https://upload.wikimedia.org/wikipedia/commons/6/68/Flight_takeoff.ogv?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+              "descriptionurl": "https://commons.wikimedia.org/wiki/File:Flight_takeoff.ogv",
+              "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=5532760",
+              "extmetadata": {
+                "DateTime": {
+                  "value": "2008-12-19 20:48:18",
+                  "source": "mediawiki-metadata",
+                  "hidden": ""
+                },
+                "ObjectName": {
+                  "value": "Flight takeoff",
+                  "source": "mediawiki-metadata"
+                },
+                "CommonsMetadataExtension": {
+                  "value": 1.2,
+                  "source": "extension",
+                  "hidden": ""
+                },
+                "Categories": {
+                  "value": "Aircraft take offs|Self-published work|Ogv videos|Video display resolution 640 x 480|Videos from Northern Ireland|Videos of starts in aviation|Aircraft at Belfast International Airport",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "Assessments": {
+                  "value": "",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "ImageDescription": {
+                  "value": "View out the window of a plane during take-off from Belfast International Airport in Antrim, N.Ireland.",
+                  "source": "commons-desc-page"
+                },
+                "Credit": {
+                  "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                  "source": "commons-desc-page"
+                },
+                "Artist": {
+                  "value": "<a href=\"//commons.wikimedia.org/wiki/User:Fsphil\" title=\"User:Fsphil\">fsphil</a>",
+                  "source": "commons-desc-page"
+                },
+                "LicenseShortName": {
+                  "value": "CC BY-SA 3.0",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "UsageTerms": {
+                  "value": "Creative Commons Attribution-Share Alike 3.0",
+                  "source": "commons-desc-page"
+                },
+                "AttributionRequired": {
+                  "value": "true",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseUrl": {
+                  "value": "https://creativecommons.org/licenses/by-sa/3.0",
+                  "source": "commons-desc-page"
+                },
+                "Copyrighted": {
+                  "value": "True",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Restrictions": {
+                  "value": "",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "License": {
+                  "value": "cc-by-sa-3.0",
+                  "source": "commons-templates",
+                  "hidden": ""
+                }
+              }
+            }
+          ]
+        },
+        "165441781": {
+          "pageid": 165441781,
+          "ns": 6,
+          "title": "File:Kleemann crushing plant Koskela depot.opus",
+          "imagerepository": "local",
+          "imageinfo": [
+            {
+              "size": 2638039,
+              "width": 0,
+              "height": 0,
+              "duration": 81.9665,
+              "url": "https://upload.wikimedia.org/wikipedia/commons/7/73/Kleemann_crushing_plant_Koskela_depot.opus?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+              "descriptionurl": "https://commons.wikimedia.org/wiki/File:Kleemann_crushing_plant_Koskela_depot.opus",
+              "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=165441781",
+              "extmetadata": {
+                "DateTime": {
+                  "value": "2025-05-17 09:32:01",
+                  "source": "mediawiki-metadata",
+                  "hidden": ""
+                },
+                "ObjectName": {
+                  "value": "Kleemann crushing plant Koskela depot",
+                  "source": "mediawiki-metadata"
+                },
+                "CommonsMetadataExtension": {
+                  "value": 1.2,
+                  "source": "extension",
+                  "hidden": ""
+                },
+                "Categories": {
+                  "value": "Crushers|Kleemann GmbH|Self-published work|Sounds of machinery|Files with coordinates missing SDC location of creation",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "Assessments": {
+                  "value": "",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "GPSLatitude": {
+                  "value": "60.215963",
+                  "source": "commons-desc-page"
+                },
+                "GPSLongitude": {
+                  "value": "24.968771",
+                  "source": "commons-desc-page"
+                },
+                "GPSMapDatum": {
+                  "value": "WGS-84",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "ImageDescription": {
+                  "value": "Kleemann Mobirex MR 130 Z Evo 2 crushing plant operating at the demolition site of Koskela tram depot in Helsinki",
+                  "source": "commons-desc-page"
+                },
+                "DateTimeOriginal": {
+                  "value": "2025-05-05 15:47:00",
+                  "source": "commons-desc-page"
+                },
+                "Credit": {
+                  "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                  "source": "commons-desc-page"
+                },
+                "Artist": {
+                  "value": "<a href=\"//commons.wikimedia.org/wiki/User:Antti_T._Lepp%C3%A4nen\" title=\"User:Antti T. Leppänen\">Antti Leppänen</a>",
+                  "source": "commons-desc-page"
+                },
+                "LicenseShortName": {
+                  "value": "CC BY 4.0",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "UsageTerms": {
+                  "value": "Creative Commons Attribution 4.0",
+                  "source": "commons-desc-page"
+                },
+                "AttributionRequired": {
+                  "value": "true",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseUrl": {
+                  "value": "https://creativecommons.org/licenses/by/4.0",
+                  "source": "commons-desc-page"
+                },
+                "Copyrighted": {
+                  "value": "True",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Restrictions": {
+                  "value": "",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "License": {
+                  "value": "cc-by-4.0",
+                  "source": "commons-templates",
+                  "hidden": ""
+                }
+              }
+            }
+          ]
+        },
+        "143923478": {
+          "pageid": 143923478,
+          "ns": 6,
+          "title": "File:Sonatema - The Techno Funk Man.wav",
+          "imagerepository": "local",
+          "imageinfo": [
+            {
+              "size": 42661608,
+              "width": 0,
+              "height": 0,
+              "duration": 241.84560090702948,
+              "url": "https://upload.wikimedia.org/wikipedia/commons/7/71/Sonatema_-_The_Techno_Funk_Man.wav?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+              "descriptionurl": "https://commons.wikimedia.org/wiki/File:Sonatema_-_The_Techno_Funk_Man.wav",
+              "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=143923478",
+              "extmetadata": {
+                "DateTime": {
+                  "value": "2024-01-13 18:17:40",
+                  "source": "mediawiki-metadata",
+                  "hidden": ""
+                },
+                "ObjectName": {
+                  "value": "Sonatema - The Techno Funk Man",
+                  "source": "mediawiki-metadata"
+                },
+                "CommonsMetadataExtension": {
+                  "value": 1.2,
+                  "source": "extension",
+                  "hidden": ""
+                },
+                "Categories": {
+                  "value": "CC-Zero|Techno|Self-published work|Audio files of electronic music",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "Assessments": {
+                  "value": "",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "ImageDescription": {
+                  "value": "Tema bailable que no encaja en ningún estilo concreto y a la vez contiene reminiscencias de tecno y de <a href=\"//commons.wikimedia.org/wiki/Funk_music\" title=\"Funk music\">funk</a>.",
+                  "source": "commons-desc-page"
+                },
+                "DateTimeOriginal": {
+                  "value": "2019-03-08",
+                  "source": "commons-desc-page"
+                },
+                "Credit": {
+                  "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                  "source": "commons-desc-page"
+                },
+                "Artist": {
+                  "value": "Lebrozu",
+                  "source": "commons-desc-page"
+                },
+                "LicenseShortName": {
+                  "value": "CC0",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "UsageTerms": {
+                  "value": "Creative Commons Zero, Public Domain Dedication",
+                  "source": "commons-desc-page"
+                },
+                "AttributionRequired": {
+                  "value": "false",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseUrl": {
+                  "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+                  "source": "commons-desc-page"
+                },
+                "Copyrighted": {
+                  "value": "True",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Restrictions": {
+                  "value": "",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "License": {
+                  "value": "cc0",
+                  "source": "commons-templates",
+                  "hidden": ""
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "batchcomplete": "",
+    "query": {
+      "pages": {
+        "25624038": {
+          "pageid": 25624038,
+          "ns": 6,
+          "title": "File:20121112 TU Delft Library, quiet study room - general ambience - SoundCloud - el mar.ogg",
+          "imagerepository": "local",
+          "imageinfo": [
+            {
+              "size": 15278610,
+              "width": 0,
+              "height": 0,
+              "duration": 258.792,
+              "url": "https://upload.wikimedia.org/wikipedia/commons/f/fb/20121112_TU_Delft_Library%2C_quiet_study_room_-_general_ambience_-_SoundCloud_-_el_mar.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+              "descriptionurl": "https://commons.wikimedia.org/wiki/File:20121112_TU_Delft_Library,_quiet_study_room_-_general_ambience_-_SoundCloud_-_el_mar.ogg",
+              "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=25624038",
+              "extmetadata": {
+                "DateTime": {
+                  "value": "2013-04-16 18:23:18",
+                  "source": "mediawiki-metadata",
+                  "hidden": ""
+                },
+                "ObjectName": {
+                  "value": "20121112 TU Delft Library, quiet study room - general ambience - SoundCloud - el mar",
+                  "source": "mediawiki-metadata"
+                },
+                "CommonsMetadataExtension": {
+                  "value": 1.2,
+                  "source": "extension",
+                  "hidden": ""
+                },
+                "Categories": {
+                  "value": "Sounds from Geluid van Nederland|Sounds from Geluid van Nederland to be checked",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "Assessments": {
+                  "value": "",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "ImageDescription": {
+                  "value": "<p>A quiet study room in the library at Dutch university TU Delft. Noise of the ventilation system. Computer keyboards and mouses in the background. Some students cough. Recorded with a Zoom H2 (front mikes).\nLocation pics:\n<a rel=\"nofollow\" class=\"external free\" href=\"http://flic.kr/p/dwugZF\">http://flic.kr/p/dwugZF</a>\n</p>\n<a rel=\"nofollow\" class=\"external free\" href=\"http://flic.kr/p/dwzLHo\">http://flic.kr/p/dwzLHo</a>",
+                  "source": "commons-desc-page"
+                },
+                "DateTimeOriginal": {
+                  "value": "2012-11-12",
+                  "source": "commons-desc-page"
+                },
+                "Credit": {
+                  "value": "Soundcloud: <a rel=\"nofollow\" class=\"external text\" data-mw-original-href=\"http://soundcloud.com/el_mar\" href=\"https://soundcloud.com/el_mar\">27749512</a>",
+                  "source": "commons-desc-page"
+                },
+                "Artist": {
+                  "value": "el_mar",
+                  "source": "commons-desc-page"
+                },
+                "Permission": {
+                  "value": "<div class=\"responsive-license-cc layouttemplate licensetpl\" dir=\"ltr\" lang=\"en\"><div class=\"rlicense-icons\"><span class=\"skin-invert\" typeof=\"mw:File\"><span title=\"w:en:Creative Commons\"><img alt=\"w:en:Creative Commons\" src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/CC_some_rights_reserved.svg/120px-CC_some_rights_reserved.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"90\" height=\"36\" class=\"mw-file-element\" srcset=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/CC_some_rights_reserved.svg/250px-CC_some_rights_reserved.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"744\" data-file-height=\"300\"></span></span><br>\n<span class=\"skin-invert\" typeof=\"mw:File\"><span title=\"attribution\"><img alt=\"attribution\" src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Cc-by_new_white.svg/40px-Cc-by_new_white.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"24\" height=\"24\" class=\"mw-file-element\" srcset=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Cc-by_new_white.svg/60px-Cc-by_new_white.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"64\" data-file-height=\"64\"></span></span></div><div class=\"rlicense-text\"><div class=\"rlicense-declaration\">This file is licensed under the <a href=\"https://en.wikipedia.org/wiki/en:Creative_Commons\" class=\"extiw\" title=\"w:en:Creative Commons\">Creative Commons</a> <a href=\"//creativecommons.org/licenses/by/3.0/deed.en\" class=\"extiw\" title=\"creativecommons:by/3.0/deed.en\">Attribution 3.0 Unported</a> license.</div><div class=\"rlicense-desc\" style=\"text-align:start;\" dir=\"ltr\" lang=\"en\">\n<dl><dd>You are free:\n<ul><li><b>to share</b> – to copy, distribute and transmit the work</li>\n<li><b>to remix</b> – to adapt the work</li></ul></dd>\n<dd>Under the following conditions:\n<ul><li><b>attribution</b> – You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</li></ul></dd></dl>\n</div><span class=\"licensetpl_link\" style=\"display:none;\">https://creativecommons.org/licenses/by/3.0</span><span class=\"licensetpl_short\" style=\"display:none;\">CC BY 3.0 </span><span class=\"licensetpl_long\" style=\"display:none;\">Creative Commons Attribution 3.0 </span><span class=\"licensetpl_link_req\" style=\"display:none;\">true</span><span class=\"licensetpl_attr_req\" style=\"display:none;\">true</span></div></div>",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseShortName": {
+                  "value": "CC BY 3.0",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "UsageTerms": {
+                  "value": "Creative Commons Attribution 3.0",
+                  "source": "commons-desc-page"
+                },
+                "AttributionRequired": {
+                  "value": "true",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseUrl": {
+                  "value": "https://creativecommons.org/licenses/by/3.0",
+                  "source": "commons-desc-page"
+                },
+                "Copyrighted": {
+                  "value": "True",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Restrictions": {
+                  "value": "",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "License": {
+                  "value": "cc-by-3.0",
+                  "source": "commons-templates",
+                  "hidden": ""
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "batchcomplete": "",
+    "query": {
+      "pages": {
+        "72338451": {
+          "pageid": 72338451,
+          "ns": 6,
+          "title": "File:FedEx 757-200 (N962FD) Takeoff Portland Airport (PDX).ogv",
+          "imagerepository": "local",
+          "imageinfo": [
+            {
+              "size": 70389054,
+              "width": 1920,
+              "height": 1080,
+              "duration": 65.31773242630385,
+              "url": "https://upload.wikimedia.org/wikipedia/commons/e/ed/FedEx_757-200_%28N962FD%29_Takeoff_Portland_Airport_%28PDX%29.ogv?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+              "descriptionurl": "https://commons.wikimedia.org/wiki/File:FedEx_757-200_(N962FD)_Takeoff_Portland_Airport_(PDX).ogv",
+              "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=72338451",
+              "extmetadata": {
+                "DateTime": {
+                  "value": "2018-09-04 05:44:11",
+                  "source": "mediawiki-metadata",
+                  "hidden": ""
+                },
+                "ObjectName": {
+                  "value": "FedEx 757-200 (N962FD) Takeoff Portland Airport (PDX)",
+                  "source": "mediawiki-metadata"
+                },
+                "CommonsMetadataExtension": {
+                  "value": 1.2,
+                  "source": "extension",
+                  "hidden": ""
+                },
+                "Categories": {
+                  "value": "Media from YouTube|June 2017 in the United States|Ogv videos|Uploaded with video2commons|Video display resolution 1920 x 1080|Videos of 2017 from the United States|License reviewed by YouTubeReviewBot|Videos by PDX Aviation - HD(ish) Plane Spotting|Videos taken on 2017-06-20|Boeing 757-200 take offs|Aircraft at Portland International Airport|FedEx aircraft",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "Assessments": {
+                  "value": "",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "ImageDescription": {
+                  "value": "Flight: FDX3129 PDX-AFW\n<p>Date: June 20, 2017\n</p>\nTaking off from runway 28L",
+                  "source": "commons-desc-page"
+                },
+                "DateTimeOriginal": {
+                  "value": "Taken on 20 June 2017, Upload date:  14 July 2017",
+                  "source": "commons-desc-page"
+                },
+                "Credit": {
+                  "value": "<bdi lang=\"en\" dir=\"ltr\"><a href=\"//commons.wikimedia.org/wiki/Commons:YouTube_files\" title=\"Commons:YouTube files\">YouTube</a>: <a rel=\"nofollow\" class=\"external text\" href=\"https://www.youtube.com/watch?v=2wtNAXyePJ8\"><bdi lang=\"\">FedEx 757-200 [N962FD] Takeoff Portland Airport (PDX)</bdi></a> – View/save archived versions on <a rel=\"nofollow\" class=\"external text\" href=\"https://web.archive.org/web/*/https://www.youtube.com/watch?v=2wtNAXyePJ8\">archive.org</a></bdi>",
+                  "source": "commons-desc-page"
+                },
+                "Artist": {
+                  "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.youtube.com/user/buybygb\">PDX Aviation - HD(ish) Plane Spotting</a>",
+                  "source": "commons-desc-page"
+                },
+                "Permission": {
+                  "value": "<div class=\"licensetpl_wrapper\" style=\"clear:both; margin:0.5em auto; background-color:var(--background-color-interactive,#eaecf0); color:inherit; border:2px solid var(--border-color-subtle,#c8ccd1); padding:8px;\">\n<div style=\"text-align:center;\" lang=\"en\" dir=\"ltr\">\n<figure class=\"mw-halign-right\" typeof=\"mw:File\"><a href=\"//commons.wikimedia.org/wiki/File:YouTube_full-color_icon_(2024).svg\" class=\"mw-file-description\"><img src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/YouTube_full-color_icon_%282024%29.svg/120px-YouTube_full-color_icon_%282024%29.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"80\" height=\"55\" class=\"mw-file-element\" srcset=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/YouTube_full-color_icon_%282024%29.svg/250px-YouTube_full-color_icon_%282024%29.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"1184\" data-file-height=\"816\"></a><figcaption></figcaption></figure>\n<div><i>This video, screenshot or audio excerpt was released under the Creative Commons license option on <a href=\"https://en.wikipedia.org/wiki/YouTube\" class=\"extiw\" title=\"en:YouTube\">YouTube</a> <b>before August 2025</b>. (YouTube changed the license version from CC BY 3.0 to 4.0 on August 1; this was not retroactive.)</i></div>\n<div>For videos uploaded or licensed after July 2025 use <a href=\"//commons.wikimedia.org/wiki/Template:YouTube_CC-BY_4.0\" title=\"Template:YouTube CC-BY 4.0\"><span style=\"font-family:monospace,monospace;\">{{YouTube CC-BY 4.0}}</span></a></div>\n<div style=\"font-size:smaller; margin:0.75em 0;\"><b><u>To the uploader</u></b>: You must provide a link (URL) to the original file and the authorship information if available.</div>\n</div>\n<div class=\"responsive-license-cc layouttemplate licensetpl\" dir=\"ltr\" lang=\"en\"><div class=\"rlicense-icons\"><span class=\"skin-invert\" typeof=\"mw:File\"><span title=\"w:en:Creative Commons\"><img alt=\"w:en:Creative Commons\" src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/CC_some_rights_reserved.svg/120px-CC_some_rights_reserved.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"90\" height=\"36\" class=\"mw-file-element\" srcset=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/CC_some_rights_reserved.svg/250px-CC_some_rights_reserved.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"744\" data-file-height=\"300\"></span></span><br>\n<span class=\"skin-invert\" typeof=\"mw:File\"><span title=\"attribution\"><img alt=\"attribution\" src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Cc-by_new_white.svg/40px-Cc-by_new_white.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"24\" height=\"24\" class=\"mw-file-element\" srcset=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Cc-by_new_white.svg/60px-Cc-by_new_white.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"64\" data-file-height=\"64\"></span></span></div><div class=\"rlicense-text\"><div class=\"rlicense-declaration\">This file is licensed under the <a href=\"https://en.wikipedia.org/wiki/en:Creative_Commons\" class=\"extiw\" title=\"w:en:Creative Commons\">Creative Commons</a> <a href=\"//creativecommons.org/licenses/by/3.0/deed.en\" class=\"extiw\" title=\"creativecommons:by/3.0/deed.en\">Attribution 3.0 Unported</a> license.</div><div class=\"rlicense-attr\" style=\"font-weight: bold;\">Attribution: <div style=\"display:inline;font-size:larger;\" class=\"licensetpl_attr\">PDX Aviation - HD(ish) Plane Spotting</div></div><div class=\"rlicense-desc\" style=\"text-align:start;\" dir=\"ltr\" lang=\"en\">\n<dl><dd>You are free:\n<ul><li><b>to share</b> – to copy, distribute and transmit the work</li>\n<li><b>to remix</b> – to adapt the work</li></ul></dd>\n<dd>Under the following conditions:\n<ul><li><b>attribution</b> – You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</li></ul></dd></dl>\n</div><span class=\"licensetpl_link\" style=\"display:none;\">https://creativecommons.org/licenses/by/3.0</span><span class=\"licensetpl_short\" style=\"display:none;\">CC BY 3.0 </span><span class=\"licensetpl_long\" style=\"display:none;\">Creative Commons Attribution 3.0 </span><span class=\"licensetpl_link_req\" style=\"display:none;\">true</span><span class=\"licensetpl_attr_req\" style=\"display:none;\">true</span></div></div>\n</div>\n<style data-mw-deduplicate=\"TemplateStyles:r892700814\">.mw-parser-output .license-review-passed{width:100%;margin:0.5em auto;background:var(--background-color-success-subtle,#d5fdf4);padding:5px;border:1px solid var(--border-color-base,#a2a9b1)}.mw-parser-output .license-review-failed{width:100%;margin:0.5em auto;background:var(--background-color-error-subtle,#fee7e6);padding:5px;border:1px solid var(--border-color-base,#a2a9b1)}.mw-parser-output .license-review-needed{width:100%;margin:0.5em auto;background:var(--background-color-warning-subtle,#fef6e7);padding:5px;border:1px solid var(--border-color-base,#a2a9b1)}</style>\n<table class=\"license-review-passed\" lang=\"en\" dir=\"ltr\">\n\n<tbody><tr>\n<td><span typeof=\"mw:File\"><span><img alt=\"YouTube logo\" src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/YouTube_2024.svg/120px-YouTube_2024.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"120\" height=\"26\" class=\"mw-file-element\" srcset=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/YouTube_2024.svg/250px-YouTube_2024.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"1469\" data-file-height=\"317\"></span></span>\n</td>\n<td rowspan=\"2\" style=\"width:100%; padding-left:0.5em;\">This file, which was originally posted to <bdi lang=\"en\" dir=\"ltr\"><a href=\"//commons.wikimedia.org/wiki/Commons:YouTube_files\" title=\"Commons:YouTube files\">YouTube</a>: <a rel=\"nofollow\" class=\"external text\" href=\"https://www.youtube.com/watch?v=2wtNAXyePJ8\"><bdi lang=\"\">FedEx 757-200 -N962FD- Takeoff Portland Airport (PDX)</bdi></a></bdi> (<a rel=\"nofollow\" class=\"external text\" href=\"https://web.archive.org/web/20200213140730/https://www.youtube.com/watch?v=2wtNAXyePJ8\">archive</a>), was reviewed on 13 February 2020 by the automatic software <a href=\"//commons.wikimedia.org/wiki/User:YouTubeReviewBot\" title=\"User:YouTubeReviewBot\">YouTubeReviewBot</a>, which confirmed that this video was available there under the stated Creative Commons license on that date. This file should not be deleted if the license has changed in the meantime. The Creative Commons license is irrevocable.\n<p>The bot <b>only</b> checks for the license, human review is still required to check if the video is a <a href=\"//commons.wikimedia.org/wiki/Special:MyLanguage/Commons:Derivative_works\" title=\"Special:MyLanguage/Commons:Derivative works\">derivative work</a>, has <a href=\"//commons.wikimedia.org/wiki/Special:MyLanguage/Commons:Freedom_of_panorama\" title=\"Special:MyLanguage/Commons:Freedom of panorama\">freedom of panorama</a> related issues and other copyright problems that might be present in the video. Visit <a href=\"//commons.wikimedia.org/wiki/Special:MyLanguage/Commons:Licensing\" title=\"Special:MyLanguage/Commons:Licensing\">licensing</a> for more information. If you are a <a href=\"//commons.wikimedia.org/wiki/Special:MyLanguage/Commons:License_review\" title=\"Special:MyLanguage/Commons:License review\">license reviewer</a>, you can review this file by manually appending <code>|reviewer={{subst:REVISIONUSER}}</code> to this template.\n</p>\n</td></tr>\n<tr>\n<td style=\"padding-top:5px;\"><span class=\"skin-invert\" typeof=\"mw:File\"><span><img alt=\"Creative Commons logo\" src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/CC-logo.svg/120px-CC-logo.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"120\" height=\"29\" class=\"mw-file-element\" srcset=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/CC-logo.svg/250px-CC-logo.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"512\" data-file-height=\"123\"></span></span>\n</td></tr></tbody></table>",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseShortName": {
+                  "value": "CC BY 3.0",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "UsageTerms": {
+                  "value": "Creative Commons Attribution 3.0",
+                  "source": "commons-desc-page"
+                },
+                "AttributionRequired": {
+                  "value": "true",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Attribution": {
+                  "value": "PDX Aviation - HD(ish) Plane Spotting",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseUrl": {
+                  "value": "https://creativecommons.org/licenses/by/3.0",
+                  "source": "commons-desc-page"
+                },
+                "Copyrighted": {
+                  "value": "True",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Restrictions": {
+                  "value": "",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "License": {
+                  "value": "cc-by-3.0",
+                  "source": "commons-templates",
+                  "hidden": ""
+                }
+              }
+            }
+          ]
+        },
+        "94505036": {
+          "pageid": 94505036,
+          "ns": 6,
+          "title": "File:Plane Spotting FedEx cargo (The World On Time) Runway Takeoff at Taoyuan Airport 桃園機場起飛.webm",
+          "imagerepository": "local",
+          "imageinfo": [
+            {
+              "size": 262861579,
+              "width": 1920,
+              "height": 1080,
+              "duration": 1299.461,
+              "url": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Plane_Spotting_FedEx_cargo_%28The_World_On_Time%29_Runway_Takeoff_at_Taoyuan_Airport_%E6%A1%83%E5%9C%92%E6%A9%9F%E5%A0%B4%E8%B5%B7%E9%A3%9B.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+              "descriptionurl": "https://commons.wikimedia.org/wiki/File:Plane_Spotting_FedEx_cargo_(The_World_On_Time)_Runway_Takeoff_at_Taoyuan_Airport_%E6%A1%83%E5%9C%92%E6%A9%9F%E5%A0%B4%E8%B5%B7%E9%A3%9B.webm",
+              "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=94505036",
+              "extmetadata": {
+                "DateTime": {
+                  "value": "2020-09-27 21:47:23",
+                  "source": "mediawiki-metadata",
+                  "hidden": ""
+                },
+                "ObjectName": {
+                  "value": "Plane Spotting FedEx cargo (The World On Time) Runway Takeoff at Taoyuan Airport 桃園機場起飛",
+                  "source": "mediawiki-metadata"
+                },
+                "CommonsMetadataExtension": {
+                  "value": 1.2,
+                  "source": "extension",
+                  "hidden": ""
+                },
+                "Categories": {
+                  "value": "Media from YouTube|WebM videos|Airports in Taiwan|November 2017 in Taiwan|Files from external sources with reviewed licenses|2017-11-25|Videos of 2017 from Taiwan|Video display resolution 1920 x 1080|Boeing 767-300F of FedEx Express|McDonnell Douglas MD-11(F) of FedEx Express|FedEx aircraft",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "Assessments": {
+                  "value": "",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "ImageDescription": {
+                  "value": "Plane Spotting  FedEx cargo (The World On Time) Runway Takeoff at Taoyuan Airport 桃園機場起飛",
+                  "source": "commons-desc-page"
+                },
+                "DateTimeOriginal": {
+                  "value": "Published on 25 November 2017",
+                  "source": "commons-desc-page"
+                },
+                "Credit": {
+                  "value": "<bdi lang=\"en\" dir=\"ltr\"><a href=\"//commons.wikimedia.org/wiki/Commons:YouTube_files\" title=\"Commons:YouTube files\">YouTube</a>: <a rel=\"nofollow\" class=\"external text\" href=\"https://www.youtube.com/watch?v=eK5WCQd0QSc\"><bdi lang=\"\">Plane Spotting  FedEx cargo (The World On Time) Runway Takeoff at Taoyuan Airport 桃園機場起飛</bdi></a> – View/save archived versions on <a rel=\"nofollow\" class=\"external text\" href=\"https://web.archive.org/web/*/https://www.youtube.com/watch?v=eK5WCQd0QSc\">archive.org</a></bdi>",
+                  "source": "commons-desc-page"
+                },
+                "Artist": {
+                  "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.youtube.com/user/joinns\">small Jia</a>",
+                  "source": "commons-desc-page"
+                },
+                "LicenseShortName": {
+                  "value": "CC BY 3.0",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "UsageTerms": {
+                  "value": "Creative Commons Attribution 3.0",
+                  "source": "commons-desc-page"
+                },
+                "AttributionRequired": {
+                  "value": "true",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Attribution": {
+                  "value": "small Jia",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseUrl": {
+                  "value": "https://creativecommons.org/licenses/by/3.0",
+                  "source": "commons-desc-page"
+                },
+                "Copyrighted": {
+                  "value": "True",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Restrictions": {
+                  "value": "",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "License": {
+                  "value": "cc-by-3.0",
+                  "source": "commons-templates",
+                  "hidden": ""
+                }
+              }
+            }
+          ]
+        },
+        "72391408": {
+          "pageid": 72391408,
+          "ns": 6,
+          "title": "File:UPS 767-300F (N360UP) Takeoff Portland Airport (PDX).ogv",
+          "imagerepository": "local",
+          "imageinfo": [
+            {
+              "size": 65427215,
+              "width": 1920,
+              "height": 1080,
+              "duration": 66.73414965986395,
+              "url": "https://upload.wikimedia.org/wikipedia/commons/c/c6/UPS_767-300F_%28N360UP%29_Takeoff_Portland_Airport_%28PDX%29.ogv?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+              "descriptionurl": "https://commons.wikimedia.org/wiki/File:UPS_767-300F_(N360UP)_Takeoff_Portland_Airport_(PDX).ogv",
+              "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=72391408",
+              "extmetadata": {
+                "DateTime": {
+                  "value": "2018-09-05 04:28:28",
+                  "source": "mediawiki-metadata",
+                  "hidden": ""
+                },
+                "ObjectName": {
+                  "value": "UPS 767-300F (N360UP) Takeoff Portland Airport (PDX)",
+                  "source": "mediawiki-metadata"
+                },
+                "CommonsMetadataExtension": {
+                  "value": 1.2,
+                  "source": "extension",
+                  "hidden": ""
+                },
+                "Categories": {
+                  "value": "Media from YouTube|June 2017 in the United States|Files from external sources with reviewed licenses|Media of the day|Ogv videos|Uploaded with video2commons|Video display resolution 1920 x 1080|Videos of 2017 from the United States|Videos by PDX Aviation - HD(ish) Plane Spotting|Videos taken on 2017-07-13|Boeing 767-300 take offs|Aircraft at Portland International Airport|N360UP (aircraft)|UPS Airlines aircraft at Portland International Airport",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "Assessments": {
+                  "value": "",
+                  "source": "commons-categories",
+                  "hidden": ""
+                },
+                "ImageDescription": {
+                  "value": "Flight: UPS973 PDX-SDF\n<p>Date: June 13, 2017\n</p>\nTaking off from runway 28L",
+                  "source": "commons-desc-page"
+                },
+                "DateTimeOriginal": {
+                  "value": "Taken on 13 July 2017, Upload date:  20 October 2017",
+                  "source": "commons-desc-page"
+                },
+                "Credit": {
+                  "value": "<bdi lang=\"en\" dir=\"ltr\"><a href=\"//commons.wikimedia.org/wiki/Commons:YouTube_files\" title=\"Commons:YouTube files\">YouTube</a>: <a rel=\"nofollow\" class=\"external text\" href=\"https://www.youtube.com/watch?v=DSJJamSYfyE\"><bdi lang=\"\">UPS 767-300F [N360UP] Takeoff Portland Airport (PDX)</bdi></a> – View/save archived versions on <a rel=\"nofollow\" class=\"external text\" href=\"https://web.archive.org/web/*/https://www.youtube.com/watch?v=DSJJamSYfyE\">archive.org</a></bdi>",
+                  "source": "commons-desc-page"
+                },
+                "Artist": {
+                  "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.youtube.com/user/buybygb\">PDX Aviation - HD(ish) Plane Spotting</a>",
+                  "source": "commons-desc-page"
+                },
+                "Permission": {
+                  "value": "This file, which was originally posted to\n<a rel=\"nofollow\" class=\"external text\" href=\"https://www.youtube.com/watch?v=DSJJamSYfyE\">YouTube</a>, was reviewed on 15 July 2019 by <a href=\"//commons.wikimedia.org/wiki/Commons:License_review#Reviewers\" title=\"Commons:License review\">reviewer</a> <b><a href=\"//commons.wikimedia.org/wiki/User:Jdx\" title=\"User:Jdx\">Jdx</a></b>, who confirmed that it was available there under the stated license on that date.",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseShortName": {
+                  "value": "CC BY 3.0",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "UsageTerms": {
+                  "value": "Creative Commons Attribution 3.0",
+                  "source": "commons-desc-page"
+                },
+                "AttributionRequired": {
+                  "value": "true",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Attribution": {
+                  "value": "PDX Aviation - HD(ish) Plane Spotting",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "LicenseUrl": {
+                  "value": "https://creativecommons.org/licenses/by/3.0",
+                  "source": "commons-desc-page"
+                },
+                "Copyrighted": {
+                  "value": "True",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "Restrictions": {
+                  "value": "",
+                  "source": "commons-desc-page",
+                  "hidden": ""
+                },
+                "License": {
+                  "value": "cc-by-3.0",
+                  "source": "commons-templates",
+                  "hidden": ""
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+]

@@ -1,4 +1,5 @@
-import {createDecibelExplorer} from './decibel-experiment.mjs?v=1';
+import {loadDecibelRecording,createDecibelVoice} from './decibel-audio.mjs?v=1';
+import {createDecibelExplorer} from './decibel-experiment.mjs?v=2';
 import {signal,soundSamples,challenge,checkSettings} from './model.mjs?v=1';
 import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
 import {createForkExperiment} from './fork-experiment.mjs?v=2';
@@ -14,7 +15,7 @@ import {createHearingVoice} from './hearing-audio.mjs?v=1';
 import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const state={frequency:400,index:0};
-let forkView,pitchView,guitarView,panView,timbreView,hearingView,hearingVoice=null;
+let forkView,pitchView,guitarView,panView,timbreView,hearingView,decibelView,decibelVoice=null,hearingVoice=null;
 const FORK_OUTPUT_GAIN=6;
 const PITCH_OUTPUT_GAIN=14;
 const names={pure:'純音',string:'弦音示意',pipe:'管音示意'};
@@ -32,11 +33,12 @@ function wave(id,frequency,amplitude,tone='pure',compact=false){
 function stop(root=activeRoot){
  if(root && activeRoot && root!==activeRoot)return;
  request++;
- if(hearingVoice){source.onended=null;hearingVoice.stop();hearingVoice=null;source=null;}
+ if(decibelVoice){source.onended=null;decibelVoice.stop();decibelVoice=null;source=null;}
+ else if(hearingVoice){source.onended=null;hearingVoice.stop();hearingVoice=null;source=null;}
  else if(source){source.onended=null;try{source.stop();}catch{}source.disconnect();source=null;}
  cancelAnimationFrame(animation);animation=0;
  if(activeRoot){activeRoot.dataset.playing='false';activeRoot.querySelectorAll('.stop').forEach(b=>b.disabled=true);activeRoot.querySelector('.play-state').textContent='已停止，點擊可重新播放';}
- activeRoot=null;forkView?.stop();pitchView?.stop();guitarView?.stop();panView?.stop();timbreView?.stop();hearingView?.stop();
+ activeRoot=null;decibelView?.stop();forkView?.stop();pitchView?.stop();guitarView?.stop();panView?.stop();timbreView?.stop();hearingView?.stop();
 }
 function config(key){
  if(key.startsWith('pan-'))return panView.settings(Number(key.slice(4)));
@@ -182,5 +184,22 @@ $('card-04').querySelector('[data-pan-reset]').addEventListener('click',()=>{sto
 timbreView=createTimbreExperiment($('card-05'));
 hearingView=createHearingExperiment($('card-06'),{onToggle:toggleHearing,onFrequency:tuneHearing,onReset:()=>stop($('card-06'))});
 $('card-06').addEventListener('pointerdown',()=>{if(activeRoot&&activeRoot!==$('card-06'))stop();},true);
-createDecibelExplorer($('card-07'),{onInteract:()=>stop()});
+async function playDecibel(){
+ const root=$('card-07'),scene=decibelView.scene;
+ stop();const ticket=++request;activeRoot=root;decibelView.mode('preparing');
+ try{
+  const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)throw Error('unsupported');
+  audioContext??=new Audio();await audioContext.resume();
+  if(ticket!==request||document.hidden)return;
+  const buffer=await loadDecibelRecording(scene.key,audioContext);
+  if(ticket!==request||document.hidden)return;
+  decibelVoice=createDecibelVoice(audioContext,buffer);source=decibelVoice.source;
+  const current=source;source.onended=()=>{if(source===current){stop(root);decibelView.mode('stopped','播放完畢，可再次播放場景聲音');}};
+  root.dataset.audioScene=scene.key;decibelView.mode('playing');decibelVoice.start();
+ }catch{if(ticket!==request)return;stop(root);decibelView.mode('error','場景聲音暫時無法載入，請按播放重試。');}
+}
+decibelView=createDecibelExplorer($('card-07'),{
+ onInteract:()=>{if(activeRoot&&activeRoot!==$('card-07'))stop();},
+ onSceneChange:()=>{if(activeRoot===$('card-07'))playDecibel();},onPlay:playDecibel
+});
 newChallenge();activeLink(location.hash||'#card-01');

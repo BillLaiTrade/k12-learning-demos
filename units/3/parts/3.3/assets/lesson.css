@@ -594,3 +594,17 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .decibel-landmarks{font-size:.65rem;height:28px}.decibel-landmarks>span{padding:1px 8px}.decibel-landmarks>i{top:-37px}
 .decibel-explorer>p{font-size:.63rem}.decibel-facts{grid-template-columns:1fr;gap:8px}.decibel-facts>div{padding:10px}.card-main .decibel-facts h3{font-size:.82rem}.decibel-facts p{font-size:.7rem}.card-main>.decibel-note,.card-main>.decibel-sources{font-size:.65rem}
 }
+
+/* 第七區沿用原場景大圖，播放入口不改變圖像取景。 */
+.decibel-photo{position:relative}
+.decibel-picture-play{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;cursor:pointer;border-radius:inherit}
+.decibel-picture-play>span{position:absolute;right:16px;bottom:16px;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;color:#fff;background:#205b55e8;box-shadow:0 3px 14px #122d2933}
+.decibel-picture-play:hover>span,.decibel-picture-play[aria-pressed=true]>span{background:#173f3a}
+.decibel-picture-play:focus-visible{outline:3px solid #d28a29;outline-offset:-5px}
+.decibel-listening{margin:18px 0 24px}
+.decibel-listening .play-state{min-height:1.5em;margin:10px 0;color:#315b55}
+.decibel-listening-note,.decibel-audio-sources{font-size:.9rem;line-height:1.7;color:#53635e}
+.decibel-audio-sources{margin:18px 0;padding:14px 18px;border:1px solid #d8e3da;border-radius:14px;background:#f8faf6;overflow-wrap:anywhere}
+.decibel-audio-sources summary{cursor:pointer;font-weight:700;color:#2f554d}
+.decibel-audio-sources li{margin:10px 0}
+@media(max-width:600px){.decibel-listening .button-row{flex-wrap:wrap}.decibel-picture-play>span{width:42px;height:42px;right:10px;bottom:10px}}
