@@ -1,4 +1,4 @@
-import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessNotebook,measuredMasses,measurementHint} from './investigation-state.js?v=filter-liquid-1';
+import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessNotebook,measuredMasses,measurementHint} from './investigation-state.js?v=retry-button-1';
 import {loadPicture,createRenderer} from './investigation-renderer.js?v=filtrate-to-scale-1';
 
 const root=document.getElementById('invest-lab');
