@@ -306,3 +306,13 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .guitar-note{text-align:center;margin:11px 0 16px;color:#6b7a70;font-size:.75rem;line-height:1.6}
 @media(min-width:761px) and (max-width:1100px){.guitar-bench{gap:10px}.guitar-play{font-size:.77rem}.guitar-tools{padding:0 92px 0 0}.guitar-mode-switch button{padding-inline:13px}.guitar-drag-hint{font-size:.68rem;top:7px;right:7px}.guitar-tension-tools button{padding:4px 5px;font-size:.7rem}.guitar-tension-tools output{min-width:55px;font-size:.7rem}}
 @media(max-width:600px){.guitar-bench{grid-template-columns:1fr;gap:18px}.guitar-tools{padding:0;justify-content:space-between;gap:6px}.guitar-reset{position:static;font-size:.76rem}.guitar-mode-switch button{padding:6px 12px;font-size:.84rem}.guitar-play{font-size:.86rem}.guitar-frequency{font-size:1.55rem}.guitar-drag-hint{font-size:.71rem}.guitar-readout{font-size:.85rem}}
+
+/* 桌機上下對照：每列圖與操作並排，讓兩把琴同時可見。 */
+@media(min-width:601px){
+.guitar-drag-hint{right:auto}
+.guitar-column{display:grid;grid-template-columns:minmax(0,2fr) minmax(160px,1fr);grid-template-rows:auto 1fr 1fr}
+.card-main .guitar-column>h3{grid-column:1/-1}
+.guitar-stage{grid-column:1;grid-row:2/4;width:100%;max-width:480px;margin-inline:auto}
+.guitar-readout{grid-column:2;grid-row:2;align-self:end;margin-bottom:7px;flex-wrap:wrap}
+.guitar-play{grid-column:2;grid-row:3;align-self:start;margin-top:0;white-space:normal}
+}
