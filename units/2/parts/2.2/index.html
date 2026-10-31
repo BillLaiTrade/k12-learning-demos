@@ -93,12 +93,10 @@
     .filter-observation-close {display:grid;place-items:center;flex:none;width:36px;height:36px;border:1px solid #cddbd1;border-radius:50%;background:#fff;color:#315345;font-size:1.3rem;cursor:pointer;}
     .filter-observation canvas {display:block;width:100%;height:auto;max-height:55vh;object-fit:contain;border-radius:12px;background:#edf4ee;}
     .filter-observation p {margin:12px 0 0;font-size:.9rem;line-height:1.7;}
-    .filter-play-cue {position:absolute;right:12px;bottom:12px;display:none;place-items:center;width:38px;height:38px;padding:6px;border:1px solid #bdc8bf;border-radius:10px;background:#ffffffeb;color:#176b53;pointer-events:none;}
-    .filter-play-cue svg {width:23px;height:23px;}
-    .filter-animation:is([data-state="ready"],[data-state="complete"]) .filter-play-cue {display:grid;}
-    .filter-play-cue .filter-replay-icon {display:none;}
-    .filter-animation[data-state="complete"] .filter-start-icon {display:none;}
-    .filter-animation[data-state="complete"] .filter-replay-icon {display:block;}
+    .filter-reset {position:absolute;right:12px;bottom:12px;z-index:3;display:grid;place-items:center;width:38px;height:38px;padding:6px;border:1px solid #bdc8bf;border-radius:10px;background:#ffffffeb;color:#176b53;cursor:pointer;}
+    .filter-reset svg {width:23px;height:23px;}
+    .filter-reset:disabled {opacity:.45;cursor:default;}
+    .filter-reset:focus-visible {outline:3px solid #176b53;outline-offset:2px;}
     .filter-hotspot.sample {left:22%;top:93.5%;}
     .filter-hotspot.filter {left:65%;top:36%;}
     .filter-hotspot.result {left:64%;top:78%;}
@@ -195,7 +193,7 @@
             <span class="filter-hotspot sample" data-filter-label="sample">樣本</span>
             <button class="filter-hotspot filter" data-filter-label="filter" type="button" aria-label="放大觀察濾紙上的泥沙" aria-haspopup="dialog" aria-controls="filter-observation" disabled>濾紙</button>
             <button class="filter-hotspot result" data-filter-label="result" type="button" aria-label="放大觀察濾液" aria-haspopup="dialog" aria-controls="filter-observation" disabled>接液杯</button>
-            <span class="filter-play-cue" aria-hidden="true"><svg class="filter-start-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg><svg class="filter-replay-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></span>
+            <button class="filter-reset" id="filter-reset" type="button" aria-label="恢復過濾初始狀態" title="恢復初始狀態" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></button>
           </div>
           <span id="filter-status" role="status" hidden><svg viewBox="0 0 24 28" aria-hidden="true"><path d="M4 3v18l5-5 4 9 4-2-4-9h7Z"/></svg><span id="filter-instruction"></span></span>
           <dialog class="filter-observation" id="filter-observation" aria-labelledby="filter-observation-title" aria-describedby="filter-observation-copy">
@@ -395,7 +393,7 @@
 
   </script>
   <script type="importmap">{"imports":{"three":"../../../4/parts/4.1/assets/vendor/three/build/three.module.js"}}</script>
-  <script type="module" src="assets/filtration.js?v=click-guidance-1"></script>
+  <script type="module" src="assets/filtration.js?v=reset-state-1"></script>
   <script type="module" src="assets/evaporation-animation.js?v=full-replay-1"></script>
   <script type="module" src="assets/chromatography.js?v=state-guidance-1"></script>
   <script type="module" src="assets/concentration.js?v=outside-clear-1"></script>

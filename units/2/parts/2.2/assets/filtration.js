@@ -2,6 +2,7 @@ import {CUP,cupTransfer,drawCup,drawJet} from './cup-transfer.js?v=review-5';
 import {loadPicture} from './investigation-renderer.js?v=review-5';
 const root=document.getElementById('filter-animation'),button=document.getElementById('filter-play'),canvas=document.getElementById('filter-canvas'),status=document.getElementById('filter-status');
 const instruction=document.getElementById('filter-instruction');
+const resetButton=document.getElementById('filter-reset');
 function showInstruction(text){instruction.textContent=text;status.hidden=!text;}
 const ctx=canvas.getContext('2d'),duration=2000,scale=1.6;
 const sampleMarker=root.querySelector('[data-filter-label=sample]'),filterMarker=root.querySelector('[data-filter-label=filter]'),resultMarker=root.querySelector('[data-filter-label=result]');
@@ -45,7 +46,13 @@ function draw(t){
  for(let i=0;i<Math.round(150*f.arrived);i++){const a=i*2.39996,r=Math.sqrt(((i*73)%151)/151);ctx.fillStyle=['#816244','#b69569','#564634','#c6ae87'][i%4];ctx.beginPath();ctx.ellipse(835+Math.cos(a)*70*r,334+Math.sin(a)*16*r,2.5+(i%3),1.8+(i%2),a,0,Math.PI*2);ctx.fill();}
  ctx.save();ctx.scale(scale,scale);drawCup(ctx,glass,f,1);drawJet(ctx,f.stream,true,6);drawJet(ctx,f.outlet,false,4);ctx.restore();
  root.dataset.progress=t.toFixed(4);root.dataset.source=f.source.toFixed(6);root.dataset.received=f.received.toFixed(6);root.dataset.retained=f.arrived.toFixed(6);root.dataset.state=t>=1?'complete':playing?'playing':'ready';
+ resetButton.disabled=!playing&&t===0;
 }
+resetButton.addEventListener('click',event=>{
+ event.stopPropagation();cancelAnimationFrame(frame);frame=0;playing=false;elapsed=0;started=0;delete root.dataset.paused;
+ if(observation.open)observation.close();
+ button.setAttribute('aria-label','播放過濾動畫');draw(0);showInstruction('點圖片任意處，觀察過濾過程');
+});
 function tick(now){if(!playing)return;elapsed=Math.max(0,Math.min(duration,now-started));draw(elapsed/duration);if(elapsed<duration)frame=requestAnimationFrame(tick);else{playing=false;button.setAttribute('aria-label','重新播放過濾動畫');showInstruction('點濾紙或濾液，放大觀察');}}
 function play(){if(!background||!glass)return;if(observation.open)observation.close();cancelAnimationFrame(frame);delete root.dataset.paused;elapsed=0;playing=true;started=performance.now();showInstruction('');button.setAttribute('aria-label','從頭播放過濾動畫');draw(0);frame=requestAnimationFrame(tick);}
 function observe(kind){
