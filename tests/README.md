@@ -600,3 +600,13 @@ CHROMIUM_PATH=/usr/bin/chromium GAS_PROPERTIES_ARTIFACT_DIR=/tmp/unit23-properti
 共67項（含外層）：新增properties10、氧氣模型4、五步／木條11、材質場景8、整頁9、小測模型4、三種知識卡各7。新增檢查六區無重複ID、03／04只有製備收集、05集中兩種氣體與石灰水、來源／下一區／小測回看、同餘燼同步深度／時間、氧氣復燃／二氧化碳漸暗未復燃、暫停實際像素、跨播放器互相暫停、快速重播、鍵盤／背景／離區、七寬度兩瓶並列、觸控／減少動態／無JS及唯一小測。原杯子專項僅更新六區導覽預期，未重跑拖曳／保水全套；整頁已檢查杯子預設比較與重設，源碼保存證據見本輪review。
 
 `GAS_PROPERTIES_URL` 可指定公開2.3頁面，`GAS_PROPERTIES_ARTIFACT_DIR` 保存新區截圖；其餘URL／截圖變數沿用各測試。證據見 `docs/reviews/unit-2.3-properties-block/`。原第五區小測現在為第六區，舊#s5為性質比較。
+
+## 2.3準備材料：物品本體與名稱點選介紹（2026-10-31）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_MATERIALS_ARTIFACT_DIR=/tmp/unit23-material-exploration node --test --test-concurrency=1 tests/unit-2.3-materials.test.cjs tests/unit-2.3-oxygen.test.cjs tests/unit-2.3-oxygen-three.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-properties.test.cjs
+```
+
+本機48項全通過、零失敗／略過（含外層）：材料介紹10、五步／木條11、材質場景8、整頁9、性質比較10。材料專項驗證七個原生控制、照片本體座標實際命中、標籤／Enter／空白、兩段介紹與ARIA連結、點選停止可選導覽並保留選擇、離開後返回、七寬度最小44px目標／不溢出、真實觸控／減少動態、氧氣來源與催化劑／排氣／水下蓋片界線及無JS完整可讀。專項不取代其他教材的拖曳或氣體知識卡完整測試。
+
+`OXYGEN_MATERIALS_URL` 可指定公開完整網址，`OXYGEN_MATERIALS_ARTIFACT_DIR`保存七項在1440／390／320px的畫面。其餘URL沿用各測試；公開頁材料＋氧氣＋整頁可跑30項。紀錄見 `docs/reviews/unit-2.3-material-exploration/`。

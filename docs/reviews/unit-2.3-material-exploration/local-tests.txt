@@ -1,0 +1,61 @@
+▶ 2.3 complete page: five teaching sections and one evidence-based quiz
+  ✔ all six sections and routes exist, with gas profiles and no retired experiment (118.953481ms)
+  ✔ default cup comparisons remain after preview and reset (135.586214ms)
+  ✔ oxygen navigates one step at a time; carbon dioxide retains its replay (858.439439ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (288.147484ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (568.275321ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (4344.326265ms)
+  ✔ all teaching evidence is available without JavaScript (1333.323705ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (13272.289625ms)
+✔ 2.3 complete page: five teaching sections and one evidence-based quiz (22507.644023ms)
+▶ 2.3 materials: seven illustrated objects explain identity and experimental role
+  ✔ native controls connect each object to a persistent two-part introduction; initial state does not autoplay (211.359596ms)
+  ✔ actual photo object bodies select all seven introductions, independently of the name labels (521.646378ms)
+  ✔ labels, Enter and Space operate the same native controls and retain keyboard focus (165.724753ms)
+  ✔ manual selection stops the optional tour and remains readable; explicitly replaying the tour still works (209.675892ms)
+  ✔ selected knowledge survives leaving and returning to materials; assembly remains its own scene (163.988601ms)
+  ✔ seven responsive widths keep touch targets within the photo and all introductions within the page (5778.997534ms)
+  ✔ mobile touch and reduced motion select real object bodies and retain the explanation (1498.045787ms)
+  ✔ explanations identify oxygen source, catalyst, purge, displacement and covering in the correct order (51.185538ms)
+  ✔ without JavaScript all seven introductions remain readable alongside the original materials photo (923.205627ms)
+✔ 2.3 materials: seven illustrated objects explain identity and experimental role (11180.182417ms)
+▶ 2.3 oxygen: step-specific material scenes and physical collection states
+  ✔ materials are unassembled; each experiment screen shares the glass plate without WebGL (81.461142ms)
+  ✔ assembly visibly places the jar, pours peroxide, adds catalyst and seals before routing gas (1976.771783ms)
+  ✔ purge holds a full jar, with every bubble outside it and below the external water surface (245.023809ms)
+  ✔ collection moves the tube before displacement and confines bubbles to remaining water (322.140757ms)
+  ✔ pausing freezes water, bubbles, arrows and the mobile shared SVG scene (893.461605ms)
+  ✔ the fifth step withdraws before covering; complete frame never leaves this step (450.496886ms)
+  ✔ the selected main view, mobile close-up and headings agree after returning to an earlier step (985.383952ms)
+✔ 2.3 oxygen: step-specific material scenes and physical collection states (6522.622344ms)
+▶ 2.3 oxygen: five learner-controlled steps and independent splint comparison
+  ✔ initial view contains materials and preparation only; comparison results and original avatars stay available (518.154275ms)
+  ✔ next includes assembly before purge, then collection and covering; each animation stays selected (1086.627727ms)
+  ✔ previous and direct selection restart that step; final next focuses the carbon dioxide collection lesson (210.466932ms)
+  ✔ one replay control pauses and resumes the selected scene; rapid selection cancels old clocks (852.007055ms)
+  ✔ tabs support arrows, Home, End, Enter, Escape and focus never remains in a hidden panel (162.385848ms)
+  ✔ background, leaving the block and starting the other player pause without automatic restart (306.705616ms)
+  ✔ two wooden splints keep identical entry timing and only oxygen develops a frozen or replayed flame (428.928485ms)
+  ✔ all five selected screens and controls fit seven widths, with side-by-side wood samples (6655.57418ms)
+  ✔ touch and reduced motion keep manual navigation and bounded essential animation (1517.70483ms)
+  ✔ without JavaScript all five stage-specific scenes, explanations and final wood results are readable (1073.891117ms)
+✔ 2.3 oxygen: five learner-controlled steps and independent splint comparison (14494.613045ms)
+▶ 2.3 collected gases: preparation, property comparison and final quiz are separate
+  ✔ six sections have unique IDs and routes; only section five owns the property observations (81.490667ms)
+  ✔ known oxygen and carbon dioxide are linked to their collection lessons and retain visible completed results (40.824096ms)
+  ✔ both glowing splints enter at identical depth and time, then oxygen relights while carbon dioxide fades (379.417403ms)
+  ✔ pause freezes both visible samples and flame; resume, reset and rapid replay preserve sample roles (707.615046ms)
+  ✔ keyboard, Escape, background and competing preparation players stop the comparison without resetting collected samples (363.945394ms)
+  ✔ sample source links, collection-next links and revised quiz feedback point to the right sections (615.132206ms)
+  ✔ matched samples stay beside each other and all revised lessons fit seven desktop and mobile widths (1393.372554ms)
+  ✔ touch and reduced motion retain essential manual comparison and the new last quiz route (1276.119111ms)
+  ✔ without JavaScript both gas results, separate limewater evidence, source links and six sections remain readable (1062.32867ms)
+✔ 2.3 collected gases: preparation, property comparison and final quiz are separate (7481.009548ms)
+ℹ tests 48
+ℹ suites 0
+ℹ pass 48
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 64114.36391

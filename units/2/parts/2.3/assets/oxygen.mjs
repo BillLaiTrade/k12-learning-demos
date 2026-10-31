@@ -5,6 +5,20 @@ const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
 const panels = [...panel.querySelectorAll('[data-step-panel]')];
 const players = [];
 
+const materialButtons=[...panels[0].querySelectorAll('[data-material]')];
+const materialInfo=[...panels[0].querySelectorAll('[data-material-info]')];
+const materialDetails=panels[0].querySelector('[data-material-details]');
+let selectedMaterial='source', materialInitialized=false;
+function showMaterial(key) {
+  if(!materialButtons.some(button=>button.dataset.material===key))return;
+  if(materialInitialized&&selectedMaterial===key)return;
+  selectedMaterial=key;materialInitialized=true;
+  panels[0].dataset.materialCurrent=key;
+  materialButtons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.material===key)));
+  materialInfo.forEach(info=>{info.hidden=info.dataset.materialInfo!==key;});
+  panels[0].querySelector('.oxygen-water-prep').classList.toggle('is-highlighted',key==='jar');
+}
+
 function renderPreparation(stage, elapsed, state) {
   const f = preparationStepFrame(stage, elapsed);
   const view = panels[stage];
@@ -12,9 +26,9 @@ function renderPreparation(stage, elapsed, state) {
   panel.dataset.tipX = (800+235*f.tube).toFixed(3);
   panel.dataset.cover = f.cover.toFixed(4);
   if (stage === 0) {
-    view.querySelectorAll('[data-material]').forEach(label => label.classList.toggle('is-highlighted', label.dataset.material === ['source','catalyst',''][f.material]));
-    view.querySelector('.oxygen-water-prep').classList.toggle('is-highlighted', f.material === 2);
-    return state === 'ready' ? '準備材料：先認識材料用途，再按下一步。' : f.material === 0 ? '雙氧水是製備氧氣的來源。' : f.material === 1 ? '二氧化錳加快雙氧水分解，不是氧氣來源。' : '集氣瓶先裝滿水，倒置在水中；準備好後按下一步。';
+    if(state==='playing')showMaterial(['source','catalyst','jar'][f.material]);
+    const name=materialInfo.find(info=>info.dataset.materialInfo===selectedMaterial).querySelector('h4').textContent;
+    return state==='ready' ? `正在認識${name}；可點選其他物品，或按下一步。` : f.material===0 ? '雙氧水是製備氧氣的來源。' : f.material===1 ? '二氧化錳加快雙氧水分解，不是氧氣來源。' : '集氣瓶先裝滿水，倒置在水中；準備好後按下一步。';
   }
   if (stage === 1) return renderAssembly(elapsed, state, view);
   const $ = part => view.querySelector(`[data-part="${part}"]`);
@@ -161,6 +175,17 @@ function createPreparationPlayer() {
       if(target!==undefined){event.preventDefault();select(target);steps[target].focus();}
     });
   });
+  materialButtons.forEach(button=>{
+    button.disabled=false;
+    button.addEventListener('click',()=>{
+      cancel();elapsed=0;state='ready';
+      showMaterial(button.dataset.material);paint();
+      const bounds=materialDetails.getBoundingClientRect();
+      if(bounds.bottom>innerHeight||bounds.top<0)materialDetails.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth',block:'nearest'});
+    });
+  });
+  showMaterial(selectedMaterial);
+  materialDetails.setAttribute('aria-live','polite');materialDetails.setAttribute('aria-atomic','true');
   play.addEventListener('click',()=>state==='playing'?pausePlayback():start());
   previous.addEventListener('click',()=>{if(stage>0)select(stage-1,true);});
   next.addEventListener('click',()=>{
