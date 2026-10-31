@@ -7,6 +7,17 @@ let state={...INITIAL},ready=false,animation=null,queue=[],raf=null,gesture=null
 const massButtons=[...document.querySelectorAll('[data-mass-kind]')];
 const massActions=[...massButtons.map(button=>({button,kind:button.dataset.massKind,delta:Number(button.dataset.massDelta)})),{button:pitcher,kind:'water',delta:1}];
 const images={},reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const roleButtons=[...document.querySelectorAll('#s5 [data-mass-role]')];
+const formulaParts=[...document.querySelectorAll('#mass-percent-formula [data-formula-part]')];
+roleButtons.forEach(button=>button.addEventListener('click',()=>{
+  const selected=button.getAttribute('aria-pressed')==='true'?'':button.dataset.massRole;
+  roleButtons.forEach(item=>item.setAttribute('aria-pressed',String(item.dataset.massRole===selected)));
+  formulaParts.forEach(part=>part.classList.toggle('is-highlighted',part.dataset.formulaPart===selected));
+  if(selected){
+    const formula=$('mass-percent-formula'),rect=formula.getBoundingClientRect();
+    if(rect.top<0||rect.bottom>innerHeight)formula.scrollIntoView({block:'nearest',behavior:reduceMotion?'instant':'smooth'});
+  }
+}));
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 function boundaryMessage(){
   const edges=[];
