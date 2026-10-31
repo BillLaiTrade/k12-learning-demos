@@ -275,7 +275,7 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .guitar-mode-switch button[aria-pressed=true]{background:#176b53;color:#fff;box-shadow:0 2px 4px #234c3520}
 .guitar-reset{position:absolute;right:0;min-height:44px;border:0;background:transparent;color:#176b53;font-size:.84rem;font-weight:750;padding:4px}
 .guitar-reset span{font-size:1.25rem;vertical-align:middle}
-.guitar-bench{margin-top:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.guitar-bench{margin-top:16px;display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
 .guitar-column{min-width:0;overflow:hidden;border:1px solid #e0e6dc;border-radius:14px;background:linear-gradient(#fffefa,#f7f9f3)}
 .card-main .guitar-column>h3{margin:0;padding:8px;text-align:center;background:#ecf2e5;color:#234e3a;font-size:1.05rem}
 .guitar-stage{position:relative;isolation:isolate;line-height:0;background:#e9ddc9 url('pitch-room-background.png') center/cover no-repeat}

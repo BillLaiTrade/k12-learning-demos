@@ -102,7 +102,7 @@ test('guitar lesson: real instrument, one variable at a time, synchronized pluck
     await mode(value);await root.scrollIntoViewIfNeeded();
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     const m=await root.evaluate(n=>{const cols=[...n.querySelectorAll('.guitar-column')],rect=(c,s)=>c.querySelector(s).getBoundingClientRect();return {play:cols.map(c=>rect(c,'.guitar-play').top),width:cols.map(c=>c.getBoundingClientRect().width),clipped:[...n.querySelectorAll('button,output')].filter(b=>b.getBoundingClientRect().width>0).some(b=>b.scrollWidth>b.clientWidth+2),out:[...n.querySelectorAll('.guitar-stage')].some(stage=>{const a=stage.getBoundingClientRect(),c=stage.querySelector('.guitar-fret-control');if(!c||c.hidden)return false;const b=c.getBoundingClientRect();return b.left<a.left||b.right>a.right;})};});
-    assert.ok(Math.abs(m.width[0]-m.width[1])<1);if(width>600)assert.ok(Math.abs(m.play[0]-m.play[1])<1);assert.equal(m.clipped,false);assert.equal(m.out,false);
+    assert.ok(Math.abs(m.width[0]-m.width[1])<1);assert.ok(m.play[1]>m.play[0], 'comparison cards are stacked in order at every width');assert.equal(m.clipped,false);assert.equal(m.out,false);
     await root.screenshot({path:path.join(capture,`${value}-${width}.png`)});
    }
   }
