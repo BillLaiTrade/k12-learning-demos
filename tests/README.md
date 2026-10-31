@@ -534,3 +534,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 共12項（含外層）：固定起伏地形與1,500m/s、2／4／6秒模型；發聲才建立A、B、C…（Z後AA）且收到回波才填值；滑鼠／真實手機觸控拖船、按鈕及鍵盤、測量期間鎖船、舊標記不隨船移動、圖表逐筆對應、獨立暫停續播、清除取消與重新編號、跨區／背景停止、啟音失敗重試，以及1440–320px七種寬度。真實4秒與Web Audio最末輸出量測不凍結時鐘；返回副本較弱，暫停後SVG像素保持不變。手機拖曳後第一次觸控發聲須只新增一筆。
 
 測試自行啟停Python與Chromium。`SONAR_URL`可指定以`/`結尾的公開課程入口（可帶版本查詢參數）；公開瀏覽器沿用HTTPS代理。`SONAR_CAPTURE_DIR`指定截圖目錄，預設`/tmp/k12-34-sonar`。本機完整回歸沿用本課第一至三區與整頁指令，不把操作通過視為整單元外部驗收。舊深度滑桿／收合答案／八倍聲納檢查由本專項與整頁新聲納案例取代。
+
+## 3.3 第六區：持續純音頻率探索
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-hearing.test.cjs tests/unit-3.3-timbre.test.cjs tests/unit-3.3.test.cjs tests/unit-3.3-fork.test.cjs tests/unit-3.3-pitch.test.cjs tests/unit-3.3-guitar.test.cjs tests/unit-3.3-pan.test.cjs
+```
+
+第六區專項以瀏覽器OfflineAudioContext實際render驗證20／80／1000／8000／16000／20000Hz、低增益與頭尾餘裕、35ms調頻後的2000Hz及起音10ms就停止；實際頁面攔截OscillatorNode確認持續播放超過短音長度、調頻沿用同一個節點、頻率數值、暫停／重播／跨區取消。另含真實滑鼠拖曳與邊界、鍵盤、端點改寫／防反向／重設、待resume取消與失敗重試、知識文字、八種寬度，以及真實手機touch拖曳後立即暫停、紀錄／重設／點喇叭且每次起音一次。HEARING_CAPTURE_DIR指定截圖目錄，SOUND33_BASE_URL可指向公開頁（以/結尾）。
+
+本輪上述整合75項通過（含外層），0失敗／略過；第六區單獨11項。實際音訊驗證只確認數位訊號，不冒稱驗證喇叭的聲壓輸出或學生聽覺。

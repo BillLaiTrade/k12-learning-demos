@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="比較振幅、頻率與波形，探索琴弦、空氣柱、音色及聽覺範圍，認識分貝的基本讀法。">
 <title>不同的聲音，差別在哪裡？｜3.3 聲音的特性</title>
-<link rel="stylesheet" href="assets/lesson.css?v=21">
-<script type="module" src="assets/lesson.mjs?v=19">
+<link rel="stylesheet" href="assets/lesson.css?v=22">
+<script type="module" src="assets/lesson.mjs?v=20">
 </script>
 </head>
 <body>
@@ -37,7 +37,7 @@
 <a href="#card-03"><b>03</b><span>同一條琴弦，怎麼彈出不同高低的聲音？</span></a>
 <a href="#card-04"><b>04</b><span>排笛的管子長短不同，吹出的聲音會怎麼變？</span></a>
 <a href="#card-05"><b>05</b><span>同樣的音高，為什麼聽得出不同樂器？</span></a>
-<a href="#card-06"><b>06</b><span>有些聲音，我們為什麼聽不到？</span></a>
+<a href="#card-06"><b>06</b><span>你聽得到哪些頻率的聲音？</span></a>
 <a href="#card-07"><b>07</b><span>分貝數字，怎麼幫我們比較聲音大小？</span></a>
 <a href="#unit-quiz" class="quiz-nav"><b aria-hidden="true">✦</b><span>單元小測</span></a>
 </div>
@@ -217,50 +217,29 @@
 <details class="timbre-sources"><summary>錄音來源與波形</summary><p>音叉為近似純音合成示意；吉他與排管實錄均經剪輯調音至共同音高，保留聲音本身的波形與起音／衰減。音量以全段訊號強度近似匹配，聽感仍會受設備影響。圖是該聲音的一小段，並非整段聲音的全部特徵。亮點是讀取波形的標記，不代表空氣粒子向右移動。</p><p>吉他：<a href="https://freesound.org/people/allan764/sounds/467669/" target="_blank" rel="noopener">allan764「31-A#4.flac」</a> · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>。排管：<a href="https://freesound.org/people/mrshoes/sounds/278175/" target="_blank" rel="noopener">mrshoes「panflute scale octave and a half」</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>，錄音器材為封底 PVC 管，非竹製排笛。<a href="assets/timbre-audio/LICENSE.md">授權及修改紀錄</a></p></details>
 </div></section>
 <section class="lesson-card" id="card-06" data-core="聽覺範圍">
-<header class="lesson-head"><span class="lesson-number">06</span><div><h2>有些聲音，我們為什麼聽不到？</h2><p>聽覺範圍：分辨聽不到的聲波
-</p></div></header>
+<header class="lesson-head"><span class="lesson-number">06</span><div><h2>你聽得到哪些頻率的聲音？</h2><p>持續試聽，自由探索高低音，記下這次的聽覺範圍。</p></div></header>
 <div class="lesson-body card-main">
-<div class="dialogue dialogue--xiaokui">
-<span class="speaker"><span class="visually-hidden">小葵</span></span>
-<p>如果有振動，卻聽不到，就代表沒有聲音嗎？</p>
+<div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>邊聽邊調整，我想找找聲音在哪裡聽不見。</p></div>
+<div class="hearing-workbench">
+<div class="hearing-workbench-head"><h3>頻率探索台</h3><p>先從 1,000 Hz 開始，再往低音或高音調整。</p></div>
+<div class="hearing-console">
+<div class="hearing-speaker-stage"><img src="assets/pitch-speaker.png" alt="木製喇叭"><button class="hearing-speaker-button" type="button" aria-label="播放目前頻率"></button></div>
+<div class="hearing-controls">
+<div class="hearing-readout"><div><span>目前頻率</span><output id="hearing-frequency">1,000 Hz</output><p class="play-state" role="status">已暫停</p></div><button class="play hearing-toggle" data-hearing-toggle type="button" aria-pressed="false"><span aria-hidden="true">▶</span> 播放</button></div>
+<div class="hearing-spectrum"><div class="hearing-band-heading"><h3>聲音頻率帶</h3><span>高音 →</span></div>
+<div class="hearing-band-control" data-hearing-band role="slider" tabindex="0" aria-label="調整聲音頻率；方向鍵微調，Home最低，End最高" aria-valuemin="20" aria-valuemax="20000" aria-valuenow="1000" aria-orientation="horizontal">
+<span class="hearing-band-low" aria-hidden="true">← 低音</span><div class="hearing-ribbon" aria-hidden="true"><span class="hearing-cursor"></span></div><span class="hearing-cursor-label" aria-hidden="true">1,000 Hz</span>
 </div>
-<div class="hearing-overview">
-<div class="hearing-main">
-<span>人耳概略可聽範圍</span>
-<strong>20～20,000 <small>Hz</small>
-</strong>
-<p>實際範圍因年齡、個體與聲級而異。</p>
-</div>
-<div class="hearing-band">
-<span>低於20 Hz<br>次聲波</span>
-<span>約20～20,000 Hz<br>人耳可聽範圍</span>
-<span>高於20,000 Hz<br>超聲波</span>
-</div>
-</div>
-<div class="button-row frequency-options" role="group" aria-label="選擇要觀察的頻率">
-<button class="secondary" type="button" data-hearing="18" aria-pressed="false">18 Hz</button>
-<button class="secondary" type="button" data-hearing="440" aria-pressed="true">440 Hz</button>
-<button class="secondary" type="button" data-hearing="18000" aria-pressed="false">18,000 Hz</button>
-<button class="secondary" type="button" data-hearing="25000" aria-pressed="false">25,000 Hz</button>
-</div>
-<p id="hearing-result" class="observation" aria-live="polite">
-</p>
-<h3>高頻聽覺上限的例子</h3>
-<div class="animal-grid">
-<p>
-<strong>人耳</strong>約20,000 Hz</p>
-<p>
-<strong>狗</strong>約30,000 Hz</p>
-<p>
-<strong>部分蝙蝠</strong>可達100,000 Hz</p>
-</div>
-<p class="model-note">這裡比較的是高頻上限，不代表從0 Hz起都能聽見；動物種類與個體也有差異。本區只看頻率資料，不播放極高、極低頻聲音，也不作個人聽力測試。來源：OpenStax《College Physics 2e》17.6。</p>
-<div class="dialogue">
-<span class="speaker"><span class="visually-hidden">阿公</span></span>
-<p>人耳能聽到的頻率有範圍。超過人耳可聽範圍的聲波仍然存在；有些動物能聽見人耳聽不到的高頻聲音。</p>
-</div>
-</div>
-</section>
+<div class="hearing-ticks" aria-hidden="true"><span style="left:0%">20 Hz</span><span style="left:23.3%">100 Hz</span><span style="left:56.633%">1,000 Hz</span><span style="left:89.966%">10,000 Hz</span><span style="left:100%">20,000 Hz</span></div>
+<p class="hearing-band-hint">播放中點擊或拖動頻率帶，聲音就會切換。</p><p class="hearing-volume-note">先調小音量，聽不到時不要一直加大音量。</p>
+</div></div></div></div>
+<div class="hearing-records"><div class="hearing-records-head"><h3>我這次聽到的大約區間 <small>手動記錄</small></h3><button class="hearing-reset" data-hearing-reset type="button">↻ 重新探索</button></div>
+<div class="hearing-record-grid"><div class="hearing-record"><div><span>低音端</span><output id="hearing-low">尚未記錄</output></div><button class="secondary" data-hearing-record="low" type="button">記為目前頻率</button></div><div class="hearing-record"><div><span>高音端</span><output id="hearing-high">尚未記錄</output></div><button class="secondary" data-hearing-record="high" type="button">記為目前頻率</button></div></div>
+<p class="hearing-record-note">自行標記兩端，之後仍可重新調整。</p><p class="hearing-limitation">紀錄受裝置、音量與環境影響，並非聽力檢查。</p></div>
+<p class="hearing-feedback" role="status" hidden></p>
+<div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>人耳概略可聽範圍約 20～20,000 Hz，每個人不一定相同。</p></div>
+<details class="hearing-animals"><summary>其他動物能聽到多高？</summary><div class="animal-grid"><p><strong>人耳</strong>約 20,000 Hz</p><p><strong>狗</strong>約 30,000 Hz</p><p><strong>部分蝙蝠</strong>可達 100,000 Hz</p></div><p>這裡比較的是高頻上限，不代表從 0 Hz 起都能聽見；物種與個體也有差異。人耳概略範圍以下（低於 20 Hz）稱為次聲波，高於 20,000 Hz 稱為超聲波。</p><p>聽不到不代表沒有聲波；裝置的輸出能力與環境也會影響這次的結果。網頁可確認產生的數位訊號頻率，不能據此保證喇叭實際發出的聲波強度。頻率帶的顏色只用來幫助操作，不代表聲音本身有顏色。<a href="https://openstax.org/books/college-physics-2e/pages/17-6-hearing" target="_blank" rel="noopener">資料來源：OpenStax 17.6</a></p></details>
+</div></section>
 <section class="lesson-card" id="card-07" data-core="分貝的辨讀">
 <header class="lesson-head"><span class="lesson-number">07</span><div><h2>分貝數字，怎麼幫我們比較聲音大小？</h2><p>分貝的辨讀：分貝數字幫助我們描述聲音大小；下面是有情境的參考資料，不是現在裝置的量測結果。</p></div></header>
 <div class="lesson-body card-main">

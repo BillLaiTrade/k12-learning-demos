@@ -65,9 +65,10 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
   await page.locator('.route a[href="#card-05"]').click();assert.equal(await page.locator('#card-05').getAttribute('data-playing'),'false');
   await play('tone-pipe');await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));delete document.hidden;});assert.equal(await page.locator('#card-05').getAttribute('data-playing'),'false');
  });
- await t.test('hearing range and dBA examples change observations without producing test tones',async()=>{
+ await t.test('hearing exploration stays silent until played; knowledge and dBA remain readable',async()=>{
   const before=await page.evaluate(()=>window.audioRuns.length);
-  await page.locator('[data-hearing="25000"]').click();assert.equal(await page.locator('#hearing-result').getAttribute('data-band'),'ultrasound');await page.locator('[data-hearing="18"]').click();assert.equal(await page.locator('#hearing-result').getAttribute('data-band'),'low');
+  await page.locator('[data-hearing-band]').focus();await page.keyboard.press('End');assert.equal(await page.locator('#hearing-frequency').innerText(),'20,000 Hz');assert.equal(await page.locator('#card-06').getAttribute('data-playing'),'false');
+  await page.locator('.hearing-animals summary').click();assert.match(await page.locator('.hearing-animals').innerText(),/次聲波[\s\S]*超聲波/);await page.locator('.hearing-animals summary').click();
   await page.locator('[data-level="cinema"]').click();assert.match(await page.locator('#level-result').textContent(),/74～104/);assert.equal(await page.evaluate(()=>window.audioRuns.length),before);assert.equal(await page.locator('#card-07 [data-play]').count(),0);
  });
  await t.test('one final task supports incomplete, incorrect, correct, editing, replay, clear and new requirements',async()=>{

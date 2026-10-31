@@ -424,3 +424,103 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .timbre-cursor{pointer-events:none}
 .timbre-cursor-halo{fill:#e9ab33;opacity:.23}
 .timbre-cursor-dot{fill:#e8a426;stroke:#fffdf5;stroke-width:2;vector-effect:non-scaling-stroke}
+
+/* 第六區：持續純音、彩色頻率帶與手動端點紀錄。 */
+.hearing-workbench{margin:18px 0 12px;padding:12px;border:1px solid #d0e1d1;border-radius:16px;background:linear-gradient(115deg,#eff5e9,#f9fcf6)}
+.hearing-workbench-head{display:flex;align-items:center;gap:15px;margin:1px 2px 11px}
+.card-main .hearing-workbench-head h3{flex:none;margin:0;padding-right:14px;border-right:1px solid #c6d7cb;font-size:1.1rem;color:#183d32}
+.hearing-workbench-head p{margin:0;color:#63796c;font-size:.8rem}
+.hearing-console{display:grid;grid-template-columns:minmax(0,.36fr) minmax(0,.64fr);gap:10px}
+.hearing-speaker-stage{position:relative;min-width:0;min-height:265px;overflow:hidden;border-radius:12px;background:#ecd8b9 url('pitch-room-background.png') center/cover no-repeat}
+.hearing-speaker-stage img{position:absolute;left:13%;bottom:12%;display:block;width:74%;height:78%;object-fit:contain;filter:drop-shadow(4px 8px 4px #563b2835)}
+.hearing-speaker-button{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;touch-action:manipulation}
+.hearing-speaker-button:focus-visible{outline-offset:-5px}
+.hearing-controls{display:grid;gap:7px;min-width:0}
+.hearing-readout{display:grid;grid-template-columns:minmax(0,1fr) minmax(90px,.75fr);align-items:center;gap:8px;padding:10px 12px;border:1px solid #dfebdf;border-radius:13px;background:#fffef9;text-align:center}
+.hearing-readout>div>span{font-size:.85rem;color:#385b4a;font-weight:700}
+.hearing-readout output{display:block;font-size:clamp(1.7rem,3vw,2.6rem);font-weight:850;color:#124b39;line-height:1.3;white-space:nowrap;font-variant-numeric:tabular-nums}
+.hearing-readout .play-state{margin:4px 0 0;font-size:.73rem;color:#758276;line-height:1.4}
+.hearing-readout .play-state::before{content:"";display:inline-block;width:8px;height:8px;margin-right:6px;border-radius:50%;background:#a2b0a5}
+#card-06[data-playing=true] .hearing-readout .play-state{color:#177149}
+#card-06[data-playing=true] .hearing-readout .play-state::before{background:#27b94b}
+.hearing-toggle{min-width:0;min-height:49px;padding:9px 6px;font-size:1.06rem;border:1px solid #4a9b7e;box-shadow:0 2px 4px #214f3625}
+.hearing-toggle>span{display:inline-block;margin-right:7px}
+.hearing-toggle,.hearing-record button,.hearing-reset{touch-action:manipulation}
+.hearing-spectrum{min-width:0;padding:11px 12px 9px;border:1px solid #dfebdf;border-radius:13px;background:#fffef9}
+.hearing-band-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#284e40;font-weight:700}
+.card-main .hearing-band-heading h3{font-size:.94rem;margin:0}
+.hearing-band-heading>span{font-size:.71rem}
+.hearing-band-control{position:relative;min-height:75px;padding-top:25px;cursor:crosshair;touch-action:none;user-select:none;-webkit-user-select:none}
+.hearing-band-low{position:absolute;top:3px;left:0;font-size:.71rem;color:#365545;pointer-events:none}
+.hearing-ribbon{position:relative;height:46px;border-radius:10px;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(2.1% - 1px),#fff8 calc(2.1% - 1px),#fff8 2.1%),linear-gradient(90deg,#07879a,#51bbad 23%,#b4d786 48%,#ffe66b 67%,#f5a33e 85%,#c95e39);box-shadow:inset 0 0 0 1px #8ba98e55}
+.hearing-cursor{position:absolute;top:-4px;bottom:-4px;left:var(--frequency-position);width:4px;transform:translateX(-50%);border-radius:3px;background:#fffef1;box-shadow:0 0 0 1px #d7ac42,0 0 9px 3px #f7c951a6;pointer-events:none}
+.hearing-cursor-label{position:absolute;top:-1px;left:clamp(36px,var(--frequency-position),calc(100% - 43px));transform:translateX(-50%);padding:2px 7px;border-radius:6px;background:#244c43;color:#fffefa;font-size:.68rem;line-height:1.6;white-space:nowrap;pointer-events:none}
+.hearing-cursor-label::after{content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#244c43}
+.hearing-ticks{position:relative;height:43px;font-size:.66rem;color:#38594b;font-variant-numeric:tabular-nums;line-height:1.5}
+.hearing-ticks>span{position:absolute;top:7px;transform:translateX(-50%);white-space:nowrap}
+.hearing-ticks>span::before{content:"";position:absolute;left:50%;top:-7px;height:5px;width:1px;background:#9aaea0}
+.hearing-ticks>span:first-child{transform:none}
+.hearing-ticks>span:first-child::before{left:0}
+.hearing-ticks>span:last-child{transform:translateX(-100%)}
+.hearing-ticks>span:last-child::before{left:100%}
+.hearing-ticks>span:nth-child(4){top:24px}
+.hearing-ticks>span:nth-child(4)::before{top:-24px;height:21px}
+.hearing-spectrum .hearing-band-hint,.hearing-spectrum .hearing-volume-note{margin:3px 0 0;text-align:center;font-size:.7rem;color:#5e7868;line-height:1.6}
+.hearing-spectrum .hearing-volume-note{font-size:.66rem;color:#7c8273}
+.hearing-records{padding:12px;border:1px solid #d8e5d7;border-radius:14px;background:#fcfdf8}
+.hearing-records-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.card-main .hearing-records-head h3{margin:0;font-size:1rem;color:#204c3b}
+.hearing-records-head h3 small{display:inline-block;margin-left:7px;padding:2px 8px;border-radius:999px;background:#edf2e9;color:#667f6e;font-size:.65rem;font-weight:600;vertical-align:middle;white-space:nowrap}
+.hearing-reset{flex:none;min-height:36px;padding:4px 9px;border:1px solid #d1ded1;border-radius:9px;background:#f9fbf5;color:#42634f;font-size:.76rem}
+.hearing-record-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hearing-record{display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0;padding:9px 10px;border:1px solid #e0e9dc;border-radius:10px;background:#fffefa}
+.hearing-record>div{min-width:0}
+.hearing-record span{font-size:.8rem;color:#476351}
+.hearing-record output{display:block;margin-top:3px;color:#164b38;font-size:clamp(1rem,2vw,1.65rem);font-weight:800;line-height:1.4;white-space:nowrap;font-variant-numeric:tabular-nums}
+.hearing-record button{flex:none;min-height:43px;padding:6px 8px;font-size:.72rem;font-weight:650;white-space:nowrap;background:#fbfdf8;border-color:#abc3af}
+.hearing-records .hearing-record-note,.hearing-records .hearing-limitation{margin:7px 0 0;text-align:center;color:#687b6b;font-size:.7rem;line-height:1.5}
+.hearing-records .hearing-limitation{margin-top:3px;font-size:.67rem}
+.card-main>.hearing-feedback{margin:9px 0;padding:7px 10px;border-radius:9px;background:#f7f1de;color:#685b3d;font-size:.8rem}
+.hearing-animals{margin-top:9px;border:1px solid #dbe5d5;border-radius:11px;background:#f7f9f2;color:#647363;font-size:.78rem}
+.hearing-animals>summary{padding:6px 12px;text-align:center;cursor:pointer}
+.hearing-animals>p{margin:10px 14px}
+.hearing-animals .animal-grid{margin:10px 13px}
+@media(min-width:761px) and (max-width:1100px){
+.hearing-console{grid-template-columns:minmax(0,.32fr) minmax(0,.68fr)}
+.hearing-readout{padding:9px 7px;grid-template-columns:minmax(0,1fr) 85px}
+.hearing-readout output{font-size:1.9rem}
+.hearing-toggle{font-size:.95rem}
+.hearing-record{flex-direction:column;align-items:stretch;text-align:center;gap:6px}
+.hearing-record button{min-height:42px}
+.hearing-workbench-head p{font-size:.74rem}
+}
+@media(max-width:600px){
+.hearing-workbench{padding:8px;margin-top:14px}
+.hearing-workbench-head{display:block;margin-bottom:9px}
+.card-main .hearing-workbench-head h3{padding:0;border:0;font-size:1rem}
+.hearing-workbench-head p{font-size:.7rem;margin-top:3px}
+.hearing-console{grid-template-columns:95px minmax(0,1fr);gap:7px}
+.hearing-controls{display:contents}
+.hearing-speaker-stage{grid-column:1;grid-row:1;min-height:153px}
+.hearing-speaker-stage img{left:5%;width:90%;bottom:13%;height:80%}
+.hearing-readout{grid-column:2;grid-row:1;display:flex;flex-direction:column;justify-content:center;gap:7px;padding:8px 5px}
+.hearing-readout output{font-size:1.7rem}
+.hearing-readout>div>span{font-size:.72rem}
+.hearing-readout .play-state{font-size:.65rem}
+.hearing-toggle{min-height:42px;width:100%;font-size:.87rem;padding:6px}
+.hearing-spectrum{grid-column:1/-1;grid-row:2;padding:9px 10px}
+.hearing-band-heading>span,.hearing-band-low{font-size:.65rem}
+.hearing-ribbon{height:44px}
+.hearing-ticks{font-size:.57rem}
+.hearing-records{padding:9px}
+.hearing-records-head{align-items:flex-start}
+.card-main .hearing-records-head h3{font-size:.85rem}
+.hearing-records-head h3 small{display:block;width:max-content;margin:3px 0 0;font-size:.59rem}
+.hearing-reset{font-size:.66rem;padding:3px 6px;min-height:37px}
+.hearing-record-grid{gap:7px}
+.hearing-record{flex-direction:column;text-align:center;padding:8px 5px;gap:6px}
+.hearing-record span{font-size:.73rem}
+.hearing-record output{font-size:1.12rem}
+.hearing-record button{width:100%;font-size:.63rem;padding:4px 2px;min-height:43px}
+.hearing-records .hearing-record-note,.hearing-records .hearing-limitation{font-size:.63rem}
+}

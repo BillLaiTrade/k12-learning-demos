@@ -1,4 +1,4 @@
-import {signal,hearingBand,soundSamples,challenge,checkSettings} from './model.mjs?v=1';
+import {signal,soundSamples,challenge,checkSettings} from './model.mjs?v=1';
 import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
 import {createForkExperiment} from './fork-experiment.mjs?v=2';
 import {createPitchExperiment,PITCH_SECONDS} from './pitch-experiment.mjs?v=5';
@@ -8,10 +8,12 @@ import {createPanExperiment} from './pan-experiment.mjs?v=2';
 import {loadPanRecording,recordingLevel} from './pan-recordings.mjs?v=1';
 import {createTimbreExperiment} from './timbre-experiment.mjs?v=3';
 import {timbreBuffer} from './timbre-model.mjs?v=1';
+import {createHearingExperiment} from './hearing-experiment.mjs?v=1';
+import {createHearingVoice} from './hearing-audio.mjs?v=1';
 import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const state={frequency:400,index:0};
-let forkView,pitchView,guitarView,panView,timbreView;
+let forkView,pitchView,guitarView,panView,timbreView,hearingView,hearingVoice=null;
 const FORK_OUTPUT_GAIN=6;
 const PITCH_OUTPUT_GAIN=14;
 const names={pure:'純音',string:'弦音示意',pipe:'管音示意'};
@@ -29,10 +31,11 @@ function wave(id,frequency,amplitude,tone='pure',compact=false){
 function stop(root=activeRoot){
  if(root && activeRoot && root!==activeRoot)return;
  request++;
- if(source){source.onended=null;try{source.stop();}catch{}source.disconnect();source=null;}
+ if(hearingVoice){source.onended=null;hearingVoice.stop();hearingVoice=null;source=null;}
+ else if(source){source.onended=null;try{source.stop();}catch{}source.disconnect();source=null;}
  cancelAnimationFrame(animation);animation=0;
  if(activeRoot){activeRoot.dataset.playing='false';activeRoot.querySelectorAll('.stop').forEach(b=>b.disabled=true);activeRoot.querySelector('.play-state').textContent='已停止，點擊可重新播放';}
- activeRoot=null;forkView?.stop();pitchView?.stop();guitarView?.stop();panView?.stop();timbreView?.stop();
+ activeRoot=null;forkView?.stop();pitchView?.stop();guitarView?.stop();panView?.stop();timbreView?.stop();hearingView?.stop();
 }
 function config(key){
  if(key.startsWith('pan-'))return panView.settings(Number(key.slice(4)));
@@ -123,12 +126,22 @@ for(const button of document.querySelectorAll('[data-reset]'))button.addEventLis
  const defaults={1:{},2:{frequency:440},5:{}};Object.assign(state,defaults[n]);
  button.closest('section').querySelector('.play-state').textContent='等待操作';
 });
-function hearing(frequency){
- const band=hearingBand(frequency),texts={low:'低於人耳概略可聽範圍，屬於次聲波。',audible:'落在人耳概略可聽範圍內，但每個人的實際聽覺不同。',ultrasound:'高於20,000 Hz，屬於超聲波。人耳聽不到，不代表聲波不存在。'};
- $('hearing-result').textContent=`${frequency.toLocaleString('zh-TW')} Hz：${texts[band]}`;$('hearing-result').dataset.band=band;
- for(const button of document.querySelectorAll('[data-hearing]'))button.setAttribute('aria-pressed',String(Number(button.dataset.hearing)===frequency));
+async function toggleHearing(){
+ const root=$('card-06');
+ if(activeRoot===root){stop(root);return;}
+ stop();const ticket=++request;activeRoot=root;hearingView.clearMessage();hearingView.mode('preparing');
+ try{
+  const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)throw Error('unsupported');
+  audioContext??=new Audio();await audioContext.resume();if(ticket!==request||document.hidden)return;
+  hearingVoice=createHearingVoice(audioContext,hearingView.frequency);source=hearingVoice.oscillator;
+  const current=source;source.onended=()=>{if(source===current)stop(root);};
+  hearingVoice.start();hearingView.mode('playing');
+ }catch{if(ticket!==request)return;stop(root);hearingView.error('目前無法播放這個頻率，請調整頻率或再點播放重試。');}
 }
-for(const button of document.querySelectorAll('[data-hearing]'))button.addEventListener('click',()=>hearing(Number(button.dataset.hearing)));
+function tuneHearing(frequency){
+ if(activeRoot&&activeRoot!==$('card-06'))stop();
+ if(hearingVoice)try{hearingVoice.setFrequency(frequency);}catch{stop();hearingView.error('此裝置不支援目前頻率，請往低音調整後再播放。');}
+}
 const levels={conversation:'一般交談約60～70 dBA。這是生活參考範圍，距離與周圍環境改變，量測值也會不同。',cinema:'電影院約74～104 dBA。不同場景、座位與播放條件會造成很大差異，不能說每間電影院都固定是同一個分貝數。',concert:'音樂會約94～110 dBA。與其他資料比較時，也要看量測條件與加權方式；這裡不播放相當聲級的聲音。'};
 function level(key){$('level-result').textContent=levels[key];for(const b of document.querySelectorAll('[data-level]'))b.setAttribute('aria-pressed',String(b.dataset.level===key));}
 for(const b of document.querySelectorAll('[data-level]'))b.addEventListener('click',()=>level(b.dataset.level));
@@ -169,4 +182,6 @@ guitarView=createGuitarExperiment($('card-03'),{onChange:()=>{stop();$('card-03'
 panView=createPanExperiment($('card-04'));
 $('card-04').querySelector('[data-pan-reset]').addEventListener('click',()=>{stop();panView.reset();$('card-04').querySelector('.play-state').classList.add('visually-hidden');});
 timbreView=createTimbreExperiment($('card-05'));
-hearing(440);level('conversation');newChallenge();activeLink(location.hash||'#card-01');
+hearingView=createHearingExperiment($('card-06'),{onToggle:toggleHearing,onFrequency:tuneHearing,onReset:()=>stop($('card-06'))});
+$('card-06').addEventListener('pointerdown',()=>{if(activeRoot&&activeRoot!==$('card-06'))stop();},true);
+level('conversation');newChallenge();activeLink(location.hash||'#card-01');
