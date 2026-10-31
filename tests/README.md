@@ -446,3 +446,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-
 ```
 
 第二區12項涵蓋共同視角、不中斷音訊／進度、±A端點連接同一膜緣點、生產renderer取樣200～800Hz的同幅及頻率比例、實際側面幀差、鍵盤／觸控與七種寬度；另保留聲音峰值／RMS、停止／調頻／跨區等檢查。三檔合計32項（含外層）。`SOUND33_BASE_URL`可將第二區12項指向完整公開網址；公開測試仍需Chromium與繼承的HTTPS proxy。截圖存至`/tmp/unit33-pitch-review/`，核可圖與交付證據在`docs/reviews/unit-3.3-speaker-view-switch/`。
+
+## 2.3 第五區：氬氣保護比較
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium ARGON_ARTIFACT_DIR=/tmp/unit23-argon node --test --test-concurrency=1 tests/unit-2.3-argon-model.test.mjs tests/unit-2.3-argon.test.cjs
+```
+
+模型與瀏覽器共9項（含外層），檢查原標題／副標保留、兩組同圖與預設結果、資料不重複、原人物頭像、唯一重播、真正SVG線條與箭頭尖端連續移動、快速重播、Escape／離場／背景暫停與恢復、暫停像素不變、七種寬度與手機上下排列、觸控／減少動態、無JS。圖片延遲載入，進入第五區後等待圖片實際就緒再核對素材尺寸。`ARGON_URL` 可指定公開頁面，截圖預設存 `/tmp/unit23-argon`。

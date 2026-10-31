@@ -131,7 +131,7 @@ test('2.3 complete page: six teaching sections and one evidence-based quiz', { t
   await t.test('all teaching evidence is available without JavaScript', async () => {
     const context = await browser.newContext({ javaScriptEnabled:false, viewport:{width:390,height:844} });
     const staticPage = await context.newPage(); await staticPage.goto(url, {waitUntil:'networkidle'});
-    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#s3 .nitrogen-facts','#s4 .sequence-grid','#s4 .gas-observations','#s5 .gas-feature','#s6 .sequence-grid','#s6 .gas-observations','#s7 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
+    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#s3 .nitrogen-facts','#s4 .sequence-grid','#s4 .gas-observations','#s5 .argon-comparison','#s6 .sequence-grid','#s6 .gas-observations','#s7 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
     assert.equal(await staticPage.locator('.sequence-step').count(),8);
     await context.close();
   });
