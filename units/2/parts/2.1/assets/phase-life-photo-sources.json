@@ -46,54 +46,49 @@
     ]
   },
   "freeze": {
-    "source_title": "Surfusion.ogv",
-    "source_page": "https://commons.wikimedia.org/wiki/File:Surfusion.ogv",
-    "original_url": "https://upload.wikimedia.org/wikipedia/commons/2/21/Surfusion.ogv",
-    "original_sha256": "399de3055bc2417c980d89f19aba57f327bf8a3f0f7210b15d2575aef502b679",
-    "author": "Mehdi jmiai",
-    "license": "CC BY-SA 3.0",
-    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
-    "changes": "擷取同一杯過冷水凝固前後的實拍影格；兩張均裁出杯子及周邊背景，去除黑邊與下方法文字幕，再轉存 WebP。沒有生成、重繪、補畫或合成。",
-    "conditions": "水已事先冷卻至0°C以下，仍呈液態，受擾動後開始形成冰晶；不表示常溫水因攪拌就能結冰，也不宣稱整杯水已完全凝固。",
-    "selection_status": "使用者暫時採用，尚非最終選圖。",
+    "source_type": "ai_generated_photorealistic_illustration",
+    "source_title": "凝固：同杯液態水與杯形成冰（寫實示意圖）",
+    "generator": "OpenAI image generation",
+    "generation_date": "2026-10-31",
+    "source_artifact": "docs/reviews/unit-2.1-freeze-generated/approved-comparison.png",
+    "source_artifact_sha256": "b78222c97ecad376ac058067bb22abaa993150565519de7a284556c356bc72a7",
+    "source_dimensions": [
+      1536,
+      1024
+    ],
+    "reference_artifact": "docs/reviews/unit-2.1-melt-generated/approved-comparison.png",
+    "prompt_summary": "沿用核可融化圖的透明短杯、角度、桌面、背景與光線。左圖為透明液態水，右圖為在杯內成形、符合杯內形狀的單一固態冰體；沒有獨立方冰塊、液體倒出、白霧或杯外結霜。前兩版份量不當未採用，最後修正版調整水位，使液面略低於冰面，份量為視覺示意而非量測。",
+    "changes": "依使用者核可的最後雙欄生成原圖拆成前後兩張，僅去除中央留白並轉存WebP，沒有重繪核可內容。",
+    "disclosure": "AI生成的寫實示意，不是真實拍攝或同次實驗紀錄。",
+    "selection_status": "使用者已核可最後修正版並要求依序套用；下一組汽化僅先生成候選，待核可後才套用。",
     "photos": [
       {
         "file": "phase-photo-freeze-before.webp",
-        "time_seconds": 0.2492,
         "crop": [
-          330,
-          80,
-          900,
-          580
-        ],
-        "frame_dimensions": [
-          1280,
-          720
+          0,
+          0,
+          762,
+          1024
         ],
         "output_dimensions": [
-          570,
-          500
+          762,
+          1024
         ],
-        "sha256": "c6b925c394e4dcd9092d61e9d55d1e828f0e5f3878ed961df709cfb5533730bd"
+        "sha256": "57aadb5281070a181b982c2ce3ce7801f08bdb1ad0ff4081b3875a760e342552"
       },
       {
         "file": "phase-photo-freeze-after.webp",
-        "time_seconds": 24.4216,
         "crop": [
-          330,
-          80,
-          900,
-          580
-        ],
-        "frame_dimensions": [
-          1280,
-          720
+          774,
+          0,
+          1536,
+          1024
         ],
         "output_dimensions": [
-          570,
-          500
+          762,
+          1024
         ],
-        "sha256": "e2b28928333357d0a2fb501a8cb8ebe0e0673518cddf4d6f4385165fe9394e2a"
+        "sha256": "4df4e644c01c54c9daea298bbdf1d1d2fd7b312af90b075c413e193d2529d803"
       }
     ]
   },
