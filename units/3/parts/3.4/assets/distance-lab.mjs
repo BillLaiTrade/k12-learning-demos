@@ -41,7 +41,6 @@ export function renderDistance(progress) {
   $('distance-elapsed').textContent = seconds(elapsed);
   const number = $('wall-distance-number');
   if (document.activeElement !== number) number.value = String(distance);
-  $('distance-far-title').textContent = `調整距離｜${distance} 公尺`;
   $('distance-far-record-label').textContent = `${distance === FIXED_DISTANCE ? '同距' : '遠牆'}（${distance} 公尺）`;
   const handle = $('distance-wall');
   handle.setAttribute('aria-valuenow', String(distance));
