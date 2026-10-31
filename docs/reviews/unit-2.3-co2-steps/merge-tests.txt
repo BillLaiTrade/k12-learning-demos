@@ -1,0 +1,58 @@
+✔ assembly orders marble, acid, sealing and gas delivery (1.24679ms)
+✔ purging keeps the outlet outside the collection jar (0.333113ms)
+✔ tube crosses above the mouth before entering; collecting begins only after reaching the base (1.355534ms)
+✔ withdrawal precedes the cover and sample label; the reaction outlet stays open (0.702954ms)
+▶ 2.3 carbon dioxide: materials, assembly, purging, upward air displacement and storage
+  ✔ initial state shows only preparation and one persistent introduction; no autoplay or property experiments (418.84982ms)
+  ✔ all six actual object images and labels select their own accessible identity and role (992.54844ms)
+  ✔ manual selection cancels the optional tour and survives leaving preparation (190.294234ms)
+  ✔ assembly really adds marble then acid, reacts before sealing, and only then directs gas through the tube (956.980614ms)
+  ✔ purging stays outside; collection moves tube into an open upright jar and never animates a water level (665.772366ms)
+  ✔ withdrawal finishes before the glass cover moves and the sample is labeled (1050.376825ms)
+  ✔ one control pauses pixels, resumes time, replays; rapid step changes cancel the old frame clock (788.490977ms)
+  ✔ native keyboard controls, roving step tabs and panel focus remain accessible (1090.505492ms)
+  ✔ background, leaving the block and oxygen or properties playback pause without automatic restart (246.493445ms)
+  ✔ all five steps fit seven widths; mobile closeups share the same animated scene (5796.131176ms)
+  ✔ real touch and reduced motion retain selection and manually requested essential animation (1579.834647ms)
+  ✔ no JavaScript leaves all five representative scenes and all six material introductions readable (967.029324ms)
+✔ 2.3 carbon dioxide: materials, assembly, purging, upward air displacement and storage (16442.628067ms)
+▶ 2.3 complete page: five teaching sections and one evidence-based quiz
+  ✔ all six sections and routes exist, with gas profiles and no retired experiment (75.070934ms)
+  ✔ default cup comparisons remain after preview and reset (126.91228ms)
+  ✔ both preparation lessons navigate independent steps and keep properties in section five (631.184186ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (185.215768ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (440.75623ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (3164.888984ms)
+  ✔ all teaching evidence is available without JavaScript (1028.20359ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (13004.172793ms)
+✔ 2.3 complete page: five teaching sections and one evidence-based quiz (20154.397829ms)
+▶ 2.3 materials: seven illustrated objects explain identity and experimental role
+  ✔ native controls connect each object to a persistent two-part introduction; initial state does not autoplay (179.077542ms)
+  ✔ actual photo object bodies select all seven introductions, independently of the name labels (398.076345ms)
+  ✔ labels, Enter and Space operate the same native controls and retain keyboard focus (132.587637ms)
+  ✔ manual selection stops the optional tour and remains readable; explicitly replaying the tour still works (223.268406ms)
+  ✔ selected knowledge survives leaving and returning to materials; assembly remains its own scene (161.571491ms)
+  ✔ seven responsive widths keep touch targets within the photo and all introductions within the page (5592.817824ms)
+  ✔ mobile touch and reduced motion select real object bodies and retain the explanation (1483.220483ms)
+  ✔ explanations identify oxygen source, catalyst, purge, displacement and covering in the correct order (39.245879ms)
+  ✔ without JavaScript all seven introductions remain readable alongside the original materials photo (985.489911ms)
+✔ 2.3 materials: seven illustrated objects explain identity and experimental role (10675.892302ms)
+▶ 2.3 collected gases: preparation, property comparison and final quiz are separate
+  ✔ six sections have unique IDs and routes; only section five owns the property observations (61.466935ms)
+  ✔ known oxygen and carbon dioxide are linked to their collection lessons and retain visible completed results (36.765282ms)
+  ✔ both glowing splints enter at identical depth and time, then oxygen relights while carbon dioxide fades (345.869473ms)
+  ✔ pause freezes both visible samples and flame; resume, reset and rapid replay preserve sample roles (696.349779ms)
+  ✔ keyboard, Escape, background and competing preparation players stop the comparison without resetting collected samples (333.790474ms)
+  ✔ sample source links, collection-next links and revised quiz feedback point to the right sections (544.614312ms)
+  ✔ matched samples stay beside each other and all revised lessons fit seven desktop and mobile widths (1481.772855ms)
+  ✔ touch and reduced motion retain essential manual comparison and the new last quiz route (1259.459282ms)
+  ✔ without JavaScript both gas results, separate limewater evidence, source links and six sections remain readable (1021.95502ms)
+✔ 2.3 collected gases: preparation, property comparison and final quiz are separate (7201.666009ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 46
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 56082.862895
