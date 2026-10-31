@@ -405,9 +405,15 @@ NITROGEN_ARTIFACT_DIR=/tmp/unit23-nitrogen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-ful
 
 依使用者最新要求，格式基準由1.1概念側欄改為2.1橫向標頭及全寬內容。整頁回歸直接載入2.1比對標頭、編號、字級、內距與圓角；逐區檢查七區內容寬度與上下排列。整頁、音叉及雙喇叭專項合計28項通過；證據在docs/reviews/unit-3.3-fullwidth-cards/。
 
-### 2.1 六種物態變化的生活場景同步
+### 2.1 六種物態變化的實拍照片對照
 
-`node --test tests/unit-2.1-phase-life.test.cjs`：檢查1440／1280／1024一般偏好及1024減少動態偏好的六種變化起點、中段、終點；以實際粒子種類核對生活畫面進度，並檢查水位、冰塊體積、凝固前緣、霜晶範圍、圖片載入、上下同時可見、六種重播、快速切換、離屏續播與12個四角入口。`PHASE_LIFE_CAPTURE_DIR`指定截圖目錄。生活場景沒有獨立計時器；蒸發保留一半液態粒子與一半水深。詳見 `docs/reviews/unit-2.1-phase-life/review.md`。
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.1-phase-life.test.cjs
+```
+
+現行為每組兩張固定實拍照片，取代 fea12ccb 的生活場景合成動畫。檢查1920×1080、1440×900、1366×768、1280×800、1024×768的六種切換，照片整區高度為完整粒子展示框的一半，照片在起始／中段／完成均維持相同像素；上方粒子仍轉換，蒸發保留24顆液態粒子。另驗六種重播、快速切換、離屏暫停與返回、12個四角入口、減少動態、分享連結、390px載入與來源頁。總覽粒子數依目前16–72顆計，非固定48顆；獨立六種示範維持48顆。
+
+`PHASE_LIFE_CAPTURE_DIR`指定截圖及本次結果目錄，`PHASE_PHOTOS_URL`可指定以`/`結尾的公開頁面，透過繼承的HTTPS代理重跑同套檢查。照片來源與擷取記錄見`units/2/parts/2.1/assets/phase-life-assets.md`與同目錄JSON；本次畫面與結果見`docs/reviews/unit-2.1-phase-photos/`。原同步場景紀錄保留在`docs/reviews/unit-2.1-phase-life/`作歷史依據，非現行照片驗證。
 
 ### 3.3前兩區音量檢查
 

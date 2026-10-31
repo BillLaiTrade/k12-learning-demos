@@ -669,7 +669,7 @@
     #s2 button:focus-visible,#s2 a:focus-visible,#s2 input:focus-visible { outline-color:#79b89a; }
   </style>
   <link rel="stylesheet" href="assets/states-table.css?v=20261030-all-format">
-  <link rel="stylesheet" href="assets/phase-life.css?v=20261031-life1">
+  <link rel="stylesheet" href="assets/phase-life.css?v=20261031-photos1">
   <script src="assets/states-table.js?v=20261029-pull" defer></script>
 </head>
 <body>
@@ -924,10 +924,12 @@
                 </div>
                 <p class="phase-solid-overview-hint" id="phase-overview-hint">點選四角變化：粒子逐漸加入冰晶或離開冰塊；尚未轉變的粒子仍持續運動。</p>
               </div>
-              <section class="phase-life" id="phase-life" aria-label="生活中的物態變化" hidden>
-                <h4></h4>
-                <div class="phase-life-layout"><div class="phase-life-picture"><span class="phase-life-reference" hidden>虛線：原水位</span></div><div><p class="phase-life-stage"></p><p class="phase-life-description"></p></div></div>
-                <p class="phase-life-note">生活情境合成示意・與上方粒子同步，時間經加速，非實際變化速度或大小比例。</p>
+              <section class="phase-life" id="phase-life" aria-label="物態變化實拍前後照片" hidden>
+                <div class="phase-life-copy"><h4></h4><p class="phase-life-description"></p><a class="phase-life-source" href="assets/phase-life-credits.html">照片來源與拍攝條件</a></div>
+                <div class="phase-life-photos">
+                  <figure class="phase-life-photo"><figcaption>變化前</figcaption><img alt="" decoding="async"></figure>
+                  <figure class="phase-life-photo"><figcaption>變化後</figcaption><img alt="" decoding="async"></figure>
+                </div>
               </section>
               <div class="water-state-color-key" id="phase-state-color-key" role="note" aria-label="水分子的狀態配色說明">
                 <div class="water-state-color-legend"><span><i class="water-state-color-dot water-state-color-dot--solid" aria-hidden="true"></i>深藍：固態中的水分子</span><span><i class="water-state-color-dot water-state-color-dot--liquid" aria-hidden="true"></i>藍色：液態中的水分子</span><span><i class="water-state-color-dot water-state-color-dot--gas" aria-hidden="true"></i>淺藍：氣態中的水分子</span></div>
@@ -1239,7 +1241,7 @@
   </main>
   <footer class="shell">國二上・自然科學</footer>
 
-  <script src="assets/phase-life.js?v=20261031-life1"></script>
+  <script src="assets/phase-life.js?v=20261031-photos1"></script>
   <script>
     const bucketPartViews = {
       overview: { label:"物體", heading:"整只水桶", copy:"水桶是看得見、摸得到的整體，由桶身、提把支架和握把組成。", alt:"完整的空水桶，包含桶身、提把支架和握把" },

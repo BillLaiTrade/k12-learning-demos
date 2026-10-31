@@ -1,0 +1,40 @@
+▶ 2.1: three-state diagrams are visible and interact inside the table
+  ✔ nine diagrams and conclusions exist without selecting a table cell (881.772709ms)
+  ✔ all four gas diagrams move independently, stay bounded and resume on return (1808.296696ms)
+  ✔ gas volume increases and decreases within limits independently of compression (5574.418247ms)
+  ✔ container changes preserve solid geometry and liquid quantity (1895.912215ms)
+  ✔ gas shape changes keep all particles inside the sealed container (707.979301ms)
+  ✔ solid and liquid lift above unchanged samples and stop when lowered to contact (7706.964578ms)
+  ✔ gas compression responds to mouse drag and keyboard with constant particles (1982.249644ms)
+  ✔ other lesson content is preserved under the shared header format and still initializes (296.123367ms)
+  ✔ responsive table stays inside the page; narrow screens scroll internally (5535.784899ms)
+  ✖ touch dragging and reduced-motion keyboard operation work (2601.027854ms)
+✖ 2.1: three-state diagrams are visible and interact inside the table (31317.585776ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 9
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 31723.418956
+
+✖ failing tests:
+
+test at ../tmp/k12-phase-photos/baseline-states.cjs:364:11
+✖ touch dragging and reduced-motion keyboard operation work (2601.027854ms)
+  AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+  
+  'translate(0 90)'
+      at TestContext.<anonymous> (/tmp/k12-phase-photos/baseline-states.cjs:388:16)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/tmp/k12-phase-photos/baseline-states.cjs:364:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'translate(0 90)',
+    expected: 'translate(0 90)',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }

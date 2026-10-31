@@ -1,0 +1,146 @@
+{
+  "melt": {
+    "source_title": "Ice cubes melting in a glass.ogv",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Ice_cubes_melting_in_a_glass.ogv",
+    "original_url": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Ice_cubes_melting_in_a_glass.ogv",
+    "original_sha256": "c9f3a1b73dc714389ea359060e8ad34b97325187472688444f53c99b7a5992b8",
+    "author": "Philip Serracino Inglott (Inkwina)",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "changes": "從同一實拍影片擷取兩個指定時刻；等比例縮小並轉存 WebP，無重繪、生成或合成。",
+    "photos": [
+      {
+        "file": "phase-photo-melt-before.webp",
+        "time_seconds": 0.9,
+        "sha256": "1cb293865b4368ccad08a4dcb1e5943327af4656e6fdc3c36fdd54a7bcc4679f"
+      },
+      {
+        "file": "phase-photo-melt-after.webp",
+        "time_seconds": 17.5,
+        "sha256": "264dd6d659b068c7178d09c715da528b6d317cc96e30fa1a9e68607e120202e4"
+      }
+    ]
+  },
+  "freeze": {
+    "source_title": "Frozen drop.webm",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Frozen_drop.webm",
+    "original_url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Frozen_drop.webm",
+    "original_sha256": "b423239475c52f75ea210d6c262fbb96e009af20b10d4323801f2c9aed58bf91",
+    "author": "Maxim Bilovitskiy",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "changes": "從同一實拍影片擷取兩個指定時刻；等比例縮小並轉存 WebP，無重繪、生成或合成。",
+    "photos": [
+      {
+        "file": "phase-photo-freeze-before.webp",
+        "time_seconds": 4.8,
+        "sha256": "ba44270621b8ff04369aa1b25983649b823912210cdf688c04bb78200cf69f68"
+      },
+      {
+        "file": "phase-photo-freeze-after.webp",
+        "time_seconds": 15,
+        "sha256": "e5d622f40077e74565fd8ba3dafdc05b8c7e2b1821cbe9a257d0ff5a88160ed7"
+      }
+    ]
+  },
+  "vaporization": {
+    "source_title": "Evaporation (Salzlake).webm",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Evaporation_(Salzlake).webm",
+    "original_url": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Evaporation_%28Salzlake%29.webm",
+    "original_sha256": "ec64a6c50ec50701121636df8e0bbefc1964305d4fbbc343e0d423a6551327e1",
+    "author": "Rhetos",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "changes": "從同一實拍影片擷取兩個指定時刻；等比例縮小並轉存 WebP，無重繪、生成或合成。",
+    "photos": [
+      {
+        "file": "phase-photo-vaporization-before.webp",
+        "time_seconds": 36,
+        "sha256": "977fe1cd523e4db18acf85a069b71daf444bab4a88c9621bb3ca002f8f7f1a36"
+      },
+      {
+        "file": "phase-photo-vaporization-after.webp",
+        "time_seconds": 70,
+        "sha256": "c20a1e412579d36e826507b3ea4e52fb990a05b9b0ebffccfac5ca34de389e2a"
+      }
+    ]
+  },
+  "condensation": {
+    "source_title": "Controlling-condensation-and-frost-growth-with-chemical-micropatterns-srep19131-s2.ogv",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Controlling-condensation-and-frost-growth-with-chemical-micropatterns-srep19131-s2.ogv",
+    "original_url": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Controlling-condensation-and-frost-growth-with-chemical-micropatterns-srep19131-s2.ogv",
+    "original_sha256": "4c0ded6b73e3ac438b0b95b2d17405d538c0a6a15f2c7e2fbcd13712d9fe20a6",
+    "author": "Boreyko J, Hansen R, Murphy K, Nath S, Retterer S, Collier C",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "changes": "從同一實拍影片擷取兩個指定時刻；等比例縮小並轉存 WebP，無重繪、生成或合成。",
+    "photos": [
+      {
+        "file": "phase-photo-condensation-before.webp",
+        "time_seconds": 0.2,
+        "sha256": "fa0e4824841825a59305cfcec7959505b8dd297e61fbf4d7df607b2e7356ed20"
+      },
+      {
+        "file": "phase-photo-condensation-after.webp",
+        "time_seconds": 14,
+        "sha256": "41b9be1db1444898e6286b401c878e09056bf68aa48d2b91ce3ea2407d71a970"
+      }
+    ]
+  },
+  "deposition": {
+    "source_title": "Frozen drop.webm",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Frozen_drop.webm",
+    "original_url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Frozen_drop.webm",
+    "original_sha256": "b423239475c52f75ea210d6c262fbb96e009af20b10d4323801f2c9aed58bf91",
+    "author": "Maxim Bilovitskiy",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "changes": "從同一實拍影片擷取兩個指定時刻；等比例縮小並轉存 WebP，無重繪、生成或合成。",
+    "photos": [
+      {
+        "file": "phase-photo-deposition-before.webp",
+        "time_seconds": 15,
+        "sha256": "e5d622f40077e74565fd8ba3dafdc05b8c7e2b1821cbe9a257d0ff5a88160ed7"
+      },
+      {
+        "file": "phase-photo-deposition-after.webp",
+        "time_seconds": 30,
+        "sha256": "87c7ef8585a5397633b7b3a3540cc4edc60de5767b1326717d46b615ac9de6a9"
+      }
+    ]
+  },
+  "sublimation": {
+    "source_title": "Evaporating ice on Mars Phoenix lander image.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Evaporating_ice_on_Mars_Phoenix_lander_image.jpg",
+    "original_url": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Evaporating_ice_on_Mars_Phoenix_lander_image.jpg",
+    "original_sha256": "52edb39deb0ba894dc2b4935e255ce814f190f2c0a6c4da5075df60dd741ea99",
+    "author": "NASA/JPL",
+    "license": "Public domain",
+    "license_url": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+    "changes": "分別裁出 NASA 原始前後圖中同一處的實拍放大區，去除版面邊框；無生成、補畫或重建。",
+    "photos": [
+      {
+        "file": "phase-photo-sublimation-before.webp",
+        "crop": [
+          237,
+          175,
+          507,
+          480
+        ],
+        "date": "2008-06-15",
+        "sha256": "2c711ef9aabd22f95f2323317f972c6d7397b3d831d1075b6a1610cb98687af9"
+      },
+      {
+        "file": "phase-photo-sublimation-after.webp",
+        "crop": [
+          770,
+          175,
+          1040,
+          480
+        ],
+        "date": "2008-06-19",
+        "sha256": "6f711cf6358cf3ac698285482086ff463402adae3865884ea5f75cdf3ec0f487"
+      }
+    ]
+  }
+}
