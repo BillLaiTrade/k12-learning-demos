@@ -17,3 +17,11 @@ test('audio arrival times use the same slowed clock and equal-distance echoes co
   assert.deepEqual(distanceTaps(34),[{delay:0,gain:1},{delay:1.6,gain:.45}]);
   assert.ok(Math.abs(distanceTaps(102)[2].delay-4.8)<1e-9);
 });
+test('single-lane playback schedules only its own return and stops at its own arrival',()=>{
+  for(const distance of[34,68,102]){
+    assert.deepEqual(distanceTaps(distance,'near'),[{delay:0,gain:1},{delay:1.6,gain:.45}]);
+    assert.deepEqual(distanceTaps(distance,'far'),[{delay:0,gain:1},{delay:2*distance/340*TIME_SCALE,gain:.45}]);
+    assert.equal(distanceDuration(distance,'near'),distanceDuration(34));
+    assert.equal(distanceDuration(distance,'far'),distanceDuration(distance));
+  }
+});

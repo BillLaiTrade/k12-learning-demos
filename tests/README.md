@@ -412,3 +412,7 @@ NITROGEN_ARTIFACT_DIR=/tmp/unit23-nitrogen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-ful
 ### 3.3前兩區音量檢查
 
 音叉及音調喇叭專項直接量測最終AudioBufferSource資料的峰值／RMS，確認提高音量且未削波，輕重比例及固定振幅仍成立。模型原始資料測試保留。整頁及兩專項28項通過；詳見docs/reviews/unit-3.3-intro-audio-gain/。measure.cjs另可用SOUND33_BASE_URL量測公開頁，並以第五區純音確認其他區輸出不變。
+
+### 3.4第二區分別點喇叭（2026-10-31）
+
+`CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-distance-model.test.mjs tests/unit-3.4-distance.test.cjs`：新增上／下方只播放所選組的波前、接收燈、返回路徑、計時及接收紀錄；未選組從播放中到完成都等待發聲。實際Web Audio最末輸出須只有原音與該組回波，並檢查上方不等待遠牆、暫停續播保留範圍、切換取消舊排程、主按鈕恢復同步、Enter／Space與手機兩組觸控。`DISTANCE_URL`可指定公開頁（以`/`結尾），截圖暫存於`/tmp/k12-34-distance-verified`；原同步、拖牆、同距及版面回歸仍保留。

@@ -1,6 +1,6 @@
 import {echo, distanceFromEcho, wavePosition, arrivals, judge} from './echo-model.mjs';
 import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
-import {renderDistance, bindDistanceWall, bindDistanceSpeakers, distanceDuration, distanceTaps} from './distance-lab.mjs';
+import {renderDistance, bindDistanceWall, bindDistanceSpeakers, distanceDuration, distanceTaps} from './distance-lab.mjs?v=20261031-single-lane';
 const $ = id => document.getElementById(id), fmt = (n, digits = 2) => Number(n.toFixed(digits)).toString();
 const panels = new Map();
 let active = null, context = null, phrasePromise = null, sources = [], audioEpoch = 0, outputGain = null;
@@ -69,7 +69,7 @@ async function sound(panel, elapsed = 0) {
     audioError(panel, '聲音未能啟用。請再次點擊播放；若仍無聲，請用瀏覽器開啟本頁，並確認裝置與分頁未靜音。');
   }
 }
-function player(id, render, duration, {room = false, mode = () => '', restartOnPlay = false, taps = null} = {}) {
+function player(id, render, duration, {room = false, mode = () => '', restartOnPlay = false, taps = null, onRestart = () => {}} = {}) {
   const root = $(id), play = document.querySelector(`[data-play="${id}"]`), reset = document.querySelector(`[data-reset="${id}"]`), soundBox = document.querySelector(`[data-sound="${id}"]`);
   const pauseButton = root.querySelector('[data-pause]');
   const p = {id, root, phase: 'ready', elapsed: 0, start: 0, raf: 0, render, duration, room, mode, taps, sound: soundBox};
@@ -94,10 +94,10 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
     if (p.elapsed >= p.duration()) { phase('complete'); if (active === p) {active = null; stopSound();} }
     else p.raf = requestAnimationFrame(tick);
   }
-  p.play = (restart = false) => {
+  p.play = (restart = false, selection) => {
     const newEmission = restart || p.phase === 'complete' || p.elapsed === 0;
     stopActive();
-    if (newEmission) p.elapsed = 0;
+    if (newEmission) { p.elapsed = 0; onRestart(selection); }
     if (['reflection', 'distance'].includes(id) && newEmission) root.dataset.emissions = String(Number(root.dataset.emissions) + 1);
     active = p; p.start = performance.now() - p.elapsed * 1000;
     phase('playing'); p.draw(); sound(p, p.elapsed); p.raf = requestAnimationFrame(tick);
@@ -137,11 +137,12 @@ const reflection = player('reflection', renderReflection, () => REFLECTION_DURAT
   taps: () => [{delay: 0, gain: 1}, {delay: REFLECTION_RETURN_TIME, gain: .45}]
 });
 $('reflection-speaker').addEventListener('click', () => reflection.play(true));
-const distance = player('distance', renderDistance, () => distanceDuration(Number($('wall-distance').value)), {
+const distance = player('distance', renderDistance, () => distanceDuration(Number($('wall-distance').value), $('distance').dataset.selection), {
   restartOnPlay: true,
-  taps: () => distanceTaps(Number($('wall-distance').value))
+  onRestart: (selection = 'both') => { $('distance').dataset.selection = selection; },
+  taps: () => distanceTaps(Number($('wall-distance').value), $('distance').dataset.selection)
 });
-bindDistanceSpeakers(() => distance.play(true));
+bindDistanceSpeakers(selection => distance.play(true, selection));
 bindDistanceWall(distance.reset);
 player('calculation', progress => {
   const t = Number($('echo-time').value), e = distanceFromEcho(t, 340);

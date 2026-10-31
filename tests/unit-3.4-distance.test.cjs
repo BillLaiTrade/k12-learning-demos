@@ -24,12 +24,57 @@ test('3.4 distance comparison follows the approved two-lane mockup',{timeout:180
   for(const img of await root.locator('img').all())assert.equal(await img.evaluate(n=>n.complete&&n.naturalWidth>0),true);
   const boxes=await root.locator('.distance-scene').evaluateAll(ns=>ns.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height};}));assert.equal(boxes[0].x,boxes[1].x);assert.equal(boxes[0].w,boxes[1].w);assert.ok(boxes[1].y>boxes[0].y+boxes[0].h);assert.equal(await page.locator('.distance-arrival:visible').count(),0);await page.locator('#s2').screenshot({path:'/tmp/k12-34-distance-verified/ready-1440.png'});
  });
- await t.test('direct speaker click emits once plus both correctly delayed weaker echoes at the final output',async()=>{
-  await page.locator('[data-distance-speaker]').first().click();await page.waitForFunction(()=>window.__sources.length===3);assert.equal(await count(),'1');
+ await t.test('together button emits once plus both correctly delayed weaker echoes at the final output',async()=>{
+  await emit.click();await page.waitForFunction(()=>window.__sources.length===3);assert.equal(await count(),'1');
   await page.waitForFunction(()=>document.getElementById('distance').dataset.phase==='complete');
   const evidence=await page.evaluate(()=>{const output=window.__outputs.at(-1),sources=window.__sources.slice(-3),first=sources[0];return{same:sources.every(s=>s.source.buffer===first.source.buffer),delays:sources.map(s=>s.when-first.when),gains:sources.map(s=>s.gain),master:output.gain.gain.value,peaks:sources.map(s=>Math.max(0,...output.samples.filter(p=>p.time>=s.when&&p.time<s.when+.2).map(p=>p.peak)))};});
   assert.equal(evidence.same,true);for(let i=0;i<3;i++)assert.ok(Math.abs(evidence.delays[i]-[0,1.6,3.2][i])<.03);assert.ok(Math.abs(evidence.master-.32)<1e-6);assert.deepEqual(evidence.gains.map(n=>Math.round(n*100)),[100,45,45]);assert.ok(evidence.peaks[0]>.28&&evidence.peaks[0]<.34);for(const peak of evidence.peaks.slice(1))assert.ok(peak>.12&&peak<.16);console.log('Distance final audio:',JSON.stringify(evidence));
   assert.equal(await page.locator('#distance-near-record').getAttribute('data-received'),'true');assert.equal(await page.locator('#distance-far-record').getAttribute('data-received'),'true');assert.match(await page.locator('#distance-far-record .distance-arrival').innerText(),/0.40 秒/);
+ });
+ await t.test('each speaker animates and records only its own lane and produces only its own audible echo',async()=>{
+  await select(102);
+  for(const [name,other,delay,arrival] of[['near','far',1.6,'0.20'],['far','near',4.8,'0.60']]){
+   const before=await page.evaluate(()=>window.__sources.length);
+   await page.locator(`[data-distance-speaker=${name}]`).click();
+   await page.waitForFunction(n=>window.__sources.length===n+2,before);
+   assert.equal(await root.getAttribute('data-selection'),name);
+   await page.waitForFunction(name=>document.getElementById(`distance-${name}-waves`).childElementCount>0,name);
+   const idle=async()=>{
+    assert.equal(await stage(other),'ready');
+    for(const part of['waves','route','received'])assert.equal(await page.locator(`#distance-${other}-${part}`).evaluate(n=>n.childElementCount),0);
+    const row=page.locator(`#distance-${other}-record`);
+    assert.equal(await row.getAttribute('data-received'),'false');assert.equal(await row.locator('.distance-arrival').isVisible(),false);
+    assert.equal(await row.locator('.distance-pending').innerText(),'等待發聲');
+    assert.equal(await row.evaluate(n=>n.style.getPropertyValue('--trace-end')),'0%');
+    assert.equal(await row.evaluate(n=>n.style.getPropertyValue('--playhead')),'0%');
+   };
+   await idle();await page.waitForTimeout(400);await idle();
+   await page.waitForFunction(()=>document.getElementById('distance').dataset.phase==='complete');
+   await idle();assert.equal(await stage(name),'received');assert.equal(await page.locator(`#distance-${name}-record .distance-arrival`).innerText(),arrival+' 秒');
+   assert.equal(await page.locator('#distance-elapsed').innerText(),arrival);
+   assert.equal(await pause.isDisabled(),true);
+   const evidence=await page.evaluate(before=>{
+    const output=window.__outputs.at(-1),sources=window.__sources.slice(before),first=sources[0];
+    return{count:sources.length,same:sources.every(s=>s.source.buffer===first.source.buffer),delays:sources.map(s=>s.when-first.when),gains:sources.map(s=>s.gain),peaks:sources.map(s=>Math.max(0,...output.samples.filter(p=>p.time>=s.when&&p.time<s.when+.2).map(p=>p.peak)))};
+   },before);
+   assert.equal(evidence.count,2);assert.equal(evidence.same,true);assert.ok(Math.abs(evidence.delays[1]-delay)<.03);
+   assert.deepEqual(evidence.gains.map(n=>Math.round(n*100)),[100,45]);assert.ok(evidence.peaks[0]>.28&&evidence.peaks[0]<.34);assert.ok(evidence.peaks[1]>.12&&evidence.peaks[1]<.16);
+   console.log('Single lane final audio:',name,JSON.stringify(evidence));
+   await page.locator('#s2').screenshot({path:`/tmp/k12-34-distance-verified/${name}-only-1440.png`});
+  }
+  await select(68);
+ });
+ await t.test('pause and resume preserve the selected lane and switching lanes cancels the old return',async()=>{
+  await page.locator('[data-distance-speaker=far]').click();await page.waitForTimeout(300);await pause.click();
+  const progress=await root.getAttribute('data-progress'),emissions=await count();await page.waitForTimeout(150);
+  assert.equal(await root.getAttribute('data-progress'),progress);assert.equal(await root.getAttribute('data-selection'),'far');assert.equal(await stage('near'),'ready');
+  const before=await page.evaluate(()=>window.__sources.length);await pause.click();
+  await page.waitForFunction(n=>window.__sources.length>n,before);assert.equal(await count(),emissions);assert.equal(await root.getAttribute('data-selection'),'far');assert.equal(await stage('near'),'ready');
+  const old=await page.evaluate(()=>window.__sources.length);await page.locator('[data-distance-speaker=near]').click();
+  await page.waitForFunction(n=>window.__sources.length===n+2,old);
+  assert.equal(await page.evaluate(n=>window.__sources.slice(0,n).every(s=>s.stopped||s.ended),old),true);
+  assert.equal(await root.getAttribute('data-selection'),'near');assert.equal(await stage('far'),'ready');
+  await emit.click();assert.equal(await root.getAttribute('data-selection'),'both');assert.equal(await stage('near'),'outbound');assert.equal(await stage('far'),'outbound');await pause.click();
  });
  await t.test('at the comparison moment near has arrived while far just reaches the wall; pause freezes the shared record and waves',async()=>{
   await emit.click();await page.waitForFunction(()=>document.getElementById('distance-near-lane').dataset.stage==='received'&&document.getElementById('distance-far-lane').dataset.stage==='surface');await pause.click();
@@ -38,7 +83,7 @@ test('3.4 distance comparison follows the approved two-lane mockup',{timeout:180
   await pause.click();assert.equal(await count(),emissions);await page.waitForFunction(()=>document.getElementById('distance').dataset.phase==='complete');assert.equal(await stage('far'),'received');assert.equal(await page.locator('#distance-far-waves path').count(),0);
  });
  await t.test('each speaker and lower button restarts the same controller and cancels previous echoes',async()=>{
-  const before=Number(await count());for(const entrance of[page.locator('[data-distance-speaker]').first(),page.locator('[data-distance-speaker]').last(),emit]){const old=Number(await count());await entrance.click();await page.waitForTimeout(70);assert.equal(Number(await count()),old+1);assert.ok(Number(await root.getAttribute('data-progress'))<.1);assert.equal(await page.evaluate(()=>window.__sources.slice(0,-3).every(s=>s.stopped||s.ended)),true);}await page.locator('[data-distance-speaker]').first().focus();await page.keyboard.press('Enter');await page.keyboard.press('Space');assert.equal(Number(await count()),before+5);await pause.click();
+  const before=Number(await count());for(const entrance of[page.locator('[data-distance-speaker]').first(),page.locator('[data-distance-speaker]').last(),emit]){const old=Number(await count()),sources=await page.evaluate(()=>window.__sources.length);await entrance.click();await page.waitForTimeout(70);assert.equal(Number(await count()),old+1);assert.ok(Number(await root.getAttribute('data-progress'))<.1);assert.equal(await page.evaluate(n=>window.__sources.slice(0,n).every(s=>s.stopped||s.ended),sources),true);}await page.locator('[data-distance-speaker]').first().focus();await page.keyboard.press('Enter');assert.equal(await root.getAttribute('data-selection'),'near');assert.equal(await stage('far'),'ready');await page.locator('[data-distance-speaker]').last().focus();await page.keyboard.press('Space');assert.equal(await root.getAttribute('data-selection'),'far');assert.equal(await stage('near'),'ready');assert.equal(Number(await count()),before+5);await pause.click();
  });
  await t.test('mouse wall dragging keeps the fixed lane unchanged, clamps distance and cancels the previous observation',async()=>{
   await emit.click();await page.waitForFunction(()=>document.body.dataset.audioPlaying==='true');const fixed=await page.locator('#distance-near-lane').getAttribute('data-wall-x'),b=await wall.boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2+350,b.y+b.height/2,{steps:8});await page.mouse.up();assert.equal(await slider.inputValue(),'102');assert.equal(await phase(),'ready');assert.equal(await page.locator('body').getAttribute('data-audio-playing'),'false');assert.equal(await page.locator('#distance-near-lane').getAttribute('data-wall-x'),fixed);assert.equal(await page.locator('.distance-arrival:visible').count(),0);assert.equal(await wall.getAttribute('aria-valuenow'),'102');
@@ -55,7 +100,7 @@ test('3.4 distance comparison follows the approved two-lane mockup',{timeout:180
   for(const width of[1440,1280,1024,768,390,320]){await page.setViewportSize({width,height:1100});const sizes=await page.locator('#s2').evaluate(n=>{const main=n.querySelector('.card-main').getBoundingClientRect();return{overflow:document.documentElement.scrollWidth>innerWidth,left:main.left,right:main.right,boxes:[...n.querySelectorAll('.distance-experiment,.distance-scene,.distance-records,.distance-actions,.distance-conclusion')].map(n=>{const b=n.getBoundingClientRect();return{left:b.left,right:b.right};})};});assert.equal(sizes.overflow,false,`${width}px overflow`);for(const b of sizes.boxes){assert.ok(b.left>=sizes.left-1);assert.ok(b.right<=sizes.right+1);}if([1440,1024,390].includes(width))await page.locator('#s2').screenshot({path:`/tmp/k12-34-distance-verified/complete-${width}.png`});}await select(68);
  });
  await t.test('real touch wall dragging and speaker tapping work under reduced motion',async()=>{
-  const ctx=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});try{const p=await ctx.newPage();await p.goto(base+'#s2');await p.waitForFunction(()=>document.body.dataset.ready==='true');const target=p.locator('#distance-wall');await target.scrollIntoViewIfNeeded();const b=await target.boundingBox(),cdp=await ctx.newCDPSession(p),x=b.x+b.width/2,y=b.y+b.height/2;await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+35,y}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});assert.ok(Number(await p.locator('#wall-distance').inputValue())>68);await p.locator('[data-distance-speaker]').last().tap();await p.waitForFunction(()=>document.body.dataset.audioPlaying==='true');assert.equal(await p.locator('#distance').getAttribute('data-emissions'),'1');await p.locator('[data-distance-speaker]').last().tap();assert.equal(await p.locator('#distance').getAttribute('data-emissions'),'2');await p.waitForTimeout(130);assert.ok(Number(await p.locator('#distance').getAttribute('data-progress'))>0);await p.locator('[data-pause=distance]').tap();assert.equal(await p.locator('#distance').getAttribute('data-phase'),'paused');assert.equal(await p.locator('body').getAttribute('data-audio-playing'),'false');}finally{await ctx.close();}
+  const ctx=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});try{const p=await ctx.newPage();await p.goto(base+'#s2');await p.waitForFunction(()=>document.body.dataset.ready==='true');const target=p.locator('#distance-wall');await target.scrollIntoViewIfNeeded();const b=await target.boundingBox(),cdp=await ctx.newCDPSession(p),x=b.x+b.width/2,y=b.y+b.height/2;await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+35,y}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});assert.ok(Number(await p.locator('#wall-distance').inputValue())>68);await p.locator('[data-distance-speaker]').last().tap();await p.waitForFunction(()=>document.body.dataset.audioPlaying==='true');assert.equal(await p.locator('#distance').getAttribute('data-emissions'),'1');assert.equal(await p.locator('#distance').getAttribute('data-selection'),'far');assert.equal(await p.locator('#distance-near-lane').getAttribute('data-stage'),'ready');assert.equal(await p.locator('#distance-near-waves path').count(),0);await p.locator('[data-distance-speaker]').last().tap();assert.equal(await p.locator('#distance').getAttribute('data-emissions'),'2');assert.equal(await p.locator('#distance-near-record').getAttribute('data-received'),'false');await p.locator('[data-distance-speaker]').first().tap();assert.equal(await p.locator('#distance').getAttribute('data-emissions'),'3');assert.equal(await p.locator('#distance').getAttribute('data-selection'),'near');assert.equal(await p.locator('#distance-far-lane').getAttribute('data-stage'),'ready');await p.waitForTimeout(130);assert.ok(Number(await p.locator('#distance').getAttribute('data-progress'))>0);await p.locator('[data-pause=distance]').tap();assert.equal(await p.locator('#distance').getAttribute('data-phase'),'paused');assert.equal(await p.locator('body').getAttribute('data-audio-playing'),'false');}finally{await ctx.close();}
  });
  await t.test('audio failure appears only on failure and a new explicit play clears the error',async()=>{
   const p=await browser.newPage();try{await p.addInitScript(()=>{const Native=AudioContext;let rejected=false;window.AudioContext=class extends Native{resume(){if(!rejected){rejected=true;return Promise.reject(new DOMException('blocked','NotAllowedError'));}return super.resume();}};});await p.goto(base+'#s2');await p.waitForFunction(()=>document.body.dataset.ready==='true');assert.equal(await p.locator('#distance-error').isVisible(),false);await p.locator('[data-play=distance]').click();await p.waitForFunction(()=>!document.getElementById('distance-error').hidden);assert.match(await p.locator('#distance-error').innerText(),/聲音未能啟用/);await p.locator('[data-play=distance]').click();await p.waitForFunction(()=>document.body.dataset.audioPlaying==='true');assert.equal(await p.locator('#distance-error').isVisible(),false);}finally{await p.close();}
