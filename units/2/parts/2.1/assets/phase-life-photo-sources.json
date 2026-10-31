@@ -66,24 +66,57 @@
     ]
   },
   "condensation": {
-    "source_title": "Controlling-condensation-and-frost-growth-with-chemical-micropatterns-srep19131-s2.ogv",
-    "source_page": "https://commons.wikimedia.org/wiki/File:Controlling-condensation-and-frost-growth-with-chemical-micropatterns-srep19131-s2.ogv",
-    "original_url": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Controlling-condensation-and-frost-growth-with-chemical-micropatterns-srep19131-s2.ogv",
-    "original_sha256": "4c0ded6b73e3ac438b0b95b2d17405d538c0a6a15f2c7e2fbcd13712d9fe20a6",
-    "author": "Boreyko J, Hansen R, Murphy K, Nath S, Retterer S, Collier C",
-    "license": "CC BY 4.0",
-    "license_url": "https://creativecommons.org/licenses/by/4.0",
-    "changes": "從同一實拍影片擷取兩個指定時刻；等比例縮小並轉存 WebP，無重繪、生成或合成。",
+    "source_title": "乾燥草葉與清晨露珠（分別取材）",
+    "source_type": "independent_photographs",
+    "license": "Pexels License",
+    "license_url": "https://www.pexels.com/license/",
+    "changes": "兩張分別取材的實拍照片作凝結前後示意，不是同一片草葉的連拍。僅等比例縮小及轉存 WebP，無生成、重繪或合成。",
     "photos": [
       {
         "file": "phase-photo-condensation-before.webp",
-        "time_seconds": 0.2,
-        "sha256": "fa0e4824841825a59305cfcec7959505b8dd297e61fbf4d7df607b2e7356ed20"
+        "source_title": "Green Grass in Close Up Photography",
+        "source_page": "https://www.pexels.com/photo/green-grass-in-close-up-photography-8967697/",
+        "author": "Alberta Studios",
+        "license": "Pexels License",
+        "license_url": "https://www.pexels.com/license/",
+        "image_url": "https://images.pexels.com/photos/8967697/pexels-photo-8967697.jpeg?auto=compress&cs=tinysrgb&w=1440",
+        "downloaded_sha256": "2ee086f2852e6ed93b0f99ab1630fe7cc8268c642237ce448cf7cc0470490f4b",
+        "source_dimensions": [
+          4164,
+          4000
+        ],
+        "input_dimensions": [
+          1440,
+          1383
+        ],
+        "output_dimensions": [
+          960,
+          922
+        ],
+        "sha256": "7d05162ad4854d5284e96c3c0f8ec9c3a4f3060211942f6d20b86e75bcc5e935"
       },
       {
         "file": "phase-photo-condensation-after.webp",
-        "time_seconds": 14,
-        "sha256": "41b9be1db1444898e6286b401c878e09056bf68aa48d2b91ce3ea2407d71a970"
+        "source_title": "Grass in Dew",
+        "source_page": "https://www.pexels.com/photo/grass-in-dew-15149665/",
+        "author": "Devyn Breslin",
+        "license": "Pexels License",
+        "license_url": "https://www.pexels.com/license/",
+        "image_url": "https://images.pexels.com/photos/15149665/pexels-photo-15149665.jpeg?auto=compress&cs=tinysrgb&w=1440",
+        "downloaded_sha256": "5fd07c4ef29837a5e7681d024e43a23a8d697af119b502a4cc1a3568a112ca72",
+        "source_dimensions": [
+          4000,
+          6000
+        ],
+        "input_dimensions": [
+          1440,
+          2160
+        ],
+        "output_dimensions": [
+          640,
+          960
+        ],
+        "sha256": "71f47f128a616d21388fae8952b5e9f39c690f9c860df3b4999738977aa9cb41"
       }
     ]
   },

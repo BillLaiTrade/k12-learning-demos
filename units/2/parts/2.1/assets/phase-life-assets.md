@@ -7,9 +7,9 @@
 - 融化：Philip Serracino Inglott（Inkwina） 的《Ice cubes melting in a glass》，同一杯冰的縮時實拍，CC BY-SA 3.0。末張仍可見少量冰，說明只寫冰變小、液態水增加，不冒稱全部融化。
 - 凝固、凝華：Maxim Bilovitskiy 的《Frozen drop》，CC BY 4.0。凝固為4.8秒透明水滴／15秒冰珠；凝華為15秒冰珠／30秒表面霜晶。這是低溫實驗特寫，不冒稱家用冷凍庫；霧狀背景不作水蒸氣的可見外觀。
 - 汽化：Rhetos 的《Evaporation (Salzlake)》，CC BY-SA 4.0。同一份石板上的鹽水，36秒倒入／70秒所示13分鐘後的殘鹽；液態水蒸發，鹽沒有變成水蒸氣。
-- 凝結：Boreyko、Hansen、Murphy、Nath、Retterer、Collier（2016）的《Controlling condensation and frost growth with chemical micropatterns》Supplementary Movie 1，CC BY 4.0。原研究 DOI 10.1038/srep19131，採冷表面液滴凝結的顯微實拍，不使用後續液滴結冰／冰橋成長作凝華照片。
+- 凝結：使用者選定草葉晨露示例。變化前採 Alberta Studios 的《Green Grass in Close Up Photography》（Pexels 8967697），變化後採 Devyn Breslin 的《Grass in Dew》（Pexels 15149665），皆依 Pexels License 使用。兩張分別取材，作乾燥草葉／清晨露珠的凝結前後示意，不是同一片草葉的連拍；說明露珠來自空氣中的水蒸氣遇冷凝結，不將葉片自身的水或雨水描述為凝結。
 - 昇華：NASA/JPL 的鳳凰號水冰照片，公有領域。從原始前後圖的實拍放大區各裁一張；2008-06-15／06-19，同位置小塊水冰消失。明示為火星觀測，不冒稱地球冷凍庫；只以水冰直接轉為水蒸氣說明昇華，不延伸行星氣候課程。
 
-各組均來自同一拍攝紀錄，但各組拍攝環境、時間與尺度不同，照片不與粒子動畫同步，不作同次實驗或學生實測聲明。原始公開紀錄連結、作者、授權、來源與輸出SHA-256、擷取時間／裁切範圍詳見 phase-life-photo-sources.json；學生可點「照片來源與拍攝條件」讀取 phase-life-credits.html。原始影片僅供來源查核，不部署，不嵌入教學頁。
+凝結組為分別取材的實拍示意，其餘組各自來自同一拍攝紀錄。各組拍攝環境、時間與尺度不同，照片不與粒子動畫同步，不作同次實驗或學生實測聲明。原始公開紀錄連結、作者、授權、來源與輸出SHA-256、擷取時間／裁切範圍詳見 phase-life-photo-sources.json；學生可點「照片來源與拍攝條件」讀取 phase-life-credits.html。原始影片僅供來源查核，不部署，不嵌入教學頁。
 
 衍生檔只做影格擷取、裁切、等比例縮小與WebP編碼，沒有生成、補畫、上色或新增照片圖層。CC BY-SA衍生影格維持對應授權。舊版生成背景與透明冰塊／霜晶素材自本版移除；歷史來源仍可由Git追溯。
