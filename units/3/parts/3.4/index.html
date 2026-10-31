@@ -111,6 +111,8 @@
               <button type="button" class="calculation-speaker" id="calculation-speaker" aria-label="點喇叭，發出一次短音" title="發出一次短音"></button>
             </div>
           </figure>
+      <div class="calculation-actions"><button class="action" type="button" data-play="calculation"><span aria-hidden="true">▶</span> 再發出一次短音</button><button class="secondary" type="button" data-pause="calculation" disabled>暫停</button></div>
+      <p id="calculation-error" class="calculation-error" role="alert" hidden></p>
         </li>
         <li class="calculation-step">
           <h3><span class="calculation-step-number" aria-hidden="true">2</span><span>每秒走 340 公尺，<span data-calculation-time>4</span> 秒共走多遠？</span></h3>
@@ -131,8 +133,6 @@
         </li>
       </ol>
       <p class="calculation-formula">距離＝聲速 × 往返時間 ÷ 2</p>
-      <div class="calculation-actions"><button class="action" type="button" data-play="calculation"><span aria-hidden="true">▶</span> 再發出一次短音</button><button class="secondary" type="button" data-pause="calculation" disabled>暫停</button></div>
-      <p id="calculation-error" class="calculation-error" role="alert" hidden></p>
       <p id="calculation-reading" class="calculation-sr-only" role="status"></p><p id="calculation-status" class="calculation-sr-only" role="status">準備好，可點喇叭或按鈕觀察。</p>
     </div>
     <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>聲速乘上往返時間，得到的是去、回兩段加起來的路程。喇叭和接收器靠在一起，去、回兩段一樣長，所以要除以二，才是裝置到反射板的距離。</p></div>
