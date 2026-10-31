@@ -491,3 +491,8 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-knowledge-oxygen
 前三個入口共用 `helpers/gas-profile.cjs`，現驗證第二區內的氮／氬／氧介紹，不再驗獨立03／05。檢查預設氮氣、原生點選／鍵盤／觸控切換、滑過不換內容、換排列與點空白保留閱讀、斜紋格先明確拆分、其餘不等同二氧化碳、三種科學措辭與用途照片實際解碼、七種寬度與無JS三份完整資料。`GAS_PROFILE_URL` 指定共同公開頁，`GAS_PROFILE_ARTIFACT_DIR`指定截圖位置；組成與整頁可另以 `AIR_COMPOSITION_URL`／`AIR_FULL_URL` 指向公開頁。
 
 整頁現驗證四教學＋一小測、五個有效導覽、兩實驗及杯子／小測回歸；小測模型逐項核對新回看位置。第二組另驗氧氣3D／SVG後備、暫停／繼續、無JS、木條共用時鐘、窄欄並列及杯子真實滑鼠／觸控拖曳保水。未復用舊編號通過紀錄。證據見 `docs/reviews/unit-2.3-composition-knowledge/`。
+
+
+### 第四區實錄音檔更新
+
+現行第四區使用CC BY 4.0的mrshoes封底PVC排管實錄，六管WAV由來源錄音剪取調音。相同指令的排笛專項現11項，整合54項、直接模型／WAV3項共57項（含外層）。以實際播放Buffer自相關檢查音高、PCM與雜湊確認實錄音檔；另測載入後取消不會起音、503失敗後重試成功。來源授權與重製程式見docs/reviews/unit-3.3-pan-recordings/及scripts/prepare-pan-recordings.py。

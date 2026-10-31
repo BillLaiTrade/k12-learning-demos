@@ -4,8 +4,8 @@ import {createForkExperiment} from './fork-experiment.mjs?v=2';
 import {createPitchExperiment,PITCH_SECONDS} from './pitch-experiment.mjs?v=5';
 import {createGuitarExperiment} from './guitar-experiment.mjs?v=2';
 import {guitarSamples} from './guitar-model.mjs?v=1';
-import {createPanExperiment} from './pan-experiment.mjs?v=1';
-import {panSamples} from './pan-model.mjs?v=1';
+import {createPanExperiment} from './pan-experiment.mjs?v=2';
+import {loadPanRecording,recordingLevel} from './pan-recordings.mjs?v=1';
 import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const state={frequency:400,index:0};
@@ -52,11 +52,17 @@ async function play(button){
   audioContext??=new Audio();await audioContext.resume();
   if(ticket!==request||document.hidden)return;
   const forkKey=button.dataset.forkStrike,pitchKey=button.dataset.play.startsWith('pitch-')?button.dataset.play:null,guitarKey=button.dataset.play.startsWith('string-')?button.dataset.play:null,panKey=button.dataset.play.startsWith('pan-');
-  const data=forkKey?forkSamples(settings.amplitude,audioContext.sampleRate):guitarKey?guitarSamples(settings.frequency,audioContext.sampleRate):panKey?panSamples(settings.frequency,audioContext.sampleRate):soundSamples(settings,audioContext.sampleRate,pitchKey?PITCH_SECONDS:1.6);
-  const outputGain=forkKey?FORK_OUTPUT_GAIN:pitchKey?PITCH_OUTPUT_GAIN:1;
-  if(outputGain!==1)for(let i=0;i<data.length;i++)data[i]*=outputGain;
-  const buffer=audioContext.createBuffer(1,data.length,audioContext.sampleRate);
-  buffer.copyToChannel(data,0);source=audioContext.createBufferSource();source.buffer=buffer;source.connect(audioContext.destination);
+  let buffer;
+  if(panKey){
+   buffer=await loadPanRecording(Number(button.dataset.play.slice(4)),audioContext);
+   if(ticket!==request||document.hidden)return;
+  }else{
+   const data=forkKey?forkSamples(settings.amplitude,audioContext.sampleRate):guitarKey?guitarSamples(settings.frequency,audioContext.sampleRate):soundSamples(settings,audioContext.sampleRate,pitchKey?PITCH_SECONDS:1.6);
+   const outputGain=forkKey?FORK_OUTPUT_GAIN:pitchKey?PITCH_OUTPUT_GAIN:1;
+   if(outputGain!==1)for(let i=0;i<data.length;i++)data[i]*=outputGain;
+   buffer=audioContext.createBuffer(1,data.length,audioContext.sampleRate);buffer.copyToChannel(data,0);
+  }
+  source=audioContext.createBufferSource();source.buffer=buffer;source.connect(audioContext.destination);
   root.dataset.playing='true';root.dataset.frequency=String(settings.frequency);root.dataset.amplitude=String(settings.amplitude);root.dataset.tone=settings.tone||'pure';
   root.querySelectorAll('.stop').forEach(b=>b.disabled=false);root.querySelector('.play-state').textContent=forkKey?`${forkKey==='soft'?'輕敲':'較重敲'}，觀察振幅與聲音`:`播放中・${settings.frequency.toFixed(1)} Hz`;
   const start=performance.now(),currentSource=source,forkStart=audioContext.currentTime+(forkKey?STRIKE_DELAY:0);
@@ -71,7 +77,7 @@ async function play(button){
    if(forkKey)forkView.update(audioContext.currentTime-forkStart);
    if(pitchKey)pitchView.update(audioContext.currentTime-forkStart);
    if(guitarKey)guitarView.update(audioContext.currentTime-forkStart);
-   if(panKey)panView.update(audioContext.currentTime-forkStart);
+   if(panKey){const elapsed=audioContext.currentTime-forkStart;panView.update(elapsed,recordingLevel(buffer,elapsed));}
    animation=requestAnimationFrame(animate);
   }
   animation=requestAnimationFrame(animate);

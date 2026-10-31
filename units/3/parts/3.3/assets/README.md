@@ -4,7 +4,7 @@
 - 首頁插圖：`sound-fair-opening.png`為使用者於2026-10-30選定的第三輪C02「聲音體驗市集」。以image_gen依1.1／1.2及共用角色參考生成，來源為`docs/reviews/unit-3.3-hero-candidates-round3/candidate-c02.png`；1672×941原始PNG直接採用，未裁切、重畫或後製。生成紀錄見該輪`generation.json`。
 - 第一區音叉：依核可示意圖，以image_gen製作`fork-tabletop-background.png`及透明`fork-apparatus.png`，生成紀錄見`fork-generation.json`。音叉照片的兩叉股分段彎曲，叉柄／木座固定；音槌及單叉股放大觀察使用SVG。
 - 現行琴弦採透明木吉他素材與獨立SVG弦／品格／手指；空氣柱與訊號圖為繪製SVG，無外部圖片授權依賴。
-- 示意音為本次以Web Audio產生的短音，不是錄音；學生頁已標明弦音／管音示意。沒有替換3.2已核可的真實音效。
+- 第四區現採CC BY 4.0封底PVC排管實錄經剪輯調音；其他區仍為Web Audio合成示意，沒有替換3.2已核可音效。
 - 第一區`fork-model.mjs`為440Hz純音衰減示意，輕／較重敲相對振幅0.30／0.70，長2.4秒，並非音叉實錄。音槌接觸、聲音及叉股位移共用音訊時間；畫面5Hz放慢、位移放大，兩叉股反向；停止後放大圖明示此次最大振幅快照。比較紀錄採相同時間窗（4個週期，約9.09ms）及比例，振幅標記由平衡位置到單側最大位移，不是峰到峰值。
 - 其餘區`model.mjs`的固定泛音係數用於呈現不同波形；不宣稱精確重建特定樂器。音訊為1.6秒，20ms淡入、120ms淡出，依RMS作近似大小聲匹配；不是聲級校準，也不保證不同設備與頻率下主觀響度相等。
 - 現行木吉他畫面弦振動以基本頻率的1/100呈現；管內空氣位移以1/100放慢，使用兩端開口管基本模式的往返位移，聲音保持原音高。
@@ -60,3 +60,10 @@ pitch-room-background.png為image_gen生成的暖米色牆、柔和採光及木�
 使用者核可竹製排笛並取消固定參照，改為六管自由點奏。pan-bamboo.png為image_gen依核可圖生成的單管透明素材，1024×1536原始PNG直接採用，來源及雜湊見pan-generation.json。由pan-experiment.mjs用SVG視窗布局管口、管身、封底與編繩、獨立切窗和粒子；長度40／35／30／26／23／20cm，管徑保持相同。
 
 pan-model.mjs取代初版兩端開口的第四區模型：上開下閉、基本頻率343/(4L)，忽略端點修正。位移以封底為節點、管口為腹點的基本模態，100倍放慢與8圖形單位最大放大位移；1.8秒奇次泛音合成示意，共用70ms起音、180ms收音與0.92合成係數。舊model.mjs的tubeFrequency保留一般開口管回歸範例，不再控制第四區；第五區與小測的管音示意仍沿用既有模型。詳見docs/reviews/unit-3.3-pan-flute/。
+
+
+## 2026-10-31第四區授權錄音（取代合成管音）
+
+六管現使用pan-audio/pipe-0.wav～pipe-5.wav，來自mrshoes的Freesound 278175“panflute scale octave and a half”，CC BY 4.0。作者以封底PVC管與水位錄製音階，非竹排笛實錄。網站可見作者、來源、授權與剪輯調音告知；素材授權及每檔段落／調音／量測／SHA-256見pan-audio/LICENSE.md及recordings.json。原HQ MP3及來源證據在docs/reviews/unit-3.3-pan-recordings/source/，scripts/prepare-pan-recordings.py可重製。
+
+pan-recordings.mjs負責本地WAV下載、AudioContext解碼快取及錄音RMS取樣，取消請求不會稍後起音，失敗可重試。pan-model.mjs已移除合成聲音函式；管內位移使用實錄RMS振幅與共同100倍放慢頻率，封底節點保持。數字為調音後的理想目標，不將微小吹奏音高變化當作新物理條件。此節取代上節合成音與固定音訊包絡的描述。

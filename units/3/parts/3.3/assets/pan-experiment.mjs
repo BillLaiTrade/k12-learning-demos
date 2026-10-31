@@ -1,4 +1,4 @@
-import {PAN_LENGTHS,panFrequency,panGeometry,panDisplacement} from './pan-model.mjs?v=1';
+import {PAN_LENGTHS,panFrequency,panGeometry,panDisplacement} from './pan-model.mjs?v=2';
 const image=(x,y,w,h,box)=>`<svg x="${x}" y="${y}" width="${w}" height="${h}" viewBox="${box}" preserveAspectRatio="none"><image href="assets/pan-bamboo.png" width="1024" height="1536"/></svg>`;
 function pipe(index){
  const g=panGeometry(index),{x,top,height}=g,id=`pan-window-${index}`;
@@ -23,12 +23,12 @@ export function createPanExperiment(root){
   const g=panGeometry(i);b.style.cssText=`left:${g.x/10}%;top:${g.top/5.2}%;width:7.2%;height:${g.height/5.2}%`;
   b.setAttribute('aria-label',`吹奏${g.length}公分排笛，${panFrequency(g.length).toFixed(1)}赫茲`);
  }
- function position(seconds){
+ function position(seconds,level){
   const hz=panFrequency(PAN_LENGTHS[selected]);
   for(const col of root.querySelectorAll('.pan-pipe')){
    const active=Number(col.dataset.panIndex)===selected&&sounding;
    for(const dot of col.querySelectorAll('.pan-particle')){
-    const delta=active?panDisplacement(Number(dot.dataset.fraction),seconds,hz):0;
+    const delta=active?panDisplacement(Number(dot.dataset.fraction),seconds,hz,level):0;
     dot.setAttribute('cy',String(Number(dot.dataset.originY)-delta));
    }
   }

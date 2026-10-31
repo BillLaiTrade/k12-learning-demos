@@ -1,0 +1,11 @@
+✔ closed-end pipes have quarter-wave fundamentals and matched physical length scale (0.901104ms)
+✔ closed bottom is a displacement node; air oscillates locally on a common slow clock (4.757389ms)
+✔ all recorded pipe files carry attribution, have audible bounded PCM and correct duration (15.110891ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26.236652

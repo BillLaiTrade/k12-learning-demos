@@ -8,12 +8,4 @@ export function panGeometry(index){
 }
 export function panEnvelope(seconds){return Math.max(0,Math.min(1,seconds/.07,(PAN_SECONDS-seconds)/.18));}
 // fraction=0於封底、1於管口；閉端位移節點、開端位移腹點。
-export function panDisplacement(fraction,seconds,hz){return 8*Math.sin(Math.PI*fraction/2)*Math.sin(2*Math.PI*hz*seconds/PAN_SLOWDOWN)*panEnvelope(seconds);}
-export function panSamples(hz,rate){
- const a=new Float32Array(Math.ceil(rate*PAN_SECONDS));
- for(let i=0;i<a.length;i++){
-  const t=i/rate,phase=2*Math.PI*hz*t;
-  a[i]=.92*(Math.sin(phase)+.18*Math.sin(3*phase)+.06*Math.sin(5*phase))/1.24*panEnvelope(t);
- }
- return a;
-}
+export function panDisplacement(fraction,seconds,hz,level=panEnvelope(seconds)){return 8*Math.sin(Math.PI*fraction/2)*Math.sin(2*Math.PI*hz*seconds/PAN_SLOWDOWN)*level;}
