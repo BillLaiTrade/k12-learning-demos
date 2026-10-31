@@ -38,7 +38,7 @@ test('2.1 static image pairs and retained particle transitions',{timeout:300000}
  function check(s,key,half=true){
   assert.equal(s.key,key);assert.equal(s.total,s.population??48);assert.equal(s.synthetic,0);assert.equal(s.animations,0);assert.equal(s.photos.length,2);assert.deepEqual(s.labels,['變化前','變化後']);
   assert.equal(s.overflow,false);assert.equal(s.textOverflow,false);assert.ok(s.legendBox.top>=s.stageBox.bottom-1);assert.ok(s.photoBox.top>=s.legendBox.bottom-1);
-  assert.match(s.text,/寫實示意/);assert.match(s.text,/圖片來源與製作說明/);assert.doesNotMatch(s.text,/實拍對照|照片來源與拍攝條件/);for(const p of s.photos)assert.match(p.alt,/寫實生成示意/);
+  assert.match(s.text,/生活例子/);assert.match(s.text,/圖片來源與製作說明/);assert.doesNotMatch(s.text,/實拍對照|照片來源與拍攝條件/);for(const p of s.photos)assert.match(p.alt,/寫實生成示意/);
   if(key==='sublimation'){assert.match(s.text,/零下/);assert.match(s.text,/乾燥/);assert.match(s.text,/長時間/);assert.match(s.text,/看不見的水蒸氣/);}if(key==='deposition'){assert.match(s.text,/零下/);assert.match(s.text,/直接形成固態霜晶/);}assert.notEqual(s.photos[0].src,s.photos[1].src);
   for(const [i,p]of s.photos.entries()){assert.ok(p.loaded&&p.width>200);assert.match(p.src,new RegExp(`phase-photo-${key}-${i?'after':'before'}\\.webp`));assert.ok(p.alt);assert.ok(p.box.top>=s.photoBox.top&&p.box.bottom<=s.photoBox.bottom+1);assert.ok(p.box.left>=s.photoBox.left&&p.box.right<=s.photoBox.right+1);}
   assert.ok(s.photos[1].box.left>s.photos[0].box.left);

@@ -33,7 +33,7 @@
     get ready() { return ready; }, readyPromise,
     begin(key) {
       const scene = scenes[key];
-      title.textContent = `${scene.illustration ? '寫實示意' : '實拍對照'}｜${scene.title}`;
+      title.textContent = `生活例子｜${scene.title}`;
       description.textContent = scene.copy;
       ['before','after'].forEach((side, i) => { photos[i].src = url(key, side); photos[i].alt = scene.alt[i]; });
       source.href = new URL(`phase-life-credits.html#${key}`, base).href;
