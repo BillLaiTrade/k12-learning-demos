@@ -1,0 +1,19 @@
+{
+  "baseline": "17eae34baf595ce76457136bc030a28e15403b04",
+  "inline_script_count": 1,
+  "inline_scripts_byte_identical": true,
+  "unchanged_other_five_pairs": {
+    "phase-photo-freeze-after.webp": true,
+    "phase-photo-sublimation-after.webp": true,
+    "phase-photo-melt-after.webp": true,
+    "phase-photo-condensation-after.webp": true,
+    "phase-photo-freeze-before.webp": true,
+    "phase-photo-condensation-before.webp": true,
+    "phase-photo-deposition-after.webp": true,
+    "phase-photo-melt-before.webp": true,
+    "phase-photo-sublimation-before.webp": true,
+    "phase-photo-deposition-before.webp": true
+  },
+  "unchanged_other_five_source_records": true,
+  "vaporization_output_and_approved_artifact_hashes_match_sources": true
+}

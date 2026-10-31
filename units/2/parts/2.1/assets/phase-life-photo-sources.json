@@ -93,24 +93,48 @@
     ]
   },
   "vaporization": {
-    "source_title": "Evaporation (Salzlake).webm",
-    "source_page": "https://commons.wikimedia.org/wiki/File:Evaporation_(Salzlake).webm",
-    "original_url": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Evaporation_%28Salzlake%29.webm",
-    "original_sha256": "ec64a6c50ec50701121636df8e0bbefc1964305d4fbbc343e0d423a6551327e1",
-    "author": "Rhetos",
-    "license": "CC BY-SA 4.0",
-    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
-    "changes": "從同一實拍影片擷取兩個指定時刻；等比例縮小並轉存 WebP，無重繪、生成或合成。",
+    "source_type": "ai_generated_photorealistic_illustration",
+    "source_title": "汽化：地磚積水蒸發前後（寫實示意圖）",
+    "generator": "OpenAI image generation",
+    "generation_date": "2026-10-31",
+    "source_artifact": "docs/reviews/unit-2.1-vaporization-generated/approved-comparison.png",
+    "source_artifact_sha256": "30d95ae55ebe42980a70c7dec309e90786d34fb5ca39cc26bb27add180e05a4a",
+    "source_dimensions": [
+      1536,
+      1024
+    ],
+    "prompt_summary": "固定不吸水瓷磚的紋路、視角、光線與背景。左圖為一灘淺而透明的清水，右圖為同處蒸發後完全乾燥的地磚；沒有排水口、吸水土壤、殘留水漬或礦物、白霧與可見氣體。不以流走或滲入地面代替蒸發。未採用先前空杯或電磁爐候選。",
+    "changes": "依使用者核可的雙欄生成原圖拆成前後兩張，僅去除中央留白並轉存WebP，沒有重繪核可內容。",
+    "disclosure": "AI生成的寫實示意，不是真實拍攝或同次實驗紀錄。",
+    "selection_status": "使用者已核可地磚積水版並依序套用；下一組凝結須先生成候選，待核可後才套用。",
     "photos": [
       {
         "file": "phase-photo-vaporization-before.webp",
-        "time_seconds": 36,
-        "sha256": "977fe1cd523e4db18acf85a069b71daf444bab4a88c9621bb3ca002f8f7f1a36"
+        "crop": [
+          0,
+          0,
+          763,
+          1024
+        ],
+        "output_dimensions": [
+          763,
+          1024
+        ],
+        "sha256": "e2d709f68c58022e2b5b2de9a0e6f484746aa51a33d660907a56fb391caf3fb0"
       },
       {
         "file": "phase-photo-vaporization-after.webp",
-        "time_seconds": 70,
-        "sha256": "c20a1e412579d36e826507b3ea4e52fb990a05b9b0ebffccfac5ca34de389e2a"
+        "crop": [
+          775,
+          0,
+          1536,
+          1024
+        ],
+        "output_dimensions": [
+          761,
+          1024
+        ],
+        "sha256": "30d5a4852c93bff50b20cf93b867ad3bba64f4aede53d0de7f044cb2eb8042f6"
       }
     ]
   },
