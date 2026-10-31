@@ -9,7 +9,6 @@ const answerFields=['raw-mass','solution-mass','solute-mass','calculation-numera
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
 let samples=[],active=null,stock=6,nextId=1,animation=null,renderer=null,frame=0,pausedAt=null,drag=null,suppressClickUntil=0,feedbackRevealFrame=0;
 const selected=()=>samples.find(s=>s.id===active);
-const label=id=>id<=26?String.fromCharCode(64+id):String(id);
 function announce(text,observation=false){$('status').textContent=text;$('status').dataset.observation=String(observation);}
 function clearReportTarget(){
   for(const field of $('report').querySelectorAll('[aria-invalid="true"]')){
@@ -56,21 +55,14 @@ function update(){
   root.dataset.busy=String(busy);root.dataset.hasSample=String(!!sample);root.dataset.sampleCount=String(samples.length);root.dataset.stock=String(stock);root.dataset.active=active??'';root.dataset.phase=sample?.phase||'';
   for(const button of controls)button.disabled=!ready||busy;
   for(const button of root.querySelectorAll('.invest-tool'))button.setAttribute('aria-pressed',String(button.dataset.investTool===(animation?.kind||sample?.display)));
-  $('reset').disabled=!ready;$('take').textContent=stock===0?'補充同批樣本':sample?'＋ 再取一份':'取一份';
-  const sampleLabel=stock===0?'未知樣本 X 已取完：補充同批樣本，保留既有取樣與紀錄':'未知樣本 X：點瓶身取一份到燒杯，也可拖到燒杯';
+  $('reset').disabled=!ready;$('take').textContent=sample?'＋ 再取一份':'取一份';
+  const sampleLabel=sample?'未知樣本 X：再取一份重新操作，保留筆記本紀錄；也可拖到燒杯':'未知樣本 X：點瓶身取一份到燒杯，也可拖到燒杯';
   for(const id of ['bottle','take'])$(id).setAttribute('aria-label',sampleLabel);
-  $('current').hidden=!sample;$('samples').hidden=samples.length<2;
-  $('current-label').textContent=sample?`取樣 ${label(sample.id)} · ${phaseName(sample)}`:'';
+  $('current').hidden=!sample;
+  $('current-label').textContent=sample?phaseName(sample):'';
   $('settle').hidden=!sample||sample.water===0||sample.sand===0;$('settle').disabled=!ready||busy;
-  const focusId=document.activeElement?.dataset?.sample;
-  $('samples').replaceChildren();
-  for(const s of samples){const button=document.createElement('button');button.type='button';button.dataset.sample=s.id;button.setAttribute('aria-pressed',String(s.id===active));button.disabled=busy;const name=document.createElement('strong');name.textContent=`取樣 ${label(s.id)}`;const phase=document.createElement('span');phase.textContent=phaseName(s);button.append(name,phase);button.addEventListener('click',()=>selectSample(s.id));$('samples').append(button);}
-  if(focusId)$('samples').querySelector(`[data-sample="${focusId}"]`)?.focus({preventScroll:true});
   updateConcentration();
-  $('canvas').setAttribute('aria-label',sample?`未知樣本 X 與取樣 ${label(sample.id)}，目前為${phaseName(sample)}。${busy?`${actionName(animation.kind)}進行中。`:sample.events.at(-1)?.observation||''}`:'未知樣本 X 樣本瓶、空燒杯與收好的器材盤。點瓶身取樣。');
-}
-function selectSample(id){
-  if(animation)return;active=id;invalidateReport();const sample=selected();update();redraw();announce(sample.events.at(-1)?.observation||`已選取取樣 ${label(id)}，可以選用器材測試。`,!!sample.events.length);
+  $('canvas').setAttribute('aria-label',sample?`未知樣本 X，目前這份樣本為${phaseName(sample)}。${busy?`${actionName(animation.kind)}進行中。`:sample.events.at(-1)?.observation||''}`:'未知樣本 X 樣本瓶、空燒杯與收好的器材盤。點瓶身取樣。');
 }
 function animate(kind,before){
   const start=performance.now();animation={kind,before,start,duration:DURATION[kind],reduced:motion.matches};
@@ -85,7 +77,7 @@ function animate(kind,before){
       samples=samples.map(s=>s.id===active?result.sample:s);
       root.dataset.lastEvent=result.event.id;
       announce(result.event.observation,true);
-    }else announce(`取樣 ${label(active)} 已放上實驗桌。可以選用器材，也可以再取一份。`);
+    }else announce('新的一份樣本已放上實驗桌。可以選用器材；筆記本紀錄已保留。');
     animation=null;frame=0;update();redraw();
   };
   animation.tick=tick;frame=requestAnimationFrame(tick);
@@ -93,7 +85,7 @@ function animate(kind,before){
 function perform(action){
   if(root.dataset.ready!=='true'||animation)return;
   if(action==='sample'){
-    if(stock===0){stock=6;update();redraw();announce('已補充同批樣本；既有取樣與紀錄保留。可以再取一份。');return;}
+    if(stock===0)stock=6;
     const sample=newSample(nextId++);sample.display='beaker';samples.push(sample);active=sample.id;stock--;animate('sample',null);return;
   }
   const reason=canTest(selected(),action);
@@ -123,7 +115,7 @@ function submitReport(event){
 
 function clear(){
   cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];for(const field of answerFields)delete answers[field];active=null;stock=6;nextId=1;
-  $('report').reset();invalidateReport();root.querySelectorAll('[data-sample]').forEach(b=>b.remove());delete root.dataset.lastEvent;
+  $('report').reset();invalidateReport();delete root.dataset.lastEvent;
   $('concentration-value').value='';update();redraw();announce('點未知樣本 X 取樣，再自由選用器材測試。');$('bottle').focus({preventScroll:true});
 }
 function cancelDrag(){if(!drag)return;drag.ghost?.remove();$('picture').classList.remove('is-drop-ready');drag=null;}

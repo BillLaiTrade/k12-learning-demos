@@ -150,7 +150,7 @@
   <link rel="stylesheet" href="assets/chromatography.css?v=state-guidance-1">
   <link rel="stylesheet" href="assets/concentration.css?v=formula-cards-1">
   <link rel="stylesheet" href="assets/ppm-scale.css?v=water-mass-units-1">
-  <link rel="stylesheet" href="assets/investigation.css?v=tool-warning-1">
+  <link rel="stylesheet" href="assets/investigation.css?v=fresh-sample-1">
 </head>
 <body>
   <header class="shell masthead">
@@ -358,7 +358,6 @@
                 <button type="button" data-invest-tool="weigh" class="invest-tool" aria-label="用電子秤稱量目前取樣；也可拖到燒杯" disabled><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 5h20v7H6zM5 16h22l2 12H3zM11 21h10v4H11z"/></svg><span>電子秤</span></button>
               </div>
             </div>
-            <div class="invest-samples" id="invest-samples" aria-label="已取樣的容器，選擇一份繼續測試" hidden></div>
             <div class="invest-current" id="invest-current" hidden><strong id="invest-current-label"></strong><button type="button" id="invest-settle">靜置觀察</button></div>
             <p class="invest-status" id="invest-status" role="status" aria-live="polite">點未知樣本 X 取樣，再自由選用器材測試。</p>
             <p class="invest-hint" id="invest-hint" role="status" hidden></p>
@@ -373,7 +372,7 @@
               <div class="invest-notebook-calculation"><h4><span class="invest-entry-number" aria-hidden="true">04</span>把重量代入，算出濃度</h4><div class="invest-worked-calculation"><span class="invest-equation-name">重量百分濃度 ＝</span><span class="invest-calculation-fraction"><span><small>晶體淨質量</small><span class="invest-mass-input"><input id="invest-calculation-numerator" disabled type="number" min="0" step="any" inputmode="decimal" placeholder="填重量" aria-label="代入計算的晶體淨質量"><span aria-hidden="true">克</span></span></span><span><small>濾液淨質量</small><span class="invest-mass-input"><input id="invest-calculation-denominator" disabled type="number" min="0" step="any" inputmode="decimal" placeholder="填重量" aria-label="代入計算的濾液淨質量"><span aria-hidden="true">克</span></span></span></span><span class="invest-equation-factor">× 100% ＝</span><div class="invest-notebook-answer"><input id="invest-concentration-value" disabled type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="填答案" aria-label="重量百分濃度計算結果" aria-describedby="invest-answer-title"><span aria-hidden="true">%</span></div></div></div>
               <div class="invest-notebook-actions"><button type="submit" id="invest-check" disabled>核對我的計算</button></div>
               <div class="invest-feedback" id="invest-feedback" role="status" aria-live="polite" tabindex="-1" hidden></div>
-              <p class="invest-note-foot">切換取樣會保留本冊所有紀錄；重新開始會清除本次調查。</p>
+              <p class="invest-note-foot">再取一份會保留本冊所有紀錄；重新開始會清除本次調查。</p>
             </form>
           </section>
           <noscript><p>請啟用 JavaScript，才能取樣、操作器材與填寫計算紀錄。</p></noscript>
@@ -400,6 +399,6 @@
   <script type="module" src="assets/chromatography.js?v=state-guidance-1"></script>
   <script type="module" src="assets/concentration.js?v=outside-clear-1"></script>
   <script type="module" src="assets/ppm-pool.js?v=camera-toggle-1"></script>
-  <script type="module" src="assets/investigation.js?v=retry-button-1"></script>
+  <script type="module" src="assets/investigation.js?v=fresh-sample-1"></script>
 </body>
 </html>
