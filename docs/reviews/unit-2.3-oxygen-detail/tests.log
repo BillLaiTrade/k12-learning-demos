@@ -1,0 +1,28 @@
+▶ 2.3 complete page: six teaching sections and one evidence-based quiz
+  ✔ all seven sections and routes exist, with natural dialogue and no retired experiment (156.79875ms)
+  ✔ default cup comparisons remain after preview and reset (132.075956ms)
+  ✔ both preparations replay, pause, resume and reset without hiding results (2877.073878ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (208.900042ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (518.294422ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (4028.857342ms)
+  ✔ all teaching evidence is available without JavaScript (1853.542489ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (9781.66026ms)
+✔ 2.3 complete page: six teaching sections and one evidence-based quiz (21355.71606ms)
+▶ 2.3 oxygen: continuous collection and simultaneous wood comparison
+  ✔ default results, full width, four upper stages, two lower samples and original characters (128.288747ms)
+  ✔ four stages synchronize tube path, bubbles, continuous water displacement and cover (2453.603323ms)
+  ✔ pause freezes actual water and arrows, resumes and rapid replay cancels prior progress (474.029998ms)
+  ✔ both real wooden splints enter together; only oxygen develops a flame (1350.70872ms)
+  ✔ keyboard, Escape, hidden pages and leaving the scene pause without automatic restart (420.681284ms)
+  ✔ seven widths contain diagrams, controls and text; screenshots cover both scenes (1618.50211ms)
+  ✔ touch under reduced motion still continuously collects water and retains results (2712.060519ms)
+  ✔ without JavaScript all essential materials, collection and flame results remain visible (1030.242558ms)
+✔ 2.3 oxygen: continuous collection and simultaneous wood comparison (11715.004458ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 33905.706792
