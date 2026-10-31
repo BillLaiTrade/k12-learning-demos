@@ -48,9 +48,6 @@ export function oceanEnvironment(bottomAt) {
  ${slopes}${strata}<polyline points="${points}" fill="none" stroke="#c8c4ac" stroke-width="9" opacity=".4"/>${gravel}
  <rect y="200" width="1000" height="360" fill="url(#sonar-depth-fog)"/>
  </g>
- <g id="sonar-landform-labels" clip-path="url(#sonar-bed-clip)" fill="#f4f3df" stroke="#294641" stroke-width="3" paint-order="stroke" font-size="21" font-weight="600" text-anchor="middle" aria-hidden="true">
- <text x="155" y="230">大陸棚</text><text x="315" y="320">大陸坡</text><text x="500" y="345">海山</text><text x="625" y="405">深海平原</text><text x="650" y="500">海溝</text><path d="M680 494L747 482" fill="none" stroke="#e3e9d5" stroke-width="1"/>
- </g>
  <polyline id="sonar-seabed-edge" points="${points}" fill="none" stroke="#132f35" stroke-opacity=".5" stroke-width="5"/>
  <polyline points="${points}" fill="none" stroke="#d6c79f" stroke-opacity=".85" stroke-width="1.6"/>
  `;
