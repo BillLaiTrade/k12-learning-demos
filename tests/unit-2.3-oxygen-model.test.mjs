@@ -14,3 +14,14 @@ test('shared insertion completes before oxygen ignition; results remain at durat
  assert.equal(comparisonFrame(1500).inserted,1);assert.equal(comparisonFrame(2000).ignition,0);assert.equal(comparisonFrame(2600).ignition,.5);
  assert.deepEqual(comparisonFrame(COMPARISON_DURATION),{inserted:1,ignition:1,fading:1});
 });
+
+test('selected step stays bounded at both ends without leaking into the next step',async()=>{
+ const {preparationStepFrame,STEP_DURATIONS}=await import('../units/2/parts/2.3/assets/oxygen-model.mjs');
+ for(let stage=0;stage<4;stage++){
+  const first=preparationStepFrame(stage,-500),last=preparationStepFrame(stage,STEP_DURATIONS[stage]+99999);
+  assert.equal(first.stage,stage);assert.equal(first.localTime,0);assert.equal(last.stage,stage);assert.equal(last.localTime,STEP_DURATIONS[stage]);
+ }
+ assert.equal(preparationStepFrame(1,99999).purging,true);assert.equal(preparationStepFrame(1,99999).collected,0);
+ assert.equal(preparationStepFrame(2,99999).collected,1);assert.equal(preparationStepFrame(2,99999).tube,1);assert.equal(preparationStepFrame(2,99999).cover,0);
+ assert.equal(preparationStepFrame(3,0).collected,1);assert.equal(preparationStepFrame(3,99999).covered,true);
+});

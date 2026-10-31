@@ -1,0 +1,22 @@
+{
+  "s1": {
+    "unchanged": true,
+    "sha256": "125cb2796d1713ec7b2e373180d33480377d48bc45cffa1e2db851b0545dc597"
+  },
+  "s2": {
+    "unchanged": true,
+    "sha256": "e0df0a6d779016ebace7705e403e9e6287746ec1f0fe3922122c5130b6a70b51"
+  },
+  "s4": {
+    "unchanged": true,
+    "sha256": "9bb39643a0c3e1f70189939be1bfeeab0bb2c52c27b30a5769fe7e3f15c5d4a2"
+  },
+  "s5": {
+    "unchanged": true,
+    "sha256": "a6e2b8e88029f8d599603d25f53a169a33b95781753c4feed3196d9c565da33a"
+  },
+  "oxygen-comparison-and-conclusions": {
+    "unchanged": true,
+    "sha256": "63d479df2b699279f4e5e673edc24934c2f1eef72b3fb99a46fcbfd5cf32ca55"
+  }
+}

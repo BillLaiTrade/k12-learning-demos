@@ -1,0 +1,10 @@
+{
+  "source": "exec-8aef822c-ff0d-46d9-bda9-b0826820ae47.png",
+  "source_sha256": "49de9ddd071958f1cd0926e6288f9fabcbed9ea80a9c880b56abd34793ba0b0c",
+  "crop": "1536x850+0+150",
+  "asset": "units/2/parts/2.3/assets/oxygen-materials-layout.webp",
+  "asset_sha256": "83a697e6dfc03c68cba7b314a52968576e541eaafa88092923558eac7e14a200",
+  "bytes": 110822,
+  "reference": "approved-mockup.png",
+  "purpose": "七件尚未組裝的材料與器材；HTML提供標籤，不是實驗照片"
+}

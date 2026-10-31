@@ -21,7 +21,7 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
   page.on('pageerror', e => errors.push(e.message));
   page.on('requestfailed', r => errors.push(r.url()));
   page.on('response', r => { if (r.status() >= 400) errors.push(r.url()); });
-  await page.clock.install(); await page.goto(url, { waitUntil: 'networkidle' });await page.waitForFunction(()=>document.querySelector('.oxygen-drawing').dataset.ready==='true');await page.clock.pauseAt(await page.evaluate(()=>Date.now()+100));
+  await page.clock.install(); await page.goto(url, { waitUntil: 'networkidle' });await page.waitForFunction(()=>document.querySelector('.oxygen-preparation').dataset.ready==='true');await page.clock.pauseAt(await page.evaluate(()=>Date.now()+100));
   const artifacts = path.resolve(process.env.AIR_FULL_ARTIFACT_DIR || 'docs/reviews/unit-2.3-complete'); mkdirSync(artifacts, { recursive: true });
   const fields = { composition: 'mixture', sample_a: 'oxygen', sample_b: 'co2', fuel: 'wood', evidence: 'limewater', uses: 'stable' };
   const answer = async (name, value) => {
@@ -55,22 +55,21 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
     assert.equal(await page.locator('#cup-conclusion').isVisible(), true);
     assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'false');
   });
-  await t.test('both preparations replay, pause, resume and reset without hiding results', async () => {
-    for (const gas of ['oxygen','co2']) {
-      const panel = page.locator(`[data-replay="${gas}"]`); await panel.scrollIntoViewIfNeeded();
-      assert.equal(await panel.locator('.sequence-step').count(), 4);
-      await panel.locator('[data-play]').click(); await page.clock.fastForward(gas==='oxygen'?2500:1500);
-      assert.equal(await panel.getAttribute('data-stage'), '1');
-      await panel.locator('[data-pause]').click(); const stage = await panel.getAttribute('data-stage');
-      await page.clock.runFor(3000); assert.equal(await panel.getAttribute('data-stage'), stage);
-      await panel.locator('[data-play]').click(); if(gas==='oxygen')await page.clock.fastForward(13000);else await page.clock.runFor(5000);
-      assert.equal(await panel.getAttribute('data-state'), 'complete');
-      assert.equal(await panel.locator('.sequence-step:visible').count(), 4);
-      await panel.locator('[data-reset]').click(); assert.equal(await panel.getAttribute('data-stage'), '-1');
-      assert.equal(await panel.locator('.sequence-step:visible').count(), 4);
-    }
-    assert.equal(await page.locator('#s3 .observation-grid figure').count(), 2);
-    assert.equal(await page.locator('#s4 .observation-grid figure').count(), 6);
+  await t.test('oxygen navigates one step at a time; carbon dioxide retains its replay', async () => {
+    const oxygen=page.locator('[data-replay="oxygen"]');
+    assert.equal(await oxygen.getAttribute('data-stage'),'0');
+    assert.equal(await oxygen.locator('[role=tabpanel]:visible').count(),1);
+    await oxygen.locator('[data-next]').click();await page.clock.fastForward(400);
+    assert.equal(await oxygen.getAttribute('data-stage'),'1');
+    await oxygen.locator('[data-play]').click();await page.clock.fastForward(3000);assert.equal(await oxygen.getAttribute('data-state'),'paused');
+    await oxygen.locator('[data-play]').click();await page.clock.fastForward(10000);assert.equal(await oxygen.getAttribute('data-state'),'complete');assert.equal(await oxygen.getAttribute('data-stage'),'1');
+    for(const stage of[2,3]){await oxygen.locator('[data-next]').click();await page.clock.fastForward(6000);assert.equal(await oxygen.getAttribute('data-stage'),String(stage));assert.equal(await oxygen.getAttribute('data-state'),'complete');}
+    await oxygen.locator('[data-stage="0"]').click();assert.equal(await oxygen.getAttribute('data-stage'),'0');
+    const panel=page.locator('[data-replay="co2"]');await panel.locator('[data-play]').click();await page.clock.fastForward(1500);assert.equal(await panel.getAttribute('data-stage'),'1');
+    await panel.locator('[data-pause]').click();const stage=await panel.getAttribute('data-stage');await page.clock.runFor(3000);assert.equal(await panel.getAttribute('data-stage'),stage);
+    await panel.locator('[data-play]').click();await page.clock.runFor(5000);assert.equal(await panel.getAttribute('data-state'),'complete');
+    await panel.locator('[data-reset]').click();assert.equal(await panel.getAttribute('data-stage'),'-1');
+    assert.equal(await page.locator('#s3 .observation-grid figure').count(),2);assert.equal(await page.locator('#s4 .observation-grid figure').count(),6);
   });
   await t.test('leaving a replay pauses it and returning does not autoplay', async () => {
     const panel = page.locator('[data-replay="oxygen"]'); await panel.scrollIntoViewIfNeeded();
@@ -81,7 +80,7 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
     const stage = await panel.getAttribute('data-stage');
     await panel.scrollIntoViewIfNeeded(); await page.clock.runFor(2000);
     assert.equal(await panel.getAttribute('data-stage'), stage);
-    await panel.locator('[data-reset]').click();
+    await panel.locator('[data-stage="0"]').click();
   });
   await t.test('single quiz gives missing, misconception, revised and correct feedback; reset is local', async () => {
     const feedback = page.locator('#gas-report-feedback');
@@ -138,8 +137,9 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
   await t.test('touch, reduced motion, keyboard selects and last-section anchor work', async () => {
     const touch = await browser.newPage({ viewport:{width:390,height:844}, hasTouch:true, isMobile:true, reducedMotion:'reduce' });
     await touch.goto(url,{waitUntil:'networkidle'});
-    await touch.locator('[data-replay="oxygen"] [data-play]').tap();
+    await touch.locator('[data-replay="oxygen"] [data-next]').tap();
     await touch.waitForFunction(() => document.querySelector('[data-replay="oxygen"]').dataset.state === 'complete');
+    assert.equal(await touch.locator('[data-replay="oxygen"]').getAttribute('data-stage'),'1');
     assert.equal(await touch.locator('[data-replay="oxygen"] .sequence-step:visible').count(),4);
     await touch.locator('.route a[href="#s5"]').tap();
     await touch.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s5');

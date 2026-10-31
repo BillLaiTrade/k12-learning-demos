@@ -1,58 +1,134 @@
-import { PREPARATION_DURATION, COMPARISON_DURATION, PREPARATION_STAGES, preparationFrame, comparisonFrame } from './oxygen-model.mjs?v=refined-4';
+import { COMPARISON_DURATION, STEP_DURATIONS, preparationStepFrame, comparisonFrame } from './oxygen-model.mjs?v=steps-5';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const comparison = section.querySelector('.oxygen-comparison');
-const $ = id => section.querySelector(id);
-const steps = [...panel.querySelectorAll('[data-stage]')];
-const names = ['準備材料：集氣瓶先裝滿水並倒置。', '先排空氣：導管口在瓶外，開始的混合氣不收集。', '排水集氣：移入導管，氧氣進入後，瓶內的水逐漸排出。', '收集完成：先移開導管，再在水下蓋上玻璃片。'];
-const opacity = (selector, value) => $(selector).setAttribute('opacity', String(value));
-function renderPreparation(time, state) {
-  const f = preparationFrame(time), overview = state === 'overview';
-  panel.dataset.stage = overview ? '-1' : f.stage;
+const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
+const panels = [...panel.querySelectorAll('[data-step-panel]')];
+const players = [];
+
+function renderPreparation(stage, elapsed, state) {
+  const f = preparationStepFrame(stage, elapsed);
+  const view = panels[stage];
   panel.dataset.collected = f.collected.toFixed(4);
-  panel.dataset.tipX = (800 + 235*f.tube).toFixed(3);
+  panel.dataset.tipX = (800+235*f.tube).toFixed(3);
   panel.dataset.cover = f.cover.toFixed(4);
-  steps.forEach((step, i) => {
-    const current = !overview && f.stage === i;
-    step.classList.toggle('is-current', current);
-    if (current) step.setAttribute('aria-current', 'step'); else step.removeAttribute('aria-current');
-  });
-  const waterY = 280 + f.collected*400;
-  $('#oxygen-jar-water').setAttribute('y', waterY);
-  $('#oxygen-jar-water').setAttribute('height', 680-waterY);
-  $('#oxygen-water-line').setAttribute('cy', waterY);
-  opacity('#oxygen-water-line', f.collected < 1 ? 1 : 0);
-  opacity('#oxygen-stopper', f.stage > 0 ? 1 : 0);
-  opacity('#oxygen-delivery-tube',f.stage>0?1:0);opacity('#oxygen-tube-highlight',f.stage>0?1:0);
-  const reacting = f.purging || (f.stage === 2);
-  opacity('#oxygen-reaction-bubbles', reacting ? 1 : 0);
-  opacity('#oxygen-purge-bubbles', f.purging ? 1 : 0);
-  // Bubble positions are constrained between the submerged outlet and the
-  // moving liquid surface. There are never bubbles in the collected gas space.
+  if (stage === 0) {
+    view.querySelectorAll('[data-material]').forEach(label => label.classList.toggle('is-highlighted', label.dataset.material === ['source','catalyst',''][f.material]));
+    view.querySelector('.oxygen-water-prep').classList.toggle('is-highlighted', f.material === 2);
+    return state === 'ready' ? '準備材料：先認識材料用途，再按下一步。' : f.material === 0 ? '雙氧水是製備氧氣的來源。' : f.material === 1 ? '二氧化錳加快雙氧水分解，不是氧氣來源。' : '集氣瓶先裝滿水，倒置在水中；準備好後按下一步。';
+  }
+  const $ = part => view.querySelector(`[data-part="${part}"]`);
+  const opacity = (part, value) => $(part).setAttribute('opacity', String(value));
+  const waterY = 280+f.collected*400;
+  $('jar-water').setAttribute('y', waterY);
+  $('jar-water').setAttribute('height', 680-waterY);
+  $('water-line').setAttribute('cy', waterY);
+  opacity('water-line', f.collected<1 ? 1 : 0);
+  const reacting = f.purging || f.collecting;
+  opacity('reaction-bubbles',reacting ? 1 : 0);
+  opacity('purge-bubbles',f.purging ? 1 : 0);
+  // Bubbles stay below the internal water surface and above the submerged tip.
+  // None are drawn in the colorless gas space after the water has left.
   const liquidRoom = 665-waterY-10;
-  opacity('#oxygen-collection-bubbles', f.collecting && liquidRoom>12 ? 1 : 0);
-  $('#oxygen-collection-bubbles').querySelectorAll('circle').forEach((bubble,i)=>{
-    const phase=(time/1000+i*.27)%1;
-    const r=Number(bubble.getAttribute('r'));
-    bubble.setAttribute('cx', 1035+Math.sin(i*2+phase*4)*13);
-    bubble.setAttribute('cy', Math.max(waterY+r+3,665-phase*Math.max(0,liquidRoom-r)));
+  opacity('collection-bubbles',f.collecting && liquidRoom>12 ? 1 : 0);
+  $('collection-bubbles').querySelectorAll('circle').forEach((bubble,i)=>{
+    const phase=(f.time/1000+i*.27)%1, r=Number(bubble.getAttribute('r'));
+    bubble.setAttribute('cx',1035+Math.sin(i*2+phase*4)*13);
+    bubble.setAttribute('cy',Math.max(waterY+r+3,665-phase*Math.max(0,liquidRoom-r)));
   });
-  $('#oxygen-purge-bubbles').querySelectorAll('circle').forEach((b,i)=>{
-    const phase=(time/1150+i*.33)%1;b.setAttribute('cx',800+Math.sin(phase*5+i)*8);b.setAttribute('cy',657-phase*90);
+  $('purge-bubbles').querySelectorAll('circle').forEach((bubble,i)=>{
+    const phase=(f.time/1150+i*.33)%1;
+    bubble.setAttribute('cx',800+Math.sin(phase*5+i)*8);
+    bubble.setAttribute('cy',657-phase*90);
   });
-  opacity('#oxygen-water-out', f.collecting ? 1 : 0);
-  opacity('#oxygen-water-label', f.collecting ? 1 : 0);
-  $('#oxygen-cover').setAttribute('transform', `translate(${(1-f.cover)*290} 0)`);
-  opacity('#oxygen-cover', f.stage === 3 ? 1 : 0);
-  opacity('#oxygen-gas-label', f.collected > .3 ? 1 : 0);
-  opacity('#oxygen-flow', reacting ? 1 : 0);
+  opacity('water-out',f.collecting ? 1 : 0);
+  opacity('water-label',f.collecting ? 1 : 0);
+  $('cover').setAttribute('transform',`translate(${(1-f.cover)*290} 0)`);
+  opacity('cover',stage===3 ? 1 : 0);
+  opacity('gas-label',f.collected>.3 ? 1 : 0);
+  opacity('full-label',stage===1 ? 1 : 0);
+  opacity('flow',reacting ? 1 : 0);
   const x=800+235*f.tube;
   const tube=`M315 275V200Q315 180 335 180H700Q720 180 720 200V710Q720 730 740 730H${x-20}Q${x} 730 ${x} 710V665`;
-  for(const id of ['#oxygen-delivery-tube','#oxygen-tube-highlight','#oxygen-flow'])$(id).setAttribute('d',tube);
-  $('#oxygen-reaction-bubbles').setAttribute('transform', `translate(0 ${-((time%900)/900)*30})`);
-  $('#oxygen-flow').style.strokeDashoffset=String(-time/35);
-  $('#oxygen-scene-note').textContent = f.stage === 3 ? (f.covered ? '導管已移開，集氣瓶在水下蓋好' : f.tube > 0 ? '先移開導管，集氣瓶口保持在水下' : '在水下滑入玻璃片，蓋好瓶口') : ['集氣瓶先裝滿水，倒置在水中','導管口在瓶外：先排出裝置原有的空氣','導管移入瓶口：氧氣進入，水位下降'][f.stage];
-  return overview ? '已收集氧氣，導管移開後，集氣瓶在水下蓋好。' : names[f.stage];
+  for (const part of ['delivery-tube','tube-highlight','flow']) $(part).setAttribute('d',tube);
+  $('reaction-bubbles').setAttribute('transform',`translate(0 ${-((f.time%900)/900)*30})`);
+  $('flow').style.strokeDashoffset=String(-f.time/35);
+  const note = stage===1 ? '導管口在瓶外的水中，開始的混合氣不收集' : stage===2 ? (f.tube<1 ? '先將導管移入瓶口下方' : f.collected<1 ? '氧氣進入，瓶內水位下降' : '瓶內水已排出，氧氣已收集') : f.covered ? '導管已移開，玻璃片在水下蓋好' : f.tube>0 ? '先移開導管，瓶口保持在水下' : '再滑入玻璃片，在水下蓋住瓶口';
+  view.querySelector('[data-scene-note]').textContent=note;
+  view.querySelector('title').textContent=note;
+  return note + (state==='complete' ? '。這一步已播完，可重播或繼續下一步。' : '。');
+}
+
+function createPreparationPlayer() {
+  const play=panel.querySelector('[data-play]');
+  const previous=panel.querySelector('[data-previous]');
+  const next=panel.querySelector('[data-next]');
+  const status=panel.querySelector('[role=status]');
+  const count=panel.querySelector('.oxygen-step-count');
+  let stage=0, elapsed=0, state='ready', started=0, frame=0, message='';
+  function cancel(){cancelAnimationFrame(frame);frame=0;}
+  function paint(){
+    panel.dataset.stage=String(stage);panel.dataset.state=state;
+    const text=(state==='paused'?'已暫停：':'')+renderPreparation(stage,elapsed,state);
+    if(message!==text){status.textContent=text;message=text;}
+    play.textContent=state==='playing'?'暫停動畫':state==='paused'?'繼續播放':stage===0?'看看準備':'重播這一步';
+    previous.disabled=stage===0;
+    count.textContent=`${stage+1} / 4`;
+    next.innerHTML=stage===3?'接著觀察木條 <span aria-hidden="true">›</span>':'下一步 <span aria-hidden="true">›</span>';
+  }
+  function tick(now){
+    if(state!=='playing')return;
+    elapsed=Math.min(STEP_DURATIONS[stage],now-started);
+    if(elapsed>=STEP_DURATIONS[stage])state='complete';
+    paint();if(state==='playing')frame=requestAnimationFrame(tick);
+  }
+  function pausePlayback(){
+    if(state!=='playing')return;
+    elapsed=Math.min(STEP_DURATIONS[stage],performance.now()-started);
+    cancel();state='paused';paint();
+  }
+  function start(){
+    const at=state==='paused'?elapsed:0;
+    players.forEach(p=>p.pausePlayback());cancel();
+    elapsed=at;state='playing';started=performance.now()-elapsed;paint();
+    frame=requestAnimationFrame(tick);
+  }
+  function select(index,focusContent=false){
+    players.forEach(p=>p.pausePlayback());cancel();
+    stage=index;elapsed=0;state='ready';
+    panels.forEach((view,i)=>{view.hidden=i!==stage;});
+    steps.forEach((tab,i)=>{
+      const selected=i===stage;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;
+      tab.classList.toggle('is-current',selected);
+      if(selected)tab.setAttribute('aria-current','step');else tab.removeAttribute('aria-current');
+    });
+    paint();
+    if(focusContent){const heading=panels[stage].querySelector('h3');heading.focus({preventScroll:true});heading.scrollIntoView({behavior:'instant',block:'start'});}
+    if(stage>0)start();
+  }
+  panel.querySelector('.oxygen-steps').setAttribute('role','tablist');
+  steps.forEach((tab,i)=>{
+    tab.disabled=false;tab.setAttribute('role','tab');tab.setAttribute('aria-controls',panels[i].id);
+    panels[i].setAttribute('role','tabpanel');panels[i].setAttribute('aria-labelledby',tab.id);panels[i].tabIndex=0;
+    panels[i].querySelector('h3').tabIndex=-1;
+    tab.addEventListener('click',()=>select(i));
+    tab.addEventListener('keydown',event=>{
+      let target;
+      if(event.key==='ArrowRight')target=(i+1)%4;else if(event.key==='ArrowLeft')target=(i+3)%4;
+      else if(event.key==='Home')target=0;else if(event.key==='End')target=3;
+      if(target!==undefined){event.preventDefault();select(target);steps[target].focus();}
+    });
+  });
+  play.addEventListener('click',()=>state==='playing'?pausePlayback():start());
+  previous.addEventListener('click',()=>{if(stage>0)select(stage-1,true);});
+  next.addEventListener('click',()=>{
+    if(stage<3)select(stage+1,true);
+    else {pausePlayback();const heading=comparison.querySelector('h3');heading.tabIndex=-1;heading.focus({preventScroll:true});heading.scrollIntoView({behavior:'instant',block:'start'});}
+  });
+  panel.addEventListener('keydown',event=>{if(event.key==='Escape')pausePlayback();});
+  if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel);
+  const api={pausePlayback};players.push(api);
+  play.disabled=false;next.disabled=false;select(0);panel.dataset.ready='true';return api;
 }
 function renderComparison(time) {
   const f=comparisonFrame(time);
@@ -70,7 +146,6 @@ function renderComparison(time) {
   [air,oxygen].forEach((sample,i)=>{sample.querySelector('figcaption').textContent=captions[i];sample.querySelector('svg').setAttribute('aria-label',`${i?'收集的氧氣':'一般空氣'}中的木條：${captions[i]}`)});
   return time < 1500 ? '兩支木條同時放入，起始都帶餘燼。' : time <= 2000 ? '兩支木條已放入，觀察尖端的餘燼。' : time < 4800 ? '一般空氣中餘燼漸暗；氧氣中的木條開始復燃。' : '一般空氣中的木條未同樣復燃；氧氣中的木條復燃。';
 }
-const players = [];
 function player(root, duration, render, selectors) {
   const [play, pause, reset] = selectors.map(s => root.querySelector(s));
   const status = root.querySelector('[role=status]');
@@ -80,7 +155,7 @@ function player(root, duration, render, selectors) {
     const next = (state === 'paused' ? '已暫停：' : '') + render(elapsed, state);
     // Announce stage changes, not every animation frame.
     if (message !== next) { status.textContent = next; message = next; }
-    play.textContent = state === 'paused' ? '繼續播放' : root === panel ? '重播製氣' : '同時放入木條';
+    play.textContent = state === 'paused' ? '繼續播放' : '同時放入木條';
     pause.disabled = state !== 'playing'; reset.disabled = state === 'overview';
   }
   function cancel() { cancelAnimationFrame(frame); frame = 0; }
@@ -114,16 +189,11 @@ function player(root, duration, render, selectors) {
   play.disabled = false; paint();
   const api = { pausePlayback, start }; players.push(api); return api;
 }
-const preparation = player(panel, PREPARATION_DURATION, renderPreparation, ['[data-play]', '[data-pause]', '[data-reset]']);
+createPreparationPlayer();
 player(comparison, COMPARISON_DURATION, renderComparison, ['[data-compare-play]', '[data-compare-pause]', '[data-compare-reset]']);
-steps.forEach((step, i) => { step.disabled = false; step.addEventListener('click', () => preparation.start(PREPARATION_STAGES[i])); });
-document.addEventListener('visibilitychange', () => { if (document.hidden) players.forEach(p => p.pausePlayback()); });
-window.addEventListener('pagehide', () => players.forEach(p => p.pausePlayback()));
-// Explicit playback retains essential educational motion under reduced motion.
-// No automatic or independent decorative loops. Both SVG viewports reference
-// the same scene group, including water, submerged bubbles, tube and glass cover.
-const narrow=matchMedia('(max-width: 700px)');
-function resizeDetails(){comparison.querySelectorAll('figure svg').forEach(svg=>svg.setAttribute('viewBox',narrow.matches?'130 30 340 360':'0 0 600 400'))}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)players.forEach(p=>p.pausePlayback());});
+window.addEventListener('pagehide',()=>players.forEach(p=>p.pausePlayback()));
+const narrow=matchMedia('(max-width:700px)');
+function resizeDetails(){comparison.querySelectorAll('figure svg').forEach(svg=>svg.setAttribute('viewBox',narrow.matches?'130 30 340 360':'0 0 600 400'));}
 resizeDetails();narrow.addEventListener('change',resizeDetails);
-section.dataset.renderer='material-svg';
-section.querySelector('.oxygen-drawing').dataset.ready='true';
+section.dataset.renderer='step-material-svg';

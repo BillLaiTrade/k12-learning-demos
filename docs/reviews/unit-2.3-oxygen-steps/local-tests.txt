@@ -1,0 +1,46 @@
+▶ 2.3 complete page: four teaching sections and one evidence-based quiz
+  ✔ all five sections and routes exist, with gas profiles and no retired experiment (98.888254ms)
+  ✔ default cup comparisons remain after preview and reset (130.714718ms)
+  ✔ oxygen navigates one step at a time; carbon dioxide retains its replay (638.920308ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (172.541138ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (485.45678ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (3133.778564ms)
+  ✔ all teaching evidence is available without JavaScript (1082.280921ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (4187.152772ms)
+✔ 2.3 complete page: four teaching sections and one evidence-based quiz (11525.859371ms)
+✔ tube entry precedes displacement; withdrawal precedes glass cover (2.886166ms)
+✔ shared insertion completes before oxygen ignition; results remain at duration (0.743578ms)
+✔ selected step stays bounded at both ends without leaking into the next step (0.461833ms)
+▶ 2.3 oxygen: step-specific material scenes and physical collection states
+  ✔ materials are unassembled; each experiment screen shares the glass plate without WebGL (76.042808ms)
+  ✔ purge holds a full jar, with every bubble outside it and below the external water surface (321.767007ms)
+  ✔ collection moves the tube before displacement and confines bubbles to remaining water (355.972716ms)
+  ✔ pausing freezes water, bubbles, arrows and the mobile shared SVG scene (995.24686ms)
+  ✔ the fourth step withdraws before covering; complete frame never leaves this step (452.333009ms)
+  ✔ the selected main view, mobile close-up and headings agree after returning to an earlier step (991.969295ms)
+✔ 2.3 oxygen: step-specific material scenes and physical collection states (4856.681581ms)
+▶ 2.3 oxygen: four learner-controlled steps and independent splint comparison
+  ✔ initial view contains materials and preparation only; comparison results and original avatars stay available (445.732075ms)
+  ✔ next changes scene, action and principle; a finished animation never advances the selected step (767.046071ms)
+  ✔ previous and direct selection restart that step; final next focuses the separate wood observation (218.79461ms)
+  ✔ one replay control pauses and resumes the selected scene; rapid selection cancels old clocks (844.231769ms)
+  ✔ tabs support arrows, Home, End, Enter, Escape and focus never remains in a hidden panel (175.590996ms)
+  ✔ background, leaving the block and starting the other player pause without automatic restart (274.420984ms)
+  ✔ two wooden splints keep identical entry timing and only oxygen develops a frozen or replayed flame (429.401473ms)
+  ✔ all four selected screens and controls fit seven widths, with side-by-side wood samples (4584.5933ms)
+  ✔ touch and reduced motion keep manual navigation and bounded essential animation (1401.192772ms)
+  ✔ without JavaScript all four stage-specific scenes, explanations and final wood results are readable (1032.444518ms)
+✔ 2.3 oxygen: four learner-controlled steps and independent splint comparison (11765.077343ms)
+▶ 2.3 integrated report checks evidence, completeness and misconceptions
+  ✔ unanswered form names every missing item without claiming completion (1.229678ms)
+  ✔ fully supported report is accepted (0.181843ms)
+  ✔ each misconception identifies the relevant observation and destination (0.300499ms)
+✔ 2.3 integrated report checks evidence, completeness and misconceptions (4.043953ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 29403.857658

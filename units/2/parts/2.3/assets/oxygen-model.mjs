@@ -18,3 +18,18 @@ export function comparisonFrame(elapsed) {
   const time = Math.max(0, Math.min(COMPARISON_DURATION, elapsed));
   return { inserted: smooth(time/1500), ignition: clamp((time-2000)/1200), fading: clamp((time-1800)/3000) };
 }
+
+// Each selected step owns its bounded clock. Finishing it never chooses another
+// step; the learner navigates explicitly with the tabs or previous/next buttons.
+export const STEP_DURATIONS = [1800, 2800, 5200, 2600];
+export function preparationStepFrame(stage, elapsed) {
+  const index = Math.max(0, Math.min(3, Math.trunc(stage)));
+  const duration = STEP_DURATIONS[index];
+  const localTime = Math.max(0, Math.min(duration, elapsed));
+  const time = PREPARATION_STAGES[index] + localTime;
+  const frame = preparationFrame(time);
+  return { ...frame, stage: index, time, localTime, duration,
+    purging: index === 1, collecting: index === 2 && frame.collected < 1,
+    covered: index === 3 && frame.covered,
+    material: index === 0 ? Math.min(2, Math.floor(localTime/600)) : -1 };
+}

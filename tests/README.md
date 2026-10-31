@@ -553,3 +553,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-
 第六區比較插圖補充：既有hearing專項補充檢查三張SVG圖片及原PNG解碼、五種展開寬度，保存hearing-animals-1440.png／390.png。專項仍12項，與整頁合計23項（含外層）；插圖取景經實際畫面檢視，保留頻率資料與收合行為。
 
 3.4聲納最新地形依史密森尼／NOAA查核改為大陸棚、坡、平原、海山與海溝的組合示意；`sonar-terrain.mjs`統一投影，範圍約150–8,250m、往返0.2–11秒。新增淺棚與深溝的實時操作回歸，原2／4／6秒代表條件保留。
+
+## 2.3第三區氧氣：四步驟帶動內容（2026-10-31）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-steps OXYGEN_THREE_ARTIFACT_DIR=/tmp/unit23-steps-material AIR_FULL_ARTIFACT_DIR=/tmp/unit23-steps-full node --test --test-concurrency=1 tests/unit-2.3-oxygen-model.test.mjs tests/unit-2.3-oxygen.test.cjs tests/unit-2.3-oxygen-three.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-report.test.cjs
+```
+
+現行上方改為四步獨立時鐘／內容，取代自動連播全程。共34項（含外層）：模型3、步驟與木條11、材質場景7、整頁9、小測模型4。驗證初始只呈現材料、每步圖／操作／原理一起切換、播完不自動前進、前後／直接選步重建初態、正確焦點與鍵盤、選取頁籤hover對比、單一重播／暫停／繼續、快速切換、背景／離區、第四步接木條、七寬度×四狀態、手機觸控／減少動態、無JS四步可讀、瓶外排氣滿水、氣泡只在液體中、導管到位才排水、撤管後才蓋片、暫停實際像素一致及原木條／整頁回歸。
+
+公開驗證可設 `OXYGEN_URL`／`AIR_FULL_URL`；`oxygen-three.test.cjs`仍是沿用入口，實際測試材質底圖＋SVG，不宣稱舊WebGL檢查。核可四格圖、各步桌機／手機及保存範圍見 `docs/reviews/unit-2.3-oxygen-steps/`。
