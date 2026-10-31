@@ -8,7 +8,7 @@ export function newSample(id) {
 export function totalMass(sample) { return sample.sand+sample.salt+sample.water; }
 export function canTest(sample,action) {
   if(!sample)return '先從樣本瓶取一份，再選用器材。';
-  if(action==='filter'&&sample.water===0)return '這份只剩乾燥固體，無法直接倒入濾紙。可以換一份取樣繼續測試。';
+  if(action==='filter'&&sample.water===0)return '過濾需要含有液體的樣本。這份已蒸乾，可另取一份再試。';
   if(action==='heat'&&sample.water===0)return '這份樣本已經蒸乾；目前沒有液體可繼續蒸發。';
   if(action==='settle'&&(sample.water===0||sample.sand===0))return '這份目前沒有可沉降的懸浮顆粒。';
   return '';

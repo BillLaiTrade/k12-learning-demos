@@ -152,3 +152,6 @@
 .invest-lab:not([data-has-sample="true"]) .invest-tools-hint {display:none;}
 .invest-lab:not([data-next-step="true"]) .invest-tools-hint {visibility:hidden;}
 @media(max-width:560px){.invest-tools-hint {position:relative;left:auto;top:auto;width:auto;margin:9px 9px 4px;padding:7px 8px;font-size:.8rem;}}
+.invest-lab[data-tool-warning="true"] .invest-tools-hint {top:auto;bottom:57%;background:#875016;box-shadow:0 3px 12px #51350b40;}
+.invest-lab[data-tool-warning="true"] .invest-tools-hint::after {border-top-color:#875016;}
+@media(max-width:560px){.invest-lab[data-tool-warning="true"] .invest-tools-hint {bottom:auto;}}

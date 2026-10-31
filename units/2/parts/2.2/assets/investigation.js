@@ -1,4 +1,4 @@
-import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessNotebook,measuredMasses,measurementHint} from './investigation-state.js?v=numbers-only-1';
+import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessNotebook,measuredMasses,measurementHint} from './investigation-state.js?v=filter-liquid-1';
 import {loadPicture,createRenderer} from './investigation-renderer.js?v=filtrate-to-scale-1';
 
 const root=document.getElementById('invest-lab');
@@ -50,6 +50,7 @@ function updateConcentration(){
 }
 
 function update(){
+  $('tools-hint').textContent='下一步：點選要使用的器材';delete root.dataset.toolWarning;
   const sample=selected(),ready=root.dataset.ready==='true',busy=!!animation;
   root.dataset.nextStep=String(ready&&!!sample&&!busy);
   root.dataset.busy=String(busy);root.dataset.hasSample=String(!!sample);root.dataset.sampleCount=String(samples.length);root.dataset.stock=String(stock);root.dataset.active=active??'';root.dataset.phase=sample?.phase||'';
@@ -96,7 +97,7 @@ function perform(action){
     const sample=newSample(nextId++);sample.display='beaker';samples.push(sample);active=sample.id;stock--;animate('sample',null);return;
   }
   const reason=canTest(selected(),action);
-  if(reason){announce(reason);return;}
+  if(reason){announce(reason);$('tools-hint').textContent=reason;root.dataset.toolWarning='true';return;}
   animate(action,{...selected()});
 }
 function submitReport(event){
