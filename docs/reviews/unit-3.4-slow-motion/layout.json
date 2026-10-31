@@ -1,0 +1,1557 @@
+{
+  "passed": true,
+  "elapsed": 0.2058,
+  "measurements": [
+    {
+      "width": 1440,
+      "bar": {
+        "left": 400,
+        "right": 1240,
+        "top": 458.234375,
+        "bottom": 532.703125,
+        "width": 840,
+        "height": 74.46875
+      },
+      "contentWidth": 840,
+      "overflow": false,
+      "items": [
+        {
+          "left": 417,
+          "right": 544.84375,
+          "top": 482.75,
+          "bottom": 508.171875,
+          "width": 127.84375,
+          "height": 25.421875
+        },
+        {
+          "left": 558.84375,
+          "right": 1013.984375,
+          "top": 482.75,
+          "bottom": 508.171875,
+          "width": 455.140625,
+          "height": 25.421875
+        },
+        {
+          "left": 1027.984375,
+          "right": 1223,
+          "top": 471.234375,
+          "bottom": 519.703125,
+          "width": 195.015625,
+          "height": 48.46875
+        }
+      ],
+      "texts": [
+        {
+          "text": "空氣聲速340 m/s",
+          "left": 417,
+          "right": 544.84375,
+          "top": 482.75,
+          "bottom": 508.171875,
+          "width": 127.84375,
+          "height": 25.421875,
+          "scroll": 128,
+          "client": 128
+        },
+        {
+          "text": "空氣聲速",
+          "left": 417,
+          "right": 473.328125,
+          "top": 485.75,
+          "bottom": 506.859375,
+          "width": 56.328125,
+          "height": 21.109375,
+          "scroll": 56,
+          "client": 56
+        },
+        {
+          "text": "340 m/s",
+          "left": 479.328125,
+          "right": 544.84375,
+          "top": 482.75,
+          "bottom": 508.171875,
+          "width": 65.515625,
+          "height": 25.421875,
+          "scroll": 66,
+          "client": 66
+        },
+        {
+          "text": "聲音傳播時間：0.00 秒",
+          "left": 558.84375,
+          "right": 1013.984375,
+          "top": 482.75,
+          "bottom": 508.171875,
+          "width": 455.140625,
+          "height": 25.421875,
+          "scroll": 454,
+          "client": 454
+        },
+        {
+          "text": "聲音傳播時間：",
+          "left": 714,
+          "right": 812.5625,
+          "top": 485.75,
+          "bottom": 506.859375,
+          "width": 98.5625,
+          "height": 21.109375,
+          "scroll": 99,
+          "client": 99
+        },
+        {
+          "text": "0.00 秒",
+          "left": 818.5625,
+          "right": 873.8125,
+          "top": 482.75,
+          "bottom": 508.171875,
+          "width": 55.25,
+          "height": 25.421875,
+          "scroll": 55,
+          "client": 55
+        },
+        {
+          "text": "0.00",
+          "left": 818.5625,
+          "right": 852.46875,
+          "top": 483.75,
+          "bottom": 506.75,
+          "width": 33.90625,
+          "height": 23,
+          "scroll": 0,
+          "client": 0
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 1027.984375,
+          "right": 1223,
+          "top": 471.234375,
+          "bottom": 519.703125,
+          "width": 195.015625,
+          "height": 48.46875,
+          "scroll": 191,
+          "client": 191
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 1074.984375,
+          "right": 1207,
+          "top": 483.234375,
+          "bottom": 507.703125,
+          "width": 132.015625,
+          "height": 24.46875,
+          "scroll": 132,
+          "client": 132
+        }
+      ],
+      "badgeFont": 16.32
+    },
+    {
+      "width": 1280,
+      "bar": {
+        "left": 320,
+        "right": 1160,
+        "top": 308.171875,
+        "bottom": 382.640625,
+        "width": 840,
+        "height": 74.46875
+      },
+      "contentWidth": 840,
+      "overflow": false,
+      "items": [
+        {
+          "left": 337,
+          "right": 464.84375,
+          "top": 332.6875,
+          "bottom": 358.109375,
+          "width": 127.84375,
+          "height": 25.421875
+        },
+        {
+          "left": 478.84375,
+          "right": 933.984375,
+          "top": 332.6875,
+          "bottom": 358.109375,
+          "width": 455.140625,
+          "height": 25.421875
+        },
+        {
+          "left": 947.984375,
+          "right": 1143,
+          "top": 321.171875,
+          "bottom": 369.640625,
+          "width": 195.015625,
+          "height": 48.46875
+        }
+      ],
+      "texts": [
+        {
+          "text": "空氣聲速340 m/s",
+          "left": 337,
+          "right": 464.84375,
+          "top": 332.6875,
+          "bottom": 358.109375,
+          "width": 127.84375,
+          "height": 25.421875,
+          "scroll": 128,
+          "client": 128
+        },
+        {
+          "text": "空氣聲速",
+          "left": 337,
+          "right": 393.328125,
+          "top": 335.6875,
+          "bottom": 356.796875,
+          "width": 56.328125,
+          "height": 21.109375,
+          "scroll": 56,
+          "client": 56
+        },
+        {
+          "text": "340 m/s",
+          "left": 399.328125,
+          "right": 464.84375,
+          "top": 332.6875,
+          "bottom": 358.109375,
+          "width": 65.515625,
+          "height": 25.421875,
+          "scroll": 66,
+          "client": 66
+        },
+        {
+          "text": "聲音傳播時間：0.00 秒",
+          "left": 478.84375,
+          "right": 933.984375,
+          "top": 332.6875,
+          "bottom": 358.109375,
+          "width": 455.140625,
+          "height": 25.421875,
+          "scroll": 454,
+          "client": 454
+        },
+        {
+          "text": "聲音傳播時間：",
+          "left": 634,
+          "right": 732.5625,
+          "top": 335.6875,
+          "bottom": 356.796875,
+          "width": 98.5625,
+          "height": 21.109375,
+          "scroll": 99,
+          "client": 99
+        },
+        {
+          "text": "0.00 秒",
+          "left": 738.5625,
+          "right": 793.8125,
+          "top": 332.6875,
+          "bottom": 358.109375,
+          "width": 55.25,
+          "height": 25.421875,
+          "scroll": 55,
+          "client": 55
+        },
+        {
+          "text": "0.00",
+          "left": 738.5625,
+          "right": 772.46875,
+          "top": 333.6875,
+          "bottom": 356.6875,
+          "width": 33.90625,
+          "height": 23,
+          "scroll": 0,
+          "client": 0
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 947.984375,
+          "right": 1143,
+          "top": 321.171875,
+          "bottom": 369.640625,
+          "width": 195.015625,
+          "height": 48.46875,
+          "scroll": 191,
+          "client": 191
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 994.984375,
+          "right": 1127,
+          "top": 333.171875,
+          "bottom": 357.640625,
+          "width": 132.015625,
+          "height": 24.46875,
+          "scroll": 132,
+          "client": 132
+        }
+      ],
+      "badgeFont": 16.32
+    },
+    {
+      "width": 1120,
+      "bar": {
+        "left": 260,
+        "right": 1060,
+        "top": 303.78125,
+        "bottom": 378.25,
+        "width": 800,
+        "height": 74.46875
+      },
+      "contentWidth": 800,
+      "overflow": false,
+      "items": [
+        {
+          "left": 277,
+          "right": 404.84375,
+          "top": 328.296875,
+          "bottom": 353.71875,
+          "width": 127.84375,
+          "height": 25.421875
+        },
+        {
+          "left": 418.84375,
+          "right": 833.984375,
+          "top": 328.296875,
+          "bottom": 353.71875,
+          "width": 415.140625,
+          "height": 25.421875
+        },
+        {
+          "left": 847.984375,
+          "right": 1043,
+          "top": 316.78125,
+          "bottom": 365.25,
+          "width": 195.015625,
+          "height": 48.46875
+        }
+      ],
+      "texts": [
+        {
+          "text": "空氣聲速340 m/s",
+          "left": 277,
+          "right": 404.84375,
+          "top": 328.296875,
+          "bottom": 353.71875,
+          "width": 127.84375,
+          "height": 25.421875,
+          "scroll": 128,
+          "client": 128
+        },
+        {
+          "text": "空氣聲速",
+          "left": 277,
+          "right": 333.328125,
+          "top": 331.296875,
+          "bottom": 352.40625,
+          "width": 56.328125,
+          "height": 21.109375,
+          "scroll": 56,
+          "client": 56
+        },
+        {
+          "text": "340 m/s",
+          "left": 339.328125,
+          "right": 404.84375,
+          "top": 328.296875,
+          "bottom": 353.71875,
+          "width": 65.515625,
+          "height": 25.421875,
+          "scroll": 66,
+          "client": 66
+        },
+        {
+          "text": "聲音傳播時間：0.00 秒",
+          "left": 418.84375,
+          "right": 833.984375,
+          "top": 328.296875,
+          "bottom": 353.71875,
+          "width": 415.140625,
+          "height": 25.421875,
+          "scroll": 414,
+          "client": 414
+        },
+        {
+          "text": "聲音傳播時間：",
+          "left": 554,
+          "right": 652.5625,
+          "top": 331.296875,
+          "bottom": 352.40625,
+          "width": 98.5625,
+          "height": 21.109375,
+          "scroll": 99,
+          "client": 99
+        },
+        {
+          "text": "0.00 秒",
+          "left": 658.5625,
+          "right": 713.8125,
+          "top": 328.296875,
+          "bottom": 353.71875,
+          "width": 55.25,
+          "height": 25.421875,
+          "scroll": 55,
+          "client": 55
+        },
+        {
+          "text": "0.00",
+          "left": 658.5625,
+          "right": 692.46875,
+          "top": 329.296875,
+          "bottom": 352.296875,
+          "width": 33.90625,
+          "height": 23,
+          "scroll": 0,
+          "client": 0
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 847.984375,
+          "right": 1043,
+          "top": 316.78125,
+          "bottom": 365.25,
+          "width": 195.015625,
+          "height": 48.46875,
+          "scroll": 191,
+          "client": 191
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 894.984375,
+          "right": 1027,
+          "top": 328.78125,
+          "bottom": 353.25,
+          "width": 132.015625,
+          "height": 24.46875,
+          "scroll": 132,
+          "client": 132
+        }
+      ],
+      "badgeFont": 16.32
+    },
+    {
+      "width": 1050,
+      "bar": {
+        "left": 60,
+        "right": 990,
+        "top": 301.953125,
+        "bottom": 376.421875,
+        "width": 930,
+        "height": 74.46875
+      },
+      "contentWidth": 930,
+      "overflow": false,
+      "items": [
+        {
+          "left": 77,
+          "right": 204.84375,
+          "top": 326.46875,
+          "bottom": 351.890625,
+          "width": 127.84375,
+          "height": 25.421875
+        },
+        {
+          "left": 218.84375,
+          "right": 763.984375,
+          "top": 326.46875,
+          "bottom": 351.890625,
+          "width": 545.140625,
+          "height": 25.421875
+        },
+        {
+          "left": 777.984375,
+          "right": 973,
+          "top": 314.953125,
+          "bottom": 363.421875,
+          "width": 195.015625,
+          "height": 48.46875
+        }
+      ],
+      "texts": [
+        {
+          "text": "空氣聲速340 m/s",
+          "left": 77,
+          "right": 204.84375,
+          "top": 326.46875,
+          "bottom": 351.890625,
+          "width": 127.84375,
+          "height": 25.421875,
+          "scroll": 128,
+          "client": 128
+        },
+        {
+          "text": "空氣聲速",
+          "left": 77,
+          "right": 133.328125,
+          "top": 329.46875,
+          "bottom": 350.578125,
+          "width": 56.328125,
+          "height": 21.109375,
+          "scroll": 56,
+          "client": 56
+        },
+        {
+          "text": "340 m/s",
+          "left": 139.328125,
+          "right": 204.84375,
+          "top": 326.46875,
+          "bottom": 351.890625,
+          "width": 65.515625,
+          "height": 25.421875,
+          "scroll": 66,
+          "client": 66
+        },
+        {
+          "text": "聲音傳播時間：0.00 秒",
+          "left": 218.84375,
+          "right": 763.984375,
+          "top": 326.46875,
+          "bottom": 351.890625,
+          "width": 545.140625,
+          "height": 25.421875,
+          "scroll": 544,
+          "client": 544
+        },
+        {
+          "text": "聲音傳播時間：",
+          "left": 419,
+          "right": 517.5625,
+          "top": 329.46875,
+          "bottom": 350.578125,
+          "width": 98.5625,
+          "height": 21.109375,
+          "scroll": 99,
+          "client": 99
+        },
+        {
+          "text": "0.00 秒",
+          "left": 523.5625,
+          "right": 578.8125,
+          "top": 326.46875,
+          "bottom": 351.890625,
+          "width": 55.25,
+          "height": 25.421875,
+          "scroll": 55,
+          "client": 55
+        },
+        {
+          "text": "0.00",
+          "left": 523.5625,
+          "right": 557.46875,
+          "top": 327.46875,
+          "bottom": 350.46875,
+          "width": 33.90625,
+          "height": 23,
+          "scroll": 0,
+          "client": 0
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 777.984375,
+          "right": 973,
+          "top": 314.953125,
+          "bottom": 363.421875,
+          "width": 195.015625,
+          "height": 48.46875,
+          "scroll": 191,
+          "client": 191
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 824.984375,
+          "right": 957,
+          "top": 326.953125,
+          "bottom": 351.421875,
+          "width": 132.015625,
+          "height": 24.46875,
+          "scroll": 132,
+          "client": 132
+        }
+      ],
+      "badgeFont": 16.32
+    },
+    {
+      "width": 1024,
+      "bar": {
+        "left": 60,
+        "right": 964,
+        "top": 300.890625,
+        "bottom": 375.359375,
+        "width": 904,
+        "height": 74.46875
+      },
+      "contentWidth": 904,
+      "overflow": false,
+      "items": [
+        {
+          "left": 77,
+          "right": 204.84375,
+          "top": 325.40625,
+          "bottom": 350.828125,
+          "width": 127.84375,
+          "height": 25.421875
+        },
+        {
+          "left": 218.84375,
+          "right": 737.984375,
+          "top": 325.40625,
+          "bottom": 350.828125,
+          "width": 519.140625,
+          "height": 25.421875
+        },
+        {
+          "left": 751.984375,
+          "right": 947,
+          "top": 313.890625,
+          "bottom": 362.359375,
+          "width": 195.015625,
+          "height": 48.46875
+        }
+      ],
+      "texts": [
+        {
+          "text": "空氣聲速340 m/s",
+          "left": 77,
+          "right": 204.84375,
+          "top": 325.40625,
+          "bottom": 350.828125,
+          "width": 127.84375,
+          "height": 25.421875,
+          "scroll": 128,
+          "client": 128
+        },
+        {
+          "text": "空氣聲速",
+          "left": 77,
+          "right": 133.328125,
+          "top": 328.40625,
+          "bottom": 349.515625,
+          "width": 56.328125,
+          "height": 21.109375,
+          "scroll": 56,
+          "client": 56
+        },
+        {
+          "text": "340 m/s",
+          "left": 139.328125,
+          "right": 204.84375,
+          "top": 325.40625,
+          "bottom": 350.828125,
+          "width": 65.515625,
+          "height": 25.421875,
+          "scroll": 66,
+          "client": 66
+        },
+        {
+          "text": "聲音傳播時間：0.00 秒",
+          "left": 218.84375,
+          "right": 737.984375,
+          "top": 325.40625,
+          "bottom": 350.828125,
+          "width": 519.140625,
+          "height": 25.421875,
+          "scroll": 518,
+          "client": 518
+        },
+        {
+          "text": "聲音傳播時間：",
+          "left": 406,
+          "right": 504.5625,
+          "top": 328.40625,
+          "bottom": 349.515625,
+          "width": 98.5625,
+          "height": 21.109375,
+          "scroll": 99,
+          "client": 99
+        },
+        {
+          "text": "0.00 秒",
+          "left": 510.5625,
+          "right": 565.8125,
+          "top": 325.40625,
+          "bottom": 350.828125,
+          "width": 55.25,
+          "height": 25.421875,
+          "scroll": 55,
+          "client": 55
+        },
+        {
+          "text": "0.00",
+          "left": 510.5625,
+          "right": 544.46875,
+          "top": 326.40625,
+          "bottom": 349.40625,
+          "width": 33.90625,
+          "height": 23,
+          "scroll": 0,
+          "client": 0
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 751.984375,
+          "right": 947,
+          "top": 313.890625,
+          "bottom": 362.359375,
+          "width": 195.015625,
+          "height": 48.46875,
+          "scroll": 191,
+          "client": 191
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 798.984375,
+          "right": 931,
+          "top": 325.890625,
+          "bottom": 350.359375,
+          "width": 132.015625,
+          "height": 24.46875,
+          "scroll": 132,
+          "client": 132
+        }
+      ],
+      "badgeFont": 16.32
+    },
+    {
+      "width": 900,
+      "bar": {
+        "left": 53,
+        "right": 847,
+        "top": 192.140625,
+        "bottom": 266.609375,
+        "width": 794,
+        "height": 74.46875
+      },
+      "contentWidth": 794,
+      "overflow": false,
+      "items": [
+        {
+          "left": 70,
+          "right": 197.84375,
+          "top": 216.65625,
+          "bottom": 242.078125,
+          "width": 127.84375,
+          "height": 25.421875
+        },
+        {
+          "left": 211.84375,
+          "right": 620.984375,
+          "top": 216.65625,
+          "bottom": 242.078125,
+          "width": 409.140625,
+          "height": 25.421875
+        },
+        {
+          "left": 634.984375,
+          "right": 830,
+          "top": 205.140625,
+          "bottom": 253.609375,
+          "width": 195.015625,
+          "height": 48.46875
+        }
+      ],
+      "texts": [
+        {
+          "text": "空氣聲速340 m/s",
+          "left": 70,
+          "right": 197.84375,
+          "top": 216.65625,
+          "bottom": 242.078125,
+          "width": 127.84375,
+          "height": 25.421875,
+          "scroll": 128,
+          "client": 128
+        },
+        {
+          "text": "空氣聲速",
+          "left": 70,
+          "right": 126.328125,
+          "top": 219.65625,
+          "bottom": 240.765625,
+          "width": 56.328125,
+          "height": 21.109375,
+          "scroll": 56,
+          "client": 56
+        },
+        {
+          "text": "340 m/s",
+          "left": 132.328125,
+          "right": 197.84375,
+          "top": 216.65625,
+          "bottom": 242.078125,
+          "width": 65.515625,
+          "height": 25.421875,
+          "scroll": 66,
+          "client": 66
+        },
+        {
+          "text": "聲音傳播時間：0.00 秒",
+          "left": 211.84375,
+          "right": 620.984375,
+          "top": 216.65625,
+          "bottom": 242.078125,
+          "width": 409.140625,
+          "height": 25.421875,
+          "scroll": 408,
+          "client": 408
+        },
+        {
+          "text": "聲音傳播時間：",
+          "left": 344,
+          "right": 442.5625,
+          "top": 219.65625,
+          "bottom": 240.765625,
+          "width": 98.5625,
+          "height": 21.109375,
+          "scroll": 99,
+          "client": 99
+        },
+        {
+          "text": "0.00 秒",
+          "left": 448.5625,
+          "right": 503.8125,
+          "top": 216.65625,
+          "bottom": 242.078125,
+          "width": 55.25,
+          "height": 25.421875,
+          "scroll": 55,
+          "client": 55
+        },
+        {
+          "text": "0.00",
+          "left": 448.5625,
+          "right": 482.46875,
+          "top": 217.65625,
+          "bottom": 240.65625,
+          "width": 33.90625,
+          "height": 23,
+          "scroll": 0,
+          "client": 0
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 634.984375,
+          "right": 830,
+          "top": 205.140625,
+          "bottom": 253.609375,
+          "width": 195.015625,
+          "height": 48.46875,
+          "scroll": 191,
+          "client": 191
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 681.984375,
+          "right": 814,
+          "top": 217.140625,
+          "bottom": 241.609375,
+          "width": 132.015625,
+          "height": 24.46875,
+          "scroll": 132,
+          "client": 132
+        }
+      ],
+      "badgeFont": 16.32
+    },
+    {
+      "width": 768,
+      "bar": {
+        "left": 53,
+        "right": 715,
+        "top": 192.765625,
+        "bottom": 325.015625,
+        "width": 662,
+        "height": 132.25
+      },
+      "contentWidth": 662,
+      "overflow": false,
+      "items": [
+        {
+          "left": 66,
+          "right": 378,
+          "top": 205.765625,
+          "bottom": 252.828125,
+          "width": 312,
+          "height": 47.0625
+        },
+        {
+          "left": 390,
+          "right": 702,
+          "top": 205.765625,
+          "bottom": 252.828125,
+          "width": 312,
+          "height": 47.0625
+        },
+        {
+          "left": 66,
+          "right": 702,
+          "top": 264.828125,
+          "bottom": 312.015625,
+          "width": 636,
+          "height": 47.1875
+        }
+      ],
+      "texts": [
+        {
+          "text": "空氣聲速340 m/s",
+          "left": 66,
+          "right": 378,
+          "top": 205.765625,
+          "bottom": 252.828125,
+          "width": 312,
+          "height": 47.0625,
+          "scroll": 312,
+          "client": 312
+        },
+        {
+          "text": "空氣聲速",
+          "left": 196.40625,
+          "right": 247.59375,
+          "top": 205.765625,
+          "bottom": 224.953125,
+          "width": 51.1875,
+          "height": 19.1875,
+          "scroll": 51,
+          "client": 51
+        },
+        {
+          "text": "340 m/s",
+          "left": 187.359375,
+          "right": 256.625,
+          "top": 225.953125,
+          "bottom": 252.828125,
+          "width": 69.265625,
+          "height": 26.875,
+          "scroll": 69,
+          "client": 69
+        },
+        {
+          "text": "聲音傳播時間：0.00 秒",
+          "left": 390,
+          "right": 702,
+          "top": 205.765625,
+          "bottom": 252.828125,
+          "width": 312,
+          "height": 47.0625,
+          "scroll": 311,
+          "client": 311
+        },
+        {
+          "text": "聲音傳播時間：",
+          "left": 506.703125,
+          "right": 596.28125,
+          "top": 205.765625,
+          "bottom": 224.953125,
+          "width": 89.578125,
+          "height": 19.1875,
+          "scroll": 90,
+          "client": 90
+        },
+        {
+          "text": "0.00 秒",
+          "left": 522.296875,
+          "right": 580.703125,
+          "top": 225.953125,
+          "bottom": 252.828125,
+          "width": 58.40625,
+          "height": 26.875,
+          "scroll": 58,
+          "client": 58
+        },
+        {
+          "text": "0.00",
+          "left": 522.296875,
+          "right": 558.140625,
+          "top": 226.953125,
+          "bottom": 250.953125,
+          "width": 35.84375,
+          "height": 24,
+          "scroll": 0,
+          "client": 0
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 66,
+          "right": 702,
+          "top": 264.828125,
+          "bottom": 312.015625,
+          "width": 636,
+          "height": 47.1875,
+          "scroll": 632,
+          "client": 632
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 331.59375,
+          "right": 467.390625,
+          "top": 275.828125,
+          "bottom": 301.015625,
+          "width": 135.796875,
+          "height": 25.1875,
+          "scroll": 136,
+          "client": 136
+        }
+      ],
+      "badgeFont": 16.8
+    },
+    {
+      "width": 640,
+      "bar": {
+        "left": 38,
+        "right": 602,
+        "top": 34.359375,
+        "bottom": 166.609375,
+        "width": 564,
+        "height": 132.25
+      },
+      "contentWidth": 564,
+      "overflow": false,
+      "items": [
+        {
+          "left": 51,
+          "right": 314,
+          "top": 47.359375,
+          "bottom": 94.421875,
+          "width": 263,
+          "height": 47.0625
+        },
+        {
+          "left": 326,
+          "right": 589,
+          "top": 47.359375,
+          "bottom": 94.421875,
+          "width": 263,
+          "height": 47.0625
+        },
+        {
+          "left": 51,
+          "right": 589,
+          "top": 106.421875,
+          "bottom": 153.609375,
+          "width": 538,
+          "height": 47.1875
+        }
+      ],
+      "texts": [
+        {
+          "text": "空氣聲速340 m/s",
+          "left": 51,
+          "right": 314,
+          "top": 47.359375,
+          "bottom": 94.421875,
+          "width": 263,
+          "height": 47.0625,
+          "scroll": 263,
+          "client": 263
+        },
+        {
+          "text": "空氣聲速",
+          "left": 156.90625,
+          "right": 208.09375,
+          "top": 47.359375,
+          "bottom": 66.546875,
+          "width": 51.1875,
+          "height": 19.1875,
+          "scroll": 51,
+          "client": 51
+        },
+        {
+          "text": "340 m/s",
+          "left": 147.859375,
+          "right": 217.125,
+          "top": 67.546875,
+          "bottom": 94.421875,
+          "width": 69.265625,
+          "height": 26.875,
+          "scroll": 69,
+          "client": 69
+        },
+        {
+          "text": "聲音傳播時間：0.00 秒",
+          "left": 326,
+          "right": 589,
+          "top": 47.359375,
+          "bottom": 94.421875,
+          "width": 263,
+          "height": 47.0625,
+          "scroll": 262,
+          "client": 262
+        },
+        {
+          "text": "聲音傳播時間：",
+          "left": 418.203125,
+          "right": 507.78125,
+          "top": 47.359375,
+          "bottom": 66.546875,
+          "width": 89.578125,
+          "height": 19.1875,
+          "scroll": 90,
+          "client": 90
+        },
+        {
+          "text": "0.00 秒",
+          "left": 433.796875,
+          "right": 492.203125,
+          "top": 67.546875,
+          "bottom": 94.421875,
+          "width": 58.40625,
+          "height": 26.875,
+          "scroll": 58,
+          "client": 58
+        },
+        {
+          "text": "0.00",
+          "left": 433.796875,
+          "right": 469.640625,
+          "top": 68.546875,
+          "bottom": 92.546875,
+          "width": 35.84375,
+          "height": 24,
+          "scroll": 0,
+          "client": 0
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 51,
+          "right": 589,
+          "top": 106.421875,
+          "bottom": 153.609375,
+          "width": 538,
+          "height": 47.1875,
+          "scroll": 534,
+          "client": 534
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 267.59375,
+          "right": 403.390625,
+          "top": 117.421875,
+          "bottom": 142.609375,
+          "width": 135.796875,
+          "height": 25.1875,
+          "scroll": 136,
+          "client": 136
+        }
+      ],
+      "badgeFont": 16.8
+    },
+    {
+      "width": 390,
+      "bar": {
+        "left": 38,
+        "right": 352,
+        "top": 43.328125,
+        "bottom": 175.578125,
+        "width": 314,
+        "height": 132.25
+      },
+      "contentWidth": 314,
+      "overflow": false,
+      "items": [
+        {
+          "left": 51,
+          "right": 189,
+          "top": 56.328125,
+          "bottom": 103.390625,
+          "width": 138,
+          "height": 47.0625
+        },
+        {
+          "left": 201,
+          "right": 339,
+          "top": 56.328125,
+          "bottom": 103.390625,
+          "width": 138,
+          "height": 47.0625
+        },
+        {
+          "left": 51,
+          "right": 339,
+          "top": 115.390625,
+          "bottom": 162.578125,
+          "width": 288,
+          "height": 47.1875
+        }
+      ],
+      "texts": [
+        {
+          "text": "空氣聲速340 m/s",
+          "left": 51,
+          "right": 189,
+          "top": 56.328125,
+          "bottom": 103.390625,
+          "width": 138,
+          "height": 47.0625,
+          "scroll": 138,
+          "client": 138
+        },
+        {
+          "text": "空氣聲速",
+          "left": 94.40625,
+          "right": 145.59375,
+          "top": 56.328125,
+          "bottom": 75.515625,
+          "width": 51.1875,
+          "height": 19.1875,
+          "scroll": 51,
+          "client": 51
+        },
+        {
+          "text": "340 m/s",
+          "left": 85.359375,
+          "right": 154.625,
+          "top": 76.515625,
+          "bottom": 103.390625,
+          "width": 69.265625,
+          "height": 26.875,
+          "scroll": 69,
+          "client": 69
+        },
+        {
+          "text": "聲音傳播時間：0.00 秒",
+          "left": 201,
+          "right": 339,
+          "top": 56.328125,
+          "bottom": 103.390625,
+          "width": 138,
+          "height": 47.0625,
+          "scroll": 137,
+          "client": 137
+        },
+        {
+          "text": "聲音傳播時間：",
+          "left": 230.703125,
+          "right": 320.28125,
+          "top": 56.328125,
+          "bottom": 75.515625,
+          "width": 89.578125,
+          "height": 19.1875,
+          "scroll": 90,
+          "client": 90
+        },
+        {
+          "text": "0.00 秒",
+          "left": 246.296875,
+          "right": 304.703125,
+          "top": 76.515625,
+          "bottom": 103.390625,
+          "width": 58.40625,
+          "height": 26.875,
+          "scroll": 58,
+          "client": 58
+        },
+        {
+          "text": "0.00",
+          "left": 246.296875,
+          "right": 282.140625,
+          "top": 77.515625,
+          "bottom": 101.515625,
+          "width": 35.84375,
+          "height": 24,
+          "scroll": 0,
+          "client": 0
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 51,
+          "right": 339,
+          "top": 115.390625,
+          "bottom": 162.578125,
+          "width": 288,
+          "height": 47.1875,
+          "scroll": 284,
+          "client": 284
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 142.59375,
+          "right": 278.390625,
+          "top": 126.390625,
+          "bottom": 151.578125,
+          "width": 135.796875,
+          "height": 25.1875,
+          "scroll": 136,
+          "client": 136
+        }
+      ],
+      "badgeFont": 16.8
+    },
+    {
+      "width": 360,
+      "bar": {
+        "left": 38,
+        "right": 322,
+        "top": 42.859375,
+        "bottom": 158.734375,
+        "width": 284,
+        "height": 115.875
+      },
+      "contentWidth": 284,
+      "overflow": false,
+      "items": [
+        {
+          "left": 47,
+          "right": 175,
+          "top": 53.859375,
+          "bottom": 96.125,
+          "width": 128,
+          "height": 42.265625
+        },
+        {
+          "left": 185,
+          "right": 313,
+          "top": 53.859375,
+          "bottom": 96.125,
+          "width": 128,
+          "height": 42.265625
+        },
+        {
+          "left": 47,
+          "right": 313,
+          "top": 106.125,
+          "bottom": 147.734375,
+          "width": 266,
+          "height": 41.609375
+        }
+      ],
+      "texts": [
+        {
+          "text": "空氣聲速340 m/s",
+          "left": 47,
+          "right": 175,
+          "top": 53.859375,
+          "bottom": 96.125,
+          "width": 128,
+          "height": 42.265625,
+          "scroll": 128,
+          "client": 128
+        },
+        {
+          "text": "空氣聲速",
+          "left": 87.96875,
+          "right": 134.03125,
+          "top": 53.859375,
+          "bottom": 71.125,
+          "width": 46.0625,
+          "height": 17.265625,
+          "scroll": 46,
+          "client": 46
+        },
+        {
+          "text": "340 m/s",
+          "left": 80.046875,
+          "right": 141.9375,
+          "top": 72.125,
+          "bottom": 96.125,
+          "width": 61.890625,
+          "height": 24,
+          "scroll": 62,
+          "client": 62
+        },
+        {
+          "text": "聲音傳播時間：0.00 秒",
+          "left": 185,
+          "right": 313,
+          "top": 53.859375,
+          "bottom": 96.125,
+          "width": 128,
+          "height": 42.265625,
+          "scroll": 127,
+          "client": 127
+        },
+        {
+          "text": "聲音傳播時間：",
+          "left": 212.1875,
+          "right": 292.796875,
+          "top": 53.859375,
+          "bottom": 71.125,
+          "width": 80.609375,
+          "height": 17.265625,
+          "scroll": 81,
+          "client": 81
+        },
+        {
+          "text": "0.00 秒",
+          "left": 226.390625,
+          "right": 278.59375,
+          "top": 72.125,
+          "bottom": 96.125,
+          "width": 52.203125,
+          "height": 24,
+          "scroll": 52,
+          "client": 52
+        },
+        {
+          "text": "0.00",
+          "left": 226.390625,
+          "right": 258.421875,
+          "top": 73.125,
+          "bottom": 95.125,
+          "width": 32.03125,
+          "height": 22,
+          "scroll": 0,
+          "client": 0
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 47,
+          "right": 313,
+          "top": 106.125,
+          "bottom": 147.734375,
+          "width": 266,
+          "height": 41.609375,
+          "scroll": 262,
+          "client": 262
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 135.265625,
+          "right": 251.71875,
+          "top": 116.125,
+          "bottom": 137.734375,
+          "width": 116.453125,
+          "height": 21.609375,
+          "scroll": 116,
+          "client": 116
+        }
+      ],
+      "badgeFont": 14.4
+    },
+    {
+      "width": 320,
+      "bar": {
+        "left": 38,
+        "right": 282,
+        "top": 43.09375,
+        "bottom": 158.96875,
+        "width": 244,
+        "height": 115.875
+      },
+      "contentWidth": 244,
+      "overflow": false,
+      "items": [
+        {
+          "left": 47,
+          "right": 155,
+          "top": 54.09375,
+          "bottom": 96.359375,
+          "width": 108,
+          "height": 42.265625
+        },
+        {
+          "left": 165,
+          "right": 273,
+          "top": 54.09375,
+          "bottom": 96.359375,
+          "width": 108,
+          "height": 42.265625
+        },
+        {
+          "left": 47,
+          "right": 273,
+          "top": 106.359375,
+          "bottom": 147.96875,
+          "width": 226,
+          "height": 41.609375
+        }
+      ],
+      "texts": [
+        {
+          "text": "空氣聲速340 m/s",
+          "left": 47,
+          "right": 155,
+          "top": 54.09375,
+          "bottom": 96.359375,
+          "width": 108,
+          "height": 42.265625,
+          "scroll": 108,
+          "client": 108
+        },
+        {
+          "text": "空氣聲速",
+          "left": 77.96875,
+          "right": 124.03125,
+          "top": 54.09375,
+          "bottom": 71.359375,
+          "width": 46.0625,
+          "height": 17.265625,
+          "scroll": 46,
+          "client": 46
+        },
+        {
+          "text": "340 m/s",
+          "left": 70.046875,
+          "right": 131.9375,
+          "top": 72.359375,
+          "bottom": 96.359375,
+          "width": 61.890625,
+          "height": 24,
+          "scroll": 62,
+          "client": 62
+        },
+        {
+          "text": "聲音傳播時間：0.00 秒",
+          "left": 165,
+          "right": 273,
+          "top": 54.09375,
+          "bottom": 96.359375,
+          "width": 108,
+          "height": 42.265625,
+          "scroll": 107,
+          "client": 107
+        },
+        {
+          "text": "聲音傳播時間：",
+          "left": 182.1875,
+          "right": 262.796875,
+          "top": 54.09375,
+          "bottom": 71.359375,
+          "width": 80.609375,
+          "height": 17.265625,
+          "scroll": 81,
+          "client": 81
+        },
+        {
+          "text": "0.00 秒",
+          "left": 196.390625,
+          "right": 248.59375,
+          "top": 72.359375,
+          "bottom": 96.359375,
+          "width": 52.203125,
+          "height": 24,
+          "scroll": 52,
+          "client": 52
+        },
+        {
+          "text": "0.00",
+          "left": 196.390625,
+          "right": 228.421875,
+          "top": 73.359375,
+          "bottom": 95.359375,
+          "width": 32.03125,
+          "height": 22,
+          "scroll": 0,
+          "client": 0
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 47,
+          "right": 273,
+          "top": 106.359375,
+          "bottom": 147.96875,
+          "width": 226,
+          "height": 41.609375,
+          "scroll": 222,
+          "client": 222
+        },
+        {
+          "text": "慢動作｜放慢 8 倍",
+          "left": 115.265625,
+          "right": 231.71875,
+          "top": 116.359375,
+          "bottom": 137.96875,
+          "width": 116.453125,
+          "height": 21.609375,
+          "scroll": 116,
+          "client": 116
+        }
+      ],
+      "badgeFont": 14.4
+    }
+  ]
+}
