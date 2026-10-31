@@ -11,9 +11,9 @@
     vaporization: {illustration:true, title:'地磚積水蒸發', copy:'地磚表面的積水蒸發，變成看不見的水蒸氣。', alt:['寫實生成示意：不吸水的地磚表面有一灘水','寫實生成示意：同一處積水蒸發後，地磚表面變乾']},
     condensation: {illustration:true, title:'清晨草葉上的露水', copy:'清晨草葉表面較冷，空氣中的水蒸氣遇冷凝結，形成小露珠。', alt:['寫實生成示意：同一片綠色草葉的乾燥表面','寫實生成示意：空氣中的水蒸氣凝結後，草葉表面布滿透明露珠']},
     sublimation: {illustration:true, title:'冷凍庫中的冰昇華', copy:'冰持續處於零下、乾燥的冷凍庫中，經長時間直接昇華成看不見的水蒸氣。', alt:['寫實生成示意：零下冷凍庫中的乾燥金屬盤內有一塊冰','寫實生成示意：冰在持續零下、乾燥的環境中經長時間昇華後，留下乾燥空盤']},
-    deposition: {title:'冰面長出霜晶', copy:'低溫實驗中，水蒸氣在同一冰面形成新的霜晶。', alt:['冰珠表面尚未長出明顯霜晶','同一冰珠表面長出許多枝狀霜晶']}
+    deposition: {illustration:true, title:'窗玻璃長出霜晶', copy:'水蒸氣在零下的窗玻璃表面放熱，直接形成固態霜晶。', alt:['寫實生成示意：同一木框窗玻璃尚未出現明顯枝狀霜晶','寫實生成示意：水蒸氣在零下窗玻璃表面直接形成枝狀固態霜晶']}
   };
-  const photoVersions = {melt:'20261031-melt-generated1', freeze:'20261031-freeze-generated1', vaporization:'20261031-vaporization-generated1', condensation:'20261031-condensation-generated1', sublimation:'20261031-sublimation-generated1'};
+  const photoVersions = {melt:'20261031-melt-generated1', freeze:'20261031-freeze-generated1', vaporization:'20261031-vaporization-generated1', condensation:'20261031-condensation-generated1', sublimation:'20261031-sublimation-generated1', deposition:'20261031-deposition-generated1'};
   const url = (key, side) => new URL(`phase-photo-${key}-${side}.webp${photoVersions[key] ? `?v=${photoVersions[key]}` : ''}`, base).href;
   let ready = false;
   const readyPromise = Promise.all(Object.keys(scenes).flatMap(key => ['before','after'].map(side => {

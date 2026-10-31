@@ -185,24 +185,48 @@
     ]
   },
   "deposition": {
-    "source_title": "Frozen drop.webm",
-    "source_page": "https://commons.wikimedia.org/wiki/File:Frozen_drop.webm",
-    "original_url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Frozen_drop.webm",
-    "original_sha256": "b423239475c52f75ea210d6c262fbb96e009af20b10d4323801f2c9aed58bf91",
-    "author": "Maxim Bilovitskiy",
-    "license": "CC BY 4.0",
-    "license_url": "https://creativecommons.org/licenses/by/4.0",
-    "changes": "從同一實拍影片擷取兩個指定時刻；等比例縮小並轉存 WebP，無重繪、生成或合成。",
+    "source_type": "ai_generated_photorealistic_illustration",
+    "source_title": "凝華：窗玻璃長出霜晶（寫實示意圖）",
+    "generator": "OpenAI image generation",
+    "generation_date": "2026-10-31",
+    "source_artifact": "docs/reviews/unit-2.1-deposition-generated/approved-comparison.png",
+    "source_artifact_sha256": "b3497355323efd7f080e035f1a59fc77cafa8c13ea9b6721f94f8c0dfa493ba6",
+    "source_dimensions": [
+      1536,
+      1024
+    ],
+    "prompt_summary": "固定同一木框窗玻璃、角度、背景與光線。左圖窗面大致透明，右圖同處玻璃表面長出清晰的白色枝狀固態霜晶，仍保留部分透明區域。情境為窗面低於0°C，空氣中的不可見水蒸氣直接凝華成冰晶，中間不經液態；不以水滴、白霧或積雪代表霜晶。",
+    "changes": "依使用者核可的雙欄生成原圖拆成前後兩張，僅去除中央留白並轉存WebP，沒有重繪核可內容。",
+    "disclosure": "AI生成的寫實示意，不是真實拍攝或同次實驗紀錄；窗面低於0°C及水蒸氣直接形成冰晶為教學情境條件，不是溫度或時間量測。",
+    "selection_status": "使用者已核可最後一組窗玻璃霜晶版；六組寫實生成對照圖均已逐組核可。",
     "photos": [
       {
         "file": "phase-photo-deposition-before.webp",
-        "time_seconds": 15,
-        "sha256": "e5d622f40077e74565fd8ba3dafdc05b8c7e2b1821cbe9a257d0ff5a88160ed7"
+        "crop": [
+          0,
+          0,
+          762,
+          1024
+        ],
+        "output_dimensions": [
+          762,
+          1024
+        ],
+        "sha256": "4d38a9fdac698e8d64ed0943715cb196867a1d6444df8236b84a855d6e944fc4"
       },
       {
         "file": "phase-photo-deposition-after.webp",
-        "time_seconds": 30,
-        "sha256": "87c7ef8585a5397633b7b3a3540cc4edc60de5767b1326717d46b615ac9de6a9"
+        "crop": [
+          771,
+          0,
+          1536,
+          1024
+        ],
+        "output_dimensions": [
+          765,
+          1024
+        ],
+        "sha256": "c8d875f758b1b1e032379f31d79bbfab3607421fb369f238afa61895a72f8f6b"
       }
     ]
   },

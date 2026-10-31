@@ -1,0 +1,46 @@
+{
+  "source_type": "ai_generated_photorealistic_illustration",
+  "source_title": "凝華：窗玻璃長出霜晶（寫實示意圖）",
+  "generator": "OpenAI image generation",
+  "generation_date": "2026-10-31",
+  "source_artifact": "docs/reviews/unit-2.1-deposition-generated/approved-comparison.png",
+  "source_artifact_sha256": "b3497355323efd7f080e035f1a59fc77cafa8c13ea9b6721f94f8c0dfa493ba6",
+  "source_dimensions": [
+    1536,
+    1024
+  ],
+  "prompt_summary": "固定同一木框窗玻璃、角度、背景與光線。左圖窗面大致透明，右圖同處玻璃表面長出清晰的白色枝狀固態霜晶，仍保留部分透明區域。情境為窗面低於0°C，空氣中的不可見水蒸氣直接凝華成冰晶，中間不經液態；不以水滴、白霧或積雪代表霜晶。",
+  "changes": "依使用者核可的雙欄生成原圖拆成前後兩張，僅去除中央留白並轉存WebP，沒有重繪核可內容。",
+  "disclosure": "AI生成的寫實示意，不是真實拍攝或同次實驗紀錄；窗面低於0°C及水蒸氣直接形成冰晶為教學情境條件，不是溫度或時間量測。",
+  "selection_status": "使用者已核可最後一組窗玻璃霜晶版；六組寫實生成對照圖均已逐組核可。",
+  "photos": [
+    {
+      "file": "phase-photo-deposition-before.webp",
+      "crop": [
+        0,
+        0,
+        762,
+        1024
+      ],
+      "output_dimensions": [
+        762,
+        1024
+      ],
+      "sha256": "4d38a9fdac698e8d64ed0943715cb196867a1d6444df8236b84a855d6e944fc4"
+    },
+    {
+      "file": "phase-photo-deposition-after.webp",
+      "crop": [
+        771,
+        0,
+        1536,
+        1024
+      ],
+      "output_dimensions": [
+        765,
+        1024
+      ],
+      "sha256": "c8d875f758b1b1e032379f31d79bbfab3607421fb369f238afa61895a72f8f6b"
+    }
+  ]
+}
