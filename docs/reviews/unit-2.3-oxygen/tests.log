@@ -1,0 +1,35 @@
+▶ 2.3 complete page: six teaching sections and one evidence-based quiz
+  ✔ all seven sections and routes exist, with natural dialogue and no retired experiment (147.19644ms)
+  ✔ default cup comparisons remain after preview and reset (140.229139ms)
+  ✔ both preparations replay, pause, resume and reset without hiding results (2896.422718ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (206.578092ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (541.035845ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (3455.487504ms)
+  ✔ all teaching evidence is available without JavaScript (1090.018836ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (9708.172431ms)
+✔ 2.3 complete page: six teaching sections and one evidence-based quiz (19823.421943ms)
+✔ purge precedes water collection; completion covers a full gas jar (1.325846ms)
+✔ wood enters before ignition; both samples use identical insertion and elapsed time (0.804279ms)
+▶ 2.3 oxygen: continuous collection and simultaneous wood comparison
+  ✔ default results, full width, four upper stages, two lower samples and original characters (113.961818ms)
+  ✔ four stages synchronize tube path, bubbles, continuous water displacement and cover (2318.263598ms)
+  ✔ pause freezes actual water and arrows, resumes and rapid replay cancels prior progress (471.245642ms)
+  ✔ both real wooden splints enter together; only oxygen develops a flame (1373.135383ms)
+  ✔ keyboard, Escape, hidden pages and leaving the scene pause without automatic restart (337.590748ms)
+  ✔ seven widths contain diagrams, controls and text; screenshots cover both scenes (1365.582035ms)
+  ✔ touch under reduced motion still continuously collects water and retains results (2718.5064ms)
+  ✔ without JavaScript all essential materials, collection and flame results remain visible (1091.149991ms)
+✔ 2.3 oxygen: continuous collection and simultaneous wood comparison (11302.651064ms)
+▶ 2.3 integrated report checks evidence, completeness and misconceptions
+  ✔ unanswered form names every missing item without claiming completion (1.276387ms)
+  ✔ fully supported report is accepted (0.182645ms)
+  ✔ each misconception identifies the relevant observation and destination (0.451135ms)
+✔ 2.3 integrated report checks evidence, completeness and misconceptions (4.449788ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 32087.548716

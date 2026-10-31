@@ -59,17 +59,17 @@ test('2.3 complete page: six teaching sections and one evidence-based quiz', { t
     for (const gas of ['oxygen','co2']) {
       const panel = page.locator(`[data-replay="${gas}"]`); await panel.scrollIntoViewIfNeeded();
       assert.equal(await panel.locator('.sequence-step').count(), 4);
-      await panel.locator('[data-play]').click(); await page.clock.runFor(1400);
+      await panel.locator('[data-play]').click(); await page.clock.runFor(1500);
       assert.equal(await panel.getAttribute('data-stage'), '1');
       await panel.locator('[data-pause]').click(); const stage = await panel.getAttribute('data-stage');
       await page.clock.runFor(3000); assert.equal(await panel.getAttribute('data-stage'), stage);
-      await panel.locator('[data-play]').click(); await page.clock.runFor(5000);
+      await panel.locator('[data-play]').click(); await page.clock.runFor(gas === 'oxygen' ? 9000 : 5000);
       assert.equal(await panel.getAttribute('data-state'), 'complete');
       assert.equal(await panel.locator('.sequence-step:visible').count(), 4);
       await panel.locator('[data-reset]').click(); assert.equal(await panel.getAttribute('data-stage'), '-1');
       assert.equal(await panel.locator('.sequence-step:visible').count(), 4);
     }
-    assert.equal(await page.locator('#s4 .observation-grid figure').count(), 4);
+    assert.equal(await page.locator('#s4 .observation-grid figure').count(), 2);
     assert.equal(await page.locator('#s6 .observation-grid figure').count(), 6);
   });
   await t.test('leaving a replay pauses it and returning does not autoplay', async () => {
@@ -139,7 +139,7 @@ test('2.3 complete page: six teaching sections and one evidence-based quiz', { t
     const touch = await browser.newPage({ viewport:{width:390,height:844}, hasTouch:true, isMobile:true, reducedMotion:'reduce' });
     await touch.goto(url,{waitUntil:'networkidle'});
     await touch.locator('[data-replay="oxygen"] [data-play]').tap();
-    assert.equal(await touch.locator('[data-replay="oxygen"]').getAttribute('data-state'),'complete');
+    await touch.waitForFunction(() => document.querySelector('[data-replay="oxygen"]').dataset.state === 'complete');
     assert.equal(await touch.locator('[data-replay="oxygen"] .sequence-step:visible').count(),4);
     await touch.locator('.route a[href="#s7"]').tap();
     await touch.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s7');

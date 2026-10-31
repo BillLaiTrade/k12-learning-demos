@@ -416,3 +416,11 @@ NITROGEN_ARTIFACT_DIR=/tmp/unit23-nitrogen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-ful
 ### 3.4第二區分別點喇叭（2026-10-31）
 
 `CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-distance-model.test.mjs tests/unit-3.4-distance.test.cjs`：新增上／下方只播放所選組的波前、接收燈、返回路徑、計時及接收紀錄；未選組從播放中到完成都等待發聲。實際Web Audio最末輸出須只有原音與該組回波，並檢查上方不等待遠牆、暫停續播保留範圍、切換取消舊排程、主按鈕恢復同步、Enter／Space與手機兩組觸控。`DISTANCE_URL`可指定公開頁（以`/`結尾），截圖暫存於`/tmp/k12-34-distance-verified`；原同步、拖牆、同距及版面回歸仍保留。
+
+## 2.3 第四區：氧氣製備與兩組木條同步比較
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-oxygen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-full-oxygen node --test --test-concurrency=1 tests/unit-2.3-oxygen-model.test.mjs tests/unit-2.3-oxygen.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-report.test.cjs
+```
+
+驗證四步與裝置同步、先排空氣才排水集氣、實際SVG水位連續降低、水下蓋片、兩支木條同時移動與只有氧氣復燃、暫停凍結／繼續、快速重播、鍵盤、Escape、背景／離區停止、七種寬度兩瓶並列且不超出滿寬內容區、手機觸控、減少動態、無JS必要結果。整頁及小測模型回歸仍檢查六教學＋一小測、二氧化碳舊重播、第一區與單元導覽。`OXYGEN_URL` 可指定公開2.3頁面，`OXYGEN_ARTIFACT_DIR` 保存本次畫面（預設 `/tmp/unit23-oxygen`）。新測試的本機伺服器只服務展示站checkout。共24項（含外層）；教學動畫不是反應時間／產率實測，也不代表整單元外部驗收。
