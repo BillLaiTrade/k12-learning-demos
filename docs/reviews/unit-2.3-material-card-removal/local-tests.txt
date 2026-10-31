@@ -1,0 +1,31 @@
+▶ 2.3 materials: seven illustrated objects explain identity and experimental role
+  ✔ native controls connect each object to a persistent two-part introduction; initial state does not autoplay (236.22532ms)
+  ✔ actual photo object bodies select all seven introductions, independently of the name labels (506.099248ms)
+  ✔ labels, Enter and Space operate the same native controls and retain keyboard focus (140.055883ms)
+  ✔ manual selection stops the optional tour and remains readable; explicitly replaying the tour still works (247.789771ms)
+  ✔ selected knowledge survives leaving and returning to materials; assembly remains its own scene (185.221599ms)
+  ✔ seven responsive widths keep touch targets within the photo and all introductions within the page (5905.267175ms)
+  ✔ mobile touch and reduced motion select real object bodies and retain the explanation (1585.316722ms)
+  ✔ explanations identify oxygen source, catalyst, purge, displacement and covering in the correct order (49.937055ms)
+  ✔ without JavaScript all seven introductions remain readable alongside the original materials photo (1085.538289ms)
+✔ 2.3 materials: seven illustrated objects explain identity and experimental role (11603.125526ms)
+▶ 2.3 oxygen: five learner-controlled steps and independent splint comparison
+  ✔ initial view contains materials and preparation only; comparison results and original avatars stay available (456.456081ms)
+  ✔ next includes assembly before purge, then collection and covering; each animation stays selected (1267.818591ms)
+  ✔ previous and direct selection restart that step; final next focuses the carbon dioxide collection lesson (225.797715ms)
+  ✔ one replay control pauses and resumes the selected scene; rapid selection cancels old clocks (821.667418ms)
+  ✔ tabs support arrows, Home, End, Enter, Escape and focus never remains in a hidden panel (173.682495ms)
+  ✔ background, leaving the block and starting the other player pause without automatic restart (278.294504ms)
+  ✔ two wooden splints keep identical entry timing and only oxygen develops a frozen or replayed flame (444.481314ms)
+  ✔ all five selected screens and controls fit seven widths, with side-by-side wood samples (6395.154835ms)
+  ✔ touch and reduced motion keep manual navigation and bounded essential animation (1510.213793ms)
+  ✔ without JavaScript all five stage-specific scenes, explanations and final wood results are readable (1108.834483ms)
+✔ 2.3 oxygen: five learner-controlled steps and independent splint comparison (14288.656448ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26752.071771

@@ -16,7 +16,6 @@ function showMaterial(key) {
   panels[0].dataset.materialCurrent=key;
   materialButtons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.material===key)));
   materialInfo.forEach(info=>{info.hidden=info.dataset.materialInfo!==key;});
-  panels[0].querySelector('.oxygen-water-prep').classList.toggle('is-highlighted',key==='jar');
 }
 
 function renderPreparation(stage, elapsed, state) {
