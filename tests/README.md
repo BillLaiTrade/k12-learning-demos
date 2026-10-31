@@ -565,3 +565,13 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-steps OXYGEN_THR
 公開驗證可設 `OXYGEN_URL`／`AIR_FULL_URL`；`oxygen-three.test.cjs`仍是沿用入口，實際測試材質底圖＋SVG，不宣稱舊WebGL檢查。核可四格圖、各步桌機／手機及保存範圍見 `docs/reviews/unit-2.3-oxygen-steps/`。
 
 3.4聲納累積橘線：新增sonar-profile純資料測試，驗證未完成點排除、左右排序、重複位置最新值、原紀錄不變與加密後描出海山；瀏覽器驗證實際SVG頂點、原A/B/C表格順序、單點不畫線、重測與清除。
+
+## 2.3氧氣新增第二步：組裝與開始產氣（2026-10-31）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-assembly OXYGEN_THREE_ARTIFACT_DIR=/tmp/unit23-assembly-material AIR_FULL_ARTIFACT_DIR=/tmp/unit23-assembly-full node --test --test-concurrency=1 tests/unit-2.3-oxygen-model.test.mjs tests/unit-2.3-oxygen.test.cjs tests/unit-2.3-oxygen-three.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-report.test.cjs
+```
+
+現行為五步。共36項（含外層）：模型4、步驟／木條11、材質場景8、整頁9、小測模型4。新增檢查空瓶→雙氧水→加入催化劑→塞好送氣的實際可見狀態、同步內容標籤／四條操作說明、加入材料時未封口、催化劑接觸後反應、封口後才有導管氣流、集氣瓶仍滿水、重播重建空瓶、暫停像素一致；原七寬度與手機觸控／鍵盤／無JS／減少動態回歸更新為五步，其他實驗與小測維持。
+
+素材、各段桌機／手機影格及保存範圍見 `docs/reviews/unit-2.3-oxygen-assembly/`。沿用 `OXYGEN_URL`／`AIR_FULL_URL` 可驗證公開頁；`oxygen-three.test.cjs`測試的是現行材質圖＋SVG，不是歷史WebGL。

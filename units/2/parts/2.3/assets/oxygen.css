@@ -11,3 +11,10 @@
 /* Keep the selected tab readable while hovered, over the shared button rule. */
 .oxygen-steps .sequence-step.is-current:hover:not(:disabled){background:#1f624b;border-color:#1f624b}
 @container(max-width:510px){.oxygen-step-controls [data-next] span{display:none}}
+
+/* Second step: explicit placement, reagent addition, then closing the apparatus. */
+.oxygen-steps{grid-template-columns:repeat(5,minmax(0,1fr))}.oxygen-steps .step-label{font-size:.79rem}.oxygen-assembly-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;list-style:none;counter-reset:assembly;margin:15px 0 0;padding:0}.oxygen-assembly-actions li{counter-increment:assembly;position:relative;padding:11px 12px 11px 37px;border:1px solid #e0e5d8;border-radius:10px;background:#f8faf3;color:#6a7b61;font-size:.76rem;line-height:1.8}.oxygen-assembly-actions li::before{content:counter(assembly);position:absolute;left:12px;top:12px;color:#7b956a;font-weight:750;font-size:.76rem}.oxygen-assembly-actions b{display:block;color:#4f6c4b;font-size:.81rem;margin-bottom:3px}.oxygen-assembly-actions .is-current{background:#eaf2df;border-color:#8ca978;box-shadow:inset 3px 0 #7f9e6d}.oxygen-assembly-actions .is-current b{color:#2f5b40}.oxygen-assembly-panel .oxygen-step-explanation dd{font-size:.82rem}
+@container(max-width:750px){.oxygen-steps .sequence-step{gap:5px;padding-inline:4px}.oxygen-steps .step-label{font-size:.75rem}.oxygen-step-number{width:21px;height:21px}}
+@container(max-width:510px){.oxygen-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.oxygen-steps .sequence-step{padding-left:12px;gap:8px}.oxygen-steps .sequence-step:last-child{grid-column:1 / -1}.oxygen-steps .step-label{font-size:.79rem}.oxygen-assembly-actions{grid-template-columns:1fr;gap:7px}.oxygen-assembly-actions li{font-size:.73rem;padding:9px 10px 9px 33px}.oxygen-assembly-actions li::before{left:11px;top:10px}.oxygen-assembly-actions b{font-size:.78rem}.oxygen-assembly-panel .oxygen-step-explanation dd{font-size:.78rem}}
+
+@container(max-width:510px){.oxygen-assembly-panel .oxygen-mobile-zoom svg{max-height:320px}}

@@ -1,0 +1,32 @@
+[
+  {
+    "source": "exec-a7aff73d-a1b4-41c6-b440-9d900cd2eafa.png",
+    "source_sha256": "26cdb738c224850598511b2beb421aa84af4a6f5a7760147904f6dd59c3abdb4",
+    "outputs": [
+      {
+        "asset": "oxygen-apparatus-empty.webp",
+        "crop": null,
+        "bytes": 83056,
+        "sha256": "4df63926c8f93ecf4dff94428031ea59afe625d761693cff5f11a7bd12c96117"
+      }
+    ]
+  },
+  {
+    "source": "exec-da1059b5-3077-416d-817a-636118c8876b.png",
+    "source_sha256": "9ad445d430dbcee554e5ce0b3b36ff69fd341b07c5ee7e585e3a37a0a44fdf17",
+    "outputs": [
+      {
+        "asset": "oxygen-peroxide-open.webp",
+        "crop": "500x810+130+100",
+        "bytes": 66034,
+        "sha256": "ff78e7078443e6f428aa00665952f71f8cee3dc83da3460d5bd943e6c488d518"
+      },
+      {
+        "asset": "oxygen-catalyst-spoon.webp",
+        "crop": "825x125+685+480",
+        "bytes": 18262,
+        "sha256": "8be67f2542ac3bc3d3785d07035a76d2340d767c75c9d7fbf698534e021cf4ba"
+      }
+    ]
+  }
+]

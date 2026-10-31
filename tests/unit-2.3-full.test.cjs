@@ -62,8 +62,8 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
     await oxygen.locator('[data-next]').click();await page.clock.fastForward(400);
     assert.equal(await oxygen.getAttribute('data-stage'),'1');
     await oxygen.locator('[data-play]').click();await page.clock.fastForward(3000);assert.equal(await oxygen.getAttribute('data-state'),'paused');
-    await oxygen.locator('[data-play]').click();await page.clock.fastForward(10000);assert.equal(await oxygen.getAttribute('data-state'),'complete');assert.equal(await oxygen.getAttribute('data-stage'),'1');
-    for(const stage of[2,3]){await oxygen.locator('[data-next]').click();await page.clock.fastForward(6000);assert.equal(await oxygen.getAttribute('data-stage'),String(stage));assert.equal(await oxygen.getAttribute('data-state'),'complete');}
+    await oxygen.locator('[data-play]').click();await page.clock.fastForward(15000);assert.equal(await oxygen.getAttribute('data-state'),'complete');assert.equal(await oxygen.getAttribute('data-stage'),'1');
+    for(const stage of[2,3,4]){await oxygen.locator('[data-next]').click();await page.clock.fastForward(6000);assert.equal(await oxygen.getAttribute('data-stage'),String(stage));assert.equal(await oxygen.getAttribute('data-state'),'complete');}
     await oxygen.locator('[data-stage="0"]').click();assert.equal(await oxygen.getAttribute('data-stage'),'0');
     const panel=page.locator('[data-replay="co2"]');await panel.locator('[data-play]').click();await page.clock.fastForward(1500);assert.equal(await panel.getAttribute('data-stage'),'1');
     await panel.locator('[data-pause]').click();const stage=await panel.getAttribute('data-stage');await page.clock.runFor(3000);assert.equal(await panel.getAttribute('data-stage'),stage);
@@ -131,7 +131,7 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
     const context = await browser.newContext({ javaScriptEnabled:false, viewport:{width:390,height:844} });
     const staticPage = await context.newPage(); await staticPage.goto(url, {waitUntil:'networkidle'});
     for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#air-profile-nitrogen .gas-profile-properties','#air-profile-oxygen .gas-profile-properties','#air-profile-argon .gas-profile-properties','#s3 .sequence-grid','#s3 .gas-observations','#s4 .sequence-grid','#s4 .gas-observations','#s5 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
-    assert.equal(await staticPage.locator('.sequence-step').count(),8);
+    assert.equal(await staticPage.locator('.sequence-step').count(),9);
     await context.close();
   });
   await t.test('touch, reduced motion, keyboard selects and last-section anchor work', async () => {
@@ -140,7 +140,7 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
     await touch.locator('[data-replay="oxygen"] [data-next]').tap();
     await touch.waitForFunction(() => document.querySelector('[data-replay="oxygen"]').dataset.state === 'complete');
     assert.equal(await touch.locator('[data-replay="oxygen"]').getAttribute('data-stage'),'1');
-    assert.equal(await touch.locator('[data-replay="oxygen"] .sequence-step:visible').count(),4);
+    assert.equal(await touch.locator('[data-replay="oxygen"] .sequence-step:visible').count(),5);
     await touch.locator('.route a[href="#s5"]').tap();
     await touch.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s5');
     await touch.locator('#gas-report-form select[name="sample_a"]').focus();

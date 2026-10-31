@@ -19,17 +19,34 @@ export function comparisonFrame(elapsed) {
   return { inserted: smooth(time/1500), ignition: clamp((time-2000)/1200), fading: clamp((time-1800)/3000) };
 }
 
-// Each selected step owns its bounded clock. Finishing it never chooses another
-// step; the learner navigates explicitly with the tabs or previous/next buttons.
-export const STEP_DURATIONS = [1800, 2800, 5200, 2600];
+// Each selected step owns a bounded clock; only the learner selects a new step.
+export const ASSEMBLY_DURATION = 11800;
+export const STEP_DURATIONS = [1800, ASSEMBLY_DURATION, 2800, 5200, 2600];
+export function assemblyFrame(elapsed) {
+  const time = Math.max(0, Math.min(ASSEMBLY_DURATION, elapsed));
+  const phase = time < 2800 ? 0 : time < 5800 ? 1 : time < 8800 ? 2 : 3;
+  const peroxide = smooth((time-3300)/1900);
+  const catalyst = smooth((time-6300)/1400);
+  const sealed = smooth((time-9000)/1600);
+  const reaction = clamp((time-6800)/500);
+  return { time, phase, peroxide, catalyst, sealed, reaction,
+    bottleTilt: smooth((time-2800)/500),
+    bottle: smooth((time-2800)/200)*(1-smooth((time-5200)/500)),
+    liquidFlow: smooth((time-3300)/180)*(1-smooth((time-5020)/180)),
+    spoon: smooth((time-5800)/200)*(1-smooth((time-7800)/500)),
+    powderFlow: smooth((time-6300)/180)*(1-smooth((time-7520)/180)),
+    mixed: smooth((time-10700)/500),
+    gasThroughTube: sealed === 1 && reaction > 0 };
+}
 export function preparationStepFrame(stage, elapsed) {
-  const index = Math.max(0, Math.min(3, Math.trunc(stage)));
+  const index = Math.max(0, Math.min(STEP_DURATIONS.length-1, Math.trunc(stage)));
   const duration = STEP_DURATIONS[index];
   const localTime = Math.max(0, Math.min(duration, elapsed));
-  const time = PREPARATION_STAGES[index] + localTime;
-  const frame = preparationFrame(time);
-  return { ...frame, stage: index, time, localTime, duration,
-    purging: index === 1, collecting: index === 2 && frame.collected < 1,
-    covered: index === 3 && frame.covered,
-    material: index === 0 ? Math.min(2, Math.floor(localTime/600)) : -1 };
+  const legacyIndex = index > 1 ? index-1 : 0;
+  const time = PREPARATION_STAGES[legacyIndex] + localTime;
+  const frame = preparationFrame(index === 1 ? 0 : time);
+  return { ...frame, stage:index, time, localTime, duration,
+    purging:index===2, collecting:index===3 && frame.collected<1,
+    covered:index===4 && frame.covered,
+    material:index===0 ? Math.min(2,Math.floor(localTime/600)) : -1 };
 }
