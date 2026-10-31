@@ -146,9 +146,3 @@
  .invest-notebook-answer input {width:100%;padding-inline:2px;font-size:.83rem;}
  .invest-notebook-answer {min-width:0;}
 }
-
-.invest-entry-value {display:grid;grid-template-columns:90px auto;justify-content:end;min-width:130px;}
-.invest-record-source {grid-column:1/-1;display:flex;justify-content:flex-end;align-items:center;gap:5px;margin-bottom:3px;color:#62775d;font-size:.72rem;white-space:nowrap;}
-.invest-record-source select {box-sizing:border-box;width:78px;min-width:0;padding:3px 5px;border:1px solid #bdcdb2;border-radius:5px;background:#fbfdf7;color:#315d3e;font:inherit;}
-.invest-record-source select:focus-visible {outline:2px solid #86aa76;outline-offset:2px;}
-@media(max-width:680px){.invest-entry-value {grid-template-columns:85px auto;min-width:118px;}.invest-entry-value input {width:85px;}}

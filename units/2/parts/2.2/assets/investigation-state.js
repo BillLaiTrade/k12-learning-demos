@@ -77,7 +77,7 @@ export function assessReport(sample,value) {
 }
 
 // All portions are equal, homogenized aliquots of PORTION. A replacement portion
-// may supply a missed measurement; each record must still cite real evidence.
+// may supply a missed measurement; all filled numbers must still match actual measurements.
 export function assessNotebook(samples,records){
   const fail=(field,message)=>({ok:false,field,issues:[message],basis:null});
   if(!samples.length)return fail(null,'先從未知樣本 X 取一份，試著分離出乾燥晶體。');
@@ -86,14 +86,13 @@ export function assessNotebook(samples,records){
     const record=records[field]||{},value=String(record.value??'').trim();
     if(!value&&optional)continue;
     if(!value||!Number.isFinite(Number(value))||Number(value)<0)return fail(field,field==='solution-mass'?'請填寫蒸發前濾液的淨質量。若忘記先前讀值，可以另取一份補做稱量。':`請自行讀取電子秤，填寫${title}的淨質量紀錄（克）。`);
-    const sample=samples.find(s=>s.id===record.sampleId);
-    if(!sample)return fail(field,`請選擇${title}這筆紀錄的來源取樣。`);
-    const name=sample.id<=26?String.fromCharCode(64+sample.id):String(sample.id);
-    const measurements=measuredMasses(sample),measurement=measurements[key];
-    if(key==='filtered'&&!measurement)return fail(field,`取樣 ${name} 還沒有過濾後濾液的稱量紀錄。請過濾並稱量，或選擇已補做稱量的來源取樣。`);
-    if(key==='solid'&&measurement?.phase==='dry-raw')return fail(field,`取樣 ${name} 的固體還混著泥沙，不能當作晶體淨質量。請另取一份，先過濾再蒸乾、稱量。`);
-    if(!measurement)return fail(field,`取樣 ${name} 的${title}尚未稱量，請確認這筆紀錄來自電子秤讀值。`);
-    if(Math.abs(Number(value)-measurement.mass)>1e-6)return fail(field,`${title}紀錄與來源取樣 ${name} 的電子秤讀值不同，請重新核對。`);
+    const measurements=samples.map(measuredMasses).map(m=>m[key]).filter(Boolean);
+    const eligible=key==='solid'?measurements.filter(m=>m.phase==='dry-filtered'):measurements;
+    if(key==='filtered'&&!eligible.length)return fail(field,'還沒有過濾後濾液的稱量紀錄。請過濾並稱量；若原取樣已蒸乾，可以另取一份補量。');
+    if(key==='solid'&&!eligible.length&&measurements.some(m=>m.phase==='dry-raw'))return fail(field,'稱到的固體還混著泥沙，不能當作晶體淨質量。請另取一份，先過濾再蒸乾、稱量。');
+    if(!eligible.length)return fail(field,`${title}尚未稱量，請自行讀取電子秤後填寫。`);
+    const measurement=eligible.find(m=>Math.abs(Number(value)-m.mass)<=1e-6);
+    if(!measurement)return fail(field,`${title}紀錄與這次調查的電子秤讀值不同，請重新核對。`);
     evidence[key]=measurement;
   }
   const basis={solution:evidence.filtered.mass,solute:evidence.solid.mass};

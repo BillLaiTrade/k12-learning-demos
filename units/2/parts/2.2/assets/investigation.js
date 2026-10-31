@@ -1,11 +1,10 @@
-import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessNotebook,measuredMasses,measurementHint} from './investigation-state.js?v=shared-notebook-1';
+import {newSample,finishTest,canTest,DURATION,phaseName,actionName,assessNotebook,measuredMasses,measurementHint} from './investigation-state.js?v=numbers-only-1';
 import {loadPicture,createRenderer} from './investigation-renderer.js?v=filtrate-to-scale-1';
 
 const root=document.getElementById('invest-lab');
 const $=id=>document.getElementById(`invest-${id}`);
 const controls=[...root.querySelectorAll('[data-invest-tool]')];
-const answers={},sources={};
-const massFields=['raw-mass','solution-mass','solute-mass'];
+const answers={};
 const answerFields=['raw-mass','solution-mass','solute-mass','calculation-numerator','calculation-denominator','concentration-value'];
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
 let samples=[],active=null,stock=6,nextId=1,animation=null,renderer=null,frame=0,pausedAt=null,drag=null,suppressClickUntil=0,feedbackRevealFrame=0;
@@ -36,22 +35,17 @@ function invalidateReport(){cancelFeedbackReveal();clearReportTarget();const fee
 function redraw(now=performance.now()){renderer?.render({sample:selected(),stock,animation},now);}
 function updateConcentration(){
   const sample=selected();
-  const {filtered}=measuredMasses(samples.find(s=>s.id===sources['solution-mass']));
-  const {solid}=measuredMasses(samples.find(s=>s.id===sources['solute-mass']));
+  const measurements=samples.map(measuredMasses);
+  const filtered=measurements.find(m=>m.filtered)?.filtered;
+  const solid=measurements.find(m=>m.solid?.phase==='dry-filtered')?.solid||measurements.find(m=>m.solid)?.solid;
   $('solution-note').textContent=filtered?'這是計算濃度時的溶液總質量。':'這筆重量需要包含泥沙嗎？';
   $('solute-note').textContent=solid?(solid.phase==='dry-filtered'?'這是原本溶在濾液中的溶質質量。':'固體還混有泥沙，能直接當作晶體質量嗎？'):'稱到的是乾燥晶體，還是混著泥沙的固體？';
   $('liquid-measurement').dataset.valid=filtered?'true':'';
   $('solid-measurement').dataset.valid=solid?String(solid.phase==='dry-filtered'):'';
   for(const field of answerFields)if($(field).value!==(answers[field]??''))$(field).value=answers[field]??'';
-  for(const field of massFields){
-    const select=$(`${field}-source`);select.replaceChildren(new Option('選取樣',''));
-    for(const s of samples)select.add(new Option(`取樣 ${label(s.id)}`,String(s.id)));
-    select.value=sources[field]??'';
-  }
   const hint=measurementHint(sample);$('hint').hidden=!hint||!!animation;$('hint').textContent=hint;
   const disabled=root.dataset.ready!=='true'||!!animation||!sample;
   for(const field of answerFields)$(field).disabled=disabled;
-  for(const field of massFields)$(`${field}-source`).disabled=disabled;
   $('check').disabled=disabled;
 }
 
@@ -106,7 +100,7 @@ function perform(action){
 }
 function submitReport(event){
   event.preventDefault();if(animation)return;cancelFeedbackReveal();clearReportTarget();
-  const records=Object.fromEntries(answerFields.map(field=>[field,{value:$(field).value,sampleId:sources[field]}]));
+  const records=Object.fromEntries(answerFields.map(field=>[field,{value:$(field).value}]));
   const result=assessNotebook(samples,records),problemField=result.field||null;
   const feedback=$('feedback');
   feedback.hidden=false;feedback.dataset.result=result.ok?'correct':'revise';feedback.replaceChildren();
@@ -126,7 +120,7 @@ function submitReport(event){
 }
 
 function clear(){
-  cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];for(const field of answerFields)delete answers[field];for(const field of massFields)delete sources[field];active=null;stock=6;nextId=1;
+  cancelAnimationFrame(frame);frame=0;animation=null;pausedAt=null;cancelDrag();samples=[];for(const field of answerFields)delete answers[field];active=null;stock=6;nextId=1;
   $('report').reset();invalidateReport();root.querySelectorAll('[data-sample]').forEach(b=>b.remove());delete root.dataset.lastEvent;
   $('concentration-value').value='';update();redraw();announce('點未知樣本 X 取樣，再自由選用器材測試。');$('bottle').focus({preventScroll:true});
 }
@@ -162,13 +156,9 @@ $('report').addEventListener('submit',submitReport);
 for(const field of answerFields){
   $(field).addEventListener('input',()=>{
     answers[field]=$(field).value;
-    if(massFields.includes(field)&&$(field).value.trim()&&!sources[field])sources[field]=active;
     invalidateReport();updateConcentration();
   });
 }
-for(const field of massFields)$(`${field}-source`).addEventListener('change',event=>{
-  sources[field]=Number(event.target.value)||null;invalidateReport();updateConcentration();
-});
 $('reset').addEventListener('click',()=>{if(samples.length)$('reset-dialog').showModal();else clear();});
 $('reset-dialog').addEventListener('close',()=>{if($('reset-dialog').returnValue==='reset')clear();});
 document.addEventListener('visibilitychange',()=>{
