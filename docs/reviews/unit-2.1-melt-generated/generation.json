@@ -1,0 +1,46 @@
+{
+  "source_type": "ai_generated_photorealistic_illustration",
+  "source_title": "融化：一塊冰與融化後的水（寫實示意圖）",
+  "generator": "OpenAI image generation",
+  "generation_date": "2026-10-31",
+  "source_artifact": "docs/reviews/unit-2.1-melt-generated/approved-comparison.png",
+  "source_artifact_sha256": "cb9e28e2a28ef70b44991cb4832268e39fc8d564d84ed639f5b9528559b112d1",
+  "source_dimensions": [
+    1536,
+    1024
+  ],
+  "prompt_summary": "固定同一透明短杯、拍攝角度、桌面、背景與光線。左圖只有一塊大冰塊，右圖冰完全融為透明液態水；以冰約216mL、融水約198mL作設計參考，水位約杯內高度四成。沒有文字、箭頭、手、標誌、霧或多顆冰。份量為示意設計，不是量測紀錄。",
+  "changes": "依使用者核可的雙欄生成原圖拆成前後兩張，僅去除中央留白並轉存WebP，沒有重繪核可內容。",
+  "disclosure": "AI生成的寫實示意，不是真實拍攝或同次實驗紀錄。",
+  "selection_status": "使用者已核可並要求套用；其餘五組需逐組生成、核可後才替換。",
+  "photos": [
+    {
+      "file": "phase-photo-melt-before.webp",
+      "crop": [
+        0,
+        0,
+        762,
+        1024
+      ],
+      "output_dimensions": [
+        762,
+        1024
+      ],
+      "sha256": "0b6d6d2bf5ab0b909bef56ced2123de1d456f3b12218d33252983dcbcca54997"
+    },
+    {
+      "file": "phase-photo-melt-after.webp",
+      "crop": [
+        774,
+        0,
+        1536,
+        1024
+      ],
+      "output_dimensions": [
+        762,
+        1024
+      ],
+      "sha256": "2aa501a368fc5f39945357cd7f12d57836fb0ba2549ccddb39ad15b5486ebd6b"
+    }
+  ]
+}
