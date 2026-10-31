@@ -389,7 +389,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 CHROMIUM_PATH=/usr/bin/chromium GAS_PROFILE_ARTIFACT_DIR=/tmp/unit23-gas-profiles AIR_FULL_ARTIFACT_DIR=/tmp/unit23-gas-profiles-full node --test --test-concurrency=1 tests/unit-2.3-nitrogen.test.cjs tests/unit-2.3-argon.test.cjs tests/unit-2.3-full.test.cjs
 ```
 
-使用者核可兩張介紹版示意圖後，03與05改為氣體介紹為主、生活用途小圖在下的靜態版面。兩個既有測試入口現在共用 `helpers/gas-profile.cjs`；各6項（含外層），檢查名稱／化學式、約數與乾燥基準、三項限定性質、用途層次與圖片實際解碼、舊重播不載入、七種寬度320–1440px、觸控導覽及無JavaScript。整頁另9項回歸原杯子、氧氣、二氧化碳、小測及導覽。`GAS_PROFILE_URL` 可讓兩入口共同指定公開頁，或分別使用 `NITROGEN_URL`／`ARGON_URL`；`GAS_PROFILE_ARTIFACT_DIR` 指定截圖目錄。證據見 `docs/reviews/unit-2.3-gas-profiles/`。
+使用者核可介紹方向並釐清須融合原單元格式後，03與05改為共用標頭／字體／配色及小葵阿公簡短引入，保留氣體介紹為主、生活用途小圖在下的靜態版面。兩個既有測試入口現在共用 `helpers/gas-profile.cjs`；各6項（含外層），檢查名稱／化學式、約數與乾燥基準、三項限定性質、用途層次與圖片實際解碼、舊重播不載入、七種寬度320–1440px、觸控導覽及無JavaScript；每種寬度另比對第二區共用標頭／字體／編號／背景／內距的實際computed style，並驗證原44px人物頭像。整頁另9項回歸原杯子、氧氣、二氧化碳、小測及導覽。`GAS_PROFILE_URL` 可讓兩入口共同指定公開頁，或分別使用 `NITROGEN_URL`／`ARGON_URL`；`GAS_PROFILE_ARTIFACT_DIR` 指定截圖目錄。最新格式融合證據見 `docs/reviews/unit-2.3-gas-integrated/`；前版海報式畫面留於 `docs/reviews/unit-2.3-gas-profiles/` 作歷程。
 
 先前充氮包裝與焊接左右比較動畫已退出03／05主線；原腳本與模型檔保留歷史，不再由頁面載入。舊動畫測試結果不代表目前介紹版通過。
 

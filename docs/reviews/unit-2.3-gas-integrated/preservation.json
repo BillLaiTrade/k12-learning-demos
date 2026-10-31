@@ -1,0 +1,30 @@
+{
+  "baseline": "67a77eade59143bb5b75f9946e15fa5dd8dd2994",
+  "sections": [
+    {
+      "section": "s1",
+      "unchanged": true,
+      "sha256": "125cb2796d1713ec7b2e373180d33480377d48bc45cffa1e2db851b0545dc597"
+    },
+    {
+      "section": "s2",
+      "unchanged": true,
+      "sha256": "01ab92ea7c74f380dbd4f1c0652cb81ed413ea6719c5d70615f713a465e63437"
+    },
+    {
+      "section": "s4",
+      "unchanged": true,
+      "sha256": "c27644ef61e80d5d61ef1cb9a52fcddca006a5ffae2b866071b730aa45a63b92"
+    },
+    {
+      "section": "s6",
+      "unchanged": true,
+      "sha256": "e18a5c14630655fd5ffc7aebc61f84962a32aabe4c6bbade26cd15ff7a4d1c7a"
+    },
+    {
+      "section": "s7",
+      "unchanged": true,
+      "sha256": "d66a33b564c44e996416e894ece1f329d9fc7a539a2dbe9920f3a51264b6b1d4"
+    }
+  ]
+}

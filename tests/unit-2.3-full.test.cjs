@@ -33,7 +33,7 @@ test('2.3 complete page: six teaching sections and one evidence-based quiz', { t
     assert.deepEqual(await page.locator('section.lesson').evaluateAll(nodes => nodes.map(n => n.id)), ['s1','s2','s3','s4','s5','s6','s7']);
     assert.equal(await page.locator('form').count(), 1);
     assert.equal(await page.locator('.route a.quiz-nav').getAttribute('href'), '#s7');
-    for (const i of [1,2,4,6]) {
+    for (const i of [1,2,3,4,5,6]) {
       assert.equal(await page.locator(`#s${i} .dialogue.xiaokui`).first().isVisible(), true);
       assert.equal(await page.locator(`#s${i} .dialogue.grandpa`).first().isVisible(), true);
     }

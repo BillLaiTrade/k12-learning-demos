@@ -1,0 +1,139 @@
+TAP version 13
+# Subtest: 2.3 Argon: gas introduction first and compact life example
+    # Subtest: approved name, formula, approximate dry-air proportion and three qualified properties are readable
+    ok 1 - approved name, formula, approximate dry-air proportion and three qualified properties are readable
+      ---
+      duration_ms: 78.648525
+      type: 'test'
+      ...
+    # Subtest: life example is below the introduction and carries a small photo with text
+    ok 2 - life example is below the introduction and carries a small photo with text
+      ---
+      duration_ms: 34.081981
+      type: 'test'
+      ...
+    # Subtest: seven widths share the unit format, fit all text and keep examples secondary
+    ok 3 - seven widths share the unit format, fit all text and keep examples secondary
+      ---
+      duration_ms: 3136.366062
+      type: 'test'
+      ...
+    # Subtest: touch navigation reaches the gas profile and the existing final quiz
+    ok 4 - touch navigation reaches the gas profile and the existing final quiz
+      ---
+      duration_ms: 11155.471511
+      type: 'test'
+      ...
+    # Subtest: no JavaScript retains the complete profile and example
+    ok 5 - no JavaScript retains the complete profile and example
+      ---
+      duration_ms: 1087.729609
+      type: 'test'
+      ...
+    1..5
+ok 1 - 2.3 Argon: gas introduction first and compact life example
+  ---
+  duration_ms: 28546.506496
+  type: 'test'
+  ...
+# Subtest: 2.3 complete page: six teaching sections and one evidence-based quiz
+    # Subtest: all seven sections and routes exist, with gas profiles and no retired experiment
+    ok 1 - all seven sections and routes exist, with gas profiles and no retired experiment
+      ---
+      duration_ms: 106.054664
+      type: 'test'
+      ...
+    # Subtest: default cup comparisons remain after preview and reset
+    ok 2 - default cup comparisons remain after preview and reset
+      ---
+      duration_ms: 230.188017
+      type: 'test'
+      ...
+    # Subtest: both preparations replay, pause, resume and reset without hiding results
+    ok 3 - both preparations replay, pause, resume and reset without hiding results
+      ---
+      duration_ms: 3636.772627
+      type: 'test'
+      ...
+    # Subtest: leaving a replay pauses it and returning does not autoplay
+    ok 4 - leaving a replay pauses it and returning does not autoplay
+      ---
+      duration_ms: 1254.168968
+      type: 'test'
+      ...
+    # Subtest: single quiz gives missing, misconception, revised and correct feedback; reset is local
+    ok 5 - single quiz gives missing, misconception, revised and correct feedback; reset is local
+      ---
+      duration_ms: 968.880075
+      type: 'test'
+      ...
+    # Subtest: seven widths keep full-width teaching bodies below their headers without overflow
+    ok 6 - seven widths keep full-width teaching bodies below their headers without overflow
+      ---
+      duration_ms: 5701.322463
+      type: 'test'
+      ...
+    # Subtest: all teaching evidence is available without JavaScript
+    ok 7 - all teaching evidence is available without JavaScript
+      ---
+      duration_ms: 959.11946
+      type: 'test'
+      ...
+    # Subtest: touch, reduced motion, keyboard selects and last-section anchor work
+    ok 8 - touch, reduced motion, keyboard selects and last-section anchor work
+      ---
+      duration_ms: 20006.78986
+      type: 'test'
+      ...
+    1..8
+ok 2 - 2.3 complete page: six teaching sections and one evidence-based quiz
+  ---
+  duration_ms: 45788.270541
+  type: 'test'
+  ...
+# Subtest: 2.3 Nitrogen: gas introduction first and compact life example
+    # Subtest: approved name, formula, approximate dry-air proportion and three qualified properties are readable
+    ok 1 - approved name, formula, approximate dry-air proportion and three qualified properties are readable
+      ---
+      duration_ms: 72.521889
+      type: 'test'
+      ...
+    # Subtest: life example is below the introduction and carries a small photo with text
+    ok 2 - life example is below the introduction and carries a small photo with text
+      ---
+      duration_ms: 36.987264
+      type: 'test'
+      ...
+    # Subtest: seven widths share the unit format, fit all text and keep examples secondary
+    ok 3 - seven widths share the unit format, fit all text and keep examples secondary
+      ---
+      duration_ms: 3106.182832
+      type: 'test'
+      ...
+    # Subtest: touch navigation reaches the gas profile and the existing final quiz
+    ok 4 - touch navigation reaches the gas profile and the existing final quiz
+      ---
+      duration_ms: 11311.766691
+      type: 'test'
+      ...
+    # Subtest: no JavaScript retains the complete profile and example
+    ok 5 - no JavaScript retains the complete profile and example
+      ---
+      duration_ms: 1053.975244
+      type: 'test'
+      ...
+    1..5
+ok 3 - 2.3 Nitrogen: gas introduction first and compact life example
+  ---
+  duration_ms: 28678.285516
+  type: 'test'
+  ...
+1..3
+# tests 21
+# suites 0
+# pass 21
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 104196.686543

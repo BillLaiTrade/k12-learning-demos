@@ -18,16 +18,32 @@ module.exports=function profileTest({id,name,english,percent,rank,example,envNam
    assert.equal(await section.locator('.gas-profile-example h4').innerText(),example);assert.equal(await section.locator('img').count(),1);assert.ok((await section.locator('img').getAttribute('alt')).length>15);
    const r=await section.evaluate(el=>{const properties=el.querySelector('.gas-profile-properties').getBoundingClientRect(),life=el.querySelector('.gas-profile-life').getBoundingClientRect(),hero=el.querySelector('.gas-profile-hero').getBoundingClientRect(),photo=el.querySelector('img').getBoundingClientRect();return{ordered:life.top>=properties.bottom,introHeight:properties.bottom-hero.top,exampleHeight:life.height,photoWidth:photo.width,cardWidth:el.getBoundingClientRect().width}});
    assert.ok(r.ordered);assert.ok(r.introHeight>r.exampleHeight);assert.ok(r.photoWidth<r.cardWidth*.45);
-   assert.equal(await section.locator('button,input,select,canvas,.dialogue,.nitrogen-compare,.argon-comparison').count(),0);
+   assert.equal(await section.locator('button,input,select,canvas,.nitrogen-compare,.argon-comparison').count(),0);
+   assert.equal(await section.locator('.dialogue').count(),2);
+   for(const character of ['xiaokui','grandpa']) assert.equal(await section.locator(`.dialogue.${character} .speaker`).count(),1);
    assert.ok(await section.locator('img').evaluate(n=>n.complete&&n.naturalWidth>0));
    const retired=await page.evaluate(()=>performance.getEntriesByType('resource').filter(r=>/\/(nitrogen|argon)\.mjs\?/.test(r.name)).map(r=>r.name));assert.deepEqual(retired,[]);
   });
-  await t.test('seven widths fit all text and keep the example smaller than the introduction',async()=>{
+  await t.test('seven widths share the unit format, fit all text and keep examples secondary',async()=>{
+   const formatEvidence=[];
    for(const width of[1440,1280,1024,800,768,390,320]){await page.setViewportSize({width,height:1100});await section.scrollIntoViewIfNeeded();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${width} document overflow`);
+    const formats=await section.evaluate(el=>{
+     const reference=document.querySelector('#s2');
+     const styles=(root)=>{
+      const pick=(node,props,pseudo)=>{const c=getComputedStyle(node,pseudo);return Object.fromEntries(props.map(p=>[p,c[p]]))};
+      return {card:pick(root,['backgroundColor','borderColor','borderRadius']),header:pick(root.querySelector('.lesson-head'),['display','padding','gap','borderBottomColor']),number:pick(root.querySelector('.lesson-number'),['width','height','borderRadius','backgroundColor','color','fontSize','fontFamily']),heading:pick(root.querySelector('h2'),['fontSize','fontFamily','color','lineHeight','letterSpacing']),body:pick(root.querySelector('.lesson-body'),['padding'])};
+     };
+     const avatars=[...el.querySelectorAll('.speaker')].map(n=>{const c=getComputedStyle(n,'::before');return{image:c.backgroundImage,width:c.width,height:c.height}});
+     return{reference:styles(reference),profile:styles(el),avatars};
+    });
+    assert.deepEqual(formats.profile,formats.reference,`${width}: shared unit format`);
+    for(const avatar of formats.avatars){assert.match(avatar.image,/dialogue-character-avatars/);assert.equal(avatar.width,'44px');assert.equal(avatar.height,'44px')}
+    formatEvidence.push({width,...formats});
     const data=await section.evaluate(el=>{const bounds=el.getBoundingClientRect();return[...el.querySelectorAll('h2,.gas-profile-percent,.gas-profile-basis,.gas-profile-property,.gas-profile-example,.gas-profile-example-copy h4,.gas-profile-example-copy p')].map(n=>{const r=n.getBoundingClientRect();return{left:r.left-bounds.left,right:bounds.right-r.right,overflow:n.scrollWidth>n.clientWidth+1,text:n.textContent}})});for(const b of data){assert.ok(b.left>=-1&&b.right>=-1,`${width}: ${b.text}`);assert.equal(b.overflow,false,`${width}: clipped ${b.text}`)}
     const r=await section.evaluate(el=>({intro:el.querySelector('.gas-profile-properties').getBoundingClientRect().bottom-el.querySelector('.gas-profile-hero').getBoundingClientRect().top,example:el.querySelector('.gas-profile-life').getBoundingClientRect().height}));assert.ok(r.intro>r.example,`${width} introduction dominates`);
     if([1440,1024,390,320].includes(width))await section.screenshot({path:path.join(artifacts,`${english.toLowerCase()}-${width}.png`)});
    }
+   await fs.writeFile(path.join(artifacts,`${english.toLowerCase()}-shared-format.json`),JSON.stringify(formatEvidence,null,2)+'\n');
   });
   await t.test('touch navigation reaches the gas profile and the existing final quiz',async()=>{
    const p=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});try{await p.goto(url,{waitUntil:'networkidle'});await p.locator(`.route a[href="#s${id}"]`).tap();await p.waitForFunction(id=>document.querySelector('.route a[aria-current]')?.getAttribute('href')===`#s${id}`,id);assert.equal(await p.locator(`#s${id} h2`).innerText(),name);await p.locator('.route a[href="#s7"]').tap();await p.waitForFunction(()=>document.querySelector('.route a[aria-current]')?.getAttribute('href')==='#s7');assert.equal(await p.locator('#gas-report-form').count(),1);}finally{await p.close()}
