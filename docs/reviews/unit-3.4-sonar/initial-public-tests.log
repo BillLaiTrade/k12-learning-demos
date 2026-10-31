@@ -1,0 +1,40 @@
+▶ free-position active sonar survey
+  ✔ full-width format, shared dialogue, layered scene and no old slider, sound checkbox or preset points (373.462534ms)
+  ✔ mouse dragging and buttons move only the ship without creating points (261.522819ms)
+  ✖ a four-second real-time measurement locks the position, reflects halfway, then records 3000m with a weaker return (4460.652346ms)
+  ✔ new positions preserve old markers and map rows one-to-one, deeper places take longer (9049.891292ms)
+  ✔ pause freezes visual time, cancels old audio; resume preserves a single pending point (5307.035374ms)
+  ✔ clear cancels pending callbacks, retains terrain and restarts labels at A; cross-section and hidden page pause sonar (3277.15877ms)
+  ✔ seven widths keep controls beneath scene, headings, table and content inside full-width card (844.365902ms)
+  ✔ real mobile touch drag and playback work with reduced motion, including clear during pause (2652.306019ms)
+  ✔ keyboard activation and audio failure recovery keep one record and cancel failed attempts (5295.343246ms)
+✖ free-position active sonar survey (34545.449257ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 8
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35015.16804
+
+✖ failing tests:
+
+test at tests/unit-3.4-sonar.test.cjs:24:10
+✖ a four-second real-time measurement locks the position, reflects halfway, then records 3000m with a weaker return (4460.652346ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(back>.1&&back<.17)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-sonar.test.cjs:28:256)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-sonar.test.cjs:24:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

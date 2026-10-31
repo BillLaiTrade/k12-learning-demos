@@ -89,11 +89,11 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
     }
     $(`${id}-status`).textContent = {ready: '準備好，可播放或直接比較；重來保留目前條件。', playing: '播放中，可暫停觀察。', paused: '已暫停，位置保留；繼續時接著播放。', complete: '本次觀察結束，可重看或改變條件。'}[value];
   }
-  p.pause = () => { if (p.phase !== 'playing') return; p.elapsed = Math.min(p.duration(), (performance.now() - p.start) / 1000); cancelAnimationFrame(p.raf); phase('paused'); if (active === p) { active = null; stopSound(); } p.draw(); };
+  p.pause = () => { if (p.phase !== 'playing') return; if (!p.waitingForAudio) p.elapsed = Math.min(p.duration(), (performance.now() - p.start) / 1000); p.waitingForAudio = false; cancelAnimationFrame(p.raf); phase('paused'); if (active === p) { active = null; stopSound(); } p.draw(); };
   p.reset = () => { p.pause(); p.elapsed = 0; phase('ready'); p.draw(); };
   function tick(now) {
     p.elapsed = Math.min(p.duration(), (now - p.start) / 1000); p.draw();
-    if (p.elapsed >= p.duration()) { phase('complete'); p.draw(); if (active === p) {active = null; stopSound();} }
+    if (p.elapsed >= p.duration() && !(id === 'sonar' && active === p && sources.length)) { phase('complete'); p.draw(); if (active === p) {active = null; stopSound();} }
     else p.raf = requestAnimationFrame(tick);
   }
   p.play = (restart = false, selection) => {
@@ -102,7 +102,18 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
     if (newEmission) { p.elapsed = 0; onRestart(selection); }
     if (['reflection', 'distance', 'calculation', 'sonar'].includes(id) && newEmission) root.dataset.emissions = String(Number(root.dataset.emissions) + 1);
     active = p; p.start = performance.now() - p.elapsed * 1000;
-    phase('playing'); p.draw(); sound(p, p.elapsed); p.raf = requestAnimationFrame(tick);
+    phase('playing'); p.draw();
+    if (id === 'sonar') {
+      // Keep zero/the paused time until audio activation settles. A late context
+      // must not push the return cue beyond an already-running visual clock.
+      p.waitingForAudio = true;
+      const scheduled = sound(p, p.elapsed), epoch = audioEpoch;
+      scheduled.then(() => {
+        if (epoch !== audioEpoch || active !== p || p.phase !== 'playing') return;
+        p.waitingForAudio = false; p.start = performance.now() - p.elapsed * 1000;
+        p.raf = requestAnimationFrame(tick);
+      });
+    } else { sound(p, p.elapsed); p.raf = requestAnimationFrame(tick); }
   };
   play.addEventListener('click', () => {
     if (restartOnPlay) {p.play(true); return;}

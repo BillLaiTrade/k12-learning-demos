@@ -1,36 +1,37 @@
-✔ water speed and round trips agree at shallow, middle and deep locations (2.724178ms)
-✔ student-created labels continue beyond Z without preassigned positions (0.84423ms)
+✔ water speed and round trips agree at shallow, middle and deep locations (2.853983ms)
+✔ student-created labels continue beyond Z without preassigned positions (0.750591ms)
 ▶ free-position active sonar survey
-  ✔ full-width format, shared dialogue, layered scene and no old slider, sound checkbox or preset points (290.434237ms)
-  ✔ mouse dragging and buttons move only the ship without creating points (261.057316ms)
+  ✔ full-width format, shared dialogue, layered scene and no old slider, sound checkbox or preset points (312.103134ms)
+  ✔ mouse dragging and buttons move only the ship without creating points (272.217835ms)
 Sonar final output {"gain":0.3199999928474426,"direct":0.31965693831443787,"back":0.14384561777114868}
-  ✔ a four-second real-time measurement locks the position, reflects halfway, then records 3000m with a weaker return (4456.653042ms)
-  ✔ new positions preserve old markers and map rows one-to-one, deeper places take longer (9011.615499ms)
-  ✔ pause freezes visual time, cancels old audio; resume preserves a single pending point (5330.790775ms)
-  ✔ clear cancels pending callbacks, retains terrain and restarts labels at A; cross-section and hidden page pause sonar (3234.983938ms)
-  ✔ seven widths keep controls beneath scene, headings, table and content inside full-width card (842.249939ms)
-  ✔ real mobile touch drag and playback work with reduced motion, including clear during pause (1229.389399ms)
-  ✔ keyboard activation and audio failure recovery keep one record and cancel failed attempts (3019.188693ms)
-✔ free-position active sonar survey (28815.880077ms)
+  ✔ a four-second real-time measurement locks the position, reflects halfway, then records 3000m with a weaker return (4523.546351ms)
+  ✔ new positions preserve old markers and map rows one-to-one, deeper places take longer (9074.376476ms)
+  ✔ pause freezes visual time, cancels old audio; resume preserves a single pending point (5330.71033ms)
+  ✔ clear cancels pending callbacks, retains terrain and restarts labels at A; cross-section and hidden page pause sonar (3330.628813ms)
+  ✔ seven widths keep controls beneath scene, headings, table and content inside full-width card (796.535468ms)
+  ✔ real mobile touch drag and playback work with reduced motion, including clear during pause (1211.273784ms)
+  ✔ keyboard activation and audio failure recovery keep one record and cancel failed attempts (3088.855843ms)
+  ✔ delayed audio activation holds the clock at zero and clear invalidates the awaiting start (5963.328244ms)
+✔ free-position active sonar survey (34942.970084ms)
 ▶ 3.4 reflection, ranging, sonar, absorption and assessment
-  ✔ six lessons, one quiz, shared avatars and an overview link (76.226544ms)
-  ✔ ranges produce correct leg lengths and accept native keyboard input (114.495259ms)
-  ✔ wave pause freezes, resume advances, reset preserves chosen conditions (879.897087ms)
-  ✔ cross-section playback, input changes and backgrounding stop old playback (169.656066ms)
-  ✔ sonar creates a point only when emitted and fills the result on reception (4302.669689ms)
-  ✔ room and treatment modes redraw weaker reflections with the same direct path (186.897868ms)
-  ✔ synthesized phrase decodes; opt-in audio stops on pause and cross-section playback (263.648878ms)
-  ✔ the absorption comparison plays the same phrase and stops when its condition changes (234.845747ms)
-  ✔ a full room observation completes and can restart from zero (2294.931827ms)
-  ✔ quiz distinguishes missing, wrong, correct, edited and reset answers (298.890904ms)
-  ✔ anchors and 1440 through 320px layouts work without page overflow (2800.474447ms)
-  ✔ touch playback moves under reduced motion and pauses both animation and audio (1173.359224ms)
-✔ 3.4 reflection, ranging, sonar, absorption and assessment (13859.022402ms)
-ℹ tests 25
+  ✔ six lessons, one quiz, shared avatars and an overview link (82.203406ms)
+  ✔ ranges produce correct leg lengths and accept native keyboard input (74.562761ms)
+  ✔ wave pause freezes, resume advances, reset preserves chosen conditions (879.587177ms)
+  ✔ cross-section playback, input changes and backgrounding stop old playback (183.519077ms)
+  ✔ sonar creates a point only when emitted and fills the result on reception (4320.37251ms)
+  ✔ room and treatment modes redraw weaker reflections with the same direct path (188.359732ms)
+  ✔ synthesized phrase decodes; opt-in audio stops on pause and cross-section playback (262.885305ms)
+  ✔ the absorption comparison plays the same phrase and stops when its condition changes (252.858853ms)
+  ✔ a full room observation completes and can restart from zero (2295.9222ms)
+  ✔ quiz distinguishes missing, wrong, correct, edited and reset answers (321.520049ms)
+  ✔ anchors and 1440 through 320px layouts work without page overflow (2724.898879ms)
+  ✔ touch playback moves under reduced motion and pauses both animation and audio (960.353695ms)
+✔ 3.4 reflection, ranging, sonar, absorption and assessment (13493.468424ms)
+ℹ tests 26
 ℹ suites 0
-ℹ pass 25
+ℹ pass 26
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 43536.389179
+ℹ duration_ms 49237.369092
