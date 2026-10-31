@@ -496,3 +496,9 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-knowledge-oxygen
 ### 第四區實錄音檔更新
 
 現行第四區使用CC BY 4.0的mrshoes封底PVC排管實錄，六管WAV由來源錄音剪取調音。相同指令的排笛專項現11項，整合54項、直接模型／WAV3項共57項（含外層）。以實際播放Buffer自相關檢查音高、PCM與雜湊確認實錄音檔；另測載入後取消不會起音、503失敗後重試成功。來源授權與重製程式見docs/reviews/unit-3.3-pan-recordings/及scripts/prepare-pan-recordings.py。
+
+### 2.3 第二區知識卡緊湊版與材質圖示（2026-10-31）
+
+沿用第二區整合的三氣體＋組成圖與完整頁檢查；生命用途圖片選取改為 `.gas-profile-example figure img`，另核對每張卡三幅裝飾圖示實際解碼、256×256及空alt，避免把圖示誤算為用途照片。`GAS_PROFILE_ARTIFACT_DIR=/tmp/unit23-gas-detail`、`AIR_COMPOSITION_ARTIFACT_DIR=/tmp/unit23-gas-detail/composition` 與 `AIR_FULL_ARTIFACT_DIR=/tmp/unit23-gas-detail-full` 保存本輪畫面。範圍為知識卡排版與素材，未修改實驗／模型；保留先前回歸紀錄，不重跑無關模型。
+
+前後尺寸與畫面另存 `docs/reviews/unit-2.3-gas-detail/`，不是以主觀敘述宣稱留白改善：同寬卡片桌面約減28.4%、手機約減22.0%，文字內容逐項核對相同。

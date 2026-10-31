@@ -1,103 +1,84 @@
-/* 氣體介紹沿用單元共用標頭、字體、對話與色彩；只配置介紹資料和用途小圖。 */
-.gas-profile-hero {
-  display: grid;
-  grid-template-columns: 138px minmax(0, 1fr);
-  align-items: center;
-  gap: 24px;
-  margin: 23px 0 14px;
-  padding: 22px;
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  background: #f7f9f1;
-}
-.gas-profile-identity { min-width: 0; text-align: center; }
-.gas-profile-symbol {
-  display: block;
-  color: var(--green);
-  font-size: 4.5rem;
-  font-weight: 750;
-  line-height: 1.1;
-  letter-spacing: -.04em;
-}
-.gas-profile-symbol sub { position: relative; bottom: -.14em; font-size: .53em; vertical-align: baseline; line-height: 0; }
-.gas-profile-english { display: block; margin-top: 9px; font-size: .8rem; color: var(--muted); }
-.gas-profile-abundance { min-width: 0; padding-left: 24px; border-left: 1px solid var(--line); }
-.gas-profile-rank { margin: 0 0 7px; font-size: 1rem; font-weight: 750; line-height: 1.6; }
-.gas-profile-percent { display: flex; align-items: baseline; gap: 4px; margin: 0; color: var(--green); line-height: 1.2; font-variant-numeric: tabular-nums; }
-.gas-profile-about { font-size: .9rem; font-weight: 600; margin-right: 3px; }
-.gas-profile-percent strong { font-size: 2.75rem; font-weight: 800; letter-spacing: -.035em; }
-.gas-profile-percent-sign { font-size: 1.3rem; font-weight: 700; }
-.gas-profile-basis { margin: 7px 0 0; font-size: .78rem; color: var(--muted); line-height: 1.7; }
-.gas-profile-properties { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.gas-profile-property { display: flex; align-items: flex-start; gap: 11px; min-width: 0; padding: 16px 13px; border: 1px solid var(--line); border-radius: 12px; background: #fbfcf7; }
-.gas-profile-icon { display: grid; place-items: center; flex: 0 0 34px; width: 34px; height: 34px; border-radius: 9px; background: #e9f0e3; color: #416c39; }
-.gas-profile-icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.gas-profile-icon .gas-icon-slash { stroke: currentColor; stroke-width: 2.5; }
-.gas-profile-property>div { min-width: 0; }
-.gas-profile-property h5 { margin: 0 0 6px; font-size: .88rem; line-height: 1.6; color: #3f644b; }
-.gas-profile-property p { margin: 0; font-size: .82rem; line-height: 1.9; color: var(--muted); }
-.gas-profile-life { margin-top: 26px; }
-.gas-profile-life>h5 { margin: 0 0 13px; font-size: 1.02rem; line-height: 1.7; }
-.gas-profile-example { display: grid; grid-template-columns: minmax(0, .3fr) minmax(0, .7fr); align-items: center; gap: 20px; padding: 14px; border: 1px solid var(--line); border-radius: 13px; background: #f9faf3; }
-.gas-profile-example figure { margin: 0; min-width: 0; height: 122px; overflow: hidden; border-radius: 9px; }
-.gas-profile-example img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 57%; }
-.gas-profile-example-copy { min-width: 0; padding-right: 6px; }
-.gas-profile-example-copy h6 { margin: 0 0 7px; font-size: .94rem; line-height: 1.6; color: #3f644b; }
-.gas-profile-example-copy p { margin: 0; font-size: .86rem; line-height: 1.9; color: var(--muted); }
-@container (max-width: 600px) {
-  .gas-profile-hero { grid-template-columns: 105px minmax(0, 1fr); gap: 18px; padding: 18px; }
-  .gas-profile-abundance { padding-left: 18px; }
-  .gas-profile-symbol { font-size: 3.8rem; }
-  .gas-profile-property { display: block; padding: 13px; }
-  .gas-profile-icon { margin-bottom: 10px; }
-  .gas-profile-example { gap: 15px; }
-}
-@container (max-width: 420px) {
-  .gas-profile-hero { grid-template-columns: 74px minmax(0, 1fr); gap: 13px; padding: 16px 13px; }
-  .gas-profile-symbol { font-size: 3.2rem; }
-  .gas-profile-english { font-size: .72rem; }
-  .gas-profile-abundance { padding-left: 13px; }
-  .gas-profile-rank { font-size: .9rem; }
-  .gas-profile-percent strong { font-size: 2.1rem; }
-  .gas-profile-basis { font-size: .75rem; }
-  .gas-profile-properties { grid-template-columns: 1fr; gap: 9px; }
-  .gas-profile-property { display: flex; align-items: center; gap: 12px; padding: 13px; }
-  .gas-profile-icon { margin: 0; flex-basis: 36px; width: 36px; height: 36px; }
-  .gas-profile-property>div { flex: 1; }
-  .gas-profile-property h5 { margin-bottom: 2px; }
-  .gas-profile-property p br { display: none; }
-  .gas-profile-example { grid-template-columns: minmax(0, .3fr) minmax(0, .7fr); gap: 12px; padding: 12px; }
-  .gas-profile-example figure { height: 132px; }
-  .gas-profile-example-copy { padding: 0; }
-}
-
-/* 第二區共用知識面板；三份HTML在無JS時依序閱讀，啟用後只顯示選取的一份。 */
-.air-knowledge { margin-top: 24px; }
-.air-knowledge-heading h3 { margin: 0 0 7px; font-size: 1.02rem; line-height: 1.7; }
-.air-knowledge-hint { margin: 0 0 14px; font-size: .8rem; color: var(--muted); }
-.air-knowledge .gas-profile, .air-knowledge-note { padding: 18px; border: 1px solid var(--line); border-radius: 13px; background: #f9faf3; }
-.air-knowledge article+article { margin-top: 16px; }
+/* 第二區共用知識卡：沿用單元字體與色彩，精簡資料列和用途版面。 */
+.air-knowledge { margin-top: 22px; }
+.air-knowledge-heading h3 { margin: 0 0 6px; font-size: 1.02rem; line-height: 1.7; }
+.air-knowledge-hint { margin: 0 0 12px; font-size: .8rem; color: var(--muted); }
+.air-knowledge .gas-profile, .air-knowledge-note { padding: 14px; border: 1px solid var(--line); border-radius: 13px; background: #f9faf3; }
+.air-knowledge article+article { margin-top: 14px; }
 .air-knowledge[data-knowledge-current] article { margin-top: 0; }
-.air-knowledge .gas-profile-hero { grid-template-columns: 104px minmax(0, 1fr); gap: 22px; margin: 0 0 18px; padding: 0; border: 0; background: none; }
-.gas-profile-abundance h4 { margin: 0 0 4px; color: var(--ink); font-size: 1.12rem; line-height: 1.5; }
-.air-knowledge .gas-profile-symbol { font-size: 3.8rem; }
-.air-knowledge .gas-profile-rank { font-size: .86rem; font-weight: 500; color: var(--muted); }
-.air-knowledge .gas-profile-percent strong { font-size: 2.25rem; }
-.air-knowledge .gas-profile-property { background: var(--card); }
-.air-knowledge .gas-profile-life { margin-top: 18px; }
-.air-knowledge .gas-profile-example { background: var(--card); }
-.air-knowledge .gas-profile-example figure { height: 104px; }
+.gas-profile { --gas-accent: #176b53; --gas-tint: #eaf2e9; }
+.gas-profile[data-gas-profile=oxygen] { --gas-accent: #956525; --gas-tint: #faf0dc; }
+.gas-profile[data-gas-profile=argon] { --gas-accent: #6e648c; --gas-tint: #f0edf5; }
+.gas-profile-hero { display: grid; grid-template-columns: 88px minmax(0,1fr); align-items: center; gap: 18px; margin-bottom: 12px; }
+.gas-profile-identity { display: flex; flex-direction: column; justify-content: center; min-width: 0; min-height: 82px; padding: 7px 4px; text-align: center; border: 1px solid #d7e1d4; border-radius: 12px; background: linear-gradient(145deg,#fffefa 5%,var(--gas-tint)); box-shadow: inset 0 1px 0 #fff,0 2px 5px #29453205; }
+.gas-profile-symbol { display: block; font-size: 3rem; font-weight: 750; line-height: 1.05; letter-spacing: -.04em; color: var(--gas-accent); }
+.gas-profile-symbol sub { position: relative; bottom: -.14em; font-size: .53em; vertical-align: baseline; line-height: 0; }
+.gas-profile-english { display: block; margin-top: 6px; font-size: .72rem; line-height: 1.4; color: var(--muted); }
+.gas-profile-abundance { display: grid; grid-template-columns: minmax(0,1fr) auto; grid-template-areas: "name share" "rank share" "basis share"; gap: 3px 20px; align-items: center; min-width: 0; }
+.gas-profile-abundance h4 { grid-area: name; margin: 0; font-size: 1.1rem; line-height: 1.5; color: var(--ink); }
+.gas-profile-rank { grid-area: rank; margin: 0; font-size: .85rem; line-height: 1.6; color: var(--muted); }
+.gas-profile-basis { grid-area: basis; margin: 0; font-size: .74rem; line-height: 1.6; color: var(--muted); }
+.gas-profile-percent { grid-area: share; display: flex; align-items: baseline; justify-content: flex-end; gap: 3px; margin: 0; padding: 5px 4px 5px 18px; color: var(--gas-accent); font-variant-numeric: tabular-nums; line-height: 1.15; border-left: 1px solid var(--line); }
+.gas-profile-about { margin-right: 3px; font-size: .85rem; font-weight: 600; }
+.gas-profile-percent strong { font-size: 2.6rem; font-weight: 800; letter-spacing: -.04em; }
+.gas-profile-percent-sign { font-size: 1.2rem; font-weight: 700; }
+.gas-profile-properties { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+.gas-profile-property { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 11px 10px; border: 1px solid #dce3d6; border-radius: 11px; background: linear-gradient(135deg,#fffefa,#fcfdf8); box-shadow: inset 0 1px 0 #fff; }
+.gas-profile-icon { display: block; flex: 0 0 62px; width: 62px; height: 62px; }
+.gas-profile-icon img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 2px #2945320d); }
+.gas-profile-property>div { min-width: 0; }
+.gas-profile-property h5 { margin: 0 0 4px; font-size: .87rem; line-height: 1.5; color: #3f644b; }
+.gas-profile-property p { margin: 0; font-size: .81rem; line-height: 1.75; color: var(--muted); }
+.gas-profile-property p br { display: none; }
+.gas-profile-life { margin-top: 12px; }
+.gas-profile-example { display: grid; grid-template-columns: clamp(132px,23%,180px) minmax(0,1fr); align-items: center; gap: 17px; padding: 11px; border: 1px solid #dce3d6; border-radius: 11px; background: var(--card); }
+.gas-profile-example figure { position: relative; align-self: stretch; min-width: 0; min-height: 100px; margin: 0; overflow: hidden; border-radius: 8px; }
+.gas-profile-example figure img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 57%; }
+.gas-profile-example-copy { min-width: 0; padding-right: 5px; }
+.gas-profile-life h5 { margin: 0 0 4px; font-size: .73rem; line-height: 1.5; font-weight: 500; color: var(--muted); }
+.gas-profile-example-copy h6 { margin: 0 0 5px; font-size: .94rem; line-height: 1.6; color: #3f644b; }
+.gas-profile-example-copy p { margin: 0; font-size: .84rem; line-height: 1.8; color: var(--muted); }
 .air-knowledge-note h4 { margin: 0 0 10px; font-size: 1rem; line-height: 1.7; }
 .air-knowledge-note p { margin: 8px 0 0; color: var(--muted); font-size: .86rem; line-height: 1.9; }
 .air-knowledge-choices { display: none; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
 .air-knowledge[data-knowledge-current] .air-knowledge-choices { display: flex; }
 .air-knowledge-choices button { font-size: .82rem; }
+@container (max-width: 640px) {
+ .gas-profile-hero { grid-template-columns: 78px minmax(0,1fr); gap: 14px; }
+ .gas-profile-abundance { gap: 3px 12px; }
+ .gas-profile-percent { padding-left: 12px; }
+ .gas-profile-percent strong { font-size: 2.2rem; }
+ .gas-profile-property { display: block; padding: 11px; }
+ .gas-profile-icon { width: 54px; height: 54px; margin-bottom: 7px; }
+ .gas-profile-property h5 { font-size: .83rem; }
+ .gas-profile-example { gap: 14px; grid-template-columns: minmax(112px,.3fr) minmax(0,1fr); }
+}
 @container (max-width: 420px) {
- .air-knowledge .gas-profile, .air-knowledge-note { padding: 14px; }
- .air-knowledge .gas-profile-hero { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; }
- .air-knowledge .gas-profile-symbol { font-size: 2.7rem; }
- .air-knowledge .gas-profile-percent strong { font-size: 1.9rem; }
- .air-knowledge .gas-profile-abundance { padding-left: 12px; }
- .air-knowledge .gas-profile-basis { font-size: .7rem; }
- .air-knowledge .gas-profile-example figure { height: 116px; }
+ .air-knowledge .gas-profile, .air-knowledge-note { padding: 12px; }
+ .gas-profile-hero { grid-template-columns: 64px minmax(0,1fr); gap: 12px; }
+ .gas-profile-identity { min-height: 76px; }
+ .gas-profile-symbol { font-size: 2.6rem; }
+ .gas-profile-english { font-size: .68rem; }
+ .gas-profile-abundance { grid-template-areas: "name share" "rank rank" "basis basis"; gap: 3px 5px; }
+ .gas-profile-abundance h4 { font-size: 1rem; }
+ .gas-profile-rank { font-size: .79rem; }
+ .gas-profile-basis { font-size: .7rem; }
+ .gas-profile-percent { gap: 1px; padding: 0; border: 0; }
+ .gas-profile-percent strong { font-size: 1.9rem; }
+ .gas-profile-percent-sign { font-size: .9rem; }
+ .gas-profile-about { margin-right: 1px; font-size: .7rem; }
+ .gas-profile-properties { grid-template-columns: 1fr; gap: 7px; }
+ .gas-profile-property { display: flex; align-items: center; gap: 12px; padding: 9px 11px; }
+ .gas-profile-icon { flex-basis: 50px; width: 50px; height: 50px; margin: 0; }
+ .gas-profile-property h5 { font-size: .86rem; margin-bottom: 2px; }
+ .gas-profile-property p { font-size: .8rem; }
+ .gas-profile-example { grid-template-columns: 80px minmax(0,1fr); gap: 12px; padding: 10px; }
+ .gas-profile-example figure { min-height: 108px; }
+ .gas-profile-example-copy { padding: 0; }
+ .gas-profile-example-copy h6 { font-size: .87rem; }
+ .gas-profile-example-copy p { font-size: .79rem; }
+}
+@container (max-width: 320px) {
+ .gas-profile-example { grid-template-columns: 68px minmax(0,1fr); gap: 10px; }
+ .gas-profile-percent strong { font-size: 1.7rem; }
+ .gas-profile-about { font-size: .68rem; }
 }

@@ -58,11 +58,14 @@ module.exports=function profileTest({gas,name,english,formula,percent,rank,examp
    }
   });
   await t.test('small life photo follows the introduction and existing lesson format stays intact',async()=>{
-   await profile.scrollIntoViewIfNeeded();await profile.locator('img').evaluate(n=>n.decode());
+   await profile.scrollIntoViewIfNeeded();await profile.locator('.gas-profile-example figure img').evaluate(n=>n.decode());
    assert.equal(await profile.locator('.gas-profile-example h6').innerText(),example);
-   assert.equal(await profile.locator('img').count(),1);assert.ok((await profile.locator('img').getAttribute('alt')).length>15);
-   assert.equal(await profile.locator('img').evaluate(n=>n.complete&&n.naturalWidth>0),true);
-   const r=await profile.evaluate(el=>{const props=el.querySelector('.gas-profile-properties').getBoundingClientRect(),life=el.querySelector('.gas-profile-life').getBoundingClientRect(),hero=el.querySelector('.gas-profile-hero').getBoundingClientRect(),photo=el.querySelector('img').getBoundingClientRect();return{ordered:life.top>=props.bottom,intro:props.bottom-hero.top,example:life.height,photo:photo.width,width:el.getBoundingClientRect().width}});
+   assert.equal(await profile.locator('.gas-profile-icon img').count(),3);
+   await profile.locator('.gas-profile-icon img').evaluateAll(ns=>Promise.all(ns.map(n=>n.decode())));
+   assert.equal(await profile.locator('.gas-profile-icon img').evaluateAll(ns=>ns.every(n=>n.naturalWidth===256&&n.naturalHeight===256&&n.alt==='')),true);
+   assert.equal(await profile.locator('.gas-profile-example figure img').count(),1);assert.ok((await profile.locator('.gas-profile-example figure img').getAttribute('alt')).length>15);
+   assert.equal(await profile.locator('.gas-profile-example figure img').evaluate(n=>n.complete&&n.naturalWidth>0),true);
+   const r=await profile.evaluate(el=>{const props=el.querySelector('.gas-profile-properties').getBoundingClientRect(),life=el.querySelector('.gas-profile-life').getBoundingClientRect(),hero=el.querySelector('.gas-profile-hero').getBoundingClientRect(),photo=el.querySelector('.gas-profile-example figure img').getBoundingClientRect();return{ordered:life.top>=props.bottom,intro:props.bottom-hero.top,example:life.height,photo:photo.width,width:el.getBoundingClientRect().width}});
    assert.ok(r.ordered&&r.intro>r.example);assert.ok(r.photo<r.width*.45);
    assert.equal(await profile.locator('button,input,canvas,.dialogue').count(),0);
    for(const who of ['xiaokui','grandpa'])assert.equal(await section.locator(`.dialogue.${who} .speaker`).evaluate(n=>getComputedStyle(n,'::before').backgroundImage.includes('dialogue-character-avatars')),true);
@@ -95,8 +98,8 @@ module.exports=function profileTest({gas,name,english,formula,percent,rank,examp
    const p=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});
    try{
     await p.goto(url,{waitUntil:'networkidle'});assert.equal(await p.locator('#s2 .gas-profile:visible').count(),3);
-    const article=p.locator(`#air-profile-${gas}`);await article.scrollIntoViewIfNeeded();await article.locator('img').evaluate(n=>n.decode());
-    assert.equal(await article.locator('.gas-profile-property:visible').count(),3);assert.equal(await article.locator('img').evaluate(n=>n.complete&&n.naturalWidth>0),true);
+    const article=p.locator(`#air-profile-${gas}`);await article.scrollIntoViewIfNeeded();await article.locator('.gas-profile-example figure img').evaluate(n=>n.decode());
+    assert.equal(await article.locator('.gas-profile-property:visible').count(),3);assert.equal(await article.locator('.gas-profile-example figure img').evaluate(n=>n.complete&&n.naturalWidth>0),true);
     assert.equal(await p.locator('.air-knowledge-hint').isVisible(),false);assert.equal(await p.locator('.air-knowledge-choices').isVisible(),false);
     assert.equal(await p.locator('section.lesson').count(),5);
    }finally{await p.close()}

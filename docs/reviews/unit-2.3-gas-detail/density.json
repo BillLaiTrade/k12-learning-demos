@@ -1,0 +1,50 @@
+[
+  {
+    "viewport_width": 1440,
+    "gas": "nitrogen",
+    "card_width": 832,
+    "before_height": 492.40625,
+    "after_height": 352.5,
+    "height_reduction_percent": 28.41
+  },
+  {
+    "viewport_width": 1440,
+    "gas": "oxygen",
+    "card_width": 832,
+    "before_height": 492.40625,
+    "after_height": 352.5,
+    "height_reduction_percent": 28.41
+  },
+  {
+    "viewport_width": 1440,
+    "gas": "argon",
+    "card_width": 832,
+    "before_height": 492.40625,
+    "after_height": 352.5,
+    "height_reduction_percent": 28.41
+  },
+  {
+    "viewport_width": 390,
+    "gas": "nitrogen",
+    "card_width": 328,
+    "before_height": 621.484375,
+    "after_height": 484.890625,
+    "height_reduction_percent": 21.98
+  },
+  {
+    "viewport_width": 390,
+    "gas": "oxygen",
+    "card_width": 328,
+    "before_height": 621.484375,
+    "after_height": 484.890625,
+    "height_reduction_percent": 21.98
+  },
+  {
+    "viewport_width": 390,
+    "gas": "argon",
+    "card_width": 328,
+    "before_height": 621.484375,
+    "after_height": 484.890625,
+    "height_reduction_percent": 21.98
+  }
+]

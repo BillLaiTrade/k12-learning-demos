@@ -1,0 +1,29 @@
+{
+  "baseline": "9d20a32a7d0fb43e871653eb43bb187f7a9a5233",
+  "checks": [
+    {
+      "section": "s1",
+      "unchanged": true,
+      "sha256": "125cb2796d1713ec7b2e373180d33480377d48bc45cffa1e2db851b0545dc597"
+    },
+    {
+      "section": "s3",
+      "unchanged": true,
+      "sha256": "97ec8eeee1a1cf9901af8c9fdfab29184225fe77303b9e4f3d008d00571a2882"
+    },
+    {
+      "section": "s4",
+      "unchanged": true,
+      "sha256": "9bb39643a0c3e1f70189939be1bfeeab0bb2c52c27b30a5769fe7e3f15c5d4a2"
+    },
+    {
+      "section": "s5",
+      "unchanged": true,
+      "sha256": "a6e2b8e88029f8d599603d25f53a169a33b95781753c4feed3196d9c565da33a"
+    },
+    {
+      "section": "s2",
+      "all_text_unchanged": true
+    }
+  ]
+}

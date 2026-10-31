@@ -1,0 +1,65 @@
+TAP version 13
+# Subtest: 2.3 complete page: four teaching sections and one evidence-based quiz
+    # Subtest: all five sections and routes exist, with gas profiles and no retired experiment
+    ok 1 - all five sections and routes exist, with gas profiles and no retired experiment
+      ---
+      duration_ms: 338.268251
+      type: 'test'
+      ...
+    # Subtest: default cup comparisons remain after preview and reset
+    ok 2 - default cup comparisons remain after preview and reset
+      ---
+      duration_ms: 536.085856
+      type: 'test'
+      ...
+    # Subtest: both preparations replay, pause, resume and reset without hiding results
+    ok 3 - both preparations replay, pause, resume and reset without hiding results
+      ---
+      duration_ms: 5225.964929
+      type: 'test'
+      ...
+    # Subtest: leaving a replay pauses it and returning does not autoplay
+    ok 4 - leaving a replay pauses it and returning does not autoplay
+      ---
+      duration_ms: 1448.726602
+      type: 'test'
+      ...
+    # Subtest: single quiz gives missing, misconception, revised and correct feedback; reset is local
+    ok 5 - single quiz gives missing, misconception, revised and correct feedback; reset is local
+      ---
+      duration_ms: 1572.088912
+      type: 'test'
+      ...
+    # Subtest: seven widths keep full-width teaching bodies below their headers without overflow
+    ok 6 - seven widths keep full-width teaching bodies below their headers without overflow
+      ---
+      duration_ms: 9801.818775
+      type: 'test'
+      ...
+    # Subtest: all teaching evidence is available without JavaScript
+    ok 7 - all teaching evidence is available without JavaScript
+      ---
+      duration_ms: 1649.27915
+      type: 'test'
+      ...
+    # Subtest: touch, reduced motion, keyboard selects and last-section anchor work
+    ok 8 - touch, reduced motion, keyboard selects and last-section anchor work
+      ---
+      duration_ms: 26414.451717
+      type: 'test'
+      ...
+    1..8
+ok 1 - 2.3 complete page: four teaching sections and one evidence-based quiz
+  ---
+  duration_ms: 68545.574556
+  type: 'test'
+  ...
+1..1
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 69047.585692

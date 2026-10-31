@@ -1,0 +1,47 @@
+{
+  "source": "/workspace/generated_images/exec-890deba2-d848-495c-a35f-31498934b6e7.png",
+  "source_sha256": "2dcf0bd4dd13d1bcb03f09feb01aeda8fbdaabd08d07a74ce733ff6e65f69e5c",
+  "tool": "image_gen",
+  "sheet_size": [
+    1536,
+    1024
+  ],
+  "transparent_background": true,
+  "output_size": [
+    256,
+    256
+  ],
+  "cells": {
+    "appearance": [
+      0,
+      0,
+      512,
+      512
+    ],
+    "stability": [
+      512,
+      0,
+      512,
+      512
+    ],
+    "nonflammable": [
+      1024,
+      0,
+      512,
+      512
+    ],
+    "solubility": [
+      0,
+      512,
+      512,
+      512
+    ],
+    "combustion": [
+      512,
+      512,
+      512,
+      512
+    ]
+  },
+  "preparation": "ImageMagick split and WebP conversion; original retained; no painted gas color or scientific measurements"
+}
