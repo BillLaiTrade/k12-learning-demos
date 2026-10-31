@@ -188,6 +188,8 @@
 #s6 .pool-mass-comparison>.pool-added-mass {border-color:#dce3d0;background:#f6f8ed;}
 #s6 .pool-mass-comparison>div>span {font-size:.77rem;color:#5d7366;}
 #s6 .pool-mass-comparison strong {font-size:1.4rem;line-height:1.4;font-variant-numeric:tabular-nums;color:#215a47;overflow-wrap:anywhere;}
+#s6 .pool-water-units {display:flex;flex-wrap:wrap;column-gap:8px;}
+#s6 .pool-water-units>span {white-space:nowrap;}
 #s6 .pool-mass-comparison strong small {font-size:.82rem;font-weight:500;}
 #s6 .pool-mass-comparison>div>small {font-size:.71rem;color:#728277;}
 #s6 .pool-mass-plus {font-size:1.25rem;color:#8c9f91;}
