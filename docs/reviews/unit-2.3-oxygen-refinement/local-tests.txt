@@ -1,0 +1,43 @@
+▶ 2.3 complete page: four teaching sections and one evidence-based quiz
+  ✔ all five sections and routes exist, with gas profiles and no retired experiment (94.131612ms)
+  ✔ default cup comparisons remain after preview and reset (126.315135ms)
+  ✔ both preparations replay, pause, resume and reset without hiding results (516.752214ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (195.497007ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (521.881839ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (2970.592324ms)
+  ✔ all teaching evidence is available without JavaScript (1061.651355ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (13961.873147ms)
+✔ 2.3 complete page: four teaching sections and one evidence-based quiz (21020.989681ms)
+✔ tube entry precedes displacement; withdrawal precedes glass cover (2.541683ms)
+✔ shared insertion completes before oxygen ignition; results remain at duration (0.769217ms)
+▶ 2.3 oxygen: refined material scenes and synchronized close-ups
+  ✔ glass and charred wood use loaded material plates with live SVG layers (64.662197ms)
+  ✔ purge stays outside a full jar; tube moves continuously before water drops (588.859945ms)
+  ✔ pause freezes visible pixels, liquid and gas flow; resume changes the scene (563.992272ms)
+  ✔ withdrawal completes before glass cover moves, with final results retained (465.706957ms)
+  ✔ captions follow insertion, first observation, ignition and completed comparison (827.099451ms)
+  ✔ mobile synchronized magnifier is visible and both wood tips remain side by side (1467.122895ms)
+✔ 2.3 oxygen: refined material scenes and synchronized close-ups (5554.413301ms)
+▶ 2.3 oxygen: continuous collection and simultaneous wood comparison
+  ✔ default results, full width, four upper stages, two lower samples and original characters (100.057357ms)
+  ✔ four stages synchronize tube path, bubbles, continuous water displacement and cover (697.691728ms)
+  ✔ pause freezes actual water and arrows, resumes and rapid replay cancels prior progress (267.265771ms)
+  ✔ both real wooden splints enter together; only oxygen develops a flame (242.469813ms)
+  ✔ keyboard, Escape, hidden pages and leaving the scene pause without automatic restart (289.766599ms)
+  ✔ seven widths contain diagrams, controls and text; screenshots cover both scenes (1590.115186ms)
+  ✔ touch under reduced motion still continuously collects water and retains results (1361.961907ms)
+  ✔ without JavaScript all essential materials, collection and flame results remain visible (1116.15404ms)
+✔ 2.3 oxygen: continuous collection and simultaneous wood comparison (7251.995475ms)
+▶ 2.3 integrated report checks evidence, completeness and misconceptions
+  ✔ unanswered form names every missing item without claiming completion (1.384444ms)
+  ✔ fully supported report is accepted (0.182524ms)
+  ✔ each misconception identifies the relevant observation and destination (0.970717ms)
+✔ 2.3 integrated report checks evidence, completeness and misconceptions (5.986913ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35159.117652

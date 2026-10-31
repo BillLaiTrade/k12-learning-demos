@@ -516,3 +516,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-
 
 
 第五區亮點補充：專項現10項，整頁11項，合計21項（含外層）。以SVG path真實幾何核對亮點位置貼線、與AudioContext進度一致、左右／上下移動、僅一列顯示及播放後清除／重播回左；不以複製製作端公式取代檢查。
+
+## 現行2.3第三區氧氣近景精修（2026-10-31）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium AIR_FULL_ARTIFACT_DIR=/tmp/unit23-refined-full OXYGEN_ARTIFACT_DIR=/tmp/unit23-refined OXYGEN_THREE_ARTIFACT_DIR=/tmp/unit23-refined-material node --test --test-concurrency=1 tests/unit-2.3-oxygen-model.test.mjs tests/unit-2.3-oxygen.test.cjs tests/unit-2.3-oxygen-three.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-report.test.cjs
+```
+
+現行以材質圖片＋即時SVG取代舊WebGL；沿用 `oxygen-three.test.cjs` 測試入口，但內容改查實際現行渲染，沒有宣稱測試舊3D。共31項（含外層），檢查排氣瓶外、水滿初態、導管連續移動且到位才排水、氣泡不越過水面、先撤管後蓋片、暫停像素一致、兩支木條同步、火焰錨定尖端與狀態圖說、四步／下方無步驟、原頭像、七種寬度、手機同步放大、鍵盤／觸控、背景／離場、快速重播、減少動態、無JS及整頁／小測回歸。`OXYGEN_URL` 與 `AIR_FULL_URL` 可指向公開版本；截圖只反映實際測試瀏覽器，不保證各裝置固定幀率。

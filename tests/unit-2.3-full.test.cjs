@@ -21,7 +21,7 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
   page.on('pageerror', e => errors.push(e.message));
   page.on('requestfailed', r => errors.push(r.url()));
   page.on('response', r => { if (r.status() >= 400) errors.push(r.url()); });
-  await page.clock.install(); await page.goto(url, { waitUntil: 'networkidle' });await page.waitForFunction(()=>document.querySelector('.oxygen-3d-comparison').dataset.ready==='true');await page.clock.pauseAt(await page.evaluate(()=>Date.now()+100));
+  await page.clock.install(); await page.goto(url, { waitUntil: 'networkidle' });await page.waitForFunction(()=>document.querySelector('.oxygen-drawing').dataset.ready==='true');await page.clock.pauseAt(await page.evaluate(()=>Date.now()+100));
   const artifacts = path.resolve(process.env.AIR_FULL_ARTIFACT_DIR || 'docs/reviews/unit-2.3-complete'); mkdirSync(artifacts, { recursive: true });
   const fields = { composition: 'mixture', sample_a: 'oxygen', sample_b: 'co2', fuel: 'wood', evidence: 'limewater', uses: 'stable' };
   const answer = async (name, value) => {
@@ -59,11 +59,11 @@ test('2.3 complete page: four teaching sections and one evidence-based quiz', { 
     for (const gas of ['oxygen','co2']) {
       const panel = page.locator(`[data-replay="${gas}"]`); await panel.scrollIntoViewIfNeeded();
       assert.equal(await panel.locator('.sequence-step').count(), 4);
-      await panel.locator('[data-play]').click(); await page.clock.fastForward(1500);
+      await panel.locator('[data-play]').click(); await page.clock.fastForward(gas==='oxygen'?2500:1500);
       assert.equal(await panel.getAttribute('data-stage'), '1');
       await panel.locator('[data-pause]').click(); const stage = await panel.getAttribute('data-stage');
       await page.clock.runFor(3000); assert.equal(await panel.getAttribute('data-stage'), stage);
-      await panel.locator('[data-play]').click(); if(gas==='oxygen')await page.clock.fastForward(9000);else await page.clock.runFor(5000);
+      await panel.locator('[data-play]').click(); if(gas==='oxygen')await page.clock.fastForward(13000);else await page.clock.runFor(5000);
       assert.equal(await panel.getAttribute('data-state'), 'complete');
       assert.equal(await panel.locator('.sequence-step:visible').count(), 4);
       await panel.locator('[data-reset]').click(); assert.equal(await panel.getAttribute('data-stage'), '-1');

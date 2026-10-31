@@ -1,60 +1,74 @@
-import { PREPARATION_DURATION, COMPARISON_DURATION, preparationFrame, comparisonFrame } from './oxygen-model.mjs?v=oxygen-three-3';
-const section = document.querySelector('.oxygen-preparation').closest('.lesson');
+import { PREPARATION_DURATION, COMPARISON_DURATION, PREPARATION_STAGES, preparationFrame, comparisonFrame } from './oxygen-model.mjs?v=refined-4';
+const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const comparison = section.querySelector('.oxygen-comparison');
 const $ = id => section.querySelector(id);
-let preparationView = null, comparisonView = null;
-let preparationTime = PREPARATION_DURATION, comparisonTime = COMPARISON_DURATION;
 const steps = [...panel.querySelectorAll('[data-stage]')];
-const names = ['準備材料：雙氧水與二氧化錳。', '先排空氣：開始的混合氣不收集。', '排水集氣：氧氣進入，瓶內的水逐漸排出。', '收集完成：在水下蓋上玻璃片。'];
-const setVisible = (selector, shown) => $(selector).style.opacity = shown ? '1' : '0';
+const names = ['準備材料：集氣瓶先裝滿水並倒置。', '先排空氣：導管口在瓶外，開始的混合氣不收集。', '排水集氣：移入導管，氧氣進入後，瓶內的水逐漸排出。', '收集完成：先移開導管，再在水下蓋上玻璃片。'];
+const opacity = (selector, value) => $(selector).setAttribute('opacity', String(value));
 function renderPreparation(time, state) {
-  preparationTime = time;
   const f = preparationFrame(time), overview = state === 'overview';
   panel.dataset.stage = overview ? '-1' : f.stage;
   panel.dataset.collected = f.collected.toFixed(4);
+  panel.dataset.tipX = (800 + 235*f.tube).toFixed(3);
+  panel.dataset.cover = f.cover.toFixed(4);
   steps.forEach((step, i) => {
     const current = !overview && f.stage === i;
     step.classList.toggle('is-current', current);
     if (current) step.setAttribute('aria-current', 'step'); else step.removeAttribute('aria-current');
   });
-  const waterY = 115 + f.collected * 170;
+  const waterY = 280 + f.collected*400;
   $('#oxygen-jar-water').setAttribute('y', waterY);
-  $('#oxygen-jar-water').setAttribute('height', 285 - waterY);
-  $('#oxygen-water-line').setAttribute('d', `M544 ${waterY}H634`);
-  setVisible('#oxygen-water-line', f.collected < 1);
-  setVisible('#oxygen-stopper', f.stage > 0);
-  setVisible('#oxygen-reaction-bubbles', (f.purging || f.collecting));
-  setVisible('#oxygen-collection-bubbles', f.collecting);
-  setVisible('#oxygen-water-out', f.collecting);
-  setVisible('#oxygen-water-label', f.collecting);
-  setVisible('#oxygen-cover', f.covered);
-  setVisible('#oxygen-gas-label', f.collected > .22);
-  setVisible('#oxygen-flow', f.purging || f.collecting);
-  const tube = f.collecting ? 'M428 92V276H580V259' : 'M428 92V183';
-  $('#oxygen-delivery-tube').setAttribute('d', tube);
-  $('#oxygen-tube-highlight').setAttribute('d', tube);
-  $('#oxygen-flow').setAttribute('d', `M184 120V88Q184 80 194 80H416Q428 80 428 92${f.collecting ? 'V276H580V259' : 'V183m-7-10 7 10 7-10'}`);
-  // Small bubbles follow the same paused clock as the water level.
-  $('#oxygen-reaction-bubbles').setAttribute('transform', `translate(0 ${-((time % 800) / 800) * 18})`);
-  $('#oxygen-collection-bubbles').setAttribute('transform', `translate(0 ${-((time % 1100) / 1100) * 35})`);
-  $('#oxygen-flow').style.strokeDashoffset = String(-time / 50);
-  $('#oxygen-scene-note').textContent = ['集氣瓶先裝滿水並倒置', '先排出裝置原有的空氣', '氧氣進入，水逐漸排出', '在水下蓋上玻璃片'][f.stage];
-  preparationView?.draw(time, f);
-  return overview ? '已收集氧氣，集氣瓶在水下蓋好。' : names[f.stage];
+  $('#oxygen-jar-water').setAttribute('height', 680-waterY);
+  $('#oxygen-water-line').setAttribute('cy', waterY);
+  opacity('#oxygen-water-line', f.collected < 1 ? 1 : 0);
+  opacity('#oxygen-stopper', f.stage > 0 ? 1 : 0);
+  opacity('#oxygen-delivery-tube',f.stage>0?1:0);opacity('#oxygen-tube-highlight',f.stage>0?1:0);
+  const reacting = f.purging || (f.stage === 2);
+  opacity('#oxygen-reaction-bubbles', reacting ? 1 : 0);
+  opacity('#oxygen-purge-bubbles', f.purging ? 1 : 0);
+  // Bubble positions are constrained between the submerged outlet and the
+  // moving liquid surface. There are never bubbles in the collected gas space.
+  const liquidRoom = 665-waterY-10;
+  opacity('#oxygen-collection-bubbles', f.collecting && liquidRoom>12 ? 1 : 0);
+  $('#oxygen-collection-bubbles').querySelectorAll('circle').forEach((bubble,i)=>{
+    const phase=(time/1000+i*.27)%1;
+    const r=Number(bubble.getAttribute('r'));
+    bubble.setAttribute('cx', 1035+Math.sin(i*2+phase*4)*13);
+    bubble.setAttribute('cy', Math.max(waterY+r+3,665-phase*Math.max(0,liquidRoom-r)));
+  });
+  $('#oxygen-purge-bubbles').querySelectorAll('circle').forEach((b,i)=>{
+    const phase=(time/1150+i*.33)%1;b.setAttribute('cx',800+Math.sin(phase*5+i)*8);b.setAttribute('cy',657-phase*90);
+  });
+  opacity('#oxygen-water-out', f.collecting ? 1 : 0);
+  opacity('#oxygen-water-label', f.collecting ? 1 : 0);
+  $('#oxygen-cover').setAttribute('transform', `translate(${(1-f.cover)*290} 0)`);
+  opacity('#oxygen-cover', f.stage === 3 ? 1 : 0);
+  opacity('#oxygen-gas-label', f.collected > .3 ? 1 : 0);
+  opacity('#oxygen-flow', reacting ? 1 : 0);
+  const x=800+235*f.tube;
+  const tube=`M315 275V200Q315 180 335 180H700Q720 180 720 200V710Q720 730 740 730H${x-20}Q${x} 730 ${x} 710V665`;
+  for(const id of ['#oxygen-delivery-tube','#oxygen-tube-highlight','#oxygen-flow'])$(id).setAttribute('d',tube);
+  $('#oxygen-reaction-bubbles').setAttribute('transform', `translate(0 ${-((time%900)/900)*30})`);
+  $('#oxygen-flow').style.strokeDashoffset=String(-time/35);
+  $('#oxygen-scene-note').textContent = f.stage === 3 ? (f.covered ? '導管已移開，集氣瓶在水下蓋好' : f.tube > 0 ? '先移開導管，集氣瓶口保持在水下' : '在水下滑入玻璃片，蓋好瓶口') : ['集氣瓶先裝滿水，倒置在水中','導管口在瓶外：先排出裝置原有的空氣','導管移入瓶口：氧氣進入，水位下降'][f.stage];
+  return overview ? '已收集氧氣，導管移開後，集氣瓶在水下蓋好。' : names[f.stage];
 }
 function renderComparison(time) {
-  comparisonTime = time;
-  const f = comparisonFrame(time);
-  comparison.dataset.inserted = f.inserted.toFixed(4);
-  comparison.dataset.ignition = f.ignition.toFixed(4);
-  comparison.querySelectorAll('.oxygen-splint').forEach(stick => stick.setAttribute('transform', `translate(0 ${-110 * (1-f.inserted)})`));
-  const air = comparison.querySelector('[data-sample=air]'), oxygen = comparison.querySelector('[data-sample=oxygen]');
-  air.querySelector('.oxygen-ember').setAttribute('fill', `rgb(${Math.round(222-115*f.fading)},${Math.round(114-16*f.fading)},${Math.round(55+28*f.fading)})`);
-  oxygen.querySelector('.oxygen-flame').setAttribute('opacity', f.ignition);
-  oxygen.querySelector('.oxygen-flame').setAttribute('transform', `translate(180 192) scale(${.6+.4*f.ignition}) translate(-180 -192)`);
-  comparisonView?.draw(time, f);
-  return time < 1200 ? '兩支木條同時放入，起始都帶餘燼。' : time < 2400 ? '比較兩支木條的餘燼與火焰。' : '一般空氣中的木條未同樣復燃；氧氣中的木條復燃。';
+  const f=comparisonFrame(time);
+  comparison.dataset.inserted=f.inserted.toFixed(4);comparison.dataset.ignition=f.ignition.toFixed(4);
+  comparison.querySelectorAll('.oxygen-splint').forEach(stick=>stick.setAttribute('transform',`translate(0 ${-150*(1-f.inserted)})`));
+  const air=comparison.querySelector('[data-sample=air]'),oxygen=comparison.querySelector('[data-sample=oxygen]');
+  air.querySelector('.oxygen-ember').setAttribute('opacity',(1-f.fading).toFixed(4));
+  oxygen.querySelector('.oxygen-ember').setAttribute('opacity','1');
+  const flame=oxygen.querySelector('.oxygen-flame');flame.setAttribute('opacity',String(f.ignition));
+  // Flame texture stays anchored to the wood tip. Motion uses the player's
+  // elapsed clock, so pause freezes the flame as well as the inserted wood.
+  const flicker=1+Math.sin(time/90)*.035*f.ignition;
+  flame.setAttribute('transform',`translate(300 263) scale(${.7+.3*f.ignition} ${(.65+.35*f.ignition)*flicker}) translate(-300 -263)`);
+  const captions = time < 1500 ? ['帶餘燼木條，正在放入','帶餘燼木條，正在放入'] : time <= 2000 ? ['木條已放入，觀察餘燼','木條已放入，觀察餘燼'] : time < 4800 ? ['餘燼逐漸變暗','木條開始復燃，出現火焰'] : ['餘燼漸暗，未同樣復燃','木條復燃，出現火焰'];
+  [air,oxygen].forEach((sample,i)=>{sample.querySelector('figcaption').textContent=captions[i];sample.querySelector('svg').setAttribute('aria-label',`${i?'收集的氧氣':'一般空氣'}中的木條：${captions[i]}`)});
+  return time < 1500 ? '兩支木條同時放入，起始都帶餘燼。' : time <= 2000 ? '兩支木條已放入，觀察尖端的餘燼。' : time < 4800 ? '一般空氣中餘燼漸暗；氧氣中的木條開始復燃。' : '一般空氣中的木條未同樣復燃；氧氣中的木條復燃。';
 }
 const players = [];
 function player(root, duration, render, selectors) {
@@ -102,29 +116,14 @@ function player(root, duration, render, selectors) {
 }
 const preparation = player(panel, PREPARATION_DURATION, renderPreparation, ['[data-play]', '[data-pause]', '[data-reset]']);
 player(comparison, COMPARISON_DURATION, renderComparison, ['[data-compare-play]', '[data-compare-pause]', '[data-compare-reset]']);
-steps.forEach((step, i) => { step.disabled = false; step.addEventListener('click', () => preparation.start([0,1400,3400,7000][i])); });
+steps.forEach((step, i) => { step.disabled = false; step.addEventListener('click', () => preparation.start(PREPARATION_STAGES[i])); });
 document.addEventListener('visibilitychange', () => { if (document.hidden) players.forEach(p => p.pausePlayback()); });
 window.addEventListener('pagehide', () => players.forEach(p => p.pausePlayback()));
-// Explicitly requested animation keeps its essential water/wood comparison under
-// reduced motion. No looping decoration or automatic initial playback is used.
-
-// SVG remains the complete no-WebGL/no-JS fallback. The visible animation uses
-// physical 3D glass/water, with exactly the same paused/replayed clock.
-async function initializeViews() {
-  try {
-    const { createPreparationView, createComparisonView } = await import('./oxygen-three.mjs?v=oxygen-three-3');
-    const host = document.querySelector('.oxygen-3d-preparation');
-    preparationView = createPreparationView(host);
-    preparationView.draw(preparationTime, preparationFrame(preparationTime));
-    host.parentElement.classList.add('has-webgl'); host.dataset.ready = 'true';
-    const pairHost = document.querySelector('.oxygen-3d-comparison');
-    comparisonView = createComparisonView(pairHost, [...comparison.querySelectorAll('.oxygen-splint-group')]);
-    comparisonView.draw(comparisonTime, comparisonFrame(comparisonTime));
-    pairHost.parentElement.classList.add('has-webgl'); pairHost.dataset.ready = 'true';
-  } catch (error) {
-    // A lack of WebGL must not hide the lesson or disable the existing controls.
-    document.querySelector('.oxygen-preparation').closest('.lesson').dataset.renderer = 'svg-fallback';
-    console.warn('Oxygen 3D unavailable; retained the illustrated experiment.', error);
-  }
-}
-initializeViews();
+// Explicit playback retains essential educational motion under reduced motion.
+// No automatic or independent decorative loops. Both SVG viewports reference
+// the same scene group, including water, submerged bubbles, tube and glass cover.
+const narrow=matchMedia('(max-width: 700px)');
+function resizeDetails(){comparison.querySelectorAll('figure svg').forEach(svg=>svg.setAttribute('viewBox',narrow.matches?'130 30 340 360':'0 0 600 400'))}
+resizeDetails();narrow.addEventListener('change',resizeDetails);
+section.dataset.renderer='material-svg';
+section.querySelector('.oxygen-drawing').dataset.ready='true';
