@@ -221,17 +221,17 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .pitch-frequency-row{display:flex;justify-content:center;align-items:center;gap:7px;min-height:70px;white-space:nowrap}
 .pitch-frequency{font-size:clamp(1.35rem,2.6vw,2.1rem);font-weight:850;color:#154f3e;font-variant-numeric:tabular-nums;line-height:1.15}
 .pitch-step{width:36px;min-height:36px;flex:none;padding:0;border:1px solid #438774;border-radius:10px;background:linear-gradient(#2a8a70,#14624d);color:white;font-size:1.35rem;font-weight:750;box-shadow:inset 0 1px 2px #c2e4d2}
-.pitch-apparatus{position:relative;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:5px;isolation:isolate;padding:0 1px 12px;min-height:152px}
+.pitch-apparatus{position:relative;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:5px;isolation:isolate;padding:16px 10px 12px;min-height:152px;border:1px solid #e5d9c7;border-radius:13px 13px 7px 7px;background:#eee2cb url('pitch-room-background.png') center/cover no-repeat;box-shadow:inset 0 1px 0 #ffffffb0}
 .pitch-apparatus::after{content:"";position:absolute;z-index:-1;left:0;right:0;bottom:0;height:25px;border-radius:3px 3px 6px 6px;background:repeating-linear-gradient(2deg,#ffffff18 0 1px,transparent 2px 5px),linear-gradient(#e8b574 0 35%,#cb8a44 38%,#e6ae68 52%,#b97a39 95%);box-shadow:0 6px 8px #674a2520}
 .pitch-speaker.play{display:block;min-height:0;width:100%;padding:0;border-radius:9px;background:transparent;line-height:0;align-self:end;touch-action:manipulation}
 .pitch-speaker img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 2px #3b291b24)}
-.pitch-speaker:hover{background:#e7f1e5}
+.pitch-speaker:hover{background:transparent;filter:brightness(1.04)}
 .pitch-closeup{position:relative;display:flex;flex-direction:column;align-items:center;padding:6px 2px 5px;min-width:0;border:1px solid #7d9fa3;border-radius:11px;background:radial-gradient(ellipse at 50% 45%,#fff 30%,#f0f4f1 100%);box-shadow:inset 0 0 0 2px #ffffff,0 3px 7px #31564a14}
 .pitch-closeup::before{content:"";position:absolute;right:100%;top:45%;width:20%;border-top:1px solid #4b8497;transform:rotate(-30deg);transform-origin:right center}
 .pitch-closeup>span{font-size:.75rem;line-height:1.4;font-weight:650;color:#355963;white-space:nowrap}
 .pitch-diaphragm{display:block;width:100%;height:auto;overflow:hidden}
 .pitch-play{width:90%;margin:10px auto 12px;padding:8px 4px;font-size:.92rem;line-height:1.5}
-.pitch-column[data-sounding=true] .pitch-speaker{outline:2px solid #d6a348;outline-offset:1px;background:#fff7e0}
+.pitch-column[data-sounding=true] .pitch-speaker{outline:2px solid #d6a348;outline-offset:1px;background:transparent}
 .pitch-column[data-sounding=true] .pitch-play{box-shadow:0 0 0 3px #d6a34866}
 .pitch-wave-card{border:1px solid var(--line);border-radius:11px;padding:9px 2px 4px;background:#fff}
 .pitch-wave-card h4{margin:0;font-size:.85rem;line-height:1.5;color:#223f49}
