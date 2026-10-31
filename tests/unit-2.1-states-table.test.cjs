@@ -300,7 +300,7 @@ test('2.1: three-state diagrams are visible and interact inside the table', { ti
         while(walker.nextNode())if(!walker.currentNode.textContent.trim())empty.push(walker.currentNode);
         empty.forEach(node=>node.remove());return copy.outerHTML;
       };
-      const contentPreserved=[...a.querySelectorAll('section.lesson-card')].filter(s=>s.id!=='s2').every(section=>{
+      const contentPreserved=[...a.querySelectorAll('section.lesson-card')].filter(s=>!['s2','s4'].includes(s.id)).every(section=>{
         const oldMain=section.querySelector('.card-main').cloneNode(true),current=b.getElementById(section.id);
         const oldTitle=oldMain.querySelector('h2');
         const titleText=oldTitle?oldTitle.textContent:section.querySelector('.lesson-head h2').textContent;

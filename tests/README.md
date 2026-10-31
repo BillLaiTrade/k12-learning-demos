@@ -404,3 +404,7 @@ NITROGEN_ARTIFACT_DIR=/tmp/unit23-nitrogen AIR_FULL_ARTIFACT_DIR=/tmp/unit23-ful
 ### 3.3全寬卡片版型（2026-10-31）
 
 依使用者最新要求，格式基準由1.1概念側欄改為2.1橫向標頭及全寬內容。整頁回歸直接載入2.1比對標頭、編號、字級、內距與圓角；逐區檢查七區內容寬度與上下排列。整頁、音叉及雙喇叭專項合計28項通過；證據在docs/reviews/unit-3.3-fullwidth-cards/。
+
+### 2.1 六種物態變化的生活場景同步
+
+`node --test tests/unit-2.1-phase-life.test.cjs`：檢查1440／1280／1024一般偏好及1024減少動態偏好的六種變化起點、中段、終點；以實際粒子種類核對生活畫面進度，並檢查水位、冰塊體積、凝固前緣、霜晶範圍、圖片載入、上下同時可見、六種重播、快速切換、離屏續播與12個四角入口。`PHASE_LIFE_CAPTURE_DIR`指定截圖目錄。生活場景沒有獨立計時器；蒸發保留一半液態粒子與一半水深。詳見 `docs/reviews/unit-2.1-phase-life/review.md`。

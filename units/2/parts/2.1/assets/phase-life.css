@@ -1,0 +1,11 @@
+.phase-life { grid-column:1/-1; min-width:0; padding:13px 15px; border:1px solid #d8e2da; border-radius:12px; background:#fffefa; }
+.phase-life[hidden] { display:none; }
+.phase-life h4 { margin:0 0 10px; color:#31594b; font-size:1rem; line-height:1.5; }
+.phase-life-layout { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(155px,1fr); gap:16px; align-items:center; }
+.phase-life-picture { position:relative; min-width:0; overflow:hidden; border-radius:9px; background:#e9eee6; }
+.phase-life-picture svg { display:block; width:100%; height:auto; }
+.phase-life-reference { position:absolute; top:8px; right:8px; padding:2px 7px; border-radius:5px; background:#fffefae8; color:#3e554b; font-size:.78rem; }
+.phase-life p { margin:0; font-size:.94rem; line-height:1.7; color:#455e53; }
+.phase-life .phase-life-stage { margin:0 0 7px; color:#24664f; font-weight:750; }
+.phase-life .phase-life-note { margin-top:10px; color:#69796e; font-size:.8rem; }
+@media(max-width:700px) { .phase-life-layout { grid-template-columns:minmax(0,1fr); gap:10px; } .phase-life-picture { width:100%; max-width:430px; margin:auto; } }
