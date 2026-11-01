@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.2 第06項：鐘罩音效輸出中斷
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.2-vacuum-interruption.test.cjs
+```
+
+以真正的 AudioContext suspend／resume 核對中斷提示可見、分貝及LED清除、空氣量／氣壓與電源／敲錘保留、抽氣／進氣照常、系統恢復不自動發聲、原開關恢復與音訊節點沿用；另涵蓋啟動等待中的中斷、390px觸控／鍵盤／減少動態及離開後不自行播放。共5項（含外層）。`VACUUM_INTERRUPTION_URL` 可指定公開頁，`VACUUM_INTERRUPTION_ARTIFACT_DIR` 指定截圖及中斷紀錄目錄，預設 `/tmp/unit32-vacuum-interruption`。
+
 ## 3.2 第05項：鐘罩輔助提示方向
 
 ```sh

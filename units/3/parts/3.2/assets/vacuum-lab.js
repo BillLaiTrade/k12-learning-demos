@@ -11,6 +11,7 @@ const vibration = document.querySelector('#vacuum-vibration');
 const needle = document.querySelector('#vacuum-needle');
 const status = document.querySelector('#vacuum-status');
 const MIN_AIR = .02;
+const INTERRUPTED_MESSAGE = '音效已中斷，請關閉再開啟電鈴。';
 let air = 1, power = false, mode = 'idle', frame = 0, lastTime = null, phase = 0;
 let context = null, gain = null, mediaSource = null, soundRequest = 0, audioState = 'off', audioError = '';
 let analysers = [], meterBuffers = [], meterEnergy = null, lastMeterTime = null;
@@ -74,7 +75,7 @@ function setGain() {
   if (gain) gain.gain.setTargetAtTime(target, context.currentTime, .035);
 }
 function updateMeter() {
-  if (!power || audioState !== 'playing' || !analysers.length) {
+  if (!power || audioState !== 'playing' || context?.state !== 'running' || !analysers.length) {
     meterEnergy = null; lastMeterTime = null;
     showMeter('—');
     return;
@@ -142,6 +143,13 @@ function tick(now) {
   else lastTime = null;
 }
 function ensureFrame() { if (!frame && (power || mode === 'inlet' || mode === 'pump' && air > MIN_AIR)) { lastTime = null; frame = requestAnimationFrame(tick); } }
+function interruptAudio() {
+  if (!power || document.hidden || audioState === 'interrupted') return;
+  ++soundRequest;
+  audioState = 'interrupted'; audioError = INTERRUPTED_MESSAGE;
+  audio.pause();
+  render();
+}
 function setPower(enabled) {
   const request = ++soundRequest;
   power = enabled;
@@ -153,6 +161,9 @@ function setPower(enabled) {
     if (!context) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       context = new AudioContext(); gain = context.createGain();
+      context.addEventListener('statechange', () => {
+        if (audioState === 'playing' && context.state !== 'running') interruptAudio();
+      });
       mediaSource = context.createMediaElementSource(audio); mediaSource.connect(gain);
       // 各聲道分別量取調整後訊號能量，避免直接合成單聲道時相位抵銷。
       const splitter = context.createChannelSplitter(2), merger = context.createChannelMerger(2);
@@ -166,11 +177,12 @@ function setPower(enabled) {
     }
     gain.gain.setValueAtTime(soundLevel(), context.currentTime);
     // 兩個播放要求都在使用者事件內提出，支援行動瀏覽器的手勢限制。
-    if (audio.error || audioError || audioState === 'error') audio.load();
+    if (audio.error || (audioError && audioError !== INTERRUPTED_MESSAGE) || audioState === 'error') audio.load();
     audioState = 'starting'; audio.currentTime = 0;
     const resumed = context.resume(), started = audio.play();
     Promise.all([resumed, started]).then(() => {
       if (request !== soundRequest || !power) return;
+      if (context.state !== 'running') { interruptAudio(); return; }
       audioError = ''; audioState = 'playing'; render();
     }).catch(() => fail(request));
   } catch { fail(request); }
