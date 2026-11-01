@@ -1,12 +1,13 @@
 // One caption follows the active scene. Native animation delays pause together
 // with its fade, so reading time never expires while the experiment is paused.
-export function createSceneCaptions(panel) {
+export function createSceneCaptions(panel,{host=null}={}) {
   const sources=[...panel.querySelectorAll('[data-scene-note]')];
   const bubble=sources[0];
   sources.forEach(node=>node.remove());
   const strip=document.createElement('div');strip.className='oxygen-caption';strip.setAttribute('role','group');strip.setAttribute('aria-label','畫面說明');
   const label=document.createElement('span');label.className='oxygen-caption-label';label.textContent='畫面說明';
   strip.append(label,bubble);
+  if(host)host.append(strip);
   let shown='',wanted='',paused=false,generation=0,animation=null;
   const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
   const phase=value=>{bubble.dataset.captionPhase=value;};
@@ -32,10 +33,14 @@ export function createSceneCaptions(panel) {
     });
   }
   return {
-    show(view,text) {
-      const figure=view.querySelector('.oxygen-apparatus,.co2-apparatus');
+    show(view,text,{staticText=false}={}) {
+      const figure=host||view.querySelector('.oxygen-apparatus,.co2-apparatus');
       if(strip.parentElement!==figure)figure.append(strip);
       wanted=text;
+      if(staticText){
+        generation++;animation?.cancel();animation=null;shown=text;
+        bubble.textContent=text;bubble.style.opacity='1';phase('idle');return;
+      }
       if(typeof bubble.animate!=='function'){
         shown=text;bubble.textContent=text;bubble.style.opacity='1';phase('idle');return;
       }
@@ -44,7 +49,7 @@ export function createSceneCaptions(panel) {
     },
     reset() {
       generation++;animation?.cancel();animation=null;
-      shown='';wanted='';paused=false;bubble.style.opacity='1';phase('idle');strip.remove();
+      shown='';wanted='';paused=false;bubble.style.opacity='1';phase('idle');if(!host)strip.remove();
     },
     pause() {paused=true;animation?.pause();},
     resume() {paused=false;if(animation?.playState==='paused')animation.play();},

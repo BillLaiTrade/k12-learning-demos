@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.2 第10項：煙火夜景圖失敗重試
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.2-picture-retry.test.cjs
+```
+
+實際阻擋夜景圖、再恢復請求，核對重新下載與解碼、重複失敗、保留同題氣溫與時間差、正常重播不重載圖片、載入中離開／換題不啟動舊觀察；另檢查圖片／音效分開提示及390px觸控／鍵盤／減少動態的圖片與音效恢復。共6項（含外層）。`PICTURE_RETRY_URL` 可指定公開頁，`PICTURE_RETRY_ARTIFACT_DIR` 指定截圖與請求紀錄目錄，預設 `/tmp/unit32-picture-retry`。
+
 ## 3.2 第08項：暫停後單獨敲擊
 
 ```sh

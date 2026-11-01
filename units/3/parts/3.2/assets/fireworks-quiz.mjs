@@ -16,6 +16,8 @@ if (root) {
   const check = find('#fireworks-check'), feedback = find('#fireworks-feedback');
   const status = find('#fireworks-status');
   const audio = new FireworkAudio(), renderer = new FireworkRenderer(canvas);
+  const pictureUrl = new URL(picture.getAttribute('src'), document.baseURI);
+  let failedPictureSource = null, pictureAttempt = 0;
   const format = value => Number(value.toFixed(2)).toLocaleString('zh-TW', { maximumFractionDigits: 2 });
   let challenge, state = 'ready', request = 0, frame = 0, startAt = null, arrived = false;
 
@@ -23,7 +25,7 @@ if (root) {
     state = next; root.dataset.state = next;
     const busy = next === 'preparing' || next === 'observing';
     observe.disabled = busy;
-    observeText.textContent = next === 'preparing' ? '準備音效…'
+    observeText.textContent = next === 'preparing' ? '準備煙火…'
       : next === 'observing' ? '觀察中…' : '施放煙火';
     answer.disabled = next !== 'complete'; check.disabled = next !== 'complete';
   }
@@ -100,23 +102,43 @@ if (root) {
     }
   }
 
+  async function preparePicture() {
+    if (failedPictureSource === picture.src || (picture.complete && !picture.naturalWidth)) {
+      const retryUrl = new URL(pictureUrl);
+      retryUrl.searchParams.set('retry', String(++pictureAttempt));
+      picture.src = retryUrl.href;
+    }
+    const source = picture.src;
+    try {
+      await picture.decode();
+      if (picture.src === source) failedPictureSource = null;
+    } catch {
+      if (picture.src === source) failedPictureSource = source;
+      throw new Error('picture-load');
+    }
+  }
+
   async function startObservation() {
     resetObservation();
     const activeRequest = request;
     setState('preparing');
     try {
-      await Promise.all([audio.prepare(), picture.decode()]);
+      await Promise.all([
+        audio.prepare().catch(() => { throw new Error('audio-load'); }),
+        preparePicture()
+      ]);
       if (activeRequest !== request) return;
       if (document.hidden) { interrupt(); return; }
       audio.context.onstatechange = () => {
         if (audio.context.state !== 'running' && (state === 'observing' || state === 'preparing')) interrupt();
       };
       frame = requestAnimationFrame(drawFrame);
-    } catch {
+    } catch (error) {
       if (activeRequest !== request) return;
       resetObservation();
       status.dataset.error = 'true';
-      status.textContent = '煙火或音效暫時無法載入，請點「施放煙火」再試一次。';
+      const resource = error.message === 'picture-load' ? '夜景圖' : error.message === 'audio-load' ? '煙火音效' : '煙火或音效';
+      status.textContent = `${resource}暫時無法載入，請點「施放煙火」再試一次。`;
     }
   }
 
