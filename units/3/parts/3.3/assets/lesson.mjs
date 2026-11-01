@@ -7,7 +7,7 @@ import {createForkExperiment} from './fork-experiment.mjs?v=2';
 import {createPitchExperiment,PITCH_SECONDS} from './pitch-experiment.mjs?v=5';
 import {createGuitarExperiment} from './guitar-experiment.mjs?v=2';
 import {guitarSamples} from './guitar-model.mjs?v=1';
-import {createPanExperiment} from './pan-experiment.mjs?v=2';
+import {createPanExperiment} from './pan-experiment.mjs?v=3';
 import {loadPanRecording,recordingLevel} from './pan-recordings.mjs?v=1';
 import {createTimbreExperiment} from './timbre-experiment.mjs?v=3';
 import {timbreBuffer} from './timbre-model.mjs?v=1';
@@ -56,6 +56,7 @@ async function play(button){
  if(button.closest('.quiz')?.dataset.matchPlaying===button.dataset.play){stop();return;}
  stop();const ticket=++request,root=button.closest('.lesson-card,.quiz'),settings=config(button.dataset.play);
  activeRoot=root;if(root.id==='unit-quiz')root.querySelector('.play-state').classList.add('visually-hidden');if(['card-02','card-03','card-04','card-05'].includes(root.id))root.querySelector('.play-state').classList.add('visually-hidden');root.querySelector('.play-state').textContent='正在準備聲音…';
+ if(root.id==='card-04')panView.pending(true);
  try{
   const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)throw Error('unsupported');
   audioContext??=new Audio();await audioContext.resume();
@@ -163,6 +164,10 @@ forkView=createForkExperiment($('card-01'));
 pitchView=createPitchExperiment($('card-02'));pitchView.render(state.frequency);
 guitarView=createGuitarExperiment($('card-03'),{onChange:()=>{stop();$('card-03').querySelector('.play-state').classList.add('visually-hidden');},onPluck:key=>$('card-03').querySelector(`.guitar-play[data-play="${key}"]`).click()});
 panView=createPanExperiment($('card-04'));
+$('card-04').querySelector('[data-pan-cancel]').addEventListener('click',()=>{
+ const root=$('card-04');stop(root);
+ root.querySelector(`[data-play="pan-${root.dataset.panSelected}"]`).focus({preventScroll:true});
+});
 $('card-04').querySelector('[data-pan-reset]').addEventListener('click',()=>{stop();panView.reset();$('card-04').querySelector('.play-state').classList.add('visually-hidden');});
 timbreView=createTimbreExperiment($('card-05'));
 hearingView=createHearingExperiment($('card-06'),{onToggle:toggleHearing,onFrequency:tuneHearing,onReset:()=>stop($('card-06'))});

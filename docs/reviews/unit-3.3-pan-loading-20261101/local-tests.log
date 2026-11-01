@@ -1,0 +1,34 @@
+▶ pan flute: free pipes, interior observation and synchronized closed-end air motion
+  ✔ single instrument with six native pipe targets, one information row and no reference or autoplay (86.774442ms)
+  ✔ every pipe independently plays the closed-end frequency, repeats freely and replaces old audio (699.270779ms)
+  ✔ view changes preserve selection and current playback, with a window only on the selected pipe (221.878094ms)
+  ✔ air visibly oscillates near its origin, bottom node and other pipes stay fixed, then all return home (1910.041661ms)
+  ✔ length marker endpoints attach to selected mouth and closed bottom at a common physical scale (262.470555ms)
+  ✔ keyboard, reset, navigation, page hiding and leaving section cancel playback without autoplay on return (362.340505ms)
+  ✔ cancelled preparation cannot start later; failed audio offers visible retry feedback (305.485998ms)
+  ✔ waiting downloads can be cancelled, reset, left or replaced without delayed sound (8892.318789ms)
+  ✔ desktop and mobile keep compact single-stage design in both views with targets attached to pipes (3456.200389ms)
+  ✔ real mobile taps play once per touch and can switch view during playback (1479.49161ms)
+  ✔ mobile loading feedback stays visible and touch cancel prevents delayed audio (1554.299051ms)
+  ✔ slow recording download cannot start after reset; failed download can retry (1584.49979ms)
+✔ pan flute: free pipes, interior observation and synchronized closed-end air motion (22423.667965ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (100.451591ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (77.277774ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (783.936748ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (2285.688319ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (564.227772ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (263.727066ms)
+  ✔ hearing exploration stays silent until played; knowledge and dBA remain readable (214.387488ms)
+  ✔ one final listening task connects waveform selection, sliders, audio and comparison (483.314746ms)
+  ✔ lesson format follows unit 2.1 with a header and full-width body; navigation tracks reading (930.621765ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (5440.638959ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (12112.386747ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35320.072364

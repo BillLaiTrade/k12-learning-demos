@@ -2,11 +2,12 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),{spawn}=r
 test('pan flute: free pipes, interior observation and synchronized closed-end air motion',{timeout:120000},async t=>{
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{const m=String(d).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject);});
- const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',...(process.env.SOUND33_BASE_URL?{proxy:{server:process.env.HTTPS_PROXY}}:{})});t.after(()=>browser.close());
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',...(process.env.SOUND33_BASE_URL?{proxy:{server:process.env.HTTPS_PROXY,bypass:'127.0.0.1,localhost'}}:{})});t.after(()=>browser.close());
  const page=await browser.newPage({viewport:{width:1440,height:1100},reducedMotion:'reduce'}),errors=[],capture=process.env.PAN_CAPTURE_DIR||'/tmp/unit33-pan-review';await fs.mkdir(capture,{recursive:true});
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
  await page.addInitScript(()=>{window.panRuns=[];const create=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=create.call(this),start=s.start.bind(s),stop=s.stop.bind(s);let r;s.start=function(...args){const a=s.buffer.getChannelData(0),rate=s.buffer.sampleRate;let sum=0,crossings=0;for(let i=rate*.2|0;i<(rate*1.2|0);i++)if(a[i-1]<0&&a[i]>=0)crossings++;for(let i=rate*.2|0;i<(rate*.7|0);i++)sum+=a[i]*a[i];const correlations=[];const first=rate*.25|0,count=3000,minLag=Math.floor(rate/600),maxLag=Math.ceil(rate/160);for(let lag=minLag;lag<=maxLag;lag++){let xy=0,xx=0,yy=0;for(let j=first;j<first+count;j++){xy+=a[j]*a[j+lag];xx+=a[j]*a[j];yy+=a[j+lag]*a[j+lag];}correlations.push(xy/Math.sqrt(xx*yy));}let found=1;for(let k=1;k<correlations.length-1;k++)if(correlations[k]>.6&&correlations[k]>correlations[k-1]&&correlations[k]>=correlations[k+1]){found=k;break;}const y=correlations,delta=.5*(y[found-1]-y[found+1])/(y[found-1]-2*y[found]+y[found+1]),estimated=rate/(minLag+found+delta);r={hz:estimated,rms:Math.sqrt(sum/(rate*.5)),peak:a.reduce((m,x)=>Math.max(m,Math.abs(x)),0),seconds:a.length/rate,stopped:false};window.panRuns.push(r);return start(...args);};s.stop=function(...args){if(r)r.stopped=true;return stop(...args);};return s;};});
  await page.goto(process.env.SOUND33_BASE_URL||`http://127.0.0.1:${port}/units/3/parts/3.3/#card-04`,{waitUntil:'networkidle'});
+ const panUrl=new URL(page.url());panUrl.hash='card-04';
  const root=page.locator('#card-04'),button=i=>root.locator(`[data-play="pan-${i}"]`),play=async i=>{await button(i).click();await page.waitForFunction(()=>document.querySelector('#card-04').dataset.playing==='true');},view=async value=>root.locator(`[data-pan-view=${value}]`).click(),reset=async()=>root.locator('[data-pan-reset]').click();
  await t.test('single instrument with six native pipe targets, one information row and no reference or autoplay',async()=>{
   assert.equal(await root.locator('.pan-pipe-button').count(),6);assert.equal(await root.locator('input[type=range]').count(),0);assert.equal(await root.locator('.pan-reading').count(),1);assert.doesNotMatch(await root.innerText(),/參照|60 cm|兩端開口/);assert.equal(await root.getAttribute('data-pan-selected'),'5');assert.equal(await page.evaluate(()=>window.panRuns.length),0);assert.match(await root.locator('.speaker').first().evaluate(n=>getComputedStyle(n).backgroundImage),/dialogue-character-avatars/);
@@ -35,14 +36,51 @@ test('pan flute: free pipes, interior observation and synchronized closed-end ai
   await play(0);await page.locator('.route a[href="#card-05"]').click();assert.equal(await root.getAttribute('data-playing'),'false');await play(2);await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));delete document.hidden;});assert.equal(await root.getAttribute('data-playing'),'false');await play(4);await page.locator('#card-07').evaluate(n=>n.scrollIntoView());await page.waitForFunction(()=>document.querySelector('#card-04').dataset.playing==='false');
  });
  await t.test('cancelled preparation cannot start later; failed audio offers visible retry feedback',async()=>{
-  await page.evaluate(()=>{window.savedPanResume=AudioContext.prototype.resume;AudioContext.prototype.resume=function(){return new Promise(resolve=>{window.releasePan=resolve;});};});await button(3).click();await reset();const before=await page.evaluate(()=>window.panRuns.length);await page.evaluate(()=>window.releasePan());await page.waitForTimeout(60);assert.equal(await page.evaluate(()=>window.panRuns.length),before);
+  await page.evaluate(()=>{window.savedPanResume=AudioContext.prototype.resume;AudioContext.prototype.resume=function(){return new Promise(resolve=>{window.releasePan=resolve;});};});await button(3).click();
+  assert.equal(await root.locator('[data-pan-loading]').isVisible(),true);assert.equal(await root.locator('[data-pan-loading] [role=status]').innerText(),'聲音準備中…');
+  await root.locator('[data-pan-cancel]').focus();await page.keyboard.press('Enter');
+  assert.equal(await button(3).evaluate(n=>n===document.activeElement),true);assert.equal(await root.locator('[data-pan-loading]').isHidden(),true);
+  const before=await page.evaluate(()=>window.panRuns.length);await page.evaluate(()=>window.releasePan());await page.waitForTimeout(60);assert.equal(await page.evaluate(()=>window.panRuns.length),before);
   await page.evaluate(()=>{AudioContext.prototype.resume=()=>Promise.reject(Error('test failure'));});await button(0).click();await page.waitForFunction(()=>!document.querySelector('#card-04 .play-state').classList.contains('visually-hidden'));assert.match(await root.locator('.play-state').innerText(),/暫時無法播放/);await page.evaluate(()=>{AudioContext.prototype.resume=window.savedPanResume;});await play(5);assert.equal(await root.locator('.play-state').getAttribute('class'),'play-state visually-hidden');await reset();
+ });
+ await t.test('waiting downloads can be cancelled, reset, left or replaced without delayed sound',async()=>{
+  for(const action of ['cancel','reset','leave','replace','hidden','other-source']){
+   const ctx=await browser.newContext();const tab=await ctx.newPage();let held;
+   await tab.addInitScript(()=>{window.waitingRuns=[];const create=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=create.call(this),start=s.start.bind(s);s.start=(...args)=>{window.waitingRuns.push(document.querySelector('#card-04').dataset.panSelected);return start(...args);};return s;};});
+   await tab.route('**/pan-audio/pipe-0.wav*',route=>{held=route;});
+   await tab.goto(panUrl.href,{waitUntil:'networkidle'});const card=tab.locator('#card-04'),loading=card.locator('[data-pan-loading]');
+   await card.locator('[data-play=pan-0]').click();await tab.waitForFunction(()=>document.querySelector('#card-04 .pan-stage').getAttribute('aria-busy')==='true');
+   while(!held)await tab.waitForTimeout(10);
+   assert.equal(await loading.isVisible(),true);assert.equal(await card.locator('.pan-pipe[data-sounding=true]').count(),0);
+   if(action==='cancel'){
+    await card.screenshot({path:path.join(capture,'loading-desktop.png')});await card.locator('[data-pan-cancel]').click();
+    assert.equal(await card.locator('[data-play=pan-0]').evaluate(n=>n===document.activeElement),true);
+   }else if(action==='reset')await card.locator('[data-pan-reset]').click();
+   else if(action==='leave')await tab.locator('.route a[href="#card-05"]').click();
+   else if(action==='replace'){await card.locator('[data-play=pan-1]').click();await tab.waitForFunction(()=>document.querySelector('#card-04').dataset.playing==='true');}
+   else if(action==='hidden')await tab.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));delete document.hidden;});
+   else {await tab.locator('.pitch-play[data-play=pitch-live]').click();await tab.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='true');}
+   assert.equal(await loading.isHidden(),true);assert.equal(await card.locator('[data-pan-cancel]').isDisabled(),true);assert.equal(await card.locator('.pan-stage').getAttribute('aria-busy'),'false');
+   const count=await tab.evaluate(()=>window.waitingRuns.length),response=tab.waitForResponse(r=>r.url().includes('pipe-0.wav'));await held.continue();await response;await tab.waitForTimeout(100);
+   assert.equal(await tab.evaluate(()=>window.waitingRuns.length),count,action+' never starts the old sound after download');
+   if(action==='cancel'){await card.locator('[data-play=pan-0]').click();await tab.waitForFunction(()=>document.querySelector('#card-04').dataset.playing==='true');assert.equal(await loading.isHidden(),true);assert.equal(await tab.evaluate(()=>window.waitingRuns.length),count+1);}
+   await ctx.close();
+  }
  });
  await t.test('desktop and mobile keep compact single-stage design in both views with targets attached to pipes',async()=>{
   for(const width of [1024,1280,1440,1920,820,390,320]){await page.setViewportSize({width,height:1100});for(const v of ['outside','inside']){await view(v);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);assert.equal(await root.locator('button').evaluateAll(ns=>ns.filter(n=>n.clientWidth).some(n=>n.scrollWidth>n.clientWidth+2)),false);const hit=await button(5).boundingBox(),scene=await root.locator('.pan-scene').boundingBox();assert.ok(Math.abs(hit.x-(scene.x+scene.width*.59))<1);assert.ok(hit.width>0&&hit.height>20);await root.screenshot({path:path.join(capture,`${v}-${width}.png`)});}}
  });
  await t.test('real mobile taps play once per touch and can switch view during playback',async()=>{
   const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});await ctx.addInitScript(()=>{window.panTouchStarts=0;const create=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=create.call(this),start=s.start.bind(s);s.start=(...args)=>{window.panTouchStarts++;return start(...args);};return s;};});const mobile=await ctx.newPage();await mobile.goto(page.url(),{waitUntil:'networkidle'});const card=mobile.locator('#card-04');await card.locator('[data-play=pan-0]').tap();await mobile.waitForFunction(()=>document.querySelector('#card-04').dataset.playing==='true');await mobile.waitForTimeout(100);assert.equal(await mobile.evaluate(()=>window.panTouchStarts),1);await card.locator('[data-pan-view=inside]').tap();assert.equal(await card.getAttribute('data-pan-selected'),'0');await card.locator('[data-play=pan-5]').tap();await mobile.waitForFunction(()=>window.panTouchStarts===2);assert.equal(await mobile.evaluate(()=>window.panTouchStarts),2);await ctx.close();
+ });
+ await t.test('mobile loading feedback stays visible and touch cancel prevents delayed audio',async()=>{
+  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});let held;
+  await ctx.addInitScript(()=>{window.mobilePendingStarts=0;const create=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=create.call(this),start=s.start.bind(s);s.start=(...args)=>{window.mobilePendingStarts++;return start(...args);};return s;};});
+  const tab=await ctx.newPage();await tab.route('**/pan-audio/pipe-0.wav*',route=>{held=route;});await tab.goto(panUrl.href,{waitUntil:'networkidle'});const card=tab.locator('#card-04');
+  await card.locator('[data-play=pan-0]').tap();while(!held)await tab.waitForTimeout(10);
+  assert.equal(await card.locator('[data-pan-loading]').isVisible(),true);assert.equal(await tab.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  const cancel=card.locator('[data-pan-cancel]');assert.ok((await cancel.boundingBox()).height>=44);await cancel.scrollIntoViewIfNeeded();await tab.screenshot({path:path.join(capture,'loading-mobile.png')});await cancel.tap();
+  const response=tab.waitForResponse(r=>r.url().includes('pipe-0.wav'));await held.continue();await response;await tab.waitForTimeout(100);assert.equal(await tab.evaluate(()=>window.mobilePendingStarts),0);assert.equal(await card.locator('[data-pan-loading]').isHidden(),true);await ctx.close();
  });
  await t.test('slow recording download cannot start after reset; failed download can retry',async()=>{
   const isolated=await browser.newContext();await isolated.addInitScript(()=>{window.recordingStarts=0;const create=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=create.call(this),start=s.start.bind(s);s.start=(...args)=>{window.recordingStarts++;return start(...args);};return s;};});

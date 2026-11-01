@@ -373,6 +373,9 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .pan-reading{display:flex;align-items:center;justify-content:center;gap:32px;margin:12px 0;padding:10px 16px;border-left:5px solid #c18539;border-radius:11px;background:#eff3e9;color:#3e5c49;font-size:.9rem}
 .pan-reading span{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
 .pan-reading output{font-size:1.5rem;font-weight:800;color:#18553e;font-variant-numeric:tabular-nums}
+.pan-loading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;margin:10px 0;padding:10px 14px;border:1px solid #d9e2cd;border-radius:11px;background:#f2f6eb;color:#365b45}
+.pan-loading p{margin:0;font-size:.85rem}
+.pan-loading button{min-height:44px;padding:7px 14px;font-size:.85rem;white-space:nowrap}
 .pan-note{margin:8px 0 14px;text-align:center;color:#6b7a70;font-size:.75rem}
 @media(max-width:600px){.pan-tools{justify-content:space-between;gap:5px}.pan-view-switch button{min-width:69px;padding:6px 10px;font-size:.84rem}.pan-reset{position:static;font-size:.75rem}.pan-hint{top:7px;font-size:.65rem;padding:2px 7px}.pan-reading{gap:8px;padding:8px 6px;flex-wrap:wrap}.pan-reading span{gap:6px;font-size:.75rem}.pan-reading output{font-size:1.1rem}}
 
