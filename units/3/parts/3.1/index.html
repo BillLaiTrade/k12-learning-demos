@@ -483,7 +483,7 @@
       <nav class="route" aria-label="本段學習路徑">
         <p class="route-label">本單元的探索路線</p>
         <div class="route-inner">
-          <a href="#card-01" aria-current="step"><b>01</b><span>起伏怎麼沿著繩子傳開？</span></a>
+          <a href="#card-01" aria-current="step"><b>01</b><span>阿公輕輕一抖，起伏怎麼就傳到另一端？</span></a>
           <a href="#card-02"><b>02</b><span>波形向前傳，繩上的點會跟著走嗎？</span></a>
           <a href="#card-03"><b>03</b><span>繩波有些地方凸起、有些地方凹下，圖上怎麼讀？</span></a>
           <a href="#card-04"><b>04</b><span>波形的高低和重複間隔，怎麼量？</span></a>
@@ -1227,6 +1227,11 @@
   <footer><div class="shell">本頁繩波與彈簧波為概念示意模型；動畫時間與振幅用來呈現運動方向及量值關係，不代表特定實際繩長或真實介質尺度。</div></footer>
   <script>
     (() => {
+      document.querySelectorAll(".route a[href^='#card-']").forEach(link => {
+        const heading = document.querySelector(`${link.getAttribute("href")} > .lesson-head h2`);
+        const label = link.querySelector("span");
+        if (heading && label) label.textContent = heading.textContent.trim();
+      });
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const formulaChoices=[...document.querySelectorAll("#card-08 [data-formula-focus]")];
       const formulaTargets=[...document.querySelectorAll("#card-08 [data-formula-target]")];
