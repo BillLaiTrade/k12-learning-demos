@@ -320,7 +320,9 @@
       drawRuler(0);
       const rulerAudio=document.querySelector("#ruler-audio");
       rulerAudio.volume=1;
-      let rulerFrame=0,rulerAnimationStart=null,rulerPlayRequest=0;
+      // A successful current play request is the only way to clear a playback error.
+      let rulerFrame=0,rulerAnimationStart=null,rulerPlayRequest=0,rulerSoundFailed=false;
+      const setRulerStatus=message=>{if(!rulerSoundFailed)rulerStatus.textContent=message;};
       const playRulerSound=async()=>{
         rulerAudio.currentTime=0;
         try{await rulerAudio.play();return true;}catch(_error){return false;}
@@ -330,7 +332,7 @@
         rulerFrame=0;rulerAnimationStart=null;drawRuler(0);
         rulerStart.disabled=false;rulerStart.setAttribute("aria-pressed","false");rulerStop.disabled=true;
         ruler.setAttribute("aria-label","鋼尺固定在桌邊，伸出桌外的一端靜止。");
-        rulerStatus.textContent="鋼尺的振動和彈振聲已自然衰減停止。";
+        setRulerStatus(rulerAudio.ended?"鋼尺的振動和彈振聲已自然衰減停止。":"播放已停止，點擊尺面可重新觀察。");
       };
       const animateRuler=time=>{
         if(rulerAnimationStart===null)rulerAnimationStart=time;
@@ -345,9 +347,10 @@
         if(rulerFrame)window.cancelAnimationFrame(rulerFrame);
         rulerFrame=0;stopRulerSound();drawRuler(0);
         rulerStart.disabled=true;rulerStart.setAttribute("aria-pressed","true");rulerStop.disabled=false;
-        rulerStatus.textContent="正在準備鋼尺彈振聲。";
+        setRulerStatus("正在準備鋼尺彈振聲。");
         const soundStarted=await playRulerSound();
         if(request!==rulerPlayRequest)return;
+        rulerSoundFailed=!soundStarted;
         rulerStatus.textContent=soundStarted?"鋼尺正在振動，請聽它彈振發出的聲音。":"聲音暫時無法播放，請重新點擊尺面。";
         ruler.setAttribute("aria-label","鋼尺固定在桌邊，伸出桌外的一端正在振動。");
         rulerAnimationStart=null;rulerFrame=window.requestAnimationFrame(animateRuler);
@@ -356,7 +359,7 @@
         rulerPlayRequest++;
         if(rulerFrame)window.cancelAnimationFrame(rulerFrame);
         stopRulerSound();finishRuler();
-        rulerStatus.textContent="已按住鋼尺，振動和聲音停止。";
+        setRulerStatus("已按住鋼尺，振動和聲音停止。");
         ruler.setAttribute("aria-label","鋼尺固定在桌邊；按住後振動與聲音停止。");
       };
       rulerAudio.addEventListener("ended",()=>{
@@ -370,7 +373,7 @@
       stopOnLeave(document.querySelector('#card-01'),()=>{
         if(!rulerFrame&&!rulerStart.disabled&&rulerAudio.paused)return;
         stopRuler();
-        rulerStatus.textContent="播放已停止，點擊尺面可重新觀察。";
+        setRulerStatus("播放已停止，點擊尺面可重新觀察。");
       });
 
       const links=[...document.querySelectorAll(".route a[href^='#card-'],.route a[href='#unit-quiz']")],targets=links.map(link=>document.querySelector(link.getAttribute("href"))).filter(Boolean);
