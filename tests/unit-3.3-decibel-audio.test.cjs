@@ -45,9 +45,12 @@ test('twelve licensed recordings have verified hashes, ordered measured LUFS and
 test('all twelve scenes play their actual PCM, single-button playback and live selection stay synchronized',{timeout:120000},async t=>{
  const {page,url}=await fixture(t);const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(url,{waitUntil:'networkidle'});
  assert.equal(await count(page),0);assert.equal(await page.locator('.decibel-photo button').count(),0);await page.locator('.decibel-photo').click();assert.equal(await count(page),0);
+ const ribbonTop=()=>page.locator('[data-decibel-band]').evaluate(n=>n.getBoundingClientRect().top-document.querySelector('#card-07').getBoundingClientRect().top);
+ const stableTop=await ribbonTop();
  for(let i=0;i<12;i++){
   await select(page,i);assert.equal(await page.locator('#card-07').getAttribute('data-audio-state'),'stopped');
   await page.locator('[data-decibel-play]').click();await playing(page,keys[i]);assert.equal(await page.locator('[data-decibel-play]').isDisabled(),true);assert.equal(await page.locator('[data-decibel-play]').innerText(),'播放中');assert.equal(await page.evaluate(()=>window.sceneRuns.at(-1).loop),true,keys[i]+' repeats continuously');
+  assert.ok(Math.abs(await ribbonTop()-stableTop)<1,'scene changes and playback status keep the ribbon in place');
   const same=await page.evaluate(async key=>{
    const actual=window.sceneRuns.at(-1).buffer,context=window.sceneContext;
    const response=await fetch(new URL(`assets/decibel-audio/${key}.wav?v=${key==='train'?3:2}`,location.href));const expected=await context.decodeAudioData(await response.arrayBuffer());

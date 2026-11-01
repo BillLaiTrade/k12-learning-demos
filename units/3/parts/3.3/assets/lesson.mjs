@@ -1,6 +1,6 @@
 import {createSoundMatch} from './sound-match.mjs?v=6';
 import {loadDecibelRecording,createDecibelVoice} from './decibel-audio.mjs?v=4';
-import {createDecibelExplorer} from './decibel-experiment.mjs?v=4';
+import {createDecibelExplorer} from './decibel-experiment.mjs?v=5';
 import {signal,soundSamples} from './model.mjs?v=1';
 import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
 import {createForkExperiment} from './fork-experiment.mjs?v=2';

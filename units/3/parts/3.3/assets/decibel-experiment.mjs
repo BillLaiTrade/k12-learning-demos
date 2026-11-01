@@ -2,6 +2,25 @@ import {DECIBEL_SCENES,DECIBEL_MIN,DECIBEL_MAX,clampDecibel,decibelAt,nearestSce
 export function createDecibelExplorer(root,{onInteract=()=>{},onSceneChange=()=>{},onPlay=()=>{}}={}){
  const band=root.querySelector('[data-decibel-band]'),feature=root.querySelector('.decibel-feature'),art=root.querySelector('.decibel-photo'),svg=art.querySelector('svg'),image=svg.querySelector('image'),clip=svg.querySelector('rect'),status=art.querySelector('span');
  const cache=new Map();let current=60,ticket=0,pointer=null,shown=null;
+ // Overlapping, inaccessible copies reserve the longest wrapped text at any width.
+ // Grid sizing follows font and viewport changes without measuring or clipping text.
+ function reserveText(node,values,copyClass=''){
+  const space=document.createElement('div');space.className='decibel-copy-space';
+  node.before(space);space.append(node);
+  for(const text of new Set(values)){
+   const copy=document.createElement(node.localName);copy.className=copyClass;
+   copy.textContent=text;copy.setAttribute('aria-hidden','true');copy.classList.add('decibel-size-copy');space.append(copy);
+  }
+ }
+ reserveText(root.querySelector('[data-decibel-title]'),DECIBEL_SCENES.map(s=>s.title));
+ reserveText(root.querySelector('[data-decibel-intro]'),DECIBEL_SCENES.map(s=>s.intro));
+ const condition=root.querySelector('[data-decibel-condition]');condition.classList.add('decibel-condition');
+ reserveText(condition,DECIBEL_SCENES.map(s=>'參考情境：'+s.condition),'decibel-condition');
+ reserveText(root.querySelector('.play-state'),[
+  '已停止，可再次播放場景聲音','場景聲音載入中…',
+  '聲音暫時無法播放，請再點一次；仍可觀察圖形與數值。',
+  ...DECIBEL_SCENES.map(s=>'循環播放中：'+s.title)
+ ],'decibel-status-copy');
  function prepare(file){
   if(cache.has(file))return cache.get(file);
   const im=new Image();im.src=new URL(file+'?v=1',import.meta.url).href;

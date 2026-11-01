@@ -1,0 +1,27 @@
+✔ twelve licensed recordings have verified hashes, ordered measured LUFS and peak headroom (2902.387993ms)
+✔ all twelve scenes play their actual PCM, single-button playback and live selection stay synchronized (9474.678784ms)
+✔ slow cancellation, rapid switching, failed retry, hidden/leave/other sources never start stale audio (3903.275728ms)
+✔ mobile touch, keyboard, desktop/mobile layout and original large artwork remain usable (3790.038457ms)
+✔ decibel reference mapping preserves source values and distances (6.737413ms)
+✔ decibel ribbon selects all scenes, handles pointer/touch/keys without autoplay while stopped (8427.825158ms)
+✔ delayed or failed image loads cannot display an old scene under new metadata (1625.663356ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (99.086891ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (77.503007ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (813.861426ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (2278.7539ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (537.266408ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (242.845907ms)
+  ✔ hearing exploration stays silent until played; knowledge and dBA remain readable (205.478024ms)
+  ✔ one final listening task connects waveform selection, sliders, audio and comparison (515.375326ms)
+  ✔ lesson format follows unit 2.1 with a header and full-width body; navigation tracks reading (962.853509ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (5255.440351ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (11932.526591ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43222.116939

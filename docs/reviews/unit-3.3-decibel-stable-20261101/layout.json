@@ -1,0 +1,1178 @@
+[
+  {
+    "width": 1920,
+    "scene": "study",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1920,
+    "scene": "nature",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1920,
+    "scene": "whisper",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1920,
+    "scene": "residence",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1920,
+    "scene": "conversation",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1920,
+    "scene": "classroom",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1920,
+    "scene": "train",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1920,
+    "scene": "boiler",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1920,
+    "scene": "construction",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1920,
+    "scene": "club",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1920,
+    "scene": "equipment",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1920,
+    "scene": "jet",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "study",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "nature",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "whisper",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "residence",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "conversation",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "classroom",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "train",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "boiler",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "construction",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "club",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "equipment",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1440,
+    "scene": "jet",
+    "top": 790.75,
+    "height": 501.078125,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "study",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "nature",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "whisper",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "residence",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "conversation",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "classroom",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "train",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "boiler",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "construction",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "club",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "equipment",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1280,
+    "scene": "jet",
+    "top": 783.796875,
+    "height": 495.21875,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "study",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "nature",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "whisper",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "residence",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "conversation",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "classroom",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "train",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "boiler",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "construction",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "club",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "equipment",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1101,
+    "scene": "jet",
+    "top": 767.1875,
+    "height": 483.4375,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "study",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "nature",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "whisper",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "residence",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "conversation",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "classroom",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "train",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "boiler",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "construction",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "club",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "equipment",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1100,
+    "scene": "jet",
+    "top": 761.484375,
+    "height": 477.765625,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "study",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "nature",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "whisper",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "residence",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "conversation",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "classroom",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "train",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "boiler",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "construction",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "club",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "equipment",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 1024,
+    "scene": "jet",
+    "top": 757.953125,
+    "height": 476.28125,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "study",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "nature",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "whisper",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "residence",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "conversation",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "classroom",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "train",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "boiler",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "construction",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "club",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "equipment",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 901,
+    "scene": "jet",
+    "top": 776.09375,
+    "height": 495.71875,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "study",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "nature",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "whisper",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "residence",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "conversation",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "classroom",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "train",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "boiler",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "construction",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "club",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "equipment",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 900,
+    "scene": "jet",
+    "top": 931.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "study",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "nature",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "whisper",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "residence",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "conversation",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "classroom",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "train",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "boiler",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "construction",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "club",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "equipment",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 820,
+    "scene": "jet",
+    "top": 886.015625,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "study",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "nature",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "whisper",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "residence",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "conversation",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "classroom",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "train",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "boiler",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "construction",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "club",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "equipment",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 761,
+    "scene": "jet",
+    "top": 852.828125,
+    "height": 323.734375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "study",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "nature",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "whisper",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "residence",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "conversation",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "classroom",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "train",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "boiler",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "construction",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "club",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "equipment",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 760,
+    "scene": "jet",
+    "top": 903.328125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "study",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "nature",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "whisper",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "residence",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "conversation",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "classroom",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "train",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "boiler",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "construction",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "club",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "equipment",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 600,
+    "scene": "jet",
+    "top": 866.953125,
+    "height": 302.234375,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "study",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "nature",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "whisper",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "residence",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "conversation",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "classroom",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "train",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "boiler",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "construction",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "club",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "equipment",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 390,
+    "scene": "jet",
+    "top": 801.171875,
+    "height": 321.671875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "study",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "nature",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "whisper",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "residence",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "conversation",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "classroom",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "train",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "boiler",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "construction",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "club",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "equipment",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  },
+  {
+    "width": 320,
+    "scene": "jet",
+    "top": 828.265625,
+    "height": 361.796875,
+    "complete": true
+  }
+]

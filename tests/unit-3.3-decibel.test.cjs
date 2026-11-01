@@ -33,12 +33,28 @@ test('decibel ribbon selects all scenes, handles pointer/touch/keys without auto
  await page.mouse.click(x(73),y);assert.equal(await band.getAttribute('aria-valuenow'),'73');assert.equal(await page.locator('[data-decibel-reference]').textContent(),'70');assert.match(await band.getAttribute('aria-valuetext'),/73 dBA.*70 dBA/);
  await page.mouse.move(x(20),y);await page.mouse.down();await page.mouse.move(x(130),y,{steps:25});await page.mouse.up();assert.equal(await band.getAttribute('aria-valuenow'),'130');
  await band.focus();await page.keyboard.press('Home');await page.keyboard.press('PageUp');assert.equal(await band.getAttribute('aria-valuenow'),'40');await page.keyboard.press('Shift+ArrowRight');assert.equal(await band.getAttribute('aria-valuenow'),'41');
- for(const width of [1920,1440,1280,1024,820,760,390,320]){
-  await page.setViewportSize({width,height:1500});await band.focus();await page.keyboard.press('Home');for(let i=0;i<4;i++)await page.keyboard.press('ArrowRight');
+ const layout=[];
+ for(const width of [1920,1440,1280,1101,1100,1024,901,900,820,761,760,600,390,320]){
+  await page.setViewportSize({width,height:1500});await band.focus();await page.keyboard.press('Home');
+  let baseline;
+  for(let i=0;i<12;i++){
+   if(i)await page.keyboard.press('ArrowRight');
+   const geometry=await page.evaluate(()=>{
+    const band=document.querySelector('[data-decibel-band]').getBoundingClientRect(),card=document.querySelector('#card-07').getBoundingClientRect();
+    const nodes=['[data-decibel-title]','[data-decibel-intro]','[data-decibel-condition]'].map(s=>document.querySelector(s));
+    return {top:band.top-card.top,height:document.querySelector('.decibel-info').getBoundingClientRect().height,complete:nodes.every(n=>n.scrollHeight<=n.clientHeight+1&&n.scrollWidth<=n.clientWidth+1)};
+   });
+   baseline??=geometry;
+   assert.ok(Math.abs(geometry.top-baseline.top)<1,`ribbon stays in place at ${width}px, scene ${i}`);
+   assert.ok(Math.abs(geometry.height-baseline.height)<1,`consistent information height at ${width}px, scene ${i}`);
+   assert.equal(geometry.complete,true,`all scene text fits at ${width}px, scene ${i}`);
+   layout.push({width,scene:expected[i],...geometry});
+  }
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-  assert.equal(await page.locator('.decibel-info').evaluate(n=>n.scrollWidth>n.clientWidth+1),false);
+  assert.equal(await page.locator('.decibel-info').evaluate(n=>n.scrollWidth>n.clientWidth+1),false,`information fits at ${width}px`);
   if([1440,1024,390,320].includes(width))await page.locator('#card-07').screenshot({path:`${dir}/decibel-${width}.png`});
  }
+ await fs.writeFile(`${dir}/layout.json`,JSON.stringify(layout,null,2)+'\n');
  assert.equal(await page.evaluate(()=>window.decibelAudioStarts),0);
  const mobile=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,isMobile:true});await mobile.goto(base,{waitUntil:'networkidle'});const touch=mobile.locator('[data-decibel-band]');await touch.scrollIntoViewIfNeeded();const tb=await touch.boundingBox();await mobile.touchscreen.tap(tb.x+tb.width*.73,tb.y+tb.height-20);assert.equal(await mobile.locator('.decibel-feature').getAttribute('data-scene'),'construction');
  // Actual touch drag across the ribbon, followed by another tap.
