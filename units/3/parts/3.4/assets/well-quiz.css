@@ -43,8 +43,6 @@
 .well-feedback:empty{display:none}
 .well-reveal{margin:0 20px 22px;padding:18px;border:1px solid var(--line);border-radius:14px;background:#f4f7ef}
 .well-reveal h3{margin:0 0 8px;color:#214d3e;font-size:1.1rem}
-.well-explanation{display:grid;grid-template-columns:minmax(170px,.8fr) minmax(0,1fr);gap:20px;align-items:center}
-.well-explanation svg{width:100%;max-height:280px;display:block}
 .well-equation{font-weight:800;color:#1f6148;font-size:1.12rem;line-height:1.8}
 .well-reveal p{margin:8px 0;font-size:.88rem}
 .well-reveal .well-slow{font-size:.75rem;color:var(--muted)}
@@ -53,4 +51,25 @@
 .well-notes summary{cursor:pointer}
 .well-noscript{margin:0 20px 22px;padding:12px;background:#fff1e5}
 @media(min-width:1051px) and (max-width:1250px){.well-layout{grid-template-columns:minmax(0,1.2fr) minmax(230px,1fr);gap:14px;padding-left:16px;padding-right:16px}.well-panel{padding:13px}}
-@media(max-width:720px){.well-person{left:9%;top:10%;width:38%;height:65%}.well-bubble{left:45%;top:11%}.well-scene{aspect-ratio:4/3;min-height:0;flex:none}.well-layout{grid-template-columns:1fr;padding:0 14px 16px}.well-quiz .quiz-head{padding:20px 16px}.well-quiz .quiz-mark{width:40px;height:40px;border-radius:12px}.well-quiz .quiz-head p{font-size:.85rem}.well-side{gap:10px}.well-time strong{font-size:2.2rem}.well-explanation{grid-template-columns:1fr}.well-explanation svg{max-height:240px}.well-reveal{margin:0 14px 16px;padding:14px}.well-quiz .well-feedback{margin:0 14px 16px}.well-controls button{font-size:.92rem}.well-notes{margin:0 14px 16px}}
+@media(max-width:720px){.well-person{left:9%;top:10%;width:38%;height:65%}.well-bubble{left:45%;top:11%}.well-scene{aspect-ratio:4/3;min-height:0;flex:none}.well-layout{grid-template-columns:1fr;padding:0 14px 16px}.well-quiz .quiz-head{padding:20px 16px}.well-quiz .quiz-mark{width:40px;height:40px;border-radius:12px}.well-quiz .quiz-head p{font-size:.85rem}.well-side{gap:10px}.well-time strong{font-size:2.2rem}.well-reveal{margin:0 14px 16px;padding:14px}.well-quiz .well-feedback{margin:0 14px 16px}.well-controls button{font-size:.92rem}.well-notes{margin:0 14px 16px}}
+
+/* Follow the lesson's ordered time → total distance → equal legs → depth reasoning. */
+.well-steps{display:grid;gap:18px;list-style:none;margin:16px 0 0;padding:0;min-width:0}
+.well-step{min-width:0;padding:0 0 18px;border-bottom:1px solid #dbe4d5}
+.well-step:last-child{padding-bottom:0;border-bottom:0}
+.well-step h4{display:grid;grid-template-columns:26px minmax(0,1fr);gap:9px;align-items:start;margin:0 0 10px;font-size:1rem;line-height:1.6;color:#264e3d}
+.well-step-number{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#dfead6;color:#215c43;font-size:.83rem}
+.well-overview{display:grid;grid-template-columns:minmax(135px,.65fr) minmax(0,1.35fr);gap:18px;align-items:center}
+.well-route svg{display:block;width:100%;height:190px}
+.well-reveal .well-route .well-slow{font-size:.72rem;line-height:1.6;margin:4px 0 0}
+.well-known-time>span{display:block;font-size:.86rem;color:var(--muted)}
+.well-known-time>strong{display:block;margin:5px 0;color:#1f6148;font-size:1.9rem;font-variant-numeric:tabular-nums}
+.well-step .well-equation{display:block;padding:10px 14px;border-radius:9px;background:#e5eedc;font-size:clamp(1rem,2vw,1.15rem);font-variant-numeric:tabular-nums}
+.well-length-bar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));min-height:44px;overflow:hidden;border-radius:9px;border:1px solid #adbea8}
+.well-leg{display:grid;place-items:center;min-width:0;font-size:.9rem;font-weight:750}
+.well-leg--out{background:#deead8;color:#205c43}
+.well-leg--back{background:#f8e7d1;color:#8e4b1f;border-left:1px solid #adbea8}
+.well-bracket{height:8px;margin-top:4px;border:1px solid #9cab94;border-top:0}
+.well-reveal .well-lengths p{text-align:center;color:#4b5e48;margin:5px 0 0}
+.well-reveal .well-final-answer{margin-top:12px;font-size:1rem;color:#224f3a}
+@media(max-width:480px){.well-overview{grid-template-columns:1fr;gap:10px}.well-route svg{height:180px}.well-known-time{padding:12px;border-radius:9px;background:#edf2e6}.well-step h4{font-size:.96rem}.well-step .well-equation{padding:10px;font-size:1rem}.well-known-time>strong{font-size:1.6rem}}

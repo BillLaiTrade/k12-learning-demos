@@ -719,3 +719,7 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4.test.cjs
 既有unit-2.3-continuous.test.cjs改驗證唯一按鈕、選步預覽、明確按播放才連播、700ms停留、完整流程與最後停止／重新開始、精確暫停續播、切步取消、手機吸頂、原生鍵盤／觸控及無JS。氧氣、材料、器材、字卡、物理、整頁及跨播放器檢查配合新入口；不保留舊單步播放預期。
 
 本機九套共90項（含各外層）通過。公開核心用OXYGEN_CONTINUOUS_URL、OXYGEN_URL、OXYGEN_CAPTIONS_URL、OXYGEN_EQUIPMENT_URL、AIR_FULL_URL跑單鍵10＋操作11＋字卡10＋器材9＋整頁9，共49項；各截圖環境變數指向/tmp以免覆寫歷史證據。另以實際捲動確認主圖、近景與註記處只有同一顆主按鈕且可見。證據見docs/reviews/unit-2.3-oxygen-unified-player/。
+
+### 3.4井深解析四步推導
+
+同上`tests/unit-3.4-well.test.cjs`現為12項（含外層），新增四段編號、往返時間、總路程、兩個等長長條與井深，換井後逐項核對新題數值。核對前不顯示解析，重喊／換井／改答仍清除舊結果。井深12項與整課10項合計22項；九種寬度及真實觸控沿用小測專項。

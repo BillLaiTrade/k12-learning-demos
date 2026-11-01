@@ -1,0 +1,21 @@
+▶ well echo challenge
+  ✔ approved well illustration and one answer; no initial answer, bottom or sound (241.820745ms)
+  ✔ real audio uses identical call and weaker delayed copy; clock matches return schedule (1111.26159ms)
+  ✔ missing, invalid, wrong total distance, correct, edited and repeated attempts (1338.716635ms)
+  ✔ four ordered steps connect measured time, total path, equal legs and depth (186.206263ms)
+  ✔ changing wells removes stale records, answer and explanation; every new value grades correctly (4811.719226ms)
+  ✔ shared playback interrupts in either direction and new well cancels scheduled returns (1213.16219ms)
+  ✔ background/pagehide cancels audio and cannot complete a stale observation (1056.349772ms)
+  ✔ nine screen widths, controls and revealed diagram have no horizontal clipping (2061.845259ms)
+  ✔ real touch, character hotspot and keyboard work with reduced motion (1655.42523ms)
+  ✔ delayed activation is canceled by changing well and cannot emit late sound (3715.58525ms)
+  ✔ missing voice reports failure without fictional data and retry recovers (1601.290739ms)
+✔ well echo challenge (20082.968913ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20087.288058
