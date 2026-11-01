@@ -10,17 +10,6 @@ function animate(duration, update, done){
   const frame = t => { start ??= t; const elapsed=Math.min(t-start,duration); update(elapsed); if(elapsed<duration)id=requestAnimationFrame(frame);else done?.(); };
   id=requestAnimationFrame(frame); return ()=>cancelAnimationFrame(id);
 }
-let cancelRace=()=>{};
-const names=['air','water','glass'];
-function drawRace(elapsed=0){
-  $('#race-scene').innerHTML=names.map((key,i)=>{
-    const y=65+i*85, progress=Math.min(1,elapsed/(2000*materials[key].n));
-    return label(20,y+7,materials[key].name)+line([130,y],[620,y],'ghost')+`<circle cx="${130+490*progress}" cy="${y}" r="9" fill="#c96b32"/>`+label(640,y+7,progress===1?'到達':'');
-  }).join('');
-}
-function resetRace(){cancelRace();drawRace();$('#race-start').textContent='同時出發';$('#race-status').textContent='三道光已就位，按「同時出發」開始比較。';}
-$('#race-start').onclick=()=>{cancelRace();$('#race-start').textContent='重新出發';$('#race-status').textContent='三道光同時出發，觀察各自到達的先後。';cancelRace=animate(3000,drawRace,()=>{$('#race-status').textContent='空氣先到，接著是水，最後是這個模型中的玻璃。';});};
-$('#race-reset').onclick=resetRace;drawRace();
 const normalResets=[];
 $$('[data-ray-lab]').forEach(root=>{
   const type=root.dataset.rayLab, normal=type==='normal', reverse=type==='leave', svg=$('svg',root);
@@ -95,4 +84,4 @@ window.addEventListener('load',()=>{
   updateNav();
 });
 updateNav();
-document.addEventListener('visibilitychange',()=>{if(document.hidden){resetRace();normalResets.forEach(reset=>reset());}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){normalResets.forEach(reset=>reset());}});

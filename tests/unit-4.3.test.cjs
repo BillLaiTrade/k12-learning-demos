@@ -15,14 +15,15 @@ test('4.3 complete basic lesson works on desktop and mobile',{timeout:90000},asy
  t.after(()=>browser.close());
  const page=await browser.newPage({viewport:{width:1440,height:1000}});
  const failures=[];page.on('pageerror',e=>failures.push(e.message));page.on('requestfailed',r=>failures.push(r.url()));page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))failures.push(`${r.status()} ${r.url()}`);});
- await page.clock.install();await page.goto(base);await page.waitForFunction(()=>document.querySelector('#depth-scene circle'));
+ await page.clock.install();await page.goto(base);await page.waitForFunction(()=>document.querySelector('#depth-scene circle')&&document.querySelector('#speed-lab')?.dataset.state==='idle');
+ await page.clock.pauseAt(new Date(await page.evaluate(()=>Date.now())+100));
  assert.equal(await page.locator('main section').count(),7);
  assert.equal(await page.locator('form').count(),1);
  // No automatic motion. Equal lengths and a common clock create the speed comparison.
- const dots=()=>page.locator('#race-scene circle').evaluateAll(es=>es.map(e=>Number(e.getAttribute('cx'))));
- assert.deepEqual(await dots(),[130,130,130]);await page.clock.runFor(500);assert.deepEqual(await dots(),[130,130,130]);
- await page.locator('#race-start').click();await page.clock.runFor(2100);const moving=await dots();assert.ok(moving[0]>moving[1]&&moving[1]>moving[2]);await page.clock.runFor(1100);assert.deepEqual(await dots(),[620,620,620]);
- await page.locator('#race-reset').click();assert.deepEqual(await dots(),[130,130,130]);
+ const dots=()=>page.locator('#race-scene .race-pulse').evaluateAll(es=>es.map(e=>Number(e.getAttribute('cx'))));
+ assert.deepEqual(await dots(),[448,448,448]);await page.clock.runFor(500);assert.deepEqual(await dots(),[448,448,448]);
+ await page.locator('#race-start').click();await page.clock.runFor(2100);const moving=await dots();assert.ok(moving[0]>moving[1]&&moving[1]>moving[2]);await page.clock.runFor(3100);assert.deepEqual(await dots(),[1590,1590,1590]);assert.equal(await page.locator('#speed-lab').getAttribute('data-state'),'complete');
+ await page.locator('#race-reset').click();assert.deepEqual(await dots(),[448,448,448]);await page.locator('#race-pause').click();
  const normal=page.locator('[data-ray-lab=normal]');await normal.locator('.normal-play').click();await page.clock.runFor(650);const y=Number(await normal.locator('.pulse').getAttribute('cy'));assert.ok(y>30&&y<190);await normal.locator('[data-medium=glass]').click();assert.equal(await normal.locator('.pulse').getAttribute('cy'),'30');await page.clock.runFor(1000);assert.equal(await normal.locator('.pulse').getAttribute('cy'),'30');
  for(const id of ['enter','leave']){
   const lab=page.locator(`[data-ray-lab=${id}]`);await lab.locator('[data-medium=glass]').click();

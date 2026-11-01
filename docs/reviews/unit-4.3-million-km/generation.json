@@ -1,0 +1,32 @@
+{
+  "approved_design": "approved-design.png",
+  "generated_background": "../../../units/4/parts/4.3/assets/light-speed-bench.png",
+  "generated_background_dimensions": [
+    2022,
+    778
+  ],
+  "background_sha256": "0de80d26c7e8fbb9ed617f5291b9cea0d54590b654335caec7ce0aa0349a8ec9",
+  "method": "依核可圖以 image_gen 產生無文字無光跡底圖；文字、光點、光跡、光暈、接收器及讀值由 HTML／SVG 動態繪製。",
+  "geometry": {
+    "viewBox": [
+      0,
+      0,
+      2022,
+      778
+    ],
+    "common_start_x": 448,
+    "common_end_x": 1590,
+    "row_centres_y": [
+      177,
+      337,
+      506
+    ]
+  },
+  "model": {
+    "distance_km": 1000000,
+    "air_km_per_s": 300000,
+    "water_km_per_s": 225000,
+    "glass_km_per_s": 200000,
+    "playback_scale": 1
+  }
+}
