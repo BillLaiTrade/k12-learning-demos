@@ -1,0 +1,17 @@
+✔ seven operations merge real apparatus positioning into adding marble (2.960854ms)
+✔ five individual textured stones transfer once, through the neck, and never duplicate (23.049694ms)
+✔ every operation meets the next without a position, angle, liquid or quantity jump (0.53841ms)
+✔ rigid glass moves by translation and rotation; rubber keeps its own fixed arc length (26.449829ms)
+✔ the full collecting rod clears the jar rim before crossing; purge remains outside (1.241898ms)
+✔ acid uses the photographed inner curved bottom, with sloping walls and a level surface (0.403687ms)
+✔ marble is placed with forceps in a tilted flask while the dish remains level on the bench (0.198179ms)
+✔ acid stream starts at the real transformed open-bottle lip and the neck stays outside the flask (0.667975ms)
+✔ forceps enter and leave through the top without popping in over the bench (4.900233ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 66.056862

@@ -1,0 +1,41 @@
+{
+  "stages": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+  ],
+  "state": {
+    "replay": "co2",
+    "stage": "6",
+    "state": "complete",
+    "material": "marble",
+    "playMode": "continuous",
+    "elapsed": "6500.000",
+    "operation": "6.0000",
+    "localTime": "6500.0000",
+    "duration": "6500.0000",
+    "placement": "1.0000",
+    "acid": "1.0000",
+    "seal": "1.0000",
+    "cover": "1.0000",
+    "insert": "0.0000",
+    "marble": "1.0000",
+    "dishCount": "0.0000",
+    "fallingCount": "0.0000",
+    "flaskCount": "5.0000",
+    "tipX": "600.0000",
+    "tipY": "520.0000",
+    "reacting": "true",
+    "flow": "true",
+    "collecting": "false",
+    "labeled": "true",
+    "bench": "shared",
+    "setup": "1.0000",
+    "setupCaption": "true",
+    "ready": "true"
+  },
+  "errors": []
+}
