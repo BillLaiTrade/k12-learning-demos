@@ -140,6 +140,7 @@ function createPreparationPlayer() {
     const narrow=panel.clientWidth<=720;
     if(narrow===compact)return;
     compact=narrow;menu.hidden=!compact;setMenu(!compact);
+    panel.querySelectorAll('.oxygen-main-scene').forEach(svg=>svg.setAttribute('preserveAspectRatio',compact?'xMidYMid meet':'none'));
     nav.dataset.compact=String(compact);
     if(navBody.hidden&&navBody.contains(document.activeElement))menu.focus();
   }

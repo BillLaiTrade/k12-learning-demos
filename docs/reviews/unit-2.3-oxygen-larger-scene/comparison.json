@@ -1,0 +1,130 @@
+[
+  {
+    "width": 1440,
+    "stage": 0,
+    "sidebar_height_before": 593.15625,
+    "sidebar_height_after": 593.15625,
+    "note_gap": 12,
+    "frame_height": 495.4375
+  },
+  {
+    "width": 1440,
+    "stage": 1,
+    "sidebar_height_before": 593.15625,
+    "sidebar_height_after": 593.15625,
+    "note_gap": 12,
+    "frame_height": 455.390625
+  },
+  {
+    "width": 1440,
+    "stage": 2,
+    "sidebar_height_before": 593.15625,
+    "sidebar_height_after": 593.15625,
+    "note_gap": 12,
+    "frame_height": 455.390625
+  },
+  {
+    "width": 1440,
+    "stage": 3,
+    "sidebar_height_before": 593.15625,
+    "sidebar_height_after": 593.15625,
+    "note_gap": 12,
+    "frame_height": 455.390625
+  },
+  {
+    "width": 1440,
+    "stage": 4,
+    "sidebar_height_before": 593.15625,
+    "sidebar_height_after": 593.15625,
+    "note_gap": 12,
+    "frame_height": 455.390625
+  },
+  {
+    "width": 1440,
+    "stage": 5,
+    "sidebar_height_before": 593.15625,
+    "sidebar_height_after": 593.15625,
+    "note_gap": 12,
+    "frame_height": 455.390625
+  },
+  {
+    "width": 1440,
+    "stage": 6,
+    "sidebar_height_before": 593.15625,
+    "sidebar_height_after": 593.15625,
+    "note_gap": 12,
+    "frame_height": 455.390625
+  },
+  {
+    "width": 1440,
+    "stage": 7,
+    "sidebar_height_before": 593.15625,
+    "sidebar_height_after": 593.15625,
+    "note_gap": 12,
+    "frame_height": 455.390625
+  },
+  {
+    "width": 390,
+    "stage": 0,
+    "sidebar_height_before": 146.03125,
+    "sidebar_height_after": 146.03125,
+    "note_gap": 12,
+    "frame_height": 208.046875
+  },
+  {
+    "width": 390,
+    "stage": 1,
+    "sidebar_height_before": 146.03125,
+    "sidebar_height_after": 146.03125,
+    "note_gap": 12,
+    "frame_height": 573.9375
+  },
+  {
+    "width": 390,
+    "stage": 2,
+    "sidebar_height_before": 146.03125,
+    "sidebar_height_after": 146.03125,
+    "note_gap": 12,
+    "frame_height": 583.078125
+  },
+  {
+    "width": 390,
+    "stage": 3,
+    "sidebar_height_before": 146.03125,
+    "sidebar_height_after": 146.03125,
+    "note_gap": 12,
+    "frame_height": 583.078125
+  },
+  {
+    "width": 390,
+    "stage": 4,
+    "sidebar_height_before": 146.03125,
+    "sidebar_height_after": 146.03125,
+    "note_gap": 12,
+    "frame_height": 602.765625
+  },
+  {
+    "width": 390,
+    "stage": 5,
+    "sidebar_height_before": 146.03125,
+    "sidebar_height_after": 146.03125,
+    "note_gap": 12,
+    "frame_height": 526.0625
+  },
+  {
+    "width": 390,
+    "stage": 6,
+    "sidebar_height_before": 146.03125,
+    "sidebar_height_after": 146.03125,
+    "note_gap": 12,
+    "frame_height": 526.0625
+  },
+  {
+    "width": 390,
+    "stage": 7,
+    "sidebar_height_before": 146.03125,
+    "sidebar_height_after": 146.03125,
+    "note_gap": 12,
+    "frame_height": 526.0625
+  }
+]

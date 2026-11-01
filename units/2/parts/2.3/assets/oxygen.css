@@ -49,10 +49,20 @@
 /* The whole-experiment control stays outside the collapsible step list. */
 .oxygen-sequence-controls{display:none;margin:12px 0 10px;padding-bottom:9px;border-bottom:1px solid #d6e1ca}.oxygen-preparation[data-ready=true] .oxygen-sequence-controls{display:block}.oxygen-step-nav .oxygen-continuous-button{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:44px;padding:9px 10px;border:1px solid #86a17a;border-radius:9px;background:#fffef7;color:#2f6347;font-size:.8rem;font-weight:700}.oxygen-step-nav .oxygen-continuous-button.is-playing,.oxygen-step-nav .oxygen-continuous-button.is-playing:hover{background:#1f624b;border-color:#1f624b;color:white}.oxygen-step-nav [data-continuous-status]{font-size:.7rem;line-height:1.7;color:#718363;margin:8px 0 0}.oxygen-continuous-button [data-continuous-icon]{line-height:1;font-size:.92rem}@container(max-width:720px){.oxygen-sequence-controls{margin:9px 0 0;padding-bottom:0;border-bottom:0}.oxygen-step-nav [data-continuous-status]{margin-top:6px}.oxygen-step-nav #oxygen-step-list:not([hidden]){margin-top:10px}}
 
-/* Both desktop cards share their grid row; keep the image ratio and lower actions. */
+/* Both desktop cards share their grid row. */
 .oxygen-preparation[data-ready=true] .oxygen-workspace{align-items:stretch}
 .oxygen-preparation[data-ready=true] .oxygen-stage-area{display:flex;flex-direction:column}
 
 
-/* Keep the model note at the bottom without redundant step actions. */
-.oxygen-preparation[data-ready=true] .oxygen-model-note{margin-top:auto;padding-top:12px}
+/* Expand the experiment itself into the shared desktop row. */
+.oxygen-preparation[data-ready=true] .oxygen-model-note{margin:12px 0 0;padding-top:0}
+@container(min-width:721px){
+ .oxygen-preparation[data-ready=true] .oxygen-panels{display:flex;flex:1;min-height:0}
+ .oxygen-preparation[data-ready=true] .oxygen-step-panel:not([hidden]){display:flex;flex-direction:column;flex:1;min-width:0;min-height:0}
+ .oxygen-preparation[data-ready=true] .oxygen-materials-view,.oxygen-preparation[data-ready=true] .oxygen-apparatus{display:flex;flex-direction:column;flex:1;min-height:0}
+ .oxygen-preparation[data-ready=true] .oxygen-materials-photo{flex:1;min-height:0;aspect-ratio:1536 / 850}
+ .oxygen-preparation[data-ready=true] .oxygen-materials-photo>img{position:absolute;inset:0;width:100%;height:100%}
+ .oxygen-preparation[data-ready=true] .oxygen-drawing{display:flex;flex-direction:column;flex:1;min-height:0}
+ .oxygen-preparation[data-ready=true] .oxygen-scene-viewport{flex:1;min-height:0;aspect-ratio:1600 / 980}
+ .oxygen-preparation[data-ready=true] .oxygen-main-scene{position:absolute;inset:0;width:100%;height:100%}
+}
