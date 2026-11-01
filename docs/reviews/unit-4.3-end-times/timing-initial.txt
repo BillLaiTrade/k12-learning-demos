@@ -1,0 +1,40 @@
+▶ 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork
+  ✔ artwork loads, media are fixed, and geometry has equal routes (327.683297ms)
+  ✔ one second of play is one second of model time with physical distance ratios (614.134619ms)
+  ✔ three arrivals follow 3.33, 4.44 and 5 seconds, with receivers and no stationary light dots (1632.798052ms)
+  ✔ replay clears all old arrivals, and rapid keyboard pause/resume keeps one clock (490.147069ms)
+  ✔ a page-hidden event pauses the shared clock without clearing progress (441.931359ms)
+  ✔ leaving the section pauses and keeps progress for an explicit resume (539.644781ms)
+  ✔ seven screen widths retain artwork, readable controls and unclipped times (15214.740352ms)
+  ✔ image failure disables the desk, leaves the rest of the lesson working, and can retry (994.492849ms)
+  ✔ touch start, pause and continue work with horizontal desk panning (1402.121668ms)
+  ✖ a real-time run finishes in five seconds without a browser test clock (6236.401168ms)
+✖ 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork (29784.617053ms)
+✔ million-kilometre model uses the agreed representative speeds and travel times (1.407018ms)
+✔ a shared physical time gives independent distances and the same endpoint (0.489033ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 11
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30428.505763
+
+✖ failing tests:
+
+test at tests/unit-4.3-speed-lab.test.cjs:134:10
+✖ a real-time run finishes in five seconds without a browser test clock (6236.401168ms)
+  AssertionError [ERR_ASSERTION]: air: {"duration":5010.800000000745,"events":{"air":3744.9000000003725,"water":4465.200000000186,"glass":5010.700000000186}}
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-speed-lab.test.cjs:140:90)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-speed-lab.test.cjs:134:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

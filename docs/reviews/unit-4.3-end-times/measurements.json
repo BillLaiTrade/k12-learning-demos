@@ -1,0 +1,233 @@
+[
+  {
+    "viewport": 1536,
+    "overflow": false,
+    "artworkAligned": true,
+    "aspect": 2.5990170282480265,
+    "bounds": [
+      501,
+      1319
+    ],
+    "textClipped": false,
+    "endReadings": [
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      }
+    ],
+    "pulseValues": [
+      1355.89,
+      1128.9175,
+      1053.26
+    ]
+  },
+  {
+    "viewport": 1440,
+    "overflow": false,
+    "artworkAligned": true,
+    "aspect": 2.5990170282480265,
+    "bounds": [
+      453,
+      1271
+    ],
+    "textClipped": false,
+    "endReadings": [
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      }
+    ],
+    "pulseValues": [
+      1355.89,
+      1128.9175,
+      1053.26
+    ]
+  },
+  {
+    "viewport": 1366,
+    "overflow": false,
+    "artworkAligned": true,
+    "aspect": 2.5990170282480265,
+    "bounds": [
+      416,
+      1234
+    ],
+    "textClipped": false,
+    "endReadings": [
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      }
+    ],
+    "pulseValues": [
+      1355.89,
+      1128.9175,
+      1053.26
+    ]
+  },
+  {
+    "viewport": 1024,
+    "overflow": false,
+    "artworkAligned": true,
+    "aspect": 2.599107311246621,
+    "bounds": [
+      331,
+      977
+    ],
+    "textClipped": false,
+    "endReadings": [
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      }
+    ],
+    "pulseValues": [
+      1355.89,
+      1128.9175,
+      1053.26
+    ]
+  },
+  {
+    "viewport": 820,
+    "overflow": false,
+    "artworkAligned": true,
+    "aspect": 2.598984771573604,
+    "bounds": [
+      324,
+      780
+    ],
+    "textClipped": false,
+    "endReadings": [
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      }
+    ],
+    "pulseValues": [
+      1355.89,
+      1128.9175,
+      1053.26
+    ]
+  },
+  {
+    "viewport": 390,
+    "overflow": false,
+    "artworkAligned": true,
+    "aspect": 2.598984771573604,
+    "bounds": [
+      31,
+      359
+    ],
+    "textClipped": false,
+    "endReadings": [
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      }
+    ],
+    "pulseValues": [
+      1355.89,
+      1128.9175,
+      1053.26
+    ]
+  },
+  {
+    "viewport": 320,
+    "overflow": false,
+    "artworkAligned": true,
+    "aspect": 2.598984771573604,
+    "bounds": [
+      31,
+      289
+    ],
+    "textClipped": false,
+    "endReadings": [
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      },
+      {
+        "rightOfReceiver": true,
+        "insideTable": true,
+        "aligned": true
+      }
+    ],
+    "pulseValues": [
+      1355.89,
+      1128.9175,
+      1053.26
+    ]
+  }
+]

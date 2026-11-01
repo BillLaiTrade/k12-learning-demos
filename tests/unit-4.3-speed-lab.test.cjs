@@ -29,6 +29,8 @@ test('4.3 fixed-media million-kilometre desk is accurate, operable and matches i
   assert.match(await page.locator('.race-distance').innerText(),/100 萬公里/);
   assert.equal(await page.locator('#s1 input,#s1 select,[data-medium-card]').count(),0);
   assert.equal(await page.locator('.race-actions button').count(),3);
+  assert.equal(await page.locator('.race-table .race-arrivals').count(),1);
+  assert.equal(await page.locator('#speed-lab > .race-arrivals').count(),0);
   assert.deepEqual(await positions(),[448,448,448]);
   await page.clock.runFor(1000);assert.equal(await elapsed(),0);
   assert.equal(await page.locator('#race-pause').isDisabled(),true);
@@ -93,14 +95,20 @@ test('4.3 fixed-media million-kilometre desk is accurate, operable and matches i
   for(const width of [1536,1440,1366,1024,820,390,320]){
    await page.setViewportSize({width,height:1100});await page.locator('#s1').scrollIntoViewIfNeeded();await page.clock.runFor(100);
    await page.locator('#race-reset').click();await page.clock.runFor(2650);await page.locator('#race-pause').click();
-   const measure=await lab.evaluate(el=>{const img=el.querySelector('#race-background').getBoundingClientRect(),svg=el.querySelector('#race-scene').getBoundingClientRect(),bounds=el.getBoundingClientRect();return{viewport:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,artworkAligned:Math.abs(img.x-svg.x)<.01&&Math.abs(img.y-svg.y)<.01&&Math.abs(img.width-svg.width)<.01&&Math.abs(img.height-svg.height)<.01,aspect:img.width/img.height,bounds:[bounds.left,bounds.right],textClipped:[...el.querySelectorAll('.race-actions button,.race-arrivals strong,.race-clock')].some(n=>n.scrollWidth>n.clientWidth+1),pulseValues:[...el.querySelectorAll('.race-pulse')].map(e=>Number(e.getAttribute('cx')))};});
+   const measure=await lab.evaluate(el=>{const img=el.querySelector('#race-background').getBoundingClientRect(),svg=el.querySelector('#race-scene').getBoundingClientRect(),bounds=el.getBoundingClientRect();return{viewport:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,artworkAligned:Math.abs(img.x-svg.x)<.01&&Math.abs(img.y-svg.y)<.01&&Math.abs(img.width-svg.width)<.01&&Math.abs(img.height-svg.height)<.01,aspect:img.width/img.height,bounds:[bounds.left,bounds.right],textClipped:[...el.querySelectorAll('.race-actions button,.race-arrivals strong,.race-clock')].some(n=>n.scrollWidth>n.clientWidth+1),endReadings:[...el.querySelectorAll('.race-arrivals > div')].map((n,i)=>{const r=n.getBoundingClientRect();return{rightOfReceiver:r.left>=img.left+img.width*.86,insideTable:r.right<=img.right+1,aligned:Math.abs((r.top+r.bottom)/2-(img.top+[177,337,506][i]/778*img.height))<2}}),pulseValues:[...el.querySelectorAll('.race-pulse')].map(e=>Number(e.getAttribute('cx')))};});
    assert.equal(measure.overflow,false);assert.equal(measure.artworkAligned,true);assert.ok(Math.abs(measure.aspect-2022/778)<.01);assert.equal(measure.textClipped,false);assert.ok(measure.bounds[0]>=0&&measure.bounds[1]<=width+1);
-   assert.ok(measure.pulseValues[0]>measure.pulseValues[1]&&measure.pulseValues[1]>measure.pulseValues[2]);measurements.push(measure);
+   assert.ok(measure.pulseValues[0]>measure.pulseValues[1]&&measure.pulseValues[1]>measure.pulseValues[2]);
+   assert.ok(measure.endReadings.every(r=>r.rightOfReceiver&&r.insideTable&&r.aligned),`${width} time readout positions`);measurements.push(measure);
    if(capture&&[1536,1440,1024,390,320].includes(width)){
     await page.locator('#s1').screenshot({path:path.join(capture,`${width}-section.png`)});
     await page.locator('.race-table').screenshot({path:path.join(capture,`${width}-table.png`)});
     if(width===1440){const frozen=await page.locator('.race-table').screenshot();await page.clock.runFor(700);assert.deepEqual(await page.locator('.race-table').screenshot(),frozen,'paused artwork and light trails stay pixel-identical');}
    }
+   await page.locator('#race-pause').click();await page.clock.runFor(3000);
+   assert.equal(await state(),'complete');
+   assert.deepEqual(await page.locator('.race-arrivals strong').allTextContents(),['約 3.33 秒','約 4.44 秒','約 5.00 秒']);
+   assert.equal(await page.locator('.race-arrivals strong').evaluateAll(es=>es.some(e=>e.scrollWidth>e.clientWidth+1)),false,`${width} completed time is clipped`);
+   if(capture&&[1440,1024,390,320].includes(width))await page.locator('.race-table').screenshot({path:path.join(capture,`${width}-complete-table.png`)});
   }
   if(capture)await fs.writeFile(path.join(capture,'measurements.json'),JSON.stringify(measurements,null,2)+'\n');
  });

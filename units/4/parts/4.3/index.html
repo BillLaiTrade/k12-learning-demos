@@ -23,10 +23,10 @@
   <link rel="canonical" href="https://billlaitrade.github.io/k12-learning-demos/units/4/parts/4.3/">
   <link rel="icon" href="data:,">
   <title>光進入不同介質會怎樣？</title>
-  <link rel="stylesheet" href="assets/lesson.css?v=20261101-million1">
-  <link rel="stylesheet" href="assets/light-speed-lab.css?v=20261101-million1">
-  <script type="module" src="assets/light-speed-lab.mjs?v=20261101-million1"></script>
-  <script type="module" src="assets/lesson.mjs?v=20261101-million1">
+  <link rel="stylesheet" href="assets/lesson.css?v=20261101-endtimes1">
+  <link rel="stylesheet" href="assets/light-speed-lab.css?v=20261101-endtimes1">
+  <script type="module" src="assets/light-speed-lab.mjs?v=20261101-endtimes1"></script>
+  <script type="module" src="assets/lesson.mjs?v=20261101-endtimes1">
 </script>
 </head>
 <body>
@@ -99,6 +99,11 @@
         <div class="race-distance">三段路程皆為 <strong>100 萬公里</strong></div>
         <span class="race-state" id="race-state">準備實驗桌</span>
         <svg id="race-scene" viewBox="0 0 2022 778" role="img" aria-label="尚未發光的三排光速比較"></svg>
+        <div class="race-arrivals" role="group" aria-label="各排接收器右側的到達時間">
+          <div data-arrival="air"><span class="visually-hidden">空氣到達時間：</span><strong>尚未到達</strong></div>
+          <div data-arrival="water"><span class="visually-hidden">水到達時間：</span><strong>尚未到達</strong></div>
+          <div data-arrival="glass"><span class="visually-hidden">玻璃到達時間：</span><strong>尚未到達</strong></div>
+        </div>
       </div></div>
       <div class="race-console">
         <div class="race-actions" role="group" aria-label="三道光的共同播放控制">
@@ -110,11 +115,6 @@
       </div>
       <p id="race-status" class="race-status" role="status">正在準備實驗桌……</p>
       <button id="race-retry" type="button" hidden>重新載入實驗桌</button>
-      <div class="race-arrivals" aria-label="光走完100萬公里的到達時間">
-        <div data-arrival="air"><span>空氣</span><strong>尚未到達</strong></div>
-        <div data-arrival="water"><span>水</span><strong>尚未到達</strong></div>
-        <div data-arrival="glass"><span>玻璃</span><strong>尚未到達</strong></div>
-      </div>
       <p class="note race-model-note">依代表光速與設定路程計時，未放慢播放。空氣中光速取約每秒 30 萬公里；水與常見透明玻璃使用代表模型。圖中尺寸、光點與光跡為示意，假設整段均為同一介質，忽略光的衰減。</p>
       <noscript><p>空氣、水、玻璃走完 100 萬公里分別約需 3.33、4.44、5 秒。啟用 JavaScript 後可播放與暫停比較。</p></noscript>
     </div>

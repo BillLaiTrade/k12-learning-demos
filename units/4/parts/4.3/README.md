@@ -47,3 +47,5 @@ node --test tests/unit-4.3-speed-model.test.mjs tests/unit-4.3-speed-lab.test.cj
 ```
 
 `SPEED_CAPTURE_DIR` 可保存實際畫面、七種尺寸資料及真實五秒播放觀測；沿用 `LESSON_BASE_URL` 與 `LESSON_USE_PROXY` 公開驗證設定。參見 `docs/decisions/unit-4.3-million-km-speed-desk.md` 及 `docs/reviews/unit-4.3-million-km/review.md`。
+
+2026-11-01 追加：依使用者指示，到達秒數移至各排接收器右方，下方三格讀值移除。既有模型與操作程式不變；格式檢查另確認七種寬度的右側對齊、邊界及完成後秒數不裁切。
