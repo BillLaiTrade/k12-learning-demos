@@ -122,3 +122,8 @@
  .oxygen-summary{padding:16px}
  .oxygen-summary-list>div{grid-template-columns:minmax(0,1fr);gap:6px;padding:14px 0}
 }
+
+/* Decorative SVG instances must not intercept background clicks. Equipment
+   hotspots remain separate siblings with their own pointer events. */
+.oxygen-main-scene>use,.oxygen-mobile-zoom svg>use{pointer-events:none}
+.oxygen-main-scene,.oxygen-mobile-zoom svg{pointer-events:auto;user-select:none;-webkit-user-select:none}

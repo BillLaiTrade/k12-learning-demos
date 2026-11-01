@@ -1,5 +1,5 @@
 import { createSceneCaptions } from './oxygen-captions.mjs?v=subtitles-below-1';
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=oxygen-wall-fit-2';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=background-tap-1';
 import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=oxygen-wall-fit-2';
 import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=oxygen-wall-fit-2';
 const section = document.querySelector('.oxygen-lesson');
@@ -261,7 +261,7 @@ function createPreparationPlayer() {
     if(stage===0||state==='complete'){captions.reset();select(1,false,true);return;}
     start();
   }
-  explorer=createEquipmentExplorer({panel,panels,getStage:()=>stage,onOpen:pausePlayback});
+  explorer=createEquipmentExplorer({panel,panels,getStage:()=>stage,onOpen:pausePlayback,onBackgroundClick:handleStageClick});
   panel.querySelector('.oxygen-steps').setAttribute('role','tablist');
   panel.querySelector('.oxygen-steps').setAttribute('aria-orientation','vertical');
   steps.forEach((tab,i)=>{
@@ -299,13 +299,14 @@ function createPreparationPlayer() {
   },{passive:true});
   stageArea.addEventListener('pointerup',event=>{if(gesture?.id===event.pointerId)gesture.down=false;},{passive:true});
   stageArea.addEventListener('pointercancel',()=>{if(gesture){gesture.cancelled=true;gesture.down=false;}},{passive:true});
-  stageArea.addEventListener('click',event=>{
+  function handleStageClick(event){
     const tap=gesture;gesture=null;
     if(event.button!==0||event.defaultPrevented||event.target.closest?.(interactive)||selecting())return;
     if(event.detail>0&&tap&&(tap.dragged||tap.cancelled||tap.selecting||tap.interactive||Math.abs(window.scrollX-tap.scrollX)>2||Math.abs(window.scrollY-tap.scrollY)>2))return;
     if(section.querySelector('#oxygen-equipment-dialog').open)return;
     if(state==='playing'||state==='paused')togglePlayback();
-  });
+  }
+  stageArea.addEventListener('click',handleStageClick);
   panel.addEventListener('keydown',event=>{if(event.key==='Escape')pausePlayback();});
   if('IntersectionObserver'in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel.querySelector('.oxygen-stage-area'));
   const api={pausePlayback};players.push(api);play.disabled=false;
