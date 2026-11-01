@@ -1,0 +1,89 @@
+TAP version 13
+# Subtest: CO2 seven-operation apparatus and continuous player
+    # Subtest: seven real operations, initial caption, one persistent control and five concise points
+    ok 1 - seven real operations, initial caption, one persistent control and five concise points
+      ---
+      duration_ms: 218.108919
+      type: 'test'
+      ...
+    # Subtest: all six material bodies and labels open the correct dialog; keyboard restores focus
+    ok 2 - all six material bodies and labels open the correct dialog; keyboard restores focus
+      ---
+      duration_ms: 1020.864509
+      type: 'test'
+      ...
+    # Subtest: the material picture and first playback frame use exactly the same apparatus
+    ok 3 - the material picture and first playback frame use exactly the same apparatus
+      ---
+      duration_ms: 396.419417
+      type: 'test'
+      ...
+    # Subtest: five photo-textured stones move into the flask and the empty dish and used acid bottle leave
+    ok 4 - five photo-textured stones move into the flask and the empty dish and used acid bottle leave
+      ---
+      duration_ms: 377.488934
+      type: 'test'
+      ...
+    # Subtest: liquid follows a curved inner-wall path and clips resolve outside hidden panels
+    ok 5 - liquid follows a curved inner-wall path and clips resolve outside hidden panels
+      ---
+      duration_ms: 44.831702
+      type: 'test'
+      ...
+    # Subtest: the fitted stopper and fixed glass move rigidly; the rubber retains a 500-unit arc length
+    ok 6 - the fitted stopper and fixed glass move rigidly; the rubber retains a 500-unit arc length
+      ---
+      duration_ms: 1384.589979
+      type: 'test'
+      ...
+    # Subtest: the rod clears the mouth before covering, then the full-size plate contacts and spans the rim
+    ok 7 - the rod clears the mouth before covering, then the full-size plate contacts and spans the rim
+      ---
+      duration_ms: 346.325709
+      type: 'test'
+      ...
+    # Subtest: continuous play visits every operation exactly once, stops at storage and replay restores the full dish
+    ok 8 - continuous play visits every operation exactly once, stops at storage and replay restores the full dish
+      ---
+      duration_ms: 290.712079
+      type: 'test'
+      ...
+    # Subtest: blank background pauses and resumes; apparatus dialogs take priority and keep playback paused
+    ok 9 - blank background pauses and resumes; apparatus dialogs take priority and keep playback paused
+      ---
+      duration_ms: 935.434746
+      type: 'test'
+      ...
+    # Subtest: seven viewport widths preserve player layout, material labels and synchronized closeups
+    ok 10 - seven viewport widths preserve player layout, material labels and synchronized closeups
+      ---
+      duration_ms: 2245.358043
+      type: 'test'
+      ...
+    # Subtest: real touch uses background toggles and material dialogs
+    ok 11 - real touch uses background toggles and material dialogs
+      ---
+      duration_ms: 1404.978184
+      type: 'test'
+      ...
+    # Subtest: no-JavaScript fallback retains seven readable operations and realistic stone snapshots
+    ok 12 - no-JavaScript fallback retains seven readable operations and realistic stone snapshots
+      ---
+      duration_ms: 873.144378
+      type: 'test'
+      ...
+    1..12
+ok 1 - CO2 seven-operation apparatus and continuous player
+  ---
+  duration_ms: 10961.206801
+  type: 'test'
+  ...
+1..1
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11238.207703

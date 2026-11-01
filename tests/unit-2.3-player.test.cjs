@@ -31,7 +31,7 @@ test('experiments share a persistent video-style footer and concise summaries', 
    const rows=await summary.locator('dd').allTextContents();assert.ok(rows.every(s=>s.length<60));
    if(width===1440){assert.ok((await summary.boundingBox()).height<400);assert.equal(await summary.locator('dd').evaluateAll(ns=>ns.every(n=>parseFloat(getComputedStyle(n).fontSize)>=16)),true);}
    if([1440,390].includes(width))await root.locator(`.${gas}-stage-area`).screenshot({path:path.join(out,`${gas}-initial-${width}.png`)});
-   for(let i=1;i<8;i++){
+   for(let i=1;i<(gas==='co2'?7:8);i++){
     const tab=root.locator(`#${gas}-tab-${i}`);if(!await tab.isVisible())await root.locator('[data-step-menu]').click();await tab.click();
     assert.equal(await root.getAttribute('data-state'),'playing');
     assert.equal(await footer.count(),1);assert.equal(await footer.locator('[data-play]').count(),1);assert.equal(await caption.isVisible(),true);

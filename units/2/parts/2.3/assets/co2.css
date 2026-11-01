@@ -139,7 +139,7 @@
 #s4 .co2-preparation[data-ready=true] .co2-material-scene img{position:absolute;inset:0;width:100%;height:85%}
 #s4 .co2-preparation[data-ready=true] .co2-material-scene button>span{position:absolute;left:0;right:0;bottom:4%;min-height:0;padding:0;font-size:.8rem}
 #s4 .co2-preparation[data-ready=true] .co2-scene-viewport{aspect-ratio:var(--co2-bench-ratio,1100 / 650)}
-#s4 .co2-preparation[data-ready=true] [data-co2-panel="1"] .co2-closeup{display:none}
+
 @container(max-width:510px){
  #s4 .co2-preparation[data-ready=true] .co2-material-scene button{left:calc(var(--bench-mobile-col) * 50%);top:calc(var(--bench-mobile-row) * 100% / 3);width:50%;height:calc(100% / 3)}
  #s4 .co2-preparation[data-ready=true] .co2-material-scene button>span{font-size:.78rem}
@@ -179,3 +179,5 @@
    hotspots remain separate siblings with their own pointer events. */
 .co2-main-scene>use,.co2-closeup svg>use{pointer-events:none}
 .co2-main-scene,.co2-closeup svg{pointer-events:auto;user-select:none;-webkit-user-select:none}
+
+.co2-paint-resources{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}

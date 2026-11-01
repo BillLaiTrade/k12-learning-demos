@@ -1,8 +1,8 @@
 import { createExperimentPlayerFooter } from './experiment-player.mjs?v=player-1';
 import {createSceneCaptions} from './oxygen-captions.mjs?v=player-1';
-import {createCO2Explorer} from './co2-equipment.mjs?v=background-tap-1';
-import {CO2_OPERATIONS,co2OperationFrame} from './co2-model.mjs?v=co2-continuous-1';
-import {createCO2Bench} from './co2-setup.mjs?v=co2-continuous-1';
+import {createCO2Explorer} from './co2-equipment.mjs?v=seven-fixes-1';
+import {CO2_OPERATIONS,co2OperationFrame} from './co2-model.mjs?v=seven-fixes-1';
+import {createCO2Bench} from './co2-setup.mjs?v=seven-fixes-1';
 const section=document.querySelector('#s4'),root=section.querySelector('.co2-preparation'),panel=root;
 const steps=[...root.querySelectorAll('[data-co2-step]')],panels=[...root.querySelectorAll('[data-co2-panel]')],players=[];
 const materialButtons=[...panels[0].querySelectorAll('[data-co2-material]')],materialInfo=[...panels[0].querySelectorAll('[data-co2-info]')];
@@ -14,58 +14,13 @@ function showMaterial(key){
  materialInfo.forEach(info=>{info.hidden=info.dataset.co2Info!==key;});
 }
 function renderPreparation(stage,elapsed,state){
-  const f=co2OperationFrame(stage,elapsed),scene=f.scene;
+  const f=co2OperationFrame(stage,elapsed);
   for(const [key,value]of Object.entries(f))root.dataset[key]=typeof value==='number'?value.toFixed(4):String(value);
-  if(stage===0){
-    bench.render(stage,elapsed,f);
-    return `正在認識${materialInfo.find(p=>p.dataset.co2Info===selectedMaterial).querySelector('h4').textContent}；點選物品或名稱可開啟介紹。`;
-  }
-  const view=panels[stage],$=name=>view.querySelector(`[data-co2-part="${name}"]`);
-  const opacity=(name,value)=>$(name).setAttribute('opacity',String(value));
-  $('flask-label').textContent=f.marble===0?'錐形瓶（空）':f.acid===0?'錐形瓶：已加入大理石':'錐形瓶：大理石＋稀鹽酸';
-  const tube=`M300 245V145Q300 120 325 120H${f.tipX-25}Q${f.tipX} 120 ${f.tipX} 145V${f.tipY}`;
-  for(const name of ['tube','tube-shine','flow'])$(name).setAttribute('d',tube);
-  // Assembly: the connected stopper and outlet are initially beside the open flask.
-  for(const name of ['stopper','tube','tube-shine','flow'])$(name).setAttribute('transform',`translate(${-120*(1-f.seal)} ${-55*(1-f.seal)})`);
-  const liquidY=572-75*f.acid;
-  $('liquid').setAttribute('y',liquidY);$('liquid').setAttribute('height',590-liquidY);opacity('liquid',f.acid>0?.35:0);
-  $('meniscus').setAttribute('cy',liquidY);opacity('meniscus',f.acid>0?.6:0);
-  $('marble').setAttribute('opacity',String(f.marble));
-  $('marble').setAttribute('transform',`translate(300 575) scale(1 ${.5+.5*f.marble}) translate(-300 -575)`);
-  opacity('bubbles',f.reacting?1:0);
-  $('bubbles').querySelectorAll('circle').forEach((b,i)=>{const p=(f.time/1100+i*.17)%1;b.setAttribute('cy',String(558-p*Math.max(0,558-liquidY-9)));});
-  opacity('flow',f.flow?1:0);$('flow').style.strokeDashoffset=String(-f.time/35);
-  opacity('air-out',f.collecting?1:0);
-  $('air-out').setAttribute('transform',`translate(0 ${-12*((f.time%1200)/1200)})`);
-  opacity('plate',scene===4?1:0);$('plate').setAttribute('transform',`translate(${(1-f.cover)*230} ${-30*(1-f.cover)})`);
-  opacity('sample-label',f.labeled?1:0);
-  if(scene===1){
-    const pouringMarble=stage===2&&f.localTime>=700&&f.phase===1&&f.marble<1,pouringAcid=stage===3&&f.localTime>=700&&f.phase===2&&f.acid<1;
-    opacity('marble-dish',pouringMarble?1:0);opacity('falling-marble',pouringMarble?1:0);
-    $('falling-marble').querySelectorAll('path').forEach((p,i)=>p.setAttribute('transform',`translate(${300+Math.sin(i*3)*12} ${200+((f.time/1000+i*.27)%1)*355}) rotate(${i*33})`));
-    opacity('acid-bottle',pouringAcid?1:0);opacity('acid-stream',pouringAcid?1:0);
-    $('acid-stream').setAttribute('d',`M300 190Q296 235 300 265V${liquidY}`);
-    view.querySelectorAll('[data-co2-phase]').forEach((item,i)=>{item.classList.toggle('is-current',i===f.phase);if(i===f.phase)item.setAttribute('aria-current','true');else item.removeAttribute('aria-current');});
-  }
-  let notes=scene===1?['','先擺好錐形瓶與直立集氣瓶；導管出口暫留瓶外','將大理石放入錐形瓶','加入稀鹽酸，接觸大理石後開始產氣','塞好連接導管的塞子，氣體由瓶外出口送出'][stage]
-    :scene===2?'導管口在集氣瓶外，先排出裝置原有空氣與起始混合氣'
-    :scene===3?(f.insert<1?'將導管移至直立集氣瓶底部附近':'氣體由瓶底附近進入，原有空氣由瓶口向上離開')
-    :f.labeled?'已撤管並蓋上玻璃片，標示二氧化碳樣本，瓶口朝上':f.insert>0?'先將導管向上移出集氣瓶':f.cover<1?'導管已移出，再用玻璃片蓋住瓶口':'蓋好後標示二氧化碳樣本';
-  view.dataset.captionMessage=notes;view.dataset.loopCaption=notes;
-  view.querySelector('title').textContent=notes;
-  if(scene===1){view.querySelector('.co2-closeup svg').setAttribute('viewBox',f.phase===0?'540 130 520 480':'120 80 410 530');}
-  if(scene===1){
-    $('placement-jar').setAttribute('transform',`translate(${120*(1-f.placement)} ${-40*(1-f.placement)})`);
-  }
-  const observation=stage===1?'直立擺放':stage===2?'放入大理石':stage===3?'加入稀鹽酸':stage===4?'塞好導管':stage===5?'瓶外排氣':stage===6?(f.insert<1?'移入瓶底':'空氣向上離開'):f.insert>0?'撤出導管':'撤管後蓋片';
-  const x=stage===1?870+120*(1-f.placement):stage<=4?300:stage===5?f.tipX:stage===6?(f.insert<1?f.tipX:962):f.insert>0?f.tipX:870;
-  const y=stage===1?400-40*(1-f.placement):stage<=4?stage===4?195:530:stage===5?f.tipY:stage===6?(f.insert<1?f.tipY:230):f.insert>0?f.tipY:220;
-  view.querySelector('[data-observation-label]').textContent=observation;
-  view.querySelector('[data-observation-leader]').setAttribute('d',`M658 298L${x} ${y}`);
-  for(const key of ['point','halo']){const n=view.querySelector(`[data-observation-${key}]`);n.setAttribute('cx',x);n.setAttribute('cy',y);}
-  const setupNote=bench.render(stage,elapsed,f);
-  if(setupNote){notes=setupNote;view.dataset.captionMessage=notes;view.dataset.loopCaption=notes;view.querySelector('title').textContent=notes;}
-  return notes+'。';
+  const note=bench.render(stage,elapsed,f);
+  if(stage===0)return `正在認識${materialInfo.find(p=>p.dataset.co2Info===selectedMaterial).querySelector('h4').textContent}；點選物品或名稱可開啟介紹。`;
+  const view=panels[stage];view.dataset.captionMessage=note;view.dataset.loopCaption=note;
+  view.querySelector('title').textContent=note;
+  return note+'。';
 }
 function createPreparationPlayer() {
   const play=panel.querySelector('[data-play]'),footer=createExperimentPlayerFooter(panel),captions=createSceneCaptions(panel,{host:footer.element});
@@ -193,6 +148,7 @@ function createPreparationPlayer() {
       showMaterial(button.dataset.co2Material);paint();explorer.openMaterial(button.dataset.co2Material,button);
     });
   });
+  panel.querySelector('[data-co2-material-alt]').addEventListener('click',event=>{showMaterial('tube');paint();explorer.openMaterial('tube',event.currentTarget);});
   showMaterial(selectedMaterial);
   menu.addEventListener('click',()=>setMenu(navBody.hidden));
   play.addEventListener('click',togglePlayback);

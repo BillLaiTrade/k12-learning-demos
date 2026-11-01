@@ -1,0 +1,272 @@
+TAP version 13
+# Subtest: seven operations merge real apparatus positioning into adding marble
+ok 1 - seven operations merge real apparatus positioning into adding marble
+  ---
+  duration_ms: 2.243145
+  type: 'test'
+  ...
+# Subtest: five individual textured stones transfer once, through the neck, and never duplicate
+ok 2 - five individual textured stones transfer once, through the neck, and never duplicate
+  ---
+  duration_ms: 13.927202
+  type: 'test'
+  ...
+# Subtest: every operation meets the next without a position, angle, liquid or quantity jump
+ok 3 - every operation meets the next without a position, angle, liquid or quantity jump
+  ---
+  duration_ms: 0.613073
+  type: 'test'
+  ...
+# Subtest: rigid glass moves by translation and rotation; rubber keeps its own fixed arc length
+ok 4 - rigid glass moves by translation and rotation; rubber keeps its own fixed arc length
+  ---
+  duration_ms: 21.294474
+  type: 'test'
+  ...
+# Subtest: the full collecting rod clears the jar rim before crossing; purge remains outside
+ok 5 - the full collecting rod clears the jar rim before crossing; purge remains outside
+  ---
+  duration_ms: 1.430672
+  type: 'test'
+  ...
+# Subtest: acid uses the photographed inner curved bottom, with sloping walls and a level surface
+ok 6 - acid uses the photographed inner curved bottom, with sloping walls and a level surface
+  ---
+  duration_ms: 0.502286
+  type: 'test'
+  ...
+# Subtest: CO2 seven-operation apparatus and continuous player
+    # Subtest: seven real operations, initial caption, one persistent control and five concise points
+    ok 1 - seven real operations, initial caption, one persistent control and five concise points
+      ---
+      duration_ms: 379.794316
+      type: 'test'
+      ...
+    # Subtest: all six material bodies and labels open the correct dialog; keyboard restores focus
+    not ok 2 - all six material bodies and labels open the correct dialog; keyboard restores focus
+      ---
+      duration_ms: 30805.022884
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-2.3-co2.test.cjs:15:10'
+      failureType: 'testCodeFailure'
+      error: |-
+        locator.click: Timeout 30000ms exceeded.
+        Call log:
+        [2m  - waiting for locator('.co2-preparation').locator('[data-co2-material=jar]').locator('span').first()[22m
+        [2m    - locator resolved to <span>集氣瓶</span>[22m
+        [2m  - attempting click action[22m
+        [2m    2 × waiting for element to be visible, enabled and stable[22m
+        [2m      - element is visible, enabled and stable[22m
+        [2m      - scrolling into view if needed[22m
+        [2m      - done scrolling[22m
+        [2m      - <button type="button" aria-pressed="false" aria-expanded="false" aria-haspopup="dialog" data-co2-material="plate" aria-label="薄玻璃片：介紹與實驗用途" aria-controls="co2-equipment-dialog">…</button> intercepts pointer events[22m
+        [2m    - retrying click action[22m
+        [2m    - waiting 20ms[22m
+        [2m    2 × waiting for element to be visible, enabled and stable[22m
+        [2m      - element is not stable[22m
+        [2m    - retrying click action[22m
+        [2m      - waiting 100ms[22m
+        [2m    - waiting for element to be visible, enabled and stable[22m
+        [2m    - element is not stable[22m
+        [2m  5 × retrying click action[22m
+        [2m      - waiting 500ms[22m
+        [2m      - waiting for element to be visible, enabled and stable[22m
+        [2m      - element is visible, enabled and stable[22m
+        [2m      - scrolling into view if needed[22m
+        [2m      - done scrolling[22m
+        [2m      - <button type="button" aria-pressed="false" aria-expanded="false" aria-haspopup="dialog" data-co2-material="plate" aria-label="薄玻璃片：介紹與實驗用途" aria-controls="co2-equipment-dialog">…</button> intercepts pointer events[22m
+        [2m  25 × retrying click action[22m
+        [2m       - waiting 500ms[22m
+        [2m       - waiting for element to be visible, enabled and stable[22m
+        [2m       - element is not stable[22m
+        [2m     - retrying click action[22m
+        [2m       - waiting 500ms[22m
+        [2m       - waiting for element to be visible, enabled and stable[22m
+        [2m       - element is visible, enabled and stable[22m
+        [2m       - scrolling into view if needed[22m
+        [2m       - done scrolling[22m
+        [2m       - <button type="button" aria-pressed="false" aria-expanded="false" aria-haspopup="dialog" data-co2-material="plate" aria-label="薄玻璃片：介紹與實驗用途" aria-controls="co2-equipment-dialog">…</button> intercepts pointer events[22m
+        [2m  - retrying click action[22m
+        [2m    - waiting 500ms[22m
+        [2m    - waiting for element to be visible, enabled and stable[22m
+        [2m    - element is not stable[22m
+        [2m  - retrying click action[22m
+        [2m    - waiting 500ms[22m
+        
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3-co2.test.cjs:16:515)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3-co2.test.cjs:15:2)
+      ...
+    # Subtest: the material picture and first playback frame use exactly the same apparatus
+    ok 3 - the material picture and first playback frame use exactly the same apparatus
+      ---
+      duration_ms: 438.799717
+      type: 'test'
+      ...
+    # Subtest: five photo-textured stones move into the flask and the empty dish and used acid bottle leave
+    ok 4 - five photo-textured stones move into the flask and the empty dish and used acid bottle leave
+      ---
+      duration_ms: 355.982702
+      type: 'test'
+      ...
+    # Subtest: liquid follows a curved inner-wall path and clips resolve outside hidden panels
+    ok 5 - liquid follows a curved inner-wall path and clips resolve outside hidden panels
+      ---
+      duration_ms: 28.049972
+      type: 'test'
+      ...
+    # Subtest: the fitted stopper and fixed glass move rigidly; the rubber retains a 500-unit arc length
+    ok 6 - the fitted stopper and fixed glass move rigidly; the rubber retains a 500-unit arc length
+      ---
+      duration_ms: 1460.31447
+      type: 'test'
+      ...
+    # Subtest: the rod clears the mouth before covering, then the full-size plate contacts and spans the rim
+    ok 7 - the rod clears the mouth before covering, then the full-size plate contacts and spans the rim
+      ---
+      duration_ms: 333.225567
+      type: 'test'
+      ...
+    # Subtest: continuous play visits every operation exactly once, stops at storage and replay restores the full dish
+    ok 8 - continuous play visits every operation exactly once, stops at storage and replay restores the full dish
+      ---
+      duration_ms: 326.235744
+      type: 'test'
+      ...
+    # Subtest: blank background pauses and resumes; apparatus dialogs take priority and keep playback paused
+    ok 9 - blank background pauses and resumes; apparatus dialogs take priority and keep playback paused
+      ---
+      duration_ms: 930.843393
+      type: 'test'
+      ...
+    # Subtest: seven viewport widths preserve player layout, material labels and synchronized closeups
+    ok 10 - seven viewport widths preserve player layout, material labels and synchronized closeups
+      ---
+      duration_ms: 2315.255794
+      type: 'test'
+      ...
+    # Subtest: real touch uses background toggles and material dialogs
+    ok 11 - real touch uses background toggles and material dialogs
+      ---
+      duration_ms: 1386.827107
+      type: 'test'
+      ...
+    # Subtest: no-JavaScript fallback retains seven readable operations and realistic stone snapshots
+    ok 12 - no-JavaScript fallback retains seven readable operations and realistic stone snapshots
+      ---
+      duration_ms: 854.792612
+      type: 'test'
+      ...
+    1..12
+not ok 7 - CO2 seven-operation apparatus and continuous player
+  ---
+  duration_ms: 42404.757776
+  type: 'test'
+  location: '/workspace/k12-learning-demos/tests/unit-2.3-co2.test.cjs:2:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: 2.3 complete page: five teaching sections and one evidence-based quiz
+    # Subtest: all six sections and routes exist, with gas profiles and no retired experiment
+    ok 1 - all six sections and routes exist, with gas profiles and no retired experiment
+      ---
+      duration_ms: 74.887056
+      type: 'test'
+      ...
+    # Subtest: default cup comparisons remain after preview and reset
+    ok 2 - default cup comparisons remain after preview and reset
+      ---
+      duration_ms: 122.830224
+      type: 'test'
+      ...
+    # Subtest: both preparation lessons navigate independent steps and keep properties in section five
+    ok 3 - both preparation lessons navigate independent steps and keep properties in section five
+      ---
+      duration_ms: 1183.616645
+      type: 'test'
+      ...
+    # Subtest: leaving a replay pauses it and returning does not autoplay
+    ok 4 - leaving a replay pauses it and returning does not autoplay
+      ---
+      duration_ms: 253.322665
+      type: 'test'
+      ...
+    # Subtest: single quiz gives missing, misconception, revised and correct feedback; reset is local
+    ok 5 - single quiz gives missing, misconception, revised and correct feedback; reset is local
+      ---
+      duration_ms: 578.97373
+      type: 'test'
+      ...
+    # Subtest: seven widths keep full-width teaching bodies below their headers without overflow
+    ok 6 - seven widths keep full-width teaching bodies below their headers without overflow
+      ---
+      duration_ms: 3547.072705
+      type: 'test'
+      ...
+    # Subtest: all teaching evidence is available without JavaScript
+    ok 7 - all teaching evidence is available without JavaScript
+      ---
+      duration_ms: 1086.718058
+      type: 'test'
+      ...
+    # Subtest: touch, reduced motion, keyboard selects and last-section anchor work
+    ok 8 - touch, reduced motion, keyboard selects and last-section anchor work
+      ---
+      duration_ms: 2457.906535
+      type: 'test'
+      ...
+    1..8
+ok 8 - 2.3 complete page: five teaching sections and one evidence-based quiz
+  ---
+  duration_ms: 11738.436332
+  type: 'test'
+  ...
+# Subtest: experiments share a persistent video-style footer and concise summaries
+    # Subtest: persistent footer and compact summary at 1440px
+    ok 1 - persistent footer and compact summary at 1440px
+      ---
+      duration_ms: 6251.738731
+      type: 'test'
+      ...
+    # Subtest: persistent footer and compact summary at 1024px
+    ok 2 - persistent footer and compact summary at 1024px
+      ---
+      duration_ms: 4592.479805
+      type: 'test'
+      ...
+    # Subtest: persistent footer and compact summary at 768px
+    ok 3 - persistent footer and compact summary at 768px
+      ---
+      duration_ms: 3617.321121
+      type: 'test'
+      ...
+    # Subtest: persistent footer and compact summary at 390px
+    ok 4 - persistent footer and compact summary at 390px
+      ---
+      duration_ms: 4315.327347
+      type: 'test'
+      ...
+    # Subtest: persistent footer and compact summary at 320px
+    ok 5 - persistent footer and compact summary at 320px
+      ---
+      duration_ms: 3517.904244
+      type: 'test'
+      ...
+    1..5
+ok 9 - experiments share a persistent video-style footer and concise summaries
+  ---
+  duration_ms: 22865.287005
+  type: 'test'
+  ...
+1..9
+# tests 34
+# suites 0
+# pass 32
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 42728.979034

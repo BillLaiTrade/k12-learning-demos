@@ -14,11 +14,12 @@ export function createCO2Explorer({panel,panels,getStage,onOpen,onBackgroundClic
  const catalog=Object.fromEntries([...panels[0].querySelectorAll('[data-co2-info]')].map(info=>[info.dataset.co2Info,{name:info.querySelector('h4').textContent,identity:info.querySelectorAll('dd')[0].textContent,role:info.querySelectorAll('dd')[1].textContent}]));
  catalog.stopper={name:'塞子',identity:'封住反應瓶瓶口並固定玻璃導管的塞子。',role:'接好導管後塞緊錐形瓶，讓氣體由液面上方沿導管送出。'};
  function role(key,stage){
-  if(key==='flask')return stage<=1?'目前尚未加入材料，接下來先放入大理石。':stage===2?'接住加入的大理石；這一步尚未倒入稀鹽酸。':stage===3?'盛裝大理石與倒入的稀鹽酸，接觸後開始產生二氧化碳。':stage===4?'接上附塞導管；入口留在液面上方，引導生成氣體送出。':'持續產生二氧化碳，經導管送往出口。';
-  if(key==='jar')return stage<=5?'瓶口朝上，瓶內原先是空氣；導管出口先留在瓶外，尚未收集。':stage===6?'二氧化碳從瓶底附近進入，原有空氣由開放的瓶口向上離開。':Number(panel.dataset.cover)===1?'已收集二氧化碳並蓋片標示；瓶口朝上保存樣本。':'保持直立，先撤出導管，再蓋好並標示樣本。';
-  if(key==='tube')return stage<=4?'先接好塞子與管路，出口留在集氣瓶外，不堵住。':stage===5?'先在集氣瓶外排出裝置原有空氣與起始混合氣。':stage===6?'越過瓶口後移至瓶底附近，讓氣體進入直立的集氣瓶。':'先從集氣瓶撤出，再移到瓶外；產氣端保持暢通，接著蓋片。';
-  if(key==='stopper')return stage<4?'目前沒有塞緊，瓶口留作加入大理石與稀鹽酸。':'封住反應瓶口，讓氣體從液面上方進入導管；出口保持暢通。';
-  if(key==='plate')return Number(panel.dataset.cover)===1?'已蓋住集氣瓶口，減少樣本與外界空氣混合。':'等導管完全撤出集氣瓶後才蓋片；不在水下操作。';
+  if(key==='flask')return stage===1?'先與直立集氣瓶定位，再接住逐塊加入的大理石。':stage===2?'盛裝大理石與倒入的稀鹽酸，兩者接觸就開始產氣。':stage===3?'接上塞子與固定形狀的玻璃管，入口留在液面上方。':'反應容器持續提供二氧化碳，氣體沿保持暢通的管路送出。';
+  if(key==='jar')return stage<5?'瓶口朝上，原先裝有空氣；先在瓶外排氣，暫不收集。':stage===5?'將固定長度的集氣玻璃管整根抬起、越過瓶口，再放至瓶底附近；原有空氣向上離開。':'先撤出導管，再將玻璃片完整蓋住瓶口，保持直立。';
+  if(key==='tube')return '兩段玻璃管的長度與形狀固定，靠整根抬起、平移來移動；中間橡皮管只彎曲，不任意拉長。'+(stage===4?'目前先在集氣瓶外排出原有空氣。':stage===5?'出口越過瓶口後，放至瓶底附近。':stage===6?'先將集氣端整根抬起移出，再蓋玻璃片。':'管路出口保持暢通。');
+  if(key==='stopper')return stage<3?'連同玻璃管放在桌邊，留出瓶口加入材料；稍後整組移到瓶口塞緊。':'塞子外緣貼合瓶口內側，將產生的氣體引入玻璃管；出口保持暢通。';
+  if(key==='plate')return Number(panel.dataset.cover)===1?'玻璃片已平放、貼合並完整覆蓋瓶口，減少與外界空氣混合。':'放在桌邊備用；等玻璃管完全移出後，再平放蓋好瓶口。';
+  if(key==='marble')return '同一組五塊石塊由碟中逐塊移入錐形瓶；完成取用後將空碟移開。塊數是動畫示意，不是實驗用量。';
   return catalog[key].role;
  }
  function visible(n){const b=n?.getBoundingClientRect();return b?.width>0&&b.height>0&&!n.closest('[hidden]')&&n.style.display!=='none';}
