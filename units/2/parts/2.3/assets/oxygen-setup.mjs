@@ -34,10 +34,13 @@ export function createSetupScene(view) {
   const catalyst=svg('g',{'data-setup-body':'catalyst'});catalyst.append(sprite('catalyst',90,530,275,145));art.append(catalyst);
   const flask=svg('g',{'data-setup-body':'flask'});flask.append(sprite('flask',140,290,350,530));art.append(flask);
   const tank=svg('g',{'data-setup-body':'tank'});
-  const water=svg('g',{'data-setup-water':'tank'});
-  // Front and top surfaces rise together inside the trough, behind the glass.
-  const front=svg('path',{fill:'#8ed9e5','fill-opacity':'.34',stroke:'#78acb6','stroke-width':2});
-  const surface=svg('path',{fill:'#d4f5f6','fill-opacity':'.48',stroke:'#78acb6','stroke-width':2});
+  // Trace the glass's inner perspective silhouette, including the sloped base.
+  // This clip shares the tank transform, so moving/scaling cannot detach water.
+  const tankClip=svg('clipPath',{id:'setup-tank-inside',clipPathUnits:'userSpaceOnUse'});
+  tankClip.append(svg('path',{d:'M622 540L729 482L1462 510L1448 737L1380 780L641 746Z'}));defs.append(tankClip);
+  const water=svg('g',{'data-setup-water':'tank','clip-path':'url(#setup-tank-inside)'});
+  const front=svg('path',{fill:'#8ed9e5','fill-opacity':'.34','data-setup-water-volume':''});
+  const surface=svg('path',{fill:'#d4f5f6','fill-opacity':'.48',stroke:'#78acb6','stroke-width':1.5,'data-setup-water-surface':''});
   water.append(front,surface);tank.append(water,sprite('tank',590,445,890,380));art.append(tank);
   const jar=svg('g',{'data-setup-body':'jar'});
   const clip=svg('clipPath',{id:'setup-jar-inside'});clip.append(svg('path',{d:'M42 8H181V35Q213 45 213 75V405Q111 435 10 405V75Q10 45 42 35Z'}));defs.append(clip);
@@ -74,8 +77,11 @@ export function createSetupScene(view) {
       jar.setAttribute('transform',`translate(${f.jarX} ${f.jarY}) rotate(${f.angle}) scale(${mix(.762,1,a)} ${mix(.907,1,a)}) translate(-111.5 -215)`);
       jarWater.setAttribute('y',425-417*f.jarFill);jarWater.setAttribute('height',417*f.jarFill);
       lid.setAttribute('opacity',String(f.cover));lid.setAttribute('transform',`translate(${(1-f.cover)*320+f.uncover*320} 0)`);
-      const y=792-227*f.tankFill;
-      front.setAttribute('d',`M615 ${y}H1405V792H615Z`);surface.setAttribute('d',`M615 ${y}L680 ${y-68}H1460L1405 ${y}Z`);water.setAttribute('opacity',f.tankFill>0?1:0);
+      const bottom=[[641,746],[718,695],[1448,737],[1380,780]],rim=[[622,540],[729,482],[1462,510],[1405,556]];
+      const top=bottom.map((p,i)=>p.map((v,j)=>mix(v,rim[i][j],.82*f.tankFill)));
+      const path=points=>'M'+points.map(p=>p.join(' ')).join('L')+'Z';
+      front.setAttribute('d',path([top[0],top[1],top[2],bottom[2],bottom[3],bottom[0]]));surface.setAttribute('d',path(top));water.setAttribute('opacity',f.tankFill>0?1:0);
+      const y=top[0][1];
       const px=mix(1080,f.jarX-123.5,a),py=mix(570,f.jarY-230,a);
       plate.setAttribute('transform',`translate(${px} ${py}) scale(${mix(1.6,1,a)} ${mix(1.6,.22,a)})`);plate.setAttribute('opacity',String(1-f.cover));
       tube.setAttribute('transform',`translate(${mix(485,130,f.outlet)} ${mix(620,250,f.outlet)}) rotate(${36*f.outlet}) scale(${mix(1,1.38,f.outlet)}) translate(-485 -620)`);

@@ -1,7 +1,7 @@
 import { createSceneCaptions } from './oxygen-captions.mjs?v=reading-fade-1';
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=continuous-setup-1';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=continuous-setup-1';
-import { createSetupScene } from './oxygen-setup.mjs?v=continuous-setup-1';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=water-bounds-2';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=water-bounds-2';
+import { createSetupScene } from './oxygen-setup.mjs?v=water-bounds-2';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];

@@ -12,6 +12,18 @@ test('2.3 oxygen: isolated operations preserve physical prerequisites and shared
   const duplicate=await page.locator('[id]').evaluateAll(ns=>{const ids=ns.map(n=>n.id);return ids.filter((id,i)=>ids.indexOf(id)!==i)});assert.deepEqual(duplicate,[]);assert.equal(await root.locator('canvas').count(),0);
   const urls=await root.locator('.oxygen-main-scene image').evaluateAll(ns=>[...new Set(ns.map(n=>n.getAttribute('href')))]);for(const u of urls)assert.equal(await page.evaluate(async u=>{const image=new Image();image.src=u;await image.decode();return image.naturalWidth>0},u),true);assert.equal(await root.locator('.oxygen-main-scene').count(),7);
  });
+ await t.test('water never paints the tabletop outside the sloped trough during filling on desktop and phone',async()=>{
+  for(const width of[1440,390,320]){await page.setViewportSize({width,height:1100});await select(1);let previous=0;
+   for(const time of(width===1440?[3500,4250,5500,8500]:[8500])){await page.clock.fastForward(time-previous);previous=time;const water=active().locator('[data-setup-water=tank]');assert.equal(await water.getAttribute('clip-path'),'url(#setup-tank-inside)');
+    const drawing=active().locator('.oxygen-main-scene');await drawing.scrollIntoViewIfNeeded();const points=await drawing.evaluate(e=>{const m=e.getScreenCTM(),r=e.getBoundingClientRect();return [[618,780],[650,790],[900,790],[1000,650]].map(([x,y])=>({x:Math.round(m.a*x+m.c*y+m.e-r.left),y:Math.round(m.b*x+m.d*y+m.f-r.top)}))});
+    const painted=await drawing.screenshot();await water.evaluate(e=>e.style.visibility='hidden');const bare=await drawing.screenshot();await water.evaluate(e=>e.style.visibility='');
+    const changes=await page.evaluate(async({painted,bare,points})=>{async function pixels(data){const image=new Image();image.src='data:image/png;base64,'+data;await image.decode();const canvas=document.createElement('canvas');canvas.width=image.width;canvas.height=image.height;const ctx=canvas.getContext('2d');ctx.drawImage(image,0,0);return points.map(p=>Array.from(ctx.getImageData(p.x,p.y,1,1).data));}const a=await pixels(painted),b=await pixels(bare);return a.map((p,i)=>p.reduce((sum,v,c)=>sum+Math.abs(v-b[i][c]),0));},{painted:painted.toString('base64'),bare:bare.toString('base64'),points});
+    assert.deepEqual(changes.slice(0,3),[0,0,0],`${width}/${time}: water must not color the outside tabletop`);if(time>=5500)assert.ok(changes[3]>5,`${width}/${time}: water must still be visible inside`);
+    if(time===8500)await active().locator('.oxygen-drawing').screenshot({path:path.join(out,`water-contained-${width}.png`)});
+   }
+  }
+  await page.setViewportSize({width:1440,height:1100});
+ });
  await t.test('the material desk becomes a filled, covered, inverted and submerged jar before the outlet moves',async()=>{
   await select(1);const v=active();assert.equal(await v.locator('[data-setup-original]').getAttribute('opacity'),'1');assert.equal(await v.getAttribute('data-tank-fill'),'0.0000');assert.equal(await v.getAttribute('data-jar-fill'),'0.0000');await root.screenshot({path:path.join(out,'setup-desk-1440.png')});
   await page.clock.fastForward(4000);assert.ok(Number(await v.getAttribute('data-tank-fill'))>0);assert.equal(await v.getAttribute('data-jar-fill'),'0.0000');assert.match(await v.locator('[data-setup-stream]').getAttribute('d'),/M880/);await root.screenshot({path:path.join(out,'setup-tank-1440.png')});
