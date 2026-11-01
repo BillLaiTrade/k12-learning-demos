@@ -1292,6 +1292,9 @@
         formulaTargets.forEach(target=>target.classList.toggle("is-formula-related",activeFormula!==null&&(target.dataset.formulaTarget===activeFormula||target.dataset.formulaTarget==="both")));
       };
       formulaChoices.forEach(button=>button.addEventListener("click",()=>selectFormula(button.dataset.formulaFocus)));
+      document.addEventListener("click",event=>{
+        if(activeFormula!==null&&!event.target.closest("#speed-formula-panel [data-formula-focus]"))selectFormula(null);
+      });
       const waterWaveDemo=document.querySelector("[data-water-wave-demo]");
       if(waterWaveDemo){
         const waterNs="http://www.w3.org/2000/svg",topStage=waterWaveDemo.querySelector("[data-water-top-stage]"),pebble=waterWaveDemo.querySelector("[data-water-pebble]"),rippleGroup=waterWaveDemo.querySelector("#water-ripple-group"),impactDot=waterWaveDemo.querySelector("#water-impact-dot"),sideSurface=waterWaveDemo.querySelector("#water-side-surface"),sideParticles=waterWaveDemo.querySelector("#water-side-particles"),particleTrace=waterWaveDemo.querySelector("#water-particle-trace"),highlightParticle=waterWaveDemo.querySelector("#water-highlight-particle"),leftDirection=waterWaveDemo.querySelector("#water-left-direction"),rightDirection=waterWaveDemo.querySelector("#water-right-direction");

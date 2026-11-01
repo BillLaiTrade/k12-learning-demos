@@ -772,3 +772,11 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4.test.cjs
 oxygen-model增加先定位再降導管、無加藥／反應的檢查，現6項；oxygen-three增加實際可見位移、水下滿水、暫停像素、移動命中與手機觸控，現11項（含外層）。本機模型／物理17、其餘氧氣60及整頁重跑9共86項不同檢查通過。首輪整頁離區等待超時，改原生點選並先讓可見影格更新後9項全過；初次手機全卡截圖捲出實驗，改近景可見截圖後17項全過，原記錄保持。
 
 公開以OXYGEN_URL、OXYGEN_CONTINUOUS_URL、OXYGEN_EQUIPMENT_URL指定同頁，物理11＋操作11＋連播10＋器材9共41項。截圖目錄OXYGEN_THREE_ARTIFACT_DIR、OXYGEN_ARTIFACT_DIR、OXYGEN_CONTINUOUS_ARTIFACT_DIR、OXYGEN_EQUIPMENT_ARTIFACT_DIR另指/tmp，以免覆寫歷史證據。見docs/reviews/unit-2.3-oxygen-placement/。
+
+## 3.1 第七區：公式選取與空白取消
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.1-formula-focus.test.cjs
+```
+
+檢查桌機滑鼠／鍵盤及手機真實觸控：選取頻率或週期公式後，點公式面板留白或面板外可清除全部對應高亮與按鈕選取狀態；巢狀分數文字、中文公式切換、重複點選取消及其他參數控制維持正常。共3項（含外層）。可設定 `FORMULA_URL` 指向公開完整課程入口，沿用既有 HTTPS 代理驗證。
