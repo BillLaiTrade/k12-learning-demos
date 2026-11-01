@@ -1,0 +1,41 @@
+TAP version 13
+# Subtest: 4.3 shared lesson format keeps navigation and content usable
+    # Subtest: six numbered teaching sections and a separate quiz keep all existing anchors
+    ok 1 - six numbered teaching sections and a separate quiz keep all existing anchors
+      ---
+      duration_ms: 198.203154
+      type: 'test'
+      ...
+    # Subtest: desktop sidebar follows each section and keeps the quiz out of the six-section count
+    ok 2 - desktop sidebar follows each section and keeps the quiz out of the six-section count
+      ---
+      duration_ms: 554.931938
+      type: 'test'
+      ...
+    # Subtest: desktop, laptop and narrow screens retain unclipped headings and controls
+    ok 3 - desktop, laptop and narrow screens retain unclipped headings and controls
+      ---
+      duration_ms: 9436.843529
+      type: 'test'
+      ...
+    # Subtest: quiz alias and original deep links arrive below the mobile route
+    ok 4 - quiz alias and original deep links arrive below the mobile route
+      ---
+      duration_ms: 383.272415
+      type: 'test'
+      ...
+    1..4
+ok 1 - 4.3 shared lesson format keeps navigation and content usable
+  ---
+  duration_ms: 13398.328884
+  type: 'test'
+  ...
+1..1
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14449.924846

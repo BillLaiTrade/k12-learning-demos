@@ -52,7 +52,7 @@ test('4.3 shared lesson format keeps navigation and content usable',{timeout:900
    await page.setViewportSize({width,height:width<760?844:1000});
    await page.waitForTimeout(100);
    for(const i of [1,2,3,6,7]){
-    await page.evaluate(i=>{location.hash=`s${i}`;document.querySelector(`#s${i}`).scrollIntoView({block:'start',behavior:'instant'});},i);
+    await page.evaluate(i=>{document.activeElement?.blur();history.replaceState(null,'',`#s${i}`);document.querySelector(`#s${i}`).scrollIntoView({block:'start',behavior:'instant'});},i);
     await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     await page.waitForTimeout(100);
     await page.waitForFunction(i=>document.querySelector('.route a[aria-current="step"]')?.hash===`#s${i}`,i);
