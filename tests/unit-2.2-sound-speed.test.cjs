@@ -708,8 +708,9 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
       }
       console.log('real stopwatch:', JSON.stringify(readings));
       const fifth=await realPage.evaluate(()=>window.__temperatureWatch);
+      console.log('fifth-block real stopwatch:',JSON.stringify(fifth));
       for(const[id,speed]of[['cold',(await model).airSpeed(0)],['hot',(await model).airSpeed(80)]]){
-        assert.ok(Math.abs(fifth.arrivals[id].elapsed-5000/speed)<.12);
+        assert.ok(Math.abs(fifth.arrivals[id].elapsed-5000/speed)<.12,`${id} real arrival ${fifth.arrivals[id].elapsed}s, expected ${5000/speed}s`);
         assert.equal(fifth.arrivals[id].displayed,`${(5000/speed).toFixed(3)} 秒`);
       }
       assert.equal(fifth.checks.length,3);
@@ -717,7 +718,6 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
         assert.ok(Math.abs(check.clock-check.elapsed)<.06);
         [(await model).airSpeed(0),(await model).airSpeed(80)].forEach((speed,i)=>assert.ok(Math.abs(check.distances[i]-Math.min(5000,speed*check.clock))<.001));
       }
-      console.log('fifth-block real stopwatch:',JSON.stringify(fifth));
     } finally { await realPage.close(); }
   });
 

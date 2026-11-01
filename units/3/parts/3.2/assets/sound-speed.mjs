@@ -101,7 +101,7 @@ function buildModel(group) {
     text(svg('text', { x: END_X, y: trackY+14, 'text-anchor': 'middle', fill: '#5d7565', 'font-size': 12 }, field), `${number.format(DISTANCE)} m`);
   }
   return {
-    ...group, trackY, progress, startedAt: null, row, points, links, source, scene, front, reachedTrack,
+    ...group, trackY, progress, startedAt: null, pausedElapsed: null, row, points, links, source, scene, front, reachedTrack,
     timeWrap: row.querySelector('.individual-time'), timeCaption: row.querySelector('.individual-time span'), timeOutput: row.querySelector('.individual-time output'),
     distanceOutput: row.querySelector('.propagation-readout output'),
     arrivalCaption: row.querySelector('.arrival-readout span'), arrivalOutput: row.querySelector('.arrival-readout output')
@@ -135,6 +135,14 @@ function drawResult() {
   }
 }
 
+function elapsedTime(model) {
+  if (model.startedAt === null) return 0;
+  const end = runEnd([model]);
+  const elapsed = model.pausedElapsed ?? Math.max(0, state.time - model.startedAt);
+  // 平移起跑時間後的浮點尾差不應把已完成組誤標成暫停。
+  return elapsed >= end - 1e-9 ? end : elapsed;
+}
+
 function paint() {
   panel.dataset.mode = state.mode; panel.dataset.phase = state.phase;
   panel.dataset.scope = state.scope;
@@ -142,13 +150,13 @@ function paint() {
   if (state.mode === 'temperature') panel.dataset.temperatures = groups.map(group => group.temperature).join(',');
 
   for (const model of models) {
-    const elapsed = model.startedAt === null ? 0 : Math.min(runEnd([model]), Math.max(0, state.time - model.startedAt));
-    const phase = model.startedAt === null ? 'idle' : elapsed >= runEnd([model]) ? 'complete' : state.phase;
+    const elapsed = elapsedTime(model);
+    const phase = model.startedAt === null ? 'idle' : elapsed >= runEnd([model]) ? 'complete' : model.pausedElapsed !== null ? 'paused' : state.phase;
     const arrived = elapsed >= arrivalTime(model.speed);
     const distance = reachedDistance(model.speed, elapsed);
     model.row.dataset.time = elapsed.toFixed(8); model.row.dataset.phase = phase;
     model.timeWrap.hidden = state.scope !== 'individual';
-    text(model.timeCaption, model.startedAt === null ? '尚未敲擊' : '敲擊後');
+    text(model.timeCaption, model.startedAt === null ? '尚未敲擊' : phase === 'paused' ? '已暫停' : '敲擊後');
     model.timeOutput.hidden = model.startedAt === null;
     text(model.timeOutput, secondsText(elapsed));
     const frontX = START_X + distance / DISTANCE * (END_X - START_X);
@@ -198,15 +206,15 @@ function stopFrame() {
 function resetRun() {
   stopFrame();
   state.phase = 'idle'; state.time = 0; state.scope = 'together';
-  for (const model of models) model.startedAt = null;
+  for (const model of models) { model.startedAt = null; model.pausedElapsed = null; }
   paint();
 }
 
 function commitTime(now) {
   if (runStartWall === null) return;
-  const end = Math.max(0, ...models.filter(model => model.startedAt !== null).map(model => model.startedAt + runEnd([model])));
+  const end = Math.max(0, ...models.filter(model => model.startedAt !== null && model.pausedElapsed === null).map(model => model.startedAt + runEnd([model])));
   state.time = Math.min(end, runStartTime + Math.max(0, now - runStartWall) / 1000);
-  if (state.time >= end) state.phase = 'complete';
+  if (state.time >= end) state.phase = models.some(model => model.pausedElapsed !== null) ? 'paused' : 'complete';
 }
 
 function tick() {
@@ -217,7 +225,12 @@ function tick() {
   else runStartWall = null;
 }
 
-function resume() {
+function resume({ resumePaused = true } = {}) {
+  if (resumePaused) for (const model of models) {
+    if (model.pausedElapsed === null) continue;
+    model.startedAt = state.time - model.pausedElapsed;
+    model.pausedElapsed = null;
+  }
   const bounds = $('#models').getBoundingClientRect();
   if (bounds.height <= innerHeight - 24 && (bounds.top < 12 || bounds.bottom > innerHeight - 12)) {
     $('#models').scrollIntoView({ block: 'center', behavior: 'auto' });
@@ -236,13 +249,18 @@ function startSingle(id) {
   if (state.phase === 'running') commitTime(performance.now());
   stopFrame();
   state.scope = 'individual';
-  models.find(model => model.id === id).startedAt = state.time;
-  resume();
+  const selected = models.find(model => model.id === id);
+  selected.startedAt = state.time; selected.pausedElapsed = null;
+  // 敲擊只重啟點選組別；其餘暫停組等明確按「繼續觀察」才恢復。
+  resume({ resumePaused: false });
 }
 
 function pause() {
   if (state.phase !== 'running') return;
   commitTime(performance.now());
+  for (const model of models) {
+    if (model.startedAt !== null && model.pausedElapsed === null && elapsedTime(model) < runEnd([model])) model.pausedElapsed = elapsedTime(model);
+  }
   if (state.phase !== 'complete') state.phase = 'paused';
   stopFrame(); paint();
 }

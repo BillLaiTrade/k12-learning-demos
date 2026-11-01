@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.2 第08項：暫停後單獨敲擊
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.2-single-paused.test.cjs
+```
+
+實際檢查第四、五區暫停後單獨敲擊只重播點選組別，其他組的秒數、粒子、器材表面與位置完全凍結；並核對溫度刻度、完成後保留繼續入口、明確繼續時各組接續原秒數、同步重播／重設及390px觸控／鍵盤／減少動態／跨區返回。共4項（含外層）。`SINGLE_PAUSED_URL` 可指定公開頁，`SINGLE_PAUSED_ARTIFACT_DIR` 指定紀錄與截圖目錄，預設 `/tmp/unit32-single-paused`。
+
 ## 3.2 第06項：鐘罩音效輸出中斷
 
 ```sh
