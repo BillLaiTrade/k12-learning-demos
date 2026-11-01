@@ -54,6 +54,7 @@ jobs:
     permissions:
       pages: write
       id-token: write
+      deployments: write
     steps:
       - name: Check out demo page
         uses: actions/checkout@v4
@@ -63,6 +64,28 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
+      - name: Identify and back up a completed prior Pages record
+        id: previous
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGES_LOCK_DIR: ${{ runner.temp }}/pages-lock
+        run: node .github/scripts/pages-lock.mjs plan
+      - name: Archive the prior record before repair
+        if: steps.previous.outputs.found == 'true'
+        id: archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-record-backup-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pages-lock/completed-deployment.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Release only the archived completed record
+        if: steps.previous.outputs.found == 'true' && steps.archive.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGES_LOCK_DIR: ${{ runner.temp }}/pages-lock
+          PAGES_LOCK_ARCHIVE_ID: ${{ steps.archive.outputs.artifact-id }}
+        run: node .github/scripts/pages-lock.mjs apply
       - name: Publish the page
         id: deployment
         uses: actions/deploy-pages@v4

@@ -1,19 +1,17 @@
 # GitHub Pages 發布
 
-`workflows/pages.yml` 支援推送 `main` 與手動執行。第一個工作先讀取 Pages 發布來源；只有來源為 **GitHub Actions**（API `build_type=workflow`）才發布，分支來源時明確略過，避免兩條發布流程競爭。不取消正在進行的發布。教材與公開網址不受此設定檢查影響。
+Pages 目前已選 GitHub Actions。`workflows/pages.yml` 在推送main或手動執行時讀取來源，依設定使用唯一發布流程；同一發布群組依序執行，不取消正在進行的發布。
 
-## 需要儲存庫管理員完成的設定
+## 已完成舊紀錄造成的發布鎖
 
-1. 開啟 <https://github.com/BillLaiTrade/k12-learning-demos/settings/pages>。
-2. 在 **Build and deployment → Source** 選擇 **GitHub Actions**。
-3. 開啟 **Actions → Deploy demo page → Run workflow**，分支選 `main`；之後推送會自動發布。
+服務曾將已完成的609c9cfe及af49b0a0部署繼續當作進行中，阻擋下一版。單純取消、回報完成或標inactive不足以解除；清理已完成且停用的那筆紀錄後，下一版可發布。
 
-目前連線及 Actions 的 `GITHUB_TOKEN` 更新 Pages 來源皆回 HTTP403 `Resource not accessible by integration`，無法代做上述管理設定；不需新增密鑰或刪除網站。
+正式流程使用`scripts/pages-lock.mjs`：先找出與本次SHA不同、一般部署為success／inactive且Pages為succeed的最近紀錄。相同舊SHA若仍有queued／in_progress等活動紀錄，就保留它。完整紀錄與狀態歷史先上傳為`pages-record-backup-<run>-<attempt>`，保留90天；遠端封存成功後重新核對SHA與完成狀態，再停用並清理這一筆舊部署紀錄，隨後執行正式發布。只處理一筆，保留提交、網站內容及發布產物。
 
-## 2026-11-01 故障與驗證
+缺少遠端備份、備份屬於別次發布、紀錄變成進行中或任一API檢查不一致時，流程會停止。9項模擬API檢查涵蓋上述前提與正常清理順序：`node --test tests/pages-lock.test.mjs`。實際發布與公開驗證結果另記於規劃repo，不能以模擬測試當成發布完成。
 
-Pages 分支來源與自訂 Actions 曾同時發布。新部署被服務回報為已成功的舊提交阻擋，取消舊部署又回應已完成。一次性修復 `41289099188` 將過時紀錄停用後重建，`609c9cfe` 的 Pages 工作 `41289128518` 成功，接續動畫已公開：實際20檔一致，公開瀏覽器41項檢查全過。
+## 檢視與復原紀錄
 
-後續推送及重建仍被已成功的609c9cfe阻擋。將已確認完成的紀錄標為inactive並不能穩定解除Pages服務端鎖；試驗維護工作已移除，沒有將它當成永久修復。後續應由管理員統一為Actions來源，再執行此正式流程並檢查服務端鎖是否消失；如仍拒絕，需攜帶失敗與成功的部署ID向GitHub支援查核。
+在Actions對應發布工作下載備份artifact，可查原部署ID、提交、環境及全部狀態。該次Pages產物仍是獨立的github-pages artifact，原始提交保留在Git歷史。需要重演既有版本時，以該版本建立新的正常發布；清理歷史紀錄不會修改既有提交。
 
-詳細紀錄在規劃儲存庫 `BillLaiTrade/k12` 的 `docs/reviews/pages-co2-recovery-20261101/`。交付時須同時確認部署工作成功、公開檔案內容一致及瀏覽器操作，不能只依工作流程綠燈。
+先前一次性取消診斷已撤除；其他工作區的手動紀錄修復工具保留。完整故障與檢查歷程位於`BillLaiTrade/k12`的`docs/reviews/`，本輪結果於部署後補記。
