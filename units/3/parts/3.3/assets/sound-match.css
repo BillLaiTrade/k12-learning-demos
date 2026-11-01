@@ -1,33 +1,32 @@
 /* 依核可圖：上方樂器聽題，下方單一可操作波形。 */
-.sound-match{padding:22px;background:#fffdf7;color:#194d3e}
-.match-head{display:grid;grid-template-columns:1fr auto;gap:5px 16px;align-items:center;margin-bottom:16px}
-.match-kicker{display:table;margin:0 0 4px;padding:1px 13px;border-radius:99px;background:#e2efda;font-size:.82rem;font-weight:800}
-.match-head h2{margin:0;font-size:clamp(1.8rem,3.1vw,2.65rem);line-height:1.25;letter-spacing:.02em}
-.match-head>p{grid-column:1/-1;margin:5px 0 0;font-size:.88rem;color:#53676a}
-.match-new{align-self:center;display:flex;align-items:center;justify-content:center;gap:7px;border-color:#7d9f84;border-radius:99px;color:#245440;white-space:nowrap;font-size:.9rem}
+.sound-match{margin:20px 0 28px;padding:0;border:1px solid #d8e2da;border-radius:20px;background:#fffefa;color:#1c2927;line-height:1.72;box-shadow:0 10px 28px rgb(24 52 40 / 7%);scroll-margin-top:18px}
+.sound-match .quiz-head{position:relative;display:grid;grid-template-columns:74px minmax(0,1fr);gap:16px;align-items:start;padding:25px 28px 21px;border-bottom:1px solid #e7ece5;background:#fffefa}
+.sound-match .quiz-mark{display:grid;place-items:center;width:50px;height:50px;border-radius:15px;background:#f5ead0;color:#8b6725;font-size:1.45rem;font-weight:800}
+.match-heading{min-width:0}
+.sound-match .quiz-kicker{margin:0 0 4px;color:#946f2d;font-size:.82rem;font-weight:800;letter-spacing:.06em}
+.sound-match .quiz-head h2{margin:0;padding-right:108px;font-size:clamp(1.22rem,2vw,1.65rem);line-height:1.35}
+.sound-match .quiz-head p{margin:8px 0 0;color:var(--muted);font-size:.94rem}
+.match-body{padding:23px 28px 28px}
+.match-new{position:absolute;top:25px;right:28px;display:flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:6px 12px;border-color:#becbbf;border-radius:9px;background:#fffdf8;color:#40564b;white-space:nowrap;font-size:.82rem}
 .match-new>span{font-size:1.2em;line-height:1}
 .match-new:hover{background:#eef5e9}
-.match-target{position:relative;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:20px;min-height:180px;overflow:hidden;padding:15px 30px;border-radius:18px;background:radial-gradient(ellipse at 15% 15%,#fff9e4,transparent 65%),linear-gradient(120deg,#f8edbe,#fff8df 65%,#f7edbf)}
-.match-target::after{content:"";position:absolute;bottom:-40px;right:-15px;width:140px;height:140px;border-radius:50%;background:#e0e6be70;pointer-events:none}
+.match-target{position:relative;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:20px;min-height:180px;overflow:hidden;padding:15px 30px;border:1px solid #d8e2da;border-radius:15px;background:#f4f7f1}
 .match-picture{position:relative;z-index:1;display:grid;place-items:center;min-width:0;height:145px;filter:drop-shadow(0 9px 5px #8a682c28)}
 .match-picture .timbre-guitar{width:100%;height:auto;max-height:145px;transform:rotate(-9deg)}
 .match-picture .timbre-pipes{height:145px;width:auto;max-width:100%}
 .match-picture .timbre-fork{height:140px;width:auto;max-width:100%;object-fit:contain}
 .match-target-copy{position:relative;z-index:1}
-.match-target-copy h3{display:table;margin:0;padding:3px 17px;border-radius:99px;background:#ffd372;font-size:1rem}
+.match-target-copy h3{margin:0;color:#1c2927;font-size:1rem}
 .match-target-copy p{margin:9px 0 12px;font-size:.87rem;color:#586654}
 .match-listen{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:175px}
 .match-listen>span:first-child{font-size:1.05em}
-.match-target .match-listen{border-radius:99px}
-.match-note{position:absolute;z-index:1;color:#eeb94b;font-size:2rem;pointer-events:none}
-.note-one{top:10px;left:12px;transform:rotate(-15deg)}
-.note-two{bottom:0;left:42%;transform:rotate(12deg)}
-.match-workbench{margin-top:12px;padding:15px 17px 13px;border:2px solid #8bb394;border-radius:18px;background:#fff}
+.sound-match .play{border-radius:10px}
+.match-workbench{margin-top:12px;padding:15px 17px 13px;border:1px solid #d8e2da;border-radius:15px;background:#fffefa}
 .match-workbench-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
 .match-workbench-head>div{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px 14px}
 .match-workbench h3{margin:0;font-size:1.45rem;line-height:1.3}
 .match-workbench-head p{margin:0;color:#62716c;font-size:.8rem}
-.match-switch{flex:none;border-color:#34735c;border-radius:99px;color:#245440;line-height:1.3;font-size:.88rem}
+.match-switch{flex:none;border-color:#becbbf;border-radius:9px;color:#40564b;line-height:1.3;font-size:.88rem}
 .match-switch>span{display:inline-block;margin-right:6px;font-size:1.4em;vertical-align:middle;line-height:1}
 .match-wave-panel{display:grid;grid-template-columns:35px minmax(0,1fr);gap:4px;align-items:center}
 .match-y-label{font-size:.75rem;line-height:1.5;color:#62736f}
@@ -41,11 +40,11 @@
 .match-legend{display:flex;justify-content:center;gap:20px;font-size:.75rem;color:#176b53}
 .match-legend>span+span{color:#a8751e}
 .match-controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
-.match-control{display:block;min-width:0;padding:9px 13px;border-radius:13px;background:#eef5e9}
+.match-control{display:block;min-width:0;padding:9px 13px;border:1px solid #d8e2da;border-radius:10px;background:#f4f7f1}
 .match-control-title{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px 12px;font-size:.95rem;font-weight:750}
 .match-control-title small{font-size:.74rem;font-weight:450;color:#60736c}
 .match-stepper{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px;align-items:center;margin-top:6px}
-.match-stepper button{display:grid;place-items:center;width:44px;min-height:44px;padding:0;border:1px solid #bdd1c1;border-radius:12px;background:#fff;color:#176b53;font-size:1.65rem;line-height:1;font-weight:650}
+.match-stepper button{display:grid;place-items:center;width:44px;min-height:44px;padding:0;border:1px solid #c8d1c8;border-radius:10px;background:#fff;color:#315a46;font-size:1.65rem;line-height:1;font-weight:650}
 .match-stepper button:hover:not(:disabled){background:#176b53;color:#fff;border-color:#176b53}
 .match-stepper button:disabled{opacity:.35}
 .match-level{text-align:center;min-width:0}
@@ -69,29 +68,22 @@
 .sound-match .play-state:not(.visually-hidden){margin:9px 0 0;color:#8c4c2d}
 .sound-match .match-listen[aria-pressed=true]{background:#36795f;box-shadow:0 0 0 3px #bbd7bf}
 @media(min-width:761px) and (max-width:1100px){
- .sound-match{padding:17px}.match-target{padding:12px 22px;gap:15px}.match-workbench-head>div{gap:0 8px}.match-control-title{gap:0 7px}
+ .match-target{padding:12px 22px;gap:15px}.match-workbench-head>div{gap:0 8px}.match-control-title{gap:0 7px}
 }
 @media(max-width:760px){
- .sound-match{padding:15px 12px}.match-head{gap:8px}.match-head h2{font-size:1.65rem}.match-head>p{font-size:.8rem}.match-new{font-size:.8rem;padding:8px 11px;gap:5px}.match-target{min-height:165px;padding:12px;gap:10px;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+ .sound-match .quiz-head{grid-template-columns:42px minmax(0,1fr);gap:10px;padding:15px 12px}.sound-match .quiz-mark{width:38px;height:38px;border-radius:12px;font-size:1.2rem}.sound-match .quiz-head h2{padding:0;font-size:1.25rem}.sound-match .quiz-head p{font-size:.8rem}.match-body{padding:15px 12px 22px}.match-new{position:static;grid-column:2;justify-self:start;font-size:.8rem;padding:6px 11px;gap:5px}.match-target{min-height:165px;padding:12px;gap:10px;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
  .match-picture{height:120px}.match-picture .timbre-guitar{max-height:100px}.match-picture .timbre-pipes,.match-picture .timbre-fork{height:115px}.match-target-copy h3{font-size:.88rem}.match-target-copy p{font-size:.75rem;margin:7px 0}.match-listen{min-width:0;padding:9px 12px;font-size:.82rem}.match-target .match-listen{width:100%;gap:5px}.match-note{font-size:1.3rem}
  .match-workbench{padding:11px 10px}.match-workbench-head{gap:8px}.match-workbench h3{font-size:1.2rem}.match-workbench-head>div{display:block}.match-workbench-head p{font-size:.72rem}.match-switch{padding:8px 10px;font-size:.75rem}.match-switch>span{margin-right:2px}.match-wave-panel{grid-template-columns:25px minmax(0,1fr)}.match-y-label{font-size:.65rem}.match-wave{height:125px}
  .match-controls{grid-template-columns:1fr;gap:7px}.match-control{padding:8px 10px}.match-control-title{font-size:.88rem}.match-actions{gap:8px}.match-action-line{display:none}.match-actions>.play{flex:1}.match-submit{min-width:0;gap:7px;font-size:.85rem;padding:9px 10px}.match-tip{font-size:.72rem}.match-hints{grid-template-columns:1fr;gap:5px}.match-hints strong{display:inline;margin-right:8px}
 }
 /* 桌機／筆電：目標在上，波形與工具並排，結果留在同一畫面。 */
 @media(min-width:1024px){
- .sound-match{padding:14px 18px;scroll-margin-top:20px}
- .match-head{grid-template-columns:auto minmax(0,1fr) auto;gap:8px 14px;margin-bottom:9px}
- .match-head>div{display:flex;align-items:center;gap:9px}
- .match-kicker{margin:0;padding:1px 9px;font-size:.72rem;white-space:nowrap}
- .match-head h2{font-size:1.65rem;white-space:nowrap}
- .match-head>p{grid-column:2;grid-row:1;margin:0;font-size:.76rem;line-height:1.5}
- .match-new{grid-column:3;grid-row:1;padding:5px 12px;min-height:36px;font-size:.8rem}
  .match-target{grid-template-columns:minmax(0,.4fr) minmax(0,.6fr);gap:18px;min-height:100px;padding:8px 22px}
  .match-picture{height:84px}
  .match-picture .timbre-guitar{max-height:82px}
  .match-picture .timbre-pipes,.match-picture .timbre-fork{height:84px}
  .match-target-copy{display:flex;align-items:center;justify-content:space-between;gap:14px}
- .match-target-copy h3{padding:2px 12px;font-size:.9rem;white-space:nowrap}
+ .match-target-copy h3{font-size:.95rem;white-space:nowrap}
  .sound-match .match-listen,.sound-match .match-submit{min-height:36px;padding:6px 13px;font-size:.86rem}
  .match-workbench{display:grid;grid-template-columns:minmax(0,1fr) 258px;grid-template-rows:auto auto 20px auto auto;column-gap:12px;margin-top:8px;padding:10px 12px}
  .match-workbench-head{grid-column:1/-1;grid-row:1;margin-bottom:5px}
@@ -120,7 +112,11 @@
  .match-sources{margin-top:7px;font-size:.72rem}
 }
 @media(min-width:1024px) and (max-width:1100px){
- .match-head{gap:6px 10px}.match-head>div{gap:6px}.match-head h2{font-size:1.45rem}.match-head>p{font-size:.71rem}
  .match-workbench{grid-template-columns:minmax(0,1fr) 232px;column-gap:9px}
- .match-target{padding-inline:15px}.match-target-copy{gap:8px}.match-target-copy h3{padding-inline:8px}
+ .match-target{padding-inline:15px}.match-target-copy{gap:8px}
+}
+@media(min-width:1024px) and (max-height:800px){
+ .sound-match .quiz-head{padding:14px 22px 12px}
+ .match-new{top:14px;right:22px}
+ .match-body{padding:10px 22px 14px}
 }

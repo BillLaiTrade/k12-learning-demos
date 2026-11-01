@@ -1,0 +1,40 @@
+✔ 45 independent targets cover all combinations and have reachable differing starts (9.281084ms)
+✔ question deck remains usable beyond a round, exhausts every target and never immediately repeats (1.460521ms)
+✔ actual resampled PCM stays bounded; frequency changes duration; amplitude scales the same signal (52.199497ms)
+✔ pure tone buffer has the selected pitch and input validation rejects invalid recipes (9.35962ms)
+▶ sound-match assessment follows the approved layout and shares actual audio with its wave
+  ✔ initial screen has instrument listening above one editable wave, fixed step buttons and no answer reveal or autoplay (1454.347569ms)
+  ✔ shape switch changes timbre without changing frequency or amplitude; both step controls redraw the actual selected signal (257.329358ms)
+  ✔ listen controls toggle, actual playback PCM exactly matches all plotted points, and amplitude doubles samples (2836.276863ms)
+  ✔ comparison reveals the target only after both sounds were heard; edits retain the target and clear stale judgments (3255.818208ms)
+  ✔ new question is always available before listening, during adjustment and playback, and after feedback (1694.584989ms)
+  ✔ independent matching remains correct beyond four questions, with retry and no total score or final screen (3607.99223ms)
+  ✔ switching, tuning, other sections, hidden tabs and leaving the page cancel audio without resuming it (470.712203ms)
+  ✔ a pending audio resume is canceled by tuning and cannot start later (462.428743ms)
+  ✔ desktop and laptop keep the approved hierarchy and all activity controls in one viewport; mobile stays contained (982.023738ms)
+  ✔ fixed levels clamp at both ends, move by one position and never start audio (588.580587ms)
+  ✔ step buttons and waveform switching support keyboard and real touch (2532.788466ms)
+  ✔ a retained target survives an edited waveform load failure and retry; a new question hides it again (1445.798873ms)
+  ✔ failed clip load leaves no fake wave and listening retries successfully (1204.140949ms)
+  ✔ changing question during a slow clip download cancels stale playback and drawing (908.944662ms)
+✔ sound-match assessment follows the approved layout and shares actual audio with its wave (23251.790439ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (91.346337ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (78.649415ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (777.274026ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (2265.800432ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (547.870394ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (250.456332ms)
+  ✔ hearing exploration stays silent until played; knowledge and dBA remain readable (202.148639ms)
+  ✔ one final listening task connects waveform selection, sliders, audio and comparison (510.032068ms)
+  ✔ lesson format follows unit 2.1 with a header and full-width body; navigation tracks reading (862.302938ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (5300.444888ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (11825.58226ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35926.142663

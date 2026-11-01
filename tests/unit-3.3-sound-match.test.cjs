@@ -32,6 +32,13 @@ test('sound-match assessment follows the approved layout and shares actual audio
   await page.setViewportSize({width:1440,height:1000});
  };
  await t.test('initial screen has instrument listening above one editable wave, fixed step buttons and no answer reveal or autoplay',async()=>{
+  const reference=await browser.newPage({viewport:{width:1440,height:1000}});
+  try{
+   await reference.goto(`http://127.0.0.1:${port}/units/2/parts/2.1/`,{waitUntil:'networkidle'});
+   const format=p=>p.locator('#unit-quiz').evaluate(n=>{const pick=(el,keys)=>{const s=getComputedStyle(el);return Object.fromEntries(keys.map(k=>[k,s[k]]));};return{card:pick(n,['backgroundColor','color','border','borderRadius','boxShadow','lineHeight']),header:pick(n.querySelector('.quiz-head'),['display','gridTemplateColumns','columnGap','padding','borderBottom','backgroundColor']),mark:pick(n.querySelector('.quiz-mark'),['width','height','backgroundColor','color','borderRadius','fontSize']),title:pick(n.querySelector('h2'),['fontSize','lineHeight','color']),kicker:pick(n.querySelector('.quiz-kicker'),['fontSize','color','backgroundColor','letterSpacing']),bodyPadding:getComputedStyle(n.querySelector('.quiz-body,.match-body')).padding};});
+   assert.deepEqual(await format(page),await format(reference),'quiz frame, header and palette match unit 2.1');
+   assert.equal(await root.locator('.quiz-mark').innerText(),'?');
+  }finally{await reference.close();}
   assert.equal(await page.locator('.quiz').count(),1);assert.equal(await root.locator('select').count(),0);assert.equal(await root.locator('input').count(),0);assert.equal(await root.locator('[data-play]').count(),2);assert.equal(await root.locator('[data-match-step]').count(),4);
   assert.equal(await root.locator('[data-match-picture]').getAttribute('data-instrument'),'string');assert.equal(await root.locator('.match-target svg.match-wave').count(),0);assert.equal(await root.locator('[data-match-target]').isHidden(),true);assert.equal(await root.locator('.match-result').isHidden(),true);
   assert.equal(await page.evaluate(()=>window.matchRuns.length),0);assert.equal(await plot.getAttribute('data-tone'),'pipe');assert.equal(await root.locator('[data-match-new]').isVisible(),true);assert.equal(await root.locator('[data-match-progress],[data-match-dots],[data-match-summary],[data-match-restart],[data-match-next]').count(),0);
