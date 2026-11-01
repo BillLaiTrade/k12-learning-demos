@@ -26,6 +26,8 @@ const count=page=>page.evaluate(()=>window.sceneRuns.length);
 
 test('twelve licensed recordings have verified hashes, ordered measured LUFS and peak headroom',async()=>{
  const rows=JSON.parse(await fs.readFile(path.join(assets,'recordings.json')));assert.deepEqual(rows.map(r=>r.key),keys);
+ const targets=[-46,-43,-40,-37,-33,-29,-25,-22,-19,-18,-17,-16];
+ assert.deepEqual(rows.map(r=>r.target_lufs),targets);
  let previous=-Infinity;
  for(const row of rows){
   assert.ok(row.author&&row.source_url&&row.license_url&&row.modifications&&row.source_sha256);
@@ -33,10 +35,11 @@ test('twelve licensed recordings have verified hashes, ordered measured LUFS and
   const file=path.join(assets,row.key+'.wav'),bytes=await fs.readFile(file);assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),row.sha256);
   const measured=require('node:child_process').spawnSync('ffmpeg',['-hide_banner','-i',file,'-af','loudnorm=I=-23:TP=-3:LRA=11:print_format=json','-f','null','-'],{encoding:'utf8'});
   assert.equal(measured.status,0);const m=JSON.parse(measured.stderr.match(/\{[^{}]+"input_i"[^{}]+\}/)[0]);
-  assert.ok(Number(m.input_i)>previous+1.7&&Number(m.input_i)<(previous===-Infinity?Infinity:previous+2.3));previous=Number(m.input_i);
+  assert.ok(Number(m.input_i)>previous+.7,'each scene is measurably louder');previous=Number(m.input_i);
   assert.ok(Number(m.input_tp)<=-2.95);assert.ok(Math.abs(Number(m.input_i)-row.target_lufs)<.25);
-  assert.ok(Math.abs(row.baseline_measurement.lufs+23)<.15);
+  assert.ok(Math.abs(row.baseline_measurement.lufs+23)<.15);assert.equal(row.peak_limit.automatic_gain,false);
  }
+ assert.ok(rows[8].measurement.lufs-rows[0].measurement.lufs>=26.5,'study to construction has a substantially wider contrast');
 });
 
 test('all twelve scenes play their actual PCM, single-button playback and live selection stay synchronized',{timeout:120000},async t=>{
@@ -47,7 +50,7 @@ test('all twelve scenes play their actual PCM, single-button playback and live s
   await page.locator('[data-decibel-play]').click();await playing(page,keys[i]);assert.equal(await page.locator('[data-decibel-play]').isDisabled(),true);assert.equal(await page.locator('[data-decibel-play]').innerText(),'播放中');assert.equal(await page.evaluate(()=>window.sceneRuns.at(-1).loop),true,keys[i]+' repeats continuously');
   const same=await page.evaluate(async key=>{
    const actual=window.sceneRuns.at(-1).buffer,context=window.sceneContext;
-   const response=await fetch(new URL(`assets/decibel-audio/${key}.wav?v=1`,location.href));const expected=await context.decodeAudioData(await response.arrayBuffer());
+   const response=await fetch(new URL(`assets/decibel-audio/${key}.wav?v=2`,location.href));const expected=await context.decodeAudioData(await response.arrayBuffer());
    if(actual.length!==expected.length||actual.sampleRate!==expected.sampleRate)return false;
    for(let c=0;c<actual.numberOfChannels;c++){const a=actual.getChannelData(c),b=expected.getChannelData(c);for(let j=0;j<a.length;j++)if(a[j]!==b[j])return false;}return true;
   },keys[i]);assert.equal(same,true,keys[i]+' must play the selected recording');

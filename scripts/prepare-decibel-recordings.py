@@ -3,6 +3,7 @@
 只使用 Python 標準庫與 ffmpeg/ffprobe。來源、段落及授權見 source/sources.json。
 不自動下載；原檔 SHA-256 必須與已查核的來源相符。
 """
+import math
 import hashlib
 import html
 import json
@@ -15,6 +16,8 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'docs/reviews/unit-3.3-decibel-audio/source/sources.json'
 OUT = ROOT / 'units/3/parts/3.3/assets/decibel-audio'
+# 教學用相對響度：加大安靜至施工的差距，最高幾級放緩。不是 dBA 比例。
+TARGET_LUFS = (-46, -43, -40, -37, -33, -29, -25, -22, -19, -18, -17, -16)
 
 
 def run(args):
@@ -65,34 +68,38 @@ def main():
             else:
                 raise ValueError('Common loudness baseline verification failed: ' + row['key'])
             normalized.append(baseline)
-        # 同基準 -23 LUFS 後每級 +2 LU；必要時全組共同下移，保留真峰值 -3 dBFS 餘裕。
-        shift = max(0, max(row['baseline_measurement']['true_peak_dbfs'] +
-                           (-40 + 2*i) + 23 + 3 for i, row in enumerate(rows)))
-        for group_attempt in range(3):
-            for i, (row, baseline) in enumerate(zip(rows, normalized)):
-                target = -40 + 2*i - shift
-                file = OUT / (row['key'] + '.wav')
-                gain_db = target - row['baseline_measurement']['lufs']
-                # 絕對響度閘門會略去低於閾值的短靜音窗口；以成品重新量測固定增益。
-                for level_attempt in range(5):
-                    run(['ffmpeg', '-v', 'error', '-y', '-i', str(baseline), '-af',
-                         f'volume={gain_db}dB:precision=double', '-c:a', 'pcm_s16le', str(file)])
-                    actual = measure(file)
-                    if abs(actual['lufs'] - target) <= .12:
-                        break
-                    gain_db += target - actual['lufs']
-                else:
-                    raise ValueError('Output loudness verification failed: ' + row['key'])
-                row.update(target_lufs=round(target, 2), measurement=actual,
-                           output_gain_db=round(gain_db, 5),
-                           sha256=hashlib.sha256(file.read_bytes()).hexdigest(),
-                           modifications='擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。')
-            overflow = max(row['measurement']['true_peak_dbfs'] + 3 for row in rows)
-            if overflow <= .05:
-                break
-            shift += overflow + .1
-        else:
-            raise ValueError('Output true peak verification failed')
+        if len(rows) != len(TARGET_LUFS):
+            raise ValueError('Scene count does not match loudness profile')
+        for row, baseline, target in zip(rows, normalized, TARGET_LUFS):
+            file = OUT / (row['key'] + '.wav')
+            gain_db = target - row['baseline_measurement']['lufs']
+            ceiling_db = -3.5
+            for level_attempt in range(10):
+                # 四倍過採樣限制突發峰值；關閉自動增益，避免把小聲段又補回大聲。
+                ceiling = 10 ** (ceiling_db / 20)
+                chain = (f'volume={gain_db}dB:precision=double,aresample=96000,'
+                         f'alimiter=limit={ceiling}:attack=5:release=80:level=0:latency=1,'
+                         'aresample=24000')
+                run(['ffmpeg', '-v', 'error', '-y', '-i', str(baseline), '-af',
+                     chain, '-c:a', 'pcm_s16le', str(file)])
+                actual = measure(file)
+                if not math.isfinite(actual['lufs']):
+                    raise ValueError('Non-finite output loudness: ' + row['key'])
+                loudness_ok = abs(actual['lufs'] - target) <= .12
+                peak_ok = actual['true_peak_dbfs'] <= -3
+                if loudness_ok and peak_ok:
+                    break
+                gain_db += target - actual['lufs']
+                if not peak_ok:
+                    ceiling_db -= actual['true_peak_dbfs'] + 3.2
+            else:
+                raise ValueError('Output loudness/peak verification failed: ' + row['key'])
+            row.update(target_lufs=target, measurement=actual,
+                       output_gain_db=round(gain_db, 5),
+                       peak_limit=dict(oversample_rate=96000, ceiling_dbfs=round(ceiling_db, 3),
+                                       attack_ms=5, release_ms=80, automatic_gain=False),
+                       sha256=hashlib.sha256(file.read_bytes()).hexdigest(),
+                       modifications='擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。')
         for row in rows:
             print(row['key'], row['measurement'])
     (OUT / 'recordings.json').write_text(json.dumps(rows, ensure_ascii=False, indent=2)+'\n')
@@ -106,7 +113,7 @@ def main():
                        f'<a href="{esc(row["source_url"])}">{esc(row["title"])}</a> · '
                        f'<a href="{esc(row["license_url"])}">{esc(row["license"])}</a>。'
                        f'{esc(row["note"])} 修改：擷取 {row["start_seconds"]} 秒起 '
-                       f'{row["duration_seconds"]} 秒，單聲道、淡入淡出及響度調整；衍生檔沿用 {esc(row["derived_license"])}。</li>')
+                       f'{row["duration_seconds"]} 秒，單聲道、淡入淡出、響度調整與瞬時峰值限制；衍生檔沿用 {esc(row["derived_license"])}。</li>')
         license_lines.extend([f'## {row["label"]} — {row["key"]}.wav', '',
                               f'- 作者：{row["author"]}', f'- 原作：[{row["title"]}]({row["source_url"]})',
                               f'- 原作及衍生檔授權：[{row["license"]}]({row["license_url"]})',

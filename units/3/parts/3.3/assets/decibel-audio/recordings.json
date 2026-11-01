@@ -18,14 +18,21 @@
       "lufs": -23.0,
       "true_peak_dbfs": -4.78
     },
-    "target_lufs": -42.6,
+    "target_lufs": -46,
     "measurement": {
-      "lufs": -42.6,
-      "true_peak_dbfs": -24.38
+      "lufs": -46.0,
+      "true_peak_dbfs": -27.77
     },
-    "output_gain_db": -19.6,
-    "sha256": "64c540fe4f2e65deab3d2a4e4a19daa7dfc77962a15c3ef4f0528b510cc7e08a",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": -23.0,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "0eb50233a9eae829b3209ca60fbc93a59d5d196aad49b0224bc7d1fd745dbe95",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {
     "key": "nature",
@@ -46,14 +53,21 @@
       "lufs": -23.0,
       "true_peak_dbfs": -12.76
     },
-    "target_lufs": -40.6,
+    "target_lufs": -43,
     "measurement": {
-      "lufs": -40.6,
-      "true_peak_dbfs": -30.36
+      "lufs": -43.0,
+      "true_peak_dbfs": -32.76
     },
-    "output_gain_db": -17.6,
-    "sha256": "335819a5e69b774fdb6c88eed298a6a722af622765c28c122a82f1e89e9bc845",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": -20.0,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "751caf1966b4436ebf7ecdb0346e3b7743d2495acf5da450d53274f4bd0f604b",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {
     "key": "whisper",
@@ -74,14 +88,21 @@
       "lufs": -22.99,
       "true_peak_dbfs": -6.54
     },
-    "target_lufs": -38.6,
+    "target_lufs": -40,
     "measurement": {
-      "lufs": -38.6,
-      "true_peak_dbfs": -24.05
+      "lufs": -40.0,
+      "true_peak_dbfs": -25.38
     },
-    "output_gain_db": -17.51,
-    "sha256": "d26ee1db9e16a0df71c81885c7b98d26adaa60935612cc58f5c99180f1e85fb1",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": -18.86,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "c6831edf0354080ff6515a357675fc6232889adbd8248656ca4833dfd9c87553",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {
     "key": "residence",
@@ -102,14 +123,21 @@
       "lufs": -23.0,
       "true_peak_dbfs": 1.11
     },
-    "target_lufs": -36.6,
+    "target_lufs": -37,
     "measurement": {
-      "lufs": -36.6,
-      "true_peak_dbfs": -12.49
+      "lufs": -37.01,
+      "true_peak_dbfs": -12.9
     },
-    "output_gain_db": -13.6,
-    "sha256": "9c0f6f1e3ef5aa6a19afb518e293de34fededd6eb19556cf6d9931ca3f6bcdfa",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": -14.0,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "d25e7ac280d006912236aa46513612cb320d1e3731465d3ee55cbaf068f78ca2",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {
     "key": "conversation",
@@ -130,14 +158,21 @@
       "lufs": -23.0,
       "true_peak_dbfs": -6.31
     },
-    "target_lufs": -34.6,
+    "target_lufs": -33,
     "measurement": {
-      "lufs": -34.6,
-      "true_peak_dbfs": -17.91
+      "lufs": -33.0,
+      "true_peak_dbfs": -16.31
     },
-    "output_gain_db": -11.6,
-    "sha256": "8bbc04cdcdc6fb7dcae3c2681509cb6e7cef54fe31fd6fbefca1c5a4576f136e",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": -10.0,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "2804e15b5cc63c4920027c238ff8051b3795d3dd3b4d109187dffeabac5b83ed",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {
     "key": "classroom",
@@ -158,14 +193,21 @@
       "lufs": -23.01,
       "true_peak_dbfs": 0.07
     },
-    "target_lufs": -32.6,
+    "target_lufs": -29,
     "measurement": {
-      "lufs": -32.59,
-      "true_peak_dbfs": -9.52
+      "lufs": -28.99,
+      "true_peak_dbfs": -5.94
     },
-    "output_gain_db": -9.59,
-    "sha256": "375b4a5764db523d119e57d6d1b2014e25fd785a89ac57fbb39a21253ec4f5ad",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": -5.99,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "c67ce783751f82d56336962ab70a0f07ddbb42abebdd40b86d0e607e0e97f4be",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {
     "key": "train",
@@ -186,14 +228,21 @@
       "lufs": -23.01,
       "true_peak_dbfs": -7.18
     },
-    "target_lufs": -30.6,
+    "target_lufs": -25,
     "measurement": {
-      "lufs": -30.59,
-      "true_peak_dbfs": -14.77
+      "lufs": -24.99,
+      "true_peak_dbfs": -9.17
     },
-    "output_gain_db": -7.59,
-    "sha256": "fa6334ef9d7a6abc13f60ae9cf553ad0960a95343c21a7c1511a34ac56fe0216",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": -1.99,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "7c418fcc88e66590526aa9f67d6116f9f7dd5f9bb8288c69c7e6387963dea199",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {
     "key": "boiler",
@@ -214,14 +263,21 @@
       "lufs": -23.0,
       "true_peak_dbfs": -4.27
     },
-    "target_lufs": -28.6,
+    "target_lufs": -22,
     "measurement": {
-      "lufs": -28.6,
-      "true_peak_dbfs": -9.87
+      "lufs": -22.03,
+      "true_peak_dbfs": -3.5
     },
-    "output_gain_db": -5.6,
-    "sha256": "5af520a06470e14def269dbee7f950d874cce1815c20ae1b074334e5aa6a51b7",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": 1.0,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "203eb7b3f562b17afc0df393e4fda8c4015359e79fca97159e3f1c4e22380f62",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {
     "key": "construction",
@@ -242,14 +298,21 @@
       "lufs": -23.0,
       "true_peak_dbfs": 0.6
     },
-    "target_lufs": -26.6,
+    "target_lufs": -19,
     "measurement": {
-      "lufs": -26.6,
-      "true_peak_dbfs": -3.0
+      "lufs": -19.11,
+      "true_peak_dbfs": -3.48
     },
-    "output_gain_db": -3.6,
-    "sha256": "e8d197b22172d3e2078c475918038c786ade47679d4263df2750a37b7626cee7",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": 4.8,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "4986b4bed7e517a7463f78f659ad0198bda91d9e2e3fde8c44b64c84d83ad5ab",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {
     "key": "club",
@@ -270,14 +333,21 @@
       "lufs": -22.99,
       "true_peak_dbfs": -7.25
     },
-    "target_lufs": -24.6,
+    "target_lufs": -18,
     "measurement": {
-      "lufs": -24.6,
-      "true_peak_dbfs": -8.86
+      "lufs": -18.06,
+      "true_peak_dbfs": -3.48
     },
-    "output_gain_db": -1.61,
-    "sha256": "7841f18bb6dd3b73cbecdb1a26e858a95bc280df305daeb68acdcb2a94595542",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": 4.99,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "6400bd14e9569f8dcced27b12c4d07815eb8c6783f582ee34535f583e3055853",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {
     "key": "equipment",
@@ -298,14 +368,21 @@
       "lufs": -23.0,
       "true_peak_dbfs": -8.48
     },
-    "target_lufs": -22.6,
+    "target_lufs": -17,
     "measurement": {
-      "lufs": -22.6,
-      "true_peak_dbfs": -8.08
+      "lufs": -17.01,
+      "true_peak_dbfs": -3.48
     },
-    "output_gain_db": 0.4,
-    "sha256": "2522fb0621a74673b8ca4d647b4a1178f60ee9fb77a231fbe1179facdde6c4ff",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": 6.0,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "26fd62617d086ab792e2b5504718a2bd11dea404c3c33f0e682cf823fbacfcc5",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {
     "key": "jet",
@@ -326,13 +403,20 @@
       "lufs": -23.0,
       "true_peak_dbfs": -12.32
     },
-    "target_lufs": -20.6,
+    "target_lufs": -16,
     "measurement": {
-      "lufs": -20.6,
-      "true_peak_dbfs": -9.92
+      "lufs": -16.0,
+      "true_peak_dbfs": -5.32
     },
-    "output_gain_db": 2.4,
-    "sha256": "29ef9f2d0f1f6acfc68e53318e9be67e0eef52506f3e40049d8ee59023a6b908",
-    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後固定增益階梯；不變速或變調。"
+    "output_gain_db": 7.0,
+    "peak_limit": {
+      "oversample_rate": 96000,
+      "ceiling_dbfs": -3.5,
+      "attack_ms": 5,
+      "release_ms": 80,
+      "automatic_gain": false
+    },
+    "sha256": "3ae6e745d6a60a4c6a1e451450b1ba0f9246cbfd0d4003f2257ca9177542f2f0",
+    "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   }
 ]

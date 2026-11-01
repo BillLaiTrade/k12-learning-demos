@@ -626,7 +626,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.3-
 CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-decibel-audio.test.cjs tests/unit-3.3-decibel.test.cjs tests/unit-3.3.test.cjs
 ```
 
-音效專項需要系統 `ffmpeg`，獨立量測十二成品 LUFS、真峰值與 -23 LUFS 共同基準，核對來源及成品雜湊／衍生授權。瀏覽器將實際播放 AudioBuffer 與選定 WAV 經相同 AudioContext 解碼的全部 PCM 逐值比較，避免只依畫面標籤宣稱聲音正確。涵蓋圖片沒有播放按鈕且點擊／觸控不會起音、唯一播放鍵於載入／播放中停用與顯示狀態、停止後恢復並可重播、鍵盤／手機操作、連續跨過兩個完整錄音時長仍播放且使用同一音源、手動停止、播放中換場景、停止後切換不自動起音、慢下載取消／快速切換／503 重試、隱藏與離區／其他區及小測音源互斥、320–1440px 六種寬度。`SOUND33_BASE_URL` 可指向以 `/` 結尾的公開頁（故障注入也走該頁的本地音檔請求）；`DECIBEL_AUDIO_CAPTURE_DIR` 指定截圖目錄。
+音效專項需要系統 `ffmpeg`，獨立量測新版十二成品 LUFS、真峰值與 -23 LUFS 共同基準，確認分段響度遞增及書房至施工至少26.5 LU差距、峰值處理無自動補償增益，核對來源及成品雜湊／衍生授權。瀏覽器將實際播放 AudioBuffer 與選定 WAV 經相同 AudioContext 解碼的全部 PCM 逐值比較，避免只依畫面標籤宣稱聲音正確。涵蓋圖片沒有播放按鈕且點擊／觸控不會起音、唯一播放鍵於載入／播放中停用與顯示狀態、停止後恢復並可重播、鍵盤／手機操作、連續跨過兩個完整錄音時長仍播放且使用同一音源、手動停止、播放中換場景、停止後切換不自動起音、慢下載取消／快速切換／503 重試、隱藏與離區／其他區及小測音源互斥、320–1440px 六種寬度。`SOUND33_BASE_URL` 可指向以 `/` 結尾的公開頁（故障注入也走該頁的本地音檔請求）；`DECIBEL_AUDIO_CAPTURE_DIR` 指定截圖目錄。
 
 前六區全套回歸沿用各專項及 `unit-3.3.test.cjs`，不把數位響度或操作檢查當作真實 dBA 重現／主觀聽感校準。來源差異、授權與重製方法見 `docs/reviews/unit-3.3-decibel-audio/source/`；成品及授權清單在 `assets/decibel-audio/`。
 

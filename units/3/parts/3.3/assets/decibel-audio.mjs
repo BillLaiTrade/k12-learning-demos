@@ -5,7 +5,7 @@ export async function loadDecibelRecording(key,context){
  if(!caches.has(context))caches.set(context,new Map());
  const cache=caches.get(context);
  if(!cache.has(key))cache.set(key,(async()=>{
-  const response=await fetch(new URL(`./decibel-audio/${key}.wav?v=1`,import.meta.url));
+  const response=await fetch(new URL(`./decibel-audio/${key}.wav?v=2`,import.meta.url));
   if(!response.ok)throw Error('Scene recording unavailable');
   return context.decodeAudioData(await response.arrayBuffer());
  })().catch(error=>{cache.delete(key);throw error;}));
