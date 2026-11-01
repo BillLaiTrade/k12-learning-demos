@@ -1,22 +1,8 @@
-import {createSoundMatch} from './sound-match.mjs?v=6';
-import {loadDecibelRecording,createDecibelVoice} from './decibel-audio.mjs?v=4';
-import {createDecibelExplorer} from './decibel-experiment.mjs?v=5';
-import {signal,soundSamples} from './model.mjs?v=1';
-import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
-import {createForkExperiment} from './fork-experiment.mjs?v=2';
-import {createPitchExperiment,PITCH_SECONDS} from './pitch-experiment.mjs?v=5';
-import {createGuitarExperiment} from './guitar-experiment.mjs?v=2';
-import {guitarSamples} from './guitar-model.mjs?v=1';
-import {createPanExperiment} from './pan-experiment.mjs?v=3';
-import {loadPanRecording,recordingLevel} from './pan-recordings.mjs?v=1';
-import {createTimbreExperiment} from './timbre-experiment.mjs?v=3';
-import {timbreBuffer} from './timbre-model.mjs?v=1';
-import {createHearingExperiment} from './hearing-experiment.mjs?v=2';
-import {createHearingVoice} from './hearing-audio.mjs?v=1';
-import {stopOnLeave} from '../../3.2/assets/lesson-playback.mjs?v=2';
 const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 const state={frequency:400};
 let quizView,forkView,pitchView,guitarView,panView,timbreView,hearingView,decibelView,decibelVoice=null,hearingVoice=null;
+let signal,soundSamples,forkSamples,FORK_FREQUENCY,STRIKE_DELAY,PITCH_SECONDS,guitarSamples,
+ loadPanRecording,recordingLevel,timbreBuffer,createHearingVoice,loadDecibelRecording,createDecibelVoice;
 const FORK_OUTPUT_GAIN=6;
 const PITCH_OUTPUT_GAIN=14;
 const names={pure:'純音',string:'弦音示意',pipe:'管音示意'};
@@ -118,7 +104,6 @@ for(const root of document.querySelectorAll('.lesson-card,.quiz')){
  root.dataset.playing='false';
  root.querySelectorAll('.play[data-play]').forEach(button=>button.addEventListener('click',()=>play(button)));
  root.querySelectorAll('.stop').forEach(button=>button.addEventListener('click',()=>stop(root)));
- stopOnLeave(root,()=>stop(root));
 }
 for(const button of document.querySelectorAll('[data-reset]'))button.addEventListener('click',()=>{
  stop();const n=Number(button.dataset.reset);
@@ -159,19 +144,6 @@ function syncRoute(){
 }
 window.addEventListener('scroll',syncRoute,{passive:true});
 window.addEventListener('resize',syncRoute);
-wave('amplitude-reference',FORK_FREQUENCY,.3,'pure',true);wave('amplitude-live',FORK_FREQUENCY,.7,'pure',true);
-forkView=createForkExperiment($('card-01'));
-pitchView=createPitchExperiment($('card-02'));pitchView.render(state.frequency);
-guitarView=createGuitarExperiment($('card-03'),{onChange:()=>{stop();$('card-03').querySelector('.play-state').classList.add('visually-hidden');},onPluck:key=>$('card-03').querySelector(`.guitar-play[data-play="${key}"]`).click()});
-panView=createPanExperiment($('card-04'));
-$('card-04').querySelector('[data-pan-cancel]').addEventListener('click',()=>{
- const root=$('card-04');stop(root);
- root.querySelector(`[data-play="pan-${root.dataset.panSelected}"]`).focus({preventScroll:true});
-});
-$('card-04').querySelector('[data-pan-reset]').addEventListener('click',()=>{stop();panView.reset();$('card-04').querySelector('.play-state').classList.add('visually-hidden');});
-timbreView=createTimbreExperiment($('card-05'));
-hearingView=createHearingExperiment($('card-06'),{onToggle:toggleHearing,onFrequency:tuneHearing,onReset:()=>stop($('card-06'))});
-$('card-06').addEventListener('pointerdown',()=>{if(activeRoot&&activeRoot!==$('card-06'))stop();},true);
 async function playDecibel(){
  const root=$('card-07'),scene=decibelView.scene;
  stop();const ticket=++request;activeRoot=root;decibelView.mode('preparing');
@@ -186,9 +158,81 @@ async function playDecibel(){
   root.dataset.audioScene=scene.key;decibelView.mode('playing');decibelVoice.start();
  }catch{if(ticket!==request)return;stop(root);decibelView.mode('error','場景聲音暫時無法載入，請按播放重試。');}
 }
-decibelView=createDecibelExplorer($('card-07'),{
- onInteract:()=>{if(activeRoot&&activeRoot!==$('card-07'))stop();},
- onSceneChange:()=>{if(activeRoot===$('card-07'))playDecibel();},onPlay:playDecibel
-});
-quizView=createSoundMatch($('unit-quiz'),{onChange:()=>stop()});
 activeLink(location.hash||'#card-01');
+
+// Each activity owns its imports and initialization failure. No activity waits for
+// another activity's code, and pending/failed controls cannot call missing views.
+// Register before the shared playback module's document listeners, so clicking a
+// pending control cannot stop another activity through shared playback callbacks.
+for(const type of ['click','pointerdown','pointermove','pointerup','keydown','input','change','submit'])document.addEventListener(type,event=>{
+ if(!(event.target instanceof Element))return;
+ const root=event.target.closest('[data-activity-state]');
+ const control=type==='submit'?event.target:event.target.closest('button,input,select,[role=slider],[role=button]');
+ if(root&&root.dataset.activityState!=='ready'&&control){event.preventDefault();event.stopImmediatePropagation();}
+},true);
+const playback=import('../../3.2/assets/lesson-playback.mjs?v=2');
+async function initialize(id,load){
+ const root=$(id),message=document.createElement('p');
+ message.className='activity-load';message.setAttribute('role','status');message.textContent='活動載入中…';
+ root.querySelector('.lesson-head,.match-head').after(message);
+ root.dataset.activityState='loading';root.setAttribute('aria-busy','true');
+ try{
+  const {stopOnLeave}=await playback;stopOnLeave(root,()=>stop(root));
+  await load();
+  root.dataset.activityState='ready';message.hidden=true;
+ }catch{
+  root.dataset.activityState='error';message.setAttribute('role','alert');
+  message.textContent='活動載入失敗，請重新整理頁面。';
+  root.querySelectorAll('button,input,select').forEach(control=>control.disabled=true);
+  root.querySelectorAll('[role=slider]').forEach(control=>{control.setAttribute('aria-disabled','true');control.tabIndex=-1;});
+  root.querySelectorAll('.timbre-load,[data-match-load]').forEach(label=>label.hidden=true);
+ }finally{root.setAttribute('aria-busy','false');}
+}
+initialize('card-01',async()=>{
+ const [model,audio,view]=await Promise.all([import('./model.mjs?v=1'),import('./fork-model.mjs?v=1'),import('./fork-experiment.mjs?v=2')]);
+ ({signal}=model);({forkSamples,FORK_FREQUENCY,STRIKE_DELAY}=audio);
+ wave('amplitude-reference',FORK_FREQUENCY,.3,'pure',true);wave('amplitude-live',FORK_FREQUENCY,.7,'pure',true);
+ forkView=view.createForkExperiment($('card-01'));
+});
+initialize('card-02',async()=>{
+ const [model,view]=await Promise.all([import('./model.mjs?v=1'),import('./pitch-experiment.mjs?v=5')]);
+ ({soundSamples}=model);({PITCH_SECONDS}=view);
+ const experiment=view.createPitchExperiment($('card-02'));experiment.render(state.frequency);pitchView=experiment;
+});
+initialize('card-03',async()=>{
+ const [audio,view]=await Promise.all([import('./guitar-model.mjs?v=1'),import('./guitar-experiment.mjs?v=2')]);
+ ({guitarSamples}=audio);
+ guitarView=view.createGuitarExperiment($('card-03'),{onChange:()=>{stop();$('card-03').querySelector('.play-state').classList.add('visually-hidden');},onPluck:key=>$('card-03').querySelector(`.guitar-play[data-play="${key}"]`).click()});
+});
+initialize('card-04',async()=>{
+ const [audio,view]=await Promise.all([import('./pan-recordings.mjs?v=1'),import('./pan-experiment.mjs?v=3')]);
+ ({loadPanRecording,recordingLevel}=audio);
+ panView=view.createPanExperiment($('card-04'));
+ $('card-04').querySelector('[data-pan-cancel]').addEventListener('click',()=>{
+  const root=$('card-04');stop(root);
+  root.querySelector(`[data-play="pan-${root.dataset.panSelected}"]`).focus({preventScroll:true});
+ });
+ $('card-04').querySelector('[data-pan-reset]').addEventListener('click',()=>{stop();panView.reset();$('card-04').querySelector('.play-state').classList.add('visually-hidden');});
+});
+initialize('card-05',async()=>{
+ const [audio,view]=await Promise.all([import('./timbre-model.mjs?v=1'),import('./timbre-experiment.mjs?v=3')]);
+ ({timbreBuffer}=audio);timbreView=view.createTimbreExperiment($('card-05'));
+});
+initialize('card-06',async()=>{
+ const [audio,view]=await Promise.all([import('./hearing-audio.mjs?v=1'),import('./hearing-experiment.mjs?v=2')]);
+ ({createHearingVoice}=audio);
+ hearingView=view.createHearingExperiment($('card-06'),{onToggle:toggleHearing,onFrequency:tuneHearing,onReset:()=>stop($('card-06'))});
+ $('card-06').addEventListener('pointerdown',()=>{if(activeRoot&&activeRoot!==$('card-06'))stop();},true);
+});
+initialize('card-07',async()=>{
+ const [audio,view]=await Promise.all([import('./decibel-audio.mjs?v=4'),import('./decibel-experiment.mjs?v=5')]);
+ ({loadDecibelRecording,createDecibelVoice}=audio);
+ decibelView=view.createDecibelExplorer($('card-07'),{
+  onInteract:()=>{if(activeRoot&&activeRoot!==$('card-07'))stop();},
+  onSceneChange:()=>{if(activeRoot===$('card-07'))playDecibel();},onPlay:playDecibel
+ });
+});
+initialize('unit-quiz',async()=>{
+ const {createSoundMatch}=await import('./sound-match.mjs?v=6');
+ quizView=createSoundMatch($('unit-quiz'),{onChange:()=>{if($('unit-quiz').dataset.activityState==='ready')stop();}});
+});

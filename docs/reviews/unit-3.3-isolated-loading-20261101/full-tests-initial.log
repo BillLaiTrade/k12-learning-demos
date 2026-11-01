@@ -1,0 +1,164 @@
+✔ twelve licensed recordings have verified hashes, ordered measured LUFS and peak headroom (2806.49006ms)
+✔ all twelve scenes play their actual PCM, single-button playback and live selection stay synchronized (9386.170745ms)
+✔ slow cancellation, rapid switching, failed retry, hidden/leave/other sources never start stale audio (3710.890376ms)
+✔ mobile touch, keyboard, desktop/mobile layout and original large artwork remain usable (3772.140174ms)
+✔ decibel reference mapping preserves source values and distances (5.01197ms)
+✔ decibel ribbon selects all scenes, handles pointer/touch/keys without autoplay while stopped (8069.128594ms)
+✖ delayed or failed image loads cannot display an old scene under new metadata (919.922616ms)
+✔ fork sound preserves frequency and decay while strength changes amplitude (11.843217ms)
+▶ fork experiment: actual sound, synchronized motion, recording and layout
+  ✔ idle state shows the approved apparatus, accessible actions and unfilled records (107.790087ms)
+  ✔ both strikes have the same real frequency; heavy has larger audio and visible displacement (1220.159502ms)
+  ✔ wave traces grow rightward after contact, freeze on stop and restart from the left (4413.486853ms)
+  ✔ stop retains observations; reset clears them; natural completion and keyboard work (2825.409923ms)
+  ✔ rapid repeat, navigation, offscreen, hidden tab and pagehide stop sound and motion (1287.411016ms)
+  ✔ cancelled async audio preparation never starts later; playback failure can retry (1379.223853ms)
+  ✔ phone visibly explains a failed tap and hides the message after a successful retry (1663.585671ms)
+  ✔ desktop/laptop visual hierarchy matches the approved mockup and mobile stays usable (1667.841296ms)
+✔ fork experiment: actual sound, synchronized motion, recording and layout (15569.891777ms)
+▶ guitar physical and audio model
+  ✔ 65cm A string and equal-tempered frets produce the expected notes and one octave at fret 12 (0.907038ms)
+  ✔ vibrating segment has fixed endpoints and a single fundamental arch, with common slowing and decay (2.469968ms)
+  ✔ plucked harmonic sound has audible signal, natural decay, exact periodic pitch and clipping headroom (50.897039ms)
+✔ guitar physical and audio model (56.450993ms)
+▶ guitar lesson: real instrument, one variable at a time, synchronized plucks
+  ✔ approved guitar comparison, characters and independent controls render without autoplay (86.517298ms)
+  ✔ effective-length brackets touch the actual bridge and selected fret, with a half-length octave (7.281286ms)
+  ✔ real pointer dragging and fretboard selection snap to frets and keep tension fixed without sound (1046.258725ms)
+  ✔ tension mode fixes full length, turns the real tuning peg and follows square-root pitch (737.516369ms)
+  ✔ independent replay and direct plucking produce real 110/220Hz decaying buffers at audible matched levels (242.593806ms)
+  ✔ both guitar strings visibly vibrate while body, endpoints and inactive string stay fixed; finish returns to rest (4933.232239ms)
+  ✔ editing, mode/reset, navigation, offscreen and hidden tab stop sound and motion without restarting (671.86145ms)
+  ✔ cancelled async preparation stays cancelled and failed playback exposes a retryable message (311.754048ms)
+  ✔ seven widths retain both comparisons and readable controls in both investigation modes (3761.972021ms)
+  ✔ real touch dragging and direct plucking work on mobile (1943.954022ms)
+✔ guitar lesson: real instrument, one variable at a time, synchronized plucks (15300.08892ms)
+▶ hearing exploration: continuous sine, frequency ribbon and manual records
+  ✔ approved composition has no autoplay, a logarithmic ribbon and empty manual endpoints (80.51329ms)
+  ✔ actual rendered tones have the chosen frequency, fixed low gain and smooth start/stop (29.68792ms)
+  ✔ play is continuous and retunes the existing real oscillator without restarting or boosting volume (1706.570906ms)
+  ✔ real dragging clamps both ends and keyboard works while paused without starting audio (595.505728ms)
+  ✔ manual endpoints can be recorded and overwritten, reject reversed bounds and survive pause/navigation (692.33681ms)
+  ✔ either endpoint can be cancelled independently without changing frequency, playback or the other record (455.58066ms)
+  ✔ speaker click toggles, other blocks replace sound and hiding/leaving/reset stop without autoplay (719.403949ms)
+  ✔ pending resume can be cancelled and playback errors can retry (445.280318ms)
+  ✔ knowledge retains hearing range, animal upper bounds and device/colour limitations (647.786573ms)
+  ✔ approved desktop hierarchy and mobile controls remain inside their panels at eight widths (1538.598323ms)
+  ✔ real mobile touch drags while the same tone plays and taps toggle once (2284.855268ms)
+✔ hearing exploration: continuous sine, frequency ribbon and manual records (10843.335246ms)
+▶ 3.3 activity loading failures stay local on desktop and laptop
+  ✔ fork-experiment.mjs failure disables only dependent activities (2346.258378ms)
+  ✔ pitch-experiment.mjs failure disables only dependent activities (2063.184001ms)
+  ✔ guitar-experiment.mjs failure disables only dependent activities (2091.830906ms)
+  ✔ pan-experiment.mjs failure disables only dependent activities (2041.728087ms)
+  ✔ timbre-experiment.mjs failure disables only dependent activities (1858.938356ms)
+  ✔ hearing-experiment.mjs failure disables only dependent activities (1979.172598ms)
+  ✔ decibel-experiment.mjs failure disables only dependent activities (1910.585713ms)
+  ✔ sound-match.mjs failure disables only dependent activities (2700.603639ms)
+  ✔ guitar-view.mjs failure disables only dependent activities (1712.40875ms)
+  ✔ timbre-model.mjs failure disables only dependent activities (1745.641826ms)
+  ✔ model.mjs failure disables only dependent activities (1802.483934ms)
+  ✔ a partially initialized activity exception stays local (1795.922999ms)
+  ✔ slow quiz import leaves other activities usable and does not stop their sound on completion (897.918547ms)
+  ✔ shared playback import failure gives visible feedback in each affected activity (1301.677102ms)
+✔ 3.3 activity loading failures stay local on desktop and laptop (26612.139176ms)
+✔ closed-end pipes have quarter-wave fundamentals and matched physical length scale (0.848647ms)
+✔ closed bottom is a displacement node; air oscillates locally on a common slow clock (2.720089ms)
+✔ all recorded pipe files carry attribution, have audible bounded PCM and correct duration (19.66072ms)
+▶ pan flute: free pipes, interior observation and synchronized closed-end air motion
+  ✔ single instrument with six native pipe targets, one information row and no reference or autoplay (74.747639ms)
+  ✔ every pipe independently plays the closed-end frequency, repeats freely and replaces old audio (709.422016ms)
+  ✔ view changes preserve selection and current playback, with a window only on the selected pipe (171.966478ms)
+  ✔ air visibly oscillates near its origin, bottom node and other pipes stay fixed, then all return home (1927.401479ms)
+  ✔ length marker endpoints attach to selected mouth and closed bottom at a common physical scale (233.213475ms)
+  ✔ keyboard, reset, navigation, page hiding and leaving section cancel playback without autoplay on return (326.121314ms)
+  ✔ cancelled preparation cannot start later; failed audio offers visible retry feedback (306.179699ms)
+  ✔ waiting downloads can be cancelled, reset, left or replaced without delayed sound (8891.129444ms)
+  ✔ desktop and mobile keep compact single-stage design in both views with targets attached to pipes (3072.284704ms)
+  ✔ real mobile taps play once per touch and can switch view during playback (1462.611292ms)
+  ✔ mobile loading feedback stays visible and touch cancel prevents delayed audio (1520.032038ms)
+  ✔ slow recording download cannot start after reset; failed download can retry (1482.940872ms)
+✔ pan flute: free pipes, interior observation and synchronized closed-end air motion (21773.159664ms)
+▶ pitch comparison: independent speakers, controlled frequency and synchronized records
+  ✔ approved controls, matching speakers and actual shared characters render without autoplay (101.979934ms)
+  ✔ frequency changes do not play sound; bounds, cycles and amplitude stay correct at every step (798.430134ms)
+  ✔ left can repeat twice then right; actual audio has selected pitch and fixed signal amplitude (647.671467ms)
+  ✔ one side animates with its trace; natural finish rests the cone and keeps the full comparison (4176.523104ms)
+  ✔ front speaker visibly pumps in phase while its wooden cabinet stays fixed, including reduced motion (4536.727503ms)
+  ✔ one shared switch shows exactly one view per speaker and preserves sound, frequency and progress (1200.07389ms)
+  ✔ both A dimensions connect to the same membrane edge at its symmetric extreme positions (10.978996ms)
+  ✔ rendered diaphragm transforms have equal positive and negative travel at every frequency, with correct cycle ratios (992.654248ms)
+  ✔ keyboard, rapid changes, section navigation and page visibility cancel playback (395.893786ms)
+  ✔ desktop and laptop keep the mockup hierarchy, equal columns and frequency controls only on right (3016.432657ms)
+  ✔ front and side controls, speakers and complete wave cards fit one laptop viewport (1198.165286ms)
+  ✔ touch view switching and side-speaker playback work on a narrow screen (1457.030119ms)
+✔ pitch comparison: independent speakers, controlled frequency and synchronized records (20074.280636ms)
+✔ 45 independent targets cover all combinations and have reachable differing starts (12.863136ms)
+✔ question deck remains usable beyond a round, exhausts every target and never immediately repeats (1.856704ms)
+✔ actual resampled PCM stays bounded; frequency changes duration; amplitude scales the same signal (62.659929ms)
+✔ pure tone buffer has the selected pitch and input validation rejects invalid recipes (11.291878ms)
+▶ sound-match assessment follows the approved layout and shares actual audio with its wave
+  ✔ initial screen has instrument listening above one editable wave, fixed step buttons and no answer reveal or autoplay (202.825574ms)
+  ✔ shape switch changes timbre without changing frequency or amplitude; both step controls redraw the actual selected signal (307.436872ms)
+  ✔ listen controls toggle, actual playback PCM exactly matches all plotted points, and amplitude doubles samples (2748.812021ms)
+  ✔ comparison reveals the target only after both sounds were heard; feedback is specific and editing clears stale results (585.560517ms)
+  ✔ new question is always available before listening, during adjustment and playback, and after feedback (1403.74688ms)
+  ✔ independent matching remains correct beyond four questions, with retry and no total score or final screen (3100.830969ms)
+  ✔ switching, tuning, other sections, hidden tabs and leaving the page cancel audio without resuming it (557.506142ms)
+  ✔ a pending audio resume is canceled by tuning and cannot start later (478.928194ms)
+  ✔ desktop and laptop keep the approved hierarchy and all activity controls in one viewport; mobile stays contained (1256.068255ms)
+  ✔ fixed levels clamp at both ends, move by one position and never start audio (717.232387ms)
+  ✔ step buttons and waveform switching support keyboard and real touch (2713.388039ms)
+  ✔ failed clip load leaves no fake wave and listening retries successfully (1324.716482ms)
+  ✔ changing question during a slow clip download cancels stale playback and drawing (1002.571226ms)
+✔ sound-match assessment follows the approved layout and shares actual audio with its wave (17992.851888ms)
+✔ published timbre PCM keeps provenance, pitch, level and headroom (30.06547ms)
+▶ timbre rows use their actual playback PCM and independent controls
+  ✔ three compact rows are visible with genuine PCM plots and no autoplay (92.137155ms)
+  ✔ every plotted vertex equals the same sample in the actual AudioBuffer, before and after replay (291.635844ms)
+  ✔ left-left-right listening cancels previous source, ends cleanly and supports keyboard (1513.930266ms)
+  ✔ instrument pictures play the same PCM as their buttons and synchronize both controls (1252.547907ms)
+  ✔ one reading dot follows the real polyline left to right using the audio clock, then clears (2823.744073ms)
+  ✔ desktop, laptop and phone keep aligned charts, complete instruments and usable buttons (1060.370167ms)
+  ✔ actual touch plays once and can independently replay another instrument (2145.784298ms)
+  ✔ delayed clip cannot play after leaving; failed preload stays empty and playback retries (994.956192ms)
+✔ timbre rows use their actual playback PCM and independent controls (11759.16683ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (92.928224ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (96.122754ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (785.193497ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (2295.636469ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (552.68932ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (246.384198ms)
+  ✔ hearing exploration stays silent until played; knowledge and dBA remain readable (228.074342ms)
+  ✔ one final listening task connects waveform selection, sliders, audio and comparison (522.845537ms)
+  ✔ lesson format follows unit 2.1 with a header and full-width body; navigation tracks reading (901.282062ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (5189.326525ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (11848.002317ms)
+ℹ tests 127
+ℹ suites 0
+ℹ pass 126
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 184702.771654
+
+✖ failing tests:
+
+test at tests/unit-3.3-decibel.test.cjs:65:1
+✖ delayed or failed image loads cannot display an old scene under new metadata (919.922616ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'false' !== 'true'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.3-decibel.test.cjs:69:109)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'false',
+    expected: 'true',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

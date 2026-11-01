@@ -1,0 +1,39 @@
+✔ decibel reference mapping preserves source values and distances (6.253375ms)
+✔ decibel ribbon selects all scenes, handles pointer/touch/keys without autoplay while stopped (8389.116226ms)
+✔ delayed or failed image loads cannot display an old scene under new metadata (1651.241518ms)
+▶ 3.3 activity loading failures stay local on desktop and laptop
+  ✔ fork-experiment.mjs failure disables only dependent activities (1906.60132ms)
+  ✔ pitch-experiment.mjs failure disables only dependent activities (1804.691817ms)
+  ✔ guitar-experiment.mjs failure disables only dependent activities (1745.186232ms)
+  ✔ pan-experiment.mjs failure disables only dependent activities (1924.607415ms)
+  ✔ timbre-experiment.mjs failure disables only dependent activities (1799.784455ms)
+  ✔ hearing-experiment.mjs failure disables only dependent activities (1753.173252ms)
+  ✔ decibel-experiment.mjs failure disables only dependent activities (1802.678812ms)
+  ✔ sound-match.mjs failure disables only dependent activities (2655.763322ms)
+  ✔ guitar-view.mjs failure disables only dependent activities (1734.148821ms)
+  ✔ timbre-model.mjs failure disables only dependent activities (1731.941192ms)
+  ✔ model.mjs failure disables only dependent activities (1813.591112ms)
+  ✔ a partially initialized activity exception stays local (1739.653869ms)
+  ✔ slow quiz import leaves other activities usable and does not stop their sound on completion (858.541797ms)
+  ✔ shared playback import failure gives visible feedback in each affected activity (1245.077018ms)
+✔ 3.3 activity loading failures stay local on desktop and laptop (24869.618502ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (91.256996ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (100.963972ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (795.434946ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (2247.689476ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (551.470644ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (229.050711ms)
+  ✔ hearing exploration stays silent until played; knowledge and dBA remain readable (231.149907ms)
+  ✔ one final listening task connects waveform selection, sliders, audio and comparison (505.885936ms)
+  ✔ lesson format follows unit 2.1 with a header and full-width body; navigation tracks reading (877.416847ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (5273.35361ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (11847.223254ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 47852.29007
