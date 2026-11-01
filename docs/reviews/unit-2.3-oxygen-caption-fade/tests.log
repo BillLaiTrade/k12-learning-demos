@@ -1,0 +1,72 @@
+▶ 2.3 oxygen: readable captions fade, survive automatic steps and pause with the experiment
+  ✔ every sentence has a reading hold; short intermediate targets coalesce before the old words fade out (393.328189ms)
+  ✔ automatic operation changes reuse the same visible card and skip the brief completion flash (391.596827ms)
+  ✔ pausing during fade-out or fade-in freezes native opacity and text; both resume from the same point (776.486381ms)
+  ✔ apparatus introductions pause the caption; closing does not resume its reading or fade (627.799528ms)
+  ✔ manual choices cancel an abandoned fade; returning to materials leaves no caption animation (419.586348ms)
+  ✔ the last result can finish its caption after the physical animation; replay cancels the old result (259.414728ms)
+  ✔ background, another experiment and Escape freeze reading time without automatic resume (253.690401ms)
+  ✔ desktop and narrow cards stay inside the figure, preserve focus and add no duplicate controls (1737.632035ms)
+  ✔ reduced motion retains reading time with instant swaps; no-JS retains all seven original captions (1316.732308ms)
+✔ 2.3 oxygen: readable captions fade, survive automatic steps and pause with the experiment (7819.813744ms)
+▶ 2.3 oxygen: optional continuous playback shares pause and progress with the current scene
+  ✔ continuous play is explicit, accessible in the sidebar and off by default; manual steps remain bounded (152.16873ms)
+  ✔ one click from materials traverses every operation, holds completed frames and ends without leaving oxygen (561.200607ms)
+  ✔ arming continuous play preserves current progress; both pause buttons freeze and resume the same clock (603.018179ms)
+  ✔ pause in the between-operation hold retains its elapsed time and does not restart that operation (218.987657ms)
+  ✔ manual sidebar choices exit continuous mode without stale automatic advances (281.793324ms)
+  ✔ reading an apparatus pauses the sequence; closing never resumes it and explicit continue retains position (344.694562ms)
+  ✔ Escape, background, leaving the block and competing playback pause a sequence without silently restarting (291.752167ms)
+  ✔ seven widths keep the control outside the compact menu; native Enter, Space and Escape operate it (2389.148545ms)
+  ✔ real touch with reduced motion pauses and continues; no-JS keeps scenes readable with playback hidden (2668.409904ms)
+✔ 2.3 oxygen: optional continuous playback shares pause and progress with the current scene (9024.362639ms)
+▶ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role
+  ✔ the first materials step shares the dialog and has no inline information or SVG apparatus controls (261.394527ms)
+  ✔ actual flask, jar, trough, stopper and tube bodies open correct descriptions in all seven later operations (6119.1275ms)
+  ✔ pouring bottle, moving spoon, introduced catalyst and sliding glass plate remain correctly clickable (962.238248ms)
+  ✔ intro pauses the exact scene, closing keeps it paused and explicit play continues from that state (261.866755ms)
+  ✔ current role distinguishes waiting, collecting and storage; invisible equipment and empty picture space do not open (787.829786ms)
+  ✔ Enter, Space, Escape and modal focus work; step changes clear the dialog without hiding focus (348.521833ms)
+  ✔ seven widths keep the modal readable and in-screen; mobile close-up objects also open the same introduction (2553.895794ms)
+  ✔ real touch and reduced motion select the close-up body; no-JS retains the full materials reference (2565.155979ms)
+✔ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role (15557.087674ms)
+▶ 2.3 materials: seven illustrated objects explain identity and experimental role
+  ✔ native material buttons target the same dialog; inline information is absent and nothing opens automatically (191.686753ms)
+  ✔ actual photo object bodies open all seven original introductions without a lower information panel (1270.563702ms)
+  ✔ name labels, Enter and Space open the dialog; Escape and return restore the selected material focus (345.153541ms)
+  ✔ materials keep no playback or bottom next action; reopening the same material works (301.406953ms)
+  ✔ selection survives leaving and returning, but does not reopen the dialog or show inline information (428.018405ms)
+  ✔ seven widths keep every 44px target and the shared dialog in-screen (10042.951424ms)
+  ✔ real touch and reduced motion open and close every original material introduction (2160.872668ms)
+  ✔ original science content remains unchanged for oxygen source, catalyst, purge and underwater covering (25.731246ms)
+  ✔ without JavaScript all seven source introductions remain readable with the original photo (1063.543555ms)
+✔ 2.3 materials: seven illustrated objects explain identity and experimental role (17427.852147ms)
+▶ 2.3 oxygen: isolated operations preserve physical prerequisites and shared mobile scenes
+  ✔ all scene instances decode original glass assets with unique definitions, without a WebGL dependency (101.493686ms)
+  ✔ placement, peroxide, catalyst and sealing each end at their own correct state (450.600815ms)
+  ✔ purge keeps the jar full, with bubbles only outside and below the trough surface (89.501099ms)
+  ✔ collection moves the outlet before water displacement and bubbles; callouts follow the true water surface (222.098362ms)
+  ✔ pause freezes the complete drawing and mobile closeup uses the same scene (843.546363ms)
+  ✔ storage first withdraws the outlet, then covers underwater and stays on the same operation (154.213604ms)
+  ✔ returning to an earlier operation restores its science state and visible main/zoom references (1377.644006ms)
+✔ 2.3 oxygen: isolated operations preserve physical prerequisites and shared mobile scenes (4910.189598ms)
+▶ 2.3 oxygen: one vertical list of purposeful operations and in-scene playback
+  ✔ one eight-operation list sits beside materials, with no second hierarchy, counter, previous or material playback (94.219313ms)
+  ✔ sidebar selects every operation without bottom next buttons; each animation stops at its own end (733.236728ms)
+  ✔ direct selection reconstructs prerequisite contents and returning to materials preserves a chosen introduction (387.336197ms)
+  ✔ the in-scene button pauses pixels, resumes and replays; quick selection cancels previous clocks (933.801624ms)
+  ✔ vertical arrows, Home, End, native activation and Escape retain visible focus (117.974549ms)
+  ✔ background, leaving and another experiment pause without resuming automatically (252.747454ms)
+  ✔ storage and earlier operations have no bottom action; normal lesson navigation remains (260.29363ms)
+  ✔ eight operations fit seven widths; compact navigation expands vertically and all controls stay inside (11215.060028ms)
+  ✔ touch and reduced motion select operations from the expandable sidebar (1570.844962ms)
+  ✔ without JavaScript all eight correct representatives and material introductions remain readable (1144.36948ms)
+✔ 2.3 oxygen: one vertical list of purposeful operations and in-scene playback (18455.45974ms)
+ℹ tests 58
+ℹ suites 0
+ℹ pass 58
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 75564.277677

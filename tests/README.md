@@ -695,3 +695,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-
 模型 3 項、小測瀏覽器 13 項（含主項）、整頁 11 項（含主項），共 27 項。涵蓋實際播放 PCM 逐點對照波形、四題與固定檔位、換波形／加減頻率／加減振幅及兩端停用、兩聲試聽與取消、揭示／修改／摘要／重試、鍵盤與真實觸控、八種寬度與筆電核心工具同屏、延遲啟音取消、素材失敗重試。`SOUND33_BASE_URL` 可指定公開頁（勿含 hash），`MATCH_CAPTURE_DIR` 指定畫面目錄；公開模式不注入素材故障，其餘操作照常執行。音色、喇叭、分貝音效及聽覺探索另有專項回歸。
 
 3.3結果流程另涵蓋原「摘要後再提交卻誤重開」漏洞：結果區只留再挑戰，隱藏表單／舊操作不清空；全成功、部分成功、全未成功、跨區返回結果、鍵盤與手機真實觸控重開、重開清除聽題狀態且無自動播放，以及桌機／手機結果版面。
+
+## 2.3 字卡閱讀與淡入淡出（2026-11-01）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_CAPTIONS_ARTIFACT_DIR=/tmp/unit23-captions node --test tests/unit-2.3-captions.test.cjs
+```
+
+新專項10項（含外層）：以原生Animation檢查閱讀停留與中途透明度、快速句合併、連播同張字卡、淡出／淡入暫停、器材介紹後不自行續播、取消舊回呼、完成／重播、背景與其他播放器、桌機與窄欄、減少動態及無JS。搭配原材料10、器材9、操作11、連播10、物理8，共58項本機瀏覽器檢查；所有截圖環境變數指向/tmp以保存舊證據。公開可設OXYGEN_CAPTIONS_URL、OXYGEN_EQUIPMENT_URL、OXYGEN_URL、OXYGEN_CONTINUOUS_URL跑字卡10＋器材9＋操作11＋連播10，共40項。證據見docs/reviews/unit-2.3-oxygen-caption-fade/。

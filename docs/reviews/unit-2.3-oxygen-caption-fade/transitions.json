@@ -1,0 +1,12 @@
+[
+  {
+    "transition": "out",
+    "opacity": 0.5,
+    "text": "先移開導管，瓶口保持在水下"
+  },
+  {
+    "transition": "in",
+    "opacity": 0.5,
+    "text": "導管已移開，玻璃片在水下蓋好"
+  }
+]

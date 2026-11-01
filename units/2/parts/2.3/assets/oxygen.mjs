@@ -1,3 +1,4 @@
+import { createSceneCaptions } from './oxygen-captions.mjs?v=reading-fade-1';
 import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=material-dialog-14';
 import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=operations-12';
 const section = document.querySelector('.oxygen-lesson');
@@ -68,7 +69,8 @@ function renderPreparation(stage, elapsed, state) {
   $('flow').style.strokeDashoffset=String(-f.time/35);
   const note = scene===2 ? '導管口在瓶外的水中，開始的混合氣不收集' : scene===3 ? (f.tube<1 ? '先將導管移入瓶口下方' : f.collected<1 ? '氧氣進入，瓶內水位下降' : '瓶內水已排出，氧氣已收集') : f.covered ? '導管已移開，玻璃片在水下蓋好' : f.tube>0 ? '先移開導管，瓶口保持在水下' : '再滑入玻璃片，在水下蓋住瓶口';
   renderObservation(view,scene,f,waterY);
-  view.querySelector('[data-scene-note]').textContent=note;
+  view.dataset.captionMessage=note;
+  view.dataset.loopCaption=scene===3&&f.collected===1?'氧氣進入，瓶內水位下降':note;
   view.querySelector('title').textContent=note;
   return note + (state==='complete' ? '。這一步已播完，可重播或繼續下一步。' : '。');
 }
@@ -121,14 +123,14 @@ function renderAssembly(elapsed, state, view, phase) {
   const notes=['集氣瓶裝滿水、倒置水中；導管出口先放在瓶外的水中','把雙氧水倒入錐形瓶','用藥匙加入少量二氧化錳，讓雙氧水更快分解','塞緊已連接導管的塞子，氣體從瓶外水中的出口送出'];
   const finished=['集氣位置已備好；導管出口先留在瓶外水中','雙氧水已倒入，接著加入少量二氧化錳','加入二氧化錳後開始產氣，接著塞好連接導管的塞子','裝置已接好，接著先排空氣，暫不收集'];
   const note=state==='complete'?finished[phase]:notes[phase];
-  view.querySelector('[data-scene-note]').textContent=note;view.querySelector('title').textContent=note;
+  view.dataset.captionMessage=note;view.dataset.loopCaption=notes[phase];view.querySelector('title').textContent=note;
   view.querySelector('.oxygen-mobile-zoom svg').setAttribute('viewBox',phase===0?'760 235 510 495':'100 30 550 805');
   view.querySelector('[data-assembly-zoom-label]').textContent=phase===0?'集氣位置近看':'加入材料與瓶口近看';
   return note+'。';
 }
 
 function createPreparationPlayer() {
-  const play=panel.querySelector('[data-play]');
+  const play=panel.querySelector('[data-play]'),captions=createSceneCaptions(panel);
   const sequence=panel.querySelector('[data-continuous]'),sequenceStatus=panel.querySelector('[data-continuous-status]');
   const status=panel.querySelector('[role=status]'),menu=panel.querySelector('[data-step-menu]');
   const navBody=panel.querySelector('#oxygen-step-list'),nav=panel.querySelector('.oxygen-step-nav');
@@ -151,6 +153,7 @@ function createPreparationPlayer() {
     const atEnd=stage>0&&elapsed>=duration();
     let text=(state==='paused'?'已暫停：':'')+renderPreparation(stage,elapsed,atEnd?'complete':state);
     if(continuous&&state==='playing'&&atEnd&&stage<steps.length-1)text=text.replace('這一步已播完，可重播或繼續下一步。','即將接續下一個操作。');
+    if(stage>0)captions.show(panels[stage],continuous&&atEnd&&stage<steps.length-1?panels[stage].dataset.loopCaption:panels[stage].dataset.captionMessage);
     explorer?.sync(stage);
     if(message!==text){status.textContent=text;message=text;}
     const playing=state==='playing',paused=state==='paused';
@@ -174,18 +177,21 @@ function createPreparationPlayer() {
     paint();if(state==='playing')frame=requestAnimationFrame(tick);
   }
   function pausePlayback(){
+    captions.pause();
     if(state!=='playing')return;
     elapsed=Math.min(clockLimit(),performance.now()-started);cancel();state='paused';paint();
   }
   function start(){
     if(stage===0)return;
+    if(state==='complete')captions.reset();
+    captions.resume();
     const at=state==='paused'?elapsed:0;
     document.dispatchEvent(new CustomEvent('air-experiment-play',{detail:'oxygen'}));
     cancel();elapsed=at;state='playing';started=performance.now()-elapsed;paint();frame=requestAnimationFrame(tick);
   }
   function select(index,focusContent=false,keepContinuous=false){
     const focused=document.activeElement,focusInScene=panels[stage].contains(focused);
-    explorer?.close();cancel();continuous=keepContinuous;stage=index;elapsed=0;state='ready';
+    explorer?.close();cancel();if(!keepContinuous)captions.reset();continuous=keepContinuous;stage=index;elapsed=0;state='ready';
     if(stage>0)panels[stage].querySelector('.oxygen-scene-viewport').append(play);
     play.hidden=stage===0;play.disabled=stage===0;
     panels.forEach((view,i)=>{view.hidden=i!==stage;});
