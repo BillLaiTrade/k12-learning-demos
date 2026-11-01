@@ -1,3 +1,4 @@
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=equipment-13';
 import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=operations-12';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
@@ -131,7 +132,7 @@ function createPreparationPlayer() {
   const play=panel.querySelector('[data-play]'),next=panel.querySelector('[data-next]');
   const status=panel.querySelector('[role=status]'),menu=panel.querySelector('[data-step-menu]');
   const navBody=panel.querySelector('#oxygen-step-list'),nav=panel.querySelector('.oxygen-step-nav');
-  let stage=0,elapsed=0,state='ready',started=0,frame=0,message='',compact;
+  let stage=0,elapsed=0,state='ready',started=0,frame=0,message='',compact,explorer;
   const duration=()=>OXYGEN_OPERATIONS[stage].duration;
   function setMenu(open){navBody.hidden=!open;menu.setAttribute('aria-expanded',String(open));}
   function syncLayout(){
@@ -145,6 +146,7 @@ function createPreparationPlayer() {
   function paint(){
     panel.dataset.stage=String(stage);panel.dataset.state=state;
     const text=(state==='paused'?'已暫停：':'')+renderPreparation(stage,elapsed,state);
+    explorer?.sync(stage);
     if(message!==text){status.textContent=text;message=text;}
     const playing=state==='playing',paused=state==='paused';
     play.querySelector('[data-play-icon]').textContent=playing?'Ⅱ':paused?'▶':'↻';
@@ -170,7 +172,7 @@ function createPreparationPlayer() {
     cancel();elapsed=at;state='playing';started=performance.now()-elapsed;paint();frame=requestAnimationFrame(tick);
   }
   function select(index,focusContent=false){
-    cancel();stage=index;elapsed=0;state='ready';
+    explorer?.close();cancel();stage=index;elapsed=0;state='ready';
     if(stage>0)panels[stage].querySelector('.oxygen-scene-viewport').append(play);
     play.hidden=stage===0;play.disabled=stage===0;
     panels.forEach((view,i)=>{view.hidden=i!==stage;});
@@ -186,6 +188,7 @@ function createPreparationPlayer() {
     }
     if(stage>0)start();
   }
+  explorer=createEquipmentExplorer({panel,panels,getStage:()=>stage,onOpen:pausePlayback});
   panel.querySelector('.oxygen-steps').setAttribute('role','tablist');
   panel.querySelector('.oxygen-steps').setAttribute('aria-orientation','vertical');
   steps.forEach((tab,i)=>{

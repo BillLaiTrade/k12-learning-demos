@@ -644,3 +644,13 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-operations OXYGE
 瀏覽器61項（材料10、操作11、物理8、整頁9、二氧化碳13、性質10，含各外層）及模型5項通過。新版驗證單層直列、八個有目的的操作窗口、圖內媒體控制與材料頁無播放、下一項具名文字、手機展開／收合與隱藏焦點、上下鍵／Home／End、各項正確前提、暫停像素、原素材解碼／唯一ID、七寬度×八操作、觸控／減少動態／無JS、跨播放器、第五區與唯一小測。
 
 公開核心可設OXYGEN_URL、OXYGEN_MATERIALS_URL與AIR_FULL_URL，跑材料10＋操作11＋物理8＋整頁9，共38項。原第五區／二氧化碳整合檢查改由選擇氧氣操作啟動播放器，材料頁不再有可選導覽。未變更的第二區知識卡與杯子完整拖曳專項未重跑。新證據見docs/reviews/unit-2.3-oxygen-operations/。
+
+## 2.3後續操作的器材點選介紹（2026-11-01）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_EQUIPMENT_ARTIFACT_DIR=/tmp/unit23-equipment node --test --test-concurrency=1 tests/unit-2.3-equipment.test.cjs tests/unit-2.3-materials.test.cjs tests/unit-2.3-oxygen.test.cjs tests/unit-2.3-oxygen-three.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-co2.test.cjs tests/unit-2.3-properties.test.cjs
+```
+
+器材專項9項（含外層）：直接以原圖座標點七操作×五種核心器材，另點移動的試藥瓶／藥匙／粉末／玻璃片；核對基本介紹與各步角色、隱藏目標不互動、暫停／手動續播、Enter／空白／Escape及模態焦點、七種寬度與近景點選、真實觸控／減少動態及無JS回看第一步。與原六套瀏覽器61項合計70項，模型未變更而未重跑模型專項。各套截圖目錄請以原環境變數指到/tmp，避免覆寫歷史證據。
+
+公開新專項可用OXYGEN_EQUIPMENT_URL指定網址；搭配OXYGEN_URL、AIR_FULL_URL跑器材9＋操作11＋物理8＋整頁9，共37項。新證據見docs/reviews/unit-2.3-oxygen-equipment/。
