@@ -1,3 +1,4 @@
+import { SETUP_DURATION } from './oxygen-setup.mjs?v=continuous-setup-1';
 export const PREPARATION_DURATION = 12600;
 export const COMPARISON_DURATION = 6200;
 export const PREPARATION_STAGES = [0, 2000, 4800, 10000];
@@ -57,7 +58,7 @@ export function preparationStepFrame(stage, elapsed) {
 // Legacy clocks remain shared with the splint comparison and old evidence.
 export const OXYGEN_OPERATIONS = [
   {label:'認識材料',scene:0,offset:0,duration:0},
-  {label:'擺好集氣位置',scene:1,offset:0,duration:2800},
+  {label:'擺好集氣位置',scene:1,offset:0,duration:SETUP_DURATION},
   {label:'倒入雙氧水',scene:1,offset:2800,duration:3000},
   {label:'加入二氧化錳',scene:1,offset:5800,duration:3000},
   {label:'塞緊塞子與導管',scene:1,offset:8800,duration:3000},
@@ -69,6 +70,9 @@ export function oxygenOperationFrame(stage,elapsed) {
   const index=Math.max(0,Math.min(OXYGEN_OPERATIONS.length-1,Math.trunc(stage)));
   const operation=OXYGEN_OPERATIONS[index];
   const localTime=Math.max(0,Math.min(operation.duration,elapsed));
-  const frame=preparationStepFrame(operation.scene,operation.offset+localTime);
-  return {...frame,collecting:operation.scene===3&&localTime>=700&&frame.collected<1,operation:index,localTime,duration:operation.duration,scene:operation.scene,sceneTime:operation.offset+localTime};
+  // Extend only the physical preparation. Later reagent/collection windows keep
+  // their established clock and prerequisites.
+  const sceneTime=operation.offset+(index===1?2800*localTime/SETUP_DURATION:localTime);
+  const frame=preparationStepFrame(operation.scene,sceneTime);
+  return {...frame,collecting:operation.scene===3&&localTime>=700&&frame.collected<1,operation:index,localTime,duration:operation.duration,scene:operation.scene,sceneTime};
 }

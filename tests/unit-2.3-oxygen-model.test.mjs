@@ -52,3 +52,15 @@ test('placement settles the submerged full jar before lowering the outlet; later
  for(let time=0;time<=2800;time+=20){const f=assemblyFrame(time);assert.ok(f.placement>=previous);previous=f.placement;if(f.outletPlacement>0)assert.equal(f.placement,1);assert.equal(f.peroxide,0);assert.equal(f.catalyst,0);assert.equal(f.sealed,0);assert.equal(f.reaction,0);assert.equal(oxygenOperationFrame(1,time).collected,0);}
  assert.equal(assemblyFrame(2800).placement,1);assert.equal(assemblyFrame(2800).outletPlacement,1);assert.equal(assemblyFrame(4000).placement,1);
 });
+
+
+test('clear water fills both empty vessels before a covered inversion and underwater uncovering',async()=>{
+ const {setupFrame,SETUP_DURATION}=await import('../units/2/parts/2.3/assets/oxygen-setup.mjs');
+ const {oxygenOperationFrame,OXYGEN_OPERATIONS}=await import('../units/2/parts/2.3/assets/oxygen-model.mjs');
+ assert.equal(OXYGEN_OPERATIONS[1].duration,SETUP_DURATION);
+ assert.equal(setupFrame(0).tankFill,0);assert.equal(setupFrame(0).jarFill,0);assert.equal(setupFrame(0).angle,0);
+ assert.ok(setupFrame(4000).tankFill>0&&setupFrame(4000).tankFill<1);assert.equal(setupFrame(4000).jarFill,0);
+ assert.ok(setupFrame(7000).jarFill>0&&setupFrame(7000).jarFill<1);assert.equal(setupFrame(11000).angle,90);
+ for(let t=0;t<=SETUP_DURATION;t+=20){const f=setupFrame(t);if(f.jarFill>0)assert.equal(f.tankFill,1);if(f.inversion>0){assert.equal(f.jarFill,1);assert.equal(f.cover,1);}if(f.inversion>0&&f.immersion<1)assert.equal(f.covered,true);if(f.uncover>0){assert.equal(f.immersion,1);assert.ok(f.mouthY>565);}if(f.outlet>0)assert.equal(f.uncover,1);if(f.handoff>0)assert.equal(f.outlet,1);assert.equal(oxygenOperationFrame(1,t).collected,0);}
+ assert.equal(setupFrame(SETUP_DURATION).handoff,1);assert.equal(setupFrame(SETUP_DURATION).jarFill,1);
+});

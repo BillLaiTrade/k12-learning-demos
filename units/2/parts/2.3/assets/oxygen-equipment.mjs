@@ -27,6 +27,14 @@ export function createEquipmentExplorer({panel,panels,getStage,onOpen}){
   let trigger=null;
   function currentRole(key,stage){
     const tube=Number(panel.dataset.tipX),cover=Number(panel.dataset.cover);
+    if(stage===1&&panels[1].setupScene){
+      const view=panels[1];
+      if(key==='source')return '目前尚未加入雙氧水；這一步只用清水準備水槽與集氣瓶。';
+      if(key==='jar')return Number(view.dataset.jarFill)<1?'目前仍在準備集氣瓶；先注入清水，裝滿後才遮口倒置。':view.dataset.setupCover==='true'?'瓶內已裝滿清水，玻璃片遮住瓶口；倒置與移入水槽時保持遮住。':'瓶內已裝滿清水；移開遮片前先讓瓶口位於水面下，目前尚未收集氣體。';
+      if(key==='tank')return Number(view.dataset.tankFill)<1?'將清水注入水槽，準備讓倒置集氣瓶的瓶口留在水下。':'水槽已盛有清水，提供倒置集氣瓶瓶口所需的水中環境。';
+      if(key==='plate')return '先遮住已裝滿水的瓶口，隨瓶倒置；瓶口移入水下後才移開。';
+      if(key==='tube'||key==='stopper')return '集氣位置準備完成後，將導管出口放進瓶外的水中；此時尚未塞緊反應容器。';
+    }
     if(key==='flask')return stage===1?'目前尚未加入材料，接下來會用它盛裝雙氧水並進行反應。':stage===2?'接住倒入的雙氧水；這一步還沒有加入二氧化錳。':stage===3?'盛裝雙氧水與加入的二氧化錳，氧氣在這個反應容器中產生。':stage===4?'接上附有導管的塞子，讓瓶內產生的氣體沿導管送出。':stage===5?'作為產生氧氣的反應容器；裝置起初排出的混合氣先不收集。':stage===6?'持續提供氧氣，經導管送到另一側的集氣瓶。':'反應在這裡進行；已收集的氧氣保存在另一側的集氣瓶。';
     if(key==='tank')return stage===1?'盛水並放置裝滿水、倒置的集氣瓶，讓瓶口留在水下。':stage===6?'接住集氣瓶排出的水；瓶內空間逐漸由進入的氧氣占據。':stage===7?'讓集氣瓶口在撤管與蓋片時保持在水下，減少混入外界空氣。':'讓集氣瓶的瓶口保持在水下；目前先將導管出口留在瓶外的水中。';
     if(key==='jar')return stage<=5?'目前先裝滿水、倒置在水中，尚未收集氣體；瓶口保持在水下。':stage===6?'氧氣從瓶口進入，把瓶內的水排回水槽，逐漸留在瓶中。':cover===1?'已收集氧氣，現在用玻璃片在水下蓋好瓶口。':'已收集氧氣，瓶口保持在水下，接著用玻璃片蓋住。';
@@ -71,6 +79,13 @@ export function createEquipmentExplorer({panel,panels,getStage,onOpen}){
     const view=panels[stage],parts=key=>view.querySelector(`[data-part="${key}"]`);
     for(const{svg,targets}of layers.get(view)||build(view)){
       for(const{key,shape,hit,outline}of targets){
+        if(stage===1&&view.setupScene&&Number(view.dataset.setupHandoff)<1){
+          const geometry=view.setupScene.geometry(key);
+          if(geometry){const[x,y,w,h]=geometry.bounds;const d=`M${x} ${y}h${w}v${h}h${-w}Z`;for(const node of[hit,outline]){node.setAttribute('d',d);node.setAttribute('transform',geometry.transform);node.classList.remove('is-stroke');node.style.display='';}hit.style.display=outline.style.display=intersects(geometry.bounds,hit,svg.viewBox.baseVal)?'':'none';}
+          else hit.style.display=outline.style.display='none';
+          continue;
+        }
+        hit.classList.toggle('is-stroke',!!shape.stroke);outline.classList.toggle('is-stroke',!!shape.stroke);
         const d=shape.part?parts(shape.part).getAttribute('d'):shape.d;
         const transform=shape.transform?(parts(shape.transform)?.getAttribute('transform')||''):'';
         hit.setAttribute('d',d);outline.setAttribute('d',d);

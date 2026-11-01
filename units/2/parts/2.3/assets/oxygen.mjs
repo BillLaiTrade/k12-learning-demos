@@ -1,11 +1,14 @@
 import { createSceneCaptions } from './oxygen-captions.mjs?v=reading-fade-1';
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=placement-16';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=placement-13';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=continuous-setup-1';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=continuous-setup-1';
+import { createSetupScene } from './oxygen-setup.mjs?v=continuous-setup-1';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
 const panels = [...panel.querySelectorAll('[data-step-panel]')];
 const players = [];
+const setupScene=createSetupScene(panels[1]);
+panels[1].setupScene=setupScene;
 
 const materialButtons=[...panels[0].querySelectorAll('[data-material]')];
 const materialInfo=[...panels[0].querySelectorAll('[data-material-info]')];
@@ -30,7 +33,17 @@ function renderPreparation(stage, elapsed, state) {
     const name=materialInfo.find(info=>info.dataset.materialInfo===selectedMaterial).querySelector('h4').textContent;
     return `正在認識${name}；可點選其他物品，或接著擺好集氣位置。`;
   }
-  if (scene === 1) return renderAssembly(f.sceneTime, state, view, stage-1);
+  if (scene === 1) {
+    if(stage!==1)return renderAssembly(f.sceneTime, state, view, stage-1);
+    // The final underlying apparatus is already the next operation's starting
+    // picture; reveal it only after the continuous preparation reaches it.
+    renderAssembly(2800,state,view,0);
+    const setupNote=setupScene.render(f.localTime);
+    view.dataset.captionMessage=setupNote;view.dataset.loopCaption=setupNote;
+    view.querySelector('title').textContent=setupNote;
+    view.querySelector('[data-assembly-zoom-label]').textContent='材料到集氣位置：同步看完整動作';
+    return setupNote+'。';
+  }
   const $ = part => view.querySelector(`[data-part="${part}"]`);
   const opacity = (part, value) => $(part).setAttribute('opacity', String(value));
   const waterY = 280+f.collected*400;
