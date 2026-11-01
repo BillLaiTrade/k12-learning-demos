@@ -600,19 +600,19 @@
                 <path d="M40 140H680" class="equilibrium"/>
                 <path id="amplitude-wave" d="M40 140 C57.3 140 74.7 80 92 80 S161.3 200 196 200 S265.3 80 300 80 S369.3 200 404 200 S473.3 80 508 80 S542.7 140 560 140" class="wave-line"/>
                 <circle id="amplitude-peak" cx="92" cy="80" r="6" fill="#176b53"/><circle id="amplitude-trough" cx="196" cy="200" r="6" fill="#176b53"/>
-                <rect x="575" y="125" width="105" height="30" rx="8" fill="#fffefa" stroke="#d7e1dd"/><text x="627.5" y="147" text-anchor="middle">平衡位置</text><text x="92" y="25" text-anchor="middle">波峰</text><text x="196" y="260" text-anchor="middle">波谷</text>
-                <path id="amplitude-measure" d="M115 140V80" class="measure" marker-start="url(#arrow-a)" marker-end="url(#arrow-a)"/><text id="amplitude-label" x="130" y="72">A = 0.5 m</text>
+                <rect x="575" y="125" width="105" height="30" rx="8" fill="#fffefa" stroke="#d7e1dd"/><text x="627.5" y="147" text-anchor="middle">平衡位置</text><text x="92" y="32" text-anchor="middle">波峰</text><text x="196" y="260" text-anchor="middle">波谷</text>
+                <path id="amplitude-measure" d="M115 140V80" class="measure" marker-start="url(#arrow-a)" marker-end="url(#arrow-a)"/><text id="amplitude-label" x="130" y="72">A = 1.0 m</text>
               </svg>
 
             </figure>
             <div class="control-panel">
               <label class="field" for="amplitude-slider">調整波源振幅；波形離平衡位置的最大距離會跟著改變
-                <input id="amplitude-slider" type="range" min="0.3" max="0.8" step="0.1" value="0.5" aria-describedby="amplitude-model-note">
+                <input id="amplitude-slider" type="range" min="0.3" max="1.5" step="0.1" value="1.0" aria-describedby="amplitude-model-note">
               </label>
-              <div class="readout" aria-live="polite"><div class="data-cell"><small>振幅 A</small><strong id="amplitude-output">0.5 m</strong></div></div>
+              <div class="readout" aria-live="polite"><div class="data-cell"><small>振幅 A</small><strong id="amplitude-output">1.0 m</strong></div></div>
               <p class="live-note" id="amplitude-model-note">拖曳滑桿，觀察振幅變大或變小。</p>
               <p class="live-note">也可用波峰到波谷的總高度除以 2，求出振幅：</p>
-              <p class="definition-equation"><span id="amplitude-height-output">1.0 m</span> ÷ 2 = <span id="amplitude-half-output">0.5 m</span></p>
+              <p class="definition-equation"><span id="amplitude-height-output">2.0 m</span> ÷ 2 = <span id="amplitude-half-output">1.0 m</span></p>
             </div>
 
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>剛剛量的是波的高低。那如果要比較波的長短，該沿著哪個方向量呢？</p></div>
@@ -1595,7 +1595,7 @@
       const amplitudeHeightOutput=document.querySelector("#amplitude-height-output");
       const amplitudeHalfOutput=document.querySelector("#amplitude-half-output");
       const updateAmplitudeModel=()=>{
-        const amplitude=Number(amplitudeSlider.value);const pixels=amplitude*120;const top=140-pixels;const bottom=140+pixels;const waveY=x=>140-pixels*Math.sin((2*Math.PI*(x-40))/208);let d="M 40 140";
+        const amplitude=Number(amplitudeSlider.value);const pixels=amplitude*60;const top=140-pixels;const bottom=140+pixels;const waveY=x=>140-pixels*Math.sin((2*Math.PI*(x-40))/208);let d="M 40 140";
         for(let x=44;x<=560;x+=4){const y=waveY(x);d+=` L ${x} ${y.toFixed(2)}`;}
         amplitudeWave.setAttribute("d",d);amplitudePeak.setAttribute("cy",String(top));amplitudeTrough.setAttribute("cy",String(bottom));
         amplitudeMeasure.setAttribute("d",`M115 140V${top}`);
