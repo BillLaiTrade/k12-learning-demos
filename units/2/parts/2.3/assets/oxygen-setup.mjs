@@ -163,6 +163,7 @@ export function createSetupScene(view,panels) {
       }
       if(operationStage>1&&key==='catalyst')return Number(powder.getAttribute('opacity'))>.01?{bounds:[228,750,175,46],transform:''}:null;
       if(key==='tube'&&tubePhotoOpacity>.5)return {bounds:restingTubeBounds,d:restingTubePath,stroke:true,transform:''};
+      if(key==='stopper'&&tubePhotoOpacity>.5)return {bounds:[-30,-45,130,90],d:'M-14 -35Q-30 0 -14 36Q-2 45 16 35L87 21Q96 -3 84 -28L14 -40Q-3 -44 -14 -35Z',transform:restingTube.getAttribute('transform')};
       const n=bodies[key];
       if(!n||Number(n.getAttribute('opacity')??1)<=.05)return null;
       const outlines={flask:flaskOutline,tank:'M622 540L729 482L1462 510L1448 737L1380 780L641 746Z',jar:'M43 18Q112 0 180 18V60Q203 80 203 108V378Q112 419 20 378V108Q20 80 43 60Z',plate:'M47 18L237 14L176 42L-10 42Z',stopper:'M-57 -28H57V35H-57Z'};

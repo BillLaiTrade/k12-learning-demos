@@ -80,7 +80,11 @@ test('oxygen requested visual and physical corrections',{timeout:180000},async t
   });
   assert.ok(plateCoverage.every(alpha=>alpha>15),'the photographic plate must actually cover the projected bottle opening, without a visible gap');
   await root.locator('.oxygen-stage-area').screenshot({path:path.join(out,'photographic-materials-1440.png')});
-  await choose(1);await page.clock.fastForward(20800);assert.equal(await root.locator('[data-photographic-equipment=tube]').getAttribute('opacity'),'0');assert.equal(await root.locator('[data-setup-body=tube]').getAttribute('opacity'),'1');
+  await choose(1);
+  const stopper=active().locator('.oxygen-main-scene [data-equipment=stopper]');await stopper.scrollIntoViewIfNeeded();
+  const point=await stopper.evaluate(e=>{const m=e.getScreenCTM(),r=e.getBBox(),x=r.x+r.width/2,y=r.y+r.height/2;return{x:m.a*x+m.c*y+m.e,y:m.b*x+m.d*y+m.f};});
+  await page.mouse.click(point.x,point.y);const dialog=page.locator('#oxygen-equipment-dialog');assert.equal(await dialog.isVisible(),true);assert.equal(await dialog.locator('[data-equipment-title]').innerText(),'塞子');assert.equal(await root.getAttribute('data-state'),'paused');
+  await dialog.locator('.oxygen-equipment-return').click();await page.clock.runFor(20);await play.click();await page.clock.fastForward(20800);assert.equal(await root.locator('[data-photographic-equipment=tube]').getAttribute('opacity'),'0');assert.equal(await root.locator('[data-setup-body=tube]').getAttribute('opacity'),'1');
  });
  await t.test('tube glass retains its diameter while lying on the desk, lifting and connecting',async()=>{
   for(const width of[1440,390,320]){
