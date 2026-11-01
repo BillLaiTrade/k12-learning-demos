@@ -88,7 +88,7 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
   await set('answer-frequency',330);await set('answer-amplitude',.6);await page.waitForFunction(()=>document.querySelector('#quiz-choice').dataset.tone==='string'&&document.querySelector('#unit-quiz').dataset.waveReady==='true');
   await play('quiz-base');await play('quiz-choice');assert.equal(await page.locator('#unit-quiz').getAttribute('data-frequency'),'330');await page.locator('button[type=submit]').click();await page.waitForFunction(()=>document.querySelector('#quiz-feedback').dataset.state==='correct');
   assert.equal(await page.locator('[data-match-target]').getAttribute('d'),await page.locator('#quiz-choice .signal').getAttribute('d'));
-  await page.locator('[data-match-next]').click();await page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');assert.equal(await page.locator('[data-match-progress]').innerText(),'第 2／4 題');
+  await page.locator('[data-match-new]').click();await page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');assert.equal(await page.locator('#quiz-feedback').isHidden(),true);assert.equal(await page.locator('[data-match-summary],[data-match-progress]').count(),0);assert.equal(await page.locator('#unit-quiz').getAttribute('data-playing'),'false');
  });
  await t.test('lesson format follows unit 2.1 with a header and full-width body; navigation tracks reading',async()=>{
   const reference=await browser.newPage({viewport:{width:1440,height:1100}});

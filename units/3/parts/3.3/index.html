@@ -6,9 +6,9 @@
 <meta name="description" content="比較振幅、頻率與波形，探索琴弦、空氣柱、音色及聽覺範圍，認識分貝的基本讀法。">
 <title>不同的聲音，差別在哪裡？｜3.3 聲音的特性</title>
 <link rel="stylesheet" href="assets/lesson.css?v=sound-match-values-33">
-<script type="module" src="assets/lesson.mjs?v=sound-match-summary-34">
+<script type="module" src="assets/lesson.mjs?v=sound-match-free-35">
 </script>
-<link rel="stylesheet" href="assets/sound-match.css?v=4">
+<link rel="stylesheet" href="assets/sound-match.css?v=5">
 </head>
 <body>
 <header class="shell masthead">
@@ -276,11 +276,10 @@
 <section class="quiz sound-match" id="unit-quiz" aria-labelledby="quiz-title">
 <header class="match-head">
 <div><p class="match-kicker">單元小測</p><h2 id="quiz-title">把聲音調出來</h2></div>
-<div class="match-progress"><span data-match-progress>第 1／4 題</span><div data-match-dots role="group" aria-label="四題挑戰進度"></div></div>
-<p data-match-instructions>聽聽目標聲音，換波形、調整音高與音量，讓自己的聲音更接近它。</p>
+<button class="secondary match-new" type="button" data-match-new aria-label="換一題，清除目前設定與比較結果"><span aria-hidden="true">↻</span> 換一題</button>
+<p data-match-instructions>聽目標、調整波形、試聽比較；隨時都可以換一題。</p>
 </header>
 <div class="match-body">
-<div data-match-activity>
 <div class="match-target">
 <div class="match-picture" data-match-picture role="img" aria-label="目標聲音的發聲器材"></div>
 <div class="match-target-copy"><h3>目標聲音</h3><p>先聽一聽，再到下方試著調整。</p>
@@ -310,20 +309,11 @@
 </div>
 <div class="match-actions"><button class="play match-listen" type="button" data-play="quiz-choice" aria-pressed="false"><span aria-hidden="true">▶</span> <span data-match-play-label>聽我的聲音</span></button><span class="match-action-line" aria-hidden="true"></span><button class="play match-submit" type="submit">完成比較 <span aria-hidden="true">→</span></button></div>
 <p id="quiz-feedback" role="status" hidden></p>
-<div class="match-result" data-match-result hidden><div class="match-hints" data-match-hints></div><div class="match-result-actions"><button class="secondary" type="button" data-match-retry>再調整看看</button><button class="play" type="button" data-match-next>下一題 →</button></div></div>
+<div class="match-result" data-match-result hidden><div class="match-hints" data-match-hints></div><div class="match-result-actions"><button class="secondary" type="button" data-match-retry>繼續調整</button></div></div>
 <p class="play-state visually-hidden" role="status">等待操作</p>
 </form>
-<p class="match-tip"><span aria-hidden="true">☀</span> 可以反覆聽、反覆調整，準備好再完成比較。</p>
-<details class="match-sources"><summary>聲音來源與操作說明</summary><p>吉他、排笛沿用第五區的授權錄音；音叉為近似純音合成示意。小測將各素材的峰值設為共同基準，再以重取樣調整音高、固定增益調整振幅；波形與試聽取自同一份處理後的聲音。調頻也會改變播放長度，波形顯示其中 10 毫秒片段。網頁音量不是實際聲壓。</p><p>吉他：<a href="https://freesound.org/people/allan764/sounds/467669/">allan764，31-A#4.flac</a>（<a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>）；排笛聲音示例：<a href="https://freesound.org/people/mrshoes/sounds/278175/">mrshoes，panflute scale octave and a half</a>（<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>，原作以 PVC 排管錄製）。修改及授權詳見<a href="assets/timbre-audio/LICENSE.md">素材說明</a>。</p><p>頻率在 220～660 Hz 間每次增減 110 Hz，相對振幅在 0.3～0.9 間每次增減 0.3。目標聲音也取自相同預設值；音色、頻率與振幅數值相同，即算配對成功。結果僅保留在本頁，重新載入便會清除。</p></details>
-</div>
-<div class="match-summary" data-match-summary role="region" aria-labelledby="match-summary-title" hidden>
-<span class="match-summary-symbol" aria-hidden="true">✦</span>
-<p class="match-summary-kicker">四題挑戰已結束</p>
-<h3 id="match-summary-title" tabindex="-1">本輪結果</h3>
-<p class="match-summary-score" role="status">4 題中有 <strong data-match-summary-count>0</strong> 題配對成功</p>
-<div class="match-summary-items" data-match-summary-items role="list" aria-label="本輪四題完成情況"></div>
-<button class="play" type="button" data-match-restart>再挑戰一次 <span aria-hidden="true">↻</span></button>
-</div>
+<p class="match-tip"><span aria-hidden="true">☀</span> 可以反覆聽、反覆調整，也可以隨時換一題。</p>
+<details class="match-sources"><summary>聲音來源與操作說明</summary><p>吉他、排笛沿用第五區的授權錄音；音叉為近似純音合成示意。小測將各素材的峰值設為共同基準，再以重取樣調整音高、固定增益調整振幅；波形與試聽取自同一份處理後的聲音。調頻也會改變播放長度，波形顯示其中 10 毫秒片段。網頁音量不是實際聲壓。</p><p>吉他：<a href="https://freesound.org/people/allan764/sounds/467669/">allan764，31-A#4.flac</a>（<a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>）；排笛聲音示例：<a href="https://freesound.org/people/mrshoes/sounds/278175/">mrshoes，panflute scale octave and a half</a>（<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>，原作以 PVC 排管錄製）。修改及授權詳見<a href="assets/timbre-audio/LICENSE.md">素材說明</a>。</p><p>頻率在 220～660 Hz 間每次增減 110 Hz，相對振幅在 0.3～0.9 間每次增減 0.3。目標聲音也取自相同預設值；音色、頻率與振幅數值相同，即算配對成功。只比較目前這一題，不累積總分；換題會停止聲音並清除目前設定與回饋。</p></details>
 </div>
 </section>
 </div>

@@ -3,12 +3,28 @@ export const MATCH_LEVELS=Object.freeze({frequency:Object.freeze([220,330,440,55
 export const MATCH_RATE=48000;
 export const MATCH_WINDOW=.01;
 export const MATCH_PLOT=Object.freeze({left:8,right:892,zero:70,scale:100});
-export const MATCH_QUESTIONS=Object.freeze([
- {tone:'string',frequency:330,amplitude:.6,start:{tone:'pipe',frequency:440,amplitude:.3}},
- {tone:'pipe',frequency:550,amplitude:.3,start:{tone:'pure',frequency:330,amplitude:.9}},
- {tone:'pure',frequency:440,amplitude:.9,start:{tone:'string',frequency:660,amplitude:.3}},
- {tone:'string',frequency:660,amplitude:.3,start:{tone:'pipe',frequency:330,amplitude:.9}}
-]);
+// 三種音色 × 五個頻率 × 三個振幅；每題的三項初始設定都與目標不同。
+const targets=MATCH_TONES.flatMap(tone=>MATCH_LEVELS.frequency.flatMap(frequency=>MATCH_LEVELS.amplitude.map(amplitude=>({tone,frequency,amplitude}))));
+const first=targets.find(q=>q.tone==='string'&&q.frequency===330&&q.amplitude===.6);
+export const MATCH_QUESTIONS=Object.freeze([first,...targets.filter(q=>q!==first)].map(q=>Object.freeze({...q,start:Object.freeze({
+ tone:MATCH_TONES[(MATCH_TONES.indexOf(q.tone)+1)%MATCH_TONES.length],
+ frequency:MATCH_LEVELS.frequency[(MATCH_LEVELS.frequency.indexOf(q.frequency)+1)%MATCH_LEVELS.frequency.length],
+ amplitude:MATCH_LEVELS.amplitude[(MATCH_LEVELS.amplitude.indexOf(q.amplitude)+2)%MATCH_LEVELS.amplitude.length]
+})})));
+
+// 首題保留熟悉的起點；後續循環使用打散的題庫，循環交界也不連續重複。
+export function createMatchDeck(random=Math.random){
+ const shuffle=items=>{for(let i=items.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[items[i],items[j]]=[items[j],items[i]];}return items;};
+ let previous=null,pending=null;
+ return {next(){
+  if(pending===null){previous=MATCH_QUESTIONS[0];pending=shuffle(MATCH_QUESTIONS.slice(1));return previous;}
+  if(!pending.length){
+   pending=shuffle([...MATCH_QUESTIONS]);
+   if(pending.at(-1)===previous)[pending[0],pending[pending.length-1]]=[pending.at(-1),pending[0]];
+  }
+  previous=pending.pop();return previous;
+ }};
+}
 export const MATCH_NAMES=Object.freeze({pure:'音叉',string:'吉他',pipe:'排笛'});
 
 // 由既有440Hz錄音重取樣；同一份結果用於播放及繪圖，保留原音起落。
