@@ -1,0 +1,295 @@
+{
+  "url": "http://127.0.0.1:43843/units/2/parts/2.3/",
+  "checks": 16,
+  "errors": [],
+  "rows": [
+    {
+      "width": 1440,
+      "stage": 0,
+      "compact": false,
+      "left": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "right": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "imageRatio": 1.8095238095238095,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "stage": 1,
+      "compact": false,
+      "left": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "right": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "stage": 2,
+      "compact": false,
+      "left": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "right": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "stage": 3,
+      "compact": false,
+      "left": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "right": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "stage": 4,
+      "compact": false,
+      "left": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "right": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "stage": 5,
+      "compact": false,
+      "left": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "right": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "stage": 6,
+      "compact": false,
+      "left": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "right": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "stage": 7,
+      "compact": false,
+      "left": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "right": {
+        "y": 7.640625,
+        "bottom": 600.796875,
+        "height": 593.15625
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "stage": 0,
+      "compact": true,
+      "left": {
+        "y": 11.65625,
+        "bottom": 340.140625,
+        "height": 328.484375
+      },
+      "right": {
+        "y": -146.375,
+        "bottom": -0.34375,
+        "height": 146.03125
+      },
+      "imageRatio": 1.8072289156626506,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "stage": 1,
+      "compact": true,
+      "left": {
+        "y": 11.65625,
+        "bottom": 741.0625,
+        "height": 729.40625
+      },
+      "right": {
+        "y": -146.375,
+        "bottom": -0.34375,
+        "height": 146.03125
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "stage": 2,
+      "compact": true,
+      "left": {
+        "y": 11.65625,
+        "bottom": 750.203125,
+        "height": 738.546875
+      },
+      "right": {
+        "y": -146.375,
+        "bottom": -0.34375,
+        "height": 146.03125
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "stage": 3,
+      "compact": true,
+      "left": {
+        "y": 11.65625,
+        "bottom": 750.203125,
+        "height": 738.546875
+      },
+      "right": {
+        "y": -146.375,
+        "bottom": -0.34375,
+        "height": 146.03125
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "stage": 4,
+      "compact": true,
+      "left": {
+        "y": 11.65625,
+        "bottom": 792.921875,
+        "height": 781.265625
+      },
+      "right": {
+        "y": -146.375,
+        "bottom": -0.34375,
+        "height": 146.03125
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "stage": 5,
+      "compact": true,
+      "left": {
+        "y": 11.65625,
+        "bottom": 693.1875,
+        "height": 681.53125
+      },
+      "right": {
+        "y": -146.375,
+        "bottom": -0.34375,
+        "height": 146.03125
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "stage": 6,
+      "compact": true,
+      "left": {
+        "y": 11.65625,
+        "bottom": 693.1875,
+        "height": 681.53125
+      },
+      "right": {
+        "y": -146.375,
+        "bottom": -0.34375,
+        "height": 146.03125
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "stage": 7,
+      "compact": true,
+      "left": {
+        "y": 11.65625,
+        "bottom": 693.1875,
+        "height": 681.53125
+      },
+      "right": {
+        "y": -146.375,
+        "bottom": -0.34375,
+        "height": 146.03125
+      },
+      "imageRatio": null,
+      "naturalRatio": 1.8070588235294118,
+      "overflow": false
+    }
+  ]
+}

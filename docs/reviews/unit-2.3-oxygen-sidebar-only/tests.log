@@ -1,0 +1,52 @@
+▶ 2.3 oxygen: optional continuous playback shares pause and progress with the current scene
+  ✔ continuous play is explicit, accessible in the sidebar and off by default; manual steps remain bounded (384.158492ms)
+  ✔ one click from materials traverses every operation, holds completed frames and ends without leaving oxygen (645.868416ms)
+  ✔ arming continuous play preserves current progress; both pause buttons freeze and resume the same clock (794.191924ms)
+  ✔ pause in the between-operation hold retains its elapsed time and does not restart that operation (199.255973ms)
+  ✔ manual sidebar choices exit continuous mode without stale automatic advances (351.488838ms)
+  ✔ reading an apparatus pauses the sequence; closing never resumes it and explicit continue retains position (349.325004ms)
+  ✔ Escape, background, leaving the block and competing playback pause a sequence without silently restarting (265.400593ms)
+  ✔ seven widths keep the control outside the compact menu; native Enter, Space and Escape operate it (2326.901247ms)
+  ✔ real touch with reduced motion pauses and continues; no-JS keeps scenes readable with playback hidden (2564.401893ms)
+✔ 2.3 oxygen: optional continuous playback shares pause and progress with the current scene (9592.181476ms)
+▶ 2.3 complete page: five teaching sections and one evidence-based quiz
+  ✔ all six sections and routes exist, with gas profiles and no retired experiment (82.248567ms)
+  ✔ default cup comparisons remain after preview and reset (114.289868ms)
+  ✔ both preparation lessons navigate independent steps and keep properties in section five (968.655264ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (152.929201ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (528.010269ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (3216.076719ms)
+  ✔ all teaching evidence is available without JavaScript (1143.21183ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (4373.59343ms)
+✔ 2.3 complete page: five teaching sections and one evidence-based quiz (12172.857799ms)
+▶ 2.3 materials: seven illustrated objects explain identity and experimental role
+  ✔ native material buttons target the same dialog; inline information is absent and nothing opens automatically (202.310708ms)
+  ✔ actual photo object bodies open all seven original introductions without a lower information panel (1251.327109ms)
+  ✔ name labels, Enter and Space open the dialog; Escape and return restore the selected material focus (337.184065ms)
+  ✔ materials keep no playback or bottom next action; reopening the same material works (328.070435ms)
+  ✔ selection survives leaving and returning, but does not reopen the dialog or show inline information (433.96536ms)
+  ✔ seven widths keep every 44px target and the shared dialog in-screen (9824.001024ms)
+  ✔ real touch and reduced motion open and close every original material introduction (2144.881097ms)
+  ✔ original science content remains unchanged for oxygen source, catalyst, purge and underwater covering (26.501631ms)
+  ✔ without JavaScript all seven source introductions remain readable with the original photo (1183.938946ms)
+✔ 2.3 materials: seven illustrated objects explain identity and experimental role (17258.065331ms)
+▶ 2.3 oxygen: one vertical list of purposeful operations and in-scene playback
+  ✔ one eight-operation list sits beside materials, with no second hierarchy, counter, previous or material playback (90.655857ms)
+  ✔ sidebar selects every operation without bottom next buttons; each animation stops at its own end (707.203528ms)
+  ✔ direct selection reconstructs prerequisite contents and returning to materials preserves a chosen introduction (360.503436ms)
+  ✔ the in-scene button pauses pixels, resumes and replays; quick selection cancels previous clocks (882.48341ms)
+  ✔ vertical arrows, Home, End, native activation and Escape retain visible focus (145.752875ms)
+  ✔ background, leaving and another experiment pause without resuming automatically (352.547531ms)
+  ✔ storage and earlier operations have no bottom action; normal lesson navigation remains (413.255476ms)
+  ✔ eight operations fit seven widths; compact navigation expands vertically and all controls stay inside (12128.91314ms)
+  ✔ touch and reduced motion select operations from the expandable sidebar (1562.293301ms)
+  ✔ without JavaScript all eight correct representatives and material introductions remain readable (1085.195571ms)
+✔ 2.3 oxygen: one vertical list of purposeful operations and in-scene playback (19374.298355ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 59959.137896

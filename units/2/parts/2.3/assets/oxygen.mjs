@@ -128,7 +128,7 @@ function renderAssembly(elapsed, state, view, phase) {
 }
 
 function createPreparationPlayer() {
-  const play=panel.querySelector('[data-play]'),next=panel.querySelector('[data-next]');
+  const play=panel.querySelector('[data-play]');
   const sequence=panel.querySelector('[data-continuous]'),sequenceStatus=panel.querySelector('[data-continuous-status]');
   const status=panel.querySelector('[role=status]'),menu=panel.querySelector('[data-step-menu]');
   const navBody=panel.querySelector('#oxygen-step-list'),nav=panel.querySelector('.oxygen-step-nav');
@@ -164,9 +164,6 @@ function createPreparationPlayer() {
     sequence.classList.toggle('is-playing',sequencePlaying);
     sequenceStatus.textContent=sequencePlaying?'自動接續下一步，可隨時暫停。':sequencePaused?'已暫停，按繼續可接著觀看。':replayAll?'已完成氧氣收集與封存。':stage===0?'從擺好集氣位置開始連播。':state==='complete'?'接著從下一個操作連播。':'從目前操作往下連播。';
     menu.textContent=`${String(stage+1).padStart(2,'0')} ${OXYGEN_OPERATIONS[stage].label} ▾`;
-    const last=stage===steps.length-1;
-    next.parentElement.hidden=last;next.disabled=last;
-    if(!last)next.innerHTML=`接著：${OXYGEN_OPERATIONS[stage+1].label} <span aria-hidden="true">→</span>`;
   }
   function tick(now){
     if(state!=='playing')return;
@@ -239,12 +236,9 @@ function createPreparationPlayer() {
   menu.addEventListener('click',()=>setMenu(navBody.hidden));
   play.addEventListener('click',()=>{if(state==='playing')pausePlayback();else {if(state==='complete')continuous=false;start();}});
   sequence.addEventListener('click',toggleContinuous);
-  next.addEventListener('click',()=>{
-    if(stage<steps.length-1)select(stage+1,true);
-  });
   panel.addEventListener('keydown',event=>{if(event.key==='Escape')pausePlayback();});
   if('IntersectionObserver'in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel.querySelector('.oxygen-stage-area'));
-  const api={pausePlayback};players.push(api);next.disabled=false;sequence.disabled=false;
+  const api={pausePlayback};players.push(api);sequence.disabled=false;
   syncLayout();new ResizeObserver(syncLayout).observe(panel);select(0);panel.dataset.ready='true';return api;
 }
 createPreparationPlayer();

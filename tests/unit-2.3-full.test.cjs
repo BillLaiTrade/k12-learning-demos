@@ -59,11 +59,11 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     const oxygen=page.locator('[data-replay="oxygen"]');
     assert.equal(await oxygen.getAttribute('data-stage'),'0');
     assert.equal(await oxygen.locator('[role=tabpanel]:visible').count(),1);
-    await oxygen.locator('[data-next]').click();await page.clock.fastForward(400);
+    await oxygen.locator('#oxygen-tab-1').click();await page.clock.fastForward(400);
     assert.equal(await oxygen.getAttribute('data-stage'),'1');
     await oxygen.locator('[data-play]').click();await page.clock.fastForward(3000);assert.equal(await oxygen.getAttribute('data-state'),'paused');
     await oxygen.locator('[data-play]').click();await page.clock.fastForward(15000);assert.equal(await oxygen.getAttribute('data-state'),'complete');assert.equal(await oxygen.getAttribute('data-stage'),'1');
-    for(const stage of[2,3,4,5,6,7]){await oxygen.locator('[data-next]').click();await page.clock.fastForward(6000);assert.equal(await oxygen.getAttribute('data-stage'),String(stage));assert.equal(await oxygen.getAttribute('data-state'),'complete');}
+    for(const stage of[2,3,4,5,6,7]){await oxygen.locator(`#oxygen-tab-${stage}`).click();await page.clock.fastForward(6000);assert.equal(await oxygen.getAttribute('data-stage'),String(stage));assert.equal(await oxygen.getAttribute('data-state'),'complete');}
     await oxygen.locator('[data-stage="0"]').click();assert.equal(await oxygen.getAttribute('data-stage'),'0');
     const panel=page.locator('[data-replay="co2"]');await panel.locator('[data-next]').click();await page.clock.fastForward(1500);assert.equal(await panel.getAttribute('data-stage'),'1');
     await panel.locator('[data-play]').click();const time=await panel.getAttribute('data-time');await page.clock.fastForward(3000);assert.equal(await panel.getAttribute('data-time'),time);assert.equal(await panel.getAttribute('data-state'),'paused');
@@ -137,7 +137,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
   await t.test('touch, reduced motion, keyboard selects and last-section anchor work', async () => {
     const touch = await browser.newPage({ viewport:{width:390,height:844}, hasTouch:true, isMobile:true, reducedMotion:'reduce' });
     await touch.goto(url,{waitUntil:'networkidle'});
-    await touch.locator('[data-replay="oxygen"] [data-next]').tap();
+    await touch.locator('[data-replay="oxygen"] [data-step-menu]').tap();await touch.locator('#oxygen-tab-1').tap();
     await touch.waitForFunction(() => document.querySelector('[data-replay="oxygen"]').dataset.state === 'complete');
     assert.equal(await touch.locator('[data-replay="oxygen"]').getAttribute('data-stage'),'1');
     assert.equal(await touch.locator('[data-replay="oxygen"] [data-step-menu]').getAttribute('aria-expanded'),'false');await touch.locator('[data-replay="oxygen"] [data-step-menu]').tap();assert.equal(await touch.locator('[data-replay="oxygen"] .sequence-step:visible').count(),8);
