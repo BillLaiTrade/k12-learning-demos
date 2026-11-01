@@ -1,0 +1,37 @@
+{
+  "target": "http://127.0.0.1:8734/units/3/parts/3.2/",
+  "results": [
+    {
+      "width": 1440,
+      "notesVisible": 2,
+      "noHorizontalOverflow": true
+    },
+    {
+      "width": 1280,
+      "notesVisible": 2,
+      "noHorizontalOverflow": true
+    },
+    {
+      "width": 1024,
+      "notesVisible": 2,
+      "noHorizontalOverflow": true
+    },
+    {
+      "width": 768,
+      "notesVisible": 2,
+      "noHorizontalOverflow": true
+    },
+    {
+      "width": 390,
+      "notesVisible": 2,
+      "noHorizontalOverflow": true
+    },
+    {
+      "width": 320,
+      "notesVisible": 2,
+      "noHorizontalOverflow": true
+    }
+  ],
+  "controls": "play/pause/reset passed for both labs",
+  "pageErrors": []
+}
