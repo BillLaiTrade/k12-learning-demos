@@ -1,0 +1,37 @@
+[
+  {
+    "id": "card-01",
+    "unchanged": true,
+    "sha256": "e502c45cd0aa6085a9e9554dafa3a9e2aad7491fbbd349fc86fffb776f9c7b91"
+  },
+  {
+    "id": "card-02",
+    "unchanged": true,
+    "sha256": "2701e0a31b6f4482f2b41e02ca6adbc2998ee40a868c7e352fcd2a2f02e0998f"
+  },
+  {
+    "id": "card-03",
+    "unchanged": true,
+    "sha256": "660599d8959592e291f6f947cb429232aaa31b5614d82653abbab42583ef10da"
+  },
+  {
+    "id": "card-04",
+    "unchanged": true,
+    "sha256": "7ddcefca52d838db16d027866e72805b18d6a7ed7ab9c7c983caae3814536dda"
+  },
+  {
+    "id": "card-05",
+    "unchanged": true,
+    "sha256": "3297234bfa21f22e5a42432775e382c7d93c23a5a9bfd47123cf0598421a5fe0"
+  },
+  {
+    "id": "card-06",
+    "unchanged": true,
+    "sha256": "c61169942956e3b5d92e3017188e5d3f432bda7ae30ae8e755e61f8436008d67"
+  },
+  {
+    "id": "card-07",
+    "unchanged": true,
+    "sha256": "499b13e9a44fdd9524683d1032508ce31c1dd66292cbb34a56675efcbd0e1e3a"
+  }
+]

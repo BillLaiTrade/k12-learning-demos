@@ -11,9 +11,12 @@ export function createSoundMatch(root,{onChange}){
   const selected=settings(key),clip=await loadTimbreClip(selected.tone);
   return matchClip(clip,selected);
  }
- function conceal(){
-  root.querySelector('.play-state').classList.add('visually-hidden');result.hidden=true;targetPlot.setAttribute('hidden','');find('[data-match-legend]').hidden=true;
-  feedback.hidden=true;delete feedback.dataset.state;root.dataset.revealed='false';
+ function clearFeedback(){
+  root.querySelector('.play-state').classList.add('visually-hidden');result.hidden=true;
+  feedback.hidden=true;delete feedback.dataset.state;find('[data-match-hints]').replaceChildren();
+ }
+ function hideTarget(){
+  targetPlot.setAttribute('hidden','');targetPlot.setAttribute('d','');find('[data-match-legend]').hidden=true;root.dataset.revealed='false';
  }
  async function renderWave(){
   const ticket=++revision;root.dataset.waveReady='false';mine.querySelector('.signal').setAttribute('d','');
@@ -27,7 +30,7 @@ export function createSoundMatch(root,{onChange}){
   }catch{if(ticket!==revision)return;load.textContent='波形暫時無法載入，按「聽我的聲音」重試。';}
  }
  function update(){
-  onChange();heardChoice=false;conceal();root.dataset.matchState='answering';
+  onChange();heardChoice=false;clearFeedback();root.dataset.matchState='answering';
   for(const key of ['frequency','amplitude']){
    const levels=MATCH_LEVELS[key],position=levels.indexOf(answer[key]),output=find('#answer-'+key);
    output.textContent=key==='frequency'?`${answer[key]} Hz`:answer[key].toFixed(1);output.dataset.value=String(answer[key]);
@@ -38,6 +41,7 @@ export function createSoundMatch(root,{onChange}){
   renderWave();
  }
  function startQuestion(){
+  hideTarget();
   root.dataset.matchState='answering';
   onChange();heardTarget=false;heardChoice=false;answer={...target().start};
   const picture=document.querySelector(`#card-05 [data-timbre="${target().tone}"] .timbre-picture`);
@@ -82,7 +86,7 @@ export function createSoundMatch(root,{onChange}){
  find('[data-match-result-action]').addEventListener('click',()=>{
   if(result.hidden)return;
   if(feedback.dataset.state==='correct'){changeQuestion();return;}
-  onChange();conceal();root.dataset.matchState='answering';find('[data-match-step=frequency]:not(:disabled)').focus({preventScroll:true});
+  onChange();clearFeedback();root.dataset.matchState='answering';find('[data-match-step=frequency]:not(:disabled)').focus({preventScroll:true});
  });
  startQuestion();
  return {settings,prepare,buffer:(clip,context)=>timbreBuffer(clip,context),

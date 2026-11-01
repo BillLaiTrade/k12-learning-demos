@@ -42,15 +42,32 @@ test('sound-match assessment follows the approved layout and shares actual audio
   await play('quiz-base');const runs=await page.evaluate(()=>window.matchRuns.slice(-2));assert.equal(runs[0].stopped,true);assert.equal(await root.locator('[data-play=quiz-choice]').getAttribute('aria-pressed'),'false');
   await page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.playing==='false');assert.equal(await root.locator('[data-play=quiz-base] [data-match-play-label]').innerText(),'聽目標聲音');
  });
- await t.test('comparison reveals the target only after both sounds were heard; feedback is specific and editing clears stale results',async()=>{
+ await t.test('comparison reveals the target only after both sounds were heard; edits retain the target and clear stale judgments',async()=>{
   await set('frequency',220);await root.locator('[type=submit]').click();assert.equal(await feedback.getAttribute('data-state'),'incomplete');assert.equal(await root.locator('[data-match-target]').isHidden(),true);
   await play('quiz-choice');await root.locator('[type=submit]').click();await page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.revealed==='true');assert.equal(await feedback.getAttribute('data-state'),'incorrect');assert.match(await root.locator('[data-match-hints]').innerText(),/增加頻率/);await root.screenshot({path:`${capture}/comparison-1440.png`});
-  assert.equal(await root.locator('[data-match-result-action]').innerText(),'繼續調整');const kept=await plot.locator('.signal').getAttribute('d');
+  assert.equal(await root.locator('[data-match-result-action]').innerText(),'繼續調整');const kept=await plot.locator('.signal').getAttribute('d'),target=await root.locator('[data-match-target]').getAttribute('d');
   await root.locator('[data-match-result-action]').click();assert.equal(await feedback.isHidden(),true);assert.equal(await plot.locator('.signal').getAttribute('d'),kept);assert.equal(await plot.getAttribute('data-frequency'),'220');assert.equal(await root.getAttribute('data-match-state'),'answering');
-  await set('frequency',330);assert.equal(await feedback.isHidden(),true);assert.equal(await root.locator('[data-match-target]').isHidden(),true);assert.equal(await root.locator('[data-match-result]').isHidden(),true);
+  const retained=async()=>{
+   assert.equal(await root.locator('[data-match-target]').isVisible(),true);assert.equal(await root.locator('[data-match-target]').getAttribute('d'),target);
+   assert.equal(await root.locator('[data-match-legend]').isVisible(),true);assert.equal(await root.getAttribute('data-revealed'),'true');
+   assert.equal(await feedback.isHidden(),true);assert.equal(await feedback.getAttribute('data-state'),null);assert.equal(await root.locator('[data-match-hints]').innerText(),'');assert.equal(await root.locator('[data-match-result]').isHidden(),true);
+  };
+  await retained();const runs=await page.evaluate(()=>window.matchRuns.length);
+  await set('frequency',330);await retained();await set('amplitude',.3);await retained();await switchTo('string');await retained();
+  assert.equal(await page.evaluate(()=>window.matchRuns.length),runs,'editing does not autoplay');
+  await root.locator('[type=submit]').click();assert.equal(await feedback.getAttribute('data-state'),'incomplete');assert.equal(await root.locator('[data-match-target]').getAttribute('d'),target);assert.equal(await root.locator('[data-match-target]').isVisible(),true);
+  await play('quiz-choice');await root.locator('[type=submit]').click();await page.waitForFunction(()=>document.querySelector('#quiz-feedback').dataset.state==='incorrect');assert.match(await root.locator('[data-match-hints]').innerText(),/增加振幅/);
+  await set('amplitude',.6);await retained();await play('quiz-choice');await root.locator('[type=submit]').click();await page.waitForFunction(()=>document.querySelector('#quiz-feedback').dataset.state==='correct');
+  await set('frequency',440);await retained();
+  for(const [width,height]of [[1440,900],[1366,768]]){
+   await page.setViewportSize({width,height});await root.evaluate(n=>n.scrollIntoView({block:'start'}));
+   const fits=await root.evaluate(n=>n.querySelector('.match-actions').getBoundingClientRect().bottom<=innerHeight&&document.documentElement.scrollWidth<=innerWidth);assert.equal(fits,true,`retained target and controls fit ${width}x${height}`);
+   await root.screenshot({path:`${capture}/retained-target-${width}.png`});
+  }
+  await page.setViewportSize({width:1440,height:1000});
  });
  const readGoal=async()=>{if(await root.getAttribute('data-match-playing')!=='quiz-base')await play('quiz-base');return root.evaluate(n=>({tone:n.dataset.tone,frequency:Number(n.dataset.frequency),amplitude:Number(n.dataset.amplitude)}));};
- const newQuestion=async()=>{await root.locator('[data-match-new]').click();await ready();};
+ const newQuestion=async()=>{await root.locator('[data-match-new]').click();await ready();assert.equal(await root.locator('[data-match-target]').getAttribute('d'),'');assert.equal(await root.locator('[data-match-legend]').isHidden(),true);assert.equal(await root.getAttribute('data-revealed'),'false');};
  await t.test('new question is always available before listening, during adjustment and playback, and after feedback',async()=>{
   await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.evaluate(()=>window.matchRuns.length),0);
   await newQuestion();assert.equal(await page.evaluate(()=>window.matchRuns.length),0);assert.equal(await root.locator('[data-play=quiz-base]').evaluate(n=>document.activeElement===n),true);
@@ -76,7 +93,7 @@ test('sound-match assessment follows the approved layout and shares actual audio
    if(i===0)await root.screenshot({path:`${capture}/correct-1440.png`});
    const before=await page.evaluate(()=>window.matchRuns.length);
    if(i%2===0){await root.locator('[data-match-result-action]').click();await ready();}else await newQuestion();
-   assert.equal(await page.evaluate(()=>window.matchRuns.length),before);assert.equal(await root.getAttribute('data-playing'),'false');assert.equal(await root.locator('[data-match-target]').isHidden(),true);assert.equal(await root.locator('form').isVisible(),true);assert.equal(await feedback.isHidden(),true);assert.equal(await root.getAttribute('data-match-state'),'answering');
+   assert.equal(await page.evaluate(()=>window.matchRuns.length),before);assert.equal(await root.getAttribute('data-playing'),'false');assert.equal(await root.locator('[data-match-target]').isHidden(),true);assert.equal(await root.locator('[data-match-target]').getAttribute('d'),'');assert.equal(await root.locator('[data-match-legend]').isHidden(),true);assert.equal(await root.locator('form').isVisible(),true);assert.equal(await feedback.isHidden(),true);assert.equal(await root.getAttribute('data-match-state'),'answering');
   }
   assert.equal(await root.locator('[data-match-progress],[data-match-summary],[data-match-dots]').count(),0);assert.doesNotMatch(await root.innerText(),/本輪結果|再挑戰一次|第 ?\d ?[／/] ?4 ?題/);
  });
@@ -125,6 +142,19 @@ test('sound-match assessment follows the approved layout and shares actual audio
    await p.locator('[data-match-new]').tap();await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');assert.equal(await p.locator('#unit-quiz').getAttribute('data-playing'),'false');assert.equal(await p.locator('#quiz-feedback').isHidden(),true);assert.equal(await p.locator('[data-match-new]').isVisible(),true);
   }
   await p.locator('#unit-quiz [type=submit]').tap();assert.equal(await p.locator('#quiz-feedback').getAttribute('data-state'),'incomplete');assert.equal(await p.locator('[data-match-summary]').count(),0);await context.close();
+ });
+ await t.test('a retained target survives an edited waveform load failure and retry; a new question hides it again',async()=>{
+  const context=await browser.newContext(),p=await context.newPage();let fail=true;
+  try{
+   await p.route('**/timbre-audio/pure.wav*',route=>fail?route.fulfill({status:503,body:'unavailable'}):route.continue());await p.goto(base+'#unit-quiz',{waitUntil:'networkidle'});
+   const card=p.locator('#unit-quiz'),goal=card.locator('[data-match-target]');await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');
+   for(const key of ['quiz-base','quiz-choice']){await card.locator(`[data-play="${key}"]`).click();await p.waitForFunction(k=>document.querySelector('#unit-quiz').dataset.matchPlaying===k,key);}
+   await card.locator('[type=submit]').click();await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.revealed==='true');const d=await goal.getAttribute('d');
+   await card.locator('[data-match-switch]').click();await p.waitForFunction(()=>document.querySelector('[data-match-load]').textContent.includes('暫時無法'));
+   assert.equal(await goal.isVisible(),true);assert.equal(await goal.getAttribute('d'),d);assert.equal(await card.locator('#quiz-choice .signal').getAttribute('d'),'');assert.equal(await card.locator('[data-match-result]').isHidden(),true);
+   fail=false;await card.locator('[data-play=quiz-choice]').click();await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');assert.equal(await goal.getAttribute('d'),d);assert.equal(await goal.isVisible(),true);
+   await card.locator('[data-match-new]').click();await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');assert.equal(await goal.isHidden(),true);assert.equal(await goal.getAttribute('d'),'');assert.equal(await card.locator('[data-match-legend]').isHidden(),true);
+  }finally{await context.close();}
  });
  if(!process.env.SOUND33_BASE_URL)await t.test('failed clip load leaves no fake wave and listening retries successfully',async()=>{
   const p=await browser.newPage();let fail=true;await p.route('**/timbre-audio/pipe.wav*',route=>fail?route.fulfill({status:503,body:'unavailable'}):route.continue());await p.goto(base+'#unit-quiz',{waitUntil:'networkidle'});await p.waitForFunction(()=>document.querySelector('[data-match-load]').textContent.includes('暫時無法'));
