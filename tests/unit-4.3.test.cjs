@@ -24,7 +24,9 @@ test('4.3 complete basic lesson works on desktop and mobile',{timeout:90000},asy
  assert.deepEqual(await dots(),[448,448,448]);await page.clock.runFor(500);assert.deepEqual(await dots(),[448,448,448]);
  await page.locator('#race-start').click();await page.clock.runFor(2100);const moving=await dots();assert.ok(moving[0]>moving[1]&&moving[1]>moving[2]);await page.clock.runFor(3100);assert.deepEqual(await dots(),[1590,1590,1590]);assert.equal(await page.locator('#speed-lab').getAttribute('data-state'),'complete');
  await page.locator('#race-start').click();assert.deepEqual(await dots(),[448,448,448]);await page.locator('#race-pause').click();
- const normal=page.locator('[data-ray-lab=normal]');await normal.locator('.normal-play').click();await page.clock.runFor(650);const y=Number(await normal.locator('.pulse').getAttribute('cy'));assert.ok(y>30&&y<190);await normal.locator('[data-medium=glass]').click();assert.equal(await normal.locator('.pulse').getAttribute('cy'),'30');await page.clock.runFor(1000);assert.equal(await normal.locator('.pulse').getAttribute('cy'),'30');
+ await page.waitForFunction(()=>document.querySelector('#normal-lab')?.dataset.state==='idle');
+ await page.locator('#normal-start').click();await page.clock.runFor(650);const normal=page.locator('#normal-lab');const y=Number(await normal.locator('.normal-lane').first().getAttribute('data-front-y'));assert.ok(y>165&&y<463);await page.locator('#normal-pause').click();const pausedY=Number(await normal.locator('.normal-lane').first().getAttribute('data-front-y'));await page.clock.runFor(1000);assert.equal(Number(await normal.locator('.normal-lane').first().getAttribute('data-front-y')),pausedY);
+
  for(const id of ['enter','leave']){
   const lab=page.locator(`[data-ray-lab=${id}]`);await lab.locator('[data-medium=glass]').click();
   const input=lab.locator('.angle-input');await input.fill('35');await input.dispatchEvent('input');

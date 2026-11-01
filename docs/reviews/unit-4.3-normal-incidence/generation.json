@@ -1,0 +1,13 @@
+{
+  "approvedMockup": "approved-design-before-fold.png",
+  "followup": "使用者核可將「為什麼變慢卻沒有轉向」預設收合，點擊後展開。",
+  "asset": "units/4/parts/4.3/assets/normal-incidence-bench.png",
+  "source": "/workspace/generated_images/exec-b04a2081-0716-4127-b8b5-5d49f8654832.png",
+  "generation": "以最後核可示意圖為風格參考，由 image_gen 產生無文字、無光束底圖；原檔複製，未裁切或後製。",
+  "dimensions": [
+    1717,
+    916
+  ],
+  "sha256": "30b0fd1491bf2b90098cf3af827b4f59c59c3ec447b21c52a7c8b87a65514432",
+  "overlay": "光路、法線、介面、標籤、操作與狀態為可讀取的 HTML/SVG，未烘焙在圖片內。"
+}

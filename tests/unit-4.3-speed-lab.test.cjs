@@ -32,7 +32,7 @@ test('4.3 fixed-media million-kilometre desk is accurate, operable and matches i
   assert.equal(await page.locator('.race-actions button').count(),2);
   assert.equal(await page.locator('#race-reset').count(),0);
   assert.equal(await page.locator('#s1 .finding').count(),0);
-  assert.equal(await page.locator('#s2 .finding').count(),1);
+  assert.equal(await page.locator('#s3 .finding').count(),1);
   assert.equal(await page.locator('.race-table .race-arrivals').count(),1);
   assert.equal(await page.locator('#speed-lab > .race-arrivals').count(),0);
   assert.deepEqual(await positions(),[448,448,448]);

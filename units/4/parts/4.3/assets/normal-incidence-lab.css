@@ -1,0 +1,86 @@
+/* The second block has its own scene and controls; other optics labs are unchanged. */
+#s2 .lesson-body { container-type:inline-size; container-name:normal-card; }
+#normal-lab { padding:0; border:0; background:transparent; }
+.normal-viewport { overflow-x:auto; border-radius:14px; overscroll-behavior-x:contain; scrollbar-width:thin; }
+.normal-table { min-width:680px; position:relative; isolation:isolate; }
+#normal-background { display:block; width:100%; height:auto; aspect-ratio:1717 / 916; }
+#normal-scene { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+#normal-scene text { font-family:ui-sans-serif,system-ui,"Noto Sans TC",sans-serif; fill:#233d35; font-weight:650; }
+.normal-name { position:absolute; top:4.6%; margin:0; transform:translateX(-50%); padding:4px 17px; border:1px solid #dfdfcf; border-radius:8px; background:#fffdf3ed; color:#203c35; font-size:clamp(.83rem,1.25vw,1.05rem); box-shadow:0 3px 9px #59412812; white-space:nowrap; }
+.normal-name.water { left:32.7315%; }
+.normal-name.glass { left:67.385%; }
+.normal-state { position:absolute; top:10%; right:6%; padding:4px 9px; border:1px solid #b6cab3; border-radius:7px; background:#f2f8eaf5; color:#28654f; font-size:clamp(.63rem,.95vw,.78rem); font-weight:700; }
+.normal-reference { stroke:#487260; stroke-width:2.5; stroke-dasharray:9 9; opacity:.85; }
+.normal-interface { stroke:#526e62; stroke-width:2; stroke-dasharray:9 6; opacity:.65; }
+.normal-halo { stroke:#ffb52e; stroke-width:17; filter:url(#normal-glow); opacity:.8; }
+.normal-ray { stroke:#ffc741; stroke-width:7; }
+.normal-core { stroke:#fff8d6; stroke-width:2.8; }
+.normal-beam line { stroke-linecap:butt; }
+.normal-source-light { fill:#ffe9a3; filter:url(#normal-glow); }
+.normal-direction { fill:none; stroke:#fffdf3; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; filter:drop-shadow(0 2px 3px #34564e70); }
+.normal-console { display:flex; align-items:center; flex-wrap:wrap; gap:15px; margin:15px 0 11px; }
+.normal-actions { display:flex; gap:10px; }
+.normal-actions button { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:46px; padding:9px 17px; font-weight:700; }
+.normal-actions svg { width:19px; height:19px; flex:none; }
+.normal-actions button:disabled { opacity:.45; cursor:default; }
+#normal-pause[data-action="pause"] .resume-icon, #normal-pause[data-action="resume"] .pause-icon { display:none; }
+.normal-time-note { flex:1 1 220px; margin:0; color:#64736d; font-size:.76rem; }
+.normal-steps { display:flex; justify-content:center; gap:12px; margin:12px 0; padding:9px 13px; border-radius:999px; background:#f2f4ef; color:#7a857d; list-style:none; font-size:.85rem; }
+.normal-steps li { display:flex; align-items:center; gap:8px; padding:3px 10px; border-radius:999px; }
+.normal-steps li:not(:last-child)::after { content:'→'; margin-left:8px; color:#759787; }
+.normal-steps b { display:inline-grid; place-items:center; width:25px; height:25px; border-radius:50%; background:#dce2dc; font-size:.8rem; }
+.normal-steps [aria-current="step"] { background:#e2eee0; color:#1d664b; font-weight:700; }
+.normal-steps [aria-current="step"] b { background:#257656; color:white; }
+.normal-status { min-height:1.7em; margin:10px 0; color:#296b50; font-size:.86rem; }
+.normal-takeaway { margin:17px 0 22px; text-align:center; color:#1b634c; font-size:clamp(.96rem,1.4vw,1.15rem); font-weight:750; }
+.normal-pan-hint { display:none; margin:0 0 7px; font-size:.76rem; color:#64736d; }
+#normal-retry[hidden] { display:none; }
+.normal-explanation { margin-top:18px; border:1px solid #d9e4d9; border-radius:13px; background:linear-gradient(130deg,#fcfdf9,#f6f9f1); }
+.normal-explanation summary { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:17px 20px; list-style:none; cursor:pointer; color:#284d3d; font-size:1.06rem; font-weight:750; }
+.normal-explanation summary::-webkit-details-marker { display:none; }
+.normal-explanation summary::after { content:'＋'; display:grid; place-items:center; width:27px; height:27px; flex:none; border-radius:50%; background:#e5eee0; color:#32644b; }
+.normal-explanation[open] summary { border-bottom:1px solid #e1e9dc; }
+.normal-explanation[open] summary::after { content:'−'; }
+.normal-explanation-body { padding:18px 20px 20px; }
+.normal-analogy-grid { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); align-items:center; gap:24px; }
+.normal-cart-scene { position:relative; overflow:hidden; border:1px solid #e1dacb; border-radius:10px; background:#f3efe4; }
+.normal-cart-scene svg { display:block; width:100%; height:auto; }
+.normal-cart-caption { margin:8px 0 0; font-size:.79rem; color:#5d6c61; }
+.normal-cart-action { margin-top:10px; font-size:.83rem; padding:7px 12px; }
+.normal-cart-action[hidden] { display:none; }
+.normal-cart-copy p { margin:0 0 12px; }
+.normal-cart-copy strong { color:#226344; }
+.normal-analogy-note { font-size:.76rem; color:#6e7a70; }
+.normal-next { display:block; width:fit-content; margin:19px 0 0 auto; padding:7px 12px; border-radius:7px; background:#e9f2e5; text-decoration:none; font-size:.83rem; }
+@media(max-width:1100px) {
+ .normal-actions button { padding-inline:12px; font-size:.88rem; }
+ .normal-steps { gap:3px; font-size:.76rem; padding-inline:5px; }
+ .normal-steps li { padding-inline:5px; gap:5px; }
+ .normal-steps li:not(:last-child)::after { margin-left:3px; }
+}
+@media(max-width:700px) {
+ .normal-table { min-width:680px; }
+ .normal-pan-hint { display:block; }
+ .normal-name { font-size:.87rem; }
+ .normal-state { font-size:.67rem; }
+ .normal-actions { width:100%; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+ .normal-actions button { font-size:.86rem; padding-inline:8px; }
+ .normal-console { gap:8px; }
+ .normal-steps { flex-wrap:wrap; border-radius:12px; gap:1px; font-size:.73rem; }
+ .normal-steps b { width:21px; height:21px; }
+ .normal-steps li { gap:4px; padding-inline:3px; }
+ .normal-steps li:not(:last-child)::after { margin-left:1px; }
+ .normal-explanation summary { padding:15px 13px; font-size:.95rem; }
+ .normal-explanation-body { padding:14px 13px; }
+ .normal-analogy-grid { grid-template-columns:1fr; gap:16px; }
+ .normal-next { width:100%; font-size:.79rem; }
+}
+
+@container normal-card (max-width:679px) {
+ .normal-pan-hint { display:block; }
+ .normal-name { font-size:.87rem; }
+ .normal-state { font-size:.67rem; }
+}
+@container normal-card (max-width:599px) {
+ .normal-analogy-grid { grid-template-columns:1fr; gap:16px; }
+}

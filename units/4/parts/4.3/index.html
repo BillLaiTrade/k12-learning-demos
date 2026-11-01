@@ -26,7 +26,9 @@
   <link rel="stylesheet" href="assets/lesson.css?v=20261101-controls2">
   <link rel="stylesheet" href="assets/light-speed-lab.css?v=20261101-controls2">
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
-  <script type="module" src="assets/lesson.mjs?v=20261101-controls2">
+  <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261101-normal1">
+  <script type="module" src="assets/normal-incidence-lab.mjs?v=20261101-normal1"></script>
+  <script type="module" src="assets/lesson.mjs?v=20261101-normal1">
 </script>
 </head>
 <body>
@@ -57,7 +59,7 @@
 </a>
         <a href="#s2">
 <b>02</b>
-<span>光垂直進入另一種介質會轉彎嗎？</span>
+<span>光變慢了，為什麼沒有轉彎？</span>
 </a>
         <a href="#s3">
 <b>03</b>
@@ -120,46 +122,70 @@
   </div>
 </section>
 <section class="lesson-card" id="s2" aria-labelledby="heading-2">
-<header class="lesson-head">
-<span class="lesson-number">02</span>
-<div>
-<h2 id="heading-2">光垂直進入另一種介質會轉彎嗎？</h2>
-<p>垂直入射：速度改變，方向不偏折</p>
-</div>
-</header>
-<div class="lesson-body card-main">
-<div class="dialogue-sequence">
-<div class="dialogue dialogue--xiaokui">
-<span class="speaker">
-<span class="visually-hidden">小葵</span>
-</span>
-<p>換了介質，光就一定會轉彎嗎？</p>
-</div>
-<div class="dialogue">
-<span class="speaker">
-<span class="visually-hidden">阿公</span>
-</span>
-<p>先讓光沿著法線，也就是垂直介面的方向前進。</p>
-</div>
-</div>
-<p>光進入另一種介質時，速度改變，方向也可能改變，這種現象稱為<strong>折射</strong>。先觀察方向不偏折的情況。</p>
-<div class="lab" data-ray-lab="normal">
-<div class="controls" role="group" aria-label="光垂直進入另一種介質會轉彎嗎？的介質">
-<span>下方介質</span>
-<button data-medium="water" aria-pressed="true">水</button>
-<button data-medium="glass" aria-pressed="false">玻璃</button>
-</div>
-<svg class="scene ray-scene" viewBox="0 0 640 400" role="group" aria-label="空氣與下方介質的光路">
-</svg>
-<div class="controls">
-<button class="primary normal-play">播放光的前進</button>
-<button class="normal-reset">回到起點</button>
-</div>
-<p class="status normal-status" role="status">光源已就位，尚未開始前進。</p>
-</div>
-<p class="finding">
-<strong>觀察重點</strong>　垂直入射時，光跨越介面後速度改變，方向仍沿著法線。</p>
-</div>
+  <header class="lesson-head"><span class="lesson-number">02</span><div><h2 id="heading-2">光變慢了，為什麼沒有轉彎？</h2><p>垂直入射：速度改變，方向不偏折</p></div></header>
+  <div class="lesson-body card-main">
+    <div class="dialogue-sequence">
+      <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>換了介質，光就一定會轉彎嗎？</p></div>
+      <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>按下發射，觀察光束如何直直穿過介面。</p></div>
+    </div>
+    <div class="lab" id="normal-lab" data-state="loading" aria-label="空氣垂直射入水與玻璃的雙槽光路示意">
+      <p class="normal-pan-hint">↔ 左右滑動，對照水與玻璃的光路。</p>
+      <div class="normal-viewport" id="normal-viewport" role="region" tabindex="0" aria-label="垂直入射實驗桌，窄螢幕可左右滑動">
+        <div class="normal-table">
+          <img id="normal-background" src="assets/normal-incidence-bench.png" width="1717" height="916" alt="寫實木桌上的兩組光路剖面示意：上方皆為空氣，左側下方為水，右側下方為實心透明玻璃，光源固定在正上方。">
+          <h3 class="normal-name water">空氣 → 水</h3><h3 class="normal-name glass">空氣 → 玻璃</h3>
+          <span class="normal-state" id="normal-state">準備實驗桌</span>
+          <svg id="normal-scene" viewBox="0 0 1717 916" role="img" aria-label="垂直入射的光路剖面示意，按同時發射觀察。"></svg>
+        </div>
+      </div>
+      <div class="normal-console">
+        <div class="normal-actions" role="group" aria-label="兩束光的共同發射與暫停控制">
+          <button id="normal-start" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>同時發射</span></button>
+          <button id="normal-pause" type="button" disabled data-action="pause"><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zm8 0h4v16h-4z" fill="currentColor"/></svg><svg class="resume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>暫停觀察</span></button>
+        </div>
+        <p class="normal-time-note">光束前緣為共同慢動作示意，非實際光速。圖中只畫穿透光路。</p>
+      </div>
+      <ol class="normal-steps" aria-label="光束穿越的觀察步驟"><li data-normal-stage="1"><b>1</b>發射光束</li><li data-normal-stage="2"><b>2</b>跨越介面</li><li data-normal-stage="3"><b>3</b>直線通過</li></ol>
+      <p class="normal-status" id="normal-status" role="status">正在準備實驗桌……</p>
+      <button id="normal-retry" type="button" hidden>重新載入實驗桌</button>
+      <noscript><p>光由空氣垂直進入水或玻璃時，速度降低，方向不偏折。啟用 JavaScript 後可發射與暫停觀察光路。</p></noscript>
+    </div>
+    <p class="normal-takeaway">進入水或玻璃後，速度改變；垂直入射，方向不偏折。</p>
+    <details class="normal-explanation" id="normal-explanation">
+      <summary>為什麼變慢，卻沒有轉向？</summary>
+      <div class="normal-explanation-body">
+        <div class="normal-analogy-grid">
+          <div>
+            <div class="normal-cart-scene">
+              <svg viewBox="0 0 520 340" role="img" aria-label="小車雙輪並排，同時由平滑地面進入較難前進的區域，一起變慢，方向不變。">
+                <defs>
+                  <linearGradient id="cart-tire" x1="0" x2="1"><stop stop-color="#20272b"/><stop offset=".3" stop-color="#4a5053"/><stop offset=".65" stop-color="#252b2e"/><stop offset="1" stop-color="#11181c"/></linearGradient>
+                  <linearGradient id="cart-axle" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e5bb7e"/><stop offset=".4" stop-color="#c59151"/><stop offset=".65" stop-color="#d3a267"/><stop offset="1" stop-color="#94612f"/></linearGradient>
+                  <linearGradient id="cart-metal" x1="0" x2="1"><stop stop-color="#626d72"/><stop offset=".4" stop-color="#e5e7e4"/><stop offset=".6" stop-color="#8b9599"/><stop offset="1" stop-color="#444d52"/></linearGradient>
+                  <pattern id="cart-rough" width="17" height="19" patternUnits="userSpaceOnUse"><path d="m2 5 3-1m5 9 2 2m-9 1 2-2" stroke="#a7804e" stroke-width="1.2" opacity=".27"/><path d="m12 3 2 1m-6 5 2-1" stroke="#fff4d6" stroke-width="2" opacity=".6"/></pattern>
+                  <pattern id="cart-tread" width="8" height="9" patternUnits="userSpaceOnUse"><path d="M0 2h8m-8 5h8" stroke="#89908e" stroke-width="1" opacity=".35"/></pattern>
+                </defs>
+                <rect width="520" height="340" fill="#f2eee5"/><path d="M0 160H520V340H0Z" fill="#d8bd94"/><path d="M0 160H520V340H0Z" fill="url(#cart-rough)"/><path d="M0 160H520" stroke="#b89d77" stroke-width="3"/>
+                <text x="20" y="31" fill="#6d756b" font-size="18">平滑地面</text><text x="20" y="316" fill="#6d624f" font-size="18">較難前進的地面</text>
+                <path d="M260 18V310" stroke="#487c62" stroke-width="2" stroke-dasharray="7 6"/><path d="m253 301 7 10 7-10" fill="none" stroke="#487c62" stroke-width="2"/>
+                <g id="normal-cart" transform="translate(0 82)">
+                  <ellipse cx="260" cy="12" rx="107" ry="36" fill="#4a4533" opacity=".14"/>
+                  <rect x="169" y="-10" width="182" height="20" rx="7" fill="url(#cart-axle)" stroke="#a8783f"/>
+                  <g><rect x="157" y="-39" width="35" height="78" rx="13" fill="url(#cart-tire)" stroke="#111a1e"/><rect x="157" y="-39" width="35" height="78" rx="13" fill="url(#cart-tread)"/><rect x="188" y="-13" width="12" height="26" rx="3" fill="url(#cart-metal)"/></g>
+                  <g><rect x="328" y="-39" width="35" height="78" rx="13" fill="url(#cart-tire)" stroke="#111a1e"/><rect x="328" y="-39" width="35" height="78" rx="13" fill="url(#cart-tread)"/><rect x="320" y="-13" width="12" height="26" rx="3" fill="url(#cart-metal)"/></g>
+                </g>
+              </svg>
+            </div>
+            <p class="normal-cart-caption" id="normal-cart-status" role="status">兩輪並排，朝交界直直前進。</p>
+            <button class="normal-cart-action" id="normal-cart-play" type="button">播放小車示範</button>
+          </div>
+          <div class="normal-cart-copy"><p><strong>兩輪同時進入較慢的區域，一起變慢，仍直直前進。</strong></p><p>垂直入射時，波前各處同時進入另一種介質，方向保持不變。</p><p class="normal-analogy-note">小車為類比，不代表光受到摩擦。</p></div>
+        </div>
+        <p class="note">法線是垂直介面的參考線；本次光沿法線入射，因此法線與光路重合。</p>
+      </div>
+    </details>
+    <a class="normal-next" href="#s3">下一區：如果斜著進入，又會怎樣？ →</a>
+  </div>
 </section>
 <section class="lesson-card" id="s3" aria-labelledby="heading-3">
 <header class="lesson-head">
