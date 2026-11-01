@@ -1,6 +1,6 @@
-import {bindRoomWaveLab} from './room-wave-lab.mjs?v=20261101-room';
+import {bindRoomWaveLab} from './room-wave-lab.mjs?v=20261101-room-contrast';
 import {renderSonar, bindSonar, beginSonar, sonarDuration, sonarTaps} from './sonar-lab.mjs?v=20261031-results';
-import {arrivals, judge} from './echo-model.mjs?v=20261101-room';
+import {arrivals, judge} from './echo-model.mjs?v=20261101-room-contrast';
 import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
 import {renderDistance, bindDistanceWall, bindDistanceSpeakers, distanceDuration, distanceTaps} from './distance-lab.mjs?v=20261031-short-labels';
 import {renderCalculation, bindCalculationInput, calculationTime, calculationDuration, calculationTaps} from './calculation-lab.mjs?v=20261031-calculation-lab';

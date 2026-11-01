@@ -1,0 +1,19 @@
+▶ 3.4 reflection, ranging, sonar, absorption and assessment
+  ✔ five lessons, one quiz, shared avatars and an overview link (86.650297ms)
+  ✔ ranges produce correct leg lengths and accept native keyboard input (84.366913ms)
+  ✔ wave pause freezes, resume advances, reset preserves chosen conditions (870.627933ms)
+  ✔ cross-section playback, input changes and backgrounding stop old playback (190.962099ms)
+  ✔ sonar creates a point only when emitted and fills the result on reception (1553.392803ms)
+  ✔ new room experiment shares playback cancellation and material comparison with the lesson (234.484809ms)
+  ✔ quiz distinguishes missing, wrong, correct, edited and reset answers (331.664711ms)
+  ✔ anchors and 1440 through 320px layouts work without page overflow (2925.061779ms)
+  ✔ touch playback moves under reduced motion and pauses both animation and audio (1000.999189ms)
+✔ 3.4 reflection, ranging, sonar, absorption and assessment (8286.3793ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8661.86823

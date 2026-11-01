@@ -1,4 +1,4 @@
-import {ROOM,wavefronts} from './room-wave-model.mjs?v=20261101-room';
+import {ROOM,wavefronts} from './room-wave-model.mjs?v=20261101-room-contrast';
 const avatar='../../../../shared-assets/characters/dialogue-character-avatars.png?v=clean-shaven-grandpa';
 export function roomScene(){
  const x=50+ROOM.sourceX*150,y=50+ROOM.sourceY*150;
@@ -26,7 +26,7 @@ export function drawWaves(elapsed,treated,kind){
  const fronts=wavefronts(elapsed,treated,kind);
  document.getElementById('room-waves').innerHTML=fronts.map(f=>[0,.16].map((gap,i)=>{
   const r=(f.radius-gap)*150;if(r<=0)return '';
-  return `<circle class="room-wave ${f.order?'room-wave--reflected':'room-wave--outgoing'}" data-order="${f.order}" data-wall-hits="${f.left},${f.right},${f.top},${f.bottom}" data-gain="${f.gain}" cx="${50+f.x*150}" cy="${50+f.y*150}" r="${r}" fill="none" stroke="${f.order?'#dd791c':'#279e61'}" stroke-width="${i?2.5:5}" opacity="${f.opacity*(1-i*.22)}"/>`;
+  return `<circle class="room-wave ${f.order?'room-wave--reflected':'room-wave--outgoing'}" data-order="${f.order}" data-wall-hits="${f.left},${f.right},${f.top},${f.bottom}" data-gain="${f.gain}" cx="${50+f.x*150}" cy="${50+f.y*150}" r="${r}" fill="none" stroke="${f.order?'#dd791c':'#279e61'}" stroke-width="${(i?3:6)*(f.order?Math.max(.24,f.gain):1)}" opacity="${f.opacity*(1-i*.22)}"/>`;
  }).join('')).join('');
  return fronts;
 }

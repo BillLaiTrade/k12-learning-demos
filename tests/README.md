@@ -674,7 +674,7 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_MATERIALS_ARTIFACT_DIR=/tmp/unit23-materi
 CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-room-model.test.mjs tests/unit-3.4-room-audio.test.mjs tests/unit-3.4-room.test.cjs
 ```
 
-3項波前模型、2項音訊、12項瀏覽器（含主項）。涵蓋圓形擴散、近遠返回、只改指定表面反射、音檔直接聲相同／非靜音／不削波、拍手與語音、暫停續播offset、材料重設、跨區／背景停止、九種寬度、真實手機觸控、啟音延遲及失敗重試。`ROOM_CAPTURE_DIR`指定截圖目錄，`ROOM_URL`可指定公開頁URL（可含版本query，勿帶hash）。不代表Safari實機或真人聽辨已驗證。
+3項波前模型、2項音訊、13項瀏覽器（含主項）。涵蓋圓形擴散、近遠返回、只改指定表面反射、音檔直接聲相同／非靜音／不削波、拍手與語音、暫停續播offset、材料保留同一畫面並取消音源、完成後定格比較、跨區／背景停止、九種寬度、真實手機觸控、啟音延遲及失敗重試。`ROOM_CAPTURE_DIR`指定截圖目錄，`ROOM_URL`可指定公開頁URL（可含版本query，勿帶hash）。不代表Safari實機或真人聽辨已驗證。
 
 ## 2.3氧氣可選連續播放（2026-11-01）
 

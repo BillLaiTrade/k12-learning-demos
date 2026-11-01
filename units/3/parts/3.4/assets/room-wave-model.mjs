@@ -25,7 +25,7 @@ export function wavefronts(elapsed,treated=false,kind='clap') {
    const dx=Math.max(0,-s.x,s.x-ROOM.width),dy=Math.max(0,-s.y,s.y-ROOM.height),near=Math.hypot(dx,dy);
    const far=Math.max(...[[0,0],[ROOM.width,0],[0,ROOM.height],[ROOM.width,ROOM.height]].map(([x,y])=>Math.hypot(s.x-x,s.y-y)));
    if(radius<near||radius>far+.22)continue;
-   const opacity=Math.min(.92,.94*s.gain/Math.sqrt(1+radius*.10)*Math.exp(-age*5));
+   const opacity=Math.min(.92,.94*s.gain**2/Math.sqrt(1+radius*.10)*Math.exp(-age*5));
    if(opacity>.012)result.push({...s,radius,opacity,emitted});
   }
  }
