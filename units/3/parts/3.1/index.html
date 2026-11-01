@@ -555,9 +555,13 @@
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>我們在繩子上做個記號，看看這個記號會不會跟著起伏往右跑，就知道了。</p></div>
             <p>觀察動畫，起伏向右傳時，橘點只在原來的水平位置附近上下振動。繩上的振動把能量傳到遠處，但繩子本身沒有整段跟著波形往前移動。</p><figure class="visual">
               <svg class="rope-wave" data-fixed-point-wave viewBox="0 0 760 310" role="group" aria-label="互動繩波示意：左端橘點代表波源，可拖曳下方左右箭頭選擇繩上的位置，觀察繩點上下振動">
-                <defs><marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker></defs>
+                <defs>
+                  <marker id="arrow-rope-2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
+                  <marker id="arrow-source-motion-2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#748b7e"/></marker>
+                </defs>
                 <path d="M46 142H714" stroke="#b7c7bc" stroke-width="1.5" stroke-linecap="round"/>
                 <path class="pulse-path rope-underlay" d="M46 142 C120 142 145 66 205 66 C266 66 284 142 354 142 H714"/>
+                <path d="M32 98V186" fill="none" stroke="#748b7e" stroke-width="1.8" marker-start="url(#arrow-source-motion-2)" marker-end="url(#arrow-source-motion-2)"/>
                 <circle id="fixed-wave-source" cx="46" cy="142" r="6.5" fill="#df8b41" stroke="#fffefa" stroke-width="2.5" pointer-events="none" aria-hidden="true"/>
                 <path d="M118 274H565" class="motion-arrow" marker-end="url(#arrow-rope-2)"/>
                 <text x="341" y="300" text-anchor="middle">波形與能量向右傳</text>
