@@ -1,0 +1,216 @@
+[
+  {
+    "file": "assets/AUDIO-SOURCES.md",
+    "before": "b0061e5d31bfcf53a209b604f5a34072b3030c444dad5396d047609adfb78e08",
+    "after": "b0061e5d31bfcf53a209b604f5a34072b3030c444dad5396d047609adfb78e08",
+    "equal": true
+  },
+  {
+    "file": "assets/calculation-lab.mjs",
+    "before": "238cc30619e8bc6b33effebfa9a535f23384839686686304b6bf0d3b8523f29e",
+    "after": "238cc30619e8bc6b33effebfa9a535f23384839686686304b6bf0d3b8523f29e",
+    "equal": true
+  },
+  {
+    "file": "assets/calculation.css",
+    "before": "36b3c113e130b9e57774f7cddc7b354921aaaa39464c87d7a5a68183af54a859",
+    "after": "36b3c113e130b9e57774f7cddc7b354921aaaa39464c87d7a5a68183af54a859",
+    "equal": true
+  },
+  {
+    "file": "assets/distance-corridor.webp",
+    "before": "1f97a036ea0a8852de8d2cb0880963653ca5ed3d06cabeb97292393edc19cfa6",
+    "after": "1f97a036ea0a8852de8d2cb0880963653ca5ed3d06cabeb97292393edc19cfa6",
+    "equal": true
+  },
+  {
+    "file": "assets/distance-lab.mjs",
+    "before": "d9e82bd3056d6519eb9211f1d1632ff7ec39b82945dc1d1522686fe1ef1a6cc3",
+    "after": "d9e82bd3056d6519eb9211f1d1632ff7ec39b82945dc1d1522686fe1ef1a6cc3",
+    "equal": true
+  },
+  {
+    "file": "assets/distance-virtual-lab.webp",
+    "before": "fbabb0f71320739541c404cbed52e7491a99f74b20874ffd1aca805025104f68",
+    "after": "fbabb0f71320739541c404cbed52e7491a99f74b20874ffd1aca805025104f68",
+    "equal": true
+  },
+  {
+    "file": "assets/distance-wall.webp",
+    "before": "65fe8005c554386191b029a207170e7d4ad875a4a237616c7180f424cf6f9775",
+    "after": "65fe8005c554386191b029a207170e7d4ad875a4a237616c7180f424cf6f9775",
+    "equal": true
+  },
+  {
+    "file": "assets/echo-model.mjs",
+    "before": "0bfaacb2d070db36bf66261548a74e1fa7b4b9944a718d5f0bc3305769a9bfc4",
+    "after": "0bfaacb2d070db36bf66261548a74e1fa7b4b9944a718d5f0bc3305769a9bfc4",
+    "equal": true
+  },
+  {
+    "file": "assets/echo-story-opening.webp",
+    "before": "52dd0de987ac5190594992a902a406ece429da60329227dc06b97c33fa41f88a",
+    "after": "52dd0de987ac5190594992a902a406ece429da60329227dc06b97c33fa41f88a",
+    "equal": true
+  },
+  {
+    "file": "assets/echo.css",
+    "before": "b3b925a4ee6f6be4877f91480546c52a6ff37c54c3990db333fb5566f3e84b85",
+    "after": "b3b925a4ee6f6be4877f91480546c52a6ff37c54c3990db333fb5566f3e84b85",
+    "equal": true
+  },
+  {
+    "file": "assets/lesson-base.css",
+    "before": "d9354402eeeb95b25d0fde21e4d03e55dc959bd39b4bee9a2ed184ed9a1537d3",
+    "after": "d9354402eeeb95b25d0fde21e4d03e55dc959bd39b4bee9a2ed184ed9a1537d3",
+    "equal": true
+  },
+  {
+    "file": "assets/reflection-apparatus.webp",
+    "before": "fcf759208259e967e5b96bb5cd4846cb4b509024799566ac432dcb8fd93bc598",
+    "after": "fcf759208259e967e5b96bb5cd4846cb4b509024799566ac432dcb8fd93bc598",
+    "equal": true
+  },
+  {
+    "file": "assets/reflection-lab.mjs",
+    "before": "2c33c3ba65e1c38032a5631fae8312bf8303533b1c68cdbb753e64788ece37cd",
+    "after": "2c33c3ba65e1c38032a5631fae8312bf8303533b1c68cdbb753e64788ece37cd",
+    "equal": true
+  },
+  {
+    "file": "assets/room-phrase.wav",
+    "before": "d73ed48924d3329029d592eaba15032cc247fffa9b5994473d31442c1af12339",
+    "after": "d73ed48924d3329029d592eaba15032cc247fffa9b5994473d31442c1af12339",
+    "equal": true
+  },
+  {
+    "file": "assets/sonar-seabed.webp",
+    "before": "aac04680b5412fc6369ef918c131fa3a88f9a338940616f1225b2d413a3fd153",
+    "after": "aac04680b5412fc6369ef918c131fa3a88f9a338940616f1225b2d413a3fd153",
+    "equal": true
+  },
+  {
+    "file": "assets/room-wave.css",
+    "before": "9c3d835baf7015b8cef6bc554fa1f5a73ecb669155d26c5168256b7d5e77c2a1",
+    "after": "9c3d835baf7015b8cef6bc554fa1f5a73ecb669155d26c5168256b7d5e77c2a1",
+    "equal": true
+  },
+  {
+    "file": "assets/room-wave-scene.mjs",
+    "before": "127a1829351f146d945fd78d415fc5c8024ca11cf388fb99553eab4f90a62f78",
+    "after": "127a1829351f146d945fd78d415fc5c8024ca11cf388fb99553eab4f90a62f78",
+    "equal": true
+  },
+  {
+    "file": "assets/sonar.css",
+    "before": "e98356b304862719589a589789b78a82a659bf8fb024ec13b6a2155b4a7edb55",
+    "after": "e98356b304862719589a589789b78a82a659bf8fb024ec13b6a2155b4a7edb55",
+    "equal": true
+  },
+  {
+    "file": "assets/well-model.mjs",
+    "before": "c067926b2f63473606e332e0bfcab24e51e4fcce48cff1cde7d1d3976d15e1a2",
+    "after": "c067926b2f63473606e332e0bfcab24e51e4fcce48cff1cde7d1d3976d15e1a2",
+    "equal": true
+  },
+  {
+    "file": "assets/sonar-profile.mjs",
+    "before": "d5e1b41132d6550faf6b16421ac5c5612fd9527d550ebd70d575578ae6caf885",
+    "after": "d5e1b41132d6550faf6b16421ac5c5612fd9527d550ebd70d575578ae6caf885",
+    "equal": true
+  },
+  {
+    "file": "assets/sonar-lab.mjs",
+    "before": "f6f8f51e19e3f69438f23ea9ab438a178dbc71231c059a05a215113af651df05",
+    "after": "f6f8f51e19e3f69438f23ea9ab438a178dbc71231c059a05a215113af651df05",
+    "equal": true
+  },
+  {
+    "file": "assets/well-quiz.mjs",
+    "before": "fbff891fed024d67ad760575ee25373024d164bfa837cbcc59c79b8148fd9965",
+    "after": "fbff891fed024d67ad760575ee25373024d164bfa837cbcc59c79b8148fd9965",
+    "equal": true
+  },
+  {
+    "file": "assets/room-floor.webp",
+    "before": "cbb4e9414086ef56f67aa934dbe2c15579f928a3c7103f34dbfd5164d71bff3c",
+    "after": "cbb4e9414086ef56f67aa934dbe2c15579f928a3c7103f34dbfd5164d71bff3c",
+    "equal": true
+  },
+  {
+    "file": "assets/room-audio-model.json",
+    "before": "a7be505e458d707bb9740e6965ced61587c7bf64ec9e6508bd397cd1fe33a4c5",
+    "after": "a7be505e458d707bb9740e6965ced61587c7bf64ec9e6508bd397cd1fe33a4c5",
+    "equal": true
+  },
+  {
+    "file": "assets/sonar-terrain.mjs",
+    "before": "79ed5b776f8e97530cc46255919c093fafefdbd93963e0464f0ea5e586abe728",
+    "after": "79ed5b776f8e97530cc46255919c093fafefdbd93963e0464f0ea5e586abe728",
+    "equal": true
+  },
+  {
+    "file": "assets/well-quiz.css",
+    "before": "3f4dbdc1635e66a7bdb69ea67802708968a498bbaea73f34a81e5e1d212a92d6",
+    "after": "3f4dbdc1635e66a7bdb69ea67802708968a498bbaea73f34a81e5e1d212a92d6",
+    "equal": true
+  },
+  {
+    "file": "assets/sonar-scene.mjs",
+    "before": "261dc56f02a1796d9e4a08a68b8214548bd6b9c8dbc2e836fcd2bd9509d9b3a6",
+    "after": "261dc56f02a1796d9e4a08a68b8214548bd6b9c8dbc2e836fcd2bd9509d9b3a6",
+    "equal": true
+  },
+  {
+    "file": "assets/room-speech-bare.wav",
+    "before": "2e571bab292605a60c8c1c0eb267c78dd25bcf249d0eebd4a9f36d9aaf19fbcd",
+    "after": "2e571bab292605a60c8c1c0eb267c78dd25bcf249d0eebd4a9f36d9aaf19fbcd",
+    "equal": true
+  },
+  {
+    "file": "assets/well-call.wav",
+    "before": "b868c8323dbfb72cd16072760d5d72744e3980f26816f795c6f17aa1664482ca",
+    "after": "b868c8323dbfb72cd16072760d5d72744e3980f26816f795c6f17aa1664482ca",
+    "equal": true
+  },
+  {
+    "file": "assets/room-clap-bare.wav",
+    "before": "9680120729d8d8828905eceda680cb18ec55d0a018e94a389d5c0667979684bf",
+    "after": "9680120729d8d8828905eceda680cb18ec55d0a018e94a389d5c0667979684bf",
+    "equal": true
+  },
+  {
+    "file": "assets/room-speech-treated.wav",
+    "before": "c85d95ea8942b6ba6e03c2d7501b36da887cdc02918c8909971ce4d3c4edb187",
+    "after": "c85d95ea8942b6ba6e03c2d7501b36da887cdc02918c8909971ce4d3c4edb187",
+    "equal": true
+  },
+  {
+    "file": "assets/room-wave-model.mjs",
+    "before": "cddd0f2358db14fce2f91500c3e3c9cd2c3d1a358ef7f42d7407c5d100af16ba",
+    "after": "cddd0f2358db14fce2f91500c3e3c9cd2c3d1a358ef7f42d7407c5d100af16ba",
+    "equal": true
+  },
+  {
+    "file": "assets/room-clap-treated.wav",
+    "before": "8ef73b1b197f69c5d0c8110856d23c07f31763bfacf94ff962d2354139b80bee",
+    "after": "8ef73b1b197f69c5d0c8110856d23c07f31763bfacf94ff962d2354139b80bee",
+    "equal": true
+  },
+  {
+    "file": "assets/well-scene.webp",
+    "before": "7dc21342a7b215d74e3f4958009aecabc733e87bcd2e12ac012e90db60bdcb40",
+    "after": "7dc21342a7b215d74e3f4958009aecabc733e87bcd2e12ac012e90db60bdcb40",
+    "equal": true
+  },
+  {
+    "file": "index.html",
+    "only_changed": "入口快取與第五區已展開模型說明中的結尾句",
+    "other_sections_and_layout_equal": true
+  },
+  {
+    "file": "assets/echo.mjs",
+    "only_changed": "第五區控制器快取版本",
+    "shared_playback_and_navigation_equal": true
+  }
+]

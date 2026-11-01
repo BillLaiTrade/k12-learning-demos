@@ -1,0 +1,17 @@
+{
+  "total": 23,
+  "suites": [
+    {
+      "suite": "room",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0
+    },
+    {
+      "suite": "lesson",
+      "tests": 10,
+      "pass": 10,
+      "fail": 0
+    }
+  ]
+}

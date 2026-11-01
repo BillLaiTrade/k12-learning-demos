@@ -6,8 +6,9 @@ export function bindRoomWaveLab(claim,release){
  const buffers=new Map();$('room-view').innerHTML=roomScene();
  function silence(){epoch++;if(source){try{source.stop();}catch{}source=null;}master?.disconnect();master=null;document.body.dataset.audioPlaying='false';}
  function draw(){
-  const frameTime=phase==='complete'?1.05:elapsed;
-  const fronts=drawWaves(frameTime,treated,kind),returns=returnTimes(),modelTime=frameTime/ROOM.slowdown;
+  const frameTime=elapsed;
+  const fronts=phase==='complete'?[]:drawWaves(frameTime,treated,kind),returns=returnTimes(),modelTime=frameTime/ROOM.slowdown;
+  if(phase==='complete')$('room-waves').replaceChildren();
   root.dataset.frameTime=frameTime.toFixed(3);
   root.dataset.phase=phase;root.dataset.kind=kind;root.dataset.treated=String(treated);root.dataset.elapsed=elapsed.toFixed(3);root.dataset.progress=(elapsed/ROOM.duration).toFixed(4);root.dataset.modelTime=modelTime.toFixed(5);
   root.dataset.nearReturned=String(modelTime>=returns.left);root.dataset.farReturned=String(modelTime>=returns.right);root.dataset.fronts=String(fronts.length);
@@ -16,7 +17,7 @@ export function bindRoomWaveLab(claim,release){
   pause.disabled=phase==='ready'||phase==='complete';pause.textContent=phase==='paused'?'繼續':'暫停';pause.setAttribute('aria-label',phase==='paused'?'繼續聲波觀察':'暫停聲波觀察');
   for(const b of buttons){b.classList.toggle('is-active',phase==='playing'&&b.dataset.roomSource===kind);b.setAttribute('aria-pressed',String(phase==='playing'&&b.dataset.roomSource===kind));}
   $('room-observation').textContent=treated?'加入材料後，哪些地方反射回來的波變淡了？':kind==='speech'?'小葵說完後，你還聽到了什麼？':'拍手聲停下後，你還聽到了什麼？';
-  $('room-status').textContent=phase==='ready'?'先發聲觀察，再加入材料重新比較。':waiting?'正在準備聲音…':phase==='paused'?'畫面已定格；切換材料可比較同一時刻，或按繼續觀察。':phase==='complete'?'本次觀察結束，保留反射返回的代表畫面；切換材料可直接比較。':modelTime<returns.left?'聲波正在向四周擴散。':modelTime<returns.right?'近牆的反射已返回；遠牆的反射尚未回到小葵。':treated?'不同牆面的反射先後返回；碰到材料的反射較弱。':'不同牆面的反射先後返回，也會繼續反射。';
+  $('room-status').textContent=phase==='ready'?'先發聲觀察，再加入材料重新比較。':waiting?'正在準備聲音…':phase==='paused'?'畫面已定格；切換材料可比較同一時刻，或按繼續觀察。':phase==='complete'?'本次觀察結束。可切換材料，再次發聲比較。':modelTime<returns.left?'聲波正在向四周擴散。':modelTime<returns.right?'近牆的反射已返回；遠牆的反射尚未回到小葵。':treated?'不同牆面的反射先後返回；碰到材料的反射較弱。':'不同牆面的反射先後返回，也會繼續反射。';
  }
  function tick(now){elapsed=Math.min(ROOM.duration,(now-start)/1000);draw();if(elapsed>=ROOM.duration){phase='complete';silence();release(api);draw();}else raf=requestAnimationFrame(tick);}
  async function play(restart=false,nextKind=kind){
@@ -46,6 +47,6 @@ export function bindRoomWaveLab(claim,release){
  const api={id:'room',pause:stop};
  buttons.forEach(b=>b.addEventListener('click',()=>play(true,b.dataset.roomSource)));
  pause.addEventListener('click',()=>phase==='playing'?stop():play());
- material.addEventListener('click',()=>{const complete=phase==='complete';stop();silence();cancelAnimationFrame(raf);release(api);treated=!treated;if(complete)elapsed=1.05;phase=elapsed>0?'paused':'ready';$('room-error').hidden=true;draw();});
+ material.addEventListener('click',()=>{const complete=phase==='complete';stop();silence();cancelAnimationFrame(raf);release(api);treated=!treated;phase=complete?'complete':elapsed>0?'paused':'ready';$('room-error').hidden=true;draw();});
  draw();return api;
 }

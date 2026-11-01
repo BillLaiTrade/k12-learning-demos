@@ -1,0 +1,30 @@
+[
+  {
+    "kind": "clap",
+    "treated": false,
+    "elapsed": "6.000",
+    "waves": 0,
+    "phase": "complete"
+  },
+  {
+    "kind": "clap",
+    "treated": true,
+    "elapsed": "6.000",
+    "waves": 0,
+    "phase": "complete"
+  },
+  {
+    "kind": "speech",
+    "treated": false,
+    "elapsed": "6.000",
+    "waves": 0,
+    "phase": "complete"
+  },
+  {
+    "kind": "speech",
+    "treated": true,
+    "elapsed": "6.000",
+    "waves": 0,
+    "phase": "complete"
+  }
+]

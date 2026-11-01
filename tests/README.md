@@ -811,3 +811,7 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4-navigation.test.cjs
 ```
 
 新專項13項（含外層）：六個播放器點側欄他區停下、原區可續播或小測重喊、聲納不重建測點、已完成小測不清除；六種600ms啟音準備取消無舊聲音；普通滑動／同區連結／Ctrl開新頁不中斷，鍵盤Enter及手機實際觸控導覽／滑動正常。搭配F01啟音8、整課10，共31項。`NAVIGATION_URL`可指定公開頁（不帶hash），`NAVIGATION_CAPTURE_DIR`保存navigation.json及390px定格畫面。手機滑動以CDP原生touch事件輸入，不代表Safari實機。公開專項需另跑，不以本機通過代替發布確認。
+
+## 3.4 第五區乾淨結尾（2026-11-01）
+
+既有`unit-3.4-room.test.cjs`仍13項（含外層）。完成檢查改為拍手／語音×有／無材料四組：結束後DOM波線0、時間不跳回、切材料不恢復舊波或新聲音、明確重播才從零恢復波。手機原生觸控同驗結束與材料切換，保留播放中暫停／同時刻減弱對照、音訊、九寬度與錯誤重試。本機房間13＋整課10共23項，公開以`ROOM_URL`另跑13項；`ROOM_CAPTURE_DIR`保存四種結尾、390px結尾及`end-states.json`。模型與音檔未改，不重跑純模型。
