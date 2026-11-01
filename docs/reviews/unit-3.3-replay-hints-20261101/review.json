@@ -1,0 +1,74 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "id": "card-02",
+    "hint": "再點同一個喇叭或播放鍵，可從頭重播。",
+    "restart": true,
+    "oldSourceStopped": true,
+    "offset": 0
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "id": "card-03",
+    "hint": "再點同一邊的琴弦或撥弦按鈕，可從頭重播。",
+    "restart": true,
+    "oldSourceStopped": true,
+    "offset": 0
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "id": "card-04",
+    "hint": "再點同一根管子，可從頭重播。",
+    "restart": true,
+    "oldSourceStopped": true,
+    "offset": 0
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "id": "card-05",
+    "hint": "再點同一個樂器或播放鍵，可從頭重播。",
+    "restart": true,
+    "oldSourceStopped": true,
+    "offset": 0
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "id": "card-02",
+    "hint": "再點同一個喇叭或播放鍵，可從頭重播。",
+    "restart": true,
+    "oldSourceStopped": true,
+    "offset": 0
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "id": "card-03",
+    "hint": "再點同一邊的琴弦或撥弦按鈕，可從頭重播。",
+    "restart": true,
+    "oldSourceStopped": true,
+    "offset": 0
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "id": "card-04",
+    "hint": "再點同一根管子，可從頭重播。",
+    "restart": true,
+    "oldSourceStopped": true,
+    "offset": 0
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "id": "card-05",
+    "hint": "再點同一個樂器或播放鍵，可從頭重播。",
+    "restart": true,
+    "oldSourceStopped": true,
+    "offset": 0
+  }
+]
