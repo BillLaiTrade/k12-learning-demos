@@ -114,7 +114,7 @@ export function bindWellQuiz(claim, release) {
   });
   input.addEventListener('input', () => {
     clearResult(); $('well-feedback').dataset.result = 'pending';
-    $('well-feedback').textContent = '答案已修改，請重新核對。';
+    $('well-feedback').textContent = '填好後核對井深。';
   });
   draw(); return api;
 }
