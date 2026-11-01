@@ -81,6 +81,9 @@
     #lambda-ruler-control { cursor:ew-resize; touch-action:none; user-select:none; -webkit-user-select:none; outline:none; }
     #lambda-ruler-control.is-dragging { cursor:grabbing; }
     #lambda-ruler-control:focus-visible #lambda-measure { stroke-width:4; }
+    .lambda-caption { display:grid; gap:6px; }
+    .lambda-caption strong { color:var(--green); }
+    .lambda-caption p { margin:0; }
     .definition-equation { margin-top:9px!important; color:#176b53!important; font-size:1.08rem; font-weight:800; font-variant-numeric:tabular-nums; }
     .legend { display:flex; flex-wrap:wrap; gap:8px 18px; margin:10px 0 0; color:var(--muted); font-size:.84rem; }
     .legend span { display:inline-flex; align-items:center; gap:7px; }
@@ -653,12 +656,11 @@
                   <text id="lambda-label" x="250" y="286" text-anchor="middle">一個波長 λ</text>
                 </g>
               </svg>
-              <figcaption>直接拖曳橘色雙向箭頭，整段標尺會左右移動；它的長度固定為一個波長。</figcaption>
+              <figcaption class="lambda-caption">
+                <strong>左右拖曳標尺</strong>
+                <p id="lambda-explanation" aria-live="polite">波峰到下一個波峰，相隔一個波長 λ。</p>
+              </figcaption>
             </figure>
-            <div class="control-panel">
-              <p><strong>直接拖曳橘色標尺</strong></p>
-              <p class="live-note" id="lambda-explanation" aria-live="polite">波峰對到下一個波峰。標尺平移後，也能對準波谷、或平衡線上同方向通過的位置；兩端始終相隔一個 λ。</p>
-            </div>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我懂了！從平衡位置量到波峰是振幅，沿著波前進的方向量相鄰兩個波峰的間隔，就是波長！</p></div>
           </div>
         </section>
@@ -1642,11 +1644,11 @@
         lambdaLeftGuide.setAttribute("d",`M${leftPoint.x} ${leftPoint.y+9}V254`);lambdaRightGuide.setAttribute("d",`M${rightPoint.x} ${rightPoint.y+9}V254`);
         lambdaMeasure.setAttribute("d",`M${left+4} 254H${right-4}`);lambdaLabel.setAttribute("x",String((left+right)/2));
         const near=(value,target)=>Math.abs(value-target)<3;
-        let description="起點和終點落在相同的波形位置；兩端固定相隔一個波長 λ。";
-        if(near(left,130)||near(left,370))description="最高點對到下一個最高點；兩端相隔一個波長 λ。";
-        else if(near(left,250))description="最低點對到下一個最低點；兩端相隔一個波長 λ。";
-        else if(near(left,190))description="平衡線上往下通過的位置，對到下一個同方向的位置；兩端相隔一個波長 λ。";
-        else if(near(left,310))description="平衡線上往上通過的位置，對到下一個同方向的位置；兩端相隔一個波長 λ。";
+        let description="兩端對應相同的波形位置，相隔一個波長 λ。";
+        if(near(left,130)||near(left,370))description="波峰到下一個波峰，相隔一個波長 λ。";
+        else if(near(left,250))description="波谷到下一個波谷，相隔一個波長 λ。";
+        else if(near(left,190))description="平衡位置上同樣向下通過的兩點，相隔一個波長 λ。";
+        else if(near(left,310))description="平衡位置上同樣向上通過的兩點，相隔一個波長 λ。";
         lambdaExplanation.textContent=description;lambdaRulerControl.setAttribute("aria-valuenow",String(Math.round(left)));lambdaRulerControl.setAttribute("aria-valuetext",description);
       };
       const lambdaPointerX=event=>{
