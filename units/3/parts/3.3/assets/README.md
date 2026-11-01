@@ -126,3 +126,5 @@ decibel-model.mjs存放十二例與線性刻度，decibel-experiment.mjs管理�
 `decibel-audio/` 的十二成品為對應情境實錄或授權舞曲，不是插圖現場／OSHA 指定距離實測。來源差異、作者、網址、衍生授權與修改逐項列在頁面收合清單及 `LICENSE.md`，精確段落／SHA-256／實測響度在 `recordings.json`。`scripts/prepare-decibel-recordings.py` 核對原檔後，以共同 -23 LUFS 基準製作每級 2 LU 的相對音量階梯並檢查真峰值；無變調、變速或合成噪音。網頁音量不代表 20～130 dBA，也不是聽感等距校準。決策與查核證據見 `docs/decisions/unit-3.3-decibel-audio.md` 及本輪 review。
 
 2026-11-01：第七區改為圖片優先，桌機約七成寬留給場景、縮小文字及 dBA 數字；手機圖片增高。場景錄音改為同一 AudioBufferSourceNode 持續循環，按停止才結束；離區、隱藏或其他區試聽仍停止。沿用原音檔與邊界淡入淡出，不變更來源、音量或授權。此節取代單次播放的現行行為。
+
+2026-11-01 播放控制位置：播放／停止及狀態移入情境介紹欄下方，分貝情境帶與上方場景區直接相接。數位音量不代表實際 dBA 的說明保留於情境帶之後；播放邏輯不變。

@@ -538,7 +538,7 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 @media(max-width:600px){.hearing-animals .animal-grid{grid-template-columns:1fr;gap:8px}.hearing-animal-card{display:grid;grid-template-columns:92px minmax(0,1fr);align-items:center;gap:12px;padding:9px 12px}.hearing-animal-art{height:82px}.hearing-animal-card p{text-align:left;padding:0}}
 
 /* 第七區：十二個生活情境與分貝探索帶。 */
-.decibel-feature{display:grid;grid-template-columns:minmax(0,2.3fr) minmax(0,1fr);margin:18px 0 12px;overflow:hidden;border:1px solid #cfdfcf;border-radius:16px;background:#fcfbf5}
+.decibel-feature{display:grid;grid-template-columns:minmax(0,2.3fr) minmax(0,1fr);margin:18px 0 0;overflow:hidden;border:1px solid #cfdfcf;border-radius:16px 16px 0 0;background:#fcfbf5}
 .decibel-photo{position:relative;min-width:0;min-height:360px;overflow:hidden;background:linear-gradient(120deg,#e7e9d7,#f7edd8)}
 .decibel-photo svg{position:absolute;inset:0;display:block;width:100%;height:100%;overflow:hidden}
 .decibel-photo>span{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;font-size:.85rem;color:#64745c;pointer-events:none}
@@ -554,7 +554,7 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .decibel-value>strong{font-size:clamp(2.35rem,3.5vw,3rem);font-weight:850;letter-spacing:-.04em}
 .decibel-info>p{margin:5px 0 0;color:#535e54;font-size:.88rem;line-height:1.65}
 .decibel-info>[data-decibel-condition]{margin-top:13px;padding-top:11px;border-top:1px solid #d6dfd1;color:#778170;font-size:.76rem}
-.decibel-explorer{padding:12px 17px 9px;border:1px solid #d7e3d3;border-radius:15px;background:linear-gradient(110deg,#f3f8f0,#f8faf2)}
+.decibel-explorer{padding:12px 17px 9px;border:1px solid #d7e3d3;border-top:0;border-radius:0 0 15px 15px;background:linear-gradient(110deg,#f3f8f0,#f8faf2)}
 .decibel-band-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .card-main .decibel-band-heading h3{margin:0;font-size:1.06rem;color:#244c39}
 .decibel-band-heading>span{font-size:.73rem;color:#7b8976}
@@ -601,8 +601,10 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .decibel-picture-play>span{position:absolute;right:16px;bottom:16px;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;color:#fff;background:#205b55e8;box-shadow:0 3px 14px #122d2933}
 .decibel-picture-play:hover>span,.decibel-picture-play[aria-pressed=true]>span{background:#173f3a}
 .decibel-picture-play:focus-visible{outline:3px solid #d28a29;outline-offset:-5px}
-.decibel-listening{margin:18px 0 24px}
-.decibel-listening .play-state{min-height:1.5em;margin:10px 0;color:#315b55}
+.decibel-listening{margin:16px 0 0}
+.decibel-listening .button-row{gap:8px;flex-wrap:wrap}
+.decibel-listening .button-row button{font-size:.8rem;padding:9px 10px}
+.decibel-listening .play-state{min-height:1.5em;margin:10px 0 0;color:#315b55;font-size:.76rem;line-height:1.6}
 .decibel-listening-note,.decibel-audio-sources{font-size:.9rem;line-height:1.7;color:#53635e}
 .decibel-audio-sources{margin:18px 0;padding:14px 18px;border:1px solid #d8e3da;border-radius:14px;background:#f8faf6;overflow-wrap:anywhere}
 .decibel-audio-sources summary{cursor:pointer;font-weight:700;color:#2f554d}
