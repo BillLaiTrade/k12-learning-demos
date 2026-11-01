@@ -1,4 +1,4 @@
-import {createSoundMatch} from './sound-match.mjs?v=5';
+import {createSoundMatch} from './sound-match.mjs?v=6';
 import {loadDecibelRecording,createDecibelVoice} from './decibel-audio.mjs?v=4';
 import {createDecibelExplorer} from './decibel-experiment.mjs?v=4';
 import {signal,soundSamples} from './model.mjs?v=1';

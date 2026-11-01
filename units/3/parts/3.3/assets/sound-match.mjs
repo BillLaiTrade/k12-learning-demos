@@ -46,10 +46,11 @@ export function createSoundMatch(root,{onChange}){
   find('[data-match-picture]').dataset.instrument=target().tone;
   update();
  }
- find('[data-match-new]').addEventListener('click',()=>{
+ function changeQuestion(){
   question=deck.next();startQuestion();root.scrollIntoView({block:'start'});
   find('[data-play="quiz-base"]').focus({preventScroll:true});
- });
+ }
+ find('[data-match-new]').addEventListener('click',changeQuestion);
  for(const button of root.querySelectorAll('[data-match-step]'))button.addEventListener('click',()=>{
   const key=button.dataset.matchStep,levels=MATCH_LEVELS[key],next=levels.indexOf(answer[key])+Number(button.dataset.direction);
   if(next<0||next>=levels.length)return;
@@ -74,10 +75,15 @@ export function createSoundMatch(root,{onChange}){
     ['振幅／音量',comparison.amplitude?'振幅接近了':`振幅較${answer.amplitude<target().amplitude?'小，增加振幅再試聽':'大，減少振幅再試聽'}`,comparison.amplitude]
    ];
    find('[data-match-hints]').replaceChildren(...hints.map(([title,text,ok])=>{const p=document.createElement('p'),strong=document.createElement('strong');p.dataset.matched=String(ok);strong.textContent=`${ok?'✓':'↗'} ${title}`;p.append(strong,document.createTextNode(text));return p;}));
+   const action=find('[data-match-result-action]');action.textContent=comparison.correct?'再挑戰一題':'繼續調整';action.classList.toggle('play',comparison.correct);action.classList.toggle('secondary',!comparison.correct);
    result.hidden=false;
   }catch{if(ticket!==revision)return;feedback.hidden=false;feedback.dataset.state='error';feedback.textContent='目標波形暫時無法載入，請再按「完成比較」重試。';}
  });
- find('[data-match-retry]').addEventListener('click',()=>{onChange();conceal();root.dataset.matchState='answering';find('[data-match-step=frequency]:not(:disabled)').focus({preventScroll:true});});
+ find('[data-match-result-action]').addEventListener('click',()=>{
+  if(result.hidden)return;
+  if(feedback.dataset.state==='correct'){changeQuestion();return;}
+  onChange();conceal();root.dataset.matchState='answering';find('[data-match-step=frequency]:not(:disabled)').focus({preventScroll:true});
+ });
  startQuestion();
  return {settings,prepare,buffer:(clip,context)=>timbreBuffer(clip,context),
   start(key){
