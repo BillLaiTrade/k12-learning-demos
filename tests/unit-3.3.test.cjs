@@ -19,7 +19,7 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
  await page.addInitScript(()=>{window.audioRuns=[];const create=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=create.call(this),start=s.start.bind(s),stop=s.stop.bind(s);let entry;s.start=function(...args){const a=s.buffer.getChannelData(0),rate=s.buffer.sampleRate;let sum=0,crossings=0;for(let i=rate*.1|0;i<rate*.3;i++){sum+=a[i]**2;if(a[i-1]<0&&a[i]>=0)crossings++;}entry={rms:Math.sqrt(sum/(rate*.2)),frequency:crossings/.2,peak:a.reduce((peak,v)=>Math.max(peak,Math.abs(v)),0),stopped:false};window.audioRuns.push(entry);return start(...args);};s.stop=function(...args){if(entry)entry.stopped=true;return stop(...args);};return s;};});
  const base=process.env.SOUND33_BASE_URL||`http://127.0.0.1:${port}/units/3/parts/3.3/`;
- await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('#tone-pipe .signal').waitFor({state:'attached'});
+ await page.goto(base,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelectorAll('.wave .signal').length===9);
  const set=async(id,value)=>{await page.locator('#'+id).fill(String(value));};
  const play=async key=>{await page.locator(`[data-play="${key}"]`).first().click();await page.waitForFunction(()=>document.querySelector('[data-playing=true]'));};
  await t.test('seven blocks and comparisons render without autoplay',async()=>{

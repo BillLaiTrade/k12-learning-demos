@@ -75,7 +75,7 @@ test('all twelve scenes play their actual PCM, single-button playback and live s
 
 test('slow cancellation, rapid switching, failed retry, hidden/leave/other sources never start stale audio',{timeout:120000},async t=>{
  const {page,url}=await fixture(t);let held=[];
- await page.route('**/decibel-audio/*.wav*',route=>{held.push(route);});await page.goto(url,{waitUntil:'domcontentloaded'});
+ await page.route('**/decibel-audio/*.wav*',route=>{held.push(route);});await page.goto(url,{waitUntil:'networkidle'});
  await page.locator('[data-decibel-play]').click();await page.waitForFunction(()=>document.querySelector('#card-07').dataset.audioState==='preparing');
  await page.locator('#card-07 .stop').click();while(!held.length)await page.waitForTimeout(20);await held.shift().continue();await page.waitForTimeout(400);assert.equal(await count(page),0);
  await select(page,0);await page.locator('[data-decibel-play]').click();await page.locator('[data-decibel-band]').focus();await page.keyboard.press('End');
