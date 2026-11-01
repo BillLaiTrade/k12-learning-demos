@@ -1,0 +1,19 @@
+▶ 2.3 materials: seven illustrated objects explain identity and experimental role
+  ✔ native material buttons target the same dialog; inline information is absent and nothing opens automatically (194.270238ms)
+  ✔ actual photo object bodies open all seven original introductions without a lower information panel (1230.210421ms)
+  ✔ name labels, Enter and Space open the dialog; Escape and return restore the selected material focus (307.046546ms)
+  ✔ materials keep no playback or bottom next action; reopening the same material works (322.009743ms)
+  ✔ selection survives leaving and returning, but does not reopen the dialog or show inline information (403.900998ms)
+  ✔ seven widths keep every 44px target and the shared dialog in-screen (9908.640321ms)
+  ✔ real touch and reduced motion open and close every original material introduction (2155.26709ms)
+  ✔ original science content remains unchanged for oxygen source, catalyst, purge and underwater covering (27.817876ms)
+  ✔ without JavaScript all seven source introductions remain readable with the original photo (1094.321222ms)
+✔ 2.3 materials: seven illustrated objects explain identity and experimental role (17327.992784ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17733.414716
