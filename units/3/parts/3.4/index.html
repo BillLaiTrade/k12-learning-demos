@@ -182,7 +182,7 @@
 <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>發出的聲音，會怎麼從四周返回呢？</p></div>
 <div class="room-wave-lab" id="room" data-phase="ready" data-treated="false" data-emissions="0">
 <div class="room-wave-heading"><h3>先發聲觀察，再試著改變房間</h3><span id="room-condition" class="room-condition">尚未加入吸音材料</span></div>
-<div class="room-wave-scene"><svg id="room-view" viewBox="0 0 1000 640" role="img" aria-label="空教室的俯視聲波剖面；小葵自己發聲與聆聽，圓形波前向四周擴散，再從不同距離的牆面反射返回。"></svg><span id="room-material-label" class="room-surface-label" hidden>吸音材料</span><p class="room-scene-note">俯視聲波剖面・80倍慢動作示意</p></div>
+<div class="room-wave-scene"><svg id="room-view" viewBox="0 0 1000 640" role="img" aria-label="空教室的俯視聲波剖面；小葵自己發聲與聆聽，圓形波前向四周擴散，再從不同距離的牆面反射返回。"></svg><span id="room-material-label" class="room-surface-label" hidden>吸音材料</span><p class="room-scene-note">俯視聲波示意動畫・非實際傳播速度</p></div>
 <div class="room-wave-legend" aria-label="聲波圖例"><span><i aria-hidden="true"></i>發出的波</span><span class="reflected"><i aria-hidden="true"></i>反射回來的波</span></div>
 <div class="room-wave-controls"><button type="button" class="action" data-room-source="clap" aria-pressed="false">拍一下手</button><button type="button" class="secondary" data-room-source="speech" aria-pressed="false">說一句話</button><button type="button" class="secondary" id="room-pause" disabled>暫停</button><button type="button" class="secondary room-material" id="room-material" aria-pressed="false" aria-controls="room-view">＋ 加入吸音材料</button></div>
 <p class="room-wave-hint">先發聲觀察；暫停後切換材料，可直接比較同一時刻。</p>
@@ -191,7 +191,7 @@
 </div>
 <p class="room-wave-note">波線的深淺與粗細表示相對強弱。加入材料只減弱左側、上側兩面牆的反射；切換時保留同一畫面，方便比較。</p>
 <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>房間裡的聲音會經不同表面反射，先後傳回耳朵。吸音材料能減弱部分反射，其他表面的反射仍然存在。</p></div>
-<details class="room-wave-note"><summary>模型與音效說明</summary><p>空教室為簡化模型；波前以80倍慢動作呈現水平切片，語音僅取代表波前，聲音不與慢動作逐波同步。播放結束後回到沒有波線的房間畫面；播放中可暫停、切換材料比較同一時刻。音效以三維房間模型合成，包含地板、天花板和多次反射，並非現場錄音或個人聽覺量測。材料反射強弱為定性示意；比較時保留相同發聲、位置與直接聲強度。吸音減少部分反射，與阻擋聲音穿過牆壁的隔音作用不同。</p></details>
+<details class="room-wave-note"><summary>模型與音效說明</summary><p>空教室為簡化模型；波前以示意動畫呈現水平切片，非實際傳播速度。語音僅取代表波前，音效不與動畫逐波同步。播放結束後回到沒有波線的房間畫面；播放中可暫停、切換材料比較同一時刻。音效以三維房間模型合成，包含地板、天花板和多次反射，並非現場錄音或個人聽覺量測。材料反射強弱為定性示意；比較時保留相同發聲、位置與直接聲強度。吸音減少部分反射，與阻擋聲音穿過牆壁的隔音作用不同。</p></details>
 </div></div></section><section class="quiz well-quiz" id="quiz" aria-labelledby="quiz-title">
 <header class="quiz-head"><span class="quiz-mark" aria-hidden="true">?</span><div><h2 id="quiz-title">這口井有多深？</h2><p>朝井底喊一聲，利用回聲估算井深。</p></div></header>
 <div id="well" data-phase="ready" data-observed="false" data-emissions="0">
