@@ -1,16 +1,16 @@
 name: Deploy demo page
 
 on:
-  push:
-    branches: [main]
+  # Pages currently publishes main through its branch build. Keep this workflow
+  # manual so each push has one publisher instead of two competing deployments.
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: pages-main-recovery
-  cancel-in-progress: true
+  group: pages-main-manual
+  cancel-in-progress: false
 
 jobs:
   deploy:
