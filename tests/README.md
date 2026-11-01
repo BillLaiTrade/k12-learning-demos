@@ -675,3 +675,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-
 ```
 
 3項波前模型、2項音訊、12項瀏覽器（含主項）。涵蓋圓形擴散、近遠返回、只改指定表面反射、音檔直接聲相同／非靜音／不削波、拍手與語音、暫停續播offset、材料重設、跨區／背景停止、九種寬度、真實手機觸控、啟音延遲及失敗重試。`ROOM_CAPTURE_DIR`指定截圖目錄，`ROOM_URL`可指定公開頁URL（可含版本query，勿帶hash）。不代表Safari實機或真人聽辨已驗證。
+
+## 2.3氧氣可選連續播放（2026-11-01）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_CONTINUOUS_ARTIFACT_DIR=/tmp/unit23-continuous node --test tests/unit-2.3-continuous.test.cjs
+```
+
+連播專項10項（含外層）：預設關閉、材料起播、完整七操作與完成影格停留、從目前進度切入、右側／圖內共用暫停及接續、操作間停留暫停、手動選步取消連播、器材視窗保持暫停、Escape／背景／離區／其他播放器、七寬度、原生鍵盤、真實觸控、減少動態及無JS。暫停時比對實際場景像素；全程核對催化劑／封口／蓋片前提，最後停在第三區封存畫面。
+
+本輪與材料10、器材9、操作11、物理8、整頁9、CO2 13、性質10合計80項瀏覽器檢查；各套截圖路徑須以原環境變數指向/tmp，避免覆寫歷史證據。模型未改，不另重跑純模型套件。公開核心可用OXYGEN_CONTINUOUS_URL、OXYGEN_URL、OXYGEN_EQUIPMENT_URL、AIR_FULL_URL指定同一頁面，連播10＋操作11＋器材9＋整頁9，共39項。證據見docs/reviews/unit-2.3-oxygen-continuous-controls/。

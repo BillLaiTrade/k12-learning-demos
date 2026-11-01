@@ -45,3 +45,6 @@
 
 /* Materials use the same dialog; their source reference remains readable without JS. */
 .oxygen-preparation[data-ready=true] .oxygen-material-details{display:none}
+
+/* The whole-experiment control stays outside the collapsible step list. */
+.oxygen-sequence-controls{display:none;margin:12px 0 10px;padding-bottom:9px;border-bottom:1px solid #d6e1ca}.oxygen-preparation[data-ready=true] .oxygen-sequence-controls{display:block}.oxygen-step-nav .oxygen-continuous-button{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:44px;padding:9px 10px;border:1px solid #86a17a;border-radius:9px;background:#fffef7;color:#2f6347;font-size:.8rem;font-weight:700}.oxygen-step-nav .oxygen-continuous-button.is-playing,.oxygen-step-nav .oxygen-continuous-button.is-playing:hover{background:#1f624b;border-color:#1f624b;color:white}.oxygen-step-nav [data-continuous-status]{font-size:.7rem;line-height:1.7;color:#718363;margin:8px 0 0}.oxygen-continuous-button [data-continuous-icon]{line-height:1;font-size:.92rem}@container(max-width:720px){.oxygen-sequence-controls{margin:9px 0 0;padding-bottom:0;border-bottom:0}.oxygen-step-nav [data-continuous-status]{margin-top:6px}.oxygen-step-nav #oxygen-step-list:not([hidden]){margin-top:10px}}

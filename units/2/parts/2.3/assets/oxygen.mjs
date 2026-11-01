@@ -129,10 +129,12 @@ function renderAssembly(elapsed, state, view, phase) {
 
 function createPreparationPlayer() {
   const play=panel.querySelector('[data-play]'),next=panel.querySelector('[data-next]');
+  const sequence=panel.querySelector('[data-continuous]'),sequenceStatus=panel.querySelector('[data-continuous-status]');
   const status=panel.querySelector('[role=status]'),menu=panel.querySelector('[data-step-menu]');
   const navBody=panel.querySelector('#oxygen-step-list'),nav=panel.querySelector('.oxygen-step-nav');
-  let stage=0,elapsed=0,state='ready',started=0,frame=0,message='',compact,explorer;
+  let stage=0,elapsed=0,state='ready',started=0,frame=0,message='',compact,explorer,continuous=false;
   const duration=()=>OXYGEN_OPERATIONS[stage].duration;
+  const clockLimit=()=>duration()+(continuous&&stage<steps.length-1?700:0);
   function setMenu(open){navBody.hidden=!open;menu.setAttribute('aria-expanded',String(open));}
   function syncLayout(){
     const narrow=panel.clientWidth<=720;
@@ -144,25 +146,36 @@ function createPreparationPlayer() {
   function cancel(){cancelAnimationFrame(frame);frame=0;}
   function paint(){
     panel.dataset.stage=String(stage);panel.dataset.state=state;
-    const text=(state==='paused'?'已暫停：':'')+renderPreparation(stage,elapsed,state);
+    panel.dataset.playMode=continuous?'continuous':'single';panel.dataset.elapsed=elapsed.toFixed(3);
+    const atEnd=stage>0&&elapsed>=duration();
+    let text=(state==='paused'?'已暫停：':'')+renderPreparation(stage,elapsed,atEnd?'complete':state);
+    if(continuous&&state==='playing'&&atEnd&&stage<steps.length-1)text=text.replace('這一步已播完，可重播或繼續下一步。','即將接續下一個操作。');
     explorer?.sync(stage);
     if(message!==text){status.textContent=text;message=text;}
     const playing=state==='playing',paused=state==='paused';
     play.querySelector('[data-play-icon]').textContent=playing?'Ⅱ':paused?'▶':'↻';
     play.querySelector('[data-play-label]').textContent=playing?'暫停':paused?'播放':'重播';
-    play.setAttribute('aria-label',playing?'暫停此步動畫':paused?'繼續此步動畫':'重播此步動畫');
+    play.setAttribute('aria-label',playing?(continuous?'暫停連續播放':'暫停此步動畫'):paused?(continuous?'繼續連續播放':'繼續此步動畫'):'重播此步動畫');
+    const replayAll=stage===steps.length-1&&state==='complete';
+    const sequencePlaying=continuous&&playing,sequencePaused=continuous&&paused;
+    sequence.querySelector('[data-continuous-icon]').textContent=sequencePlaying?'Ⅱ':replayAll?'↻':'▶';
+    const sequenceLabel=sequencePlaying?'暫停連播':sequencePaused?'繼續連播':replayAll?'重新連播':'連續播放';
+    sequence.querySelector('[data-continuous-label]').textContent=sequenceLabel;sequence.setAttribute('aria-label',sequenceLabel);
+    sequence.classList.toggle('is-playing',sequencePlaying);
+    sequenceStatus.textContent=sequencePlaying?'自動接續下一步，可隨時暫停。':sequencePaused?'已暫停，按繼續可接著觀看。':replayAll?'已完成氧氣收集與封存。':stage===0?'從擺好集氣位置開始連播。':state==='complete'?'接著從下一個操作連播。':'從目前操作往下連播。';
     menu.textContent=`${String(stage+1).padStart(2,'0')} ${OXYGEN_OPERATIONS[stage].label} ▾`;
     next.innerHTML=`接著：${stage===steps.length-1?'二氧化碳實驗':OXYGEN_OPERATIONS[stage+1].label} <span aria-hidden="true">→</span>`;
   }
   function tick(now){
     if(state!=='playing')return;
-    elapsed=Math.min(duration(),now-started);
-    if(elapsed>=duration())state='complete';
+    elapsed=Math.min(clockLimit(),now-started);
+    if(continuous&&stage<steps.length-1&&elapsed>=clockLimit()){select(stage+1,false,true);return;}
+    if(elapsed>=duration()&&(!continuous||stage===steps.length-1))state='complete';
     paint();if(state==='playing')frame=requestAnimationFrame(tick);
   }
   function pausePlayback(){
     if(state!=='playing')return;
-    elapsed=Math.min(duration(),performance.now()-started);cancel();state='paused';paint();
+    elapsed=Math.min(clockLimit(),performance.now()-started);cancel();state='paused';paint();
   }
   function start(){
     if(stage===0)return;
@@ -170,8 +183,9 @@ function createPreparationPlayer() {
     document.dispatchEvent(new CustomEvent('air-experiment-play',{detail:'oxygen'}));
     cancel();elapsed=at;state='playing';started=performance.now()-elapsed;paint();frame=requestAnimationFrame(tick);
   }
-  function select(index,focusContent=false){
-    explorer?.close();cancel();stage=index;elapsed=0;state='ready';
+  function select(index,focusContent=false,keepContinuous=false){
+    const focused=document.activeElement,focusInScene=panels[stage].contains(focused);
+    explorer?.close();cancel();continuous=keepContinuous;stage=index;elapsed=0;state='ready';
     if(stage>0)panels[stage].querySelector('.oxygen-scene-viewport').append(play);
     play.hidden=stage===0;play.disabled=stage===0;
     panels.forEach((view,i)=>{view.hidden=i!==stage;});
@@ -185,7 +199,17 @@ function createPreparationPlayer() {
       if(compact)setMenu(false);
       const heading=panels[stage].querySelector('h3');heading.focus({preventScroll:true});heading.scrollIntoView({behavior:'instant',block:'start'});
     }
+    if(!focusContent&&keepContinuous&&focusInScene)(focused===play?play:sequence).focus({preventScroll:true});
     if(stage>0)start();
+  }
+  function toggleContinuous(){
+    if(compact)setMenu(false);
+    if(continuous&&state==='playing'){pausePlayback();return;}
+    explorer?.close();
+    if(stage===0||(stage===steps.length-1&&state==='complete')){select(1,false,true);return;}
+    if(state==='complete'){select(stage+1,false,true);return;}
+    if(state==='playing')pausePlayback();
+    continuous=true;start();
   }
   explorer=createEquipmentExplorer({panel,panels,getStage:()=>stage,onOpen:pausePlayback});
   panel.querySelector('.oxygen-steps').setAttribute('role','tablist');
@@ -211,14 +235,15 @@ function createPreparationPlayer() {
   });
   showMaterial(selectedMaterial);
   menu.addEventListener('click',()=>setMenu(navBody.hidden));
-  play.addEventListener('click',()=>state==='playing'?pausePlayback():start());
+  play.addEventListener('click',()=>{if(state==='playing')pausePlayback();else {if(state==='complete')continuous=false;start();}});
+  sequence.addEventListener('click',toggleContinuous);
   next.addEventListener('click',()=>{
     if(stage<steps.length-1)select(stage+1,true);
     else {pausePlayback();const heading=document.querySelector('#title-4');heading.tabIndex=-1;heading.focus({preventScroll:true});heading.scrollIntoView({behavior:'instant',block:'start'});}
   });
   panel.addEventListener('keydown',event=>{if(event.key==='Escape')pausePlayback();});
   if('IntersectionObserver'in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel.querySelector('.oxygen-stage-area'));
-  const api={pausePlayback};players.push(api);next.disabled=false;
+  const api={pausePlayback};players.push(api);next.disabled=false;sequence.disabled=false;
   syncLayout();new ResizeObserver(syncLayout).observe(panel);select(0);panel.dataset.ready='true';return api;
 }
 createPreparationPlayer();
