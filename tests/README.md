@@ -827,3 +827,11 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4-navigation.test.cjs
 ### 3.4聲納對話順序（2026-11-01）
 
 聲納既有15項同驗三段對話常駐、前兩段位於互動前／總結在互動後；九寬度依760px切換雙欄與依序。筆電同屏從互動工具列起量測，另記錄從區塊標頭起的操作區座標headingView；不宣稱新加入的上方對話與全部內容同屏。既有音效與操作檢查保持。
+
+## 3.1 第五區：振動前的平衡繩子
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.1-cycle-rest.test.cjs
+```
+
+共4項（含外層），確認無JavaScript與一般載入時皆是完整綠色平衡直線，等待時不自動振動；滑鼠、鍵盤及手機觸控播放後才產生波形，前方未受擾動的繩段保持平直。以受控瀏覽器時鐘檢查四段振動、完成後一個波長標示、四段完成狀態及重播回到直線起點。含減少動態與手機版面檢查。`CYCLE_WAVE_URL` 可指定公開頁面，`CYCLE_CAPTURE_DIR` 可保存初始畫面；公開驗證沿用既有HTTPS代理。

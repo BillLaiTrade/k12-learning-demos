@@ -733,7 +733,7 @@
                 <text x="412" y="68" text-anchor="middle">波形向右形成</text>
                 <path d="M50 115H645 M50 225H645" fill="none" stroke="#c4d0c7" stroke-width="1.3" stroke-dasharray="4 6"/>
                 <path d="M50 170H645" class="equilibrium"/>
-                <path id="cycle-wave-path" class="wave-line cycle-wave-path" d="M90 170"/>
+                <path id="cycle-wave-path" class="wave-line cycle-wave-path" d="M90 170H600"/>
                 <circle id="cycle-source-marker" cx="90" cy="170" r="10" class="marker"/>
                 <g id="cycle-wave-length-annotation" visibility="hidden" aria-label="完整波形的長度是一個波長 λ">
                   <text x="345" y="253" text-anchor="middle" fill="#bc612b">λ（一個波長）</text>
@@ -1758,6 +1758,10 @@
             const x=cycleStartX+cycleWidth*distance;
             const y=cycleMidY-cycleAmplitude*Math.sin(phase*Math.PI*2);
             path+=` L${x.toFixed(2)} ${y.toFixed(2)}`;
+          }
+          if(progress<1){
+            const frontX=cycleStartX+cycleWidth*progress;
+            path+=` L${frontX.toFixed(2)} ${cycleMidY}H${cycleStartX+cycleWidth}`;
           }
           cycleWavePath.setAttribute("d",path);
           cycleWaveLengthAnnotation.setAttribute("visibility",progress>=1?"visible":"hidden");
