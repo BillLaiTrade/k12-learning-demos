@@ -6,18 +6,22 @@ test('seven operations merge real apparatus positioning into adding marble',()=>
  assert.equal(ops.length,7);assert.equal(ops[1].label,'加入大理石');assert.ok(!ops.some(op=>op.label==='擺好集氣位置'));
  assert.deepEqual(bench(0,0),bench(1,0));
  assert.equal(frame(1,3600).placement,1);assert.equal(frame(1,3600).dishCount,5);
- assert.equal(frame(1,9000).flaskCount,5);assert.equal(frame(1,9000).acid,0);
+ assert.equal(frame(1,18000).flaskCount,5);assert.equal(frame(1,18000).acid,0);
 });
 test('five individual textured stones transfer once, through the neck, and never duplicate',()=>{
- for(let t=0;t<=9000;t+=10){
+ for(let t=0;t<=18000;t+=10){
   const f=frame(1,t),p=bench(1,t);assert.equal(f.dishCount+f.fallingCount+f.flaskCount,5);
   assert.equal(p.stones.filter(s=>s.location==='dish').length,f.dishCount);
   assert.equal(p.stones.filter(s=>s.location==='flask').length,f.flaskCount);
   assert.equal(new Set(p.stones.map(s=>s.id)).size,5);
-  for(const s of p.stones)if(s.location==='falling'&&s.y>=210&&s.y<=330)close(s.x,300);
+  for(const s of p.stones)if(s.location==='falling'&&s.inside){
+   const body=p.bodies.flask,local=transformPoint({x:s.x-body.cx,y:s.y-body.cy},{x:body.cx,y:body.cy,angle:-body.angle});
+   if(local.y<=300)close(local.x,300);
+   if(local.y>350&&local.y<500)assert.ok(local.x>340,'stone follows lower side wall rather than free-falling down the center');
+  }
  }
- assert.deepEqual(bench(1,9000).stones.map(s=>s.location),Array(5).fill('flask'));
- assert.ok(bench(1,9000).bowl.x+110<0);assert.equal(bench(2,5000).bodies.acid.visible,false);
+ assert.deepEqual(bench(1,18000).stones.map(s=>s.location),Array(5).fill('flask'));
+ assert.ok(bench(1,18000).bowl.x+110<0);assert.equal(bench(2,5000).bodies.acid.visible,false);
 });
 test('every operation meets the next without a position, angle, liquid or quantity jump',()=>{
  for(let i=1;i<6;i++){
@@ -49,4 +53,17 @@ test('acid uses the photographed inner curved bottom, with sloping walls and a l
  assert.equal(liquid.points.filter(p=>p.y===500).length,2);assert.ok(liquid.right>liquid.left);
  const bottom=liquid.points.filter(p=>p.y>560);assert.ok(new Set(bottom.map(p=>p.y)).size>3);
  for(const p of liquid.points)assert.ok(p.y>=500&&p.y<=Math.max(...CO2_LIQUID_PROFILE.map(v=>v.y)));
+});
+
+test('marble is placed with forceps in a tilted flask while the dish remains level on the bench',()=>{
+ const p=bench(1,6300);assert.equal(p.bowl.angle,0);assert.equal(p.bowl.x,520);assert.equal(p.bowl.y,500);assert.equal(p.bodies.flask.angle,-28);assert.equal(p.tool.gripping,true);assert.equal(p.tool.visible,true);
+ const moving=p.stones.find(s=>s.location==='falling');close(p.tool.x,moving.x);close(p.tool.y,moving.y);assert.equal(bench(1,18000).bodies.flask.angle,0);
+});
+test('acid stream starts at the real transformed open-bottle lip and the neck stays outside the flask',()=>{
+ for(let t=700;t<3200;t+=25){const p=bench(2,t),b=p.bodies.acid;close(p.acidMouth.x,304);close(p.acidMouth.y,174);assert.equal(b.angle,-65);assert.ok(p.acidMouth.y<200);assert.ok(b.cx>330);}
+});
+
+test('forceps enter and leave through the top without popping in over the bench',()=>{
+ assert.equal(bench(1,4700).tool.y,-60);assert.equal(bench(1,16600).tool.y,-60);let prior=bench(1,4700).tool;
+ for(let t=4716;t<16600;t+=16){const current=bench(1,t).tool;assert.ok(Math.hypot(current.x-prior.x,current.y-prior.y)<60,`tool jump at ${t}`);prior=current;}
 });

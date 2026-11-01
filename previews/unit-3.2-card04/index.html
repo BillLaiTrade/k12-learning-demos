@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex">
   <title>第四、第五學習區塊｜完整互動預覽</title>
   <link rel="stylesheet" href="style.css?v=fixed-22">
-  <link rel="stylesheet" href="../../units/3/parts/3.2/assets/sound-speed.css?v=silent-arrival-20261029">
+  <link rel="stylesheet" href="../../units/3/parts/3.2/assets/sound-speed.css?v=loading-state-20261101">
 </head>
 <body>
   <header class="preview-header shell">
@@ -22,14 +22,15 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p id="girl-line">空氣、水和鋼，裡面的粒子是怎麼把振動傳開的？</p></div>
             <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p id="grandpa-line">音叉被敲一下後來回振動，帶動附近粒子；再看相鄰粒子如何依序受振。</p></div>
 
-            <section id="experiment-panel" role="group" aria-labelledby="lesson-title">
+            <p class="sound-speed-fallback" data-sound-speed-fallback role="status">互動功能尚未載入，請稍候或重新整理後再試。</p>
+              <section id="experiment-panel" role="group" inert aria-busy="true" aria-labelledby="lesson-title">
               <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>介質</span><span>粒子振動 · 逐段傳遞</span><span>到達時間</span></div><div id="models" class="models" role="group" aria-label="可個別敲擊或同步比較的粒子振動模型"></div></div>
               <p class="color-key">相鄰粒子依序往返，傳遞擾動；下方綠色刻度只記錄已傳到的位置。</p>
 
               <div class="controls">
-                <button class="action" id="primary-action" type="button">同時敲擊音叉</button>
-                <button class="text-button" id="pause-action" type="button" hidden>暫停觀察</button>
-                <button class="text-button" id="reset-action" type="button">回到起點</button>
+                <button class="action" id="primary-action" type="button" disabled>同時敲擊音叉</button>
+                <button class="text-button" id="pause-action" type="button" disabled hidden>暫停觀察</button>
+                <button class="text-button" id="reset-action" type="button" disabled>回到起點</button>
               </div>
               <div class="observation-options"><span id="playback-state">點按音叉可單獨敲擊該組。</span></div>
 
@@ -58,13 +59,14 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p id="temp-girl-line">一組 0°C，一組 80°C，我們同時敲音叉看看！</p></div>
             <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p id="temp-grandpa-line">兩組都是空氣、距離也相同，只比較溫度的差異。</p></div>
 
-            <section id="temp-experiment-panel" role="group" aria-labelledby="temp-lesson-title">
+            <p class="sound-speed-fallback" data-sound-speed-fallback role="status">互動功能尚未載入，請稍候或重新整理後再試。</p>
+              <section id="temp-experiment-panel" role="group" inert aria-busy="true" aria-labelledby="temp-lesson-title">
               <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>空氣溫度</span><span>粒子振動 · 逐段傳遞</span><span>到達時間</span></div><div id="temp-models" class="models" role="group" aria-label="可個別敲擊或同步比較的粒子振動模型"></div></div>
 
               <div class="controls">
-                <button class="action" id="temp-primary-action" type="button">同時敲擊音叉</button>
-                <button class="text-button" id="temp-pause-action" type="button" hidden>暫停觀察</button>
-                <button class="text-button" id="temp-reset-action" type="button">回到起點</button>
+                <button class="action" id="temp-primary-action" type="button" disabled>同時敲擊音叉</button>
+                <button class="text-button" id="temp-pause-action" type="button" disabled hidden>暫停觀察</button>
+                <button class="text-button" id="temp-reset-action" type="button" disabled>回到起點</button>
               </div>
 
               <section class="result" id="temp-result" aria-labelledby="temp-result-title" hidden>
@@ -86,6 +88,6 @@
         </section>
   </main>
   <footer class="shell preview-footer"><a href="../../units/3/parts/3.2/#card-04">前往正式 3.2 課程的第四學習區塊</a></footer>
-  <script type="module" src="app.mjs?v=linear-speed-20261101"></script>
+  <script type="module" src="app.mjs?v=loading-state-20261101"></script>
 </body>
 </html>

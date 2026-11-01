@@ -33,7 +33,7 @@
   </style>
   <link rel="stylesheet" href="assets/sound-propagation.css?v=3">
   <link rel="stylesheet" href="assets/vacuum-lab.css?v=5">
-  <link rel="stylesheet" href="assets/sound-speed.css?v=silent-arrival-20261029">
+  <link rel="stylesheet" href="assets/sound-speed.css?v=loading-state-20261101">
   <link rel="stylesheet" href="assets/fireworks-quiz.css?v=exact-answer-20261101">
 </head>
 <body>
@@ -190,15 +190,16 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p id="girl-line">阿公，除了空氣，還有其他介質能傳聲音嗎？</p></div>
             <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p id="grandpa-line">有，水和鋼也能傳聲音。我們可以讓聲音傳過相同的距離，看看在不同介質裡，到達的時間有什麼不同。</p></div>
 
-            <section id="experiment-panel" role="group" aria-labelledby="lesson-title">
+            <p class="sound-speed-fallback" data-sound-speed-fallback role="status">互動功能尚未載入，請稍候或重新整理後再試。</p>
+              <section id="experiment-panel" role="group" inert aria-busy="true" aria-labelledby="lesson-title">
               <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>介質</span><span>粒子振動 · 逐段傳遞</span><span>到達時間</span></div><div id="models" class="models" role="group" aria-label="可個別敲擊或同步比較的粒子振動模型"></div></div>
               <p class="color-key">器材圖為示意，不按實際距離比例繪製。</p>
               <p class="color-key">相鄰粒子依序往返，傳遞擾動；下方綠色刻度只記錄已傳到的位置。</p>
 
               <div class="controls">
-                <button class="action" id="primary-action" type="button">同時敲擊音叉</button>
-                <button class="text-button" id="pause-action" type="button" hidden>暫停觀察</button>
-                <button class="text-button" id="reset-action" type="button">回到起點</button>
+                <button class="action" id="primary-action" type="button" disabled>同時敲擊音叉</button>
+                <button class="text-button" id="pause-action" type="button" disabled hidden>暫停觀察</button>
+                <button class="text-button" id="reset-action" type="button" disabled>回到起點</button>
               </div>
               <div class="observation-options"><span id="playback-state">點按音叉可單獨敲擊該組。</span></div>
 
@@ -219,14 +220,15 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p id="temp-girl-line">同樣都是空氣，如果溫度不同，聲音傳得會一樣快嗎？</p></div>
             <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p id="temp-grandpa-line">我們來試試看，讓聲音在冷一點和熱一點的空氣裡傳一樣遠，看看哪邊先到。</p></div>
 
-            <section id="temp-experiment-panel" role="group" aria-labelledby="temp-lesson-title">
+            <p class="sound-speed-fallback" data-sound-speed-fallback role="status">互動功能尚未載入，請稍候或重新整理後再試。</p>
+              <section id="temp-experiment-panel" role="group" inert aria-busy="true" aria-labelledby="temp-lesson-title">
               <div class="comparison-board"><div class="comparison-heading" aria-hidden="true"><span>空氣溫度</span><span>粒子振動 · 逐段傳遞</span><span>到達時間</span></div><div id="temp-models" class="models" role="group" aria-label="可個別敲擊或同步比較的粒子振動模型"></div></div>
               <p class="color-key">器材圖為示意，不按實際距離比例繪製。</p>
 
               <div class="controls">
-                <button class="action" id="temp-primary-action" type="button">同時敲擊音叉</button>
-                <button class="text-button" id="temp-pause-action" type="button" hidden>暫停觀察</button>
-                <button class="text-button" id="temp-reset-action" type="button">回到起點</button>
+                <button class="action" id="temp-primary-action" type="button" disabled>同時敲擊音叉</button>
+                <button class="text-button" id="temp-pause-action" type="button" disabled hidden>暫停觀察</button>
+                <button class="text-button" id="temp-reset-action" type="button" disabled>回到起點</button>
               </div>
 
               <section class="result" id="temp-result" aria-labelledby="temp-result-title" hidden>
@@ -389,7 +391,7 @@
   </script>
   <script type="module" src="assets/sound-propagation.js?v=exclusive-playback-20261030"></script>
   <script type="module" src="assets/vacuum-lab.js?v=audio-interruption-20261101"></script>
-  <script type="module" src="assets/sound-speed.mjs?v=linear-speed-20261101"></script>
+  <script type="module" src="assets/sound-speed.mjs?v=loading-state-20261101"></script>
   <script type="module" src="assets/fireworks-quiz.mjs?v=exact-answer-20261101"></script>
 </body>
 </html>

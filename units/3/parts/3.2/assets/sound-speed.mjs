@@ -291,7 +291,22 @@ $('#pause-action').addEventListener('click', () => state.phase === 'running' ? p
 $('#reset-action').addEventListener('click', resetRun);
 stopOnLeave(root.closest('.lesson-card'), pause);
 rebuild();
+for (const button of panel.querySelectorAll('.controls button')) button.disabled = false;
+panel.removeAttribute('inert');
+panel.removeAttribute('aria-busy');
+const fallback = root.querySelector('[data-sound-speed-fallback]');
+if (fallback) fallback.hidden = true;
+root.dataset.soundSpeedState = 'ready';
 
 }
 
-for (const root of document.querySelectorAll('[data-sound-speed-lab]')) initSoundSpeed(root);
+for (const root of document.querySelectorAll('[data-sound-speed-lab]')) {
+  try {
+    initSoundSpeed(root);
+  } catch (error) {
+    root.dataset.soundSpeedState = 'failed';
+    const fallback = root.querySelector('[data-sound-speed-fallback]');
+    if (fallback) fallback.textContent = '互動功能未能載入，請重新整理後再試。';
+    console.error('Sound-speed activity could not be initialized.', error);
+  }
+}

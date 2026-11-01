@@ -1,5 +1,6 @@
 const NS='http://www.w3.org/2000/svg';
 const shapes={
+ forceps:{d:'M-20 -314H20V-14H-20Z',bounds:[-20,-314,40,300]},
  flask:{d:'M276 208H325V324L427 550Q437 586 300 586Q163 586 173 550L276 324Z',bounds:[170,208,260,380]},
  jar:{d:'M740 240Q870 195 1010 240V558Q870 603 740 558Z',bounds:[740,215,270,370],transform:'placement-jar'},
  marble:{d:'M200 548H405V584H200Z',bounds:[200,548,205,36],part:'marble'},
@@ -12,14 +13,16 @@ function node(tag,attrs){const n=document.createElementNS(NS,tag);for(const[k,v]
 export function createCO2Explorer({panel,panels,getStage,onOpen,onBackgroundClick}){
  const dialog=panel.querySelector('#co2-equipment-dialog'),layers=new Map();let trigger=null;
  const catalog=Object.fromEntries([...panels[0].querySelectorAll('[data-co2-info]')].map(info=>[info.dataset.co2Info,{name:info.querySelector('h4').textContent,identity:info.querySelectorAll('dd')[0].textContent,role:info.querySelectorAll('dd')[1].textContent}]));
+ catalog.forceps={name:'鑷子',identity:'用來夾取小塊固體的金屬器具。',role:'夾取一塊大理石，靠近略微傾斜的錐形瓶口輕放，讓石塊沿內壁滑入，避免直接撞擊瓶底。'};
  catalog.stopper={name:'塞子',identity:'封住反應瓶瓶口並固定玻璃導管的塞子。',role:'接好導管後塞緊錐形瓶，讓氣體由液面上方沿導管送出。'};
  function role(key,stage){
-  if(key==='flask')return stage===1?'先與直立集氣瓶定位，再接住逐塊加入的大理石。':stage===2?'盛裝大理石與倒入的稀鹽酸，兩者接觸就開始產氣。':stage===3?'接上塞子與固定形狀的玻璃管，入口留在液面上方。':'反應容器持續提供二氧化碳，氣體沿保持暢通的管路送出。';
+  if(key==='forceps')return catalog.forceps.role;
+  if(key==='flask')return stage===1?'先定位，再略微傾斜；用鑷子逐塊輕放大理石，使它沿內壁滑入後再扶正。':stage===2?'盛裝大理石與倒入的稀鹽酸，兩者接觸就開始產氣。':stage===3?'接上塞子與固定形狀的玻璃管，入口留在液面上方。':'反應容器持續提供二氧化碳，氣體沿保持暢通的管路送出。';
   if(key==='jar')return stage<5?'瓶口朝上，原先裝有空氣；先在瓶外排氣，暫不收集。':stage===5?'將固定長度的集氣玻璃管整根抬起、越過瓶口，再放至瓶底附近；原有空氣向上離開。':'先撤出導管，再將玻璃片完整蓋住瓶口，保持直立。';
   if(key==='tube')return '兩段玻璃管的長度與形狀固定，靠整根抬起、平移來移動；中間橡皮管只彎曲，不任意拉長。'+(stage===4?'目前先在集氣瓶外排出原有空氣。':stage===5?'出口越過瓶口後，放至瓶底附近。':stage===6?'先將集氣端整根抬起移出，再蓋玻璃片。':'管路出口保持暢通。');
   if(key==='stopper')return stage<3?'連同玻璃管放在桌邊，留出瓶口加入材料；稍後整組移到瓶口塞緊。':'塞子外緣貼合瓶口內側，將產生的氣體引入玻璃管；出口保持暢通。';
   if(key==='plate')return Number(panel.dataset.cover)===1?'玻璃片已平放、貼合並完整覆蓋瓶口，減少與外界空氣混合。':'放在桌邊備用；等玻璃管完全移出後，再平放蓋好瓶口。';
-  if(key==='marble')return '同一組五塊石塊由碟中逐塊移入錐形瓶；完成取用後將空碟移開。塊數是動畫示意，不是實驗用量。';
+  if(key==='marble')return '瓷碟留在桌上，用鑷子逐塊輕放，讓同一組五塊大理石沿傾斜錐形瓶內壁滑入；完成取用後將空碟移開。塊數是動畫示意，不是實驗用量。';
   return catalog[key].role;
  }
  function visible(n){const b=n?.getBoundingClientRect();return b?.width>0&&b.height>0&&!n.closest('[hidden]')&&n.style.display!=='none';}
@@ -30,7 +33,10 @@ export function createCO2Explorer({panel,panels,getStage,onOpen,onBackgroundClic
   dialog.querySelector('[data-equipment-identity]').textContent=info.identity;
   dialog.querySelector('[data-equipment-role-label]').textContent=stage===0?'用途':'本步中的作用';
   dialog.querySelector('[data-equipment-role]').textContent=stage===0?info.role:role(key,stage);
-  dialog.querySelector('[data-equipment-portrait]').src=`assets/co2-${key==='stopper'?'tube':key}.webp`;
+  const portrait=dialog.querySelector('[data-equipment-portrait]');let toolPortrait=dialog.querySelector('[data-forceps-portrait]');
+  if(!toolPortrait){toolPortrait=node('svg',{viewBox:'842 35 110 1155',width:'112',height:'116',role:'img','aria-label':'金屬鑷子','data-forceps-portrait':''});toolPortrait.style.cssText='width:112px;height:116px;flex:0 0 112px;border:1px solid #e2e8d8;border-radius:12px;background:#f4f5e9';toolPortrait.append(node('image',{href:'assets/co2-tools-atlas.png',width:'1268',height:'1241'}));portrait.after(toolPortrait);}
+  portrait.style.display=key==='forceps'?'none':'';toolPortrait.style.display=key==='forceps'?'':'none';
+  if(key!=='forceps')portrait.src=`assets/co2-${key==='stopper'?'tube':key}.webp`;
   dialog.querySelector('.co2-equipment-paused').textContent=stage===0?'關閉介紹後，可繼續點選其他材料或選擇操作。':'已暫停在目前位置，關閉後可自行按繼續。';
   source.setAttribute('aria-expanded','true');dialog.showModal();
  }
