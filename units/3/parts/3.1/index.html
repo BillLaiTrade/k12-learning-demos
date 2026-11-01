@@ -279,6 +279,13 @@
     .speed-interactive { margin-top:18px; padding:18px; border:1px solid var(--line); border-radius:18px; background:#fbfcf8; container-type:inline-size; }
     .speed-interactive-heading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:4px 14px; }
     .speed-interactive-heading h3 { margin:0; font-size:1.08rem; }
+    .speed-mode-switch { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+    .speed-mode-switch button { flex:1; min-height:44px; padding:9px 12px; border:1px solid #b7ccbe; border-radius:10px; background:#fffefa; color:var(--green); font:inherit; font-weight:750; cursor:pointer; }
+    .speed-mode-switch button[aria-pressed="true"] { background:var(--green); color:white; border-color:var(--green); }
+    .speed-mode-switch button:focus-visible { outline:3px solid #cf7040; outline-offset:3px; }
+    .speed-interactive [hidden] { display:none; }
+    .speed-model-note.speed-rope-note { border-color:#8cae98; border-left-color:var(--green); background:#edf4ea; }
+    .speed-model-note.speed-rope-note h4 { color:var(--green); }
     .speed-condition { color:var(--muted); font-size:.9rem; }
     #card-07 .speed-visual { margin:12px 0; padding:12px 14px 9px; }
     #card-07 .speed-visual text { font-size:15px; }
@@ -853,8 +860,12 @@
               </div>
             </div>
             <section class="speed-interactive" aria-labelledby="speed-interactive-title">
-              <div class="speed-interactive-heading"><h3 id="speed-interactive-title">波源振動一次，讓波形向右傳</h3><span class="speed-condition">理想化參數實驗｜固定路徑 30 m</span></div>
-              <figure class="visual speed-visual">
+              <div class="speed-interactive-heading"><h3 id="speed-interactive-title">波源振動一次，讓波形向右傳</h3><span class="speed-condition" id="speed-condition">理想化參數實驗｜固定路徑 30 m</span></div>
+              <div class="speed-mode-switch" role="group" aria-label="繩波實驗模式">
+                <button type="button" data-speed-mode="ideal" aria-pressed="true" aria-controls="speed-experiment">理想化參數實驗</button>
+                <button type="button" data-speed-mode="rope" aria-pressed="false" aria-controls="speed-experiment">真實繩子</button>
+              </div>
+              <figure class="visual speed-visual" id="speed-experiment">
                 <div class="speed-control-grid" aria-label="調整波的參數">
                   <div class="speed-control">
                     <div class="speed-control-title"><span>頻率 f</span></div>
@@ -863,7 +874,7 @@
                       <span class="speed-step-value" id="speed-frequency-value">2 Hz</span>
                       <button class="secondary" id="speed-frequency-up" type="button" aria-label="提高頻率">＋</button>
                     </div>
-                    <small class="speed-step-note">每次調整 0.5 Hz；週期同步更新</small>
+                    <small class="speed-step-note" id="speed-frequency-note">每次調整 0.5 Hz；週期同步更新</small>
                   </div>
                   <div class="speed-control">
                     <div class="speed-control-title"><span>週期 T</span></div>
@@ -872,7 +883,7 @@
                       <span class="speed-step-value" id="speed-period-value">0.50 s</span>
                       <button class="secondary" id="speed-period-up" type="button" aria-label="延長週期">＋</button>
                     </div>
-                    <small class="speed-step-note">每次調整 0.05 s；頻率同步更新</small>
+                    <small class="speed-step-note" id="speed-period-note">每次調整 0.05 s；頻率同步更新</small>
                   </div>
                   <div class="speed-control">
                     <div class="speed-control-title"><span>波長 λ</span></div>
@@ -881,7 +892,7 @@
                       <span class="speed-step-value" id="speed-wavelength-value">6 m</span>
                       <button class="secondary" id="speed-wavelength-up" type="button" aria-label="增加波長">＋</button>
                     </div>
-                    <small class="speed-step-note">每次調整 1 m</small>
+                    <small class="speed-step-note" id="speed-wavelength-note">每次調整 1 m</small>
                   </div>
                 </div>
                 <p class="speed-equation-live" id="speed-equation-live">波速 = v = f × λ = 2 Hz × 6 m = 12 m/s</p>
@@ -902,10 +913,15 @@
                   </g>
                 </svg>
               </figure>
-              <aside class="speed-model-note" aria-labelledby="speed-model-note-title">
+              <aside class="speed-model-note" id="speed-ideal-note" aria-labelledby="speed-model-note-title">
                 <h4 id="speed-model-note-title"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 22 21H2L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.5" r="1" fill="currentColor"/></svg>理想化模型</h4>
                 <p>頻率、波長可分開設定；繩子變色代表不同波速條件。</p>
                 <p class="speed-model-reality">真實繩子拉緊程度等條件不變時，頻率改變會使波長改變，<strong>波速不變</strong>。</p>
+              </aside>
+              <aside class="speed-model-note speed-rope-note" id="speed-rope-note" aria-labelledby="speed-rope-note-title" hidden>
+                <h4 id="speed-rope-note-title">同一條繩子｜波速固定 12 m/s</h4>
+                <p>繩子拉緊程度等條件不變；調整頻率、週期或波長，其他兩個量會同步更新。</p>
+                <p>頻率越高，波長越短；波速不變，繩子維持綠色。顯示值最多取三位小數。</p>
               </aside>
               <div class="speed-run-controls">
                 <button class="action" id="speed-send-wave" type="button">讓波源振動一次</button>
@@ -1839,11 +1855,17 @@
         const periodDown=document.querySelector("#speed-period-down"),periodUp=document.querySelector("#speed-period-up");
         const wavelengthDown=document.querySelector("#speed-wavelength-down"),wavelengthUp=document.querySelector("#speed-wavelength-up");
         const stepButtons=[frequencyDown,frequencyUp,periodDown,periodUp,wavelengthDown,wavelengthUp];
-        let frequency=2,period=.5,wavelength=6,animationFrame=0,runStartedAt=null,isRunning=false;
+        const modeButtons=[...document.querySelectorAll("[data-speed-mode]")];
+        const modeCondition=document.querySelector("#speed-condition");
+        const idealNote=document.querySelector("#speed-ideal-note"),ropeNote=document.querySelector("#speed-rope-note");
+        const colorLegend=document.querySelector(".speed-color-legend");
+        const frequencyNote=document.querySelector("#speed-frequency-note"),periodNote=document.querySelector("#speed-period-note"),wavelengthNote=document.querySelector("#speed-wavelength-note");
+        const fixedRopeSpeed=12,modeValues={ideal:{frequency:2,period:.5,wavelength:6},rope:{frequency:2,period:.5,wavelength:6}};
+        let mode="ideal",frequency=2,period=.5,wavelength=6,animationFrame=0,runStartedAt=null,isRunning=false;
         const clamp=(value,min,max)=>Math.min(max,Math.max(min,value));
         const round=(value,digits=6)=>Number(value.toFixed(digits));
         const format=(value,digits=3)=>Number(value.toFixed(digits)).toString();
-        const getWaveSpeed=()=>frequency*wavelength;
+        const getWaveSpeed=()=>mode==="rope"?fixedRopeSpeed:frequency*wavelength;
         const speedColorAt=speed=>{
           const ratio=clamp((speed-4)/(32-4),0,1),stops=[{at:0,color:[23,107,83]},{at:.5,color:[211,162,60]},{at:1,color:[196,72,66]}];
           const left=ratio<=.5?stops[0]:stops[1],right=ratio<=.5?stops[1]:stops[2],local=(ratio-left.at)/(right.at-left.at);
@@ -1873,7 +1895,7 @@
             speedWaveGuides.setAttribute("d",`M${startX.toFixed(2)} ${waveMidY}V150M${endX.toFixed(2)} ${waveMidY}V150`);
             speedWavelengthArrow.setAttribute("d",`M${startX.toFixed(2)} 151H${endX.toFixed(2)}`);
             speedLambdaLabel.setAttribute("x",String((startX+endX)/2));
-            speedLambdaLabel.textContent=`λ = ${format(wavelength,1)} m`;
+            speedLambdaLabel.textContent=`λ = ${format(wavelength,3)} m`;
             speedLambdaLabel.setAttribute("visibility","visible");
           }else{
             speedWaveGuides.setAttribute("d","");speedWavelengthArrow.setAttribute("d","");speedLambdaLabel.setAttribute("visibility","hidden");
@@ -1891,17 +1913,17 @@
           frequencyUp.disabled=isRunning||frequency>=4;
           periodDown.disabled=isRunning||period<=.25;
           periodUp.disabled=isRunning||period>=1;
-          wavelengthDown.disabled=isRunning||wavelength<=4;
-          wavelengthUp.disabled=isRunning||wavelength>=8;
+          wavelengthDown.disabled=isRunning||wavelength<=(mode==="rope"?3:4);
+          wavelengthUp.disabled=isRunning||wavelength>=(mode==="rope"?12:8);
         };
         const updateReadouts=()=>{
           const speed=getWaveSpeed(),arrivalTime=getArrivalTime();
-          const frequencyText=`${format(frequency,3)} Hz`,periodText=`${format(period,3)} s`,wavelengthText=`${format(wavelength,1)} m`;
-          const color=speedColorAt(speed),colorPosition=clamp((speed-4)/(32-4),0,1)*100;
+          const frequencyText=`${format(frequency,3)} Hz`,periodText=`${format(period,3)} s`,wavelengthText=`${format(wavelength,3)} m`;
+          const color=mode==="rope"?"rgb(23,107,83)":speedColorAt(speed),colorPosition=clamp((speed-4)/(32-4),0,1)*100;
           speedFrequencyValue.textContent=frequencyText;speedPeriodValue.textContent=periodText;speedWavelengthValue.textContent=wavelengthText;
           speedWavePath.style.stroke=color;speedColorMarker.style.left=`${colorPosition.toFixed(2)}%`;speedColorMarker.style.backgroundColor=color;
           speedColorScale.setAttribute("aria-valuenow",format(speed,2));speedColorScale.setAttribute("aria-valuetext",`${format(speed,2)} 公尺每秒，色階位置 ${format(colorPosition,1)}%`);
-          speedEquation.textContent=`波速 = v = f × λ = ${format(frequency,3)} Hz × ${format(wavelength,1)} m = ${format(speed,2)} m/s`;
+          speedEquation.textContent=`波速 = v = f × λ = ${format(frequency,3)} Hz × ${format(wavelength,3)} m = ${format(speed,2)} m/s`;
           speedWave.setAttribute("aria-label",`橘色波源上下振動一次，產生一個完整波形並向右傳播；頻率 ${frequencyText}，週期 ${periodText}，波長 ${wavelengthText}，波速 ${format(speed,2)} 公尺每秒，波形前端到達30公尺處需 ${format(arrivalTime,2)} 秒`);
           runTime.textContent=`0.00 / ${format(arrivalTime,2)} s`;
           updateControls();
@@ -1935,9 +1957,39 @@
           runMessage.textContent=getArrivalMessage();
           animationFrame=window.requestAnimationFrame(animateSingleWave);
         };
-        const changeFrequency=delta=>{frequency=round(clamp(frequency+delta,1,4),3);period=round(1/frequency,6);resetSingleWave();};
-        const changePeriod=delta=>{period=round(clamp(period+delta,.25,1),6);frequency=round(1/period,6);resetSingleWave();};
-        const changeWavelength=delta=>{wavelength=clamp(wavelength+delta,4,8);resetSingleWave();};
+        const changeFrequency=delta=>{
+          frequency=round(clamp(frequency+delta,1,4),3);
+          period=mode==="rope"?1/frequency:round(1/frequency,6);
+          if(mode==="rope")wavelength=fixedRopeSpeed/frequency;
+          resetSingleWave();
+        };
+        const changePeriod=delta=>{
+          period=round(clamp(period+delta,.25,1),6);
+          frequency=mode==="rope"?1/period:round(1/period,6);
+          if(mode==="rope")wavelength=fixedRopeSpeed*period;
+          resetSingleWave();
+        };
+        const changeWavelength=delta=>{
+          wavelength=round(clamp(wavelength+delta,mode==="rope"?3:4,mode==="rope"?12:8),6);
+          if(mode==="rope"){frequency=fixedRopeSpeed/wavelength;period=wavelength/fixedRopeSpeed;}
+          resetSingleWave();
+        };
+        const changeMode=nextMode=>{
+          if(nextMode===mode)return;
+          modeValues[mode]={frequency,period,wavelength};
+          mode=nextMode;
+          ({frequency,period,wavelength}=modeValues[mode]);
+          const isRope=mode==="rope";
+          modeButtons.forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.speedMode===mode)));
+          modeCondition.textContent=isRope?"波速固定 12 m/s｜固定路徑 30 m":"理想化參數實驗｜固定路徑 30 m";
+          idealNote.hidden=isRope;ropeNote.hidden=!isRope;colorLegend.hidden=isRope;
+          speedWavePath.style.transition=isRope?"none":"";
+          frequencyNote.textContent=isRope?"每次調整 0.5 Hz；週期、波長同步更新":"每次調整 0.5 Hz；週期同步更新";
+          periodNote.textContent=isRope?"每次調整 0.05 s；頻率、波長同步更新":"每次調整 0.05 s；頻率同步更新";
+          wavelengthNote.textContent=isRope?"每次調整 1 m；頻率、週期同步更新":"每次調整 1 m";
+          resetSingleWave();
+        };
+        modeButtons.forEach(button=>button.addEventListener("click",()=>changeMode(button.dataset.speedMode)));
         frequencyDown.addEventListener("click",()=>changeFrequency(-.5));frequencyUp.addEventListener("click",()=>changeFrequency(.5));
         periodDown.addEventListener("click",()=>changePeriod(-.05));periodUp.addEventListener("click",()=>changePeriod(.05));
         wavelengthDown.addEventListener("click",()=>changeWavelength(-1));wavelengthUp.addEventListener("click",()=>changeWavelength(1));

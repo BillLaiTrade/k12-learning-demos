@@ -780,3 +780,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.1-formula-focus.test.cj
 ```
 
 檢查桌機滑鼠／鍵盤及手機真實觸控：選取頻率或週期公式後，點公式面板留白或面板外可清除全部對應高亮與按鈕選取狀態；巢狀分數文字、中文公式切換、重複點選取消及其他參數控制維持正常。共3項（含外層）。可設定 `FORMULA_URL` 指向公開完整課程入口，沿用既有 HTTPS 代理驗證。
+
+## 3.1 第七區：理想化參數與真實繩子模式
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.1-speed-modes.test.cjs tests/unit-3.1-formula-focus.test.cjs
+```
+
+兩模式專項8項（含外層），加上公式選取回歸3項，合計11項。驗證理想模式的獨立波長與變速變色，真實模式固定12 m/s／綠色及頻率、週期、波長三向連動、上下限、各模式參數保存、播放中切換與舊動畫取消、30m的2.5秒抵達及單次振動、原生鍵盤／手機觸控與減少動態、五種寬度的版面。傳播測試以受控瀏覽器時鐘驗證時間及進度，並不代表量測真實繩子。`SPEED_MODES_URL` 可指向公開完整課程入口，`SPEED_MODES_CAPTURE_DIR` 可保存1440／390px兩模式畫面；公開驗證沿用既有HTTPS代理。
