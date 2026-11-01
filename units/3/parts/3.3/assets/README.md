@@ -1,7 +1,7 @@
 # 3.3 示意素材與聲音模型
 
 - 對話頭像：沿用儲存庫共用 `shared-assets/characters/dialogue-character-avatars.png`。
-- 首頁插圖：`sound-fair-opening.png`為使用者於2026-10-30選定的第三輪C02「聲音體驗市集」。以image_gen依1.1／1.2及共用角色參考生成，來源為`docs/reviews/unit-3.3-hero-candidates-round3/candidate-c02.png`；1672×941原始PNG直接採用，未裁切、重畫或後製。生成紀錄見該輪`generation.json`。
+- 首頁插圖：`sound-exploration-courtyard.png`為使用者於2026-11-01選定的第四輪B「校園庭院・一起聽聲音」，以共用角色、木製喇叭、木吉他與竹管素材為參考生成。1672×941原始PNG直接採用，未裁切、重畫或後製；來源與SHA-256見`hero-courtyard-generation.json`。畫面包含音叉、喇叭、吉他、竹排笛、狗／人耳／蝙蝠及閱讀／交談／施工，對應目前七區內容。舊版`sound-fair-opening.png`保留歷史追溯，現行頁面不再引用。
 - 第一區音叉：依核可示意圖，以image_gen製作`fork-tabletop-background.png`及透明`fork-apparatus.png`，生成紀錄見`fork-generation.json`。音叉照片的兩叉股分段彎曲，叉柄／木座固定；音槌及單叉股放大觀察使用SVG。
 - 現行琴弦採透明木吉他素材與獨立SVG弦／品格／手指；空氣柱與訊號圖為繪製SVG，無外部圖片授權依賴。
 - 第四區現採CC BY 4.0封底PVC排管實錄經剪輯調音；第五區現採授權木吉他／排管實錄及音叉近似純音，詳見文末；其餘區仍為Web Audio合成示意，沒有替換3.2已核可音效。
