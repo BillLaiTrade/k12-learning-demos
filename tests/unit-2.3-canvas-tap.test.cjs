@@ -12,6 +12,21 @@ test('2.3 oxygen: blank experiment taps pause and resume without swallowing equi
  await t.test('one blank click pauses time, pixels and caption animation; the next resumes the same progress',async()=>{
   await select(6,true);await page.clock.fastForward(1800);await blank();assert.equal(await root.getAttribute('data-state'),'paused');assert.match(await play.innerText(),/繼續/);const at=await root.getAttribute('data-elapsed'),water=await root.getAttribute('data-collected'),picture=active().locator('.oxygen-drawing'),pixels=await picture.screenshot();await page.clock.fastForward(30000);await page.waitForTimeout(100);assert.equal(await root.getAttribute('data-elapsed'),at);assert.ok(pixels.equals(await picture.screenshot()));assert.ok(await active().locator('[data-scene-note]').evaluate(e=>e.getAnimations().every(a=>a.playState==='paused')));await root.screenshot({path:path.join(out,'paused-1440.png')});await blank();assert.equal(await root.getAttribute('data-state'),'playing');await page.clock.fastForward(300);assert.ok(Number(await root.getAttribute('data-collected'))>Number(water));assert.equal(await root.locator('[data-play]').count(),1);evidence.push({action:'blank pause and continue',heldElapsed:at});
  });
+ await t.test('the setup scene table and background pause and resume during placement and immersion',async()=>{
+  for(const elapsed of [1200,13800,17000]){
+   await select(1,true);await page.clock.fastForward(elapsed);
+   for(const [x,y] of [[700,190],[550,760]]){
+    const q=await coords(active().locator('.oxygen-main-scene'),x,y);
+    assert.equal(await page.evaluate(({x,y})=>!!document.elementFromPoint(x,y)?.closest('[data-equipment]'),q),false,'background must not be an equipment target');
+    await page.mouse.click(q.x,q.y);assert.equal(await root.getAttribute('data-state'),'paused');
+    assert.equal(await dialog.isVisible(),false);
+    const held=await root.getAttribute('data-elapsed');await page.clock.fastForward(500);
+    assert.equal(await root.getAttribute('data-elapsed'),held);
+    await page.mouse.click(q.x,q.y);assert.equal(await root.getAttribute('data-state'),'playing');
+    await page.clock.fastForward(100);assert.ok(Number(await root.getAttribute('data-elapsed'))>Number(held));
+   }
+  }
+ });
  await t.test('equipment keeps priority, opens its introduction and never bubbles into an immediate resume',async()=>{
   await select(6,true);await page.clock.fastForward(1700);await point(1035,400);assert.equal(await dialog.isVisible(),true);assert.equal(await root.getAttribute('data-state'),'paused');const at=await root.getAttribute('data-elapsed');await close();await page.clock.fastForward(5000);assert.equal(await root.getAttribute('data-elapsed'),at);await point(1035,400);assert.equal(await dialog.isVisible(),true);assert.equal(await root.getAttribute('data-state'),'paused');await close();await blank();assert.equal(await root.getAttribute('data-state'),'playing');await point(500,180);assert.equal(await dialog.isVisible(),true);assert.match(await dialog.locator('[data-equipment-title]').innerText(),/導管/);assert.equal(await root.getAttribute('data-state'),'paused');await close();
  });
