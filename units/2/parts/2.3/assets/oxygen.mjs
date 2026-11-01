@@ -163,7 +163,7 @@ function createPreparationPlayer() {
     play.querySelector('[data-play-icon]').textContent=playing?'Ⅱ':complete?'↻':'▶';
     play.querySelector('[data-play-label]').textContent=label;play.setAttribute('aria-label',label);
     play.classList.toggle('is-playing',playing);
-    sequenceStatus.textContent=playing?'自動接續下一步，可隨時暫停。':paused?'已暫停，按繼續接著看。':complete?'已完成氧氣收集與封存。':stage===0?'從擺好集氣位置開始播放。':'按播放，從這一步接著看。';
+    sequenceStatus.textContent=playing?'點畫面空白處可暫停。':paused?'點空白處或按繼續接著看。':complete?'已完成氧氣收集與封存。':stage===0?'從擺好集氣位置開始播放。':'按播放，從這一步接著看。';
     menu.textContent=`${String(stage+1).padStart(2,'0')} ${OXYGEN_OPERATIONS[stage].label} ▾`;
   }
   function tick(now){
@@ -236,6 +236,27 @@ function createPreparationPlayer() {
   showMaterial(selectedMaterial);
   menu.addEventListener('click',()=>setMenu(navBody.hidden));
   play.addEventListener('click',togglePlayback);
+  const stageArea=panel.querySelector('.oxygen-stage-area');
+  const interactive='button,a,input,select,textarea,label,summary,[role="button"],[role="tab"],[contenteditable],[data-material],[data-equipment]';
+  const selecting=()=>window.getSelection()?.isCollapsed===false;
+  let gesture=null;
+  stageArea.addEventListener('pointerdown',event=>{
+    if(!event.isPrimary){if(gesture)gesture.cancelled=true;return;}
+    if(event.button!==0){gesture=null;return;}
+    gesture={id:event.pointerId,x:event.clientX,y:event.clientY,scrollX:window.scrollX,scrollY:window.scrollY,down:true,dragged:false,cancelled:false,selecting:selecting(),interactive:!!event.target.closest?.(interactive)};
+  },{passive:true});
+  stageArea.addEventListener('pointermove',event=>{
+    if(gesture?.down&&gesture.id===event.pointerId&&Math.hypot(event.clientX-gesture.x,event.clientY-gesture.y)>10)gesture.dragged=true;
+  },{passive:true});
+  stageArea.addEventListener('pointerup',event=>{if(gesture?.id===event.pointerId)gesture.down=false;},{passive:true});
+  stageArea.addEventListener('pointercancel',()=>{if(gesture){gesture.cancelled=true;gesture.down=false;}},{passive:true});
+  stageArea.addEventListener('click',event=>{
+    const tap=gesture;gesture=null;
+    if(event.button!==0||event.defaultPrevented||event.target.closest?.(interactive)||selecting())return;
+    if(event.detail>0&&tap&&(tap.dragged||tap.cancelled||tap.selecting||tap.interactive||Math.abs(window.scrollX-tap.scrollX)>2||Math.abs(window.scrollY-tap.scrollY)>2))return;
+    if(section.querySelector('#oxygen-equipment-dialog').open)return;
+    if(state==='playing'||state==='paused')togglePlayback();
+  });
   panel.addEventListener('keydown',event=>{if(event.key==='Escape')pausePlayback();});
   if('IntersectionObserver'in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel.querySelector('.oxygen-stage-area'));
   const api={pausePlayback};players.push(api);play.disabled=false;

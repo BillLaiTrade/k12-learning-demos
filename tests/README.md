@@ -727,3 +727,13 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4.test.cjs
 ### 3.4井深精簡解析高度
 
 井深專項仍為12項。原四大段檢查改為單一圖文區內的三個精簡計算線索，並驗證兩半長條等長與換井資料同步。九種寬度另斷言桌機解析高度≤360px、窄螢幕≤520px，保留不溢出、原生觸控／鍵盤、聲音、判分與取消舊排程檢查。
+
+## 2.3 左側空白點選暫停／繼續（2026-11-01）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_TAP_ARTIFACT_DIR=/tmp/unit23-tap node --test tests/unit-2.3-canvas-tap.test.cjs
+```
+
+新專項10項（含外層），驗證空白點選精確暫停／續播、場景像素與原生字卡動畫凍結、器材及材料介紹優先、預覽／完成不誤啟動、文字選取／拖曳／右鍵排除、手機主圖與近景真實觸控、原生滑動不切換、卡片文字區、700ms完成影格停留、自動換步後仍有效，以及右側控制不重複觸發。
+
+搭配字卡10、單鍵連播10、器材9、操作11、材料10，本機共60項通過。公開可設OXYGEN_TAP_URL、OXYGEN_CAPTIONS_URL、OXYGEN_CONTINUOUS_URL、OXYGEN_EQUIPMENT_URL跑點選10＋字卡10＋連播10＋器材9共39項；截圖目錄均設至/tmp避免覆寫歷史證據。模型／CSS／其他區未改，未重跑其專用套件。證據見docs/reviews/unit-2.3-oxygen-canvas-tap/。

@@ -1,0 +1,11 @@
+[
+  {
+    "action": "blank pause and continue",
+    "heldElapsed": "1800.000"
+  },
+  {
+    "action": "touch pan",
+    "scrollBefore": 4717,
+    "scrollAfter": 4782
+  }
+]
