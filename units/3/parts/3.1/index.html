@@ -62,6 +62,7 @@
     #fixed-point-slider { cursor:ew-resize; touch-action:none; }
     #fixed-point-slider:focus-visible:not(.is-dragging) .slider-handle-bg { stroke:#176b53; stroke-width:3; }
     .visual .fixed-point-hint { fill:#176b53; font-size:18px; font-weight:750; }
+    .visual [data-fixed-point-wave] { overflow:visible; }
     @media (max-width:520px) { .visual .fixed-point-hint { font-size:28px; } }
     .slider-horizontal-icon { fill:none; stroke:#176b53; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; pointer-events:none; }
     .slider-hitarea { fill:transparent; pointer-events:all; }
@@ -557,8 +558,8 @@
                   <rect class="slider-handle-bg" x="-27" y="-12" width="54" height="24" rx="12" fill="#fffefa" stroke="#82978a" stroke-width="1.5"/>
                   <path class="slider-horizontal-icon" d="M-10 0H10M-6-4L-10 0L-6 4M6-4L10 0L6 4"/>
                   <rect class="slider-hitarea" x="-30" y="-18" width="60" height="36"/>
+                  <text class="fixed-point-hint" x="0" y="46" text-anchor="middle" pointer-events="none">左右拖曳</text>
                 </g>
-                <text class="fixed-point-hint" x="350" y="250" text-anchor="middle">左右拖曳</text>
               </svg>
             </figure>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>明明繩上的點只是在原處上下動，波形卻一路往右傳，真的好神奇！</p></div>
