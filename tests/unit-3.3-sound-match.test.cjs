@@ -79,10 +79,10 @@ test('sound-match assessment follows the approved layout and shares actual audio
  await t.test('fixed levels clamp at both ends, move by one position and never start audio',async()=>{
   const runs=await page.evaluate(()=>window.matchRuns.length);
   for(const key of ['frequency','amplitude']){
-   for(const value of levels[key]){await set(key,value);assert.equal(await root.locator('#answer-'+key).innerText(),`第 ${levels[key].indexOf(value)+1}／${levels[key].length} 檔`);}
+   for(const value of levels[key]){await set(key,value);assert.equal(await root.locator('#answer-'+key).innerText(),key==='frequency'?`${value} Hz`:value.toFixed(1));}
    assert.equal(await root.locator(`[data-match-step="${key}"][data-direction="1"]`).isDisabled(),true);
    await set(key,levels[key][0]);assert.equal(await root.locator(`[data-match-step="${key}"][data-direction="-1"]`).isDisabled(),true);
-   assert.equal(await root.locator(`[data-match-levels="${key}"] i`).count(),levels[key].length);
+   assert.equal(await root.locator(`[data-match-levels="${key}"]`).count(),0);
   }
   assert.equal(await page.evaluate(()=>window.matchRuns.length),runs);assert.equal(await root.locator('input,[role=slider]').count(),0);
  });
@@ -91,7 +91,7 @@ test('sound-match assessment follows the approved layout and shares actual audio
   await root.locator('[data-match-step=frequency][data-direction="1"]').focus();await page.keyboard.press('Enter');await ready();assert.equal(await plot.getAttribute('data-frequency'),'550');
   await root.locator('[data-match-step=frequency][data-direction="-1"]').focus();await page.keyboard.press('Space');await ready();assert.equal(await plot.getAttribute('data-frequency'),'440');
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const p=await context.newPage();await p.goto(base+'#unit-quiz',{waitUntil:'networkidle'});await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');
-  await p.locator('[data-match-step=frequency][data-direction="1"]').tap();await p.waitForFunction(()=>document.querySelector('#quiz-choice').dataset.frequency==='550');assert.equal(await p.locator('#answer-frequency').innerText(),'第 4／5 檔');
+  await p.locator('[data-match-step=frequency][data-direction="1"]').tap();await p.waitForFunction(()=>document.querySelector('#quiz-choice').dataset.frequency==='550');assert.equal(await p.locator('#answer-frequency').innerText(),'550 Hz');
   await p.locator('[data-match-switch]').tap();await p.waitForFunction(()=>document.querySelector('#quiz-choice').dataset.tone==='pure');await p.locator('[data-play=quiz-choice]').tap();await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.playing==='true');await p.locator('[data-play=quiz-choice]').tap();assert.equal(await p.locator('#unit-quiz').getAttribute('data-playing'),'false');await context.close();
  });
  if(!process.env.SOUND33_BASE_URL)await t.test('failed clip load leaves no fake wave and listening retries successfully',async()=>{

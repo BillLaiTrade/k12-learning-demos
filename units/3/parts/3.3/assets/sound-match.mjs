@@ -35,8 +35,7 @@ export function createSoundMatch(root,{onChange}){
   onChange();heardChoice=false;conceal();
   for(const key of ['frequency','amplitude']){
    const levels=MATCH_LEVELS[key],position=levels.indexOf(answer[key]),output=find('#answer-'+key);
-   output.textContent=`第 ${position+1}／${levels.length} 檔`;output.dataset.value=String(answer[key]);
-   find(`[data-match-levels="${key}"]`).innerHTML=levels.map((_,i)=>`<i class="${i===position?'selected':''}"></i>`).join('');
+   output.textContent=key==='frequency'?`${answer[key]} Hz`:answer[key].toFixed(1);output.dataset.value=String(answer[key]);
    root.querySelector(`[data-match-step="${key}"][data-direction="-1"]`).disabled=position===0;
    root.querySelector(`[data-match-step="${key}"][data-direction="1"]`).disabled=position===levels.length-1;
   }

@@ -52,10 +52,7 @@
 .match-stepper button:hover:not(:disabled){background:#176b53;color:#fff;border-color:#176b53}
 .match-stepper button:disabled{opacity:.35}
 .match-level{text-align:center;min-width:0}
-.match-level output{display:block;font-size:.9rem;font-weight:750;line-height:1.4;font-variant-numeric:tabular-nums}
-.match-levels{display:flex;justify-content:center;gap:5px;margin-top:6px}
-.match-levels i{display:block;width:15px;height:5px;border-radius:99px;background:#cfddd0}
-.match-levels .selected{background:#176b53}
+.match-level output{display:block;font-size:1.35rem;font-weight:750;line-height:1.4;font-variant-numeric:tabular-nums}
 .match-level-ends{display:flex;justify-content:space-between;margin-top:4px;font-size:.7rem;line-height:1.4;color:#597466}
 .match-level-ends>span:nth-child(2){color:#728375}
 .match-actions{display:flex;align-items:center;gap:16px;margin-top:12px}
