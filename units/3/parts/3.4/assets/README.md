@@ -1,3 +1,7 @@
+## 2026-11-01 第四區人物對話常駐
+
+三段對話移出收合區，模型條件另收在「模型說明」。原文字、素材、CSS及程式保持，操作區仍同屏；既有對話承接換位置與累積測點的觀察引導。見`docs/decisions/unit-3.4-sonar-workspace.md`。
+
 ## 2026-11-01 第四區工具列位置對調
 
 接收狀態與發聲／暫停移至左側，聲速／往返時間移至右側；手機先操作再數據。CSS版本`20261101-toolbar-swap`，原探測／移船／紀錄程式與其他區塊保持。見`docs/decisions/unit-3.4-sonar-workspace.md`及`docs/reviews/unit-3.4-sonar-toolbar-swap/`。

@@ -1,0 +1,102 @@
+TAP version 13
+# Subtest: free-position active sonar survey
+    # Subtest: full-width format, shared dialogue, layered scene and no old slider, sound checkbox or preset points
+    ok 1 - full-width format, shared dialogue, layered scene and no old slider, sound checkbox or preset points
+      ---
+      duration_ms: 301.001208
+      type: 'test'
+      ...
+    # Subtest: mouse dragging and buttons move only the ship without creating points
+    ok 2 - mouse dragging and buttons move only the ship without creating points
+      ---
+      duration_ms: 280.831023
+      type: 'test'
+      ...
+# Sonar final output {"gain":0.3199999928474426,"direct":0.31965693831443787,"back":0.14384561777114868}
+    # Subtest: a 1.19-second real-time measurement locks the position, reflects halfway, then records 892.5m with a weaker return
+    ok 3 - a 1.19-second real-time measurement locks the position, reflects halfway, then records 892.5m with a weaker return
+      ---
+      duration_ms: 1972.350158
+      type: 'test'
+      ...
+    # Subtest: new positions preserve old markers and map rows one-to-one, deeper places take longer
+    ok 4 - new positions preserve old markers and map rows one-to-one, deeper places take longer
+      ---
+      duration_ms: 3871.719559
+      type: 'test'
+      ...
+    # Subtest: ocean, aligned chart, current depth and records fit together including the section heading on laptops
+    ok 5 - ocean, aligned chart, current depth and records fit together including the section heading on laptops
+      ---
+      duration_ms: 456.883352
+      type: 'test'
+      ...
+    # Subtest: pause freezes visual time, cancels old audio; resume preserves a single pending point
+    ok 6 - pause freezes visual time, cancels old audio; resume preserves a single pending point
+      ---
+      duration_ms: 3020.977721
+      type: 'test'
+      ...
+    # Subtest: clear cancels pending callbacks, retains terrain and restarts labels at A; cross-section and hidden page pause sonar
+    ok 7 - clear cancels pending callbacks, retains terrain and restarts labels at A; cross-section and hidden page pause sonar
+      ---
+      duration_ms: 2076.382361
+      type: 'test'
+      ...
+    # Subtest: four records per page retain all measurements and the full chart without increasing workspace height
+    ok 8 - four records per page retain all measurements and the full chart without increasing workspace height
+      ---
+      duration_ms: 8627.091088
+      type: 'test'
+      ...
+    # Subtest: nine widths keep the common toolbar, aligned visual column and results inside the card
+    ok 9 - nine widths keep the common toolbar, aligned visual column and results inside the card
+      ---
+      duration_ms: 1050.442671
+      type: 'test'
+      ...
+    # Subtest: real mobile touch drag and playback work with reduced motion, including clear during pause
+    ok 10 - real mobile touch drag and playback work with reduced motion, including clear during pause
+      ---
+      duration_ms: 3863.227065
+      type: 'test'
+      ...
+    # Subtest: keyboard activation and audio failure recovery keep one record and cancel failed attempts
+    ok 11 - keyboard activation and audio failure recovery keep one record and cancel failed attempts
+      ---
+      duration_ms: 1902.676665
+      type: 'test'
+      ...
+    # Subtest: delayed audio activation holds the clock at zero and clear invalidates the awaiting start
+    ok 12 - delayed audio activation holds the clock at zero and clear invalidates the awaiting start
+      ---
+      duration_ms: 3254.171065
+      type: 'test'
+      ...
+    # Subtest: rock material decodes, stays clipped to measured terrain and agrees with an intermediate survey point
+    ok 13 - rock material decodes, stays clipped to measured terrain and agrees with an intermediate survey point
+      ---
+      duration_ms: 2446.928354
+      type: 'test'
+      ...
+    # Subtest: shelf and trench retain actual .2s and 3s travel times without an animation speed multiplier
+    ok 14 - shelf and trench retain actual .2s and 3s travel times without an animation speed multiplier
+      ---
+      duration_ms: 4632.414951
+      type: 'test'
+      ...
+    1..14
+ok 1 - free-position active sonar survey
+  ---
+  duration_ms: 38849.533101
+  type: 'test'
+  ...
+1..1
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 39250.603322
