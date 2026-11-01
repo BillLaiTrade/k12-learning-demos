@@ -1,0 +1,30 @@
+✔ echo uses two equal legs and the specified air or water speed (2.692556ms)
+✔ invalid physical inputs are rejected (0.593319ms)
+✔ wave reaches wall halfway and then returns to receiver (0.23328ms)
+✔ absorption preserves direct sound and path delays while reducing reflection energy (0.549333ms)
+✔ assessment identifies omissions, wrong reasoning and correct understanding (4.516631ms)
+✔ paired synthetic audio has identical direct onset and timeline, nonzero reflections and no clipping (108.887545ms)
+✔ audio model preserves direct tap and includes 3D untreated surfaces (4.154284ms)
+✔ mirror sources produce outward circles and physically ordered wall returns (7.959786ms)
+✔ absorption changes only reflection amplitude on the treated left/top surfaces (2.112589ms)
+✔ source ceases, reflected fronts remain finite and speech uses representative repeated pulses (7.196988ms)
+▶ everyday room wavefront experiment
+  ✔ approved single scene, shared identity and merged section; no rays or automatic sound (398.376916ms)
+  ✔ clap emits one finite buffer, expands circular fronts and receives near before far (3653.624769ms)
+  ✔ material toggles reset old waves/audio; left/top reflections weaken but other walls and propagation do not (2121.378321ms)
+  ✔ speech pause/resume preserves offset; repeat and switch cancel old audio with no overlap (834.627698ms)
+  ✔ real output is nonzero and all four files decode with equal duration per paired condition (103.437251ms)
+  ✔ cross-section and hidden page cancel room playback in either direction (373.240908ms)
+  ✔ full observation completes and restart begins at zero (6405.746408ms)
+  ✔ nine screen widths keep scene and controls visible without overflow (1089.382086ms)
+  ✔ real mobile touch and keyboard activate each control once under reduced motion (1165.993534ms)
+  ✔ delayed audio activation and failure cannot emit a stale observation after material changes (2880.79421ms)
+✔ everyday room wavefront experiment (20543.415125ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22367.445228

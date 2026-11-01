@@ -1,0 +1,58 @@
+{
+  "model": "3D image sources; amplitude reflection hard=.88, treated=.35; whole left/top walls; no measured self-hearing claim",
+  "room_m": [
+    6.0,
+    3.6,
+    2.6
+  ],
+  "source_m": [
+    1.65,
+    1.9,
+    1.35
+  ],
+  "receiver_m": [
+    1.5499999999999998,
+    1.9,
+    1.5
+  ],
+  "sample_rate": 24000,
+  "maximum_order": 22,
+  "speech_source": "room-phrase.wav; existing offline synthetic phrase",
+  "clap_source": "deterministic 10ms noise burst, not a real clap recording",
+  "rirs": [
+    {
+      "treated": false,
+      "direct_tap": 1.0,
+      "C50_dB": 15.033780980179841,
+      "late_100ms_fraction": 0.009505230010313231
+    },
+    {
+      "treated": true,
+      "direct_tap": 1.0,
+      "C50_dB": 31.624061235559992,
+      "late_100ms_fraction": 3.3426821901856044e-05
+    }
+  ],
+  "files": {
+    "room-clap-bare.wav": {
+      "duration": 0.39466666666666667,
+      "peak": 0.7999999999999998,
+      "common_gain": 0.7999999999999998
+    },
+    "room-clap-treated.wav": {
+      "duration": 0.39466666666666667,
+      "peak": 0.8,
+      "common_gain": 0.7999999999999998
+    },
+    "room-speech-bare.wav": {
+      "duration": 4.054458333333334,
+      "peak": 0.8,
+      "common_gain": 0.6435520307008266
+    },
+    "room-speech-treated.wav": {
+      "duration": 4.054458333333334,
+      "peak": 0.6445747811931282,
+      "common_gain": 0.6435520307008266
+    }
+  }
+}

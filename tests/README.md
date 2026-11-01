@@ -664,3 +664,14 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_MATERIALS_ARTIFACT_DIR=/tmp/unit23-materi
 本機47項（材料10、器材9、操作11、物理8、整頁9，含外層）通過。材料專項改驗證七件原圖／名稱開共用視窗、定義與用途逐字保留、無常駐資訊、首次不自動開啟、反覆點同物品、Enter／空白／Escape、同步aria-expanded與回焦點、保留選擇但返回不重開、七寬度44px與模態不溢出、真實觸控及無JS原文可讀。其餘專項配合第一步開視窗後先關閉再切步，後七項點選與原物理／小測回歸。
 
 公開可設OXYGEN_MATERIALS_URL、OXYGEN_EQUIPMENT_URL、OXYGEN_URL、AIR_FULL_URL，跑材料10＋器材9＋操作11＋整頁9，共39項。證據見docs/reviews/unit-2.3-material-dialog/。模型、CO2與性質模組未改，未在本輪重跑它們的專用套件。
+
+
+## 3.4 第五區：生活中的反射波前（2026-11-01）
+
+原第五／六區合併，五教學＋一小測。執行：
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.4-room-model.test.mjs tests/unit-3.4-room-audio.test.mjs tests/unit-3.4-room.test.cjs
+```
+
+3項波前模型、2項音訊、12項瀏覽器（含主項）。涵蓋圓形擴散、近遠返回、只改指定表面反射、音檔直接聲相同／非靜音／不削波、拍手與語音、暫停續播offset、材料重設、跨區／背景停止、九種寬度、真實手機觸控、啟音延遲及失敗重試。`ROOM_CAPTURE_DIR`指定截圖目錄，`ROOM_URL`可指定公開頁URL（可含版本query，勿帶hash）。不代表Safari實機或真人聽辨已驗證。

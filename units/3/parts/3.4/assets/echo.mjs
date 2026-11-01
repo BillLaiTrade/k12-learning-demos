@@ -1,5 +1,6 @@
+import {bindRoomWaveLab} from './room-wave-lab.mjs?v=20261101-room';
 import {renderSonar, bindSonar, beginSonar, sonarDuration, sonarTaps} from './sonar-lab.mjs?v=20261031-results';
-import {arrivals, judge} from './echo-model.mjs';
+import {arrivals, judge} from './echo-model.mjs?v=20261101-room';
 import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
 import {renderDistance, bindDistanceWall, bindDistanceSpeakers, distanceDuration, distanceTaps} from './distance-lab.mjs?v=20261031-short-labels';
 import {renderCalculation, bindCalculationInput, calculationTime, calculationDuration, calculationTaps} from './calculation-lab.mjs?v=20261031-calculation-lab';
@@ -125,13 +126,9 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
   soundBox?.addEventListener('change', () => {if (p.phase === 'playing') sound(p, p.elapsed);});
   panels.set(id, p); p.draw(); return p;
 }
-function line(x1, y1, x2, y2, color, dash = '') { return `<path d="M${x1} ${y1}L${x2} ${y2}" stroke="${color}" stroke-width="4" fill="none" ${dash ? 'stroke-dasharray="8 6"' : ''}/>`; }
 function trace(target, mode = 'dense', treated = false, progress = 0) {
   const taps = arrivals(mode, treated), width = 650;
   $(target).innerHTML = `<svg viewBox="0 0 720 150" role="img" aria-label="${mode === 'single' ? '一次較晚回聲' : treated ? '直接聲相同、反射減弱' : '直接聲與密集反射'}的到達紀錄"><path d="M35 110H690" stroke="#a9b9ad"/>${taps.map((a, i) => `<path d="M${35 + a.delay / 1.4 * width} 110v-${a.gain * 70}" stroke="${i ? '#bc612b' : '#176b53'}" stroke-width="7"/>`).join('')}<text x="20" y="23">接收強弱（示意）</text><text x="20" y="140">0：直接聲</text><text x="580" y="140">1.4秒</text><path d="M${35 + Math.min(1, progress) * width} 35V115" stroke="#6eaeb3" stroke-width="2" stroke-dasharray="4 4"/></svg>`;
-}
-function roomView(id, treated = false) {
-  $(id).innerHTML = `<rect x="55" y="30" width="610" height="180" rx="8" fill="#edf1e7" stroke="#9a886e" stroke-width="8"/>${treated ? '<path d="M250 34H470M250 206H470" stroke="#80aa97" stroke-width="18"/>' : ''}${line(120, 140, 600, 140, '#176b53') }<path d="M120 140L360 35L600 140M120 140L360 205L600 140" fill="none" stroke="#bc612b" stroke-width="4" stroke-dasharray="7 5" opacity="${treated ? '.25' : '.8'}"/><circle cx="120" cy="140" r="17" fill="#176b53"/><circle cx="600" cy="140" r="17" fill="#bc612b"/><text x="90" y="185">聲源</text><text x="575" y="185">聽者</text><text x="270" y="130">直接聲 →</text><text x="260" y="239">${treated ? '部分牆面吸音：反射減弱' : '反射走較長的路徑，較晚抵達'}</text>`;
 }
 const reflection = player('reflection', renderReflection, () => REFLECTION_DURATION, {
   restartOnPlay: true,
@@ -153,16 +150,8 @@ $('calculation-speaker').addEventListener('click', () => calculation.play(true))
 bindCalculationInput(calculation.reset);
 const sonarPlayer = player('sonar', renderSonar, sonarDuration, {restartOnPlay: true, onRestart: beginSonar, taps: sonarTaps});
 bindSonar(sonarPlayer);
-player('room', progress => {
-  trace('room-single', 'single', false, progress * 2 / 1.4); trace('room-dense', 'dense', false, progress * 2 / 1.4); roomView('room-view');
-}, () => 2, {room: true, mode: () => document.querySelector('[name=room-mode]:checked').value});
-player('treatment', progress => {
-  trace('treatment-before', 'dense', false, progress * 6.8 / 1.4); trace('treatment-after', 'dense', true, progress * 6.8 / 1.4);
-  const treated = document.querySelector('[name=treatment-mode]:checked').value === 'after'; roomView('treatment-view', treated);
-  $('treatment-reading').textContent = treated ? '目前比較：部分牆面吸音，直接聲保留，反射聲較弱。' : '目前比較：未處理牆面，反射聲較強。';
-}, () => 6.8, {room: true, mode: () => document.querySelector('[name=treatment-mode]:checked').value});
+bindRoomWaveLab(controller => { stopActive(); active = controller; }, controller => { if (active === controller) active = null; });
 $('wall-distance').addEventListener('input', () => distance.reset());
-for (const name of ['room-mode', 'treatment-mode']) document.querySelectorAll(`[name="${name}"]`).forEach(el => el.addEventListener('change', () => panels.get(name.split('-')[0]).reset()));
 trace('quiz-before'); trace('quiz-after', 'dense', true);
 const form = $('echo-quiz'), feedback = $('quiz-feedback');
 form.addEventListener('submit', event => {

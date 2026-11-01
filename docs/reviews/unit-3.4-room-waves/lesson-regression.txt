@@ -1,0 +1,65 @@
+▶ 3.4 third lesson follows the numeric-input mockup within the shared lesson format
+  ✔ shared full-width header and character dialogue surround the four-step scene, with no automatic audio or old controls (115.19844ms)
+  ✔ the default derivation multiplies once, splits equal paths, then divides by two without revealing the answer in the scene (268.150473ms)
+  ✔ editable decimal times and times above six seconds synchronize every derivation value (259.736588ms)
+  ✔ an empty or out-of-range edit stops the old observation and cannot send invalid values into playback (422.764052ms)
+Calculation real-time and audio: {"arrival":4.005,"elapsed":"4.0000","same":true,"delay":4,"gains":[1,0.44999998807907104],"master":0.3199999928474426,"peaks":[0.31965693831443787,0.14384561777114868]}
+  ✔ a four-second run receives at four actual seconds with audible original and weaker matching echo (4248.914701ms)
+  ✔ pictured speaker and button restart one controller and cancel all previous echoes (464.806884ms)
+  ✔ pause and resume hold the return position and do not emit a second original (2735.083377ms)
+  ✔ editing a condition clears waves and stops sound; cross-section and background playback cancel old work (342.200534ms)
+  ✔ the pictured speaker supports Enter and Space, and both preserve the typed condition (154.401827ms)
+  ✔ actual touch starts one pulse under reduced motion and pauses both audio and animation (1302.277085ms)
+  ✔ 1440–320px layouts retain equal legs, full-width lesson format, legible controls and contained labels (2014.923879ms)
+  ✔ audio activation errors have a visible retry explanation and successful retries clear it (1018.433161ms)
+✔ 3.4 third lesson follows the numeric-input mockup within the shared lesson format (14401.464316ms)
+▶ 3.4 first lesson matches approved apparatus layout and has two synchronized playback entrances
+  ✔ complete scene and Traditional Chinese text load, with no automatic animation or sound (429.916055ms)
+  ✔ clicking the pictured speaker emits exactly one original and its weaker delayed copy (190.128729ms)
+Measured final Web Audio output: {"state":"running","gain":0.3199999928474426,"direct":0.31965693831443787,"echo":0.14384561777114868}
+  ✔ final output contains both audible-strength pulses after all gain stages (4659.767541ms)
+  ✔ the page has no web volume controls and keeps device-based volume adjustment (8.381201ms)
+  ✔ both entrances restart the same timeline and cancel earlier scheduled echoes (664.681601ms)
+  ✔ pause freezes waves and audio; resume preserves the emission count (498.552572ms)
+  ✔ surface contact precedes return; receiver lights only when the returning sound arrives (4965.836565ms)
+  ✔ pause and changing sections/background stop playback without a separate sound switch (331.599395ms)
+  ✔ keyboard Enter and Space activate the real speaker hit area once each (66.971088ms)
+  ✔ the scene, phase strip, controls and explanation all remain within the right content column (999.421774ms)
+  ✔ touch and reduced-motion still allow explicit speaker playback and pause (1241.355026ms)
+  ✔ blocked or stalled audio shows a visible retry message rather than a false playback success (3485.22589ms)
+  ✔ prefixed Web Audio fallback can also emit from an explicit click (814.93447ms)
+✔ 3.4 first lesson matches approved apparatus layout and has two synchronized playback entrances (19577.114127ms)
+▶ free-position active sonar survey
+  ✔ full-width format, shared dialogue, layered scene and no old slider, sound checkbox or preset points (444.736345ms)
+  ✔ mouse dragging and buttons move only the ship without creating points (374.237108ms)
+Sonar final output {"gain":0.3199999928474426,"direct":0.31965693831443787,"back":0.14384561777114868}
+  ✔ a 1.19-second real-time measurement locks the position, reflects halfway, then records 892.5m with a weaker return (2568.217537ms)
+  ✔ new positions preserve old markers and map rows one-to-one, deeper places take longer (6398.523971ms)
+  ✔ pause freezes visual time, cancels old audio; resume preserves a single pending point (2836.005441ms)
+  ✔ clear cancels pending callbacks, retains terrain and restarts labels at A; cross-section and hidden page pause sonar (2152.770416ms)
+  ✔ nine widths keep controls beneath scene, headings, table and content inside full-width card (1312.955984ms)
+  ✔ real mobile touch drag and playback work with reduced motion, including clear during pause (1320.792654ms)
+  ✔ keyboard activation and audio failure recovery keep one record and cancel failed attempts (1864.73771ms)
+  ✔ delayed audio activation holds the clock at zero and clear invalidates the awaiting start (3210.222285ms)
+  ✔ rock material decodes, stays clipped to measured terrain and agrees with an intermediate survey point (2490.767527ms)
+  ✔ shelf and trench retain actual .2s and 3s travel times without an animation speed multiplier (4701.650994ms)
+✔ free-position active sonar survey (30949.49546ms)
+▶ 3.4 reflection, ranging, sonar, absorption and assessment
+  ✔ five lessons, one quiz, shared avatars and an overview link (93.366914ms)
+  ✔ ranges produce correct leg lengths and accept native keyboard input (59.573268ms)
+  ✔ wave pause freezes, resume advances, reset preserves chosen conditions (900.312508ms)
+  ✔ cross-section playback, input changes and backgrounding stop old playback (167.220845ms)
+  ✔ sonar creates a point only when emitted and fills the result on reception (1544.362543ms)
+  ✔ new room experiment shares playback cancellation and material reset with the lesson (231.713193ms)
+  ✔ quiz distinguishes missing, wrong, correct, edited and reset answers (318.306522ms)
+  ✔ anchors and 1440 through 320px layouts work without page overflow (2945.748817ms)
+  ✔ touch playback moves under reduced motion and pauses both animation and audio (1076.018671ms)
+✔ 3.4 reflection, ranging, sonar, absorption and assessment (8418.190321ms)
+ℹ tests 50
+ℹ suites 0
+ℹ pass 50
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 75096.950727

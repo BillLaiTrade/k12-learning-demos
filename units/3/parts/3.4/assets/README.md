@@ -1,5 +1,12 @@
 # 3.4 聲波反射與回聲初稿
 
+## 目前第五區：生活聲音反射與材料切換（2026-11-01）
+
+原第五／六區合併為一區，目前五教學＋一小測。`room-wave-model.mjs`、`room-wave-scene.mjs`、`room-wave-lab.mjs`與`room-wave.css`實作分層俯視房間、偏心小葵、圓形反射波、拍手／語音、材料切換及暫停；角色引用共用頭像。80倍動畫是水平波前示意，聲音按原時長播放，不與慢動作逐波同步。詳見`docs/decisions/unit-3.4-room-waves.md`，下方六區與舊第五／六區說明為歷史。
+
+`room-floor.webp`為獨立生成木地板材質，原檔`exec-86373eab-a1ab-4a16-9bbc-a25bce8a7501.png`，僅轉WebP；波、牆、材料與角色未合成進材質。四個`room-{clap,speech}-{bare,treated}.wav`為本模型的離線合成音效，`room-audio-model.json`保留參數與數值，重建命令`python3 scripts/build-room-wave-audio.py`（分析環境使用NumPy／SciPy；網頁無新增依賴）。沒有引入研究資料中的遠場錄音。
+
+
 依使用者核可的6教學＋1小測規劃製作，仍在第四階段供檢視，不代表第五階段整課檢查、完整單元外部驗收或最終核可。
 
 ## 船上的獨立測深圖（2026-10-31）
