@@ -1,0 +1,53 @@
+{
+  "total": 101,
+  "suites": [
+    {
+      "suite": "audio-start",
+      "tests": 8,
+      "pass": 8,
+      "fail": 0
+    },
+    {
+      "suite": "reflection",
+      "tests": 14,
+      "pass": 14,
+      "fail": 0
+    },
+    {
+      "suite": "distance",
+      "tests": 15,
+      "pass": 15,
+      "fail": 0
+    },
+    {
+      "suite": "calculation",
+      "tests": 14,
+      "pass": 14,
+      "fail": 0
+    },
+    {
+      "suite": "sonar",
+      "tests": 15,
+      "pass": 15,
+      "fail": 0
+    },
+    {
+      "suite": "room",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0
+    },
+    {
+      "suite": "well",
+      "tests": 12,
+      "pass": 12,
+      "fail": 0
+    },
+    {
+      "suite": "lesson",
+      "tests": 10,
+      "pass": 10,
+      "fail": 0
+    }
+  ]
+}

@@ -780,3 +780,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.1-formula-focus.test.cj
 ```
 
 檢查桌機滑鼠／鍵盤及手機真實觸控：選取頻率或週期公式後，點公式面板留白或面板外可清除全部對應高亮與按鈕選取狀態；巢狀分數文字、中文公式切換、重複點選取消及其他參數控制維持正常。共3項（含外層）。可設定 `FORMULA_URL` 指向公開完整課程入口，沿用既有 HTTPS 代理驗證。
+
+## 3.4 F01啟音與回聲同步（2026-11-01）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4-audio-start.test.cjs
+```
+
+新專項8項（含外層）：前三區600ms啟音延遲各驗證零進度等待、完整最末輸出、原音／回聲排程及接收時刻；另測等待中暫停續播不重發、改值／快速重播取消、跨區起播／背景取消、延遲續播保留原畫面且只排剩餘回聲。真實AudioContext＋Analyser，記錄自然ended與stop，不能只驗證排程而未驗最末輸出。`AUDIO_START_URL`指定公開頁（不帶hash），`AUDIO_START_CAPTURE_DIR`保存三區等待／完成截圖及timing.json。既有reflection14、distance15、calculation14、sonar15、room13、well12與整課10作共用播放器回歸；不重跑未改的純模型。公開專項亦需執行，觸控仍由既有專項覆蓋，不代表Safari實機或真人聽感驗收。

@@ -1,0 +1,88 @@
+[
+  {
+    "id": "reflection",
+    "skew": 0.0008163265306118106,
+    "sources": [
+      {
+        "ended": true,
+        "when": 0.6611337868480726,
+        "offset": 0,
+        "duration": 0.09,
+        "endedAt": 0.7517460317460317
+      },
+      {
+        "ended": true,
+        "when": 5.061133786848073,
+        "offset": 0,
+        "duration": 0.09,
+        "endedAt": 5.1519274376417235
+      }
+    ],
+    "receivedAt": 5.061950113378685,
+    "peaks": [
+      0.31965693831443787,
+      0.14384561777114868
+    ],
+    "audioPlaying": "false"
+  },
+  {
+    "id": "distance",
+    "skew": 0.008979591836735246,
+    "sources": [
+      {
+        "ended": true,
+        "when": 0.6611337868480726,
+        "offset": 0,
+        "duration": 0.09,
+        "endedAt": 0.7517460317460317
+      },
+      {
+        "ended": true,
+        "when": 2.6611337868480724,
+        "offset": 0,
+        "duration": 0.09,
+        "endedAt": 2.75156462585034
+      },
+      {
+        "ended": true,
+        "when": 4.6611337868480724,
+        "offset": 0,
+        "duration": 0.09,
+        "endedAt": 4.751383219954649
+      }
+    ],
+    "receivedAt": 4.670113378684808,
+    "peaks": [
+      0.31965693831443787,
+      0.14384561777114868,
+      0.14384561777114868
+    ],
+    "audioPlaying": "false"
+  },
+  {
+    "id": "calculation",
+    "skew": 0.008979591836735246,
+    "sources": [
+      {
+        "ended": true,
+        "when": 0.6611337868480726,
+        "offset": 0,
+        "duration": 0.09,
+        "endedAt": 0.7517460317460317
+      },
+      {
+        "ended": true,
+        "when": 4.6611337868480724,
+        "offset": 0,
+        "duration": 0.09,
+        "endedAt": 4.751383219954649
+      }
+    ],
+    "receivedAt": 4.670113378684808,
+    "peaks": [
+      0.31965693831443787,
+      0.14384561777114868
+    ],
+    "audioPlaying": "false"
+  }
+]

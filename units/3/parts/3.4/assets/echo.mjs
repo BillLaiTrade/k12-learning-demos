@@ -57,17 +57,19 @@ async function sound(panel, elapsed = 0) {
     master.gain.value = outputLevel(panel); outputGain = master;
     master.connect(context.destination);
     const taps = panel.taps ? panel.taps() : panel.room ? arrivals(panel.mode(), panel.id === 'treatment' && panel.mode() === 'after') : [{delay: 0, gain: 1}, {delay: panel.duration() - .1, gain: .45}];
+    const startAt = context.currentTime + .04;
     for (const tap of taps) {
       const offset = Math.max(0, elapsed - tap.delay);
       if (offset >= buffer.duration) continue;
       const source = context.createBufferSource(), gain = context.createGain();
       source.buffer = buffer; gain.gain.value = tap.gain;
       source.connect(gain); gain.connect(master);
-      source.start(context.currentTime + (['reflection', 'distance', 'calculation', 'sonar'].includes(panel.id) ? .04 : 0) + Math.max(0, tap.delay - elapsed), offset);
+      source.start(startAt + Math.max(0, tap.delay - elapsed), offset);
       sources.push(source);
       source.onended = () => { sources = sources.filter(s => s !== source); if (!sources.length) document.body.dataset.audioPlaying = 'false'; };
     }
     document.body.dataset.audioPlaying = sources.length ? 'true' : 'false';
+    return {context, startAt: startAt - elapsed};
   } catch {
     if (epoch !== audioEpoch) return;
     audioError(panel, '聲音未能啟用。請再次點擊播放；若仍無聲，請用瀏覽器開啟本頁，並確認裝置與分頁未靜音。');
@@ -76,7 +78,7 @@ async function sound(panel, elapsed = 0) {
 function player(id, render, duration, {room = false, mode = () => '', restartOnPlay = false, taps = null, onRestart = () => {}} = {}) {
   const root = $(id), play = document.querySelector(`[data-play="${id}"]`), reset = document.querySelector(`[data-reset="${id}"]`), soundBox = document.querySelector(`[data-sound="${id}"]`);
   const pauseButton = root.querySelector('[data-pause]');
-  const p = {id, root, phase: 'ready', elapsed: 0, start: 0, raf: 0, render, duration, room, mode, taps, sound: soundBox};
+  const p = {id, root, phase: 'ready', elapsed: 0, start: 0, raf: 0, clock: null, render, duration, room, mode, taps, sound: soundBox};
   p.draw = () => { root.dataset.progress = fmt(p.elapsed / p.duration(), 4); render(Math.min(1, p.elapsed / p.duration())); };
   function phase(value) {
     p.phase = value; root.dataset.phase = value;
@@ -91,31 +93,32 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
     }
     $(`${id}-status`).textContent = {ready: '準備好，可播放或直接比較；重來保留目前條件。', playing: '播放中，可暫停觀察。', paused: '已暫停，位置保留；繼續時接著播放。', complete: '本次觀察結束，可重看或改變條件。'}[value];
   }
-  p.pause = () => { if (p.phase !== 'playing') return; if (!p.waitingForAudio) p.elapsed = Math.min(p.duration(), (performance.now() - p.start) / 1000); p.waitingForAudio = false; cancelAnimationFrame(p.raf); phase('paused'); if (active === p) { active = null; stopSound(); } p.draw(); };
+  const elapsedAt = now => Math.max(0, Math.min(p.duration(), p.clock ? p.clock.context.currentTime - p.clock.startAt : (now - p.start) / 1000));
+  p.pause = () => { if (p.phase !== 'playing') return; if (!p.waitingForAudio) p.elapsed = elapsedAt(performance.now()); p.waitingForAudio = false; cancelAnimationFrame(p.raf); phase('paused'); if (active === p) { active = null; stopSound(); } p.draw(); };
   p.reset = () => { p.pause(); p.elapsed = 0; phase('ready'); p.draw(); };
   function tick(now) {
-    p.elapsed = Math.min(p.duration(), (now - p.start) / 1000); p.draw();
-    if (p.elapsed >= p.duration() && !(id === 'sonar' && active === p && sources.length)) { phase('complete'); p.draw(); if (active === p) {active = null; stopSound();} }
+    p.elapsed = elapsedAt(now); p.draw();
+    if (p.elapsed >= p.duration() && !(active === p && sources.length)) { phase('complete'); p.draw(); if (active === p) {active = null; stopSound();} }
     else p.raf = requestAnimationFrame(tick);
   }
   p.play = (restart = false, selection) => {
-    const newEmission = restart || p.phase === 'complete' || p.elapsed === 0;
+    const newEmission = restart || p.phase === 'complete' || p.phase === 'ready';
     stopActive();
     if (newEmission) { p.elapsed = 0; onRestart(selection); }
     if (['reflection', 'distance', 'calculation', 'sonar'].includes(id) && newEmission) root.dataset.emissions = String(Number(root.dataset.emissions) + 1);
-    active = p; p.start = performance.now() - p.elapsed * 1000;
+    active = p; p.clock = null; p.start = performance.now() - p.elapsed * 1000;
     phase('playing'); p.draw();
-    if (id === 'sonar') {
-      // Keep zero/the paused time until audio activation settles. A late context
-      // must not push the return cue beyond an already-running visual clock.
-      p.waitingForAudio = true;
-      const scheduled = sound(p, p.elapsed), epoch = audioEpoch;
-      scheduled.then(() => {
-        if (epoch !== audioEpoch || active !== p || p.phase !== 'playing') return;
-        p.waitingForAudio = false; p.start = performance.now() - p.elapsed * 1000;
-        p.raf = requestAnimationFrame(tick);
-      });
-    } else { sound(p, p.elapsed); p.raf = requestAnimationFrame(tick); }
+    // Preparation preserves zero/the paused frame. The same audio clock then
+    // drives the waves and the scheduled cues, including the output lead-in.
+    p.waitingForAudio = true;
+    const scheduled = sound(p, p.elapsed), epoch = audioEpoch;
+    scheduled.then(clock => {
+      if (epoch !== audioEpoch || active !== p || p.phase !== 'playing') return;
+      p.waitingForAudio = false; p.clock = clock || null;
+      // Keep the existing visual fallback when audio activation reports an error.
+      p.start = performance.now() - p.elapsed * 1000;
+      p.raf = requestAnimationFrame(tick);
+    });
   };
   play.addEventListener('click', () => {
     if (restartOnPlay) {p.play(true); return;}

@@ -1,0 +1,133 @@
+▶ 3.4 audio preparation and visual clocks share the scheduled start
+  ✖ reflection: 600ms preparation holds zero, aligns reception and lets every echo finish (1138.186433ms)
+  ✖ distance: 600ms preparation holds zero, aligns reception and lets every echo finish (919.24594ms)
+  ✖ calculation: 600ms preparation holds zero, aligns reception and lets every echo finish (895.108184ms)
+  ✖ pausing before audio activation keeps zero; resuming does not create another emission (1558.119793ms)
+  ✔ editing conditions and rapid replay invalidate pending audio without a stale start (2365.570137ms)
+  ✖ starting another section or hiding the page cancels preparation before sources exist (921.61849ms)
+  ✖ a delayed resume preserves the paused frame and only schedules the remaining echo (1293.478153ms)
+✖ 3.4 audio preparation and visual clocks share the scheduled start (9520.58223ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 1
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9524.806345
+
+✖ failing tests:
+
+test at tests/unit-3.4-audio-start.test.cjs:24:11
+✖ reflection: 600ms preparation holds zero, aligns reception and lets every echo finish (1138.186433ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '0.0628' !== '0'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:27:59)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:24:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '0.0628',
+    expected: '0',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-audio-start.test.cjs:24:11
+✖ distance: 600ms preparation holds zero, aligns reception and lets every echo finish (919.24594ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '0.0499' !== '0'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:27:59)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:24:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '0.0499',
+    expected: '0',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-audio-start.test.cjs:24:11
+✖ calculation: 600ms preparation holds zero, aligns reception and lets every echo finish (895.108184ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '0.0458' !== '0'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:27:59)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:24:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '0.0458',
+    expected: '0',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-audio-start.test.cjs:38:10
+✖ pausing before audio activation keeps zero; resuming does not create another emission (1558.119793ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '0.3017' !== '0'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:40:308)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:38:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '0.3017',
+    expected: '0',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-audio-start.test.cjs:50:10
+✖ starting another section or hiding the page cancels preparation before sources exist (921.61849ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '0.048' !== '0'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:52:167)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:50:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '0.048',
+    expected: '0',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-audio-start.test.cjs:57:10
+✖ a delayed resume preserves the paused frame and only schedules the remaining echo (1293.478153ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0.5446 !== 0.3486
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:60:59)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-audio-start.test.cjs:57:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0.5446,
+    expected: 0.3486,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

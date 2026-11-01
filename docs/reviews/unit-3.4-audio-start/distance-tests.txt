@@ -1,0 +1,28 @@
+▶ 3.4 distance comparison follows the approved real-time virtual-lab mockup
+  ✔ two stacked scenes load with real separate apparatus, synchronized distance controls and no unsolicited audio controls (562.461202ms)
+Distance final audio: {"same":true,"delays":[0,2,4],"gains":[1,0.44999998807907104,0.44999998807907104],"master":0.3199999928474426,"peaks":[0.31965693831443787,0.14384561777114868,0.14384561777114868]}
+  ✔ together button emits once plus both correctly delayed weaker echoes at the final output (4349.24506ms)
+Actual real-time receiver arrivals: {"near":2.0449000000059603,"far":4.038800000011921}
+  ✔ animation and reception records follow real elapsed time at one-times speed (4305.823698ms)
+Single lane final audio: near {"count":2,"same":true,"delays":[0,2],"gains":[1,0.44999998807907104],"peaks":[0.31965693831443787,0.14384561777114868]}
+Single lane final audio: far {"count":2,"same":true,"delays":[0,6],"gains":[1,0.44999998807907104],"peaks":[0.31965693831443787,0.14384561777114868]}
+  ✔ each speaker animates and records only its own lane and produces only its own audible echo (9277.891355ms)
+  ✔ pause and resume preserve the selected lane and switching lanes cancels the old return (890.741549ms)
+  ✔ at the comparison moment near has arrived while far just reaches the wall; pause freezes the shared record and waves (4856.338106ms)
+  ✔ each speaker and lower button restarts the same controller and cancels previous echoes (554.992253ms)
+  ✔ mouse wall dragging keeps the fixed lane unchanged, clamps distance and cancels the previous observation (261.86732ms)
+  ✔ number entry, range and dragged board share conditions; incomplete and out-of-range edits are safe (338.515392ms)
+  ✔ wall and native distance input both support keyboard with bounds; equal distances share one echo (2313.90897ms)
+  ✔ cross-section playback and hidden pages stop this scene without autoplaying on return (282.558172ms)
+  ✔ all scene, records, controls and dialogues stay in the content column from 1440 to 320px (8275.878641ms)
+  ✔ real touch wall dragging and speaker tapping work under reduced motion (1391.922835ms)
+  ✔ audio failure appears only on failure and a new explicit play clears the error (944.430121ms)
+✔ 3.4 distance comparison follows the approved real-time virtual-lab mockup (40082.37601ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40088.519779
