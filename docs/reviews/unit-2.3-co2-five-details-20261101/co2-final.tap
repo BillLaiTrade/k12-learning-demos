@@ -3,85 +3,85 @@ TAP version 13
     # Subtest: seven real operations, initial caption, one persistent control and five concise points
     ok 1 - seven real operations, initial caption, one persistent control and five concise points
       ---
-      duration_ms: 242.783652
+      duration_ms: 262.605997
       type: 'test'
       ...
     # Subtest: all six material bodies and labels open the correct dialog; keyboard restores focus
     ok 2 - all six material bodies and labels open the correct dialog; keyboard restores focus
       ---
-      duration_ms: 1308.084541
+      duration_ms: 1396.498274
       type: 'test'
       ...
     # Subtest: the material picture and first playback frame use exactly the same apparatus
     ok 3 - the material picture and first playback frame use exactly the same apparatus
       ---
-      duration_ms: 524.231798
+      duration_ms: 551.27315
       type: 'test'
       ...
     # Subtest: the new forceps open an introduction and keep the placing scene paused
     ok 4 - the new forceps open an introduction and keep the placing scene paused
       ---
-      duration_ms: 234.186944
+      duration_ms: 218.623441
       type: 'test'
       ...
     # Subtest: five photo-textured stones move into the flask and the empty dish and used acid bottle leave
     ok 5 - five photo-textured stones move into the flask and the empty dish and used acid bottle leave
       ---
-      duration_ms: 535.336708
+      duration_ms: 547.162271
       type: 'test'
       ...
     # Subtest: liquid follows a curved inner-wall path and clips resolve outside hidden panels
     ok 6 - liquid follows a curved inner-wall path and clips resolve outside hidden panels
       ---
-      duration_ms: 485.814141
+      duration_ms: 476.196156
       type: 'test'
       ...
     # Subtest: the fitted stopper and fixed glass move rigidly; the rubber retains a 500-unit arc length
     ok 7 - the fitted stopper and fixed glass move rigidly; the rubber retains a 500-unit arc length
       ---
-      duration_ms: 2070.788505
+      duration_ms: 2089.809927
       type: 'test'
       ...
     # Subtest: the rod clears the mouth before covering, then the full-size plate contacts and spans the rim
     ok 8 - the rod clears the mouth before covering, then the full-size plate contacts and spans the rim
       ---
-      duration_ms: 453.398154
+      duration_ms: 484.515786
       type: 'test'
       ...
     # Subtest: continuous play visits every operation exactly once, stops at storage and replay restores the full dish
     ok 9 - continuous play visits every operation exactly once, stops at storage and replay restores the full dish
       ---
-      duration_ms: 574.27715
+      duration_ms: 679.888274
       type: 'test'
       ...
     # Subtest: blank background pauses and resumes; apparatus dialogs take priority and keep playback paused
     ok 10 - blank background pauses and resumes; apparatus dialogs take priority and keep playback paused
       ---
-      duration_ms: 1278.536035
+      duration_ms: 1419.073523
       type: 'test'
       ...
     # Subtest: seven viewport widths preserve player layout, material labels and synchronized closeups
     ok 11 - seven viewport widths preserve player layout, material labels and synchronized closeups
       ---
-      duration_ms: 3403.482185
+      duration_ms: 3248.714602
       type: 'test'
       ...
     # Subtest: real touch uses background toggles and material dialogs
     ok 12 - real touch uses background toggles and material dialogs
       ---
-      duration_ms: 1536.974384
+      duration_ms: 1541.430938
       type: 'test'
       ...
     # Subtest: no-JavaScript fallback retains seven readable operations and realistic stone snapshots
     ok 13 - no-JavaScript fallback retains seven readable operations and realistic stone snapshots
       ---
-      duration_ms: 898.015252
+      duration_ms: 1041.606996
       type: 'test'
       ...
     1..13
 ok 1 - CO2 seven-operation apparatus and continuous player
   ---
-  duration_ms: 15024.03793
+  duration_ms: 15556.901426
   type: 'test'
   ...
 1..1
@@ -92,4 +92,4 @@ ok 1 - CO2 seven-operation apparatus and continuous player
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 15335.988275
+# duration_ms 15886.757773

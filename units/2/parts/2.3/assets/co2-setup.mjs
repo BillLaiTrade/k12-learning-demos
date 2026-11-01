@@ -1,4 +1,4 @@
-import {CO2_SETUP_DURATION,co2SetupFrame,CO2_OPERATIONS,co2BenchFrame,CO2_LIQUID_PROFILE,liquidGeometry,rubberGeometry,transformPoint} from './co2-model.mjs?v=five-detail-2';
+import {CO2_SETUP_DURATION,co2SetupFrame,CO2_OPERATIONS,co2BenchFrame,CO2_LIQUID_PROFILE,liquidGeometry,rubberGeometry,transformPoint} from './co2-model.mjs?v=five-detail-3';
 export {CO2_SETUP_DURATION,co2SetupFrame,co2BenchFrame};
 const NS='http://www.w3.org/2000/svg';
 const atlas='assets/co2-marble-atlas.png';
@@ -19,6 +19,7 @@ const stopperOutline='M-50 -15Q0 -33 50 -15L40 45Q0 58 -40 45Z';
 export function createCO2Bench(panel,panels){
  // Definitions live outside all hidden panels, so Chromium retains liquid clips.
  const resources=node('svg',{class:'co2-paint-resources',width:0,height:0,'aria-hidden':'true',focusable:'false'}),defs=node('defs');resources.append(defs);panel.prepend(resources);
+ const materialTubeShape=node('path',{id:'co2-material-tube-shape',fill:'none',stroke:'black','stroke-width':24});defs.append(materialTubeShape);
  const art=node('g',{id:'co2-shared-bench','data-shared-bench':''});defs.append(art);
  const flaskClip=node('clipPath',{id:'co2-live-flask-inside',clipPathUnits:'userSpaceOnUse'});flaskClip.append(node('path',{d:polygon(CO2_LIQUID_PROFILE)}));defs.append(flaskClip);
  const stopperClip=node('clipPath',{id:'co2-live-stopper-shape'});stopperClip.append(node('path',{d:stopperOutline}));defs.append(stopperClip);
@@ -100,7 +101,7 @@ export function createCO2Bench(panel,panels){
   return null;
  }
  function target(key){
-  if(stage===0)return null;
+  if(stage===0&&key!=='tube')return null;
   if(key==='forceps')return {visible:current.tool.visible,bounds:[-20,-314,40,300],d:'M-20 -314H20V-14H-20Z',transform:matrix(current.tool),stroke:false};
   if(key==='tube'){
    const g=current.glass,ps=firstLocal.map(p=>transformPoint(p,g.first)),end=transformPoint({x:0,y:-260},g.rod),tip=g.rodTip;
@@ -115,5 +116,9 @@ export function createCO2Bench(panel,panels){
   const d=key==='flask'?`M${p(.42,.1)}H${x+w*.58}V${y+h*.31}L${p(.8,.82)}Q${p(.86,.94)} ${p(.5,.96)}Q${p(.14,.94)} ${p(.2,.82)}L${p(.42,.31)}Z`:key==='jar'?`M${p(.24,.16)}Q${p(.5,.08)} ${p(.76,.16)}V${y+h*.83}Q${p(.5,.95)} ${p(.24,.83)}Z`:`M${p(.1,.1)}h${w*.8}v${h*.8}h${-w*.8}Z`;
   return {visible:b.visible,bounds:b.box,stroke:false,transform:`rotate(${b.angle} ${b.cx} ${b.cy})`,d};
  }
- return {render,target};
+ function materialTubeAt(clientX,clientY){
+  if(stage!==0)return false;const r=material.getBoundingClientRect();if(!r.width||!r.height)return false;
+  materialTubeShape.setAttribute('d',target('tube').d);return materialTubeShape.isPointInStroke(new DOMPoint((clientX-r.left)*1100/r.width,(clientY-r.top)*650/r.height));
+ }
+ return {render,target,materialTubeAt};
 }

@@ -14,6 +14,7 @@ test('CO2 seven-operation apparatus and continuous player',{timeout:180000},asyn
  });
  await t.test('all six material bodies and labels open the correct dialog; keyboard restores focus',async()=>{
   for(const key of ['marble','acid','flask','jar','tube','plate']){const button=root.locator(`[data-co2-material=${key}]`);await button.locator('img').click();assert.equal(await dialog.isVisible(),true);assert.deepEqual(await dialog.locator('dt').allTextContents(),['這是什麼','用途']);assert.equal(await dialog.locator('img').evaluate(n=>n.complete&&n.naturalWidth>0),true);await page.keyboard.press('Escape');assert.equal(await button.evaluate(n=>n===document.activeElement),true);await button.locator('span').first().click();assert.equal(await dialog.isVisible(),true);await page.keyboard.press('Escape');assert.equal(await root.getAttribute('data-state'),'ready');}
+  const tip=await root.locator('[data-shared-materials]').evaluate(n=>{const m=n.getScreenCTM();return{x:m.a*430+m.e,y:m.d*450+m.f};});await page.mouse.click(tip.x,tip.y);assert.match(await dialog.locator('h3').textContent(),/玻璃導管/);await page.keyboard.press('Escape');
   await root.locator('[data-co2-material=acid]').focus();await page.keyboard.press('Space');assert.equal(await dialog.isVisible(),true);await page.keyboard.press('Escape');await root.locator('[data-co2-material-alt]').click();assert.match(await dialog.locator('h3').textContent(),/玻璃導管/);await page.keyboard.press('Escape');
  });
  await t.test('the material picture and first playback frame use exactly the same apparatus',async()=>{
