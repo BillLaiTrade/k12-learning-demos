@@ -737,3 +737,11 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_TAP_ARTIFACT_DIR=/tmp/unit23-tap node --t
 新專項10項（含外層），驗證空白點選精確暫停／續播、場景像素與原生字卡動畫凍結、器材及材料介紹優先、預覽／完成不誤啟動、文字選取／拖曳／右鍵排除、手機主圖與近景真實觸控、原生滑動不切換、卡片文字區、700ms完成影格停留、自動換步後仍有效，以及右側控制不重複觸發。
 
 搭配字卡10、單鍵連播10、器材9、操作11、材料10，本機共60項通過。公開可設OXYGEN_TAP_URL、OXYGEN_CAPTIONS_URL、OXYGEN_CONTINUOUS_URL、OXYGEN_EQUIPMENT_URL跑點選10＋字卡10＋連播10＋器材9共39項；截圖目錄均設至/tmp避免覆寫歷史證據。模型／CSS／其他區未改，未重跑其專用套件。證據見docs/reviews/unit-2.3-oxygen-canvas-tap/。
+
+## 3.4第三區緊湊排版（2026-11-01）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4-calculation.test.cjs
+```
+
+現14項（含外層），保留原速音訊、數字輸入、暫停續播、跨區／背景、錯誤重試與真實觸控。新增四種筆電／桌機視窗同屏檢查：互動區對齊後，時間欄、場景、總路程、等長長條與單程距離均可見，數字變更同步；預設互動區≤640px、整區≤1000px。十種寬度×三種數值另檢查高度、長數字、標籤不重疊及點擊區。`CALCULATION_URL`指定公開頁面URL，`CALCULATION_CAPTURE_DIR`指定截圖與layout／same-view量測JSON。

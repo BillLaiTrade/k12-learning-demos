@@ -1,0 +1,222 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "section": 941.953125,
+    "lab": 572.125,
+    "results": [
+      {
+        "id": "echo-time",
+        "top": 25.28125,
+        "bottom": 69.28125,
+        "visible": true
+      },
+      {
+        "id": "calculation-scene",
+        "top": 153.59375,
+        "bottom": 350.09375,
+        "visible": true
+      },
+      {
+        "id": "total-distance",
+        "top": 471.609375,
+        "bottom": 500.40625,
+        "visible": true
+      },
+      {
+        "id": "calculation-lengths",
+        "top": 462.609375,
+        "bottom": 517.71875,
+        "visible": true
+      },
+      {
+        "id": "one-distance",
+        "top": 471.609375,
+        "bottom": 500.40625,
+        "visible": true
+      }
+    ],
+    "columns": [
+      {
+        "top": 422.609375,
+        "bottom": 542.640625,
+        "left": 451
+      },
+      {
+        "top": 422.609375,
+        "bottom": 542.640625,
+        "left": 723
+      },
+      {
+        "top": 422.609375,
+        "bottom": 542.640625,
+        "left": 995
+      }
+    ]
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "section": 941.953125,
+    "lab": 572.125,
+    "results": [
+      {
+        "id": "echo-time",
+        "top": 24.96875,
+        "bottom": 68.96875,
+        "visible": true
+      },
+      {
+        "id": "calculation-scene",
+        "top": 153.28125,
+        "bottom": 349.78125,
+        "visible": true
+      },
+      {
+        "id": "total-distance",
+        "top": 471.296875,
+        "bottom": 500.09375,
+        "visible": true
+      },
+      {
+        "id": "calculation-lengths",
+        "top": 462.296875,
+        "bottom": 517.40625,
+        "visible": true
+      },
+      {
+        "id": "one-distance",
+        "top": 471.296875,
+        "bottom": 500.09375,
+        "visible": true
+      }
+    ],
+    "columns": [
+      {
+        "top": 422.296875,
+        "bottom": 542.328125,
+        "left": 414
+      },
+      {
+        "top": 422.296875,
+        "bottom": 542.328125,
+        "left": 686
+      },
+      {
+        "top": 422.296875,
+        "bottom": 542.328125,
+        "left": 958
+      }
+    ]
+  },
+  {
+    "width": 1280,
+    "height": 720,
+    "section": 940.859375,
+    "lab": 572.125,
+    "results": [
+      {
+        "id": "echo-time",
+        "top": 25.125,
+        "bottom": 69.125,
+        "visible": true
+      },
+      {
+        "id": "calculation-scene",
+        "top": 153.4375,
+        "bottom": 349.9375,
+        "visible": true
+      },
+      {
+        "id": "total-distance",
+        "top": 471.453125,
+        "bottom": 500.25,
+        "visible": true
+      },
+      {
+        "id": "calculation-lengths",
+        "top": 462.453125,
+        "bottom": 517.5625,
+        "visible": true
+      },
+      {
+        "id": "one-distance",
+        "top": 471.453125,
+        "bottom": 500.25,
+        "visible": true
+      }
+    ],
+    "columns": [
+      {
+        "top": 422.453125,
+        "bottom": 542.484375,
+        "left": 371
+      },
+      {
+        "top": 422.453125,
+        "bottom": 542.484375,
+        "left": 643
+      },
+      {
+        "top": 422.453125,
+        "bottom": 542.484375,
+        "left": 915
+      }
+    ]
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "section": 964.75,
+    "lab": 602.921875,
+    "results": [
+      {
+        "id": "echo-time",
+        "top": 25.28125,
+        "bottom": 69.28125,
+        "visible": true
+      },
+      {
+        "id": "calculation-scene",
+        "top": 153.59375,
+        "bottom": 383.578125,
+        "visible": true
+      },
+      {
+        "id": "total-distance",
+        "top": 505.09375,
+        "bottom": 531.203125,
+        "visible": true
+      },
+      {
+        "id": "calculation-lengths",
+        "top": 496.09375,
+        "bottom": 551.203125,
+        "visible": true
+      },
+      {
+        "id": "one-distance",
+        "top": 505.09375,
+        "bottom": 531.203125,
+        "visible": true
+      }
+    ],
+    "columns": [
+      {
+        "top": 456.09375,
+        "bottom": 573.4375,
+        "left": 41
+      },
+      {
+        "top": 456.09375,
+        "bottom": 573.4375,
+        "left": 357.65625
+      },
+      {
+        "top": 456.09375,
+        "bottom": 573.4375,
+        "left": 674.328125
+      }
+    ]
+  }
+]
