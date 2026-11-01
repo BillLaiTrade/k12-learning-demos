@@ -69,3 +69,12 @@
 
 /* Caption fades do not move the apparatus or add another control. */
 .oxygen-scene-note[data-caption-phase=out],.oxygen-scene-note[data-caption-phase=in]{will-change:opacity}
+
+/* One player remains reachable while the compact experiment scrolls. */
+#s3{overflow:clip}
+@container(max-width:720px){
+ .oxygen-preparation[data-ready=true] .oxygen-workspace{display:flex;flex-direction:column}
+ .oxygen-preparation[data-ready=true] .oxygen-step-nav{position:sticky;top:8px;z-index:4;max-height:calc(100dvh - 16px);overflow:auto}
+ .oxygen-preparation[data-ready=true] .oxygen-step-head h3{scroll-margin-top:calc(var(--oxygen-controls-height,150px) + 16px)}
+ .oxygen-preparation[data-ready=true] .oxygen-step-nav [data-continuous-status]{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;margin:-1px;padding:0;border:0}
+}

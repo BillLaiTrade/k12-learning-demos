@@ -131,13 +131,14 @@ function renderAssembly(elapsed, state, view, phase) {
 
 function createPreparationPlayer() {
   const play=panel.querySelector('[data-play]'),captions=createSceneCaptions(panel);
-  const sequence=panel.querySelector('[data-continuous]'),sequenceStatus=panel.querySelector('[data-continuous-status]');
+  const sequenceStatus=panel.querySelector('[data-continuous-status]');
   const status=panel.querySelector('[role=status]'),menu=panel.querySelector('[data-step-menu]');
   const navBody=panel.querySelector('#oxygen-step-list'),nav=panel.querySelector('.oxygen-step-nav');
-  let stage=0,elapsed=0,state='ready',started=0,frame=0,message='',compact,explorer,continuous=false;
+  let stage=0,elapsed=0,state='ready',started=0,frame=0,message='',compact,explorer;
   const duration=()=>OXYGEN_OPERATIONS[stage].duration;
-  const clockLimit=()=>duration()+(continuous&&stage<steps.length-1?700:0);
-  function setMenu(open){navBody.hidden=!open;menu.setAttribute('aria-expanded',String(open));}
+  const clockLimit=()=>duration()+(stage<steps.length-1?700:0);
+  function syncControlOffset(){panel.style.setProperty('--oxygen-controls-height',`${nav.getBoundingClientRect().height}px`);}
+  function setMenu(open){navBody.hidden=!open;menu.setAttribute('aria-expanded',String(open));syncControlOffset();}
   function syncLayout(){
     const narrow=panel.clientWidth<=720;
     if(narrow===compact)return;
@@ -149,31 +150,27 @@ function createPreparationPlayer() {
   function cancel(){cancelAnimationFrame(frame);frame=0;}
   function paint(){
     panel.dataset.stage=String(stage);panel.dataset.state=state;
-    panel.dataset.playMode=continuous?'continuous':'single';panel.dataset.elapsed=elapsed.toFixed(3);
+    panel.dataset.playMode='continuous';panel.dataset.elapsed=elapsed.toFixed(3);
     const atEnd=stage>0&&elapsed>=duration();
     let text=(state==='paused'?'已暫停：':'')+renderPreparation(stage,elapsed,atEnd?'complete':state);
-    if(continuous&&state==='playing'&&atEnd&&stage<steps.length-1)text=text.replace('這一步已播完，可重播或繼續下一步。','即將接續下一個操作。');
-    if(stage>0)captions.show(panels[stage],continuous&&atEnd&&stage<steps.length-1?panels[stage].dataset.loopCaption:panels[stage].dataset.captionMessage);
+    if(state==='playing'&&atEnd&&stage<steps.length-1)text=text.replace('這一步已播完，可重播或繼續下一步。','即將接續下一個操作。');
+    if(stage===steps.length-1&&state==='complete')text=text.replace('這一步已播完，可重播或繼續下一步。','氧氣收集與封存已完成，可重新播放。');
+    if(stage>0)captions.show(panels[stage],atEnd&&stage<steps.length-1?panels[stage].dataset.loopCaption:panels[stage].dataset.captionMessage);
     explorer?.sync(stage);
     if(message!==text){status.textContent=text;message=text;}
-    const playing=state==='playing',paused=state==='paused';
-    play.querySelector('[data-play-icon]').textContent=playing?'Ⅱ':paused?'▶':'↻';
-    play.querySelector('[data-play-label]').textContent=playing?'暫停':paused?'播放':'重播';
-    play.setAttribute('aria-label',playing?(continuous?'暫停連續播放':'暫停此步動畫'):paused?(continuous?'繼續連續播放':'繼續此步動畫'):'重播此步動畫');
-    const replayAll=stage===steps.length-1&&state==='complete';
-    const sequencePlaying=continuous&&playing,sequencePaused=continuous&&paused;
-    sequence.querySelector('[data-continuous-icon]').textContent=sequencePlaying?'Ⅱ':replayAll?'↻':'▶';
-    const sequenceLabel=sequencePlaying?'暫停連播':sequencePaused?'繼續連播':replayAll?'重新連播':'連續播放';
-    sequence.querySelector('[data-continuous-label]').textContent=sequenceLabel;sequence.setAttribute('aria-label',sequenceLabel);
-    sequence.classList.toggle('is-playing',sequencePlaying);
-    sequenceStatus.textContent=sequencePlaying?'自動接續下一步，可隨時暫停。':sequencePaused?'已暫停，按繼續可接著觀看。':replayAll?'已完成氧氣收集與封存。':stage===0?'從擺好集氣位置開始連播。':state==='complete'?'接著從下一個操作連播。':'從目前操作往下連播。';
+    const playing=state==='playing',paused=state==='paused',complete=state==='complete';
+    const label=playing?'暫停':paused?'繼續':complete?'重新播放':'播放';
+    play.querySelector('[data-play-icon]').textContent=playing?'Ⅱ':complete?'↻':'▶';
+    play.querySelector('[data-play-label]').textContent=label;play.setAttribute('aria-label',label);
+    play.classList.toggle('is-playing',playing);
+    sequenceStatus.textContent=playing?'自動接續下一步，可隨時暫停。':paused?'已暫停，按繼續接著看。':complete?'已完成氧氣收集與封存。':stage===0?'從擺好集氣位置開始播放。':'按播放，從這一步接著看。';
     menu.textContent=`${String(stage+1).padStart(2,'0')} ${OXYGEN_OPERATIONS[stage].label} ▾`;
   }
   function tick(now){
     if(state!=='playing')return;
     elapsed=Math.min(clockLimit(),now-started);
-    if(continuous&&stage<steps.length-1&&elapsed>=clockLimit()){select(stage+1,false,true);return;}
-    if(elapsed>=duration()&&(!continuous||stage===steps.length-1))state='complete';
+    if(stage<steps.length-1&&elapsed>=clockLimit()){select(stage+1,false,true);return;}
+    if(stage===steps.length-1&&elapsed>=duration())state='complete';
     paint();if(state==='playing')frame=requestAnimationFrame(tick);
   }
   function pausePlayback(){
@@ -183,17 +180,17 @@ function createPreparationPlayer() {
   }
   function start(){
     if(stage===0)return;
-    if(state==='complete')captions.reset();
     captions.resume();
     const at=state==='paused'?elapsed:0;
     document.dispatchEvent(new CustomEvent('air-experiment-play',{detail:'oxygen'}));
     cancel();elapsed=at;state='playing';started=performance.now()-elapsed;paint();frame=requestAnimationFrame(tick);
+    if(compact){const bounds=panel.querySelector('.oxygen-stage-area').getBoundingClientRect();if(bounds.top>=innerHeight||bounds.bottom<=0)panels[stage].querySelector('h3').scrollIntoView({behavior:'instant',block:'start'});}
   }
-  function select(index,focusContent=false,keepContinuous=false){
-    const focused=document.activeElement,focusInScene=panels[stage].contains(focused);
-    explorer?.close();cancel();if(!keepContinuous)captions.reset();continuous=keepContinuous;stage=index;elapsed=0;state='ready';
-    if(stage>0)panels[stage].querySelector('.oxygen-scene-viewport').append(play);
-    play.hidden=stage===0;play.disabled=stage===0;
+  function select(index,focusContent=false,autoplay=false){
+    const focusInScene=panels[stage].contains(document.activeElement);
+    explorer?.close();cancel();
+    if(!autoplay){captions.reset();captions.pause();}
+    stage=index;elapsed=0;state='ready';
     panels.forEach((view,i)=>{view.hidden=i!==stage;});
     steps.forEach((tab,i)=>{
       const selected=i===stage;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;
@@ -205,17 +202,15 @@ function createPreparationPlayer() {
       if(compact)setMenu(false);
       const heading=panels[stage].querySelector('h3');heading.focus({preventScroll:true});heading.scrollIntoView({behavior:'instant',block:'start'});
     }
-    if(!focusContent&&keepContinuous&&focusInScene)(focused===play?play:sequence).focus({preventScroll:true});
-    if(stage>0)start();
+    if(autoplay&&focusInScene)play.focus({preventScroll:true});
+    if(autoplay)start();
   }
-  function toggleContinuous(){
+  function togglePlayback(){
     if(compact)setMenu(false);
-    if(continuous&&state==='playing'){pausePlayback();return;}
+    if(state==='playing'){pausePlayback();return;}
     explorer?.close();
-    if(stage===0||(stage===steps.length-1&&state==='complete')){select(1,false,true);return;}
-    if(state==='complete'){select(stage+1,false,true);return;}
-    if(state==='playing')pausePlayback();
-    continuous=true;start();
+    if(stage===0||state==='complete'){captions.reset();select(1,false,true);return;}
+    start();
   }
   explorer=createEquipmentExplorer({panel,panels,getStage:()=>stage,onOpen:pausePlayback});
   panel.querySelector('.oxygen-steps').setAttribute('role','tablist');
@@ -235,18 +230,16 @@ function createPreparationPlayer() {
   });
   materialButtons.forEach(button=>{
     button.disabled=false;button.addEventListener('click',()=>{
-      showMaterial(button.dataset.material);paint();
-      explorer.openMaterial(button.dataset.material,button);
+      showMaterial(button.dataset.material);paint();explorer.openMaterial(button.dataset.material,button);
     });
   });
   showMaterial(selectedMaterial);
   menu.addEventListener('click',()=>setMenu(navBody.hidden));
-  play.addEventListener('click',()=>{if(state==='playing')pausePlayback();else {if(state==='complete')continuous=false;start();}});
-  sequence.addEventListener('click',toggleContinuous);
+  play.addEventListener('click',togglePlayback);
   panel.addEventListener('keydown',event=>{if(event.key==='Escape')pausePlayback();});
   if('IntersectionObserver'in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel.querySelector('.oxygen-stage-area'));
-  const api={pausePlayback};players.push(api);sequence.disabled=false;
-  syncLayout();new ResizeObserver(syncLayout).observe(panel);select(0);panel.dataset.ready='true';return api;
+  const api={pausePlayback};players.push(api);play.disabled=false;
+  syncLayout();new ResizeObserver(syncLayout).observe(panel);new ResizeObserver(syncControlOffset).observe(nav);select(0);panel.dataset.ready='true';return api;
 }
 createPreparationPlayer();
 document.addEventListener('visibilitychange',()=>{if(document.hidden)players.forEach(p=>p.pausePlayback());});

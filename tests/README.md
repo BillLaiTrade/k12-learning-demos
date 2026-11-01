@@ -713,3 +713,9 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4.test.cjs
 ```
 
 3項模型／短喊聲PCM、11項井深瀏覽器（含外層）。涵蓋原音與較弱回聲共用AudioBuffer、實際排程延遲與畫面起始紀錄、非靜音／不削波、未探測與答案各狀態、核對才揭示井底、換題清除、重喊保留草稿、跨區／背景取消、延遲啟音取消、載入及啟音失敗重試、九種寬度、人物熱區與真實手機觸控／鍵盤、減少動態。`WELL_URL`指定公開頁URL（可含query，勿帶hash），`WELL_CAPTURE_DIR`指定截圖目錄。前五區與共享播放回歸另跑整課10項及第五區13項。檢查不代表Safari實機或真人聽感核可。
+
+## 2.3方案A：唯一主播放鍵（2026-11-01）
+
+既有unit-2.3-continuous.test.cjs改驗證唯一按鈕、選步預覽、明確按播放才連播、700ms停留、完整流程與最後停止／重新開始、精確暫停續播、切步取消、手機吸頂、原生鍵盤／觸控及無JS。氧氣、材料、器材、字卡、物理、整頁及跨播放器檢查配合新入口；不保留舊單步播放預期。
+
+本機九套共90項（含各外層）通過。公開核心用OXYGEN_CONTINUOUS_URL、OXYGEN_URL、OXYGEN_CAPTIONS_URL、OXYGEN_EQUIPMENT_URL、AIR_FULL_URL跑單鍵10＋操作11＋字卡10＋器材9＋整頁9，共49項；各截圖環境變數指向/tmp以免覆寫歷史證據。另以實際捲動確認主圖、近景與註記處只有同一顆主按鈕且可見。證據見docs/reviews/unit-2.3-oxygen-unified-player/。

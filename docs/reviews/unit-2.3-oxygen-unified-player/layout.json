@@ -1,0 +1,23 @@
+[
+  {
+    "selector": ".oxygen-stage-area",
+    "x": 44,
+    "y": 73,
+    "width": 302,
+    "height": 44
+  },
+  {
+    "selector": ".oxygen-mobile-zoom",
+    "x": 44,
+    "y": 73,
+    "width": 302,
+    "height": 44
+  },
+  {
+    "selector": ".oxygen-model-note",
+    "x": 44,
+    "y": 73,
+    "width": 302,
+    "height": 44
+  }
+]
