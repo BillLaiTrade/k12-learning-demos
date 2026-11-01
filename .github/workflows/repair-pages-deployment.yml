@@ -1,0 +1,37 @@
+name: Repair an obsolete Pages deployment record
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_id:
+        description: Archived inactive deployment record that blocks publication
+        type: string
+        required: true
+
+permissions:
+  pages: read
+  deployments: write
+
+jobs:
+  remove-obsolete-record:
+    runs-on: ubuntu-latest
+    environment: github-pages
+    steps:
+      - name: Remove only an inactive record whose Pages publication is complete
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGES_REPAIR_REPO: ${{ github.repository }}
+          PAGES_DEPLOYMENT_ID: ${{ inputs.deployment_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$PAGES_DEPLOYMENT_ID" =~ ^[0-9]+$ ]]
+          gh api "repos/${PAGES_REPAIR_REPO}/deployments/${PAGES_DEPLOYMENT_ID}" > /tmp/pages-obsolete-record.json
+          [[ "$(jq -r .environment /tmp/pages-obsolete-record.json)" == github-pages ]]
+          deployment_sha=$(jq -r .sha /tmp/pages-obsolete-record.json)
+          [[ "$deployment_sha" =~ ^[0-9a-f]{40}$ && "$deployment_sha" != "$GITHUB_SHA" ]]
+          state=$(gh api "repos/${PAGES_REPAIR_REPO}/deployments/${PAGES_DEPLOYMENT_ID}/statuses" --jq '.[0].state')
+          [[ "$state" == inactive ]]
+          pages_state=$(gh api "repos/${PAGES_REPAIR_REPO}/pages/deployments/${deployment_sha}" --jq '.status')
+          [[ "$pages_state" == succeed ]]
+          gh api --method DELETE "repos/${PAGES_REPAIR_REPO}/deployments/${PAGES_DEPLOYMENT_ID}"
