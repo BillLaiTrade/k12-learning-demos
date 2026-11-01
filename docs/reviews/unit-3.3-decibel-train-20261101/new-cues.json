@@ -1,0 +1,272 @@
+[
+  {
+    "start": 0,
+    "top": [
+      [
+        "Rail transport",
+        0.9129
+      ],
+      [
+        "Train",
+        0.9125
+      ],
+      [
+        "Vehicle",
+        0.8547
+      ],
+      [
+        "Train horn",
+        0.7645
+      ],
+      [
+        "Railroad car, train wagon",
+        0.5004
+      ],
+      [
+        "Train whistle",
+        0.3277
+      ]
+    ],
+    "related": {
+      "Goose": 0.0,
+      "Bird": 0.0,
+      "Bird vocalization, bird call, bird song": 0.0,
+      "Bird flight, flapping wings": 0.0,
+      "Water": 0.0004,
+      "Waterfall": 0.0,
+      "Boat, Water vehicle": 0.0,
+      "Rail transport": 0.9129,
+      "Train": 0.9125,
+      "Train whistle": 0.3277,
+      "Train horn": 0.7645,
+      "Railroad car, train wagon": 0.5004,
+      "Train wheels squealing": 0.0,
+      "Water tap, faucet": 0.0
+    }
+  },
+  {
+    "start": 10,
+    "top": [
+      [
+        "Rail transport",
+        0.7484
+      ],
+      [
+        "Train",
+        0.7461
+      ],
+      [
+        "Vehicle",
+        0.7359
+      ],
+      [
+        "Train horn",
+        0.6582
+      ],
+      [
+        "Railroad car, train wagon",
+        0.4996
+      ],
+      [
+        "Train whistle",
+        0.3371
+      ]
+    ],
+    "related": {
+      "Goose": 0.0,
+      "Bird": 0.0004,
+      "Bird vocalization, bird call, bird song": 0.0,
+      "Bird flight, flapping wings": 0.0,
+      "Water": 0.0008,
+      "Waterfall": 0.0,
+      "Boat, Water vehicle": 0.0,
+      "Rail transport": 0.7484,
+      "Train": 0.7461,
+      "Train whistle": 0.3371,
+      "Train horn": 0.6582,
+      "Railroad car, train wagon": 0.4996,
+      "Train wheels squealing": 0.0008,
+      "Water tap, faucet": 0.0
+    }
+  },
+  {
+    "start": 20,
+    "top": [
+      [
+        "Vehicle",
+        0.2992
+      ],
+      [
+        "Emergency vehicle",
+        0.1738
+      ],
+      [
+        "Motor vehicle (road)",
+        0.1437
+      ],
+      [
+        "Fire engine, fire truck (siren)",
+        0.1328
+      ],
+      [
+        "Alarm",
+        0.1285
+      ],
+      [
+        "Siren",
+        0.1156
+      ]
+    ],
+    "related": {
+      "Goose": 0.0004,
+      "Bird": 0.0031,
+      "Bird vocalization, bird call, bird song": 0.0004,
+      "Bird flight, flapping wings": 0.0,
+      "Water": 0.002,
+      "Waterfall": 0.0,
+      "Boat, Water vehicle": 0.0027,
+      "Rail transport": 0.0766,
+      "Train": 0.0652,
+      "Train whistle": 0.0191,
+      "Train horn": 0.0414,
+      "Railroad car, train wagon": 0.043,
+      "Train wheels squealing": 0.0016,
+      "Water tap, faucet": 0.0
+    }
+  },
+  {
+    "start": 30,
+    "top": [
+      [
+        "Vehicle",
+        0.707
+      ],
+      [
+        "Rail transport",
+        0.4984
+      ],
+      [
+        "Train",
+        0.4641
+      ],
+      [
+        "Railroad car, train wagon",
+        0.3387
+      ],
+      [
+        "Subway, metro, underground",
+        0.1645
+      ],
+      [
+        "Clickety-clack",
+        0.1066
+      ]
+    ],
+    "related": {
+      "Goose": 0.0,
+      "Bird": 0.0,
+      "Bird vocalization, bird call, bird song": 0.0,
+      "Bird flight, flapping wings": 0.0,
+      "Water": 0.0,
+      "Waterfall": 0.0,
+      "Boat, Water vehicle": 0.0027,
+      "Rail transport": 0.4984,
+      "Train": 0.4641,
+      "Train whistle": 0.0125,
+      "Train horn": 0.0777,
+      "Railroad car, train wagon": 0.3387,
+      "Train wheels squealing": 0.0219,
+      "Water tap, faucet": 0.0
+    }
+  },
+  {
+    "start": 40,
+    "top": [
+      [
+        "Vehicle",
+        0.902
+      ],
+      [
+        "Rail transport",
+        0.8359
+      ],
+      [
+        "Train",
+        0.7926
+      ],
+      [
+        "Railroad car, train wagon",
+        0.6398
+      ],
+      [
+        "Clickety-clack",
+        0.3332
+      ],
+      [
+        "Clicking",
+        0.3328
+      ]
+    ],
+    "related": {
+      "Goose": 0.0,
+      "Bird": 0.0,
+      "Bird vocalization, bird call, bird song": 0.0,
+      "Bird flight, flapping wings": 0.0,
+      "Water": 0.0,
+      "Waterfall": 0.0,
+      "Boat, Water vehicle": 0.0008,
+      "Rail transport": 0.8359,
+      "Train": 0.7926,
+      "Train whistle": 0.0023,
+      "Train horn": 0.023,
+      "Railroad car, train wagon": 0.6398,
+      "Train wheels squealing": 0.0547,
+      "Water tap, faucet": 0.0
+    }
+  },
+  {
+    "start": 50,
+    "top": [
+      [
+        "Vehicle",
+        0.9387
+      ],
+      [
+        "Rail transport",
+        0.9008
+      ],
+      [
+        "Train",
+        0.877
+      ],
+      [
+        "Railroad car, train wagon",
+        0.7191
+      ],
+      [
+        "Clickety-clack",
+        0.4105
+      ],
+      [
+        "Clicking",
+        0.3938
+      ]
+    ],
+    "related": {
+      "Goose": 0.0,
+      "Bird": 0.0,
+      "Bird vocalization, bird call, bird song": 0.0,
+      "Bird flight, flapping wings": 0.0,
+      "Water": 0.0004,
+      "Waterfall": 0.0,
+      "Boat, Water vehicle": 0.0012,
+      "Rail transport": 0.9008,
+      "Train": 0.877,
+      "Train whistle": 0.0043,
+      "Train horn": 0.0324,
+      "Railroad car, train wagon": 0.7191,
+      "Train wheels squealing": 0.0496,
+      "Water tap, faucet": 0.0
+    }
+  }
+]

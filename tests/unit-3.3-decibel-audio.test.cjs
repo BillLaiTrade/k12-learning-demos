@@ -50,7 +50,7 @@ test('all twelve scenes play their actual PCM, single-button playback and live s
   await page.locator('[data-decibel-play]').click();await playing(page,keys[i]);assert.equal(await page.locator('[data-decibel-play]').isDisabled(),true);assert.equal(await page.locator('[data-decibel-play]').innerText(),'播放中');assert.equal(await page.evaluate(()=>window.sceneRuns.at(-1).loop),true,keys[i]+' repeats continuously');
   const same=await page.evaluate(async key=>{
    const actual=window.sceneRuns.at(-1).buffer,context=window.sceneContext;
-   const response=await fetch(new URL(`assets/decibel-audio/${key}.wav?v=2`,location.href));const expected=await context.decodeAudioData(await response.arrayBuffer());
+   const response=await fetch(new URL(`assets/decibel-audio/${key}.wav?v=${key==='train'?3:2}`,location.href));const expected=await context.decodeAudioData(await response.arrayBuffer());
    if(actual.length!==expected.length||actual.sampleRate!==expected.sampleRate)return false;
    for(let c=0;c<actual.numberOfChannels;c++){const a=actual.getChannelData(c),b=expected.getChannelData(c);for(let j=0;j<a.length;j++)if(a[j]!==b[j])return false;}return true;
   },keys[i]);assert.equal(same,true,keys[i]+' must play the selected recording');

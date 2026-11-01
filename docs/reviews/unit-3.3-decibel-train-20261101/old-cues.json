@@ -1,0 +1,47 @@
+[
+  {
+    "start": 0,
+    "top": [
+      [
+        "Vehicle",
+        0.3301
+      ],
+      [
+        "Motor vehicle (road)",
+        0.1375
+      ],
+      [
+        "Car",
+        0.1262
+      ],
+      [
+        "Outside, urban or manmade",
+        0.091
+      ],
+      [
+        "Traffic noise, roadway noise",
+        0.0859
+      ],
+      [
+        "Wind",
+        0.0477
+      ]
+    ],
+    "related": {
+      "Goose": 0.0027,
+      "Bird": 0.0098,
+      "Bird vocalization, bird call, bird song": 0.002,
+      "Bird flight, flapping wings": 0.0,
+      "Water": 0.0051,
+      "Waterfall": 0.0,
+      "Boat, Water vehicle": 0.0121,
+      "Rail transport": 0.0352,
+      "Train": 0.0332,
+      "Train whistle": 0.0,
+      "Train horn": 0.0035,
+      "Railroad car, train wagon": 0.0254,
+      "Train wheels squealing": 0.0,
+      "Water tap, faucet": 0.0
+    }
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "model": "Google YAMNet AudioSet classifier (TFLite)",
+  "model_url": "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/audio_classification/android/lite-model_yamnet_classification_tflite_1.tflite",
+  "class_map_url": "https://raw.githubusercontent.com/tensorflow/models/master/research/audioset/yamnet/yamnet_class_map.csv",
+  "model_sha256": "10c95ea3eb9a7bb4cb8bddf6feb023250381008177ac162ce169694d05c317de",
+  "class_map_sha256": "cdf24d193e196d9e95912a2667051ae203e92a2ba09449218ccb40ef787c6df2",
+  "runtime": "ai-edge-litert 2.3.0",
+  "old_audio_sha256": "7c418fcc88e66590526aa9f67d6116f9f7dd5f9bb8288c69c7e6387963dea199",
+  "new_audio_sha256": "8c14f160701f551ba96b96d35b51539b47e4a472cb1247d92d9dcd0c02ba879a",
+  "method": "16kHz mono; per-10-second window fixed gain toward RMS 0.1 capped at 0.95 peak, then independent 15600-sample YAMNet frames averaged; scores are classifier outputs, not human recognition probabilities."
+}

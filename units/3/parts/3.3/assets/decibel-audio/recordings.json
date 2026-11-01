@@ -212,28 +212,28 @@
   {
     "key": "train",
     "label": "貨運列車經過",
-    "title": "Freight train passes Phelan, startles Canadian geese.flac",
-    "author": "Extemporalist",
-    "source_url": "https://commons.wikimedia.org/wiki/File:Freight_train_passes_Phelan,_startles_Canadian_geese.flac",
-    "download_url": "https://upload.wikimedia.org/wikipedia/commons/6/60/Freight_train_passes_Phelan%2C_startles_Canadian_geese.flac?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "title": "Train passing by in the Wirikuta Desert (Mexico, SLP).wav",
+    "author": "felix.blume（Félix Blume）",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Train_passing_by_in_the_Wirikuta_Desert_(Mexico,_SLP).wav",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/6/67/Train_passing_by_in_the_Wirikuta_Desert_%28Mexico%2C_SLP%29.wav?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
     "license": "CC0",
-    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "derived_license": "CC0",
-    "note": "加拿大 Phelan 貨運列車經過，並有現場環境聲；非插圖現場。",
-    "source_file": "train.flac",
-    "start_seconds": 296,
-    "duration_seconds": 10,
-    "source_sha256": "f66cc6975f0cda9b3573b8cf788831e38d63082cb3531ff3f15fd6ec9d086f05",
+    "note": "墨西哥 Wadley 的列車鳴笛、輪軌與鐵軌振動錄音，作為聲音示例；原作未註明客／貨運，非插圖現場或約30公尺條件實錄。",
+    "source_file": "train-wirikuta.wav",
+    "start_seconds": 45,
+    "duration_seconds": 60,
+    "source_sha256": "9f1898341d5865e7f2063a4791ac6a39796d4030ac480379fe60935f38d74a09",
     "baseline_measurement": {
-      "lufs": -23.01,
-      "true_peak_dbfs": -7.18
+      "lufs": -23.0,
+      "true_peak_dbfs": -8.86
     },
     "target_lufs": -25,
     "measurement": {
-      "lufs": -24.99,
-      "true_peak_dbfs": -9.17
+      "lufs": -25.0,
+      "true_peak_dbfs": -10.86
     },
-    "output_gain_db": -1.99,
+    "output_gain_db": -2.0,
     "peak_limit": {
       "oversample_rate": 96000,
       "ceiling_dbfs": -3.5,
@@ -241,7 +241,7 @@
       "release_ms": 80,
       "automatic_gain": false
     },
-    "sha256": "7c418fcc88e66590526aa9f67d6116f9f7dd5f9bb8288c69c7e6387963dea199",
+    "sha256": "8c14f160701f551ba96b96d35b51539b47e4a472cb1247d92d9dcd0c02ba879a",
     "modifications": "擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。"
   },
   {

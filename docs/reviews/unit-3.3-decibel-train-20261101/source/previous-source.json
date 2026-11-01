@@ -1,0 +1,16 @@
+{
+  "key": "train",
+  "label": "貨運列車經過",
+  "title": "Freight train passes Phelan, startles Canadian geese.flac",
+  "author": "Extemporalist",
+  "source_url": "https://commons.wikimedia.org/wiki/File:Freight_train_passes_Phelan,_startles_Canadian_geese.flac",
+  "download_url": "https://upload.wikimedia.org/wikipedia/commons/6/60/Freight_train_passes_Phelan%2C_startles_Canadian_geese.flac?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "license": "CC0",
+  "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "derived_license": "CC0",
+  "note": "加拿大 Phelan 貨運列車經過，並有現場環境聲；非插圖現場。",
+  "source_file": "train.flac",
+  "start_seconds": 296,
+  "duration_seconds": 10,
+  "source_sha256": "f66cc6975f0cda9b3573b8cf788831e38d63082cb3531ff3f15fd6ec9d086f05"
+}

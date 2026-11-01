@@ -59,12 +59,12 @@
 
 ## 貨運列車經過 — train.wav
 
-- 作者：Extemporalist
-- 原作：[Freight train passes Phelan, startles Canadian geese.flac](https://commons.wikimedia.org/wiki/File:Freight_train_passes_Phelan,_startles_Canadian_geese.flac)
-- 原作及衍生檔授權：[CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en)
-- 情境差異：加拿大 Phelan 貨運列車經過，並有現場環境聲；非插圖現場。
-- 修改：296 秒起擷取 10 秒；擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。
-- 成品：-24.99 LUFS，真峰值 -9.17 dBFS
+- 作者：felix.blume（Félix Blume）
+- 原作：[Train passing by in the Wirikuta Desert (Mexico, SLP).wav](https://commons.wikimedia.org/wiki/File:Train_passing_by_in_the_Wirikuta_Desert_(Mexico,_SLP).wav)
+- 原作及衍生檔授權：[CC0](https://creativecommons.org/publicdomain/zero/1.0/)
+- 情境差異：墨西哥 Wadley 的列車鳴笛、輪軌與鐵軌振動錄音，作為聲音示例；原作未註明客／貨運，非插圖現場或約30公尺條件實錄。
+- 修改：45 秒起擷取 60 秒；擷取指定段落、24kHz 單聲道 PCM16、60ms 淡入／160ms 淡出、共同 -23 LUFS 基準後安排加大差距的相對響度；四倍過採樣限制瞬時峰值（無自動補償增益）；不變速或變調。
+- 成品：-25.0 LUFS，真峰值 -10.86 dBFS
 
 ## 鍋爐房設備運轉 — boiler.wav
 
