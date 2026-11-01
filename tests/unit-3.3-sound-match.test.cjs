@@ -10,27 +10,35 @@ test('sound-match assessment follows the approved layout and shares actual audio
  const root=page.locator('#unit-quiz'),plot=root.locator('#quiz-choice'),feedback=root.locator('#quiz-feedback');
  const ready=()=>page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');
  const play=async key=>{await root.locator(`[data-play="${key}"]`).click();await page.waitForFunction(key=>document.querySelector('#unit-quiz').dataset.matchPlaying===key,key);};
- const set=async(id,value)=>{await root.locator('#answer-'+id).fill(String(value));await ready();};
+ const levels=(await import('../units/3/parts/3.3/assets/sound-match-model.mjs')).MATCH_LEVELS;
+ const set=async(id,value)=>{
+  assert.ok(levels[id].includes(value));await ready();
+  for(let i=0;i<levels[id].length;i++){
+   const current=Number(await plot.getAttribute('data-'+id));if(current===value)return;
+   await root.locator(`[data-match-step="${id}"][data-direction="${value>current?1:-1}"]`).click();await ready();
+  }
+  assert.equal(Number(await plot.getAttribute('data-'+id)),value);
+ };
  const switchTo=async tone=>{for(let i=0;i<3&&await plot.getAttribute('data-tone')!==tone;i++){await root.locator('[data-match-switch]').click();await ready();}assert.equal(await plot.getAttribute('data-tone'),tone);};
  const questions=(await import('../units/3/parts/3.3/assets/sound-match-model.mjs')).MATCH_QUESTIONS;
  const capture=process.env.MATCH_CAPTURE_DIR||'/tmp/unit33-sound-match';await fs.mkdir(capture,{recursive:true});await ready();
- await t.test('initial screen has instrument listening above one editable wave, two sliders and no answer reveal or autoplay',async()=>{
-  assert.equal(await page.locator('.quiz').count(),1);assert.equal(await root.locator('select').count(),0);assert.equal(await root.locator('input[type=range]').count(),2);assert.equal(await root.locator('[data-play]').count(),2);
+ await t.test('initial screen has instrument listening above one editable wave, fixed step buttons and no answer reveal or autoplay',async()=>{
+  assert.equal(await page.locator('.quiz').count(),1);assert.equal(await root.locator('select').count(),0);assert.equal(await root.locator('input').count(),0);assert.equal(await root.locator('[data-play]').count(),2);assert.equal(await root.locator('[data-match-step]').count(),4);
   assert.equal(await root.locator('[data-match-picture]').getAttribute('data-instrument'),'string');assert.equal(await root.locator('.match-target svg.match-wave').count(),0);assert.equal(await root.locator('[data-match-target]').isHidden(),true);assert.equal(await root.locator('.match-result').isHidden(),true);
   assert.equal(await page.evaluate(()=>window.matchRuns.length),0);assert.equal(await plot.getAttribute('data-tone'),'pipe');assert.equal(await root.locator('[data-match-dots] span').count(),4);
   assert.ok(await root.locator('[data-match-picture] image').count());await root.screenshot({path:`${capture}/initial-1440.png`});
  });
- await t.test('shape switch changes timbre without changing frequency or amplitude; both sliders redraw the actual selected signal',async()=>{
-  const before=await plot.locator('.signal').getAttribute('d');await root.locator('[data-match-switch]').click();await ready();assert.notEqual(await plot.locator('.signal').getAttribute('d'),before);assert.equal(await plot.getAttribute('data-frequency'),'440');assert.equal(await plot.getAttribute('data-amplitude'),'0.5');
-  await set('frequency',660);assert.equal(await plot.getAttribute('data-frequency'),'660');await set('amplitude',.8);assert.equal(await plot.getAttribute('data-amplitude'),'0.8');assert.equal(await page.evaluate(()=>window.matchRuns.length),0);
+ await t.test('shape switch changes timbre without changing frequency or amplitude; both step controls redraw the actual selected signal',async()=>{
+  const before=await plot.locator('.signal').getAttribute('d');await root.locator('[data-match-switch]').click();await ready();assert.notEqual(await plot.locator('.signal').getAttribute('d'),before);assert.equal(await plot.getAttribute('data-frequency'),'440');assert.equal(await plot.getAttribute('data-amplitude'),'0.3');
+  await set('frequency',660);assert.equal(await plot.getAttribute('data-frequency'),'660');await set('amplitude',.9);assert.equal(await plot.getAttribute('data-amplitude'),'0.9');assert.equal(await page.evaluate(()=>window.matchRuns.length),0);
  });
  await t.test('listen controls toggle, actual playback PCM exactly matches all plotted points, and amplitude doubles samples',async()=>{
-  await switchTo('pure');await set('frequency',440);await set('amplitude',.4);await play('quiz-choice');
+  await switchTo('pure');await set('frequency',440);await set('amplitude',.3);await play('quiz-choice');
   const points=await plot.locator('.signal').evaluate(n=>[...n.getAttribute('d').matchAll(/[ML]([\d.]+) ([-\d.]+)/g)].map(m=>m.slice(1).map(Number)));
   const run=await page.evaluate(()=>window.matchRuns.at(-1));assert.equal(run.rate,48000);
   for(const [x,y] of points){const i=Math.round((.2+(x-8)/884*.01)*run.rate);assert.ok(Math.abs(y-(70-100*run.data[i]))<.0001);}
   await root.locator('[data-play=quiz-choice]').click();assert.equal(await root.getAttribute('data-playing'),'false');assert.equal(await root.locator('[data-play=quiz-choice]').getAttribute('aria-pressed'),'false');
-  await set('amplitude',.8);await play('quiz-choice');const doubled=await page.evaluate(()=>window.matchRuns.at(-1));for(let i=0;i<run.data.length;i+=97)assert.ok(Math.abs(doubled.data[i]-2*run.data[i])<1e-7);
+  await set('amplitude',.6);await play('quiz-choice');const doubled=await page.evaluate(()=>window.matchRuns.at(-1));for(let i=0;i<run.data.length;i+=97)assert.ok(Math.abs(doubled.data[i]-2*run.data[i])<1e-7);
   await play('quiz-base');const runs=await page.evaluate(()=>window.matchRuns.slice(-2));assert.equal(runs[0].stopped,true);assert.equal(await root.locator('[data-play=quiz-choice]').getAttribute('aria-pressed'),'false');
   await page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.playing==='false');assert.equal(await root.locator('[data-play=quiz-base] [data-match-play-label]').innerText(),'聽目標聲音');
  });
@@ -68,9 +76,22 @@ test('sound-match assessment follows the approved layout and shares actual audio
    await root.screenshot({path:`${capture}/layout-${width}.png`});
   }
  });
- await t.test('native sliders and waveform switching support keyboard and real touch',async()=>{
-  await page.setViewportSize({width:1440,height:1000});await root.locator('#answer-frequency').focus();const n=Number(await root.locator('#answer-frequency').inputValue());await page.keyboard.press('ArrowRight');assert.equal(Number(await root.locator('#answer-frequency').inputValue()),n+5);await ready();
+ await t.test('fixed levels clamp at both ends, move by one position and never start audio',async()=>{
+  const runs=await page.evaluate(()=>window.matchRuns.length);
+  for(const key of ['frequency','amplitude']){
+   for(const value of levels[key]){await set(key,value);assert.equal(await root.locator('#answer-'+key).innerText(),`第 ${levels[key].indexOf(value)+1}／${levels[key].length} 檔`);}
+   assert.equal(await root.locator(`[data-match-step="${key}"][data-direction="1"]`).isDisabled(),true);
+   await set(key,levels[key][0]);assert.equal(await root.locator(`[data-match-step="${key}"][data-direction="-1"]`).isDisabled(),true);
+   assert.equal(await root.locator(`[data-match-levels="${key}"] i`).count(),levels[key].length);
+  }
+  assert.equal(await page.evaluate(()=>window.matchRuns.length),runs);assert.equal(await root.locator('input,[role=slider]').count(),0);
+ });
+ await t.test('step buttons and waveform switching support keyboard and real touch',async()=>{
+  await page.setViewportSize({width:1440,height:1000});await set('frequency',440);
+  await root.locator('[data-match-step=frequency][data-direction="1"]').focus();await page.keyboard.press('Enter');await ready();assert.equal(await plot.getAttribute('data-frequency'),'550');
+  await root.locator('[data-match-step=frequency][data-direction="-1"]').focus();await page.keyboard.press('Space');await ready();assert.equal(await plot.getAttribute('data-frequency'),'440');
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const p=await context.newPage();await p.goto(base+'#unit-quiz',{waitUntil:'networkidle'});await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');
+  await p.locator('[data-match-step=frequency][data-direction="1"]').tap();await p.waitForFunction(()=>document.querySelector('#quiz-choice').dataset.frequency==='550');assert.equal(await p.locator('#answer-frequency').innerText(),'第 4／5 檔');
   await p.locator('[data-match-switch]').tap();await p.waitForFunction(()=>document.querySelector('#quiz-choice').dataset.tone==='pure');await p.locator('[data-play=quiz-choice]').tap();await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.playing==='true');await p.locator('[data-play=quiz-choice]').tap();assert.equal(await p.locator('#unit-quiz').getAttribute('data-playing'),'false');await context.close();
  });
  if(!process.env.SOUND33_BASE_URL)await t.test('failed clip load leaves no fake wave and listening retries successfully',async()=>{

@@ -692,4 +692,4 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_CONTINUOUS_ARTIFACT_DIR=/tmp/unit23-conti
 CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-sound-match-model.test.cjs tests/unit-3.3-sound-match.test.cjs tests/unit-3.3.test.cjs
 ```
 
-模型 3 項、小測瀏覽器 11 項（含主項）、整頁 11 項（含主項），共 25 項。涵蓋實際播放 PCM 逐點對照波形、四題與容許差、換波形／調頻率／調振幅、兩聲試聽與取消、揭示／修改／摘要／重試、鍵盤與真實觸控、八種寬度與筆電核心工具同屏、延遲啟音取消、素材失敗重試。`SOUND33_BASE_URL` 可指定公開頁（勿含 hash），`MATCH_CAPTURE_DIR` 指定畫面目錄；公開模式不注入素材故障，其餘操作照常執行。音色、喇叭、分貝音效及聽覺探索另有專項回歸。
+模型 3 項、小測瀏覽器 12 項（含主項）、整頁 11 項（含主項），共 26 項。涵蓋實際播放 PCM 逐點對照波形、四題與固定檔位、換波形／加減頻率／加減振幅及兩端停用、兩聲試聽與取消、揭示／修改／摘要／重試、鍵盤與真實觸控、八種寬度與筆電核心工具同屏、延遲啟音取消、素材失敗重試。`SOUND33_BASE_URL` 可指定公開頁（勿含 hash），`MATCH_CAPTURE_DIR` 指定畫面目錄；公開模式不注入素材故障，其餘操作照常執行。音色、喇叭、分貝音效及聽覺探索另有專項回歸。

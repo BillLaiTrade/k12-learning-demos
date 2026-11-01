@@ -1,8 +1,8 @@
 import {loadTimbreClip,timbreBuffer} from './timbre-model.mjs?v=1';
-import {MATCH_TONES,MATCH_QUESTIONS,MATCH_NAMES,matchClip,matchWavePath,compareMatch} from './sound-match-model.mjs?v=1';
+import {MATCH_TONES,MATCH_LEVELS,MATCH_QUESTIONS,MATCH_NAMES,matchClip,matchWavePath,compareMatch} from './sound-match-model.mjs?v=2';
 
 export function createSoundMatch(root,{onChange}){
- const find=s=>root.querySelector(s),frequency=find('#answer-frequency'),amplitude=find('#answer-amplitude');
+ const find=s=>root.querySelector(s);
  const mine=find('#quiz-choice'),targetPlot=find('[data-match-target]'),feedback=find('#quiz-feedback'),result=find('[data-match-result]');
  let index=0,answer,revision=0,heardTarget=false,heardChoice=false,checked=false,summary=false;
  const scores=Array(4).fill(false),attempted=Array(4).fill(false);
@@ -33,15 +33,18 @@ export function createSoundMatch(root,{onChange}){
  }
  function update(){
   onChange();heardChoice=false;conceal();
-  answer.frequency=Number(frequency.value);answer.amplitude=Number(amplitude.value);
-  frequency.setAttribute('aria-valuetext',`${answer.frequency} Hz`);amplitude.setAttribute('aria-valuetext',`相對增益 ${answer.amplitude.toFixed(2)}`);
-  for(const input of [frequency,amplitude])input.style.setProperty('--range-position',`${(Number(input.value)-Number(input.min))/(Number(input.max)-Number(input.min))*100}%`);
+  for(const key of ['frequency','amplitude']){
+   const levels=MATCH_LEVELS[key],position=levels.indexOf(answer[key]),output=find('#answer-'+key);
+   output.textContent=`第 ${position+1}／${levels.length} 檔`;output.dataset.value=String(answer[key]);
+   find(`[data-match-levels="${key}"]`).innerHTML=levels.map((_,i)=>`<i class="${i===position?'selected':''}"></i>`).join('');
+   root.querySelector(`[data-match-step="${key}"][data-direction="-1"]`).disabled=position===0;
+   root.querySelector(`[data-match-step="${key}"][data-direction="1"]`).disabled=position===levels.length-1;
+  }
   find('[data-match-switch]').setAttribute('aria-label',`換一種波形，目前波形${MATCH_TONES.indexOf(answer.tone)+1}，共3種`);
   renderWave();
  }
  function startQuestion(){
   onChange();heardTarget=false;heardChoice=false;answer={...target().start};
-  frequency.value=answer.frequency;amplitude.value=answer.amplitude;
   const picture=document.querySelector(`#card-05 [data-timbre="${target().tone}"] .timbre-picture`);
   find('[data-match-picture]').replaceChildren(...[...picture.childNodes].map(n=>n.cloneNode(true)));
   find('[data-match-picture]').setAttribute('aria-label',`${MATCH_NAMES[target().tone]}，目標聲音的發聲器材`);
@@ -52,7 +55,11 @@ export function createSoundMatch(root,{onChange}){
   startQuestion();root.scrollIntoView({block:'start'});
   find('[data-play="quiz-base"]').focus({preventScroll:true});
  }
- frequency.addEventListener('input',update);amplitude.addEventListener('input',update);
+ for(const button of root.querySelectorAll('[data-match-step]'))button.addEventListener('click',()=>{
+  const key=button.dataset.matchStep,levels=MATCH_LEVELS[key],next=levels.indexOf(answer[key])+Number(button.dataset.direction);
+  if(next<0||next>=levels.length)return;
+  answer[key]=levels[next];update();
+ });
  find('[data-match-switch]').addEventListener('click',()=>{answer.tone=MATCH_TONES[(MATCH_TONES.indexOf(answer.tone)+1)%MATCH_TONES.length];update();});
  find('form').addEventListener('submit',async event=>{
   event.preventDefault();onChange();
@@ -75,7 +82,7 @@ export function createSoundMatch(root,{onChange}){
    result.hidden=false;find('[data-match-next]').textContent=index===3?'查看本輪結果 →':'下一題 →';
   }catch{if(ticket!==revision)return;feedback.hidden=false;feedback.dataset.state='error';feedback.textContent='目標波形暫時無法載入，請再按「完成比較」重試。';}
  });
- find('[data-match-retry]').addEventListener('click',()=>{onChange();conceal();frequency.focus({preventScroll:true});});
+ find('[data-match-retry]').addEventListener('click',()=>{onChange();conceal();find('[data-match-step=frequency]:not(:disabled)').focus({preventScroll:true});});
  find('[data-match-next]').addEventListener('click',()=>{
   if(!checked)return;onChange();
   if(summary){scores.fill(false);attempted.fill(false);index=0;nextQuestion();}
