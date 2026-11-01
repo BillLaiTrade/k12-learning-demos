@@ -1,0 +1,57 @@
+name: Maintain completed Pages deployment state
+
+on:
+  push:
+    branches: [main]
+  workflow_run:
+    workflows: [pages-build-deployment, pages build and deployment, Deploy demo page]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      rebuild:
+        description: Request a branch build after retiring completed records
+        type: boolean
+        default: false
+
+permissions:
+  pages: write
+  deployments: write
+
+concurrency:
+  group: pages-completed-state
+  cancel-in-progress: false
+
+jobs:
+  retire-completed-records:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retire only records confirmed successful by both deployment APIs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGES_STATE_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${PAGES_STATE_REPO}/deployments?environment=github-pages&per_page=100" \
+            --jq '.[] | [.id,.sha] | @tsv' > /tmp/pages-deployment-records
+          while IFS=$'\t' read -r deployment_id deployment_sha; do
+            state=$(gh api "repos/${PAGES_STATE_REPO}/deployments/${deployment_id}/statuses" --jq '.[0].state // "unknown"')
+            if [[ "$state" != success ]]; then continue; fi
+            page_state=$(gh api "repos/${PAGES_STATE_REPO}/pages/deployments/${deployment_sha}" --jq '.status')
+            if [[ "$page_state" != succeed ]]; then
+              echo "Keep deployment ${deployment_id}: Pages state is ${page_state}."
+              continue
+            fi
+            gh api --method POST "repos/${PAGES_STATE_REPO}/deployments/${deployment_id}/statuses" \
+              -f state=inactive \
+              -f description='Pages confirmed publication complete; release stale active deployment state.' \
+              --jq '{id,state}'
+          done < /tmp/pages-deployment-records
+      - name: Rebuild only when explicitly requested
+        if: github.event_name == 'workflow_dispatch' && inputs.rebuild
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGES_STATE_REPO: ${{ github.repository }}
+        run: gh api --method POST "repos/${PAGES_STATE_REPO}/pages/builds"
