@@ -34,7 +34,8 @@ test('sound-match assessment follows the approved layout and shares actual audio
  await t.test('initial screen has instrument listening above one editable wave, fixed step buttons and no answer reveal or autoplay',async()=>{
   const reference=await browser.newPage({viewport:{width:1440,height:1000}});
   try{
-   await reference.goto(`http://127.0.0.1:${port}/units/2/parts/2.1/`,{waitUntil:'networkidle'});
+   const referenceUrl=process.env.SOUND33_BASE_URL?new URL('../../../2/parts/2.1/',base).href:`http://127.0.0.1:${port}/units/2/parts/2.1/`;
+   await reference.goto(referenceUrl,{waitUntil:'networkidle'});
    const format=p=>p.locator('#unit-quiz').evaluate(n=>{const pick=(el,keys)=>{const s=getComputedStyle(el);return Object.fromEntries(keys.map(k=>[k,s[k]]));};return{card:pick(n,['backgroundColor','color','border','borderRadius','boxShadow','lineHeight']),header:pick(n.querySelector('.quiz-head'),['display','gridTemplateColumns','columnGap','padding','borderBottom','backgroundColor']),mark:pick(n.querySelector('.quiz-mark'),['width','height','backgroundColor','color','borderRadius','fontSize']),title:pick(n.querySelector('h2'),['fontSize','lineHeight','color']),kicker:pick(n.querySelector('.quiz-kicker'),['fontSize','color','backgroundColor','letterSpacing']),bodyPadding:getComputedStyle(n.querySelector('.quiz-body,.match-body')).padding};});
    assert.deepEqual(await format(page),await format(reference),'quiz frame, header and palette match unit 2.1');
    assert.equal(await root.locator('.quiz-mark').innerText(),'?');
