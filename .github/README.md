@@ -1,6 +1,6 @@
 # GitHub Pages 發布
 
-Pages 目前已選 GitHub Actions。`workflows/pages.yml` 在推送main或手動執行時讀取來源，依設定使用唯一發布流程；同一發布群組依序執行，不取消正在進行的發布。
+目前API讀到的Pages來源是main分支（`build_type=legacy`）。`workflows/pages.yml`每次先讀取來源：分支來源時自動工作略過deploy；Actions來源才自動發布。分支發布失敗時，可手動勾選`publish_when_branch_build_failed`啟用恢復發布。同一發布群組依序執行，不取消正在進行的發布。
 
 ## 已完成舊紀錄造成的發布鎖
 
@@ -17,3 +17,8 @@ Pages 目前已選 GitHub Actions。`workflows/pages.yml` 在推送main或手動
 先前一次性取消診斷已撤除；其他工作區的手動紀錄修復工具保留。完整故障與檢查歷程位於`BillLaiTrade/k12`的`docs/reviews/`，本輪結果於部署後補記。
 
 取消API若明確回400「already finished」，會重新核對Pages為succeed後繼續真正發布；不把清理成功或already finished回覆當成網站發布成功。其他取消錯誤仍會停止。
+
+
+## 連續發布驗證（2026-11-01）
+
+手動工作[2145／41293533567](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41293533567)已實際發布3164619d成功，公開氧氣、3.3及3.4共九檔與該提交一致。本提交新增獨立JSON標記，接續驗證新main能否再次發布；以真正deploy成功及公開標記一致為準，結果另記於課程紀錄repo。
