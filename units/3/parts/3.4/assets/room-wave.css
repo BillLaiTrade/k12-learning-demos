@@ -2,3 +2,18 @@
 @media(max-width:650px){.room-wave-heading{padding:12px;gap:7px}.room-wave-heading h3{font-size:1rem}.room-condition{font-size:.73rem}.room-wave-scene{margin:0 6px}.room-wave-legend{padding:9px 12px;gap:12px;font-size:.78rem}.room-wave-controls{padding:8px 10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}.room-wave-controls button{font-size:.85rem;padding:10px 6px}.room-wave-controls .room-material{margin:0}.room-wave-hint{padding:0 12px;font-size:.75rem}.room-wave-question{margin:0 10px 9px;padding:10px;font-size:.88rem}.room-wave-status,.room-wave-error{margin:0 12px 12px;font-size:.8rem}.room-scene-note{font-size:.65rem}.room-wave-heading .room-condition{max-width:100%}}
 
 .room-surface-label{position:absolute;left:6%;top:9%;padding:3px 7px;border-radius:6px;background:#fffdf0e8;color:#355e4c;font-size:.74rem;pointer-events:none}@media(max-width:650px){.room-surface-label{font-size:.63rem;padding:2px 5px}}
+
+/* F15: approved compact workspace; the scene keeps its original dimensions. */
+.room-wave-lab.room-wave-lab--compact{margin-top:16px;scroll-margin-top:8px}
+.room-wave-lab--compact .room-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 12px 8px}
+.room-wave-lab--compact .room-toolbar .room-wave-controls{padding:0;gap:8px;flex-wrap:nowrap;min-width:0}
+.room-wave-lab--compact .room-wave-controls button{font-size:.88rem;padding:9px 12px;min-height:44px;white-space:nowrap}
+.room-wave-lab--compact .room-condition{white-space:nowrap;flex-shrink:0;font-size:.74rem;padding:5px 8px}
+.room-wave-lab--compact .room-wave-question{margin:0 12px 10px;padding:8px 12px;font-size:.92rem;line-height:1.6}
+.room-wave-lab--compact .room-reading{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;gap:8px 14px;padding:9px 14px 11px}
+.room-wave-lab--compact .room-reading .room-wave-legend{padding:0;gap:12px;font-size:.78rem}
+.room-wave-lab--compact .room-reading .room-wave-legend i{width:18px;height:18px}
+.room-wave-lab--compact .room-wave-status{margin:0;min-height:0;font-size:.8rem;line-height:1.6}
+.room-wave-lab--compact .room-wave-error{margin:0 12px 10px}
+.room-wave-lab--compact+.room-wave-hint{padding:0;margin:0 0 8px;font-size:.78rem;line-height:1.8}
+@media(max-width:650px){.room-wave-lab--compact .room-toolbar{display:flex;flex-wrap:wrap;padding:10px;gap:8px}.room-wave-lab--compact .room-toolbar .room-wave-controls{display:grid;grid-template-columns:1fr 1fr;flex:1 1 100%;width:100%}.room-wave-lab--compact .room-toolbar .room-condition{order:-1}.room-wave-lab--compact .room-wave-controls button{font-size:.85rem;padding:10px 6px}.room-wave-lab--compact .room-wave-question{margin:0 10px 9px;padding:9px 10px;font-size:.88rem}.room-wave-lab--compact .room-reading{grid-template-columns:1fr;padding:8px 12px 10px;gap:8px}.room-wave-lab--compact .room-wave-status{font-size:.8rem}}
