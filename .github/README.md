@@ -1,9 +1,19 @@
 # GitHub Pages 發布
 
-目前 Pages 由 `main` 根目錄的分支來源自動發布。每次推送只保留這一條自動發布流程；`workflows/pages.yml` 為手動備用，正常更新不需啟動它。若未先把 Pages 來源改為 Actions，請勿重新加入此工作流程的 `push` 觸發，以免兩個發布流程競爭。
+`workflows/pages.yml` 支援推送 `main` 與手動執行。第一個工作先讀取 Pages 發布來源；只有來源為 **GitHub Actions**（API `build_type=workflow`）才發布，分支來源時明確略過，避免兩條發布流程競爭。不取消正在進行的發布。教材與公開網址不受此設定檢查影響。
 
-`workflows/pages-state.yml` 只維護最近100筆部署紀錄，不發布網站，也不自行建立環境部署。它在推送時及發布成功後，將一般部署 API 顯示 `success`、且 Pages 部署 API 確認為 `succeed` 的紀錄標為 `inactive`，避免服務持續把已完成部署誤判為進行中。它會保留 queued／in_progress 等其餘狀態，不取消或刪除部署，也不改動已發布內容。手動執行時可選擇 `rebuild` 請求現有分支來源重建；自動執行不另外觸發建置。
+## 需要儲存庫管理員完成的設定
 
-2026-11-01 曾發生新部署持續被已成功的舊部署 `44f42d94` 阻擋。一次性修復工作 `41289099188` 使用 `deployments: write` 將兩筆過時部署標為 `inactive`，再以 `pages: write` 請求分支建置；後續 `609c9cfe` 的 Pages 工作 `41289128518` 成功，新動畫模組及頁面已可公開取得。修復工作流程執行完畢即移除，避免保留針對舊提交的維護操作。
+1. 開啟 <https://github.com/BillLaiTrade/k12-learning-demos/settings/pages>。
+2. 在 **Build and deployment → Source** 選擇 **GitHub Actions**。
+3. 開啟 **Actions → Deploy demo page → Run workflow**，分支選 `main`；之後推送會自動發布。
 
-檢查發布時，先確認對應提交的工作流程結果，再實際核對公開 HTML、程式與素材。公開站可能暫留 404 或舊檔快取，應檢查有版本參數的 `index.html`、實際頁面引用的資源網址及瀏覽器功能；不要只依 Actions 綠燈宣稱已上線。詳細修復及公開檢查證據位於規劃儲存庫 `BillLaiTrade/k12` 的 `docs/reviews/pages-co2-recovery-20261101/`。
+目前連線及 Actions 的 `GITHUB_TOKEN` 更新 Pages 來源皆回 HTTP403 `Resource not accessible by integration`，無法代做上述管理設定；不需新增密鑰或刪除網站。
+
+## 2026-11-01 故障與驗證
+
+Pages 分支來源與自訂 Actions 曾同時發布。新部署被服務回報為已成功的舊提交阻擋，取消舊部署又回應已完成。一次性修復 `41289099188` 將過時紀錄停用後重建，`609c9cfe` 的 Pages 工作 `41289128518` 成功，接續動畫已公開：實際20檔一致，公開瀏覽器41項檢查全過。
+
+後續推送及重建仍被已成功的609c9cfe阻擋。將已確認完成的紀錄標為inactive並不能穩定解除Pages服務端鎖；試驗維護工作已移除，沒有將它當成永久修復。後續應由管理員統一為Actions來源，再執行此正式流程並檢查服務端鎖是否消失；如仍拒絕，需攜帶失敗與成功的部署ID向GitHub支援查核。
+
+詳細紀錄在規劃儲存庫 `BillLaiTrade/k12` 的 `docs/reviews/pages-co2-recovery-20261101/`。交付時須同時確認部署工作成功、公開檔案內容一致及瀏覽器操作，不能只依工作流程綠燈。

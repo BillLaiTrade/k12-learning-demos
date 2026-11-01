@@ -1,19 +1,43 @@
 name: Deploy demo page
 
 on:
-  # Pages currently publishes main through its branch build. Keep this workflow
-  # manual so each push has one publisher instead of two competing deployments.
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: pages-main-manual
+  group: pages-main-single
   cancel-in-progress: false
 
 jobs:
+  publishing-source:
+    runs-on: ubuntu-latest
+    permissions:
+      pages: read
+    outputs:
+      actions: ${{ steps.source.outputs.actions }}
+    steps:
+      - name: Publish only when Pages selects GitHub Actions
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGES_SOURCE_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          pages_source=$(gh api "repos/${PAGES_SOURCE_REPO}/pages" --jq '.build_type')
+          if [[ "$pages_source" == workflow ]]; then
+            echo 'actions=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'actions=false' >> "$GITHUB_OUTPUT"
+            echo '::notice::Pages uses the branch publisher. To enable this publisher, select Settings > Pages > Build and deployment > Source > GitHub Actions.'
+          fi
   deploy:
+    needs: publishing-source
+    if: needs.publishing-source.outputs.actions == 'true'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
