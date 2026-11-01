@@ -103,30 +103,17 @@ export function bindWellQuiz(claim, release) {
   }
   function reveal() {
     const q = question, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    $('well-reveal').innerHTML = `<h3>一步一步，從回聲時間算出井深</h3>
-      <ol class="well-steps" aria-label="井深計算的四個步驟">
-        <li class="well-step">
-          <h4><span class="well-step-number" aria-hidden="true">1</span><span>先看聲音往返花了多少時間</span></h4>
-          <div class="well-overview"><div class="well-route"><svg viewBox="0 0 320 330" role="img" aria-label="聲音由井口到井底，再返回井口，往返共${time(q.time)}秒。"><path d="M65 45V285H235V45" fill="#e8e2d2" stroke="#8d927e" stroke-width="7"/><path d="M78 50V273H222V50" fill="#fffefa"/><path d="M105 65V270M195 270V65" stroke="#d9e4d5" stroke-width="3" stroke-dasharray="5 6"/><text x="93" y="28" font-size="16" fill="#344c3e">井口／發聲與接收</text><text x="40" y="160" text-anchor="middle" font-size="15" fill="#176b53">去程</text><text x="280" y="160" text-anchor="middle" font-size="15" fill="#ad6029">回程</text><text x="160" y="315" text-anchor="middle" font-size="17" fill="#344c3e">井底</text><circle cx="105" cy="65" r="10" fill="#388f62">${reduce?'':`<animateMotion dur="${q.time*5}s" path="M0 0 L0 205 L90 205 L90 0" fill="freeze"/>`}</circle><path d="M185 90q10-14 20 0m-20 12q10-14 20 0" fill="none" stroke="#c3752f" stroke-width="3"/></svg>
-            <p class="well-slow">${reduce?'聲路示意':'5倍慢動作聲路示意'}；圖形不按實際比例繪製。</p>
-          </div><div class="well-known-time"><span>去程和回程，總共花了</span><strong><span data-well-value="time">${time(q.time)}</span> 秒</strong><p>從喊聲開始，到井底回聲開始；這段時間包含去程與回程。</p></div></div>
-        </li>
-        <li class="well-step">
-          <h4><span class="well-step-number" aria-hidden="true">2</span><span>先算聲音走過的總路程</span></h4>
-          <p>每秒走 ${q.speed} 公尺，${time(q.time)} 秒共走多遠？</p>
-          <strong class="well-equation">${q.speed} × ${time(q.time)} ＝ <span data-well-value="total">${q.depth*2}</span> 公尺</strong>
-        </li>
-        <li class="well-step">
-          <h4><span class="well-step-number" aria-hidden="true">3</span><span>去程和回程一樣長，把總路程分成兩半</span></h4>
-          <div class="well-lengths" role="img" aria-label="去程和回程各占一半，往返總路程${q.depth*2}公尺。"><div class="well-length-bar"><span class="well-leg well-leg--out">去程</span><span class="well-leg well-leg--back">回程</span></div><div class="well-bracket" aria-hidden="true"></div><p>往返總路程 <strong data-well-value="total">${q.depth*2}</strong> 公尺</p></div>
-        </li>
-        <li class="well-step">
-          <h4><span class="well-step-number" aria-hidden="true">4</span><span>井深只取其中一段</span></h4>
-          <p>從井口到井底，只有往返總路程的一半。</p>
-          <strong class="well-equation">${q.depth*2} ÷ 2 ＝ <span data-well-value="depth">${q.depth}</span> 公尺</strong>
-          <p class="well-final-answer">所以，這口井深 <strong>${q.depth} 公尺</strong>。</p>
-        </li>
-      </ol>`;
+    $('well-reveal').innerHTML = `<h3>從往返時間推算井深</h3>
+      <div class="well-compact"><div class="well-route"><svg viewBox="0 0 320 330" role="img" aria-label="聲音由井口到井底，再返回井口，往返共${time(q.time)}秒。"><path d="M65 45V285H235V45" fill="#e8e2d2" stroke="#8d927e" stroke-width="7"/><path d="M78 50V273H222V50" fill="#fffefa"/><path d="M105 65V270M195 270V65" stroke="#d9e4d5" stroke-width="3" stroke-dasharray="5 6"/><text x="93" y="28" font-size="16" fill="#344c3e">井口／發聲與接收</text><text x="40" y="160" text-anchor="middle" font-size="15" fill="#176b53">去程</text><text x="280" y="160" text-anchor="middle" font-size="15" fill="#ad6029">回程</text><text x="160" y="315" text-anchor="middle" font-size="17" fill="#344c3e">井底</text><circle cx="105" cy="65" r="10" fill="#388f62">${reduce?'':`<animateMotion dur="${q.time*5}s" path="M0 0 L0 205 L90 205 L90 0" fill="freeze"/>`}</circle><path d="M185 90q10-14 20 0m-20 12q10-14 20 0" fill="none" stroke="#c3752f" stroke-width="3"/></svg>
+        <p class="well-slow">${reduce?'聲路示意':'5倍慢動作聲路示意'}；非實際比例。</p>
+      </div><div class="well-working">
+        <p class="well-time-note"><span data-well-value="time">${time(q.time)}</span> 秒包含聲音下去、再回來的時間。</p>
+        <ol class="well-calculation" aria-label="井深計算：總路程、平分去回、井深">
+          <li><span class="well-calc-label"><span class="well-calc-number" aria-hidden="true">1</span>先算往返總路程</span><strong class="well-equation">${q.speed} × ${time(q.time)} ＝ <span data-well-value="total">${q.depth*2}</span> 公尺</strong></li>
+          <li><span class="well-calc-label"><span class="well-calc-number" aria-hidden="true">2</span>去程和回程一樣長，分成兩半</span><div class="well-lengths" role="img" aria-label="去程和回程各占一半，往返總路程${q.depth*2}公尺。"><div class="well-length-bar"><span class="well-leg well-leg--out">去程</span><span class="well-leg well-leg--back">回程</span></div><p>往返共 <span data-well-value="total">${q.depth*2}</span> 公尺</p></div></li>
+          <li><span class="well-calc-label"><span class="well-calc-number" aria-hidden="true">3</span>井深只取其中一段</span><strong class="well-equation">${q.depth*2} ÷ 2 ＝ <span data-well-value="depth">${q.depth}</span> 公尺</strong></li>
+        </ol>
+      </div></div>`;
     $('well-reveal').hidden = false;
   }
   call.addEventListener('click', play); person.addEventListener('click', play);
