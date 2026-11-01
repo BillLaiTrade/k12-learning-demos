@@ -1,0 +1,62 @@
+[
+  {
+    "gas": "oxygen",
+    "width": 1440,
+    "summaryHeight": 311.359375,
+    "footerHeight": 156
+  },
+  {
+    "gas": "co2",
+    "width": 1440,
+    "summaryHeight": 340.953125,
+    "footerHeight": 156
+  },
+  {
+    "gas": "oxygen",
+    "width": 1024,
+    "summaryHeight": 311.359375,
+    "footerHeight": 156
+  },
+  {
+    "gas": "co2",
+    "width": 1024,
+    "summaryHeight": 370.546875,
+    "footerHeight": 156
+  },
+  {
+    "gas": "oxygen",
+    "width": 768,
+    "summaryHeight": 457.734375,
+    "footerHeight": 246.5625
+  },
+  {
+    "gas": "co2",
+    "width": 768,
+    "summaryHeight": 459.328125,
+    "footerHeight": 246.5625
+  },
+  {
+    "gas": "oxygen",
+    "width": 390,
+    "summaryHeight": 609.3125,
+    "footerHeight": 246.5625
+  },
+  {
+    "gas": "co2",
+    "width": 390,
+    "summaryHeight": 638.90625,
+    "footerHeight": 246.5625
+  },
+  {
+    "gas": "oxygen",
+    "width": 320,
+    "summaryHeight": 638.90625,
+    "footerHeight": 246.5625
+  },
+  {
+    "gas": "co2",
+    "width": 320,
+    "summaryHeight": 698.09375,
+    "footerHeight": 246.5625
+  }
+]

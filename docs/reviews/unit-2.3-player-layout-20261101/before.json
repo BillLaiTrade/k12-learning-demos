@@ -1,0 +1,22 @@
+[
+  {
+    "gas": "oxygen",
+    "width": 1440,
+    "height": 501.734375
+  },
+  {
+    "gas": "co2",
+    "width": 1440,
+    "height": 560.921875
+  },
+  {
+    "gas": "oxygen",
+    "width": 390,
+    "height": 835.28125
+  },
+  {
+    "gas": "co2",
+    "width": 390,
+    "height": 924.0625
+  }
+]

@@ -1,4 +1,5 @@
-import { createSceneCaptions } from './oxygen-captions.mjs?v=subtitles-below-1';
+import { createExperimentPlayerFooter } from './experiment-player.mjs?v=player-1';
+import { createSceneCaptions } from './oxygen-captions.mjs?v=player-1';
 import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=background-tap-1';
 import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=oxygen-wall-fit-2';
 import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=oxygen-wall-fit-2';
@@ -157,7 +158,7 @@ function renderAssembly(elapsed, state, view, phase) {
 }
 
 function createPreparationPlayer() {
-  const play=panel.querySelector('[data-play]'),captions=createSceneCaptions(panel);
+  const play=panel.querySelector('[data-play]'),footer=createExperimentPlayerFooter(panel),captions=createSceneCaptions(panel,{host:footer.element});
   const sequenceStatus=panel.querySelector('[data-continuous-status]');
   const status=panel.querySelector('[role=status]'),menu=panel.querySelector('[data-step-menu]');
   const navBody=panel.querySelector('#oxygen-step-list'),nav=panel.querySelector('.oxygen-step-nav');
@@ -200,7 +201,8 @@ function createPreparationPlayer() {
     let text=(state==='paused'?'已暫停：':'')+renderPreparation(stage,elapsed,atEnd?'complete':state);
     if(state==='playing'&&atEnd&&stage<steps.length-1)text=text.replace('這一步已播完，可重播或繼續下一步。','即將接續下一個操作。');
     if(stage===steps.length-1&&state==='complete')text=text.replace('這一步已播完，可重播或繼續下一步。','氧氣收集與封存已完成，可重新播放。');
-    if(stage>0)captions.show(panels[stage],atEnd&&stage<steps.length-1?panels[stage].dataset.loopCaption:panels[stage].dataset.captionMessage);
+    footer.show(panels[stage]);
+    captions.show(panels[stage],stage===0?'桌上是這次實驗的材料與器材，點選可查看介紹。':atEnd&&stage<steps.length-1?panels[stage].dataset.loopCaption:panels[stage].dataset.captionMessage,{staticText:stage===0});
     explorer?.sync(stage);
     if(message!==text){status.textContent=text;message=text;}
     const playing=state==='playing',paused=state==='paused',complete=state==='complete';
@@ -208,7 +210,7 @@ function createPreparationPlayer() {
     play.querySelector('[data-play-icon]').textContent=playing?'Ⅱ':complete?'↻':'▶';
     play.querySelector('[data-play-label]').textContent=label;play.setAttribute('aria-label',label);
     play.classList.toggle('is-playing',playing);
-    sequenceStatus.textContent=playing?'點畫面空白處可暫停。':paused?'點空白處或按繼續接著看。':complete?'已完成氧氣收集與封存。':stage===0?'從擺好集氣位置開始播放。':'按播放，從這一步接著看。';
+    sequenceStatus.textContent='點畫面空白處，也可暫停／繼續。';
     menu.textContent=`${String(stage+1).padStart(2,'0')} ${OXYGEN_OPERATIONS[stage].label} ▾`;
   }
   function tick(now){
