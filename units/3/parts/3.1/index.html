@@ -260,9 +260,9 @@
     .speed-formula-panel { margin:14px 0 18px; padding:10px 16px 12px; border:1px solid #d6e4d5; border-radius:16px; background:#eaf3e9; container-type:inline-size; }
     .speed-formula-comparison { margin:-10px -16px 0; border-bottom:1px solid #c8d9c7; }
     .speed-formula-row { display:grid; grid-template-columns:110px minmax(0,1fr); }
-    .speed-formula-row + .speed-formula-row { border-top:1px solid #c8d9c7; }
-    .speed-formula-label { margin:0; padding:22px 18px; border-right:1px solid #c8d9c7; color:var(--green); font-size:1.05rem; font-weight:800; line-height:1.5; }
-    .speed-formula { display:flex; align-items:center; justify-content:flex-start; gap:.28em; min-width:0; margin:0; padding:18px 24px; background:transparent; font-size:clamp(1.55rem,3.5vw,2rem); }
+    .speed-formula-row + .speed-formula-row { border-top:1px solid #d8e4d6; }
+    .speed-formula-label { display:flex; align-items:center; margin:0; padding:22px 18px; border-right:1px solid rgb(23 107 83 / 8%); color:var(--green); font-size:1.05rem; font-weight:800; line-height:1.5; }
+    .speed-formula { display:flex; align-items:center; justify-content:center; gap:.28em; min-width:0; margin:0; padding:18px 24px; background:transparent; font-size:clamp(1.45rem,3vw,1.85rem); }
     .speed-formula-choice,.speed-formula-meaning-choice { border:0; border-radius:8px; background:transparent; color:inherit; font:inherit; cursor:pointer; transition:background-color .15s ease,box-shadow .15s ease; }
     .speed-formula-choice { padding:0 .08em; line-height:1.2; }
     .speed-formula-meaning-choice { display:grid; grid-template-columns:3.5em minmax(0,1fr); align-items:center; gap:8px; width:100%; max-width:100%; min-width:0; padding:3px 0; line-height:inherit; text-align:left; }
@@ -275,11 +275,11 @@
     .speed-chinese-denominator > span { white-space:nowrap; }
     .speed-formula-choice:hover,.speed-formula-meaning-choice:hover,.speed-formula-choice[aria-pressed="true"],.speed-formula-meaning-choice[aria-pressed="true"] { background:#fff4e9; box-shadow:0 0 0 2px #cf7040; }
     .speed-formula-choice:focus-visible,.speed-formula-meaning-choice:focus-visible { outline:3px solid #cf7040; outline-offset:3px; }
-    .speed-formula-meaning { display:grid; align-content:start; gap:14px; min-width:0; margin:0; padding:20px 24px; color:var(--ink); text-align:left; font-size:1rem; line-height:1.6; }
+    .speed-formula-meaning { display:grid; align-content:start; justify-self:center; width:fit-content; max-width:100%; gap:14px; min-width:0; margin:0; padding:20px 24px; color:var(--ink); text-align:left; font-size:1.05rem; line-height:1.6; }
     .speed-chinese-velocity { color:var(--green); font-size:1.15em; font-weight:850; white-space:nowrap; }
     @container (max-width:600px) {
       .speed-formula-row { grid-template-columns:minmax(0,1fr); }
-      .speed-formula-label { padding:14px 16px 0; border-right:0; font-size:1rem; }
+      .speed-formula-label { display:block; padding:14px 16px 0; border-right:0; font-size:1rem; }
       .speed-formula { padding:12px 16px 16px; }
       .speed-formula-meaning { padding:12px 16px 16px; font-size:.95rem; }
     }
