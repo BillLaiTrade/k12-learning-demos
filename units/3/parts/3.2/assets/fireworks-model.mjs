@@ -23,9 +23,8 @@ export function createChallenge({ random = Math.random, previous = null } = {}) 
 
 export function checkEstimate(value, challenge) {
   if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) return 'invalid';
-  // 這是估算題；接受整數四捨五入與約 1% 的合理估算。
-  return Math.abs(value - challenge.distance) <= Math.max(2, challenge.distance * .01)
-    ? 'correct' : 'incorrect';
+  // 整數聲速乘以百分之一秒，答案最多兩位小數；核對完整公式結果。
+  return value === challenge.distance ? 'correct' : 'incorrect';
 }
 
 export function seededRandom(seed) {

@@ -54,6 +54,7 @@
 .fireworks-feedback{grid-column:1/-1;margin:0;padding:9px 10px;border-radius:8px;background:#fff3df;color:#80511e;font-size:.84rem;line-height:1.65}
 .fireworks-feedback[data-state=correct]{background:#edf5e9;color:#245b40}
 .fireworks-feedback[hidden]{display:none}
+.fireworks-answer-note{grid-column:1/-1;margin:0;color:#64736b;font-size:.78rem;line-height:1.6}
 .fireworks-status{grid-column:1/-1;margin:0;color:#66786e;font-size:.82rem}
 .fireworks-status:empty{display:none}
 .fireworks-status:not([data-error=true]){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}

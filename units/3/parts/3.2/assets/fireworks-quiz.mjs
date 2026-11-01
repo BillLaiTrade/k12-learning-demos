@@ -1,4 +1,4 @@
-import { createChallenge, checkEstimate } from './fireworks-model.mjs?v=3';
+import { createChallenge, checkEstimate } from './fireworks-model.mjs?v=exact-answer-20261101';
 import { FireworkRenderer, FIREWORK_DURATION } from './fireworks-renderer.mjs?v=3';
 import { FireworkAudio } from './fireworks-audio.mjs?v=2';
 import { stopOnLeave } from './lesson-playback.mjs?v=2';
@@ -94,7 +94,7 @@ if (root) {
         timer.textContent = challenge.delay.toFixed(2);
         recordLabel.textContent = '時間差';
         caption.textContent = '聽到爆炸聲了';
-        status.textContent = '已記下時間差，現在可以估算距離；按「重播同題」再次觀察，或按「換一題」更換題目。';
+        status.textContent = '已記下時間差，現在可以計算距離；按「重播同題」再次觀察，或按「換一題」更換題目。';
       }
     }
     if (elapsed < Math.max(FIREWORK_DURATION, challenge.delay + audio.buffer.duration)) {
@@ -157,10 +157,10 @@ if (root) {
       feedback.textContent = '請輸入大於 0 的距離，以公尺作答。'; answer.focus();
     } else if (result === 'incorrect') {
       answer.setAttribute('aria-invalid', 'true');
-      feedback.textContent = '再確認一次：先將氣溫代入聲速公式，再把算出的聲速乘以時間差，結果是公尺。';
+      feedback.textContent = '再確認一次：先將氣溫代入聲速公式，再把算出的聲速乘以時間差。請以公尺作答，有小數時完整保留，不用四捨五入。';
     } else {
       answer.removeAttribute('aria-invalid');
-      feedback.textContent = '估算正確！煙火距離約 ' + format(challenge.distance) + ' 公尺，約 '
+      feedback.textContent = '計算正確！依公式算得煙火距離為 ' + format(challenge.distance) + ' 公尺，約 '
         + (challenge.distance / 1000).toFixed(2) + ' 公里。這是爆炸點到觀察位置的直線距離。';
     }
   });

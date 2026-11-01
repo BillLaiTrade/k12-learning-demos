@@ -17,7 +17,8 @@ test('fireworks model: weather, random delay, displayed arithmetic and estimates
     assert.ok(q.delay >= 2 && q.delay <= 6);
     assert.equal(q.delay, Number(q.delay.toFixed(2)));
     assert.equal(q.distance, Math.round(q.speed * q.delay * 100) / 100);
-    assert.equal(checkEstimate(Math.round(q.distance), q), 'correct');
+    assert.equal(checkEstimate(q.distance, q), 'correct');
+    assert.equal(checkEstimate(Math.round(q.distance), q), Number.isInteger(q.distance) ? 'correct' : 'incorrect');
     assert.equal(checkEstimate(q.distance * .5, q), 'incorrect');
     if (previous) assert.notDeepEqual([q.temperature, q.delay], [previous.temperature, previous.delay]);
     temperatures.add(q.temperature); delays.add(q.delay); previous = q;
@@ -30,6 +31,26 @@ test('fireworks model: weather, random delay, displayed arithmetic and estimates
   assert.equal(createChallenge({ random: () => 0 }).delay, 2);
   assert.equal(createChallenge({ random: () => 1 }).delay, 6);
   for (const value of [0, -1, NaN, Infinity, undefined, '1011']) assert.equal(checkEstimate(value, fixed), 'invalid');
+});
+
+test('all 1604 temperature/time pairs require the full formula result without rounding or tolerance', async () => {
+  const url = pathToFileURL(path.resolve(__dirname, '../units/3/parts/3.2/assets/fireworks-model.mjs'));
+  const { distanceFor, checkEstimate } = await import(url.href);
+  for (const temperature of [0, 10, 20, 30]) {
+    const speed = 331 + 3 * temperature / 5;
+    for (let hundredths = 200; hundredths <= 600; hundredths++) {
+      const expected = speed * hundredths / 100;
+      const challenge = { distance: distanceFor(speed, hundredths / 100) };
+      assert.equal(challenge.distance, expected);
+      assert.equal(checkEstimate(Number(expected.toFixed(2)), challenge), 'correct');
+      for (const value of [expected + .01, expected - .01, expected + .001, expected + 1e-10]) {
+        assert.equal(checkEstimate(value, challenge), 'incorrect');
+      }
+    }
+  }
+  for (const distance of [1348, 1372]) assert.equal(checkEstimate(1360, { distance }), 'incorrect');
+  assert.equal(checkEstimate(1014.37, { distance: 1014.37 }), 'correct');
+  for (const value of [1014, 1014.3, 1014.4]) assert.equal(checkEstimate(value, { distance: 1014.37 }), 'incorrect');
 });
 
 test('fireworks quiz: real audio clock, observation, replay, answers and reset', { timeout: 90000 }, async t => {
@@ -199,7 +220,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     t.diagnostic('wall clock and audio ' + JSON.stringify(times));
   });
 
-  await t.test('answer, rounding, keyboard and feedback follow the displayed numbers', async () => {
+  await t.test('exact answers, rejected approximations, keyboard and feedback follow the displayed numbers', async () => {
     const answer = page.locator('#fireworks-answer'), submit = page.locator('#fireworks-check');
     await submit.click();
     assert.equal(await page.locator('#fireworks-feedback').getAttribute('data-state'), 'invalid');
@@ -211,7 +232,8 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await page.locator('#fireworks-feedback').getAttribute('data-state'), 'correct');
     assert.match(await page.locator('#fireworks-feedback').textContent(), /1,011.*1\.01/);
     await answer.fill('1012'); assert.equal(await page.locator('#fireworks-feedback').isHidden(), true);
-    await submit.click(); assert.equal(await page.locator('#fireworks-feedback').getAttribute('data-state'), 'correct');
+    await submit.click(); assert.equal(await page.locator('#fireworks-feedback').getAttribute('data-state'), 'incorrect');
+    assert.match(await page.locator('#fireworks-feedback').textContent(), /不用四捨五入/);
   });
 
   await t.test('replay preserves the question, while a new challenge cancels pending sound and resets answers', async () => {
@@ -259,6 +281,19 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal((await data()).temperature, previous.temperature);
     assert.equal((await data()).delay, previous.delay);
     assert.equal(await page.locator('#fireworks-observe').innerText(), '重播同題');
+    await page.setViewportSize({ width: 390, height: 844 });
+    assert.equal(await page.locator('#fireworks-answer-note').isVisible(), true);
+    assert.match(await page.locator('#fireworks-answer').getAttribute('aria-describedby'), /fireworks-answer-note/);
+    for (const value of ['1014', '1014.4', '1014.36', '1014.38', '1014.371']) {
+      await page.locator('#fireworks-answer').fill(value);
+      await page.locator('#fireworks-answer').press('Enter');
+      assert.equal(await page.locator('#fireworks-feedback').getAttribute('data-state'), 'incorrect', value);
+    }
+    await page.locator('#fireworks-answer').fill('1014.370');
+    await page.locator('#fireworks-answer').press('Enter');
+    assert.equal(await page.locator('#fireworks-feedback').getAttribute('data-state'), 'correct');
+    assert.match(await page.locator('#fireworks-feedback').textContent(), /計算正確.*1,014\.37 公尺/);
+    await page.setViewportSize({ width: 1440, height: 1100 });
   });
 
   await t.test('firework motion and clearing remain identical with reduced motion enabled', async () => {
@@ -347,6 +382,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
       assert.equal(estimate.direct, true); assert.equal(estimate.sidePanels, 2);
       assert.equal(estimate.full, true); assert.equal(estimate.below, true);
       assert.equal(width === 390 ? estimate.vertical : estimate.horizontal, true, 'estimate form uses the available width');
+      await page.locator('#unit-quiz').evaluate(element => element.scrollIntoView({ block: 'start' }));
       await page.locator('#unit-quiz').screenshot({path:path.join(process.env.FIREWORKS_ARTIFACT_DIR || '/tmp', `unit32-stopwatch-${width}.png`)});
     }
   });

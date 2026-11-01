@@ -34,7 +34,7 @@
   <link rel="stylesheet" href="assets/sound-propagation.css?v=3">
   <link rel="stylesheet" href="assets/vacuum-lab.css?v=5">
   <link rel="stylesheet" href="assets/sound-speed.css?v=silent-arrival-20261029">
-  <link rel="stylesheet" href="assets/fireworks-quiz.css?v=launch-button-20261030">
+  <link rel="stylesheet" href="assets/fireworks-quiz.css?v=exact-answer-20261101">
 </head>
 <body>
   <header class="shell masthead">
@@ -240,7 +240,7 @@
         <section class="quiz fireworks-quiz" id="unit-quiz" aria-labelledby="quiz-title">
           <header class="quiz-head">
             <span class="quiz-mark" aria-hidden="true">?</span>
-            <div class="fireworks-head-copy"><p class="fireworks-kicker">單元小測</p><h2 id="quiz-title">煙火離你多遠？</h2><p>煙火的亮光幾乎立刻到達，聲音卻要花時間傳來。利用這段時間差和當時的氣溫，估算煙火離你多遠。</p></div>
+            <div class="fireworks-head-copy"><p class="fireworks-kicker">單元小測</p><h2 id="quiz-title">煙火離你多遠？</h2><p>煙火的亮光幾乎立刻到達，聲音卻要花時間傳來。利用這段時間差和當時的氣溫，計算煙火離你多遠。</p></div>
           </header>
           <div class="fireworks-body">
             <div class="fireworks-view">
@@ -277,17 +277,18 @@
               </section>
             </div>
             <section class="fireworks-panel fireworks-estimate-panel" aria-labelledby="fireworks-estimate-title">
-                <h3 id="fireworks-estimate-title">你的估算</h3>
+                <h3 id="fireworks-estimate-title">你的計算</h3>
                 <form class="fireworks-estimate" id="fireworks-answer-form" novalidate>
                   <p class="fireworks-formula">距離 ＝ 聲速 × 時間差</p>
-                  <label class="fireworks-input"><input id="fireworks-answer" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入距離" aria-label="估算煙火爆炸點到觀察位置的距離，單位公尺" aria-describedby="fireworks-feedback" disabled><span>公尺</span></label>
+                  <label class="fireworks-input"><input id="fireworks-answer" type="number" min="0" step="any" inputmode="decimal" placeholder="輸入距離" aria-label="計算煙火爆炸點到觀察位置的距離，單位公尺" aria-describedby="fireworks-answer-note fireworks-feedback" disabled><span>公尺</span></label>
                   <button class="action" id="fireworks-check" type="submit" disabled>核對距離</button>
+                  <p class="fireworks-answer-note" id="fireworks-answer-note">請以公尺作答，有小數時請完整保留，不用四捨五入。</p>
                   <p class="fireworks-feedback" id="fireworks-feedback" role="status" aria-live="polite" hidden></p>
                 </form>
             </section>
             <p class="fireworks-status" id="fireworks-status" role="status" aria-live="polite"></p>
           </div>
-          <p class="fireworks-footnote">此處可忽略光的傳播時間；估算的是煙火爆炸點到觀察者的直線距離。</p>
+          <p class="fireworks-footnote">此處可忽略光的傳播時間；計算的是煙火爆炸點到觀察者的直線距離。</p>
           <noscript><p class="fireworks-footnote">請啟用 JavaScript，才能觀察煙火、聆聽爆炸聲並核對距離。</p></noscript>
         </section>
       </div>
@@ -389,6 +390,6 @@
   <script type="module" src="assets/sound-propagation.js?v=exclusive-playback-20261030"></script>
   <script type="module" src="assets/vacuum-lab.js?v=audio-interruption-20261101"></script>
   <script type="module" src="assets/sound-speed.mjs?v=linear-speed-20261101"></script>
-  <script type="module" src="assets/fireworks-quiz.mjs?v=replay-labels-20261101"></script>
+  <script type="module" src="assets/fireworks-quiz.mjs?v=exact-answer-20261101"></script>
 </body>
 </html>
