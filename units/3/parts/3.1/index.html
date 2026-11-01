@@ -266,6 +266,7 @@
     .speed-formula-choice:focus-visible,.speed-formula-meaning-choice:focus-visible { outline:3px solid #cf7040; outline-offset:3px; }
     .speed-formula-meaning { display:grid; justify-items:center; gap:6px; margin:0; padding:12px 4px; border-block:1px solid #d6e4d5; color:var(--ink); text-align:center; font-size:.9rem; line-height:1.5; }
     .speed-formula-meaning-title { margin:0; color:var(--green); font-size:.88rem; font-weight:800; }
+    .speed-wave-count { color:var(--green); font-size:1.3em; font-weight:850; white-space:nowrap; }
     .speed-formula-explanations { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
     .speed-formula-explanation { min-width:0; padding:12px 14px; border:1px solid #d6e4d5; border-radius:12px; background:#f7faf6; transition:background-color .15s ease,box-shadow .15s ease,border-color .15s ease; }
     .speed-formula-panel [data-formula-target].is-formula-related { border-color:#cf7040; background:#fff4e9; box-shadow:0 0 0 2px #cf7040; }
@@ -841,7 +842,7 @@
                 <div class="formula speed-formula" role="group" aria-label="可點選公式，查看各部分對應的中文與白話解釋"><em>v</em> = <button class="speed-formula-choice" type="button" data-formula-focus="frequency" aria-pressed="false" aria-label="查看頻率乘以波長的解釋" aria-controls="speed-chinese-frequency speed-explanation-frequency speed-map-frequency speed-map-wavelength"><em>f</em> × <em>λ</em></button> = <button class="speed-formula-choice" type="button" data-formula-focus="period" aria-pressed="false" aria-label="查看波長除以週期的解釋" aria-controls="speed-chinese-period speed-explanation-period speed-map-wavelength speed-map-period"><span class="stacked-fraction" aria-hidden="true"><span><em>λ</em></span><span class="fraction-rule"></span><span><em>T</em></span></span></button></div>
               <div class="speed-formula-meaning">
                 <p class="speed-formula-meaning-title">中文公式</p>
-                <button id="speed-chinese-frequency" class="speed-formula-meaning-choice" type="button" data-formula-focus="frequency" aria-pressed="false" aria-label="查看每秒波數乘以波長的解釋" aria-controls="speed-explanation-frequency speed-map-frequency speed-map-wavelength">波速 = 每秒產生的完整波數 × 每個完整波的長度</button>
+                <button id="speed-chinese-frequency" class="speed-formula-meaning-choice" type="button" data-formula-focus="frequency" aria-pressed="false" aria-label="查看每秒波數乘以波長的解釋" aria-controls="speed-explanation-frequency speed-map-frequency speed-map-wavelength">波速 = <span>每秒產生的完整<strong class="speed-wave-count">波數</strong></span> × 每個完整波的長度</button>
                 <button id="speed-chinese-period" class="speed-formula-meaning-choice" type="button" data-formula-focus="period" aria-pressed="false" aria-label="查看波長除以週期的解釋" aria-controls="speed-explanation-period speed-map-wavelength speed-map-period">= <span class="frequency-meaning-fraction"><span>一個完整波的長度</span><span class="fraction-rule"></span><span>波形前進一個完整波長所需的時間</span></span></button>
               </div>
               <div class="speed-formula-explanations">
