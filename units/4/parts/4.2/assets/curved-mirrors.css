@@ -1,5 +1,4 @@
 #card-05 .card-main{container:mirror-lesson/inline-size}
-#card-05 .mirror-reading-order{display:block;margin-top:24px;line-height:1.8}
 #card-05 .mirror-step{margin-top:16px;padding:14px 10px 12px;border:1px solid #d5dfd4;border-radius:17px;background:linear-gradient(145deg,#fffef9,#fdfdf6)}
 #card-05 .mirror-step-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 13px}
 #card-05 .mirror-step-head h3{display:flex;align-items:center;gap:9px;flex:0 0 auto;margin:0;color:#1b483d;font-size:1.21rem;line-height:1.3;font-weight:800}
@@ -70,4 +69,3 @@
   #card-05 .mirror-cause-chain strong{font-size:.68rem}
   #card-05 .mirror-bear-toggle{font-size:.62rem;padding-inline:3px}
 }
-@media(max-width:780px){#card-05 .mirror-reading-order{display:none}}
