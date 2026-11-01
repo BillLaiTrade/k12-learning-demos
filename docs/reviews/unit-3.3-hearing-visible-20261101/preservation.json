@@ -1,0 +1,13 @@
+{
+  "card-01": true,
+  "card-02": true,
+  "card-03": true,
+  "card-04": true,
+  "card-05": true,
+  "card-07": true,
+  "quiz": true,
+  "lesson.mjs": true,
+  "lesson.css": true,
+  "hearing-experiment.mjs": true,
+  "hearing-audio.mjs": true
+}

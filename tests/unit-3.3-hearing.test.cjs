@@ -108,7 +108,13 @@ test('hearing exploration: continuous sine, frequency ribbon and manual records'
   }finally{await c.close();}
  });
  await t.test('knowledge retains hearing range, animal upper bounds and device/colour limitations',async()=>{
-  await root.locator('.hearing-animals summary').click();const text=await root.locator('.hearing-animals').innerText();assert.match(text,/次聲波[\s\S]*超聲波/);assert.match(text,/沒有聲波/);assert.match(text,/30,000[\s\S]*100,000/);assert.match(text,/顏色/);
+  assert.equal(await root.locator('.hearing-animals').getAttribute('open'),null);
+  const main=root.locator('.dialogue p').filter({hasText:'人耳概略可聽範圍'});
+  assert.equal(await main.isVisible(),true);assert.match(await main.innerText(),/高於 20,000 Hz 的聲音稱為超聲波/);assert.match(await main.innerText(),/聽不到不代表沒有聲波/);
+  for(const [width,height]of [[1440,900],[1366,768]]){
+   await page.setViewportSize({width,height});await main.scrollIntoViewIfNeeded();assert.equal(await main.evaluate(n=>n.scrollWidth>n.clientWidth+1),false);await main.locator('..').screenshot({path:path.join(capture,`main-concepts-${width}.png`)});
+  }
+  await root.locator('.hearing-animals summary').click();const text=await root.locator('.hearing-animals').innerText();assert.match(text,/次聲波/);assert.doesNotMatch(text,/稱為超聲波|聽不到不代表沒有聲波/);assert.match(text,/30,000[\s\S]*100,000/);assert.match(text,/顏色/);
   assert.equal(await root.locator('.hearing-animal-card svg image').count(),3);
   const image=await page.evaluate(async()=>{const image=new Image();image.src=new URL('assets/hearing-animal-illustrations.png',location.href);await image.decode();return{width:image.naturalWidth,height:image.naturalHeight};});assert.deepEqual(image,{width:2172,height:724});
   for(const width of [1440,1024,820,390,320]){
