@@ -1,4 +1,4 @@
-import {wellQuestion, nextWell, gradeWell} from './well-model.mjs?v=20261101-well';
+import {wellQuestion, nextWell, gradeWell} from './well-model.mjs?v=df51ec914f81';
 
 export function bindWellQuiz(claim, release) {
   const $ = id => document.getElementById(id), root = $('well'), form = $('well-form');
@@ -30,7 +30,7 @@ export function bindWellQuiz(claim, release) {
     call.textContent = phase === 'preparing' ? '正在準備喊聲…' : phase === 'playing' ? '聆聽回聲中…' : observed ? '再喊一次' : '朝井底喊一聲';
     $('well-check').disabled = busy;
     $('well-bubble').hidden = !(phase === 'playing' && elapsed >= 0 && elapsed < buffer.duration);
-    $('well-status').textContent = phase === 'preparing' ? '正在準備小葵的喊聲…' : phase === 'playing' ? elapsed < question.time ? '聽聽看，聲音何時從井底回來？' : '井底回聲已返回。' : observed ? '已取得回聲紀錄，試著估算井深。' : phase === 'interrupted' ? '本次喊聲已停止；請再喊一次，取得完整紀錄。' : '點小葵或按鈕，朝井底喊一聲。';
+    $('well-status').textContent = phase === 'preparing' ? '正在準備小葵的喊聲…' : phase === 'playing' ? elapsed < question.time ? '聽聽看，聲音何時從井底回來？' : '井底回聲已返回。' : observed ? '已取得回聲紀錄，試著計算井深。' : phase === 'interrupted' ? '本次喊聲已停止；請再喊一次，取得完整紀錄。' : '點小葵或按鈕，朝井底喊一聲。';
     let wave = '';
     if (phase === 'playing' && elapsed >= 0) {
       const returning = elapsed >= question.time;

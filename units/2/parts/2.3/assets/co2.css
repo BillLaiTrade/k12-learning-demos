@@ -174,3 +174,8 @@
 }
 
 @container(max-width:510px){#s4 .co2-preparation[data-ready=true] .co2-material-scene button[data-co2-material=tube]>span{white-space:normal;width:calc(4em + 8px);text-align:center}}
+
+/* Decorative SVG instances must not intercept background clicks. Equipment
+   hotspots remain separate siblings with their own pointer events. */
+.co2-main-scene>use,.co2-closeup svg>use{pointer-events:none}
+.co2-main-scene,.co2-closeup svg{pointer-events:auto;user-select:none;-webkit-user-select:none}

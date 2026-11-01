@@ -1,0 +1,235 @@
+TAP version 13
+# Subtest: 2.3 oxygen: blank experiment taps pause and resume without swallowing equipment or reading gestures
+    # Subtest: one blank click pauses time, pixels and caption animation; the next resumes the same progress
+    ok 1 - one blank click pauses time, pixels and caption animation; the next resumes the same progress
+      ---
+      duration_ms: 814.499734
+      type: 'test'
+      ...
+    # Subtest: the setup scene table and background pause and resume during placement and immersion
+    ok 2 - the setup scene table and background pause and resume during placement and immersion
+      ---
+      duration_ms: 660.657582
+      type: 'test'
+      ...
+    # Subtest: tabletop and room background clicks reach the canvas and toggle during the actual setup phases
+    ok 3 - tabletop and room background clicks reach the canvas and toggle during the actual setup phases
+      ---
+      duration_ms: 934.330873
+      type: 'test'
+      ...
+    # Subtest: equipment keeps priority, opens its introduction and never bubbles into an immediate resume
+    ok 4 - equipment keeps priority, opens its introduction and never bubbles into an immediate resume
+      ---
+      duration_ms: 436.292777
+      type: 'test'
+      ...
+    # Subtest: material bodies and nested labels still open introductions; material background remains a preview
+    ok 5 - material bodies and nested labels still open introductions; material background remains a preview
+      ---
+      duration_ms: 349.294281
+      type: 'test'
+      ...
+    # Subtest: a paused selected step resumes on blank click while materials and completed storage remain stopped
+    ok 6 - a paused selected step resumes on blank click while materials and completed storage remain stopped
+      ---
+      duration_ms: 292.291073
+      type: 'test'
+      ...
+    # Subtest: selecting or clearing text, dragging and right clicks do not toggle playback
+    ok 7 - selecting or clearing text, dragging and right clicks do not toggle playback
+      ---
+      duration_ms: 235.679331
+      type: 'test'
+      ...
+    # Subtest: real touch works in the main scene and close-up; a native scrolling gesture leaves playback alone
+    ok 8 - real touch works in the main scene and close-up; a native scrolling gesture leaves playback alone
+      ---
+      duration_ms: 1943.85749
+      type: 'test'
+      ...
+    # Subtest: ordinary caption, heading, helper and note clicks toggle within the left experiment card
+    ok 9 - ordinary caption, heading, helper and note clicks toggle within the left experiment card
+      ---
+      duration_ms: 575.601232
+      type: 'test'
+      ...
+    # Subtest: the shortcut remains active after an automatic step change and retains a paused completed-frame hold
+    ok 10 - the shortcut remains active after an automatic step change and retains a paused completed-frame hold
+      ---
+      duration_ms: 198.47708
+      type: 'test'
+      ...
+    # Subtest: the right-side controls and the gap outside the experiment are not a second blank-tap surface
+    ok 11 - the right-side controls and the gap outside the experiment are not a second blank-tap surface
+      ---
+      duration_ms: 330.794502
+      type: 'test'
+      ...
+    1..11
+ok 1 - 2.3 oxygen: blank experiment taps pause and resume without swallowing equipment or reading gestures
+  ---
+  duration_ms: 8225.540405
+  type: 'test'
+  ...
+# Subtest: 2.3 CO2 follows the latest oxygen workspace with eight operations and one continuous player
+    # Subtest: one right-side list and player, no lower controls or persistent explanation cards; initial state does not autoplay
+    ok 1 - one right-side list and player, no lower controls or persistent explanation cards; initial state does not autoplay
+      ---
+      duration_ms: 187.616466
+      type: 'test'
+      ...
+    # Subtest: the material desk is the exact first frame; one shared set moves continuously to the working positions
+    ok 2 - the material desk is the exact first frame; one shared set moves continuously to the working positions
+      ---
+      duration_ms: 936.78534
+      type: 'test'
+      ...
+    # Subtest: all six material bodies and labels open the shared introduction dialog and restore focus without autoplay
+    ok 3 - all six material bodies and labels open the shared introduction dialog and restore focus without autoplay
+      ---
+      duration_ms: 1479.187198
+      type: 'test'
+      ...
+    # Subtest: each selected operation begins at its own prerequisite; actual additions, sealing and gas motion stay in order
+    ok 4 - each selected operation begins at its own prerequisite; actual additions, sealing and gas motion stay in order
+      ---
+      duration_ms: 1565.74194
+      type: 'test'
+      ...
+    # Subtest: play from materials traverses all operations and stops at labeled upright CO2 storage, without entering properties
+    ok 5 - play from materials traverses all operations and stops at labeled upright CO2 storage, without entering properties
+      ---
+      duration_ms: 405.235908
+      type: 'test'
+      ...
+    # Subtest: one button freezes pixels and time, resumes the exact position; rapid choices replace the old clock
+    ok 6 - one button freezes pixels and time, resumes the exact position; rapid choices replace the old clock
+      ---
+      duration_ms: 798.626477
+      type: 'test'
+      ...
+    # Subtest: the actual jar and moving tube can open context-specific dialogs; closing stays paused and does not resume
+    ok 7 - the actual jar and moving tube can open context-specific dialogs; closing stays paused and does not resume
+      ---
+      duration_ms: 310.829763
+      type: 'test'
+      ...
+    # Subtest: keyboard navigation, blank scene taps, Escape, background and competing players share the same pause state
+    ok 8 - keyboard navigation, blank scene taps, Escape, background and competing players share the same pause state
+      ---
+      duration_ms: 533.054127
+      type: 'test'
+      ...
+    # Subtest: seven widths keep the same single player accessible, diagrams synchronized and desktop cards aligned at the top
+    ok 9 - seven widths keep the same single player accessible, diagrams synchronized and desktop cards aligned at the top
+      ---
+      duration_ms: 2015.989616
+      type: 'test'
+      ...
+    # Subtest: real touch and reduced motion support material dialogs, compact selection and essential movement
+    ok 10 - real touch and reduced motion support material dialogs, compact selection and essential movement
+      ---
+      duration_ms: 1833.854395
+      type: 'test'
+      ...
+    # Subtest: no JS keeps all eight scenes and six material explanations readable; source links and the unique quiz remain
+    ok 11 - no JS keeps all eight scenes and six material explanations readable; source links and the unique quiz remain
+      ---
+      duration_ms: 944.41295
+      type: 'test'
+      ...
+    # Subtest: the fixed camera, apparatus textures and poses meet across all automatic step boundaries
+    ok 12 - the fixed camera, apparatus textures and poses meet across all automatic step boundaries
+      ---
+      duration_ms: 1162.635102
+      type: 'test'
+      ...
+    # Subtest: table clicks pause the real drawing and resume it; moving acid and the stopper retain introduction priority
+    ok 13 - table clicks pause the real drawing and resume it; moving acid and the stopper retain introduction priority
+      ---
+      duration_ms: 1684.194387
+      type: 'test'
+      ...
+    # Subtest: five experiment points match section three and remain readable at desktop and narrow widths
+    ok 14 - five experiment points match section three and remain readable at desktop and narrow widths
+      ---
+      duration_ms: 1368.270886
+      type: 'test'
+      ...
+    1..14
+ok 2 - 2.3 CO2 follows the latest oxygen workspace with eight operations and one continuous player
+  ---
+  duration_ms: 16652.3429
+  type: 'test'
+  ...
+# Subtest: 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role
+    # Subtest: the first materials step shares the dialog and has no inline information or SVG apparatus controls
+    ok 1 - the first materials step shares the dialog and has no inline information or SVG apparatus controls
+      ---
+      duration_ms: 210.69498
+      type: 'test'
+      ...
+    # Subtest: actual flask, jar, trough, stopper and tube bodies open correct descriptions in all seven later operations
+    ok 2 - actual flask, jar, trough, stopper and tube bodies open correct descriptions in all seven later operations
+      ---
+      duration_ms: 5051.509829
+      type: 'test'
+      ...
+    # Subtest: pouring bottle, moving spoon, introduced catalyst and sliding glass plate remain correctly clickable
+    ok 3 - pouring bottle, moving spoon, introduced catalyst and sliding glass plate remain correctly clickable
+      ---
+      duration_ms: 897.749065
+      type: 'test'
+      ...
+    # Subtest: intro pauses the exact scene, closing keeps it paused and explicit play continues from that state
+    ok 4 - intro pauses the exact scene, closing keeps it paused and explicit play continues from that state
+      ---
+      duration_ms: 254.938398
+      type: 'test'
+      ...
+    # Subtest: current role distinguishes waiting, collecting and storage; invisible equipment and empty picture space do not open
+    ok 5 - current role distinguishes waiting, collecting and storage; invisible equipment and empty picture space do not open
+      ---
+      duration_ms: 765.936268
+      type: 'test'
+      ...
+    # Subtest: returning from an operation restores material purpose without operation wording
+    ok 6 - returning from an operation restores material purpose without operation wording
+      ---
+      duration_ms: 394.285494
+      type: 'test'
+      ...
+    # Subtest: Enter, Space, Escape and modal focus work; step changes clear the dialog without hiding focus
+    ok 7 - Enter, Space, Escape and modal focus work; step changes clear the dialog without hiding focus
+      ---
+      duration_ms: 327.29414
+      type: 'test'
+      ...
+    # Subtest: seven widths keep the modal readable and in-screen; mobile close-up objects also open the same introduction
+    ok 8 - seven widths keep the modal readable and in-screen; mobile close-up objects also open the same introduction
+      ---
+      duration_ms: 2473.2003
+      type: 'test'
+      ...
+    # Subtest: real touch and reduced motion select the close-up body; no-JS retains the full materials reference
+    ok 9 - real touch and reduced motion select the close-up body; no-JS retains the full materials reference
+      ---
+      duration_ms: 2395.702724
+      type: 'test'
+      ...
+    1..9
+ok 3 - 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role
+  ---
+  duration_ms: 14211.455032
+  type: 'test'
+  ...
+1..3
+# tests 37
+# suites 0
+# pass 37
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 39967.016997

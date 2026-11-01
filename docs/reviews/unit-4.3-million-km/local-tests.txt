@@ -1,0 +1,31 @@
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (336.819995ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (748.024928ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (6313.502591ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (308.985831ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (12127.907202ms)
+✔ transmitted rays conserve tangential optical direction and reverse exactly (2.367757ms)
+✔ apparent coin is the backward intersection of independently refracted pupil rays (6.76528ms)
+▶ 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork
+  ✔ artwork loads, media are fixed, and geometry has equal routes (584.523659ms)
+  ✔ one second of play is one second of model time with physical distance ratios (820.914816ms)
+  ✔ three arrivals follow 3.33, 4.44 and 5 seconds, with receivers and no stationary light dots (1948.200611ms)
+  ✔ replay clears all old arrivals, and rapid keyboard pause/resume keeps one clock (671.703618ms)
+  ✔ a page-hidden event pauses the shared clock without clearing progress (459.248943ms)
+  ✔ leaving the section pauses and keeps progress for an explicit resume (605.673932ms)
+  ✔ seven screen widths retain artwork, readable controls and unclipped times (10217.008075ms)
+  ✔ image failure disables the desk, leaves the rest of the lesson working, and can retry (962.811109ms)
+  ✔ touch start, pause and continue work with horizontal desk panning (1459.947207ms)
+  ✔ a real-time run finishes in five seconds without a browser test clock (5999.657419ms)
+✔ 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork (28119.317672ms)
+✔ million-kilometre model uses the agreed representative speeds and travel times (5.57725ms)
+✔ a shared physical time gives independent distances and the same endpoint (0.737473ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (11934.759842ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 29342.755798

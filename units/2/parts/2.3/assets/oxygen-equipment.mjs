@@ -16,7 +16,7 @@ function intersects(bounds,node,box){
   const points=[[x,y],[x+w,y],[x,y+h],[x+w,y+h]].map(([a,b])=>m?{x:m.a*a+m.c*b+m.e,y:m.b*a+m.d*b+m.f}:{x:a,y:b});
   return Math.max(...points.map(p=>p.x))>=box.x&&Math.min(...points.map(p=>p.x))<=box.x+box.width&&Math.max(...points.map(p=>p.y))>=box.y&&Math.min(...points.map(p=>p.y))<=box.y+box.height;
 }
-export function createEquipmentExplorer({panel,panels,getStage,onOpen}){
+export function createEquipmentExplorer({panel,panels,getStage,onOpen,onBackgroundClick}){
   const dialog=panel.closest('.oxygen-lesson').querySelector('#oxygen-equipment-dialog'),layers=new Map();
   const materialsCatalog=Object.fromEntries([...panels[0].querySelectorAll('[data-material-info]')].map(info=>[info.dataset.materialInfo,{name:info.querySelector('h4').textContent,identity:info.querySelectorAll('dd')[0].textContent,role:info.querySelectorAll('dd')[1].textContent}]));
   const catalog={...materialsCatalog};
@@ -71,7 +71,11 @@ export function createEquipmentExplorer({panel,panels,getStage,onOpen}){
         hit.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();open(key,hit)}});
         layer.append(hit,outline);targets.push({key,shape,hit,outline});
       }
-      svg.append(layer);return {svg,targets};
+      const background=svgElement('rect',{x:-2048,y:-2048,width:4096,height:4096,fill:'transparent','pointer-events':'all',class:'oxygen-background-hit','aria-hidden':'true'});
+      // Give the background its own click action so mobile tap adjustment does
+      // not redirect a background tap to a nearby equipment button.
+      background.addEventListener('click',event=>{onBackgroundClick(event);event.stopPropagation();});
+      svg.append(background,layer);return {svg,targets};
     });
     layers.set(view,result);return result;
   }

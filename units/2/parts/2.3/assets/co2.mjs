@@ -1,5 +1,5 @@
 import {createSceneCaptions} from './oxygen-captions.mjs?v=co2-continuous-1';
-import {createCO2Explorer} from './co2-equipment.mjs?v=co2-continuous-1';
+import {createCO2Explorer} from './co2-equipment.mjs?v=background-tap-1';
 import {CO2_OPERATIONS,co2OperationFrame} from './co2-model.mjs?v=co2-continuous-1';
 import {createCO2Bench} from './co2-setup.mjs?v=co2-continuous-1';
 const section=document.querySelector('#s4'),root=section.querySelector('.co2-preparation'),panel=root;
@@ -170,7 +170,7 @@ function createPreparationPlayer() {
     if(stage===0||state==='complete'){captions.reset();select(1,false,true);return;}
     start();
   }
-  explorer=createCO2Explorer({panel,panels,getStage:()=>stage,onOpen:pausePlayback});
+  explorer=createCO2Explorer({panel,panels,getStage:()=>stage,onOpen:pausePlayback,onBackgroundClick:handleStageClick});
   panel.querySelector('.co2-steps').setAttribute('role','tablist');
   panel.querySelector('.co2-steps').setAttribute('aria-orientation','vertical');
   steps.forEach((tab,i)=>{
@@ -208,13 +208,14 @@ function createPreparationPlayer() {
   },{passive:true});
   stageArea.addEventListener('pointerup',event=>{if(gesture?.id===event.pointerId)gesture.down=false;},{passive:true});
   stageArea.addEventListener('pointercancel',()=>{if(gesture){gesture.cancelled=true;gesture.down=false;}},{passive:true});
-  stageArea.addEventListener('click',event=>{
+  function handleStageClick(event){
     const tap=gesture;gesture=null;
     if(event.button!==0||event.defaultPrevented||event.target.closest?.(interactive)||selecting())return;
     if(event.detail>0&&tap&&(tap.dragged||tap.cancelled||tap.selecting||tap.interactive||Math.abs(window.scrollX-tap.scrollX)>2||Math.abs(window.scrollY-tap.scrollY)>2))return;
     if(section.querySelector('#co2-equipment-dialog').open)return;
     if(state==='playing'||state==='paused')togglePlayback();
-  });
+  }
+  stageArea.addEventListener('click',handleStageClick);
   panel.addEventListener('keydown',event=>{if(event.key==='Escape')pausePlayback();});
   if('IntersectionObserver'in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel.querySelector('.co2-stage-area'));
   const api={pausePlayback};players.push(api);play.disabled=false;

@@ -7,12 +7,19 @@ test('every well uses the complete air round trip and next well cannot repeat',(
  for(const time of WELL_TIMES){const q=wellQuestion(time);assert.equal(q.depth*2/q.speed,time);for(const r of[0,.2,.5,.99,1])assert.notEqual(nextWell(q,r).time,time);assert.equal(gradeWell(String(q.depth),q,true).result,'correct');assert.equal(gradeWell(String(q.depth*2),q,true).result,'wrong');}
  assert.throws(()=>wellQuestion(.45),RangeError);
 });
-test('observation, valid numbers, total-distance misconception and rounding are distinguished',()=>{
+test('observation, positive integers and total-distance misconception are distinguished',()=>{
  const q=wellQuestion();assert.equal(gradeWell('68',q,false).result,'unobserved');
  for(const v of['',' '])assert.equal(gradeWell(v,q,true).result,'incomplete');
  for(const v of['NaN','Infinity','-3','0','hi'])assert.equal(gradeWell(v,q,true).result,'invalid');
  assert.match(gradeWell('136',q,true).message,/往返的總路程/);
- assert.equal(gradeWell('68.04',q,true).result,'correct');assert.equal(gradeWell('68.1',q,true).result,'wrong');
+ assert.equal(gradeWell('68.04',q,true).result,'invalid');assert.equal(gradeWell('68.1',q,true).result,'invalid');assert.equal(gradeWell('69',q,true).result,'wrong');
+});
+test('all four wells reject fractional near misses without rounding or revealing an answer',()=>{
+ for(const time of WELL_TIMES){const q=wellQuestion(time);
+  for(const offset of[-.1,-.04,.01,.04,.1,.9]){const value=String(q.depth+offset),result=gradeWell(value,q,true);assert.equal(result.result,'invalid');assert.match(result.message,/整數/);assert.doesNotMatch(result.message,/\d/);}
+  assert.equal(gradeWell(String(q.depth),q,true).result,'correct');assert.equal(gradeWell(`${q.depth}.0`,q,true).result,'correct');
+  assert.equal(gradeWell(String(q.depth+1),q,true).result,'wrong');assert.match(gradeWell(String(q.depth*2),q,true).message,/往返的總路程/);
+ }
 });
 test('short voice has a silent gap before even the closest echo and stays below clipping',()=>{
  const b=readFileSync(new URL('../units/3/parts/3.4/assets/well-call.wav',import.meta.url));let p=12,rate,pcm;

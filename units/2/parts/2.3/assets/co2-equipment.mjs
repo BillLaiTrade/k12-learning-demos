@@ -9,7 +9,7 @@ const shapes={
  plate:{d:'M730 220L958 210 1019 226 785 238Z',bounds:[730,210,289,28],transform:'plate',part:'plate'},
 };
 function node(tag,attrs){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,v);return n;}
-export function createCO2Explorer({panel,panels,getStage,onOpen}){
+export function createCO2Explorer({panel,panels,getStage,onOpen,onBackgroundClick}){
  const dialog=panel.querySelector('#co2-equipment-dialog'),layers=new Map();let trigger=null;
  const catalog=Object.fromEntries([...panels[0].querySelectorAll('[data-co2-info]')].map(info=>[info.dataset.co2Info,{name:info.querySelector('h4').textContent,identity:info.querySelectorAll('dd')[0].textContent,role:info.querySelectorAll('dd')[1].textContent}]));
  catalog.stopper={name:'塞子',identity:'封住反應瓶瓶口並固定玻璃導管的塞子。',role:'接好導管後塞緊錐形瓶，讓氣體由液面上方沿導管送出。'};
@@ -43,7 +43,11 @@ export function createCO2Explorer({panel,panels,getStage,onOpen}){
     hit.addEventListener('keydown',e=>{if(['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();open(key,hit);}});
     layer.append(hit,outline);targets.push({key,shape,hit,outline});
    }
-   svg.append(layer);return {svg,targets};
+   const background=node('rect',{x:-2048,y:-2048,width:4096,height:4096,fill:'transparent','pointer-events':'all',class:'co2-background-hit','aria-hidden':'true'});
+      // Give the background its own click action so mobile tap adjustment does
+      // not redirect a background tap to a nearby equipment button.
+      background.addEventListener('click',event=>{onBackgroundClick(event);event.stopPropagation();});
+      svg.append(background,layer);return {svg,targets};
   });layers.set(view,result);return result;
  }
  function sync(stage){
