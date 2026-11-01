@@ -1,0 +1,22 @@
+▶ everyday room wavefront experiment
+  ✔ approved single scene, shared identity and merged section; no rays or automatic sound (387.423375ms)
+  ✔ clap emits one finite buffer, expands circular fronts and receives near before far (3449.306154ms)
+  ✔ material toggles preserve the frame and cancel audio; left/top reflections weaken selectively (1055.266358ms)
+  ✔ material comparison preserves exact geometry while visibly reducing treated reflections only (1666.638079ms)
+  ✔ speech pause/resume preserves offset; repeat and switch cancel old audio with no overlap (672.425739ms)
+  ✔ real output is nonzero and all four files decode with equal duration per paired condition (34.521465ms)
+  ✔ cross-section and hidden page cancel room playback in either direction (342.096619ms)
+  ✔ full observation completes and restart begins at zero (6163.650858ms)
+  ✔ nine screen widths keep scene and controls visible without overflow (1792.66804ms)
+  ✔ real mobile touch and keyboard activate each control once under reduced motion (1266.6054ms)
+  ✔ delayed audio activation and failure cannot emit a stale observation after material changes (2462.191861ms)
+  ✔ a missing audio file shows an error and a later explicit retry recovers (969.83781ms)
+✔ everyday room wavefront experiment (21311.987226ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21316.037182

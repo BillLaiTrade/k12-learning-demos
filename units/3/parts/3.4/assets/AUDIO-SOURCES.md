@@ -1,12 +1,11 @@
 # 3.4 示範音效來源
 
 - 第1–4區提示音、第5區短音：由本課程式以650Hz正弦與短包絡自行合成，不使用既有歌曲、第三方錄音或真實超聲波。
-- `room-phrase.wav`：原創句子「聽聽看，這裡的聲音清楚嗎？」，用eSpeak NG的 `cmn` 聲音、語速145離線合成，再以FFmpeg存成22050Hz、單聲道PCM WAV。非真人錄音，未收集學生或其他人的語音。長度約4.03秒。
-- 製作命令：`espeak-ng -v cmn -s 145 -w phrase.wav '聽聽看，這裡的聲音清楚嗎？'`，接著 `ffmpeg -i phrase.wav -ar 22050 -ac 1 room-phrase.wav`。eSpeak NG只用於素材製作，頁面執行不需要安裝此工具或呼叫語音服務。
-- 工具取自Debian官方trixie套件索引，下載套件均核對索引所列SHA256，只解壓至暫存區，未修改系統或專案依賴宣告。[eSpeak NG專案](https://github.com/espeak-ng/espeak-ng)、[Debian套件頁](https://packages.debian.org/trixie/espeak-ng)。
-- 室內反射與吸音前後都在瀏覽器由同一乾音產生，直接聲相同，反射增益／延遲見README；不是現場錄音，也不宣稱任何材料的實測性能。語音音質為合成示範，聽感仍待使用者檢視。
+- `room-phrase.wav`：原創句子「聽聽看，這裡的聲音清楚嗎？」，2026-11-01改用Microsoft臺灣華語神經合成女聲`zh-TW-HsiaoChenNeural`，語速`+4%`、音高`+25Hz`，作為小葵年輕明亮聲線的試配。尚非使用者核可的正式角色配音；非真人錄音，未收集學生或其他人的語音。取代先前較機械的eSpeak NG `cmn`乾音。
+- 製作工具為`edge-tts 7.3.1`（僅暫存製作環境），透過受信任CA與環境代理產生MP3，再用`ffmpeg -i xiaokui.mp3 -ar 22050 -ac 1 -c:a pcm_s16le room-phrase.wav`轉為單聲道PCM WAV；儲存乾音約3.38秒，剪除首尾空白並與相同房間模型卷積後，兩個語音版本均約2.83秒。[語音清單與語言說明](https://learn.microsoft.com/azure/ai-services/speech-service/language-support?tabs=tts)、[edge-tts工具](https://github.com/rany2/edge-tts)。
+- 網頁只載入版本庫內的WAV，不在播放時呼叫外部語音服務，無新增網頁依賴。吸音前後均從相同乾音離線產生，直接聲與共用增益相同，差異只在房間反射；不是現場錄音，不宣稱材料實測性能。角色聲線的主觀貼合度待使用者聽取。
 
-音檔SHA256：`4dc2275042df7c5b8a849fe0dc9aebef029a699830f49ce95f32adeb5a08bf81`。
+音檔SHA256：`d73ed48924d3329029d592eaba15032cc247fffa9b5994473d31442c1af12339`。重建後的來源雜湊另存於`room-audio-model.json`，避免乾音更新而兩個反射版本未更新。
 
 第二區最新互動（2026-10-31）為原速虛擬實驗室。上方340公尺、下方預設680公尺，原音一次，兩個較弱返回音依實際往返2秒與4秒排程；下方1020公尺為6秒。單獨點喇叭只排該組一個返回音，340公尺同距同步時合併重合返回音。原音與返回音為同一650Hz緩衝區，90ms包絡，直接聲增益1、返回聲0.45，最末輸出0.32；音高／短音時長未拉伸。播放器末尾保留0.16秒，容納40ms啟動餘裕及90ms末音。
 
@@ -23,6 +22,6 @@
 
 ## 2026-11-01 第五區新音效
 
-`room-clap-bare.wav`／`room-clap-treated.wav`：固定種子20261101的10ms衰減噪聲，作拍手類比，非真實拍手錄音。`room-speech-bare.wav`／`room-speech-treated.wav`：沿用本檔所記錄的`room-phrase.wav`中文離線合成音源，與三維矩形房間鏡像聲源模型卷積。來源均由專案合成；未複製dEchorate音訊或原始RIR。模型尺寸6×3.6×2.6m，未處理壓力反射係數0.88，左／上處理0.35，非材料實測。直接路徑與共用縮放相同，沒有整段降低音量冒充吸音。數值與峰值見room-audio-model.json；腳本位於scripts/build-room-wave-audio.py。播放固定輸出增益0.65、已編碼樣本峰值不超過0.8；音量由裝置控制。
+`room-clap-bare.wav`／`room-clap-treated.wav`：固定種子20261101的10ms衰減噪聲，作拍手類比，非真實拍手錄音。`room-speech-bare.wav`／`room-speech-treated.wav`：使用本檔所記錄的`room-phrase.wav`小葵試配合成音源，與三維矩形房間鏡像聲源模型卷積。來源均由專案合成；未複製dEchorate音訊或原始RIR。模型尺寸6×3.6×2.6m，未處理壓力反射係數0.88，左／上處理0.35，非材料實測。直接路徑與共用縮放相同，沒有整段降低音量冒充吸音。數值與峰值見room-audio-model.json；腳本位於scripts/build-room-wave-audio.py。播放固定輸出增益0.65、已編碼樣本峰值不超過0.8；音量由裝置控制。
 
 研究背景：Di Carlo等(2021)，doi:10.1186/s13636-021-00229-0；教室反射時間與自聽限制已查核，本音效只稱合成示意，不稱現地／自聽量測。

@@ -17,7 +17,8 @@
   ],
   "sample_rate": 24000,
   "maximum_order": 22,
-  "speech_source": "room-phrase.wav; existing offline synthetic phrase",
+  "speech_source": "room-phrase.wav; zh-TW-HsiaoChenNeural; rate +4%; pitch +25Hz; Xiaokui voice trial",
+  "speech_source_sha256": "d73ed48924d3329029d592eaba15032cc247fffa9b5994473d31442c1af12339",
   "clap_source": "deterministic 10ms noise burst, not a real clap recording",
   "rirs": [
     {
@@ -45,14 +46,14 @@
       "common_gain": 0.7999999999999998
     },
     "room-speech-bare.wav": {
-      "duration": 4.054458333333334,
-      "peak": 0.8,
-      "common_gain": 0.6435520307008266
+      "duration": 2.8346666666666667,
+      "peak": 0.794358523111488,
+      "common_gain": 0.7189037988116327
     },
     "room-speech-treated.wav": {
-      "duration": 4.054458333333334,
-      "peak": 0.6445747811931282,
-      "common_gain": 0.6435520307008266
+      "duration": 2.8346666666666667,
+      "peak": 0.8,
+      "common_gain": 0.7189037988116327
     }
   }
 }

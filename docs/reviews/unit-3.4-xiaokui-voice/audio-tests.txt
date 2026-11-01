@@ -1,0 +1,11 @@
+✔ paired synthetic audio has identical direct onset and timeline, nonzero reflections and no clipping (36.881502ms)
+✔ audio model preserves direct tap and includes 3D untreated surfaces (0.380812ms)
+✔ paired speech was rebuilt from the current Xiaokui voice source and fits observation time (9.470117ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 53.024091

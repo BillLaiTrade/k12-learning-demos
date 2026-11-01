@@ -1,6 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 const base=new URL('../units/3/parts/3.4/assets/',import.meta.url);
 function wav(name){const b=readFileSync(new URL(name,base));assert.equal(b.toString('ascii',0,4),'RIFF');let p=12,rate,data;while(p+8<=b.length){const id=b.toString('ascii',p,p+4),n=b.readUInt32LE(p+4);if(id==='fmt '){assert.equal(b.readUInt16LE(p+8),1);assert.equal(b.readUInt16LE(p+10),1);rate=b.readUInt32LE(p+12);assert.equal(b.readUInt16LE(p+22),16);}if(id==='data')data=b.subarray(p+8,p+8+n);p+=8+n+(n%2);}return {rate,samples:Array.from({length:data.length/2},(_,i)=>data.readInt16LE(i*2)/32768)};}
 test('paired synthetic audio has identical direct onset and timeline, nonzero reflections and no clipping',()=>{
@@ -8,3 +9,9 @@ test('paired synthetic audio has identical direct onset and timeline, nonzero re
  const a=wav('room-clap-bare.wav'),b=wav('room-clap-treated.wav'),energy=x=>x.slice(2400).reduce((s,y)=>s+y*y,0);assert.ok(energy(b.samples)>0);assert.ok(energy(b.samples)<energy(a.samples)*.2);
 });
 test('audio model preserves direct tap and includes 3D untreated surfaces',()=>{const m=JSON.parse(readFileSync(new URL('room-audio-model.json',base)));assert.equal(m.room_m.length,3);assert.equal(m.rirs[0].direct_tap,m.rirs[1].direct_tap);assert.ok(m.rirs[1].C50_dB>m.rirs[0].C50_dB);assert.ok(m.rirs[1].late_100ms_fraction>0);for(const kind of['clap','speech'])assert.equal(m.files[`room-${kind}-bare.wav`].common_gain,m.files[`room-${kind}-treated.wav`].common_gain);});
+
+test('paired speech was rebuilt from the current Xiaokui voice source and fits observation time',()=>{
+ const m=JSON.parse(readFileSync(new URL('room-audio-model.json',base)));
+ assert.equal(m.speech_source_sha256,createHash('sha256').update(readFileSync(new URL('room-phrase.wav',base))).digest('hex'));
+ for(const condition of ['bare','treated']){const audio=wav(`room-speech-${condition}.wav`);assert.ok(Math.abs(audio.samples.length/audio.rate-m.files[`room-speech-${condition}.wav`].duration)<1/audio.rate);assert.ok(audio.samples.length/audio.rate<6);}
+});

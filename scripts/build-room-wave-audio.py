@@ -3,7 +3,7 @@ No measured far-field RIR is presented as a self-hearing recording. Research inf
 room scale and attenuation; this model omits bone conduction, scattering/directivity.
 """
 from pathlib import Path
-import json,subprocess
+import json,subprocess,hashlib
 import numpy as np
 from scipy.signal import fftconvolve,resample_poly,butter,sosfilt
 from scipy.io import wavfile
@@ -24,7 +24,7 @@ rng=np.random.default_rng(20261101);clap=rng.normal(size=240)*np.exp(-np.arange(
 sr,voice=wavfile.read(assets/'room-phrase.wav');voice=voice.astype(float)/32768
 if voice.ndim>1:voice=voice.mean(axis=1)
 voice=resample_poly(voice,fs,sr);active=np.flatnonzero(abs(voice)>.008);voice=voice[max(0,active[0]-1200):active[-1]+1200];voice/=max(abs(voice))
-manifest={'model':'3D image sources; amplitude reflection hard=.88, treated=.35; whole left/top walls; no measured self-hearing claim','room_m':room.tolist(),'source_m':src.tolist(),'receiver_m':receiver.tolist(),'sample_rate':fs,'maximum_order':22,'speech_source':'room-phrase.wav; existing offline synthetic phrase','clap_source':'deterministic 10ms noise burst, not a real clap recording','rirs':[],'files':{}}
+manifest={'model':'3D image sources; amplitude reflection hard=.88, treated=.35; whole left/top walls; no measured self-hearing claim','room_m':room.tolist(),'source_m':src.tolist(),'receiver_m':receiver.tolist(),'sample_rate':fs,'maximum_order':22,'speech_source':'room-phrase.wav; zh-TW-HsiaoChenNeural; rate +4%; pitch +25Hz; Xiaokui voice trial','speech_source_sha256':hashlib.sha256((assets/'room-phrase.wav').read_bytes()).hexdigest(),'clap_source':'deterministic 10ms noise burst, not a real clap recording','rirs':[],'files':{}}
 for treated,h in zip([False,True],rirs):
  e=h*h;manifest['rirs'].append({'treated':treated,'direct_tap':h[0],'C50_dB':float(10*np.log10(e[:1200].sum()/e[1200:].sum())),'late_100ms_fraction':float(e[2400:].sum()/e.sum())})
 for kind,x in [('clap',clap),('speech',voice)]:

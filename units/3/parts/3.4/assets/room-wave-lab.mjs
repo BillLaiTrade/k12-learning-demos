@@ -28,7 +28,7 @@ export function bindRoomWaveLab(claim,release){
    let timer;try{await Promise.race([context.resume(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('audio timeout')),1800);})]);}finally{clearTimeout(timer);}
    if(context.state!=='running')throw Error('audio not running');
    if(token!==epoch||phase!=='playing')return;
-   const file=`room-${kind}-${treated?'treated':'bare'}.wav`;
+   const file=`room-${kind}-${treated?'treated':'bare'}.wav${kind==='speech'?'?v=20261101-xiaokui-voice':''}`;
    if(!buffers.has(file)){
     const pending=(async()=>{const abort=new AbortController(),timer=setTimeout(()=>abort.abort(),8000);try{const r=await fetch(new URL(file,import.meta.url),{signal:abort.signal});if(!r.ok)throw Error('audio unavailable');return await context.decodeAudioData(await r.arrayBuffer());}finally{clearTimeout(timer);}})();buffers.set(file,pending);pending.catch(()=>buffers.delete(file));
    }

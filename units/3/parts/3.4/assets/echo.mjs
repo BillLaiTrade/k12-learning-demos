@@ -1,4 +1,4 @@
-import {bindRoomWaveLab} from './room-wave-lab.mjs?v=20261101-room-contrast';
+import {bindRoomWaveLab} from './room-wave-lab.mjs?v=20261101-xiaokui-voice';
 import {renderSonar, bindSonar, beginSonar, sonarDuration, sonarTaps} from './sonar-lab.mjs?v=20261031-results';
 import {arrivals, judge} from './echo-model.mjs?v=20261101-room-contrast';
 import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
