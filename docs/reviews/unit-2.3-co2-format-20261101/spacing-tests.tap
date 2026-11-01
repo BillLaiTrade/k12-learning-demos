@@ -1,0 +1,137 @@
+TAP version 13
+# Subtest: assembly orders marble, acid, sealing and gas delivery
+ok 1 - assembly orders marble, acid, sealing and gas delivery
+  ---
+  duration_ms: 0.889619
+  type: 'test'
+  ...
+# Subtest: purging keeps the outlet outside the collection jar
+ok 2 - purging keeps the outlet outside the collection jar
+  ---
+  duration_ms: 0.886344
+  type: 'test'
+  ...
+# Subtest: tube crosses above the mouth before entering; collecting begins only after reaching the base
+ok 3 - tube crosses above the mouth before entering; collecting begins only after reaching the base
+  ---
+  duration_ms: 0.464238
+  type: 'test'
+  ...
+# Subtest: withdrawal precedes the cover and sample label; the reaction outlet stays open
+ok 4 - withdrawal precedes the cover and sample label; the reaction outlet stays open
+  ---
+  duration_ms: 0.394103
+  type: 'test'
+  ...
+# Subtest: eight operations separate placement, marble, acid and sealing with continuous prerequisite states
+ok 5 - eight operations separate placement, marble, acid and sealing with continuous prerequisite states
+  ---
+  duration_ms: 0.416597
+  type: 'test'
+  ...
+# Subtest: the same reagent and apparatus poses meet at every automatic operation boundary
+ok 6 - the same reagent and apparatus poses meet at every automatic operation boundary
+  ---
+  duration_ms: 21.300884
+  type: 'test'
+  ...
+# Subtest: 2.3 CO2 follows the latest oxygen workspace with eight operations and one continuous player
+    # Subtest: one right-side list and player, no lower controls or persistent explanation cards; initial state does not autoplay
+    ok 1 - one right-side list and player, no lower controls or persistent explanation cards; initial state does not autoplay
+      ---
+      duration_ms: 172.213258
+      type: 'test'
+      ...
+    # Subtest: the material desk is the exact first frame; one shared set moves continuously to the working positions
+    ok 2 - the material desk is the exact first frame; one shared set moves continuously to the working positions
+      ---
+      duration_ms: 900.311283
+      type: 'test'
+      ...
+    # Subtest: all six material bodies and labels open the shared introduction dialog and restore focus without autoplay
+    ok 3 - all six material bodies and labels open the shared introduction dialog and restore focus without autoplay
+      ---
+      duration_ms: 1425.591034
+      type: 'test'
+      ...
+    # Subtest: each selected operation begins at its own prerequisite; actual additions, sealing and gas motion stay in order
+    ok 4 - each selected operation begins at its own prerequisite; actual additions, sealing and gas motion stay in order
+      ---
+      duration_ms: 1623.714262
+      type: 'test'
+      ...
+    # Subtest: play from materials traverses all operations and stops at labeled upright CO2 storage, without entering properties
+    ok 5 - play from materials traverses all operations and stops at labeled upright CO2 storage, without entering properties
+      ---
+      duration_ms: 413.045346
+      type: 'test'
+      ...
+    # Subtest: one button freezes pixels and time, resumes the exact position; rapid choices replace the old clock
+    ok 6 - one button freezes pixels and time, resumes the exact position; rapid choices replace the old clock
+      ---
+      duration_ms: 771.356734
+      type: 'test'
+      ...
+    # Subtest: the actual jar and moving tube can open context-specific dialogs; closing stays paused and does not resume
+    ok 7 - the actual jar and moving tube can open context-specific dialogs; closing stays paused and does not resume
+      ---
+      duration_ms: 312.461293
+      type: 'test'
+      ...
+    # Subtest: keyboard navigation, blank scene taps, Escape, background and competing players share the same pause state
+    ok 8 - keyboard navigation, blank scene taps, Escape, background and competing players share the same pause state
+      ---
+      duration_ms: 479.773255
+      type: 'test'
+      ...
+    # Subtest: seven widths keep the same single player accessible, diagrams synchronized and desktop cards aligned at the top
+    ok 9 - seven widths keep the same single player accessible, diagrams synchronized and desktop cards aligned at the top
+      ---
+      duration_ms: 1933.301137
+      type: 'test'
+      ...
+    # Subtest: real touch and reduced motion support material dialogs, compact selection and essential movement
+    ok 10 - real touch and reduced motion support material dialogs, compact selection and essential movement
+      ---
+      duration_ms: 1883.212675
+      type: 'test'
+      ...
+    # Subtest: no JS keeps all eight scenes and six material explanations readable; source links and the unique quiz remain
+    ok 11 - no JS keeps all eight scenes and six material explanations readable; source links and the unique quiz remain
+      ---
+      duration_ms: 931.474603
+      type: 'test'
+      ...
+    # Subtest: the fixed camera, apparatus textures and poses meet across all automatic step boundaries
+    ok 12 - the fixed camera, apparatus textures and poses meet across all automatic step boundaries
+      ---
+      duration_ms: 1142.442254
+      type: 'test'
+      ...
+    # Subtest: table clicks pause the real drawing and resume it; moving acid and the stopper retain introduction priority
+    ok 13 - table clicks pause the real drawing and resume it; moving acid and the stopper retain introduction priority
+      ---
+      duration_ms: 1697.785761
+      type: 'test'
+      ...
+    # Subtest: five experiment points match section three and remain readable at desktop and narrow widths
+    ok 14 - five experiment points match section three and remain readable at desktop and narrow widths
+      ---
+      duration_ms: 1385.803749
+      type: 'test'
+      ...
+    1..14
+ok 7 - 2.3 CO2 follows the latest oxygen workspace with eight operations and one continuous player
+  ---
+  duration_ms: 16452.137144
+  type: 'test'
+  ...
+1..7
+# tests 21
+# suites 0
+# pass 21
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16823.106182

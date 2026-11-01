@@ -89,6 +89,8 @@ test('2.3 CO2 follows the latest oxygen workspace with eight operations and one 
    const summary=page.locator('.co2-summary');assert.equal(await summary.locator('dt:visible').count(),5);assert.equal(await summary.locator('dd:visible').count(),5);
    const text=await summary.innerText();for(const pattern of [/反應物/,/不是催化劑/,/接觸時就開始/,/最初流出的氣體/,/向上排空氣法/,/氣體仍會混合/,/先將導管移到瓶外/])assert.match(text,pattern);
    const b=await summary.boundingBox(),workspace=await root.locator('.co2-workspace').boundingBox();assert.ok(b.y>=workspace.y+workspace.height);assert.ok(Math.abs(b.x-workspace.x)<2&&Math.abs(b.width-workspace.width)<2);
+   const labels=await active().locator('.co2-material-scene button>span').evaluateAll(ns=>ns.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,text:n.textContent}}));
+   for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++){const a=labels[i],b=labels[j];assert.ok(a.right<=b.x||b.right<=a.x||a.bottom<=b.y||b.bottom<=a.y,`${width} material labels overlap: ${a.text}/${b.text}`);}
    const hint=active().locator('.co2-equipment-help');assert.equal(await hint.evaluate(n=>getComputedStyle(n).textAlign),'center');assert.equal(await hint.evaluate(n=>getComputedStyle(n).backgroundColor),'rgb(255, 242, 203)');
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
    const positions=await summary.locator('dl>div').evaluateAll(ns=>ns.map(n=>{const a=n.querySelector('dt').getBoundingClientRect(),b=n.querySelector('dd').getBoundingClientRect();return {x:a.x,answerX:b.x,bottom:a.bottom,answerTop:b.y}}));

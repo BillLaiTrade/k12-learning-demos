@@ -169,6 +169,8 @@
 #s4 .co2-closeup{flex:0 0 auto}
 @container(max-width:510px){
  #s4 .co2-equipment-help{font-size:.73rem;padding:9px 11px}
- #s4 .co2-preparation[data-ready=true] .co2-material-scene button>span{font-size:.65rem;padding:2px 4px}
+ #s4 .co2-preparation[data-ready=true] .co2-material-scene button>span{font-size:.65rem;padding:2px 3px}
  #s4 .oxygen-caption .co2-scene-note{font-size:.82rem;min-height:7.4em}
 }
+
+@container(max-width:510px){#s4 .co2-preparation[data-ready=true] .co2-material-scene button[data-co2-material=tube]>span{white-space:normal;width:calc(4em + 8px);text-align:center}}

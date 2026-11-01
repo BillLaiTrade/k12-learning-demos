@@ -8,7 +8,7 @@ export function co2SetupFrame(elapsed){
  return {time,arrangement:ease((time-400)/4600),phase:time<400?'desk':time<5000?'arrange':'ready'};
 }
 const keys=['marble','acid','flask','jar','tube','plate'];
-const initial={flask:[140,100,340,340],jar:[715,155,350,350],marble:[310,440,210,160],acid:[30,420,170,170],tube:[500,470,210,170],plate:[800,485,190,110]};
+const initial={flask:[140,100,340,340],jar:[715,155,350,350],marble:[285,440,210,160],acid:[30,420,170,170],tube:[570,470,210,170],plate:[850,485,190,110]};
 const working={flask:[70,145,460,460],jar:[640,145,460,460],marble:[455,405,170,170],acid:[455,240,150,170],tube:[440,500,180,150],plate:[630,505,130,120]};
 const names={marble:'大理石',acid:'稀鹽酸',flask:'錐形瓶',jar:'集氣瓶',tube:'附塞玻璃導管',plate:'薄玻璃片'};
 // The unlabelled open reagent bottle stays identical before, during and after pouring.
