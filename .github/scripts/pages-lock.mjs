@@ -7,7 +7,7 @@ const folder=process.env.PAGES_LOCK_DIR;
 if(!/^[\w.-]+\/[\w.-]+$/.test(repo||'')||!/^[a-f0-9]{40}$/.test(head||'')||!folder)throw Error('Missing valid repository, revision or backup directory.');
 const prefix=`repos/${repo}/`,file=join(folder,'completed-deployment.json');
 function api(path,method='GET',fields={}){
- const args=['api',prefix+path];
+ const args=['api',prefix+path,'-H','X-GitHub-Api-Version: 2026-03-10'];
  if(method!=='GET')args.push('--method',method);
  for(const[key,value]of Object.entries(fields))args.push('-f',`${key}=${value}`);
  const body=execFileSync(process.env.PAGES_LOCK_GH||'gh',args,{encoding:'utf8',stdio:['ignore','pipe','pipe']});
@@ -78,6 +78,14 @@ if(process.argv[2]==='plan'){
   if(statuses(id)[0]?.state!=='inactive')throw Error('Deployment did not become inactive.');
   api(`deployments/${id}`,'DELETE');
  }else if(siblings.length)throw Error('Prior deployment records appeared after backup.');
- api(`pages/deployments/${sha}/cancel`,'POST');
- console.log(`Released obsolete Pages lock ${sha}; backup artifact ${process.env.PAGES_LOCK_ARCHIVE_ID}.`);
+ try{
+  api(`pages/deployments/${sha}/cancel`,'POST');
+  console.log(`Cancelled obsolete Pages lock ${sha}; backup artifact ${process.env.PAGES_LOCK_ARCHIVE_ID}.`);
+ }catch(error){
+  let response;try{response=JSON.parse(error.stdout);}catch{}
+  if(String(response?.status)!=='400'||!response.message?.includes("as it's finished")||!pagesDone(sha))throw error;
+  // This is the documented terminal state, not a failed new publication.
+  // Let the actual publisher verify whether the obsolete lease is released.
+  console.log(`Pages confirms ${sha} is already finished; prior metadata is archived. Proceeding to the real publisher.`);
+ }
 }else throw Error('Expected plan or apply.');
