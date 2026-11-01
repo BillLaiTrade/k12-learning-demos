@@ -1,7 +1,7 @@
-import { createSceneCaptions } from './oxygen-captions.mjs?v=reading-fade-1';
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=apparatus-layout-6';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=apparatus-layout-6';
-import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=apparatus-layout-6';
+import { createSceneCaptions } from './oxygen-captions.mjs?v=subtitles-below-1';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=oxygen-review-1';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=oxygen-review-1';
+import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=oxygen-review-1';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
@@ -86,11 +86,11 @@ function renderPreparation(stage, elapsed, state) {
   for (const part of ['delivery-tube','tube-highlight','flow']) $(part).setAttribute('d',tube);
   $('reaction-bubbles').setAttribute('transform',`translate(0 ${-((f.time%900)/900)*30})`);
   $('flow').style.strokeDashoffset=String(-f.time/35);
-  const note = scene===2 ? '導管口在瓶外的水中，開始的混合氣不收集' : scene===3 ? (f.tube<1 ? '先將導管移入瓶口下方' : f.collected<1 ? '氧氣進入，瓶內水位下降' : '瓶內水已排出，氧氣已收集') : f.covered ? '導管已移開，玻璃片在水下蓋好' : f.tube>0 ? '先移開導管，瓶口保持在水下' : '再滑入玻璃片，在水下蓋住瓶口';
+  const note = scene===2 ? '導管口在瓶外的水中，開始的混合氣不收集' : scene===3 ? (f.tube<1 ? '先將導管移入瓶口下方' : f.collected<1 ? '氧氣進入，瓶內水位下降' : '雙氧水足量時，可排出瓶內的水並收集滿瓶氧氣') : f.setDown===1 ? '集氣瓶已取出並轉正放到桌面，玻璃片持續蓋緊瓶口' : f.setDown>0 ? '保持玻璃片貼緊瓶口，將集氣瓶直立放到桌面' : f.upright>0 ? '集氣瓶已離開水槽；壓緊玻璃片，將瓶子轉正' : f.lift>0 ? '玻璃片貼緊瓶口，連瓶帶片一起移出水槽' : f.covered ? '導管已移開，玻璃片在水下蓋好，接著取出集氣瓶' : f.tube>0 ? '先移開導管，瓶口保持在水下' : '再滑入玻璃片，在水下蓋住瓶口';
   setupScene.operation(stage,f,null,view);
   renderObservation(view,scene,f,waterY);
   view.dataset.captionMessage=note;
-  view.dataset.loopCaption=scene===3&&f.collected===1?'氧氣進入，瓶內水位下降':note;
+  view.dataset.loopCaption=note;
   view.querySelector('title').textContent=note;
   return note + (state==='complete' ? '。這一步已播完，可重播或繼續下一步。' : '。');
 }
@@ -98,11 +98,11 @@ function renderPreparation(stage, elapsed, state) {
 function renderObservation(view,stage,f,waterY) {
   const movingTube=stage===3&&f.tube<1;
   const withdrawing=stage===4&&f.tube>0;
-  const label=stage===2?'瓶外排氣':stage===3?(movingTube?'移入瓶口':f.collected<1?'水位下降':'集氣完成'):withdrawing?'撤開導管':f.covered?'水下蓋片':'滑入玻璃片';
+  const label=stage===2?'瓶外排氣':stage===3?(movingTube?'移入瓶口':f.collected<1?'水位下降':'集氣完成'):f.setDown===1?'桌面封存':f.lift>0?'連瓶帶片取出':withdrawing?'撤開導管':f.covered?'水下蓋片':'滑入玻璃片';
   let x=stage===2?800:stage===3?(movingTube?800+235*f.tube:940):withdrawing?800+235*f.tube:1034;
   let y=stage===2?600:stage===3?(movingTube?665:waterY):withdrawing?665:667;
   if(stage===4&&!withdrawing){const plate=panel.querySelector('[data-setup-body=plate]'),m=plate.transform.baseVal.consolidate().matrix;x=m.a*112.5+m.c*13+m.e;y=m.b*112.5+m.d*13+m.f;}
-  view.querySelector('.oxygen-observation-guide').style.opacity=stage===4&&!withdrawing&&f.cover<.7?'0':'1';
+  view.querySelector('.oxygen-observation-guide').style.opacity=stage===4&&(f.lift>0||!withdrawing&&f.cover<.7)?'0':'1';
   view.querySelector('[data-observation-label]').textContent=label;
   view.querySelector('[data-observation-leader]').setAttribute('d',`M${stage===4?950:915} ${stage===2?507:stage===3?417:457}L${x} ${y}`);
   for(const selector of ['[data-observation-point]','[data-observation-halo]']){
@@ -166,7 +166,25 @@ function createPreparationPlayer() {
   const clockLimit=()=>duration()+(stage<steps.length-1?700:0);
   function syncControlOffset(){panel.style.setProperty('--oxygen-controls-height',`${nav.getBoundingClientRect().height}px`);}
   function setMenu(open){navBody.hidden=!open;menu.setAttribute('aria-expanded',String(open));syncControlOffset();}
+  let headingWidth=0;
+  function syncSceneHeading(){
+    const body=panel.querySelector('.oxygen-panels'),width=body.getBoundingClientRect().width;
+    if(!width||Math.abs(width-headingWidth)<.5)return;
+    headingWidth=width;
+    // Measure all existing descriptions at the current width, without adding
+    // visible text or exposing duplicate headings to assistive technology.
+    const probes=panels.map(view=>{
+      const heading=view.querySelector('.oxygen-step-head').cloneNode(true);
+      heading.setAttribute('aria-hidden','true');
+      heading.style.cssText=`position:absolute;display:flow-root;visibility:hidden;pointer-events:none;width:${width}px;min-height:0;height:auto`;
+      body.append(heading);return heading;
+    });
+    const height=Math.ceil(Math.max(...probes.map(heading=>heading.getBoundingClientRect().height)));
+    probes.forEach(heading=>heading.remove());
+    panel.style.setProperty('--oxygen-heading-height',`${height}px`);
+  }
   function syncLayout(){
+    syncSceneHeading();
     const narrow=panel.clientWidth<=720;
     if(narrow===compact)return;
     compact=narrow;menu.hidden=!compact;setMenu(!compact);
@@ -291,7 +309,9 @@ function createPreparationPlayer() {
   panel.addEventListener('keydown',event=>{if(event.key==='Escape')pausePlayback();});
   if('IntersectionObserver'in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel.querySelector('.oxygen-stage-area'));
   const api={pausePlayback};players.push(api);play.disabled=false;
-  syncLayout();new ResizeObserver(syncLayout).observe(panel);new ResizeObserver(syncControlOffset).observe(nav);select(0);panel.dataset.ready='true';return api;
+  syncLayout();new ResizeObserver(syncLayout).observe(panel);new ResizeObserver(syncControlOffset).observe(nav);select(0);panel.dataset.ready='true';
+  document.fonts.ready.then(()=>{headingWidth=0;syncSceneHeading();});
+  return api;
 }
 createPreparationPlayer();
 document.addEventListener('visibilitychange',()=>{if(document.hidden)players.forEach(p=>p.pausePlayback());});

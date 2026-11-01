@@ -90,3 +90,25 @@
 .oxygen-preparation[data-ready=true] .oxygen-stage-area{align-self:start}
 .oxygen-preparation[data-ready=true] .oxygen-apparatus{flex:0 0 auto}
 .oxygen-equipment-hit.is-stroke{stroke-linecap:round;stroke-linejoin:round}
+
+/* Materials and every operation share one fixed camera frame and heading slot. */
+.oxygen-preparation[data-ready=true] .oxygen-step-head{display:flow-root;min-height:var(--oxygen-heading-height,0px)}
+.oxygen-preparation[data-ready=true] .oxygen-materials-photo,.oxygen-preparation[data-ready=true] .oxygen-scene-viewport{flex:0 0 auto;width:100%;aspect-ratio:1536 / 900}
+.oxygen-preparation[data-ready=true] .oxygen-materials-photo>img,.oxygen-preparation[data-ready=true] .oxygen-main-scene{position:absolute;inset:0;width:100%;height:100%}
+.oxygen-preparation[data-ready=true] .oxygen-equipment-help{font-size:.79rem;line-height:1.8;padding:10px 14px}
+@container(max-width:510px){.oxygen-preparation[data-ready=true] .oxygen-equipment-help{font-size:.73rem;padding:9px 11px}}
+
+
+/* Subtitles belong below the pictures, with a stable reading area. */
+.oxygen-preparation .oxygen-scene-note{position:static;max-width:none;margin:0;padding:12px 14px;border:0;border-radius:0;box-shadow:none;background:#fff2cb;color:#304c38;font-size:.9rem;font-weight:600;line-height:1.85}
+.oxygen-caption{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:12px;min-height:92px;box-sizing:border-box;padding:14px;background:#fff2cb;border-top:2px solid #d6ad56}
+.oxygen-caption-label{display:inline-block;white-space:nowrap;padding:4px 8px;border-radius:5px;background:#365c43;color:#fff;font-size:.73rem;font-weight:700;line-height:1.65}
+.oxygen-caption .oxygen-scene-note{padding:0;background:transparent;min-height:3.7em}
+.oxygen-preparation[data-ready=true] .oxygen-panels,.oxygen-preparation[data-ready=true] .oxygen-step-panel,.oxygen-preparation[data-ready=true] .oxygen-apparatus,.oxygen-preparation[data-ready=true] .oxygen-materials-view,.oxygen-preparation[data-ready=true] .oxygen-drawing{min-width:0;width:100%;box-sizing:border-box}
+.oxygen-equipment-hit.is-stroke{stroke-width:18}
+@container(max-width:510px){
+ .oxygen-caption{grid-template-columns:minmax(0,1fr);gap:8px;min-height:156px;padding:12px}
+ .oxygen-caption-label{justify-self:start;font-size:.7rem}
+ .oxygen-caption .oxygen-scene-note{font-size:.82rem;min-height:7.4em}
+ .oxygen-preparation[data-ready=true] .oxygen-material-hint,.oxygen-preparation[data-ready=true] .oxygen-equipment-help{box-sizing:border-box;min-height:calc(3.6em + 19px)}
+}

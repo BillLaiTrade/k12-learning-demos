@@ -1,4 +1,4 @@
-import { SETUP_DURATION } from './oxygen-setup.mjs?v=apparatus-layout-6';
+import { SETUP_DURATION } from './oxygen-setup.mjs?v=oxygen-review-1';
 export const PREPARATION_DURATION = 12600;
 export const COMPARISON_DURATION = 6200;
 export const PREPARATION_STAGES = [0, 2000, 4800, 10000];
@@ -64,7 +64,7 @@ export const OXYGEN_OPERATIONS = [
   {label:'塞緊塞子與導管',scene:1,offset:8800,duration:3000},
   {label:'先排出空氣',scene:2,offset:0,duration:2800},
   {label:'排水收集氧氣',scene:3,offset:0,duration:5200},
-  {label:'封存氧氣',scene:4,offset:0,duration:2600},
+  {label:'封存氧氣',scene:4,offset:0,duration:7800},
 ];
 export function oxygenOperationFrame(stage,elapsed) {
   const index=Math.max(0,Math.min(OXYGEN_OPERATIONS.length-1,Math.trunc(stage)));
@@ -74,5 +74,9 @@ export function oxygenOperationFrame(stage,elapsed) {
   // their established clock and prerequisites.
   const sceneTime=operation.offset+(index===1?2800*localTime/SETUP_DURATION:localTime);
   const frame=preparationStepFrame(operation.scene,sceneTime);
-  return {...frame,collecting:operation.scene===3&&localTime>=700&&frame.collected<1,operation:index,localTime,duration:operation.duration,scene:operation.scene,sceneTime};
+  return {...frame,collecting:operation.scene===3&&localTime>=700&&frame.collected<1,
+    lift:index===7?smooth((localTime-2600)/1400):0,
+    upright:index===7?smooth((localTime-4200)/1400):0,
+    setDown:index===7?smooth((localTime-5800)/1800):0,
+    operation:index,localTime,duration:operation.duration,scene:operation.scene,sceneTime};
 }

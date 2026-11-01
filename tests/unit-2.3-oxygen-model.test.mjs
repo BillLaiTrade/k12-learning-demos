@@ -64,3 +64,15 @@ test('clear water fills both empty vessels before a covered inversion and underw
  for(let t=0;t<=SETUP_DURATION;t+=20){const f=setupFrame(t);if(f.jarFill>0)assert.equal(f.tankFill,1);if(f.inversion>0){assert.equal(f.jarFill,1);assert.equal(f.cover,1);}if(f.inversion>0&&f.immersion<1)assert.equal(f.covered,true);if(f.uncover>0){assert.equal(f.immersion,1);assert.ok(f.mouthY>565);}if(f.plateReturn>0)assert.equal(f.uncover,1);if(f.outlet>0){assert.equal(f.uncover,1);assert.equal(f.plateReturn,1);}if(f.phase==='ready')assert.equal(f.outlet,1);assert.equal(oxygenOperationFrame(1,t).collected,0);}
  assert.equal(setupFrame(SETUP_DURATION).outlet,1);assert.equal(setupFrame(SETUP_DURATION).jarFill,1);
 });
+
+test('storage covers underwater before lifting, turns upright only above water, then sets the sealed jar down',async()=>{
+ const {oxygenOperationFrame,OXYGEN_OPERATIONS}=await import('../units/2/parts/2.3/assets/oxygen-model.mjs');
+ for(let time=0;time<=OXYGEN_OPERATIONS[7].duration;time+=20){
+  const f=oxygenOperationFrame(7,time);
+  if(f.lift>0){assert.equal(f.cover,1);assert.equal(f.tube,0);}
+  if(f.upright>0)assert.equal(f.lift,1);
+  if(f.setDown>0){assert.equal(f.upright,1);assert.equal(f.cover,1);}
+ }
+ const end=oxygenOperationFrame(7,99999);
+ assert.equal(end.lift,1);assert.equal(end.upright,1);assert.equal(end.setDown,1);
+});

@@ -4,6 +4,9 @@ export function createSceneCaptions(panel) {
   const sources=[...panel.querySelectorAll('[data-scene-note]')];
   const bubble=sources[0];
   sources.forEach(node=>node.remove());
+  const strip=document.createElement('div');strip.className='oxygen-caption';strip.setAttribute('role','group');strip.setAttribute('aria-label','畫面說明');
+  const label=document.createElement('span');label.className='oxygen-caption-label';label.textContent='畫面說明';
+  strip.append(label,bubble);
   let shown='',wanted='',paused=false,generation=0,animation=null;
   const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
   const phase=value=>{bubble.dataset.captionPhase=value;};
@@ -30,8 +33,8 @@ export function createSceneCaptions(panel) {
   }
   return {
     show(view,text) {
-      const drawing=view.querySelector('.oxygen-drawing');
-      if(bubble.parentElement!==drawing)drawing.append(bubble);
+      const figure=view.querySelector('.oxygen-apparatus');
+      if(strip.parentElement!==figure)figure.append(strip);
       wanted=text;
       if(typeof bubble.animate!=='function'){
         shown=text;bubble.textContent=text;bubble.style.opacity='1';phase('idle');return;
@@ -41,7 +44,7 @@ export function createSceneCaptions(panel) {
     },
     reset() {
       generation++;animation?.cancel();animation=null;
-      shown='';wanted='';paused=false;bubble.style.opacity='1';phase('idle');bubble.remove();
+      shown='';wanted='';paused=false;bubble.style.opacity='1';phase('idle');strip.remove();
     },
     pause() {paused=true;animation?.pause();},
     resume() {paused=false;if(animation?.playState==='paused')animation.play();},
