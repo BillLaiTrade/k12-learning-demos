@@ -703,3 +703,13 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_CAPTIONS_ARTIFACT_DIR=/tmp/unit23-caption
 ```
 
 新專項10項（含外層）：以原生Animation檢查閱讀停留與中途透明度、快速句合併、連播同張字卡、淡出／淡入暫停、器材介紹後不自行續播、取消舊回呼、完成／重播、背景與其他播放器、桌機與窄欄、減少動態及無JS。搭配原材料10、器材9、操作11、連播10、物理8，共58項本機瀏覽器檢查；所有截圖環境變數指向/tmp以保存舊證據。公開可設OXYGEN_CAPTIONS_URL、OXYGEN_EQUIPMENT_URL、OXYGEN_URL、OXYGEN_CONTINUOUS_URL跑字卡10＋器材9＋操作11＋連播10，共40項。證據見docs/reviews/unit-2.3-oxygen-caption-fade/。
+
+## 3.4 井深小測（2026-11-01）
+
+```sh
+node tests/unit-3.4-well-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4-well.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4.test.cjs
+```
+
+3項模型／短喊聲PCM、11項井深瀏覽器（含外層）。涵蓋原音與較弱回聲共用AudioBuffer、實際排程延遲與畫面起始紀錄、非靜音／不削波、未探測與答案各狀態、核對才揭示井底、換題清除、重喊保留草稿、跨區／背景取消、延遲啟音取消、載入及啟音失敗重試、九種寬度、人物熱區與真實手機觸控／鍵盤、減少動態。`WELL_URL`指定公開頁URL（可含query，勿帶hash），`WELL_CAPTURE_DIR`指定截圖目錄。前五區與共享播放回歸另跑整課10項及第五區13項。檢查不代表Safari實機或真人聽感核可。

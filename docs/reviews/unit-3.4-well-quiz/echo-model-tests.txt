@@ -1,0 +1,12 @@
+✔ echo uses two equal legs and the specified air or water speed (1.680661ms)
+✔ invalid physical inputs are rejected (0.641785ms)
+✔ wave reaches wall halfway and then returns to receiver (0.189605ms)
+✔ absorption preserves direct sound and path delays while reducing reflection energy (0.387011ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10.442063

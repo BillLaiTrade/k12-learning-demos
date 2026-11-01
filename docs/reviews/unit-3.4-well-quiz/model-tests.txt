@@ -1,0 +1,11 @@
+✔ every well uses the complete air round trip and next well cannot repeat (2.171142ms)
+✔ observation, valid numbers, total-distance misconception and rounding are distinguished (0.420956ms)
+✔ short voice has a silent gap before even the closest echo and stays below clipping (3.822049ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13.200685

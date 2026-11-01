@@ -1,3 +1,9 @@
+## 2026-11-01 單元小測：這口井有多深？
+
+依核可圖`exec-e8d5b0bf-5b0d-4785-8ad0-cb508f600b69.png`製作，取代原海底計算及室內選擇題。五區保持，入口仍為`#quiz`。`well-model.mjs`負責題目與核對，`well-quiz.mjs`串接共用音訊互斥、原速喊聲／回聲、紀錄、換井及解析，`well-quiz.css`處理桌機／手機。
+
+`well-scene.webp`源自獨立生成素材`exec-6f8ea0bd-b002-43fe-b670-e5e49744cf65.png`，參照核可圖及共用角色，縮至1200×900、WebP品質88；沒有把整張示意圖貼進頁面，素材中沒有文字、波線或操作。井底初始隱藏，聲波與泡泡為程式疊層。`well-call.wav`為小葵同聲線的短喊聲，來源見[AUDIO-SOURCES.md](AUDIO-SOURCES.md)。聲音與畫面用相同AudioContext時鐘；換井取消舊排程並清除紀錄。模型限制與製作決策見`docs/decisions/unit-3.4-well-quiz.md`。下方歷史小測說明由本節取代。
+
 ## 2026-11-01 小葵語音試配
 
 「說一句話」改用臺灣華語神經合成女聲，語速+4%、音高+25Hz，取代eSpeak通用乾音。吸音前後從同一乾音重建，共用直接聲、增益與時長；來源設定及雜湊見[AUDIO-SOURCES.md](AUDIO-SOURCES.md)。語音URL加版本避免載入舊配音。這是角色試配，尚待使用者核可聲線。

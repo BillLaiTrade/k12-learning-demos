@@ -1,6 +1,7 @@
+import {bindWellQuiz} from './well-quiz.mjs?v=20261101-well';
 import {bindRoomWaveLab} from './room-wave-lab.mjs?v=20261101-xiaokui-voice';
 import {renderSonar, bindSonar, beginSonar, sonarDuration, sonarTaps} from './sonar-lab.mjs?v=20261031-results';
-import {arrivals, judge} from './echo-model.mjs?v=20261101-room-contrast';
+import {arrivals} from './echo-model.mjs?v=20261101-room-contrast';
 import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
 import {renderDistance, bindDistanceWall, bindDistanceSpeakers, distanceDuration, distanceTaps} from './distance-lab.mjs?v=20261031-short-labels';
 import {renderCalculation, bindCalculationInput, calculationTime, calculationDuration, calculationTaps} from './calculation-lab.mjs?v=20261031-calculation-lab';
@@ -126,10 +127,6 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
   soundBox?.addEventListener('change', () => {if (p.phase === 'playing') sound(p, p.elapsed);});
   panels.set(id, p); p.draw(); return p;
 }
-function trace(target, mode = 'dense', treated = false, progress = 0) {
-  const taps = arrivals(mode, treated), width = 650;
-  $(target).innerHTML = `<svg viewBox="0 0 720 150" role="img" aria-label="${mode === 'single' ? '一次較晚回聲' : treated ? '直接聲相同、反射減弱' : '直接聲與密集反射'}的到達紀錄"><path d="M35 110H690" stroke="#a9b9ad"/>${taps.map((a, i) => `<path d="M${35 + a.delay / 1.4 * width} 110v-${a.gain * 70}" stroke="${i ? '#bc612b' : '#176b53'}" stroke-width="7"/>`).join('')}<text x="20" y="23">接收強弱（示意）</text><text x="20" y="140">0：直接聲</text><text x="580" y="140">1.4秒</text><path d="M${35 + Math.min(1, progress) * width} 35V115" stroke="#6eaeb3" stroke-width="2" stroke-dasharray="4 4"/></svg>`;
-}
 const reflection = player('reflection', renderReflection, () => REFLECTION_DURATION, {
   restartOnPlay: true,
   taps: () => [{delay: 0, gain: 1}, {delay: REFLECTION_RETURN_TIME, gain: .45}]
@@ -152,14 +149,7 @@ const sonarPlayer = player('sonar', renderSonar, sonarDuration, {restartOnPlay: 
 bindSonar(sonarPlayer);
 bindRoomWaveLab(controller => { stopActive(); active = controller; }, controller => { if (active === controller) active = null; });
 $('wall-distance').addEventListener('input', () => distance.reset());
-trace('quiz-before'); trace('quiz-after', 'dense', true);
-const form = $('echo-quiz'), feedback = $('quiz-feedback');
-form.addEventListener('submit', event => {
-  event.preventDefault(); const data = new FormData(form), result = judge({depth: $('quiz-depth').value, reason: data.get('reason'), record: data.get('record'), echo: data.get('echo')});
-  feedback.dataset.result = result.result; feedback.textContent = result.message;
-});
-form.addEventListener('input', () => {feedback.dataset.result = 'pending'; feedback.textContent = '答案已修改，請重新核對。';});
-form.addEventListener('reset', () => {feedback.dataset.result = 'ready'; feedback.textContent = '已全部重填，請重新判讀紀錄。';});
+bindWellQuiz(controller => { stopActive(); active = controller; }, controller => { if (active === controller) active = null; });
 document.addEventListener('visibilitychange', () => {if (document.hidden) stopActive();});
 window.addEventListener('pagehide', stopActive);
 const observer = new IntersectionObserver(entries => {
