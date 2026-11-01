@@ -1,5 +1,5 @@
-import {loadDecibelRecording,createDecibelVoice} from './decibel-audio.mjs?v=1';
-import {createDecibelExplorer} from './decibel-experiment.mjs?v=2';
+import {loadDecibelRecording,createDecibelVoice} from './decibel-audio.mjs?v=2';
+import {createDecibelExplorer} from './decibel-experiment.mjs?v=3';
 import {signal,soundSamples,challenge,checkSettings} from './model.mjs?v=1';
 import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
 import {createForkExperiment} from './fork-experiment.mjs?v=2';
@@ -194,7 +194,7 @@ async function playDecibel(){
   const buffer=await loadDecibelRecording(scene.key,audioContext);
   if(ticket!==request||document.hidden)return;
   decibelVoice=createDecibelVoice(audioContext,buffer);source=decibelVoice.source;
-  const current=source;source.onended=()=>{if(source===current){stop(root);decibelView.mode('stopped','播放完畢，可再次播放場景聲音');}};
+  const current=source;source.onended=()=>{if(source===current){stop(root);decibelView.mode('stopped','播放已結束，可再次播放場景聲音');}};
   root.dataset.audioScene=scene.key;decibelView.mode('playing');decibelVoice.start();
  }catch{if(ticket!==request)return;stop(root);decibelView.mode('error','場景聲音暫時無法載入，請按播放重試。');}
 }

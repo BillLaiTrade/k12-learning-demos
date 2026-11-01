@@ -43,7 +43,7 @@ export function createDecibelExplorer(root,{onInteract=()=>{},onSceneChange=()=>
  });
  const play=root.querySelector('[data-decibel-play]'),picture=root.querySelector('[data-decibel-picture]');
  play.addEventListener('click',onPlay);picture.addEventListener('click',onPlay);
- function mode(value,message){root.dataset.audioState=value;const active=value==='playing'||value==='preparing';root.dataset.playing=String(value==='playing');root.querySelector('.stop').disabled=!active;picture.setAttribute('aria-pressed',String(active));play.setAttribute('aria-pressed',String(active));root.querySelector('.play-state').textContent=message||({stopped:'已停止，可再次播放場景聲音',preparing:'場景聲音載入中…',playing:'正在播放：'+nearestScene(current).title}[value]);picture.setAttribute('aria-label','播放場景聲音：'+nearestScene(current).title);}
+ function mode(value,message){root.dataset.audioState=value;const active=value==='playing'||value==='preparing';root.dataset.playing=String(value==='playing');root.querySelector('.stop').disabled=!active;picture.setAttribute('aria-pressed',String(active));play.setAttribute('aria-pressed',String(active));root.querySelector('.play-state').textContent=message||({stopped:'已停止，可再次播放場景聲音',preparing:'場景聲音載入中…',playing:'循環播放中：'+nearestScene(current).title}[value]);picture.setAttribute('aria-label','播放場景聲音：'+nearestScene(current).title);}
  render(60);mode('stopped');for(const file of new Set(DECIBEL_SCENES.map(scene=>scene.image)))prepare(file).catch(()=>{});
  return {get scene(){return nearestScene(current);},mode,stop:()=>mode('stopped')};
 }

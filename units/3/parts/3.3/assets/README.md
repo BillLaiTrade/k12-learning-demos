@@ -124,3 +124,5 @@ decibel-model.mjs存放十二例與線性刻度，decibel-experiment.mjs管理�
 保留原十二場景大圖、介紹與情境帶，新增圖片點播及播放／停止。`decibel-audio.mjs` 管理解碼快取與短邊界增益，`lesson.mjs` 沿用同一活動來源與票號取消；準備中／播放中換場景跟隨最後選取，停止後切換不自動播放。離區、隱藏分頁、其他區及小測試聽停止舊錄音；失敗可重試且不回放錯誤情境。
 
 `decibel-audio/` 的十二成品為對應情境實錄或授權舞曲，不是插圖現場／OSHA 指定距離實測。來源差異、作者、網址、衍生授權與修改逐項列在頁面收合清單及 `LICENSE.md`，精確段落／SHA-256／實測響度在 `recordings.json`。`scripts/prepare-decibel-recordings.py` 核對原檔後，以共同 -23 LUFS 基準製作每級 2 LU 的相對音量階梯並檢查真峰值；無變調、變速或合成噪音。網頁音量不代表 20～130 dBA，也不是聽感等距校準。決策與查核證據見 `docs/decisions/unit-3.3-decibel-audio.md` 及本輪 review。
+
+2026-11-01：第七區改為圖片優先，桌機約七成寬留給場景、縮小文字及 dBA 數字；手機圖片增高。場景錄音改為同一 AudioBufferSourceNode 持續循環，按停止才結束；離區、隱藏或其他區試聽仍停止。沿用原音檔與邊界淡入淡出，不變更來源、音量或授權。此節取代單次播放的現行行為。

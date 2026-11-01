@@ -12,8 +12,8 @@ async function fixture(t,mobile=false){
   window.sceneRuns=[];
   const create=AudioContext.prototype.createBufferSource;
   AudioContext.prototype.createBufferSource=function(){
-   window.sceneContext=this;const source=create.call(this),start=source.start.bind(source),stop=source.stop.bind(source);let row;
-   source.start=function(...args){row={buffer:source.buffer,stopped:false,scene:document.querySelector('#card-07').dataset.audioScene};window.sceneRuns.push(row);return start(...args);};
+   window.sceneContext=this;const thisContext=this,source=create.call(this),start=source.start.bind(source),stop=source.stop.bind(source);let row;
+   source.start=function(...args){row={buffer:source.buffer,loop:source.loop,startedAt:thisContext.currentTime,stopped:false,scene:document.querySelector('#card-07').dataset.audioScene};window.sceneRuns.push(row);return start(...args);};
    source.stop=function(...args){if(row)row.stopped=true;return stop(...args);};return source;
   };
  });
@@ -44,7 +44,7 @@ test('all twelve scenes play their actual PCM, picture/button replay and live se
  assert.equal(await count(page),0);
  for(let i=0;i<12;i++){
   await select(page,i);assert.equal(await page.locator('#card-07').getAttribute('data-audio-state'),'stopped');
-  await page.locator(i%2?'[data-decibel-picture]':'[data-decibel-play]').click();await playing(page,keys[i]);
+  await page.locator(i%2?'[data-decibel-picture]':'[data-decibel-play]').click();await playing(page,keys[i]);assert.equal(await page.evaluate(()=>window.sceneRuns.at(-1).loop),true,keys[i]+' repeats continuously');
   const same=await page.evaluate(async key=>{
    const actual=window.sceneRuns.at(-1).buffer,context=window.sceneContext;
    const response=await fetch(new URL(`assets/decibel-audio/${key}.wav?v=1`,location.href));const expected=await context.decodeAudioData(await response.arrayBuffer());
@@ -58,7 +58,14 @@ test('all twelve scenes play their actual PCM, picture/button replay and live se
  const band=page.locator('[data-decibel-band]');await band.focus();await page.keyboard.press('ArrowRight');await playing(page,'classroom');
  assert.equal(await page.evaluate(()=>window.sceneRuns.at(-2).stopped),true);
  await page.locator('#card-07 .stop').click();const stopped=await count(page);await page.keyboard.press('Home');await page.waitForTimeout(200);assert.equal(await count(page),stopped);
- await select(page,2);await page.locator('[data-decibel-play]').click();await playing(page,'whisper');await page.waitForFunction(()=>document.querySelector('#card-07').dataset.audioState==='stopped');
+ await select(page,2);await page.locator('[data-decibel-play]').click();await playing(page,'whisper');
+ const loops=await count(page);const duration=await page.evaluate(()=>window.sceneRuns.at(-1).buffer.duration);
+ await page.waitForFunction(d=>window.sceneContext.currentTime-window.sceneRuns.at(-1).startedAt>d*2,duration,{timeout:15000});
+ assert.equal(await page.locator('#card-07').getAttribute('data-audio-state'),'playing');assert.equal(await count(page),loops,'looping reuses one source');
+ assert.equal(await page.evaluate(()=>window.sceneRuns.at(-1).loop),true);
+ assert.ok(await page.evaluate(()=>window.sceneContext.currentTime-window.sceneRuns.at(-1).startedAt)>duration*2);
+ await page.locator('#card-07 .stop').click();assert.equal(await page.locator('#card-07').getAttribute('data-audio-state'),'stopped');
+ assert.equal(await page.evaluate(()=>window.sceneRuns.at(-1).stopped),true);
  await page.locator('.decibel-audio-sources summary').click();assert.equal(await page.locator('[data-decibel-credits] li').count(),12);assert.match(await page.locator('.decibel-listening-note').innerText(),/不代表.*實際 dBA/);
  assert.deepEqual(errors,[]);
 });
@@ -97,7 +104,8 @@ test('mobile touch, keyboard, desktop/mobile layout and original large artwork r
  for(const width of [1440,1280,1024,768,390,320]){
   await page.setViewportSize({width,height:1100});await page.locator('#card-07').scrollIntoViewIfNeeded();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await page.locator('.decibel-audio-sources summary').click();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.locator('.decibel-audio-sources summary').click();
-  const art=await page.locator('.decibel-photo').boundingBox();const feature=await page.locator('.decibel-feature').boundingBox();assert.ok(art.width>feature.width*(width<=760?.95:.5),`${width}px artwork retains the original share of the feature`);assert.ok(art.height>100);
+  const art=await page.locator('.decibel-photo').boundingBox();const feature=await page.locator('.decibel-feature').boundingBox();assert.ok(art.width>feature.width*(width<=760?.95:.68),`${width}px image takes priority over text`);assert.ok(art.height>100);
+  const digits=await page.locator('.decibel-value>strong').evaluate(n=>parseFloat(getComputedStyle(n).fontSize));assert.ok(digits<=48,'dBA number stays compact');
   if([1440,390].includes(width))await page.locator('#card-07').screenshot({path:`${dir}/audio-${width}.png`});
  }
 });

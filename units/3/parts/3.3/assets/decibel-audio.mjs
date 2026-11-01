@@ -14,7 +14,7 @@ export async function loadDecibelRecording(key,context){
 // 成品已作響度安排；播放不再依 dBA 加大增益。
 export function createDecibelVoice(context,buffer){
  const source=context.createBufferSource(),gain=context.createGain();
- source.buffer=buffer;source.connect(gain);gain.connect(context.destination);
+ source.buffer=buffer;source.loop=true;source.connect(gain);gain.connect(context.destination);
  const now=context.currentTime;gain.gain.setValueAtTime(0,now);gain.gain.linearRampToValueAtTime(1,now+.025);
  source.addEventListener('ended',()=>{source.disconnect();gain.disconnect();},{once:true});
  return {source,start:()=>source.start(),stop(){
