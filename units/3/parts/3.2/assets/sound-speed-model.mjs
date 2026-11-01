@@ -7,8 +7,8 @@ export const FREQUENCY = .6;
 export const PULSE_DURATION = 4;
 export const AMPLITUDE = 4;
 export const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-// 乾燥空氣、組成固定：聲速與絕對溫度的平方根成正比，以 20°C 約 343 m/s 校準。
-export const airSpeed = temperature => 343 * Math.sqrt((temperature + 273.15) / 293.15);
+// 與煙火小測採用相同的空氣聲速近似公式；T 為攝氏溫度，v 為公尺／秒。
+export const airSpeed = temperature => 331 + .6 * temperature;
 export const arrivalTime = speed => DISTANCE / speed;
 export const reachedDistance = (speed, time) => clamp(speed * time, 0, DISTANCE);
 

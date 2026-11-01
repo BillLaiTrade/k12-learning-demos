@@ -93,7 +93,7 @@ test('3.2 striking one fork leaves other paused groups frozen', { timeout: 90000
     assert.deepEqual(await snapshot(root, 'cold'), cold);
     assert.ok(Math.abs(await seconds(root, 'hot') - 1) < .03);
     const progress = root.locator('.race-progress');
-    assert.equal(await progress.getAttribute('data-other-distance'), cold.distance);
+    assert.equal(Number(await progress.getAttribute('data-other-distance')), Number(cold.distance));
     await root.locator('#temp-pause-action').click();
     const hot = await snapshot(root, 'hot');
     await strike(root, 'cold').focus(); await p.keyboard.press('Space'); await p.clock.runFor(300);
@@ -102,15 +102,19 @@ test('3.2 striking one fork leaves other paused groups frozen', { timeout: 90000
     assert.equal(Number(await progress.getAttribute('data-own-distance')), Number(hot.distance));
     assert.match(await root.locator('.progress-gap').textContent(), /起跑時間不同/);
     records.push({ mode: 'temperature', frozenHot: hot.time, cold: await seconds(root, 'cold') });
-    await root.screenshot({ path: path.join(out, 'temperature-single-1440.png') });
     await p.clock.fastForward(25000);
     assert.deepEqual(await snapshot(root, 'hot'), hot);
-    assert.equal(await row(root, 'cold').getAttribute('data-phase'), 'complete');
+    assert.equal(await row(root, 'cold').getAttribute('data-phase'), 'complete', JSON.stringify({
+      time: await seconds(root, 'cold'),
+      panel: await root.locator('#temp-experiment-panel').evaluate(node => ({ ...node.dataset })),
+      visibility: await root.evaluate(node => ({ top: node.getBoundingClientRect().top, bottom: node.getBoundingClientRect().bottom, hidden: document.hidden }))
+    }));
     assert.equal(await root.locator('#temp-experiment-panel').getAttribute('data-phase'), 'paused');
     assert.equal(await root.locator('#temp-pause-action').textContent(), '繼續觀察');
     await root.locator('#temp-pause-action').click(); await p.clock.runFor(500);
     assert.ok(Math.abs(await seconds(root, 'hot') - Number(hot.time) - .5) < .03);
     assert.equal(await root.locator('#temp-result').isHidden(), true);
+    await root.screenshot({ path: path.join(out, 'temperature-single-1440.png') });
     await p.close();
   });
 
