@@ -235,7 +235,6 @@
     @container (max-width:520px) { .cycle-amplitude-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
     @media (max-width:520px) { #card-06 .visual svg text { font-size:25px; } #card-06 .visual svg .small-label { font-size:21px; } }
     .longitudinal-wavelength-panel svg text { font-size:18px; }
-    .longitudinal-wavelength-panel svg .lambda-symbol { font-size:25px; font-weight:800; }
     .data-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
     .data-cell { padding:13px 15px; border:1px solid var(--line); border-radius:14px; background:#f8f9f4; }
     .data-cell small { display:block; color:var(--muted); }
@@ -476,7 +475,7 @@
 
 
     }
-    @media (max-width:520px) { .diagram-grid,.data-grid,.example-grid { grid-template-columns:1fr; } .lesson-card { scroll-margin-top:160px; } .visual { padding:8px; } .speed-quantity-map { grid-template-columns:1fr; gap:5px; } .speed-quantity-map div { display:flex; align-items:baseline; justify-content:center; gap:8px; } .longitudinal-wavelength-panel svg text { font-size:26px; } .longitudinal-wavelength-panel svg .lambda-symbol { font-size:32px; } }
+    @media (max-width:520px) { .diagram-grid,.data-grid,.example-grid { grid-template-columns:1fr; } .lesson-card { scroll-margin-top:160px; } .visual { padding:8px; } .speed-quantity-map { grid-template-columns:1fr; gap:5px; } .speed-quantity-map div { display:flex; align-items:baseline; justify-content:center; gap:8px; } .longitudinal-wavelength-panel svg text { font-size:26px; } }
     @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
 
     /* 依使用者指示沿用2.1：橫向標頭，下方完整寬度內容。 */
@@ -707,7 +706,7 @@
             </div>
             <div class="diagram-panel longitudinal-wavelength-panel">
               <h3>縱波也有波長</h3>
-              <svg viewBox="0 0 720 246" role="img" aria-label="彈簧縱波中，兩個相鄰壓縮區中心以橘點標示，中心間距為一個波長 λ；波沿水平方向傳播">
+              <svg viewBox="0 0 720 310" role="img" aria-label="彈簧縱波中，兩個相鄰壓縮區中心以橘點標示，中心間距為一個波長 λ；波沿水平方向傳播">
                 <defs>
                   <linearGradient id="lambda-spring-metal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#64717a"/><stop offset=".22" stop-color="#d8dfe2"/><stop offset=".48" stop-color="#fff"/><stop offset=".72" stop-color="#87939a"/><stop offset="1" stop-color="#e8edef"/></linearGradient>
                   <marker id="arrow-long-lambda" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto-start-reverse"><path d="M0 0L9 4.5L0 9Z" fill="#bc612b"/></marker>
@@ -838,12 +837,11 @@
                 </g>
                 <circle cx="205" cy="100" r="6.5" fill="#df8b41" stroke="#fff" stroke-width="2.5"/>
                 <circle cx="485" cy="100" r="6.5" fill="#df8b41" stroke="#fff" stroke-width="2.5"/>
-                <path d="M205 112V153M485 112V153" stroke="#84988a" stroke-width="1.5" stroke-dasharray="4 4"/>
-                <path d="M214 151H476" class="measure" marker-start="url(#arrow-long-lambda)" marker-end="url(#arrow-long-lambda)"/>
-                <rect x="325" y="132" width="70" height="37" rx="17" fill="#fffefa" stroke="#eaded1"/>
-                <text class="lambda-symbol" x="360" y="157" text-anchor="middle" fill="#a94d20">λ</text>
-                <path d="M230 199H490" class="motion-arrow" marker-end="url(#arrow-long-lambda-direction)"/>
-                <text x="360" y="228" text-anchor="middle">波的傳播方向</text>
+                <path d="M205 109V184M485 109V184" stroke="#84988a" stroke-width="1.5" stroke-dasharray="5 5"/>
+                <path d="M214 184H476" class="measure" marker-start="url(#arrow-long-lambda)" marker-end="url(#arrow-long-lambda)"/>
+                <text x="345" y="216" text-anchor="middle">一個波長 λ</text>
+                <path d="M230 256H490" class="motion-arrow" marker-end="url(#arrow-long-lambda-direction)"/>
+                <text x="360" y="286" text-anchor="middle">波的傳播方向</text>
               </svg>
               <p>找相鄰兩團最擠的線圈，各取中間；兩個中心之間的距離，就是一個波長 λ。</p>
             </div>
