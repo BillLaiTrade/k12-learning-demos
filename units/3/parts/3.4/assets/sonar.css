@@ -1,12 +1,14 @@
 /* One workspace: common toolbar, ocean/chart on the left and results on the right. */
 .sonar-lab{margin:0;border:1px solid #cad8c7;border-radius:16px;background:#fffefa;overflow:hidden;font-variant-numeric:tabular-nums}
 .sonar-toolbar{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid #d6e1d2;background:#f3f7ed}
+.sonar-actions{display:flex;align-items:center;gap:12px;flex:0 0 auto;min-width:0}
 .sonar-instruments{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .sonar-instruments>div{display:flex;align-items:baseline;gap:6px;min-width:0}
 .sonar-instruments>div>span{font-size:.72rem;color:#536a5e;white-space:nowrap}
 .sonar-instruments strong{font-size:1.06rem;color:#234d3c;line-height:1.4;white-space:nowrap}
 .sonar-instruments small{font-size:.76rem}
-.sonar-reception strong{font-size:.8rem}
+.sonar-reception{display:flex;align-items:center;flex:0 0 auto}
+.sonar-reception strong{font-size:.8rem;color:#234d3c;line-height:1.4;white-space:nowrap}
 .sonar-controls{display:flex;gap:7px;flex:0 0 auto}
 .sonar-controls button{min-height:44px;padding:8px 11px;font-size:.81rem;white-space:nowrap}
 .sonar-controls button:disabled,.sonar-records button:disabled{opacity:.45;cursor:default}
@@ -65,8 +67,8 @@
 .sonar-error{margin:0;padding:2px 12px 10px;color:#973e2d;font-size:.8rem}
 #s4 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 #s4 button{touch-action:manipulation}#s4 #sonar-ship{touch-action:none}
-@media(min-width:761px) and (max-width:1150px){.sonar-toolbar{gap:7px;padding:8px}.sonar-instruments{gap:7px}.sonar-instruments>div{gap:4px}.sonar-instruments>div>span{font-size:.68rem}.sonar-instruments strong{font-size:.96rem}.sonar-reception strong{font-size:.74rem}.sonar-controls button{padding:7px 8px;font-size:.76rem}}
-@media(max-width:760px){.sonar-toolbar{flex-direction:column;align-items:stretch;gap:8px;padding:10px}.sonar-instruments{gap:6px}.sonar-instruments>div{flex-direction:column;gap:0}.sonar-instruments>div>span{font-size:.66rem}.sonar-instruments strong{font-size:.98rem}.sonar-reception{justify-content:center;align-items:flex-end}.sonar-reception strong{font-size:.78rem}.sonar-controls button{flex:1;font-size:.86rem}.sonar-layout{grid-template-columns:minmax(0,1fr);padding:8px;gap:8px}.sonar-chart-plot,.sonar-chart svg{min-height:150px}.sonar-results{gap:8px}.sonar-results h3{font-size:1rem}.sonar-records table{font-size:.86rem}.sonar-records th,.sonar-records td{padding:8px 6px}.sonar-records thead th{font-size:.78rem}.sonar-table-wrap{min-height:190px}.sonar-record-heading button,.sonar-pagination button{font-size:.8rem}.sonar-current-point{font-size:.8rem}.sonar-depth strong{font-size:2rem}.sonar-calculation #sonar-answer{font-size:.86rem;min-height:2.4em}.sonar-depth-label{font-size:.82rem}.sonar-ocean .sonar-steer{top:calc(max(30.24%, 7.84% + 44px) + 24px)}.sonar-point text{font-size:42px}.sonar-probe-label{font-size:32px}.sonar-hint{font-size:.73rem;padding:0 10px 10px}}
+@media(min-width:761px) and (max-width:1150px){.sonar-toolbar{gap:7px;padding:8px}.sonar-actions{gap:7px}.sonar-instruments{gap:7px}.sonar-instruments>div{gap:4px}.sonar-instruments>div>span{font-size:.68rem}.sonar-instruments strong{font-size:.96rem}.sonar-reception strong{font-size:.74rem}.sonar-controls button{padding:7px 8px;font-size:.76rem}}
+@media(max-width:760px){.sonar-toolbar{flex-direction:column;align-items:stretch;gap:8px;padding:10px}.sonar-actions{gap:8px}.sonar-instruments{gap:6px}.sonar-instruments>div{flex-direction:column;gap:0}.sonar-instruments>div>span{font-size:.66rem}.sonar-instruments strong{font-size:.98rem}.sonar-reception{justify-content:flex-start;align-items:center}.sonar-reception strong{font-size:.78rem}.sonar-controls{flex:1;min-width:0}.sonar-controls button{flex:1 1 auto;font-size:.8rem;padding:8px}.sonar-layout{grid-template-columns:minmax(0,1fr);padding:8px;gap:8px}.sonar-chart-plot,.sonar-chart svg{min-height:150px}.sonar-results{gap:8px}.sonar-results h3{font-size:1rem}.sonar-records table{font-size:.86rem}.sonar-records th,.sonar-records td{padding:8px 6px}.sonar-records thead th{font-size:.78rem}.sonar-table-wrap{min-height:190px}.sonar-record-heading button,.sonar-pagination button{font-size:.8rem}.sonar-current-point{font-size:.8rem}.sonar-depth strong{font-size:2rem}.sonar-calculation #sonar-answer{font-size:.86rem;min-height:2.4em}.sonar-depth-label{font-size:.82rem}.sonar-ocean .sonar-steer{top:calc(max(30.24%, 7.84% + 44px) + 24px)}.sonar-point text{font-size:42px}.sonar-probe-label{font-size:32px}.sonar-hint{font-size:.73rem;padding:0 10px 10px}}
 
 #s4{scroll-margin-top:12px}
 #s4 .lesson-head{grid-template-columns:52px minmax(0,1fr);gap:12px;padding:16px 18px 12px}

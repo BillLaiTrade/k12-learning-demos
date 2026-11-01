@@ -1,3 +1,7 @@
+## 2026-11-01 第四區工具列位置對調
+
+接收狀態與發聲／暫停移至左側，聲速／往返時間移至右側；手機先操作再數據。CSS版本`20261101-toolbar-swap`，原探測／移船／紀錄程式與其他區塊保持。見`docs/decisions/unit-3.4-sonar-workspace.md`及`docs/reviews/unit-3.4-sonar-toolbar-swap/`。
+
 ## 2026-11-01 第五區播放結束回到乾淨房間
 
 依使用者截圖指示，取代完成時回到1.05秒保留波前的舊行為。拍手／語音自然結束清空波線；完成後切材料維持乾淨且不自動播放，重播從零開始。播放中暫停與同時刻材料比較保持。入口與控制器快取版本`20261101-room-clean-end`，同步更新結尾狀態及收合說明；模型、音檔、場景與其他區保持。見`docs/decisions/unit-3.4-room-clean-end.md`及`docs/reviews/unit-3.4-room-clean-end/`。

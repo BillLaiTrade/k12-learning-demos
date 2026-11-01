@@ -1,0 +1,206 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "labHeight": 587.265625,
+    "visible": [
+      {
+        "name": "sonar-toolbar",
+        "top": 110.984375,
+        "bottom": 175.984375,
+        "ok": true
+      },
+      {
+        "name": "sonar-ocean",
+        "top": 185.984375,
+        "bottom": 440.546875,
+        "ok": true
+      },
+      {
+        "name": "sonar-chart",
+        "top": 450.546875,
+        "bottom": 659.984375,
+        "ok": true
+      },
+      {
+        "name": "sonar-calculation",
+        "top": 185.984375,
+        "bottom": 336.5,
+        "ok": true
+      },
+      {
+        "name": "sonar-records",
+        "top": 346.5,
+        "bottom": 659.984375,
+        "ok": true
+      }
+    ],
+    "alignment": [
+      {
+        "name": "B",
+        "error": 0.4000244140625
+      },
+      {
+        "name": "A",
+        "error": 0
+      },
+      {
+        "name": "C",
+        "error": 0.4000244140625
+      }
+    ]
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "labHeight": 587.265625,
+    "visible": [
+      {
+        "name": "sonar-toolbar",
+        "top": 110.671875,
+        "bottom": 175.671875,
+        "ok": true
+      },
+      {
+        "name": "sonar-ocean",
+        "top": 185.671875,
+        "bottom": 440.234375,
+        "ok": true
+      },
+      {
+        "name": "sonar-chart",
+        "top": 450.234375,
+        "bottom": 659.671875,
+        "ok": true
+      },
+      {
+        "name": "sonar-calculation",
+        "top": 185.671875,
+        "bottom": 336.1875,
+        "ok": true
+      },
+      {
+        "name": "sonar-records",
+        "top": 346.1875,
+        "bottom": 659.671875,
+        "ok": true
+      }
+    ],
+    "alignment": [
+      {
+        "name": "B",
+        "error": 0.4000244140625
+      },
+      {
+        "name": "A",
+        "error": 0
+      },
+      {
+        "name": "C",
+        "error": 0.4000244140625
+      }
+    ]
+  },
+  {
+    "width": 1280,
+    "height": 720,
+    "labHeight": 587.265625,
+    "visible": [
+      {
+        "name": "sonar-toolbar",
+        "top": 110.625,
+        "bottom": 175.625,
+        "ok": true
+      },
+      {
+        "name": "sonar-ocean",
+        "top": 185.625,
+        "bottom": 440.1875,
+        "ok": true
+      },
+      {
+        "name": "sonar-chart",
+        "top": 450.1875,
+        "bottom": 659.625,
+        "ok": true
+      },
+      {
+        "name": "sonar-calculation",
+        "top": 185.625,
+        "bottom": 336.140625,
+        "ok": true
+      },
+      {
+        "name": "sonar-records",
+        "top": 346.140625,
+        "bottom": 659.625,
+        "ok": true
+      }
+    ],
+    "alignment": [
+      {
+        "name": "B",
+        "error": 0.4000244140625
+      },
+      {
+        "name": "A",
+        "error": 0
+      },
+      {
+        "name": "C",
+        "error": 0.4000244140625
+      }
+    ]
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "labHeight": 626.34375,
+    "visible": [
+      {
+        "name": "sonar-toolbar",
+        "top": 105.390625,
+        "bottom": 166.390625,
+        "ok": true
+      },
+      {
+        "name": "sonar-ocean",
+        "top": 176.390625,
+        "bottom": 474.03125,
+        "ok": true
+      },
+      {
+        "name": "sonar-chart",
+        "top": 484.03125,
+        "bottom": 693.46875,
+        "ok": true
+      },
+      {
+        "name": "sonar-calculation",
+        "top": 176.390625,
+        "bottom": 326.90625,
+        "ok": true
+      },
+      {
+        "name": "sonar-records",
+        "top": 336.90625,
+        "bottom": 693.46875,
+        "ok": true
+      }
+    ],
+    "alignment": [
+      {
+        "name": "B",
+        "error": 0.4000000000000057
+      },
+      {
+        "name": "A",
+        "error": 0
+      },
+      {
+        "name": "C",
+        "error": 0.39999999999997726
+      }
+    ]
+  }
+]
