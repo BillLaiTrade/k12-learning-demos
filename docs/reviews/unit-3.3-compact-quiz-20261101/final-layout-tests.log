@@ -1,0 +1,24 @@
+▶ sound-match assessment follows the approved layout and shares actual audio with its wave
+  ✔ initial screen has instrument listening above one editable wave, fixed step buttons and no answer reveal or autoplay (172.961289ms)
+  ✔ shape switch changes timbre without changing frequency or amplitude; both step controls redraw the actual selected signal (236.892929ms)
+  ✔ listen controls toggle, actual playback PCM exactly matches all plotted points, and amplitude doubles samples (2715.376834ms)
+  ✔ comparison reveals the target only after both sounds were heard; edits retain the target and clear stale judgments (2018.323745ms)
+  ✔ new question is always available before listening, during adjustment and playback, and after feedback (1383.598553ms)
+  ✔ independent matching remains correct beyond four questions, with retry and no total score or final screen (2887.701725ms)
+  ✔ switching, tuning, other sections, hidden tabs and leaving the page cancel audio without resuming it (502.760454ms)
+  ✔ a pending audio resume is canceled by tuning and cannot start later (469.314019ms)
+  ✔ desktop and laptop keep the approved hierarchy and all activity controls in one viewport; mobile stays contained (1154.128315ms)
+  ✔ fixed levels clamp at both ends, move by one position and never start audio (668.798623ms)
+  ✔ step buttons and waveform switching support keyboard and real touch (2541.507122ms)
+  ✔ a retained target survives an edited waveform load failure and retry; a new question hides it again (1465.613176ms)
+  ✔ failed clip load leaves no fake wave and listening retries successfully (1279.480678ms)
+  ✔ changing question during a slow clip download cancels stale playback and drawing (1084.091533ms)
+✔ sound-match assessment follows the approved layout and shares actual audio with its wave (20106.565946ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20437.478503

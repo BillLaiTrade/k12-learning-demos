@@ -22,6 +22,15 @@ test('sound-match assessment follows the approved layout and shares actual audio
  const switchTo=async tone=>{for(let i=0;i<3&&await plot.getAttribute('data-tone')!==tone;i++){await root.locator('[data-match-switch]').click();await ready();}assert.equal(await plot.getAttribute('data-tone'),tone);};
  const questions=(await import('../units/3/parts/3.3/assets/sound-match-model.mjs')).MATCH_QUESTIONS;
  const capture=process.env.MATCH_CAPTURE_DIR||'/tmp/unit33-sound-match';await fs.mkdir(capture,{recursive:true});await ready();
+ const resultFits=async state=>{
+  for(const [width,height]of [[1440,900],[1366,768],[1280,720],[1024,768]]){
+   await page.setViewportSize({width,height});await root.evaluate(n=>n.scrollIntoView({block:'start'}));
+   const geometry=await root.evaluate(n=>{const box=n.getBoundingClientRect();return{height:box.height,overflow:document.documentElement.scrollWidth>innerWidth,outside:[...n.querySelectorAll('.match-head,.match-target,.match-wave-panel,.match-controls,.match-actions,#quiz-feedback,.match-hints,[data-match-result-action]')].filter(el=>{const r=el.getBoundingClientRect();return r.width&&(r.top<0||r.bottom>innerHeight||r.left<box.left||r.right>box.right+1);}).map(el=>el.className||el.id)};});
+   assert.equal(geometry.overflow,false);assert.equal(await root.locator('button,output,h2,.match-control-title,#quiz-feedback,.match-hints p').evaluateAll(ns=>ns.some(n=>n.scrollWidth>n.clientWidth+1)),false);assert.deepEqual(geometry.outside,[],`${state} ${width}x${height}: complete activity and result fit`);assert.ok(geometry.height<=height-20);
+   await page.screenshot({path:`${capture}/compact-${state}-${width}.png`});
+  }
+  await page.setViewportSize({width:1440,height:1000});
+ };
  await t.test('initial screen has instrument listening above one editable wave, fixed step buttons and no answer reveal or autoplay',async()=>{
   assert.equal(await page.locator('.quiz').count(),1);assert.equal(await root.locator('select').count(),0);assert.equal(await root.locator('input').count(),0);assert.equal(await root.locator('[data-play]').count(),2);assert.equal(await root.locator('[data-match-step]').count(),4);
   assert.equal(await root.locator('[data-match-picture]').getAttribute('data-instrument'),'string');assert.equal(await root.locator('.match-target svg.match-wave').count(),0);assert.equal(await root.locator('[data-match-target]').isHidden(),true);assert.equal(await root.locator('.match-result').isHidden(),true);
@@ -45,7 +54,7 @@ test('sound-match assessment follows the approved layout and shares actual audio
  await t.test('comparison reveals the target only after both sounds were heard; edits retain the target and clear stale judgments',async()=>{
   await set('frequency',220);await root.locator('[type=submit]').click();assert.equal(await feedback.getAttribute('data-state'),'incomplete');assert.equal(await root.locator('[data-match-target]').isHidden(),true);
   await play('quiz-choice');await root.locator('[type=submit]').click();await page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.revealed==='true');assert.equal(await feedback.getAttribute('data-state'),'incorrect');assert.match(await root.locator('[data-match-hints]').innerText(),/增加頻率/);await root.screenshot({path:`${capture}/comparison-1440.png`});
-  assert.equal(await root.locator('[data-match-result-action]').innerText(),'繼續調整');const kept=await plot.locator('.signal').getAttribute('d'),target=await root.locator('[data-match-target]').getAttribute('d');
+  assert.equal(await root.locator('[data-match-result-action]').innerText(),'繼續調整');await resultFits('incorrect');const kept=await plot.locator('.signal').getAttribute('d'),target=await root.locator('[data-match-target]').getAttribute('d');
   await root.locator('[data-match-result-action]').click();assert.equal(await feedback.isHidden(),true);assert.equal(await plot.locator('.signal').getAttribute('d'),kept);assert.equal(await plot.getAttribute('data-frequency'),'220');assert.equal(await root.getAttribute('data-match-state'),'answering');
   const retained=async()=>{
    assert.equal(await root.locator('[data-match-target]').isVisible(),true);assert.equal(await root.locator('[data-match-target]').getAttribute('d'),target);
@@ -58,6 +67,7 @@ test('sound-match assessment follows the approved layout and shares actual audio
   await root.locator('[type=submit]').click();assert.equal(await feedback.getAttribute('data-state'),'incomplete');assert.equal(await root.locator('[data-match-target]').getAttribute('d'),target);assert.equal(await root.locator('[data-match-target]').isVisible(),true);
   await play('quiz-choice');await root.locator('[type=submit]').click();await page.waitForFunction(()=>document.querySelector('#quiz-feedback').dataset.state==='incorrect');assert.match(await root.locator('[data-match-hints]').innerText(),/增加振幅/);
   await set('amplitude',.6);await retained();await play('quiz-choice');await root.locator('[type=submit]').click();await page.waitForFunction(()=>document.querySelector('#quiz-feedback').dataset.state==='correct');
+  await resultFits('correct');
   await set('frequency',440);await retained();
   for(const [width,height]of [[1440,900],[1366,768]]){
    await page.setViewportSize({width,height});await root.evaluate(n=>n.scrollIntoView({block:'start'}));

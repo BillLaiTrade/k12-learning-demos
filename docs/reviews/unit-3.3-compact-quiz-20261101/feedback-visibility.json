@@ -1,0 +1,266 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "incorrect": {
+      "height": 900,
+      "scrollY": 8201,
+      "quizBottom": 757.796875,
+      "quizHeight": 598.9375,
+      "feedback": {
+        "top": 613.234375,
+        "bottom": 649.234375,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "hints": {
+        "top": 655.234375,
+        "bottom": 704.234375,
+        "height": 49,
+        "visiblePixels": 49
+      },
+      "action": {
+        "top": 613.234375,
+        "bottom": 649.546875,
+        "height": 36.3125,
+        "visiblePixels": 36.3125
+      },
+      "submit": {
+        "top": 569.953125,
+        "bottom": 605.953125,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "focus": "play match-submit"
+    },
+    "correct": {
+      "height": 900,
+      "scrollY": 8201,
+      "quizBottom": 757.796875,
+      "quizHeight": 598.9375,
+      "feedback": {
+        "top": 613.234375,
+        "bottom": 649.234375,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "hints": {
+        "top": 655.234375,
+        "bottom": 704.234375,
+        "height": 49,
+        "visiblePixels": 49
+      },
+      "action": {
+        "top": 613.234375,
+        "bottom": 649.234375,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "submit": {
+        "top": 569.953125,
+        "bottom": 605.953125,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "focus": "play match-submit"
+    }
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "incorrect": {
+      "height": 768,
+      "scrollY": 8319,
+      "quizBottom": 625.96875,
+      "quizHeight": 598.9375,
+      "feedback": {
+        "top": 481.40625,
+        "bottom": 517.40625,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "hints": {
+        "top": 523.40625,
+        "bottom": 572.40625,
+        "height": 49,
+        "visiblePixels": 49
+      },
+      "action": {
+        "top": 481.40625,
+        "bottom": 517.71875,
+        "height": 36.3125,
+        "visiblePixels": 36.3125
+      },
+      "submit": {
+        "top": 438.125,
+        "bottom": 474.125,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "focus": "play match-submit"
+    },
+    "correct": {
+      "height": 768,
+      "scrollY": 8319,
+      "quizBottom": 625.96875,
+      "quizHeight": 598.9375,
+      "feedback": {
+        "top": 481.40625,
+        "bottom": 517.40625,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "hints": {
+        "top": 523.40625,
+        "bottom": 572.40625,
+        "height": 49,
+        "visiblePixels": 49
+      },
+      "action": {
+        "top": 481.40625,
+        "bottom": 517.40625,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "submit": {
+        "top": 438.125,
+        "bottom": 474.125,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "focus": "play match-submit"
+    }
+  },
+  {
+    "width": 1280,
+    "height": 720,
+    "incorrect": {
+      "height": 720,
+      "scrollY": 8321,
+      "quizBottom": 588.125,
+      "quizHeight": 598.9375,
+      "feedback": {
+        "top": 443.5625,
+        "bottom": 479.5625,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "hints": {
+        "top": 485.5625,
+        "bottom": 534.5625,
+        "height": 49,
+        "visiblePixels": 49
+      },
+      "action": {
+        "top": 443.5625,
+        "bottom": 479.875,
+        "height": 36.3125,
+        "visiblePixels": 36.3125
+      },
+      "submit": {
+        "top": 400.28125,
+        "bottom": 436.28125,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "focus": "play match-submit"
+    },
+    "correct": {
+      "height": 720,
+      "scrollY": 8321,
+      "quizBottom": 588.125,
+      "quizHeight": 598.9375,
+      "feedback": {
+        "top": 443.5625,
+        "bottom": 479.5625,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "hints": {
+        "top": 485.5625,
+        "bottom": 534.5625,
+        "height": 49,
+        "visiblePixels": 49
+      },
+      "action": {
+        "top": 443.5625,
+        "bottom": 479.5625,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "submit": {
+        "top": 400.28125,
+        "bottom": 436.28125,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "focus": "play match-submit"
+    }
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "incorrect": {
+      "height": 768,
+      "scrollY": 8156,
+      "quizBottom": 626.3125,
+      "quizHeight": 598.9375,
+      "feedback": {
+        "top": 481.75,
+        "bottom": 517.75,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "hints": {
+        "top": 523.75,
+        "bottom": 572.75,
+        "height": 49,
+        "visiblePixels": 49
+      },
+      "action": {
+        "top": 481.75,
+        "bottom": 518.0625,
+        "height": 36.3125,
+        "visiblePixels": 36.3125
+      },
+      "submit": {
+        "top": 438.46875,
+        "bottom": 474.46875,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "focus": "play match-submit"
+    },
+    "correct": {
+      "height": 768,
+      "scrollY": 8156,
+      "quizBottom": 626.3125,
+      "quizHeight": 598.9375,
+      "feedback": {
+        "top": 481.75,
+        "bottom": 517.75,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "hints": {
+        "top": 523.75,
+        "bottom": 572.75,
+        "height": 49,
+        "visiblePixels": 49
+      },
+      "action": {
+        "top": 481.75,
+        "bottom": 517.75,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "submit": {
+        "top": 438.46875,
+        "bottom": 474.46875,
+        "height": 36,
+        "visiblePixels": 36
+      },
+      "focus": "play match-submit"
+    }
+  }
+]
