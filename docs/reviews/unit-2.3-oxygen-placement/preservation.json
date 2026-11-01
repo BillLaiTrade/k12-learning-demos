@@ -1,0 +1,31 @@
+{
+  "baseline": "d279649a945f935a899de79274d636a1e4e3ab0c",
+  "html_changes": "僅擺好集氣位置場景、該步說明與oxygen.mjs快取版本；其他步驟與五區逐字保持",
+  "model_changes": "僅assemblyFrame增加placement與outletPlacement；原時間、化學、排氣、集氣與封存計算保持",
+  "unchanged": [
+    {
+      "path": "units/2/parts/2.3/assets/oxygen-captions.mjs",
+      "sha256": "0ed1a9d91bced4225126a69206780dc62c90f1d235e5ab2f4dd088c31cfddfa6"
+    },
+    {
+      "path": "units/2/parts/2.3/assets/oxygen.css",
+      "sha256": "5068bf6e75696cb59dfe0429f314be22321a83291fed7858d6ce336024cf1033"
+    },
+    {
+      "path": "units/2/parts/2.3/assets/co2.mjs",
+      "sha256": "a65ea5626be43bb92bdfdc16563cdf1130f1a2015a9a30efea1b96a1680d326c"
+    },
+    {
+      "path": "units/2/parts/2.3/assets/gas-properties.mjs",
+      "sha256": "790b854c056f075ec5d6b84e52f33902d7e2472df26a93111ef5181147f7ebdc"
+    },
+    {
+      "path": "units/2/parts/2.3/assets/oxygen-apparatus-empty.webp",
+      "sha256": "4df63926c8f93ecf4dff94428031ea59afe625d761693cff5f11a7bd12c96117"
+    },
+    {
+      "path": "units/2/parts/2.3/assets/oxygen-apparatus-plate.webp",
+      "sha256": "84be392ff0edae08a00713f1129e7bda3fa09eafc98867ac1f497f65c3e45ebf"
+    }
+  ]
+}

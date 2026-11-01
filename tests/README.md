@@ -766,3 +766,9 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4.test.cjs
 ```
 
 本機圖模型2＋聲納15＋船隻7＋整課10，共34項（含外層）。聲納新增四個桌機／筆電視窗自區塊標頭起的全核心同屏、場景與圖表測點水平誤差<1.5px、九種寬度，以及每頁四筆／自動跳至新筆所在頁／鍵盤換頁／探測中翻舊紀錄／保留全部測點／清除重設。手機原生觸控另測五筆後的上一頁／下一頁，排除相容click重複。完整對話與模型說明改驗證展開後可讀。原速、音訊、拖船、點船、暫停及錯誤重試沿用原檢查。`SONAR_URL`指定公開頁（勿帶hash），`SONAR_CAPTURE_DIR`保存截圖及same-view.json，避免覆寫歷史證據。瀏覽器觸控為Chromium模擬，不代表Safari實機或真人聽感核可。
+
+## 2.3 擺放集氣位置動畫（2026-11-01）
+
+oxygen-model增加先定位再降導管、無加藥／反應的檢查，現6項；oxygen-three增加實際可見位移、水下滿水、暫停像素、移動命中與手機觸控，現11項（含外層）。本機模型／物理17、其餘氧氣60及整頁重跑9共86項不同檢查通過。首輪整頁離區等待超時，改原生點選並先讓可見影格更新後9項全過；初次手機全卡截圖捲出實驗，改近景可見截圖後17項全過，原記錄保持。
+
+公開以OXYGEN_URL、OXYGEN_CONTINUOUS_URL、OXYGEN_EQUIPMENT_URL指定同頁，物理11＋操作11＋連播10＋器材9共41項。截圖目錄OXYGEN_THREE_ARTIFACT_DIR、OXYGEN_ARTIFACT_DIR、OXYGEN_CONTINUOUS_ARTIFACT_DIR、OXYGEN_EQUIPMENT_ARTIFACT_DIR另指/tmp，以免覆寫歷史證據。見docs/reviews/unit-2.3-oxygen-placement/。

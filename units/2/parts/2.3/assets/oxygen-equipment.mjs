@@ -2,7 +2,7 @@ const NS='http://www.w3.org/2000/svg';
 const shapes={
   tank:{d:'M590 490L680 445H1480V760L1405 825H590Z',bounds:[590,445,890,380],crop:[590,90,680,340]},
   flask:{d:'M250 290H380V390L458 710Q490 810 315 820Q140 810 155 710L250 390Z',bounds:[140,290,350,530],crop:[330,20,285,470]},
-  jar:{d:'M924 275Q1035 230 1147 275V675Q1035 715 924 675Z',bounds:[924,250,223,465],crop:[1260,20,270,470]},
+  jar:{d:'M924 275Q1035 230 1147 275V675Q1035 715 924 675Z',bounds:[924,250,223,465],transform:'placement-jar',crop:[1260,20,270,470]},
   catalyst:{d:'M170 770a140 55 0 1 0 280 0a140 55 0 1 0-280 0',bounds:[170,715,280,110],transform:'settled-catalyst',crop:[65,535,330,190]},
   tube:{part:'delivery-tube',d:'',bounds:[65,150,1100,600],stroke:true,crop:[535,515,530,135]},
   stopper:{d:'M245 252Q315 232 385 252L375 305Q315 320 255 305Z',bounds:[245,232,140,88],transform:'stopper',crop:[410,555,130,135]},

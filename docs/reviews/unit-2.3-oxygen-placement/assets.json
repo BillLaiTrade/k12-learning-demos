@@ -1,0 +1,27 @@
+{
+  "source": "oxygen-apparatus-empty.webp",
+  "method": "image_gen參考原圖編輯，僅WebP格式轉存",
+  "background": {
+    "file": "oxygen-placement-background.webp",
+    "description": "移除集氣瓶、補回同一水槽與背景",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  "jar": {
+    "file": "oxygen-placement-jar.webp",
+    "description": "同一倒置集氣瓶的透明獨立圖層",
+    "size": [
+      1254,
+      1254
+    ],
+    "svgViewBox": [
+      311,
+      80,
+      632,
+      1094
+    ]
+  },
+  "use": "只用於擺好集氣位置；不是反應速率、用量或實景操作量測"
+}

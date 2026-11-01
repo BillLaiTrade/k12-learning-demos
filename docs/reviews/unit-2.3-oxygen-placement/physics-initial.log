@@ -1,0 +1,47 @@
+✔ tube entry precedes displacement; withdrawal precedes glass cover (6.480478ms)
+✔ shared insertion completes before oxygen ignition; results remain at duration (1.067792ms)
+✔ selected step stays bounded at both ends without leaking into the next step (0.643827ms)
+✔ assembly adds reagents in order, starts reaction after catalyst, and seals before gas enters the tube (2.47732ms)
+✔ operation windows stop at purposeful boundaries, with prerequisites and withdrawal before covering (0.740873ms)
+✔ placement settles the submerged full jar before lowering the outlet; later chemistry keeps its existing timing (0.971919ms)
+▶ 2.3 oxygen: isolated operations preserve physical prerequisites and shared mobile scenes
+  ✔ all scene instances decode original glass assets with unique definitions, without a WebGL dependency (187.504068ms)
+  ✔ placement visibly moves the full inverted jar underwater before lowering the outlet outside it (1044.462099ms)
+  ✔ placement freezes with the player and a moving jar opens its matching introduction without resuming (664.594715ms)
+  ✖ touch close-up shows the moving jar fully, pauses on introduction and ends at the next operation prerequisites (1991.422885ms)
+  ✔ placement, peroxide, catalyst and sealing each end at their own correct state (553.820773ms)
+  ✔ purge keeps the jar full, with bubbles only outside and below the trough surface (80.899835ms)
+  ✔ collection moves the outlet before water displacement and bubbles; callouts follow the true water surface (252.399839ms)
+  ✔ pause freezes the complete drawing and mobile closeup uses the same scene (800.18143ms)
+  ✔ storage first withdraws the outlet, then covers underwater and stays on the same operation (155.326513ms)
+  ✔ returning to an earlier operation restores its science state and visible main/zoom references (1487.084564ms)
+✖ 2.3 oxygen: isolated operations preserve physical prerequisites and shared mobile scenes (8963.030481ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 15
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9444.480815
+
+✖ failing tests:
+
+test at tests/unit-2.3-oxygen-three.test.cjs:25:10
+✖ touch close-up shows the moving jar fully, pauses on introduction and ends at the next operation prerequisites (1991.422885ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '1' !== '2'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3-oxygen-three.test.cjs:26:1894)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3-oxygen-three.test.cjs:25:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '1',
+    expected: '2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

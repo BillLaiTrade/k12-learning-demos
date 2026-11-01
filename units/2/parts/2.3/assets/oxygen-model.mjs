@@ -29,7 +29,9 @@ export function assemblyFrame(elapsed) {
   const catalyst = smooth((time-6300)/1400);
   const sealed = smooth((time-9000)/1600);
   const reaction = clamp((time-6800)/500);
-  return { time, phase, peroxide, catalyst, sealed, reaction,
+  const placement = smooth((time-100)/1500);
+  const outletPlacement = smooth((time-1700)/900);
+  return { time, phase, peroxide, catalyst, sealed, reaction, placement, outletPlacement,
     bottleTilt: smooth((time-2800)/500),
     bottle: smooth((time-2800)/200)*(1-smooth((time-5200)/500)),
     liquidFlow: smooth((time-3300)/180)*(1-smooth((time-5020)/180)),
