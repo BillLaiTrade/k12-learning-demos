@@ -1,0 +1,60 @@
+▶ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role
+  ✔ the first materials step shares the dialog and has no inline information or SVG apparatus controls (203.362519ms)
+  ✔ actual flask, jar, trough, stopper and tube bodies open correct descriptions in all seven later operations (5956.626433ms)
+  ✔ pouring bottle, moving spoon, introduced catalyst and sliding glass plate remain correctly clickable (827.393573ms)
+  ✔ intro pauses the exact scene, closing keeps it paused and explicit play continues from that state (263.233685ms)
+  ✔ current role distinguishes waiting, collecting and storage; invisible equipment and empty picture space do not open (720.799291ms)
+  ✔ Enter, Space, Escape and modal focus work; step changes clear the dialog without hiding focus (383.509464ms)
+  ✔ seven widths keep the modal readable and in-screen; mobile close-up objects also open the same introduction (2513.786694ms)
+  ✔ real touch and reduced motion select the close-up body; no-JS retains the full materials reference (2528.210539ms)
+✔ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role (14983.649622ms)
+▶ 2.3 complete page: five teaching sections and one evidence-based quiz
+  ✔ all six sections and routes exist, with gas profiles and no retired experiment (81.249723ms)
+  ✔ default cup comparisons remain after preview and reset (120.388456ms)
+  ✔ both preparation lessons navigate independent steps and keep properties in section five (908.014715ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (166.113057ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (524.752375ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (3274.579143ms)
+  ✔ all teaching evidence is available without JavaScript (1075.496927ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (4244.119271ms)
+✔ 2.3 complete page: five teaching sections and one evidence-based quiz (12097.889068ms)
+▶ 2.3 materials: seven illustrated objects explain identity and experimental role
+  ✔ native material buttons target the same dialog; inline information is absent and nothing opens automatically (186.699525ms)
+  ✔ actual photo object bodies open all seven original introductions without a lower information panel (1191.176942ms)
+  ✔ name labels, Enter and Space open the dialog; Escape and return restore the selected material focus (292.931594ms)
+  ✔ materials keep no playback; reopening the same material works and forward action still names placement (306.703288ms)
+  ✔ selection survives leaving and returning, but does not reopen the dialog or show inline information (412.328967ms)
+  ✔ seven widths keep every 44px target and the shared dialog in-screen (9707.396538ms)
+  ✔ real touch and reduced motion open and close every original material introduction (2267.351203ms)
+  ✔ original science content remains unchanged for oxygen source, catalyst, purge and underwater covering (27.76888ms)
+  ✔ without JavaScript all seven source introductions remain readable with the original photo (1136.038774ms)
+✔ 2.3 materials: seven illustrated objects explain identity and experimental role (17086.914215ms)
+▶ 2.3 oxygen: isolated operations preserve physical prerequisites and shared mobile scenes
+  ✔ all scene instances decode original glass assets with unique definitions, without a WebGL dependency (98.104461ms)
+  ✔ placement, peroxide, catalyst and sealing each end at their own correct state (389.318928ms)
+  ✔ purge keeps the jar full, with bubbles only outside and below the trough surface (67.673098ms)
+  ✔ collection moves the outlet before water displacement and bubbles; callouts follow the true water surface (198.269183ms)
+  ✔ pause freezes the complete drawing and mobile closeup uses the same scene (760.781232ms)
+  ✔ storage first withdraws the outlet, then covers underwater and stays on the same operation (138.635012ms)
+  ✔ returning to an earlier operation restores its science state and visible main/zoom references (1306.313873ms)
+✔ 2.3 oxygen: isolated operations preserve physical prerequisites and shared mobile scenes (4551.773777ms)
+▶ 2.3 oxygen: one vertical list of purposeful operations and in-scene playback
+  ✔ one eight-operation list sits beside materials, with no second hierarchy, counter, previous or material playback (90.263724ms)
+  ✔ forward actions name the next operation; each animation stops before another operation starts (663.509833ms)
+  ✔ direct selection reconstructs prerequisite contents and returning to materials preserves a chosen introduction (418.813011ms)
+  ✔ the in-scene button pauses pixels, resumes and replays; quick selection cancels previous clocks (881.736681ms)
+  ✔ vertical arrows, Home, End, native activation and Escape retain visible focus (117.071172ms)
+  ✔ background, leaving and another experiment pause without resuming automatically (256.589314ms)
+  ✔ final action moves focus to carbon dioxide; property results and project avatars remain (185.29759ms)
+  ✔ eight operations fit seven widths; compact navigation expands vertically and all controls stay inside (11688.478073ms)
+  ✔ touch and reduced motion use an expandable list and explicit named next action (1530.56509ms)
+  ✔ without JavaScript all eight correct representatives and material introductions remain readable (1142.567315ms)
+✔ 2.3 oxygen: one vertical list of purposeful operations and in-scene playback (18648.706808ms)
+ℹ tests 47
+ℹ suites 0
+ℹ pass 47
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 69291.045842

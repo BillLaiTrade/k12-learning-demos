@@ -18,7 +18,8 @@ function intersects(bounds,node,box){
 }
 export function createEquipmentExplorer({panel,panels,getStage,onOpen}){
   const dialog=panel.closest('.oxygen-lesson').querySelector('#oxygen-equipment-dialog'),layers=new Map();
-  const catalog=Object.fromEntries([...panels[0].querySelectorAll('[data-material-info]')].map(info=>[info.dataset.materialInfo,{name:info.querySelector('h4').textContent,identity:info.querySelectorAll('dd')[0].textContent,role:info.querySelectorAll('dd')[1].textContent}]));
+  const materialsCatalog=Object.fromEntries([...panels[0].querySelectorAll('[data-material-info]')].map(info=>[info.dataset.materialInfo,{name:info.querySelector('h4').textContent,identity:info.querySelectorAll('dd')[0].textContent,role:info.querySelectorAll('dd')[1].textContent}]));
+  const catalog={...materialsCatalog};
   catalog.source={name:'雙氧水試藥瓶',identity:'盛裝雙氧水的玻璃試藥瓶；瓶內的雙氧水是過氧化氫的水溶液。',role:'在這一步把雙氧水倒入錐形瓶，作為製備氧氣的來源。'};
   catalog.tube={name:'玻璃導管',identity:'讓氣體沿固定路徑通過的中空玻璃管。',role:'將錐形瓶產生的氣體送到出口，再導入集氣瓶收集。'};
   catalog.stopper={name:'塞子',identity:'用來封住反應容器瓶口，並固定穿過它的玻璃導管。',role:'塞緊錐形瓶口，讓產生的氣體沿導管送出。'};
@@ -37,12 +38,13 @@ export function createEquipmentExplorer({panel,panels,getStage,onOpen}){
   function visible(node){const r=node?.getBoundingClientRect();return !!r&&r.width>0&&r.height>0&&!node.closest('[hidden]');}
   function open(key,node){
     onOpen();trigger=node;
-    const info=catalog[key],stage=getStage();
+    const stage=getStage(),info=stage===0?materialsCatalog[key]:catalog[key];
     dialog.querySelector('[data-equipment-title]').textContent=info.name;
     dialog.querySelector('[data-equipment-context]').textContent=`目前操作：${panels[stage].querySelector('h3').textContent}`;
     dialog.querySelector('[data-equipment-identity]').textContent=info.identity;
-    dialog.querySelector('[data-equipment-role]').textContent=currentRole(key,stage);
-    dialog.querySelector('[data-equipment-portrait]').setAttribute('viewBox',shapes[key].crop.join(' '));
+    dialog.querySelector('[data-equipment-role]').textContent=stage===0?info.role:currentRole(key,stage);
+    dialog.querySelector('.oxygen-equipment-paused').textContent=stage===0?'關閉介紹後，可繼續點選其他材料或前往下一個操作。':'關閉介紹後，可自行播放或重播這一步。';
+    dialog.querySelector('[data-equipment-portrait]').setAttribute('viewBox',(stage===0&&key==='tube'?[410,500,700,250]:shapes[key].crop).join(' '));
     const image=dialog.querySelector('[data-equipment-portrait] image');image.setAttribute('href',key==='spoon'?'assets/oxygen-catalyst-spoon.webp':'assets/oxygen-materials-layout.webp');image.setAttribute('width',key==='spoon'?'245':'1536');image.setAttribute('height',key==='spoon'?'55':'850');
     node.setAttribute('aria-expanded','true');dialog.showModal();
   }
@@ -79,15 +81,19 @@ export function createEquipmentExplorer({panel,panels,getStage,onOpen}){
       }
     }
   }
-  dialog.querySelectorAll('[data-equipment-close]').forEach(button=>button.addEventListener('click',()=>dialog.close()));
-  dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
-  dialog.addEventListener('close',()=>{
-    if(!trigger)return;
-    trigger.setAttribute('aria-expanded','false');
+  function restoreFocus(){
+    const origin=trigger;if(!origin)return;
+    trigger=null;origin.setAttribute('aria-expanded','false');
     const view=panels[getStage()];
-    const same=view.querySelector(`.oxygen-main-scene [data-equipment="${trigger.dataset.equipment}"]`);
-    const target=view.contains(trigger)&&visible(trigger)?trigger:visible(same)?same:view.querySelector('h3');
-    target.focus({preventScroll:true});trigger=null;
-  });
-  return {sync,close:()=>{if(dialog.open)dialog.close();}};
+    const same=view.querySelector(`.oxygen-main-scene [data-equipment="${origin.dataset.equipment||origin.dataset.material}"]`);
+    const target=view.contains(origin)&&visible(origin)?origin:visible(same)?same:view.querySelector('h3');
+    target.focus({preventScroll:true});
+  }
+  function close(){if(dialog.open)dialog.close();restoreFocus();}
+  dialog.querySelectorAll('[data-equipment-close]').forEach(button=>button.addEventListener('click',close));
+  dialog.addEventListener('cancel',event=>{event.preventDefault();close();});
+  dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)close();}});
+  // Native close events are queued: an older event must not reset a reopened dialog.
+  dialog.addEventListener('close',()=>{if(!dialog.open)restoreFocus();});
+  return {sync,openMaterial:open,close};
 }

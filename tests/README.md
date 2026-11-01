@@ -654,3 +654,13 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_EQUIPMENT_ARTIFACT_DIR=/tmp/unit23-equipm
 器材專項9項（含外層）：直接以原圖座標點七操作×五種核心器材，另點移動的試藥瓶／藥匙／粉末／玻璃片；核對基本介紹與各步角色、隱藏目標不互動、暫停／手動續播、Enter／空白／Escape及模態焦點、七種寬度與近景點選、真實觸控／減少動態及無JS回看第一步。與原六套瀏覽器61項合計70項，模型未變更而未重跑模型專項。各套截圖目錄請以原環境變數指到/tmp，避免覆寫歷史證據。
 
 公開新專項可用OXYGEN_EQUIPMENT_URL指定網址；搭配OXYGEN_URL、AIR_FULL_URL跑器材9＋操作11＋物理8＋整頁9，共37項。新證據見docs/reviews/unit-2.3-oxygen-equipment/。
+
+## 2.3第一步材料改為同款視窗（2026-11-01）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_MATERIALS_ARTIFACT_DIR=/tmp/unit23-material-dialog OXYGEN_EQUIPMENT_ARTIFACT_DIR=/tmp/unit23-material-dialog-equipment OXYGEN_ARTIFACT_DIR=/tmp/unit23-material-dialog-operations OXYGEN_THREE_ARTIFACT_DIR=/tmp/unit23-material-dialog-physics AIR_FULL_ARTIFACT_DIR=/tmp/unit23-material-dialog-full node --test --test-concurrency=1 tests/unit-2.3-materials.test.cjs tests/unit-2.3-equipment.test.cjs tests/unit-2.3-oxygen.test.cjs tests/unit-2.3-oxygen-three.test.cjs tests/unit-2.3-full.test.cjs
+```
+
+本機47項（材料10、器材9、操作11、物理8、整頁9，含外層）通過。材料專項改驗證七件原圖／名稱開共用視窗、定義與用途逐字保留、無常駐資訊、首次不自動開啟、反覆點同物品、Enter／空白／Escape、同步aria-expanded與回焦點、保留選擇但返回不重開、七寬度44px與模態不溢出、真實觸控及無JS原文可讀。其餘專項配合第一步開視窗後先關閉再切步，後七項點選與原物理／小測回歸。
+
+公開可設OXYGEN_MATERIALS_URL、OXYGEN_EQUIPMENT_URL、OXYGEN_URL、AIR_FULL_URL，跑材料10＋器材9＋操作11＋整頁9，共39項。證據見docs/reviews/unit-2.3-material-dialog/。模型、CO2與性質模組未改，未在本輪重跑它們的專用套件。

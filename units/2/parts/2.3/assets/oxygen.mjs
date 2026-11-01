@@ -1,4 +1,4 @@
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=equipment-13';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=material-dialog-14';
 import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=operations-12';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
@@ -8,7 +8,6 @@ const players = [];
 
 const materialButtons=[...panels[0].querySelectorAll('[data-material]')];
 const materialInfo=[...panels[0].querySelectorAll('[data-material-info]')];
-const materialDetails=panels[0].querySelector('[data-material-details]');
 let selectedMaterial='source', materialInitialized=false;
 function showMaterial(key) {
   if(!materialButtons.some(button=>button.dataset.material===key))return;
@@ -207,11 +206,10 @@ function createPreparationPlayer() {
   materialButtons.forEach(button=>{
     button.disabled=false;button.addEventListener('click',()=>{
       showMaterial(button.dataset.material);paint();
-      const bounds=materialDetails.getBoundingClientRect();
-      if(bounds.bottom>innerHeight||bounds.top<0)materialDetails.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth',block:'nearest'});
+      explorer.openMaterial(button.dataset.material,button);
     });
   });
-  showMaterial(selectedMaterial);materialDetails.setAttribute('aria-live','polite');materialDetails.setAttribute('aria-atomic','true');
+  showMaterial(selectedMaterial);
   menu.addEventListener('click',()=>setMenu(navBody.hidden));
   play.addEventListener('click',()=>state==='playing'?pausePlayback():start());
   next.addEventListener('click',()=>{
