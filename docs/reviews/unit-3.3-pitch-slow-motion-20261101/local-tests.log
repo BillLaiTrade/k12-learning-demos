@@ -1,0 +1,22 @@
+▶ pitch comparison: independent speakers, controlled frequency and synchronized records
+  ✔ approved controls, matching speakers and actual shared characters render without autoplay (114.420653ms)
+  ✔ frequency changes do not play sound; bounds, cycles and amplitude stay correct at every step (1037.892547ms)
+  ✔ left can repeat twice then right; actual audio has selected pitch and fixed signal amplitude (731.977362ms)
+  ✔ one side animates with its trace; natural finish rests the cone and keeps the full comparison (4170.467692ms)
+  ✔ front speaker visibly pumps in phase while its wooden cabinet stays fixed, including reduced motion (4506.072308ms)
+  ✔ one shared switch shows exactly one view per speaker and preserves sound, frequency and progress (1201.341589ms)
+  ✔ both A dimensions connect to the same membrane edge at its symmetric extreme positions (4.474095ms)
+  ✔ rendered diaphragm transforms have equal positive and negative travel at every frequency, with correct cycle ratios (1039.240102ms)
+  ✔ keyboard, rapid changes, section navigation and page visibility cancel playback (421.714855ms)
+  ✔ desktop and laptop keep the mockup hierarchy, equal columns and frequency controls only on right (3236.033058ms)
+  ✔ front and side controls, speakers and complete wave cards fit one laptop viewport (1229.940244ms)
+  ✔ touch view switching and side-speaker playback work on a narrow screen (1336.095611ms)
+✔ pitch comparison: independent speakers, controlled frequency and synchronized records (20708.855023ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21091.210864

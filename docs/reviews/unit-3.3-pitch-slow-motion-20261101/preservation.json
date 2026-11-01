@@ -1,0 +1,10 @@
+{
+  "only-added-slow-motion-note": true,
+  "single-visible-note": true,
+  "lesson.mjs": true,
+  "lesson.css": true,
+  "pitch-experiment.mjs": true,
+  "model.mjs": true,
+  "sound-match.mjs": true,
+  "sound-match-model.mjs": true
+}
