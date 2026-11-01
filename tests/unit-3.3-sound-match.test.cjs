@@ -55,7 +55,35 @@ test('sound-match assessment follows the approved layout and shares actual audio
    assert.equal(await root.locator('[data-match-hints] [data-matched=true]').count(),3);assert.equal(await root.locator('[data-match-dots] .passed').count(),i+1);
    await root.locator('[data-match-next]').click();if(i<3){await ready();assert.equal(await root.locator('[data-match-progress]').innerText(),`第 ${i+2}／4 題`);assert.equal(await feedback.isHidden(),true);assert.equal(await root.locator('[data-play=quiz-base]').evaluate(n=>document.activeElement===n),true);}
   }
-  assert.match(await feedback.innerText(),/4 題中有 4 題/);await root.locator('[data-match-next]').click();await ready();assert.equal(await root.locator('[data-match-dots] .passed').count(),0);assert.equal(await root.locator('[data-match-progress]').innerText(),'第 1／4 題');assert.equal(await root.locator('[data-match-target]').isHidden(),true);
+  assert.equal(await root.getAttribute('data-match-state'),'summary');assert.equal(await root.locator('[data-match-summary-count]').innerText(),'4');
+  assert.equal(await root.locator('[data-match-activity]').isHidden(),true);assert.equal(await root.locator('[data-match-summary-items] [data-matched=true]').count(),4);
+  assert.equal(await root.locator('[data-match-progress]').innerText(),'本輪完成');assert.equal(await root.locator('[data-match-dots] .current').count(),0);
+  assert.equal(await root.locator('#match-summary-title').evaluate(n=>document.activeElement===n),true);assert.equal(await root.locator('button:visible').count(),1);
+  const runs=await page.evaluate(()=>window.matchRuns.length),waveBefore=await plot.locator('.signal').getAttribute('d');
+  // Reproduce the original bug: stale form submission followed by old next/retry controls must not reset the round.
+  await root.locator('form').evaluate(n=>n.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true})));
+  for(const selector of ['[data-match-next]','[data-match-retry]','[data-match-switch]','[data-match-step=amplitude][data-direction="1"]'])await root.locator(selector).evaluate(n=>n.click());
+  assert.equal(await root.getAttribute('data-match-state'),'summary');assert.equal(await root.locator('[data-match-summary-count]').innerText(),'4');assert.equal(await root.locator('[data-match-dots] .passed').count(),4);assert.equal(await plot.locator('.signal').getAttribute('d'),waveBefore);assert.equal(await page.evaluate(()=>window.matchRuns.length),runs);
+  await root.locator('[data-match-restart]').focus();await page.keyboard.press('Enter');await ready();
+  assert.equal(await root.getAttribute('data-match-state'),'answering');assert.equal(await root.locator('[data-match-summary]').isHidden(),true);assert.equal(await root.locator('[data-match-activity]').isVisible(),true);
+  assert.equal(await root.locator('[data-match-dots] .passed').count(),0);assert.equal(await root.locator('[data-match-progress]').innerText(),'第 1／4 題');assert.equal(await root.locator('[data-match-target]').isHidden(),true);
+  assert.equal(await plot.getAttribute('data-tone'),'pipe');assert.equal(await plot.getAttribute('data-frequency'),'440');assert.equal(await plot.getAttribute('data-amplitude'),'0.3');assert.equal(await page.evaluate(()=>window.matchRuns.length),runs);
+  await root.locator('[type=submit]').click();assert.equal(await feedback.getAttribute('data-state'),'incomplete');
+
+ });
+ await t.test('summary preserves mixed outcomes, contains one restart action and fits desktop and phone layouts',async()=>{
+  for(let i=0;i<4;i++){
+   if(i===0){await switchTo(questions[0].tone);await set('frequency',questions[0].frequency);await set('amplitude',questions[0].amplitude);}
+   await play('quiz-base');await play('quiz-choice');await root.locator('[type=submit]').click();await page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.revealed==='true');
+   assert.equal(await feedback.getAttribute('data-state'),i===0?'correct':'incorrect');await root.locator('[data-match-next]').click();if(i<3)await ready();
+  }
+  assert.equal(await root.locator('[data-match-summary-count]').innerText(),'1');assert.equal(await root.locator('[data-match-summary-items] [data-matched=true]').count(),1);assert.equal(await root.locator('[data-match-summary-items] [data-matched=false]').count(),3);
+  for(const [width,height]of [[1440,900],[1280,720],[390,844],[320,844]]){
+   await page.setViewportSize({width,height});await root.evaluate(n=>n.scrollIntoView({block:'start'}));assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+   const layout=await root.locator('[data-match-summary]').evaluate(n=>{const box=n.getBoundingClientRect();return [...n.querySelectorAll('button,[role=listitem]')].every(x=>{const r=x.getBoundingClientRect();return r.left>=box.left&&r.right<=box.right&&x.scrollWidth<=x.clientWidth+1;});});assert.equal(layout,true);assert.equal(await root.locator('button:visible').count(),1);await root.screenshot({path:`${capture}/summary-${width}.png`});
+  }
+  await page.setViewportSize({width:1440,height:1000});await page.locator('.route a[href="#card-02"]').click();await page.locator('.route a[href="#unit-quiz"]').click();assert.equal(await root.getAttribute('data-match-state'),'summary');assert.equal(await root.locator('[data-match-summary-count]').innerText(),'1');
+  await root.locator('[data-match-restart]').click();await ready();assert.equal(await root.locator('[data-match-dots] .passed').count(),0);assert.equal(await feedback.isHidden(),true);
  });
  await t.test('switching, tuning, other sections, hidden tabs and leaving the page cancel audio without resuming it',async()=>{
   await play('quiz-choice');await root.locator('[data-match-switch]').click();assert.equal(await root.getAttribute('data-playing'),'false');await ready();
@@ -92,7 +120,13 @@ test('sound-match assessment follows the approved layout and shares actual audio
   await root.locator('[data-match-step=frequency][data-direction="-1"]').focus();await page.keyboard.press('Space');await ready();assert.equal(await plot.getAttribute('data-frequency'),'440');
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const p=await context.newPage();await p.goto(base+'#unit-quiz',{waitUntil:'networkidle'});await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');
   await p.locator('[data-match-step=frequency][data-direction="1"]').tap();await p.waitForFunction(()=>document.querySelector('#quiz-choice').dataset.frequency==='550');assert.equal(await p.locator('#answer-frequency').innerText(),'550 Hz');
-  await p.locator('[data-match-switch]').tap();await p.waitForFunction(()=>document.querySelector('#quiz-choice').dataset.tone==='pure');await p.locator('[data-play=quiz-choice]').tap();await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.playing==='true');await p.locator('[data-play=quiz-choice]').tap();assert.equal(await p.locator('#unit-quiz').getAttribute('data-playing'),'false');await context.close();
+  await p.locator('[data-match-switch]').tap();await p.waitForFunction(()=>document.querySelector('#quiz-choice').dataset.tone==='pure');await p.locator('[data-play=quiz-choice]').tap();await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.playing==='true');await p.locator('[data-play=quiz-choice]').tap();assert.equal(await p.locator('#unit-quiz').getAttribute('data-playing'),'false');
+  for(let i=0;i<4;i++){
+   for(const key of ['quiz-base','quiz-choice']){await p.locator(`[data-play="${key}"]`).tap();await p.waitForFunction(key=>document.querySelector('#unit-quiz').dataset.matchPlaying===key,key);}
+   await p.locator('#unit-quiz [type=submit]').tap();await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.revealed==='true');await p.locator('[data-match-next]').tap();if(i<3)await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');
+  }
+  assert.equal(await p.locator('#unit-quiz').getAttribute('data-match-state'),'summary');assert.equal(await p.locator('[data-match-summary-count]').innerText(),'0');assert.equal(await p.locator('#unit-quiz button:visible').count(),1);
+  await p.locator('[data-match-restart]').tap();await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');assert.equal(await p.locator('[data-match-progress]').innerText(),'第 1／4 題');assert.equal(await p.locator('#unit-quiz').getAttribute('data-playing'),'false');await context.close();
  });
  if(!process.env.SOUND33_BASE_URL)await t.test('failed clip load leaves no fake wave and listening retries successfully',async()=>{
   const p=await browser.newPage();let fail=true;await p.route('**/timbre-audio/pipe.wav*',route=>fail?route.fulfill({status:503,body:'unavailable'}):route.continue());await p.goto(base+'#unit-quiz',{waitUntil:'networkidle'});await p.waitForFunction(()=>document.querySelector('[data-match-load]').textContent.includes('暫時無法'));

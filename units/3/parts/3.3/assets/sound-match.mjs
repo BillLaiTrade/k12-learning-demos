@@ -4,6 +4,7 @@ import {MATCH_TONES,MATCH_LEVELS,MATCH_QUESTIONS,MATCH_NAMES,matchClip,matchWave
 export function createSoundMatch(root,{onChange}){
  const find=s=>root.querySelector(s);
  const mine=find('#quiz-choice'),targetPlot=find('[data-match-target]'),feedback=find('#quiz-feedback'),result=find('[data-match-result]');
+ const activity=find('[data-match-activity]'),summaryPanel=find('[data-match-summary]'),instructions=find('[data-match-instructions]'),initialInstructions=instructions.textContent;
  let index=0,answer,revision=0,heardTarget=false,heardChoice=false,checked=false,summary=false;
  const scores=Array(4).fill(false),attempted=Array(4).fill(false);
  const target=()=>MATCH_QUESTIONS[index];
@@ -13,12 +14,12 @@ export function createSoundMatch(root,{onChange}){
   return matchClip(clip,selected);
  }
  function conceal(){
-  checked=false;summary=false;root.querySelector('.play-state').classList.add('visually-hidden');result.hidden=true;targetPlot.setAttribute('hidden','');find('[data-match-legend]').hidden=true;
+  checked=false;root.querySelector('.play-state').classList.add('visually-hidden');result.hidden=true;targetPlot.setAttribute('hidden','');find('[data-match-legend]').hidden=true;
   feedback.hidden=true;delete feedback.dataset.state;root.dataset.revealed='false';
  }
  function progress(){
-  find('[data-match-progress]').textContent=`第 ${index+1}／4 題`;
-  find('[data-match-dots]').innerHTML=scores.map((ok,i)=>`<span class="${i===index?'current ':''}${ok?'passed':attempted[i]?'attempted':''}" aria-label="第${i+1}題${ok?'已配對成功':i===index?'進行中':attempted[i]?'已嘗試':'尚未作答'}"></span>`).join('');
+  find('[data-match-progress]').textContent=summary?'本輪完成':`第 ${index+1}／4 題`;
+  find('[data-match-dots]').innerHTML=scores.map((ok,i)=>`<span class="${!summary&&i===index?'current ':''}${ok?'passed':attempted[i]?'attempted':''}" aria-label="第${i+1}題${ok?'已配對成功':!summary&&i===index?'進行中':attempted[i]?'已嘗試':'尚未作答'}"></span>`).join('');
  }
  async function renderWave(){
   const ticket=++revision;root.dataset.waveReady='false';mine.querySelector('.signal').setAttribute('d','');
@@ -32,6 +33,7 @@ export function createSoundMatch(root,{onChange}){
   }catch{if(ticket!==revision)return;load.textContent='波形暫時無法載入，按「聽我的聲音」重試。';}
  }
  function update(){
+  if(summary)return;
   onChange();heardChoice=false;conceal();
   for(const key of ['frequency','amplitude']){
    const levels=MATCH_LEVELS[key],position=levels.indexOf(answer[key]),output=find('#answer-'+key);
@@ -43,6 +45,7 @@ export function createSoundMatch(root,{onChange}){
   renderWave();
  }
  function startQuestion(){
+  root.dataset.matchState='answering';activity.hidden=false;summaryPanel.hidden=true;instructions.textContent=initialInstructions;
   onChange();heardTarget=false;heardChoice=false;answer={...target().start};
   const picture=document.querySelector(`#card-05 [data-timbre="${target().tone}"] .timbre-picture`);
   find('[data-match-picture]').replaceChildren(...[...picture.childNodes].map(n=>n.cloneNode(true)));
@@ -54,14 +57,27 @@ export function createSoundMatch(root,{onChange}){
   startQuestion();root.scrollIntoView({block:'start'});
   find('[data-play="quiz-base"]').focus({preventScroll:true});
  }
+ function showSummary(){
+  onChange();summary=true;checked=false;revision++;
+  root.dataset.matchState='summary';activity.hidden=true;summaryPanel.hidden=false;
+  instructions.textContent='四題挑戰已結束，看看這一輪的完成情況。';progress();
+  find('[data-match-summary-count]').textContent=String(scores.filter(Boolean).length);
+  find('[data-match-summary-items]').replaceChildren(...scores.map((ok,i)=>{
+   const item=document.createElement('div'),title=document.createElement('strong'),status=document.createElement('span');
+   item.setAttribute('role','listitem');item.dataset.matched=String(ok);title.textContent=`第 ${i+1} 題`;
+   status.textContent=ok?'✓ 已配對成功':'尚未配對成功';item.append(title,status);return item;
+  }));
+  root.scrollIntoView({block:'start'});find('#match-summary-title').focus({preventScroll:true});
+ }
  for(const button of root.querySelectorAll('[data-match-step]'))button.addEventListener('click',()=>{
+  if(summary)return;
   const key=button.dataset.matchStep,levels=MATCH_LEVELS[key],next=levels.indexOf(answer[key])+Number(button.dataset.direction);
   if(next<0||next>=levels.length)return;
   answer[key]=levels[next];update();
  });
- find('[data-match-switch]').addEventListener('click',()=>{answer.tone=MATCH_TONES[(MATCH_TONES.indexOf(answer.tone)+1)%MATCH_TONES.length];update();});
+ find('[data-match-switch]').addEventListener('click',()=>{if(summary)return;answer.tone=MATCH_TONES[(MATCH_TONES.indexOf(answer.tone)+1)%MATCH_TONES.length];update();});
  find('form').addEventListener('submit',async event=>{
-  event.preventDefault();onChange();
+  event.preventDefault();if(summary)return;onChange();
   if(!heardTarget||!heardChoice){
    feedback.hidden=false;feedback.dataset.state='incomplete';feedback.textContent=!heardTarget?'先按「聽目標聲音」，再試聽並調整自己的聲音。':'再按「聽我的聲音」確認目前的設定，然後完成比較。';return;
   }
@@ -81,15 +97,14 @@ export function createSoundMatch(root,{onChange}){
    result.hidden=false;find('[data-match-next]').textContent=index===3?'查看本輪結果 →':'下一題 →';
   }catch{if(ticket!==revision)return;feedback.hidden=false;feedback.dataset.state='error';feedback.textContent='目標波形暫時無法載入，請再按「完成比較」重試。';}
  });
- find('[data-match-retry]').addEventListener('click',()=>{onChange();conceal();find('[data-match-step=frequency]:not(:disabled)').focus({preventScroll:true});});
+ find('[data-match-retry]').addEventListener('click',()=>{if(summary)return;onChange();conceal();find('[data-match-step=frequency]:not(:disabled)').focus({preventScroll:true});});
  find('[data-match-next]').addEventListener('click',()=>{
-  if(!checked)return;onChange();
-  if(summary){scores.fill(false);attempted.fill(false);index=0;nextQuestion();}
-  else if(index<3){index++;nextQuestion();}
-  else{
-   summary=true;feedback.dataset.state='summary';feedback.textContent=`本輪完成！4 題中有 ${scores.filter(Boolean).length} 題配對成功。可以再挑戰一次，練習用波形調整聲音。`;
-   find('[data-match-next]').textContent='再挑戰一次 ↻';
-  }
+  if(summary||!checked)return;
+  if(index<3){index++;nextQuestion();}else showSummary();
+ });
+ find('[data-match-restart]').addEventListener('click',()=>{
+  if(!summary)return;
+  summary=false;scores.fill(false);attempted.fill(false);index=0;nextQuestion();
  });
  startQuestion();
  return {settings,prepare,buffer:(clip,context)=>timbreBuffer(clip,context),
