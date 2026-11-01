@@ -98,7 +98,7 @@
     .dialogue--xiaokui .speaker::before { border-color:#d39765; background-position:0 50%; }
     .control-panel { margin-top:14px; padding:14px 16px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
     .controls { display:flex; flex-wrap:wrap; align-items:center; gap:9px; }
-    .wave-controls { display:grid; grid-template-columns:auto auto minmax(0,1fr); gap:12px; }
+    .wave-controls { display:grid; grid-template-columns:auto auto minmax(0,1fr); gap:12px 14px; padding:12px 0 8px; }
     .wave-button-help { color:var(--muted); line-height:1.6; }
     @media (max-width:680px) { .wave-button-help { grid-column:1/-1; } }
     .secondary,.action { min-height:44px; padding:9px 15px; border-radius:13px; font-weight:750; }
@@ -527,7 +527,7 @@
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>繩子上的起伏沿著繩子傳到另一端；這種變化的傳遞，就叫做波。</p></div>
             <p>波是振動或擾動的傳播，能把能量由一處傳到另一處。繩子一端振動後，變化沿著繩子傳開。</p>
             <figure class="visual">
-              <svg class="rope-wave" viewBox="0 0 760 270" role="img" aria-label="繩波由左側波源向右傳播；可播放單次起伏，或切換連續波">
+              <svg class="rope-wave" viewBox="0 50 760 200" role="img" aria-label="繩波由左側波源向右傳播；可播放單次起伏，或切換連續波">
                 <defs>
                   <marker id="arrow-rope-1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#176b53"/></marker>
                   <marker id="arrow-source-motion" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" fill="#748b7e"/></marker>
@@ -535,9 +535,9 @@
                 <path class="pulse-path rope-underlay" d="M38 142H722"/>
                 <path d="M24 98V186" fill="none" stroke="#748b7e" stroke-width="1.8" marker-start="url(#arrow-source-motion)" marker-end="url(#arrow-source-motion)"/>
                 <circle id="wave-source-marker-1" cx="38" cy="142" r="6.5" fill="#df8b41" stroke="#fffefa" stroke-width="2.5"/>
-                <text x="84" y="45">波源上下振動</text>
-                <path d="M130 228H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
-                <text x="345" y="253" text-anchor="middle">波形傳播方向</text>
+                <text x="48" y="78">波源上下振動</text>
+                <path d="M130 215H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
+                <text x="345" y="235" text-anchor="middle">波形傳播方向</text>
               </svg>
               <figcaption>
                 <div class="controls wave-controls" role="group" aria-label="繩波播放控制" aria-describedby="wave-button-help"><button class="secondary playback-button" type="button" data-wave-single>單次波</button><button class="secondary playback-button" type="button" data-wave-continuous aria-pressed="false">連續波</button><span class="wave-button-help" id="wave-button-help">單次波：振動一次。<br>連續波：持續振動，可暫停。</span></div>
