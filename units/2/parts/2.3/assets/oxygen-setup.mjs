@@ -21,7 +21,7 @@ const NS='http://www.w3.org/2000/svg';
 function svg(tag,attrs={}) {const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,v);return n;}
 // Sprite coordinates refer to the generated transparent sheet, not the source
 // photograph. Each cutout is explicitly placed back at its original photo spot.
-const crops={source:[48,95,240,425],flask:[365,60,290,470],tank:[650,170,750,360],jar:[1425,75,215,465],catalyst:[45,630,330,180],tube:[435,620,785,195],plate:[1190,660,475,190]};
+const crops={source:[48,95,240,425],flask:[365,60,290,470],tank:[650,170,750,360],jar:[1425,75,215,465],catalyst:[45,630,330,180],tube:[435,620,785,195],plate:[1190,660,475,190],cork:[445,700,150,113]};
 function sprite(key,x,y,w,h) {
   const n=svg('svg',{x,y,width:w,height:h,viewBox:crops[key].join(' '),preserveAspectRatio:'none',overflow:'hidden'});
   n.append(svg('image',{href:'assets/oxygen-setup-sprites.png',width:1686,height:933}));return n;
@@ -36,12 +36,23 @@ export function createSetupScene(view,panels) {
   const source=svg('g',{'data-setup-body':'source'});source.append(sprite('source',75,70,165,350));art.append(source);
   const catalyst=svg('g',{'data-setup-body':'catalyst'});catalyst.append(sprite('catalyst',90,530,275,145));art.append(catalyst);
   const flask=svg('g',{'data-setup-body':'flask'});
-  const flaskOutline='M270 305H360V412L455 722Q476 796 315 807Q158 796 180 722L270 412Z';
-  const flaskClip=svg('clipPath',{id:'shared-flask-inside'});flaskClip.append(svg('path',{d:'M284 317H346V412L428 722Q443 759 416 773Q315 802 214 773Q187 759 201 722L284 412Z'}));defs.append(flaskClip);
+  const flaskOutline='M246 305Q315 291 392 305V330H381V405L479 725Q498 796 315 815Q133 796 151 725L264 405V330H246Z';
+  const flaskClip=svg('clipPath',{id:'shared-flask-inside'}),flaskInside=svg('path',{d:'M274 322H374V405L466 718Q477 750 448 777Q315 820 182 777Q157 750 167 718L274 405Z'});flaskClip.append(flaskInside);defs.append(flaskClip);
+  // Trace the inner glass surface, not a smaller free-standing container.
+  // The same profile determines the meniscus at every level during pouring.
+  const profileLength=flaskInside.getTotalLength(),profile=Array.from({length:513},(_,i)=>flaskInside.getPointAtLength(profileLength*i/512));
+  function liquidSpan(y){
+    const xs=[];
+    for(let i=1;i<profile.length;i++){
+      const a=profile[i-1],b=profile[i];
+      if((a.y<=y&&b.y>y)||(b.y<=y&&a.y>y))xs.push(a.x+(b.x-a.x)*(y-a.y)/(b.y-a.y));
+    }
+    return xs.length?[Math.min(...xs),Math.max(...xs)]:[315,315];
+  }
   flask.append(svg('ellipse',{cx:315,cy:811,rx:170,ry:19,fill:'url(#oxygen-contact-shadow)'}));
   const contents=svg('g',{'clip-path':'url(#shared-flask-inside)'});
   const flaskLiquid=svg('rect',{x:160,y:805,width:310,height:0,fill:'#b8dce2','fill-opacity':'.35','data-shared-flask-liquid':''});
-  const flaskSurface=svg('ellipse',{cx:315,cy:805,rx:112,ry:10,fill:'#d3eef0','fill-opacity':'.34',stroke:'#91b7bc','stroke-width':1.5});
+  const flaskSurface=svg('ellipse',{cx:315,cy:805,rx:0,ry:10,fill:'#d3eef0','fill-opacity':'.34',stroke:'#91b7bc','stroke-width':1.5,'data-shared-flask-surface':''});
   const powder=svg('g',{'data-shared-catalyst':''});
   powder.append(svg('path',{d:'M234 777Q257 751 283 763Q315 744 340 763Q375 755 396 778Q318 799 234 777Z',fill:'#282c29'}));
   for(let i=0;i<90;i++){const x=230+(i*41%169),y=760+(i*17%25);powder.append(svg('circle',{cx:x,cy:y,r:2.5+(i%4),fill:i%3?'#202521':'#626a61'}));}
@@ -63,19 +74,22 @@ export function createSetupScene(view,panels) {
   jar.append(jarWater,jarSurface,sprite('jar',0,0,223,430));
   const jarShadow=svg('ellipse',{cx:1190,cy:849,rx:111,ry:12,fill:'url(#oxygen-contact-shadow)',opacity:0,'data-storage-shadow':''});art.append(jarShadow);
   const lid=svg('g',{'data-setup-cover':'','data-setup-body':'plate'});
-  lid.append(svg('path',{d:'M-20 16L8 5H245L223 16V21H-20Z',fill:'#d8f4ee','fill-opacity':'.22',stroke:'#8eb6ba','stroke-width':1.5}),svg('path',{d:'M-18 16H223',stroke:'#fff','stroke-width':1.5}));art.append(jar);art.append(lid);
+  const platePhoto=sprite('plate',-20,-10,265,40);platePhoto.setAttribute('transform','translate(0 24) skewY(-3)');platePhoto.setAttribute('data-photographic-equipment','plate');lid.append(platePhoto);art.append(jar);art.append(lid);
   const plate=lid;
   const frontTint=svg('g',{'clip-path':'url(#setup-tank-inside)'});frontTint.append(svg('path',{d:'M933 587L1137 596V685H933Z',fill:'#bbdce0','fill-opacity':'.14'}));art.insertBefore(frontTint,lid);
   const tube=svg('g',{'data-setup-body':'tube'}),pipeOuter=svg('path',{fill:'none',stroke:'#759aa2','stroke-width':19,'stroke-linecap':'round','stroke-linejoin':'round','data-shared-tube-path':''}),pipeInner=svg('path',{fill:'none',stroke:'#d4ecee','stroke-width':12,'stroke-linecap':'round','stroke-linejoin':'round'}),pipeShine=svg('path',{fill:'none',stroke:'#fff','stroke-opacity':'.9','stroke-width':3,'stroke-linecap':'round'});
   tube.append(pipeOuter,pipeInner,pipeShine);art.append(tube);
-  const stopper=svg('g',{'data-setup-body':'stopper'}),corkGradient=svg('linearGradient',{id:'oxygen-cork-shade',x2:1,y2:0});corkGradient.append(svg('stop',{offset:0,'stop-color':'#b9955d'}),svg('stop',{offset:'.45','stop-color':'#e0c18b'}),svg('stop',{offset:1,'stop-color':'#aa8251'}));defs.append(corkGradient);
-  stopper.append(svg('path',{d:'M-57 -18L-43 24Q0 31 43 24L57 -18Z',fill:'url(#oxygen-cork-shade)',stroke:'#a58053','stroke-width':1.5}),svg('ellipse',{cx:0,cy:-18,rx:57,ry:10,fill:'#dcc294',stroke:'#bc9c6c','stroke-width':1.5}),svg('path',{d:'M0 -22V-6',stroke:'#eaf4ef','stroke-width':5,'stroke-linecap':'round'}));art.append(stopper);
+  const restingTube=svg('g',{'data-photographic-equipment':'tube'});restingTube.append(sprite('tube',-27.3,-105.3,612.3,152.1));art.append(restingTube);
+  const stopper=svg('g',{'data-setup-body':'stopper'}),corkPhoto=sprite('cork',-35,-57,70,114);corkPhoto.setAttribute('transform','rotate(90)');corkPhoto.setAttribute('data-photographic-equipment','stopper');stopper.append(corkPhoto);art.append(stopper);
 
   const stream=svg('path',{fill:'none',stroke:'#a8e4ee','stroke-width':12,'stroke-linecap':'round','data-setup-stream':''});
   const highlight=svg('path',{fill:'none',stroke:'#fff','stroke-opacity':'.85','stroke-width':3});art.append(stream,highlight);
   const label=svg('text',{x:1390,y:95,'text-anchor':'end',fill:'#315c55','font-size':28,'paint-order':'stroke',stroke:'#fff','stroke-width':5});art.append(label);
   const makeLabel=(text,x,y)=>{const n=svg('text',{x,y,'text-anchor':'middle',fill:'#3b5952','font-size':23,'paint-order':'stroke',stroke:'#fff','stroke-width':4,'stroke-opacity':'.75'});n.textContent=text;art.append(n);return n;};
-  const flaskName=makeLabel('錐形瓶（空）',315,863),tankName=makeLabel('水槽',1340,430),jarName=makeLabel('',1035,390);
+  const flaskName=makeLabel('錐形瓶（空）',315,863),tankName=makeLabel('水槽',1378,640),jarName=makeLabel('',1035,390);
+  tankName.setAttribute('data-setup-label','tank');
+  const tankLeader=svg('g',{'data-tank-label-leader':''});tankLeader.append(svg('path',{d:'M1382 650L1408 695',fill:'none',stroke:'#4a6b61','stroke-width':2.5}),svg('circle',{cx:1408,cy:695,r:4,fill:'#4a6b61',stroke:'#fff','stroke-width':1.5}));
+  tank.append(tankLeader,tankName);
   // One scene is referenced by every operation. Legacy definitions retain only
   // the changing experiment overlays; no photographic backdrop can fade back in.
   const oldUse=main.querySelector(':scope > use'),oldZoom=zoom.querySelector('use');
@@ -112,7 +126,7 @@ export function createSetupScene(view,panels) {
     for(const key of['--hit-y','--hit-h'])button.style.setProperty(key,`${parseFloat(button.style.getPropertyValue(key))*850/900}%`);
   });
   let activeView=view,operationStage=1;
-  let tubePath='';
+  let tubePath='',restingTubePath='',restingTubeBounds=[],tubePhotoOpacity=1;
   function route(capX,capY,tipX,tipY){return `M${capX} ${capY-25}V205Q${capX} 185 ${capX+20} 185H700Q720 185 720 205V${tipY+35}Q720 ${tipY+55} 740 ${tipY+55}H${tipX-20}Q${tipX} ${tipY+55} ${tipX} ${tipY+35}V${tipY}`;}
   function positionPipe(capX,capY,tipX,progress=1,layout=1){
     const parkedX=mix(430,550,layout),parkedY=mix(625,839,layout);
@@ -123,21 +137,24 @@ export function createSetupScene(view,panels) {
     tubePath=progress===1?route(capX,capY,tipX,665):`M${startX} ${y-25*spread}V${firstY}Q${startX} ${top} ${mix(startX,x+20,spread)} ${top}H${right-20}Q${right} ${top} ${right} ${firstY}V${bend}Q${right} ${bottom} ${right+20} ${bottom}H${tip-20}Q${tip} ${bottom} ${tip} ${bend}V${mix(y+35,665,spread)}`;
     for(const n of[pipeOuter,pipeInner,pipeShine])n.setAttribute('d',tubePath);
     tube.setAttribute('transform','');
-    stopper.setAttribute('transform',`translate(${x} ${y}) rotate(${90*(1-progress)}) scale(${mix(mix(1,.8,layout),1,lift)})`);
+    tubePhotoOpacity=1-between(progress,0,.3);restingTube.setAttribute('transform',`translate(${x} ${y})`);restingTube.setAttribute('opacity',tubePhotoOpacity);
+    tube.setAttribute('opacity',1-tubePhotoOpacity);stopper.setAttribute('opacity',1-tubePhotoOpacity);
+    restingTubePath=`M${x+72} ${y-16}L${x+520} ${y-83}Q${x+550} ${y-90} ${x+560} ${y-60}L${x+565} ${y-32}`;restingTubeBounds=[x-30,y-110,620,160];
+    stopper.setAttribute('transform',`translate(${x} ${y}) rotate(${-90*(1-progress)}) scale(${mix(mix(1,.8,layout),1,lift)})`);
     return tubePath;
   }
-  const parkedPlate='translate(1300 820) scale(.8 3)';
+  const parkedPlate='translate(1300 764.8) scale(.8 2.3)';
   function preparePlate(f,jarTransform){
-    if(f.cover===0)plate.setAttribute('transform',`translate(${mix(1110,1300,f.arrangement)} ${mix(540,820,f.arrangement)}) scale(${mix(1.49,.8,f.arrangement)} ${mix(6,3,f.arrangement)})`);
-    else if(f.cover<1){const c=f.cover;let cx,cy,sx;if(c<.55){cx=1390;cy=mix(859,90,c/.55);sx=mix(.8,.9,c/.55);}else if(c<.85){cx=mix(1390,f.jarX,(c-.55)/.3);cy=90;sx=mix(.9,1,(c-.55)/.3);}else{cx=f.jarX;cy=mix(90,f.jarY-202,(c-.85)/.15);sx=1;}plate.setAttribute('transform',`translate(${cx} ${cy}) scale(${sx} ${mix(3,1,Math.min(1,c/.55))}) translate(-112.5 -13)`);}
+    if(f.cover===0)plate.setAttribute('transform',`translate(${mix(1110,1300,f.arrangement)} ${mix(484.4,764.8,f.arrangement)}) scale(${mix(1.49,.8,f.arrangement)} ${mix(4.4,2.3,f.arrangement)})`);
+    else if(f.cover<1){const c=f.cover;let cx,cy,sx;if(c<.55){cx=1389.2;cy=mix(806.2,90,c/.55);sx=mix(.8,.9,c/.55);}else if(c<.85){cx=mix(1389.2,f.jarX,(c-.55)/.3);cy=90;sx=mix(.9,1,(c-.55)/.3);}else{cx=f.jarX;cy=mix(90,f.jarY-197,(c-.85)/.15);sx=1;}plate.setAttribute('transform',`translate(${cx} ${cy}) scale(${sx} ${mix(2.3,1,Math.min(1,c/.55))}) translate(-111.5 -18)`);}
     else if(f.uncover<1)plate.setAttribute('transform',`${jarTransform} translate(${220*f.uncover} 0)`);
-    else {const u=f.plateReturn,cx=mix(814,1390,u),cy=mix(667,859,u)-350*Math.sin(Math.PI*u);plate.setAttribute('transform',`translate(${cx} ${cy}) rotate(${180*(1-u)}) scale(${mix(1,.8,u)} ${mix(1,3,u)}) translate(-112.5 -13)`);}
+    else {const u=f.plateReturn,cx=mix(815,1389.2,u),cy=mix(662,806.2,u)-350*Math.sin(Math.PI*u);plate.setAttribute('transform',`translate(${cx} ${cy}) rotate(${180*(1-u)}) scale(${mix(1,.8,u)} ${mix(1,2.3,u)}) translate(-111.5 -18)`);}
     plate.setAttribute('opacity','1');
   }
 
   const setTransform=(n,a,b,t)=>n.setAttribute('transform',`translate(${mix(a[0],b[0],t)} ${mix(a[1],b[1],t)}) scale(${mix(a[2],b[2],t)} ${mix(a[3],b[3],t)})`);
   const bodies={source,catalyst,flask,tank,jar,plate,tube,stopper};
-  const bounds={source:[75,70,165,350],catalyst:[90,530,275,145],flask:[140,290,350,530],tank:[590,445,890,380],jar:[0,0,223,430],plate:[-20,5,265,16],tube:[200,150,900,590],stopper:[-57,-28,114,60]};
+  const bounds={source:[75,70,165,350],catalyst:[90,530,275,145],flask:[140,290,350,530],tank:[590,445,890,380],jar:[0,0,223,430],plate:[-20,10,265,50],tube:[200,150,900,590],stopper:[-57,-35,114,70]};
   return {
     geometry(key) {
       if(operationStage>1&&['source','spoon'].includes(key)){
@@ -145,9 +162,10 @@ export function createSetupScene(view,panels) {
         return n&&Number(n.getAttribute('opacity'))>.01?{bounds:key==='source'?[-52,0,104,210]:[-27,-18,245,55],transform:n.getAttribute('transform')||''}:null;
       }
       if(operationStage>1&&key==='catalyst')return Number(powder.getAttribute('opacity'))>.01?{bounds:[228,750,175,46],transform:''}:null;
+      if(key==='tube'&&tubePhotoOpacity>.5)return {bounds:restingTubeBounds,d:restingTubePath,stroke:true,transform:''};
       const n=bodies[key];
       if(!n||Number(n.getAttribute('opacity')??1)<=.05)return null;
-      const outlines={flask:flaskOutline,tank:'M622 540L729 482L1462 510L1448 737L1380 780L641 746Z',jar:'M43 18Q112 0 180 18V60Q203 80 203 108V378Q112 419 20 378V108Q20 80 43 60Z',plate:'M-20 16L8 5H245L223 16V21H-20Z',stopper:'M-57 -18L-43 24Q0 31 43 24L57 -18Z'};
+      const outlines={flask:flaskOutline,tank:'M622 540L729 482L1462 510L1448 737L1380 780L641 746Z',jar:'M43 18Q112 0 180 18V60Q203 80 203 108V378Q112 419 20 378V108Q20 80 43 60Z',plate:'M47 18L237 14L176 42L-10 42Z',stopper:'M-57 -28H57V35H-57Z'};
       return {bounds:bounds[key],d:key==='tube'?tubePath:outlines[key],stroke:key==='tube',transform:n.getAttribute('transform')||''};
     },
     operation(stage,frame,assembly,operationView){
@@ -155,7 +173,8 @@ export function createSetupScene(view,panels) {
       const chemical=stage<5?assembly:{peroxide:1,catalyst:1,sealed:1};
       const level=790-165*chemical.peroxide;
       flaskLiquid.setAttribute('y',level);flaskLiquid.setAttribute('height',chemical.peroxide?805-level:0);
-      flaskSurface.setAttribute('cy',level);flaskSurface.setAttribute('opacity',chemical.peroxide?1:0);
+      const [left,right]=liquidSpan(level);
+      flaskSurface.setAttribute('cx',(left+right)/2);flaskSurface.setAttribute('rx',(right-left)/2);flaskSurface.setAttribute('cy',level);flaskSurface.setAttribute('opacity',chemical.peroxide?1:0);
       powder.setAttribute('opacity',chemical.catalyst);powder.setAttribute('transform',`translate(310 790) scale(1 ${chemical.catalyst}) translate(-310 -790)`);
       const capX=250+65*chemical.sealed,capY=350-15*chemical.sealed-75*Math.sin(Math.PI*chemical.sealed);
       const tipX=stage<5?800:800+235*frame.tube;
@@ -170,9 +189,10 @@ export function createSetupScene(view,panels) {
       jar.setAttribute('transform',jarTransform);frontTint.setAttribute('opacity',1-frame.lift);jarShadow.setAttribute('opacity',frame.setDown);
       if(stage===7&&frame.cover>0){
         if(frame.cover===1)plate.setAttribute('transform',jarTransform);
-        else {const c=frame.cover;let cx,cy;if(c<.35){const u=c/.35;cx=mix(1390,1280,u);cy=mix(859,480,u);}else if(c<.7){cx=1280;cy=mix(480,662,(c-.35)/.35);}else{cx=mix(1280,1035,(c-.7)/.3);cy=662;}plate.setAttribute('transform',`translate(${cx} ${cy}) rotate(${180*Math.min(1,c/.35)}) scale(${mix(.8,1,Math.min(1,c/.35))} ${mix(3,1,Math.min(1,c/.35))}) translate(-111.5 -18)`);}
+        else {const c=frame.cover;let cx,cy;if(c<.35){const u=c/.35;cx=mix(1389.2,1280,u);cy=mix(806.2,480,u);}else if(c<.7){cx=1280;cy=mix(480,662,(c-.35)/.35);}else{cx=mix(1280,1035,(c-.7)/.3);cy=662;}plate.setAttribute('transform',`translate(${cx} ${cy}) rotate(${180*Math.min(1,c/.35)}) scale(${mix(.8,1,Math.min(1,c/.35))} ${mix(2.3,1,Math.min(1,c/.35))}) translate(-111.5 -18)`);}
       }else plate.setAttribute('transform',parkedPlate);
       operationView.dataset.storageLift=String(frame.lift);operationView.dataset.storageUpright=String(frame.upright);operationView.dataset.storageSetDown=String(frame.setDown);
+      const showTankLabel=stage===7&&frame.cover>0&&frame.cover<1?'0':'1';tankName.setAttribute('opacity',showTankLabel);tankLeader.setAttribute('opacity',showTankLabel);
       label.textContent='';flaskName.textContent=chemical.peroxide===0?'錐形瓶（空）':chemical.catalyst===0?'雙氧水（無色溶液）':'雙氧水＋二氧化錳';jarName.textContent=frame.collected===0?'瓶內裝滿清水':frame.collected>.3?'氧氣（無色）':'';
       jarName.setAttribute('x',jarX);jarName.setAttribute('y',jarY-75);
 
@@ -203,6 +223,7 @@ export function createSetupScene(view,panels) {
       label.textContent=pouringTank||pouringJar?'清水':'';
       label.setAttribute('x',pouringTank?800:950);label.setAttribute('y',pouringTank?410:250);
       positionPipe(250,350,800,f.outlet,f.arrangement);flaskName.setAttribute('opacity',f.arrangement);tankName.setAttribute('opacity',f.arrangement);flaskName.textContent='錐形瓶（空）';jarName.textContent=f.immersion===1?'瓶內裝滿清水':'';
+      const tankLabelOpacity=f.cover>0&&f.plateReturn<1?0:f.arrangement;tankName.setAttribute('opacity',tankLabelOpacity);tankLeader.setAttribute('opacity',tankLabelOpacity);
       jarName.setAttribute('x','1035');jarName.setAttribute('y','390');
       view.dataset.sharedScene='oxygen-setup-art';
       main.setAttribute('viewBox','0 0 1536 900');

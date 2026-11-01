@@ -1,4 +1,4 @@
-import { SETUP_DURATION } from './oxygen-setup.mjs?v=oxygen-review-1';
+import { SETUP_DURATION } from './oxygen-setup.mjs?v=oxygen-wall-fit-1';
 export const PREPARATION_DURATION = 12600;
 export const COMPARISON_DURATION = 6200;
 export const PREPARATION_STAGES = [0, 2000, 4800, 10000];

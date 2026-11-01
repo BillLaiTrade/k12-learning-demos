@@ -31,7 +31,7 @@ test('oxygen requested visual and physical corrections',{timeout:180000},async t
   for(const width of[1440,390]){
    await page.setViewportSize({width,height:1100});await choose(3);await page.clock.fastForward(2800);await play.click();
    const svg=active().locator('.oxygen-main-scene');await svg.scrollIntoViewIfNeeded();
-   const points=await svg.evaluate(e=>{const m=e.getScreenCTM(),r=e.getBoundingClientRect();return[[190,750],[450,740],[450,765],[315,805],[315,770]].map(([x,y])=>({x:Math.round(m.a*x+m.c*y+m.e-r.x),y:Math.round(m.b*x+m.d*y+m.f-r.y)}));});
+   const points=await svg.evaluate(e=>{const m=e.getScreenCTM(),r=e.getBoundingClientRect();return[[140,750],[485,740],[485,775],[315,805],[315,770]].map(([x,y])=>({x:Math.round(m.a*x+m.c*y+m.e-r.x),y:Math.round(m.b*x+m.d*y+m.f-r.y)}));});
    const painted=await svg.screenshot();await root.locator('[data-shared-flask-liquid]').evaluate(e=>e.parentElement.style.visibility='hidden');const bare=await svg.screenshot();await root.locator('[data-shared-flask-liquid]').evaluate(e=>e.parentElement.style.visibility='');
    const samples=await page.evaluate(async({a,b,points})=>{async function read(data){const image=new Image();image.src='data:image/png;base64,'+data;await image.decode();const c=document.createElement('canvas');c.width=image.width;c.height=image.height;const x=c.getContext('2d');x.drawImage(image,0,0);return points.map(p=>Array.from(x.getImageData(p.x,p.y,1,1).data));}return{painted:await read(a),bare:await read(b)};},{a:painted.toString('base64'),b:bare.toString('base64'),points});
    samples.painted.slice(0,4).forEach((p,i)=>assert.deepEqual(p,samples.bare[i],`${width}/${i}: contents must not paint outside the flask`));
@@ -39,6 +39,48 @@ test('oxygen requested visual and physical corrections',{timeout:180000},async t
    assert.ok(samples.bare[4].slice(0,3).reduce((a,b)=>a+b,0)-solid.slice(0,3).reduce((a,b)=>a+b,0)>80,`${width}: manganese must visibly change the bottle pixels`);
    await shot(`manganese-${width}`);
   }
+ });
+ await t.test('liquid reaches both glass walls and the base during pouring instead of floating inside a narrower shape',async()=>{
+  for(const width of[1440,390])for(const time of[1600,2800]){
+   await page.setViewportSize({width,height:1100});await choose(2);await page.clock.fastForward(time);await play.click();
+   const svg=active().locator('.oxygen-main-scene'),liquid=root.locator('[data-shared-flask-liquid]');await svg.scrollIntoViewIfNeeded();
+   const level=Number(await liquid.getAttribute('y'));
+   const points=await svg.evaluate((e,level)=>{const m=e.getScreenCTM(),r=e.getBoundingClientRect();return[[198,650],[442,650],[185,675],[449,675],[173,725],[459,725],[184,770],[447,770],[315,795]].filter(([,y])=>y>level+12).map(([x,y])=>({world:[x,y],x:Math.round(m.a*x+m.c*y+m.e-r.x),y:Math.round(m.b*x+m.d*y+m.f-r.y)}));},level);
+   const painted=await svg.screenshot();await liquid.evaluate(e=>e.style.visibility='hidden');const bare=await svg.screenshot();await liquid.evaluate(e=>e.style.visibility='');
+   const changes=await page.evaluate(async({a,b,points})=>{async function read(data){const image=new Image();image.src='data:image/png;base64,'+data;await image.decode();const c=document.createElement('canvas');c.width=image.width;c.height=image.height;const x=c.getContext('2d');x.drawImage(image,0,0);return points.map(p=>Array.from(x.getImageData(p.x,p.y,1,1).data));}const x=await read(a),y=await read(b);return x.map((p,i)=>p.slice(0,3).reduce((sum,v,j)=>sum+Math.abs(v-y[i][j]),0));},{a:painted.toString('base64'),b:bare.toString('base64'),points});
+   changes.forEach((change,i)=>assert.ok(change>=4,`${width}/${time}/${points[i].world}: liquid must touch the inner wall or base (${change})`));
+   if(time===2800){const surface=await root.locator('[data-shared-flask-surface]').evaluate(e=>({x:+e.getAttribute('cx'),r:+e.getAttribute('rx')}));assert.ok(surface.x-surface.r<202&&surface.x+surface.r>435,'the meniscus must span the full inner width');await shot(`wall-fit-${width}`);}
+  }
+ });
+ await t.test('the tank label and its short leader stay on the trough, away from the sealed glass plate',async()=>{
+  await page.setViewportSize({width:1440,height:1100});
+  for(const time of[0,1600,2200,5000,7800]){
+   await choose(7);await page.clock.fastForward(time);
+   const label=root.locator('[data-setup-label=tank]');assert.equal(await label.textContent(),'水槽');assert.equal(await label.evaluate(e=>e.parentElement.dataset.setupBody),'tank');
+   if(time===1600){assert.equal(await label.getAttribute('opacity'),'0');continue;}
+   assert.equal(await label.getAttribute('opacity'),'1');
+   const position=await label.evaluate(e=>({x:+e.getAttribute('x'),y:+e.getAttribute('y')}));const p=await contact();assert.ok(Math.hypot(position.x-p.plate.x,position.y-p.plate.y)>100);
+   const target=await root.locator('[data-tank-label-leader] circle').evaluate(e=>({x:+e.getAttribute('cx'),y:+e.getAttribute('cy')}));assert.ok(target.x>1380&&target.x<1445&&target.y>600&&target.y<735,'leader points to the actual right tank wall');
+  }
+  await shot('tank-label-and-real-plate-1440');
+ });
+ await t.test('the material tube, cork and glass plate use the original photographic equipment cutouts',async()=>{
+  await choose(0);
+  for(const key of['tube','stopper','plate']){
+   const image=root.locator(`[data-photographic-equipment=${key}] image`);assert.equal(await image.count(),1);assert.equal(await image.getAttribute('href'),'assets/oxygen-setup-sprites.png');
+  }
+  assert.equal(await root.locator('[data-photographic-equipment=tube]').getAttribute('opacity'),'1');assert.equal(await root.locator('[data-setup-body=tube]').getAttribute('opacity'),'0');
+  const plateCoverage=await root.locator('[data-photographic-equipment=plate]').evaluate(async node=>{
+   const copy=node.cloneNode(true),image=copy.querySelector('image'),source=await fetch(image.href.baseVal).then(r=>r.blob());
+   image.href.baseVal=await new Promise(resolve=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.readAsDataURL(source);});
+   const xml=`<svg xmlns="http://www.w3.org/2000/svg" width="340" height="70" viewBox="-40 0 340 70">${new XMLSerializer().serializeToString(copy)}</svg>`;
+   const rendered=new Image();rendered.src='data:image/svg+xml;base64,'+btoa(xml);await rendered.decode();
+   const canvas=document.createElement('canvas');canvas.width=340;canvas.height=70;const context=canvas.getContext('2d');context.drawImage(rendered,0,0);
+   return[70,111.5,150].map(x=>context.getImageData(Math.round(x+40),30,1,1).data[3]);
+  });
+  assert.ok(plateCoverage.every(alpha=>alpha>15),'the photographic plate must actually cover the projected bottle opening, without a visible gap');
+  await root.locator('.oxygen-stage-area').screenshot({path:path.join(out,'photographic-materials-1440.png')});
+  await choose(1);await page.clock.fastForward(20800);assert.equal(await root.locator('[data-photographic-equipment=tube]').getAttribute('opacity'),'0');assert.equal(await root.locator('[data-setup-body=tube]').getAttribute('opacity'),'1');
  });
  await t.test('tube glass retains its diameter while lying on the desk, lifting and connecting',async()=>{
   for(const width of[1440,390,320]){

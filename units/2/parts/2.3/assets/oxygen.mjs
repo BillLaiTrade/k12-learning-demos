@@ -1,7 +1,7 @@
 import { createSceneCaptions } from './oxygen-captions.mjs?v=subtitles-below-1';
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=oxygen-review-1';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=oxygen-review-1';
-import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=oxygen-review-1';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=oxygen-wall-fit-1';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=oxygen-wall-fit-1';
+import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=oxygen-wall-fit-1';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
@@ -101,7 +101,7 @@ function renderObservation(view,stage,f,waterY) {
   const label=stage===2?'瓶外排氣':stage===3?(movingTube?'移入瓶口':f.collected<1?'水位下降':'集氣完成'):f.setDown===1?'桌面封存':f.lift>0?'連瓶帶片取出':withdrawing?'撤開導管':f.covered?'水下蓋片':'滑入玻璃片';
   let x=stage===2?800:stage===3?(movingTube?800+235*f.tube:940):withdrawing?800+235*f.tube:1034;
   let y=stage===2?600:stage===3?(movingTube?665:waterY):withdrawing?665:667;
-  if(stage===4&&!withdrawing){const plate=panel.querySelector('[data-setup-body=plate]'),m=plate.transform.baseVal.consolidate().matrix;x=m.a*112.5+m.c*13+m.e;y=m.b*112.5+m.d*13+m.f;}
+  if(stage===4&&!withdrawing){const plate=panel.querySelector('[data-setup-body=plate]'),m=plate.transform.baseVal.consolidate().matrix;x=m.a*111.5+m.c*30+m.e;y=m.b*111.5+m.d*30+m.f;}
   view.querySelector('.oxygen-observation-guide').style.opacity=stage===4&&(f.lift>0||!withdrawing&&f.cover<.7)?'0':'1';
   view.querySelector('[data-observation-label]').textContent=label;
   view.querySelector('[data-observation-leader]').setAttribute('d',`M${stage===4?950:915} ${stage===2?507:stage===3?417:457}L${x} ${y}`);
