@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      publish_when_branch_build_failed:
+        description: Publish with Actions after the branch publisher has failed
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -20,20 +25,24 @@ jobs:
     outputs:
       actions: ${{ steps.source.outputs.actions }}
     steps:
-      - name: Publish only when Pages selects GitHub Actions
+      - name: Select the configured publisher or explicit manual recovery
         id: source
         env:
           GH_TOKEN: ${{ github.token }}
           PAGES_SOURCE_REPO: ${{ github.repository }}
+          PAGES_MANUAL_PUBLISH: ${{ github.event_name == 'workflow_dispatch' && inputs.publish_when_branch_build_failed }}
         shell: bash
         run: |
           set -euo pipefail
           pages_source=$(gh api "repos/${PAGES_SOURCE_REPO}/pages" --jq '.build_type')
-          if [[ "$pages_source" == workflow ]]; then
+          if [[ "$pages_source" == workflow || "$PAGES_MANUAL_PUBLISH" == true ]]; then
             echo 'actions=true' >> "$GITHUB_OUTPUT"
+            if [[ "$pages_source" != workflow ]]; then
+              echo '::notice::Explicit manual recovery requested after branch publication failed.'
+            fi
           else
             echo 'actions=false' >> "$GITHUB_OUTPUT"
-            echo '::notice::Pages uses the branch publisher. To enable this publisher, select Settings > Pages > Build and deployment > Source > GitHub Actions.'
+            echo '::notice::Pages uses the branch publisher; automatic Actions publication is skipped.'
           fi
   deploy:
     needs: publishing-source
