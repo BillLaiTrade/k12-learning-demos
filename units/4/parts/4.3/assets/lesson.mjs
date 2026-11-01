@@ -70,11 +70,29 @@ const answers=['toward','speed','apparent'];
 const explanations=['光由空氣進入水中會偏向法線，折射角較小。','沿法線入射時，速度改變，方向不偏折。','光由水中進入空氣時折射，眼睛沿入眼光線反向延伸，判斷出較淺的位置。'];
 quiz.onsubmit=e=>{e.preventDefault();const data=new FormData(quiz);const missing=answers.map((_,i)=>i+1).filter(i=>!data.has(`q${i}`));if(missing.length){result.textContent=`還有第 ${missing.join('、')} 題未作答，完成後再送出。`;return;}const wrong=answers.map((answer,i)=>data.get(`q${i+1}`)===answer?null:i).filter(i=>i!==null);result.innerHTML=wrong.length?`<strong>再觀察一下，有 ${wrong.length} 題可以修正。</strong>`+wrong.map(i=>`<p>第 ${i+1} 題：${explanations[i]} <a href="#s${[3,2,6][i]}">回到相關探索</a></p>`).join(''):'<strong>三題都答對了！</strong><p>你已能比較折射方向，並用光路解釋水底物體看起來較淺的原因。</p>';};
 quiz.onchange=()=>{result.textContent='';};quiz.onreset=()=>{result.textContent='';};
-const links=$$('nav a');
+const links=$$('.route-inner a');
+const sections=links.map(a=>$(a.hash));
+const route=$('.route'), routeInner=$('.route-inner');
+let activeSection;
 function updateNav(){
-  const sections=$$('main section');
-  const current=sections.filter(s=>s.getBoundingClientRect().top<=160).at(-1) || sections[0];
-  links.forEach(a=>a.hash===`#${current.id}`?a.setAttribute('aria-current','location'):a.removeAttribute('aria-current'));
+  const mobile=matchMedia('(max-width: 760px)').matches;
+  const threshold=mobile?Math.max(route.getBoundingClientRect().height+28,parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)+24):160;
+  const current=sections.filter(s=>s.getBoundingClientRect().top<=threshold).at(-1) || sections[0];
+  links.forEach(a=>a.hash===`#${current.id}`?a.setAttribute('aria-current','step'):a.removeAttribute('aria-current'));
+  $('#route-progress').textContent=current.id==='s7'?'目前位置：單元小測':`目前位置：第 ${String(sections.indexOf(current)+1).padStart(2,'0')}／06 個學習區塊`;
+  if(mobile && activeSection!==current){
+    const link=links[sections.indexOf(current)], box=link.getBoundingClientRect(), viewport=routeInner.getBoundingClientRect();
+    if(box.left<viewport.left || box.right>viewport.right)routeInner.scrollLeft+=box.left-viewport.left;
+  }
+  activeSection=current;
 }
-window.addEventListener('scroll',updateNav,{passive:true});updateNav();
+window.addEventListener('scroll',updateNav,{passive:true});
+window.addEventListener('resize',updateNav);
+window.addEventListener('hashchange',updateNav);
+window.addEventListener('load',()=>{
+  const target=location.hash && document.getElementById(location.hash.slice(1));
+  if(target && (sections.includes(target) || target.id==='unit-quiz'))target.scrollIntoView({block:'start',behavior:'instant'});
+  updateNav();
+});
+updateNav();
 document.addEventListener('visibilitychange',()=>{if(document.hidden){resetRace();normalResets.forEach(reset=>reset());}});

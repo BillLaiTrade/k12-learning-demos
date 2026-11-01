@@ -1,0 +1,20 @@
+{
+  "six_interactive_labs": {
+    "equal": true,
+    "count": 6,
+    "normalized_sha256": "0cdd5dcc64ae0d9387bf9a24ba6dced70f4434a4769026e50e6b98615d8f4dee"
+  },
+  "three_question_form": {
+    "equal": true,
+    "count": 1,
+    "normalized_sha256": "cb85c21de151ca7efc861e7b8b6ed58a2bb2d18d3b419792e1643fea580c0ff7"
+  },
+  "optics_model": {
+    "equal": true,
+    "sha256": "a45eeb8d660ed21d1ec3ebe5362f06e015eebdc831a63fac1a38f71d54a0d8ec"
+  },
+  "interaction_and_quiz_logic": {
+    "equal": true,
+    "sha256": "752a3764c913cce0cfc365a37ceb307a8c5f7800903e8d37745a80936709db22"
+  }
+}

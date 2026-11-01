@@ -1,0 +1,17 @@
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (168.306072ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (431.027377ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (5546.937151ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (191.864551ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (7908.490933ms)
+✔ transmitted rays conserve tangential optical direction and reverse exactly (1.59339ms)
+✔ apparent coin is the backward intersection of independently refracted pupil rays (5.101345ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (8095.987699ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8574.744733
