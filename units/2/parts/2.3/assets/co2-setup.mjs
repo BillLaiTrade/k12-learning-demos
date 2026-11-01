@@ -1,4 +1,4 @@
-import {CO2_SETUP_DURATION,co2SetupFrame,CO2_OPERATIONS,co2BenchFrame,CO2_LIQUID_PROFILE,liquidGeometry,rubberGeometry,transformPoint} from './co2-model.mjs?v=five-detail-1';
+import {CO2_SETUP_DURATION,co2SetupFrame,CO2_OPERATIONS,co2BenchFrame,CO2_LIQUID_PROFILE,liquidGeometry,rubberGeometry,transformPoint} from './co2-model.mjs?v=five-detail-2';
 export {CO2_SETUP_DURATION,co2SetupFrame,co2BenchFrame};
 const NS='http://www.w3.org/2000/svg';
 const atlas='assets/co2-marble-atlas.png';
@@ -101,6 +101,7 @@ export function createCO2Bench(panel,panels){
  }
  function target(key){
   if(stage===0)return null;
+  if(key==='forceps')return {visible:current.tool.visible,bounds:[-20,-314,40,300],d:'M-20 -314H20V-14H-20Z',transform:matrix(current.tool),stroke:false};
   if(key==='tube'){
    const g=current.glass,ps=firstLocal.map(p=>transformPoint(p,g.first)),end=transformPoint({x:0,y:-260},g.rod),tip=g.rodTip;
    const first=`M${ps[0].x} ${ps[0].y}L${ps[1].x} ${ps[1].y}Q${ps[2].x} ${ps[2].y} ${ps[3].x} ${ps[3].y}L${ps[4].x} ${ps[4].y}`;
