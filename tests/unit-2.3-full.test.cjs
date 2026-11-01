@@ -42,7 +42,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     assert.doesNotMatch(await page.locator('#s3').innerText(), /保存效果仍與密封/);
     assert.match(await page.locator('#oxygen-step-0 [data-material-info=catalyst]').textContent(), /不是氧氣來源/);
     assert.match(await page.locator('#air-profile-nitrogen').innerText(), /相對不易反應/);
-    assert.match(await page.locator('#s4').innerText(), /不能說它絕對不能用排水法/);
+    assert.match(await page.locator('#s4').textContent(), /不能說它絕對不能用排水法/);
   });
   await t.test('default cup comparisons remain after preview and reset', async () => {
     for (const id of ['cup-before-scene', 'cup-after-scene']) assert.equal(await page.locator('#' + id + ' svg').count(), 1);
@@ -63,9 +63,9 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     await page.clock.fastForward(400);await oxygen.locator('[data-play]').click();await page.clock.fastForward(3000);assert.equal(await oxygen.getAttribute('data-state'),'paused');
     await oxygen.locator('[data-play]').click();for(let stage=1;stage<=7;stage++){assert.equal(await oxygen.getAttribute('data-stage'),String(stage));await page.clock.fastForward(15000);}assert.equal(await oxygen.getAttribute('data-state'),'complete');
     await oxygen.locator('[data-stage="0"]').click();assert.equal(await oxygen.getAttribute('data-stage'),'0');
-    const panel=page.locator('[data-replay="co2"]');await panel.locator('[data-next]').click();await page.clock.fastForward(1500);assert.equal(await panel.getAttribute('data-stage'),'1');
+    const panel=page.locator('[data-replay="co2"]');await panel.locator('#co2-tab-2').click();await page.clock.fastForward(1500);assert.equal(await panel.getAttribute('data-stage'),'2');
     await panel.locator('[data-play]').click();const time=await panel.getAttribute('data-time');await page.clock.fastForward(3000);assert.equal(await panel.getAttribute('data-time'),time);assert.equal(await panel.getAttribute('data-state'),'paused');
-    await panel.locator('[data-play]').click();await page.clock.fastForward(15000);assert.equal(await panel.getAttribute('data-state'),'complete');assert.equal(await panel.getAttribute('data-stage'),'1');
+    await panel.locator('[data-play]').click();for(let i=2;i<8;i++){assert.equal(await panel.getAttribute('data-stage'),String(i));await page.clock.fastForward(15000);}assert.equal(await panel.getAttribute('data-state'),'complete');
     await panel.locator('[data-co2-step="0"]').click();assert.equal(await panel.getAttribute('data-stage'),'0');
     assert.equal(await page.locator('#s3 .gas-observations,#s4 .gas-observations').count(),0);assert.equal(await page.locator('#s5 .observation-grid figure').count(),4);assert.equal(await page.locator('#s5 .oxygen-comparison').count(),1);
   });
@@ -129,8 +129,8 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
   await t.test('all teaching evidence is available without JavaScript', async () => {
     const context = await browser.newContext({ javaScriptEnabled:false, viewport:{width:390,height:844} });
     const staticPage = await context.newPage(); await staticPage.goto(url, {waitUntil:'networkidle'});
-    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#air-profile-nitrogen .gas-profile-properties','#air-profile-oxygen .gas-profile-properties','#air-profile-argon .gas-profile-properties','#s3 .sequence-grid','#s3 .properties-collected-note','#s4 .co2-step','#s4 .properties-collected-note','#s5 .oxygen-comparison','#s5 .properties-limewater','#s6 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
-    assert.equal(await staticPage.locator('#s4 .co2-step:visible').count(),5);
+    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#air-profile-nitrogen .gas-profile-properties','#air-profile-oxygen .gas-profile-properties','#air-profile-argon .gas-profile-properties','#s3 .sequence-grid','#s3 .properties-collected-note','#s4 .co2-step','#s5 .oxygen-comparison','#s5 .properties-limewater','#s6 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
+    assert.equal(await staticPage.locator('#s4 .co2-step:visible').count(),8);
     assert.equal(await staticPage.locator('#s4 [data-co2-info]:visible').count(),6);
     await context.close();
   });

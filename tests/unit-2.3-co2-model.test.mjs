@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {CO2_DURATIONS,co2Frame} from '../units/2/parts/2.3/assets/co2-model.mjs';
+import {CO2_DURATIONS,co2Frame,CO2_OPERATIONS,co2OperationFrame} from '../units/2/parts/2.3/assets/co2-model.mjs';
 test('assembly orders marble, acid, sealing and gas delivery',()=>{
  const initial=co2Frame(1,0);assert.equal(initial.marble,0);assert.equal(initial.acid,0);assert.equal(initial.seal,0);
  const marble=co2Frame(1,3200);assert.ok(marble.marble>0&&marble.marble<1);assert.equal(marble.acid,0);assert.equal(marble.flow,false);
@@ -18,4 +18,12 @@ test('tube crosses above the mouth before entering; collecting begins only after
 test('withdrawal precedes the cover and sample label; the reaction outlet stays open',()=>{
  for(let t=0;t<=4600;t+=20){const f=co2Frame(4,t);if(f.cover>0)assert.equal(f.insert,0);if(f.labeled)assert.equal(f.cover,1);assert.equal(f.flow,true);if(f.tipX>600&&f.tipX<870)assert.equal(f.tipY,155);}
  const done=co2Frame(4,4600);assert.equal(done.tipX,600);assert.equal(done.labeled,true);
+});
+test('eight operations separate placement, marble, acid and sealing with continuous prerequisite states',()=>{
+ assert.equal(CO2_OPERATIONS.length,8);
+ const end=i=>co2OperationFrame(i,CO2_OPERATIONS[i].duration),start=i=>co2OperationFrame(i,0);
+ for(let i=1;i<7;i++)for(const key of['marble','acid','seal','insert','cover'])assert.equal(end(i)[key],start(i+1)[key],`${i}/${key}`);
+ assert.equal(start(1).placement,0);assert.equal(end(1).placement,1);
+ assert.equal(end(2).acid,0);assert.equal(end(3).seal,0);assert.equal(end(4).flow,true);
+ assert.equal(end(7).labeled,true);
 });

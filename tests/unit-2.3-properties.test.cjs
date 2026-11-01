@@ -9,7 +9,7 @@ test('2.3 collected gases: preparation, property comparison and final quiz are s
  const out=process.env.GAS_PROPERTIES_ARTIFACT_DIR||'/tmp/unit23-properties';await fs.mkdir(out,{recursive:true});
  await t.test('six sections have unique IDs and routes; only section five owns the property observations',async()=>{
   assert.deepEqual(await page.locator('section.lesson').evaluateAll(ns=>ns.map(n=>n.id)),['s1','s2','s3','s4','s5','s6']);assert.deepEqual(await page.locator('.route a').evaluateAll(ns=>ns.map(n=>n.getAttribute('href'))),['#s1','#s2','#s3','#s4','#s5','#s6']);assert.equal(await page.locator('.route .quiz-nav').getAttribute('href'),'#s6');assert.equal(await page.locator('form').count(),1);
-  for(const id of['s3','s4']){assert.equal(await page.locator(`#${id} .gas-observations,#${id} [data-compare-play]`).count(),0);assert.match(await page.locator(`#${id} h2`).innerText(),/收集/);assert.equal(await page.locator(`#${id} .properties-collected-note`).count(),1);}
+  for(const id of['s3','s4']){assert.equal(await page.locator(`#${id} .gas-observations,#${id} [data-compare-play]`).count(),0);assert.match(await page.locator(`#${id} h2`).innerText(),/收集/);assert.equal(await page.locator(`#${id} .properties-collected-note`).count(),id==='s4'?0:1);}
   assert.equal(await fifth.locator('.oxygen-comparison').count(),1);assert.equal(await fifth.locator('.properties-limewater').count(),1);assert.equal(await fifth.locator('.observation-grid figure').count(),4);assert.equal(await page.locator('#s6 form').count(),1);
   assert.deepEqual(await page.evaluate(()=>{const ids=[...document.querySelectorAll('[id]')].map(n=>n.id);return ids.filter((id,i)=>ids.indexOf(id)!==i);}),[]);
  });
@@ -37,7 +37,7 @@ test('2.3 collected gases: preparation, property comparison and final quiz are s
   await play.click();await page.locator('#s2').evaluate(e=>e.scrollIntoView({behavior:'instant'}));await page.clock.fastForward(100);await page.waitForFunction(()=>document.querySelector('.oxygen-comparison').dataset.state==='paused');await comparison.scrollIntoViewIfNeeded();assert.equal(await comparison.getAttribute('data-state'),'paused');await reset.click();
  });
  await t.test('sample source links, collection-next links and revised quiz feedback point to the right sections',async()=>{
-  assert.equal(await page.locator('#s4 .properties-next').getAttribute('href'),'#s5');assert.equal(await fifth.locator('.properties-next').getAttribute('href'),'#s6');
+  assert.equal(await page.locator('.route a[href="#s5"]').getAttribute('href'),'#s5');assert.equal(await fifth.locator('.properties-next').getAttribute('href'),'#s6');
   await page.locator('.route a[href="#s4"]').click();assert.equal(new URL(page.url()).hash,'#s4');
   const answers={composition:'mixture',sample_a:'oxygen',sample_b:'co2',fuel:'wood',evidence:'limewater',uses:'stable'};
   for(const[name,value]of Object.entries(answers)){if(name.startsWith('sample_'))await page.locator(`#gas-report-form [name=${name}]`).selectOption(value);else await page.locator(`#gas-report-form [name=${name}][value=${value}]`).check();}

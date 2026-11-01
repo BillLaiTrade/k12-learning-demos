@@ -1,0 +1,25 @@
+{
+  "remote": "716e3d5eac8d2e913b8f59ae7f19dc5d30e767d0",
+  "sections": {
+    "s1": {
+      "same_as_latest_remote": true,
+      "sha256": "125cb2796d1713ec7b2e373180d33480377d48bc45cffa1e2db851b0545dc597"
+    },
+    "s2": {
+      "same_as_latest_remote": true,
+      "sha256": "5a696035d95691932c88b8b15bc31bcebe60c4ad18bf6f05b3b84d3c74647804"
+    },
+    "s3": {
+      "same_as_latest_remote": true,
+      "sha256": "35898d34d71d748e9d024779b6bb0c6083885e0966ec57f2d7dd26a1398e96c2"
+    },
+    "s5": {
+      "same_as_latest_remote": true,
+      "sha256": "e24433788245d6f07b3cb0a7e4e3623fc2360cb2b53e9bf2d36f6ce288a505df"
+    },
+    "s6": {
+      "same_as_latest_remote": true,
+      "sha256": "746aa1f47431fda00696e943ec214784fc67ce222abdd371950728159c9bd68e"
+    }
+  }
+}

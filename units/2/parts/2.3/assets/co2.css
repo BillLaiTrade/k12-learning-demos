@@ -1,4 +1,4 @@
-/* All styles are scoped to section four. Reuse the lesson's fonts and colors. */
+/* All styles are scoped to section four or unique co2 classes. */
 #s4 .co2-preparation{margin-top:26px}
 #s4 .co2-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:18px 0}
 #s4 .co2-steps button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:58px;padding:10px 5px;border:1px solid #d6e0cf;border-radius:10px;background:#f5f8ef;color:#45664d;font:inherit;font-size:.8rem;cursor:pointer}
@@ -37,3 +37,95 @@
 #s4 .co2-step[hidden],#s4 [data-co2-info][hidden]{display:none}
 @container(max-width:650px){#s4 .co2-steps{grid-template-columns:repeat(3,minmax(0,1fr))}#s4 .co2-steps button{font-size:.76rem}#s4 .co2-material-scene img{height:135px}}
 @container(max-width:510px){#s4 .co2-material-scene{grid-template-columns:repeat(2,minmax(0,1fr));padding:8px;gap:5px}#s4 .co2-material-scene img{height:115px}#s4 .co2-material-scene button>span{font-size:.79rem;padding:8px 3px}#s4 .co2-material-details{padding:15px}#s4 .co2-material-details dl,#s4 .co2-explanation{grid-template-columns:1fr;gap:14px}#s4 .co2-explanation{padding:15px}#s4 .co2-steps{gap:5px}#s4 .co2-steps button{flex-direction:column;gap:3px;padding:8px 3px;min-height:66px}#s4 .co2-closeup{display:block;border-top:1px solid #dce3d5;background:#f7f8f0}#s4 .co2-closeup>p{margin:9px 12px;font-size:.76rem;color:#54714e}#s4 .co2-controls{gap:7px}#s4 .co2-controls button{padding:8px 10px;font-size:.78rem}#s4 .co2-controls [data-co2-count]{width:100%;text-align:right}}
+
+/* 2026-11-01: align with the oxygen workspace. */
+/* One operation list beside the current scene; no second layer of substeps. */
+.co2-workspace{display:grid;grid-template-columns:minmax(0,1fr) 208px;gap:18px;align-items:start}.co2-stage-area{min-width:0;border:1px solid #d8e2d0;border-radius:15px;background:#fffef9;padding:16px}.co2-preparation .co2-step{margin-top:0}.co2-preparation .co2-panels{display:block}.co2-step-nav{min-width:0;background:linear-gradient(#f3f6ed,#edf2e5);border:1px solid #cddbc2;border-radius:15px;padding:14px;position:sticky;top:18px}.co2-nav-heading h3{font-size:1rem;margin:0;color:#2e563e}.co2-step-nav p{font-size:.74rem;color:#758366;line-height:1.7;margin:7px 0 13px}.co2-preparation .co2-steps{display:grid;grid-template-columns:1fr;gap:5px;margin:0;position:relative}.co2-preparation .co2-steps::before{content:"";position:absolute;left:20px;top:24px;bottom:24px;width:1px;background:#afc39d}.co2-preparation .co2-steps .sequence-step{position:relative;display:flex;justify-content:flex-start;align-items:center;gap:8px;min-height:46px;padding:8px 9px;border-color:transparent;border-radius:10px;background:#fffef6a6;box-shadow:none;text-align:left;grid-column:auto}.co2-preparation .co2-steps .step-label{font-size:.77rem;white-space:normal;line-height:1.45}.co2-preparation .co2-steps .co2-step-number{flex:0 0 23px;width:23px;height:23px;background:#fbfcf5;border-color:#9eb591;color:#416c47;font-size:.69rem}.co2-preparation .co2-steps .sequence-step.is-current,.co2-preparation .co2-steps .sequence-step.is-current:hover{background:#1f624b;border-color:#1f624b}.co2-preparation .co2-steps .is-current .co2-step-number{background:#fafdf1;border-color:#fafdf1;color:#1f624b}.co2-preparation .co2-steps .sequence-step:hover:not(:disabled){background:#e7efdb;border-color:#b0c59b}.co2-step-head p{line-height:1.8}.co2-scene-viewport{position:relative}.co2-media-control{display:none;position:absolute;z-index:2;bottom:10px;right:10px;align-items:center;gap:7px;min-height:44px;padding:6px 11px!important;border:1px solid #7f997a!important;border-radius:9px;background:#fffef2ed!important;color:#315d43;box-shadow:0 2px 8px #29452e15;font-size:.75rem!important}.co2-preparation[data-ready=true] .co2-media-control:not([hidden]){display:flex}.co2-media-control [data-play-icon]{font-size:.96rem;line-height:1}.co2-nav-heading [data-step-menu]{display:none}.co2-preparation .co2-model-note{font-size:.67rem;line-height:1.8;margin-top:12px}.co2-steps .sequence-step:focus-visible{outline:3px solid #c69c49;outline-offset:2px}
+@container(max-width:720px){.co2-workspace{grid-template-columns:minmax(0,1fr);gap:12px}.co2-step-nav{order:-1;position:static;padding:11px 12px}.co2-nav-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.co2-nav-heading h3{font-size:.84rem}.co2-preparation[data-ready=true] .co2-nav-heading [data-step-menu]:not([hidden]){display:block;min-height:44px;font-size:.79rem;padding:7px 10px;text-align:left;max-width:75%;background:#fffef7;color:#315d43}.co2-step-nav p{margin-bottom:10px}.co2-preparation .co2-steps .sequence-step{min-height:44px}.co2-preparation .co2-steps .step-label{font-size:.8rem}.co2-stage-area{padding:12px}.co2-preparation .co2-step-head h3{font-size:1.05rem}.co2-preparation .co2-step-head p{font-size:.8rem}.co2-media-control{bottom:8px;right:8px}.co2-preparation .co2-step-nav .co2-steps .sequence-step:last-child{grid-column:auto}}
+
+.co2-materials-photo .co2-material-hit[data-material=jar]{left:auto;right:0}
+
+/* Real apparatus outlines remain clickable in both the scene and its close-up. */
+.co2-equipment-help{font-size:.72rem;line-height:1.8;color:#66805a;background:#f4f8eb;margin:0;padding:8px 12px;border-bottom:1px solid #dce5d3}.co2-equipment-hit{fill:transparent;stroke:transparent;stroke-width:0;pointer-events:all;cursor:pointer;outline:none}.co2-equipment-hit.is-stroke{fill:none;stroke-width:44;pointer-events:stroke}.co2-equipment-outline{fill:transparent;stroke:transparent;stroke-width:2;pointer-events:none}.co2-equipment-outline.is-stroke{fill:none;stroke-width:3}.co2-equipment-hit:hover+.co2-equipment-outline,.co2-equipment-hit:focus+.co2-equipment-outline{fill:#dcebc22b;stroke:#829d66}.co2-equipment-hit.is-stroke:hover+.co2-equipment-outline,.co2-equipment-hit.is-stroke:focus+.co2-equipment-outline{fill:none}.co2-equipment-hit:focus-visible+.co2-equipment-outline{stroke:#c49742;stroke-width:3}.co2-equipment-dialog{width:min(490px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 32px);box-sizing:border-box;border:1px solid #bfceb0;border-radius:18px;padding:24px;color:#365b42;background:#fffef8;box-shadow:0 18px 70px #193c2a38;overscroll-behavior:contain;overflow:auto}.co2-equipment-dialog::backdrop{background:#17352470;backdrop-filter:blur(3px)}.co2-equipment-close{position:absolute;right:10px;top:10px;width:44px;height:44px;padding:0;font-size:1.6rem;line-height:1;border:0;background:transparent;color:#527256;border-radius:50%}.co2-equipment-heading{display:flex;align-items:center;gap:20px;padding-right:25px;margin-bottom:20px}.co2-equipment-heading>svg{display:block;width:112px;height:116px;flex:0 0 112px;border:1px solid #e2e8d8;border-radius:12px;background:#f4f5e9}.co2-equipment-heading p{font-size:.72rem;line-height:1.7;color:#7a896b;margin:0 0 5px}.co2-equipment-heading h3{font-size:1.3rem;line-height:1.5;color:#2d573e;margin:0}.co2-equipment-dialog dl{margin:0;display:grid;gap:16px}.co2-equipment-dialog dt{font-size:.78rem;color:#6c845b;font-weight:700;margin-bottom:5px}.co2-equipment-dialog dd{font-size:.88rem;line-height:1.9;margin:0;color:#4a6650}.co2-equipment-paused{font-size:.72rem;line-height:1.8;color:#859276;border-top:1px solid #e2e7d9;padding-top:12px;margin:18px 0 0}@media(max-width:510px){.co2-equipment-dialog{padding:20px}.co2-equipment-heading{gap:14px;padding-right:20px}.co2-equipment-heading>svg{width:90px;height:100px;flex-basis:90px}.co2-equipment-heading h3{font-size:1.15rem}.co2-equipment-dialog dd{font-size:.84rem}}
+.co2-equipment-return{display:block;margin:16px 0 0 auto;font-size:.82rem;min-height:44px;padding:9px 18px}
+
+/* Materials use the same dialog; their source reference remains readable without JS. */
+.co2-preparation[data-ready=true] .co2-material-details{display:none}
+
+/* The whole-experiment control stays outside the collapsible step list. */
+.co2-sequence-controls{display:none;margin:12px 0 10px;padding-bottom:9px;border-bottom:1px solid #d6e1ca}.co2-preparation[data-ready=true] .co2-sequence-controls{display:block}.co2-step-nav .co2-continuous-button{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:44px;padding:9px 10px;border:1px solid #86a17a;border-radius:9px;background:#fffef7;color:#2f6347;font-size:.8rem;font-weight:700}.co2-step-nav .co2-continuous-button.is-playing,.co2-step-nav .co2-continuous-button.is-playing:hover{background:#1f624b;border-color:#1f624b;color:white}.co2-step-nav [data-continuous-status]{font-size:.7rem;line-height:1.7;color:#718363;margin:8px 0 0}.co2-continuous-button [data-continuous-icon]{line-height:1;font-size:.92rem}@container(max-width:720px){.co2-sequence-controls{margin:9px 0 0;padding-bottom:0;border-bottom:0}.co2-step-nav [data-continuous-status]{margin-top:6px}.co2-step-nav #co2-step-list:not([hidden]){margin-top:10px}}
+
+/* Both desktop cards share their grid row. */
+.co2-preparation[data-ready=true] .co2-workspace{align-items:stretch}
+.co2-preparation[data-ready=true] .co2-stage-area{display:flex;flex-direction:column}
+
+
+/* Expand the experiment itself into the shared desktop row. */
+.co2-preparation[data-ready=true] .co2-model-note{margin:12px 0 0;padding-top:0}
+@container(min-width:721px){
+ .co2-preparation[data-ready=true] .co2-panels{display:flex;flex:1;min-height:0}
+ .co2-preparation[data-ready=true] .co2-step:not([hidden]){display:flex;flex-direction:column;flex:1;min-width:0;min-height:0}
+ .co2-preparation[data-ready=true] .co2-materials-view,.co2-preparation[data-ready=true] .co2-apparatus{display:flex;flex-direction:column;flex:1;min-height:0}
+ .co2-preparation[data-ready=true] .co2-materials-photo{flex:1;min-height:0;aspect-ratio:1536 / 850}
+ .co2-preparation[data-ready=true] .co2-materials-photo>img{position:absolute;inset:0;width:100%;height:100%}
+ .co2-preparation[data-ready=true] .co2-drawing{display:flex;flex-direction:column;flex:1;min-height:0}
+ .co2-preparation[data-ready=true] .co2-scene-viewport{flex:1;min-height:0;aspect-ratio:1600 / 980}
+ .co2-preparation[data-ready=true] .co2-main-scene{position:absolute;inset:0;width:100%;height:100%}
+}
+
+/* Caption fades do not move the apparatus or add another control. */
+.co2-scene-note[data-caption-phase=out],.co2-scene-note[data-caption-phase=in]{will-change:opacity}
+
+/* One player remains reachable while the compact experiment scrolls. */
+#s4{overflow:clip}
+@container(max-width:720px){
+ .co2-preparation[data-ready=true] .co2-workspace{display:flex;flex-direction:column}
+ .co2-preparation[data-ready=true] .co2-step-nav{position:sticky;top:8px;z-index:4;max-height:calc(100dvh - 16px);overflow:auto}
+ .co2-preparation[data-ready=true] .co2-step-head h3{scroll-margin-top:calc(var(--co2-controls-height,150px) + 16px)}
+ .co2-preparation[data-ready=true] .co2-step-nav [data-continuous-status]{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;margin:-1px;padding:0;border:0}
+}
+
+/* Match the current single-column operation navigation, overriding the older tabs. */
+#s4 .co2-preparation .co2-steps{display:grid;grid-template-columns:1fr;gap:5px;margin:0;position:relative}
+#s4 .co2-preparation .co2-steps::before{content:"";position:absolute;left:20px;top:24px;bottom:24px;width:1px;background:#afc39d}
+#s4 .co2-preparation .co2-steps button{position:relative;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;min-height:46px;padding:8px 9px;border-color:transparent;border-radius:10px;background:#fffef6a6;box-shadow:none;text-align:left;font-size:.77rem;line-height:1.45}
+#s4 .co2-preparation .co2-steps button span{width:23px;height:23px;flex:0 0 23px;background:#fbfcf5;border:1px solid #9eb591;color:#416c47;font-size:.69rem}
+#s4 .co2-preparation .co2-steps button b{font-weight:600}
+#s4 .co2-preparation .co2-steps [aria-selected=true]{background:#1f624b;border-color:#1f624b;color:white}
+#s4 .co2-preparation .co2-steps [aria-selected=true] span{background:#fafdf1;color:#1f624b}
+#s4 .co2-preparation .co2-steps button:hover:not(:disabled):not([aria-selected=true]){background:#e7efdb;border-color:#b0c59b}
+#s4 .co2-preparation[data-ready=true] .co2-material-details,#s4 .co2-preparation[data-ready=true] .co2-reading{display:none}
+#s4 .co2-materials-view{margin:0;border:1px solid #d3ddcf;border-radius:15px;overflow:hidden;background:#f6f7ef}
+#s4 .co2-material-scene{border:0;border-radius:0;flex:1}
+#s4 .co2-material-scene img{height:145px}
+#s4 .co2-material-scene button>span{min-height:34px;padding:7px 2px;font-size:.8rem}
+#s4 .co2-step-head h3{margin:0 0 8px;font-size:1.12rem}
+#s4 .co2-step-head p{color:var(--muted);font-size:.85rem;line-height:1.8;margin:0 0 14px}
+#s4 .co2-apparatus{margin:0;display:flex;flex-direction:column;flex:1}
+#s4 .co2-drawing{position:relative;flex:1;display:flex;flex-direction:column}
+#s4 .co2-scene-viewport{position:relative;flex:1;aspect-ratio:1100/650;min-height:0}
+#s4 .co2-scene-note{position:absolute;z-index:1;right:12px;top:12px;max-width:65%;border:1px solid #d8e2d3;border-radius:9px;padding:8px 12px;background:#fffef8ed;color:#47674f;box-shadow:0 2px 8px #52674708;font-size:.8rem;line-height:1.7;pointer-events:none}
+#s4 .co2-observation-guide{pointer-events:none}
+#s4 .co2-observation-guide path{stroke:#64836a;stroke-width:2;fill:none}
+#s4 .co2-observation-guide rect{fill:#fffef4;stroke:#b5c5a6;stroke-width:2}
+#s4 .co2-observation-guide text{font-size:23px;font-weight:600;stroke-width:0}
+#s4 [data-observation-halo]{fill:#e7f0cf;fill-opacity:.45;stroke:#75975b;stroke-width:2}
+#s4 [data-observation-point]{fill:#426b50;stroke:#fffef4;stroke-width:3}
+#s4 .co2-status{position:absolute;width:1px;height:1px;min-height:0;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+#s4 .co2-model-note{font-size:.67rem;line-height:1.8;color:var(--muted);margin:12px 0 0}
+#s4 .co2-equipment-heading img{width:112px;height:116px;object-fit:contain;flex:0 0 112px;border:1px solid #e2e8d8;border-radius:12px;background:#f4f5e9}
+#s4 .co2-workspace{display:block}
+#s4 .co2-preparation[data-ready=true] .co2-workspace{display:grid;grid-template-columns:minmax(0,1fr) 208px;gap:18px;align-items:stretch}
+#s4 .co2-preparation[data-ready=true] .co2-stage-area{display:flex;flex-direction:column;min-width:0}
+#s4 .co2-preparation[data-ready=true] .co2-panels{display:flex;flex:1;min-height:0}
+#s4 .co2-step[hidden]{display:none!important}
+#s4 .co2-step:not([hidden]){display:flex;flex-direction:column;flex:1;min-width:0}
+#s4 .co2-equipment-hit{fill:transparent;stroke:transparent;stroke-width:0;pointer-events:all;cursor:pointer;outline:none}
+#s4 .co2-equipment-hit.is-stroke{fill:none;stroke-width:28;pointer-events:stroke}
+#s4 .co2-equipment-outline{fill:transparent;stroke:transparent;stroke-width:2;pointer-events:none}
+#s4 .co2-equipment-outline.is-stroke{fill:none}
+#s4 .co2-equipment-hit:hover+.co2-equipment-outline,#s4 .co2-equipment-hit:focus+.co2-equipment-outline{fill:#dcebc22b;stroke:#829d66}
+#s4 .co2-equipment-hit.is-stroke:hover+.co2-equipment-outline,#s4 .co2-equipment-hit.is-stroke:focus+.co2-equipment-outline{fill:none}
+@container(min-width:721px){#s4 .co2-preparation[data-ready=true] .co2-main-scene{position:absolute;inset:0;width:100%;height:100%}}
+@container(max-width:720px){#s4 .co2-preparation[data-ready=true] .co2-workspace{display:flex;flex-direction:column;gap:12px}#s4 .co2-step-nav{order:-1}#s4 .co2-scene-note{position:static;max-width:none;border:0;border-top:1px solid #dce3d4;border-radius:0;box-shadow:none}#s4 .co2-step-head h3{scroll-margin-top:calc(var(--co2-controls-height,150px) + 16px)}#s4 .co2-equipment-help{font-size:.72rem}#s4 .co2-material-scene img{height:115px}}
+#s4 .co2-preparation:not([data-ready=true]) .co2-panels{display:block}
