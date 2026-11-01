@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.2 第11項：重播同題／換一題
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.2-fireworks.test.cjs
+```
+
+既有12項（含外層）加入首次／完成／換題名稱、同題重播中斷及解碼失敗後保留名稱、重試文案對應當前按鈕與恢復後同題氣溫／時間差檢查。原本的真實音訊時鐘、作答、鍵盤及390px版面檢查持續執行。`FIREWORKS_URL` 可指定公開頁，`FIREWORKS_ARTIFACT_DIR` 指定既存截圖目錄；公開頁使用環境 HTTPS_PROXY。
+
 ## 3.2 第10項：煙火夜景圖失敗重試
 
 ```sh

@@ -20,13 +20,14 @@ if (root) {
   let failedPictureSource = null, pictureAttempt = 0;
   const format = value => Number(value.toFixed(2)).toLocaleString('zh-TW', { maximumFractionDigits: 2 });
   let challenge, state = 'ready', request = 0, frame = 0, startAt = null, arrived = false;
+  let hasObserved = false;
 
   function setState(next) {
     state = next; root.dataset.state = next;
     const busy = next === 'preparing' || next === 'observing';
     observe.disabled = busy;
     observeText.textContent = next === 'preparing' ? '準備煙火…'
-      : next === 'observing' ? '觀察中…' : '施放煙火';
+      : next === 'observing' ? '觀察中…' : hasObserved ? '重播同題' : '施放煙火';
     answer.disabled = next !== 'complete'; check.disabled = next !== 'complete';
   }
 
@@ -48,6 +49,7 @@ if (root) {
   }
 
   function newChallenge() {
+    hasObserved = false;
     resetObservation();
     challenge = createChallenge({ previous: challenge });
     root.dataset.temperature = String(challenge.temperature);
@@ -86,13 +88,13 @@ if (root) {
       const shown = Math.min(challenge.delay, elapsed);
       timer.textContent = shown.toFixed(2);
       if (elapsed >= challenge.delay) {
-        arrived = true; setState('complete');
+        arrived = true; hasObserved = true; setState('complete');
         root.dataset.audio = 'playing'; root.dataset.delay = challenge.delay.toFixed(2);
         soundEvent.dataset.reached = 'true';
         timer.textContent = challenge.delay.toFixed(2);
         recordLabel.textContent = '時間差';
         caption.textContent = '聽到爆炸聲了';
-        status.textContent = '已記下時間差，現在可以估算距離；再次施放煙火會重播同一題。';
+        status.textContent = '已記下時間差，現在可以估算距離；按「重播同題」再次觀察，或按「換一題」更換題目。';
       }
     }
     if (elapsed < Math.max(FIREWORK_DURATION, challenge.delay + audio.buffer.duration)) {
@@ -138,7 +140,7 @@ if (root) {
       resetObservation();
       status.dataset.error = 'true';
       const resource = error.message === 'picture-load' ? '夜景圖' : error.message === 'audio-load' ? '煙火音效' : '煙火或音效';
-      status.textContent = `${resource}暫時無法載入，請點「施放煙火」再試一次。`;
+      status.textContent = `${resource}暫時無法載入，請點「${observeText.textContent}」再試一次。`;
     }
   }
 

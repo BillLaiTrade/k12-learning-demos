@@ -47,7 +47,9 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     });
     server.once('error', reject);
   });
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium' });
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium',
+    ...(process.env.FIREWORKS_URL?.startsWith('https:') && process.env.HTTPS_PROXY
+      ? { proxy: { server: process.env.HTTPS_PROXY } } : {}) });
   t.after(() => browser.close());
   const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
   const errors = [];
@@ -102,7 +104,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
       }).observe(root, { attributes: true, attributeFilter: ['data-state'] });
     });
   });
-  const base = 'http://127.0.0.1:' + port + '/units/3/parts/3.2/';
+  const base = process.env.FIREWORKS_URL || 'http://127.0.0.1:' + port + '/units/3/parts/3.2/';
   await page.goto(base + '#unit-quiz', { waitUntil: 'networkidle' });
   const root = page.locator('#unit-quiz');
   const data = () => root.evaluate(element => ({ ...element.dataset }));
@@ -114,6 +116,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await page.locator('#fireworks-speed').count(), 0);
     assert.equal(await page.locator('#fireworks-timer').textContent(), '—');
     assert.equal(await page.locator('#fireworks-observe').innerText(), '施放煙火');
+    assert.equal(await page.locator('#fireworks-new').innerText(), '換一題');
     assert.equal(await page.locator('#unit-quiz [role=progressbar], #unit-quiz .fireworks-line, #unit-quiz .fireworks-timeline').count(), 0);
     assert.equal(await page.locator('.fireworks-record #fireworks-timer, .fireworks-record #fireworks-light, .fireworks-record #fireworks-sound').count(), 3);
     assert.equal(await page.locator('.fireworks-view #fireworks-timer, #fireworks-delay').count(), 0);
@@ -191,7 +194,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await page.locator('#fireworks-check').isEnabled(), true);
     await page.waitForTimeout(250);
     assert.equal(await page.locator('#fireworks-timer').textContent(), '3.00', 'stopwatch stops at sound arrival');
-    assert.equal(await page.locator('#fireworks-observe').innerText(), '施放煙火', 'completed observation keeps the same launch label');
+    assert.equal(await page.locator('#fireworks-observe').innerText(), '重播同題');
     assert.equal(await page.locator('#fireworks-record-label').textContent(), '時間差');
     t.diagnostic('wall clock and audio ' + JSON.stringify(times));
   });
@@ -220,15 +223,18 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await page.evaluate(() => window.fwSignals[1].when - window.fwSignals[0].when > 0), true);
     await page.locator('#fireworks-new').click();
     assert.equal((await data()).state, 'ready');
+    assert.equal(await page.locator('#fireworks-observe').innerText(), '施放煙火');
     assert.equal(await page.locator('#fireworks-answer').inputValue(), '');
     assert.equal(await page.locator('#fireworks-timer').textContent(), '—');
     assert.equal(await page.evaluate(() => window.fwSignals[1].stopped), true);
     await page.locator('#fireworks-observe').focus(); await page.keyboard.press('Enter');
     await page.waitForFunction(() => document.querySelector('#unit-quiz').dataset.state === 'complete');
     assert.equal((await data()).delay, '3.01');
+    assert.equal(await page.locator('#fireworks-observe').innerText(), '重播同題');
   });
 
   await t.test('background interruption stops the scheduled sound and leaves a replayable question', async () => {
+    const previous = await data();
     await page.locator('#fireworks-observe').click();
     await page.waitForFunction(() => document.querySelector('#unit-quiz').dataset.state === 'observing');
     await page.evaluate(() => {
@@ -238,6 +244,21 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal((await data()).state, 'ready');
     assert.equal(await page.evaluate(() => window.fwSignals.at(-1).stopped), true);
     assert.match(await page.locator('#fireworks-status').textContent(), /中斷/);
+    assert.equal(await page.locator('#fireworks-observe').innerText(), '重播同題');
+    // Exercise a later decode failure without changing the question or reloading the page.
+    await page.locator('.fireworks-scene>img').evaluate(image => {
+      image.decode = () => Promise.reject(new DOMException('Test decode failure', 'EncodingError'));
+    });
+    await page.locator('#fireworks-observe').click();
+    await page.waitForFunction(() => document.querySelector('#fireworks-status').dataset.error === 'true');
+    assert.equal(await page.locator('#fireworks-observe').innerText(), '重播同題');
+    assert.equal(await page.locator('#fireworks-status').textContent(), '夜景圖暫時無法載入，請點「重播同題」再試一次。');
+    await page.locator('.fireworks-scene>img').evaluate(image => { delete image.decode; });
+    await page.locator('#fireworks-observe').click();
+    await page.waitForFunction(() => document.querySelector('#unit-quiz').dataset.state === 'complete');
+    assert.equal((await data()).temperature, previous.temperature);
+    assert.equal((await data()).delay, previous.delay);
+    assert.equal(await page.locator('#fireworks-observe').innerText(), '重播同題');
   });
 
   await t.test('firework motion and clearing remain identical with reduced motion enabled', async () => {
@@ -326,7 +347,7 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
       assert.equal(estimate.direct, true); assert.equal(estimate.sidePanels, 2);
       assert.equal(estimate.full, true); assert.equal(estimate.below, true);
       assert.equal(width === 390 ? estimate.vertical : estimate.horizontal, true, 'estimate form uses the available width');
-      await page.locator('#unit-quiz').screenshot({path:`/tmp/unit32-stopwatch-${width}.png`});
+      await page.locator('#unit-quiz').screenshot({path:path.join(process.env.FIREWORKS_ARTIFACT_DIR || '/tmp', `unit32-stopwatch-${width}.png`)});
     }
   });
 
@@ -362,6 +383,8 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
     assert.equal(await failed.locator('#unit-quiz').getAttribute('data-state'), 'ready');
     assert.equal(await failed.locator('#fireworks-check').isDisabled(), true);
     assert.equal(await failed.locator('#fireworks-observe').isEnabled(), true);
+    assert.equal(await failed.locator('#fireworks-observe').innerText(), '施放煙火');
+    assert.match(await failed.locator('#fireworks-status').textContent(), /請點「施放煙火」/);
     assert.equal(await failed.locator('#fireworks-sound').getAttribute('data-reached'), 'false');
     await failed.unroute('**/firework-burst.wav*');
     await failed.locator('#fireworks-observe').click();
