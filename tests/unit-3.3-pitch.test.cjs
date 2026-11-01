@@ -147,6 +147,20 @@ test('pitch comparison: independent speakers, controlled frequency and synchroni
    await root.locator('button[data-pitch-view=front]').click();
   }
  });
+ await t.test('front and side controls, speakers and complete wave cards fit one laptop viewport',async()=>{
+  for(const [width,height] of [[1440,900],[1366,768],[1280,720],[1024,768]]){
+   await page.setViewportSize({width,height});
+   for(const view of ['front','side']){
+    await root.locator(`[data-pitch-view=${view}]`).click();
+    await root.locator('.pitch-view-switch').evaluate(n=>scrollTo(0,scrollY+n.getBoundingClientRect().top-20));
+    const metrics=await root.evaluate(n=>({top:n.querySelector('.pitch-view-switch').getBoundingClientRect().top,bottom:Math.max(...[...n.querySelectorAll('.pitch-wave-card')].map(g=>g.getBoundingClientRect().bottom)),height:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth}));
+    assert.ok(metrics.top>=19,`${width}x${height} ${view}: view selector visible`);
+    assert.ok(metrics.bottom<=height-16,`${width}x${height} ${view}: full graphs visible (${metrics.bottom})`);
+    assert.equal(metrics.overflow,false);
+    await page.screenshot({path:`/tmp/unit33-pitch-compact-${width}-${height}-${view}.png`});
+   }
+  }
+ });
  await t.test('touch view switching and side-speaker playback work on a narrow screen',async()=>{
   const touch=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
   const mobile=await touch.newPage();await mobile.goto(page.url(),{waitUntil:'networkidle'});
