@@ -120,12 +120,12 @@ async function toggleHearing(){
   audioContext??=new Audio();await audioContext.resume();if(ticket!==request||document.hidden)return;
   hearingVoice=createHearingVoice(audioContext,hearingView.frequency);source=hearingVoice.oscillator;
   const current=source;source.onended=()=>{if(source===current)stop(root);};
-  hearingVoice.start();hearingView.mode('playing');
+  hearingVoice.start();hearingView.mode('playing');if(audioContext.state==='running')hearingView.markPlayed(hearingView.frequency);
  }catch{if(ticket!==request)return;stop(root);hearingView.error('目前無法播放這個頻率，請調整頻率或再點播放重試。');}
 }
 function tuneHearing(frequency){
  if(activeRoot&&activeRoot!==$('card-06'))stop();
- if(hearingVoice)try{hearingVoice.setFrequency(frequency);}catch{stop();hearingView.error('此裝置不支援目前頻率，請往低音調整後再播放。');}
+ if(hearingVoice)try{hearingVoice.setFrequency(frequency);if(audioContext.state==='running')hearingView.markPlayed(frequency);}catch{stop();hearingView.error('此裝置不支援目前頻率，請往低音調整後再播放。');}
 }
 const links=[...document.querySelectorAll('.route a')];
 function activeLink(hash){for(const link of links)if(link.hash===hash)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');}
@@ -219,7 +219,7 @@ initialize('card-05',async()=>{
  ({timbreBuffer}=audio);timbreView=view.createTimbreExperiment($('card-05'));
 });
 initialize('card-06',async()=>{
- const [audio,view]=await Promise.all([import('./hearing-audio.mjs?v=1'),import('./hearing-experiment.mjs?v=2')]);
+ const [audio,view]=await Promise.all([import('./hearing-audio.mjs?v=1'),import('./hearing-experiment.mjs?v=3')]);
  ({createHearingVoice}=audio);
  hearingView=view.createHearingExperiment($('card-06'),{onToggle:toggleHearing,onFrequency:tuneHearing,onReset:()=>stop($('card-06'))});
  $('card-06').addEventListener('pointerdown',()=>{if(activeRoot&&activeRoot!==$('card-06'))stop();},true);

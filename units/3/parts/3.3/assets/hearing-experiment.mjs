@@ -13,7 +13,7 @@ function activate(button,handler){
  button.addEventListener('click',event=>{if(event.detail>0&&performance.now()-lastTouch<700){event.preventDefault();return;}handler();});
 }
 export function createHearingExperiment(root,{onToggle,onFrequency,onReset}){
- let frequency=HEARING_START,low=null,high=null,pointer=null;
+ let frequency=HEARING_START,low=null,high=null,pointer=null,played=false;
  const band=root.querySelector('[data-hearing-band]'),feedback=root.querySelector('.hearing-feedback'),toggle=root.querySelector('[data-hearing-toggle]');
  function render(){
   root.dataset.frequency=String(frequency);
@@ -24,9 +24,12 @@ export function createHearingExperiment(root,{onToggle,onFrequency,onReset}){
   root.querySelector('#hearing-low').textContent=low===null?'尚未記錄':number(low)+' Hz';
   root.querySelector('#hearing-high').textContent=high===null?'尚未記錄':number(high)+' Hz';
   root.dataset.low=low===null?'':String(low);root.dataset.high=high===null?'':String(high);
+  root.dataset.recordReady=String(played);
+  root.querySelectorAll('[data-hearing-record]').forEach(button=>button.disabled=!played);
+  root.querySelector('.hearing-record-note').textContent=played?'已試聽目前頻率；確認聽得到，再記錄低音端或高音端。':'先播放目前頻率，確認聽得到後再記錄。';
   root.querySelector('[data-hearing-clear=low]').disabled=low===null;root.querySelector('[data-hearing-clear=high]').disabled=high===null;
  }
- function select(value){frequency=Math.max(HEARING_MIN,Math.min(HEARING_MAX,Math.round(value)));feedback.hidden=true;render();onFrequency(frequency);}
+ function select(value){const next=Math.max(HEARING_MIN,Math.min(HEARING_MAX,Math.round(value)));if(next!==frequency)played=false;frequency=next;feedback.hidden=true;render();onFrequency(frequency);}
  function fromPointer(event){const r=band.getBoundingClientRect();select(frequencyAt((event.clientX-r.left)/r.width));}
  band.addEventListener('pointerdown',event=>{
   if(pointer!==null||event.button!==0)return;
@@ -44,6 +47,7 @@ export function createHearingExperiment(root,{onToggle,onFrequency,onReset}){
  });
  activate(toggle,onToggle);activate(root.querySelector('.hearing-speaker-button'),onToggle);
  for(const button of root.querySelectorAll('[data-hearing-record]'))activate(button,()=>{
+  if(!played||button.disabled)return;
   const side=button.dataset.hearingRecord;
   if(side==='low'&&high!==null&&frequency>high||side==='high'&&low!==null&&frequency<low){
    feedback.textContent=side==='low'?'低音端不能高於已記錄的高音端，請調整頻率或先改寫高音端。':'高音端不能低於已記錄的低音端，請調整頻率或先改寫低音端。';feedback.hidden=false;return;
@@ -56,7 +60,7 @@ export function createHearingExperiment(root,{onToggle,onFrequency,onReset}){
   const side=button.dataset.hearingClear;if(side==='low')low=null;else high=null;render();
   feedback.textContent=`已取消${side==='low'?'低音端':'高音端'}紀錄。`;feedback.hidden=false;
  });
- activate(root.querySelector('[data-hearing-reset]'),()=>{onReset();frequency=HEARING_START;low=null;high=null;feedback.hidden=true;render();});
+ activate(root.querySelector('[data-hearing-reset]'),()=>{onReset();frequency=HEARING_START;low=null;high=null;played=false;feedback.hidden=true;render();});
  function mode(value){
   const playing=value==='playing',preparing=value==='preparing';root.dataset.playing=String(playing);root.dataset.preparing=String(preparing);
   toggle.innerHTML=playing?'<span aria-hidden="true">Ⅱ</span> 暫停':preparing?'<span aria-hidden="true">■</span> 取消':'<span aria-hidden="true">▶</span> 播放';
@@ -64,5 +68,5 @@ export function createHearingExperiment(root,{onToggle,onFrequency,onReset}){
   root.querySelector('.play-state').textContent=playing?'正在持續播放':preparing?'正在準備聲音…':'已暫停';
  }
  render();mode('paused');
- return {get frequency(){return frequency;},mode,stop(){mode('paused');},error(message){mode('paused');feedback.textContent=message;feedback.hidden=false;},clearMessage(){feedback.hidden=true;}};
+ return {get frequency(){return frequency;},markPlayed(hz){if(hz===frequency){played=true;render();}},mode,stop(){mode('paused');},error(message){mode('paused');feedback.textContent=message;feedback.hidden=false;},clearMessage(){feedback.hidden=true;}};
 }

@@ -16,12 +16,28 @@ test('hearing exploration: continuous sine, frequency ribbon and manual records'
  const root=page.locator('#card-06'),band=root.locator('[data-hearing-band]'),toggle=root.locator('[data-hearing-toggle]'),reset=async()=>root.locator('[data-hearing-reset]').click();
  const select=async frequency=>{const b=await band.boundingBox(),fraction=Math.log(frequency/20)/Math.log(1000);await page.mouse.click(b.x+b.width*fraction,b.y+b.height*.75);return Number(await band.getAttribute('aria-valuenow'));};
  const play=async()=>{await toggle.click();await page.waitForFunction(()=>document.querySelector('#card-06').dataset.playing==='true');};
+ const audition=async()=>{await play();await toggle.click();};
+ const recordsEnabled=async enabled=>{assert.equal(await root.getAttribute('data-record-ready'),String(enabled));assert.equal(await root.locator('[data-hearing-record]').evaluateAll((ns,value)=>ns.every(n=>n.disabled===!value),enabled),true);};
  await t.test('approved composition has no autoplay, a logarithmic ribbon and empty manual endpoints',async()=>{
   assert.equal(await root.locator('h2').innerText(),'你聽得到哪些頻率的聲音？');assert.equal(await root.locator('#hearing-frequency').innerText(),'1,000 Hz');
   assert.equal(await page.evaluate(()=>window.hearingRuns.length),0);assert.equal(await root.locator('[data-hearing-record]').count(),2);assert.equal(await root.getAttribute('data-low'),'');assert.equal(await root.getAttribute('data-high'),'');
   assert.ok(await band.evaluate(n=>getComputedStyle(n.querySelector('.hearing-ribbon')).backgroundImage.includes('gradient')));
   assert.ok(Math.abs(await band.evaluate(n=>parseFloat(n.style.getPropertyValue('--frequency-position')))-56.633)<.01);
   assert.equal(await root.locator('.hearing-animals').getAttribute('open'),null);assert.equal(await root.locator('form').count(),0);
+  await recordsEnabled(false);assert.match(await root.locator('.hearing-record-note').innerText(),/先播放目前頻率/);
+ });
+ await t.test('records require successful playback of the current selection, stay available after pause and reset on a frequency change',async()=>{
+  await reset();await recordsEnabled(false);
+  await root.locator('[data-hearing-record=high]').evaluate(n=>{n.disabled=false;n.click();});assert.equal(await root.getAttribute('data-high'),'');
+  await band.focus();await page.keyboard.press('End');await recordsEnabled(false);await play();await recordsEnabled(true);await toggle.click();await recordsEnabled(true);
+  await root.locator('[data-hearing-record=high]').click();assert.equal(await root.getAttribute('data-high'),'20000');
+  await band.focus();await page.keyboard.press('End');await recordsEnabled(true);
+  await page.keyboard.press('Home');await recordsEnabled(false);await page.keyboard.press('End');await recordsEnabled(false);assert.equal(await root.getAttribute('data-high'),'20000');
+  await band.focus();await page.keyboard.press('Home');await audition();await recordsEnabled(true);
+  await root.locator('[data-hearing-record=low]').focus();await page.keyboard.press('Enter');assert.equal(await root.getAttribute('data-low'),'20');
+  await page.setViewportSize({width:1366,height:768});await root.locator('.hearing-records').screenshot({path:path.join(capture,'record-eligible-1366.png')});
+  await band.focus();await page.keyboard.press('End');await recordsEnabled(false);await root.locator('.hearing-records').screenshot({path:path.join(capture,'record-needs-listening-1366.png')});
+  await page.setViewportSize({width:1440,height:1200});await reset();await recordsEnabled(false);
  });
  await t.test('actual rendered tones have the chosen frequency, fixed low gain and smooth start/stop',async()=>{
   const results=await page.evaluate(async()=>{
@@ -43,6 +59,7 @@ test('hearing exploration: continuous sine, frequency ribbon and manual records'
   const n=await page.evaluate(()=>window.hearingRuns.length),chosen=await select(8000);await page.waitForTimeout(80);
   const actual=await page.evaluate(()=>{const r=window.hearingRuns.at(-1);return{hz:r.node.frequency.value,type:r.node.type,stopped:r.stopped};});
   assert.equal(await page.evaluate(()=>window.hearingRuns.length),n);assert.equal(actual.type,'sine');assert.ok(Math.abs(actual.hz-chosen)<.1);assert.equal(actual.stopped,false);
+  await recordsEnabled(true);await root.locator('[data-hearing-record=high]').click();assert.equal(await root.getAttribute('data-high'),String(chosen));
   await toggle.click();assert.equal(await root.getAttribute('data-playing'),'false');assert.equal(await page.evaluate(()=>window.hearingRuns.at(-1).stopped),true);
   await play();await page.waitForTimeout(60);assert.ok(Math.abs(await page.evaluate(()=>window.hearingRuns.at(-1).node.frequency.value)-chosen)<.1);await toggle.click();
  });
@@ -53,18 +70,18 @@ test('hearing exploration: continuous sine, frequency ribbon and manual records'
   assert.equal(await page.evaluate(()=>window.hearingRuns.length),n);await reset();
  });
  await t.test('manual endpoints can be recorded and overwritten, reject reversed bounds and survive pause/navigation',async()=>{
-  const low=await select(80);await root.locator('[data-hearing-record=low]').click();const high=await select(8000);await root.locator('[data-hearing-record=high]').click();assert.equal(await root.getAttribute('data-low'),String(low));assert.equal(await root.getAttribute('data-high'),String(high));
+  const low=await select(80);await audition();await root.locator('[data-hearing-record=low]').click();const high=await select(8000);await audition();await root.locator('[data-hearing-record=high]').click();assert.equal(await root.getAttribute('data-low'),String(low));assert.equal(await root.getAttribute('data-high'),String(high));
   await play();await root.locator('[data-hearing-record=high]').click();assert.equal(await root.getAttribute('data-playing'),'true');await toggle.click();
-  await select(16000);await root.locator('[data-hearing-record=low]').click();assert.equal(await root.getAttribute('data-low'),String(low));assert.match(await root.locator('.hearing-feedback').innerText(),/不能高於/);
-  await select(20);await root.locator('[data-hearing-record=high]').click();assert.equal(await root.getAttribute('data-high'),String(high));assert.match(await root.locator('.hearing-feedback').innerText(),/不能低於/);
-  const replaced=await select(100);await root.locator('[data-hearing-record=low]').click();assert.equal(await root.getAttribute('data-low'),String(replaced));
+  await select(16000);await audition();await root.locator('[data-hearing-record=low]').click();assert.equal(await root.getAttribute('data-low'),String(low));assert.match(await root.locator('.hearing-feedback').innerText(),/不能高於/);
+  await select(20);await audition();await root.locator('[data-hearing-record=high]').click();assert.equal(await root.getAttribute('data-high'),String(high));assert.match(await root.locator('.hearing-feedback').innerText(),/不能低於/);
+  const replaced=await select(100);await audition();await root.locator('[data-hearing-record=low]').click();assert.equal(await root.getAttribute('data-low'),String(replaced));
   await page.locator('.route a[href="#card-07"]').click();await page.locator('.route a[href="#card-06"]').click();assert.equal(await root.getAttribute('data-low'),String(replaced));assert.equal(await root.getAttribute('data-playing'),'false');
   await reset();assert.equal(await root.getAttribute('data-low'),'');assert.equal(await root.getAttribute('data-high'),'');assert.equal(await band.getAttribute('aria-valuenow'),'1000');
  });
  await t.test('either endpoint can be cancelled independently without changing frequency, playback or the other record',async()=>{
   await reset();const clear=side=>root.locator(`[data-hearing-clear=${side}]`);
   assert.equal(await clear('low').isDisabled(),true);assert.equal(await clear('high').isDisabled(),true);
-  const low=await select(80);await root.locator('[data-hearing-record=low]').click();const high=await select(8000);await root.locator('[data-hearing-record=high]').click();await play();const n=await page.evaluate(()=>window.hearingRuns.length);
+  const low=await select(80);await audition();await root.locator('[data-hearing-record=low]').click();const high=await select(8000);await audition();await root.locator('[data-hearing-record=high]').click();await play();const n=await page.evaluate(()=>window.hearingRuns.length);
   await clear('low').click();assert.equal(await root.getAttribute('data-low'),'');assert.equal(await root.getAttribute('data-high'),String(high));assert.equal(await root.locator('#hearing-low').innerText(),'尚未記錄');assert.equal(await clear('low').isDisabled(),true);assert.equal(await root.getAttribute('data-playing'),'true');assert.equal(await band.getAttribute('aria-valuenow'),String(high));assert.equal(await page.evaluate(()=>window.hearingRuns.length),n);
   await select(low);await root.locator('[data-hearing-record=low]').click();assert.equal(await clear('low').isEnabled(),true);await clear('high').focus();await page.keyboard.press('Enter');assert.equal(await root.getAttribute('data-high'),'');assert.equal(await root.getAttribute('data-low'),String(low));assert.equal(await root.getAttribute('data-playing'),'true');
   await clear('low').click();assert.equal(await root.getAttribute('data-low'),'');assert.equal(await clear('high').isDisabled(),true);await reset();
@@ -77,9 +94,18 @@ test('hearing exploration: continuous sine, frequency ribbon and manual records'
   await page.locator('[data-play=tone-string]').click();await page.waitForFunction(()=>document.querySelector('#card-05').dataset.playing==='true');await play();assert.equal(await page.locator('#card-05').getAttribute('data-playing'),'false');await toggle.click();
  });
  await t.test('pending resume can be cancelled and playback errors can retry',async()=>{
-  await page.evaluate(()=>{window.savedHearingResume=AudioContext.prototype.resume;AudioContext.prototype.resume=function(){return new Promise(r=>window.releaseHearing=r);};});await toggle.click();assert.equal(await root.getAttribute('data-preparing'),'true');const n=await page.evaluate(()=>window.hearingRuns.length);await toggle.click();await page.evaluate(()=>window.releaseHearing());await page.waitForTimeout(70);assert.equal(await page.evaluate(()=>window.hearingRuns.length),n);
+  await reset();await page.evaluate(()=>{window.savedHearingResume=AudioContext.prototype.resume;AudioContext.prototype.resume=function(){return new Promise(r=>window.releaseHearing=r);};});await toggle.click();assert.equal(await root.getAttribute('data-preparing'),'true');await recordsEnabled(false);await select(8000);await recordsEnabled(false);const n=await page.evaluate(()=>window.hearingRuns.length);await toggle.click();await page.evaluate(()=>window.releaseHearing());await page.waitForTimeout(70);assert.equal(await page.evaluate(()=>window.hearingRuns.length),n);await recordsEnabled(false);
   await toggle.click();await reset();await page.evaluate(()=>window.releaseHearing());await page.waitForTimeout(60);assert.equal(await page.evaluate(()=>window.hearingRuns.length),n);
-  await page.evaluate(()=>AudioContext.prototype.resume=()=>Promise.reject(Error('test')));await toggle.click();await page.waitForFunction(()=>!document.querySelector('.hearing-feedback').hidden);assert.match(await root.locator('.hearing-feedback').innerText(),/無法播放/);await page.evaluate(()=>AudioContext.prototype.resume=window.savedHearingResume);await play();await toggle.click();
+  await recordsEnabled(false);await page.evaluate(()=>AudioContext.prototype.resume=()=>Promise.reject(Error('test')));await toggle.click();await page.waitForFunction(()=>!document.querySelector('.hearing-feedback').hidden);assert.match(await root.locator('.hearing-feedback').innerText(),/無法播放/);await recordsEnabled(false);await page.evaluate(()=>AudioContext.prototype.resume=window.savedHearingResume);await play();await recordsEnabled(true);await toggle.click();
+ });
+ await t.test('unsupported startup and live retuning do not qualify the new frequency for recording',async()=>{
+  const c=await browser.newContext();await c.addInitScript(()=>{const Native=window.AudioContext;window.AudioContext=class extends Native{constructor(){super({sampleRate:32000});}};});const p=await c.newPage();
+  try{
+   await p.goto(url+'#card-06',{waitUntil:'networkidle'});const card=p.locator('#card-06'),ribbon=card.locator('[data-hearing-band]'),button=card.locator('[data-hearing-toggle]');
+   await ribbon.focus();await p.keyboard.press('End');await button.click();await p.waitForFunction(()=>!document.querySelector('#card-06 .hearing-feedback').hidden);assert.equal(await card.getAttribute('data-record-ready'),'false');assert.equal(await card.getAttribute('data-playing'),'false');
+   await ribbon.focus();await p.keyboard.press('Home');await button.click();await p.waitForFunction(()=>document.querySelector('#card-06').dataset.recordReady==='true');await card.locator('[data-hearing-record=low]').click();assert.equal(await card.getAttribute('data-low'),'20');
+   await ribbon.focus();await p.keyboard.press('End');await p.waitForFunction(()=>document.querySelector('#card-06').dataset.playing==='false');assert.equal(await card.getAttribute('data-record-ready'),'false');assert.equal(await card.locator('[data-hearing-record=high]').isDisabled(),true);assert.equal(await card.getAttribute('data-low'),'20');
+  }finally{await c.close();}
  });
  await t.test('knowledge retains hearing range, animal upper bounds and device/colour limitations',async()=>{
   await root.locator('.hearing-animals summary').click();const text=await root.locator('.hearing-animals').innerText();assert.match(text,/次聲波[\s\S]*超聲波/);assert.match(text,/沒有聲波/);assert.match(text,/30,000[\s\S]*100,000/);assert.match(text,/顏色/);
@@ -92,7 +118,7 @@ test('hearing exploration: continuous sine, frequency ribbon and manual records'
   await root.locator('.hearing-animals summary').click();await page.setViewportSize({width:1440,height:1200});
  });
  await t.test('approved desktop hierarchy and mobile controls remain inside their panels at eight widths',async()=>{
-  await select(80);await root.locator('[data-hearing-record=low]').click();await select(8000);await root.locator('[data-hearing-record=high]').click();
+  await select(80);await audition();await root.locator('[data-hearing-record=low]').click();await select(8000);await audition();await root.locator('[data-hearing-record=high]').click();
   for(const width of [1920,1440,1280,1024,820,760,390,320]){
    await page.setViewportSize({width,height:1200});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
    const issues=await root.evaluate(n=>{const box=n.getBoundingClientRect();return[...n.querySelectorAll('button,[role=slider],output,.dialogue')].flatMap(el=>{const b=el.getBoundingClientRect();return b.width&&(b.left<box.left||b.right>box.right+1||el.scrollWidth>el.clientWidth+2)?[el.className||el.id]:[];});});assert.deepEqual(issues,[],`${width}px layout`);

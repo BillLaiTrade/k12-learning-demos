@@ -1,0 +1,23 @@
+▶ hearing exploration: continuous sine, frequency ribbon and manual records
+  ✔ approved composition has no autoplay, a logarithmic ribbon and empty manual endpoints (97.308471ms)
+  ✔ records require successful playback of the current selection, stay available after pause and reset on a frequency change (737.054377ms)
+  ✔ actual rendered tones have the chosen frequency, fixed low gain and smooth start/stop (43.302325ms)
+  ✔ play is continuous and retunes the existing real oscillator without restarting or boosting volume (1681.815093ms)
+  ✔ real dragging clamps both ends and keyboard works while paused without starting audio (552.825068ms)
+  ✔ manual endpoints can be recorded and overwritten, reject reversed bounds and survive pause/navigation (1005.650725ms)
+  ✔ either endpoint can be cancelled independently without changing frequency, playback or the other record (574.955973ms)
+  ✔ speaker click toggles, other blocks replace sound and hiding/leaving/reset stop without autoplay (671.161211ms)
+  ✔ pending resume can be cancelled and playback errors can retry (478.071137ms)
+  ✔ unsupported startup and live retuning do not qualify the new frequency for recording (1431.659098ms)
+  ✔ knowledge retains hearing range, animal upper bounds and device/colour limitations (613.256757ms)
+  ✔ approved desktop hierarchy and mobile controls remain inside their panels at eight widths (1289.351668ms)
+  ✔ real mobile touch drags while the same tone plays and taps toggle once (2140.776277ms)
+✔ hearing exploration: continuous sine, frequency ribbon and manual records (13049.84359ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13445.537744
