@@ -1,4 +1,4 @@
-import {bindWellQuiz} from './well-quiz.mjs?v=20261101-well-compact';
+import {bindWellQuiz} from './well-quiz.mjs?v=c4ea93ed6ef5';
 import {bindRoomWaveLab} from './room-wave-lab.mjs?v=0df53bfb7d7b';
 import {renderSonar, bindSonar, beginSonar, sonarDuration, sonarTaps} from './sonar-lab.mjs?v=20261101-workspace';
 import {arrivals} from './echo-model.mjs?v=20261101-room-contrast';

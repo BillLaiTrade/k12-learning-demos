@@ -41,33 +41,9 @@
 .well-check{width:100%;min-height:46px}
 .well-quiz .well-feedback{margin:14px 20px 20px;padding:12px 16px;border-radius:10px;font-size:.92rem;background:#f0f4eb}
 .well-feedback:empty{display:none}
-.well-reveal{margin:0 20px 22px;padding:18px;border:1px solid var(--line);border-radius:14px;background:#f4f7ef}
-.well-reveal h3{margin:0 0 8px;color:#214d3e;font-size:1.1rem}
-.well-equation{font-weight:800;color:#1f6148;font-size:1.12rem;line-height:1.8}
-.well-reveal p{margin:8px 0;font-size:.88rem}
-.well-reveal .well-slow{font-size:.75rem;color:var(--muted)}
 .well-error{margin:12px 0;color:#924118;font-size:.85rem}
 .well-notes{margin:0 20px 20px;font-size:.77rem;color:var(--muted)}
 .well-notes summary{cursor:pointer}
 .well-noscript{margin:0 20px 22px;padding:12px;background:#fff1e5}
 @media(min-width:1051px) and (max-width:1250px){.well-layout{grid-template-columns:minmax(0,1.2fr) minmax(230px,1fr);gap:14px;padding-left:16px;padding-right:16px}.well-panel{padding:13px}}
-@media(max-width:720px){.well-person{left:9%;top:10%;width:38%;height:65%}.well-bubble{left:45%;top:11%}.well-scene{aspect-ratio:4/3;min-height:0;flex:none}.well-layout{grid-template-columns:1fr;padding:0 14px 16px}.well-quiz .quiz-head{padding:20px 16px}.well-quiz .quiz-mark{width:40px;height:40px;border-radius:12px}.well-quiz .quiz-head p{font-size:.85rem}.well-side{gap:10px}.well-time strong{font-size:2.2rem}.well-reveal{margin:0 14px 16px;padding:14px}.well-quiz .well-feedback{margin:0 14px 16px}.well-controls button{font-size:.92rem}.well-notes{margin:0 14px 16px}}
-
-/* Keep the original diagram beside a short calculation, without a long worksheet. */
-.well-compact{display:grid;grid-template-columns:minmax(140px,.65fr) minmax(0,1.35fr);gap:16px;align-items:center}
-.well-route svg{display:block;width:100%;height:200px}
-.well-reveal .well-route .well-slow{font-size:.72rem;line-height:1.5;margin:4px 0 0}
-.well-working{min-width:0}
-.well-reveal .well-time-note{font-size:.84rem;line-height:1.6;margin:0 0 9px;color:var(--muted)}
-.well-calculation{display:grid;gap:9px;list-style:none;margin:0;padding:0;min-width:0}
-.well-calculation li{min-width:0}
-.well-calc-label{display:flex;align-items:baseline;gap:6px;font-size:.84rem;line-height:1.6;color:#31543e;font-weight:750}
-.well-calc-number{display:inline-grid;place-items:center;flex:0 0 auto;width:18px;height:18px;border-radius:50%;background:#dfead6;color:#215c43;font-size:.7rem}
-.well-calculation .well-equation{display:block;margin-top:3px;font-size:1.02rem;line-height:1.65;font-variant-numeric:tabular-nums}
-.well-lengths{margin-top:5px}
-.well-length-bar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));height:26px;overflow:hidden;border-radius:6px;border:1px solid #adbea8}
-.well-leg{display:grid;place-items:center;min-width:0;font-size:.76rem;font-weight:700}
-.well-leg--out{background:#deead8;color:#205c43}
-.well-leg--back{background:#f8e7d1;color:#8e4b1f;border-left:1px solid #adbea8}
-.well-reveal .well-lengths p{text-align:center;font-size:.72rem;line-height:1.5;margin:2px 0 0;color:#4b5e48}
-@media(max-width:520px){.well-compact{grid-template-columns:1fr;gap:8px}.well-route svg{height:125px}.well-reveal .well-route .well-slow{text-align:center}.well-calculation{gap:8px}.well-calculation .well-equation{font-size:1rem}.well-reveal h3{font-size:1rem}}
+@media(max-width:720px){.well-person{left:9%;top:10%;width:38%;height:65%}.well-bubble{left:45%;top:11%}.well-scene{aspect-ratio:4/3;min-height:0;flex:none}.well-layout{grid-template-columns:1fr;padding:0 14px 16px}.well-quiz .quiz-head{padding:20px 16px}.well-quiz .quiz-mark{width:40px;height:40px;border-radius:12px}.well-quiz .quiz-head p{font-size:.85rem}.well-side{gap:10px}.well-time strong{font-size:2.2rem}.well-quiz .well-feedback{margin:0 14px 16px}.well-controls button{font-size:.92rem}.well-notes{margin:0 14px 16px}}
