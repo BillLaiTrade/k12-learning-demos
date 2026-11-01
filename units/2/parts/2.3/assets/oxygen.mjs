@@ -1,6 +1,6 @@
 import { createSceneCaptions } from './oxygen-captions.mjs?v=reading-fade-1';
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=material-purpose-15';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=operations-12';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=placement-16';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=placement-13';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
@@ -112,19 +112,24 @@ function renderAssembly(elapsed, state, view, phase) {
   });
   const capX=130+185*f.sealed;
   $('stopper').setAttribute('transform',`translate(${capX-315} ${-25*(1-f.sealed)})`);
-  const tube=`M${capX} ${275-25*(1-f.sealed)}V200Q${capX} 180 ${capX+20} 180H700Q720 180 720 200V710Q720 730 740 730H780Q800 730 800 710V665`;
+  const tipY=phase===0?450+215*f.outletPlacement:665;
+  const tube=`M${capX} ${275-25*(1-f.sealed)}V200Q${capX} 180 ${capX+20} 180H700Q720 180 720 200V${tipY+45}Q720 ${tipY+65} 740 ${tipY+65}H780Q800 ${tipY+65} 800 ${tipY+45}V${tipY}`;
   for(const part of ['delivery-tube','tube-highlight','flow'])$(part).setAttribute('d',tube);
+  if(phase===0){
+    const position=`translate(${155*(1-f.placement)} ${-70*(1-f.placement)})`;
+    for(const part of ['placement-jar','full-label','assembly-jar-focus'])$(part).setAttribute('transform',position);
+  }
   opacity('reaction-bubbles',f.reaction);
   $('reaction-bubbles').setAttribute('transform',`translate(0 ${-((f.time%900)/900)*30})`);
   opacity('purge-bubbles',f.gasThroughTube?1:0);opacity('flow',f.gasThroughTube?1:0);
   $('purge-bubbles').querySelectorAll('circle').forEach((b,i)=>{const phase=(f.time/1150+i*.33)%1;b.setAttribute('cx',800+Math.sin(phase*5+i)*8);b.setAttribute('cy',657-phase*90);});
   $('flow').style.strokeDashoffset=String(-f.time/35);
   opacity('assembly-jar-focus',phase===0?1:0);
-  const notes=['集氣瓶裝滿水、倒置水中；導管出口先放在瓶外的水中','把雙氧水倒入錐形瓶','用藥匙加入少量二氧化錳，讓雙氧水更快分解','塞緊已連接導管的塞子，氣體從瓶外水中的出口送出'];
+  const notes=['把裝滿水的倒置集氣瓶移到定位，再將導管出口放在瓶外水中','把雙氧水倒入錐形瓶','用藥匙加入少量二氧化錳，讓雙氧水更快分解','塞緊已連接導管的塞子，氣體從瓶外水中的出口送出'];
   const finished=['集氣位置已備好；導管出口先留在瓶外水中','雙氧水已倒入，接著加入少量二氧化錳','加入二氧化錳後開始產氣，接著塞好連接導管的塞子','裝置已接好，接著先排空氣，暫不收集'];
   const note=state==='complete'?finished[phase]:notes[phase];
   view.dataset.captionMessage=note;view.dataset.loopCaption=notes[phase];view.querySelector('title').textContent=note;
-  view.querySelector('.oxygen-mobile-zoom svg').setAttribute('viewBox',phase===0?'760 235 510 495':'100 30 550 805');
+  view.querySelector('.oxygen-mobile-zoom svg').setAttribute('viewBox',phase===0?'740 120 690 635':'100 30 550 805');
   view.querySelector('[data-assembly-zoom-label]').textContent=phase===0?'集氣位置近看':'加入材料與瓶口近看';
   return note+'。';
 }

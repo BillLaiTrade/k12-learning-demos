@@ -1,0 +1,26 @@
+✔ tube entry precedes displacement; withdrawal precedes glass cover (3.195586ms)
+✔ shared insertion completes before oxygen ignition; results remain at duration (0.997122ms)
+✔ selected step stays bounded at both ends without leaking into the next step (0.522471ms)
+✔ assembly adds reagents in order, starts reaction after catalyst, and seals before gas enters the tube (2.802567ms)
+✔ operation windows stop at purposeful boundaries, with prerequisites and withdrawal before covering (0.794474ms)
+✔ placement settles the submerged full jar before lowering the outlet; later chemistry keeps its existing timing (1.111784ms)
+▶ 2.3 oxygen: isolated operations preserve physical prerequisites and shared mobile scenes
+  ✔ all scene instances decode original glass assets with unique definitions, without a WebGL dependency (168.367032ms)
+  ✔ placement visibly moves the full inverted jar underwater before lowering the outlet outside it (968.708448ms)
+  ✔ placement freezes with the player and a moving jar opens its matching introduction without resuming (624.219926ms)
+  ✔ touch close-up shows the moving jar fully, pauses on introduction and ends at the next operation prerequisites (1833.575076ms)
+  ✔ placement, peroxide, catalyst and sealing each end at their own correct state (529.582755ms)
+  ✔ purge keeps the jar full, with bubbles only outside and below the trough surface (78.517726ms)
+  ✔ collection moves the outlet before water displacement and bubbles; callouts follow the true water surface (262.99362ms)
+  ✔ pause freezes the complete drawing and mobile closeup uses the same scene (811.580396ms)
+  ✔ storage first withdraws the outlet, then covers underwater and stays on the same operation (176.01097ms)
+  ✔ returning to an earlier operation restores its science state and visible main/zoom references (1454.936643ms)
+✔ 2.3 oxygen: isolated operations preserve physical prerequisites and shared mobile scenes (8542.675617ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9071.461732

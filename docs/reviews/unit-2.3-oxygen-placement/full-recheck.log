@@ -1,0 +1,18 @@
+▶ 2.3 complete page: five teaching sections and one evidence-based quiz
+  ✔ all six sections and routes exist, with gas profiles and no retired experiment (83.799991ms)
+  ✔ default cup comparisons remain after preview and reset (160.717371ms)
+  ✔ both preparation lessons navigate independent steps and keep properties in section five (764.156064ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (233.665271ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (536.677635ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (3293.947064ms)
+  ✔ all teaching evidence is available without JavaScript (1215.62707ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (2191.087307ms)
+✔ 2.3 complete page: five teaching sections and one evidence-based quiz (10112.02425ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10516.707528

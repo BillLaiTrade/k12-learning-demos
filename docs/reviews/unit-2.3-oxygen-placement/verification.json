@@ -1,0 +1,27 @@
+{
+  "unique_passed_checks": 86,
+  "model_and_physics": {
+    "log": "physics-tests.log",
+    "passed": 17
+  },
+  "other_oxygen_suites": {
+    "log": "regressions-initial.log",
+    "passed": 60,
+    "suites": [
+      "canvas-tap 10",
+      "captions 10",
+      "continuous 10",
+      "equipment 9",
+      "materials 10",
+      "oxygen 11"
+    ]
+  },
+  "full_page": {
+    "log": "full-recheck.log",
+    "passed": 9
+  },
+  "initial_failures": [
+    "手機全卡截圖捲出實驗觸發既有離區暫停；改在近景可見時截圖，重跑專項17項全過",
+    "整頁測試同一影格程式選步後立即捲走，未讓可見性觀測先更新；改原生點選並推進觀測影格，重跑9項全過"
+  ]
+}

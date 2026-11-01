@@ -755,3 +755,9 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4-calculation.test.cjs
 continuous與oxygen專項改驗證點選即播放、重選從頭重演、換步取消舊時鐘／字卡、正確科學前提、鍵盤及手機同規則。其他氧氣與跨播放器專項改由選步直接起播，不再多按主鍵。十套共100項通過（連播10＋操作11＋空白點選10＋字卡10＋器材9＋材料10＋物理8＋整頁9＋性質10＋CO2 13，含外層）。
 
 公開核心以OXYGEN_CONTINUOUS_URL、OXYGEN_URL、OXYGEN_TAP_URL、OXYGEN_CAPTIONS_URL、OXYGEN_EQUIPMENT_URL指定同頁，跑上述五套共50項；截圖目錄須另設/tmp保留歷史證據。模型、CSS與其他區未改，無新依賴。證據見docs/reviews/unit-2.3-oxygen-step-play/。
+
+## 2.3 擺放集氣位置動畫（2026-11-01）
+
+oxygen-model增加先定位再降導管、無加藥／反應的檢查，現6項；oxygen-three增加實際可見位移、水下滿水、暫停像素、移動命中與手機觸控，現11項（含外層）。本機模型／物理17、其餘氧氣60及整頁重跑9共86項不同檢查通過。首輪整頁離區等待超時，改原生點選並先讓可見影格更新後9項全過；初次手機全卡截圖捲出實驗，改近景可見截圖後17項全過，原記錄保持。
+
+公開以OXYGEN_URL、OXYGEN_CONTINUOUS_URL、OXYGEN_EQUIPMENT_URL指定同頁，物理11＋操作11＋連播10＋器材9共41項。截圖目錄OXYGEN_THREE_ARTIFACT_DIR、OXYGEN_ARTIFACT_DIR、OXYGEN_CONTINUOUS_ARTIFACT_DIR、OXYGEN_EQUIPMENT_ARTIFACT_DIR另指/tmp，以免覆寫歷史證據。見docs/reviews/unit-2.3-oxygen-placement/。

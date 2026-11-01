@@ -43,3 +43,12 @@ test('operation windows stop at purposeful boundaries, with prerequisites and wi
  assert.equal(oxygenOperationFrame(5,99999).collected,0);for(let time=0;time<700;time+=50){const f=oxygenOperationFrame(6,time);assert.equal(f.collected,0);assert.equal(f.collecting,false);}
  assert.equal(oxygenOperationFrame(6,99999).collected,1);for(let time=0;time<=2600;time+=20){const f=oxygenOperationFrame(7,time);if(f.cover>0)assert.equal(f.tube,0);assert.equal(f.collected,1);}assert.equal(oxygenOperationFrame(7,99999).covered,true);
 });
+
+
+test('placement settles the submerged full jar before lowering the outlet; later chemistry keeps its existing timing',async()=>{
+ const {assemblyFrame,oxygenOperationFrame}=await import('../units/2/parts/2.3/assets/oxygen-model.mjs');
+ assert.equal(assemblyFrame(0).placement,0);assert.equal(assemblyFrame(0).outletPlacement,0);
+ let previous=0;
+ for(let time=0;time<=2800;time+=20){const f=assemblyFrame(time);assert.ok(f.placement>=previous);previous=f.placement;if(f.outletPlacement>0)assert.equal(f.placement,1);assert.equal(f.peroxide,0);assert.equal(f.catalyst,0);assert.equal(f.sealed,0);assert.equal(f.reaction,0);assert.equal(oxygenOperationFrame(1,time).collected,0);}
+ assert.equal(assemblyFrame(2800).placement,1);assert.equal(assemblyFrame(2800).outletPlacement,1);assert.equal(assemblyFrame(4000).placement,1);
+});

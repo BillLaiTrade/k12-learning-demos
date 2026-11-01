@@ -70,8 +70,10 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     assert.equal(await page.locator('#s3 .gas-observations,#s4 .gas-observations').count(),0);assert.equal(await page.locator('#s5 .observation-grid figure').count(),4);assert.equal(await page.locator('#s5 .oxygen-comparison').count(),1);
   });
   await t.test('leaving a replay pauses it and returning does not autoplay', async () => {
-    const panel = page.locator('[data-replay="oxygen"]'); await panel.locator('#oxygen-tab-6').evaluate(b=>b.click());
+    const panel = page.locator('[data-replay="oxygen"]'); await panel.locator('#oxygen-tab-6').click();
+    await page.clock.runFor(100);
     await page.locator('#s2').evaluate(el => el.scrollIntoView({ behavior: 'instant' }));
+    await page.clock.runFor(100);
     await page.waitForFunction(() => document.querySelector('[data-replay="oxygen"]').dataset.state === 'paused');
     assert.equal(await panel.getAttribute('data-state'), 'paused');
     const stage = await panel.getAttribute('data-stage');
