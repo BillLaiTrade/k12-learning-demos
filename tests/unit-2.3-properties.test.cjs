@@ -38,7 +38,7 @@ test('2.3 collected gases: preparation, property comparison and final quiz are s
  });
  await t.test('sample source links, collection-next links and revised quiz feedback point to the right sections',async()=>{
   assert.equal(await page.locator('#s4 .properties-next').getAttribute('href'),'#s5');assert.equal(await fifth.locator('.properties-next').getAttribute('href'),'#s6');
-  await page.locator('.oxygen-preparation [data-stage="7"]').click();await page.locator('.oxygen-preparation [data-next]').click();assert.equal(await page.evaluate(()=>document.activeElement===document.querySelector('#title-4')),true);
+  await page.locator('.route a[href="#s4"]').click();assert.equal(new URL(page.url()).hash,'#s4');
   const answers={composition:'mixture',sample_a:'oxygen',sample_b:'co2',fuel:'wood',evidence:'limewater',uses:'stable'};
   for(const[name,value]of Object.entries(answers)){if(name.startsWith('sample_'))await page.locator(`#gas-report-form [name=${name}]`).selectOption(value);else await page.locator(`#gas-report-form [name=${name}][value=${value}]`).check();}
   await page.locator('#gas-report-form [name=fuel][value=oxygen]').check();await page.locator('#gas-report-form [type=submit]').click();assert.equal(await page.locator('#gas-report-feedback a').getAttribute('href'),'#s5');

@@ -164,7 +164,9 @@ function createPreparationPlayer() {
     sequence.classList.toggle('is-playing',sequencePlaying);
     sequenceStatus.textContent=sequencePlaying?'自動接續下一步，可隨時暫停。':sequencePaused?'已暫停，按繼續可接著觀看。':replayAll?'已完成氧氣收集與封存。':stage===0?'從擺好集氣位置開始連播。':state==='complete'?'接著從下一個操作連播。':'從目前操作往下連播。';
     menu.textContent=`${String(stage+1).padStart(2,'0')} ${OXYGEN_OPERATIONS[stage].label} ▾`;
-    next.innerHTML=`接著：${stage===steps.length-1?'二氧化碳實驗':OXYGEN_OPERATIONS[stage+1].label} <span aria-hidden="true">→</span>`;
+    const last=stage===steps.length-1;
+    next.parentElement.hidden=last;next.disabled=last;
+    if(!last)next.innerHTML=`接著：${OXYGEN_OPERATIONS[stage+1].label} <span aria-hidden="true">→</span>`;
   }
   function tick(now){
     if(state!=='playing')return;
@@ -239,7 +241,6 @@ function createPreparationPlayer() {
   sequence.addEventListener('click',toggleContinuous);
   next.addEventListener('click',()=>{
     if(stage<steps.length-1)select(stage+1,true);
-    else {pausePlayback();const heading=document.querySelector('#title-4');heading.tabIndex=-1;heading.focus({preventScroll:true});heading.scrollIntoView({behavior:'instant',block:'start'});}
   });
   panel.addEventListener('keydown',event=>{if(event.key==='Escape')pausePlayback();});
   if('IntersectionObserver'in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel.querySelector('.oxygen-stage-area'));

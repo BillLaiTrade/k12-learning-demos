@@ -1,0 +1,37 @@
+{
+  "url": "http://127.0.0.1:34771/units/2/parts/2.3/",
+  "rows": [
+    {
+      "width": 1440,
+      "stage": 7,
+      "compact": false,
+      "topDelta": 0,
+      "bottomDelta": 0,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "stage": 6,
+      "compact": false,
+      "topDelta": 0,
+      "bottomDelta": 0,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "stage": 7,
+      "compact": true,
+      "topDelta": 158.03125,
+      "bottomDelta": 693.53125,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "stage": 6,
+      "compact": true,
+      "topDelta": 158.03125,
+      "bottomDelta": 754.53125,
+      "overflow": false
+    }
+  ]
+}

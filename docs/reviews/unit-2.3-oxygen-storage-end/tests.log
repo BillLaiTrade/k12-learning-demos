@@ -1,0 +1,42 @@
+▶ 2.3 oxygen: optional continuous playback shares pause and progress with the current scene
+  ✔ continuous play is explicit, accessible in the sidebar and off by default; manual steps remain bounded (145.715547ms)
+  ✔ one click from materials traverses every operation, holds completed frames and ends without leaving oxygen (545.806549ms)
+  ✔ arming continuous play preserves current progress; both pause buttons freeze and resume the same clock (586.232899ms)
+  ✔ pause in the between-operation hold retains its elapsed time and does not restart that operation (206.614029ms)
+  ✔ manual step choice and named next action exit continuous mode without stale automatic advances (257.881857ms)
+  ✔ reading an apparatus pauses the sequence; closing never resumes it and explicit continue retains position (333.482528ms)
+  ✔ Escape, background, leaving the block and competing playback pause a sequence without silently restarting (298.320252ms)
+  ✔ seven widths keep the control outside the compact menu; native Enter, Space and Escape operate it (2420.805387ms)
+  ✔ real touch with reduced motion pauses and continues; no-JS keeps scenes readable with playback hidden (2557.704203ms)
+✔ 2.3 oxygen: optional continuous playback shares pause and progress with the current scene (8959.986191ms)
+▶ 2.3 oxygen: one vertical list of purposeful operations and in-scene playback
+  ✔ one eight-operation list sits beside materials, with no second hierarchy, counter, previous or material playback (94.882985ms)
+  ✔ forward actions name the next operation; each animation stops before another operation starts (634.321485ms)
+  ✔ direct selection reconstructs prerequisite contents and returning to materials preserves a chosen introduction (408.704791ms)
+  ✔ the in-scene button pauses pixels, resumes and replays; quick selection cancels previous clocks (1164.904555ms)
+  ✔ vertical arrows, Home, End, native activation and Escape retain visible focus (112.614408ms)
+  ✔ background, leaving and another experiment pause without resuming automatically (303.158309ms)
+  ✔ storage has no cross-lesson action; returning restores the next step and normal lesson navigation remains (235.250478ms)
+  ✔ eight operations fit seven widths; compact navigation expands vertically and all controls stay inside (11829.488812ms)
+  ✔ touch and reduced motion use an expandable list and explicit named next action (1494.883346ms)
+  ✔ without JavaScript all eight correct representatives and material introductions remain readable (1204.842426ms)
+✔ 2.3 oxygen: one vertical list of purposeful operations and in-scene playback (19148.348143ms)
+▶ 2.3 collected gases: preparation, property comparison and final quiz are separate
+  ✔ six sections have unique IDs and routes; only section five owns the property observations (73.069572ms)
+  ✔ known oxygen and carbon dioxide are linked to their collection lessons and retain visible completed results (42.173746ms)
+  ✔ both glowing splints enter at identical depth and time, then oxygen relights while carbon dioxide fades (372.246607ms)
+  ✔ pause freezes both visible samples and flame; resume, reset and rapid replay preserve sample roles (712.8642ms)
+  ✔ keyboard, Escape, background and competing preparation players stop the comparison without resetting collected samples (407.769362ms)
+  ✔ sample source links, collection-next links and revised quiz feedback point to the right sections (5203.862074ms)
+  ✔ matched samples stay beside each other and all revised lessons fit seven desktop and mobile widths (1882.053663ms)
+  ✔ touch and reduced motion retain essential manual comparison and the new last quiz route (1346.051676ms)
+  ✔ without JavaScript both gas results, separate limewater evidence, source links and six sections remain readable (1104.769689ms)
+✔ 2.3 collected gases: preparation, property comparison and final quiz are separate (12832.901092ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42141.817244
