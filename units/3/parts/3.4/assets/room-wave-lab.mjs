@@ -16,7 +16,7 @@ export function bindRoomWaveLab(claim,release){
   $('room-condition').textContent=treated?'已加入吸音材料':'尚未加入吸音材料';material.textContent=treated?'− 移除吸音材料':'＋ 加入吸音材料';material.setAttribute('aria-pressed',String(treated));
   pause.disabled=phase==='ready'||phase==='complete';pause.textContent=phase==='paused'?'繼續':'暫停';pause.setAttribute('aria-label',phase==='paused'?'繼續聲波觀察':'暫停聲波觀察');
   for(const b of buttons){b.classList.toggle('is-active',phase==='playing'&&b.dataset.roomSource===kind);b.setAttribute('aria-pressed',String(phase==='playing'&&b.dataset.roomSource===kind));}
-  $('room-observation').textContent=treated?'比較加入材料前後，反射回來的波線有什麼變化？每面牆的變化都一樣嗎？':kind==='speech'?'小葵說完後，你還聽到了什麼？':'拍手聲停下後，你還聽到了什麼？';
+  $('room-observation').textContent=treated?'比較加入材料前後，反射回來的波線有什麼變化？每面牆的變化都一樣嗎？':'觀察從四周牆面反射回來的波，哪一面牆的反射波先回到小葵身旁？';
   $('room-status').textContent=phase==='ready'?'先發聲觀察，再加入材料重新比較。':waiting?'正在準備聲音…':phase==='paused'?'畫面已定格；切換材料可比較同一時刻，或按繼續觀察。':phase==='complete'?'本次觀察結束。可切換材料，再次發聲比較。':modelTime<returns.left?'聲波正在向四周擴散。':modelTime<returns.right?'近牆的反射已返回；遠牆的反射尚未回到小葵。':treated?'不同牆面的反射先後返回；碰到材料的反射較弱。':'不同牆面的反射先後返回，也會繼續反射。';
  }
  function tick(now){elapsed=Math.min(ROOM.duration,(now-start)/1000);draw();if(elapsed>=ROOM.duration){phase='complete';silence();release(api);draw();}else raf=requestAnimationFrame(tick);}
