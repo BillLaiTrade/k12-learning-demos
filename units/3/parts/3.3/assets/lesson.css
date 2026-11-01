@@ -508,6 +508,9 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .hearing-records .hearing-record-note,.hearing-records .hearing-limitation{margin:7px 0 0;text-align:center;color:#687b6b;font-size:.7rem;line-height:1.5}
 .hearing-records .hearing-limitation{margin-top:3px;font-size:.67rem}
 .card-main>.hearing-feedback{margin:9px 0;padding:7px 10px;border-radius:9px;background:#f7f1de;color:#685b3d;font-size:.8rem}
+.hearing-knowledge{margin:14px 0;padding:14px 18px;border:1px solid #e4ddc9;border-radius:12px;background:#faf7ed;color:#46534c}
+.card-main .hearing-knowledge h3{margin:0 0 6px;color:#715a2d;font-size:1rem}
+.hearing-knowledge p{margin:0;font-size:.92rem;line-height:1.8}
 .hearing-animals{margin-top:9px;border:1px solid #dbe5d5;border-radius:11px;background:#f7f9f2;color:#647363;font-size:.78rem}
 .hearing-animals>summary{padding:6px 12px;text-align:center;cursor:pointer}
 .hearing-animals>p{margin:10px 14px}

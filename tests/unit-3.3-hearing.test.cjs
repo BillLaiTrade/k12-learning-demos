@@ -109,10 +109,12 @@ test('hearing exploration: continuous sine, frequency ribbon and manual records'
  });
  await t.test('knowledge retains hearing range, animal upper bounds and device/colour limitations',async()=>{
   assert.equal(await root.locator('.hearing-animals').getAttribute('open'),null);
-  const main=root.locator('.dialogue p').filter({hasText:'人耳概略可聽範圍'});
-  assert.equal(await main.isVisible(),true);assert.match(await main.innerText(),/高於 20,000 Hz 的聲音稱為超聲波/);assert.match(await main.innerText(),/聽不到不代表沒有聲波/);
+  const main=root.getByRole('complementary',{name:'聽不到，就沒有聲波嗎？'});
+  assert.equal(await main.isVisible(),true);assert.match(await main.innerText(),/人耳概略可聽範圍約為 20～20,000 Hz/);assert.match(await main.innerText(),/高於 20,000 Hz 的聲音稱為超聲波/);assert.match(await main.innerText(),/聽不到，不代表沒有聲波/);
+  assert.equal(await main.locator('.speaker,.dialogue').count(),0);
+  const prompt=root.locator('.dialogue').filter({hasText:'你聽不到的聲音，其他動物也聽不到嗎？'});assert.equal(await prompt.isVisible(),true);assert.equal(await prompt.locator('.speaker').count(),1);
   for(const [width,height]of [[1440,900],[1366,768]]){
-   await page.setViewportSize({width,height});await main.scrollIntoViewIfNeeded();assert.equal(await main.evaluate(n=>n.scrollWidth>n.clientWidth+1),false);await main.locator('..').screenshot({path:path.join(capture,`main-concepts-${width}.png`)});
+   await page.setViewportSize({width,height});await main.scrollIntoViewIfNeeded();assert.equal(await main.evaluate(n=>n.scrollWidth>n.clientWidth+1),false);await main.screenshot({path:path.join(capture,`main-concepts-${width}.png`)});await root.locator('.hearing-animals').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(capture,`knowledge-context-${width}.png`)});
   }
   await root.locator('.hearing-animals summary').click();const text=await root.locator('.hearing-animals').innerText();assert.match(text,/次聲波/);assert.doesNotMatch(text,/稱為超聲波|聽不到不代表沒有聲波/);assert.match(text,/30,000[\s\S]*100,000/);assert.match(text,/顏色/);
   assert.equal(await root.locator('.hearing-animal-card svg image').count(),3);

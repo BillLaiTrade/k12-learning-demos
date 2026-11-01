@@ -74,7 +74,7 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
  await t.test('hearing exploration stays silent until played; knowledge and dBA remain readable',async()=>{
   const before=await page.evaluate(()=>window.audioRuns.length);
   await page.locator('[data-hearing-band]').focus();await page.keyboard.press('End');assert.equal(await page.locator('#hearing-frequency').innerText(),'20,000 Hz');assert.equal(await page.locator('#card-06').getAttribute('data-playing'),'false');
-  assert.match(await page.locator('#card-06 .dialogue p').filter({hasText:'人耳概略可聽範圍'}).innerText(),/高於 20,000 Hz 的聲音稱為超聲波。[\s\S]*聽不到不代表沒有聲波。/);
+  assert.match(await page.locator('#card-06 .hearing-knowledge').innerText(),/高於 20,000 Hz 的聲音稱為超聲波。[\s\S]*聽不到，不代表沒有聲波。/);
   await page.locator('.hearing-animals summary').click();assert.match(await page.locator('.hearing-animals').innerText(),/次聲波/);await page.locator('.hearing-animals summary').click();
   await page.locator('.route a[href="#card-07"]').click();
   assert.deepEqual(await page.locator('#card-07 [data-decibel-marker]').evaluateAll(nodes=>nodes.map(n=>Number(n.dataset.decibelMarker))),Array.from({length:12},(_,i)=>20+i*10));assert.equal(await page.locator('#card-07 [data-play]').count(),0);
