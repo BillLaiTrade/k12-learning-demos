@@ -1,0 +1,23 @@
+▶ 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork
+  ✔ artwork loads, media are fixed, and geometry has equal routes (510.927559ms)
+  ✔ one second of play is one second of model time with physical distance ratios (782.154055ms)
+  ✔ three arrivals follow 3.33, 4.44 and 5 seconds, with receivers and no stationary light dots (4492.972123ms)
+  ✔ starting again after completion clears old arrivals, and keyboard pause/resume keeps one clock (2027.121225ms)
+  ✔ a page-hidden event pauses the shared clock without clearing progress (2211.99799ms)
+  ✔ leaving the section pauses and keeps progress for an explicit resume (1864.5119ms)
+  ✔ seven screen widths retain artwork, readable controls and unclipped times (16403.361169ms)
+  ✔ image failure disables the desk, leaves the rest of the lesson working, and can retry (915.765853ms)
+  ✔ touch start, pause and continue work with horizontal desk panning (1433.070044ms)
+  ✔ a real-time run finishes in five seconds without a browser test clock (6053.176928ms)
+✔ 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork (39341.805566ms)
+✔ million-kilometre model uses the agreed representative speeds and travel times (2.89873ms)
+✔ a shared physical time gives independent distances and the same endpoint (0.801434ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (12228.976224ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39871.096688

@@ -51,7 +51,7 @@
   .race-distance { font-size: .74rem; }
   .race-state { font-size: .63rem; }
   .race-console { align-items: stretch; gap: 10px; }
-  .race-actions { display: grid; width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .race-actions { display: grid; width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
   .race-actions button { gap: 5px; min-height: 45px; padding: 8px 5px; font-size: .79rem; }
   .race-actions svg { width: 15px; height: 15px; }
   .race-clock { justify-content: flex-end; width: 100%; padding: 0; border: 0; }

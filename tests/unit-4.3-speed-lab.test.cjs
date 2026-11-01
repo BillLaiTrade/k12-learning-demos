@@ -20,6 +20,7 @@ test('4.3 fixed-media million-kilometre desk is accurate, operable and matches i
  await page.clock.pauseAt(new Date(await page.evaluate(()=>Date.now())+100));
  const lab=page.locator('#speed-lab');
  const state=()=>lab.getAttribute('data-state');
+ const startAgain=async()=>{const current=await state();if(current==='paused')await page.locator('#race-pause').click();if(current==='paused'||current==='running')await page.clock.runFor(5100);await page.locator('#race-start').click();};
  const elapsed=()=>lab.getAttribute('data-elapsed-ms').then(Number);
  const positions=()=>page.locator('.race-pulse').evaluateAll(es=>es.map(e=>Number(e.getAttribute('cx'))));
  const arrived=()=>page.locator('.race-lane').evaluateAll(es=>es.map(e=>e.dataset.arrived==='true'));
@@ -28,7 +29,10 @@ test('4.3 fixed-media million-kilometre desk is accurate, operable and matches i
   assert.equal(await page.locator('.race-material').allTextContents().then(a=>a.join('、')),'空氣、水、玻璃');
   assert.match(await page.locator('.race-distance').innerText(),/100 萬公里/);
   assert.equal(await page.locator('#s1 input,#s1 select,[data-medium-card]').count(),0);
-  assert.equal(await page.locator('.race-actions button').count(),3);
+  assert.equal(await page.locator('.race-actions button').count(),2);
+  assert.equal(await page.locator('#race-reset').count(),0);
+  assert.equal(await page.locator('#s1 .finding').count(),0);
+  assert.equal(await page.locator('#s2 .finding').count(),1);
   assert.equal(await page.locator('.race-table .race-arrivals').count(),1);
   assert.equal(await page.locator('#speed-lab > .race-arrivals').count(),0);
   assert.deepEqual(await positions(),[448,448,448]);
@@ -51,7 +55,7 @@ test('4.3 fixed-media million-kilometre desk is accurate, operable and matches i
   assert.ok(Math.abs((await elapsed())-paused-500)<35);
  });
  await t.test('three arrivals follow 3.33, 4.44 and 5 seconds, with receivers and no stationary light dots',async()=>{
-  await page.locator('#race-reset').click();await page.clock.runFor(3200);assert.deepEqual(await arrived(),[false,false,false]);
+  await startAgain();await page.clock.runFor(3200);assert.deepEqual(await arrived(),[false,false,false]);
   await page.clock.runFor(200);assert.deepEqual(await arrived(),[true,false,false]);
   assert.equal(await page.locator('[data-arrival=air] strong').innerText(),'約 3.33 秒');
   assert.equal(await page.locator('[data-material=air] .race-pulse').getAttribute('visibility'),'hidden');
@@ -65,15 +69,15 @@ test('4.3 fixed-media million-kilometre desk is accurate, operable and matches i
   assert.equal(await page.locator('#race-pause').isDisabled(),true);
   await page.clock.runFor(500);assert.equal(await elapsed(),5000);
  });
- await t.test('replay clears all old arrivals, and rapid keyboard pause/resume keeps one clock',async()=>{
-  await page.locator('#race-reset').click();assert.deepEqual(await arrived(),[false,false,false]);assert.equal(await elapsed(),0);
+ await t.test('starting again after completion clears old arrivals, and keyboard pause/resume keeps one clock',async()=>{
+  await startAgain();assert.deepEqual(await arrived(),[false,false,false]);assert.equal(await elapsed(),0);
   for(let i=0;i<4;i++){await page.locator('#race-pause').focus();await page.keyboard.press('Space');assert.equal(await state(),'paused');await page.clock.runFor(100);await page.keyboard.press('Space');assert.equal(await state(),'running');}
   await page.clock.runFor(500);assert.ok((await elapsed())>=480&&(await elapsed())<=550);
-  await page.locator('#race-reset').click();assert.equal(await elapsed(),0);
+  await startAgain();assert.equal(await elapsed(),0);
   await page.locator('#race-pause').click();assert.equal(await state(),'paused');
  });
  await t.test('a page-hidden event pauses the shared clock without clearing progress',async()=>{
-  await page.locator('#race-reset').click();await page.clock.runFor(700);
+  await startAgain();await page.clock.runFor(700);
   await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
   assert.equal(await state(),'paused');const saved=await elapsed();await page.clock.runFor(700);assert.equal(await elapsed(),saved);
   await page.evaluate(()=>{delete document.hidden;document.dispatchEvent(new Event('visibilitychange'));});
@@ -81,7 +85,7 @@ test('4.3 fixed-media million-kilometre desk is accurate, operable and matches i
   await page.locator('#race-pause').click();
  });
  await t.test('leaving the section pauses and keeps progress for an explicit resume',async()=>{
-  await page.locator('#race-reset').click();await page.clock.runFor(700);
+  await startAgain();await page.clock.runFor(700);
   await page.locator('#s3').evaluate(e=>e.scrollIntoView({block:'start',behavior:'instant'}));await page.clock.runFor(100);
   await page.waitForFunction(()=>document.querySelector('#speed-lab').dataset.state==='paused',null,{polling:50});
   assert.equal(await state(),'paused');const saved=await elapsed();await page.clock.runFor(1000);assert.equal(await elapsed(),saved);
@@ -94,7 +98,7 @@ test('4.3 fixed-media million-kilometre desk is accurate, operable and matches i
   const measurements=[];
   for(const width of [1536,1440,1366,1024,820,390,320]){
    await page.setViewportSize({width,height:1100});await page.locator('#s1').scrollIntoViewIfNeeded();await page.clock.runFor(100);
-   await page.locator('#race-reset').click();await page.clock.runFor(2650);await page.locator('#race-pause').click();
+   await startAgain();await page.clock.runFor(2650);await page.locator('#race-pause').click();
    const measure=await lab.evaluate(el=>{const img=el.querySelector('#race-background').getBoundingClientRect(),svg=el.querySelector('#race-scene').getBoundingClientRect(),bounds=el.getBoundingClientRect();return{viewport:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,artworkAligned:Math.abs(img.x-svg.x)<.01&&Math.abs(img.y-svg.y)<.01&&Math.abs(img.width-svg.width)<.01&&Math.abs(img.height-svg.height)<.01,aspect:img.width/img.height,bounds:[bounds.left,bounds.right],textClipped:[...el.querySelectorAll('.race-actions button,.race-arrivals strong,.race-clock')].some(n=>n.scrollWidth>n.clientWidth+1),endReadings:[...el.querySelectorAll('.race-arrivals > div')].map((n,i)=>{const r=n.getBoundingClientRect();return{rightOfReceiver:r.left>=img.left+img.width*.86,insideTable:r.right<=img.right+1,aligned:Math.abs((r.top+r.bottom)/2-(img.top+[177,337,506][i]/778*img.height))<2}}),pulseValues:[...el.querySelectorAll('.race-pulse')].map(e=>Number(e.getAttribute('cx')))};});
    assert.equal(measure.overflow,false);assert.equal(measure.artworkAligned,true);assert.ok(Math.abs(measure.aspect-2022/778)<.01);assert.equal(measure.textClipped,false);assert.ok(measure.bounds[0]>=0&&measure.bounds[1]<=width+1);
    assert.ok(measure.pulseValues[0]>measure.pulseValues[1]&&measure.pulseValues[1]>measure.pulseValues[2]);

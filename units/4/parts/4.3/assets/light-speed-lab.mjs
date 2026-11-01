@@ -2,7 +2,7 @@ import {distanceKm, media, arrivalMs, durationMs, snapshot} from './light-speed-
 
 const root = document.querySelector('#speed-lab');
 const $ = selector => root.querySelector(selector);
-const start = $('#race-start'), pause = $('#race-pause'), replay = $('#race-reset');
+const start = $('#race-start'), pause = $('#race-pause');
 const stateLabel = $('#race-state'), status = $('#race-status'), timer = $('#race-time');
 const image = $('#race-background'), retry = $('#race-retry');
 const scene = $('#race-scene');
@@ -40,7 +40,6 @@ function controls() {
   const unavailable = state === 'loading' || state === 'error';
   start.disabled = unavailable || state === 'running' || state === 'paused';
   pause.disabled = unavailable || state === 'idle' || state === 'complete';
-  replay.disabled = unavailable;
   start.classList.toggle('primary',state === 'idle' || state === 'complete');
   pause.classList.toggle('primary',state === 'running' || state === 'paused');
   pause.querySelector('span').textContent = state === 'paused' ? '繼續觀察' : '暫停觀察';
@@ -73,7 +72,7 @@ function tick(now) {
   render();
   if (elapsed >= durationMs) {
     state='complete';frame=0;controls();
-    status.textContent='相同路程下，空氣中的光先到，接著是水，最後是這種玻璃。';
+    status.textContent='相同路程下，空氣中的光先到，接著是水，最後是這種玻璃。再按「同時發光」可重新比較。';
   } else frame=requestAnimationFrame(tick);
 }
 function play(fromBeginning = false) {
@@ -88,11 +87,10 @@ function freeze() {
   if(state!=='running')return;
   stopFrame();elapsed=Math.min(durationMs,Math.max(0,performance.now()-startTime));
   state=elapsed>=durationMs?'complete':'paused';render();controls();
-  status.textContent=state==='complete'?'三道光皆已到達，可重新播放比較。':'三道光定格在同一瞬間。按「繼續觀察」接著看，不計入暫停的時間。';
+  status.textContent=state==='complete'?'三道光皆已到達，再按「同時發光」可重新比較。':'三道光定格在同一瞬間。按「繼續觀察」接著看，不計入暫停的時間。';
 }
 start.onclick=()=>play(true);
 pause.onclick=()=>state==='paused'?play():freeze();
-replay.onclick=()=>play(true);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)freeze();});
 if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)freeze();},{threshold:0}).observe(root);
 async function prepare() {
