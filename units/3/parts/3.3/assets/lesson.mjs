@@ -1,5 +1,5 @@
 import {loadDecibelRecording,createDecibelVoice} from './decibel-audio.mjs?v=2';
-import {createDecibelExplorer} from './decibel-experiment.mjs?v=3';
+import {createDecibelExplorer} from './decibel-experiment.mjs?v=4';
 import {signal,soundSamples,challenge,checkSettings} from './model.mjs?v=1';
 import {forkSamples,FORK_FREQUENCY,STRIKE_DELAY} from './fork-model.mjs?v=1';
 import {createForkExperiment} from './fork-experiment.mjs?v=2';

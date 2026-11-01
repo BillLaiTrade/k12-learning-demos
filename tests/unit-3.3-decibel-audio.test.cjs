@@ -39,12 +39,12 @@ test('twelve licensed recordings have verified hashes, ordered measured LUFS and
  }
 });
 
-test('all twelve scenes play their actual PCM, picture/button replay and live selection stay synchronized',{timeout:120000},async t=>{
+test('all twelve scenes play their actual PCM, single-button playback and live selection stay synchronized',{timeout:120000},async t=>{
  const {page,url}=await fixture(t);const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(url,{waitUntil:'networkidle'});
- assert.equal(await count(page),0);
+ assert.equal(await count(page),0);assert.equal(await page.locator('.decibel-photo button').count(),0);await page.locator('.decibel-photo').click();assert.equal(await count(page),0);
  for(let i=0;i<12;i++){
   await select(page,i);assert.equal(await page.locator('#card-07').getAttribute('data-audio-state'),'stopped');
-  await page.locator(i%2?'[data-decibel-picture]':'[data-decibel-play]').click();await playing(page,keys[i]);assert.equal(await page.evaluate(()=>window.sceneRuns.at(-1).loop),true,keys[i]+' repeats continuously');
+  await page.locator('[data-decibel-play]').click();await playing(page,keys[i]);assert.equal(await page.locator('[data-decibel-play]').isDisabled(),true);assert.equal(await page.locator('[data-decibel-play]').innerText(),'播放中');assert.equal(await page.evaluate(()=>window.sceneRuns.at(-1).loop),true,keys[i]+' repeats continuously');
   const same=await page.evaluate(async key=>{
    const actual=window.sceneRuns.at(-1).buffer,context=window.sceneContext;
    const response=await fetch(new URL(`assets/decibel-audio/${key}.wav?v=1`,location.href));const expected=await context.decodeAudioData(await response.arrayBuffer());
@@ -54,7 +54,7 @@ test('all twelve scenes play their actual PCM, picture/button replay and live se
   await page.locator('#card-07 .stop').click();assert.equal(await page.locator('#card-07').getAttribute('data-playing'),'false');
  }
  await select(page,4);await page.locator('[data-decibel-play]').click();await playing(page,'conversation');const before=await count(page);
- await page.locator('[data-decibel-picture]').click();await playing(page,'conversation');assert.equal(await count(page),before+1);assert.equal(await page.evaluate(()=>window.sceneRuns.at(-2).stopped),true);
+ await page.locator('[data-decibel-play]').evaluate(n=>n.click());await page.locator('.decibel-photo').click();assert.equal(await count(page),before);await page.locator('#card-07 .stop').click();assert.equal(await page.locator('[data-decibel-play]').isEnabled(),true);assert.match(await page.locator('[data-decibel-play]').innerText(),/播放場景聲音/);await page.locator('[data-decibel-play]').click();await playing(page,'conversation');assert.equal(await count(page),before+1);assert.equal(await page.evaluate(()=>window.sceneRuns.at(-2).stopped),true);
  const band=page.locator('[data-decibel-band]');await band.focus();await page.keyboard.press('ArrowRight');await playing(page,'classroom');
  assert.equal(await page.evaluate(()=>window.sceneRuns.at(-2).stopped),true);
  await page.locator('#card-07 .stop').click();const stopped=await count(page);await page.keyboard.press('Home');await page.waitForTimeout(200);assert.equal(await count(page),stopped);
@@ -75,7 +75,7 @@ test('slow cancellation, rapid switching, failed retry, hidden/leave/other sourc
  await page.route('**/decibel-audio/*.wav*',route=>{held.push(route);});await page.goto(url,{waitUntil:'domcontentloaded'});
  await page.locator('[data-decibel-play]').click();await page.waitForFunction(()=>document.querySelector('#card-07').dataset.audioState==='preparing');
  await page.locator('#card-07 .stop').click();while(!held.length)await page.waitForTimeout(20);await held.shift().continue();await page.waitForTimeout(400);assert.equal(await count(page),0);
- await select(page,0);await page.locator('[data-decibel-picture]').click();await page.locator('[data-decibel-band]').focus();await page.keyboard.press('End');
+ await select(page,0);await page.locator('[data-decibel-play]').click();await page.locator('[data-decibel-band]').focus();await page.keyboard.press('End');
  await page.waitForTimeout(200);assert.equal(await page.locator('#card-07').getAttribute('data-audio-state'),'preparing');
  // Release latest first, then obsolete study; old completion cannot replace jet.
  for(const route of held.filter(r=>r.request().url().includes('/jet.wav')))await route.continue();
@@ -96,10 +96,10 @@ test('slow cancellation, rapid switching, failed retry, hidden/leave/other sourc
 });
 
 test('mobile touch, keyboard, desktop/mobile layout and original large artwork remain usable',{timeout:90000},async t=>{
- const {page,url}=await fixture(t,true);await page.goto(url,{waitUntil:'networkidle'});await page.locator('[data-decibel-picture]').tap();await playing(page,'conversation');
+ const {page,url}=await fixture(t,true);await page.goto(url,{waitUntil:'networkidle'});await page.locator('.decibel-photo').tap();assert.equal(await count(page),0);await page.locator('[data-decibel-play]').tap();await playing(page,'conversation');
  await page.locator('#card-07 .stop').tap();const n=await count(page);const band=page.locator('[data-decibel-band]');await band.scrollIntoViewIfNeeded();let box=await band.boundingBox();await page.touchscreen.tap(box.x+box.width*.73,box.y+50);assert.equal(await page.locator('.decibel-feature').getAttribute('data-scene'),'construction');assert.equal(await count(page),n);
  await page.locator('[data-decibel-play]').tap();await playing(page,'construction');await band.scrollIntoViewIfNeeded();box=await band.boundingBox();const cdp=await page.context().newCDPSession(page);await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:box.x+2,y:box.y+50}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:box.x+box.width-2,y:box.y+50}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await playing(page,'jet');await page.locator('#card-07 .stop').tap();
- await page.locator('[data-decibel-picture]').focus();await page.keyboard.press('Enter');await playing(page,'jet');await page.locator('#card-07 .stop').click();
+ await page.locator('[data-decibel-play]').focus();await page.keyboard.press('Enter');await playing(page,'jet');await page.locator('#card-07 .stop').click();
  const dir=process.env.DECIBEL_AUDIO_CAPTURE_DIR||'/tmp/unit33-decibel-audio';await fs.mkdir(dir,{recursive:true});
  for(const width of [1440,1280,1024,768,390,320]){
   await page.setViewportSize({width,height:1100});await page.locator('#card-07').scrollIntoViewIfNeeded();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
