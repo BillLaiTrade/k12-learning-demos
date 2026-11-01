@@ -1,20 +1,20 @@
-name: Retire completed Pages record after source switch
+name: Clear superseded Pages deployment after source switch
 
 on: workflow_dispatch
 
 permissions:
-  pages: read
-  deployments: write
+  actions: read
+  pages: write
 
 concurrency:
   group: pages-completed-record-repair
   cancel-in-progress: false
 
 jobs:
-  retire-completed-record:
+  cancel-completed-deployment:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify the superseded Pages deployment completed before retiring its records
+      - name: Verify the completed old release and request its cancellation
         env:
           GH_TOKEN: ${{ github.token }}
           PAGES_STATE_REPO: ${{ github.repository }}
@@ -24,13 +24,7 @@ jobs:
           set -euo pipefail
           source_type=$(gh api "repos/${PAGES_STATE_REPO}/pages" --jq '.build_type')
           test "$source_type" = workflow
-          deployment_state=$(gh api "repos/${PAGES_STATE_REPO}/pages/deployments/${PAGES_STATE_SHA}" --jq '.status')
-          test "$deployment_state" = succeed
-          gh api "repos/${PAGES_STATE_REPO}/deployments?sha=${PAGES_STATE_SHA}&environment=github-pages&per_page=100" --jq '.[].id' > /tmp/pages-completed-records
-          while IFS= read -r record_id; do
-            test -n "$record_id"
-            gh api --method POST "repos/${PAGES_STATE_REPO}/deployments/${record_id}/statuses" \
-              -f state=inactive \
-              -f description='Completed old publisher; superseded after switching Pages to Actions.' \
-              --jq '{id,state}'
-          done < /tmp/pages-completed-records
+          old_run=$(gh api "repos/${PAGES_STATE_REPO}/actions/runs/41289128518" --jq '.head_sha + " " + .conclusion')
+          test "$old_run" = "${PAGES_STATE_SHA} success"
+          gh api --method POST "repos/${PAGES_STATE_REPO}/pages/deployments/${PAGES_STATE_SHA}/cancel"
+          echo 'Cancellation request accepted for the confirmed superseded release.'
