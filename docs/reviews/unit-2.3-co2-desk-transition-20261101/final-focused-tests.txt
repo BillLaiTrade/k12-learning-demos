@@ -1,0 +1,36 @@
+✔ assembly orders marble, acid, sealing and gas delivery (1.254409ms)
+✔ purging keeps the outlet outside the collection jar (1.165483ms)
+✔ tube crosses above the mouth before entering; collecting begins only after reaching the base (0.781123ms)
+✔ withdrawal precedes the cover and sample label; the reaction outlet stays open (0.737431ms)
+✔ eight operations separate placement, marble, acid and sealing with continuous prerequisite states (0.513452ms)
+▶ 2.3 CO2 follows the latest oxygen workspace with eight operations and one continuous player
+  ✔ one right-side list and player, no lower controls or persistent explanation cards; initial state does not autoplay (223.014133ms)
+  ✔ the material desk is the exact first frame; one shared set moves continuously to the working positions (960.485436ms)
+  ✔ all six material bodies and labels open the shared introduction dialog and restore focus without autoplay (1675.387361ms)
+  ✔ each selected operation begins at its own prerequisite; actual additions, sealing and gas motion stay in order (1640.109118ms)
+  ✔ play from materials traverses all operations and stops at labeled upright CO2 storage, without entering properties (509.638079ms)
+  ✔ one button freezes pixels and time, resumes the exact position; rapid choices replace the old clock (788.058599ms)
+  ✔ the actual jar and moving tube can open context-specific dialogs; closing stays paused and does not resume (343.905434ms)
+  ✔ keyboard navigation, blank scene taps, Escape, background and competing players share the same pause state (487.635233ms)
+  ✔ seven widths keep the same single player accessible, diagrams synchronized and desktop cards aligned (2166.04206ms)
+  ✔ real touch and reduced motion support material dialogs, compact selection and essential movement (2020.67066ms)
+  ✔ no JS keeps all eight scenes and six material explanations readable; source links and the unique quiz remain (1128.876282ms)
+✔ 2.3 CO2 follows the latest oxygen workspace with eight operations and one continuous player (13582.163354ms)
+▶ 2.3 complete page: five teaching sections and one evidence-based quiz
+  ✔ all six sections and routes exist, with gas profiles and no retired experiment (82.744914ms)
+  ✔ default cup comparisons remain after preview and reset (126.900342ms)
+  ✔ both preparation lessons navigate independent steps and keep properties in section five (801.144274ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (267.830592ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (518.405582ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (3046.682576ms)
+  ✔ all teaching evidence is available without JavaScript (1099.383017ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (2109.793343ms)
+✔ 2.3 complete page: five teaching sections and one evidence-based quiz (9677.872221ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24094.881001

@@ -5,7 +5,7 @@ const shapes={
  marble:{d:'M200 548H405V584H200Z',bounds:[200,548,205,36],part:'marble'},
  acid:{d:'M-35 0H70V170H-35Z',bounds:[-35,0,105,170],transform:'acid-bottle',part:'acid-bottle'},
  tube:{dynamic:'tube',bounds:[180,120,710,435],stroke:true,transform:'tube'},
- stopper:{d:'M267 185Q300 174 333 185L327 214Q300 225 273 214Z',bounds:[267,176,66,50],transform:'stopper'},
+ stopper:{d:'M267 185Q300 174 333 185L327 214Q300 225 273 214Z',bounds:[267,176,66,50],transform:'stopper',part:'stopper'},
  plate:{d:'M730 220L958 210 1019 226 785 238Z',bounds:[730,210,289,28],transform:'plate',part:'plate'},
 };
 function node(tag,attrs){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,v);return n;}
@@ -49,10 +49,11 @@ export function createCO2Explorer({panel,panels,getStage,onOpen}){
  function sync(stage){
   if(stage===0)return;const view=panels[stage],part=key=>view.querySelector(`[data-co2-part="${key}"]`);
   for(const{svg,targets}of layers.get(view)||build(view))for(const{key,shape,hit,outline}of targets){
-   const d=shape.dynamic?part(shape.dynamic).getAttribute('d'):shape.d,t=shape.transform?(part(shape.transform)?.getAttribute('transform')||''):'';
+   const shared=panel.sharedBench?.target(key);
+   const d=shared?.d||(shape.dynamic?part(shape.dynamic).getAttribute('d'):shape.d),t=shared?shared.transform||'':shape.transform?(part(shape.transform)?.getAttribute('transform')||''):'';
    for(const n of[hit,outline]){n.setAttribute('d',d);n.setAttribute('transform',t);}
-   const exists=!shape.part||Number(part(shape.part)?.getAttribute('opacity')??0)>.001;
-   const[x,y,w,h]=shape.bounds,m=hit.transform.baseVal.consolidate()?.matrix,b=svg.viewBox.baseVal;
+   const exists=shared?shared.visible:!shape.part||Number(part(shape.part)?.getAttribute('opacity')??0)>.001;
+   const[x,y,w,h]=shared?.bounds||shape.bounds,m=hit.transform.baseVal.consolidate()?.matrix,b=svg.viewBox.baseVal;
    const ps=[[x,y],[x+w,y],[x,y+h],[x+w,y+h]].map(([a,c])=>m?{x:m.a*a+m.c*c+m.e,y:m.b*a+m.d*c+m.f}:{x:a,y:c});
    const inside=Math.max(...ps.map(p=>p.x))>=b.x&&Math.min(...ps.map(p=>p.x))<=b.x+b.width&&Math.max(...ps.map(p=>p.y))>=b.y&&Math.min(...ps.map(p=>p.y))<=b.y+b.height;
    hit.style.display=outline.style.display=exists&&inside?'':'none';

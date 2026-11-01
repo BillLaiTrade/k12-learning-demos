@@ -1,0 +1,42 @@
+✔ assembly orders marble, acid, sealing and gas delivery (1.303197ms)
+✔ purging keeps the outlet outside the collection jar (1.238656ms)
+✔ tube crosses above the mouth before entering; collecting begins only after reaching the base (0.637522ms)
+✔ withdrawal precedes the cover and sample label; the reaction outlet stays open (0.645687ms)
+✔ eight operations separate placement, marble, acid and sealing with continuous prerequisite states (0.708044ms)
+▶ 2.3 CO2 follows the latest oxygen workspace with eight operations and one continuous player
+  ✔ one right-side list and player, no lower controls or persistent explanation cards; initial state does not autoplay (200.046729ms)
+  ✔ the material desk is the exact first frame; one shared set moves continuously to the working positions (1027.289622ms)
+  ✔ all six material bodies and labels open the shared introduction dialog and restore focus without autoplay (1761.650461ms)
+  ✔ each selected operation begins at its own prerequisite; actual additions, sealing and gas motion stay in order (1711.302585ms)
+  ✔ play from materials traverses all operations and stops at labeled upright CO2 storage, without entering properties (434.070112ms)
+  ✔ one button freezes pixels and time, resumes the exact position; rapid choices replace the old clock (775.446373ms)
+  ✔ the actual jar and moving tube can open context-specific dialogs; closing stays paused and does not resume (378.833188ms)
+  ✔ keyboard navigation, blank scene taps, Escape, background and competing players share the same pause state (491.467684ms)
+  ✖ seven widths keep the same single player accessible, diagrams synchronized and desktop cards aligned (187.676253ms)
+  ✔ real touch and reduced motion support material dialogs, compact selection and essential movement (1929.613338ms)
+  ✔ no JS keeps all eight scenes and six material explanations readable; source links and the unique quiz remain (1085.992071ms)
+✖ 2.3 CO2 follows the latest oxygen workspace with eight operations and one continuous player (11728.166636ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 15
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12169.315963
+
+✖ failing tests:
+
+test at tests/unit-2.3-co2.test.cjs:47:10
+✖ seven widths keep the same single player accessible, diagrams synchronized and desktop cards aligned (187.676253ms)
+  locator.getAttribute: Error: strict mode violation: locator('.co2-preparation').locator('.co2-step:visible').locator('.co2-closeup use') resolved to 2 elements:
+      1) <use aria-hidden="true" href="#co2-shared-bench" data-shared-bench-use=""></use> aka locator('#co2-step-6 > .co2-apparatus > .co2-closeup > svg > use').first()
+      2) <use href="#co2-scene-6"></use> aka locator('#co2-step-6 > .co2-apparatus > .co2-closeup > svg > use:nth-child(2)')
+  
+  Call log:
+  [2m  - waiting for locator('.co2-preparation').locator('.co2-step:visible').locator('.co2-closeup use')[22m
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3-co2.test.cjs:48:1007)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3-co2.test.cjs:47:2) {
+    log: [ "  - waiting for locator('.co2-preparation').locator('.co2-step:visible').locator('.co2-closeup use')" ]
+  }
