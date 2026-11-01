@@ -56,12 +56,13 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'false');
   });
   await t.test('both preparation lessons navigate independent steps and keep properties in section five', async () => {
+    const {OXYGEN_OPERATIONS:oxygenOps}=await import('../units/2/parts/2.3/assets/oxygen-model.mjs');
     const oxygen=page.locator('[data-replay="oxygen"]');
     assert.equal(await oxygen.getAttribute('data-stage'),'0');
     assert.equal(await oxygen.locator('[role=tabpanel]:visible').count(),1);
     await oxygen.locator('#oxygen-tab-1').click();await page.clock.fastForward(3000);assert.equal(await oxygen.getAttribute('data-state'),'playing');
     await page.clock.fastForward(400);await oxygen.locator('[data-play]').click();await page.clock.fastForward(3000);assert.equal(await oxygen.getAttribute('data-state'),'paused');
-    await oxygen.locator('[data-play]').click();for(let stage=1;stage<=7;stage++){assert.equal(await oxygen.getAttribute('data-stage'),String(stage));await page.clock.fastForward(15000);}assert.equal(await oxygen.getAttribute('data-state'),'complete');
+    await oxygen.locator('[data-play]').click();for(let stage=1;stage<=7;stage++){assert.equal(await oxygen.getAttribute('data-stage'),String(stage));await page.clock.fastForward(oxygenOps[stage].duration+1000);}assert.equal(await oxygen.getAttribute('data-state'),'complete');
     await oxygen.locator('[data-stage="0"]').click();assert.equal(await oxygen.getAttribute('data-stage'),'0');
     const panel=page.locator('[data-replay="co2"]');await panel.locator('#co2-tab-2').click();await page.clock.fastForward(1500);assert.equal(await panel.getAttribute('data-stage'),'2');
     await panel.locator('[data-play]').click();const time=await panel.getAttribute('data-time');await page.clock.fastForward(3000);assert.equal(await panel.getAttribute('data-time'),time);assert.equal(await panel.getAttribute('data-state'),'paused');

@@ -1,0 +1,116 @@
+▶ 2.3 oxygen: readable captions fade, survive automatic steps and pause with the experiment
+  ✔ every sentence has a reading hold; short intermediate targets coalesce before the old words fade out (395.162816ms)
+  ✔ automatic operation changes reuse the visible card after the longer water preparation (449.379438ms)
+  ✔ pausing during fade-out or fade-in freezes native opacity and text; both resume from the same point (678.268875ms)
+  ✔ apparatus introductions pause the caption; closing does not resume its reading or fade (621.179499ms)
+  ✔ manual choices cancel an abandoned fade; returning to materials leaves no caption animation (404.199306ms)
+  ✔ the last result can finish its caption after the physical animation; replay cancels the old result (259.516384ms)
+  ✔ background, another experiment and Escape freeze reading time without automatic resume (261.366657ms)
+  ✔ desktop and narrow cards stay inside the figure, preserve focus and add no duplicate controls (1756.214793ms)
+  ✔ reduced motion retains reading time with instant swaps; no-JS retains all seven original captions (1364.805486ms)
+✔ 2.3 oxygen: readable captions fade, survive automatic steps and pause with the experiment (7810.428277ms)
+✔ assembly orders marble, acid, sealing and gas delivery (1.259355ms)
+✔ purging keeps the outlet outside the collection jar (0.501448ms)
+✔ tube crosses above the mouth before entering; collecting begins only after reaching the base (1.453338ms)
+✔ withdrawal precedes the cover and sample label; the reaction outlet stays open (0.512319ms)
+✔ eight operations separate placement, marble, acid and sealing with continuous prerequisite states (0.415167ms)
+▶ 2.3 CO2 follows the latest oxygen workspace with eight operations and one continuous player
+  ✔ one right-side list and player, no lower controls or persistent explanation cards; initial state does not autoplay (196.596381ms)
+  ✔ all six material bodies and labels open the shared introduction dialog and restore focus without autoplay (1606.350123ms)
+  ✔ each selected operation begins at its own prerequisite; actual additions, sealing and gas motion stay in order (1612.235525ms)
+  ✔ play from materials traverses all operations and stops at labeled upright CO2 storage, without entering properties (348.656663ms)
+  ✔ one button freezes pixels and time, resumes the exact position; rapid choices replace the old clock (782.829056ms)
+  ✔ the actual jar and moving tube can open context-specific dialogs; closing stays paused and does not resume (329.36588ms)
+  ✔ keyboard navigation, blank scene taps, Escape, background and competing players share the same pause state (463.089719ms)
+  ✔ seven widths keep the same single player accessible, diagrams synchronized and desktop cards aligned (2102.891509ms)
+  ✔ real touch and reduced motion support material dialogs, compact selection and essential movement (1668.467575ms)
+  ✔ no JS keeps all eight scenes and six material explanations readable; source links and the unique quiz remain (1035.28197ms)
+✔ 2.3 CO2 follows the latest oxygen workspace with eight operations and one continuous player (11726.62206ms)
+▶ 2.3 oxygen: one main player, immediate step playback and continuous playback
+  ✔ there is one sidebar player; each operation starts directly from its own physical prerequisites (900.633842ms)
+  ✔ play from materials traverses every operation, keeps its completed frame and stops at oxygen storage (356.643699ms)
+  ✔ the same key pauses pixels and time, resumes the exact position and then proceeds to the next step (504.102814ms)
+  ✔ pausing in the completed-frame hold preserves that position and resumes into the next operation (155.221618ms)
+  ✔ manual choices replace the old clock and repeated choices restart the selected action (402.714307ms)
+  ✔ reading equipment pauses the same player; closing keeps its position and explicit continue resumes it (258.055481ms)
+  ✔ Escape, background, leaving and competing playback pause without silently restarting (234.09667ms)
+  ✔ seven widths keep one accessible key; compact scrolling keeps it visible and native activation works (2260.811692ms)
+  ✔ real touch starts the selected action and uses the same key to pause and continue; no-JS retains readable scenes and no active player (2397.417087ms)
+✔ 2.3 oxygen: one main player, immediate step playback and continuous playback (9113.154527ms)
+▶ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role
+  ✔ the first materials step shares the dialog and has no inline information or SVG apparatus controls (247.153832ms)
+  ✔ actual flask, jar, trough, stopper and tube bodies open correct descriptions in all seven later operations (5285.24882ms)
+  ✔ pouring bottle, moving spoon, introduced catalyst and sliding glass plate remain correctly clickable (852.685384ms)
+  ✔ intro pauses the exact scene, closing keeps it paused and explicit play continues from that state (243.713275ms)
+  ✔ current role distinguishes waiting, collecting and storage; invisible equipment and empty picture space do not open (726.301777ms)
+  ✔ returning from an operation restores material purpose without operation wording (371.056926ms)
+  ✔ Enter, Space, Escape and modal focus work; step changes clear the dialog without hiding focus (321.754617ms)
+  ✔ seven widths keep the modal readable and in-screen; mobile close-up objects also open the same introduction (2447.9755ms)
+  ✔ real touch and reduced motion select the close-up body; no-JS retains the full materials reference (2500.425164ms)
+✔ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role (14478.527173ms)
+▶ 2.3 complete page: five teaching sections and one evidence-based quiz
+  ✔ all six sections and routes exist, with gas profiles and no retired experiment (85.152784ms)
+  ✔ default cup comparisons remain after preview and reset (110.581638ms)
+  ✖ both preparation lessons navigate independent steps and keep properties in section five (256.907935ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (232.925033ms)
+  ✔ single quiz gives missing, misconception, revised and correct feedback; reset is local (528.1452ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (2940.578917ms)
+  ✔ all teaching evidence is available without JavaScript (1020.458409ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (2034.884834ms)
+✖ 2.3 complete page: five teaching sections and one evidence-based quiz (8778.981253ms)
+▶ 2.3 materials: seven illustrated objects explain identity and experimental role
+  ✔ native material buttons target the same dialog; inline information is absent and nothing opens automatically (185.942739ms)
+  ✔ actual photo object bodies open all seven original introductions without a lower information panel (1010.222997ms)
+  ✔ name labels, Enter and Space open the dialog; Escape and return restore the selected material focus (1072.364021ms)
+  ✔ materials do not autoplay; one sidebar key and no bottom next action remain (228.710139ms)
+  ✔ selection survives leaving and returning, but does not reopen the dialog or show inline information (368.27072ms)
+  ✔ seven widths keep every 44px target and the shared dialog in-screen (9289.337296ms)
+  ✔ real touch and reduced motion open and close every original material introduction (2117.894488ms)
+  ✔ approved purposes describe roles while the original identity definitions remain (49.796712ms)
+  ✔ without JavaScript all seven source introductions remain readable with the original photo (1128.687152ms)
+✔ 2.3 materials: seven illustrated objects explain identity and experimental role (16970.075142ms)
+▶ 2.3 collected gases: preparation, property comparison and final quiz are separate
+  ✔ six sections have unique IDs and routes; only section five owns the property observations (74.762391ms)
+  ✔ known oxygen and carbon dioxide are linked to their collection lessons and retain visible completed results (48.227717ms)
+  ✔ both glowing splints enter at identical depth and time, then oxygen relights while carbon dioxide fades (369.982132ms)
+  ✔ pause freezes both visible samples and flame; resume, reset and rapid replay preserve sample roles (726.784413ms)
+  ✔ keyboard, Escape, background and competing preparation players stop the comparison without resetting collected samples (384.828668ms)
+  ✔ sample source links, collection-next links and revised quiz feedback point to the right sections (503.401248ms)
+  ✔ matched samples stay beside each other and all revised lessons fit seven desktop and mobile widths (1403.769654ms)
+  ✔ touch and reduced motion retain essential manual comparison and the new last quiz route (1334.322643ms)
+  ✔ without JavaScript both gas results, separate limewater evidence, source links and six sections remain readable (1095.334367ms)
+✔ 2.3 collected gases: preparation, property comparison and final quiz are separate (7508.677363ms)
+▶ 2.3 integrated report checks evidence, completeness and misconceptions
+  ✔ unanswered form names every missing item without claiming completion (1.190607ms)
+  ✔ fully supported report is accepted (0.183283ms)
+  ✔ each misconception identifies the relevant observation and destination (0.31556ms)
+✔ 2.3 integrated report checks evidence, completeness and misconceptions (4.153588ms)
+ℹ tests 79
+ℹ suites 0
+ℹ pass 77
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 79119.984217
+
+✖ failing tests:
+
+test at tests/unit-2.3-full.test.cjs:58:11
+✖ both preparation lessons navigate independent steps and keep properties in section five (256.907935ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '1' !== '2'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3-full.test.cjs:64:90)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3-full.test.cjs:58:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '1',
+    expected: '2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
