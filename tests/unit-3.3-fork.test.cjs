@@ -28,6 +28,7 @@ test('fork experiment: actual sound, synchronized motion, recording and layout',
  await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('#fork-apparatus [data-prong]').first().waitFor({state:'attached'});
  const root=page.locator('#card-01'),strike=async key=>{await page.locator(`[data-fork-strike="${key}"]`).click();await page.waitForFunction(()=>document.querySelector('#card-01').dataset.forkState==='vibrating');};
  const reset=async()=>root.locator('.reset').click();
+ const capture=process.env.FORK_CAPTURE_DIR||'/tmp/unit33-fork-message';await fs.mkdir(capture,{recursive:true});
  const sample=()=>page.evaluate(async()=>{
   const rows=[];for(let i=0;i<22;i++){await new Promise(requestAnimationFrame);const photo=document.querySelector('[data-prong="right"]');rows.push({x:photo.querySelector("[data-tip-cap]").getBoundingClientRect().x,left:Number(document.querySelector('[data-prong="left"]').dataset.displacement),right:Number(photo.dataset.displacement),displacement:Number(document.querySelector('#fork-detail').dataset.displacement),main:Number(document.querySelector('#fork-apparatus').dataset.displacement),extent:Number(document.querySelector('#fork-detail').dataset.extent),arrow:document.querySelector('#fork-amplitude-arrow').getAttribute('d')});}return rows;
  });
@@ -85,9 +86,25 @@ test('fork experiment: actual sound, synchronized motion, recording and layout',
   const before=await page.evaluate(()=>window.forkSounds.length);
   await page.evaluate(()=>{window.nativeResume=AudioContext.prototype.resume;AudioContext.prototype.resume=function(){return new Promise(resolve=>setTimeout(resolve,350));};});
   await page.locator('[data-fork-strike="soft"]').click();await page.locator('.route a[href="#card-02"]').click();await page.waitForTimeout(450);assert.equal(await page.evaluate(()=>window.forkSounds.length),before);assert.equal(await root.getAttribute('data-playing'),'false');
-  await page.evaluate(()=>{AudioContext.prototype.resume=function(){AudioContext.prototype.resume=window.nativeResume;return Promise.reject(new Error('test audio rejection'));};});
-  await page.locator('[data-fork-strike="soft"]').click();await page.waitForFunction(()=>document.querySelector('#card-01 .play-state').textContent.includes('無法播放'));assert.equal(await root.locator('.stop').isDisabled(),true);
-  await strike('soft');await root.locator('.stop').click();
+  await page.evaluate(()=>{AudioContext.prototype.resume=()=>Promise.reject(new Error('test audio rejection'));});
+  const state=root.locator('.play-state');
+  for(const key of ['soft','strong']){
+   await page.locator(`[data-fork-strike="${key}"]`).click();await page.waitForFunction(()=>document.querySelector('#card-01 .play-state').textContent.includes('無法播放'));assert.equal(await root.locator('.stop').isDisabled(),true);
+   assert.equal(await state.innerText(),'聲音暫時無法播放，請再點一次敲擊按鈕重試。');
+   const visible=await state.evaluate(n=>{const b=n.getBoundingClientRect(),controls=n.previousElementSibling.getBoundingClientRect();return !n.classList.contains('visually-hidden')&&b.width>150&&b.height>20&&b.top>=controls.bottom&&getComputedStyle(n).clip==='auto';});assert.equal(visible,true,'error is visibly rendered below the strike controls');
+   assert.equal(await page.evaluate(()=>window.forkSounds.length),before);
+  }
+  await root.screenshot({path:`${capture}/desktop-error.png`});await reset();assert.equal(await state.evaluate(n=>n.classList.contains('visually-hidden')),true);
+  await page.locator('[data-fork-strike="soft"]').click();await page.waitForFunction(()=>document.querySelector('#card-01 .play-state').textContent.includes('無法播放'));
+  await page.evaluate(()=>AudioContext.prototype.resume=window.nativeResume);await strike('strong');assert.equal(await state.evaluate(n=>n.classList.contains('visually-hidden')),true);await root.locator('.stop').click();
+  await root.screenshot({path:`${capture}/desktop-recovered.png`});
+ });
+ await t.test('phone visibly explains a failed tap and hides the message after a successful retry',async()=>{
+  const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
+  await context.addInitScript(()=>{const resume=AudioContext.prototype.resume;AudioContext.prototype.resume=function(){AudioContext.prototype.resume=resume;return Promise.reject(Error('initial playback failure'));};});
+  const phone=await context.newPage();await phone.goto(base+'#card-01',{waitUntil:'networkidle'});await phone.locator('[data-fork-strike=soft]').tap();await phone.waitForFunction(()=>document.querySelector('#card-01 .play-state').textContent.includes('敲擊按鈕重試'));
+  const state=phone.locator('#card-01 .play-state');assert.equal(await state.evaluate(n=>n.classList.contains('visually-hidden')),false);assert.equal(await phone.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await phone.locator('#card-01').screenshot({path:`${capture}/mobile-error.png`});
+  await phone.locator('[data-fork-strike=strong]').tap();await phone.waitForFunction(()=>document.querySelector('#card-01').dataset.forkState==='vibrating');assert.equal(await state.evaluate(n=>n.classList.contains('visually-hidden')),true);await phone.locator('#card-01 .stop').tap();await context.close();
  });
  await t.test('desktop/laptop visual hierarchy matches the approved mockup and mobile stays usable',async()=>{
   await strike('soft');await strike('strong');await root.locator('.stop').click();await fs.mkdir('/tmp/unit33-fork-review',{recursive:true});

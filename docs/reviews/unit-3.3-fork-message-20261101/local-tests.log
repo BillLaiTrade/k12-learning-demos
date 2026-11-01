@@ -1,0 +1,31 @@
+✔ fork sound preserves frequency and decay while strength changes amplitude (11.890496ms)
+▶ fork experiment: actual sound, synchronized motion, recording and layout
+  ✔ idle state shows the approved apparatus, accessible actions and unfilled records (50.633514ms)
+  ✔ both strikes have the same real frequency; heavy has larger audio and visible displacement (1223.864024ms)
+  ✔ wave traces grow rightward after contact, freeze on stop and restart from the left (4382.706135ms)
+  ✔ stop retains observations; reset clears them; natural completion and keyboard work (2809.845397ms)
+  ✔ rapid repeat, navigation, offscreen, hidden tab and pagehide stop sound and motion (1282.083357ms)
+  ✔ cancelled async audio preparation never starts later; playback failure can retry (1370.302285ms)
+  ✔ phone visibly explains a failed tap and hides the message after a successful retry (1647.158796ms)
+  ✔ desktop/laptop visual hierarchy matches the approved mockup and mobile stays usable (1764.353022ms)
+✔ fork experiment: actual sound, synchronized motion, recording and layout (15635.279544ms)
+✔ 3.3 sound relationships and bounded audio match the displayed model (136.181213ms)
+▶ 3.3 seven learning blocks, sound, instruments and one final assessment
+  ✔ seven blocks and comparisons render without autoplay (77.976651ms)
+  ✔ fork strikes change audio amplitude at the same pitch and leave resettable observations (825.623507ms)
+  ✔ frequency changes pitch and the plotted cycles with amplitude held fixed (2269.42774ms)
+  ✔ string and pipe controls produce independent physical comparisons and reset (547.491823ms)
+  ✔ timbre changes waveform at the same fundamental; navigating or hiding stops audio (219.112414ms)
+  ✔ hearing exploration stays silent until played; knowledge and dBA remain readable (209.876176ms)
+  ✔ one final listening task connects waveform selection, sliders, audio and comparison (485.555677ms)
+  ✔ lesson format follows unit 2.1 with a header and full-width body; navigation tracks reading (950.516472ms)
+  ✔ desktop, laptop and narrow layouts retain controls and anchors (5072.1974ms)
+✔ 3.3 seven learning blocks, sound, instruments and one final assessment (11702.755053ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 28231.072791

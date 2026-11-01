@@ -92,6 +92,7 @@ async function play(button){
   if(timbreKey){timbreView.start(timbreKey,buffer.duration);root.querySelector('.play-state').textContent=`正在播放${{pure:'音叉近似純音',string:'吉他',pipe:'排笛'}[timbreKey]}`;}
   source.onended=()=>{if(source===currentSource){if(forkKey)forkView.finish();if(pitchKey)pitchView.finish();stop(root);root.querySelector('.play-state').textContent='播放完畢，可再次比較';}};
   source.start(forkStart);
+  if(forkKey)root.querySelector('.play-state').classList.add('visually-hidden');
   function animate(now){
    if(source!==currentSource)return;
    if(forkKey)forkView.update(audioContext.currentTime-forkStart);
@@ -103,7 +104,9 @@ async function play(button){
   }
   animation=requestAnimationFrame(animate);
  }catch{
-  if(ticket!==request)return;stop(root);if(['card-02','card-03','card-04','card-05','unit-quiz'].includes(root.id))root.querySelector('.play-state').classList.remove('visually-hidden');root.querySelector('.play-state').textContent='聲音暫時無法播放，請再點一次；仍可觀察圖形與數值。';
+  if(ticket!==request)return;stop(root);
+  if(['card-01','card-02','card-03','card-04','card-05','unit-quiz'].includes(root.id))root.querySelector('.play-state').classList.remove('visually-hidden');
+  root.querySelector('.play-state').textContent=root.id==='card-01'?'聲音暫時無法播放，請再點一次敲擊按鈕重試。':'聲音暫時無法播放，請再點一次；仍可觀察圖形與數值。';
  }
 }
 
@@ -118,7 +121,7 @@ for(const root of document.querySelectorAll('.lesson-card,.quiz')){
 }
 for(const button of document.querySelectorAll('[data-reset]'))button.addEventListener('click',()=>{
  stop();const n=Number(button.dataset.reset);
- if(n===1)forkView.reset();
+ if(n===1){forkView.reset();$('card-01').querySelector('.play-state').classList.add('visually-hidden');}
  const defaults={1:{},2:{frequency:440},5:{}};Object.assign(state,defaults[n]);
  button.closest('section').querySelector('.play-state').textContent='等待操作';
 });
