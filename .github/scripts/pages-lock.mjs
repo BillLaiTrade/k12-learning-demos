@@ -19,6 +19,9 @@ const pagesDone=sha=>api(`pages/deployments/${sha}`)?.status==='succeed';
 function validate(record){
  if(!Number.isSafeInteger(record.id)||record.id<=0||record.environment!=='github-pages'||!/^[a-f0-9]{40}$/.test(record.sha)||record.sha===head)throw Error('Refusing a current or invalid deployment record.');
 }
+function validateRun(run){
+ if(!Number.isSafeInteger(run?.id)||run.status!=='completed'||run.conclusion!=='success'||!/^[a-f0-9]{40}$/.test(run.head_sha)||run.head_sha===head)throw Error('Refusing an active or current publisher.');
+}
 if(process.argv[2]==='plan'){
  mkdirSync(folder,{recursive:true});let plan=null;
  for(const record of api('deployments?environment=github-pages&per_page=100')){
@@ -32,23 +35,49 @@ if(process.argv[2]==='plan'){
   if(siblings.some(other=>!['success','inactive','failure','error'].includes(statuses(other.id)[0]?.state)))continue;
   plan={repository:repo,current_sha:head,record,statuses:history,pages_state:'succeed'};break;
  }
+ // A previous repair may have removed the generic record without releasing
+ // Pages itself. Only a confirmed successful, completed publisher can supply
+ // that orphaned Pages ID; never guess it from an arbitrary revision.
+ if(!plan){
+  const runs=api('actions/workflows/pages.yml/runs?status=success&branch=main&per_page=20').workflow_runs;
+  for(const run of runs){
+   if(run.head_sha===head||run.status!=='completed'||run.conclusion!=='success')continue;
+   validateRun(run);if(!pagesDone(run.head_sha))continue;
+   const records=api(`deployments?sha=${run.head_sha}&environment=github-pages&per_page=100`);
+   if(records.length)continue;
+   plan={repository:repo,current_sha:head,record:null,run,pages_state:'succeed'};break;
+  }
+ }
  writeFileSync(file,JSON.stringify(plan,null,2)+'\n');
  if(process.env.GITHUB_OUTPUT)appendFileSync(process.env.GITHUB_OUTPUT,`found=${Boolean(plan)}\n`);
- console.log(plan?`Backed up completed prior deployment ${plan.record.id} (${plan.record.sha}).`:'No completed prior Pages record needs repair.');
+ console.log(plan?`Backed up completed prior publication ${plan.record?.id||plan.run.id} (${plan.record?.sha||plan.run.head_sha}).`:'No completed prior Pages record needs repair.');
 }else if(process.argv[2]==='apply'){
  // The workflow supplies this only after upload-artifact succeeds. A local
  // backup alone is not enough to remove historical deployment metadata.
  if(!/^\d+$/.test(process.env.PAGES_LOCK_ARCHIVE_ID||''))throw Error('A successful remote backup is required before repair.');
  const plan=JSON.parse(readFileSync(file,'utf8'));
  if(!plan||plan.repository!==repo||plan.current_sha!==head)throw Error('Backup does not match this publisher.');
- validate(plan.record);
- if(!settled(plan.statuses[0]?.state)||plan.pages_state!=='succeed')throw Error('Backup does not describe a completed publication.');
- const live=api(`deployments/${plan.record.id}`);validate(live);
- if(live.sha!==plan.record.sha||!settled(statuses(live.id)[0]?.state)||!pagesDone(live.sha))throw Error('Prior deployment changed; refusing repair.');
- const siblings=api(`deployments?sha=${live.sha}&environment=github-pages&per_page=100`);
+ if(plan.pages_state!=='succeed')throw Error('Backup does not describe a completed publication.');
+ let sha;
+ if(plan.record){
+  validate(plan.record);
+  if(!settled(plan.statuses[0]?.state))throw Error('Backup does not describe a completed deployment.');
+  const live=api(`deployments/${plan.record.id}`);validate(live);
+  if(live.sha!==plan.record.sha||!settled(statuses(live.id)[0]?.state))throw Error('Prior deployment changed; refusing repair.');
+  sha=live.sha;
+ }else{
+  validateRun(plan.run);const run=api(`actions/runs/${plan.run.id}`);validateRun(run);
+  if(run.head_sha!==plan.run.head_sha)throw Error('Prior publisher changed.');sha=run.head_sha;
+ }
+ if(!pagesDone(sha))throw Error('Prior Pages publication changed; refusing repair.');
+ const siblings=api(`deployments?sha=${sha}&environment=github-pages&per_page=100`);
  if(siblings.some(other=>!['success','inactive','failure','error'].includes(statuses(other.id)[0]?.state)))throw Error('Another publisher of the prior revision is still active.');
- if(statuses(live.id)[0]?.state!=='inactive')api(`deployments/${live.id}/statuses`,'POST',{state:'inactive',description:'Completed prior Pages publication archived before releasing its stale lock.'});
- if(statuses(live.id)[0]?.state!=='inactive')throw Error('Deployment did not become inactive.');
- api(`deployments/${live.id}`,'DELETE');
- console.log(`Released obsolete deployment record ${live.id}; backup artifact ${process.env.PAGES_LOCK_ARCHIVE_ID}.`);
+ if(plan.record){
+  const id=plan.record.id;
+  if(statuses(id)[0]?.state!=='inactive')api(`deployments/${id}/statuses`,'POST',{state:'inactive',description:'Completed prior Pages publication archived before releasing its stale lock.'});
+  if(statuses(id)[0]?.state!=='inactive')throw Error('Deployment did not become inactive.');
+  api(`deployments/${id}`,'DELETE');
+ }else if(siblings.length)throw Error('Prior deployment records appeared after backup.');
+ api(`pages/deployments/${sha}/cancel`,'POST');
+ console.log(`Released obsolete Pages lock ${sha}; backup artifact ${process.env.PAGES_LOCK_ARCHIVE_ID}.`);
 }else throw Error('Expected plan or apply.');

@@ -55,6 +55,7 @@ jobs:
       pages: write
       id-token: write
       deployments: write
+      actions: read
     steps:
       - name: Check out demo page
         uses: actions/checkout@v4
