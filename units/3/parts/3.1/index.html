@@ -111,6 +111,14 @@
     .action { border:0; background:var(--green); color:white; }
     .action:hover { background:#105640; }
     .live-note { min-height:1.6em; margin:9px 0 0; color:var(--muted); font-size:.9rem; }
+    .amplitude-control { display:grid; grid-template-columns:minmax(0,2fr) minmax(220px,1fr); align-items:center; gap:24px; padding:18px 20px; }
+    .amplitude-control input[type="range"] { width:100%; margin:10px 0 0; }
+    .amplitude-results { min-width:0; padding-left:24px; border-left:1px solid var(--line); }
+    .amplitude-results p { margin:0; }
+    .amplitude-value { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px; color:var(--muted); font-size:.9rem; }
+    .amplitude-value strong { color:var(--green); font-size:1.5rem; font-variant-numeric:tabular-nums; }
+    .amplitude-calculation-label { margin-top:8px!important; color:var(--muted); font-size:.8rem; }
+    @media (max-width:680px) { .amplitude-control { grid-template-columns:1fr; gap:16px; padding:16px; } .amplitude-results { padding:14px 0 0; border-left:0; border-top:1px solid var(--line); } }
     .diagram-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
     .diagram-panel { padding:14px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
     .diagram-panel h3 { margin:0 0 5px; font-size:1rem; }
@@ -605,14 +613,18 @@
               </svg>
 
             </figure>
-            <div class="control-panel">
-              <label class="field" for="amplitude-slider">調整波源振幅；波形離平衡位置的最大距離會跟著改變
-                <input id="amplitude-slider" type="range" min="0.3" max="1.5" step="0.1" value="1.0" aria-describedby="amplitude-model-note">
-              </label>
-              <div class="readout" aria-live="polite"><div class="data-cell"><small>振幅 A</small><strong id="amplitude-output">1.0 m</strong></div></div>
-              <p class="live-note" id="amplitude-model-note">拖曳滑桿，觀察振幅變大或變小。</p>
-              <p class="live-note">也可用波峰到波谷的總高度除以 2，求出振幅：</p>
-              <p class="definition-equation"><span id="amplitude-height-output">2.0 m</span> ÷ 2 = <span id="amplitude-half-output">1.0 m</span></p>
+            <div class="control-panel amplitude-control">
+              <div>
+                <label class="field" for="amplitude-slider">調整波源振幅
+                  <input id="amplitude-slider" type="range" min="0.3" max="1.5" step="0.1" value="1.0" aria-describedby="amplitude-model-note">
+                </label>
+                <p class="live-note" id="amplitude-model-note">拖曳滑桿，觀察波形的高低變化。</p>
+              </div>
+              <div class="amplitude-results">
+                <p class="amplitude-value" aria-live="polite">振幅 A：<strong id="amplitude-output">1.0 m</strong></p>
+                <p class="amplitude-calculation-label">波峰到波谷的總高度 ÷ 2</p>
+                <p class="definition-equation"><span id="amplitude-height-output">2.0 m</span> ÷ 2 = <span id="amplitude-half-output">1.0 m</span></p>
+              </div>
             </div>
 
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>剛剛量的是波的高低。那如果要比較波的長短，該沿著哪個方向量呢？</p></div>
