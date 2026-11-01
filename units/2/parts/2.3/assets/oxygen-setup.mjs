@@ -63,7 +63,7 @@ export function createSetupScene(view,panels) {
   const tube=svg('g',{'data-setup-body':'tube'}),pipeOuter=svg('path',{fill:'none',stroke:'#7e9fa5','stroke-width':11,'stroke-linecap':'round','stroke-linejoin':'round','data-shared-tube-path':''}),pipeInner=svg('path',{fill:'none',stroke:'#e9f5f3','stroke-width':6,'stroke-linecap':'round','stroke-linejoin':'round'});
   tube.append(pipeOuter,pipeInner);art.append(tube);
   const stopper=svg('g',{'data-setup-body':'stopper'}),corkGradient=svg('linearGradient',{id:'oxygen-cork-shade',x2:1,y2:0});corkGradient.append(svg('stop',{offset:0,'stop-color':'#b9955d'}),svg('stop',{offset:'.45','stop-color':'#e0c18b'}),svg('stop',{offset:1,'stop-color':'#aa8251'}));defs.append(corkGradient);
-  stopper.append(svg('path',{d:'M-38 -18L-29 24Q0 31 29 24L38 -18Z',fill:'url(#oxygen-cork-shade)',stroke:'#a58053','stroke-width':1.5}),svg('ellipse',{cx:0,cy:-18,rx:38,ry:10,fill:'#dcc294',stroke:'#bc9c6c','stroke-width':1.5}),svg('path',{d:'M0 -22V-6',stroke:'#eaf4ef','stroke-width':5,'stroke-linecap':'round'}));art.append(stopper);
+  stopper.append(svg('path',{d:'M-57 -18L-43 24Q0 31 43 24L57 -18Z',fill:'url(#oxygen-cork-shade)',stroke:'#a58053','stroke-width':1.5}),svg('ellipse',{cx:0,cy:-18,rx:57,ry:10,fill:'#dcc294',stroke:'#bc9c6c','stroke-width':1.5}),svg('path',{d:'M0 -22V-6',stroke:'#eaf4ef','stroke-width':5,'stroke-linecap':'round'}));art.append(stopper);
 
   const stream=svg('path',{fill:'none',stroke:'#a8e4ee','stroke-width':12,'stroke-linecap':'round','data-setup-stream':''});
   const highlight=svg('path',{fill:'none',stroke:'#fff','stroke-opacity':'.85','stroke-width':3});art.append(stream,highlight);
@@ -101,25 +101,25 @@ export function createSetupScene(view,panels) {
   let activeView=view,operationStage=1;
   let tubePath='';
   function route(capX,capY,tipX,tipY){return `M${capX} ${capY-25}V205Q${capX} 185 ${capX+20} 185H700Q720 185 720 205V${tipY+35}Q720 ${tipY+55} 740 ${tipY+55}H${tipX-20}Q${tipX} ${tipY+55} ${tipX} ${tipY+35}V${tipY}`;}
-  function positionPipe(capX,capY,tipX,progress=1){
+  function positionPipe(capX,capY,tipX,progress=1,layout=1){
     tubePath=route(capX,capY,tipX,665);for(const n of[pipeOuter,pipeInner])n.setAttribute('d',tubePath);
-    let x,y,sx,sy;if(progress<.45){const u=progress/.45;x=430;y=mix(580,115,u);sx=mix(1.16,1,u);sy=mix(.16,1,u);}else if(progress<.8){const u=(progress-.45)/.35;x=mix(430,250,u);y=115;sx=sy=1;}else{x=250;y=mix(115,185,(progress-.8)/.2);sx=sy=1;}
+    const baseX=mix(430,550,layout),baseY=mix(580,830,layout),baseSy=mix(.16,.08,layout);let x,y,sx,sy;if(progress<.45){const u=progress/.45;x=baseX;y=mix(baseY,115,u);sx=mix(1.16,1,u);sy=mix(baseSy,1,u);}else if(progress<.8){const u=(progress-.45)/.35;x=mix(baseX,250,u);y=115;sx=sy=1;}else{x=250;y=mix(115,185,(progress-.8)/.2);sx=sy=1;}
     tube.setAttribute('transform',`translate(${x} ${y}) scale(${sx} ${sy}) translate(-250 -185)`);
-    stopper.setAttribute('transform',`translate(${x+sx*(capX-250)} ${y+sy*(capY-185)}) rotate(${90*(1-progress)})`);
+    stopper.setAttribute('transform',`translate(${x+sx*(capX-250)} ${y+sy*(capY-185)}) rotate(${90*(1-progress)}) scale(${mix(mix(1,.8,layout),1,Math.min(1,progress/.45))})`);
     return tubePath;
   }
-  const parkedPlate='translate(1160 820) scale(1 3)';
+  const parkedPlate='translate(1300 820) scale(.8 3)';
   function preparePlate(f,jarTransform){
-    if(f.cover===0)plate.setAttribute('transform',`translate(${mix(1110,1160,f.arrangement)} ${mix(540,820,f.arrangement)}) scale(${mix(1.49,1,f.arrangement)} ${mix(6,3,f.arrangement)})`);
-    else if(f.cover<1){const c=f.cover;let cx,cy,sx;if(c<.15){const u=c/.15;cx=mix(1272.5,1390,u);cy=859;sx=mix(1,.9,u);}else if(c<.55){cx=1390;cy=mix(859,90,(c-.15)/.4);sx=.9;}else if(c<.85){cx=mix(1390,f.jarX,(c-.55)/.3);cy=90;sx=mix(.9,1,(c-.55)/.3);}else{cx=f.jarX;cy=mix(90,f.jarY-202,(c-.85)/.15);sx=1;}plate.setAttribute('transform',`translate(${cx} ${cy}) scale(${sx} ${mix(3,1,Math.min(1,c/.55))}) translate(-112.5 -13)`);}
+    if(f.cover===0)plate.setAttribute('transform',`translate(${mix(1110,1300,f.arrangement)} ${mix(540,820,f.arrangement)}) scale(${mix(1.49,.8,f.arrangement)} ${mix(6,3,f.arrangement)})`);
+    else if(f.cover<1){const c=f.cover;let cx,cy,sx;if(c<.55){cx=1390;cy=mix(859,90,c/.55);sx=mix(.8,.9,c/.55);}else if(c<.85){cx=mix(1390,f.jarX,(c-.55)/.3);cy=90;sx=mix(.9,1,(c-.55)/.3);}else{cx=f.jarX;cy=mix(90,f.jarY-202,(c-.85)/.15);sx=1;}plate.setAttribute('transform',`translate(${cx} ${cy}) scale(${sx} ${mix(3,1,Math.min(1,c/.55))}) translate(-112.5 -13)`);}
     else if(f.uncover<1)plate.setAttribute('transform',`${jarTransform} translate(${220*f.uncover} 0)`);
-    else {const u=f.plateReturn,cx=mix(814,1272.5,u),cy=mix(667,859,u)-350*Math.sin(Math.PI*u);plate.setAttribute('transform',`translate(${cx} ${cy}) rotate(${180*(1-u)}) scale(1 ${mix(1,3,u)}) translate(-112.5 -13)`);}
+    else {const u=f.plateReturn,cx=mix(814,1390,u),cy=mix(667,859,u)-350*Math.sin(Math.PI*u);plate.setAttribute('transform',`translate(${cx} ${cy}) rotate(${180*(1-u)}) scale(${mix(1,.8,u)} ${mix(1,3,u)}) translate(-112.5 -13)`);}
     plate.setAttribute('opacity','1');
   }
 
   const setTransform=(n,a,b,t)=>n.setAttribute('transform',`translate(${mix(a[0],b[0],t)} ${mix(a[1],b[1],t)}) scale(${mix(a[2],b[2],t)} ${mix(a[3],b[3],t)})`);
   const bodies={source,catalyst,flask,tank,jar,plate,tube,stopper};
-  const bounds={source:[75,70,165,350],catalyst:[90,530,275,145],flask:[140,290,350,530],tank:[590,445,890,380],jar:[0,0,223,430],plate:[-20,5,265,16],tube:[200,150,900,590],stopper:[-38,-28,76,60]};
+  const bounds={source:[75,70,165,350],catalyst:[90,530,275,145],flask:[140,290,350,530],tank:[590,445,890,380],jar:[0,0,223,430],plate:[-20,5,265,16],tube:[200,150,900,590],stopper:[-57,-28,114,60]};
   return {
     geometry(key) {
       if(operationStage>1&&['source','spoon'].includes(key)){
@@ -145,7 +145,7 @@ export function createSetupScene(view,panels) {
       liquid.setAttribute('y',290+360*frame.collected);liquid.setAttribute('height',360*(1-frame.collected));
       const line=operationView.querySelector('[data-part="water-line"]');line.setAttribute('cy',290+360*frame.collected);
       const flow=operationView.querySelector('[data-part="flow"]');flow.setAttribute('d',tubePath);flow.setAttribute('transform','');
-      if(stage===7&&frame.cover>0){const c=frame.cover;let cx,cy;if(c<.35){const u=c/.35;cx=mix(1272.5,1280,u);cy=mix(859,480,u);}else if(c<.7){cx=1280;cy=mix(480,667,(c-.35)/.35);}else{cx=mix(1280,1034,(c-.7)/.3);cy=667;}plate.setAttribute('transform',`translate(${cx} ${cy}) scale(1 ${mix(3,1,Math.min(1,c/.35))}) translate(-112.5 -13)`);}else plate.setAttribute('transform',parkedPlate);
+      if(stage===7&&frame.cover>0){const c=frame.cover;let cx,cy;if(c<.35){const u=c/.35;cx=mix(1390,1280,u);cy=mix(859,480,u);}else if(c<.7){cx=1280;cy=mix(480,667,(c-.35)/.35);}else{cx=mix(1280,1034,(c-.7)/.3);cy=667;}plate.setAttribute('transform',`translate(${cx} ${cy}) scale(${mix(.8,1,Math.min(1,c/.35))} ${mix(3,1,Math.min(1,c/.35))}) translate(-112.5 -13)`);}else plate.setAttribute('transform',parkedPlate);
       label.textContent='';flaskName.textContent=chemical.peroxide===0?'錐形瓶（空）':chemical.catalyst===0?'雙氧水（無色溶液）':'雙氧水＋二氧化錳';jarName.textContent=frame.collected===0?'瓶內裝滿清水':frame.collected>.3?'氧氣（無色）':'';
 
       for(const canvas of operationView.querySelectorAll('.oxygen-main-scene,.oxygen-mobile-zoom svg'))canvas.setAttribute('viewBox','40 0 1470 900');
@@ -173,7 +173,7 @@ export function createSetupScene(view,panels) {
       for(const n of[stream,highlight]){n.setAttribute('d',d);n.setAttribute('opacity',pouringTank||pouringJar?1:0);}
       label.textContent=pouringTank||pouringJar?'清水':'';
       label.setAttribute('x',pouringTank?800:950);label.setAttribute('y',pouringTank?410:250);
-      positionPipe(250,350,800,f.outlet);flaskName.setAttribute('opacity',f.arrangement);tankName.setAttribute('opacity',f.arrangement);flaskName.textContent='錐形瓶（空）';jarName.textContent=f.immersion===1?'瓶內裝滿清水':'';
+      positionPipe(250,350,800,f.outlet,f.arrangement);flaskName.setAttribute('opacity',f.arrangement);tankName.setAttribute('opacity',f.arrangement);flaskName.textContent='錐形瓶（空）';jarName.textContent=f.immersion===1?'瓶內裝滿清水':'';
       view.dataset.sharedScene='oxygen-setup-art';
       main.setAttribute('viewBox',`${mix(0,40,a)} 0 ${mix(1536,1470,a)} ${mix(850,900,a)}`);
       main.parentElement.style.aspectRatio=`${mix(1536,1470,a)} / ${mix(850,900,a)}`;
