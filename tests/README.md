@@ -915,3 +915,12 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.1-
 沿用房間13項、整課10項共23項。房間原「控制在場景下方」預期改為核可配置：操作→提問→場景→圖例／狀態；10種寬度、各有／無材料共20組版面，檢查44px操作區、文字不溢出、詳細提示在工作區外且角色對話不收合。1440／1366／1280px下確認房間圖766×490.23px、工作區671.81px，從工作區起可同屏，沒有把整區含標頭與對話都算入。
 
 原聲音、暫停、同時刻切換、結尾清空、背景取消、錯誤重試與觸控／鍵盤回歸保留。`ROOM_URL`可指向公開正式課程，`ROOM_CAPTURE_DIR`保存截圖及 `compact-layouts.json`；公開另跑房間13項。控制器、模型及音檔未改，不重跑未受影響的純模型／PCM檢查。
+
+## 4.4 十區透鏡成像基本版
+
+```sh
+node tests/unit-4.4-optics.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs
+```
+
+純模型8項、瀏覽器23項（含主項），涵蓋實際成像計算、九個教學區與單一小測、調焦／物距紀錄、透鏡切換、眼睛／眼鏡／顯微鏡、滑鼠拖曳／鍵盤／原生觸控、七寬度與十個導覽標題連動，並與2.2計算樣式比對。`LENS_URL`指定公開頁（不帶hash），`LENS_CAPTURE_DIR`另存畫面與layout.json。詳見`units/4/parts/4.4/README.md`；操作通過不代表外部驗收。

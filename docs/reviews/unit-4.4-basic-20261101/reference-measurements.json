@@ -1,0 +1,252 @@
+{
+  "1.1": {
+    "shell": {
+      "width": 1120,
+      "height": 528.796875,
+      "font": "16px",
+      "padding": "26px 0px 18px",
+      "gap": "normal",
+      "grid": "none",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "layout": {
+      "width": 1120,
+      "height": 8974.3125,
+      "font": "16px",
+      "padding": "0px",
+      "gap": "34px",
+      "grid": "250px 836px",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "head": null,
+    "body": null,
+    "title": {
+      "width": 564,
+      "height": 79.875,
+      "font": "29.6px",
+      "padding": "0px",
+      "gap": "normal",
+      "grid": "none",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "nav": [
+      {
+        "text": "01只說「這支鉛筆很長」，別人怎麼知道它到底有多長？",
+        "href": "#card-01"
+      },
+      {
+        "text": "0218 代表什麼？",
+        "href": "#card-02"
+      },
+      {
+        "text": "03尺上的每一格，代表多少？",
+        "href": "#card-03"
+      }
+    ],
+    "summary": "01為什麼要量？把感覺變成可比較的資料\n        \n          只說「這支鉛筆很長」，別人怎麼知道它到底有多長？\n          「很長」是感覺，別人不一定和你想的一樣。測量能把觀察變成具體數字，讓結果可以說清楚、記下來，也能和別人比較。\n          小葵這支鉛筆好像比其他鉛筆長耶！\n          阿公妳怎麼知道呢？\n          小葵好像是靠感覺。\n          阿公除了靠感覺，也可以用尺量量看啊。\n          \n          \n            \n              \n                \n                \n                01234567891011121314151617181920\n                \n              \n              \n                \n              \n            \n            同一支鉛筆\n          \n          \n            先用眼睛看\n            對照尺上的刻度\n          \n          先觀察看起來很長每個人的感覺可能不一樣，還不能公平比較。"
+  },
+  "1.2": {
+    "shell": {
+      "width": 1380,
+      "height": 62.875,
+      "font": "15.04px",
+      "padding": "18px 0px",
+      "gap": "16px",
+      "grid": "none",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "layout": {
+      "width": 1380,
+      "height": 12219.546875,
+      "font": "16px",
+      "padding": "32px 0px 72px",
+      "gap": "36px",
+      "grid": "290px 1054px",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "head": {
+      "width": 1052,
+      "height": 116.515625,
+      "font": "16px",
+      "padding": "25px 28px 21px",
+      "gap": "16px",
+      "grid": "74px 906px",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "body": {
+      "width": 1052,
+      "height": 841.90625,
+      "font": "16px",
+      "padding": "23px 28px 28px",
+      "gap": "normal",
+      "grid": "none",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "title": {
+      "width": 906,
+      "height": 35.640625,
+      "font": "26.4px",
+      "padding": "0px",
+      "gap": "normal",
+      "grid": "none",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "nav": [
+      {
+        "text": "01一塊隕石，光說長度夠嗎？",
+        "href": "#s1"
+      },
+      {
+        "text": "02長、寬、高怎麼算出它佔多少空間？",
+        "href": "#s3"
+      },
+      {
+        "text": "03隕石形狀不規則，體積怎麼量？",
+        "href": "#s4"
+      }
+    ],
+    "summary": "01一塊隕石，光說長度夠嗎？隕石轉個方向，量出的長、寬、高也可能改變。不同擺向的讀值都可能正確，但不容易用一組尺寸說明隕石占多少空間。小葵阿公，鉛筆的長度我會量了。那我們撿到的隕石，要怎麼把資料記清楚？阿公我們先用尺量量看這顆隕石的長、寬、高，想想看這些數字能不能告訴我們它的體積？改變的是量測方向，不是隕石本身。長、寬、高描述各方向的跨度；要知道隕石占多少空間，還需要量出體積。正在準備立體模型…拖曳隕石旋轉；使用滑鼠滾輪縮放。長｜左右方向約 11.7 cm寬｜前後方向約 7.5 cm高｜上下方向約 9.3 cm先從邊長容易量出的長方體開始，看看長、寬、高如何組成體積；再把這個方法和隕石的形狀比較。"
+  },
+  "2.1": {
+    "shell": {
+      "width": 1120,
+      "height": 513.03125,
+      "font": "16px",
+      "padding": "26px 0px 18px",
+      "gap": "normal",
+      "grid": "none",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "layout": {
+      "width": 1120,
+      "height": 11403.34375,
+      "font": "16px",
+      "padding": "0px",
+      "gap": "34px",
+      "grid": "250px 836px",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "head": {
+      "width": 834,
+      "height": 116.515625,
+      "font": "16px",
+      "padding": "25px 28px 21px",
+      "gap": "16px",
+      "grid": "74px 688px",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "body": {
+      "width": 834,
+      "height": 1102.71875,
+      "font": "16px",
+      "padding": "23px 28px 28px",
+      "gap": "normal",
+      "grid": "none",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "title": {
+      "width": 688,
+      "height": 35.640625,
+      "font": "26.4px",
+      "padding": "0px",
+      "gap": "normal",
+      "grid": "none",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "nav": [
+      {
+        "text": "01水桶是一個物體，桶身、提把支架和握把由什麼製成？",
+        "href": "#s1"
+      },
+      {
+        "text": "02桶身、水和空氣，各有哪些不同？",
+        "href": "#s2"
+      },
+      {
+        "text": "03以水為例：三種狀態的粒子有什麼不同？",
+        "href": "#s3"
+      }
+    ],
+    "summary": "01\n            水桶是一個物體，桶身、提把支架和握把由什麼製成？物體和物質：先分清楚正在研究什麼\n          \n          \n          \n            小葵這只水桶是整個物體；桶身、提把支架和握把都是同一種材料做的嗎？\n            爺爺不一定喔。像這只水桶，桶身是鐵做的，握把卻是塑膠做的。同一個物體，也可以用不同的材料組成。\n            依序查看水桶的不同部位，找出製作各部位所用的材料。\n            \n              \n                整只水桶\n                桶身\n                提把支架\n                握把\n              \n              \n                \n                  \n                    \n                      \n                    \n                    \n                      \n                      \n                      \n                      \n                    \n                  \n                  點選桶身、提把支架或握把可放大；再次點擊放大圖可恢復整桶。\n                \n                \n                  物體\n                  整只水桶\n                  水桶是看得見、摸得到的整體，由桶身、提把支架和握把組成。\n  "
+  },
+  "2.2": {
+    "shell": {
+      "width": 1160,
+      "height": 485.5625,
+      "font": "16px",
+      "padding": "28px 0px 22px",
+      "gap": "normal",
+      "grid": "none",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "layout": {
+      "width": 1160,
+      "height": 8799.296875,
+      "font": "16px",
+      "padding": "0px",
+      "gap": "34px",
+      "grid": "250px 876px",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "head": {
+      "width": 874,
+      "height": 116.515625,
+      "font": "16px",
+      "padding": "25px 28px 21px",
+      "gap": "16px",
+      "grid": "74px 728px",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "body": {
+      "width": 874,
+      "height": 959.265625,
+      "font": "16px",
+      "padding": "23px 28px 28px",
+      "gap": "normal",
+      "grid": "none",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "title": {
+      "width": 728,
+      "height": 35.640625,
+      "font": "26.4px",
+      "padding": "0px",
+      "gap": "normal",
+      "grid": "none",
+      "background": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "nav": [
+      {
+        "text": "01泥沙混在水裡，要怎麼分離出來？",
+        "href": "#s1"
+      },
+      {
+        "text": "02鹽溶在水裡，要怎麼分離出來？",
+        "href": "#s2"
+      },
+      {
+        "text": "03綠色墨水裡，還藏著其他顏色嗎？",
+        "href": "#s3"
+      }
+    ],
+    "summary": "01\n          泥沙混在水裡，要怎麼分離出來？過濾：分離不溶於水的固體\n        \n        \n          泥沙不溶於水，仍以固體顆粒的形式混在水中，因此可以利用過濾這種物理方法，將泥沙和水分開。\n          小葵泥沙顆粒這麼小，混在水裡很難用手一一挑出來，還有什麼方法能把它們分開呢？\n          阿公我們可以用濾紙試試看，觀察泥沙和水各自去了哪裡。\n          \n            \n            樣本\n            濾紙\n            接液杯\n            \n          \n          點圖片任意處，觀察過濾過程\n          \n            放大觀察×\n            \n            \n          \n          \n            ① 架好器材將濾紙放入漏斗，並在漏斗下方放好接液杯。\n            ② 倒入泥沙水將樣本慢慢倒進濾紙中，避免液體溢出。\n            ③ 讓混合物分開水穿過濾紙，泥沙顆粒留在濾紙上。\n            ④ 觀察結果濾紙上留下固體；下方接液杯收集流下的液體。\n          \n          阿公泥沙不溶於水，泥沙顆粒會被濾紙攔住，水則穿過濾紙流進接液杯。留在濾紙上的固體叫「濾渣」，收集到的液體叫「濾液」。"
+  }
+}

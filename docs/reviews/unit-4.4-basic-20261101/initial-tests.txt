@@ -1,0 +1,187 @@
+▶ 4.4 十區基本版：真實操作、參考格式與跨尺寸導覽
+  ✔ 九教學區、一個獨立小測，標題和導覽一致且無重複ID (256.966438ms)
+  ✔ 小孔光路的上／下端選取、屏幕移動和獨立重設 (226.763289ms)
+  ✔ 平行光會聚／發散及兩表面詳圖連動 (706.662428ms)
+  ✔ 調焦會實際縮小光斑；上端／下端光束不混成一點 (132.615439ms)
+  ✔ 物距變化不自動搬屏幕；只記錄清楚像並處理焦點邊界 (1137.685269ms)
+  ✔ 放大鏡觀察與屏幕比較分開，虛線切換不改變像 (863.752545ms)
+  ✔ 同位置換鏡片，讀值／像／單一選取狀態同步 (230.629162ms)
+  ✔ 遠近切換保留視網膜，調節後恢復清楚像 (697.063026ms)
+  ✔ 近視／遠視比較與兩段矯正光路，切模型撤除舊鏡片 (823.232756ms)
+  ✔ 顯微鏡的物鏡／目鏡／合看連動及第九區重設 (176.077709ms)
+  ✖ 唯一小測：漏答、錯答回看、修改清除、全對與重填 (63.972642ms)
+  ✔ 與 2.2 共用的排版數值及人物素材一致 (16336.959397ms)
+  ✖ 1440px 十區標頭、滿寬內容、導覽與文字未遮擋 (164.552631ms)
+  ✖ 1366px 十區標頭、滿寬內容、導覽與文字未遮擋 (134.147707ms)
+  ✖ 1024px 十區標頭、滿寬內容、導覽與文字未遮擋 (135.139419ms)
+  ✖ 820px 十區標頭、滿寬內容、導覽與文字未遮擋 (198.161831ms)
+  ✖ 760px 十區標頭、滿寬內容、導覽與文字未遮擋 (368.33232ms)
+  ✖ 390px 十區標頭、滿寬內容、導覽與文字未遮擋 (261.408019ms)
+  ✖ 320px 十區標頭、滿寬內容、導覽與文字未遮擋 (220.301235ms)
+  ✔ 初始深連結、鍵盤及原生觸控都可操作 (1761.889604ms)
+  ✔ 素材、有效入口、內部連結及瀏覽器錯誤 (69.116771ms)
+✖ 4.4 十區基本版：真實操作、參考格式與跨尺寸導覽 (27023.418235ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 13
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27030.326217
+
+✖ failing tests:
+
+test at tests/unit-4.4.test.cjs:57:10
+✖ 唯一小測：漏答、錯答回看、修改清除、全對與重填 (63.972642ms)
+  locator.check: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': '[name=q1][value=0]' is not a valid selector.
+      at query (<anonymous>:5608:41)
+      at <anonymous>:5618:7
+      at SelectorEvaluatorImpl._cached (<anonymous>:5395:20)
+      at SelectorEvaluatorImpl._queryCSS (<anonymous>:5605:17)
+      at SelectorEvaluatorImpl._querySimple (<anonymous>:5485:19)
+      at <anonymous>:5433:29
+      at SelectorEvaluatorImpl._cached (<anonymous>:5395:20)
+      at SelectorEvaluatorImpl.query (<anonymous>:5426:19)
+      at Object.query (<anonymous>:5640:44)
+      at <anonymous>:5598:21
+  Call log:
+    - waiting for locator('[name=q1][value=0]')
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:58:191)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:57:2) {
+    log: [ "  - waiting for locator('[name=q1][value=0]')" ]
+  }
+
+test at tests/unit-4.4.test.cjs:65:62
+✖ 1440px 十區標頭、滿寬內容、導覽與文字未遮擋 (164.552631ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  '#s1' !== '#s2'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:70:259)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:65:54)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '#s1',
+    expected: '#s2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-4.4.test.cjs:65:62
+✖ 1366px 十區標頭、滿寬內容、導覽與文字未遮擋 (134.147707ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  '#s1' !== '#s2'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:70:259)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:65:54)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '#s1',
+    expected: '#s2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-4.4.test.cjs:65:62
+✖ 1024px 十區標頭、滿寬內容、導覽與文字未遮擋 (135.139419ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  '#s1' !== '#s2'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:70:259)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:65:54)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '#s1',
+    expected: '#s2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-4.4.test.cjs:65:62
+✖ 820px 十區標頭、滿寬內容、導覽與文字未遮擋 (198.161831ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  '#s1' !== '#s2'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:70:259)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:65:54)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '#s1',
+    expected: '#s2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-4.4.test.cjs:65:62
+✖ 760px 十區標頭、滿寬內容、導覽與文字未遮擋 (368.33232ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  '#s1' !== '#s2'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:70:259)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:65:54)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '#s1',
+    expected: '#s2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-4.4.test.cjs:65:62
+✖ 390px 十區標頭、滿寬內容、導覽與文字未遮擋 (261.408019ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  '#s1' !== '#s2'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:70:259)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:65:54)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '#s1',
+    expected: '#s2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-4.4.test.cjs:65:62
+✖ 320px 十區標頭、滿寬內容、導覽與文字未遮擋 (220.301235ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  '#s1' !== '#s2'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:70:259)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:65:54)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '#s1',
+    expected: '#s2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
