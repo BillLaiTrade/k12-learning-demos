@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.2 第05項：鐘罩輔助提示方向
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.2-vacuum-status.test.cjs
+```
+
+實際操作並核對空氣量與 aria-live 提示：抽氣減少、停止保留、進氣增加、關閉進氣、切換方向、回到充足及抽氣下限；另檢查390px觸控／鍵盤／減少動態、電鈴關閉時不宣稱聽到鈴聲，以及音效失敗提示仍優先顯示。可用 `VACUUM_STATUS_URL` 檢查公開頁、`VACUUM_STATUS_ARTIFACT_DIR` 指定敘述紀錄及截圖目錄（預設 `/tmp/unit32-vacuum-status`）。共5項，包含外層主測試；可搭配既有鐘罩、音訊重試與跨區播放檢查。
+
 ## 3.2 第02項：音檔重試
 
 ```sh

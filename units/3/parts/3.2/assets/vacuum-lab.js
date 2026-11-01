@@ -98,8 +98,12 @@ function updateMeter() {
   showMeter(String(Math.round(clamp(db, 0, 99))), db);
 }
 function render() {
-  const airLabel = air > .67 ? '充足' : air > .15 ? '逐漸減少' : '接近真空';
-  const heard = !power ? '未發聲' : air > .67 ? '清楚' : air > .15 ? '變弱' : '幾乎聽不見';
+  const airLabel = air > .67 ? '充足' : air > .15 ? '較少' : '接近真空';
+  const pumping = mode === 'pump' && air > MIN_AIR;
+  const admitting = mode === 'inlet' && air < 1;
+  const airChange = pumping ? '逐漸減少' : admitting ? '逐漸增加' : '量保持不變';
+  const heard = air > .67 ? '清楚' : air > .15 ? '較弱' : '幾乎聽不見';
+  const soundChange = pumping ? '，鈴聲逐漸變弱' : admitting ? '，鈴聲逐漸變清楚' : '';
   const modeLabel = mode === 'pump' && air > MIN_AIR ? '抽氣中' : mode === 'inlet' ? '進氣中' : air <= MIN_AIR + .0001 ? '接近真空' : power ? '觀察中' : '等待啟動';
   lab.dataset.air = air.toFixed(5); lab.dataset.power = power ? 'on' : 'off';
   lab.dataset.mode = mode; lab.dataset.audio = audioState;
@@ -116,7 +120,7 @@ function render() {
   needle.setAttribute('transform', `translate(1770 534) rotate(${(-120 + air * 240).toFixed(3)})`);
   const sentence = audioError || (!power && mode === 'idle' && air === 1
     ? '先開啟電鈴，再抽氣比較聽到的鈴聲。'
-    : `${modeLabel}，罩內空氣${airLabel}；${power ? `電鈴持續運作，聽到的鈴聲${heard}。` : '電鈴已關閉，可開啟電鈴比較鈴聲。'}`);
+    : `${modeLabel}，罩內空氣${airChange}（${airLabel}）；${power ? `電鈴持續運作，聽到的鈴聲${heard}${soundChange}。` : '電鈴已關閉，可開啟電鈴比較鈴聲。'}`);
   if (status.textContent !== sentence) status.textContent = sentence;
   status.classList.toggle('vacuum-status-error', Boolean(audioError));
   setGain(); updateMeter();
