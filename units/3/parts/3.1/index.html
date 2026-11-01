@@ -257,16 +257,33 @@
     .data-cell small { display:block; color:var(--muted); }
     .data-cell strong { display:block; font-size:1.26rem; }
     .formula { margin:14px 0; padding:16px; border-radius:16px; background:#eaf3e9; text-align:center; color:#183c31; font-size:clamp(1.25rem,3vw,1.8rem); font-weight:800; letter-spacing:.02em; }
-    .speed-formula-panel { margin:14px 0 18px; padding:10px 16px 12px; border:1px solid #d6e4d5; border-radius:16px; background:#eaf3e9; }
-    .speed-formula { display:flex; align-items:center; justify-content:center; gap:.28em; margin:0 0 5px; padding:8px 12px; background:transparent; font-size:clamp(1.5rem,4vw,2.15rem); }
+    .speed-formula-panel { margin:14px 0 18px; padding:10px 16px 12px; border:1px solid #d6e4d5; border-radius:16px; background:#eaf3e9; container-type:inline-size; }
+    .speed-formula-comparison { margin:-10px -16px 0; border-bottom:1px solid #c8d9c7; }
+    .speed-formula-row { display:grid; grid-template-columns:110px minmax(0,1fr); }
+    .speed-formula-row + .speed-formula-row { border-top:1px solid #c8d9c7; }
+    .speed-formula-label { margin:0; padding:22px 18px; border-right:1px solid #c8d9c7; color:var(--green); font-size:1.05rem; font-weight:800; line-height:1.5; }
+    .speed-formula { display:flex; align-items:center; justify-content:flex-start; gap:.28em; min-width:0; margin:0; padding:18px 24px; background:transparent; font-size:clamp(1.55rem,3.5vw,2rem); }
     .speed-formula-choice,.speed-formula-meaning-choice { border:0; border-radius:8px; background:transparent; color:inherit; font:inherit; cursor:pointer; transition:background-color .15s ease,box-shadow .15s ease; }
     .speed-formula-choice { padding:0 .08em; line-height:1.2; }
-    .speed-formula-meaning-choice { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px; max-width:100%; padding:3px 7px; line-height:inherit; text-align:center; }
+    .speed-formula-meaning-choice { display:grid; grid-template-columns:3.5em minmax(0,1fr); align-items:center; gap:8px; width:100%; max-width:100%; min-width:0; padding:3px 0; line-height:inherit; text-align:left; }
+    .speed-chinese-equality { display:flex; align-items:center; gap:6px; white-space:nowrap; }
+    .speed-chinese-equals { margin-left:auto; }
+    .speed-chinese-product { display:flex; flex-wrap:wrap; align-items:center; gap:4px; min-width:0; }
+    .speed-formula-meaning .frequency-meaning-fraction { min-width:0; justify-self:start; }
+    .speed-formula-meaning .frequency-meaning-fraction .fraction-rule { margin:0; }
+    .speed-chinese-denominator { display:flex; flex-wrap:wrap; justify-content:center; }
+    .speed-chinese-denominator > span { white-space:nowrap; }
     .speed-formula-choice:hover,.speed-formula-meaning-choice:hover,.speed-formula-choice[aria-pressed="true"],.speed-formula-meaning-choice[aria-pressed="true"] { background:#fff4e9; box-shadow:0 0 0 2px #cf7040; }
     .speed-formula-choice:focus-visible,.speed-formula-meaning-choice:focus-visible { outline:3px solid #cf7040; outline-offset:3px; }
-    .speed-formula-meaning { display:grid; justify-items:center; gap:6px; margin:0; padding:12px 4px; border-block:1px solid #d6e4d5; color:var(--ink); text-align:center; font-size:.9rem; line-height:1.5; }
-    .speed-formula-meaning-title { margin:0; color:var(--green); font-size:.88rem; font-weight:800; }
-    .speed-chinese-velocity { color:var(--green); font-size:1.3em; font-weight:850; white-space:nowrap; }
+    .speed-formula-meaning { display:grid; align-content:start; gap:14px; min-width:0; margin:0; padding:20px 24px; color:var(--ink); text-align:left; font-size:1rem; line-height:1.6; }
+    .speed-chinese-velocity { color:var(--green); font-size:1.15em; font-weight:850; white-space:nowrap; }
+    @container (max-width:600px) {
+      .speed-formula-row { grid-template-columns:minmax(0,1fr); }
+      .speed-formula-label { padding:14px 16px 0; border-right:0; font-size:1rem; }
+      .speed-formula { padding:12px 16px 16px; }
+      .speed-formula-meaning { padding:12px 16px 16px; font-size:.95rem; }
+    }
+    @container (max-width:260px) { .speed-formula-meaning { font-size:.9rem; } }
     .speed-formula-explanations { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
     .speed-formula-explanation { min-width:0; padding:12px 14px; border:1px solid #d6e4d5; border-radius:12px; background:#f7faf6; transition:background-color .15s ease,box-shadow .15s ease,border-color .15s ease; }
     .speed-formula-panel [data-formula-target].is-formula-related { border-color:#cf7040; background:#fff4e9; box-shadow:0 0 0 2px #cf7040; }
@@ -839,11 +856,18 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>阿公，如果我一秒內把繩子上下抖更多次，頻率變高了，波就會更快傳到另一端嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>不一定，除了頻率，還要知道波長，兩者相乘，才能算出波傳得多快，也就是「波速」。</p></div>
             <div class="speed-formula-panel" id="speed-formula-panel">
-                <div class="formula speed-formula" role="group" aria-label="可點選公式，查看各部分對應的中文與白話解釋"><em>v</em> = <button class="speed-formula-choice" type="button" data-formula-focus="frequency" aria-pressed="false" aria-label="查看頻率乘以波長的解釋" aria-controls="speed-chinese-frequency speed-explanation-frequency speed-map-frequency speed-map-wavelength"><em>f</em> × <em>λ</em></button> = <button class="speed-formula-choice" type="button" data-formula-focus="period" aria-pressed="false" aria-label="查看波長除以週期的解釋" aria-controls="speed-chinese-period speed-explanation-period speed-map-wavelength speed-map-period"><span class="stacked-fraction" aria-hidden="true"><span><em>λ</em></span><span class="fraction-rule"></span><span><em>T</em></span></span></button></div>
-              <div class="speed-formula-meaning">
-                <p class="speed-formula-meaning-title">中文公式</p>
-                <button id="speed-chinese-frequency" class="speed-formula-meaning-choice" type="button" data-formula-focus="frequency" aria-pressed="false" aria-label="查看每秒波數乘以波長的解釋" aria-controls="speed-explanation-frequency speed-map-frequency speed-map-wavelength"><span><strong class="speed-chinese-velocity">波速</strong> =</span> <span>每秒產生的完整波數</span> × <span>每個完整波的長度</span></button>
-                <button id="speed-chinese-period" class="speed-formula-meaning-choice" type="button" data-formula-focus="period" aria-pressed="false" aria-label="查看波長除以週期的解釋" aria-controls="speed-explanation-period speed-map-wavelength speed-map-period">= <span class="frequency-meaning-fraction"><span>一個完整波的長度</span><span class="fraction-rule"></span><span>波形前進一個完整波長所需的時間</span></span></button>
+              <div class="speed-formula-comparison">
+                <div class="speed-formula-row">
+                  <h3 class="speed-formula-label" id="speed-symbolic-title">符號公式</h3>
+                  <div class="formula speed-formula" role="group" aria-label="可點選公式，查看各部分對應的中文與白話解釋"><em>v</em> = <button class="speed-formula-choice" type="button" data-formula-focus="frequency" aria-pressed="false" aria-label="查看頻率乘以波長的解釋" aria-controls="speed-chinese-frequency speed-explanation-frequency speed-map-frequency speed-map-wavelength"><em>f</em> × <em>λ</em></button> = <button class="speed-formula-choice" type="button" data-formula-focus="period" aria-pressed="false" aria-label="查看波長除以週期的解釋" aria-controls="speed-chinese-period speed-explanation-period speed-map-wavelength speed-map-period"><span class="stacked-fraction" aria-hidden="true"><span><em>λ</em></span><span class="fraction-rule"></span><span><em>T</em></span></span></button></div>
+                </div>
+                <div class="speed-formula-row">
+                  <h3 class="speed-formula-label" id="speed-chinese-title">中文公式</h3>
+                  <div class="speed-formula-meaning" role="group" aria-labelledby="speed-chinese-title">
+                    <button id="speed-chinese-frequency" class="speed-formula-meaning-choice" type="button" data-formula-focus="frequency" aria-pressed="false" aria-label="查看每秒波數乘以波長的解釋" aria-controls="speed-explanation-frequency speed-map-frequency speed-map-wavelength"><span class="speed-chinese-equality"><strong class="speed-chinese-velocity">波速</strong><span class="speed-chinese-equals">=</span></span><span class="speed-chinese-product"><span>每秒產生的完整波數</span><span>×</span><span>每個完整波的長度</span></span></button>
+                    <button id="speed-chinese-period" class="speed-formula-meaning-choice" type="button" data-formula-focus="period" aria-pressed="false" aria-label="查看波長除以週期的解釋" aria-controls="speed-explanation-period speed-map-wavelength speed-map-period"><span class="speed-chinese-equality"><span class="speed-chinese-equals">=</span></span><span class="frequency-meaning-fraction"><span>一個完整波的長度</span><span class="fraction-rule" aria-hidden="true"></span><span class="speed-chinese-denominator"><span>波形前進一個完整波長</span><span>所需的時間</span></span></span></button>
+                  </div>
+                </div>
               </div>
               <div class="speed-formula-explanations">
                 <section class="speed-formula-explanation" id="speed-explanation-frequency" data-formula-target="frequency" aria-labelledby="speed-plain-frequency">
