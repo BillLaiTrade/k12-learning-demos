@@ -1,11 +1,27 @@
 import {surveyProfile} from './sonar-profile.mjs?v=20261031-shallow';
 import {oceanEnvironment, surveyShip} from './sonar-scene.mjs?v=20261031-no-landform-labels';
-import {depthAt, bottomY, returnTime, PROBE_Y as probeY} from './sonar-terrain.mjs?v=20261031-shallow';
+import {depthAt, bottomY, returnTime, PROBE_Y as probeY, DEPTH_HEIGHT} from './sonar-terrain.mjs?v=20261031-shallow';
 export {depthAt, returnTime, WATER_SPEED} from './sonar-terrain.mjs?v=20261031-shallow';
 export function pointName(index) { let name = ''; for (let n = index + 1; n > 0; n = Math.floor((n - 1) / 26)) name = String.fromCharCode(65 + (n - 1) % 26) + name; return name; }
 const $ = id => document.getElementById(id);
 const number = value => value.toLocaleString('en-US', {maximumFractionDigits: 1});
-let shipX = 500, records = [], current = null, controller, drag = null, previousRows = '';
+const PAGE_SIZE = 4;
+let shipX = 500, records = [], current = null, controller, drag = null, previousRows = '', recordPage = 0;
+let chartData = [], chartKey = '';
+function drawChart(profile = chartData) {
+ chartData = profile;
+ const svg = $('sonar-chart'), box = svg.getBoundingClientRect(), width = Math.max(1, box.width), height = Math.max(1, box.height);
+ const key = [width, height, current?.name, ...profile.flatMap(p => [p.name,p.x,p.y])].join('|');
+ if (key === chartKey) return; chartKey = key;
+ const top = 23, range = height - 47;
+ const points = profile.map(p => ({...p, cx:p.x/1000*width, cy:top+(p.y-probeY)/DEPTH_HEIGHT*range}));
+ svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+ svg.querySelector('.sonar-chart-grid').innerHTML = [0,1,2,3].map(i => `<path d="M0 ${top+range*i/3}H${width}"/>`).join('');
+ svg.querySelector('.sonar-chart-axis').innerHTML = [0,750,1500,2250].map((d,i) => `<text x="6" y="${top+range*i/3+4}">${number(d)}</text>`).join('')+`<text x="${width/2}" y="${height-3}" text-anchor="middle">探測位置（左 → 右）</text>`;
+ const line = points.length < 2 ? '' : `<polyline points="${points.map(p=>`${p.cx},${p.cy}`).join(' ')}" fill="none" stroke="#294d43" stroke-width="4" stroke-linejoin="round"/><polyline id="sonar-profile-line" points="${points.map(p=>`${p.cx},${p.cy}`).join(' ')}" fill="none" stroke="#e39147" stroke-width="2.5" stroke-linejoin="round"><title>僅連接已收到回波的測點，點間為直線估計。</title></polyline>`;
+ $('sonar-profile-layer').innerHTML = line+points.map(p=>`<g class="sonar-chart-point" data-point="${p.name}" data-x="${p.x}"><circle cx="${p.cx}" cy="${p.cy}" r="4.5" fill="${p.name===current?.name?'#276447':'#fff3ca'}" stroke="#285540" stroke-width="1.7"/><text x="${p.cx}" y="${p.cy<top+18?p.cy+20:p.cy-11}" text-anchor="middle">${p.name}</text></g>`).join('');
+}
+function updateText(id, value) {const node=$(id);if(node.textContent!==value)node.textContent=value;}
 export const sonarDuration = () => (current?.time ?? returnTime(shipX)) + .16;
 export const sonarTaps = () => [{delay: 0, gain: 1}, {delay: current.time, gain: .45}];
 export function beginSonar() {
@@ -13,6 +29,7 @@ export function beginSonar() {
   if (current && !current.done) return;
   current = {name: pointName(records.length), x: shipX, time: returnTime(shipX), depth: depthAt(shipX), done: false};
   records.push(current);
+  recordPage = Math.floor((records.length - 1) / PAGE_SIZE);
 }
 let background;
 export function renderSonar(progress = 0) {
@@ -43,23 +60,33 @@ export function renderSonar(progress = 0) {
    background = oceanEnvironment(bottomY);
    $('sonar-view').innerHTML = background + '<g id="sonar-signal-layer"></g><g id="sonar-points-layer"></g><g id="sonar-vessel-layer"></g>';
  }
- const profile = surveyProfile(records), linePoints = profile.map(p=>`${p.x},${p.y}`).join(' ');
- const line = profile.length < 2 ? '' : `<polyline points="${linePoints}" fill="none" stroke="#294d43" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/><polyline id="sonar-profile-line" points="${linePoints}" fill="none" stroke="#e39147" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"><title>依左右位置連接 ${profile.map(p=>p.name).join('、')}，點間為直線估計。</title></polyline>`;
- const chartPoints = profile.map(p=>`<g class="sonar-chart-point" data-point="${p.name}"><circle cx="${p.x}" cy="${p.y}" r="8" fill="#fff9e5" stroke="#285540" stroke-width="3"/><text x="${p.x}" y="${p.y < 165 ? p.y+32 : p.y-15}" text-anchor="middle">${p.name}</text></g>`).join('');
- $('sonar-profile-layer').innerHTML = line+chartPoints;
+ const profile = surveyProfile(records);
+ drawChart(profile);
  $('sonar-chart-empty').hidden = profile.length>0;
  $('sonar-signal-layer').innerHTML = signal;
  $('sonar-points-layer').innerHTML = marks;
  $('sonar-vessel-layer').innerHTML = surveyShip(shipX) + `<text class="sonar-probe-label" x="${shipX+(shipX>700?-24:24)}" y="168" text-anchor="${shipX>700?'end':'start'}" fill="#f4f8e2" stroke="#35685e" stroke-width="3" paint-order="stroke" font-size="20">船底探頭</text>`;
- const rows=records.map(r=>`<tr data-point="${r.name}"><th scope="row">${r.name}</th><td>${r.done?r.time.toFixed(2)+' 秒':'探測中'}</td><td>${r.done?number(r.depth)+' 公尺':'—'}</td></tr>`).join('');
+ const pageCount = Math.max(1, Math.ceil(records.length / PAGE_SIZE));
+ recordPage = Math.max(0, Math.min(recordPage, pageCount - 1));
+ const rows=records.slice(recordPage*PAGE_SIZE,(recordPage+1)*PAGE_SIZE).map(r=>`<tr data-point="${r.name}"${r===current?' aria-current="true"':''}><th scope="row">${r.name}</th><td>${r.done?r.time.toFixed(2)+' 秒':'探測中'}</td><td>${r.done?number(r.depth)+' 公尺':'—'}</td></tr>`).join('');
  if(rows!==previousRows){$('sonar-records').innerHTML=rows;previousRows=rows;}
+ root.dataset.recordCount=String(records.length);root.dataset.recordPage=String(recordPage+1);
+ $('sonar-prev').disabled=recordPage===0;$('sonar-next').disabled=recordPage>=pageCount-1;
+ updateText('sonar-page',`${recordPage+1}／${pageCount}`);
  $('sonar-empty').hidden = records.length>0;
  $('sonar-current-point').hidden = !current;
- $('sonar-current-point').textContent = current ? `探測點 ${current.name}` : '';
- $('sonar-answer').textContent = !current ? '選好船的位置，發出聲波，等回波帶回這裡的深度。' : !received ? `探測點 ${current.name}：探測中，尚未收到回波。` : `探測點 ${current.name}：1,500 × ${current.time.toFixed(2)} ÷ 2＝ ${number(current.depth)} 公尺。`;
+ updateText('sonar-current-point',current ? `探測點 ${current.name}` : '');
+ updateText('sonar-depth',received ? number(current.depth) : '—');
+ $('sonar-depth-unit').hidden = !received;
+ updateText('sonar-answer',!current ? '選好船位，發聲後查看測深結果。' : !received ? `探測點 ${current.name}：探測中，尚未收到回波。` : `1,500 × ${current.time.toFixed(2)} ÷ 2＝ ${number(current.depth)} 公尺。`);
+
 }
 export function bindSonar(player) {
  controller=player;
+ const resize = new ResizeObserver(() => drawChart());
+ resize.observe($('sonar-chart'));
+ $('sonar-prev').addEventListener('click',()=>{recordPage--;renderSonar(controller.elapsed/sonarDuration());});
+ $('sonar-next').addEventListener('click',()=>{recordPage++;renderSonar(controller.elapsed/sonarDuration());});
  // Some mobile browsers suppress the compatibility click after dragging.
  // Handle a deliberate touch release once, while retaining native keyboard clicks.
  for (const button of $('sonar').querySelectorAll('button:not(#sonar-ship)')) {
@@ -76,7 +103,7 @@ export function bindSonar(player) {
 
  const move = x => {if($('sonar-ship').disabled)return;shipX=Math.max(100,Math.min(900,x));renderSonar(controller.elapsed/sonarDuration());};
  $('sonar-left').addEventListener('click',()=>move(shipX-40));$('sonar-right').addEventListener('click',()=>move(shipX+40));
- $('sonar-clear').addEventListener('click',()=>{controller.pause();current=null;records=[];controller.reset();$('sonar-error').hidden=true;});
+ $('sonar-clear').addEventListener('click',()=>{controller.pause();current=null;records=[];recordPage=0;controller.reset();$('sonar-error').hidden=true;});
  const handle=$('sonar-ship');
  handle.addEventListener('keydown',e=>{const moves={ArrowLeft:shipX-20,ArrowRight:shipX+20,Home:100,End:900};if(e.key in moves){e.preventDefault();move(moves[e.key]);}});
  let suppressClickUntil = 0;

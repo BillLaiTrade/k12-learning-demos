@@ -1,0 +1,16 @@
+▶ ship tap emits once while dragging only moves
+  ✔ mouse clicks the visible ship, schedules one original and return, and produces one record (1533.680538ms)
+  ✔ steering arrows follow the boat, stay inside the scene, and lock during a sounding (9575.219004ms)
+  ✔ a drag and a drag returning to its origin never emit on release (1892.150962ms)
+  ✔ a small pointer jitter counts as a tap without shifting the measurement position (1031.537449ms)
+  ✔ Enter and Space emit once, arrow keys only move and the lower button stays usable (1808.810761ms)
+  ✔ actual mobile taps emit once; busy taps, dragging and canceled touches do not add records (2451.347597ms)
+✔ ship tap emits once while dragging only moves (19891.828966ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19897.18475

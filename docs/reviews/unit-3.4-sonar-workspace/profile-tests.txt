@@ -1,0 +1,10 @@
+✔ profile uses only finished measurements, spatial order and latest duplicate, without changing the log (1.802284ms)
+✔ an added measurement resolves a missed seamount rather than pre-filling the real terrain (0.489361ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9.043048

@@ -1,3 +1,7 @@
+## 2026-11-01 第四區同屏工作區
+
+依核可圖重排為左海洋／測深圖、右計算／紀錄，上方集中操作。紀錄每頁四筆，圖保留全部完成測點；長對話與模型說明移至下方可展開說明。手機順序排列。原速／模型／聲音與船隻互動保持，圖表水平位置隨欄寬精確對齊，快取版本為`20261101-workspace`。詳見`docs/decisions/unit-3.4-sonar-workspace.md`與`docs/reviews/unit-3.4-sonar-workspace/`。
+
 ## 2026-11-01 第三區計算與場景同屏
 
 第三區將場景置上方、第二至第四步桌機並排，手機順序排列；收緊對話與重複推導文字。整區1491→942px、互動區978→572px（1440px寬），輸入、場景與計算可同屏檢視。計算模組、共用播放器及其他區塊保持，詳見`docs/decisions/unit-3.4-calculation-lab.md`及`docs/reviews/unit-3.4-calculation-compact/`。

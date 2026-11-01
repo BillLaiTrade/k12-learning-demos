@@ -1,6 +1,6 @@
 import {bindWellQuiz} from './well-quiz.mjs?v=20261101-well-compact';
 import {bindRoomWaveLab} from './room-wave-lab.mjs?v=20261101-xiaokui-voice';
-import {renderSonar, bindSonar, beginSonar, sonarDuration, sonarTaps} from './sonar-lab.mjs?v=20261031-results';
+import {renderSonar, bindSonar, beginSonar, sonarDuration, sonarTaps} from './sonar-lab.mjs?v=20261101-workspace';
 import {arrivals} from './echo-model.mjs?v=20261101-room-contrast';
 import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
 import {renderDistance, bindDistanceWall, bindDistanceSpeakers, distanceDuration, distanceTaps} from './distance-lab.mjs?v=20261031-short-labels';
