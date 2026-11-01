@@ -324,8 +324,11 @@
       let rulerFrame=0,rulerAnimationStart=null,rulerPlayRequest=0,rulerSoundFailed=false;
       const setRulerStatus=message=>{if(!rulerSoundFailed)rulerStatus.textContent=message;};
       const playRulerSound=async()=>{
-        rulerAudio.currentTime=0;
-        try{await rulerAudio.play();return true;}catch(_error){return false;}
+        try{
+          if(rulerSoundFailed||rulerAudio.error)rulerAudio.load();
+          rulerAudio.currentTime=0;
+          await rulerAudio.play();return true;
+        }catch(_error){return false;}
       };
       const stopRulerSound=()=>{rulerAudio.pause();rulerAudio.currentTime=0;};
       const finishRuler=()=>{
@@ -382,7 +385,7 @@
     })();
   </script>
   <script type="module" src="assets/sound-propagation.js?v=exclusive-playback-20261030"></script>
-  <script type="module" src="assets/vacuum-lab.js?v=exclusive-playback-20261030"></script>
+  <script type="module" src="assets/vacuum-lab.js?v=audio-retry-20261101"></script>
   <script type="module" src="assets/sound-speed.mjs?v=full-width-20261031"></script>
   <script type="module" src="assets/fireworks-quiz.mjs?v=launch-button-20261030"></script>
 </body>
