@@ -98,6 +98,13 @@
     .secondary,.action { min-height:44px; padding:9px 15px; border-radius:13px; font-weight:750; }
     .secondary { border:1px solid var(--line); background:#fff; color:var(--ink); }
     .secondary:hover { border-color:var(--green); }
+    .wave-controls .secondary { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:48px; padding:10px 18px; border:2px solid #10513e; background:#176b53; color:#fff; box-shadow:0 3px 0 #0c4635,0 5px 9px rgb(24 52 40 / 14%); transition:background .15s,transform .15s,box-shadow .15s; }
+    .wave-controls .secondary::before { content:""; width:0; height:0; border-top:6px solid transparent; border-bottom:6px solid transparent; border-left:9px solid currentColor; }
+    .wave-controls .secondary[aria-pressed="true"] { background:#105640; }
+    .wave-controls .secondary[aria-pressed="true"]::before { width:10px; height:12px; border:0; background:linear-gradient(to right,currentColor 0 3px,transparent 3px 7px,currentColor 7px 10px); }
+    @media (hover:hover) { .wave-controls .secondary:hover { background:#105640; transform:translateY(-1px); box-shadow:0 4px 0 #0c4635,0 6px 11px rgb(24 52 40 / 18%); } }
+    .wave-controls .secondary:active { transform:translateY(2px); box-shadow:0 1px 0 #0c4635; }
+    .wave-controls .secondary:focus-visible { outline:3px solid #df8b41; outline-offset:4px; }
     .action { border:0; background:var(--green); color:white; }
     .action:hover { background:#105640; }
     .live-note { min-height:1.6em; margin:9px 0 0; color:var(--muted); font-size:.9rem; }
