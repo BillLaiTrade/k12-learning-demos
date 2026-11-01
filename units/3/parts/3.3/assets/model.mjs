@@ -18,11 +18,3 @@ export function soundSamples({frequency, amplitude, tone='pure'}, rate, seconds=
   }
   return samples;
 }
-export function challenge(index=0) {
-  const items=[{base:440,target:660,tone:'string'},{base:220,target:440,tone:'pipe'},{base:440,target:330,tone:'string'}];
-  return {...items[index%items.length],amplitude:.35};
-}
-export function checkSettings(answer, target) {
-  if (!answer.frequency || !answer.amplitude || !answer.tone) return 'incomplete';
-  return Number(answer.frequency)===target.target && Number(answer.amplitude)===target.amplitude && answer.tone===target.tone ? 'correct' : 'incorrect';
-}

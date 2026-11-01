@@ -9,7 +9,6 @@ test('3.3 sound relationships and bounded audio match the displayed model',async
  assert.ok(Math.abs(rms(loud)/rms(soft)-7/3)<.001);
  for(const tone of ['pure','string','pipe']){const a=m.soundSamples({frequency:440,amplitude:.9,tone},48000);assert.ok(a.every(x=>Number.isFinite(x)&&Math.abs(x)<=.2));assert.equal(a[0],0);assert.ok(Math.abs(a.at(-1))<.001);}
  const timbres=['pure','string','pipe'].map(tone=>rms(m.soundSamples({frequency:440,amplitude:.5,tone},48000)));assert.ok(Math.max(...timbres)/Math.min(...timbres)<1.02,'timbre examples have matched RMS levels');
- const target=m.challenge();assert.equal(m.checkSettings({},target),'incomplete');assert.equal(m.checkSettings({frequency:660,amplitude:.35,tone:'string'},target),'correct');assert.equal(m.checkSettings({frequency:440,amplitude:.7,tone:'pipe'},target),'incorrect');
 });
 test('3.3 seven learning blocks, sound, instruments and one final assessment',{timeout:90000},async t=>{
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});t.after(()=>server.kill());
@@ -19,12 +18,12 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
  await page.addInitScript(()=>{window.audioRuns=[];const create=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=create.call(this),start=s.start.bind(s),stop=s.stop.bind(s);let entry;s.start=function(...args){const a=s.buffer.getChannelData(0),rate=s.buffer.sampleRate;let sum=0,crossings=0;for(let i=rate*.1|0;i<rate*.3;i++){sum+=a[i]**2;if(a[i-1]<0&&a[i]>=0)crossings++;}entry={rms:Math.sqrt(sum/(rate*.2)),frequency:crossings/.2,peak:a.reduce((peak,v)=>Math.max(peak,Math.abs(v)),0),stopped:false};window.audioRuns.push(entry);return start(...args);};s.stop=function(...args){if(entry)entry.stopped=true;return stop(...args);};return s;};});
  const base=process.env.SOUND33_BASE_URL||`http://127.0.0.1:${port}/units/3/parts/3.3/`;
- await page.goto(base,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelectorAll('.wave .signal').length===9);
+ await page.goto(base,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelectorAll('.wave .signal').length===7);
  const set=async(id,value)=>{await page.locator('#'+id).fill(String(value));};
  const play=async key=>{await page.locator(`[data-play="${key}"]`).first().click();await page.waitForFunction(()=>document.querySelector('[data-playing=true]'));};
  await t.test('seven blocks and comparisons render without autoplay',async()=>{
   assert.equal(await page.locator('.lesson-card').count(),7);assert.equal(await page.locator('.quiz').count(),1);assert.equal(await page.locator('form').count(),1);assert.equal(await page.evaluate(()=>window.audioRuns.length),0);
-  assert.equal(await page.locator('.wave .signal').count(),9);
+  assert.equal(await page.locator('.wave .signal').count(),7);
   for(const href of await page.locator('.route a').evaluateAll(ns=>ns.map(n=>n.hash)))assert.equal(await page.locator(href).count(),1);
   assert.equal(await page.locator('#card-01 .speaker').first().evaluate(n=>getComputedStyle(n).backgroundImage.includes('dialogue-character-avatars')),true);
   assert.doesNotMatch(await page.locator('body').innerText(),/候選版|第八區|聽力保護|CARD 0/);
@@ -75,13 +74,14 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
   assert.match(await page.locator('#card-07').innerText(),/0 dB，不代表沒有聲音/);assert.match(await page.locator('#card-07').innerText(),/不代表聽起來大聲 3 倍/);assert.match(await page.locator('#card-07 .decibel-sources a').first().getAttribute('href'),/osha\.gov/);
   assert.equal(await page.evaluate(()=>window.audioRuns.length),before);assert.equal(await page.locator('#card-07 [data-play]').count(),0);
  });
- await t.test('one final task supports incomplete, incorrect, correct, editing, replay, clear and new requirements',async()=>{
+ await t.test('one final listening task connects waveform selection, sliders, audio and comparison',async()=>{
   await page.locator('.route a[href="#unit-quiz"]').click();await page.locator('button[type=submit]').click();assert.equal(await page.locator('#quiz-feedback').getAttribute('data-state'),'incomplete');
-  for(const[id,value]of [['frequency','440'],['amplitude','.6'],['tone','pipe']])await page.locator('#answer-'+id).selectOption(value);
-  await page.locator('button[type=submit]').click();assert.equal(await page.locator('#quiz-feedback').getAttribute('data-state'),'incorrect');
-  for(const[id,value]of [['frequency','660'],['amplitude','.35'],['tone','string']])await page.locator('#answer-'+id).selectOption(value);
-  assert.equal(await page.locator('#quiz-feedback').isHidden(),true);await play('quiz-choice');assert.equal(await page.locator('#unit-quiz').getAttribute('data-frequency'),'660');await page.locator('button[type=submit]').click();assert.equal(await page.locator('#quiz-feedback').getAttribute('data-state'),'correct');
-  await page.locator('#quiz-clear').click();assert.equal(await page.locator('#answer-tone').inputValue(),'');assert.equal(await page.locator('[data-play="quiz-choice"]').isDisabled(),true);const task=await page.locator('#quiz-task').textContent();await page.locator('#quiz-new').click();assert.notEqual(await page.locator('#quiz-task').textContent(),task);
+  await page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');
+  for(let i=0;i<2;i++){await page.locator('[data-match-switch]').click();await page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');}
+  await set('answer-frequency',330);await set('answer-amplitude',.7);await page.waitForFunction(()=>document.querySelector('#quiz-choice').dataset.tone==='string'&&document.querySelector('#unit-quiz').dataset.waveReady==='true');
+  await play('quiz-base');await play('quiz-choice');assert.equal(await page.locator('#unit-quiz').getAttribute('data-frequency'),'330');await page.locator('button[type=submit]').click();await page.waitForFunction(()=>document.querySelector('#quiz-feedback').dataset.state==='correct');
+  assert.equal(await page.locator('[data-match-target]').getAttribute('d'),await page.locator('#quiz-choice .signal').getAttribute('d'));
+  await page.locator('[data-match-next]').click();await page.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');assert.equal(await page.locator('[data-match-progress]').innerText(),'第 2／4 題');
  });
  await t.test('lesson format follows unit 2.1 with a header and full-width body; navigation tracks reading',async()=>{
   const reference=await browser.newPage({viewport:{width:1440,height:1100}});

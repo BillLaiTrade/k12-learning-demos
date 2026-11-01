@@ -1,0 +1,68 @@
+✔ twelve licensed recordings have verified hashes, ordered measured LUFS and peak headroom (3114.195105ms)
+✔ all twelve scenes play their actual PCM, single-button playback and live selection stay synchronized (9263.86688ms)
+✔ slow cancellation, rapid switching, failed retry, hidden/leave/other sources never start stale audio (3701.639571ms)
+✔ mobile touch, keyboard, desktop/mobile layout and original large artwork remain usable (3496.603777ms)
+▶ hearing exploration: continuous sine, frequency ribbon and manual records
+  ✔ approved composition has no autoplay, a logarithmic ribbon and empty manual endpoints (76.642918ms)
+  ✔ actual rendered tones have the chosen frequency, fixed low gain and smooth start/stop (28.153989ms)
+  ✔ play is continuous and retunes the existing real oscillator without restarting or boosting volume (1730.293694ms)
+  ✔ real dragging clamps both ends and keyboard works while paused without starting audio (565.642471ms)
+  ✔ manual endpoints can be recorded and overwritten, reject reversed bounds and survive pause/navigation (654.450463ms)
+  ✔ either endpoint can be cancelled independently without changing frequency, playback or the other record (407.845292ms)
+  ✔ speaker click toggles, other blocks replace sound and hiding/leaving/reset stop without autoplay (635.746996ms)
+  ✔ pending resume can be cancelled and playback errors can retry (397.386608ms)
+  ✔ knowledge retains hearing range, animal upper bounds and device/colour limitations (576.573547ms)
+  ✔ approved desktop hierarchy and mobile controls remain inside their panels at eight widths (1039.152349ms)
+  ✔ real mobile touch drags while the same tone plays and taps toggle once (1894.097807ms)
+✔ hearing exploration: continuous sine, frequency ribbon and manual records (9548.245021ms)
+▶ pitch comparison: independent speakers, controlled frequency and synchronized records
+  ✔ approved controls, matching speakers and actual shared characters render without autoplay (90.178428ms)
+  ✔ frequency changes do not play sound; bounds, cycles and amplitude stay correct at every step (737.229504ms)
+  ✔ left can repeat twice then right; actual audio has selected pitch and fixed signal amplitude (599.605947ms)
+  ✔ one side animates with its trace; natural finish rests the cone and keeps the full comparison (4177.818626ms)
+  ✔ front speaker visibly pumps in phase while its wooden cabinet stays fixed, including reduced motion (4515.347373ms)
+  ✔ one shared switch shows exactly one view per speaker and preserves sound, frequency and progress (1206.568921ms)
+  ✔ both A dimensions connect to the same membrane edge at its symmetric extreme positions (9.338874ms)
+  ✔ rendered diaphragm transforms have equal positive and negative travel at every frequency, with correct cycle ratios (1063.975194ms)
+  ✔ keyboard, rapid changes, section navigation and page visibility cancel playback (493.492707ms)
+  ✔ desktop and laptop keep the mockup hierarchy, equal columns and frequency controls only on right (2766.480356ms)
+  ✔ front and side controls, speakers and complete wave cards fit one laptop viewport (1210.272238ms)
+  ✔ touch view switching and side-speaker playback work on a narrow screen (1486.526186ms)
+✔ pitch comparison: independent speakers, controlled frequency and synchronized records (19864.761354ms)
+✔ published timbre PCM keeps provenance, pitch, level and headroom (30.432511ms)
+▶ timbre rows use their actual playback PCM and independent controls
+  ✔ three compact rows are visible with genuine PCM plots and no autoplay (92.691389ms)
+  ✔ every plotted vertex equals the same sample in the actual AudioBuffer, before and after replay (256.085609ms)
+  ✔ left-left-right listening cancels previous source, ends cleanly and supports keyboard (1517.685828ms)
+  ✔ instrument pictures play the same PCM as their buttons and synchronize both controls (1185.422289ms)
+  ✖ one reading dot follows the real polyline left to right using the audio clock, then clears (1816.731349ms)
+  ✔ desktop, laptop and phone keep aligned charts, complete instruments and usable buttons (1005.045287ms)
+  ✔ actual touch plays once and can independently replay another instrument (2074.46879ms)
+  ✔ delayed clip cannot play after leaving; failed preload stays empty and playback retries (964.455683ms)
+✖ timbre rows use their actual playback PCM and independent controls (10417.552556ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 37
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 60768.718547
+
+✖ failing tests:
+
+test at tests/unit-3.3-timbre.test.cjs:86:10
+✖ one reading dot follows the real polyline left to right using the audio clock, then clears (1816.731349ms)
+  AssertionError [ERR_ASSERTION]: dot rises and falls
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.3-timbre.test.cjs:102:55)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.3-timbre.test.cjs:86:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

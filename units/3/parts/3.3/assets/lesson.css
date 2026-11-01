@@ -270,7 +270,7 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
  .pitch-play{min-height:40px;margin:6px auto;padding:6px;font-size:.9rem;line-height:1.4}
  .pitch-wave-card{padding:6px 2px 3px}
  .pitch-wave-card h4{font-size:.8rem;line-height:1.4}
- .pitch-wave-card .wave-label{margin-top:2px;font-size:.7rem;line-height:1.4}
+ .pitch-wave-card .wave-label{margin-top:2px;font-size:.75rem;line-height:1.4}
  .pitch-wave{height:clamp(110px,16vh,130px)}
  .pitch-period-note{margin-bottom:0;font-size:.7rem;line-height:1.4}
 }

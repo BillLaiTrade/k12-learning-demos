@@ -685,3 +685,11 @@ CHROMIUM_PATH=/usr/bin/chromium OXYGEN_CONTINUOUS_ARTIFACT_DIR=/tmp/unit23-conti
 連播專項10項（含外層）：預設關閉、材料起播、完整七操作與完成影格停留、從目前進度切入、右側／圖內共用暫停及接續、操作間停留暫停、手動選步取消連播、器材視窗保持暫停、Escape／背景／離區／其他播放器、七寬度、原生鍵盤、真實觸控、減少動態及無JS。暫停時比對實際場景像素；全程核對催化劑／封口／蓋片前提，最後停在第三區封存畫面。
 
 本輪與材料10、器材9、操作11、物理8、整頁9、CO2 13、性質10合計80項瀏覽器檢查；各套截圖路徑須以原環境變數指向/tmp，避免覆寫歷史證據。模型未改，不另重跑純模型套件。公開核心可用OXYGEN_CONTINUOUS_URL、OXYGEN_URL、OXYGEN_EQUIPMENT_URL、AIR_FULL_URL指定同一頁面，連播10＋操作11＋器材9＋整頁9，共39項。證據見docs/reviews/unit-2.3-oxygen-continuous-controls/。
+
+## 3.3 單元小測：把聲音調出來（2026-11-01）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-sound-match-model.test.cjs tests/unit-3.3-sound-match.test.cjs tests/unit-3.3.test.cjs
+```
+
+模型 3 項、小測瀏覽器 11 項（含主項）、整頁 11 項（含主項），共 25 項。涵蓋實際播放 PCM 逐點對照波形、四題與容許差、換波形／調頻率／調振幅、兩聲試聽與取消、揭示／修改／摘要／重試、鍵盤與真實觸控、八種寬度與筆電核心工具同屏、延遲啟音取消、素材失敗重試。`SOUND33_BASE_URL` 可指定公開頁（勿含 hash），`MATCH_CAPTURE_DIR` 指定畫面目錄；公開模式不注入素材故障，其餘操作照常執行。音色、喇叭、分貝音效及聽覺探索另有專項回歸。

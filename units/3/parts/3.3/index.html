@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="比較振幅、頻率與波形，探索琴弦、空氣柱、音色及聽覺範圍，認識分貝的基本讀法。">
 <title>不同的聲音，差別在哪裡？｜3.3 聲音的特性</title>
-<link rel="stylesheet" href="assets/lesson.css?v=pitch-compact-30">
-<script type="module" src="assets/lesson.mjs?v=decibel-train-27">
+<link rel="stylesheet" href="assets/lesson.css?v=sound-match-31">
+<script type="module" src="assets/lesson.mjs?v=sound-match-31">
 </script>
+<link rel="stylesheet" href="assets/sound-match.css?v=1">
 </head>
 <body>
 <header class="shell masthead">
@@ -272,84 +273,47 @@
 </ol><p><a href="assets/decibel-audio/LICENSE.md">完整來源與修改說明</a></p></details>
 <p class="decibel-sources">數值來源：<a href="https://www.osha.gov/otm/section-3-health-hazards/chapter-5#decibles" target="_blank" rel="noopener">OSHA 典型聲級參考圖</a> · 分貝概念：<a href="https://openstax.org/books/college-physics-2e/pages/17-3-sound-intensity-and-sound-level" target="_blank" rel="noopener">OpenStax 17.3</a></p>
 </div></section>
-<section class="quiz" id="unit-quiz" aria-labelledby="quiz-title">
-<header class="quiz-head">
-<span class="quiz-mark" aria-hidden="true">?</span>
-<div>
-<p class="quiz-kicker">單元小測</p>
-<h2 id="quiz-title">幫聲音展示台調整聲音</h2>
-<p>依照要求設定聲音，再用頻率、振幅與音色說明你的選擇。</p>
-</div>
+<section class="quiz sound-match" id="unit-quiz" aria-labelledby="quiz-title">
+<header class="match-head">
+<div><p class="match-kicker">單元小測</p><h2 id="quiz-title">把聲音調出來</h2></div>
+<div class="match-progress"><span data-match-progress>第 1／4 題</span><div data-match-dots role="group" aria-label="四題挑戰進度"></div></div>
+<p>聽聽目標聲音，換波形、調整音高與音量，讓自己的聲音更接近它。</p>
 </header>
-<div class="quiz-body">
-<div class="quiz-brief">
-<h3>展示需求</h3>
-<p id="quiz-task">
-</p>
-<div class="compare-grid">
-<div class="compare-card">
-<h3>原來的聲音</h3>
-<p id="quiz-original">
-</p>
-<div class="wave-panel">
-<span class="wave-label" aria-hidden="true">相對振幅</span>
-<svg class="wave" id="quiz-base" viewBox="0 15 600 140" preserveAspectRatio="none" role="img" aria-label="聲音訊號隨時間的變化">
+<div class="match-body">
+<div class="match-target">
+<div class="match-picture" data-match-picture role="img" aria-label="目標聲音的發聲器材"></div>
+<div class="match-target-copy"><h3>目標聲音</h3><p>先聽一聽，再到下方試著調整。</p>
+<button class="play match-listen" type="button" data-play="quiz-base" aria-pressed="false"><span aria-hidden="true">▶</span> <span data-match-play-label>聽目標聲音</span></button>
+</div>
+<span class="match-note note-one" aria-hidden="true">♪</span><span class="match-note note-two" aria-hidden="true">♫</span>
+</div>
+<form class="match-workbench" id="settings-form" novalidate>
+<div class="match-workbench-head"><div><h3>我的聲音</h3><p>調整後可以隨時試聽。</p></div>
+<button class="secondary match-switch" type="button" data-match-switch><span aria-hidden="true">⟳</span> 換一種波形</button></div>
+<div class="match-wave-panel">
+<span class="match-y-label">相對<br>振幅</span>
+<div class="match-plot">
+<svg class="match-wave" id="quiz-choice" viewBox="0 0 900 140" preserveAspectRatio="none" role="img" aria-label="我的聲音波形">
+<defs><pattern id="match-grid" width="88.4" height="30" x="8" y="10" patternUnits="userSpaceOnUse"><path d="M0 0H88.4V30" fill="none" stroke="#e4ece7" stroke-width="1"/></pattern></defs>
+<path d="M8 10H892V130H8Z" fill="url(#match-grid)" stroke="#e4ece7"/><path d="M8 70H892" stroke="#b8cbbf"/>
+<path class="match-target-signal" data-match-target hidden fill="none"/><path class="signal" fill="none"/>
 </svg>
-<div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div>
-</div>
-<button class="play" type="button" data-play="quiz-base">
-<span aria-hidden="true">▶</span> 聽原來的聲音</button>
-</div>
-<div class="compare-card">
-<h3>你的設定</h3>
-<p id="quiz-choice-description">請完成下方設定。</p>
-<div class="wave-panel">
-<span class="wave-label" aria-hidden="true">相對振幅</span>
-<svg class="wave" id="quiz-choice" viewBox="0 15 600 140" preserveAspectRatio="none" role="img" aria-label="聲音訊號隨時間的變化">
-</svg>
-<div class="wave-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10 ms</span></div>
-</div>
-<button class="play" type="button" data-play="quiz-choice">
-<span aria-hidden="true">▶</span> 聽你的設定</button>
+<p class="match-load" data-match-load role="status">正在準備波形…</p>
+<div class="match-ticks" aria-hidden="true"><span>0</span><span>5</span><span>10</span></div><p class="match-x-label">時間（毫秒）</p>
 </div>
 </div>
+<div class="match-legend" data-match-legend hidden><span>━ 我的波形</span><span>┄ 目標波形</span></div>
+<div class="match-controls">
+<label class="match-control" for="answer-frequency"><span class="match-control-title">調整頻率 <small>改變波的疏密</small></span><span class="match-range"><span>低音</span><input id="answer-frequency" type="range" min="220" max="660" step="5" value="440"><span>高音</span></span></label>
+<label class="match-control" for="answer-amplitude"><span class="match-control-title">調整振幅 <small>改變波的高低</small></span><span class="match-range"><span>小聲</span><input id="answer-amplitude" type="range" min="0.25" max="1" step="0.05" value="0.5"><span>大聲</span></span></label>
 </div>
-<form id="settings-form" novalidate>
-<div class="quiz-selects">
-<label>頻率<select id="answer-frequency">
-<option value="">選擇頻率</option>
-<option value="220">220 Hz</option>
-<option value="330">330 Hz</option>
-<option value="440">440 Hz</option>
-<option value="660">660 Hz</option>
-<option value="880">880 Hz</option>
-</select>
-</label>
-<label>相對振幅<select id="answer-amplitude">
-<option value="">選擇振幅</option>
-<option value=".2">0.20</option>
-<option value=".35">0.35</option>
-<option value=".6">0.60</option>
-</select>
-</label>
-<label>聲音特色<select id="answer-tone">
-<option value="">選擇音色</option>
-<option value="pure">純音</option>
-<option value="string">弦音示意</option>
-<option value="pipe">管音示意</option>
-</select>
-</label>
-</div>
-<div class="button-row">
-<button class="play" type="submit">檢查設定</button>
-<button class="secondary" id="quiz-clear" type="button">全部重填</button>
-<button class="secondary" id="quiz-new" type="button">換一個要求</button>
-<button class="stop secondary" type="button" disabled>停止播放</button>
-</div>
-<p id="quiz-feedback" role="status" hidden>
-</p>
-<p class="play-state" role="status">等待操作</p>
+<div class="match-actions"><button class="play match-listen" type="button" data-play="quiz-choice" aria-pressed="false"><span aria-hidden="true">▶</span> <span data-match-play-label>聽我的聲音</span></button><span class="match-action-line" aria-hidden="true"></span><button class="play match-submit" type="submit">完成比較 <span aria-hidden="true">→</span></button></div>
+<p id="quiz-feedback" role="status" hidden></p>
+<div class="match-result" data-match-result hidden><div class="match-hints" data-match-hints></div><div class="match-result-actions"><button class="secondary" type="button" data-match-retry>再調整看看</button><button class="play" type="button" data-match-next>下一題 →</button></div></div>
+<p class="play-state visually-hidden" role="status">等待操作</p>
 </form>
+<p class="match-tip"><span aria-hidden="true">☀</span> 可以反覆聽、反覆調整，準備好再完成比較。</p>
+<details class="match-sources"><summary>聲音來源與操作說明</summary><p>吉他、排笛沿用第五區的授權錄音；音叉為近似純音合成示意。小測將各素材的峰值設為共同基準，再以重取樣調整音高、固定增益調整振幅；波形與試聽取自同一份處理後的聲音。調頻也會改變播放長度，波形顯示其中 10 毫秒片段。網頁音量不是實際聲壓。</p><p>吉他：<a href="https://freesound.org/people/allan764/sounds/467669/">allan764，31-A#4.flac</a>（<a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>）；排笛聲音示例：<a href="https://freesound.org/people/mrshoes/sounds/278175/">mrshoes，panflute scale octave and a half</a>（<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>，原作以 PVC 排管錄製）。修改及授權詳見<a href="assets/timbre-audio/LICENSE.md">素材說明</a>。</p><p>頻率在目標的 3% 內、振幅增益相差不超過一格，且音色相同，即算配對成功。結果僅保留在本頁，重新載入便會清除。</p></details>
 </div>
 </section>
 </div>

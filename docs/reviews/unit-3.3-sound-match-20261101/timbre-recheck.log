@@ -1,0 +1,19 @@
+✔ published timbre PCM keeps provenance, pitch, level and headroom (29.988065ms)
+▶ timbre rows use their actual playback PCM and independent controls
+  ✔ three compact rows are visible with genuine PCM plots and no autoplay (75.477799ms)
+  ✔ every plotted vertex equals the same sample in the actual AudioBuffer, before and after replay (260.545635ms)
+  ✔ left-left-right listening cancels previous source, ends cleanly and supports keyboard (1532.481383ms)
+  ✔ instrument pictures play the same PCM as their buttons and synchronize both controls (1144.807407ms)
+  ✔ one reading dot follows the real polyline left to right using the audio clock, then clears (2834.186049ms)
+  ✔ desktop, laptop and phone keep aligned charts, complete instruments and usable buttons (928.099371ms)
+  ✔ actual touch plays once and can independently replay another instrument (2146.304853ms)
+  ✔ delayed clip cannot play after leaving; failed preload stays empty and playback retries (934.404904ms)
+✔ timbre rows use their actual playback PCM and independent controls (11334.173242ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11698.946966
