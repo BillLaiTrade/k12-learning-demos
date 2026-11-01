@@ -180,22 +180,27 @@ test('fireworks quiz: real audio clock, observation, replay, answers and reset',
   await t.test('three displayed seconds take three real seconds and the audio waits for the arrival', async () => {
     await page.locator('#fireworks-observe').click();
     await page.waitForFunction(() => document.querySelector('#unit-quiz').dataset.state === 'observing');
-    await page.waitForTimeout(1000);
-    assert.equal((await data()).state, 'observing');
-    assert.equal(await page.locator('#fireworks-sound').getAttribute('data-reached'), 'false');
-    assert.equal(await page.locator('#fireworks-check').isDisabled(), true);
-    assert.ok(Number(await page.locator('#fireworks-timer').textContent()) >= .9);
-    assert.equal(await page.evaluate(() => window.fwSignals[0].firstSignal), null);
-    assert.equal(await page.locator('#fireworks-record-label').textContent(), '計時中');
-    assert.equal(await page.locator('#fireworks-light').getAttribute('data-reached'), 'true');
-    assert.equal(await page.locator('#unit-quiz [aria-valuemax], #unit-quiz progress').count(), 0);
-    const pixels = await page.locator('#unit-quiz canvas').evaluate(canvas => {
+    // Snapshot the one-second frame and its fields together; protocol round trips must not
+    // postpone the pixel sample until the firework has already faded.
+    const observation = await page.evaluate(async () => {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const root = document.querySelector('#unit-quiz'), find = selector => root.querySelector(selector);
+      const canvas = find('canvas');
       const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
       let lit = 0; for (let i = 3; i < data.length; i += 4) if (data[i] > 40) lit++;
-      return lit;
+      return { pixels: lit, elapsed: root.dataset.elapsed, state: root.dataset.state,
+        sound: find('#fireworks-sound').dataset.reached, disabled: find('#fireworks-check').disabled,
+        timer: Number(find('#fireworks-timer').textContent), firstSignal: window.fwSignals[0].firstSignal,
+        record: find('#fireworks-record-label').textContent, light: find('#fireworks-light').dataset.reached,
+        progress: root.querySelectorAll('[aria-valuemax], progress').length };
     });
-    assert.ok(pixels > 1500, 'a substantial luminous burst and trails must be rendered');
-    const ticking = Number(await page.locator('#fireworks-timer').textContent());
+    assert.equal(observation.state, 'observing');
+    assert.equal(observation.sound, 'false'); assert.equal(observation.disabled, true);
+    assert.ok(observation.timer >= .9); assert.equal(observation.firstSignal, null);
+    assert.equal(observation.record, '計時中'); assert.equal(observation.light, 'true');
+    assert.equal(observation.progress, 0);
+    assert.ok(observation.pixels > 1500, JSON.stringify(observation));
+    const ticking = observation.timer;
     await page.waitForTimeout(250);
     assert.ok(Number(await page.locator('#fireworks-timer').textContent()) > ticking + .15);
     await page.waitForFunction(() => document.querySelector('#unit-quiz').dataset.state === 'complete');
