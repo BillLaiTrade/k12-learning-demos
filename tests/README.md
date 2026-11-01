@@ -633,3 +633,14 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-
 ## 2.3氧氣移除重複說明、以圖中標示引導（2026-11-01）
 
 沿用材料、氧氣步驟、材質／物理與二氧化碳四套瀏覽器檢查共42項（含外層）。氧氣原步驟檢查改驗證標題下的科學引導及無JS可讀，物理檢查增加標示跟隨移管／水位、最後指向水下蓋片，暫停像素同時包含標示。圖片採原SVG與手機近景共用物件。最終隱藏重複可見狀態後另重跑氧氣11項；紀錄見docs/reviews/unit-2.3-oxygen-observation/。公開可設OXYGEN_URL與OXYGEN_MATERIALS_URL跑材料10＋步驟11＋物理8，共29項。
+
+## 2.3氧氣右側直列操作流程（2026-11-01）
+
+```sh
+node tests/unit-2.3-oxygen-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium OXYGEN_ARTIFACT_DIR=/tmp/unit23-operations OXYGEN_THREE_ARTIFACT_DIR=/tmp/unit23-operations-physics OXYGEN_MATERIALS_ARTIFACT_DIR=/tmp/unit23-operations-materials AIR_FULL_ARTIFACT_DIR=/tmp/unit23-operations-full CO2_ARTIFACT_DIR=/tmp/unit23-operations-co2 GAS_PROPERTIES_ARTIFACT_DIR=/tmp/unit23-operations-properties node --test --test-concurrency=1 tests/unit-2.3-materials.test.cjs tests/unit-2.3-oxygen.test.cjs tests/unit-2.3-oxygen-three.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-co2.test.cjs tests/unit-2.3-properties.test.cjs
+```
+
+瀏覽器61項（材料10、操作11、物理8、整頁9、二氧化碳13、性質10，含各外層）及模型5項通過。新版驗證單層直列、八個有目的的操作窗口、圖內媒體控制與材料頁無播放、下一項具名文字、手機展開／收合與隱藏焦點、上下鍵／Home／End、各項正確前提、暫停像素、原素材解碼／唯一ID、七寬度×八操作、觸控／減少動態／無JS、跨播放器、第五區與唯一小測。
+
+公開核心可設OXYGEN_URL、OXYGEN_MATERIALS_URL與AIR_FULL_URL，跑材料10＋操作11＋物理8＋整頁9，共38項。原第五區／二氧化碳整合檢查改由選擇氧氣操作啟動播放器，材料頁不再有可選導覽。未變更的第二區知識卡與杯子完整拖曳專項未重跑。新證據見docs/reviews/unit-2.3-oxygen-operations/。

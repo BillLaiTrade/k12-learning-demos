@@ -32,13 +32,13 @@ test('2.3 collected gases: preparation, property comparison and final quiz are s
  await t.test('keyboard, Escape, background and competing preparation players stop the comparison without resetting collected samples',async()=>{
   await play.focus();await page.keyboard.press('Enter');await page.clock.fastForward(500);await page.keyboard.press('Escape');assert.equal(await comparison.getAttribute('data-state'),'paused');
   await play.click();await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});assert.equal(await comparison.getAttribute('data-state'),'paused');await page.evaluate(()=>{delete document.hidden;document.dispatchEvent(new Event('visibilitychange'));});assert.equal(await comparison.getAttribute('data-state'),'paused');
-  await play.click();await page.locator('.oxygen-preparation [data-play]').evaluate(e=>e.click());assert.equal(await comparison.getAttribute('data-state'),'paused');
+  await play.click();await page.locator('.oxygen-preparation #oxygen-tab-2').evaluate(e=>e.click());assert.equal(await comparison.getAttribute('data-state'),'paused');
   await play.click();await page.locator('[data-replay=co2] [data-play]').evaluate(e=>e.click());assert.equal(await comparison.getAttribute('data-state'),'paused');assert.notEqual(await page.locator('.oxygen-preparation').getAttribute('data-state'),'playing');
   await play.click();await page.locator('#s2').evaluate(e=>e.scrollIntoView({behavior:'instant'}));await page.clock.fastForward(100);await page.waitForFunction(()=>document.querySelector('.oxygen-comparison').dataset.state==='paused');await comparison.scrollIntoViewIfNeeded();assert.equal(await comparison.getAttribute('data-state'),'paused');await reset.click();
  });
  await t.test('sample source links, collection-next links and revised quiz feedback point to the right sections',async()=>{
   assert.equal(await page.locator('#s4 .properties-next').getAttribute('href'),'#s5');assert.equal(await fifth.locator('.properties-next').getAttribute('href'),'#s6');
-  await page.locator('.oxygen-preparation [data-stage="4"]').click();await page.locator('.oxygen-preparation [data-next]').click();assert.equal(await page.evaluate(()=>document.activeElement===document.querySelector('#title-4')),true);
+  await page.locator('.oxygen-preparation [data-stage="7"]').click();await page.locator('.oxygen-preparation [data-next]').click();assert.equal(await page.evaluate(()=>document.activeElement===document.querySelector('#title-4')),true);
   const answers={composition:'mixture',sample_a:'oxygen',sample_b:'co2',fuel:'wood',evidence:'limewater',uses:'stable'};
   for(const[name,value]of Object.entries(answers)){if(name.startsWith('sample_'))await page.locator(`#gas-report-form [name=${name}]`).selectOption(value);else await page.locator(`#gas-report-form [name=${name}][value=${value}]`).check();}
   await page.locator('#gas-report-form [name=fuel][value=oxygen]').check();await page.locator('#gas-report-form [type=submit]').click();assert.equal(await page.locator('#gas-report-feedback a').getAttribute('href'),'#s5');

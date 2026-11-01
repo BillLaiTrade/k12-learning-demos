@@ -50,3 +50,23 @@ export function preparationStepFrame(stage, elapsed) {
     covered:index===4 && frame.covered,
     material:index===0 ? Math.min(2,Math.floor(localTime/600)) : -1 };
 }
+
+// Purposeful operations, each isolated to its own instructional time window.
+// Legacy clocks remain shared with the splint comparison and old evidence.
+export const OXYGEN_OPERATIONS = [
+  {label:'認識材料',scene:0,offset:0,duration:0},
+  {label:'擺好集氣位置',scene:1,offset:0,duration:2800},
+  {label:'倒入雙氧水',scene:1,offset:2800,duration:3000},
+  {label:'加入二氧化錳',scene:1,offset:5800,duration:3000},
+  {label:'塞緊塞子與導管',scene:1,offset:8800,duration:3000},
+  {label:'先排出空氣',scene:2,offset:0,duration:2800},
+  {label:'排水收集氧氣',scene:3,offset:0,duration:5200},
+  {label:'封存氧氣',scene:4,offset:0,duration:2600},
+];
+export function oxygenOperationFrame(stage,elapsed) {
+  const index=Math.max(0,Math.min(OXYGEN_OPERATIONS.length-1,Math.trunc(stage)));
+  const operation=OXYGEN_OPERATIONS[index];
+  const localTime=Math.max(0,Math.min(operation.duration,elapsed));
+  const frame=preparationStepFrame(operation.scene,operation.offset+localTime);
+  return {...frame,collecting:operation.scene===3&&localTime>=700&&frame.collected<1,operation:index,localTime,duration:operation.duration,scene:operation.scene,sceneTime:operation.offset+localTime};
+}

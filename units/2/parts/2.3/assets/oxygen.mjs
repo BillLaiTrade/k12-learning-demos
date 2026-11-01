@@ -1,4 +1,4 @@
-import { STEP_DURATIONS, preparationStepFrame, assemblyFrame } from './oxygen-model.mjs?v=assembly-6';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=operations-12';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
@@ -19,17 +19,17 @@ function showMaterial(key) {
 }
 
 function renderPreparation(stage, elapsed, state) {
-  const f = preparationStepFrame(stage, elapsed);
+  const f = oxygenOperationFrame(stage, elapsed);
+  const scene=f.scene;
   const view = panels[stage];
   panel.dataset.collected = f.collected.toFixed(4);
   panel.dataset.tipX = (800+235*f.tube).toFixed(3);
   panel.dataset.cover = f.cover.toFixed(4);
-  if (stage === 0) {
-    if(state==='playing')showMaterial(['source','catalyst','jar'][f.material]);
+  if (scene === 0) {
     const name=materialInfo.find(info=>info.dataset.materialInfo===selectedMaterial).querySelector('h4').textContent;
-    return state==='ready' ? `正在認識${name}；可點選其他物品，或按下一步。` : f.material===0 ? '雙氧水是製備氧氣的來源。' : f.material===1 ? '二氧化錳加快雙氧水分解，不是氧氣來源。' : '集氣瓶先裝滿水，倒置在水中；準備好後按下一步。';
+    return `正在認識${name}；可點選其他物品，或接著擺好集氣位置。`;
   }
-  if (stage === 1) return renderAssembly(elapsed, state, view);
+  if (scene === 1) return renderAssembly(f.sceneTime, state, view, stage-1);
   const $ = part => view.querySelector(`[data-part="${part}"]`);
   const opacity = (part, value) => $(part).setAttribute('opacity', String(value));
   const waterY = 280+f.collected*400;
@@ -57,17 +57,17 @@ function renderPreparation(stage, elapsed, state) {
   opacity('water-out',f.collecting ? 1 : 0);
   opacity('water-label',f.collecting ? 1 : 0);
   $('cover').setAttribute('transform',`translate(${(1-f.cover)*290} 0)`);
-  opacity('cover',stage===4 ? 1 : 0);
+  opacity('cover',scene===4 ? 1 : 0);
   opacity('gas-label',f.collected>.3 ? 1 : 0);
-  opacity('full-label',stage===2 ? 1 : 0);
+  opacity('full-label',scene===2 ? 1 : 0);
   opacity('flow',reacting ? 1 : 0);
   const x=800+235*f.tube;
   const tube=`M315 275V200Q315 180 335 180H700Q720 180 720 200V710Q720 730 740 730H${x-20}Q${x} 730 ${x} 710V665`;
   for (const part of ['delivery-tube','tube-highlight','flow']) $(part).setAttribute('d',tube);
   $('reaction-bubbles').setAttribute('transform',`translate(0 ${-((f.time%900)/900)*30})`);
   $('flow').style.strokeDashoffset=String(-f.time/35);
-  const note = stage===2 ? '導管口在瓶外的水中，開始的混合氣不收集' : stage===3 ? (f.tube<1 ? '先將導管移入瓶口下方' : f.collected<1 ? '氧氣進入，瓶內水位下降' : '瓶內水已排出，氧氣已收集') : f.covered ? '導管已移開，玻璃片在水下蓋好' : f.tube>0 ? '先移開導管，瓶口保持在水下' : '再滑入玻璃片，在水下蓋住瓶口';
-  renderObservation(view,stage,f,waterY);
+  const note = scene===2 ? '導管口在瓶外的水中，開始的混合氣不收集' : scene===3 ? (f.tube<1 ? '先將導管移入瓶口下方' : f.collected<1 ? '氧氣進入，瓶內水位下降' : '瓶內水已排出，氧氣已收集') : f.covered ? '導管已移開，玻璃片在水下蓋好' : f.tube>0 ? '先移開導管，瓶口保持在水下' : '再滑入玻璃片，在水下蓋住瓶口';
+  renderObservation(view,scene,f,waterY);
   view.querySelector('[data-scene-note]').textContent=note;
   view.querySelector('title').textContent=note;
   return note + (state==='complete' ? '。這一步已播完，可重播或繼續下一步。' : '。');
@@ -86,10 +86,10 @@ function renderObservation(view,stage,f,waterY) {
   }
 }
 
-function renderAssembly(elapsed, state, view) {
+function renderAssembly(elapsed, state, view, phase) {
   const f=assemblyFrame(elapsed), $=part=>view.querySelector(`[data-part="${part}"]`);
   const opacity=(part,value)=>$(part).setAttribute('opacity',String(value));
-  panel.dataset.assemblyPhase=String(f.phase);
+  panel.dataset.assemblyPhase=String(phase);
   panel.dataset.peroxide=f.peroxide.toFixed(4);panel.dataset.catalyst=f.catalyst.toFixed(4);panel.dataset.sealed=f.sealed.toFixed(4);
   $('assembly-flask-label').textContent=f.peroxide===0?'錐形瓶（空）':f.catalyst===0?'雙氧水（無色溶液）':'雙氧水＋二氧化錳';
   const liquidY=790-165*f.peroxide;
@@ -117,54 +117,62 @@ function renderAssembly(elapsed, state, view) {
   opacity('purge-bubbles',f.gasThroughTube?1:0);opacity('flow',f.gasThroughTube?1:0);
   $('purge-bubbles').querySelectorAll('circle').forEach((b,i)=>{const phase=(f.time/1150+i*.33)%1;b.setAttribute('cx',800+Math.sin(phase*5+i)*8);b.setAttribute('cy',657-phase*90);});
   $('flow').style.strokeDashoffset=String(-f.time/35);
-  opacity('assembly-jar-focus',f.phase===0?1:0);
-  view.querySelectorAll('[data-assembly-phase]').forEach((item,i)=>{item.classList.toggle('is-current',i===f.phase);if(i===f.phase)item.setAttribute('aria-current','true');else item.removeAttribute('aria-current');});
+  opacity('assembly-jar-focus',phase===0?1:0);
   const notes=['集氣瓶裝滿水、倒置水中；導管出口先放在瓶外的水中','把雙氧水倒入錐形瓶','用藥匙加入少量二氧化錳，讓雙氧水更快分解','塞緊已連接導管的塞子，氣體從瓶外水中的出口送出'];
-  const note=state==='complete'?'材料已加入、塞子與導管接好；下一步先排空氣':notes[f.phase];
+  const finished=['集氣位置已備好；導管出口先留在瓶外水中','雙氧水已倒入，接著加入少量二氧化錳','加入二氧化錳後開始產氣，接著塞好連接導管的塞子','裝置已接好，接著先排空氣，暫不收集'];
+  const note=state==='complete'?finished[phase]:notes[phase];
   view.querySelector('[data-scene-note]').textContent=note;view.querySelector('title').textContent=note;
-  view.querySelector('.oxygen-mobile-zoom svg').setAttribute('viewBox',f.phase===0?'760 235 510 495':'100 30 550 805');
-  view.querySelector('[data-assembly-zoom-label]').textContent=f.phase===0?'集氣位置近看':'加入材料與瓶口近看';
+  view.querySelector('.oxygen-mobile-zoom svg').setAttribute('viewBox',phase===0?'760 235 510 495':'100 30 550 805');
+  view.querySelector('[data-assembly-zoom-label]').textContent=phase===0?'集氣位置近看':'加入材料與瓶口近看';
   return note+'。';
 }
 
 function createPreparationPlayer() {
-  const play=panel.querySelector('[data-play]');
-  const previous=panel.querySelector('[data-previous]');
-  const next=panel.querySelector('[data-next]');
-  const status=panel.querySelector('[role=status]');
-  const count=panel.querySelector('.oxygen-step-count');
-  let stage=0, elapsed=0, state='ready', started=0, frame=0, message='';
+  const play=panel.querySelector('[data-play]'),next=panel.querySelector('[data-next]');
+  const status=panel.querySelector('[role=status]'),menu=panel.querySelector('[data-step-menu]');
+  const navBody=panel.querySelector('#oxygen-step-list'),nav=panel.querySelector('.oxygen-step-nav');
+  let stage=0,elapsed=0,state='ready',started=0,frame=0,message='',compact;
+  const duration=()=>OXYGEN_OPERATIONS[stage].duration;
+  function setMenu(open){navBody.hidden=!open;menu.setAttribute('aria-expanded',String(open));}
+  function syncLayout(){
+    const narrow=panel.clientWidth<=720;
+    if(narrow===compact)return;
+    compact=narrow;menu.hidden=!compact;setMenu(!compact);
+    nav.dataset.compact=String(compact);
+    if(navBody.hidden&&navBody.contains(document.activeElement))menu.focus();
+  }
   function cancel(){cancelAnimationFrame(frame);frame=0;}
   function paint(){
     panel.dataset.stage=String(stage);panel.dataset.state=state;
     const text=(state==='paused'?'已暫停：':'')+renderPreparation(stage,elapsed,state);
     if(message!==text){status.textContent=text;message=text;}
-    play.textContent=state==='playing'?'暫停動畫':state==='paused'?'繼續播放':stage===0?'看看準備':'重播這一步';
-    previous.disabled=stage===0;
-    count.textContent=`${stage+1} / ${steps.length}`;
-    next.innerHTML=stage===steps.length-1?'接著製備二氧化碳 <span aria-hidden="true">›</span>':'下一步 <span aria-hidden="true">›</span>';
+    const playing=state==='playing',paused=state==='paused';
+    play.querySelector('[data-play-icon]').textContent=playing?'Ⅱ':paused?'▶':'↻';
+    play.querySelector('[data-play-label]').textContent=playing?'暫停':paused?'播放':'重播';
+    play.setAttribute('aria-label',playing?'暫停此步動畫':paused?'繼續此步動畫':'重播此步動畫');
+    menu.textContent=`${String(stage+1).padStart(2,'0')} ${OXYGEN_OPERATIONS[stage].label} ▾`;
+    next.innerHTML=`接著：${stage===steps.length-1?'二氧化碳實驗':OXYGEN_OPERATIONS[stage+1].label} <span aria-hidden="true">→</span>`;
   }
   function tick(now){
     if(state!=='playing')return;
-    elapsed=Math.min(STEP_DURATIONS[stage],now-started);
-    if(elapsed>=STEP_DURATIONS[stage])state='complete';
+    elapsed=Math.min(duration(),now-started);
+    if(elapsed>=duration())state='complete';
     paint();if(state==='playing')frame=requestAnimationFrame(tick);
   }
   function pausePlayback(){
     if(state!=='playing')return;
-    elapsed=Math.min(STEP_DURATIONS[stage],performance.now()-started);
-    cancel();state='paused';paint();
+    elapsed=Math.min(duration(),performance.now()-started);cancel();state='paused';paint();
   }
   function start(){
+    if(stage===0)return;
     const at=state==='paused'?elapsed:0;
     document.dispatchEvent(new CustomEvent('air-experiment-play',{detail:'oxygen'}));
-    players.forEach(p=>p.pausePlayback());cancel();
-    elapsed=at;state='playing';started=performance.now()-elapsed;paint();
-    frame=requestAnimationFrame(tick);
+    cancel();elapsed=at;state='playing';started=performance.now()-elapsed;paint();frame=requestAnimationFrame(tick);
   }
   function select(index,focusContent=false){
-    players.forEach(p=>p.pausePlayback());cancel();
-    stage=index;elapsed=0;state='ready';
+    cancel();stage=index;elapsed=0;state='ready';
+    if(stage>0)panels[stage].querySelector('.oxygen-scene-viewport').append(play);
+    play.hidden=stage===0;play.disabled=stage===0;
     panels.forEach((view,i)=>{view.hidden=i!==stage;});
     steps.forEach((tab,i)=>{
       const selected=i===stage;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;
@@ -172,47 +180,48 @@ function createPreparationPlayer() {
       if(selected)tab.setAttribute('aria-current','step');else tab.removeAttribute('aria-current');
     });
     paint();
-    if(focusContent){const heading=panels[stage].querySelector('h3');heading.focus({preventScroll:true});heading.scrollIntoView({behavior:'instant',block:'start'});}
+    if(focusContent){
+      if(compact)setMenu(false);
+      const heading=panels[stage].querySelector('h3');heading.focus({preventScroll:true});heading.scrollIntoView({behavior:'instant',block:'start'});
+    }
     if(stage>0)start();
   }
   panel.querySelector('.oxygen-steps').setAttribute('role','tablist');
+  panel.querySelector('.oxygen-steps').setAttribute('aria-orientation','vertical');
   steps.forEach((tab,i)=>{
     tab.disabled=false;tab.setAttribute('role','tab');tab.setAttribute('aria-controls',panels[i].id);
     panels[i].setAttribute('role','tabpanel');panels[i].setAttribute('aria-labelledby',tab.id);panels[i].tabIndex=0;
     panels[i].querySelector('h3').tabIndex=-1;
-    tab.addEventListener('click',()=>select(i));
+    tab.addEventListener('click',()=>select(i,true));
     tab.addEventListener('keydown',event=>{
       let target;
-      if(event.key==='ArrowRight')target=(i+1)%steps.length;else if(event.key==='ArrowLeft')target=(i+steps.length-1)%steps.length;
+      if(['ArrowDown','ArrowRight'].includes(event.key))target=(i+1)%steps.length;
+      else if(['ArrowUp','ArrowLeft'].includes(event.key))target=(i+steps.length-1)%steps.length;
       else if(event.key==='Home')target=0;else if(event.key==='End')target=steps.length-1;
       if(target!==undefined){event.preventDefault();select(target);steps[target].focus();}
     });
   });
   materialButtons.forEach(button=>{
-    button.disabled=false;
-    button.addEventListener('click',()=>{
-      cancel();elapsed=0;state='ready';
+    button.disabled=false;button.addEventListener('click',()=>{
       showMaterial(button.dataset.material);paint();
       const bounds=materialDetails.getBoundingClientRect();
       if(bounds.bottom>innerHeight||bounds.top<0)materialDetails.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth',block:'nearest'});
     });
   });
-  showMaterial(selectedMaterial);
-  materialDetails.setAttribute('aria-live','polite');materialDetails.setAttribute('aria-atomic','true');
+  showMaterial(selectedMaterial);materialDetails.setAttribute('aria-live','polite');materialDetails.setAttribute('aria-atomic','true');
+  menu.addEventListener('click',()=>setMenu(navBody.hidden));
   play.addEventListener('click',()=>state==='playing'?pausePlayback():start());
-  previous.addEventListener('click',()=>{if(stage>0)select(stage-1,true);});
   next.addEventListener('click',()=>{
     if(stage<steps.length-1)select(stage+1,true);
     else {pausePlayback();const heading=document.querySelector('#title-4');heading.tabIndex=-1;heading.focus({preventScroll:true});heading.scrollIntoView({behavior:'instant',block:'start'});}
   });
   panel.addEventListener('keydown',event=>{if(event.key==='Escape')pausePlayback();});
-  if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel);
-  const api={pausePlayback};players.push(api);
-  play.disabled=false;next.disabled=false;select(0);panel.dataset.ready='true';return api;
+  if('IntersectionObserver'in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel.querySelector('.oxygen-stage-area'));
+  const api={pausePlayback};players.push(api);next.disabled=false;
+  syncLayout();new ResizeObserver(syncLayout).observe(panel);select(0);panel.dataset.ready='true';return api;
 }
 createPreparationPlayer();
 document.addEventListener('visibilitychange',()=>{if(document.hidden)players.forEach(p=>p.pausePlayback());});
 window.addEventListener('pagehide',()=>players.forEach(p=>p.pausePlayback()));
-section.dataset.renderer='step-material-svg';
-
+section.dataset.renderer='operation-material-svg';
 document.addEventListener('air-experiment-play',event=>{if(event.detail!=='oxygen')players.forEach(p=>p.pausePlayback());});

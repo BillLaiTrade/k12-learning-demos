@@ -33,3 +33,13 @@ test('assembly adds reagents in order, starts reaction after catalyst, and seals
  for(let time=0;time<=ASSEMBLY_DURATION;time+=20){const f=assemblyFrame(time);if(f.catalyst>0)assert.equal(f.peroxide,1);if(f.reaction>0)assert.ok(f.catalyst>0);if(f.sealed>0){assert.equal(f.peroxide,1);assert.equal(f.catalyst,1);}if(f.gasThroughTube){assert.equal(f.sealed,1);assert.ok(f.reaction>0);}if(f.liquidFlow>0)assert.equal(f.sealed,0);if(f.powderFlow>0)assert.equal(f.sealed,0);}
  const end=assemblyFrame(99999);assert.equal(end.time,ASSEMBLY_DURATION);assert.equal(end.sealed,1);assert.equal(end.catalyst,1);assert.equal(end.peroxide,1);assert.equal(end.gasThroughTube,true);
 });
+
+test('operation windows stop at purposeful boundaries, with prerequisites and withdrawal before covering',async()=>{
+ const {OXYGEN_OPERATIONS,oxygenOperationFrame,assemblyFrame}=await import('../units/2/parts/2.3/assets/oxygen-model.mjs');
+ assert.equal(OXYGEN_OPERATIONS.length,8);
+ for(let i=0;i<8;i++){const a=oxygenOperationFrame(i,-10),b=oxygenOperationFrame(i,99999);assert.equal(a.localTime,0);assert.equal(b.localTime,OXYGEN_OPERATIONS[i].duration);assert.equal(b.operation,i);}
+ const assembled=i=>assemblyFrame(oxygenOperationFrame(i,99999).sceneTime);
+ assert.equal(assembled(1).peroxide,0);assert.equal(assembled(2).peroxide,1);assert.equal(assembled(2).catalyst,0);assert.equal(assembled(3).catalyst,1);assert.equal(assembled(3).sealed,0);assert.equal(assembled(4).gasThroughTube,true);
+ assert.equal(oxygenOperationFrame(5,99999).collected,0);for(let time=0;time<700;time+=50){const f=oxygenOperationFrame(6,time);assert.equal(f.collected,0);assert.equal(f.collecting,false);}
+ assert.equal(oxygenOperationFrame(6,99999).collected,1);for(let time=0;time<=2600;time+=20){const f=oxygenOperationFrame(7,time);if(f.cover>0)assert.equal(f.tube,0);assert.equal(f.collected,1);}assert.equal(oxygenOperationFrame(7,99999).covered,true);
+});

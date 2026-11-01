@@ -40,7 +40,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     const text = await page.locator('main').innerText();
     assert.doesNotMatch(text, /鋼絲絨|AQI|150 mL|100\.0|濕度計算/);
     assert.doesNotMatch(await page.locator('#s3').innerText(), /保存效果仍與密封/);
-    assert.match(await page.locator('#s3').innerText(), /二氧化錳不是氧氣來源/);
+    assert.match(await page.locator('#oxygen-step-0 [data-material-info=catalyst]').textContent(), /不是氧氣來源/);
     assert.match(await page.locator('#air-profile-nitrogen').innerText(), /相對不易反應/);
     assert.match(await page.locator('#s4').innerText(), /不能說它絕對不能用排水法/);
   });
@@ -63,7 +63,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     assert.equal(await oxygen.getAttribute('data-stage'),'1');
     await oxygen.locator('[data-play]').click();await page.clock.fastForward(3000);assert.equal(await oxygen.getAttribute('data-state'),'paused');
     await oxygen.locator('[data-play]').click();await page.clock.fastForward(15000);assert.equal(await oxygen.getAttribute('data-state'),'complete');assert.equal(await oxygen.getAttribute('data-stage'),'1');
-    for(const stage of[2,3,4]){await oxygen.locator('[data-next]').click();await page.clock.fastForward(6000);assert.equal(await oxygen.getAttribute('data-stage'),String(stage));assert.equal(await oxygen.getAttribute('data-state'),'complete');}
+    for(const stage of[2,3,4,5,6,7]){await oxygen.locator('[data-next]').click();await page.clock.fastForward(6000);assert.equal(await oxygen.getAttribute('data-stage'),String(stage));assert.equal(await oxygen.getAttribute('data-state'),'complete');}
     await oxygen.locator('[data-stage="0"]').click();assert.equal(await oxygen.getAttribute('data-stage'),'0');
     const panel=page.locator('[data-replay="co2"]');await panel.locator('[data-next]').click();await page.clock.fastForward(1500);assert.equal(await panel.getAttribute('data-stage'),'1');
     await panel.locator('[data-play]').click();const time=await panel.getAttribute('data-time');await page.clock.fastForward(3000);assert.equal(await panel.getAttribute('data-time'),time);assert.equal(await panel.getAttribute('data-state'),'paused');
@@ -72,8 +72,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     assert.equal(await page.locator('#s3 .gas-observations,#s4 .gas-observations').count(),0);assert.equal(await page.locator('#s5 .observation-grid figure').count(),4);assert.equal(await page.locator('#s5 .oxygen-comparison').count(),1);
   });
   await t.test('leaving a replay pauses it and returning does not autoplay', async () => {
-    const panel = page.locator('[data-replay="oxygen"]'); await panel.scrollIntoViewIfNeeded();
-    await panel.locator('[data-play]').click();
+    const panel = page.locator('[data-replay="oxygen"]'); await panel.locator('#oxygen-tab-6').evaluate(b=>b.click());
     await page.locator('#s2').evaluate(el => el.scrollIntoView({ behavior: 'instant' }));
     await page.waitForFunction(() => document.querySelector('[data-replay="oxygen"]').dataset.state === 'paused');
     assert.equal(await panel.getAttribute('data-state'), 'paused');
@@ -141,7 +140,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     await touch.locator('[data-replay="oxygen"] [data-next]').tap();
     await touch.waitForFunction(() => document.querySelector('[data-replay="oxygen"]').dataset.state === 'complete');
     assert.equal(await touch.locator('[data-replay="oxygen"]').getAttribute('data-stage'),'1');
-    assert.equal(await touch.locator('[data-replay="oxygen"] .sequence-step:visible').count(),5);
+    assert.equal(await touch.locator('[data-replay="oxygen"] [data-step-menu]').getAttribute('aria-expanded'),'false');await touch.locator('[data-replay="oxygen"] [data-step-menu]').tap();assert.equal(await touch.locator('[data-replay="oxygen"] .sequence-step:visible').count(),8);
     await touch.locator('.route a[href="#s6"]').tap();
     await touch.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s6');
     await touch.locator('#gas-report-form select[name="sample_a"]').focus();

@@ -1,0 +1,13 @@
+✔ tube entry precedes displacement; withdrawal precedes glass cover (2.849432ms)
+✔ shared insertion completes before oxygen ignition; results remain at duration (0.959142ms)
+✔ selected step stays bounded at both ends without leaking into the next step (0.564691ms)
+✔ assembly adds reagents in order, starts reaction after catalyst, and seals before gas enters the tube (2.089618ms)
+✔ operation windows stop at purposeful boundaries, with prerequisites and withdrawal before covering (0.62498ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13.704655

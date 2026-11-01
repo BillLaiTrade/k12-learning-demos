@@ -1,0 +1,46 @@
+{
+  "s1": {
+    "unchanged": true,
+    "sha256": "125cb2796d1713ec7b2e373180d33480377d48bc45cffa1e2db851b0545dc597"
+  },
+  "s2": {
+    "unchanged": true,
+    "sha256": "e0df0a6d779016ebace7705e403e9e6287746ec1f0fe3922122c5130b6a70b51"
+  },
+  "s4": {
+    "unchanged": true,
+    "sha256": "5841d4ec83f5c4c55467f2251f83e7b72c0776f6ec011764c26f6159cfae40df"
+  },
+  "s5": {
+    "unchanged": true,
+    "sha256": "e24433788245d6f07b3cb0a7e4e3623fc2360cb2b53e9bf2d36f6ce288a505df"
+  },
+  "s6": {
+    "unchanged": true,
+    "sha256": "746aa1f47431fda00696e943ec214784fc67ce222abdd371950728159c9bd68e"
+  },
+  "co2.css": {
+    "unchanged": true,
+    "sha256": "03833d40ffffa3a9d9a5a3a7efb0984a4f3c166f32376474a08dc0c0837c3cc2"
+  },
+  "co2.mjs": {
+    "unchanged": true,
+    "sha256": "a65ea5626be43bb92bdfdc16563cdf1130f1a2015a9a30efea1b96a1680d326c"
+  },
+  "co2-model.mjs": {
+    "unchanged": true,
+    "sha256": "92a4be65cf3645e88c9e0a1519b9538b6c74eddd6717ea4527225757c9ad562e"
+  },
+  "gas-properties.mjs": {
+    "unchanged": true,
+    "sha256": "790b854c056f075ec5d6b84e52f33902d7e2472df26a93111ef5181147f7ebdc"
+  },
+  "air-report.mjs": {
+    "unchanged": true,
+    "sha256": "98c0c226974b71ac47e1278c565e95fcf38ff2b4d1f9325a6a44d75ef51234c6"
+  },
+  "oxygen-materials-layout.webp": {
+    "unchanged": true,
+    "sha256": "83a697e6dfc03c68cba7b314a52968576e541eaafa88092923558eac7e14a200"
+  }
+}
