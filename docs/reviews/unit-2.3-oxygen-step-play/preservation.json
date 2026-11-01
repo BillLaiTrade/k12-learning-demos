@@ -1,0 +1,30 @@
+{
+  "baseline": "1a3fe752b61b83824e4d70258194961086a9ffa3",
+  "html_changes": "僅選步提示與oxygen.mjs快取版本",
+  "unchanged": [
+    {
+      "path": "units/2/parts/2.3/assets/oxygen-model.mjs",
+      "sha256": "fd60525c885ab7212ff1b4fe76c126f506c7c505320afcef963f4c7ca69acb92"
+    },
+    {
+      "path": "units/2/parts/2.3/assets/oxygen-equipment.mjs",
+      "sha256": "b5789774aa4547f6fcde1d76cb447685bbcf9ea2d87895e728da76ae99ee1228"
+    },
+    {
+      "path": "units/2/parts/2.3/assets/oxygen-captions.mjs",
+      "sha256": "0ed1a9d91bced4225126a69206780dc62c90f1d235e5ab2f4dd088c31cfddfa6"
+    },
+    {
+      "path": "units/2/parts/2.3/assets/oxygen.css",
+      "sha256": "5068bf6e75696cb59dfe0429f314be22321a83291fed7858d6ce336024cf1033"
+    },
+    {
+      "path": "units/2/parts/2.3/assets/co2.mjs",
+      "sha256": "a65ea5626be43bb92bdfdc16563cdf1130f1a2015a9a30efea1b96a1680d326c"
+    },
+    {
+      "path": "units/2/parts/2.3/assets/gas-properties.mjs",
+      "sha256": "790b854c056f075ec5d6b84e52f33902d7e2472df26a93111ef5181147f7ebdc"
+    }
+  ]
+}

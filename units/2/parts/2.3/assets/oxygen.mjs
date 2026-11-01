@@ -205,6 +205,10 @@ function createPreparationPlayer() {
     if(autoplay&&focusInScene)play.focus({preventScroll:true});
     if(autoplay)start();
   }
+  function choose(index,focusContent=false){
+    select(index,focusContent);
+    if(index>0)start();
+  }
   function togglePlayback(){
     if(compact)setMenu(false);
     if(state==='playing'){pausePlayback();return;}
@@ -219,13 +223,13 @@ function createPreparationPlayer() {
     tab.disabled=false;tab.setAttribute('role','tab');tab.setAttribute('aria-controls',panels[i].id);
     panels[i].setAttribute('role','tabpanel');panels[i].setAttribute('aria-labelledby',tab.id);panels[i].tabIndex=0;
     panels[i].querySelector('h3').tabIndex=-1;
-    tab.addEventListener('click',()=>select(i,true));
+    tab.addEventListener('click',()=>choose(i,true));
     tab.addEventListener('keydown',event=>{
       let target;
       if(['ArrowDown','ArrowRight'].includes(event.key))target=(i+1)%steps.length;
       else if(['ArrowUp','ArrowLeft'].includes(event.key))target=(i+steps.length-1)%steps.length;
       else if(event.key==='Home')target=0;else if(event.key==='End')target=steps.length-1;
-      if(target!==undefined){event.preventDefault();select(target);steps[target].focus();}
+      if(target!==undefined){event.preventDefault();choose(target);steps[target].focus();}
     });
   });
   materialButtons.forEach(button=>{

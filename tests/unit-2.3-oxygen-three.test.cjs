@@ -6,7 +6,7 @@ test('2.3 oxygen: isolated operations preserve physical prerequisites and shared
  const{OXYGEN_OPERATIONS:operations}=await import('../units/2/parts/2.3/assets/oxygen-model.mjs');
  const root=page.locator('.oxygen-preparation'),active=()=>root.locator('.oxygen-step-panel:visible'),part=name=>active().locator(`[data-part="${name}"]`),play=root.locator('[data-play]');
  const out=process.env.OXYGEN_THREE_ARTIFACT_DIR||'/tmp/unit23-oxygen-operation-physics';await fs.mkdir(out,{recursive:true});
- async function select(i){const b=root.locator(`#oxygen-tab-${i}`);if(!await b.isVisible())await root.locator('[data-step-menu]').click();await b.click();if(i)await play.click();}
+ async function select(i){const b=root.locator(`#oxygen-tab-${i}`);if(!await b.isVisible())await root.locator('[data-step-menu]').click();await b.click();}
  async function finish(){const i=Number(await root.getAttribute('data-stage')),at=Number(await root.getAttribute('data-elapsed'));await page.clock.fastForward(Math.max(0,operations[i].duration-at)+30);if(await root.getAttribute('data-state')==='playing')await play.click();}
  await t.test('all scene instances decode original glass assets with unique definitions, without a WebGL dependency',async()=>{
   const duplicate=await page.locator('[id]').evaluateAll(ns=>{const ids=ns.map(n=>n.id);return ids.filter((id,i)=>ids.indexOf(id)!==i)});assert.deepEqual(duplicate,[]);assert.equal(await root.locator('canvas').count(),0);

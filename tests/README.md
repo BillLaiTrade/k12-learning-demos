@@ -749,3 +749,9 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4-calculation.test.cjs
 ## 2.3 認識材料的用途標題（2026-11-01）
 
 既有materials專項10項改驗證七材料「認識材料／用途」及玻璃片一般用途，equipment專項9項驗證後續操作仍為「本步中的作用」。兩套共19項通過；OXYGEN_MATERIALS_URL／OXYGEN_EQUIPMENT_URL可指定公開頁，截圖目錄另設/tmp以保留歷史證據。無新增測試套件或依賴，播放邏輯、模型及版面未改；證據見docs/reviews/unit-2.3-material-purpose/。
+
+## 2.3 選步立即播放（2026-11-01）
+
+continuous與oxygen專項改驗證點選即播放、重選從頭重演、換步取消舊時鐘／字卡、正確科學前提、鍵盤及手機同規則。其他氧氣與跨播放器專項改由選步直接起播，不再多按主鍵。十套共100項通過（連播10＋操作11＋空白點選10＋字卡10＋器材9＋材料10＋物理8＋整頁9＋性質10＋CO2 13，含外層）。
+
+公開核心以OXYGEN_CONTINUOUS_URL、OXYGEN_URL、OXYGEN_TAP_URL、OXYGEN_CAPTIONS_URL、OXYGEN_EQUIPMENT_URL指定同頁，跑上述五套共50項；截圖目錄須另設/tmp保留歷史證據。模型、CSS與其他區未改，無新依賴。證據見docs/reviews/unit-2.3-oxygen-step-play/。
