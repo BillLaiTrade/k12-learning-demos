@@ -1,7 +1,7 @@
-import {createSceneCaptions} from './oxygen-captions.mjs?v=reading-fade-1';
-import {createCO2Explorer} from './co2-equipment.mjs?v=desk-4';
-import {CO2_OPERATIONS,co2OperationFrame} from './co2-model.mjs?v=desk-4';
-import {createCO2Bench} from './co2-setup.mjs?v=desk-4';
+import {createSceneCaptions} from './oxygen-captions.mjs?v=co2-continuous-1';
+import {createCO2Explorer} from './co2-equipment.mjs?v=co2-continuous-1';
+import {CO2_OPERATIONS,co2OperationFrame} from './co2-model.mjs?v=co2-continuous-1';
+import {createCO2Bench} from './co2-setup.mjs?v=co2-continuous-1';
 const section=document.querySelector('#s4'),root=section.querySelector('.co2-preparation'),panel=root;
 const steps=[...root.querySelectorAll('[data-co2-step]')],panels=[...root.querySelectorAll('[data-co2-panel]')],players=[];
 const materialButtons=[...panels[0].querySelectorAll('[data-co2-material]')],materialInfo=[...panels[0].querySelectorAll('[data-co2-info]')];
@@ -76,7 +76,22 @@ function createPreparationPlayer() {
   const clockLimit=()=>duration()+(stage<steps.length-1?700:0);
   function syncControlOffset(){panel.style.setProperty('--co2-controls-height',`${nav.getBoundingClientRect().height}px`);}
   function setMenu(open){navBody.hidden=!open;menu.setAttribute('aria-expanded',String(open));syncControlOffset();}
+  let headingWidth=0;
+  function syncSceneHeading(){
+    const body=panel.querySelector('.co2-panels'),width=body.getBoundingClientRect().width;
+    if(!width||Math.abs(width-headingWidth)<.5)return;
+    headingWidth=width;
+    const probes=panels.map(view=>{
+      const heading=view.querySelector('.co2-step-head').cloneNode(true);
+      heading.setAttribute('aria-hidden','true');
+      heading.style.cssText=`position:absolute;display:flow-root;visibility:hidden;pointer-events:none;width:${width}px;min-height:0;height:auto`;
+      body.append(heading);return heading;
+    });
+    panel.style.setProperty('--co2-heading-height',`${Math.ceil(Math.max(...probes.map(h=>h.getBoundingClientRect().height)))}px`);
+    probes.forEach(h=>h.remove());
+  }
   function syncLayout(){
+    syncSceneHeading();
     const narrow=panel.clientWidth<=720;
     if(narrow===compact)return;
     compact=narrow;menu.hidden=!compact;setMenu(!compact);
@@ -203,7 +218,7 @@ function createPreparationPlayer() {
   panel.addEventListener('keydown',event=>{if(event.key==='Escape')pausePlayback();});
   if('IntersectionObserver'in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pausePlayback();}).observe(panel.querySelector('.co2-stage-area'));
   const api={pausePlayback};players.push(api);play.disabled=false;
-  syncLayout();new ResizeObserver(()=>{syncLayout();paint();}).observe(panel);new ResizeObserver(syncControlOffset).observe(nav);select(0);panel.dataset.ready='true';return api;
+  syncLayout();new ResizeObserver(()=>{syncLayout();paint();}).observe(panel);new ResizeObserver(syncControlOffset).observe(nav);select(0);panel.dataset.ready='true';document.fonts.ready.then(()=>{headingWidth=0;syncSceneHeading();});return api;
 }
 createPreparationPlayer();
 document.addEventListener('visibilitychange',()=>{if(document.hidden)players.forEach(p=>p.pausePlayback());});

@@ -144,3 +144,31 @@
  #s4 .co2-preparation[data-ready=true] .co2-material-scene button{left:calc(var(--bench-mobile-col) * 50%);top:calc(var(--bench-mobile-row) * 100% / 3);width:50%;height:calc(100% / 3)}
  #s4 .co2-preparation[data-ready=true] .co2-material-scene button>span{font-size:.78rem}
 }
+
+/* Match section three: fixed camera, stable heading and a caption below the scene. */
+#s4 .co2-preparation[data-ready=true] .co2-workspace{align-items:start}
+#s4 .co2-preparation[data-ready=true] .co2-stage-area{align-self:start}
+#s4 .co2-preparation[data-ready=true] .co2-step-head{display:flow-root;min-height:var(--co2-heading-height,0px)}
+#s4 .co2-preparation[data-ready=true] .co2-material-scene,
+#s4 .co2-preparation[data-ready=true] .co2-scene-viewport{flex:0 0 auto;width:100%;aspect-ratio:1100 / 650}
+#s4 .co2-preparation[data-ready=true] .co2-drawing,
+#s4 .co2-preparation[data-ready=true] .co2-apparatus,
+#s4 .co2-preparation[data-ready=true] .co2-materials-view{flex:0 0 auto}
+#s4 .co2-preparation[data-ready=true] .co2-panels,
+#s4 .co2-preparation[data-ready=true] .co2-step,
+#s4 .co2-preparation[data-ready=true] .co2-apparatus,
+#s4 .co2-preparation[data-ready=true] .co2-materials-view{min-width:0;width:100%;box-sizing:border-box}
+#s4 .co2-materials-view>.co2-equipment-help{background:#fff2cb;border-bottom:1px solid #d6ad56;color:#59451f;font-weight:700;text-align:center}
+#s4 .co2-equipment-help{font-size:.79rem;line-height:1.8;padding:10px 14px}
+#s4 .co2-preparation[data-ready=true] .co2-material-scene button>span{left:50%;right:auto;bottom:0;transform:translateX(-50%);padding:4px 7px;border:1px solid #dce5d3;border-radius:6px;background:#fffef5;color:#315d43;white-space:nowrap}
+#s4 .co2-preparation[data-ready=true] .co2-material-scene button[aria-pressed=true]>span{background:#1f624b;color:white}
+#s4 .co2-preparation[data-ready=true] .co2-material-scene button[aria-pressed=true]{background:transparent}
+#s4 .co2-preparation[data-ready=true] .co2-material-scene button{border-width:1px;min-height:44px}
+#s4 .co2-scene-note{position:static;max-width:none;margin:0;padding:0;border:0;border-radius:0;background:transparent;color:#304c38;box-shadow:none;font-size:.9rem;font-weight:600;line-height:1.85;pointer-events:auto}
+#s4 .oxygen-caption{border-top:2px solid #d6ad56}
+#s4 .co2-closeup{flex:0 0 auto}
+@container(max-width:510px){
+ #s4 .co2-equipment-help{font-size:.73rem;padding:9px 11px}
+ #s4 .co2-preparation[data-ready=true] .co2-material-scene button>span{font-size:.65rem;padding:2px 4px}
+ #s4 .oxygen-caption .co2-scene-note{font-size:.82rem;min-height:7.4em}
+}

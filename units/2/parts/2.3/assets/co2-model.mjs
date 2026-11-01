@@ -1,4 +1,4 @@
-import {CO2_SETUP_DURATION,co2SetupFrame} from './co2-setup.mjs?v=desk-4';
+import {CO2_SETUP_DURATION,co2SetupFrame} from './co2-setup.mjs?v=co2-continuous-1';
 // Independent instructional clocks; neither volume nor real reaction rate is modeled.
 export const CO2_DURATIONS = [4800, 11200, 4200, 6200, 4600];
 const clamp = x => Math.min(1, Math.max(0, x));

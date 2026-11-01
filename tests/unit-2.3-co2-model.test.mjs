@@ -27,3 +27,22 @@ test('eight operations separate placement, marble, acid and sealing with continu
  assert.equal(end(2).acid,0);assert.equal(end(3).seal,0);assert.equal(end(4).flow,true);
  assert.equal(end(7).labeled,true);
 });
+
+test('the same reagent and apparatus poses meet at every automatic operation boundary',async()=>{
+ const {co2BenchFrame}=await import('../units/2/parts/2.3/assets/co2-setup.mjs');
+ const pose=(i,t)=>co2BenchFrame(i,t,co2OperationFrame(i,t));
+ assert.deepEqual(pose(0,0).bodies,pose(1,0).bodies);
+ for(let i=1;i<7;i++)assert.deepEqual(pose(i,CO2_OPERATIONS[i].duration).bodies,pose(i+1,0).bodies,`boundary ${i} -> ${i+1}`);
+ // Small time increments must not hide a reagent, substitute a photo or teleport it.
+ for(let i=1;i<8;i++){
+  let previous=pose(i,0).bodies;
+  for(let t=16;t<=CO2_OPERATIONS[i].duration;t+=16){
+   const current=pose(i,t).bodies;
+   for(const key of Object.keys(current)){
+    for(let j=0;j<4;j++)assert.ok(Math.abs(current[key].pose[j]-previous[key].pose[j])<25,`${i}/${key}/${t}`);
+    assert.ok(Math.abs(current[key].angle-previous[key].angle)<8,`${i}/${key}/rotation`);
+   }
+   previous=current;
+  }
+ }
+});

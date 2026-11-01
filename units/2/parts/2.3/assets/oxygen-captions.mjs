@@ -33,7 +33,7 @@ export function createSceneCaptions(panel) {
   }
   return {
     show(view,text) {
-      const figure=view.querySelector('.oxygen-apparatus');
+      const figure=view.querySelector('.oxygen-apparatus,.co2-apparatus');
       if(strip.parentElement!==figure)figure.append(strip);
       wanted=text;
       if(typeof bubble.animate!=='function'){

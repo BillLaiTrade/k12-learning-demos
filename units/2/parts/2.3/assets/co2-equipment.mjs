@@ -51,7 +51,7 @@ export function createCO2Explorer({panel,panels,getStage,onOpen}){
   for(const{svg,targets}of layers.get(view)||build(view))for(const{key,shape,hit,outline}of targets){
    const shared=panel.sharedBench?.target(key);
    const d=shared?.d||(shape.dynamic?part(shape.dynamic).getAttribute('d'):shape.d),t=shared?shared.transform||'':shape.transform?(part(shape.transform)?.getAttribute('transform')||''):'';
-   for(const n of[hit,outline]){n.setAttribute('d',d);n.setAttribute('transform',t);}
+   for(const n of[hit,outline]){n.setAttribute('d',d);n.setAttribute('transform',t);n.classList.toggle('is-stroke',shared?!!shared.stroke:!!shape.stroke);}
    const exists=shared?shared.visible:!shape.part||Number(part(shape.part)?.getAttribute('opacity')??0)>.001;
    const[x,y,w,h]=shared?.bounds||shape.bounds,m=hit.transform.baseVal.consolidate()?.matrix,b=svg.viewBox.baseVal;
    const ps=[[x,y],[x+w,y],[x,y+h],[x+w,y+h]].map(([a,c])=>m?{x:m.a*a+m.c*c+m.e,y:m.b*a+m.d*c+m.f}:{x:a,y:c});
