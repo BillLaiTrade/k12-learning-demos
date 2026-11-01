@@ -92,7 +92,7 @@ ok 6 - acid uses the photographed inner curved bottom, with sloping walls and a 
         [2m    - element is not stable[22m
         [2m  - retrying click action[22m
         [2m    - waiting 500ms[22m
-        
+
       code: 'ERR_TEST_FAILURE'
       name: 'TimeoutError'
       stack: |-
