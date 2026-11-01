@@ -1,0 +1,40 @@
+{
+  "units/4/parts/4.3/assets/light-speed-model.mjs": {
+    "unchanged": true,
+    "sha256": "1b08a913a4058d574b98c34cf6f70fc3d248a3fe8b056af66cc58210d8706243"
+  },
+  "units/4/parts/4.3/assets/light-speed-lab.mjs": {
+    "unchanged": true,
+    "sha256": "3ae99605d1063795d8c8db05d925f67782481eca06115ab177291a2147797b6a"
+  },
+  "units/4/parts/4.3/assets/lesson.mjs": {
+    "unchanged": true,
+    "sha256": "9c787649476e58312d44c9bc8b84e999c99cf7684f3544318fcbcd815a7aa233"
+  },
+  "units/4/parts/4.3/assets/optics.mjs": {
+    "unchanged": true,
+    "sha256": "a45eeb8d660ed21d1ec3ebe5362f06e015eebdc831a63fac1a38f71d54a0d8ec"
+  },
+  "units/4/parts/4.3/assets/light-speed-bench.png": {
+    "unchanged": true,
+    "sha256": "0de80d26c7e8fbb9ed617f5291b9cea0d54590b654335caec7ce0aa0349a8ec9"
+  },
+  "section_2": {
+    "unchanged": true
+  },
+  "section_3": {
+    "unchanged": true
+  },
+  "section_4": {
+    "unchanged": true
+  },
+  "section_5": {
+    "unchanged": true
+  },
+  "section_6": {
+    "unchanged": true
+  },
+  "section_7": {
+    "unchanged": true
+  }
+}
