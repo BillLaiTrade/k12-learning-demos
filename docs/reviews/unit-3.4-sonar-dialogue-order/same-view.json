@@ -1,0 +1,222 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "headingView": {
+      "top": 181.984375,
+      "bottom": 769.25
+    },
+    "labHeight": 587.265625,
+    "visible": [
+      {
+        "name": "sonar-toolbar",
+        "top": 0.984375,
+        "bottom": 65.984375,
+        "ok": true
+      },
+      {
+        "name": "sonar-ocean",
+        "top": 75.984375,
+        "bottom": 330.546875,
+        "ok": true
+      },
+      {
+        "name": "sonar-chart",
+        "top": 340.546875,
+        "bottom": 549.984375,
+        "ok": true
+      },
+      {
+        "name": "sonar-calculation",
+        "top": 75.984375,
+        "bottom": 226.5,
+        "ok": true
+      },
+      {
+        "name": "sonar-records",
+        "top": 236.5,
+        "bottom": 549.984375,
+        "ok": true
+      }
+    ],
+    "alignment": [
+      {
+        "name": "B",
+        "error": 0.4000244140625
+      },
+      {
+        "name": "A",
+        "error": 0
+      },
+      {
+        "name": "C",
+        "error": 0.4000244140625
+      }
+    ]
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "headingView": {
+      "top": 181.671875,
+      "bottom": 768.9375
+    },
+    "labHeight": 587.265625,
+    "visible": [
+      {
+        "name": "sonar-toolbar",
+        "top": 0.671875,
+        "bottom": 65.671875,
+        "ok": true
+      },
+      {
+        "name": "sonar-ocean",
+        "top": 75.671875,
+        "bottom": 330.234375,
+        "ok": true
+      },
+      {
+        "name": "sonar-chart",
+        "top": 340.234375,
+        "bottom": 549.671875,
+        "ok": true
+      },
+      {
+        "name": "sonar-calculation",
+        "top": 75.671875,
+        "bottom": 226.1875,
+        "ok": true
+      },
+      {
+        "name": "sonar-records",
+        "top": 236.1875,
+        "bottom": 549.671875,
+        "ok": true
+      }
+    ],
+    "alignment": [
+      {
+        "name": "B",
+        "error": 0.4000244140625
+      },
+      {
+        "name": "A",
+        "error": 0
+      },
+      {
+        "name": "C",
+        "error": 0.4000244140625
+      }
+    ]
+  },
+  {
+    "width": 1280,
+    "height": 720,
+    "headingView": {
+      "top": 181.625,
+      "bottom": 768.890625
+    },
+    "labHeight": 587.265625,
+    "visible": [
+      {
+        "name": "sonar-toolbar",
+        "top": 0.625,
+        "bottom": 65.625,
+        "ok": true
+      },
+      {
+        "name": "sonar-ocean",
+        "top": 75.625,
+        "bottom": 330.1875,
+        "ok": true
+      },
+      {
+        "name": "sonar-chart",
+        "top": 340.1875,
+        "bottom": 549.625,
+        "ok": true
+      },
+      {
+        "name": "sonar-calculation",
+        "top": 75.625,
+        "bottom": 226.140625,
+        "ok": true
+      },
+      {
+        "name": "sonar-records",
+        "top": 236.140625,
+        "bottom": 549.625,
+        "ok": true
+      }
+    ],
+    "alignment": [
+      {
+        "name": "B",
+        "error": 0.4000244140625
+      },
+      {
+        "name": "A",
+        "error": 0
+      },
+      {
+        "name": "C",
+        "error": 0.4000244140625
+      }
+    ]
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "headingView": {
+      "top": 176.390625,
+      "bottom": 802.734375
+    },
+    "labHeight": 626.34375,
+    "visible": [
+      {
+        "name": "sonar-toolbar",
+        "top": 1.390625,
+        "bottom": 62.390625,
+        "ok": true
+      },
+      {
+        "name": "sonar-ocean",
+        "top": 72.390625,
+        "bottom": 370.03125,
+        "ok": true
+      },
+      {
+        "name": "sonar-chart",
+        "top": 380.03125,
+        "bottom": 589.46875,
+        "ok": true
+      },
+      {
+        "name": "sonar-calculation",
+        "top": 72.390625,
+        "bottom": 222.90625,
+        "ok": true
+      },
+      {
+        "name": "sonar-records",
+        "top": 232.90625,
+        "bottom": 589.46875,
+        "ok": true
+      }
+    ],
+    "alignment": [
+      {
+        "name": "B",
+        "error": 0.4000000000000057
+      },
+      {
+        "name": "A",
+        "error": 0
+      },
+      {
+        "name": "C",
+        "error": 0.39999999999997726
+      }
+    ]
+  }
+]
