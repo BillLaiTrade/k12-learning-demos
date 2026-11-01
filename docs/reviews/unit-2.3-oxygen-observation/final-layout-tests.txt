@@ -1,0 +1,20 @@
+▶ 2.3 oxygen: five learner-controlled steps and independent splint comparison
+  ✔ initial view contains materials and preparation only; comparison results and original avatars stay available (483.981904ms)
+  ✔ next includes assembly before purge, then collection and covering; each animation stays selected (1728.696048ms)
+  ✔ previous and direct selection restart that step; final next focuses the carbon dioxide collection lesson (234.063518ms)
+  ✔ one replay control pauses and resumes the selected scene; rapid selection cancels old clocks (897.231593ms)
+  ✔ tabs support arrows, Home, End, Enter, Escape and focus never remains in a hidden panel (197.854015ms)
+  ✔ background, leaving the block and starting the other player pause without automatic restart (372.19564ms)
+  ✔ two wooden splints keep identical entry timing and only oxygen develops a frozen or replayed flame (1110.540491ms)
+  ✔ all five selected screens and controls fit seven widths, with side-by-side wood samples (8801.088112ms)
+  ✔ touch and reduced motion keep manual navigation and bounded essential animation (1790.218149ms)
+  ✔ without JavaScript all five stage-specific scenes, explanations and final wood results are readable (1252.589851ms)
+✔ 2.3 oxygen: five learner-controlled steps and independent splint comparison (19214.053579ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19684.563708

@@ -629,3 +629,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.3-
 音效專項需要系統 `ffmpeg`，獨立量測十二成品 LUFS、真峰值與 -23 LUFS 共同基準，核對來源及成品雜湊／衍生授權。瀏覽器將實際播放 AudioBuffer 與選定 WAV 經相同 AudioContext 解碼的全部 PCM 逐值比較，避免只依畫面標籤宣稱聲音正確。涵蓋圖片／按鈕／鍵盤／手機點播與重播、連續跨過兩個完整錄音時長仍播放且使用同一音源、手動停止、播放中換場景、停止後切換不自動起音、慢下載取消／快速切換／503 重試、隱藏與離區／其他區及小測音源互斥、320–1440px 六種寬度。`SOUND33_BASE_URL` 可指向以 `/` 結尾的公開頁（故障注入也走該頁的本地音檔請求）；`DECIBEL_AUDIO_CAPTURE_DIR` 指定截圖目錄。
 
 前六區全套回歸沿用各專項及 `unit-3.3.test.cjs`，不把數位響度或操作檢查當作真實 dBA 重現／主觀聽感校準。來源差異、授權與重製方法見 `docs/reviews/unit-3.3-decibel-audio/source/`；成品及授權清單在 `assets/decibel-audio/`。
+
+## 2.3氧氣移除重複說明、以圖中標示引導（2026-11-01）
+
+沿用材料、氧氣步驟、材質／物理與二氧化碳四套瀏覽器檢查共42項（含外層）。氧氣原步驟檢查改驗證標題下的科學引導及無JS可讀，物理檢查增加標示跟隨移管／水位、最後指向水下蓋片，暫停像素同時包含標示。圖片採原SVG與手機近景共用物件。最終隱藏重複可見狀態後另重跑氧氣11項；紀錄見docs/reviews/unit-2.3-oxygen-observation/。公開可設OXYGEN_URL與OXYGEN_MATERIALS_URL跑材料10＋步驟11＋物理8，共29項。

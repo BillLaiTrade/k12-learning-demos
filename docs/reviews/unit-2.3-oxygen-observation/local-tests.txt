@@ -1,0 +1,54 @@
+▶ 2.3 carbon dioxide: materials, assembly, purging, upward air displacement and storage
+  ✔ initial state shows only preparation and one persistent introduction; no autoplay or property experiments (444.117735ms)
+  ✔ all six actual object images and labels select their own accessible identity and role (1013.129372ms)
+  ✔ manual selection cancels the optional tour and survives leaving preparation (193.940592ms)
+  ✔ assembly really adds marble then acid, reacts before sealing, and only then directs gas through the tube (994.816266ms)
+  ✔ purging stays outside; collection moves tube into an open upright jar and never animates a water level (714.775452ms)
+  ✔ withdrawal finishes before the glass cover moves and the sample is labeled (1005.638469ms)
+  ✔ one control pauses pixels, resumes time, replays; rapid step changes cancel the old frame clock (831.214103ms)
+  ✔ native keyboard controls, roving step tabs and panel focus remain accessible (1084.981354ms)
+  ✔ background, leaving the block and oxygen or properties playback pause without automatic restart (306.820832ms)
+  ✔ all five steps fit seven widths; mobile closeups share the same animated scene (6095.626852ms)
+  ✔ real touch and reduced motion retain selection and manually requested essential animation (1705.76744ms)
+  ✔ no JavaScript leaves all five representative scenes and all six material introductions readable (1093.686278ms)
+✔ 2.3 carbon dioxide: materials, assembly, purging, upward air displacement and storage (17585.483404ms)
+▶ 2.3 materials: seven illustrated objects explain identity and experimental role
+  ✔ native controls connect each object to a persistent two-part introduction; initial state does not autoplay (179.284331ms)
+  ✔ actual photo object bodies select all seven introductions, independently of the name labels (449.369365ms)
+  ✔ labels, Enter and Space operate the same native controls and retain keyboard focus (123.957988ms)
+  ✔ manual selection stops the optional tour and remains readable; explicitly replaying the tour still works (203.681275ms)
+  ✔ selected knowledge survives leaving and returning to materials; assembly remains its own scene (178.86275ms)
+  ✔ seven responsive widths keep touch targets within the photo and all introductions within the page (5690.924702ms)
+  ✔ mobile touch and reduced motion select real object bodies and retain the explanation (1590.565729ms)
+  ✔ explanations identify oxygen source, catalyst, purge, displacement and covering in the correct order (58.967134ms)
+  ✔ without JavaScript all seven introductions remain readable alongside the original materials photo (1256.348515ms)
+✔ 2.3 materials: seven illustrated objects explain identity and experimental role (11396.240841ms)
+▶ 2.3 oxygen: step-specific material scenes and physical collection states
+  ✔ materials are unassembled; each experiment screen shares the glass plate without WebGL (134.621084ms)
+  ✔ assembly visibly places the jar, pours peroxide, adds catalyst and seals before routing gas (3098.222011ms)
+  ✔ purge holds a full jar, with every bubble outside it and below the external water surface (340.118087ms)
+  ✔ collection moves the tube before displacement and confines bubbles to remaining water (703.294564ms)
+  ✔ pausing freezes water, bubbles, arrows and the mobile shared SVG scene (942.124719ms)
+  ✔ the fifth step withdraws before covering; complete frame never leaves this step (471.617338ms)
+  ✔ the selected main view, mobile close-up and headings agree after returning to an earlier step (1039.832329ms)
+✔ 2.3 oxygen: step-specific material scenes and physical collection states (9083.411623ms)
+▶ 2.3 oxygen: five learner-controlled steps and independent splint comparison
+  ✔ initial view contains materials and preparation only; comparison results and original avatars stay available (411.101308ms)
+  ✔ next includes assembly before purge, then collection and covering; each animation stays selected (1064.874327ms)
+  ✔ previous and direct selection restart that step; final next focuses the carbon dioxide collection lesson (224.364689ms)
+  ✔ one replay control pauses and resumes the selected scene; rapid selection cancels old clocks (830.917808ms)
+  ✔ tabs support arrows, Home, End, Enter, Escape and focus never remains in a hidden panel (187.058519ms)
+  ✔ background, leaving the block and starting the other player pause without automatic restart (316.331319ms)
+  ✔ two wooden splints keep identical entry timing and only oxygen develops a frozen or replayed flame (444.867861ms)
+  ✔ all five selected screens and controls fit seven widths, with side-by-side wood samples (7483.871561ms)
+  ✔ touch and reduced motion keep manual navigation and bounded essential animation (1588.571857ms)
+  ✔ without JavaScript all five stage-specific scenes, explanations and final wood results are readable (1145.521922ms)
+✔ 2.3 oxygen: five learner-controlled steps and independent splint comparison (15375.742592ms)
+ℹ tests 42
+ℹ suites 0
+ℹ pass 42
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 55614.705044

@@ -67,9 +67,23 @@ function renderPreparation(stage, elapsed, state) {
   $('reaction-bubbles').setAttribute('transform',`translate(0 ${-((f.time%900)/900)*30})`);
   $('flow').style.strokeDashoffset=String(-f.time/35);
   const note = stage===2 ? '導管口在瓶外的水中，開始的混合氣不收集' : stage===3 ? (f.tube<1 ? '先將導管移入瓶口下方' : f.collected<1 ? '氧氣進入，瓶內水位下降' : '瓶內水已排出，氧氣已收集') : f.covered ? '導管已移開，玻璃片在水下蓋好' : f.tube>0 ? '先移開導管，瓶口保持在水下' : '再滑入玻璃片，在水下蓋住瓶口';
+  renderObservation(view,stage,f,waterY);
   view.querySelector('[data-scene-note]').textContent=note;
   view.querySelector('title').textContent=note;
   return note + (state==='complete' ? '。這一步已播完，可重播或繼續下一步。' : '。');
+}
+
+function renderObservation(view,stage,f,waterY) {
+  const movingTube=stage===3&&f.tube<1;
+  const withdrawing=stage===4&&f.tube>0;
+  const label=stage===2?'瓶外排氣':stage===3?(movingTube?'移入瓶口':f.collected<1?'水位下降':'集氣完成'):withdrawing?'撤開導管':f.covered?'水下蓋片':'滑入玻璃片';
+  const x=stage===2?800:stage===3?(movingTube?800+235*f.tube:940):withdrawing?800+235*f.tube:940;
+  const y=stage===2?600:stage===3?(movingTube?665:waterY):withdrawing?665:690;
+  view.querySelector('[data-observation-label]').textContent=label;
+  view.querySelector('[data-observation-leader]').setAttribute('d',`M${stage===4?950:915} ${stage===2?507:stage===3?417:457}L${x} ${y}`);
+  for(const selector of ['[data-observation-point]','[data-observation-halo]']){
+    const dot=view.querySelector(selector);dot.setAttribute('cx',x);dot.setAttribute('cy',y);
+  }
 }
 
 function renderAssembly(elapsed, state, view) {
