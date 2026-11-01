@@ -93,6 +93,8 @@
     .dialogue--xiaokui .speaker::before { border-color:#d39765; background-position:0 50%; }
     .control-panel { margin-top:14px; padding:14px 16px; border:1px solid var(--line); border-radius:16px; background:#f8f9f4; }
     .controls { display:flex; flex-wrap:wrap; align-items:center; gap:9px; }
+    .wave-controls { margin-top:12px; }
+    .wave-controls .live-note { margin:0; }
     .secondary,.action { min-height:44px; padding:9px 15px; border-radius:13px; font-weight:750; }
     .secondary { border:1px solid var(--line); background:#fff; color:var(--ink); }
     .secondary:hover { border-color:var(--green); }
@@ -516,9 +518,11 @@
                 <path d="M130 228H570" class="motion-arrow" marker-end="url(#arrow-rope-1)"/>
                 <text x="345" y="253" text-anchor="middle">波形傳播方向</text>
               </svg>
-              <figcaption data-wave-caption>單次波：波源完成一次上下振動，形成一個起伏向右傳播。</figcaption>
+              <figcaption>
+                <div data-wave-caption>單次波：波源完成一次上下振動，形成一個起伏向右傳播。</div>
+                <div class="controls wave-controls" role="group" aria-label="繩波播放控制"><button class="secondary" type="button" data-wave-single>單次波</button><button class="secondary" type="button" data-wave-continuous aria-pressed="false">連續波</button><span class="live-note" data-pulse-status aria-live="polite">初始狀態：繩子維持平衡。可播放一次波形，或持續振動。</span></div>
+              </figcaption>
             </figure>
-            <div class="control-panel"><div class="controls" role="group" aria-label="繩波播放控制"><button class="secondary" type="button" data-wave-single>單次波</button><button class="secondary" type="button" data-wave-continuous aria-pressed="false">連續波</button><span class="live-note" data-pulse-status aria-live="polite">初始狀態：繩子維持平衡。可播放一次波形，或持續振動。</span></div></div>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>起伏是沿著繩子傳過來的，那繩子在這裡有什麼作用？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>繩子就是這個波的「介質」。繩波屬於「機械波」，需要透過物質傳播；傳播機械波、並參與振動的物質，就叫做介質。</p></div>
           </div>
