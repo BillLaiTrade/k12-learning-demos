@@ -85,3 +85,7 @@
  .oxygen-preparation[data-ready=true] .oxygen-scene-viewport{flex:0 0 auto;width:100%;aspect-ratio:1470 / 900}
  .oxygen-preparation[data-ready=true] .oxygen-materials-photo{flex:0 0 auto;width:100%}
 }
+
+/* Let the scene end at its own content instead of an empty stretched card. */
+.oxygen-preparation[data-ready=true] .oxygen-stage-area{align-self:start}
+.oxygen-preparation[data-ready=true] .oxygen-apparatus{flex:0 0 auto}

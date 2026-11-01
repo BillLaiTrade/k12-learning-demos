@@ -60,7 +60,7 @@ test('clear water fills both empty vessels before a covered inversion and underw
  assert.equal(OXYGEN_OPERATIONS[1].duration,SETUP_DURATION);
  assert.equal(setupFrame(0).tankFill,0);assert.equal(setupFrame(0).jarFill,0);assert.equal(setupFrame(0).angle,0);
  assert.ok(setupFrame(4000).tankFill>0&&setupFrame(4000).tankFill<1);assert.equal(setupFrame(4000).jarFill,0);
- assert.ok(setupFrame(7000).jarFill>0&&setupFrame(7000).jarFill<1);assert.equal(setupFrame(11000).angle,90);
- for(let t=0;t<=SETUP_DURATION;t+=20){const f=setupFrame(t);if(f.jarFill>0)assert.equal(f.tankFill,1);if(f.inversion>0){assert.equal(f.jarFill,1);assert.equal(f.cover,1);}if(f.inversion>0&&f.immersion<1)assert.equal(f.covered,true);if(f.uncover>0){assert.equal(f.immersion,1);assert.ok(f.mouthY>565);}if(f.outlet>0)assert.equal(f.uncover,1);if(f.phase==='ready')assert.equal(f.outlet,1);assert.equal(oxygenOperationFrame(1,t).collected,0);}
+ assert.ok(setupFrame(7000).jarFill>0&&setupFrame(7000).jarFill<1);assert.equal(setupFrame(11400).angle,90);
+ for(let t=0;t<=SETUP_DURATION;t+=20){const f=setupFrame(t);if(f.jarFill>0)assert.equal(f.tankFill,1);if(f.inversion>0){assert.equal(f.jarFill,1);assert.equal(f.cover,1);}if(f.inversion>0&&f.immersion<1)assert.equal(f.covered,true);if(f.uncover>0){assert.equal(f.immersion,1);assert.ok(f.mouthY>565);}if(f.plateReturn>0)assert.equal(f.uncover,1);if(f.outlet>0){assert.equal(f.uncover,1);assert.equal(f.plateReturn,1);}if(f.phase==='ready')assert.equal(f.outlet,1);assert.equal(oxygenOperationFrame(1,t).collected,0);}
  assert.equal(setupFrame(SETUP_DURATION).outlet,1);assert.equal(setupFrame(SETUP_DURATION).jarFill,1);
 });
