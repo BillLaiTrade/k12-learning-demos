@@ -5,35 +5,24 @@ const line = (a,b,cls='ray',extra='') => `<path class="${cls}" d="M${a} L${b}" $
 const label = (x,y,s,extra='') => `<text x="${x}" y="${y}" ${extra}>${s}</text>`;
 function defs(id){return `<defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#246e9c"/></marker></defs>`;}
 function arrow(a,b,id){return line(a,b,'ray',`marker-end="url(#${id})"`);}
-function animate(duration, update, done){
-  let id, start;
-  const frame = t => { start ??= t; const elapsed=Math.min(t-start,duration); update(elapsed); if(elapsed<duration)id=requestAnimationFrame(frame);else done?.(); };
-  id=requestAnimationFrame(frame); return ()=>cancelAnimationFrame(id);
-}
-const normalResets=[];
 $$('[data-ray-lab]').forEach(root=>{
-  const type=root.dataset.rayLab, normal=type==='normal', reverse=type==='leave', svg=$('svg',root);
-  let medium='water', angle=normal?0:30, cancel=()=>{}, dragging=false;
-  function reset(){cancel(); if(normal)$('.normal-status',root).textContent='光源已就位，尚未開始前進。';render();}
+  const type=root.dataset.rayLab, reverse=type==='leave', svg=$('svg',root);
+  let medium='water', angle=30, dragging=false;
+  function reset(){render();}
   function render(){
     const g=rayGeometry(medium,angle,reverse), arrowId=`arrow-${type}`;
     const arc=(a,normalSign,side)=>{const r=47,rad=a*Math.PI/180;return `<path class="angle" d="M320 ${190+normalSign*r} A${r} ${r} 0 0 ${normalSign*side<0?1:0} ${320+side*r*Math.sin(rad)} ${190+normalSign*r*Math.cos(rad)}"/>`;};
-    svg.innerHTML=defs(arrowId)+`<rect x="0" y="190" width="640" height="210" fill="#dceeea"/>`+line([20,190],[620,190],'normal')+label(35,45,'空氣')+label(35,360,materials[medium].name)+label(485,180,'介面')+line([320,15],[320,380],'normal')+label(335,30,'法線')+arrow(g.source,g.hit,arrowId)+arrow(g.hit,g.end,arrowId)+(normal?'':arc(angle,reverse?1:-1,-1)+arc(g.outgoing,reverse?-1:1,1))+`<circle class="source" cx="${g.source[0]}" cy="${g.source[1]}" r="12" ${normal?'':`tabindex="0" role="slider" aria-label="拖曳光源調整入射角" aria-valuemin="0" aria-valuemax="${reverse?35:60}" aria-valuenow="${angle}" aria-valuetext="${angle}度"`}/>`+(normal?`<circle class="pulse" cx="320" cy="30" r="8" fill="#c96b32"/>`:'');
-    if(!normal){$('.angle-input',root).value=angle;$('.angle-output',root).textContent=`${angle}°`;$('.incident-readout',root).textContent=`${angle}°`;$('.refracted-readout',root).textContent=`${g.outgoing.toFixed(1)}°`;}
+    svg.innerHTML=defs(arrowId)+`<rect x="0" y="190" width="640" height="210" fill="#dceeea"/>`+line([20,190],[620,190],'normal')+label(35,45,'空氣')+label(35,360,materials[medium].name)+label(485,180,'介面')+line([320,15],[320,380],'normal')+label(335,30,'法線')+arrow(g.source,g.hit,arrowId)+arrow(g.hit,g.end,arrowId)+(arc(angle,reverse?1:-1,-1)+arc(g.outgoing,reverse?-1:1,1))+`<circle class="source" cx="${g.source[0]}" cy="${g.source[1]}" r="12" tabindex="0" role="slider" aria-label="拖曳光源調整入射角" aria-valuemin="0" aria-valuemax="${reverse?35:60}" aria-valuenow="${angle}" aria-valuetext="${angle}度"/>`;
+    $('.angle-input',root).value=angle;$('.angle-output',root).textContent=`${angle}°`;$('.incident-readout',root).textContent=`${angle}°`;$('.refracted-readout',root).textContent=`${g.outgoing.toFixed(1)}°`;
     svg.setAttribute('aria-label',`空氣在上方，${materials[medium].name}在下方；${reverse?'由下往上':'由上往下'}，入射角${angle}度，折射角${g.outgoing.toFixed(1)}度`);
   }
   $$('[data-medium]',root).forEach(btn=>btn.onclick=()=>{medium=btn.dataset.medium;$$('[data-medium]',root).forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));reset();});
-  if(normal){
-    normalResets.push(reset);$('.normal-reset',root).onclick=reset;
-    $('.normal-play',root).onclick=()=>{reset();$('.normal-status',root).textContent='光由空氣進入下方介質，觀察跨越介面前後的速度。';cancel=animate(1000+1125*materials[medium].n,t=>{const y=t<=1000?30+160*t/1000:190+180*(t-1000)/(1125*materials[medium].n);$('.pulse',svg).setAttribute('cy',y);},()=>{$('.normal-status',root).textContent=`光進入${materials[medium].name}後前進較慢，仍沿法線前進。`;});};
-  }else{
-    const setAngle=value=>{angle=Math.max(0,Math.min(reverse?35:60,Math.round(value)));render();};
-    $('.angle-input',root).oninput=e=>setAngle(Number(e.target.value));
-    const move=e=>{const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse());setAngle(Math.atan2(Math.max(0,320-p.x),Math.max(1,reverse?p.y-190:190-p.y))*180/Math.PI);};
-    svg.onpointerdown=e=>{if(e.target.classList.contains('source')){e.preventDefault();dragging=true;svg.setPointerCapture(e.pointerId);}};
-    svg.onpointermove=e=>{if(dragging)move(e);};svg.onpointerup=svg.onpointercancel=()=>{dragging=false;};
-    svg.onkeydown=e=>{if(e.target.getAttribute('role')!=='slider')return;const step={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1}[e.key];if(step!==undefined||e.key==='Home'||e.key==='End'){e.preventDefault();setAngle(e.key==='Home'?0:e.key==='End'?(reverse?35:60):angle+step);$('.source',svg).focus();}};
-  }
+  const setAngle=value=>{angle=Math.max(0,Math.min(reverse?35:60,Math.round(value)));render();};
+  $('.angle-input',root).oninput=e=>setAngle(Number(e.target.value));
+  const move=e=>{const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse());setAngle(Math.atan2(Math.max(0,320-p.x),Math.max(1,reverse?p.y-190:190-p.y))*180/Math.PI);};
+  svg.onpointerdown=e=>{if(e.target.classList.contains('source')){e.preventDefault();dragging=true;svg.setPointerCapture(e.pointerId);}};
+  svg.onpointermove=e=>{if(dragging)move(e);};svg.onpointerup=svg.onpointercancel=()=>{dragging=false;};
+  svg.onkeydown=e=>{if(e.target.getAttribute('role')!=='slider')return;const step={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1}[e.key];if(step!==undefined||e.key==='Home'||e.key==='End'){e.preventDefault();setAngle(e.key==='Home'?0:e.key==='End'?(reverse?35:60):angle+step);$('.source',svg).focus();}};
   render();
 });
 let reversed=false;
@@ -84,4 +73,3 @@ window.addEventListener('load',()=>{
   updateNav();
 });
 updateNav();
-document.addEventListener('visibilitychange',()=>{if(document.hidden){normalResets.forEach(reset=>reset());}});

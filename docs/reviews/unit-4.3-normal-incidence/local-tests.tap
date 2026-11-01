@@ -1,0 +1,211 @@
+TAP version 13
+# Subtest: 4.3 shared lesson format keeps navigation and content usable
+    # Subtest: six numbered teaching sections and a separate quiz keep all existing anchors
+    ok 1 - six numbered teaching sections and a separate quiz keep all existing anchors
+      ---
+      duration_ms: 233.215379
+      type: 'test'
+      ...
+    # Subtest: desktop sidebar follows each section and keeps the quiz out of the six-section count
+    ok 2 - desktop sidebar follows each section and keeps the quiz out of the six-section count
+      ---
+      duration_ms: 618.808991
+      type: 'test'
+      ...
+    # Subtest: desktop, laptop and narrow screens retain unclipped headings and controls
+    ok 3 - desktop, laptop and narrow screens retain unclipped headings and controls
+      ---
+      duration_ms: 11014.73508
+      type: 'test'
+      ...
+    # Subtest: quiz alias and original deep links arrive below the mobile route
+    ok 4 - quiz alias and original deep links arrive below the mobile route
+      ---
+      duration_ms: 433.299482
+      type: 'test'
+      ...
+    1..4
+ok 1 - 4.3 shared lesson format keeps navigation and content usable
+  ---
+  duration_ms: 13918.868817
+  type: 'test'
+  ...
+# Subtest: 4.3 normal incidence desk and folding explanation work as approved
+    # Subtest: idle scene has no emitted light, dotted particles, autoplay or open explanation
+    ok 1 - idle scene has no emitted light, dotted particles, autoplay or open explanation
+      ---
+      duration_ms: 941.900619
+      type: 'test'
+      ...
+    # Subtest: continuous beams launch together and stay on the same axis across the interface
+    ok 2 - continuous beams launch together and stay on the same axis across the interface
+      ---
+      duration_ms: 825.372885
+      type: 'test'
+      ...
+    # Subtest: pause freezes both fronts and resume continues the saved progress
+    ok 3 - pause freezes both fronts and resume continues the saved progress
+      ---
+      duration_ms: 1345.512594
+      type: 'test'
+      ...
+    # Subtest: same launch button starts a fresh run and offscreen or hidden pages preserve progress
+    ok 4 - same launch button starts a fresh run and offscreen or hidden pages preserve progress
+      ---
+      duration_ms: 1722.98748
+      type: 'test'
+      ...
+    # Subtest: native folding control works by keyboard and the cart moves straight, slows and stops when folded
+    ok 5 - native folding control works by keyboard and the cart moves straight, slows and stops when folded
+      ---
+      duration_ms: 1547.921922
+      type: 'test'
+      ...
+    # Subtest: seven widths keep controls readable, with only the apparatus scrolling on phones
+    ok 6 - seven widths keep controls readable, with only the apparatus scrolling on phones
+      ---
+      duration_ms: 3183.993655
+      type: 'test'
+      ...
+    # Subtest: failed artwork disables firing, retry recovers, and other sections remain usable
+    ok 7 - failed artwork disables firing, retry recovers, and other sections remain usable
+      ---
+      duration_ms: 3174.453315
+      type: 'test'
+      ...
+    # Subtest: opening the explanation starts the analogy with normal motion preferences
+    ok 8 - opening the explanation starts the analogy with normal motion preferences
+      ---
+      duration_ms: 1337.963874
+      type: 'test'
+      ...
+    # Subtest: phone touch can fire, pause and expand the explanation
+    ok 9 - phone touch can fire, pause and expand the explanation
+      ---
+      duration_ms: 2078.342758
+      type: 'test'
+      ...
+    1..9
+ok 2 - 4.3 normal incidence desk and folding explanation work as approved
+  ---
+  duration_ms: 18088.879298
+  type: 'test'
+  ...
+# Subtest: normal rays share a straight axis, an interface and a common illustrative time
+ok 3 - normal rays share a straight axis, an interface and a common illustrative time
+  ---
+  duration_ms: 2.805681
+  type: 'test'
+  ...
+# Subtest: both media slow the beam front in the expected proportion without bending
+ok 4 - both media slow the beam front in the expected proportion without bending
+  ---
+  duration_ms: 0.474899
+  type: 'test'
+  ...
+# Subtest: transmitted rays conserve tangential optical direction and reverse exactly
+ok 5 - transmitted rays conserve tangential optical direction and reverse exactly
+  ---
+  duration_ms: 1.972865
+  type: 'test'
+  ...
+# Subtest: apparent coin is the backward intersection of independently refracted pupil rays
+ok 6 - apparent coin is the backward intersection of independently refracted pupil rays
+  ---
+  duration_ms: 5.251509
+  type: 'test'
+  ...
+# Subtest: 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork
+    # Subtest: artwork loads, media are fixed, and geometry has equal routes
+    ok 1 - artwork loads, media are fixed, and geometry has equal routes
+      ---
+      duration_ms: 152.874952
+      type: 'test'
+      ...
+    # Subtest: one second of play is one second of model time with physical distance ratios
+    ok 2 - one second of play is one second of model time with physical distance ratios
+      ---
+      duration_ms: 642.709558
+      type: 'test'
+      ...
+    # Subtest: three arrivals follow 3.33, 4.44 and 5 seconds, with receivers and no stationary light dots
+    ok 3 - three arrivals follow 3.33, 4.44 and 5 seconds, with receivers and no stationary light dots
+      ---
+      duration_ms: 2678.341823
+      type: 'test'
+      ...
+    # Subtest: starting again after completion clears old arrivals, and keyboard pause/resume keeps one clock
+    ok 4 - starting again after completion clears old arrivals, and keyboard pause/resume keeps one clock
+      ---
+      duration_ms: 1824.426961
+      type: 'test'
+      ...
+    # Subtest: a page-hidden event pauses the shared clock without clearing progress
+    ok 5 - a page-hidden event pauses the shared clock without clearing progress
+      ---
+      duration_ms: 2142.486357
+      type: 'test'
+      ...
+    # Subtest: leaving the section pauses and keeps progress for an explicit resume
+    ok 6 - leaving the section pauses and keeps progress for an explicit resume
+      ---
+      duration_ms: 1911.805051
+      type: 'test'
+      ...
+    # Subtest: seven screen widths retain artwork, readable controls and unclipped times
+    ok 7 - seven screen widths retain artwork, readable controls and unclipped times
+      ---
+      duration_ms: 14895.147901
+      type: 'test'
+      ...
+    # Subtest: image failure disables the desk, leaves the rest of the lesson working, and can retry
+    ok 8 - image failure disables the desk, leaves the rest of the lesson working, and can retry
+      ---
+      duration_ms: 894.283499
+      type: 'test'
+      ...
+    # Subtest: touch start, pause and continue work with horizontal desk panning
+    ok 9 - touch start, pause and continue work with horizontal desk panning
+      ---
+      duration_ms: 1388.906301
+      type: 'test'
+      ...
+    # Subtest: a real-time run finishes in five seconds without a browser test clock
+    ok 10 - a real-time run finishes in five seconds without a browser test clock
+      ---
+      duration_ms: 5811.905071
+      type: 'test'
+      ...
+    1..10
+ok 7 - 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork
+  ---
+  duration_ms: 33816.207256
+  type: 'test'
+  ...
+# Subtest: million-kilometre model uses the agreed representative speeds and travel times
+ok 8 - million-kilometre model uses the agreed representative speeds and travel times
+  ---
+  duration_ms: 3.70307
+  type: 'test'
+  ...
+# Subtest: a shared physical time gives independent distances and the same endpoint
+ok 9 - a shared physical time gives independent distances and the same endpoint
+  ---
+  duration_ms: 0.935778
+  type: 'test'
+  ...
+# Subtest: 4.3 complete basic lesson works on desktop and mobile
+ok 10 - 4.3 complete basic lesson works on desktop and mobile
+  ---
+  duration_ms: 8338.424295
+  type: 'test'
+  ...
+1..10
+# tests 33
+# suites 0
+# pass 33
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 76985.975114

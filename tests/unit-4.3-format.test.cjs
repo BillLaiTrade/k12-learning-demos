@@ -51,7 +51,7 @@ test('4.3 shared lesson format keeps navigation and content usable',{timeout:900
   for(const width of [1440,1366,1024,820,760,390,320]){
    await page.setViewportSize({width,height:width<760?844:1000});
    await page.waitForTimeout(100);
-   for(const i of [1,3,6,7]){
+   for(const i of [1,2,3,6,7]){
     await page.evaluate(i=>{location.hash=`s${i}`;document.querySelector(`#s${i}`).scrollIntoView({block:'start',behavior:'instant'});},i);
     await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     await page.waitForTimeout(100);
@@ -72,10 +72,10 @@ test('4.3 shared lesson format keeps navigation and content usable',{timeout:900
  });
  await t.test('quiz alias and original deep links arrive below the mobile route',async()=>{
   await page.setViewportSize({width:390,height:844});
-  for(const hash of ['#unit-quiz','#s7','#s3']){
+  for(const hash of ['#unit-quiz','#s7','#s3','#s2']){
    await page.goto(base.replace(/#.*$/,'')+hash);
    await page.waitForFunction(()=>document.querySelector('#depth-scene circle'));
-   await page.waitForLoadState('networkidle');
+   await page.waitForFunction(()=>document.querySelector('#normal-lab')?.dataset.state==='idle'&&document.querySelector('#speed-lab')?.dataset.state==='idle');
    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
    await page.waitForFunction(hash=>document.querySelector('.route a[aria-current="step"]')?.hash===(hash==='#unit-quiz'?'#s7':hash),hash);
    const r=await page.evaluate(hash=>({heading:document.querySelector(hash==='#unit-quiz'?'#s7 h2':`${hash} h2`).getBoundingClientRect().top,nav:document.querySelector('.route').getBoundingClientRect().bottom}),hash);
