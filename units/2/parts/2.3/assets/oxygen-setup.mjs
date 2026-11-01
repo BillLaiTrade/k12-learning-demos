@@ -148,7 +148,8 @@ export function createSetupScene(view,panels) {
       if(stage===7&&frame.cover>0){const c=frame.cover;let cx,cy;if(c<.35){const u=c/.35;cx=mix(1390,1280,u);cy=mix(859,480,u);}else if(c<.7){cx=1280;cy=mix(480,667,(c-.35)/.35);}else{cx=mix(1280,1034,(c-.7)/.3);cy=667;}plate.setAttribute('transform',`translate(${cx} ${cy}) scale(${mix(.8,1,Math.min(1,c/.35))} ${mix(3,1,Math.min(1,c/.35))}) translate(-112.5 -13)`);}else plate.setAttribute('transform',parkedPlate);
       label.textContent='';flaskName.textContent=chemical.peroxide===0?'錐形瓶（空）':chemical.catalyst===0?'雙氧水（無色溶液）':'雙氧水＋二氧化錳';jarName.textContent=frame.collected===0?'瓶內裝滿清水':frame.collected>.3?'氧氣（無色）':'';
 
-      for(const canvas of operationView.querySelectorAll('.oxygen-main-scene,.oxygen-mobile-zoom svg'))canvas.setAttribute('viewBox','40 0 1470 900');
+      operationView.querySelector('.oxygen-main-scene').setAttribute('viewBox','40 0 1470 900');
+      operationView.querySelector('.oxygen-mobile-zoom svg').setAttribute('viewBox',stage<5?'90 110 570 790':'740 235 520 550');
       operationView.dataset.sharedScene='oxygen-setup-art';
     },
     render(elapsed) {
@@ -177,9 +178,9 @@ export function createSetupScene(view,panels) {
       view.dataset.sharedScene='oxygen-setup-art';
       main.setAttribute('viewBox',`${mix(0,40,a)} 0 ${mix(1536,1470,a)} ${mix(850,900,a)}`);
       main.parentElement.style.aspectRatio=`${mix(1536,1470,a)} / ${mix(850,900,a)}`;
-      // The same complete scene remains in the phone view, so the rotation and
-      // submerged mouth cannot leave a fixed close-up while moving.
-      zoom.setAttribute('viewBox','40 0 1470 900');
+      // Follow the jar without leaving the shared background; the main view
+      // always retains the complete apparatus.
+      zoom.setAttribute('viewBox',`${Math.min(760,Math.max(40,f.jarX-375))} 60 750 840`);
       return messages[f.phase];
     }
   };

@@ -89,3 +89,4 @@
 /* Let the scene end at its own content instead of an empty stretched card. */
 .oxygen-preparation[data-ready=true] .oxygen-stage-area{align-self:start}
 .oxygen-preparation[data-ready=true] .oxygen-apparatus{flex:0 0 auto}
+.oxygen-equipment-hit.is-stroke{stroke-linecap:round;stroke-linejoin:round}

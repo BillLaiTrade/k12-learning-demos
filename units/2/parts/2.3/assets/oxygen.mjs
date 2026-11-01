@@ -1,7 +1,7 @@
 import { createSceneCaptions } from './oxygen-captions.mjs?v=reading-fade-1';
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=apparatus-layout-5';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=apparatus-layout-5';
-import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=apparatus-layout-5';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=apparatus-layout-6';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=apparatus-layout-6';
+import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=apparatus-layout-6';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
@@ -46,7 +46,7 @@ function renderPreparation(stage, elapsed, state) {
     const setupNote=setupScene.render(f.localTime);
     view.dataset.captionMessage=setupNote;view.dataset.loopCaption=setupNote;
     view.querySelector('title').textContent=setupNote;
-    view.querySelector('[data-assembly-zoom-label]').textContent='材料到集氣位置：同步看完整動作';
+    view.querySelector('[data-assembly-zoom-label]').textContent='集氣瓶與瓶口近看';
     return setupNote+'。';
   }
   const $ = part => view.querySelector(`[data-part="${part}"]`);
