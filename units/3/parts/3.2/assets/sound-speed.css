@@ -1,6 +1,8 @@
 /* 第四、第五學習區塊共用互動樣式；不改動其餘區塊的版型。 */
 .sound-speed-lab{min-width:0;container-type:inline-size}
 .sound-speed-lab [hidden]{display:none!important}
+.sound-speed-fallback{margin:12px 0;padding:10px 12px;border:1px solid #e2cf9f;border-radius:10px;background:#fff5de;color:#705322;font-size:.85rem;line-height:1.6}
+.sound-speed-lab button:disabled{cursor:not-allowed;opacity:.55}
 :where(.sound-speed-lab) .comparison-board{overflow:hidden;border:1px solid #cfddd2;border-radius:16px;background:#fffefa}
 :where(.sound-speed-lab) .comparison-heading{display:grid;grid-template-columns:64px minmax(0,1fr) 88px;gap:12px;align-items:center;padding:10px 12px;background:#edf3e8;color:#526e5b;font-size:.72rem;font-weight:650}
 :where(.sound-speed-lab) .comparison-heading span:last-child{text-align:center}

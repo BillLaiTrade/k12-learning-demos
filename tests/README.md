@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.2 第16項：比較區未載入備援
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.2-loading-state.test.cjs
+```
+
+共7項（含外層）。以正式頁與預覽頁檢查停用JavaScript、延遲主程式、阻擋主程式／相依檔、重新整理恢復、單區初始化例外不影響另一區、390px觸控／鍵盤／減少動態與正常播放。未就緒時提示可見、按鈕停用、比較區inert；就緒後五組圖與操作恢復。`LOADING_STATE_SITE_URL` 可指定公開站根網址，`LOADING_STATE_ARTIFACT_DIR` 指定截圖與狀態紀錄目錄，預設 `/tmp/unit32-loading-state`。公開頁使用環境HTTPS_PROXY。
+
 ## 3.2 第14項：完整公式答案
 
 ```sh
