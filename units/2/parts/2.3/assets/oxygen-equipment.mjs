@@ -40,7 +40,8 @@ export function createEquipmentExplorer({panel,panels,getStage,onOpen}){
     onOpen();trigger=node;
     const stage=getStage(),info=stage===0?materialsCatalog[key]:catalog[key];
     dialog.querySelector('[data-equipment-title]').textContent=info.name;
-    dialog.querySelector('[data-equipment-context]').textContent=`目前操作：${panels[stage].querySelector('h3').textContent}`;
+    dialog.querySelector('[data-equipment-context]').textContent=stage===0?'認識材料':`目前操作：${panels[stage].querySelector('h3').textContent}`;
+    dialog.querySelector('[data-equipment-role-label]').textContent=stage===0?'用途':'本步中的作用';
     dialog.querySelector('[data-equipment-identity]').textContent=info.identity;
     dialog.querySelector('[data-equipment-role]').textContent=stage===0?info.role:currentRole(key,stage);
     dialog.querySelector('.oxygen-equipment-paused').textContent=stage===0?'關閉介紹後，可繼續點選其他材料或前往下一個操作。':'關閉介紹後，可自行播放或重播這一步。';

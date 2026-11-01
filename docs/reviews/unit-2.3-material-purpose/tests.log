@@ -1,0 +1,29 @@
+▶ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role
+  ✔ the first materials step shares the dialog and has no inline information or SVG apparatus controls (285.591729ms)
+  ✔ actual flask, jar, trough, stopper and tube bodies open correct descriptions in all seven later operations (6280.186634ms)
+  ✔ pouring bottle, moving spoon, introduced catalyst and sliding glass plate remain correctly clickable (1116.448707ms)
+  ✔ intro pauses the exact scene, closing keeps it paused and explicit play continues from that state (274.229059ms)
+  ✔ current role distinguishes waiting, collecting and storage; invisible equipment and empty picture space do not open (942.716171ms)
+  ✔ Enter, Space, Escape and modal focus work; step changes clear the dialog without hiding focus (407.592783ms)
+  ✔ seven widths keep the modal readable and in-screen; mobile close-up objects also open the same introduction (2914.761459ms)
+  ✔ real touch and reduced motion select the close-up body; no-JS retains the full materials reference (2866.107841ms)
+✔ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role (16789.849154ms)
+▶ 2.3 materials: seven illustrated objects explain identity and experimental role
+  ✔ native material buttons target the same dialog; inline information is absent and nothing opens automatically (195.854101ms)
+  ✔ actual photo object bodies open all seven original introductions without a lower information panel (1259.975757ms)
+  ✔ name labels, Enter and Space open the dialog; Escape and return restore the selected material focus (350.482345ms)
+  ✔ materials do not autoplay; one sidebar key and no bottom next action remain (310.761651ms)
+  ✔ selection survives leaving and returning, but does not reopen the dialog or show inline information (398.783471ms)
+  ✔ seven widths keep every 44px target and the shared dialog in-screen (10292.046953ms)
+  ✔ real touch and reduced motion open and close every original material introduction (2171.119972ms)
+  ✔ original science content remains unchanged for oxygen source, catalyst, purge and underwater covering (28.696712ms)
+  ✔ without JavaScript all seven source introductions remain readable with the original photo (1137.097611ms)
+✔ 2.3 materials: seven illustrated objects explain identity and experimental role (17807.753265ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35400.361004

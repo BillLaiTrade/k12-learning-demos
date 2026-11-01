@@ -1,5 +1,5 @@
 import { createSceneCaptions } from './oxygen-captions.mjs?v=reading-fade-1';
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=material-dialog-14';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=material-purpose-15';
 import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=operations-12';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');

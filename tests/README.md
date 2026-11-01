@@ -745,3 +745,7 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4-calculation.test.cjs
 ```
 
 現14項（含外層），保留原速音訊、數字輸入、暫停續播、跨區／背景、錯誤重試與真實觸控。新增四種筆電／桌機視窗同屏檢查：互動區對齊後，時間欄、場景、總路程、等長長條與單程距離均可見，數字變更同步；預設互動區≤640px、整區≤1000px。十種寬度×三種數值另檢查高度、長數字、標籤不重疊及點擊區。`CALCULATION_URL`指定公開頁面URL，`CALCULATION_CAPTURE_DIR`指定截圖與layout／same-view量測JSON。
+
+## 2.3 認識材料的用途標題（2026-11-01）
+
+既有materials專項10項改驗證七材料「認識材料／用途」及玻璃片一般用途，equipment專項9項驗證後續操作仍為「本步中的作用」。兩套共19項通過；OXYGEN_MATERIALS_URL／OXYGEN_EQUIPMENT_URL可指定公開頁，截圖目錄另設/tmp以保留歷史證據。無新增測試套件或依賴，播放邏輯、模型及版面未改；證據見docs/reviews/unit-2.3-material-purpose/。
