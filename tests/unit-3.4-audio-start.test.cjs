@@ -44,7 +44,11 @@ test('3.4 audio preparation and visual clocks share the scheduled start',{timeou
  await t.test('editing conditions and rapid replay invalidate pending audio without a stale start',async()=>{
   const {p,root,emit}=await open('calculation');try{
    await emit.click();await p.waitForTimeout(150);await p.locator('#echo-time').fill('0.5');await p.locator('#echo-time').press('Enter');await p.waitForTimeout(650);assert.equal(await root.getAttribute('data-phase'),'ready');assert.equal(await p.evaluate(()=>window.soundSources.length),0);
-   await emit.click();await p.waitForTimeout(150);await emit.click();await complete(p,'calculation');assert.equal(await p.evaluate(()=>window.soundSources.length),2);assert.equal(await root.getAttribute('data-time'),'0.5');assert.equal(await p.locator('#calculation-error').isHidden(),true);
+   const before=Number(await root.getAttribute('data-emissions'));
+   // Keep both restarts in one browser task: automation scrolling must not let
+   // the first 600ms preparation finish before the replay actually happens.
+   const replay=await p.evaluate(()=>{const button=document.querySelector('[data-play=calculation]'),root=document.getElementById('calculation');button.click();const pending={sources:window.soundSources.length,progress:root.dataset.progress,phase:root.dataset.phase};button.click();return pending;});
+   assert.deepEqual(replay,{sources:0,progress:'0',phase:'playing'});await complete(p,'calculation');assert.equal(await p.evaluate(()=>window.soundSources.length),2);assert.equal(Number(await root.getAttribute('data-emissions')),before+2);assert.equal(await root.getAttribute('data-time'),'0.5');assert.equal(await p.locator('#calculation-error').isHidden(),true);report.push({id:'calculation-rapid-replay',pending:replay,sources:await p.evaluate(()=>window.soundSources)});
   }finally{await p.close();}
  });
  await t.test('starting another section or hiding the page cancels preparation before sources exist',async()=>{

@@ -853,7 +853,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-3.1-
 CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4-audio-start.test.cjs
 ```
 
-新專項8項（含外層）：前三區600ms啟音延遲各驗證零進度等待、完整最末輸出、原音／回聲排程及接收時刻；另測等待中暫停續播不重發、改值／快速重播取消、跨區起播／背景取消、延遲續播保留原畫面且只排剩餘回聲。真實AudioContext＋Analyser，記錄自然ended與stop，不能只驗證排程而未驗最末輸出。`AUDIO_START_URL`指定公開頁（不帶hash），`AUDIO_START_CAPTURE_DIR`保存三區等待／完成截圖及timing.json。既有reflection14、distance15、calculation14、sonar15、room13、well12與整課10作共用播放器回歸；不重跑未改的純模型。公開專項亦需執行，觸控仍由既有專項覆蓋，不代表Safari實機或真人聽感驗收。
+新專項8項（含外層）：前三區600ms啟音延遲各驗證零進度等待、完整最末輸出、原音／回聲排程及接收時刻；另測等待中暫停續播不重發、改值／快速重播取消、跨區起播／背景取消、延遲續播保留原畫面且只排剩餘回聲。真實AudioContext＋Analyser，記錄自然ended與stop，不能只驗證排程而未驗最末輸出。快速重播案例先明確確認尚在準備中（音源0、進度0），再於同一瀏覽器工作中觸發第二次原生按鈕click，避免自動化捲動／等待讓首次準備已完成；滑鼠／觸控入口仍由既有專項覆蓋。`AUDIO_START_URL`指定公開頁（不帶hash），`AUDIO_START_CAPTURE_DIR`保存三區等待／完成截圖及timing.json。既有reflection14、distance15、calculation14、sonar15、room13、well12與整課10作共用播放器回歸；不重跑未改的純模型。公開專項亦需執行，觸控仍由既有專項覆蓋，不代表Safari實機或真人聽感驗收。
 
 
 ## 2.3 第四區：與最新第三區一致的八項操作工作區（2026-11-01）
