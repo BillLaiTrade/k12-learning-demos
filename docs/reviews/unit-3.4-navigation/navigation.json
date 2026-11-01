@@ -1,0 +1,44 @@
+[
+  {
+    "id": "reflection",
+    "navigatedTo": "s2",
+    "pausedState": "paused",
+    "held": "0.0046",
+    "startedBeforeReturn": 2
+  },
+  {
+    "id": "distance",
+    "navigatedTo": "s1",
+    "pausedState": "paused",
+    "held": "0.0413",
+    "startedBeforeReturn": 3
+  },
+  {
+    "id": "calculation",
+    "navigatedTo": "s1",
+    "pausedState": "paused",
+    "held": "0.0210",
+    "startedBeforeReturn": 2
+  },
+  {
+    "id": "sonar",
+    "navigatedTo": "s1",
+    "pausedState": "paused",
+    "held": "0.09931972789115649",
+    "startedBeforeReturn": 2
+  },
+  {
+    "id": "room",
+    "navigatedTo": "s1",
+    "pausedState": "paused",
+    "held": "0.076",
+    "startedBeforeReturn": 1
+  },
+  {
+    "id": "well",
+    "navigatedTo": "s1",
+    "pausedState": "interrupted",
+    "held": "0.000",
+    "startedBeforeReturn": 2
+  }
+]

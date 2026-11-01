@@ -1,0 +1,17 @@
+▶ 3.4 audio preparation and visual clocks share the scheduled start
+  ✔ reflection: 600ms preparation holds zero, aligns reception and lets every echo finish (6865.678213ms)
+  ✔ distance: 600ms preparation holds zero, aligns reception and lets every echo finish (6105.872964ms)
+  ✔ calculation: 600ms preparation holds zero, aligns reception and lets every echo finish (5809.792663ms)
+  ✔ pausing before audio activation keeps zero; resuming does not create another emission (2937.25945ms)
+  ✔ editing conditions and rapid replay invalidate pending audio without a stale start (3101.867427ms)
+  ✔ starting another section or hiding the page cancels preparation before sources exist (2966.242139ms)
+  ✔ a delayed resume preserves the paused frame and only schedules the remaining echo (3356.322939ms)
+✔ 3.4 audio preparation and visual clocks share the scheduled start (31743.737817ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 31750.736941

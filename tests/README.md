@@ -803,3 +803,11 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4-audio-start.test.cjs
 原五步專項已更新為八項與單鍵連播；執行 `CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-2.3-co2-model.test.mjs tests/unit-2.3-co2.test.cjs`。檢查材料／動態器材視窗、操作起訖狀態、連播／手動切步、封存停止、字卡共用、空白點選、跨實驗互停、七寬度與手機固定單鍵、觸控／鍵盤／無JS。`CO2_URL`及`CO2_ARTIFACT_DIR`沿用；本輪畫面與實際輸出見docs/reviews/unit-2.3-co2-workspace-20261101/。
 
 
+
+## 3.4 F02側欄切換播放規則（2026-11-01）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node tests/unit-3.4-navigation.test.cjs
+```
+
+新專項13項（含外層）：六個播放器點側欄他區停下、原區可續播或小測重喊、聲納不重建測點、已完成小測不清除；六種600ms啟音準備取消無舊聲音；普通滑動／同區連結／Ctrl開新頁不中斷，鍵盤Enter及手機實際觸控導覽／滑動正常。搭配F01啟音8、整課10，共31項。`NAVIGATION_URL`可指定公開頁（不帶hash），`NAVIGATION_CAPTURE_DIR`保存navigation.json及390px定格畫面。手機滑動以CDP原生touch事件輸入，不代表Safari實機。公開專項需另跑，不以本機通過代替發布確認。

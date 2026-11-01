@@ -1,0 +1,22 @@
+▶ 3.4 sidebar changes stop the old observation while scrolling keeps it playing
+  ✔ reflection: clicking a different sidebar section stops audio and preserves the right state (1320.181638ms)
+  ✔ distance: clicking a different sidebar section stops audio and preserves the right state (1090.683254ms)
+  ✔ calculation: clicking a different sidebar section stops audio and preserves the right state (1149.251756ms)
+  ✔ sonar: clicking a different sidebar section stops audio and preserves the right state (2347.335505ms)
+  ✔ room: clicking a different sidebar section stops audio and preserves the right state (1346.207958ms)
+  ✔ well: clicking a different sidebar section stops audio and preserves the right state (2026.859662ms)
+  ✔ navigation cancels all six audio preparations before any stale source can start (8972.61793ms)
+  ✔ ordinary scrolling and a link to the playing section do not pause or restart it (1109.083812ms)
+  ✔ Ctrl-click opens another tab without stopping the current observation (944.706525ms)
+  ✔ Enter activates sidebar navigation and keeps the destination idle (715.052992ms)
+  ✔ touch scrolling keeps playback; tapping the horizontal route pauses once and can resume (1595.84257ms)
+  ✔ navigation preserves a completed well answer and never starts another call automatically (1609.148634ms)
+✔ 3.4 sidebar changes stop the old observation while scrolling keeps it playing (24606.990384ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24611.413886

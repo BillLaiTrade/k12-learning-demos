@@ -1,0 +1,213 @@
+▶ 3.4 sidebar changes stop the old observation while scrolling keeps it playing
+  ✖ reflection: clicking a different sidebar section stops audio and preserves the right state (878.927759ms)
+  ✖ distance: clicking a different sidebar section stops audio and preserves the right state (778.11816ms)
+  ✖ calculation: clicking a different sidebar section stops audio and preserves the right state (719.346929ms)
+  ✖ sonar: clicking a different sidebar section stops audio and preserves the right state (826.650449ms)
+  ✖ room: clicking a different sidebar section stops audio and preserves the right state (717.157385ms)
+  ✖ well: clicking a different sidebar section stops audio and preserves the right state (749.137978ms)
+  ✖ navigation cancels all six audio preparations before any stale source can start (1512.155329ms)
+  ✔ ordinary scrolling and a link to the playing section do not pause or restart it (1086.143775ms)
+  ✔ Ctrl-click opens another tab without stopping the current observation (925.603385ms)
+  ✖ Enter activates sidebar navigation and keeps the destination idle (773.881076ms)
+  ✖ touch scrolling keeps playback; tapping the horizontal route pauses once and can resume (943.272994ms)
+  ✔ navigation preserves a completed well answer and never starts another call automatically (1671.38111ms)
+✖ 3.4 sidebar changes stop the old observation while scrolling keeps it playing (11971.925602ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 3
+ℹ fail 10
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11976.093222
+
+✖ failing tests:
+
+test at tests/unit-3.4-navigation.test.cjs:11:11
+✖ reflection: clicking a different sidebar section stops audio and preserves the right state (878.927759ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'playing'
+  - 'paused'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:15:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:11:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'playing',
+    expected: 'paused',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-navigation.test.cjs:11:11
+✖ distance: clicking a different sidebar section stops audio and preserves the right state (778.11816ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'playing'
+  - 'paused'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:15:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:11:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'playing',
+    expected: 'paused',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-navigation.test.cjs:11:11
+✖ calculation: clicking a different sidebar section stops audio and preserves the right state (719.346929ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'playing'
+  - 'paused'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:15:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:11:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'playing',
+    expected: 'paused',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-navigation.test.cjs:11:11
+✖ sonar: clicking a different sidebar section stops audio and preserves the right state (826.650449ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'playing'
+  - 'paused'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:15:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:11:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'playing',
+    expected: 'paused',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-navigation.test.cjs:11:11
+✖ room: clicking a different sidebar section stops audio and preserves the right state (717.157385ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'playing'
+  - 'paused'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:15:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:11:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'playing',
+    expected: 'paused',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-navigation.test.cjs:11:11
+✖ well: clicking a different sidebar section stops audio and preserves the right state (749.137978ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'playing'
+  - 'interrupted'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:15:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:11:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'playing',
+    expected: 'interrupted',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-navigation.test.cjs:23:10
+✖ navigation cancels all six audio preparations before any stale source can start (1512.155329ms)
+  AssertionError [ERR_ASSERTION]: reflection
+  + actual - expected
+  
+  + 'playing'
+  - 'paused'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:24:188)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:23:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'playing',
+    expected: 'paused',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-navigation.test.cjs:32:10
+✖ Enter activates sidebar navigation and keeps the destination idle (773.881076ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'playing'
+  - 'paused'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:33:261)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:32:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'playing',
+    expected: 'paused',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-3.4-navigation.test.cjs:35:10
+✖ touch scrolling keeps playback; tapping the horizontal route pauses once and can resume (943.272994ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'playing'
+  - 'paused'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:36:448)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-3.4-navigation.test.cjs:35:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'playing',
+    expected: 'paused',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

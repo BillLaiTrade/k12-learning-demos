@@ -153,6 +153,11 @@ bindSonar(sonarPlayer);
 bindRoomWaveLab(controller => { stopActive(); active = controller; }, controller => { if (active === controller) active = null; });
 $('wall-distance').addEventListener('input', () => distance.reset());
 bindWellQuiz(controller => { stopActive(); active = controller; }, controller => { if (active === controller) active = null; });
+document.querySelector('.route').addEventListener('click', event => {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest('a[href^="#"]'), target = link && $(link.hash.slice(1));
+  if (active && target && $(active.id)?.closest('.lesson-card,.quiz') !== target) stopActive();
+});
 document.addEventListener('visibilitychange', () => {if (document.hidden) stopActive();});
 window.addEventListener('pagehide', stopActive);
 const observer = new IntersectionObserver(entries => {
