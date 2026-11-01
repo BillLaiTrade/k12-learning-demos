@@ -1,0 +1,26 @@
+/* The picture, playback bar and description form one stable player frame. */
+.experiment-player-footer{display:none;width:100%;border:0;border-radius:0;overflow:hidden;background:var(--card)}
+[data-ready=true] .experiment-player-footer{display:block}
+#s3 .experiment-player-footer .experiment-playback-controls,
+#s4 .experiment-player-footer .experiment-playback-controls{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 16px;margin:0;padding:10px 14px;border:0;background:#fffef9}
+.experiment-play-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:112px;min-height:44px;padding:8px 14px;border:1px solid #86a17a;border-radius:9px;background:#fffef7;color:#2f6347;font-size:.85rem;font-weight:700}
+.experiment-play-button.is-playing,.experiment-play-button.is-playing:hover{background:#1f624b;border-color:#1f624b;color:white}
+.experiment-playback-controls [data-continuous-status]{margin:0;color:#64766c;font-size:.76rem;line-height:1.65}
+.experiment-player-footer .oxygen-caption{width:100%;margin:0}
+#s3 .experiment-player-footer .oxygen-scene-note,#s4 .experiment-player-footer .co2-scene-note{margin:0;padding:0;border:0;border-radius:0;background:transparent;color:#304c38;box-shadow:none;font-size:.9rem;font-weight:600;line-height:1.85;min-height:3.7em}
+/* Keep readable type; remove repetition and excess space from the summary. */
+.oxygen-summary{padding:16px}
+.oxygen-summary>h3{margin-bottom:8px}
+.oxygen-summary-list>div{gap:20px;padding:9px 0}
+@container(max-width:510px){
+ #s3 .experiment-player-footer .experiment-playback-controls,
+ #s4 .experiment-player-footer .experiment-playback-controls{flex-direction:column;gap:6px;padding:10px 12px}
+ .experiment-playback-controls [data-continuous-status]{font-size:.72rem;text-align:center}
+ #s3 .experiment-player-footer .oxygen-scene-note,#s4 .experiment-player-footer .co2-scene-note{font-size:.82rem;min-height:7.4em}
+ #s4 .co2-equipment-help{min-height:calc(3.6em + 19px);box-sizing:border-box}
+}
+@media(max-width:720px){.oxygen-summary{padding:14px}.oxygen-summary-list>div{gap:4px;padding:8px 0}}
+
+.experiment-closeup-view{border:1px solid #d3ddcf;border-radius:12px;overflow:hidden;margin-top:12px}
+/* Column layouts must fill the available width rather than shrink to the text. */
+#s3 .oxygen-stage-area,#s4 .co2-stage-area{width:100%;box-sizing:border-box}

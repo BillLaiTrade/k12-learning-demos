@@ -1,0 +1,77 @@
+TAP version 13
+# Subtest: 2.3 oxygen: direct step playback, one main player and purposeful operation scenes
+    # Subtest: one eight-operation list and one player below the picture, with no image player, bottom action or material autoplay
+    ok 1 - one eight-operation list and one player below the picture, with no image player, bottom action or material autoplay
+      ---
+      duration_ms: 70.977445
+      type: 'test'
+      ...
+    # Subtest: selecting each operation immediately plays its action and preserves physical prerequisites
+    ok 2 - selecting each operation immediately plays its action and preserves physical prerequisites
+      ---
+      duration_ms: 879.794891
+      type: 'test'
+      ...
+    # Subtest: direct playback reconstructs contents and returning to materials preserves a chosen introduction
+    ok 3 - direct playback reconstructs contents and returning to materials preserves a chosen introduction
+      ---
+      duration_ms: 365.989757
+      type: 'test'
+      ...
+    # Subtest: the main key pauses pixels, resumes and restarts after completion; quick choices cancel old advancement
+    ok 4 - the main key pauses pixels, resumes and restarts after completion; quick choices cancel old advancement
+      ---
+      duration_ms: 984.581954
+      type: 'test'
+      ...
+    # Subtest: vertical arrows and native activation start actions; main key and Escape retain visible focus
+    ok 5 - vertical arrows and native activation start actions; main key and Escape retain visible focus
+      ---
+      duration_ms: 170.391809
+      type: 'test'
+      ...
+    # Subtest: background, leaving and another experiment pause without resuming automatically
+    ok 6 - background, leaving and another experiment pause without resuming automatically
+      ---
+      duration_ms: 255.167127
+      type: 'test'
+      ...
+    # Subtest: storage stops with a whole-experiment restart; no bottom cross-lesson action returns
+    ok 7 - storage stops with a whole-experiment restart; no bottom cross-lesson action returns
+      ---
+      duration_ms: 258.043984
+      type: 'test'
+      ...
+    # Subtest: all eight scenes fit seven widths; compact navigation expands vertically and the only player stays directly below the picture
+    ok 8 - all eight scenes fit seven widths; compact navigation expands vertically and the only player stays directly below the picture
+      ---
+      duration_ms: 7674.241427
+      type: 'test'
+      ...
+    # Subtest: touch immediately plays a selected step and uses the same key to pause and continue
+    ok 9 - touch immediately plays a selected step and uses the same key to pause and continue
+      ---
+      duration_ms: 1514.053331
+      type: 'test'
+      ...
+    # Subtest: without JavaScript the eight representatives and material introductions remain readable
+    ok 10 - without JavaScript the eight representatives and material introductions remain readable
+      ---
+      duration_ms: 915.336871
+      type: 'test'
+      ...
+    1..10
+ok 1 - 2.3 oxygen: direct step playback, one main player and purposeful operation scenes
+  ---
+  duration_ms: 14470.386437
+  type: 'test'
+  ...
+1..1
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14755.369083
