@@ -1,14 +1,14 @@
 import { createSceneCaptions } from './oxygen-captions.mjs?v=reading-fade-1';
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=water-bounds-2';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=water-bounds-2';
-import { createSetupScene } from './oxygen-setup.mjs?v=water-bounds-2';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=shared-scene-3';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=shared-scene-3';
+import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=shared-scene-3';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
 const panels = [...panel.querySelectorAll('[data-step-panel]')];
 const players = [];
-const setupScene=createSetupScene(panels[1]);
-panels[1].setupScene=setupScene;
+const setupScene=createSetupScene(panels[1],panels);
+panels.slice(1).forEach(view=>view.setupScene=setupScene);
 
 const materialButtons=[...panels[0].querySelectorAll('[data-material]')];
 const materialInfo=[...panels[0].querySelectorAll('[data-material-info]')];
@@ -30,13 +30,18 @@ function renderPreparation(stage, elapsed, state) {
   panel.dataset.tipX = (800+235*f.tube).toFixed(3);
   panel.dataset.cover = f.cover.toFixed(4);
   if (scene === 0) {
+    setupScene.render(0);
     const name=materialInfo.find(info=>info.dataset.materialInfo===selectedMaterial).querySelector('h4').textContent;
     return `正在認識${name}；可點選其他物品，或接著擺好集氣位置。`;
   }
   if (scene === 1) {
-    if(stage!==1)return renderAssembly(f.sceneTime, state, view, stage-1);
-    // The final underlying apparatus is already the next operation's starting
-    // picture; reveal it only after the continuous preparation reaches it.
+    if(stage!==1){
+      setupScene.render(SETUP_DURATION);
+      const note=renderAssembly(f.sceneTime,state,view,stage-1);
+      setupScene.operation(stage,f,assemblyFrame(f.sceneTime),view);
+      return note;
+    }
+    // Preparation and chemistry share one background and the same glass assets.
     renderAssembly(2800,state,view,0);
     const setupNote=setupScene.render(f.localTime);
     view.dataset.captionMessage=setupNote;view.dataset.loopCaption=setupNote;
@@ -46,9 +51,10 @@ function renderPreparation(stage, elapsed, state) {
   }
   const $ = part => view.querySelector(`[data-part="${part}"]`);
   const opacity = (part, value) => $(part).setAttribute('opacity', String(value));
-  const waterY = 280+f.collected*400;
+  setupScene.render(SETUP_DURATION);
+  const waterY = 290+f.collected*360;
   $('jar-water').setAttribute('y', waterY);
-  $('jar-water').setAttribute('height', 680-waterY);
+  $('jar-water').setAttribute('height', 650-waterY);
   $('water-line').setAttribute('cy', waterY);
   opacity('water-line', f.collected<1 ? 1 : 0);
   const reacting = f.purging || f.collecting;
@@ -81,6 +87,7 @@ function renderPreparation(stage, elapsed, state) {
   $('reaction-bubbles').setAttribute('transform',`translate(0 ${-((f.time%900)/900)*30})`);
   $('flow').style.strokeDashoffset=String(-f.time/35);
   const note = scene===2 ? '導管口在瓶外的水中，開始的混合氣不收集' : scene===3 ? (f.tube<1 ? '先將導管移入瓶口下方' : f.collected<1 ? '氧氣進入，瓶內水位下降' : '瓶內水已排出，氧氣已收集') : f.covered ? '導管已移開，玻璃片在水下蓋好' : f.tube>0 ? '先移開導管，瓶口保持在水下' : '再滑入玻璃片，在水下蓋住瓶口';
+  setupScene.operation(stage,f,null,view);
   renderObservation(view,scene,f,waterY);
   view.dataset.captionMessage=note;
   view.dataset.loopCaption=scene===3&&f.collected===1?'氧氣進入，瓶內水位下降':note;
