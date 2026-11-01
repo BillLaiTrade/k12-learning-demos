@@ -140,7 +140,7 @@ function tick(now) {
 function ensureFrame() { if (!frame && (power || mode === 'inlet' || mode === 'pump' && air > MIN_AIR)) { lastTime = null; frame = requestAnimationFrame(tick); } }
 function setPower(enabled) {
   const request = ++soundRequest;
-  power = enabled; audioError = '';
+  power = enabled;
   if (!power) {
     audio.pause(); audio.currentTime = 0; audioState = 'off';
     drawHammer(); render(); ensureFrame(); return;
@@ -162,11 +162,12 @@ function setPower(enabled) {
     }
     gain.gain.setValueAtTime(soundLevel(), context.currentTime);
     // 兩個播放要求都在使用者事件內提出，支援行動瀏覽器的手勢限制。
+    if (audio.error || audioError || audioState === 'error') audio.load();
     audioState = 'starting'; audio.currentTime = 0;
     const resumed = context.resume(), started = audio.play();
     Promise.all([resumed, started]).then(() => {
       if (request !== soundRequest || !power) return;
-      audioState = 'playing'; render();
+      audioError = ''; audioState = 'playing'; render();
     }).catch(() => fail(request));
   } catch { fail(request); }
   render(); ensureFrame();

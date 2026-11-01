@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.2 第02項：音檔重試
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.2-audio-retry.test.cjs
+```
+
+以實際阻擋鋼尺／電鈴音檔、再恢復連線的方式，驗證原生媒體錯誤後確實重新請求並播放、等待期間保留錯誤、鐘罩保留空氣量／模式／音訊節點與實際分貝取樣，以及重複失敗、取消等待、離開不自動恢復、390px觸控／鍵盤／減少動態。共6項（含外層）。可用`AUDIO_RETRY_URL`檢查公開頁，`AUDIO_RETRY_ARTIFACT_DIR`指定截圖目錄，預設存於`/tmp/unit32-audio-retry`。與第01項、鋼尺、鐘罩及跨區測試一起執行可檢查原有播放行為。
+
 ## 3.2 敲擊前靜止與音叉傳播
 
 ```sh
