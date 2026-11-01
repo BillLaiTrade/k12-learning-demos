@@ -835,3 +835,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-3.1-cycle-rest.test.cjs
 ```
 
 共4項（含外層），確認無JavaScript與一般載入時皆是完整綠色平衡直線，等待時不自動振動；滑鼠、鍵盤及手機觸控播放後才產生波形，前方未受擾動的繩段保持平直。以受控瀏覽器時鐘檢查四段振動、完成後一個波長標示、四段完成狀態及重播回到直線起點。含減少動態與手機版面檢查。`CYCLE_WAVE_URL` 可指定公開頁面，`CYCLE_CAPTURE_DIR` 可保存初始畫面；公開驗證沿用既有HTTPS代理。
+
+## 4.1 頂部標頭與滿寬內容
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.1-layout.test.cjs tests/unit-1.1-aperture.test.cjs tests/unit-1.1-shadow-theatre.test.cjs
+```
+
+六區比照現行2.2標頭，檢查320、390、768、1024、1366、1440px下的上下排列、內容滿寬、完整副標、主標題不重複、無橫向溢出與外側導覽；另操作桌機／觸控的燈光、遮擋球、影子大小、計時及結尾小測。歷史`unit-1.1-*`測試實際指向4.1，涵蓋三孔板及影子劇場的幾何、拖曳、鍵盤、尺軌與通過／重設狀態。可用`LIGHT_LAYOUT_URL`指定公開4.1網址，`LIGHT_LAYOUT_CAPTURE_DIR`保存版面數據與桌機／手機畫面。

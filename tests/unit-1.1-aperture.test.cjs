@@ -99,10 +99,10 @@ test('第三區實際器材、亮點、燈號與既有操作',{timeout:240000},a
     await p.locator('#aperture-reset').click();for(const width of [320,390,768,1024,1440]){await p.setViewportSize({width,height:1050});await check();assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));if(width===390)await shot('mobile');if(width===1440)await shot('desktop');}
     assert.equal(await p.locator('.lesson-card').count(),6);assert.equal(await p.locator('#card-03 input').count(),1);assert.equal(await p.locator('#card-03 button').count(),5);
   });
-  await t.test('第二區開關、第六區計時與相鄰1.2入口回應回歸',async()=>{
+  await t.test('第二區開關、第六區計時與相鄰4.2入口回應回歸',async()=>{
     await p.bringToFront();await p.locator('#lamp-toggle').click();await expect(p.locator('#lamp-toggle')).toHaveAttribute('aria-pressed','false');await expect(p.locator('#night-feedback')).toContainText('關掉檯燈後');
     await p.locator('#light-speed-tap').click();await p.waitForTimeout(150);await p.locator('#light-speed-tap').click();await expect(p.locator('#light-speed-tap')).toHaveAttribute('data-phase','result');
-    const response=await p.request.get(new URL('../1.2/',url).href);assert.equal(response.status(),200);assert.ok((await response.text()).includes('mirror-image.js'));assert.deepEqual(errors,[]);
+    const response=await p.request.get(new URL('../4.2/',url).href);assert.equal(response.status(),200);assert.ok((await response.text()).includes('mirror-image.js'));assert.deepEqual(errors,[]);
   });
   await t.test('真實觸控拖曳與按鈕，縮減動態設定不改變通光結果',async()=>{
     await context.close();await browser.close();

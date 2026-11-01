@@ -59,12 +59,14 @@
     .route a[aria-current="step"] { border-left-color: var(--green); background: #e7eee0; color: #315a46; font-weight: 750; }
     .route b { color: var(--green); font-size: .76rem; font-weight: 700; }
     .cards { display: grid; gap: 20px; }
-    .lesson-card { position: relative; scroll-margin-top: 22px; display: grid; grid-template-columns: 175px minmax(0, 1fr); gap: 26px; padding: 26px; border: 1px solid var(--line); border-radius: 24px; background: var(--card); box-shadow: var(--shadow); }
-    .card-side { border-right: 1px solid var(--line); padding-right: 18px; }
-    .card-number { color: var(--green); font-weight: 850; font-size: .84rem; letter-spacing: .08em; }
-    .card-side h3 { margin: 10px 0 8px; font-size: 1.05rem; line-height: 1.45; }
-    .card-role { color: var(--muted); font-size: .87rem; }
-    .card-main h2 { margin: 0 0 8px; font-size: clamp(1.3rem, 2.6vw, 1.75rem); line-height: 1.38; }
+    .lesson-card { position: relative; scroll-margin-top: 22px; min-width: 0; display: block; padding: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--card); box-shadow: var(--shadow); }
+    .lesson-head { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 16px; align-items: start; padding: 25px 28px 21px; border-bottom: 1px solid #e7ece5; }
+    .lesson-number { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 15px; background: #e9f0e3; color: #416c39; font-weight: 850; font-size: 1.1rem; }
+    .lesson-head h2 { margin: 0; font-size: clamp(1.22rem, 2vw, 1.65rem); line-height: 1.35; }
+    .lesson-head p { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; color: #5b6a65; font-size: .94rem; }
+    .lesson-body { padding: 23px 28px 28px; min-width: 0; }
+    @media (max-width: 900px) { .lesson-head, .lesson-body { padding-left: 21px; padding-right: 21px; } }
+    @media (max-width: 700px) { .lesson-head { grid-template-columns: 48px minmax(0, 1fr); gap: 10px; padding: 18px; } .lesson-number { width: 40px; height: 40px; border-radius: 12px; } .lesson-body { padding: 18px; } }
     .card-main > p { margin: 0 0 16px; color: var(--muted); }
     .dialogue { display: flex; gap: 10px; align-items: center; margin: 12px 0; padding: 11px 15px; border-left: 4px solid #8cae91; border-radius: 0 13px 13px 0; background: #f0f5eb; }
     .dialogue p { margin: 0; }
@@ -305,11 +307,13 @@
       .aperture-height-control { padding: 9px 3px; }
       .aperture-height-control output { padding-inline: 0; font-size: .66rem; letter-spacing: -.055em; }
       .equipment-labels { font-size: .64rem; gap: 1px; }
+      .equipment-labels button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding-inline: 1px; white-space: normal; }
+      .equipment-labels .aperture-through-icon { flex-shrink: 0; margin-left: 0; }
       .aperture-scene-actions { top: 8px; left: 8px; gap: 6px; }
       .aperture-scene-action { min-height: 42px; padding: 6px 11px; font-size: .84rem; }
     }
     .end-card { border-color: #bfd1be; background: #f4f8ef; }
-    .end-card .card-side { border-color: #d0ddcb; }
+    .end-card .lesson-head { border-color: #d0ddcb; }
     .choice.correct[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); }
     .choice.incorrect[aria-pressed="true"] { border-color: var(--orange); background: var(--orange-pale); }
     .check-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; }
@@ -329,10 +333,7 @@
       .route-inner { display: flex; width: max-content; gap: 6px; }
       .route a { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); white-space: nowrap; }
       .route a[aria-current="step"] { border-color: var(--green); }
-      .lesson-card { grid-template-columns: 1fr; gap: 13px; padding: 19px; border-radius: 19px; }
-      .card-side { display: flex; align-items: baseline; gap: 10px; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 10px; }
-      .card-side h3 { margin: 0; }
-      .card-role { display: none; }
+      .lesson-card { border-radius: 19px; scroll-margin-top: 110px; }
       .medium-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .night-switches { grid-template-columns: 1fr; gap: 8px; }
       .light-switch { min-height: 70px; }
@@ -408,9 +409,11 @@
       </nav>
       <div class="cards">
         <section class="lesson-card" id="card-01">
-          <div class="card-side"><span class="card-number">01</span><h3>從眼睛看到的現象開始</h3><span class="card-role">光要進入眼睛</span></div>
-          <div class="card-main">
-            <h2>為什麼我們看得見東西？</h2>
+          <header class="lesson-head">
+            <span class="lesson-number">01</span>
+            <div><h2>為什麼我們看得見東西？</h2><p><span>從眼睛看到的現象開始</span><span>光要進入眼睛</span></p></div>
+          </header>
+          <div class="card-main lesson-body">
             <p>我們看見光源，也看見被照亮的物體；兩種情況都需要光進入眼睛，但光走的路徑不同。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我在家看電視時，電視螢幕的光直接進入眼睛；可是書頁自己不發光，阿公怎麼也看得見？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>我們來找找看：檯燈照到書頁後，光又往哪裡去了？</p></div>
@@ -435,9 +438,11 @@
         </section>
 
         <section class="lesson-card" id="card-02">
-          <div class="card-side"><span class="card-number">02</span><h3>分清楚光從哪裡來</h3><span class="card-role">自己發光或反射光</span></div>
-          <div class="card-main">
-            <h2>今晚，哪些光讓小葵看得見？</h2>
+          <header class="lesson-head">
+            <span class="lesson-number">02</span>
+            <div><h2>今晚，哪些光讓小葵看得見？</h2><p><span>分清楚光從哪裡來</span><span>自己發光或反射光</span></p></div>
+          </header>
+          <div class="card-main lesson-body">
             <p>切換照向月球的陽光和書桌檯燈，觀察月亮、書頁與光路如何改變。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>月亮的光是從太陽反射過來的。那月光照到書頁後，書頁也會把光反射進我們眼睛嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>會的，反射太陽光的月光照到書頁後，還能再反射進我們的眼睛裡。可以試著關掉檯燈，看看關掉後是否還是看得到書本。</p></div>
@@ -467,9 +472,11 @@
         </section>
 
         <section class="lesson-card" id="card-03">
-          <div class="card-side"><span class="card-number">03</span><h3>觀察光怎麼前進</h3><span class="card-role">光沿直線前進</span></div>
-          <div class="card-main">
-            <h2>光會沿直線前進嗎？</h2>
+          <header class="lesson-head">
+            <span class="lesson-number">03</span>
+            <div><h2>光會沿直線前進嗎？</h2><p><span>觀察光怎麼前進</span><span>光沿直線前進</span></p></div>
+          </header>
+          <div class="card-main lesson-body">
             <p>觀察三個小孔是否排成一直線，以及屏幕亮點如何變化。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>現在中間板偏高，屏幕沒有亮點；光會不會自己轉彎，繞過中間板呢？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先把中間板往下調，直到屏幕出現亮點；再慢慢往上移，觀察亮點如何變化。</p></div>
@@ -499,9 +506,11 @@
         </section>
 
         <section class="lesson-card" id="card-04">
-          <div class="card-side"><span class="card-number">04</span><h3>把直線光路連到影子</h3><span class="card-role">不透明物體擋住光</span></div>
-          <div class="card-main">
-            <h2>影子怎麼形成？</h2>
+          <header class="lesson-head">
+            <span class="lesson-number">04</span>
+            <div><h2>影子怎麼形成？</h2><p><span>把直線光路連到影子</span><span>不透明物體擋住光</span></p></div>
+          </header>
+          <div class="card-main lesson-body">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>剛才孔板擋住了光；如果換成一顆不透明球，屏幕上是不是也會留下暗的地方？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>沿著光源到屏幕的路徑看一看，球擋住光之後，屏幕哪裡收不到光？</p></div>
             <p>光源發出的光沿直線前進。當不透明物體擋在光源和屏幕之間，沒有光到達的區域就形成影子。</p>
@@ -527,9 +536,11 @@
         </section>
 
         <section class="lesson-card" id="card-05">
-          <div class="card-side"><span class="card-number">05</span><h3>觀察物體位置的影響</h3><span class="card-role">物體靠近光源，影子變大</span></div>
-          <div class="card-main">
-            <h2>影子的大小如何改變？</h2>
+          <header class="lesson-head">
+            <span class="lesson-number">05</span>
+            <div><h2>影子的大小如何改變？</h2><p><span>觀察物體位置的影響</span><span>物體靠近光源，影子變大</span></p></div>
+          </header>
+          <div class="card-main lesson-body">
             <p>試著移動光源和屏幕之間的遮擋物。觀察它靠近光源或靠近屏幕時，屏幕上的影子有什麼變化。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>同一個物體的影子，為什麼有時會變大，有時又會變小呢？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>試著讓遮擋物靠近光源，再慢慢遠離光源，觀察影子的大小如何改變。</p></div>
@@ -546,9 +557,11 @@
         </section>
 
         <section class="lesson-card" id="card-06">
-          <div class="card-side"><span class="card-number">06</span><h3>感受光速的尺度</h3><span class="card-role">光不是瞬間到達</span></div>
-          <div class="card-main">
-            <h2>光傳得有多快？</h2>
+          <header class="lesson-head">
+            <span class="lesson-number">06</span>
+            <div><h2>光傳得有多快？</h2><p><span>感受光速的尺度</span><span>光不是瞬間到達</span></p></div>
+          </header>
+          <div class="card-main lesson-body">
             <p>光沿直線傳播，但並非瞬間到達。快速點擊兩次，從這段短短的時間感受光速的尺度。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>如果只有兩次點擊之間這麼短的時間，光能走多遠？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>快速點下面的按鈕兩次：第一次開始計時，第二次停止，再看看這段時間光能繞地球幾圈。</p></div>
