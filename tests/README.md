@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.3 第一區緊湊比較紀錄
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium FORK_CAPTURE_DIR=/tmp/unit33-compact-records node --test --test-concurrency=1 tests/unit-3.3-fork.test.cjs tests/unit-3.3.test.cjs
+```
+
+共22項（含外層）：音叉專項補驗1440／1366／390／320px下初始短狀態、只敲一種時另一欄不撐高、兩次觀察後相同波形尺寸、重設收回及無JavaScript初始狀態。原音訊、振動、停止／重播、取消、錯誤重試、鍵盤／觸控及整頁回歸維持。`SOUND33_BASE_URL`可指定公開頁（勿帶hash），公開檢查須信任環境代理CA；截圖存至`/tmp`避免覆寫歷史證據。
+
 ## 3.2 鋼尺場景放大裁切
 
 ```sh
@@ -933,6 +941,15 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.1-
 原聲音、暫停、同時刻切換、結尾清空、背景取消、錯誤重試與觸控／鍵盤回歸保留。`ROOM_URL`可指向公開正式課程，`ROOM_CAPTURE_DIR`保存截圖及 `compact-layouts.json`；公開另跑房間13項。控制器、模型及音檔未改，不重跑未受影響的純模型／PCM檢查。
 
 ## 4.4 十區透鏡成像基本版
+
+2026-11-02第一區立體改版後，另執行：
+
+```sh
+node tests/unit-4.4-pinhole-optics.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4-pinhole-3d.test.cjs
+```
+
+針孔模型7項、立體瀏覽器9項（含主項），加下方既有模型8與整課23，共47項。新專項讀取實際Three.js場景及投影像素，驗證直線穿孔／孔板遮擋、倒立與連續大小、接收面位置、滑鼠／原生觸控拖曳、旋轉／滾輪／雙指縮放、取消手勢、鍵盤界限與獨立重設、同屏幕正面觀察、七寬度及深連結。`PINHOLE_URL`指定公開頁，`PINHOLE_CAPTURE_DIR`保存scene.json、layout.json與畫面。正式程式沒有測試API；測試以模組攔截注入唯讀觀察介面。公開需另跑新9與整課23，共32項瀏覽器檢查。
 
 ```sh
 node tests/unit-4.4-optics.test.mjs

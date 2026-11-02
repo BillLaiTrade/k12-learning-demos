@@ -1,0 +1,43 @@
+▶ 4.4 第一區立體針孔實驗：實際渲染、拖曳、觀看與光路
+  ✔ 初始為暗環境3D，真實孔洞、完整倒立投影且沒有拉霸或自動光路 (1872.289536ms)
+  ✔ 滑鼠直接拖屏幕沿光軌移動，孔板與圖卡保持固定 (2597.801387ms)
+  ✔ 鍵盤與連續大小變化，近／等大／遠均有完整投影 (1117.390339ms)
+  ✔ 旋轉／縮放及重設視角只改鏡頭，器材與成像數值不變 (2212.263075ms)
+  ✔ 正面觀察同一片屏幕，切換與移動都不生成第二張假圖 (1725.673536ms)
+  ✔ 光路預設關閉，追蹤上下端／一起看與遮擋線由真正幾何產生 (2278.362283ms)
+  ✖ 手機觸控移屏幕、空白旋轉、雙指縮放及取消不跳動 (3621.989913ms)
+  ✔ 七種寬度、深連結與控制位置符合既有頁面格式 (2925.127832ms)
+✖ 4.4 第一區立體針孔實驗：實際渲染、拖曳、觀看與光路 (26070.675224ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 7
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26075.659629
+
+✖ failing tests:
+
+test at tests/unit-4.4-pinhole-3d.test.cjs:38:10
+✖ 手機觸控移屏幕、空白旋轉、雙指縮放及取消不跳動 (3621.989913ms)
+  AssertionError [ERR_ASSERTION]: Expected "actual" not to be strictly deep-equal to:
+
+  [
+    -10.311546998600521,
+    7.305604992784238,
+    3.864799476396351
+  ]
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4-pinhole-3d.test.cjs:43:404)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4-pinhole-3d.test.cjs:38:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [Array],
+    expected: [Array],
+    operator: 'notDeepStrictEqual',
+    diff: 'simple'
+  }

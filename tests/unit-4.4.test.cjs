@@ -3,7 +3,7 @@ const {chromium}=require('playwright');
 test('4.4 十區基本版：真實操作、參考格式與跨尺寸導覽',{timeout:240000},async t=>{
  let base=process.env.LENS_URL;
  if(!base){const root=path.resolve(__dirname,'..'),server=http.createServer(async(req,res)=>{try{let file=path.join(root,decodeURI(req.url.split('?')[0]));if((await fs.stat(file)).isDirectory())file+='/index.html';const ext=path.extname(file);res.setHeader('Content-Type',({'.mjs':'text/javascript','.js':'text/javascript','.css':'text/css','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'})[ext]||'text/html');res.end(await fs.readFile(file));}catch{res.statusCode=404;res.end('missing')}});await new Promise(r=>server.listen(0,'127.0.0.1',r));t.after(()=>server.close());base=`http://127.0.0.1:${server.address().port}/units/4/parts/4.4/`;}
- const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox'],...(process.env.LENS_URL?{proxy:{server:process.env.HTTPS_PROXY||process.env.HTTP_PROXY}}:{})});t.after(()=>browser.close());
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'],...(process.env.LENS_URL?{proxy:{server:process.env.HTTPS_PROXY||process.env.HTTP_PROXY}}:{})});t.after(()=>browser.close());
  const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>errors.push(r.url()));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`)});
  const capture=process.env.LENS_CAPTURE_DIR||'/tmp/unit44-check';await fs.mkdir(capture,{recursive:true});
@@ -17,10 +17,8 @@ test('4.4 十區基本版：真實操作、參考格式與跨尺寸導覽',{time
   const ids=await page.locator('[id]').evaluateAll(es=>es.map(e=>e.id));assert.equal(ids.length,new Set(ids).size);
   assert.equal(await page.locator('.hero-cover img').evaluate(e=>e.complete&&e.naturalWidth===1672),true);
  });
- await t.test('小孔光路的上／下端選取、屏幕移動和獨立重設',async()=>{
-  await lab(1).locator('[data-value=top]').click();assert.equal(await lab(1).locator('.light-ray').count(),2);
-  await range(1,'screen',240);assert.match(await result(1).innerText(),/放大/);assert.match(await lab(1).locator('[data-scene]').getAttribute('aria-label'),/240/);
-  await lab(1).locator('[data-toggle=rays]').uncheck();assert.equal(await lab(1).locator('.light-ray').count(),0);await lab(1).locator('[data-action=reset]').click();assert.equal(await lab(1).locator('[data-input=screen]').inputValue(),'140');assert.equal(await lab(1).locator('.light-ray').count(),4);
+ await t.test('立體小孔沒有拉霸，屏幕位置與光路可操作',async()=>{
+  assert.equal(await lab(1).locator('input[type=range]').count(),0);await lab(1).locator('[data-pinhole-screen]').focus();await page.keyboard.press('End');assert.ok(Number(await lab(1).getAttribute('data-magnification'))>1);await lab(1).locator('[data-pinhole-rays]').check();await lab(1).locator('[data-pinhole-point=top]').click();assert.match(await lab(1).locator('[data-pinhole-status]').innerText(),/上端.*下方/);await lab(1).locator('[data-pinhole-reset]').click();assert.equal(await lab(1).getAttribute('data-screen-x'),'2.6000');await lab(1).locator('[data-pinhole-rays]').uncheck();
  });
  await t.test('平行光會聚／發散及兩表面詳圖連動',async()=>{
   await lab(2).locator('[data-value=concave]').click();assert.match(await result(2).innerText(),/發散/);assert.equal(await lab(2).locator('.extension').count(),2);
@@ -78,12 +76,10 @@ test('4.4 十區基本版：真實操作、參考格式與跨尺寸導覽',{time
   await page.locator('#lab6 [data-drag=object]').focus();await page.keyboard.press('Home');assert.equal(await page.locator('#lab6 [data-input=object]').inputValue(),'40');await page.keyboard.press('End');assert.equal(await page.locator('#lab6 [data-input=object]').inputValue(),'350');
   const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});const mp=await mobile.newPage();await mp.goto(base+'#s5');await mp.locator('#lab5 [data-value=screen]').tap();assert.match(await mp.locator('#lab5 [data-result]').innerText(),/無法直接/);await mp.locator('.route a[href="#s10"]').tap();await mp.waitForFunction(()=>document.querySelector('.route a[aria-current=step]')?.hash==='#s10');assert.equal(await mp.locator('#route-progress').innerText(),'目前位置：單元小測');await mp.screenshot({path:path.join(capture,'touch-quiz.png')});await mobile.close();
  });
- await t.test('滑鼠點選十個導覽、直接拖屏幕與虛像入眼光束',async()=>{
+ await t.test('十個導覽、屏幕鍵盤操作與虛像入眼光束',async()=>{
   await page.setViewportSize({width:1440,height:1000});await page.bringToFront();
   for(let i=1;i<=10;i++){await page.locator(`.route a[href="#s${i}"]`).click();await page.waitForFunction(i=>document.querySelector('.route a[aria-current=step]')?.hash==='#s'+i,i);}
-  await page.locator('.route a[href="#s1"]').click();await lab(1).locator('[data-action=reset]').click();
-  const scene=lab(1).locator('[data-scene]');await scene.scrollIntoViewIfNeeded();const p=await scene.evaluate(e=>{const m=e.getScreenCTM(),x=390+140*.85,y=120;return{x:m.a*x+m.c*y+m.e,y:m.b*x+m.d*y+m.f}});
-  await page.mouse.move(p.x,p.y);await page.mouse.down();await page.mouse.move(p.x+50,p.y,{steps:5});await page.mouse.up();assert.ok(Number(await lab(1).locator('[data-input=screen]').inputValue())>140);
+  await page.locator('.route a[href="#s1"]').click();await lab(1).locator('[data-pinhole-reset]').click();await lab(1).locator('[data-pinhole-screen]').focus();await page.keyboard.press('ArrowRight');assert.ok(Number(await lab(1).getAttribute('data-screen-x'))>2.6);
   await lab(5).locator('[data-action=reset]').click();const ends=await lab(5).locator('.light-ray').evaluateAll(es=>es.filter((_,i)=>i%2===1).map(e=>e.getAttribute('d').match(/L([\d.-]+) ([\d.-]+)/).slice(1).map(Number)));assert.equal(ends.length,6);for(const[x,y]of ends){assert.equal(x,580);assert.ok(Math.abs(y-180)<=6.01);}
  });
  await t.test('素材、有效入口、內部連結及瀏覽器錯誤',async()=>{

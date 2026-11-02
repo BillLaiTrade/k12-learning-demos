@@ -183,14 +183,16 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .fork-actions .stop:disabled{opacity:1;border-color:#d7dfd9;background:#e9eeeb;color:#8a9691;cursor:not-allowed}
 .fork-message:not(.visually-hidden){margin:0 0 12px;padding:10px 13px;border-left:3px solid #be9148;border-radius:0 10px 10px 0;background:#fff3dc;color:#795b2b;font-size:.84rem;line-height:1.6}
 .card-main .fork-records>h3{margin:0 0 8px;font-size:1rem}
-.fork-comparisons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fork-comparisons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:10px}
 .fork-record{min-width:0;padding:10px;border:1px solid #cadfd8;border-radius:12px;background:#fff}
 .card-main .fork-record>h3{margin:0 0 7px}
+.fork-record[data-observed=false]{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.card-main .fork-record[data-observed=false]>h3{margin:0}
 .fork-record-body{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;min-height:82px}
 .fork-record .wave{height:80px}
 .fork-findings{display:grid;gap:6px;font-size:.78rem;color:#3d4841}
 .fork-findings span{padding:5px 7px;border-radius:7px;background:#faf5e9;white-space:nowrap}
-.fork-record-pending{display:grid;min-height:82px;align-content:center;margin:0;color:#718176;font-size:.82rem}
+.fork-record-pending{margin:0;color:#718176;font-size:.82rem}
 .fork-same-pitch{display:flex;align-items:center;gap:12px;margin:8px 0 0;color:#667870;font-size:.84rem;text-align:center}
 .fork-same-pitch::before,.fork-same-pitch::after{height:1px;flex:1;background:#c7d8d0;content:""}
 .fork-conclusion{margin-bottom:0}

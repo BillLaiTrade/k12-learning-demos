@@ -1,0 +1,65 @@
+[
+  {
+    "width": 1440,
+    "left": 453,
+    "right": 1271,
+    "canvasWidth": 816,
+    "page": 1440,
+    "viewport": 1440,
+    "clipped": []
+  },
+  {
+    "width": 1366,
+    "left": 416,
+    "right": 1234,
+    "canvasWidth": 816,
+    "page": 1366,
+    "viewport": 1366,
+    "clipped": []
+  },
+  {
+    "width": 1024,
+    "left": 331,
+    "right": 977,
+    "canvasWidth": 644,
+    "page": 1024,
+    "viewport": 1024,
+    "clipped": []
+  },
+  {
+    "width": 820,
+    "left": 324,
+    "right": 780,
+    "canvasWidth": 454,
+    "page": 820,
+    "viewport": 820,
+    "clipped": []
+  },
+  {
+    "width": 760,
+    "left": 92,
+    "right": 668,
+    "canvasWidth": 574,
+    "page": 760,
+    "viewport": 760,
+    "clipped": []
+  },
+  {
+    "width": 390,
+    "left": 31,
+    "right": 359,
+    "canvasWidth": 326,
+    "page": 390,
+    "viewport": 390,
+    "clipped": []
+  },
+  {
+    "width": 320,
+    "left": 31,
+    "right": 289,
+    "canvasWidth": 256,
+    "page": 320,
+    "viewport": 320,
+    "clipped": []
+  }
+]

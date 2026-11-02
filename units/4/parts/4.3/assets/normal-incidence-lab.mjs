@@ -1,4 +1,4 @@
-import { layout, media, boundaryMs, comparisonMs, durationMs, snapshot } from './normal-incidence-model.mjs?v=20261102-air-control1';
+import { layout, media, boundaryMs, comparisonMs, durationMs, snapshot } from './normal-incidence-model.mjs?v=20261102-air-half1';
 
 const root=document.querySelector('#normal-lab');
 const $=selector=>root.querySelector(selector);
@@ -12,9 +12,9 @@ scene.innerHTML=`<defs><filter id="normal-glow" filterUnits="userSpaceOnUse" x="
 ${media.map((medium,i)=>{
  const x=layout.axes[i], inAir=medium==='air';
  return `<g class="normal-lane" data-medium="${medium}">
- ${inAir?'':`<path class="normal-interface" d="M${x-151} ${layout.boundary}H${x+151}"/>${tag(x-226,layout.boundary+10,'介面',90)}<path class="normal-reference" d="M${x} 266V815"/><text x="${x}" y="847" text-anchor="middle" font-size="27">法線</text>`}
- ${tag(x-137,inAir?424:300,'空氣',100)}
- ${inAir?'':tag(x-137,525,medium==='water'?'水':'玻璃',medium==='water'?80:100)}
+ ${inAir?'':`<path class="normal-interface" d="M${x-151} ${layout.boundary}H${x+151}"/>${tag(x-226,layout.boundary+10,'介面',90)}<path class="normal-reference" d="M${x} 266V925"/><g class="normal-reference-label"><rect x="${x-61}" y="934" width="122" height="54" rx="12" fill="#fffef7" stroke="#aac2a9" stroke-width="2"/><text x="${x}" y="971" text-anchor="middle" font-size="30">法線</text></g>`}
+ ${tag(x-137,inAir?424:380,'空氣',100)}
+ ${inAir?'':tag(x-137,590,medium==='water'?'水':'玻璃',medium==='water'?80:100)}
  <g class="normal-beam" visibility="hidden">${['normal-halo','normal-ray','normal-core'].map(cls=>`<line class="${cls}" x1="${x}" y1="${layout.source}" x2="${x}" y2="${layout.source}"/>`).join('')}</g>
  <ellipse class="normal-source-light" cx="${x}" cy="${layout.source}" rx="14" ry="14" visibility="hidden"/>
  <path class="normal-direction" d="M0 0V28m-9-10 9 10 9-10" visibility="hidden"/>
@@ -100,7 +100,7 @@ async function prepare(){
  try{await picture.decode();state='idle';controls();explainStage();}
  catch{state='error';controls();retry.hidden=false;status.textContent='實驗桌圖片暫時無法載入，請重新載入後再發射。';}
 }
-retry.onclick=()=>{picture.src=new URL(`normal-incidence-three-bench.png?retry=${Date.now()}`,import.meta.url).href;prepare();};
+retry.onclick=()=>{picture.src=new URL(`normal-incidence-half-air-bench.png?retry=${Date.now()}`,import.meta.url).href;prepare();};
 prepare();
 
 // A single rigid axle moves straight across a horizontal boundary. Both wheels

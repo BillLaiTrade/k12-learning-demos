@@ -39,10 +39,10 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   if(captures)await page.locator('#s2').screenshot({path:path.join(captures,'1440-idle-collapsed.png')});
  });
  await t.test('continuous beams launch together and stay on the same axis across the interface',async()=>{
-  await run();await page.clock.runFor(300);const air=await fronts();assert.ok(air[0]>240&&air[0]<340);assert.equal(air[0],air[1]);assert.equal(air[1],air[2]);
-  await page.clock.runFor(1000);const below=await fronts();assert.ok(below[0]>below[1]&&below[1]>below[2]&&below[2]>340);
+  await run();await page.clock.runFor(300);const air=await fronts();assert.ok(air[0]>240&&air[0]<484);assert.equal(air[0],air[1]);assert.equal(air[1],air[2]);
+  await page.clock.runFor(1800);const below=await fronts();assert.ok(below[0]>below[1]&&below[1]>below[2]&&below[2]>484);
   const geometry=await page.locator('.normal-beam line').evaluateAll(es=>es.map(e=>[e.getAttribute('x1'),e.getAttribute('x2'),e.getAttribute('y1'),e.getAttribute('y2')]));
-  geometry.forEach(g=>{assert.equal(g[0],g[1]);assert.equal(g[2],'240');assert.ok(Number(g[3])>340);});
+  geometry.forEach(g=>{assert.equal(g[0],g[1]);assert.equal(g[2],'240');assert.ok(Number(g[3])>484);});
   assert.equal(await page.locator('[data-normal-stage="2"]').getAttribute('aria-current'),'step');
  });
  await t.test('pause freezes both fronts and resume continues the saved progress',async()=>{
@@ -56,7 +56,7 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   await page.clock.runFor(6000);
   assert.equal(await lab.getAttribute('data-state'),'paused');assert.equal(await lab.getAttribute('data-pause-reason'),'comparison');
   assert.ok(Math.abs(Number(await lab.getAttribute('data-elapsed-ms'))-comparisonMs)<1e-8);
-  const frozen=await fronts();assert.equal(frozen[0],728);assert.ok(Math.abs(frozen[1]-631)<1e-8);assert.ok(Math.abs(frozen[2]-(598+2/3))<1e-8);
+  const frozen=await fronts();assert.equal(frozen[0],728);assert.ok(Math.abs(frozen[1]-667)<1e-8);assert.ok(Math.abs(frozen[2]-(646+2/3))<1e-8);
   assert.equal(await page.locator('[data-normal-stage="3"]').getAttribute('aria-current'),'step');
   assert.equal(await page.locator('#normal-state').innerText(),'同一瞬間・已暫停');
   assert.deepEqual(await page.locator('.normal-arrival text').allTextContents(),['先到達','尚未到達','尚未到達']);
@@ -113,7 +113,7 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
  });
  await t.test('failed artwork disables firing, retry recovers, and other sections remain usable',async()=>{
   const failed=await browser.newPage({viewport:{width:1440,height:1000}});
-  let block=true;await failed.route('**/normal-incidence-three-bench.png*',route=>block?route.abort():route.continue());
+  let block=true;await failed.route('**/normal-incidence-half-air-bench.png*',route=>block?route.abort():route.continue());
   await failed.goto(base);await failed.waitForFunction(()=>document.querySelector('#normal-lab').dataset.state==='error');
   assert.equal(await failed.locator('#normal-start').isDisabled(),true);assert.equal(await failed.locator('#normal-retry').isVisible(),true);
   await failed.locator('[data-ray-lab="enter"] .angle-input').fill('45');await failed.locator('[data-ray-lab="enter"] .angle-input').dispatchEvent('input');assert.match(await failed.locator('[data-ray-lab="enter"] .angle-output').innerText(),/45/);

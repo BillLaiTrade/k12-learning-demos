@@ -4,6 +4,11 @@
 
 ## 結構與模型
 
+2026-11-02 第一區已依核可示意改為可旋轉、縮放的立體針孔實驗台。直接拖曳屏幕沿光軌移動，沒有距離拉霸；「屏幕」按鈕支援方向鍵／Home／End。暗環境保留明亮發光圖卡與較暗的倒立投影，輔助光路預設關閉，可分別追蹤上下端；「正面看屏幕」僅改變相機。重設位置與重設視角分開。第2–10區HTML逐段雜湊保持相同。
+
+- `assets/pinhole-optics.mjs`：三維直線投影、屏幕位置限制及定性亮度。
+- `assets/pinhole-3d.mjs`、`pinhole-3d.css`：第一區獨立渲染與操作，直接引用4.1既有Three.js，不新增套件；孔板具有真實開孔，接收面與像共用同一片屏幕。
+
 - `index.html`：可閱讀的逐區內容、共用人物對話、完整提問導覽、九區閱讀位置及獨立小測。
 - `assets/lesson.css`：沿用 4.3／2.2 的頁面殼層與卡頭尺寸，再加入本課的工作台、光路、控制與觀察窗；未修改共用或其他單元樣式。
 - `assets/optics.mjs`：小孔相似三角形、理想薄透鏡光路、眼睛及兩段眼鏡作用、兩透鏡顯微鏡的純計算。公式用於保持模型正確，學生不必計算。
@@ -20,10 +25,14 @@
 
 ```sh
 node tests/unit-4.4-optics.test.mjs
+node tests/unit-4.4-pinhole-optics.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4-pinhole-3d.test.cjs
 CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs
 ```
 
-純模型8項；瀏覽器22個子項加主項，共23項，合計31項。涵蓋九區所有操作、十區格式、唯一小測、實際滑鼠拖曳、鍵盤、原生觸控、七種寬度、標頭不遮擋、初始深連結、有效素材及入口，並與2.2實際計算樣式比較。
+最新本機共47項：透鏡模型8、針孔模型7、立體專項9、整課23（瀏覽器含主項）。涵蓋實際像素上下對應、孔板實體與光路、滑鼠／鍵盤／原生觸控拖曳、旋轉、縮放、取消手勢、七種寬度、十區導覽及2.2計算樣式比較。31項為改版前基本版的歷史總數。
+
+`PINHOLE_URL`可指定公開4.4網址（不帶hash），`PINHOLE_CAPTURE_DIR`另存第一區證據。立體專項以測試期間模組攔截讀取實際場景；正式模組不暴露測試API。光學模型用獨立幾何關係核對，沒有把畫面狀態文字當成成像證據。瀏覽器使用SwiftShader驗WebGL；不代表Safari實機。詳見[本輪紀錄](../../../../docs/reviews/unit-4.4-pinhole-3d-20261102/review.md)。
 
 `LENS_URL` 可指定公開課程完整網址（不帶hash），`LENS_CAPTURE_DIR` 指定證據目錄。公開測試使用環境提供的 HTTPS 代理；需允許本機 socket 與 Chromium 程序。`#s1`–`#s10` 為十區錨點，`#unit-quiz` 為小測入口別名。
 

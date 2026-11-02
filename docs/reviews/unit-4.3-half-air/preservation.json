@@ -1,0 +1,18 @@
+{
+  "baseline": "6d91dd45",
+  "unchangedSections": {
+    "s1": true,
+    "s3": true,
+    "s4": true,
+    "s5": true,
+    "s6": true,
+    "s7": true
+  },
+  "unchangedPlaybackAndComparisonLogic": true,
+  "controllerChanges": [
+    "asset and model cache versions",
+    "air label position",
+    "water/glass label position",
+    "retry image URL"
+  ]
+}
