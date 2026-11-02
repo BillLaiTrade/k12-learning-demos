@@ -6,6 +6,7 @@ const fs=require('node:fs/promises');
 const {chromium}=require('playwright');
 
 test('4.3 normal incidence desk and folding explanation work as approved',{timeout:120000},async t=>{
+ const {comparisonMs,durationMs}=await import('../units/4/parts/4.3/assets/normal-incidence-model.mjs');
  let base=process.env.LESSON_BASE_URL;
  if(!base){
   const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});t.after(()=>server.kill());
@@ -21,25 +22,27 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
  const lab=page.locator('#normal-lab'),details=page.locator('#normal-explanation'),summary=details.locator('summary');
  const fronts=()=>page.locator('.normal-lane').evaluateAll(es=>es.map(e=>Number(e.dataset.frontY)));
  const run=async()=>{await page.locator('#normal-start').click();await page.clock.runFor(100);};
- const finish=async()=>{if(await lab.getAttribute('data-state')==='paused')await page.locator('#normal-pause').click();await page.clock.runFor(4400);};
+ const finish=async()=>{for(let i=0;i<2&&await lab.getAttribute('data-state')!=='complete';i++){if(await lab.getAttribute('data-state')==='paused')await page.locator('#normal-pause').click();await page.clock.runFor(durationMs+200);}assert.equal(await lab.getAttribute('data-state'),'complete');};
  const captures=process.env.NORMAL_CAPTURE_DIR;if(captures)await fs.mkdir(captures,{recursive:true});
  await t.test('idle scene has no emitted light, dotted particles, autoplay or open explanation',async()=>{
-  assert.equal(await details.getAttribute('open'),null);assert.equal(await page.locator('.normal-beam[visibility="hidden"]').count(),2);
+  assert.equal(await details.getAttribute('open'),null);assert.equal(await page.locator('.normal-beam[visibility="hidden"]').count(),3);
   assert.equal(await page.locator('#normal-scene circle').count(),0);assert.equal(await page.locator('#normal-scene .pulse').count(),0);
   assert.equal(await page.locator('.normal-actions button').count(),2);
   assert.equal(await page.locator('#normal-pause').isDisabled(),true);
   assert.equal(await page.locator('#normal-cart').getAttribute('transform'),'translate(0 82)');
-  await page.clock.runFor(600);assert.deepEqual(await fronts(),[165,165]);
+  await page.clock.runFor(600);assert.deepEqual(await fronts(),[240,240,240]);
   await page.locator('#normal-background').evaluate(el=>el.decode());
-  assert.equal(await page.locator('#normal-background').evaluate(el=>el.naturalWidth),1717);
+  assert.equal(await page.locator('#normal-background').evaluate(el=>el.naturalWidth),1536);
   assert.match(await lab.innerText(),/慢動作示意/);assert.doesNotMatch(await lab.innerText(),/間距/);
+  assert.equal(await page.locator('#s2 .normal-next').count(),0);assert.equal(await page.locator('.normal-name').count(),3);assert.equal(await page.locator('[data-medium=air] .normal-interface').count(),0);assert.equal(await page.locator('[data-medium=air] .normal-reference').count(),0);
+  assert.ok(await page.locator('.normal-steps').evaluate(el=>el.getBoundingClientRect().bottom<=document.querySelector('#normal-viewport').getBoundingClientRect().top));
   if(captures)await page.locator('#s2').screenshot({path:path.join(captures,'1440-idle-collapsed.png')});
  });
  await t.test('continuous beams launch together and stay on the same axis across the interface',async()=>{
-  await run();await page.clock.runFor(700);const air=await fronts();assert.ok(air[0]>165&&air[0]<463);assert.equal(air[0],air[1]);
-  await page.clock.runFor(1800);const below=await fronts();assert.ok(below[0]>below[1]&&below[1]>463);
+  await run();await page.clock.runFor(300);const air=await fronts();assert.ok(air[0]>240&&air[0]<340);assert.equal(air[0],air[1]);assert.equal(air[1],air[2]);
+  await page.clock.runFor(1000);const below=await fronts();assert.ok(below[0]>below[1]&&below[1]>below[2]&&below[2]>340);
   const geometry=await page.locator('.normal-beam line').evaluateAll(es=>es.map(e=>[e.getAttribute('x1'),e.getAttribute('x2'),e.getAttribute('y1'),e.getAttribute('y2')]));
-  geometry.forEach(g=>{assert.equal(g[0],g[1]);assert.equal(g[2],'165');assert.ok(Number(g[3])>463);});
+  geometry.forEach(g=>{assert.equal(g[0],g[1]);assert.equal(g[2],'240');assert.ok(Number(g[3])>340);});
   assert.equal(await page.locator('[data-normal-stage="2"]').getAttribute('aria-current'),'step');
  });
  await t.test('pause freezes both fronts and resume continues the saved progress',async()=>{
@@ -48,12 +51,28 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   assert.match(await page.locator('#normal-pause').innerText(),/繼續/);
   if(captures)await page.locator('#s2').screenshot({path:path.join(captures,'1440-paused-collapsed.png')});
   await page.locator('#normal-pause').click();await page.clock.runFor(200);assert.ok((await fronts())[0]>stopped[0]);
-  await finish();assert.deepEqual(await fronts(),[714,714]);assert.equal(await lab.getAttribute('data-state'),'complete');
+ });
+ await t.test('air arrival pauses exactly once at one common instant, even across many frames',async()=>{
+  await page.clock.runFor(6000);
+  assert.equal(await lab.getAttribute('data-state'),'paused');assert.equal(await lab.getAttribute('data-pause-reason'),'comparison');
+  assert.ok(Math.abs(Number(await lab.getAttribute('data-elapsed-ms'))-comparisonMs)<1e-8);
+  const frozen=await fronts();assert.equal(frozen[0],728);assert.ok(Math.abs(frozen[1]-631)<1e-8);assert.ok(Math.abs(frozen[2]-(598+2/3))<1e-8);
+  assert.equal(await page.locator('[data-normal-stage="3"]').getAttribute('aria-current'),'step');
+  assert.equal(await page.locator('#normal-state').innerText(),'同一瞬間・已暫停');
+  assert.deepEqual(await page.locator('.normal-arrival text').allTextContents(),['先到達','尚未到達','尚未到達']);
+  assert.equal(await page.locator('#normal-start').isDisabled(),true);
+  await page.clock.runFor(2500);assert.deepEqual(await fronts(),frozen);
+  if(captures)await page.locator('#s2').screenshot({path:path.join(captures,'1440-comparison-collapsed.png')});
+ });
+ await t.test('continuing the comparison finishes all three rays without a second automatic stop',async()=>{
+  const frozen=await fronts();await page.locator('#normal-pause').click();await page.clock.runFor(200);
+  const next=await fronts();assert.equal(next[0],728);assert.ok(next[1]>frozen[1]&&next[2]>frozen[2]);
+  await finish();assert.deepEqual(await fronts(),[728,728,728]);
   assert.equal(await page.locator('#normal-pause').isDisabled(),true);assert.equal(await page.locator('#normal-start').isEnabled(),true);
-  assert.equal(await page.locator('.normal-direction[visibility="hidden"]').count(),2);
+  assert.equal(await page.locator('.normal-direction[visibility="hidden"]').count(),3);
  });
  await t.test('same launch button starts a fresh run and offscreen or hidden pages preserve progress',async()=>{
-  await run();assert.ok((await fronts())[0]<230);
+  await run();assert.ok((await fronts())[0]<280);assert.equal(await lab.getAttribute('data-comparison-passed'),'false');
   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.clock.runFor(100);
   await page.waitForFunction(()=>document.querySelector('#normal-lab').dataset.state==='paused');
   const stopped=await fronts();await page.clock.runFor(1000);assert.deepEqual(await fronts(),stopped);
@@ -75,6 +94,7 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   await summary.click();await page.clock.runFor(50);
  });
  await t.test('seven widths keep controls readable, with only the apparatus scrolling on phones',async()=>{
+  await run();await page.clock.runFor(6000);assert.equal(await lab.getAttribute('data-pause-reason'),'comparison');
   const measurements=[];
   for(const width of [1440,1366,1024,820,760,390,320]){
    await page.setViewportSize({width,height:width<760?844:1100});
@@ -93,7 +113,7 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
  });
  await t.test('failed artwork disables firing, retry recovers, and other sections remain usable',async()=>{
   const failed=await browser.newPage({viewport:{width:1440,height:1000}});
-  let block=true;await failed.route('**/normal-incidence-bench.png*',route=>block?route.abort():route.continue());
+  let block=true;await failed.route('**/normal-incidence-three-bench.png*',route=>block?route.abort():route.continue());
   await failed.goto(base);await failed.waitForFunction(()=>document.querySelector('#normal-lab').dataset.state==='error');
   assert.equal(await failed.locator('#normal-start').isDisabled(),true);assert.equal(await failed.locator('#normal-retry').isVisible(),true);
   await failed.locator('[data-ray-lab="enter"] .angle-input').fill('45');await failed.locator('[data-ray-lab="enter"] .angle-input').dispatchEvent('input');assert.match(await failed.locator('[data-ray-lab="enter"] .angle-output').innerText(),/45/);

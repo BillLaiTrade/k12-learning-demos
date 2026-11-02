@@ -1,0 +1,26 @@
+{
+  "approvedMockup": "approved-design-before-link-removal.png",
+  "followup": "使用者要求移除最下方下一區連結；實作以收合解說作結。",
+  "asset": "units/4/parts/4.3/assets/normal-incidence-three-bench.png",
+  "sources": [
+    "/workspace/generated_images/exec-1700092a-0041-487c-8edf-f467651bb976.png",
+    "/workspace/generated_images/exec-53a26511-1d69-4477-a228-aa04b81fc0a2.png"
+  ],
+  "process": "依核可示意圖由 image_gen 產生三組無光無字底圖，再以 image_gen 提高水與玻璃介面。最終原檔直接複製，沒有程式裁切或後製。",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "sha256": "b91fb3ed19402d27c3386b1bb6e751432d8e7d411279a0c6205cdc96809ac504",
+  "overlayCoordinates": {
+    "axes": [
+      350,
+      768,
+      1184
+    ],
+    "source": 240,
+    "boundary": 340,
+    "end": 728
+  },
+  "mediumPathFraction": 0.7950819672131147
+}
