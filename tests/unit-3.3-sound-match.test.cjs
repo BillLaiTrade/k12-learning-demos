@@ -22,12 +22,25 @@ test('sound-match assessment follows the approved layout and shares actual audio
  const switchTo=async tone=>{for(let i=0;i<3&&await plot.getAttribute('data-tone')!==tone;i++){await root.locator('[data-match-switch]').click();await ready();}assert.equal(await plot.getAttribute('data-tone'),tone);};
  const questions=(await import('../units/3/parts/3.3/assets/sound-match-model.mjs')).MATCH_QUESTIONS;
  const capture=process.env.MATCH_CAPTURE_DIR||'/tmp/unit33-sound-match';await fs.mkdir(capture,{recursive:true});await ready();
+ const checkSteps=async()=>{
+  assert.deepEqual(await root.locator('.match-step h3').allTextContents(),['聽目標聲音','調整並試聽','完成比較']);
+  assert.deepEqual(await root.locator('.match-step-number').allTextContents(),['1','2','3']);
+  assert.equal(await root.locator('.match-target [data-play=quiz-base]').count(),1);
+  assert.equal(await root.locator('.match-workbench [data-play=quiz-choice]').count(),1);
+  assert.equal(await root.locator('.match-comparison [type=submit]').count(),1);
+  assert.equal(await root.locator('[type=submit]').evaluate(n=>n.form===document.querySelector('#settings-form')),true);
+  const geometry=await root.evaluate(n=>{
+   const steps=[...n.querySelectorAll('.match-step')].map(el=>el.getBoundingClientRect()),mine=n.querySelector('[data-play=quiz-choice]').getBoundingClientRect(),submit=n.querySelector('[type=submit]').getBoundingClientRect(),note=n.querySelector('#match-compare-note').getBoundingClientRect();
+   return {gaps:steps.slice(1).map((r,i)=>r.top-steps[i].bottom),aligned:Math.abs(mine.left-submit.left),belowNote:submit.top>=note.bottom};
+  });
+  assert.ok(geometry.gaps.every(g=>g>=10),'three groups have clear vertical separation');assert.ok(geometry.aligned<1,'submit aligns left with listening');assert.equal(geometry.belowNote,true);
+ };
  const resultFits=async state=>{
   for(const [width,height]of [[1440,900],[1366,768],[1280,720],[1024,768]]){
-   await page.setViewportSize({width,height});await root.evaluate(n=>n.scrollIntoView({block:'start'}));
-   const geometry=await root.evaluate(n=>{const box=n.getBoundingClientRect();return{height:box.height,overflow:document.documentElement.scrollWidth>innerWidth,outside:[...n.querySelectorAll('.match-head,.match-target,.match-wave-panel,.match-controls,.match-actions,#quiz-feedback,.match-hints,[data-match-result-action]')].filter(el=>{const r=el.getBoundingClientRect();return r.width&&(r.top<0||r.bottom>innerHeight||r.left<box.left||r.right>box.right+1);}).map(el=>el.className||el.id)};});
-   assert.equal(geometry.overflow,false);assert.equal(await root.locator('button,output,h2,.match-control-title,#quiz-feedback,.match-hints p').evaluateAll(ns=>ns.some(n=>n.scrollWidth>n.clientWidth+1)),false);assert.deepEqual(geometry.outside,[],`${state} ${width}x${height}: complete activity and result fit`);assert.ok(geometry.height<=height-20);
-   await page.screenshot({path:`${capture}/compact-${state}-${width}.png`});
+   await page.setViewportSize({width,height});await checkSteps();await root.locator('.match-response').scrollIntoViewIfNeeded();
+   const geometry=await root.evaluate(n=>{const box=n.getBoundingClientRect(),group=n.querySelector('.match-comparison').getBoundingClientRect(),response=n.querySelector('.match-response').getBoundingClientRect();return{overflow:document.documentElement.scrollWidth>innerWidth,responseVisible:response.top>=-1&&response.bottom<=innerHeight+1,outside:[...n.querySelectorAll('#quiz-feedback,.match-hints,[data-match-result-action]')].filter(el=>{const r=el.getBoundingClientRect();return r.width&&(r.top<group.top||r.bottom>group.bottom||r.left<box.left||r.right>box.right+1);}).map(el=>el.className||el.id)};});
+   assert.equal(geometry.overflow,false);assert.equal(geometry.responseVisible,true);assert.equal(await root.locator('button,output,h2,.match-control-title,#quiz-feedback,.match-hints p').evaluateAll(ns=>ns.some(n=>n.scrollWidth>n.clientWidth+1)),false);assert.deepEqual(geometry.outside,[],`${state} ${width}x${height}: feedback stays in the completion group`);
+   await root.screenshot({path:`${capture}/three-steps-${state}-${width}.png`});
   }
   await page.setViewportSize({width:1440,height:1000});
  };
@@ -36,10 +49,11 @@ test('sound-match assessment follows the approved layout and shares actual audio
   try{
    const referenceUrl=process.env.SOUND33_BASE_URL?new URL('../../../2/parts/2.1/',base).href:`http://127.0.0.1:${port}/units/2/parts/2.1/`;
    await reference.goto(referenceUrl,{waitUntil:'networkidle'});
-   const format=p=>p.locator('#unit-quiz').evaluate(n=>{const pick=(el,keys)=>{const s=getComputedStyle(el);return Object.fromEntries(keys.map(k=>[k,s[k]]));};return{card:pick(n,['backgroundColor','color','border','borderRadius','boxShadow','lineHeight']),header:pick(n.querySelector('.quiz-head'),['display','gridTemplateColumns','columnGap','padding','borderBottom','backgroundColor']),mark:pick(n.querySelector('.quiz-mark'),['width','height','backgroundColor','color','borderRadius','fontSize']),title:pick(n.querySelector('h2'),['fontSize','lineHeight','color']),kicker:pick(n.querySelector('.quiz-kicker'),['fontSize','color','backgroundColor','letterSpacing']),bodyPadding:getComputedStyle(n.querySelector('.quiz-body,.match-body')).padding};});
-   assert.deepEqual(await format(page),await format(reference),'quiz frame, header and palette match unit 2.1');
+   const format=p=>p.locator('#unit-quiz').evaluate(n=>{const pick=(el,keys)=>{const s=getComputedStyle(el);return Object.fromEntries(keys.map(k=>[k,s[k]]));};return{headerColumns:getComputedStyle(n.querySelector('.quiz-head')).gridTemplateColumns.split(' ').length,card:pick(n,['backgroundColor','color','border','borderRadius','boxShadow','lineHeight']),header:pick(n.querySelector('.quiz-head'),['display','columnGap','borderBottom','backgroundColor']),mark:pick(n.querySelector('.quiz-mark'),['width','height','backgroundColor','color','borderRadius','fontSize']),title:pick(n.querySelector('h2'),['fontSize','lineHeight','color']),kicker:pick(n.querySelector('.quiz-kicker'),['fontSize','color','backgroundColor','letterSpacing'])};});
+   assert.deepEqual(await format(page),await format(reference),'quiz frame, header hierarchy and palette match unit 2.1; compact spacing is independent');
    assert.equal(await root.locator('.quiz-mark').innerText(),'?');
   }finally{await reference.close();}
+  await checkSteps();
   assert.equal(await page.locator('.quiz').count(),1);assert.equal(await root.locator('select').count(),0);assert.equal(await root.locator('input').count(),0);assert.equal(await root.locator('[data-play]').count(),2);assert.equal(await root.locator('[data-match-step]').count(),4);
   assert.equal(await root.locator('[data-match-picture]').getAttribute('data-instrument'),'string');assert.equal(await root.locator('.match-target svg.match-wave').count(),0);assert.equal(await root.locator('[data-match-target]').isHidden(),true);assert.equal(await root.locator('.match-result').isHidden(),true);
   assert.equal(await page.evaluate(()=>window.matchRuns.length),0);assert.equal(await plot.getAttribute('data-tone'),'pipe');assert.equal(await root.locator('[data-match-new]').isVisible(),true);assert.equal(await root.locator('[data-match-progress],[data-match-dots],[data-match-summary],[data-match-restart],[data-match-next]').count(),0);
@@ -79,7 +93,7 @@ test('sound-match assessment follows the approved layout and shares actual audio
   await set('frequency',440);await retained();
   for(const [width,height]of [[1440,900],[1366,768]]){
    await page.setViewportSize({width,height});await root.evaluate(n=>n.scrollIntoView({block:'start'}));
-   const fits=await root.evaluate(n=>n.querySelector('.match-actions').getBoundingClientRect().bottom<=innerHeight&&document.documentElement.scrollWidth<=innerWidth);assert.equal(fits,true,`retained target and controls fit ${width}x${height}`);
+   await checkSteps();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`retained target and controls stay contained at ${width}x${height}`);
    await root.screenshot({path:`${capture}/retained-target-${width}.png`});
   }
   await page.setViewportSize({width:1440,height:1000});
@@ -126,11 +140,11 @@ test('sound-match assessment follows the approved layout and shares actual audio
   await page.evaluate(()=>{window.originalResume=AudioContext.prototype.resume;AudioContext.prototype.resume=function(){return new Promise(resolve=>window.releaseMatch=()=>window.originalResume.call(this).then(resolve));};});
   const n=await page.evaluate(()=>window.matchRuns.length);await root.locator('[data-play=quiz-choice]').click();await page.waitForFunction(()=>!!window.releaseMatch);await set('amplitude',Number(await plot.getAttribute('data-amplitude'))===.6?.3:.6);await page.evaluate(()=>window.releaseMatch());await page.waitForTimeout(150);assert.equal(await page.evaluate(()=>window.matchRuns.length),n);const after=await page.evaluate(()=>window.matchRuns.length);await root.locator('[data-play=quiz-choice]').click();await root.locator('[data-match-new]').click();await ready();await page.evaluate(()=>window.releaseMatch());await page.waitForTimeout(150);assert.equal(await page.evaluate(()=>window.matchRuns.length),after);assert.equal(await root.getAttribute('data-playing'),'false');await page.evaluate(()=>AudioContext.prototype.resume=window.originalResume);
  });
- await t.test('desktop and laptop keep the approved hierarchy and all activity controls in one viewport; mobile stays contained',async()=>{
+ await t.test('three separate activity groups stay ordered and left aligned across desktop, laptop and mobile',async()=>{
   for(const [width,height] of [[1440,1000],[1366,768],[1280,720],[1024,768],[820,1000],[760,1000],[390,1000],[320,1000]]){
    await page.setViewportSize({width,height});await root.evaluate(n=>n.scrollIntoView({block:'start'}));assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
    const metrics=await root.evaluate(n=>{const box=n.getBoundingClientRect(),a=n.querySelector('.match-target').getBoundingClientRect(),wave=n.querySelector('.match-wave').getBoundingClientRect(),end=n.querySelector('.match-actions').getBoundingClientRect();return {above:a.bottom<wave.top,top:box.top,bottom:end.bottom,clipped:[...n.querySelectorAll('button,input')].some(x=>{const r=x.getBoundingClientRect();return r.width>0&&(r.left<box.left||r.right>box.right+1||x.scrollWidth>x.clientWidth+1);})};});
-   assert.equal(metrics.above,true);assert.equal(metrics.clipped,false,`${width}px controls stay inside`);if(width>=1024)assert.ok(metrics.bottom<=height,`${width}x${height}: activity bottom ${metrics.bottom}`);
+   assert.equal(metrics.above,true);assert.equal(metrics.clipped,false,`${width}px controls stay inside`);await checkSteps();
    await root.screenshot({path:`${capture}/layout-${width}.png`});
   }
  });

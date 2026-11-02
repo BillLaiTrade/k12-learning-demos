@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="assets/lesson.css?v=pan-controls-47">
 <script type="module" src="assets/lesson.mjs?v=pan-controls-47">
 </script>
-<link rel="stylesheet" href="assets/sound-match.css?v=7">
+<link rel="stylesheet" href="assets/sound-match.css?v=compact-steps-9">
 </head>
 <body>
 <header class="shell masthead">
@@ -291,19 +291,19 @@
 <section class="quiz sound-match" id="unit-quiz" aria-labelledby="quiz-title">
 <header class="quiz-head match-head">
 <div class="quiz-mark" aria-hidden="true">?</div>
-<div class="match-heading"><p class="quiz-kicker">單元小測</p><h2 id="quiz-title">把聲音調出來</h2><p class="quiz-subtitle" data-match-instructions>聽目標、調整波形、試聽比較；隨時都可以換一題。</p></div>
+<div class="match-heading"><p class="quiz-kicker">單元小測</p><h2 id="quiz-title">把聲音調出來</h2><p class="quiz-subtitle" data-match-instructions>調整音色、音高與大小聲，讓「我的聲音」盡量接近目標。</p></div>
 <button class="secondary match-new" type="button" data-match-new aria-label="換一題，清除目前設定與比較結果"><span aria-hidden="true">↻</span> 換一題</button>
 </header>
 <div class="match-body">
-<div class="match-target">
+<section class="match-target match-step" aria-labelledby="match-target-title">
+<div class="match-step-heading"><span class="match-step-number" aria-hidden="true">1</span><div><h3 id="match-target-title">聽目標聲音</h3><p id="match-target-note">留意音色、音高和大小聲。</p></div></div>
 <div class="match-picture" data-match-picture role="img" aria-label="目標聲音的發聲器材"></div>
-<div class="match-target-copy"><h3>目標聲音</h3>
-<button class="play match-listen" type="button" data-play="quiz-base" aria-pressed="false"><span aria-hidden="true">▶</span> <span data-match-play-label>聽目標聲音</span></button>
-</div>
-</div>
-<form class="match-workbench" id="settings-form" novalidate>
-<div class="match-workbench-head"><div><h3>我的聲音</h3></div>
-<button class="secondary match-switch" type="button" data-match-switch><span aria-hidden="true">⟳</span> 換一種波形</button></div>
+<button class="play match-listen" type="button" data-play="quiz-base" aria-pressed="false" aria-describedby="match-target-note"><span aria-hidden="true">▶</span> <span data-match-play-label>聽目標聲音</span></button>
+</section>
+<form class="match-form" id="settings-form" novalidate>
+<section class="match-workbench match-step" aria-labelledby="match-adjust-title">
+<div class="match-workbench-head"><div class="match-step-heading"><span class="match-step-number" aria-hidden="true">2</span><div><h3 id="match-adjust-title">調整並試聽</h3><p id="match-adjust-note">可反覆調整、試聽，並重聽上方的目標。</p></div></div>
+<div class="match-switch-wrap"><button class="secondary match-switch" type="button" data-match-switch aria-describedby="match-timbre-note"><span aria-hidden="true">⟳</span> 換一種波形</button><p id="match-timbre-note">改變音色</p></div></div>
 <div class="match-wave-panel">
 <span class="match-y-label">相對<br>振幅</span>
 <div class="match-plot">
@@ -318,13 +318,18 @@
 </div>
 <div class="match-legend" data-match-legend hidden><span>━ 我的波形</span><span>┄ 目標波形</span></div>
 <div class="match-controls">
-<div class="match-control" role="group" aria-labelledby="match-frequency-title"><div class="match-control-title" id="match-frequency-title">調整頻率 <small>改變波的疏密</small></div><div class="match-stepper"><button type="button" data-match-step="frequency" data-direction="-1" aria-label="頻率減少 110 Hz">−</button><div class="match-level"><output id="answer-frequency" aria-label="頻率" aria-live="polite">440 Hz</output></div><button type="button" data-match-step="frequency" data-direction="1" aria-label="頻率增加 110 Hz">＋</button></div><div class="match-level-ends" aria-hidden="true"><span>低音</span><span>每次 110 Hz</span><span>高音</span></div></div>
-<div class="match-control" role="group" aria-labelledby="match-amplitude-title"><div class="match-control-title" id="match-amplitude-title">調整振幅 <small>改變波的高低</small></div><div class="match-stepper"><button type="button" data-match-step="amplitude" data-direction="-1" aria-label="相對振幅減少 0.3">−</button><div class="match-level"><output id="answer-amplitude" aria-label="相對振幅" aria-live="polite">0.3</output></div><button type="button" data-match-step="amplitude" data-direction="1" aria-label="相對振幅增加 0.3">＋</button></div><div class="match-level-ends" aria-hidden="true"><span>小聲</span><span>相對值・每次 0.3</span><span>大聲</span></div></div>
+<div class="match-control" role="group" aria-labelledby="match-frequency-title"><div class="match-control-title" id="match-frequency-title">調整頻率 <small>改變音高</small></div><div class="match-stepper"><button type="button" data-match-step="frequency" data-direction="-1" aria-label="頻率減少 110 Hz">−</button><div class="match-level"><output id="answer-frequency" aria-label="頻率" aria-live="polite">440 Hz</output></div><button type="button" data-match-step="frequency" data-direction="1" aria-label="頻率增加 110 Hz">＋</button></div><div class="match-level-ends" aria-hidden="true"><span>低音</span><span>每次 110 Hz</span><span>高音</span></div></div>
+<div class="match-control" role="group" aria-labelledby="match-amplitude-title"><div class="match-control-title" id="match-amplitude-title">調整振幅 <small>改變大小聲</small></div><div class="match-stepper"><button type="button" data-match-step="amplitude" data-direction="-1" aria-label="相對振幅減少 0.3">−</button><div class="match-level"><output id="answer-amplitude" aria-label="相對振幅" aria-live="polite">0.3</output></div><button type="button" data-match-step="amplitude" data-direction="1" aria-label="相對振幅增加 0.3">＋</button></div><div class="match-level-ends" aria-hidden="true"><span>小聲</span><span>相對值・每次 0.3</span><span>大聲</span></div></div>
 </div>
-<div class="match-actions"><button class="play match-listen" type="button" data-play="quiz-choice" aria-pressed="false"><span aria-hidden="true">▶</span> <span data-match-play-label>聽我的聲音</span></button><span class="match-action-line" aria-hidden="true"></span><button class="play match-submit" type="submit">完成比較 <span aria-hidden="true">→</span></button></div>
+<div class="match-actions"><button class="play match-listen" type="button" data-play="quiz-choice" aria-pressed="false" aria-describedby="match-adjust-note"><span aria-hidden="true">▶</span> <span data-match-play-label>聽我的聲音</span></button></div>
+</section>
+<section class="match-comparison match-step" aria-labelledby="match-compare-title">
+<div class="match-step-heading"><span class="match-step-number" aria-hidden="true">3</span><div><h3 id="match-compare-title">完成比較</h3><p id="match-compare-note">覺得接近目標後，查看比較結果。</p></div></div>
+<button class="play match-submit" type="submit" aria-describedby="match-compare-note">完成比較 <span aria-hidden="true">→</span></button>
 <div class="match-response"><p id="quiz-feedback" role="status" hidden></p>
 <div class="match-result" data-match-result hidden><div class="match-hints" data-match-hints></div><div class="match-result-actions"><button class="secondary" type="button" data-match-result-action>繼續調整</button></div></div>
 </div>
+</section>
 <p class="play-state visually-hidden" role="status">等待操作</p>
 </form>
 <details class="match-sources"><summary>聲音來源與操作說明</summary><p>吉他、排笛沿用第五區的授權錄音；音叉為近似純音合成示意。小測將各素材的峰值設為共同基準，再以重取樣調整音高、固定增益調整振幅；波形與試聽取自同一份處理後的聲音。調頻也會改變播放長度，波形顯示其中 10 毫秒片段。網頁音量不是實際聲壓。</p><p>吉他：<a href="https://freesound.org/people/allan764/sounds/467669/">allan764，31-A#4.flac</a>（<a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>）；排笛聲音示例：<a href="https://freesound.org/people/mrshoes/sounds/278175/">mrshoes，panflute scale octave and a half</a>（<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>，原作以 PVC 排管錄製）。修改及授權詳見<a href="assets/timbre-audio/LICENSE.md">素材說明</a>。</p><p>頻率在 220～660 Hz 間每次增減 110 Hz，相對振幅在 0.3～0.9 間每次增減 0.3。目標聲音也取自相同預設值；音色、頻率與振幅數值相同，即算配對成功。只比較目前這一題，不累積總分；換題會停止聲音並清除目前設定與回饋。</p></details>
