@@ -1,0 +1,11 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {parallelModel} from '../units/4/parts/4.4/assets/parallel-optics.mjs';
+const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`);
+const cross=(a,b)=>Math.abs(a[0]*b[1]-a[1]*b[0]);
+test('凸鏡中央較厚、凹鏡中央較薄，兩邊界均不交錯',()=>{for(const kind of ['convex','concave']){const g=parallelModel(kind),middle=g.right(0)-g.left(0),edge=g.right(g.halfHeight)-g.left(g.halfHeight);assert.ok(kind==='convex'?middle>edge:middle<edge);for(let y=-g.halfHeight;y<=g.halfHeight;y+=.01)assert.ok(g.right(y)>g.left(y));}});
+test('三束光在空氣平行，進出點均落在相應玻璃球面',()=>{for(const kind of ['convex','concave']){const g=parallelModel(kind);for(const r of g.rays){assert.deepEqual(r.incoming,[1,0]);close(r.from[1],r.enter[1]);close(r.enter[0],g.left(r.enter[1]));close(r.exit[0],g.right(r.exit[1]));close((r.exit[1]-r.enter[1])/(r.exit[0]-r.enter[0]),r.inside[1]/r.inside[0]);assert.ok(r.exit[0]>r.enter[0]&&Math.abs(r.exit[1])<g.halfHeight);}}});
+test('兩個介面各自滿足司乃耳關係，法線與方向均為單位向量',()=>{for(const kind of ['convex','concave']){const g=parallelModel(kind);for(const r of g.rays){for(const v of [r.incoming,r.inside,r.outgoing,r.N1,r.N2])close(Math.hypot(...v),1);close(cross(r.incoming,r.N1),g.index*cross(r.inside,r.N1));close(g.index*cross(r.inside,r.N2),cross(r.outgoing,r.N2));assert.ok(r.inside[0]>0&&r.outgoing[0]>0);}}});
+test('凸鏡三束出射光在另一側會聚，主軸光不偏折',()=>{const g=parallelModel('convex');assert.ok(g.focus>g.thickness);for(const r of g.rays){close(r.exit[1]+(g.focus-r.exit[0])*r.outgoing[1]/r.outgoing[0],0);if(r.enter[1])assert.ok(r.enter[1]*r.outgoing[1]<0);}assert.deepEqual(g.rays[1].outgoing,[1,0]);});
+test('凹鏡實際光發散，只有反向延長線交於入射側',()=>{const g=parallelModel('concave');assert.ok(g.focus<0);for(const r of g.rays){close(r.exit[1]+(g.focus-r.exit[0])*r.outgoing[1]/r.outgoing[0],0);if(r.enter[1]){assert.ok(r.enter[1]*r.outgoing[1]>0);assert.ok(Math.abs(r.end[1])>Math.abs(r.exit[1]));}}});
+test('全部主圖光線與焦點留在完整視野，非法種類受拒絕',()=>{for(const kind of ['convex','concave']){const g=parallelModel(kind);assert.ok(g.focus>-8.5&&g.focus<14.5);for(const r of g.rays)for(const [x,y]of [r.from,r.enter,r.exit,r.end]){assert.ok(Number.isFinite(x)&&Number.isFinite(y));assert.ok(x>-8.5&&x<14.5&&y>-3.8&&y<3.8);}}assert.throws(()=>parallelModel('mirror'),RangeError);});

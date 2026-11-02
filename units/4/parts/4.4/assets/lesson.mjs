@@ -14,7 +14,7 @@ const text=(x,y,s,cls='',anchor='start')=>`<text x="${x}" y="${y}" class="${cls}
 function line(a,b,c=RED,dash=false,id=''){const ci=c===RED?0:c===BLUE?1:2;return `<path class="${dash?'extension':'light-ray'}" d="M${a[0]} ${a[1]}L${b[0]} ${b[1]}" stroke="${c}" ${!dash&&id?`marker-end="url(#${id}-arrow${ci})"`:''}/>`;}
 function symbol(x,y,m=1,ghost=false){return `<g transform="translate(${x} ${y}) scale(${m})" ${ghost?'opacity=".5"':''}><path d="M0 -35V35" stroke="#6b8771" stroke-width="5"/><path d="M0 -45L-11 -27H11Z" fill="${RED}" stroke="#fff9" stroke-width="1.5"/><circle cy="35" r="9" fill="${BLUE}" stroke="#fff9" stroke-width="1.5"/></g>`;}
 function stand(x,id,type='lens'){return `<ellipse cx="${x+4}" cy="309" rx="38" ry="7" fill="#3f503e" opacity=".1"/><path d="M${x-26} 302L${x-35} 312H${x+35}L${x+25} 302Z" fill="url(#${id}-metal)" stroke="#6e8270"/><rect x="${x-4}" y="242" width="8" height="60" rx="2" fill="url(#${id}-metal)"/>`;}
-function lens(x,id,convex=true){return stand(x,id)+`<path d="M${x} 93 Q${x+(convex?35:-22)} 180 ${x} 267 Q${x+(convex?-35:22)} 180 ${x} 93Z" fill="url(#${id}-glass)" stroke="#6c9c91" stroke-width="2"/><path d="M${x-3} 104Q${x+(convex?-20:12)} 180 ${x-3} 254" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="3"/>`;}
+function lens(x,id,convex=true){const contour=convex?`M${x} 93 Q${x+35} 180 ${x} 267 Q${x-35} 180 ${x} 93Z`:`M${x-18} 93Q${x+3} 180 ${x-18} 267L${x+18} 267Q${x-3} 180 ${x+18} 93Z`;return stand(x,id)+`<path d="${contour}" fill="url(#${id}-glass)" stroke="#6c9c91" stroke-width="2"/><path d="${convex?`M${x-3} 104Q${x-20} 180 ${x-3} 254`:`M${x-14} 104Q${x+5} 180 ${x-14} 254`}" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="3"/>`;}
 function background(id,eye=false){return `<rect width="900" height="390" rx="13" fill="url(#${id}-wall)"/>${eye?'':`<path d="M20 300H880L900 342H0Z" fill="url(#${id}-wood)"/><path d="M0 342H900V358H0Z" fill="#b9976b"/><path d="M45 316H860M70 329H840" stroke="#f5e7cc" stroke-opacity=".6"/><rect x="45" y="294" width="810" height="9" rx="3" fill="url(#${id}-metal)"/>${Array.from({length:39},(_,i)=>`<path d="M${60+i*20} 294v${i%5===0?8:4}" stroke="#647961" stroke-width="1"/>`).join('')}`}<path class="optical-axis" d="M25 180H875"/>`;}
 function eyeIcon(x,y=180){return `<g transform="translate(${x},${y})"><path d="M-23 0Q0 -25 23 0Q0 25 -23 0Z" fill="#fff" stroke="#607964" stroke-width="2"/><circle r="9" fill="#678f81"/><circle r="4.5" fill="#243a35"/><circle cx="-2" cy="-3" r="2" fill="#fff"/></g>`;}
 function screen(x,id,handle=true){return stand(x,id)+`<g ${handle?'class="drag-handle" data-drag="screen" role="slider" tabindex="0" aria-label="移動屏幕"':''}><rect x="${x-7}" y="88" width="14" height="181" rx="3" fill="#fffef6" stroke="#afba9e" stroke-width="2"/><path d="M${x-3} 94V260" stroke="#fff" stroke-width="3"/><rect x="${x-20}" y="270" width="40" height="23" rx="6" fill="#f9fcf3" stroke="#a1b29a"/><path d="M${x-8} 282h16m-12-4l-4 4 4 4m8-8l4 4-4 4" stroke="#5b795c" fill="none"/></g>`;}
@@ -24,11 +24,18 @@ function projection(root,m=1,blur=0,noImage=''){
  const scale=Math.min(1.1,Math.abs(m))*Math.sign(m);
  box.innerHTML=`<svg viewBox="0 0 140 110" role="img" aria-label="${m<0?'倒立':'正立'}${blur>1?'模糊':'清楚'}的圖案"><defs><filter id="preview-${root.id}"><feGaussianBlur stdDeviation="${Math.min(6,blur)}"/></filter></defs><g filter="url(#preview-${root.id})">${symbol(70,55,scale)}</g></svg>`;
 }
-const initial=i=>({rays:true,extensions:true,lens:i===6?'concave':'convex',point:'both',object:i===1?180:i===5?60:i===6?160:320,screen:i===1?140:i===5?180:240,distance:'far',kind:i===9?'myopia':'normal',adjusted:false,corrected:false,view:'eye',records:[]});
+const initial=i=>({rays:true,extensions:true,lens:i===6?'concave':'convex',point:'both',object:i===1?180:i===5?60:i===6?160:320,screen:i===1?140:i===5?180:240,distance:'far',kind:i===9?'myopia':'normal',adjusted:false,corrected:false,view:'eye',records:[],stage:i===4?'focus':null});
 $$('[data-lab]').forEach(root=>{
- const i=Number(root.dataset.lab),svg=$('[data-scene]',root),id=root.id;let s=initial(i),dragKey=null;
+ const canCorrect=root.hasAttribute('data-correction'),i=Number(root.dataset.lab),svg=$('[data-scene]',root),id=root.id;let s=initial(i),dragKey=null;
  if(i===5){const mode=document.createElement('div');mode.className='choice-row';mode.setAttribute('role','group');mode.setAttribute('aria-label','觀看方式');mode.innerHTML='<button type="button" data-set="view" data-value="eye" aria-pressed="true">透過透鏡看</button><button type="button" data-set="view" data-value="screen" aria-pressed="false">移動屏幕比較</button>';$('.tool-row',root).before(mode);}
  function render(){
+  if(root.hasAttribute('data-focus-sequence')){
+   const focus=s.stage==='focus';root.dataset.focusStep=s.stage;
+   $('[data-input=object]',root).disabled=focus;$('.object-control',root).hidden=focus;
+   $('.distance-controls',root).hidden=focus;$('.range-grid',root).classList.toggle('single',focus);
+   $('[data-record-controls]',root).hidden=focus;$('[data-records]',root).hidden=focus;
+   $('[data-focus-heading]',root).textContent=focus?'固定較遠物體，只移動屏幕，找出清楚的倒立像。':'先改物體遠近，再重新移動屏幕；清楚後才留下比較紀錄。';
+  }
   if(i<=6)drawBench();else drawEye();
   $$('[data-set]',root).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.set==='distance'&&i===4?s.object===Number(b.dataset.value):String(s[b.dataset.set])===b.dataset.value)));
   $$('[data-input]',root).forEach(input=>{input.value=s[input.dataset.input];$(`#${input.id}-out`,root).textContent=`${fmt(s[input.dataset.input])} 公分`;});
@@ -43,17 +50,9 @@ $$('[data-lab]').forEach(root=>{
   out+=text(38,38,i===2?'同一組平行光':'同一個發光圖案','device-label')+text(370,38,s.lens==='concave'?'凹透鏡':'凸透鏡','device-label','middle')+text(740,38,hasScreen?'白色屏幕':g.type==='virtual'?'透過鏡片觀察':'觀察光束的會聚','device-label','middle');
   out+=lens(X,id,s.lens==='convex');
   for(const v of [-100,100])out+=`<path d="M${X+v*k} 262v8" stroke="#79927a"/>`+text(X+v*k,285,'F','f-label','middle');
-  if(i===2){
-   if(show)for(const h of [-55,0,55]){const c=h<0?RED:h>0?BLUE:GOLD,end=750;out+=line([85,Y+h],[X,Y+h],c,false,id)+line([X,Y+h],[end,Y+h-(end-X)*h/f/k],c,false,id);if(f<0&&s.extensions&&h!==0)out+=line([X,Y+h],[X+f*k,Y],c,true);}
-   if(f>0&&show)out+=`<circle cx="${X+100*k}" cy="${Y}" r="5" fill="${GOLD}"/>`;
-   $('[data-result]',root).textContent=f>0?'凸透鏡中間厚、邊緣薄；這組平行光在另一側會聚。會聚處是焦點，透鏡中心到焦點的距離稱焦距。':'凹透鏡中間薄、邊緣厚；這組平行光通過後發散。反向延長線交會的位置，是光看起來散開的起點。';
-   const surface=$('[data-surface]',root);
-   if(surface)surface.innerHTML=surfaceDiagram(s.lens,id);
-   svg.innerHTML=out;svg.setAttribute('aria-label',s.lens==='convex'?'凸透鏡使平行光會聚':'凹透鏡使平行光發散，虛線為輔助延長線');return;
-  }
   // Objects and screen are on the same optical rail in every lens experiment.
   out+=stand(objectX,id)+`<rect x="${objectX-17}" y="126" width="34" height="110" rx="5" fill="#fff9ea" stroke="#a5ae96"/>`;
-  out+=`<g ${i===4||i===5||i===6?'class="drag-handle" data-drag="object" role="slider" tabindex="0" aria-label="移動物體"':''}>${symbol(objectX,Y)}<rect x="${objectX-18}" y="270" width="36" height="22" rx="6" fill="#eff6e9" stroke="#9baf94"/></g>`;
+  out+=`<g ${(i===4&&s.stage==='compare')||i===5||i===6?'class="drag-handle" data-drag="object" role="slider" tabindex="0" aria-label="移動物體"':''}>${symbol(objectX,Y)}<rect x="${objectX-18}" y="270" width="36" height="22" rx="6" fill="#eff6e9" stroke="#9baf94"/></g>`;
   const observeEye=!hasScreen&&g.finite&&g.type==='virtual',eyeX=580;
   let endX=hasScreen?screenX:observeEye?eyeX:835;
   if(show)for(const [oy,c,point] of [[-35,RED,'top'],[35,BLUE,'bottom']]){
@@ -93,12 +92,12 @@ $$('[data-lab]').forEach(root=>{
   svg.innerHTML=out;svg.setAttribute('aria-label',message);
  }
  function drawEye(){
-  const kind=i===7?'normal':s.kind,near=i===7&&s.distance==='near',g=eyeModel(kind,near,s.adjusted,i===9&&s.corrected);
+  const kind=i===7?'normal':s.kind,near=i===7&&s.distance==='near',g=eyeModel(kind,near,s.adjusted,canCorrect&&s.corrected);
   const X=430,Y=180,rx=X+160;let out=defs(id)+background(id,true);
   out+=text(30,38,near?'近處物體的光':'同一遠方物體的光','device-label')+text(510,38,'固定的眼球與視網膜','device-label','middle');
   out+=`<ellipse cx="508" cy="180" rx="136" ry="113" fill="#f6eee2" stroke="#8f9b84" stroke-width="2"/><ellipse cx="508" cy="180" rx="123" ry="102" fill="#fffcf3" stroke="#e7c5ac" stroke-width="5"/><path d="M395 129Q359 180 395 231" fill="#cce5da" stroke="#7caca0" stroke-width="2"/><path d="M${X} 125Q${s.adjusted&&near?X+30:X+18} 180 ${X} 235Q${s.adjusted&&near?X-30:X-18} 180 ${X} 125Z" fill="url(#${id}-glass)" stroke="#74a196" stroke-width="2"/><path d="M${rx} 111V249" fill="none" stroke="#c67854" stroke-width="7"/><path d="M641 168L695 157L704 191L643 197" fill="#d9baa0" stroke="#ad927d"/>`;
   out+=text(340,281,'角膜','dim-label')+`<path d="M365 270L382 230" stroke="#7c9481"/>`+text(X,306,'水晶體','dim-label','middle')+`<path d="M${X} 290V239" stroke="#7c9481"/>`+text(603,290,'視網膜接收面','device-label','middle')+`<path d="M600 273L590 245" stroke="#a67856"/>`+text(710,178,'神經訊號 →','dim-label');
-  if(i===9){out+=text(275,60,s.corrected?kind==='myopia'?'凹透鏡矯正':'凸透鏡矯正':'尚未加鏡片','device-label','middle');if(s.corrected)out+=lens(X-g.gap,id,kind==='hyperopia');}
+  if(canCorrect){out+=text(275,60,kind==='normal'?'正常成像，無需矯正':s.corrected?kind==='myopia'?'凹透鏡矯正':'凸透鏡矯正':'尚未加鏡片','device-label','middle');if(s.corrected)out+=lens(X-g.gap,id,kind==='hyperopia');}
   if(s.rays){for(const r of g.objectRays){
    const c=r.objectY<0?RED:BLUE;
    const left=75,sp=X-g.gap;
@@ -113,16 +112,16 @@ $$('[data-lab]').forEach(root=>{
   const message=clear?'光在視網膜上成像，圖案清楚。':`光的會聚位置在${position}，到達視網膜時成為光斑，圖案模糊。${g.focus>160?'虛線只標出幾何延伸的位置。':''}`;
   $('[data-result]',root).textContent=message;projection(root,-.65,clear?0:5);
   if(i===7)$('[data-adjust]',root).textContent=s.adjusted?(near?'看近處：水晶體較厚，會聚作用較強。':'看遠方：水晶體較扁，會聚作用較弱。'):'保留原本看遠方的調節狀態。';
-  if(i===9){const b=$('[data-action=correct]',root);b.setAttribute('aria-pressed',String(s.corrected));b.textContent=s.corrected?'取下矯正鏡片':'加入矯正鏡片';}
+  if(canCorrect){const b=$('[data-action=correct]',root);b.disabled=kind==='normal';b.setAttribute('aria-pressed',String(s.corrected));b.textContent=kind==='normal'?'正常成像不需矯正鏡片':s.corrected?'取下矯正鏡片':`加入${kind==='myopia'?'凹':'凸'}透鏡矯正`;}
   out+=text(450,365,'光路以等效透鏡表示角膜與水晶體的總作用；視網膜以固定平面簡化表示。','dim-label','middle');
   svg.innerHTML=out;svg.setAttribute('aria-label',message);
  }
- function set(key,value){s[key]=value;if(key==='distance'){if(i===4)s.object=Number(value);else s.adjusted=false;}if(key==='kind')s.corrected=false;render();}
+ function set(key,value){if(i===4&&s.stage==='focus'&&['object','distance'].includes(key))return;s[key]=value;if(key==='stage'&&value==='focus')s.object=320;if(key==='distance'){if(i===4)s.object=Number(value);else s.adjusted=false;}if(key==='kind')s.corrected=false;render();}
  root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   if(b.dataset.set)set(b.dataset.set,b.dataset.value);
-  if(b.dataset.action==='reset'){s=initial(i);render();if(i===9){microStep='objective';drawMicro();}}
+  if(b.dataset.action==='reset'){s=initial(i);render();}
   if(b.dataset.action==='accommodate'){s.adjusted=true;render();}
-  if(b.dataset.action==='correct'){s.corrected=!s.corrected;render();}
+  if(b.dataset.action==='correct'&&canCorrect&&s.kind!=='normal'){s.corrected=!s.corrected;render();}
   if(b.dataset.action==='record'){
    const g=imageFor(100,s.object);if(!g.finite||g.type!=='real'||Math.abs(s.screen-g.v)>3)return;
    s.records=s.records.filter(r=>r.u!==s.object);s.records.push({u:s.object,v:g.v,size:g.size});s.records=s.records.slice(-3);render();
@@ -130,7 +129,7 @@ $$('[data-lab]').forEach(root=>{
  });
  root.addEventListener('input',e=>{if(e.target.dataset.input)set(e.target.dataset.input,Number(e.target.value));});
  root.addEventListener('change',e=>{if(e.target.dataset.toggle)set(e.target.dataset.toggle,e.target.checked);});
- const limit=(key,v)=>{const input=$(`[data-input=${key}]`,root);if(!input)return;const step=Number(input.step);set(key,Math.max(Number(input.min),Math.min(Number(input.max),Math.round(v/step)*step)));};
+ const limit=(key,v)=>{const input=$(`[data-input=${key}]`,root);if(!input||input.disabled)return;const step=Number(input.step);set(key,Math.max(Number(input.min),Math.min(Number(input.max),Math.round(v/step)*step)));};
  svg.addEventListener('pointerdown',e=>{const h=e.target.closest('[data-drag]');if(!h)return;e.preventDefault();dragKey=h.dataset.drag;svg.setPointerCapture(e.pointerId);});
  svg.addEventListener('pointermove',e=>{if(!dragKey)return;const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse()),origin=i===1?390:370;limit(dragKey,dragKey==='screen'?(p.x-origin)/.85:(origin-p.x)/.85);});
  svg.addEventListener('pointerup',()=>{dragKey=null;});svg.addEventListener('pointercancel',()=>{dragKey=null;});svg.addEventListener('lostpointercapture',()=>{dragKey=null;});
@@ -138,26 +137,6 @@ $$('[data-lab]').forEach(root=>{
  render();
 });
 function sizeText(size){return {equal:'等大',larger:'放大',smaller:'縮小'}[size];}
-function surfaceDiagram(kind,id){
- // A genuine near-axis ray through two spherical surfaces, not a decorative kink.
- const convex=kind==='convex',n=1.5,R=180,c=convex?1:-1,t=30,y0=-42;
- const leftCenter=c*R,rightCenter=t-c*R;
- const leftX=leftCenter-c*Math.sqrt(R*R-y0*y0);
- const N1=[c*Math.sqrt(R*R-y0*y0)/R,-y0/R];
- const refract=(d,N,n1,n2)=>{let nx=N[0],ny=N[1];if(d[0]*nx+d[1]*ny>0){nx=-nx;ny=-ny;}const dot=-(d[0]*nx+d[1]*ny),eta=n1/n2,q=Math.sqrt(1-eta*eta*(1-dot*dot));return [eta*d[0]+(eta*dot-q)*nx,eta*d[1]+(eta*dot-q)*ny];};
- const d1=refract([1,0],N1,1,n);
- const dx=leftX-rightCenter,dy=y0,b=2*(dx*d1[0]+dy*d1[1]),cc=dx*dx+dy*dy-R*R,disc=b*b-4*cc;
- const distances=[(-b-Math.sqrt(disc))/2,(-b+Math.sqrt(disc))/2].filter(v=>v>1e-4);
- const valid=distances.map(v=>[leftX+v*d1[0],y0+v*d1[1]]).filter(p=>convex?p[0]>0:p[0]>t/2);
- const p2=valid.sort((a,b)=>a[0]-b[0])[0];
- if(!p2)return '<p>光在兩個表面分別折射。</p>';
- const N2=[(p2[0]-rightCenter)/R,p2[1]/R],d2=refract(d1,N2,n,1);
- const scale=2,ox=350,oy=170,p1=[ox+leftX*scale,oy+y0*scale],p=[ox+p2[0]*scale,oy+p2[1]*scale];
- const normal=(P,N)=>`<path d="M${P[0]-N[0]*80} ${P[1]-N[1]*80}L${P[0]+N[0]*80} ${P[1]+N[1]*80}" stroke="#7e9586" stroke-dasharray="5 5"/>`;
- const yedge=75,L=y=>leftCenter-c*Math.sqrt(R*R-y*y),RR=y=>rightCenter+c*Math.sqrt(R*R-y*y);
- let path=`M${ox+L(-yedge)*scale} ${oy-yedge*scale}`;for(let y=-yedge+3;y<=yedge;y+=3)path+=`L${ox+L(y)*scale} ${oy+y*scale}`;for(let y=yedge;y>=-yedge;y-=3)path+=`L${ox+RR(y)*scale} ${oy+y*scale}`;
- return `<svg viewBox="0 0 800 350" role="img" aria-label="空氣進入玻璃與離開玻璃的兩次折射，虛線為各處法線"><path d="${path}Z" fill="#d9ebe3" stroke="#82a99b" stroke-width="2"/>${normal(p1,N1)+normal(p,N2)}${line([50,p1[1]],p1,RED)+line(p1,p,RED)+line(p,[730,p[1]+(730-p[0])*d2[1]/d2[0]],RED)}${text(70,35,'空氣')+text(ox+30,330,'玻璃','','middle')+text(650,35,'空氣')+text(125,120,'進入：偏向法線')+text(485,225,'離開：偏離法線')}</svg>`;
-}
 let microStep='objective';
 function drawMicro(){
  const root=$('#microscope-lab'),g=microscope(),id='micro',X1=230,X2=530,Y=195,k=.8;
@@ -178,22 +157,23 @@ function drawMicro(){
  }
  out+=text(450,30,'物鏡先成像，目鏡再觀察這個像','device-label','middle');$('#microscope-scene').innerHTML=out;
  $('#micro-result').textContent={objective:'物鏡把原物形成倒立放大的實像，這是中間像。',eyepiece:'中間像位於目鏡焦距內；目鏡把它進一步放大，眼睛看見虛像。',both:'同一套光路接力成像：物鏡先成倒立的中間像，目鏡再放大，最終像仍相對原物倒立。'}[microStep];
+ root.dataset.ready='true';
  $$('[data-set=micro]',root).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.value===microStep)));
 }
-$$('[data-set=micro]').forEach(b=>b.addEventListener('click',()=>{microStep=b.dataset.value;drawMicro();}));drawMicro();
+$$('[data-set=micro]').forEach(b=>b.addEventListener('click',()=>{microStep=b.dataset.value;drawMicro();}));$('[data-micro-reset]').addEventListener('click',()=>{microStep='objective';drawMicro();});drawMicro();
 const quiz=$('#quiz'),result=$('#quiz-result');
-const answers=['1','0','2','1'];
+const answers=['1','0','2','1'],reviewTargets=$$('fieldset',quiz).map(f=>f.dataset.review);
 const explanations=['上下端的光各自沿直線穿過小孔，落在屏幕相反高度。','物體在焦距外向透鏡靠近時，清楚實像離透鏡更遠、變大，仍是倒立。','虛像的位置由入眼光線的反向延長線判斷；光沒有真的在那裡會聚。','凹透鏡先改變入眼光束，使整體光路在視網膜上成像。'];
 quiz.addEventListener('submit',e=>{e.preventDefault();const data=new FormData(quiz),missing=answers.map((_,i)=>i+1).filter(i=>!data.has(`q${i}`));if(missing.length){result.textContent=`還有第 ${missing.join('、')} 題未作答，完成後再送出。`;return;}
  const wrong=answers.map((a,i)=>data.get(`q${i+1}`)===a?null:i).filter(i=>i!==null);
- result.innerHTML=wrong.length?'<strong>再沿著光路觀察一下。</strong>'+wrong.map(i=>`<p>第 ${i+1} 題：${explanations[i]} <a href="#s${[1,4,5,9][i]}">回到相關探索</a></p>`).join(''):'<strong>四題都答對了！</strong><p>你能根據光路，解釋成像的位置、大小，以及透鏡如何配合眼睛。</p>';
+ result.innerHTML=wrong.length?'<strong>再沿著光路觀察一下。</strong>'+wrong.map(i=>`<p>第 ${i+1} 題：${explanations[i]} <a href="${reviewTargets[i]}">回到相關探索</a></p>`).join(''):'<strong>四題都答對了！</strong><p>你能根據光路，解釋成像的位置、大小，以及透鏡如何配合眼睛。</p>';
 });quiz.addEventListener('change',()=>result.replaceChildren());quiz.addEventListener('reset',()=>result.replaceChildren());
 const route=$('.route'),inner=$('.route-inner'),links=$$('.route a'),sections=links.map(a=>$(a.hash));let active,frame;
 function nav(){
  const mobile=matchMedia('(max-width:760px)').matches,threshold=mobile?route.getBoundingClientRect().height+50:160;
  const current=sections.filter(s=>s.getBoundingClientRect().top<=threshold).at(-1)||sections[0],index=sections.indexOf(current);
  links.forEach(a=>a.hash===`#${current.id}`?a.setAttribute('aria-current','step'):a.removeAttribute('aria-current'));
- $('#route-progress').textContent=index===9?'目前位置：單元小測':`目前位置：第 ${String(index+1).padStart(2,'0')}／09 個學習區塊`;
+ const count=sections.filter(s=>!s.classList.contains('unit-quiz')).length;$('#route-progress').textContent=current.classList.contains('unit-quiz')?'目前位置：單元小測':`目前位置：第 ${String(index+1).padStart(2,'0')}／${String(count).padStart(2,'0')} 個學習區塊`;
  if(mobile&&current!==active){const l=links[index].getBoundingClientRect(),r=inner.getBoundingClientRect();if(l.left<r.left||l.right>r.right)inner.scrollLeft+=l.left-r.left;}
  active=current;
 }

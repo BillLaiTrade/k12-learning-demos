@@ -202,3 +202,6 @@ footer.shell { padding: 28px 0 36px; border-top: 1px solid var(--line); color: v
  .lesson-head h2 { overflow-wrap:anywhere; }
 }
 .lesson-layout { padding-bottom:0; }
+
+.focus-steps { margin-bottom:10px; }
+.focus-steps button[aria-pressed=true] { background:#176b53; color:#fff; }

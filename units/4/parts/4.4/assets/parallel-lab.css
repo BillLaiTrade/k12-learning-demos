@@ -1,0 +1,18 @@
+.parallel-lab { margin:18px 0; min-width:0; padding:14px; border:1px solid #d5e0d2; border-radius:16px; background:#f1f6ee; }
+.parallel-stage { position:relative; overflow:hidden; border:1px solid #d0ddcc; border-radius:13px; background:#edf3e8; }
+.parallel-tools { display:flex; flex-wrap:wrap; gap:7px; padding:11px; position:relative; z-index:1; }
+.parallel-tools button { min-height:40px; padding:7px 10px; font-size:.8rem; background:#fffef7; }
+.parallel-tools [data-parallel-rays] { background:#f5d88d; border-color:#dbbf77; color:#42351a; font-weight:750; }
+.parallel-tools [data-parallel-rays][aria-pressed=true] { background:#f5d88d; color:#42351a; }
+.parallel-stage svg { display:block; width:100%; height:auto; aspect-ratio:23/7.6; min-height:210px; max-height:380px; }
+.parallel-lab[data-view=surface] .parallel-stage svg { aspect-ratio:1.7; height:330px; }
+.parallel-view-label { margin:0; padding:6px 12px; color:#576d5d; font-size:.76rem; }
+.parallel-caption { padding:10px 12px; margin:0; border-top:1px solid #d7e2d0; color:#385743; font-size:.83rem; }
+.parallel-guide { display:flex; flex-wrap:wrap; gap:8px; padding:9px 12px; font-size:.82rem; color:#385743; }
+.parallel-guide span { border:1px solid #ccdbca; padding:5px 9px; border-radius:8px; background:#fffaf3; }
+.parallel-observation { margin:12px 0 0; padding:12px 14px; border-left:4px solid #86a777; border-radius:0 10px 10px 0; background:#fff; font-size:.9rem; }
+.parallel-observation p { margin:0; }
+@media(max-width:760px) { .parallel-lab { padding:9px; } .parallel-tools { padding:8px; gap:6px; } .parallel-tools button { font-size:.75rem; padding:6px 8px; } .parallel-stage svg { min-height:190px; } }
+
+.parallel-tools button[aria-pressed=true] { background:#dce9d0; color:#244a32; border-color:#8eac7d; }
+.parallel-tools [data-parallel-rays][aria-pressed=true] { background:#f5d88d; color:#42351a; border-color:#dbbf77; }
