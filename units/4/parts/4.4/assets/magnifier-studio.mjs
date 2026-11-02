@@ -37,7 +37,7 @@ function initialise(root){
   $$('[data-mag-distance]').forEach(e=>e.textContent=`${e.dataset.magDistance==='object'?'物距':'屏幕距離'} ${state[e.dataset.magDistance]} 公分`);
   $$('[data-mag-device]').forEach(b=>{b.setAttribute('aria-pressed',String(selected===b.dataset.magDevice));b.setAttribute('aria-label',`${b.dataset.magDevice==='object'?'圖卡':'屏幕'}，${state[b.dataset.magDevice]}公分，方向鍵可沿軌道移動`);});
   $$('[data-mag-nudge]').forEach(b=>{const key=b.dataset.magNudge;b.disabled=Number(b.dataset.direction)<0?state[key]<=G[key+'Min']:state[key]>=G[key+'Max'];});
-  $('[data-mag-badge]').textContent=state.screenIn?'屏幕接到散開光斑':'圖卡位於焦距內';$('[data-mag-eye-badge]').textContent=state.screenIn?'屏幕擋住視線':'正立・放大';$('[data-mag-eye-note]').textContent=state.screenIn?'取下屏幕後，恢復透鏡中的觀察。':'轉動左側視角，不改變眼睛的位置。';
+  $('[data-mag-badge]').textContent=state.screenIn?'屏幕接到散開光斑':'圖卡位於焦距內';$('[data-mag-eye-badge]').textContent=state.screenIn?'屏幕擋住視線':'正立・放大';$('[data-mag-eye-note]').textContent=state.screenIn?'取下屏幕後，恢復透鏡中的觀察。':'旋轉主圖不改變眼睛位置。';
   $('[data-mag-orbit]').textContent=front?'同一屏幕正面・返回整體觀察可拖曳器材':'↔ 拖曳空白處旋轉　⌕ 滾輪／雙指縮放';
   let message=state.screenIn?'屏幕上有光，但無法直接接到這個正立放大的虛像。不透明屏幕擋住眼睛的視線，取下後再比較。':'圖卡位於焦距內，透過凸透鏡看見正立、放大的虛像；拖動圖卡，比較看起來的大小。';
   if(extensions)message+=g.virtualOutside?` 反向延長線的交點在主圖範圍外，虛像仍存在${state.screenIn?'；取下屏幕後可從右側觀察。':'；右側持續呈現眼睛所見。'}`:' 虛線往回交於物體同側，標示看起來的像位置；光沒有真的在那裡會聚。';
