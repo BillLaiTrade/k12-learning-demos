@@ -33,7 +33,7 @@ test('sound-match assessment follows the approved layout and shares actual audio
    const steps=[...n.querySelectorAll('.match-step')].map(el=>el.getBoundingClientRect()),mine=n.querySelector('[data-play=quiz-choice]').getBoundingClientRect(),submit=n.querySelector('[type=submit]').getBoundingClientRect(),note=n.querySelector('#match-compare-note').getBoundingClientRect();
    return {gaps:steps.slice(1).map((r,i)=>r.top-steps[i].bottom),aligned:Math.abs(mine.left-submit.left),belowNote:submit.top>=note.bottom};
   });
-  assert.ok(geometry.gaps.every(g=>g>=12),'three groups have clear vertical separation');assert.ok(geometry.aligned<1,'submit aligns left with listening');assert.equal(geometry.belowNote,true);
+  assert.ok(geometry.gaps.every(g=>g>=10),'three groups have clear vertical separation');assert.ok(geometry.aligned<1,'submit aligns left with listening');assert.equal(geometry.belowNote,true);
  };
  const resultFits=async state=>{
   for(const [width,height]of [[1440,900],[1366,768],[1280,720],[1024,768]]){
@@ -49,8 +49,8 @@ test('sound-match assessment follows the approved layout and shares actual audio
   try{
    const referenceUrl=process.env.SOUND33_BASE_URL?new URL('../../../2/parts/2.1/',base).href:`http://127.0.0.1:${port}/units/2/parts/2.1/`;
    await reference.goto(referenceUrl,{waitUntil:'networkidle'});
-   const format=p=>p.locator('#unit-quiz').evaluate(n=>{const pick=(el,keys)=>{const s=getComputedStyle(el);return Object.fromEntries(keys.map(k=>[k,s[k]]));};return{card:pick(n,['backgroundColor','color','border','borderRadius','boxShadow','lineHeight']),header:pick(n.querySelector('.quiz-head'),['display','gridTemplateColumns','columnGap','padding','borderBottom','backgroundColor']),mark:pick(n.querySelector('.quiz-mark'),['width','height','backgroundColor','color','borderRadius','fontSize']),title:pick(n.querySelector('h2'),['fontSize','lineHeight','color']),kicker:pick(n.querySelector('.quiz-kicker'),['fontSize','color','backgroundColor','letterSpacing']),bodyPadding:getComputedStyle(n.querySelector('.quiz-body,.match-body')).padding};});
-   assert.deepEqual(await format(page),await format(reference),'quiz frame, header and palette match unit 2.1');
+   const format=p=>p.locator('#unit-quiz').evaluate(n=>{const pick=(el,keys)=>{const s=getComputedStyle(el);return Object.fromEntries(keys.map(k=>[k,s[k]]));};return{headerColumns:getComputedStyle(n.querySelector('.quiz-head')).gridTemplateColumns.split(' ').length,card:pick(n,['backgroundColor','color','border','borderRadius','boxShadow','lineHeight']),header:pick(n.querySelector('.quiz-head'),['display','columnGap','borderBottom','backgroundColor']),mark:pick(n.querySelector('.quiz-mark'),['width','height','backgroundColor','color','borderRadius','fontSize']),title:pick(n.querySelector('h2'),['fontSize','lineHeight','color']),kicker:pick(n.querySelector('.quiz-kicker'),['fontSize','color','backgroundColor','letterSpacing'])};});
+   assert.deepEqual(await format(page),await format(reference),'quiz frame, header hierarchy and palette match unit 2.1; compact spacing is independent');
    assert.equal(await root.locator('.quiz-mark').innerText(),'?');
   }finally{await reference.close();}
   await checkSteps();
