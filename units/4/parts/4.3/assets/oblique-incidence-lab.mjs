@@ -38,14 +38,13 @@ zoom.innerHTML=`<defs><linearGradient id="oblique-zoom-water" x2="0" y2="1"><sto
  <rect x="490" y="450" width="320" height="240" fill="#fffdf6"/>
  <rect id="oblique-zoom-medium-fill" x="490" y="570" width="320" height="120" fill="url(#oblique-zoom-water)"/>
  <path class="oblique-zoom-interface" d="M490 570H810"/>
+ <path class="oblique-angle-sector oblique-in-sector"/><path class="oblique-angle-sector oblique-out-sector"/>
  <path class="oblique-normal" d="M650 450V690"/>
  <path class="oblique-angle-arc oblique-in-arc"/><path class="oblique-angle-arc oblique-out-arc"/>
  ${beam()}
  <g class="oblique-zoom-labels">
   <text class="oblique-normal-name" x="662" y="476">法線</text><text x="755" y="476" text-anchor="middle">空氣</text><text id="oblique-zoom-medium" x="507" y="665">水</text>
   <g><rect x="498" y="552" width="52" height="26" rx="5" fill="#fffdf6" stroke="#b8cfc5"/><text x="524" y="570" text-anchor="middle">介面</text></g>
-  <text x="677" y="506">入射角</text><text class="oblique-angle-value oblique-in-value" x="677" y="542">45°</text>
-  <text x="764" y="608" text-anchor="middle">折射角</text><text class="oblique-angle-value oblique-out-value" x="764" y="642" text-anchor="middle">32.0°</text>
  </g>`;
 const source=scene.querySelector('.oblique-source'),views=[scene,zoom].map(svg=>({svg,beam:svg.querySelector('.oblique-beam'),paths:[...svg.querySelectorAll('.oblique-beam path')]}));
 const photos=new Map();
@@ -55,8 +54,11 @@ function photo(key,reload=false){
 }
 function arc(degrees,up){
  if(!degrees)return '';
- const r=48,a=degrees*Math.PI/180,sign=up?-1:1;
+ const r=76,a=degrees*Math.PI/180,sign=up?-1:1;
  return `M${layout.axis} ${layout.boundary+sign*r} A${r} ${r} 0 0 0 ${layout.axis+sign*r*Math.sin(a)} ${layout.boundary+sign*r*Math.cos(a)}`;
+}
+function sector(degrees,up){
+ const edge=arc(degrees,up);return edge?`M${layout.axis} ${layout.boundary}L${edge.slice(1)}Z`:'';
 }
 function drawGeometry(){
  const g=geometry(medium,angle),ratio=Math.max(.1,scene.getBoundingClientRect().width/layout.width),sourceScale=Math.max(1.6,30/(70*ratio)),fontScale=Math.max(1,.3/ratio);
@@ -66,13 +68,13 @@ function drawGeometry(){
  const hit=source.querySelector('rect');const hitWidth=Math.max(96,44/(ratio*sourceScale));hit.setAttribute('x',String(-hitWidth/2));hit.setAttribute('width',String(hitWidth));
  scene.querySelector('#oblique-case-label').setAttribute('transform',`translate(650 155) scale(${fontScale})`);scene.querySelector('#oblique-case-name').textContent=`空氣 → ${name()}`;
  scene.querySelector('#oblique-air-label').setAttribute('transform',`translate(${1030-110*fontScale} 440) scale(${fontScale})`);scene.querySelector('#oblique-material-label').setAttribute('transform',`translate(230 740) scale(${fontScale})`);scene.querySelector('#oblique-material-label text').textContent=name();
- zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));zoom.querySelector('.oblique-in-value').textContent=`${angle}°`;zoom.querySelector('.oblique-out-value').textContent=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();zoom.querySelector('#oblique-zoom-medium-fill').setAttribute('fill',`url(#oblique-zoom-${medium})`);
+ zoom.querySelector('.oblique-in-sector').setAttribute('d',sector(angle,true));zoom.querySelector('.oblique-out-sector').setAttribute('d',sector(g.outgoing,false));zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));$('#oblique-in-value').value=`${angle}°`;$('#oblique-out-value').value=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();zoom.querySelector('#oblique-zoom-medium-fill').setAttribute('fill',`url(#oblique-zoom-${medium})`);
  zoom.style.setProperty('--zoom-font-scale',String(Math.max(1,320/Math.max(200,zoom.getBoundingClientRect().width))));
  const description=`空氣射入${name()}，入射角${angle}度，折射角${g.outgoing.toFixed(1)}度。法線通過入射點；角度皆從法線量起。`;
  scene.setAttribute('aria-label',`${description}點燈發射，拖曳可調角度。`);zoom.setAttribute('aria-label',`同一入射點的放大畫面。${description}`);
  $('#oblique-finding-text').textContent=angle===0?'垂直入射 → 方向不偏折':`斜射入${name()} → 折射光偏向法線`;
- $('#oblique-relation').value=`折射角 ${g.outgoing.toFixed(1)}° ${angle===0?'=':'<'} 入射角 ${angle}°`;
- $('#oblique-zoom-note').textContent=angle===0?'光路與法線重合，兩個角度都是0°。':'兩個角度都從法線量起。';
+ $('#oblique-angle-comparison').textContent=angle===0?' = ':' < ';
+ $('#oblique-zoom-note').textContent=angle===0?'光路與法線重合，兩個角度都是0°。':'有色扇形表示光線與法線之間的角度。';
  const hero=$('.oblique-experiment').getBoundingClientRect(),from=new DOMPoint(layout.axis+38,layout.boundary).matrixTransform(scene.getScreenCTM()),to=new DOMPoint(layout.axis-layout.zoomX,layout.boundary).matrixTransform(zoom.getScreenCTM());
  $('#oblique-link').setAttribute('viewBox',`0 0 ${hero.width} ${hero.height}`);$('#oblique-link path').setAttribute('d',`M${from.x-hero.x} ${from.y-hero.y}L${to.x-hero.x} ${to.y-hero.y}`);
 }

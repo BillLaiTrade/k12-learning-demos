@@ -28,8 +28,8 @@
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
-  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261102-entry1">
-  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261102-entry1"></script>
+  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261102-sectors1">
+  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261102-sectors1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261101-normal1">
 </script>
 </head>
@@ -212,10 +212,14 @@
         <aside class="oblique-detail" aria-labelledby="oblique-detail-title">
           <div class="oblique-detail-heading"><h3 id="oblique-detail-title"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg>入射點放大</h3><span>與全景同步</span></div>
           <svg id="oblique-zoom" viewBox="490 450 320 240" role="img" aria-label="同一入射點的放大光路，角度從法線量起。"></svg>
+          <div class="oblique-angle-readouts" role="group" aria-label="讀值對應圖中同色扇形，角度皆從法線量起">
+            <div class="oblique-angle-reading oblique-incident-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M17 18V2A16 16 0 0 0 5.7 6.7Z"/></svg>入射角</span><output id="oblique-in-value" class="oblique-in-value">45°</output></div>
+            <div class="oblique-angle-reading oblique-refracted-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 2V18A16 16 0 0 0 11 15.9Z"/></svg>折射角</span><output id="oblique-out-value" class="oblique-out-value">32.0°</output></div>
+          </div>
           <div class="finding oblique-finding">
             <div class="oblique-rule-head"><span class="oblique-rule-check" aria-hidden="true">✓</span><strong id="oblique-finding-text">斜射入水 → 折射光偏向法線</strong></div>
-            <output id="oblique-relation">折射角 32.0° &lt; 入射角 45°</output>
-            <p id="oblique-zoom-note">兩個角度都從法線量起。</p>
+            <p id="oblique-relation"><span class="oblique-refracted-color">折射角</span><span id="oblique-angle-comparison"> &lt; </span><span class="oblique-incident-color">入射角</span></p>
+            <p id="oblique-zoom-note">有色扇形表示光線與法線之間的角度。</p>
           </div>
         </aside>
       </div>
