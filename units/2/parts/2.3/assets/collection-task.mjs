@@ -1,5 +1,5 @@
-import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal} from './collection-task-model.mjs?v=desk-1';
-import {createCollectionScene,materialArt} from './collection-task-scene.mjs?v=desk-1';
+import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal} from './collection-task-model.mjs?v=desk-2';
+import {createCollectionScene,materialArt} from './collection-task-scene.mjs?v=desk-2';
 const form=document.querySelector('#gas-report-form'),svg=form.querySelector('.task-scene'),scene=createCollectionScene(svg),selection=form.querySelector('[data-desk-select]'),operation=form.querySelector('[data-desk-operate]'),feedback=form.querySelector('#gas-report-feedback'),context=form.querySelector('[data-desk-context]');
 let state=createDesk(),raf=0,last=0,suspended=false,contextKey='',drag=null,suppressClick=false;
 const labels={flask:'錐形瓶',jar:'集氣瓶',tank:'水槽',marble:'大理石',outlet:'導管出口',funnel:'漏斗口'};

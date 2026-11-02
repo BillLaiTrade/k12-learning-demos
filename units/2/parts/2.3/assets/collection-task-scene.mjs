@@ -1,5 +1,5 @@
 import {createThistleFunnel,createDoubleStopper,svgNode as n} from './thistle-apparatus.mjs?v=thistle-1';
-import {taskHosePoints,deskFrame,jarPose,jarMouth,waterSurface,ease,mix,clamp} from './collection-task-model.mjs?v=desk-1';
+import {taskHosePoints,deskFrame,jarPose,jarMouth,waterSurface,ease,mix,clamp} from './collection-task-model.mjs?v=desk-2';
 import {liquidGeometry} from './co2-model.mjs?v=marble-fast-1';
 const image=(file,box)=>{const el=n('image',{href:'assets/'+file,preserveAspectRatio:'none'});['x','y','width','height'].forEach((key,i)=>el.setAttribute(key,box[i]));return el;};
 const box=(el,b)=>['x','y','width','height'].forEach((k,i)=>el.setAttribute(k,b[i]));
