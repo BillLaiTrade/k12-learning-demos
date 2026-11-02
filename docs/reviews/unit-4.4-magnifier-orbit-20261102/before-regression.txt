@@ -1,0 +1,29 @@
+▶ 4.4 第四區：可旋轉立體實驗台與常駐眼睛視角
+  ✖ 旋轉保持相機距離與視角，只有滾輪縮放；右側眼睛逐像素不變 (6578.181807ms)
+✖ 4.4 第四區：可旋轉立體實驗台與常駐眼睛視角 (20320.140512ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20325.114185
+
+✖ failing tests:
+
+test at ../../tmp/unit44-mag-orbit-reproduce.test.cjs:14:10
+✖ 旋轉保持相機距離與視角，只有滾輪縮放；右側眼睛逐像素不變 (6578.181807ms)
+  AssertionError [ERR_ASSERTION]: {"before":11.389791350012556,"after":12.79756956087411}
+      at TestContext.<anonymous> (/tmp/unit44-mag-orbit-reproduce.test.cjs:15:462)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/tmp/unit44-mag-orbit-reproduce.test.cjs:14:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

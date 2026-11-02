@@ -1,0 +1,299 @@
+{
+  "initial": 11.389791350012556,
+  "mouse": 11.389791350012556,
+  "keyboard": 11.389791350012556,
+  "rotations": [
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012555,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012555,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowLeft",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012555,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012555,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012555,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowRight",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowUp",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowUp",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowUp",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowUp",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowUp",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowDown",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowDown",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowDown",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowDown",
+      "distance": 11.389791350012556,
+      "fov": 39
+    },
+    {
+      "key": "ArrowDown",
+      "distance": 11.389791350012556,
+      "fov": 39
+    }
+  ],
+  "zoom": 12.30097465801356,
+  "rotateAfterZoom": 12.30097465801356
+}

@@ -56,7 +56,7 @@ function initialise(root){
  function createStudio(){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();scene.background=new THREE.Color('#566b5b');scene.fog=new THREE.Fog('#566b5b',35,80);
-  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3( .7,1.6,0);let orbit={azimuth:-.62,polar:1.33,zoom:1},pending=0;
+  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3( .7,1.6,0);let orbit={azimuth:-.62,polar:1.33,zoom:1},fitRadius=6,pending=0;
   scene.add(new THREE.HemisphereLight('#f2f3df','#3a503e',2.1));const light=new THREE.DirectionalLight('#fff0cf',3.1);light.position.set(-3,8,6);light.castShadow=true;light.shadow.mapSize.set(1024,1024);Object.assign(light.shadow.camera,{left:-8,right:10,top:7,bottom:-5});light.shadow.bias=-.0004;scene.add(light);const rim=new THREE.DirectionalLight('#d3e9e0',1.6);rim.position.set(5,4,-4);scene.add(rim);
   const mat=(color,options={})=>new THREE.MeshStandardMaterial({color,roughness:.5,metalness:.15,...options}),dark=mat('#283e30',{metalness:.5,roughness:.36}),steel=mat('#a2b4a4',{metalness:.7,roughness:.27}),brass=mat('#bba267',{metalness:.7,roughness:.3});
   function box(parent,size,pos,material){const mesh=new THREE.Mesh(new THREE.BoxGeometry(...size),material);mesh.position.set(...pos);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;}
@@ -91,13 +91,15 @@ function initialise(root){
     if(extensions){const A=new THREE.Vector3(...r.lens),B=new THREE.Vector3(...r.virtual);if(B.x< -2.6){const end=B.clone();B.copy(A).lerp(end,-2.6/end.x);}const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([A,B]),new THREE.LineDashedMaterial({color,dashSize:.055,gapSize:.04,transparent:true,opacity:.8}));line.computeLineDistances();line.userData={name:r.name,from:A.toArray(),to:B.toArray()};extensionGroup.add(line);}
    }
   }
+  function fitToViewport(){
+   // Choose a base distance only when the viewport changes. Orbiting must not refit.
+   camera.fov=39;let radius=6;const home=new THREE.Vector3(Math.sin(1.33)*Math.sin(-.62),Math.cos(1.33),Math.sin(1.33)*Math.cos(-.62));
+   for(let i=0;i<40;i++){camera.position.copy(target).addScaledVector(home,radius);camera.lookAt(target);camera.updateProjectionMatrix();camera.updateMatrixWorld();const bounds=[];for(const [xs,ys,zs]of [[[-1.8,-.6],[.3,2.7],[-.9,.9]],[[.9,2.8],[.3,state.screenIn?3.6:.4],[-1,1]],[[3.3,3.7],[.3,2.3],[-1,1]],[[-2.8,4.2],[-.25,.25],[-1,1]]])for(const x of xs)for(const y of ys)for(const z of zs)bounds.push([x,y,z]);if(bounds.every(p=>{const q=new THREE.Vector3(...p).project(camera);return Math.abs(q.x)<.9&&Math.abs(q.y)<.78;}))break;radius*=1.06;}
+   fitRadius=radius;
+  }
   function updateCamera(){
    if(front){const d=1.1;camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.max(G.screenHeight+.65,(G.screenWidth+.6)/camera.aspect)/(2*d)));camera.position.set(state.screen*G.scale-d,G.axis,0);camera.lookAt(state.screen*G.scale,G.axis,0);}
-   else{
-    camera.fov=39;let radius=6;const direction=new THREE.Vector3(Math.sin(orbit.polar)*Math.sin(orbit.azimuth),Math.cos(orbit.polar),Math.sin(orbit.polar)*Math.cos(orbit.azimuth));
-    for(let i=0;i<40;i++){camera.position.copy(target).addScaledVector(direction,radius);camera.lookAt(target);camera.updateProjectionMatrix();camera.updateMatrixWorld();const bounds=[];for(const [xs,ys,zs]of [[[-1.8,-.6],[.3,2.7],[-.9,.9]],[[.9,2.8],[.3,state.screenIn?3.6:.4],[-1,1]],[[3.3,3.7],[.3,2.3],[-1,1]],[[-2.8,4.2],[-.25,.25],[-1,1]]])for(const x of xs)for(const y of ys)for(const z of zs)bounds.push([x,y,z]);if(bounds.every(p=>{const q=new THREE.Vector3(...p).project(camera);return Math.abs(q.x)<.9&&Math.abs(q.y)<.78;}))break;radius*=1.06;}
-    camera.position.copy(target).addScaledVector(direction,radius*orbit.zoom);camera.lookAt(target);
-   }
+   else{camera.fov=39;const direction=new THREE.Vector3(Math.sin(orbit.polar)*Math.sin(orbit.azimuth),Math.cos(orbit.polar),Math.sin(orbit.polar)*Math.cos(orbit.azimuth));camera.position.copy(target).addScaledVector(direction,fitRadius*orbit.zoom);camera.lookAt(target);}
    camera.updateProjectionMatrix();camera.updateMatrixWorld();
   }
   function labels(){const rect=canvas.getBoundingClientRect(),g=magnifierState(state),positions={virtual:[g.v*G.scale,G.axis+g.m*.44,0]};
@@ -127,7 +129,7 @@ function initialise(root){
   for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,stop);
   canvas.addEventListener('wheel',e=>{e.preventDefault();if(front)return;orbit.zoom=THREE.MathUtils.clamp(orbit.zoom+e.deltaY*.001,.65,1.6);update();},{passive:false});
   canvas.addEventListener('keydown',e=>{const steps={ArrowLeft:[.06,0],ArrowRight:[-.06,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!steps[e.key])return;e.preventDefault();front=false;orbit.azimuth=orbit.azimuth+steps[e.key][0];orbit.polar=THREE.MathUtils.clamp(orbit.polar+steps[e.key][1],.45,1.48);update();});
-  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;updateCamera();requestDraw();}new ResizeObserver(resize).observe(canvas);resize();
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;fitToViewport();updateCamera();requestDraw();}new ResizeObserver(resize).observe(canvas);resize();
   return {update:syncScene,scene,camera,renderer,source,lens,screen,screenPlane,rays,extensionGroup,devices,eye};
  }
 }
