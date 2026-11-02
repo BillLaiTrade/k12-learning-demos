@@ -1,6 +1,6 @@
 /* A single experiment and a magnified view of the same entry point. */
 #s3 .lesson-body { container-type:inline-size; container-name:oblique-card; }
-#oblique-lab { padding:0; border:0; background:transparent; }
+#oblique-lab { --oblique-in:#165fc2; --oblique-out:#24783a; padding:0; border:0; background:transparent; }
 .oblique-topline { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 14px; margin:0 0 12px; }
 .oblique-topline .oblique-hint { flex:1 1 280px; margin:0; }
 .oblique-toolbar { display:flex; justify-content:flex-end; align-items:center; gap:9px; margin:0; color:#315340; font-size:.87rem; font-weight:650; }
@@ -13,8 +13,15 @@
 #oblique-background { display:block; width:100%; height:auto; }
 #oblique-scene { position:absolute; inset:0; width:100%; height:100%; }
 #oblique-scene text, #oblique-zoom text { font-family:ui-sans-serif,system-ui,"Noto Sans TC",sans-serif; fill:#233d35; font-weight:650; }
-.oblique-normal { fill:none; stroke:#396d52; stroke-width:3; stroke-dasharray:12 9; }
-.oblique-angle-arc { fill:none; stroke:#a95426; stroke-width:2.3; }
+.oblique-normal { fill:none; stroke:#737e76; stroke-width:3; stroke-dasharray:12 9; }
+.oblique-angle-sector { stroke:none; }
+.oblique-in-sector { fill:var(--oblique-in); fill-opacity:.17; }
+.oblique-out-sector { fill:var(--oblique-out); fill-opacity:.2; }
+.oblique-angle-arc { fill:none; stroke-width:2.3; }
+.oblique-in-arc { stroke:var(--oblique-in); }
+.oblique-out-arc { stroke:var(--oblique-out); }
+.oblique-incident-color { color:var(--oblique-in); }
+.oblique-refracted-color { color:var(--oblique-out); }
 .oblique-halo { fill:none; stroke:#ffb52e; stroke-width:17; opacity:.8; filter:url(#oblique-glow); }
 .oblique-ray { fill:none; stroke:#ffc741; stroke-width:7; }
 .oblique-core { fill:none; stroke:#fff9d5; stroke-width:2.8; }
@@ -45,8 +52,12 @@
 #oblique-zoom .oblique-ray { stroke-width:2.7; }
 #oblique-zoom .oblique-core { stroke-width:1; }
 #oblique-zoom text { font-size:calc(14px * var(--zoom-font-scale,1)); }
-#oblique-zoom .oblique-angle-value { fill:#99491f; font-size:calc(21px * var(--zoom-font-scale,1)); font-variant-numeric:tabular-nums; font-weight:750; }
-#oblique-zoom .oblique-normal-name { fill:#285d41; }
+#oblique-zoom .oblique-normal-name { fill:#45534b; }
+.oblique-angle-readouts { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:9px 0 0; }
+.oblique-angle-reading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:center; gap:3px 7px; padding:5px 2px; }
+.oblique-angle-reading > span { display:inline-flex; align-items:center; gap:4px; font-size:.86rem; font-weight:700; white-space:nowrap; }
+.oblique-angle-reading svg { width:13px; height:13px; flex:none; fill:currentColor; }
+.oblique-angle-reading output { color:inherit; font-size:1.2rem; line-height:1.3; font-weight:750; font-variant-numeric:tabular-nums; white-space:nowrap; }
 #s3 .oblique-finding { flex:1; margin:9px 0 0; padding:10px 9px; border:1px solid #d9e6d3; border-radius:9px; background:#edf5e8; color:#205b43; }
 .oblique-rule-head { display:flex; align-items:flex-start; justify-content:center; gap:7px; }
 .oblique-rule-head strong { font-size:1.0625rem; line-height:1.5; font-weight:750; }
@@ -54,11 +65,11 @@
 #oblique-relation { display:block; margin:7px 0 0; text-align:center; color:#254e37; font-size:.93rem; font-weight:650; font-variant-numeric:tabular-nums; }
 #oblique-zoom-note { margin:5px 0 0; text-align:center; font-size:.77rem; color:#637568; }
 .oblique-console { display:flex; flex-wrap:wrap; align-items:center; gap:9px 18px; margin:13px 0 0; }
-.oblique-angle-control { display:flex; flex:1 1 300px; align-items:center; gap:14px; margin:0; color:#274f3b; font-size:.95rem; font-weight:650; }
+.oblique-angle-control { display:flex; flex:1 1 300px; align-items:center; gap:14px; margin:0; color:var(--oblique-in); font-size:.95rem; font-weight:650; }
 .oblique-angle-control > span { white-space:nowrap; }
 #oblique-angle-value { margin-left:6px; font-size:1.2rem; font-weight:750; font-variant-numeric:tabular-nums; }
 .oblique-slider { display:grid; flex:1; min-width:100px; grid-template-columns:1fr 1fr; color:#66786a; font-size:.7rem; font-weight:500; }
-.oblique-slider input { grid-column:1 / -1; width:100%; min-height:30px; margin:0; accent-color:#267451; }
+.oblique-slider input { grid-column:1 / -1; width:100%; min-height:30px; margin:0; accent-color:var(--oblique-in); }
 .oblique-slider span:last-child { text-align:right; }
 .oblique-actions { display:flex; gap:10px; }
 .oblique-actions button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:46px; padding:9px 15px; font-weight:700; }
@@ -97,4 +108,8 @@
  .oblique-angle-control { gap:10px; font-size:.86rem; }
  .oblique-explanation summary { padding:15px 13px; font-size:.95rem; }
  .oblique-explanation-body { padding:14px 13px; }
+}
+
+@container oblique-card (max-width:520px) {
+ .oblique-angle-reading { flex-direction:column; align-items:center; gap:3px; }
 }

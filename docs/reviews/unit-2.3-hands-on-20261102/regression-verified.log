@@ -1,0 +1,43 @@
+▶ 2.3 complete page: five teaching sections and one evidence-based quiz
+  ✔ all six sections and routes exist, with gas profiles and no retired experiment (109.040601ms)
+  ✔ default cup comparisons remain after preview and reset (241.40559ms)
+  ✔ both preparation lessons navigate independent steps and keep properties in section five (1898.003355ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (361.939826ms)
+  ✔ the single transfer quiz combines CO2 reactants and water displacement, then resets locally (15324.490518ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (3540.170464ms)
+  ✔ all teaching evidence is available without JavaScript (1078.480052ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (2286.382113ms)
+✔ 2.3 complete page: five teaching sections and one evidence-based quiz (27635.955107ms)
+✔ initial splints share a glowing start without a flame; limewater starts clear without bubbles (1.580708ms)
+✔ splints finish their identical insertion before oxygen relights; CO2 progressively loses its glow (1.243821ms)
+✔ CO2 is supplied before bubbles, and bubbles precede gradual clouding (1.487728ms)
+✔ both experiments are bounded and retain a readable end state (0.749237ms)
+▶ section five: stacked splint comparison and CO2 limewater experiment
+  ✔ two stacked experiments, one control each and one shared three-point summary (140.998498ms)
+  ✔ both start ready, with glowing wood above both mouths and clear, still limewater (728.432121ms)
+  ✔ wood inserts synchronously, then oxygen relights while CO2 loses its glow (580.025712ms)
+  ✔ CO2 source precedes submerged bubbles and progressive clouding; both effects paint real pixels (1282.005034ms)
+  ✔ inlet tip stays underwater and above the curved bottom; bubbles remain in the liquid (153.378437ms)
+  ✔ button and background pause actual frames and resume the same progress in both experiments (1452.22295ms)
+  ✔ complete frames remain still; one-key replay returns to the initial scientific state (621.832538ms)
+  ✔ starting another property or preparation experiment pauses the previous one (1609.956727ms)
+  ✔ keyboard, hidden pages and scrolling away pause without implicit resume; text selection does not toggle (1744.178884ms)
+  ✔ source links and one concise shared summary retain the scientific distinctions (165.46724ms)
+  ✔ seven widths preserve stacked experiments, legible labels, control positions and compact descriptions (3356.844762ms)
+  ✔ touch and reduced motion preserve manual playback and background taps (2786.243221ms)
+  ✔ without JavaScript both prepared scenes and the summary remain readable with disabled play buttons (1215.308278ms)
+✔ section five: stacked splint comparison and CO2 limewater experiment (18722.436053ms)
+▶ thistle funnels: actual material selection, liquid seal and transfer-task feedback
+  ✔ oxygen: material body and name, assembled dry stage, pouring and submerged tip (2180.043214ms)
+  ✔ co2: material body and name, assembled dry stage, pouring and submerged tip (1091.949169ms)
+  ✔ the hands-on task uses the same occluded thistle stem and a real liquid seal (4908.7377ms)
+  ✔ no-script snapshots contain the new funnel and five summary rows (1542.818099ms)
+✔ thistle funnels: actual material selection, liquid seal and transfer-task feedback (12613.05321ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27948.236763
