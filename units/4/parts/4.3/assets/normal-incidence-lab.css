@@ -37,8 +37,8 @@
 .normal-steps [aria-current="step"] { background:#e2eee0; color:#1d664b; font-weight:700; }
 .normal-steps [aria-current="step"] b { background:#257656; color:white; }
 .normal-status { flex:1 1 170px; min-width:0; margin:0; color:#64736d; font-size:.8rem; line-height:1.6; }
-.normal-takeaway { margin:10px 0 14px; text-align:left; color:#3e5b4f; font-size:.9rem; line-height:1.7; }
-.normal-takeaway strong { color:#285a43; font-weight:700; }
+.normal-takeaway { margin:12px 0 14px; padding:10px 14px; border-left:3px solid #6b9d76; border-radius:0 8px 8px 0; background:#edf5ed; text-align:left; color:#205b43; font-size:1.0625rem; font-weight:600; line-height:1.6; }
+.normal-takeaway strong { color:#194b36; font-weight:750; }
 .normal-pan-hint { display:none; margin:0 0 7px; font-size:.76rem; color:#64736d; }
 #normal-retry[hidden] { display:none; }
 .normal-explanation { margin-top:18px; border:1px solid #d9e4d9; border-radius:13px; background:linear-gradient(130deg,#fcfdf9,#f6f9f1); }
