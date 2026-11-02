@@ -7,7 +7,7 @@ const input=$('#oblique-angle'),output=$('#oblique-angle-value'),start=$('#obliq
 const status=$('#oblique-status'),badge=$('#oblique-state'),buttons=[...root.querySelectorAll('[data-oblique-medium]')];
 let medium='water',requestedMedium='water',angle=45,elapsed=0,state='loading',frame=0,startTime=0,drag=null,loadId=0,restoreLight=false;
 const name=()=>medium==='water'?'水':'玻璃',clickSlop=5;
-const label=(id,x,y,text,width=110)=>`<g id="${id}" transform="translate(${x} ${y})"><rect x="0" y="-35" width="${width}" height="52" rx="9" fill="#fffef4" fill-opacity=".96"/><text x="${width/2}" y="0" text-anchor="middle" font-size="36">${text}</text></g>`;
+const label=(id,x,y,text,width=110)=>`<g id="${id}" transform="translate(${x} ${y})"><rect x="0" y="-35" width="${width}" height="52" rx="9" fill="#fffef4" fill-opacity=".96"/><text x="${width/2}" y="0" text-anchor="middle" font-size="30">${text}</text></g>`;
 const beam=()=>'<g class="oblique-beam" visibility="hidden"><path class="oblique-halo"/><path class="oblique-ray"/><path class="oblique-core"/></g>';
 scene.setAttribute('viewBox',`0 0 ${layout.width} ${layout.height}`);
 scene.innerHTML=`<defs>
@@ -26,9 +26,9 @@ scene.innerHTML=`<defs>
   ${beam()}
    <g class="oblique-source" tabindex="0" role="slider" aria-label="${medium==='water'?'水':'玻璃'}組光源，點擊或按Enter發射，拖曳或方向鍵調角度" aria-keyshortcuts="Enter Space" aria-valuemin="0" aria-valuemax="60" aria-valuenow="45" aria-valuetext="45度" data-lit="false">
     <title>點燈發射；拖曳調角度</title>
-    <rect x="-48" y="-100" width="96" height="140" fill="transparent"/>
+    <rect class="oblique-source-hit" x="-48" y="-82" width="96" height="96" fill="transparent"/>
     <rect class="oblique-focus" x="-42" y="-86" width="84" height="105" rx="15"/>
-    <g filter="url(#oblique-shadow)"><rect x="-35" y="-78" width="70" height="69" rx="13" fill="url(#oblique-metal)" stroke="#131e20" stroke-width="2"/><path d="M-23-69V-25M-18-69V-25" stroke="#9aa5a1" stroke-width="2" opacity=".45"/><rect x="-38" y="-23" width="76" height="16" rx="5" fill="url(#oblique-rim)"/><ellipse cx="0" cy="-5" rx="35" ry="15" fill="url(#oblique-rim)" stroke="#162423" stroke-width="2"/><ellipse class="oblique-lens" cx="0" cy="-3" rx="26" ry="10" fill="url(#oblique-dark-lens)" stroke="#111d1c" stroke-width="2"/></g>
+    <g class="oblique-source-lamp" filter="url(#oblique-shadow)"><rect x="-35" y="-78" width="70" height="69" rx="13" fill="url(#oblique-metal)" stroke="#131e20" stroke-width="2"/><path d="M-23-69V-25M-18-69V-25" stroke="#9aa5a1" stroke-width="2" opacity=".45"/><rect x="-38" y="-23" width="76" height="16" rx="5" fill="url(#oblique-rim)"/><ellipse cx="0" cy="-5" rx="35" ry="15" fill="url(#oblique-rim)" stroke="#162423" stroke-width="2"/><ellipse class="oblique-lens" cx="0" cy="-3" rx="26" ry="10" fill="url(#oblique-dark-lens)" stroke="#111d1c" stroke-width="2"/></g>
    </g>
  </g>`;
 zoom.setAttribute('viewBox',zoomViewBox);
@@ -77,11 +77,11 @@ function sector(degrees,up){
  const edge=arc(degrees,up);return edge?`M${layout.axis} ${layout.boundary}L${edge.slice(1)}Z`:'';
 }
 function drawGeometry(){
- const g=geometry(medium,angle),ratio=Math.max(.1,scene.getBoundingClientRect().width/layout.width),sourceScale=Math.max(1.6,30/(70*ratio)),fontScale=Math.max(1,.3/ratio);
+ const g=geometry(medium,angle),ratio=Math.max(.1,scene.getBoundingClientRect().width/layout.width),sourceScale=Math.max(.9,22/(70*ratio)),fontScale=Math.max(.8,13/(30*ratio));
  input.value=angle;output.value=`${angle}°`;root.dataset.angle=String(angle);root.dataset.medium=medium;root.dataset.outgoing=String(g.outgoing);
  source.setAttribute('transform',`translate(${g.source.join(' ')}) rotate(${-angle}) scale(${sourceScale})`);
  source.setAttribute('aria-label',`${name()}組光源，點擊或按Enter發射，拖曳或方向鍵調角度`);source.setAttribute('aria-valuenow',String(angle));source.setAttribute('aria-valuetext',`${angle}度，折射角${g.outgoing.toFixed(1)}度`);
- const hit=source.querySelector('rect');const hitWidth=Math.max(96,44/(ratio*sourceScale));hit.setAttribute('x',String(-hitWidth/2));hit.setAttribute('width',String(hitWidth));
+ const hit=source.querySelector('.oblique-source-hit'),hitSize=Math.max(96,44/(ratio*sourceScale));for(const [key,value] of Object.entries({x:-hitSize/2,y:-34-hitSize/2,width:hitSize,height:hitSize}))hit.setAttribute(key,String(value));
  scene.querySelector('#oblique-case-label').setAttribute('transform',`translate(650 155) scale(${fontScale})`);scene.querySelector('#oblique-case-name').textContent=`空氣 → ${name()}`;
  scene.querySelector('#oblique-air-label').setAttribute('transform',`translate(${1030-110*fontScale} 440) scale(${fontScale})`);scene.querySelector('#oblique-material-label').setAttribute('transform',`translate(230 740) scale(${fontScale})`);scene.querySelector('#oblique-material-label text').textContent=name();
  for(const kind of ['sector','base']){zoom.querySelector(`.oblique-in-${kind}`).setAttribute('d',sector(angle,true));zoom.querySelector(`.oblique-out-${kind}`).setAttribute('d',sector(g.outgoing,false));}zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));$('#oblique-in-value').value=`${angle}°`;$('#oblique-out-value').value=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();
