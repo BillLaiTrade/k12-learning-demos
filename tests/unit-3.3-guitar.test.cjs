@@ -29,23 +29,27 @@ test('guitar lesson: real instrument, one variable at a time, synchronized pluck
   assert.equal(await page.evaluate(()=>window.guitarRuns.length),0);assert.equal(await right.locator('svg').getAttribute('data-displacement'),'0');
   assert.equal(await root.locator('.guitar-tension-tools').isHidden(),true);assert.equal(await handle.getAttribute('aria-valuenow'),'12');
  });
- await t.test('opening question and guidance persist through changing modes, values and reset',async()=>{
+ await t.test('opening dialogue and Xiaokui discovery persist through changing modes, values and reset',async()=>{
   const question='那演奏樂器的時候，要怎麼調整振動的頻率，奏出不同高低的音呢？';
   const guidance='我們先用吉他試試看。改變按弦的位置，或調整琴弦的鬆緊，看看頻率會怎麼變。';
+  const discovery='我發現，琴弦能振動的部分越短，或是琴弦拉得越緊，彈出的聲音就越高！';
   const check=async()=>{
    assert.equal(await root.locator('.guitar-question').innerText(),question);
    assert.equal(await root.locator('.dialogue--xiaokui + .dialogue > p').innerText(),guidance);
    assert.equal(await root.locator('.dialogue--xiaokui + .dialogue + .guitar-lab').count(),1);
+   const finding=root.locator('.guitar-conclusion');
+   assert.equal(await finding.innerText(),discovery);
+   const speaker=finding.locator('..');
+   assert.equal(await speaker.locator('.visually-hidden').innerText(),'小葵');
+   assert.equal(await speaker.evaluate(n=>n.classList.contains('dialogue--xiaokui')),true);
   };
   await check();
   for(const value of ['length','tension','length']){
    await mode(value);await check();
    if(value==='length'){
     await handle.focus();await page.keyboard.press('Home');await check();
-    assert.match(await root.locator('.guitar-conclusion').innerText(),/弦段越短/);
    }else{
     await root.locator('[data-guitar-tension=".25"]').click();await check();
-    assert.match(await root.locator('.guitar-conclusion').innerText(),/弦拉得越緊/);
    }
    await reset();await check();
   }

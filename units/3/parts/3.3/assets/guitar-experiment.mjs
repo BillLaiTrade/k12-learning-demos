@@ -16,7 +16,6 @@ export function createGuitarExperiment(root,{onChange,onPluck}){
  function render(){
   root.dataset.guitarMode=mode;
   for(const button of root.querySelectorAll('[data-guitar-mode]'))button.setAttribute('aria-pressed',String(button.dataset.guitarMode===mode));
-  root.querySelector('.guitar-conclusion').textContent=mode==='length'?'其他條件相同時，振動的弦段越短，振動頻率越高，音調也越高。':'其他條件相同時，弦拉得越緊，振動頻率越高，音調也越高。';
   root.querySelector('.guitar-tension-tools').hidden=mode!=='tension';
   root.querySelector('.guitar-tuner-control').hidden=mode!=='tension';
   handle.hidden=mode!=='length';

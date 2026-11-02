@@ -1,6 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {CO2_OPERATIONS as ops,co2OperationFrame as frame,co2BenchFrame as bench,CO2_GLASS_ROD_LENGTH as rodLength,rubberGeometry,transformPoint,liquidGeometry,CO2_LIQUID_PROFILE} from '../units/2/parts/2.3/assets/co2-model.mjs';
+const faster=t=>t<=4700?t:4700+(t-4700)/2;
 const close=(a,b,tol=.001)=>assert.ok(Math.abs(a-b)<tol,`${a} ≈ ${b}`);
 test('seven operations merge real apparatus positioning into adding marble',()=>{
  assert.equal(ops.length,7);assert.equal(ops[1].label,'加入大理石');assert.ok(!ops.some(op=>op.label==='擺好集氣位置'));
@@ -10,7 +11,7 @@ test('seven operations merge real apparatus positioning into adding marble',()=>
 });
 test('five individual textured stones transfer once, through the neck, and never duplicate',()=>{
  for(let t=0;t<=21000;t+=10){
-  const f=frame(1,t),p=bench(1,t);assert.equal(f.dishCount+f.fallingCount+f.flaskCount,5);
+  const f=frame(1,faster(t)),p=bench(1,faster(t));assert.equal(f.dishCount+f.fallingCount+f.flaskCount,5);
   assert.equal(p.stones.filter(s=>s.location==='dish').length,f.dishCount);
   assert.equal(p.stones.filter(s=>s.location==='flask').length,f.flaskCount);
   assert.equal(new Set(p.stones.map(s=>s.id)).size,5);
@@ -56,7 +57,7 @@ test('acid uses the photographed inner curved bottom, with sloping walls and a l
 });
 
 test('marble is placed with forceps in a tilted flask while the dish remains level on the bench',()=>{
- const p=bench(1,6300);assert.equal(p.bowl.angle,0);assert.equal(p.bowl.x,520);assert.equal(p.bowl.y,500);assert.equal(p.bodies.flask.angle,-28);assert.equal(p.tool.gripping,true);assert.equal(p.tool.visible,true);
+ const p=bench(1,faster(6300));assert.equal(p.bowl.angle,0);assert.equal(p.bowl.x,520);assert.equal(p.bowl.y,500);assert.equal(p.bodies.flask.angle,-28);assert.equal(p.tool.gripping,true);assert.equal(p.tool.visible,true);
  const moving=p.stones.find(s=>s.location==='falling');close(p.tool.x,moving.x);close(p.tool.y,moving.y);assert.equal(bench(1,21000).bodies.flask.angle,0);
 });
 test('acid stream starts at the real transformed open-bottle lip and the neck stays outside the flask',()=>{
@@ -64,15 +65,15 @@ test('acid stream starts at the real transformed open-bottle lip and the neck st
 });
 
 test('forceps enter and leave through the top without popping in over the bench',()=>{
- assert.equal(bench(1,4700).tool.y,-60);assert.equal(bench(1,19600).tool.y,-60);let prior=bench(1,4700).tool;
- for(let t=4716;t<19600;t+=16){const current=bench(1,t).tool;assert.ok(Math.hypot(current.x-prior.x,current.y-prior.y)<60,`tool jump at ${t}`);prior=current;}
+ assert.equal(bench(1,4700).tool.y,-60);assert.equal(bench(1,faster(19600)).tool.y,-60);let prior=bench(1,4700).tool;
+ for(let t=4716;t<19600;t+=16){const current=bench(1,faster(t)).tool;assert.ok(Math.hypot(current.x-prior.x,current.y-prior.y)<60,`tool jump at ${t}`);prior=current;}
 });
 
 test('every incoming and outgoing stone/forceps trajectory crosses the opening, never the bottle wall',()=>{
  const local=(p,b)=>transformPoint({x:p.x-b.cx,y:p.y-b.cy},{x:b.cx,y:b.cy,angle:-b.angle});
  const inside=p=>{let yes=false;for(let i=0,j=CO2_LIQUID_PROFILE.length-1;i<CO2_LIQUID_PROFILE.length;j=i++){const a=CO2_LIQUID_PROFILE[i],b=CO2_LIQUID_PROFILE[j];if((a.y>p.y)!==(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)yes=!yes;}return yes;};
  const prior=new Map();let crossings=0;
- for(let t=5500;t<18100;t+=8){const p=bench(1,t),b=p.bodies.flask,actors=[...p.stones.filter(v=>v.location==='falling').map(v=>({id:v.id,p:v})),{id:'tool',p:p.tool}];
+ for(let t=5500;t<18100;t+=8){const p=bench(1,faster(t)),b=p.bodies.flask,actors=[...p.stones.filter(v=>v.location==='falling').map(v=>({id:v.id,p:v})),{id:'tool',p:p.tool}];
   for(const actor of actors){const v=local(actor.p,b),isInside=inside(v),was=prior.get(actor.id)??false;
    if(isInside!==was){close(v.x,300);assert.ok(v.y<240);crossings++;}prior.set(actor.id,isInside);
   }
@@ -92,4 +93,13 @@ test('thistle liquid seal follows assembly and addition; the fixed stem enters o
   if(f.liquidSeal)assert.ok(level>391,'gas inlet stays above the liquid');
  }
  for(let i=1;i<6;i++)assert.deepEqual(bench(i,ops[i].duration).funnel,bench(i+1,0).funnel);
+});
+
+
+test('forceps movement is twice as fast after positioning and still transfers only one stone at a time',()=>{
+ assert.equal(ops[1].duration,12850);
+ for(const t of[0,1000,3600,4700])assert.equal(frame(1,t).motionTime,t);
+ for(let t=4700;t<=12850;t+=8){const f=frame(1,t);assert.equal(f.motionTime,4700+(t-4700)*2);assert.ok(f.fallingCount<=1);assert.equal(f.dishCount+f.fallingCount+f.flaskCount,5);}
+ assert.equal(frame(1,7600).flaskCount,2);assert.equal(frame(1,12850).flaskCount,5);
+ assert.deepEqual(bench(1,12850).bodies,bench(2,0).bodies);
 });
