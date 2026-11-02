@@ -21,7 +21,8 @@
     @media(max-width:700px){.lesson-head{grid-template-columns:48px minmax(0,1fr);gap:10px;padding:18px}.lesson-number{width:40px;height:40px;border-radius:12px}.lesson-body{padding:18px}}
   </style>
   <style>
-    .ruler-photo-stage{position:relative;isolation:isolate;overflow:hidden;width:100%;aspect-ratio:16/9;border-radius:13px;background:#e8e5dc}
+    .ruler-photo-stage{position:relative;isolation:isolate;overflow:hidden;width:100%;aspect-ratio:2.1;border-radius:13px;background:#e8e5dc}
+    .ruler-photo-scene{position:absolute;left:-18%;top:50%;width:130%;aspect-ratio:16/9;transform:translateY(-50%)}
     .ruler-photo-background,.ruler-model{position:absolute;display:block;max-width:none;pointer-events:none;user-select:none}
     .ruler-photo-background{z-index:0;inset:0;width:100%;height:100%;object-fit:cover}
     .ruler-model{z-index:1;inset:0;width:100%;height:100%}
@@ -58,6 +59,7 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-hidden="true"></span><p>尺一邊發出聲音，一邊抖得好快，聲音跟它在動有關嗎？</p></div>
             <div class="dialogue"><span class="speaker" aria-hidden="true"></span><p>我們來撥動鋼尺，看看它發出聲音時，尺身是怎麼動的。</p></div>
             <figure class="visual"><div class="ruler-photo-stage" id="ruler-demo" role="group" aria-label="鋼尺平放並夾緊在桌邊，自由端伸出桌外；可直接點擊尺面撥動。">
+              <div class="ruler-photo-scene">
               <img class="ruler-photo-background" src="assets/ruler-suspended-background.png" alt="" aria-hidden="true">
               <svg class="ruler-model" viewBox="0 0 1000 562.5" role="group" aria-label="平放鋼尺互動示範">
                 <defs>
@@ -75,6 +77,7 @@
                   <g clip-path="url(#ruler-clamp-region)" aria-hidden="true"><use href="#ruler-photo"/></g>
                 </g>
               </svg>
+              </div>
             </div></figure>
             <div class="controls"><button class="action" id="ruler-start" type="button" aria-pressed="false">撥動鋼尺並聆聽</button><button class="secondary" id="ruler-stop" type="button" disabled>按住鋼尺停止</button><span class="live-note" id="ruler-status" aria-live="polite">直接點擊尺面，讓鋼尺振動並播放聲音。</span></div>
             <audio id="ruler-audio" src="assets/metal-ruler-twang.wav?v=beeproductive-383135" preload="auto"></audio>
