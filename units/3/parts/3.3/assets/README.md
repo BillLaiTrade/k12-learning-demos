@@ -1,5 +1,7 @@
 # 3.3 示意素材與聲音模型
 
+2026-11-02 第一區提問文字：依使用者指示，將小葵的「同一支音叉，為什麼這次比較大聲？」改為「同一支音叉，為什麼有時候敲起來比較大聲，有時候比較小聲？」明確比較不同次敲擊的聲音大小。阿公回應、操作、音訊與振動模型保持。
+
 - 對話頭像：沿用儲存庫共用 `shared-assets/characters/dialogue-character-avatars.png`。
 - 首頁插圖：`sound-exploration-courtyard.png`為使用者於2026-11-01選定的第四輪B「校園庭院・一起聽聲音」，以共用角色、木製喇叭、木吉他與竹管素材為參考生成。1672×941原始PNG直接採用，未裁切、重畫或後製；來源與SHA-256見`hero-courtyard-generation.json`。畫面包含音叉、喇叭、吉他、竹排笛、狗／人耳／蝙蝠及閱讀／交談／施工，對應目前七區內容。舊版`sound-fair-opening.png`保留歷史追溯，現行頁面不再引用。
 - 第一區音叉：依核可示意圖，以image_gen製作`fork-tabletop-background.png`及透明`fork-apparatus.png`，生成紀錄見`fork-generation.json`。音叉照片的兩叉股分段彎曲，叉柄／木座固定；音槌及單叉股放大觀察使用SVG。
