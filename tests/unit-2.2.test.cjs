@@ -85,6 +85,30 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
     assert.ok(framing.model.width > framing.stage.width && framing.model.height > framing.stage.height, 'the enlarged scene extends beyond its cropped viewport');
     assert.ok(Math.abs(framing.scaleX - framing.scaleY) < 1e-6, 'the scene is enlarged uniformly');
     for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(framing.photo[key] - framing.model[key]) < .1, 'background and interactive ruler remain aligned: ' + key);
+    const clampBounds = await page.locator('#ruler-table-clamp').evaluate(async node => {
+      const image = new Image(); image.src = node.getAttribute('href'); await image.decode();
+      const canvas = document.createElement('canvas'); canvas.width = image.naturalWidth; canvas.height = image.naturalHeight;
+      const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
+      const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+      let left = canvas.width, top = canvas.height, right = 0, bottom = 0;
+      for (let y = 0; y < canvas.height; y++) for (let x = 0; x < canvas.width; x++) if (pixels[(y * canvas.width + x) * 4 + 3] > 180) {
+        left = Math.min(left, x); top = Math.min(top, y); right = Math.max(right, x); bottom = Math.max(bottom, y);
+      }
+      const point = (x, y) => new DOMPoint(node.x.baseVal.value + x / canvas.width * node.width.baseVal.value,
+        node.y.baseVal.value + y / canvas.height * node.height.baseVal.value).matrixTransform(node.getScreenCTM());
+      const a = point(left, top), b = point(right, bottom);
+      return { left: a.x, top: a.y, right: b.x, bottom: b.y };
+    });
+    assert.ok(clampBounds.left >= framing.stage.x && clampBounds.right <= framing.stage.x + framing.stage.width);
+    assert.ok(clampBounds.top >= framing.stage.y && clampBounds.bottom <= framing.stage.y + framing.stage.height, 'the complete clamp, including its knob, stays in frame');
+    await page.locator('#ruler-table-clamp').click({ position: { x: 85, y: 45 } });
+    assert.equal(await page.locator('#ruler-audio').evaluate(audio => audio.paused), true, 'the fixed clamp is not a pluck target');
+    await hit.scrollIntoViewIfNeeded();
+    const nearClamp = await hit.evaluate(node => {
+      const b = node.getBBox(); const p = new DOMPoint(b.x + b.width * .08, b.y + b.height / 2).matrixTransform(node.getScreenCTM());
+      return { x: p.x, y: p.y };
+    });
+    assert.equal(await page.evaluate(p => document.elementFromPoint(p.x, p.y)?.id, nearClamp), 'ruler-pluck', 'transparent clamp margins do not block the adjacent ruler');
     const edges = await page.evaluate(async () => {
       const image = new Image();
       image.src = document.querySelector('#ruler-photo').getAttribute('href');
