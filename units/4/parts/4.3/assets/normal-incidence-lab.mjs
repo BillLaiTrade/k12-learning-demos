@@ -1,14 +1,17 @@
-import { layout, media, boundaryMs, comparisonMs, durationMs, snapshot } from './normal-incidence-model.mjs?v=20261102-air-half1';
+import { layout, media, distanceKm, airDistanceKm, mediumDistanceKm, arrivalMs, boundaryMs, comparisonMs, durationMs, snapshot } from './normal-incidence-model.mjs?v=20261102-1500000-v1';
 
 const root=document.querySelector('#normal-lab');
 const $=selector=>root.querySelector(selector);
 const scene=$('#normal-scene'), picture=$('#normal-background');
 const start=$('#normal-start'), pause=$('#normal-pause'), retry=$('#normal-retry');
-const status=$('#normal-status'), badge=$('#normal-state');
+const status=$('#normal-status'), badge=$('#normal-state'), timer=$('#normal-time');
+$('#normal-distance').textContent=`${distanceKm/10000} 萬公里`;
+$('#normal-route-split').textContent=`水／玻璃組：空氣 ${airDistanceKm/10000} 萬公里 ＋ 介質 ${mediumDistanceKm/10000} 萬公里`;
 let state='loading', elapsed=0, startTime=0, frame=0, previousStage=-1;
 let comparisonPending=true, pauseReason='';
 const tag=(x,y,text,width=104)=>`<g><rect x="${x}" y="${y-35}" width="${width}" height="54" rx="10" fill="#fffef4" fill-opacity=".94"/><text x="${x+width/2}" y="${y}" text-anchor="middle" font-size="30">${text}</text></g>`;
 scene.innerHTML=`<defs><filter id="normal-glow" filterUnits="userSpaceOnUse" x="310" y="200" width="920" height="560"><feGaussianBlur stdDeviation="6"/></filter></defs>
+<g class="normal-distance-guide" aria-hidden="true"><path d="M110 ${layout.source}V${layout.end} M98 ${layout.source}H122 M98 ${layout.end}H122" fill="none" stroke="#3f735c" stroke-width="2.5"/><rect x="24" y="${layout.boundary-26}" width="132" height="52" rx="9" fill="#fffef4" stroke="#b7cbb1"/><text x="90" y="${layout.boundary+9}" text-anchor="middle" font-size="24">${distanceKm/10000}萬公里</text></g>
 ${media.map((medium,i)=>{
  const x=layout.axes[i], inAir=medium==='air';
  return `<g class="normal-lane" data-medium="${medium}">
@@ -18,7 +21,7 @@ ${media.map((medium,i)=>{
  <g class="normal-beam" visibility="hidden">${['normal-halo','normal-ray','normal-core'].map(cls=>`<line class="${cls}" x1="${x}" y1="${layout.source}" x2="${x}" y2="${layout.source}"/>`).join('')}</g>
  <ellipse class="normal-source-light" cx="${x}" cy="${layout.source}" rx="14" ry="14" visibility="hidden"/>
  <path class="normal-direction" d="M0 0V28m-9-10 9 10 9-10" visibility="hidden"/>
- <g class="normal-arrival" visibility="hidden" data-arrived="false"><rect x="${x-78}" y="755" width="156" height="53" rx="15"/><text x="${x}" y="790" text-anchor="middle" font-size="29">尚未到達</text></g>
+ <g class="normal-arrival" visibility="hidden" data-arrived="false"><rect x="${x-78}" y="755" width="156" height="84" rx="15"/><text class="normal-arrival-status" x="${x}" y="785" text-anchor="middle" font-size="27">尚未到達</text><text class="normal-arrival-time" x="${x}" y="821" text-anchor="middle" font-size="26">—</text></g>
  </g>`;
 }).join('')}`;
 const lanes=media.map(medium=>{
@@ -39,11 +42,11 @@ function controls(){
 }
 function explainStage(){
  if(state==='paused'){
-  status.textContent=pauseReason==='comparison'?'同一段時間，空氣組先到達，水與玻璃中的光走得較短。按「繼續觀察」再看其餘兩組。':'三束光已定格在同一瞬間。按「繼續觀察」接著看。';return;
+  status.textContent=pauseReason==='comparison'?`共同計時 ${(comparisonMs/1000).toFixed(2)} 秒，空氣組先到達，水與玻璃中的光走得較短。按「繼續觀察」比較到達時間。`:'三束光已定格在同一瞬間。按「繼續觀察」接著看。';return;
  }
- if(state==='complete'){status.textContent='三組光路都保持筆直。再按「同時發射」可重新比較。';return;}
+ if(state==='complete'){status.textContent=`同樣 ${distanceKm/10000} 萬公里，全程空氣約 ${(arrivalMs('air')/1000).toFixed(2)} 秒、空氣接水約 ${(arrivalMs('water')/1000).toFixed(2)} 秒、空氣接玻璃約 ${(arrivalMs('glass')/1000).toFixed(2)} 秒。三組光路都保持筆直。`;return;}
  status.textContent=[
-  '按「同時發射」，比較全程空氣與進入水、玻璃的三束光。',
+  `按「同時發射」，比較三束光走完 ${distanceKm/10000} 萬公里的時間。`,
   '三束光由同一高度同時出發，在空氣中的前進速度相同。',
   '進入水與玻璃後，光束前緣變慢，仍沿法線前進；空氣組繼續直行。',
   '空氣組已先到達，繼續觀察水與玻璃中的光，方向仍保持不變。'
@@ -51,6 +54,7 @@ function explainStage(){
 }
 function render(){
  root.dataset.elapsedMs=String(elapsed);root.dataset.comparisonPassed=String(!comparisonPending);
+ timer.textContent=(Math.floor(elapsed/10+1e-8)/100).toFixed(2);
  snapshot(elapsed).forEach((s,i)=>{
   const lane=lanes[i];lane.group.dataset.frontY=String(s.y);lane.group.dataset.entered=String(s.entered);lane.group.dataset.arrived=String(s.arrived);
   lane.lines.forEach(line=>line.setAttribute('y2',String(s.y)));
@@ -59,11 +63,12 @@ function render(){
   lane.arrow.setAttribute('transform',`translate(${s.x+32} ${s.y-12})`);
   lane.arrow.setAttribute('visibility',state==='running'&&elapsed>0&&!s.arrived?'visible':'hidden');
   lane.arrival.setAttribute('visibility',elapsed>0?'visible':'hidden');lane.arrival.dataset.arrived=String(s.arrived);
-  lane.arrival.querySelector('text').textContent=s.arrived?(s.medium==='air'?'先到達':'已到達'):'尚未到達';
+  lane.arrival.querySelector('.normal-arrival-status').textContent=s.arrived?(s.medium==='air'?'先到達':'已到達'):'尚未到達';
+  lane.arrival.querySelector('.normal-arrival-time').textContent=s.arrived?`約 ${(arrivalMs(s.medium)/1000).toFixed(2)} 秒`:'—';
  });
  const current=stage();
  root.querySelectorAll('[data-normal-stage]').forEach(el=>current===Number(el.dataset.normalStage)?el.setAttribute('aria-current','step'):el.removeAttribute('aria-current'));
- scene.setAttribute('aria-label',`三組共同時間的光路剖面示意：左側全程空氣，中間由空氣進入水，右側由空氣進入玻璃。${current>=2?'水與玻璃中的前緣較慢，光路仍沿法線筆直前進。':'按同時發射觀察。'}${!comparisonPending?'空氣組已先到達；可比較同一段時間走過的距離。':''}`);
+ scene.setAttribute('aria-label',`總路程${distanceKm/10000}萬公里，共同計時${timer.textContent}秒的光路剖面示意：左側全程空氣，中間由空氣進入水，右側由空氣進入玻璃。${current>=2?'水與玻璃中的前緣較慢，光路仍沿法線筆直前進。':'按同時發射觀察。'}${!comparisonPending?'空氣組已先到達；可比較同一段時間走過的距離。':''}`);
  if(previousStage!==current){previousStage=current;if(!['loading','error'].includes(state))explainStage();}
 }
 function stop(){cancelAnimationFrame(frame);frame=0;}

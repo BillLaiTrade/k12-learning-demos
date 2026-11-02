@@ -1,0 +1,37 @@
+[
+  {
+    "path": "assets/light-speed-model.mjs",
+    "unchanged": true,
+    "sha256": "1b08a913a4058d574b98c34cf6f70fc3d248a3fe8b056af66cc58210d8706243"
+  },
+  {
+    "path": "assets/light-speed-lab.mjs",
+    "unchanged": true,
+    "sha256": "be05a8543b2e4f333ddde21a637700a82881b08dd5765728574a09f64deec9da"
+  },
+  {
+    "path": "assets/light-speed-lab.css",
+    "unchanged": true,
+    "sha256": "4b75ba53604812d312b2f9bbfc88b149f974e150f38d8d4a72a5e806aa552d6f"
+  },
+  {
+    "path": "assets/optics.mjs",
+    "unchanged": true,
+    "sha256": "a45eeb8d660ed21d1ec3ebe5362f06e015eebdc831a63fac1a38f71d54a0d8ec"
+  },
+  {
+    "path": "assets/lesson.mjs",
+    "unchanged": true,
+    "sha256": "a68520d20c96212e15f2ba9a11545f6fe44337c5cf6e7bbbdb333ce266cc1a4b"
+  },
+  {
+    "path": "assets/lesson.css",
+    "unchanged": true,
+    "sha256": "c5f91e12d78a68fc1d7583ea8530017e66700e687ec7737cbf630da8f112d788"
+  },
+  {
+    "path": "assets/normal-incidence-half-air-bench.png",
+    "unchanged": true,
+    "sha256": "ea1ae7048c57b47fbe2e5fc56ebfd75045ced3073d06e3d4d66107a3ea6ab527"
+  }
+]

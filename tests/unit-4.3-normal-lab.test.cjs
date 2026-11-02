@@ -33,21 +33,21 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   await page.clock.runFor(600);assert.deepEqual(await fronts(),[240,240,240]);
   await page.locator('#normal-background').evaluate(el=>el.decode());
   assert.equal(await page.locator('#normal-background').evaluate(el=>el.naturalWidth),1536);
-  assert.match(await lab.innerText(),/慢動作示意/);assert.doesNotMatch(await lab.innerText(),/間距/);
+  assert.match(await lab.innerText(),/未放慢播放/);assert.equal(await page.locator('#normal-time').innerText(),'0.00');assert.equal(await page.locator('#normal-distance').innerText(),'150 萬公里');assert.match(await page.locator('#normal-route-split').innerText(),/75.*75/);assert.doesNotMatch(await lab.innerText(),/間距/);
   assert.equal(await page.locator('#s2 .normal-next').count(),0);assert.equal(await page.locator('.normal-name').count(),3);assert.equal(await page.locator('[data-medium=air] .normal-interface').count(),0);assert.equal(await page.locator('[data-medium=air] .normal-reference').count(),0);
   assert.ok(await page.locator('.normal-steps').evaluate(el=>el.getBoundingClientRect().bottom<=document.querySelector('#normal-viewport').getBoundingClientRect().top));
   if(captures)await page.locator('#s2').screenshot({path:path.join(captures,'1440-idle-collapsed.png')});
  });
  await t.test('continuous beams launch together and stay on the same axis across the interface',async()=>{
   await run();await page.clock.runFor(300);const air=await fronts();assert.ok(air[0]>240&&air[0]<484);assert.equal(air[0],air[1]);assert.equal(air[1],air[2]);
-  await page.clock.runFor(1800);const below=await fronts();assert.ok(below[0]>below[1]&&below[1]>below[2]&&below[2]>484);
+  await page.clock.runFor(2600);const below=await fronts();assert.ok(below[0]>below[1]&&below[1]>below[2]&&below[2]>484);
   const geometry=await page.locator('.normal-beam line').evaluateAll(es=>es.map(e=>[e.getAttribute('x1'),e.getAttribute('x2'),e.getAttribute('y1'),e.getAttribute('y2')]));
   geometry.forEach(g=>{assert.equal(g[0],g[1]);assert.equal(g[2],'240');assert.ok(Number(g[3])>484);});
   assert.equal(await page.locator('[data-normal-stage="2"]').getAttribute('aria-current'),'step');
  });
  await t.test('pause freezes both fronts and resume continues the saved progress',async()=>{
-  await page.locator('#normal-pause').click();const stopped=await fronts();assert.equal(await lab.getAttribute('data-state'),'paused');
-  await page.clock.runFor(1500);assert.deepEqual(await fronts(),stopped);
+  await page.locator('#normal-pause').click();const stopped=await fronts(),stoppedClock=await page.locator('#normal-time').innerText();assert.equal(await lab.getAttribute('data-state'),'paused');
+  await page.clock.runFor(1500);assert.deepEqual(await fronts(),stopped);assert.equal(await page.locator('#normal-time').innerText(),stoppedClock);
   assert.match(await page.locator('#normal-pause').innerText(),/繼續/);
   if(captures)await page.locator('#s2').screenshot({path:path.join(captures,'1440-paused-collapsed.png')});
   await page.locator('#normal-pause').click();await page.clock.runFor(200);assert.ok((await fronts())[0]>stopped[0]);
@@ -58,8 +58,8 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   assert.ok(Math.abs(Number(await lab.getAttribute('data-elapsed-ms'))-comparisonMs)<1e-8);
   const frozen=await fronts();assert.equal(frozen[0],728);assert.ok(Math.abs(frozen[1]-667)<1e-8);assert.ok(Math.abs(frozen[2]-(646+2/3))<1e-8);
   assert.equal(await page.locator('[data-normal-stage="3"]').getAttribute('aria-current'),'step');
-  assert.equal(await page.locator('#normal-state').innerText(),'同一瞬間・已暫停');
-  assert.deepEqual(await page.locator('.normal-arrival text').allTextContents(),['先到達','尚未到達','尚未到達']);
+  assert.equal(await page.locator('#normal-state').innerText(),'同一瞬間・已暫停');assert.equal(await page.locator('#normal-time').innerText(),'5.00');assert.deepEqual(await page.locator('.normal-arrival-time').allTextContents(),['約 5.00 秒','—','—']);
+  assert.deepEqual(await page.locator('.normal-arrival-status').allTextContents(),['先到達','尚未到達','尚未到達']);
   assert.equal(await page.locator('#normal-start').isDisabled(),true);
   await page.clock.runFor(2500);assert.deepEqual(await fronts(),frozen);
   if(captures)await page.locator('#s2').screenshot({path:path.join(captures,'1440-comparison-collapsed.png')});
@@ -67,12 +67,13 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
  await t.test('continuing the comparison finishes all three rays without a second automatic stop',async()=>{
   const frozen=await fronts();await page.locator('#normal-pause').click();await page.clock.runFor(200);
   const next=await fronts();assert.equal(next[0],728);assert.ok(next[1]>frozen[1]&&next[2]>frozen[2]);
-  await finish();assert.deepEqual(await fronts(),[728,728,728]);
+  await page.clock.runFor(700);assert.deepEqual(await page.locator('.normal-arrival-time').allTextContents(),['約 5.00 秒','約 5.83 秒','—']);
+  await finish();assert.deepEqual(await fronts(),[728,728,728]);assert.equal(await page.locator('#normal-time').innerText(),'6.25');assert.deepEqual(await page.locator('.normal-arrival-time').allTextContents(),['約 5.00 秒','約 5.83 秒','約 6.25 秒']);
   assert.equal(await page.locator('#normal-pause').isDisabled(),true);assert.equal(await page.locator('#normal-start').isEnabled(),true);
   assert.equal(await page.locator('.normal-direction[visibility="hidden"]').count(),3);
  });
  await t.test('same launch button starts a fresh run and offscreen or hidden pages preserve progress',async()=>{
-  await run();assert.ok((await fronts())[0]<280);assert.equal(await lab.getAttribute('data-comparison-passed'),'false');
+  await run();assert.ok((await fronts())[0]<280);assert.ok(Number(await page.locator('#normal-time').innerText())<.3);assert.deepEqual(await page.locator('.normal-arrival-time').allTextContents(),['—','—','—']);assert.equal(await lab.getAttribute('data-comparison-passed'),'false');
   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.clock.runFor(100);
   await page.waitForFunction(()=>document.querySelector('#normal-lab').dataset.state==='paused');
   const stopped=await fronts();await page.clock.runFor(1000);assert.deepEqual(await fronts(),stopped);
