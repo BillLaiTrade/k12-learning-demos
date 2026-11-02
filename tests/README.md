@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.3 第一區緊湊比較紀錄
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium FORK_CAPTURE_DIR=/tmp/unit33-compact-records node --test --test-concurrency=1 tests/unit-3.3-fork.test.cjs tests/unit-3.3.test.cjs
+```
+
+共22項（含外層）：音叉專項補驗1440／1366／390／320px下初始短狀態、只敲一種時另一欄不撐高、兩次觀察後相同波形尺寸、重設收回及無JavaScript初始狀態。原音訊、振動、停止／重播、取消、錯誤重試、鍵盤／觸控及整頁回歸維持。`SOUND33_BASE_URL`可指定公開頁（勿帶hash），公開檢查須信任環境代理CA；截圖存至`/tmp`避免覆寫歷史證據。
+
 ## 3.2 鋼尺場景放大裁切
 
 ```sh

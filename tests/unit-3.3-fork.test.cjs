@@ -37,6 +37,42 @@ test('fork experiment: actual sound, synchronized motion, recording and layout',
   assert.equal(await root.locator('[data-fork-strike]').count(),2);assert.equal(await root.locator('#amplitude').count(),0);assert.match(await root.locator('.fork-scene').evaluate(n=>getComputedStyle(n).backgroundImage),/fork-tabletop-background/);
   assert.equal(await root.locator('#fork-photo [data-prong]').count(),2);assert.equal(await root.locator('#fork-photo image').count(),0);assert.match(await root.locator('#fork-detail').getAttribute('aria-label'),/平衡位置.*單側最大位移/);
  });
+ await t.test('records stay compact until each strike, expand independently and collapse on reset',async()=>{
+  const record=key=>root.locator(`[data-fork-record="${key}"]`);
+  const height=key=>record(key).evaluate(n=>n.getBoundingClientRect().height);
+  for(const width of [1440,1366,390,320]){
+   await page.setViewportSize({width,height:900});await reset();
+   for(const key of ['soft','strong']){
+    assert.ok(await height(key)<=58,'unobserved record is a short status row');
+    assert.equal(await record(key).locator('.fork-record-pending').innerText(),'尚未觀察');
+    assert.equal(await record(key).locator('.fork-record-body').isHidden(),true);
+   }
+   if(width===1440)await root.locator('.fork-records').screenshot({path:`${capture}/compact-initial-${width}.png`});
+   await strike('soft');await root.locator('.stop').click();
+   assert.equal(await record('soft').locator('.fork-record-body').isVisible(),true);
+   assert.equal(await record('soft').locator('.fork-record-pending').isHidden(),true);
+   assert.ok(await height('soft')>90,'observed record has room for the waveform');
+   assert.ok(await height('strong')<=58,'other record does not stretch to match its neighbor');
+   if(width===1440)await root.locator('.fork-records').screenshot({path:`${capture}/compact-one-${width}.png`});
+   await strike('strong');await root.locator('.stop').click();
+   assert.equal(await root.locator('.fork-same-pitch').isVisible(),true);
+   const waves=await root.locator('.fork-record .wave').evaluateAll(nodes=>nodes.map(n=>({width:n.getBoundingClientRect().width,height:n.getBoundingClientRect().height,viewBox:n.getAttribute('viewBox')})));
+   assert.ok(waves.every(w=>w.width>80&&w.height===80),'both plots keep readable waveform space');
+   assert.ok(Math.abs(waves[0].width-waves[1].width)<1);assert.equal(waves[0].viewBox,waves[1].viewBox);
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+   await root.locator('.fork-records').screenshot({path:`${capture}/compact-both-${width}.png`});
+   await reset();
+   for(const key of ['soft','strong']){assert.ok(await height(key)<=58);assert.equal(await record(key).locator('.fork-record-body').isHidden(),true);}
+  }
+  const staticPage=await browser.newPage({javaScriptEnabled:false,viewport:{width:1440,height:900}});
+  await staticPage.goto(base,{waitUntil:'networkidle'});
+  for(const row of await staticPage.locator('.fork-record').all()){
+   assert.ok(await row.evaluate(n=>n.getBoundingClientRect().height)<=58);
+   assert.equal(await row.locator('.fork-record-pending').innerText(),'尚未觀察');
+   assert.equal(await row.locator('.fork-record-body').isHidden(),true);
+  }
+  await staticPage.close();await page.setViewportSize({width:1440,height:1100});
+ });
  await t.test('both strikes have the same real frequency; heavy has larger audio and visible displacement',async()=>{
   await strike('soft');const soft=await sample();await strike('strong');const strong=await sample();
   const runs=await page.evaluate(()=>window.forkSounds.slice(-2));assert.ok(runs.every(r=>Math.abs(r.frequency-440)<10));assert.ok(Math.abs(runs[1].rms/runs[0].rms-7/3)<.01);assert.equal(runs[0].stopped,true);assert.ok(runs[0].rms>.12&&runs[1].rms>.28,'final playback buffer is audible at the intended boosted signal level');assert.ok(runs[0].peak>.2&&runs[1].peak>.5&&runs.every(r=>r.peak<.6),'boosted strikes retain headroom without clipping');
