@@ -7,7 +7,7 @@ export const REQUIRED_MATERIALS=DESK_MATERIALS.filter(m=>m.required).map(m=>m.id
 export const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 export const ease=v=>{const t=clamp(v);return t*t*(3-2*t);};
 export const mix=(a,b,p)=>a+(b-a)*p;
-export function createDesk(){return{positions:{},dragging:null,phase:'choose',selected:[],tool:null,focus:null,tankWater:0,jarWater:0,jarAngle:0,jarPlace:0,jarCovered:false,sealedUnderwater:false,flaskMarbles:0,heldMarble:false,acid:0,rig:false,funnel:false,outlet:'air',airRemaining:1,co2Volume:0,airVolume:0,sampleStarted:false,reactionAge:0,time:0,motion:null,feedback:'從桌上挑出你需要的材料與器具。',feedbackKind:'hint',result:null,spilling:false};}
+export function createDesk(){return{positions:{},dragging:null,phase:'operate',selected:[],tool:null,focus:null,tankWater:0,jarWater:0,jarAngle:0,jarPlace:0,jarCovered:false,sealedUnderwater:false,flaskMarbles:0,heldMarble:false,acid:0,rig:false,funnel:false,outlet:'air',airRemaining:1,co2Volume:0,airVolume:0,sampleStarted:false,reactionAge:0,time:0,motion:null,feedback:'從材料區點選要用的物品，放到桌上直接操作。',feedbackKind:'hint',result:null,spilling:false};}
 export const waterSurface=s=>524-119*s.tankWater;
 export function jarPose(s){
  const m=s.motion;
@@ -62,17 +62,20 @@ export function inspectDesk(s){
 }
 export function actDesk(s,action,value){
  if(action==='reset')return createDesk();
- if(action==='select'&&s.phase==='choose'){s.selected=s.selected.includes(value)?s.selected.filter(id=>id!==value):[...s.selected,value];tell(s,`已選 ${s.selected.length} 件。選好後開始操作。`);return s;}
- if(action==='begin'){
-  const wrong=s.selected.filter(id=>!REQUIRED_MATERIALS.includes(id)),missing=REQUIRED_MATERIALS.filter(id=>!s.selected.includes(id));
-  if(wrong.length)tell(s,'雙氧水與二氧化錳是前面製氧的材料，這次製備二氧化碳用不到它們。請調整選材。','revise');
-  else if(missing.length)tell(s,'還缺一些工具。想想製氣、裝水、取物、連接與封口各需要什麼。','revise');
-  else{s.phase='operate';tell(s,'點工具放到桌上，再拖近器材；停靠或放開即可操作。');}return s;
- }
  if(s.phase!=='operate')return s;
  if(action==='inspect'){const r=inspectDesk(s);s.result=r.correct?'correct':'revise';s.feedback=r.message;s.feedbackKind=s.result;if(r.correct)s.phase='complete';return s;}
  if(action==='stop'&&['water','acid'].includes(s.motion?.kind)){const m=s.motion;move(s,'put-away',450,{pourKind:m.kind,target:m.target,viaFunnel:m.viaFunnel,stopAt:m.elapsed/m.duration});tell(s,'收起倒液工具，已倒入的液體會保留。');return s;}
  if(s.motion){tell(s,'請等手上的動作完成。');return s;}
+ if(action==='take'){
+  const item=DESK_MATERIALS.find(m=>m.id===value);if(!item)return s;
+  const isTool=!['flask','jar','tank','marble'].includes(value);
+  if(s.heldMarble&&isTool&&value!=='forceps'){tell(s,'鑷子還夾著一塊大理石，先放進瓶口或放回盤中。');return s;}
+  const present=s.selected.includes(value);if(!present)s.selected.push(value);
+  s.tool=isTool?value:null;s.focus=isTool?null:value;
+  tell(s,present?`${item.name}已在桌上，接著操作同一件器材。`:`已將${item.name}放到操作桌上。`);return s;
+ }
+ if(['immerse','extract','rotate','relocate','uncover'].includes(action)&&!s.selected.includes('jar')){tell(s,'先從材料區取用集氣瓶。');return s;}
+ if((action==='immerse'||action==='relocate'&&s.jarPlace<.5)&&!s.selected.includes('tank')){tell(s,'先從材料區取用水槽。');return s;}
  if(action==='immerse'||action==='extract'){
   if(s.outlet==='jar'){tell(s,'先撤出導管，再移動集氣瓶。','revise');return s;}
   const startPose=jarPose(s),startAngle=s.jarAngle;
@@ -80,11 +83,16 @@ export function actDesk(s,action,value){
   tell(s,action==='immerse'?'保持蓋片，提起集氣瓶、倒置，再從上方放入水槽。':'保持封口向上取出，離水後扶正放回桌面。');return s;
  }
  if(action==='tool'){
+  if(!DESK_MATERIALS.some(m=>m.id===value))return s;
   if(s.heldMarble&&value!=='forceps'){tell(s,'鑷子還夾著一塊大理石，先放進瓶口或放回盤中。');return s;}
+  if(!s.selected.includes(value))s.selected.push(value);
   s.tool=s.tool===value?null:value;s.focus=null;tell(s,s.tool?`拿起${DESK_MATERIALS.find(m=>m.id===s.tool).name}，點選要使用的位置。`:'已放下工具。');return s;
  }
  if(action==='target'){
+  const target=value==='funnel'?'flask':value==='outlet'?'rig':value;
+  if(!s.selected.includes(target)){tell(s,'先從材料區取用'+(DESK_MATERIALS.find(m=>m.id===target)?.name||'器材')+'。');return s;}
   const tool=s.tool;
+  if(['peroxide','catalyst'].includes(tool)){tell(s,'雙氧水與二氧化錳用於前面的製氧；這次要用大理石與稀鹽酸製備二氧化碳。','revise');return s;}
   if(!tool){s.focus=s.focus===value?null:value;tell(s,value==='marble'?'用鑷子夾取大理石，再從瓶口放入。':value==='outlet'?'可直接拖動出口，也可使用下方的位置按鈕。':'選擇器材下方的操作。');return s;}
   if(tool==='water'){
    if(value==='jar'&&(s.jarAngle>.01||s.jarPlace>.01||s.jarCovered)){tell(s,'先將集氣瓶移到桌面、扶正並移開玻璃片，再裝水。','revise');return s;}
@@ -137,6 +145,7 @@ export function actDesk(s,action,value){
   move(s,'relocate',1200,{from:s.jarPlace,to:s.jarPlace>.5?0:1});tell(s,s.jarPlace>.5?(s.jarCovered?'將集氣瓶移到桌面，保持玻璃片貼合。':'未蓋片取出，瓶口離水後水與氣體會流失。'):'將倒置的集氣瓶移入水槽。');return s;
  }
  if(action==='outlet'){
+  if(value!=='air'&&(!s.selected.includes('tank')||value==='jar'&&!s.selected.includes('jar'))){tell(s,'先從材料區取用水槽與集氣瓶，再調整出口位置。');return s;}
   if(!s.rig){tell(s,'先把雙孔塞與導管裝在錐形瓶上。');return s;}
   if(value==='jar'&&(!mouthUnderwater(s)||s.jarAngle<179||s.jarCovered)){tell(s,'瓶口要倒置、浸在水下並移開玻璃片，導管才能從下方進入。','revise');return s;}
   if(s.outlet===value){tell(s,'出口已在這個位置。');return s;}

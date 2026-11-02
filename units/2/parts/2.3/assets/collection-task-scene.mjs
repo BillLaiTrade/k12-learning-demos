@@ -1,6 +1,6 @@
-import {directPosition,parkPosition} from './collection-task-direct.mjs?v=direct-1';
+import {directPosition,parkPosition} from './collection-task-direct.mjs?v=supplies-1';
 import {createThistleFunnel,createDoubleStopper,svgNode as n} from './thistle-apparatus.mjs?v=thistle-1';
-import {taskHosePoints,deskFrame,jarPose,jarMouth,waterSurface,ease,mix,clamp} from './collection-task-model.mjs?v=direct-1';
+import {taskHosePoints,deskFrame,jarPose,jarMouth,waterSurface,ease,mix,clamp} from './collection-task-model.mjs?v=supplies-1';
 import {liquidGeometry} from './co2-model.mjs?v=marble-fast-1';
 const image=(file,box)=>{const el=n('image',{href:'assets/'+file,preserveAspectRatio:'none'});['x','y','width','height'].forEach((key,i)=>el.setAttribute(key,box[i]));return el;};
 const box=(el,b)=>['x','y','width','height'].forEach((k,i)=>el.setAttribute(k,b[i]));
@@ -60,7 +60,7 @@ export function createCollectionScene(svg){
  const jarWater=n('rect',{x:0,width:1500,height:800,fill:'#a7d6df','fill-opacity':.46,'clip-path':'url(#desk-jar-inside)','data-desk-jar-water':''});art.append(jarWater);const meniscus=n('path',{fill:'none',stroke:'#6babb8','stroke-width':2,'stroke-opacity':.7,'clip-path':'url(#desk-jar-inside)','data-desk-jar-surface':''});art.append(meniscus);
  const jarFront=image('co2-jar.webp',[700,160,340,340]);jarFront.setAttribute('opacity','.2');art.append(jarFront);
  const plate=n('g',{'data-desk-plate':''});plate.append(image('co2-plate.webp',[698.45,192.91,340,80]));art.append(plate);
- art.append(sprite('oxygen-setup-sprites.png',[650,170,750,360],[580,310,480,270],[1686,933]));
+ const tankBody=sprite('oxygen-setup-sprites.png',[650,170,750,360],[580,310,480,270],[1686,933]);art.append(tankBody);
  // 先畫漏斗，再畫瓶塞；塞子會遮住穿孔內的長管。
  const funnel=createThistleFunnel('desk',{top:-140,tip:350,port:-26});art.append(funnel.group);
  const first=n('g',{'data-desk-rig':''}),firstClip=n('clipPath',{id:'desk-first-glass'});firstClip.append(n('path',{d:'M15 195V-48Q15 -84 52 -84H150V-57H52Q37 -57 37 -45V195Z'}));defs.append(firstClip);
@@ -73,11 +73,15 @@ export function createCollectionScene(svg){
  const stream=n('path',{fill:'none',stroke:'#b4dae0','stroke-opacity':.8,'stroke-width':4,'stroke-linecap':'round','data-desk-stream':''}),spill=n('path',{fill:'none',stroke:'#acd5dc','stroke-opacity':.65,'stroke-width':5,'data-desk-spill':''});art.append(stream,spill);
  const labels={};for(const[id,text]of[['flask','反應瓶'],['jar','集氣瓶'],['tank','水槽'],['marble','大理石']]){const g=n('g'),r=n('rect',{x:-49,y:-22,width:98,height:33,rx:6,fill:'#fffef6','fill-opacity':.95}),t=n('text',{'text-anchor':'middle','font-size':19,fill:'#31584f',y:1});t.textContent=text;g.append(r,t);art.append(g);labels[id]=g;}
  const sample=n('text',{'text-anchor':'middle','font-size':19,fill:'#31584f','paint-order':'stroke',stroke:'#fff','stroke-width':4,'data-desk-sample':''});art.append(sample);
- const draggable=(el,id,rect)=>{el.dataset.deskDrag=id;el.setAttribute('role','button');el.setAttribute('tabindex','0');el.setAttribute('aria-label',({forceps:'鑷子',water:'清水瓶',acid:'稀鹽酸瓶',rig:'雙孔塞與導管',funnel:'薊頭漏斗',plate:'玻璃片',jar:'集氣瓶',outlet:'導管出口'})[id]+'，可拖曳或使用輔助選項');const hit=n('rect',{x:rect[0],y:rect[1],width:rect[2],height:rect[3],fill:'transparent','data-desk-grip':id});el.append(hit);};
+ const draggable=(el,id,rect)=>{el.dataset.deskDrag=id;el.setAttribute('role','button');el.setAttribute('tabindex','0');el.setAttribute('aria-label',({forceps:'鑷子',water:'清水瓶',acid:'稀鹽酸瓶',rig:'雙孔塞與導管',funnel:'薊頭漏斗',plate:'玻璃片',jar:'集氣瓶',outlet:'導管出口',peroxide:'雙氧水',catalyst:'二氧化錳'})[id]+'，可拖曳或使用輔助選項');const hit=n('rect',{x:rect[0],y:rect[1],width:rect[2],height:rect[3],fill:'transparent','data-desk-grip':id});el.append(hit);};
  draggable(forceps,'forceps',[-38,-230,76,230]);draggable(bottles.water,'water',[-75,-85,150,170]);draggable(bottles.acid,'acid',[-75,-85,150,170]);draggable(first,'rig',[-55,-20,160,95]);draggable(funnel.group,'funnel',[-65,-140,80,150]);draggable(plate,'plate',[790,190,160,86]);draggable(jar,'jar',[790,250,160,170]);draggable(collector,'outlet',[220,-15,80,75]);
+ const spare={};for(const id of ['peroxide','catalyst']){const g=n('g');const art=materialArt(id);art.setAttribute('x','-80');art.setAttribute('y','-70');art.setAttribute('width','160');art.setAttribute('height','140');g.append(art);draggable(g,id,[-65,-55,130,110]);spare[id]=g;svg.lastChild.append(g);}
  const anchor=(el,p)=>{el.dataset.anchorX=p.x;el.dataset.anchorY=p.y;};
  let hoseKey='';
  return{render(s){
+  const has=id=>s.selected.includes(id);
+  for(const [id,nodes] of Object.entries({flask:[flask],marble:[bowl],tank:[tankBody,water,surface],jar:[jar,jarFront,jarWater,meniscus,sample]})){for(const el of nodes){el.setAttribute('visibility',has(id)?'visible':'hidden');el.style.display=has(id)?'':'none';}labels[id].setAttribute('visibility',has(id)?'visible':'hidden');nodes[0].dataset.deskApparatus=id;}
+  for(const [id,el]of Object.entries(spare)){const pos=directPosition(s,id);el.setAttribute('visibility',has(id)?'visible':'hidden');el.setAttribute('transform',`translate(${pos.x} ${pos.y})`);anchor(el,pos);}
   const f=deskFrame(s),m=s.motion,p=f.progress,jp=jarPose(s),jt=`translate(${jp.x} ${jp.y}) rotate(${s.jarAngle} 870 330)`,sp=stonePose(s,f);
   svg.dataset.water=s.jarWater.toFixed(4);svg.dataset.collected=s.co2Volume.toFixed(4);svg.dataset.air=s.airVolume.toFixed(4);svg.dataset.reaction=String(f.reaction);svg.dataset.flow=String(f.flow);svg.dataset.collecting=String(f.collecting);svg.dataset.motion=f.motion;svg.dataset.angle=String(s.jarAngle);svg.dataset.tubeX=String(f.outlet.x);svg.dataset.tubeY=String(f.outlet.y);svg.dataset.sealed=String(s.jarCovered);
   flask.setAttribute('transform',`rotate(${sp?.angle||0} 300 579.7)`);liquid.setAttribute('d',liquidGeometry(580-80*s.acid).d);liquid.setAttribute('opacity',s.acid>0?'1':'0');solidNodes.forEach((el,i)=>el.setAttribute('visibility',i<s.flaskMarbles?'visible':'hidden'));
@@ -128,7 +132,7 @@ export function createCollectionScene(svg){
    const rad=angle*Math.PI/180,local={x:-75+116/500*150,y:-85+83/810*170};bottle.setAttribute('transform',`translate(${lip.x-local.x*Math.cos(rad)+local.y*Math.sin(rad)} ${lip.y-local.x*Math.sin(rad)-local.y*Math.cos(rad)}) rotate(${angle})`);anchor(bottle,lip);
   }
   if(s.funnel&&funnel.group.nextSibling!==first)art.insertBefore(funnel.group,first);
-  const chosen=({forceps,water:bottles.water,acid:bottles.acid,rig:first,funnel:funnel.group,plate})[s.tool];if(chosen&&art.lastChild!==chosen&&!(s.tool==='rig'&&s.rig)&&!(s.tool==='funnel'&&s.funnel))art.append(chosen);
+  const chosen=({forceps,water:bottles.water,acid:bottles.acid,rig:first,funnel:funnel.group,plate,...spare})[s.tool];if(chosen&&art.lastChild!==chosen&&!(s.tool==='rig'&&s.rig)&&!(s.tool==='funnel'&&s.funnel))art.append(chosen);
   const mouth=jarMouth(s);spill.setAttribute('opacity',s.spilling?'1':'0');spill.setAttribute('d',`M${mouth.x} ${mouth.y}Q${mouth.x+15} ${mouth.y+45} ${mouth.x+10} ${Math.max(570,mouth.y+75)}`);
   labels.flask.setAttribute('transform','translate(300 620)');labels.marble.setAttribute('transform','translate(520 640)');labels.tank.setAttribute('transform','translate(1000 590)');labels.jar.setAttribute('transform',`translate(${870+jp.x} ${Math.max(...ys)+32})`);
   sample.textContent=s.sampleStarted?(s.airVolume>.01?'混有空氣':s.co2Volume>.98?'二氧化碳':'正在集氣'):'';sample.setAttribute('x',870+jp.x);sample.setAttribute('y',330+jp.y);sample.setAttribute('opacity',s.co2Volume>0||s.airVolume>0?'1':'0');

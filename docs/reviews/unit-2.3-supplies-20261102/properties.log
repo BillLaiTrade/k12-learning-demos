@@ -1,0 +1,23 @@
+▶ section five: stacked splint comparison and CO2 limewater experiment
+  ✔ two stacked experiments, one control each and one shared three-point summary (131.720093ms)
+  ✔ both start ready, with glowing wood above both mouths and clear, still limewater (690.259732ms)
+  ✔ wood inserts synchronously, then oxygen relights while CO2 loses its glow (518.932439ms)
+  ✔ CO2 source precedes submerged bubbles and progressive clouding; both effects paint real pixels (1125.130152ms)
+  ✔ inlet tip stays underwater and above the curved bottom; bubbles remain in the liquid (139.84236ms)
+  ✔ button and background pause actual frames and resume the same progress in both experiments (1368.757178ms)
+  ✔ complete frames remain still; one-key replay returns to the initial scientific state (544.069251ms)
+  ✔ starting another property or preparation experiment pauses the previous one (1094.421798ms)
+  ✔ keyboard, hidden pages and scrolling away pause without implicit resume; text selection does not toggle (1571.494679ms)
+  ✔ source links and one concise shared summary retain the scientific distinctions (78.785422ms)
+  ✔ seven widths preserve stacked experiments, legible labels, control positions and compact descriptions (2801.761367ms)
+  ✔ touch and reduced motion preserve manual playback and background taps (2748.547809ms)
+  ✔ without JavaScript both prepared scenes and the summary remain readable with disabled play buttons (1152.888298ms)
+✔ section five: stacked splint comparison and CO2 limewater experiment (16263.632322ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16267.524911
