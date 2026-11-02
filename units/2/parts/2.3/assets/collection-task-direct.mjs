@@ -1,16 +1,19 @@
-import {jarPose,jarMouth,outletPose,clamp} from './collection-task-model.mjs?v=contact-1';
-import {contactRegions,contains} from './collection-task-contact.mjs?v=contact-1';
-export const TOOL_HOME={forceps:{x:485,y:305},water:{x:660,y:130},acid:{x:440,y:65},rig:{x:500,y:50},funnel:{x:400,y:380},plate:{x:605,y:-20},peroxide:{x:680,y:65},catalyst:{x:490,y:450}};
+import {jarPose,jarMouth,outletPose,clamp,rigPosition} from './collection-task-model.mjs?v=assembly-1';
+import {contactRegions,contains} from './collection-task-contact.mjs?v=assembly-1';
+export const TOOL_HOME={forceps:{x:485,y:305},water:{x:660,y:130},acid:{x:440,y:65},rig:{x:500,y:50},funnel:{x:535,y:550},plate:{x:605,y:-20},peroxide:{x:680,y:65},catalyst:{x:490,y:450}};
 export function directPosition(s,id){
  if(s.dragging?.id===id)return s.dragging.position;
  if(id==='jar'){const p=jarPose(s);return{x:870+p.x,y:330+p.y};}
  if(id==='outlet'){const p=outletPose(s);return{x:p.x+260,y:p.y+10};}
+ if(id==='rig')return rigPosition(s);
+ if(id==='funnel'&&s.funnel){const q=rigPosition(s);return{x:q.x-26,y:q.y+350};}
  if(id==='plate'&&s.jarCovered)return jarMouth(s);
  return s.positions[id]||TOOL_HOME[id];
 }
 export function limitPosition(s,id,p){
  const q={x:clamp(p.x,65,1035),y:clamp(p.y,-25,590)};
  if(id==='funnel'){q.x=clamp(q.x,65,650);q.y=clamp(q.y,140,590);}
+ if(id==='rig'&&s.rig){q.x=300;q.y=Math.min(205,q.y);}
  if(id==='outlet'){
   // 固定長度玻璃管：先退出瓶口下方，再能橫移。不得自由穿過瓶壁。
   q.x=clamp(q.x,620,1000);q.y=clamp(q.y,210,495);
@@ -46,8 +49,8 @@ export function approach(s,id,p,origin){
  if(id==='water'||id==='acid'||id==='peroxide'){
   // 瓶嘴對開口；裝好漏斗後只有漏斗口可加液，瓶身或塞子側面不觸發。
   const source=id==='peroxide'?{x:p.x,y:p.y-58}:p;
-  const target=s.funnel?r.funnel:r.flask;
-  if(has('flask')&&hit(target,source))return use(s.funnel?'funnel':'flask',s.rig&&!s.funnel?'瓶口被塞子擋住：先插入漏斗':id==='water'?'清水由開口倒入反應瓶':id==='acid'?'稀鹽酸由開口流入反應瓶':'嘗試加入雙氧水','flask',target);
+  const target=s.rig&&s.funnel?r.funnel:r.flask;
+  if(has('flask')&&hit(target,source))return use(s.rig&&s.funnel?'funnel':'flask',s.rig&&!s.funnel?'瓶口被塞子擋住：先插入漏斗':id==='water'?'清水由開口倒入反應瓶':id==='acid'?'稀鹽酸由開口流入反應瓶':'嘗試加入雙氧水','flask',target);
   if(id==='water'){
    if(has('jar')&&s.jarAngle<1&&s.jarPlace<.01&&hit(r.jar))return use('jar',s.jarCovered?'瓶口已蓋住：先移開玻璃片':'瓶嘴對準集氣瓶口：加水','jar',r.jar);
    if(has('tank')&&hit(r.tank))return use('tank','瓶嘴對準槽口：加水','tank',r.tank,{pourAt:{x:p.x,y:p.y}});
@@ -59,9 +62,14 @@ export function approach(s,id,p,origin){
   return null;
  }
  if(id==='plate'&&has('jar')&&hit(r.jarSeal))return use('jar',s.outlet==='jar'?'先撤出導管，再蓋玻璃片':'玻璃片貼合瓶口','jar',r.jarSeal);
- // 塞子以下緣對瓶口；漏斗以長管末端對空孔（p 就是可見管尖）。
+ // 塞子以下緣對瓶口；漏斗以細長管整段對空孔（p 是可見管尖）。
+ if(id==='rig'&&s.rig){if(p.y<(origin?.y??205)-30)return intent('remove-rig',null,'向上拔出雙孔塞與整組器材','flask',r.flask);return null;}
  if(id==='rig'&&has('flask')&&hit(r.flask,{x:p.x,y:p.y+59}))return use('flask','塞子下緣已對準瓶口：裝入','flask',r.flask);
- if(id==='funnel'&&has('flask')&&s.rig&&hit(r.stopper))return use('flask','長管末端已對準空孔：插入','flask',r.stopper);
+ if(id==='funnel'&&has('rig')&&!s.funnel){
+  // 長管全部有效，排除上端球狀膨大部；以長管輪廓對空孔。
+  const rig=rigPosition(s),q={x:clamp(rig.x-26,p.x-8,p.x+8),y:clamp(rig.y-7,p.y-345,p.y)};
+  if(hit(r.stopper,q))return use(s.rig?'flask':'rig','細長管已對準空孔：插入漏斗',s.rig?'flask':'rig',r.stopper);
+ }
  if(id==='catalyst'&&has('flask')&&hit(r.flask,{x:p.x+55,y:p.y-10}))return use('flask','由材料碟邊緣嘗試加入二氧化錳','flask',r.flask);
  return null;
 }

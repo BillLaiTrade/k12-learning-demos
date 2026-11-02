@@ -1,7 +1,7 @@
-import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=contact-1';
-import {directPosition,parkPosition} from './collection-task-direct.mjs?v=contact-1';
+import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=assembly-1';
+import {directPosition,parkPosition} from './collection-task-direct.mjs?v=assembly-1';
 import {createThistleFunnel,createDoubleStopper,svgNode as n} from './thistle-apparatus.mjs?v=thistle-1';
-import {taskHosePoints,deskFrame,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp} from './collection-task-model.mjs?v=contact-1';
+import {taskHosePoints,deskFrame,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition} from './collection-task-model.mjs?v=assembly-1';
 import {liquidGeometry} from './co2-model.mjs?v=marble-fast-1';
 const image=(file,box)=>{const el=n('image',{href:'assets/'+file,preserveAspectRatio:'none'});['x','y','width','height'].forEach((key,i)=>el.setAttribute(key,box[i]));return el;};
 const box=(el,b)=>['x','y','width','height'].forEach((k,i)=>el.setAttribute(k,b[i]));
@@ -65,7 +65,8 @@ export function createCollectionScene(svg){
  // 先畫漏斗，再畫瓶塞；塞子會遮住穿孔內的長管。
  const funnel=createThistleFunnel('desk',{top:-140,tip:350,port:-26});art.append(funnel.group);
  const first=n('g',{'data-desk-rig':''}),firstClip=n('clipPath',{id:'desk-first-glass'});firstClip.append(n('path',{d:'M15 195V-48Q15 -84 52 -84H150V-57H52Q37 -57 37 -45V195Z'}));defs.append(firstClip);
- const firstGlass=n('g',{'clip-path':'url(#desk-first-glass)'});firstGlass.append(sprite('co2-tube.webp',[85,45,172,350],[6.8,-90,137.6,280],[440,440]));first.append(firstGlass,createDoubleStopper());art.append(first);
+ const firstGlass=n('g',{'clip-path':'url(#desk-first-glass)'});firstGlass.append(sprite('co2-tube.webp',[85,45,172,350],[6.8,-90,137.6,280],[440,440]));const stopper=createDoubleStopper();stopper.setAttribute('transform','scale(.86 .74)');first.append(firstGlass,stopper);art.append(first);
+ const neckClip=n('clipPath',{id:'desk-neck-front'});neckClip.append(n('path',{d:'M252 205Q300 225 348 205V212Q300 232 252 212ZM254 215L264 218L268 274H259ZM336 218L346 215L341 274H333Z'}));defs.append(neckClip);const neckFront=image('co2-flask.webp',[70,145,460,460]);neckFront.setAttribute('clip-path','url(#desk-neck-front)');neckFront.setAttribute('data-desk-neck-front','');art.append(neckFront);
  const collector=n('g',{'data-desk-collector':''});art.append(collector);glass('M0 -140V40Q0 60 20 60H240Q260 60 260 40V10',collector);
  const rubber=n('g',{'data-desk-hose':''}),segments=[];art.append(rubber);for(let i=0;i<64;i++){const g=n('g'),piece=sprite('co2-tools-atlas.png',[338,100+i*980/64,90,24],[-7,0,14,10],[1268,1241]);g.append(piece);rubber.append(g);segments.push({g,piece});}
  const outletBubbles=n('g',{fill:'#fff','fill-opacity':.9,stroke:'#79a6ac','stroke-width':1.3,'data-desk-outlet-bubbles':''});for(let i=0;i<8;i++)outletBubbles.append(n('circle',{r:3+i%3}));art.append(outletBubbles);
@@ -80,9 +81,9 @@ export function createCollectionScene(svg){
  const bottleShape='M-43 -70Q-58 -70 -58 -57L-58 -42Q-65 -30 -65 -15V64Q-60 82 30 80Q60 77 62 63V-15Q58 -35 27 -45V-62Q26 -74 -43 -70Z';
  draggable(bottles.water,'water',bottleShape,[0,15]);draggable(bottles.acid,'acid',bottleShape,[0,15]);
  draggable(first,'rig','M-52 -11Q0 -25 52 -11L42 53Q0 65 -42 53Z',[0,20]);
- draggable(funnel.group,'funnel',funnel.geometry().d,[-26,-65]);
+ draggable(funnel.group,'funnel',funnel.geometry().d,[-26,220]);
  draggable(plate,'plate','M835 200L1010 219L920 261L737 237Z',[870,228]);
- draggable(jar,'jar','M799 228Q870 208 941 228V439Q870 459 799 439Z',[870,330]);
+ draggable(jar,'jar','M799 228Q870 208 941 228V439Q870 459 799 439Z',[870,380]);
  draggable(collector,'outlet','M260 10V40Q260 60 240 60H220',[260,30]);
  const spare={};for(const id of ['peroxide','catalyst']){const g=n('g');const art=materialArt(id);art.setAttribute('x','-80');art.setAttribute('y','-70');art.setAttribute('width','160');art.setAttribute('height','140');g.append(art);draggable(g,id,id==='catalyst'?'M-58 -20Q0 -47 58 -20Q55 45 0 51Q-55 45 -58 -20Z':'M-18 -62H18V-36Q50 -27 50 0V54Q0 65 -50 54V0Q-50 -27 -18 -36Z',[0,0]);spare[id]=g;svg.lastChild.append(g);}
  const contact=n('path',{'data-desk-contact':'',fill:'#ffdf7033',stroke:'#a97710','stroke-width':3,'stroke-dasharray':'7 4','pointer-events':'none'});svg.append(contact);
@@ -109,24 +110,26 @@ export function createCollectionScene(svg){
   if(s.jarCovered&&!['uncover'].includes(f.motion)&&s.dragging?.id!=='plate')plateTransform=jt;
   else if(pp)plateTransform=`translate(${pp.x-870} ${pp.y-228})`;
   plate.setAttribute('visibility',s.jarCovered||s.positions.plate||['cover','uncover'].includes(f.motion)?'visible':'hidden');plate.setAttribute('opacity','1');plate.setAttribute('transform',plateTransform);if(pp)anchor(plate,pp);
-  let rigPose=s.rig?{x:300,y:205,angle:0}:{...directPosition(s,'rig'),angle:0},op=f.outlet,rigVisible=s.rig||!!s.positions.rig||f.motion==='rig'||f.motion==='remove-rig';if(!s.rig)op={x:rigPose.x+130,y:rigPose.y+55};
+  let rigPose={...rigPosition(s),angle:0},op=f.outlet,rigVisible=s.rig||!!s.positions.rig||f.motion==='rig'||f.motion==='remove-rig';if(!s.rig)op={x:rigPose.x+130,y:rigPose.y+55};
   if(f.motion==='rig'||f.motion==='remove-rig'){
-   const q=f.motion==='remove-rig'?1-p:p,lift=ease(q/.4),across=ease((q-.4)/.35),lower=ease((q-.75)/.25);
-   const start=m.toolStart||{x:500,y:50};rigPose=s.motion.contact&&f.motion==='rig'?{...line(start,{x:300,y:205},p),angle:0}:{x:mix(start.x,300,across),y:mix(mix(start.y,-40,lift),205,lower),angle:0};op={x:rigPose.x+130,y:rigPose.y+55};
+   const start=m.toolStart||{x:500,y:50},end=f.motion==='rig'?{x:300,y:205}:m.endTool||{x:500,y:50};
+   rigPose=p<.4?line(start,{x:start.x,y:-60},p/.4):p<.7?line({x:start.x,y:-60},{x:end.x,y:-60},(p-.4)/.3):line({x:end.x,y:-60},end,(p-.7)/.3);
+   rigPose.angle=0;op={x:rigPose.x+130,y:rigPose.y+55};
   }
-  first.setAttribute('transform',`translate(${rigPose.x} ${rigPose.y}) rotate(${rigPose.angle})`);first.setAttribute('visibility',rigVisible?'visible':'hidden');
-  let fp=s.funnel?{x:300,y:205,angle:0}:looseFunnelPose(directPosition(s,'funnel'));const fv=s.funnel||!!s.positions.funnel||f.motion==='funnel'||(f.motion==='remove-rig'&&m.hasFunnel);
+  first.setAttribute('transform',`translate(${rigPose.x} ${rigPose.y}) rotate(${rigPose.angle})`);first.setAttribute('visibility',rigVisible?'visible':'hidden');neckFront.setAttribute('visibility',has('flask')&&s.rig&&rigPose.y>185?'visible':'hidden');
+  let fp=s.funnel?rigPose:looseFunnelPose(directPosition(s,'funnel'));const fv=s.funnel||!!s.positions.funnel||f.motion==='funnel'||(f.motion==='remove-rig'&&m.hasFunnel);
   if(f.motion==='funnel'){
-   const start=m.toolStart||directPosition(s,'funnel');
-   // 先以管尖對空孔，豎直後才讓整根長管穿孔下降，長度不變。
-   const tip=p<.35?line(start,{x:274,y:175},p/.35):line({x:274,y:175},{x:274,y:555},(p-.35)/.65);
-   fp=looseFunnelPose(tip,65*(1-ease(p/.35)));
+   const start=m.toolStart||directPosition(s,'funnel'),base=m.rigAnchor||rigPose;
+   // 長管任一段對孔後，先沿原位置抬高，再由孔口下降，避免管身穿過塞子。
+   const above={x:base.x-26,y:base.y-30},end={x:base.x-26,y:base.y+350};
+   const tip=p<.4?line(start,{x:start.x,y:above.y},p/.4):p<.55?line({x:start.x,y:above.y},above,(p-.4)/.15):line(above,end,(p-.55)/.45);
+   fp=looseFunnelPose(tip);
   }
   if(f.motion==='remove-rig')fp=rigPose;
   const pouring=['acid','water'].includes(f.motion)&&p>.25&&p<.8;
   funnel.render(fp,pouring&&m.viaFunnel);
   // 插入長漏斗時平順拉遠，完整看見上端與管尖；結束後回到原比例。
-  const cameraTop=f.motion==='funnel'?Math.min(-100,funnel.mouth().y-25):-100,zoom=750/(650-cameraTop);
+  const cameraTop=fv&&['funnel','rig','remove-rig'].includes(f.motion)?Math.min(-100,funnel.mouth().y-5):-100,zoom=750/(650-cameraTop);
   art.setAttribute('transform',`translate(${550*(1-zoom)} ${-100-cameraTop*zoom}) scale(${zoom})`);funnel.group.setAttribute('visibility',fv?'visible':'hidden');
   anchor(first,rigPose);anchor(funnel.group,{x:+funnel.group.dataset.tipX,y:+funnel.group.dataset.tipY});anchor(jar,{x:870+jp.x,y:330+jp.y});anchor(collector,{x:op.x+260,y:op.y+10});first.dataset.installed=String(s.rig);funnel.group.dataset.installed=String(s.funnel);
   collector.setAttribute('transform',`translate(${op.x} ${op.y})`);collector.setAttribute('visibility',rigVisible?'visible':'hidden');rubber.setAttribute('visibility',rigVisible?'visible':'hidden');
@@ -151,6 +154,7 @@ export function createCollectionScene(svg){
    const rad=angle*Math.PI/180,local={x:-75+116/500*150,y:-85+83/810*170};bottle.setAttribute('transform',`translate(${lip.x-local.x*Math.cos(rad)+local.y*Math.sin(rad)} ${lip.y-local.x*Math.sin(rad)-local.y*Math.cos(rad)}) rotate(${angle})`);anchor(bottle,lip);
   }
   if(s.funnel&&funnel.group.nextSibling!==first)art.insertBefore(funnel.group,first);
+  if(s.rig&&neckFront.previousSibling!==first)art.insertBefore(neckFront,first.nextSibling);
   const chosen=({forceps,water:bottles.water,acid:bottles.acid,rig:first,funnel:funnel.group,plate,...spare})[s.tool];if(chosen&&art.lastChild!==chosen&&!(s.tool==='rig'&&s.rig)&&!(s.tool==='funnel'&&s.funnel))art.append(chosen);
   const mouth=jarMouth(s);spill.setAttribute('opacity',s.spilling?'1':'0');spill.setAttribute('d',`M${mouth.x} ${mouth.y}Q${mouth.x+15} ${mouth.y+45} ${mouth.x+10} ${Math.max(570,mouth.y+75)}`);
   labels.flask.setAttribute('transform','translate(300 620)');labels.marble.setAttribute('transform','translate(520 640)');labels.tank.setAttribute('transform','translate(1000 590)');labels.jar.setAttribute('transform',`translate(${870+jp.x} ${Math.max(...ys)+32})`);

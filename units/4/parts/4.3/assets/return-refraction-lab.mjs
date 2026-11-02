@@ -1,0 +1,101 @@
+import { geometry,layout,zoomViewBox,clampAngle,angleMark,arrow } from './return-refraction-model.mjs?v=20261102-return1';
+
+const root=document.querySelector('#return-lab'),$=s=>root.querySelector(s),scene=$('#return-scene'),zoom=$('#return-zoom'),picture=$('#return-background'),detail=$('#return-detail'),viewport=$('#return-viewport'),magnify=$('#return-magnify'),close=$('#return-close'),input=$('#return-angle');
+const mediumButtons=[...root.querySelectorAll('[data-medium]')],lights={a:false,b:false},photos=new Map();
+let medium='water',requested='water',angle=30,state='loading',loadId=0,press=null;
+const views=[scene,zoom];
+function source(key,id){return `<g class="return-source${key==='b'&&id==='main'?' source':''}" data-source="${key}" tabindex="0" role="${key==='b'?'slider':'button'}" aria-label="${key==='b'?'B 藍光，點擊開關，拖曳或方向鍵調整水中入射角':'A 紅光，點擊開關'}" aria-keyshortcuts="Enter Space" ${key==='b'?'aria-valuemin="0" aria-valuemax="35" aria-valuenow="30"':'aria-pressed="false"'}>
+ <rect class="return-source-hit" x="-48" y="-82" width="96" height="96" fill="transparent"/>
+ <rect class="return-source-focus" x="-42" y="-86" width="84" height="105" rx="15"/>
+ <rect x="-35" y="-78" width="70" height="69" rx="13" fill="url(#return-metal-${id})" stroke="#131e20" stroke-width="2"/>
+ <path d="M-23-69V-25M-18-69V-25" stroke="#9aa5a1" stroke-width="2" opacity=".45"/>
+ <rect x="-38" y="-23" width="76" height="16" rx="5" fill="url(#return-rim-${id})"/>
+ <ellipse cx="0" cy="-5" rx="35" ry="15" fill="url(#return-rim-${id})" stroke="#162423" stroke-width="2"/>
+ <ellipse class="return-lens" cx="0" cy="-3" rx="26" ry="10" fill="#243c3c" stroke="#111d1c" stroke-width="2"/>
+ <text class="return-device-letter" x="0" y="-42" text-anchor="middle" ${key==='b'?'transform="rotate(180 0 -49)"':''}>${key.toUpperCase()}</text>
+ </g>`;}
+views.forEach((svg,index)=>{
+ const id=index?'zoom':'main';svg.setAttribute('viewBox',index?zoomViewBox:'0 0 1254 1254');
+ svg.innerHTML=`<defs>
+ <linearGradient id="return-metal-${id}" x1="0" x2="1"><stop stop-color="#10191b"/><stop offset=".18" stop-color="#6d7777"/><stop offset=".4" stop-color="#263033"/><stop offset=".78" stop-color="#101719"/><stop offset="1" stop-color="#414b4c"/></linearGradient>
+ <linearGradient id="return-rim-${id}"><stop stop-color="#555d5b"/><stop offset=".3" stop-color="#d5d9d1"/><stop offset=".55" stop-color="#545e5b"/><stop offset="1" stop-color="#111c1b"/></linearGradient>
+ </defs>
+ ${index?`<image class="return-detail-photo" width="1254" height="1254" href="${picture.src}"/><rect x="350" y="340" width="600" height="460" fill="#fffdf6" fill-opacity=".12"/>
+ <svg x="350" y="550" width="600" height="20" viewBox="350 520 600 20" opacity=".85"><image class="return-detail-photo" width="1254" height="1254" href="${picture.src}"/></svg>
+ <svg x="350" y="570" width="600" height="30" viewBox="350 620 600 30" opacity=".85"><image class="return-detail-photo" width="1254" height="1254" href="${picture.src}"/></svg>
+ <path class="return-interface" d="M350 570H950"/>`:''}
+ <path class="return-normal-underlay" d="M650 270V885"/><path class="return-normal" d="M650 270V885"/>
+ ${index?`<g class="return-angle-marks" visibility="hidden">
+ <path class="return-angle-sector return-upper-sector"/><path class="return-angle-sector return-lower-sector"/>
+ <path class="return-angle-arc return-upper-arc"/><path class="return-angle-arc return-lower-arc"/>
+ <g class="return-angle-label return-upper-label"><path class="return-angle-leader"/><text data-sized x="710" y="470"><tspan class="return-angle-name" x="710">折射角</tspan><tspan class="return-angle-number" x="710" dy="50">41.8°</tspan></text></g>
+ <g class="return-angle-label return-lower-label"><path class="return-angle-leader"/><text data-sized x="610" y="625" text-anchor="end"><tspan class="return-angle-name" x="610">入射角</tspan><tspan class="return-angle-number" x="610" dy="50">30°</tspan></text></g>
+ </g>`:''}
+ ${['a','b'].map(key=>`<g class="return-light return-light-${key}" visibility="hidden"><path class="return-beam return-beam-${key}"/><path class="return-direction return-direction-${key}" data-segment="0"/><path class="return-direction return-direction-${key}" data-segment="1"/></g>`).join('')}
+ ${source('a',id)}${source('b',id)}
+ ${index?'<text data-sized x="670" y="395">法線</text><text data-marker x="666" y="566">M</text><text data-sized x="395" y="530">空氣</text><text data-sized class="return-medium-name" x="395" y="770">水</text>':'<text data-sized x="950" y="440">空氣</text><text data-sized class="return-medium-name" x="230" y="740">水</text>'}`;
+});
+function positionDetail(){
+ const box=viewport.getBoundingClientRect(),p=new DOMPoint(layout.axis,layout.boundary).matrixTransform(scene.getScreenCTM()),x=p.x-box.x,y=p.y-box.y;
+ magnify.style.left=`${x}px`;magnify.style.top=`${y}px`;viewport.style.setProperty('--return-x',`${x}px`);viewport.style.setProperty('--return-y',`${y}px`);
+ if(!detail.hidden){detail.style.left=`${x-detail.offsetWidth/2}px`;detail.style.top=`${y-detail.offsetHeight/2}px`;}
+}
+function render(){
+ const g=geometry(medium,angle),active=state==='ready'&&(lights.a||lights.b),both=lights.a&&lights.b;
+ root.dataset.state=state;root.dataset.medium=medium;root.dataset.angle=String(angle);root.dataset.airAngle=String(g.airAngle);root.dataset.lightA=String(lights.a);root.dataset.lightB=String(lights.b);
+ root.setAttribute('aria-busy',String(state==='loading'));input.value=String(angle);$('#return-angle-value').value=`${angle}°`;
+ $('#return-air-value').textContent=`${g.airAngle.toFixed(1)}°`;$('#return-water-value').textContent=`${angle}°`;
+ input.setAttribute('aria-label',`${g.name}中入射角，從法線量起`);$('#return-angle-caption').textContent=`${g.name}中入射角`;
+ views.forEach((svg,index)=>{
+  const matrix=svg.getScreenCTM(),ratio=Math.max(.05,matrix?Math.hypot(matrix.a,matrix.b):.8),scale=.8;
+  svg.querySelectorAll('[data-sized]').forEach(e=>e.style.fontSize=`${Math.max(index?24:22,(index?13:12)/ratio)}px`);
+  svg.querySelectorAll('[data-marker]').forEach(e=>e.style.fontSize=`${Math.max(18,10/ratio)}px`);
+  svg.querySelector('.return-medium-name').textContent=g.name;
+  for(const key of ['a','b']){
+   const lamp=svg.querySelector(`[data-source=${key}]`),on=lights[key],p=key==='a'?g.sourceA:g.sourceB,rotation=key==='a'?-g.airAngle:180-angle,path=key==='a'?g.forward:g.backward,group=svg.querySelector(`.return-light-${key}`);
+   lamp.setAttribute('transform',`translate(${p.join(' ')}) rotate(${rotation}) scale(${scale})`);lamp.setAttribute('aria-disabled',String(state!=='ready'));lamp.setAttribute('tabindex',state==='ready'?'0':'-1');
+   lamp.querySelector('.return-lens').setAttribute('fill',on&&state==='ready'?(key==='a'?'#ff767b':'#74c9ff'):'#243c3c');
+   if(key==='a')lamp.setAttribute('aria-pressed',String(on));else{lamp.setAttribute('aria-valuenow',String(angle));lamp.setAttribute('aria-valuetext',`${g.name}中${angle}度，空氣中${g.airAngle.toFixed(1)}度，B藍光${on?'開啟':'關閉'}`);}
+   const hitSize=Math.max(96,45/(ratio*scale)),hit=lamp.querySelector('.return-source-hit');for(const [k,v]of Object.entries({x:-hitSize/2,y:(index?10:-34)-hitSize/2,width:hitSize,height:hitSize}))hit.setAttribute(k,String(v));
+   group.setAttribute('visibility',on&&state==='ready'?'visible':'hidden');group.querySelector('.return-beam').setAttribute('d',`M${path.map(p=>p.join(' ')).join('L')}`);group.querySelector('.return-beam').setAttribute('stroke-width',String(Math.max(key==='a'&&both?8:4,(key==='a'&&both?5:2.6)/ratio)));
+   group.querySelectorAll('.return-direction').forEach((head,i)=>head.setAttribute('d',arrow(path[i],path[i+1],key==='a'?.32:.36,Math.max(12,8/ratio))));
+  }
+  svg.setAttribute('aria-label',`${g.name}在下方，空氣在上方。${g.name}側${angle}度，空氣側${g.airAngle.toFixed(1)}度。A紅光${lights.a?'開啟':'關閉'}，B藍光${lights.b?'開啟':'關閉'}。`);
+ });
+ zoom.querySelector('.return-angle-marks').setAttribute('visibility',active?'visible':'hidden');
+ for(const upper of [true,false]){
+  const kind=upper?'upper':'lower',degrees=upper?g.airAngle:angle,mark=angleMark(degrees,upper),color=(upper?(lights.a&&!lights.b):(!lights.a||lights.b))?'#165fc2':'#24783a',sign=upper?-1:1,half=degrees*Math.PI/360;
+  zoom.querySelector(`.return-${kind}-sector`).setAttribute('d',mark.sector);zoom.querySelector(`.return-${kind}-sector`).setAttribute('fill',color);zoom.querySelector(`.return-${kind}-arc`).setAttribute('d',mark.arc);zoom.querySelector(`.return-${kind}-arc`).setAttribute('stroke',color);
+  const label=zoom.querySelector(`.return-${kind}-label`);label.querySelector('text').style.fill=color;label.querySelector('.return-angle-name').textContent=both?(upper?'空氣側':`${g.name}側`):upper?(lights.a?'入射角':'折射角'):(lights.a?'折射角':'入射角');label.querySelector('.return-angle-number').textContent=upper?`${g.airAngle.toFixed(1)}°`:`${angle}°`;
+  const leader=label.querySelector('path');leader.setAttribute('stroke',color);leader.setAttribute('d',`M${650+sign*98*Math.sin(half)} ${570+sign*98*Math.cos(half)}L${upper?'690 460L702 460':'628 615L618 615'}`);
+ }
+ for(const key of ['a','b']){const button=$(`#return-toggle-${key}`);button.setAttribute('aria-pressed',String(lights[key]));button.disabled=state!=='ready';button.querySelector('small').textContent=lights[key]?'開啟':'關閉';}
+ input.disabled=state!=='ready';magnify.disabled=state!=='ready';$('#return-reset').disabled=state!=='ready';mediumButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.medium===requested)));
+ $('#return-finding').textContent=both?'往返光路重合':!active?'先開啟 B，觀察射回空氣的光':angle===0?'垂直入射，方向不偏折':lights.b?`${g.name} → 空氣，偏離法線`:`空氣 → ${g.name}，偏向法線`;
+ $('#return-route').textContent=both?'A → M → B　／　B → M → A':lights.b?`B → M → A｜入射 ${angle}° → 折射 ${g.airAngle.toFixed(1)}°`:lights.a?`A → M → B｜入射 ${g.airAngle.toFixed(1)}° → 折射 ${angle}°`:`空氣側 ${g.airAngle.toFixed(1)}°｜${g.name}側 ${angle}°`;
+ $('#return-status').textContent=state==='loading'?'正在準備實驗場景……':state==='error'?'場景未能載入，請重試或切換介質。':'點擊 A、B 開關光源；拖動 B 調角，A 自動對準對應路徑。';
+ $('#return-device-status').textContent=active?(both?'紅藍光路重合':lights.b?'B 藍光開啟':'A 紅光開啟'):'兩支光源已關閉';
+ positionDetail();
+}
+function toggle(key){if(state!=='ready')return;lights[key]=!lights[key];render();}
+function setAngle(value){if(state!=='ready')return;angle=clampAngle(value);render();}
+function setDetail(open){if(open&&magnify.disabled)return;detail.hidden=!open;root.dataset.detailOpen=String(open);magnify.setAttribute('aria-expanded',String(open));magnify.setAttribute('aria-hidden',String(open));magnify.tabIndex=open?-1:0;render();(open?close:!magnify.disabled?magnify:mediumButtons.find(b=>b.dataset.medium===requested)).focus({preventScroll:true});}
+$('#return-toggle-a').onclick=()=>toggle('a');$('#return-toggle-b').onclick=()=>toggle('b');
+$('#return-reset').onclick=()=>{lights.a=lights.b=false;angle=30;render();};input.oninput=()=>setAngle(Number(input.value));magnify.onclick=()=>setDetail(true);close.onclick=()=>setDetail(false);
+root.addEventListener('keydown',e=>{if(e.key==='Escape'&&!detail.hidden){e.preventDefault();setDetail(false);return;}const lamp=e.target.closest('.return-source');if(!lamp||state!=='ready')return;const key=lamp.dataset.source;if(e.key==='Enter'||e.key===' '){e.preventDefault();if(!e.repeat)toggle(key);return;}if(key!=='b')return;const step={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1}[e.key];if(step!==undefined||e.key==='Home'||e.key==='End'){e.preventDefault();setAngle(e.key==='Home'?0:e.key==='End'?35:angle+step);}});
+const point=(event,svg)=>new DOMPoint(event.clientX,event.clientY).matrixTransform(svg.getScreenCTM().inverse());
+views.forEach(svg=>{
+ svg.addEventListener('pointerdown',e=>{const lamp=e.target.closest('.return-source');if(!lamp||state!=='ready'||e.button!==0)return;e.preventDefault();const p=point(e,svg),g=geometry(medium,angle);press={key:lamp.dataset.source,id:e.pointerId,x:e.clientX,y:e.clientY,moved:false,dx:p.x-g.sourceB[0],dy:p.y-g.sourceB[1]};svg.setPointerCapture(e.pointerId);lamp.focus({preventScroll:true});});
+ svg.addEventListener('pointermove',e=>{if(!press||press.id!==e.pointerId)return;if(Math.hypot(e.clientX-press.x,e.clientY-press.y)>5)press.moved=true;if(press.moved&&press.key==='b'){const p=point(e,svg);setAngle(Math.atan2(Math.max(0,p.x-press.dx-layout.axis),Math.max(1,p.y-press.dy-layout.boundary))*180/Math.PI);}});
+ svg.addEventListener('pointerup',e=>{if(press?.id===e.pointerId&&!press.moved)toggle(press.key);press=null;});svg.addEventListener('pointercancel',()=>press=null);svg.addEventListener('lostpointercapture',()=>press=null);
+ svg.addEventListener('click',e=>{const lamp=e.target.closest('.return-source');if(lamp&&e.detail===0)toggle(lamp.dataset.source);});
+ svg.addEventListener('touchstart',e=>{if(e.target.closest('.return-source')&&state==='ready')e.preventDefault();},{passive:false});
+});
+async function prepare(target,retry=false){
+ const id=++loadId;requested=target;state='loading';press=null;$('#return-retry').hidden=true;render();
+ try{if(!photos.has(target)||retry){const img=new Image();img.src=new URL(`oblique-entry-${target}.png${retry?`?retry=${Date.now()}`:''}`,import.meta.url).href;photos.set(target,img);}const img=photos.get(target);await img.decode();if(id!==loadId)return;medium=target;picture.src=img.src;picture.alt=`寫實水槽，上方空氣，下方${geometry(medium,angle).name}；A、B 兩端光源可獨立開關。`;zoom.querySelectorAll('.return-detail-photo').forEach(p=>p.setAttribute('href',img.src));state='ready';render();}
+ catch{if(id!==loadId)return;state='error';$('#return-retry').hidden=false;render();}
+}
+mediumButtons.forEach(b=>b.onclick=()=>{if(b.dataset.medium!==requested||state==='error')prepare(b.dataset.medium);});$('#return-retry').onclick=()=>prepare(requested,true);
+const observer=new ResizeObserver(render);observer.observe(viewport);observer.observe(zoom);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)press=null;});render();prepare('water');

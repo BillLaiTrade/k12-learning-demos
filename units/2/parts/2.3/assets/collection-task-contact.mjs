@@ -1,5 +1,5 @@
 // 第六區的實物接觸幾何；場景提示與判定共用輪廓，座標來自器材繪圖。
-import {jarMouth,waterSurface} from './collection-task-model.mjs?v=contact-1';
+import {jarMouth,waterSurface,rigPosition} from './collection-task-model.mjs?v=assembly-1';
 export const STONE_OFFSETS=[[-48,-12],[0,-22],[48,-10],[-27,17],[27,19]];
 const polygon=points=>({kind:'polygon',points});
 const ellipse=(x,y,rx,ry)=>({kind:'ellipse',x,y,rx,ry});
@@ -17,11 +17,11 @@ export function regionPath(r){if(r.outline)return regionPath(r.outline);return r
 // 開口輪廓向外延伸一小段操作空間，避免要求手指壓在一條細線上。
 const opening=(x,y,rx,depth=32,down=false)=>({...polygon([[x-rx,y],[x-rx*.9,y+(down?depth:-depth)],[x+rx*.9,y+(down?depth:-depth)],[x+rx,y],[x+rx*.8,y+8],[x-rx*.8,y+8]]),outline:ellipse(x,y,rx,rx<20?5:10)});
 export function contactRegions(s){
- const m=jarMouth(s),sy=waterSurface(s);
+ const m=jarMouth(s),sy=waterSurface(s),rig=rigPosition(s);
  return {
   flask:opening(300,205,47),
   funnel:opening(274,65,30),
-  stopper:opening(274,198,15,34),
+  stopper:opening(rig.x-26,rig.y-7,15,34),
   jar:opening(m.x,m.y,69,34,s.jarAngle>90),
   jarSeal:ellipse(m.x,m.y,70,23),
   // 上緣平行四邊形：整個槽口皆可倒水，而不是右下角的單點。
@@ -35,7 +35,7 @@ export function contactRegions(s){
   stones:STONE_OFFSETS.map(([x,y])=>ellipse(520+x,560+y,25,21))
  };
 }
-export function looseFunnelPose(tip,angle=65){
+export function looseFunnelPose(tip,angle=0){
  const a=angle*Math.PI/180;
  return{x:tip.x+26*Math.cos(a)+350*Math.sin(a),y:tip.y+26*Math.sin(a)-350*Math.cos(a),angle};
 }
