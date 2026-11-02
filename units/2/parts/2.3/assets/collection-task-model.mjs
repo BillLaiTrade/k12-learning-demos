@@ -7,7 +7,8 @@ export const REQUIRED_MATERIALS=DESK_MATERIALS.filter(m=>m.required).map(m=>m.id
 export const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 export const ease=v=>{const t=clamp(v);return t*t*(3-2*t);};
 export const mix=(a,b,p)=>a+(b-a)*p;
-export function createDesk(){return{positions:{},dragging:null,phase:'operate',selected:[],tool:null,focus:null,tankWater:0,jarWater:0,jarAngle:0,jarPlace:0,jarCovered:false,sealedUnderwater:false,flaskMarbles:0,heldMarble:false,acid:0,flaskWater:0,rig:false,funnel:false,outlet:'air',airRemaining:1,co2Volume:0,airVolume:0,sampleStarted:false,reactionAge:0,time:0,motion:null,feedback:'從材料區點選要用的物品，放到桌上直接操作。',feedbackKind:'hint',result:null,spilling:false};}
+export function createDesk(){return{positions:{},dragging:null,phase:'operate',selected:[],tool:null,focus:null,tankWater:0,jarWater:0,jarAngle:0,jarPlace:0,jarCovered:false,sealedUnderwater:false,flaskMarbles:0,flaskStoneIds:[],heldStoneId:null,heldMarble:false,acid:0,flaskWater:0,rig:false,funnel:false,outlet:'air',airRemaining:1,co2Volume:0,airVolume:0,sampleStarted:false,reactionAge:0,time:0,motion:null,feedback:'從材料區點選要用的物品，放到桌上直接操作。',feedbackKind:'hint',result:null,spilling:false};}
+export function rigPosition(s){return s.dragging?.id==='rig'?s.dragging.position:s.rigLift|| (s.rig?{x:300,y:205}:s.positions.rig||{x:500,y:50});}
 export const flaskSurface=s=>580-80*Math.min(2,s.acid+s.flaskWater);
 export const waterSurface=s=>524-119*s.tankWater;
 export function jarPose(s){
@@ -34,14 +35,14 @@ export function reacting(s){
  if(s.flaskMarbles>0&&surface<575)return true;
  if(s.motion?.kind!=='place-stone')return false;
  const p=s.motion.elapsed/s.motion.duration;if(p<.6)return false;
- const heights=[238,300,350,430,500,[555,555,548,525,520][s.motion.index]],k=clamp((p-.6)/.23)*5,i=Math.min(4,Math.floor(k)),y=mix(heights[i],heights[i+1],ease(k-i));
+ const heights=[238,300,350,430,500,[555,555,548,525,520][s.flaskMarbles]],k=clamp((p-.6)/.23)*5,i=Math.min(4,Math.floor(k)),y=mix(heights[i],heights[i+1],ease(k-i));
  return y+18>surface;
 }
-export const liquidSeal=s=>s.rig&&s.funnel&&s.motion?.kind!=='remove-rig'&&flaskSurface(s)<555;
+export const liquidSeal=s=>s.rig&&s.funnel&&!s.rigLift&&!(s.dragging?.id==='rig'&&s.dragging.position.y<190)&&s.motion?.kind!=='remove-rig'&&flaskSurface(s)<555;
 const poses={air:{x:430,y:260},tank:{x:430,y:405},jar:{x:610,y:405}};
 function tubePose(m,p){
  const from=m.startOutlet||poses[m.from],to=poses[m.to];
- if(m.from==='jar'||m.to==='jar'){
+ if(m.from==='jar'||m.to==='jar'||from.x>535||to.x>535){
   // 先降到瓶口下方，再橫移，最後升入；玻璃不得穿過瓶壁。
   if(p<.3)return{x:from.x,y:mix(from.y,450,ease(p/.3))};
   if(p<.7)return{x:mix(from.x,to.x,ease((p-.3)/.4)),y:450};
@@ -67,11 +68,11 @@ function returnMaterial(s,id){
  if(withJar){removed.add('jar');if(s.jarCovered)removed.add('plate');s.jarWater=0;s.jarAngle=0;s.jarPlace=0;s.jarCovered=false;s.sealedUnderwater=false;s.co2Volume=0;s.airVolume=0;s.sampleStarted=false;}
  if(id==='tank')s.tankWater=0;
  if(id==='flask'){
-  if(s.rig)removed.add('rig');if(s.funnel)removed.add('funnel');s.acid=0;s.flaskWater=0;s.flaskMarbles=0;s.reactionAge=0;
+  if(s.rig){removed.add('rig');if(s.funnel)removed.add('funnel');}s.acid=0;s.flaskWater=0;s.flaskMarbles=0;s.flaskStoneIds=[];s.reactionAge=0;
  }
- if(removed.has('rig')){if(s.funnel)removed.add('funnel');s.rig=false;s.outlet='air';s.airRemaining=1;}
+ if(removed.has('rig')){if(s.funnel)removed.add('funnel');s.rig=false;s.rigLift=null;s.outlet='air';s.airRemaining=1;}
  if(removed.has('funnel')){s.funnel=false;s.airRemaining=1;}
- if(removed.has('forceps'))s.heldMarble=false;
+ if(removed.has('forceps')){s.heldMarble=false;s.heldStoneId=null;}
  if(removed.has('plate')){s.jarCovered=false;s.sealedUnderwater=false;}
  s.selected=s.selected.filter(x=>!removed.has(x));for(const x of removed)delete s.positions[x];
  if(removed.has(s.tool))s.tool=null;if(removed.has(s.focus))s.focus=null;s.result=null;
@@ -84,7 +85,7 @@ function beginReturn(s,id){
   move(s,'outlet',1450,{from:s.outlet,to,startOutlet:outletPose(s),returnAfter:id});tell(s,'先將導管從瓶口下方撤出，再收回器材。');return;
  }
  if(id==='plate'&&s.jarCovered){move(s,'uncover',650,{tool:'plate',toolStart:jarMouth(s),returnAfter:id});tell(s,'先移開瓶口的玻璃片，再收回材料區。');return;}
- if(id==='forceps'&&s.heldMarble&&s.selected.includes('marble')){move(s,'return-stone',700,{tool:'forceps',toolStart:s.positions.forceps&&{...s.positions.forceps},returnAfter:id});tell(s,'先將夾著的大理石放回盤中，再收回鑷子。');return;}
+ if(id==='forceps'&&s.heldMarble&&s.selected.includes('marble')){move(s,'return-stone',700,{tool:'forceps',toolStart:s.positions.forceps&&{...s.positions.forceps},index:s.heldStoneId??s.flaskMarbles,returnAfter:id});tell(s,'先將夾著的大理石放回盤中，再收回鑷子。');return;}
  returnMaterial(s,id);
 }
 export function actDesk(s,action,value){
@@ -129,30 +130,30 @@ export function actDesk(s,action,value){
    if(['flask','funnel'].includes(value)&&s.rig&&!s.funnel){tell(s,'瓶口已被塞子擋住；先插入漏斗或移開塞子，再加水。','revise');return s;}
    if(value==='jar'&&s.outlet==='jar'){tell(s,'先將導管撤出集氣瓶。','revise');return s;}
    if(value==='jar'){s.co2Volume=0;s.airVolume=0;s.sampleStarted=false;s.sealedUnderwater=false;}
-   const target=value==='funnel'?'flask':value;move(s,'water',1600,{target,from:s[target==='jar'?'jarWater':target==='flask'?'flaskWater':'tankWater'],viaFunnel:target==='flask'&&s.funnel});tell(s,target==='flask'?'清水由瓶口加入反應瓶；單加清水不會產生二氧化碳。':'清水由壺嘴流入容器；可在倒滿前放下工具。');return s;
+   const target=value==='funnel'?'flask':value;move(s,'water',1600,{target,from:s[target==='jar'?'jarWater':target==='flask'?'flaskWater':'tankWater'],viaFunnel:target==='flask'&&s.rig&&s.funnel});tell(s,target==='flask'?'清水由瓶口加入反應瓶；單加清水不會產生二氧化碳。':'清水由壺嘴流入容器；可在倒滿前放下工具。');return s;
   }
   if(tool==='forceps'){
    if(value==='marble'){
-    if(s.heldMarble){move(s,'return-stone',700);tell(s,'將大理石放回盤中。');}
-    else if(s.flaskMarbles<5){move(s,'pick-stone',650,{index:s.flaskMarbles});tell(s,'鑷子夾住一塊大理石，從盤中提起。');}
+    if(s.heldMarble){move(s,'return-stone',700,{index:s.heldStoneId??s.flaskMarbles});tell(s,'將大理石放回盤中。');}
+    else if(s.flaskMarbles<5){move(s,'pick-stone',650,{index:[0,1,2,3,4].find(i=>!s.flaskStoneIds.includes(i))});tell(s,'鑷子夾住一塊大理石，從盤中提起。');}
     else tell(s,'盤中的大理石已用完。');return s;
    }
    if(value==='flask'){
     if(!s.heldMarble){tell(s,'先用鑷子夾取盤中的一塊大理石。');return s;}
     if(s.rig){tell(s,'瓶口已被塞子擋住，先移開塞子與導管。','revise');return s;}
-    move(s,'place-stone',1350,{index:s.flaskMarbles,tilt:s.acid+s.flaskWater<.01});tell(s,'鑷子從瓶口進入，讓大理石沿瓶內側滑下。');return s;
+    move(s,'place-stone',1350,{index:s.heldStoneId??s.flaskMarbles,tilt:s.acid+s.flaskWater<.01});tell(s,'鑷子從瓶口進入，讓大理石沿瓶內側滑下。');return s;
    }
   }
   if(tool==='rig'&&value==='flask'){
    if(s.rig){tell(s,'雙孔塞與導管已裝好。');return s;}move(s,'rig',1450);tell(s,'先抬高整組裝置，再由瓶口上方放下雙孔塞。');return s;
   }
-  if(tool==='funnel'&&value==='flask'){
-   if(!s.rig){tell(s,'先裝雙孔塞與導管，漏斗才有支撐的位置。');return s;}
-   if(s.funnel){tell(s,'薊頭漏斗已裝好。');return s;}move(s,'funnel',1350);tell(s,'由上方將漏斗長管插入另一個孔。');return s;
+  if(tool==='funnel'&&['flask','rig'].includes(value)){
+   if(!s.selected.includes('rig')){tell(s,'先取用雙孔塞與導管。');return s;}
+   if(s.funnel){tell(s,'薊頭漏斗已裝好。');return s;}move(s,'funnel',1350,{rigAnchor:{...rigPosition(s)}});tell(s,'由上方將漏斗長管插入另一個孔。');return s;
   }
   if(tool==='acid'&&['flask','funnel'].includes(value)){
    if(s.rig&&!s.funnel){tell(s,'塞子已裝好，先插入薊頭漏斗，再由漏斗口加液。','revise');return s;}
-   move(s,'acid',1750,{from:s.acid,viaFunnel:s.funnel});tell(s,s.funnel?'稀鹽酸由試藥瓶口流入漏斗，再沿長管進入錐形瓶。':'由試藥瓶口倒入開口的錐形瓶；此時生成的氣體會直接逸出。');return s;
+   move(s,'acid',1750,{from:s.acid,viaFunnel:s.rig&&s.funnel});tell(s,s.rig&&s.funnel?'稀鹽酸由試藥瓶口流入漏斗，再沿長管進入錐形瓶。':'由試藥瓶口倒入開口的錐形瓶；此時生成的氣體會直接逸出。');return s;
   }
   if(tool==='plate'&&value==='jar'){
    if(s.jarCovered){tell(s,'玻璃片已蓋在瓶口上。');return s;}
@@ -182,8 +183,8 @@ export function actDesk(s,action,value){
   move(s,'outlet',value==='jar'||s.outlet==='jar'?1450:850,{from:s.outlet,to:value,startOutlet:outletPose(s)});tell(s,value==='jar'?'導管先從瓶口下方移入，再向上伸進瓶口。':value==='tank'?'出口移到瓶外水中，觀察排出的氣泡。':'出口移到水面上方，氣體直接排到空氣中。');return s;
  }
  if(action==='remove-rig'){
-  if(s.outlet!=='air'){tell(s,'先將導管出口移到水面上方，再移開整組裝置。');return s;}
-  move(s,'remove-rig',1450,{hasFunnel:s.funnel});tell(s,'向上提起塞子，再移開整組裝置。');return s;
+  if(s.outlet!=='air'){s.rigLift={...rigPosition(s)};move(s,'outlet',1450,{from:s.outlet,to:'air',startOutlet:outletPose(s),removeAfter:true});tell(s,'先將導管由瓶口下方撤出，再拔起整組裝置。');return s;}
+  move(s,'remove-rig',1450,{hasFunnel:s.funnel,tool:'rig',toolStart:{...rigPosition(s)},endTool:{x:500,y:50}});tell(s,'向上提起塞子，再移開整組裝置。');return s;
  }
  return s;
 }
@@ -198,18 +199,24 @@ function applyMotion(s,m){
  if(m.kind==='rotate')s.jarAngle=mix(m.from,m.to,ease(p));
  if(m.kind==='relocate')s.jarPlace=mix(m.from,m.to,ease(p));
  if(p<1)return;
- if(m.kind==='pick-stone')s.heldMarble=true;
- if(m.kind==='return-stone')s.heldMarble=false;
- if(m.kind==='place-stone'){s.heldMarble=false;s.flaskMarbles++;}
+ if(m.kind==='pick-stone'){s.heldMarble=true;s.heldStoneId=m.index;}
+ if(m.kind==='return-stone'){s.heldMarble=false;s.heldStoneId=null;}
+ if(m.kind==='place-stone'){s.heldMarble=false;s.flaskStoneIds.push(m.index);s.heldStoneId=null;s.flaskMarbles++;}
  if(m.kind==='rig'){s.rig=true;s.outlet='air';s.airRemaining=1;}
  if(m.kind==='funnel')s.funnel=true;
- if(m.kind==='remove-rig'){s.rig=false;s.funnel=false;s.airRemaining=1;}
+ if(m.kind==='remove-rig'){s.rig=false;s.rigLift=null;s.outlet='air';s.airRemaining=1;}
  if(m.kind==='outlet')s.outlet=m.to;
  if(m.kind==='cover'){s.jarCovered=true;s.sealedUnderwater=m.underwater;}
  if(m.kind==='uncover'){s.jarCovered=false;s.sealedUnderwater=false;}
  if(m.tool&&m.endTool)s.positions[m.tool]={...m.endTool};
  s.motion=null;
  if(m.returnAfter)returnMaterial(s,m.returnAfter);
+ if(m.removeAfter)actDesk(s,'remove-rig');
+ if(m.autoFill&&['pick-stone','place-stone'].includes(m.kind)&&s.flaskMarbles<5){
+  const kind=m.kind==='pick-stone'?'place-stone':'pick-stone',index=kind==='place-stone'?s.heldStoneId:[0,1,2,3,4].find(i=>!s.flaskStoneIds.includes(i));
+  move(s,kind,kind==='pick-stone'?650:1350,{tool:'forceps',toolStart:{...(s.positions.forceps||{x:445,y:310})},endTool:kind==='pick-stone'?{x:520,y:305}:{x:445,y:310},index,autoFill:true,contact:true});
+  tell(s,'正在將剩餘大理石逐塊夾入反應瓶。');
+ }
 }
 export function advanceDesk(s,ms){
  if(s.phase!=='operate')return s;

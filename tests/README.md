@@ -1,5 +1,22 @@
 # 5.1 瀏覽器操作檢查
 
+## 4.5 第二區固定三稜鏡與單色比較（2026-11-02）
+
+```sh
+node --test tests/unit-4.5-prism-optics.test.mjs tests/unit-4.5-color-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+模型新增650／530／460nm單色有限狹縫、真實折射與透射、同一白光取景範圍；整頁驗證兩區同器材與白光像素、第二區所有位移入口停用、單色主圖／近看像素與真實落點、光路／視角不改結果、回白光復原、小葵觀察接阿公解釋、七寬度兩區預覽避讓、手機切光與平面備援。測試以分區唯讀觀察實際器材，正式程式不新增測試API。COLOR_URL、COLOR_CAPTURE_DIR沿用。
+
+## 4.5 第一區預設分光與常駐白幕（2026-11-02）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+整頁28項（含外層）。改驗首次／重新整理都預設放入玻璃、開啟實際多條分光線、按鈕選取與引導對應，確認不存在放大按鈕／視窗，右上預覽兩狀態同步；保留3D拖曳／取消、鍵盤、手機、七寬度、備援與其他區／小測回歸。光學模型未改，本輪不重跑模型11項。`COLOR_URL`與`COLOR_CAPTURE_DIR`沿用。
+
 ## 4.5 第一區內嵌白幕預覽與較小側偏（2026-11-02）
 
 ```sh

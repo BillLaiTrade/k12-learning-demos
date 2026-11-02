@@ -1,5 +1,5 @@
 import {test}from'node:test';import assert from'node:assert/strict';
-import{SETUP,TRIANGLE,INCIDENCE,indexBK7,trace,spectrum,pixelLinear,measurements,fresnel}from'../units/4/parts/4.5/assets/prism-optics.mjs';
+import{SETUP,TRIANGLE,MONOCHROMATIC,rays,INCIDENCE,indexBK7,trace,spectrum,pixelLinear,measurements,fresnel}from'../units/4/parts/4.5/assets/prism-optics.mjs';
 const near=(a,b,e=1e-9)=>assert.ok(Math.abs(a-b)<e,`${a} != ${b}`),dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0),sub=(a,b)=>a.map((v,i)=>v-b[i]),unit=a=>{const d=Math.hypot(...a);return a.map(v=>v/d)};
 test('N-BK7與公開Fraunhofer折射率符合，30度等腰三角柱實體尺寸固定',()=>{
  for(const[w,n]of[[435.8343,1.52668],[486.1327,1.52238],[546.074,1.51872],[587.5618,1.51680],[656.2725,1.51432]])near(indexBK7(w),n,5e-6);
@@ -31,4 +31,15 @@ test('有限狹縫足跡與Fresnel／吸收守恆；D65白點和全局曝光不�
 });
 test('白幕移遠造成可計算色散展開，參考波長解析偏折角不隨屏幕距離改變',()=>{
  const a=trace(400,{screenX:200}),b=trace(700,{screenX:200}),c=trace(400,{screenX:400}),d=trace(700,{screenX:400});assert.ok(Math.abs(c.landing-d.landing)>Math.abs(a.landing-b.landing));near(a.deviation,c.deviation);near(b.deviation,d.deviation);
+});
+
+test('單色光沿用兩介面與有限狹縫，取景固定於白光，三個真實落點互異',()=>{
+ const crop=measurements().crop,centers=[];
+ for(const [light,w]of Object.entries(MONOCHROMATIC)){
+  const r=rays(true,light),s=spectrum(true,light),m=measurements(true,light);assert.equal(r.length,1);assert.equal(s.length,1);assert.equal(r[0].wavelength,w);near(r[0].landing,trace(w).landing);near(s[0].low,trace(w,{offset:-.5}).landing);near(s[0].high,trace(w,{offset:.5}).landing);near(m.height,5);assert.deepEqual(m.crop,crop);assert.ok(m.width>1.03&&m.width<1.06);assert.ok(m.low>crop[0]&&m.high<crop[1]);centers.push(m.center);
+  // Identical incident power: transmission scales every XYZ component by
+  // the physical Fresnel/absorption factor, never by a display brightness target.
+  const original=spectrum(false,light)[0],gain=(trace(w,{offset:-.5}).transmission+trace(w,{offset:.5}).transmission)/2;for(let i=0;i<3;i++)near(s[0].xyz[i],original.xyz[i]*gain);near(pixelLinear(m.low-2,m.low-1,s).reduce((sum,v)=>sum+Math.abs(v),0),0);
+ }
+ assert.ok(centers[0]>centers[1]&&centers[1]>centers[2]);assert.equal(rays().length,401);assert.equal(spectrum().length,401);
 });
