@@ -2,7 +2,7 @@ import { materials } from './optics.mjs';
 
 // Image coordinates share one distance scale and one illustrative time scale.
 // This is a slowed diagram, not the travel time through a real tabletop tank.
-export const layout = Object.freeze({ width:1536, height:1024, source:240, boundary:340, end:728, axes:[350,768,1184] });
+export const layout = Object.freeze({ width:1536, height:1024, source:240, boundary:484, end:728, axes:[350,768,1184] });
 export const media = Object.freeze(['air','water','glass']);
 export const airRate = .14;
 export const boundaryMs = (layout.boundary-layout.source)/airRate;

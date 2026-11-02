@@ -4,8 +4,8 @@ import { layout, airRate, boundaryMs, comparisonMs, arrivalMs, durationMs, snaps
 
 test('three normal rays share a distance scale and common air speed before the real interfaces',()=>{
  assert.deepEqual(snapshot(-10).map(s=>s.y),[240,240,240]);
- assert.deepEqual(snapshot(boundaryMs/2).map(s=>s.y),[290,290,290]);
- assert.deepEqual(snapshot(boundaryMs).map(s=>s.y),[340,340,340]);
+ assert.deepEqual(snapshot(boundaryMs/2).map(s=>s.y),[362,362,362]);
+ assert.deepEqual(snapshot(boundaryMs).map(s=>s.y),[484,484,484]);
  assert.deepEqual(snapshot(boundaryMs).map(s=>s.entered),[false,true,true]);
  for(const time of [0,300,boundaryMs,2000,comparisonMs,durationMs,10000]){
   snapshot(time).forEach((s,i)=>{assert.equal(s.x,layout.axes[i]);assert.ok(s.y>=240&&s.y<=728);});
@@ -21,9 +21,10 @@ test('the air reference continues unchanged while water and glass slow without b
 test('the shared air-arrival instant gives a visible, physically proportionate comparison',()=>{
  assert.equal(comparisonMs,arrivalMs('air'));
  const s=snapshot(comparisonMs);
- assert.equal(s[0].y,728);assert.ok(Math.abs(s[1].y-631)<1e-10);assert.ok(Math.abs(s[2].y-(598+2/3))<1e-10);
+ assert.equal(s[0].y,728);assert.ok(Math.abs(s[1].y-667)<1e-10);assert.ok(Math.abs(s[2].y-(646+2/3))<1e-10);
  assert.deepEqual(s.map(v=>v.arrived),[true,false,false]);
- assert.ok(Math.abs((s[1].y-340)/(s[0].y-340)-.75)<1e-10);
- assert.ok(Math.abs((s[2].y-340)/(s[0].y-340)-2/3)<1e-10);
- assert.ok((layout.end-layout.boundary)/(layout.end-layout.source)>.79);
+ assert.ok(Math.abs((s[1].y-484)/(s[0].y-484)-.75)<1e-10);
+ assert.ok(Math.abs((s[2].y-484)/(s[0].y-484)-2/3)<1e-10);
+ assert.equal((layout.boundary-layout.source)/(layout.end-layout.source),.5);
+ assert.equal(layout.boundary-layout.source,layout.end-layout.boundary);
 });

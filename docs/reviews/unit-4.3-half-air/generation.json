@@ -1,0 +1,15 @@
+{
+  "asset": "units/4/parts/4.3/assets/normal-incidence-half-air-bench.png",
+  "source": "/workspace/generated_images/exec-2b077177-1e0d-4141-9c3c-7074f0dff489.png",
+  "process": "image_gen依原三組底圖降低水面與玻璃頂面，並再次校正高度；最終原檔直接複製，未程式裁切後製。",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "sha256": "ea1ae7048c57b47fbe2e5fc56ebfd75045ced3073d06e3d4d66107a3ea6ab527",
+  "sourceY": 240,
+  "boundaryY": 484,
+  "endY": 728,
+  "airFraction": 0.5,
+  "mediumFraction": 0.5
+}
