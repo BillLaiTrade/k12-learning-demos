@@ -1,0 +1,48 @@
+▶ CO2 seven-operation apparatus and continuous player
+  ✔ seven real operations, initial caption, one persistent control and five concise points (395.769352ms)
+  ✔ all six material bodies and labels open the correct dialog; keyboard restores focus (2050.408864ms)
+  ✔ the material picture and first playback frame use exactly the same apparatus (734.735712ms)
+  ✔ the new forceps open an introduction and keep the placing scene paused (268.715735ms)
+  ✔ five photo-textured stones move into the flask and the empty dish and used acid bottle leave (683.029268ms)
+  ✔ liquid follows a curved inner-wall path and clips resolve outside hidden panels (645.55712ms)
+  ✔ the fitted stopper and fixed glass move rigidly; the rubber retains a 500-unit arc length (2754.281044ms)
+  ✔ the rod clears the mouth before covering, then the full-size plate contacts and spans the rim (625.244781ms)
+  ✔ continuous play visits every operation exactly once, stops at storage and replay restores the full dish (887.005166ms)
+  ✔ blank background pauses and resumes; apparatus dialogs take priority and keep playback paused (1675.627416ms)
+  ✔ seven viewport widths preserve player layout, material labels and synchronized closeups (4844.357207ms)
+  ✔ real touch uses background toggles and material dialogs (2070.066113ms)
+  ✔ no-JavaScript fallback retains seven readable operations and realistic stone snapshots (1331.587573ms)
+✔ CO2 seven-operation apparatus and continuous player (21408.211064ms)
+▶ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role
+  ✔ the first materials step shares the dialog and has no inline information or SVG apparatus controls (311.720567ms)
+  ✔ actual flask, jar, trough, stopper and tube bodies open correct descriptions in all seven later operations (7510.690553ms)
+  ✔ pouring bottle, moving spoon, introduced catalyst and sliding glass plate remain correctly clickable (1333.791383ms)
+  ✔ intro pauses the exact scene, closing keeps it paused and explicit play continues from that state (343.971114ms)
+  ✔ current role distinguishes waiting, collecting and storage; invisible equipment and empty picture space do not open (1005.50581ms)
+  ✔ returning from an operation restores material purpose without operation wording (609.116181ms)
+  ✔ Enter, Space, Escape and modal focus work; step changes clear the dialog without hiding focus (509.697425ms)
+  ✔ seven widths keep the modal readable and in-screen; mobile close-up objects also open the same introduction (3690.450417ms)
+  ✔ real touch and reduced motion select the close-up body; no-JS retains the full materials reference (3461.569893ms)
+✔ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role (21140.231238ms)
+▶ nine visual corrections: real sources, bubbles, occlusion and compact neutral labels
+  ✔ peroxide bottle and its pouring stream are actually painted while the liquid rises (897.255681ms)
+  ✔ a loaded spoon crosses above the flask, and falling grains are actually painted (1579.479805ms)
+  ✔ purge bubbles appear at the submerged outlet and change position during playback (841.911025ms)
+  ✔ both stoppers hide the funnel stem within the solid body, while the gas tube remains in place (1133.767727ms)
+  ✔ material names stay white after closing, and all oxygen stages use the same double-hole asset (1836.802912ms)
+  ✔ seven widths keep compact captions, unobstructed labels and usable controls (7434.518786ms)
+✔ nine visual corrections: real sources, bubbles, occlusion and compact neutral labels (16026.912917ms)
+▶ thistle funnels: actual material selection, liquid seal and transfer-task feedback
+  ✔ oxygen: material body and name, assembled dry stage, pouring and submerged tip (2024.677837ms)
+  ✔ co2: material body and name, assembled dry stage, pouring and submerged tip (979.133262ms)
+  ✔ unsealed funnel is a specific editable mistake in the water-displacement task (704.621431ms)
+  ✔ no-script snapshots contain the new funnel and five summary rows (894.986511ms)
+✔ thistle funnels: actual material selection, liquid seal and transfer-task feedback (6367.821094ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23091.115903

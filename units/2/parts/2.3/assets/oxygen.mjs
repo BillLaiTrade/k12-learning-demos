@@ -1,6 +1,6 @@
 import { createExperimentPlayerFooter } from './experiment-player.mjs?v=player-1';
 import { createSceneCaptions } from './oxygen-captions.mjs?v=player-1';
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=thistle-1';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=nine-details-2';
 import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=nine-details-1';
 import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=nine-details-1';
 const section = document.querySelector('.oxygen-lesson');

@@ -1,6 +1,6 @@
 import { createExperimentPlayerFooter } from './experiment-player.mjs?v=player-1';
 import {createSceneCaptions} from './oxygen-captions.mjs?v=player-1';
-import {createCO2Explorer} from './co2-equipment.mjs?v=thistle-1';
+import {createCO2Explorer} from './co2-equipment.mjs?v=nine-details-2';
 import {CO2_OPERATIONS,co2OperationFrame} from './co2-model.mjs?v=thistle-1';
 import {createCO2Bench} from './co2-setup.mjs?v=nine-details-1';
 const section=document.querySelector('#s4'),root=section.querySelector('.co2-preparation'),panel=root;
