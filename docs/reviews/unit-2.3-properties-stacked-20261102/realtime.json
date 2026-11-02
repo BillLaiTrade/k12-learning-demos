@@ -1,0 +1,60 @@
+{
+  "experiments": {
+    "splints": {
+      "state": "complete",
+      "phases": [
+        {
+          "phase": "insert",
+          "elapsed": 24.4,
+          "wallMs": 92
+        },
+        {
+          "phase": "observe",
+          "elapsed": 1590.9,
+          "wallMs": 1665
+        },
+        {
+          "phase": "change",
+          "elapsed": 2024.3,
+          "wallMs": 2099
+        },
+        {
+          "phase": "result",
+          "elapsed": 4890.9,
+          "wallMs": 4963
+        }
+      ]
+    },
+    "limewater": {
+      "state": "complete",
+      "phases": [
+        {
+          "phase": "ready",
+          "elapsed": 0,
+          "wallMs": 43
+        },
+        {
+          "phase": "source",
+          "elapsed": 111.5,
+          "wallMs": 157
+        },
+        {
+          "phase": "bubbles",
+          "elapsed": 1261.4,
+          "wallMs": 1305
+        },
+        {
+          "phase": "cloud",
+          "elapsed": 2044.6,
+          "wallMs": 2084
+        },
+        {
+          "phase": "result",
+          "elapsed": 6027.8,
+          "wallMs": 6076
+        }
+      ]
+    }
+  },
+  "errors": []
+}

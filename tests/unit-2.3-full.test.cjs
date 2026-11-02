@@ -62,7 +62,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     await panel.locator('[data-play]').click();const time=await panel.getAttribute('data-time');await page.clock.fastForward(3000);assert.equal(await panel.getAttribute('data-time'),time);assert.equal(await panel.getAttribute('data-state'),'paused');
     await panel.locator('[data-play]').click();for(let i=2;i<7;i++){assert.equal(await panel.getAttribute('data-stage'),String(i));await page.clock.fastForward(15000);}assert.equal(await panel.getAttribute('data-state'),'complete');
     await panel.locator('[data-co2-step="0"]').click();assert.equal(await panel.getAttribute('data-stage'),'0');
-    assert.equal(await page.locator('#s3 .gas-observations,#s4 .gas-observations').count(),0);assert.equal(await page.locator('#s5 .observation-grid figure').count(),4);assert.equal(await page.locator('#s5 .oxygen-comparison').count(),1);
+    assert.equal(await page.locator('#s3 .gas-observations,#s4 .gas-observations').count(),0);assert.equal(await page.locator('#s5 [data-property-experiment]').count(),2);assert.equal(await page.locator('#s5 .oxygen-comparison').count(),1);
   });
   await t.test('leaving a replay pauses it and returning does not autoplay', async () => {
     const panel = page.locator('[data-replay="oxygen"]'); await panel.locator('#oxygen-tab-6').click();
