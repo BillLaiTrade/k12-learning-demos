@@ -12,4 +12,4 @@
 
 人工檢視後修整窄螢幕標籤重疊及正面視角的輔助線遮擋，再重跑專項10項全過。Chromium軟體WebGL與CDP觸控不代表Safari實機驗證。先前31項第二區檢查為歷史結果，本輪沒有重跑未改的第一／第二區專項與既有純模型。
 
-公開部署與驗證結果在完成後補記。
+主提交3bbe3e5d，保留其他單元更新後以2ec7a428c150ca8df4918d174ff60e0922f196da推送main。[Pages41399123812](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/41399123812)的build、deploy與report-build-status已全部成功。公開入口：https://billlaitrade.github.io/k12-learning-demos/units/4/parts/4.4/?v=2ec7a428#s3。公開瀏覽器重驗、檔案一致性及部署原始證據統一保存於[規劃庫交付紀錄](https://github.com/BillLaiTrade/k12/tree/main/docs/reviews/unit-4.4-imaging-3d-20261102)，以該處最終結果為準。
