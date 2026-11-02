@@ -4,8 +4,8 @@ exports.desk=page=>{
  const run=ms=>page.clock.runFor(ms);
  const assist=async()=>{await f.locator('.desk-assistance').evaluate(n=>n.open=true);};
  const click=async(a,v)=>{await assist();return f.locator(`[data-desk-action="${a}"]${v?`[data-value="${v}"]`:''}`).click();};
- async function select(){for(const id of ['flask','jar','tank','marble'])await f.locator(`[data-desk-material=${id}]`).click();}
- async function use(tool,target,ms){await assist();await f.locator(`[data-desk-tool=${tool}]`).click();await f.locator(`[data-desk-object=${target==='funnel'?'flask':target}]`).click();if(ms)await run(ms);}
+ async function select(){for(const id of ['flask','jar','tank','marble']){const b=f.locator(`[data-desk-material=${id}]`);if(await b.getAttribute('data-present')!=='true')await b.click();}}
+ async function use(tool,target,ms){await assist();const b=f.locator(`[data-desk-tool=${tool}]`);if(await b.getAttribute('data-present')==='true')await scene.locator(`[data-desk-drag=${tool}]`).press('Enter');else await b.click();await f.locator(`[data-desk-object=${target==='funnel'?'flask':target}]`).click();if(ms)await run(ms);}
  async function focus(id){await assist();const tool=f.locator('[data-desk-material][data-active=true]');if(await tool.count())await page.keyboard.press('Escape');const obj=f.locator(`[data-desk-object=${id}]`);if(await obj.getAttribute('aria-pressed')!=='true')await obj.click();}
  async function action(a,v,ms=0){await focus(['rotate','relocate','uncover'].includes(a)?'jar':a==='outlet'?'outlet':'flask');await click(a,v);if(ms)await run(ms);}
  async function prepare(){await use('water','tank',1700);await use('water','jar',1700);await use('plate','jar',900);await action('rotate',null,1200);await action('relocate',null,1300);await action('uncover',null,750);}

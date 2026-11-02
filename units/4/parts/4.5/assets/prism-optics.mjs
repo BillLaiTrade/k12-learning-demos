@@ -1,10 +1,11 @@
 import {CIE_D65} from './spectral-data.mjs';
 // All physical coordinates below are millimetres. Scene scale: 100 mm = 1 unit.
-export const SETUP=Object.freeze({side:50,height:40,axisHeight:120,apexDeg:60,referenceNm:587.5618,sourceX:-150,slitX:-80,slitWidth:1,slitHeight:5,screenX:300,screenZ:[-290,20],screenY:[65,175],railOut:90,cropWidth:30,cropHeight:20,exposure:7,ambient:.045});
+export const SETUP=Object.freeze({side:50,height:40,axisHeight:120,apexDeg:30,referenceNm:587.5618,sourceX:-150,slitX:-80,slitWidth:1,slitHeight:5,screenX:300,screenZ:[-165,25],screenY:[65,175],railOut:90,cropWidth:15,cropHeight:10,exposure:7,ambient:.045});
 export function indexBK7(wavelength){const l2=(wavelength/1000)**2;return Math.sqrt(1+1.03961212*l2/(l2-.00600069867)+.231792344*l2/(l2-.0200179144)+1.01046945*l2/(l2-103.560653));}
-export const INCIDENCE=Math.asin(indexBK7(SETUP.referenceNm)*Math.sin(Math.PI/6));
-const rotation=Math.PI/6-INCIDENCE;
-export const TRIANGLE=Object.freeze([[-25,-50*Math.sqrt(3)/6],[25,-50*Math.sqrt(3)/6],[0,50*Math.sqrt(3)/3]].map(([x,z])=>Object.freeze([x*Math.cos(rotation)-z*Math.sin(rotation),x*Math.sin(rotation)+z*Math.cos(rotation)])));
+const halfA=SETUP.apexDeg*Math.PI/360;
+export const INCIDENCE=Math.asin(indexBK7(SETUP.referenceNm)*Math.sin(halfA));
+const rotation=halfA-INCIDENCE,halfBase=SETUP.side*Math.sin(halfA),triangleHeight=SETUP.side*Math.cos(halfA);
+export const TRIANGLE=Object.freeze([[-halfBase,-triangleHeight/3],[halfBase,-triangleHeight/3],[0,triangleHeight*2/3]].map(([x,z])=>Object.freeze([x*Math.cos(rotation)-z*Math.sin(rotation),x*Math.sin(rotation)+z*Math.cos(rotation)])));
 const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0),cross=(a,b)=>a[0]*b[1]-a[1]*b[0],sub=(a,b)=>a.map((v,i)=>v-b[i]);
 const unit=a=>{const l=Math.hypot(...a);return a.map(v=>v/l)};
 export function snell(direction,normal,n1,n2){let N=normal;if(dot(direction,N)>0)N=N.map(v=>-v);const ci=-dot(direction,N),ratio=n1/n2,k=1-ratio*ratio*(1-ci*ci);if(k<0)return null;return unit(direction.map((v,i)=>ratio*v+(ratio*ci-Math.sqrt(k))*N[i]));}

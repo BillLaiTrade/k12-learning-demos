@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="從回聲理解聲波反射、往返測距與聲納，再比較室內反射與吸音處理。"><title>聲波反射與回聲｜波動與聲音</title><link rel="stylesheet" href="assets/lesson-base.css"><link rel="stylesheet" href="assets/echo.css?v=20261031-wide-route"><link rel="stylesheet" href="assets/calculation.css?v=20261101-compact"><link rel="stylesheet" href="assets/sonar.css?v=20261101-dialogue-order"><script type="module" src="assets/echo.mjs?v=93b1a7cf54a0"></script><link rel="stylesheet" href="assets/room-wave.css?v=037fdc3fb048"><link rel="stylesheet" href="assets/well-quiz.css?v=a4b0acb5d933"></head>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="從回聲理解聲波反射、往返測距與聲納，再比較室內反射與吸音處理。"><title>聲波反射與回聲｜波動與聲音</title><link rel="stylesheet" href="assets/lesson-base.css"><link rel="stylesheet" href="assets/echo.css?v=20261031-wide-route"><link rel="stylesheet" href="assets/calculation.css?v=20261101-compact"><link rel="stylesheet" href="assets/sonar.css?v=20261101-dialogue-order"><script type="module" src="assets/echo.mjs?v=93b1a7cf54a0"></script><link rel="stylesheet" href="assets/room-wave.css?v=037fdc3fb048"><link rel="stylesheet" href="assets/well-quiz.css?v=b22dee4d4806"></head>
 <body><header class="shell masthead"><div class="brand-row"><a class="brand" href="../../index.html">← 波動與聲音</a><span class="crumb">國二上・理化</span></div><div class="hero"><div><div class="eyebrow">學習內容 3.4｜波動與聲音｜聲波反射與回聲</div><h1>聲音反射後，<br>可以告訴我們什麼？</h1><p>小葵和阿公在實驗桌旁準備好喇叭與反射板。聲音發出後，為什麼會再傳回來？聲音返回的時間能告訴我們什麼資訊？從反射板、海底到房間裡，一起追蹤聲音反射留下的線索。</p></div><figure class="hero-art"><img src="assets/echo-story-opening.webp" width="1672" height="941" fetchpriority="high" alt="小葵與阿公在實驗桌旁聆聽聲音；桌上有喇叭、接收器、計時器、捲尺與反射板，旁邊的水槽船模及吸音材料呼應後續探索。"><figcaption class="hero-caption">從反射板、測距器材到水槽船模，展開聲音的探索。</figcaption></figure></div></header><main class="shell lesson"><div class="lesson-layout"><nav class="route" aria-label="學習路線"><p class="route-label">探索路線</p><div class="route-inner"><a href="#s1"><b>01</b><span>聲音碰到反射板，會怎麼走？</span></a><a href="#s2"><b>02</b><span>牆越遠，返回的聲音就越晚嗎？</span></a><a href="#s3"><b>03</b><span>知道回來的時間，怎麼算牆有多遠？</span></a><a href="#s4"><b>04</b><span>海底看不見，怎麼知道有多深？</span></a><a href="#s5"><b>05</b><span>找找生活中聲音反射的蹤影</span></a><a class="quiz-nav" href="#quiz"><b>✓</b><span>單元小測</span></a></div></nav><div class="cards"><section class="lesson-card" id="s1" aria-labelledby="title-1">
 
   <header class="lesson-head"><div class="lesson-number">01</div><div><h2 id="title-1">聲音碰到反射板，會怎麼走？</h2><p>聲波反射：觀察一次發聲的返回</p></div></header>
@@ -179,7 +179,8 @@
   </div></div></section><section class="lesson-card" id="s5" aria-labelledby="title-5">
 <header class="lesson-head"><div class="lesson-number">05</div><div><h2 id="title-5">找找生活中聲音反射的蹤影</h2><p>室內反射與吸音：比較加入材料前後的變化</p></div></header>
 <div class="lesson-body"><div class="card-main">
-<div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>發出的聲音，會怎麼從四周返回呢？</p></div>
+<div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>阿公，那我們平常待的房間裡，聲音碰到四周的牆，也會反射回來嗎？</p></div>
+<div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>會，聲音可能從不同的牆面反射回來。我們可以加入吸音材料，讓部分反射回來的聲音減弱。</p></div>
 <div class="room-wave-lab room-wave-lab--compact" id="room" role="group" aria-label="先發聲觀察，再試著改變房間" data-phase="ready" data-treated="false" data-emissions="0">
 <div class="room-toolbar"><div class="room-wave-controls"><button type="button" class="action" data-room-source="clap" aria-pressed="false">拍一下手</button><button type="button" class="secondary" data-room-source="speech" aria-pressed="false">說一句話</button><button type="button" class="secondary" id="room-pause" disabled>暫停</button><button type="button" class="secondary room-material" id="room-material" aria-pressed="false" aria-controls="room-view">＋ 加入吸音材料</button></div><span id="room-condition" class="room-condition">尚未加入吸音材料</span></div>
 <p id="room-observation" class="room-wave-question">觀察從四周牆面反射回來的波，哪一面牆的反射波先回到小葵身旁？</p>
@@ -189,11 +190,10 @@
 </div>
 <p class="room-wave-hint">先發聲觀察；暫停後切換材料，可直接比較同一時刻。</p>
 <p class="room-wave-note">波線的深淺與粗細表示相對強弱。加入材料只減弱左側、上側兩面牆的反射；切換時保留同一畫面，方便比較。</p>
-<div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>房間裡的聲音會經不同表面反射，先後傳回耳朵。吸音材料能減弱部分反射，其他表面的反射仍然存在。</p></div>
 <details class="room-wave-note"><summary>模型與音效說明</summary><p>空教室為簡化模型；波前以示意動畫呈現水平切片，非實際傳播速度。語音僅取代表波前，音效不與動畫逐波同步。播放結束後回到沒有波線的房間畫面；播放中可暫停、切換材料比較同一時刻。音效以三維房間模型合成，包含地板、天花板和多次反射，並非現場錄音或個人聽覺量測。材料反射強弱為定性示意；比較時保留相同發聲、位置與直接聲強度。吸音減少部分反射，與阻擋聲音穿過牆壁的隔音作用不同。</p></details>
-</div></div></section><section class="quiz well-quiz" id="quiz" aria-labelledby="quiz-title">
-<header class="quiz-head"><span class="quiz-mark" aria-hidden="true">?</span><div><h2 id="quiz-title">這口井有多深？</h2><p>朝井底喊一聲，利用回聲計算井深。</p></div></header>
-<div id="well" data-phase="ready" data-observed="false" data-emissions="0">
+</div></div></section><section class="quiz unit-quiz well-quiz" id="quiz" aria-labelledby="quiz-title">
+<header class="quiz-head"><span class="quiz-mark" aria-hidden="true">?</span><div><p class="quiz-kicker">單元小測</p><h2 id="quiz-title">這口井有多深？</h2><p class="quiz-intro">朝井底喊一聲，利用回聲計算井深。</p></div></header>
+<div id="well" class="quiz-body" data-phase="ready" data-observed="false" data-emissions="0">
 <div class="well-layout"><div class="well-picture">
 <figure class="well-scene"><svg viewBox="0 0 1000 750" preserveAspectRatio="xMinYMid slice" role="img" aria-label="小葵在井口朝乾井內喊話；石砌井壁往下變暗，作答前看不到井底。"><image href="assets/well-scene.webp?v=20261101-well" width="1000" height="750" preserveAspectRatio="xMidYMid slice"/><g id="well-waves" aria-hidden="true"></g></svg><button type="button" id="well-person" class="well-person" aria-label="點小葵，朝井底喊一聲"></button><span class="well-bubble" id="well-bubble" aria-hidden="true" hidden>喂！</span><figcaption class="well-tag">乾井示意・反射面為井底</figcaption></figure>
 <div class="well-legend" aria-label="聲音圖例"><span><i aria-hidden="true"></i>喊聲</span><span class="echo"><i aria-hidden="true"></i>井底回聲</span></div>

@@ -1,4 +1,4 @@
-import {initialisePrecisionPrism} from './precision-prism.mjs';
+import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-inset-20261102';
 import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays,DEFAULT_SPOTS,mixPreset,mixAt,QUIZ,clamp} from './color-model.mjs';
 import {prismDiagram,materialDiagram,drawScreen,drawObservation,drawMix} from './rendering.mjs';
 let studioModule=null;
