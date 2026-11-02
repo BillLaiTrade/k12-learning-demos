@@ -53,3 +53,33 @@
 #s6 .task-brief{padding:12px 19px}
 #s6 .task-brief p{margin:0}
 @media(max-width:760px){#s6 .task-brief{padding:12px 14px}}
+
+/* 桌機將材料區與實驗桌並排，讓取用及操作在同一視野內。 */
+@media(min-width:1000px){
+ #s6 .collection-task{display:grid;grid-template-columns:200px minmax(0,1fr);align-items:start}
+ #s6 .desk-heading,#s6 .desk-feedback,#s6 .desk-bottom{grid-column:1/-1}
+ #s6 .desk-heading{padding:8px 14px}
+ #s6 .desk-supplies{grid-column:1;align-self:stretch;border-right:1px solid #d3dec8;background:#f1f3e8}
+ #s6 .desk-supply-heading{padding:8px 10px 0;gap:3px}
+ #s6 .desk-supply-heading p{line-height:1.35}
+ #s6 .desk-materials{grid-template-columns:repeat(2,minmax(0,1fr));padding:4px 8px;gap:2px;border:0}
+ #s6 .desk-material{padding:2px;min-height:58px}
+ #s6 .desk-material > svg{height:36px}
+ #s6 .desk-material span{font-size:.72rem;line-height:1.25}
+ #s6 [data-desk-operate]{grid-column:2;min-width:0}
+ #s6 .desk-instruction{padding:6px 10px}
+ #s6 .desk-workbench{min-width:0}
+ #s6 .desk-observation{padding:5px 10px}
+ #s6 .desk-assistance{padding:0 10px}
+ #s6 .desk-controls{padding:6px 10px}
+ #s6 .desk-controls button{min-height:40px;padding:7px 12px}
+ #s6 .desk-feedback{padding:8px 14px;min-height:0}
+}
+@media(min-width:1000px){
+ #s6 .desk-scroll{max-width:570px;margin-inline:auto}
+ #s6 .desk-bottom{padding:6px 14px}
+}
+@media(min-width:1000px){
+ #s6 .desk-heading{padding:6px 14px}
+ #s6 .desk-bottom{padding:4px 14px}
+}
