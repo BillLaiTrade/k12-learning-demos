@@ -1,5 +1,5 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {SETUP,TRIANGLE,trace,drawProjection,measurements} from './prism-optics.mjs';
+import {SETUP,TRIANGLE,trace,drawProjection,measurements} from './prism-optics.mjs?v=prism-inset-20261102';
 import {wavelengthRgb} from './color-model.mjs';
 const AXIS=SETUP.axisHeight/100,S=.01;
 const p=([x,z],y=AXIS)=>new THREE.Vector3(x*S,y,z*S);
