@@ -45,3 +45,20 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
 瀏覽器檢查含七寬度、原生觸控、實際抓取3D器材、接收面像素、單變因、獨立狀態、唯一小測與載入失敗備援。`COLOR_URL`指定公開頁，`COLOR_CAPTURE_DIR`指定證據目錄。測試以攔截模組加入唯讀投影座標觀察，正式程式不含測試API。
 
 內容來源與RGB納入依主專案4.5 Part規劃、製作腳本及`unit-4.5-rgb-inclusion.md`。授權與借鑑細節見[製作決策](../../../../docs/decisions/unit-4.5-initial-lesson.md)。
+
+## 第一區科學條件與滑軌修訂（2026-11-02）
+
+第一區現採[固定科學條件](assets/spectral-sources.md)：準直D65白光、1×5mm垂直狹縫、50mm邊長／40mm高的60°直立N-BK7三稜鏡、x=300mm的固定白幕。用公開Sellmeier資料、有限孔徑兩側光線、兩介面折射、Fresnel透射與吸收計算；色度改用CIE1931觀察者與D65光譜，1nm取樣，整體固定曝光。上述先前AI構想圖沒有經光學驗證，已由[相同模型繪製的尺寸圖](assets/prism-scientific-layout.svg)取代作科學依據。
+
+380–780nm幾何包絡約18.05×5mm、400–700nm約14.47×5mm；主圖與30×20mm近看共用計算，兩軸同倍率，附5mm尺。狹縫像直立、不同色光在水平方向分開。玻璃沿垂直入射方向的短滑軌在0／90mm兩點移動；拖曳中暫停結果，放開後定位比較。三稜鏡、底座與把手可拖動，按鈕及方向鍵等效；輔助光路預設關閉，保留白幕框選對應與角色發現，移除重複說明框。
+
+這次只改第一區，第二至七區與小測保持初版內容；原始色散模型仍供第二區使用，第一區已獨立改由`prism-optics.mjs`／`prism-studio.mjs`／`precision-prism.mjs`呈現，避免未檢視區域連帶改動。
+
+幾何位置／方向／長寬對應所選模型；未模擬繞射、裝調誤差、光源發散或白幕散射。顏色受顯示色域與固定曝光影響，不能視為校準照片。相關限制與來源置於可展開說明，未加入學生必須計算折射率的課題。
+
+```sh
+node --test tests/unit-4.5-prism-optics.test.mjs tests/unit-4.5-color-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+新物理模型6項、既有模型5項；整頁26項（含外層），涵蓋實際3D頂點與尺寸、兩幅接收像素、等比例、拖曳偏移／取消／雙指、兩點定位、七寬度標籤避讓及備援。正式程式無測試API，測試才攔截模組加入唯讀觀察。

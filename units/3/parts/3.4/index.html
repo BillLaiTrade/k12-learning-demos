@@ -85,8 +85,8 @@
   <header class="lesson-head"><div class="lesson-number">03</div><div><h2 id="title-3">知道回來的時間，怎麼算牆有多遠？</h2><p>往返測距：從聲音走過的路程推算距離。</p></div></header>
   <div class="lesson-body"><div class="card-main">
     <p>上一區由距離觀察返回時間；這次反過來，由往返時間推算距離。</p>
-    <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>如果只知道聲音回來花了幾秒，要怎麼算反射板有多遠？</p></div>
-    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>先算聲音這段時間總共走了多遠，再看看去程和回程各占多少。</p></div>
+    <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>反射板越遠，聲音回來就越晚。那反過來，知道聲音回來花了多久，是不是就能算出反射板有多遠？</p></div>
+    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>可以，還要用到聲速。我們先算出聲音在這段時間總共走了多遠，再想想這個路程和反射板的距離有什麼關係。</p></div>
     <div class="calculation-lab" id="calculation" data-phase="ready" data-progress="0" data-time="4" data-elapsed="0" data-emissions="0">
       <div class="calculation-known">
         <label for="echo-time" class="calculation-time-entry"><span>已知往返時間</span><span class="calculation-number"><input id="echo-time" type="number" min="0.1" max="60" step="any" value="4" inputmode="decimal" aria-controls="calculation-steps" aria-describedby="calculation-input-error"><span>秒</span></span></label>
@@ -137,15 +137,14 @@
       <p class="calculation-formula">距離＝聲速 × 往返時間 ÷ 2</p>
       <p id="calculation-reading" class="calculation-sr-only" role="status"></p><p id="calculation-status" class="calculation-sr-only" role="status">準備好，可點喇叭或按鈕觀察。</p>
     </div>
-    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>聲速乘上往返時間，得到的是去、回兩段加起來的路程。喇叭和接收器靠在一起，去、回兩段一樣長，所以要除以二，才是裝置到反射板的距離。</p></div>
     <p class="model-note">題給聲速 340 m/s；反射板固定、往返同介質，發射與接收近似同位置。這是虛擬模型的條件，並非現場量測。</p>
   </div></div>
 </section><section class="lesson-card" id="s4" aria-labelledby="title-4">
   <header class="lesson-head"><div class="lesson-number">04</div><div><h2 id="title-4">海底看不見，怎麼知道有多深？</h2><p>主動聲納：從回波時間描出海底的起伏</p></div></header>
   <div class="lesson-body"><div class="card-main">
     <div class="sonar-intro">
-    <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>海底看不見，也能靠回來的聲音知道它有多深嗎？</p></div>
-    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>船底的探頭會發聲，也會接收回波。換個位置再測，看看聲音回來的時間有什麼不同。</p></div>
+    <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>阿公，那用聲音回來的時間算距離，可以拿來做什麼呢？</p></div>
+    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>像船隻探測海底有多深，就會用到這個方法。船底的探頭先發聲，接收海底反射回來的聲音後，就能利用往返時間推算深度。</p></div>
     </div>
     <div class="sonar-lab" id="sonar" data-phase="ready" data-progress="0" data-emissions="0">
       <div class="sonar-toolbar">
@@ -174,7 +173,6 @@
       <p class="sonar-hint">點船發聲；拖船或點箭頭移動。探測中（含暫停）船位固定。</p>
       <p id="sonar-error" class="sonar-error" role="alert" hidden></p><p id="sonar-status" class="sr-only" role="status"></p>
     </div>
-    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>和剛才一樣，聲速乘往返時間再除以二，才是探頭到海底的距離。每次只量到一個位置；累積不同位置的探測點，才能逐漸看出海底的高低起伏。</p></div>
     <details class="sonar-explanation"><summary>模型說明</summary>
     <p class="model-note">這是多種海底地形的組合示意，並非特定海域；船與探頭放大、橫向距離壓縮。深度約150–2,250公尺，往返約0.2–3秒；垂直深度與時間使用同一比例。深海實際沒有陽光，剖面以可視化方式呈現。固定地形、垂直聲路，距離從船底探頭起算。1,500 m/s 是題給近似值；可聽短音僅提示發射與接收，並非真實水下聲納錄音。</p>
     </details>
