@@ -57,8 +57,8 @@ zoom.innerHTML=`<defs>
  <g class="oblique-angle-marks" visibility="hidden"><path class="oblique-angle-arc oblique-in-arc"/><path class="oblique-angle-arc oblique-out-arc"/></g>
  ${beam()}
  <g class="oblique-zoom-labels">
-  <g><rect x="657" y="458" width="43" height="24" rx="4"/><text class="oblique-normal-name" x="662" y="500">法線</text></g>
-  <g><rect x="719" y="458" width="43" height="24" rx="4"/><text x="740" y="500" text-anchor="middle">空氣</text></g>
+  <g><rect x="657" y="458" width="43" height="24" rx="4"/><text class="oblique-normal-name" x="662" y="506">法線</text></g>
+  <g transform="translate(0 50)"><rect x="719" y="458" width="43" height="24" rx="4"/><text x="740" y="506" text-anchor="middle">空氣</text></g>
   <g><rect x="539" y="645" width="48" height="25" rx="4"/><text id="oblique-zoom-medium" x="546" y="648">水</text></g>
   <g><rect x="534" y="552" width="48" height="25" rx="4"/><text x="558" y="570" text-anchor="middle">介面</text></g>
  </g>`;
@@ -84,7 +84,7 @@ function drawGeometry(){
  const hit=source.querySelector('rect');const hitWidth=Math.max(96,44/(ratio*sourceScale));hit.setAttribute('x',String(-hitWidth/2));hit.setAttribute('width',String(hitWidth));
  scene.querySelector('#oblique-case-label').setAttribute('transform',`translate(650 155) scale(${fontScale})`);scene.querySelector('#oblique-case-name').textContent=`空氣 → ${name()}`;
  scene.querySelector('#oblique-air-label').setAttribute('transform',`translate(${1030-110*fontScale} 440) scale(${fontScale})`);scene.querySelector('#oblique-material-label').setAttribute('transform',`translate(230 740) scale(${fontScale})`);scene.querySelector('#oblique-material-label text').textContent=name();
- for(const kind of ['sector','base']){zoom.querySelector(`.oblique-in-${kind}`).setAttribute('d',sector(angle,true));zoom.querySelector(`.oblique-out-${kind}`).setAttribute('d',sector(g.outgoing,false));}zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));$('#oblique-in-value').value=$('#oblique-detail-in-value').value=`${angle}°`;$('#oblique-out-value').value=$('#oblique-detail-out-value').value=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();
+ for(const kind of ['sector','base']){zoom.querySelector(`.oblique-in-${kind}`).setAttribute('d',sector(angle,true));zoom.querySelector(`.oblique-out-${kind}`).setAttribute('d',sector(g.outgoing,false));}zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));$('#oblique-in-value').value=`${angle}°`;$('#oblique-out-value').value=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();
  zoom.style.setProperty('--zoom-font-scale',String(Math.max(1,14*240/(11*Math.max(80,zoom.getBoundingClientRect().width||200)))));
  for(const group of detail.hidden?[]:zoom.querySelectorAll('.oblique-zoom-labels > g')){const box=group.querySelector('text').getBBox(),plate=group.querySelector('rect');for(const [key,value] of Object.entries({x:box.x-4,y:box.y-3,width:box.width+8,height:box.height+6}))plate.setAttribute(key,String(value));}
  const description=`空氣射入${name()}，入射角${angle}度，折射角${g.outgoing.toFixed(1)}度。法線通過入射點；角度皆從法線量起。`;
@@ -122,7 +122,7 @@ function controls(){
  buttons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.obliqueMedium===requestedMedium)));
  source.setAttribute('aria-disabled',String(start.disabled));source.setAttribute('tabindex',start.disabled?'-1':'0');start.classList.toggle('primary',!start.disabled&&state!=='running');pause.classList.toggle('primary',['running','paused'].includes(state));pause.dataset.action=state==='paused'?'resume':'pause';pause.querySelector('span').textContent=state==='paused'?'繼續觀察':'暫停觀察';
  badge.textContent={loading:'準備場景',error:'場景未就緒',idle:'準備發射',running:'光束穿越中',paused:'已暫停觀察',preview:'光路預覽',complete:'光路已展開'}[state];
- status.textContent={loading:'正在準備實驗場景……',error:`${requestedMedium==='water'?'水':'玻璃'}場景未能載入，請重試或切換介質。`,idle:'點燈或按發射光束，觀察入射點。',running:'全景與放大畫面同步前進。',paused:'已暫停，可仔細觀察入射點。',preview:'光路已更新，可重新發射觀察。',complete:'光路已展開，可調角度或切換介質。'}[state];
+ status.textContent={loading:'正在準備實驗場景……',error:`${requestedMedium==='water'?'水':'玻璃'}場景未能載入，請重試或切換介質。`,idle:'點燈發射，拖曳光源可調角度。',running:'全景與放大畫面同步前進。',paused:'已暫停，可仔細觀察入射點。',preview:'光路已更新，可重新發射觀察。',complete:'光路已展開，可調角度或切換介質。'}[state];
 }
 function stop(){cancelAnimationFrame(frame);frame=0;}
 function tick(now){
