@@ -30,10 +30,10 @@ test('sound-match assessment follows the approved layout and shares actual audio
   assert.equal(await root.locator('.match-comparison [type=submit]').count(),1);
   assert.equal(await root.locator('[type=submit]').evaluate(n=>n.form===document.querySelector('#settings-form')),true);
   const geometry=await root.evaluate(n=>{
-   const steps=[...n.querySelectorAll('.match-step')].map(el=>el.getBoundingClientRect()),mine=n.querySelector('[data-play=quiz-choice]').getBoundingClientRect(),submit=n.querySelector('[type=submit]').getBoundingClientRect(),note=n.querySelector('#match-compare-note').getBoundingClientRect();
-   return {gaps:steps.slice(1).map((r,i)=>r.top-steps[i].bottom),aligned:Math.abs(mine.left-submit.left),belowNote:submit.top>=note.bottom};
+   const steps=[...n.querySelectorAll('.match-step')].map(el=>el.getBoundingClientRect()),buttons=[...n.querySelectorAll('.match-target [data-play],.match-actions [data-play],.match-submit')].map(el=>el.getBoundingClientRect()),submit=buttons[2],heading=n.querySelector('.match-comparison .match-step-heading').getBoundingClientRect(),note=n.querySelector('#match-compare-note').getBoundingClientRect();
+   return {gaps:steps.slice(1).map((r,i)=>r.top-steps[i].bottom),aligned:Math.max(...buttons.map(r=>r.right))-Math.min(...buttons.map(r=>r.right)),widths:buttons.map(r=>r.width),layout:innerWidth>760?submit.left>=heading.right&&Math.abs(submit.top+submit.height/2-heading.top-heading.height/2)<1:submit.top>=note.bottom};
   });
-  assert.ok(geometry.gaps.every(g=>g>=10),'three groups have clear vertical separation');assert.ok(geometry.aligned<1,'submit aligns left with listening');assert.equal(geometry.belowNote,true);
+  assert.ok(geometry.gaps.every(g=>g>=10),'three groups have clear vertical separation');assert.ok(geometry.aligned<1,'three main buttons share a right edge');assert.ok(geometry.widths.every(w=>Math.abs(w-175)<1),'three main buttons have the same width');assert.equal(geometry.layout,true,'completion is one row on desktop and wraps below the note on mobile');
  };
  const resultFits=async state=>{
   for(const [width,height]of [[1440,900],[1366,768],[1280,720],[1024,768]]){
@@ -140,7 +140,7 @@ test('sound-match assessment follows the approved layout and shares actual audio
   await page.evaluate(()=>{window.originalResume=AudioContext.prototype.resume;AudioContext.prototype.resume=function(){return new Promise(resolve=>window.releaseMatch=()=>window.originalResume.call(this).then(resolve));};});
   const n=await page.evaluate(()=>window.matchRuns.length);await root.locator('[data-play=quiz-choice]').click();await page.waitForFunction(()=>!!window.releaseMatch);await set('amplitude',Number(await plot.getAttribute('data-amplitude'))===.6?.3:.6);await page.evaluate(()=>window.releaseMatch());await page.waitForTimeout(150);assert.equal(await page.evaluate(()=>window.matchRuns.length),n);const after=await page.evaluate(()=>window.matchRuns.length);await root.locator('[data-play=quiz-choice]').click();await root.locator('[data-match-new]').click();await ready();await page.evaluate(()=>window.releaseMatch());await page.waitForTimeout(150);assert.equal(await page.evaluate(()=>window.matchRuns.length),after);assert.equal(await root.getAttribute('data-playing'),'false');await page.evaluate(()=>AudioContext.prototype.resume=window.originalResume);
  });
- await t.test('three separate activity groups stay ordered and left aligned across desktop, laptop and mobile',async()=>{
+ await t.test('three activity groups stay ordered with equal-width right aligned actions across desktop, laptop and mobile',async()=>{
   for(const [width,height] of [[1440,1000],[1366,768],[1280,720],[1024,768],[820,1000],[760,1000],[390,1000],[320,1000]]){
    await page.setViewportSize({width,height});await root.evaluate(n=>n.scrollIntoView({block:'start'}));assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
    const metrics=await root.evaluate(n=>{const box=n.getBoundingClientRect(),a=n.querySelector('.match-target').getBoundingClientRect(),wave=n.querySelector('.match-wave').getBoundingClientRect(),end=n.querySelector('.match-actions').getBoundingClientRect();return {above:a.bottom<wave.top,top:box.top,bottom:end.bottom,clipped:[...n.querySelectorAll('button,input')].some(x=>{const r=x.getBoundingClientRect();return r.width>0&&(r.left<box.left||r.right>box.right+1||x.scrollWidth>x.clientWidth+1);})};});
