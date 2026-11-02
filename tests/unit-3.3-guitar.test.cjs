@@ -31,7 +31,7 @@ test('guitar lesson: real instrument, one variable at a time, synchronized pluck
  });
  await t.test('opening question and guidance persist through changing modes, values and reset',async()=>{
   const question='那演奏樂器的時候，要怎麼調整振動的頻率，奏出不同高低的音呢？';
-  const guidance='我們先用吉他試試看。改變按弦的位置，或調整琴弦的鬆緊，一次只改一個條件，看看頻率會怎麼變。';
+  const guidance='我們先用吉他試試看。改變按弦的位置，或調整琴弦的鬆緊，看看頻率會怎麼變。';
   const check=async()=>{
    assert.equal(await root.locator('.guitar-question').innerText(),question);
    assert.equal(await root.locator('.dialogue--xiaokui + .dialogue > p').innerText(),guidance);
