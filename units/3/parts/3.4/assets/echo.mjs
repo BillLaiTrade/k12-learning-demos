@@ -91,7 +91,10 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
       pauseButton.textContent = value === 'paused' ? '繼續' : '暫停';
       pauseButton.setAttribute('aria-label', value === 'paused' ? '繼續聲波觀察' : '暫停聲波觀察');
     }
-    $(`${id}-status`).textContent = {ready: '準備好，可播放或直接比較；重來保留目前條件。', playing: '播放中，可暫停觀察。', paused: '已暫停，位置保留；繼續時接著播放。', complete: '本次觀察結束，可重看或改變條件。'}[value];
+    const messages = id === 'reflection'
+      ? {ready: '準備好，可點喇叭或按鈕發出一次短音。', playing: '播放中，可再次發聲，從頭觀察。', paused: '觀察已中斷，可再次發聲，從頭觀察。', complete: '本次觀察結束，可再次發聲。'}
+      : {ready: '準備好，可播放或直接比較；重來保留目前條件。', playing: '播放中，可暫停觀察。', paused: '已暫停，位置保留；繼續時接著播放。', complete: '本次觀察結束，可重看或改變條件。'};
+    $(`${id}-status`).textContent = messages[value];
   }
   const elapsedAt = now => Math.max(0, Math.min(p.duration(), p.clock ? p.clock.context.currentTime - p.clock.startAt : (now - p.start) / 1000));
   p.pause = () => { if (p.phase !== 'playing') return; if (!p.waitingForAudio) p.elapsed = elapsedAt(performance.now()); p.waitingForAudio = false; cancelAnimationFrame(p.raf); phase('paused'); if (active === p) { active = null; stopSound(); } p.draw(); };

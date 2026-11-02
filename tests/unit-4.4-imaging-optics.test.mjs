@@ -18,3 +18,7 @@ test('焦點邊界、軌道外與超出屏幕皆有有限且可判定的狀態',
 test('固定階段不能移動圖卡，移動單一器材保留另一器材及範圍',()=>{
  const initial={object:320,screen:240,stage:'focus'};assert.deepEqual(moveImaging(initial,'object',150),initial);const s={...initial,stage:'compare'};assert.deepEqual(moveImaging(s,'object',150),{...s,object:150});assert.equal(moveImaging(s,'screen',1000).screen,500);assert.equal(moveImaging(s,'object',-20).object,100);assert.deepEqual(moveImaging(s,'screen',NaN),s);
 });
+
+test('屏幕可在焦距內移動，幾何投影及光路仍使用同一接收面',()=>{
+ const initial={object:200,screen:240,stage:'compare'},s=moveImaging(initial,'screen',70),g=imagingState(s);assert.equal(s.screen,70);assert.equal(s.object,200);assert.ok(s.screen<G.f);assert.equal(g.clear,false);assert.equal(g.projectionScale,-.35);assert.ok(g.spread>0);for(const ray of imagingRays(s))assert.equal(ray.end[0],70*G.scale);assert.equal(moveImaging(s,'screen',0).screen,G.screenMin);assert.ok(G.screenMin<G.f);
+});

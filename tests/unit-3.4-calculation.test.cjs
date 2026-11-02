@@ -18,9 +18,9 @@ test('3.4 third lesson follows the numeric-input mockup within the shared lesson
  const phase=()=>root.getAttribute('data-phase'),count=()=>root.getAttribute('data-emissions');
  async function enter(value){await input.fill(String(value));await input.press('Enter');}
  const equation=id=>page.locator('#'+id).innerText().then(s=>s.replace(/\s/g,''));
- await t.test('shared full-width header and character dialogue surround the four-step scene, with no automatic audio or old controls',async()=>{
+ await t.test('shared full-width header and opening dialogue introduce the four-step scene, with no automatic audio or old controls',async()=>{
   assert.equal(await page.locator('#s3 .lesson-head .lesson-number').innerText(),'03');assert.match(await page.locator('#title-3').innerText(),/知道回來的時間/);
-  assert.equal(await page.locator('#s3 .dialogue .speaker[aria-label="小葵"]').count(),1);assert.equal(await page.locator('#s3 .dialogue .speaker[aria-label="阿公"]').count(),2);
+  assert.equal(await page.locator('#s3 .dialogue .speaker[aria-label="小葵"]').count(),1);assert.equal(await page.locator('#s3 .dialogue .speaker[aria-label="阿公"]').count(),1);
   assert.equal(await root.locator('.calculation-step').count(),4);assert.equal(await root.locator('input[type=range],[data-sound],[data-reset],input[type=checkbox]').count(),0);
   assert.equal(await input.getAttribute('type'),'number');assert.equal(await input.inputValue(),'4');assert.equal(await phase(),'ready');assert.equal(await count(),'0');assert.equal(await pause.isDisabled(),true);assert.equal(await page.evaluate(()=>window.__sources.length),0);
   assert.doesNotMatch(await root.innerText(),/慢動作|放慢|等待發聲/);

@@ -1,0 +1,24 @@
+▶ CO2 hands-on tabletop: choose, manipulate, observe, recover and seal
+  ✔ one quiz, twelve real objects and no planner, timeline or playback button (399.09359ms)
+  ✔ missing apparatus and distractors are editable, with no hidden auto-assembly (1311.696559ms)
+  ✔ water has a visible source and stream; interrupted pouring preserves a partial level (2024.758614ms)
+  ✔ covered inversion and real movement over the tank preserve the full water column (4284.892602ms)
+  ✔ forceps carry one photographed stone from the dish and enter through the bottle mouth (1300.361074ms)
+  ✔ double stopper covers both inserted stems and acid pours from its actual bottle lip (2517.878288ms)
+  ✔ bottle-exterior purge bubbles change visible pixels and the jar does not fill before insertion (2711.700385ms)
+  ✔ insertion goes below the mouth; bubbles rise only through remaining water as the level falls (4107.266003ms)
+  ✔ cannot cover across glass; underwater covering, extraction and righting complete the task (3064.772176ms)
+  ✔ reset is local, and starting another experiment suspends actual work without catch-up (2237.766442ms)
+  ✔ dragging the actual desk tool onto a target performs the same action (1294.941022ms)
+  ✔ seven widths keep targets and buttons usable, without document overflow (1431.304907ms)
+  ✔ touch, keyboard and reduced motion support the same operations (4270.305583ms)
+  ✔ without JavaScript the principle and fallback are readable and start is disabled (1193.918863ms)
+✔ CO2 hands-on tabletop: choose, manipulate, observe, recover and seal (34143.778731ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34147.903717

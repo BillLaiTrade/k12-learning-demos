@@ -1,18 +1,18 @@
 /* A single experiment and a magnified view of the same entry point. */
 #s3 .lesson-body { container-type:inline-size; container-name:oblique-card; }
 #oblique-lab { --oblique-in:#165fc2; --oblique-out:#24783a; padding:0; border:0; background:transparent; }
-.oblique-topline { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 14px; margin:0 0 12px; }
-.oblique-topline .oblique-hint { flex:1 1 280px; margin:0; }
-.oblique-toolbar { display:flex; justify-content:flex-end; align-items:center; gap:9px; margin:0; color:#315340; font-size:.87rem; font-weight:650; }
-.oblique-toolbar button { min-width:68px; min-height:42px; padding:7px 16px; }
-.oblique-hint { margin:0 0 12px; color:#607366; font-size:.8rem; }
+.oblique-toolbar { display:flex; align-items:center; gap:6px; margin:0; padding:3px 5px; border:1px solid #d2dfcf; border-radius:9px; background:#fffef7f2; color:#315340; font-size:.78rem; font-weight:650; box-shadow:0 1px 5px #263c2710; }
+.oblique-toolbar button { min-width:52px; min-height:36px; padding:4px 12px; }
 .oblique-experiment { position:relative; }
-.oblique-settings { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px 22px; align-items:center; margin-top:8px; }
-.oblique-overview { min-width:0; width:100%; max-width:760px; margin:0 auto; display:flex; flex-direction:column; }
-.oblique-overview figcaption { display:flex; align-items:center; height:34px; margin:0 0 8px; color:#28523e; font-size:1rem; font-weight:750; }
-.oblique-table { position:relative; width:100%; aspect-ratio:1; overflow:visible; border-radius:12px; background:#fffdf7; }
-#oblique-background { display:block; width:100%; height:auto; }
-#oblique-scene { position:absolute; inset:0; width:100%; height:100%; }
+.oblique-settings { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:6px 18px; align-items:center; margin-top:4px; }
+.oblique-overview { position:relative; min-width:0; width:100%; margin:0; }
+.oblique-overview figcaption { position:absolute; inset:8px 8px auto; z-index:2; display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin:0; color:#28523e; font-size:.9rem; font-weight:750; pointer-events:none; }
+.oblique-overview-title { padding:4px 8px; border-radius:6px; background:#fffef7ed; }
+.oblique-overview figcaption .oblique-toolbar { pointer-events:auto; }
+.oblique-table { position:relative; width:100%; aspect-ratio:1254 / 780; overflow:hidden; border-radius:12px; background:#fffdf7; }
+#oblique-background { display:block; }
+#oblique-background, #oblique-scene { position:absolute; left:0; top:-23.076923%; width:100%; height:160.769231%; }
+#oblique-case-label { display:none; }
 #oblique-scene text, #oblique-zoom text { font-family:ui-sans-serif,system-ui,"Noto Sans TC",sans-serif; fill:#233d35; font-weight:650; }
 .oblique-normal { fill:none; stroke:#737e76; stroke-width:3; stroke-dasharray:12 9; }
 .oblique-angle-sector { stroke:none; }
@@ -36,26 +36,20 @@
 .oblique-source:focus-visible { outline:none; }
 .oblique-source:focus-visible .oblique-focus, .oblique-source:hover .oblique-focus { opacity:1; }
 .oblique-source[data-lit=true] .oblique-lens { fill:url(#oblique-lit-lens); }
-.oblique-state { position:absolute; right:3%; top:1%; padding:3px 7px; border:1px solid #b6cab3; border-radius:7px; background:#f2f8eaf5; color:#28654f; font-size:.66rem; font-weight:700; pointer-events:none; }
+.oblique-state { position:absolute; left:8px; bottom:8px; padding:3px 7px; border:1px solid #b6cab3; border-radius:7px; background:#f2f8eaf5; color:#28654f; font-size:.66rem; font-weight:700; pointer-events:none; }
 #oblique-magnify { position:absolute; z-index:2; width:44px; height:44px; min-height:44px; padding:0; transform:translate(-50%,-50%); border:2px solid #fffce9; border-radius:5px; background:#fffae51a; outline:1px solid #2a7350; box-shadow:0 0 0 3px #ffffed55; cursor:zoom-in; }
 #oblique-magnify:hover, #oblique-magnify:focus-visible { background:#fff4ba55; outline:3px solid #246747; }
 #oblique-magnify:disabled { cursor:default; opacity:.45; }
 #oblique-lab[data-detail-open=true] #oblique-magnify, #oblique-lab[data-detail-open=true] .oblique-magnify-label { opacity:0; pointer-events:none; }
 .oblique-magnify-label { position:absolute; z-index:2; left:var(--oblique-entry-x); top:var(--oblique-entry-y); transform:translate(32px,-28px); pointer-events:none; display:inline-flex; align-items:center; gap:5px; padding:6px 9px; border:1px solid #b9cdb7; border-radius:7px; background:#fffef4f5; color:#23583f; font-size:.8rem; font-weight:700; white-space:nowrap; box-shadow:0 2px 7px #35463212; }
 .oblique-magnify-label svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2; }
-.oblique-detail { position:absolute; z-index:3; width:clamp(200px,44%,340px); max-width:calc(100% - 24px); min-width:0; padding:10px; border:1px solid #8dac96; border-radius:12px; background:#fffef8; box-shadow:0 8px 28px #1d302735,0 2px 5px #1d30271a; }
+.oblique-detail { position:absolute; z-index:3; width:clamp(180px,40%,320px); max-width:calc(100% - 24px); min-width:0; padding:6px; border:1px solid #8dac96; border-radius:12px; background:#fffef8; box-shadow:0 8px 28px #1d302735,0 2px 5px #1d30271a; }
 .oblique-detail[hidden] { display:none; }
-.oblique-detail-readouts { display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:5px; min-height:44px; margin-top:6px; font-size:.8rem; font-weight:700; }
-.oblique-detail-readouts > span { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:center; gap:1px 5px; }
-.oblique-detail-readouts output { color:inherit; font-size:1.05rem; font-weight:750; font-variant-numeric:tabular-nums; }
-#oblique-close { display:grid; place-items:center; flex:none; width:32px; height:32px; min-width:32px; min-height:32px; padding:0; border:0; border-radius:50%; background:#e9f1e4; color:#2d5744; font-size:1.35rem; line-height:1; }
+#oblique-close { position:absolute; top:4px; right:4px; z-index:1; display:grid; place-items:center; flex:none; width:32px; height:32px; min-width:32px; min-height:32px; padding:0; border:0; border-radius:50%; background:#e9f1e4; color:#2d5744; font-size:1.35rem; line-height:1; }
 #oblique-close:hover, #oblique-close:focus-visible { background:#d9e9d3; outline:2px solid #5b8869; outline-offset:1px; }
 #oblique-lab[aria-busy=true] .oblique-detail #oblique-zoom { opacity:.45; }
 
-.oblique-detail-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:5px 6px; height:32px; margin-bottom:6px; }
-.oblique-detail-heading h3 { display:flex; align-items:center; gap:6px; margin:0; color:#25573f; font-size:.9rem; font-weight:750; }
-.oblique-detail-heading svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; }
-.oblique-detail-heading > span { color:#68796c; font-size:.72rem; }
+.oblique-detail-heading { height:0; margin:0; }
 #oblique-zoom { display:block; width:100%; height:auto; aspect-ratio:4 / 3; overflow:hidden; border:1px solid #dfe5d7; border-radius:10px; background:#fffdf6; }
 #oblique-zoom .oblique-normal { stroke:#526559; stroke-width:1.3; stroke-dasharray:5 4; }
 .oblique-normal-underlay { fill:none; stroke:#fffef5; stroke-opacity:.85; stroke-width:2.5; stroke-dasharray:5 4; }
@@ -67,7 +61,7 @@
 #oblique-zoom text { font-size:calc(11px * var(--zoom-font-scale,1)); }
 #oblique-zoom .oblique-normal-name { fill:#45534b; }
 .oblique-zoom-labels rect { fill:#fffef5; fill-opacity:.9; stroke:#d7e2d6; stroke-width:.6; }
-.oblique-angle-readouts { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:0; min-width:0; min-height:58px; align-items:center; }
+.oblique-angle-readouts { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:0; min-width:0; min-height:46px; align-items:center; }
 .oblique-angle-reading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:center; gap:3px 7px; padding:5px 2px; }
 .oblique-angle-reading > span { display:inline-flex; align-items:center; gap:4px; font-size:.86rem; font-weight:700; white-space:nowrap; }
 .oblique-angle-reading svg { width:17px; height:17px; flex:none; fill:currentColor; }
@@ -79,8 +73,8 @@
 #oblique-relation { display:inline; margin:0; color:#254e37; font-size:.88rem; font-weight:650; }
 .oblique-rule-divider { color:#9ca99e; font-size:.8rem; }
 #oblique-zoom-note { display:inline; margin:0; font-size:.78rem; color:#637568; }
-.oblique-console { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; gap:8px 22px; margin:16px 0 0; padding-top:18px; border-top:1px solid #dce6db; }
-.oblique-angle-control { display:flex; min-width:0; align-items:center; gap:12px; margin:0; color:var(--oblique-in); font-size:.86rem; font-weight:650; min-height:58px; }
+.oblique-console { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; gap:6px 18px; margin:8px 0 0; padding-top:10px; border-top:1px solid #dce6db; }
+.oblique-angle-control { display:flex; min-width:0; align-items:center; gap:12px; margin:0; color:var(--oblique-in); font-size:.86rem; font-weight:650; min-height:46px; }
 .oblique-angle-control > span:first-child { white-space:nowrap; }
 .oblique-slider { display:grid; flex:1; min-width:100px; grid-template-columns:1fr 1fr; color:#66786a; font-size:.7rem; font-weight:500; }
 .oblique-slider input { grid-column:1 / -1; width:100%; min-height:30px; margin:0; accent-color:var(--oblique-in); }
@@ -91,7 +85,7 @@
 .oblique-actions button:disabled { opacity:.45; cursor:default; }
 #oblique-pause[data-action=pause] .resume-icon, #oblique-pause[data-action=resume] .pause-icon { display:none; }
 .oblique-status { grid-column:1 / -1; margin:0; color:#64736d; font-size:.8rem; line-height:1.6; }
-.oblique-explanation { margin-top:18px; border:1px solid #d9e4d9; border-radius:13px; background:linear-gradient(130deg,#fcfdf9,#f6f9f1); }
+.oblique-explanation { margin-top:12px; border:1px solid #d9e4d9; border-radius:13px; background:linear-gradient(130deg,#fcfdf9,#f6f9f1); }
 .oblique-explanation summary { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:17px 20px; list-style:none; cursor:pointer; color:#284d3d; font-size:1.06rem; font-weight:750; }
 .oblique-explanation summary::-webkit-details-marker { display:none; }
 .oblique-explanation summary::after { content:'＋'; display:grid; place-items:center; width:27px; height:27px; flex:none; border-radius:50%; background:#e5eee0; }
@@ -105,27 +99,27 @@
 .oblique-model-note { padding-top:12px; border-top:1px solid #e1e9dc; color:#64736d; font-size:.76rem; }
 #oblique-retry[hidden] { display:none; }
 @container oblique-card (max-width:680px) {
- .oblique-console { grid-template-columns:1fr; gap:12px; margin-top:12px; padding-top:14px; }
+ .oblique-console { grid-template-columns:1fr; gap:8px; margin-top:8px; padding-top:10px; }
  .oblique-actions { display:grid; grid-template-columns:1fr 1fr; }
  .oblique-status { grid-column:1; }
  .oblique-cart-pan-hint { display:block; }
 }
 @media(max-width:700px) {
- .oblique-toolbar { justify-content:flex-start; }
  .oblique-actions button { font-size:.86rem; padding-inline:8px; }
  .oblique-angle-control { gap:10px; font-size:.86rem; }
  .oblique-explanation summary { padding:15px 13px; font-size:.95rem; }
  .oblique-explanation-body { padding:14px 13px; }
 }
 @container oblique-card (max-width:520px) {
+ .oblique-overview figcaption { position:static; height:46px; margin-bottom:4px; align-items:center; pointer-events:auto; }
+ .oblique-overview-title { padding:0; background:transparent; }
+ .oblique-toolbar { border:0; padding:0; box-shadow:none; background:transparent; }
+ .oblique-toolbar > span { display:none; }
+ .oblique-toolbar button { min-width:46px; min-height:40px; }
  .oblique-settings { grid-template-columns:1fr; gap:0; }
  .oblique-angle-reading { flex-direction:column; align-items:center; gap:3px; }
  .oblique-angle-readouts { padding-top:6px; }
  .oblique-magnify-label { transform:translate(-50%,calc(-100% - 30px)); }
- .oblique-detail { padding:8px; }
- .oblique-detail-heading h3 { font-size:.8rem; }
- .oblique-detail-heading h3 svg { display:none; }
- .oblique-detail-readouts > span { flex-direction:column; align-items:center; }
  .oblique-rule-divider { display:none; }
  #oblique-zoom-note { flex-basis:100%; margin-top:3px; }
 }

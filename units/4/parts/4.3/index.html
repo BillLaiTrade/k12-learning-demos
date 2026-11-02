@@ -28,8 +28,8 @@
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
-  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261102-center1">
-  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261102-center1"></script>
+  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261102-wide-view1">
+  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261102-wide-view1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261101-normal1">
 </script>
 </head>
@@ -198,22 +198,17 @@
       <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>把入射點放大，看看光線和法線之間的角度。</p></div>
     </div>
     <div class="lab" id="oblique-lab" data-state="loading" data-detail-open="false" aria-label="單一折射實驗與同步入射點放大畫面">
-      <div class="oblique-topline"><p class="oblique-hint">點燈發射，拖曳調角度；點入射點可局部放大。</p><div class="oblique-toolbar" role="group" aria-label="選擇射入的介質"><span>射入介質</span><button type="button" data-oblique-medium="water" aria-pressed="true">水</button><button type="button" data-oblique-medium="glass" aria-pressed="false">玻璃</button></div></div>
       <div class="oblique-experiment">
         <figure class="oblique-overview">
-          <figcaption>實驗全景</figcaption>
+          <figcaption><span class="oblique-overview-title">實驗全景</span><div class="oblique-toolbar" role="group" aria-label="選擇射入的介質"><span>射入介質</span><button type="button" data-oblique-medium="water" aria-pressed="true">水</button><button type="button" data-oblique-medium="glass" aria-pressed="false">玻璃</button></div></figcaption>
           <div class="oblique-table" id="oblique-viewport">
             <img id="oblique-background" src="assets/oblique-entry-water.png" width="1254" height="1254" alt="寫實木桌上的單槽光路剖面：上方空氣，下方為水。">
             <svg id="oblique-scene" viewBox="0 0 1254 1254" role="group" aria-label="點燈發射，拖曳光源調整入射角。"></svg>
             <span class="oblique-state" id="oblique-state">準備場景</span>
             <button id="oblique-magnify" type="button" aria-label="放大中央入射點" aria-expanded="false" aria-controls="oblique-detail" disabled></button><span class="oblique-magnify-label" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5M10 7v6M7 10h6"/></svg>點此放大</span>
         <aside class="oblique-detail" id="oblique-detail" role="region" aria-labelledby="oblique-detail-title" hidden>
-          <div class="oblique-detail-heading"><h3 id="oblique-detail-title"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg>入射點放大</h3><button id="oblique-close" type="button" aria-label="關閉入射點放大">×</button></div>
+          <div class="oblique-detail-heading"><h3 id="oblique-detail-title" class="visually-hidden"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg>入射點放大</h3><button id="oblique-close" type="button" aria-label="關閉入射點放大">×</button></div>
           <svg id="oblique-zoom" viewBox="530 480 240 180" role="img" aria-label="同一入射點的放大光路，角度從法線量起。"></svg>
-          <div class="oblique-detail-readouts" role="group" aria-label="圖中同色扇形的角度讀值，皆從法線量起">
-            <span class="oblique-incident-color">入射角 <output id="oblique-detail-in-value">45°</output></span>
-            <span class="oblique-refracted-color">折射角 <output id="oblique-detail-out-value">32.0°</output></span>
-          </div>
         </aside>
           </div>
         </figure>
