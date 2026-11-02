@@ -1,4 +1,4 @@
-import { svgNode } from './sound-speed-rendering.mjs?v=fixed-22';
+import { svgNode } from './sound-speed-rendering.mjs?v=continuous-fork-20261102';
 
 export const AIR_CHAMBER = { x: 27, y: 27, width: 412, height: 91 };
 

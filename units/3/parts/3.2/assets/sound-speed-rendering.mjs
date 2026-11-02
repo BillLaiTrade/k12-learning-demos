@@ -156,7 +156,7 @@ export function mediumScene(root, kind, prefix) {
   } };
 }
 
-// 叉臂幾何固定，只作水平微幅反向位移，不逐影格變形、旋轉或扭曲。
+// 兩叉臂與彎曲底部使用同一條連續路徑；位移由叉尖向根部平順遞減。
 // 鋼材由右叉臂經薄接觸層傳振，另一臂自由；不把兩臂夾死。
 export function tuningForkSource(root, kind, fill, { labelY = 139 } = {}) {
   const group = svgNode('g', { class:'sound-source tuning-fork', 'data-medium':kind, 'data-vibrating':'false', 'aria-hidden':'true' }, root);
@@ -167,31 +167,39 @@ export function tuningForkSource(root, kind, fill, { labelY = 139 } = {}) {
     const shine = svgNode('path', { class:cls, d, fill:'none', stroke:'#f7fbf8', 'stroke-width':1, opacity:.65, 'stroke-linecap':'round' }, parent);
     return [outer,inner,shine];
   };
-  let paths, hit, contact;
+  let geometry, hit, contact;
   if (kind === 'water') {
     metal(body,'M80 7V25');
-    metal(body,'M68 44C68 19 92 19 92 44');
-    paths = ['M68 44V99','M92 44V99'];
+    geometry = { left:68, right:92, root:44, tip:99, base:25 };
     hit = { x:68, y:9, handle:'M73 14L53 1', dx:-20, dy:4 };
     svgNode('path',{class:'fork-waterline',d:'M61 30H73M86 30H98',stroke:'#eaf9f7','stroke-width':1.5,opacity:.9},group);
   } else if (kind === 'steel') {
-    metal(body,'M52 99C52 123 86 123 86 99');
     metal(body,'M69 117V125');
-    paths = ['M52 99V35','M86 99V35'];
+    geometry = { left:52, right:86, root:99, tip:35, base:117 };
     contact = svgNode('path',{class:'source-contact','data-coupled-arm':'right',fill:'#9cabad',stroke:'#617980','stroke-width':.5},group);
     hit = { x:40, y:35, handle:'M46 41L27 63', dx:-20, dy:3 };
   } else {
-    metal(body,'M42 79C42 104 74 104 74 79');
     metal(body,'M58 98V113');
-    paths = ['M42 79V33','M74 79V33'];
+    geometry = { left:42, right:74, root:79, tip:33, base:98 };
     hit = { x:30, y:33, handle:'M36 39L16 62', dx:-24, dy:3 };
   }
+  const { left, right, root:rootY, tip:tipY, base } = geometry;
+  const centre = (left+right)/2, length = rootY-tipY;
+  // 根部保留十分之一位移，彎曲底部在握柄處回到零；各接點切線連續。
+  const shape = value => {
+    const l = left-.1*value, r = right+.1*value;
+    return `M${left-value} ${tipY}`
+      +`C${left-.55*value} ${tipY+length/3} ${l} ${rootY-length/3} ${l} ${rootY}`
+      +`C${l} ${rootY+.68*(base-rootY)} ${centre-.55*(centre-left)} ${base} ${centre} ${base}`
+      +`C${centre+.55*(right-centre)} ${base} ${r} ${rootY+.68*(base-rootY)} ${r} ${rootY}`
+      +`C${r} ${rootY-length/3} ${right+.55*value} ${tipY+length/3} ${right+value} ${tipY}`;
+  };
   const traces=svgNode('g',{class:'fork-vibration-trace',visibility:'hidden','aria-hidden':'true'},group);
-  for(const d of paths) for(const offset of [-2.1,2.1]) svgNode('path',{
-    d,transform:`translate(${offset} 0)`,fill:'none',stroke:'#819ba3','stroke-width':1.2,
-    'stroke-linecap':'round',opacity:.25
+  for(const offset of [-2.1,2.1]) svgNode('path',{
+    d:shape(offset),fill:'none',stroke:'#819ba3','stroke-width':1.2,
+    'stroke-linecap':'round',opacity:.18
   },traces);
-  const arms = paths.map(d => metal(group,d,'fork-tine'));
+  const fork = metal(group,shape(0),'fork-body');
   const mallet = svgNode('g',{class:'fork-striker',visibility:'hidden','data-strike':'idle'},group);
   svgNode('path',{d:hit.handle,stroke:'#956b43','stroke-width':4.5,'stroke-linecap':'round'},mallet);
   svgNode('rect',{x:hit.x,y:hit.y,width:12,height:12,rx:4,fill:'#3a4649',stroke:'#1e3034','stroke-width':.8},mallet);
@@ -202,12 +210,17 @@ export function tuningForkSource(root, kind, fill, { labelY = 139 } = {}) {
     const value=forkVibration(time);
     const active=time>0&&time<PULSE_DURATION;
     group.setAttribute('data-vibrating',String(active));
-    arms.forEach((arm,i)=>arm.forEach(node=>node.setAttribute('transform',`translate(${((i?1:-1)*value).toFixed(5)} 0)`)));
+    const outline = shape(value);
+    fork.forEach(node=>node.setAttribute('d',outline));
     traces.setAttribute('visibility',active?'visible':'hidden');
     if(contact) {
       // 右臂外緣與鋼端面之間始終連接，薄層彈性變形傳遞振動。
-      const edge=86+value+2.8;
-      contact.setAttribute('d',`M${edge} 35H94V52H${edge}Z`);
+      const edge=right+value+2.8;
+      // 接觸層貼合右叉臂的曲線，整個接觸高度都不留下空隙。
+      const span=17, s=(rootY-52)/length;
+      const lower=right+value*(.1+1.35*s*s-.45*s*s*s)+2.8;
+      const slope=t=>-value*(2.7*t-1.35*t*t)/length;
+      contact.setAttribute('d',`M${edge} 35C${edge+slope(1)*span/3} ${35+span/3} ${lower-slope(s)*span/3} ${52-span/3} ${lower} 52H94V35Z`);
       contact.setAttribute('data-arm-edge',String(edge));
       contact.setAttribute('data-steel-edge','94');
     }

@@ -3,9 +3,9 @@ import {
   appearance, arrivalTime, reachedDistance, conditions,
   positions, runEnd, sample
 } from './sound-speed-model.mjs?v=linear-speed-20261101';
-import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=fixed-22';
+import { addMaterials, particleGlyph, springPath, materialInfo, mediumScene, tuningForkSource } from './sound-speed-rendering.mjs?v=continuous-fork-20261102';
 import { createTemperatureProgress } from './temperature-progress.mjs?v=start-time-20261029';
-import { airChamberScene } from './temperature-chamber.mjs?v=fixed-22';
+import { airChamberScene } from './temperature-chamber.mjs?v=continuous-fork-20261102';
 import { stopOnLeave } from './lesson-playback.mjs?v=2';
 
 export function initSoundSpeed(root) {

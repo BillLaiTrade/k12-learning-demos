@@ -92,7 +92,7 @@ test('sound comparison uses one signal and physical travel delays', async t => {
   });
 });
 
-test('fork appearance uses rapid bounded translation without affecting the propagation signal', async () => {
+test('fork appearance uses rapid bounded motion without affecting the propagation signal', async () => {
   const {forkVibration}=await import(pathToFileURL(path.resolve(__dirname,'../units/3/parts/3.2/assets/sound-speed-rendering.mjs')).href);
   const values=Array.from({length:1001},(_,i)=>forkVibration(.251+i/1000));
   assert.ok(values.every(v=>Math.abs(v)<=1.5));
@@ -350,8 +350,8 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await page.locator('#card-04 .tuning-fork').count(),3);
     assert.equal(await page.locator('#card-04 .fork-striker[visibility=hidden]').count(),3);
     const fixed=await page.locator('#card-04 .fork-fixed').evaluateAll(nodes=>nodes.map(n=>n.innerHTML));
-    const arms=()=>page.locator('#card-04 .fork-tine').evaluateAll(nodes=>nodes.map(n=>[n.getAttribute('d'),n.getAttribute('transform')]));
-    const tips=()=>page.locator('#card-04 .tuning-fork').evaluateAll(nodes=>nodes.map(n=>[n.querySelectorAll('.fork-tine')[0],n.querySelectorAll('.fork-tine')[3]].map(path=>{const p=path.getPointAtLength(path.getTotalLength());return p.x+path.transform.baseVal.consolidate().matrix.e;})));
+    const arms=()=>page.locator('#card-04 .fork-body').evaluateAll(nodes=>nodes.map(n=>[n.getAttribute('d'),n.getAttribute('transform')]));
+    const tips=()=>page.locator('#card-04 .tuning-fork').evaluateAll(nodes=>nodes.map(n=>{const path=n.querySelector('.fork-body');return [0,path.getTotalLength()].map(length=>path.getPointAtLength(length).x);} ));
     const initialArms=await arms(),initialTips=await tips();
     await primary.click();assert.equal(await page.locator('#card-04 .fork-striker[visibility=visible]').count(),3);
     await page.clock.runFor(150);
@@ -395,33 +395,68 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     }
   });
 
-  await t.test('small repeated tine motion stays connected to steel without a handle pushing the block', async () => {
+  await t.test('continuous fork bending remains coupled to steel throughout the contact height', async () => {
     await fresh();await primary.click();
     const readings=[];
-    const shapes=await page.locator('#card-04 .fork-tine').evaluateAll(ns=>ns.map(n=>n.getAttribute('d')));
     for(let i=0;i<39;i++){
       await page.clock.runFor(100);
       const reading=await page.locator('#card-04 [data-group=steel] .tuning-fork').evaluate(n=>{
-        const paths=n.querySelectorAll('.fork-tine'),contact=n.querySelector('.source-contact');
-        const tip=path=>{const p=path.getPointAtLength(path.getTotalLength());return{x:p.x+path.transform.baseVal.consolidate().matrix.e,y:p.y};};
-        return{left:tip(paths[0]).x,right:tip(paths[3]).x,tipY:tip(paths[3]).y,
+        const body=n.querySelector('.fork-body'),contact=n.querySelector('.source-contact'),total=body.getTotalLength();
+        const left=body.getPointAtLength(0),right=body.getPointAtLength(total);
+        const atY=(path,y,lo,hi)=>{for(let j=0;j<30;j++){const mid=(lo+hi)/2;if((path.getPointAtLength(mid).y<y)===(path===contact))lo=mid;else hi=mid;}return path.getPointAtLength((lo+hi)/2);};
+        return{left:left.x,right:right.x,tipY:right.y,
           edge:Number(contact.dataset.armEdge),steel:Number(contact.dataset.steelEdge),
+          gaps:[36,42,50].map(y=>atY(contact,y,0,17.5).x-atY(body,y,total/2,total).x),
           arm:contact.dataset.coupledArm,contactInBase:!!n.querySelector('.fork-fixed .source-contact'),
-          d:paths[3].getAttribute('d')};
+          d:body.getAttribute('d')};
       });
-      assert.deepEqual(await page.locator('#card-04 .fork-tine').evaluateAll(ns=>ns.map(n=>n.getAttribute('d'))),shapes,'no path morphing');
       assert.equal(reading.arm,'right');assert.equal(reading.contactInBase,false);
       assert.ok(Math.abs(reading.edge-reading.right-2.8)<.001);
-      assert.equal(reading.steel,94);assert.ok(reading.edge<reading.steel,'contact layer remains positive in width');
-      assert.equal(reading.tipY,35);assert.match(reading.d,/^M86 99V35$/,'tine geometry is constant and straight');
-      assert.ok(Math.abs(reading.right-86)<=1.5+.001,'small displacement avoids a visibly distorted fork');
+      assert.ok(reading.gaps.every(gap=>Math.abs(gap-2.8)<.01),'contact follows the bent arm along its height');
+      assert.equal(reading.steel,94);assert.ok(reading.edge<reading.steel);
+      assert.equal(reading.tipY,35);
+      assert.equal((reading.d.match(/M/g)||[]).length,1,'the U is one connected subpath');
+      assert.ok(Math.abs(reading.right-86)<=1.5+.001);
       assert.ok(Math.abs(reading.left+reading.right-138)<.001);
       readings.push(reading.right-86);
     }
     const signs=readings.filter(x=>Math.abs(x)>.01).map(x=>Math.sign(x));
-    assert.ok(signs.slice(1).filter((x,i)=>x!==signs[i]).length>=4,'several genuine direction reversals during the strike signal');
+    assert.ok(signs.slice(1).filter((x,i)=>x!==signs[i]).length>=4);
     await page.clock.runFor(200);
     assert.equal(await page.locator('#card-04 [data-group=steel] .source-contact').getAttribute('data-arm-edge'),'88.8');
+  });
+
+  await t.test('all material and temperature forks bend continuously into a stable handle and reset exactly', async () => {
+    await fresh();
+    for(const [card,button,reset,count]of[['#card-04','#primary-action','#reset-action',3],['#card-05','#temp-primary-action','#temp-reset-action',2]]){
+      const sources=page.locator(`${card} .tuning-fork`);
+      const snapshot=()=>sources.evaluateAll(nodes=>nodes.map(n=>{
+        const paths=[...n.querySelectorAll('.fork-body')],p=paths[0],length=p.getTotalLength();
+        const left=p.getPointAtLength(0),right=p.getPointAtLength(length),base=p.getPointAtLength(length/2);
+        return{d:p.getAttribute('d'),layers:paths.length,same:paths.every(q=>q.getAttribute('d')===p.getAttribute('d')),
+          continuous:(p.getAttribute('d').match(/M/g)||[]).length===1,
+          transforms:paths.some(q=>q.hasAttribute('transform')),
+          left:{x:left.x,y:left.y},right:{x:right.x,y:right.y},base:{x:base.x,y:base.y},handle:n.querySelector('.fork-fixed').innerHTML};
+      }));
+      const rest=await snapshot();assert.equal(rest.length,count);
+      await page.locator(button).click();
+      let moved=false;
+      for(let frame=0;frame<12;frame++){
+        await page.clock.runFor(16);
+        const values=await snapshot();
+        values.forEach((v,i)=>{
+          assert.equal(v.layers,3);assert.ok(v.same&&v.continuous&&!v.transforms);
+          assert.equal(v.handle,rest[i].handle);
+          assert.ok(Math.hypot(v.base.x-rest[i].base.x,v.base.y-rest[i].base.y)<.001,'the curved base remains joined to its handle');
+          const a=v.left.x-rest[i].left.x,b=v.right.x-rest[i].right.x;
+          assert.ok(Math.abs(a+b)<.001&&a*b<=0);
+          assert.equal(v.left.y,rest[i].left.y);assert.equal(v.right.y,rest[i].right.y);
+          if(Math.abs(a)>.5)moved=true;
+        });
+      }
+      assert.ok(moved,'the free ends visibly flex');
+      await page.locator(reset).click();assert.deepEqual(await snapshot(),rest);
+    }
   });
 
   await t.test('vibrating neighbours carry the disturbance while the position pointer stays below the medium', async () => {
@@ -488,7 +523,7 @@ test('fourth learning block works within the complete lesson', { timeout: 180000
     assert.equal(await temperatureLab.locator('[data-group=hot] .race-progress').count(),1);
     assert.deepEqual(await temperatureLab.locator('.field>svg').evaluateAll(ns=>ns.map(n=>n.getAttribute('viewBox'))),['0 0 456 150','0 0 456 150']);
     const shapes=where=>page.locator(where).evaluateAll(ns=>ns.map(n=>({d:n.getAttribute('d'),strokeWidth:n.getAttribute('stroke-width')})));
-    assert.deepEqual(await shapes('#card-04 [data-group=air] .fork-tine'),await shapes('#card-05 [data-group=hot] .fork-tine'));
+    assert.deepEqual(await shapes('#card-04 [data-group=air] .fork-body'),await shapes('#card-05 [data-group=hot] .fork-body'));
     assert.deepEqual(await shapes('#card-04 [data-group=air] .fork-fixed path'),await shapes('#card-05 [data-group=hot] .fork-fixed path'));
     assert.equal(await page.evaluate(()=>performance.getEntriesByType('resource').some(r=>r.name.includes('temperature-control-unit.png'))),false);
     for(const width of[320,390,640,768,850,1024,1440]){
