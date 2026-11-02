@@ -1,5 +1,5 @@
 .pinhole-lab { margin:20px 0; min-width:0; }
-.pinhole-stage { position:relative; overflow:hidden; border:1px solid #53675d; border-radius:17px; background:#15271f; box-shadow:0 8px 24px #1f35201a; }
+.pinhole-stage { position:relative; overflow:hidden; border:1px solid #53675d; border-radius:17px; background:#34473d; box-shadow:0 8px 24px #1f35201a; }
 #pinhole-canvas { display:block; width:100%; height:clamp(350px,42vw,510px); cursor:grab; touch-action:none; }
 #pinhole-canvas:active { cursor:grabbing; }
 #pinhole-canvas:focus-visible { outline:3px solid #b9d3a5; outline-offset:-4px; }
@@ -7,10 +7,16 @@
 .pinhole-actions > div { display:flex; flex-wrap:wrap; gap:7px; }
 .pinhole-actions button { pointer-events:auto; min-height:39px; padding:7px 12px; border-color:#ced9cd; font-size:.82rem; background:#fcfdf6f2; color:#304e3d; box-shadow:0 2px 8px #0002; }
 .pinhole-actions button[aria-pressed=true] { background:#e4efdc; border-color:#b1d19c; color:#254631; }
+.pinhole-actions .pinhole-light-actions { flex-basis:100%; }
+.pinhole-actions [data-pinhole-rays] { background:#f5d88d; border-color:#fbe3a9; color:#3e3217; font-weight:750; box-shadow:0 2px 9px #0005; }
+.pinhole-actions [data-pinhole-rays][aria-pressed=true] { background:#ffe9a5; border-color:#ffefbc; color:#3e3217; }
+.pinhole-hole-label { position:absolute; transform:translate(-50%,-100%); padding:3px 7px; border:1px solid #cbb87c; border-radius:5px; background:#18251fe8; color:#f6e4ad; font-size:.72rem; pointer-events:none; }
+.pinhole-hole-label::after { content:''; position:absolute; top:100%; left:50%; height:12px; border-left:1px solid #e7d4a0; }
 .pinhole-position { position:absolute; bottom:12px; left:13px; margin:0; padding:5px 9px; border-radius:7px; background:#15271fc9; color:#dbe6d4; font-size:.75rem; pointer-events:none; }
 .pinhole-objects { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; padding:10px 3px 4px; color:#697d6e; text-align:center; font-size:.8rem; }
-.pinhole-objects span:last-child { color:#176b53; font-weight:750; background:#e9f1e3; border:1px solid #cfddc9; border-radius:8px; padding:5px; }
-.pinhole-objects span { padding:5px; }
+.pinhole-objects [data-pinhole-device] { min-height:38px; padding:5px; color:#176b53; font-weight:750; font-size:.8rem; background:#e9f1e3; border:1px solid #cfddc9; border-radius:8px; }
+.pinhole-objects [data-pinhole-device][aria-pressed=true] { background:#d5e6c8; border-color:#85a878; }
+.pinhole-note { color:#66796c; font-size:.81rem; }
 .pinhole-instruction { margin:8px 0 12px; color:#66796c; font-size:.83rem; }
 .pinhole-controls { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; border:1px solid #d6e0d1; border-radius:12px; background:#f5f8f0; }
 .pinhole-controls label { display:flex; align-items:center; gap:8px; font-size:.88rem; }
@@ -29,4 +35,3 @@
  .pinhole-controls { padding:10px; }
  .pinhole-controls .note { margin:0; }
 }
-.pinhole-objects [data-pinhole-screen] { min-height:34px; padding:5px; color:#176b53; font-weight:750; font-size:.8rem; background:#e9f1e3; border:1px solid #cfddc9; border-radius:8px; }

@@ -18,7 +18,7 @@ test('4.4 十區基本版：真實操作、參考格式與跨尺寸導覽',{time
   assert.equal(await page.locator('.hero-cover img').evaluate(e=>e.complete&&e.naturalWidth===1672),true);
  });
  await t.test('立體小孔沒有拉霸，屏幕位置與光路可操作',async()=>{
-  assert.equal(await lab(1).locator('input[type=range]').count(),0);await lab(1).locator('[data-pinhole-screen]').focus();await page.keyboard.press('End');assert.ok(Number(await lab(1).getAttribute('data-magnification'))>1);await lab(1).locator('[data-pinhole-rays]').check();await lab(1).locator('[data-pinhole-point=top]').click();assert.match(await lab(1).locator('[data-pinhole-status]').innerText(),/上端.*下方/);await lab(1).locator('[data-pinhole-reset]').click();assert.equal(await lab(1).getAttribute('data-screen-x'),'2.6000');await lab(1).locator('[data-pinhole-rays]').uncheck();
+  assert.equal(await lab(1).locator('input[type=range]').count(),0);await lab(1).locator('[data-pinhole-screen]').focus();await page.keyboard.press('End');assert.ok(Number(await lab(1).getAttribute('data-magnification'))>1);await lab(1).locator('[data-pinhole-rays]').click();await lab(1).locator('[data-pinhole-point=top]').click();assert.match(await lab(1).locator('[data-pinhole-status]').innerText(),/上端.*下方/);await lab(1).locator('[data-pinhole-reset]').click();assert.equal(await lab(1).getAttribute('data-screen-x'),'2.6000');await lab(1).locator('[data-pinhole-rays]').click();
  });
  await t.test('平行光會聚／發散及兩表面詳圖連動',async()=>{
   await lab(2).locator('[data-value=concave]').click();assert.match(await result(2).innerText(),/發散/);assert.equal(await lab(2).locator('.extension').count(),2);

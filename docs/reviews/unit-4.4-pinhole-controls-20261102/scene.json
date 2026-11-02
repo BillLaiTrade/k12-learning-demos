@@ -1,0 +1,31 @@
+{
+  "hole": 0,
+  "sourceX": -3,
+  "background": "34473d",
+  "screen": 2.6,
+  "m": 0.8667,
+  "view": "orbit",
+  "rays": "false",
+  "point": "both",
+  "image": [
+    2.6,
+    1.6,
+    0
+  ],
+  "source": [
+    -3,
+    1.6,
+    0
+  ],
+  "camera": [
+    -10.822460232468021,
+    7.241888092998188,
+    7.918047834182529
+  ],
+  "imageOpacity": 0.35,
+  "sourceOpacity": 1,
+  "redY": 489.76304849884525,
+  "blueY": 277,
+  "rayPaths": [],
+  "holeRadius": 0.07
+}
